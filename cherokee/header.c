@@ -885,32 +885,6 @@ cherokee_header_copy_version (cherokee_header_t *hdr, cherokee_buffer_t *buf)
 
 
 ret_t 
-cherokee_header_get_number (cherokee_header_t *hdr, cuint_t *ret_num)
-{
-	cuint_t   i;
-	cuint_t num;
-
-	/* Unknown headers
-	 */
-	num = hdr->unknowns_len;
-	
-	/* Known headers
-	 */
-	for (i=0; i<HEADER_LENGTH; i++)
-	{
-		if (hdr->header[i].info_off != 0) {
-			num++;
-		}
-	}
-
-	/* Retur the number
-	 */
-	*ret_num = num;
-	return ret_ok;
-}
-
-
-ret_t 
 cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, int tail_len)
 {
 	int   tail;
@@ -932,3 +906,4 @@ cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, i
 	 */
 	return (strstr(start, CRLF CRLF) != NULL) ? ret_ok : ret_error;
 }
+

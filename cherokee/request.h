@@ -41,6 +41,7 @@ typedef struct {
 	cherokee_http_method_t  method;
 	cherokee_http_version_t version;
 	off_t                   post_len;
+	cherokee_buffer_t       extra_headers;
 } cherokee_request_header_t;
 
 
@@ -57,7 +58,7 @@ ret_t cherokee_request_header_init     (cherokee_request_header_t *request);
 ret_t cherokee_request_header_clean    (cherokee_request_header_t *request);
 ret_t cherokee_request_header_mrproper (cherokee_request_header_t *request);
 
-ret_t cherokee_request_header_set_url      (cherokee_request_header_t *request, cherokee_url_t *url);
+ret_t cherokee_request_header_add_header   (cherokee_request_header_t *request, char *ptr, cuint_t len);
 ret_t cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf);
 
 #endif /* CHEROKEE_REQUEST_H */

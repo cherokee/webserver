@@ -87,7 +87,7 @@ ret_t cherokee_header_parse               (cherokee_header_t *hdr, cherokee_buff
 ret_t cherokee_header_has_header          (cherokee_header_t *hdr, cherokee_buffer_t *buffer, int tail_len);
 
 ret_t cherokee_header_get_length          (cherokee_header_t *hdr, cuint_t *len);
-ret_t cherokee_header_get_number          (cherokee_header_t *hdr, cuint_t *num);
+ret_t cherokee_header_for_each            (cherokee_header_t *hdr, void *);
 
 ret_t cherokee_header_copy_request        (cherokee_header_t *hdr, cherokee_buffer_t *request);
 ret_t cherokee_header_copy_request_w_args (cherokee_header_t *hdr, cherokee_buffer_t *request);

@@ -44,6 +44,8 @@ cherokee_request_header_init (cherokee_request_header_t *request)
 
 	ret = cherokee_url_init (&request->url);
 	if (unlikely(ret < ret_ok)) return ret;
+
+	cherokee_buffer_init (&request->extra_headers);
 	
 	return ret_ok;
 }
@@ -52,6 +54,7 @@ cherokee_request_header_init (cherokee_request_header_t *request)
 ret_t 
 cherokee_request_header_mrproper (cherokee_request_header_t *request)
 {
+	cherokee_buffer_mrproper (&request->extra_headers);
 	cherokee_url_mrproper (&request->url);
 	return ret_ok;
 }
@@ -155,9 +158,27 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 		cherokee_buffer_mrproper (&tmp);
 	}
 
+	/* Extra headers
+	 */
+	if (! cherokee_buffer_is_empty (&request->extra_headers)) {
+		cherokee_buffer_add_buffer (buf, &request->extra_headers);
+	}
+
 	/* Finish the header
 	 */
 	cherokee_buffer_add (buf, CRLF, 2);
+
+	return ret_ok;
+}
+
+ret_t 
+cherokee_request_header_add_header (cherokee_request_header_t *request, char *ptr, cuint_t len)
+{
+	cherokee_buffer_ensure_size (&request->extra_headers, request->extra_headers.len + len + 2);
+	cherokee_buffer_add (&request->extra_headers, ptr, len);
+	cherokee_buffer_add (&request->extra_headers, CRLF, 2);
+
+	printf ("add_headers: %s\n", ptr);
 
 	return ret_ok;
 }

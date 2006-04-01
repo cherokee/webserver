@@ -83,7 +83,7 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 	ret = cherokee_buffer_init (&n->body);
 	if (unlikely(ret != ret_ok)) return ret;		
 
-	ret = cherokee_socket_new (&n->socket);
+	ret = cherokee_socket_init (&n->socket);
 	if (unlikely(ret != ret_ok)) return ret;	
 
 	ret = cherokee_header_new (&n->header);	
@@ -127,10 +127,14 @@ cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 	/* Free the memory
 	 */
 	cherokee_request_header_mrproper (&downloader->request);
+
 	cherokee_buffer_mrproper (&downloader->request_header);
 	cherokee_buffer_mrproper (&downloader->reply_header);
 	cherokee_buffer_mrproper (&downloader->body);
-	cherokee_socket_free (downloader->socket);
+
+	cherokee_socket_close (&downloader->socket);
+	cherokee_socket_mrproper (&downloader->socket);
+
 	cherokee_header_free (downloader->header);
 
 	return ret_ok;
@@ -172,7 +176,7 @@ ret_t
 cherokee_downloader_connect (cherokee_downloader_t *downloader)
 {
 	ret_t               ret;
-	cherokee_socket_t  *sock = downloader->socket;
+	cherokee_socket_t  *sock = &downloader->socket;
 	cherokee_url_t     *url  = &downloader->request.url;
 
 	/* Create the socket
@@ -220,7 +224,7 @@ cherokee_downloader_connect (cherokee_downloader_t *downloader)
 static int
 is_connected (cherokee_downloader_t *downloader)
 {
-	return (downloader->socket->socket != -1);
+	return (downloader->socket.socket != -1);
 }
 
 
@@ -228,11 +232,9 @@ static ret_t
 downloader_send_buffer (cherokee_downloader_t *downloader, cherokee_buffer_t *buf)
 {
 	ret_t              ret;
-	cherokee_socket_t *sock;
 	size_t             written = 0;
+	cherokee_socket_t *sock    = &downloader->socket;;
 
-	sock = downloader->socket;
-	
 	ret = cherokee_socket_write (sock, buf, &written);
 	switch (ret) {
 	case ret_ok:
@@ -260,10 +262,8 @@ downloader_header_read (cherokee_downloader_t *downloader)
 	ret_t               ret;
 	cuint_t             len;
 	size_t              readed = 0;
-	cherokee_socket_t  *sock;
+	cherokee_socket_t  *sock   = &downloader->socket;
 
-	sock = downloader->socket;
-	
 	ret = cherokee_socket_read (sock, &downloader->reply_header, DEFAULT_RECV_SIZE, &readed);
 	switch (ret) {
 	case ret_eof:     
@@ -344,9 +344,7 @@ downloader_step (cherokee_downloader_t *downloader)
 {
 	ret_t               ret;
 	size_t              readed = 0;
-	cherokee_socket_t  *sock;
-
-	sock = downloader->socket;
+	cherokee_socket_t  *sock   = &downloader->socket;
 
 	ret = cherokee_socket_read (sock, &downloader->body, DEFAULT_RECV_SIZE, &readed);
 	switch (ret) {

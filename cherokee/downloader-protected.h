@@ -55,7 +55,7 @@ struct cherokee_downloader {
 	cherokee_buffer_t           *post_ref;
 	off_t                        post_sent;
 
-	cherokee_socket_t           *socket;
+	cherokee_socket_t            socket;
 	cherokee_sockaddr_t          sockaddr;
 
 	cherokee_downloader_phase_t  phase;
