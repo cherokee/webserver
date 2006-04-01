@@ -363,6 +363,25 @@ endif
 
 
 #
+# Handler proxy
+#
+handler_proxy = \
+handler_proxy.c \
+handler_proxy.h
+
+libplugin_proxy_la_LDFLAGS = $(module_ldflags)  
+libplugin_proxy_la_SOURCES = $(handler_proxy)
+libplugin_proxy_la_LIBADD  = libcherokee-client.la  
+
+if STATIC_HANDLER_PROXY
+static_handler_proxy_src = $(handler_proxy)
+static_handler_proxy_lib = libcherokee-client.la
+else
+dynamic_handler_proxy_lib = libplugin_proxy.la
+endif
+
+
+#
 # Handler admin
 #
 config_common = \
@@ -584,6 +603,7 @@ $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 $(static_validator_pam_lib) \
 $(static_validator_htpasswd_lib) \
+$(static_handler_proxy_lib) \
 libcherokee-base.la
 
 libcherokee_config_la_LDFLAGS = $(common_ldflags)
@@ -751,6 +771,7 @@ $(static_handler_cgi_src) \
 $(static_handler_phpcgi_src) \
 $(static_handler_common_src) \
 $(static_handler_nn_src) \
+$(static_handler_proxy_src) \
 $(static_handler_server_info_src) \
 \
 $(static_logger_w3c_src) \
@@ -882,6 +903,7 @@ $(dynamic_handler_scgi_lib) \
 $(dynamic_handler_fcgi_lib) \
 $(dynamic_handler_fastcgi_lib) \
 $(dynamic_handler_redir_lib) \
+$(dynamic_handler_proxy_lib) \
 $(dynamic_handler_error_redir_lib) \
 $(dynamic_handler_common_lib) \
 $(dynamic_handler_nn_lib) \

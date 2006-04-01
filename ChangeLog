@@ -1,5 +1,14 @@
 2006-04-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* configure.in, cherokee/Makefile.am: Added compilation stuff for
+	handler proxy.
+
+2006-04-01  Cesar Fernandez Gago  <cesar@alobbs.com>
+
+	* handler_proxy.c, handler_proxy.h: Added new handler.
+
+2006-04-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+	
 	* cherokee/connection.c (get_host): Little clean up.
 
 	* cherokee/handler_error.c (build_hardcoded_response_page): It was
