@@ -133,7 +133,7 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin, cherokee_fdpoll_t
 	
 	/* Set up the downloader object properties
 	 */
-	ret = cherokee_downloader_set_fdpoll (downloader, admin->poll_ref);
+	ret = cherokee_downloader_set_fdpoll (downloader, admin->poll_ref, true);
 	if (unlikely (ret != ret_ok)) return ret;
 	
 	ret = cherokee_downloader_set_url (&admin->downloader, admin->url_ref); 

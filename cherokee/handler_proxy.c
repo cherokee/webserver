@@ -29,6 +29,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "util.h"
 #include "handler_proxy.h"
 #include "header.h"
 #include "thread.h"
@@ -54,10 +55,7 @@ ret_t
 cherokee_handler_proxy_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties)
 {
 	ret_t ret;
-
-	ret = ret_ok;
 	CHEROKEE_NEW_STRUCT (n, handler_proxy); 
-	cherokee_downloader_t *tmp; 
 
 	/* Init the base class object
 	 */
@@ -110,91 +108,80 @@ cherokee_handler_proxy_get_name (cherokee_handler_proxy_t *n, const char **name)
 ret_t 
 cherokee_handler_proxy_init (cherokee_handler_proxy_t *n)
 {
-	
+	ret_t                  ret;	
 	cherokee_connection_t *conn = HANDLER_CONN(n);
-	cherokee_header_t     *hdr;
-	cherokee_buffer_t     *tmp;
 
-	cuint_t  fdlimit; 
-	ret_t    ret;
 
-	/*  Use state machine???? */
-	
-	ret = ret_error;
+	/* Sanity check
+	 */
+	if (conn->request.len <= 0) 
+		return ret_error;
 
-	/*
-	 * 1. Parse request headers and create a new request headers
+	/* 1. Parse request headers and create a new request headers
 	 *    with the necesary header additions/modifications.
 	 *    Follow RFC2616
 	 */
 
-	/*
-	 * Construct the URL host + request + pathinfo + query_string
+	/* Construct the URL host + request + pathinfo + query_string
 	 */
+	ret = cherokee_buffer_add_buffer (&n->url, &conn->host);
+	if ( ret != ret_ok ) return ret;
 	
-	if (conn->request.len > 0) {
+	ret = cherokee_buffer_add_buffer (&n->url, &conn->request); 
+	if ( ret != ret_ok ) return ret;
+	
+	ret = cherokee_buffer_add_buffer (&n->url, &conn->pathinfo);
+	if ( ret != ret_ok ) return ret;
+	
+	ret = cherokee_buffer_add_buffer (&n->url, &conn->query_string);
+	if ( ret != ret_ok ) return ret;
 
-		ret = cherokee_buffer_add_buffer (&n->url, &conn->host);
-		if ( ret != ret_ok ) return ret;
-			
-                ret = cherokee_buffer_add_buffer (&n->url, &conn->request); 
-		if ( ret != ret_ok ) return ret;
-		
-		ret = cherokee_buffer_add_buffer (&n->url,  &conn->pathinfo);
-		if ( ret != ret_ok ) return ret;
-
-		ret = cherokee_buffer_add_buffer (&n->url, &conn->query_string);
-		if ( ret != ret_ok ) return ret;
-	}
-	else 
-		TRACE (ENTRIES, "conn->request.len = %d\n", conn->request.len); 
-
-	/*
-	 * Fill in the downloader object. Send the request to the remote server
+	/* Fill in the downloader object. Send the request to the remote server
 	 */
 	ret = cherokee_downloader_set_url(&n->client, &n->url);
 	if ( ret != ret_ok ) return ret;
 	
-	//cherokee_url_print(&n->client.request.url);
+	TRACE(ENTRIES, "Request: %s", n->client.request.url.host.buf);
  
-	TRACE(ENTRIES,"client.request %s", n->client.request.url.host.buf);
- 
-	ret = cherokee_downloader_set_keepalive(&n->client, true); 
+	ret = cherokee_downloader_set_keepalive (&n->client, false); 
 	if (ret != ret_ok) return ret;
 
-	ret = cherokee_downloader_set_fdpoll(&n->client, CONN_THREAD(conn)->fdpoll);
+	ret = cherokee_downloader_set_fdpoll (&n->client, CONN_THREAD(conn)->fdpoll, false);
 	if (ret != ret_ok) return ret;
 
-	ret = cherokee_downloader_connect(&n->client);
+	ret = cherokee_downloader_connect (&n->client);
 	if (ret != ret_ok) return ret;
 
 	TRACE(ENTRIES, "client->downloader->socket: %d\n",  SOCKET_FD(n->client.socket)); 
 	
-	return ret;
+	return ret_ok;
 }
 
 
 
 ret_t
 cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *phdl,
-				   cherokee_buffer_t       *buffer)
+				    cherokee_buffer_t        *buffer)
 {
-	int      num; 
 	ret_t    ret; 
 	cuint_t  end_len; 
 	char     *content; 
 	cuint_t  len; 
-	char     *reply_header = phdl->client.reply_header.buf; 
-	
-	ret = cherokee_downloader_step(&phdl->client);
+	cherokee_buffer_t *reply_header = &phdl->client.reply_header;
+
+	ret = cherokee_downloader_step (&phdl->client);
+	printf ("ret = %d\n", ret);
 	
 	switch (ret) {
 	case ret_ok:
 	case ret_eof_have_data:
 		break;		
 	case ret_eagain:
-		cherokee_thread_deactive_to_polling(HANDLER_THREAD(phdl), HANDLER_CONN(phdl), 
-						    SOCKET_FD(phdl->client.socket), 0, false);	
+		printf ("A - fd %d\n", SOCKET_FD(phdl->client.socket));
+		cherokee_thread_deactive_to_polling (HANDLER_THREAD(phdl), HANDLER_CONN(phdl), 
+						     SOCKET_FD(phdl->client.socket), 0, true);	
+		printf ("B - fd %d\n", SOCKET_FD(phdl->client.socket));
+		return ret_eagain;
 	case ret_eof:
 	case ret_error:
 		return ret;
@@ -203,13 +190,20 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *phdl,
 		return ret_error;
 	}
 
+	if (reply_header->len <= 3) {
+
+		return ret_eagain;
+	}
+	
+	printf ("reply_header->len %d\n", reply_header->len);
+
 	/* Look the end of headers
 	 */
-	content = strstr (reply_header, CRLF CRLF);
+	content = strstr (reply_header->buf, CRLF CRLF);
 	if (content != NULL) {
 		end_len = 4;
 	} else {
-		content = strstr (reply_header, "\n\n");
+		content = strstr (reply_header->buf, "\n\n");
 		end_len = 2;
 	}
 	
@@ -219,15 +213,19 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *phdl,
 
 	/* Copy the header
 	 */
-	len = content - reply_header; 
+	len = content - reply_header->buf; 
+	printf ("len %d\n", len);
 
 	cherokee_buffer_ensure_size (buffer, len+4);
-	cherokee_buffer_add (buffer, reply_header, len);
+	cherokee_buffer_add (buffer, reply_header->buf, len);
 	cherokee_buffer_add (buffer, CRLF CRLF, 4);
 
 	/* Drop out the headers, we already have a copy
 	 */
 	cherokee_buffer_move_to_begin (buffer, len + end_len);
+
+	printf ("%d\n", buffer->len);
+	printf ("%s\n", buffer->buf);
 
         /*	
 	 * 1. Construct the response header to the client request

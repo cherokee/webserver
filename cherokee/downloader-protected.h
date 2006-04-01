@@ -56,6 +56,8 @@ struct cherokee_downloader {
 	off_t                        post_sent;
 
 	cherokee_fdpoll_t           *fdpoll;
+	cherokee_boolean_t           fdpoll_add_itself;
+
 	cherokee_socket_t           *socket;
 	cherokee_sockaddr_t          sockaddr;
 

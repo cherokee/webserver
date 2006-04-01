@@ -102,11 +102,13 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 
 	/* Init the properties
 	 */
-	n->fdpoll   = NULL;
-	n->phase    = downloader_phase_init;
+	n->fdpoll            = NULL;
+	n->fdpoll_add_itself = true;
 
-	n->post_ref  = NULL;
-	n->post_sent = 0;
+	n->phase             = downloader_phase_init;
+
+	n->post_ref          = NULL;
+	n->post_sent         = 0;
 
 	/* Lengths
 	 */
@@ -138,7 +140,9 @@ cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 {
 	/* Remove the socket from the poll
 	 */
-	cherokee_fdpoll_del (downloader->fdpoll, SOCKET_FD(downloader->socket));
+	if (downloader->fdpoll_add_itself) {
+		cherokee_fdpoll_del (downloader->fdpoll, SOCKET_FD(downloader->socket));
+	}
 	
 	/* Free the memory
 	 */
@@ -154,13 +158,14 @@ cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 
 
 ret_t 
-cherokee_downloader_set_fdpoll (cherokee_downloader_t *downloader, cherokee_fdpoll_t *fdpoll)
+cherokee_downloader_set_fdpoll (cherokee_downloader_t *downloader, cherokee_fdpoll_t *fdpoll, cherokee_boolean_t add_itself)
 {
 	if (downloader->fdpoll != NULL) {
 		PRINT_ERROR_S ("ERROR: fdpoll already set\n");
 	}
 
-	downloader->fdpoll = fdpoll;
+	downloader->fdpoll            = fdpoll;
+	downloader->fdpoll_add_itself = add_itself;
 	return ret_ok;
 }
 
@@ -237,10 +242,12 @@ cherokee_downloader_connect (cherokee_downloader_t *downloader)
 
 	/* Add the socket to the file descriptors poll
 	 */
-	ret = cherokee_fdpoll_add (downloader->fdpoll, SOCKET_FD(sock), 1);
-	if (ret > ret_ok) {
-		PRINT_ERROR ("Can not add file descriptor (%d) to fdpoll\n", r);
-		return ret;
+	if (downloader->fdpoll_add_itself) {
+		ret = cherokee_fdpoll_add (downloader->fdpoll, SOCKET_FD(sock), 1);
+		if (ret > ret_ok) {
+			PRINT_ERROR ("Can not add file descriptor (%d) to fdpoll\n", r);
+			return ret;
+		}
 	}
 
 	/* Maybe execute the callback
