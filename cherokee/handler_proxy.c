@@ -204,6 +204,7 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *phdl,
 
 	switch (ret) {
 	case ret_ok:
+	case ret_eof:
 	case ret_eof_have_data:
 		break;		
 	case ret_eagain:
@@ -213,7 +214,6 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *phdl,
 		cherokee_thread_deactive_to_polling (HANDLER_THREAD(phdl), HANDLER_CONN(phdl), 
 						     SOCKET_FD(&phdl->client.socket), rw, false);	
 		return ret_eagain;
-	case ret_eof:
 	case ret_error:
 		return ret;
 	default:
@@ -265,7 +265,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *phdl,
 	}
 
 	if (phdl->client.body.len > 0) {
-		cherokee_buffer_add_buffer (buffer, &phdl->client.body);
+		cherokee_buffer_swap_buffers (buffer, &phdl->client.body);
 		cherokee_buffer_clean (&phdl->client.body);
 	}
 	
