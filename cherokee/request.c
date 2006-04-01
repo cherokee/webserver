@@ -178,7 +178,5 @@ cherokee_request_header_add_header (cherokee_request_header_t *request, char *pt
 	cherokee_buffer_add (&request->extra_headers, ptr, len);
 	cherokee_buffer_add (&request->extra_headers, CRLF, 2);
 
-	printf ("add_headers: %s\n", ptr);
-
 	return ret_ok;
 }

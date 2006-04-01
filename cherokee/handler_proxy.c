@@ -120,7 +120,9 @@ add_extra_headers (cherokee_handler_proxy_t *hdl)
 		nl = strstr (i, CRLF);
 		if (nl == NULL) break;
 
-		if (strncasecmp (i, "Host:", 5) != 0)  {
+		if ((strncasecmp (i, "Host:", 5) != 0) &&
+		    (strncasecmp (i, "Connection:", 11) != 0)) 
+		{
 			cherokee_request_header_add_header (&hdl->client.request, i, nl - i);
 		}
 
@@ -137,16 +139,12 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	ret_t                  ret;	
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
-
 	/* Sanity check
 	 */
 	if (conn->request.len <= 0) 
 		return ret_error;
 
-	/* 1. Parse request headers and create a new request headers
-	 *    with the necesary header additions/modifications.
-	 *    Follow RFC2616
-	 */
+	cherokee_connection_parse_args (conn);
 
 	/* Construct the URL host + request + pathinfo + query_string
 	 */
@@ -159,8 +157,13 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	ret = cherokee_buffer_add_buffer (&hdl->url, &conn->pathinfo);
 	if ( ret != ret_ok ) return ret;
 	
-	ret = cherokee_buffer_add_buffer (&hdl->url, &conn->query_string);
-	if ( ret != ret_ok ) return ret;
+	if (! cherokee_buffer_is_empty (&conn->query_string)) {
+		ret = cherokee_buffer_add (&hdl->url, "?", 1);
+		if ( ret != ret_ok ) return ret;
+
+		ret = cherokee_buffer_add_buffer (&hdl->url, &conn->query_string);
+		if ( ret != ret_ok ) return ret;
+	}
 
 	/* Fill in the downloader object. 
 	 */
