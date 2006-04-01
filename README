@@ -1,0 +1,48 @@
+Cherokee Web Server
+===================
+
+A mailing-list cherokee@alobbs.com is available, to subscribe:
+    http://alobbs.com/cgi-bin/mailman/listinfo/cherokee
+
+The list archive is at:
+    http://www.0x50.org/archives/
+
+
+
+1.- How to compile it
+---------------------
+./configure --prefix=/usr --sysconfdir=/etc
+
+2.- How to create dinamyc modules
+---------------------------------
+It's the default way.
+
+3.- How to compile the module xyz statically in the libcherokee
+---------------------------------------------------------------
+./configure --prefix=/usr --sysconfdir=/etc --enable-static-module=xyz
+
+4.- How to build statically
+---------------------------
+./configure --prefix=/usr --sysconfdir=/etc --enable-static-module=all
+
+5.- How to optimize in a Pentium4
+---------------------------------
+make CFLAGS="-march=pentium4 -O3 -pipe -fomit-frame-pointer -fforce-addr -falign-functions=4 -fprefetch-loop-arrays"
+
+6.- How to create a self signed certificate for TLS
+---------------------------------------------------
+openssl req -days 1000 -new -x509 -nodes -out /etc/cherokee/ssl/cherokee.pem -keyout /etc/cherokee/ssl/cherokee.pem
+
+7.- How to compile the embedded version
+--------------------------------------
+./configure --prefix=/usr --sysconfdir=/etc --disable-pthread --disable-tls --disable-largefile --disable-pcre
+cd cherokee && make -f Makefile.embedded 
+
+8.- Windows compilation
+-----------------------
+./configure --prefix=/usr --sysconfdir=/etc --enable-trace --enable-static-module=all --enable-static --enable-shared=no
+
+
+--
+Alvaro Lopez Ortega
+alvaro@gnu.org

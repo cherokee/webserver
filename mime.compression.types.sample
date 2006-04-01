@@ -1,0 +1,15 @@
+###############################################################################
+#
+#  These are not MIME types, but we can treat them like that..
+#
+###############################################################################
+
+application/zip				.zip
+application/rar				.rar
+application/bzip2				.bz2
+application/gzip				.gz
+application/x-tar				.tar
+application/x-gzip				.gz	.tgz
+application/x-stuffit			.sit	.sea
+application/octetstream			.7z
+application/octetstream			.ace

@@ -1,0 +1,18 @@
+##
+## SSLCertificateFile:
+## This is your PEM-encoded server certificate
+##
+SSLCertificateFile %sysconfdir%/cherokee/ssl/cherokee.pem
+
+##
+## SSLCertificateKeyFile: 
+## This is the private key of your certificate, PEM-encoded.
+##
+SSLCertificateKeyFile %sysconfdir%/cherokee/ssl/cherokee.pem
+
+##
+## SSLCAListFile:
+## This is a file containing all certification authorities that you trust.
+## Tip: you can just use the file cert.pem
+##
+SSLCAListFile %sysconfdir%/cherokee/ssl/cherokee.pem

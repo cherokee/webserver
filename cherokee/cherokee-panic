@@ -1,0 +1,109 @@
+#!/bin/sh
+
+# Default action for Cherokee-Panic.
+# Possible actions are:
+#   mail - mail the error. You need a working MTA in the system.
+#   cat  - just print it
+action=mail
+
+# Redirect all output to our mail command
+(
+     # Check the OS
+     os=`uname`
+
+	# We must be given a pid to look at
+	if [ -z "$1" ]; then
+		echo "$0 called with no arguments."
+		exit 1
+	else
+	    pid=$1
+	fi
+
+	# Check for a second argument
+	if [ -n "$2" ]; then
+	    action="$2"
+	fi
+
+	if [ ! -d "/proc/$pid" ]; then
+		echo "$0: No such process: $pid"
+		exit 1
+	fi
+
+	# Find out what binary we're debugging
+	if [ $os = "Linux" ]; then 
+	     BINARYNAME=`readlink "/proc/$pid/exe"`
+	elif [ $os = "SunOS" ]; then
+	     BINARYNAME=`perl -e "print readlink(\"/proc/$pid/path/a.out\");"`
+     else
+	     echo "Unsupported OS: $os"
+	     exit 1
+	fi
+
+	# Generic header for our email
+	echo "The Cherokee 'panic action' script, $0,"
+	echo "was called for pid $pid ($BINARYNAME)."
+	echo
+
+	if [ -z "$BINARYNAME" ]; then
+		echo "This means there was a problem with the program, such as a segfault."
+		echo "However, the executable could not be found for process $pid."
+		echo "It may have died unexpectedly, or you may not have permission to"
+		echo "debug the process."
+		exit 1
+	fi
+
+	# Check the debugger
+	gdb=`type gdb 2>/dev/null | grep -v "not found" | cut -f3 -d " "`
+	dbx=`type dbx 2>/dev/null | grep -v "not found" | cut -f3 -d " "`
+
+	if [ x$gdb != x ]; then
+	     debugger=$gdb
+	elif [ x$dbx != x ]; then
+	     debugger=$dbx
+	else
+	     # No debugger
+	     echo "This means there was a problem with the program, such as a segfault."
+		echo "However, gdb was not found on your system, so the error could not be"
+		echo "debugged.  Please install the gdb package so that debugging information is"
+		echo "available the next time such a problem occurs."
+		exit 1
+	fi
+
+	echo "Below is a backtrace for this process generated with gdb, which shows"
+	echo "the state of the program at the time the error occured.  You are"
+	echo "encouraged to submit this information as a bug report in the Cherokee"
+	echo "bug traq system:  http://bugs.0x50.org"
+	echo
+	echo "Operating System: `uname -a`"
+	echo "Debugger: $debugger"
+	echo
+
+	# Get the backtrace
+	if [ x$debugger = x$gdb ]; then 
+	     tmp_cmd=`mktemp -t` || exit 1
+
+		( echo "print cherokee_version"
+		  echo "thread apply all bt full"
+		  echo "quit" ) >> $tmp_cmd
+
+		$gdb -x $tmp_cmd -batch "$BINARYNAME" "$pid"
+		rm $tmp_cmd
+
+	elif [ x$debugger = x$dbx ]; then
+	     $dbx -c "print (char *)cherokee_version; where -v -l ; quit" "$BINARYNAME" "$pid"
+	fi
+
+) | ( 
+    case "$action" in
+	   mail)
+		  mail -s "Segfault in Cherokee" root
+		  ;;
+	   cat)
+		  cat -
+		  ;;
+	   *)
+		  echo "ERROR: Wrong action."
+		  exit 1
+    esac;
+)
+

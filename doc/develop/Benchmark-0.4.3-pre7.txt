@@ -1,0 +1,92 @@
+Cherokee 0.4.3-pre7 Benchmark
+=============================
+
+The test:
+ab -k -dS  -n 10000 -c 100 http://localhost/test.txt
+
+
+Server Software:        Cherokee/0.4.3
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /test.txt
+Document Length:        19 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.491754 seconds
+Complete requests:      10000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    10011
+Total transferred:      1574159 bytes
+HTML transferred:       190570 bytes
+Requests per second:    20335.37 [#/sec] (mean)
+Time per request:       4.918 [ms] (mean)
+Time per request:       0.049 [ms] (mean, across all concurrent requests)
+Transfer rate:          3125.55 [Kbytes/sec] received
+
+
+
+Server Software:        Boa/0.94.13
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /test.txt
+Document Length:        19 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.991562 seconds
+Complete requests:      10000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    10000
+Total transferred:      2450100 bytes
+HTML transferred:       190000 bytes
+Requests per second:    10085.10 [#/sec] (mean)
+Time per request:       9.916 [ms] (mean)
+Time per request:       0.099 [ms] (mean, across all concurrent requests)
+Transfer rate:          2412.36 [Kbytes/sec] received
+
+
+
+Server Software:        thttpd/2.23beta1
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /test.txt
+Document Length:        19 bytes
+
+Concurrency Level:      100
+Time taken for tests:   2.242261 seconds
+Complete requests:      10000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    0
+Total transferred:      2640000 bytes
+HTML transferred:       190000 bytes
+Requests per second:    4459.78 [#/sec] (mean)
+Time per request:       22.423 [ms] (mean)
+Time per request:       0.224 [ms] (mean, across all concurrent requests)
+Transfer rate:          1149.73 [Kbytes/sec] received
+
+
+
+Server Software:        Apache/2.0.45
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /test.txt
+Document Length:        19 bytes
+
+Concurrency Level:      100
+Time taken for tests:   2.674268 seconds
+Complete requests:      10000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    9917
+Total transferred:      3309411 bytes
+HTML transferred:       190209 bytes
+Requests per second:    3739.34 [#/sec] (mean)
+Time per request:       26.743 [ms] (mean)
+Time per request:       0.267 [ms] (mean, across all concurrent requests)
+Transfer rate:          1208.18 [Kbytes/sec] received

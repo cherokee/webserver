@@ -1,0 +1,79 @@
+CFLAGS=-O0 -g -DCHEROKEE_COMPILATION -DCHEROKEE_EMBEDDED -I. -I.. -DCHEROKEE_CONFDIR=\""/etc/cherokee"\" -DCHEROKEE_DEPSDIR=\""/usr/share/cherokee/deps"\"
+LDFLAGS=-lc -ldl
+
+OBJS = \
+md5.o \
+main.o \
+http.o \
+util.o \
+table.o \
+crc32.o \
+buffer.o \
+server.o \
+access.o \
+module.o \
+fdpoll.o \
+thread.o \
+header.o \
+socket.o \
+logger.o \
+handler.o \
+avl/avl.o \
+encoder.o \
+list_ext.o \
+validator.o \
+exts_table.o \
+connection.o \
+tdate_parse.o \
+logger_table.o \
+resolv_cache.o \
+fdpoll-poll.o \
+fdpoll-epoll.o \
+fdpoll-select.o \
+encoder_table.o \
+buffer_escape.o \
+dirs_table.o \
+matching_list.o \
+handler_error.o \
+module_loader.o \
+virtual_server.o \
+validator_htdigest.o \
+config_entry.o \
+handler_cgi_base.o \
+handler_cgi.o \
+handler_file.o \
+handler_redir.o \
+handler_phpcgi.o \
+handler_dirlist.o \
+handler_common.o \
+list_merge_sort.o \
+post.o \
+nonce.o \
+typed_table.o \
+read_config_embedded.o 
+
+all: u-cherokee
+
+
+#read_config_grammar.o \
+#read_config_scanner.o \
+
+#read_config_scanner.c : read_config_scanner.l
+#	$(LEX) -i -o$@ $<
+
+#read_config_grammar.h : read_config_grammar.c
+#read_config_grammar.c : read_config_grammar.y
+#	$(YACC) -dv $< -o $@
+
+
+u-cherokee: $(OBJS)
+	$(CC) -o $@ $(LDFLAGS) $(OBJS) 
+#	strip -R .note -R .comment $@
+#	if [ `type -p upx | wc -c` != 0 ]; then \
+#	   upx -9 $@; \
+#	fi
+
+
+clean:
+	rm -rf $(OBJS) u-cherokee
+

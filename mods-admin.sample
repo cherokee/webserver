@@ -1,0 +1,24 @@
+##
+## Remote administration module
+##
+
+##
+## WARNING: Keep this directory entry strongly protected!
+##
+## The default configuration only allows only secure connections - TLS,
+## comming from localhost. It also requires the root system login/password 
+## pair which will be checked using PAM.
+##
+
+Directory /admin {
+   Handler admin
+
+   Auth basic {
+      Method pam
+      Name "Administration"
+      User root
+   }
+ 
+   Allow from localhost
+}
+

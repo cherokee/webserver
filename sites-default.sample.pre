@@ -1,0 +1,170 @@
+##
+## Please, visit http://www.0x50.org/doc for further information  
+##
+
+##
+## DirectoryIndex: Name of the file or files to use as a pre-written HTML
+## directory index.  Separate multiple entries with commas.
+##
+DirectoryIndex index.php, index.html, index.htm, index.shtml
+
+##
+## DocumentRoot: The directory out of which you will serve your
+## documents. By default, all requests are taken from this directory, but
+## symbolic links and aliases may be used to point to other locations.
+##
+DocumentRoot %wwwroot%
+
+##
+## UserDir: Use this to enable users of the server running your website 
+## to publish web pages in their own home directories.
+##
+## The name of the directory which is appended onto a user's home
+## directory if a ~user request is received.
+##
+## NOTE: Take in mind the permissions. If you have changed the User/Group
+##       the server maybe will have problems accessing the personal users' 
+##       content.
+##
+UserDir public_html {
+    Directory / {
+       Handler common
+    }
+
+    Directory /cgi-bin/ {
+	  Handler cgi
+	  DocumentRoot /usr/lib/cgi-bin/
+    }
+}
+
+##
+## Log: Turn On/Off the logging in to syslog
+##
+## Parameters:
+## combined - Most common
+## ncsa     - NCSA format: AccessLog, ErrorLog
+## w3c      - LogFile
+##
+Log combined {
+    AccessLog /var/log/cherokee.access
+    ErrorLog  /var/log/cherokee.error
+}
+
+##
+## ErrorHandler:
+## In the event of a problem or error.
+##
+# ErrorHandler error_redir {
+#    404 http://www.alobbs.com/error.php?op=404
+# }
+
+##
+## These Directory entries define the server behaviour.  Each entry
+## can contain different properties which are going to be used to
+## reply the request.
+##
+## Read the documentation to learn more about how do directories 
+## inherit configuration form its parents..
+##
+Directory / {
+    Handler common
+}
+
+Directory /about {
+    ## Justabout:
+    ## It will inhibit the server to show server information
+    Handler server_info	{
+        JustAbout
+    }
+}
+
+Directory /icons {
+    Handler file
+    DocumentRoot %prefix%/share/cherokee/icons/
+}
+
+Directory /cgi-bin {
+    Handler cgi
+    DocumentRoot %prefix%/lib/cgi-bin/
+}
+
+
+## Redirections:
+##
+## The difference between the next two examples is that in the first
+## one the redirection will be send to the browser, but in the second
+## one it will be an internal redirection (the browser will keep the 
+## same URL untouched)
+
+# Directory /pic1 {
+#     Handler redir {
+#	     Show Rewrite "/(.*)$" "/showpic.php?pic=$1&full=1"
+#	 }
+# }
+
+# Directory /pic2 {
+#	 Handler redir {
+#	     Rewrite "/(.*)$" "/showpic.php?pic=$1&full=1"
+#	 }
+# }
+
+
+## Authentication:
+## 
+## There are currently two modes of authentication built into HTTP 1.1
+## protocol: 
+##
+## `Basic' authentication: 
+## basic authentication is the simplest method of authentication, and
+## for a long time was the most common authentication method used.
+##
+## `Digest' authentication:
+## digest authentication provides an alternate method for protecting
+## your web content.
+
+##
+## Basic authentication example
+##
+# Directory /private {
+#     Auth Basic {
+#         Name "My private data"
+#         Method pam
+#     }
+# }
+
+##
+## Digest authentication example
+##
+# Directory /private2 {
+#     Auth Digest {
+#         Name "My private data 2"
+#         Method htpasswd {
+#             PasswdFile /var/www/private2/.htpasswd
+#         }
+#     }
+# }
+
+##
+## Basic OR Digest authentication
+##
+# Directory /private3 {
+#     Auth Basic, Digest {
+#         Name "My private data 3"
+#         Method plain {
+#             PasswdFile /var/www/private3/.plain_passwds
+#         }
+#     }
+# }
+
+
+##
+## Extension:
+## Set some basic extensions
+##
+## NOTE: Probably it is a good idea to keep these definitions
+##       at the end of the file (higher priority)
+##
+
+Extension php, php3, php4 {
+		Handler phpcgi
+}

@@ -1,0 +1,153 @@
+=======================
+Introducción a Cherokee
+======================
+
+Instalación
+-----------
+La instalación de cherokee es muy similar a la de cualquier otro paquete de
+software libre basado las herramientas autoconf/automake. Tan sólo es el típico
+"./configure ; make install".
+
+Además tiene algunos parametros para compilarlo. Le sugiero usar `prefix' y
+`sysconfdir'; con ellos podrás decidir dónde instalar los archivos del servidor.
+Sería algo así:
+
+./configure --prefix=/usr --sysconfdir=/etc
+
+
+Cherokee tienes también sus propios para añadir algunas características
+externas:
+
+--with-php activa el soporte a PHP4.
+--with-mono activa el soporte a ASPX (usando Mono).
+
+También puedes establecer algunas opciones de compilación para mejorar el
+rendimiento del servidor usando el parámetro CFLAGS en la fase de compilación.
+Pro ejemplo, si tiene un Pentium-3, algo como esto sería magnífico:
+
+make CFLAGS="-march=pentium3 -O3 -pipe" install
+
+Fichero de configuración 
+------------------------
+Si usa cherokee como servidor web (no como una librería para servidor web
+empotrado), él leerá un fichero de configuración para configurarse a sí mismo.
+Por defecto, este fichero es /etc/cherokee.conf, pero depende de dónde haya
+instalado el servidor.
+Estos ficheros contienen algunas opciones acerca de la configuración y cómo
+debería trabajar el servidor. El fichero de configuración está completamente
+comentado, por lo que es un buen punto para empezar. :-)
+
+NOTA: En este momento, estamos trabajando duramente en cherokee, por lo que
+añadiremos nuevos parámetros de configuración de vez en cuando. :)
+
+Hay un concepto importante en el sistema de configuración de Cherokee: los
+handlers (manejadores).
+Estos handlers son el medio para añadir la correspondencia entre cómo quiere que
+actúe un directorio y su contenido.
+El movimiento se explicará más adelante, por lo que expondré algunos ejemplos:
+
+Directory /public {
+		Handler common
+}
+
+Directory / {
+		Handler file
+}
+
+
+Cuando Cherokee recibe una solicitud mira en sus reglas internas buscando una
+para estas coincidencias. Si tu accedes a http://localhost/public/thing, él
+coincidirá con la primera regla, por lo que la solicitud será atendida por el
+handler "common".
+Hay un caso `especial', el directorio root "/". Si cherokee atiende una
+solucitud para un objeto almacenado en un directorio desconocido, usará el
+handler predeterminado; en este caso el handler "file".
+Puedes hacer el fichero de configuración tan complicado como quieras.
+
+
+Handlers
+--------
+Previamente, vimos cómo establecer las correspondencias entre directorios y
+handlers. En este punto explicaremos qué es un handler.
+Básicamente cada handler es un módulo independiente de cherokee, que maneja una
+solicitud de un modo concreto.
+En este momento, están los siguientes handlers
+
+* file:    Devuelve ficheros. Si el handler encuentra el fichero en la
+           solicitud, lo envía. Tenga en cuenta que envía sólo ficheros
+* dirlist: Lista el contenido de un directorio. Tenga cuidado, no envía ficheros
+* common:  Es una mezcla de los dos anteriores. Si el objeto solicitado es un
+           fichero, lo envía, pero si es un directorio, manda el listado.
+* redir:   Redirecciona la solicitud a una nueva URL
+* nn:      Implementa el algoritmo `nearest neighbor'. Si la solicitud no
+           existe, buscará la coincidencia más cercana.
+
+NOTA: En este momento, hay algunos handlers sin terminar. Estamos trabajando
+para finalizarlos
+
+* php:     Ejecuta/evalúa ficheros PHP.
+* mono:    Ejecuta/evalúa ficheros ASPX.
+
+Virtual hosts
+-------------
+Las nuevas versiones de Cherokee tienen soporte para hosts virtuales.
+Puede añadir tantos servidores como quieras en el sitema de configuración. La
+sintaxis de configuración es muy similar al resto. Por ejemplo:
+
+Server tesoro.alobbs.com {
+	  DocumentRoot /tmp
+
+	  Directory / {
+			  Handler common
+	  }
+}
+
+Hay un parámetro básico, "DocumentRoot", que especifica la ruta por defecto
+del contenido de este host virtual.
+Dentro de la configuración del servidor puede añadir otra vez tantas entradas
+Directory como quiera
+
+Para añadir un servidor por defecto, basta con añadir DocumentRoot y al menos
+una entrada Directory fuera de cualquier entrada Server. Si ningún servidor
+virtual coincide con la solicitud, cherokee usará la entrada predeterminada.
+
+
+Ficheros de log
+---------------
+Cherokee usa syslog para el log. Es el más flexible, limpio y estándar método de
+hacerlo. Loguear puede se (des)activado con el parámetro "Log" del fichero de
+configuración. Normalmente querrá mantenerlo activado, pero en algunas
+situaciones (como pruebas de rendimiento) es mejor mantenerlo apagado.
+
+Directorios de usuario
+----------------------
+Desde la versión 0.4.2, Cherokee puede trabajar con el contenido personal del
+usuario. Básicamente, tiene que añadir la entrada "UserDir" al fichero de
+configuración (un servidor virtual también vale)
+
+Ejemplo:
+
+UserDir public_html
+
+Si Cherokee va a responder a la solicitud http://www.alobbs.com/~user/thing,
+buscará el objeto "thing" en directorio "public_html" del directorio home del
+usuario "user".
+
+Si no se especifica ninguna entrada "UserDir", esta característica no se usa.
+
+
+Para desarrolladores: cómo escribir un nuevo handler
+----------------------------------------------------
+Escribir un nuevo handler es una tarea simple.
+Le sugiero leer el fichero "handler.h". Verá una estructura y 4-5 prototipos de
+funciones. Normalmente, el handler tiene que implementar todas las funciones. La
+mejor manera de ver cómo trabaja es leer el código de los handlers actuales, es
+fácil y limpio.
+
+
+
+Alvaro Lopez Ortega
+alvaro@alobbs.com
+
+Traducido por Ayose Cazorla León
+setepo@gulic.org

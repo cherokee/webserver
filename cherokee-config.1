@@ -1,0 +1,32 @@
+.TH CHEROKEE
+.SH NAME
+cherokee-config - script to get information about the installed version of Cherokee
+.SH SYNOPSIS
+.B xml-config
+[\-\-prefix\fI[=DIR]\fP] [\-\-libs] [\-\-cflags] [\-\-version] [\-\-help]
+.SH DESCRIPTION
+\fIcherokee-config\fP is a tool that is used to determine the compile and
+linker flags that should be used to compile and link programs that use
+\fICherokee\fP.
+.SH OPTIONS
+.l
+\fIcherokee-config\fP accepts the following options:
+.TP 8
+.B  \-\-version
+Print the currently installed version of \fICHEROKEE\fP on the standard output.
+.TP 8
+.B  \-\-libs
+Print the linker flags that are necessary to link a \fICHEROKEE\fP program.
+.TP 8
+.B  \-\-cflags
+Print the compiler flags that are necessary to compile a \fICHEROKEE\fP program
+.
+.TP 8
+.B  \-\-prefix=PREFIX
+If specified, use PREFIX instead of the installation prefix that
+\fICHEROKEE\fP was built with when computing the output for the
+\-\-cflags and \-\-libs options. This option must be specified before
+any \-\-libs or \-\-cflags options.
+.SH AUTHOR
+This manual page was written by Fredrik Hallenberg <hallon@lysator.liu.se>,
+for the Debian GNU/linux system (but may be used by others).

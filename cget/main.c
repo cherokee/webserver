@@ -1,0 +1,432 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+
+/* Cherokee
+ *
+ * Authors:
+ *      Alvaro Lopez Ortega <alvaro@alobbs.com>
+ *
+ * Copyright (C) 2001-2006 Alvaro Lopez Ortega
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of version 2 of the GNU General Public
+ * License as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+
+#include "common-internal.h"
+
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+
+#ifdef HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#endif
+
+#ifdef HAVE_FCNTL_H
+# include <fcntl.h>
+#endif
+
+#ifdef HAVE_TIME_H
+# include <time.h>
+#endif
+
+#include <getopt.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <strings.h>
+
+#include "util.h"
+#include "url.h"
+#include "header.h"
+#include "fdpoll.h"
+#include "request.h"
+#include "downloader.h"
+#include "downloader-protected.h"
+#include "header-protected.h"      /* FIXME! */
+
+#define EXIT_OK    0
+#define EXIT_ERROR 1
+#define POLL_TIME  1000
+#define UNSET_FD   -1
+#define COLUM_NUM  20
+#define COLUM_SEP  ":"
+
+
+/* Globals..
+ */
+static int                output_fd    = UNSET_FD;
+static int                global_fd    = UNSET_FD;
+static cherokee_boolean_t quiet        = false;
+static cherokee_boolean_t save_headers = false;
+
+
+static void
+print_help (void)
+{
+	printf ("Cherokee Downloader %s\n"
+		"Usage: cget [options] URL\n\n"
+		"Mandatory arguments to long options are mandatory for short options too.\n\n"
+		"Startup:\n"
+		"  -V,  --version                Print version and exit\n"
+		"  -h,  --help                   Print this help\n"
+		"\n"
+		"Logging and input file:\n"
+		"  -q,  --quiet                  Quiet (no output)\n"
+		"\n"
+		"Download:\n"
+		"  -O   --output-document=FILE   Write documents to FILE\n"
+		"\n"
+		"HTTP options:\n"
+		"  -s,  --save-headers           Save the HTTP headers to file\n"
+		"       --header=STRING          insert STRING among the headers\n"
+		"\n"
+		"Report bugs to alvaro@gnu.org\n", PACKAGE_VERSION);
+}
+
+
+static void
+print_usage (void)
+{
+	printf ("Cherokee Downloader %s\n"
+		"Usage: cget [options] URL\n\n"
+		"Try `cget --help' for more options.\n", PACKAGE_VERSION);
+}
+
+
+static void
+print_tuple_str (const char *title, const char *info)
+{
+	int   whites;
+	char *tmp;
+
+	if (quiet == true) 
+		return;
+	
+	whites = COLUM_NUM - strlen(title);
+
+	fprintf (stderr, "%s ", title);
+
+	if (whites > 0) {
+		tmp = (char *) malloc (whites +1);
+		memset (tmp, ' ', whites);
+		tmp[whites] = '\0';
+		fprintf (stderr, "%s", tmp);
+		free (tmp);
+	}
+
+	fprintf (stderr, COLUM_SEP " %s\n", info);
+}
+
+
+static void
+print_tuple_int (const char *title, int num)
+{
+	char tmp[128];
+	
+	snprintf (tmp, 128, "%d", num);	
+	print_tuple_str (title, tmp);
+}
+
+
+static ret_t
+do_download__init (cherokee_downloader_t *downloader, void *param)
+{
+	cherokee_url_t *url;
+
+	url = &downloader->request.url;
+	
+	print_tuple_str ("Host",    url->host.buf);
+	print_tuple_str ("Request", url->request.buf);
+	print_tuple_int ("Port",    url->port);
+
+	return ret_ok;
+}
+
+
+static ret_t
+do_download__has_headers (cherokee_downloader_t *downloader, void *param)
+{
+	cherokee_url_t    *url;
+	cherokee_buffer_t *req;
+	cherokee_header_t *hdr;
+
+	url = &downloader->request.url;
+	req = &url->request;
+	hdr = downloader->header;
+
+	/* Check the response
+	 */
+	if (quiet == false) {
+		cherokee_buffer_t *buf;
+
+		cherokee_buffer_new (&buf);
+		cherokee_http_code_copy (HDR_RESPONSE(hdr), buf);
+
+		print_tuple_str ("Response", buf->buf);
+		
+		cherokee_buffer_free (buf);
+	}
+
+	if ((! http_type_200 (hdr->response)) && (! save_headers)) {
+		return ret_error;
+	}
+
+	/* Open a new file if needed
+	 */
+	if (global_fd == UNSET_FD) {
+		char *name;
+		
+		name = strrchr (req->buf, '/');
+		if (name == NULL) {
+			name = "index.html";
+		}
+
+		output_fd = open (name, O_WRONLY, O_CREAT);
+		if (output_fd < 0) {
+			return ret_error;
+		}
+
+	} else {
+		output_fd = global_fd;
+	}
+
+	/* Save the headers?
+	 */
+	if (save_headers == true) {
+		ssize_t  written;
+		uint32_t len;
+
+		cherokee_header_get_length (hdr, &len);
+		written = write (output_fd, hdr->input_buffer->buf, len);
+		if (written < 0) {
+			PRINT_ERROR_S ("Can not write to output file\n");
+			return ret_error;
+		}
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t
+do_download__read_body (cherokee_downloader_t *downloader, void *param)
+{
+	char    tmp[5];
+	char    total[5];
+
+	ret_t   ret;
+	ssize_t len;
+
+	/* Write down
+	 */
+	len = write (output_fd, downloader->body.buf, downloader->body.len);
+	if (len > 0) {
+		ret = cherokee_buffer_move_to_begin (&downloader->body, len);
+		if (ret != ret_ok) return ret;
+	}
+
+	/* Print info
+	 */
+	cherokee_strfsize (downloader->content_length, total);
+	cherokee_strfsize (downloader->info.body_recv, tmp);
+
+	fprintf (stderr, "\rDownloading: %s of %s", tmp, total);
+	fflush(stderr);
+
+	return ret_ok;	
+}
+
+
+static ret_t
+do_download__finish (cherokee_downloader_t *downloader, void *param)
+{
+	fprintf (stderr, "\n");
+	return ret_ok;
+}
+
+
+static ret_t
+do_download (cherokee_downloader_t *downloader, cherokee_fdpoll_t *fdpoll)
+{
+	int   num;
+	ret_t ret;
+	
+	for (;;) {
+		/* Inspect the file descriptors
+		 */ 
+		num = cherokee_fdpoll_watch (downloader->fdpoll, POLL_TIME);
+
+		/* Do some work
+		 */
+		ret = cherokee_downloader_step (downloader);
+
+		switch (ret) {
+		case ret_ok:
+		case ret_eagain:
+			/* it is go.. continue
+			 */
+			break;
+			
+		case ret_eof:
+		case ret_error:
+			/* Finished or critical error
+			 */
+			return ret;
+			
+		default:
+			SHOULDNT_HAPPEN;
+			return ret_error;
+		}
+	}
+
+	return ret_ok;
+}
+
+
+int
+main (int argc, char **argv)
+{
+	int     re;
+	ret_t   ret;
+	int     val;
+	int     param_num;
+	int     long_index;
+	cuint_t fdlimit;
+	cherokee_fdpoll_t     *fdpoll;
+	cherokee_downloader_t *downloader;
+
+
+	struct option long_options[] = {
+		/* Options without arguments */
+		{"help",          no_argument,       NULL, 'h'},
+		{"version",       no_argument,       NULL, 'V'},
+		{"quiet",         no_argument,       NULL, 'q'},
+		{"save-headers",  no_argument,       NULL, 's'},
+		{"header",        required_argument, NULL,  0 },
+		{NULL, 0, NULL, 0}
+	};
+
+	/* Build the fd poll object..
+	 */
+	ret = cherokee_sys_fdlimit_get (&fdlimit);
+	if (ret != ret_ok) return EXIT_ERROR;
+
+	ret = cherokee_fdpoll_best_new (&fdpoll, fdlimit, fdlimit);
+	if (ret != ret_ok) return EXIT_ERROR;
+
+	/* Parse known parameters
+	 */
+	while ((val = getopt_long (argc, argv, "VshqO:", long_options, &long_index)) != -1) {
+		switch (val) {
+		case 'V':
+			printf ("Cherokee Downloader %s\n"
+				"Written by Alvaro Lopez Ortega <alvaro@gnu.org>\n\n"
+				"Copyright (C) 2001-2006 Alvaro Lopez Ortega.\n"
+				"This is free software; see the source for copying conditions.  There is NO\n"
+				"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
+				PACKAGE_VERSION);
+			return EXIT_OK;
+
+		case 'O':
+			if (! strncmp (optarg, "-", 1)) {
+				global_fd = 1;
+			} else {
+				global_fd = open (optarg, O_WRONLY | O_CREAT, 0644);
+				if (global_fd < 0) {
+					PRINT_ERROR ("ERROR: Can not open %s\n", optarg);
+					return EXIT_ERROR;
+				}
+			}
+			break;
+
+		case 0: 
+			break;
+			
+		case 'q':
+			quiet = true;
+			break;
+
+		case 's':
+			save_headers = true;
+			break;
+
+		case 'h':
+		case '?':
+		default:
+			print_help();
+			return EXIT_OK;
+		}
+	}
+
+	/* The rest..
+	 */
+	param_num = argc - optind;
+	
+	if (param_num <= 0) {
+		print_usage();
+		return EXIT_OK;
+	}
+
+	for (val=optind; val<optind+param_num; val++) {
+		cherokee_buffer_t *url;
+		
+		/* Build the url buffer
+		 */
+		ret = cherokee_buffer_new (&url);
+		if (ret != ret_ok) return EXIT_ERROR;
+
+		ret = cherokee_buffer_add_va (url, "%s", argv[val]);
+		if (ret != ret_ok) return EXIT_ERROR;
+
+		/* Create the downloader object..
+		 */
+		ret = cherokee_downloader_new (&downloader);
+		if (ret != ret_ok) return EXIT_ERROR;
+
+		ret = cherokee_downloader_set_url (downloader, url);
+		if (ret != ret_ok) return EXIT_ERROR;
+
+		ret = cherokee_downloader_set_fdpoll (downloader, fdpoll);
+		if (ret != ret_ok) return EXIT_ERROR;
+
+		ret = cherokee_downloader_connect (downloader);
+		if (ret != ret_ok) return EXIT_ERROR;
+
+		/* Set the callbacks
+		 */
+		cherokee_downloader_connect_event (downloader, downloader_event_init,        do_download__init,        NULL);
+		cherokee_downloader_connect_event (downloader, downloader_event_has_headers, do_download__has_headers, NULL);
+		cherokee_downloader_connect_event (downloader, downloader_event_read_body,   do_download__read_body,   NULL);
+		cherokee_downloader_connect_event (downloader, downloader_event_finish,      do_download__finish,      NULL);
+
+		/* Download it!
+		 */
+		ret = do_download (downloader, fdpoll);
+		if ((ret != ret_ok) && (ret != ret_eof)) {
+			return EXIT_ERROR;
+		}
+
+		/* Free the objects..
+		 */
+		cherokee_buffer_free (url);
+		cherokee_downloader_free (downloader);
+	}
+
+	/* Close the output file
+	 */
+	re = close (output_fd);
+	if (re != 0) return EXIT_ERROR;
+
+	return EXIT_OK;
+}

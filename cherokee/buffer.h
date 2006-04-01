@@ -1,0 +1,121 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+
+/* Cherokee
+ *
+ * Authors:
+ *      Alvaro Lopez Ortega <alvaro@alobbs.com>
+ *
+ * Copyright (C) 2001-2006 Alvaro Lopez Ortega
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of version 2 of the GNU General Public
+ * License as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+
+#if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
+# error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
+#endif
+
+#ifndef CHEROKEE_BUFFER_H
+#define CHEROKEE_BUFFER_H
+
+#include <cherokee/common.h>
+#include <stddef.h>
+#include <stdarg.h>
+#include <stdlib.h>
+
+
+CHEROKEE_BEGIN_DECLS
+
+typedef enum {
+	ver_full_html,    /*!< Eg: <address>Cherokee web server 0.5.0 Port 80</address> */
+	ver_port_html     /*!< Eg: <address>Cherokee web server Port 80</address>       */
+} cherokee_version_t;
+
+typedef struct {
+	char *buf;        /**< Memory chunk           */
+	int   size;       /**< Total amount of memory */
+	int   len;        /**< Lenght of the string   */
+} cherokee_buffer_t;
+
+#define BUF(x) ((cherokee_buffer_t *)(x))
+#define CHEROKEE_BUF_INIT  {NULL, 0, 0}
+
+#define cherokee_buffer_is_empty(b)        (BUF(b)->len == 0)
+#define cherokee_buffer_add_str(b,s)       cherokee_buffer_add (b, s, sizeof(s)-1)
+#define cherokee_buffer_cmp_str(b,s)       cherokee_buffer_cmp (b, s, sizeof(s))
+#define cherokee_buffer_case_cmp_str(b,s)  cherokee_buffer_case_cmp (b, s, sizeof(s))
+
+
+
+
+ret_t cherokee_buffer_new                (cherokee_buffer_t **buf);
+ret_t cherokee_buffer_free               (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_clean              (cherokee_buffer_t  *buf);
+
+ret_t cherokee_buffer_init               (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_mrproper           (cherokee_buffer_t  *buf);
+void  cherokee_buffer_swap_buffers       (cherokee_buffer_t  *buf, cherokee_buffer_t *second);       
+
+ret_t cherokee_buffer_add                (cherokee_buffer_t  *buf, char *txt, size_t size);
+ret_t cherokee_buffer_add_va             (cherokee_buffer_t  *buf, char *format, ...);
+ret_t cherokee_buffer_add_va_list        (cherokee_buffer_t  *buf, char *format, va_list args);
+ret_t cherokee_buffer_add_char_n         (cherokee_buffer_t  *buf, char c, int n);
+ret_t cherokee_buffer_add_buffer         (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+ret_t cherokee_buffer_prepend            (cherokee_buffer_t  *buf, char *txt, size_t size);
+
+ret_t cherokee_buffer_cmp                (cherokee_buffer_t  *buf, char *txt, cuint_t txt_len);
+ret_t cherokee_buffer_cmp_buf            (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+ret_t cherokee_buffer_case_cmp           (cherokee_buffer_t  *buf, char *txt, cuint_t txt_len);
+ret_t cherokee_buffer_case_cmp_buf       (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+
+ret_t cherokee_buffer_read_file          (cherokee_buffer_t  *buf, char *filename);
+ret_t cherokee_buffer_read_from_fd       (cherokee_buffer_t  *buf, int fd, size_t size, size_t *ret_size);
+
+ret_t cherokee_buffer_add_chunked        (cherokee_buffer_t  *buf, char *txt, size_t size);
+ret_t cherokee_buffer_add_buffer_chunked (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+
+ret_t cherokee_buffer_move_to_begin      (cherokee_buffer_t  *buf, int pos);
+ret_t cherokee_buffer_drop_endding       (cherokee_buffer_t  *buf, int num_chars);
+ret_t cherokee_buffer_multiply           (cherokee_buffer_t  *buf, int num);
+ret_t cherokee_buffer_swap_chars         (cherokee_buffer_t  *buf, char a, char b);
+ret_t cherokee_buffer_remove_dups        (cherokee_buffer_t  *buf, char c);
+ret_t cherokee_buffer_remove_string      (cherokee_buffer_t  *buf, char *string, int string_len);
+ret_t cherokee_buffer_remove_chunk       (cherokee_buffer_t  *buf, int from, int len);
+ret_t cherokee_buffer_replace_string     (cherokee_buffer_t  *buf, char *subs, int subs_len, char *repl, int repl_len);
+
+ret_t cherokee_buffer_ensure_size        (cherokee_buffer_t  *buf, size_t size);
+
+int   cherokee_buffer_is_endding         (cherokee_buffer_t  *buf, char c);
+char  cherokee_buffer_end_char           (cherokee_buffer_t  *buf);
+
+crc_t cherokee_buffer_crc32              (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_decode             (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_encode_base64      (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_decode_base64      (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_encode_md5         (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
+ret_t cherokee_buffer_encode_md5_digest  (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_encode_sha1        (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
+ret_t cherokee_buffer_encode_sha1_base64 (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_encode_hex         (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_decode_hex         (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_escape_html        (cherokee_buffer_t  *buf, cherokee_buffer_t **maybe_new);
+ret_t cherokee_buffer_add_comma_marks    (cherokee_buffer_t  *buf);
+
+ret_t cherokee_buffer_add_version        (cherokee_buffer_t  *buf, int port, cherokee_version_t ver);
+ret_t cherokee_buffer_print_debug        (cherokee_buffer_t  *buf, int length);
+
+
+CHEROKEE_END_DECLS
+
+#endif /* CHEROKEE_BUFFER_H */

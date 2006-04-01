@@ -1,0 +1,63 @@
+.\"                              hey, Emacs:   -*- nroff -*-
+.\" cherokee is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation version 2 of the License.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program; see the file COPYING.  If not, write to
+.\" the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+.\"
+.TH Cherokee_logrotate 1 "Dicember 20, 2001"
+.\" Please update the above date whenever this man page is modified.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins (default)
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+cherokee_logrotate \- Cherokee on-the-fly log rotation tool
+.SH SYNOPSIS
+.B cherokee_logrotate
+.SH DESCRIPTION
+\fBcherokee_logrotate\fP is a log rotation tool.  It sets the logging
+subsystem on "back up mode" through the administration interface, then
+it moves the log file renaming it to the next available filaname (it
+concatenates a dot and a number), and finally it restores the server
+state to the original one.
+.BR
+It allows to rotate the server logs in a safe way, at the same time
+the server keeps working.  All the connection log entries during the
+back up mode is actived will be hold on memory, and when it restores
+the default state all of them will be written on the new file.
+.\" .PP
+.\" It also...
+.SH EXAMPLE
+cherokee_logrotate https://root:password@localhost/admin/ /var/log/cherokee.access
+.SH BUGS
+.SS Bug reports
+I would appreciate hearing of any problems you have with Cherokee.  I
+would also like to hear from you if you have successfully used Cherokee,
+especially if you are using it for a distribution.
+.PP
+There is a mailing list for discussion among Cherokee users and for
+announcements of new and test versions. To join, send a message to
+cherokee-admin@alobbs.com with the line:
+.PP
+.B subscribe cherokee
+.PP
+in the body of the message. The submission address is cherokee@alobbs.com.
+.\" .SH "SEE ALSO"
+.SH AUTHOR
+Alvaro Lopez Ortega <alvaro@alobbs.com>.
+

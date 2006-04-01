@@ -1,0 +1,40 @@
+#
+# File: Special files
+#
+file {
+	readme.png   *README*
+	bomb.png     core
+}
+
+#
+# Suffix: File extensions to Icons
+#
+suffix {
+	text.png        txt, text
+	image.png       jpg, jpeg, jpe, png, gif, xcf, bmp, pcx, tiff, tif, cdr, psd, xpm, xbm
+	sound.png       au, snd, mid, midi, kar, mpga, mpega, mp2, mp3, m3u, sid, wav, aif, aiff, aifc, gsm, m3u, wma, wax, ra, rm, ram, pls, sd2, ogg
+	movie.png       avi, ogg
+	compressed.png  tar, gz, bz2, zip, rar, ace, lha, Z
+	binary.png      bin, exe, com, msi
+	script.png      sh, csh, ksh, tcl, tk, py, pl, php
+	tex.png         tex, latex, ltx, sty, cls
+	ps.png          ps, eps, ai
+	pdf.png         pdf
+	iso.png         iso, nrg, cue
+	java.png        java, class, jar
+}
+
+#
+# Directory: Icon for directories
+#
+Directory folder.png
+
+#
+# ParentDirectory: Parent Directory icon
+#
+ParentDirectory back.png
+
+#
+# Default: Icon for the rest
+#
+Default unknown.png

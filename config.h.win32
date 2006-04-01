@@ -1,0 +1,52 @@
+/* -*- Mode: C; TABs are evil */
+
+/* Cherokee
+ *
+ * Authors:
+ *      Gisle Vanem <giva@bgnett.no>
+ *
+ */
+
+#ifndef _CONFIG_H_WIN32_
+#define _CONFIG_H_WIN32_
+
+/* Headers
+ */
+#ifdef __MINGW32__
+#define HAVE_INTTYPES_H 1
+#endif
+
+#define HAVE_STDINT_H   1
+#define HAVE_FCNTL_H    1
+
+/* Functions & features 
+ */
+#define HAVE_INT_TIMEZONE  1
+#define HAVE_MEMMOVE 1
+#define HAVE_INET_PTON 1
+#define HAVE_INET_NTOP 1
+#define HAVE_CRYPT 1
+#define HAVE_GETDTABLESIZE 1
+#define HAVE_WIN32_SELECT 1
+
+/* Types
+ */
+#define UWORD32 unsigned long
+
+/* Misc
+ */
+#define FD_SETSIZE   256
+#define _PC_NAME_MAX 256
+#define SO_SUFFIX    "dll"
+#define OS_TYPE      "Win32" 
+
+
+#ifdef __MINGW32__
+#define HAVE_INLINE  1
+#endif
+
+#ifndef WEXITSTATUS
+#define WEXITSTATUS(x) ((x) & 0xff)
+#endif
+
+#endif

@@ -1,0 +1,8 @@
+#
+# The PAM configuration file for Cherokee
+#
+
+account    required   pam_unix.so
+auth       required   pam_unix.so nullok
+auth       required   pam_env.so
+session    required   pam_unix.so

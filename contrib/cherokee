@@ -1,0 +1,62 @@
+#! /bin/bash
+#
+# cherokee	Start the cherokee HTTP server.
+#
+
+NAME=cherokee
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/lib/cherokee
+DAEMON=/usr/local/sbin/cherokee
+PIDFILE=/var/run/$NAME.pid
+CONF=/usr/local/etc/cherokee/cherokee.conf
+
+trap "" 1
+export LANG=C
+export PATH
+
+test -f $DAEMON || exit 0
+
+case "$1" in
+  start)
+    echo -n "Starting cherokee web server: $NAME"
+    start-stop-daemon --start --pidfile $PIDFILE -b --exec $DAEMON
+    ;;
+
+  stop)
+    echo -n "Stopping cherokee web server: $NAME"
+    start-stop-daemon --stop --pidfile $PIDFILE --oknodo --exec $DAEMON
+    ;;
+
+  reload)
+    echo -n "Reloading $NAME configuration"
+    start-stop-daemon --stop --pidfile $PIDFILE --signal USR1 --exec $DAEMON
+    ;;
+
+  reload-modules)
+    echo -n "Reloading $NAME modules"
+    start-stop-daemon --stop --pidfile $PIDFILE --oknodo --retry 30
+    start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON
+    ;;
+
+  restart)
+    $0 reload-modules
+    exit $?
+    ;;
+
+  force-reload)
+    $0 reload-modules
+    exit $?
+    ;;
+
+  *)
+    echo "Usage: /etc/init.d/$NAME {start|stop|reload|reload-modules|force-reload|restart}"
+    exit 1
+    ;;
+esac
+
+if [ $? == 0 ]; then
+	echo .
+	exit 0
+else
+	echo failed
+	exit 1
+fi

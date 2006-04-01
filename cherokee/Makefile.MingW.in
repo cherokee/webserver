@@ -1,0 +1,255 @@
+#
+# Cherokee Web-server by Alvaro Lopez Ortega <alvaro@gnu.org>
+# http://www.alobbs.com/cherokee/
+#
+# This is a GNU makefile for MingW32 only.
+#
+# G. Vanem <giva@bgnett.no> May 2004
+#
+.SUFFIXES: .exe .def
+
+#
+# How about generating this from a ../VERSION file, like:
+# VERSION = $(shell cat ../VERSION)
+#
+VERSION = @PACKAGE_VERSION@
+CFLAGS = -DPACKAGE_VERSION=\"@PACKAGE_VERSION@\"\
+         -DPACKAGE_MAJOR_VERSION=\"@PACKAGE_MAJOR_VERSION@\" \
+         -DPACKAGE_MINOR_VERSION=\"@PACKAGE_MINOR_VERSION@\" \
+         -DPACKAGE_MICRO_VERSION=\"@PACKAGE_MICRO_VERSION@\" \
+         -DPACKAGE_PATCH_VERSION=\"@PACKAGE_PATCH_VERSION@\" \
+         -DCHEROKEE_COMPILATION         \
+         -DOS_TYPE=\"Win32\"
+
+VPATH = avl pcre zlib
+
+#
+# Include https and IPv6 support. Use pThreads.
+#
+USE_OPENSSL = 0
+USE_IPV6    = 0
+USE_PTHREAD = 1
+
+#
+# Build without modules. Put all code into the .exe
+#
+CHEROKEE_EMBEDDED = 1
+
+#
+# Change to suite.
+# OpenSSL/pThreads are optional. 
+#
+PTHREAD_ROOT = ../../../pthreads-2004-11-03
+OPENSSL_ROOT = ../../OpenSSL-0.9.8
+
+OBJ_DIR = MingW_obj
+
+CC      = gcc
+CFLAGS += -g -O2 -mtune=pentium -Wall -I. -I.. \
+          -D_WIN32 -DSO_SUFFIX=\"dll\" -DPCRE_STATIC
+
+#
+# Must run cherokee from directory of .conf files!
+#
+CFLAGS += -DCHEROKEE_CONFDIR=\".\" -DCHEROKEE_PLUGINDIR=\".\" -DCHEROKEE_DEPSDIR=\"./data/deps\"
+
+ifeq ($(USE_OPENSSL),1)
+  CFLAGS += -I$(OPENSSL_ROOT)/outinc -DOPENSSL_NO_KRB5=1 -DHAVE_OPENSSL -DHAVE_TLS
+  LIBS   += $(OPENSSL_ROOT)/out/libssl32.dll.a $(OPENSSL_ROOT)/out/libeay32.dll.a
+endif
+
+ifeq ($(USE_PTHREAD),1)
+  CFLAGS += -I$(PTHREAD_ROOT) -DHAVE_PTHREAD -DHAVE_PTHREAD_H
+  LIBS   += $(PTHREAD_ROOT)/libpthreadGC.a
+endif
+
+ifeq ($(USE_IPV6),1)
+  CFLAGS += -DHAVE_IPV6
+endif
+
+LIBS += -lws2_32
+
+APP_SOURCE = main.c
+
+DLL_SOURCE = access.c buffer.c buffer_escape.c cgi.c connection.c crc32.c dirs_table.c \
+             dirs_table_entry.c encoder.c encoder_table.c exts_table.c fdpoll-select.c \
+             fdpoll.c handler.c handler_error.c header.c http.c icons.c icons_grammar.c \
+             icons_scanner.c iocache.c levenshtein_distance.c list_ext.c list_merge_sort.c \
+             logger.c logger_table.c match.c matching_list.c md5.c mime.c mime_grammar.c \
+             mime_scanner.c module.c module_loader.c read_config_embedded.c \
+             read_config_grammar.c read_config_scanner.c regex.c request.c url.c \
+             resolv_cache.c server.c session_cache.c sha1.c socket.c table.c \
+             tdate_parse.c thread.c typed_table.c unix4win32.c util.c validator.c \
+             validator_htpasswd.c validator_plain.c virtual_server.c win32_misc.c \
+             avl/avl.c pcre/get.c pcre/pcre.c pcre/chartables.c zlib/deflate.c \
+             zlib/deftree.c nonce.c
+
+#
+# Module source (build as DLLs or statics)
+#
+MOD_SOURCE = encoder_gzip.c handler_common.c handler_dirlist.c \
+             handler_file.c handler_nn.c handler_redir.c handler_phpcgi.c \
+             handler_cgi.c handler_server_info.c handler_remote_control.c \
+             handler_webcam.c logger_combined.c logger_ncsa.c
+           # logger_w3c.c handler_cgi.c handler_phpcgi.c
+
+MODULES = common file server_info dirlist redir nn gzip ncsa combined htpasswd plain
+
+#
+# Unportable modules:
+#  MODULES += cgi php4 phpcgi gnomevfs pam mono w3c
+#
+
+ifeq ($(CHEROKEE_EMBEDDED),1)
+  CFLAGS     += -DCHEROKEE_EMBEDDED
+  APP_SOURCE += $(MOD_SOURCE) $(filter-out server.c, $(DLL_SOURCE))
+else
+  MAIN_DLL   = ../cherokee.dll
+  IMPORT_LIB = cherokee.dll.a
+endif
+
+DLL_MODULES = $(addsuffix .dll, $(addprefix ../libcherokee_, $(MODULES)))
+DLL_OBJECTS = $(addprefix $(OBJ_DIR)/, $(notdir $(DLL_SOURCE:.c=.o)))
+APP_OBJECTS = $(addprefix $(OBJ_DIR)/, $(notdir $(APP_SOURCE:.c=.o)))
+
+ifeq ($(CHEROKEE_EMBEDDED),1)
+  APP_OBJECTS += $(DLL_OBJECTS)
+endif
+
+GEN_SOURCE = icons_scanner.c mime_scanner.c icons_grammar.h icons_grammar.c \
+             read_config_scanner.c mime_grammar.h mime_grammar.c \
+             read_config_grammar.h read_config_grammar.c config.h
+
+PROGRAM  = ../cherokee.exe
+DEF_FILE = cherokee.def
+
+all: intro loader_autoconf $(OBJ_DIR) $(GEN_SOURCE) $(MAIN_DLL) $(IMPORT_LIB) $(PROGRAM) \
+     embedded_$(CHEROKEE_EMBEDDED)
+	@echo Welcome to the Cherokee Web-server
+
+intro:
+	@echo Building Cherokee $(VERSION)
+
+$(OBJ_DIR):
+	- mkdir $(OBJ_DIR)
+
+embedded_0: $(DLL_MODULES)
+
+embedded_1: ;
+
+$(PROGRAM): $(APP_OBJECTS) $(IMPORT_LIB)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+	@echo
+
+$(MAIN_DLL) $(IMPORT_LIB): $(DEF_FILE) $(DLL_OBJECTS)
+	$(CC) -shared $(LDFLAGS) -Wl,--out-implib,$(IMPORT_LIB) -o $(MAIN_DLL) $^ $(LIBS)
+	@echo
+
+config.h:
+	@echo '/* config for MingW */' > $@
+	@echo '#include "../config.h.win32"' >> $@
+
+loader_autoconf: Makefile.MingW
+ifeq ($(CHEROKEE_EMBEDDED),0)
+	@echo Generating "loader.autoconf.h and loader.autoconf.inc"
+	@echo '' > loader.autoconf.h
+	@echo '' > loader.autoconf.inc
+	- @$(foreach m, $(MODULES), \
+	  echo 'extern cherokee_module_info_t cherokee_$m_info;' >> loader.autoconf.h ; \
+	  echo 'cherokee_table_add(loader->table,"$m",&cherokee_$m_info);' >> loader.autoconf.inc ;)
+endif
+
+icons_scanner.c: icons_scanner.l
+	flex -i -Pyy_icons_ -t $^ > $@
+
+mime_scanner.c: mime_scanner.l
+	flex -i -Pyy_mime_ -t $^ > $@
+
+read_config_scanner.c: read_config_scanner.l
+	flex -i -t $^ > $@
+
+read_config_grammar.h : read_config_grammar.c
+read_config_grammar.c : read_config_grammar.y
+	bison -d $< -o $@
+
+icons_grammar.h : icons_grammar.c
+icons_grammar.c : icons_grammar.y
+	bison -p yy_icons_ -d $< -o $@
+
+mime_grammar.h : mime_grammar.c
+mime_grammar.c : mime_grammar.y
+	bison -p yy_mime_ -d $< -o $@
+
+clean:
+	rm -f $(OBJ_DIR)/*.o cherokee.map
+
+vclean: clean
+	rm -f $(PROGRAM) $(IMPORT_LIB) $(GEN_SOURCE) $(DLL_MODULES) $(MAIN_DLL) \
+	      libcherokee_*.dll.a loader.autoconf.h loader.autoconf.inc .depend
+	- rmdir $(OBJ_DIR)
+
+../libcherokee_server_info.dll: handler_server_info.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -o $@ $^
+	@echo
+
+../libcherokee_gzip.dll: encoder_gzip.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -o $@ $^ 
+	@echo
+
+../libcherokee_ncsa.dll libcherokee_ncsa.dll.a: logger_ncsa.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -Wl,--out-implib,libcherokee_ncsa.dll.a -o ../libcherokee_ncsa.dll $^
+	@echo
+
+../libcherokee_file.dll libcherokee_file.dll.a: handler_file.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -Wl,--out-implib,libcherokee_file.dll.a -o ../libcherokee_file.dll $^
+	@echo
+
+../libcherokee_dirlist.dll libcherokee_dirlist.dll.a: handler_dirlist.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -Wl,--out-implib,libcherokee_dirlist.dll.a -o ../libcherokee_dirlist.dll $^
+	@echo
+
+../libcherokee_redir.dll libcherokee_redir.dll.a: handler_redir.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -Wl,--out-implib,libcherokee_redir.dll.a -o ../libcherokee_redir.dll $^
+	@echo
+
+../libcherokee_common.dll libcherokee_common.dll.a: handler_common.c $(IMPORT_LIB) libcherokee_dirlist.dll.a libcherokee_file.dll.a
+	$(CC) -shared $(CFLAGS) -Wl,--out-implib,libcherokee_common.dll.a -o ../libcherokee_common.dll $^
+	@echo
+
+../libcherokee_htpasswd.dll libcherokee_htpasswd.dll.a: validator_htpasswd.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -Wl,--out-implib,libcherokee_htpasswd.dll.a -o ../libcherokee_htpasswd.dll $^
+	@echo
+
+../libcherokee_plain.dll libcherokee_plain.dll.a: validator_plain.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -Wl,--out-implib,libcherokee_plain.dll.a -o ../libcherokee_plain.dll $^
+	@echo
+
+../libcherokee_nn.dll: handler_nn.c $(IMPORT_LIB) libcherokee_common.dll.a libcherokee_redir.dll.a
+	$(CC) -shared $(CFLAGS) -o $@ $^
+	@echo
+
+../libcherokee_cgi.dll: handler_cgi.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -o $@ $^
+	@echo
+
+../libcherokee_phpcgi.dll: handler_phpcgi.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -o $@ $^
+	@echo
+
+../libcherokee_remote_control.dll: handler_remote_control.c $(IMPORT_LIB)
+	$(CC) -shared $(CFLAGS) -o $@ $^
+	@echo
+
+../libcherokee_combined.dll: logger_combined.c $(IMPORT_LIB) libcherokee_ncsa.dll.a
+	$(CC) -shared $(CFLAGS) -o $@ $^
+	@echo
+
+$(OBJ_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+	@echo
+
+depend: loader_autoconf $(GEN_SOURCE)
+	$(CC) -MM $(CFLAGS) $(APP_SOURCE) $(DLL_SOURCE) $(MOD_SOURCE) | \
+	sed -e 's/^\([a-zA-Z0-9_-]*\.o:\)/$$(OBJ_DIR)\/\1/' > .depend
+
+-include .depend

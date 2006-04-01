@@ -1,0 +1,1026 @@
+dnl Process this file with autoconf to produce a configure script.
+
+AC_COPYRIGHT([
+Copyright (C) 2001-2006 Alvaro Lopez Ortega
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of version 2 of the GNU General Public
+License as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+USA
+])
+
+dnl require autoconf 2.58
+AC_PREREQ(2.56)
+
+dnl Version
+m4_define([cherokee_major_version], [0])
+m4_define([cherokee_minor_version], [5])
+m4_define([cherokee_micro_version], [0])
+m4_define([cherokee_patch_version], [])
+m4_define([cherokee_version], m4_format('%s.%s.%s%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version, cherokee_patch_version))
+
+dnl Init autoconf and automake
+AC_INIT([cherokee], [cherokee_version], [http://bugs.0x50.org], [cherokee])
+AC_CONFIG_SRCDIR([cherokee/server.c])
+AM_INIT_AUTOMAKE([no-define])
+
+AC_CANONICAL_HOST
+AC_DEFINE(PACKAGE_MAJOR_VERSION, "cherokee_major_version", [Version string])
+AC_DEFINE(PACKAGE_MINOR_VERSION, "cherokee_minor_version", [Version string])
+AC_DEFINE(PACKAGE_MICRO_VERSION, "cherokee_micro_version", [Version string])
+AC_DEFINE(PACKAGE_PATCH_VERSION, "cherokee_patch_version", [Version string])
+
+dnl Substitution variables
+PACKAGE_MAJOR_VERSION="cherokee_major_version"
+PACKAGE_MINOR_VERSION="cherokee_minor_version"
+PACKAGE_MICRO_VERSION="cherokee_micro_version"
+PACKAGE_PATCH_VERSION="cherokee_patch_version"
+AC_SUBST(PACKAGE_MAJOR_VERSION)
+AC_SUBST(PACKAGE_MINOR_VERSION)
+AC_SUBST(PACKAGE_MICRO_VERSION)
+AC_SUBST(PACKAGE_PATCH_VERSION)
+
+dnl Check for CPU / vendor / OS
+os_string="UNIX"
+so_suffix=so
+AC_MSG_CHECKING([host platform characteristics])
+	case "$host" in
+	*-*-mingw*|*-*-cygwin*)
+		so_suffix=DLL
+	     os_string="Win32"
+          libdl=
+          ;;
+	*-*-*netbsd*)
+		thread_ldflags="-pthread"	
+          libdl=
+          ;;
+	*-*-*freebsd*|*-*-*openbsd*|*-*-*dragonfly*)
+		thread_ldflags="-pthread"
+          libdl="-pthread"
+          ;;
+	*-*-linux*)
+		thread_ldflags="-lpthread"
+          libdl="-ldl"
+          ;;
+	*-*-hpux*)
+		thread_ldflags="-lpthread"
+          libdl="-ldl"
+          ;;
+	*-*-solaris*)
+	     AC_DEFINE(SOLARIS, 1, [It is Solaris])	     
+		setenv_is_threadsafe="yes"
+          libdl="-ldl"
+          ;;
+	*-*-darwin*)
+		so_suffix=dylib
+		thread_ldflags="-pthread"
+          libdl="-ldl"
+          ;;
+	*)
+		AC_MSG_WARN([*** Please add $host to configure.in checks!])
+          libdl="-ldl"
+          ;;
+esac
+AC_MSG_RESULT(ok)
+
+dnl
+dnl OS string
+dnl
+AC_ARG_ENABLE(os_string, AC_HELP_STRING([--enable-os-string=STR], [Set a customized OS type string]), [os_string="$enableval"])
+AC_DEFINE_UNQUOTED(OS_TYPE, "${os_string}", [OS type])
+
+AC_ARG_ENABLE(trace, AC_HELP_STRING([--enable-trace], [Enable trace facility]), 
+   [enable_trace="$enableval"
+    AC_DEFINE(TRACE_ENABLED, 1, [Trace facility])
+   ], [enable_trace="no"])
+
+dnl
+dnl Dynamic library loading library
+dnl
+LIBS="$LIBS $libdl"
+AC_DEFINE_UNQUOTED(SO_SUFFIX, "${so_suffix}", [Dynamic loading libraries extension])
+
+dnl
+dnl Platforms
+dnl
+AM_CONDITIONAL(PLATFORM_WIN32, test x"$os_string" = "xWin32")
+
+dnl
+dnl Libtool options
+dnl
+if test "$os_string" != "Win32"; then
+    # libtool option to control which symbols are exported
+    # right now, symbols starting with _ are not exported
+    LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
+else
+    LIBTOOL_EXPORT_OPTIONS=
+fi
+
+AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
+
+
+
+AM_INIT_AUTOMAKE(cherokee, $VERSION)
+AM_MAINTAINER_MODE
+
+AM_CONFIG_HEADER(config.h)
+AC_SUBST(VERSION)
+
+AC_PATH_PROG(cherokeepath, cherokee)
+
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+
+AC_LIBTOOL_DLOPEN
+AC_LIBTOOL_WIN32_DLL
+AM_PROG_LIBTOOL
+
+AC_FUNC_CLOSEDIR_VOID
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_VPRINTF
+
+AC_C_CONST
+AC_C_BIGENDIAN
+AC_C_INLINE
+if test "$ac_cv_c_inline" != no; then
+  AC_DEFINE(HAVE_INLINE, 1, [Compile supports inline])
+fi
+
+AC_PROG_YACC
+if test "$YACC" != "bison -y"; then
+    AC_MSG_ERROR([Bison is required to build Cherokee])
+fi
+
+AM_PROG_LEX
+if test "$LEX" != "flex"; then 
+    AC_MSG_ERROR([Flex is required to build Cherokee])
+fi
+
+dnl
+dnl Check for headers
+dnl
+AC_HEADER_STDC
+AC_HEADER_DIRENT
+AC_HEADER_TIME
+AC_HEADER_SYS_WAIT
+
+AC_CHECK_HEADERS(endian.h machine/endian.h sys/endian.h sys/isa_defs.h sys/utsname.h sys/poll.h poll.h )
+AC_CHECK_HEADERS(sys/socket.h sys/un.h netinet/in.h arpa/inet.h netinet/tcp.h sys/ioctl.h fcntl.h sys/time.h)
+AC_CHECK_HEADERS(sys/resource.h resource.h unistd.h syslog.h stdint.h inttypes.h error.h pwd.h sys/uio.h)
+AC_CHECK_HEADERS(pthread.h netdb.h stdarg.h sys/filio.h sys/varargs.h sys/select.h sys/mman.h grp.h winsock.h)
+AC_CHECK_HEADERS(winsock.h winsock2.h)
+
+
+AC_SYS_LARGEFILE
+
+AC_SIZE_T
+AC_TYPE_SIGNAL
+AC_TYPE_UID_T
+AC_TYPE_MODE_T
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_TYPE_PID_T
+AC_STRUCT_ST_RDEV
+AC_CHECK_TYPE(ino_t,unsigned)
+AC_CHECK_TYPE(loff_t,off_t)
+AC_CHECK_TYPE(offset_t,loff_t)
+AC_CHECK_TYPE(ssize_t, int)
+AC_CHECK_TYPE(wchar_t, unsigned short)
+
+AC_CHECK_SIZEOF(unsigned long)
+AC_CHECK_SIZEOF(unsigned long long)
+AC_CHECK_SIZEOF(unsigned int)
+AC_CHECK_SIZEOF(off_t)
+
+AC_CACHE_CHECK([for long long],samba_cv_have_longlong,[
+AC_TRY_RUN([#include <stdio.h>
+main() { long long x = 1000000; x *= x; exit(((x/1000000) == 1000000)? 0: 1); }],
+samba_cv_have_longlong=yes,samba_cv_have_longlong=no,samba_cv_have_longlong=cross)])
+if test x"$samba_cv_have_longlong" = x"yes"; then
+    AC_DEFINE(HAVE_LONGLONG,1,[Whether the host supports long long's])
+fi
+
+AC_FUNC_MEMCMP
+AC_FUNC_MMAP
+
+AC_CHECK_FUNCS(gmtime gmtime_r localtime localtime_r getrlimit getdtablesize readdir_r)
+
+
+AH_BOTTOM([
+/* Give us an unsigned 32-bit data type. */
+#if SIZEOF_UNSIGNED_LONG==4
+#define UWORD32 unsigned long
+#elif SIZEOF_UNSIGNED_INT==4
+#define UWORD32 unsigned int
+#else
+#error I do not know what to use for a UWORD32.
+#endif
+])
+
+
+dnl Find socket()
+dnl Likely combinations:
+dnl		-lsocket [ -lnsl_s | -lnsl ]
+dnl		-linet
+AC_CHECK_LIB(ws2_32, main)
+AC_CHECK_LIB(wsock32, main)
+
+AC_CHECK_FUNC(socket, :, [	
+	AC_CHECK_LIB(socket, main)
+	AC_CHECK_LIB(net, main)
+	AC_CHECK_LIB(nsl_s, main)
+	AC_CHECK_LIB(nsl, main)
+	AC_CHECK_LIB(inet, socket)
+	AC_CHECK_LIB(gen, main)
+])
+
+AC_SEARCH_LIBS(accept, socket)
+AC_SEARCH_LIBS(bind, socket)
+AC_SEARCH_LIBS(listen, socket)
+AC_SEARCH_LIBS(setsockopt, socket)
+
+
+dnl
+dnl Check for fd events inspect functions
+dnl
+AC_CHECK_FUNC(poll, have_poll=yes)
+AC_CHECK_FUNC(kqueue, have_kqueue=yes)
+AC_CHECK_FUNC(select, have_select=yes)
+
+if test "x-$have_select" != "x-yes" -a "x-$ac_cv_header_winsock2_h" = "x-yes"; then 
+     AC_MSG_CHECKING([for select in ws2_32])
+     AC_TRY_LINK([#include <winsock2.h>],
+				[select(0,0,0,0,0)],
+				[AC_MSG_RESULT(yes)
+				 have_win32_select=yes],
+				[AC_MSG_RESULT(no)])
+fi
+
+dnl
+dnl Epoll
+dnl
+AC_CHECK_HEADER(sys/epoll.h, have_epoll_include=yes, have_epoll_include=no)
+
+have_epoll=no
+if test "x$have_epoll_include" = "xyes"; then
+ 	AC_MSG_CHECKING(for epoll system call)
+
+     AC_TRY_RUN([
+		#include <stdint.h>
+		#include <sys/param.h>
+		#include <sys/types.h>
+		#include <sys/syscall.h>
+		#include <sys/epoll.h>
+		#include <unistd.h>
+
+		int epoll_create (int size) {
+	        return (syscall(__NR_epoll_create, size));
+		}
+	
+		int main (int argc, char **argv) {
+	        int epfd;
+	        epfd = epoll_create(256);
+	    	   exit (epfd == -1 ? 1 : 0);
+		}
+	], have_epoll=yes)
+	AC_MSG_RESULT($have_epoll)
+fi
+
+dnl
+dnl Solaris 10: Event ports
+dnl
+AC_CHECK_HEADER(port.h, have_port_include=yes, have_port_include=no)
+
+have_port=no
+if test "x$have_port_include" = "xyes"; then
+    	AC_MSG_CHECKING(for event ports support)
+
+     AC_TRY_RUN([
+		#include <stdint.h>
+		#include <unistd.h>
+		#include <port.h>
+	
+		int main (int argc, char **argv) {
+	        int port;
+		   port = port_create();
+	    	   exit (port < 0 ? 1 : 0);
+		}
+	], have_port=yes)
+	AC_MSG_RESULT($have_port)
+fi
+
+
+
+if test "$have_epoll" = yes; then
+	AC_DEFINE(HAVE_EPOLL, 1, [Have epoll])
+fi
+AM_CONDITIONAL(COMPILE_EPOLL, test x"$have_epoll" = "xyes")
+
+if test "$have_kqueue" = yes; then
+	AC_DEFINE(HAVE_KQUEUE, 1, [Have kqueue])
+fi
+AM_CONDITIONAL(COMPILE_KQUEUE, test x"$have_kqueue" = "xyes")
+
+if test "$have_port" = yes; then
+	AC_DEFINE(HAVE_PORT, 1, [Have event ports])
+fi
+AM_CONDITIONAL(COMPILE_PORT, test x"$have_port" = "xyes")
+
+if test "$have_poll" = yes; then
+	AC_DEFINE(HAVE_POLL, 1, [Have poll])
+fi
+AM_CONDITIONAL(COMPILE_POLL, test x"$have_poll" = "xyes")
+
+if test "$have_win32_select" = yes; then
+	AC_DEFINE(HAVE_WIN32_SELECT, 1, [Have Win32 select])
+fi
+AM_CONDITIONAL(COMPILE_WIN32_SELECT, test x"$have_win32_select" = "xyes")
+
+if test "$have_select" = yes; then
+     AC_DEFINE(HAVE_SELECT, 1, [Have select])
+fi
+AM_CONDITIONAL(COMPILE_SELECT, test x"$have_select" = "xyes" -a x"$have_win32_select" != "xyes")
+
+
+dnl
+dnl Check for inet_pton.  We have our own, but on Solaris the version in
+dnl libresolv is more lenient in ways that Solaris's internal DNS resolution
+dnl code requires, so if we use our own *and* link with libresolv (which may
+dnl be forced by Perl) DNS resolution fails.
+dnl
+AC_SEARCH_LIBS(inet_pton, [socket nsl resolv])
+AC_CHECK_FUNCS(inet_pton inet_ntop inet_addr)
+
+AC_SEARCH_LIBS(gethostbyname, [socket nsl resolv])
+AC_CHECK_FUNCS(gethostbyname gethostbyname_r)
+
+dnl
+dnl Check for inet_addr
+dnl
+AC_SEARCH_LIBS(inet_addr, xnet) 
+AC_CHECK_FUNCS(inet_addr)
+
+dnl
+dnl TCP_CORK
+dnl
+HYDRA_TCP_CORK
+
+
+dnl
+dnl Check for GNU getopt_long()
+dnl
+#AC_SEARCH_LIBS(getopt_long, [iberty gnugetopt])
+AC_CHECK_HEADERS(getopt.h)
+AC_CHECK_FUNC(getopt_long, have_getopt_long="yes")
+AM_CONDITIONAL(HAVE_GETOPT_LONG, test x"$have_getopt_long" = "xyes")
+
+
+dnl
+dnl Pthread
+dnl
+with_pthread="yes"
+AC_ARG_ENABLE(pthread, AC_HELP_STRING([--disable-pthread],[Disable threading support]),
+		    with_pthread="$enableval", with_pthread="yes")
+
+AM_CONDITIONAL(USE_PTHREAD, test "x$with_pthread" = "xyes")
+if test "x$with_pthread" = "xyes"
+then
+	ACX_PTHREAD( , AC_MSG_ERROR([POSIX threads missing]))
+
+	dnl I'm not sure about it..
+	dnl but I've had problems compiling in some GNU/Linux machines
+	dnl because ACX_PTHREAD didn't add -lpthread
+	if test "x$PTHREAD_LIBS" =  "x"
+	then
+#	   AC_CHECK_LIB(pthread, pthread_create, 
+#				 [PTHREAD_LIBS="-lpthread"
+#				  AC_SUBST(PTHREAD_LIBS)])
+		PTHREAD_LIBS="$thread_ldflags"
+ 		AC_SUBST(PTHREAD_LIBS)
+	fi
+
+	if test "$acx_pthread_ok" = "yes"; then
+
+		AC_MSG_CHECKING([for pthread_rwlock_t support])
+		have_pthread_rwlock_t=yes
+		AC_TRY_COMPILE([#include <pthread.h>],
+			[pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;],
+			AC_MSG_RESULT([ok]),
+
+		dnl Didn't find rwlock_t. 
+		dnl Try defining _XOPEN_SOURCE=500
+		dnl
+		oldcflags="$CFLAGS"
+		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
+
+		AC_TRY_COMPILE([#include <pthread.h>], 
+			[pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;]
+		,
+			AC_MSG_RESULT([-D_XOPEN_SOURCE=500])
+			PTHREAD_CFLAGS="$PTHREAD_CFLAGS -D_XOPEN_SOURCE=500"
+			AC_SUBST(PTHREAD_CFLAGS)
+			# AC_DEFINE(_XOPEN_SOURCE, 500, [Define this if it is needed for pthread_rwlock_t support])
+		,
+			# AC_MSG_ERROR([pthread_rwlock_t support missing]))
+		))
+
+		if test "$have_pthread_rwlock_t" = yes; then
+			AC_DEFINE(HAVE_PTHREAD_RWLOCK_T, 1, [Define if your pthread library includes pthread_rwlock_t])
+		fi
+
+		CFLAGS="$oldcflags"
+
+		with_pthread="yes"
+	fi
+fi
+
+AC_CHECK_FUNC(pthread_attr_setschedpolicy, have_pthread_attr_setschedpolicy=yes)
+if test x"$have_pthread_attr_setschedpolicy" = "xyes"; then
+  AC_DEFINE(HAVE_PTHREAD_SETSCHEDPOLICY, 1, [Pthread support pthread_attr_setschedpolicy])
+fi
+
+dnl
+dnl Is setenv() threadsafe?
+dnl
+if test "$setenv_is_threadsafe" = "yes"; then
+AC_DEFINE(SETENV_IS_THREADSAFE, 1, [setenv function is thread safe])
+fi
+
+dnl
+dnl Check for vsyslog
+dnl
+AC_CHECK_FUNCS(syslog vsyslog strsep strcasestr memmove strerror bcopy strlcat)
+
+
+dnl
+dnl Does this platform require array notation to assign to a va_list?
+dnl If cross-compiling, we assume va_list is "normal".  If this breaks
+dnl you, set ac_cv_valistisarray=true and maybe define HAVE_VA_LIST_AS_ARRAY
+dnl also just to be sure.
+dnl
+AC_MSG_CHECKING(whether va_list assignments need array notation)
+AC_CACHE_VAL(ac_cv_valistisarray,
+        [AC_TRY_RUN([#include <stdlib.h>
+		     #include <stdarg.h>
+		     void foo(int i, ...) {
+			va_list ap1, ap2;
+			va_start(ap1, i);
+			ap2 = ap1;
+			if (va_arg(ap2, int) != 123 || va_arg(ap1, int) != 123) { exit(1); }
+			va_end(ap1); va_end(ap2);
+		     }
+		     int main()
+		     { foo(0, 123); return(0); }],
+		    [ac_cv_valistisarray=false],
+		    [ac_cv_valistisarray=true],
+		    [ac_cv_valistisarray=false])])
+					     
+if test "$ac_cv_valistisarray" = true ; then
+	AC_DEFINE(HAVE_VA_LIST_AS_ARRAY,,[va_list works copying an array])
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+
+
+dnl
+dnl Check if the global variable `timezone' exists. If so, define
+dnl HAVE_INT_TIMEZONE.
+dnl
+AC_STRUCT_TIMEZONE
+
+AC_MSG_CHECKING(for global timezone)
+AC_TRY_LINK([#include <time.h>],
+[int res; res = timezone / 60;],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(HAVE_INT_TIMEZONE,, [Set to 1 if you have the global variable timezone])],
+AC_MSG_RESULT(no))
+
+
+dnl
+dnl Check for RTDL constants (from Haskell code)
+dnl
+dnl ** check for libdl & RTLD_NEXT
+dnl ** sometimes RTLD_NEXT is hidden in #ifdefs we really don't wan to set
+AC_MSG_CHECKING(for RTLD_NEXT from dlfcn.h)
+AC_EGREP_CPP(yes,
+[
+ #include <dlfcn.h>
+ #ifdef RTLD_NEXT
+        yes
+ #endif
+], [
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_RTLDNEXT,,[Have RTDL_NEXT])
+  HaveRtldNext=YES
+], [
+  AC_MSG_RESULT(no)
+  HaveRtldNext=NO
+  ])    
+AC_SUBST(HaveRtldNext)
+
+dnl ** RTLD_LOCAL isn't available on cygwin or openbsd
+AC_MSG_CHECKING(for RTLD_LOCAL from dlfcn.h)
+AC_EGREP_CPP(yes,
+[
+ #include <dlfcn.h>
+ #ifdef RTLD_LOCAL
+        yes
+ #endif
+], [
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_RTLDLOCAL,,[Have RTDL_LOCAL])
+  HaveRtldLocal=YES
+], [
+  AC_MSG_RESULT(no)
+  HaveRtldLocal=NO
+  ])    
+AC_SUBST(HaveRtldLocal)
+
+dnl ** RTLD_GLOBAL isn't available on openbsd
+AC_MSG_CHECKING(for RTLD_GLOBAL from dlfcn.h)
+AC_EGREP_CPP(yes,
+[
+ #include <dlfcn.h>
+ #ifdef RTLD_GLOBAL
+        yes
+ #endif
+], [
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_RTLDGLOBAL,,[Have RTDL_GLOBAL])
+  HaveRtldGlobal=YES
+], [
+  AC_MSG_RESULT(no)
+  HaveRtldGlobal=NO
+  ])    
+AC_SUBST(HaveRtldGlobal)
+
+dnl ** RTLD_NOW isn't available on openbsd
+AC_MSG_CHECKING(for RTLD_NOW from dlfcn.h)
+AC_EGREP_CPP(yes,
+[
+ #include <dlfcn.h>
+ #ifdef RTLD_NOW
+        yes
+ #endif
+], [
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_RTLDNOW,,[Have RTDL_NOW])
+  HaveRtldNow=YES
+], [
+  AC_MSG_RESULT(no)
+  HaveRtldNow=NO
+  ])    
+AC_SUBST(HaveRtldNow)
+
+
+dnl
+dnl Check of off64_t
+dnl
+AC_CACHE_CHECK([for off64_t],samba_cv_HAVE_OFF64_T,[
+AC_TRY_RUN([
+#if defined(HAVE_UNISTD_H)
+#include <unistd.h>
+#endif
+#include <stdio.h>
+#include <sys/stat.h>
+main() { struct stat64 st; off64_t s; if (sizeof(off_t) == sizeof(off64_t)) exit(1); exit((lstat64("/dev/null", &st)==0)?0:1); }],
+samba_cv_HAVE_OFF64_T=yes,samba_cv_HAVE_OFF64_T=no,samba_cv_HAVE_OFF64_T=cross)])
+if test x"$samba_cv_HAVE_OFF64_T" = x"yes"; then
+    AC_DEFINE(HAVE_OFF64_T,1,[Whether off64_t is available])
+fi
+
+
+# From etr_socket_nsl.m4
+ETR_SOCKET_NSL
+
+# From sendfile_samba.m4
+SENDFILE_CHECK
+
+# Is sendfile broken?
+AC_MSG_CHECKING(if sendfile works)
+AC_TRY_RUN([#include <errno.h>
+            int main() {
+               int o = 0;
+               if (-1 == sendfile(0, 0, &o, 0) && errno == ENOSYS) return -1;
+               return 0;
+            } ], 
+            AC_MSG_RESULT(yes), 
+            [ AC_MSG_RESULT(no) 
+              AC_DEFINE([HAVE_SENDFILE_BROKEN], [1], [broken sendfile]) ])
+
+# readdir_r()
+PHP_READDIR_R_TYPE
+
+
+dnl
+dnl IPv6 Support
+dnl I got this mostly from Apache's tests
+dnl
+
+AC_ARG_ENABLE(ipv6,
+  AC_HELP_STRING([--disable-ipv6], [Disable IPv6 support]),
+  [ if test "$enableval" = "no"; then
+       disabled_ipv6=1
+    fi ],
+  [ disabled_ipv6=0 ] )
+
+AC_SEARCH_LIBS(getaddrinfo, socket inet6)
+AC_SEARCH_LIBS(getnameinfo, socket inet6)
+AC_SEARCH_LIBS(gai_strerror, socket inet6)
+AC_CHECK_FUNC(gai_strerror)
+
+APR_CHECK_WORKING_GETADDRINFO
+APR_CHECK_WORKING_GETNAMEINFO
+
+AC_ACME_SOCKADDR_UN
+AC_ACME_SOCKADDR_IN6
+AC_ACME_SOCKADDR_STORAGE
+
+AC_MSG_CHECKING(if the system supports IPv6)
+have_ipv6="no"
+
+if test "$disabled_ipv6" = 1; then
+    AC_MSG_RESULT([no -- disabled by user])
+else
+    if test "x$ac_cv_acme_sockaddr_in6" = "xyes"; then
+        if test "x$ac_cv_working_getaddrinfo" = "xyes"; then
+            if test "x$ac_cv_working_getnameinfo" = "xyes"; then
+                have_ipv6="yes"
+                AC_MSG_RESULT([yes])
+ 		      AC_DEFINE(HAVE_IPV6, 1, [Define if you have IPv6 support.])
+            else
+                AC_MSG_RESULT([no -- no getnameinfo])
+            fi
+        else
+            AC_MSG_RESULT([no -- no working getaddrinfo])
+        fi
+    else
+        AC_MSG_RESULT([no -- no sockaddr_in6])
+    fi
+fi
+
+dnl 
+dnl Test whether SO_RCVTIMEO is broken
+dnl 
+AC_CACHE_CHECK([whether setsockopt(SO_RCVTIMEO) is broken],
+  ac_cv_so_rcvtimeo_broken, [dnl
+    AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#if defined(HAVE_SYS_TYPES_H)
+#include <sys/types.h>
+#endif
+
+#if defined(HAVE_SYS_SOCKET_H)
+#include <sys/socket.h>
+#endif
+
+#if defined(HAVE_SYS_TIME_H)
+#include <sys/time.h>
+#endif
+
+int main(void) {
+        int fd;
+        int ret;
+        struct timeval new_tv;
+
+        /* Open the socket (INET/TCP).*/
+        fd = socket(AF_INET, SOCK_STREAM, 0);
+
+        /* set the timeout for the incoming queue */
+        /* 1 second for example */
+        new_tv.tv_sec = 1;
+        new_tv.tv_usec = 0;
+
+        ret = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &new_tv, sizeof(new_tv)); 
+        return ret;
+}
+]])],[ac_cv_so_rcvtimeo_broken=no],[ac_cv_so_rcvtimeo_broken=yes],[ac_cv_so_rcvtimeo_broken=cross])])
+if test x"$ac_cv_so_rcvtimeo_broken" = x"yes"; then
+  AC_DEFINE(HAVE_BROKEN_SO_RCVTIMEO, 1, [Define if setsockopt(SO_RCVTIMEO) is broken])
+fi
+
+dnl
+dnl Check of __func__ and co..
+dnl
+AC_MSG_CHECKING([whether our compiler supports __func__])
+AC_TRY_COMPILE([],
+ [const char *cp = __func__;],
+ AC_MSG_RESULT([yes]),
+ AC_MSG_RESULT([no])
+ AC_MSG_CHECKING([whether our compiler supports __FUNCTION__])
+ AC_TRY_COMPILE([],
+   [const char *cp = __FUNCTION__;],
+   AC_MSG_RESULT([yes])
+   AC_DEFINE(__func__, __FUNCTION__,
+         [Define to appropriate substitue if compiler doesnt have __func__]),
+   AC_MSG_RESULT([no])
+   AC_DEFINE(__func__, __FILE__,
+         [Define to appropriate substitue if compiler doesnt have __func__])))
+
+dnl
+dnl Check for pcre library
+dnl
+AC_CHECK_LIB(pcre, pcre_compile, have_pcre_lib=yes, have_pcre_lib=no)
+AC_CHECK_HEADER(pcre.h, have_pcre_include=yes, have_pcre_include=no)
+if test "$have_pcre_lib $have_pcre_include" = "yes yes"; then
+   have_pcre="yes"
+else
+   have_pcre="built-in"
+fi
+AM_CONDITIONAL(USE_INTERNAL_PCRE, test $have_pcre = "built-in")
+
+
+dnl
+dnl Check for FastCGI library
+dnl
+AC_CHECK_LIB(fcgi, FCGX_IsCGI, have_fcgi=yes, have_fcgi=no)
+AM_CONDITIONAL(HAVE_FCGI, test "$have_fcgi" = "yes")
+
+
+dnl
+dnl PAM
+dnl
+have_pam="disabled"
+AC_ARG_ENABLE(pam, AC_HELP_STRING([--disable-pam],[Disable PAM support]), use_pam="$enableval", use_pam="yes")
+if test "x$use_pam" = "xyes"; then
+     AC_CHECK_LIB(pam, _pam_dispatch, have_pam=yes, have_pam=no)
+     AC_CHECK_HEADER(security/pam_modules.h, have_pam_include=yes, have_pam_include=no)
+     AC_CHECK_HEADERS(security/_pam_macros.h security/pam_appl.h)
+fi
+AM_CONDITIONAL(HAVE_PAM, test "$have_pam $have_pam_include" = "yes yes")
+
+dnl
+dnl crypt() and crypt_r()
+dnl
+AC_CHECK_HEADERS(crypt.h, have_crypt_include=yes, have_crypt_include=no)
+
+AC_CHECK_LIB(crypt, crypt, have_crypt_lib="yes")
+AM_CONDITIONAL(HAVE_CRYPT, test "$have_crypt_lib $have_crypt_include" = "yes yes")
+if test "$have_crypt_lib" = "yes"; then
+	AC_DEFINE(HAVE_CRYPT, 1, [Have crypt function])
+fi
+
+AC_CHECK_LIB(crypt, crypt_r, have_crypt_r_lib="yes")
+AM_CONDITIONAL(HAVE_CRYPT_R, test "$have_crypt_r_lib $have_crypt_include" = "yes yes")
+if test "$have_crypt_r_lib" = "yes"; then
+	AC_DEFINE(HAVE_CRYPT_R, 1, [Have crypt_r function])
+fi
+
+if test "x$have_crypt_lib" = "xyes"; then
+	CRYPT_LIBS="-lcrypt"
+	AC_SUBST(CRYPT_LIBS)
+fi
+
+dnl
+dnl crypt_r and pthread 
+dnl
+if test "$have_crypt_r_lib" = "yes"; then
+	dnl
+	dnl struct crypt_data
+	dnl
+	oldcflags="$CFLAGS"
+	CFLAGS="$CFLAGS -D_GNU_SOURCE"
+
+	AC_MSG_CHECKING([for struct crypt_data])
+	AC_TRY_COMPILE([#include <crypt.h>], 
+				[struct crypt_data data;]
+			    ,
+				AC_MSG_RESULT([-D_GNU_SOURCE])
+				CRYPT_CFLAGS="-D_GNU_SOURCE"
+				AC_SUBST(CRYPT_CFLAGS)
+			    ,
+				AC_MSG_ERROR([struct crypt_data is not known]))
+
+	CFLAGS="$oldcflags"
+fi
+
+
+dnl
+dnl SSL and TLS
+dnl
+AC_ARG_ENABLE([tls], 
+[AC_HELP_STRING([--disable-tls],[Disable TLS/SSL support])
+AC_HELP_STRING([--enable-tls=[gnutls|openssl]])],
+		    enable_tls="$enableval", enable_tls="undef")
+
+case "$enable_tls" in
+	no)
+		check_gnutls=no
+		check_openssl=no
+		;;
+	undef|yes)
+		check_gnutls=yes
+		check_openssl=yes
+		;;
+	gnu*)
+		check_gnutls=yes
+		check_openssl=no
+		;;
+	open*)
+		check_gnutls=no
+		check_openssl=yes
+		;;	
+	*)
+		AC_MSG_ERROR([Incorrect TLS library])
+		;;
+esac
+
+have_tls="no"
+
+if test "$check_gnutls" = "yes"  && test "$have_tls" = "no"
+then
+		dnl
+		dnl GNUTLS
+		dnl
+		AM_PATH_LIBGNUTLS(1.0.4, [have_gnutls=yes], [have_gnutls=no])
+		if test "$have_gnutls" = "yes"
+		then
+		        TLS_LIBS="$LIBGNUTLS_LIBS"
+		        TLS_CFLAGS="$LIBGNUTLS_CFLAGS"
+			   AC_SUBST(TLS_LIBS)
+			   AC_SUBST(TLS_CFLAGS)
+
+			   AC_DEFINE(HAVE_TLS, 1, [Have TLS support])
+			   AC_DEFINE(HAVE_GNUTLS, 1, [Have libgnutls])
+			   have_tls="gnutls"
+		else
+			   enable_tls=no
+			   AC_MSG_WARN([[
+		   ***
+		   *** libgnutls was not found. You may want to get it from
+		   *** ftp://ftp.gnutls.org/pub/gnutls/
+		   ***]])
+		fi
+fi
+
+if test "$check_openssl" = "yes" && test "$have_tls" = "no"
+then
+		dnl
+		dnl OpenSSL
+		dnl
+		AC_CHECK_LIB(ssl, SSL_accept, [have_openssl=yes], [have_openssl=no])
+		if test "$have_openssl" = "yes"
+		then
+			TLS_LIBS="-lssl"
+			AC_SUBST(TLS_LIBS)
+
+			AC_DEFINE(HAVE_TLS, 1, [Have TLS support])
+			AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
+			have_tls="openssl"
+		else
+			enable_tls=no
+			AC_MSG_WARN([[
+		   ***
+		   *** OpenSSL was not found. You may want to get it from
+		   *** http://www.openssl.org
+		   ***]])
+		fi
+fi
+
+
+dnl
+dnl WWW root directory
+dnl
+AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root directory]),
+		  WWW_ROOT="$withval", WWW_ROOT="$localstatedir/www")
+
+AC_SUBST(WWW_ROOT)
+
+
+dnl
+dnl Options
+dnl
+use_static_module=""
+AC_ARG_ENABLE(static-module,
+	   AC_HELP_STRING([--enable-static-module=MODULE][]),
+	   [use_static_module="$use_static_module $enableval "],[])
+
+modules="read_config error_redir server_info file admin dirlist fcgi fastcgi scgi redir common nn cgi phpcgi gzip ncsa combined w3c pam htpasswd plain htdigest"
+
+# Remove modules that will not be compiles
+#
+if test "x$have_pam" != "xyes"; then
+	modules=`echo $modules | sed s/pam//`
+fi
+if test "$have_crypt_lib $have_crypt_include" != "yes yes"; then
+	modules=`echo $modules | sed s/htpasswd//`
+fi
+
+add_calls=""
+init_calls=""
+headers=""
+ext_defs=""
+
+for mod in $modules; do
+	AC_MSG_CHECKING([module "$mod"])
+
+	if echo $use_static_module | grep $mod >/dev/null || echo $use_static_module | grep all >/dev/null; then
+		 ext_defs="$ext_defs \n extern cherokee_module_info_t cherokee_${mod}_info;"
+
+		 headers="$headers \n void MODULE_INIT($mod) (cherokee_module_loader_t *loader);"
+		 add_calls="$add_calls \n add_static_entry (loader, \"$mod\", &cherokee_${mod}_info);"
+		 init_calls="$init_calls \n MODULE_INIT($mod)(loader);"
+
+	      AC_MSG_RESULT([static])
+	else
+	      AC_MSG_RESULT([dynamic])
+	fi
+done
+
+printf "$ext_defs\n"                                 > ${srcdir}/cherokee/loader.autoconf.h
+printf "$headers \n\n $add_calls \n\n $init_calls\n" > ${srcdir}/cherokee/loader.autoconf.inc
+
+dnl
+dnl Static/Dynamic modules
+dnl
+conf_h="${srcdir}/cherokee/loader.autoconf.h"
+AM_CONDITIONAL(STATIC_MODULE_READ_CONFIG,     grep read_config    $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_SERVER_INFO,    grep server_info    $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_FILE,           grep file           $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_ADMIN,          grep admin          $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_DIRLIST,        grep dirlist        $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_FCGI,           grep fcgi           $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_FASTCGI,        grep fastcgi        $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_SCGI,           grep scgi           $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_REDIR,          grep redir          $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_ERROR_REDIR,    grep redir          $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_COMMON,         grep common         $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_NN,             grep nn             $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_CGI,            grep cgi            $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_HANDLER_PHPCGI,         grep phpcgi         $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_ENCODER_GZIP,           grep gzip           $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_LOGGER_NCSA,            grep ncsa           $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_LOGGER_COMBINED,        grep combined       $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_LOGGER_W3C,             grep w3c            $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_VALIDATOR_PAM,          grep pam            $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_VALIDATOR_HTPASSWD,     grep htpasswd       $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_VALIDATOR_PLAIN,        grep plain          $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_VALIDATOR_HTDIGEST,     grep htdigest       $conf_h >/dev/null)
+
+AC_OUTPUT(Makefile cherokee/Makefile.MingW m4/Makefile cherokee/Makefile cget/Makefile icons/Makefile www/Makefile doc/Makefile doc/develop/Makefile doc/develop/doxygen.cfg contrib/Makefile qa/Makefile windows/Makefile cherokee-config cherokee.spec cherokee.pc windows/cherokee.nsi)
+
+
+methods=""
+if test "$have_epoll"        = yes; then methods="${methods}epoll ";  fi
+if test "$have_kqueue"       = yes; then methods="${methods}kqueue "; fi
+if test "$have_poll"         = yes; then methods="${methods}poll ";   fi
+if test "$have_port"         = yes; then methods="${methods}port ";   fi
+if test "$have_win32_select" = yes; then methods="${methods}win32 ";  fi
+if test "$have_select"       = yes; then methods="${methods}select";  fi
+
+crypt_type="no"
+if test "$have_crypt_lib" = "yes" && test "$have_crypt_r_lib" = "yes"; then
+	crypt_type="multithread"
+elif test "$have_crypt_lib" = "yes"; then
+	crypt_type="single thread"
+fi
+
+echo
+echo ============================
+echo "Install prefix        $prefix"
+echo "cflags                $CFLAGS"
+echo "trace                 $enable_trace"
+echo "sendfile()            $with_sendfile_support"
+echo "IPv6 support          $have_ipv6"
+i=1
+for m in $methods; do
+	echo "Polling method $i      $m"
+	i=`expr $i + 1`
+done
+echo "Threading support     $with_pthread"
+echo "PCRE library          $have_pcre"
+echo "Compatible PAM        $have_pam"
+echo "TLS support           $have_tls"
+echo "crypt support         $crypt_type"
+echo
+eval eval echo "Installation dir      $bindir"
+echo ============================
+echo
+if test "x$cherokeepath" != "x" ; then
+	echo Warning: You have an old copy of Cherokee at $cherokeepath.
+	echo	
+fi
+
+cat <<THEEND
++--------------------------------------------------------------------+
+| License:                                                           |
+| This software is subject to the GPL License, available in this     |
+| distribution in the file COPYING.  By continuing this installation |
+| process, you are bound by the terms of this license agreement.     |
+| If you do not agree with the terms of this license, you must abort |
+| the installation process at this point.                            |
++--------------------------------------------------------------------+
+
+Thank you for using Cherokee.
+THEEND

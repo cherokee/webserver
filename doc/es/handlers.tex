@@ -1,0 +1,420 @@
+
+\documentclass[spanish]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{babel}
+%\usepackage{hyperref}
+%\usepackage{times}
+
+\newcommand{\handler}{{\em handler}}
+\newcommand{\handlers}{{\em handlers}}
+\newcommand{\function}[1]{\textbf{#1}}
+\newcommand{\struct}[1]{\texttt{#1}}
+\newcommand{\ret}[1]{\texttt{ret\_#1}}
+
+\begin{document}
+
+\title{Handlers para Cherokee}
+\author{Ayose Cazorla León}
+
+\maketitle
+\tableofcontents{}
+
+\begin{abstract}
+La principal intención de este ``documento'' es describir la creación de
+un \handler\ para el servidor Cherokee. Ojo, éste documento está escrito
+en Junio de 2003, sobre la versión actual, la 0.4. Muchas cosas pueden haber
+cambiado (a mejor, seguramente) cuando lo lea.
+
+También hay que advertir que este documento no es una ninguna obra de arte
+\verb+:-PP+. Habrán cosas que no estén bien explicadas, o incluso que no sean
+100\% ciertas.
+\end{abstract}
+
+\section{¿Qué es Cherokee?}
+
+posloques... cherokee, pues un servidor web, chiquitito, eso sí \verb+:-)+
+
+
+\section{Los \handlers\ o manejadores}
+
+Un \handler\ es un módulo que se enchufa al servidor para que responda
+a las solicitudes sobre una determinada URL.
+
+Algunos de los \handlers\ que vienen con el programa son \textbf{file},
+que devuelve el contenido de un fichero, \textbf{dirlist}, que devuelve el listado
+de un directorio, o \textbf{common}, que comprueba si la dirección se refiere
+a un directorio o un fichero, redirigiendo la solicitud a alguno de los \handlers\
+anteriores según el caso.
+
+Los \handlers\ se activan según se cargan en la configuración del \textbf{cherokee.conf}.
+Los \handlers\ pueden estar compilados estáticamente o cargarse como librerías.
+Cuando la configuración encuentra la etiqueta \textbf{Handler} en el \textbf{cherokee.conf}
+primero mira si está ``dentro'' del Cherokee. Si no lo está, lo intenta
+cargar del directorio \texttt{\$libdir/cherokee}, siendo \texttt{\$libdir} el
+directorio de instalación de libs.
+
+
+\section{Cómo funciona un \emph{handler}}
+
+Escribir un \handlers\ es sencillo. Tan sólo hacen falta seguir unas pequeñas
+reglas. Luego, la complejidad del código del \handler\ es otra historia.
+
+
+\subsection{Carga}
+
+Cuando un \handler\ se carga, Cherokee llama a la función \function{{\em nombre}\_init},
+siendo {\em nombre} el nombre del \handler\ que se está cargando. Esta
+función, ahora mismo, puede ser llamada varias veces, por lo que puede interesar
+meter algún medio para que sólo se invoque una vez. Por ejemplo, el del \handler\ 
+\textbf{common} es así.
+
+\begin{verbatim}
+/* Library init function  
+ */
+
+static int _common_is_init = 0;
+
+void common_init (void) {      
+    if (_common_is_init)
+        return;
+
+    /* Init the dependences          
+     */
+    file_init();
+    dirlist_init();
+
+    _common_is_init = 1; 
+}
+
+\end{verbatim}
+Esta función puede hacer cualquier cosa. No hay ninguna función que haga el
+proceso inverso, es decir, que se llame cuando el \handler\ se va a descargar.
+
+\subsection{Esqueleto de una solicitud}
+
+Cada \handler\ tiene asociado un directorio, y todo lo que haya por debajo
+(si no hay otro \handler\ que controle algún subdirectorio). Por cada solicitud,
+Cherokee llamará \function{cherokee\_handler\_{\em nombre}\_init},
+siendo \emph{nombre} el nombre del \handler. Esta función tendrá acceso
+a la configuración del directorio, y rellenará una estructura, de tipo \struct{cherokee\_handler\_t}
+(o derivadas), con la información necesaria para que Cherokee pueda mandar datos
+al cliente.
+
+Con la información de \struct{cherokee\_handler\_t} Cherokee podrá empezar a
+enviar datos al cliente. Para ello, primero llamará a la función indicada por
+el campo \function{init}. Después, llamará a \function{add\_headers} para elegir
+las cabeceras que serán enviadas al cliente. Luego, llamará repetidas veces
+a la función \function{step}, la cual enviará cada vez que sea llamada un trozo
+del contenido, hasta que ella misma le diga al Cherokee que ya ha acabado. Finalmente,
+llamará a \function{free} para indicar que la conexión ha terminado.
+
+
+\subsection{Recursos \emph{extra}}
+
+Cherokee dispone de dos estructuras de datos para dar vida a los \handlers:
+los \textbf{búfers} y las \textbf{tablas}.
+
+
+\subsubsection{Búfers}
+
+Los búfers se usan para mantener cualquier dato, ya sea el contenido que se
+enviará al cliente, las cabeceras, algunos campos de configuración, etc.
+
+Los búfers se guardan como una estructura de 3 campos
+
+\begin{verbatim}
+typedef struct {
+    char* buf;
+    int size;
+    int len;
+} cherokee_buffer_t;
+\end{verbatim}
+
+La API para usarlos es muy sencilla e intuitiva. 
+
+\paragraph{Creación y destrucción de búfers}
+
+Para crearlos se usa \function{cherokee\_buffer\_new}, y para borrarlos \function{cherokee\_buffer\_free}.
+Por ejemplo
+
+\begin{verbatim}
+cherokee_buffer_t* buf;
+cherokee_buffer_new(&buf);
+
+/* ... */
+
+cherokee_buffer_free(buf);
+buf = NULL;
+\end{verbatim}
+
+\paragraph{Alterar el contenido}
+
+Para añadir contenido se usa \function{cherokee\_buffer\_add}, la cual recibirá
+3 parámetros: el búfer, un puntero a donde estén los datos, y un entero indicando
+cuantos bytes copiar. Esta función colocará los bytes indicados al final del
+búfer
+
+\begin{verbatim}cherokee_buffer_t* buf;
+ 
+cherokee_buffer_new(&buf);
+cherokee_buffer_add(buf, "ho", 2);
+cherokee_buffer_add(buf, "la", 2);    /* Búfer = "hola" */
+
+cherokee_buffer_free(buf);
+buf = NULL;
+\end{verbatim}
+
+La función \function{cherokee\_buffer\_drop\_ending} se usa para elimar la parte
+final de un búfer. Recibe como segundo parámetro el número de bytes a eliminar.
+Por ejemplo
+
+\begin{verbatim}
+cherokee_buffer_new(&buf);
+cherokee_buffer_add(buf, "hola mundo", 10);
+cherokee_buffer_drop_endding(buf, 6);
+
+/* Búfer = "hola" */
+
+\end{verbatim}
+Hay algunas funciones más que pueden ser también útiles, pero se quedan un poco
+fuera de esta introducción, y el código es fácil de leer \verb+:-P+
+
+\subsubsection{Tablas}
+
+Las tablas son el método para que los \handlers\ puedan
+obtener los valores de la configuración.
+
+La función más importante (y casi la única necesaria) es \function{cherokee\_table\_get}.
+Esta función devuelve una cadena que contiene el valor del parámetro en el
+\textbf{cherokee.conf}. Si no se encuentra, devolverá {\em NULL}. Además, el
+valor que devuelve no debe liberarse con \function{free}; esto es tarea del Cherokee. 
+
+\begin{verbatim}
+char *name_const, *url;
+ 
+name_const = cherokee_table_get(propierties, "name");
+url = strdup(cherokee_table_get(propierties, "url"));
+ 
+manipulate_url(url);
+free(url);
+\end{verbatim}
+
+Hay más funciones para manipular estas tablas (añadir entradas, etc), pero no
+son objetivos de este documento.
+
+\section{Implementación}
+
+Ahora trataremos en detalle cómo implementar las diferentes funciones que tiene
+que tener el \handler.
+
+\subsection{Inicializar el módulo}
+
+La primera de ellas es el \function{{\em init}} del \handler. Esta función, como
+se comentó más arriba, se llama durante la carga del módulo. Sólo se llama
+durante el arranque, aunque puede que se llame varias veces---dependiendo de la
+configuración---por lo que los \handlers\ que vienen por defecto usan una
+variable para saber si la función ya ha sido invocada.
+
+La misión de esta función es tan sólo resolver las posibles dependencias que
+pueda tener el \handler. No hay función de descarga, por lo que la función no
+debería hacer nada que necesitase ser deshecho.
+
+En la sección {\em Cómo funciona un \handler} tiene un tiene un ejemplo de esta
+función.
+
+\subsection{Crear una instancia}
+
+Cada vez que se requiera responder a una petición, se llamará a
+\function{cherokee\_handler\_\emph{nombre}\_new}. Esta función debe crear el una
+estructura de tipo \struct{cherokee\_handler\_t}, o que derive de ella.
+
+El valor devuelto por la función es de tipo \ret{t}. Éste es un tipo
+enumerado que se define el estado de la función
+
+\begin{verbatim}
+typedef enum {
+        ret_ok,
+        ret_error,
+        ret_nomem,
+        ret_eof,
+        ret_eof_have_data,
+        ret_file_not_found,
+        ret_eagain
+} ret_t;
+\end{verbatim}
+
+Si no ocurre ningún error, la función debe devolver \ret{ok}.
+
+El primero de los tres parámetros que recibe es un \verb+cherokee_handler_t**+,
+donde se almacenará el puntero al objeto. La posibilidad de poder derivar
+estructura es interesante porque permite mantener la información que necesita el
+\handler\ a lo largo de la conexión. Por ejemplo, el \handler\ {\bf redir}, el
+cual se usa para redireccionar, define \struct{cherokee\_handler\_redir\_t} para
+mantener la dirección de destino
+
+\begin{verbatim}
+typedef struct  {
+    cherokee_handler_t handler;
+    
+    char              *target_url;
+    int                target_url_len;
+} cherokee_handler_redir_t;
+\end{verbatim}
+
+de este modo, en su \function{new} usará su estructura.
+
+\begin{verbatim}
+ret_t 
+cherokee_handler_redir_new (cherokee_handler_t **hdl,
+                            void *cnt,
+                            cherokee_table_t *properties)
+{
+   cherokee_handler_redir_t *n = 
+           (cherokee_handler_redir_t *)malloc(sizeof(cherokee_handler_redir_t))
+   ....
+
+   *hdl = HANDLER(n)
+   return ret_ok;
+}
+\end{verbatim}
+
+% TODO: explicar mejor esto
+El segundo parámetro es un puntero a la conexión. 
+
+El tercero es para poder obtener los valores de la configuración. Para ello, se
+usan las tablas explicadas más arriba. El \handler\ {\bf redir} las usa
+para saber a qué URL hay que redirigir
+
+\begin{verbatim}
+if (propierties) {
+       n->target_url = cherokee_table_get(propierties, "url");
+       n->target_url_len = strlen(n->target_url);
+}
+\end{verbatim}
+
+\subsubsection{Indicar las funciones del \handler}
+La función que crea la instancia tiene que rellenar los miembros
+\function{init}, \function{free}, \function{step} y \function{add\_headers}.
+La funciones \function{init} y \function{free} reciben un único argumento, que es el puntero a
+\struct{cherokee\_handler\_t} (o su estructura derivada) y devuelve un
+\ret{t}. Las funciones \function{step} y \function{add\_headers} reciben
+un parámetro más, que es el puntero a un búfer donde se pondrán los datos a
+mandar al cliente.
+
+Cualquiera de estas funciones puede ser NULL.
+
+\subsection{Iniciar la transferencia}
+
+La primera función que se llama es la indicada por \function{init}. La razón
+de que existan dos funciones antes de transmitir nada es que \function{new} se
+usa sólo como constructor, y Cherokee puede modificar los datos de
+conexión (inicializar cualquier otra cosa) antes de llamar a \function{init}.
+
+\function{init} será la primera en llamarse, y puede hacer cualquier tarea de
+inicialización para responder a la petición. Después de ella, se llamará a
+\function{add\_headers} para que especifique qué caberas enviar al cliente.
+
+\subsection{Contenido}
+
+Cherokee usa la función \function{step} para pedir datos al \handler\ y mandarlos
+al cliente. Si esta función devuelve \ret{ok}, Cherokee mandará el
+búfer con los datos que haya dado el \handler, y volverá a llamar a la función.
+
+Cuando el \handler\ termine de mandar los datos, puede devolver dos valores:
+\ret{eof} o \ret{eof\_have\_data}. 
+
+\ret{eof} se usa
+cuando todos los datos ya han sido mandados, y sólo queda cerrar la conexión. 
+
+\ret{eof\_have\_data} se manda cuando el \handler\ ha terminado
+, pero el búfer tiene datos aún por enviar, por lo que Cherokee enviará el
+contenido del búfer y cerrará la conexión.
+
+Una vez que todo el contenido haya sido enviado, se llamará a \function{free},
+la cual debe liberar todos los recursos que se hayan cogido en cualquiera de las
+funciones anteriores, incluso el propio objeto del \handler\ si se creó usando
+\function{malloc}.
+
+\section{Cherokee, por dentro}
+
+Ahora mismo, Cherokee va por su versión 0.4. La API interna puede cambiar---de
+hecho, está cambiando---muchsímo, y lo que se dice aquí no concordará totalmente
+con lo que haya en el momento de leerlo. Pero bueno, ahí va \verb+:-P+
+
+\subsection{\emph{Log}}
+
+EL sistema de {\em logueo} en Cherokee es muy básico, y dentro de nada cambiará.
+
+Ahora mismo, los logs del Cherokee se mandan a {\em syslog}, a través de la
+función \function{cherokee\_log}.
+
+\begin{verbatim}
+void inline
+cherokee_log (int priority, const char *format, ...)
+{	
+	if (__cherokee_logging) {
+		va_list l;
+
+		va_start(l, format);
+#ifdef HAVE_VSYSLOG
+		vsyslog(priority, format, l);
+#endif /* HAVE_VSYSLOG */
+		va_end(l);
+	}
+}
+\end{verbatim}
+
+En el futuro ---cercano--- se quiere hacer esta parte modulable, de forma que, a
+través de módulos, se pueda mandar a info a ficheros, a {\em syslog}, o lo que
+sea
+
+\subsection{Conexión}
+
+La información sobre la conexión se guarda en una estructura llamada
+\struct{cherokee\_connection\_t}
+
+\begin{verbatim}
+typedef struct {
+        struct list_head              list;
+        
+        void                         *server;
+
+        int                           socket;
+        struct sockaddr_in            addr_in;
+        
+        cherokee_connection_status_t  status;
+        cherokee_connection_phase_t   phase;
+
+
+        cherokee_http_version_t       version;
+        cherokee_http_method_t        method;
+
+        cherokee_encoder_t           *encoder;
+
+        cherokee_http_t               error_code;
+        
+        cherokee_buffer_t            *buffer;
+        cherokee_handler_t           *handler;
+
+        /* Eg:
+         * http://www.alobbs.com/cherokee/dir/file
+         */
+        cherokee_buffer_t            *local_directory;  /* /var/www/  or  /home/alo/public_html/ */
+        cherokee_buffer_t            *web_directory;    /* /cherokee/ */
+        cherokee_buffer_t            *request;          /* /dir/file */
+        cherokee_buffer_t            *host;
+
+        time_t                        timeout;
+        int                           keep_alive;
+
+        int                           range_start;
+        int                           range_end;
+} cherokee_connection_t;
+\end{verbatim}
+
+
+
+\end{document}
+
+

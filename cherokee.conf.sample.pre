@@ -1,0 +1,120 @@
+##
+## cherokee.conf -- Cherokee HTTP server configuration file
+##
+
+##
+## Port: The port to which the standalone server listens. For
+## ports < 1023, you will need cherokee to be run as root initially.
+## Security: if you do start the server as root, be sure not to set
+## "User" to root. 
+##
+Port 80
+
+##
+## PortTLS: The port to which the secure server listens. Default 443.
+##
+# PortTLS 443
+
+##
+## IPv6 support
+##
+IPv6 Off
+
+##
+## This directiveis used to tell the server which IP address to listen to.
+##
+#Listen 127.0.0.1
+
+##
+## If you wish cherokee to run as a different user or group, you must run
+## cherokee as root initially and it will switch.
+##
+## Eg: User www-data
+##     Group www-data
+##
+## Eg: User 65534
+##     Group 65534
+##
+#User nobody
+#Group nogroup
+
+##
+## Chroot:
+##
+# Chroot %wwwroot%
+
+##
+## Timeout: The number of seconds before receives and sends time out.
+##
+Timeout 60
+
+##
+## KeepAlive: Whether or not to allow persistent connections (more than
+## one request per connection). Set to "Off" to deactivate.
+##
+KeepAlive On
+
+##
+## MaxKeepAliveRequests: The MaxKeepAliveRequests directive limits the 
+## number of requests allowed per connection when KeepAlive is on.
+## We recommend that this setting be kept to a high value for maximum 
+## server performance.
+##
+MaxKeepAliveRequests 500
+
+##
+## ServerTokens:  This directive configures what you return as the Server 
+## HTTP response Header. The default is 'Full' which sends information about
+## the OS-Type and compiled in modules.  Full conveys the most information, 
+## and Product the least.
+##
+## Product  -  Cherokee
+## Minor    -  Cherokee/0.0
+## Minimal  -  Cherokee/0.0.0
+## OS       -  Cherokee/0.0.0 (UNIX)
+## Full     -  Cherokee/0.0.0 (UNIX) Ext/0.0 Ext2/0.0
+##
+ServerTokens Full
+
+##
+## Load the GZip encoder plugin
+## only used if the client support the encoding ("Accept-Encoding:")
+##
+Encoder gzip {
+   Allow html, htm, txt
+   Deny jpg, png, gz, php
+}
+
+##
+## PidFile: The file in which the server should record its process
+## identification number when it starts.
+##
+PidFile /var/run/cherokee.pid
+
+##
+## Icons: Extension to icon file.
+##
+Icons %sysconfdir%/cherokee/icons.conf
+
+##
+## MimeFile: Mime types file. By default you should leave it 
+## commented
+##
+MimeFile %sysconfdir%/cherokee/mime.types
+MimeFile %sysconfdir%/cherokee/mime.compression.types
+
+##
+## Advanced settings, do not change if you are not sure..
+##
+Include %sysconfdir%/cherokee/advanced.conf
+
+##
+## Include the module configuration:
+##
+Include %sysconfdir%/cherokee/mods-enabled
+
+##
+## Include the virtual host configuration:
+##
+Include %sysconfdir%/cherokee/sites-enabled
+

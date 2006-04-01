@@ -1,0 +1,59 @@
+##
+## Advanced configuration:
+## Don't change it unless you know what you're doing.
+##
+
+##
+## LogFlushInterval: 
+## Indicates how often, in seconds, the log cache will be flushed 
+##
+LogFlushInterval 5
+
+##
+## The maximum number of file descriptors
+##
+MaxFds 16384
+
+##
+## MaxConnectionReuse: Max number of connection to reuse per thread.
+##
+MaxConnectionReuse 20
+
+##
+## PanicAction: It something terrible happens, like a segmentation fault, 
+## Cherokee will execute this program to report the problem.  The default
+## action is to send a mail to root with the back-trace.
+##
+PanicAction %prefix%/bin/cherokee-panic
+
+##
+## PollMethod:
+## Force to use a polling method. It's available:
+## epoll, kqueue, ports, poll and select.
+##
+# PollMethod epoll
+
+##
+## Size of the TCP listen queue.
+##
+# ListenQueue 1024
+
+##
+## ThreadNumber:  
+## Available policies: fifo, rr, other
+##
+# ThreadNumber 5 {
+#      Policy fifo
+# }
+
+##
+## Sendfile configuration: for the platforms that supports it.
+##
+## MinSize: Size in bytes of the smallest file to be sent with sendfile.
+## MaxSize: Size in bytes of the biggest file to be sent with sendfile.
+##
+# Sendfile {
+#     MinSize 32768
+#     MaxSize 2147483647
+# }
+
