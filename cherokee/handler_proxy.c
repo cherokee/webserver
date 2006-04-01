@@ -28,14 +28,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-//#include <errno.h>
-//#include <time.h>
 
 #include "handler_proxy.h"
-//#include "server.h"
-//#include "server-protected.h"
-//#include "tdate_parse.h"
-//#include "mime.h"
 #include "header.h"
 #include "thread.h"
 #include "header-protected.h"
@@ -47,10 +41,6 @@
 #include "downloader-protected.h"
 
 #define ENTRIES "proxy,handler"
-
-//#include "module.h"
-//#include "iocache.h"
-//#include "util.h"
 
 
 cherokee_module_info_handler_t MODULE_INFO(proxy) = {

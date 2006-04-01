@@ -449,7 +449,7 @@ parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char *
 
 		/* Add the host header
 		 */
-		add_known_header (hdr, header_host, begin - buf->buf, dir - host);
+		add_known_header (hdr, header_host, host - buf->buf, dir - host);
 		
 		/* Fix the URL
 		 */

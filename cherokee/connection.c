@@ -916,7 +916,7 @@ get_host (cherokee_connection_t *cnt,
 
 	/* Skip "colon + port"
 	 */
-	for (i=end; i>=ptr; i--) {
+	for (i=end-1; i>=ptr; i--) {
 		if (*i == ':') {
 			skip = end - i;
 			break;

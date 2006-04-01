@@ -1,5 +1,7 @@
 2006-04-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/util.c (cherokee_gethostbyname): Fixes segfault.
+
 	* configure.in, cherokee/Makefile.am: Added compilation stuff for
 	handler proxy.
 
