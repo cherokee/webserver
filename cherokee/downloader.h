@@ -37,39 +37,25 @@
 
 CHEROKEE_BEGIN_DECLS
 
-typedef enum {
-	downloader_event_init,
-	downloader_event_has_headers,
-	downloader_event_read_body,
-	downloader_event_finish,
-	downloader_event_NUMBER
-} cherokee_downloader_event_t;
-
-typedef ret_t (* cherokee_downloader_init_t)        (void *downloader, void *param);
-typedef ret_t (* cherokee_downloader_has_headers_t) (void *downloader, void *param);
-typedef ret_t (* cherokee_downloader_read_body_t)   (void *downloader, void *param);
-typedef ret_t (* cherokee_downloader_finish_t)      (void *downloader, void *param);
-
 typedef struct cherokee_downloader cherokee_downloader_t;
 #define DOWNLOADER(d) ((cherokee_downloader_t *)(d))
 
 
-ret_t cherokee_downloader_new           (cherokee_downloader_t **downloader);
-ret_t cherokee_downloader_free          (cherokee_downloader_t  *downloader);
+ret_t cherokee_downloader_new             (cherokee_downloader_t **downloader);
+ret_t cherokee_downloader_free            (cherokee_downloader_t  *downloader);
 
-ret_t cherokee_downloader_set_fdpoll     (cherokee_downloader_t *downloader, cherokee_fdpoll_t *fdpoll, cherokee_boolean_t add_itself);
-ret_t cherokee_downloader_set_url        (cherokee_downloader_t *downloader, cherokee_buffer_t *url);
-ret_t cherokee_downloader_set_keepalive  (cherokee_downloader_t *downloader, cherokee_boolean_t active);
-ret_t cherokee_downloader_get_reply_code (cherokee_downloader_t *downloader, cherokee_http_t *code);
+ret_t cherokee_downloader_set_url         (cherokee_downloader_t *downloader, cherokee_buffer_t *url);
+ret_t cherokee_downloader_set_keepalive   (cherokee_downloader_t *downloader, cherokee_boolean_t active);
+ret_t cherokee_downloader_get_reply_code  (cherokee_downloader_t *downloader, cherokee_http_t *code);
 
-ret_t cherokee_downloader_post_set      (cherokee_downloader_t *downloader, cherokee_buffer_t *post);
-ret_t cherokee_downloader_post_reset    (cherokee_downloader_t *downloader);
+ret_t cherokee_downloader_post_set        (cherokee_downloader_t *downloader, cherokee_buffer_t *post);
+ret_t cherokee_downloader_post_reset      (cherokee_downloader_t *downloader);
 
-ret_t cherokee_downloader_step          (cherokee_downloader_t *downloader);
-ret_t cherokee_downloader_reuse         (cherokee_downloader_t *downloader);
-ret_t cherokee_downloader_connect       (cherokee_downloader_t *downloader);
-ret_t cherokee_downloader_connect_event (cherokee_downloader_t *downloader, cherokee_downloader_event_t event, void *func, void *param);
+ret_t cherokee_downloader_step            (cherokee_downloader_t *downloader);
+ret_t cherokee_downloader_reuse           (cherokee_downloader_t *downloader);
+ret_t cherokee_downloader_connect         (cherokee_downloader_t *downloader);
 
+ret_t cherokee_downloader_is_request_sent (cherokee_downloader_t *downloader);
 
 CHEROKEE_END_DECLS
 

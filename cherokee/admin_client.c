@@ -90,17 +90,6 @@ cherokee_admin_client_free (cherokee_admin_client_t *admin)
 }
 
 
-ret_t 
-cherokee_admin_client_set_fdpoll (cherokee_admin_client_t *admin, cherokee_fdpoll_t *poll)
-{
-	if (admin->poll_ref != NULL) {
-		PRINT_ERROR_S ("WARNING: Overwritting poll object\n");
-	}
-
-	return ret_ok;
-}
-
-
 static ret_t
 on_downloader_finish (void *_downloader, void *_param)
 {
@@ -133,8 +122,10 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin, cherokee_fdpoll_t
 	
 	/* Set up the downloader object properties
 	 */
-	ret = cherokee_downloader_set_fdpoll (downloader, admin->poll_ref, true);
-	if (unlikely (ret != ret_ok)) return ret;
+#warning "Fix this!"
+
+//	ret = cherokee_downloader_set_fdpoll (downloader, admin->poll_ref, true);
+//	if (unlikely (ret != ret_ok)) return ret;
 	
 	ret = cherokee_downloader_set_url (&admin->downloader, admin->url_ref); 
 	if (unlikely (ret != ret_ok)) return ret;
@@ -142,8 +133,8 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin, cherokee_fdpoll_t
 	ret = cherokee_downloader_set_keepalive (downloader, true);
 	if (unlikely (ret != ret_ok)) return ret;
 
-	ret = cherokee_downloader_connect_event (downloader, downloader_event_finish, on_downloader_finish, admin);
-	if (unlikely (ret != ret_ok)) return ret;
+//	ret = cherokee_downloader_connect_event (downloader, downloader_event_finish, on_downloader_finish, admin);
+//	if (unlikely (ret != ret_ok)) return ret;
 
 	return ret_ok;
 }

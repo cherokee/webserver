@@ -42,9 +42,9 @@ typedef struct {
 	cherokee_handler_t     handler;	
 	cherokee_downloader_t  client;
 	cherokee_buffer_t      url;
-	cuint_t                got_eof;
-
 } cherokee_handler_proxy_t;
+
+#define HANDLER_PROXY(p)  ((cherokee_handler_proxy_t *)(p))
 
 
 /* Library init function

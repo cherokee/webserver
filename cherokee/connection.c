@@ -517,16 +517,6 @@ build_response_header (cherokee_connection_t *cnt, cherokee_buffer_t *buffer)
 	if (cnt->header.method == http_options) {
 		cherokee_buffer_add_str (buffer, "Allow: GET, HEAD, POST, OPTIONS"CRLF);
 	}
-	
-	/* Maybe the handler add some headers from the handler
-	 */
-	if (! cherokee_buffer_is_empty (&cnt->header_buffer)) {
-		cherokee_buffer_add_buffer (buffer, &cnt->header_buffer);
-	}
-
-	/* Add the response header ends
-	 */
-	cherokee_buffer_add_str (buffer, CRLF);
 }
 
 
@@ -560,7 +550,19 @@ cherokee_connection_build_header (cherokee_connection_t *cnt)
 	
 	/* Add the server headers	
 	 */
-	build_response_header (cnt, &cnt->buffer);
+	if (! (cnt->handler->support & hsupport_dont_add_headers)) {
+		build_response_header (cnt, &cnt->buffer);
+	}
+
+	/* Add handler headers
+	 */
+	if (! cherokee_buffer_is_empty (&cnt->header_buffer)) {
+		cherokee_buffer_add_buffer (&cnt->buffer, &cnt->header_buffer);
+	}
+
+	/* END of response
+	 */
+	cherokee_buffer_add_str (&cnt->buffer, CRLF);
 
 	return ret_ok;
 }

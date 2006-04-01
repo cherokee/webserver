@@ -29,7 +29,6 @@
 #include "common-internal.h"
 #include "buffer.h"
 #include "request.h"
-#include "fdpoll.h"
 #include "socket.h"
 #include "header.h"
 
@@ -40,7 +39,8 @@ typedef enum {
 	downloader_phase_send_headers,
 	downloader_phase_send_post,
 	downloader_phase_read_headers,
-	downloader_phase_step
+	downloader_phase_step,
+	downloader_phase_finished
 } cherokee_downloader_phase_t;
 
 
@@ -55,9 +55,6 @@ struct cherokee_downloader {
 	cherokee_buffer_t           *post_ref;
 	off_t                        post_sent;
 
-	cherokee_fdpoll_t           *fdpoll;
-	cherokee_boolean_t           fdpoll_add_itself;
-
 	cherokee_socket_t           *socket;
 	cherokee_sockaddr_t          sockaddr;
 
@@ -68,22 +65,11 @@ struct cherokee_downloader {
 	/* Information
 	 */
 	struct {
-		uint32_t headers_sent;
+		uint32_t request_sent;
 		uint32_t headers_recv;
 		uint32_t post_sent;
 		uint32_t body_recv;
 	} info;
-
-	/* Event handlers..
-	 */
-	struct {
-		cherokee_downloader_init_t        init;
-		cherokee_downloader_has_headers_t has_headers;
-		cherokee_downloader_read_body_t   read_body;
-		cherokee_downloader_finish_t      finish;
-		void                             *param[downloader_event_NUMBER];
-	} callback;
-
 };
 
 
