@@ -158,9 +158,8 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *phdl,
 				    cherokee_buffer_t        *buffer)
 {
 	ret_t              ret; 
-	cuint_t            end_len; 
-	cuint_t            len; 
-	char              *content; 
+	char              *end; 
+	cuint_t            skip;
 	cherokee_boolean_t rw;
 	cherokee_buffer_t *reply_header = &phdl->client.reply_header;
 
@@ -185,31 +184,20 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *phdl,
 		return ret_error;
 	}
 
-	if (reply_header->len <= 3) {
+	if (reply_header->len < 5)
 		return ret_eagain;
-	}
-	
-	/* Look the end of headers
-	 */
-	content = strstr (reply_header->buf, CRLF CRLF);
-	if (content != NULL) {
-		end_len = 4;
-	} else {
-		content = strstr (reply_header->buf, "\n\n");
-		end_len = 2;
-	}
-	
-	if (content == NULL) {
-		return ret_eagain;
-	}
 
-	/* Copy the header
-	 */
-	len = content - reply_header->buf; 
+	end = reply_header->buf + reply_header->len;
 
-	cherokee_buffer_ensure_size (buffer, len+4);
-	cherokee_buffer_add (buffer, reply_header->buf, len);
-	cherokee_buffer_add (buffer, CRLF CRLF, 4);
+	if (strncmp (end - 4, CRLF CRLF, 4) == 0)
+		skip = 2;
+	else if (strncmp (end - 2, "\n\n", 2) == 0)
+		skip = 1;
+	else
+		return ret_error;
+
+// swap?
+	cherokee_buffer_add (buffer, reply_header->buf, reply_header->len - skip);
 
 	return ret_ok;
 }
@@ -241,8 +229,10 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *phdl,
 		return ret_error;
 	}
 
-	if (phdl->client.body.len > 0) 
+	if (phdl->client.body.len > 0) {
 		cherokee_buffer_add_buffer (buffer, &phdl->client.body);
+		cherokee_buffer_clean (&phdl->client.body);
+	}
 	
 	if ((ret == ret_eof) && (buffer->len > 0))
 		return ret_eof_have_data;
