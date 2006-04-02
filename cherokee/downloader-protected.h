@@ -31,6 +31,8 @@
 #include "request.h"
 #include "socket.h"
 #include "header.h"
+#include "post.h"
+
 
 CHEROKEE_BEGIN_DECLS
 
@@ -52,8 +54,7 @@ struct cherokee_downloader {
 	cherokee_buffer_t            reply_header;
 	cherokee_buffer_t            body;
 
-	cherokee_buffer_t           *post_ref;
-	off_t                        post_sent;
+	cherokee_post_t             *post;
 
 	cherokee_socket_t            socket;
 	cherokee_sockaddr_t          sockaddr;

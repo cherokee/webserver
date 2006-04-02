@@ -721,7 +721,9 @@ regex.c \
 resolv_cache.h \
 resolv_cache.c \
 typed_table.h \
-typed_table.c 
+typed_table.c \
+post.h \
+post.c 
 
 libcherokee_client_la_SOURCES = \
 url.h \
@@ -829,8 +831,6 @@ handler_error.c \
 handler_error.h \
 nonce.h \
 nonce.c \
-post.h \
-post.c \
 ext_source.h \
 ext_source.c
 

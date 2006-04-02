@@ -92,13 +92,11 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 	/* Init the properties
 	 */
 	n->phase             = downloader_phase_init;
-
-	n->post_ref          = NULL;
-	n->post_sent         = 0;
+	n->post              = NULL;
 
 	/* Lengths
 	 */
-	n->content_length = -1;
+	n->content_length    = -1;
 
 	/* Info
 	 */
@@ -384,9 +382,9 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 		
 		/* Maybe add the post info
 		 */
-		if (downloader->post_ref != NULL) {
-			req->method   = http_post;
-			req->post_len = downloader->post_ref->len;
+		if (downloader->post != NULL) {
+			req->method = http_post;
+			cherokee_post_walk_reset (downloader->post);
 		}
 
 		/* Build the request header
@@ -416,8 +414,11 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 	case downloader_phase_send_post:
 		TRACE(ENTRIES, "Phase %s\n", "send_post");
 
-		if (downloader->post_ref != NULL) {
-			ret = downloader_send_buffer (downloader, downloader->post_ref);
+		if (downloader->post != NULL) {
+			ret = cherokee_post_walk_to_fd (downloader->post, downloader->socket.socket, NULL, NULL);
+
+//			ret = send_post (downloader);
+/* 			ret = downloader_send_buffer (downloader, downloader->post_ref); */
 			if (unlikely(ret != ret_ok)) return ret;
 		}
 
@@ -461,15 +462,13 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 
 
 ret_t 
-cherokee_downloader_post_set (cherokee_downloader_t *downloader, cherokee_buffer_t *post)
+cherokee_downloader_post_set (cherokee_downloader_t *downloader, cherokee_post_t *post)
 {
-	if (downloader->post_ref != NULL) {
+	if (downloader->post != NULL) {
 		PRINT_ERROR_S ("WARNING: Overwriting post info\n");
 	}
 
-	downloader->post_sent = 0;
-	downloader->post_ref  = post;
-
+	downloader->post = post;
 	return ret_ok;
 }
 
@@ -478,9 +477,7 @@ ret_t
 cherokee_downloader_reuse (cherokee_downloader_t *downloader)
 {
 	downloader->phase = downloader_phase_init;
-
-	downloader->post_ref  = NULL;
-	downloader->post_sent = 0;
+	downloader->post  = NULL;
 
 	cherokee_buffer_clean (&downloader->request_header);
 	cherokee_buffer_clean (&downloader->reply_header);

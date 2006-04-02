@@ -33,6 +33,7 @@
 #include <cherokee/fdpoll.h>
 #include <cherokee/buffer.h>
 #include <cherokee/http.h>
+#include <cherokee/post.h>
 
 
 CHEROKEE_BEGIN_DECLS
@@ -48,7 +49,7 @@ ret_t cherokee_downloader_set_url         (cherokee_downloader_t *downloader, ch
 ret_t cherokee_downloader_set_keepalive   (cherokee_downloader_t *downloader, cherokee_boolean_t active);
 ret_t cherokee_downloader_get_reply_code  (cherokee_downloader_t *downloader, cherokee_http_t *code);
 
-ret_t cherokee_downloader_post_set        (cherokee_downloader_t *downloader, cherokee_buffer_t *post);
+ret_t cherokee_downloader_post_set        (cherokee_downloader_t *downloader, cherokee_post_t *post);
 ret_t cherokee_downloader_post_reset      (cherokee_downloader_t *downloader);
 
 ret_t cherokee_downloader_step            (cherokee_downloader_t *downloader);

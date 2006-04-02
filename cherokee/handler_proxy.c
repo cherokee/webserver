@@ -45,9 +45,9 @@
 
 
 cherokee_module_info_handler_t MODULE_INFO(proxy) = {
-	.module.type     = cherokee_handler,             /* type         */
-	.module.new_func = cherokee_handler_proxy_new,   /* new func     */
-	.valid_methods   = http_get | http_head          /* http methods */
+	.module.type     = cherokee_handler,                 /* type         */
+	.module.new_func = cherokee_handler_proxy_new,       /* new func     */
+	.valid_methods   = http_get | http_post | http_head  /* http methods */
 };
 
 
@@ -177,6 +177,12 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	ret = add_extra_headers (hdl);
 	if ( ret != ret_ok ) return ret;
 	
+	/* Post
+	 */
+	if (! cherokee_post_is_empty (&conn->post)) { 
+		cherokee_downloader_post_set (&hdl->client, &conn->post);
+	}
+
 	/* Properties
 	 */
 	ret = cherokee_downloader_set_keepalive (&hdl->client, false); 
@@ -184,6 +190,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 
 	ret = cherokee_downloader_connect (&hdl->client);
 	if (ret != ret_ok) return ret;
+
 
 	TRACE(ENTRIES, "client->downloader->socket: %d\n",  SOCKET_FD(&hdl->client.socket)); 
 	return ret_ok;
@@ -282,9 +289,4 @@ void
 MODULE_INIT(proxy) (cherokee_module_loader_t *loader)
 {
 }
-
-
-
-
-
 

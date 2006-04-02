@@ -60,9 +60,4 @@ void  cherokee_handler_proxy_get_name    (cherokee_handler_proxy_t *hdl, const c
 ret_t cherokee_handler_proxy_step        (cherokee_handler_proxy_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl, cherokee_buffer_t *buffer);
 
-static ret_t do_download__init (cherokee_downloader_t *downloader, void *param);
-static ret_t do_download__has_headers (cherokee_downloader_t *downloader, void *param);
-static ret_t do_download__read_body (cherokee_downloader_t *downloader, void *param);
-static ret_t do_download__finish (cherokee_downloader_t *downloader, void *param);
-
 #endif /* CHEROKEE_HANDLER_PROXY_H */

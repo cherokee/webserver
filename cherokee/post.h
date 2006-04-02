@@ -28,6 +28,9 @@
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
 
+
+CHEROKEE_BEGIN_DECLS
+
 typedef enum {
 	post_undefined,
 	post_in_memory,
@@ -66,5 +69,7 @@ ret_t cherokee_post_walk_reset    (cherokee_post_t *post);
 ret_t cherokee_post_walk_finished (cherokee_post_t *post);
 ret_t cherokee_post_walk_read     (cherokee_post_t *post, cherokee_buffer_t *buf, cuint_t len);
 ret_t cherokee_post_walk_to_fd    (cherokee_post_t *post, int fd, int *eagain_fd, int *mode);
+
+CHEROKEE_END_DECLS
 
 #endif /* CHEROKEE_POST_H */
