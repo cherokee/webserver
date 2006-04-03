@@ -530,10 +530,12 @@ initialize_server_socket4 (cherokee_server_t *srv, unsigned short port, int *srv
 		sockaddr.sin_addr.s_addr = INADDR_ANY; 
 	} else {
 #ifdef HAVE_INET_PTON
-		inet_pton (sockaddr.sin_family, srv->listen_to, &sockaddr.sin_addr);
+		re = inet_pton (sockaddr.sin_family, srv->listen_to, &sockaddr.sin_addr);
+		if (re == -1) {
+			PRINT_ERROR ("inet_pton errno=%d\n", errno);
+		}
 #else
-		/* IPv6 needs inet_pton. inet_addr just doesn't work without
-		 * it. We'll suppose then that we haven't IPv6 support 
+		/* IPv6 needs inet_pton; inet_addr() doesn't support it.
 		 */
 		sockaddr.sin_addr.s_addr = inet_addr (srv->listen_to);
 #endif
@@ -574,7 +576,10 @@ initialize_server_socket6 (cherokee_server_t *srv, unsigned short port, int *srv
 	if (srv->listen_to == NULL) {
 		sockaddr.sin6_addr = in6addr_any; 
 	} else {
-		inet_pton (sockaddr.sin6_family, srv->listen_to, &sockaddr.sin6_addr);
+		re = inet_pton (sockaddr.sin6_family, srv->listen_to, &sockaddr.sin6_addr);
+		if (re == -1) {
+			PRINT_ERROR ("inet_pton errno=%d\n", errno);
+		}
 	}
 
 	re = bind (srv_socket, (struct sockaddr *)&sockaddr, sizeof(struct sockaddr_in6));
@@ -783,7 +788,7 @@ for_each_vserver_init_tls_func (const char *key, void *value)
 	ret = cherokee_virtual_server_init_tls (vserver);
 	if (ret < ret_ok) {
 		PRINT_ERROR ("Can not initialize TLS for `%s' virtual host\n", 
-			     cherokee_buffer_is_empty(vserver->name) ? "unknown" : vserver->name->buf);
+			     cherokee_buffer_is_empty(&vserver->name) ? "unknown" : vserver->name.buf);
 	}
 }
 
@@ -1468,3 +1473,4 @@ cherokee_server_write_pidfile (cherokee_server_t *srv)
 
 	return ret_ok;
 }
+

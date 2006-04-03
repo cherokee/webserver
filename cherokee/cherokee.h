@@ -48,6 +48,7 @@
 
 /* Server library
  */
+#include <cherokee/config_node.h>
 #include <cherokee/server.h>
 #include <cherokee/module.h>
 #include <cherokee/logger.h>

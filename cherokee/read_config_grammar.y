@@ -697,7 +697,7 @@ document_root : T_DOCUMENT_ROOT id_or_path
 
 	   /* Add the virtual root path to the virtual server struct
 	    */
-	   cherokee_buffer_add (vserver->root, root, root_len);
+	   cherokee_buffer_add (&vserver->root, root, root_len);
 };
 
 
@@ -1363,7 +1363,7 @@ server : T_SERVER domain_list '{'
 	   /* Add default virtual server name
 	    */
 	   if (i->string != NULL) {
-			 cherokee_buffer_t *name = current_virtual_server->name;
+			 cherokee_buffer_t *name = &current_virtual_server->name;
 
 			 if (cherokee_buffer_is_empty (name)) {
 				    cherokee_buffer_add_va (name, "%s", i->string);
@@ -1762,14 +1762,14 @@ userdir : T_USERDIR T_ID
 
 	   /* Set the users public directory
 	    */
-	   if (!cherokee_buffer_is_empty (vsrv->userdir)) {
-			 PRINT_MSG ("WARNING: Overwriting userdir '%s'\n", vsrv->userdir->buf);
-			 cherokee_buffer_clean (vsrv->userdir);
+	   if (!cherokee_buffer_is_empty (&vsrv->userdir)) {
+			 PRINT_MSG ("WARNING: Overwriting userdir '%s'\n", vsrv->userdir.buf);
+			 cherokee_buffer_clean (&vsrv->userdir);
 	   }
 
 	   len = strlen($2);
 	   tmp = make_finish_with_slash ($2, &len);
-	   cherokee_buffer_add (vsrv->userdir, tmp, len);
+	   cherokee_buffer_add (&vsrv->userdir, tmp, len);
 
 	   /* Set the plugin table reference
 	    */

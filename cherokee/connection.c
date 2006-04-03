@@ -1138,7 +1138,7 @@ cherokee_connection_build_local_directory (cherokee_connection_t *cnt, cherokee_
 	} else {
 		/* Normal request
 		 */
-		ret = cherokee_buffer_add_buffer (&cnt->local_directory, vsrv->root);
+		ret = cherokee_buffer_add_buffer (&cnt->local_directory, &vsrv->root);
 	}
 	
 	return ret;
@@ -1179,7 +1179,7 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t *cnt, c
 	 */
 	cherokee_buffer_add (&cnt->local_directory, pwd->pw_dir, strlen(pwd->pw_dir));
 	cherokee_buffer_add (&cnt->local_directory, "/", 1);
-	cherokee_buffer_add_buffer (&cnt->local_directory, vsrv->userdir);
+	cherokee_buffer_add_buffer (&cnt->local_directory, &vsrv->userdir);
 
 	return ret_ok;
 }
@@ -1413,7 +1413,7 @@ cherokee_connection_get_request (cherokee_connection_t *cnt)
 
 	/* Userdir requests
 	 */
-	if ((!cherokee_buffer_is_empty (CONN_VSRV(cnt)->userdir)) && 
+	if ((!cherokee_buffer_is_empty (&CONN_VSRV(cnt)->userdir)) && 
 	    cherokee_connection_is_userdir (cnt)) 
 	{
 		ret = parse_userdir (cnt);

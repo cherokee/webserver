@@ -832,7 +832,9 @@ handler_error.h \
 nonce.h \
 nonce.c \
 ext_source.h \
-ext_source.c
+ext_source.c \
+config_node.h \
+config_node.c
 
 libcherokee_config_la_SOURCES = \
 $(config_common) \
@@ -920,7 +922,7 @@ $(dynamic_validator_htpasswd_lib)
 #
 # Main binary: Cherokee server
 #
-sbin_PROGRAMS = cherokee
+sbin_PROGRAMS = cherokee cherokee-admin
 
 cherokee_SOURCES = main.c
 cherokee_LDADD   = \
@@ -930,6 +932,11 @@ libcherokee-base.la \
 libcherokee-server.la
 cherokee_LDFLAGS = -export-dynamic
 
+cherokee_admin_SOURCES = main_admin.c
+cherokee_admin_LDADD   = $(cherokee_LDADD)
+cherokee_admin_LDFLAGS = $(cherokee_LDFLAGS)
+
+
 #
 # Log rotate utility
 #
@@ -938,41 +945,16 @@ bin_PROGRAMS = cherokee_logrotate
 cherokee_logrotate_SOURCES = cherokee_logrotate.c
 cherokee_logrotate_LDADD = libcherokee-base.la libcherokee-client.la libcherokee-server.la libcherokee-config.la
 
-
 #
 # Test programs
 #
-noinst_PROGRAMS = cherokee_admin
+noinst_PROGRAMS = cherokee_show 
 
-cherokee_admin_SOURCES = cherokee_admin.c 
-cherokee_admin_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la 
+cherokee_show_SOURCES = cherokee_show.c 
+cherokee_show_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la 
 
-##cherokee_table_test_SOURCES = cherokee_table_test.c
-##cherokee_table_test_LDADD = libcherokee.la
-
-#noinst_PROGRAMS = cherokee_modules cherokee_base64 cherokee_headers cherokee_fastcgi
-
-#cherokee_modules_SOURCES = cherokee_modules.c
-#cherokee_modules_LDADD = libcherokee.la
-
-#cherokee_base64_SOURCES = cherokee_base64.c
-#cherokee_base64_LDADD = libcherokee.la
-
-#cherokee_headers_SOURCES = cherokee_headers.c
-#cherokee_headers_LDADD = libcherokee.la
-
-#cherokee_fastcgi_SOURCES = cherokee_fastcgi.c
-#cherokee_fastcgi_LDADD = libcherokee.la 
-#cherokee_fastcgi_LDFLAGS = -lfcgi
-
-#cherokee_ip_SOURCES = cherokee_ip.c
-#cherokee_ip_LDADD = libcherokee.la
-
-#cherokee_hex_SOURCES = cherokee_hex.c
-#cherokee_hex_LDADD = libcherokee-base.la
-
-#cherokee_short_path = cherokee_short_path.c
-#cherokee_short_path_LDADD = libcherokee-base.la
+# test_SOURCES = test.c
+# test_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la 
 
 
 CLEANFILES = \

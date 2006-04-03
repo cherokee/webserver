@@ -49,7 +49,7 @@
 typedef struct {
 	struct list_head list_entry;
 
-	cherokee_buffer_t           *name;            /* Default name.   Eg: www.0x50.org */
+	cherokee_buffer_t            name;            /* Default name.   Eg: www.0x50.org */
 
 	cherokee_dirs_table_t        dirs;            /* Eg: (/public, common) */
 	cherokee_exts_table_t       *exts;            /* Eg: (.php,    phpcgi) */
@@ -61,8 +61,8 @@ typedef struct {
 	cherokee_logger_t           *logger;          /* Logger obj              */
 	cherokee_table_t            *logger_props;    /* Logger properties table */
 
-	cherokee_buffer_t           *root;            /* Document root. Eg: /var/www */
-	cherokee_buffer_t           *userdir;         /* Eg: public_html             */
+	cherokee_buffer_t            root;            /* Document root. Eg: /var/www */
+	cherokee_buffer_t            userdir;         /* Eg: public_html             */
 	cherokee_dirs_table_t       *userdir_dirs;    /* Eg: (/public, common)       */
 
 	list_t                       index_list;      /* Eg: index.html, index.php  */
@@ -110,5 +110,9 @@ ret_t cherokee_virtual_server_have_tls (cherokee_virtual_server_t *vserver);
 
 void  cherokee_virtual_server_add_rx (cherokee_virtual_server_t *vserver, size_t rx);
 void  cherokee_virtual_server_add_tx (cherokee_virtual_server_t *vserver, size_t tx);
+
+/* Configuration
+ */
+ret_t cherokee_virtual_server_set_documentroot (cherokee_virtual_server_t *vserver, const char *documentroot);
 
 #endif /* CHEROKEE_VIRTUAL_SERVER_H */

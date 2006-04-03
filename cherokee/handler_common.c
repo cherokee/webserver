@@ -224,7 +224,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_table
 
 				/* Lets reconstruct the local directory
 				 */
-				cherokee_buffer_add_buffer (&new_local_dir, CONN_VSRV(conn)->root);
+				cherokee_buffer_add_buffer (&new_local_dir, &CONN_VSRV(conn)->root);
 				cherokee_buffer_add (&new_local_dir, index, index_len);
 				
 				ret = stat_file (use_iocache, iocache, &nocache_info, new_local_dir.buf, &file, &info);

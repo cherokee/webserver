@@ -75,10 +75,10 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver)
 # endif 
 #endif
 
-	ret = cherokee_buffer_new (&vsrv->root);
+	ret = cherokee_buffer_init (&vsrv->root);
 	if (unlikely(ret < ret_ok)) return ret;	
 	
-	ret = cherokee_buffer_new (&vsrv->name);
+	ret = cherokee_buffer_init (&vsrv->name);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	ret = cherokee_dirs_table_init (&vsrv->dirs);
@@ -86,7 +86,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver)
 
         /* User dir
          */
-	ret = cherokee_buffer_new (&vsrv->userdir);
+	ret = cherokee_buffer_init (&vsrv->userdir);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	ret = cherokee_dirs_table_new (&vsrv->userdir_dirs);
@@ -145,8 +145,8 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 # endif
 #endif
 
-	cherokee_buffer_free (vserver->name);
-	cherokee_buffer_free (vserver->root);
+	cherokee_buffer_mrproper (&vserver->name);
+	cherokee_buffer_mrproper (&vserver->root);
 
 	if (vserver->logger != NULL) {
 		cherokee_logger_free (vserver->logger);
@@ -162,8 +162,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	cherokee_dirs_table_mrproper (&vserver->dirs);
 	cherokee_dirs_table_free     (vserver->userdir_dirs);
 
-	cherokee_buffer_free (vserver->userdir);
-	vserver->userdir = NULL;
+	cherokee_buffer_mrproper (&vserver->userdir);
 
 	/* Extension table
 	 */
@@ -351,5 +350,15 @@ cherokee_virtual_server_add_tx (cherokee_virtual_server_t *vserver, size_t tx)
 	CHEROKEE_MUTEX_LOCK(&vserver->data.tx_mutex);
 	vserver->data.tx += tx;
 	CHEROKEE_MUTEX_UNLOCK(&vserver->data.tx_mutex);
+}
+
+
+ret_t 
+cherokee_virtual_server_set_documentroot (cherokee_virtual_server_t *vserver, const char *documentroot)
+{
+	cherokee_buffer_clean (&vserver->root);
+	cherokee_buffer_add (&vserver->root, (char *)documentroot, strlen(documentroot));
+
+	return ret_ok;
 }
 

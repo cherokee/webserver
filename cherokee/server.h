@@ -70,7 +70,6 @@ ret_t cherokee_server_get_total_traffic  (cherokee_server_t *srv, size_t *rx, si
 ret_t cherokee_server_set_backup_mode    (cherokee_server_t *srv, cherokee_boolean_t active);
 ret_t cherokee_server_get_backup_mode    (cherokee_server_t *srv, cherokee_boolean_t *active);
 
-
 /* System signal callback
  */
 ret_t cherokee_server_handle_HUP   (cherokee_server_t *srv, cherokee_server_reinit_cb_t callback);

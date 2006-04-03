@@ -530,7 +530,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	/* OH MY GOD!!! an error is here 
 	 */
 	SHOULDNT_HAPPEN;
-	exit(1);
+	exit(2);
 }
 
 static ret_t

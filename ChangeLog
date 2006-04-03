@@ -1,3 +1,19 @@
+2006-04-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main_admin.c, cherokee/Makefile.am: Added file to build
+	the administration server.
+
+	* cherokee/config_node.c, cherokee/config_node.h: Added new class.
+
+	* cherokee/cherokee_admin.c, cherokee/Makefile.am:
+	cherokee_admin.c renamed to cherokee/cherokee_show.c
+
+	* admin, admin/Makefile.am, configure.in: Added new directory to
+	hold the admin interface sources.
+
+	* cherokee/virtual_server.h, cherokee/virtual_server.c: A few
+	buffers are now embedded rather than pointers.
+
 2006-04-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/util.c (cherokee_gethostbyname): Fixes segfault.

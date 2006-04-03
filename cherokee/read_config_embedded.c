@@ -44,7 +44,7 @@ cherokee_embedded_read_config (cherokee_server_t *srv)
 
 	   /* Root directory
 	    */
-	   cherokee_buffer_add_str (vserver->root, DEFAULT_DOCUMENTROOT);
+	   cherokee_virtual_server_set_documentroot (vserver, DEFAULT_DOCUMENTROOT);
 
 	   /* Default handler
 	    */

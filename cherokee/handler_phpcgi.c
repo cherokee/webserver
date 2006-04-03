@@ -71,7 +71,7 @@ static char *php_names[] = {
 	"php", 
 	"php5", 
 	"php4", 
-	"php3",
+	"php-cgi",
 	NULL
 };
 

@@ -795,7 +795,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* 2.- Read the directory configuration
 			 */
-			if (!cherokee_buffer_is_empty (CONN_VSRV(conn)->userdir) &&
+			if (!cherokee_buffer_is_empty (&CONN_VSRV(conn)->userdir) &&
 			    !cherokee_buffer_is_empty (&conn->userdir))
 			{
 				ret = cherokee_connection_get_dir_entry (conn, CONN_VSRV(conn)->userdir_dirs, &entry);
