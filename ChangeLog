@@ -1,3 +1,18 @@
+2006-04-08  Rodrigo Fernandez-Vizarra  <rfdzvizarra@yahoo.ie>
+
+	* cget/main.c: Modified cget not to use the event interface of the
+	download and to use the new interface to query the status of a
+	download
+
+	* cherokee/downloader-protected.h: Added field the
+	cherokee_downloader struct to store the status of the download
+
+	* cherokee/downloader.c: Implemented the interface to query the
+	status of a download
+
+	* cherokee/downloader.h: Added interface to query the status of a
+	download
+
 2006-04-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main_admin.c, cherokee/Makefile.am: Added file to build
