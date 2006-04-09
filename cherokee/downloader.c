@@ -105,6 +105,8 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 	n->info.post_sent    = 0;
 	n->info.body_recv    = 0;
 
+	n->status = downloader_status_none;
+
 	return ret_ok;
 }
 
@@ -409,6 +411,7 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 		ret = downloader_send_buffer (downloader, &downloader->request_header);
 		if (unlikely(ret != ret_ok)) return ret;
 
+		downloader->status = downloader_status_headers_sent;
 		downloader->phase = downloader_phase_send_post;
 
 	case downloader_phase_send_post:
@@ -422,6 +425,7 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 			if (unlikely(ret != ret_ok)) return ret;
 		}
 
+		downloader->status = downloader->status | downloader_status_post_sent;
 		downloader->phase = downloader_phase_read_headers;
 		break;
 
@@ -433,11 +437,13 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 
 		/* We have the header parsed, continue..
 		 */
+		downloader->status = downloader->status | downloader_status_headers_received;
 		downloader->phase = downloader_phase_step;
 
 		/* Does it read the full reply in the first received chunk?
 		 */
 		if (downloader->info.body_recv >= downloader->content_length) {
+			downloader->status = downloader->status | downloader_status_data_available | downloader_status_finished;
 			return ret_eof_have_data;
 		}
 
@@ -445,11 +451,28 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 		TRACE(ENTRIES, "Phase %s\n", "step");
 
 		ret = downloader_step (downloader);
-		if (ret != ret_ok) return ret;
+		switch (ret) {
+		case ret_error:
+			break;
+		case ret_ok:
+			downloader->status = downloader->status | downloader_status_data_available;
+			break;
+		case ret_eof_have_data:
+			downloader->status = downloader->status | downloader_status_data_available | downloader_status_finished;
+			break;
+		case ret_eof:
+			downloader->status = downloader->status & ~downloader_status_data_available | downloader_status_finished;
+			break;
+		case ret_eagain:
+			downloader->status = downloader->status & ~downloader_status_data_available;
+			break;
+		}
+		return ret;
 
 	case downloader_phase_finished:
 		TRACE(ENTRIES, "Phase %s\n", "finished");
 
+		downloader->status = downloader->status & ~downloader_status_data_available & downloader_status_finished;
 		return ret_ok;
 
 	default:
@@ -495,4 +518,36 @@ cherokee_downloader_is_request_sent (cherokee_downloader_t *downloader)
 		return ret_ok;
 
 	return ret_deny;
+}
+
+ret_t 
+cherokee_downloader_headers_available(cherokee_downloader_t *downloader)
+{
+	return (downloader->phase == downloader_phase_step) ? ret_ok: ret_deny;
+}
+ret_t 
+cherokee_downloader_data_available(cherokee_downloader_t *downloader)
+{
+	return (downloader->phase == downloader_phase_step) ? ret_ok: ret_deny;
+}
+
+ret_t
+cherokee_downloader_finished(cherokee_downloader_t *downloader) 
+{
+	ret_t ret = ret_deny;
+
+	if (downloader->info.body_recv >= downloader->content_length) {
+		ret = ret_ok;
+	} else 	if (downloader->phase == downloader_phase_finished) {
+		ret = ret_ok;
+	}
+	return ret;
+}
+
+ret_t
+cherokee_downloader_get_status(cherokee_downloader_t *downloader, cherokee_downloader_status_t *status)
+{
+	if (status != NULL) {
+		*status = downloader->status;
+	}
 }

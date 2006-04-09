@@ -41,6 +41,14 @@ CHEROKEE_BEGIN_DECLS
 typedef struct cherokee_downloader cherokee_downloader_t;
 #define DOWNLOADER(d) ((cherokee_downloader_t *)(d))
 
+typedef enum {
+	downloader_status_none = 0x0,
+	downloader_status_headers_sent = 0x1,
+	downloader_status_post_sent = 0x2,
+	downloader_status_headers_received = 0x4,
+	downloader_status_data_available = 0x8,
+	downloader_status_finished = 0x10
+} cherokee_downloader_status_t;
 
 ret_t cherokee_downloader_new             (cherokee_downloader_t **downloader);
 ret_t cherokee_downloader_free            (cherokee_downloader_t  *downloader);
@@ -55,6 +63,8 @@ ret_t cherokee_downloader_post_reset      (cherokee_downloader_t *downloader);
 ret_t cherokee_downloader_step            (cherokee_downloader_t *downloader);
 ret_t cherokee_downloader_reuse           (cherokee_downloader_t *downloader);
 ret_t cherokee_downloader_connect         (cherokee_downloader_t *downloader);
+
+ret_t cherokee_downloader_get_status      (cherokee_downloader_t *downloader, cherokee_downloader_status_t *status);
 
 ret_t cherokee_downloader_is_request_sent (cherokee_downloader_t *downloader);
 

@@ -71,6 +71,8 @@ struct cherokee_downloader {
 		uint32_t post_sent;
 		uint32_t body_recv;
 	} info;
+
+	cherokee_downloader_status_t status;
 };
 
 
