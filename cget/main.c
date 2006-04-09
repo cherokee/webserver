@@ -53,6 +53,7 @@
 #include "request.h"
 #include "downloader.h"
 #include "downloader-protected.h"
+#include "socket.h"
 #include "header-protected.h"      /* FIXME! */
 
 #define EXIT_OK    0
@@ -261,32 +262,73 @@ do_download (cherokee_downloader_t *downloader, cherokee_fdpoll_t *fdpoll)
 {
 	int   num;
 	ret_t ret;
-	
+	cherokee_downloader_status_t status;
+	int headers_are_read = 0;
+	int reading = 0;
+
+	do_download__init(downloader,NULL);
+
+	/* 
+	 * add socket to fdpoll in write mode
+	 */
+	cherokee_fdpoll_add(fdpoll, downloader->socket.socket, 1);
 	for (;;) {
 		/* Inspect the file descriptors
 		 */ 
-		num = cherokee_fdpoll_watch (downloader->fdpoll, POLL_TIME);
+		if ( cherokee_fdpoll_watch (fdpoll, POLL_TIME) > 0 ) {
 
-		/* Do some work
-		 */
-		ret = cherokee_downloader_step (downloader);
 
-		switch (ret) {
-		case ret_ok:
-		case ret_eagain:
-			/* it is go.. continue
+			/* Do some work
 			 */
-			break;
+			ret = cherokee_downloader_step (downloader);
+
+			cherokee_downloader_get_status(downloader, &status);
+			switch (ret) {
+			case ret_ok:
+				if ( !reading && (status & downloader_status_post_sent)) {
+					/*	
+					 * the headers and post have been sent,
+					 * switch socket to read
+					 */
+					cherokee_fdpoll_set_mode (fdpoll, downloader->socket.socket, 0);
+					reading = 1;
+				}
 			
-		case ret_eof:
-		case ret_error:
-			/* Finished or critical error
-			 */
-			return ret;
+				if ( (status & downloader_status_headers_received) && !headers_are_read) {
+					do_download__has_headers(downloader, NULL);
+					headers_are_read = 1;
+				}
+
+				if (status & downloader_status_data_available) {
+					do_download__read_body(downloader, NULL);
+				}
+
+				if (status & downloader_status_finished) {
+					do_download__finish(downloader, NULL);
+				}
+
+			case ret_eagain:
+				/* it is go.. continue
+				 */
+				break;
 			
-		default:
-			SHOULDNT_HAPPEN;
-			return ret_error;
+			case ret_eof_have_data:
+				if (status & downloader_status_data_available) {
+					do_download__read_body(downloader, NULL);
+				}
+			case ret_eof:
+				if (status & downloader_status_finished) {
+					do_download__finish(downloader, NULL);
+				}
+			case ret_error:
+				/* Finished or critical error
+				 */
+				return ret;
+			
+			default:
+				SHOULDNT_HAPPEN;
+				return ret_error;
+			}
 		}
 	}
 
@@ -394,21 +436,14 @@ main (int argc, char **argv)
 		ret = cherokee_downloader_new (&downloader);
 		if (ret != ret_ok) return EXIT_ERROR;
 
-		ret = cherokee_downloader_set_url (downloader, url);
+		ret = cherokee_downloader_init(downloader);
 		if (ret != ret_ok) return EXIT_ERROR;
 
-		ret = cherokee_downloader_set_fdpoll (downloader, fdpoll);
+		ret = cherokee_downloader_set_url (downloader, url);
 		if (ret != ret_ok) return EXIT_ERROR;
 
 		ret = cherokee_downloader_connect (downloader);
 		if (ret != ret_ok) return EXIT_ERROR;
-
-		/* Set the callbacks
-		 */
-		cherokee_downloader_connect_event (downloader, downloader_event_init,        do_download__init,        NULL);
-		cherokee_downloader_connect_event (downloader, downloader_event_has_headers, do_download__has_headers, NULL);
-		cherokee_downloader_connect_event (downloader, downloader_event_read_body,   do_download__read_body,   NULL);
-		cherokee_downloader_connect_event (downloader, downloader_event_finish,      do_download__finish,      NULL);
 
 		/* Download it!
 		 */
