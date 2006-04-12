@@ -95,6 +95,13 @@
 
 #define CRLF "\r\n"
 
+#define equal_str(m,str) \
+	(strncasecmp(m, str, sizeof(str)-1) == 0)
+
+#define equal_buf_str(b,str)            \
+	(((b)->len == sizeof(str)-1) &&	\
+	 (strncasecmp((b)->buf, str, sizeof(str)-1) == 0))
+
 #define return_if_fail(expr,ret) \
 	if (!(expr)) {                                                      \
 		fprintf (stderr,                                            \
