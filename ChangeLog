@@ -1,5 +1,8 @@
 2006-04-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main_admin.c (config_server): Now it uses the new
+	configuration strings rather than the internal API.
+
 	* cherokee/server.c (cherokee_server_read_config_string): Added
 	new method. Cherokee 0.5 supports it, so it was a
 	regression. Fixed.

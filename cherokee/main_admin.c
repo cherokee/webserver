@@ -30,7 +30,6 @@
 #include "list_ext.h"
 #include "typed_table.h"
 
-
 #define DEFAULT_PORT         9090
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin/"
 
@@ -38,58 +37,29 @@
 static ret_t
 config_server (cherokee_server_t *srv) 
 {
-	ret_t                      ret;
-	cherokee_virtual_server_t *vserver;
-	cherokee_module_info_t    *info;
-	cherokee_config_entry_t   *entry;
+	ret_t             ret;
+	cherokee_buffer_t buf = CHEROKEE_BUF_INIT;
 
-	/* Server: Port, DocumentRoot and DirectoryIndex
-	 */
-	srv->port      = DEFAULT_PORT;
-	srv->ipv6      = false;
-	
-	vserver = srv->vserver_default;
+	cherokee_buffer_add_va  (&buf, "server!port = %d\n", DEFAULT_PORT);
+	cherokee_buffer_add_str (&buf, "server!ipv6 = 0\n");
+	cherokee_buffer_add_str (&buf, "server!listen = 127.0.0.1\n");
+	cherokee_buffer_add_str (&buf, "server!max_connection_reuse = 0\n");
 
-	cherokee_buffer_add_str (&srv->listen_to, "127.0.0.1");
-	cherokee_virtual_server_set_documentroot (vserver, DEFAULT_DOCUMENTROOT);
-	cherokee_list_add_tail (&vserver->index_list, "index.php");
-	
-	/* Default handler
-	 */
-	cherokee_module_loader_load (&srv->loader, "common");
-	cherokee_module_loader_get_info (&srv->loader, "common", &info);
-	
-	cherokee_config_entry_new (&entry);
-	cherokee_config_entry_set_handler (entry, info);
-	entry->priority = CHEROKEE_CONFIG_PRIORITY_DEFAULT;
+	cherokee_buffer_add_va  (&buf, "vserver!default!document_root = %s\n", DEFAULT_DOCUMENTROOT);
+	cherokee_buffer_add_str (&buf, "vserver!default!directory_index = index.php\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler = common\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!priority = 1\n");
 
-	vserver->default_handler = entry;
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/about!handler = server_info\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/about!priority = 2\n");
 
-	/* About
-	 */
-	cherokee_module_loader_load (&srv->loader, "server_info");
-	cherokee_module_loader_get_info (&srv->loader, "server_info", &info);
+	cherokee_buffer_add_str (&buf, "vserver!default!extensions!php!handler = phpcgi\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!extensions!php!priority = 3\n");
 
-	cherokee_config_entry_new (&entry);
-	cherokee_config_entry_set_handler (entry, info);
-	entry->priority = CHEROKEE_CONFIG_PRIORITY_DEFAULT + 1;
-	
-	cherokee_dirs_table_add (&vserver->entry.dirs, "/about", entry);
-
-	/* PHP extension
-	 */
-	cherokee_module_loader_load (&srv->loader, "phpcgi");
-	cherokee_module_loader_get_info (&srv->loader, "phpcgi", &info);
-
-	cherokee_config_entry_new (&entry);
-	cherokee_config_entry_set_handler (entry, info);
-	entry->priority = CHEROKEE_CONFIG_PRIORITY_DEFAULT + 2;
-
-	ret = cherokee_exts_table_new (&vserver->entry.exts);
+	ret = cherokee_server_read_config_string (srv, &buf);
 	if (ret != ret_ok) return ret;
 
-	cherokee_exts_table_add (vserver->entry.exts, "php", entry);
-	
+	cherokee_buffer_mrproper (&buf);
 	return ret_ok;
 }
 
