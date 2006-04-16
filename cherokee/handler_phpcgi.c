@@ -213,7 +213,7 @@ cherokee_handler_phpcgi_configure (cherokee_config_node_t *conf, cherokee_server
 		ret = cherokee_typed_table_instance (props);
 		if (ret != ret_ok) return ret;
 		
-		ret = cherokee_typed_table_add_str (*props, "interpreter", buf->buf);
+		ret = cherokee_typed_table_add_str (*props, "interpreter", strdup(buf->buf));
 		if (ret != ret_ok) return ret;		
 	}
 

@@ -151,7 +151,7 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 		if (ret != ret_ok) return ret;
 
 		if (equal_buf_str (&subconf->key, "script_alias")) {
-			ret = cherokee_typed_table_add_str (*props, "script_alias", subconf->val.buf);
+			ret = cherokee_typed_table_add_str (*props, "script_alias", strdup(subconf->val.buf));
 			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "env")) {

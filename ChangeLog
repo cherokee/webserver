@@ -1,5 +1,12 @@
 2006-04-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_redir.c, cherokee/handler_cgi_base.c,
+	cherokee/handler_dirlist.c, cherokee/validator_plain.c,
+	cherokee/validator_plain.h, cherokee/validator_htpasswd.c,
+	cherokee/validator_htdigest.c, cherokee/handler_phpcgi.c: A few
+	memory management problem have been fixed it (due to previous
+	commit).
+
 	* cherokee/server.c (cherokee_server_read_config_string): It
 	doesn't make sente to keep the configuration nodes when the server
 	start running, so now it frees it as soon as everything is parsed.

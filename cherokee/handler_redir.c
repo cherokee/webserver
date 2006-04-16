@@ -359,8 +359,8 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 		ret = cherokee_typed_table_instance (props);
 		if (ret != ret_ok) return ret;
 
-		if (equal_buf_str (&subconf->key, "url")) {			
-			ret = cherokee_typed_table_add_str (*props, "url", subconf->val.buf);
+		if (equal_buf_str (&subconf->key, "url")) {
+			ret = cherokee_typed_table_add_str (*props, "url", strdup(subconf->val.buf));
 			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "rewrite")) {

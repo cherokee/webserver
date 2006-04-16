@@ -39,7 +39,7 @@ cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_se
 		ret = cherokee_typed_table_instance (props);
 		if (ret != ret_ok) return ret;
 
-		ret = cherokee_typed_table_add_str (*props, "passwdfile", subconf->val.buf);
+		ret = cherokee_typed_table_add_str (*props, "passwdfile", strdup(subconf->val.buf));
 		if (ret != ret_ok) return ret;
 	}
 

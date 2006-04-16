@@ -30,8 +30,8 @@
 
 
 typedef struct {
-	   cherokee_validator_t  validator;
-	   const char           *file_ref;
+	cherokee_validator_t  validator;
+	const char           *file_ref;
 } cherokee_validator_plain_t;
 
 #define PLAIN(x) ((cherokee_validator_plain_t *)(x))

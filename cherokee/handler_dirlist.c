@@ -87,7 +87,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 		    equal_buf_str (&subconf->key, "alink")   ||
 		    equal_buf_str (&subconf->key, "background"))
 		{
-			ret = cherokee_typed_table_add_str (*props, subconf->key.buf, subconf->val.buf);
+			ret = cherokee_typed_table_add_str (*props, subconf->key.buf, strdup(subconf->val.buf));
 			if (ret != ret_ok) return ret;
 			
 		} else if (equal_buf_str (&subconf->key, "size")  ||
@@ -95,7 +95,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 			   equal_buf_str (&subconf->key, "owner") ||
 			   equal_buf_str (&subconf->key, "group"))
 		{
-			ret = cherokee_typed_table_add_str (*props, subconf->key.buf, subconf->val.buf);
+			ret = cherokee_typed_table_add_str (*props, subconf->key.buf, strdup(subconf->val.buf));
 			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "header_file")) {
