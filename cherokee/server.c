@@ -1408,17 +1408,11 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	return ret_ok;
 }
 
-
-ret_t 
-cherokee_server_read_config_file (cherokee_server_t *srv, char *fullpath)
+static ret_t
+configure_server (cherokee_server_t *srv)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf;
-
-	/* Load the main file
-	 */
-	ret = cherokee_config_node_read_file (&srv->config, fullpath);
-	if (ret != ret_ok) return ret;
 
 	/* Server
 	 */
@@ -1451,6 +1445,33 @@ cherokee_server_read_config_file (cherokee_server_t *srv, char *fullpath)
 	}
 
 	return ret_ok;
+}
+
+
+ret_t 
+cherokee_server_read_config_string (cherokee_server_t *srv, cherokee_buffer_t *string)
+{
+	ret_t ret;
+
+	/* Load the main file
+	 */
+	ret = cherokee_config_node_parse_string (&srv->config, string);
+	if (ret != ret_ok) return ret;
+
+	return configure_server (srv);
+}
+
+ret_t 
+cherokee_server_read_config_file (cherokee_server_t *srv, char *fullpath)
+{
+	ret_t ret;
+
+	/* Load the main file
+	 */
+	ret = cherokee_config_node_parse_file (&srv->config, fullpath);
+	if (ret != ret_ok) return ret;
+
+	return configure_server (srv);
 }
 
 

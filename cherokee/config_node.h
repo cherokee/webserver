@@ -61,7 +61,9 @@ ret_t cherokee_config_node_get       (cherokee_config_node_t *conf, const char *
 ret_t cherokee_config_node_get_buf   (cherokee_config_node_t *conf, cherokee_buffer_t *key, cherokee_config_node_t **entry);
 
 ret_t cherokee_config_node_while     (cherokee_config_node_t *conf, cherokee_config_node_while_func_t func, void *data);
-ret_t cherokee_config_node_read_file (cherokee_config_node_t *conf, const char *file);
+
+ret_t cherokee_config_node_parse_file   (cherokee_config_node_t *conf, const char *file);
+ret_t cherokee_config_node_parse_string (cherokee_config_node_t *conf, cherokee_buffer_t *string);
 
 /* Convenience functions: value retrieving
  */

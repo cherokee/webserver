@@ -1,5 +1,12 @@
 2006-04-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (cherokee_server_read_config_string): Added
+	new method. Cherokee 0.5 supports it, so it was a
+	regression. Fixed.
+
+	* cherokee/config_node.c (cherokee_config_node_parse_string):
+	Addnew new method.
+
 	* Makefile.am, sites-default.sample.pre, cherokee/handler_redir,
 	cherokee/handler_redir.h, cherokee/module_loader.c,
 	cherokee/handler_server_info.c, cherokee/module_loader.h,

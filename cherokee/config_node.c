@@ -197,7 +197,7 @@ cherokee_config_node_while (cherokee_config_node_t *conf, cherokee_config_node_w
 
 
 ret_t 
-cherokee_config_node_read_file (cherokee_config_node_t *conf, const char *file)
+cherokee_config_node_parse_string (cherokee_config_node_t *conf, cherokee_buffer_t *buf)
 {
 	ret_t              ret;
 	char              *eol;
@@ -205,17 +205,12 @@ cherokee_config_node_read_file (cherokee_config_node_t *conf, const char *file)
 	char              *equal;
 	char              *tmp;
 	char              *eof;
-	cherokee_buffer_t  buf = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t  key = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t  val = CHEROKEE_BUF_INIT;
 
+	eof = buf->buf + buf->len;
 
-	ret = cherokee_buffer_read_file (&buf, (char *)file);
-	if (ret != ret_ok) return ret;
-	
-	eof = buf.buf + buf.len;
-
-	begin = buf.buf;
+	begin = buf->buf;
 	do {
 		/* Skip whites at the begining
 		 */
@@ -269,7 +264,6 @@ cherokee_config_node_read_file (cherokee_config_node_t *conf, const char *file)
 
 	} while (eol != NULL);
 	
-	cherokee_buffer_mrproper (&buf);
 	cherokee_buffer_mrproper (&key);
 	cherokee_buffer_mrproper (&val);
 	return ret_ok;
@@ -277,9 +271,28 @@ cherokee_config_node_read_file (cherokee_config_node_t *conf, const char *file)
 error:
 	PRINT_MSG ("Error parsing: %s\n", begin);
 
-	cherokee_buffer_mrproper (&buf);
 	cherokee_buffer_mrproper (&key);
 	cherokee_buffer_mrproper (&val);
+	return ret_error;
+}
+
+ret_t 
+cherokee_config_node_parse_file (cherokee_config_node_t *conf, const char *file)
+{
+	ret_t              ret;
+	cherokee_buffer_t  buf = CHEROKEE_BUF_INIT;
+
+	ret = cherokee_buffer_read_file (&buf, (char *)file);
+	if (ret != ret_ok) return ret;
+
+	ret = cherokee_config_node_parse_string (conf, &buf);
+	if (ret != ret_ok) goto error;
+
+	cherokee_buffer_mrproper (&buf);
+	return ret_ok;
+
+error:
+	cherokee_buffer_mrproper (&buf);
 	return ret_error;
 }
 

@@ -466,6 +466,8 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 		case ret_eagain:
 			downloader->status = downloader->status & ~downloader_status_data_available;
 			break;
+		default:
+			RET_UNKNOWN(ret);
 		}
 		return ret;
 
@@ -550,4 +552,6 @@ cherokee_downloader_get_status(cherokee_downloader_t *downloader, cherokee_downl
 	if (status != NULL) {
 		*status = downloader->status;
 	}
+
+	return ret_ok;
 }
