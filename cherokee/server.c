@@ -1458,7 +1458,15 @@ cherokee_server_read_config_string (cherokee_server_t *srv, cherokee_buffer_t *s
 	ret = cherokee_config_node_parse_string (&srv->config, string);
 	if (ret != ret_ok) return ret;
 
-	return configure_server (srv);
+	ret = configure_server (srv);
+	if (ret != ret_ok) return ret;
+
+	/* Clean up
+	 */
+	ret = cherokee_config_node_mrproper (&srv->config);
+	if (ret != ret_ok) return ret;
+	
+	return ret_ok;
 }
 
 ret_t 
@@ -1471,7 +1479,15 @@ cherokee_server_read_config_file (cherokee_server_t *srv, char *fullpath)
 	ret = cherokee_config_node_parse_file (&srv->config, fullpath);
 	if (ret != ret_ok) return ret;
 
-	return configure_server (srv);
+	ret = configure_server (srv);
+	if (ret != ret_ok) return ret;
+
+	/* Clean up
+	 */
+	ret = cherokee_config_node_mrproper (&srv->config);
+	if (ret != ret_ok) return ret;
+
+	return ret_ok;
 }
 
 

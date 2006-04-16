@@ -51,6 +51,9 @@ typedef struct {
 typedef ret_t (* cherokee_config_node_while_func_t) (cherokee_config_node_t *, void *);
 typedef ret_t (* cherokee_config_node_list_func_t)  (char *, void *);
 
+ret_t cherokee_config_node_new       (cherokee_config_node_t **conf);
+ret_t cherokee_config_node_free      (cherokee_config_node_t *conf);
+
 ret_t cherokee_config_node_init      (cherokee_config_node_t *conf);
 ret_t cherokee_config_node_mrproper  (cherokee_config_node_t *conf);
 

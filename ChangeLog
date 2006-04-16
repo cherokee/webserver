@@ -1,5 +1,14 @@
 2006-04-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (cherokee_server_read_config_string): It
+	doesn't make sente to keep the configuration nodes when the server
+	start running, so now it frees it as soon as everything is parsed.
+
+	* cherokee/config_node.h,
+	cherokee/config_node.c (cherokee_config_node_new,
+	cherokee_config_node_free): Added two new method (beside the
+	stack'ed version _init()/_mrproper()).
+
 	* cherokee/main_admin.c (config_server): Now it uses the new
 	configuration strings rather than the internal API.
 

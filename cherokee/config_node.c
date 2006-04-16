@@ -42,11 +42,38 @@ cherokee_config_node_init (cherokee_config_node_t *conf)
 }
 
 ret_t 
+cherokee_config_node_new (cherokee_config_node_t **conf)
+{
+	CHEROKEE_NEW_STRUCT(n,config_node);
+
+	cherokee_config_node_init (n);
+
+	*conf = n;
+	return ret_ok;
+}
+
+
+ret_t 
 cherokee_config_node_mrproper (cherokee_config_node_t *conf)
 {
+	list_t *i, *j;
+
 	cherokee_buffer_mrproper (&conf->key);
 	cherokee_buffer_mrproper (&conf->val);
 
+	list_for_each_safe (i, j, &conf->child) {
+		cherokee_config_node_free (CONFIG_NODE(i));
+	}
+
+	return ret_ok;
+}
+
+ret_t 
+cherokee_config_node_free (cherokee_config_node_t *conf)
+{
+	cherokee_config_node_mrproper (conf);
+
+	free (conf);
 	return ret_ok;
 }
 
@@ -67,15 +94,16 @@ search_child (cherokee_config_node_t *current, cherokee_buffer_t *child)
 	return NULL;
 }
 
+
 static cherokee_config_node_t *
 add_new_child (cherokee_config_node_t *entry, cherokee_buffer_t *key)
 {
+	ret_t                   ret;
 	cherokee_config_node_t *n;
 
-	n = (cherokee_config_node_t *) malloc(sizeof(cherokee_config_node_t));
-	if (unlikely(n==NULL)) return NULL;
-	   
-	cherokee_config_node_init (n);
+	ret = cherokee_config_node_new (&n);
+	if (ret != ret_ok) return NULL;
+
 	cherokee_buffer_add_buffer (&n->key, key);	   
 
 	list_add_tail ((list_t *)n, &entry->child);
