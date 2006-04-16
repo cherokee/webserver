@@ -48,6 +48,7 @@ typedef void (* cherokee_typed_free_func_t) (void *);
 
 ret_t cherokee_typed_table_clean    (cherokee_table_t *table);
 ret_t cherokee_typed_table_free     (cherokee_table_t *table);
+ret_t cherokee_typed_table_instance (cherokee_table_t **table);
 
 ret_t cherokee_typed_table_add_data (cherokee_table_t *table, char *index, void *data, cherokee_typed_free_func_t free);
 ret_t cherokee_typed_table_add_list (cherokee_table_t *table, char *index, list_t *list, cherokee_typed_free_func_t free);

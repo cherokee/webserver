@@ -55,6 +55,7 @@
 #include "regex.h"
 #include "nonce.h"
 #include "mime.h"
+#include "config_node.h"
 
 
 struct cherokee_server {
@@ -70,13 +71,13 @@ struct cherokee_server {
 
 	/* Exit related
 	 */
-	char                        *panic_action;
+	cherokee_buffer_t            panic_action;
 	cherokee_boolean_t           wanna_exit;
 	cherokee_server_reinit_cb_t  reinit_callback;
 	
 	/* Virtual servers
 	 */
-	struct list_head           vservers;
+	list_t                     vservers;
 	cherokee_table_t          *vservers_ref;
 	cherokee_virtual_server_t *vserver_default;
 	
@@ -84,7 +85,7 @@ struct cherokee_server {
 	 */
 	cherokee_thread_t         *main_thread;
 	int                        thread_num;
-	struct list_head           thread_list;
+	list_t                     thread_list;
 	int                        thread_policy;
 
 	/* Modules
@@ -127,8 +128,8 @@ struct cherokee_server {
 
 	/* Networking config
 	 */
-	int                        ipv6;
-	char                      *listen_to;	
+	cherokee_boolean_t         ipv6;
+	cherokee_buffer_t          listen_to;
 	int                        fdwatch_msecs;
 	int                        listen_queue;
 
@@ -148,12 +149,11 @@ struct cherokee_server {
 	gid_t                      group;
 	gid_t                      group_orig;
 
-	char                      *chroot;
-	int                        chrooted;
+	cherokee_buffer_t          chroot;
+	cherokee_boolean_t         chrooted;
 
 	/* Mime
 	 */
-	char                      *mime_file;
 	cherokee_mime_t           *mime;
 
 	/* Time
@@ -171,6 +171,7 @@ struct cherokee_server {
 
 	/* Another config files
 	 */
+	cherokee_config_node_t     config;
 	char                      *config_file;
 	char                      *icons_file;
 

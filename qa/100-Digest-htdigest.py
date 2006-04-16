@@ -7,6 +7,14 @@ USER   = "username"
 PASSWD = "itissecret"
 DIR    = "digest_htdigest1"
 
+CONF = """
+vserver!default!directory!/%s!auth = htdigest
+vserver!default!directory!/%s!auth!methods = digest
+vserver!default!directory!/%s!auth!realm = %s
+vserver!default!directory!/%s!auth!passwdfile = %s
+vserver!default!directory!/%s!priority = 1000
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -57,7 +65,9 @@ class Test (TestBase):
 
         # Set the configuration
         #
-        self.conf             = """
+        self.conf = CONF % (DIR, DIR, DIR, REALM, DIR, passfile, DIR)
+
+        self.conf2             = """
            Directory /%s {
                Handler file
                Auth Digest {

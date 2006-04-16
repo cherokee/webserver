@@ -2,6 +2,17 @@ from base import *
 
 MAGIC = "It shouldn't inherit in this case"
 
+CONF = """
+vserver!default!directory!/inherit2/dir1/dir2/dir3!auth = plain
+vserver!default!directory!/inherit2/dir1/dir2/dir3!auth!methods = basic
+vserver!default!directory!/inherit2/dir1/dir2/dir3!auth!realm = Test
+vserver!default!directory!/inherit2/dir1/dir2/dir3!auth!passwdfile = %s
+vserver!default!directory!/inherit2/dir1/dir2/dir3!priority = 710
+
+vserver!default!directory!/inherit2!handler = file
+vserver!default!directory!/inherit2!priority = 711
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -14,16 +25,4 @@ class Test (TestBase):
         self.Mkdir (www, "inherit2/dir1/dir2/dir3")
         fn = self.WriteFile (www, "inherit2/dir1/test", 0555, MAGIC)
 
-        self.conf = """
-              Directory /inherit2 {
-                 Handler file
-              }
-
-              Directory /inherit2/dir1/dir2/dir3 {
-                  Handler common 
-                  Auth Basic {
-                       Name "Test"
-                       Method plain { PasswdFile %s }
-                  }
-              }
-              """ % (fn)
+        self.conf = CONF % (fn)

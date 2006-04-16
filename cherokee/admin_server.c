@@ -146,10 +146,10 @@ serialize_connection (cherokee_connection_info_t *info, cherokee_buffer_t *buf)
 ret_t
 cherokee_admin_server_reply_get_connections (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
-	ret_t                       ret;
-	list_t                     *i, *tmp;
-	cherokee_server_t          *server = HANDLER_SRV(ahdl);
-	LIST_HEAD(connections);
+	ret_t               ret;
+	list_t             *i, *tmp;
+	list_t              connections = LIST_HEAD_INIT(connections);
+	cherokee_server_t  *server      = HANDLER_SRV(ahdl);
 
 	/* Get the connection info list
 	 */

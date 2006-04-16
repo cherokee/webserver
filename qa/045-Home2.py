@@ -4,12 +4,17 @@ from base import *
 
 PUBLIC_HTML = "public_html"
 
+CONF = """
+vserver!testhost1!user_dir = %s
+vserver!testhost1!user_dir!directory!/!handler = common
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "Valid home"
 
-        self.conf             = "UserDir %s { Directory / { Handler common }}" % (PUBLIC_HTML)
+        self.conf             = CONF % (PUBLIC_HTML)
         self.expected_error   = 200
 
     def Precondition (self):

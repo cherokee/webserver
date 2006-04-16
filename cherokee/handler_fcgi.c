@@ -38,12 +38,6 @@
 #define set_env(cgi,key,val,len) \
 	set_env_pair (cgi, key, sizeof(key)-1, val, len)
 
-cherokee_module_info_handler_t MODULE_INFO(fcgi) = {
-	.module.type     = cherokee_handler,                /* type         */
-	.module.new_func = cherokee_handler_fcgi_new,       /* new func     */
-	.valid_methods   = http_get | http_post | http_head /* http methods */
-};
-
 
 static void set_env_pair (cherokee_handler_cgi_base_t *cgi_base, 
 			  char *key, int key_len, 
@@ -200,6 +194,28 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 }
 
 
+static ret_t 
+cherokee_handler_fcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	ret_t   ret;
+	list_t *i;
+
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+                ret = cherokee_typed_table_instance (props);
+                if (ret != ret_ok) return ret;
+
+		if (equal_buf_str (&subconf->key, "server")) {
+			ret = cherokee_ext_source_configure (subconf, *props);
+			if (ret != ret_ok) return ret;
+		}
+	}
+	
+	return cherokee_handler_cgi_base_configure (conf, srv, props);
+}
+
+
 ret_t 
 cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties)
 {
@@ -230,7 +246,6 @@ cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t
 	cherokee_socket_init (&n->socket);
 	cherokee_buffer_init (&n->write_buffer);
 	cherokee_buffer_ensure_size (&n->write_buffer, 512);
-
 
 	if (properties) {
 		cherokee_typed_table_get_list (properties, "servers", &n->server_list);
@@ -670,4 +685,11 @@ void
 MODULE_INIT(fcgi) (cherokee_module_loader_t *loader)
 {
 }
+
+cherokee_module_info_handler_t MODULE_INFO(fcgi) = {
+	.module.type      = cherokee_handler,                 /* type         */
+	.module.new_func  = cherokee_handler_fcgi_new,        /* new func     */
+	.module.configure = cherokee_handler_fcgi_configure,  /* configure    */
+	.valid_methods    = http_get | http_post | http_head  /* http methods */
+};
 

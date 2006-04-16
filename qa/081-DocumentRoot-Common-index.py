@@ -3,6 +3,12 @@ from base import *
 MAGIC1 = "First part"
 MAGIC2 = "Second part"
 
+CONF = """
+vserver!default!directory!/dr_common_index!handler = common
+vserver!default!directory!/dr_common_index!document_root = %s
+vserver!default!directory!/dr_common_index!priority = 810
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -13,17 +19,11 @@ class Test (TestBase):
         self.forbidden_content = ["<?php", "Index of"]
 
     def Prepare (self, www):
-        path = self.Mkdir (www, "dr_common_index/in/si/de")
-        self.WriteFile (www, "dr_common_index/in/si/de/test_index.php", 0444,
+        d = self.Mkdir (www, "dr_common_index/in/si/de")
+        self.WriteFile (d, "test_index.php", 0444,
                         '<?php echo "%s"."%s"; ?>' % (MAGIC1, MAGIC2))
 
-        self.conf = """
-              Directory /dr_common_index {
-                 Handler common
-                 DocumentRoot %s
-              }
-              """ % (path)
-
+        self.conf = CONF % (d)
 
     def Precondition (self):
         return os.path.exists (PHPCGI_PATH)

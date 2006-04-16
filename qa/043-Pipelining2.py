@@ -16,7 +16,6 @@ class Test (TestBase):
                                 "Host: localhost\r\n"             +\
                                 "Connection: Keep-alive\r\n"
 
-        self.conf             = "Directory /pipe2 { Handler common }"
         self.expected_error   = 200
         self.expected_content = [ MAGIC %("one"),
                                   MAGIC2 ]

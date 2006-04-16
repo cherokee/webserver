@@ -28,73 +28,72 @@
 #include "list_ext.h"
 #include "socket.h"
 #include "reqs_list.h"
+#include "server-protected.h"
+#include "util.h"
+#include "access.h"
 
 #include "handler_error.h"
 
 #include <errno.h>
 
+#define ENTRIES "vserver"
+
 
 ret_t 
-cherokee_virtual_server_new (cherokee_virtual_server_t **vserver)
+cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 {
 	ret_t ret;
 
-       	CHEROKEE_NEW_STRUCT (vsrv, virtual_server);
+       	CHEROKEE_NEW_STRUCT (n, virtual_server);
 
-	INIT_LIST_HEAD (&vsrv->list_entry);
-	INIT_LIST_HEAD (&vsrv->index_list);
+	INIT_LIST_HEAD (&n->list_entry);
+	INIT_LIST_HEAD (&n->index_list);
 
-	vsrv->default_handler = NULL;
-	vsrv->error_handler   = NULL;
-	vsrv->exts            = NULL;
-	vsrv->logger          = NULL;
-	vsrv->logger_props    = NULL;
+	n->server_ref      = server;
+	n->default_handler = NULL;
+	n->error_handler   = NULL;
+	n->logger          = NULL;
+	n->logger_props    = NULL;
 
-	INIT_LIST_HEAD (&vsrv->reqs);
+	ret = cherokee_virtual_entries_init (&n->entry);
+	if (ret != ret_ok) return ret;
 
-	vsrv->relative_paths  = false;
+	ret = cherokee_virtual_entries_init (&n->userdir_entry);
+	if (ret != ret_ok) return ret;
 
-	vsrv->data.rx         = 0;
-	vsrv->data.tx         = 0;
-	CHEROKEE_MUTEX_INIT(&vsrv->data.rx_mutex, NULL);
-	CHEROKEE_MUTEX_INIT(&vsrv->data.tx_mutex, NULL);
+	n->data.rx         = 0;
+	n->data.tx         = 0;
+	CHEROKEE_MUTEX_INIT(&n->data.rx_mutex, NULL);
+	CHEROKEE_MUTEX_INIT(&n->data.tx_mutex, NULL);
 
-	vsrv->server_cert     = NULL;
-	vsrv->server_key      = NULL;
-	vsrv->ca_cert         = NULL;
+	n->server_cert     = NULL;
+	n->server_key      = NULL;
+	n->ca_cert         = NULL;
 
 #ifdef HAVE_TLS
-	ret = cherokee_session_cache_new (&vsrv->session_cache);
+	ret = cherokee_table_init (&n->session_cache);
 	if (unlikely(ret < ret_ok)) return ret;
 
 # ifdef HAVE_GNUTLS
-	vsrv->credentials     = NULL;
+	n->credentials     = NULL;
 # endif
 # ifdef HAVE_OPENSSL
-	vsrv->context         = NULL;
+	n->context         = NULL;
 # endif 
 #endif
 
-	ret = cherokee_buffer_init (&vsrv->root);
+	ret = cherokee_buffer_init (&n->root);
 	if (unlikely(ret < ret_ok)) return ret;	
 	
-	ret = cherokee_buffer_init (&vsrv->name);
+	ret = cherokee_buffer_init (&n->name);
 	if (unlikely(ret < ret_ok)) return ret;
 
-	ret = cherokee_dirs_table_init (&vsrv->dirs);
-	if (unlikely(ret < ret_ok)) return ret;
-
-        /* User dir
-         */
-	ret = cherokee_buffer_init (&vsrv->userdir);
-	if (unlikely(ret < ret_ok)) return ret;
-
-	ret = cherokee_dirs_table_new (&vsrv->userdir_dirs);
+	ret = cherokee_buffer_init (&n->userdir);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	/* Return the object
 	 */
-	*vserver = vsrv;
+	*vserver = n;
 	return ret_ok;
 }
 
@@ -128,8 +127,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	}
 
 #ifdef HAVE_TLS
-	cherokee_session_cache_free (vserver->session_cache);
-
+	cherokee_table_mrproper (&vserver->session_cache);
 
 # ifdef HAVE_GNUTLS
 	if (vserver->credentials != NULL) {
@@ -157,27 +155,12 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 		vserver->logger_props = NULL;
 	}
 	
-	/* Destroy the dirs list
-	 */
-	cherokee_dirs_table_mrproper (&vserver->dirs);
-	cherokee_dirs_table_free     (vserver->userdir_dirs);
-
 	cherokee_buffer_mrproper (&vserver->userdir);
 
-	/* Extension table
+	/* Destroy the virtual_entries
 	 */
-	if (vserver->exts != NULL) {
-		cherokee_exts_table_free (vserver->exts);
-		vserver->exts = NULL;
-	}
-
-	/* Requests list
-	 */
-	if (!list_empty (&vserver->reqs)) {
-#ifndef CHEROKEE_EMBEDDED
-		cherokee_reqs_list_mrproper (&vserver->reqs);
-#endif
-	}
+	cherokee_virtual_entries_mrproper (&vserver->entry);
+	cherokee_virtual_entries_mrproper (&vserver->userdir_entry);
 
 	/* Index list
 	 */
@@ -362,3 +345,327 @@ cherokee_virtual_server_set_documentroot (cherokee_virtual_server_t *vserver, co
 	return ret_ok;
 }
 
+
+static ret_t 
+add_directory_index (char *alias, void *data)
+{
+	cherokee_virtual_server_t *vserver = VSERVER(data);
+
+	cherokee_list_add_tail (&vserver->index_list, strdup(alias));
+	return ret_ok;
+}
+
+static ret_t
+add_access (char *address, void *data)
+{
+	ret_t                    ret;
+	cherokee_config_entry_t *entry = CONF_ENTRY(data);
+
+	if (entry->access == NULL) {
+		ret = cherokee_access_new ((cherokee_access_t **) &entry->access);
+		if (ret != ret_ok) return ret;
+	}
+
+	ret = cherokee_access_add (entry->access, address);
+	if (ret != ret_ok) return ret;
+
+	return ret_ok;
+}
+
+
+static ret_t 
+init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, cherokee_config_entry_t *entry)
+{
+	ret_t                      ret;
+	int                        pri;
+	cherokee_buffer_t         *tmp;
+	cherokee_module_info_t    *info;
+	cherokee_config_node_t    *subconf;
+
+	/* Priority
+	 */
+	ret = cherokee_config_node_read_int (config, "priority", &pri);
+	if (ret == ret_ok) {
+		entry->priority = pri;
+	}
+
+	/* Handler
+	 */
+	ret = cherokee_config_node_get (config, "handler", &subconf);
+	if (ret == ret_ok) {
+		tmp = &subconf->val;
+
+		ret = cherokee_module_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
+		if (ret != ret_ok) return ret;
+
+		if (info->configure) {
+			info->configure (subconf, vserver->server_ref, &entry->handler_properties);
+		}
+		
+		TRACE(ENTRIES, "Handler: %s\n", tmp->buf);
+		cherokee_config_entry_set_handler (entry, info);		
+	}
+
+	/* Authentication
+	 */
+	ret = cherokee_config_node_get (config, "auth", &subconf);
+	if (ret == ret_ok) {
+		cherokee_module_info_validator_t *vinfo;
+	   
+		/* Load module
+		 */
+		tmp = &subconf->val;
+
+		ret = cherokee_module_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
+		if (ret != ret_ok) return ret;
+
+		entry->validator_new_func = info->new_func;
+
+		if (info->configure) {
+			info->configure (subconf, vserver->server_ref, &entry->validator_properties);
+		}
+
+		/* Configure the entry
+		 */
+		vinfo = (cherokee_module_info_validator_t *)info;
+
+		ret = cherokee_validator_configure (subconf, entry);
+		if (ret != ret_ok) return ret;
+
+		if ((entry->authentication & vinfo->valid_methods) != entry->authentication) {
+			PRINT_MSG ("ERROR: '%s' unsupported methods\n", tmp->buf);
+			return ret_error;
+		}		
+
+		TRACE(ENTRIES, "Validator: %s\n", tmp->buf);
+	}
+
+	/* DocumentRoot
+	 */
+	ret = cherokee_config_node_read_path (config, "document_root", &tmp);
+	if (ret == ret_ok) {
+		if (entry->document_root == NULL) 
+			cherokee_buffer_new (&entry->document_root);
+		else
+			cherokee_buffer_clean (entry->document_root);
+
+		TRACE(ENTRIES, "DocumentRoot: %s\n", tmp->buf);
+		cherokee_buffer_add_buffer (entry->document_root, tmp);
+	}
+
+	/* Allow from
+	 */
+	ret = cherokee_config_node_get (config, "allow_from", &subconf);
+	if (ret == ret_ok) {
+		ret = cherokee_config_node_read_list (subconf, NULL, add_access, entry);
+		if (ret != ret_ok) return ret;
+	}
+
+	return ret_ok;
+}
+
+static ret_t 
+add_directory (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver, cherokee_virtual_entries_t *ventry)
+{
+	ret_t                      ret;
+	cherokee_config_entry_t   *entry;
+	char                      *dir     = config->key.buf;
+
+	/* Create a new entry
+	 */
+	ret = cherokee_config_entry_new (&entry);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = init_entry (vserver, config, entry);
+	if (ret != ret_ok) return ret;
+	
+	if (equal_buf_str (&config->key, "/")) {
+		TRACE(ENTRIES, "Adding %s\n", "default directory");
+
+		vserver->default_handler           = entry;
+		vserver->default_handler->priority = CHEROKEE_CONFIG_PRIORITY_DEFAULT;
+	} else {
+		TRACE(ENTRIES, "Adding '%s' directory, priority %d\n", dir, entry->priority);
+
+		ret = cherokee_dirs_table_add (&ventry->dirs, dir, entry);
+		if (ret != ret_ok) {
+			PRINT_MSG ("ERROR: Can't load handler '%s': Unknown error\n", dir);
+			return ret;
+		}
+
+		cherokee_dirs_table_relink (&ventry->dirs);
+	}
+
+	return ret_ok;
+}
+
+static ret_t 
+add_extensions (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver, cherokee_virtual_entries_t *ventry)
+{
+	ret_t                      ret;
+	char                      *end;
+	cherokee_config_entry_t   *entry;
+	char                      *ext = config->key.buf;
+
+	ret = cherokee_config_entry_new (&entry);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = init_entry (vserver, config, entry);
+	if (ret != ret_ok) return ret;
+
+	if (vserver->entry.exts == NULL) {
+		ret = cherokee_exts_table_new (&ventry->exts);
+		if (ret != ret_ok) return ret;
+	}
+
+	for (;;) {
+		end = strchr (ext, ',');
+		if (end != NULL) *end = '\0';
+
+		ret = cherokee_exts_table_has (ventry->exts, ext);
+		if (ret != ret_not_found) {
+			PRINT_MSG ("ERROR: Extension '%s' was already set\n", ext);
+			return ret_error;
+		}
+	
+		TRACE(ENTRIES, "Adding '%s' extension, priority %d\n", ext, entry->priority);
+		
+		ret = cherokee_exts_table_add (ventry->exts, ext, entry);
+		if (ret != ret_ok) return ret;
+		
+		if (end == NULL)
+			break;
+
+		*end = ',';
+		ext = end + 1;
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t 
+add_request (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver, cherokee_virtual_entries_t *ventry)
+{
+	ret_t                       ret;
+	cherokee_reqs_list_entry_t *entry;
+
+	ret = cherokee_reqs_list_entry_new (&entry);
+	if (ret != ret_ok) return ret;
+
+	ret = init_entry (vserver, config, CONF_ENTRY(entry));
+	if (ret != ret_ok) return ret;
+
+	cherokee_buffer_add_buffer (&entry->request, &config->key);
+
+	TRACE(ENTRIES, "Adding '%s' request, priority %d\n", config->key.buf, CONF_ENTRY(entry)->priority);
+
+	ret = cherokee_reqs_list_add (&ventry->reqs, entry, SRV(vserver->server_ref)->regexs);
+	if (ret != ret_ok) return ret;
+
+	return ret_ok;
+}
+
+
+static ret_t 
+configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
+{
+	ret_t                   ret;
+	list_t                 *i;
+	cherokee_config_node_t *subconf;
+
+	cherokee_buffer_add_buffer (&vserver->userdir, &config->val);
+
+	ret = cherokee_config_node_get (config, "directory", &subconf);
+	if (ret == ret_ok) {
+		cherokee_config_node_foreach (i, subconf) {
+			add_directory (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
+		}
+	}
+
+	ret = cherokee_config_node_get (config, "extensions", &subconf);
+	if (ret == ret_ok) {
+		cherokee_config_node_foreach (i, subconf) {
+			add_extensions (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
+		}
+	}
+
+	ret = cherokee_config_node_get (config, "request", &subconf);
+	if (ret == ret_ok) {
+		cherokee_config_node_foreach (i, subconf) {
+			add_request (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
+		}
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t 
+configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
+{
+	ret_t                      ret;
+	cherokee_buffer_t         *tmp;
+	list_t                    *i;
+	char                      *key     = conf->key.buf;
+	cherokee_virtual_server_t *vserver = VSERVER(data);
+
+	if (equal_buf_str (&conf->key, "document_root")) {
+		ret = cherokee_config_node_read_path (conf, NULL, &tmp);
+		if (ret != ret_ok) return ret;
+		
+		ret = cherokee_virtual_server_set_documentroot (vserver, (const char *)tmp->buf);
+		if (ret != ret_ok) {
+			PRINT_MSG ("ERROR: Virtual server: Error setting DocumentRoot: '%s'\n", tmp->buf);
+			return ret_error;
+		}
+
+	} else if (equal_buf_str (&conf->key, "user_dir")) {
+		configure_user_dir (conf, vserver);
+
+	} else if (equal_buf_str (&conf->key, "directory")) {
+		cherokee_config_node_foreach (i, conf) {
+			add_directory (CONFIG_NODE(i), vserver, &vserver->entry);
+		}
+	} else if (equal_buf_str (&conf->key, "extensions")) {
+		cherokee_config_node_foreach (i, conf) {
+			add_extensions (CONFIG_NODE(i), vserver, &vserver->entry);
+		}
+	} else if (equal_buf_str (&conf->key, "request")) {
+		cherokee_config_node_foreach (i, conf) {
+			add_request (CONFIG_NODE(i), vserver, &vserver->entry);
+		}
+
+	} else if (equal_buf_str (&conf->key, "directory_index")) {
+		cherokee_config_node_read_list (conf, NULL, add_directory_index, vserver);
+		
+	} else if (equal_buf_str (&conf->key, "alias")) {
+		/* Ignore it, server config already did this for us..
+		 */
+	} else {
+		PRINT_MSG ("ERROR: Virtual Server: Unknown key '%s'\n", key);
+		return ret_error;
+	}
+	
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver, cherokee_buffer_t *name, cherokee_config_node_t *config)
+{
+	ret_t ret;
+
+	/* Set vserver name
+	 */
+	if (cherokee_buffer_is_empty (&vserver->name)) {
+		cherokee_buffer_add_buffer (&vserver->name, name);
+	}
+
+	/* Parse properties
+	 */
+	ret = cherokee_config_node_while (config, configure_virtual_server_property, vserver);
+	if (ret != ret_ok) return ret;
+
+	return ret_ok;
+}

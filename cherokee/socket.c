@@ -209,24 +209,23 @@ static gnutls_datum
 db_retrieve (void *ptr, gnutls_datum key)
 {
 	ret_t                     ret;
+	cherokee_table_t         *cache;
 	gnutls_datum              new    = { NULL, 0 };
 	cherokee_socket_t        *socket = SOCKET(ptr);
-	cherokee_session_cache_t *cache;
 
 	// printf ("db::retrieve\n");
 
-	if (socket->vserver_ref == NULL) {
-		PRINT_ERROR ("Assert failed %s, %d\n", __FILE__, __LINE__);
+	if (unlikely (socket->vserver_ref == NULL)) {
+		PRINT_ERROR ("No virtual server reference\n");
 		return new;
 	}
 
-	cache = socket->vserver_ref->session_cache;
+	cache = &socket->vserver_ref->session_cache;
 
-	/* Retrieve (get and remove) the object from the session cache
+	/* Get (and remove) the object from the session cache
 	 */
-	ret = cherokee_session_cache_retrieve (cache, key.data, key.size, 
-					       (void **)&new.data, &new.size);
-	if (unlikely(ret != ret_ok)) return new;
+	ret = cherokee_table_del (cache, key.data, (void **)&new);
+	if (ret != ret_ok) return new;
 
 	return new;
 }
@@ -235,19 +234,24 @@ static int
 db_remove (void *ptr, gnutls_datum key)
 {
 	ret_t                     ret;
+	cherokee_table_t         *cache;
+	gnutls_datum             *n      = NULL;
 	cherokee_socket_t        *socket = SOCKET(ptr);
-	cherokee_session_cache_t *cache;
 
 	// printf ("db::remove\n");
 
-	if (socket->vserver_ref == NULL) {
-		PRINT_ERROR ("ERROR: Assert failed %s, %d\n", __FILE__, __LINE__);
+	if (unlikely (socket->vserver_ref == NULL)) {
+		PRINT_ERROR ("No virtual server reference\n");
 		return 1;
 	}
 
-	cache = socket->vserver_ref->session_cache;
-	ret = cherokee_session_cache_del (cache, key.data, key.size);
-	
+	cache = &socket->vserver_ref->session_cache;
+//	ret = cherokee_session_cache_del (cache, key.data, key.size);
+
+	ret = cherokee_table_del (cache, key.data, NULL);	
+	if (n != NULL)
+		free (n);
+
 	return (ret == ret_ok) ? 0 : 1;
 }
 
@@ -255,18 +259,26 @@ static int
 db_store (void *ptr, gnutls_datum key, gnutls_datum data)
 {
 	ret_t                     ret;
+	gnutls_datum             *n;
+	cherokee_table_t         *cache;
 	cherokee_socket_t        *socket = SOCKET(ptr);
-	cherokee_session_cache_t *cache;
-
 	// printf ("db::store\n");
 
 	if (socket->vserver_ref == NULL) {
-		PRINT_ERROR ("ERROR: Assert failed %s, %d\n", __FILE__, __LINE__);
+		PRINT_ERROR ("No virtual server reference\n");
 		return 1;
 	}
 
-	cache = socket->vserver_ref->session_cache;
-	ret = cherokee_session_cache_add (cache, key.data, key.size, data.data, data.size);
+	cache = &socket->vserver_ref->session_cache;
+
+	n = (gnutls_datum *) malloc (sizeof (gnutls_datum));
+	if (n == NULL) return 1;
+
+	memcpy (n, &data, sizeof (gnutls_datum));
+
+//	ret = cherokee_session_cache_add (cache, key.data, key.size, data.data, data.size);
+//	cherokee_session_cache_add (cache, key
+	ret = cherokee_table_add (cache, key.data, n);
 
 	return (ret == ret_ok) ? 0 : 1;
 }

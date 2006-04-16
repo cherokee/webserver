@@ -310,3 +310,107 @@ error:
 	cherokee_buffer_mrproper (&tmp);
 	return ret_error;
 }
+
+
+static ret_t
+split_address_or_path (char *str, cherokee_buffer_t *hostname, cint_t *port_num, 
+				   cherokee_buffer_t *unix_socket, cherokee_buffer_t *original)
+{
+	char    *p;
+	cuint_t  len;
+	
+	len = strlen(str);
+	if (len <= 0) return ret_error;
+	
+	/* Original
+	 */
+	cherokee_buffer_add (original, str, len);
+	
+	/* Unix socket
+	 */
+	if (str[0] == '/') {
+		cherokee_buffer_add (unix_socket, str, len);
+		return ret_ok;
+	} 
+	
+	/* Host name
+	 */
+	p = strchr(str, ':');
+	if (p == NULL) {
+		cherokee_buffer_add (hostname, str, len);
+		return ret_ok;
+	} 
+	
+	/* Host name + port
+	 */
+	*p = '\0';
+	*port_num = atoi (p+1);
+	cherokee_buffer_add (hostname, str, p - str);
+	*p = ':';
+	
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_ext_source_configure (cherokee_config_node_t *conf, cherokee_table_t *props)
+{
+	ret_t                       ret;
+	cherokee_config_node_t     *subconf;
+	cherokee_config_node_t     *child;
+	cherokee_config_node_t     *child2;
+	list_t                     *i, *j;
+	list_t                      nlist        = LIST_HEAD_INIT(nlist);
+	cherokee_boolean_t          first        = true;
+	cherokee_ext_source_t      *server_entry = NULL;
+	cherokee_ext_source_head_t *head         = NULL;
+
+	TRACE (ENTRIES, "Configuring '%s'\n", conf->key.buf);
+
+	cherokee_config_node_foreach (i, conf) {
+		child = CONFIG_NODE(i);
+
+		/* Create the external source object
+		 */
+		if (first) {
+			ret = cherokee_ext_source_head_new (&head);
+			if (ret != ret_ok) return ret;
+			
+			list_add ((list_t *)head, &nlist);
+			cherokee_typed_table_add_list (props, "servers", &nlist, (cherokee_typed_free_func_t) cherokee_ext_source_free);
+
+			first        = false;
+			server_entry = EXT_SOURCE(head);
+		} else {
+			cherokee_ext_source_new (&server_entry);
+			list_add_tail ((list_t *)server_entry, &nlist);
+		}
+
+		/* Properties
+		 */
+		ret = cherokee_config_node_get (child, "host", &subconf);
+		if (ret == ret_ok) {
+			split_address_or_path (subconf->val.buf, &server_entry->host, &server_entry->port,
+					       &server_entry->unix_socket, &server_entry->original_server);
+		}
+
+		subconf = NULL;
+		ret = cherokee_config_node_get (child, "env", &subconf);
+		if (ret == ret_ok) {
+			cherokee_config_node_foreach (j, subconf) {
+				child2 = CONFIG_NODE(j);
+
+				ret = cherokee_ext_source_add_env (server_entry, child2->key.buf, child2->val.buf);
+				if (ret != ret_ok) return ret;
+			}
+		}
+
+		ret = cherokee_config_node_get (child, "interpreter", &subconf);
+		if (ret == ret_ok) {
+			// fix win32 path
+			cherokee_buffer_add_buffer (&server_entry->interpreter, &subconf->val);
+		}
+	}
+
+	return ret_ok;
+}

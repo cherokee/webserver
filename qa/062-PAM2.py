@@ -5,6 +5,13 @@ from base import *
 USER="cherokeeqa"
 PASS="invalid"
 
+CONF = """
+vserver!default!directory!/privpam2!auth = pam
+vserver!default!directory!/privpam2!auth!methods = basic
+vserver!default!directory!/privpam2!auth!realm = Test PAM
+vserver!default!directory!/privpam2!priority = 620
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -23,13 +30,7 @@ class Test (TestBase):
             return
 
         directory = self.Mkdir (www, "privpam2")
-        self.conf = """Directory /privpam2 {
-                         Handler common
-                         Auth Basic {
-                           Name "Test PAM"
-                           Method pam
-                         }
-                       }"""
+        self.conf = CONF
 
     def Precondition (self):
         # It will only work it the server runs as root

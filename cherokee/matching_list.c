@@ -48,11 +48,11 @@ free_list (list_t *list)
 	list_t *i, *tmp;
 
 	list_for_each_safe (i, tmp, list) {
-		   if (MLIST_ENTRY(i)->string) {
-				 free (MLIST_ENTRY(i)->string);
-		   }
+		if (MLIST_ENTRY(i)->string) {
+			free (MLIST_ENTRY(i)->string);
+		}
 
-		   list_del(i);
+		list_del(i);
 	}
 }
 
@@ -60,12 +60,12 @@ free_list (list_t *list)
 ret_t 
 cherokee_matching_list_free (cherokee_matching_list_t *mlist)
 {
-	   free_list (&mlist->list_allow);
-	   free_list (&mlist->list_deny);
+	free_list (&mlist->list_allow);
+	free_list (&mlist->list_deny);
 
-	   free (mlist);
+	free (mlist);
 
-	   return ret_ok;
+	return ret_ok;
 }
 
 
@@ -84,22 +84,22 @@ add_to_list (list_t *list, const char *item)
 ret_t 
 cherokee_matching_list_add_allow (cherokee_matching_list_t *mlist, const char *item)
 {
-	   return add_to_list (&mlist->list_allow, item);
+	return add_to_list (&mlist->list_allow, item);
 }
 
 
 ret_t 
 cherokee_matching_list_add_deny  (cherokee_matching_list_t *mlist, const char *item)
 {
-	   return add_to_list (&mlist->list_deny, item);
+	return add_to_list (&mlist->list_deny, item);
 }
 
 
 ret_t 
 cherokee_matching_list_set_type (cherokee_matching_list_t *mlist, cherokee_matching_t type)
 {
-	   mlist->type = type;
-	   return ret_ok;
+	mlist->type = type;
+	return ret_ok;
 }
 
 
@@ -120,33 +120,33 @@ in_list  (list_t *list, char *match)
 static int
 match_default_allow (cherokee_matching_list_t *mlist, char *match)
 {
-	   return ! in_list (&mlist->list_deny, match);
+	return ! in_list (&mlist->list_deny, match);
 }
 
 static int
 match_default_deny (cherokee_matching_list_t *mlist, char *match)
 {
-	   return in_list (&mlist->list_allow, match);
+	return in_list (&mlist->list_allow, match);
 }
 
 static int
 match_deny_allow (cherokee_matching_list_t *mlist, char *match)
 {
-	   int tmp;
+	int tmp;
 
-	   tmp = ! in_list (&mlist->list_deny, match);
-	   if (!tmp) {
-			 tmp = in_list (&mlist->list_allow, match);
-	   }
+	tmp = ! in_list (&mlist->list_deny, match);
+	if (!tmp) {
+		tmp = in_list (&mlist->list_allow, match);
+	}
 
-	   return tmp;
+	return tmp;
 }
 
 static int
 match_allow_deny (cherokee_matching_list_t *mlist, char *match)
 {
-	   return (in_list (&mlist->list_allow, match) &&
-			 (!in_list (&mlist->list_deny, match)));
+	return (in_list (&mlist->list_allow, match) &&
+		(!in_list (&mlist->list_deny, match)));
 }
 
 int 
@@ -174,3 +174,30 @@ cherokee_matching_list_match (cherokee_matching_list_t *mlist, char *match)
 	return 0;
 }
 
+
+static ret_t 
+add_allow_cb  (char *val, void *data)
+{
+	return cherokee_matching_list_add_allow (MLIST(data), val);
+}
+
+static ret_t 
+add_deny_cb  (char *val, void *data)
+{
+	return cherokee_matching_list_add_deny (MLIST(data), val);
+}
+
+
+ret_t 
+cherokee_matching_list_configure (cherokee_matching_list_t *mlist, cherokee_config_node_t *config)
+{
+	ret_t ret;
+
+	ret = cherokee_config_node_read_list (config, "allow", add_allow_cb, mlist);
+	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
+
+	ret = cherokee_config_node_read_list (config, "deny", add_deny_cb, mlist);
+	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
+
+	return ret_ok;
+}

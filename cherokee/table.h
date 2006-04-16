@@ -30,16 +30,16 @@
 #define CHEROKEE_TABLE_H
 
 #include <cherokee/common.h>
+#include <cherokee/avl.h>
 
 
 CHEROKEE_BEGIN_DECLS
 
-typedef void (* cherokee_table_free_item_t)    (void *item);
+typedef void (* cherokee_table_free_item_t)    (void *key);
 typedef void (* cherokee_table_foreach_func_t) (const char *key, void *value);
 typedef int  (* cherokee_table_while_func_t)   (const char *key, void *value, void *param);
 
-
-typedef struct cherokee_table cherokee_table_t;
+typedef struct _avl_tree cherokee_table_t;
 #define TABLE(x) ((cherokee_table_t *)(x))
 
 

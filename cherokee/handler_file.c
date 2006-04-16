@@ -44,11 +44,12 @@
 #include "util.h"
 
 
-cherokee_module_info_handler_t MODULE_INFO(file) = {
-	.module.type     = cherokee_handler,            /* type         */
-	.module.new_func = cherokee_handler_file_new,   /* new func     */
-	.valid_methods   = http_get | http_head         /* http methods */
-};
+ret_t 
+cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	// iocache
+	return ret_ok;
+}
 
 ret_t
 cherokee_handler_file_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties)
@@ -629,18 +630,14 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 /*   Library init function
  */
-static cherokee_boolean_t _file_is_init = false;
-
 void
 MODULE_INIT(file) (cherokee_module_loader_t *loader)
 {
-	/* Init flag
-	 */
-	if (_file_is_init == true) {
-		return;
-	}
-	_file_is_init = true;
-
-	/* Init something more..
-	 */
 }
+
+cherokee_module_info_handler_t MODULE_INFO(file) = {
+	.module.type      = cherokee_handler,                /* type         */
+	.module.new_func  = cherokee_handler_file_new,       /* new func     */
+	.module.configure = cherokee_handler_file_configure, /* configure */
+	.valid_methods    = http_get | http_head             /* http methods */
+};

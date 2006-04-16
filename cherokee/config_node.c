@@ -24,6 +24,9 @@
 
 #include "common-internal.h"
 #include "config_node.h"
+#include "util.h"
+
+#define ENTRIES "config"
 
 
 ret_t 
@@ -75,7 +78,7 @@ add_new_child (cherokee_config_node_t *entry, cherokee_buffer_t *key)
 	cherokee_config_node_init (n);
 	cherokee_buffer_add_buffer (&n->key, key);	   
 
-	list_add ((list_t *)n, &entry->child);
+	list_add_tail ((list_t *)n, &entry->child);
 	return n;
 }
 
@@ -153,7 +156,7 @@ cherokee_config_node_get (cherokee_config_node_t *conf, const char *key, cheroke
 		/* Look for the child entry
 		 */
 		child = search_child (current, &tmp);
-		if (child == NULL) return ret_error;
+		if (child == NULL) return ret_not_found;
 
 		if (final) {
 			*entry = child;
@@ -178,16 +181,195 @@ cherokee_config_node_get_buf (cherokee_config_node_t *conf, cherokee_buffer_t *k
 }
 
 
-
 ret_t 
-cherokee_config_node_foreach (cherokee_config_node_t *conf, cherokee_config_node_foreach_func_t func, void *data)
+cherokee_config_node_while (cherokee_config_node_t *conf, cherokee_config_node_while_func_t func, void *data)
 {
+	ret_t   ret;
 	list_t *i;
 
-	list_for_each (i, &conf->child) {
-		func (CONFIG_NODE(i), data);
+	cherokee_config_node_foreach (i, conf) {
+		ret = func (CONFIG_NODE(i), data);
+		if (ret != ret_ok) return ret;
 	}
 
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_config_node_read_file (cherokee_config_node_t *conf, const char *file)
+{
+	ret_t              ret;
+	char              *eol;
+	char              *begin;
+	char              *equal;
+	char              *tmp;
+	char              *eof;
+	cherokee_buffer_t  buf = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  key = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  val = CHEROKEE_BUF_INIT;
+
+
+	ret = cherokee_buffer_read_file (&buf, (char *)file);
+	if (ret != ret_ok) return ret;
+	
+	eof = buf.buf + buf.len;
+
+	begin = buf.buf;
+	do {
+		/* Skip whites at the begining
+		 */
+		while ((begin < eof) && 
+		       ((*begin == ' ') || (*begin == '\t') || 
+			(*begin == '\r') || (*begin == '\n'))) 
+		{
+			begin++;
+		}
+
+		/* Mark the EOL
+		 */
+		eol = cherokee_min_str (strchr(begin, '\n'), 
+					strchr(begin, '\r'));
+
+		if (eol == NULL) 
+			break;
+
+		if (eol - begin <= 4) {
+			begin = eol + 1;
+			continue;
+		}
+		*eol = '\0';
+
+		/* Read the line 
+		 */
+		if (*begin != '#') {
+			equal = strstr (begin, " = ");
+			if (equal == NULL) goto error;
+		
+			tmp = equal;
+			while (*tmp == ' ') tmp--;
+			cherokee_buffer_add (&key, begin, (tmp + 1) - begin);
+			
+			tmp = equal + 3;
+			while (*tmp == ' ') tmp++;		
+			cherokee_buffer_add (&val, tmp, strlen(tmp));
+
+			TRACE(ENTRIES, "'%s' => '%s'\n", key.buf, val.buf);
+
+			ret = cherokee_config_node_add_buf (conf, &key, &val);
+			if (ret != ret_ok) goto error;
+		}
+
+		/* Next loop
+		 */
+		begin = eol + 1;
+
+		cherokee_buffer_clean (&key);
+		cherokee_buffer_clean (&val);
+
+	} while (eol != NULL);
+	
+	cherokee_buffer_mrproper (&buf);
+	cherokee_buffer_mrproper (&key);
+	cherokee_buffer_mrproper (&val);
+	return ret_ok;
+
+error:
+	PRINT_MSG ("Error parsing: %s\n", begin);
+
+	cherokee_buffer_mrproper (&buf);
+	cherokee_buffer_mrproper (&key);
+	cherokee_buffer_mrproper (&val);
+	return ret_error;
+}
+
+
+ret_t 
+cherokee_config_node_read (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf)
+{
+	ret_t                   ret;
+	cherokee_config_node_t *tmp;
+
+	ret = cherokee_config_node_get (conf, key, &tmp);
+	if (ret != ret_ok) return ret;
+
+	*buf = &tmp->val;
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_config_node_read_int  (cherokee_config_node_t *conf, const char *key, int *num)
+{
+	ret_t                   ret;
+	cherokee_config_node_t *tmp;
+
+	ret = cherokee_config_node_get (conf, key, &tmp);
+	if (ret != ret_ok) return ret;
+
+	*num = atoi (tmp->val.buf);
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_config_node_read_path (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf)
+{
+	ret_t                   ret;
+	cherokee_config_node_t *tmp;
+
+	if (key != NULL) {
+		ret = cherokee_config_node_get (conf, key, &tmp);
+		if (ret != ret_ok) return ret;
+	} else {
+		tmp = conf;
+	}
+
+	if (cherokee_buffer_end_char (&tmp->val) != '/')
+		cherokee_buffer_add_str (&tmp->val, "/");
+
+	*buf = &tmp->val;
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_config_node_read_list (cherokee_config_node_t           *conf, 
+				const char                       *key, 
+				cherokee_config_node_list_func_t  func, 
+				void                             *param)
+{
+	ret_t                   ret;
+	char                   *ptr;
+	char                   *stop;
+	cherokee_config_node_t *tmp;
+
+	if (key != NULL) {
+		ret = cherokee_config_node_get (conf, key, &tmp);
+		if (ret != ret_ok) return ret;
+	} else {
+		tmp = conf;
+	}
+
+	ptr = tmp->val.buf;
+
+	if (ptr == NULL)
+		return ret_not_found;
+
+	for (;;) {
+		stop = strchr (ptr, ',');
+		if (stop != NULL) *stop = '\0';
+	
+		ret = func (ptr, param);
+		if (ret != ret_ok) return ret;
+		
+		if (stop == NULL)
+			break;
+		
+		*stop = ',';
+		ptr = stop + 1;
+	}
+	
 	return ret_ok;
 }
 

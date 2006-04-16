@@ -4,6 +4,11 @@ PATHINFO    = "this_is_the/path_info"
 VIRTUAL_DIR = "/scriptname_vir"
 SCRIPT_NAME = VIRTUAL_DIR + "/exec.cgi"
 
+CONF = """
+vserver!default!directory!%s!handler = cgi
+vserver!default!directory!%s!document_root = %s
+vserver!default!directory!%s!priority = 1030
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -24,8 +29,4 @@ class Test (TestBase):
                         echo "SCRIPT_NAME = $SCRIPT_NAME"
                         """) 
 
-        self.conf             = """
-           Directory %s {
-              Handler cgi
-              DocumentRoot %s
-           }""" % (VIRTUAL_DIR, d)
+        self.conf = CONF % (VIRTUAL_DIR, VIRTUAL_DIR, d, VIRTUAL_DIR)

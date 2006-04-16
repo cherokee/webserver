@@ -483,4 +483,19 @@ cherokee_module_loader_get_sym  (cherokee_module_loader_t *loader, char *modname
 	return ret_ok;
 }
 
+ret_t 
+cherokee_module_loader_get (cherokee_module_loader_t *loader, char *modname, cherokee_module_info_t **info)
+{
+	   ret_t ret;
+
+	   ret = cherokee_module_loader_load (loader, modname);
+	   if (ret != ret_ok) return ret;
+
+	   ret = cherokee_module_loader_get_info (loader, modname, info);
+	   if (ret != ret_ok) return ret;
+
+	   return ret_ok;
+}
+
+
 #endif

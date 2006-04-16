@@ -90,17 +90,103 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 	/* Read the properties
 	 */
 	if (properties) {
-		cherokee_typed_table_get_str  (properties, "scriptalias",  &cgi->script_alias);
-		cherokee_typed_table_get_list (properties, "env",          &cgi->system_env);
-		cherokee_typed_table_get_int  (properties, "errorhandler", &cgi->is_error_handler);
-		cherokee_typed_table_get_int  (properties, "changeuser",   &cgi->change_user);		
-		cherokee_typed_table_get_int  (properties, "checkfile",    &cgi->check_file);		
+		cherokee_typed_table_get_str  (properties, "script_alias",  &cgi->script_alias);
+		cherokee_typed_table_get_list (properties, "env",           &cgi->system_env);
+		cherokee_typed_table_get_int  (properties, "error_handler", &cgi->is_error_handler);
+		cherokee_typed_table_get_int  (properties, "change_user",   &cgi->change_user);		
+		cherokee_typed_table_get_int  (properties, "check_file",    &cgi->check_file);		
 	}
 
 	if (cgi->is_error_handler) {
 		HANDLER(cgi)->support |= hsupport_error;		
 	}
 	
+	return ret_ok;
+}
+
+
+typedef struct {
+	list_t            entry;
+	cherokee_buffer_t env;
+	cherokee_buffer_t val;
+} env_item_t;
+
+
+static env_item_t *
+env_item_new (cherokee_buffer_t *key, cherokee_buffer_t *val)
+{
+	env_item_t *n = malloc (sizeof (env_item_t));
+
+	INIT_LIST_HEAD (&n->entry);
+	cherokee_buffer_init (&n->env);
+	cherokee_buffer_init (&n->val);
+
+	cherokee_buffer_add_buffer(&n->env, key);
+	cherokee_buffer_add_buffer(&n->val, val);
+
+	return n;
+}
+
+static void
+env_item_free (void *p)
+{
+	env_item_t *n = (env_item_t *)p;
+
+	cherokee_buffer_mrproper (&n->env);
+	cherokee_buffer_mrproper (&n->val);
+	free (p);
+}
+
+
+ret_t 
+cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	ret_t   ret;
+	list_t *i, *j;
+
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+		ret = cherokee_typed_table_instance (props);
+		if (ret != ret_ok) return ret;
+
+		if (equal_buf_str (&subconf->key, "script_alias")) {
+			ret = cherokee_typed_table_add_str (*props, "script_alias", subconf->val.buf);
+			if (ret != ret_ok) return ret;
+
+		} else if (equal_buf_str (&subconf->key, "env")) {
+			cherokee_config_node_foreach (j, subconf) {
+				env_item_t             *env;
+				list_t                 *plist    = NULL;
+				list_t                  nlist    = LIST_HEAD_INIT(nlist);
+				cherokee_config_node_t *subconf2 = CONFIG_NODE(j);
+
+				env = env_item_new (&subconf2->key, &subconf2->val);
+				if (env == NULL) return ret_error;
+
+				cherokee_typed_table_get_list (*props, "env", &plist);
+
+				if (plist == NULL) {
+					list_add ((list_t *)env, &nlist);
+					cherokee_typed_table_add_list (*props, "env", &nlist, env_item_free);
+				} else {
+					list_add_tail ((list_t *)env, plist);
+				}
+			}
+		} else if (equal_buf_str (&subconf->key, "error_handler")) {
+			ret = cherokee_typed_table_add_int (*props, "error_handler", atoi(subconf->val.buf));
+			if (ret != ret_ok) return ret;
+
+		} else if (equal_buf_str (&subconf->key, "change_user")) {
+			ret = cherokee_typed_table_add_int (*props, "change_user", atoi(subconf->val.buf));
+			if (ret != ret_ok) return ret;
+
+		} else if (equal_buf_str (&subconf->key, "check_file")) {
+			ret = cherokee_typed_table_add_int (*props, "check_file", atoi(subconf->val.buf));
+			if (ret != ret_ok) return ret;
+		}
+	}
+
 	return ret_ok;
 }
 
@@ -324,26 +410,21 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 {
 	ret_t              ret;
 	list_t            *i;
+	cherokee_buffer_t *name;
 	cuint_t            len = 0;
 	char              *p   = "";
 	cherokee_buffer_t  tmp = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t *name;
 
 	/* Add user defined variables at the beginning,
 	 * these have precedence..
 	 */
 	if (cgi->system_env != NULL) {
 		list_for_each (i, cgi->system_env) {
-			char    *name;
-			cuint_t  name_len;
-			char    *value;
-			
-			name     = LIST_ITEM_INFO(i);
-			name_len = strlen(name);
-			value    = name + name_len + 1;
-			
-			cgi->add_env_pair (cgi, name, name_len, value, strlen(value));
-		}
+			env_item_t *env = (env_item_t *)i;			
+			cgi->add_env_pair (cgi, 
+					   env->env.buf, env->env.len, 
+					   env->val.buf, env->val.len);
+		}		
 	}
 
 	/* Add the basic enviroment variables

@@ -25,7 +25,6 @@
 #include "exts_table.h"
 #include "list_ext.h"
 #include "table.h"
-#include "table-protected.h"
 
 #define ENTRIES "exts"
 

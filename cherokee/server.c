@@ -106,7 +106,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	n->socket          = -1;
 	n->socket_tls      = -1;
-	n->ipv6            =  1;
+	n->ipv6            = true;
 	n->fdpoll_method   = cherokee_poll_UNSET;
 
 	/* Config files
@@ -116,13 +116,11 @@ cherokee_server_new  (cherokee_server_t **srv)
 	
 	/* Mime types
 	 */
-	n->mime_file       = NULL;
 	n->mime            = NULL;
 
 	/* Exit related
 	 */
 	n->wanna_exit      = false;
-	n->panic_action    = NULL;
 	n->reinit_callback = NULL;
 	
 	/* Server config
@@ -131,7 +129,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->port_tls        = 443;
 	n->tls_enabled     = false;
 
-	n->listen_to       = NULL;
 	n->fdwatch_msecs   = 999;
 
 	n->start_time      = time(NULL);
@@ -143,9 +140,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->thread_num      = -1;
 	n->thread_policy   = -1;
 
-	n->chroot          = NULL;
-	n->chrooted        = 0;
-
+	n->chrooted        = false;
 	n->user_orig       = getuid();
 	n->user            = n->user_orig;
 	n->group_orig      = getgid();
@@ -164,6 +159,10 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->regexs          = NULL;
 	n->icons           = NULL;
 	n->iocache         = NULL;
+
+	cherokee_buffer_init (&n->listen_to);
+	cherokee_buffer_init (&n->chroot);
+	cherokee_buffer_init (&n->panic_action);
 
 	/* Bogo now
 	 */
@@ -221,7 +220,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	cherokee_table_new (&n->vservers_ref);
 	return_if_fail (n->vservers_ref!=NULL, ret_nomem);
 
-	cherokee_virtual_server_new (&n->vserver_default);
+	cherokee_virtual_server_new (&n->vserver_default, n);
 	return_if_fail (n->vserver_default!=NULL, ret_nomem);
 		
 	/* Encoders 
@@ -252,6 +251,10 @@ cherokee_server_new  (cherokee_server_t **srv)
 	/* PID
 	 */
 	cherokee_buffer_init (&n->pidfile);
+
+	/* Config
+	 */
+	cherokee_config_node_init (&n->config);
 	
 	/* Return the object
 	 */
@@ -318,11 +321,6 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	/* Mime
 	 */
-	if (srv->mime_file != NULL) {
-		free (srv->mime_file);
-		srv->mime_file = NULL;
-	}
-
 	if (srv->mime != NULL) {
 		cherokee_mime_free (srv->mime);
 		srv->mime = NULL;
@@ -346,29 +344,20 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	cherokee_buffer_free (srv->timeout_header);
 
-	if (srv->listen_to != NULL) {
-		free (srv->listen_to);
-		srv->listen_to = NULL;
-	}
-
-	if (srv->chroot != NULL) {
-		free (srv->chroot);
-		srv->chroot = NULL;
-	}
+	cherokee_buffer_mrproper (&srv->listen_to);
+	cherokee_buffer_mrproper (&srv->chroot);
 
 	/* Clean config files entries
 	 */
+	cherokee_config_node_mrproper (&srv->config);
+
 	if (srv->config_file != NULL) {
 		free (srv->config_file);
 		srv->config_file = NULL;
 	}
 
-	if (srv->panic_action != NULL) {
-		free (srv->panic_action);
-		srv->panic_action = NULL;
-	}
-
 	cherokee_buffer_mrproper (&srv->pidfile);
+	cherokee_buffer_mrproper (&srv->panic_action);
 
 	/* Module loader:
 	 * It must be the last action to perform because
@@ -526,18 +515,18 @@ initialize_server_socket4 (cherokee_server_t *srv, unsigned short port, int *srv
 	sockaddr.sin_port   = htons (port);
 	sockaddr.sin_family = AF_INET;
 
-	if (srv->listen_to == NULL) {
+	if (cherokee_buffer_is_empty (&srv->listen_to)) {
 		sockaddr.sin_addr.s_addr = INADDR_ANY; 
 	} else {
 #ifdef HAVE_INET_PTON
-		re = inet_pton (sockaddr.sin_family, srv->listen_to, &sockaddr.sin_addr);
+		re = inet_pton (sockaddr.sin_family, srv->listen_to.buf, &sockaddr.sin_addr);
 		if (re == -1) {
 			PRINT_ERROR ("inet_pton errno=%d\n", errno);
 		}
 #else
 		/* IPv6 needs inet_pton; inet_addr() doesn't support it.
 		 */
-		sockaddr.sin_addr.s_addr = inet_addr (srv->listen_to);
+		sockaddr.sin_addr.s_addr = inet_addr (srv->listen_to.buf);
 #endif
 	}
 
@@ -559,7 +548,7 @@ initialize_server_socket6 (cherokee_server_t *srv, unsigned short port, int *srv
 	srv_socket = socket (AF_INET6, SOCK_STREAM, 0);
 	if (srv_socket < 0) {
 		PRINT_ERROR_S ("Error creating IPv6 server socket.. switching to IPv4\n");
-		srv->ipv6 = 0;
+		srv->ipv6 = false;
 		return ret_error;
 	}
 
@@ -573,10 +562,10 @@ initialize_server_socket6 (cherokee_server_t *srv, unsigned short port, int *srv
 	sockaddr.sin6_port   = htons (port);  /* Transport layer port #   */
 	sockaddr.sin6_family = AF_INET6;      /* AF_INET6                 */
 
-	if (srv->listen_to == NULL) {
+	if (cherokee_buffer_is_empty (&srv->listen_to)) {
 		sockaddr.sin6_addr = in6addr_any; 
 	} else {
-		re = inet_pton (sockaddr.sin6_family, srv->listen_to, &sockaddr.sin6_addr);
+		re = inet_pton (sockaddr.sin6_family, srv->listen_to.buf, &sockaddr.sin6_addr);
 		if (re == -1) {
 			PRINT_ERROR ("inet_pton errno=%d\n", errno);
 		}
@@ -690,7 +679,7 @@ initialize_server_socket (cherokee_server_t *srv, unsigned short port, int *srv_
 	}
 #endif
 
-	if ((srv->ipv6 == 0) || (ret != ret_ok)) {
+	if ((srv->ipv6 == false) || (ret != ret_ok)) {
 		ret = initialize_server_socket4 (srv, port, srv_socket_ptr);
 	}
 
@@ -796,11 +785,10 @@ for_each_vserver_init_tls_func (const char *key, void *value)
 static int  
 while_vserver_check_tls_func (const char *key, void *value, void *param)
 {
-	cherokee_boolean_t found;
+	ret_t ret;
 	
-	found = (cherokee_virtual_server_have_tls (VSERVER(value)) == ret_ok);
-
-	return (found) ? 0 : 1;
+	ret = cherokee_virtual_server_have_tls (VSERVER(value));
+	return (ret == ret_ok) ? 1 : 0;
 }
 
 
@@ -920,7 +908,8 @@ cherokee_server_init (cherokee_server_t *srv)
 
 	/* Look if TLS is enabled
 	 */
-	srv->tls_enabled = (cherokee_virtual_server_have_tls (srv->vserver_default) == ret_ok);
+	ret = cherokee_virtual_server_have_tls (srv->vserver_default);
+	srv->tls_enabled = (ret == ret_ok);
 
 	if (srv->tls_enabled == false) {
 		ret = cherokee_table_while (srv->vservers_ref, while_vserver_check_tls_func, NULL, NULL, NULL);
@@ -970,10 +959,10 @@ cherokee_server_init (cherokee_server_t *srv)
 
 	/* Chroot
 	 */
-	if (srv->chroot) {
-		srv->chrooted = (chroot (srv->chroot) == 0);
+	if (! cherokee_buffer_is_empty (&srv->chroot)) {
+		srv->chrooted = (chroot (srv->chroot.buf) == 0);
 		if (srv->chrooted == 0) {
-			PRINT_ERROR ("Cannot chroot() to '%s': %s\n", srv->chroot, strerror(errno));
+			PRINT_ERROR ("Cannot chroot() to '%s': %s\n", srv->chroot.buf, strerror(errno));
 		}
 	} 
 
@@ -1194,55 +1183,274 @@ cherokee_server_step (cherokee_server_t *srv)
 }
 
 
-static ret_t
-config_module_execute_function (cherokee_server_t *srv, char *param, char *func_name)
+static ret_t 
+add_vserver_alias  (char *alias, void *data)
 {
-#ifdef CHEROKEE_EMBEDDED
-	return cherokee_embedded_read_config (srv);
-#else
-	ret_t   ret;
-	ret_t (*read_config) (cherokee_server_t *srv, char *config_string);
+	cherokee_server_t         *srv  = ((void **)data)[0];
+	cherokee_virtual_server_t *vsrv = ((void **)data)[1];
 
-	/* Load the module
-	 */
-	ret = cherokee_module_loader_load_no_global (&srv->loader, "read_config");
-	if (ret != ret_ok) return ret_error;
+	TRACE (ENTRIES, "Adding vserver alias '%s'\n", alias);	
+	return cherokee_table_add (srv->vservers_ref, alias, vsrv);
+}
 
-	/* Get the function
-	 */
-	ret = cherokee_module_loader_get_sym (&srv->loader, "read_config", 
-					      func_name,
-					      (void **)&read_config);
+
+static ret_t 
+add_encoder (cherokee_config_node_t *node, void *data)
+{
+	ret_t                           ret;
+	cherokee_encoder_table_entry_t *enc;
+	cherokee_matching_list_t       *matching;
+	cherokee_module_info_t         *info = NULL;
+ 	cherokee_server_t              *srv  = SRV(data);
+	
+	ret = cherokee_module_loader_get (&srv->loader, node->key.buf, &info);
 	if (ret != ret_ok) return ret;
 
-	/* Execute it!
+	/* Set the info in the new entry
 	 */
-	ret = read_config (srv, param);
+	cherokee_encoder_table_entry_new (&enc);
+	cherokee_encoder_table_entry_get_info (enc, info);
 
-	/* Clean up
+	/* Set the matching list
 	 */
-	cherokee_module_loader_unload (&srv->loader, "read_config");
+	cherokee_matching_list_new (&matching);
+	cherokee_encoder_entry_set_matching_list (enc, matching);
 
-	return ret;
-#endif
+	ret = cherokee_matching_list_configure (matching, node);
+	if (ret != ret_ok) return ret;	
+
+	/* Set in the encoders table
+	 */
+	ret = cherokee_encoder_table_set (srv->encoders, node->key.buf, enc);
+	if (ret != ret_ok) return ret;
+
+	return ret_ok;
 }
 
 
-ret_t 
-cherokee_server_read_config_file (cherokee_server_t *srv, char *path)
+static ret_t 
+add_vserver (cherokee_config_node_t *node, void *data)
 {
- 	if (path == NULL) { 
- 		path = CHEROKEE_CONFDIR"/cherokee.conf"; 
- 	} 
+	ret_t                      ret;
+	cherokee_virtual_server_t *vsrv;
+	void                      *param[2];
+ 	cherokee_server_t         *srv = SRV(data);
+
+	TRACE (ENTRIES, "Adding vserver %s\n", node->key.buf);
+
+	if (equal_buf_str (&node->key, "default")) {
+		vsrv = srv->vserver_default;
+	} else {
+		/* Add alias	
+		 */
+		ret = cherokee_virtual_server_new (&vsrv, srv);
+		if (ret != ret_ok) return ret;
+
+		ret = cherokee_table_add (srv->vservers_ref, node->key.buf, vsrv);
+		if (ret != ret_ok) return ret;
+
+		param[0] = srv;
+		param[1] = vsrv;
+		cherokee_config_node_read_list (node, "alias", add_vserver_alias, param);
+	}
+
+	ret = cherokee_virtual_server_configure (vsrv, &node->key, node);
+	if (ret != ret_ok) return ret;	
+
+	return ret_ok;
+}
+
+static ret_t 
+load_mime_file (cherokee_server_t *srv, cherokee_buffer_t *mime_file)
+{
+	ret_t ret;
+
+	if (srv->mime == NULL) {
+		ret = cherokee_mime_new (&srv->mime);
+		if (ret < ret_ok) {
+			PRINT_MSG_S ("ERROR: Couldn't get default MIME configuration file\n");
+			return ret;
+		}
+	}
+
+	ret = cherokee_mime_load_mime_types (srv->mime, mime_file->buf);
+	if (ret < ret_ok) {
+		PRINT_MSG ("Couldn't load MIME configuration file %s\n", mime_file->buf);
+		return ret;
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t 
+configure_server_property (cherokee_config_node_t *conf, void *data)
+{
+	ret_t              ret;
+	char              *key = conf->key.buf;
+	cherokee_server_t *srv = SRV(data);
+
+	if (equal_buf_str (&conf->key, "port")) {
+		srv->port = atoi(conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "port_tls")) {
+		srv->port_tls = atoi(conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "max_fds")) {
+		srv->max_fds = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "listen_queue")) {
+		srv->listen_queue = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "sendfile_min")) {
+		srv->sendfile.min = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "sendfile_max")) {
+		srv->sendfile.max = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "max_connection_reuse")) {
+		srv->max_conn_reuse = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "ipv6")) {
+		srv->ipv6 = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "timeout")) {
+		srv->timeout = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "log_flush_elapse")) {
+		srv->log_flush_elapse = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "keepalive")) {
+		srv->keepalive = (atoi (conf->val.buf) == 0) ? false : true;
+
+	} else if (equal_buf_str (&conf->key, "keepalive_max_requests")) {
+		srv->keepalive_max = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "panic_action")) {
+		cherokee_buffer_clean (&srv->panic_action);
+		cherokee_buffer_add_buffer (&srv->panic_action, &conf->val);
+
+	} else if (equal_buf_str (&conf->key, "chroot")) {
+		cherokee_buffer_clean (&srv->chroot);
+		cherokee_buffer_add_buffer (&srv->chroot, &conf->val);
+
+	} else if (equal_buf_str (&conf->key, "mime_file")) {
+		ret = load_mime_file (srv, &conf->val);
+		if (ret != ret_ok) return ret;
+
+	} else if (equal_buf_str (&conf->key, "listen")) {
+		cherokee_buffer_clean (&srv->listen_to);
+		cherokee_buffer_add_buffer (&srv->listen_to, &conf->val);
+
+	} else if (equal_buf_str (&conf->key, "poll_method")) {
+		if (equal_buf_str (&conf->val, "epoll")) {
+			srv->fdpoll_method = cherokee_poll_epoll;
+		} else if (equal_buf_str (&conf->val, "port")) {
+			srv->fdpoll_method = cherokee_poll_port;
+		} else if (equal_buf_str (&conf->val, "kqueue")) {
+			srv->fdpoll_method = cherokee_poll_kqueue;
+		} else if (equal_buf_str (&conf->val, "poll")) {
+			srv->fdpoll_method = cherokee_poll_poll;
+		} else if (equal_buf_str (&conf->val, "win32")) {
+			srv->fdpoll_method = cherokee_poll_win32;
+		} else if (equal_buf_str (&conf->val, "select")) {
+			srv->fdpoll_method = cherokee_poll_select;
+		} else {
+			PRINT_MSG ("ERROR: Unknown polling method '%s'\n", conf->val.buf);
+			return ret_error;
+		}
+
+	} else if (equal_buf_str (&conf->key, "server_tokens")) {
+		if (equal_buf_str (&conf->val, "Product")) {
+			srv->server_token = cherokee_version_product;
+		} else if (equal_buf_str (&conf->val, "Minor")) {
+			srv->server_token = cherokee_version_minor;
+		} else if (equal_buf_str (&conf->val, "Minimal")) {
+			srv->server_token = cherokee_version_minimal;
+		} else if (equal_buf_str (&conf->val, "OS")) {
+			srv->server_token = cherokee_version_os;
+		} else if (equal_buf_str (&conf->val, "Full")) {
+			srv->server_token = cherokee_version_full;
+		} else {
+			PRINT_MSG ("ERROR: Unknown server token '%s'\n", conf->val.buf);
+			return ret_error;
+		}
+
+	} else if (equal_buf_str (&conf->key, "user")) {
+		struct passwd *pwd;
+	   
+		pwd = (struct passwd *) getpwnam (conf->val.buf);
+		if (pwd == NULL) {
+			 PRINT_MSG ("ERROR: User '%s' not found in the system\n", conf->val.buf);
+			 return ret_error;
+		}
+		srv->user = pwd->pw_uid;		
+
+	} else if (equal_buf_str (&conf->key, "group")) {
+		struct group *grp;
+		
+		grp = (struct group *) getgrnam (conf->val.buf);
+		if (grp == NULL) {
+			PRINT_MSG ("ERROR: Group '%s' not found in the system\n", conf->val.buf);
+			return ret_error;
+		}		
+		srv->group = grp->gr_gid;
+
+	} else if (equal_buf_str (&conf->key, "encoder")) {
+		ret = cherokee_config_node_while (conf, add_encoder, srv);
+		if (ret != ret_ok) return ret;
+
+	} else {
+		PRINT_MSG ("ERROR: Server: Unknown key %s\n", key);
+		return ret_error;
+	}
 	
-	return config_module_execute_function (srv, path, "read_config_file");
+	return ret_ok;
 }
 
 
 ret_t 
-cherokee_server_read_config_string (cherokee_server_t *srv, char *config_string)
+cherokee_server_read_config_file (cherokee_server_t *srv, char *fullpath)
 {
-	return config_module_execute_function (srv, config_string, "read_config_string");
+	ret_t                   ret;
+	cherokee_config_node_t *subconf;
+
+	/* Load the main file
+	 */
+	ret = cherokee_config_node_read_file (&srv->config, fullpath);
+	if (ret != ret_ok) return ret;
+
+	/* Server
+	 */
+	TRACE (ENTRIES, "Configuring %s\n", "server");
+	ret = cherokee_config_node_get (&srv->config, "server", &subconf);
+	if (ret == ret_ok) {
+		ret = cherokee_config_node_while (subconf, configure_server_property, srv);
+		if (ret != ret_ok) return ret;
+	}
+
+	/* Icons
+	 */
+	TRACE (ENTRIES, "Configuring %s\n", "icons");
+	ret = cherokee_config_node_get (&srv->config, "icons", &subconf);
+	if (ret == ret_ok) {
+		ret = cherokee_icons_new (&srv->icons);
+		if (ret != ret_ok) return ret;
+		
+		ret =  cherokee_icons_configure (srv->icons, subconf);
+		if (ret != ret_ok) return ret;
+	}
+	
+	/* Load the virtual servers
+	 */
+	TRACE (ENTRIES, "Configuring %s\n", "virtual servers");
+	ret = cherokee_config_node_get (&srv->config, "vserver", &subconf);
+	if (ret == ret_ok) {
+		ret = cherokee_config_node_while (subconf, add_vserver, srv);
+		if (ret != ret_ok) return ret;
+	}
+
+	return ret_ok;
 }
 
 
@@ -1358,12 +1566,12 @@ cherokee_server_handle_panic (cherokee_server_t *srv)
 
 	PRINT_ERROR_S ("Cherokee feels panic!\n");
 	
-	if ((srv == NULL) || (srv->panic_action == NULL)) {
+	if ((srv == NULL) || (srv->panic_action.len <= 0)) {
 		goto fin;
 	}
 
 	cherokee_buffer_new (&cmd);
-	cherokee_buffer_add_va (cmd, "%s %d", srv->panic_action, getpid());
+	cherokee_buffer_add_va (cmd, "%s %d", srv->panic_action.buf, getpid());
 
 	re = system (cmd->buf);
 	if (re < 0) {

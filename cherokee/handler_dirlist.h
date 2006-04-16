@@ -52,8 +52,8 @@ typedef struct {
 
 	/* File list
 	 */
-	struct list_head dirs;
-	struct list_head files;
+	list_t           dirs;
+	list_t           files;
 	cherokee_sort_t  sort;
 
 	/* State

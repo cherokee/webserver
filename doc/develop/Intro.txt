@@ -97,7 +97,7 @@ add as many servers as you want in the configuration system. The
 configuration syntax to do this is quite similar to the rest. For
 example:
 
-Server tesoro.alobbs.com {
+Server host.example.com {
           DocumentRoot /tmp
 
           Directory / {
@@ -137,7 +137,7 @@ Example:
 UserDir public_html
 
 If Cherokee is going to reply to the request
-http://www.alobbs.com/~user/thing it will search for the object
+http://www.example.com/~user/thing it will search for the object
 "thing" in the "public_html" directory of the home directory of
 "user".
 If no UserDir is specified, this feature will be turned off.

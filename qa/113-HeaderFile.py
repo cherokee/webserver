@@ -5,6 +5,12 @@ random_str  = letters_random (POST_LENGTH)
 
 HEADER_CONTENT = "This is the header file of the directory"
 
+CONF = """
+vserver!default!directory!/header_file1!handler = common
+vserver!default!directory!/header_file1!handler!header_file = header
+vserver!default!directory!/header_file1!priority = 1130
+"""
+
 
 class Test (TestBase):
     def __init__ (self):
@@ -13,12 +19,7 @@ class Test (TestBase):
 
         self.request           = "GET /header_file1/file/ HTTP/1.0\r\n"
         self.expected_error    = 200        
-
-        self.conf              = """Directory /header_file1 {
-                                       Handler common {
-                                          HeaderFile header
-                                       }
-                                  }""" 
+        self.conf              = CONF
 
     def Prepare (self, www):
         d = self.Mkdir (www, "header_file1")

@@ -3,6 +3,15 @@ from base import *
 REQUIRED  = "This is working! :-)"
 FORBIDDEN = "It shouldn't appear in the text"
 
+CONF = """
+vserver!default!directory!/extension2!handler = file
+vserver!default!directory!/extension2!priority = 800
+
+vserver!default!extensions!abc,def,ghi!handler = phpcgi
+vserver!default!extensions!abc,def,ghi!handler!interpreter = %s
+vserver!default!extensions!abc,def,ghi!priority = 801
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -11,17 +20,7 @@ class Test (TestBase):
         self.expected_error    = 200
         self.expected_content  = REQUIRED
         self.forbidden_content = FORBIDDEN
-        self.conf              = """
-              Directory /extension2 {
-                 Handler file
-              }
-
-              Extension abc, def, ghi { 
-                 Handler phpcgi {
-                   Interpreter %s
-                 }
-              }              
-              """ % (PHPCGI_PATH) 
+        self.conf              = CONF % (PHPCGI_PATH)
 
     def Prepare (self, www):
         self.Mkdir (www, "extension2")

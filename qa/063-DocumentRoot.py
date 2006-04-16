@@ -2,6 +2,13 @@ from base import *
 
 MAGIC="This is the magic string for the DocumentRoot test - common"
 
+CONF = """
+vserver!default!directory!/droot!handler = common
+vserver!default!directory!/droot!document_root = %s
+vserver!default!directory!/droot!priority = 630
+"""
+
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -11,11 +18,8 @@ class Test (TestBase):
         self.expected_content = MAGIC
 
     def Prepare (self, www):
-        self.Mkdir     (www, "documentroot/subdir/subdir")
-        self.WriteFile (www, "documentroot/subdir/subdir/file", 0444, MAGIC)
+        d = self.Mkdir (www, "documentroot/subdir/subdir")
+        self.WriteFile (d, "file", 0444, MAGIC)
 
-        self.conf = """Directory /droot {
-                          Handler common
-                          DocumentRoot %s/documentroot/subdir/subdir
-                    }""" % (www)
+        self.conf = CONF % (d)
 

@@ -7,7 +7,7 @@ class Test (TestBase):
 
         self.expected_error = 200
         self.request        = "GET /basic_test1/ HTTP/1.0\r\n"
-        self.conf           = "Directory /basic_test1/ { Handler common }"
+        self.conf           = "vserver!default!directory!/!handler = common"
 
     def Prepare (self, www):
         self.Mkdir (www, "basic_test1")

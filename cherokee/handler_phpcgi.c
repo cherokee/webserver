@@ -54,13 +54,6 @@
 #include "connection-protected.h"
 
 
-cherokee_module_info_handler_t MODULE_INFO(phpcgi) = {
-	.module.type     = cherokee_handler,                /* type         */
-	.module.new_func = cherokee_handler_phpcgi_new,     /* new func     */
-	.valid_methods   = http_get | http_post | http_head /* http methods */
-};
-
-
 static char *php_paths[] = {
 	"/usr/lib/cgi-bin/",
 	"/usr/local/bin/",
@@ -209,6 +202,25 @@ cherokee_handler_phpcgi_init (cherokee_handler_t *hdl)
 }
 
 
+static ret_t 
+cherokee_handler_phpcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	ret_t              ret;
+	cherokee_buffer_t *buf;
+
+	ret = cherokee_config_node_read (conf, "interpreter", &buf);
+	if (ret == ret_ok) {
+		ret = cherokee_typed_table_instance (props);
+		if (ret != ret_ok) return ret;
+		
+		ret = cherokee_typed_table_add_str (*props, "interpreter", buf->buf);
+		if (ret != ret_ok) return ret;		
+	}
+
+	return cherokee_handler_cgi_configure (conf, srv, props);
+}
+
+
 /*   Library init function
  */
 static cherokee_boolean_t _phpcgi_is_init = false;
@@ -226,4 +238,10 @@ MODULE_INIT(phpcgi) (cherokee_module_loader_t *loader)
 	cherokee_module_loader_load (loader, "cgi");
 }
 
+cherokee_module_info_handler_t MODULE_INFO(phpcgi) = {
+	.module.type      = cherokee_handler,                  /* type         */
+	.module.new_func  = cherokee_handler_phpcgi_new,       /* new func     */
+	.module.configure = cherokee_handler_phpcgi_configure, /* configure    */
+	.valid_methods    = http_get | http_post | http_head   /* http methods */
+};
 

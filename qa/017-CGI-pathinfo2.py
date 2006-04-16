@@ -2,13 +2,18 @@ from base import *
 
 MAGIC = "Cherokee rocks"
 
+CONF = """
+vserver!default!directory!/cgi-bin3!handler = cgi
+vserver!default!directory!/cgi-bin3!priority = 170
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "CGI with pathinfo II"
 
         self.request          = "GET /cgi-bin3/inside/test/test_parameter HTTP/1.0\r\n"
-        self.conf             = "Directory /cgi-bin3 { Handler cgi }"
+        self.conf             = CONF
         self.expected_error   = 200
         self.expected_content = MAGIC
 

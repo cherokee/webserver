@@ -15,8 +15,8 @@ class Test (TestBase):
         self.expected_content = MAGIC
         
     def Prepare (self, www):
-        self.Mkdir (www, "php3")
-        self.WriteFile (www, "php3/post.php", 0444, '<?php echo $_POST["magic"] ?>')
+        d = self.Mkdir (www, "php3")
+        self.WriteFile (d, "post.php", 0444, '<?php echo $_POST["magic"] ?>')
 
     def Precondition (self):
         return os.path.exists (PHPCGI_PATH)

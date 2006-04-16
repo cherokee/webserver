@@ -3,6 +3,14 @@ from base import *
 COMMENT = "This is comment inside the CGI"
 TEXT    = "It should be printed by the CGI"
 
+CONF = """
+vserver!default!directory!/prio1/sub!handler = cgi
+vserver!default!directory!/prio1/sub!priority = 1070
+
+vserver!default!directory!/prio1!handler = file
+vserver!default!directory!/prio1!priority = 1071
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -12,14 +20,7 @@ class Test (TestBase):
         self.expected_error    = 200
         self.expected_content  = TEXT
         self.forbidden_content = COMMENT
-
-        self.conf              = """Directory /prio1/sub {
-                                      Handler cgi
-                                    }
-                                    Directory /prio1 {
-                                      Handler file
-                                    }
-                                 """
+        self.conf              = CONF
 
     def Prepare (self, www):
         d = self.Mkdir (www, "prio1/sub")

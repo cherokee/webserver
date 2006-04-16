@@ -64,7 +64,7 @@ typedef union {
 } ip_t;
 
 typedef struct {
-	struct list_head node;
+	list_t    node;
 	
 	ip_type_t type;
 	ip_t      ip;

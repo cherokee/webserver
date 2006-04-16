@@ -4,6 +4,14 @@ from base64 import encodestring
 LOGIN="Aladdin"
 PASSWD="open sesame"
 
+CONF = """
+vserver!default!directory!/auth2!auth = plain
+vserver!default!directory!/auth2!auth!methods = basic
+vserver!default!directory!/auth2!auth!realm = Test
+vserver!default!directory!/auth2!auth!passwdfile = %s
+vserver!default!directory!/auth2!priority = 400
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -13,12 +21,7 @@ class Test (TestBase):
         self.expected_error   = 200
 
     def Prepare (self, www):
-        dir = self.Mkdir (www, "auth2")
-        self.WriteFile (www, "auth2/passwd", 0444, '%s:%s\n' %(LOGIN,PASSWD))
+        d = self.Mkdir (www, "auth2")
+        self.WriteFile (d, "passwd", 0444, '%s:%s\n' %(LOGIN,PASSWD))
 
-        self.conf             = """Directory /auth2 {
-                                     Auth Basic {
-                                          Name "Test"
-                                          Method plain { PasswdFile %s }
-                                     }
-                                }""" % (dir+"/passwd")
+        self.conf = CONF % (d+"/passwd")

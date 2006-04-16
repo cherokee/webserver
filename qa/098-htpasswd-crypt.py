@@ -9,6 +9,13 @@ USER         = "username"
 PASSWD       = "alo"
 PASSWD_CRYPT = "kA7oFNEzu4SrI"
 
+CONF = """
+vserver!default!directory!/htpasswd_crypt!auth = htpasswd
+vserver!default!directory!/htpasswd_crypt!auth!methods = basic
+vserver!default!directory!/htpasswd_crypt!auth!realm = %s
+vserver!default!directory!/htpasswd_crypt!auth!passwdfile = %s
+vserver!default!directory!/htpasswd_crypt!priority = 980
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -27,10 +34,4 @@ class Test (TestBase):
         passf = self.WriteFile (tdir, "passwd", 0444, '%s:%s\n' %(USER, PASSWD_CRYPT))
         self.WriteFile (tdir, "file", 0444, MAGIC)
 
-        self.conf             = """Directory /htpasswd_crypt {
-                                     Handler file
-                                     Auth Basic {
-                                          Name "%s"
-                                          Method htpasswd { PasswdFile %s }
-                                     }
-                                }""" % (REALM, passf)
+        self.conf = CONF % (REALM, passf)

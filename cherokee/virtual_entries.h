@@ -22,25 +22,23 @@
  * USA
  */
 
-#ifndef CHEROKEE_SESSION_CACHE_H
-#define CHEROKEE_SESSION_CACHE_H
+#ifndef CHEROKEE_VIRTUAL_ENTRIES_H
+#define CHEROKEE_VIRTUAL_ENTRIES_H
 
-#include "avl/avl.h"
 #include "common.h"
 
+#include "reqs_list.h"
+#include "dirs_table.h"
+#include "exts_table.h"
 
 typedef struct {
-	struct avl_table *tree;
-} cherokee_session_cache_t;
+	cherokee_dirs_table_t        dirs;            /* Eg: (/public, common) */
+	cherokee_exts_table_t       *exts;            /* Eg: (.php,    phpcgi) */
+	cherokee_reqs_list_t         reqs;            /* Eg: ("*.mp3"  auth{}) */
+} cherokee_virtual_entries_t;
 
-#define SESSION_CACHE(x) ((cherokee_session_cache_t *)(x))
 
+ret_t cherokee_virtual_entries_init     (cherokee_virtual_entries_t *ventry);
+ret_t cherokee_virtual_entries_mrproper (cherokee_virtual_entries_t *ventry);
 
-ret_t cherokee_session_cache_new  (cherokee_session_cache_t **tab);
-ret_t cherokee_session_cache_free (cherokee_session_cache_t  *tab);
-
-ret_t cherokee_session_cache_del      (cherokee_session_cache_t *tab, unsigned char *key, int key_len);
-ret_t cherokee_session_cache_add      (cherokee_session_cache_t *tab, unsigned char *key, unsigned int key_len, unsigned char *value, unsigned int value_len);
-ret_t cherokee_session_cache_retrieve (cherokee_session_cache_t *tab, unsigned char *key, int key_len, void **buf, unsigned int *but_len);
-
-#endif /* CHEROKEE_SESSION_CACHE_H */
+#endif /* CHEROKEE_VIRTUAL_ENTRIES_H */

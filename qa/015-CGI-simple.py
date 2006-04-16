@@ -1,6 +1,10 @@
 from base import *
 
-MAGIC="This is the magic string"
+MAGIC = "This is the magic string"
+CONF = """
+vserver!default!directory!/cgi-bin1!handler = cgi
+vserver!default!directory!/cgi-bin1!priority = 150
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -8,7 +12,7 @@ class Test (TestBase):
         self.name = "CGI Execution"
 
         self.request          = "GET /cgi-bin1/test HTTP/1.0\r\n"
-        self.conf             = "Directory /cgi-bin1 { Handler cgi }"
+        self.conf             = CONF
         self.expected_error   = 200
         self.expected_content = MAGIC
 

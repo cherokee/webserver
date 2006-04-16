@@ -57,11 +57,9 @@ void  cherokee_server_step               (cherokee_server_t *srv);
 void  cherokee_server_set_min_latency    (cherokee_server_t *srv, int msecs);
 ret_t cherokee_server_unlock_threads     (cherokee_server_t *srv);
 
+ret_t cherokee_server_read_config_file   (cherokee_server_t *srv, char *filename);
 ret_t cherokee_server_daemonize          (cherokee_server_t *srv);
 ret_t cherokee_server_write_pidfile      (cherokee_server_t *srv);
-
-ret_t cherokee_server_read_config_file   (cherokee_server_t *srv, char *filename);
-ret_t cherokee_server_read_config_string (cherokee_server_t *srv, char *string);
 
 ret_t cherokee_server_get_active_conns   (cherokee_server_t *srv, int *num);
 ret_t cherokee_server_get_reusable_conns (cherokee_server_t *srv, int *num);

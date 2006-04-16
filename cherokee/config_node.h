@@ -45,18 +45,31 @@ typedef struct {
 
 #define CONFIG_NODE(c) ((cherokee_config_node_t *)(c))
 
-typedef void (* cherokee_config_node_foreach_func_t) (cherokee_config_node_t *, void *);
+#define cherokee_config_node_foreach(i,config) \
+	list_for_each (i, &config->child)
 
-ret_t cherokee_config_node_init     (cherokee_config_node_t *conf);
-ret_t cherokee_config_node_mrproper (cherokee_config_node_t *conf);
+typedef ret_t (* cherokee_config_node_while_func_t) (cherokee_config_node_t *, void *);
+typedef ret_t (* cherokee_config_node_list_func_t)  (char *, void *);
 
-ret_t cherokee_config_node_add     (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t *val);
-ret_t cherokee_config_node_add_buf (cherokee_config_node_t *conf, cherokee_buffer_t *key, cherokee_buffer_t *val);
+ret_t cherokee_config_node_init      (cherokee_config_node_t *conf);
+ret_t cherokee_config_node_mrproper  (cherokee_config_node_t *conf);
 
-ret_t cherokee_config_node_get     (cherokee_config_node_t *conf, const char *key, cherokee_config_node_t **entry);
-ret_t cherokee_config_node_get_buf (cherokee_config_node_t *conf, cherokee_buffer_t *key, cherokee_config_node_t **entry);
+ret_t cherokee_config_node_add       (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t *val);
+ret_t cherokee_config_node_add_buf   (cherokee_config_node_t *conf, cherokee_buffer_t *key, cherokee_buffer_t *val);
 
-ret_t cherokee_config_node_foreach (cherokee_config_node_t *conf, cherokee_config_node_foreach_func_t func, void *data);
+ret_t cherokee_config_node_get       (cherokee_config_node_t *conf, const char *key, cherokee_config_node_t **entry);
+ret_t cherokee_config_node_get_buf   (cherokee_config_node_t *conf, cherokee_buffer_t *key, cherokee_config_node_t **entry);
+
+ret_t cherokee_config_node_while     (cherokee_config_node_t *conf, cherokee_config_node_while_func_t func, void *data);
+ret_t cherokee_config_node_read_file (cherokee_config_node_t *conf, const char *file);
+
+/* Convenience functions: value retrieving
+ */
+ret_t cherokee_config_node_read      (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf);
+ret_t cherokee_config_node_read_path (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf);
+ret_t cherokee_config_node_read_int  (cherokee_config_node_t *conf, const char *key, int *num);
+ret_t cherokee_config_node_read_list (cherokee_config_node_t *conf, const char *key, 
+				      cherokee_config_node_list_func_t func, void *param);
 
 CHEROKEE_END_DECLS
 

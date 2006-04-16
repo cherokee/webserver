@@ -40,7 +40,7 @@ typedef struct {
 	void                   *dlopen_ref;
 } cherokee_module_loader_entry_t;
 
-typedef struct cherokee_table cherokee_module_loader_t;
+typedef cherokee_table_t cherokee_module_loader_t;
 
 #define MODINFO(x)   ((cherokee_module_info_t *) (x))
 #define MODLOADER(x) ((cherokee_module_loader_t *) (x))
@@ -48,6 +48,8 @@ typedef struct cherokee_table cherokee_module_loader_t;
 
 ret_t cherokee_module_loader_init     (cherokee_module_loader_t *loader);
 ret_t cherokee_module_loader_mrproper (cherokee_module_loader_t *loader);
+
+ret_t cherokee_module_loader_get            (cherokee_module_loader_t *loader, char *modname, cherokee_module_info_t **info);
 
 ret_t cherokee_module_loader_load           (cherokee_module_loader_t *loader, char *modname);
 ret_t cherokee_module_loader_load_no_global (cherokee_module_loader_t *loader, char *modname);

@@ -27,7 +27,7 @@
 
 
 ret_t 
-cherokee_list_add (struct list_head *head, void *item)
+cherokee_list_add (list_t *head, void *item)
 {
 	   CHEROKEE_NEW_STRUCT(n,list_item);
 
@@ -45,7 +45,7 @@ cherokee_list_add (struct list_head *head, void *item)
 
 
 ret_t 
-cherokee_list_add_tail (struct list_head *head, void *item)
+cherokee_list_add_tail (list_t *head, void *item)
 {
 	   CHEROKEE_NEW_STRUCT(n,list_item);
 
@@ -63,7 +63,7 @@ cherokee_list_add_tail (struct list_head *head, void *item)
 
 
 ret_t 
-cherokee_list_free (struct list_head *head, void (*free_func) (void *))
+cherokee_list_free (list_t *head, void (*free_func) (void *))
 {
 	   list_t *i, *tmp;
 
@@ -78,7 +78,7 @@ cherokee_list_free (struct list_head *head, void (*free_func) (void *))
 
 
 ret_t 
-cherokee_list_free_item (struct list_head *head, void (*free_func) (void *))
+cherokee_list_free_item (list_t *head, void (*free_func) (void *))
 {
 	list_del (head);
 	
@@ -92,7 +92,7 @@ cherokee_list_free_item (struct list_head *head, void (*free_func) (void *))
 
 
 ret_t 
-cherokee_list_free_item_simple (struct list_head *head)
+cherokee_list_free_item_simple (list_t *head)
 {
 	list_del (head);
 	

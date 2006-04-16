@@ -26,10 +26,8 @@
 #include "iocache.h"
 
 #include "table.h"
-#include "table-protected.h"
 #include "list.h"
 #include "buffer.h"
-#include "list_merge_sort.h"
 #include "server-protected.h"
 #include "util.h"
 
@@ -90,7 +88,7 @@ struct cherokee_iocache {
 typedef struct {
 	cherokee_iocache_t *iocache;
 	float               average;
-	struct list_head    to_delete;
+	list_t              to_delete;
 } clean_up_params_t;
 
 
@@ -169,7 +167,7 @@ iocache_clean_up_each (const char *key, void *value, void *param)
 	/* Is it in use?
 	 */
 	if (PRIV(file)->mmap_usage > 0) {
-		return true;
+		return false;
 	}
 
 	if ((usage == -1) ||
@@ -186,7 +184,7 @@ iocache_clean_up_each (const char *key, void *value, void *param)
 		list_add ((list_t *)delobj, &params->to_delete);
 	}
 
-	return true;
+	return false;
 }
 
 

@@ -7,6 +7,11 @@ from gzip import GzipFile
 
 MAGIC  = "Random text follows: " + str_random (10 * 1024)
 
+CONF = """
+vserver!default!directory!/gzip1!handler = file
+vserver!default!directory!/gzip1!priority = 890
+"""
+
 
 class Test (TestBase):
     def __init__ (self):
@@ -15,9 +20,7 @@ class Test (TestBase):
 
         self.request           = "GET /gzip1/file.txt HTTP/1.0\r\n" +\
                                  "Accept-Encoding: gzip\r\n"
-        self.conf              = """Directory /gzip1/ {
-                                    Handler file 
-                                 }"""
+        self.conf              = CONF
         self.expected_error    = 200
         self.forbidden_content = "Random text follows"
 

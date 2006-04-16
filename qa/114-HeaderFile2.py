@@ -6,6 +6,12 @@ HEADER_CONTENT = """
 ============================================
 """
 
+CONF = """
+vserver!default!directory!/header_file2!handler = dirlist
+vserver!default!directory!/header_file2!handler!header_file = noexits1.txt,header.txt,noexits2.txt
+vserver!default!directory!/header_file2!priority = 1140
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -15,12 +21,7 @@ class Test (TestBase):
         self.expected_error    = 200        
         self.expected_content  = [HEADER_CONTENT, "file1", "file2", "file3"]
         self.forbidden_content = ["header.txt"]
-
-        self.conf              = """Directory /header_file2 {
-                                       Handler dirlist {
-                                          HeaderFile noexits1.txt, header.txt, noexits2.txt
-                                       }
-                                  }"""
+        self.conf              = CONF
 
     def Prepare (self, www):
         d = self.Mkdir (www, "header_file2")

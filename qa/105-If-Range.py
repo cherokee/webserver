@@ -35,12 +35,17 @@ DOCUMENTATION = """
    return the entire entity using a 200 (OK) response.
 """
 
+CONF = """
+vserver!default!directory!/if_range1!handler = file
+vserver!default!directory!/if_range1!priority = 1050
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "If-Range header, 200 error"
 
-        self.conf             = "Directory /if_range1 { Handler file }"
+        self.conf             = CONF
         self.expected_error   = 200
         self.expected_content = DOCUMENTATION
 

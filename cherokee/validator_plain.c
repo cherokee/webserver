@@ -30,11 +30,24 @@
 #include "module_loader.h"
 
 
-cherokee_module_info_validator_t MODULE_INFO(plain) = {
-	.module.type     = cherokee_validator,                 /* type     */
-	.module.new_func = cherokee_validator_plain_new,       /* new func */
-	.valid_methods   = http_auth_basic | http_auth_digest  /* methods  */
-};
+ret_t 
+cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	ret_t                   ret;
+	cherokee_config_node_t *subconf;
+
+	ret = cherokee_config_node_get (conf, "passwdfile", &subconf);
+	if (ret == ret_ok) {
+		ret = cherokee_typed_table_instance (props);
+		if (ret != ret_ok) return ret;
+
+		ret = cherokee_typed_table_add_str (*props, "passwdfile", subconf->val.buf);
+		if (ret != ret_ok) return ret;
+	}
+
+	return ret_ok;
+}
+
 
 ret_t 
 cherokee_validator_plain_new (cherokee_validator_plain_t **plain, cherokee_table_t *properties)
@@ -56,9 +69,9 @@ cherokee_validator_plain_new (cherokee_validator_plain_t **plain, cherokee_table
 	/* Get the properties
 	 */
 	if (properties) {
-		ret = cherokee_typed_table_get_str (properties, "file", (char **)&n->file_ref);
+		ret = cherokee_typed_table_get_str (properties, "passwdfile", (char **)&n->file_ref);
 		if (ret < ret_ok) {
-			PRINT_MSG_S ("plain validator needs a \"File\" property\n");
+			PRINT_MSG_S ("plain validator needs a password file\n");
 			return ret_error;
 		}
 	}
@@ -215,17 +228,14 @@ cherokee_validator_plain_add_headers (cherokee_validator_plain_t *plain, cheroke
 
 /*   Library init function
  */
-static cherokee_boolean_t _plain_is_init = false;
-
 void
 MODULE_INIT(plain) (cherokee_module_loader_t *loader)
 {
-	/* Init flag
-	 */
-	if (_plain_is_init == true) return;
-	_plain_is_init = true;
-
-	/* Other stuff
-	 */
 }
 
+cherokee_module_info_validator_t MODULE_INFO(plain) = {
+	.module.type      = cherokee_validator,                 /* type     */
+	.module.new_func  = cherokee_validator_plain_new,       /* new func */
+	.module.configure = cherokee_validator_plain_configure, /* config   */
+	.valid_methods    = http_auth_basic | http_auth_digest  /* methods  */
+};

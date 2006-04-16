@@ -1,5 +1,13 @@
 from base import *
 
+CONF = """
+vserver!default!directory!/auth1!auth = plain
+vserver!default!directory!/auth1!auth!methods = basic
+vserver!default!directory!/auth1!auth!realm = Test
+vserver!default!directory!/auth1!auth!passwdfile = %s
+vserver!default!directory!/auth1!priority = 390
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -8,12 +16,7 @@ class Test (TestBase):
         self.expected_error   = 401
 
     def Prepare (self, www):
-        dir = self.Mkdir (www, "auth1")
-        self.WriteFile (www, "auth1/passwd", 0444, 'user:cherokee')
+        d = self.Mkdir (www, "auth1")
+        self.WriteFile (d, "passwd", 0444, 'user:cherokee')
 
-        self.conf             = """Directory /auth1 {
-                                     Auth Basic {
-                                          Name "Test"
-                                          Method plain { PasswdFile %s }
-                                     }
-                                }""" % (dir+"/passwd")
+        self.conf = CONF % (d+"/passwd")

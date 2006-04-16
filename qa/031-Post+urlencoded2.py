@@ -1,12 +1,17 @@
 from base import *
 
+CONF = """
+vserver!default!directory!/post3!handler = common
+vserver!default!directory!/post3!priority = 310
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "Post request"
 
         self.expected_error = 200
-        self.conf           = "Directory /post3 { Handler common }"
+        self.conf           = CONF
         self.request        = "POST /post3/test.php HTTP/1.1\r\n" +\
                               "Host: localhost\r\n" +\
                               "Content-type: application/x-www-form-urlencoded\r\n" +\

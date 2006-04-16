@@ -1,6 +1,11 @@
 from base import *
 
-MAGIC="The_index_page_should_contain_this"
+MAGIC = "The_index_page_should_contain_this"
+
+CONF = """
+vserver!default!directory!/index1!handler = dirlist
+vserver!default!directory!/index1!priority = 330
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -8,7 +13,7 @@ class Test (TestBase):
         self.name = "Directory index, dirlist"
 
         self.request          = "GET /index1/ HTTP/1.0\r\n"
-        self.conf             = "Directory /index1 { Handler dirlist }"
+        self.conf             = CONF
         self.expected_error   = 200
         self.expected_content = MAGIC
 

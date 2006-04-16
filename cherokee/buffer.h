@@ -57,11 +57,10 @@ typedef struct {
 #define cherokee_buffer_case_cmp_str(b,s)  cherokee_buffer_case_cmp (b, s, sizeof(s))
 
 
-
-
 ret_t cherokee_buffer_new                (cherokee_buffer_t **buf);
 ret_t cherokee_buffer_free               (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_clean              (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_dup                (cherokee_buffer_t  *buf, cherokee_buffer_t **dup);
 
 ret_t cherokee_buffer_init               (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_mrproper           (cherokee_buffer_t  *buf);

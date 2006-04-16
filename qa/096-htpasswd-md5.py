@@ -9,6 +9,13 @@ USER       = "username"
 PASSWD     = "alo"
 PASSWD_MD5 = "$1$JJ3RnzaO$zpsGlLvKvMVrUW4ZNZ7Iw1"
 
+CONF = """
+vserver!default!directory!/htpasswd_md5!auth = htpasswd
+vserver!default!directory!/htpasswd_md5!auth!methods = basic
+vserver!default!directory!/htpasswd_md5!auth!realm = %s
+vserver!default!directory!/htpasswd_md5!auth!passwdfile = %s
+vserver!default!directory!/htpasswd_md5!priority = 960
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -27,10 +34,4 @@ class Test (TestBase):
         passf = self.WriteFile (tdir, "passwd", 0444, '%s:%s\n' %(USER, PASSWD_MD5))
         self.WriteFile (tdir, "file", 0444, MAGIC)
 
-        self.conf             = """Directory /htpasswd_md5 {
-                                     Handler file
-                                     Auth Basic {
-                                          Name "%s"
-                                          Method htpasswd { PasswdFile %s }
-                                     }
-                                }""" % (REALM, passf)
+        self.conf = CONF % (REALM, passf)

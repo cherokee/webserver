@@ -27,7 +27,6 @@
 
 #include "common.h"
 #include "table.h"
-#include "table-protected.h"
 #include "config_entry.h"
 
 

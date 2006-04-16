@@ -28,11 +28,24 @@
 #include "connection-protected.h"
 
 
-cherokee_module_info_validator_t MODULE_INFO(htdigest) = {
-	.module.type     = cherokee_validator,                 /* type     */
-	.module.new_func = cherokee_validator_htdigest_new,    /* new func */
-	.valid_methods   = http_auth_basic | http_auth_digest  /* methods  */
-};
+ret_t 
+cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	ret_t                   ret;
+	cherokee_config_node_t *subconf;
+
+	ret = cherokee_config_node_get (conf, "passwdfile", &subconf);
+	if (ret == ret_ok) {
+		ret = cherokee_typed_table_instance (props);
+		if (ret != ret_ok) return ret;
+
+		ret = cherokee_typed_table_add_str (*props, "passwdfile", subconf->val.buf);
+		if (ret != ret_ok) return ret;
+	}
+
+	return ret_ok;
+}
+
 
 ret_t 
 cherokee_validator_htdigest_new (cherokee_validator_htdigest_t **htdigest, cherokee_table_t *properties)
@@ -55,11 +68,11 @@ cherokee_validator_htdigest_new (cherokee_validator_htdigest_t **htdigest, chero
 	/* Get the properties
 	 */
 	if (properties) {
-		cherokee_typed_table_get_str (properties, "file", &n->file_ref);
+		cherokee_typed_table_get_str (properties, "passwdfile", &n->file_ref);
 	}
 
 	if (n->file_ref == NULL) {
-		PRINT_ERROR_S ("htdigest validator needs a \"File\" property\n");
+		PRINT_ERROR_S ("htdigest validator needs a password file\n");
 	}
 
 	*htdigest = n;
@@ -243,13 +256,15 @@ cherokee_validator_htdigest_add_headers (cherokee_validator_htdigest_t *plain, c
 
 /* Library init function
  */
-static cherokee_boolean_t _htdigest_is_init = false;
-
 void
 MODULE_INIT(htdigest) (cherokee_module_loader_t *loader)
 {
-	/* Is init?
-	 */
-	if (_htdigest_is_init) return;
-	_htdigest_is_init = true;
 }
+
+cherokee_module_info_validator_t MODULE_INFO(htdigest) = {
+	.module.type      = cherokee_validator,                    /* type      */
+	.module.new_func  = cherokee_validator_htdigest_new,       /* new func  */
+	.module.configure = cherokee_validator_htdigest_configure, /* configure */
+	.valid_methods    = http_auth_basic | http_auth_digest     /* methods   */
+};
+

@@ -1,5 +1,14 @@
 from base import *
 
+CONF = """
+vserver!default!directory!/auth2users!auth = plain
+vserver!default!directory!/auth2users!auth!methods = basic
+vserver!default!directory!/auth2users!auth!realm = Test with Users
+vserver!default!directory!/auth2users!auth!passwdfile = %s
+vserver!default!directory!/auth2users!auth!users = foo,Aladdin
+vserver!default!directory!/auth2users!priority = 860
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -9,13 +18,15 @@ class Test (TestBase):
         self.expected_error   = 200
 
     def Prepare (self, www):
-        dir = self.Mkdir (www, "auth2users")
-        self.WriteFile (www, "auth2users/passwd", 0444, 'user:cherokee\n' + 'foo:bar\n' + 'Aladdin:open sesame\n')
+        d = self.Mkdir (www, "auth2users")
+        self.WriteFile (d, "passwd", 0444, 'user:cherokee\n' + 'foo:bar\n' + 'Aladdin:open sesame\n')
 
-        self.conf             = """Directory /auth2users {
+        self.conf = CONF % (d+"/passwd")
+        
+        self.conf2             = """Directory /auth2users {
                                      Auth Basic {
                                           Name "Test with Users"
                                           Method plain { PasswdFile %s }
                                           User foo, Aladdin
                                      }
-                                }""" % (dir+"/passwd")
+                                }""" % (d+"/passwd")

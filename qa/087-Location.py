@@ -6,7 +6,6 @@ class Test (TestBase):
         self.name = "PHP Location header"
 
         self.request           = "GET /phplocation/redir.php HTTP/1.0\r\n"
-        self.conf              = "Directory /phplocation { Handler phpcgi { Interpreter %s }}" % (PHPCGI_PATH)
         self.expected_error    = 302
         self.expected_content  = "Location: src/login.php"
         self.forbidden_content = "header("

@@ -1,5 +1,13 @@
 from base import *
 
+CONF = """
+vserver!default!directory!/auth3!auth = plain
+vserver!default!directory!/auth3!auth!methods = basic
+vserver!default!directory!/auth3!auth!realm = Test
+vserver!default!directory!/auth3!auth!passwdfile = %s
+vserver!default!directory!/auth3!priority = 410
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -9,13 +17,7 @@ class Test (TestBase):
         self.expected_error   = 401
 
     def Prepare (self, www):
-        dir = self.Mkdir (www, "auth3")
-        self.WriteFile (www, "auth3/passwd", 0444, 'Aladdin:open sesame\n')
+        d = self.Mkdir (www, "auth3")
+        self.WriteFile (d, "passwd", 0444, 'Aladdin:open sesame\n')
 
-        self.conf             = """Directory /auth3 {
-                                     Handler common
-                                     Auth Basic {
-                                          Name "Test"
-                                          Method plain { PasswdFile %s }
-                                     }
-                                }""" % (dir+"/passwd")
+        self.conf = CONF % (d+"/passwd")

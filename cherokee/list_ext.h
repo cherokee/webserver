@@ -29,19 +29,19 @@
 #include "list.h"
 
 typedef struct {
-	   struct list_head  list;
-	   void             *info;
+	   list_t  list;
+	   void   *info;
 } cherokee_list_item_t;
 
 #define LIST_ITEM(i)      ((cherokee_list_item_t *)(i))
 #define LIST_ITEM_INFO(i) (LIST_ITEM(i)->info)
 
 
-ret_t cherokee_list_add              (struct list_head *head, void *item);
-ret_t cherokee_list_add_tail         (struct list_head *head, void *item);
+ret_t cherokee_list_add              (list_t *head, void *item);
+ret_t cherokee_list_add_tail         (list_t *head, void *item);
 
-ret_t cherokee_list_free             (struct list_head *head, void (*free_func) (void *));
-ret_t cherokee_list_free_item        (struct list_head *head, void (*free_func) (void *));
-ret_t cherokee_list_free_item_simple (struct list_head *head);
+ret_t cherokee_list_free             (list_t *head, void (*free_func) (void *));
+ret_t cherokee_list_free_item        (list_t *head, void (*free_func) (void *));
+ret_t cherokee_list_free_item_simple (list_t *head);
 
 #endif /* CHEROKEE_LIST_EXT_H */

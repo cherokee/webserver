@@ -2,6 +2,12 @@ from base import *
 
 MAGIC = "This_is_the_magic_key"
 
+CONF = """
+vserver!default!directory!/dr_common!handler = common
+vserver!default!directory!/dr_common!document_root = %s
+vserver!default!directory!/dr_common!priority = 360
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -11,12 +17,8 @@ class Test (TestBase):
         self.expected_content = MAGIC
         
     def Prepare (self, www):
-        dir = self.Mkdir (www, "dr_common_another/dir")
-        self.WriteFile (www, "dr_common_another/dir/test_index.html", 0444, MAGIC)
+        d = self.Mkdir (www, "dr_common_another/dir")
+        self.WriteFile (d, "test_index.html", 0444, MAGIC)
 
-        self.conf             = """
-           Directory /dr_common {
-             Handler common
-             DocumentRoot %s
-           }
-           """ % (dir)
+        self.conf = CONF % (d)
+

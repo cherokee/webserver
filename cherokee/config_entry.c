@@ -58,13 +58,13 @@ cherokee_config_entry_init (cherokee_config_entry_t *entry)
 
 	entry->validator_new_func   = NULL;
 	entry->validator_properties = NULL;
+	entry->auth_realm           = NULL;
 
 	entry->access               = NULL;
 	entry->authentication       = http_auth_nothing;
 	entry->only_secure          = false;
 
 	entry->document_root        = NULL;
-	entry->auth_realm           = NULL;
 	entry->users                = NULL;
 
 	return ret_ok;
@@ -96,13 +96,14 @@ cherokee_config_entry_free (cherokee_config_entry_t *entry)
 
 	if (entry->auth_realm != NULL) {
 		cherokee_buffer_free (entry->auth_realm);
-		entry->auth_realm = NULL;
+		entry->document_root = NULL;
 	}
 
 	if (entry->users != NULL) {
 		cherokee_table_free (entry->users);
 		entry->users = NULL;
 	}
+
 
 	free (entry);
 	return ret_ok;
@@ -255,6 +256,26 @@ cherokee_config_entry_inherit (cherokee_config_entry_t *entry)
 	while ((parent = parent->parent) != NULL) {
 		cherokee_config_entry_complete (entry, parent, true);
 	}
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_config_entry_print (cherokee_config_entry_t *entry)
+{
+	printf ("parent:                    %p\n", entry->parent);
+	printf ("priority:                  %d\n", entry->priority);
+	printf ("document_root:             %s\n", entry->document_root ? entry->document_root->buf : "");
+	printf ("only_secure:               %d\n", entry->only_secure);
+	printf ("access:                    %p\n", entry->access);
+	printf ("handler_new                %p\n", entry->handler_new_func);
+	printf ("http_methods:              0x%x\n", entry->handler_methods);
+	printf ("handler_properties:        %p\n", entry->handler_properties);
+	printf ("validator_new:             %p\n", entry->validator_new_func);
+	printf ("validator_properties:      %p\n", entry->validator_properties);
+	printf ("auth_realm:                %s\n", entry->auth_realm ? entry->auth_realm->buf : "");
+	printf ("users:                     %p\n", entry->users);
 
 	return ret_ok;
 }

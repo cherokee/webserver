@@ -2,13 +2,19 @@ from base import *
 
 PATH_INFO = "/param1/param2/param3"
 
+CONF = """
+vserver!default!directory!/pathinfo2!handler = phpcgi
+vserver!default!directory!/pathinfo2!handler!interpreter = %s
+vserver!default!directory!/pathinfo2!priority = 680
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "PathInfo, phpcgi"
 
         self.request           = "GET /pathinfo2/deep/deep/test.php%s HTTP/1.0\r\n" %(PATH_INFO)
-        self.conf              = "Directory /pathinfo2 { Handler phpcgi { Interpreter %s }}" % (PHPCGI_PATH)
+        self.conf              = CONF % (PHPCGI_PATH)
         self.expected_error    = 200
         self.expected_content  = "PathInfo is: "+PATH_INFO
 

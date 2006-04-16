@@ -33,14 +33,30 @@
 
 #define ENTRIES "handler,cgi"
 
-cherokee_module_info_handler_t MODULE_INFO(scgi) = {
-	.module.type     = cherokee_handler,                /* type         */
-	.module.new_func = cherokee_handler_scgi_new,       /* new func     */
-	.valid_methods   = http_get | http_post | http_head /* http methods */
-};
-
 #define set_env(cgi,key,val,len) \
 	add_env_pair (cgi, key, sizeof(key)-1, val, len)
+
+
+static ret_t 
+cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	ret_t   ret;
+	list_t *i;
+
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+                ret = cherokee_typed_table_instance (props);
+                if (ret != ret_ok) return ret;
+
+		if (equal_buf_str (&subconf->key, "server")) {
+			ret = cherokee_ext_source_configure (subconf, *props);
+			if (ret != ret_ok) return ret;
+		}
+	}
+	
+	return cherokee_handler_cgi_base_configure (conf, srv, props);
+}
 
 
 static void 
@@ -54,8 +70,6 @@ add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 	if (val_len == 0) {
 		return;
 	}
-
-//	printf ("****[%s]=[%s] (%d, %d)\n", key, val, key_len, val_len);
 
 	cherokee_buffer_ensure_size (&scgi->header, scgi->header.len + key_len + val_len + 3);
 
@@ -333,3 +347,11 @@ void
 MODULE_INIT(scgi) (cherokee_module_loader_t *loader)
 {
 }
+
+
+cherokee_module_info_handler_t MODULE_INFO(scgi) = {
+	.module.type      = cherokee_handler,                /* type         */
+	.module.new_func  = cherokee_handler_scgi_new,       /* new func     */
+	.module.configure = cherokee_handler_scgi_configure, /* configure    */
+	.valid_methods    = http_get | http_post | http_head /* http methods */
+};

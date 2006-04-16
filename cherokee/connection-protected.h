@@ -82,7 +82,7 @@ typedef enum {
 
 
 struct cherokee_connection {
-	struct list_head              list_entry;
+	list_t                        list_entry;
 
 	/* References
 	 */

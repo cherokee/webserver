@@ -24,54 +24,31 @@
 
 #include "common-internal.h"
 #include "table.h"
-#include "table-protected.h"
+#include "avl.h"
 
 #include <string.h>
-
-
-
-typedef struct {
-	char *key;
-	void *value;
-} item_t;
+#include <strings.h>
 
 
 static int
-equal (const void *avl_a, const void *avl_b, void *avl_param)
+equal (void *avl_param, void *key, void *val)
 {
-	avl_param = avl_param;
-
-	return strcmp(((item_t *)avl_a)->key, ((item_t *)avl_b)->key);
+	return strcmp((const char *)key, (const char *)val);
 }
 
 static int
-equal_case (const void *avl_a, const void *avl_b, void *avl_param)
+equal_case (void *avl_param, void *key, void *val)
 {
-	avl_param = avl_param;
-
-	return strcasecmp(((item_t *)avl_a)->key, ((item_t *)avl_b)->key);
-}
-
-
-static inline void
-del_item (void *avl_item, void *avl_param)
-{
-	free (((item_t *)avl_item)->key);
-	free ((item_t *)avl_item);
+	return strcasecmp((const char *)key, (const char *)val);
 }
 
 
 ret_t
 cherokee_table_new (cherokee_table_t **tab)
 {
-	ret_t ret;
+	*tab = avl_new_avl_tree (equal, NULL);
+	if (unlikely (*tab == NULL)) return ret_nomem;
 
-	CHEROKEE_NEW_STRUCT(n, table);
-	
-	ret = cherokee_table_init (n);
-	if (unlikely(ret < ret_ok)) return ret;
-	
-	*tab = n;
 	return ret_ok;
 }
 
@@ -79,11 +56,15 @@ cherokee_table_new (cherokee_table_t **tab)
 ret_t
 cherokee_table_init (cherokee_table_t *tab)
 {
-	tab->tree = avl_create (equal, NULL, NULL);
-	if (tab->tree == NULL) {
-		return ret_error;
-	}
+	avl_node * root = avl_new_avl_node(NULL, NULL, NULL);
+	if (unlikely (root == NULL)) 
+		return ret_nomem;
 
+	tab->root        = root;
+	tab->length      = 0;
+	tab->compare_fun = equal;
+	tab->compare_arg = NULL;
+	
 	return ret_ok;
 }
 
@@ -91,24 +72,25 @@ cherokee_table_init (cherokee_table_t *tab)
 ret_t
 cherokee_table_init_case (cherokee_table_t *tab)
 {
-	tab->tree = avl_create (equal_case, NULL, NULL);
-	if (tab->tree == NULL) {
-		return ret_error;
-	}
+	ret_t ret;
+
+	ret = cherokee_table_init (tab);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	tab->compare_fun = equal_case;
 
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_table_free (cherokee_table_t *tab)
+cherokee_table_mrproper2 (cherokee_table_t *tab, cherokee_table_free_item_t free_func) 
 {
-	cherokee_table_clean (tab);
-
-	free (tab);
+	avl_free_avl_mrproper (tab, 
+			       (avl_free_key_fun_type)free, 
+			       (avl_free_key_fun_type)free_func);
 	return ret_ok;
 }
-
 
 ret_t 
 cherokee_table_free2 (cherokee_table_t  *tab, cherokee_table_free_item_t free_func)
@@ -121,38 +103,15 @@ cherokee_table_free2 (cherokee_table_t  *tab, cherokee_table_free_item_t free_fu
 
 
 ret_t
-cherokee_table_mrproper (cherokee_table_t *tab) {
-	if (tab->tree) {
-		avl_destroy (tab->tree, del_item);
-		tab->tree = NULL;
-	}
-	return ret_ok;
+cherokee_table_free (cherokee_table_t *tab)
+{
+	return cherokee_table_free2 (tab, free);
 }
 
-
 ret_t
-cherokee_table_mrproper2 (cherokee_table_t *tab, cherokee_table_free_item_t free_func) 
+cherokee_table_mrproper (cherokee_table_t *tab) 
 {
-	struct avl_traverser  trav;
-	item_t               *item;
-
-	/* We've to visit all the nodes of the tree
-	 * to free all the 'value' entries
-	 */
-	avl_t_init (&trav, tab->tree);
-
-	item = (item_t *) avl_t_first (&trav, tab->tree);
-	if (item != NULL) {
-		free_func (item->value);
-	}
-	while ((item = avl_t_next(&trav)) != NULL) {
-		free_func (item->value);
-	}
-
-	avl_destroy (tab->tree, del_item);
-	tab->tree = NULL;
-
-	return ret_ok;
+	return cherokee_table_mrproper2 (tab, free);
 }
 
 
@@ -165,11 +124,10 @@ cherokee_table_clean (cherokee_table_t *tab)
 
 
 ret_t 
-cherokee_table_clean2 (cherokee_table_t  *tab, cherokee_table_free_item_t free_func)
+cherokee_table_clean2 (cherokee_table_t *tab, cherokee_table_free_item_t free_func)
 {
-	if (tab->tree == NULL) {
+	if (unlikely (tab == NULL)) 
 		return ret_error;
-	}
 
 	cherokee_table_mrproper2 (tab, free_func);
 	return cherokee_table_init(tab);
@@ -179,46 +137,35 @@ cherokee_table_clean2 (cherokee_table_t  *tab, cherokee_table_free_item_t free_f
 ret_t
 cherokee_table_add (cherokee_table_t *tab, char *key, void *value)
 {
-	item_t *n = (item_t *)malloc(sizeof(item_t));
+	int          re;
+	unsigned int index;
 
-	n->key   = strdup (key);
-	n->value = value;
-	
-	avl_insert (tab->tree, n);
-	
+	re = avl_insert_by_key (tab, strdup(key), value, &index);
+	if (unlikely (re != 0)) return ret_error;
+
 	return ret_ok;
 }
 
 void *
 cherokee_table_get_val (cherokee_table_t *tab, char *key)
 {
-	item_t  n;
-	item_t *found;
-	
-	n.key = key;	
-	found = avl_find (tab->tree, &n);
-	
-	if (found) {
-		return found->value;
-	}
-	
-	return NULL;
+	ret_t  ret;
+	void  *val = NULL;
+
+	ret = cherokee_table_get (tab, key, &val);	
+	if (unlikely (ret != ret_ok)) return NULL;
+
+	return val;
 }
 
 ret_t
 cherokee_table_get (cherokee_table_t *tab, char *key, void **ret_val)
 {
-	item_t  n;
-	item_t *found;
-	
-	n.key = key;	
-	found = avl_find (tab->tree, &n);
-	
-	if (found == NULL) {
-		return ret_not_found;
-	}
+	int re; 
 
-	*ret_val = found->value;	
+	re = avl_get_item_by_key (tab, key, ret_val);
+	if (unlikely (re != 0)) return ret_not_found;
+
 	return ret_ok;
 }
 
@@ -226,19 +173,11 @@ cherokee_table_get (cherokee_table_t *tab, char *key, void **ret_val)
 ret_t
 cherokee_table_del (cherokee_table_t *tab, char *key, void **val)
 {
-	item_t  n;
-	item_t *found;
+	int re;
 
-	n.key = key;
-	found = avl_find (tab->tree, &n);
+	re = avl_remove_by_key (tab, key, (avl_free_key_fun_type)free, val);
+	if (unlikely (re != 0)) return ret_error;
 
-	if (found == NULL)
-		return ret_not_found;
-		
-	if (val != NULL)
-		*val = found->value;
-
-	avl_delete (tab->tree, found);
 	return ret_ok;
 }
 
@@ -246,37 +185,26 @@ cherokee_table_del (cherokee_table_t *tab, char *key, void **val)
 ret_t 
 cherokee_table_len (cherokee_table_t *tab, size_t *len)
 {
-	*len = avl_count(tab->tree);
+	*len = tab->length;
 	return ret_ok;
+}
+
+
+static int
+foreach_wrapper (void *key, void *val, void *iter_arg)
+{
+	((cherokee_table_foreach_func_t)iter_arg) (key, val);
+	return 0;
 }
 
 
 ret_t 
 cherokee_table_foreach (cherokee_table_t *tab, cherokee_table_foreach_func_t func)
 {
-	struct avl_traverser  trav;
-	item_t               *item;
+	int re;
 
-	if (tab->tree == NULL) {
-		return ret_ok;
-	}
-
-	avl_t_init (&trav, tab->tree);
-
-	item = (item_t *) avl_t_first (&trav, tab->tree);
-	if (item != NULL) {
-#if 0
-		printf ("for each: table %p key='%s'\n", tab, item->key);
-#endif
-		func (item->key, item->value);
-	}
-
-	while ((item = avl_t_next(&trav)) != NULL) {
-#if 0
-		printf ("for each: table %p key='%s'\n", tab, item->key);
-#endif
-		func (item->key, item->value);
-	}
+	re = avl_iterate_inorder (tab, foreach_wrapper, func, NULL, NULL);
+	if (unlikely (re != 0)) return ret_error;
 
 	return ret_ok;
 }
@@ -285,68 +213,10 @@ cherokee_table_foreach (cherokee_table_t *tab, cherokee_table_foreach_func_t fun
 ret_t 
 cherokee_table_while (cherokee_table_t *tab, cherokee_table_while_func_t func, void *param, char **key, void **value)
 {
-	struct avl_traverser  trav;
-	item_t               *item;
-	int                   ret;
+	int re;
 
-	if (tab->tree == NULL) {
-		return ret_ok;
-	}
-
-	avl_t_init (&trav, tab->tree);
-
-	item = (item_t *) avl_t_first (&trav, tab->tree);
-	if (item != NULL) {
-		ret = func (item->key, item->value, param);
-		if (ret == 0) goto found;
-	}
-
-	while ((item = avl_t_next(&trav)) != NULL) {
-		ret = func (item->key, item->value, param);
-		if (ret == 0) goto found;
-	}
-
-	return ret_not_found;
-
-found:
-	if (key != NULL) {
-		*key   = item->key;
-	}
-	
-	if (value != NULL) {
-		*value = item->value;
-	}
-	return ret_ok;
-}
-
-
-ret_t 
-cherokee_table_clean_up (cherokee_table_t *tab, cherokee_table_while_func_t func, void *param)
-{
-	struct avl_traverser  trav;
-	item_t               *item;
-	int                   ret;
-
-	if (tab->tree == NULL) {
-		return ret_ok;
-	}
-
-	avl_t_init (&trav, tab->tree);
-
-	item = (item_t *) avl_t_first (&trav, tab->tree);
-	if (item != NULL) {
-		ret = func (item->key, item->value, param);
-		if (ret) {
-			avl_delete (tab->tree, item);
-		}
-	}
-	
-	while ((item = avl_t_next(&trav)) != NULL) {
-		ret = func (item->key, item->value, param);
-		if (ret) {
-			avl_delete (tab->tree, item);
-		}
-	}
+	re = avl_iterate_inorder (tab, (avl_iter_fun_type)func, param, (void **)key, value);
+	if (re == 0) return ret_not_found;
 
 	return ret_ok;
 }

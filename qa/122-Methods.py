@@ -5,14 +5,18 @@ class TestEntry (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.expected_error = 405
-        
+
+CONF = """        
+vserver!default!directory!/methods_group!handler = file
+vserver!default!directory!/methods_group!priority = 1220
+"""
 
 class Test (TestCollection):
     def __init__ (self):
         TestCollection.__init__ (self)
 
         self.name = "HTTP Methods"
-        self.conf = "Directory /methods_group { Handler file } "
+        self.conf = CONF
 
     def Prepare (self, www):
 

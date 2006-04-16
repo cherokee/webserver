@@ -35,13 +35,6 @@
 #define CHEROKEE_AUTH_SERVICE "cherokee"
 
 
-cherokee_module_info_validator_t MODULE_INFO(pam) = {
-	.module.type     = cherokee_validator,                 /* type     */
-	.module.new_func = cherokee_validator_pam_new,         /* new func */
-	.valid_methods   = http_auth_basic                     /* methods  */
-};
-
-
 ret_t 
 cherokee_validator_pam_new (cherokee_validator_pam_t **pam, cherokee_table_t *properties)
 {
@@ -219,13 +212,13 @@ cherokee_validator_pam_add_headers (cherokee_validator_pam_t  *pam, cherokee_con
 
 /* Library init function
  */
-static cherokee_boolean_t _pam_is_init = false;
-
 void
 MODULE_INIT(pam) (cherokee_module_loader_t *loader)
 {
-	/* Init flag
-	 */
-	if (_pam_is_init) return;
-	_pam_is_init = true;
 }
+
+cherokee_module_info_validator_t MODULE_INFO(pam) = {
+	.module.type     = cherokee_validator,                 /* type     */
+	.module.new_func = cherokee_validator_pam_new,         /* new func */
+	.valid_methods   = http_auth_basic                     /* methods  */
+};

@@ -2,13 +2,18 @@ from base import *
 
 MAGIC = "This shouldn't be sent"
 
+CONF = """
+vserver!default!directory!/head-body!handler = common
+vserver!default!directory!/head-body!priority = 500
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "Head doesn't include body"
 
         self.request           = "HEAD /head-body/test HTTP/1.0\r\n"
-        self.conf              = "Directory /head-body { Handler common }"
+        self.conf              = CONF
         self.expected_error    = 200
         self.forbidden_content = MAGIC
 

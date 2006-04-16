@@ -22,17 +22,18 @@
  * USA
  */
 
-#include "list_merge_sort.h"
+#include "common-internal.h"
+#include "list.h"
 
 #include <stdlib.h>
 
 
 void 
-list_sort (struct list_head *head, int (*cmp)(struct list_head *a, struct list_head *b))
+list_sort (list_t *head, int (*cmp)(list_t *a, list_t *b))
 {
-	struct list_head *p, *q, *e, *list, *tail, *oldhead;
+	list_t *p, *q, *e, *list, *tail, *oldhead;
 	int insize, nmerges, psize, qsize, i;
-
+	
 	list = head->next;
 	list_del(head);
 	insize = 1;

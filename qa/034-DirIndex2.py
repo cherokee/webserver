@@ -1,6 +1,11 @@
 from base import *
 
-MAGIC="The_index_page_should_contain_this"
+MAGIC = "The_index_page_should_contain_this"
+
+CONF = """
+vserver!default!directory!/index2!handler = common
+vserver!default!directory!/index2!priority = 340
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -8,7 +13,7 @@ class Test (TestBase):
         self.name = "Directory index, common"
 
         self.request          = "GET /index2/ HTTP/1.0\r\n"
-        self.conf             = "Directory /index2 { Handler common }"
+        self.conf             = CONF
         self.expected_error   = 200
         self.expected_content = MAGIC
 

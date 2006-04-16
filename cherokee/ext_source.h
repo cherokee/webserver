@@ -29,12 +29,13 @@
 #include "buffer.h"
 #include "typed_table.h"
 #include "socket.h"
+#include "config_node.h"
 
 
 CHEROKEE_BEGIN_DECLS
 
 typedef struct {
-	struct list_head           entry;
+	list_t                     entry;
 
 	cherokee_buffer_t          interpreter;
 
@@ -79,6 +80,11 @@ ret_t cherokee_ext_source_spawn_srv (cherokee_ext_source_t  *server);
  */
 ret_t cherokee_ext_source_head_new  (cherokee_ext_source_head_t **serverf);
 ret_t cherokee_ext_source_get_next  (cherokee_ext_source_head_t  *serverf, list_t *server_list, cherokee_ext_source_t **next);
+
+/* Configure
+ */
+ret_t cherokee_ext_source_configure (cherokee_config_node_t *conf, cherokee_table_t *props);
+
 
 CHEROKEE_END_DECLS
 

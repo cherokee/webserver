@@ -47,11 +47,11 @@ config_server (cherokee_server_t *srv)
 	 */
 	srv->port      = DEFAULT_PORT;
 	srv->ipv6      = false;
-	srv->listen_to = strdup("127.0.0.1");
-
+	
 	vserver = srv->vserver_default;
-	cherokee_virtual_server_set_documentroot (vserver, DEFAULT_DOCUMENTROOT);
 
+	cherokee_buffer_add_str (&srv->listen_to, "127.0.0.1");
+	cherokee_virtual_server_set_documentroot (vserver, DEFAULT_DOCUMENTROOT);
 	cherokee_list_add_tail (&vserver->index_list, "index.php");
 	
 	/* Default handler
@@ -74,7 +74,7 @@ config_server (cherokee_server_t *srv)
 	cherokee_config_entry_set_handler (entry, info);
 	entry->priority = CHEROKEE_CONFIG_PRIORITY_DEFAULT + 1;
 	
-	cherokee_dirs_table_add (&vserver->dirs, "/about", entry);
+	cherokee_dirs_table_add (&vserver->entry.dirs, "/about", entry);
 
 	/* PHP extension
 	 */
@@ -85,10 +85,10 @@ config_server (cherokee_server_t *srv)
 	cherokee_config_entry_set_handler (entry, info);
 	entry->priority = CHEROKEE_CONFIG_PRIORITY_DEFAULT + 2;
 
-	ret = cherokee_exts_table_new (&vserver->exts);
+	ret = cherokee_exts_table_new (&vserver->entry.exts);
 	if (ret != ret_ok) return ret;
 
-	cherokee_exts_table_add (vserver->exts, "php", entry);
+	cherokee_exts_table_add (vserver->entry.exts, "php", entry);
 	
 	return ret_ok;
 }

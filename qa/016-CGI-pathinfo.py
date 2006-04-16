@@ -1,6 +1,10 @@
 from base import *
 
 MAGIC = "It works"
+CONF = """
+vserver!default!directory!/cgi-bin2!handler = cgi
+vserver!default!directory!/cgi-bin2!priority = 160
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -8,9 +12,9 @@ class Test (TestBase):
         self.name = "CGI with pathinfo"
 
         self.request          = "GET /cgi-bin2/test/parameter HTTP/1.0\r\n"
-        self.conf             = "Directory /cgi-bin2 { Handler cgi }"
-        self.expected_error   = 200
+        self.conf             = CONF
         self.expected_content = MAGIC
+        self.expected_error   = 200
 
     def Prepare (self, www):
         self.Mkdir (www, "cgi-bin2")

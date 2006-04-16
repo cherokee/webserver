@@ -1,12 +1,17 @@
 import os
 from base import *
 
+CONF = """
+vserver!default!directory!/post2!handler = cgi
+vserver!default!directory!/post2!priority = 300
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "Post with length zero"
 
-        self.conf           = "Directory /post2 { Handler cgi }"
+        self.conf           = CONF
         self.request        = "POST /post2/test HTTP/1.0\r\n" +\
                               "Content-type: application/x-www-form-urlencoded\r\n" +\
                               "Content-length: 0\r\n"

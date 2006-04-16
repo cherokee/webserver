@@ -179,7 +179,7 @@ relink_func (const char *key_, void *value, void *param)
 	
 out:
 	cherokee_buffer_mrproper (&key);
-	return true;
+	return false;
 }
 
 

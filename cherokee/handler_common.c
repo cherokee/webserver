@@ -52,11 +52,16 @@
 #define ENTRIES "handler,common"
 
 
-cherokee_module_info_handler_t MODULE_INFO(common) = {
-	.module.type     = cherokee_handler,                /* type         */
-	.module.new_func = cherokee_handler_common_new,     /* new func     */
-	.valid_methods   = http_all_methods                 /* http methods */
-};
+ret_t 
+cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	ret_t ret;
+
+	ret = cherokee_handler_file_configure (conf, srv, props);
+	if (ret != ret_ok) return ret;
+
+	return cherokee_handler_dirlist_configure (conf, srv, props);
+}
 
 
 static ret_t
@@ -298,3 +303,11 @@ MODULE_INIT(common) (cherokee_module_loader_t *loader)
 	cherokee_module_loader_load (loader, "file");
 	cherokee_module_loader_load (loader, "dirlist");
 }
+
+
+cherokee_module_info_handler_t MODULE_INFO(common) = {
+	.module.type      = cherokee_handler,                  /* type         */
+	.module.new_func  = cherokee_handler_common_new,       /* new func     */
+	.module.configure = cherokee_handler_common_configure, /* configure */
+	.valid_methods    = http_all_methods                   /* http methods */
+};

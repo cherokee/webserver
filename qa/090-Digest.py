@@ -2,6 +2,14 @@ from base import *
 
 MAGIC  = "Don't show this"
 
+CONF = """
+vserver!default!directory!/digest1!auth = plain
+vserver!default!directory!/digest1!auth!methods = digest
+vserver!default!directory!/digest1!auth!realm = Test is the realm
+vserver!default!directory!/digest1!auth!passwdfile = %s
+vserver!default!directory!/digest1!priority = 900
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -16,14 +24,5 @@ class Test (TestBase):
         self.Mkdir (www, "digest1")
         self.WriteFile (www, "digest1/file", 0444, MAGIC)
         passfile = self.WriteFile (www, "digest1/.passwd", 0444, "user:password\n")
-
-        self.conf             = """
-           Directory /digest1 {
-               Handler file
-               Auth Digest {
-                  Name "This is the realm"
-                  Method plain {
-                    PasswdFile %s
-                  }
-               }
-           }""" % (passfile)
+        
+        self.conf = CONF % (passfile)

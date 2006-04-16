@@ -906,7 +906,7 @@ AC_ARG_ENABLE(static-module,
 	   AC_HELP_STRING([--enable-static-module=MODULE][]),
 	   [use_static_module="$use_static_module $enableval "],[])
 
-modules="read_config error_redir server_info file admin dirlist fcgi fastcgi scgi redir common nn cgi phpcgi proxy gzip ncsa combined w3c pam htpasswd plain htdigest"
+modules="error_redir server_info file admin dirlist fcgi fastcgi scgi redir common nn cgi phpcgi proxy gzip ncsa combined w3c pam htpasswd plain htdigest"
 
 # Remove modules that will not be compiles
 #
@@ -945,7 +945,6 @@ dnl
 dnl Static/Dynamic modules
 dnl
 conf_h="${srcdir}/cherokee/loader.autoconf.h"
-AM_CONDITIONAL(STATIC_MODULE_READ_CONFIG,     grep read_config    $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_SERVER_INFO,    grep server_info    $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_FILE,           grep file           $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_ADMIN,          grep admin          $conf_h >/dev/null)

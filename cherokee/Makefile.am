@@ -41,17 +41,6 @@ zlib/zconf.h   \
 zlib/zlib.h    \
 zlib/zutil.h
 
-dict_src =          \
-dict/dict_generic.h \
-dict/dict_generic.c \
-dict/sp_tree.h      \
-dict/sp_tree.c      \
-dict/dict_private.h
-
-avl_src = \
-avl/avl.h \
-avl/avl.c
-
 pcre_src = \
 pcre/get.c \
 pcre/pcre.h \
@@ -92,25 +81,6 @@ $(common_ldflags) \
 -avoid-version \
 -export-dynamic \
 $(module_ldflags_w32) 
-
-
-#
-# Config stuff
-#
-module_read_config = \
-read_config_grammar.y \
-read_config_scanner.l \
-module_read_config.h \
-module_read_config.c
-
-libplugin_read_config_la_LDFLAGS = $(module_ldflags)
-libplugin_read_config_la_SOURCES = $(module_read_config)
-
-if STATIC_MODULE_READ_CONFIG
-static_module_read_config_src = $(module_read_config)
-else
-dynamic_module_read_config_lib = libplugin_read_config.la
-endif
 
 
 #
@@ -554,15 +524,6 @@ endif
 
 
 
-#
-# Yacc and Lex paramters
-# -d Generate .h file
-# -l Don't use #line
-# -t Debug
-AM_YFLAGS=-d -l -t
-AM_LFLAGS=-i
-
-
 if USE_INTERNAL_PCRE
 internal_pcre_src=$(pcre_src)
 else
@@ -648,9 +609,7 @@ win32_misc.c
 endif
 
 libcherokee_base_la_SOURCES = \
-$(avl_src) \
 $(zlib_src) \
-$(dict_src) \
 $(internal_pcre_src) \
 $(internal_getopt_src) \
 $(poll_poll_src) \
@@ -661,11 +620,12 @@ $(poll_select_src) \
 $(poll_win32_src) \
 $(win32_src) \
 cherokee.h \
+avl.h \
+avl.c \
 http.h \
 http.c \
 list.h \
-list_merge_sort.h \
-list_merge_sort.c \
+list.c \
 list_ext.h \
 list_ext.c \
 ncpus.h \
@@ -680,10 +640,7 @@ util.c \
 buffer.h \
 buffer.c \
 table.h \
-table-protected.h \
 table.c \
-dict.h \
-dict.c \
 buffer_escape.h \
 buffer_escape.c \
 socket.h \
@@ -712,8 +669,6 @@ tdate_parse.c \
 header.h \
 header-protected.h \
 header.c \
-session_cache.h \
-session_cache.c \
 access.h \
 access.c \
 regex.h \
@@ -757,10 +712,6 @@ endif
 
 
 libcherokee_server_la_SOURCES = \
-icons_grammar.y \
-icons_scanner.l \
-\
-$(static_module_read_config_src) \
 $(static_handler_file_src) \
 $(static_handler_admin_src) \
 $(static_handler_dirlist_src) \
@@ -796,6 +747,8 @@ handler.h \
 handler.c \
 config_entry.h \
 config_entry.c \
+virtual_entries.h \
+virtual_entries.c \
 dirs_table.h \
 dirs_table.c \
 exts_table.h \
@@ -858,7 +811,6 @@ http.h \
 mime.h \
 mime_entry.h \
 list.h \
-list_merge_sort.h \
 url.h \
 header.h \
 resolv_cache.h \
@@ -879,22 +831,11 @@ admin_client.h \
 connection_info.h
 
 
-# automake isn't too clever about "non-standard" use of lex and yacc
-# Icons:
-icons_scanner.c : icons_scanner.l
-	$(LEX) -Pyy_icons_ -i -o$@ $<
-
-icons_grammar.h : icons_grammar.c
-icons_grammar.c : icons_grammar.y
-	$(YACC) -dv -p yy_icons_ -o $@ $<
-
-
 #
 # Cherokee plugins
 #
 plugindir = "$(libdir)/cherokee"
 plugin_LTLIBRARIES = \
-$(dynamic_module_read_config_lib) \
 $(dynamic_handler_cgi_lib) \
 $(dynamic_handler_phpcgi_lib) \
 $(dynamic_handler_server_info_lib) \
@@ -958,12 +899,6 @@ cherokee_show_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-clie
 
 
 CLEANFILES = \
-read_config_grammar.h \
-read_config_grammar.c \
-read_config_scanner.c \
-icons_grammar.h \
-icons_grammar.c \
-icons_scanner.c \
 config.h
 
 WINDOWS_PORT_FILES = \
@@ -988,6 +923,5 @@ $(cherokeedeps_DATA) \
 $(cherokeedata_DATA) \
 $(WINDOWS_PORT_FILES) \
 $(EMBEDDED_VERSION_FILES) \
-read_config_grammar.h \
 loader.autoconf.h \
 loader.autoconf.inc

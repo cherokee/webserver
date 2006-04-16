@@ -31,6 +31,10 @@
 
 #include <cherokee/common.h>
 #include <cherokee/http.h>
+#include <cherokee/config_node.h>
+#include <cherokee/table.h>
+#include <cherokee/server.h>
+
 
 CHEROKEE_BEGIN_DECLS
 
@@ -44,14 +48,16 @@ typedef enum {
 } cherokee_module_type_t;
 
 
-typedef ret_t (* module_func_new_t)      (void *);
-typedef ret_t (* module_func_free_t)     (void *);
-typedef void  (* module_func_get_name_t) (void  *, const char **name);
+typedef ret_t (* module_func_new_t)       (void *);
+typedef ret_t (* module_func_free_t)      (void *);
+typedef void  (* module_func_get_name_t)  (void  *, const char **name);
+typedef ret_t (* module_func_configure_t) (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props);
 
 
 typedef struct {
-	cherokee_module_type_t  type;
-	void                   *new_func;
+	cherokee_module_type_t   type;
+	void                    *new_func;
+	module_func_configure_t  configure; 
 } cherokee_module_info_t;
 
 typedef struct {
@@ -64,12 +70,11 @@ typedef struct {
 	cherokee_http_auth_t   valid_methods;
 } cherokee_module_info_validator_t;
 
-
 typedef struct {
-	module_func_new_t       instance; /* constructor step begging */
-	module_func_free_t      free;     /* destructor               */
-	module_func_get_name_t  get_name;
-	void                   *init;     /* constructor step endding */
+	module_func_new_t        instance;   /* constructor step begging */
+	module_func_free_t       free;       /* destructor               */
+	module_func_get_name_t   get_name;   /* retrieve module name     */
+	void                    *init ;      /* constructor step endding */
 } cherokee_module_t;
 
 

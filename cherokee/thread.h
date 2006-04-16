@@ -51,7 +51,7 @@ typedef enum {
 
 
 typedef struct {
-	struct list_head base;
+	list_t                  base;
 
 #ifdef HAVE_PTHREAD
 	pthread_t               thread;

@@ -38,12 +38,23 @@
 #define CRYPT_SALT_LENGTH 2
 
 
-cherokee_module_info_validator_t MODULE_INFO(htpasswd) = {
-	.module.type     = cherokee_validator,                 /* type     */
-	.module.new_func = cherokee_validator_htpasswd_new,    /* new func */
-	.valid_methods   = http_auth_basic                     /* methods  */
-};
+ret_t 
+cherokee_validator_htpasswd_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	ret_t                   ret;
+	cherokee_config_node_t *subconf;
 
+	ret = cherokee_config_node_get (conf, "passwdfile", &subconf);
+	if (ret == ret_ok) {
+		ret = cherokee_typed_table_instance (props);
+		if (ret != ret_ok) return ret;
+
+		ret = cherokee_typed_table_add_str (*props, "passwdfile", subconf->val.buf);
+		if (ret != ret_ok) return ret;
+	}
+
+	return ret_ok;
+}
 
 ret_t 
 cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd, cherokee_table_t *properties)
@@ -64,11 +75,11 @@ cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd, chero
 	/* Get the properties
 	 */
 	if (properties) {
-		cherokee_typed_table_get_str (properties, "file", (char **)&n->file_ref);
+		cherokee_typed_table_get_str (properties, "passwdfile", (char **)&n->file_ref);
 	}
 
 	if (n->file_ref == NULL) {
-		PRINT_ERROR_S ("htpasswd validator needs a \"File\" property\n");
+		PRINT_ERROR_S ("htpasswd validator needs a password file\n");
 	}
 
 	*htpasswd = n;
@@ -338,13 +349,15 @@ cherokee_validator_htpasswd_add_headers (cherokee_validator_htpasswd_t *htpasswd
 
 /* Library init function
  */
-static cherokee_boolean_t _htpasswd_is_init = false;
-
 void
 MODULE_INIT(htpasswd) (cherokee_module_loader_t *loader)
 {
-	/* Is init?
-	 */
-	if (_htpasswd_is_init) return;
-	_htpasswd_is_init = true;
 }
+
+cherokee_module_info_validator_t MODULE_INFO(htpasswd) = {
+	.module.type      = cherokee_validator,                    /* type      */
+	.module.new_func  = cherokee_validator_htpasswd_new,       /* new func  */
+	.module.configure = cherokee_validator_htpasswd_configure, /* configure */
+	.valid_methods    = http_auth_basic                        /* methods   */
+};
+

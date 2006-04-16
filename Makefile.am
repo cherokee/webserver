@@ -92,27 +92,27 @@ install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/sites-enabled
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/sites-available
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf ; then \
-		echo "$@ will not overwrite existing $(cherokeeconfdir)/cherokee.conf"; \
+		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/cherokee.conf"; \
 	else \
 		$(INSTALL_DATA) $(top_builddir)/cherokee.conf.sample $(DESTDIR)$(cherokeeconfdir)/cherokee.conf; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/advanced.conf ; then \
-		echo "$@ will not overwrite existing $(cherokeeconfdir)/advanced.conf"; \
+		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/advanced.conf"; \
 	else \
 		$(INSTALL_DATA) $(top_builddir)/advanced.conf.sample $(DESTDIR)$(cherokeeconfdir)/advanced.conf; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/icons.conf ; then \
-		echo "$@ will not overwrite existing $(cherokeeconfdir)/icons.conf"; \
+		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/icons.conf"; \
 	else \
 		$(INSTALL_DATA) $(top_srcdir)/icons.conf.sample $(DESTDIR)$(cherokeeconfdir)/icons.conf; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.types ; then \
-		echo "$@ will not overwrite existing $(cherokeeconfdir)/mime.types"; \
+		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mime.types"; \
 	else \
 		$(INSTALL_DATA) $(top_srcdir)/mime.types.sample $(DESTDIR)$(cherokeeconfdir)/mime.types; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.compression.types ; then \
-		echo "$@ will not overwrite existing $(cherokeeconfdir)/mime.compression.types"; \
+		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mime.compression.types"; \
 	else \
 		$(INSTALL_DATA) $(top_srcdir)/mime.compression.types.sample $(DESTDIR)$(cherokeeconfdir)/mime.compression.types; \
 	fi
@@ -120,23 +120,23 @@ install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 		$(INSTALL_DATA) $(top_srcdir)/pam.d_cherokee $(DESTDIR)$(sysconfdir)/pam.d/cherokee; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/sites-available/default ; then \
-		echo "$@ will not overwrite existing $(cherokeeconfdir)/sites-available/default"; \
+		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/sites-available/default"; \
 	else \
 		$(INSTALL_DATA) $(top_builddir)/sites-default.sample $(DESTDIR)$(cherokeeconfdir)/sites-available/default; \
 		$(SHELL) -c "cd $(DESTDIR)$(cherokeeconfdir)/sites-enabled/ && $(LN_S) ../sites-available/default ."; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/sites-available/example.com ; then \
-		echo "$@ will not overwrite existing $(cherokeeconfdir)/sites-available/example.com"; \
+		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/sites-available/example.com"; \
 	else \
 		$(INSTALL_DATA) $(top_builddir)/sites-example.sample $(DESTDIR)$(cherokeeconfdir)/sites-available/example.com; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl ; then \
-		echo "$@ will not overwrite existing $(cherokeeconfdir)/mods-available/ssl"; \
+		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl"; \
 	else \
 		$(INSTALL_DATA) $(top_builddir)/mods-ssl.sample $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/admin ; then \
-		echo "$@ will not overwrite existing $(cherokeeconfdir)/mods-available/admin"; \
+		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mods-available/admin"; \
 	else \
 		$(INSTALL_DATA) $(top_srcdir)/mods-admin.sample $(DESTDIR)$(cherokeeconfdir)/mods-available/admin; \
 	fi

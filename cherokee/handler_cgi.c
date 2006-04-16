@@ -58,13 +58,6 @@
 #include "post.h"
 
 
-cherokee_module_info_handler_t MODULE_INFO(cgi) = {
-	.module.type     = cherokee_handler,                /* type         */
-	.module.new_func = cherokee_handler_cgi_new,        /* new func     */
-	.valid_methods   = http_get | http_post | http_head /* http methods */
-};
-
-
 #define ENTRIES "handler,cgi"
 
 #ifdef _WIN32
@@ -256,6 +249,13 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 	do_reap();
 
 	return ret_ok;
+}
+
+
+ret_t 
+cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	return cherokee_handler_cgi_base_configure (conf, srv, props);
 }
 
 
@@ -767,3 +767,10 @@ MODULE_INIT(cgi) (cherokee_module_loader_t *loader)
 #endif
 }
 
+
+cherokee_module_info_handler_t MODULE_INFO(cgi) = {
+	.module.type      = cherokee_handler,                 /* type         */
+	.module.new_func  = cherokee_handler_cgi_new,         /* new func     */
+	.module.configure = cherokee_handler_cgi_configure,   /* configure    */
+	.valid_methods    = http_get | http_post | http_head  /* http methods */
+};

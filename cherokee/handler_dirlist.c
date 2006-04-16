@@ -40,7 +40,6 @@
 #endif
 
 #include "list.h"
-#include "list_merge_sort.h"
 #include "util.h"
 #include "connection.h"
 #include "connection-protected.h"
@@ -54,20 +53,68 @@
 #define DEFAULT_NAME_LEN 40
 
 
-cherokee_module_info_handler_t MODULE_INFO(dirlist) = {
-	.module.type     = cherokee_handler,               /* type         */
-	.module.new_func = cherokee_handler_dirlist_new,   /* new func     */
-	.valid_methods   = http_get                        /* http methods */
-};
-
-
 struct file_entry {
-	struct list_head list_entry;
+	list_t           list_entry;
 	struct stat      stat;
 	cuint_t          name_len;
 	struct dirent    info;          /* It *must* be the last entry */
 };
 typedef struct file_entry file_entry_t;
+
+
+static ret_t 
+config_add_header_file (char *key, void *param)
+{
+	return cherokee_list_add_tail (LIST(param), strdup(key));
+}
+
+ret_t 
+cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	ret_t   ret;
+	list_t *i;
+
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+		ret = cherokee_typed_table_instance (props);
+		if (ret != ret_ok) return ret;
+
+		if (equal_buf_str (&subconf->key, "bgcolor") ||
+		    equal_buf_str (&subconf->key, "text")    ||
+		    equal_buf_str (&subconf->key, "link")    ||
+		    equal_buf_str (&subconf->key, "vlink")   ||
+		    equal_buf_str (&subconf->key, "alink")   ||
+		    equal_buf_str (&subconf->key, "background"))
+		{
+			ret = cherokee_typed_table_add_str (*props, subconf->key.buf, subconf->val.buf);
+			if (ret != ret_ok) return ret;
+			
+		} else if (equal_buf_str (&subconf->key, "size")  ||
+			   equal_buf_str (&subconf->key, "date")  ||
+			   equal_buf_str (&subconf->key, "owner") ||
+			   equal_buf_str (&subconf->key, "group"))
+		{
+			ret = cherokee_typed_table_add_str (*props, subconf->key.buf, subconf->val.buf);
+			if (ret != ret_ok) return ret;
+
+		} else if (equal_buf_str (&subconf->key, "header_file")) {
+			list_t list = LIST_HEAD_INIT(list);
+
+			ret = cherokee_config_node_read_list (subconf, NULL, config_add_header_file, &list);
+			if (ret != ret_ok) return ret;
+
+			ret = cherokee_typed_table_add_list (*props, subconf->key.buf, &list, free);
+			if (ret != ret_ok) return ret;			
+
+		} else if (equal_buf_str (&subconf->key, "show_header_file")) {
+			ret = cherokee_typed_table_add_int (*props, subconf->key.buf, atoi(subconf->val.buf));
+			if (ret != ret_ok) return ret;
+		} 
+	}
+
+	return ret_ok;
+}
 
 
 ret_t
@@ -214,9 +261,9 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_tab
 		cherokee_typed_table_get_int (properties, "owner", &n->show_owner);
 		cherokee_typed_table_get_int (properties, "group", &n->show_group);
 
-		cherokee_typed_table_get_list (properties, "headerfile", &n->header_file);
+		cherokee_typed_table_get_list (properties, "header_file", &n->header_file);
 
-		cherokee_typed_table_get_int (properties, "show_headerfile", &n->build_headers);
+		cherokee_typed_table_get_int (properties, "show_header_file", &n->build_headers);
 	}
 
 	*hdl = HANDLER(n);
@@ -305,7 +352,7 @@ read_header_file (cherokee_handler_dirlist_t *dhdl)
 
 
 static int 
-cmp_name_down (struct list_head *a, struct list_head *b)
+cmp_name_down (list_t *a, list_t *b)
 {
 	file_entry_t *f1 = (file_entry_t *)a;
 	file_entry_t *f2 = (file_entry_t *)b;
@@ -315,7 +362,7 @@ cmp_name_down (struct list_head *a, struct list_head *b)
 
 
 static int 
-cmp_size_down (struct list_head *a, struct list_head *b)
+cmp_size_down (list_t *a, list_t *b)
 {
 	int           diff;
 	file_entry_t *f1 = (file_entry_t *)a;
@@ -328,7 +375,7 @@ cmp_size_down (struct list_head *a, struct list_head *b)
 }
 
 static int 
-cmp_date_down (struct list_head *a, struct list_head *b)
+cmp_date_down (list_t *a, list_t *b)
 {
 	int           diff;
 	file_entry_t *f1 = (file_entry_t *)a;
@@ -341,25 +388,25 @@ cmp_date_down (struct list_head *a, struct list_head *b)
 }
 
 static int 
-cmp_name_up (struct list_head *a, struct list_head *b)
+cmp_name_up (list_t *a, list_t *b)
 {
 	return -cmp_name_down(a,b);
 }
 
 static int 
-cmp_size_up (struct list_head *a, struct list_head *b)
+cmp_size_up (list_t *a, list_t *b)
 {
 	return -cmp_size_down(a,b);
 }
 
 static int 
-cmp_date_up (struct list_head *a, struct list_head *b)
+cmp_date_up (list_t *a, list_t *b)
 {
 	return -cmp_date_down(a,b);
 }
 
 static void
-list_sort_by_type (struct list_head *list, cherokee_sort_t sort)
+list_sort_by_type (list_t *list, cherokee_sort_t sort)
 {
 	switch (sort) {
 	case Name_Down:
@@ -543,7 +590,7 @@ render_page_header (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 	 * Print the ordering bar
 	 */
 #ifndef CHEROKEE_EMBEDDED
-	if (icons && (icons->parentdir_icon != NULL))
+	if (icons && (icons->parentdir_icon.len > 0))
 		cherokee_buffer_add_str (buffer, "<img src=\"/icons/blank.png\">");
 	else
 #endif	
@@ -577,9 +624,9 @@ render_page_header (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 	}
 	
 #ifndef CHEROKEE_EMBEDDED
-	if (icons && (icons->parentdir_icon != NULL)) {
+	if (icons && (icons->parentdir_icon.len > 0)) {
 		cherokee_buffer_add_va (buffer, "<img border=\"0\" src=\"/icons/%s\" alt=\"[DIR]\"> <a href=\"..\">Parent Directory</a>\n", 
-					icons->parentdir_icon);
+					icons->parentdir_icon.buf);
 	} else
 #endif	
 		cherokee_buffer_add_str (buffer, "<a href=\"..\">Parent Directory</a>\n");
@@ -614,8 +661,8 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 #ifndef CHEROKEE_EMBEDDED
 	if (icons != NULL) {
-		if (is_dir && (icons->directory_icon != NULL)) {
-			cherokee_buffer_add_va (buffer, "<img border=\"0\" src=\"/icons/%s\" alt=\"[DIR]\"> ", icons->directory_icon);
+		if (is_dir && (icons->directory_icon.len > 0)) {
+			cherokee_buffer_add_va (buffer, "<img border=\"0\" src=\"/icons/%s\" alt=\"[DIR]\"> ", icons->directory_icon.buf);
 		} else {
 			cherokee_icons_get_icon (icons, name, &icon);
 			cherokee_buffer_add_va (buffer, "<img border=\"0\" src=\"/icons/%s\" alt=\"[   ]\"> ", icon);
@@ -758,7 +805,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 ret_t
 cherokee_handler_dirlist_add_headers (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
-	cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);
+	cherokee_buffer_add_str (buffer, "Content-Type: text/html; charset=iso-8859-1"CRLF);
 	return ret_ok;
 }
 
@@ -776,3 +823,11 @@ void
 MODULE_INIT(dirlist) (cherokee_module_loader_t *loader)
 {
 }
+
+
+cherokee_module_info_handler_t MODULE_INFO(dirlist) = {
+	.module.type      = cherokee_handler,                   /* type         */
+	.module.new_func  = cherokee_handler_dirlist_new,       /* new func     */
+	.module.configure = cherokee_handler_dirlist_configure, /* configure */
+	.valid_methods    = http_get                            /* http methods */
+};

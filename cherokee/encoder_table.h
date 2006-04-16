@@ -28,7 +28,6 @@
 #include "common-internal.h"
 
 #include "table.h"
-#include "table-protected.h"
 #include "encoder.h"
 #include "matching_list.h"
 #include "module.h"

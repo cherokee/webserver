@@ -28,6 +28,7 @@
 #include "connection.h"
 #include "connection-protected.h"
 #include "header-protected.h"
+#include "config_entry.h"
 
 ret_t 
 cherokee_validator_init_base (cherokee_validator_t *validator)
@@ -322,3 +323,61 @@ error:
 	return ret;
 }
 
+
+static ret_t
+add_method (char *method, void *data)
+{
+	cherokee_config_entry_t *entry = CONF_ENTRY(data);
+
+	if (equal_str (method, "basic")) 
+		entry->authentication |= http_auth_basic;
+	else if (equal_str (method, "digest")) 
+		entry->authentication |= http_auth_digest;
+	else {
+		PRINT_MSG ("ERROR: Unknown authentication method '%s'\n", method);
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t 
+add_user  (char *val, void *data)
+{
+	return cherokee_table_add (TABLE(data), val, NULL);
+}
+
+
+ret_t 
+cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
+{
+	ret_t                    ret;
+	list_t                  *i;
+	cherokee_config_node_t  *subconf;
+	cherokee_config_entry_t *entry = CONF_ENTRY(config_entry);
+
+	cherokee_config_node_foreach (i, conf) {
+		subconf = CONFIG_NODE(i);
+
+		if (equal_buf_str (&subconf->key, "realm")) {
+			ret = cherokee_buffer_dup (&subconf->val, &entry->auth_realm);
+			if (ret != ret_ok) return ret;
+
+		} else if (equal_buf_str (&subconf->key, "methods")) {
+			ret = cherokee_config_node_read_list (subconf, NULL, add_method, entry);
+			if (ret != ret_ok) return ret;
+
+		} else if (equal_buf_str (&subconf->key, "users")) {
+			if (entry->users == NULL) {
+				cherokee_table_new (&entry->users);
+			}
+			
+			ret = cherokee_config_node_read_list (subconf, NULL, add_user, entry->users);
+			if (ret != ret_ok) return ret;
+
+		} 
+	}
+
+	return ret_ok;
+}

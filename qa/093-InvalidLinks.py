@@ -6,13 +6,18 @@ DIRS    = ["dir1", "dir2", "dir3", "dir4"]
 LINKS   = {"link1": "dir1", "link2": "file1" }
 BLINKS  = {"broken2": "del1", "broken1": "del2"}
 
+CONF = """
+vserver!default!directory!/brokenlinks1!handler = dirlist
+vserver!default!directory!/brokenlinks1!priority = 930
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "Broken links"
 
         self.request           = "GET /brokenlinks1/ HTTP/1.0\r\n"
-        self.conf              = "Directory /brokenlinks1 { Handler dirlist }"
+        self.conf              = CONF
         self.expected_error    = 200
         self.expected_content  = FILES + DIRS + LINKS.keys()
 

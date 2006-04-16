@@ -6,6 +6,13 @@ REALM  = "realm"
 USER   = "username"
 PASSWD = ""
 
+CONF = """
+vserver!default!directory!/digest_empty!auth = plain
+vserver!default!directory!/digest_empty!auth!methods = digest
+vserver!default!directory!/digest_empty!auth!realm = %s
+vserver!default!directory!/digest_empty!auth!passwdfile = %s
+vserver!default!directory!/digest_empty!priority = 1300
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -48,13 +55,4 @@ class Test (TestBase):
 
         # Set the configuration
         #
-        self.conf             = """
-           Directory /digest_empty {
-               Handler file
-               Auth Digest {
-                  Name "%s"
-                  Method plain {
-                    PasswdFile %s
-                  }
-               }
-           }""" % (REALM, passfile)
+        self.conf = CONF % (REALM, passfile)

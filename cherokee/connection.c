@@ -1404,7 +1404,6 @@ cherokee_connection_get_request (cherokee_connection_t *cnt)
 		/* Set the virtual host reference
 		 */
 		cherokee_table_get (CONN_SRV(cnt)->vservers_ref, cnt->host.buf, &cnt->vserver);
-
 		break;
 
 	default:

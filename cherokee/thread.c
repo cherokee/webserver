@@ -756,8 +756,10 @@ process_active_connections (cherokee_thread_t *thd)
 			conn->phase = phase_setup_connection;
 			
 		case phase_setup_connection: {
-			cherokee_config_entry_t entry;
-			cherokee_boolean_t      matched_req;
+			cherokee_config_entry_t     entry; 
+			cherokee_virtual_entries_t *ventry;
+			cherokee_boolean_t          matched_req;
+			cherokee_boolean_t          is_userdir;
 
 			TRACE (ENTRIES, "Setup connection begins: request=\"%s\"\n", conn->request.buf);
 
@@ -780,57 +782,48 @@ process_active_connections (cherokee_thread_t *thd)
 			}
 
 			cherokee_config_entry_init (&entry);
+
+			/* Choose the virtual entries table
+			 */
+			is_userdir = ((CONN_VSRV(conn)->userdir.len > 0) && (conn->userdir.len > 0));
+
+			if (is_userdir) {
+				ventry = &CONN_VSRV(conn)->userdir_entry;
+			} else {
+				ventry = &CONN_VSRV(conn)->entry;
+			}
 			
 			/* 1.- Read the extension configuration
 			 */
-			if (CONN_VSRV(conn)->exts != NULL) 
-			{
-				ret = cherokee_connection_get_ext_entry (conn, CONN_VSRV(conn)->exts, &entry);
+			if (ventry->exts != NULL) {
+				ret = cherokee_connection_get_ext_entry (conn, ventry->exts, &entry);
 				if (unlikely (ret != ret_ok)) {
 					cherokee_connection_setup_error_handler (conn);
 					conn->phase = phase_init;
 					continue;
-				}				
+				}
 			}
 
 			/* 2.- Read the directory configuration
 			 */
-			if (!cherokee_buffer_is_empty (&CONN_VSRV(conn)->userdir) &&
-			    !cherokee_buffer_is_empty (&conn->userdir))
-			{
-				ret = cherokee_connection_get_dir_entry (conn, CONN_VSRV(conn)->userdir_dirs, &entry);
-				switch (ret) {
-				case ret_not_found:
-					break;
-				case ret_ok:
-					if (cherokee_buffer_is_empty (&conn->local_directory)) {
+			ret = cherokee_connection_get_dir_entry (conn, &ventry->dirs, &entry);
+			switch (ret) {
+			case ret_not_found:
+				break;
+			case ret_ok:
+				if (cherokee_buffer_is_empty (&conn->local_directory)) {
+					if (is_userdir) 
 						ret = cherokee_connection_build_local_directory_userdir (conn, CONN_VSRV(conn), &entry);
-					}
-					break;
-				default:
-					cherokee_connection_setup_error_handler (conn);
-					conn->phase = phase_init;
-					continue;
-				}
-				
-			} else {
-
-				ret = cherokee_connection_get_dir_entry (conn, &CONN_VSRV(conn)->dirs, &entry);
-				switch (ret) {
-				case ret_not_found:
-					break;
-				case ret_ok:
-					if (cherokee_buffer_is_empty (&conn->local_directory)) {
+					else
 						ret = cherokee_connection_build_local_directory (conn, CONN_VSRV(conn), &entry);
-					}
-					break;
-				default:
-					cherokee_connection_setup_error_handler (conn);
-					conn->phase = phase_init;
-					continue;
 				}
-
+				break;
+			default:
+				cherokee_connection_setup_error_handler (conn);
+				conn->phase = phase_init;
+				continue;
 			}
+
 			if (unlikely (ret == ret_error)) {
 				cherokee_connection_setup_error_handler (conn);
 				conn->phase = phase_init;
@@ -840,9 +833,8 @@ process_active_connections (cherokee_thread_t *thd)
 			/* 3.- Read Request configurations
 			 */
 			matched_req = false;
-			if (! list_empty (&CONN_VSRV(conn)->reqs)) 
-			{
-				ret = cherokee_connection_get_req_entry (conn, &CONN_VSRV(conn)->reqs, &entry);
+			if (! list_empty (&ventry->reqs)) {
+				ret = cherokee_connection_get_req_entry (conn, &ventry->reqs, &entry);
 				switch (ret) {
 				case ret_ok:
 					matched_req = true;

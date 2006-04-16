@@ -86,40 +86,50 @@ if type(pause) == types.StringType:
         pause = sys.maxint
 
 # Configuration file base
-CONF_BASE = """# Cherokee QA tests
-               Port %d
-               Keepalive On
-               Listen 127.0.0.1
-               DocumentRoot %s
-               PanicAction /usr/bin/cherokee-panic
-               Directory / { Handler common }
-               DirectoryIndex test_index.html, test_index.php, /super_test_index.php
-               Encoder gzip { allow txt }
-               MimeFile /etc/cherokee/mime.types
-            """ % (PORT, www)
+CONF_BASE = """
+#
+# Cherokee QA tests
+#
+server!port =  %d
+server!keepalive = 1 
+server!listen = 127.0.0.1
+server!panic_action = /usr/bin/cherokee-panic
+server!encoder!gzip!allow = txt
+server!mime_file = /etc/cherokee/mime.types
+
+vserver!default!document_root = %s
+vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php
+vserver!default!directory!/!handler = common
+vserver!default!directory!/!priority = 1
+""" % (PORT, www)
+
+PHP_FCGI = """extensions!php!handler = fcgi
+extensions!php!priority = 10000
+extensions!php!handler!server!local1!host = localhost:%d
+extensions!php!handler!server!local1!env!PHP_FCGI_CHILDREN = 5
+extensions!php!handler!server!local1!interpreter = %s -b %d""" % (PHP_FCGI_PORT, PHPCGI_PATH, PHP_FCGI_PORT)
+
+PHP_CGI = """extensions!php!handler = phpcgi
+extensions!php!priority = 10000
+extensions!php!handler!interpreter = %s""" % (PHPCGI_PATH)
+
 
 if fcgi:
-    PHP_EXTENSION = """Extension php {
-                      Handler fcgi {
-                         Server localhost:%d {
-                           Env PHP_FCGI_CHILDREN "5"
-                           Interpreter "%s -b %d"
-                         }
-                      }
-                  }""" % (PHP_FCGI_PORT, PHPCGI_PATH, PHP_FCGI_PORT)
+    php_ext = PHP_FCGI
 else:
-    PHP_EXTENSION = "Extension php { Handler phpcgi { Interpreter %s } }" % (PHPCGI_PATH)
+    php_ext = PHP_CGI
 
+for php in php_ext.split("\n"):
+    CONF_BASE += "vserver!default!%s\n" % (php)
 
 if ssl:
-    CONF_BASE += """SSLCertificateFile    %s
-                   SSLCertificateKeyFile %s
-                   SSLCAListFile         %s
+    CONF_BASE += """vserver!default!ssl_certificate_file = %s
+                    vserver!default!ssl_certificate_key_file = %s
+                    vserver!default!ssl_cal_list_file = %s
                  """ % (SSL_CERT_FILE, SSL_CERT_KEY_FILE, SSL_CA_FILE)
 
 if method:
-    CONF_BASE += """ PollMethod %s
-                 """ % (method)
+    CONF_BASE += "server!poll_method = %s" % (method)
 
 # Import modules 
 mods = []
@@ -135,7 +145,7 @@ for m in mods:
     # properties are added here!
     obj.tmp      = tmp
     obj.nobody   = nobody
-    obj.php_conf = PHP_EXTENSION
+    obj.php_conf = php_ext
     objs.append(obj)
 
 # Prepare www files
@@ -149,7 +159,7 @@ for obj in objs:
         mod_conf += obj.conf+"\n"
 
 # Write down the configuration file
-cfg = CONF_BASE + mod_conf + PHP_EXTENSION
+cfg = CONF_BASE + mod_conf
 cfg_file = tempfile.mktemp("cherokee_tmp_cfg")
 cfg_fd = open (cfg_file, 'w')
 cfg_fd.write (cfg)

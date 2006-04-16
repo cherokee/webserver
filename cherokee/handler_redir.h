@@ -37,8 +37,6 @@ typedef struct {
 	int                   target_url_len;
 
 	list_t               *regex_list_ref;
-	void                 *regex_list_cre;
-
 	cherokee_boolean_t    use_previous_match;
 
 } cherokee_handler_redir_t;

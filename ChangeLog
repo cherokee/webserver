@@ -1,3 +1,110 @@
+2006-04-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* Makefile.am, sites-default.sample.pre, cherokee/handler_redir,
+	cherokee/handler_redir.h, cherokee/module_loader.c,
+	cherokee/handler_server_info.c, cherokee/module_loader.h,
+	cherokee/dict.c, cherokee/dict.h, cherokee/handler_cgi_base.c,
+	cherokee/resolv_cache.c, cherokee/handler_cgi_base.h,
+	cherokee/access.c, cherokee/handler_dirlist.c,
+	cherokee/module_loader-protected.h, cherokee/list.c,
+	cherokee/handler_dirlist.h, cherokee/virtual_server.c,
+	cherokee/list.h, cherokee/virtual_server.h,
+	cherokee/handler_common.c, cherokee/cherokee_show.c,
+	cherokee/config_entry.c, cherokee/module.h,
+	cherokee/config_entry.h, cherokee/request.h, cherokee/avl,
+	cherokee/validator_plain.c, cherokee/reqs_list.h,
+	cherokee/ext_source.c, cherokee/avl.c, cherokee/ext_source.h,
+	cherokee/validator.c, cherokee/avl.h, cherokee/exts_table.c,
+	cherokee/validator.h, cherokee/encoder_table.h,
+	cherokee/typed_table.c, cherokee/main_admin.c,
+	cherokee/typed_table.h, cherokee/validator_htpasswd.c,
+	cherokee/thread.c, cherokee/buffer.c, cherokee/handler_file.c,
+	cherokee/thread.h, cherokee/buffer.h, cherokee/main.c,
+	cherokee/Makefile.am, cherokee/handler_fcgi.c,
+	cherokee/session_cache.c, cherokee/config_node.c,
+	cherokee/icons.c, cherokee/session_cache.h,
+	cherokee/config_node.h, cherokee/icons.h, cherokee/handler_scgi.c,
+	cherokee/handler_error.c, cherokee/table.c, cherokee/list_ext.c,
+	cherokee/logger_table.h, cherokee/table.h, cherokee/handler_cgi.c,
+	cherokee/list_ext.h, cherokee/dict, cherokee/server-protected.h,
+	cherokee/handler_cgi.h, cherokee/module_read_config.c,
+	cherokee/module_read_config.h, cherokee/admin_server.c,
+	cherokee/connection_info.h, cherokee/validator_htdigest.c,
+	cherokee/mime-protected.h, cherokee/table-protected.h,
+	cherokee/matching_list.c, cherokee/cherokee.h,
+	cherokee/matching_list.h, cherokee/iocache.c,
+	cherokee/connection.c, cherokee/list_merge_sort.c,
+	cherokee/list_merge_sort.h, cherokee/server.c,
+	cherokee/handler_phpcgi.c, cherokee/dirs_table.c,
+	cherokee/mime_entry.c, cherokee/server.h, cherokee/dirs_table.h,
+	cherokee/virtual_entries.c, cherokee/validator_pam.c,
+	cherokee/virtual_entries.h, cherokee/socket.c,
+	cherokee/connection-protected.h, cherokee/reqs_list_entry.h,
+	windows/cherokee.nsi.in, cherokee_logrotate.1,
+	doc/develop/Intro.txt, cherokee.1, configure.in, README: Many
+	changes mixed together in here: 1.- The list and AVL
+	implementations are new.  2.- I've added a new configuration
+	system much more generic than the previous one (it doesn't require
+	yacc or lex any longer! but it isn't meant to be written by hand
+	though). 3.- Most of the modules have been updated to read its
+	configuration with the new method.
+
+	* qa/031-Post+urlencoded2.py, qa/112-NiceError-CGI.py,
+	qa/034-DirIndex2.py, qa/083-RedirParam.py,
+	qa/125-domain-redir1.py, qa/080-Extension2.py, qa/070-Inherit.py,
+	qa/104-ScriptAlias_PathInfo.py, qa/091-Digest2.py,
+	qa/029-Post+Without-lenght.py, qa/127-SCGI-Post.py,
+	qa/086-AuthUsers2.py, qa/020-VirtualHost.py, qa/087-Location.py,
+	qa/015-CGI-simple.py, qa/082-Auth-header.py, qa/047-Redir2.py,
+	qa/017-CGI-pathinfo2.py, qa/042-Pipelining.py,
+	qa/118-Request-redir.py, qa/040-Auth-Basic2.py,
+	qa/107-Priority1.py, qa/108-Priority2.py, qa/033-DirIndex.py,
+	qa/076-AccessRange2.py, qa/109-Priority3.py,
+	qa/089-gzip-encoding.py, qa/037-PHP-post.py, qa/061-PAM.py,
+	qa/043-Pipelining2.py, qa/075-AccessRange.py, qa/072-Inherit3.py,
+	qa/093-InvalidLinks.py, qa/097-htpasswd-sha1.py, qa/run-tests.py,
+	qa/073-Access.py, qa/046-Redir.py, qa/117-DomainToDir.py,
+	qa/045-Home2.py, qa/081-DocumentRoot-Common-index.py,
+	qa/066-DirectoryIndex3.py, qa/063-DocumentRoot.py,
+	qa/071-Inherit2.py, qa/126-SCGI.py, qa/102-QueryString.py,
+	qa/128-ValidMethod-common.py, qa/124-DomainToDir2.py,
+	qa/062-PAM2.py, qa/041-Auth-Basic3.py, qa/122-Methods.py,
+	qa/098-htpasswd-crypt.py, qa/016-CGI-pathinfo.py, qa/001-basic.py,
+	qa/044-Home.py, qa/116-RequestTiny.py, qa/021-VirtualHost2.py,
+	qa/121-NoUserDir.py, qa/077-AccessRange3.py, qa/035-PHP-simple.py,
+	qa/065-DirectoryIndex2.py, qa/088-CGI-envs.py,
+	qa/085-AuthUsers.py, qa/131-ChangeUser-phpcgi.py,
+	qa/018-CGI-pathinfo3.py, qa/094-URL-request.py,
+	qa/110-Priority4.py, qa/123-ImplicitRedit.py,
+	qa/099-htpasswd-plain.py, qa/050-HeadBody.py, qa/079-Extension.py,
+	qa/113-HeaderFile.py, qa/074-Access2.py, qa/096-htpasswd-md5.py,
+	qa/084-RedirParamShow.py, qa/049-NN-broken.py,
+	qa/064-DirectoryIndex.py, qa/030-Post+urlencoded.py,
+	qa/068-PathInfo2.py, qa/069-PathInfo3.py, qa/092-Digest3.py,
+	qa/095-htpasswd-apache-md5.py, qa/067-PathInfo.py, qa/048-NN.py,
+	qa/039-Auth-Basic.py, qa/105-If-Range.py,
+	qa/130-Digest-EmptyPasswd.py, qa/115-Respin.py,
+	qa/103-ScriptName.py, qa/129-Basic-EmptyPasswd.py,
+	qa/114-HeaderFile2.py, qa/106-If-Range2.py,
+	qa/036-DocumentRoot-common.py, qa/090-Digest.py,
+	qa/078-AccessAny.py, qa/100-Digest-htdigest.py: Rewritten using
+	the new configuration file syntax.
+
+2006-04-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_dirlist.c (cherokee_handler_dirlist_add_headers):
+	Added charset entry into Content-Type header.
+
+2006-04-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main.c (common_server_initialization): PID file must to
+	written before the server changes its user identity.
+
+	* cherokee.1, cherokee_logrotate.1, doc/develop/Intro.txt, README,
+	sites-default.sample.pre, windows/cherokee.nsi.in: URL poiting to
+	alobbs.com has been fixed to point to 0x50.org.  Patch by Gunnar
+	Wolf <gwolf@gwolf.org>
+	
 2006-04-08  Rodrigo Fernandez-Vizarra  <rfdzvizarra@yahoo.ie>
 
 	* cget/main.c: Modified cget not to use the event interface of the
@@ -12,6 +119,25 @@
 
 	* cherokee/downloader.h: Added interface to query the status of a
 	download
+
+2006-04-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/buffer.c (cherokee_buffer_dup): New method.
+
+2006-04-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/macros.h (equal_str, equal_buf_str): Added new macros
+
+2006-04-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/module_loader.c,
+	cherokee/module_loader.h (cherokee_module_loader_get): New method.
+
+	* cherokee/icons.c (cherokee_icons_configure): Added.
+
+	* cherokee/icons.h,
+	cherokee/icons.c (cherokee_icons_read_config_file,
+	cherokee_icons_read_config_string): Removed.
 
 2006-04-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 

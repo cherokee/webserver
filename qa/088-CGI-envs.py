@@ -6,6 +6,12 @@ ENV2_NAME  = "SECOND"
 ENV1_VALUE = "Value1"
 ENV2_VALUE = "This is the second one"
 
+CONF = """
+vserver!default!directory!/cgienvs!handler = cgi
+vserver!default!directory!/cgienvs!handler!env!%s = %s
+vserver!default!directory!/cgienvs!handler!env!%s = %s
+vserver!default!directory!/cgienvs!priority = 880
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -13,7 +19,9 @@ class Test (TestBase):
         self.name = "CGI env variables"
 
         self.request           = "GET /cgienvs/cgi.cgi HTTP/1.0\r\n"
-        self.conf              = """Directory /cgienvs/ {
+        self.conf              = CONF % (ENV1_NAME, ENV1_VALUE, ENV2_NAME, ENV2_VALUE)
+
+        self.conf2              = """Directory /cgienvs/ {
                                     Handler cgi {
                                       Env %s "%s"
                                       Env %s "%s"
@@ -33,4 +41,3 @@ class Test (TestBase):
                         echo "Env1 %s = $%s"
                         echo "Env2 %s = $%s"
                         """ % (ENV1_NAME, ENV1_NAME, ENV2_NAME, ENV2_NAME))
-

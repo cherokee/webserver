@@ -22,13 +22,39 @@
  * USA
  */
 
-#ifndef MODULE_LOADER_PROTECTED_H
-#define MODULE_LOADER_PROTECTED_H
+#include "common-internal.h"
+#include "virtual_entries.h"
 
-#include "table.h"
 
-struct cherokee_module_loader {
-	cherokee_table_t *table;
-};
+ret_t 
+cherokee_virtual_entries_init (cherokee_virtual_entries_t *ventry)
+{
+	ret_t ret;
+	
+	ventry->exts = NULL;
+	INIT_LIST_HEAD (&ventry->reqs);
+	
+	ret = cherokee_dirs_table_init (&ventry->dirs);
+	if (unlikely(ret < ret_ok)) return ret;
 
-#endif /* MODULE_LOADER_PROTECTED_H */
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_virtual_entries_mrproper (cherokee_virtual_entries_t *ventry)
+{
+	cherokee_dirs_table_mrproper (&ventry->dirs);
+
+	if (!list_empty (&ventry->reqs)) {
+		cherokee_reqs_list_mrproper (&ventry->reqs);
+	}
+
+	if (ventry->exts != NULL) {
+		cherokee_exts_table_free (ventry->exts);
+		ventry->exts = NULL;
+	}
+
+	return ret_ok;
+}
+

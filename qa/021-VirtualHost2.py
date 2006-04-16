@@ -1,6 +1,13 @@
 from base import *
 
-MAGIC = "Virtual Host test magic string II"
+MAGIC = "Second virtual Host test magic string"
+
+CONF = """
+vserver!first.domain!document_root = %s
+vserver!first.domain!alias = second.domain
+vserver!first.domain!directory!/!handler = common
+vserver!first.domain!directory!/!priority = 10
+"""
 
 class Test (TestBase):
     def __init__ (self):
@@ -13,11 +20,8 @@ class Test (TestBase):
         self.expected_content = MAGIC
 
     def Prepare (self, www):
-        dir = self.Mkdir (www, "vhost2")
-        self.WriteFile (www, "vhost2/file", 0444, MAGIC)
-        
-        self.conf = """Server first.domain, second.domain {
-                         DocumentRoot %s
-                         Directory / { Handler common }
-                    }""" % (dir)
+        d = self.Mkdir (www, "vhost2")
+        self.WriteFile (d, "file", 0444, MAGIC)
+
+        self.conf = CONF % (d)
 

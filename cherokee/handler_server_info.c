@@ -256,7 +256,7 @@ build_modules_table_content_while (const char *key, void *value, void *params[])
 		PRINT_ERROR("Unknown module type (%d)\n", mod->type);
 	}
 
-	return 1;
+	return 0;
 }
 
 static void
@@ -296,9 +296,9 @@ server_info_build_logo (cherokee_handler_server_info_t *hdl)
 static void
 build_icons_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
-	table_add_row_str (buf, "Default icon", (srv->icons->default_icon) ? srv->icons->default_icon : "");
-	table_add_row_str (buf, "Directory icon", (srv->icons->directory_icon) ? srv->icons->directory_icon : "");
-	table_add_row_str (buf, "Parent directory icon", (srv->icons->parentdir_icon) ? srv->icons->parentdir_icon : "");
+	table_add_row_str (buf, "Default icon", (srv->icons->default_icon.len > 0) ? srv->icons->default_icon.buf : "");
+	table_add_row_str (buf, "Directory icon", (srv->icons->directory_icon.len > 0) ? srv->icons->directory_icon.buf : "");
+	table_add_row_str (buf, "Parent directory icon", (srv->icons->parentdir_icon.len > 0) ? srv->icons->parentdir_icon.buf : "");
 }
 
 static void

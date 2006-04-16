@@ -13,12 +13,17 @@ DOCUMENTATION = """
    to be built independently of the data being transferred.
 """
 
+CONF = """
+vserver!default!directory!/if_range2!handler = file
+vserver!default!directory!/if_range2!priority = 1060
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "If-Range header, 206 error"
 
-        self.conf              = "Directory /if_range2 { Handler file }"
+        self.conf              = CONF
         self.expected_error    = 206
         self.forbidden_content = DOCUMENTATION
 

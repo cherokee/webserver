@@ -26,7 +26,7 @@
 #include "mime_entry.h"
 
 struct cherokee_mime_entry {
-	struct list_head   base;
+	list_t             base;
 
 	cuint_t            maxage;
 	cherokee_boolean_t maxage_set;

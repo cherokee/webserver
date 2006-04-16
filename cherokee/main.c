@@ -94,16 +94,15 @@ common_server_initialization (cherokee_server_t *srv)
 		return ret_error;
 	}
 		
+	if (daemon_mode)
+		cherokee_server_daemonize (srv);
+
+	cherokee_server_write_pidfile (srv);
+
 	ret = cherokee_server_init (srv);
 	if (ret != ret_ok) return ret_error;
 
-	if (daemon_mode) {
-		cherokee_server_daemonize (srv);
-	}
-
-	cherokee_server_write_pidfile (srv);
 	cherokee_server_unlock_threads (srv);
-
 	return ret_ok;
 }
 

@@ -27,7 +27,6 @@
 
 #include "list.h"
 #include "table.h"
-#include "table-protected.h"
 
 struct cherokee_mime {
 	cherokee_table_t mime_table;

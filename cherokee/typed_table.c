@@ -305,3 +305,13 @@ cherokee_typed_table_update_str  (cherokee_table_t *table, char *index, char *st
 	val->data.str = str;
 	return ret_ok;
 }
+
+
+ret_t 
+cherokee_typed_table_instance (cherokee_table_t **table)
+{
+	if (*table != NULL)
+		return ret_ok;
+
+	return cherokee_table_new (table);
+}

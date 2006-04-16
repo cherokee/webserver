@@ -103,7 +103,6 @@ cherokee_buffer_clean (cherokee_buffer_t *buf)
 	return ret_ok;
 }
 
-
 void
 cherokee_buffer_swap_buffers (cherokee_buffer_t *buf, cherokee_buffer_t *second)
 {
@@ -122,6 +121,23 @@ cherokee_buffer_swap_buffers (cherokee_buffer_t *buf, cherokee_buffer_t *second)
 	second->buf = tmp_buf;
 	second->len = tmp_len;
 	second->size = tmp_size;
+}
+
+ret_t 
+cherokee_buffer_dup (cherokee_buffer_t *buf, cherokee_buffer_t **dup)
+{
+	CHEROKEE_NEW_STRUCT(n, buffer);
+
+	n->buf = (char *) malloc(buf->len + 1);
+	if (unlikely(n->buf == NULL)) return ret_nomem;
+
+	memcpy (n->buf, buf->buf, buf->len + 1);
+
+	n->len  = buf->len;
+	n->size = buf->len + 1;
+
+	*dup = n;
+	return ret_ok;
 }
 
 

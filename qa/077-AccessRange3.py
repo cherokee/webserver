@@ -3,6 +3,10 @@ from os import system
 
 MAGIC = "Allow From range invalid"
 
+CONF = """
+vserver!default!directory!/allow_range3!allow_from = 123.123.0.0/16,0102::/16
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -10,12 +14,7 @@ class Test (TestBase):
         self.request           = "GET /allow_range3/file HTTP/1.0\r\n"
         self.expected_error    = 403
         self.forbidden_content = MAGIC
-        self.conf              = """
-              Directory /allow_range3/ {
-                 Handler file
-                 Allow from 123.123.0.0/16, 0102::/16
-              }
-              """
+        self.conf              = CONF
 
     def Prepare (self, www):
         self.Mkdir (www, "allow_range3")

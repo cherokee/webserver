@@ -70,7 +70,8 @@ cherokee_handler_error_free (cherokee_handler_error_t *hdl)
 static ret_t
 build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *buffer)
 {
-	cuint_t port;
+	cuint_t            port;
+	cherokee_buffer_t *escaped = NULL;
 
 	cherokee_buffer_add_str (buffer, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">" CRLF);
 	   
@@ -106,7 +107,12 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 	case http_bad_request:
 		cherokee_buffer_add_str (buffer, 
 					 "Your browser sent a request that this server could not understand.");
-		cherokee_buffer_add_va (buffer, "<p><pre>%s</pre>", cnt->header.input_buffer->buf);
+
+		cherokee_buffer_escape_html (cnt->header.input_buffer, &escaped);
+		if (escaped == NULL)
+			cherokee_buffer_add_va (buffer, "<p><pre>%s</pre>", cnt->header.input_buffer->buf);
+		else
+			cherokee_buffer_add_va (buffer, "<p><pre>%s</pre>", escaped->buf);
 		break;
         case http_access_denied:
 		cherokee_buffer_add_str (buffer, "You have no access to the request URL");

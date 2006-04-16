@@ -34,7 +34,6 @@
 #include "resolv_cache.h"
 #include "util.h"
 #include "table.h"
-#include "table-protected.h"
 
 
 struct cherokee_resolv_cache {

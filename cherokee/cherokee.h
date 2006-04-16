@@ -39,8 +39,6 @@
 #include <cherokee/list.h>
 #include <cherokee/mime_entry.h>
 #include <cherokee/mime.h>
-#include <cherokee/list.h>
-#include <cherokee/list_merge_sort.h>
 #include <cherokee/url.h>
 #include <cherokee/header.h>
 #include <cherokee/resolv_cache.h>

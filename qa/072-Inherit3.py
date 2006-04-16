@@ -3,6 +3,15 @@ from base import *
 COMMENT = "/* This is a PHP comment */"
 MAGIC   = "This is th magic string"
 
+CONF = """
+vserver!default!directory!/inherit3/dir1/dir2/dir3!handler = phpcgi
+vserver!default!directory!/inherit3/dir1/dir2/dir3!interpreter = %s
+vserver!default!directory!/inherit3/dir1/dir2/dir3!priority = 720
+
+vserver!default!directory!/inherit3!handler = file
+vserver!default!directory!/inherit3!priority = 721
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
@@ -11,17 +20,7 @@ class Test (TestBase):
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.forbidden_content = COMMENT
-        self.conf              = """
-              Directory /inherit3 {
-                 Handler file
-              }
-
-              Directory /inherit3/dir1/dir2/dir3 {
-                  Handler phpcgi {
-                    Interpreter %s
-                  }
-              }
-              """ % (PHPCGI_PATH)
+        self.conf              = CONF % (PHPCGI_PATH)
 
     def Prepare (self, www):
         self.Mkdir (www, "inherit3/dir1/dir2/dir3")

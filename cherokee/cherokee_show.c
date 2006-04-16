@@ -46,7 +46,7 @@ main (int argc, char *argv[])
 
 	cuint_t                     port;
 	cherokee_buffer_t           buf;
-	LIST_HEAD(conns);
+	list_t                      conns = LIST_HEAD_INIT(conns);
 
 	if (argc <= 1) {
 		PRINT_ERROR ("%s url request\n", argv[0]);

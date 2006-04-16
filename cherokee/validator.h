@@ -31,6 +31,7 @@
 #include "table.h"
 #include "http.h"
 #include "connection.h"
+#include "config_node.h"
 
 
 /* Callback function definitions
@@ -74,6 +75,7 @@ typedef struct {
 
 ret_t cherokee_validator_init_base (cherokee_validator_t *validator);
 ret_t cherokee_validator_free_base (cherokee_validator_t *validator);   
+ret_t cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry);
 
 ret_t cherokee_validator_free         (cherokee_validator_t *validator);
 ret_t cherokee_validator_check        (cherokee_validator_t *validator, void *conn);
