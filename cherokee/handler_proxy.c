@@ -44,12 +44,12 @@
 #define ENTRIES "proxy,handler"
 
 
-cherokee_module_info_handler_t MODULE_INFO(proxy) = {
-	.module.type     = cherokee_handler,                 /* type         */
-	.module.new_func = cherokee_handler_proxy_new,       /* new func     */
-	.valid_methods   = http_get | http_post | http_head  /* http methods */
-};
 
+ret_t 
+cherokee_handler_proxy_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+{
+	return ret_ok;
+}
 
 ret_t
 cherokee_handler_proxy_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties)
@@ -290,3 +290,9 @@ MODULE_INIT(proxy) (cherokee_module_loader_t *loader)
 {
 }
 
+cherokee_module_info_handler_t MODULE_INFO(proxy) = {
+	.module.type      = cherokee_handler,                  /* type         */
+	.module.new_func  = cherokee_handler_proxy_new,        /* new func     */
+	.module.configure = cherokee_handler_proxy_configure,  /* configure    */
+	.valid_methods    = http_get | http_post | http_head   /* http methods */
+};
