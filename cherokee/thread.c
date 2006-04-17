@@ -950,7 +950,9 @@ process_active_connections (cherokee_thread_t *thd)
 			/* If it is an error, and the connection has not a handler to manage
 			 * this error, the handler has to be changed
 			 */
- 			if ((http_type_300(conn->error_code) || http_type_400(conn->error_code)) &&
+ 			if ((http_type_300(conn->error_code) || 
+			     http_type_400(conn->error_code) ||
+			     http_type_500(conn->error_code)) &&
 			    conn->handler && (!HANDLER_SUPPORT_ERROR(conn->handler)))
 			{
 				/* Try to setup an error handler
