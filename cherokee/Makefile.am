@@ -9,7 +9,8 @@ $(PTHREAD_CFLAGS) \
 -DCHEROKEE_DEPSDIR=\""$(cherokeedepsdir)"\" \
 -DCHEROKEE_DATADIR=\""$(cherokeedatadir)"\" \
 -DCHEROKEE_CONFDIR=\""$(sysconfdir)/cherokee"\" \
--DCHEROKEE_ICONSDIR=\""$(prefix)/share/cherokee/icons"\"
+-DCHEROKEE_ICONSDIR=\""$(prefix)/share/cherokee/icons"\" \
+-DCHEROKEE_THEMEDIR=\""$(prefix)/share/cherokee/themes"\"
 
 #
 # Scripts

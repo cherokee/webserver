@@ -62,63 +62,185 @@ struct file_entry {
 typedef struct file_entry file_entry_t;
 
 
-static ret_t 
-config_add_header_file (char *key, void *param)
+
+static ret_t
+load_theme_load_file (cherokee_buffer_t *theme_path, char *file, cherokee_buffer_t *output)
 {
-	return cherokee_list_add_tail (LIST(param), strdup(key));
+	cherokee_buffer_t path = CHEROKEE_BUF_INIT;
+
+	cherokee_buffer_add_buffer (&path, theme_path);
+	cherokee_buffer_add (&path, file, strlen(file));
+	
+	cherokee_buffer_clean (output);
+	cherokee_buffer_read_file (output, path.buf);
+
+	cherokee_buffer_mrproper (&path);
+	return ret_ok;
 }
 
-ret_t 
-cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+static ret_t
+parse_if (cherokee_buffer_t *buf, char *if_entry, cherokee_boolean_t show)
 {
-	ret_t   ret;
-	list_t *i;
+	char              *begin;
+	char              *end;
+	cherokee_buffer_t  token = CHEROKEE_BUF_INIT;
+	
+	cherokee_buffer_add_str (&token, "%if ");
+	cherokee_buffer_add (&token, if_entry, strlen(if_entry));
+	cherokee_buffer_add_str (&token, "%");
 
-	cherokee_config_node_foreach (i, conf) {
-		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+	begin = strstr (buf->buf, token.buf);
+	if (begin == NULL) goto error;
+	
+	end = strstr (begin, "%fi%");
+	if (end == NULL) goto error;
 
-		ret = cherokee_typed_table_instance (props);
-		if (ret != ret_ok) return ret;
-
-		if (equal_buf_str (&subconf->key, "bgcolor") ||
-		    equal_buf_str (&subconf->key, "text")    ||
-		    equal_buf_str (&subconf->key, "link")    ||
-		    equal_buf_str (&subconf->key, "vlink")   ||
-		    equal_buf_str (&subconf->key, "alink")   ||
-		    equal_buf_str (&subconf->key, "background"))
-		{
-			ret = cherokee_typed_table_add_str (*props, subconf->key.buf, strdup(subconf->val.buf));
-			if (ret != ret_ok) return ret;
-			
-		} else if (equal_buf_str (&subconf->key, "size")  ||
-			   equal_buf_str (&subconf->key, "date")  ||
-			   equal_buf_str (&subconf->key, "owner") ||
-			   equal_buf_str (&subconf->key, "group"))
-		{
-			ret = cherokee_typed_table_add_str (*props, subconf->key.buf, strdup(subconf->val.buf));
-			if (ret != ret_ok) return ret;
-
-		} else if (equal_buf_str (&subconf->key, "header_file")) {
-			list_t list = LIST_HEAD_INIT(list);
-
-			ret = cherokee_config_node_read_list (subconf, NULL, config_add_header_file, &list);
-			if (ret != ret_ok) return ret;
-
-			ret = cherokee_typed_table_add_list (*props, subconf->key.buf, &list, free);
-			if (ret != ret_ok) return ret;			
-
-		} else if (equal_buf_str (&subconf->key, "show_header_file")) {
-			ret = cherokee_typed_table_add_int (*props, subconf->key.buf, atoi(subconf->val.buf));
-			if (ret != ret_ok) return ret;
-		} 
+	if (show) {
+		cherokee_buffer_remove_chunk (buf, end - buf->buf, 4);		
+		cherokee_buffer_remove_chunk (buf, begin - buf->buf, token.len);
+	} else {
+		cherokee_buffer_remove_chunk (buf, begin - buf->buf, (end+4) - begin);
 	}
+
+	cherokee_buffer_mrproper (&token);
+	return ret_ok;	
+error:
+	cherokee_buffer_mrproper (&token);
+	return ret_error;	
+}
+
+static ret_t
+parse_macros_in_buffer (cherokee_buffer_t *buf, cherokee_handler_dirlist_props_t *props)
+{
+	parse_if (buf, "size",  props->show_size);
+	parse_if (buf, "date",  props->show_date);
+	parse_if (buf, "user",  props->show_user);
+	parse_if (buf, "group", props->show_group);
 
 	return ret_ok;
 }
 
+static ret_t
+load_theme (cherokee_buffer_t *theme_path, cherokee_handler_dirlist_props_t *props)
+{
+	load_theme_load_file (theme_path, "header.html", &props->header);
+	load_theme_load_file (theme_path, "footer.html", &props->footer);
+	load_theme_load_file (theme_path, "entry.html", &props->entry);
+	load_theme_load_file (theme_path, "theme.css", &props->css);
+
+	/* Check it
+	 */
+	if ((cherokee_buffer_is_empty (&props->header) ||
+	     cherokee_buffer_is_empty (&props->entry) || 
+	     cherokee_buffer_is_empty (&props->footer)))
+	    return ret_error;
+
+	/* Parse conditional blocks
+	 */
+	parse_macros_in_buffer (&props->header, props);
+	parse_macros_in_buffer (&props->footer, props);
+	parse_macros_in_buffer (&props->entry,  props);
+
+	return ret_ok;
+}
+
+static void
+cherokee_handler_dirlist_props_free (void *props)
+{
+	// TODO
+	;
+}
+
+
+ret_t 
+cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_dirlist_props_t **_props)
+{
+	ret_t                             ret;
+	list_t                           *i;
+	cherokee_handler_dirlist_props_t *props;
+	char                             *theme      = NULL;
+	cherokee_buffer_t                 theme_path = CHEROKEE_BUF_INIT;
+
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n,handler_dirlist_props);
+		
+		n->props.free  = cherokee_handler_dirlist_props_free;
+		n->show_size   = true;
+		n->show_date   = true;
+		n->show_user   = false;
+		n->show_group  = false;
+
+		cherokee_buffer_init (&n->header);
+		cherokee_buffer_init (&n->footer);
+		cherokee_buffer_init (&n->entry);
+		cherokee_buffer_init (&n->css);
+
+		INIT_LIST_HEAD (&n->notice_files);
+		
+		*_props = n;
+	}
+	
+	props = *_props;
+
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+		/* Convert the properties
+		 */
+		if (equal_buf_str (&subconf->key, "size")) {
+			props->show_size = atoi (subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "date")) {
+			props->show_date = atoi (subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "user")) {
+			props->show_user = atoi (subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "group")) {
+			props->show_group = atoi (subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "theme")) {
+			theme = subconf->val.buf;
+		
+		} else if (equal_buf_str (&subconf->key, "notice_files")) {
+			ret = cherokee_config_node_convert_list (subconf, NULL, &props->notice_files);
+			if (unlikely (ret != ret_ok)) return ret;
+		}
+	}
+
+	/* Load the theme
+	 */
+	if (theme == NULL)
+		theme = "default";
+
+	ret = cherokee_buffer_add_va (&theme_path, CHEROKEE_THEMEDIR"/%s/", theme);
+	if (ret != ret_ok) return ret;
+	
+	ret = load_theme (&theme_path, props);
+	if (ret != ret_ok) {
+		PRINT_MSG ("Couldn't load theme '%s': %s\n", theme, theme_path.buf);
+		return ret;
+	}
+	
+	cherokee_buffer_mrproper (&theme_path);
+	return ret_ok;
+}
+
+
+static cherokee_boolean_t
+is_header_file (cherokee_handler_dirlist_t *dhdl, char *filename)
+{
+	list_t *i;
+
+	list_for_each (i, &dhdl->props->notice_files) 
+	{
+		if (strcmp (filename, LIST_ITEM_INFO(i)) == 0)
+			return true;
+	}
+
+	return false;
+}
+
 
 ret_t
-generate_file_entry (DIR *dir, cherokee_buffer_t *path, cherokee_handler_dirlist_t *dhdl, file_entry_t **ret_entry)
+generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer_t *path, file_entry_t **ret_entry)
 {
 	int            re;
 	file_entry_t  *n;
@@ -126,57 +248,74 @@ generate_file_entry (DIR *dir, cherokee_buffer_t *path, cherokee_handler_dirlist
 	cuint_t        extra;
 	struct dirent *entry;
 	
-	/* Get the memory
-	 */
 #ifdef _PC_NAME_MAX
 	extra = pathconf(path->buf, _PC_NAME_MAX);
 #else
 	extra = PATH_MAX;
 #endif
+
+	/* New object
+	 */
 	n = (file_entry_t *) malloc (sizeof(file_entry_t) + path->len + extra + 3);
 	if (unlikely(n == NULL)) return ret_nomem;
 
-	/* Read a new directory entry
-	 */
-	cherokee_readdir (dir, &n->info, &entry);
-	if (entry == NULL) return ret_eof;
-
-	/* Initialization
-	 */
 	INIT_LIST_HEAD(&n->list_entry);
 
-	/* Build the local path, stat and clean
-	 */
-	name = (char *)entry->d_name;
-	n->name_len = strlen(name);
-	cherokee_buffer_add (path, name, n->name_len);
+	for (;;) {
+		/* Read a new directory entry
+		 */
+		cherokee_readdir (dir, &n->info, &entry);
+		if (entry == NULL) {
+			free (n);
+			return ret_eof;
+		}
 
-	/* Check the filename size
-	 */
-	if (n->name_len > dhdl->longest_filename)
-		dhdl->longest_filename = n->name_len;
+		name = (char *)entry->d_name;
+		n->name_len = strlen(name);
 
-	/* Path
-	 */
- 	re = cherokee_stat (path->buf, &n->stat);
-	if (re < 0) {
+		/* Skip some files
+		 */
+		if ((name[0] == '.') ||
+		    (name[0] == '#') ||
+		    (name[n->name_len-1] == '~') ||
+		    is_header_file (dhdl, name))
+		{
+			continue;
+		}
+		
+		/* Build the local path, stat and clean
+		 */
+		cherokee_buffer_add (path, name, n->name_len);
+		
+		/* Check the filename size
+		 */
+		if (n->name_len > dhdl->longest_filename)
+			dhdl->longest_filename = n->name_len;
+		
+		/* Path	
+		 */
+		re = cherokee_stat (path->buf, &n->stat);
+		if (re < 0) {
+			cherokee_buffer_drop_endding (path, n->name_len);
+
+			free (n);
+			return ret_error;
+		}
+
+		/* Clean up and exit
+		 */
 		cherokee_buffer_drop_endding (path, n->name_len);
-		free (n);
 
-		return ret_error;
+		*ret_entry = n;
+		return ret_ok;
 	}
 
-	/* Clean up and exit
-	 */
-	cherokee_buffer_drop_endding (path, n->name_len);
-
-	*ret_entry = n;
-	return ret_ok;
+	return ret_eof;
 }
 
 
 ret_t
-cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties)
+cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *properties)
 {	
 	ret_t  ret;
 	char  *value;
@@ -205,9 +344,17 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_tab
 	INIT_LIST_HEAD (&n->files);
 	INIT_LIST_HEAD (&n->dirs);
 
+	/* State
+	 */
+	n->dir_ptr          = NULL;
+	n->file_ptr         = NULL;
+	n->longest_filename = 0;
+	n->serve_css        = false;
+
 	/* Choose the sorting key
 	 */
-	n->sort = Name_Down;
+	n->phase = dirlist_phase_add_header;
+	n->sort  = Name_Down;
 	ret = cherokee_table_get (HANDLER_CONN(n)->arguments, "order", (void **) &value);
 	if (ret == ret_ok) {
 		if      (value[0] == 'N') n->sort = Name_Up;
@@ -218,52 +365,27 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_tab
 		else if (value[0] == 's') n->sort = Size_Down;
 	}
 
-	/* State
-	 */
-	n->page_header      = false;
-	n->dir_ptr          = NULL;
-	n->file_ptr         = NULL;
-	n->longest_filename = 0;
+	ret = cherokee_table_get (HANDLER_CONN(n)->arguments, "css", (void **) &value);
+	if (ret == ret_ok) {
+		n->serve_css = true;
+	}
 
 	/* Properties
 	 */
-	n->show_size        = 1;
-	n->show_date        = 1;
-	n->show_owner       = 0;
-	n->show_group       = 0;
-	
-	/* Eyecandy
-	 */
-	n->bgcolor          = "FFFFFF";
-	n->text             = "000000";
-	n->link             = "0000AA";
-	n->vlink            = "0000CC";
-	n->alink            = "0022EE";
-	n->background       = NULL;
-	n->header_file      = NULL;
-	n->header_file_ref  = NULL;
- 	n->build_headers    = true;
+	n->props = (cherokee_handler_dirlist_props_t *) properties;
 
 	cherokee_buffer_init (&n->header);
+	cherokee_buffer_init (&n->public_dir);
+	cherokee_buffer_init (&n->server_software);
 
-	/* Read the properties
+	/* Check the theme
 	 */
-	if (properties) {
-		cherokee_typed_table_get_str (properties, "bgcolor", &n->bgcolor);
-		cherokee_typed_table_get_str (properties, "text", &n->text);
-		cherokee_typed_table_get_str (properties, "link", &n->link);
-		cherokee_typed_table_get_str (properties, "vlink", &n->vlink);
-		cherokee_typed_table_get_str (properties, "alink", &n->alink);
-		cherokee_typed_table_get_str (properties, "background", &n->background);
-
-		cherokee_typed_table_get_int (properties, "size", &n->show_size);
-		cherokee_typed_table_get_int (properties, "date", &n->show_date);
-		cherokee_typed_table_get_int (properties, "owner", &n->show_owner);
-		cherokee_typed_table_get_int (properties, "group", &n->show_group);
-
-		cherokee_typed_table_get_list (properties, "header_file", &n->header_file);
-
-		cherokee_typed_table_get_int (properties, "show_header_file", &n->build_headers);
+	if (cherokee_buffer_is_empty (&n->props->header) ||
+	    cherokee_buffer_is_empty (&n->props->entry)  ||
+	    cherokee_buffer_is_empty (&n->props->footer))
+	{
+		PRINT_ERROR_S ("The theme is incomplete\n");
+		return ret_error;
 	}
 
 	*hdl = HANDLER(n);
@@ -277,6 +399,8 @@ cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 	list_t *i, *tmp;
 
 	cherokee_buffer_mrproper (&dhdl->header);
+	cherokee_buffer_mrproper (&dhdl->public_dir);
+	cherokee_buffer_mrproper (&dhdl->server_software);
 
 	list_for_each_safe (i, tmp, &dhdl->dirs) {
 		list_del (i);
@@ -317,39 +441,6 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 
 	return ret_ok;
 }
-
-static void
-read_header_file (cherokee_handler_dirlist_t *dhdl)
-{
-	ret_t                  ret;
-	list_t                *i;
-	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
-
-	list_for_each (i, dhdl->header_file) {
-		cuint_t  filename_len;
-		char    *filename = LIST_ITEM_INFO(i);
-
-		filename_len = strlen(filename);
-		cherokee_buffer_clean (&dhdl->header);
-		
-		if (filename[0] != '/') {
-			cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);                     /* do   */
-			cherokee_buffer_add (&conn->local_directory, filename, filename_len);
-	
-			ret = cherokee_buffer_read_file (&dhdl->header, conn->local_directory.buf);
-			
-			cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len + filename_len); /* undo */	
-		} else {
-			ret = cherokee_buffer_read_file (&dhdl->header, filename);
-		}
-
-		if (ret == ret_ok) {
-			dhdl->header_file_ref = filename;
-			return;
-		}
-	}
-}
-
 
 static int 
 cmp_name_down (list_t *a, list_t *b)
@@ -406,7 +497,7 @@ cmp_date_up (list_t *a, list_t *b)
 }
 
 static void
-list_sort_by_type (list_t *list, cherokee_sort_t sort)
+list_sort_by_type (list_t *list, cherokee_dirlist_sort_t sort)
 {
 	switch (sort) {
 	case Name_Down:
@@ -453,9 +544,12 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	for (;;) {
 		ret_t ret;
 		
-		ret = generate_file_entry (dir, &conn->local_directory, dhdl, &item);
-		if (ret == ret_eof) break;
-		if (ret == ret_error) continue;
+		ret = generate_file_entry (dhdl, dir, &conn->local_directory, &item);
+		if (ret == ret_eof) 
+			break;
+		if ((ret == ret_nomem) ||
+		    (ret == ret_error))
+			continue;
 
 		if (S_ISDIR(item->stat.st_mode)) {
 			list_add ((list_t *)item, &dhdl->dirs);
@@ -480,7 +574,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	 * it doesn't make sense to look for the size
 	 */
 	if (! list_empty(&dhdl->dirs)) {
-		cherokee_sort_t sort = dhdl->sort;
+		cherokee_dirlist_sort_t sort = dhdl->sort;
 
 		if (sort == Size_Down) sort = Name_Down;
 		if (sort == Size_Up)   sort = Name_Up;
@@ -490,32 +584,6 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	}
 
 	return ret_ok;
-}
-
-
-
-ret_t
-cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
-{
-	ret_t ret;
-
-	/* The request must end with a slash..
-	 */
-	ret = check_request_finish_with_slash (dhdl);
-	if (ret != ret_ok) return ret;
-
-	/* Maybe read the header file
-	 */
-	if (dhdl->header_file != NULL) {
-		read_header_file (dhdl);
-	}
-
-	/* Build de local request
-	 */
-	ret = build_file_list (dhdl);
-	if (unlikely(ret < ret_ok)) return ret;
-	
- 	return ret_ok;
 }
 
 
@@ -541,262 +609,288 @@ build_public_path (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buf)
 
 
 static ret_t
-render_page_header (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
+read_notice_file (cherokee_handler_dirlist_t *dhdl)
 {
-	cherokee_connection_t *conn;
- 	cherokee_icons_t      *icons;
-	cherokee_buffer_t      path = CHEROKEE_BUF_INIT;
-	
-//	CHEROKEE_NEW(path,buffer);
+	ret_t                  ret;
+	list_t                *i;
+	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
-	conn  = HANDLER_CONN(dhdl);
-	icons = HANDLER_SRV(dhdl)->icons;
-	
-	if (dhdl->build_headers) {
-		cherokee_buffer_add_str (buffer, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">" CRLF);
-	
-		/* Step 1:
-		 * Build the public path
-		 */
-		build_public_path (dhdl, &path);
-	
-		/* Add some HTML: title and body begin
-		 */
-		cherokee_buffer_add_str (buffer, "<html><head><title>Index of ");
-		cherokee_buffer_add_buffer (buffer, &path);
-		cherokee_buffer_add_str (buffer, "</title></head><body");
-	
-		cherokee_buffer_add_va (buffer, " bgcolor=\"%s\" text=\"%s\" link=\"%s\" vlink=\"%s\" alink=\"%s\"", 
-					dhdl->bgcolor, dhdl->text, dhdl->link, dhdl->vlink, dhdl->alink);
-	
-		if (dhdl->background) {
-			cherokee_buffer_add_va (buffer, " background=\"%s\"", dhdl->background);
+	list_for_each (i, &dhdl->props->notice_files) {
+		cuint_t  filename_len;
+		char    *filename = LIST_ITEM_INFO(i);
+
+		filename_len = strlen(filename);
+		cherokee_buffer_clean (&dhdl->header);
+	        
+		if (filename[0] != '/') {
+			cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);                     /* do   */
+			cherokee_buffer_add (&conn->local_directory, filename, filename_len);
+			
+			ret = cherokee_buffer_read_file (&dhdl->header, conn->local_directory.buf);
+			cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len + filename_len); /* undo */
+		} else {
+			ret = cherokee_buffer_read_file (&dhdl->header, filename);
 		}
-	
-		cherokee_buffer_add_str (buffer, "><h1>Index of ");
-		cherokee_buffer_add_buffer (buffer, &path);
-		cherokee_buffer_add_str (buffer, "</h1>");
 
-	} else {
-		/* The custom header should be enough
-		 */
-		cherokee_buffer_add_buffer (buffer, &dhdl->header);
-		cherokee_buffer_mrproper (&dhdl->header);
+		if (ret == ret_ok)
+			break;
 	}
 
-	cherokee_buffer_add_str (buffer, "<pre>");
-	
-	/* Step 2:
-	 * Print the ordering bar
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
+{
+	ret_t                  ret;
+	cuint_t                port;
+	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
+	cherokee_server_t     *srv  = HANDLER_SRV(dhdl);
+
+	/* The request must end with a slash..
 	 */
-#ifndef CHEROKEE_EMBEDDED
-	if (icons && (icons->parentdir_icon.len > 0))
-		cherokee_buffer_add_str (buffer, "<img src=\"/icons/blank.png\">");
+	ret = check_request_finish_with_slash (dhdl);
+	if (ret != ret_ok) return ret;
+	
+	if (! list_empty (&dhdl->props->notice_files)) {
+		ret = read_notice_file (dhdl);
+		if (ret != ret_ok) return ret;
+	}
+
+	/* Build de local request
+	 */
+	ret = build_file_list (dhdl);
+	if (unlikely(ret < ret_ok)) return ret;
+	
+	/* Build public dir string
+	 */
+	ret = build_public_path (dhdl, &dhdl->public_dir);
+	if (unlikely (ret != ret_ok)) return ret;
+	
+	/* Server software string
+	 */
+	if (conn->socket.is_tls == non_TLS)
+		port = srv->port;
 	else
-#endif	
-		cherokee_buffer_add_str (buffer, "   ");
+		port = srv->port_tls;
 	
-	cherokee_buffer_add_va (buffer, " <a href=\"?order=%c\">Name</a>",
-				(dhdl->sort == Name_Down) ? 'N' : 'n');
+	switch (srv->server_token) {
+	case cherokee_version_product:
+		cherokee_buffer_add_version (&dhdl->server_software, port, ver_full_html);
+	case cherokee_version_minor:
+	case cherokee_version_minimal:
+	case cherokee_version_os:
+	case cherokee_version_full:
+		cherokee_buffer_add_version (&dhdl->server_software, port, ver_port_html);
+	}
 
-	cherokee_buffer_add_char_n (buffer, ' ', MAX(dhdl->longest_filename, DEFAULT_NAME_LEN) - 3);
-	
-	if (dhdl->show_date) {
-		cherokee_buffer_add_va (buffer, "<a href=\"?order=%c\">Last Modification</a>   ", 
-					(dhdl->sort == Date_Down) ? 'D' : 'd');
+ 	return ret_ok;
+}
+
+
+static ret_t
+replace_token_guts (cherokee_buffer_t *buf, char *token, char token_len, char *replacement)
+{
+	if (replacement == NULL) {
+		return cherokee_buffer_replace_string (buf, token, token_len, "", 0);
 	}
-	
-	if (dhdl->show_size) {
-		cherokee_buffer_add_va (buffer, "<a href=\"?order=%c\">Size</a>         ",
-					(dhdl->sort == Size_Down) ? 'S' : 's');
-	}
-	
-	cherokee_buffer_add_str (buffer, "<hr>");
-	
-	/* Step 3:
-	 * Free the path, we will not need it again
+
+	return cherokee_buffer_replace_string (buf, token, token_len, replacement, strlen(replacement));
+}
+
+static ret_t
+render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_entry_t *file)
+{
+	cherokee_boolean_t  is_dir;
+	char               *icon     = NULL;
+	cherokee_icons_t   *icons    = HANDLER_SRV(dhdl)->icons;
+	char               *name     = (char *) &file->info.d_name;
+	cherokee_buffer_t  *tmp      = &dhdl->header;
+
+#define replace_token(buf,token,val) \
+	replace_token_guts(buf,token,sizeof(token)-1,val)
+
+	/* Add entry text
 	 */
-	cherokee_buffer_mrproper (&path);
+	cherokee_buffer_add_buffer (buffer, &dhdl->props->entry);
 	
-	
-	if (! cherokee_buffer_is_empty (&dhdl->header)) {
-		cherokee_buffer_add_buffer (buffer, &dhdl->header);
+	/* Add the icon
+	 */
+	is_dir = S_ISDIR(file->stat.st_mode);
+
+	if (is_dir) {
+		replace_token (buffer, "%icon_alt%", "[DIR]");
+		replace_token (buffer, "%icon%", icons->directory_icon.buf);
+	} else {
+		cherokee_icons_get_icon (icons, name, &icon);
+		if (icon == NULL)
+			icon = "/icons/blank.png";
+
+		replace_token (buffer, "%icon_alt%", "[   ]");
+		replace_token (buffer, "%icon%", icon);
 	}
-	
-#ifndef CHEROKEE_EMBEDDED
-	if (icons && (icons->parentdir_icon.len > 0)) {
-		cherokee_buffer_add_va (buffer, "<img border=\"0\" src=\"/icons/%s\" alt=\"[DIR]\"> <a href=\"..\">Parent Directory</a>\n", 
-					icons->parentdir_icon.buf);
-	} else
-#endif	
-		cherokee_buffer_add_str (buffer, "<a href=\"..\">Parent Directory</a>\n");
-	
+
+	/* File
+	 */
+	replace_token (buffer, "%file%", name);
+
+	/* Date
+	 */
+	if (dhdl->props->show_date) {
+		cherokee_buffer_clean (tmp);
+		cherokee_buffer_ensure_size (tmp, 33);
+
+		strftime (tmp->buf, 32, "%d-%b-%Y %H:%M", localtime(&file->stat.st_mtime));
+		replace_token (buffer, "%date%", tmp->buf);
+	} 
+
+	/* Size
+	 */
+	if (dhdl->props->show_size) {
+		if (is_dir) {
+			replace_token (buffer, "%size_unit%", NULL);
+			replace_token (buffer, "%size%", "-");
+		} else {
+			char *unit;
+
+			cherokee_buffer_clean (tmp);
+			cherokee_buffer_ensure_size (tmp, 6);
+
+			cherokee_strfsize (file->stat.st_size, tmp->buf);
+
+			unit = tmp->buf;
+			while ((*unit >= '0')  && (*unit <= '9')) unit++;
+
+			replace_token (buffer, "%size_unit%", unit);
+			*unit = '\0';
+			replace_token (buffer, "%size%", tmp->buf);
+		}
+	} 
+
+	/* User
+	 */
+	if (dhdl->props->show_user) {
+		struct passwd *user;
+		char          *name;
+		
+		user = getpwuid (file->stat.st_uid);
+		name = (char *) (user->pw_name) ? user->pw_name : "unknown";
+
+		replace_token (buffer, "%user%", name);
+	} 
+
+	/* Group
+	 */
+	if (dhdl->props->show_group) {
+		struct group *user;
+		char         *group;
+		
+		user = getgrgid (file->stat.st_gid);
+		group = (char *) (user->gr_name) ? user->gr_name : "unknown";
+		
+		replace_token (buffer, "%group%", group);
+	}
+
 	return ret_ok;
 }
 
 
 static ret_t
-render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_entry_t *file)
+replace_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
-	int               is_dir;
-	char             *icon;
-	cherokee_icons_t *icons    = HANDLER_SRV(dhdl)->icons;
-	char             *name     = (char *) &file->info.d_name;
-	cuint_t           name_len = file->name_len;
-
-	/* Ignore backup files
+	/* Public dir
 	 */
-	if ((name[0] == '.') ||
-	    (name[0] == '#') ||
-	    (name[name_len-1] == '~') ||
-	    ((dhdl->header_file_ref) && (strcmp (name, dhdl->header_file_ref) == 0)))
-	{
-		return ret_ok;
-	}
-	
-	/* Add the icon
+	replace_token (buffer, "%public_dir%", dhdl->public_dir.buf);
+
+	/* Server software
 	 */
-	icon   = "";
-	is_dir = S_ISDIR(file->stat.st_mode);
+	replace_token (buffer, "%server_software%", dhdl->server_software.buf);
 
-#ifndef CHEROKEE_EMBEDDED
-	if (icons != NULL) {
-		if (is_dir && (icons->directory_icon.len > 0)) {
-			cherokee_buffer_add_va (buffer, "<img border=\"0\" src=\"/icons/%s\" alt=\"[DIR]\"> ", icons->directory_icon.buf);
-		} else {
-			cherokee_icons_get_icon (icons, name, &icon);
-			cherokee_buffer_add_va (buffer, "<img border=\"0\" src=\"/icons/%s\" alt=\"[   ]\"> ", icon);
-		}
-	} else
-#endif	
-		cherokee_buffer_add (buffer, (char *) (is_dir) ? "[DIR] " : "[   ] ", 6);
-	
-	/* Add the filename
+	/* Notice
 	 */
-	if (is_dir) {
-		cherokee_buffer_add_va (buffer, "<a href=\"%s/\">%s/</a>", name, name); 
-		name_len++;
-	} else {
-		cherokee_buffer_add_va (buffer, "<a href=\"%s\">%s</a>", name, name); 
-	}
-	
-	
-	/* Maybe add more info
+	replace_token (buffer, "%notice%", dhdl->header.buf);
+
+	/* Orders
 	 */
-	if (dhdl->show_size  || dhdl->show_date  ||
-	    dhdl->show_owner || dhdl->show_group) 
-	{
-		int spaces;
+	replace_token (buffer, "%order_name%", 
+		       (dhdl->sort == Name_Down) ? "N" : "n");
+	replace_token (buffer, "%order_size%", 
+		       (dhdl->sort == Size_Down) ? "S" : "s");
+	replace_token (buffer, "%order_date%", 
+		       (dhdl->sort == Date_Down) ? "D" : "d");
 
-		spaces = MAX(DEFAULT_NAME_LEN, dhdl->longest_filename) - name_len;
-		cherokee_buffer_add_char_n (buffer, ' ', spaces+1);
-
-			
-		if (dhdl->show_date) {				
-			int len;
-			char tmp[32];
-			len = strftime (tmp, 32, "%d-%b-%Y %H:%M   ", localtime(&file->stat.st_mtime));
-			cherokee_buffer_add (buffer, tmp, len);
-		}
-
-		if (dhdl->show_size) {
-			char tmp[5];			
-
-			if (S_ISDIR(file->stat.st_mode)) {
-				memcpy (tmp, "   -\0", 5);
-			} else {
-				cherokee_strfsize (file->stat.st_size, tmp);
-			}
-			cherokee_buffer_add_va (buffer, "%s  ", tmp);
-		}
-
-		if (dhdl->show_owner) {
-			struct passwd *user;
-			char          *name;
-
-			user = getpwuid (file->stat.st_uid);
-			name = (char *) (user->pw_name) ? user->pw_name : "unknown";
-
-			cherokee_buffer_add_va (buffer, "%s", name);
-		}
-
-		if (dhdl->show_group) {
-			struct group *user;
-			char         *group;
-
-			user = getgrgid (file->stat.st_gid);
-			group = (char *) (user->gr_name) ? user->gr_name : "unknown";
-
-			cherokee_buffer_add_va (buffer, "%s", group);
-		}
-	}
-		
-	cherokee_buffer_add_str (buffer, "\n");
 	return ret_ok;
 }
-
 
 
 ret_t
 cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
-	cuint_t                port;
-	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
+	ret_t ret;
 
-	/* Page header
-	 */
-	if (dhdl->page_header == false) {
-		render_page_header (dhdl, buffer);
-		dhdl->page_header = true;
+	if (dhdl->serve_css) {
+		cherokee_buffer_add_buffer (buffer, &dhdl->props->css);
+		return ret_eof_have_data;
 	}
 
-	/* Print the directories first
-	 */
-	while (dhdl->dir_ptr) {
-		if (dhdl->dir_ptr == &dhdl->dirs) {
-			dhdl->dir_ptr = NULL;
-			break;
-		}
-		render_file (dhdl, buffer, (file_entry_t *)dhdl->dir_ptr);
-		dhdl->dir_ptr = dhdl->dir_ptr->next;
-
-		/* Maybe it has readed enought
+	switch (dhdl->phase) {
+	case dirlist_phase_add_header:
+		/* Add the theme header
 		 */
-		if (buffer->len > DEFAULT_READ_SIZE) 
+		cherokee_buffer_add_buffer (buffer, &dhdl->props->header);
+
+		ret = replace_header_footer_vbles (dhdl, buffer);
+		if (unlikely (ret != ret_ok)) return ret;
+
+		if (buffer->len > DEFAULT_READ_SIZE)
 			return ret_ok;
-	}
+		dhdl->phase = dirlist_phase_add_entries;
 
-	/* then the file list
-	 */
-	while (dhdl->file_ptr) {
-		if (dhdl->file_ptr == &dhdl->files) {
-			dhdl->file_ptr = NULL;
-			break;
-		}
-		render_file (dhdl, buffer, (file_entry_t *) dhdl->file_ptr);
-		dhdl->file_ptr = dhdl->file_ptr->next;
+	case dirlist_phase_add_entries:
 
-		/* Maybe it has readed enought
+		/* Print the directories first
 		 */
-		if (buffer->len > DEFAULT_READ_SIZE) 
-			return ret_ok;
+		while (dhdl->dir_ptr) {
+			if (dhdl->dir_ptr == &dhdl->dirs) {
+				dhdl->dir_ptr = NULL;
+				break;
+			}
+			render_file (dhdl, buffer, (file_entry_t *)dhdl->dir_ptr);
+			dhdl->dir_ptr = dhdl->dir_ptr->next;
+
+			/* Maybe it has readed enought
+			 */
+			if (buffer->len > DEFAULT_READ_SIZE) 
+				return ret_ok;
+		}
+
+		/* then the file list
+		 */
+		while (dhdl->file_ptr) {
+			if (dhdl->file_ptr == &dhdl->files) {
+				dhdl->file_ptr = NULL;
+				break;
+			}
+			render_file (dhdl, buffer, (file_entry_t *) dhdl->file_ptr);
+			dhdl->file_ptr = dhdl->file_ptr->next;
+
+			/* Maybe it has readed enought
+			 */
+			if (buffer->len > DEFAULT_READ_SIZE) 
+				return ret_ok;
+		}
+
+		dhdl->phase = dirlist_phase_add_footer;
+
+	case dirlist_phase_add_footer:
+		cherokee_buffer_add_buffer (buffer, &dhdl->props->footer);
+
+		ret = replace_header_footer_vbles (dhdl, buffer);
+		if (unlikely (ret != ret_ok)) return ret;
+
+		break;
 	}
-
-	/* Page ending
-	 */
-	cherokee_buffer_add_str (buffer, "</pre><hr>\n");
-
-	if (HANDLER_CONN(dhdl)->socket.is_tls == non_TLS)
- 		port = HANDLER_SRV(dhdl)->port;
-	else 
- 		port = HANDLER_SRV(dhdl)->port_tls;
-
-	if (CONN_SRV(conn)->server_token == cherokee_version_full) 
-		cherokee_buffer_add_version (buffer, port, ver_full_html);
-	else 
-		cherokee_buffer_add_version (buffer, port, ver_port_html);
-
-	cherokee_buffer_add_str (buffer, "\n</body></html>");
 
 	return ret_eof_have_data;
 }
@@ -805,6 +899,13 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 ret_t
 cherokee_handler_dirlist_add_headers (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
+	if (dhdl->serve_css) {
+		cherokee_buffer_add_va (buffer, 
+					"Content-Type: text/css; charset=iso-8859-1"CRLF
+					"Content-Length: %d"CRLF, dhdl->props->css.len);
+		return ret_ok;
+	}
+
 	cherokee_buffer_add_str (buffer, "Content-Type: text/html; charset=iso-8859-1"CRLF);
 	return ret_ok;
 }

@@ -75,7 +75,11 @@ ret_t
 cherokee_config_entry_free (cherokee_config_entry_t *entry) 
 {
 	if (entry->handler_properties != NULL) {
-		cherokee_typed_table_free (entry->handler_properties);
+		if (entry->handler_properties->free == NULL) {
+			SHOULDNT_HAPPEN;
+		}
+			
+		entry->handler_properties->free (entry->handler_properties);
 		entry->handler_properties = NULL;
 	}
 
@@ -107,63 +111,6 @@ cherokee_config_entry_free (cherokee_config_entry_t *entry)
 
 	free (entry);
 	return ret_ok;
-}
-
-
-static ret_t 
-entry_set_prop (prop_table_types_t table_type, cherokee_config_entry_t *entry, char *prop_name, cherokee_typed_table_types_t type, void *value, cherokee_table_free_item_t free_func)
-{
-	ret_t              ret;
-	cherokee_table_t **table;
-
-	/* Choose the table
-	 */
-	switch (table_type) {
-	case table_handler:
-		table = &entry->handler_properties;
-		break;
-	case table_validator:
-		table = &entry->validator_properties;
-		break;
-	}
-	
-	/* Create the table on demand to save memory
-	 */
-	if (*table == NULL) {
-		ret = cherokee_table_new (table);
-		if (unlikely(ret != ret_ok)) return ret;
-	}
-
-	/* Add the property
-	 */
-	switch (type) {
-	case typed_int:
-		return cherokee_typed_table_add_int (*table, prop_name, POINTER_TO_INT(value));
-	case typed_str:
-		return cherokee_typed_table_add_str (*table, prop_name, value);
-	case typed_data:
-		return cherokee_typed_table_add_data (*table, prop_name, value, free_func);
-	case typed_list:
-		return cherokee_typed_table_add_list (*table, prop_name, value, free_func);
-	default:
-		SHOULDNT_HAPPEN;
-	}
-	
-	return ret_error;
-}
-
-
-ret_t 
-cherokee_config_entry_set_handler_prop (cherokee_config_entry_t *entry, char *prop_name, cherokee_typed_table_types_t type, void *value, cherokee_table_free_item_t free_func)
-{
-	return entry_set_prop (table_handler, entry, prop_name, type, value, free_func);
-}
-
-
-ret_t 
-cherokee_config_entry_set_validator_prop (cherokee_config_entry_t *entry, char *prop_name, cherokee_typed_table_types_t type, void *value, cherokee_table_free_item_t free_func)
-{
-	return entry_set_prop (table_validator, entry, prop_name, type, value, free_func);
 }
 
 

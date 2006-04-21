@@ -1,4 +1,4 @@
-## Cherokee: cherokee/Makefile.am  -*- makefile -*-
+## Cherokee: icons/Makefile.am  -*- makefile -*-
 
 cherokeeiconsdir = "$(prefix)/share/cherokee/icons/"
 cherokeeicons_DATA = \

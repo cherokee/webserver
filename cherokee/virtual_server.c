@@ -399,7 +399,8 @@ init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, 
 		if (ret != ret_ok) return ret;
 
 		if (info->configure) {
-			info->configure (subconf, vserver->server_ref, &entry->handler_properties);
+			ret = info->configure (subconf, vserver->server_ref, &entry->handler_properties);
+			if (ret != ret_ok) return ret;
 		}
 		
 		TRACE(ENTRIES, "Handler: %s\n", tmp->buf);
@@ -422,7 +423,8 @@ init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, 
 		entry->validator_new_func = info->new_func;
 
 		if (info->configure) {
-			info->configure (subconf, vserver->server_ref, &entry->validator_properties);
+			ret = info->configure (subconf, vserver->server_ref, &entry->validator_properties);
+			if (ret != ret_ok) return ret;
 		}
 
 		/* Configure the entry
@@ -579,21 +581,24 @@ configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *v
 	ret = cherokee_config_node_get (config, "directory", &subconf);
 	if (ret == ret_ok) {
 		cherokee_config_node_foreach (i, subconf) {
-			add_directory (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
+			ret = add_directory (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
+			if (ret != ret_ok) return ret;
 		}
 	}
 
 	ret = cherokee_config_node_get (config, "extensions", &subconf);
 	if (ret == ret_ok) {
 		cherokee_config_node_foreach (i, subconf) {
-			add_extensions (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
+			ret = add_extensions (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
+			if (ret != ret_ok) return ret;
 		}
 	}
 
 	ret = cherokee_config_node_get (config, "request", &subconf);
 	if (ret == ret_ok) {
 		cherokee_config_node_foreach (i, subconf) {
-			add_request (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
+			ret = add_request (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
+			if (ret != ret_ok) return ret;
 		}
 	}
 
@@ -621,19 +626,23 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		}
 
 	} else if (equal_buf_str (&conf->key, "user_dir")) {
-		configure_user_dir (conf, vserver);
+		ret = configure_user_dir (conf, vserver);
+		if (ret != ret_ok) return ret;
 
 	} else if (equal_buf_str (&conf->key, "directory")) {
 		cherokee_config_node_foreach (i, conf) {
-			add_directory (CONFIG_NODE(i), vserver, &vserver->entry);
+			ret = add_directory (CONFIG_NODE(i), vserver, &vserver->entry);
+			if (ret != ret_ok) return ret;
 		}
 	} else if (equal_buf_str (&conf->key, "extensions")) {
 		cherokee_config_node_foreach (i, conf) {
-			add_extensions (CONFIG_NODE(i), vserver, &vserver->entry);
+			ret = add_extensions (CONFIG_NODE(i), vserver, &vserver->entry);
+			if (ret != ret_ok) return ret;
 		}
 	} else if (equal_buf_str (&conf->key, "request")) {
 		cherokee_config_node_foreach (i, conf) {
-			add_request (CONFIG_NODE(i), vserver, &vserver->entry);
+			ret = add_request (CONFIG_NODE(i), vserver, &vserver->entry);
+			if (ret != ret_ok) return ret;
 		}
 
 	} else if (equal_buf_str (&conf->key, "directory_index")) {

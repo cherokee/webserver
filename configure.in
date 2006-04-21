@@ -968,7 +968,7 @@ AM_CONDITIONAL(STATIC_VALIDATOR_HTPASSWD,     grep htpasswd       $conf_h >/dev/
 AM_CONDITIONAL(STATIC_VALIDATOR_PLAIN,        grep plain          $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_VALIDATOR_HTDIGEST,     grep htdigest       $conf_h >/dev/null)
 
-AC_OUTPUT(Makefile cherokee/Makefile.MingW m4/Makefile cherokee/Makefile cget/Makefile icons/Makefile www/Makefile doc/Makefile doc/develop/Makefile doc/develop/doxygen.cfg contrib/Makefile qa/Makefile windows/Makefile admin/Makefile  cherokee-config cherokee.spec cherokee.pc windows/cherokee.nsi)
+AC_OUTPUT(Makefile cherokee/Makefile.MingW m4/Makefile cherokee/Makefile cget/Makefile icons/Makefile themes/Makefile www/Makefile doc/Makefile doc/develop/Makefile doc/develop/doxygen.cfg contrib/Makefile qa/Makefile windows/Makefile admin/Makefile  cherokee-config cherokee.spec cherokee.pc windows/cherokee.nsi)
 
 
 methods=""

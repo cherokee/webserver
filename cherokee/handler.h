@@ -76,8 +76,12 @@ typedef struct {
 	 */
 	void                      *connection;
 	cherokee_handler_support_t support;
-
 } cherokee_handler_t;
+
+typedef struct {
+	void (*free) (void *itself);
+} cherokee_handler_props_t;
+
 
 #define HANDLER(x)                         ((cherokee_handler_t *)(x))
 #define HANDLER_CONN(h)                    (CONN(HANDLER(h)->connection))

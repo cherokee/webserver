@@ -70,11 +70,13 @@ ret_t cherokee_config_node_parse_string (cherokee_config_node_t *conf, cherokee_
 
 /* Convenience functions: value retrieving
  */
-ret_t cherokee_config_node_read      (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf);
-ret_t cherokee_config_node_read_path (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf);
-ret_t cherokee_config_node_read_int  (cherokee_config_node_t *conf, const char *key, int *num);
-ret_t cherokee_config_node_read_list (cherokee_config_node_t *conf, const char *key, 
-				      cherokee_config_node_list_func_t func, void *param);
+ret_t cherokee_config_node_read       (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf);
+ret_t cherokee_config_node_read_path  (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf);
+ret_t cherokee_config_node_read_int   (cherokee_config_node_t *conf, const char *key, int *num);
+ret_t cherokee_config_node_read_list  (cherokee_config_node_t *conf, const char *key, 
+				       cherokee_config_node_list_func_t func, void *param);
+
+ret_t cherokee_config_node_convert_list (cherokee_config_node_t *conf, const char *key, list_t *list);
 
 CHEROKEE_END_DECLS
 

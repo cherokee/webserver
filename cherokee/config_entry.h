@@ -40,30 +40,29 @@
 typedef struct {
 	/* Parent table_entry
 	 */
-	void                   *parent;
-	cuint_t                 priority;
+	void                     *parent;
+	cuint_t                   priority;
 
 	/* Properties
 	 */
-	cherokee_buffer_t      *document_root;
-	cherokee_boolean_t      only_secure;
-	void                   *access;
+	cherokee_buffer_t        *document_root;
+	cherokee_boolean_t        only_secure;
+	void                     *access;
 
 	/* Handler
 	 */
-	handler_func_new_t      handler_new_func;
-	cherokee_http_method_t  handler_methods;
-	cherokee_table_t       *handler_properties; 
+	handler_func_new_t        handler_new_func;
+	cherokee_http_method_t    handler_methods;
+	cherokee_handler_props_t *handler_properties; 
 
 	/* Validator
 	 */
-	validator_func_new_t    validator_new_func;
-	cherokee_table_t       *validator_properties; 
+	validator_func_new_t      validator_new_func;
+	cherokee_table_t         *validator_properties; 
 
-	cherokee_buffer_t      *auth_realm;
-	cherokee_http_auth_t    authentication;
-	cherokee_table_t       *users;
-
+	cherokee_buffer_t        *auth_realm;
+	cherokee_http_auth_t      authentication;
+	cherokee_table_t         *users;
 } cherokee_config_entry_t; 
 
 #define CONF_ENTRY(x) ((cherokee_config_entry_t *)(x))

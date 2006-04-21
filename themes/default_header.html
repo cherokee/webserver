@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="es">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Index of %public_dir%</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="?css" />
+</head>
+
+<body>
+	<div id="main"><!-- BEGINOF main -->
+	  <pre>%notice%</pre>
+		<div id="dirlist"><!-- BEGINOF dirlist -->
+			<h1>Index of %public_dir%</h1>
+			<ul style="list-style: none !important;">
+				<li class="headings">
+					<a    class="link" href="?order=%order_name%">Name</a>
+					<span class="sep"> | </span>
+					%if date%<a    class="date" href="?order=%order_date%">Last Modification</a>
+					<span class="sep"> | </span>%fi%
+					%if size%<a    class="size" href="?order=%order_size%">Size</a>
+					<span class="sep"> | </span>%fi%
+					%if user%User
+					<span class="sep"> | </span>%fi%
+					%if group%Group
+					<span class="sep"> | </span>%fi%
+				</li>

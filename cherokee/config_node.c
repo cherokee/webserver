@@ -25,6 +25,7 @@
 #include "common-internal.h"
 #include "config_node.h"
 #include "util.h"
+#include "list_ext.h"
 
 #define ENTRIES "config"
 
@@ -414,3 +415,15 @@ cherokee_config_node_read_list (cherokee_config_node_t           *conf,
 	return ret_ok;
 }
 
+
+static ret_t
+convert_to_list_step (char *entry, void *data)
+{
+	return cherokee_list_add_tail ((list_t *)data, strdup(entry));
+}
+
+ret_t
+cherokee_config_node_convert_list (cherokee_config_node_t *conf, const char *key, list_t *list)
+{
+	return cherokee_config_node_read_list (conf, key, convert_to_list_step, list);
+}

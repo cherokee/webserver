@@ -36,53 +36,74 @@
 #include "module_loader.h"
 
 
-enum cherokee_sort {
+typedef enum {
 	Name_Down,
 	Name_Up,
 	Size_Down,
 	Size_Up,
 	Date_Down,
 	Date_Up
-};
-typedef enum cherokee_sort cherokee_sort_t;
+} cherokee_dirlist_sort_t;
+
+typedef enum {
+	dirlist_phase_add_header,
+	dirlist_phase_add_entries,
+	dirlist_phase_add_footer
+} cherokee_dirlist_phase_t;
 
 
 typedef struct {
-	cherokee_handler_t handler;
+	cherokee_handler_props_t props;
+
+	list_t                   notice_files;
+
+	/* Visible properties
+	 */
+ 	cherokee_boolean_t       show_size;
+	cherokee_boolean_t       show_date;
+	cherokee_boolean_t       show_user;
+	cherokee_boolean_t       show_group;
+
+	/* Theme
+	 */
+	cherokee_buffer_t        header;
+	cherokee_buffer_t        footer;
+	cherokee_buffer_t        entry;
+	cherokee_buffer_t        css;
+
+} cherokee_handler_dirlist_props_t;
+
+
+typedef struct {
+	cherokee_handler_t       handler;
 
 	/* File list
 	 */
-	list_t           dirs;
-	list_t           files;
-	cherokee_sort_t  sort;
+	list_t                   dirs;
+	list_t                   files;
+	
+	/* State
+	 */
+	cherokee_dirlist_sort_t  sort;
+	cherokee_dirlist_phase_t phase;
 
 	/* State
 	 */
-	cherokee_boolean_t  page_header;
-	cuint_t             longest_filename;
-	list_t             *dir_ptr;
-	list_t             *file_ptr;
+	cuint_t                  longest_filename;
+	list_t                  *dir_ptr;
+	list_t                  *file_ptr;	
+ 	cherokee_buffer_t        header;
+	cherokee_boolean_t       serve_css;
+
+	cherokee_buffer_t        public_dir;
+	cherokee_buffer_t        server_software;
 
 	/* Properties
 	 */
-	char *bgcolor;     /* background color for the document */
-	char *text;        /* color for the text of the document */
-	char *link;        /* color for unvisited hypertext links */
-	char *vlink;       /* color for visited hypertext links */
-	char *alink;       /* color for active hypertext links */
-	char *background;  /* URL for an image to be used to tile the background */
-
-	cuint_t show_size;
-	cuint_t show_date;
-	cuint_t show_owner;
-	cuint_t show_group;
-	
-	cherokee_buffer_t   header;          /* Header content */
-	list_t             *header_file;     /* List of possible header filenames */
-	char               *header_file_ref; /* Pointer to the used header filename */
-	cherokee_boolean_t  build_headers;   /* Build headers */
+	cherokee_handler_dirlist_props_t *props;
 
 } cherokee_handler_dirlist_t;
+
 
 #define DHANDLER(x)  ((cherokee_handler_dirlist_t *)(x))
 
@@ -90,7 +111,7 @@ typedef struct {
 /* Library init function
  */
 void MODULE_INIT(dirlist)          (cherokee_module_loader_t *loader);
-ret_t cherokee_handler_dirlist_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties);
+ret_t cherokee_handler_dirlist_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *properties);
 
 /* virtual methods implementation
  */
