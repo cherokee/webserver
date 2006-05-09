@@ -114,9 +114,9 @@ reset_connections (cherokee_fcgi_manager_t *mgr)
 		if (mgr->conn.id2conn[i].conn == NULL)
 			continue;
 			
-		cgi = CGI_BASE(mgr->conn.id2conn[i].conn->handler);
+		cgi = HDL_CGI_BASE(mgr->conn.id2conn[i].conn->handler);
 
-		if (mgr->generation != HANDLER_FASTCGI(cgi)->generation) {
+		if (mgr->generation != HDL_FASTCGI(cgi)->generation) {
 			continue;
 		}
 		
@@ -268,8 +268,8 @@ process_package (cherokee_fcgi_manager_t *mgr, cherokee_buffer_t *inbuf)
 		goto go_out;
 	}
 
-	hdl      = HANDLER_FASTCGI(conn->handler);
-	outbuf   = &CGI_BASE(hdl)->data;
+	hdl      = HDL_FASTCGI(conn->handler);
+	outbuf   = &HDL_CGI_BASE(hdl)->data;
 	data     = inbuf->buf +  FCGI_HEADER_LEN;
 
 	/* It has received the full package content
@@ -299,7 +299,7 @@ process_package (cherokee_fcgi_manager_t *mgr, cherokee_buffer_t *inbuf)
 			      (ending->appStatusB0 << 16) | 
 			      (ending->appStatusB0 << 24));
 
-		CGI_BASE(hdl)->got_eof    = true;
+		HDL_CGI_BASE(hdl)->got_eof    = true;
 		mgr->conn.id2conn[id].eof = true;
 
 		update_conn_list_lenght (mgr, id);
@@ -391,7 +391,7 @@ cherokee_fcgi_manager_register (cherokee_fcgi_manager_t *mgr, cherokee_connectio
 ret_t 
 cherokee_fcgi_manager_unregister (cherokee_fcgi_manager_t *mgr, cherokee_connection_t *conn)
 {
-	cherokee_handler_fastcgi_t *hdl = HANDLER_FASTCGI(conn->handler);
+	cherokee_handler_fastcgi_t *hdl = HDL_FASTCGI(conn->handler);
 
 	if (hdl->generation != mgr->generation) {
 		TRACE (ENTRIES, "Unregister: Different generation id=%d gen=%d, mgr=%d\n",

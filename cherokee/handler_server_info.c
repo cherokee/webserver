@@ -37,12 +37,6 @@
 #include "module_loader.h"
 
 
-cherokee_module_info_handler_t MODULE_INFO(server_info) = {
-	.module.type     = cherokee_handler,                   /* type         */
-	.module.new_func = cherokee_handler_server_info_new,   /* new func     */
-	.valid_methods   = http_get                            /* http methods */
-};
-
 
 #define PAGE_HEADER                                                                                     \
 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">" CRLF\
@@ -101,6 +95,36 @@ cherokee_module_info_handler_t MODULE_INFO(server_info) = {
 "</td></tr>"                                                                                        CRLF\
 "</table><br />"                                                                                    CRLF\
 "</div></body></html>"                                                                             
+
+
+ret_t 
+cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+{
+	list_t                               *i;
+	cherokee_handler_server_info_props_t *props;
+
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n, handler_server_info_props);
+
+		n->just_about = false;
+		*_props = HANDLER_PROPS(n);
+	}
+
+	props = PROP_SRV_INFO(*_props);
+
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+		if (equal_buf_str (&subconf->key, "just_about")) {
+			props->just_about = atoi(subconf->val.buf);
+		} else {
+			PRINT_MSG ("ERROR: Handler file: Unknown key: '%s'\n", subconf->key.buf);
+			return ret_error;
+		}
+	}
+
+	return ret_ok;
+}
 
 
 static void
@@ -321,7 +345,7 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 
 	cherokee_buffer_add_va (buf, PAGE_HEADER, ver);
 
-	if (! hdl->just_about) {
+	if (! HDL_SRV_INFO_PROPS(hdl)->just_about) {
 
 		/* General table
 		 */
@@ -363,13 +387,13 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 
 
 ret_t
-cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties)
+cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_server_info);
 	
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base(HANDLER(n), cnt);
+	cherokee_handler_init_base(HANDLER(n), cnt, props);
 	   
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_server_info_init;
 	MODULE(n)->free         = (handler_func_free_t) cherokee_handler_server_info_free;
@@ -380,14 +404,8 @@ cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection
 
 	/* Init
 	 */
-	n->just_about = false;
-
 	cherokee_buffer_init (&n->buffer);
 	cherokee_buffer_ensure_size (&n->buffer, 4*1024);
-
-	if (properties) {
-		cherokee_typed_table_get_int (properties, "about", &n->just_about);
-	}
 
 	*hdl = HANDLER(n);
 	return ret_ok;
@@ -463,13 +481,14 @@ cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl, c
 
 /* Library init function
  */
-static cherokee_boolean_t _server_info_is_init = false;
-
 void
 MODULE_INIT(server_info) (cherokee_module_loader_t *loader)
 {
-	/* Is init?
-	 */
-	if (_server_info_is_init) return;
-	_server_info_is_init = true;
 }
+
+cherokee_module_info_handler_t MODULE_INFO(server_info) = {
+	.module.type      = cherokee_handler,                       /* type         */
+	.module.new_func  = cherokee_handler_server_info_new,       /* new func     */
+	.module.configure = cherokee_handler_server_info_configure, /* configure   */
+	.valid_methods    = http_get                                /* http methods */
+};

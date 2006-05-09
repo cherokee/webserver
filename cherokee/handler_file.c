@@ -45,20 +45,43 @@
 
 
 ret_t 
-cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
-	// iocache
+	list_t                        *i;
+	cherokee_handler_file_props_t *props;
+
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n, handler_file_props);
+
+		n->use_cache = true;
+		*_props = HANDLER_PROPS(n);
+	}
+	
+	props = PROP_FILE(*_props);
+
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+		
+		if (equal_buf_str (&subconf->key, "iocache")) {
+			props->use_cache = atoi (subconf->val.buf);
+		} else {
+			PRINT_MSG ("ERROR: Handler file: Unknown key: '%s'\n", subconf->key.buf);
+			return ret_error;
+		}
+	}
+
 	return ret_ok;
 }
 
+
 ret_t
-cherokee_handler_file_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties)
+cherokee_handler_file_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_file);
 	
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base (HANDLER(n), cnt);
+	cherokee_handler_init_base (HANDLER(n), cnt, props);
 
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_file_free;
 	MODULE(n)->get_name     = (module_func_get_name_t) cherokee_handler_file_get_name;
@@ -77,18 +100,6 @@ cherokee_handler_file_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 	n->mime           = NULL;
 	n->using_sendfile = false;
 	n->info           = NULL;
-
-#ifdef CHEROKEE_EMBEDDED
-	n->use_cache      = true;
-#else
-	n->use_cache      = false;
-#endif
-
-	/* Check some properties
-	 */
-	if (properties != NULL) {
-		cherokee_typed_table_get_int (properties, "cache", &n->use_cache);
-	}
 
 	/* Return the object
 	 */
@@ -258,7 +269,7 @@ stat_local_directory (cherokee_handler_file_t *n, cherokee_connection_t *conn, c
 
 	/* Without cache
 	 */
-	if (! n->use_cache) {
+	if (! HDL_FILE_PROP(n)->use_cache) {
 		re = stat (conn->local_directory.buf, &n->cache_info);
 		if (re < 0) {
 			switch (errno) {
@@ -348,7 +359,7 @@ cherokee_handler_file_init (cherokee_handler_file_t *n)
 	/* Is this file cached in the io cache?
 	 */
 #ifndef CHEROKEE_EMBEDDED
-	use_io = ((!n->use_cache) &&
+	use_io = ((!HDL_FILE_PROP(n)->use_cache) &&
 		  (conn->encoder == NULL) &&
 		  (conn->socket.is_tls == non_TLS) &&
 		  (n->info->st_size <= IOCACHE_MAX_FILE_SIZE) &&

@@ -39,13 +39,15 @@ typedef struct {
 	cherokee_buffer_t              reply;
 } cherokee_handler_admin_t;
 
-#define AHANDLER(x)  ((cherokee_handler_admin_t *)(x))
+#define PROP_ADMIN(x)      ((cherokee_handler_admin_props_t *)(x)) 
+#define HDL_ADMIN(x)       ((cherokee_handler_admin_t *)(x))
+#define HDL_ADMIN_PROPS(x) (PROP_ADMIN(HANDLER(x)->props))
 
 
 /* Library init function
  */
 void MODULE_INIT(admi) (cherokee_module_loader_t *loader);
-ret_t cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties);
+ret_t cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props);
 
 /* virtual methods implementation
  */

@@ -26,8 +26,14 @@
 #define CHEROKEE_CONNECTION_HANDLER_PHPCGI_H
 
 #include "common-internal.h"
-#include "handler.h"
-#include "module_loader.h"
+#include "handler_cgi.h"
+
+typedef struct {
+	cherokee_handler_cgi_props_t base;
+	cherokee_buffer_t            interpreter;
+} cherokee_handler_phpcgi_props_t;
+
+#define PROP_PHPCGI(x) ((cherokee_handler_phpcgi_props_t *)(x))
 
 
 /* Library init function
@@ -35,7 +41,7 @@
 void MODULE_INIT(phpcgi) (cherokee_module_loader_t *loader);
 
 
-ret_t cherokee_handler_phpcgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties);
+ret_t cherokee_handler_phpcgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props);
 ret_t cherokee_handler_phpcgi_init (cherokee_handler_t  *hdl);
 
 #endif /* CHEROKEE_CONNECTION_HANDLER_PHPCGI_H */

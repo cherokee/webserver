@@ -41,7 +41,7 @@ typedef struct {
 /* Library init function
  */
 void MODULE_INIT(error) (cherokee_module_loader_t *loader);
-ret_t cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties);
+ret_t cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props);
 
 /* virtual methods implementation
  */

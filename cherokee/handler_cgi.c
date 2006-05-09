@@ -76,7 +76,7 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 {
 	ret_t                   ret;
  	size_t                  readed = 0;
-	cherokee_handler_cgi_t *cgi    = HANDLER_CGI(cgi_base);
+	cherokee_handler_cgi_t *cgi    = HDL_CGI(cgi_base);
 
 	/* Read the data from the pipe:
 	 */
@@ -108,15 +108,14 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 
 
 ret_t
-cherokee_handler_cgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties)
+cherokee_handler_cgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
 {
 	int i;
 	CHEROKEE_NEW_STRUCT (n, handler_cgi);
 	
 	/* Init the base class
 	 */
-	cherokee_handler_cgi_base_init (CGI_BASE(n), cnt, properties, 
-					cherokee_handler_cgi_add_env_pair, read_from_cgi);
+	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, props, cherokee_handler_cgi_add_env_pair, read_from_cgi);
 
 	/* Virtual methods
 	 */
@@ -191,7 +190,7 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 
 	/* Free the rest of the handler CGI memory
 	 */
-	cherokee_handler_cgi_base_free (CGI_BASE(cgi));
+	cherokee_handler_cgi_base_free (HDL_CGI_BASE(cgi));
 
 	/* Close the connection with the CGI
 	 */
@@ -253,9 +252,25 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 
 
 ret_t 
-cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
-	return cherokee_handler_cgi_base_configure (conf, srv, props);
+	cherokee_handler_cgi_props_t *props;
+
+	/* Instance a new property object
+	 */
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n, handler_cgi_props);
+		*_props = HANDLER_PROPS(n);
+	}
+
+	props = PROP_CGI(*_props);
+
+	/* Parse local options
+	 */
+	
+	
+
+	return cherokee_handler_cgi_base_configure (conf, srv, _props);
 }
 
 
@@ -264,7 +279,7 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 				   char *name,    int name_len,
 				   char *content, int content_len)
 {
-	cherokee_handler_cgi_t *cgi = HANDLER_CGI(cgi_base);
+	cherokee_handler_cgi_t *cgi = HDL_CGI(cgi_base);
 
 #ifdef _WIN32
 	cherokee_buffer_add_va (&cgi->envp, "%s=%s", name, content);
@@ -302,9 +317,9 @@ add_environment (cherokee_handler_cgi_t *cgi, cherokee_connection_t *conn)
 	ret_t                        ret;
 	char                        *lenght;
 	cuint_t                      lenght_len;
-	cherokee_handler_cgi_base_t *cgi_base = CGI_BASE(cgi);
+	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
 
-	ret = cherokee_handler_cgi_base_build_envp (CGI_BASE(cgi), conn);
+	ret = cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(cgi), conn);
 	if (unlikely (ret != ret_ok)) return ret;
 
 	/* CONTENT_LENGTH
@@ -361,7 +376,7 @@ ret_t
 cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 {
 	ret_t                        ret;
-	cherokee_handler_cgi_base_t *cgi_base = CGI_BASE(cgi);
+	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
 	cherokee_connection_t       *conn     = HANDLER_CONN(cgi);
 
 	switch (cgi_base->init_phase) {
@@ -440,7 +455,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	 */
 	int                          re;
 	cherokee_connection_t       *conn          = HANDLER_CONN(cgi);
-	cherokee_handler_cgi_base_t *cgi_base      = CGI_BASE(cgi);
+	cherokee_handler_cgi_base_t *cgi_base      = HDL_CGI_BASE(cgi);
 	char                        *absolute_path = cgi_base->executable.buf;
 	char                        *argv[4]       = { NULL, NULL, NULL, NULL };
 
@@ -503,7 +518,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	/* Change the execution user?
 	 */
-	if (cgi_base->change_user) {
+	if (HDL_CGI_BASE_PROPS(cgi_base)->change_user) {
 		struct stat info;
 			
 		re = stat (argv[1], &info);
@@ -627,9 +642,9 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 
 	/* Command line
 	 */
-	cmd = CGI_BASE(cgi)->executable.buf;
+	cmd = HDL_CGI_BASE(cgi)->executable.buf;
 	cherokee_buffer_add (&cmd_line, cmd, strlen(cmd));
-	cherokee_buffer_add_va (&cmd_line, " \"%s\"", CGI_BASE(cgi)->param.buf);
+	cherokee_buffer_add_va (&cmd_line, " \"%s\"", HDL_CGI_BASE(cgi)->param.buf);
 
 	/* Execution directory
 	 */
@@ -637,10 +652,10 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 		cherokee_buffer_add_buffer (&exec_dir, &conn->effective_directory);
 	} else {
 		char *file = strrchr (cmd, '/');
-		char *end  = CGI_BASE(cgi)->executable.buf + CGI_BASE(cgi)->executable.len;
+		char *end  = HDL_CGI_BASE(cgi)->executable.buf + HDL_CGI_BASE(cgi)->executable.len;
 
 		cherokee_buffer_add (&exec_dir, cmd, 
-				     CGI_BASE(cgi)->executable.len - (end - file));
+				     HDL_CGI_BASE(cgi)->executable.len - (end - file));
 	}
 
 	/* Set the bInheritHandle flag so pipe handles are inherited. 

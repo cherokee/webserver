@@ -353,15 +353,14 @@ split_address_or_path (char *str, cherokee_buffer_t *hostname, cint_t *port_num,
 
 
 ret_t 
-cherokee_ext_source_configure (cherokee_config_node_t *conf, cherokee_table_t *props)
+cherokee_ext_source_configure (cherokee_config_node_t *conf, list_t *ext_list)
 {
 	ret_t                       ret;
-	cherokee_config_node_t     *subconf;
 	cherokee_config_node_t     *child;
 	cherokee_config_node_t     *child2;
-	list_t                     *i, *j;
+	cherokee_config_node_t     *child3;
+	list_t                     *i, *j, *k;
 	list_t                      nlist        = LIST_HEAD_INIT(nlist);
-	cherokee_boolean_t          first        = true;
 	cherokee_ext_source_t      *server_entry = NULL;
 	cherokee_ext_source_head_t *head         = NULL;
 
@@ -370,45 +369,47 @@ cherokee_ext_source_configure (cherokee_config_node_t *conf, cherokee_table_t *p
 	cherokee_config_node_foreach (i, conf) {
 		child = CONFIG_NODE(i);
 
-		/* Create the external source object
+		/* Instance a new entry
 		 */
-		if (first) {
+		if (list_empty (ext_list)) {
 			ret = cherokee_ext_source_head_new (&head);
 			if (ret != ret_ok) return ret;
-			
-			list_add ((list_t *)head, &nlist);
-			cherokee_typed_table_add_list (props, "servers", &nlist, (cherokee_typed_free_func_t) cherokee_ext_source_free);
 
-			first        = false;
 			server_entry = EXT_SOURCE(head);
 		} else {
-			cherokee_ext_source_new (&server_entry);
-			list_add_tail ((list_t *)server_entry, &nlist);
+			ret = cherokee_ext_source_new (&server_entry);
+			if (ret != ret_ok) return ret;
 		}
-
-		/* Properties
+		
+		/* Add the entry to the list
 		 */
-		ret = cherokee_config_node_get (child, "host", &subconf);
-		if (ret == ret_ok) {
-			split_address_or_path (subconf->val.buf, &server_entry->host, &server_entry->port,
-					       &server_entry->unix_socket, &server_entry->original_server);
-		}
+		list_add_tail ((list_t *)server_entry, ext_list);
 
-		subconf = NULL;
-		ret = cherokee_config_node_get (child, "env", &subconf);
-		if (ret == ret_ok) {
-			cherokee_config_node_foreach (j, subconf) {
-				child2 = CONFIG_NODE(j);
+		/* Parse properties
+		 */
+		cherokee_config_node_foreach (j, child) {
+			child2 = CONFIG_NODE(j);
 
-				ret = cherokee_ext_source_add_env (server_entry, child2->key.buf, child2->val.buf);
-				if (ret != ret_ok) return ret;
+			if (equal_buf_str (&child2->key, "host")) {
+				split_address_or_path (child2->val.buf, &server_entry->host, &server_entry->port,
+						       &server_entry->unix_socket, &server_entry->original_server);
+				
+			} else if (equal_buf_str (&child2->key, "env")) {
+				cherokee_config_node_foreach (k, child2) {
+					child3 = CONFIG_NODE(k);
+					
+					ret = cherokee_ext_source_add_env (server_entry, child3->key.buf, child3->val.buf);
+					if (ret != ret_ok) return ret;
+				}
+
+			} else if (equal_buf_str (&child2->key, "interpreter")) {
+				// fix win32 path
+				cherokee_buffer_add_buffer (&server_entry->interpreter, &child2->val);
+
+			} else {
+				PRINT_MSG ("ERROR: Handler ext_source: Unknown key: '%s'\n", child2->key.buf);
+				return ret_error;
 			}
-		}
-
-		ret = cherokee_config_node_get (child, "interpreter", &subconf);
-		if (ret == ret_ok) {
-			// fix win32 path
-			cherokee_buffer_add_buffer (&server_entry->interpreter, &subconf->val);
 		}
 	}
 

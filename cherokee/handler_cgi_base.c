@@ -44,7 +44,7 @@
 ret_t 
 cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi, 
 				cherokee_connection_t                    *conn,
-				cherokee_table_t                         *properties,
+				cherokee_handler_props_t                 *props,
 				cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
 				cherokee_handler_cgi_base_read_from_cgi_t read_from_cgi)
 {
@@ -52,7 +52,7 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base (HANDLER(cgi), conn);
+	cherokee_handler_init_base (HANDLER(cgi), conn, props);
 
 	/* Supported features
 	 */
@@ -67,13 +67,8 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 	/* Init to default values
 	 */
 	cgi->init_phase          = hcgi_phase_build_headers;
-	cgi->script_alias        = NULL;
-	cgi->system_env          = NULL;
 	cgi->content_length      = 0;
 	cgi->got_eof             = false;
-	cgi->is_error_handler    = false;
-	cgi->check_file          = true;
-	cgi->change_user         = 0;
 
 	cherokee_buffer_init (&cgi->executable);
 	cherokee_buffer_init (&cgi->param);
@@ -89,15 +84,7 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 
 	/* Read the properties
 	 */
-	if (properties) {
-		cherokee_typed_table_get_str  (properties, "script_alias",  &cgi->script_alias);
-		cherokee_typed_table_get_list (properties, "env",           &cgi->system_env);
-		cherokee_typed_table_get_int  (properties, "error_handler", &cgi->is_error_handler);
-		cherokee_typed_table_get_int  (properties, "change_user",   &cgi->change_user);		
-		cherokee_typed_table_get_int  (properties, "check_file",    &cgi->check_file);		
-	}
-
-	if (cgi->is_error_handler) {
+	if (HDL_CGI_BASE_PROPS(cgi)->is_error_handler) {
 		HANDLER(cgi)->support |= hsupport_error;		
 	}
 	
@@ -139,51 +126,58 @@ env_item_free (void *p)
 
 
 ret_t 
-cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
-	ret_t   ret;
-	list_t *i, *j;
+	ret_t                              ret;
+	list_t                            *i, *j;
+	cherokee_handler_cgi_base_props_t *props;
 
+	/* Sanity check: This class is pure virtual, it shouldn't allocate memory here. 
+	 * Check that the object space has been already instanced by it father.
+	 */
+	if (*_props == NULL) {
+		SHOULDNT_HAPPEN;
+		return ret_ok;
+	}
+	
+	/* Init
+	 */
+	props = PROP_CGI_BASE(*_props);
+
+	INIT_LIST_HEAD (&props->system_env);
+	cherokee_buffer_init (&props->script_alias);
+
+	props->is_error_handler = false;
+	props->change_user      = false;
+	props->check_file       = true;
+
+	/* Parse the configuration tree
+	 */
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
-		ret = cherokee_typed_table_instance (props);
-		if (ret != ret_ok) return ret;
-
 		if (equal_buf_str (&subconf->key, "script_alias")) {
-			ret = cherokee_typed_table_add_str (*props, "script_alias", strdup(subconf->val.buf));
+			ret = cherokee_buffer_add_buffer (&props->script_alias, &subconf->val);
 			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "env")) {
 			cherokee_config_node_foreach (j, subconf) {
 				env_item_t             *env;
-				list_t                 *plist    = NULL;
-				list_t                  nlist    = LIST_HEAD_INIT(nlist);
 				cherokee_config_node_t *subconf2 = CONFIG_NODE(j);
 
 				env = env_item_new (&subconf2->key, &subconf2->val);
 				if (env == NULL) return ret_error;
 
-				cherokee_typed_table_get_list (*props, "env", &plist);
-
-				if (plist == NULL) {
-					list_add ((list_t *)env, &nlist);
-					cherokee_typed_table_add_list (*props, "env", &nlist, env_item_free);
-				} else {
-					list_add_tail ((list_t *)env, plist);
-				}
+				list_add_tail ((list_t *)env, &props->system_env);
 			}
 		} else if (equal_buf_str (&subconf->key, "error_handler")) {
-			ret = cherokee_typed_table_add_int (*props, "error_handler", atoi(subconf->val.buf));
-			if (ret != ret_ok) return ret;
+			props->is_error_handler = atoi(subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "change_user")) {
-			ret = cherokee_typed_table_add_int (*props, "change_user", atoi(subconf->val.buf));
-			if (ret != ret_ok) return ret;
+			props->change_user = atoi(subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "check_file")) {
-			ret = cherokee_typed_table_add_int (*props, "check_file", atoi(subconf->val.buf));
-			if (ret != ret_ok) return ret;
+			props->check_file = atoi(subconf->val.buf);
 		}
 	}
 
@@ -418,14 +412,12 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	/* Add user defined variables at the beginning,
 	 * these have precedence..
 	 */
-	if (cgi->system_env != NULL) {
-		list_for_each (i, cgi->system_env) {
-			env_item_t *env = (env_item_t *)i;			
-			cgi->add_env_pair (cgi, 
-					   env->env.buf, env->env.len, 
-					   env->val.buf, env->val.len);
-		}		
-	}
+	list_for_each (i, &HDL_CGI_BASE_PROPS(cgi)->system_env) {
+		env_item_t *env = (env_item_t *)i;			
+		cgi->add_env_pair (cgi, 
+				   env->env.buf, env->env.len, 
+				   env->val.buf, env->val.len);
+	}		
 
 	/* Add the basic enviroment variables
 	 */
@@ -435,7 +427,7 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	/* SCRIPT_NAME:
 	 * It is the request without the pathinfo if it exists
 	 */	
-	if (! cgi->script_alias) {
+	if (cherokee_buffer_is_empty (&HDL_CGI_BASE_PROPS(cgi)->script_alias)) {
 		if (cgi->param.len > 0) {
 			/* phpcgi request	
 			 */
@@ -457,7 +449,7 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 
 	cherokee_buffer_clean (&tmp);
 	
-	if (cgi->check_file &&
+	if (HDL_CGI_BASE_PROPS(cgi)->check_file &&
 	    (conn->web_directory.len > 1))
 	{
 		cherokee_buffer_add_buffer (&tmp, &conn->web_directory);
@@ -481,25 +473,26 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 ret_t 
 cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherokee_boolean_t check_filename)
 {
-	struct stat            st;
-	ret_t                  ret;
-	cherokee_connection_t *conn         = HANDLER_CONN(cgi);
-	int                    req_len;
-	int                    local_len;
-	int                    pathinfo_len = 0;
+	ret_t                              ret;
+	cint_t                             req_len;
+	cint_t                             local_len;
+	struct stat                        st;
+	cint_t                             pathinfo_len = 0;
+	cherokee_connection_t             *conn         = HANDLER_CONN(cgi);
+	cherokee_handler_cgi_base_props_t *props        = HDL_CGI_BASE_PROPS(cgi);
 
 	/* ScriptAlias: If there is a ScriptAlias directive, it
 	 * doesn't need to find the executable file..
 	 */
-	if (cgi->script_alias != NULL) {
-		TRACE (ENTRIES, "Script alias '%s'\n", cgi->script_alias);
+	if (! cherokee_buffer_is_empty (&props->script_alias)) {
+		TRACE (ENTRIES, "Script alias '%s'\n", props->script_alias.buf);
 
-		if (stat(cgi->script_alias, &st) == -1) {
+		if (stat (props->script_alias.buf, &st) == -1) {
 			conn->error_code = http_not_found;
 			return ret_error;
 		}
 
-		cherokee_buffer_add (&cgi->executable, cgi->script_alias, strlen(cgi->script_alias));
+		cherokee_buffer_add_buffer (&cgi->executable, &props->script_alias);
 
 		/* Check the path_info even if it uses a  scriptalias. The PATH_INFO 	
 		 * is the rest of the substraction of request - configured directory.

@@ -32,14 +32,14 @@
 
 
 ret_t 
-cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties)
+cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_error);
 	   
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base(HANDLER(n), cnt);
+	cherokee_handler_init_base(HANDLER(n), cnt, props);
 	HANDLER(n)->support = hsupport_error | hsupport_length;
 
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_error_init;

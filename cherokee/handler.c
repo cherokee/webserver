@@ -32,7 +32,7 @@
 
 
 ret_t
-cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn)
+cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn, cherokee_handler_props_t *props)
 {
 	/* Init the base class
 	 */
@@ -46,6 +46,8 @@ cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn)
 	/* Parent reference
 	 */
 	hdl->connection = conn;
+	hdl->props      = props;
+
 	return ret_ok;
 }
 

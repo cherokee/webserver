@@ -43,16 +43,22 @@ typedef enum {
 } cherokee_handler_fcgi_post_t;
 
 typedef struct {
+	cherokee_handler_cgi_base_t  base;
+	list_t                       server_list; 	
+} cherokee_handler_fcgi_props_t;
+
+typedef struct {
 	cherokee_handler_cgi_base_t   base;
 	cherokee_socket_t             socket;
 	cherokee_ext_source_t        *src;
 	cherokee_handler_fcgi_post_t  post_phase;
-	list_t                       *server_list;
 	cuint_t                       post_len;
 	cherokee_buffer_t             write_buffer;
 } cherokee_handler_fcgi_t;
 
-#define HANDLER_FCGI(x)  ((cherokee_handler_fcgi_t *)(x))
+#define HDL_FCGI(x)       ((cherokee_handler_fcgi_t *)(x))
+#define PROP_FCGI(x)      ((cherokee_handler_fcgi_props_t *)(x))
+#define HDL_FCGI_PROPS(x) (PROP_FCGI(HANDLER(x)->props))
 
  
 /* Library init function
@@ -61,7 +67,7 @@ void  MODULE_INIT(fcgi) (cherokee_module_loader_t *loader);
 
 /* Methods
  */
-ret_t cherokee_handler_fcgi_new  (cherokee_handler_t     **hdl, void *cnt, cherokee_table_t *properties);
+ret_t cherokee_handler_fcgi_new  (cherokee_handler_t     **hdl, void *cnt, cherokee_handler_props_t *props);
 ret_t cherokee_handler_fcgi_free (cherokee_handler_fcgi_t *hdl);
 ret_t cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl);
 

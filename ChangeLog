@@ -2,7 +2,8 @@
 
 	* themes/Makefile.am, themes/default_theme.css,
 	themes/default_header.html, themes/default_footer.html,
-	themes/default_entry.html: Added default theme for dirlist.
+	themes/default_entry.html, configure.in: Added default theme for
+	dirlist.
 	
 	* cherokee/handler_dirlist.c, cherokee/handler_dirlist.c: Almost
 	rewritten: removed hardcoded HTML.  Now it supports themes.

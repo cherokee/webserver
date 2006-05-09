@@ -44,23 +44,32 @@
 #include "server-protected.h"
 #include "module.h"
 #include "connection.h"
-
-#include "handler_file.h"
-#include "handler_dirlist.h"
 #include "list_ext.h"
 
 #define ENTRIES "handler,common"
 
 
 ret_t 
-cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	ret_t ret;
+	cherokee_handler_common_props_t *props;
 
-	ret = cherokee_handler_file_configure (conf, srv, props);
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n, handler_common_props);
+
+		n->props_file    = NULL;
+		n->props_dirlist = NULL;
+
+		*_props = HANDLER_PROPS(n);
+	}
+
+	props = PROP_COMMON(*_props);
+
+	ret = cherokee_handler_file_configure (conf, srv, (cherokee_handler_props_t **)&props->props_file);
 	if (ret != ret_ok) return ret;
 
-	return cherokee_handler_dirlist_configure (conf, srv, props);
+	return cherokee_handler_dirlist_configure (conf, srv, (cherokee_handler_props_t **)&props->props_dirlist);
 }
 
 
@@ -120,7 +129,7 @@ stat_file (cherokee_boolean_t useit, cherokee_iocache_t *iocache, struct stat *n
 
 
 ret_t 
-cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties)
+cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
 {
 	ret_t                     ret;
 	int                       exists;
@@ -133,8 +142,8 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_table
 
 	/* Check some properties
 	 */
-	if (properties != NULL) {
-		cherokee_typed_table_get_int (properties, "cache", &use_iocache);
+	if (PROP_COMMON(props)->props_file != NULL) {
+		use_iocache = PROP_COMMON(props)->props_file->use_cache;
 	}
 
 	/* Check the request
@@ -188,7 +197,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_table
 	 */
 	if (S_ISREG(info->st_mode)) {
 		TRACE (ENTRIES, "going for %s\n", "handler_file");
-		return cherokee_handler_file_new (hdl, cnt, properties);
+		return cherokee_handler_file_new (hdl, cnt, HANDLER_PROPS(PROP_COMMON(props)->props_file));
 	}
 
 	/* Is it a directory
@@ -200,7 +209,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_table
 		 */
 		if (conn->request.buf[conn->request.len-1] != '/') {
 			TRACE (ENTRIES, "going for %s\n", "handler_dir");
-			return cherokee_handler_dirlist_new (hdl, cnt, properties);
+			return cherokee_handler_dirlist_new (hdl, cnt, HANDLER_PROPS(PROP_COMMON(props)->props_dirlist));
 		}
 
 		/* Add the request
@@ -276,7 +285,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_table
 		/* If the dir hasn't a index file, it uses dirlist
 		 */
 		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
-		return cherokee_handler_dirlist_new (hdl, cnt, properties);
+		return cherokee_handler_dirlist_new (hdl, cnt, HANDLER_PROPS(PROP_COMMON(props)->props_dirlist));
 	}
 
 	/* Unknown request type

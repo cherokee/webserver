@@ -771,6 +771,23 @@ cherokee_header_copy_request (cherokee_header_t *hdr, cherokee_buffer_t *request
 
 
 ret_t 
+cherokee_header_copy_query_string (cherokee_header_t *hdr, cherokee_buffer_t *query_string)
+{
+	ret_t ret;
+
+	if ((hdr->query_string_off == 0) ||
+	    (hdr->query_string_len <= 0)) {
+		return ret_not_found;
+	}
+
+	ret = cherokee_buffer_add (query_string, hdr->input_buffer->buf + hdr->query_string_off, hdr->query_string_len);
+	if (unlikely(ret < ret_ok)) return ret;
+
+	return ret_ok;
+}
+
+
+ret_t 
 cherokee_header_get_request_w_args (cherokee_header_t *hdr, char **req, int *req_len)
 {
 	if ((hdr->request_off == 0) ||
@@ -802,57 +819,6 @@ cherokee_header_copy_request_w_args (cherokee_header_t *hdr, cherokee_buffer_t *
 	if (unlikely(ret < ret_ok)) return ret;
 
 	return cherokee_buffer_decode (request);
-}
-
-
-ret_t 
-cherokee_header_get_arguments (cherokee_header_t *hdr, cherokee_buffer_t *qstring, cherokee_table_t *arguments)
-{
-	ret_t ret;
- 	char *string, *token; 
-
-
-	if ((hdr->query_string_off == 0) ||
-	    (hdr->query_string_len <= 0)) 
-	{
-		return ret_ok;
-	}
-
-	ret = cherokee_buffer_add (qstring, hdr->input_buffer->buf + hdr->query_string_off, hdr->query_string_len); 
-	if (unlikely(ret < ret_ok)) return ret;
-
-	string = qstring->buf;
-
-	while ((token = (char *) strsep(&string, "&")) != NULL)
-	{
-		char *equ, *key, *val;
-
-		if (token == NULL) continue;
-
-		if ((equ = strchr(token, '=')))
-		{
-			*equ = '\0';
-
-			key = token;
-			val = equ+1;
-
-			cherokee_table_add (arguments, key, strdup(val));
-
-			*equ = '=';
-		} else {
-			cherokee_table_add (arguments, token, NULL);
-		}
-
-		/* UGLY hack, part 1:
-		 * It restore the string modified by the strtok() function
-		 */
-		token[strlen(token)] = '&';
-	}
-
-	/* UGLY hack, part 2:
-	 */
-	qstring->buf[qstring->len] = '\0';
-	return ret_ok;
 }
 
 

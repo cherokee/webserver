@@ -52,10 +52,13 @@ AC_SUBST(PACKAGE_PATCH_VERSION)
 dnl Check for CPU / vendor / OS
 os_string="UNIX"
 so_suffix=so
+mod_suffix=$so_suffix
+
 AC_MSG_CHECKING([host platform characteristics])
 	case "$host" in
 	*-*-mingw*|*-*-cygwin*)
 		so_suffix=DLL
+		mod_suffix=$so_suffix
 	     os_string="Win32"
           libdl=
           ;;
@@ -82,6 +85,7 @@ AC_MSG_CHECKING([host platform characteristics])
           ;;
 	*-*-darwin*)
 		so_suffix=dylib
+		mod_suffix=so
 		thread_ldflags="-pthread"
           libdl="-ldl"
           ;;
@@ -108,6 +112,7 @@ dnl Dynamic library loading library
 dnl
 LIBS="$LIBS $libdl"
 AC_DEFINE_UNQUOTED(SO_SUFFIX, "${so_suffix}", [Dynamic loading libraries extension])
+AC_DEFINE_UNQUOTED(MOD_SUFFIX, "${mod_suffix}", [Dynamic modules extension])
 
 dnl
 dnl Platforms

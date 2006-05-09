@@ -42,13 +42,13 @@ cherokee_module_info_handler_t MODULE_INFO(admin) = {
 
 
 ret_t 
-cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties)
+cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_admin);
 
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base (HANDLER(n), cnt);
+	cherokee_handler_init_base (HANDLER(n), cnt, props);
 
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_admin_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_admin_free;

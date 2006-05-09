@@ -70,7 +70,6 @@ typedef struct {
 	cherokee_buffer_t        footer;
 	cherokee_buffer_t        entry;
 	cherokee_buffer_t        css;
-
 } cherokee_handler_dirlist_props_t;
 
 
@@ -97,21 +96,19 @@ typedef struct {
 
 	cherokee_buffer_t        public_dir;
 	cherokee_buffer_t        server_software;
-
-	/* Properties
-	 */
-	cherokee_handler_dirlist_props_t *props;
-
 } cherokee_handler_dirlist_t;
 
-
-#define DHANDLER(x)  ((cherokee_handler_dirlist_t *)(x))
+#define PROP_DIRLIST(x)      ((cherokee_handler_dirlist_props_t *)(x))
+#define HDL_DIRLIST(x)       ((cherokee_handler_dirlist_t *)(x))
+#define HDL_DIRLIST_PROP(x)  (PROP_DIRLIST(HANDLER(x)->props))
 
 
 /* Library init function
  */
-void MODULE_INIT(dirlist)          (cherokee_module_loader_t *loader);
-ret_t cherokee_handler_dirlist_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *properties);
+void MODULE_INIT(dirlist)                  (cherokee_module_loader_t *loader);
+
+ret_t cherokee_handler_dirlist_new         (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *properties);
+ret_t cherokee_handler_dirlist_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props);
 
 /* virtual methods implementation
  */
@@ -120,6 +117,5 @@ ret_t cherokee_handler_dirlist_free        (cherokee_handler_dirlist_t *dhdl);
 void  cherokee_handler_dirlist_get_name    (cherokee_handler_dirlist_t *dhdl, char **name);
 ret_t cherokee_handler_dirlist_step        (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_dirlist_add_headers (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer);
-
 
 #endif /* CHEROKEE_DIRLIST_HANDLER_H */

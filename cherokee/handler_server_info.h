@@ -31,12 +31,13 @@
 #include "connection.h"
 #include "module_loader.h"
 
+typedef struct {
+	cherokee_boolean_t  just_about;
+} cherokee_handler_server_info_props_t;
 
 typedef struct {
 	cherokee_handler_t  handler;
 	cherokee_buffer_t   buffer;
-
-	cherokee_boolean_t  just_about;
 
 	enum {
 		send_page,
@@ -45,11 +46,12 @@ typedef struct {
 	   
 } cherokee_handler_server_info_t;
 
-#define SRVINFOHANDLER(x)  ((cherokee_handler_server_info_t *)(x))
-
+#define HDL_SRV_INFO(x)       ((cherokee_handler_server_info_t *)(x))
+#define PROP_SRV_INFO(x)      ((cherokee_handler_server_info_props_t *)(x))
+#define HDL_SRV_INFO_PROPS(x) (PROP_SRV_INFO(HANDLER(x)->props))
 
 void MODULE_INIT(server_info) (cherokee_module_loader_t *loader);
-ret_t cherokee_handler_server_info_new   (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties);
+ret_t cherokee_handler_server_info_new   (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props);
 
 /* virtual methods implementation
  */

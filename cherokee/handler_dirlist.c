@@ -153,7 +153,7 @@ cherokee_handler_dirlist_props_free (void *props)
 
 
 ret_t 
-cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_dirlist_props_t **_props)
+cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	ret_t                             ret;
 	list_t                           *i;
@@ -177,10 +177,10 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 
 		INIT_LIST_HEAD (&n->notice_files);
 		
-		*_props = n;
+		*_props = HANDLER_PROPS(n);
 	}
 	
-	props = *_props;
+	props = PROP_DIRLIST(*_props);
 
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
@@ -229,7 +229,7 @@ is_header_file (cherokee_handler_dirlist_t *dhdl, char *filename)
 {
 	list_t *i;
 
-	list_for_each (i, &dhdl->props->notice_files) 
+	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) 
 	{
 		if (strcmp (filename, LIST_ITEM_INFO(i)) == 0)
 			return true;
@@ -315,7 +315,7 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 
 
 ret_t
-cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *properties)
+cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
 {	
 	ret_t  ret;
 	char  *value;
@@ -323,7 +323,7 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_han
 	
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base (HANDLER(n), cnt);
+	cherokee_handler_init_base (HANDLER(n), cnt, props);
 
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_dirlist_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_dirlist_free;
@@ -372,17 +372,15 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_han
 
 	/* Properties
 	 */
-	n->props = (cherokee_handler_dirlist_props_t *) properties;
-
 	cherokee_buffer_init (&n->header);
 	cherokee_buffer_init (&n->public_dir);
 	cherokee_buffer_init (&n->server_software);
 
 	/* Check the theme
 	 */
-	if (cherokee_buffer_is_empty (&n->props->header) ||
-	    cherokee_buffer_is_empty (&n->props->entry)  ||
-	    cherokee_buffer_is_empty (&n->props->footer))
+	if (cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->entry)  ||
+	    cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->header) ||
+	    cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->footer))
 	{
 		PRINT_ERROR_S ("The theme is incomplete\n");
 		return ret_error;
@@ -615,7 +613,7 @@ read_notice_file (cherokee_handler_dirlist_t *dhdl)
 	list_t                *i;
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
-	list_for_each (i, &dhdl->props->notice_files) {
+	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) {
 		cuint_t  filename_len;
 		char    *filename = LIST_ITEM_INFO(i);
 
@@ -653,7 +651,7 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 	ret = check_request_finish_with_slash (dhdl);
 	if (ret != ret_ok) return ret;
 	
-	if (! list_empty (&dhdl->props->notice_files)) {
+	if (! list_empty (&HDL_DIRLIST_PROP(dhdl)->notice_files)) {
 		ret = read_notice_file (dhdl);
 		if (ret != ret_ok) return ret;
 	}
@@ -702,18 +700,19 @@ replace_token_guts (cherokee_buffer_t *buf, char *token, char token_len, char *r
 static ret_t
 render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_entry_t *file)
 {
-	cherokee_boolean_t  is_dir;
-	char               *icon     = NULL;
-	cherokee_icons_t   *icons    = HANDLER_SRV(dhdl)->icons;
-	char               *name     = (char *) &file->info.d_name;
-	cherokee_buffer_t  *tmp      = &dhdl->header;
+	cherokee_boolean_t                is_dir;
+	char                             *icon     = NULL;
+	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
+	char                             *name     = (char *) &file->info.d_name;
+	cherokee_buffer_t                *tmp      = &dhdl->header;
+	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
 
 #define replace_token(buf,token,val) \
 	replace_token_guts(buf,token,sizeof(token)-1,val)
 
 	/* Add entry text
 	 */
-	cherokee_buffer_add_buffer (buffer, &dhdl->props->entry);
+	cherokee_buffer_add_buffer (buffer, &props->entry);
 	
 	/* Add the icon
 	 */
@@ -737,7 +736,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 	/* Date
 	 */
-	if (dhdl->props->show_date) {
+	if (props->show_date) {
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_ensure_size (tmp, 33);
 
@@ -747,7 +746,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 	/* Size
 	 */
-	if (dhdl->props->show_size) {
+	if (props->show_size) {
 		if (is_dir) {
 			replace_token (buffer, "%size_unit%", NULL);
 			replace_token (buffer, "%size%", "-");
@@ -770,7 +769,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 	/* User
 	 */
-	if (dhdl->props->show_user) {
+	if (props->show_user) {
 		struct passwd *user;
 		char          *name;
 		
@@ -782,7 +781,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 	/* Group
 	 */
-	if (dhdl->props->show_group) {
+	if (props->show_group) {
 		struct group *user;
 		char         *group;
 		
@@ -827,10 +826,11 @@ replace_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t
 ret_t
 cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
-	ret_t ret;
+	ret_t                             ret;
+	cherokee_handler_dirlist_props_t *props = HDL_DIRLIST_PROP(dhdl);
 
 	if (dhdl->serve_css) {
-		cherokee_buffer_add_buffer (buffer, &dhdl->props->css);
+		cherokee_buffer_add_buffer (buffer, &props->css);
 		return ret_eof_have_data;
 	}
 
@@ -838,7 +838,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 	case dirlist_phase_add_header:
 		/* Add the theme header
 		 */
-		cherokee_buffer_add_buffer (buffer, &dhdl->props->header);
+		cherokee_buffer_add_buffer (buffer, &props->header);
 
 		ret = replace_header_footer_vbles (dhdl, buffer);
 		if (unlikely (ret != ret_ok)) return ret;
@@ -884,7 +884,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 		dhdl->phase = dirlist_phase_add_footer;
 
 	case dirlist_phase_add_footer:
-		cherokee_buffer_add_buffer (buffer, &dhdl->props->footer);
+		cherokee_buffer_add_buffer (buffer, &props->footer);
 
 		ret = replace_header_footer_vbles (dhdl, buffer);
 		if (unlikely (ret != ret_ok)) return ret;
@@ -902,7 +902,7 @@ cherokee_handler_dirlist_add_headers (cherokee_handler_dirlist_t *dhdl, cherokee
 	if (dhdl->serve_css) {
 		cherokee_buffer_add_va (buffer, 
 					"Content-Type: text/css; charset=iso-8859-1"CRLF
-					"Content-Length: %d"CRLF, dhdl->props->css.len);
+					"Content-Length: %d"CRLF, HDL_DIRLIST_PROP(dhdl)->css.len);
 		return ret_ok;
 	}
 

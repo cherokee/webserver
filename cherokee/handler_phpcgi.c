@@ -120,7 +120,7 @@ out:
 
 
 ret_t 
-cherokee_handler_phpcgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties)
+cherokee_handler_phpcgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
 {
 	ret_t                        ret;
 	cherokee_handler_cgi_base_t *cgi;
@@ -128,10 +128,10 @@ cherokee_handler_phpcgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_tabl
 
 	/* Create the new handler CGI object
 	 */
-	ret = cherokee_handler_cgi_new (hdl, cnt, properties);
+	ret = cherokee_handler_cgi_new (hdl, cnt, props);
 	if (unlikely(ret != ret_ok)) return ret;
 
-	cgi = CGI_BASE(*hdl);
+	cgi = HDL_CGI_BASE(*hdl);
 	   
 	/* Redefine the init method
 	 */
@@ -139,8 +139,8 @@ cherokee_handler_phpcgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_tabl
 
 	/* Look for the interpreter in the properties
 	 */
-	if (properties) {
-		cherokee_typed_table_get_str (properties, "interpreter", &interpreter);
+	if (props) {
+		interpreter = PROP_PHPCGI(props)->interpreter.buf;
 	}
 
 	if (interpreter == NULL) 
@@ -174,7 +174,7 @@ cherokee_handler_phpcgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_tabl
 ret_t 
 cherokee_handler_phpcgi_init (cherokee_handler_t *hdl)
 {
-	cherokee_handler_cgi_base_t *cgi  = CGI_BASE(hdl);
+	cherokee_handler_cgi_base_t *cgi  = HDL_CGI_BASE(hdl);
 	cherokee_connection_t       *conn = HANDLER_CONN(hdl);
 	cherokee_buffer_t           *ld   = &conn->local_directory;
 
@@ -184,7 +184,7 @@ cherokee_handler_phpcgi_init (cherokee_handler_t *hdl)
 	 * is to call again the CGI handler
 	 */
 	if (cgi->init_phase != hcgi_phase_build_headers) {
-		return cherokee_handler_cgi_init (HANDLER_CGI(hdl));
+		return cherokee_handler_cgi_init (HDL_CGI(hdl));
 	}
 
 	/* Add parameter to CGI handler
@@ -198,26 +198,35 @@ cherokee_handler_phpcgi_init (cherokee_handler_t *hdl)
 	cherokee_handler_cgi_add_env_pair (cgi, "REDIRECT_STATUS", 15, "200", 3); 
 	cherokee_handler_cgi_add_env_pair (cgi, "SCRIPT_FILENAME", 15, cgi->param.buf, cgi->param.len);	
 
-	return cherokee_handler_cgi_init (HANDLER_CGI(hdl));
+	return cherokee_handler_cgi_init (HDL_CGI(hdl));
 }
 
 
 static ret_t 
-cherokee_handler_phpcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+cherokee_handler_phpcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
-	ret_t              ret;
-	cherokee_buffer_t *buf;
+	list_t                          *i;
+	cherokee_handler_phpcgi_props_t *props;
 
-	ret = cherokee_config_node_read (conf, "interpreter", &buf);
-	if (ret == ret_ok) {
-		ret = cherokee_typed_table_instance (props);
-		if (ret != ret_ok) return ret;
-		
-		ret = cherokee_typed_table_add_str (*props, "interpreter", strdup(buf->buf));
-		if (ret != ret_ok) return ret;		
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT(n, handler_phpcgi_props);
+
+		cherokee_buffer_init (&n->interpreter);
+
+		*_props = HANDLER_PROPS(n);
 	}
 
-	return cherokee_handler_cgi_configure (conf, srv, props);
+	props = PROP_PHPCGI(*_props);
+
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+		if (equal_buf_str (&subconf->key, "interpreter")) {
+			cherokee_buffer_add_buffer (&props->interpreter, &subconf->val);
+		}
+	}
+
+	return cherokee_handler_cgi_configure (conf, srv, _props);
 }
 
 

@@ -24,3 +24,4 @@ class Test (TestBase):
 
     def Precondition (self):
         return os.path.exists (PHPCGI_PATH)
+

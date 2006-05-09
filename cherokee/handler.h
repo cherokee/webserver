@@ -63,10 +63,14 @@ typedef ret_t (* handler_func_free_t)        (void  *handler);
 typedef ret_t (* handler_func_step_t)        (void  *handler, cherokee_buffer_t *buffer);
 typedef ret_t (* handler_func_add_headers_t) (void  *handler, cherokee_buffer_t *buffer);
 
+typedef struct {
+	void (*free) (void *itself);
+} cherokee_handler_props_t;
 
 typedef struct {
-	cherokee_module_t module;
-	
+	cherokee_module_t           module;
+	cherokee_handler_props_t   *props;
+
 	/* Pure virtual methods
 	 */
 	handler_func_step_t         step;
@@ -74,16 +78,14 @@ typedef struct {
 
 	/* Properties
 	 */
-	void                      *connection;
-	cherokee_handler_support_t support;
+	void                       *connection;
+	cherokee_handler_support_t  support;
 } cherokee_handler_t;
-
-typedef struct {
-	void (*free) (void *itself);
-} cherokee_handler_props_t;
 
 
 #define HANDLER(x)                         ((cherokee_handler_t *)(x))
+#define HANDLER_PROPS(x)                   ((cherokee_handler_props_t *)(x))
+
 #define HANDLER_CONN(h)                    (CONN(HANDLER(h)->connection))
 #define HANDLER_SRV(h)                     (CONN_SRV(HANDLER_CONN(h)))
 #define HANDLER_THREAD(h)                  (CONN_THREAD(HANDLER_CONN(h)))
@@ -94,7 +96,7 @@ typedef struct {
 #define HANDLER_SUPPORT_ERROR(h)           (HANDLER(h)->support & hsupport_error)
 
 
-ret_t cherokee_handler_init_base   (cherokee_handler_t  *hdl, void *conn);
+ret_t cherokee_handler_init_base   (cherokee_handler_t  *hdl, void *conn, cherokee_handler_props_t *props);
 ret_t cherokee_handler_free_base   (cherokee_handler_t  *hdl);
 
 ret_t cherokee_handler_init        (cherokee_handler_t  *hdl);

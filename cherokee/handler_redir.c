@@ -48,55 +48,67 @@ struct cre_list {
 
 
 static void 
-substitute_groups (cherokee_buffer_t* url, const char* subject, 
-		   cherokee_buffer_t* subs, int ovector[], int stringcount)
+substitute_groups (cherokee_buffer_t *url, const char *subject, 
+		   cherokee_buffer_t *subs, int ovector[], int stringcount)
 {
-	char               *s;
-	cherokee_boolean_t dollar;
-	cherokee_buffer_t  buff = CHEROKEE_BUF_INIT;
-	
-	dollar = false;
-	for(s = subs->buf; *s != '\0'; s++) {
+	cint_t              re;
+	char                num;
+	cherokee_boolean_t  dollar;
+	char               *s         = subs->buf;
+	const char         *substring = NULL;
 
-		if (dollar) {
-			char num = *s - '0';
-
-			if (num >= 0 && num <= 9) {
-				cherokee_buffer_ensure_size (&buff, 1024);
-
-				pcre_copy_substring (subject, ovector, stringcount, num, buff.buf, buff.size-1);
-				cherokee_buffer_add (url, buff.buf, strlen(buff.buf));
-
-			} else {
-				/* If it is not a number, add both characters 
-				 */
-				cherokee_buffer_add_str (url, "$");
-				cherokee_buffer_add (url, (char *)s, 1);
-			}
-
-			dollar = false;
-		} else {
+	for (dollar = false; *s != '\0'; s++) {
+		if (! dollar) {
 			if (*s == '$')
 				dollar = true;
 			else 
 				cherokee_buffer_add (url, (char *)s, 1);
+			continue;
 		}
-	}
 
-	cherokee_buffer_mrproper (&buff);
+		num = *s - '0';
+		if (num >= 0 && num <= 9) {
+			re = pcre_get_substring (subject, ovector, stringcount, num, &substring);
+			if ((re < 0) || (substring == NULL)) {
+				dollar = false;
+				continue;
+			}
+			cherokee_buffer_add (url, (char *)substring, strlen(substring));
+			pcre_free_substring (substring);
+
+		} else {
+			/* If it is not a number, add both characters 
+			 */
+			cherokee_buffer_add_str (url, "$");
+			cherokee_buffer_add (url, (char *)s, 1);
+		}
+		
+		dollar = false;
+	}
 }
 
 
 static ret_t
 match_and_substitute (cherokee_handler_redir_t *n) 
 {
+	ret_t                  ret;
 	list_t                *i;
 	cherokee_connection_t *conn = HANDLER_CONN(n);
 	
-	list_for_each (i, n->regex_list_ref) {
-		int   ovector[OVECTOR_LEN], rc;
-		char *subject; 
-		int   subject_len;
+	/* Append the query string
+	 */
+	if (! cherokee_buffer_is_empty (&conn->query_string)) {
+		cherokee_buffer_add_str (&conn->request, "?");
+		cherokee_buffer_add_buffer (&conn->request, &conn->query_string);
+	}
+	
+	/* Try to match it
+	 */
+	list_for_each (i, &HDL_REDIR_PROPS(n)->regex_list) {
+		cint_t           rc;
+		char            *subject; 
+		cint_t           subject_len;
+		cint_t           ovector[OVECTOR_LEN];
 		struct cre_list *list = (struct cre_list *)i;
 
 		/* The subject usually begins with a slash. Lets imagine a request "/dir/thing". 
@@ -120,7 +132,7 @@ match_and_substitute (cherokee_handler_redir_t *n)
 			rc = conn->req_matched_ref->ovecsize;
 
 		} else {
-			rc = pcre_exec (list->re, NULL, subject, subject_len, 0, 0, ovector, 30);
+			rc = pcre_exec (list->re, NULL, subject, subject_len, 0, 0, ovector, OVECTOR_LEN);
 			if (rc == 0) {
 				PRINT_ERROR_S("Too many groups in the regex\n");
 			}
@@ -145,9 +157,10 @@ match_and_substitute (cherokee_handler_redir_t *n)
 			int   len;
 			char *subject_copy = strdup (subject);
 
-			cherokee_buffer_ensure_size (&conn->request, conn->request.len + subject_len);
+			cherokee_buffer_clean (&conn->pathinfo);
 			cherokee_buffer_clean (&conn->request);
 
+			cherokee_buffer_ensure_size (&conn->request, conn->request.len + subject_len);
 			substitute_groups (&conn->request, subject_copy, &list->subs, ovector, rc);
 
 			cherokee_split_arguments (&conn->request, 0, &args, &len);
@@ -172,23 +185,30 @@ match_and_substitute (cherokee_handler_redir_t *n)
 
 		TRACE (ENTRIES, "Redirect %s -> %s\n", conn->request_original.buf, conn->redirect.buf);
 
-		return ret_ok;
+		ret = ret_ok;
+		goto out;
 	}
 
-	return ret_ok;
+	ret = ret_ok;
+
+out:
+	if (! cherokee_buffer_is_empty (&conn->query_string))
+		cherokee_buffer_drop_endding (&conn->request, conn->query_string.len + 1);
+
+	return ret;
 }
 
 #endif
 
 ret_t 
-cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties)
+cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_redir);
 	
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base(HANDLER(n), cnt);
+	cherokee_handler_init_base(HANDLER(n), cnt, props);
 	
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_redir_init;
 	MODULE(n)->free         = (handler_func_free_t) cherokee_handler_redir_free;
@@ -197,34 +217,25 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_
 	HANDLER(n)->connection  = cnt;
 	HANDLER(n)->support     = hsupport_nothing;
 
-	n->regex_list_ref       = NULL;
-	n->target_url           = NULL;
-	n->target_url_len       = 0;
 	n->use_previous_match   = false;
 
-	/* It needs at least the "URL" configuration parameter..
-	 */
-	if (cherokee_buffer_is_empty (&CONN(cnt)->redirect) && properties) {
-		/* Get the URL property, if needed
-		 */
-		cherokee_typed_table_get_str (properties, "url", &n->target_url);
-		n->target_url_len = (n->target_url == NULL ? 0 : strlen(n->target_url));
-
-		TRACE (ENTRIES, "URL: %s\n", n->target_url);
-	}
-
-	/* Manage the regex rules
-	 */
 #ifndef CHEROKEE_EMBEDDED
-	if (properties != NULL) {
-		cherokee_typed_table_get_list (properties, "regex_list", &n->regex_list_ref);
-	}
 
-	if (n->regex_list_ref != NULL) {
-		ret = match_and_substitute (n);
-		if (ret == ret_eagain) {
-			cherokee_handler_redir_free (n);
-			return ret_eagain;
+	/* If there is an explitic redirection on the connection don't
+	 * even bother looking in the properties. Go straight for it.
+	 */
+	if (! cherokee_buffer_is_empty (&CONN(cnt)->redirect)) {
+		TRACE (ENTRIES, "Explicit redirection to '%s'\n", CONN(cnt)->redirect.buf);
+	} else {
+		if (! list_empty (&HDL_REDIR_PROPS(n)->regex_list)) {
+
+			/* Manage the regex rules
+			 */
+			ret = match_and_substitute (n);
+			if (ret == ret_eagain) {
+				cherokee_handler_redir_free (n);
+				return ret_eagain;
+			}
 		}
 	}
 #endif
@@ -260,7 +271,7 @@ cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 	
 	/* Check if it has the URL
 	 */
-	if (n->target_url_len <= 0) {
+	if (HDL_REDIR_PROPS(n)->url.len <= 0) {
 		conn->error_code = http_internal_error;
 		return ret_error;		
 	}
@@ -270,8 +281,8 @@ cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 	request_end = (conn->request.len - conn->web_directory.len);
 	request_endding = conn->request.buf + conn->web_directory.len;
 	
-	cherokee_buffer_ensure_size (&conn->redirect, request_end + n->target_url_len +1);
-	cherokee_buffer_add (&conn->redirect, n->target_url, n->target_url_len);
+	cherokee_buffer_ensure_size (&conn->redirect, request_end + HDL_REDIR_PROPS(n)->url.len +1);
+	cherokee_buffer_add_buffer (&conn->redirect, &HDL_REDIR_PROPS(n)->url);
 	cherokee_buffer_add (&conn->redirect, request_endding, request_end);
 
 	conn->error_code = http_moved_permanently;
@@ -292,20 +303,16 @@ cre_list_free (void *data)
 }
 
 static ret_t
-configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t *props)
+configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_redir_props_t *props)
 {
-	ret_t              ret;
-	cint_t             hidden;
-	list_t             nlist;
-	struct cre_list   *n;
-	cherokee_buffer_t *substring;
-	pcre              *re    = NULL;
-	cherokee_buffer_t *regex = NULL;
-	list_t            *plist = NULL;
+	ret_t               ret;
+	cint_t              hidden;
+	struct cre_list    *n;
+	cherokee_buffer_t  *substring;
+	pcre               *re         = NULL;
+	cherokee_buffer_t  *regex      = NULL;
 
 	TRACE(ENTRIES, "Converting rewrite rule '%s'\n", conf->key.buf);
-
-	INIT_LIST_HEAD (&nlist);
 
 	/* Query conf
 	 */
@@ -316,56 +323,58 @@ configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cheroke
 	if (ret == ret_ok) {
 		ret = cherokee_regex_table_get (srv->regexs, regex->buf, (void **)&re);
 		if (ret != ret_ok) return ret;
-	}
+	} 
 
 	ret = cherokee_config_node_read (conf, "substring", &substring);
 	if (ret != ret_ok) return ret;
-	
+
 	/* New RegEx
 	 */
 	n = (struct cre_list*)malloc(sizeof(struct cre_list));
 
 	INIT_LIST_HEAD (&n->item);
-	n->re     = re;
-	n->hidden = hidden;
+	n->re         = re;
+	n->hidden     = hidden;
 	
 	cherokee_buffer_init (&n->subs);
 	cherokee_buffer_add_buffer (&n->subs, substring);
 
 	/* Add the list
 	 */
-	cherokee_typed_table_get_list (props, "regex_list", &plist);
-	
-	if (plist == NULL) {
-		list_add_tail ((list_t *)n, &nlist);
-		cherokee_typed_table_add_list (props, "regex_list", &nlist, cre_list_free);
-	} else {
-		list_add_tail ((list_t *)n, plist);
-	}
+	list_add_tail ((list_t *)n, &props->regex_list);
 
 	return ret_ok;
 }
 
 
 static ret_t 
-cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
-	ret_t   ret;
-	list_t *i, *j;
+	ret_t                           ret;
+	list_t                         *i, *j;
+	cherokee_handler_redir_props_t *props;
+
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n,handler_redir_props);
+
+		cherokee_buffer_init (&n->url);
+		INIT_LIST_HEAD (&n->regex_list);
+		
+		*_props = HANDLER_PROPS(n);
+	}	
+
+	props = PROP_REDIR(*_props);
 
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
-		ret = cherokee_typed_table_instance (props);
-		if (ret != ret_ok) return ret;
-
 		if (equal_buf_str (&subconf->key, "url")) {
-			ret = cherokee_typed_table_add_str (*props, "url", strdup(subconf->val.buf));
-			if (ret != ret_ok) return ret;
+			cherokee_buffer_clean (&props->url);
+			cherokee_buffer_add_buffer (&props->url, &subconf->val);
 
 		} else if (equal_buf_str (&subconf->key, "rewrite")) {
 			cherokee_config_node_foreach (j, subconf) {
-				ret = configure_rewrite (CONFIG_NODE(j), srv, *props);
+				ret = configure_rewrite (CONFIG_NODE(j), srv, PROP_REDIR(props));
 				if (ret != ret_ok) return ret;
 			}
 		}

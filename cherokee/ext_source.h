@@ -83,7 +83,7 @@ ret_t cherokee_ext_source_get_next  (cherokee_ext_source_head_t  *serverf, list_
 
 /* Configure
  */
-ret_t cherokee_ext_source_configure (cherokee_config_node_t *conf, cherokee_table_t *props);
+ret_t cherokee_ext_source_configure (cherokee_config_node_t *conf, list_t *ext_list);
 
 
 CHEROKEE_END_DECLS

@@ -30,6 +30,7 @@
 #define CHEROKEE_UTIL_H
 
 #include <cherokee/common.h>
+#include <cherokee/table.h>
 
 #ifdef HAVE_NETINET_IN_H
 # include <netinet/in.h>
@@ -97,18 +98,21 @@ void  cherokee_trace (const char *entry, const char *file, int line, const char 
 
 /* Path walking
  */
-ret_t cherokee_split_pathinfo (cherokee_buffer_t  *path, 
-			       int                 init_pos,
-			       int                 allow_dirs,
-			       char              **pathinfo,
-			       int                *pathinfo_len);
+ret_t cherokee_split_pathinfo     (cherokee_buffer_t  *path, 
+				   int                 init_pos,
+				   int                 allow_dirs,
+				   char              **pathinfo,
+				   int                *pathinfo_len);
 
-ret_t cherokee_split_arguments (cherokee_buffer_t *request,
-				int                init_pos,
-				char             **arguments,
-				int               *arguments_len);
+ret_t cherokee_split_arguments    (cherokee_buffer_t *request,
+				   int                init_pos,
+				   char             **arguments,
+				   int               *arguments_len);
 
-ret_t cherokee_short_path      (cherokee_buffer_t *path);
+ret_t cherokee_short_path         (cherokee_buffer_t *path);
+
+ret_t cherokee_parse_query_string (cherokee_buffer_t *qstring, 
+				   cherokee_table_t  *arguments);
 
 
 CHEROKEE_END_DECLS

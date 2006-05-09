@@ -39,18 +39,24 @@
 #include "connection.h"
 
 typedef struct {
+	int                    foo;
+} cherokee_handler_proxy_props_t;
+
+typedef struct {
 	cherokee_handler_t     handler;	
 	cherokee_downloader_t  client;
 	cherokee_buffer_t      url;
 } cherokee_handler_proxy_t;
 
-#define HANDLER_PROXY(p)  ((cherokee_handler_proxy_t *)(p))
+#define PROP_PROXY(x)      ((cherokee_handler_proxy_props_t *)(x))
+#define HDL_PROXY(x)       ((cherokee_handler_proxy_t *)(p))
+#define HDL_PROXY_PROPS(x) (PROP_PROXY(HANDLER(x)->props))
 
 
 /* Library init function
  */
 void  MODULE_INIT(proxy)         (cherokee_module_loader_t *loader);
-ret_t cherokee_handler_proxy_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties);
+ret_t cherokee_handler_proxy_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props);
 
 /* Virtual methods
  */

@@ -31,21 +31,24 @@
 #include "list.h"
 
 typedef struct {
+	cherokee_buffer_t url;
+	list_t            regex_list;
+} cherokee_handler_redir_props_t;
+
+typedef struct {
 	cherokee_handler_t    handler;
 
-	char                 *target_url;
-	int                   target_url_len;
-
-	list_t               *regex_list_ref;
+//	list_t               *regex_list_ref;
 	cherokee_boolean_t    use_previous_match;
-
 } cherokee_handler_redir_t;
 
-#define REHANDLER(x)  ((cherokee_handler_redir_t *)(x))
+#define PROP_REDIR(x)      ((cherokee_handler_redir_props_t *)(x))
+#define HDL_REDIR(x)       ((cherokee_handler_redir_t *)(x))
+#define HDL_REDIR_PROPS(x) (PROP_REDIR(HANDLER(x)->props))
 
 
 void MODULE_INIT(redir) (cherokee_module_loader_t *loader);
-ret_t cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties);
+ret_t cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props);
 
 /* virtual methods implementation
  */

@@ -52,14 +52,14 @@ cherokee_handler_proxy_configure (cherokee_config_node_t *conf, cherokee_server_
 }
 
 ret_t
-cherokee_handler_proxy_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties)
+cherokee_handler_proxy_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_proxy); 
 
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base (HANDLER(n), cnt);
+	cherokee_handler_init_base (HANDLER(n), cnt, props);
 
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_proxy_free;
 	MODULE(n)->get_name     = (module_func_get_name_t) cherokee_handler_proxy_get_name;

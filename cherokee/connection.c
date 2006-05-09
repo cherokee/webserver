@@ -1,3 +1,4 @@
+
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 
 /* Cherokee
@@ -1364,10 +1365,13 @@ cherokee_connection_get_request (cherokee_connection_t *cnt)
 		cherokee_buffer_drop_endding (&cnt->incoming_header, post_len);
 	}
 	
-	/* Copy the request
+	/* Copy the request and query string
 	 */
 	ret = cherokee_header_copy_request (&cnt->header, &cnt->request);
-	if (ret < ret_ok) goto error;
+	if (unlikely (ret < ret_ok)) goto error;
+
+	ret = cherokee_header_copy_query_string (&cnt->header, &cnt->query_string);
+	if (unlikely (ret < ret_ok)) goto error;	
 
 	/* Look for starting '/' in the request
 	 */
@@ -1565,9 +1569,6 @@ cherokee_connection_get_req_entry (cherokee_connection_t *cnt, cherokee_reqs_lis
 	 */
 #ifndef CHEROKEE_EMBEDDED
 	ret = cherokee_reqs_list_get (reqs, &cnt->request, config_entry, cnt);
-#else
-	return ret_ok;
-#endif
 	switch (ret) {
 	case ret_not_found:
 		break;
@@ -1587,6 +1588,9 @@ cherokee_connection_get_req_entry (cherokee_connection_t *cnt, cherokee_reqs_lis
 	cnt->auth_type = config_entry->authentication;
 
 	return ret;
+#else
+	return ret_ok;
+#endif
 }
 
 
@@ -1807,7 +1811,7 @@ cherokee_connection_parse_args (cherokee_connection_t *cnt)
 
 	/* Parse the header
 	 */
-	ret = cherokee_header_get_arguments (&cnt->header, &cnt->query_string, cnt->arguments);
+	ret = cherokee_parse_query_string (&cnt->query_string, cnt->arguments);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	return ret_ok;

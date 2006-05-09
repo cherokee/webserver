@@ -39,11 +39,59 @@
 	set_env_pair (cgi, key, sizeof(key)-1, val, len)
 
 
-cherokee_module_info_handler_t MODULE_INFO(fastcgi) = {
-	.module.type     = cherokee_handler,                /* type         */
-	.module.new_func = cherokee_handler_fastcgi_new,    /* new func     */
-	.valid_methods   = http_get | http_post | http_head /* http methods */
-};
+static ret_t 
+cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+{
+	ret_t                             ret;
+	list_t                           *i, *j;
+	cherokee_handler_fastcgi_props_t *props;
+
+	/* Instance a new property object
+	 */
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n, handler_fastcgi_props);
+		
+		INIT_LIST_HEAD(&n->server_list);
+		INIT_LIST_HEAD(&n->fastcgi_env_ref);
+
+		n->nsockets   = NSOCKS_DEFAULT;
+		n->nkeepalive = 0;
+		n->npipeline  = 0;
+
+		*_props = HANDLER_PROPS(n);
+	}
+
+	props = PROP_FASTCGI(*_props);
+
+	/* Parse the configuration tree
+	 */
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+		if (equal_buf_str (&subconf->key, "server")) {
+			ret = cherokee_ext_source_configure (subconf, &props->server_list);
+			if (ret != ret_ok) return ret;
+
+		} else if (equal_buf_str (&subconf->key, "fcgi_env")) {
+			cherokee_config_node_foreach (j, conf) {
+				cherokee_config_node_t *subconf2 = CONFIG_NODE(j);
+
+				// TODO : implemet this
+				subconf2 = subconf2;
+			}
+			
+		} else if (equal_buf_str (&subconf->key, "keepalive")) {
+			props->npipeline = atoi(subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "pipeline")) {
+			props->nkeepalive = atoi(subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "socket")) {
+			props->nsockets = atoi(subconf->val.buf);
+		}
+	}
+	return cherokee_handler_cgi_base_configure (conf, srv, _props);
+}
 
 
 static void
@@ -79,7 +127,7 @@ set_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 {
         int                         len;
         FCGI_BeginRequestRecord     request;
-	cherokee_handler_fastcgi_t *hdl = HANDLER_FASTCGI(cgi_base);	
+	cherokee_handler_fastcgi_t *hdl = HDL_FASTCGI(cgi_base);	
 	cherokee_buffer_t          *buf = &hdl->write_buffer;
 
         len  = key_len + val_len;
@@ -118,7 +166,7 @@ static ret_t
 read_from_fastcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 {
 	ret_t                       ret;
-	cherokee_handler_fastcgi_t *hdl     = HANDLER_FASTCGI(cgi);
+	cherokee_handler_fastcgi_t *hdl     = HDL_FASTCGI(cgi);
 	cherokee_connection_t      *conn    = HANDLER_CONN(cgi);
 	cherokee_fcgi_manager_t    *manager = hdl->manager;
 
@@ -173,14 +221,13 @@ read_from_fastcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 
 ret_t
-cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties)
+cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_fastcgi);
 	
 	/* Init the base class
 	 */
-	cherokee_handler_cgi_base_init (CGI_BASE(n), cnt, properties, 
-					set_env_pair, read_from_fastcgi);
+	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, props, set_env_pair, read_from_fastcgi);
 
 	/* Virtual methods
 	 */
@@ -198,22 +245,10 @@ cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_tabl
 	n->init_phase = fcgi_init_get_manager;
 	n->post_phase = fcgi_post_init;
 	n->post_len   = 0;
-
 	n->manager    = NULL;
 	n->dispatcher = NULL;
 
-	n->nkeepalive = 0;
-	n->npipeline  = 0;
-	n->nsockets   = NSOCKS_DEFAULT;
-
 	cherokee_buffer_init (&n->write_buffer);
-
-	if (properties) {
-		cherokee_typed_table_get_list (properties, "servers", &n->server_list);
-		cherokee_typed_table_get_list (properties, "env", &n->fastcgi_env_ref);
-		cherokee_typed_table_get_int (properties, "nkeepalive", &n->nkeepalive);
-		cherokee_typed_table_get_int (properties, "nsocket", &n->nsockets);
-	}
 
         /* The first FastCGI handler of each thread must create the
          * FastCGI manager container table, and set the freeing func.
@@ -247,21 +282,22 @@ cherokee_handler_fastcgi_free (cherokee_handler_fastcgi_t *hdl)
 static ret_t
 get_dispatcher (cherokee_handler_fastcgi_t *hdl, cherokee_fcgi_dispatcher_t **dispatcher)
 {
-	ret_t                    ret;
-	cherokee_ext_source_t   *src         = NULL;
-	cherokee_thread_t       *thread      = HANDLER_THREAD(hdl);
-        cherokee_table_t        *dispatchers = thread->fastcgi_servers;
+	ret_t                             ret;
+	cherokee_ext_source_t            *src         = NULL;
+	cherokee_thread_t                *thread      = HANDLER_THREAD(hdl);
+        cherokee_table_t                 *dispatchers = thread->fastcgi_servers;
+	cherokee_handler_fastcgi_props_t *props       = HDL_FASTCGI_PROPS(hdl);
 
 	/* Choose the server
 	 */
-	ret = cherokee_ext_source_get_next (EXT_SOURCE_HEAD(hdl->server_list->next), hdl->server_list, &src);
+	ret = cherokee_ext_source_get_next (EXT_SOURCE_HEAD(props->server_list.next), &props->server_list, &src);
 	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Get the manager
 	 */
 	ret = cherokee_table_get (dispatchers, src->original_server.buf, (void **)dispatcher);
 	if (ret == ret_not_found) {
-		ret = cherokee_fcgi_dispatcher_new (dispatcher, thread, src, hdl->nsockets, hdl->nkeepalive, hdl->npipeline);
+		ret = cherokee_fcgi_dispatcher_new (dispatcher, thread, src, props->nsockets, props->nkeepalive, props->npipeline);
 		if (unlikely (ret != ret_ok)) return ret;
 
 		ret = cherokee_table_add (dispatchers, src->original_server.buf, *dispatcher);
@@ -315,7 +351,7 @@ static ret_t
 add_extra_fastcgi_env (cherokee_handler_fastcgi_t *hdl, cuint_t *last_header_offset)
 {
 	ret_t                        ret;
-	cherokee_handler_cgi_base_t *cgi_base = CGI_BASE(hdl);
+	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(hdl);
         cherokee_buffer_t            buffer   = CHEROKEE_BUF_INIT;
 	cherokee_connection_t       *conn     = HANDLER_CONN(hdl);
 
@@ -413,7 +449,7 @@ build_header (cherokee_handler_fastcgi_t *hdl)
 
 	/* Add enviroment variables
 	 */
-	cherokee_handler_cgi_base_build_envp (CGI_BASE(hdl), conn);
+	cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), conn);
 
 	add_extra_fastcgi_env (hdl, &last_header_offset);
         fixup_padding (&hdl->write_buffer, hdl->id, last_header_offset);
@@ -537,7 +573,7 @@ init_respin (cherokee_handler_fastcgi_t *hdl)
 	ret = register_connection (hdl);
 	if (unlikely (ret != ret_ok)) return ret;
 	
-	CGI_BASE(hdl)->got_eof = false;
+	HDL_CGI_BASE(hdl)->got_eof = false;
 	hdl->init_phase = fcgi_init_build_header;
 	return ret_eagain;			
 }
@@ -548,7 +584,7 @@ cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 {
 	ret_t                        ret;
 	cherokee_connection_t       *conn = HANDLER_CONN(hdl);
-	cherokee_handler_cgi_base_t *cgi  = CGI_BASE(hdl);
+	cherokee_handler_cgi_base_t *cgi  = HDL_CGI_BASE(hdl);
 
 	switch (hdl->init_phase) {
 	case fcgi_init_get_manager:
@@ -576,7 +612,7 @@ cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 
 		/* Set the executable filename
 		 */
-		ret = cherokee_handler_cgi_base_extract_path (CGI_BASE(cgi), true);
+		ret = cherokee_handler_cgi_base_extract_path (HDL_CGI_BASE(cgi), true);
 		if (unlikely (ret < ret_ok)) return ret;
 
 		hdl->init_phase = fcgi_init_build_header;
@@ -617,7 +653,7 @@ cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 	case fcgi_init_read:
  		TRACE (ENTRIES, "id=%d gen=%d, Init phase = read\n", hdl->id, hdl->generation);
 
-		ret = read_from_fastcgi (CGI_BASE(hdl), &HANDLER_CONN(hdl)->buffer);
+		ret = read_from_fastcgi (HDL_CGI_BASE(hdl), &HANDLER_CONN(hdl)->buffer);
 		switch (ret) {
 		case ret_eof:
 			if (cgi->got_eof) 
@@ -661,3 +697,12 @@ MODULE_INIT(fastcgi) (cherokee_module_loader_t *loader)
 	printf ("IMPORTANT: This \"fastcgi\" module is NOT ready to be used. Please,\n");
 	printf ("modify your configuration in order to use the \"fcgi\" module instead.\n\n");
 }
+
+
+cherokee_module_info_handler_t MODULE_INFO(fastcgi) = {
+	.module.type      = cherokee_handler,                   /* type         */
+	.module.new_func  = cherokee_handler_fastcgi_new,       /* new func     */
+	.module.configure = cherokee_handler_fastcgi_configure, /* configure */
+	.valid_methods    = http_get | http_post | http_head    /* http methods */
+};
+

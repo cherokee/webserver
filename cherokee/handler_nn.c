@@ -40,11 +40,11 @@
 #include "levenshtein_distance.h"
 
 
-cherokee_module_info_handler_t MODULE_INFO(nn) = {
-	.module.type     = cherokee_handler,            /* type         */
-	.module.new_func = cherokee_handler_nn_new,     /* new func     */
-	.valid_methods   = http_get | http_head         /* http methods */
-};
+ret_t 
+cherokee_handler_nn_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+{
+	return cherokee_handler_common_configure (conf, srv, _props);
+}
 
 
 static ret_t
@@ -119,7 +119,7 @@ get_nearest (cherokee_buffer_t *local_dir,
 
 
 ret_t 
-cherokee_handler_nn_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties)
+cherokee_handler_nn_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
 {
 	ret_t                  ret;
 	struct stat            info;
@@ -135,46 +135,29 @@ cherokee_handler_nn_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *
 	/* Maybe the file/dir exists
 	 */
 	if (stat_ret == 0) {
-		return cherokee_handler_common_new (hdl, cnt, properties);
+		return cherokee_handler_common_new (hdl, cnt, props);
 	} 
-	
-	/* Create the redir handler
-	 */
-	ret = cherokee_handler_redir_new (hdl, cnt, properties);
-	if (unlikely(ret < ret_ok)) return ret;
 
-	MODULE(*hdl)->init = (handler_func_init_t) cherokee_handler_nn_init;
-	
-	return ret;
-}
-
-
-ret_t 
-cherokee_handler_nn_init (cherokee_handler_t *hdl)
-{
-	ret_t                  ret;
-	cherokee_connection_t *conn;
-	conn = CONN(HANDLER(hdl)->connection);
-	
-	/* Look for the `nearest neighbor' and redirect to it
+	/* It doesn't exit, lets redirect it..
 	 */
 	cherokee_buffer_clean (&conn->redirect);
 
 	ret = get_nearest (&conn->local_directory, &conn->request, &conn->redirect);
 	if (unlikely (ret != ret_ok)) {
-		CONN(hdl->connection)->error_code = http_not_found;
+		CONN(cnt)->error_code = http_not_found;
 		return ret_error;
 	}
 
-	CONN(hdl->connection)->error_code = http_moved_permanently;	
-	return ret_ok;
-}
+	cherokee_buffer_swap_buffers (&conn->request, &conn->redirect);
+	cherokee_buffer_clean (&conn->redirect);
 
+	return ret_eagain;
+}
 
 
 /*   Library init function
  */
-static int _nn_is_init = 0;
+static cherokee_boolean_t _nn_is_init = false;
 
 void
 MODULE_INIT(nn) (cherokee_module_loader_t *loader)
@@ -187,9 +170,13 @@ MODULE_INIT(nn) (cherokee_module_loader_t *loader)
 	/* Load the dependences
 	 */
 	cherokee_module_loader_load (loader, "common");
-	cherokee_module_loader_load (loader, "redir");
-
-	_nn_is_init = 1;
+	_nn_is_init = true;
 }
 
 
+cherokee_module_info_handler_t MODULE_INFO(nn) = {
+	.module.type      = cherokee_handler,              /* type         */
+	.module.new_func  = cherokee_handler_nn_new,       /* new func     */
+	.module.configure = cherokee_handler_nn_configure, /* configure    */
+	.valid_methods    = http_all_methods               /* http methods */
+};

@@ -174,7 +174,7 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_con
 	if (handler_name && !strcmp (handler_name, "file")) {
 		char                    *point;
 		double                   percent;
-		cherokee_handler_file_t *file = FHANDLER(conn->handler);		
+		cherokee_handler_file_t *file = HDL_FILE(conn->handler);		
 
 		/* File size
 		 */

@@ -55,31 +55,32 @@ typedef enum {
 
 
 typedef struct {
-	cherokee_handler_cgi_base_t base;
+	list_t                          server_list;
+	list_t                          fastcgi_env_ref;
 
-	list_t                         *fastcgi_env_ref;
-	list_t                         *server_list;	
-
-	cuint_t                         id;
-	cuchar_t                        generation;
-	
 	cuint_t                         nsockets;
 	cuint_t                         nkeepalive;
 	cuint_t                         npipeline;
+} cherokee_handler_fastcgi_props_t;
 
+typedef struct {
+	cherokee_handler_cgi_base_t     base;
+
+	cuint_t                         id;
+	cuchar_t                        generation;	
 	cherokee_buffer_t               write_buffer;	
+	size_t                          post_len;
 
 	cherokee_fcgi_manager_t        *manager;
 	cherokee_fcgi_dispatcher_t     *dispatcher;
 
 	cherokee_handler_fastcgi_init_t init_phase;
 	cherokee_handler_fastcgi_post_t post_phase;
-	size_t                          post_len;
-
 } cherokee_handler_fastcgi_t;
 
-#define HANDLER_FASTCGI(x)  ((cherokee_handler_fastcgi_t *)(x))
-
+#define HDL_FASTCGI(x)       ((cherokee_handler_fastcgi_t *)(x))
+#define PROP_FASTCGI(x)      ((cherokee_handler_fastcgi_props_t *)(x))
+#define HDL_FASTCGI_PROPS(x) (PROP_FASTCGI(HANDLER(x)->props))
  
 /* Library init function
  */
@@ -87,10 +88,11 @@ void  MODULE_INIT(fastcgi) (cherokee_module_loader_t *loader);
 
 /* Methods
  */
-ret_t cherokee_handler_fastcgi_new         (cherokee_handler_t        **hdl, void *cnt, cherokee_table_t *properties);
+ret_t cherokee_handler_fastcgi_new         (cherokee_handler_t        **hdl, void *cnt, cherokee_handler_props_t *properties);
 ret_t cherokee_handler_fastcgi_free        (cherokee_handler_fastcgi_t *hdl);
 ret_t cherokee_handler_fastcgi_init        (cherokee_handler_fastcgi_t *hdl);
 ret_t cherokee_handler_fastcgi_add_headers (cherokee_handler_fastcgi_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_fastcgi_step        (cherokee_handler_fastcgi_t *hdl, cherokee_buffer_t *buffer);
+
 
 #endif /* CHEROKEE_HANDLER_CGI_H */

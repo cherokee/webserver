@@ -42,6 +42,8 @@
 #define ENV_VAR_NUM 80
 
 
+typedef cherokee_handler_cgi_base_props_t cherokee_handler_cgi_props_t;
+
 typedef struct {
 	cherokee_handler_cgi_base_t base;
 
@@ -58,12 +60,11 @@ typedef struct {
 	int               envp_last;
 	pid_t             pid;               /* CGI pid */
 #endif
-
-
-
 } cherokee_handler_cgi_t;
 
-#define HANDLER_CGI(x)  ((cherokee_handler_cgi_t *)(x))
+#define HDL_CGI(x)       ((cherokee_handler_cgi_t *)(x))
+#define PROP_CGI(x)      ((cherokee_handler_cgi_props_t *)(x))
+#define HDL_CGI_PROPS(x) (PROP_CGI(HANDLER(x)->props))
 
 
 /* Library init function
@@ -72,7 +73,7 @@ void MODULE_INIT(cgi) (cherokee_module_loader_t *loader);
 
 /* Methods
  */
-ret_t cherokee_handler_cgi_new         (cherokee_handler_t    **hdl, void *cnt, cherokee_table_t *properties);
+ret_t cherokee_handler_cgi_new         (cherokee_handler_t    **hdl, void *cnt, cherokee_handler_props_t *props);
 ret_t cherokee_handler_cgi_free        (cherokee_handler_cgi_t *hdl);
 
 ret_t cherokee_handler_cgi_init        (cherokee_handler_cgi_t *hdl);
@@ -87,6 +88,6 @@ void  cherokee_handler_cgi_add_env_pair   (cherokee_handler_cgi_base_t *cgi,
 					   char *name,    int name_len,
 					   char *content, int content_len);
 
-ret_t cherokee_handler_cgi_configure      (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props);
+ret_t cherokee_handler_cgi_configure      (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **props);
 
 #endif /* CHEROKEE_HANDLER_CGI_H */

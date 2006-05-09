@@ -28,7 +28,7 @@
 #include "common-internal.h"
 #include "config_entry.h"
 
-#define OVECTOR_LEN 30
+#define OVECTOR_LEN 10
 
 
 typedef struct {
