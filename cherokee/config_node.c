@@ -152,6 +152,7 @@ cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cheroke
 
 	} while (! final);
 
+	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 }
 
@@ -185,7 +186,10 @@ cherokee_config_node_get (cherokee_config_node_t *conf, const char *key, cheroke
 		/* Look for the child entry
 		 */
 		child = search_child (current, &tmp);
-		if (child == NULL) return ret_not_found;
+		if (child == NULL) {
+			cherokee_buffer_mrproper (&tmp);
+			return ret_not_found;
+		}
 
 		if (final) {
 			*entry = child;
@@ -199,7 +203,8 @@ cherokee_config_node_get (cherokee_config_node_t *conf, const char *key, cheroke
 		cherokee_buffer_clean (&tmp);
 
 	} while (! final);
-
+       
+	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 }
 

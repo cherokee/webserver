@@ -22,9 +22,10 @@
  * USA
  */
 
+#include "common-internal.h"
+
 #include "crc32.h"
 #include "encoder_gzip.h"
-#include "common-internal.h"
 #include "module_loader.h"
 
 /* Specs:
@@ -76,8 +77,8 @@ cherokee_encoder_gzip_new (cherokee_encoder_gzip_t **encoder)
 	 */
 	cherokee_encoder_init_base (ENCODER(n));
 
-	MODULE(n)->free         = (encoder_func_free_t) cherokee_encoder_gzip_free;
 	MODULE(n)->init         = (encoder_func_encode_t) cherokee_encoder_gzip_init;
+	MODULE(n)->free         = (encoder_func_free_t) cherokee_encoder_gzip_free;
 	ENCODER(n)->add_headers = (encoder_func_add_headers_t) cherokee_encoder_gzip_add_headers;
 	ENCODER(n)->encode      = (encoder_func_encode_t) cherokee_encoder_gzip_encode;
 	ENCODER(n)->flush       = (encoder_func_flush_t) cherokee_encoder_gzip_flush;

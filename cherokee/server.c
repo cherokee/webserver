@@ -88,7 +88,6 @@
 
 #define ENTRIES "core,server"
 
-
 ret_t
 cherokee_server_new  (cherokee_server_t **srv)
 {
@@ -217,16 +216,14 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	INIT_LIST_HEAD (&n->vservers);
 
-	cherokee_table_new (&n->vservers_ref);
-	return_if_fail (n->vservers_ref!=NULL, ret_nomem);
+	cherokee_table_init (&n->vservers_ref);
 
 	cherokee_virtual_server_new (&n->vserver_default, n);
 	return_if_fail (n->vserver_default!=NULL, ret_nomem);
 		
 	/* Encoders 
 	 */
-	cherokee_encoder_table_new (&n->encoders);
-	return_if_fail (n->encoders != NULL, ret_nomem);
+	cherokee_encoder_table_init (&n->encoders);
 
 	/* Server string
 	 */
@@ -283,21 +280,64 @@ free_virtual_servers (cherokee_server_t *srv)
 
 	list_for_each_safe (i, j, &srv->vservers) {
 		cherokee_virtual_server_free (VSERVER(i));
-		list_del(i);
 	}
+
+	cherokee_table_mrproper (&srv->vservers_ref);
+}
+
+
+static ret_t
+destroy_thread (cherokee_thread_t *thread)
+{
+	cherokee_thread_wait_end (thread);
+	cherokee_thread_free (thread);
+
+	return ret_ok;
+}
+
+
+static ret_t
+destroy_all_threads (cherokee_server_t *srv)
+{
+	list_t *i, *tmp;
+
+	/* Set the exit flag, and try to ensure the threads are not
+	 * locked on a semaphore
+	 */
+	list_for_each_safe (i, tmp, &srv->thread_list) {
+		THREAD(i)->exit = true;
+		CHEROKEE_MUTEX_UNLOCK (&srv->accept_mutex);
+#ifdef HAVE_TLS
+		CHEROKEE_MUTEX_UNLOCK (&srv->accept_tls_mutex);
+#endif
+	}
+
+	/* Destroy the thread object
+	 */
+	list_for_each_safe (i, tmp, &srv->thread_list) {
+		destroy_thread (THREAD(i));
+	}
+
+	/* Main thread
+	 */
+	return cherokee_thread_free (srv->main_thread);
 }
 
 
 ret_t
 cherokee_server_free (cherokee_server_t *srv)
 {
+	/* Threads
+	 */
+	destroy_all_threads (srv);
+
 	close (srv->socket);
 	
 	if (srv->socket_tls != -1) {
 		close (srv->socket_tls);		
 	}
 
-	cherokee_encoder_table_free (srv->encoders);
+	cherokee_encoder_table_mrproper (&srv->encoders);
 	cherokee_logger_table_free (srv->loggers);
 
 #ifdef HAVE_TLS
@@ -333,11 +373,10 @@ cherokee_server_free (cherokee_server_t *srv)
 	
 	/* Virtual servers
 	 */
+	free_virtual_servers (srv);
+
 	cherokee_virtual_server_free (srv->vserver_default);
 	srv->vserver_default = NULL;
-
-	free_virtual_servers (srv);
-	cherokee_table_free (srv->vservers_ref);
 
 	cherokee_buffer_free (srv->bogo_now_string);
 	cherokee_buffer_free (srv->server_string);
@@ -349,8 +388,6 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	/* Clean config files entries
 	 */
-	cherokee_config_node_mrproper (&srv->config);
-
 	if (srv->config_file != NULL) {
 		free (srv->config_file);
 		srv->config_file = NULL;
@@ -813,7 +850,7 @@ init_vservers_tls (cherokee_server_t *srv)
 		return ret_error;
 	}
 
-	cherokee_table_foreach (srv->vservers_ref, for_each_vserver_init_tls_func);
+	cherokee_table_foreach (&srv->vservers_ref, for_each_vserver_init_tls_func);
 #endif
 
 	return ret_ok;	
@@ -912,7 +949,7 @@ cherokee_server_init (cherokee_server_t *srv)
 	srv->tls_enabled = (ret == ret_ok);
 
 	if (srv->tls_enabled == false) {
-		ret = cherokee_table_while (srv->vservers_ref, while_vserver_check_tls_func, NULL, NULL, NULL);
+		ret = cherokee_table_while (&srv->vservers_ref, while_vserver_check_tls_func, NULL, NULL, NULL);
 		srv->tls_enabled = (ret == ret_ok);
 	}
 
@@ -1006,36 +1043,9 @@ void static
 flush_logs (cherokee_server_t *srv)
 {
 	flush_vserver (NULL, srv->vserver_default);
-	cherokee_table_foreach (srv->vservers_ref, flush_vserver);
+	cherokee_table_foreach (&srv->vservers_ref, flush_vserver);
 }
 
-static ret_t
-destroy_all_threads (cherokee_server_t *srv)
-{
-	list_t *i, *tmp;
-
-	/* Set the exit flag, and try to ensure the threads are not
-	 * locked on a semaphore
-	 */
-	list_for_each_safe (i, tmp, &srv->thread_list) {
-		THREAD(i)->exit = true;
-		CHEROKEE_MUTEX_UNLOCK (&srv->accept_mutex);
-#ifdef HAVE_TLS
-		CHEROKEE_MUTEX_UNLOCK (&srv->accept_tls_mutex);
-#endif
-	} 
-
-	/* Let's destroy the threads
-	 */
-	list_for_each_safe (i, tmp, &srv->thread_list) {
-		cherokee_thread_t *thread = THREAD(i);
-
-		cherokee_thread_wait_end (thread);
-		cherokee_thread_free (thread);
-	}
-
-	return ret_ok;
-}
 
 ret_t 
 cherokee_server_reinit (cherokee_server_t *srv)
@@ -1063,10 +1073,6 @@ cherokee_server_reinit (cherokee_server_t *srv)
 	/* Close all connections
 	 */
 	close_all_connections (srv);
-
-	/* Destroy all the threads
-	 */
-	destroy_all_threads (srv);
 
 	/* Destroy the server object
 	 */
@@ -1184,13 +1190,13 @@ cherokee_server_step (cherokee_server_t *srv)
 
 
 static ret_t 
-add_vserver_alias  (char *alias, void *data)
+add_vserver_alias (char *alias, void *data)
 {
 	cherokee_server_t         *srv  = ((void **)data)[0];
 	cherokee_virtual_server_t *vsrv = ((void **)data)[1];
 
 	TRACE (ENTRIES, "Adding vserver alias '%s'\n", alias);	
-	return cherokee_table_add (srv->vservers_ref, alias, vsrv);
+	return cherokee_table_add (&srv->vservers_ref, alias, vsrv);
 }
 
 
@@ -1198,33 +1204,44 @@ static ret_t
 add_encoder (cherokee_config_node_t *node, void *data)
 {
 	ret_t                           ret;
-	cherokee_encoder_table_entry_t *enc;
-	cherokee_matching_list_t       *matching;
-	cherokee_module_info_t         *info = NULL;
- 	cherokee_server_t              *srv  = SRV(data);
-	
-	ret = cherokee_module_loader_get (&srv->loader, node->key.buf, &info);
-	if (ret != ret_ok) return ret;
+	cherokee_encoder_table_entry_t *enc      = NULL;
+	cherokee_matching_list_t       *matching = NULL;
+	cherokee_module_info_t         *info     = NULL;
+ 	cherokee_server_t              *srv      = SRV(data);
 
-	/* Set the info in the new entry
-	 */
-	cherokee_encoder_table_entry_new (&enc);
-	cherokee_encoder_table_entry_get_info (enc, info);
+	TRACE(ENTRIES, "Encoder: %s\n", node->key.buf);
 
 	/* Set the matching list
 	 */
-	cherokee_matching_list_new (&matching);
-	cherokee_encoder_entry_set_matching_list (enc, matching);
+	ret = cherokee_matching_list_new (&matching);
+	if (ret != ret_ok) goto error;
 
 	ret = cherokee_matching_list_configure (matching, node);
-	if (ret != ret_ok) return ret;	
+	if (ret != ret_ok) goto error;	
 
+	/* Load the module library and set the info
+	 */
+	ret = cherokee_module_loader_get (&srv->loader, node->key.buf, &info);
+	if (ret != ret_ok) goto error;
+
+	ret = cherokee_encoder_table_entry_new (&enc);
+	if (ret != ret_ok) goto error;
+
+	ret = cherokee_encoder_table_entry_get_info (enc, info);
+	if (ret != ret_ok) goto error;
+
+	cherokee_encoder_entry_set_matching_list (enc, matching);
+ 
 	/* Set in the encoders table
 	 */
-	ret = cherokee_encoder_table_set (srv->encoders, node->key.buf, enc);
-	if (ret != ret_ok) return ret;
+	ret = cherokee_encoder_table_set (&srv->encoders, node->key.buf, enc);
+	if (ret != ret_ok) goto error;
 
 	return ret_ok;
+
+error:
+	TRACE(ENTRIES, "Could not add '%s' encoder\n", node->key.buf);
+	return ret;
 }
 
 
@@ -1246,8 +1263,10 @@ add_vserver (cherokee_config_node_t *node, void *data)
 		ret = cherokee_virtual_server_new (&vsrv, srv);
 		if (ret != ret_ok) return ret;
 
-		ret = cherokee_table_add (srv->vservers_ref, node->key.buf, vsrv);
+		ret = cherokee_table_add (&srv->vservers_ref, node->key.buf, vsrv);
 		if (ret != ret_ok) return ret;
+
+		list_add ((list_t *)vsrv, &srv->vservers);
 
 		param[0] = srv;
 		param[1] = vsrv;

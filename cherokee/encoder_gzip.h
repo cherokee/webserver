@@ -25,19 +25,20 @@
 #ifndef CHEROKEE_ENCODE_GZIP_H
 #define CHEROKEE_ENCODE_GZIP_H
 
-#include <common-internal.h>
+#include <common.h>
 
 #include "zlib/zlib.h"
 #include "module.h"
 #include "encoder.h"
 
-
+/* Data types
+ */
 typedef struct {
 	cherokee_encoder_t  base;
+
 	z_stream            stream;
 	void               *workspace;
 	cherokee_boolean_t  add_header;
-
 	uLong               crc32;
 	uLong               size;
 } cherokee_encoder_gzip_t;
@@ -45,6 +46,8 @@ typedef struct {
 #define ENC_GZIP(x) ((cherokee_encoder_gzip_t *)(x))
 
 
+/* Methods
+ */
 ret_t cherokee_encoder_gzip_new         (cherokee_encoder_gzip_t **encoder);
 ret_t cherokee_encoder_gzip_free        (cherokee_encoder_gzip_t  *encoder);
 ret_t cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t  *encoder, cherokee_buffer_t *buf);

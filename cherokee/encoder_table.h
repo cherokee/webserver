@@ -32,40 +32,33 @@
 #include "matching_list.h"
 #include "module.h"
 
-
-typedef struct {
-	cherokee_table_t table;   /* "encoder -> encoder_table_entry */
-} cherokee_encoder_table_t;
-
 typedef struct {
 	cherokee_matching_list_t *matching;
 	encoder_func_new_t        func_new;
 } cherokee_encoder_table_entry_t;
 
+
+typedef cherokee_table_t cherokee_encoder_table_t;
 #define ETABLE(x) ((cherokee_encoder_table_t *)(x))
 
 
 /* Encoder table methods
  */
+ret_t cherokee_encoder_table_init        (cherokee_encoder_table_t *et);
+ret_t cherokee_encoder_table_mrproper    (cherokee_encoder_table_t *et);
 
-ret_t cherokee_encoder_table_new   (cherokee_encoder_table_t **et);
-ret_t cherokee_encoder_table_free  (cherokee_encoder_table_t  *et);
-ret_t cherokee_encoder_table_clean (cherokee_encoder_table_t  *et);
-
-ret_t cherokee_encoder_table_get (cherokee_encoder_table_t *et, char *encoder, cherokee_encoder_table_entry_t **entry);
-ret_t cherokee_encoder_table_set (cherokee_encoder_table_t *et, char *encoder, cherokee_encoder_table_entry_t  *entry);
-
+ret_t cherokee_encoder_table_get         (cherokee_encoder_table_t *et, char *encoder, cherokee_encoder_table_entry_t **entry);
+ret_t cherokee_encoder_table_set         (cherokee_encoder_table_t *et, char *encoder, cherokee_encoder_table_entry_t  *entry);
 ret_t cherokee_encoder_table_new_encoder (cherokee_encoder_table_t *et, char *encoder, char *ext, cherokee_encoder_t **new_encoder);
-
 
 /* Encoder entry methods
  */
-ret_t cherokee_encoder_table_entry_new      (cherokee_encoder_table_entry_t **eentry);
-ret_t cherokee_encoder_table_entry_get_info (cherokee_encoder_table_entry_t  *eentry, cherokee_module_info_t *info);
+ret_t cherokee_encoder_table_entry_new         (cherokee_encoder_table_entry_t **eentry);
+ret_t cherokee_encoder_table_entry_free        (cherokee_encoder_table_entry_t  *eentry);
+ret_t cherokee_encoder_table_entry_get_info    (cherokee_encoder_table_entry_t  *eentry, cherokee_module_info_t *info);
 
 int   cherokee_encoder_entry_has_matching_list (cherokee_encoder_table_entry_t *eentry);
 ret_t cherokee_encoder_entry_set_matching_list (cherokee_encoder_table_entry_t *eentry, cherokee_matching_list_t  *matching);
 ret_t cherokee_encoder_entry_get_matching_list (cherokee_encoder_table_entry_t *eentry, cherokee_matching_list_t **matching);
-
 
 #endif /* CHEROKEE_ENCODER_TABLE_H */

@@ -144,11 +144,18 @@ load_theme (cherokee_buffer_t *theme_path, cherokee_handler_dirlist_props_t *pro
 	return ret_ok;
 }
 
-static void
-cherokee_handler_dirlist_props_free (void *props)
+
+ret_t 
+cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 {
-	// TODO
-	;
+	cherokee_list_free (&props->notice_files, free);
+
+	cherokee_buffer_mrproper (&props->header);
+	cherokee_buffer_mrproper (&props->footer);
+	cherokee_buffer_mrproper (&props->entry);
+	cherokee_buffer_mrproper (&props->css);
+
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
 
@@ -162,9 +169,11 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 	cherokee_buffer_t                 theme_path = CHEROKEE_BUF_INIT;
 
 	if (*_props == NULL) {
-		CHEROKEE_NEW_STRUCT (n,handler_dirlist_props);
+		CHEROKEE_NEW_STRUCT (n, handler_dirlist_props);
 		
-		n->props.free  = cherokee_handler_dirlist_props_free;
+		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+						  HANDLER_PROPS_FREE(cherokee_handler_dirlist_props_free));
+
 		n->show_size   = true;
 		n->show_date   = true;
 		n->show_user   = false;

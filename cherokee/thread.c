@@ -911,7 +911,7 @@ process_active_connections (cherokee_thread_t *thd)
 			
 			/* Parse the rest of headers
 			 */
-			ret = cherokee_connection_parse_header (conn, srv->encoders);
+			ret = cherokee_connection_parse_header (conn, &srv->encoders);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				conn->phase = phase_init;

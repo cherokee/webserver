@@ -31,13 +31,17 @@
 #include "connection.h"
 #include "module_loader.h"
 
+
+/* Data types
+ */
 typedef struct {
-	cherokee_boolean_t  just_about;
+	cherokee_handler_props_t base;
+	cherokee_boolean_t       just_about;
 } cherokee_handler_server_info_props_t;
 
 typedef struct {
-	cherokee_handler_t  handler;
-	cherokee_buffer_t   buffer;
+	cherokee_handler_t       handler;
+	cherokee_buffer_t        buffer;
 
 	enum {
 		send_page,
@@ -50,6 +54,9 @@ typedef struct {
 #define PROP_SRV_INFO(x)      ((cherokee_handler_server_info_props_t *)(x))
 #define HDL_SRV_INFO_PROPS(x) (PROP_SRV_INFO(HANDLER(x)->props))
 
+
+/* Library init function
+ */
 void MODULE_INIT(server_info) (cherokee_module_loader_t *loader);
 ret_t cherokee_handler_server_info_new   (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props);
 

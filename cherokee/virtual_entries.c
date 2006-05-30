@@ -45,10 +45,7 @@ ret_t
 cherokee_virtual_entries_mrproper (cherokee_virtual_entries_t *ventry)
 {
 	cherokee_dirs_table_mrproper (&ventry->dirs);
-
-	if (!list_empty (&ventry->reqs)) {
-		cherokee_reqs_list_mrproper (&ventry->reqs);
-	}
+	cherokee_reqs_list_mrproper (&ventry->reqs);
 
 	if (ventry->exts != NULL) {
 		cherokee_exts_table_free (ventry->exts);

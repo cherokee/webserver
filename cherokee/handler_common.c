@@ -24,7 +24,6 @@
 
 #include "common-internal.h"
 #include "handler_common.h"
-#include "util.h"
 
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
@@ -38,6 +37,7 @@
 # include <strings.h>
 #endif
 
+#include "util.h"
 #include "connection.h"
 #include "connection-protected.h"
 #include "server.h"
@@ -49,6 +49,23 @@
 #define ENTRIES "handler,common"
 
 
+ret_t
+cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)
+{
+	if (props->props_file != NULL) {
+		cherokee_handler_file_props_free (props->props_file);
+		props->props_file = NULL;
+	}
+	
+	if (props->props_dirlist != NULL) {
+		cherokee_handler_dirlist_props_free (props->props_dirlist);
+		props->props_dirlist = NULL;
+	}
+
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+}
+
+
 ret_t 
 cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
@@ -57,6 +74,9 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_common_props);
+
+		cherokee_handler_props_init_base (HANDLER_PROPS(n),
+						  HANDLER_PROPS_FREE(cherokee_handler_common_props_free));
 
 		n->props_file    = NULL;
 		n->props_dirlist = NULL;

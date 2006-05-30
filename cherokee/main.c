@@ -69,6 +69,7 @@ restart_server_cb (cherokee_server_t *new_srv)
 static void
 restart_server (int code)
 {	
+	printf ("Handling HUP signal..\n");
 	cherokee_server_handle_HUP (srv, restart_server_cb);
 }
 

@@ -23,65 +23,52 @@
  */
 
 #include "encoder_table.h"
+#include "util.h"
+
+#define ENTRIES "encoder"
 
 
 ret_t 
-cherokee_encoder_table_new  (cherokee_encoder_table_t **et)
+cherokee_encoder_table_init  (cherokee_encoder_table_t *et)
 {
-	CHEROKEE_NEW_STRUCT(n, encoder_table);
-
-	/* Init the table
-	 */
-	cherokee_table_init (&n->table);
-
-	/* Return the object
-	 */
-	*et = n;	
-	return ret_ok;
-}
-
-
-static void
-for_each_func_free_encoder (const char *key, void *encoder)
-{	
-	cherokee_encoder_free (encoder);
+	return cherokee_table_init (et);
 }
 
 
 ret_t 
-cherokee_encoder_table_free (cherokee_encoder_table_t *et)
+cherokee_encoder_table_mrproper (cherokee_encoder_table_t *et)
 {
-	cherokee_table_foreach (&et->table, for_each_func_free_encoder);
-	
-	/* alo: It's ok, have a look at cherokee_encoder_table_t before change it
-	 */
-	return cherokee_table_free (&et->table);
+	return cherokee_table_mrproper2 (et, cherokee_encoder_table_entry_free);
 }
 
 
 ret_t 
 cherokee_encoder_table_set (cherokee_encoder_table_t *et, char *encoder, cherokee_encoder_table_entry_t *entry)
 {
-	return cherokee_table_add (&et->table, encoder, entry);
+	return cherokee_table_add (et, encoder, entry);
 }
+
 
 ret_t
 cherokee_encoder_table_get (cherokee_encoder_table_t *et, char *encoder, cherokee_encoder_table_entry_t **entry) 
 {
-	return cherokee_table_get (&et->table, encoder, (void **)entry);
+	return cherokee_table_get (et, encoder, (void **)entry);
 }
 
 
 ret_t 
 cherokee_encoder_table_new_encoder (cherokee_encoder_table_t *et, char *encoder, char *ext, cherokee_encoder_t **new_encoder)
 {
-	ret_t ret;
-	int   make_object = 1;
+	ret_t                           ret;
 	cherokee_encoder_table_entry_t *entry;
 	cherokee_matching_list_t       *matching;
+	cherokee_boolean_t              make_object = true;
 
 	ret = cherokee_encoder_table_get (et, encoder, &entry);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok)) {
+		TRACE (ENTRIES, "Encoder table: '%s' not found\n", encoder);
+		return ret;
+	}
 
 	if (cherokee_encoder_entry_has_matching_list (entry)) {
 		ret = cherokee_encoder_entry_get_matching_list (entry, &matching);
@@ -102,20 +89,24 @@ cherokee_encoder_table_new_encoder (cherokee_encoder_table_t *et, char *encoder,
 }
 
 
-/* 
- * Encoder entry methods 
+/* Encoder properties
  */
-
 ret_t 
 cherokee_encoder_table_entry_new (cherokee_encoder_table_entry_t **eentry)
 {
 	CHEROKEE_NEW_STRUCT (n, encoder_table_entry);
 
-	n->matching = NULL;
 	n->func_new = NULL;
+	n->matching = NULL;
 
 	*eentry = n;
+	return ret_ok;
+}
 
+ret_t 
+cherokee_encoder_table_entry_free (cherokee_encoder_table_entry_t *eentry)
+{
+	free (eentry);
 	return ret_ok;
 }
 
@@ -124,15 +115,13 @@ ret_t
 cherokee_encoder_table_entry_get_info  (cherokee_encoder_table_entry_t *eentry, cherokee_module_info_t *info)
 {
 	if (info->type != cherokee_encoder) {
-		PRINT_ERROR ("Wrong module: type(%d) is not a cherokee_encoder\n", info->type);
+		PRINT_ERROR ("ERROR: Wrong module type(%d): not a encoder\n", info->type);
 		return ret_error;
 	}
 
 	eentry->func_new = info->new_func;
-
 	return ret_ok;
 }
-
 
 
 ret_t 
@@ -141,6 +130,7 @@ cherokee_encoder_entry_set_matching_list (cherokee_encoder_table_entry_t *eentry
 	eentry->matching = matching;
 	return ret_ok;
 }
+
 
 int
 cherokee_encoder_entry_has_matching_list (cherokee_encoder_table_entry_t *eentry)

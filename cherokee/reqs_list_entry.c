@@ -32,7 +32,7 @@ cherokee_reqs_list_entry_new  (cherokee_reqs_list_entry_t **entry)
 
 	/* Init base class
 	 */
-	cherokee_config_entry_init (&n->base_entry);
+	cherokee_config_entry_init (CONF_ENTRY(n));
 
 	memset (n->ovector, 0, sizeof(int)*OVECTOR_LEN);
 	n->ovecsize = 0;
@@ -50,9 +50,7 @@ cherokee_reqs_list_entry_new  (cherokee_reqs_list_entry_t **entry)
 ret_t 
 cherokee_reqs_list_entry_free (cherokee_reqs_list_entry_t *entry)
 {
-	   list_del ((list_t *)&entry->list_entry);
 	   cherokee_buffer_mrproper (&entry->request);
-
-	   return cherokee_config_entry_free (&entry->base_entry);
+	   return cherokee_config_entry_free (CONF_ENTRY(entry));
 }
 

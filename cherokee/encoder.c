@@ -33,6 +33,7 @@ cherokee_encoder_init_base (cherokee_encoder_t *enc)
 
 	enc->encode      = NULL;
 	enc->add_headers = NULL;
+	enc->flush       = NULL;
 
 	return ret_ok;
 }
@@ -41,10 +42,13 @@ cherokee_encoder_init_base (cherokee_encoder_t *enc)
 ret_t 
 cherokee_encoder_free (cherokee_encoder_t *enc)
 {
+	ret_t ret;
+
 	if (MODULE(enc)->free == NULL) 
 		return ret_error;
 
-	return MODULE(enc)->free (enc);
+	ret = MODULE(enc)->free (enc);
+	return ret;
 }
 
 
@@ -72,6 +76,7 @@ cherokee_encoder_init (cherokee_encoder_t *enc, void *conn)
 	return init_func (enc);
 }
 
+
 ret_t 
 cherokee_encoder_encode (cherokee_encoder_t *enc, 
 			 cherokee_buffer_t  *in, 
@@ -82,7 +87,6 @@ cherokee_encoder_encode (cherokee_encoder_t *enc,
 
 	return enc->encode (enc, in, out);
 }
-
 
 
 ret_t 

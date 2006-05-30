@@ -85,8 +85,9 @@ free_avl_tree_helper (avl_node * node,
 	if (node->left) 
 		free_avl_tree_helper (node->left, free_key_fun, free_val_fun);
 	
+	if (free_val_fun != NULL)
+		free_val_fun (node->value);
 	free_key_fun (node->key);
-	free_val_fun (node->value);
 
 	if (node->right) 
 		free_avl_tree_helper (node->right, free_key_fun, free_val_fun);

@@ -38,14 +38,18 @@
 #include "table.h"
 #include "connection.h"
 
+
+/* Data types
+ */
 typedef struct {
-	int                    foo;
+	cherokee_handler_props_t base;
+	cuint_t                  foo;
 } cherokee_handler_proxy_props_t;
 
 typedef struct {
-	cherokee_handler_t     handler;	
-	cherokee_downloader_t  client;
-	cherokee_buffer_t      url;
+	cherokee_handler_t       handler;	
+	cherokee_downloader_t    client;
+	cherokee_buffer_t        url;
 } cherokee_handler_proxy_t;
 
 #define PROP_PROXY(x)      ((cherokee_handler_proxy_props_t *)(x))
@@ -57,6 +61,7 @@ typedef struct {
  */
 void  MODULE_INIT(proxy)         (cherokee_module_loader_t *loader);
 ret_t cherokee_handler_proxy_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props);
+
 
 /* Virtual methods
  */

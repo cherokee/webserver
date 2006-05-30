@@ -45,6 +45,13 @@
 
 
 ret_t 
+cherokee_handler_file_props_free (cherokee_handler_file_props_t *props)
+{
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+}
+
+
+ret_t 
 cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	list_t                        *i;
@@ -52,6 +59,9 @@ cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t
 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_file_props);
+
+		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+						  HANDLER_PROPS_FREE(cherokee_handler_file_props_free));
 
 		n->use_cache = true;
 		*_props = HANDLER_PROPS(n);

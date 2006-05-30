@@ -136,4 +136,35 @@ cherokee_handler_step (cherokee_handler_t *hdl, cherokee_buffer_t *buffer)
 }
 
 
+/* Handler properties
+ */
+ret_t 
+cherokee_handler_props_init_base (cherokee_handler_props_t *hdlp, handler_props_func_free_t free_func)
+{
+	hdlp->free = free_func;
+	return ret_ok;
+}
 
+
+ret_t 
+cherokee_handler_props_free (cherokee_handler_props_t *hdlp)
+{
+	if (hdlp == NULL) 
+		return ret_error;
+
+	if (hdlp->free == NULL) {
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
+
+	hdlp->free (hdlp);
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_handler_props_free_base (cherokee_handler_props_t *hdlp)
+{
+	free (hdlp);
+	return ret_ok;
+}

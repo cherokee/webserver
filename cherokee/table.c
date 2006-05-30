@@ -111,14 +111,14 @@ cherokee_table_free (cherokee_table_t *tab)
 ret_t
 cherokee_table_mrproper (cherokee_table_t *tab) 
 {
-	return cherokee_table_mrproper2 (tab, free);
+	return cherokee_table_mrproper2 (tab, NULL);
 }
 
 
 ret_t
 cherokee_table_clean (cherokee_table_t *tab)
 {
-	cherokee_table_mrproper (tab);
+	cherokee_table_mrproper2 (tab, NULL);
 	return cherokee_table_init (tab);
 }
 

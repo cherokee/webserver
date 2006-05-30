@@ -43,7 +43,6 @@ ret_t
 cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 {
 	ret_t ret;
-
        	CHEROKEE_NEW_STRUCT (n, virtual_server);
 
 	INIT_LIST_HEAD (&n->list_entry);

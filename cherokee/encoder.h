@@ -45,8 +45,10 @@ typedef ret_t (* encoder_func_init_t)        (void  *encoder);
 typedef ret_t (* encoder_func_encode_t)      (void  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 typedef ret_t (* encoder_func_flush_t)       (void  *encoder, cherokee_buffer_t *in, cherokee_buffer_t *out);
 
+/* Data types
+ */
 typedef struct {
-	cherokee_module_t module;
+	cherokee_module_t          module;
 
 	/* Pure virtual methods
 	 */
@@ -56,13 +58,15 @@ typedef struct {
 	
 	/* Properties
 	 */
-	void *conn;
-
+	void                      *conn;
 } cherokee_encoder_t;
 
 #define ENCODER(x)      ((cherokee_encoder_t *)(x))
 #define ENCODER_CONN(x) (CONN(ENCODER(x)->conn))
 
+
+/* Methods
+ */
 ret_t cherokee_encoder_init_base   (cherokee_encoder_t *enc);
 
 ret_t cherokee_encoder_free        (cherokee_encoder_t *enc);

@@ -40,6 +40,13 @@
 
 
 static ret_t 
+props_free (cherokee_handler_fastcgi_props_t *props)
+{
+	// TODO: Free the structure content
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+}
+
+static ret_t 
 cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	ret_t                             ret;
@@ -51,6 +58,9 @@ cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_serve
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_fastcgi_props);
 		
+		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+						  HANDLER_PROPS_FREE(props_free));		
+
 		INIT_LIST_HEAD(&n->server_list);
 		INIT_LIST_HEAD(&n->fastcgi_env_ref);
 

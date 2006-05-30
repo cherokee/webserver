@@ -903,7 +903,7 @@ cherokee_connection_step (cherokee_connection_t *cnt)
 }
 
 
-static inline ret_t
+static ret_t
 get_host (cherokee_connection_t *cnt, 
 	  char                  *ptr,
 	  int                    size) 
@@ -949,10 +949,10 @@ get_host (cherokee_connection_t *cnt,
 }
 
 
-static inline ret_t
+static ret_t
 get_encoding (cherokee_connection_t    *cnt,
-	      char                     *ptr,
-	      cherokee_encoder_table_t *encoders) 
+		    char                     *ptr,
+		    cherokee_encoder_table_t *encoders) 
 {
 	char tmp;
 	char *i1, *i2;
@@ -1407,7 +1407,7 @@ cherokee_connection_get_request (cherokee_connection_t *cnt)
 		
 		/* Set the virtual host reference
 		 */
-		cherokee_table_get (CONN_SRV(cnt)->vservers_ref, cnt->host.buf, &cnt->vserver);
+		cherokee_table_get (&CONN_SRV(cnt)->vservers_ref, cnt->host.buf, &cnt->vserver);
 		break;
 
 	default:

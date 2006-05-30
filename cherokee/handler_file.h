@@ -38,9 +38,11 @@
 #include "mime.h"
 #include "module_loader.h"
 
-
+/* Data types
+ */
 typedef struct {
-	cherokee_boolean_t use_cache;
+	cherokee_handler_props_t base;
+	cherokee_boolean_t       use_cache;
 } cherokee_handler_file_props_t;
 
 typedef struct {
@@ -54,6 +56,7 @@ typedef struct {
 	struct stat            cache_info;	
 } cherokee_handler_file_t;
 
+
 #define PROP_FILE(x)      ((cherokee_handler_file_props_t *)(x))
 #define HDL_FILE(x)       ((cherokee_handler_file_t *)(x))
 #define HDL_FILE_PROP(x)  (PROP_FILE(HANDLER(x)->props))
@@ -65,6 +68,7 @@ void  MODULE_INIT(file)                 (cherokee_module_loader_t *loader);
 
 ret_t cherokee_handler_file_new         (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props);
 ret_t cherokee_handler_file_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props);
+ret_t cherokee_handler_file_props_free  (cherokee_handler_file_props_t *props);
 
 /* Virtual methods
  */
@@ -73,5 +77,6 @@ ret_t cherokee_handler_file_free        (cherokee_handler_file_t *hdl);
 void  cherokee_handler_file_get_name    (cherokee_handler_file_t *hdl, const char **name);
 ret_t cherokee_handler_file_step        (cherokee_handler_file_t *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_file_add_headers (cherokee_handler_file_t *hdl, cherokee_buffer_t *buffer);
+
 
 #endif /* CHEROKEE_HANDLER_FILE_H */

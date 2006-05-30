@@ -78,7 +78,7 @@ struct cherokee_server {
 	/* Virtual servers
 	 */
 	list_t                     vservers;
-	cherokee_table_t          *vservers_ref;
+	cherokee_table_t           vservers_ref;
 	cherokee_virtual_server_t *vserver_default;
 	
 	/* Threads
@@ -92,7 +92,7 @@ struct cherokee_server {
 	 */
 	cherokee_logger_table_t   *loggers;
 	cherokee_module_loader_t   loader;
-	cherokee_encoder_table_t  *encoders;
+	cherokee_encoder_table_t   encoders;
 
 	/* Tables: icons, iocache
 	 */

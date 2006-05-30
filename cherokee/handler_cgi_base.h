@@ -49,6 +49,7 @@ typedef enum {
 } cherokee_handler_cgi_base_phase_t;
 
 typedef struct {
+	cherokee_handler_props_t           base;
 	list_t                             system_env;
 	cuint_t                            change_user;
 	cherokee_buffer_t                  script_alias;

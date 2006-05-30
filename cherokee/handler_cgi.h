@@ -89,5 +89,6 @@ void  cherokee_handler_cgi_add_env_pair   (cherokee_handler_cgi_base_t *cgi,
 					   char *content, int content_len);
 
 ret_t cherokee_handler_cgi_configure      (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **props);
+ret_t cherokee_handler_cgi_props_free     (cherokee_handler_cgi_props_t *props);
 
 #endif /* CHEROKEE_HANDLER_CGI_H */

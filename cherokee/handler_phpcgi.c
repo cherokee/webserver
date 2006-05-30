@@ -203,6 +203,14 @@ cherokee_handler_phpcgi_init (cherokee_handler_t *hdl)
 
 
 static ret_t 
+props_free (cherokee_handler_phpcgi_props_t *props)
+{
+	cherokee_buffer_mrproper (&props->interpreter);
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+}
+
+
+static ret_t 
 cherokee_handler_phpcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	list_t                          *i;
@@ -211,8 +219,10 @@ cherokee_handler_phpcgi_configure (cherokee_config_node_t *conf, cherokee_server
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT(n, handler_phpcgi_props);
 
-		cherokee_buffer_init (&n->interpreter);
+		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+						  HANDLER_PROPS_FREE(props_free));		
 
+		cherokee_buffer_init (&n->interpreter);
 		*_props = HANDLER_PROPS(n);
 	}
 

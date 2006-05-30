@@ -30,16 +30,18 @@
 #include "module_loader.h"
 #include "list.h"
 
+
+/* Data types
+ */
 typedef struct {
-	cherokee_buffer_t url;
-	list_t            regex_list;
+	cherokee_handler_props_t base;
+	cherokee_buffer_t        url;
+	list_t                   regex_list;
 } cherokee_handler_redir_props_t;
 
 typedef struct {
-	cherokee_handler_t    handler;
-
-//	list_t               *regex_list_ref;
-	cherokee_boolean_t    use_previous_match;
+	cherokee_handler_t       handler;
+	cherokee_boolean_t       use_previous_match;
 } cherokee_handler_redir_t;
 
 #define PROP_REDIR(x)      ((cherokee_handler_redir_props_t *)(x))
@@ -47,6 +49,8 @@ typedef struct {
 #define HDL_REDIR_PROPS(x) (PROP_REDIR(HANDLER(x)->props))
 
 
+/* Library init function
+ */
 void MODULE_INIT(redir) (cherokee_module_loader_t *loader);
 ret_t cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props);
 

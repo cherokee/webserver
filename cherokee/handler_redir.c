@@ -348,6 +348,15 @@ configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cheroke
 
 
 static ret_t 
+props_free (cherokee_handler_redir_props_t *props)
+{
+	cherokee_buffer_mrproper (&props->url);
+	// TODO: Free regex_list
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+}
+
+
+static ret_t 
 cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	ret_t                           ret;
@@ -357,6 +366,9 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n,handler_redir_props);
 
+		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+						  HANDLER_PROPS_FREE(props_free));		
+		
 		cherokee_buffer_init (&n->url);
 		INIT_LIST_HEAD (&n->regex_list);
 		

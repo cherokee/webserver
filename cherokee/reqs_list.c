@@ -44,7 +44,12 @@ cherokee_reqs_list_init (cherokee_reqs_list_t *rl)
 ret_t 
 cherokee_reqs_list_mrproper (cherokee_reqs_list_t *rl)
 {
-	// TODO!
+	list_t *i, *tmp;
+
+	list_for_each_safe (i, tmp, ((list_t *)rl)) {
+		cherokee_reqs_list_entry_free (RQ_ENTRY(i));
+	}
+
 	return ret_ok;
 }
 

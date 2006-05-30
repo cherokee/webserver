@@ -97,6 +97,13 @@
 "</div></body></html>"                                                                             
 
 
+static ret_t 
+props_free (cherokee_handler_server_info_props_t *props)
+{
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+}
+
+
 ret_t 
 cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
@@ -106,6 +113,8 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_server_info_props);
 
+		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+						  HANDLER_PROPS_FREE(props_free));		
 		n->just_about = false;
 		*_props = HANDLER_PROPS(n);
 	}
