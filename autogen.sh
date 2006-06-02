@@ -30,7 +30,7 @@ test -z "$LIBTOOLIZE" && LIBTOOLIZE=libtoolize
 
 ($LIBTOOL --version) < /dev/null > /dev/null 2>&1 || {
         echo
-        echo "You must have libtool installed to compile gnome-xml."
+        echo "You must have libtool installed to compile $PROJECT."
         echo "Get ftp://ftp.gnu.org/gnu/libtool/libtool-1.4.tar.gz"
         echo "(or a newer version if it is available)"
         DIE=1
