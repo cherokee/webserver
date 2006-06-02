@@ -747,13 +747,6 @@ AM_CONDITIONAL(USE_INTERNAL_PCRE, test $have_pcre = "built-in")
 
 
 dnl
-dnl Check for FastCGI library
-dnl
-AC_CHECK_LIB(fcgi, FCGX_IsCGI, have_fcgi=yes, have_fcgi=no)
-AM_CONDITIONAL(HAVE_FCGI, test "$have_fcgi" = "yes")
-
-
-dnl
 dnl PAM
 dnl
 have_pam="disabled"
