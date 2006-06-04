@@ -879,10 +879,13 @@ cherokee_trace (const char *entry, const char *file, int line, const char *func,
 	cherokee_buffer_add_va_list (&output, (char *)fmt, args);
 	va_end (args);
 
-	if (use_syslog) 
+	if (use_syslog) {
 		syslog (LOG_DEBUG, "%s", output.buf);
-	else
-		printf ("%s", output.buf);
+	} else {
+		flockfile (stdout);
+		fprintf (stdout, "%s", output.buf);
+		funlockfile (stdout);
+	}
 
 out:
 	cherokee_buffer_mrproper (&output);
