@@ -55,6 +55,8 @@ cherokee_exts_table_free (cherokee_exts_table_t *et)
 {
 	cherokee_list_free (&et->list, (void *)cherokee_config_entry_free);
 	cherokee_table_clean (&et->table);
+
+	free (et);
 	return ret_ok;
 }
 

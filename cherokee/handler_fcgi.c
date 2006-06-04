@@ -202,8 +202,8 @@ props_free (cherokee_handler_fcgi_props_t *props)
 	list_for_each_safe (i, tmp, &props->server_list) {
 		cherokee_ext_source_free (EXT_SOURCE(i));
 	}
-
-	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+	
+	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));
 }
 
 

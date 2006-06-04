@@ -107,6 +107,7 @@ ret_t cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t    
 						 cherokee_buffer_t                        *tmp);
 
 ret_t cherokee_handler_cgi_base_configure       (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **props);
+ret_t cherokee_handler_cgi_base_props_free      (cherokee_handler_cgi_base_props_t *props);
 
 #endif /* CHEROKEE_HANDLER_CGI_BASE_H */
 

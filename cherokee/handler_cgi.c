@@ -254,7 +254,7 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 ret_t 
 cherokee_handler_cgi_props_free (cherokee_handler_cgi_props_t *props)
 {
-	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));
 }
 
 

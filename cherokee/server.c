@@ -1637,7 +1637,6 @@ cherokee_server_handle_panic (cherokee_server_t *srv)
 	}
 
 	cherokee_buffer_mrproper (&cmd);
-
 fin:
 	abort();
 }

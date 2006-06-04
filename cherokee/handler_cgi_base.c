@@ -103,7 +103,7 @@ static env_item_t *
 env_item_new (cherokee_buffer_t *key, cherokee_buffer_t *val)
 {
 	env_item_t *n = malloc (sizeof (env_item_t));
-
+	
 	INIT_LIST_HEAD (&n->entry);
 	cherokee_buffer_init (&n->env);
 	cherokee_buffer_init (&n->val);
@@ -124,6 +124,19 @@ env_item_free (void *p)
 	free (p);
 }
 
+ret_t 
+cherokee_handler_cgi_base_props_free (cherokee_handler_cgi_base_props_t *props)
+{
+	list_t *i, *tmp;
+
+	cherokee_buffer_mrproper (&props->script_alias);
+
+	list_for_each_safe (i, tmp, &props->system_env) {
+		env_item_free (i);
+	}
+	
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+}
 
 ret_t 
 cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)

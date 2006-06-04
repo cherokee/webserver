@@ -43,7 +43,7 @@ static ret_t
 props_free (cherokee_handler_fastcgi_props_t *props)
 {
 	// TODO: Free the structure content
-	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));
 }
 
 static ret_t 
