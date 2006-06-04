@@ -51,7 +51,7 @@ cherokee_mime_free (cherokee_mime_t *mime)
 {
 	list_t *i, *tmp;
 
-	cherokee_table_clean (&mime->mime_table);
+	cherokee_table_mrproper (&mime->mime_table);
 
 	list_for_each_safe (i, tmp, &mime->mime_list) {
 		list_del (i);

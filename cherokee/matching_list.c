@@ -64,7 +64,6 @@ cherokee_matching_list_free (cherokee_matching_list_t *mlist)
 	free_list (&mlist->list_deny);
 
 	free (mlist);
-
 	return ret_ok;
 }
 
@@ -74,9 +73,10 @@ add_to_list (list_t *list, const char *item)
 {
 	CHEROKEE_NEW_STRUCT (n, matching_list_entry);
 
+	INIT_LIST_HEAD(&n->list);
 	n->string = strdup(item);
-	list_add ((list_t *)n, list);
-	
+
+	list_add ((list_t *)n, list);	
 	return ret_ok;
 }
 

@@ -106,6 +106,10 @@ cherokee_encoder_table_entry_new (cherokee_encoder_table_entry_t **eentry)
 ret_t 
 cherokee_encoder_table_entry_free (cherokee_encoder_table_entry_t *eentry)
 {
+	if (eentry->matching != NULL) {
+		cherokee_matching_list_free (eentry->matching);
+	}
+
 	free (eentry);
 	return ret_ok;
 }
