@@ -40,7 +40,14 @@
 static ret_t 
 props_free (cherokee_handler_scgi_props_t *props)
 {
-	// TODO: Free the local properties 
+	list_t *i, *tmp;
+	
+	list_for_each_safe (i, tmp, &props->server_list) {
+		cherokee_ext_source_free (EXT_SOURCE(i));
+	}
+
+	// TODO: Free scgi_env_ref
+
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
@@ -59,7 +66,7 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
 						  HANDLER_PROPS_FREE(props_free));
 		
-		INIT_LIST_HEAD(&n->scgi_env_ref);
+		INIT_LIST_HEAD(&n->scgi_env_ref);   // TODO: finish this
 		INIT_LIST_HEAD(&n->server_list);
 
 		*_props = HANDLER_PROPS(n);

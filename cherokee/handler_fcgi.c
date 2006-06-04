@@ -197,7 +197,12 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 static ret_t 
 props_free (cherokee_handler_fcgi_props_t *props)
 {
-	// TODO: Free server list
+	list_t *i, *tmp;
+	
+	list_for_each_safe (i, tmp, &props->server_list) {
+		cherokee_ext_source_free (EXT_SOURCE(i));
+	}
+
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
