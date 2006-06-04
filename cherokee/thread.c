@@ -90,8 +90,8 @@ update_bogo_now_internal (cherokee_thread_t *thd)
 	
 	/* Update cherokee_buffer_t
 	 */
-	cherokee_buffer_clean (thd->bogo_now_string);
-	cherokee_buffer_add_buffer (thd->bogo_now_string, srv->bogo_now_string);
+	cherokee_buffer_clean (&thd->bogo_now_string);
+	cherokee_buffer_add_buffer (&thd->bogo_now_string, &srv->bogo_now_string);
 	
 }
 
@@ -103,6 +103,7 @@ update_bogo_now (cherokee_thread_t *thd)
 	update_bogo_now_internal(thd);
 	CHEROKEE_RWLOCK_UNLOCK (&THREAD_SRV(thd)->bogo_now_mutex);
 }
+
 
 static void
 try_to_update_bogo_now (cherokee_thread_t *thd)
@@ -141,7 +142,7 @@ thread_routine (void *data)
                 cherokee_thread_step (thread, false);
         }
 
-        return NULL;
+	pthread_exit (NULL);
 }
 #endif
 
@@ -207,7 +208,7 @@ cherokee_thread_new  (cherokee_thread_t **thd, void *server, cherokee_thread_typ
 	 */
 	n->bogo_now = 0;
 	memset (&n->bogo_now_tm, 0, sizeof (struct tm));
-	cherokee_buffer_new (&n->bogo_now_string);
+	cherokee_buffer_init (&n->bogo_now_string);
 
 	/* Accepting information
 	 */
@@ -247,6 +248,7 @@ cherokee_thread_new  (cherokee_thread_t **thd, void *server, cherokee_thread_typ
 		/* Finally, create the system thread
 		 */
 		pthread_create (&n->thread, &attr, thread_routine, n);
+		printf ("new %p\n", n->thread);
 #else
 		SHOULDNT_HAPPEN;
 #endif		
@@ -1164,6 +1166,8 @@ cherokee_thread_free (cherokee_thread_t *thd)
 {
 	list_t *i, *tmp;
 
+	cherokee_buffer_mrproper (&thd->bogo_now_string);
+
 	cherokee_fdpoll_free (thd->fdpoll);
 	thd->fdpoll = NULL;
 
@@ -1182,7 +1186,7 @@ cherokee_thread_free (cherokee_thread_t *thd)
 
 	CHEROKEE_MUTEX_DESTROY (&thd->starting_lock);
 	CHEROKEE_MUTEX_DESTROY (&thd->ownership);
-
+	
 	free (thd);
 	return ret_ok;
 }

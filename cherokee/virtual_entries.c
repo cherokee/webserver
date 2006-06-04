@@ -32,7 +32,9 @@ cherokee_virtual_entries_init (cherokee_virtual_entries_t *ventry)
 	ret_t ret;
 	
 	ventry->exts = NULL;
-	INIT_LIST_HEAD (&ventry->reqs);
+
+	ret = cherokee_reqs_list_init (&ventry->reqs);
+	if (unlikely(ret < ret_ok)) return ret;
 	
 	ret = cherokee_dirs_table_init (&ventry->dirs);
 	if (unlikely(ret < ret_ok)) return ret;

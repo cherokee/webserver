@@ -467,7 +467,7 @@ build_response_header (cherokee_connection_t *cnt, cherokee_buffer_t *buffer)
 
 	} else if (cnt->handler && (cnt->keepalive > 0)) {
 		cherokee_buffer_add_str (buffer, "Connection: Keep-Alive"CRLF);
-		cherokee_buffer_add_buffer (buffer, CONN_SRV(cnt)->timeout_header);
+		cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->timeout_header);
 
 	} else {
 		cherokee_buffer_add_str (buffer, "Connection: Close"CRLF);
@@ -476,13 +476,13 @@ build_response_header (cherokee_connection_t *cnt, cherokee_buffer_t *buffer)
 	/* Date
 	 */
 	cherokee_buffer_add_str (buffer, "Date: ");
-	cherokee_buffer_add_buffer (buffer, CONN_SRV(cnt)->bogo_now_string);
+	cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->bogo_now_string);
 	cherokee_buffer_add (buffer, CRLF, 2);
 
 	/* Add the Server header
 	 */
 	cherokee_buffer_add_str (buffer, "Server: ");
-	cherokee_buffer_add_buffer (buffer, CONN_SRV(cnt)->server_string);
+	cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->server_string);
 	cherokee_buffer_add_str (buffer, CRLF);
 
 	/* Authentication

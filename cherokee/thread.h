@@ -65,7 +65,7 @@ typedef struct {
 
 	time_t                  bogo_now;
 	struct tm               bogo_now_tm;
-	cherokee_buffer_t      *bogo_now_string;
+	cherokee_buffer_t       bogo_now_string;
 	
 	void                   *server;
 	cherokee_boolean_t      exit;

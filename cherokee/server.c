@@ -169,14 +169,14 @@ cherokee_server_new  (cherokee_server_t **srv)
 	CHEROKEE_RWLOCK_INIT (&n->bogo_now_mutex, NULL);
 
 	CHEROKEE_RWLOCK_WRITER (&n->bogo_now_mutex);
-	cherokee_buffer_new (&n->bogo_now_string);
-	cherokee_buffer_ensure_size (n->bogo_now_string, 100);	
+	cherokee_buffer_init (&n->bogo_now_string);
+	cherokee_buffer_ensure_size (&n->bogo_now_string, 100);	
 	CHEROKEE_RWLOCK_UNLOCK (&n->bogo_now_mutex);
 
 	/* Time managing hack
 	 */
-	cherokee_buffer_new (&n->timeout_header);
-	cherokee_buffer_add (n->timeout_header, "Keep-Alive: timeout=15"CRLF, 24);
+	cherokee_buffer_init (&n->timeout_header);
+	cherokee_buffer_add_str (&n->timeout_header, "Keep-Alive: timeout=15"CRLF);
 
 	/* Accepting mutexes
 	 */
@@ -228,7 +228,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	/* Server string
 	 */
 	n->server_token = cherokee_version_full;
-	cherokee_buffer_new (&n->server_string);
+	cherokee_buffer_init (&n->server_string);
 
 	/* Loggers
 	 */
@@ -378,11 +378,9 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_virtual_server_free (srv->vserver_default);
 	srv->vserver_default = NULL;
 
-	cherokee_buffer_free (srv->bogo_now_string);
-	cherokee_buffer_free (srv->server_string);
-
-	cherokee_buffer_free (srv->timeout_header);
-
+	cherokee_buffer_mrproper (&srv->bogo_now_string);
+	cherokee_buffer_mrproper (&srv->timeout_header);
+	cherokee_buffer_mrproper (&srv->server_string);
 	cherokee_buffer_mrproper (&srv->listen_to);
 	cherokee_buffer_mrproper (&srv->chroot);
 
@@ -633,29 +631,29 @@ print_banner (cherokee_server_t *srv)
 	}
 
 	if (srv->chrooted) {
-		cherokee_buffer_add (n, ", chrooted", 10);
+		cherokee_buffer_add_str (n, ", chrooted");
 	}
 
 	/* TLS / SSL
 	 */
 	if (srv->tls_enabled) {
 #if defined(HAVE_GNUTLS)
-		cherokee_buffer_add (n, ", with TLS support via GNUTLS", 29);
+		cherokee_buffer_add_str (n, ", with TLS support via GNUTLS");
 #elif defined(HAVE_OPENSSL)
-		cherokee_buffer_add (n, ", with TLS support via OpenSSL", 30);
+		cherokee_buffer_add_str (n, ", with TLS support via OpenSSL");
 #endif
 	} else {
-		cherokee_buffer_add (n, ", TLS disabled", 14);		
+		cherokee_buffer_add_str (n, ", TLS disabled");
 	}
 
 	/* IPv6
 	 */
 #ifdef HAVE_IPV6
 	if (srv->ipv6) {
-		cherokee_buffer_add (n, ", IPv6 enabled", 14);		
+		cherokee_buffer_add_str (n, ", IPv6 enabled");		
 	} else
 #endif
-		cherokee_buffer_add (n, ", IPv6 disabled", 14);
+		cherokee_buffer_add_str (n, ", IPv6 disabled");
 
 	/* Polling method
 	 */
@@ -669,7 +667,7 @@ print_banner (cherokee_server_t *srv)
 	/* Threading stuff
 	 */
 	if (srv->thread_num <= 1) {
-		cherokee_buffer_add (n, ", single thread", 15);
+		cherokee_buffer_add_str (n, ", single thread");
 	} else {
 		cherokee_buffer_add_va (n, ", %d threads", srv->thread_num);
 		cherokee_buffer_add_va (n, ", %d fds in each", srv->system_fd_limit / (srv->thread_num));	
@@ -677,14 +675,14 @@ print_banner (cherokee_server_t *srv)
 		switch (srv->thread_policy) {
 #ifdef HAVE_PTHREAD
 		case SCHED_FIFO:
-			cherokee_buffer_add (n, ", FIFO scheduling policy", 24);
+			cherokee_buffer_add_str (n, ", FIFO scheduling policy");
 			break;
 		case SCHED_RR:
-			cherokee_buffer_add (n, ", RR scheduling policy", 22);
+			cherokee_buffer_add_str (n, ", RR scheduling policy");
 			break;
 #endif
 		default:
-			cherokee_buffer_add (n, ", standard scheduling policy", 28);
+			cherokee_buffer_add_str (n, ", standard scheduling policy");
 			break;
 		}
 	}
@@ -889,29 +887,29 @@ set_fdmax_limit (cherokee_server_t *srv)
 static void
 build_server_string (cherokee_server_t *srv)
 {
-	cherokee_buffer_clean (srv->server_string);
+	cherokee_buffer_clean (&srv->server_string);
 
 	/* Cherokee
 	 */
-	cherokee_buffer_add (srv->server_string, "Cherokee", 8); 
+	cherokee_buffer_add_str (&srv->server_string, "Cherokee"); 
 	if (srv->server_token <= cherokee_version_product) 
 		return;
 
 	/* Cherokee/x.y
 	 */
-	cherokee_buffer_add_va (srv->server_string, "/%s.%s", PACKAGE_MAJOR_VERSION, PACKAGE_MINOR_VERSION);
+	cherokee_buffer_add_va (&srv->server_string, "/%s.%s", PACKAGE_MAJOR_VERSION, PACKAGE_MINOR_VERSION);
 	if (srv->server_token <= cherokee_version_minor) 
 		return;
 
 	/* Cherokee/x.y.z-betaXX
 	 */
-	cherokee_buffer_add_va (srv->server_string, ".%s", PACKAGE_MICRO_VERSION PACKAGE_PATCH_VERSION);
+	cherokee_buffer_add_va (&srv->server_string, ".%s", PACKAGE_MICRO_VERSION PACKAGE_PATCH_VERSION);
 	if (srv->server_token <= cherokee_version_minimal) 
 		return;
 
 	/* Cherokee/x.y.z-betaXX (UNIX)
 	 */
-	cherokee_buffer_add_va (srv->server_string, " (%s)", OS_TYPE);
+	cherokee_buffer_add_va (&srv->server_string, " (%s)", OS_TYPE);
 	if (srv->server_token <= cherokee_version_os) return;
 
 	/* Cherokee/x.y.z-betaXX (UNIX) Ext1/x.y Ext2/x.y
@@ -1112,13 +1110,13 @@ update_bogo_now (cherokee_server_t *srv)
 	if (prev < srv->bogo_now) {
 		int z;
 
-		cherokee_buffer_clean (srv->bogo_now_string);
+		cherokee_buffer_clean (&srv->bogo_now_string);
 
 		if (this_timezone == NULL) 
 			this_timezone = cherokee_get_timezone_ref();
 		z = - (*this_timezone / 60);
 
-		cherokee_buffer_add_va (srv->bogo_now_string, "%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
+		cherokee_buffer_add_va (&srv->bogo_now_string, "%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
 					cherokee_weekdays[srv->bogo_now_tm.tm_wday], 
 					srv->bogo_now_tm.tm_mday,
 					cherokee_months[srv->bogo_now_tm.tm_mon], 
@@ -1617,8 +1615,8 @@ cherokee_server_handle_HUP (cherokee_server_t *srv, cherokee_server_reinit_cb_t 
 ret_t
 cherokee_server_handle_panic (cherokee_server_t *srv)
 {
-	int                re;
-	cherokee_buffer_t *cmd;
+	int               re;
+	cherokee_buffer_t cmd = CHEROKEE_BUF_INIT;
 
 	PRINT_ERROR_S ("Cherokee feels panic!\n");
 	
@@ -1626,20 +1624,19 @@ cherokee_server_handle_panic (cherokee_server_t *srv)
 		goto fin;
 	}
 
-	cherokee_buffer_new (&cmd);
-	cherokee_buffer_add_va (cmd, "%s %d", srv->panic_action.buf, getpid());
+	cherokee_buffer_add_va (&cmd, "%s %d", srv->panic_action.buf, getpid());
 
-	re = system (cmd->buf);
+	re = system (cmd.buf);
 	if (re < 0) {
 #ifdef WEXITSTATUS		
 		int val = WEXITSTATUS(re);
 #else
 		int val = re;			
 #endif
-		PRINT_ERROR ("PANIC: re-panic: '%s', status %d\n", cmd->buf, val);
+		PRINT_ERROR ("PANIC: re-panic: '%s', status %d\n", cmd.buf, val);
 	}
 
-	cherokee_buffer_free (cmd);
+	cherokee_buffer_mrproper (&cmd);
 
 fin:
 	abort();

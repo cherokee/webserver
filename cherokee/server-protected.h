@@ -64,7 +64,7 @@ struct cherokee_server {
 	time_t                       start_time;
 	time_t                       bogo_now;
 	struct tm                    bogo_now_tm;
-	cherokee_buffer_t           *bogo_now_string;
+	cherokee_buffer_t            bogo_now_string;
 #ifdef HAVE_PTHREAD
 	pthread_rwlock_t             bogo_now_mutex;
 #endif
@@ -140,7 +140,7 @@ struct cherokee_server {
 	/* Server name
 	 */
 	cherokee_server_token_t    server_token;
-	cherokee_buffer_t         *server_string;
+	cherokee_buffer_t          server_string;
 
 	/* User/group and chroot
 	 */
@@ -159,7 +159,7 @@ struct cherokee_server {
 	/* Time
 	 */
 	int                        timeout;
-	cherokee_buffer_t         *timeout_header;
+	cherokee_buffer_t          timeout_header;
 
 	cherokee_boolean_t         keepalive;
 	uint32_t                   keepalive_max;
