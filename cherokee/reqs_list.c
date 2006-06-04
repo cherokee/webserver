@@ -44,10 +44,18 @@ cherokee_reqs_list_init (cherokee_reqs_list_t *rl)
 ret_t 
 cherokee_reqs_list_mrproper (cherokee_reqs_list_t *rl)
 {
-	list_t *i, *tmp;
+	list_t                     *i, *tmp;
+	cherokee_reqs_list_entry_t *entry;
 
-	list_for_each_safe (i, tmp, ((list_t *)rl)) {
-		cherokee_reqs_list_entry_free (RQ_ENTRY(i));
+	i   = rl->next;
+	tmp = i->next;
+
+	while (i != rl) {
+		entry = list_entry (i, cherokee_reqs_list_entry_t, list_node);
+		cherokee_reqs_list_entry_free (entry);
+
+		i = tmp;
+		tmp = i->next;
 	}
 
 	return ret_ok;
@@ -81,7 +89,7 @@ cherokee_reqs_list_get (cherokee_reqs_list_t     *rl,
 	list_for_each (i, reqs) {
 		int                          rei;
 		pcre                        *re      = NULL;
-		cherokee_reqs_list_entry_t  *lentry  = list_entry (i, cherokee_reqs_list_entry_t, list_entry);
+		cherokee_reqs_list_entry_t  *lentry  = list_entry (i, cherokee_reqs_list_entry_t, list_node);
 		char                        *pattern = lentry->request.buf;
 		cherokee_config_entry_t     *entry   = &lentry->base_entry;
 
@@ -129,7 +137,7 @@ cherokee_reqs_list_add  (cherokee_reqs_list_t       *rl,
 
 	/* Add the new connection
 	 */
-	list_add (&plugin_entry->list_entry, (list_t *)rl);
+	list_add (&plugin_entry->list_node, (list_t *)rl);
 	
 	/* Compile the expression
 	 */

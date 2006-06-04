@@ -34,7 +34,7 @@
 typedef struct {
 	cherokee_config_entry_t  base_entry;
 	cherokee_buffer_t        request;
-	list_t                   list_entry;
+	list_t                   list_node;
 	
 	int                      ovector[OVECTOR_LEN];
 	int                      ovecsize;

@@ -72,7 +72,7 @@ cherokee_config_entry_init (cherokee_config_entry_t *entry)
 
 
 ret_t 
-cherokee_config_entry_free (cherokee_config_entry_t *entry) 
+cherokee_config_entry_mrproper (cherokee_config_entry_t *entry) 
 {
 	if (entry->handler_properties != NULL) {
 		cherokee_handler_props_free (entry->handler_properties);
@@ -104,8 +104,16 @@ cherokee_config_entry_free (cherokee_config_entry_t *entry)
 		entry->users = NULL;
 	}
 
+	return ret_ok;
+}
 
+
+ret_t 
+cherokee_config_entry_free (cherokee_config_entry_t *entry) 
+{
+	cherokee_config_entry_mrproper (entry);
 	free (entry);
+
 	return ret_ok;
 }
 

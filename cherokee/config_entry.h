@@ -68,9 +68,10 @@ typedef struct {
 #define CONF_ENTRY(x) ((cherokee_config_entry_t *)(x))
 
 
-ret_t cherokee_config_entry_new  (cherokee_config_entry_t **entry);
-ret_t cherokee_config_entry_free (cherokee_config_entry_t  *entry);
-ret_t cherokee_config_entry_init (cherokee_config_entry_t  *entry);
+ret_t cherokee_config_entry_new      (cherokee_config_entry_t **entry);
+ret_t cherokee_config_entry_free     (cherokee_config_entry_t  *entry);
+ret_t cherokee_config_entry_init     (cherokee_config_entry_t  *entry);
+ret_t cherokee_config_entry_mrproper (cherokee_config_entry_t  *entry);
 
 ret_t cherokee_config_entry_set_handler_prop   (cherokee_config_entry_t *entry, char *prop_name, cherokee_typed_table_types_t type, void *value, cherokee_table_free_item_t free_func);
 ret_t cherokee_config_entry_set_validator_prop (cherokee_config_entry_t *entry, char *prop_name, cherokee_typed_table_types_t type, void *value, cherokee_table_free_item_t free_func);
