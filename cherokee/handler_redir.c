@@ -297,11 +297,6 @@ cherokee_handler_redir_add_headers (cherokee_handler_redir_t *rehdl, cherokee_bu
 }
 
 
-static void
-cre_list_free (void *data)
-{
-}
-
 static ret_t
 configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_redir_props_t *props)
 {
@@ -347,11 +342,25 @@ configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cheroke
 }
 
 
+static void
+cre_entry_free (struct cre_list *n) 
+{
+	cherokee_buffer_mrproper (&n->subs);
+	free (n);
+}
+
+
 static ret_t 
 props_free (cherokee_handler_redir_props_t *props)
 {
+	list_t *i, *tmp;
+
 	cherokee_buffer_mrproper (&props->url);
-	// TODO: Free regex_list
+
+	list_for_each_safe (i, tmp, &props->regex_list) {
+		cre_entry_free ((struct cre_list *)i);
+	}
+
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
