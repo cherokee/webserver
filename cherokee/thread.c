@@ -248,7 +248,6 @@ cherokee_thread_new  (cherokee_thread_t **thd, void *server, cherokee_thread_typ
 		/* Finally, create the system thread
 		 */
 		pthread_create (&n->thread, &attr, thread_routine, n);
-		printf ("new %p\n", n->thread);
 #else
 		SHOULDNT_HAPPEN;
 #endif		

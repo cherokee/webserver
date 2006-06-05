@@ -52,7 +52,7 @@ free_list (list_t *list)
 			free (MLIST_ENTRY(i)->string);
 		}
 
-		list_del(i);
+		free(i);
 	}
 }
 
