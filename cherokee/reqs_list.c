@@ -47,15 +47,9 @@ cherokee_reqs_list_mrproper (cherokee_reqs_list_t *rl)
 	list_t                     *i, *tmp;
 	cherokee_reqs_list_entry_t *entry;
 
-	i   = rl->next;
-	tmp = i->next;
-
-	while (i != rl) {
+	list_for_each_safe (i, tmp, rl) {
 		entry = list_entry (i, cherokee_reqs_list_entry_t, list_node);
 		cherokee_reqs_list_entry_free (entry);
-
-		i = tmp;
-		tmp = i->next;
 	}
 
 	return ret_ok;
@@ -137,7 +131,7 @@ cherokee_reqs_list_add  (cherokee_reqs_list_t       *rl,
 
 	/* Add the new connection
 	 */
-	list_add (&plugin_entry->list_node, (list_t *)rl);
+	list_add_tail (&plugin_entry->list_node, (list_t *)rl);
 	
 	/* Compile the expression
 	 */
