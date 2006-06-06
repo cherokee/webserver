@@ -25,9 +25,32 @@
 require_once ('common.php');
 require_once ('config_node.php');
 
+function headers() 
+{
+	$scripts  = CRLF;
+	$scripts .= '<script type="text/javascript" src="build/yahoo/yahoo.js"></script>'.CRLF;
+
+	echo '<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'.CRLF;
+	echo '<html>'.CRLF;
+	echo "<head>$scripts</head>".CRLF;
+}
+
+function body()
+{
+	echo "<body>".CRLF;
+}
+
+function foot()
+{
+	echo "</body>".CRLF;
+	echo "</html>";
+}
+
 function main() 
 {
 	session_start();
+	headers();
+	body();
 
 //	echo "The session is: " . $_SESSION["config"] . "<br />";
 
@@ -40,9 +63,15 @@ function main()
 			PRINT_ERROR ("Couldn't read $default_config");
 		}
 
+		$re = $conf->Save ("/tmp/prueba.conf");
+		if ($re != ret_ok) {
+			PRINT_ERROR ("Algo fallo");
+		}
+
 		$_SESSION["config"] = $conf;
 	}
 
+	foot();
 	session_write_close();
 }
 

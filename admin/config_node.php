@@ -40,23 +40,30 @@ class ConfigNode {
 		 */
 		$sep = strchr ($left, '!');
 
-		/* Is it a final value?
-		 */
-		if (empty($sep)) {
-			$this->value = $right;
-			return ret_ok;
-		} 
-		
 		/* Intermediate node
 		 */
-		$first = substr ($left, 0, strlen($left) - strlen($sep));
-		$rest  = substr ($left, strlen($first) + 1, strlen($left)-(strlen($first)+1));
-		
+		if (empty($sep)) {
+			$first = $left;
+			$rest  = '';
+		} else {
+			$first = substr ($left, 0, strlen($left) - strlen($sep));
+			$rest  = substr ($line, strlen($first) + 1, strlen($line)-(strlen($first)+1));
+		}
+
+		/* Create a new node
+		 */
 		if (! array_key_exists ($first, $this->child)) {
 			$this->child[$first] = new ConfigNode;
 		}
-		$subconf = $this->child[$first];
-		$subconf->ParseLine ($rest);
+
+		$subconf = &$this->child[$first];
+
+		/* Configure it
+		 */
+		if (! empty($rest)) 
+			$subconf->ParseLine ($rest);
+		else 
+			$subconf->value = $right;
 
 		return ret_ok;
 	}
@@ -130,6 +137,55 @@ class ConfigNode {
 		}
 
 		return $this->_readFile ($path);
+	}
+
+	function _Serialize ($path="") {
+		$content = '';
+
+		if ($this->value != NULL) {
+			$line = $path . ' = ' . $this->value . CRLF;
+			$content .= $line;
+		}
+
+		if ($this->child == NULL)
+			return $content;
+
+		foreach ($this->child as $name => $child) {
+			if (! empty ($path)) 
+				$new_path = $path . '!' . $name;
+			else 
+				$new_path = $name;
+			
+			$content .= $child->_Serialize ($new_path);
+		}
+		
+		return $content;
+	}
+
+	function Save ($file) {
+		/* Serialize the config
+		 */
+		$content = $this->_Serialize();
+
+		/* Check that the file is writable
+		 */
+		if (!is_writable($file)) {
+			PRINT_ERROR ("$file is not writable");
+			return ret_error;
+		}
+
+		/* Write down the file
+		 */
+		$f = fopen ($file, 'w+');
+
+		$re = fwrite ($f, $content);
+		if ($re === FALSE) {
+			PRINT_ERROR ("couldn't write content in $file");
+			return ret_error;
+		}
+
+		fclose ($f);
+		return ret_ok;
 	}
 }
 

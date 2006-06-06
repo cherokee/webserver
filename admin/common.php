@@ -29,6 +29,7 @@ define ("ret_error", -1);
 
 /* Constants
  */
+define ("CRLF", "\r\n");
 define ("cherokee_default_config_file", "/etc/cherokee/cherokee.conf");
 
 /* Functions
