@@ -22,29 +22,20 @@
  * USA
  */
 
-require_once ('common.php');
-require_once ('config_node.php');
+/* Types
+ */
+define ("ret_ok",     0);
+define ("ret_error", -1);
 
-function main() 
+/* Constants
+ */
+define ("cherokee_default_config_file", "/etc/cherokee/cherokee.conf");
+
+/* Functions
+ */
+function PRINT_ERROR ($string) 
 {
-	session_start();
-
-//	echo "The session is: " . $_SESSION["config"] . "<br />";
-
-	if ($_SESSION["config"] == null) 
-	{
-		$conf = new ConfigNode();
-
-		$ret = $conf->Load (cherokee_default_config_file);
-		if ($ret != ret_ok) {
-			PRINT_ERROR ("Couldn't read $default_config");
-		}
-
-		$_SESSION["config"] = $conf;
-	}
-
-	session_write_close();
+	   echo "<b>ERROR</b>: $string<br />\n";
 }
 
-main();
 ?>

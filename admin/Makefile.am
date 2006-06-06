@@ -2,7 +2,9 @@
 
 cherokeeadmindir = "$(prefix)/share/cherokee/admin/"
 cherokeeadmin_DATA = \
-index.php
+index.php            \
+common.php           \
+config_node.php      
 
 EXTRA_DIST = \
 $(cherokeeicons_DATA)
