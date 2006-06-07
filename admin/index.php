@@ -63,11 +63,6 @@ function main()
 			PRINT_ERROR ("Couldn't read $default_config");
 		}
 
-		$re = $conf->Save ("/tmp/prueba.conf");
-		if ($re != ret_ok) {
-			PRINT_ERROR ("Algo fallo");
-		}
-
 		$_SESSION["config"] = $conf;
 	}
 

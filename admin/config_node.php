@@ -187,6 +187,47 @@ class ConfigNode {
 		fclose ($f);
 		return ret_ok;
 	}
+
+	function Find ($path) 
+	{
+		$subconf = &$this;
+		
+		for (;;) {
+			$sep = strchr ($path, '!');
+			
+			/* If it isn't a final object, keep searching..
+			 */
+			if (! empty ($sep)) {
+				$key = substr ($path, 0, strlen($path) - strlen($sep));
+
+				if (! array_key_exists ($key, $subconf->child))
+					return NULL;
+
+				$subconf = &$subconf->child[$key];
+				$path    = substr ($sep, 1, strlen($sep) - 1);
+
+				continue;
+			}
+			
+			/* Check that the key actually exists
+			 */
+			if (! array_key_exists ($path, $subconf->child))
+				return NULL;
+			
+			/* Found		
+			 */
+			return $subconf->child[$path];
+		}
+	}
+
+	function FindValue ($path) 
+	{
+		$re = $this->Find ($path);
+		if ($re == NULL) 
+			return NULL;
+
+		return $re->value;
+	}
 }
 
 ?>
