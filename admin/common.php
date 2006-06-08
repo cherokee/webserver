@@ -30,13 +30,18 @@ define ("ret_error", -1);
 /* Constants
  */
 define ("CRLF", "\r\n");
+
+/* Configuration
+ */
 define ("cherokee_default_config_file", "/etc/cherokee/cherokee.conf");
+define ('YUI_use_min', 0);
+define ('YUI_www_path', '/build');
 
 /* Functions
  */
 function PRINT_ERROR ($string) 
 {
-	   echo "<b>ERROR</b>: $string<br />\n";
+	echo "<b>ERROR</b>: $string<br />\n";
 }
 
 ?>

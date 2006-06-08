@@ -27,12 +27,29 @@ require_once ('config_node.php');
 
 function headers() 
 {
-	$scripts  = CRLF;
-	$scripts .= '<script type="text/javascript" src="build/yahoo/yahoo.js"></script>'.CRLF;
+	$css    = array();
+	$js     = array();
+	$header = CRLF;
+
+	array_push ($css, 'reset/reset');
+	array_push ($css, 'fonts/fonts');
+	array_push ($js,  'yahoo/yahoo');
+
+	foreach ($css as $css_entry) {
+		if (YUI_use_min)
+			$css_entry .= "-min";
+		$header .= ' <link rel="stylesheet" type="text/css" href="'.YUI_www_path.'/'.$css_entry.'.css" />'.CRLF;
+	}
+
+	foreach ($js as $js_entry) {
+		if (YUI_use_min)
+			$js_entry .= "-min";
+		$header .= ' <script type="text/javascript" src="'.YUI_www_path.'/'.$js_entry.'.js"></script>'.CRLF;
+	}
 
 	echo '<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'.CRLF;
 	echo '<html>'.CRLF;
-	echo "<head>$scripts</head>".CRLF;
+	echo "<head>$header</header>";
 }
 
 function body()
