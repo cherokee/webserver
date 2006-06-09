@@ -216,7 +216,7 @@ db_retrieve (void *ptr, gnutls_datum key)
 	// printf ("db::retrieve\n");
 
 	if (unlikely (socket->vserver_ref == NULL)) {
-		PRINT_ERROR ("No virtual server reference\n");
+		PRINT_ERROR_S ("No virtual server reference\n");
 		return new;
 	}
 
@@ -241,7 +241,7 @@ db_remove (void *ptr, gnutls_datum key)
 	// printf ("db::remove\n");
 
 	if (unlikely (socket->vserver_ref == NULL)) {
-		PRINT_ERROR ("No virtual server reference\n");
+		PRINT_ERROR_S ("No virtual server reference\n");
 		return 1;
 	}
 
@@ -265,7 +265,7 @@ db_store (void *ptr, gnutls_datum key, gnutls_datum data)
 	// printf ("db::store\n");
 
 	if (socket->vserver_ref == NULL) {
-		PRINT_ERROR ("No virtual server reference\n");
+		PRINT_ERROR_S ("No virtual server reference\n");
 		return 1;
 	}
 
