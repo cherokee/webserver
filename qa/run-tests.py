@@ -41,6 +41,7 @@ server   = CHEROKEE_PATH
 # Make the DocumentRoot directory
 www = tempfile.mkdtemp ("cherokee_www")
 tmp = www + "/_tmp/"
+pid = tmp + "cherokee.pid"
 os.makedirs (tmp)
 
 map (lambda x: os.chmod (x, 0777), [www, tmp])
@@ -96,12 +97,13 @@ server!listen = 127.0.0.1
 server!panic_action = /usr/bin/cherokee-panic
 server!encoder!gzip!allow = txt
 server!mime_file = /etc/cherokee/mime.types
+server!pid_file = %s
 
 vserver!default!document_root = %s
 vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php
 vserver!default!directory!/!handler = common
 vserver!default!directory!/!priority = 1
-""" % (PORT, www)
+""" % (PORT, pid, www)
 
 PHP_FCGI = """extensions!php!handler = fcgi
 extensions!php!priority = 10000

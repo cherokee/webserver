@@ -24,6 +24,7 @@
 
 require_once ('common.php');
 require_once ('config_node.php');
+require_once ('server.php');
 
 function headers() 
 {
@@ -83,6 +84,11 @@ function main()
 		$_SESSION["config"] = $conf;
 	}
 
+	$conf   = &$_SESSION["config"];
+	$server = new Server($conf);
+
+//	$server->SendHUP();
+	
 	foot();
 	session_write_close();
 }

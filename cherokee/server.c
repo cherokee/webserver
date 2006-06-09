@@ -1351,6 +1351,10 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_clean (&srv->chroot);
 		cherokee_buffer_add_buffer (&srv->chroot, &conf->val);
 
+	} else if (equal_buf_str (&conf->key, "pid_file")) {
+		cherokee_buffer_clean (&srv->pidfile);
+		cherokee_buffer_add_buffer (&srv->pidfile, &conf->val);
+
 	} else if (equal_buf_str (&conf->key, "mime_file")) {
 		ret = load_mime_file (srv, &conf->val);
 		if (ret != ret_ok) return ret;
