@@ -23,39 +23,44 @@
  */
 
 require_once ('common.php');
-require_once ('config_node.php');
-require_once ('server.php');
-require_once ('widget_debug.php');
-require_once ('page.php');
 
 
-function main() 
-{
-	session_start();
-
-	if ($_SESSION["config"] == null) 
-	{
-		$conf = new ConfigNode();
-
-		$ret = $conf->Load (cherokee_default_config_file);
-		if ($ret != ret_ok) {
-			PRINT_ERROR ("Couldn't read $default_config");
-		}
-
-		$_SESSION["config"] = $conf;
+class Widget {
+	var $id;
+   
+	function Widget ($name) {
+		$this->id = uniqid ($name.'_'.time());
 	}
 
-	$conf   = &$_SESSION["config"];
-	$server = new Server($conf);
+	/* Headers
+	 */
+	function GetCSSIncludes () {
+		if (! method_exists ($this, '_GetCSSIncludes'))
+			return NULL;
+		
+		return $this->_GetCSSIncludes();
+	}
+	function GetJavaScriptIncludes () {
+		if (! method_exists ($this, '_GetJavaScriptIncludes'))
+			return NULL;
+		
+		return $this->_GetJavaScriptIncludes();
+	}
+	
+	/* Body
+	 */
+	function Render () {
+		if (! method_exists ($this, '_Render'))
+			return NULL;
+		
+		return $this->_Render();
+	}
 
-	$page  = new Page();
-	$debug = new WidgetDebug($conf);
-
-	$page->AddWidget ('debug', &$debug);
-	echo $page->Render();
-
-	session_write_close();
+	/* Methods
+	 */
+	function GetID () {
+		return $this->id;
+	}
 }
 
-main();
 ?>

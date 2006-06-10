@@ -5,7 +5,10 @@ cherokeeadmin_DATA = \
 index.php            \
 common.php           \
 config_node.php      \
-server.php
+server.php           \
+page.php             \
+widget.php           \
+widget_debug.php
 
 EXTRA_DIST = \
 $(cherokeeicons_DATA)
