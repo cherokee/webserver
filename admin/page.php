@@ -24,16 +24,19 @@
 
 require_once ('common.php');
 require_once ('widget.php');
+require_once ('theme.php');
 
 
 class Page {
 	var $widgets;
+	var $theme;
 
-	function Page () {
+	function Page ($theme) {
+		$this->theme   = $theme;
 		$this->widgets = array();
 	}
 
-	/* Private methods
+	/* Private 
 	 */
 	function _GetCSSHeaders () {
 		$css = array();
@@ -42,7 +45,7 @@ class Page {
 			$css_js = $widget->GetCSSIncludes();
 
 			if (empty ($css_js))
-				return NULL;
+				continue;
 
 			foreach ($css_js as $i) {
 				$js[$i] = $i;
@@ -59,7 +62,7 @@ class Page {
 			$widget_js = $widget->GetJavaScriptIncludes();
 
 			if (empty ($widget_js))
-				return NULL;
+				continue;
 
 			foreach ($widget_js as $i) {
 				$js[$i] = $i;
@@ -90,21 +93,12 @@ class Page {
 		
 		return $header;
 	}
-
-	function _GetBodyText () {
-		$body = '';
-
-		foreach ($this->widgets as $name => $widget) {
-			$body .= "<!-- Widget: $name -->" . CRLF;
-			$body .= $widget->Render() . CRLF;
-		}
-
-		return $body;
-	}
 	
 	/* Public methods
 	 */
 	function AddWidget ($name, $widget) {
+		$name = strtolower($name);
+
 		if (array_key_exists ($name, $this->widgets)) {
 			PRINT_ERROR ("Widget $name already exists");
 			return ret_error;
@@ -113,24 +107,19 @@ class Page {
 		$this->widgets[$name] = &$widget;
 		return ret_ok;
 	}
-	
+
 	function Render () {
+		return $this->theme->Render ($this);
+	}
+
+	/* Callbacks
+	 */
+	function GetHeader () {
 		$js_headers  = $this->_GetJavaScriptHeaders();
 		$css_headers = $this->_GetCSSHeaders();
 
 		$header = $this->_GetHeaderText ($css_headers, $js_headers);
-		$body   = $this->_GetBodyText ();
-
- 		$page  = '<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'.CRLF;
-		$page .= '<html>'.CRLF;
-		$page .= '<head>'.CRLF;
-		$page .= $header;
-		$page .= '</head><body>'.CRLF;
-		$page .= $body;
-		$page .= '</body>'.CRLF;
-		$page .= '</html>';
-
-		return $page;
+		return $header;
 	}
 }
 

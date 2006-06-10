@@ -33,7 +33,9 @@ define ("CRLF", "\r\n");
 
 /* Configuration
  */
-define ("cherokee_default_config_file", "/etc/cherokee/cherokee.conf");
+define ('cherokee_default_config_file', '/etc/cherokee/cherokee.conf');
+define ('cherokee_default_theme_path',  'theme/');
+
 define ('YUI_use_min', 0);
 define ('YUI_www_path', '/build');
 

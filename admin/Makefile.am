@@ -8,7 +8,8 @@ config_node.php      \
 server.php           \
 page.php             \
 widget.php           \
-widget_debug.php
+widget_debug.php     \
+theme.php
 
 EXTRA_DIST = \
 $(cherokeeicons_DATA)

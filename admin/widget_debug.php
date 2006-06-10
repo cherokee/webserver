@@ -30,7 +30,7 @@ class WidgetDebug extends Widget {
 	var $id_num;
 	
 	function WidgetDebug ($conf) {
-		$this->Widget(get_class($this));
+		$this->Widget (get_class($this));
 		$this->conf   = $conf;
 		$this->id_num = 1;
 	}

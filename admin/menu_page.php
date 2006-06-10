@@ -23,42 +23,20 @@
  */
 
 require_once ('common.php');
-require_once ('config_node.php');
-require_once ('server.php');
-require_once ('widget_debug.php');
-require_once ('page_debug.php');
+require_once ('page.php');
+require_once ('widget_menu.php');
 
-
-function read_configuration () {
-	$conf = new ConfigNode();
+class MenuPage extends Page {
+	function MenuPage ($theme) {
+		$this->Page ($theme);
+		
+		$this->wid_menu  = new WidgetMenu();
+		$this->AddWidget ('menu', &$this->wid_menu);
+	}
 	
-	$ret = $conf->Load (cherokee_default_config_file);
-	if ($ret != ret_ok) {
-		PRINT_ERROR ("Couldn't read $default_config");
+	function GetMenu () {
+		return $this->wid_menu->Render();
 	}
-
-	return $conf;
 }
 
-function main() 
-{
-	session_start();
-
-	if ($_SESSION["config"] == null) {
-		$conf = read_configuration ();
-		$_SESSION["config"] = $conf;
-	}
-
-	$conf   = &$_SESSION["config"];
-	$server = new Server($conf);
-
-	$theme = new Theme();
-	$page  = new PageDebug(&$theme, &$conf);
-
-	echo $page->Render();
-
-	session_write_close();
-}
-
-main();
 ?>
