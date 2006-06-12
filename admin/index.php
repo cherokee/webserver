@@ -23,9 +23,9 @@
  */
 
 require_once ('common.php');
-require_once ('config_node.php');
 require_once ('server.php');
-require_once ('widget_debug.php');
+require_once ('config_node.php');
+require_once ('page_index.php');
 require_once ('page_debug.php');
 
 
@@ -40,6 +40,29 @@ function read_configuration () {
 	return $conf;
 }
 
+
+function instance_page ($theme, $conf) {
+	$name   = strtolower($_REQUEST['page']);
+	$params = $_REQUEST;
+	
+	unset ($params['page']);
+	
+	switch ($name) {
+	case 'debug':
+		$page  = new PageDebug(&$theme, &$conf, $params);
+		break;
+	default:
+		if (!empty($params['ajax'])) 
+			$page  = new PageIndexAjax (&$conf, $params);
+		else
+			$page  = new PageIndex (&$theme, &$conf, $params);
+		break;
+	}
+
+	return $page;
+}
+
+
 function main() 
 {
 	session_start();
@@ -49,12 +72,12 @@ function main()
 		$_SESSION["config"] = $conf;
 	}
 
+
 	$conf   = &$_SESSION["config"];
 	$server = new Server($conf);
+	$theme  = new Theme();
 
-	$theme = new Theme();
-	$page  = new PageDebug(&$theme, &$conf);
-
+	$page = instance_page (&$theme, &$conf);
 	echo $page->Render();
 
 	session_write_close();

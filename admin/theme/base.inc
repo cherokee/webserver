@@ -17,11 +17,8 @@
         </div>
         <div id="main">
           <h1>%%pagetitle%%</h1>
+          %%body%%
 	   </div>
-
-	   
-
-        %%body%%
 
         <div class="clearfix"></div>
         <div id="footer" class="clearfix">

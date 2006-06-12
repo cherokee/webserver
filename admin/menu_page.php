@@ -27,8 +27,8 @@ require_once ('page.php');
 require_once ('widget_menu.php');
 
 class MenuPage extends Page {
-	function MenuPage ($theme) {
-		$this->Page ($theme);
+	function MenuPage ($theme, $params) {
+		$this->Page ($theme, $params);
 		
 		$this->wid_menu  = new WidgetMenu();
 		$this->AddWidget ('menu', &$this->wid_menu);

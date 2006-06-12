@@ -1,0 +1,2 @@
+%%ServerInfoPanel%%
+%%VirtualServersPanel%%

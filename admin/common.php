@@ -46,4 +46,13 @@ function PRINT_ERROR ($string)
 	echo "<b>ERROR</b>: $string<br />\n";
 }
 
+/* Utilities
+ */
+function is_windows ()
+{
+	return ((PHP_OS == 'WINNT') or 
+		(PHP_OS == 'WIN32') or 
+		(PHP_OS == 'Windows'));
+}
+
 ?>

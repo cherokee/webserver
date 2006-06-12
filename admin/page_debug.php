@@ -24,13 +24,14 @@
 
 require_once ('common.php');
 require_once ('menu_page.php');
+require_once ('widget_debug.php');
 
 class PageDebug extends MenuPage {
 	var $wid_debug;
 	var $body;
 
-	function PageDebug ($theme, $conf) {
-		$this->MenuPage ($theme);
+	function PageDebug ($theme, $conf, $params) {
+		$this->MenuPage ($theme, $params);
 
 		$this->wid_debug = new WidgetDebug($conf);
 		$this->AddWidget ('debug', &$this->wid_debug);
