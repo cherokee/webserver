@@ -1,3 +1,9 @@
+2006-06-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/util.c (cherokee_tls_init): Added SSL hardware
+	acceleration support. Patch by Yusuf Goolamabbas
+	<yusufg@outblaze.com>
+
 2006-04-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* themes/Makefile.am, themes/default_theme.css,

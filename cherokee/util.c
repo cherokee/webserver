@@ -76,6 +76,9 @@
 # include <openssl/ssl.h>
 # include <openssl/err.h>
 # include <openssl/rand.h>
+#if HAVE_OPENSSL_ENGINE_H
+# include <openssl/engine.h>
+#endif
 #endif
 
 
@@ -707,7 +710,10 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 
 ret_t
 cherokee_tls_init (void)
-{	
+{
+#if HAVE_OPENSSL_ENGINE_H
+	ENGINE *e;
+#endif
 #ifdef HAVE_GNUTLS
 	int rc;
 
@@ -718,7 +724,7 @@ cherokee_tls_init (void)
 	 */
 	gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread); 
 # endif
-
+ 
 	/* Gnutls library-width initialization
 	 */
 	rc = gnutls_global_init();
@@ -729,13 +735,37 @@ cherokee_tls_init (void)
 #endif
 
 #ifdef HAVE_OPENSSL
+# if HAVE_OPENSSL_ENGINE_H
+#  if OPENSSL_VERSION_NUMBER >= 0x00907000L
+	ENGINE_load_builtin_engines();
+#  endif
+	if (!(e = ENGINE_by_id("pkcs11"))) {
+		PRINT_ERROR_S ("could not find pkcs11 engine");
+		return ret_error;
+	}
+
+	if(!ENGINE_init(e)) {
+		ENGINE_free(e);
+		PRINT_ERROR_S ("could not init pkcs11 engine");
+		return ret_error;
+	}
+
+	if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+		ENGINE_free(e);
+		PRINT_ERROR_S ("could not set all defaults");
+		return ret_error;
+	}
+
+	ENGINE_finish(e);
+	ENGINE_free(e);
+# endif
+
 	SSL_load_error_strings();
 	SSL_library_init();
 	
 	SSLeay_add_all_algorithms ();
 	SSLeay_add_ssl_algorithms ();
 #endif
-
 	return ret_ok;
 }
 
