@@ -61,10 +61,12 @@ panic_handler (int code)
 static void
 restart_server_cb (cherokee_server_t *new_srv)
 {
-	srv = new_srv;
-	common_server_initialization (srv);
-}
+	ret_t ret;
 
+	srv = new_srv;
+	ret = common_server_initialization (srv);
+	if (ret != ret_ok) exit(3);
+}
 
 static void
 restart_server (int code)
