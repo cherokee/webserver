@@ -81,7 +81,7 @@ class Page {
 			foreach ($css as $css_entry) {
 				if (YUI_use_min)
 					$css_entry .= "-min";
-				$header .= '<link rel="stylesheet" type="text/css" href="'.YUI_www_path.'/'.$css_entry.'.css" />'.CRLF;
+				$header .= '<link rel="stylesheet" type="text/css" href="/'.$css_entry.'.css" />'.CRLF;
 			}
 		}
 
@@ -89,7 +89,7 @@ class Page {
 			foreach ($js as $js_entry) {
 				if (YUI_use_min)
 					$js_entry .= "-min";
-				$header .= '<script type="text/javascript" src="'.YUI_www_path.'/'.$js_entry.'.js"></script>'.CRLF;
+				$header .= '<script type="text/javascript" src="/'.$js_entry.'.js"></script>'.CRLF;
 			}
 		}
 		

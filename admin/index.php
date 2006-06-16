@@ -29,8 +29,8 @@ require_once ('page_index.php');
 require_once ('page_debug.php');
 
 
-function read_configuration () {
-	$conf = new ConfigNode();
+function &read_configuration () {
+	$conf =& new ConfigNode();
 	
 	$ret = $conf->Load (cherokee_default_config_file);
 	if ($ret != ret_ok) {
@@ -41,7 +41,7 @@ function read_configuration () {
 }
 
 
-function instance_page ($theme, $conf) {
+function &instance_page (&$theme, &$conf) {
 	$name   = strtolower($_REQUEST['page']);
 	$params = $_REQUEST;
 	
@@ -49,13 +49,18 @@ function instance_page ($theme, $conf) {
 	
 	switch ($name) {
 	case 'debug':
-		$page  = new PageDebug(&$theme, &$conf, $params);
+		$page =& new PageDebug(&$theme, &$conf, $params);
+		break;
+	case 'restart':
+		$server =& new Server ($conf);
+		$conf->Save (cherokee_default_config_file);
+		$server->SendHUP();
 		break;
 	default:
 		if (!empty($params['ajax'])) 
-			$page  = new PageIndexAjax (&$conf, $params);
+			$page =& new PageIndexAjax ($conf, $params);
 		else
-			$page  = new PageIndex (&$theme, &$conf, $params);
+			$page =& new PageIndex ($theme, $conf, $params);
 		break;
 	}
 
@@ -68,16 +73,14 @@ function main()
 	session_start();
 
 	if ($_SESSION["config"] == null) {
-		$conf = read_configuration ();
-		$_SESSION["config"] = $conf;
+		$conf =& read_configuration ();
+		$_SESSION["config"] =& $conf;
 	}
 
+	$theme =  new Theme();
+	$conf  =& $_SESSION["config"];
 
-	$conf   = &$_SESSION["config"];
-	$server = new Server($conf);
-	$theme  = new Theme();
-
-	$page = instance_page (&$theme, &$conf);
+	$page =& instance_page ($theme, $conf);
 	echo $page->Render();
 
 	session_write_close();

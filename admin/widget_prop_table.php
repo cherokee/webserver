@@ -37,101 +37,49 @@ class WidgetPropTable extends Widget {
 	}
 
 	function _GetJavaScriptIncludes () {
-		return array('yahoo/yahoo',
-			     'event/event',
-			     'dom/dom',
-			     'connection/connection');
+		return array('yui/yahoo/yahoo',
+			     'yui/event/event',
+			     'yui/dom/dom',
+			     'yui/connection/connection',
+			     'widget_prop_table');
 	}
 
 	function _Render () {
-		$general_js= '
-		<script type="text/javascript">//<![CDATA[
-
-		var id_being_edited = "";
-
-		var property_clicked;
-		var property_update_and_close;
-		var property_check;
-		var property_update_and_close_ok;
-		var property_update_and_close_failed;
-
-		property_update_and_close_ok = function (resp) {
-			if (resp.responseText != "ok\r\n") {
-				return property_update_and_close_failed (resp);
-			}
-
-			var div_area  = document.getElementById (id_being_edited);
-			var text_area = document.getElementById (id_being_edited + "_entry");
-			var value     = text_area.value;
-
-			div_area.innerHTML = value;
-			YAHOO.util.Event.addListener(id_being_edited, "click", property_clicked);
-
-			id_being_edited = "";
-		}
-		property_update_and_close_failed = function (resp) {
-			alert ("failed: " + resp.responseText);
-		}			
-	
-		var property_check_cb = {
-		  	success: property_update_and_close_ok, 
-			failure: property_update_and_close_failed
-		};
-
-		property_update_and_close = function () {
-			var div_area  = document.getElementById (id_being_edited);
-			var text_area = document.getElementById (id_being_edited + "_entry");
-			var value     = text_area.value;
-
-			var post_data = "ajax=1&prop="+id_being_edited+"&value="+value;
-			var request   = YAHOO.util.Connect.asyncRequest ("POST", document.location.href, property_check_cb, post_data);
-
-			return false;
-		}
-
-		property_clicked = function (event, type) {
-			var target = YAHOO.util.Event.getTarget (event, true);
-			var obj    = document.getElementById (target.id);
-			var old    = obj.innerHTML;
-
-			if (id_being_edited.length != 0) {
-				return false;
-			}
-
-			YAHOO.util.Event.preventDefault (event);
-			YAHOO.util.Event.removeListener (target.id, "click", property_clicked);
-
-			id_being_edited = target.id;
-
-			obj.innerHTML = \'<form onsubmit="return property_update_and_close();"> \
-	                                   <input type="textarea" id="\'+target.id+\'_entry" value="\'+old+\'" name="\'+target.id+\'" /> \
-					   <input type="submit" value="OK" /> \
-					 </form>\';
-	    	}
-		//]]></script>';
-
 		$table_rows = '';
 		$events_js  = '';
 
 		foreach ($this->entries as $name => $entry) {
 			$fname = str_replace(' ', '_', $name);
+			
+			$events_js .= "var $fname".'_params = new Array("'.$entry['type'].'", "'.$entry['conf'].'", "'.$fname.'");' .CRLF;
 
-			$table_rows .= "<tr><td>$name</td><td><div id=\"$fname\">" . 
-				       $this->conf->FindValue($entry['conf']) .
-				       "</div></td></tr>";
+			if ($entry['type'] == 'bool') {
+				if ($this->conf->FindValue($entry['conf']) == '1') 
+					$checked = 'checked';
 
-			$events_js  .= "YAHOO.util.Event.addListener (\"$fname\", \"click\", ".
-				       "property_clicked, \"".$entry['type']."\");" . CRLF;
+				$table_rows .= "<tr><td>$name</td><td><div id=\"$fname\">" . 
+					"<input type=\"checkbox\" id=\"$fname"."_entry\" $checked />" .
+					"</div></td></tr>".CRLF;					
+
+				$events_js .= "YAHOO.util.Event.addListener ('$fname', 'click', property_bool_clicked, $fname".'_params);'.CRLF;
+			} else {
+				$table_rows .= "<tr><td>$name</td><td><div id=\"$fname\">" . 
+					$this->conf->FindValue($entry['conf']) .
+					"</div></td></tr>".CRLF;
+
+				$events_js .= "YAHOO.util.Event.addListener ('$fname', 'click', property_text_clicked, $fname".'_params);' . CRLF;
+			}
 		}
 
-		return $general_js. '
-	        	<table class="pretty-table">
+		return '<table class="pretty-table">
 	            		<tr><th>Setting</th><th>Value</th></tr>
 				'. $table_rows .'
 			</table>
+
 			<script type="text/javascript">//<![CDATA[ 
-			'. $events_js .' 
-			//]]></script>';
+			        '. $events_js .' 
+			//]]></script>
+		       ';
 	}
 
 	/* Public methods

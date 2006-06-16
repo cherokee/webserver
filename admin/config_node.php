@@ -53,10 +53,11 @@ class ConfigNode {
 		/* Create a new node
 		 */
 		if (! array_key_exists ($first, $this->child)) {
-			$this->child[$first] = new ConfigNode;
+			$this->child[$first] =& new ConfigNode;
 		}
 
-		$subconf = &$this->child[$first];
+		$child   =& $this->child;
+		$subconf =& $child[$first];
 
 		/* Configure it
 		 */
@@ -188,7 +189,7 @@ class ConfigNode {
 		return ret_ok;
 	}
 
-	function Find ($path) 
+	function &Find ($path) 
 	{
 		$subconf = &$this;
 		
@@ -202,31 +203,46 @@ class ConfigNode {
 
 				if (! array_key_exists ($key, $subconf->child))
 					return NULL;
-
-				$subconf = &$subconf->child[$key];
-				$path    = substr ($sep, 1, strlen($sep) - 1);
+				
+				$child   =& $subconf->child;
+				$subconf =& $child[$key];
+				$path    =  substr ($sep, 1, strlen($sep) - 1);
 
 				continue;
 			}
 			
 			/* Check that the key actually exists
 			 */
-			if (! array_key_exists ($path, $subconf->child))
+			$child =& $subconf->child; 
+
+			if (! array_key_exists ($path, $child))
 				return NULL;
 			
 			/* Found		
 			 */
-			return $subconf->child[$path];
+			$re =& $child[$path];
+			return $re;
 		}
 	}
 
-	function FindValue ($path) 
+	function &FindValue ($path) 
 	{
-		$re = $this->Find ($path);
+		$re =& $this->Find ($path);
 		if ($re == NULL) 
 			return NULL;
 
 		return $re->value;
+	}
+
+	function SetValue ($path, $value, $create=0) 
+	{
+		$entry =& $this->Find ($path);
+		
+		if ($entry == NULL)
+			return "Node not found";
+
+		$entry->value = $value;
+		return NULL;
 	}
 }
 

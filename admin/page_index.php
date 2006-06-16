@@ -28,7 +28,7 @@ require_once ('widget_prop_table.php');
 
 
 $entries = array ('Port'      => array ('type' => 'int',  'conf' => 'server!port',      'check' => 'check_is_int'),
-		  'Keepalive' => array ('type' => 'bool', 'conf' => 'server!keepalive', 'check' => 'check_is_bool'),
+		  'Keepalive' => array ('type' => 'bool', 'conf' => 'server!keepalive', 'check' => 'check_is_bool', 'fix' => 'fix_bool'),
 		  'Listen'    => array ('type' => 'text', 'conf' => 'server!listen',    'check' => 'check_is_ip'),
 		  'PID file'  => array ('type' => 'text', 'conf' => 'server!pid_file',  'check' => 'check_is_path')
 	);
@@ -38,32 +38,68 @@ class PageIndexAjax {
 	var $conf;
 	var $params;
 
-	function PageIndexAjax ($conf, $params) {
-		$this->conf   = $conf;
-		$this->params = $params;
+	function PageIndexAjax (&$conf, &$params) {
+		$this->conf   =& $conf;
+		$this->params =  $params;
 	}
 
 	function Render () {
 		global $entries;
+				
+		$prop  =& $this->params['prop'];
+		$value =& $this->params['value'];
+		$confp =& $this->params['conf'];
 
-		$prop  = $this->params['prop'];
-		$value = $this->params['value'];
+		if (empty ($prop))
+			return "No property".CRLF;
+
+		/* Update properties
+		 */
+		$found = false;
 
 		foreach ($entries as $name => $entry) {
 			$fname = str_replace (' ', '_', $name);
-
+			
 			if ($fname == $prop) {
+				/* Validate the value
+				 */
 				$check = $entry['check'];
-
+				
 				$re = $check ($value);
-				if ($re == NULL) 
-					return 'ok'.CRLF;
-				else 
+				if ($re != NULL) 
 					return $re.CRLF;
+				
+				/* Fix it up
+				 */
+				$fix = $entry['fix'];
+
+				if (!empty($fix)) {
+					$v2 = $fix ($value);
+					$value = $v2;				
+				}
+				
+				/* Update the configuration	
+				 */
+				$conf =& $this->conf;
+				
+				$re = $conf->SetValue ($confp, $value);
+				if ($re != NULL) return $re.CRLF;
+				
+				/* Double check it
+				 */
+				$v =& $conf->FindValue ($confp);
+				if ($v != $value)
+					return "Didn't match: $v and .$value".CRLF;
+				
+				$found = true;
+				break;
 			}
 		}
 
-		return 'Property not found'.CRLF;
+		if (! $found) 
+			return 'Property not found'.CRLF;
+
+		return 'ok'.CRLF;
 	}
 }
 
@@ -71,11 +107,11 @@ class PageIndexAjax {
 class PageIndex extends MenuPage {
 	var $tab;
 
-	function PageIndex ($theme, $conf, $params) {
+	function PageIndex (&$theme, &$conf, $params) {
 		$this->MenuPage ($theme, $params);
 
-		$this->conf = $conf;
-		$this->body = $theme->LoadFile('pag_index.inc');
+		$this->conf =& $conf;
+		$this->body =  $theme->LoadFile('pag_index.inc');
 
 		$this->tab  = new WidgetPropTable (&$conf);
 		$this->AddWidget ('tab', &$this->tab);
@@ -99,6 +135,36 @@ class PageIndex extends MenuPage {
 
 	function GetVirtualServersPanel () {
 		return "<br/><br/><br/>TODO: Virtual Server Table";
+	}
+
+	function GetApplyButton () {
+		$js   = '
+	        <script type="text/javascript">//<![CDATA[ 
+
+			restarted_ok = function (resp) {
+				;
+			}			
+			restarted_failed = function (resp) {
+		   		alert ("failed: " + resp.responseText);
+			}			
+
+			var restart_cb = {
+			  	success: restarted_ok, 
+	                        failure: restarted_failed
+                        };
+
+			function apply_changes_clicked (event) {
+				var post_data = "page=restart";
+		   		YAHOO.util.Connect.asyncRequest ("POST", document.location.href, restart_cb, post_data);
+			}
+		//]]></script>
+		';
+
+		$html = '<div align="right">
+			   <input type="button" value="Apply Changes" onclick="return apply_changes_clicked();">
+			 </div>';
+
+		return $js . $html;
 	}
 }
 

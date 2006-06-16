@@ -36,17 +36,17 @@ class WidgetDebug extends Widget {
 	}
 
 	function _GetCSSIncludes () {
-		return array ('treeview/assets/tree');
+		return array ('yui/treeview/assets/tree');
 	}
 
 	function _GetJavaScriptIncludes () {
-		return array ('yahoo/yahoo',
-			      'event/event',
-			      'connection/connection',
-			      'animation/animation',
-			      'dom/dom',
-			      'dragdrop/dragdrop',
-			      'treeview/treeview');
+		return array ('yui/yahoo/yahoo',
+			      'yui/event/event',
+			      'yui/connection/connection',
+			      'yui/animation/animation',
+			      'yui/dom/dom',
+			      'yui/dragdrop/dragdrop',
+			      'yui/treeview/treeview');
 	}
 
 	function _GetNextID () {

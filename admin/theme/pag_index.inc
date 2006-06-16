@@ -1,2 +1,3 @@
 %%ServerInfoPanel%%
 %%VirtualServersPanel%%
+%%ApplyButton%%

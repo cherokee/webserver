@@ -39,7 +39,25 @@ function check_is_int ($i) {
 	return NULL;
 }
 
+function fix_bool ($b) {
+	$lb = strtolower($b);
+
+	if (($lb == 'on') || ($lb == 'true'))
+		return true;
+
+	if (($lb == 'off') || ($lb == 'false'))
+		return false;
+
+	return (int)$b;
+}
+
 function check_is_bool ($b) {
+	$lb = strtolower($b);
+
+	if (($lb == 'on')  or ($lb == 'true') or
+	    ($lb == 'off') or ($lb == 'false'))
+		return NULL;
+
 	if (is_bool ($b))
 		return NULL;
 

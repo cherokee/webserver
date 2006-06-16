@@ -29,7 +29,7 @@ class Server {
 	var $config;
 	var $pid;
 
-	function Server ($config) {
+	function Server (&$config) {
 		$this->config = &$config;
 		$this->pid    = NULL;
 		
