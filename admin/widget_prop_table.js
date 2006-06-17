@@ -3,8 +3,8 @@
 /* Copyright (C) 2001-2006 Alvaro Lopez Ortega <alvaro@alobbs.com>
  */
 
-var id_being_edited = "";
-var confc_being_edited = "";
+var id_being_edited   = "";
+var conf_being_edited = "";
 
 function Trim (sString) {
         while (sString.substring(0,1) == " ")
@@ -22,11 +22,13 @@ property_text_update_and_close_ok = function (resp) {
 	   var div_area  = document.getElementById (id_being_edited);
 	   var text_area = document.getElementById (id_being_edited + "_entry");
 	   var value     = text_area.value;
+	   var params    = window[id_being_edited+"_params"];
 
 	   div_area.innerHTML = value;
-	   YAHOO.util.Event.addListener(id_being_edited, "click", property_text_clicked, id_being_edited+"_params");
+	   YAHOO.util.Event.addListener(id_being_edited, "click", property_text_clicked, params);
 
-	   id_being_edited = "";
+	   id_being_edited   = "";
+	   conf_being_edited = "";
 }
 
 property_bool_update_and_close_ok = function (resp) {
@@ -73,7 +75,7 @@ property_bool_clicked = function (event, params) {
 	   
 property_text_clicked = function (event, params) {
 	   if (id_being_edited.length != 0) {
-			 return false;
+		   return false;
 	   }
 
 	   var target = YAHOO.util.Event.getTarget (event, true);
@@ -88,9 +90,9 @@ property_text_clicked = function (event, params) {
 	   conf_being_edited = conf;
 	   id_being_edited   = target.id;
 	   
-	   obj.innerHTML = '<form onsubmit="return property_text_update_and_close();">             \
-	   <input type="textarea" id="'+target.id+'_entry" value="'+old+'" name="'+target.id+'" /> \
-	   <input type="submit" value="OK" />						                          \
+	   obj.innerHTML = '<form onsubmit="return property_text_update_and_close();">                  \
+	   	<input type="textarea" id="'+target.id+'_entry" value="'+old+'" name="'+target.id+'" /> \
+		<input type="submit" value="OK" />	                                   		\
 	   </form>';
 }
 

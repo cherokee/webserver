@@ -225,7 +225,7 @@ class ConfigNode {
 		}
 	}
 
-	function &FindValue ($path) 
+	function FindValue ($path) 
 	{
 		$re =& $this->Find ($path);
 		if ($re == NULL) 

@@ -38,7 +38,7 @@ class PageIndexAjax {
 	var $conf;
 	var $params;
 
-	function PageIndexAjax (&$conf, &$params) {
+	function PageIndexAjax (&$conf, $params) {
 		$this->conf   =& $conf;
 		$this->params =  $params;
 	}
@@ -46,9 +46,9 @@ class PageIndexAjax {
 	function Render () {
 		global $entries;
 				
-		$prop  =& $this->params['prop'];
-		$value =& $this->params['value'];
-		$confp =& $this->params['conf'];
+		$prop  = $this->params['prop'];
+		$value = $this->params['value'];
+		$confp = $this->params['conf'];
 
 		if (empty ($prop))
 			return "No property".CRLF;
@@ -95,6 +95,7 @@ class PageIndexAjax {
 				break;
 			}
 		}
+
 
 		if (! $found) 
 			return 'Property not found'.CRLF;

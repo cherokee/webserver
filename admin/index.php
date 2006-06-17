@@ -44,12 +44,12 @@ function &read_configuration () {
 function &instance_page (&$theme, &$conf) {
 	$name   = strtolower($_REQUEST['page']);
 	$params = $_REQUEST;
-	
+
 	unset ($params['page']);
-	
+
 	switch ($name) {
 	case 'debug':
-		$page =& new PageDebug(&$theme, &$conf, $params);
+		$page =& new PageDebug(&$theme, $conf, $params);
 		break;
 	case 'restart':
 		$server =& new Server ($conf);
