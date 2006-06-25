@@ -31,40 +31,53 @@ class ConfigNode {
 		$this->value = NULL; 
 	}
 
+	function &_CreatePath ($path) {
+		$subconf =& $this;
+
+		for (;;) {
+			/* Get the first element
+			 */
+			$sep = strchr ($path, '!');
+
+			/* Intermediate node
+			 */
+			if (empty($sep)) {
+				$first = $path;
+				$rest  = '';
+			} else {
+				$first = substr ($path, 0, strlen($path) - strlen($sep));
+				$rest  = substr ($path, strlen($first) + 1, strlen($path)-(strlen($first)+1));
+			}
+			
+			/* Create a new node
+			 */
+			if (! array_key_exists ($first, $subconf->child)) {
+				$subconf->child[$first] =& new ConfigNode;
+			}
+			
+			$child   =& $subconf->child;
+			$subconf =& $child[$first];
+
+			if (empty($rest)) 
+				return $subconf;
+			
+			$path = $rest;
+		}
+	}
+
 	function ParseLine ($line) {
 		/* Split left and right sides
 		 */
 		list($left, $right) = explode(' = ', $line);
 
-		/* Get the first element
-		 */
-		$sep = strchr ($left, '!');
+		$subconf = $this->_CreatePath ($left);
+		if ($subconf == NULL) return ret_error;
 
-		/* Intermediate node
+		/* Assign the value
 		 */
-		if (empty($sep)) {
-			$first = $left;
-			$rest  = '';
-		} else {
-			$first = substr ($left, 0, strlen($left) - strlen($sep));
-			$rest  = substr ($line, strlen($first) + 1, strlen($line)-(strlen($first)+1));
-		}
-
-		/* Create a new node
-		 */
-		if (! array_key_exists ($first, $this->child)) {
-			$this->child[$first] =& new ConfigNode;
-		}
-
-		$child   =& $this->child;
-		$subconf =& $child[$first];
-
-		/* Configure it
-		 */
-		if (! empty($rest)) 
-			$subconf->ParseLine ($rest);
-		else 
+		if (!empty ($right)) {
 			$subconf->value = $right;
+		}
 
 		return ret_ok;
 	}
@@ -234,13 +247,31 @@ class ConfigNode {
 		return $re->value;
 	}
 
-	function SetValue ($path, $value, $create=0) 
-	{
-		$entry =& $this->Find ($path);
-		
-		if ($entry == NULL)
-			return "Node not found";
+	function AddPath ($path) {
+		$this->_CreatePath ($path);
+	}
 
+	function SetValue ($path, $value, $create=false) 
+	{
+		/* Look for the entry
+		 */
+		$entry =& $this->Find ($path);
+		if ($entry == NULL) {
+			/* There is no such element 
+			 */
+			if (! $create) 
+				return "Node not found: ".$path;
+
+			/* Add a new config node
+			 */
+			$entry = $this->_CreatePath ($path);
+
+			if ($entry == NULL)
+				return "Could not create: ".$path;
+		}
+		
+		/* Fill it out
+		 */
 		$entry->value = $value;
 		return NULL;
 	}

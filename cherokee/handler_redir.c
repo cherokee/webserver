@@ -91,8 +91,8 @@ substitute_groups (cherokee_buffer_t *url, const char *subject,
 static ret_t
 match_and_substitute (cherokee_handler_redir_t *n) 
 {
-	ret_t                  ret;
 	list_t                *i;
+	ret_t                  ret;
 	cherokee_connection_t *conn = HANDLER_CONN(n);
 	
 	/* Append the query string

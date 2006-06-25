@@ -27,6 +27,7 @@ require_once ('server.php');
 require_once ('config_node.php');
 require_once ('page_index.php');
 require_once ('page_debug.php');
+require_once ('page_vserver.php');
 
 
 function &read_configuration () {
@@ -46,18 +47,28 @@ function &instance_page (&$theme, &$conf) {
 	$params = $_REQUEST;
 
 	unset ($params['page']);
+	$ajax = $params['ajax'];
 
 	switch ($name) {
-	case 'debug':
-		$page =& new PageDebug(&$theme, $conf, $params);
-		break;
 	case 'restart':
 		$server =& new Server ($conf);
 		$conf->Save (cherokee_default_config_file);
 		$server->SendHUP();
 		break;
+
+	case 'debug':
+		$page =& new PageDebug(&$theme, $conf, $params);
+		break;
+
+	case 'vserver':
+		if (!empty($ajax))
+			$page =& new PageVserverAjax ($conf, $params);
+		else
+			$page =& new PageVServer(&$theme, $conf, $params);
+		break;
+
 	default:
-		if (!empty($params['ajax'])) 
+		if (!empty($ajax))
 			$page =& new PageIndexAjax ($conf, $params);
 		else
 			$page =& new PageIndex ($theme, $conf, $params);

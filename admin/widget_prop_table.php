@@ -25,15 +25,88 @@
 require_once ('widget.php');
 
 
+class WidgetPropTableAjax {
+	var $conf;
+	var $params;
+
+	function WidgetPropTableAjax (&$conf, $params) {
+		$this->conf   =& $conf;
+		$this->params =  $params;
+	}
+
+	function Render ($entries) {
+		$prop  = $this->params['prop'];
+		$value = $this->params['value'];
+		$confp = $this->params['conf'];
+
+		if (empty ($prop))
+			return "No property".CRLF;
+
+		/* Update properties
+		 */
+		$found = false;
+
+		foreach ($entries as $name => $entry) {
+			$fname = str_replace (' ', '_', $name);
+			
+			if ($fname == $prop) {
+				/* Validate the value
+				 */
+				$check = $entry['check'];
+				
+				$re = $check ($value);
+				if ($re != NULL) 
+					return $re.CRLF;
+				
+				/* Fix it up
+				 */
+				$fix = $entry['fix'];
+
+				if (!empty($fix)) {
+					$v2 = $fix ($value);
+					$value = $v2;				
+				}
+				
+				/* Update the configuration	
+				 */
+				$conf =& $this->conf;
+
+				$old_value = $conf->FindValue ($confp);
+				$create    = empty($old_value);
+
+				$re = $conf->SetValue ($confp, $value, $create);
+				if ($re != NULL) return $re.CRLF;
+				
+				/* Double check it
+				 */
+				$v =& $conf->FindValue ($confp);
+				if ($v != $value)
+					return "Didn't match: $v and .$value".CRLF;
+				
+				$found = true;
+				break;
+			}
+		}
+
+
+		if (! $found) 
+			return 'Property not found'.CRLF;
+
+		return 'ok'.CRLF;
+	}
+}
+
+
 class WidgetPropTable extends Widget {
 	var $entries;
 	var $conf;
 	
-	function WidgetPropTable ($conf) {
+	function WidgetPropTable (&$conf, $page_name) {
 		$this->Widget (get_class($this));
 	
-		$this->conf    = $conf;
-		$this->entries = array();
+		$this->conf      =& $conf;
+		$this->page_name =  $page_name;
+		$this->entries   =  array();
 	}
 
 	function _GetJavaScriptIncludes () {
@@ -51,27 +124,30 @@ class WidgetPropTable extends Widget {
 		foreach ($this->entries as $name => $entry) {
 			$fname = str_replace(' ', '_', $name);
 			
-			$events_js .= "var $fname".'_params = new Array("'.$entry['type'].'", "'.$entry['conf'].'", "'.$fname.'");' .CRLF;
+			$events_js .= "var $fname".'_params = new Array("'.$entry['type'].
+				'", "'.$entry['conf'].'", "'.$fname.'", "'.$this->page_name.'");' .CRLF;
 
 			if ($entry['type'] == 'bool') {
 				if ($this->conf->FindValue($entry['conf']) == '1') 
 					$checked = 'checked';
 
-				$table_rows .= "<tr><td>$name</td><td><div id=\"$fname\">" . 
+				$table_rows .= "<tr><td>$name</td><td id=\"$fname\">" . 
 					"<input type=\"checkbox\" id=\"$fname"."_entry\" $checked />" .
-					"</div></td></tr>".CRLF;					
+					"</td></tr>".CRLF;					
 
-				$events_js .= "YAHOO.util.Event.addListener ('$fname', 'click', property_bool_clicked, $fname".'_params);'.CRLF;
+				$events_js .= "YAHOO.util.Event.addListener ('$fname', 'click', ".
+					"property_bool_clicked, $fname".'_params);'.CRLF;
 			} else {
-				$table_rows .= "<tr><td>$name</td><td><div id=\"$fname\">" . 
+				$table_rows .= "<tr><td>$name</td><td id=\"$fname\">" . 
 					$this->conf->FindValue($entry['conf']) .
-					"</div></td></tr>".CRLF;
+					"</td></tr>".CRLF;
 
-				$events_js .= "YAHOO.util.Event.addListener ('$fname', 'click', property_text_clicked, $fname".'_params);' . CRLF;
+				$events_js .= "YAHOO.util.Event.addListener ('$fname', 'click', ".
+					"property_text_clicked, $fname".'_params);' . CRLF;
 			}
 		}
 
-		return '<table class="pretty-table">
+		return '<table class="pretty-table" width="100%">
 	            		<tr><th>Setting</th><th>Value</th></tr>
 				'. $table_rows .'
 			</table>

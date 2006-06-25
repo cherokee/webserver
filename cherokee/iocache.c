@@ -64,7 +64,7 @@ typedef struct {
 	cherokee_iocache_entry_t base;
 	time_t                   stat_update;
 	time_t                   mmap_update;
-	cint_t                   mmap_usage;
+	cint_t                   ref_counter;
 	cint_t                   usages;
 
 #ifdef HAVE_PTHREAD
@@ -88,7 +88,7 @@ struct cherokee_iocache {
 typedef struct {
 	cherokee_iocache_t *iocache;
 	float               average;
-	list_t              to_delete;
+	struct list_head    to_delete;
 } clean_up_params_t;
 
 
@@ -166,8 +166,8 @@ iocache_clean_up_each (const char *key, void *value, void *param)
 
 	/* Is it in use?
 	 */
-	if (PRIV(file)->mmap_usage > 0) {
-		return false;
+	if (PRIV(file)->ref_counter > 0) {
+		return true;
 	}
 
 	if ((usage == -1) ||
@@ -184,7 +184,7 @@ iocache_clean_up_each (const char *key, void *value, void *param)
 		list_add ((list_t *)delobj, &params->to_delete);
 	}
 
-	return false;
+	return true;
 }
 
 
@@ -195,8 +195,8 @@ iocache_entry_new (cherokee_iocache_entry_t **entry)
 
 	PRIV(n)->stat_update = 0;
 	PRIV(n)->mmap_update = 0;
-	PRIV(n)->mmap_usage  = 0;
 	PRIV(n)->usages      = 0;
+	PRIV(n)->ref_counter = 1;
 	
 	CHEROKEE_MUTEX_INIT (&PRIV(n)->lock, NULL);
 
@@ -379,6 +379,13 @@ cherokee_iocache_free_default (cherokee_iocache_t *iocache)
 	return cherokee_iocache_free (iocache);	
 }
 
+static void
+hit (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *file)
+{
+	PRIV(file)->usages++;
+	iocache->files_usages++;
+}
+
 
 ret_t 
 cherokee_iocache_stat_get (cherokee_iocache_t *iocache, char *filename, cherokee_iocache_entry_t **file)
@@ -402,8 +409,8 @@ cherokee_iocache_stat_get (cherokee_iocache_t *iocache, char *filename, cherokee
 			}
 		}
 
-		PRIV(new)->usages++;
-		iocache->files_usages++;
+		hit (iocache, *file);
+		PRIV(*file)->ref_counter++;
 
 		CHEROKEE_MUTEX_UNLOCK (&iocache->files_lock);
 		return ret_ok;
@@ -422,11 +429,10 @@ cherokee_iocache_stat_get (cherokee_iocache_t *iocache, char *filename, cherokee
 	/* Add to the table
 	 */
 	cherokee_table_add (&iocache->files, filename, (void *)new);
+	iocache->files_num++;
 
 	*file = new;
-	PRIV(new)->usages++;
-	iocache->files_num++;
-	iocache->files_usages++;
+	hit (iocache, new);
 
 	CHEROKEE_MUTEX_UNLOCK (&iocache->files_lock);
 	return ret_ok;
@@ -463,8 +469,8 @@ cherokee_iocache_mmap_get_w_fd (cherokee_iocache_t *iocache, char *filename, int
 			}
 		}
 
-		PRIV(new)->usages++;
-		iocache->files_usages++;
+		hit (iocache, new);
+		PRIV(new)->ref_counter++;
 
 		CHEROKEE_MUTEX_UNLOCK (&iocache->files_lock);
 		return ret_ok;
@@ -473,18 +479,15 @@ cherokee_iocache_mmap_get_w_fd (cherokee_iocache_t *iocache, char *filename, int
 	/* Create a new entry
 	 */
 	iocache_entry_new (&new);
-
-	PRIV(new)->mmap_usage++;
 	iocache_entry_update_mmap (new, filename, fd, iocache);
 
 	/* Add to the table
 	 */
 	cherokee_table_add (&iocache->files, filename, new);
+	iocache->files_num++;
 
 	*file = new;
-	PRIV(new)->usages++;
-	iocache->files_num++;
-	iocache->files_usages++;
+	hit (iocache, new);
 
 	CHEROKEE_MUTEX_UNLOCK (&iocache->files_lock);
 	return ret_ok;
@@ -518,8 +521,8 @@ cherokee_iocache_mmap_lookup (cherokee_iocache_t *iocache, char *filename, chero
 
 	/* Return it
 	 */
-	PRIV(new)->usages++;
-	iocache->files_usages++;
+	hit (iocache, new);
+	PRIV(new)->ref_counter++;
 
 	CHEROKEE_MUTEX_UNLOCK (&iocache->files_lock);
 	return ret_ok;
@@ -536,8 +539,11 @@ cherokee_iocache_mmap_get (cherokee_iocache_t *iocache, char *filename, cherokee
 ret_t 
 cherokee_iocache_mmap_release (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *file)
 {
+	if (file == NULL)
+		return ret_not_found;
+
 	CHEROKEE_MUTEX_LOCK (&iocache->files_lock);
-	PRIV(file)->mmap_usage--;
+	PRIV(file)->ref_counter--;
 	CHEROKEE_MUTEX_UNLOCK (&iocache->files_lock);
 
 	return ret_ok;

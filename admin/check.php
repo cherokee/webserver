@@ -25,7 +25,8 @@
 require_once ('common.php');
 
 
-function check_is_int ($i) {
+function check_is_int ($i) 
+{
 	if (!is_numeric ($i))
 		return 'Non numeric';
 
@@ -39,7 +40,8 @@ function check_is_int ($i) {
 	return NULL;
 }
 
-function fix_bool ($b) {
+function fix_bool ($b) 
+{
 	$lb = strtolower($b);
 
 	if (($lb == 'on') || ($lb == 'true'))
@@ -51,7 +53,8 @@ function fix_bool ($b) {
 	return (int)$b;
 }
 
-function check_is_bool ($b) {
+function check_is_bool ($b) 
+{
 	$lb = strtolower($b);
 
 	if (($lb == 'on')  or ($lb == 'true') or
@@ -64,7 +67,8 @@ function check_is_bool ($b) {
 	return "Wrong value";
 }
 
-function check_is_ipv4 ($ip) {
+function check_is_ipv4 ($ip) 
+{
         $oct = explode('.', $ip);
         if (count($oct) != 4) {
             return "Bad formated";
@@ -83,11 +87,13 @@ function check_is_ipv4 ($ip) {
 	return NULL;
 }
 
-function check_is_ipv6 ($ip) {
+function check_is_ipv6 ($ip) 
+{
 	return NULL;
 }
 
-function check_is_ip ($ip) {
+function check_is_ip ($ip) 
+{
 	$colon = strchr ($ip, ':');
 	if ($colon != FALSE)
 		return check_is_ipv6($ip);
@@ -95,7 +101,8 @@ function check_is_ip ($ip) {
 	return check_is_ipv4($ip);
 }
 
-function check_is_path ($path) {
+function check_is_path ($path) 
+{
 	if (is_windows()) {
 		// TODO
 		return "Windows: unsupported";
@@ -103,6 +110,27 @@ function check_is_path ($path) {
 
 	if ($path[0] != '/')
 		return "Wrong beginning";
+
+	return NULL;
+}
+
+function check_nil ($param) 
+{
+	return NULL;
+}
+
+function check_file_list ($l) 
+{
+	if (empty($l))
+		return NULL;
+
+	$parts = preg_split ('/ *\, */', $l);
+ 
+	foreach ($parts as $part) {
+		$re = preg_match ('/[a-zA-Z0-9\.\_\-]+/', $part);
+		if (!$re)
+			return "Invalid: ".$part;
+	}
 
 	return NULL;
 }

@@ -5,6 +5,7 @@
 
 var id_being_edited   = "";
 var conf_being_edited = "";
+var target_page       = "";
 
 function Trim (sString) {
         while (sString.substring(0,1) == " ")
@@ -29,6 +30,7 @@ property_text_update_and_close_ok = function (resp) {
 
 	   id_being_edited   = "";
 	   conf_being_edited = "";
+	   target_page       = "";
 }
 
 property_bool_update_and_close_ok = function (resp) {
@@ -53,8 +55,9 @@ property_text_update_and_close = function () {
 	   var div_area  = document.getElementById (id_being_edited);
 	   var text_area = document.getElementById (id_being_edited + "_entry");
 	   var value     = text_area.value;
-	   
-	   var post_data = "ajax=1&prop="+id_being_edited+"&value="+value+"&conf="+conf_being_edited;
+	   var page      = target_page;
+
+	   var post_data = "ajax=1&page="+page+"&prop="+id_being_edited+"&value="+value+"&conf="+conf_being_edited;
 	   YAHOO.util.Connect.asyncRequest ("POST", document.location.href, property_text_check_cb, post_data);
 
 	   return false;
@@ -64,10 +67,11 @@ property_bool_clicked = function (event, params) {
 	   var type      = params[0];
 	   var conf      = params[1];
 	   var fname     = params[2];
+	   var page      = params[3];
 	   var checkbox  = document.getElementById (fname + "_entry");
 	   var value     = checkbox.checked;
 	   
-	   var post_data = "ajax=1&prop="+fname+"&value="+value+"&conf="+conf;
+	   var post_data = "ajax=1&page="+page+"&prop="+fname+"&value="+value+"&conf="+conf;
 	   YAHOO.util.Connect.asyncRequest ("POST", document.location.href, property_bool_check_cb, post_data);
 	   
 	   return true;
@@ -83,15 +87,18 @@ property_text_clicked = function (event, params) {
 	   var old    = Trim(obj.innerHTML);
 	   var type   = params[0];
 	   var conf   = params[1];
+	   var page   = params[3];
 	   
 	   YAHOO.util.Event.preventDefault (event);
 	   YAHOO.util.Event.removeListener (target.id, "click", property_text_clicked);
 	   
 	   conf_being_edited = conf;
 	   id_being_edited   = target.id;
+	   target_page       = page;
 	   
 	   obj.innerHTML = '<form onsubmit="return property_text_update_and_close();">                  \
 	   	<input type="textarea" id="'+target.id+'_entry" value="'+old+'" name="'+target.id+'" /> \
+		<input type="hidden" name="page" value="'+page+'">                                      \
 		<input type="submit" value="OK" />	                                   		\
 	   </form>';
 }

@@ -25,85 +25,28 @@
 require_once ('menu_page.php');
 require_once ('check.php');
 require_once ('widget_prop_table.php');
+require_once ('widget_vsrvs_table.php');
 
 
-$entries = array ('Port'      => array ('type' => 'int',  'conf' => 'server!port',      'check' => 'check_is_int'),
-		  'Keepalive' => array ('type' => 'bool', 'conf' => 'server!keepalive', 'check' => 'check_is_bool', 'fix' => 'fix_bool'),
-		  'Listen'    => array ('type' => 'text', 'conf' => 'server!listen',    'check' => 'check_is_ip'),
-		  'PID file'  => array ('type' => 'text', 'conf' => 'server!pid_file',  'check' => 'check_is_path')
-	);
+$entries_index = 
+	array ('Port'      => array ('type' => 'int',  'conf' => 'server!port',      'check' => 'check_is_int'),
+	       'Keepalive' => array ('type' => 'bool', 'conf' => 'server!keepalive', 'check' => 'check_is_bool', 'fix' => 'fix_bool'),
+	       'Listen'    => array ('type' => 'text', 'conf' => 'server!listen',    'check' => 'check_is_ip'),
+	       'PID file'  => array ('type' => 'text', 'conf' => 'server!pid_file',  'check' => 'check_is_path'));
 
 
 class PageIndexAjax {
-	var $conf;
-	var $params;
+	var $tab;
 
 	function PageIndexAjax (&$conf, $params) {
-		$this->conf   =& $conf;
-		$this->params =  $params;
+		$this->tab =& new WidgetPropTableAjax ($conf, $params);
 	}
 
 	function Render () {
-		global $entries;
-				
-		$prop  = $this->params['prop'];
-		$value = $this->params['value'];
-		$confp = $this->params['conf'];
-
-		if (empty ($prop))
-			return "No property".CRLF;
-
-		/* Update properties
-		 */
-		$found = false;
-
-		foreach ($entries as $name => $entry) {
-			$fname = str_replace (' ', '_', $name);
-			
-			if ($fname == $prop) {
-				/* Validate the value
-				 */
-				$check = $entry['check'];
-				
-				$re = $check ($value);
-				if ($re != NULL) 
-					return $re.CRLF;
-				
-				/* Fix it up
-				 */
-				$fix = $entry['fix'];
-
-				if (!empty($fix)) {
-					$v2 = $fix ($value);
-					$value = $v2;				
-				}
-				
-				/* Update the configuration	
-				 */
-				$conf =& $this->conf;
-				
-				$re = $conf->SetValue ($confp, $value);
-				if ($re != NULL) return $re.CRLF;
-				
-				/* Double check it
-				 */
-				$v =& $conf->FindValue ($confp);
-				if ($v != $value)
-					return "Didn't match: $v and .$value".CRLF;
-				
-				$found = true;
-				break;
-			}
-		}
-
-
-		if (! $found) 
-			return 'Property not found'.CRLF;
-
-		return 'ok'.CRLF;
+		global $entries_index;
+		return $this->tab->Render ($entries_index);
 	}
 }
-
 
 class PageIndex extends MenuPage {
 	var $tab;
@@ -113,14 +56,21 @@ class PageIndex extends MenuPage {
 
 		$this->conf =& $conf;
 		$this->body =  $theme->LoadFile('pag_index.inc');
-
-		$this->tab  = new WidgetPropTable (&$conf);
+		
+		/* Property table
+		 */
+		$this->tab = new WidgetPropTable ($conf, 'index');
 		$this->AddWidget ('tab', &$this->tab);
 
-		global $entries;
-		foreach ($entries as $name => $e) {
+		global $entries_index;
+		foreach ($entries_index as $name => $e) {
 			$this->tab->AddEntry ($name, $e['type'], $e['conf'], $e['check']);
 		}
+
+		/* Virtual servers table
+		 */
+		$this->vsrvs = new WidgetVSrvsTable ($conf);
+		$this->AddWidget ('vsrvs', &$this->vsrvs);
 	}
 
 	function GetPageTitle () {
@@ -135,7 +85,7 @@ class PageIndex extends MenuPage {
 	}
 
 	function GetVirtualServersPanel () {
-		return "<br/><br/><br/>TODO: Virtual Server Table";
+		return $this->vsrvs->Render();
 	}
 
 	function GetApplyButton () {
