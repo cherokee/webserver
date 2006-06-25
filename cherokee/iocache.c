@@ -88,7 +88,7 @@ struct cherokee_iocache {
 typedef struct {
 	cherokee_iocache_t *iocache;
 	float               average;
-	struct list_head    to_delete;
+	list_t              to_delete;
 } clean_up_params_t;
 
 

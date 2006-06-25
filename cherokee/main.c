@@ -36,17 +36,25 @@
 #include "server.h"
 
 #ifndef CHEROKEE_EMBEDDED
-# define GETOPT_OPT  "C:b"
+# define GETOPT_OPT  "C:br:"
 # define CONFIG_FILE "[-C configfile] "
 #else
-# define GETOPT_OPT  "b"
+# define GETOPT_OPT  "br:"
 # define CONFIG_FILE ""
 #endif 
 
+#define BASIC_CONFIG                                                               \
+	"vserver!default!directory!/!handler  = common\n"                          \
+	"vserver!default!directory!/!prioriry = 1\n"	                           \
+	"vserver!default!directory!/icons!handler = file\n"                        \
+	"vserver!default!directory!/icons!document_root = " CHEROKEE_ICONSDIR "\n" \
+	"vserver!default!directory!/icons!priority = 2\n"
 
-static cherokee_server_t  *srv         = NULL;
-static char               *config_file = NULL;
-static cherokee_boolean_t  daemon_mode = false;
+
+static cherokee_server_t  *srv           = NULL;
+static char               *config_file   = NULL;
+static char               *document_root = NULL;
+static cherokee_boolean_t  daemon_mode   = false;
 
 static ret_t common_server_initialization (cherokee_server_t *srv);
 
@@ -90,8 +98,18 @@ common_server_initialization (cherokee_server_t *srv)
 #ifdef SIGSEGV
         signal (SIGSEGV, panic_handler);
 #endif
+	if (document_root != NULL) {
+		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
-	ret = cherokee_server_read_config_file (srv, config_file);
+		cherokee_buffer_add_va (&tmp, "vserver!default!document_root = %s\n"
+					BASIC_CONFIG, document_root);
+
+		ret = cherokee_server_read_config_string (srv, &tmp);
+		cherokee_buffer_mrproper (&tmp);
+	} else {
+		ret = cherokee_server_read_config_file (srv, config_file);
+	}
+
 	if (ret != ret_ok) {
 		PRINT_MSG_S ("Couldn't read the config file\n");
 		return ret_error;
@@ -123,6 +141,10 @@ process_parameters (int argc, char **argv)
 
 		case 'b':
 			daemon_mode = true;
+			break;
+
+		case 'r':
+			document_root = strdup(optarg);
 			break;
 
 		default:
