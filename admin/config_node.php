@@ -41,7 +41,7 @@ class ConfigNode {
 
 			/* Intermediate node
 			 */
-			if (empty($sep)) {
+			if (empty ($sep)) {
 				$first = $path;
 				$rest  = '';
 			} else {
@@ -70,7 +70,7 @@ class ConfigNode {
 		 */
 		list($left, $right) = explode(' = ', $line);
 
-		$subconf = $this->_CreatePath ($left);
+		$subconf =& $this->_CreatePath ($left);
 		if ($subconf == NULL) return ret_error;
 
 		/* Assign the value

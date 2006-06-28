@@ -262,6 +262,10 @@ if ssl:
 # Maybe launch some threads
 for n in range(thds-1):
     objs_copy = map (lambda x: copy.copy(x), objs)
+
+    t = (n * 1.0 / (thds-1))
+    time.sleep(t)
+
     thread.start_new_thread (mainloop_iterator, (objs_copy,))
 
 # Execute the tests

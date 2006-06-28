@@ -24,53 +24,63 @@
 
 require_once ('widget.php');
 
+$menu_layout = 
+	array ('General'    => array ('index'    => array ('link' => '/',            'text' => 'Basic'),
+				      'advanced' => array ('link' => '/advanced',    'text' => 'Advanced')),
+	       'Debug Tree' => array ('debug'    => array ('link' => '/?page=debug', 'text' => 'Debug')));
+
 
 class WidgetMenu extends Widget {
-	
-	function WidgetMenu () {
+	var $page_name;
+
+	function WidgetMenu ($page_name='') {
 		$this->Widget (get_class($this));
+		$this->page_name = $page_name;
+	}
+	
+	function _RenderMenuGroup ($group_name, $content) {
+		return "<li><strong>$group_name</strong>
+			  <ul>
+			    $content
+			  </ul>
+			</li>
+		       ";
+	}
+
+	function _RenderMenuEntry ($menu_entry) {
+		if ($page_name == $this->page_name) 
+			return '<li><a href="'.$menu_entry['link'].'" class="selected">'.$menu_entry['text'].'</a></li>';
+		else 
+			return '<li><a href="'.$menu_entry['link'].'">'.$menu_entry['text'].'</a></li>';
 	}
 
 	function _Render () {
-		return '
-            <ul id="nav">
-                <li><strong>General</strong>
-                    <ul>
-                        <li><a href="#" class="selected">Config Summary</a></li>
-                        <li><a href="#">Fundamentals</a></li>
-                        <li><a href="#">Advanced Settings</a></li>
+		$menu_tmp = '';
 
-                    </ul>
-                </li>
-                <li><strong>File Handling</strong>
-                    <ul>
-                        <li><a href="#">MIME Types</a></li>
-                        <li><a href="#">Content Negotiation</a></li>
-                        <li><a href="#">Content Compression</a></li>
+		global $menu_layout;
+		foreach ($menu_layout as $group => $group_entry) {
 
-                        <li><a href="#">File Upload</a></li>
-                    </ul>
-                </li>
-                <li><strong>URL Handling</strong>
-                    <ul>
-                        <li><a href="#">URL Mappings</a></li>
-                        <li><a href="#">Gateway</a></li>
+			$menu_content = '';
+			foreach ($group_entry as $entry_name => $entry) {
+				$menu_content .= $this->_RenderMenuEntry ($entry);
+			}
 
-                        <li><a href="#">Home Directories</a></li>
-                        <li><a href="#">Spelling Correction</a></li>
-                    </ul>
-                </li>
-                <li><strong>API Support</strong>
-                    <ul>
-                        <li><a href="#">SSI</a></li>
+			$menu_tmp .= $this->_RenderMenuGroup ($group, $menu_content);
+		}
 
-                        <li><a href="#">CGI</a></li>
-                        <li><a href="#">FastCGI</a></li>
-                        <li><a href="#">PHP</a></li>
-                        <li><a href="#">Perl</a></li>
-                    </ul>
-                </li>
-            </ul>';
+		$menu = "
+			<ul id=\"nav\">
+			  $menu_tmp
+			</ul>
+			";
+
+		$apply_changes = '
+			<div align="center">
+			   <input type="button" value="Apply Changes" onclick="return apply_changes_clicked();">
+			</div>
+		';
+
+		return $menu . $apply_changes;
 	}
 }
 
