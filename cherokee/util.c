@@ -742,25 +742,23 @@ cherokee_tls_init (void)
 #  if OPENSSL_VERSION_NUMBER >= 0x00907000L
 	ENGINE_load_builtin_engines();
 #  endif
-	if (!(e = ENGINE_by_id("pkcs11"))) {
-		PRINT_ERROR_S ("could not find pkcs11 engine");
-		return ret_error;
-	}
-
-	if(!ENGINE_init(e)) {
+	e = ENGINE_by_id("pkcs11");
+	if (e != NULL) {
+		if(!ENGINE_init(e)) {
+			ENGINE_free(e);
+			PRINT_ERROR_S ("could not init pkcs11 engine");
+			return ret_error;
+		}
+		
+		if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+			ENGINE_free(e);
+			PRINT_ERROR_S ("could not set all defaults");
+			return ret_error;
+		}
+		
+		ENGINE_finish(e);
 		ENGINE_free(e);
-		PRINT_ERROR_S ("could not init pkcs11 engine");
-		return ret_error;
 	}
-
-	if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
-		ENGINE_free(e);
-		PRINT_ERROR_S ("could not set all defaults");
-		return ret_error;
-	}
-
-	ENGINE_finish(e);
-	ENGINE_free(e);
 # endif
 
 	SSL_load_error_strings();
