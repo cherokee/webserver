@@ -852,7 +852,14 @@ process_active_connections (cherokee_thread_t *thd)
 			/* 4.- Default handler check
 			 */
 			if (CONN_VSRV(conn)->default_handler != NULL) {
-				cherokee_config_entry_complete (&entry, CONN_VSRV(conn)->default_handler, false);
+				cherokee_virtual_server_t *vsrv = CONN_VSRV(conn);
+ 
+				cherokee_config_entry_complete (&entry, vsrv->default_handler, false);
+
+				if (conn->realm_ref == NULL) 
+					conn->realm_ref = vsrv->default_handler->auth_realm;
+				if (conn->auth_type == http_auth_nothing) 
+					conn->auth_type = vsrv->default_handler->authentication;
 
 				if (cherokee_buffer_is_empty (&conn->web_directory) && (! matched_req)) {
 					cherokee_buffer_add (&conn->web_directory, "/", 1);

@@ -219,7 +219,7 @@ fi
 AC_FUNC_MEMCMP
 AC_FUNC_MMAP
 
-AC_CHECK_FUNCS(gmtime gmtime_r localtime localtime_r getrlimit getdtablesize readdir_r)
+AC_CHECK_FUNCS(gmtime gmtime_r localtime localtime_r getrlimit getdtablesize readdir_r flockfile funlockfile)
 
 
 AH_BOTTOM([
@@ -626,7 +626,7 @@ AC_TRY_RUN([#include <errno.h>
               AC_DEFINE([HAVE_SENDFILE_BROKEN], [1], [broken sendfile]) ])
 
 # readdir_r()
-PHP_READDIR_R_TYPE
+LIBWWW_READDIR_R_TYPE
 
 
 dnl

@@ -1,3 +1,13 @@
+2006-07-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in, cherokee/util.c (cherokee_trace): Added check for
+	flockfile() and funlockfile(). It was failing compile on Win32.
+	Patch by Philip Pemberton <philpem@dsl.pipex.com>
+
+2006-0x-xx  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* Loads of commits..
+	
 2006-06-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/util.c (cherokee_tls_init): Added SSL hardware
