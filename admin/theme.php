@@ -65,7 +65,15 @@ class Theme {
 			$target = $matches[1];
 			$method = 'Get'.ucwords($target);
 
-			if (! in_array(strtolower($method), get_class_methods(get_class($page)))) {
+			$found = false;
+			foreach (get_class_methods(get_class($page)) as $n => $key) {
+				if (strtolower($method) == strtolower($key)) {
+					$found = true;
+					break;
+				}
+			}
+			
+			if (! $found) {
 				PRINT_ERROR ("Theme problem: Unimplemented Page method: $method");
 				break;
 			}

@@ -1,1 +1,5 @@
-Vserver page
+%%GeneralVirtualServerConfiguration%%
+
+<h2>Configuration chain</h2>
+
+%%ConfigurationChain%%

@@ -66,9 +66,15 @@ class PageVServer extends MenuPage {
 	function GetPageTitle () {
 		return 'Virtual Server: ' . $this->vserver;
 	}
+	function GetGeneralVirtualServerConfiguration () {
+		return $this->tab1->Render();
+	}
+	function GetConfigurationChain () {
+//		return $this->chain->Render();
+	}
 
 	function GetBody () {
-		return $this->tab1->Render();
+		return $this->body;
 	}
 }
 

@@ -16,8 +16,8 @@
 		    %%menu%%
         </div>
         <div id="main">
-          <h1>%%pagetitle%%</h1>
-          %%body%%
+          <h1>%%PageTitle%%</h1>
+          %%Body%%
 	   </div>
 
         <div class="clearfix"></div>

@@ -48,6 +48,10 @@
 
 #define ENTRIES "handler,common"
 
+#ifdef CHEROKEE_EMBEDDED
+# define cherokee_iocache_mmap_release(iocache,file)
+#endif
+
 
 ret_t
 cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)

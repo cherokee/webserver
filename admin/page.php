@@ -32,10 +32,10 @@ class Page {
 	var $theme;
 	var $params;
 
-	function Page ($theme) {
-		$this->theme   = $theme;
-		$this->widgets = array();
-		$this->params  = array();
+	function Page (&$theme) {
+		$this->theme   =& $theme;
+		$this->widgets =  array();
+		$this->params  =  array();
 	}
 
 	/* Private 
