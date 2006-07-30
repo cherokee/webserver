@@ -31,10 +31,11 @@
 #include "config_entry.h"
 
 ret_t 
-cherokee_validator_init_base (cherokee_validator_t *validator)
+cherokee_validator_init_base (cherokee_validator_t *validator, cherokee_validator_props_t *props)
 {
 	cherokee_module_init_base (MODULE(validator));
-	
+
+	validator->props = props;
 	validator->check = NULL;
 
 	cherokee_buffer_init (&validator->user);
@@ -379,5 +380,37 @@ cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
 		} 
 	}
 
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_validator_props_init_base (cherokee_validator_props_t *valp, validator_props_func_free_t free_func)
+{
+	valp->free = free_func;
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_validator_props_free_base (cherokee_validator_props_t *valp)
+{
+	free (valp);
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_validator_props_free (cherokee_validator_props_t *valp)
+{
+	if (valp == NULL) 
+		return ret_error;
+
+	if (valp->free == NULL) {
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
+
+	valp->free (valp);
 	return ret_ok;
 }

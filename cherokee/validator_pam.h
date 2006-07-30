@@ -36,7 +36,7 @@ typedef struct {
 #define PAM(x) ((cherokee_validator_pam_t *)(x))
 
 
-ret_t cherokee_validator_pam_new  (cherokee_validator_pam_t **pam, cherokee_table_t *properties);
+ret_t cherokee_validator_pam_new  (cherokee_validator_pam_t **pam, cherokee_validator_props_t *props);
 ret_t cherokee_validator_pam_free (cherokee_validator_pam_t  *pam);
 
 ret_t cherokee_validator_pam_check       (cherokee_validator_pam_t  *pam, cherokee_connection_t *conn);

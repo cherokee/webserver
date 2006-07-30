@@ -56,6 +56,9 @@ class PageVServer extends MenuPage {
 		$this->tab1    =& new WidgetPropTable (&$conf, 'vserver');
 		$this->AddWidget ('tab1', &$this->tab1);
 
+		$this->chain   =& new WidgetVsrvChain (&$conf,);
+		$this->AddWidget ('chain', &$this->chain);
+
 		global $entries_vservers;
 		foreach ($entries_vservers as $name => $e) {
 			$conf_entry = str_replace('%name%', $this->vserver, $e['conf']);

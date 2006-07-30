@@ -468,6 +468,28 @@ dynamic_validator_pam_lib = libplugin_pam.la
 endif
 endif
 
+
+#
+# Validator LDAP
+#
+if HAVE_LDAP
+validator_ldap = \
+validator_ldap.c \
+validator_ldap.h
+
+libplugin_ldap_la_LDFLAGS = $(module_ldflags) 
+libplugin_ldap_la_SOURCES = $(validator_ldap)
+libplugin_ldap_la_LIBADD  = -lldap
+
+if STATIC_VALIDATOR_LDAP
+static_validator_ldap_src = $(validator_ldap)
+static_validator_ldap_lib = -lldap
+else
+dynamic_validator_ldap_lib = libplugin_ldap.la
+endif
+endif
+
+
 #
 # Validator htpasswd
 #
@@ -564,6 +586,7 @@ $(TLS_LIBS) \
 $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 $(static_validator_pam_lib) \
+$(static_validator_ldap_lib)  \
 $(static_validator_htpasswd_lib) \
 $(static_handler_proxy_lib) \
 libcherokee-base.la
@@ -735,6 +758,7 @@ $(static_logger_combined_src) \
 $(static_encoder_gzip_src) \
 \
 $(static_validator_pam_src) \
+$(static_validator_ldap_src) \
 $(static_validator_plain_src) \
 $(static_validator_htdigest_src) \
 $(static_validator_htpasswd_src) \
@@ -856,6 +880,7 @@ $(dynamic_logger_ncsa_lib) \
 $(dynamic_logger_combined_lib) \
 $(dynamic_logger_w3c_lib) \
 $(dynamic_validator_pam_lib) \
+$(dynamic_validator_ldap_lib) \
 $(dynamic_validator_plain_lib) \
 $(dynamic_validator_htdigest_lib) \
 $(dynamic_validator_htpasswd_lib)

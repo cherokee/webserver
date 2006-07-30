@@ -34,17 +34,23 @@
 #include "config_node.h"
 
 
+CHEROKEE_BEGIN_DECLS
+
 /* Callback function definitions
  */
 typedef ret_t (* validator_func_new_t)         (void **validator, cherokee_table_t *properties); 
 typedef ret_t (* validator_func_check_t)       (void  *validator, void *conn);
 typedef ret_t (* validator_func_add_headers_t) (void  *validator, void *conn, cherokee_buffer_t *buf);
+typedef ret_t (* validator_props_func_free_t)  (void  *validatorp);
 
+/* Data types
+ */
+typedef struct {
+	void (*free) (void *itself);
+} cherokee_validator_props_t;
 
 typedef struct {
-	/* Base
-	 */
-	cherokee_module_t module;
+	cherokee_module_t            module;
 	
 	/* Pure virtual methods	
 	 */
@@ -53,7 +59,8 @@ typedef struct {
 
 	/* Properties
 	 */
-	cherokee_http_auth_t support;
+	cherokee_validator_props_t  *props;
+	cherokee_http_auth_t         support;
 
 	/* Authentication info
 	 */
@@ -70,21 +77,36 @@ typedef struct {
 	
 } cherokee_validator_t;
 
-#define VALIDATOR(x) ((cherokee_validator_t *)(x))
+#define VALIDATOR(x)             ((cherokee_validator_t *)(x))
+#define VALIDATOR_PROPS(x)       ((cherokee_validator_props_t *)(x))
+#define VALIDATOR_PROPS_FREE(f)  ((validator_props_func_free_t)(f))
 
 
-ret_t cherokee_validator_init_base (cherokee_validator_t *validator);
-ret_t cherokee_validator_free_base (cherokee_validator_t *validator);   
-ret_t cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry);
+/* Validator methods
+ */
+ret_t cherokee_validator_init_base       (cherokee_validator_t *validator, cherokee_validator_props_t *props);
+ret_t cherokee_validator_free_base       (cherokee_validator_t *validator);   
 
-ret_t cherokee_validator_free         (cherokee_validator_t *validator);
-ret_t cherokee_validator_check        (cherokee_validator_t *validator, void *conn);
-ret_t cherokee_validator_add_headers  (cherokee_validator_t *validator, void *conn, cherokee_buffer_t *buf);
+/* Validator virtual methods
+ */
+ret_t cherokee_validator_configure       (cherokee_config_node_t *conf, void *config_entry);
+ret_t cherokee_validator_free            (cherokee_validator_t *validator);
+ret_t cherokee_validator_check           (cherokee_validator_t *validator, void *conn);
+ret_t cherokee_validator_add_headers     (cherokee_validator_t *validator, void *conn, cherokee_buffer_t *buf);
 
-ret_t cherokee_validator_parse_basic  (cherokee_validator_t *validator, char *str, cuint_t str_len);
-ret_t cherokee_validator_parse_digest (cherokee_validator_t *validator, char *str, cuint_t str_len);
-
+/* Validator internal methods
+ */
+ret_t cherokee_validator_parse_basic     (cherokee_validator_t *validator, char *str, cuint_t str_len);
+ret_t cherokee_validator_parse_digest    (cherokee_validator_t *validator, char *str, cuint_t str_len);
 ret_t cherokee_validator_digest_response (cherokee_validator_t *validator, char *A1, cherokee_buffer_t *buf, cherokee_connection_t *conn);
 
+/* Handler properties
+ */
+ret_t cherokee_validator_props_init_base (cherokee_validator_props_t *valp, validator_props_func_free_t free_func);
+ret_t cherokee_validator_props_free_base (cherokee_validator_props_t *valp);
+ret_t cherokee_validator_props_free      (cherokee_validator_props_t *valp);
+
+
+CHEROKEE_END_DECLS
 
 #endif /* CHEROKEE_VALIDATOR_H */

@@ -30,19 +30,35 @@
 #include "module_loader.h"
 
 
-ret_t 
-cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props)
+static ret_t 
+props_free (cherokee_validator_plain_props_t *props)
 {
-	ret_t                   ret;
-	cherokee_config_node_t *subconf;
+	cherokee_buffer_mrproper (&props->password_file);
+	return cherokee_validator_props_free_base (VALIDATOR_PROPS(props));
+}
+
+ret_t 
+cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_validator_props_t **_props)
+{
+	ret_t                             ret;
+	cherokee_config_node_t           *subconf;
+	cherokee_validator_plain_props_t *props;
+
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n, validator_plain_props);
+
+		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), 
+						    VALIDATOR_PROPS_FREE(props_free));
+		cherokee_buffer_init (&n->password_file);
+		
+		*_props = VALIDATOR_PROPS(n);
+	}
+
+	props = PROP_PLAIN(*_props);
 
 	ret = cherokee_config_node_get (conf, "passwdfile", &subconf);
 	if (ret == ret_ok) {
-		ret = cherokee_typed_table_instance (props);
-		if (ret != ret_ok) return ret;
-
-		ret = cherokee_typed_table_add_str (*props, "passwdfile", strdup(subconf->val.buf));
-		if (ret != ret_ok) return ret;
+		cherokee_buffer_add_buffer (&props->password_file, &subconf->val);
 	}
 
 	return ret_ok;
@@ -50,30 +66,24 @@ cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_serve
 
 
 ret_t 
-cherokee_validator_plain_new (cherokee_validator_plain_t **plain, cherokee_table_t *properties)
+cherokee_validator_plain_new (cherokee_validator_plain_t **plain, cherokee_validator_props_t *props)
 {	
-	ret_t ret;
 	CHEROKEE_NEW_STRUCT(n,validator_plain);
 
 	/* Init 		
 	 */
-	cherokee_validator_init_base (VALIDATOR(n));
+	cherokee_validator_init_base (VALIDATOR(n), props);
 	VALIDATOR(n)->support = http_auth_basic | http_auth_digest;
 
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_plain_free;
 	VALIDATOR(n)->check       = (validator_func_check_t)       cherokee_validator_plain_check;
 	VALIDATOR(n)->add_headers = (validator_func_add_headers_t) cherokee_validator_plain_add_headers;
 	   
-	n->file_ref = NULL;
-
-	/* Get the properties
+	/* Checks
 	 */
-	if (properties) {
-		ret = cherokee_typed_table_get_str (properties, "passwdfile", (char **)&n->file_ref);
-		if (ret < ret_ok) {
-			PRINT_MSG_S ("plain validator needs a password file\n");
-			return ret_error;
-		}
+	if (cherokee_buffer_is_empty (&VAL_PLAIN_PROP(n)->password_file)) {
+		PRINT_MSG_S ("plain validator needs a password file\n");
+		return ret_error;
 	}
 	   
 	*plain = n;
@@ -143,7 +153,8 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_conn
                 return ret_error;
         }
 
-	f = fopen (plain->file_ref, "r");
+	f = fopen (VAL_PLAIN_PROP(plain)->password_file.buf, "r"); 
+//	f = fopen (plain->file_ref, "r");
 	if (f == NULL) {
 		return ret_error;
 	}

@@ -36,13 +36,13 @@
 
 
 ret_t 
-cherokee_validator_pam_new (cherokee_validator_pam_t **pam, cherokee_table_t *properties)
+cherokee_validator_pam_new (cherokee_validator_pam_t **pam, cherokee_validator_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT(n,validator_pam);
 
 	/* Init 
 	 */
-	cherokee_validator_init_base (VALIDATOR(n));
+	cherokee_validator_init_base (VALIDATOR(n), props);
 	VALIDATOR(n)->support = http_auth_basic;
 
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_pam_free;

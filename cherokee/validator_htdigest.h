@@ -29,14 +29,20 @@
 #include "connection.h"
 
 typedef struct {
+	cherokee_validator_props_t base;
+	cherokee_buffer_t          password_file;
+} cherokee_validator_htdigest_props_t;
+
+typedef struct {
 	   cherokee_validator_t  validator;
-	   char                 *file_ref;
 } cherokee_validator_htdigest_t;
 
-#define HTDIGEST(x) ((cherokee_validator_htdigest_t *)(x))
+#define HTDIGEST(x)          ((cherokee_validator_htdigest_t *)(x))
+#define PROP_HTDIGEST(p)     ((cherokee_validator_htdigest_props_t *)(p))
+#define VAL_HTDIGEST_PROP(x) (PROP_HTDIGEST(VALIDATOR(x)->props))
 
 
-ret_t cherokee_validator_htdigest_new  (cherokee_validator_htdigest_t **htdigest, cherokee_table_t *properties);
+ret_t cherokee_validator_htdigest_new  (cherokee_validator_htdigest_t **htdigest, cherokee_validator_props_t *props);
 ret_t cherokee_validator_htdigest_free (cherokee_validator_htdigest_t  *htdigest);
 
 ret_t cherokee_validator_htdigest_check       (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn);
