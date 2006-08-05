@@ -934,10 +934,4 @@ MODULE_INIT(dirlist) (cherokee_module_loader_t *loader)
 {
 }
 
-
-cherokee_module_info_handler_t MODULE_INFO(dirlist) = {
-	.module.type      = cherokee_handler,                   /* type         */
-	.module.new_func  = cherokee_handler_dirlist_new,       /* new func     */
-	.module.configure = cherokee_handler_dirlist_configure, /* configure */
-	.valid_methods    = http_get                            /* http methods */
-};
+HANDLER_MODULE_INFO_INIT_EASY (dirlist, http_get);

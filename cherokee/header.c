@@ -50,10 +50,6 @@
 # define HEADER_INTERNAL_CHECK(h)
 #endif
 
-#ifndef HAVE_STRSEP
-  extern char *strsep (char** str, const char* delims);
-#endif
-
 #define cmp_str(l,s) (strncmp(l, s, sizeof(s)-1) == 0)
 
 

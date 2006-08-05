@@ -31,12 +31,11 @@
 #include "module_loader.h"
 
 
-cherokee_module_info_handler_t MODULE_INFO(error_redir) = {
-	.module.type     = cherokee_handler,                 /* type         */
-	.module.new_func = cherokee_handler_error_redir_new, /* new func     */
-	.valid_methods   = http_all_methods                  /* http methods */
-};
-
+ret_t
+cherokee_handler_error_redir_configure ()
+{
+	return ret_ok;
+}
 
 ret_t 
 cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_table_t *properties)
@@ -77,3 +76,5 @@ MODULE_INIT(error_redir) (cherokee_module_loader_t *loader)
 	 */
 	cherokee_module_loader_load (loader, "redir");
 }
+
+HANDLER_MODULE_INFO_INIT_EASY (error_redir, http_all_methods);

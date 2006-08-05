@@ -708,10 +708,5 @@ MODULE_INIT(fcgi) (cherokee_module_loader_t *loader)
 {
 }
 
-cherokee_module_info_handler_t MODULE_INFO(fcgi) = {
-	.module.type      = cherokee_handler,                 /* type         */
-	.module.new_func  = cherokee_handler_fcgi_new,        /* new func     */
-	.module.configure = cherokee_handler_fcgi_configure,  /* configure    */
-	.valid_methods    = http_get | http_post | http_head  /* http methods */
-};
+HANDLER_MODULE_INFO_INIT_EASY (fcgi, http_get | http_post | http_head);
 

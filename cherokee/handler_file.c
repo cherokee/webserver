@@ -656,9 +656,4 @@ MODULE_INIT(file) (cherokee_module_loader_t *loader)
 {
 }
 
-cherokee_module_info_handler_t MODULE_INFO(file) = {
-	.module.type      = cherokee_handler,                /* type         */
-	.module.new_func  = cherokee_handler_file_new,       /* new func     */
-	.module.configure = cherokee_handler_file_configure, /* configure */
-	.valid_methods    = http_get | http_head             /* http methods */
-};
+HANDLER_MODULE_INFO_INIT_EASY (file, http_get | http_head);

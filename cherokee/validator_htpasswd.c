@@ -366,10 +366,5 @@ MODULE_INIT(htpasswd) (cherokee_module_loader_t *loader)
 {
 }
 
-cherokee_module_info_validator_t MODULE_INFO(htpasswd) = {
-	.module.type      = cherokee_validator,                    /* type      */
-	.module.new_func  = cherokee_validator_htpasswd_new,       /* new func  */
-	.module.configure = cherokee_validator_htpasswd_configure, /* configure */
-	.valid_methods    = http_auth_basic                        /* methods   */
-};
+VALIDATOR_MODULE_INFO_INIT_EASY (htpasswd, http_auth_basic);
 

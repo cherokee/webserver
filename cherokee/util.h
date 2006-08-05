@@ -56,8 +56,6 @@ CHEROKEE_BEGIN_DECLS
 # define cherokee_error          errno
 #endif
 
-
-
 /* Some global information
  */
 const extern char *cherokee_months[]; 
@@ -85,7 +83,7 @@ long      *cherokee_get_timezone_ref (void);
 /* Thread safe functions
  */
 int        cherokee_readdir       (DIR *dirstream, struct dirent *entry, struct dirent **result);
-ret_t      cherokee_gethostbyname (const char *hostname, struct in_addr *addr);
+ret_t      cherokee_gethostbyname (const char *hostname, void *addr);
 ret_t      cherokee_syslog        (int priority, cherokee_buffer_t *buf);
 
 /* Misc

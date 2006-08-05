@@ -52,6 +52,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef HAVE_SYS_VARARGS
+# include <sys/varargs.h>
+#endif
+
 #ifdef HAVE_DLFCN_H
 # include <dlfcn.h>
 #endif
@@ -113,6 +117,48 @@
 #else
 # define SOCK_ERRNO()      errno
 # define CLOSE_ON_EXEC(h)  fcntl (h, F_SETFD, FD_CLOEXEC, 1)
+#endif
+
+
+
+/* IMPORTANT:
+ * Cross compilers should define BYTE_ORDER in CFLAGS 
+ */
+#ifndef BYTE_ORDER
+
+/* Definitions for byte order, according to byte significance from low
+ * address to high.
+ */
+# ifndef  LITTLE_ENDIAN
+#  define LITTLE_ENDIAN  1234    /* LSB first: i386, vax */
+# endif
+# ifndef BIG_ENDIAN
+#  define BIG_ENDIAN     4321    /* MSB first: 68000, ibm, net */
+# endif 
+# ifndef PDP_ENDIAN
+#  define PDP_ENDIAN     3412    /* LSB first in word, MSW first in long */
+# endif
+
+/* It assumes autoconf's AC_C_BIGENDIAN has been ran. 
+ * If it hasn't, we assume the order is LITTLE ENDIAN.
+ */
+# ifdef WORDS_BIGENDIAN
+#   define BYTE_ORDER  BIG_ENDIAN
+# else
+#   define BYTE_ORDER  LITTLE_ENDIAN
+# endif
+
+#endif
+
+/* String missing prototypes: 
+ * Implemented in util.c, can't move prototype there though
+ */
+#ifndef HAVE_STRSEP
+char *strsep(char **str, const char *delims);
+#endif
+
+#ifndef HAVE_STRCASESTR
+char *strcasestr(char *s, char *find);
 #endif
 
 #endif /* CHEROKEE_COMMON_INTERNAL_H */

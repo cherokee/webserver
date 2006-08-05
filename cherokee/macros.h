@@ -33,16 +33,22 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#ifdef HAVE_SYS_VARARGS
-# include <sys/varargs.h>
-#endif
-
 #ifdef  __cplusplus
 #  define CHEROKEE_BEGIN_DECLS  extern "C" {
 #  define CHEROKEE_END_DECLS    }
 #else
 #  define CHEROKEE_BEGIN_DECLS
 #  define CHEROKEE_END_DECLS
+#endif
+
+#ifdef __func__
+# define __cherokee_func__ __func__
+#else
+# ifdef __FUNCTION__
+#  define __cherokee_func__ __FUNCTION__
+# else
+#  define __cherokee_func__ "<unknown function>"
+# endif
 #endif
 
 #ifndef TRUE
@@ -108,7 +114,7 @@
        		         "file %s: line %d (%s): assertion `%s' failed\n",  \
                           __FILE__,                                         \
                           __LINE__,                                         \
-                          __func__,                                         \
+                          __cherokee_func__,                                \
                           #expr);                                           \
 	        return (ret);                                               \
 	}
@@ -116,12 +122,12 @@
 
 #define SHOULDNT_HAPPEN \
 	do { fprintf (stderr, "file %s:%d (%s): this shouldn't happend\n",  \
-		      __FILE__, __LINE__, __func__);                        \
+		      __FILE__, __LINE__, __cherokee_func__);               \
 	} while (0)
 
 #define RET_UNKNOWN(ret) \
 	do { fprintf (stderr, "file %s:%d (%s): ret code unknown ret=%d\n", \
-		      __FILE__, __LINE__, __func__, ret);                   \
+		      __FILE__, __LINE__, __cherokee_func__, ret);          \
 	} while (0)
 
 
@@ -190,9 +196,9 @@
 # define TRACE_ENV "CHEROKEE_TRACE"
 
 # ifdef __GNUC__
-#  define TRACE(fmt,arg...) cherokee_trace (fmt, __FILE__, __LINE__, __func__, ##arg)
+#  define TRACE(fmt,arg...) cherokee_trace (fmt, __FILE__, __LINE__, __cherokee_func__, ##arg)
 # else
-#  define TRACE(fmt,...) cherokee_trace (fmt, __FILE__, __LINE__, __func__, __VA_ARGS__)
+#  define TRACE(fmt,...) cherokee_trace (fmt, __FILE__, __LINE__, __cherokee_func__, __VA_ARGS__)
 # endif
 #else
 # ifdef __GNUC__
@@ -206,29 +212,6 @@
  */
 #define POINTER_TO_INT(pointer) ((long)(pointer))
 #define INT_TO_POINTER(integer) ((void*)((long)(integer)))
-
-/* IMPORTANT:
- * Cross compilers should define BYTE_ORDER in CFLAGS 
- */
-#ifndef BYTE_ORDER
-
-/* Definitions for byte order, according to byte significance from low
- * address to high.
- */
-# define LITTLE_ENDIAN  1234    /* LSB first: i386, vax */
-# define    BIG_ENDIAN  4321    /* MSB first: 68000, ibm, net */
-# define    PDP_ENDIAN  3412    /* LSB first in word, MSW first in long */
-
-/* assume autoconf's AC_C_BIGENDIAN has been ran. If it hasn't, we 
- * assume (maybe falsely) the order is LITTLE ENDIAN
- */
-# ifdef WORDS_BIGENDIAN
-#   define BYTE_ORDER  BIG_ENDIAN
-# else
-#   define BYTE_ORDER  LITTLE_ENDIAN
-# endif
-
-#endif /* BYTE_ORDER */
 
 
 /* Format string for off_t

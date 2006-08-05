@@ -259,10 +259,5 @@ MODULE_INIT(phpcgi) (cherokee_module_loader_t *loader)
 	cherokee_module_loader_load (loader, "cgi");
 }
 
-cherokee_module_info_handler_t MODULE_INFO(phpcgi) = {
-	.module.type      = cherokee_handler,                  /* type         */
-	.module.new_func  = cherokee_handler_phpcgi_new,       /* new func     */
-	.module.configure = cherokee_handler_phpcgi_configure, /* configure    */
-	.valid_methods    = http_get | http_post | http_head   /* http methods */
-};
+HANDLER_MODULE_INFO_INIT_EASY (phpcgi, http_get | http_post | http_head);
 

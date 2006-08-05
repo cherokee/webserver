@@ -375,10 +375,4 @@ MODULE_INIT(scgi) (cherokee_module_loader_t *loader)
 {
 }
 
-
-cherokee_module_info_handler_t MODULE_INFO(scgi) = {
-	.module.type      = cherokee_handler,                /* type         */
-	.module.new_func  = cherokee_handler_scgi_new,       /* new func     */
-	.module.configure = cherokee_handler_scgi_configure, /* configure    */
-	.valid_methods    = http_get | http_post | http_head /* http methods */
-};
+HANDLER_MODULE_INFO_INIT_EASY (scgi, http_get | http_post | http_head);

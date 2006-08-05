@@ -35,6 +35,13 @@
 #define CHEROKEE_AUTH_SERVICE "cherokee"
 
 
+ret_t
+cherokee_validator_pam_configure ()
+{
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_validator_pam_new (cherokee_validator_pam_t **pam, cherokee_validator_props_t *props)
 {
@@ -217,8 +224,5 @@ MODULE_INIT(pam) (cherokee_module_loader_t *loader)
 {
 }
 
-cherokee_module_info_validator_t MODULE_INFO(pam) = {
-	.module.type     = cherokee_validator,                 /* type     */
-	.module.new_func = cherokee_validator_pam_new,         /* new func */
-	.valid_methods   = http_auth_basic                     /* methods  */
-};
+VALIDATOR_MODULE_INFO_INIT_EASY (pam, http_auth_basic);
+

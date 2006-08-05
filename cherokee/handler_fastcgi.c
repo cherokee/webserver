@@ -708,11 +708,5 @@ MODULE_INIT(fastcgi) (cherokee_module_loader_t *loader)
 	printf ("modify your configuration in order to use the \"fcgi\" module instead.\n\n");
 }
 
-
-cherokee_module_info_handler_t MODULE_INFO(fastcgi) = {
-	.module.type      = cherokee_handler,                   /* type         */
-	.module.new_func  = cherokee_handler_fastcgi_new,       /* new func     */
-	.module.configure = cherokee_handler_fastcgi_configure, /* configure */
-	.valid_methods    = http_get | http_post | http_head    /* http methods */
-};
+HANDLER_MODULE_INFO_INIT_EASY (fastcgi, http_get | http_post | http_head);
 

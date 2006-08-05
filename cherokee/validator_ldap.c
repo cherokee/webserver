@@ -83,10 +83,5 @@ MODULE_INIT(ldap) (cherokee_module_loader_t *loader)
 {
 }
 
-cherokee_module_info_validator_t MODULE_INFO(ldap) = {
-	.module.type      = cherokee_validator,                /* type      */
-	.module.new_func  = cherokee_validator_ldap_new,       /* new func  */
-	.module.configure = cherokee_validator_ldap_configure, /* configure */
-	.valid_methods    = http_auth_basic                    /* methods   */
-};
+VALIDATOR_MODULE_INFO_INIT_EASY (ldap, http_auth_basic);
 

@@ -346,10 +346,4 @@ MODULE_INIT(common) (cherokee_module_loader_t *loader)
 	cherokee_module_loader_load (loader, "dirlist");
 }
 
-
-cherokee_module_info_handler_t MODULE_INFO(common) = {
-	.module.type      = cherokee_handler,                  /* type         */
-	.module.new_func  = cherokee_handler_common_new,       /* new func     */
-	.module.configure = cherokee_handler_common_configure, /* configure */
-	.valid_methods    = http_all_methods                   /* http methods */
-};
+HANDLER_MODULE_INFO_INIT_EASY (common, http_all_methods);
