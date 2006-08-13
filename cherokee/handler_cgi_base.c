@@ -731,7 +731,7 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 
 	cherokee_buffer_ensure_size (outbuf, len+6);
 	cherokee_buffer_add (outbuf, inbuf->buf, len);
-	cherokee_buffer_add (outbuf, CRLF CRLF, 4);
+	cherokee_buffer_add_str (outbuf, CRLF CRLF);
 
 	/* Drop out the headers, we already have a copy
 	 */

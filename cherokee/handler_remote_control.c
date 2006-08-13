@@ -77,8 +77,8 @@ cherokee_handler_remote_control_init (cherokee_handler_remote_control_t *hdl)
 
 	cherokee_connection_parse_args (HANDLER_CONN(hdl));
 
-	cherokee_buffer_add (hdl->buffer, "<?xml version=\"1.0\"?>"CRLF, 23); 
-	cherokee_buffer_add (hdl->buffer, "<status>"CRLF, 10); 
+	cherokee_buffer_add_str (hdl->buffer, "<?xml version=\"1.0\"?>"CRLF); 
+	cherokee_buffer_add_str (hdl->buffer, "<status>"CRLF); 
 	
 	/* Connections
 	 */
@@ -122,7 +122,7 @@ cherokee_handler_remote_control_init (cherokee_handler_remote_control_t *hdl)
 
 
 
-	cherokee_buffer_add (hdl->buffer, "</status>"CRLF, 11); 
+	cherokee_buffer_add_str (hdl->buffer, "</status>"CRLF); 
 
 	return ret_ok;
 }
@@ -139,11 +139,11 @@ cherokee_handler_remote_control_step (cherokee_handler_remote_control_t *hdl, ch
 ret_t 
 cherokee_handler_remote_control_add_headers (cherokee_handler_remote_control_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_buffer_add    (buffer, "Content-Type: text/html"CRLF, 25);
+	cherokee_buffer_add_str(buffer, "Content-Type: text/html"CRLF);
 	cherokee_buffer_add_va (buffer, "Content-Length: %d"CRLF, hdl->buffer->len);
 
-	cherokee_buffer_add (buffer, "Cache-Control: no-cache"CRLF, 25);		
-	cherokee_buffer_add (buffer, "Pragma: no-cache"CRLF, 18);		
+	cherokee_buffer_add_str(buffer, "Cache-Control: no-cache"CRLF);
+	cherokee_buffer_add_str(buffer, "Pragma: no-cache"CRLF);
 
 	return ret_ok;
 }

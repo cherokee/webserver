@@ -89,7 +89,7 @@ cherokee_handler_webcam_free (cherokee_handler_webcam_t *hdl)
 ret_t 
 cherokee_handler_webcam_add_headers (cherokee_handler_webcam_t *hdl, cherokee_buffer_t *buffer)
 {
-	   cherokee_buffer_add (buffer, "Content-Type: image/jpeg"CRLF, 26);
+	   cherokee_buffer_add_str (buffer, "Content-Type: image/jpeg"CRLF);
 	   return ret_ok;
 }
 

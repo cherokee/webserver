@@ -635,7 +635,8 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	 */
 	cherokee_gmtime (&fhdl->info->st_mtime, &modified_tm);
 
-	cherokee_buffer_add_va (buffer, "Last-Modified: %s, %02d %s %d %02d:%02d:%02d GMT"CRLF,
+	cherokee_buffer_add_va (buffer,
+				"Last-Modified: %s, %02d %s %d %02d:%02d:%02d GMT"CRLF,
 				cherokee_weekdays[modified_tm.tm_wday],
 				modified_tm.tm_mday,
 				cherokee_months[modified_tm.tm_mon], 

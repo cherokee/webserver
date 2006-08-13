@@ -25,7 +25,7 @@
 ** SUCH DAMAGE.
 */
 
-/* This is a stripped-down version of date_parse.c, available at
+/* This is a stripped-down / modified version of date_parse.c, available at
 ** http://www.acme.com/software/date_parse/
 */
 
@@ -59,12 +59,6 @@ pound_case( char* str )
 	   }
 }
 
-static int
-strlong_compare (void *v1, void *v2)
-{
-	   return strcmp( ((struct strlong*) v1)->s, ((struct strlong*) v2)->s );
-}
-
 
 static int
 strlong_search( char* str, struct strlong* tab, int n, long* lP )
@@ -96,26 +90,25 @@ static int
 scan_wday( char* str_wday, long* tm_wdayP )
 {
 	   static struct strlong wday_tab[] = {
-			 { "sun", 0 }, { "sunday", 0 },
-			 { "mon", 1 }, { "monday", 1 },
-			 { "tue", 2 }, { "tuesday", 2 },
-			 { "wed", 3 }, { "wednesday", 3 },
-			 { "thu", 4 }, { "thursday", 4 },
-			 { "fri", 5 }, { "friday", 5 },
-			 { "sat", 6 }, { "saturday", 6 },
-	   };
-	   static int sorted = 0;
+			{ "fri",       5 },
+			{ "friday",    5 },
+			{ "mon",       1 },
+			{ "monday",    1 },
+			{ "sat",       6 },
+			{ "saturday",  6 },
+			{ "sun",       0 },
+			{ "sunday",    0 },
+			{ "thu",       4 },
+			{ "thursday",  4 },
+			{ "tue",       2 },
+			{ "tuesday",   2 },
+			{ "wed",       3 },
+			{ "wednesday", 3 }
+		};
 
-	   if ( ! sorted )
-	   {
-			 (void) qsort(
-				    wday_tab, sizeof(wday_tab)/sizeof(struct strlong),
-				    sizeof(struct strlong), strlong_compare );
-			 sorted = 1;
-	   }
 	   pound_case( str_wday );
 	   return strlong_search(
-			 str_wday, wday_tab, sizeof(wday_tab)/sizeof(struct strlong), tm_wdayP );
+		str_wday, wday_tab, sizeof(wday_tab)/sizeof(struct strlong), tm_wdayP );
 }
 
 
@@ -123,31 +116,34 @@ static int
 scan_mon( char* str_mon, long* tm_monP )
 {
 	   static struct strlong mon_tab[] = {
-			 { "jan", 0 }, { "january", 0 },
-			 { "feb", 1 }, { "february", 1 },
-			 { "mar", 2 }, { "march", 2 },
-			 { "apr", 3 }, { "april", 3 },
-			 { "may", 4 },
-			 { "jun", 5 }, { "june", 5 },
-			 { "jul", 6 }, { "july", 6 },
-			 { "aug", 7 }, { "august", 7 },
-			 { "sep", 8 }, { "september", 8 },
-			 { "oct", 9 }, { "october", 9 },
-			 { "nov", 10 }, { "november", 10 },
-			 { "dec", 11 }, { "december", 11 },
-	   };
-	   static int sorted = 0;
+			{ "apr",       3 },
+			{ "april",     3 },
+			{ "aug",       7 },
+			{ "august",    7 },
+			{ "dec",      11 },
+			{ "december", 11 },
+			{ "feb",       1 },
+			{ "february",  1 },
+			{ "jan",       0 },
+			{ "january",   0 },
+			{ "jul",       6 },
+			{ "july",      6 },
+			{ "jun",       5 },
+			{ "june",      5 },
+			{ "mar",       2 },
+			{ "march",     2 },
+			{ "may",       4 },
+			{ "nov",      10 },
+			{ "november", 10 },
+			{ "oct",       9 },
+			{ "october",   9 },
+			{ "sep",       8 },
+			{ "september", 8 }
+		};
 
-	   if ( ! sorted )
-	   {
-			 (void) qsort(
-				    mon_tab, sizeof(mon_tab)/sizeof(struct strlong),
-				    sizeof(struct strlong), strlong_compare );
-			 sorted = 1;
-	   }
 	   pound_case( str_mon );
 	   return strlong_search(
-			 str_mon, mon_tab, sizeof(mon_tab)/sizeof(struct strlong), tm_monP );
+		str_mon, mon_tab, sizeof(mon_tab)/sizeof(struct strlong), tm_monP );
 }
 
 
@@ -186,12 +182,16 @@ tm_to_time( struct tm* tmP )
 }
 
 
+/*
+** Parse the date-time string and returns the equivalent time in seconds.
+*/
 time_t
 tdate_parse( char* str )
 {
 	   struct tm tm;
 	   char* cp;
-	   char str_mon[500], str_wday[500];
+	   char str_mon[64], str_wday[64];
+	   char str_sep1[8], str_sep2[8];
 	   int tm_sec, tm_min, tm_hour, tm_mday, tm_year;
 	   long tm_mon, tm_wday;
 	   time_t t;
@@ -203,116 +203,117 @@ tdate_parse( char* str )
 	   for ( cp = str; *cp == ' ' || *cp == '\t'; ++cp )
 			 continue;
 
+	   /* If there is no date-time, then return now */
+	   if ( !*cp )
+		    return (time_t) -1;
+
 	   /* And do the sscanfs.  WARNING: you can add more formats here,
 	   ** but be careful!  You can easily screw up the parsing of existing
 	   ** formats when you add new ones.  The order is important.
 	   */
 
-	   /* DD-mth-YY HH:MM:SS GMT */
-	   if ( sscanf( cp, "%d-%400[a-zA-Z]-%d %d:%d:%d GMT",
-				 &tm_mday, str_mon, &tm_year, &tm_hour, &tm_min,
-				 &tm_sec ) == 6 &&
-		   scan_mon( str_mon, &tm_mon ) )
+	   /* wdy, DD mth YYYY HH:MM:SS GMT (RFC 822, 1123 - standard). */
+	   if ( sscanf( cp, "%60[a-zA-Z], %d %60[a-zA-Z] %d %d:%d:%d GMT",
+			str_wday, &tm_mday, str_mon, &tm_year,
+			&tm_hour, &tm_min, &tm_sec ) == 7 &&
+		    scan_wday( str_wday, &tm_wday ) &&
+		    scan_mon( str_mon, &tm_mon ) )
 	   {
-			 tm.tm_mday = tm_mday;
-			 tm.tm_mon = tm_mon;
-			 tm.tm_year = tm_year;
-			 tm.tm_hour = tm_hour;
-			 tm.tm_min = tm_min;
-			 tm.tm_sec = tm_sec;
+			tm.tm_wday = tm_wday;
+			tm.tm_mday = tm_mday;
+			tm.tm_mon = tm_mon;
+			tm.tm_year = tm_year;
+			tm.tm_hour = tm_hour;
+			tm.tm_min = tm_min;
+			tm.tm_sec = tm_sec;
 	   }
 
-	   /* DD mth YY HH:MM:SS GMT */
-	   else if ( sscanf( cp, "%d %400[a-zA-Z] %d %d:%d:%d GMT",
-					 &tm_mday, str_mon, &tm_year, &tm_hour, &tm_min,
-					 &tm_sec) == 6 &&
-			   scan_mon( str_mon, &tm_mon ) )
+	   /* wdy, DD-mth-YY HH:MM:SS GMT  (RFC 850 - obsolete) */
+	   /* wdy, DD-mth-YYYY HH:MM:SS GMT (strange RFC 822) */
+	   else
+	   if ( sscanf( cp, "%60[a-zA-Z], %d%2[ -]%60[a-zA-Z]%2[ -]%d %d:%d:%d GMT",
+			str_wday, &tm_mday, str_sep1, str_mon, str_sep2, &tm_year,
+			&tm_hour, &tm_min, &tm_sec ) == 9 &&
+		    scan_wday( str_wday, &tm_wday ) &&
+		    scan_mon( str_mon, &tm_mon ) )
 	   {
-			 tm.tm_mday = tm_mday;
-			 tm.tm_mon = tm_mon;
-			 tm.tm_year = tm_year;
-			 tm.tm_hour = tm_hour;
-			 tm.tm_min = tm_min;
-			 tm.tm_sec = tm_sec;
+			tm.tm_wday = tm_wday;
+			tm.tm_mday = tm_mday;
+			tm.tm_mon = tm_mon;
+			tm.tm_year = tm_year;
+			tm.tm_hour = tm_hour;
+			tm.tm_min = tm_min;
+			tm.tm_sec = tm_sec;
+	   }
+
+	   /* wdy mth DD HH:MM:SS YYYY (ANSI C asctime() format - uncommon) */
+	   else
+	   if ( sscanf( cp, "%60[a-zA-Z] %60[a-zA-Z] %d %d:%d:%d %d",
+			str_wday, str_mon, &tm_mday, &tm_hour, &tm_min, &tm_sec,
+			&tm_year ) == 7 &&
+		    scan_wday( str_wday, &tm_wday ) &&
+		    scan_mon( str_mon, &tm_mon ) )
+	   {
+			tm.tm_wday = tm_wday;
+			tm.tm_mon = tm_mon;
+			tm.tm_mday = tm_mday;
+			tm.tm_hour = tm_hour;
+			tm.tm_min = tm_min;
+			tm.tm_sec = tm_sec;
+			tm.tm_year = tm_year;
+	   }
+	   /* other VERY VERY UNCOMMON formats */
+
+	   /* wdy mth DD HH:MM:SS GMT YY */
+	   else
+	   if ( sscanf( cp, "%60[a-zA-Z] %60[a-zA-Z] %d %d:%d:%d GMT %d",
+			str_wday, str_mon, &tm_mday, &tm_hour, &tm_min, &tm_sec,
+			&tm_year ) == 7 &&
+		    scan_wday( str_wday, &tm_wday ) &&
+		    scan_mon( str_mon, &tm_mon ) )
+	   {
+			tm.tm_wday = tm_wday;
+			tm.tm_mon = tm_mon;
+			tm.tm_mday = tm_mday;
+			tm.tm_hour = tm_hour;
+			tm.tm_min = tm_min;
+			tm.tm_sec = tm_sec;
+			tm.tm_year = tm_year;
+	   }
+
+	   /* DD-mth-YY HH:MM:SS GMT */
+	   /* DD mth YY HH:MM:SS GMT */
+	   else
+	   if ( sscanf( cp, "%d%2[ -]%60[a-zA-Z]%2[ -]%d %d:%d:%d GMT",
+			&tm_mday, str_sep1, str_mon, str_sep2, &tm_year,
+			&tm_hour, &tm_min, &tm_sec ) == 8 &&
+		    scan_mon( str_mon, &tm_mon ) )
+	   {
+			tm.tm_mday = tm_mday;
+			tm.tm_mon = tm_mon;
+			tm.tm_year = tm_year;
+			tm.tm_hour = tm_hour;
+			tm.tm_min = tm_min;
+			tm.tm_sec = tm_sec;
 	   }
 
 	   /* HH:MM:SS GMT DD-mth-YY */
-	   else if ( sscanf( cp, "%d:%d:%d GMT %d-%400[a-zA-Z]-%d",
-					 &tm_hour, &tm_min, &tm_sec, &tm_mday, str_mon,
-					 &tm_year ) == 6 &&
-			   scan_mon( str_mon, &tm_mon ) )
-	   {
-			 tm.tm_hour = tm_hour;
-			 tm.tm_min = tm_min;
-			 tm.tm_sec = tm_sec;
-			 tm.tm_mday = tm_mday;
-			 tm.tm_mon = tm_mon;
-			 tm.tm_year = tm_year;
-	   }
-
 	   /* HH:MM:SS GMT DD mth YY */
-	   else if ( sscanf( cp, "%d:%d:%d GMT %d %400[a-zA-Z] %d",
-					 &tm_hour, &tm_min, &tm_sec, &tm_mday, str_mon,
-					 &tm_year ) == 6 &&
-			   scan_mon( str_mon, &tm_mon ) )
+	   else
+	   if ( sscanf( cp, "%d:%d:%d GMT %d%2[ -]%60[a-zA-Z]%2[ -]%d",
+			&tm_hour, &tm_min, &tm_sec,
+			&tm_mday, str_sep1, str_mon, str_sep2, &tm_year ) == 8 &&
+		    scan_mon( str_mon, &tm_mon ) )
 	   {
-			 tm.tm_hour = tm_hour;
-			 tm.tm_min = tm_min;
-			 tm.tm_sec = tm_sec;
-			 tm.tm_mday = tm_mday;
-			 tm.tm_mon = tm_mon;
-			 tm.tm_year = tm_year;
-	   }
-
-	   /* wdy, DD-mth-YY HH:MM:SS GMT */
-	   else if ( sscanf( cp, "%400[a-zA-Z], %d-%400[a-zA-Z]-%d %d:%d:%d GMT",
-					 str_wday, &tm_mday, str_mon, &tm_year, &tm_hour, &tm_min,
-					 &tm_sec ) == 7 &&
-			   scan_wday( str_wday, &tm_wday ) &&
-			   scan_mon( str_mon, &tm_mon ) )
-	   {
-			 tm.tm_wday = tm_wday;
-			 tm.tm_mday = tm_mday;
-			 tm.tm_mon = tm_mon;
-			 tm.tm_year = tm_year;
-			 tm.tm_hour = tm_hour;
-			 tm.tm_min = tm_min;
-			 tm.tm_sec = tm_sec;
-	   }
-
-	   /* wdy, DD mth YY HH:MM:SS GMT */
-	   else if ( sscanf( cp, "%400[a-zA-Z], %d %400[a-zA-Z] %d %d:%d:%d GMT",
-					 str_wday, &tm_mday, str_mon, &tm_year, &tm_hour, &tm_min,
-					 &tm_sec ) == 7 &&
-			   scan_wday( str_wday, &tm_wday ) &&
-			   scan_mon( str_mon, &tm_mon ) )
-	   {
-			 tm.tm_wday = tm_wday;
-			 tm.tm_mday = tm_mday;
-			 tm.tm_mon = tm_mon;
-			 tm.tm_year = tm_year;
-			 tm.tm_hour = tm_hour;
-			 tm.tm_min = tm_min;
-			 tm.tm_sec = tm_sec;
-	   }
-
-	   /* wdy mth DD HH:MM:SS GMT YY */
-	   else if ( sscanf( cp, "%400[a-zA-Z] %400[a-zA-Z] %d %d:%d:%d GMT %d",
-					 str_wday, str_mon, &tm_mday, &tm_hour, &tm_min, &tm_sec,
-					 &tm_year ) == 7 &&
-			   scan_wday( str_wday, &tm_wday ) &&
-			   scan_mon( str_mon, &tm_mon ) )
-	   {
-			 tm.tm_wday = tm_wday;
-			 tm.tm_mon = tm_mon;
-			 tm.tm_mday = tm_mday;
-			 tm.tm_hour = tm_hour;
-			 tm.tm_min = tm_min;
-			 tm.tm_sec = tm_sec;
-			 tm.tm_year = tm_year;
+			tm.tm_hour = tm_hour;
+			tm.tm_min = tm_min;
+			tm.tm_sec = tm_sec;
+			tm.tm_mday = tm_mday;
+			tm.tm_mon = tm_mon;
+			tm.tm_year = tm_year;
 	   }
 	   else
-			 return (time_t) -1;
+			return (time_t) -1;
 
 	   if ( tm.tm_year > 1900 )
 			 tm.tm_year -= 1900;

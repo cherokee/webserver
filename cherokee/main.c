@@ -35,12 +35,14 @@
 
 #include "server.h"
 
+#define DEFAULT_CONFIG_FILE "/etc/cherokee/cherokee.conf"
+
 #ifndef CHEROKEE_EMBEDDED
 # define GETOPT_OPT  "C:br:"
-# define CONFIG_FILE "[-C configfile] "
+# define CONFIG_FILE_HELP "[-C configfile] [-r]"
 #else
 # define GETOPT_OPT  "br:"
-# define CONFIG_FILE ""
+# define CONFIG_FILE_HELP ""
 #endif 
 
 #define BASIC_CONFIG                                                               \
@@ -107,7 +109,8 @@ common_server_initialization (cherokee_server_t *srv)
 		ret = cherokee_server_read_config_string (srv, &tmp);
 		cherokee_buffer_mrproper (&tmp);
 	} else {
-		ret = cherokee_server_read_config_file (srv, config_file);
+		char *config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
+		ret = cherokee_server_read_config_file (srv, config);
 	}
 
 	if (ret != ret_ok) {
@@ -148,7 +151,7 @@ process_parameters (int argc, char **argv)
 			break;
 
 		default:
-			fprintf (stderr, "Usage: %s " CONFIG_FILE "[-b]\n", argv[0]);
+			fprintf (stderr, "Usage: %s " CONFIG_FILE_HELP "[-b]\n", argv[0]);
 			exit(1);
 		}
 	}

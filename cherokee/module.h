@@ -52,7 +52,7 @@ typedef enum {
 typedef ret_t (* module_func_new_t)       (void *);
 typedef ret_t (* module_func_free_t)      (void *);
 typedef void  (* module_func_get_name_t)  (void  *, const char **name);
-typedef ret_t (* module_func_configure_t) (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **props);
+typedef ret_t (* module_func_configure_t) (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props);
 
 
 /* Data types for module_info
@@ -116,15 +116,15 @@ typedef struct {
 #define HANDLER_MODULE_INFO_INIT_EASY(name, methods)	           \
  	cherokee_module_info_handler_t MODULE_INFO(name) = { 	   \
 		{ cherokee_handler,                                \
-                  cherokee_handler_ ## name ## _new,		   \
-		  cherokee_handler_ ## name ## _configure,         \
+                  (void *) cherokee_handler_ ## name ## _new,	   \
+		  (void *) cherokee_handler_ ## name ## _configure, \
 		}, (methods) }
 
 #define VALIDATOR_MODULE_INFO_INIT_EASY(name, methods)	           \
  	cherokee_module_info_handler_t MODULE_INFO(name) = { 	   \
 		{ cherokee_validator,                              \
-                  cherokee_validator_ ## name ## _new,		   \
-		  cherokee_validator_ ## name ## _configure,       \
+                  (void *) cherokee_validator_ ## name ## _new,		   \
+		  (void *) cherokee_validator_ ## name ## _configure, \
 		}, (methods) }
 
 /* Methods

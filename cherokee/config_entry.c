@@ -80,7 +80,7 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 	}
 
 	if (entry->validator_properties != NULL) {
-		cherokee_typed_table_free (entry->validator_properties);
+		cherokee_validator_props_free (entry->validator_properties);
 		entry->validator_properties = NULL;
 	}
 	
@@ -112,8 +112,8 @@ ret_t
 cherokee_config_entry_free (cherokee_config_entry_t *entry) 
 {
 	cherokee_config_entry_mrproper (entry);
-	free (entry);
 
+	free (entry);
 	return ret_ok;
 }
 

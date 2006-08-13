@@ -461,7 +461,7 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 			downloader->status = downloader->status | downloader_status_data_available | downloader_status_finished;
 			break;
 		case ret_eof:
-			downloader->status = downloader->status & ~downloader_status_data_available | downloader_status_finished;
+			downloader->status = downloader->status & (~downloader_status_data_available | downloader_status_finished);
 			break;
 		case ret_eagain:
 			downloader->status = downloader->status & ~downloader_status_data_available;

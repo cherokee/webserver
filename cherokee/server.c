@@ -1096,27 +1096,31 @@ cherokee_server_reinit (cherokee_server_t *srv)
 static void
 update_bogo_now (cherokee_server_t *srv)
 {
-	time_t       prev;
+	time_t       newtime;
 	static long *this_timezone = NULL;
 
 	CHEROKEE_RWLOCK_WRITER (&srv->bogo_now_mutex);      /* 1.- lock as writer */
 
-	prev = srv->bogo_now;
-	srv->bogo_now = time (NULL);
-	cherokee_localtime (&srv->bogo_now, &srv->bogo_now_tm);
-	
-	/* Update time string if needed
-	 */
-	if (prev < srv->bogo_now) {
-		int z;
+	newtime = time (NULL);
+	if (srv->bogo_now != newtime) {
+		time_t prevtime = srv->bogo_now;
 
-		cherokee_buffer_clean (&srv->bogo_now_string);
+		srv->bogo_now  = newtime;
+		cherokee_localtime (&newtime, &srv->bogo_now_tm);
 
-		if (this_timezone == NULL) 
-			this_timezone = cherokee_get_timezone_ref();
-		z = - (*this_timezone / 60);
+		/* Update time string if needed
+		 */
+		if (prevtime < newtime) {
+			int z;
 
-		cherokee_buffer_add_va (&srv->bogo_now_string, "%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
+			cherokee_buffer_clean (&srv->bogo_now_string);
+
+			if (this_timezone == NULL) 
+				this_timezone = cherokee_get_timezone_ref();
+			z = - (*this_timezone / 60);
+
+			cherokee_buffer_add_va (&srv->bogo_now_string,
+					"%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
 					cherokee_weekdays[srv->bogo_now_tm.tm_wday], 
 					srv->bogo_now_tm.tm_mday,
 					cherokee_months[srv->bogo_now_tm.tm_mon], 
@@ -1126,6 +1130,7 @@ update_bogo_now (cherokee_server_t *srv)
 					srv->bogo_now_tm.tm_sec,
 					(z < 0) ? '-' : '+',
 					(z / 60));
+		}
 	}
 
 	CHEROKEE_RWLOCK_UNLOCK (&srv->bogo_now_mutex);      /* 2.- release */

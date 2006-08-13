@@ -108,13 +108,13 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 
 	switch (REQUEST_VERSION(request)) {
 	case http_version_11:
-		cherokee_buffer_add (buf, " HTTP/1.1" CRLF, 11);
+		cherokee_buffer_add_str (buf, " HTTP/1.1" CRLF);
 		break;
 	case http_version_10:
-		cherokee_buffer_add (buf, " HTTP/1.0" CRLF, 11);
+		cherokee_buffer_add_str (buf, " HTTP/1.0" CRLF);
 		break;
 	case http_version_09:
-		cherokee_buffer_add (buf, " HTTP/0.9" CRLF, 11);
+		cherokee_buffer_add_str (buf, " HTTP/0.9" CRLF);
 		break;
 	default:
 		SHOULDNT_HAPPEN;
@@ -125,7 +125,7 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	if (REQUEST_VERSION(request) == http_version_11) {
 		cherokee_buffer_add (buf, "Host: ", 6);
 		cherokee_buffer_add_buffer (buf, URL_HOST(url));
-		cherokee_buffer_add (buf, CRLF, 2);
+		cherokee_buffer_add_str (buf, CRLF);
 	}
 
 	/* Post information
@@ -138,9 +138,9 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	/* Add "Connection:" header
 	 */
 	if (REQUEST_KEEPALIVE(request)) {
-		cherokee_buffer_add (buf, "Connection: Keep-alive"CRLF, 24); 
+		cherokee_buffer_add_str (buf, "Connection: Keep-alive"CRLF); 
 	} else {
-		cherokee_buffer_add (buf, "Connection: Close"CRLF, 19); 
+		cherokee_buffer_add_str (buf, "Connection: Close"CRLF); 
 	}
 
 	/* Authentication
@@ -166,7 +166,7 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 
 	/* Finish the header
 	 */
-	cherokee_buffer_add (buf, CRLF, 2);
+	cherokee_buffer_add_str (buf, CRLF);
 
 	return ret_ok;
 }
