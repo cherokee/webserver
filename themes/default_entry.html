@@ -1,13 +1,20 @@
-<li>
-  <img  class="icon"  src="%icon%" alt="%icon_alt%" />
-  <a    class="link" href="%file%">%file%</a>
-  <span class="sep"> | </span>
-%if date%
-  <span class="date">%date%</span>
-%fi%
-  <span class="sep"> | </span>
-%if size%
-  <span class="size">%size%</span>
-  <span class="unit">%size_unit%</span>
-%fi%
-</li>
+<tr>
+  <td style="width: 1px;">
+    <img class="icon" src="/icons/%icon%" alt="%icon_alt%" />
+  </td>
+  <td>
+    <a class="link" href="%file%">%file%</a>
+  </td>
+  %if date%<td>
+    <span class="date">%date%</span>
+  </td>%fi%
+  %if size%<td>
+    <span class="size">%size%</span><span class="unit">%size_unit%</span>
+  </td>%fi%
+  %if user%User<td>
+    <span>&nbsp;</span>
+  </td>%fi%
+  %if group%Group<td>
+    <span>&nbsp;</span>
+  </td>%fi%
+</tr>

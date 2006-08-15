@@ -8,20 +8,30 @@
 </head>
 
 <body>
-	<div id="main"><!-- BEGINOF main -->
+	<div id="main" align="center" style="height: 100%;"><!-- BEGINOF main -->
+        <img src="/cherokee-logo.png" alt="Cherokee" border="0" />
 	  <pre>%notice%</pre>
 		<div id="dirlist"><!-- BEGINOF dirlist -->
 			<h1>Index of %public_dir%</h1>
-			<ul style="list-style: none !important;">
-				<li class="headings">
-					<a    class="link" href="?order=%order_name%">Name</a>
-					<span class="sep"> | </span>
-					%if date%<a    class="date" href="?order=%order_date%">Last Modification</a>
-					<span class="sep"> | </span>%fi%
-					%if size%<a    class="size" href="?order=%order_size%">Size</a>
-					<span class="sep"> | </span>%fi%
-					%if user%User
-					<span class="sep"> | </span>%fi%
-					%if group%Group
-					<span class="sep"> | </span>%fi%
-				</li>
+			<table>
+                          <thead class="headings">
+                            <tr>
+                              <td style="width: 1px;">&nbsp;</td>
+                              <td>
+                                <a class="link" href="?order=%order_name%">Name</a>
+                              </td>
+                              %if date%<td>
+                                <a class="date" href="?order=%order_date%">Last Modification</a>
+                              </td>%fi%
+                              %if size%<td>
+                                <a class="size" href="?order=%order_size%">Size</a>%fi%
+                              </td>
+                              %if user%User<td>
+                                <span class="sep"> | </span>
+                              </td>%fi%
+                              %if group%Group<td>
+                                <span class="sep"> | </span>
+                              </td>%fi%
+                            </tr>
+                          </thead>
+                          <tbody>
