@@ -346,11 +346,13 @@ cherokee_virtual_server_set_documentroot (cherokee_virtual_server_t *vserver, co
 
 
 static ret_t 
-add_directory_index (char *alias, void *data)
+add_directory_index (char *index, void *data)
 {
 	cherokee_virtual_server_t *vserver = VSERVER(data);
 
-	cherokee_list_add_tail (&vserver->index_list, strdup(alias));
+	TRACE(ENTRIES, "Adding directory index '%s'\n", index);
+
+	cherokee_list_add_tail (&vserver->index_list, strdup(index));
 	return ret_ok;
 }
 

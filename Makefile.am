@@ -29,18 +29,12 @@ cherokeeconfdir = $(sysconfdir)/cherokee
 .sample.pre.sample:
 	$(top_builddir)/cherokee_replace $< $@ "%sysconfdir%" "${sysconfdir}" "%datadir%" "${datadir}" "%prefix%" "${prefix}" "%wwwroot%" "${WWW_ROOT}"
 
-CONFS_PRE =              \
-mods-ssl.sample.pre      \
-cherokee.conf.sample.pre \
-advanced.conf.sample.pre \
-sites-default.sample.pre \
-sites-example.sample.pre
+CONFS_PRE = \
+cherokee.conf.sample.pre
 
 CONFS_DONE =      \
 mime.types.sample \
-mime.compression.types.sample \
-icons.conf.sample \
-mods-admin.sample
+mime.compression.types.sample
 
 CONFS = \
 $(CONFS_PRE:.sample.pre=.sample)
@@ -87,24 +81,10 @@ uninstall-local-config:
 install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/ssl
-	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/mods-enabled
-	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/mods-available
-	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/sites-enabled
-	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/sites-available
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf ; then \
 		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/cherokee.conf"; \
 	else \
 		$(INSTALL_DATA) $(top_builddir)/cherokee.conf.sample $(DESTDIR)$(cherokeeconfdir)/cherokee.conf; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/advanced.conf ; then \
-		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/advanced.conf"; \
-	else \
-		$(INSTALL_DATA) $(top_builddir)/advanced.conf.sample $(DESTDIR)$(cherokeeconfdir)/advanced.conf; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/icons.conf ; then \
-		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/icons.conf"; \
-	else \
-		$(INSTALL_DATA) $(top_srcdir)/icons.conf.sample $(DESTDIR)$(cherokeeconfdir)/icons.conf; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.types ; then \
 		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mime.types"; \
@@ -119,26 +99,10 @@ install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	@if test -d $(DESTDIR)$(sysconfdir)/pam.d && test ! -d $(DESTDIR)$(sysconfdir)/pam.d/cherokee ; then \
 		$(INSTALL_DATA) $(top_srcdir)/pam.d_cherokee $(DESTDIR)$(sysconfdir)/pam.d/cherokee; \
 	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/sites-available/default ; then \
-		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/sites-available/default"; \
-	else \
-		$(INSTALL_DATA) $(top_builddir)/sites-default.sample $(DESTDIR)$(cherokeeconfdir)/sites-available/default; \
-		$(SHELL) -c "cd $(DESTDIR)$(cherokeeconfdir)/sites-enabled/ && $(LN_S) ../sites-available/default ."; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/sites-available/example.com ; then \
-		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/sites-available/example.com"; \
-	else \
-		$(INSTALL_DATA) $(top_builddir)/sites-example.sample $(DESTDIR)$(cherokeeconfdir)/sites-available/example.com; \
-	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl ; then \
 		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl"; \
 	else \
 		$(INSTALL_DATA) $(top_builddir)/mods-ssl.sample $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/admin ; then \
-		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mods-available/admin"; \
-	else \
-		$(INSTALL_DATA) $(top_srcdir)/mods-admin.sample $(DESTDIR)$(cherokeeconfdir)/mods-available/admin; \
 	fi
 	$(mkinstalldirs) $(DESTDIR)$(localstatedir)
 
@@ -146,14 +110,6 @@ uninstall-local: uninstall-local-config
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf ; then \
 		echo "rm -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf"; \
 		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/advanced.conf ; then \
-		echo "rm -f $(DESTDIR)$(cherokeeconfdir)/advanced.conf"; \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/advanced.conf; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/icons.conf ; then \
-		echo "rm -f $(DESTDIR)$(cherokeeconfdir)/icons.conf"; \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/icons.conf; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.types ; then \
 		echo "rm -f $(cherokeeconfdir)/mime.types"; \
@@ -165,15 +121,6 @@ uninstall-local: uninstall-local-config
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl ; then \
 		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/admin ; then \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mods-available/admin; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/sites-available/default ; then \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/sites-available/default; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/sites-available/example.com ; then \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/sites-available/example.com; \
 	fi
 
 test:

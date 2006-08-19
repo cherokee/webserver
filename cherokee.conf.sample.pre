@@ -7,19 +7,21 @@
 # Server
 #
 server!port = 80
-server!tls_port = 443
+server!port_tls = 443
 server!timeout = 60
-server!keepalive= 1
+server!keepalive = 1
 server!keepalive_max_requests = 500
 server!pid_file = /var/run/cherokee.pid
 server!server_tokens = full
 server!encoder!gzip!allow = html,html,txt
-server!panic_action= %prefix%/bin/cherokee-panic
+server!panic_action = %prefix%/bin/cherokee-panic
+server!mime_file = %sysconfdir%/cherokee/mime.types
+server!mime_file = %sysconfdir%/cherokee/mime.compression.types
 
 # Default virtual server
 #
 vserver!default!document_root = %wwwroot%
-vserber!default!directory_index = index.php,index.html
+vserver!default!directory_index = index.php,index.html
 
 vserver!default!directory!/!handler = common
 vserver!default!directory!/!priority = 1
@@ -44,9 +46,9 @@ vserver!default!extensions!php!priority = 99999
 
 # Icons
 #
+icons!default = unknown.png
 icons!directory = folder.png
 icons!parent_directory = back.png
-icons!default = unknown.png
 
 icons!file!core = core
 icons!file!*README* = readme.png
