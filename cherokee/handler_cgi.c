@@ -540,10 +540,10 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	if (re < 0) {
 		switch (errno) {
 		case ENOENT:
-			printf ("Status: 404" CRLF CRLF);
+			printf ("Status: 404" CRLF_CRLF);
 			break;
 		default:
-			printf ("Status: 500" CRLF CRLF);
+			printf ("Status: 500" CRLF_CRLF);
 		}
 
 		exit(1);

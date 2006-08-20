@@ -620,11 +620,11 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	if (cherokee_buffer_is_empty (buffer) || buffer->len <= 5)
 		return ret_ok;
 
-	/* It is possible that the header ends with CRLF CRLF
+	/* It is possible that the header ends with CRLF_CRLF
 	 * In this case, we have to remove the last two characters
 	 */
 	if ((buffer->len > 4) &&
-	    (strncmp (CRLF CRLF, buffer->buf + buffer->len - 4, 4) == 0))
+	    (strncmp (CRLF_CRLF, buffer->buf + buffer->len - 4, 4) == 0))
 	{
 		cherokee_buffer_drop_endding (buffer, 2);
 	}
@@ -633,14 +633,14 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	 */
 	begin = buffer->buf;
 	while (begin != NULL) {
-		end1 = strchr (begin, '\r');
-		end2 = strchr (begin, '\n');
+		end1 = strchr (begin, CHR_CR);
+		end2 = strchr (begin, CHR_LF);
 
 		end = cherokee_min_str (end1, end2);
 		if (end == NULL) break;
 
 		end2 = end;
-		while (((*end2 == '\r') || (*end2 == '\n')) && (*end2 != '\0')) end2++;
+		while (((*end2 == CHR_CR) || (*end2 == CHR_LF)) && (*end2 != '\0')) end2++;
 
 		if (strncasecmp ("Status: ", begin, 8) == 0) {
 			int  code;
@@ -713,11 +713,11 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 
 	/* Look the end of headers
 	 */
-	content = strstr (inbuf->buf, CRLF CRLF);
+	content = strstr (inbuf->buf, CRLF_CRLF);
 	if (content != NULL) {
 		end_len = 4;
 	} else {
-		content = strstr (inbuf->buf, "\n\n");
+		content = strstr (inbuf->buf, LF_LF);
 		end_len = 2;
 	}
 	
@@ -731,7 +731,7 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 
 	cherokee_buffer_ensure_size (outbuf, len+6);
 	cherokee_buffer_add (outbuf, inbuf->buf, len);
-	cherokee_buffer_add_str (outbuf, CRLF CRLF);
+	cherokee_buffer_add_str (outbuf, CRLF_CRLF);
 
 	/* Drop out the headers, we already have a copy
 	 */

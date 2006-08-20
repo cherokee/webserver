@@ -58,8 +58,7 @@ clean_known_headers (cherokee_header_t *hdr)
 {
 	int i;
 	
-	for (i=0; i<HEADER_LENGTH; i++)
-	{
+	for (i=0; i<HEADER_LENGTH; i++) {
 		hdr->header[i].info_off =  0;
 		hdr->header[i].info_len = -1;			 
 	}
@@ -114,9 +113,9 @@ cherokee_header_init (cherokee_header_t *hdr)
 
 	/* Sanity
 	 */
-	hdr->input_buffer     = NULL;
-	hdr->input_buffer_crc = 0;
-	hdr->input_header_len = 0;
+	hdr->input_buffer       = NULL;
+	hdr->input_buffer_crc   = 0;
+	hdr->input_header_len   = 0;
 
 	return ret_ok;
 }
@@ -207,11 +206,11 @@ static ret_t
 parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char **next_pos)
 {
 	char *line  = buf->buf;
-	char *begin = line;
+	char *begin = buf->buf;
 	char  tmp[4];
 	char *end;
 
-	end = strchr (line, '\r');
+	end = strchr (line, CHR_CR);
 	if (end == NULL) {
 		return ret_error;
 	}
@@ -222,7 +221,7 @@ parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char 
 		return ret_error;
 	}
 
-	/* Return the line endding
+	/* Return next line
 	 */
 	*next_pos = end + 2;
 
@@ -362,27 +361,35 @@ parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char *
 	char  *end;
 	char  *ptr;
 	char  *restore;
+	char  chr_end;
 
 	/* Basic security check. The shortest possible request
 	 * "GET / HTTP/1.0" is 14 characters long..
 	 */
-	if (buf->len < 14) {
+	if (unlikely(buf->len < 14)) {
 		return ret_error;
 	}
 
 	/* Look for the end of the request line
 	 */
-	end = strchr (line, '\r');
-	if (end == NULL) {
+	end = strchr (line, CHR_LF);
+	if (unlikely(end == NULL || line == end)) {
 		return ret_error;
 	}
-
+	--end;
+	if (unlikely(*end != CHR_CR)) {
+		++end;
+		/* Return begin of next line 
+		 */
+		*next_pos = end + 1;
+	} else {
+		/* Return begin of next line 
+		 */
+		*next_pos = end + 2;
+	}
+	chr_end = *end;
 	*end = '\0';
 	restore = end;
-
-	/* Return the line endding
-	 */
-	*next_pos = end + 2;
 
 	/* Get the method
 	 */
@@ -453,11 +460,11 @@ parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char *
 		hdr->request_off = dir - buf->buf;
 	}
 
-	*restore = '\r';
+	*restore = chr_end;
 	return ret_ok;
 
 error:
-	*restore = '\r';
+	*restore = chr_end;
 	return ret_error;
 }
 
@@ -466,35 +473,47 @@ static char *
 get_new_line (char *string)
 {
 	char *end1;
-	char *end2;
-	char *farest;
+	char *end2 = string;
 
+	/* RFC states that EOL should be made by CRLF only, but some
+	 * old clients (HTTP 0.9 and a few HTTP/1.0 robots) may send
+	 * LF only as EOL, so try to catch that case too (of course CR
+	 * only is ignored); anyway leading spaces after a LF or CRLF
+	 * means that the new line is the continuation of previous
+	 * line (first line excluded).
+	 */
 	do {
-		end1 = strchr (string, '\r');
-		end2 = strchr (string, '\n');
+		end1 = end2;
+		end2 = strchr (end1, CHR_LF);
 
-		farest = cherokee_min_str (end1, end2);
-		if (farest == NULL) return NULL;
+		if (unlikely (end2 == NULL))
+			return NULL;
 
-		string = farest+1;
-	} while (farest[1] == ' ');
+		end1 = end2;
+		if (likely (end2 != string && *(end1 - 1) == CHR_CR))
+			--end1;
 
-	return farest;
+		++end2;
+	} while (*end2 == CHR_SP || *end2 == CHR_HT);
+
+	return end1;
 }
 
+
 ret_t 
-cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer,  cherokee_type_header_t type)
+cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherokee_type_header_t type)
 {
 	ret_t  ret;
 	char  *begin = buffer->buf;
 	char  *end   = NULL;
 	char  *colon;
 	char  *header_end;
+	char  chr_header_end;
 
 	/* Check the buffer content
 	 */
 	if ((buffer->buf == NULL) || (buffer->len < 5)) {
-		PRINT_ERROR_S ("ERROR: Calling cherokee_header_parse() with a empty header\n");
+		PRINT_ERROR_S ("ERROR: Calling cherokee_header_parse() with an empty header\n");
 		return ret_error;
 	}
 
@@ -506,27 +525,40 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer,  chero
 	hdr->input_buffer_crc = cherokee_buffer_crc32 (buffer);
 #endif
 
-	/* Look for the header endding 'CRLF CRLF'
+	/* header_len should have already been set by a previous call
+	 * to cherokee_header_has_header() but if not we call it now.
 	 */
-	header_end = strstr (buffer->buf, CRLF CRLF);
-	if (header_end == NULL) {
-		PRINT_ERROR ("ERROR: Cannot find the end of the header:\n===\n%s===\n", buffer->buf);
-		return ret_error;
+	if (unlikely (hdr->input_header_len < 1)) {
+		/* Strange, anyway go on and look for EOH 
+		 */
+		ret = cherokee_header_has_header(hdr, buffer, buffer->len);
+		if (ret != ret_ok) {
+			if (ret == ret_not_found)
+				PRINT_ERROR("ERROR: EOH not found:\n===\n%s===\n", buffer->buf);
+			else
+				PRINT_ERROR("ERROR: Too many initial CRLF:\n===\n%s===\n", buffer->buf);
+			return ret_error;
+		}
 	}
-	
-	header_end += 4; 
-	hdr->input_header_len = (header_end - buffer->buf);
+	header_end = &(buffer->buf[hdr->input_header_len]);
 
-	/* Parse the speacial first line
+	/* Terminate current request space (there maybe other
+	 * pipelined requests in the buffer) after the EOH.
+	 */
+	chr_header_end = *header_end;
+	*header_end = '\0';
+
+	/* Parse the special first line
 	 */
 	switch (type) {
 	case header_type_request:
 		/* Parse request. Something like this:
-		 * GET /icons/compressed.png HTTP/1.1\r\n
+		 * GET /icons/compressed.png HTTP/1.1CRLF
 		 */
 		ret = parse_request_first_line (hdr, buffer, &begin);
 		if (unlikely(ret < ret_ok)) {
 			PRINT_DEBUG ("ERROR: Failed to parse header_type_request:\n===\n%s===\n", buffer->buf);
+			*header_end = chr_header_end;
 			return ret;
 		}
 		break;
@@ -535,6 +567,7 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer,  chero
 		ret = parse_response_first_line (hdr, buffer, &begin);
 		if (unlikely(ret < ret_ok)) {
 			PRINT_DEBUG ("ERROR: Failed to parse header_type_response:\n===\n%s===\n", buffer->buf);
+			*header_end = chr_header_end;
 			return ret;
 		}
 		break;
@@ -545,26 +578,29 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer,  chero
 		break;
 
 	default:
+		*header_end = chr_header_end;
 		SHOULDNT_HAPPEN;
 	}
 
 
 	/* Parse the rest of headers
 	 */
-	while ((end = get_new_line(begin)) && (end < header_end))
-	{	       
+	while ((begin < header_end) && (end = get_new_line(begin)) != NULL)
+	{
 		cuint_t header_len;
 		char    first_char;
-		char    end_char = *end;
+		char    chr_end    = *end;
 
 		*end = '\0';
 
+		/* Current line may have embedded CR+SP or CRLF+SP 
+		 */
 		colon = strchr (begin, ':');
 		if (colon == NULL) {
 			goto next;
 		}
 		
-		if (end < colon +2) {
+		if (end < colon + 2) {
 			goto next;
 		}
 
@@ -649,16 +685,18 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer,  chero
 
 		if (ret < ret_ok) {
 			PRINT_ERROR_S ("ERROR: Failed to add_(un)known_header()\n");
+			*header_end = chr_header_end;
 			return ret;
 		}
 
 	next:
-		*end = end_char;
+		*end = chr_end;
 
-		while ((*end == '\r') || (*end == '\n')) end++;
+		while ((*end == CHR_CR) || (*end == CHR_LF)) end++;
 		begin = end;
 	}
-	
+
+	*header_end = chr_header_end;
 	return ret_ok;
 }
 
@@ -678,8 +716,7 @@ cherokee_header_get_unknown (cherokee_header_t *hdr, char *name, int name_len, c
 
 	HEADER_INTERNAL_CHECK(hdr);
 
-	for (i=0; i < hdr->unknowns_len; i++)
-	{
+	for (i=0; i < hdr->unknowns_len; i++) {
 		char *h = hdr->unknowns[i].header_off + hdr->input_buffer->buf;
 
 		if (strncasecmp (h, name, name_len) == 0) {
@@ -849,23 +886,66 @@ cherokee_header_copy_version (cherokee_header_t *hdr, cherokee_buffer_t *buf)
 ret_t 
 cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, int tail_len)
 {
-	int   tail;
-	char *start;
-	
-	/* Too few information?
-	 * len("GET / HTTP/1.0" CRLF CRLF) = 18
+	char   *start;
+	char   *end;
+	size_t  crlf_len = 0;
+
+	/* Skip initial CRLFs:
+	 * NOTE: they are not allowed by standard (RFC) but many
+	 * popular HTTP clients (including MSIE, etc.)  may send a
+	 * couple of them between two requests, so every widely used
+	 * web server has to deal with them.
 	 */
-	if (buffer->len < 18) {
-		return ret_deny;
+	crlf_len = cherokee_buffer_cnt_spn (buffer, 0, CRLF);
+	if (unlikely (crlf_len > MAX_HEADER_CRLF)) {
+		/* Too many initial CRLF 
+		 */
+		return ret_error;
+	}
+
+	if (unlikely (tail_len < 0)) {
+		/* Bad parameter value 
+		 */
+		return ret_error;
+	}
+
+	if ((crlf_len > 0) && (crlf_len < (size_t) buffer->len)) {
+		/* Found heading CRLFs and their length is less than
+		 * buffer length so we have to move the real content
+		 * to the beginning of the buffer.
+		 */
+		cherokee_buffer_move_to_begin(buffer, (int) crlf_len);
+	}
+
+	/* Do we have enough information ?
+	 * len("GET /" CRLF_CRLF) = 9               (HTTP/0.9)
+	 * len("GET / HTTP/1.0" CRLF_CRLF) = 18     (HTTP/1.x)
+	 */
+	if (unlikely (buffer->len < 18)) {
+		return ret_not_found;
 	}
 
 	/* Look for the starting point
 	 */
-	tail  = (tail_len < buffer->len) ? tail_len : buffer->len;
-	start = buffer->buf + (buffer->len - tail);		
+	start = (tail_len >= buffer->len) ?
+		buffer->buf : buffer->buf + (buffer->len - tail_len);
 
 	/* It could be a partial header, or maybe a POST request
 	 */
-	return (strstr(start, CRLF CRLF) != NULL) ? ret_ok : ret_error;
+	if (unlikely((end = strstr(start, CRLF_CRLF)) == NULL)) {
+		if ((end = strstr(start, LF_LF)) == NULL)
+			return ret_not_found;
+
+		/* Found uncommon / non standard EOH, set header length 
+		 */
+		hdr->input_header_len = ((int) (end - buffer->buf)) + CSZLEN(LF_LF);
+		return ret_ok;
+	}
+
+	/* Found standard EOH, set header length 
+	 */
+	hdr->input_header_len = ((int) (end - buffer->buf)) + CSZLEN(CRLF_CRLF);
+
+	return ret_ok;
 }
 

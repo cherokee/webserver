@@ -145,7 +145,7 @@ extract_user_entry (cherokee_buffer_t *file, char *user_, char **user, char **re
 		/* Look for the next line
 		 */
 		pos = eol;
-		while ((*pos == '\r') || (*pos == '\n')) pos++;
+		while ((*pos == CHR_CR) || (*pos == CHR_LF)) pos++;
 	}
 
 	return ret_not_found;

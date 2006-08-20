@@ -117,9 +117,13 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
         case http_access_denied:
 		cherokee_buffer_add_str (buffer, "You have no access to the request URL");
 		break;
+	case http_request_entity_too_large:
+		cherokee_buffer_add_str (buffer,
+					 "The length of request entity exceeds the capacity limit for this server.");
+		break;
 	case http_request_uri_too_long:
 		cherokee_buffer_add_str (buffer,
-					 "The requested URL's length exceeds the capacity limit for this server.");
+					 "The length of requested URL exceeds the capacity limit for this server.");
 		break;		
 	case http_moved_permanently:
 	case http_moved_temporarily:

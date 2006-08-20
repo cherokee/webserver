@@ -81,6 +81,7 @@
 #define DEFAULT_RECV_SIZE             1024
 #define DEFAULT_READ_SIZE             8192
 #define MAX_HEADER_LEN                4096
+#define MAX_HEADER_CRLF               8 
 #define MAX_KEEPALIVE                 500
 #define MAX_NEW_CONNECTIONS_PER_STEP  50
 #define DEFAULT_CONN_REUSE            20
@@ -99,7 +100,18 @@
 #define EXIT_SERVER_READ_CONFIG         31
 #define EXIT_SERVER_INIT                32
 
-#define CRLF "\r\n"
+
+#define CSZLEN(str) (sizeof(str) - 1)
+  
+#define LF_LF     "\n\n"        /* EOHs (End Of Headers) */
+#define CRLF_CRLF "\r\n\r\n"    /* EOHs (End Of Headers) */
+#define CRLF      "\r\n"        /* EOH (End Of Header Line) */
+#define LWS       " \t\r\n"     /* HTTP linear white space */
+#define CHR_CR    '\r'          /* Carriage return */
+#define CHR_LF    '\n'          /* Line feed (new line) */
+#define CHR_SP    ' '           /* Space */
+#define CHR_HT    '\t'          /* Horizontal tab */
+
 
 #define equal_str(m,str) \
 	(strncasecmp(m, str, sizeof(str)-1) == 0)

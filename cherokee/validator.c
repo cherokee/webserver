@@ -164,9 +164,9 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator, char *str, cui
 	do {
 		/* Skip some chars
 		 */
-		while ((*entry == ' ')  ||
-		       (*entry == '\r') || 
-		       (*entry == '\n')) entry++;
+		while ((*entry == CHR_SP)  ||
+		       (*entry == CHR_CR) || 
+		       (*entry == CHR_LF)) entry++;
 
 		/* Check for the end
 		 */
@@ -214,8 +214,8 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator, char *str, cui
 		len = strlen(equal);		
 		while ((len > 0) &&
 		       ((equal[len-1] == '"')  || 
-			(equal[len-1] == '\r') || 
-			(equal[len-1] == '\n'))) len--;
+			(equal[len-1] == CHR_CR) || 
+			(equal[len-1] == CHR_LF))) len--;
 
 		/* Copy the entry value
 		 */ 

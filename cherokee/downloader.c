@@ -280,10 +280,17 @@ downloader_header_read (cherokee_downloader_t *downloader)
 		/* Check the header. Is it complete? 
 		 */
 		ret = cherokee_header_has_header (downloader->header, &downloader->reply_header, readed+4);
-		if (ret != ret_ok) {
-			/* It needs to read more header..
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_not_found:
+			/* It needs to read more headers ... 
 			 */
 			return ret_eagain;
+		default:
+			/* Too many initial CRLF 
+			 */
+			return ret_error;
 		}
 		
 		/* Parse the header

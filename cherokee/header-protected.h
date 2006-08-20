@@ -75,6 +75,7 @@ struct cherokee_header {
 	 */
 	cherokee_buffer_t      *input_buffer;
 	crc_t                   input_buffer_crc;
+	uint32_t                input_header_start;
 	uint32_t                input_header_len;
 
 };

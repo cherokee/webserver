@@ -211,6 +211,7 @@ ret_t
 cherokee_connection_clean (cherokee_connection_t *cnt)
 {	   
 	uint32_t           header_len;
+	size_t             crlf_len;
 	cherokee_server_t *srv = CONN_SRV(cnt);
 
 #ifndef CHEROKEE_EMBEDDED
@@ -285,13 +286,23 @@ cherokee_connection_clean (cherokee_connection_t *cnt)
 		cnt->arguments = NULL;
 	}
 
-	/* Drop out the loast incoming header
+	/* Drop out the last incoming header
 	 */
 	cherokee_header_get_length (&cnt->header, &header_len);
 
 	cherokee_header_clean (&cnt->header);
 	cherokee_buffer_clean (&cnt->buffer);
 	cherokee_buffer_clean (&cnt->header_buffer);
+	
+	/* Skip trailing CRLF (which may be sent by some HTTP clients)
+	 * only if the number of CRLFs is within the predefine count
+	 * limit otherwise ignore trailing CRLFs so that they will be
+	 * handled in next request.  This may avoid a subsequent real
+	 * move_to_begin of the contents left in the buffer.
+	 */
+	crlf_len = cherokee_buffer_cnt_spn (&cnt->incoming_header, header_len, CRLF);
+	header_len += (crlf_len <= MAX_HEADER_CRLF) ? crlf_len : 0;
+
 	cherokee_buffer_move_to_begin (&cnt->incoming_header, header_len);
 
 	/* If the connection has incoming headers to be processed,
@@ -445,6 +456,7 @@ build_response_header (cherokee_connection_t *cnt, cherokee_buffer_t *buffer)
 	 */
 	switch (cnt->header.version) {
 	case http_version_09:
+		/* TODO: remove HTTP headers in this version */
 		cherokee_buffer_add_str (buffer, "HTTP/0.9 "); 
 		break;
 	case http_version_10:
@@ -702,7 +714,7 @@ cherokee_connection_reading_check (cherokee_connection_t *cnt)
 	/* Check for too long headers
 	 */
 	if (cnt->incoming_header.len > MAX_HEADER_LEN) {
-		cnt->error_code = http_request_uri_too_long;
+		cnt->error_code = http_request_entity_too_large;
 		return ret_error;
 	}
 
@@ -961,7 +973,7 @@ get_encoding (cherokee_connection_t    *cnt,
 
 	/* ptr = Header at the "Accept-Encoding" position 
 	 */
-	end = strchr (ptr, '\r');
+	end = strchr (ptr, CHR_CR);
 	if (end == NULL) {
 		return ret_error;
 	}
@@ -1004,11 +1016,11 @@ get_encoding (cherokee_connection_t    *cnt,
 
 	} while (i2 < end);
 
-	*end = '\r'; /* (1') */
+	*end = CHR_CR; /* (1') */
 	return ret_ok;
 
 error:
-	*end = '\r'; /* (1') */
+	*end = CHR_CR; /* (1') */
 	return ret_error;
 }
 
@@ -1051,8 +1063,8 @@ get_authorization (cherokee_connection_t *cnt,
 
 	/* Skip end of line
 	 */
-	end  = strchr (ptr, '\r');
-	end2 = strchr (ptr, '\n');
+	end  = strchr (ptr, CHR_CR);
+	end2 = strchr (ptr, CHR_LF);
 
 	end = cherokee_min_str (end, end2);
 	if (end == NULL) 
@@ -1215,7 +1227,7 @@ get_range (cherokee_connection_t *cnt, char *ptr, int ptr_len)
 
 	/* Maybe there're an ending position
 	 */
-	if ((*ptr != '\0') && (*ptr != '\r') && (*ptr != '\n')) {
+	if ((*ptr != '\0') && (*ptr != CHR_CR) && (*ptr != CHR_LF)) {
 		num_len = 0;
 		
 		/* Read the end

@@ -41,7 +41,7 @@
 #include "sha1.h"
 
 
-#define TO_HEX(c) (c>9? c+'a'-10 : c+'0')
+#define TO_HEX(c) (c > 9 ? c+'a'-10 : c+'0')
 
 ret_t
 cherokee_buffer_new  (cherokee_buffer_t **buf)
@@ -274,24 +274,23 @@ cherokee_buffer_is_endding (cherokee_buffer_t *buf, char c)
 		return 0;
 	}
 
-	return (buf->buf[buf->len -1] == c);
+	return (buf->buf[buf->len - 1] == c);
 }
 
 
 ret_t
 cherokee_buffer_move_to_begin (cherokee_buffer_t *buf, int pos)
 {
-	int offset;
-
 	if (pos <= 0) 
 		return ret_ok;
 
 	if (pos >= buf->len) 
 		return cherokee_buffer_clean(buf);
 
-	offset = MIN(pos, buf->len);
-	memmove (buf->buf, buf->buf+offset, (buf->len - offset) +1);
-	buf->len -= offset;
+	/* At this point: 0 < pos < buf->len 
+	 */
+	memmove (buf->buf, buf->buf+pos, (buf->len - pos) + 1);
+	buf->len -= pos;
 
 #if 0
 	if (strlen(buf->buf) != buf->len) {
@@ -646,19 +645,18 @@ cherokee_buffer_add_version (cherokee_buffer_t *buf, int port, cherokee_version_
 	case ver_full_html:
 		cherokee_buffer_ensure_size (buf, buf->len + 29 + sizeof(PACKAGE_VERSION) + 6 + port_len + 10);
 
-		cherokee_buffer_add (buf, "<address>Cherokee web server ", 29);
-		cherokee_buffer_add_str (buf, PACKAGE_VERSION);
-		cherokee_buffer_add (buf, " Port ", 6);
+		cherokee_buffer_add_str (buf, 
+					 "<address>Cherokee web server " PACKAGE_VERSION " Port ");
 		cherokee_buffer_add (buf, port_str, port_len);
-		cherokee_buffer_add (buf, "</address>", 10);
+		cherokee_buffer_add_str (buf, "</address>");
 		break;
 
 	case ver_port_html:
 		cherokee_buffer_ensure_size (buf, buf->len + 34 + port_len + 10);
 
-		cherokee_buffer_add (buf, "<address>Cherokee web server Port ", 34);
+		cherokee_buffer_add_str (buf, "<address>Cherokee web server Port ");
 		cherokee_buffer_add (buf, port_str, port_len);
-		cherokee_buffer_add (buf, "</address>", 10);
+		cherokee_buffer_add_str (buf, "</address>");
 		break;
 
 	default:	
