@@ -30,7 +30,8 @@ cherokeeconfdir = $(sysconfdir)/cherokee
 	$(top_builddir)/cherokee_replace $< $@ "%sysconfdir%" "${sysconfdir}" "%datadir%" "${datadir}" "%prefix%" "${prefix}" "%wwwroot%" "${WWW_ROOT}"
 
 CONFS_PRE = \
-cherokee.conf.sample.pre
+cherokee.conf.sample.pre \
+cherokee.conf.performance.pre
 
 CONFS_DONE =      \
 mime.types.sample \
@@ -86,6 +87,11 @@ install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	else \
 		$(INSTALL_DATA) $(top_builddir)/cherokee.conf.sample $(DESTDIR)$(cherokeeconfdir)/cherokee.conf; \
 	fi
+	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample ; then \
+		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample"; \
+	else \
+		$(INSTALL_DATA) $(top_builddir)/cherokee.conf.performance $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample; \
+	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.types ; then \
 		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mime.types"; \
 	else \
@@ -110,6 +116,10 @@ uninstall-local: uninstall-local-config
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf ; then \
 		echo "rm -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf"; \
 		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf; \
+	fi
+	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample ; then \
+		echo "rm -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample"; \
+		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.types ; then \
 		echo "rm -f $(cherokeeconfdir)/mime.types"; \

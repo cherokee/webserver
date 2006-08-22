@@ -36,19 +36,25 @@
 
 CHEROKEE_BEGIN_DECLS
 
+
+/* Validator properties
+ */
+typedef ret_t (* validator_props_func_free_t)  (void  *validatorp);
+
+typedef struct {
+	validator_props_func_free_t free;
+} cherokee_validator_props_t;
+
+
 /* Callback function definitions
  */
-typedef ret_t (* validator_func_new_t)         (void **validator, cherokee_table_t *properties); 
+typedef ret_t (* validator_func_new_t)         (void **validator, cherokee_validator_props_t *props); 
 typedef ret_t (* validator_func_check_t)       (void  *validator, void *conn);
 typedef ret_t (* validator_func_add_headers_t) (void  *validator, void *conn, cherokee_buffer_t *buf);
-typedef ret_t (* validator_props_func_free_t)  (void  *validatorp);
+
 
 /* Data types
  */
-typedef struct {
-	void (*free) (void *itself);
-} cherokee_validator_props_t;
-
 typedef struct {
 	cherokee_module_t            module;
 	

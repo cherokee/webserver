@@ -571,6 +571,35 @@ add_request (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver,
 
 
 static ret_t 
+add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
+{
+	ret_t                   ret;
+	logger_func_new_t       func_new;
+	cherokee_module_info_t *info      = NULL;
+	cherokee_server_t      *srv       = SRV(vserver->server_ref);
+
+	if (cherokee_buffer_is_empty (&config->val)) {
+		PRINT_ERROR_S ("ERROR: A logger must be specified\n");
+		return ret_error;
+	}
+
+	ret = cherokee_module_loader_get (&srv->loader, config->val.buf, &info);
+	if (ret < ret_ok) {
+		PRINT_MSG ("ERROR: Couldn't load logger module '%s'\n", config->val.buf);
+		return ret_error;
+	}
+
+	func_new = (logger_func_new_t) info->new_func;
+	if (func_new == NULL) return ret_error;
+
+	ret = func_new ((void **) &vserver->logger, config);
+	if (ret != ret_ok) return ret;
+	
+	return ret_ok;
+}
+
+
+static ret_t 
 configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 {
 	ret_t                   ret;
@@ -645,6 +674,9 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 			ret = add_request (CONFIG_NODE(i), vserver, &vserver->entry);
 			if (ret != ret_ok) return ret;
 		}
+	} else if (equal_buf_str (&conf->key, "logger")) {
+		ret = add_logger (conf, vserver);
+		if (ret != ret_ok) return ret;
 
 	} else if (equal_buf_str (&conf->key, "directory_index")) {
 		cherokee_config_node_read_list (conf, NULL, add_directory_index, vserver);

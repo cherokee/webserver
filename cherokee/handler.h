@@ -54,22 +54,25 @@ typedef enum {
 	hsupport_dont_add_headers = 1 << 4,    /* The server shouldn't add any headers    */
 } cherokee_handler_support_t;
 
+/* Handler properties
+ */
+typedef ret_t (* handler_props_func_free_t)  (void  *handlerp);
+
+typedef struct {
+	handler_props_func_free_t   free;
+} cherokee_handler_props_t;
+
 
 /* Callback function definitions
  */
-typedef ret_t (* handler_func_new_t)         (void **handler, void *cnt, cherokee_table_t *properties);
+typedef ret_t (* handler_func_new_t)         (void **handler, void *cnt, cherokee_handler_props_t *properties);
 typedef ret_t (* handler_func_init_t)        (void  *handler);
 typedef ret_t (* handler_func_free_t)        (void  *handler);
 typedef ret_t (* handler_func_step_t)        (void  *handler, cherokee_buffer_t *buffer);
 typedef ret_t (* handler_func_add_headers_t) (void  *handler, cherokee_buffer_t *buffer);
-typedef ret_t (* handler_props_func_free_t)  (void  *handlerp);
 
 /* Data types
  */
-typedef struct {
-	void (*free) (void *itself);
-} cherokee_handler_props_t;
-
 typedef struct {
 	cherokee_module_t           module;
 	cherokee_handler_props_t   *props;

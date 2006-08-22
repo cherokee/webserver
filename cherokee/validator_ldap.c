@@ -36,7 +36,6 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 ret_t 
 cherokee_validator_ldap_new (cherokee_validator_ldap_t **ldap, cherokee_validator_props_t *props)
 {	  
-	ret_t ret;
 	CHEROKEE_NEW_STRUCT(n,validator_ldap);
 
 	/* Init 		

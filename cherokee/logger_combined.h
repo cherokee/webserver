@@ -22,13 +22,13 @@
  * USA
  */
 
-#ifndef __CHEROKEE_LOGGER_COMBINED_H__
-#define __CHEROKEE_LOGGER_COMBINED_H__
+#ifndef CHEROKEE_LOGGER_COMBINED_H
+#define CHEROKEE_LOGGER_COMBINED_H
 
 #include "logger_ncsa.h"
 
 typedef cherokee_logger_ncsa_t cherokee_logger_combined_t;
 
-ret_t cherokee_logger_combined_new (cherokee_logger_t **logger, cherokee_table_t *properties);
+ret_t cherokee_logger_combined_new (cherokee_logger_t **logger, cherokee_config_node_t *config);
 
-#endif /* __CHEROKEE_LOGGER_COMBINED_H__ */
+#endif /* CHEROKEE_LOGGER_COMBINED_H */

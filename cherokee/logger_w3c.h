@@ -42,17 +42,15 @@
 
 
 typedef struct {
-	   cherokee_logger_t logger;
-
-	   int   header_added;
-
-	   char *filename;
-	   FILE *file;
-
+	cherokee_logger_t logger;
+	
+	cherokee_boolean_t header_added;
+	cherokee_buffer_t  filename;
+	FILE              *file;
 } cherokee_logger_w3c_t;
 
 
-ret_t cherokee_logger_w3c_new (cherokee_logger_t **logger, cherokee_table_t *properties);
+ret_t cherokee_logger_w3c_new (cherokee_logger_t **logger, cherokee_config_node_t *config);
 
 /* virtual methods implementation
  */

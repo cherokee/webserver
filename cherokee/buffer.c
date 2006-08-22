@@ -330,13 +330,6 @@ cherokee_buffer_ensure_size (cherokee_buffer_t *buf, size_t size)
 }
 
 
-/* This function is based on code from thttpd
- * Copyright: Jef Poskanzer <jef@acme.com>
- *
- * Copies and decodes a string.  It's ok for from and to to be the
- * same string.
- */
-
 ret_t
 cherokee_buffer_decode (cherokee_buffer_t *buffer)
 {
@@ -347,13 +340,16 @@ cherokee_buffer_decode (cherokee_buffer_t *buffer)
 		return ret_error;
 	}
 
+        /* Copies and decodes a string.  It's ok for from and to to be
+	 * the same string.
+	 */
 	from = to = buffer->buf;
 
 	for (; *from != '\0'; ++to, ++from) {
 		if (from[0] == '%' && isxdigit(from[1]) && isxdigit(from[2])) {
-			if ((from[1] == '0') && (from[2] == '0')) {
-				/* Replace null bytes (%00) with spaces,
-				 * to prevent attacks 	
+			if (unlikely (((from[1] == '0') && (from[2] == '0')))) {
+				/* Replace null bytes (%00) with
+				 * spaces, to prevent attacks
 				 */
 				*to = ' ';
 			} else {
@@ -667,20 +663,6 @@ cherokee_buffer_add_version (cherokee_buffer_t *buf, int port, cherokee_version_
 }
 
 
-/* b64_decode_table has been copy&pasted from the code of thttpd:  
- * Copyright <A9> 1995,1998,1999,2000,2001 by Jef Poskanzer <jef@acme.com>
- */
-
-/* Base-64 decoding.  This represents binary data as printable ASCII
- * characters.  Three 8-bit binary bytes are turned into four 6-bit
- * values, like so:
- *
- *   [11111111]  [22222222]  [33333333]
- *   [111111] [112222] [222233] [333333]
- *
- * Then the 6-bit values are represented using the characters "A-Za-z0-9+/".
- */
-
 ret_t 
 cherokee_buffer_decode_base64 (cherokee_buffer_t *buf)
 {
@@ -689,6 +671,17 @@ cherokee_buffer_decode_base64 (cherokee_buffer_t *buf)
 	int  i, phase  = 0;
 	int  d, prev_d = 0;
 	int  buf_pos   = 0;
+
+	/* Base-64 decoding: This represents binary data as printable
+	 * ASCII characters. Three 8-bit binary bytes are turned into
+	 * four 6-bit values, like so:
+	 *	
+	 *   [11111111]  [22222222]  [33333333]
+	 *   [111111] [112222] [222233] [333333]
+	 *
+	 * Then the 6-bit values are represented using the characters
+	 * "A-Za-z0-9+/".
+	 */
 
 	static const char
 		b64_decode_table[256] = {
@@ -710,9 +703,6 @@ cherokee_buffer_decode_base64 (cherokee_buffer_t *buf)
 			-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1   /* F0-FF */
 		};
 
-
-	space_idx = 0;
-	phase = 0;
 	for (i=0; i < buf->len; i++) {
 		d = b64_decode_table[(int) buf->buf[i]];
 		if (d != -1) {

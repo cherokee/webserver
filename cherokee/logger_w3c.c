@@ -75,8 +75,10 @@ cherokee_module_info_t MODULE_INFO(w3c) = {
 
 
 ret_t
-cherokee_logger_w3c_new  (cherokee_logger_t **logger, cherokee_table_t *properties)
+cherokee_logger_w3c_new  (cherokee_logger_t **logger, cherokee_config_node_t *config)
 {
+	ret_t              ret;
+	cherokee_buffer_t *tmp;
 	CHEROKEE_NEW_STRUCT (n, logger_w3c);
 	
 	/* Init the base class object
@@ -94,15 +96,16 @@ cherokee_logger_w3c_new  (cherokee_logger_t **logger, cherokee_table_t *properti
 	
 	/* Init
 	 */
-	
-	n->header_added = 0;
-	n->filename     = NULL;
+	cherokee_buffer_init (&n->filename);
+
+	n->header_added = false;
 	n->file         = NULL;
 	
-	if (properties != NULL) {
-		cherokee_typed_table_get_str (properties, "LogFile", &n->filename);
+	ret = cherokee_config_node_read (config, "file", &tmp);
+	if (ret == ret_ok) { 
+		cherokee_buffer_add_buffer (&n->filename, tmp);
 	}
-	
+
 	return ret_ok;
 }
 
@@ -112,7 +115,7 @@ open_output (cherokee_logger_w3c_t *logger)
 {
 	/* Syslog
 	 */
-	if (logger->filename == NULL) {
+	if (cherokee_buffer_is_empty (&logger->filename)) {
 		openlog ("Cherokee", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
 		return ret_ok;
 	}
@@ -120,9 +123,9 @@ open_output (cherokee_logger_w3c_t *logger)
 
 	/* Direct file writting
 	 */
-	logger->file = fopen (logger->filename, "a+");
+	logger->file = fopen (logger->filename.buf, "a+");
 	if (logger->file == NULL) {
-		PRINT_ERROR("cherokee_logger_w3c: error opening %s for append\n", logger->filename); 
+		PRINT_ERROR("cherokee_logger_w3c: error opening %s for append\n", logger->filename.buf); 
 		return ret_error;
 	}
 
@@ -162,6 +165,7 @@ cherokee_logger_w3c_init (cherokee_logger_w3c_t *logger)
 ret_t
 cherokee_logger_w3c_free (cherokee_logger_w3c_t *logger)
 {
+	cherokee_buffer_mrproper (&logger->filename);
 	return close_output (logger);
 }
 
@@ -290,7 +294,7 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 	 */
 	conn_time = &CONN_THREAD(cnt)->bogo_now_tm;
 
-	if ((logger->header_added == 0) && (logger->file)) {
+	if ((! logger->header_added) && (logger->file)) {
 		len = snprintf (tmp, tmp_size-1, 
 				"#Version 1.0\n"
 				"#Date: %d02-%s-%4d %02d:%02d:%02d\n"
@@ -306,7 +310,7 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 		cherokee_buffer_add (LOGGER_BUFFER(logger), tmp, len);
 		CHEROKEE_MUTEX_UNLOCK(&buffer_lock);
 
-		logger->header_added = 1;
+		logger->header_added = true;
 	}
 	
 	/* Get the timezone reference

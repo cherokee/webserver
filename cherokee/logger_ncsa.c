@@ -70,7 +70,7 @@ cherokee_module_info_t MODULE_INFO(ncsa) = {
 };
 
 ret_t
-cherokee_logger_ncsa_new (cherokee_logger_t **logger, cherokee_table_t *properties)
+cherokee_logger_ncsa_new (cherokee_logger_t **logger, cherokee_config_node_t *config)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, logger_ncsa);
@@ -81,13 +81,14 @@ cherokee_logger_ncsa_new (cherokee_logger_t **logger, cherokee_table_t *properti
 
 	MODULE(n)->init         = (logger_func_init_t) cherokee_logger_ncsa_init;
 	MODULE(n)->free         = (logger_func_free_t) cherokee_logger_ncsa_free;
+	
 	LOGGER(n)->flush        = (logger_func_flush_t) cherokee_logger_ncsa_flush;
 	LOGGER(n)->reopen       = (logger_func_reopen_t) cherokee_logger_ncsa_reopen;
 	LOGGER(n)->write_error  = (logger_func_write_error_t)  cherokee_logger_ncsa_write_error;
 	LOGGER(n)->write_access = (logger_func_write_access_t) cherokee_logger_ncsa_write_access;
 	LOGGER(n)->write_string = (logger_func_write_string_t) cherokee_logger_ncsa_write_string;
 
-	ret = cherokee_logger_ncsa_init_base (n, properties);
+	ret = cherokee_logger_ncsa_init_base (n, config);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	/* Return the object
@@ -98,19 +99,28 @@ cherokee_logger_ncsa_new (cherokee_logger_t **logger, cherokee_table_t *properti
 
 
 ret_t 
-cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t *logger, cherokee_table_t *properties)
+cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t *logger, cherokee_config_node_t *config)
 {
+	ret_t              ret;
+	cherokee_buffer_t *tmp;
+
 	/* Init
 	 */
+	cherokee_buffer_init (&logger->accesslog);
+	cherokee_buffer_init (&logger->errorlog);
+
 	logger->errorlog_fd        = NULL;
 	logger->accesslog_fd       = NULL;
-	logger->accesslog_filename = NULL;
-	logger->errorlog_filename  = NULL;
 	logger->combined           = false;
 	
-	if (properties != NULL) {
-		cherokee_typed_table_get_str (properties, "AccessLog", &logger->accesslog_filename);
-		cherokee_typed_table_get_str (properties, "ErrorLog", &logger->errorlog_filename);
+	ret = cherokee_config_node_read (config, "access", &tmp);
+	if (ret == ret_ok) {
+		cherokee_buffer_add_buffer (&logger->accesslog, tmp);
+	}
+
+	ret = cherokee_config_node_read (config, "error", &tmp);
+	if (ret == ret_ok) {
+		cherokee_buffer_add_buffer (&logger->errorlog, tmp);
 	}
 	
 	return ret_ok;
@@ -120,25 +130,25 @@ cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t *logger, cherokee_table_t
 static ret_t 
 open_output (cherokee_logger_ncsa_t *logger)
 {
-	if ((logger->accesslog_filename == NULL) ||
-	    (logger->errorlog_filename == NULL))
+	if (cherokee_buffer_is_empty (&logger->accesslog) ||
+	    cherokee_buffer_is_empty (&logger->errorlog))
 	{
 		openlog ("Cherokee", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
 		return ret_ok;
 	}
 
-	logger->accesslog_fd = fopen (logger->accesslog_filename, "a+");
+	logger->accesslog_fd = fopen (logger->accesslog.buf, "a+");
 	if (logger->accesslog_fd == NULL) {
-		PRINT_ERROR("cherokee_logger_ncsa: error opening %s for append\n", logger->accesslog_filename); 
+		PRINT_ERROR("cherokee_logger_ncsa: error opening %s for append\n", logger->accesslog.buf); 
 		return ret_error;
 	}
 #ifndef _WIN32
 	fcntl (fileno (logger->accesslog_fd), F_SETFD, 1);
 #endif	
 
-        logger->errorlog_fd  = fopen (logger->errorlog_filename, "a+");
+        logger->errorlog_fd  = fopen (logger->errorlog.buf, "a+");
 	if (logger->errorlog_fd == NULL) {
-		PRINT_ERROR("cherokee_logger_ncsa: error opening %s for append\n", logger->errorlog_filename); 
+		PRINT_ERROR("cherokee_logger_ncsa: error opening %s for append\n", logger->errorlog.buf); 
 		return ret_error;
 	}
 #ifndef _WIN32
@@ -185,6 +195,9 @@ cherokee_logger_ncsa_init (cherokee_logger_ncsa_t *logger)
 ret_t
 cherokee_logger_ncsa_free (cherokee_logger_ncsa_t *logger)
 {
+	cherokee_buffer_mrproper (&logger->accesslog);
+	cherokee_buffer_mrproper (&logger->errorlog);
+
 	return close_output (logger);
 }
 

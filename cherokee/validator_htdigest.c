@@ -36,7 +36,7 @@ props_free (cherokee_validator_htdigest_props_t *props)
 }
 
 ret_t 
-cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_table_t **_props)
+cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_validator_props_t **_props)
 {
 	ret_t                                ret;
 	cherokee_config_node_t              *subconf;

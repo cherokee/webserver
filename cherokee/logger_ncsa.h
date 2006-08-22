@@ -39,17 +39,16 @@ typedef struct {
 
 	cherokee_boolean_t combined;
 
-	char *accesslog_filename;
-	char *errorlog_filename;
+	cherokee_buffer_t  accesslog;
+	cherokee_buffer_t  errorlog;
 
 	FILE *accesslog_fd;
 	FILE *errorlog_fd;
-
 } cherokee_logger_ncsa_t;
 
 
-ret_t cherokee_logger_ncsa_new       (cherokee_logger_t     **logger, cherokee_table_t *properties);
-ret_t cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t *logger, cherokee_table_t *properties);
+ret_t cherokee_logger_ncsa_new       (cherokee_logger_t     **logger, cherokee_config_node_t *config);
+ret_t cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t *logger, cherokee_config_node_t *config);
 
 /* virtual methods implementation
  */

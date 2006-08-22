@@ -55,7 +55,7 @@ typedef void  (* module_func_get_name_t)  (void  *, const char **name);
 typedef ret_t (* module_func_configure_t) (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props);
 
 
-/* Data types for module_info
+/* Data types for the plug-ins: module_info
  */
 typedef struct {
 	cherokee_module_type_t    type;
@@ -74,7 +74,7 @@ typedef struct {
 } cherokee_module_info_validator_t;
 
 
-/* Data types for module
+/* Data types for module objects
  */
 typedef struct {
 	void                     *init ;      /* constructor step endding */
