@@ -175,29 +175,3 @@ cherokee_matching_list_match (cherokee_matching_list_t *mlist, char *match)
 }
 
 
-static ret_t 
-add_allow_cb  (char *val, void *data)
-{
-	return cherokee_matching_list_add_allow (MLIST(data), val);
-}
-
-static ret_t 
-add_deny_cb  (char *val, void *data)
-{
-	return cherokee_matching_list_add_deny (MLIST(data), val);
-}
-
-
-ret_t 
-cherokee_matching_list_configure (cherokee_matching_list_t *mlist, cherokee_config_node_t *config)
-{
-	ret_t ret;
-
-	ret = cherokee_config_node_read_list (config, "allow", add_allow_cb, mlist);
-	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
-
-	ret = cherokee_config_node_read_list (config, "deny", add_deny_cb, mlist);
-	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
-
-	return ret_ok;
-}
