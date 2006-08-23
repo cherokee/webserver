@@ -68,10 +68,11 @@ static char *month[]   = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 #define IN_ADDR(c) ((struct in_addr) (c).sin_addr)
 
 
-cherokee_module_info_t MODULE_INFO(w3c) = {
-	cherokee_logger,            /* type     */
-	cherokee_logger_w3c_new     /* new func */
-};
+ret_t 
+cherokee_logger_w3c_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props)
+{
+	return ret_ok;
+}
 
 
 ret_t
@@ -356,6 +357,7 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 
 /* Library init function
  */
+MODULE_INFO_INIT_EASY (logger, w3c);
 
 static cherokee_boolean_t _w3c_is_init = false;
 

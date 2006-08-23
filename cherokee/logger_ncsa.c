@@ -64,10 +64,13 @@ static char *month[] = {
 };
 
 
-cherokee_module_info_t MODULE_INFO(ncsa) = {
-	cherokee_logger,            /* type     */
-	cherokee_logger_ncsa_new    /* new func */
-};
+
+ret_t 
+cherokee_logger_ncsa_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props)
+{
+	return ret_ok;
+}
+
 
 ret_t
 cherokee_logger_ncsa_new (cherokee_logger_t **logger, cherokee_config_node_t *config)
@@ -424,6 +427,7 @@ cherokee_logger_ncsa_reopen (cherokee_logger_ncsa_t *logger)
 
 /*   Library init function
  */
+MODULE_INFO_INIT_EASY (logger, ncsa);
 
 static cherokee_boolean_t _ncsa_is_init = false;
 

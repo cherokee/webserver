@@ -31,7 +31,7 @@ cherokeeconfdir = $(sysconfdir)/cherokee
 
 CONFS_PRE = \
 cherokee.conf.sample.pre \
-cherokee.conf.performance.pre
+performance.conf.sample.pre
 
 CONFS_DONE =      \
 mime.types.sample \
@@ -90,7 +90,7 @@ install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample ; then \
 		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample"; \
 	else \
-		$(INSTALL_DATA) $(top_builddir)/cherokee.conf.performance $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample; \
+		$(INSTALL_DATA) $(top_builddir)/performance.conf.sample $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.types ; then \
 		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mime.types"; \

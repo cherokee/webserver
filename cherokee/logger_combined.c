@@ -27,10 +27,12 @@
 #include "module_loader.h"
 
 
-cherokee_module_info_t MODULE_INFO(combined) = {
-	cherokee_logger,              /* type     */
-	cherokee_logger_combined_new  /* new func */
-};
+
+ret_t 
+cherokee_logger_combined_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props)
+{
+	return cherokee_logger_ncsa_configure (conf, srv, props);
+}
 
 
 ret_t
@@ -70,6 +72,7 @@ cherokee_logger_combined_new (cherokee_logger_t **logger, cherokee_config_node_t
 
 /* Library init function
  */
+MODULE_INFO_INIT_EASY (logger, combined);
 
 static cherokee_boolean_t _combined_is_init = false;
 

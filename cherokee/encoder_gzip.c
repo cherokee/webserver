@@ -49,12 +49,12 @@ enum {
 
 
 #define gzip_header_len 10
-static char gzip_header[gzip_header_len] = {0x1F, 0x8B,   /* 16 bits: IDentification     */
-					    Z_DEFLATED,   /*  b bits: Compression Method */
-					    0,            /*  8 bits: FLags              */
-					    0, 0, 0, 0,   /* 32 bits: Modification TIME  */
-					    0,            /*  8 bits: Extra Flags        */
-					    OS_UNIX};     /*  8 bits: Operating System   */  
+static unsigned char gzip_header[gzip_header_len] = {0x1F, 0x8B,   /* 16 bits: IDentification     */
+						     Z_DEFLATED,   /*  b bits: Compression Method */
+						     0,            /*  8 bits: FLags              */
+						     0, 0, 0, 0,   /* 32 bits: Modification TIME  */
+						     0,            /*  8 bits: Extra Flags        */
+						     OS_UNIX};     /*  8 bits: Operating System   */  
 
 /* GZIP
  * ====
@@ -62,10 +62,11 @@ static char gzip_header[gzip_header_len] = {0x1F, 0x8B,   /* 16 bits: IDentifica
  *
  */
 
-cherokee_module_info_t MODULE_INFO(gzip) = {
-	cherokee_encoder,            /* type     */
-	cherokee_encoder_gzip_new    /* new func */
-};
+ret_t 
+cherokee_encoder_gzip_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props)
+{
+	return ret_ok;
+}
 
 ret_t 
 cherokee_encoder_gzip_new (cherokee_encoder_gzip_t **encoder)
@@ -77,8 +78,8 @@ cherokee_encoder_gzip_new (cherokee_encoder_gzip_t **encoder)
 	 */
 	cherokee_encoder_init_base (ENCODER(n));
 
-	MODULE(n)->init         = (encoder_func_encode_t) cherokee_encoder_gzip_init;
-	MODULE(n)->free         = (encoder_func_free_t) cherokee_encoder_gzip_free;
+	MODULE(n)->init         = (encoder_func_init_t) cherokee_encoder_gzip_init;
+	MODULE(n)->free         = (module_func_free_t) cherokee_encoder_gzip_free;
 	ENCODER(n)->add_headers = (encoder_func_add_headers_t) cherokee_encoder_gzip_add_headers;
 	ENCODER(n)->encode      = (encoder_func_encode_t) cherokee_encoder_gzip_encode;
 	ENCODER(n)->flush       = (encoder_func_flush_t) cherokee_encoder_gzip_flush;
@@ -314,6 +315,9 @@ cherokee_encoder_gzip_flush (cherokee_encoder_gzip_t *encoder, cherokee_buffer_t
 
 /*   Library init function
  */
+
+MODULE_INFO_INIT_EASY (encoder, gzip);
+
 
 static cherokee_boolean_t _gzip_is_init = false;
 

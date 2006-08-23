@@ -162,16 +162,6 @@ if test "$ac_cv_c_inline" != no; then
   AC_DEFINE(HAVE_INLINE, 1, [Compile supports inline])
 fi
 
-AC_PROG_YACC
-if test "$YACC" != "bison -y"; then
-    AC_MSG_ERROR([Bison is required to build Cherokee])
-fi
-
-AM_PROG_LEX
-if test "$LEX" != "flex"; then 
-    AC_MSG_ERROR([Flex is required to build Cherokee])
-fi
-
 dnl
 dnl Check for headers
 dnl

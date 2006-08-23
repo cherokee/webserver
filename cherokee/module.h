@@ -113,6 +113,13 @@ typedef struct {
 
 /* Handy definitions
  */
+#define MODULE_INFO_INIT_EASY(type, name)		                 \
+ 	 cherokee_module_info_t MODULE_INFO(name) = { 	                 \
+		  cherokee_ ## type,                                     \
+                  (void *) cherokee_ ## type ## _ ## name ## _new,	 \
+		  (void *) cherokee_ ## type ## _ ## name ## _configure, \
+		}
+
 #define HANDLER_MODULE_INFO_INIT_EASY(name, methods)	           \
  	cherokee_module_info_handler_t MODULE_INFO(name) = { 	   \
 		{ cherokee_handler,                                \
