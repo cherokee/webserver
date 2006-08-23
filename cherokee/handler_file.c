@@ -189,9 +189,11 @@ check_cached (cherokee_handler_file_t *n)
 		int    tmp_len;
 		CHEROKEE_TEMP(tmp,100);
 		
-		tmp_len = snprintf (tmp, tmp_size, "%lx=" FMT_OFFSET "x", n->info->st_mtime, n->info->st_size);
-		
-		if (strncmp (header, tmp, tmp_len) == 0) {
+		tmp_len = snprintf (tmp, tmp_size, "%lx=" FMT_OFFSET_HEX, n->info->st_mtime, n->info->st_size);
+
+		if ((header_len == tmp_len) && 
+		    (strncmp (header, tmp, tmp_len) == 0)) 
+		{
 			conn->error_code = http_not_modified;
 			return ret_error;				
 		}
@@ -510,11 +512,6 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl,
 						&fhdl->offset,                     /* off_t             *offset */
 						&sent);                            /* ssize_t           *sent   */
 
-		if (ret == ret_no_sys) {
-			fhdl->using_sendfile = false;
-			goto exit_sendfile;
-		}
-
 		/* cherokee_handler_file_init() activated the TCP_CORK flags.
 		 * After it, the header was sent.  And now, the first
 		 * chunk of the file with sendfile().  It's time to turn
@@ -522,6 +519,11 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl,
 		 */
 		if (conn->tcp_cork) {
 			cherokee_connection_set_cork (conn, 0);
+		}
+
+		if (ret == ret_no_sys) {
+			fhdl->using_sendfile = false;
+			goto exit_sendfile;
 		}
 
 		if (ret < ret_ok) return ret;
@@ -576,24 +578,25 @@ ret_t
 cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 				   cherokee_buffer_t       *buffer)
 {
-	ret_t     ret;
-	off_t     length;
-	struct tm modified_tm;
+	ret_t                  ret;
+	off_t                  length;
+	struct tm              modified_tm;
+	cherokee_connection_t *conn         = HANDLER_CONN(fhdl);
 
 	/* We stat()'ed the file in the handler constructor
 	 */
-	length = HANDLER_CONN(fhdl)->range_end - HANDLER_CONN(fhdl)->range_start;		
+	length = conn->range_end - conn->range_start;		
 	if (length < 0) {
 		length = 0;
 	}
 
-	if (HANDLER_CONN(fhdl)->encoder == NULL) {
-		if(HANDLER_CONN(fhdl)->error_code == http_partial_content) {
+	if (conn->encoder == NULL) {
+		if (conn->error_code == http_partial_content) {
 			cherokee_buffer_add_va (buffer,
 						"Content-Range: bytes " FMT_OFFSET "-"
 						FMT_OFFSET "/" FMT_OFFSET CRLF,
-						HANDLER_CONN(fhdl)->range_start,
-						HANDLER_CONN(fhdl)->range_end - 1,
+						conn->range_start,
+						conn->range_end - 1,
 						fhdl->info->st_size);
 		}
 		
@@ -602,7 +605,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	} else {
 		/* Can't use Keep-alive w/o "Content-length:", so
 		 */
-		HANDLER_CONN(fhdl)->keepalive = 0;
+		conn->keepalive = 0;
 	}
 
 	/* Add MIME related headers: 
@@ -627,8 +630,8 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 	/* Etag
 	 */
-	if (HANDLER_CONN(fhdl)->header.version >= http_version_11) { 
-		cherokee_buffer_add_va (buffer, "Etag: %lx=%lx"CRLF, fhdl->info->st_mtime, fhdl->info->st_size);
+	if (conn->header.version >= http_version_11) { 
+		cherokee_buffer_add_va (buffer, "Etag: %lx=" FMT_OFFSET_HEX CRLF, fhdl->info->st_mtime, fhdl->info->st_size);
 	}
 
 	/* Last-Modified:
