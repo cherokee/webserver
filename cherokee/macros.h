@@ -41,15 +41,7 @@
 #  define CHEROKEE_END_DECLS
 #endif
 
-#ifdef __func__
-# define __cherokee_func__ __func__
-#else
-# ifdef __FUNCTION__
-#  define __cherokee_func__ __FUNCTION__
-# else
-#  define __cherokee_func__ "<unknown function>"
-# endif
-#endif
+#define __cherokee_func__ __func__
 
 #ifndef TRUE
 #  define TRUE 1
