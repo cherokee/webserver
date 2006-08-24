@@ -775,6 +775,7 @@ process_active_connections (cherokee_thread_t *thd)
 			}
 			
 			conn->phase = phase_setup_connection;
+
 			/* fall down */
 			
 		case phase_setup_connection: {
@@ -796,7 +797,8 @@ process_active_connections (cherokee_thread_t *thd)
 			/* Is it already an error response?
 			 */
 			if (http_type_300(conn->error_code) ||
-			    http_type_400(conn->error_code)) 
+			    http_type_400(conn->error_code) ||
+			    http_type_500(conn->error_code)) 
 			{
 				cherokee_connection_setup_error_handler (conn);
 				conn->phase = phase_init;
@@ -883,7 +885,7 @@ process_active_connections (cherokee_thread_t *thd)
 					conn->auth_type = vsrv->default_handler->authentication;
 
 				if (cherokee_buffer_is_empty (&conn->web_directory) && (! matched_req)) {
-					cherokee_buffer_add (&conn->web_directory, "/", 1);
+					cherokee_buffer_add_str (&conn->web_directory, "/");
 				}
 			}
 
