@@ -52,8 +52,10 @@ typedef struct {
 	off_t                  offset;
 	struct stat           *info;
 	cherokee_mime_entry_t *mime;
-	cherokee_boolean_t     using_sendfile;
 	struct stat            cache_info;	
+
+	cherokee_boolean_t     using_sendfile;
+	cherokee_boolean_t     not_modified;
 } cherokee_handler_file_t;
 
 
