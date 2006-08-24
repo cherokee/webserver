@@ -683,13 +683,16 @@ process_active_connections (cherokee_thread_t *thd)
 				ret = cherokee_header_has_header (&conn->header,
 								  &conn->incoming_header, 
 								  conn->incoming_header.len);
-				if (ret == ret_ok) {
+				switch (ret) {
+				case ret_ok:
 					goto phase_reading_header_EXIT;
-				}
-				if (ret != ret_not_found) {
-					/* Too many initial CRLF */
+				case ret_not_found:
+					break;
+				case ret_error:
 					purge_closed_connection (thd, conn);
 					continue;
+				default:
+					RET_UNKNOWN(ret);
 				}
 			}
 
@@ -722,14 +725,24 @@ process_active_connections (cherokee_thread_t *thd)
 			/* May it already has the full header
 			 */
 			ret = cherokee_header_has_header (&conn->header, &conn->incoming_header, len+4);
-			if (ret != ret_ok) {
+			switch (ret) {
+			case ret_ok:
+				break;
+			case ret_not_found:
 				conn->phase = phase_reading_header;
 				continue;
+			case ret_error:
+				purge_closed_connection (thd, conn);
+				continue;
+			default:
+				RET_UNKNOWN(ret);
 			}
+
 			/* fall down */
 
 		phase_reading_header_EXIT:
 			conn->phase = phase_processing_header;
+
 			/* fall down */
 
 		case phase_processing_header:

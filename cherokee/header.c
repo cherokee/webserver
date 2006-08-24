@@ -932,8 +932,8 @@ cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, i
 
 	/* It could be a partial header, or maybe a POST request
 	 */
-	if (unlikely((end = strstr(start, CRLF_CRLF)) == NULL)) {
-		if ((end = strstr(start, LF_LF)) == NULL)
+	if (unlikely ((end = strstr(start, CRLF_CRLF)) == NULL)) {
+		if ((end = strstr (start, LF_LF)) == NULL)
 			return ret_not_found;
 
 		/* Found uncommon / non standard EOH, set header length 
