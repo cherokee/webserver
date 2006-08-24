@@ -174,10 +174,14 @@ cherokee_handler_error_init (cherokee_handler_error_t *hdl)
 	ret_t                  ret;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
-	/* Generate the error web page
+	/* Generate the error web page if needed. Some HTTP responses
+	 * codes should not include body because it's fobidden by the
+	 * RFC.
 	 */
-	ret = build_hardcoded_response_page (conn, hdl->content);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (http_code_with_body (conn->error_code)) {
+		ret = build_hardcoded_response_page (conn, hdl->content);
+		if (unlikely(ret < ret_ok)) return ret;
+	}
 
 	return ret_ok;
 }
