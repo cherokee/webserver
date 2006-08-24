@@ -1,40 +1,21 @@
+# Icons
 #
-# File: Special files
-#
-file {
-	readme.png   *README*
-	bomb.png     core
-}
+icons!default = unknown.png
+icons!directory = folder.png
+icons!parent_directory = back.png
 
-#
-# Suffix: File extensions to Icons
-#
-suffix {
-	text.png        txt, text
-	image.png       jpg, jpeg, jpe, png, gif, xcf, bmp, pcx, tiff, tif, cdr, psd, xpm, xbm
-	sound.png       au, snd, mid, midi, kar, mpga, mpega, mp2, mp3, m3u, sid, wav, aif, aiff, aifc, gsm, m3u, wma, wax, ra, rm, ram, pls, sd2, ogg
-	movie.png       avi, ogg
-	compressed.png  tar, gz, bz2, zip, rar, ace, lha, Z
-	binary.png      bin, exe, com, msi
-	script.png      sh, csh, ksh, tcl, tk, py, pl, php
-	tex.png         tex, latex, ltx, sty, cls
-	ps.png          ps, eps, ai
-	pdf.png         pdf
-	iso.png         iso, nrg, cue
-	java.png        java, class, jar
-}
+icons!file!core = core
+icons!file!*README* = readme.png
 
-#
-# Directory: Icon for directories
-#
-Directory folder.png
-
-#
-# ParentDirectory: Parent Directory icon
-#
-ParentDirectory back.png
-
-#
-# Default: Icon for the rest
-#
-Default unknown.png
+icons!suffix!text.png = txt,text
+icons!suffix!image.png = jpg,jpeg,jpe,png,gif,xcf,bmp,pcx,tiff,tif,cdr,psd,xpm,xbm
+icons!suffix!sound.png = au,snd,mid,midi,kar,mpga,mpega,mp2,mp3,m3u,sid,wav,aif,aiff,aifc,gsm,m3u,wma,wax,ra,rm,ram,pls,sd2,ogg
+icons!suffix!movie.png = avi,ogg
+icons!suffix!compressed.png = tar,gz,bz2,zip,rar,ace,lha,Z
+icons!suffix!binary.png = bin,exe,com,msi
+icons!suffix!script.png = sh,csh,ksh,tcl,tk,py,pl,php
+icons!suffix!tex.png = tex,latex,ltx,sty,cls
+icons!suffix!ps.png = ps,eps,ai
+icons!suffix!pdf.png = pdf
+icons!suffix!iso.png = iso,ngr,cue
+icons!suffix!java.png = java,class,jar

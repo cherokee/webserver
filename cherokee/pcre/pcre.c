@@ -5566,9 +5566,7 @@ i, and fc and c, can be the same variables. */
 #define fc c
 
 const uschar *callpat;             /* Many of these variables are used ony */
-// const uschar *charptr;          /* small blocks of the code. My normal  */
 const uschar *data;                /* style of coding would have declared  */
-// const uschar *lastptr;          /* them within each of those blocks.    */
 const uschar *next;                /* However, in order to accommodate the */
 const uschar *pp;                  /* version of this code that uses an    */
 const uschar *prev;                /* external "stack" implemented on the  */

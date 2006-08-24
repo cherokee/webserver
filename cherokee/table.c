@@ -203,7 +203,7 @@ cherokee_table_foreach (cherokee_table_t *tab, cherokee_table_foreach_func_t fun
 {
 	int re;
 
-	re = avl_iterate_inorder (tab, foreach_wrapper, func, NULL, NULL);
+	re = avl_iterate_inorder (tab, foreach_wrapper, (void *)func, NULL, NULL);
 	if (unlikely (re != 0)) return ret_error;
 
 	return ret_ok;

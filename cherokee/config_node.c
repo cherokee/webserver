@@ -23,6 +23,11 @@
  */
 
 #include "common-internal.h"
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include "config_node.h"
 #include "util.h"
 #include "list_ext.h"
@@ -111,6 +116,66 @@ add_new_child (cherokee_config_node_t *entry, cherokee_buffer_t *key)
 	return n;
 }
 
+
+static ret_t
+do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path) 
+{
+	int         re;
+	struct stat info;
+
+	re = stat (path->buf, &info);
+	if (re < 0) {
+		PRINT_MSG ("Could not access '%s'\n", path->buf);
+		return ret_error;
+	}
+
+	if (S_ISREG(info.st_mode)) {
+		return cherokee_config_node_parse_file (conf, path->buf);
+
+	} else if (S_ISDIR(info.st_mode)) {
+		DIR              *dir;
+		struct dirent    *entry;
+		int               entry_len;
+		
+		dir = opendir (path->buf);
+		if (dir == NULL) return ret_error;
+		
+		while ((entry = readdir(dir)) != NULL) {
+			ret_t             ret;
+			cherokee_buffer_t full_new = CHEROKEE_BUF_INIT;
+			
+			/* Ignore backup files
+			 */
+			entry_len = strlen(entry->d_name);
+			
+			if ((entry->d_name[0] == '.') ||
+			    (entry->d_name[0] == '#') ||
+			    (entry->d_name[entry_len-1] == '~'))
+			{
+				continue;
+			}
+			
+			ret = cherokee_buffer_add_va (&full_new, "%s/%s", path->buf, entry->d_name);
+			if (unlikely (ret != ret_ok)) return ret;
+
+			ret = cherokee_config_node_parse_file (conf, full_new.buf);
+			if (ret != ret_ok) {
+				cherokee_buffer_mrproper (&full_new);
+				return ret;
+			}
+
+			cherokee_buffer_mrproper (&full_new);
+		}
+			
+		closedir (dir);
+		return ret_ok;
+	} 
+	
+	SHOULDNT_HAPPEN;
+	return ret_error;
+}
+
+
 ret_t 
 cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t *val)
 {
@@ -120,6 +185,12 @@ cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cheroke
 	const char             *begin   = key;
 	cherokee_buffer_t       tmp     = CHEROKEE_BUF_INIT;
 	cherokee_boolean_t      final   = false;
+	
+	/* 'include' is a special case
+	 */
+	if (equal_str (key, "include")) {
+		return do_include (conf, val);
+	}
 
 	do {
 		/* Extract current child
@@ -156,11 +227,13 @@ cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cheroke
 	return ret_ok;
 }
 
+
 ret_t 
 cherokee_config_node_add_buf (cherokee_config_node_t *conf, cherokee_buffer_t *key, cherokee_buffer_t *val)
 {
 	return cherokee_config_node_add (conf, key->buf, val);
 }
+
 
 ret_t
 cherokee_config_node_get (cherokee_config_node_t *conf, const char *key, cherokee_config_node_t **entry)
@@ -207,6 +280,7 @@ cherokee_config_node_get (cherokee_config_node_t *conf, const char *key, cheroke
 	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 }
+
 
 ret_t 
 cherokee_config_node_get_buf (cherokee_config_node_t *conf, cherokee_buffer_t *key, cherokee_config_node_t **entry)
@@ -309,6 +383,7 @@ error:
 	cherokee_buffer_mrproper (&val);
 	return ret_error;
 }
+
 
 ret_t 
 cherokee_config_node_parse_file (cherokee_config_node_t *conf, const char *file)
@@ -426,6 +501,7 @@ convert_to_list_step (char *entry, void *data)
 {
 	return cherokee_list_add_tail ((list_t *)data, strdup(entry));
 }
+
 
 ret_t
 cherokee_config_node_convert_list (cherokee_config_node_t *conf, const char *key, list_t *list)

@@ -63,7 +63,7 @@ cherokee_list_add_tail (list_t *head, void *item)
 
 
 ret_t 
-cherokee_list_free (list_t *head, void (*free_func) (void *))
+cherokee_list_free (list_t *head, cherokee_list_free_func free_func)
 {
 	   list_t *i, *tmp;
 
@@ -78,7 +78,7 @@ cherokee_list_free (list_t *head, void (*free_func) (void *))
 
 
 ret_t 
-cherokee_list_free_item (list_t *head, void (*free_func) (void *))
+cherokee_list_free_item (list_t *head, cherokee_list_free_func free_func)
 {
 	list_del (head);
 	

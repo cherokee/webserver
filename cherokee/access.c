@@ -433,7 +433,7 @@ cherokee_access_add (cherokee_access_t *entry, char *ip_or_subnet)
 	if ((strchr(ip_or_subnet, '.') != NULL) && (mask == 32)) {
 		sep = *slash;
 		*slash = '\0';
-		return cherokee_access_add_ip (entry, ip_or_subnet);		
+		ret = cherokee_access_add_ip (entry, ip_or_subnet);		
 		*slash = sep;
 		return ret;
 	}

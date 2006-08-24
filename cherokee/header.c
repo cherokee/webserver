@@ -876,7 +876,7 @@ cherokee_header_copy_version (cherokee_header_t *hdr, cherokee_buffer_t *buf)
 	const char *tmp;
 	cuint_t     len;
 
-	ret = cherokee_http_version_to_string (HDR_METHOD(hdr), &tmp, &len);
+	ret = cherokee_http_version_to_string (HDR_VERSION(hdr), &tmp, &len);
 	if (unlikely(ret != ret_ok)) return ret;
 
 	return cherokee_buffer_add (buf, (char *)tmp, len);

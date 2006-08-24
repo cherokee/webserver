@@ -400,7 +400,7 @@ init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, 
 		if (ret != ret_ok) return ret;
 
 		if (info->configure) {
-			ret = info->configure (subconf, vserver->server_ref, &entry->handler_properties);
+			ret = info->configure (subconf, vserver->server_ref, (void **) &entry->handler_properties);
 			if (ret != ret_ok) return ret;
 		}
 		

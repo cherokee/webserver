@@ -53,7 +53,7 @@ cherokee_exts_table_new (cherokee_exts_table_t **et)
 ret_t 
 cherokee_exts_table_free (cherokee_exts_table_t *et)
 {
-	cherokee_list_free (&et->list, (void *)cherokee_config_entry_free);
+	cherokee_list_free (&et->list, (cherokee_list_free_func) cherokee_config_entry_free);
 	cherokee_table_mrproper (&et->table);
 
 	free (et);

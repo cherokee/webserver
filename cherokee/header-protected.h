@@ -80,6 +80,7 @@ struct cherokee_header {
 
 
 #define HDR_METHOD(h)   (HDR(h)->method)
+#define HDR_VERSION(h)  (HDR(h)->version)
 #define HDR_RESPONSE(h) (HDR(h)->response)
 
 

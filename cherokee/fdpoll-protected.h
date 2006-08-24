@@ -39,6 +39,7 @@ typedef ret_t (* fdpoll_func_is_full_t)  (void  *fdpoll);
 
 ret_t fdpoll_epoll_new  (cherokee_fdpoll_t **fdp, int sys_limit, int limit);
 ret_t fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit);
+ret_t fdpoll_port_new   (cherokee_fdpoll_t **fdp, int sys_limit, int limit);
 ret_t fdpoll_poll_new   (cherokee_fdpoll_t **fdp, int sys_limit, int limit);
 ret_t fdpoll_select_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit);
 ret_t fdpoll_win32_new  (cherokee_fdpoll_t **fdp, int sys_limit, int limit);

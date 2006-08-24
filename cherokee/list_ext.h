@@ -28,6 +28,8 @@
 #include "common.h"
 #include "list.h"
 
+typedef void (*cherokee_list_free_func) (void *);
+
 typedef struct {
 	   list_t  list;
 	   void   *info;
@@ -40,8 +42,8 @@ typedef struct {
 ret_t cherokee_list_add              (list_t *head, void *item);
 ret_t cherokee_list_add_tail         (list_t *head, void *item);
 
-ret_t cherokee_list_free             (list_t *head, void (*free_func) (void *));
-ret_t cherokee_list_free_item        (list_t *head, void (*free_func) (void *));
+ret_t cherokee_list_free             (list_t *head, cherokee_list_free_func free_func);
+ret_t cherokee_list_free_item        (list_t *head, cherokee_list_free_func free_func);
 ret_t cherokee_list_free_item_simple (list_t *head);
 
 #endif /* CHEROKEE_LIST_EXT_H */

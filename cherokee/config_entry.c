@@ -128,7 +128,7 @@ cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_modu
 		return ret_error;
 	}
 
-	entry->handler_new_func = modinfo->new_func;
+	entry->handler_new_func = (handler_func_new_t) modinfo->new_func;
 	entry->handler_methods  = MODULE_INFO_HANDLER(modinfo)->valid_methods;
 
 	return ret_ok;

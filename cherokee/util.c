@@ -595,12 +595,12 @@ reswitch:
 			base = 10;
 			goto number;
 		case 'f':
-			ul = va_arg(ap, double); // FIXME: Add float numbers support
+			ul = va_arg(ap, double); /* FIXME: Add float numbers support */
 			len += 30; 
 			base = 10;
 			goto number;			
 		case 'p':
-			len += 2; /* Pointer: "0x" + hex value */
+			len += 2;                /* Pointer: "0x" + hex value */
 		case 'x':
 			ul = lflag ? va_arg(ap, culong_t) : va_arg(ap, int);
 			base = 16;

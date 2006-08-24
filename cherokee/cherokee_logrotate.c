@@ -24,6 +24,10 @@
 
 #include <cherokee/cherokee.h>
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 #include <string.h>
 #include <sys/types.h>
 #include <dirent.h>
