@@ -9,9 +9,9 @@ m4datadir = "$(datadir)/aclocal"
 m4data_DATA = cherokee.m4
 
 # Man pag
-man_MANS = \
-cget.1 \
-cherokee.1 \
+man_MANS =        \
+cget.1            \
+cherokee.1        \
 cherokee-config.1 \
 cherokee_logrotate.1
 
@@ -31,6 +31,7 @@ cherokeeconfdir = $(sysconfdir)/cherokee
 
 CONFS_PRE =              \
 cherokee.conf.sample.pre \
+mods-ssl.sample.pre      \
 performance.conf.sample.pre
 
 CONFS_DONE =           \
@@ -49,7 +50,7 @@ cherokee.pc      \
 $(CONFS)
 
 COMPILATION_TESTS = \
-debian_testing.sh \
+debian_testing.sh   \
 debian_testing_chroot.sh
 
 
