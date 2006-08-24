@@ -1,2 +1,0 @@
-Internal configuration tree:
-%%widgetdebug%%
