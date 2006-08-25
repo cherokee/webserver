@@ -335,8 +335,7 @@ stat_local_directory (cherokee_handler_file_t *n, cherokee_connection_t *conn, c
 ret_t 
 cherokee_handler_file_init (cherokee_handler_file_t *n)
 {
-	int   ret;
-	char *ext;
+	ret_t                     ret;
 	cherokee_boolean_t        use_io   = false;
 	cherokee_iocache_entry_t *io_entry = NULL;
 	cherokee_connection_t    *conn     = HANDLER_CONN(n);
@@ -360,6 +359,17 @@ cherokee_handler_file_init (cherokee_handler_file_t *n)
 		conn->error_code = http_access_denied;
 		return ret_error;
 	}
+
+	/* Look for the mime type
+	 */
+#ifndef CHEROKEE_EMBEDDED
+	if (srv->mime != NULL) {
+		ext = strrchr (conn->request.buf, '.');
+		if (ext != NULL) {
+			ret = cherokee_mime_get_by_suffix (srv->mime, ext+1, &n->mime);
+		}
+	}
+#endif
 
 	/* Is it cached on the client?
 	 */
@@ -463,17 +473,6 @@ cherokee_handler_file_init (cherokee_handler_file_t *n)
 		}
 	}
 
-	/* Look for the mime type
-	 */
-#ifndef CHEROKEE_EMBEDDED
-	if (srv->mime != NULL) {
-		ext = strrchr (conn->request.buf, '.');
-		if (ext != NULL) {
-			ret = cherokee_mime_get_by_suffix (srv->mime, ext+1, &n->mime);
-		}
-	}
-#endif
-
 	/* Maybe use sendfile
 	 */
 #ifdef HAVE_SENDFILE
@@ -525,11 +524,29 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 				modified_tm.tm_min,
 				modified_tm.tm_sec);
 
+#ifndef CHEROKEE_EMBEDDED
+	/* Add MIME related headers: 
+	 * "Content-Type:" and "Cache-Control: max-age="
+	 */
+	if (fhdl->mime != NULL) {
+		cherokee_buffer_t *mime;
+		cuint_t            maxage;
+		
+		cherokee_mime_entry_get_type (fhdl->mime, &mime);
+		cherokee_buffer_add_str (buffer, "Content-Type: ");
+		cherokee_buffer_add_buffer (buffer, mime);
+		cherokee_buffer_add_str (buffer, CRLF);
+		
+		ret = cherokee_mime_entry_get_maxage (fhdl->mime, &maxage);             
+		if (ret == ret_ok) {
+			cherokee_buffer_add_va (buffer, "Cache-Control: max-age=%u"CRLF, maxage);
+		}
+	}
+#endif
+
 	/* If it's replying "304 Not Modified", we're done here
 	 */
 	if (fhdl->not_modified) {
-		cherokee_buffer_add_str (buffer, "Content-Length: 0" CRLF);
-
 		/* The handler will manage this special reply
 		 */
 		HANDLER(fhdl)->support |= hsupport_error;
@@ -562,26 +579,6 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 		 */
 		conn->keepalive = 0;
 	}
-
-	/* Add MIME related headers: 
-	 * "Content-Type:" and "Cache-Control: max-age="
-	 */
-#ifndef CHEROKEE_EMBEDDED
-	if (fhdl->mime != NULL) {
-		cherokee_buffer_t *mime;
-		cuint_t            maxage;
-
-		cherokee_mime_entry_get_type (fhdl->mime, &mime);
-		cherokee_buffer_add_str (buffer, "Content-Type: ");
-		cherokee_buffer_add_buffer (buffer, mime);
-		cherokee_buffer_add_str (buffer, CRLF);
-
-		ret = cherokee_mime_entry_get_maxage (fhdl->mime, &maxage);		
-		if (ret == ret_ok) {
-			cherokee_buffer_add_va (buffer, "Cache-Control: max-age=%d"CRLF, maxage);
-		}
-	}
-#endif
 
 	return ret_ok;
 }

@@ -207,6 +207,15 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 		SHOULDNT_HAPPEN;
 	}
 
+	/* "304 Not Modified" responses are managed by the individuals
+	 * handler, however this test ensures that it'll never send
+	 * wrong and unrelated headers in case that a 304 response is
+	 * managed by this handler. They should only include the
+	 * Last-Modified, ETag, Expires and Cache-Control headers.
+	 */
+	if (conn->error_code == http_not_modified)
+		return ret_ok;
+
 	/* Usual headers
 	 */
 	cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);

@@ -1351,6 +1351,9 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "listen_queue")) {
 		srv->listen_queue = atoi (conf->val.buf);
 
+	} else if (equal_buf_str (&conf->key, "thread_number")) {
+		srv->thread_num = atoi (conf->val.buf);
+
 	} else if (equal_buf_str (&conf->key, "sendfile_min")) {
 		srv->sendfile.min = atoi (conf->val.buf);
 

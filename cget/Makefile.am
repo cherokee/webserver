@@ -1,4 +1,4 @@
-## Cherokee: src/bench/Makefile.am  -*- makefile -*-
+## Cherokee: src/cget/Makefile.am  -*- makefile -*-
 
 INCLUDES = \
 -DCHEROKEE_COMPILATION \

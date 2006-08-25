@@ -903,12 +903,6 @@ cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, i
 		return ret_error;
 	}
 
-	if (unlikely (tail_len < 0)) {
-		/* Bad parameter value 
-		 */
-		return ret_error;
-	}
-
 	if ((crlf_len > 0) && (crlf_len < (size_t) buffer->len)) {
 		/* Found heading CRLFs and their length is less than
 		 * buffer length so we have to move the real content
@@ -924,6 +918,12 @@ cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, i
 	if (unlikely (buffer->len < 18)) {
 		return ret_not_found;
 	}
+
+	if (unlikely (tail_len < 0)) {
+		/* Bad parameter value 
+		 */
+		return ret_error;
+        }
 
 	/* Look for the starting point
 	 */
