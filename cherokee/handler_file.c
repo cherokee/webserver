@@ -364,6 +364,8 @@ cherokee_handler_file_init (cherokee_handler_file_t *n)
 	 */
 #ifndef CHEROKEE_EMBEDDED
 	if (srv->mime != NULL) {
+		char *ext;
+
 		ext = strrchr (conn->request.buf, '.');
 		if (ext != NULL) {
 			ret = cherokee_mime_get_by_suffix (srv->mime, ext+1, &n->mime);

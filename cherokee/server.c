@@ -1457,7 +1457,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		if (ret != ret_ok) return ret;
 
 	} else {
-		PRINT_MSG ("ERROR: Server: Unknown key %s\n", key);
+		PRINT_MSG ("ERROR: Server parser: Unknown key \"%s\"\n", key);
 		return ret_error;
 	}
 	

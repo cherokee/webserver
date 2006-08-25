@@ -375,48 +375,52 @@ add_access (char *address, void *data)
 
 
 static ret_t 
-init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, cherokee_config_entry_t *entry)
+init_entry_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
-	int                        pri;
 	cherokee_buffer_t         *tmp;
-	cherokee_module_info_t    *info;
-	cherokee_config_node_t    *subconf;
+	cherokee_module_info_t    *info    = NULL;
+	cherokee_virtual_server_t *vserver = ((void **)data)[0];
+	cherokee_config_entry_t   *entry   = ((void **)data)[1];
 
-	/* Priority
-	 */
-	ret = cherokee_config_node_read_int (config, "priority", &pri);
-	if (ret == ret_ok) {
-		entry->priority = pri;
-	}
-
-	/* Handler
-	 */
-	ret = cherokee_config_node_get (config, "handler", &subconf);
-	if (ret == ret_ok) {
-		tmp = &subconf->val;
-
-		ret = cherokee_module_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
+	if (equal_buf_str (&conf->key, "priority")) {
+		entry->priority = atoi(conf->val.buf);
+		
+	} else if (equal_buf_str (&conf->key, "allow_from")) {
+		ret = cherokee_config_node_read_list (conf, NULL, add_access, entry);
 		if (ret != ret_ok) return ret;
 
+	} else if (equal_buf_str (&conf->key, "document_root")) {
+		cherokee_config_node_read_path (conf, NULL, &tmp);
+
+		if (entry->document_root == NULL) 
+			cherokee_buffer_new (&entry->document_root);
+		else
+			cherokee_buffer_clean (entry->document_root);
+
+		TRACE(ENTRIES, "DocumentRoot: %s\n", tmp->buf);
+		cherokee_buffer_add_buffer (entry->document_root, tmp);
+
+	} else if (equal_buf_str (&conf->key, "handler")) {
+		tmp = &conf->val;
+		
+		ret = cherokee_module_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
+		if (ret != ret_ok) return ret;
+		
 		if (info->configure) {
-			ret = info->configure (subconf, vserver->server_ref, (void **) &entry->handler_properties);
+			ret = info->configure (conf, vserver->server_ref, (void **) &entry->handler_properties);
 			if (ret != ret_ok) return ret;
 		}
 		
 		TRACE(ENTRIES, "Handler: %s\n", tmp->buf);
 		cherokee_config_entry_set_handler (entry, info);		
-	}
 
-	/* Authentication
-	 */
-	ret = cherokee_config_node_get (config, "auth", &subconf);
-	if (ret == ret_ok) {
+	} else if (equal_buf_str (&conf->key, "auth")) {
 		cherokee_module_info_validator_t *vinfo;
 	   
 		/* Load module
 		 */
-		tmp = &subconf->val;
+		tmp = &conf->val;
 
 		ret = cherokee_module_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
 		if (ret != ret_ok) return ret;
@@ -424,7 +428,7 @@ init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, 
 		entry->validator_new_func = info->new_func;
 
 		if (info->configure) {
-			ret = info->configure (subconf, vserver->server_ref, &entry->validator_properties);
+			ret = info->configure (conf, vserver->server_ref, (void **) &entry->validator_properties);
 			if (ret != ret_ok) return ret;
 		}
 
@@ -432,7 +436,7 @@ init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, 
 		 */
 		vinfo = (cherokee_module_info_validator_t *)info;
 
-		ret = cherokee_validator_configure (subconf, entry);
+		ret = cherokee_validator_configure (conf, entry);
 		if (ret != ret_ok) return ret;
 
 		if ((entry->authentication & vinfo->valid_methods) != entry->authentication) {
@@ -441,28 +445,24 @@ init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, 
 		}		
 
 		TRACE(ENTRIES, "Validator: %s\n", tmp->buf);
+
+	} else {
+		PRINT_MSG ("ERROR: Virtual Server parser: Unknown key \"%s\"\n", conf->key.buf);
+		return ret_error;
 	}
 
-	/* DocumentRoot
-	 */
-	ret = cherokee_config_node_read_path (config, "document_root", &tmp);
-	if (ret == ret_ok) {
-		if (entry->document_root == NULL) 
-			cherokee_buffer_new (&entry->document_root);
-		else
-			cherokee_buffer_clean (entry->document_root);
+	return ret_ok;
+}
 
-		TRACE(ENTRIES, "DocumentRoot: %s\n", tmp->buf);
-		cherokee_buffer_add_buffer (entry->document_root, tmp);
-	}
 
-	/* Allow from
-	 */
-	ret = cherokee_config_node_get (config, "allow_from", &subconf);
-	if (ret == ret_ok) {
-		ret = cherokee_config_node_read_list (subconf, NULL, add_access, entry);
-		if (ret != ret_ok) return ret;
-	}
+static ret_t 
+init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, cherokee_config_entry_t *entry)
+{
+	ret_t  ret;
+	void  *params[2] = { vserver, entry };
+
+	ret = cherokee_config_node_while (config, init_entry_property, (void *)params);
+	if (ret != ret_ok) return ret;
 
 	return ret_ok;
 }

@@ -5,7 +5,7 @@ MAGIC   = "This is th magic string"
 
 CONF = """
 vserver!default!directory!/inherit3/dir1/dir2/dir3!handler = phpcgi
-vserver!default!directory!/inherit3/dir1/dir2/dir3!interpreter = %s
+vserver!default!directory!/inherit3/dir1/dir2/dir3!handler!interpreter = %s
 vserver!default!directory!/inherit3/dir1/dir2/dir3!priority = 720
 
 vserver!default!directory!/inherit3!handler = file
