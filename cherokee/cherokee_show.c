@@ -22,6 +22,10 @@
  * USA
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <string.h>
 #include <cherokee/cherokee.h>
 
