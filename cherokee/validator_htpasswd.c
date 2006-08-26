@@ -42,6 +42,7 @@ static ret_t
 props_free (cherokee_validator_htpasswd_props_t *props)
 {
 	cherokee_buffer_mrproper (&props->password_file);
+
 	return cherokee_validator_props_free_base (VALIDATOR_PROPS(props));
 }
 
@@ -266,9 +267,10 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd, cher
 	ret_t ret_auth;
 	CHEROKEE_TEMP(line, 128);
 
-	if ((conn->validator == NULL) || cherokee_buffer_is_empty (&conn->validator->user)) {
+	/* Sanity check
+	 */
+	if ((conn->validator == NULL) || cherokee_buffer_is_empty (&conn->validator->user))
 		return ret_error;
-	}
 
 	/* 1.- Check the login/passwd
 	 */	  

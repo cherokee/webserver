@@ -25,15 +25,35 @@
 #ifndef CHEROKEE_VALIDATOR_LDAP_H
 #define CHEROKEE_VALIDATOR_LDAP_H
 
+#include "common.h"
+
+#include "ldap.h"
+
 #include "validator.h"
 #include "connection.h"
 
+
 typedef struct {
-	   cherokee_validator_t  validator;
-	   int                   stuff;
+	cherokee_validator_props_t base;
+
+	cherokee_buffer_t          server;
+	cint_t                     port;
+
+	cherokee_buffer_t          binddn;
+	cherokee_buffer_t          bindpw;
+	cherokee_buffer_t          basedn;
+	cherokee_buffer_t          filter;
+} cherokee_validator_ldap_props_t;
+
+typedef struct {
+	cherokee_validator_t       validator;
+	LDAP                      *conn;
+	cherokee_buffer_t          filter;
 } cherokee_validator_ldap_t;
 
-#define LDAP(x) ((cherokee_validator_ldap_t *)(x))
+#define LDAP(x)          ((cherokee_validator_ldap_t *)(x))
+#define PROP_LDAP(p)     ((cherokee_validator_ldap_props_t *)(p))
+#define VAL_LDAP_PROP(x) (PROP_LDAP(VALIDATOR(x)->props))
 
 
 ret_t cherokee_validator_ldap_new  (cherokee_validator_ldap_t **ldap, cherokee_validator_props_t *props);

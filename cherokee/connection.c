@@ -1034,13 +1034,13 @@ get_authorization (cherokee_connection_t *cnt,
 {
 	ret_t    ret;
 	char    *end, *end2;
-	cuint_t  pre_len;
+	cuint_t  pre_len = 0;
 
 	/* It checks that the authentication send by the client is compliant
 	 * with the configuration of the server.  It does not check if the 
 	 * kind of validator is suitable in this case.
 	 */
-	if (strncasecmp(ptr, "Basic ", 6) == 0) {
+	if (equal_str (ptr, "Basic ")) {
 
 		/* Check the authentication type
  		 */
@@ -1050,7 +1050,7 @@ get_authorization (cherokee_connection_t *cnt,
 		cnt->req_auth_type = http_auth_basic;
 		pre_len = 6;
 
-	} else if (strncasecmp(ptr, "Digest ", 7) == 0) {
+	} else if (equal_str (ptr, "Digest ")) {
 
 		/* Check the authentication type
 		 */
@@ -1059,7 +1059,7 @@ get_authorization (cherokee_connection_t *cnt,
 
 		cnt->req_auth_type = http_auth_digest;
 		pre_len = 7;
-	}
+	} 
 
 	/* Skip end of line
 	 */

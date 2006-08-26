@@ -29,6 +29,11 @@
 #include "connection-protected.h"
 #include "header-protected.h"
 #include "config_entry.h"
+#include "util.h"
+
+
+#define ENTRIES "validator"
+
 
 ret_t 
 cherokee_validator_init_base (cherokee_validator_t *validator, cherokee_validator_props_t *props)
@@ -132,6 +137,8 @@ cherokee_validator_parse_basic (cherokee_validator_t *validator, char *str, cuin
 	cherokee_buffer_add (&validator->user, auth.buf, colon - auth.buf);
 	cherokee_buffer_add (&validator->passwd, colon+1, auth.len  - ((colon+1) - auth.buf));		
 	
+	TRACE (ENTRIES, "Parse basic auth got user=%s, passwd=%s\n", validator->user.buf, validator->passwd.buf);
+
 	/* Clean up and exit
 	 */
 	cherokee_buffer_mrproper (&auth);
@@ -175,23 +182,23 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator, char *str, cui
 
 		comma = strchr(entry, ',');
 
-		if (strncasecmp (entry, "nc", 2) == 0) {
+		if (equal_str (entry, "nc")) {
 			entry_buf = &validator->nc;
-		} else if (strncasecmp (entry, "uri", 3) == 0) {
+		} else if (equal_str (entry, "uri")) {
 			entry_buf = &validator->uri;
-		} else if (strncasecmp (entry, "qop", 3) == 0) {
+		} else if (equal_str (entry, "qop")) {
 			entry_buf = &validator->qop;
-		} else if (strncasecmp (entry, "realm", 5) == 0) {
+		} else if (equal_str (entry, "realm")) {
 			entry_buf = &validator->realm;
-		} else if (strncasecmp (entry, "nonce", 5) == 0) {
+		} else if (equal_str (entry, "nonce")) {
 			entry_buf = &validator->nonce;
-		} else if (strncasecmp (entry, "cnonce", 6) == 0) {
+		} else if (equal_str (entry, "cnonce")) {
 			entry_buf = &validator->cnonce;
-		} else if (strncasecmp (entry, "username", 8) == 0) {
+		} else if (equal_str (entry, "username")) {
 			entry_buf = &validator->user;
-		} else if (strncasecmp (entry, "response", 8) == 0) {
+		} else if (equal_str (entry, "response")) {
 			entry_buf = &validator->response;
-		} else if (strncasecmp (entry, "algorithm", 9) == 0) {
+		} else if (equal_str (entry, "algorithm")) {
 			entry_buf = &validator->algorithm;
 		} else {
 			entry = comma + 1;

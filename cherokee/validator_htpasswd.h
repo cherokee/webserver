@@ -34,10 +34,10 @@ typedef struct {
 } cherokee_validator_htpasswd_props_t;
 
 typedef struct {
-	   cherokee_validator_t  validator;
+	cherokee_validator_t       validator;
 } cherokee_validator_htpasswd_t;
 
-#define HTPASSWD(x) ((cherokee_validator_htpasswd_t *)(x))
+#define HTPASSWD(x)          ((cherokee_validator_htpasswd_t *)(x))
 #define PROP_HTPASSWD(p)     ((cherokee_validator_htpasswd_props_t *)(p))
 #define VAL_HTPASSWD_PROP(x) (PROP_HTPASSWD(VALIDATOR(x)->props))
 
