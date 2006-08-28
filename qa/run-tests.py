@@ -181,7 +181,7 @@ if port is None:
             os.execl (server, name, "-C", cfg_file)
     else:
         print "PID: %d - %s" % (pid, CHEROKEE_PATH)
-        time.sleep(3)
+        time.sleep(7)
 
 its_clean = False
 def clean_up():

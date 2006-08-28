@@ -405,7 +405,7 @@ cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection
 	cherokee_handler_init_base(HANDLER(n), cnt, props);
 	   
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_server_info_init;
-	MODULE(n)->free         = (handler_func_free_t) cherokee_handler_server_info_free;
+	MODULE(n)->free         = (module_func_free_t) cherokee_handler_server_info_free;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_server_info_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_server_info_add_headers;
 

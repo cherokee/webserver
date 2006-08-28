@@ -812,7 +812,9 @@ nonce.c \
 ext_source.h \
 ext_source.c \
 config_node.h \
-config_node.c
+config_node.c \
+balancer.h \
+balancer.c
 
 libcherokee_config_la_SOURCES = \
 $(config_common) \

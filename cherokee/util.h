@@ -67,11 +67,12 @@ ret_t cherokee_tls_init (void);
 
 /* String management functions
  */
-int   cherokee_hexit              (char c);
-int   cherokee_isbigendian        (void);
-char *cherokee_min_str            (char *s1, char *s2);
-char *cherokee_strfsize           (unsigned long long size, char *buf);
-int   cherokee_estimate_va_length (char *format, va_list ap);
+int     cherokee_hexit              (char c);
+int     cherokee_isbigendian        (void);
+char   *cherokee_min_str            (char *s1, char *s2);
+char   *cherokee_strfsize           (unsigned long long size, char *buf);
+size_t  cherokee_strlcat            (char *dst, const char *src, size_t siz);
+int     cherokee_estimate_va_length (char *format, va_list ap);
 
 /* Time management functions
  */
@@ -82,9 +83,9 @@ long      *cherokee_get_timezone_ref (void);
 
 /* Thread safe functions
  */
-int        cherokee_readdir       (DIR *dirstream, struct dirent *entry, struct dirent **result);
-ret_t      cherokee_gethostbyname (const char *hostname, void *addr);
-ret_t      cherokee_syslog        (int priority, cherokee_buffer_t *buf);
+int   cherokee_readdir       (DIR *dirstream, struct dirent *entry, struct dirent **result);
+ret_t cherokee_gethostbyname (const char *hostname, void *addr);
+ret_t cherokee_syslog        (int priority, cherokee_buffer_t *buf);
 
 /* Misc
  */

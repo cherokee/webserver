@@ -46,7 +46,7 @@ cherokee_handler_remote_control_new (cherokee_handler_t **hdl, cherokee_connecti
 	cherokee_handler_init_base(HANDLER(n), cnt);
 
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_remote_control_init;
-	MODULE(n)->free         = (handler_func_free_t) cherokee_handler_remote_control_free;
+	MODULE(n)->free         = (module_func_free_t) cherokee_handler_remote_control_free;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_remote_control_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_remote_control_add_headers;
 

@@ -52,16 +52,9 @@ cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn, cherokee_handle
 }
 
 
-ret_t 
-cherokee_handler_free_base (cherokee_handler_t *hdl)
-{
-	free (hdl);
-	return ret_ok;
-}
-
-
-/* 	Virtual method hidding layer
+/* Virtual method hidding layer
  */
+
 ret_t
 cherokee_handler_free (cherokee_handler_t *hdl)
 {

@@ -457,6 +457,18 @@ dnl Check for vsyslog
 dnl
 AC_CHECK_FUNCS(syslog vsyslog strsep strcasestr memmove strerror bcopy strlcat)
 
+dnl
+dnl Check for Glib (usually Linux)
+dnl
+AC_PREPROC_IFELSE([
+#include <features.h>
+#ifndef __GLIBC__
+    chokeme
+#endif
+], [
+    AC_DEFINE([HAVE_GLIBC], [1], [Define to 1 if you have glibc.])
+    AC_DEFINE([_GNU_SOURCE], [1], [Define to 1 if you have glibc.])
+])
 
 dnl
 dnl Does this platform require array notation to assign to a va_list?

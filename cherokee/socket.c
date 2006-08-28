@@ -948,12 +948,47 @@ cherokee_socket_read (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t 
 ret_t 
 cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t *offset, ssize_t *sent)
 {
-#ifndef HAVE_SENDFILE
-	SHOULDNT_HAPPEN;
-	return ret_error;
-#else
+#if defined(LINUX_SENDFILE_API) || defined(HAVE_SENDFILE64)
 
-# ifdef FREEBSD_SENDFILE_API
+	/* Linux sendfile
+	 *
+	 * ssize_t 
+	 * sendfile (int out_fd, int in_fd, off_t *offset, size_t *count);
+	 *
+	 * ssize_t 
+	 * sendfile64 (int out_fd, int in_fd, off64_t *offset, size_t *count);
+	 */
+	do {
+		*sent = sendfile (SOCKET_FD(socket),            /* int     out_fd */
+				  fd,                           /* int     in_fd  */
+				  offset,                       /* off_t  *offset */
+				  size);                        /* size_t  count  */
+	} while ((*sent == -1) && (errno == EINTR));
+		
+	if (*sent < 0) {
+		switch (errno) {
+		case ENOSYS: return ret_no_sys;
+		case EAGAIN: return ret_eagain;
+		}
+
+		return ret_error;
+	}
+	
+
+#elif HAVE_SENDFILE_BROKEN
+
+	/* Some Linux 2.4 kernels doesn't support sendfile in a LFS
+	 * environment.
+	 */
+	return ret_no_sys;
+
+#elif SOLARIS_SENDFILE_API
+
+	/* TODO!!
+	 */
+	return ret_no_sys;
+
+#elif FREEBSD_SENDFILE_API
 	int            re;
 	struct sf_hdtr hdr;
 	struct iovec   hdtrl;
@@ -992,7 +1027,7 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 	}
 	*offset = *offset + *sent;
 
-# elif HPUX_SENDFILE_API
+#elif HPUX_SENDFILE_API
 	
 	/* HP-UX:
 	 *
@@ -1021,49 +1056,12 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 	}
 	*offset = *offset + *sent;
 
-# elif SOLARIS_SENDFILE_API
-
-	/* TODO!!
-	 */
-	return ret_no_sys;
-
-# elif HAVE_SENDFILE_BROKEN
-
-	/* Some Linux 2.4 kernels doesn't support sendfile in a LFS environment
-	 */
-	return ret_no_sys;
-
-# elif LINUX_SENDFILE_API
-
-	/* Linux sendfile
-	 *
-	 * ssize_t 
-	 * sendfile (int out_fd, int in_fd, off_t *offset, size_t *count);
-	 */
-	do {
-		*sent = sendfile (SOCKET_FD(socket),            /* int     out_fd */
-				  fd,                           /* int     in_fd  */
-				  offset,                       /* off_t  *offset */
-				  size);                        /* size_t  count  */
-	} while ((*sent == -1) && (errno == EINTR));
-		
-	if (*sent < 0) {
-		switch (errno) {
-		case ENOSYS: return ret_no_sys;
-		case EAGAIN: return ret_eagain;
-		}
-
-		return ret_error;
-	}
-
-# else
+#else
 	SHOULDNT_HAPPEN;
-	return ret_no_sys;
-# endif
+	return ret_error;
+#endif
 
 	return ret_ok;
-
-#endif /* HAVE_SENDFILE */
 }
 
 

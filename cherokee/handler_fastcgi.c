@@ -242,7 +242,7 @@ cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_hand
 	/* Virtual methods
 	 */
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_fastcgi_init;
-	MODULE(n)->free         = (handler_func_free_t) cherokee_handler_fastcgi_free;
+	MODULE(n)->free         = (module_func_free_t) cherokee_handler_fastcgi_free;
 
 	/* Virtual methods: implemented by handler_cgi_base
 	 */

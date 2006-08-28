@@ -67,7 +67,6 @@ typedef struct {
  */
 typedef ret_t (* handler_func_new_t)         (void **handler, void *cnt, cherokee_handler_props_t *properties);
 typedef ret_t (* handler_func_init_t)        (void  *handler);
-typedef ret_t (* handler_func_free_t)        (void  *handler);
 typedef ret_t (* handler_func_step_t)        (void  *handler, cherokee_buffer_t *buffer);
 typedef ret_t (* handler_func_add_headers_t) (void  *handler, cherokee_buffer_t *buffer);
 
