@@ -144,7 +144,11 @@ check_cached (cherokee_handler_file_t *n)
 	ret_t                  ret;
 	char                  *header;
 	cuint_t                header_len;
-	cherokee_connection_t *conn = HANDLER_CONN(n);
+	cherokee_boolean_t     has_modified_since = false;
+	cherokee_boolean_t     has_etag           = false;
+	cherokee_boolean_t     not_modified_ms    = false;
+	cherokee_boolean_t     not_modified_etag  = false;
+	cherokee_connection_t *conn               = HANDLER_CONN(n);
 
 	/* Based in time
 	 */
@@ -156,6 +160,8 @@ check_cached (cherokee_handler_file_t *n)
 
 		tmp = *end;    /* save */
 		*end = '\0';   /* set  */
+
+		has_modified_since = true;
 
 		req_time = tdate_parse (header);			
 		if (req_time == -1) {
@@ -173,15 +179,16 @@ check_cached (cherokee_handler_file_t *n)
 		/* The file is cached in the client
 		 */
 		if (n->info->st_mtime <= req_time) {
-			n->not_modified = true;
-			return ret_ok;
+			not_modified_ms = true;
 		}
 	}
 	
-	/* HTTP/1.1 only headers
+	/* HTTP/1.1 only headers from now on
 	 */
-	if (conn->header.version < http_version_11)
+	if (conn->header.version < http_version_11) {
+		n->not_modified = not_modified_ms;
 		return ret_ok;
+	}
 
 	/* Based in ETag
 	 */
@@ -190,12 +197,28 @@ check_cached (cherokee_handler_file_t *n)
 		int    tmp_len;
 		CHEROKEE_TEMP(tmp,100);
 		
+		has_modified_etag = true;
+		
 		tmp_len = snprintf (tmp, tmp_size, "%lx=" FMT_OFFSET_HEX, n->info->st_mtime, n->info->st_size);
 
 		if ((header_len == tmp_len) && 
-		    (strncmp (header, tmp, tmp_len) == 0)) 
+		    (strncmp (header, tmp, tmp_len) == 0))
 		{
-			n->not_modified = true;
+			not_modified_etag = true;
+		}
+	}
+
+	/* If both If-Modified-Since and ETag have been found then
+	 * both must match in order to return a not_modified response.
+	 */
+	if (has_modified_since && has_modified_etag) {
+		if (not_modified_ms && not_modified_etag) {
+			n->not_modified = true;		
+			return ret_ok;
+		}
+	} else  {
+		if (not_modified_ms || not_modified_etag) {
+			n->not_modified = true;		
 			return ret_ok;
 		}
 	}
