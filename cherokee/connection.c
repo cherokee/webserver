@@ -1211,7 +1211,7 @@ get_range (cherokee_connection_t *cnt, char *ptr, int ptr_len)
 	}
 	tmp[num_len] = '\0';
 	if (num_len != 0) {
-		cnt->range_start = atoi (tmp);
+		cnt->range_start = atoll (tmp);
 		if (cnt->range_start < 0) {
 			return ret_error;
 		}
@@ -1237,7 +1237,7 @@ get_range (cherokee_connection_t *cnt, char *ptr, int ptr_len)
 			num_len++;
 		}
 		tmp[num_len] = '\0';
-		cnt->range_end = atoi (tmp);
+		cnt->range_end = atoll (tmp);
 		if (cnt->range_end < 1){
 			return ret_error;
 		}

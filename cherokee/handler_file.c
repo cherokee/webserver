@@ -197,7 +197,7 @@ check_cached (cherokee_handler_file_t *n)
 		int    tmp_len;
 		CHEROKEE_TEMP(tmp,100);
 		
-		has_modified_etag = true;
+		has_etag = true;
 		
 		tmp_len = snprintf (tmp, tmp_size, "%lx=" FMT_OFFSET_HEX, n->info->st_mtime, n->info->st_size);
 
@@ -211,7 +211,7 @@ check_cached (cherokee_handler_file_t *n)
 	/* If both If-Modified-Since and ETag have been found then
 	 * both must match in order to return a not_modified response.
 	 */
-	if (has_modified_since && has_modified_etag) {
+	if (has_modified_since && has_etag) {
 		if (not_modified_ms && not_modified_etag) {
 			n->not_modified = true;		
 			return ret_ok;
