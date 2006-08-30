@@ -40,6 +40,8 @@
 #include "connection_info.h"
 #include "connection-protected.h"
 #include "downloader-protected.h"
+#include "server-protected.h"
+
 
 #define ENTRIES "proxy,handler"
 
@@ -47,13 +49,33 @@
 static ret_t 
 props_free (cherokee_handler_proxy_props_t *props)
 {
-	// TODO: Free the local properties 
+	if (props->balancer != NULL) {
+		cherokee_balancer_free (props->balancer);
+	}
+
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
+
+
+static ret_t
+load_balancer (cherokee_server_t *srv, cherokee_buffer_t *name, cherokee_config_node_t *subconf, cherokee_balancer_t **balancer)
+{
+	ret_t                   ret;
+	cherokee_module_info_t *info = NULL;
+
+	ret = cherokee_module_loader_get (&srv->loader, name->buf, &info);
+	if (ret != ret_ok) return ret;
+
+	// TODO: Instance the balancer obj
+	
+	return ret_ok;
+}
+
 
 ret_t 
 cherokee_handler_proxy_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
+	list_t                         *i;
 	cherokee_handler_proxy_props_t *props;
 
 	if (*_props == NULL) {
@@ -61,14 +83,28 @@ cherokee_handler_proxy_configure (cherokee_config_node_t *conf, cherokee_server_
 
 		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
 						  HANDLER_PROPS_FREE(props_free));		
+		n->balancer = NULL;
 
-		// TODO: Init default values here
 		*_props = HANDLER_PROPS(n);
 	}
 
 	props = PROP_PROXY(*_props);
 
-	// TODOl: Parse the properties tree here
+	cherokee_config_node_foreach (i, conf) {
+		ret_t                   ret;
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+		
+		if (equal_buf_str (&subconf->key, "balancer")) {
+			ret = load_balancer(srv, &subconf->val, subconf, &props->balancer);
+			if (ret < ret_ok) {
+				PRINT_ERROR ("ERROR: Couldn't load balancer '%s'\n", subconf->val.buf);
+				return ret;
+			}
+		} else {
+			PRINT_MSG ("ERROR: Handler proxy: Unknown key: '%s'\n", subconf->key.buf);
+			return ret_error;
+		}
+	}
 
 	return ret_ok;
 }

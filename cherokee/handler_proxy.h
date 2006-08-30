@@ -37,13 +37,13 @@
 #include "buffer.h"
 #include "table.h"
 #include "connection.h"
-
+#include "balancer.h"
 
 /* Data types
  */
 typedef struct {
-	cherokee_handler_props_t base;
-	cuint_t                  foo;
+	cherokee_handler_props_t  base;
+	cherokee_balancer_t      *balancer;
 } cherokee_handler_proxy_props_t;
 
 typedef struct {
