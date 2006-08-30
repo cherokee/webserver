@@ -29,6 +29,7 @@
 
 #include "connection.h"
 #include "module_loader.h"
+#include "connection-protected.h"
 
 
 typedef struct {
@@ -41,6 +42,15 @@ typedef struct {
 static ret_t 
 props_free (cherokee_handler_error_redir_props_t *props)
 {
+	list_t *i, *j;
+
+	list_for_each_safe (i, j, &props->errors) {
+		error_entry_t *entry = (error_entry_t *)i;
+
+		cherokee_buffer_mrproper (&entry->url);
+		free (entry);
+	}
+
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
@@ -63,6 +73,7 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 
 	cherokee_config_node_foreach (i, conf) {
 		cuint_t                 error;
+		error_entry_t          *entry;
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
 		error = atoi (subconf->key.buf);
@@ -74,11 +85,15 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 			continue;
 		}
 
-//		if (equal_buf_str (&subconf->key, "iocache")) {	
+		entry = (error_entry_t *) malloc (sizeof(error_entry_t));
+		if (entry == NULL) return ret_nomem;
 
-		// ALO TODO: Finish this mess
+		INIT_LIST_HEAD (&entry->entry);
+		entry->error = error;
+		cherokee_buffer_init (&entry->url);
+		cherokee_buffer_add_buffer (&entry->url, &subconf->val);
 
-		subconf = subconf;
+		list_add (&entry->entry, &props->errors);
 	}
 
 	return ret_ok;
@@ -88,23 +103,22 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 ret_t 
 cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props)
 {
-	ret_t  ret;
-	char  *dir = NULL;
-	char   code[4];
+	list_t *i;
 
-	if (props == NULL) {
-		return ret_not_found;
+	list_for_each (i, &PROP_ERREDIR(props)->errors) {
+		error_entry_t *entry = (error_entry_t *)i;
+		
+		if (entry->error != cnt->error_code)
+			continue;
+
+		cherokee_buffer_clean (&cnt->redirect);
+		cherokee_buffer_add_buffer (&cnt->redirect, &entry->url); 
+		
+		cnt->error_code = http_moved_permanently; 
+		return cherokee_handler_redir_new (hdl, cnt, props);
 	}
-
-/* 	snprintf (code, 4, "%d", cnt->error_code); */
-	   
-/* 	ret = cherokee_typed_table_get_str (properties, code, &dir); */
-/* 	if (ret != ret_ok) return ret_error; */
-
-/* 	cherokee_buffer_add (&cnt->redirect, dir, strlen(dir)); */
-/* 	cnt->error_code = http_moved_permanently; */
-
-	return cherokee_handler_redir_new (hdl, cnt, props);
+	
+	return ret_error;
 }
 
 

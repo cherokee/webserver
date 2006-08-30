@@ -467,12 +467,41 @@ init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, 
 	return ret_ok;
 }
 
+
+static ret_t 
+add_error_handler (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
+{
+	ret_t                    ret;
+	cherokee_config_entry_t *entry;
+	cherokee_module_info_t  *info   = NULL;
+	cherokee_buffer_t       *name   = &config->val;
+
+	ret = cherokee_config_entry_new (&entry);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_module_loader_get (&SRV(vserver->server_ref)->loader, name->buf, &info);
+	if (ret != ret_ok) return ret;
+		
+	if (info->configure) {
+		ret = info->configure (config, vserver->server_ref, (void **) &entry->handler_properties);
+		if (ret != ret_ok) return ret;
+	}
+		
+	TRACE(ENTRIES, "Error handler: %s\n", name->buf);
+
+	cherokee_config_entry_set_handler (entry, info);		
+	vserver->error_handler = entry;
+
+	return ret_ok;
+}
+
+
 static ret_t 
 add_directory (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver, cherokee_virtual_entries_t *ventry)
 {
-	ret_t                      ret;
-	cherokee_config_entry_t   *entry;
-	char                      *dir     = config->key.buf;
+	ret_t                    ret;
+	cherokee_config_entry_t *entry;
+	char                    *dir    = config->key.buf;
 
 	/* Create a new entry
 	 */
@@ -674,6 +703,10 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 			ret = add_request (CONFIG_NODE(i), vserver, &vserver->entry);
 			if (ret != ret_ok) return ret;
 		}
+	} else if (equal_buf_str (&conf->key, "error_handler")) {
+		ret = add_error_handler (conf, vserver);
+		if (ret != ret_ok) return ret;
+
 	} else if (equal_buf_str (&conf->key, "logger")) {
 		ret = add_logger (conf, vserver);
 		if (ret != ret_ok) return ret;
