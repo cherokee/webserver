@@ -962,8 +962,8 @@ get_host (cherokee_connection_t *conn,
 
 static ret_t
 get_encoding (cherokee_connection_t    *conn,
-		    char                     *ptr,
-		    cherokee_encoder_table_t *encoders) 
+	      char                     *ptr,
+	      cherokee_encoder_table_t *encoders) 
 {
 	char tmp;
 	char *i1, *i2;
