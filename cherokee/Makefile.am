@@ -546,6 +546,23 @@ dynamic_validator_htdigest_lib = libplugin_htdigest.la
 endif
 
 
+#
+# Balancer Round Robin
+#
+balancer_round_robin = \
+balancer_round_robin.c \
+balancer_round_robin.h
+
+libplugin_round_robin_la_LDFLAGS = $(module_ldflags) 
+libplugin_round_robin_la_SOURCES = $(balancer_round_robin)
+
+if STATIC_BALANCER_ROUND_ROBIN
+static_balancer_round_robin_src = $(balancer_round_robin)
+else
+dynamic_balancer_round_robin_lib = libplugin_round_robin.la
+endif
+
+
 
 if USE_INTERNAL_PCRE
 internal_pcre_src=$(pcre_src)
@@ -763,6 +780,8 @@ $(static_validator_plain_src) \
 $(static_validator_htdigest_src) \
 $(static_validator_htpasswd_src) \
 \
+$(static_balancer_round_robin_src) \
+\
 $(common_cgi) \
 \
 connection.h \
@@ -885,7 +904,8 @@ $(dynamic_validator_pam_lib) \
 $(dynamic_validator_ldap_lib) \
 $(dynamic_validator_plain_lib) \
 $(dynamic_validator_htdigest_lib) \
-$(dynamic_validator_htpasswd_lib)
+$(dynamic_validator_htpasswd_lib) \
+$(dynamic_balancer_round_robin_lib) 
 
 
 #

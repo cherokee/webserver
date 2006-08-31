@@ -1079,3 +1079,166 @@ cherokee_parse_query_string (cherokee_buffer_t *qstring, cherokee_table_t *argum
 	qstring->buf[qstring->len] = '\0';
 	return ret_ok;
 }
+
+
+
+#if defined(HAVE_PTHREAD) && !defined(HAVE_GETPWNAM_R)
+static pthread_mutex_t __global_getpwnam_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
+
+ret_t 
+cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buflen)
+{
+#ifndef HAVE_GETPWNAM_R
+	size_t         pw_name_len   = 0;
+	size_t         pw_passwd_len = 0;
+	size_t         pw_gecos_len  = 0;
+	size_t         pw_dir_len    = 0;
+	size_t         pw_shell_len  = 0;
+	char          *ptr;
+	struct passwd *tmp;
+
+ 	CHEROKEE_MUTEX_LOCK (&__global_getpwnam_mutex);
+	
+	tmp = getpwnam (name);
+	if (tmp == NULL) 
+		return ret_error;
+
+	if (tmp->pw_name)   pw_name_len   = strlen(tmp->pw_name);
+	if (tmp->pw_passwd) pw_passwd_len = strlen(tmp->pw_passwd);
+	if (tmp->pw_gecos)  pw_gecos_len  = strlen(tmp->pw_gecos);
+	if (tmp->pw_dir)    pw_dir_len    = strlen(tmp->pw_dir);
+	if (tmp->pw_shell)  pw_shell_len  = strlen(tmp->pw_shell);
+
+	if ((pw_name_len + pw_passwd_len + 
+	     pw_gecos_len + pw_dir_len + pw_shell_len) > buflen)
+		return ret_error;
+
+	memset (buf, 0, buflen);
+	ptr = buf;
+
+	pwbuf->pw_uid = tmp->pw_uid;
+	pwbuf->pw_gid = tmp->pw_gid;
+
+	if (tmp->pw_dir) {
+		memcpy (ptr, tmp->pw_dir, pw_dir_len);
+		pwbuf->pw_dir = ptr;
+		ptr += pw_dir_len + 1;
+	}
+
+	if (tmp->pw_passwd) {
+		memcpy (ptr, tmp->pw_passwd, pw_passwd_len);
+		pwbuf->pw_passwd = ptr;
+		ptr += pw_passwd_len + 1;
+	}
+
+	if (tmp->pw_name) {
+		memcpy (ptr, tmp->pw_name, pw_name_len);
+		pwbuf->pw_name = ptr;
+		ptr += pw_name_len + 1;
+	}
+
+	if (tmp->pw_gecos) {
+		memcpy (ptr, tmp->pw_gecos, pw_gecos_len);
+		pwbuf->pw_gecos = ptr;
+		ptr += pw_gecos_len + 1;
+	}
+
+	if (tmp->pw_shell) {
+		memcpy (ptr, tmp->pw_shell, pw_shell_len);
+		pwbuf->pw_shell = ptr;
+		ptr += pw_shell_len + 1;
+	}
+
+        CHEROKEE_MUTEX_UNLOCK (&__global_getpwnam_mutex);
+	return ret_ok;
+
+#elif HAVE_GETPWNAM_R_5
+	int            re;
+	struct passwd *tmp;
+
+	re = getpwnam_r (name, pwbuf, buf, buflen, &tmp);
+	if (re != 0) return ret_error;
+
+	return ret_ok;
+
+#elif HAVE_GETPWNAM_R_4
+	int re;
+
+	re = getpwnam_r (name, pwbuf, buf, buflen);
+	if (re != 0) return ret_error;
+
+	return ret_ok;
+#endif
+
+	return ret_no_sys;
+}
+
+
+#if defined(HAVE_PTHREAD) && !defined(HAVE_GETGRNAM_R)
+static pthread_mutex_t __global_getgrnam_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
+
+ret_t 
+cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t buflen)
+{
+#ifndef HAVE_GETGRNAM_R
+	size_t        gr_name_len   = 0;
+	size_t        gr_passwd_len = 0;
+	char         *ptr;
+	struct group *tmp;
+
+        CHEROKEE_MUTEX_LOCK (&__global_getgrnam_mutex);
+
+	tmp = getgrnam (name);
+	if (tmp == NULL) 
+		return ret_error;
+
+	if (tmp->gr_name)   gr_name_len   = strlen(tmp->gr_name);
+	if (tmp->gr_passwd) gr_passwd_len = strlen(tmp->gr_passwd);
+
+	if ((gr_name_len + gr_passwd_len) > buflen)
+		return ret_error;
+
+	memset (buf, 0, buflen);
+	ptr = buf;
+
+	grbuf->gr_gid = tmp->gr_gid;
+
+	if (tmp->gr_name) {
+		memcpy (ptr, tmp->gr_name, gr_name_len);
+		grbuf->gr_name = ptr;
+		ptr += gr_name_len + 1;
+	}
+
+	if (tmp->gr_passwd) {
+		memcpy (ptr, tmp->gr_passwd, gr_passwd_len);
+		grbuf->gr_passwd = ptr;
+		ptr += gr_passwd_len + 1;
+	}
+
+	// TODO: Duplicate char **tmp->gr_mem
+
+        CHEROKEE_MUTEX_UNLOCK (&__global_getgrnam_mutex);
+	return ret_ok;
+
+#elif HAVE_GETGRNAM_R_5
+	int           re;
+	struct group *tmp;
+
+	re = getgrnam_r (name, grbuf, buf, buflen, &tmp);
+	if (re != 0) return ret_error;
+
+	return ret_ok;
+
+#elif HAVE_GETGRNAM_R_4
+	int re;
+
+	re = getgrnam_r (name, grbuf, buf, buflen);
+	if (re != 0) return ret_error;
+
+	return ret_ok;
+#endif
+
+	return ret_no_sys;
+}

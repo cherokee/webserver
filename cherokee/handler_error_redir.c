@@ -101,21 +101,21 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 
 
 ret_t 
-cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props)
+cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_t *conn, cherokee_handler_props_t *props)
 {
 	list_t *i;
 
 	list_for_each (i, &PROP_ERREDIR(props)->errors) {
 		error_entry_t *entry = (error_entry_t *)i;
 		
-		if (entry->error != cnt->error_code)
+		if (entry->error != conn->error_code)
 			continue;
 
-		cherokee_buffer_clean (&cnt->redirect);
-		cherokee_buffer_add_buffer (&cnt->redirect, &entry->url); 
+		cherokee_buffer_clean (&conn->redirect);
+		cherokee_buffer_add_buffer (&conn->redirect, &entry->url); 
 		
-		cnt->error_code = http_moved_permanently; 
-		return cherokee_handler_redir_new (hdl, cnt, props);
+		conn->error_code = http_moved_permanently; 
+		return cherokee_handler_redir_new (hdl, conn, props);
 	}
 	
 	return ret_error;

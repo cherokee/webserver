@@ -59,7 +59,7 @@ typedef enum {
 typedef ret_t (* handler_props_func_free_t)  (void  *handlerp);
 
 typedef struct {
-	handler_props_func_free_t   free;
+	handler_props_func_free_t free;
 } cherokee_handler_props_t;
 
 

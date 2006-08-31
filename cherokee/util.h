@@ -40,6 +40,9 @@
 # include <arpa/inet.h>
 #endif 
 
+#include <pwd.h>
+#include <grp.h>
+
 #include <time.h>
 #include <dirent.h>
 
@@ -76,7 +79,6 @@ int     cherokee_estimate_va_length (char *format, va_list ap);
 
 /* Time management functions
  */
-
 struct tm *cherokee_gmtime           (const time_t *timep, struct tm *result);
 struct tm *cherokee_localtime        (const time_t *timep, struct tm *result);
 long      *cherokee_get_timezone_ref (void);
@@ -86,6 +88,8 @@ long      *cherokee_get_timezone_ref (void);
 int   cherokee_readdir       (DIR *dirstream, struct dirent *entry, struct dirent **result);
 ret_t cherokee_gethostbyname (const char *hostname, void *addr);
 ret_t cherokee_syslog        (int priority, cherokee_buffer_t *buf);
+ret_t cherokee_getpwnam      (const char *name, struct passwd *pwbuf, char *buf, size_t buflen);
+ret_t cherokee_getgrnam      (const char *name, struct group *pwbuf, char *buf, size_t buflen);
 
 /* Misc
  */

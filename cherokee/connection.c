@@ -1160,7 +1160,9 @@ cherokee_connection_build_local_directory (cherokee_connection_t *conn, cherokee
 ret_t
 cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, cherokee_virtual_server_t *vsrv, cherokee_config_entry_t *entry)
 {
-	struct passwd *pwd;	
+	ret_t         ret;
+	struct passwd pwd;
+	char          tmp[1024];
 
 	/* Has a defined DocumentRoot
 	 */
@@ -1181,16 +1183,16 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, 
 
 	/* Default: it is inside the UserDir in home
 	 */
-	pwd = (struct passwd *) getpwnam (conn->userdir.buf);
-	if ((pwd == NULL) || (pwd->pw_dir == NULL)) {
+	ret = cherokee_getpwnam (conn->userdir.buf, &pwd, tmp, 1024);
+	if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
 		conn->error_code = http_not_found;
 		return ret_error;
 	}
-
+	
 	/* Build the local_directory:
 	 */
-	cherokee_buffer_add (&conn->local_directory, pwd->pw_dir, strlen(pwd->pw_dir));
-	cherokee_buffer_add (&conn->local_directory, "/", 1);
+	cherokee_buffer_add (&conn->local_directory, pwd.pw_dir, strlen(pwd.pw_dir));
+	cherokee_buffer_add_str (&conn->local_directory, "/");
 	cherokee_buffer_add_buffer (&conn->local_directory, &vsrv->userdir);
 
 	return ret_ok;

@@ -43,7 +43,8 @@ typedef enum {
 	cherokee_logger    = 1 << 1,
 	cherokee_handler   = 1 << 2,
 	cherokee_encoder   = 1 << 3,
-	cherokee_validator = 1 << 4
+	cherokee_validator = 1 << 4,
+	cherokee_balancer  = 1 << 5
 } cherokee_module_type_t;
 
 

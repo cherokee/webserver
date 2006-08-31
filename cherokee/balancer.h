@@ -43,6 +43,15 @@ typedef struct {
 } cherokee_balancer_host_t;
 
 
+/* Handler properties
+ */
+typedef ret_t (* balancer_props_func_free_t)  (void  *balancerp);
+
+typedef struct {
+	balancer_props_func_free_t free;
+} cherokee_balancer_props_t;
+
+
 /* Balancer
  */
 typedef ret_t (* balancer_dispatch_func_t) (void *balancer, cherokee_connection_t *conn, cherokee_balancer_host_t **hosts);
