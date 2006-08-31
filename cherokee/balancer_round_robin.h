@@ -30,16 +30,25 @@
 
 
 typedef struct {
-	cherokee_balancer_t balancer;
+	cherokee_balancer_t  balancer;
+
+	cuint_t              last_one;
+#ifdef HAVE_PTHREAD
+	pthread_mutex_t      last_one_mutex;
+#endif	
 } cherokee_balancer_round_robin_t;
 
 
 #define PROP_RR(x)      ((cherokee_balancer_round_robin_props_t *)(x))
 #define BAL_RR(x)       ((cherokee_balancer_round_robin_file_t *)(x))
-#define BAL_RR_PROP(x)  (PROP_RR(BALANCER(x)->props))
+#define BAL_RR_PROP(x)  (PROP_RR(BAL(x)->props))
 
 
 ret_t cherokee_balancer_round_robin_new       (cherokee_balancer_t **hdl, cherokee_connection_t *cnt, cherokee_balancer_props_t *props);
 ret_t cherokee_balancer_round_robin_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props);
+
+ret_t cherokee_balancer_round_robin_free      (cherokee_balancer_round_robin_t *balancer);
+ret_t cherokee_balancer_round_robin_dispatch  (cherokee_balancer_round_robin_t *balancer, cherokee_connection_t *conn, cherokee_balancer_host_t **host);
+
 
 #endif /* CHEROKEE_BALANCER_ROUND_ROBIN_H */

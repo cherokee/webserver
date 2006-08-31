@@ -29,18 +29,69 @@
 
 
 ret_t 
-cherokee_balancer_round_robin_new (cherokee_balancer_t **hdl, cherokee_connection_t *cnt, cherokee_balancer_props_t *props)
-{
-	return ret_ok;
-}
-
-ret_t 
 cherokee_balancer_round_robin_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props)
 {
 	return ret_ok;
 }
 
+ret_t 
+cherokee_balancer_round_robin_new (cherokee_balancer_t **bal, cherokee_connection_t *cnt, cherokee_balancer_props_t *props)
+{
+	CHEROKEE_NEW_STRUCT (n, balancer_round_robin);
 
+	/* Init 	
+	 */
+	cherokee_balancer_init_base (BAL(n));
+
+	MODULE(n)->free  = (module_func_free_t) cherokee_balancer_round_robin_free;
+	BAL(n)->dispatch = (balancer_dispatch_func_t) cherokee_balancer_round_robin_dispatch;
+
+	/* Init properties
+	 */
+	n->last_one = 0;
+	CHEROKEE_MUTEX_INIT (&n->last_one_mutex, NULL);
+
+	/* Return obj
+	 */
+	*bal = BAL(n);
+	return ret_ok;
+}
+
+
+ret_t      
+cherokee_balancer_round_robin_free (cherokee_balancer_round_robin_t *balancer)
+{
+	CHEROKEE_MUTEX_DESTROY (&balancer->last_one_mutex);
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_balancer_round_robin_dispatch (cherokee_balancer_round_robin_t *balancer, 
+					cherokee_connection_t           *conn, 
+					cherokee_balancer_host_t       **host)
+{
+	cherokee_balancer_t *gbal = BAL(balancer);
+
+	CHEROKEE_MUTEX_LOCK (&balancer->last_one_mutex);
+
+	if (gbal->hosts_len <= 0)
+		goto error;
+	
+	balancer->last_one = (balancer->last_one + 1) % gbal->hosts_len;
+	*host = gbal->hosts[balancer->last_one];
+
+	CHEROKEE_MUTEX_UNLOCK (&balancer->last_one_mutex);
+	return ret_ok;
+
+error:
+	CHEROKEE_MUTEX_UNLOCK (&balancer->last_one_mutex);
+	return ret_error;
+}
+
+
+/* Module stuff
+ */
 
 MODULE_INFO_INIT_EASY (balancer, round_robin);
 

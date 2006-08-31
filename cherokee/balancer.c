@@ -102,7 +102,7 @@ cherokee_balancer_add_host (cherokee_balancer_t *balancer, cherokee_balancer_hos
 
 
 ret_t 
-cherokee_balancer_add_dispatch (cherokee_balancer_t *balancer, cherokee_connection_t *conn, cherokee_balancer_host_t **host)
+cherokee_balancer_dispatch (cherokee_balancer_t *balancer, cherokee_connection_t *conn, cherokee_balancer_host_t **host)
 {
 	if (balancer->dispatch == NULL)
 		return ret_error;

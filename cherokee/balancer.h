@@ -69,13 +69,17 @@ typedef struct {
 	balancer_dispatch_func_t   dispatch;
 } cherokee_balancer_t;
 
+#define BAL(b)  ((cherokee_balancer_t *)(b))
 
-ret_t cherokee_balancer_init_base     (cherokee_balancer_t *balancer);
-ret_t cherokee_balancer_mrproper      (cherokee_balancer_t *balancer);
+ret_t cherokee_balancer_init_base  (cherokee_balancer_t *balancer);
+ret_t cherokee_balancer_mrproper   (cherokee_balancer_t *balancer);
 
-ret_t cherokee_balancer_add_host      (cherokee_balancer_t *balancer, cherokee_balancer_host_t *host);
-ret_t cherokee_balancer_add_dispatch  (cherokee_balancer_t *balancer, cherokee_connection_t *conn, cherokee_balancer_host_t **host);
-ret_t cherokee_balancer_free          (cherokee_balancer_t *balancer);
+ret_t cherokee_balancer_add_host   (cherokee_balancer_t *balancer, cherokee_balancer_host_t *host);
+
+/* Virtual methods
+ */
+ret_t cherokee_balancer_dispatch   (cherokee_balancer_t *balancer, cherokee_connection_t *conn, cherokee_balancer_host_t **host);
+ret_t cherokee_balancer_free       (cherokee_balancer_t *balancer);
 
 CHEROKEE_END_DECLS
 
