@@ -77,7 +77,7 @@ alloc_more_hosts (cherokee_balancer_t *balancer)
 	if (balancer->hosts == NULL) 
 		return ret_nomem;
 	
-	memset (balancer->hosts, 0, size);
+	memset (balancer->hosts + balancer->hosts_len, 0, DEFAULT_HOSTS_ALLOCATION);
 
 	balancer->hosts_size += DEFAULT_HOSTS_ALLOCATION;
 	return ret_ok;
