@@ -63,13 +63,13 @@ typedef struct list_entry cherokee_list_entry_t;
 
 
 static inline int 
-list_empty (cherokee_list_t *list)
+cherokee_list_empty (cherokee_list_t *list)
 {
 	return (list->next == list);
 }
 
 static inline void 
-list_add (cherokee_list_t *new_entry, cherokee_list_t *head)
+cherokee_list_add (cherokee_list_t *new_entry, cherokee_list_t *head)
 {
 	new_entry->next  = head->next;
 	new_entry->prev  = head;
@@ -78,7 +78,7 @@ list_add (cherokee_list_t *new_entry, cherokee_list_t *head)
 }
 
 static inline void 
-list_add_tail (cherokee_list_t *new_entry, cherokee_list_t *head)
+cherokee_list_add_tail (cherokee_list_t *new_entry, cherokee_list_t *head)
 {
 	new_entry->next  = head;
 	new_entry->prev  = head->prev;
@@ -87,16 +87,16 @@ list_add_tail (cherokee_list_t *new_entry, cherokee_list_t *head)
 }
 
 static inline void
-list_del (cherokee_list_t *entry)
+cherokee_list_del (cherokee_list_t *entry)
 {
 	entry->next->prev = entry->prev;
 	entry->prev->next = entry->next;
 }
 
 static inline void 
-list_reparent (cherokee_list_t *list, cherokee_list_t *new_entry)
+cherokee_list_reparent (cherokee_list_t *list, cherokee_list_t *new_entry)
 {
-	if (list_empty(list))
+	if (cherokee_list_empty(list))
 		return;
 	
 	new_entry->next = list->next;

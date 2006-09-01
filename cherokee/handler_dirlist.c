@@ -409,12 +409,12 @@ cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 	cherokee_buffer_mrproper (&dhdl->server_software);
 
 	list_for_each_safe (i, tmp, &dhdl->dirs) {
-		list_del (i);
+		cherokee_list_del (i);
 		free (i);
 	}
 
 	list_for_each_safe (i, tmp, &dhdl->files) {
-		list_del (i);
+		cherokee_list_del (i);
 		free (i);
 	}
 
@@ -558,9 +558,9 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 			continue;
 
 		if (S_ISDIR(item->stat.st_mode)) {
-			list_add (LIST(item), &dhdl->dirs);
+			cherokee_list_add (LIST(item), &dhdl->dirs);
 		} else {
-			list_add (LIST(item), &dhdl->files);
+			cherokee_list_add (LIST(item), &dhdl->files);
 		}
 	}
 
@@ -571,7 +571,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 
 	/* Sort the file list
 	 */
-	if (! list_empty(&dhdl->files)) {
+	if (! cherokee_list_empty(&dhdl->files)) {
 		list_sort_by_type (&dhdl->files, dhdl->sort);
 		dhdl->file_ptr = dhdl->files.next;
 	}
@@ -579,7 +579,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	/* Sort the directories list:
 	 * it doesn't make sense to look for the size
 	 */
-	if (! list_empty(&dhdl->dirs)) {
+	if (! cherokee_list_empty (&dhdl->dirs)) {
 		cherokee_dirlist_sort_t sort = dhdl->sort;
 
 		if (sort == Size_Down) sort = Name_Down;
@@ -659,7 +659,7 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 	ret = check_request_finish_with_slash (dhdl);
 	if (ret != ret_ok) return ret;
 	
-	if (! list_empty (&HDL_DIRLIST_PROP(dhdl)->notice_files)) {
+	if (! cherokee_list_empty (&HDL_DIRLIST_PROP(dhdl)->notice_files)) {
 		ret = read_notice_file (dhdl);
 		if (ret != ret_ok) return ret;
 	}

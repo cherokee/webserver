@@ -181,7 +181,7 @@ iocache_clean_up_each (const char *key, void *value, void *param)
 		delobj->file     = file;
 		delobj->filename = key;
 		
-		list_add (LIST(delobj), &params->to_delete);
+		cherokee_list_add (LIST(delobj), &params->to_delete);
 	}
 
 	return true;

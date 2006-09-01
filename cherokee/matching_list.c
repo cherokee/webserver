@@ -76,7 +76,7 @@ add_to_list (cherokee_list_t *list, const char *item)
 	INIT_LIST_HEAD(&n->list);
 	n->string = strdup(item);
 
-	list_add (LIST(n), list);	
+	cherokee_list_add (LIST(n), list);	
 	return ret_ok;
 }
 

@@ -271,28 +271,28 @@ conn_set_mode (cherokee_thread_t *thd, cherokee_connection_t *conn, cherokee_soc
 static void
 add_connection (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
-	list_add_tail (LIST(conn), &thd->active_list);
+	cherokee_list_add_tail (LIST(conn), &thd->active_list);
 	thd->active_list_num++;
 }
 
 static void
 add_connection_polling (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
-	list_add_tail (LIST(conn), &thd->polling_list);
+	cherokee_list_add_tail (LIST(conn), &thd->polling_list);
 	thd->polling_list_num++;
 }
 
 static void
 del_connection (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
-	list_del (LIST(conn));
+	cherokee_list_del (LIST(conn));
 	thd->active_list_num--;
 }
 
 static void
 del_connection_polling (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
-	list_del (LIST(conn));
+	cherokee_list_del (LIST(conn));
 	thd->polling_list_num--;
 }
 
@@ -312,7 +312,7 @@ connection_reuse_or_free (cherokee_thread_t *thread, cherokee_connection_t *conn
 
 	/* Add it to the reusable connection list
 	 */
-	list_add (LIST(conn), &thread->reuse_list);
+	cherokee_list_add (LIST(conn), &thread->reuse_list);
 	thread->reuse_list_num++;
 
 	return ret_ok;
@@ -856,7 +856,7 @@ process_active_connections (cherokee_thread_t *thd)
 			/* 3.- Read Request configurations
 			 */
 			matched_req = false;
-			if (! list_empty (&ventry->reqs)) {
+			if (! cherokee_list_empty (&ventry->reqs)) {
 				ret = cherokee_connection_get_req_entry (conn, &ventry->reqs, &entry);
 				switch (ret) {
 				case ret_ok:
@@ -1700,7 +1700,7 @@ cherokee_thread_get_new_connection (cherokee_thread_t *thd, cherokee_connection_
 
 	server = SRV(thd->server);
 
-	if (list_empty (&thd->reuse_list)) {
+	if (cherokee_list_empty (&thd->reuse_list)) {
 		ret_t ret;
 
 		/* Create new connection object
@@ -1711,7 +1711,7 @@ cherokee_thread_get_new_connection (cherokee_thread_t *thd, cherokee_connection_
 		/* Reuse an old one
 		 */
 		new_connection = CONN(thd->reuse_list.prev);
-		list_del (LIST(new_connection));
+		cherokee_list_del (LIST(new_connection));
 		thd->reuse_list_num--;
 
 		INIT_LIST_HEAD (LIST(new_connection));		

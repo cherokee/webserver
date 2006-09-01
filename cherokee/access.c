@@ -159,14 +159,14 @@ cherokee_access_free (cherokee_access_t *entry)
 	/* Free the IP list items
 	 */
 	list_for_each_safe (i, tmp, LIST(&entry->list_ips)) {
-		list_del (i);
+		cherokee_list_del (i);
 		free (i);
 	}
 
 	/* Free the Subnet list items
 	 */
 	list_for_each_safe (i, tmp, LIST(&entry->list_subnets)) {
-		list_del (i);
+		cherokee_list_del (i);
 		free (i);
 	}
 
@@ -317,7 +317,7 @@ cherokee_access_add_ip (cherokee_access_t *entry, char *ip)
 		return ret;
 	}
 
-	list_add (LIST(n), &entry->list_ips);
+	cherokee_list_add (LIST(n), &entry->list_ips);
 
 	return ret;
 }
@@ -362,7 +362,7 @@ cherokee_access_add_subnet (cherokee_access_t *entry, char *subnet)
 	n = new_subnet();
 	if (n == NULL) return ret_error;
 
-	list_add (LIST(n), &entry->list_subnets);
+	cherokee_list_add (LIST(n), &entry->list_subnets);
 
 	/* Parse the IP
 	 */

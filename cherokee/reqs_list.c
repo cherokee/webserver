@@ -131,7 +131,7 @@ cherokee_reqs_list_add  (cherokee_reqs_list_t       *rl,
 
 	/* Add the new connection
 	 */
-	list_add_tail (&plugin_entry->list_node, LIST(rl));
+	cherokee_list_add_tail (&plugin_entry->list_node, LIST(rl));
 	
 	/* Compile the expression
 	 */

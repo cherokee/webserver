@@ -794,7 +794,7 @@ initialize_server_threads (cherokee_server_t *srv)
 		
 		thread->thread_pref = (i % 2)? thread_normal_tls : thread_tls_normal;
 
-		list_add (LIST(thread), &srv->thread_list);
+		cherokee_list_add (LIST(thread), &srv->thread_list);
 	}
 #endif
 
@@ -1295,7 +1295,7 @@ add_vserver (cherokee_config_node_t *node, void *data)
 		ret = cherokee_table_add (&srv->vservers_ref, node->key.buf, vsrv);
 		if (ret != ret_ok) return ret;
 
-		list_add (LIST(vsrv), &srv->vservers);
+		cherokee_list_add (LIST(vsrv), &srv->vservers);
 
 		param[0] = srv;
 		param[1] = vsrv;

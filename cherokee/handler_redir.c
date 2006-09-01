@@ -226,7 +226,7 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_handle
 	if (! cherokee_buffer_is_empty (&CONN(cnt)->redirect)) {
 		TRACE (ENTRIES, "Explicit redirection to '%s'\n", CONN(cnt)->redirect.buf);
 	} else {
-		if (! list_empty (&HDL_REDIR_PROPS(n)->regex_list)) {
+		if (! cherokee_list_empty (&HDL_REDIR_PROPS(n)->regex_list)) {
 
 			/* Manage the regex rules
 			 */
@@ -335,7 +335,7 @@ configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cheroke
 
 	/* Add the list
 	 */
-	list_add_tail (LIST(n), &props->regex_list);
+	cherokee_list_add_tail (LIST(n), &props->regex_list);
 
 	return ret_ok;
 }

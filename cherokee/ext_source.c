@@ -371,7 +371,7 @@ cherokee_ext_source_configure (cherokee_config_node_t *conf, cherokee_list_t *ex
 
 		/* Instance a new entry
 		 */
-		if (list_empty (ext_list)) {
+		if (cherokee_list_empty (ext_list)) {
 			ret = cherokee_ext_source_head_new (&head);
 			if (ret != ret_ok) return ret;
 
@@ -383,7 +383,7 @@ cherokee_ext_source_configure (cherokee_config_node_t *conf, cherokee_list_t *ex
 		
 		/* Add the entry to the list
 		 */
-		list_add_tail (LIST(server_entry), ext_list);
+		cherokee_list_add_tail (LIST(server_entry), ext_list);
 
 		/* Parse properties
 		 */

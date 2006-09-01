@@ -35,7 +35,7 @@ cherokee_list_sort (cherokee_list_t *head, int (*cmp)(cherokee_list_t *a, cherok
 	int insize, nmerges, psize, qsize, i;
 	
 	list = head->next;
-	list_del(head);
+	cherokee_list_del(head);
 	insize = 1;
 	for (;;) {
 		p = oldhead = list;
@@ -114,12 +114,12 @@ cherokee_list_add_content (cherokee_list_t *head, void *item)
 	
 	/* Init
 	 */
-	INIT_LIST_HEAD((cherokee_list_t*)n);
+	INIT_LIST_HEAD (LIST(n));
 	n->info = item;
 	
 	/* Add to list
 	 */
-	list_add ((cherokee_list_t *)n, head);
+	cherokee_list_add (LIST(n), head);
 	
 	return ret_ok;
 }
@@ -132,12 +132,12 @@ cherokee_list_add_tail_content (cherokee_list_t *head, void *item)
 	
 	/* Init
 	 */
-	INIT_LIST_HEAD((cherokee_list_t*)n);
+	INIT_LIST_HEAD (LIST(n));
 	n->info = item;
 	
 	/* Add to list
 	 */
-	list_add_tail ((cherokee_list_t *)n, head);
+	cherokee_list_add_tail (LIST(n), head);
 	
 	return ret_ok;
 }
@@ -161,7 +161,7 @@ cherokee_list_content_free (cherokee_list_t *head, cherokee_list_free_func free_
 ret_t 
 cherokee_list_content_free_item (cherokee_list_t *head, cherokee_list_free_func free_func)
 {
-	list_del (head);
+	cherokee_list_del (head);
 	
 	if ((free_func != NULL) && (LIST_ITEM(head)->info)) {
 		free_func (LIST_ITEM(head)->info);
@@ -175,7 +175,7 @@ cherokee_list_content_free_item (cherokee_list_t *head, cherokee_list_free_func 
 ret_t 
 cherokee_list_content_free_item_simple (cherokee_list_t *head)
 {
-	list_del (head);
+	cherokee_list_del (head);
 	
 	if (LIST_ITEM(head)->info) {
 		free (LIST_ITEM(head)->info);

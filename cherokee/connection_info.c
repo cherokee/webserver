@@ -251,10 +251,10 @@ cherokee_connection_info_list_thread (cherokee_list_t *list, void *_thread, cher
 		CHEROKEE_NEW(n,connection_info);
 
 		cherokee_connection_info_fill_up (n, CONN(i));
-		list_add (LIST(n), list);
+		cherokee_list_add (LIST(n), list);
 	}
 
-	if (list_empty(list))
+	if (cherokee_list_empty (list))
 		return ret_not_found;
 
 	/* Release it
@@ -277,7 +277,7 @@ cherokee_connection_info_list_server (cherokee_list_t *list, cherokee_server_t *
 		cherokee_connection_info_list_thread (list, i, self);
 	}
 
-	if (list_empty(list))
+	if (cherokee_list_empty (list))
 		return ret_not_found;
 
 	return ret_ok;

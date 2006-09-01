@@ -179,7 +179,7 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 				env = env_item_new (&subconf2->key, &subconf2->val);
 				if (env == NULL) return ret_error;
 
-				list_add_tail (LIST(env), &props->system_env);
+				cherokee_list_add_tail (LIST(env), &props->system_env);
 			}
 		} else if (equal_buf_str (&subconf->key, "error_handler")) {
 			props->is_error_handler = atoi(subconf->val.buf);

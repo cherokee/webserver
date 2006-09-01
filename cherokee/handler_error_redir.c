@@ -93,7 +93,7 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 		cherokee_buffer_init (&entry->url);
 		cherokee_buffer_add_buffer (&entry->url, &subconf->val);
 
-		list_add (&entry->entry, &props->errors);
+		cherokee_list_add (&entry->entry, &props->errors);
 	}
 
 	return ret_ok;

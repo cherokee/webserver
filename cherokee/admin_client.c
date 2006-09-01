@@ -438,7 +438,7 @@ parse_reply_get_connections (char *reply, cherokee_list_t *conns_list)
 				SHOULDNT_HAPPEN;
 		}
 
-		list_add (LIST(conn_info), conns_list);
+		cherokee_list_add (LIST(conn_info), conns_list);
 		cherokee_buffer_clean (&info_str);
 	}
 

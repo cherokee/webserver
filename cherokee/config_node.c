@@ -111,7 +111,7 @@ add_new_child (cherokee_config_node_t *entry, cherokee_buffer_t *key)
 
 	cherokee_buffer_add_buffer (&n->key, key);	   
 
-	list_add_tail (LIST(n), &entry->child);
+	cherokee_list_add_tail (LIST(n), &entry->child);
 	return n;
 }
 
