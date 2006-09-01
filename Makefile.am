@@ -114,7 +114,7 @@ install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/icons ; then \
 		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mods-available/icons"; \
 	else \
-		$(INSTALL_DATA) $(top_builddir)/icons.conf.sample $(DESTDIR)$(cherokeeconfdir)/mods-available/icons; \
+		$(INSTALL_DATA) $(top_builddir)/mods-icons.conf.sample $(DESTDIR)$(cherokeeconfdir)/mods-available/icons; \
 		$(SHELL) -c "cd $(DESTDIR)$(cherokeeconfdir)/mods-enabled/ && $(LN_S) ../mods-available/icons ."; \
 	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl ; then \
