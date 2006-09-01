@@ -42,7 +42,6 @@
 #include <cherokee/url.h>
 #include <cherokee/header.h>
 #include <cherokee/resolv_cache.h>
-#include <cherokee/typed_table.h>
 
 /* Server library
  */

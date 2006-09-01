@@ -50,7 +50,7 @@ static ret_t
 cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	ret_t                             ret;
-	list_t                           *i, *j;
+	cherokee_list_t                  *i, *j;
 	cherokee_handler_fastcgi_props_t *props;
 
 	/* Instance a new property object

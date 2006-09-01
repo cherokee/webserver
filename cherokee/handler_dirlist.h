@@ -55,7 +55,7 @@ typedef enum {
 typedef struct {
 	cherokee_handler_props_t props;
 
-	list_t                   notice_files;
+	cherokee_list_t          notice_files;
 
 	/* Visible properties
 	 */
@@ -78,8 +78,8 @@ typedef struct {
 
 	/* File list
 	 */
-	list_t                   dirs;
-	list_t                   files;
+	cherokee_list_t          dirs;
+	cherokee_list_t          files;
 	
 	/* State
 	 */
@@ -89,8 +89,8 @@ typedef struct {
 	/* State
 	 */
 	cuint_t                  longest_filename;
-	list_t                  *dir_ptr;
-	list_t                  *file_ptr;	
+	cherokee_list_t         *dir_ptr;
+	cherokee_list_t         *file_ptr;	
  	cherokee_buffer_t        header;
 	cherokee_boolean_t       serve_css;
 

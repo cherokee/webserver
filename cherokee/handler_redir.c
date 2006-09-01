@@ -32,7 +32,6 @@
 #include "pcre/pcre.h"
 #include "regex.h"
 #include "util.h"
-#include "list_ext.h"
 
 #define ENTRIES "handler,redir"
 
@@ -40,7 +39,7 @@
 #ifndef CHEROKEE_EMBEDDED
 
 struct cre_list {
-	list_t             item;
+	cherokee_list_t    item;
 	pcre              *re;
 	char               hidden;
 	cherokee_buffer_t  subs;
@@ -91,7 +90,7 @@ substitute_groups (cherokee_buffer_t *url, const char *subject,
 static ret_t
 match_and_substitute (cherokee_handler_redir_t *n) 
 {
-	list_t                *i;
+	cherokee_list_t       *i;
 	ret_t                  ret;
 	cherokee_connection_t *conn = HANDLER_CONN(n);
 	
@@ -336,7 +335,7 @@ configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cheroke
 
 	/* Add the list
 	 */
-	list_add_tail ((list_t *)n, &props->regex_list);
+	list_add_tail (LIST(n), &props->regex_list);
 
 	return ret_ok;
 }
@@ -353,7 +352,7 @@ cre_entry_free (struct cre_list *n)
 static ret_t 
 props_free (cherokee_handler_redir_props_t *props)
 {
-	list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 
 	cherokee_buffer_mrproper (&props->url);
 
@@ -369,7 +368,7 @@ static ret_t
 cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	ret_t                           ret;
-	list_t                         *i, *j;
+	cherokee_list_t                *i, *j;
 	cherokee_handler_redir_props_t *props;
 
 	if (*_props == NULL) {

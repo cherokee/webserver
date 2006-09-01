@@ -64,10 +64,10 @@ typedef union {
 } ip_t;
 
 typedef struct {
-	list_t    node;
+	cherokee_list_t node;
 	
-	ip_type_t type;
-	ip_t      ip;
+	ip_type_t       type;
+	ip_t            ip;
 } ip_item_t;
 
 typedef struct {
@@ -87,7 +87,7 @@ new_ip (void)
 	ip_item_t *n = (ip_item_t *) malloc (sizeof(ip_item_t));
 	if (n == NULL) return NULL;
 
-	INIT_LIST_HEAD((list_t*)n);
+	INIT_LIST_HEAD (LIST(n));
 	memset (&n->ip, 0, sizeof(ip_t));
 
 	return n;
@@ -109,7 +109,7 @@ new_subnet (void)
 	memset (&n->base.ip, 0, sizeof(ip_t));
 	memset (&n->mask, 0, sizeof(ip_t));
 
-	INIT_LIST_HEAD((list_t*)n);
+	INIT_LIST_HEAD (LIST(n));
 	return n;
 }
 
@@ -154,18 +154,18 @@ print_ip (ip_type_t type, ip_t *ip)
 ret_t 
 cherokee_access_free (cherokee_access_t *entry)
 {
-	list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 	
 	/* Free the IP list items
 	 */
-	list_for_each_safe (i, tmp, (list_t*)&entry->list_ips) {
+	list_for_each_safe (i, tmp, LIST(&entry->list_ips)) {
 		list_del (i);
 		free (i);
 	}
 
 	/* Free the Subnet list items
 	 */
-	list_for_each_safe (i, tmp, (list_t*)&entry->list_subnets) {
+	list_for_each_safe (i, tmp, LIST(&entry->list_subnets)) {
 		list_del (i);
 		free (i);
 	}
@@ -317,7 +317,7 @@ cherokee_access_add_ip (cherokee_access_t *entry, char *ip)
 		return ret;
 	}
 
-	list_add ((list_t *)n, &entry->list_ips);
+	list_add (LIST(n), &entry->list_ips);
 
 	return ret;
 }
@@ -362,7 +362,7 @@ cherokee_access_add_subnet (cherokee_access_t *entry, char *subnet)
 	n = new_subnet();
 	if (n == NULL) return ret_error;
 
-	list_add ((list_t *)n, &entry->list_subnets);
+	list_add (LIST(n), &entry->list_subnets);
 
 	/* Parse the IP
 	 */
@@ -447,17 +447,17 @@ cherokee_access_add (cherokee_access_t *entry, char *ip_or_subnet)
 ret_t 
 cherokee_access_print_debug (cherokee_access_t *entry)
 {
-	list_t *i;
+	cherokee_list_t *i;
 
 	printf ("IPs: ");
-	list_for_each (i, (list_t*)&entry->list_ips) {
+	list_for_each (i, LIST(&entry->list_ips)) {
 		print_ip (IP_NODE(i)->type, &IP_NODE(i)->ip);
 		printf(" ");
 	}
 	printf("\n");
 
 	printf ("Subnets: ");
-	list_for_each (i, (list_t*)&entry->list_subnets) {
+	list_for_each (i, LIST(&entry->list_subnets)) {
 		print_ip (IP_NODE(i)->type, &IP_NODE(i)->ip);
 		printf("/");
 		print_ip (IP_NODE(i)->type, &SUBNET_NODE(i)->mask);
@@ -472,12 +472,12 @@ cherokee_access_print_debug (cherokee_access_t *entry)
 ret_t 
 cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 {
-	int     re;
-	list_t *i;
+	int              re;
+	cherokee_list_t *i;
 
 	/* Check in the IP list
 	 */
-	list_for_each (i, (list_t*)&entry->list_ips) {
+	list_for_each (i, LIST(&entry->list_ips)) {
 		
 #ifdef HAVE_IPV6
 		/* This is a special case:
@@ -529,7 +529,7 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 
 	/* Check in the Subnets list
 	 */
-	list_for_each (i, (list_t*)&entry->list_subnets) {
+	list_for_each (i, LIST(&entry->list_subnets)) {
 		int j;
 		ip_t masqued_remote, masqued_list;
 

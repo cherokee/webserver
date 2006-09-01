@@ -30,8 +30,8 @@
 
 struct cherokee_mime {
 	cherokee_table_t mime_table;
-	list_t           mime_list;
-	list_t           name_list;
+	cherokee_list_t  mime_list;
+	cherokee_list_t  name_list;
 };
 
 #define MIME_TABLE(m)  (&((cherokee_mime_t *)(m))->mime_table)

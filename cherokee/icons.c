@@ -25,7 +25,6 @@
 #include "common-internal.h"
 
 #include "icons.h"
-#include "list_ext.h"
 #include "match.h"
 #include "util.h"
 

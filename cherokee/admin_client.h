@@ -101,7 +101,7 @@ ret_t cherokee_admin_client_ask_port_tls    (cherokee_admin_client_t *admin, cui
 ret_t cherokee_admin_client_ask_rx          (cherokee_admin_client_t *admin, cherokee_buffer_t *rx);
 ret_t cherokee_admin_client_ask_tx          (cherokee_admin_client_t *admin, cherokee_buffer_t *tx);
 
-ret_t cherokee_admin_client_ask_connections (cherokee_admin_client_t *admin, list_t *conns);
+ret_t cherokee_admin_client_ask_connections (cherokee_admin_client_t *admin, cherokee_list_t *conns);
 ret_t cherokee_admin_client_del_connection  (cherokee_admin_client_t *admin, char *id);
 ret_t cherokee_admin_client_ask_thread_num  (cherokee_admin_client_t *admin, cherokee_buffer_t *num);
 ret_t cherokee_admin_client_set_backup_mode (cherokee_admin_client_t *admin, cherokee_boolean_t active);

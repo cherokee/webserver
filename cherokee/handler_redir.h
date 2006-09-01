@@ -36,7 +36,7 @@
 typedef struct {
 	cherokee_handler_props_t base;
 	cherokee_buffer_t        url;
-	list_t                   regex_list;
+	cherokee_list_t          regex_list;
 } cherokee_handler_redir_props_t;
 
 typedef struct {

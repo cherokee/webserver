@@ -44,7 +44,7 @@ typedef enum {
 
 typedef struct {
 	cherokee_handler_cgi_base_t  base;
-	list_t                       server_list; 	
+	cherokee_list_t              server_list; 	
 } cherokee_handler_fcgi_props_t;
 
 typedef struct {

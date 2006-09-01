@@ -77,7 +77,7 @@ struct cherokee_server {
 	
 	/* Virtual servers
 	 */
-	list_t                     vservers;
+	cherokee_list_t            vservers;
 	cherokee_table_t           vservers_ref;
 	cherokee_virtual_server_t *vserver_default;
 	
@@ -85,7 +85,7 @@ struct cherokee_server {
 	 */
 	cherokee_thread_t         *main_thread;
 	int                        thread_num;
-	list_t                     thread_list;
+	cherokee_list_t            thread_list;
 	int                        thread_policy;
 
 	/* Modules

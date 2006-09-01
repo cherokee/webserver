@@ -29,9 +29,9 @@
 
 
 void 
-cherokee_list_sort (list_t *head, int (*cmp)(list_t *a, list_t *b))
+cherokee_list_sort (cherokee_list_t *head, int (*cmp)(cherokee_list_t *a, cherokee_list_t *b))
 {
-	list_t *p, *q, *e, *list, *tail, *oldhead;
+	cherokee_list_t *p, *q, *e, *list, *tail, *oldhead;
 	int insize, nmerges, psize, qsize, i;
 	
 	list = head->next;
@@ -108,58 +108,58 @@ cherokee_list_sort (list_t *head, int (*cmp)(list_t *a, list_t *b))
 
 
 ret_t 
-cherokee_list_add_content (list_t *head, void *item)
+cherokee_list_add_content (cherokee_list_t *head, void *item)
 {
-	   CHEROKEE_NEW_STRUCT(n,list_item);
-
-	   /* Init
-	    */
-	   INIT_LIST_HEAD((list_t*)n);
-	   n->info = item;
-
-	   /* Add to list
-	    */
-	   list_add ((list_t *)n, head);
-
-	   return ret_ok;
+	CHEROKEE_NEW_STRUCT(n,list_item);
+	
+	/* Init
+	 */
+	INIT_LIST_HEAD((cherokee_list_t*)n);
+	n->info = item;
+	
+	/* Add to list
+	 */
+	list_add ((cherokee_list_t *)n, head);
+	
+	return ret_ok;
 }
 
 
 ret_t 
-cherokee_list_add_tail_content (list_t *head, void *item)
+cherokee_list_add_tail_content (cherokee_list_t *head, void *item)
 {
-	   CHEROKEE_NEW_STRUCT(n,list_item);
-
-	   /* Init
-	    */
-	   INIT_LIST_HEAD((list_t*)n);
-	   n->info = item;
-
-	   /* Add to list
-	    */
-	   list_add_tail ((list_t *)n, head);
-
-	   return ret_ok;
+	CHEROKEE_NEW_STRUCT(n,list_item);
+	
+	/* Init
+	 */
+	INIT_LIST_HEAD((cherokee_list_t*)n);
+	n->info = item;
+	
+	/* Add to list
+	 */
+	list_add_tail ((cherokee_list_t *)n, head);
+	
+	return ret_ok;
 }
 
 
 ret_t 
-cherokee_list_content_free (list_t *head, cherokee_list_free_func free_func)
+cherokee_list_content_free (cherokee_list_t *head, cherokee_list_free_func free_func)
 {
-	   list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 
-	   list_for_each_safe (i, tmp, head) {
-		   cherokee_list_content_free_item (i, free_func);
-	   }
-
-	   INIT_LIST_HEAD(head);
-
-	   return ret_ok;
+	list_for_each_safe (i, tmp, head) {
+		cherokee_list_content_free_item (i, free_func);
+	}
+	
+	INIT_LIST_HEAD(head);
+	
+	return ret_ok;
 }
 
 
 ret_t 
-cherokee_list_content_free_item (list_t *head, cherokee_list_free_func free_func)
+cherokee_list_content_free_item (cherokee_list_t *head, cherokee_list_free_func free_func)
 {
 	list_del (head);
 	
@@ -173,7 +173,7 @@ cherokee_list_content_free_item (list_t *head, cherokee_list_free_func free_func
 
 
 ret_t 
-cherokee_list_content_free_item_simple (list_t *head)
+cherokee_list_content_free_item_simple (cherokee_list_t *head)
 {
 	list_del (head);
 	

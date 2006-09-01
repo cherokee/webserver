@@ -41,16 +41,16 @@
 int 
 main (int argc, char *argv[]) 
 {
-	ret_t              ret;
-	cuint_t            fds_num;
+	ret_t                    ret;
+	cuint_t                  fds_num;
 	cherokee_fdpoll_t       *fdpoll;
 	cherokee_admin_client_t *client;
 	cherokee_buffer_t        url;
-	list_t                  *i, *tmp;
+	cherokee_list_t         *i, *tmp;
 
-	cuint_t                     port;
-	cherokee_buffer_t           buf;
-	list_t                      conns = LIST_HEAD_INIT(conns);
+	cuint_t                  port;
+	cherokee_buffer_t        buf;
+	cherokee_list_t          conns = LIST_HEAD_INIT(conns);
 
 	if (argc <= 1) {
 		PRINT_ERROR ("%s url request\n", argv[0]);

@@ -361,7 +361,7 @@ ret_t
 cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
 {
 	ret_t                    ret;
-	list_t                  *i;
+	cherokee_list_t         *i;
 	cherokee_config_node_t  *subconf;
 	cherokee_config_entry_t *entry = CONF_ENTRY(config_entry);
 

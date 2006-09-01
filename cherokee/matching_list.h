@@ -38,14 +38,14 @@ typedef enum {
 
 
 typedef struct {
-	list_t              list;
+	cherokee_list_t     list;
 	char               *string;
 } cherokee_matching_list_entry_t;
 
 
 typedef struct {
-	list_t              list_allow;
-	list_t              list_deny;
+	cherokee_list_t     list_allow;
+	cherokee_list_t     list_deny;
 	cherokee_matching_t type;
 } cherokee_matching_list_t;
 

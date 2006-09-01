@@ -36,7 +36,7 @@
 static void
 init_server (cherokee_ext_source_t *n)
 {
-	INIT_LIST_HEAD((list_t *)n);
+	INIT_LIST_HEAD (LIST(n));
 	
 	cherokee_buffer_init (&n->interpreter);
 	cherokee_buffer_init (&n->host);
@@ -95,7 +95,7 @@ cherokee_ext_source_new (cherokee_ext_source_t **server)
 	CHEROKEE_NEW_STRUCT (n, ext_source);
 	
 	init_server (n);
-	n->free_func = (cherokee_typed_free_func_t) server_free;
+//	n->free_func = (cherokee_typed_free_func_t) server_free;
 	
 	*server = n;
 	return ret_ok;
@@ -108,7 +108,7 @@ cherokee_ext_source_head_new (cherokee_ext_source_head_t **server)
 	CHEROKEE_NEW_STRUCT (n, ext_source_head);
 	
 	init_server (EXT_SOURCE(n));
-	EXT_SOURCE(n)->free_func = (cherokee_typed_free_func_t) server_head_free;
+//	EXT_SOURCE(n)->free_func = (cherokee_typed_free_func_t) server_head_free;
 	
 	n->current_server = EXT_SOURCE(n);
 	CHEROKEE_MUTEX_INIT (&n->current_server_lock, NULL);
@@ -121,10 +121,10 @@ cherokee_ext_source_head_new (cherokee_ext_source_head_t **server)
 ret_t 
 cherokee_ext_source_free (cherokee_ext_source_t *server)
 {
-	if (server->free_func == NULL)
+//	if (server->free_func == NULL)
 		return ret_error;
 
-	server->free_func(server);
+//	server->free_func(server);
 	return ret_ok;
 }
 
@@ -197,7 +197,7 @@ cherokee_ext_source_connect (cherokee_ext_source_t *src, cherokee_socket_t *sock
 
 
 ret_t 
-cherokee_ext_source_get_next (cherokee_ext_source_head_t *head_config, list_t *server_list, cherokee_ext_source_t **next)
+cherokee_ext_source_get_next (cherokee_ext_source_head_t *head_config, cherokee_list_t *server_list, cherokee_ext_source_t **next)
 {
 	cherokee_ext_source_t *current_config;
 
@@ -206,14 +206,14 @@ cherokee_ext_source_get_next (cherokee_ext_source_head_t *head_config, list_t *s
 	/* Set the next server
 	 */
 	current_config              = head_config->current_server;
-	head_config->current_server = EXT_SOURCE(((list_t *)current_config)->next);
+	head_config->current_server = EXT_SOURCE(LIST(current_config)->next);
 
 	/* This is a special case: if the next is the base of the list, we have to
 	 * skip the entry and point to the next one
 	 */
-	if ((list_t*)head_config->current_server == server_list) {
+	if (LIST(head_config->current_server) == server_list) {
 		current_config = head_config->current_server;
-		head_config->current_server = EXT_SOURCE(((list_t *)current_config)->next);
+//		head_config->current_server = EXT_SOURCE((LIST(current_config)->next);
 	}		
 
 	*next = head_config->current_server;
@@ -353,14 +353,14 @@ split_address_or_path (char *str, cherokee_buffer_t *hostname, cint_t *port_num,
 
 
 ret_t 
-cherokee_ext_source_configure (cherokee_config_node_t *conf, list_t *ext_list)
+cherokee_ext_source_configure (cherokee_config_node_t *conf, cherokee_list_t *ext_list)
 {
 	ret_t                       ret;
 	cherokee_config_node_t     *child;
 	cherokee_config_node_t     *child2;
 	cherokee_config_node_t     *child3;
-	list_t                     *i, *j, *k;
-	list_t                      nlist        = LIST_HEAD_INIT(nlist);
+	cherokee_list_t            *i, *j, *k;
+	cherokee_list_t             nlist        = LIST_HEAD_INIT(nlist);
 	cherokee_ext_source_t      *server_entry = NULL;
 	cherokee_ext_source_head_t *head         = NULL;
 
@@ -383,7 +383,7 @@ cherokee_ext_source_configure (cherokee_config_node_t *conf, list_t *ext_list)
 		
 		/* Add the entry to the list
 		 */
-		list_add_tail ((list_t *)server_entry, ext_list);
+		list_add_tail (LIST(server_entry), ext_list);
 
 		/* Parse properties
 		 */

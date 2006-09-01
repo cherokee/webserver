@@ -49,7 +49,7 @@ cherokee_mime_new (cherokee_mime_t **mime)
 ret_t
 cherokee_mime_free (cherokee_mime_t *mime)
 {
-	list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 
 	cherokee_table_mrproper (&mime->mime_table);
 
@@ -79,8 +79,8 @@ cherokee_mime_get_by_suffix (cherokee_mime_t *mime, char *suffix, cherokee_mime_
 ret_t 
 cherokee_mime_get_by_type (cherokee_mime_t *mime, char *type, cherokee_mime_entry_t **entry)
 {
-	ret_t   ret;
-	list_t *i;
+	ret_t            ret;
+	cherokee_list_t *i;
 
 	list_for_each (i, &mime->mime_list) {
 		cherokee_buffer_t *itype;
@@ -101,7 +101,7 @@ cherokee_mime_get_by_type (cherokee_mime_t *mime, char *type, cherokee_mime_entr
 ret_t 
 cherokee_mime_add_entry (cherokee_mime_t *mime, cherokee_mime_entry_t *entry)
 {
-	list_add ((list_t *)entry, &mime->mime_list);
+	list_add (LIST(entry), &mime->mime_list);
 	return ret_ok;
 }
 

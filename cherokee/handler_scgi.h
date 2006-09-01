@@ -36,8 +36,8 @@
 
 typedef struct {
 	cherokee_handler_cgi_base_t  base;
-	list_t                       scgi_env_ref;
-	list_t                       server_list; 	
+	cherokee_list_t              scgi_env_ref;
+	cherokee_list_t              server_list; 	
 } cherokee_handler_scgi_props_t;
 
 

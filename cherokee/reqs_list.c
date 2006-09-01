@@ -44,7 +44,7 @@ cherokee_reqs_list_init (cherokee_reqs_list_t *rl)
 ret_t 
 cherokee_reqs_list_mrproper (cherokee_reqs_list_t *rl)
 {
-	list_t                     *i, *tmp;
+	cherokee_list_t            *i, *tmp;
 	cherokee_reqs_list_entry_t *entry;
 
 	list_for_each_safe (i, tmp, rl) {
@@ -62,9 +62,9 @@ cherokee_reqs_list_get (cherokee_reqs_list_t     *rl,
 			cherokee_config_entry_t  *plugin_entry,
 			cherokee_connection_t    *conn)
 {
-	ret_t   ret;
-	list_t *i;
-	list_t *reqs = (list_t *)rl;
+	ret_t            ret;
+	cherokee_list_t *i;
+	cherokee_list_t *reqs = LIST(rl);
 
 	/* Sanity check
 	 */
@@ -131,7 +131,7 @@ cherokee_reqs_list_add  (cherokee_reqs_list_t       *rl,
 
 	/* Add the new connection
 	 */
-	list_add_tail (&plugin_entry->list_node, (list_t *)rl);
+	list_add_tail (&plugin_entry->list_node, LIST(rl));
 	
 	/* Compile the expression
 	 */

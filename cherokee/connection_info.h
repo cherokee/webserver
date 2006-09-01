@@ -40,7 +40,7 @@
 CHEROKEE_BEGIN_DECLS
 
 typedef struct {
-	list_t               list_entry;
+	cherokee_list_t      list_entry;
 	cherokee_buffer_t    id;              /* ID */
 	cherokee_buffer_t    phase;           /* Current task */
 	cherokee_buffer_t    request;         /* Request string */
@@ -61,8 +61,8 @@ ret_t cherokee_connection_info_free     (cherokee_connection_info_t  *info);
 
 ret_t cherokee_connection_info_fill_up     (cherokee_connection_info_t *info, cherokee_connection_t *conn);
 
-ret_t cherokee_connection_info_list_thread (list_t *infos_list, void *thread, cherokee_handler_t *self);
-ret_t cherokee_connection_info_list_server (list_t *infos_list, cherokee_server_t *server, cherokee_handler_t *self);
+ret_t cherokee_connection_info_list_thread (cherokee_list_t *infos_list, void *thread, cherokee_handler_t *self);
+ret_t cherokee_connection_info_list_server (cherokee_list_t *infos_list, cherokee_server_t *server, cherokee_handler_t *self);
 
 CHEROKEE_END_DECLS
 

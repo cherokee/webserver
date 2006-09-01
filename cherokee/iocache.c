@@ -88,12 +88,12 @@ struct cherokee_iocache {
 typedef struct {
 	cherokee_iocache_t *iocache;
 	float               average;
-	list_t              to_delete;
+	cherokee_list_t     to_delete;
 } clean_up_params_t;
 
 
 typedef struct {
-	list_t                    list;
+	cherokee_list_t           list;
 	cherokee_iocache_entry_t *file;
 	const char               *filename;
 } to_delete_entry_t;
@@ -181,7 +181,7 @@ iocache_clean_up_each (const char *key, void *value, void *param)
 		delobj->file     = file;
 		delobj->filename = key;
 		
-		list_add ((list_t *)delobj, &params->to_delete);
+		list_add (LIST(delobj), &params->to_delete);
 	}
 
 	return true;
@@ -318,7 +318,7 @@ cherokee_iocache_clean_up (cherokee_iocache_t *iocache, cuint_t num)
 {
 	float              average;
 	clean_up_params_t  params;
-	list_t            *i, *tmp;
+	cherokee_list_t   *i, *tmp;
 	
 	if (iocache->files_num < CACHE_SIZE)
 		return ret_ok;

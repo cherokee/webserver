@@ -33,7 +33,7 @@
 #include "config_entry.h"
 
 
-typedef list_t cherokee_reqs_list_t;
+typedef cherokee_list_t cherokee_reqs_list_t;
 #define REQLIST(x) ((cherokee_req_list_t *)(x))
 
 ret_t cherokee_reqs_list_init     (cherokee_reqs_list_t *rl);

@@ -40,7 +40,7 @@
 static ret_t 
 props_free (cherokee_handler_scgi_props_t *props)
 {
-	list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 	
 	list_for_each_safe (i, tmp, &props->server_list) {
 		cherokee_ext_source_free (EXT_SOURCE(i));
@@ -55,7 +55,7 @@ static ret_t
 cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	ret_t                          ret;
-	list_t                        *i;
+	cherokee_list_t               *i;
 	cherokee_handler_scgi_props_t *props;
 	
 	/* Instance a new property object

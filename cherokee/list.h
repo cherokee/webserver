@@ -38,9 +38,12 @@ struct list_entry {
 	struct list_entry *next;
 	struct list_entry *prev;
 };
-typedef struct list_entry list_t;
 
-#define LIST(l) ((list_t *)(l))
+typedef struct list_entry cherokee_list_t;
+typedef struct list_entry cherokee_list_entry_t;
+
+
+#define LIST(l) ((cherokee_list_t *)(l))
 
 #define INIT_LIST_HEAD(ptr) do {     \
 		(ptr)->next = (ptr); \
@@ -60,13 +63,13 @@ typedef struct list_entry list_t;
 
 
 static inline int 
-list_empty (list_t *list)
+list_empty (cherokee_list_t *list)
 {
 	return (list->next == list);
 }
 
 static inline void 
-list_add (list_t *new_entry, list_t *head)
+list_add (cherokee_list_t *new_entry, cherokee_list_t *head)
 {
 	new_entry->next  = head->next;
 	new_entry->prev  = head;
@@ -75,7 +78,7 @@ list_add (list_t *new_entry, list_t *head)
 }
 
 static inline void 
-list_add_tail (list_t *new_entry, list_t *head)
+list_add_tail (cherokee_list_t *new_entry, cherokee_list_t *head)
 {
 	new_entry->next  = head;
 	new_entry->prev  = head->prev;
@@ -84,14 +87,14 @@ list_add_tail (list_t *new_entry, list_t *head)
 }
 
 static inline void
-list_del (list_t *entry)
+list_del (cherokee_list_t *entry)
 {
 	entry->next->prev = entry->prev;
 	entry->prev->next = entry->next;
 }
 
 static inline void 
-list_reparent (list_t *list, list_t *new_entry)
+list_reparent (cherokee_list_t *list, cherokee_list_t *new_entry)
 {
 	if (list_empty(list))
 		return;
@@ -102,7 +105,7 @@ list_reparent (list_t *list, list_t *new_entry)
 	new_entry->next->prev = new_entry;
 }
 
-void cherokee_list_sort (list_t *head, int (*cmp)(list_t *a, list_t *b));
+void cherokee_list_sort (cherokee_list_t *head, int (*cmp)(cherokee_list_t *a, cherokee_list_t *b));
 
 
 /* Methods for non list elements
@@ -111,19 +114,19 @@ void cherokee_list_sort (list_t *head, int (*cmp)(list_t *a, list_t *b));
 typedef void (*cherokee_list_free_func) (void *);
 
 typedef struct {
-	list_t  list;
-	void   *info;
+	cherokee_list_entry_t  list;
+	void                  *info;
 } cherokee_list_item_t;
 
 #define LIST_ITEM(i)      ((cherokee_list_item_t *)(i))
 #define LIST_ITEM_INFO(i) (LIST_ITEM(i)->info)
 
-ret_t cherokee_list_add_content              (list_t *head, void *item);
-ret_t cherokee_list_add_tail_content         (list_t *head, void *item);
+ret_t cherokee_list_add_content              (cherokee_list_t *head, void *item);
+ret_t cherokee_list_add_tail_content         (cherokee_list_t *head, void *item);
 
-ret_t cherokee_list_content_free             (list_t *head, cherokee_list_free_func free_func);
-ret_t cherokee_list_content_free_item        (list_t *head, cherokee_list_free_func free_func);
-ret_t cherokee_list_content_free_item_simple (list_t *head);
+ret_t cherokee_list_content_free             (cherokee_list_t *head, cherokee_list_free_func free_func);
+ret_t cherokee_list_content_free_item        (cherokee_list_t *head, cherokee_list_free_func free_func);
+ret_t cherokee_list_content_free_item_simple (cherokee_list_t *head);
 
 
 CHEROKEE_END_DECLS

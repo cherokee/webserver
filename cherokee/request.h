@@ -33,7 +33,7 @@
 #include "http.h"
 
 typedef struct {
-	list_t                  list_entry;
+	cherokee_list_t         list_entry;
 	cherokee_url_t          url;
 	
 	uint16_t                pipeline;

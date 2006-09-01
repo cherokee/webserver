@@ -43,9 +43,9 @@ cherokee_matching_list_new (cherokee_matching_list_t **mlist)
 
 
 static void
-free_list (list_t *list)
+free_list (cherokee_list_t *list)
 {
-	list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 
 	list_for_each_safe (i, tmp, list) {
 		if (MLIST_ENTRY(i)->string) {
@@ -69,14 +69,14 @@ cherokee_matching_list_free (cherokee_matching_list_t *mlist)
 
 
 static ret_t
-add_to_list (list_t *list, const char *item)
+add_to_list (cherokee_list_t *list, const char *item)
 {
 	CHEROKEE_NEW_STRUCT (n, matching_list_entry);
 
 	INIT_LIST_HEAD(&n->list);
 	n->string = strdup(item);
 
-	list_add ((list_t *)n, list);	
+	list_add (LIST(n), list);	
 	return ret_ok;
 }
 
@@ -104,9 +104,9 @@ cherokee_matching_list_set_type (cherokee_matching_list_t *mlist, cherokee_match
 
 
 static int
-in_list  (list_t *list, char *match)
+in_list  (cherokee_list_t *list, char *match)
 {
-	list_t *i;
+	cherokee_list_t *i;
 
 	list_for_each (i, list) {
 		if (!strcmp (MLIST_ENTRY(i)->string, match)) {

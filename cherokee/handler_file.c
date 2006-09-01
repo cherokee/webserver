@@ -54,7 +54,7 @@ cherokee_handler_file_props_free (cherokee_handler_file_props_t *props)
 ret_t 
 cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
-	list_t                        *i;
+	cherokee_list_t               *i;
 	cherokee_handler_file_props_t *props;
 
 	if (*_props == NULL) {

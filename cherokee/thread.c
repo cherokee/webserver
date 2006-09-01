@@ -179,10 +179,10 @@ cherokee_thread_new  (cherokee_thread_t **thd, void *server, cherokee_thread_typ
 
 	/* Init
 	 */
-	INIT_LIST_HEAD((list_t*)&n->base);
-	INIT_LIST_HEAD((list_t*)&n->active_list);
-	INIT_LIST_HEAD((list_t*)&n->reuse_list);
-	INIT_LIST_HEAD((list_t*)&n->polling_list);
+	INIT_LIST_HEAD (LIST(&n->base));
+	INIT_LIST_HEAD (LIST(&n->active_list));
+	INIT_LIST_HEAD (LIST(&n->reuse_list));
+	INIT_LIST_HEAD (LIST(&n->polling_list));
 	
 	if (fdpoll_type == cherokee_poll_UNSET)
 		ret = cherokee_fdpoll_best_new (&n->fdpoll, system_fd_num, fd_num);
@@ -271,28 +271,28 @@ conn_set_mode (cherokee_thread_t *thd, cherokee_connection_t *conn, cherokee_soc
 static void
 add_connection (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
-	list_add_tail ((list_t *)conn, &thd->active_list);
+	list_add_tail (LIST(conn), &thd->active_list);
 	thd->active_list_num++;
 }
 
 static void
 add_connection_polling (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
-	list_add_tail ((list_t *)conn, &thd->polling_list);
+	list_add_tail (LIST(conn), &thd->polling_list);
 	thd->polling_list_num++;
 }
 
 static void
 del_connection (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
-	list_del ((list_t *)conn);
+	list_del (LIST(conn));
 	thd->active_list_num--;
 }
 
 static void
 del_connection_polling (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
-	list_del ((list_t *)conn);
+	list_del (LIST(conn));
 	thd->polling_list_num--;
 }
 
@@ -312,7 +312,7 @@ connection_reuse_or_free (cherokee_thread_t *thread, cherokee_connection_t *conn
 
 	/* Add it to the reusable connection list
 	 */
-	list_add ((list_t *)conn, &thread->reuse_list);
+	list_add (LIST(conn), &thread->reuse_list);
 	thread->reuse_list_num++;
 
 	return ret_ok;
@@ -339,7 +339,7 @@ purge_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 static cherokee_boolean_t 
 check_addition_multiple_fd (cherokee_thread_t *thread, int fd)
 {
-	list_t                *i;
+	cherokee_list_t       *i;
 	cherokee_connection_t *iconn;
 	
 	list_for_each (i, &thread->polling_list) {
@@ -354,7 +354,7 @@ check_addition_multiple_fd (cherokee_thread_t *thread, int fd)
 static cherokee_boolean_t 
 check_removal_multiple_fd (cherokee_thread_t *thread, int fd)
 {
-	list_t                *i;
+	cherokee_list_t       *i;
 	cherokee_connection_t *iconn;
 	cherokee_boolean_t     first = false;
 	
@@ -468,11 +468,11 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 static ret_t 
 process_polling_connections (cherokee_thread_t *thd)
 {
-	int     re;
-	list_t *tmp, *i;
+	int                    re;
+	cherokee_list_t       *tmp, *i;
 	cherokee_connection_t *conn;
 
-	list_for_each_safe (i, tmp, (list_t*)&thd->polling_list) {
+	list_for_each_safe (i, tmp, LIST(&thd->polling_list)) {
 		conn = CONN(i);
 
 		/* Has it been too much without any work?
@@ -516,17 +516,16 @@ process_polling_connections (cherokee_thread_t *thd)
 static ret_t 
 process_active_connections (cherokee_thread_t *thd)
 {
-	ret_t    ret;
-	off_t    len;
-	list_t *i, *tmp;
-	cherokee_boolean_t process;
-	
+	ret_t                  ret;
+	off_t                  len;
+	cherokee_list_t       *i, *tmp;
+	cherokee_boolean_t     process;
 	cherokee_connection_t *conn = NULL;
 	cherokee_server_t     *srv  = SRV(thd->server);
 
 	/* Process active connections
 	 */
-	list_for_each_safe (i, tmp, (list_t*)&thd->active_list) {
+	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
 		conn = CONN(i);
 
 		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d\n", thd, conn, conn->phase);
@@ -1193,7 +1192,7 @@ process_active_connections (cherokee_thread_t *thd)
 ret_t 
 cherokee_thread_free (cherokee_thread_t *thd)
 {
-	list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 
 	cherokee_buffer_mrproper (&thd->bogo_now_string);
 
@@ -1712,10 +1711,10 @@ cherokee_thread_get_new_connection (cherokee_thread_t *thd, cherokee_connection_
 		/* Reuse an old one
 		 */
 		new_connection = CONN(thd->reuse_list.prev);
-		list_del ((list_t *)new_connection);
+		list_del (LIST(new_connection));
 		thd->reuse_list_num--;
 
-		INIT_LIST_HEAD((list_t *)new_connection);		
+		INIT_LIST_HEAD (LIST(new_connection));		
 	}
 
 	/* Set the basic information to the connection
@@ -1758,7 +1757,7 @@ cherokee_thread_connection_num (cherokee_thread_t *thd)
 ret_t 
 cherokee_thread_close_all_connections (cherokee_thread_t *thd)
 {
-	list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 	list_for_each_safe (i, tmp, &thd->active_list) {
 		purge_closed_connection (thd, CONN(i));
 	}
@@ -1770,8 +1769,8 @@ cherokee_thread_close_all_connections (cherokee_thread_t *thd)
 ret_t 
 cherokee_thread_close_polling_connections (cherokee_thread_t *thd, int fd, cuint_t *num)
 {
-	cuint_t  n = 0;
-	list_t  *i, *tmp;
+	cuint_t                n = 0;
+	cherokee_list_t       *i, *tmp;
 	cherokee_connection_t *conn;
 
 	list_for_each_safe (i, tmp, &thd->polling_list) {

@@ -57,8 +57,8 @@ typedef enum {
 typedef struct {
 	cherokee_handler_cgi_base_t     base;
 
-	list_t                          server_list;
-	list_t                          fastcgi_env_ref;
+	cherokee_list_t                 server_list;
+	cherokee_list_t                 fastcgi_env_ref;
 
 	cuint_t                         nsockets;
 	cuint_t                         nkeepalive;

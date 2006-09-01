@@ -45,7 +45,7 @@
 
 
 typedef struct {
-	list_t                       list_entry;
+	cherokee_list_t              list_entry;
 
 	cherokee_buffer_t            name;            /* Default name.   Eg: www.0x50.org */
 	void                        *server_ref;      /* Ref to server */
@@ -62,7 +62,7 @@ typedef struct {
 	cherokee_buffer_t            userdir;         /* Eg: public_html             */
 	cherokee_virtual_entries_t   userdir_entry;
 
-	list_t                       index_list;      /* Eg: index.html, index.php  */
+	cherokee_list_t              index_list;      /* Eg: index.html, index.php  */
 
 	struct {                                      /* Number of bytes {up,down}loaded */
 		size_t tx;

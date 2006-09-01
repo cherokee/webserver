@@ -36,7 +36,7 @@ typedef struct {
 	cherokee_fcgi_manager_t *manager;
 	cuint_t                  manager_num;
 
-	list_t                   queue;
+	cherokee_list_t          queue;
 	cherokee_thread_t       *thread;
 
 #ifdef HAVE_PTHREAD

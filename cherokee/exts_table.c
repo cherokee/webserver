@@ -23,7 +23,6 @@
  */
 
 #include "exts_table.h"
-#include "list_ext.h"
 #include "table.h"
 
 #define ENTRIES "exts"
@@ -31,7 +30,7 @@
 
 struct cherokee_exts_table {
 	cherokee_table_t table;
-	list_t           list;
+	cherokee_list_t  list;
 };
 
 ret_t 
@@ -84,7 +83,7 @@ cherokee_exts_table_get (cherokee_exts_table_t *et, cherokee_buffer_t *requested
 ret_t 
 cherokee_exts_table_add  (cherokee_exts_table_t *et, char *ext, cherokee_config_entry_t *plugin_entry)
 {
-	list_t            *i;
+	cherokee_list_t   *i;
 	cherokee_boolean_t found = false;
 
 	/* Each plugin entry has to be added to the list only once

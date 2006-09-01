@@ -30,7 +30,6 @@
 
 #include "config_node.h"
 #include "util.h"
-#include "list_ext.h"
 
 #define ENTRIES "config"
 
@@ -62,7 +61,7 @@ cherokee_config_node_new (cherokee_config_node_t **conf)
 ret_t 
 cherokee_config_node_mrproper (cherokee_config_node_t *conf)
 {
-	list_t *i, *j;
+	cherokee_list_t *i, *j;
 
 	cherokee_buffer_mrproper (&conf->key);
 	cherokee_buffer_mrproper (&conf->val);
@@ -87,7 +86,7 @@ cherokee_config_node_free (cherokee_config_node_t *conf)
 static cherokee_config_node_t *
 search_child (cherokee_config_node_t *current, cherokee_buffer_t *child)
 {
-	list_t                        *i;
+	cherokee_list_t        *i;
 	cherokee_config_node_t *entry;
 
 	list_for_each (i, &current->child) {
@@ -112,7 +111,7 @@ add_new_child (cherokee_config_node_t *entry, cherokee_buffer_t *key)
 
 	cherokee_buffer_add_buffer (&n->key, key);	   
 
-	list_add_tail ((list_t *)n, &entry->child);
+	list_add_tail (LIST(n), &entry->child);
 	return n;
 }
 
@@ -292,8 +291,8 @@ cherokee_config_node_get_buf (cherokee_config_node_t *conf, cherokee_buffer_t *k
 ret_t 
 cherokee_config_node_while (cherokee_config_node_t *conf, cherokee_config_node_while_func_t func, void *data)
 {
-	ret_t   ret;
-	list_t *i;
+	ret_t            ret;
+	cherokee_list_t *i;
 
 	cherokee_config_node_foreach (i, conf) {
 		ret = func (CONFIG_NODE(i), data);
@@ -499,12 +498,12 @@ cherokee_config_node_read_list (cherokee_config_node_t           *conf,
 static ret_t
 convert_to_list_step (char *entry, void *data)
 {
-	return cherokee_list_add_tail_content ((list_t *)data, strdup(entry));
+	return cherokee_list_add_tail_content (LIST(data), strdup(entry));
 }
 
 
 ret_t
-cherokee_config_node_convert_list (cherokee_config_node_t *conf, const char *key, list_t *list)
+cherokee_config_node_convert_list (cherokee_config_node_t *conf, const char *key, cherokee_list_t *list)
 {
 	return cherokee_config_node_read_list (conf, key, convert_to_list_step, list);
 }

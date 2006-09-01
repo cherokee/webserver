@@ -30,7 +30,6 @@
 #include "table.h"
 #include "handler.h"
 #include "http.h"
-#include "typed_table.h"
 #include "validator.h"
 
 #define CHEROKEE_CONFIG_PRIORITY_NONE    0
@@ -73,10 +72,7 @@ ret_t cherokee_config_entry_free     (cherokee_config_entry_t  *entry);
 ret_t cherokee_config_entry_init     (cherokee_config_entry_t  *entry);
 ret_t cherokee_config_entry_mrproper (cherokee_config_entry_t  *entry);
 
-ret_t cherokee_config_entry_set_handler_prop   (cherokee_config_entry_t *entry, char *prop_name, cherokee_typed_table_types_t type, void *value, cherokee_table_free_item_t free_func);
-ret_t cherokee_config_entry_set_validator_prop (cherokee_config_entry_t *entry, char *prop_name, cherokee_typed_table_types_t type, void *value, cherokee_table_free_item_t free_func);
-ret_t cherokee_config_entry_set_handler        (cherokee_config_entry_t *entry, cherokee_module_info_t *modinfo); 
-
+ret_t cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_module_info_t *modinfo); 
 ret_t cherokee_config_entry_complete    (cherokee_config_entry_t *entry, cherokee_config_entry_t *parent, cherokee_boolean_t same_type);
 ret_t cherokee_config_entry_inherit     (cherokee_config_entry_t *entry);
 

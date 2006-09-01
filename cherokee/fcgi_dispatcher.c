@@ -67,8 +67,8 @@ cherokee_fcgi_dispatcher_new (cherokee_fcgi_dispatcher_t **fcgi,
 ret_t 
 cherokee_fcgi_dispatcher_free (cherokee_fcgi_dispatcher_t *fcgi)
 {
-	cuint_t  i;
-	list_t  *l, *tmp;
+	cuint_t          i;
+	cherokee_list_t *l, *tmp;
 
 	CHEROKEE_MUTEX_DESTROY(&fcgi->lock);
 	
@@ -79,7 +79,7 @@ cherokee_fcgi_dispatcher_free (cherokee_fcgi_dispatcher_t *fcgi)
 	list_for_each_safe (l, tmp, &fcgi->queue) {
 		cherokee_connection_t *conn = HANDLER_CONN(l);
 
-		list_del ((list_t *)conn);
+		list_del (LIST(conn));
 		cherokee_thread_inject_active_connection (HANDLER_THREAD(l), conn);
 	}
 
@@ -174,7 +174,7 @@ cherokee_fcgi_dispatcher_dispatch (cherokee_fcgi_dispatcher_t  *fcgi,
 ret_t
 cherokee_fcgi_dispatcher_end_notif (cherokee_fcgi_dispatcher_t *fcgi)
 {
-	list_t *i;
+	cherokee_list_t *i;
 
 	if (list_empty (&fcgi->queue))
 		return ret_ok;
@@ -189,6 +189,6 @@ cherokee_fcgi_dispatcher_end_notif (cherokee_fcgi_dispatcher_t *fcgi)
 ret_t
 cherokee_fcgi_dispatcher_queue_conn (cherokee_fcgi_dispatcher_t *fcgi, cherokee_connection_t *conn)
 {
-	list_add_tail ((list_t *)conn, &fcgi->queue);
+	list_add_tail (LIST(conn), &fcgi->queue);
 	return ret_ok;
 }

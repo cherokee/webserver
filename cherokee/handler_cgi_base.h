@@ -50,7 +50,7 @@ typedef enum {
 
 typedef struct {
 	cherokee_handler_props_t           base;
-	list_t                             system_env;
+	cherokee_list_t                    system_env;
 	cuint_t                            change_user;
 	cherokee_buffer_t                  script_alias;
  	cherokee_boolean_t                 check_file;	

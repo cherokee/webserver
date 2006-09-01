@@ -25,9 +25,7 @@
 #include "common-internal.h"
 #include "handler_cgi_base.h"
 
-#include "typed_table.h"
 #include "socket.h"
-#include "list_ext.h"
 #include "util.h"
 
 #include "connection-protected.h"
@@ -93,7 +91,7 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 
 
 typedef struct {
-	list_t            entry;
+	cherokee_list_t   entry;
 	cherokee_buffer_t env;
 	cherokee_buffer_t val;
 } env_item_t;
@@ -127,7 +125,7 @@ env_item_free (void *p)
 ret_t 
 cherokee_handler_cgi_base_props_free (cherokee_handler_cgi_base_props_t *props)
 {
-	list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 
 	cherokee_buffer_mrproper (&props->script_alias);
 
@@ -142,7 +140,7 @@ ret_t
 cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	ret_t                              ret;
-	list_t                            *i, *j;
+	cherokee_list_t                   *i, *j;
 	cherokee_handler_cgi_base_props_t *props;
 
 	/* Sanity check: This class is pure virtual, it shouldn't allocate memory here. 
@@ -181,7 +179,7 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 				env = env_item_new (&subconf2->key, &subconf2->val);
 				if (env == NULL) return ret_error;
 
-				list_add_tail ((list_t *)env, &props->system_env);
+				list_add_tail (LIST(env), &props->system_env);
 			}
 		} else if (equal_buf_str (&subconf->key, "error_handler")) {
 			props->is_error_handler = atoi(subconf->val.buf);
@@ -416,7 +414,7 @@ ret_t
 cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee_connection_t *conn)
 {
 	ret_t              ret;
-	list_t            *i;
+	cherokee_list_t   *i;
 	cherokee_buffer_t *name;
 	cuint_t            len = 0;
 	char              *p   = "";

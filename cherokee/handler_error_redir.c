@@ -33,7 +33,7 @@
 
 
 typedef struct {
-	list_t            entry;
+	cherokee_list_t   entry;
 	cuint_t           error;
 	cherokee_buffer_t url;
 } error_entry_t;
@@ -42,7 +42,7 @@ typedef struct {
 static ret_t 
 props_free (cherokee_handler_error_redir_props_t *props)
 {
-	list_t *i, *j;
+	cherokee_list_t *i, *j;
 
 	list_for_each_safe (i, j, &props->errors) {
 		error_entry_t *entry = (error_entry_t *)i;
@@ -57,7 +57,7 @@ props_free (cherokee_handler_error_redir_props_t *props)
 ret_t 
 cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
-	list_t                               *i;
+	cherokee_list_t                      *i;
 	cherokee_handler_error_redir_props_t *props;
 
 	if (*_props == NULL) {
@@ -103,7 +103,7 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 ret_t 
 cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_t *conn, cherokee_handler_props_t *props)
 {
-	list_t *i;
+	cherokee_list_t *i;
 
 	list_for_each (i, &PROP_ERREDIR(props)->errors) {
 		error_entry_t *entry = (error_entry_t *)i;

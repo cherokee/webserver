@@ -714,8 +714,6 @@ regex.h \
 regex.c \
 resolv_cache.h \
 resolv_cache.c \
-typed_table.h \
-typed_table.c \
 post.h \
 post.c 
 

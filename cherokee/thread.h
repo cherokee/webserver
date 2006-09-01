@@ -51,7 +51,7 @@ typedef enum {
 
 
 typedef struct {
-	list_t                  base;
+	cherokee_list_t         base;
 
 #ifdef HAVE_PTHREAD
 	pthread_t               thread;
@@ -71,10 +71,10 @@ typedef struct {
 	cherokee_boolean_t      exit;
 
 	int                     active_list_num;
-	list_t                  active_list;
+	cherokee_list_t         active_list;
 	int                     polling_list_num;
-	list_t                  polling_list;
-	list_t                  reuse_list;
+	cherokee_list_t         polling_list;
+	cherokee_list_t         reuse_list;
 	int                     reuse_list_num;
 
 	int                     pending_conns_num;   /* Waiting pipelining connections */

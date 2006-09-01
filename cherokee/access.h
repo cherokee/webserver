@@ -30,8 +30,8 @@
 #include "socket.h"
 
 typedef struct {
-	list_t list_ips;
-	list_t list_subnets;
+	cherokee_list_t list_ips;
+	cherokee_list_t list_subnets;
 } cherokee_access_t;
 
 ret_t cherokee_access_new  (cherokee_access_t **entry);

@@ -44,7 +44,6 @@
 #include "server-protected.h"
 #include "module.h"
 #include "connection.h"
-#include "list_ext.h"
 
 #define ENTRIES "handler,common"
 
@@ -230,7 +229,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_handl
 	/* Is it a directory
 	 */
 	if (S_ISDIR(info->st_mode)) {
-		list_t *i;
+		cherokee_list_t *i;
 
 		cherokee_iocache_mmap_release (iocache, file);
 

@@ -77,7 +77,6 @@
 #include "connection.h"
 #include "ncpus.h"
 #include "mime.h"
-#include "list_ext.h"
 #include "util.h"
 #include "fdpoll.h"
 #include "fdpoll-protected.h"
@@ -263,7 +262,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 static void
 close_all_connections (cherokee_server_t *srv)
 {
-	list_t *i;
+	cherokee_list_t *i;
 
 	cherokee_thread_close_all_connections (srv->main_thread);
 	
@@ -276,7 +275,7 @@ close_all_connections (cherokee_server_t *srv)
 static void
 free_virtual_servers (cherokee_server_t *srv)
 {
-	list_t *i, *j;
+	cherokee_list_t *i, *j;
 
 	list_for_each_safe (i, j, &srv->vservers) {
 		cherokee_virtual_server_free (VSERVER(i));
@@ -299,7 +298,7 @@ destroy_thread (cherokee_thread_t *thread)
 static ret_t
 destroy_all_threads (cherokee_server_t *srv)
 {
-	list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 
 	/* Set the exit flag, and try to ensure the threads are not
 	 * locked on a semaphore
@@ -795,7 +794,7 @@ initialize_server_threads (cherokee_server_t *srv)
 		
 		thread->thread_pref = (i % 2)? thread_normal_tls : thread_tls_normal;
 
-		list_add ((list_t *)thread, &srv->thread_list);
+		list_add (LIST(thread), &srv->thread_list);
 	}
 #endif
 
@@ -1140,8 +1139,8 @@ update_bogo_now (cherokee_server_t *srv)
 ret_t
 cherokee_server_unlock_threads (cherokee_server_t *srv)
 {
-	ret_t   ret;
-	list_t *i;
+	ret_t            ret;
+	cherokee_list_t *i;
 
 	/* Update bogo_now before launch the threads
 	 */
@@ -1296,7 +1295,7 @@ add_vserver (cherokee_config_node_t *node, void *data)
 		ret = cherokee_table_add (&srv->vservers_ref, node->key.buf, vsrv);
 		if (ret != ret_ok) return ret;
 
-		list_add ((list_t *)vsrv, &srv->vservers);
+		list_add (LIST(vsrv), &srv->vservers);
 
 		param[0] = srv;
 		param[1] = vsrv;
@@ -1581,8 +1580,8 @@ cherokee_server_daemonize (cherokee_server_t *srv)
 ret_t 
 cherokee_server_get_active_conns (cherokee_server_t *srv, int *num)
 {
-	int     active = 0;
-	list_t *thread;
+	int              active = 0;
+	cherokee_list_t *thread;
 
 	/* Active connections number
 	 */
@@ -1603,8 +1602,8 @@ cherokee_server_get_active_conns (cherokee_server_t *srv, int *num)
 ret_t 
 cherokee_server_get_reusable_conns (cherokee_server_t *srv, int *num)
 {
-	int     reusable = 0;
-	list_t *thread, *i;
+	int              reusable = 0;
+	cherokee_list_t *thread, *i;
 
 	/* Reusable connections
 	 */
@@ -1627,7 +1626,7 @@ cherokee_server_get_reusable_conns (cherokee_server_t *srv, int *num)
 ret_t 
 cherokee_server_get_total_traffic (cherokee_server_t *srv, size_t *rx, size_t *tx)
 {
-	list_t *i;
+	cherokee_list_t *i;
 
 	*rx = srv->vserver_default->data.rx;
 	*tx = srv->vserver_default->data.tx;
@@ -1684,8 +1683,8 @@ fin:
 ret_t 
 cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
 {
-	list_t *t, *c;
-	culong_t id;
+	culong_t         id;
+	cherokee_list_t *t, *c;
 	
 	id = strtol (id_str, NULL, 10);
 
@@ -1707,8 +1706,8 @@ cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
 ret_t 
 cherokee_server_set_backup_mode (cherokee_server_t *srv, cherokee_boolean_t active)
 {
-	ret_t   ret;
-	list_t *i;
+	ret_t            ret;
+	cherokee_list_t *i;
 
 	ret = cherokee_logger_set_backup_mode (srv->vserver_default->logger, active);
 	if (unlikely (ret != ret_ok)) return ret;
@@ -1730,7 +1729,7 @@ cherokee_server_set_backup_mode (cherokee_server_t *srv, cherokee_boolean_t acti
 ret_t 
 cherokee_server_get_backup_mode (cherokee_server_t *srv, cherokee_boolean_t *active)
 {
-	list_t *i;
+	cherokee_list_t *i;
 
 	*active = false;
 

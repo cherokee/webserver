@@ -376,7 +376,7 @@ ask_get_connections (cherokee_admin_client_t *admin, void *arg)
 }
 
 static ret_t
-parse_reply_get_connections (char *reply, list_t *conns_list)
+parse_reply_get_connections (char *reply, cherokee_list_t *conns_list)
 {
 	char              *begin;
 	char              *end;
@@ -438,7 +438,7 @@ parse_reply_get_connections (char *reply, list_t *conns_list)
 				SHOULDNT_HAPPEN;
 		}
 
-		list_add ((list_t *)conn_info, conns_list);
+		list_add (LIST(conn_info), conns_list);
 		cherokee_buffer_clean (&info_str);
 	}
 
@@ -446,7 +446,7 @@ parse_reply_get_connections (char *reply, list_t *conns_list)
 }
 
 ret_t 
-cherokee_admin_client_ask_connections (cherokee_admin_client_t *admin, list_t *conns_list)
+cherokee_admin_client_ask_connections (cherokee_admin_client_t *admin, cherokee_list_t *conns_list)
 {
 	ret_t ret;
 

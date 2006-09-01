@@ -27,7 +27,6 @@
 
 #include "list.h"
 #include "buffer.h"
-#include "typed_table.h"
 #include "socket.h"
 #include "config_node.h"
 
@@ -35,7 +34,7 @@
 CHEROKEE_BEGIN_DECLS
 
 typedef struct {
-	list_t                     entry;
+	cherokee_list_t            entry;
 
 	cherokee_buffer_t          interpreter;
 
@@ -47,7 +46,7 @@ typedef struct {
 	char                     **custom_env;
 	cuint_t                    custom_env_len;
 
-	cherokee_typed_free_func_t free_func;
+//	cherokee_typed_free_func_t free_func;
 } cherokee_ext_source_t;
 
 
@@ -79,11 +78,11 @@ ret_t cherokee_ext_source_spawn_srv (cherokee_ext_source_t  *server);
 /* External source head
  */
 ret_t cherokee_ext_source_head_new  (cherokee_ext_source_head_t **serverf);
-ret_t cherokee_ext_source_get_next  (cherokee_ext_source_head_t  *serverf, list_t *server_list, cherokee_ext_source_t **next);
+ret_t cherokee_ext_source_get_next  (cherokee_ext_source_head_t  *serverf, cherokee_list_t *server_list, cherokee_ext_source_t **next);
 
 /* Configure
  */
-ret_t cherokee_ext_source_configure (cherokee_config_node_t *conf, list_t *ext_list);
+ret_t cherokee_ext_source_configure (cherokee_config_node_t *conf, cherokee_list_t *ext_list);
 
 
 CHEROKEE_END_DECLS

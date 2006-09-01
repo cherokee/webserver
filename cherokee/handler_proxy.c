@@ -75,7 +75,7 @@ load_balancer (cherokee_server_t *srv, cherokee_buffer_t *name, cherokee_config_
 ret_t 
 cherokee_handler_proxy_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
-	list_t                         *i;
+	cherokee_list_t                *i;
 	cherokee_handler_proxy_props_t *props;
 
 	if (*_props == NULL) {

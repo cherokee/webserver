@@ -25,7 +25,6 @@
 #include "common-internal.h"
 #include "virtual_server.h"
 #include "config_entry.h"
-#include "list_ext.h"
 #include "socket.h"
 #include "reqs_list.h"
 #include "server-protected.h"
@@ -632,7 +631,7 @@ static ret_t
 configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 {
 	ret_t                   ret;
-	list_t                 *i;
+	cherokee_list_t        *i;
 	cherokee_config_node_t *subconf;
 
 	cherokee_buffer_add_buffer (&vserver->userdir, &config->val);
@@ -670,7 +669,7 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
 	cherokee_buffer_t         *tmp;
-	list_t                    *i;
+	cherokee_list_t           *i;
 	char                      *key     = conf->key.buf;
 	cherokee_virtual_server_t *vserver = VSERVER(data);
 

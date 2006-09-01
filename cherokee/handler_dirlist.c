@@ -48,13 +48,12 @@
 #include "module_loader.h"
 #include "icons.h"
 #include "common.h"
-#include "list_ext.h"
 
 #define DEFAULT_NAME_LEN 40
 
 
 struct file_entry {
-	list_t           list_entry;
+	cherokee_list_t  list_entry;
 	struct stat      stat;
 	cuint_t          name_len;
 	struct dirent    info;          /* It *must* be the last entry */
@@ -163,7 +162,7 @@ ret_t
 cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
 {
 	ret_t                             ret;
-	list_t                           *i;
+	cherokee_list_t                  *i;
 	cherokee_handler_dirlist_props_t *props;
 	char                             *theme      = NULL;
 	cherokee_buffer_t                 theme_path = CHEROKEE_BUF_INIT;
@@ -236,7 +235,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 static cherokee_boolean_t
 is_header_file (cherokee_handler_dirlist_t *dhdl, char *filename)
 {
-	list_t *i;
+	cherokee_list_t *i;
 
 	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) 
 	{
@@ -403,7 +402,7 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_han
 ret_t
 cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 {
-	list_t *i, *tmp;
+	cherokee_list_t *i, *tmp;
 
 	cherokee_buffer_mrproper (&dhdl->header);
 	cherokee_buffer_mrproper (&dhdl->public_dir);
@@ -450,7 +449,7 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 }
 
 static int 
-cmp_name_down (list_t *a, list_t *b)
+cmp_name_down (cherokee_list_t *a, cherokee_list_t *b)
 {
 	file_entry_t *f1 = (file_entry_t *)a;
 	file_entry_t *f2 = (file_entry_t *)b;
@@ -460,7 +459,7 @@ cmp_name_down (list_t *a, list_t *b)
 
 
 static int 
-cmp_size_down (list_t *a, list_t *b)
+cmp_size_down (cherokee_list_t *a, cherokee_list_t *b)
 {
 	int           diff;
 	file_entry_t *f1 = (file_entry_t *)a;
@@ -473,7 +472,7 @@ cmp_size_down (list_t *a, list_t *b)
 }
 
 static int 
-cmp_date_down (list_t *a, list_t *b)
+cmp_date_down (cherokee_list_t *a, cherokee_list_t *b)
 {
 	int           diff;
 	file_entry_t *f1 = (file_entry_t *)a;
@@ -486,25 +485,25 @@ cmp_date_down (list_t *a, list_t *b)
 }
 
 static int 
-cmp_name_up (list_t *a, list_t *b)
+cmp_name_up (cherokee_list_t *a, cherokee_list_t *b)
 {
 	return -cmp_name_down(a,b);
 }
 
 static int 
-cmp_size_up (list_t *a, list_t *b)
+cmp_size_up (cherokee_list_t *a, cherokee_list_t *b)
 {
 	return -cmp_size_down(a,b);
 }
 
 static int 
-cmp_date_up (list_t *a, list_t *b)
+cmp_date_up (cherokee_list_t *a, cherokee_list_t *b)
 {
 	return -cmp_date_down(a,b);
 }
 
 static void
-list_sort_by_type (list_t *list, cherokee_dirlist_sort_t sort)
+list_sort_by_type (cherokee_list_t *list, cherokee_dirlist_sort_t sort)
 {
 	switch (sort) {
 	case Name_Down:
@@ -559,9 +558,9 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 			continue;
 
 		if (S_ISDIR(item->stat.st_mode)) {
-			list_add ((list_t *)item, &dhdl->dirs);
+			list_add (LIST(item), &dhdl->dirs);
 		} else {
-			list_add ((list_t *)item, &dhdl->files);
+			list_add (LIST(item), &dhdl->files);
 		}
 	}
 
@@ -619,7 +618,7 @@ static ret_t
 read_notice_file (cherokee_handler_dirlist_t *dhdl)
 {
 	ret_t                  ret;
-	list_t                *i;
+	cherokee_list_t       *i;
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
 	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) {

@@ -27,8 +27,6 @@
 #include "virtual_server.h"
 #include "server-protected.h"
 #include "config_entry.h"
-#include "list_ext.h"
-#include "typed_table.h"
 
 #define DEFAULT_PORT         9090
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin/"

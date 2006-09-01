@@ -221,9 +221,9 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_con
 
 
 ret_t 
-cherokee_connection_info_list_thread (list_t *list, void *_thread, cherokee_handler_t *self_handler)
+cherokee_connection_info_list_thread (cherokee_list_t *list, void *_thread, cherokee_handler_t *self_handler)
 {
-	list_t             *i;
+	cherokee_list_t    *i;
 	cherokee_boolean_t  locked = false;
 	cherokee_thread_t  *thread = THREAD(_thread);
 
@@ -251,7 +251,7 @@ cherokee_connection_info_list_thread (list_t *list, void *_thread, cherokee_hand
 		CHEROKEE_NEW(n,connection_info);
 
 		cherokee_connection_info_fill_up (n, CONN(i));
-		list_add ((list_t *)n, list);
+		list_add (LIST(n), list);
 	}
 
 	if (list_empty(list))
@@ -267,9 +267,9 @@ cherokee_connection_info_list_thread (list_t *list, void *_thread, cherokee_hand
 
 
 ret_t 
-cherokee_connection_info_list_server (list_t *list, cherokee_server_t *server, cherokee_handler_t *self)
+cherokee_connection_info_list_server (cherokee_list_t *list, cherokee_server_t *server, cherokee_handler_t *self)
 {
-	list_t *i;
+	cherokee_list_t *i;
 
 	cherokee_connection_info_list_thread (list, server->main_thread, self);
 
