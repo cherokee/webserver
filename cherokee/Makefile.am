@@ -667,8 +667,6 @@ http.h \
 http.c \
 list.h \
 list.c \
-list_ext.h \
-list_ext.c \
 ncpus.h \
 ncpus.c \
 crc32.h \

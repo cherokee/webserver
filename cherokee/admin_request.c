@@ -51,7 +51,7 @@ ret_t cherokee_admin_request_new  (cherokee_admin_request_t **req)
 ret_t 
 cherokee_admin_request_free (cherokee_admin_request_t *req)
 {
-	cherokee_list_free (&req->list, free);
+	cherokee_list_content_free (&req->list, free);
 	cherokee_buffer_mrproper (&req->req);
 
 	free (req);
@@ -62,7 +62,7 @@ cherokee_admin_request_free (cherokee_admin_request_t *req)
 ret_t
 cherokee_admin_request_add (cherokee_admin_request_t *req, char *key)
 {
-	cherokee_list_add_tail (&req->list, strdup(key));
+	cherokee_list_add_tail_content (&req->list, strdup(key));
 	req->num++;
 	return ret_ok;
 }
@@ -86,7 +86,7 @@ cherokee_admin_request_serialize (cherokee_admin_request_t *req)
 
 	/* Clean the list
 	 */
-	cherokee_list_free (&req->list, free);	   
+	cherokee_list_content_free (&req->list, free);	   
 	return ret_ok;
 }
 

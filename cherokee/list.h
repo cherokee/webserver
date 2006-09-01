@@ -102,7 +102,29 @@ list_reparent (list_t *list, list_t *new_entry)
 	new_entry->next->prev = new_entry;
 }
 
-void list_sort (list_t *head, int (*cmp)(list_t *a, list_t *b));
+void cherokee_list_sort (list_t *head, int (*cmp)(list_t *a, list_t *b));
+
+
+/* Methods for non list elements
+ */
+
+typedef void (*cherokee_list_free_func) (void *);
+
+typedef struct {
+	list_t  list;
+	void   *info;
+} cherokee_list_item_t;
+
+#define LIST_ITEM(i)      ((cherokee_list_item_t *)(i))
+#define LIST_ITEM_INFO(i) (LIST_ITEM(i)->info)
+
+ret_t cherokee_list_add_content              (list_t *head, void *item);
+ret_t cherokee_list_add_tail_content         (list_t *head, void *item);
+
+ret_t cherokee_list_content_free             (list_t *head, cherokee_list_free_func free_func);
+ret_t cherokee_list_content_free_item        (list_t *head, cherokee_list_free_func free_func);
+ret_t cherokee_list_content_free_item_simple (list_t *head);
+
 
 CHEROKEE_END_DECLS
 

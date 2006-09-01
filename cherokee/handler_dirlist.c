@@ -148,7 +148,7 @@ load_theme (cherokee_buffer_t *theme_path, cherokee_handler_dirlist_props_t *pro
 ret_t 
 cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 {
-	cherokee_list_free (&props->notice_files, free);
+	cherokee_list_content_free (&props->notice_files, free);
 
 	cherokee_buffer_mrproper (&props->header);
 	cherokee_buffer_mrproper (&props->footer);
@@ -508,22 +508,22 @@ list_sort_by_type (list_t *list, cherokee_dirlist_sort_t sort)
 {
 	switch (sort) {
 	case Name_Down:
-		list_sort (list, cmp_name_down);
+		cherokee_list_sort (list, cmp_name_down);
 		break;
 	case Name_Up:
-		list_sort (list, cmp_name_up);
+		cherokee_list_sort (list, cmp_name_up);
 		break;
 	case Size_Down:
-		list_sort (list, cmp_size_down);
+		cherokee_list_sort (list, cmp_size_down);
 		break;
 	case Size_Up:
-		list_sort (list, cmp_size_up);
+		cherokee_list_sort (list, cmp_size_up);
 		break;
 	case Date_Down:
-		list_sort (list, cmp_date_down);
+		cherokee_list_sort (list, cmp_date_down);
 		break;
 	case Date_Up:
-		list_sort (list, cmp_date_up);
+		cherokee_list_sort (list, cmp_date_up);
 		break;
 	}
 }

@@ -163,7 +163,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 
 	/* Index list
 	 */
-	cherokee_list_free (&vserver->index_list, free);
+	cherokee_list_content_free (&vserver->index_list, free);
 
 	free (vserver);	
 	return ret_ok;
@@ -352,7 +352,7 @@ add_directory_index (char *index, void *data)
 
 	TRACE(ENTRIES, "Adding directory index '%s'\n", index);
 
-	cherokee_list_add_tail (&vserver->index_list, strdup(index));
+	cherokee_list_add_tail_content (&vserver->index_list, strdup(index));
 	return ret_ok;
 }
 

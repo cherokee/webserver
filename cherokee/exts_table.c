@@ -53,7 +53,7 @@ cherokee_exts_table_new (cherokee_exts_table_t **et)
 ret_t 
 cherokee_exts_table_free (cherokee_exts_table_t *et)
 {
-	cherokee_list_free (&et->list, (cherokee_list_free_func) cherokee_config_entry_free);
+	cherokee_list_content_free (&et->list, (cherokee_list_free_func) cherokee_config_entry_free);
 	cherokee_table_mrproper (&et->table);
 
 	free (et);
@@ -94,7 +94,7 @@ cherokee_exts_table_add  (cherokee_exts_table_t *et, char *ext, cherokee_config_
 	}
 
 	if (!found) {
-		cherokee_list_add (&et->list, plugin_entry);
+		cherokee_list_add_content (&et->list, plugin_entry);
 	}
 
 	/* Add to the table. It is ok if many entries point to the same
