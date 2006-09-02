@@ -181,7 +181,9 @@ ret_t cherokee_socket_write         (cherokee_socket_t *socket, cherokee_buffer_
 ret_t cherokee_socket_read          (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t count, size_t *read);
 ret_t cherokee_socket_sendfile      (cherokee_socket_t *socket, int fd, size_t size, off_t *offset, ssize_t *sent);
 ret_t cherokee_socket_connect       (cherokee_socket_t *socket);
-ret_t cherokee_socket_set_timeout   (cherokee_socket_t *socket, cuint_t timeout);
+
+ret_t cherokee_socket_has_block_timeout (cherokee_socket_t *socket);
+ret_t cherokee_socket_set_block_timeout (cherokee_socket_t *socket, cuint_t timeout);
 
 ret_t cherokee_socket_ntop          (cherokee_socket_t *socket, char *buf, size_t buf_size);
 ret_t cherokee_socket_pton          (cherokee_socket_t *socket, cherokee_buffer_t *buf);

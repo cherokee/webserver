@@ -1693,6 +1693,7 @@ cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
 			cherokee_connection_t *conn = CONN(c);
 
 			if (conn->id == id) {
+				cherokee_connection_pre_lingering_close (conn);
 				conn->phase = phase_lingering;
 				return ret_ok;
 			}

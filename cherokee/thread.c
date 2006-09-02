@@ -322,6 +322,13 @@ connection_reuse_or_free (cherokee_thread_t *thread, cherokee_connection_t *conn
 static void
 purge_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
+	/* Try last read, if last read returned eof, then no problem,
+	 * otherwise it may avoid a nasty connection reset.
+	 */
+	if (conn->phase == phase_lingering) {
+		cherokee_connection_linger_read (conn);
+	}
+
 	/* Maybe have a delayed log
 	 */
 	cherokee_connection_log_delayed (conn);
@@ -418,26 +425,42 @@ purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 static void
 purge_maybe_lingering (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
+	ret_t                       ret;
+	cherokee_connection_phase_t old_phase;
+
+	/* Set lingering close
+	 */
+	old_phase = conn->phase; 
+	conn->phase = phase_lingering;
+
 	if (conn->keepalive <= 0) {
 		purge_closed_connection (thread, conn);
 		return;
 	}
 
-	conn->phase = phase_lingering;
-	conn_set_mode (thread, conn, socket_reading);
+	/* Shutdown writting, and try to read some trash
+	 */
+	ret = cherokee_connection_pre_lingering_close (conn);
+	switch (ret) {
+	case ret_ok:
+	case ret_eagain:
+		/* Ok, really lingering
+		 */
+		conn_set_mode (thread, conn, socket_reading);
+		return;
+	default:
+		conn->phase = old_phase;
+		purge_closed_connection (thread, conn);
+		return;
+	}	
 }
 
 
 static void
 maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
+	ret_t              ret;
 	cherokee_server_t *srv = SRV(thread->server);
-
-	/* TCP cork
-	 */
-	if (conn->tcp_cork) {
-		cherokee_connection_set_cork (conn, 0);
-	}
 
 	/* Log if it was delayed and update vserver traffic counters
 	 */
@@ -445,14 +468,31 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 	cherokee_connection_log_delayed (conn);
 
 	/* If it isn't a keep-alive connection, it should try to
-	 * perform a lingering close
+	 * perform a lingering close. (There is no need to disable TCP
+	 * cork before shutdown)
 	 */
 	if (conn->keepalive <= 0) {
-		conn->phase = phase_lingering;
-		return;
+		ret = cherokee_connection_pre_lingering_close (conn);
+		switch (ret) {
+		case ret_ok:
+		case ret_eagain:
+			/* Ok, lingering
+			 */
+                       conn->phase = phase_lingering;
+                       return;
+		default:
+			purge_closed_connection (thread, conn);
+			return;
+		}
 	} 	
 
 	conn->keepalive--;
+
+	/* TCP cork
+	 */
+	if (conn->tcp_cork) {
+		cherokee_connection_set_cork (conn, 0);
+	}
 
 	/* Clean the connection
 	 */
@@ -546,12 +586,12 @@ process_active_connections (cherokee_thread_t *thd)
 			cherokee_connection_update_vhost_traffic (conn);
 		}
 
-		/* Process the connection?
-		 * 1.- Is there a pipelined connection?
-		 * 2.- Is it closing the connection?
+		/* Process? 
+		 * Incoming buffer has information and it's reading the headers
 		 */
-		process = ((conn->phase == phase_lingering) ||
-			   ((conn->phase == phase_reading_header) && (conn->incoming_header.len > 0)));
+		process = ((conn->phase == phase_reading_header) && (conn->incoming_header.len > 0));
+
+                // (conn->phase == phase_lingering) || ?
 			
 		/* Process the connection?
 		 * 2.- Inspect the file descriptor	
@@ -574,7 +614,7 @@ process_active_connections (cherokee_thread_t *thd)
 		}
 		
 		/* Process the connection?
-		 * Finial.- 
+		 * Final.
 		 */
 		if (process == false) {
 			continue;
@@ -1168,14 +1208,17 @@ process_active_connections (cherokee_thread_t *thd)
 			
 		case phase_lingering: 
 
-			ret = cherokee_connection_pre_lingering_close (conn);
+			ret = cherokee_connection_linger_read (conn);
 			switch (ret) {
 			case ret_ok:
-				purge_closed_connection (thd, conn);
-				continue;
 			case ret_eagain:
 				continue;
+			case ret_eof:
+			case ret_error:
+				purge_closed_connection (thd, conn);
+				continue;
 			default:
+				purge_closed_connection (thd, conn);
 				RET_UNKNOWN(ret);
 			}
 			break;

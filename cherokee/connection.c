@@ -823,34 +823,51 @@ cherokee_connection_pre_lingering_close (cherokee_connection_t *conn)
 	 */
 	conn->socket.is_tls = non_TLS;
 
-	/* Shut down the socket for write, which will send a FIN
-	 * to the peer.
+	/* Shut down the socket for write, which will send a FIN to
+	 * the peer. If shutdown fails then the socket is unusable.
 	 */
 	ret = cherokee_socket_shutdown (&conn->socket, SHUT_WR);
-	if (unlikely (ret != ret_ok)) return ret_ok;
+	if (unlikely (ret != ret_ok)) return ret;
 
-	/* Set the timeout
+	/* Set the timeout leaving the non-blocking mode
 	 */
-	ret = cherokee_socket_set_timeout (&conn->socket, MSECONS_TO_LINGER);	
-	if (unlikely (ret != ret_ok)) return ret_ok;
+	conn->timeout = CONN_THREAD(conn)->bogo_now + (MSECONS_TO_LINGER / 1000) + 1;
 
-	/* Read from the socket to nowhere
-	 */
-	ret = cherokee_socket_read (&conn->socket, NULL, DEFAULT_RECV_SIZE, &readed);
-	switch (ret) {
-	case ret_eof:
-	case ret_error:
-	case ret_eagain:
-		TRACE(ENTRIES, "%s\n", "ok");
-		return ret_ok;
-	case ret_ok:
-		TRACE(ENTRIES, "readed %d, eagain\n", readed);
-		return ret_eagain;
-	default:
-		RET_UNKNOWN(ret);		
+	return cherokee_connection_linger_read (conn);
+}
+
+
+ret_t 
+cherokee_connection_linger_read (cherokee_connection_t *conn)
+{
+	ret_t  ret;
+	int    retries = 2;
+	size_t readed  = 0;
+	
+	while (true) {
+		/* Read from the socket to nowhere
+		 */
+		ret = cherokee_socket_read (&conn->socket, NULL, DEFAULT_RECV_SIZE, &readed);
+		switch (ret) {
+		case ret_eof:
+			TRACE(ENTRIES, "%s\n", "eof");
+			return ret;
+		case ret_error:
+			TRACE(ENTRIES, "%s\n", "error");
+			return ret;
+		case ret_eagain:
+			TRACE(ENTRIES, "readed %d, eagain (linger)\n", readed);
+			return ret;
+		case ret_ok:
+			TRACE(ENTRIES, "readed %d, ok/eagain (linger)\n", readed);
+			if (readed > 0 && --retries > 0)
+				continue;
+			return ret;
+		default:
+			RET_UNKNOWN(ret);               
+		}
+		return ret_error;
 	}
-
-	return ret_error;
 }
 
 

@@ -750,6 +750,9 @@ cherokee_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t *done)
 {
 	ssize_t len;
 
+	if (unlikely (socket->status == socket_closed))
+		return ret_eof;
+
 	if ((socket->is_tls == TLS) && (buf != NULL)) {
 #ifdef HAVE_GNUTLS
 		len = gnutls_record_recv (socket->session, buf, buf_size);
@@ -806,8 +809,8 @@ cherokee_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t *done)
 	/* Plain read
 	 */
 	if (unlikely (buf == NULL)) {
-		static char trash[256];
-		len = recv (SOCKET_FD(socket), trash, 256, 0);
+		static char trash[4096];
+		len = recv (SOCKET_FD(socket), trash, sizeof(trash), 0);
 	} else {
 		len = recv (SOCKET_FD(socket), buf, buf_size, 0);
 	}
@@ -923,7 +926,7 @@ cherokee_socket_read (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t 
 	/* Special case: read to empty the buffer
 	 */
 	if (buf == NULL) {
-		return cherokee_read (socket, NULL, count, NULL);
+		return cherokee_read (socket, NULL, count, done);
 	}
 
 	/* Read
@@ -1233,8 +1236,19 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket)
 }
 
 
+ret_t
+cherokee_socket_has_block_timeout (cherokee_socket_t *socket)
+{
+#if defined(SO_RCVTIMEO) && !defined(HAVE_BROKEN_SO_RCVTIMEO)
+	return ret_ok;
+#else
+	return ret_not_found;
+#endif
+}
+
+ 
 ret_t 
-cherokee_socket_set_timeout (cherokee_socket_t *socket, cuint_t timeout)
+cherokee_socket_set_block_timeout (cherokee_socket_t *socket, cuint_t timeout)
 {
 	int            re;
 	cuint_t        block;
@@ -1246,11 +1260,12 @@ cherokee_socket_set_timeout (cherokee_socket_t *socket, cuint_t timeout)
 
 	if (timeout < 0)
 		timeout = 0;
-	
+
+#if defined(SO_RCVTIMEO) && !defined(HAVE_BROKEN_SO_RCVTIMEO)
 	/* Set the socket to blocking
 	 */
 	block = 0;
-
+		
 #ifdef _WIN32
 	re = ioctlsocket (socket->socket, FIONBIO, &block);	
 	if (re == SOCKET_ERROR) {
@@ -1264,7 +1279,6 @@ cherokee_socket_set_timeout (cherokee_socket_t *socket, cuint_t timeout)
 
 	/* Set the send / receive timeouts
 	 */
-#if defined(SO_RCVTIMEO) && !defined(HAVE_BROKEN_SO_RCVTIMEO)
 	tv.tv_sec  = timeout / 1000;
 	tv.tv_usec = timeout % 1000;
 	
@@ -1273,7 +1287,10 @@ cherokee_socket_set_timeout (cherokee_socket_t *socket, cuint_t timeout)
 		int err = errno;
 		PRINT_ERROR ("Couldn't set SO_RCVTIMEO, fd=%d, timeout=%d: %s\n", 
 			     socket->socket, timeout, strerror(err));
+		return ret_error;
 	}
+#else
+	return no_esys;
 #endif
 	
 	return ret_ok;		      
