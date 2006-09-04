@@ -75,7 +75,7 @@ ret_t
 cherokee_config_entry_mrproper (cherokee_config_entry_t *entry) 
 {
 	if (entry->handler_properties != NULL) {
-		cherokee_handler_props_free (entry->handler_properties);
+		cherokee_module_props_free (entry->handler_properties);
 		entry->handler_properties = NULL;
 	}
 

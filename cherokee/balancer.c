@@ -24,9 +24,11 @@
 
 #include "common-internal.h"
 #include "balancer.h"
+#include "module_loader.h"
+#include "server-protected.h"
+#include "source_interpreter.h"
 
-
-#define DEFAULT_HOSTS_ALLOCATION 5
+#define DEFAULT_SOURCES_ALLOCATION 5
 
 
 ret_t 
@@ -38,13 +40,13 @@ cherokee_balancer_init_base (cherokee_balancer_t *balancer)
 
 	/* Virtual methods
 	 */
-	balancer->dispatch   = NULL;
+	balancer->dispatch     = NULL;
 	
-	/* Hosts
+	/* Sources
 	 */
-	balancer->hosts_len  = 0;
-	balancer->hosts_size = 0;
-	balancer->hosts      = NULL;
+	balancer->sources_len  = 0;
+	balancer->sources_size = 0;
+	balancer->sources      = NULL;
 
 	return ret_ok;
 }
@@ -53,61 +55,112 @@ cherokee_balancer_init_base (cherokee_balancer_t *balancer)
 ret_t 
 cherokee_balancer_mrproper (cherokee_balancer_t *balancer)
 {
-	if (balancer->hosts != NULL) {
-		free (balancer->hosts);
+	if (balancer->sources != NULL) {
+		free (balancer->sources);
 	}
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_balancer_configure (cherokee_balancer_t *balancer, cherokee_config_node_t *conf)
+{
+	ret_t              ret;
+	cherokee_list_t   *i;
+	cherokee_buffer_t *buf;
+	cherokee_boolean_t interpreter = false;
+
+	/* Look for the type of the source objects
+	 */
+	ret = cherokee_config_node_read (conf, "type", &buf);
+	if (ret != ret_ok) {
+		PRINT_ERROR_S ("ERROR: Balancer: An entry 'type' is needed\n");
+		return ret;
+	}
+	
+	if (equal_buf_str (buf, "interpreter")) {
+		interpreter = true;
+	} else {
+		PRINT_ERROR ("ERROR: Balancer: Unknown type '%s'\n", buf->buf);
+		return ret_error;
+	}
+	
+	/* Add the source objects
+	 */
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_source_t      *src     = NULL;
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+		if (equal_buf_str (&subconf->key, "type"))
+			continue;
+
+		if (interpreter) {
+			cherokee_source_interpreter_t *src2;
+
+			ret = cherokee_source_interpreter_new (&src2);
+			if (ret != ret_ok) return ret;
+			
+			ret = cherokee_source_interpreter_configure (src2, subconf);
+			if (ret != ret_ok) return ret;
+
+			src = SOURCE(src2);
+		}
+		
+		cherokee_balancer_add_source (balancer, src);
+	}	
 
 	return ret_ok;
 }
 
 
 static ret_t
-alloc_more_hosts (cherokee_balancer_t *balancer)
+alloc_more_sources (cherokee_balancer_t *balancer)
 {
 	size_t size;
 
-	if (balancer->hosts == NULL) {
-		size = DEFAULT_HOSTS_ALLOCATION * sizeof(cherokee_balancer_host_t *);
-		balancer->hosts = (cherokee_balancer_host_t **) malloc (size);
+	if (balancer->sources == NULL) {
+		size = DEFAULT_SOURCES_ALLOCATION * sizeof(cherokee_source_t *);
+		balancer->sources = (cherokee_source_t **) malloc (size);
 	} else {
-		size = (balancer->hosts_size + DEFAULT_HOSTS_ALLOCATION ) * sizeof(cherokee_balancer_host_t *);
-		balancer->hosts = (cherokee_balancer_host_t **) realloc (balancer->hosts, size);
+		size = (balancer->sources_size + DEFAULT_SOURCES_ALLOCATION ) * sizeof(cherokee_source_t *);
+		balancer->sources = (cherokee_source_t **) realloc (balancer->sources, size);
 	}
 	
-	if (balancer->hosts == NULL) 
+	if (balancer->sources == NULL) 
 		return ret_nomem;
 	
-	memset (balancer->hosts + balancer->hosts_len, 0, DEFAULT_HOSTS_ALLOCATION);
+	memset (balancer->sources + balancer->sources_len, 0, DEFAULT_SOURCES_ALLOCATION);
 
-	balancer->hosts_size += DEFAULT_HOSTS_ALLOCATION;
+	balancer->sources_size += DEFAULT_SOURCES_ALLOCATION;
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_balancer_add_host (cherokee_balancer_t *balancer, cherokee_balancer_host_t *host)
+cherokee_balancer_add_source (cherokee_balancer_t *balancer, cherokee_source_t *source)
 {
 	ret_t ret;
-
-	if (balancer->hosts_len >= balancer->hosts_size) {
-		ret = alloc_more_hosts (balancer);
+	
+	if (balancer->sources_len >= balancer->sources_size) {
+		ret = alloc_more_sources (balancer);
 		if (ret != ret_ok) return ret;
 	}
 
-	balancer->hosts[balancer->hosts_len] = host;
-	balancer->hosts_len++;
+	balancer->sources[balancer->sources_len] = source;
+	balancer->sources_len++;
 
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_balancer_dispatch (cherokee_balancer_t *balancer, cherokee_connection_t *conn, cherokee_balancer_host_t **host)
+cherokee_balancer_dispatch (cherokee_balancer_t *balancer, cherokee_connection_t *conn, cherokee_source_t **source)
 {
 	if (balancer->dispatch == NULL)
 		return ret_error;
 
-	return balancer->dispatch (balancer, conn, host);
+	return balancer->dispatch (balancer, conn, source);
 }
 
 
@@ -133,5 +186,29 @@ cherokee_balancer_free (cherokee_balancer_t *bal)
 	cherokee_balancer_mrproper(bal);
 
 	free (bal);
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_balancer_instance (cherokee_buffer_t       *name, 
+			    cherokee_config_node_t  *conf, 
+			    cherokee_server_t       *srv, 
+			    cherokee_balancer_t    **balancer)
+{
+	ret_t                   ret;
+	balancer_new_func_t     new_func;
+	cherokee_module_info_t *info      = NULL;
+	
+	ret = cherokee_module_loader_get (&srv->loader, name->buf, &info);
+	if (ret != ret_ok) return ret;
+	
+	new_func = (balancer_new_func_t) info->new_func;
+	ret = new_func (balancer);
+	if (ret != ret_ok) return ret;
+
+	ret = cherokee_balancer_configure (*balancer, conf);
+	if (ret != ret_ok) return ret;
+
 	return ret_ok;
 }

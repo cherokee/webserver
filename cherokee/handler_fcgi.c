@@ -28,6 +28,7 @@
 #include "connection-protected.h"
 #include "util.h"
 #include "thread.h"
+#include "source_interpreter.h"
 
 #include "fastcgi.h"
 
@@ -197,18 +198,15 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 static ret_t 
 props_free (cherokee_handler_fcgi_props_t *props)
 {
-	cherokee_list_t *i, *tmp;
-	
-	list_for_each_safe (i, tmp, &props->server_list) {
-		cherokee_ext_source_free (EXT_SOURCE(i));
-	}
+	if (props->balancer != NULL) 
+		cherokee_balancer_free (props->balancer);
 	
 	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));
 }
 
 
 static ret_t 
-cherokee_handler_fcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_fcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                          ret;
 	cherokee_list_t               *i;
@@ -219,11 +217,12 @@ cherokee_handler_fcgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_fcgi_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  HANDLER_PROPS_FREE(props_free));
-		
+		cherokee_module_props_init_base (MODULE_PROPS(n), 
+						 MODULE_PROPS_FREE(props_free));
 		INIT_LIST_HEAD(&n->server_list);
-		*_props = HANDLER_PROPS(n);
+		n->balancer = NULL;
+
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_FCGI(*_props);	
@@ -233,18 +232,30 @@ cherokee_handler_fcgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
-		if (equal_buf_str (&subconf->key, "server")) {
-			ret = cherokee_ext_source_configure (subconf, &props->server_list);
+		if (equal_buf_str (&subconf->key, "balancer")) {
+			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer); 
 			if (ret != ret_ok) return ret;
 		}
 	}
 	
-	return cherokee_handler_cgi_base_configure (conf, srv, _props);
+	/* Init base class
+	 */
+	ret = cherokee_handler_cgi_base_configure (conf, srv, _props);
+	if (ret != ret_ok) return ret;
+
+	/* Final checks
+	 */
+	if (props->balancer == NULL) {
+		PRINT_ERROR_S ("ERROR: fcgi handler needs a balancer\n");
+		return ret_error;
+	}
+
+	return ret_ok;
 }
 
 
 ret_t 
-cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
+cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_fcgi);
 
@@ -264,7 +275,6 @@ cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler
 
 	/* Properties
 	 */
-	n->src         = NULL;
 	n->post_phase  = fcgi_post_init;
 	n->post_len    = 0;
 	
@@ -475,35 +485,34 @@ static ret_t
 connect_to_server (cherokee_handler_fcgi_t *hdl)
 {
 	ret_t                          ret;
-	cuint_t                        try   = 0;
+	int                            try   = 0;
+	cherokee_source_t             *src   = NULL;
+	cherokee_connection_t         *conn  = HANDLER_CONN(hdl);
 	cherokee_handler_fcgi_props_t *props = HDL_FCGI_PROPS(hdl);
 
-	if (hdl->src == NULL) {
-		ret = cherokee_ext_source_get_next (EXT_SOURCE_HEAD(props->server_list.next), &props->server_list, &hdl->src);
-		if (unlikely (ret != ret_ok)) return ret;
-	}
-	
-	ret = cherokee_ext_source_connect (hdl->src, &hdl->socket);
-	if (ret != ret_ok) {	
-		/* It didn't sucess to connect, so lets spawn a new server
-		 */
-		ret = cherokee_ext_source_spawn_srv (hdl->src);
+	ret = cherokee_balancer_dispatch (props->balancer, conn, &src);
+	if (ret != ret_ok) return ret;
+
+ 	ret = cherokee_source_connect (src, &hdl->socket); 
+ 	if (ret != ret_ok) { 
+		cherokee_source_interpreter_t *src_int = SOURCE_INT(src);
+
+		ret = cherokee_source_interpreter_spawn (src_int);
 		if (ret != ret_ok) {
-			TRACE (ENTRIES, "Couldn't spawn: %s\n", hdl->src->host.buf ? hdl->src->host.buf : hdl->src->unix_socket.buf);
+			TRACE (ENTRIES, "Couldn't spawn: %s\n", src->host.buf ? src->host.buf : src->unix_socket.buf);
 			return ret;
 		}
-
-		for (; try < 4; try++) {
-			/* Try to connect again	
-			 */
-			ret = cherokee_ext_source_connect (hdl->src, &hdl->socket);
+		
+		for (try = 0; try < 3; try ++) {
+			ret = cherokee_source_connect (src, &hdl->socket);
 			if (ret == ret_ok) break;
 
-			TRACE (ENTRIES, "Couldn't connect: %s, try %d\n", hdl->src->host.buf ? hdl->src->host.buf : hdl->src->unix_socket.buf, try);
+			TRACE (ENTRIES, "Couldn't connect: %s, try %d\n", src->host.buf ? src->host.buf : src->unix_socket.buf, try);
 			sleep (1);
 		}
+		
 	}
-	
+
 	TRACE (ENTRIES, "Connected sucessfully try=%d, fd=%d\n", try, hdl->socket.socket);
 	return ret_ok;
 }

@@ -32,8 +32,7 @@
 #include "module_loader.h"
 #include "socket.h"
 #include "handler_cgi_base.h"
-#include "ext_source.h"
-
+#include "balancer.h"
 
 typedef enum {
 	fcgi_post_unknown,
@@ -45,12 +44,12 @@ typedef enum {
 typedef struct {
 	cherokee_handler_cgi_base_t  base;
 	cherokee_list_t              server_list; 	
+	cherokee_balancer_t         *balancer;
 } cherokee_handler_fcgi_props_t;
 
 typedef struct {
 	cherokee_handler_cgi_base_t   base;
 	cherokee_socket_t             socket;
-	cherokee_ext_source_t        *src;
 	cherokee_handler_fcgi_post_t  post_phase;
 	cuint_t                       post_len;
 	cherokee_buffer_t             write_buffer;
@@ -67,7 +66,7 @@ void  MODULE_INIT(fcgi) (cherokee_module_loader_t *loader);
 
 /* Methods
  */
-ret_t cherokee_handler_fcgi_new  (cherokee_handler_t     **hdl, void *cnt, cherokee_handler_props_t *props);
+ret_t cherokee_handler_fcgi_new  (cherokee_handler_t     **hdl, void *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_fcgi_free (cherokee_handler_fcgi_t *hdl);
 ret_t cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl);
 

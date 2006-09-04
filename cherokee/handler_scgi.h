@@ -32,19 +32,20 @@
 #include "module_loader.h"
 #include "socket.h"
 #include "handler_cgi_base.h"
+#include "balancer.h"
 
 
 typedef struct {
 	cherokee_handler_cgi_base_t  base;
 	cherokee_list_t              scgi_env_ref;
-	cherokee_list_t              server_list; 	
+	cherokee_balancer_t         *balancer;
 } cherokee_handler_scgi_props_t;
 
 
 typedef struct {
 	cherokee_handler_cgi_base_t  base;
 	cherokee_buffer_t            header;
-	cherokee_socket_t           *socket;
+	cherokee_socket_t            socket;
 	size_t                       post_len;
 } cherokee_handler_scgi_t;
 
@@ -59,7 +60,7 @@ void MODULE_INIT(scgi) (cherokee_module_loader_t *loader);
 
 /* Methods
  */
-ret_t cherokee_handler_scgi_new  (cherokee_handler_t     **hdl, void *cnt, cherokee_handler_props_t *props);
+ret_t cherokee_handler_scgi_new  (cherokee_handler_t     **hdl, void *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_scgi_free (cherokee_handler_scgi_t *hdl);
 ret_t cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl);
 

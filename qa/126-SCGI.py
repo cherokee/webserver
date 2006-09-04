@@ -20,8 +20,10 @@ SCGIServer(TestHandler, port=%d).serve()
 
 CONF = """
 vserver!default!directory!%s!handler = scgi
-vserver!default!directory!%s!handler!server!local_scgi1!host = localhost:%d
-vserver!default!directory!%s!handler!server!local_scgi1!interpreter = %s %s
+vserver!default!directory!%s!handler!balancer = round_robin
+vserver!default!directory!%s!handler!balancer!type = interpreter
+vserver!default!directory!%s!handler!balancer!local_scgi1!host = localhost:%d
+vserver!default!directory!%s!handler!balancer!local_scgi1!interpreter = %s %s
 vserver!default!directory!%s!priority = 1260
 """
 
@@ -38,7 +40,7 @@ class Test (TestBase):
     def Prepare (self, www):
         scgi_file = self.WriteFile (www, "scgi_test1.scgi", 0444, SCRIPT)
 
-        self.conf = CONF % (DIR, DIR, PORT, DIR, PYTHON_PATH, scgi_file, DIR)
+        self.conf = CONF % (DIR, DIR, DIR, DIR, PORT, DIR, PYTHON_PATH, scgi_file, DIR)
 
     def Precondition (self):
         re = os.system ("%s -c 'import scgi.scgi_server'" % (PYTHON_PATH)) 

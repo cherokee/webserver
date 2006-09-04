@@ -42,7 +42,7 @@
 ret_t 
 cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi, 
 				cherokee_connection_t                    *conn,
-				cherokee_handler_props_t                 *props,
+				cherokee_module_props_t                  *props,
 				cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
 				cherokee_handler_cgi_base_read_from_cgi_t read_from_cgi)
 {
@@ -133,11 +133,11 @@ cherokee_handler_cgi_base_props_free (cherokee_handler_cgi_base_props_t *props)
 		env_item_free (i);
 	}
 	
-	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
 ret_t 
-cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                              ret;
 	cherokee_list_t                   *i, *j;

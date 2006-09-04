@@ -42,12 +42,15 @@
 static ret_t 
 props_free (cherokee_handler_fastcgi_props_t *props)
 {
+	if (props->balancer != NULL) 
+		cherokee_balancer_free (props->balancer);
+
 	// TODO: Free the structure content
 	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));
 }
 
 static ret_t 
-cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                             ret;
 	cherokee_list_t                  *i, *j;
@@ -58,17 +61,17 @@ cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_serve
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_fastcgi_props);
 		
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  HANDLER_PROPS_FREE(props_free));		
+		cherokee_module_props_init_base (MODULE_PROPS(n), 
+						 MODULE_PROPS_FREE(props_free));		
 
-		INIT_LIST_HEAD(&n->server_list);
 		INIT_LIST_HEAD(&n->fastcgi_env_ref);
 
+		n->balancer   = NULL;
 		n->nsockets   = NSOCKS_DEFAULT;
 		n->nkeepalive = 0;
 		n->npipeline  = 0;
 
-		*_props = HANDLER_PROPS(n);
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_FASTCGI(*_props);
@@ -78,8 +81,8 @@ cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_serve
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
-		if (equal_buf_str (&subconf->key, "server")) {
-			ret = cherokee_ext_source_configure (subconf, &props->server_list);
+		if (equal_buf_str (&subconf->key, "balancer")) {
+			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer); 
 			if (ret != ret_ok) return ret;
 
 		} else if (equal_buf_str (&subconf->key, "fcgi_env")) {
@@ -231,7 +234,7 @@ read_from_fastcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 
 ret_t
-cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
+cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_fastcgi);
 	
@@ -293,24 +296,24 @@ static ret_t
 get_dispatcher (cherokee_handler_fastcgi_t *hdl, cherokee_fcgi_dispatcher_t **dispatcher)
 {
 	ret_t                             ret;
-	cherokee_ext_source_t            *src         = NULL;
+	cherokee_source_t                *src         = NULL;
 	cherokee_thread_t                *thread      = HANDLER_THREAD(hdl);
         cherokee_table_t                 *dispatchers = thread->fastcgi_servers;
 	cherokee_handler_fastcgi_props_t *props       = HDL_FASTCGI_PROPS(hdl);
 
 	/* Choose the server
 	 */
-	ret = cherokee_ext_source_get_next (EXT_SOURCE_HEAD(props->server_list.next), &props->server_list, &src);
-	if (unlikely (ret != ret_ok)) return ret;
+	ret = cherokee_balancer_dispatch (props->balancer, HANDLER_CONN(hdl), &src);
+	if (ret != ret_ok) return ret;
 
 	/* Get the manager
 	 */
-	ret = cherokee_table_get (dispatchers, src->original_server.buf, (void **)dispatcher);
+	ret = cherokee_table_get (dispatchers, src->original.buf, (void **)dispatcher);
 	if (ret == ret_not_found) {
 		ret = cherokee_fcgi_dispatcher_new (dispatcher, thread, src, props->nsockets, props->nkeepalive, props->npipeline);
 		if (unlikely (ret != ret_ok)) return ret;
 
-		ret = cherokee_table_add (dispatchers, src->original_server.buf, *dispatcher);
+		ret = cherokee_table_add (dispatchers, src->original.buf, *dispatcher);
 		if (unlikely (ret != ret_ok)) return ret;
 	}
 

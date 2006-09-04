@@ -31,7 +31,7 @@
 #include "handler_dirlist.h"
 
 typedef struct {
-	cherokee_handler_props_t          base;
+	cherokee_module_props_t           base;
 	cherokee_handler_file_props_t    *props_file;
 	cherokee_handler_dirlist_props_t *props_dirlist;
 } cherokee_handler_common_props_t;
@@ -43,8 +43,8 @@ typedef struct {
  */
 void  common_init                        (cherokee_module_loader_t *loader);
 
-ret_t cherokee_handler_common_configure  (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **props);
-ret_t cherokee_handler_common_new        (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props);
+ret_t cherokee_handler_common_configure  (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
+ret_t cherokee_handler_common_new        (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_common_props_free (cherokee_handler_common_props_t *props);
 
 #endif /* CHEROKEE_HANDLER_COMMON_H */

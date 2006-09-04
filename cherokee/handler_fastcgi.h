@@ -31,6 +31,7 @@
 #include "buffer.h"
 #include "module_loader.h"
 #include "socket.h"
+#include "balancer.h"
 #include "handler_cgi_base.h"
 #include "fcgi_manager.h"
 #include "fcgi_dispatcher.h"
@@ -57,7 +58,7 @@ typedef enum {
 typedef struct {
 	cherokee_handler_cgi_base_t     base;
 
-	cherokee_list_t                 server_list;
+	cherokee_balancer_t            *balancer;
 	cherokee_list_t                 fastcgi_env_ref;
 
 	cuint_t                         nsockets;
@@ -90,7 +91,7 @@ void  MODULE_INIT(fastcgi) (cherokee_module_loader_t *loader);
 
 /* Methods
  */
-ret_t cherokee_handler_fastcgi_new         (cherokee_handler_t        **hdl, void *cnt, cherokee_handler_props_t *properties);
+ret_t cherokee_handler_fastcgi_new         (cherokee_handler_t        **hdl, void *cnt, cherokee_module_props_t *properties);
 ret_t cherokee_handler_fastcgi_free        (cherokee_handler_fastcgi_t *hdl);
 ret_t cherokee_handler_fastcgi_init        (cherokee_handler_fastcgi_t *hdl);
 ret_t cherokee_handler_fastcgi_add_headers (cherokee_handler_fastcgi_t *hdl, cherokee_buffer_t *buffer);

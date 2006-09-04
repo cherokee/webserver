@@ -749,6 +749,10 @@ endif
 
 
 libcherokee_server_la_SOURCES = \
+source.h \
+source.c \
+source_interpreter.h \
+source_interpreter.c \
 $(static_handler_file_src) \
 $(static_handler_admin_src) \
 $(static_handler_dirlist_src) \
@@ -824,12 +828,10 @@ handler_error.c \
 handler_error.h \
 nonce.h \
 nonce.c \
-ext_source.h \
-ext_source.c \
 config_node.h \
 config_node.c \
 balancer.h \
-balancer.c
+balancer.c 
 
 libcherokee_config_la_SOURCES = \
 $(config_common) \

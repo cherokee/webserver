@@ -42,7 +42,7 @@ cherokee_handler_admin_configure ()
 
 
 ret_t 
-cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
+cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_admin);
 

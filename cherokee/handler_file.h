@@ -41,9 +41,10 @@
 /* Data types
  */
 typedef struct {
-	cherokee_handler_props_t base;
-	cherokee_boolean_t       use_cache;
+	cherokee_module_props_t base;
+	cherokee_boolean_t      use_cache;
 } cherokee_handler_file_props_t;
+
 
 typedef struct {
 	cherokee_handler_t handler;
@@ -68,8 +69,8 @@ typedef struct {
  */
 void  MODULE_INIT(file)                 (cherokee_module_loader_t *loader);
 
-ret_t cherokee_handler_file_new         (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props);
-ret_t cherokee_handler_file_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props);
+ret_t cherokee_handler_file_new         (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
+ret_t cherokee_handler_file_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);
 ret_t cherokee_handler_file_props_free  (cherokee_handler_file_props_t *props);
 
 /* Virtual methods

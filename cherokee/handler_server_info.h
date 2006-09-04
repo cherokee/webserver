@@ -35,7 +35,7 @@
 /* Data types
  */
 typedef struct {
-	cherokee_handler_props_t base;
+	cherokee_module_props_t  base;
 	cherokee_boolean_t       just_about;
 } cherokee_handler_server_info_props_t;
 
@@ -58,7 +58,7 @@ typedef struct {
 /* Library init function
  */
 void MODULE_INIT(server_info) (cherokee_module_loader_t *loader);
-ret_t cherokee_handler_server_info_new   (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props);
+ret_t cherokee_handler_server_info_new   (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
 
 /* virtual methods implementation
  */

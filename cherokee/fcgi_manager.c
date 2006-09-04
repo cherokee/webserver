@@ -28,6 +28,7 @@
 #include "fastcgi.h"
 #include "connection-protected.h"
 #include "handler_fastcgi.h"
+#include "source_interpreter.h"
 
 #include <unistd.h>
 
@@ -39,7 +40,7 @@
 ret_t
 cherokee_fcgi_manager_init (cherokee_fcgi_manager_t *mgr,
 			    void                    *dispatcher,
-			    cherokee_ext_source_t   *src, 
+			    cherokee_source_t       *src, 
 			    cherokee_boolean_t       keepalive, 
 			    cuint_t                  pipeline)
 {
@@ -131,10 +132,10 @@ reset_connections (cherokee_fcgi_manager_t *mgr)
 static ret_t 
 reconnect (cherokee_fcgi_manager_t *mgr, cherokee_thread_t *thd, cherokee_boolean_t clean_up)
 {
-	ret_t                  ret;
-	cuint_t                next;
-	cuint_t                try = 0;
-	cherokee_ext_source_t *src = mgr->source;
+	ret_t              ret;
+	cuint_t            next;
+	cuint_t            try = 0;
+	cherokee_source_t *src = mgr->source;
 
 	/* Do some clean up
 	 */
@@ -158,11 +159,13 @@ reconnect (cherokee_fcgi_manager_t *mgr, cherokee_thread_t *thd, cherokee_boolea
 	
 	/* If it connects we're done here..
 	 */
-	ret = cherokee_ext_source_connect (src, &mgr->socket);
+	ret = cherokee_source_connect (src, &mgr->socket);
 	if (ret != ret_ok) {
+		cherokee_source_interpreter_t *src2 = SOURCE_INT(src);
+
 		/* It didn't sucess to connect, so lets spawn a new server
 		 */
-		ret = cherokee_ext_source_spawn_srv (src);
+		ret = cherokee_source_interpreter_spawn (src2);
 		if (ret != ret_ok) {
 			TRACE (ENTRIES, "Couldn't spawn: %s\n", src->host.buf ? src->host.buf : src->unix_socket.buf);
 			return ret;
@@ -171,7 +174,7 @@ reconnect (cherokee_fcgi_manager_t *mgr, cherokee_thread_t *thd, cherokee_boolea
 		for (; try < 4; try++) {
 			/* Try to connect again	
 			 */
-			ret = cherokee_ext_source_connect (src, &mgr->socket);
+			ret = cherokee_source_connect (src, &mgr->socket);
 			if (ret == ret_ok) break;
 
 			TRACE (ENTRIES, "Couldn't connect: %s, try %d\n", src->host.buf ? src->host.buf : src->unix_socket.buf, try);

@@ -34,7 +34,7 @@
  */
 void MODULE_INIT(nn) (cherokee_module_loader_t *loader);
 
-ret_t cherokee_handler_nn_new  (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props);
+ret_t cherokee_handler_nn_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_nn_init (cherokee_handler_t  *hdl);
 
 #endif /* CHEROKEE_CONNECTION_HANDLER_NN_H */

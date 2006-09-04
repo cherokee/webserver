@@ -54,18 +54,10 @@ typedef enum {
 	hsupport_dont_add_headers = 1 << 4,    /* The server shouldn't add any headers    */
 } cherokee_handler_support_t;
 
-/* Handler properties
- */
-typedef ret_t (* handler_props_func_free_t)  (void  *handlerp);
-
-typedef struct {
-	handler_props_func_free_t free;
-} cherokee_handler_props_t;
-
 
 /* Callback function definitions
  */
-typedef ret_t (* handler_func_new_t)         (void **handler, void *cnt, cherokee_handler_props_t *properties);
+typedef ret_t (* handler_func_new_t)         (void **handler, void *cnt, cherokee_module_props_t *properties);
 typedef ret_t (* handler_func_init_t)        (void  *handler);
 typedef ret_t (* handler_func_step_t)        (void  *handler, cherokee_buffer_t *buffer);
 typedef ret_t (* handler_func_add_headers_t) (void  *handler, cherokee_buffer_t *buffer);
@@ -74,7 +66,7 @@ typedef ret_t (* handler_func_add_headers_t) (void  *handler, cherokee_buffer_t 
  */
 typedef struct {
 	cherokee_module_t           module;
-	cherokee_handler_props_t   *props;
+	cherokee_module_props_t    *props;
 
 	/* Pure virtual methods
 	 */
@@ -89,9 +81,6 @@ typedef struct {
 
 
 #define HANDLER(x)                         ((cherokee_handler_t *)(x))
-#define HANDLER_PROPS(x)                   ((cherokee_handler_props_t *)(x))
-#define HANDLER_PROPS_FREE(f)              ((handler_props_func_free_t)(f))
-
 #define HANDLER_CONN(h)                    (CONN(HANDLER(h)->connection))
 #define HANDLER_SRV(h)                     (CONN_SRV(HANDLER_CONN(h)))
 #define HANDLER_THREAD(h)                  (CONN_THREAD(HANDLER_CONN(h)))
@@ -103,7 +92,7 @@ typedef struct {
 
 /* Handler methods
  */
-ret_t cherokee_handler_init_base   (cherokee_handler_t  *hdl, void *conn, cherokee_handler_props_t *props);
+ret_t cherokee_handler_init_base   (cherokee_handler_t  *hdl, void *conn, cherokee_module_props_t *props);
 ret_t cherokee_handler_free_base   (cherokee_handler_t  *hdl);
 
 /* Handler virtual methods
@@ -112,12 +101,6 @@ ret_t cherokee_handler_init        (cherokee_handler_t  *hdl);
 ret_t cherokee_handler_free        (cherokee_handler_t  *hdl);
 ret_t cherokee_handler_step        (cherokee_handler_t  *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_add_headers (cherokee_handler_t  *hdl, cherokee_buffer_t *buffer);
-
-/* Handler properties
- */
-ret_t cherokee_handler_props_init_base (cherokee_handler_props_t *hdlp, handler_props_func_free_t free_func);
-ret_t cherokee_handler_props_free_base (cherokee_handler_props_t *hdlp);
-ret_t cherokee_handler_props_free      (cherokee_handler_props_t *hdlp);
 
 
 CHEROKEE_END_DECLS

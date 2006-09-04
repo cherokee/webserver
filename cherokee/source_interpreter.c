@@ -1,0 +1,236 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+
+/* Cherokee
+ *
+ * Authors:
+ *      Alvaro Lopez Ortega <alvaro@alobbs.com>
+ *
+ * Copyright (C) 2001-2006 Alvaro Lopez Ortega
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of version 2 of the GNU General Public
+ * License as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+
+#include "common-internal.h"
+#include "source_interpreter.h"
+#include "util.h"
+
+#include <sys/types.h>
+#include <unistd.h>
+
+
+#define ENTRIES "source,src,interpreter"
+
+
+ret_t 
+cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
+{
+	CHEROKEE_NEW_STRUCT(n, source_interpreter);
+
+	cherokee_source_init (SOURCE(n));
+	cherokee_buffer_init (&n->interpreter);
+
+	n->custom_env     = NULL;
+	n->custom_env_len = 0;
+
+	*src = n;
+	return ret_ok;
+}
+
+
+static void
+free_custon_env (cherokee_source_interpreter_t *src)
+{
+	cuint_t i;
+	
+	for (i=0; src->custom_env[i] != NULL; i++) {
+		free (src->custom_env[i]);
+	}
+	
+	free (src->custom_env);
+}
+
+
+ret_t 
+cherokee_source_interpreter_free (cherokee_source_interpreter_t *src)
+{
+	cherokee_source_mrproper (SOURCE(src));
+	cherokee_buffer_mrproper (&src->interpreter);
+
+	if (src->custom_env)
+		free_custon_env (src);
+
+	free (src);
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, cherokee_config_node_t *conf)
+{
+	ret_t                   ret;
+	cherokee_list_t        *i, *j;
+	cherokee_config_node_t *child;
+
+	/* Configure the base class
+	 */
+	ret = cherokee_source_configure (SOURCE(src), conf);
+	if (ret != ret_ok) return ret;
+
+	/* Interpreter parameters
+	 */
+	cherokee_config_node_foreach (i, conf) {
+		child = CONFIG_NODE(i);
+
+		if (equal_buf_str (&child->key, "interpreter")) {
+			/* TODO: fix win32 path */
+			cherokee_buffer_add_buffer (&src->interpreter, &child->val);
+
+		} else if (equal_buf_str (&child->key, "env")) {			
+			cherokee_config_node_foreach (j, child) {
+				cherokee_config_node_t *child2 = CONFIG_NODE(j);
+                                
+				ret = cherokee_source_interpreter_add_env (src, child2->key.buf, child2->val.buf);
+				if (ret != ret_ok) return ret;
+			}
+		}	
+	}
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *env, char *val)
+{
+	char    *entry;
+	cuint_t  env_len;
+	cuint_t  val_len;
+
+	/* Build the env entry
+	 */
+	env_len = strlen (env);
+	val_len = strlen (val);
+
+	entry = (char *) malloc (env_len + val_len + 2);
+	if (entry == NULL) return ret_nomem;
+
+	memcpy (entry, env, env_len);
+	entry[env_len] = '=';
+	memcpy (entry + env_len + 1, val, val_len);
+	entry[env_len + val_len+1] = '\0';
+	
+	/* Add it into the env array
+	 */
+	if (src->custom_env_len == 0) {
+		src->custom_env = malloc (sizeof (char *) * 2);
+	} else {
+		src->custom_env = realloc (src->custom_env, (src->custom_env_len + 2) * sizeof (char *));
+	}
+	src->custom_env_len +=  1;
+
+	src->custom_env[src->custom_env_len - 1] = entry;
+	src->custom_env[src->custom_env_len] = NULL;
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
+{
+	int                re;
+	char             **envp;
+	char              *argv[]       = {"sh", "-c", NULL, NULL};
+	int                child        = -1;
+	char              *empty_envp[] = {NULL};
+	cherokee_buffer_t  tmp          = CHEROKEE_BUF_INIT;
+
+#if 0
+	int s;
+	cherokee_sockaddr_t addr;
+
+	/* This code is meant to, in some way, signal the FastCGI that
+	 * it is centainly a FastCGI.  The fcgi client will execute
+	 * getpeername (FCGI_LISTENSOCK_FILENO) and, then if it is a
+	 * fcgi, error will have the ENOTCONN value.
+	 */
+	addr.sa_in.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	s = socket (AF_INET, SOCK_STREAM, 0);
+	if (s < 0) return ret_error;
+	
+	re = 1;
+	setsockopt (s, SOL_SOCKET, SO_REUSEADDR, &re, sizeof(re));
+
+	re = bind (s, (struct sockaddr *) &addr, sizeof(cherokee_sockaddr_t));
+	if (re == -1) return ret_error;
+
+	re = listen (s, 1024);
+	if (re == -1) return ret_error;
+#endif
+
+	/* Maybe set a custom enviroment variable set 
+	 */
+	envp = (src->custom_env) ? src->custom_env : empty_envp;
+
+	/* Execute the FastCGI server
+	 */
+	cherokee_buffer_add_va (&tmp, "exec %s", src->interpreter.buf);
+
+	TRACE (ENTRIES, "Spawn \"/bin/sh %s\"\n", src->interpreter.buf);
+
+#ifndef _WIN32
+	child = fork();
+#endif
+	switch (child) {
+	case 0:
+#if 0 
+		/* More FCGI_LISTENSOCK_FILENO stuff..
+		 */
+		close (STDIN_FILENO);
+
+		if (s != FCGI_LISTENSOCK_FILENO) {
+			close (FCGI_LISTENSOCK_FILENO);
+			dup2 (s, FCGI_LISTENSOCK_FILENO);
+			close (s);
+		}
+		
+		close (STDOUT_FILENO);
+		close (STDERR_FILENO);
+#endif
+		argv[2] = (char *)tmp.buf;
+
+		re = execve ("/bin/sh", argv, envp);
+		if (re < 0) {
+			PRINT_ERROR ("ERROR: Could spawn %s\n", tmp.buf);
+			exit (1);
+		}
+
+	case -1:
+		goto error;
+		
+	default:
+		sleep (1);
+		break;
+		
+	}
+
+	cherokee_buffer_mrproper (&tmp);
+	return ret_ok;
+
+error:
+	cherokee_buffer_mrproper (&tmp);
+	return ret_error;
+}

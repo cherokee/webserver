@@ -39,20 +39,20 @@
 typedef struct {
 	/* Parent table_entry
 	 */
-	void                     *parent;
-	cuint_t                   priority;
+	void                       *parent;
+	cuint_t                     priority;
 
 	/* Properties
 	 */
-	cherokee_buffer_t        *document_root;
-	cherokee_boolean_t        only_secure;
-	void                     *access;
+	cherokee_buffer_t          *document_root;
+	cherokee_boolean_t          only_secure;
+	void                       *access;
 
 	/* Handler
 	 */
 	handler_func_new_t          handler_new_func;
 	cherokee_http_method_t      handler_methods;
-	cherokee_handler_props_t   *handler_properties; 
+	cherokee_module_props_t    *handler_properties; 
 
 	/* Validator
 	 */

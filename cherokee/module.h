@@ -84,10 +84,24 @@ typedef struct {
 	module_func_get_name_t    get_name;   /* retrieve module name     */
 } cherokee_module_t;
 
-
 #define MODULE(x)              ((cherokee_module_t *) (x))
 #define MODULE_INFO_HANDLER(x) ((cherokee_module_info_handler_t *) (x))
 
+
+/* Module properties
+ */
+typedef ret_t (* module_props_func_free_t) (void *props);
+
+typedef struct {
+	module_props_func_free_t free;
+} cherokee_module_props_t;
+
+#define MODULE_PROPS(x)        ((cherokee_module_props_t *)(x))
+#define MODULE_PROPS_FREE(f)   ((module_props_func_free_t)(f))
+
+
+/* Convenience Macros
+ */
 #define MODULE_INFO(name) cherokee_ ## name ## _info
 #define MODULE_INIT(name) cherokee_module_ ## name ## _init
 
@@ -121,17 +135,17 @@ typedef struct {
 		  (void *) cherokee_ ## type ## _ ## name ## _configure, \
 		}
 
-#define HANDLER_MODULE_INFO_INIT_EASY(name, methods)	           \
- 	cherokee_module_info_handler_t MODULE_INFO(name) = { 	   \
-		{ cherokee_handler,                                \
-                  (void *) cherokee_handler_ ## name ## _new,	   \
+#define HANDLER_MODULE_INFO_INIT_EASY(name, methods)	            \
+ 	cherokee_module_info_handler_t MODULE_INFO(name) = { 	    \
+		{ cherokee_handler,                                 \
+                  (void *) cherokee_handler_ ## name ## _new,	    \
 		  (void *) cherokee_handler_ ## name ## _configure, \
 		}, (methods) }
 
-#define VALIDATOR_MODULE_INFO_INIT_EASY(name, methods)	           \
- 	cherokee_module_info_handler_t MODULE_INFO(name) = { 	   \
-		{ cherokee_validator,                              \
-                  (void *) cherokee_validator_ ## name ## _new,		   \
+#define VALIDATOR_MODULE_INFO_INIT_EASY(name, methods)	              \
+ 	cherokee_module_info_validator_t MODULE_INFO(name) = { 	      \
+		{ cherokee_validator,                                 \
+                  (void *) cherokee_validator_ ## name ## _new,	      \
 		  (void *) cherokee_validator_ ## name ## _configure, \
 		}, (methods) }
 
@@ -139,6 +153,14 @@ typedef struct {
  */
 ret_t cherokee_module_init_base (cherokee_module_t *module);
 void  cherokee_module_get_name  (cherokee_module_t *module, const char **name);
+
+
+/* Property methods
+ */
+ret_t cherokee_module_props_init_base (cherokee_module_props_t *prop, module_props_func_free_t free_func);
+ret_t cherokee_module_props_free_base (cherokee_module_props_t *prop);
+ret_t cherokee_module_props_free      (cherokee_module_props_t *prop);
+
 
 CHEROKEE_END_DECLS
 

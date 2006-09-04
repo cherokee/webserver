@@ -27,15 +27,26 @@
 #include "balancer_round_robin.h"
 #include "module_loader.h"
 
+static ret_t
+dispatch (cherokee_balancer_round_robin_t *balancer, 
+	  cherokee_connection_t           *conn, 
+	  cherokee_source_t              **src);
+
 
 ret_t 
-cherokee_balancer_round_robin_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props)
+cherokee_balancer_round_robin_configure (cherokee_balancer_t  *balancer, cherokee_config_node_t *conf)
 {
+	ret_t ret;
+
+	ret = cherokee_balancer_configure (BAL(balancer), conf);
+	if (ret != ret_ok) return ret;
+
 	return ret_ok;
 }
 
+
 ret_t 
-cherokee_balancer_round_robin_new (cherokee_balancer_t **bal, cherokee_connection_t *cnt, cherokee_balancer_props_t *props)
+cherokee_balancer_round_robin_new (cherokee_balancer_t **bal)
 {
 	CHEROKEE_NEW_STRUCT (n, balancer_round_robin);
 
@@ -44,7 +55,7 @@ cherokee_balancer_round_robin_new (cherokee_balancer_t **bal, cherokee_connectio
 	cherokee_balancer_init_base (BAL(n));
 
 	MODULE(n)->free  = (module_func_free_t) cherokee_balancer_round_robin_free;
-	BAL(n)->dispatch = (balancer_dispatch_func_t) cherokee_balancer_round_robin_dispatch;
+	BAL(n)->dispatch = (balancer_dispatch_func_t) dispatch;
 
 	/* Init properties
 	 */
@@ -66,20 +77,20 @@ cherokee_balancer_round_robin_free (cherokee_balancer_round_robin_t *balancer)
 }
 
 
-ret_t
-cherokee_balancer_round_robin_dispatch (cherokee_balancer_round_robin_t *balancer, 
-					cherokee_connection_t           *conn, 
-					cherokee_balancer_host_t       **host)
+static ret_t
+dispatch (cherokee_balancer_round_robin_t *balancer, 
+	  cherokee_connection_t           *conn, 
+	  cherokee_source_t              **src)
 {
 	cherokee_balancer_t *gbal = BAL(balancer);
 
 	CHEROKEE_MUTEX_LOCK (&balancer->last_one_mutex);
 
-	if (gbal->hosts_len <= 0)
+	if (gbal->sources_len <= 0)
 		goto error;
 	
-	balancer->last_one = (balancer->last_one + 1) % gbal->hosts_len;
-	*host = gbal->hosts[balancer->last_one];
+	balancer->last_one = (balancer->last_one + 1) % gbal->sources_len;
+	*src = gbal->sources[balancer->last_one];
 
 	CHEROKEE_MUTEX_UNLOCK (&balancer->last_one_mutex);
 	return ret_ok;
@@ -88,6 +99,7 @@ error:
 	CHEROKEE_MUTEX_UNLOCK (&balancer->last_one_mutex);
 	return ret_error;
 }
+
 
 
 /* Module stuff

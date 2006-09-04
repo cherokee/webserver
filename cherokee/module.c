@@ -52,3 +52,37 @@ cherokee_module_get_name (cherokee_module_t *module, const char **name)
 	*name = "unknown";
 }
 
+
+
+/* Module properties
+ */
+ret_t 
+cherokee_module_props_init_base (cherokee_module_props_t *prop, module_props_func_free_t free_func)
+{
+	prop->free = free_func;
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_module_props_free (cherokee_module_props_t *prop)
+{
+	if (prop == NULL) 
+		return ret_error;
+
+	if (prop->free == NULL) {
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
+
+	prop->free (prop);
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_module_props_free_base (cherokee_module_props_t *prop)
+{
+	free (prop);
+	return ret_ok;
+}

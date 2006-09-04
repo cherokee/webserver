@@ -49,31 +49,16 @@
 static ret_t 
 props_free (cherokee_handler_proxy_props_t *props)
 {
-	if (props->balancer != NULL) {
+	if (props->balancer) {
 		cherokee_balancer_free (props->balancer);
 	}
-
-	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
-}
-
-
-static ret_t
-load_balancer (cherokee_server_t *srv, cherokee_buffer_t *name, cherokee_config_node_t *subconf, cherokee_balancer_t **balancer)
-{
-	ret_t                   ret;
-	cherokee_module_info_t *info = NULL;
-
-	ret = cherokee_module_loader_get (&srv->loader, name->buf, &info);
-	if (ret != ret_ok) return ret;
-
-	// TODO: Instance the balancer obj
 	
-	return ret_ok;
+	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
 
 ret_t 
-cherokee_handler_proxy_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_proxy_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	cherokee_list_t                *i;
 	cherokee_handler_proxy_props_t *props;
@@ -81,11 +66,10 @@ cherokee_handler_proxy_configure (cherokee_config_node_t *conf, cherokee_server_
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT(n, handler_proxy_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  HANDLER_PROPS_FREE(props_free));		
+		cherokee_module_props_init_base (MODULE_PROPS(n), 
+						 MODULE_PROPS_FREE(props_free));		
 		n->balancer = NULL;
-
-		*_props = HANDLER_PROPS(n);
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_PROXY(*_props);
@@ -95,7 +79,8 @@ cherokee_handler_proxy_configure (cherokee_config_node_t *conf, cherokee_server_
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 		
 		if (equal_buf_str (&subconf->key, "balancer")) {
-			ret = load_balancer(srv, &subconf->val, subconf, &props->balancer);
+			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer);
+
 			if (ret < ret_ok) {
 				PRINT_ERROR ("ERROR: Couldn't load balancer '%s'\n", subconf->val.buf);
 				return ret;
@@ -110,7 +95,7 @@ cherokee_handler_proxy_configure (cherokee_config_node_t *conf, cherokee_server_
 }
 
 ret_t
-cherokee_handler_proxy_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props)
+cherokee_handler_proxy_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_proxy); 

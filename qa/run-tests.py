@@ -107,9 +107,11 @@ vserver!default!directory!/!priority = 1
 
 PHP_FCGI = """extensions!php!handler = fcgi
 extensions!php!priority = 10000
-extensions!php!handler!server!local1!host = localhost:%d
-extensions!php!handler!server!local1!env!PHP_FCGI_CHILDREN = 5
-extensions!php!handler!server!local1!interpreter = %s -b %d""" % (PHP_FCGI_PORT, PHPCGI_PATH, PHP_FCGI_PORT)
+extensions!php!handler!balancer = round_robin
+extensions!php!handler!balancer!type = interpreter
+extensions!php!handler!balancer!local1!host = localhost:%d
+extensions!php!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
+extensions!php!handler!balancer!local1!interpreter = %s -b %d""" % (PHP_FCGI_PORT, PHPCGI_PATH, PHP_FCGI_PORT)
 
 PHP_CGI = """extensions!php!handler = phpcgi
 extensions!php!priority = 10000

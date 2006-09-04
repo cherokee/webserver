@@ -32,54 +32,51 @@
 #include <cherokee/common.h>
 #include <cherokee/module.h>
 #include <cherokee/connection.h>
+#include <cherokee/source.h>
 
 CHEROKEE_BEGIN_DECLS
 
-
-/* Hosts
- */
-typedef struct {
-	int foo;
-} cherokee_balancer_host_t;
-
-
-/* Handler properties
- */
-typedef ret_t (* balancer_props_func_free_t)  (void  *balancerp);
+typedef ret_t (* balancer_dispatch_func_t) (void *balancer, cherokee_connection_t *conn, cherokee_source_t **src);
 
 typedef struct {
-	balancer_props_func_free_t free;
-} cherokee_balancer_props_t;
-
-
-/* Balancer
- */
-typedef ret_t (* balancer_dispatch_func_t) (void *balancer, cherokee_connection_t *conn, cherokee_balancer_host_t **hosts);
-typedef ret_t (* balancer_free_func_t)     (void *balancer);
-
-typedef struct {
-	cherokee_module_t          module;
+	cherokee_module_t        module;
 
 	/* Properties */
-	cherokee_balancer_host_t **hosts;
-	cuint_t                    hosts_len;
-	cuint_t                    hosts_size;
+	cherokee_source_t      **sources;
+	cuint_t                  sources_len;
+	cuint_t                  sources_size;
 
 	/* Virtual methods */
-	balancer_dispatch_func_t   dispatch;
+	balancer_dispatch_func_t dispatch;
+
 } cherokee_balancer_t;
 
 #define BAL(b)  ((cherokee_balancer_t *)(b))
 
+
+typedef ret_t (* balancer_new_func_t)      (cherokee_balancer_t **balancer);
+typedef ret_t (* balancer_free_func_t)     (cherokee_balancer_t  *balancer);
+
+
 ret_t cherokee_balancer_init_base  (cherokee_balancer_t *balancer);
 ret_t cherokee_balancer_mrproper   (cherokee_balancer_t *balancer);
+ret_t cherokee_balancer_configure  (cherokee_balancer_t *balancer, cherokee_config_node_t *conf);
 
-ret_t cherokee_balancer_add_host   (cherokee_balancer_t *balancer, cherokee_balancer_host_t *host);
+/* Public methods
+ */
+ret_t cherokee_balancer_add_source (cherokee_balancer_t *balancer, cherokee_source_t *source);
 
 /* Virtual methods
  */
-ret_t cherokee_balancer_dispatch   (cherokee_balancer_t *balancer, cherokee_connection_t *conn, cherokee_balancer_host_t **host);
+ret_t cherokee_balancer_dispatch   (cherokee_balancer_t *balancer, cherokee_connection_t *conn, cherokee_source_t **source);
 ret_t cherokee_balancer_free       (cherokee_balancer_t *balancer);
+
+/* Commodity 
+ */
+ret_t cherokee_balancer_instance   (cherokee_buffer_t       *name, 
+				    cherokee_config_node_t  *conf, 
+				    cherokee_server_t       *srv, 
+				    cherokee_balancer_t    **balancer);
 
 CHEROKEE_END_DECLS
 

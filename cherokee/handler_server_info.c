@@ -100,12 +100,12 @@
 static ret_t 
 props_free (cherokee_handler_server_info_props_t *props)
 {
-	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
 
 ret_t 
-cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	cherokee_list_t                      *i;
 	cherokee_handler_server_info_props_t *props;
@@ -113,10 +113,10 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_server_info_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  HANDLER_PROPS_FREE(props_free));		
+		cherokee_module_props_init_base (MODULE_PROPS(n), 
+						 MODULE_PROPS_FREE(props_free));		
 		n->just_about = false;
-		*_props = HANDLER_PROPS(n);
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_SRV_INFO(*_props);
@@ -396,7 +396,7 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 
 
 ret_t
-cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props)
+cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_server_info);
 	

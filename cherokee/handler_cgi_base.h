@@ -49,7 +49,7 @@ typedef enum {
 } cherokee_handler_cgi_base_phase_t;
 
 typedef struct {
-	cherokee_handler_props_t           base;
+	cherokee_module_props_t            base;
 	cherokee_list_t                    system_env;
 	cuint_t                            change_user;
 	cherokee_buffer_t                  script_alias;
@@ -83,7 +83,7 @@ struct cherokee_handler_cgi_base {
 
 ret_t cherokee_handler_cgi_base_init           (cherokee_handler_cgi_base_t              *hdl, 
 						cherokee_connection_t                    *conn,
-						cherokee_handler_props_t                 *props, 
+						cherokee_module_props_t                  *props, 
 						cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
 						cherokee_handler_cgi_base_read_from_cgi_t read_from_cgi);
 
@@ -106,7 +106,7 @@ ret_t cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t    
 						 cherokee_connection_t                    *conn,
 						 cherokee_buffer_t                        *tmp);
 
-ret_t cherokee_handler_cgi_base_configure       (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **props);
+ret_t cherokee_handler_cgi_base_configure       (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
 ret_t cherokee_handler_cgi_base_props_free      (cherokee_handler_cgi_base_props_t *props);
 
 #endif /* CHEROKEE_HANDLER_CGI_BASE_H */

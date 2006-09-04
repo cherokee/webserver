@@ -154,12 +154,12 @@ cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 	cherokee_buffer_mrproper (&props->entry);
 	cherokee_buffer_mrproper (&props->css);
 
-	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
 
 ret_t 
-cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                             ret;
 	cherokee_list_t                  *i;
@@ -170,8 +170,8 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_dirlist_props);
 		
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  HANDLER_PROPS_FREE(cherokee_handler_dirlist_props_free));
+		cherokee_module_props_init_base (MODULE_PROPS(n), 
+						 MODULE_PROPS_FREE(cherokee_handler_dirlist_props_free));
 
 		n->show_size   = true;
 		n->show_date   = true;
@@ -185,7 +185,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 
 		INIT_LIST_HEAD (&n->notice_files);
 		
-		*_props = HANDLER_PROPS(n);
+		*_props = MODULE_PROPS(n);
 	}
 	
 	props = PROP_DIRLIST(*_props);
@@ -323,7 +323,7 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 
 
 ret_t
-cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
+cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {	
 	ret_t  ret;
 	char  *value;

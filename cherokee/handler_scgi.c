@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "handler_scgi.h"
 #include "connection.h"
-#include "ext_source.h"
+#include "source_interpreter.h"
 #include "thread.h"
 #include "util.h"
 
@@ -40,11 +40,8 @@
 static ret_t 
 props_free (cherokee_handler_scgi_props_t *props)
 {
-	cherokee_list_t *i, *tmp;
-	
-	list_for_each_safe (i, tmp, &props->server_list) {
-		cherokee_ext_source_free (EXT_SOURCE(i));
-	}
+	if (props->balancer)
+		cherokee_balancer_free (props->balancer);
 
 	// TODO: Free scgi_env_ref
 
@@ -52,7 +49,7 @@ props_free (cherokee_handler_scgi_props_t *props)
 }
 
 static ret_t 
-cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                          ret;
 	cherokee_list_t               *i;
@@ -63,13 +60,12 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_scgi_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  HANDLER_PROPS_FREE(props_free));
-		
+		cherokee_module_props_init_base (MODULE_PROPS(n), 
+						 MODULE_PROPS_FREE(props_free));
+		n->balancer = NULL;
 		INIT_LIST_HEAD(&n->scgi_env_ref);   // TODO: finish this
-		INIT_LIST_HEAD(&n->server_list);
 
-		*_props = HANDLER_PROPS(n);
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_SCGI(*_props);	
@@ -79,15 +75,25 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
-		if (equal_buf_str (&subconf->key, "server")) {
-			ret = cherokee_ext_source_configure (subconf, &props->server_list);
+		if (equal_buf_str (&subconf->key, "balancer")) {
+			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer); 
 			if (ret != ret_ok) return ret;
 		}
 	}
 
 	/* Init base class
 	 */
-	return cherokee_handler_cgi_base_configure (conf, srv, _props);
+	ret = cherokee_handler_cgi_base_configure (conf, srv, _props);
+	if (ret != ret_ok) return ret;
+
+	/* Final checks
+	 */
+	if (props->balancer == NULL) {
+		PRINT_ERROR_S ("ERROR: SCGI handler needs a balancer\n");
+		return ret_error;
+	}
+
+	return ret_ok;
 }
 
 
@@ -119,12 +125,12 @@ read_from_scgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer
 	size_t                   read = 0;
 	cherokee_handler_scgi_t *scgi = HDL_SCGI(cgi_base);
 	
-	ret = cherokee_socket_read (scgi->socket, buffer, 4096, &read);
+	ret = cherokee_socket_read (&scgi->socket, buffer, 4096, &read);
 
 	switch (ret) {
 	case ret_eagain:
 		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi_base), HANDLER_CONN(cgi_base), 
-						     scgi->socket->socket, 0, false);
+						     scgi->socket.socket, 0, false);
 		return ret_eagain;
 
 	case ret_ok:
@@ -146,7 +152,7 @@ read_from_scgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer
 
 
 ret_t 
-cherokee_handler_scgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
+cherokee_handler_scgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_scgi);
 	
@@ -169,7 +175,7 @@ cherokee_handler_scgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler
 	n->post_len = 0;
 
 	cherokee_buffer_init (&n->header);
-	cherokee_socket_new  (&n->socket);
+	cherokee_socket_init (&n->socket);
 
 	/* Return the object
 	 */
@@ -187,8 +193,8 @@ cherokee_handler_scgi_free (cherokee_handler_scgi_t *hdl)
 
 	/* SCGI stuff
 	 */
-	cherokee_socket_close (hdl->socket);
-	cherokee_socket_free (hdl->socket);
+	cherokee_socket_close (&hdl->socket);
+	cherokee_socket_mrproper (&hdl->socket);
 
 	cherokee_buffer_mrproper (&hdl->header);
 
@@ -238,24 +244,26 @@ static ret_t
 connect_to_server (cherokee_handler_scgi_t *hdl)
 {
 	ret_t                          ret;
+	cherokee_source_t             *src   = NULL;
+	cherokee_connection_t         *conn  = HANDLER_CONN(hdl);
 	cherokee_handler_scgi_props_t *props = HDL_SCGI_PROPS(hdl);
-	cherokee_ext_source_t         *src   = NULL;
 
-	ret = cherokee_ext_source_get_next (EXT_SOURCE_HEAD(props->server_list.next), &props->server_list, &src);
-	if (unlikely (ret != ret_ok)) return ret;
+	ret = cherokee_balancer_dispatch (props->balancer, conn, &src);
+	if (ret != ret_ok) return ret;
 
-	ret = cherokee_ext_source_connect (src, hdl->socket);
-	if (ret != ret_ok) {
-		int try = 0;
+ 	ret = cherokee_source_connect (src, &hdl->socket); 
+ 	if (ret != ret_ok) { 
+ 		int                            try     = 0;
+		cherokee_source_interpreter_t *src_int = SOURCE_INT(src);
 
-		ret = cherokee_ext_source_spawn_srv (src);
+		ret = cherokee_source_interpreter_spawn (src_int);
 		if (ret != ret_ok) {
 			TRACE (ENTRIES, "Couldn't spawn: %s\n", src->host.buf ? src->host.buf : src->unix_socket.buf);
 			return ret;
 		}
 		
 		for (try = 0; try < 3; try ++) {
-			ret = cherokee_ext_source_connect (src, hdl->socket);
+			ret = cherokee_source_connect (src, &hdl->socket);
 			if (ret == ret_ok) break;
 
 			TRACE (ENTRIES, "Couldn't connect: %s, try %d\n", src->host.buf ? src->host.buf : src->unix_socket.buf, try);
@@ -263,10 +271,9 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 		}
 		
 	}
-
-	TRACE (ENTRIES, "connected fd=%d\n", hdl->socket->socket);
 	
-	return ret_ok;
+ 	TRACE (ENTRIES, "connected fd=%d\n", hdl->socket.socket); 
+ 	return ret_ok; 
 }
 
 
@@ -276,7 +283,7 @@ send_header (cherokee_handler_scgi_t *hdl)
 	ret_t  ret;
 	size_t written = 0;
 	
-	ret = cherokee_socket_write (hdl->socket, &hdl->header, &written);
+	ret = cherokee_socket_write (&hdl->socket, &hdl->header, &written);
 	if (ret != ret_ok) return ret;
 	
 //	cherokee_buffer_print_debug (&hdl->header, -1);
@@ -300,7 +307,7 @@ send_post (cherokee_handler_scgi_t *hdl)
 	int                    mode =  0;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 	
-	ret = cherokee_post_walk_to_fd (&conn->post, hdl->socket->socket, &e_fd, &mode);
+	ret = cherokee_post_walk_to_fd (&conn->post, hdl->socket.socket, &e_fd, &mode);
 	
 	switch (ret) {
 	case ret_ok:

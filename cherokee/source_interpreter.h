@@ -22,27 +22,33 @@
  * USA
  */
 
-#ifndef CHEROKEE_BALANCER_ROUND_ROBIN_H
-#define CHEROKEE_BALANCER_ROUND_ROBIN_H
+#ifndef CHEROKEE_SOURCE_INTERPRETER_H
+#define CHEROKEE_SOURCE_INTERPRETER_H
 
-#include "common-internal.h"
-#include "balancer.h"
+#include "source.h"
+
+
+CHEROKEE_BEGIN_DECLS
 
 
 typedef struct {
-	cherokee_balancer_t  balancer;
+	cherokee_source_t   source;
 
-	cuint_t              last_one;
-#ifdef HAVE_PTHREAD
-	pthread_mutex_t      last_one_mutex;
-#endif	
-} cherokee_balancer_round_robin_t;
+	cherokee_buffer_t   interpreter;
+	char              **custom_env;
+	cuint_t             custom_env_len;
+} cherokee_source_interpreter_t;
 
-#define BAL_RR(x)       ((cherokee_balancer_round_robin_file_t *)(x))
+#define SOURCE_INT(s)  ((cherokee_source_interpreter_t *)(s))
 
 
-ret_t cherokee_balancer_round_robin_new       (cherokee_balancer_t **balancer);
-ret_t cherokee_balancer_round_robin_configure (cherokee_balancer_t  *balancer, cherokee_config_node_t *conf);
-ret_t cherokee_balancer_round_robin_free      (cherokee_balancer_round_robin_t *balancer);
+ret_t cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src);
+ret_t cherokee_source_interpreter_free (cherokee_source_interpreter_t  *src);
 
-#endif /* CHEROKEE_BALANCER_ROUND_ROBIN_H */
+ret_t cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, cherokee_config_node_t *conf);
+ret_t cherokee_source_interpreter_add_env   (cherokee_source_interpreter_t *src, char *env, char *val);
+ret_t cherokee_source_interpreter_spawn     (cherokee_source_interpreter_t *src);
+
+CHEROKEE_END_DECLS
+
+#endif /* CHEROKEE_SOURCE_INTERPRETER_H */

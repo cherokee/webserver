@@ -29,7 +29,7 @@
 #include "connection.h"
 #include "socket.h"
 #include "thread.h"
-#include "ext_source.h"
+#include "source.h"
 
 
 typedef struct {
@@ -40,7 +40,7 @@ typedef struct {
 typedef struct {
 	cherokee_socket_t      socket;
 	cherokee_buffer_t      read_buffer;
-	cherokee_ext_source_t *source;
+	cherokee_source_t     *source;
 	void                  *dispatcher;
 
 	cherokee_boolean_t    first_connect;	
@@ -58,7 +58,7 @@ typedef struct {
 
 #define FCGI_MANAGER(f) ((cherokee_fcgi_manager_t *)(f))
 
-ret_t cherokee_fcgi_manager_init        (cherokee_fcgi_manager_t *mgr, void *dispatcher, cherokee_ext_source_t *src, cherokee_boolean_t keepalive, cuint_t pipeline);
+ret_t cherokee_fcgi_manager_init        (cherokee_fcgi_manager_t *mgr, void *dispatcher, cherokee_source_t *src, cherokee_boolean_t keepalive, cuint_t pipeline);
 ret_t cherokee_fcgi_manager_mrproper    (cherokee_fcgi_manager_t *mgr);
 
 ret_t cherokee_fcgi_manager_register    (cherokee_fcgi_manager_t *mgr, cherokee_connection_t *conn, cuint_t *id, cuchar_t *gen);

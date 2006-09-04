@@ -47,7 +47,7 @@ typedef struct {
 #define FCGI_DISPATCHER(f) ((cherokee_fcgi_dispatcher_t *)(f))
 
 
-ret_t cherokee_fcgi_dispatcher_new        (cherokee_fcgi_dispatcher_t **fcgi, cherokee_thread_t *thd, cherokee_ext_source_t *src, cuint_t mgr_num, cuint_t nkeepalive, cuint_t pipeline);
+ret_t cherokee_fcgi_dispatcher_new        (cherokee_fcgi_dispatcher_t **fcgi, cherokee_thread_t *thd, cherokee_source_t *src, cuint_t mgr_num, cuint_t nkeepalive, cuint_t pipeline);
 ret_t cherokee_fcgi_dispatcher_free       (cherokee_fcgi_dispatcher_t  *fcgi);
 
 ret_t cherokee_fcgi_dispatcher_dispatch   (cherokee_fcgi_dispatcher_t *fcgi, cherokee_fcgi_manager_t **mgr);

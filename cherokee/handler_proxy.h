@@ -42,8 +42,8 @@
 /* Data types
  */
 typedef struct {
-	cherokee_handler_props_t  base;
-	cherokee_balancer_t      *balancer;
+	cherokee_module_props_t    base;
+	cherokee_balancer_t       *balancer;
 } cherokee_handler_proxy_props_t;
 
 typedef struct {
@@ -60,7 +60,7 @@ typedef struct {
 /* Library init function
  */
 void  MODULE_INIT(proxy)         (cherokee_module_loader_t *loader);
-ret_t cherokee_handler_proxy_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props);
+ret_t cherokee_handler_proxy_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
 
 
 /* Virtual methods

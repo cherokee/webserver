@@ -37,8 +37,8 @@ typedef struct {
 } cherokee_handler_error_redir_t;
 
 typedef struct {
-	cherokee_handler_props_t base;
-	cherokee_list_t          errors;
+	cherokee_module_props_t base;
+	cherokee_list_t         errors;
 } cherokee_handler_error_redir_props_t;
 
 #define ERREDIR_HANDLER(x)  ((cherokee_handler_error_redir_t *)(x))
@@ -49,7 +49,7 @@ typedef struct {
  */
 void MODULE_INIT(error_redir) (cherokee_module_loader_t *loader);
 
-ret_t cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props);
-ret_t cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_handler_props_t *props);
+ret_t cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);
+ret_t cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
 
 #endif /* CHEROKEE_HANDLER_ERROR_REDIR_H */

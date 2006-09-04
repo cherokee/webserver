@@ -65,12 +65,12 @@ cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)
 		props->props_dirlist = NULL;
 	}
 
-	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
 
 ret_t 
-cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t ret;
 	cherokee_handler_common_props_t *props;
@@ -78,21 +78,21 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_common_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n),
-						  HANDLER_PROPS_FREE(cherokee_handler_common_props_free));
+		cherokee_module_props_init_base (MODULE_PROPS(n),
+						 MODULE_PROPS_FREE(cherokee_handler_common_props_free));
 
 		n->props_file    = NULL;
 		n->props_dirlist = NULL;
 
-		*_props = HANDLER_PROPS(n);
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_COMMON(*_props);
 
-	ret = cherokee_handler_file_configure (conf, srv, (cherokee_handler_props_t **)&props->props_file);
+	ret = cherokee_handler_file_configure (conf, srv, (cherokee_module_props_t **)&props->props_file);
 	if (ret != ret_ok) return ret;
 
-	return cherokee_handler_dirlist_configure (conf, srv, (cherokee_handler_props_t **)&props->props_dirlist);
+	return cherokee_handler_dirlist_configure (conf, srv, (cherokee_module_props_t **)&props->props_dirlist);
 }
 
 
@@ -152,7 +152,7 @@ stat_file (cherokee_boolean_t useit, cherokee_iocache_t *iocache, struct stat *n
 
 
 ret_t 
-cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
+cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	ret_t                     ret;
 	int                       exists;
@@ -223,7 +223,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_handl
 	 */
 	if (S_ISREG(info->st_mode)) {
 		TRACE (ENTRIES, "going for %s\n", "handler_file");
-		return cherokee_handler_file_new (hdl, cnt, HANDLER_PROPS(PROP_COMMON(props)->props_file));
+		return cherokee_handler_file_new (hdl, cnt, MODULE_PROPS(PROP_COMMON(props)->props_file));
 	}
 
 	/* Is it a directory
@@ -237,7 +237,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_handl
 		 */
 		if (conn->request.buf[conn->request.len-1] != '/') {
 			TRACE (ENTRIES, "going for %s\n", "handler_dir");
-			return cherokee_handler_dirlist_new (hdl, cnt, HANDLER_PROPS(PROP_COMMON(props)->props_dirlist));
+			return cherokee_handler_dirlist_new (hdl, cnt, MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
 		}
 
 		/* Add the request
@@ -317,7 +317,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_handl
 		/* If the dir hasn't a index file, it uses dirlist
 		 */
 		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
-		return cherokee_handler_dirlist_new (hdl, cnt, HANDLER_PROPS(PROP_COMMON(props)->props_dirlist));
+		return cherokee_handler_dirlist_new (hdl, cnt, MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
 	}
 
 	/* Unknown request type

@@ -41,7 +41,7 @@
 
 
 ret_t 
-cherokee_handler_nn_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_nn_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	return cherokee_handler_common_configure (conf, srv, _props);
 }
@@ -119,7 +119,7 @@ get_nearest (cherokee_buffer_t *local_dir,
 
 
 ret_t 
-cherokee_handler_nn_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
+cherokee_handler_nn_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	ret_t                  ret;
 	struct stat            info;

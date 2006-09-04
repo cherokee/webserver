@@ -200,7 +200,7 @@ out:
 #endif
 
 ret_t 
-cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
+cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_redir);
@@ -360,12 +360,12 @@ props_free (cherokee_handler_redir_props_t *props)
 		cre_entry_free ((struct cre_list *)i);
 	}
 
-	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
 
 static ret_t 
-cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                           ret;
 	cherokee_list_t                *i, *j;
@@ -374,13 +374,13 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n,handler_redir_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  HANDLER_PROPS_FREE(props_free));		
+		cherokee_module_props_init_base (MODULE_PROPS(n), 
+						 MODULE_PROPS_FREE(props_free));		
 		
 		cherokee_buffer_init (&n->url);
 		INIT_LIST_HEAD (&n->regex_list);
 		
-		*_props = HANDLER_PROPS(n);
+		*_props = MODULE_PROPS(n);
 	}	
 
 	props = PROP_REDIR(*_props);

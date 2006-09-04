@@ -53,7 +53,7 @@ typedef enum {
 
 
 typedef struct {
-	cherokee_handler_props_t props;
+	cherokee_module_props_t  props;
 
 	cherokee_list_t          notice_files;
 
@@ -107,8 +107,8 @@ typedef struct {
  */
 void MODULE_INIT(dirlist)                  (cherokee_module_loader_t *loader);
 
-ret_t cherokee_handler_dirlist_new         (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *properties);
-ret_t cherokee_handler_dirlist_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props);
+ret_t cherokee_handler_dirlist_new         (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *properties);
+ret_t cherokee_handler_dirlist_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);
 ret_t cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props);
 
 /* virtual methods implementation

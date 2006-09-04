@@ -107,7 +107,7 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 
 
 ret_t
-cherokee_handler_cgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_handler_props_t *props)
+cherokee_handler_cgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	int i;
 	CHEROKEE_NEW_STRUCT (n, handler_cgi);
@@ -258,7 +258,7 @@ cherokee_handler_cgi_props_free (cherokee_handler_cgi_props_t *props)
 
 
 ret_t 
-cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_props_t **_props)
+cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	cherokee_handler_cgi_props_t *props;
 
@@ -267,9 +267,9 @@ cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_cgi_props);
 
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  HANDLER_PROPS_FREE(cherokee_handler_cgi_props_free));
-		*_props = HANDLER_PROPS(n);
+		cherokee_module_props_init_base (MODULE_PROPS(n), 
+						 MODULE_PROPS_FREE(cherokee_handler_cgi_props_free));
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_CGI(*_props);

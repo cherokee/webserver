@@ -32,7 +32,7 @@
 ret_t 
 cherokee_fcgi_dispatcher_new (cherokee_fcgi_dispatcher_t **fcgi, 
 			      cherokee_thread_t           *thd, 
-			      cherokee_ext_source_t       *src, 
+			      cherokee_source_t           *src, 
 			      cuint_t                      mgr_num, 
 			      cuint_t                      keepalive,
 			      cuint_t                      pipeline)
