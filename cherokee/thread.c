@@ -64,6 +64,7 @@ phase_to_str (cherokee_connection_phase_t phase)
 	case phase_add_headers:       return "Add headers";
 	case phase_send_headers:      return "Send headers";
 	case phase_steping:           return "Step";
+	case phase_shutdown:          return "Shutdown connection";
 	case phase_lingering:         return "Lingering close";
 	default:
 		SHOULDNT_HAPPEN;
@@ -322,8 +323,8 @@ connection_reuse_or_free (cherokee_thread_t *thread, cherokee_connection_t *conn
 static void
 purge_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
-	/* Try last read, if last read returned eof, then no problem,
-	 * otherwise it may avoid a nasty connection reset.
+	/* Try last read, if previous read/write returned eof, then no
+	 *  problem, otherwise it may avoid a nasty connection reset.
 	 */
 	if (conn->phase == phase_lingering) {
 		cherokee_connection_linger_read (conn);
@@ -425,20 +426,15 @@ purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 static void
 purge_maybe_lingering (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
-	ret_t                       ret;
-	cherokee_connection_phase_t old_phase;
-
-	/* Set lingering close
-	 */
-	old_phase = conn->phase; 
-	conn->phase = phase_lingering;
+	ret_t ret;
 
 	if (conn->keepalive <= 0) {
+		conn->phase = phase_lingering;
 		purge_closed_connection (thread, conn);
 		return;
 	}
 
-	/* Shutdown writting, and try to read some trash
+	/* Shutdown writing, and try to read some trash
 	 */
 	ret = cherokee_connection_pre_lingering_close (conn);
 	switch (ret) {
@@ -446,10 +442,12 @@ purge_maybe_lingering (cherokee_thread_t *thread, cherokee_connection_t *conn)
 	case ret_eagain:
 		/* Ok, really lingering
 		 */
+		conn->phase = phase_lingering;
 		conn_set_mode (thread, conn, socket_reading);
 		return;
 	default:
-		conn->phase = old_phase;
+		/* Error: no linger and no last read, just close it
+		 */
 		purge_closed_connection (thread, conn);
 		return;
 	}	
@@ -468,8 +466,8 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 	cherokee_connection_log_delayed (conn);
 
 	/* If it isn't a keep-alive connection, it should try to
-	 * perform a lingering close. (There is no need to disable TCP
-	 * cork before shutdown)
+	 * perform a lingering close (there is no need to disable TCP
+	 * cork before shutdown or before a close).
 	 */
 	if (conn->keepalive <= 0) {
 		ret = cherokee_connection_pre_lingering_close (conn);
@@ -478,9 +476,13 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 		case ret_eagain:
 			/* Ok, lingering
 			 */
-                       conn->phase = phase_lingering;
-                       return;
+			conn->phase = phase_lingering;
+			conn_set_mode (thread, conn, socket_reading);
+			return;
 		default:
+			/* Error, no linger and no last read, just
+			 * close the connection.
+			 */
 			purge_closed_connection (thread, conn);
 			return;
 		}
@@ -586,12 +588,12 @@ process_active_connections (cherokee_thread_t *thd)
 			cherokee_connection_update_vhost_traffic (conn);
 		}
 
-		/* Process? 
-		 * Incoming buffer has information and it's reading the headers
+		/* Set process condition to true if it's shutdown
+		 * phase or it's reading the headers and incoming
+		 * buffer has data to be processed.
 		 */
-		process = ((conn->phase == phase_reading_header) && (conn->incoming_header.len > 0));
-
-                // (conn->phase == phase_lingering) || ?
+		process = ((conn->phase == phase_shutdown) || 
+			   ((conn->phase == phase_reading_header) && (conn->incoming_header.len > 0)));
 			
 		/* Process the connection?
 		 * 2.- Inspect the file descriptor	
@@ -1206,6 +1208,25 @@ process_active_connections (cherokee_thread_t *thd)
 			}
 			break;
 			
+		case phase_shutdown: 
+
+			ret = cherokee_connection_pre_lingering_close (conn);
+			switch (ret) {
+			case ret_ok:
+			case ret_eagain:
+				/* Ok, really lingering
+				 */
+				conn->phase = phase_lingering;
+				conn_set_mode (thd, conn, socket_reading);
+				break;
+			default:
+				/* Error, no linger and no last read,
+				 * just close the connection.
+				 */
+				purge_closed_connection (thd, conn);
+				continue;
+			}
+		
 		case phase_lingering: 
 
 			ret = cherokee_connection_linger_read (conn);
@@ -1226,6 +1247,7 @@ process_active_connections (cherokee_thread_t *thd)
 		default:
  			SHOULDNT_HAPPEN;
 		}
+
 	} /* list */	
 
 	return ret_ok;

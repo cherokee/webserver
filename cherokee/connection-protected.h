@@ -77,6 +77,7 @@ typedef enum {
 	phase_add_headers,
 	phase_send_headers,
 	phase_steping,
+	phase_shutdown,
 	phase_lingering
 } cherokee_connection_phase_t;
 

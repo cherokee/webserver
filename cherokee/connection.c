@@ -815,25 +815,20 @@ cherokee_connection_send (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_pre_lingering_close (cherokee_connection_t *conn)
 {
-	ret_t  ret;
-	size_t readed = 0;
-
 	/* At this point, we don't want to follow the TLS protocol
 	 * any longer.
 	 */
 	conn->socket.is_tls = non_TLS;
 
-	/* Shut down the socket for write, which will send a FIN to
-	 * the peer. If shutdown fails then the socket is unusable.
-	 */
-	ret = cherokee_socket_shutdown (&conn->socket, SHUT_WR);
-	if (unlikely (ret != ret_ok)) return ret;
-
-	/* Set the timeout leaving the non-blocking mode
-	 */
+	/* Set the timeout for future linger read(s) leaving the
+	 * non-blocking mode.
+         */
 	conn->timeout = CONN_THREAD(conn)->bogo_now + (MSECONS_TO_LINGER / 1000) + 1;
 
-	return cherokee_connection_linger_read (conn);
+	/* Shut down the socket for write, which will send a FIN to
+	 * the peer. If shutdown fails then the socket is unusable.
+         */
+	return cherokee_socket_shutdown (&conn->socket, SHUT_WR);
 }
 
 
@@ -856,10 +851,10 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 			TRACE(ENTRIES, "%s\n", "error");
 			return ret;
 		case ret_eagain:
-			TRACE(ENTRIES, "readed %d, eagain (linger)\n", readed);
+			TRACE(ENTRIES, "readed %d, eagain\n", readed);
 			return ret;
 		case ret_ok:
-			TRACE(ENTRIES, "readed %d, ok/eagain (linger)\n", readed);
+			TRACE(ENTRIES, "readed %d, ok/eagain\n", readed);
 			if (readed > 0 && --retries > 0)
 				continue;
 			return ret;

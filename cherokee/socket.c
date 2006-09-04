@@ -483,13 +483,19 @@ cherokee_socket_shutdown (cherokee_socket_t *socket, int how)
 {
 	int re;
 
-	if (socket->socket < 0) {
+	/* If the read side of the socket has been closed but the
+	 * write side is not, then don't bother to call shutdown
+	 * because the socket is going to be closed anyway.
+	 */
+	if (unlikely (socket->status == socket_closed))
+		return ret_eof;
+	
+	if (unlikely (socket->socket < 0))
 		return ret_error;
-	}
 
 	re = shutdown (socket->socket, how);	
 
-	return (re == 0)? ret_ok : ret_error;
+	return (re == 0) ? ret_ok : ret_error;
 }
 
 
@@ -858,6 +864,9 @@ ret_t
 cherokee_writev (cherokee_socket_t *socket, const struct iovec *vector, uint16_t vector_len, size_t *written)
 {
 	int re;
+
+	if (unlikely (socket->status == socket_closed))
+		return ret_eof;
 
 #ifdef _WIN32
 	int i;
