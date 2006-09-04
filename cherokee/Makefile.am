@@ -858,7 +858,6 @@ list.h \
 url.h \
 header.h \
 resolv_cache.h \
-typed_table.h \
 \
 server.h \
 module.h \
