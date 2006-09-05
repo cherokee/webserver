@@ -92,7 +92,6 @@ typedef struct {
 	cherokee_list_t         *dir_ptr;
 	cherokee_list_t         *file_ptr;	
  	cherokee_buffer_t        header;
-	cherokee_boolean_t       serve_css;
 
 	cherokee_buffer_t        public_dir;
 	cherokee_buffer_t        server_software;

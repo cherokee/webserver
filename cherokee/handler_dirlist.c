@@ -357,12 +357,12 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	n->dir_ptr          = NULL;
 	n->file_ptr         = NULL;
 	n->longest_filename = 0;
-	n->serve_css        = false;
 
 	/* Choose the sorting key
 	 */
 	n->phase = dirlist_phase_add_header;
 	n->sort  = Name_Down;
+
 	ret = cherokee_table_get (HANDLER_CONN(n)->arguments, "order", (void **) &value);
 	if (ret == ret_ok) {
 		if      (value[0] == 'N') n->sort = Name_Up;
@@ -371,11 +371,6 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 		else if (value[0] == 'd') n->sort = Date_Down;
 		else if (value[0] == 'S') n->sort = Size_Up;
 		else if (value[0] == 's') n->sort = Size_Down;
-	}
-
-	ret = cherokee_table_get (HANDLER_CONN(n)->arguments, "css", (void **) &value);
-	if (ret == ret_ok) {
-		n->serve_css = true;
 	}
 
 	/* Properties
@@ -732,7 +727,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	} else {
 		cherokee_icons_get_icon (icons, name, &icon);
 		if (icon == NULL)
-			icon = "/icons/blank.png";
+			icon = "blank.png";
 
 		replace_token (buffer, "%icon_alt%", "[   ]");
 		replace_token (buffer, "%icon%", icon);
@@ -837,11 +832,6 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 	ret_t                             ret;
 	cherokee_handler_dirlist_props_t *props = HDL_DIRLIST_PROP(dhdl);
 
-	if (dhdl->serve_css) {
-		cherokee_buffer_add_buffer (buffer, &props->css);
-		return ret_eof_have_data;
-	}
-
 	switch (dhdl->phase) {
 	case dirlist_phase_add_header:
 		/* Add the theme header
@@ -907,13 +897,6 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 ret_t
 cherokee_handler_dirlist_add_headers (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
-	if (dhdl->serve_css) {
-		cherokee_buffer_add_va (buffer, 
-					"Content-Type: text/css; charset=iso-8859-1"CRLF
-					"Content-Length: %d"CRLF, HDL_DIRLIST_PROP(dhdl)->css.len);
-		return ret_ok;
-	}
-
 	cherokee_buffer_add_str (buffer, "Content-Type: text/html; charset=iso-8859-1"CRLF);
 	return ret_ok;
 }

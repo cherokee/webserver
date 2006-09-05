@@ -36,13 +36,17 @@ vserver!default!directory!/icons!document_root = %prefix%/share/cherokee/icons/
 vserver!default!directory!/icons!handler = file
 vserver!default!directory!/icons!priority = 2
 
+vserver!default!directory!/cherokee_themes!document_root = %prefix%/share/cherokee/themes/
+vserver!default!directory!/cherokee_themes!handler = file
+vserver!default!directory!/cherokee_themes!priority = 3
+
 vserver!default!directory!/cgi-bin!document_root = %prefix%/lib/cgi-bin/
 vserver!default!directory!/cgi-bin!handler = cgi
-vserver!default!directory!/cgi-bin!priority = 3
+vserver!default!directory!/cgi-bin!priority = 4
 
 vserver!default!directory!/about!handler = server_info
 vserver!default!directory!/about!handler!just_about = 1
-vserver!default!directory!/about!priority = 4
+vserver!default!directory!/about!priority = 5
 
 vserver!default!extensions!php!handler = fcgi
 vserver!default!extensions!php!handler!server!local1!host = localhost:1234

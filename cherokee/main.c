@@ -45,13 +45,16 @@
 # define CONFIG_FILE_HELP ""
 #endif 
 
-#define BASIC_CONFIG                                                               \
-	"vserver!default!directory!/!handler  = common\n"                          \
-	"vserver!default!directory!/!prioriry = 1\n"	                           \
-	"vserver!default!directory!/icons!handler = file\n"                        \
-	"vserver!default!directory!/icons!document_root = " CHEROKEE_ICONSDIR "\n" \
-	"vserver!default!directory!/icons!priority = 2\n"
-
+#define BASIC_CONFIG                                                                \
+	"vserver!default!directory!/!handler  = common\n"                           \
+	"vserver!default!directory!/!priority = 1\n"                                \
+	"vserver!default!directory!/icons!handler = file\n"                         \
+	"vserver!default!directory!/icons!document_root = " CHEROKEE_ICONSDIR "\n"  \
+	"vserver!default!directory!/icons!priority = 2\n"                           \
+	"vserver!default!directory!/themes!handler = file\n"                        \
+	"vserver!default!directory!/themes!document_root = " CHEROKEE_THEMEDIR "\n" \
+	"vserver!default!directory!/themes!priority = 3\n"                          \
+	"include = " CHEROKEE_CONFDIR "/mods-enabled\n"
 
 static cherokee_server_t  *srv           = NULL;
 static char               *config_file   = NULL;
