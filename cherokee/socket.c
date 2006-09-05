@@ -865,9 +865,6 @@ cherokee_writev (cherokee_socket_t *socket, const struct iovec *vector, uint16_t
 {
 	int re;
 
-	if (unlikely (socket->status == socket_closed))
-		return ret_eof;
-
 #ifdef _WIN32
 	int i;
 	size_t total;
@@ -1299,7 +1296,7 @@ cherokee_socket_set_block_timeout (cherokee_socket_t *socket, cuint_t timeout)
 		return ret_error;
 	}
 #else
-	return no_esys;
+	return ret_no_sys;
 #endif
 	
 	return ret_ok;		      
