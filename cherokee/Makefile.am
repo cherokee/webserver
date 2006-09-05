@@ -547,6 +547,29 @@ endif
 
 
 #
+# Validator mysql
+#
+if HAVE_MYSQL
+validator_mysql = \
+validator_mysql.c \
+validator_mysql.h
+
+libplugin_mysql_la_LDFLAGS = $(module_ldflags)
+libplugin_mysql_la_SOURCES = $(validator_mysql)
+libplugin_mysql_la_LIBADD  = $(MYSQL_LDFLAGS)
+libplugin_mysql_la_CFLAGS  = $(MYSQL_CFLAGS)
+
+if STATIC_VALIDATOR_MYSQL
+static_validator_mysql_src   = $(validator_mysql)
+static_validator_mysql_lib   = $(MYSQL_LDFLAGS)
+static_validator_mysql_flags = $(MYSQL_CFLAGS)
+else
+dynamic_validator_mysql_lib = libplugin_mysql.la
+endif
+endif
+
+
+#
 # Balancer Round Robin
 #
 balancer_round_robin = \
@@ -597,7 +620,9 @@ libcherokee-base.la
 
 libcherokee_server_la_LDFLAGS = $(common_ldflags)
 libcherokee_server_la_CFLAGS = \
-$(static_validator_htpasswd_flags)
+$(static_validator_htpasswd_flags) \
+$(static_validator_mysql_flags)
+
 libcherokee_server_la_LIBADD = \
 $(TLS_LIBS) \
 $(PTHREAD_LIBS) \
@@ -605,6 +630,7 @@ $(PTHREAD_CFLAGS) \
 $(static_validator_pam_lib) \
 $(static_validator_ldap_lib)  \
 $(static_validator_htpasswd_lib) \
+$(static_validator_mysql_lib) \
 $(static_handler_proxy_lib) \
 libcherokee-base.la
 
@@ -749,10 +775,6 @@ endif
 
 
 libcherokee_server_la_SOURCES = \
-source.h \
-source.c \
-source_interpreter.h \
-source_interpreter.c \
 $(static_handler_file_src) \
 $(static_handler_admin_src) \
 $(static_handler_dirlist_src) \
@@ -779,6 +801,7 @@ $(static_validator_ldap_src) \
 $(static_validator_plain_src) \
 $(static_validator_htdigest_src) \
 $(static_validator_htpasswd_src) \
+$(static_validator_mysql_src) \
 \
 $(static_balancer_round_robin_src) \
 \
@@ -831,7 +854,11 @@ nonce.c \
 config_node.h \
 config_node.c \
 balancer.h \
-balancer.c 
+balancer.c \
+source.h \
+source.c \
+source_interpreter.h \
+source_interpreter.c
 
 libcherokee_config_la_SOURCES = \
 $(config_common) \
@@ -902,6 +929,7 @@ $(dynamic_validator_ldap_lib) \
 $(dynamic_validator_plain_lib) \
 $(dynamic_validator_htdigest_lib) \
 $(dynamic_validator_htpasswd_lib) \
+$(dynamic_validator_mysql_lib) \
 $(dynamic_balancer_round_robin_lib) 
 
 

@@ -207,7 +207,7 @@ validate_digest (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t 
 	
 	/* Compare and return
 	 */
-	ret = (strcmp (conn->validator->response.buf, buf.buf) == 0) ? ret_ok : ret_error;
+	ret = cherokee_buffer_cmp_buf (&conn->validator->response, &buf);
 	
 go_out:
 	cherokee_buffer_mrproper (&buf);

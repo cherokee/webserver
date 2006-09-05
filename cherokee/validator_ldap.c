@@ -106,6 +106,21 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 		}
 	}
 
+	/* Checks
+	 */
+	if (cherokee_buffer_is_empty (&props->basedn)) {
+		PRINT_ERROR_S ("ERROR: LDAP validator: An entry 'base_dn' is needed\n");
+		return ret_error;
+	}
+	if (cherokee_buffer_is_empty (&props->filter)) {
+		PRINT_ERROR_S ("ERROR: LDAP validator: An entry 'filter' is needed\n");
+		return ret_error;
+	}
+	if (cherokee_buffer_is_empty (&props->server)) {
+		PRINT_ERROR_S ("ERROR: LDAP validator: An entry 'server' is needed\n");
+		return ret_error;
+	}
+
 	return ret_ok;
 }
 

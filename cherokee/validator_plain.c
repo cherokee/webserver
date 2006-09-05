@@ -56,9 +56,18 @@ cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_serve
 
 	props = PROP_PLAIN(*_props);
 
+	/* Read the properties
+	 */
 	ret = cherokee_config_node_get (conf, "passwdfile", &subconf);
 	if (ret == ret_ok) {
 		cherokee_buffer_add_buffer (&props->password_file, &subconf->val);
+	}
+
+	/* Check them
+	 */
+	if (cherokee_buffer_is_empty (&props->password_file)) {
+		PRINT_MSG_S ("plain validator needs a password file\n");
+		return ret_error;
 	}
 
 	return ret_ok;
@@ -78,14 +87,9 @@ cherokee_validator_plain_new (cherokee_validator_plain_t **plain, cherokee_valid
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_plain_free;
 	VALIDATOR(n)->check       = (validator_func_check_t)       cherokee_validator_plain_check;
 	VALIDATOR(n)->add_headers = (validator_func_add_headers_t) cherokee_validator_plain_add_headers;
-	   
-	/* Checks
+
+	/* Return obj
 	 */
-	if (cherokee_buffer_is_empty (&VAL_PLAIN_PROP(n)->password_file)) {
-		PRINT_MSG_S ("plain validator needs a password file\n");
-		return ret_error;
-	}
-	   
 	*plain = n;
 	return ret_ok;
 }
@@ -99,62 +103,19 @@ cherokee_validator_plain_free (cherokee_validator_plain_t *plain)
 }
 
 
-static ret_t
-check_digest (cherokee_validator_plain_t *plain, char *passwd, cherokee_connection_t *conn)
-{			
-	ret_t                 ret;
-	cherokee_buffer_t     a1        = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t     buf       = CHEROKEE_BUF_INIT;
-	cherokee_validator_t *validator = conn->validator;
-
-	/* Sanity check
-	 */
-	if (cherokee_buffer_is_empty (&validator->user) ||
-	    cherokee_buffer_is_empty (&validator->realm)) 
-		return ret_deny;
-
-	/* Build A1
-	 */
-	cherokee_buffer_add_va (&a1, "%s:%s:%s", 
-				validator->user.buf,
-				validator->realm.buf,
-				passwd);
-
-	cherokee_buffer_encode_md5_digest (&a1);
-
-	/* Build a possible response
-	 */
-	cherokee_validator_digest_response (VALIDATOR(plain), a1.buf, &buf, conn);
-
-	/* Check the response
-	 */
-	if (cherokee_buffer_is_empty (&conn->validator->response)) {
-		ret = ret_error;
-		goto go_out;
-	}
-	
-	/* Compare and return
-	 */
-	ret = (strcmp (conn->validator->response.buf, buf.buf) == 0) ? ret_ok : ret_error;
-
-go_out:
-	cherokee_buffer_mrproper (&a1);
-	cherokee_buffer_mrproper (&buf);
-	return ret;
-}
-
 ret_t 
 cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_connection_t *conn)
 {
 	FILE  *f;
 	ret_t  ret;
 
-        if ((conn->validator == NULL) || cherokee_buffer_is_empty(&conn->validator->user)) {
+        if (unlikely ((conn->validator == NULL) || 
+		      cherokee_buffer_is_empty(&conn->validator->user)))
+	{
                 return ret_error;
         }
 
 	f = fopen (VAL_PLAIN_PROP(plain)->password_file.buf, "r"); 
-//	f = fopen (plain->file_ref, "r");
 	if (f == NULL) {
 		return ret_error;
 	}
@@ -215,7 +176,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_conn
 			break;
 
 		case http_auth_digest:
-			ret = check_digest (plain, pass, conn);
+			ret = cherokee_validator_digest_check (VALIDATOR(plain), pass, conn);
 			if (ret == ret_ok) goto go_out;
 			break;
 

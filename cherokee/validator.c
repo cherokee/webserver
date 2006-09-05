@@ -332,6 +332,44 @@ error:
 }
 
 
+ret_t 
+cherokee_validator_digest_check (cherokee_validator_t *validator, char *passwd, cherokee_connection_t *conn)
+{
+	ret_t             ret;
+	cherokee_buffer_t a1   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t buf  = CHEROKEE_BUF_INIT;
+
+	/* Sanity check
+	 */
+	if (cherokee_buffer_is_empty (&validator->user) ||
+	    cherokee_buffer_is_empty (&validator->realm)) 
+		return ret_deny;
+
+	/* Build A1
+	 */
+	cherokee_buffer_add_va (&a1, "%s:%s:%s", 
+				validator->user.buf,
+				validator->realm.buf,
+				passwd);
+
+	cherokee_buffer_encode_md5_digest (&a1);
+
+	/* Build a possible response
+	 */
+	ret = cherokee_validator_digest_response (validator, a1.buf, &buf, conn);
+	if (unlikely(ret != ret_ok)) goto go_out;
+	
+	/* Compare and return
+	 */
+	ret = cherokee_buffer_cmp_buf (&conn->validator->response, &buf);
+
+go_out:
+	cherokee_buffer_mrproper (&a1);
+	cherokee_buffer_mrproper (&buf);
+	return ret;
+}
+
+
 static ret_t
 add_method (char *method, void *data)
 {
