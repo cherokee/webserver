@@ -6,6 +6,7 @@ THEMES = \
 default_header.html \
 default_footer.html \
 default_entry.html  \
+default_theme.css   \
 default_logo.png
 
 install-data-local: $(THEMES)

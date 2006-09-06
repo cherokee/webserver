@@ -2,7 +2,9 @@
 
 INCLUDES = \
 -DCHEROKEE_COMPILATION \
--I. -I${top_srcdir}/cherokee \
+-I. \
+-I${top_srcdir} \
+-I${top_srcdir}/cherokee \
 $(TLS_CFLAGS) \
 $(PTHREAD_CFLAGS) \
 $(LARGEFILE_CFLAGS)
