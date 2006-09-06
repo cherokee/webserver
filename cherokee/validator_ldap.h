@@ -43,6 +43,9 @@ typedef struct {
 	cherokee_buffer_t          bindpw;
 	cherokee_buffer_t          basedn;
 	cherokee_buffer_t          filter;
+
+	cherokee_boolean_t         tls;
+	cherokee_buffer_t          ca_file;
 } cherokee_validator_ldap_props_t;
 
 typedef struct {

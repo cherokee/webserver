@@ -44,6 +44,7 @@ props_free (cherokee_validator_ldap_props_t *props)
 	cherokee_buffer_mrproper (&props->bindpw);
 	cherokee_buffer_mrproper (&props->basedn);
 	cherokee_buffer_mrproper (&props->filter);
+	cherokee_buffer_mrproper (&props->ca_file);
 
 	return cherokee_validator_props_free_base (VALIDATOR_PROPS(props));
 }
@@ -62,12 +63,14 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 						    VALIDATOR_PROPS_FREE(props_free));
 
 		n->port = LDAP_DEFAULT_PORT;
+		n->tls  = false;
 
 		cherokee_buffer_init (&n->server);
 		cherokee_buffer_init (&n->binddn);
 		cherokee_buffer_init (&n->bindpw);
 		cherokee_buffer_init (&n->basedn);
 		cherokee_buffer_init (&n->filter);
+		cherokee_buffer_init (&n->ca_file);
 		
 		*_props = VALIDATOR_PROPS(n);
 	}
@@ -95,6 +98,12 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 		} else if (equal_buf_str (&subconf->key, "filter")) {
 			cherokee_buffer_add_buffer (&props->filter, &subconf->val);
 
+		} else if (equal_buf_str (&subconf->key, "tls")) {
+			props->tls = atoi (subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "ca_file")) {
+			cherokee_buffer_add_buffer (&props->ca_file, &subconf->val);
+
 		} else if (equal_buf_str (&subconf->key, "methods") || 
 			   equal_buf_str (&subconf->key, "realm")) 
 		{
@@ -121,6 +130,15 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 		return ret_error;
 	}
 
+	if ((cherokee_buffer_is_empty (&props->bindpw) &&
+	     (! cherokee_buffer_is_empty (&props->basedn))))
+	{
+		PRINT_ERROR_S ("ERROR: LDAP validator: Potential security problem found:\n"
+			       "\tanonymous bind validation. Check (RFC 2251, section 4.2.2)\n");
+		return ret_error;
+	}
+
+
 	return ret_ok;
 }
 
@@ -135,7 +153,7 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 	 */
 	ldap->conn = ldap_init (props->server.buf, props->port);
 	if (ldap->conn == NULL) {
-		PRINT_ERROR ("Couldn't connect to LDAP server: %s:%d: %s\n", 
+		PRINT_ERROR ("ERROR: LDAP validator: Couldn't connect to LDAP: %s:%d: %s\n", 
 			     props->server.buf, props->port, strerror(errno));
 		return ret_error;
 	}
@@ -147,14 +165,25 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 	val = LDAP_VERSION3;
 	re = ldap_set_option (ldap->conn, LDAP_OPT_PROTOCOL_VERSION, &val);
 	if (re != LDAP_OPT_SUCCESS) {
-		PRINT_ERROR ("Couldn't set the LDAP version 3: %s:%d: %s\n", 
-			     props->server.buf, props->port, ldap_err2string (re));
+		PRINT_ERROR ("ERROR: LDAP validator: Couldn't set the LDAP version 3: %s\n", 
+			     ldap_err2string (re));
 		return ret_error;		
 	}
 
 	TRACE (ENTRIES, "LDAP protocol version %d set\n", LDAP_VERSION3);
 
-	/* TODO: TLS */
+	/* Secure connections
+	 */
+	if (props->tls) {
+		if (! cherokee_buffer_is_empty (&props->ca_file)) {
+			re = ldap_set_option (NULL, LDAP_OPT_X_TLS_CACERTFILE, props->ca_file.buf);
+			if (re != LDAP_OPT_SUCCESS) {
+				PRINT_ERROR ("ERROR: LDAP validator: Couldn't set CA file %s: %s\n", 
+					     props->ca_file.buf, ldap_err2string (re));
+				return ret_error; 
+			}
+		}
+	}
 
 	/* Bind
 	 */
@@ -231,7 +260,13 @@ validate_dn (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_props_t *p
 	re = ldap_set_option (conn, LDAP_OPT_PROTOCOL_VERSION, &val);
 	if (re != LDAP_OPT_SUCCESS) goto error;
 	
-	/* TODO: TLS */
+	if (props->tls) {
+		re = ldap_start_tls_s (conn, NULL,  NULL);
+		if (re != LDAP_OPT_SUCCESS) {
+			TRACE (ENTRIES, "Couldn't StartTLS\n");
+			goto error;
+		}
+	}
 
 	re = ldap_simple_bind_s (conn, dn, password);
 	if (re != LDAP_SUCCESS) goto error;
@@ -268,9 +303,13 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connect
 	char                            *attrs[] = { LDAP_NO_ATTRS, NULL };
 	cherokee_validator_ldap_props_t *props   = VAL_LDAP_PROP(ldap);
 
-	/* Sanity check
+	/* Sanity checks
 	 */
 	if ((conn->validator == NULL) || cherokee_buffer_is_empty (&conn->validator->user))
+		return ret_error;
+
+	re = cherokee_buffer_cnt_cspn (&conn->validator->user, 0, "*()");
+	if (re != conn->validator->user.len)
 		return ret_error;
 
 	/* Build filter
@@ -288,6 +327,14 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connect
 
 	TRACE (ENTRIES, "subtree search (%s): done\n", ldap->filter.buf);
 
+	/* Check that there a single entry
+	 */
+	re = ldap_count_entries (ldap->conn, message);
+	if (re != 1) {
+		ldap_msgfree (message);
+		return ret_not_found;		
+	}
+	
 	/* Pick up the first one
 	 */
 	first = ldap_first_entry (ldap->conn, message);
