@@ -25,7 +25,7 @@ dnl Version
 m4_define([cherokee_major_version], [0])
 m4_define([cherokee_minor_version], [6])
 m4_define([cherokee_micro_version], [0])
-m4_define([cherokee_patch_version], [b395])
+m4_define([cherokee_patch_version], [b397])
 m4_define([cherokee_version], m4_format('%s.%s.%s%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version, cherokee_patch_version))
 
 dnl Init autoconf and automake
@@ -894,13 +894,35 @@ fi
 dnl
 dnl LDAP
 dnl
-AC_CHECK_LIB(ldap, ldap_init, have_ldap_lib=yes, have_ldap_lib=no)
-AC_CHECK_HEADER(ldap.h, have_ldap_include=yes, have_ldap_include=no)
-if test "$have_ldap_lib $have_ldap_include" = "yes yes"; then
-   have_ldap="yes"
+AC_ARG_WITH([ldap],
+        AC_HELP_STRING([--with-ldap=@<:@ARG@:>@],
+            [use OpenLDAP development library @<:@default=yes@:>@, optionally specify path to dev libs]
+        ),
+        [
+        if test "$withval" = "no"; then
+            want_ldap="no"
+        elif test "$withval" = "yes"; then
+            want_ldap="yes"
+        else
+            want_ldap="yes"
+            LDAP_CONFIG="$withval"
+        fi
+        ],
+        [want_ldap="yes"]
+)
+
+if test "$want_ldap" = "yes"; then
+       AC_CHECK_LIB(ldap, ldap_init, have_ldap_lib=yes, have_ldap_lib=no)
+       AC_CHECK_HEADER(ldap.h, have_ldap_include=yes, have_ldap_include=no)
+       if test "$have_ldap_lib $have_ldap_include" = "yes yes"; then
+          have_ldap="yes"
+       else
+          have_ldap="no"
+       fi
 else
-   have_ldap="no"
+       have_ldap="no"
 fi
+
 AM_CONDITIONAL(HAVE_LDAP, test $have_ldap = "yes")
 
 
