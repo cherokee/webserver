@@ -803,7 +803,7 @@ cherokee_fd_set_nonblocking (int fd)
 	int tmp = 1;
 
 #ifdef _WIN32
-	tmp = ioctlsocket (fd, FIONBIO, (u_long)&tmp);
+	tmp = ioctlsocket (fd, FIONBIO, (u_long *)&tmp);
 #else	
 	tmp = ioctl (fd, FIONBIO, &tmp);
 #endif

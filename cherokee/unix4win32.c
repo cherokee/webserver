@@ -152,6 +152,8 @@ struct passwd *
 getpwuid (int uid)
 {
 	__pw.pw_name  = getlogin ();
+	__pw.pw_passwd = NULL;
+	__pw.pw_gecos  = NULL;
 	__pw.pw_dir   = home_dir;
 	__pw.pw_shell = login_shell;
 	__pw.pw_uid   = 0;
@@ -162,10 +164,9 @@ getpwuid (int uid)
 /* everyone is root on WIN32
  */
 struct passwd *
-getpwnam (char *name)
+getpwnam (const char *name)
 {
-        struct passwd* pw = (struct passwd*) malloc(sizeof(struct passwd));
-        memset (pw, '\0', sizeof(struct passwd));
+        struct passwd* pw = calloc(sizeof(struct passwd), 1);
         return pw;
 }
 

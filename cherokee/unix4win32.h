@@ -103,19 +103,22 @@ void closelog (void);
 
 struct passwd {
 	char *pw_name;   /* login user id  */
+	char *pw_passwd; /* login password */
 	char *pw_dir;    /* home directory */
 	char *pw_shell;  /* login shell    */
+	char *pw_gecos;
 	int   pw_gid;
 	int   pw_uid;
 };
 
 struct group {
 	char *gr_name;   /* login user id  */
+	char *gr_passwd; /* login password */
 	int  gr_gid;
 };
 
 struct passwd *getpwuid (int uid);
-struct passwd *getpwnam (char *name);
+struct passwd *getpwnam (const char *name);
 
 
 /* Structure for scatter/gather I/O.
