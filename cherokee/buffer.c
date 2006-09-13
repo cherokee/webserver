@@ -1233,3 +1233,24 @@ cherokee_buffer_case_cmp_buf (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
 	return cherokee_buffer_case_cmp (buf, buf2->buf, buf2->len);
 }
 
+
+size_t
+cherokee_buffer_cnt_spn (cherokee_buffer_t *buf, int offset, char *str) 
+{
+	if ((buf->buf == NULL) ||
+	    (buf->len <= offset))
+		return 0;
+	
+	return strspn (buf->buf + offset, str);
+}
+
+
+size_t 
+cherokee_buffer_cnt_cspn (cherokee_buffer_t *buf, int offset, char *str) 
+{
+	if ((buf->buf == NULL) ||
+	    (buf->len <= offset))
+		return 0;
+
+	return strcspn (buf->buf + offset, str);
+}
