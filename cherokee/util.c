@@ -551,25 +551,63 @@ cherokee_split_arguments (cherokee_buffer_t *request,
 int
 cherokee_estimate_va_length (char *fmt, va_list ap)
 {
-	char      *p;
-	int        ch;
-	cullong_t  ul;
-	int        base, lflag, llflag, width;
-	char       padc;
-	unsigned   len = 0;
+	char               *p;
+	cuchar_t            ch;
+	cullong_t           ul;
+	cherokee_boolean_t  lflag;
+	cherokee_boolean_t  llflag;
+	cuint_t             width;
+	char                padc;
+	cuint_t             len = 0;
+
+
+#define LEN_NUM(base)       \
+	do {	            \
+		ul /= base; \
+		len++;      \
+        } while (ul > 0);   \
+	len++;
+
 
 	for (;;) {
-		padc = ' ';
 		width = 0;
-		while ((ch = *(char *)fmt++) != '%') {
+		padc  = ' ';
+
+		while ((ch = *fmt++) != '%') {
 			if (ch == '\0')
 				return len+1;
 			len++;
 		}
-		lflag = llflag = 0;
+		lflag = llflag = false;
 
 reswitch:	
-		switch (ch = *(char *)fmt++) {
+		switch (ch = *fmt++) {
+		case 's':
+			p = va_arg(ap, char *);
+			len += strlen (p? p: "(null)");
+			break;
+		case 'd':
+			ul = lflag ? va_arg(ap, culong_t) : va_arg(ap, int);
+			if (ul < 0) {
+				ul = -ul;
+				len++;
+			}
+			LEN_NUM(10);
+			break;
+		case 'l':
+			if (lflag == false) 
+				lflag = true;
+			else
+				llflag = true;
+			goto reswitch;
+		case 'u':
+			if (llflag) {
+				ul = va_arg(ap, cullong_t);
+			} else {
+				ul = lflag ? va_arg(ap, long) : va_arg(ap, int);
+			}
+			LEN_NUM(10);
+			break;
 		case '0':
 			padc = '0';
 			goto reswitch;
@@ -583,58 +621,25 @@ reswitch:
 			}
 			len += width;
 			goto reswitch;
-		case 'l':
-			if (lflag == 0) 
-				lflag = 1;
-			else
-				llflag = 1;
-			goto reswitch;
 		case 'c':
 			va_arg(ap, int);
 			len++;
 			break;
-		case 's':
-			p = va_arg(ap, char *);
-			len += strlen (p? p: "(null)");
-			break;
-		case 'd':
-			ul = lflag ? va_arg(ap, culong_t) : va_arg(ap, int);
-			if (ul < 0) {
-				ul = -ul;
-				len++;
-			}
-			base = 10;
-			goto number;
 		case 'o':
 			ul = lflag ? va_arg(ap, culong_t) : va_arg(ap, int);
-			base = 8;
-			goto number;
-		case 'u':
-			if (llflag) {
-				ul = va_arg(ap, cullong_t);
-			} else {
-				ul = lflag ? va_arg(ap, long) : va_arg(ap, int);
-			}
-			base = 10;
-			goto number;
+			LEN_NUM(8);
+			break;
 		case 'f':
 			ul = va_arg(ap, double); /* FIXME: Add float numbers support */
 			len += 30; 
-			base = 10;
-			goto number;			
+			LEN_NUM(10);
+			break;
 		case 'p':
 			len += 2;                /* Pointer: "0x" + hex value */
 		case 'x':
 			ul = lflag ? va_arg(ap, culong_t) : va_arg(ap, int);
-			base = 16;
-number:
-			do {
-				ul /= base;
-				len++;
-			} while (ul > 0);
-			len++;
+			LEN_NUM(16);
 			break;
-			;
 		case '%':
 			len++;
 		default:

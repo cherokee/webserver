@@ -129,7 +129,7 @@ cherokee_buffer_dup (cherokee_buffer_t *buf, cherokee_buffer_t **dup)
 	CHEROKEE_NEW_STRUCT(n, buffer);
 
 	n->buf = (char *) malloc(buf->len + 1);
-	if (unlikely(n->buf == NULL)) return ret_nomem;
+	if (unlikely (n->buf == NULL)) return ret_nomem;
 
 	memcpy (n->buf, buf->buf, buf->len + 1);
 
@@ -146,14 +146,15 @@ cherokee_buffer_add (cherokee_buffer_t *buf, char *txt, size_t size)
 {	   
 	int free = buf->size - buf->len;
 
-	if (size <= 0)
+	if (unlikely (size <= 0))
 		return ret_ok;
 
 	/* Get memory
 	 */
 	if (free < (size+1)) {
 		buf->buf = (char *) realloc(buf->buf, buf->size + size - free + 1);
-		return_if_fail (buf->buf, ret_nomem);
+		if (unlikely (buf->buf == NULL)) 
+			return ret_nomem;
 
 		buf->size += size - free + 1;
 	}
@@ -190,13 +191,14 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, char *format, va_list args)
 
 	len = vsnprintf (buf->buf + buf->len, buf->size - buf->len -1, format, args2);
 	
-#if 1
+#if 0
 	if (estimated_length < len)
 		PRINT_ERROR ("  -> '%s' -> '%s', esti=%d real=%d\n", 
 			     format, buf->buf + buf->len, estimated_length, len);
 #endif
 
-	if (len < 0) return ret_error;
+	if (unlikely (len < 0)) 
+		return ret_error;
 
 	buf->len += len;
 	return ret_ok;

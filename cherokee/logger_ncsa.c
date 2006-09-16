@@ -245,7 +245,7 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 	struct tm         *conn_time;
 	char               ipaddr[CHE_INET_ADDRSTRLEN];
 	static long       *this_timezone = NULL;
-	cherokee_buffer_t *combined_info = NULL;
+	cherokee_buffer_t  combined_info = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t *request;
 
 	/* Read the bogonow value from the server
@@ -282,21 +282,29 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 	/* Look for the "combined" information
 	 */
 	if (logger->combined) {
-		char *ref;
-		char *usr;
-		CHEROKEE_NEW2(referer, useragent, buffer);
+		cherokee_buffer_t referer   = CHEROKEE_BUF_INIT;
+		cherokee_buffer_t useragent = CHEROKEE_BUF_INIT;
 
-		cherokee_header_copy_known (&cnt->header, header_referer, referer);
-		cherokee_header_copy_known (&cnt->header, header_user_agent, useragent);
+		cherokee_header_copy_known (&cnt->header, header_referer, &referer);
+		cherokee_header_copy_known (&cnt->header, header_user_agent, &useragent);
 
-		ref = (referer->buf) ? referer->buf : "-";
-		usr = (useragent->buf) ? useragent->buf : "";
+		cherokee_buffer_ensure_size (&combined_info, 8 + referer.len + referer.len);
 
-		cherokee_buffer_new (&combined_info);
-		cherokee_buffer_add_va (combined_info, " \"%s\" \"%s\"", ref, usr);
+		if (referer.len > 0) {
+			cherokee_buffer_add_str (&combined_info, " \"");
+			cherokee_buffer_add_buffer (&combined_info, &referer);
+			cherokee_buffer_add_str (&combined_info, "\" \"");
+		} else {
+			cherokee_buffer_add_str (&combined_info, "\"-\" \"");
+		}
+		
+		if (useragent.len > 0) {
+			cherokee_buffer_add_buffer (&combined_info, &useragent);
+		} 
+		cherokee_buffer_add_str (&combined_info, "\"");
 
-		cherokee_buffer_free (referer);
-		cherokee_buffer_free (useragent);
+		cherokee_buffer_mrproper (&referer);
+		cherokee_buffer_mrproper (&useragent);
 	}
 
 	request = cherokee_buffer_is_empty(&cnt->request_original) ? 
@@ -305,7 +313,7 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 	/* Build the log string
 	 */
 	cherokee_buffer_add_va (buf, 
-				"%s - %s [%02d/%s/%d:%02d:%02d:%02d %c%02d%02d] \"%s %s %s\" %d " FMT_OFFSET "%s\n",
+				"%s - %s [%02d/%s/%d:%02d:%02d:%02d %c%02d%02d] \"%s %s %s\" %d " FMT_OFFSET,
 				ipaddr,
 				username, 
 				conn_time->tm_mday, 
@@ -321,15 +329,17 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 				request->buf, 
 				version, 
 				cnt->error_code,
-				(CST_OFFSET) (cnt->range_end - cnt->range_start),
-				(logger->combined) ? combined_info->buf : "");
+				(CST_OFFSET) (cnt->range_end - cnt->range_start));
+
+	if (logger->combined) {
+		cherokee_buffer_add_buffer (buf, &combined_info);
+	}
+
+	cherokee_buffer_add_str (buf, "\n");
 	
 	/* Maybe free some memory..
 	 */
-	if (combined_info != NULL) {
-		cherokee_buffer_free (combined_info);
-	}
-
+	cherokee_buffer_mrproper (&combined_info);
 	return ret_ok;
 
 }

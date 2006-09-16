@@ -1,3 +1,12 @@
+2006-09-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/util.c (cherokee_estimate_va_length): Performance
+	improvement. Speeded up about 13,35%.
+
+2006-0x-xx  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* Loads of commits..
+
 2006-07-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* configure.in, cherokee/util.c (cherokee_trace): Added check for

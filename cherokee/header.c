@@ -261,91 +261,71 @@ parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char 
 static ret_t
 parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 {
-	/* These are HTTP/1.1 methods
-	 */
-	if (cmp_str (line, "GET ")) {
-		hdr->method = http_get;
-		*pointer += 4;
-		return ret_ok;
-	} else if (cmp_str (line, "POST ")) {
-		hdr->method = http_post;
-		*pointer += 5;
-		return ret_ok;
-	} else if (cmp_str (line, "HEAD ")) {
-		hdr->method = http_head;
-		*pointer += 5;
-		return ret_ok;
-	} else if (cmp_str (line, "OPTIONS ")) {
-		hdr->method = http_options;
-		*pointer += 8;
-		return ret_ok;
-	} else if (cmp_str (line, "PUT ")) {
-		hdr->method = http_put;
-		*pointer += 4;
-		return ret_ok;
-	} else if (cmp_str (line, "DELETE ")) {
-		hdr->method = http_delete;
-		*pointer += 7;
-		return ret_ok;
-	} else if (cmp_str (line, "TRACE ")) {
-		hdr->method = http_trace;
-		*pointer += 6;
-		return ret_ok;
-	} else if (cmp_str (line, "CONNECT ")) {
-		hdr->method = http_connect;
-		*pointer += 8;
-		return ret_ok;
+	char chr = *line;
 
-	/* WebDAV methods
+#define detect_method(l,str,mthd)           		  \
+	if (cmp_str (line+1, ((const char *)str" ")+1)) { \
+		hdr->method = http_ ## mthd;              \
+		*pointer += sizeof(str);                  \
+		return ret_ok;                            \
+        }                                                 \
+
+	/* Check the first letter of the method name, if it matches it
+	 * can continue with the rest.
 	 */
-	} else if (cmp_str (line, "COPY ")) {
-		hdr->method = http_copy;
-		*pointer += 5;
-		return ret_ok;
-	} else if (cmp_str (line, "LOCK ")) {
-		hdr->method = http_lock;
-		*pointer += 5;
-		return ret_ok;
-	} else if (cmp_str (line, "MKCOL ")) {
-		hdr->method = http_mkcol;
-		*pointer += 6;
-		return ret_ok;
-	} else if (cmp_str (line, "MOVE ")) {
-		hdr->method = http_move;
-		*pointer += 5;
-		return ret_ok;
-	} else if (cmp_str (line, "NOTIFY ")) {
-		hdr->method = http_notify;
-		*pointer += 7;
-		return ret_ok;
-	} else if (cmp_str (line, "POLL ")) {
-		hdr->method = http_poll;
-		*pointer += 5;
-		return ret_ok;
-	} else if (cmp_str (line, "PROPFIND ")) {
-		hdr->method = http_propfind;
-		*pointer += 9;
-		return ret_ok;
-	} else if (cmp_str (line, "PROPPATCH ")) {
-		hdr->method = http_proppatch;
-		*pointer += 10;
-		return ret_ok;
-	} else if (cmp_str (line, "SEARCH ")) {
-		hdr->method = http_search;
-		*pointer += 7;
-		return ret_ok;
-	} else if (cmp_str (line, "SUBSCRIBE ")) {
-		hdr->method = http_subscribe;
-		*pointer += 10;
-		return ret_ok;
-	} else if (cmp_str (line, "UNLOCK ")) {
-		hdr->method = http_unlock;
-		*pointer += 7;
-		return ret_ok;
-	} else if (cmp_str (line, "UNSUBSCRIBE ")) {
-		hdr->method = http_unsubscribe;
-		*pointer += 12;
-		return ret_ok;
+	switch (chr) {
+	case 'G':
+		detect_method (line, "GET", get)
+		break;
+	case 'P':
+		detect_method (line, "POST", post)
+		else
+		detect_method (line, "PUT", put)
+		else
+		detect_method (line, "POLL", poll)
+		else
+		detect_method (line, "PROPFIND", propfind)
+		else
+		detect_method (line, "PROPPATCH", proppatch)
+		break;
+	case 'H':
+		detect_method (line, "HEAD", head)
+		break;
+	case 'O':
+		detect_method (line, "OPTIONS", options)
+		break;
+	case 'D':
+		detect_method (line, "DELETE", delete)
+		break;
+	case 'T':
+		detect_method (line, "TRACE", trace)
+		break;
+	case 'C':
+		detect_method (line, "CONNECT", connect)
+		else
+		detect_method (line, "COPY", copy)
+		break;
+	case 'L':
+		detect_method (line, "LOCK", lock)
+	        break;
+	case 'M':
+		detect_method (line, "MKCOL", mkcol)
+		else 
+		detect_method (line, "MOVE", move)
+	        break;
+	case 'N':
+		detect_method (line, "NOTIFY", notify)
+	        break;
+	case 'S':
+		detect_method (line, "SEARCH", search)
+		else
+		detect_method (line, "SUBSCRIBE", subscribe)
+	        break;
+	case 'U':
+		detect_method (line, "UNLOCK", unlock)
+		else
+		detect_method (line, "UNSUBSCRIBE", unsubscribe)
+	        break;
 	}
 
 	return ret_error;
@@ -400,17 +380,17 @@ parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char *
 	 */	
 	switch (end[-1]) {
 	case '1':
-		if (unlikely(strncmp (end-8, "HTTP/1.1", 8) != 0))
+		if (unlikely (! cmp_str (end-8, "HTTP/1.1")))
 			goto error;
 		hdr->version = http_version_11; 
 		break;
 	case '0':
-		if (unlikely(strncmp (end-8, "HTTP/1.0", 8) != 0))
+		if (unlikely (! cmp_str (end-8, "HTTP/1.0")))
 			goto error;
 		hdr->version = http_version_10; 
 		break;
 	case '9':
-		if (unlikely(strncmp (end-8, "HTTP/0.9", 8) != 0))
+		if (unlikely (! cmp_str (end-8, "HTTP/0.9")))
 			goto error;
 		hdr->version = http_version_09; 
 		break;
