@@ -465,6 +465,7 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	if ((conn->range_start > fhdl->info->st_size) ||
 	    (conn->range_end   > fhdl->info->st_size)) 
 	{
+		conn->range_end  = fhdl->info->st_size;
 		conn->error_code = http_range_not_satisfiable;
 		return ret_error;
 	}

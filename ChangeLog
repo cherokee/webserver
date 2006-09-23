@@ -1,3 +1,16 @@
+2006-09-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/136-BadRange.py: Added new QA test to ensure previous changes
+	work alright.
+
+	* cherokee/handler_file.c (cherokee_handler_file_init): Now it
+	stores the file lenght in conn->range_end if the response is going
+	to be http_range_not_satisfiable, in this way the error handler is
+	able to know the lenght and hence to send the right response.
+
+	* cherokee/handler_error.c (cherokee_handler_error_add_headers):
+	Added new http_range_not_satisfiable exception case.
+
 2006-09-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/util.c (cherokee_estimate_va_length): Performance
