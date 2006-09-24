@@ -1,3 +1,9 @@
+2006-09-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/virtual_server.c (configure_user_dir): User_dir
+	directory name must end by slash to ensure paths can be easily
+	concatenated. Bug reported by Daniel 'NebuchadnezzaR' Dehennin.
+
 2006-09-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/136-BadRange.py: Added new QA test to ensure previous changes

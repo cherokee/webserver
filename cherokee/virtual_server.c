@@ -634,8 +634,15 @@ configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *v
 	cherokee_list_t        *i;
 	cherokee_config_node_t *subconf;
 
+	/* Set the user_dir directory. It must end by slash.
+	 */
 	cherokee_buffer_add_buffer (&vserver->userdir, &config->val);
 
+	if (cherokee_buffer_end_char (&vserver->userdir) != '/')
+		cherokee_buffer_add_str (&vserver->userdir, "/");
+
+	/* Configure the rest of the entries
+	 */
 	ret = cherokee_config_node_get (config, "directory", &subconf);
 	if (ret == ret_ok) {
 		cherokee_config_node_foreach (i, subconf) {
