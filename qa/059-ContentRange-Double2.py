@@ -25,6 +25,5 @@ class Test (TestBase):
         forbidden1 = self.WriteTemp (srandom[OFFSET1:])
         forbidden2 = self.WriteTemp (srandom[:OFFSET2])
 
-        self.expected_content  = ["file:"+expected, "Content-Length: %d" % (OFFSET2-OFFSET1)]
+        self.expected_content  = ["file:"+expected, "Content-Length: %d" % (OFFSET2-OFFSET1 + 1)]
         self.forbidden_content = ["file:"+forbidden1, "file:"+forbidden2]
-

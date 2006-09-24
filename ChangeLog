@@ -1,5 +1,11 @@
 2006-09-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_file.c: sendfile() compilation fixed.  It fixes
+	a little problem with the range management if the server wasn't
+	using either mmap or sendfile to send the file chunck.  It also
+	fixes the Content-Range reply header to use the right end
+	position.
+
 	* cherokee/virtual_server.c (configure_user_dir): User_dir
 	directory name must end by slash to ensure paths can be easily
 	concatenated. Bug reported by Daniel 'NebuchadnezzaR' Dehennin.

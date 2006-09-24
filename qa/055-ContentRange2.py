@@ -22,7 +22,7 @@ class Test (TestBase):
 
         tmpfile = self.WriteTemp (random[OFFSET:])
 
-        self.expected_content  = ["file:"+tmpfile, "Content-Length: %d" % (LENGTH-OFFSET)]
+        self.expected_content  = ["file:"+tmpfile, "Content-Length: %d" % (LENGTH-OFFSET + 1)]
         self.forbidden_content = random[:OFFSET]
 
 
