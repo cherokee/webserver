@@ -1455,6 +1455,10 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		ret = cherokee_config_node_while (conf, add_encoder, srv);
 		if (ret != ret_ok) return ret;
 
+	} else if (equal_buf_str (&conf->key, "module_dir")) {
+		/* Ignore it: Previously handled 
+		 */
+
 	} else {
 		PRINT_MSG ("ERROR: Server parser: Unknown key \"%s\"\n", key);
 		return ret_error;
@@ -1467,13 +1471,24 @@ static ret_t
 configure_server (cherokee_server_t *srv)
 {
 	ret_t                   ret;
-	cherokee_config_node_t *subconf;
+	cherokee_config_node_t *subconf, *subconf2;
 
 	/* Server
 	 */
 	TRACE (ENTRIES, "Configuring %s\n", "server");
 	ret = cherokee_config_node_get (&srv->config, "server", &subconf);
 	if (ret == ret_ok) {
+		/* Modules dir
+		 */
+		ret = cherokee_config_node_get (subconf, "module_dir", &subconf2);
+		printf ("module_dir %d\n", ret);
+		if (ret == ret_ok) {
+			ret = cherokee_module_loader_set_directory (&srv->loader, &subconf2->val);
+			if (ret != ret_ok) return ret;
+		}
+
+		/* Rest of the properties
+		 */
 		ret = cherokee_config_node_while (subconf, configure_server_property, srv);
 		if (ret != ret_ok) return ret;
 	}

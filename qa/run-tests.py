@@ -98,6 +98,7 @@ server!panic_action = /usr/bin/cherokee-panic
 server!encoder!gzip!allow = txt
 server!mime_file = /etc/cherokee/mime.types
 server!pid_file = %s
+server!module_dir = ../cherokee/.libs/
 
 vserver!default!document_root = %s
 vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php

@@ -132,7 +132,7 @@ add_static_entry (cherokee_module_loader_t *loader, const char *name, void *info
 	entry->dlopen_ref = dlopen (NULL, RTLD_BASE);
 	entry->info       = info; 
 
-	cherokee_table_add (loader, (char *)name, entry);
+	cherokee_table_add (&loader->table, (char *)name, entry);
 }
 
 
@@ -167,9 +167,14 @@ cherokee_module_loader_init (cherokee_module_loader_t *loader)
 {
 	ret_t ret;
 	
-	ret = cherokee_table_init (TABLE(loader));
+	ret = cherokee_table_init (&loader->table);
 	if (unlikely(ret < ret_ok)) return ret;
 	
+	ret = cherokee_buffer_init (&loader->module_dir);
+	if (unlikely(ret < ret_ok)) return ret;
+
+	cherokee_buffer_add_str (&loader->module_dir, CHEROKEE_PLUGINDIR);
+
 	ret = load_static_linked_modules (loader);
 	if (unlikely(ret < ret_ok)) return ret;
 
@@ -180,7 +185,8 @@ cherokee_module_loader_init (cherokee_module_loader_t *loader)
 ret_t 
 cherokee_module_loader_mrproper (cherokee_module_loader_t *loader)
 {
-	cherokee_table_mrproper2 (loader, (cherokee_table_free_item_t)free_entry);
+	cherokee_buffer_mrproper (&loader->module_dir);
+	cherokee_table_mrproper2 (&loader->table, (cherokee_table_free_item_t)free_entry);
 	return ret_ok;
 }
 
@@ -205,7 +211,10 @@ get_sym_from_dlopen_handler (void *dl_handle, const char *sym)
 
 
 static ret_t
-dylib_open (const char *libname, void **handler_out, int extra_flags) 
+dylib_open (cherokee_module_loader_t  *loader, 
+	    const char                *libname, 
+	    int                        extra_flags,
+	    void                     **handler_out) 
 {
 	ret_t             ret;
 	void             *lib;
@@ -216,7 +225,7 @@ dylib_open (const char *libname, void **handler_out, int extra_flags)
 
 	/* Build the path string
 	 */
-	ret = cherokee_buffer_add_va (&tmp, CHEROKEE_PLUGINDIR "/libplugin_%s." SO_SUFFIX, libname);
+	ret = cherokee_buffer_add_va (&tmp, "%s/libplugin_%s." SO_SUFFIX, loader->module_dir.buf, libname);
 	if (unlikely(ret < ret_ok)) return ret;
 	
 	/* Open the library	
@@ -280,7 +289,11 @@ execute_init_func (cherokee_module_loader_t *loader, const char *module, entry_t
 
 
 static ret_t
-get_info (const char *module, int flags, cherokee_module_info_t **info, void **dl_handler)
+get_info (cherokee_module_loader_t  *loader, 
+	  const char                *module, 
+	  int                        flags, 
+	  cherokee_module_info_t   **info, 
+	  void                     **dl_handler)
 {
 	ret_t             ret;
 	cherokee_buffer_t info_name = CHEROKEE_BUF_INIT;
@@ -289,7 +302,9 @@ get_info (const char *module, int flags, cherokee_module_info_t **info, void **d
 	 */
 	cherokee_buffer_add_va (&info_name, "cherokee_%s_info", module);
 
-	ret = dylib_open (module, dl_handler, flags);
+	/* Open it
+	 */
+	ret = dylib_open (loader, module, flags, dl_handler);
 	if (ret != ret_ok) {
 		ret = ret_error;
 		goto error;
@@ -360,7 +375,7 @@ load_common (cherokee_module_loader_t *loader, char *modname, int flags)
 
 	/* If it is already loaded just return 
 	 */
-	ret = cherokee_table_get (loader, modname, (void **)&entry);
+	ret = cherokee_table_get (&loader->table, modname, (void **)&entry);
 	if (ret == ret_ok) return ret_ok;
 	
 	/* Check deps
@@ -370,7 +385,7 @@ load_common (cherokee_module_loader_t *loader, char *modname, int flags)
 
 	/* Get the module info
 	 */
-	ret = get_info (modname, flags, &info, &dl_handle);
+	ret = get_info (loader, modname, flags, &info, &dl_handle);
 	switch (ret) {
 	case ret_ok:
 		break;
@@ -391,7 +406,7 @@ load_common (cherokee_module_loader_t *loader, char *modname, int flags)
 	entry->dlopen_ref = dl_handle;
 	entry->info       = info; 
 	
-	ret = cherokee_table_add (loader, modname, entry);
+	ret = cherokee_table_add (&loader->table, modname, entry);
 	if (unlikely(ret != ret_ok)) return ret;
 
 	/* Execute init function
@@ -429,7 +444,7 @@ cherokee_module_loader_unload (cherokee_module_loader_t *loader, char *modname)
 
 	/* Remove item from the table
 	 */
-	ret = cherokee_table_del (loader, modname, (void **)&entry);
+	ret = cherokee_table_del (&loader->table, modname, (void **)&entry);
 	if (ret != ret_ok) return ret;
 
 	/* Free the resources
@@ -450,7 +465,7 @@ cherokee_module_loader_get_info (cherokee_module_loader_t *loader, char *modname
 	ret_t    ret;
 	entry_t *entry;
 
-	ret = cherokee_table_get (loader, modname, (void **)&entry);
+	ret = cherokee_table_get (&loader->table, modname, (void **)&entry);
 	if (ret != ret_ok) return ret;
 
 	*info = entry->info;
@@ -467,7 +482,7 @@ cherokee_module_loader_get_sym  (cherokee_module_loader_t *loader, char *modname
 
 	/* Get the symbol from a dynamic library
 	 */
-	ret = cherokee_table_get (loader, modname, (void **)&entry);
+	ret = cherokee_table_get (&loader->table, modname, (void **)&entry);
 	if (ret != ret_ok) return ret;
 
 	/* Even if we're trying to look for symbols in the executable,
@@ -495,6 +510,16 @@ cherokee_module_loader_get (cherokee_module_loader_t *loader, char *modname, che
 	   if (ret != ret_ok) return ret;
 
 	   return ret_ok;
+}
+
+
+ret_t 
+cherokee_module_loader_set_directory  (cherokee_module_loader_t *loader, cherokee_buffer_t *dir)
+{
+	cherokee_buffer_clean (&loader->module_dir);
+	cherokee_buffer_add_buffer (&loader->module_dir, dir);
+
+	return ret_ok;
 }
 
 
