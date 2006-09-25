@@ -169,7 +169,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	CHEROKEE_RWLOCK_WRITER (&n->bogo_now_mutex);
 	cherokee_buffer_init (&n->bogo_now_string);
-	cherokee_buffer_ensure_size (&n->bogo_now_string, 100);	
+	cherokee_buffer_ensure_size (&n->bogo_now_string, 
+				     sizeof("Sun, 01 Sep 2006 00:00:00 GMT+1") + 2);	
 	CHEROKEE_RWLOCK_UNLOCK (&n->bogo_now_mutex);
 
 	/* Time managing hack
@@ -1114,17 +1115,17 @@ update_bogo_now (cherokee_server_t *srv)
 				this_timezone = cherokee_get_timezone_ref();
 
 			cherokee_buffer_clean  (&srv->bogo_now_string);
-			cherokee_buffer_add_va (&srv->bogo_now_string,
-						"%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
-						cherokee_weekdays[srv->bogo_now_tm.tm_wday], 
-						srv->bogo_now_tm.tm_mday,
-						cherokee_months[srv->bogo_now_tm.tm_mon], 
-						srv->bogo_now_tm.tm_year + 1900,
-						srv->bogo_now_tm.tm_hour,
-						srv->bogo_now_tm.tm_min,
-						srv->bogo_now_tm.tm_sec,
-						srv->bogo_now_tm.tm_gmtoff < 0 ? '-' : '+',
-						abs(srv->bogo_now_tm.tm_gmtoff / 3600));
+			cherokee_buffer_add_va_fixed (&srv->bogo_now_string,
+						      "%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
+						      cherokee_weekdays[srv->bogo_now_tm.tm_wday], 
+						      srv->bogo_now_tm.tm_mday,
+						      cherokee_months[srv->bogo_now_tm.tm_mon], 
+						      srv->bogo_now_tm.tm_year + 1900,
+						      srv->bogo_now_tm.tm_hour,
+						      srv->bogo_now_tm.tm_min,
+						      srv->bogo_now_tm.tm_sec,
+						      srv->bogo_now_tm.tm_gmtoff < 0 ? '-' : '+',
+						      abs(srv->bogo_now_tm.tm_gmtoff / 3600));
 		}
 	}
 

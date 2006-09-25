@@ -69,6 +69,7 @@ void  cherokee_buffer_swap_buffers       (cherokee_buffer_t  *buf, cherokee_buff
 
 ret_t cherokee_buffer_add                (cherokee_buffer_t  *buf, char *txt, size_t size);
 ret_t cherokee_buffer_add_va             (cherokee_buffer_t  *buf, char *format, ...);
+ret_t cherokee_buffer_add_va_fixed       (cherokee_buffer_t  *buf, char *format, ...);
 ret_t cherokee_buffer_add_va_list        (cherokee_buffer_t  *buf, char *format, va_list args);
 ret_t cherokee_buffer_add_char_n         (cherokee_buffer_t  *buf, char c, int n);
 ret_t cherokee_buffer_add_buffer         (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);

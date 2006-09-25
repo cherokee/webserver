@@ -178,6 +178,24 @@ cherokee_buffer_add_buffer (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
 
 
 ret_t 
+cherokee_buffer_add_va_fixed (cherokee_buffer_t  *buf, char *format, ...)
+{
+	cuint_t len;
+	va_list ap;
+
+	va_start (ap, format);
+	len = vsnprintf (buf->buf + buf->len, buf->size - buf->len -1, format, ap);
+	va_end (ap);
+
+	if (unlikely (len < 0)) 
+		return ret_error;
+
+	buf->len += len;
+	return ret_ok;
+}
+
+
+ret_t 
 cherokee_buffer_add_va_list (cherokee_buffer_t *buf, char *format, va_list args)
 {
 	cuint_t len;
