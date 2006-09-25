@@ -1110,25 +1110,21 @@ update_bogo_now (cherokee_server_t *srv)
 		/* Update time string if needed
 		 */
 		if (prevtime < newtime) {
-			int z;
-
-			cherokee_buffer_clean (&srv->bogo_now_string);
-
-			if (this_timezone == NULL) 
+			if (unlikely (this_timezone == NULL))
 				this_timezone = cherokee_get_timezone_ref();
-			z = - (*this_timezone / 60);
 
+			cherokee_buffer_clean  (&srv->bogo_now_string);
 			cherokee_buffer_add_va (&srv->bogo_now_string,
-					"%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
-					cherokee_weekdays[srv->bogo_now_tm.tm_wday], 
-					srv->bogo_now_tm.tm_mday,
-					cherokee_months[srv->bogo_now_tm.tm_mon], 
-					srv->bogo_now_tm.tm_year + 1900,
-					srv->bogo_now_tm.tm_hour,
-					srv->bogo_now_tm.tm_min,
-					srv->bogo_now_tm.tm_sec,
-					(z < 0) ? '-' : '+',
-					(z / 60));
+						"%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
+						cherokee_weekdays[srv->bogo_now_tm.tm_wday], 
+						srv->bogo_now_tm.tm_mday,
+						cherokee_months[srv->bogo_now_tm.tm_mon], 
+						srv->bogo_now_tm.tm_year + 1900,
+						srv->bogo_now_tm.tm_hour,
+						srv->bogo_now_tm.tm_min,
+						srv->bogo_now_tm.tm_sec,
+						srv->bogo_now_tm.tm_gmtoff < 0 ? '-' : '+',
+						abs(srv->bogo_now_tm.tm_gmtoff / 3600));
 		}
 	}
 

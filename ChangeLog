@@ -1,5 +1,8 @@
 2006-09-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (update_bogo_now): Date string fixed.  It was
+	sending "GMT--5" instead of "GMT-5".
+
 	* qa/run-tests.py (CONF_BASE): Added new config line to make it
 	use by default the local plug-ins rather than the system ones.
 
