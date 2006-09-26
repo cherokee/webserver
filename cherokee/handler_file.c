@@ -480,8 +480,9 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	 */
 	if (conn->range_end == 0) {
 		conn->range_end = fhdl->info->st_size;
-	} 
-
+	} else {
+		conn->range_end++;
+	}
 
 	/* Set mmap or file position
 	 */
@@ -585,9 +586,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	/* We stat()'ed the file in the handler constructor
 	 */
 	length = conn->range_end - conn->range_start;		
-	if (likely (length > 0)) 
-		length++;
-	else 
+	if (unlikely (length < 0))
 		length = 0;
 
 	if (conn->encoder == NULL) {
@@ -596,7 +595,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 						"Content-Range: bytes " FMT_OFFSET "-"
 						FMT_OFFSET "/" FMT_OFFSET CRLF,
 						conn->range_start,
-						conn->range_end,
+						conn->range_end - 1,
 						fhdl->info->st_size);
 		}
 		
