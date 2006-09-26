@@ -170,7 +170,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	CHEROKEE_RWLOCK_WRITER (&n->bogo_now_mutex);
 	cherokee_buffer_init (&n->bogo_now_string);
 	cherokee_buffer_ensure_size (&n->bogo_now_string, 
-				     sizeof("Sun, 01 Sep 2006 00:00:00 GMT+1") + 2);	
+				     sizeof("Sun, 01 Sep 2006 00:00:00 GMT+00"));
 	CHEROKEE_RWLOCK_UNLOCK (&n->bogo_now_mutex);
 
 	/* Time managing hack
