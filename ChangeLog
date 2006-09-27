@@ -1,3 +1,10 @@
+2006-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/run-tests.py (CONF_BASE): Now, it uses the example mime types
+	file instead of the system one.
+
+	* cherokee/server.c (update_bogo_now): Partially rewritten.
+
 2006-09-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/iocache.c (cherokee_iocache_stat_get): Potential memory

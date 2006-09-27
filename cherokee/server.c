@@ -1099,35 +1099,36 @@ update_bogo_now (cherokee_server_t *srv)
 	time_t       newtime;
 	static long *this_timezone = NULL;
 
-	CHEROKEE_RWLOCK_WRITER (&srv->bogo_now_mutex);      /* 1.- lock as writer */
-
+	/* Read the time
+	 */
 	newtime = time (NULL);
-	if (srv->bogo_now != newtime) {
-		time_t prevtime = srv->bogo_now;
+	if (srv->bogo_now <= newtime)
+		return;
 
-		srv->bogo_now  = newtime;
-		cherokee_localtime (&newtime, &srv->bogo_now_tm);
+	/* Update the internal variable
+	 */
+	CHEROKEE_RWLOCK_WRITER (&srv->bogo_now_mutex);      /* 1.- lock as writer */
+	
+	srv->bogo_now = newtime;
+	cherokee_localtime (&newtime, &srv->bogo_now_tm);
 
-		/* Update time string if needed
-		 */
-		if (prevtime < newtime) {
-			if (unlikely (this_timezone == NULL))
-				this_timezone = cherokee_get_timezone_ref();
-
-			cherokee_buffer_clean  (&srv->bogo_now_string);
-			cherokee_buffer_add_va_fixed (&srv->bogo_now_string,
-						      "%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
-						      cherokee_weekdays[srv->bogo_now_tm.tm_wday], 
-						      srv->bogo_now_tm.tm_mday,
-						      cherokee_months[srv->bogo_now_tm.tm_mon], 
-						      srv->bogo_now_tm.tm_year + 1900,
-						      srv->bogo_now_tm.tm_hour,
-						      srv->bogo_now_tm.tm_min,
-						      srv->bogo_now_tm.tm_sec,
-						      srv->bogo_now_tm.tm_gmtoff < 0 ? '-' : '+',
-						      abs(srv->bogo_now_tm.tm_gmtoff / 3600));
-		}
-	}
+	/* Update time string 
+	 */
+	if (unlikely (this_timezone == NULL))
+		this_timezone = cherokee_get_timezone_ref();
+	
+	cherokee_buffer_clean (&srv->bogo_now_string);
+	cherokee_buffer_add_va_fixed (&srv->bogo_now_string,
+				      "%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
+				      cherokee_weekdays[srv->bogo_now_tm.tm_wday], 
+				      srv->bogo_now_tm.tm_mday,
+				      cherokee_months[srv->bogo_now_tm.tm_mon], 
+				      srv->bogo_now_tm.tm_year + 1900,
+				      srv->bogo_now_tm.tm_hour,
+				      srv->bogo_now_tm.tm_min,
+				      srv->bogo_now_tm.tm_sec,
+				      srv->bogo_now_tm.tm_gmtoff < 0 ? '-' : '+',
+				      abs(srv->bogo_now_tm.tm_gmtoff / 3600));
 
 	CHEROKEE_RWLOCK_UNLOCK (&srv->bogo_now_mutex);      /* 2.- release */
 }

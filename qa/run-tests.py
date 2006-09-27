@@ -96,8 +96,8 @@ server!keepalive = 1
 server!listen = 127.0.0.1
 server!panic_action = /usr/bin/cherokee-panic
 server!encoder!gzip!allow = txt
-server!mime_file = /etc/cherokee/mime.types
 server!pid_file = %s
+server!mime_file = ../mime.types.sample
 server!module_dir = ../cherokee/.libs/
 
 vserver!default!document_root = %s
