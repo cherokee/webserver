@@ -1,3 +1,8 @@
+2006-10-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/virtual_server.c (init_entry_property): Added
+	"only_secure" configuration option. It was a regression from 0.5.
+
 2006-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/run-tests.py (CONF_BASE): Now, it uses the example mime types

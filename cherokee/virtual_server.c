@@ -445,6 +445,9 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 
 		TRACE(ENTRIES, "Validator: %s\n", tmp->buf);
 
+	} else if (equal_buf_str (&conf->key, "only_secure")) {
+		entry->only_secure = atoi(conf->val.buf);
+
 	} else {
 		PRINT_MSG ("ERROR: Virtual Server parser: Unknown key \"%s\"\n", conf->key.buf);
 		return ret_error;
