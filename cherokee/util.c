@@ -1247,3 +1247,24 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 
 	return ret_no_sys;
 }
+
+
+ret_t 
+cherokee_close_fd (cint_t fd)
+{
+	int re;
+	
+	if (fd < 0) {
+		return ret_error;
+	}
+	
+#ifdef _WIN32
+	re = closesocket (fd);
+#else  
+	re = close (fd);
+#endif
+
+	TRACE (ENTRIES",close_fd", "fd=%d re=%d\n", fd, re);
+	
+	return (re == 0) ? ret_ok : ret_error;
+}

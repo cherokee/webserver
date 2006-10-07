@@ -23,10 +23,11 @@
  */
 
 #include "admin_server.h"
-#include "util.h"
 #include "server-protected.h"
 #include "connection-protected.h"
 #include "connection_info.h"
+#include "util.h"
+
 
 /* Server Port
  */

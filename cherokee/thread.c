@@ -1305,15 +1305,20 @@ __accept_from_server (cherokee_thread_t *thd, int srv_socket, cherokee_socket_ty
 	if (ret < ret_ok) return 0;
 
         /* We got the new socket, now set it up in a new connection object
-         */
+	 */
 	ret = cherokee_thread_get_new_connection (thd, &new_conn);
 	if (unlikely(ret < ret_ok)) {
 		PRINT_ERROR_S ("ERROR: Trying to get a new connection object\n");
+		cherokee_close_fd (new_fd);
 		return 0;
 	}
 
 	ret = cherokee_socket_set_sockaddr (&new_conn->socket, new_fd, &new_sa);
-	if (unlikely(ret < ret_ok)) goto error;
+	if (unlikely(ret < ret_ok)) {
+		PRINT_ERROR_S ("ERROR: Trying to set sockaddr\n");
+		cherokee_close_fd (new_fd);
+		goto error;
+	}
 
 	/* May active the TLS support
          */

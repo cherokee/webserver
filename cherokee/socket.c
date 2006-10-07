@@ -444,8 +444,6 @@ cherokee_socket_free (cherokee_socket_t *socket)
 ret_t       
 cherokee_socket_close (cherokee_socket_t *socket)
 {
-	int re;
-
 	if (socket->socket < 0) {
 		return ret_error;
 	}
@@ -481,8 +479,6 @@ cherokee_socket_close (cherokee_socket_t *socket)
 ret_t 
 cherokee_socket_shutdown (cherokee_socket_t *socket, int how)
 {
-	int re;
-
 	/* If the read side of the socket has been closed but the
 	 * write side is not, then don't bother to call shutdown
 	 * because the socket is going to be closed anyway.
@@ -493,9 +489,10 @@ cherokee_socket_shutdown (cherokee_socket_t *socket, int how)
 	if (unlikely (socket->socket < 0))
 		return ret_error;
 
-	re = shutdown (socket->socket, how);	
+	if (unlikely (shutdown (socket->socket, how) != 0))
+		return ret_error;
 
-	return (re == 0) ? ret_ok : ret_error;
+	return ret_ok;
 }
 
 
@@ -579,7 +576,10 @@ cherokee_socket_accept (cherokee_socket_t *socket, int server_socket)
 	if (unlikely(ret < ret_ok)) return ret;
 
 	ret = cherokee_socket_set_sockaddr (socket, fd, &sa);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok)) {
+		cherokee_close_fd (socket);
+		return ret;
+	}
 
 	return ret_ok;
 }
@@ -604,6 +604,10 @@ cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockad
 	}
 
 	memcpy (&socket->client_addr, sa, socket->client_addr_len);
+
+	/* Status is no more closed.
+	 */
+	socket->status = socket_reading;
 	
 	SOCKET_FD(socket) = fd;
 	return ret_ok;
@@ -623,10 +627,6 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 	if (new_socket < 0) {
 		return ret_error;
 	}		
-
-	/* Close-on-exec
-	 */
-	CLOSE_ON_EXEC (new_socket);
 	
 	/* Disable Nagle's algorithm for this connection.
 	 * Written data to the network is not buffered pending
@@ -634,6 +634,10 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 	 */
  	setsockopt (new_socket, IPPROTO_TCP, TCP_NODELAY, (const void *)&tmp, sizeof(tmp));
 	
+	/* Close-on-exec
+	 */
+	CLOSE_ON_EXEC (new_socket);
+
 	/* Enables nonblocking I/O.
 	 */
 	cherokee_fd_set_nonblocking (new_socket);

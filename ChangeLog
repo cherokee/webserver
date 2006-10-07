@@ -1,3 +1,8 @@
+2006-10-07  A.D.F  <adefacc@tin.it>
+
+	* cherokee/thread.c, cherokee/socket.c, cherokee/socket.h: Better
+	fd management. Fixes a few problems with fd leaks.
+
 2006-10-03  A.D.F  <adefacc@tin.it>
 
 	* cherokee/handler_error.c: Couple of fixes for

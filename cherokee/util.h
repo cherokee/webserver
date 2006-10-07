@@ -102,6 +102,7 @@ ret_t cherokee_fd_set_nonblocking (int fd);
 
 ret_t cherokee_sys_fdlimit_get (cuint_t *limit);
 ret_t cherokee_sys_fdlimit_set (cuint_t  limit);
+ret_t cherokee_close_fd        (cint_t fd);
 void  cherokee_trace (const char *entry, const char *file, int line, const char *func, const char *fmt, ...);
 
 /* Path walking
