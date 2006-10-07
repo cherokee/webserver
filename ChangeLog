@@ -1,7 +1,9 @@
-2006-10-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+2006-10-03  A.D.F  <adefacc@tin.it>
 
-	* cherokee/virtual_server.c (init_entry_property): Added
-	"only_secure" configuration option. It was a regression from 0.5.
+	* cherokee/handler_error.c: Couple of fixes for
+	cherokee_handler_error_add_headers(): Always return on
+	if (!http_code_with_body()). http_range_not_satisfiable (416) has
+	an error body.
 
 2006-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 

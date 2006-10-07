@@ -125,6 +125,10 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 		cherokee_buffer_add_str (buffer,
 					 "The length of requested URL exceeds the capacity limit for this server.");
 		break;		
+	case http_range_not_satisfiable:
+		cherokee_buffer_add_str (buffer,
+					 "The requested range was not satisfiable.");
+		break;		
 	case http_moved_permanently:
 	case http_moved_temporarily:
 		cherokee_buffer_add_va (buffer, 
@@ -207,23 +211,25 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 		SHOULDNT_HAPPEN;
 	}
 
+	/* 1xx, 204 and 304 (Not Modified) responses have to be managed
+	 * by "content" handlers, anyway this test ensures that
+	 * it'll never send wrong and unrelated headers in case that
+	 * a 1xx, 204 or 304 response is managed by this handler.
+	 * 304 responses should only include the
+	 * Last-Modified, ETag, Expires and Cache-Control headers.
+	 */
+	if (!http_code_with_body (conn->error_code))
+		return ret_ok;
+
 	switch (conn->error_code) {
 	case http_range_not_satisfiable:
 		/* The handler that attended the request has put the content 
 		 * lenght in conn->range_end in order to allow it to send the
 		 * right lenght to the client.
 		 */
-		cherokee_buffer_add_va (buffer, "Content-Range: bytes */"FMT_OFFSET CRLF,
-					conn->range_end);
-		return ret_ok;
-	case http_not_modified:
-		/* "304 Not Modified" responses are managed by the individuals
-		 * handler, however this test ensures that it'll never send
-		 * wrong and unrelated headers in case that a 304 response is
-		 * managed by this handler. They should only include the
-		 * Last-Modified, ETag, Expires and Cache-Control headers.
-		 */
-		return ret_ok;
+		cherokee_buffer_add_va (buffer,
+				"Content-Range: bytes */"FMT_OFFSET CRLF,
+				conn->range_end);
 	default:
 		break;
 	}
@@ -231,7 +237,7 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	/* Usual headers
 	 */
 	cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);
-        cherokee_buffer_add_va  (buffer, "Content-length: %d"CRLF, hdl->content->len);
+	cherokee_buffer_add_va  (buffer, "Content-length: %d"CRLF, hdl->content->len);
 	cherokee_buffer_add_str (buffer, "Cache-Control: no-cache"CRLF);
 	cherokee_buffer_add_str (buffer, "Pragma: no-cache"CRLF);		
 	cherokee_buffer_add_str (buffer, "P3P: CP=3DNOI NID CURa OUR NOR UNI"CRLF);
