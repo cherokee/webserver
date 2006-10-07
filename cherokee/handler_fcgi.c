@@ -503,11 +503,15 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 			return ret;
 		}
 		
-		for (try = 0; try < 3; try ++) {
+		for (try = 0; try < 3; try++) {
 			ret = cherokee_source_connect (src, &hdl->socket);
 			if (ret == ret_ok) break;
 
 			TRACE (ENTRIES, "Couldn't connect: %s, try %d\n", src->host.buf ? src->host.buf : src->unix_socket.buf, try);
+
+			if (try >= 3)
+				return ret;
+
 			sleep (1);
 		}
 		

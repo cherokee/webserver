@@ -171,13 +171,17 @@ reconnect (cherokee_fcgi_manager_t *mgr, cherokee_thread_t *thd, cherokee_boolea
 			return ret;
 		}
 		
-		for (; try < 4; try++) {
+		for (; try < 3; try++) {
 			/* Try to connect again	
 			 */
 			ret = cherokee_source_connect (src, &mgr->socket);
 			if (ret == ret_ok) break;
 
 			TRACE (ENTRIES, "Couldn't connect: %s, try %d\n", src->host.buf ? src->host.buf : src->unix_socket.buf, try);
+
+			if (try >= 3)
+				return ret;
+
 			sleep (1);
 		}
 	}
