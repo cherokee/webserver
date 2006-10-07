@@ -444,6 +444,8 @@ cherokee_socket_free (cherokee_socket_t *socket)
 ret_t       
 cherokee_socket_close (cherokee_socket_t *socket)
 {
+	int re;
+
 	if (socket->socket < 0) {
 		return ret_error;
 	}
@@ -577,7 +579,7 @@ cherokee_socket_accept (cherokee_socket_t *socket, int server_socket)
 
 	ret = cherokee_socket_set_sockaddr (socket, fd, &sa);
 	if (unlikely(ret < ret_ok)) {
-		cherokee_close_fd (socket);
+		cherokee_close_fd (fd);
 		return ret;
 	}
 

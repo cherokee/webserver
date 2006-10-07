@@ -82,6 +82,8 @@
 #endif
 #endif
 
+#define ENTRIES "util"
+
 
 const char *cherokee_version    = PACKAGE_VERSION;
 const char *cherokee_months[]   = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
