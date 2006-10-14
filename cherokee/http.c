@@ -109,6 +109,7 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_range_not_satisfiable: *str = http_range_not_satisfiable_string; break;
 	case http_upgrade_required:      *str = http_upgrade_required_string; break;
 	case http_internal_error:        *str = http_internal_error_string; break;
+	case http_bad_gateway:           *str = http_bad_gateway_string; break;
 	case http_service_unavailable:   *str = http_service_unavailable_string; break;
 	case http_continue:              *str = http_continue_string; break;
 	case http_switching_protocols:   *str = http_switching_protocols_string; break;
@@ -146,6 +147,7 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (range_not_satisfiable);
 		entry_code (upgrade_required);
 		entry_code (internal_error);
+		entry_code (bad_gateway);
 		entry_code (service_unavailable);
 	default:
  		PRINT_ERROR ("ERROR: Unknown HTTP status code %d\n", code);

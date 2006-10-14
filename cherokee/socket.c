@@ -1130,7 +1130,7 @@ cherokee_socket_connect (cherokee_socket_t *socket)
 		case EWOULDBLOCK:
 #endif
 			return ret_eagain;
-		default:           
+		default:
 #if 1
 			PRINT_ERROR ("ERROR: Can not connect: %s\n", strerror(err));
 #endif

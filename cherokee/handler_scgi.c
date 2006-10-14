@@ -262,13 +262,13 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 			return ret;
 		}
 		
-		for (try = 0; try < 3; try++) {
+		while (true) {
 			ret = cherokee_source_connect (src, &hdl->socket);
 			if (ret == ret_ok) break;
 
 			TRACE (ENTRIES, "Couldn't connect: %s, try %d\n", src->host.buf ? src->host.buf : src->unix_socket.buf, try);
 
-			if (try >= 3)
+			if (try++ >= 3)
 				return ret;
 
 			sleep (1);			
@@ -284,11 +284,15 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 static ret_t
 send_header (cherokee_handler_scgi_t *hdl)
 {
-	ret_t  ret;
-	size_t written = 0;
+	ret_t                  ret;
+	size_t                 written = 0;
+	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 	
 	ret = cherokee_socket_write (&hdl->socket, &hdl->header, &written);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) {
+		conn->error_code = http_bad_gateway;
+		return ret;
+	}
 	
 //	cherokee_buffer_print_debug (&hdl->header, -1);
 
@@ -321,6 +325,7 @@ send_post (cherokee_handler_scgi_t *hdl)
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), conn, e_fd, mode, false);
 		return ret_eagain;
 	default:
+		conn->error_code = http_bad_gateway;
 		return ret;
 	}
 
@@ -339,7 +344,10 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 		/* Extracts PATH_INFO and filename from request uri 
 		 */
 		ret = cherokee_handler_cgi_base_extract_path (HDL_CGI_BASE(hdl), false);
-		if (unlikely (ret < ret_ok)) return ret;
+		if (unlikely (ret < ret_ok)) {
+			conn->error_code = http_internal_error;
+			return ret;
+		}
 		
 		/* Prepare Post
 		 */
@@ -351,12 +359,18 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 		/* Build the headers
 		 */
 		ret = build_header (hdl);
-		if (unlikely (ret != ret_ok)) return ret;
+		if (unlikely (ret != ret_ok)) {
+			conn->error_code = http_internal_error;
+			return ret;
+		}
 
 		/* Connect	
 		 */
 		ret = connect_to_server (hdl);
-		if (unlikely (ret != ret_ok)) return ret;
+		if (unlikely (ret != ret_ok)) {
+			conn->error_code = http_service_unavailable;
+			return ret;
+		}
 		
 		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_send_headers;
 

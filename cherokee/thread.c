@@ -1068,10 +1068,12 @@ process_active_connections (cherokee_thread_t *thd)
 				RET_UNKNOWN(ret);
 			}
 
-			/* If it is a error, we have to respin the connection
+			/* If it is an error, we have to respin the connection
 			 * to install a proper error handler.
 			 */
-			if ((http_type_300(conn->error_code) || http_type_400(conn->error_code)) &&
+			if ((http_type_300 (conn->error_code) || 
+			     http_type_400 (conn->error_code) ||
+			     http_type_500 (conn->error_code)) &&
 			    (!HANDLER_SUPPORT_ERROR(conn->handler)))								      
 			{
 				conn->phase = phase_setup_connection;

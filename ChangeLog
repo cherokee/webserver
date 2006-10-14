@@ -1,3 +1,16 @@
+2006-10-14  A.D.F  <adefacc@tin.it>
+
+	* cherokee/http.c, cherokee/http.h: Added new error: "502 Bad
+	gateway".
+
+	* cherokee/thread.c (process_active_connections): add a missing
+	test on 5xx http errors.
+
+	* cherokee/handler_scgi.c: set conn->error_code =
+	http_internal_error or http_bad_gateway or
+	http_service_unavailable when there is a init fatal error.
+	(Slightly reworked by Alvaro).
+	
 2006-10-07  A.D.F  <adefacc@tin.it>
 
 	* cherokee/thread.c, cherokee/socket.c, cherokee/socket.h: Better
