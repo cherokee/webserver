@@ -191,7 +191,7 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	}
 
 	SHOULDNT_HAPPEN;
-	return ret_error;	
+	return ret_error;
 }
 
 
@@ -446,8 +446,8 @@ static ret_t
 build_header (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 {
 	FCGI_BeginRequestRecord  request;
-	cherokee_connection_t   *conn    = HANDLER_CONN(hdl);
         cuint_t                  last_header_offset;
+	cherokee_connection_t   *conn                = HANDLER_CONN(hdl);
 
         /* Take care here, if the connection is reinjected, it
 	 * shouldn't parse the arguments again.
@@ -502,14 +502,14 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 			TRACE (ENTRIES, "Couldn't spawn: %s\n", src->host.buf ? src->host.buf : src->unix_socket.buf);
 			return ret;
 		}
-		
-		for (try = 0; try < 3; try++) {
+
+		while (true) {
 			ret = cherokee_source_connect (src, &hdl->socket);
 			if (ret == ret_ok) break;
 
 			TRACE (ENTRIES, "Couldn't connect: %s, try %d\n", src->host.buf ? src->host.buf : src->unix_socket.buf, try);
 
-			if (try >= 3)
+			if (try++ >= 3)
 				return ret;
 
 			sleep (1);
@@ -525,11 +525,15 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 static ret_t 
 do_send (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 {
-	ret_t  ret;
-	size_t written = 0;
+	ret_t                  ret;
+	size_t                 written = 0;
+	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 	
 	ret = cherokee_socket_write (&hdl->socket, buffer, &written);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) {
+		conn->error_code = http_bad_gateway;
+		return ret;
+	}
 	
 	cherokee_buffer_move_to_begin (buffer, written);
 
@@ -682,7 +686,7 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 		 */
 		ret = connect_to_server (hdl);
 		if (unlikely (ret != ret_ok)) {
-			TRACE (ENTRIES, "Could not connect%s\n", "!!");
+			conn->error_code = http_service_unavailable;
 			return ret; 
 		}
 

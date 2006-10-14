@@ -171,7 +171,7 @@ reconnect (cherokee_fcgi_manager_t *mgr, cherokee_thread_t *thd, cherokee_boolea
 			return ret;
 		}
 		
-		for (; try < 3; try++) {
+		while (true) {
 			/* Try to connect again	
 			 */
 			ret = cherokee_source_connect (src, &mgr->socket);
@@ -179,7 +179,7 @@ reconnect (cherokee_fcgi_manager_t *mgr, cherokee_thread_t *thd, cherokee_boolea
 
 			TRACE (ENTRIES, "Couldn't connect: %s, try %d\n", src->host.buf ? src->host.buf : src->unix_socket.buf, try);
 
-			if (try >= 3)
+			if (try++ >= 3)
 				return ret;
 
 			sleep (1);
@@ -473,8 +473,9 @@ cherokee_fcgi_manager_send_remove (cherokee_fcgi_manager_t *mgr, cherokee_buffer
 		TRACE (ENTRIES, "Sent %db\n", written);
 		cherokee_buffer_move_to_begin (buf, written);
 		return ret_ok;
-	case ret_eof:
 	case ret_error:
+		return ret;
+	case ret_eof:
 	case ret_eagain:
 		return ret;
 	default:

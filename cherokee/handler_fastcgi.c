@@ -540,6 +540,7 @@ send_post (cherokee_handler_fastcgi_t *hdl, cherokee_buffer_t *buf)
                                 return ret_eagain;
                         case ret_eof:
                         case ret_error:
+				conn->error_code = http_bad_gateway;
                                 return ret_error;
                         default:
 				RET_UNKNOWN(ret);
@@ -647,9 +648,12 @@ cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 		switch (ret) {
 		case ret_ok:
 			break;
+		case ret_eagain:
+			return ret;
 		case ret_eof:
 			return init_respin (hdl);
 		default:
+			conn->error_code = http_bad_gateway;
 			return ret;
 		}
 		

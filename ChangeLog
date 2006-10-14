@@ -1,3 +1,9 @@
+2006-10-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_fcgi.c, cherokee/fcgi_manager.c,
+	cherokee/handler_fastcgi.c: Implemented previous changes to scgi
+	to these handlers.
+
 2006-10-14  A.D.F  <adefacc@tin.it>
 
 	* cherokee/http.c, cherokee/http.h: Added new error: "502 Bad
