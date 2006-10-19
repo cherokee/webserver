@@ -1,4 +1,14 @@
+2006-10-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* doc/develop/Makefile.am (EXTRA_DIST),
+	doc/develop/draft-coar-cgi-v11-03.txt, doc/develop/rfc1952.txt,
+	doc/develop/rfc2616.txt, doc/develop/rfc2817.txt : Removed
+	RFCs. It's non-free content.
+
 2006-10-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/server.c (configure_server_property): Added new
+	configuration key "thread_policy".
 
 	* cherokee/handler_fcgi.c, cherokee/fcgi_manager.c,
 	cherokee/handler_fastcgi.c: Implemented previous changes to scgi
