@@ -1,3 +1,7 @@
+2006-10-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* contrib/05to06.py: Added new script.
+
 2006-10-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/server.c (update_bogo_now): Date header wasn't
