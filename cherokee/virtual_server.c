@@ -64,9 +64,9 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	CHEROKEE_MUTEX_INIT(&n->data.rx_mutex, NULL);
 	CHEROKEE_MUTEX_INIT(&n->data.tx_mutex, NULL);
 
-	n->server_cert     = NULL;
-	n->server_key      = NULL;
-	n->ca_cert         = NULL;
+	cherokee_buffer_init (&n->server_cert);
+	cherokee_buffer_init (&n->server_key);
+	cherokee_buffer_init (&n->ca_cert);
 
 #ifdef HAVE_TLS
 	ret = cherokee_table_init (&n->session_cache);
@@ -99,20 +99,9 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 ret_t 
 cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 {
-	if (vserver->server_cert != NULL) {
-		free (vserver->server_cert);
-		vserver->server_cert = NULL;
-	}
-	
-	if (vserver->server_key != NULL) {
-		free (vserver->server_key);
-		vserver->server_key = NULL;
-	}
-
-	if (vserver->ca_cert != NULL) {
-		free (vserver->ca_cert);
-		vserver->ca_cert = NULL;
-	}
+	cherokee_buffer_mrproper (&vserver->server_cert);
+	cherokee_buffer_mrproper (&vserver->server_key);
+	cherokee_buffer_mrproper (&vserver->ca_cert);
 
 	if (vserver->error_handler != NULL) {
 		cherokee_config_entry_free (vserver->error_handler);
@@ -203,10 +192,14 @@ cherokee_virtual_server_have_tls (cherokee_virtual_server_t *vserver)
 #ifndef HAVE_TLS
 	return ret_not_found;
 #endif
+	if (cherokee_buffer_is_empty (&vserver->server_cert))
+		return ret_ok;
+	if (cherokee_buffer_is_empty (&vserver->server_key))
+		return ret_ok;
+	if (cherokee_buffer_is_empty (&vserver->ca_cert))
+		return ret_ok;
 
-	return ((vserver->server_cert != NULL) ||
-		(vserver->server_key  != NULL) ||
-		(vserver->ca_cert     != NULL)) ? ret_ok : ret_not_found;
+	return ret_not_found;
 }
 
 
@@ -218,20 +211,19 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 #ifndef HAVE_TLS
 	return ret_ok;
 #endif
-
-	if ((vsrv->ca_cert     == NULL) &&
-	    (vsrv->server_cert == NULL) &&
-	    (vsrv->server_key  == NULL)) 
-	{
+	/* Check if all of them are empty
+	 */
+	if (cherokee_buffer_is_empty (&vsrv->ca_cert)    &&
+	    cherokee_buffer_is_empty (&vsrv->server_key) &&
+	    cherokee_buffer_is_empty (&vsrv->server_cert))
 		return ret_not_found;
-	}
 
-	if ((vsrv->ca_cert     == NULL) ||
-	    (vsrv->server_cert == NULL) ||
-	    (vsrv->server_key  == NULL)) 
-	{
+	/* Check one or more are empty
+	 */
+	if (cherokee_buffer_is_empty (&vsrv->ca_cert)    ||
+	    cherokee_buffer_is_empty (&vsrv->server_key) ||
+	    cherokee_buffer_is_empty (&vsrv->server_cert))
 		return ret_error;
-	}
 
 #ifdef HAVE_GNUTLS
         rc = gnutls_certificate_allocate_credentials (&vsrv->credentials);
@@ -243,22 +235,22 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 	/* CA file
 	 */
 	rc = gnutls_certificate_set_x509_trust_file (vsrv->credentials,
-						     vsrv->ca_cert,
+						     vsrv->ca_cert.buf,
 						     GNUTLS_X509_FMT_PEM);
 	if (rc < 0) {
-		PRINT_ERROR ("ERROR: reading X.509 CA Certificate: '%s'\n", vsrv->ca_cert);
+		PRINT_ERROR ("ERROR: reading X.509 CA Certificate: '%s'\n", vsrv->ca_cert.buf);
 		return ret_error;
 	}
 
 	/* Key file
 	 */
 	rc = gnutls_certificate_set_x509_key_file (vsrv->credentials,
-						   vsrv->server_cert,
-						   vsrv->server_key,
+						   vsrv->server_cert.buf,
+						   vsrv->server_key.buf,
 						   GNUTLS_X509_FMT_PEM);	
 	if (rc < 0) {
 		PRINT_ERROR ("ERROR: reading X.509 key '%s' or certificate '%s' file\n", 
-			     vsrv->server_key, vsrv->server_cert);
+			     vsrv->server_key.buf, vsrv->server_cert.buf);
 		return ret_error;
 	}
 
@@ -281,25 +273,25 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 
 	/* Certificate
 	 */
-	rc = SSL_CTX_use_certificate_file (vsrv->context, vsrv->server_cert, SSL_FILETYPE_PEM);
+	rc = SSL_CTX_use_certificate_file (vsrv->context, vsrv->server_cert.buf, SSL_FILETYPE_PEM);
 	if (rc < 0) {
 		char *error;
 
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR("ERROR: OpenSSL: Can not use certificate file '%s':  %s\n", 
-			    vsrv->server_cert, error);
+			    vsrv->server_cert.buf, error);
 		return ret_error;
 	}
 
 	/* Private key
 	 */
-	rc = SSL_CTX_use_PrivateKey_file (vsrv->context, vsrv->server_key, SSL_FILETYPE_PEM);
+	rc = SSL_CTX_use_PrivateKey_file (vsrv->context, vsrv->server_key.buf, SSL_FILETYPE_PEM);
 	if (rc < 0) {
 		char *error;
 
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR("ERROR: OpenSSL: Can not use private key file '%s': %s\n", 
-			    vsrv->server_key, error);
+			    vsrv->server_key.buf, error);
 		return ret_error;
 	}
 
@@ -547,16 +539,14 @@ add_extensions (cherokee_config_node_t *config, cherokee_virtual_server_t *vserv
 	ret = init_entry (vserver, config, entry);
 	if (ret != ret_ok) return ret;
 
-	if (vserver->entry.exts == NULL) {
-		ret = cherokee_exts_table_new (&ventry->exts);
-		if (ret != ret_ok) return ret;
-	}
+	ret = cherokee_exts_table_init (&ventry->exts);
+	if (ret != ret_ok) return ret;
 
 	for (;;) {
 		end = strchr (ext, ',');
 		if (end != NULL) *end = '\0';
 
-		ret = cherokee_exts_table_has (ventry->exts, ext);
+		ret = cherokee_exts_table_has (&ventry->exts, ext);
 		if (ret != ret_not_found) {
 			PRINT_MSG ("ERROR: Extension '%s' was already set\n", ext);
 			return ret_error;
@@ -564,7 +554,7 @@ add_extensions (cherokee_config_node_t *config, cherokee_virtual_server_t *vserv
 	
 		TRACE(ENTRIES, "Adding '%s' extension, priority %d\n", ext, entry->priority);
 		
-		ret = cherokee_exts_table_add (ventry->exts, ext, entry);
+		ret = cherokee_exts_table_add (&ventry->exts, ext, entry);
 		if (ret != ret_ok) return ret;
 		
 		if (end == NULL)
@@ -581,6 +571,7 @@ add_extensions (cherokee_config_node_t *config, cherokee_virtual_server_t *vserv
 static ret_t 
 add_request (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver, cherokee_virtual_entries_t *ventry)
 {
+#ifndef CHEROKEE_EMBEDDED
 	ret_t                       ret;
 	cherokee_reqs_list_entry_t *entry;
 
@@ -596,6 +587,7 @@ add_request (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver,
 
 	ret = cherokee_reqs_list_add (&ventry->reqs, entry, SRV(vserver->server_ref)->regexs);
 	if (ret != ret_ok) return ret;
+#endif
 
 	return ret_ok;
 }
@@ -722,6 +714,18 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "directory_index")) {
 		cherokee_config_node_read_list (conf, NULL, add_directory_index, vserver);
+
+	} else if (equal_buf_str (&conf->key, "ssl_certificate_file")) {
+		cherokee_buffer_init (&vserver->server_cert);
+		cherokee_buffer_add_buffer (&vserver->server_cert, &conf->val);
+		
+	} else if (equal_buf_str (&conf->key, "ssl_certificate_key_file")) {
+		cherokee_buffer_init (&vserver->server_key);
+		cherokee_buffer_add_buffer (&vserver->server_key, &conf->val);
+
+	} else if (equal_buf_str (&conf->key, "ssl_ca_list_file")) {
+		cherokee_buffer_init (&vserver->ca_cert);
+		cherokee_buffer_add_buffer (&vserver->ca_cert, &conf->val);
 		
 	} else if (equal_buf_str (&conf->key, "alias")) {
 		/* Ignore it, server config already did this for us..

@@ -32,9 +32,9 @@
 #include "exts_table.h"
 
 typedef struct {
-	cherokee_dirs_table_t        dirs;            /* Eg: (/public, common) */
-	cherokee_exts_table_t       *exts;            /* Eg: (.php,    phpcgi) */
-	cherokee_reqs_list_t         reqs;            /* Eg: ("*.mp3"  auth{}) */
+	cherokee_dirs_table_t  dirs;            /* Eg: (/public, common) */
+	cherokee_exts_table_t  exts;            /* Eg: (.php,    phpcgi) */
+	cherokee_reqs_list_t   reqs;            /* Eg: ("*.mp3"  auth{}) */
 } cherokee_virtual_entries_t;
 
 

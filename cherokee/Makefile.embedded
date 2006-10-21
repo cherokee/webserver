@@ -1,11 +1,17 @@
-CFLAGS=-O0 -g -DCHEROKEE_COMPILATION -DCHEROKEE_EMBEDDED -I. -I.. -DCHEROKEE_CONFDIR=\""/etc/cherokee"\" -DCHEROKEE_DEPSDIR=\""/usr/share/cherokee/deps"\"
+CFLAGS=-O0 -g -DCHEROKEE_COMPILATION -DCHEROKEE_EMBEDDED -I. -I.. \
+	  -DCHEROKEE_CONFDIR=\""/etc/cherokee"\" \
+	  -DCHEROKEE_DEPSDIR=\""/usr/share/cherokee/deps"\" \
+	  -DCHEROKEE_ICONSDIR=\""/usr/share/cherokee/icons"\" \
+	  -DCHEROKEE_THEMEDIR=\""/usr/share/cherokee/themes"\" 
 LDFLAGS=-lc -ldl
 
 OBJS = \
+avl.o \
 md5.o \
 main.o \
 http.o \
 util.o \
+list.o \
 table.o \
 crc32.o \
 buffer.o \
@@ -20,11 +26,11 @@ logger.o \
 handler.o \
 avl/avl.o \
 encoder.o \
-list_ext.o \
 validator.o \
 exts_table.o \
 connection.o \
 tdate_parse.o \
+config_node.o \
 logger_table.o \
 resolv_cache.o \
 fdpoll-poll.o \
@@ -46,11 +52,10 @@ handler_redir.o \
 handler_phpcgi.o \
 handler_dirlist.o \
 handler_common.o \
-list_merge_sort.o \
 post.o \
 nonce.o \
-typed_table.o \
-read_config_embedded.o 
+read_config_embedded.o \
+virtual_entries.o
 
 all: u-cherokee
 

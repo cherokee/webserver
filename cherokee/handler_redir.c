@@ -197,7 +197,61 @@ out:
 	return ret;
 }
 
-#endif
+static ret_t
+configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_redir_props_t *props)
+{
+	ret_t               ret;
+	cint_t              hidden;
+	struct cre_list    *n;
+	cherokee_buffer_t  *substring;
+	pcre               *re         = NULL;
+	cherokee_buffer_t  *regex      = NULL;
+
+	TRACE(ENTRIES, "Converting rewrite rule '%s'\n", conf->key.buf);
+
+	/* Query conf
+	 */
+	cherokee_config_node_read_int (conf, "show", &hidden);
+	hidden = !hidden;
+
+	ret = cherokee_config_node_read (conf, "regex", &regex);
+	if (ret == ret_ok) {
+		ret = cherokee_regex_table_get (srv->regexs, regex->buf, (void **)&re);
+		if (ret != ret_ok) return ret;
+	} 
+
+	ret = cherokee_config_node_read (conf, "substring", &substring);
+	if (ret != ret_ok) return ret;
+
+	/* New RegEx
+	 */
+	n = (struct cre_list*)malloc(sizeof(struct cre_list));
+
+	INIT_LIST_HEAD (&n->item);
+	n->re         = re;
+	n->hidden     = hidden;
+	
+	cherokee_buffer_init (&n->subs);
+	cherokee_buffer_add_buffer (&n->subs, substring);
+
+	/* Add the list
+	 */
+	cherokee_list_add_tail (LIST(n), &props->regex_list);
+
+	return ret_ok;
+}
+
+
+static void
+cre_entry_free (struct cre_list *n) 
+{
+	cherokee_buffer_mrproper (&n->subs);
+	free (n);
+}
+
+
+#endif /* CHEROKEE_EMBEDDED */
+
 
 ret_t 
 cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
@@ -296,59 +350,6 @@ cherokee_handler_redir_add_headers (cherokee_handler_redir_t *rehdl, cherokee_bu
 }
 
 
-static ret_t
-configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_redir_props_t *props)
-{
-	ret_t               ret;
-	cint_t              hidden;
-	struct cre_list    *n;
-	cherokee_buffer_t  *substring;
-	pcre               *re         = NULL;
-	cherokee_buffer_t  *regex      = NULL;
-
-	TRACE(ENTRIES, "Converting rewrite rule '%s'\n", conf->key.buf);
-
-	/* Query conf
-	 */
-	cherokee_config_node_read_int (conf, "show", &hidden);
-	hidden = !hidden;
-
-	ret = cherokee_config_node_read (conf, "regex", &regex);
-	if (ret == ret_ok) {
-		ret = cherokee_regex_table_get (srv->regexs, regex->buf, (void **)&re);
-		if (ret != ret_ok) return ret;
-	} 
-
-	ret = cherokee_config_node_read (conf, "substring", &substring);
-	if (ret != ret_ok) return ret;
-
-	/* New RegEx
-	 */
-	n = (struct cre_list*)malloc(sizeof(struct cre_list));
-
-	INIT_LIST_HEAD (&n->item);
-	n->re         = re;
-	n->hidden     = hidden;
-	
-	cherokee_buffer_init (&n->subs);
-	cherokee_buffer_add_buffer (&n->subs, substring);
-
-	/* Add the list
-	 */
-	cherokee_list_add_tail (LIST(n), &props->regex_list);
-
-	return ret_ok;
-}
-
-
-static void
-cre_entry_free (struct cre_list *n) 
-{
-	cherokee_buffer_mrproper (&n->subs);
-	free (n);
-}
-
-
 static ret_t 
 props_free (cherokee_handler_redir_props_t *props)
 {
@@ -356,9 +357,11 @@ props_free (cherokee_handler_redir_props_t *props)
 
 	cherokee_buffer_mrproper (&props->url);
 
+#ifndef CHEROKEE_EMBEDDED 
 	list_for_each_safe (i, tmp, &props->regex_list) {
 		cre_entry_free ((struct cre_list *)i);
 	}
+#endif
 
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
@@ -392,11 +395,13 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 			cherokee_buffer_clean (&props->url);
 			cherokee_buffer_add_buffer (&props->url, &subconf->val);
 
+#ifndef CHEROKEE_EMBEDDED
 		} else if (equal_buf_str (&subconf->key, "rewrite")) {
 			cherokee_config_node_foreach (j, subconf) {
 				ret = configure_rewrite (CONFIG_NODE(j), srv, PROP_REDIR(props));
 				if (ret != ret_ok) return ret;
 			}
+#endif
 		}
 	}
 	

@@ -31,13 +31,16 @@ cherokee_virtual_entries_init (cherokee_virtual_entries_t *ventry)
 {
 	ret_t ret;
 	
-	ventry->exts = NULL;
-
-	ret = cherokee_reqs_list_init (&ventry->reqs);
+	ret = cherokee_exts_table_init (&ventry->exts);
 	if (unlikely(ret < ret_ok)) return ret;
 	
 	ret = cherokee_dirs_table_init (&ventry->dirs);
 	if (unlikely(ret < ret_ok)) return ret;
+
+#ifndef CHEROKEE_EMBEDDED
+	ret = cherokee_reqs_list_init (&ventry->reqs);
+	if (unlikely(ret < ret_ok)) return ret;
+#endif
 
 	return ret_ok;
 }
@@ -47,12 +50,11 @@ ret_t
 cherokee_virtual_entries_mrproper (cherokee_virtual_entries_t *ventry)
 {
 	cherokee_dirs_table_mrproper (&ventry->dirs);
-	cherokee_reqs_list_mrproper (&ventry->reqs);
+	cherokee_exts_table_mrproper (&ventry->exts);
 
-	if (ventry->exts != NULL) {
-		cherokee_exts_table_free (ventry->exts);
-		ventry->exts = NULL;
-	}
+#ifndef CHEROKEE_EMBEDDED
+	cherokee_reqs_list_mrproper (&ventry->reqs);
+#endif
 
 	return ret_ok;
 }

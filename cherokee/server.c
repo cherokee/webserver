@@ -107,11 +107,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->ipv6            = true;
 	n->fdpoll_method   = cherokee_poll_UNSET;
 
-	/* Config files
-	 */
-	n->config_file     = NULL;	
-	n->icons_file      = NULL;
-	
 	/* Mime types
 	 */
 	n->mime            = NULL;
@@ -154,6 +149,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->sendfile.min    = 32768;
 	n->sendfile.max    = 2147483647;
 
+	n->icons           = NULL;
 	n->regexs          = NULL;
 	n->icons           = NULL;
 	n->iocache         = NULL;
@@ -186,11 +182,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 	CHEROKEE_MUTEX_INIT (&n->accept_mutex, NULL);
 
 #ifndef CHEROKEE_EMBEDDED
-	/* Icons 
-	 */
-	cherokee_icons_new (&n->icons);
-	return_if_fail (n->icons != NULL, ret_nomem);
-
 	/* IO Cache cache
 	 */
 	cherokee_iocache_new_default (&n->iocache, n);
@@ -251,7 +242,9 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* Config
 	 */
+#ifndef CHEROKEE_EMBEDDED
 	cherokee_config_node_init (&n->config);
+#endif
 	
 	/* Return the object
 	 */
@@ -331,45 +324,32 @@ cherokee_server_free (cherokee_server_t *srv)
 	 */
 	destroy_all_threads (srv);
 
+	/* File descriptors
+	 */
 	close (srv->socket);
-	
+
+
+#ifdef HAVE_TLS
 	if (srv->socket_tls != -1) {
 		close (srv->socket_tls);		
 	}
-
-	cherokee_encoder_table_mrproper (&srv->encoders);
-	cherokee_logger_table_free (srv->loggers);
-
-#ifdef HAVE_TLS
 	CHEROKEE_MUTEX_DESTROY (&srv->accept_tls_mutex);
 #endif
 	CHEROKEE_MUTEX_DESTROY (&srv->accept_mutex);
 
+	/* Attached objects
+	 */
+	cherokee_encoder_table_mrproper (&srv->encoders);
+	cherokee_logger_table_free (srv->loggers);
+
 #ifndef CHEROKEE_EMBEDDED
-	/* Nonces
-	 */
-	cherokee_nonce_table_free (srv->nonces);
-	srv->nonces = NULL;
-
-	/* Icons 
-	 */
+	cherokee_mime_free (srv->mime);
 	cherokee_icons_free (srv->icons);
-	if (srv->icons_file != NULL) {
-		free (srv->icons_file);
-		srv->icons_file = NULL;
-	}
-
-	/* Mime
-	 */
-	if (srv->mime != NULL) {
-		cherokee_mime_free (srv->mime);
-		srv->mime = NULL;
-	}
-
-	cherokee_iocache_free_default (srv->iocache);
-
 	cherokee_regex_table_free (srv->regexs);
+	cherokee_iocache_free_default (srv->iocache);
 #endif
+
+	cherokee_nonce_table_free (srv->nonces);
 	
 	/* Virtual servers
 	 */
@@ -383,20 +363,11 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_buffer_mrproper (&srv->server_string);
 	cherokee_buffer_mrproper (&srv->listen_to);
 	cherokee_buffer_mrproper (&srv->chroot);
-
-	/* Clean config files entries
-	 */
-	if (srv->config_file != NULL) {
-		free (srv->config_file);
-		srv->config_file = NULL;
-	}
-
 	cherokee_buffer_mrproper (&srv->pidfile);
 	cherokee_buffer_mrproper (&srv->panic_action);
 
-	/* Module loader:
-	 * It must be the last action to perform because
-	 * it will close all the opened modules
+	/* Module loader: It must be the last action to be performed
+	 * because it will close all the opened modules.
 	 */
 	cherokee_module_loader_mrproper (&srv->loader);
 
@@ -1102,7 +1073,7 @@ update_bogo_now (cherokee_server_t *srv)
 	/* Read the time
 	 */
 	newtime = time (NULL);
-	if (srv->bogo_now <= newtime)
+	if (srv->bogo_now >= newtime) 
 		return;
 
 	/* Update the internal variable
@@ -1206,11 +1177,13 @@ matching_list_add_allow_cb  (char *val, void *data)
 	return cherokee_matching_list_add_allow (MLIST(data), val);
 }
 
+
 static ret_t 
 matching_list_add_deny_cb  (char *val, void *data)
 {
 	return cherokee_matching_list_add_deny (MLIST(data), val);
 }
+
 
 static ret_t 
 matching_list_configure (cherokee_matching_list_t *mlist, cherokee_config_node_t *config)
@@ -1306,11 +1279,13 @@ add_vserver (cherokee_config_node_t *node, void *data)
 	return ret_ok;
 }
 
+
 static ret_t 
 load_mime_file (cherokee_server_t *srv, cherokee_buffer_t *mime_file)
 {
 	ret_t ret;
 
+#ifndef CHEROKEE_EMBEDDED 
 	if (srv->mime == NULL) {
 		ret = cherokee_mime_new (&srv->mime);
 		if (ret < ret_ok) {
@@ -1324,6 +1299,7 @@ load_mime_file (cherokee_server_t *srv, cherokee_buffer_t *mime_file)
 		PRINT_MSG ("Couldn't load MIME configuration file %s\n", mime_file->buf);
 		return ret;
 	}
+#endif
 
 	return ret_ok;
 }
@@ -1429,6 +1405,22 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 			return ret_error;
 		}
 
+	} else if (equal_buf_str (&conf->key, "thread_policy")) {
+#ifdef HAVE_PTHREAD
+		if (equal_buf_str (&conf->val, "fifo")) {
+			srv->thread_policy = SCHED_FIFO;
+		} else if (equal_buf_str (&conf->val, "rr")) {
+			srv->thread_policy = SCHED_RR;
+		} else if (equal_buf_str (&conf->val, "other")) {
+			srv->thread_policy = SCHED_OTHER;
+		} else {
+			PRINT_MSG ("ERROR: Unknown thread policy '%s'\n", conf->val.buf);
+			return ret_error;
+		}
+#else
+		PRINT_MSG ("WARNING: Ignoring thread_policy entry '%s'\n", conf->val.buf);
+#endif
+
 	} else if (equal_buf_str (&conf->key, "user")) {
 		struct passwd *pwd;
 	   
@@ -1465,6 +1457,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	return ret_ok;
 }
 
+
 static ret_t
 configure_server (cherokee_server_t *srv)
 {
@@ -1479,7 +1472,6 @@ configure_server (cherokee_server_t *srv)
 		/* Modules dir
 		 */
 		ret = cherokee_config_node_get (subconf, "module_dir", &subconf2);
-		printf ("module_dir %d\n", ret);
 		if (ret == ret_ok) {
 			ret = cherokee_module_loader_set_directory (&srv->loader, &subconf2->val);
 			if (ret != ret_ok) return ret;
@@ -1493,6 +1485,7 @@ configure_server (cherokee_server_t *srv)
 
 	/* Icons
 	 */
+#ifndef CHEROKEE_EMBEDDED
 	TRACE (ENTRIES, "Configuring %s\n", "icons");
 	ret = cherokee_config_node_get (&srv->config, "icons", &subconf);
 	if (ret == ret_ok) {
@@ -1502,6 +1495,7 @@ configure_server (cherokee_server_t *srv)
 		ret =  cherokee_icons_configure (srv->icons, subconf);
 		if (ret != ret_ok) return ret;
 	}
+#endif 
 	
 	/* Load the virtual servers
 	 */
@@ -1536,6 +1530,7 @@ cherokee_server_read_config_string (cherokee_server_t *srv, cherokee_buffer_t *s
 	
 	return ret_ok;
 }
+
 
 ret_t 
 cherokee_server_read_config_file (cherokee_server_t *srv, char *fullpath)

@@ -43,6 +43,8 @@
 #include "iocache.h"
 #include "util.h"
 
+#define ENTRIES "handler,file"
+
 
 ret_t 
 cherokee_handler_file_props_free (cherokee_handler_file_props_t *props)
@@ -409,27 +411,41 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	/* Is this file cached in the io cache?
 	 */
 #ifndef CHEROKEE_EMBEDDED
-	use_io = ((!HDL_FILE_PROP(fhdl)->use_cache) &&
+	use_io = ((HDL_FILE_PROP(fhdl)->use_cache) &&
 		  (conn->encoder == NULL) &&
 		  (conn->socket.is_tls == non_TLS) &&
 		  (fhdl->info->st_size <= IOCACHE_MAX_FILE_SIZE) &&
 		  (http_method_with_body (conn->header.method)));
 	
+
+	TRACE(ENTRIES, "Using iocache %d\n", use_io);
+	
 	if (use_io) {
 		ret = cherokee_iocache_mmap_lookup (srv->iocache,
 						    conn->local_directory.buf,
 						    &io_entry);
-		if (ret != ret_ok) {
+
+		TRACE(ENTRIES, "iocache looked up, local=%s ret=%d\n", conn->local_directory.buf, ret);
+			
+		if ((ret != ret_ok) || 
+		    (io_entry->mmaped == NULL))
+		{
+			/* Open fhdl->fd
+			 */
 			ret = open_local_directory (fhdl, conn);
 			if (ret != ret_ok) {
 				cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
 				return ret;
 			}
 
+			/* Map the file
+			 */
 			ret = cherokee_iocache_mmap_get_w_fd (srv->iocache,
 							      conn->local_directory.buf,
 							      fhdl->fd,
 							      &io_entry);
+
+			TRACE(ENTRIES, "Got it from the iocache fd=%d, entry=%p\n", fhdl->fd, io_entry);
 		}
 
 		if (ret == ret_ok) {

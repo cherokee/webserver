@@ -1,5 +1,48 @@
 2006-10-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (update_bogo_now): Date header wasn't
+	generated because of an error in the logic. Fixed.
+
+	* cherokee/handler_dirlist.c (render_file): Code that replaces
+	%icon% and %icon_alt% has been slightly cleaned up. Now it is a
+	bit cleaner.
+
+	* cherokee/exts_table.h, cherokee/exts_table.h, cherokee/thread.c:
+	The extensions table is now implemented as a static structure.
+
+	* cherokee/Makefile.embedded (OBJS): Little files: a couple of
+	objects have been added and removed.
+
+	* cherokee/server.c (cherokee_server_new): Fixed tiny memory leak:
+	The server->icons object was created twice.
+
+	* cherokee/module_loader.c (cherokee_module_loader_get,
+	cherokee_module_loader_set_directory): These are now common
+	function between embedded and non-embedded version.
+
+	* cherokee/handler_redir.c: Code has been re-factored in order to
+	make u-cherokee compile again.
+
+	* cherokee/handler_file.c (cherokee_handler_file_init): use_io
+	cache logic was wrong. There was a extra "not" that was fucking it
+	up.  Thanks to A.D.F for noticing there was something wrong with
+	the iocache behaviour.
+
+	* cherokee/mime.c (cherokee_mime_free): Added check to ensure mime
+	object exists.
+
+	* cherokee/server-protected.h,
+	cherokee/server.c (cherokee_server_new): Removed config_file and
+	icons_file properties.  They are no longer needed.
+
+	* cherokee/virtual_server.c (configure_virtual_server_property):
+	Added three new configuration keys: "ssl_certificate_file",
+	"ssl_certificate_key_file" and "ssl_ca_list_file".
+
+	* cherokee/virtual_server.h, cherokee/virtual_server.c:
+	server_cert, server_key and ca_cert are not longer char *, not
+	they are cherokee_buffer_t's.
+
 	* doc/develop/Makefile.am (EXTRA_DIST),
 	doc/develop/draft-coar-cgi-v11-03.txt, doc/develop/rfc1952.txt,
 	doc/develop/rfc2616.txt, doc/develop/rfc2817.txt : Removed

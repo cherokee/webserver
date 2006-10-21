@@ -106,7 +106,9 @@ cherokee_module_loader_get_info (cherokee_module_loader_t *loader, char *modname
 	return ret_ok;
 }
 
+
 #else 
+
 
 /* This is the non-embedded implementation
  */
@@ -498,6 +500,10 @@ cherokee_module_loader_get_sym  (cherokee_module_loader_t *loader, char *modname
 	return ret_ok;
 }
 
+
+#endif /* CHEROKEE_EMBEDDED */
+
+
 ret_t 
 cherokee_module_loader_get (cherokee_module_loader_t *loader, char *modname, cherokee_module_info_t **info)
 {
@@ -521,6 +527,3 @@ cherokee_module_loader_set_directory  (cherokee_module_loader_t *loader, cheroke
 
 	return ret_ok;
 }
-
-
-#endif

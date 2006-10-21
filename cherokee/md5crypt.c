@@ -48,7 +48,7 @@ to64(unsigned long v, int n)
 	char *s = buf;
 
 	if (n > 4)
-		return (NULL);
+		return NULL;
 
 	memset(buf, '\0', sizeof(buf));
 	while (--n >= 0) {
@@ -56,7 +56,7 @@ to64(unsigned long v, int n)
 		v >>= 6;
 	}
 
-	return (buf);
+	return buf;
 }
 
 
@@ -69,6 +69,7 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 	int sl, pl, i, j;
 	struct MD5Context ctx, ctx1;
 	unsigned long l;
+	cuint_t magic_len;
 
 	/* Refine the salt first.  It's possible we were given an already-hashed
 	 * string as the salt argument, so extract the actual salt value from it
@@ -76,17 +77,18 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 	 */
 	sp = salt;
 	
-
 	/* If it starts with the magic string, then skip that.
 	 */
-	if(strncmp(sp, magic, strlen(magic)) == 0)
-		sp += strlen(magic);
+	magic_len = strlen (magic);
+
+	if (strncmp(sp, magic, magic_len) == 0)
+		sp += magic_len;
 
 	/* It stops at the first '$', max 8 chars 
 	 */
 	for (ep = sp; *ep != '$'; ep++) {
 		if (*ep == '\0' || ep >= (sp + 8))
-			return (NULL);
+			return NULL;
 	}
 
 	/* Get the length of the true salt 
@@ -103,7 +105,7 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 	MD5Update(&ctx, (unsigned char *)pw, strlen(pw));
 
 	/* Then our magic string */
-	MD5Update(&ctx, (unsigned char *)magic, strlen(magic));
+	MD5Update(&ctx, (unsigned char *)magic, magic_len);
 
 	/* Then the raw salt */
 	MD5Update(&ctx, (unsigned char *)sp, sl);

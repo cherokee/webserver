@@ -51,6 +51,9 @@ cherokee_mime_free (cherokee_mime_t *mime)
 {
 	cherokee_list_t *i, *tmp;
 
+	if (mime == NULL)
+		return ret_ok;
+
 	cherokee_table_mrproper (&mime->mime_table);
 
 	list_for_each_safe (i, tmp, &mime->mime_list) {

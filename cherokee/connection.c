@@ -1569,7 +1569,12 @@ cherokee_connection_get_ext_entry (cherokee_connection_t *conn, cherokee_exts_ta
 	/* Look in the extension table
 	 */
 	ret = cherokee_exts_table_get (exts, &conn->request, config_entry);
-	if (unlikely (ret == ret_error)) {
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_not_found:
+		return ret_ok;
+	default:
 		conn->error_code = http_internal_error;
 		return ret_error;
 	}

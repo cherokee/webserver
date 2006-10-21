@@ -500,6 +500,7 @@ cmp_date_up (cherokee_list_t *a, cherokee_list_t *b)
 static void
 list_sort_by_type (cherokee_list_t *list, cherokee_dirlist_sort_t sort)
 {
+#ifndef CHEROKEE_EMBEDDED
 	switch (sort) {
 	case Name_Down:
 		cherokee_list_sort (list, cmp_name_down);
@@ -520,6 +521,7 @@ list_sort_by_type (cherokee_list_t *list, cherokee_dirlist_sort_t sort)
 		cherokee_list_sort (list, cmp_date_up);
 		break;
 	}
+#endif
 }
 
 
@@ -704,9 +706,10 @@ static ret_t
 render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_entry_t *file)
 {
 	cherokee_boolean_t                is_dir;
+	char                             *alt      = NULL;
 	char                             *icon     = NULL;
-	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
 	char                             *name     = (char *) &file->info.d_name;
+	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
 	cherokee_buffer_t                *tmp      = &dhdl->header;
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
 
@@ -721,17 +724,21 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	 */
 	is_dir = S_ISDIR(file->stat.st_mode);
 
-	if (is_dir) {
-		replace_token (buffer, "%icon_alt%", "[DIR]");
-		replace_token (buffer, "%icon%", icons->directory_icon.buf);
-	} else {
-		cherokee_icons_get_icon (icons, name, &icon);
-		if (icon == NULL)
-			icon = "blank.png";
-
-		replace_token (buffer, "%icon_alt%", "[   ]");
-		replace_token (buffer, "%icon%", icon);
+	alt = (is_dir) ? "[DIR]" : "[   ]";
+	
+#ifndef CHEROKEE_EMBEDDED
+	if (icons != NULL) {
+		if (is_dir) {
+			icon = icons->directory_icon.buf;
+		} else {
+			cherokee_icons_get_icon (icons, name, &icon);
+			if (icon == NULL) icon = "blank.png";
+		}
 	}
+#endif
+
+	replace_token (buffer, "%icon_alt%", alt);
+	replace_token (buffer, "%icon%", icon);
 
 	/* File
 	 */

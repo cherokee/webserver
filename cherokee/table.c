@@ -33,6 +33,7 @@
 static int
 equal (void *avl_param, void *key, void *val)
 {
+//	printf ("equal (%s, %s) = %d\n", key, val, strcmp((const char *)key, (const char *)val));
 	return strcmp((const char *)key, (const char *)val);
 }
 

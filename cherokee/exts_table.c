@@ -23,39 +23,30 @@
  */
 
 #include "exts_table.h"
-#include "table.h"
 
 #define ENTRIES "exts"
 
 
-struct cherokee_exts_table {
-	cherokee_table_t table;
-	cherokee_list_t  list;
-};
-
 ret_t 
-cherokee_exts_table_new (cherokee_exts_table_t **et)
+cherokee_exts_table_init (cherokee_exts_table_t *et)
 {
 	ret_t ret;
-	CHEROKEE_NEW_STRUCT(n, exts_table);
 
-	ret = cherokee_table_init(&n->table);
-	if (unlikely(ret != ret_ok)) return ret;
+	ret = cherokee_table_init(&et->table);
+	if (unlikely (ret != ret_ok)) return ret;
 
-	INIT_LIST_HEAD(&n->list);
+	INIT_LIST_HEAD(&et->list);
 
-	*et = n;
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_exts_table_free (cherokee_exts_table_t *et)
+cherokee_exts_table_mrproper (cherokee_exts_table_t *et)
 {
 	cherokee_list_content_free (&et->list, (cherokee_list_free_func) cherokee_config_entry_free);
 	cherokee_table_mrproper (&et->table);
 
-	free (et);
 	return ret_ok;
 }
 
@@ -70,7 +61,9 @@ cherokee_exts_table_get (cherokee_exts_table_t *et, cherokee_buffer_t *requested
 	dot = strrchr (requested_url->buf, '.');
 	if (dot == NULL) return ret_not_found;
 
+	printf ("GET0: et %p table %p ext %s\n", et, &et->table, dot+1);
 	ret = cherokee_table_get (&et->table, dot+1, (void **)&entry);
+	printf ("GET1: et %p table %p ext %s: %d\n", et, &et->table, dot+1, ret);
 	if (ret != ret_ok) return ret;
 
 	TRACE (ENTRIES, "Match with \"%s\"\n", dot+1);
@@ -99,6 +92,7 @@ cherokee_exts_table_add  (cherokee_exts_table_t *et, char *ext, cherokee_config_
 	/* Add to the table. It is ok if many entries point to the same
 	 * plugin entry object.
 	 */
+	printf ("ADD: et %p table %p ext %s\n", et, &et->table, ext);
 	return cherokee_table_add (&et->table, ext, plugin_entry);
 }
 

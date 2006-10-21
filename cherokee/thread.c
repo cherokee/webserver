@@ -860,13 +860,11 @@ process_active_connections (cherokee_thread_t *thd)
 			
 			/* 1.- Read the extension configuration
 			 */
-			if (ventry->exts != NULL) {
-				ret = cherokee_connection_get_ext_entry (conn, ventry->exts, &entry);
-				if (unlikely (ret != ret_ok)) {
-					cherokee_connection_setup_error_handler (conn);
-					conn->phase = phase_init;
-					continue;
-				}
+			ret = cherokee_connection_get_ext_entry (conn, &ventry->exts, &entry);
+			if (unlikely (ret != ret_ok)) {
+				cherokee_connection_setup_error_handler (conn);
+				conn->phase = phase_init;
+				continue;
 			}
 
 			/* 2.- Read the directory configuration

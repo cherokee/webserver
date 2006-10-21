@@ -65,29 +65,29 @@ typedef struct {
 	cherokee_list_t              index_list;      /* Eg: index.html, index.php  */
 
 	struct {                                      /* Number of bytes {up,down}loaded */
-		size_t tx;
-		size_t rx;
+		size_t               tx;
+		size_t               rx;
 
 #ifdef HAVE_PTHREAD
-		pthread_mutex_t tx_mutex;
-		pthread_mutex_t rx_mutex;
+		pthread_mutex_t      tx_mutex;
+		pthread_mutex_t      rx_mutex;
 #endif
 	} data;
 
-	char *server_cert;
-	char *server_key;
-	char *ca_cert;
+	cherokee_buffer_t            server_cert;
+	cherokee_buffer_t            server_key;
+	cherokee_buffer_t            ca_cert;
 
 #ifdef HAVE_TLS
-	cherokee_table_t          session_cache;
+	cherokee_table_t             session_cache;
 
 # ifdef HAVE_GNUTLS
 	gnutls_certificate_server_credentials credentials;
-	gnutls_dh_params                      dh_params;
-	gnutls_rsa_params                     rsa_params;
+	gnutls_dh_params             dh_params;
+	gnutls_rsa_params            rsa_params;
 # endif
 # ifdef HAVE_OPENSSL
-	SSL_CTX *context;
+	SSL_CTX                     *context;
 # endif
 #endif
 
