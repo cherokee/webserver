@@ -91,22 +91,6 @@ const char *cherokee_months[]   = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 const char *cherokee_weekdays[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
 
-
-int
-cherokee_hexit (char c)
-{
-	if ( c >= '0' && c <= '9' )
-		return c - '0';
-	if ( c >= 'a' && c <= 'f' )
-		return c - 'a' + 10;
-	if ( c >= 'A' && c <= 'F' )
-		return c - 'A' + 10;
-
-	/* shouldn't happen, we're guarded by isxdigit() */
-	return 0;           
-}
-
-
 /* This function is licenced under:
  * The Apache Software License, Version 1.1
  *

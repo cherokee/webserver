@@ -75,7 +75,6 @@ ret_t cherokee_tls_init (void);
 
 /* String management functions
  */
-int     cherokee_hexit              (char c);
 int     cherokee_isbigendian        (void);
 char   *cherokee_min_str            (char *s1, char *s2);
 char   *cherokee_strfsize           (unsigned long long size, char *buf);

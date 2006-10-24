@@ -350,42 +350,75 @@ cherokee_buffer_ensure_size (cherokee_buffer_t *buf, size_t size)
 }
 
 
+/*
+ * Decode a string that may have encoded characters %xx
+ * where xx is the hexadecimal number corresponding
+ * to the character ascii value.
+ */
 ret_t
 cherokee_buffer_decode (cherokee_buffer_t *buffer)
 {
-	char *from;
-	char *to;
+	static const char hex2dec_tab[256] = {
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 00-0F */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 10-1F */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 20-2F */
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0,  /* 30-3F */
+		0,10,11,12,13,14,15, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 40-4F */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 50-5F */
+		0,10,11,12,13,14,15, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 60-6F */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 70-7F */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 80-8F */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 90-9F */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* A0-AF */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* B0-BF */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* C0-CF */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* D0-DF */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* E0-EF */
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   /* F0-FF */
+	};
+
+	char *psrc;
+	char *ptgt;
+	int   len;
+
+#define hex2dec_m(c)	( (int) hex2dec_tab[ ( (unsigned char )(c) ) ] )
 
 	if (buffer->buf == NULL) {
 		return ret_error;
 	}
-
-        /* Copies and decodes a string.  It's ok for from and to to be
-	 * the same string.
+	
+	/* Verify if decoding is needed.
 	 */
-	from = to = buffer->buf;
+	if ((psrc = strchr (buffer->buf, '%')) == NULL)
+		return ret_ok;
 
-	for (; *from != '\0'; ++to, ++from) {
-		if (from[0] == '%' && isxdigit(from[1]) && isxdigit(from[2])) {
-			if (unlikely (((from[1] == '0') && (from[2] == '0')))) {
+	/* Decode string.
+	 */
+	len = buffer->len;
+	for (ptgt = psrc; *psrc != '\0'; ++ptgt, ++psrc) {
+		if (psrc[0] == '%' && isxdigit(psrc[1]) && isxdigit(psrc[2])) {
+			if (unlikely (((psrc[1] == '0') && (psrc[2] == '0')))) {
 				/* Replace null bytes (%00) with
 				 * spaces, to prevent attacks
 				 */
-				*to = ' ';
+				*ptgt = ' ';
 			} else {
-				*to = cherokee_hexit(from[1]) * 16 + cherokee_hexit(from[2]);
+				*ptgt = hex2dec_m(psrc[1]) * 16 + hex2dec_m(psrc[2]);
 			}
 
-			from += 2;
-			buffer->len -= 2;
+			psrc += 2;
+			len  -= 2;
 		} else {
-			*to = *from;
+			*ptgt = *psrc;
 		}
 	}
-	*to = '\0';
+	*ptgt = '\0';
+	buffer->len = len;
 
+#undef hex2dec_m
 	return ret_ok;
 }
+
 
 ret_t 
 cherokee_buffer_drop_endding (cherokee_buffer_t *buffer, int num_chars)

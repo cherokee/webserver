@@ -1,3 +1,13 @@
+2006-10-24  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.c (cherokee_buffer_decode): change
+	  cherokee_buffer_decode() in order to speed up it and to avoid to
+	  use original BSD (Jeff Poskanzer) source code.
+
+2006-10-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/util.h, cherokee/util.c (cherokee_hexit): Removed.
+
 2006-10-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/05to06.py: Added new script.

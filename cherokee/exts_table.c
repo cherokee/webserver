@@ -61,9 +61,7 @@ cherokee_exts_table_get (cherokee_exts_table_t *et, cherokee_buffer_t *requested
 	dot = strrchr (requested_url->buf, '.');
 	if (dot == NULL) return ret_not_found;
 
-	printf ("GET0: et %p table %p ext %s\n", et, &et->table, dot+1);
 	ret = cherokee_table_get (&et->table, dot+1, (void **)&entry);
-	printf ("GET1: et %p table %p ext %s: %d\n", et, &et->table, dot+1, ret);
 	if (ret != ret_ok) return ret;
 
 	TRACE (ENTRIES, "Match with \"%s\"\n", dot+1);
@@ -92,7 +90,7 @@ cherokee_exts_table_add  (cherokee_exts_table_t *et, char *ext, cherokee_config_
 	/* Add to the table. It is ok if many entries point to the same
 	 * plugin entry object.
 	 */
-	printf ("ADD: et %p table %p ext %s\n", et, &et->table, ext);
+	TRACE ("ADD: et %p table %p ext %s\n", et, &et->table, ext);
 	return cherokee_table_add (&et->table, ext, plugin_entry);
 }
 
