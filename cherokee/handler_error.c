@@ -111,8 +111,11 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 		cherokee_buffer_escape_html (cnt->header.input_buffer, &escaped);
 		if (escaped == NULL)
 			cherokee_buffer_add_va (buffer, "<p><pre>%s</pre>", cnt->header.input_buffer->buf);
-		else
+		else {
 			cherokee_buffer_add_va (buffer, "<p><pre>%s</pre>", escaped->buf);
+			cherokee_buffer_free (escaped);
+			escaped = NULL;
+		}
 		break;
         case http_access_denied:
 		cherokee_buffer_add_str (buffer, "You have no access to the request URL");

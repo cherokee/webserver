@@ -779,7 +779,7 @@ cherokee_header_copy_request (cherokee_header_t *hdr, cherokee_buffer_t *request
 	ret = cherokee_buffer_add (request, hdr->input_buffer->buf + hdr->request_off, hdr->request_len);
 	if (unlikely(ret < ret_ok)) return ret;
 
-	return cherokee_buffer_decode (request);
+	return cherokee_buffer_unescape_uri (request);
 }
 
 
@@ -831,7 +831,7 @@ cherokee_header_copy_request_w_args (cherokee_header_t *hdr, cherokee_buffer_t *
 	ret = cherokee_buffer_add (request, hdr->input_buffer->buf + hdr->request_off, hdr->request_args_len);
 	if (unlikely(ret < ret_ok)) return ret;
 
-	return cherokee_buffer_decode (request);
+	return cherokee_buffer_unescape_uri (request);
 }
 
 

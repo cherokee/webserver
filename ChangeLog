@@ -1,3 +1,19 @@
+2006-10-26  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.h, cherokee/buffer.c: sparse blanks to tab
+	conversions; cherokee_buffer_dup(), add a free() to fix a possible
+	memory leak; rename cherokee_buffer_decode() to
+	cherokee_buffer_unescape_uri() (unescape escape sequences) in
+	order to make it consistent with cherokee_buffer_escape_html() and
+	future cherokee_buffer_escape_uri();
+
+	* cherokee/buffer.c (cherokee_buffer_escape_html): - improve speed
+	by using strpbrk() (fast function) to look for special characters;
+	add '"' to the escaped characters; make sure there are no embedded
+	'\0' in input string.
+
+	* cherokee/handler_error.c: fixes a memor leak.
+
 2006-10-24  A.D.F  <adefacc@tin.it>
 
 	* cherokee/buffer.c (cherokee_buffer_decode): change

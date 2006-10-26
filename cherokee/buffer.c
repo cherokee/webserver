@@ -44,7 +44,7 @@
 #define TO_HEX(c) (c > 9 ? c+'a'-10 : c+'0')
 
 ret_t
-cherokee_buffer_new  (cherokee_buffer_t **buf)
+cherokee_buffer_new (cherokee_buffer_t **buf)
 {
 	CHEROKEE_NEW_STRUCT(n, buffer);
 
@@ -93,13 +93,11 @@ cherokee_buffer_mrproper (cherokee_buffer_t *buf)
 ret_t
 cherokee_buffer_clean (cherokee_buffer_t *buf)
 {
-	if ((buf->buf != NULL) &&
-	    (buf->len > 0))
+	if (likely ((buf->buf != NULL) && (buf->len != 0)) )
 	{
 		buf->buf[0] = '\0';
 	}
-
-	buf->len = 0;	
+	buf->len = 0;
 	return ret_ok;
 }
 
@@ -129,7 +127,10 @@ cherokee_buffer_dup (cherokee_buffer_t *buf, cherokee_buffer_t **dup)
 	CHEROKEE_NEW_STRUCT(n, buffer);
 
 	n->buf = (char *) malloc(buf->len + 1);
-	if (unlikely (n->buf == NULL)) return ret_nomem;
+	if (unlikely (n->buf == NULL)) {
+		free(n);
+		return ret_nomem;
+	}
 
 	memcpy (n->buf, buf->buf, buf->len + 1);
 
@@ -351,12 +352,11 @@ cherokee_buffer_ensure_size (cherokee_buffer_t *buf, size_t size)
 
 
 /*
- * Decode a string that may have encoded characters %xx
- * where xx is the hexadecimal number corresponding
- * to the character ascii value.
+ * Unescape a string that may have escaped characters %xx
+ * where xx is the hexadecimal number equal to the character ascii value.
  */
 ret_t
-cherokee_buffer_decode (cherokee_buffer_t *buffer)
+cherokee_buffer_unescape_uri (cherokee_buffer_t *buffer)
 {
 	static const char hex2dec_tab[256] = {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 00-0F */
@@ -737,7 +737,7 @@ cherokee_buffer_decode_base64 (cherokee_buffer_t *buf)
 	 */
 
 	static const char
-		b64_decode_table[256] = {
+		b64_decode_tab[256] = {
 			-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 00-0F */
 			-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 10-1F */
 			-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,  /* 20-2F */
@@ -757,7 +757,7 @@ cherokee_buffer_decode_base64 (cherokee_buffer_t *buf)
 		};
 
 	for (i=0; i < buf->len; i++) {
-		d = b64_decode_table[(int) buf->buf[i]];
+		d = b64_decode_tab[(int) buf->buf[i]];
 		if (d != -1) {
 			switch (phase) {
 			case 0:
@@ -784,7 +784,7 @@ cherokee_buffer_decode_base64 (cherokee_buffer_t *buf)
 			buf_pos += 127;
 			space_idx = 0;
 		}
-        }
+	}
 
 	space[space_idx]='\0';
 
@@ -818,28 +818,27 @@ cherokee_buffer_encode_base64 (cherokee_buffer_t *buf)
 	in  = (cuchar_t *) buf->buf;
 	out = (cuchar_t *) new_buf.buf;
 
-        for (i=0, j=0; i < inlen; i += 3) {
+	for (i=0, j=0; i < inlen; i += 3) {
 		int     a=0,b=0,c=0;
 		int     d, e, f, g;
 
-                a=in[i];
-                b= i+1 < inlen ? in[i+1]:0;
-                c= i+2 < inlen ? in[i+2]:0;
+		a=in[i];
+		b= i+1 < inlen ? in[i+1]:0;
+		c= i+2 < inlen ? in[i+2]:0;
 
-                d = base64tab [a >> 2 ];
-                e = base64tab [((a & 3 ) << 4) | (b >> 4)];
-                f = base64tab [((b & 15) << 2) | (c >> 6)];
-                g = base64tab [c & 63 ];
+		d = base64tab [a >> 2 ];
+		e = base64tab [((a & 3 ) << 4) | (b >> 4)];
+		f = base64tab [((b & 15) << 2) | (c >> 6)];
+		g = base64tab [c & 63 ];
 
-                if (i + 1 >= inlen) f='=';
-                if (i + 2 >= inlen) g='=';
+		if (i + 1 >= inlen) f='=';
+		if (i + 2 >= inlen) g='=';
 
-                out[j++] = d;
-                out[j++] = e;
-                out[j++] = f;
-                out[j++] = g;
-        }
-	
+		out[j++] = d;
+		out[j++] = e;
+		out[j++] = f;
+		out[j++] = g;
+	}
 
 	out[j]  = '\0';
 	new_buf.len = j;
@@ -863,18 +862,42 @@ cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t **maybe_n
 	cuint_t i;
 	cuint_t j;
 	cuint_t extra = 0;
+	char   *p0, *p;
+
+	/* Verify string termination,
+	 * we assume there are no '\0' inside buffer.
+	 */
+	if (buf->buf[buf->len] != '\0')
+		buf->buf[buf->len]  = '\0';
+
+	/* Verify if string has to be escaped.
+	 */
+	if ((p0 = strpbrk(buf->buf, "<>&\"")) == NULL)
+		return ret_not_found;
 
 	/* Count extra characters
 	 */
-	for (i=0; i<buf->len; i++) {
-		if ((buf->buf[i] == '<') || (buf->buf[i] == '>')) {
-			extra += 3;
-		} else 	if (buf->buf[i] == '&') {
-			extra += 4;
+	for (p = p0; *p != '\0'; ++p) {
+		switch(*p) {
+			case '<':
+			case '>':
+				extra += 3;
+				continue;
+			case '&':
+				extra += 4;
+				continue;
+			case '"':
+				extra += 5;
+				continue;
+			default:
+				continue;
 		}
 	}
 
-	if (extra == 0) return ret_not_found;
+	/* Verify there are no embedded '\0'.
+	 */
+	if ( ((int) (p - buf->buf)) != buf->len)
+		return ret_error;
 
 	/* Create a new buffer
 	 */
@@ -891,7 +914,7 @@ cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t **maybe_n
 
 	/* Make the changes
 	 */
-	for (i=0, j=0; i<buf->len; i++) {
+	for (i = 0, j = 0; i < buf->len; i++) {
 		char c = buf->buf[i+j]; 
 
 		switch (c) {
@@ -911,6 +934,12 @@ cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t **maybe_n
 			memmove (&buf->buf[i+j+5], &buf->buf[i+j+1], buf->len-i);
 			memcpy (&buf->buf[i+j], "&amp;", 5);
 			j += 4;
+			break;
+
+		case '"':
+			memmove (&buf->buf[i+j+6], &buf->buf[i+j+1], buf->len-i);
+			memcpy (&buf->buf[i+j], "&quot;", 6);
+			j += 5;
 			break;
 		}
 	}
@@ -1163,24 +1192,24 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 				char *substring,   int substring_length, 
 				char *replacement, int replacement_length)
 {
-        int         remaining_length;
+	int         remaining_length;
 	int         result_length;
-        char       *result;
+	char       *result;
 	char       *result_position;
-        const char *p;
+	const char *p;
 	const char *substring_position;
 
 	/* Calculate the new size
 	 */
 	result_length = buf->len;
-        for (p = buf->buf; ; p = substring_position + substring_length) {
-                substring_position = strstr (p, substring);
-                if (substring_position == NULL) {
-                        break;
-                }
+	for (p = buf->buf; ; p = substring_position + substring_length) {
+		substring_position = strstr (p, substring);
 
-                result_length += (replacement_length - substring_length);
-        } 
+		if (substring_position == NULL)
+			break;
+
+		result_length += (replacement_length - substring_length);
+	} 
 
 	/* Take the new memory chunk
 	 */
@@ -1191,20 +1220,21 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 	 */
 	result_position = result;
 
-        for (p = buf->buf; ; p = substring_position + substring_length) {
-                substring_position = strstr (p, substring);
-                if (substring_position == NULL) {
-                        remaining_length = strlen (p);
-                        memcpy (result_position, p, remaining_length);
-                        result_position += remaining_length;
-                        break;
-                }
-                memcpy (result_position, p, substring_position - p);
-                result_position += (substring_position - p);
+	for (p = buf->buf; ; p = substring_position + substring_length) {
+		substring_position = strstr (p, substring);
 
-                memcpy (result_position, replacement, replacement_length);
-                result_position += replacement_length;
-        }	
+		if (substring_position == NULL) {
+			remaining_length = strlen (p);
+			memcpy (result_position, p, remaining_length);
+			result_position += remaining_length;
+			break;
+		}
+		memcpy (result_position, p, substring_position - p);
+		result_position += (substring_position - p);
+
+		memcpy (result_position, replacement, replacement_length);
+		result_position += replacement_length;
+	}	
 	*result_position = '\0';
 
 	/* Change the internal buffer content
@@ -1239,7 +1269,7 @@ cherokee_buffer_add_comma_marks (cherokee_buffer_t  *buf)
 	} else {
 		p = buf->buf + off;
 	}
-	
+
 	for (i=0; i<num; i++) {
 		int len = (buf->buf + buf->len) - p;
 		memmove(p+1, p, len);
@@ -1290,10 +1320,9 @@ cherokee_buffer_case_cmp_buf (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
 size_t
 cherokee_buffer_cnt_spn (cherokee_buffer_t *buf, int offset, char *str) 
 {
-	if ((buf->buf == NULL) ||
-	    (buf->len <= offset))
+	if (unlikely ((buf->buf == NULL) || (buf->len <= offset)))
 		return 0;
-	
+
 	return strspn (buf->buf + offset, str);
 }
 
@@ -1301,9 +1330,9 @@ cherokee_buffer_cnt_spn (cherokee_buffer_t *buf, int offset, char *str)
 size_t 
 cherokee_buffer_cnt_cspn (cherokee_buffer_t *buf, int offset, char *str) 
 {
-	if ((buf->buf == NULL) ||
-	    (buf->len <= offset))
+	if (unlikely ((buf->buf == NULL) || (buf->len <= offset)))
 		return 0;
 
 	return strcspn (buf->buf + offset, str);
 }
+
