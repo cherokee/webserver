@@ -10,6 +10,8 @@ ERROR_MSG = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://
 
  <body>
 
+ <!-- Poem by Thomas Thurman <thomas@thurman.org.uk> -->
+
  <h1>404 File Not found</h1>
 
 <p>So many years have passed since first you sought
