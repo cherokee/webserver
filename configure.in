@@ -29,7 +29,7 @@ m4_define([cherokee_patch_version], [b397])
 m4_define([cherokee_version], m4_format('%s.%s.%s%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version, cherokee_patch_version))
 
 dnl Init autoconf and automake
-AC_INIT([cherokee], [cherokee_version], [http://bugs.0x50.org], [cherokee])
+AC_INIT([cherokee], [cherokee_version], [http://bugs.cherokee-project.com], [cherokee])
 AC_CONFIG_SRCDIR([cherokee/server.c])
 AM_INIT_AUTOMAKE([no-define])
 

@@ -1,3 +1,14 @@
+2006-10-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* README, cherokee/handler_server_info.c (PAGE_HEADER),
+	http-cherokee.xml, SUNWcherokee.spec (Source), cget.1, cherokee.1,
+	cherokee_logrotate.1, configure.in, cherokee.spec.in (URL),
+	cherokee/cherokee-panic (action), qa/023-Host.py, qa/046-Redir.py,
+	qa/047-Redir2.py, qa/128-ValidMethod-common.py,
+	qa/134-HTTP_headers.py, windows/cherokee.nsi.in, www/index.html:
+	Domian changed. 0x50.org is no longer the project's domain, from
+	now on it's cherokee-project.com.
+
 2006-10-26  A.D.F  <adefacc@tin.it>
 
 	* cherokee/buffer.h, cherokee/buffer.c: sparse blanks to tab

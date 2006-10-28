@@ -56,7 +56,7 @@ EXTRA_DIST=\
 $(doc_DATA)
 
 index.html:
-	wget -O cherokee_doc.tar.gz http://www.0x50.org/docs/cherokee_doc.tar.gz ;\
+	wget -O cherokee_doc.tar.gz http://www.cherokee-project.com/docs/cherokee_doc.tar.gz ;\
 	gunzip -dc cherokee_doc.tar.gz | tar xfv - ;\
 	rm -f cherokee_doc.tar.gz
 

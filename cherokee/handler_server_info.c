@@ -67,7 +67,8 @@
 "<body><div class=\"center\">"                                                                      CRLF\
 "<table border=\"0\" cellpadding=\"3\" width=\"600\">"                                              CRLF\
 "  <tr class=\"h\"><td>"                                                                            CRLF\
-"    <a href=\"http://www.0x50.org/\"><img border=\"0\" src=\"?logo\" alt=\"Cherokee Logo\" /></a>" CRLF\
+"    <a href=\"http://www.cherokee-project.com/\">"                                                 CRLF\
+"      <img border=\"0\" src=\"?logo\" alt=\"Cherokee Logo\" /></a>"                                CRLF\
 "    <h1 class=\"p\">Cherokee Version %s</h1>"                                                      CRLF\
 "  </td></tr>"                                                                                      CRLF\
 "</table><br />"

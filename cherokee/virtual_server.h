@@ -47,7 +47,7 @@
 typedef struct {
 	cherokee_list_t              list_entry;
 
-	cherokee_buffer_t            name;            /* Default name.   Eg: www.0x50.org */
+	cherokee_buffer_t            name;            /* Default name.   Eg: www.alobbs.com */
 	void                        *server_ref;      /* Ref to server */
 
 	cherokee_virtual_entries_t   entry;
