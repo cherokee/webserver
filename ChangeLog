@@ -1,3 +1,19 @@
+2006-11-01  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.h:
+	- move function prototype of
+	  cherokee_buffer_unescape_uri() near
+	  cherokee_buffer_escape_html.	
+
+	* cherokee/buffer.c: 
+        - move cherokee_buffer_unescape_uri()
+	  near cherokee_buffer_escape_html();
+	- move cherokee_buffer_cmp(), etc. up,
+	  before more general / helper functions;
+	- cherokee_buffer_escape_uri():
+	  - avoid a couple of jumps inside for loop
+	    for the most common cases.
+
 2006-10-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* README, cherokee/handler_server_info.c (PAGE_HEADER),
