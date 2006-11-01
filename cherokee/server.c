@@ -226,9 +226,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->log_flush_next   = 0;
 	n->log_flush_elapse = 10;
 
-	cherokee_logger_table_new (&n->loggers);
-	return_if_fail (n->loggers != NULL, ret_nomem);
-
 	/* TLS
 	 */
 	ret = cherokee_tls_init();
@@ -340,7 +337,6 @@ cherokee_server_free (cherokee_server_t *srv)
 	/* Attached objects
 	 */
 	cherokee_encoder_table_mrproper (&srv->encoders);
-	cherokee_logger_table_free (srv->loggers);
 
 #ifndef CHEROKEE_EMBEDDED
 	cherokee_mime_free (srv->mime);
@@ -1586,9 +1582,9 @@ cherokee_server_daemonize (cherokee_server_t *srv)
 
 
 ret_t 
-cherokee_server_get_active_conns (cherokee_server_t *srv, int *num)
+cherokee_server_get_active_conns (cherokee_server_t *srv, cuint_t *num)
 {
-	int              active = 0;
+	cuint_t          active = 0;
 	cherokee_list_t *thread;
 
 	/* Active connections number
@@ -1608,9 +1604,9 @@ cherokee_server_get_active_conns (cherokee_server_t *srv, int *num)
 
 
 ret_t 
-cherokee_server_get_reusable_conns (cherokee_server_t *srv, int *num)
+cherokee_server_get_reusable_conns (cherokee_server_t *srv, cuint_t *num)
 {
-	int              reusable = 0;
+	cuint_t          reusable = 0;
 	cherokee_list_t *thread, *i;
 
 	/* Reusable connections

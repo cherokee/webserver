@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "md5.h"
 #include "md5crypt.h"
-
+#include "util.h"
 
 /*
  * ----------------------------------------------------------------------------

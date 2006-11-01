@@ -835,8 +835,6 @@ encoder_table.h \
 encoder_table.c \
 logger.h \
 logger.c \
-logger_table.h \
-logger_table.c \
 thread.h \
 thread.c \
 module.h \

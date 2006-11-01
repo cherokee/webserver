@@ -1,3 +1,14 @@
+2006-11-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_server_info.c, cherokee/encoder_table.c: A few
+	minor warnings have been fixed.
+
+	* cherokee/logger_table.h, cherokee/logger_table.c,
+	cherokee/Makefile.embedded, cherokee/server-protected.h,
+	cherokee/Makefile.am (libcherokee_server_la_SOURCES),
+	cherokee/server.c: Logger table class is no longer
+	needed. Removed.
+
 2006-11-01  A.D.F  <adefacc@tin.it>
 
 	* cherokee/buffer.h:

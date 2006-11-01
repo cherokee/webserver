@@ -31,7 +31,6 @@ exts_table.o \
 connection.o \
 tdate_parse.o \
 config_node.o \
-logger_table.o \
 resolv_cache.o \
 fdpoll-poll.o \
 fdpoll-epoll.o \

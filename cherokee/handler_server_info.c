@@ -159,12 +159,6 @@ table_add_row_int (cherokee_buffer_t *buf, char *name, int value)
 }
 
 static void
-table_add_row_offset (cherokee_buffer_t *buf, char *name, unsigned long int value)
-{
-	cherokee_buffer_add_va (buf, "<tr><td class=\"e\">%s</td><td class=\"v\">" FMT_OFFSET "</td></tr>"CRLF, name, value);
-}
-
-static void
 add_uptime_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
 	unsigned int elapse = srv->bogo_now - srv->start_time;
@@ -254,8 +248,8 @@ build_server_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 static void
 build_connections_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
-	int active;
-	int reusable;
+	cuint_t active;
+	cuint_t reusable;
 	
 	cherokee_server_get_active_conns (srv, &active);
 	cherokee_server_get_reusable_conns (srv, &reusable);
@@ -296,14 +290,14 @@ build_modules_table_content_while (const char *key, void *value, void *params[])
 static void
 build_modules_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
-	int   loggers    = 0;
-	int   handlers   = 0;
-	int   encoders   = 0;
-	int   validators = 0;	   
-	int   generic    = 0;
-	void *params[]   = {buf, srv, &loggers, &handlers, &encoders, &validators, &generic};
+	cuint_t  loggers    = 0;
+	cuint_t  handlers   = 0;
+	cuint_t  encoders   = 0;
+	cuint_t  validators = 0;	   
+	cuint_t  generic    = 0;
+	void    *params[]   = {buf, srv, &loggers, &handlers, &encoders, &validators, &generic};
 
-	cherokee_table_while (&srv->loader, 
+	cherokee_table_while (&srv->loader.table, 
 			      (cherokee_table_while_func_t) build_modules_table_content_while, 
 			      params, NULL, NULL);
 

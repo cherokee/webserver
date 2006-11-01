@@ -47,7 +47,6 @@
 #include "dirs_table.h"
 #include "virtual_server.h"
 #include "encoder_table.h"
-#include "logger_table.h"
 #include "thread.h"
 #include "module_loader.h"
 #include "icons.h"
@@ -90,7 +89,6 @@ struct cherokee_server {
 
 	/* Modules
 	 */
-	cherokee_logger_table_t   *loggers;
 	cherokee_module_loader_t   loader;
 	cherokee_encoder_table_t   encoders;
 
