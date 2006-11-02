@@ -1,8 +1,20 @@
 2006-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (update_bogo_now): It have to use "timezone"
+	if the system doesn't support the gmtoff property.
+
+	* cherokee/main.c (BASIC_CONFIG): Now, it uses the new try_include
+	keyword. The -r parameter should work even if /etc/cherokee is not
+	in place.
+
+	* cherokee/config_node.c (cherokee_config_node_add): Added new
+	"try_include" clause.  If inclusion fails it'll okay.
+
 	* configure.in (HAVE_GNUTLS, HAVE_OPENSSL): There is no reason to
 	show such a fancy warning message is gnutls or openssl is not
 	found. Removed.
+
+	* configure.in: Added check for struct tm.tm_gmtoff
 
 2006-11-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 

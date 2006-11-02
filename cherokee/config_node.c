@@ -189,6 +189,8 @@ cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cheroke
 	 */
 	if (equal_str (key, "include")) {
 		return do_include (conf, val);
+	} else if (equal_str (key, "try_include")) {
+		do_include (conf, val);
 	}
 
 	do {

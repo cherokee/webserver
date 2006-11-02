@@ -54,7 +54,7 @@
 	"vserver!default!directory!/cherokee_themes!handler = file\n"                        \
 	"vserver!default!directory!/cherokee_themes!document_root = " CHEROKEE_THEMEDIR "\n" \
 	"vserver!default!directory!/cherokee_themes!priority = 3\n"                          \
-	"include = " CHEROKEE_CONFDIR "/mods-enabled\n"
+	"try_include = " CHEROKEE_CONFDIR "/mods-enabled\n"
 
 static cherokee_server_t  *srv           = NULL;
 static char               *config_file   = NULL;

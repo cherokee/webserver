@@ -1063,8 +1063,9 @@ cherokee_server_reinit (cherokee_server_t *srv)
 static void
 update_bogo_now (cherokee_server_t *srv)
 {
-	time_t       newtime;
-	static long *this_timezone = NULL;
+	char    sign;
+	cuint_t offset;
+	time_t  newtime;
 
 	/* Read the time
 	 */
@@ -1079,10 +1080,13 @@ update_bogo_now (cherokee_server_t *srv)
 	srv->bogo_now = newtime;
 	cherokee_localtime (&newtime, &srv->bogo_now_tm);
 
-	/* Update time string 
-	 */
-	if (unlikely (this_timezone == NULL))
-		this_timezone = cherokee_get_timezone_ref();
+#ifdef HAVE_STRUCT_TM_GMTOFF
+	sign = srv->bogo_now_tm.tm_gmtoff < 0 ? '-' : '+';
+	offset = abs(srv->bogo_now_tm.tm_gmtoff / 3600);
+#else
+	sign = timezone < 0 ? '-' : '+';
+	offset = abs(timezone / 3600);
+#endif
 	
 	cherokee_buffer_clean (&srv->bogo_now_string);
 	cherokee_buffer_add_va_fixed (&srv->bogo_now_string,
@@ -1094,8 +1098,7 @@ update_bogo_now (cherokee_server_t *srv)
 				      srv->bogo_now_tm.tm_hour,
 				      srv->bogo_now_tm.tm_min,
 				      srv->bogo_now_tm.tm_sec,
-				      srv->bogo_now_tm.tm_gmtoff < 0 ? '-' : '+',
-				      abs(srv->bogo_now_tm.tm_gmtoff / 3600));
+				      sign, offset);
 
 	CHEROKEE_RWLOCK_UNLOCK (&srv->bogo_now_mutex);      /* 2.- release */
 }
