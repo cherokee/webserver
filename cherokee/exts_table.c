@@ -50,12 +50,11 @@ cherokee_exts_table_mrproper (cherokee_exts_table_t *et)
 	return ret_ok;
 }
 
-
 ret_t 
 cherokee_exts_table_get (cherokee_exts_table_t *et, cherokee_buffer_t *requested_url, cherokee_config_entry_t *plugin_entry)
 {
-	ret_t                        ret;
-	char                        *dot;
+	ret_t                    ret;
+	char                    *dot;
 	cherokee_config_entry_t *entry;
 
 	dot = strrchr (requested_url->buf, '.');
@@ -91,6 +90,7 @@ cherokee_exts_table_add  (cherokee_exts_table_t *et, char *ext, cherokee_config_
 	 * plugin entry object.
 	 */
 	TRACE ("ADD: et %p table %p ext %s\n", et, &et->table, ext);
+
 	return cherokee_table_add (&et->table, ext, plugin_entry);
 }
 

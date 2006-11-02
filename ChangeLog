@@ -1,5 +1,10 @@
 2006-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/virtual_server.c (add_extensions): Bug fix. It was
+	clearing the extension table right before adding a new extension
+	and therefore it was keepling only the last one. QA tests showed
+	it up.
+
 	* cherokee/validator_ldap.c (LDAP_OPT_SUCCESS): Defines it if it
 	wasn't defined previously (like in Solaris).
 

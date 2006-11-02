@@ -53,17 +53,23 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->logger          = NULL;
 	n->logger_props    = NULL;
 
+	/* Virtual entries
+	 */
 	ret = cherokee_virtual_entries_init (&n->entry);
 	if (ret != ret_ok) return ret;
 
 	ret = cherokee_virtual_entries_init (&n->userdir_entry);
 	if (ret != ret_ok) return ret;
-
+	
+	/* Data transference 
+	 */
 	n->data.rx         = 0;
 	n->data.tx         = 0;
 	CHEROKEE_MUTEX_INIT(&n->data.rx_mutex, NULL);
 	CHEROKEE_MUTEX_INIT(&n->data.tx_mutex, NULL);
 
+	/* TLS related files
+	 */
 	cherokee_buffer_init (&n->server_cert);
 	cherokee_buffer_init (&n->server_key);
 	cherokee_buffer_init (&n->ca_cert);
@@ -537,9 +543,6 @@ add_extensions (cherokee_config_node_t *config, cherokee_virtual_server_t *vserv
 	if (unlikely (ret != ret_ok)) return ret;
 
 	ret = init_entry (vserver, config, entry);
-	if (ret != ret_ok) return ret;
-
-	ret = cherokee_exts_table_init (&ventry->exts);
 	if (ret != ret_ok) return ret;
 
 	for (;;) {
