@@ -858,11 +858,6 @@ then
 			   have_tls="gnutls"
 		else
 			   enable_tls=no
-			   AC_MSG_WARN([[
-		   ***
-		   *** libgnutls was not found. You may want to get it from
-		   *** ftp://ftp.gnutls.org/pub/gnutls/
-		   ***]])
 		fi
 fi
 
@@ -883,11 +878,6 @@ then
 			have_tls="openssl"
 		else
 			enable_tls=no
-			AC_MSG_WARN([[
-		   ***
-		   *** OpenSSL was not found. You may want to get it from
-		   *** http://www.openssl.org
-		   ***]])
 		fi
 fi
 

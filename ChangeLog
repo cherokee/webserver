@@ -1,3 +1,9 @@
+2006-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in (HAVE_GNUTLS, HAVE_OPENSSL): There is no reason to
+	show such a fancy warning message is gnutls or openssl is not
+	found. Removed.
+
 2006-11-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_server_info.c, cherokee/encoder_table.c: A few
