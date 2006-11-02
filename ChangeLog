@@ -1,5 +1,9 @@
 2006-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/util.c (cherokee_getpwnam, cherokee_getgrnam): Added a
+	new case inside the HAVE_GETPWNAM_R_4 in order to support the
+	_POSIX_PTHREAD_SEMANTICS prototype.
+
 	* cherokee/server.c (update_bogo_now): It have to use "timezone"
 	if the system doesn't support the gmtoff property.
 

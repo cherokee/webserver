@@ -1153,11 +1153,17 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 
 	return ret_ok;
 
-#elif HAVE_GETPWNAM_R_4
-	int re;
+#elif HAVE_GETPWNAM_R_4 
+	struct passwd * result;
 
-	re = getpwnam_r (name, pwbuf, buf, buflen);
+#ifdef _POSIX_PTHREAD_SEMANTICS
+	int re;
+	re = getpwnam_r (name, pwbuf, buf, buflen, &result);
 	if (re != 0) return ret_error;
+#else
+	result = getpwnam_r (name, pwbuf, buf, buflen);
+	if (result == NULL) return ret_error;
+#endif
 
 	return ret_ok;
 #endif
@@ -1223,10 +1229,16 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 	return ret_ok;
 
 #elif HAVE_GETGRNAM_R_4
-	int re;
+	struct group  *result;
 
-	re = getgrnam_r (name, grbuf, buf, buflen);
+#ifdef _POSIX_PTHREAD_SEMANTICS
+	int re;
+	re = getgrnam_r (name, grbuf, buf, buflen, &result);
 	if (re != 0) return ret_error;
+#else
+	result = getgrnam_r (name, grbuf, buf, buflen);
+	if (result == NULL) return ret_error;	
+#endif
 
 	return ret_ok;
 #endif
