@@ -1,5 +1,9 @@
 2006-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/126-SCGI.py (Test.Precondition),
+	qa/127-SCGI-Post.py (Test.Precondition): If the SCGI wasn't
+	installed an ugly error message was shown. Fixed.
+
 	* cherokee/virtual_server.c (add_extensions): Bug fix. It was
 	clearing the extension table right before adding a new extension
 	and therefore it was keepling only the last one. QA tests showed

@@ -51,5 +51,5 @@ class Test (TestBase):
         self.conf = CONF % (DIR, DIR, DIR, DIR, PORT, DIR, PYTHON_PATH, scgi_file, DIR)
 
     def Precondition (self):
-        re = os.system ("%s -c 'import scgi.scgi_server'" % (PYTHON_PATH)) 
+        re = os.system ("%s -c 'import scgi.scgi_server' 2>/dev/null" % (PYTHON_PATH)) 
         return (re == 0)
