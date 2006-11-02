@@ -118,7 +118,7 @@ cherokee_handler_cgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 
 	/* Virtual methods
 	 */
-	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_cgi_init;
+	MODULE(n)->init         = (module_func_init_t) cherokee_handler_cgi_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_cgi_free;
 	
 	/* Virtual methods: implemented by handler_cgi_base

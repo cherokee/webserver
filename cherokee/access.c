@@ -505,7 +505,8 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 			case ipv6:
 				re = (! IN6_ARE_ADDR_EQUAL (&SOCKET_ADDR_IPv6(sock)->sin6_addr, &IP_NODE(i)->ip.ip6));
 
-				// re = memcmp (&SOCKET_ADDR_IPv6(sock)->sin6_addr, &IP_NODE(i)->ip, 16);
+				/* re = memcmp (&SOCKET_ADDR_IPv6(sock)->sin6_addr, &IP_NODE(i)->ip, 16); */
+
 				/*
 				printf ("6 family=%d, ipv6=%d\n", SOCKET_ADDR_IPv6(sock)->sin6_family, ipv6);
 				printf ("6 port=%d\n",            SOCKET_ADDR_IPv6(sock)->sin6_port);

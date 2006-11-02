@@ -124,8 +124,8 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin, cherokee_fdpoll_t
 	 */
 #warning "Fix this!"
 
-//	ret = cherokee_downloader_set_fdpoll (downloader, admin->poll_ref, true);
-//	if (unlikely (ret != ret_ok)) return ret;
+/* 	ret = cherokee_downloader_set_fdpoll (downloader, admin->poll_ref, true); */
+/* 	if (unlikely (ret != ret_ok)) return ret; */
 	
 	ret = cherokee_downloader_set_url (&admin->downloader, admin->url_ref); 
 	if (unlikely (ret != ret_ok)) return ret;
@@ -133,8 +133,8 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin, cherokee_fdpoll_t
 	ret = cherokee_downloader_set_keepalive (downloader, true);
 	if (unlikely (ret != ret_ok)) return ret;
 
-//	ret = cherokee_downloader_connect_event (downloader, downloader_event_finish, on_downloader_finish, admin);
-//	if (unlikely (ret != ret_ok)) return ret;
+/* 	ret = cherokee_downloader_connect_event (downloader, downloader_event_finish, on_downloader_finish, admin); */
+/* 	if (unlikely (ret != ret_ok)) return ret; */
 
 	return ret_ok;
 }

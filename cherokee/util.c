@@ -1214,7 +1214,8 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 		ptr += gr_passwd_len + 1;
 	}
 
-	// TODO: Duplicate char **tmp->gr_mem
+	/* TODO: Duplicate char **tmp->gr_mem
+	 */
 
         CHEROKEE_MUTEX_UNLOCK (&__global_getgrnam_mutex);
 	return ret_ok;

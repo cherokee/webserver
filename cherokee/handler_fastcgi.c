@@ -45,7 +45,8 @@ props_free (cherokee_handler_fastcgi_props_t *props)
 	if (props->balancer != NULL) 
 		cherokee_balancer_free (props->balancer);
 
-	// TODO: Free the structure content
+	/* TODO: Free the structure content
+	 */
 	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));
 }
 

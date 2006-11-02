@@ -213,7 +213,7 @@ db_retrieve (void *ptr, gnutls_datum key)
 	gnutls_datum       new    = { NULL, 0 };
 	cherokee_socket_t *socket = SOCKET(ptr);
 
-	// printf ("db::retrieve\n");
+	/* printf ("db::retrieve\n"); */
 
 	if (unlikely (socket->vserver_ref == NULL)) {
 		PRINT_ERROR_S ("No virtual server reference\n");
@@ -238,7 +238,7 @@ db_remove (void *ptr, gnutls_datum key)
 	gnutls_datum      *n      = NULL;
 	cherokee_socket_t *socket = SOCKET(ptr);
 
-	// printf ("db::remove\n");
+	/* printf ("db::remove\n"); */
 
 	if (unlikely (socket->vserver_ref == NULL)) {
 		PRINT_ERROR_S ("No virtual server reference\n");
@@ -246,7 +246,7 @@ db_remove (void *ptr, gnutls_datum key)
 	}
 
 	cache = &socket->vserver_ref->session_cache;
-//	ret = cherokee_session_cache_del (cache, key.data, key.size);
+/*	ret = cherokee_session_cache_del (cache, key.data, key.size); */
 
 	ret = cherokee_table_del (cache, (char *)key.data, NULL);	
 	if (n != NULL)
@@ -262,7 +262,8 @@ db_store (void *ptr, gnutls_datum key, gnutls_datum data)
 	gnutls_datum      *n;
 	cherokee_table_t  *cache;
 	cherokee_socket_t *socket = SOCKET(ptr);
-	// printf ("db::store\n");
+
+	/* printf ("db::store\n"); */
 
 	if (socket->vserver_ref == NULL) {
 		PRINT_ERROR_S ("No virtual server reference\n");
@@ -276,8 +277,9 @@ db_store (void *ptr, gnutls_datum key, gnutls_datum data)
 
 	memcpy (n, &data, sizeof (gnutls_datum));
 
-//	ret = cherokee_session_cache_add (cache, key.data, key.size, data.data, data.size);
-//	cherokee_session_cache_add (cache, key
+/*	ret = cherokee_session_cache_add (cache, key.data, key.size, data.data, data.size);
+	cherokee_session_cache_add (cache, key */
+
 	ret = cherokee_table_add (cache, (char *)key.data, n);
 
 	return (ret == ret_ok) ? 0 : 1;

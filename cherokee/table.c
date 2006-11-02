@@ -33,7 +33,7 @@
 static int
 equal (void *avl_param, void *key, void *val)
 {
-//	printf ("equal (%s, %s) = %d\n", key, val, strcmp((const char *)key, (const char *)val));
+/*	printf ("equal (%s, %s) = %d\n", key, val, strcmp((const char *)key, (const char *)val)); */
 	return strcmp((const char *)key, (const char *)val);
 }
 
@@ -194,7 +194,9 @@ cherokee_table_len (cherokee_table_t *tab, size_t *len)
 static int
 foreach_wrapper (void *key, void *val, void *iter_arg)
 {
-	((cherokee_table_foreach_func_t)iter_arg) (key, val);
+	cherokee_table_foreach_func_t func = (cherokee_table_foreach_func_t)iter_arg;
+
+	func (key, val);
 	return 0;
 }
 

@@ -148,7 +148,7 @@ cherokee_config_entry_complete (cherokee_config_entry_t *entry, cherokee_config_
 		overwrite = true;
 	}
 
-//	printf ("same_type=%d, overwrite=%d, prio=%d\n", same_type, overwrite, main->priority);
+/* 	printf ("same_type=%d, overwrite=%d, prio=%d\n", same_type, overwrite, main->priority); */
 
 	/* If a temporary config_entry inherits from valid entry, it will
 	 * get references than mustn't be free'd, like 'user'. Take care.

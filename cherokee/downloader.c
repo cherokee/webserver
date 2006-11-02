@@ -427,7 +427,7 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 		if (downloader->post != NULL) {
 			ret = cherokee_post_walk_to_fd (downloader->post, downloader->socket.socket, NULL, NULL);
 
-//			ret = send_post (downloader);
+/*			ret = send_post (downloader); */
 /* 			ret = downloader_send_buffer (downloader, downloader->post_ref); */
 			if (unlikely(ret != ret_ok)) return ret;
 		}

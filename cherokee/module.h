@@ -50,6 +50,7 @@ typedef enum {
 
 /* Callback function prototipes
  */
+typedef void   * module_func_init_t;
 typedef ret_t (* module_func_new_t)       (void *);
 typedef ret_t (* module_func_free_t)      (void *);
 typedef void  (* module_func_get_name_t)  (void  *, const char **name);

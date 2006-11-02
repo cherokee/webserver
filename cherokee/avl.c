@@ -808,7 +808,7 @@ avl_get_span_by_key (avl_tree *tree, void *key, unsigned int *low, unsigned int 
 		/* search right */
 		right = avl_get_successor (node);
 		if (right == tree->root) {
-			// special case, tree->size == 1
+			/* special case, tree->size == 1 */
 			*low = i;
 			*high = i + 1;
 			return 0;
@@ -868,7 +868,7 @@ avl_get_span_by_two_keys (avl_tree * tree,
 		/* search right */
 		right = avl_get_successor (high_node);
 		if (right == tree->root) {
-			// special case, tree->size == 1
+			/* special case, tree->size == 1 */
 			j = i + 1;
 		} else {
 			while ((j <= tree->length) && (tree->compare_fun (tree->compare_arg, high_key, right->key) == 0)) {

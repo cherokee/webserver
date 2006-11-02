@@ -170,7 +170,6 @@ struct cherokee_server {
 	/* Another config files
 	 */
 	cherokee_config_node_t     config;
-//	char                      *config_file;
 	char                      *icons_file;
 
 	/* Performance

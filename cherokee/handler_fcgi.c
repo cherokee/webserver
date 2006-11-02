@@ -90,12 +90,12 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	len     = (header->contentLengthB0 | (header->contentLengthB1 << 8));
 	data    = inbuf->buf +  FCGI_HEADER_LEN;
 
-//	printf ("have %d, hdr=%d exp_len=%d pad=%d\n", inbuf->len, FCGI_HEADER_LEN, len, padding);
+/*	printf ("have %d, hdr=%d exp_len=%d pad=%d\n", inbuf->len, FCGI_HEADER_LEN, len, padding); */
 
 	/* Is the package complete?
 	 */
 	if (len + padding > inbuf->len - FCGI_HEADER_LEN) {
-//		printf ("Incomplete: %d < %d\n", len + padding, inbuf->len - FCGI_HEADER_LEN);
+/*		printf ("Incomplete: %d < %d\n", len + padding, inbuf->len - FCGI_HEADER_LEN); */
 		return ret_ok;
 	}
 
@@ -103,7 +103,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	 */
 	switch (type) {
 	case FCGI_STDERR: 
-//		printf ("READ:STDERR (%d): %s", len, data?data:"");
+/*		printf ("READ:STDERR (%d): %s", len, data?data:""); */
 
 		if (CONN_VSRV(conn)->logger != NULL) {
 			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
@@ -116,7 +116,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 		break;
 
 	case FCGI_STDOUT:
-//		printf ("READ:STDOUT eof=%d: %d", CGI_BASE(hdl)->got_eof, len);
+/*		printf ("READ:STDOUT eof=%d: %d", CGI_BASE(hdl)->got_eof, len); */
 		cherokee_buffer_add (outbuf, data, len);
 		break;
 
@@ -129,7 +129,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 			      (ending->appStatusB0 << 24));
 
 		HDL_CGI_BASE(hdl)->got_eof = true;
-//		printf ("READ:END");
+/*		printf ("READ:END"); */
 		break;
 
 	default:
@@ -137,7 +137,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	}
 
 	cherokee_buffer_move_to_begin (inbuf, len + FCGI_HEADER_LEN + padding);
-//	printf ("- FCGI quedan %d\n", inbuf->len);
+/*	printf ("- FCGI quedan %d\n", inbuf->len); */
 	return ret_eagain;
 }
 

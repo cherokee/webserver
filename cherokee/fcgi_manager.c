@@ -99,8 +99,8 @@ update_conn_list_lenght (cherokee_fcgi_manager_t *mgr, cuint_t id)
 		mgr->conn.len--;
 	}
 
-//	printf ("mgr->conn.id2conn[id].conn %p, mgr->conn.id2conn[id].eof %d -- use=%d\n",
-//		mgr->conn.id2conn[id].conn, mgr->conn.id2conn[id].eof, mgr->conn.len);
+/*	printf ("mgr->conn.id2conn[id].conn %p, mgr->conn.id2conn[id].eof %d -- use=%d\n",
+	mgr->conn.id2conn[id].conn, mgr->conn.id2conn[id].eof, mgr->conn.len); */
 }
 
 
@@ -294,7 +294,7 @@ process_package (cherokee_fcgi_manager_t *mgr, cherokee_buffer_t *inbuf)
 		break;
 
 	case FCGI_STDOUT:
-//		printf ("READ:STDOUT id=%d gen=%d eof=%d (%s): %d", id, hdl->generation, CGI_BASE(hdl)->got_eof, conn->query_string.buf, len);
+/* 		printf ("READ:STDOUT id=%d gen=%d eof=%d (%s): %d", id, hdl->generation, CGI_BASE(hdl)->got_eof, conn->query_string.buf, len); */
 		cherokee_buffer_add (outbuf, data, len);
 		break;
 
@@ -311,7 +311,7 @@ process_package (cherokee_fcgi_manager_t *mgr, cherokee_buffer_t *inbuf)
 
 		update_conn_list_lenght (mgr, id);
 
-//		printf ("READ:END id=%d gen=%d", id, hdl->generation);
+/* 		printf ("READ:END id=%d gen=%d", id, hdl->generation); */
 		break;
 
 	default:
@@ -320,7 +320,7 @@ process_package (cherokee_fcgi_manager_t *mgr, cherokee_buffer_t *inbuf)
 
 go_out:
 	cherokee_buffer_move_to_begin (inbuf, len + FCGI_HEADER_LEN + padding);
-//	printf ("- FCGI quedan %d\n", inbuf->len);
+/* 	printf ("- FCGI quedan %d\n", inbuf->len); */
 	return ret_eagain;
 
 error:

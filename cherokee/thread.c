@@ -1593,7 +1593,6 @@ step_MULTI_THREAD_TLS_block (cherokee_thread_t *thd, int fdwatch_msecs,
 {
 	int                     re;
 	ret_t                   ret;
-//	int                     unlock2 = 0;
 	int                     socket1;
 	int                     socket2;
 	pthread_mutex_t        *mutex1;
@@ -1895,7 +1894,7 @@ reactive_conn_from_polling (cherokee_thread_t *thd, cherokee_connection_t *conn)
 	if (del) 
 		cherokee_fdpoll_del (thd->fdpoll, conn->polling_fd);
 
-//	printf ("- reactive_conn_from_polling %p, multiple=%d del=%d\n", conn, conn->polling_multiple, del);
+/*	printf ("- reactive_conn_from_polling %p, multiple=%d del=%d\n", conn, conn->polling_multiple, del); */
 
 	cherokee_fdpoll_add (thd->fdpoll, socket->socket, socket->status);
 
@@ -1919,7 +1918,7 @@ cherokee_thread_deactive_to_polling (cherokee_thread_t *thd, cherokee_connection
 	if (multiple) 
 		add_fd = check_addition_multiple_fd (thd, fd);
 
-//	printf ("+ move_connection_to_polling %p, multiple=%d add=%d fd=%d\n", conn, multiple, add_fd, fd);
+/*	printf ("+ move_connection_to_polling %p, multiple=%d add=%d fd=%d\n", conn, multiple, add_fd, fd); */
 	
 	/* Remove the connection file descriptor and add the new one
 	 */
