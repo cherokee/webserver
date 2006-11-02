@@ -1,5 +1,14 @@
 2006-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/validator_ldap.c (LDAP_OPT_SUCCESS): Defines it if it
+	wasn't defined previously (like in Solaris).
+
+	* cherokee/validator_ldap.c (validate_dn): Takes care of
+	ldap_start_tls_s(), if the system doesn't support it, it won't use
+	it.
+
+	* configure.in: Added check for ldap_start_tls_s()
+
 	* cherokee/thread.c (process_active_connections):
 	conn->header.method was meant to be conn->header.version.  It was
 	using the wrong property.

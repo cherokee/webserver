@@ -35,6 +35,10 @@
 #define ENTRIES "validador,ldap"
 #define LDAP_DEFAULT_PORT 389
 
+#ifndef LDAP_OPT_SUCCESS
+# define LDAP_OPT_SUCCESS 0
+#endif
+
 
 static ret_t 
 props_free (cherokee_validator_ldap_props_t *props)
@@ -175,6 +179,7 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 	/* Secure connections
 	 */
 	if (props->tls) {
+#ifdef LDAP_OPT_X_TLS
 		if (! cherokee_buffer_is_empty (&props->ca_file)) {
 			re = ldap_set_option (NULL, LDAP_OPT_X_TLS_CACERTFILE, props->ca_file.buf);
 			if (re != LDAP_OPT_SUCCESS) {
@@ -183,6 +188,9 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 				return ret_error; 
 			}
 		}
+#else
+		PRINT_ERROR_S ("Can't StartTLS, it isn't supported by LDAP client libraries\n");
+#endif
 	}
 
 	/* Bind
@@ -261,11 +269,15 @@ validate_dn (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_props_t *p
 	if (re != LDAP_OPT_SUCCESS) goto error;
 	
 	if (props->tls) {
+#ifdef LDAP_HAVE_START_TLS_S
 		re = ldap_start_tls_s (conn, NULL,  NULL);
 		if (re != LDAP_OPT_SUCCESS) {
 			TRACE (ENTRIES, "Couldn't StartTLS\n");
 			goto error;
 		}
+#else
+		PRINT_ERROR_S ("Can't StartTLS, it isn't supported by LDAP client libraries\n");
+#endif
 	}
 
 	re = ldap_simple_bind_s (conn, dn, password);

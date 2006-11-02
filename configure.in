@@ -907,6 +907,11 @@ AC_ARG_WITH([ldap],
 if test "$want_ldap" = "yes"; then
        AC_CHECK_LIB(ldap, ldap_init, have_ldap_lib=yes, have_ldap_lib=no)
        AC_CHECK_HEADER(ldap.h, have_ldap_include=yes, have_ldap_include=no)
+
+	  AC_CHECK_LIB(ldap, ldap_start_tls_s, [
+		AC_DEFINE(LDAP_HAVE_START_TLS_S,, Define if you have ldap_start_tls_s)
+  	  ])
+
        if test "$have_ldap_lib $have_ldap_include" = "yes yes"; then
           have_ldap="yes"
        else
