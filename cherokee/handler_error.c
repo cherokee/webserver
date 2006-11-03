@@ -106,7 +106,7 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 		break;
 	case http_bad_request:
 		cherokee_buffer_add_str (buffer, 
-					 "Your browser sent a request that this server could not understand.");
+			"Your browser sent a request that this server could not understand.");
 
 		cherokee_buffer_escape_html (cnt->header.input_buffer, &escaped);
 		if (escaped == NULL)
@@ -118,44 +118,45 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 		}
 		break;
         case http_access_denied:
-		cherokee_buffer_add_str (buffer, "You have no access to the request URL");
+		cherokee_buffer_add_str (buffer,
+			"You have no access to the requested URL");
 		break;
 	case http_request_entity_too_large:
 		cherokee_buffer_add_str (buffer,
-					 "The length of request entity exceeds the capacity limit for this server.");
+			"The length of request entity exceeds the capacity limit for this server.");
 		break;
 	case http_request_uri_too_long:
 		cherokee_buffer_add_str (buffer,
-					 "The length of requested URL exceeds the capacity limit for this server.");
+			"The length of requested URL exceeds the capacity limit for this server.");
 		break;		
 	case http_range_not_satisfiable:
 		cherokee_buffer_add_str (buffer,
-					 "The requested range was not satisfiable.");
+			"The requested range was not satisfiable.");
 		break;		
 	case http_moved_permanently:
 	case http_moved_temporarily:
 		cherokee_buffer_add_va (buffer, 
-					"The document has moved <A HREF=\"%s\">here</A>.",
-					cnt->redirect.buf);
+			"The document has moved <A HREF=\"%s\">here</A>.",
+			cnt->redirect.buf);
 		break;
 	case http_unauthorized:
 		cherokee_buffer_add_str (buffer, 
-					 "This server could not verify that you are authorized to access the document "
-					 "requested.  Either you supplied the wrong credentials (e.g., bad password), "
-					 "or your browser doesn't understand how to supply the credentials required.");
+			"This server could not verify that you are authorized to access the requested URL.  "
+			"Either you supplied the wrong credentials (e.g., bad password), "
+			"or your browser doesn't know how to supply the credentials required.");
 		break;
 	case http_upgrade_required:
 		cherokee_buffer_add_str (buffer,
-					 "The requested resource can only be retrieved using SSL.  The server is "
-					 "willing to upgrade the current connection to SSL, but your client doesn't "
-					 "support it. Either upgrade your client, or try requesting the page "
-					 "using https://");
+			"The requested resource can only be retrieved using SSL.  The server is "
+			"willing to upgrade the current connection to SSL, but your client doesn't "
+			"support it. Either upgrade your client, or try requesting the page "
+			"using https://");
 		break;
 	default:
 		break;
 	}
 	   
-	/* Add page foot
+	/* Add page footer
 	 */
 	cherokee_buffer_add_str (buffer, "<p><hr>");	
 
@@ -181,9 +182,9 @@ cherokee_handler_error_init (cherokee_handler_error_t *hdl)
 	ret_t                  ret;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
-	/* Generate the error web page if needed. Some HTTP responses
-	 * codes should not include body because it's fobidden by the
-	 * RFC.
+	/* If needed then generate the error web page.
+	 * Some HTTP response codes should not include body
+	 * because it's forbidden by the RFC.
 	 */
 	if (http_code_with_body (conn->error_code)) {
 		ret = build_hardcoded_response_page (conn, hdl->content);
@@ -227,8 +228,8 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	switch (conn->error_code) {
 	case http_range_not_satisfiable:
 		/* The handler that attended the request has put the content 
-		 * lenght in conn->range_end in order to allow it to send the
-		 * right lenght to the client.
+		 * length in conn->range_end in order to allow it to send the
+		 * right length to the client.
 		 */
 		cherokee_buffer_add_va (buffer,
 				"Content-Range: bytes */"FMT_OFFSET CRLF,

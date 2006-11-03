@@ -1,3 +1,9 @@
+2006-11-03  A.D.F  <adefacc@tin.it>
+
+	* cherokee/handler_error.c: corrects mispellings in comments;
+	  indent fixed string only one tab beyond function names so that
+	  they are more readable; micro changes to http error strings.
+
 2006-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/126-SCGI.py (Test.Precondition),
