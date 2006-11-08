@@ -1,3 +1,14 @@
+2006-11-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in: Added a new --disable-epoll parameter. By default,
+	when it's cross compiling, it'll assume that epoll() works without
+	testing it (it cannot execute a test program to check it out), so
+	if your system doesn't support it, use the new --disable-epoll
+	flag.
+	
+	* configure.in: A few changes to make it work in cross compiling
+	environments. 
+
 2006-11-03  A.D.F  <adefacc@tin.it>
 
 	* cherokee/handler_error.c: corrects mispellings in comments;
