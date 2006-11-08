@@ -100,22 +100,22 @@ cherokee_socket_init (cherokee_socket_t *socket)
 	memset (&socket->client_addr, 0, sizeof(cherokee_sockaddr_t));
 	socket->client_addr_len = -1;
 
-	socket->socket      = -1;
-	socket->status      = socket_closed;
-	socket->is_tls      = non_TLS;
+	socket->socket          = -1;
+	socket->status          = socket_closed;
+	socket->is_tls          = non_TLS;
 
 #ifdef HAVE_TLS
-	socket->initialized = false;
-	socket->vserver_ref = NULL;
+	socket->initialized     = false;
+	socket->vserver_ref     = NULL;
 #endif
 
 #ifdef HAVE_GNUTLS
-	socket->session     = NULL;
+	socket->session         = NULL;
 #endif
 
 #ifdef HAVE_OPENSSL
-	socket->session     = NULL;
-	socket->ssl_ctx     = NULL;
+	socket->session         = NULL;
+	socket->ssl_ctx         = NULL;
 #endif
 
 	return ret_ok;
@@ -173,7 +173,7 @@ cherokee_socket_clean (cherokee_socket_t *socket)
 	/* Client address
 	 */
 	socket->client_addr_len = -1;
-	memset (&socket->client_addr, 0, sizeof(struct sockaddr));
+	memset (&socket->client_addr, 0, sizeof(cherokee_sockaddr_t));
 
 #ifdef HAVE_TLS
 	socket->initialized = false;
@@ -551,21 +551,30 @@ cherokee_socket_ntop (cherokee_socket_t *socket, char *dst, size_t cnt)
 ret_t 
 cherokee_socket_pton (cherokee_socket_t *socket, cherokee_buffer_t *host)
 {
-	int r;
+	int re;
 
-#ifdef HAVE_IPV6
-	if (SOCKET_AF(socket) == AF_INET6) {
-		r = inet_pton (AF_INET6, host->buf, &SOCKET_SIN_ADDR(socket));
-	} else 
-#endif
-
+	switch (SOCKET_AF(socket)) {
+	case AF_INET:
 #if defined(HAVE_INET_PTON)
-		r = inet_pton (AF_INET, host->buf, &SOCKET_SIN_ADDR(socket));
+		re = inet_pton (AF_INET, host->buf, &SOCKET_SIN_ADDR(socket));
+		if (re <= 0) return ret_error;
 #else		
-	r = inet_aton (host->buf, &SOCKET_SIN_ADDR(socket));
+		re = inet_aton (host->buf, &SOCKET_SIN_ADDR(socket));
+		if (re == 0) return ret_error;
 #endif
+		break;
+#ifdef HAVE_IPV6
+	case AF_INET6:
+		re = inet_pton (AF_INET6, host->buf, &SOCKET_SIN_ADDR(socket));
+		if (re <= 0) return ret_error;
+		break;
+#endif
+	default:
+		PRINT_ERROR ("ERROR: Unknown socket family: %d\n", SOCKET_AF(socket));
+		return ret_error;
+	}
 
-	return (r > 0) ? ret_ok : ret_error;
+	return ret_ok;
 }
 
 
@@ -587,6 +596,7 @@ cherokee_socket_accept (cherokee_socket_t *socket, int server_socket)
 
 	return ret_ok;
 }
+
 
 ret_t 
 cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockaddr_t *sa)
@@ -616,6 +626,7 @@ cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockad
 	SOCKET_FD(socket) = fd;
 	return ret_ok;
 }
+
 
 ret_t
 cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *sa)
@@ -652,16 +663,114 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 
 
 ret_t 
-cherokee_socket_set_client (cherokee_socket_t *sock, int type)
+cherokee_socket_set_client (cherokee_socket_t *sock, unsigned short int type)
 {
+	/* Create the socket
+	 */
 	sock->socket = socket (type, SOCK_STREAM, 0);
 	if (sock->socket < 0) {
 		return ret_error;
 	}
-	
-	SOCKET_AF(sock) = type;
+
+	/* Set the family length
+	 */
+	switch (type) {
+	case AF_INET:
+		sock->client_addr_len = sizeof (struct sockaddr_in);
+		memset (&sock->client_addr, 0, sock->client_addr_len);
+		break;
+#ifdef HAVE_IPV6
+	case AF_INET6:
+		sock->client_addr_len = sizeof (struct sockaddr_in6);
+		memset (&sock->client_addr, 0, sock->client_addr_len);
+		break;
+#endif
+	default:
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
+
+	/* Set the family 
+	 */
+	SOCKET_AF(sock) = type;	
+	return ret_ok;
+}
+
+
+static ret_t
+cherokee_bind_v4 (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_to)
+{
+	int   re;
+	ret_t ret;
+
+	SOCKET_ADDR_IPv4(sock)->sin_port = htons (port);
+
+	if (cherokee_buffer_is_empty (listen_to)) {
+		SOCKET_ADDR_IPv4(sock)->sin_addr.s_addr = INADDR_ANY;
+	} else{
+		ret = cherokee_socket_pton (sock, listen_to);
+		if (ret != ret_ok) return ret;
+	}
+
+	re = bind (SOCKET_FD(sock), SOCKET_ADDR_IPv4(sock), sock->client_addr_len);
+	if (re != 0) return ret_error;
 
 	return ret_ok;
+}
+
+
+static ret_t
+cherokee_bind_v6 (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_to)
+{
+	int   re;
+	ret_t ret;
+
+	SOCKET_ADDR_IPv6(sock)->sin6_port = htons(port);
+
+	if (cherokee_buffer_is_empty (listen_to)) {
+		SOCKET_ADDR_IPv6(sock)->sin6_addr = in6addr_any; 
+	} else{
+		ret = cherokee_socket_pton (sock, listen_to);
+		if (ret != ret_ok) return ret;
+	}
+
+	re = bind (SOCKET_FD(sock), SOCKET_ADDR_IPv6(sock), sock->client_addr_len);
+	if (re != 0) return ret_error;
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_socket_listen (cherokee_socket_t *socket, int backlog)
+{
+	int re;
+
+	re = listen (SOCKET_FD(socket), backlog);
+	if (re < 0) return ret_error;
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_socket_bind (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_to)
+{
+	/* Bind
+	 */
+	switch (SOCKET_AF(sock)) {
+	case AF_INET:
+		return cherokee_bind_v4 (sock, port, listen_to);
+#ifdef HAVE_IPV6
+	case AF_INET6:
+		return cherokee_bind_v6 (sock, port, listen_to);
+#endif
+	default:
+		break;
+	}
+	
+	SHOULDNT_HAPPEN;
+	return ret_error;
 }
 
 
@@ -671,7 +780,6 @@ cherokee_write (cherokee_socket_t *socket, const char *buf, int buf_len, size_t 
 	ssize_t len;
 
 	return_if_fail (buf != NULL, ret_error);
-
 
 	if (socket->is_tls == TLS) {
 #ifdef HAVE_GNUTLS
@@ -1315,6 +1423,31 @@ ret_t
 cherokee_socket_set_status (cherokee_socket_t *socket, cherokee_socket_status_t status)
 {
 	socket->status = status;
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_socket_set_nodelay (cherokee_socket_t *socket)
+{
+	int   re;
+	int   fd;
+	int   flags;
+
+	fd = SOCKET_FD(socket);
+
+#ifdef _WIN32
+	flags = 1;
+	re = ioctlsocket (fd, FIONBIO, (u_long)&flags);
+	if (re < 0) return ret_error;
+#else
+	flags = fcntl (fd, F_GETFL, 0);
+	if (unlikely (flags == -1)) return ret_error;
+	
+	re = fcntl (fd, F_SETFL, flags | O_NDELAY);
+	if (re < 0) return ret_error;
+#endif	
+
 	return ret_ok;
 }
 

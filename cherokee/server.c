@@ -102,8 +102,9 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* Sockets
 	 */
-	n->socket          = -1;
-	n->socket_tls      = -1;
+	cherokee_socket_init (&n->socket);
+	cherokee_socket_init (&n->socket_tls);
+
 	n->ipv6            = true;
 	n->fdpoll_method   = cherokee_poll_UNSET;
 
@@ -323,13 +324,14 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	/* File descriptors
 	 */
-	close (srv->socket);
+	cherokee_socket_close (&srv->socket);
+	cherokee_socket_mrproper (&srv->socket);
 
 
 #ifdef HAVE_TLS
-	if (srv->socket_tls != -1) {
-		close (srv->socket_tls);		
-	}
+	cherokee_socket_close (&srv->socket);
+	cherokee_socket_mrproper (&srv->socket);
+
 	CHEROKEE_MUTEX_DESTROY (&srv->accept_tls_mutex);
 #endif
 	CHEROKEE_MUTEX_DESTROY (&srv->accept_mutex);
@@ -427,7 +429,7 @@ cherokee_server_set_min_latency (cherokee_server_t *srv, int msecs)
 
 
 static ret_t
-set_server_socket_opts (int socket)
+set_server_fd_socket_opts (int socket)
 {
 	int           re;
 	int           on;
@@ -486,7 +488,7 @@ set_server_socket_opts (int socket)
 #endif
 
 	/* TODO:
-	 * Maybe add support for the FreeBSD accept filters:
+	 * It could be good to add support for the FreeBSD accept filters:
 	 * http://www.freebsd.org/cgi/man.cgi?query=accf_http
 	 */
 
@@ -495,86 +497,49 @@ set_server_socket_opts (int socket)
 
 
 static ret_t
-initialize_server_socket4 (cherokee_server_t *srv, unsigned short port, int *srv_socket_ret)
+initialize_server_socket4 (cherokee_server_t *srv, cherokee_socket_t *sock, unsigned short port)
 {
-	int re;
-	int srv_socket;
-	struct sockaddr_in sockaddr;
+	ret_t ret;
 
-	srv_socket = socket (AF_INET, SOCK_STREAM, 0);
-	if (srv_socket < 0) {
-		PRINT_ERROR_S ("Error creating IPv4 server socket\n");
-		exit(EXIT_CANT_CREATE_SERVER_SOCKET4);
-	}
+	/* Create the socket, and set its properties
+	 */
+	ret = cherokee_socket_set_client (sock, AF_INET);
+	if (ret != ret_ok) return ret;
 
-	*srv_socket_ret = srv_socket;
-	set_server_socket_opts(srv_socket);
+	ret = set_server_fd_socket_opts (SOCKET_FD(sock));
+	if (ret != ret_ok) return ret;
 
 	/* Bind the socket
 	 */
-	memset (&sockaddr, 0, sizeof(struct sockaddr_in));
-
-	sockaddr.sin_port   = htons (port);
-	sockaddr.sin_family = AF_INET;
-
-	if (cherokee_buffer_is_empty (&srv->listen_to)) {
-		sockaddr.sin_addr.s_addr = INADDR_ANY; 
-	} else {
-#ifdef HAVE_INET_PTON
-		re = inet_pton (sockaddr.sin_family, srv->listen_to.buf, &sockaddr.sin_addr);
-		if (re == -1) {
-			PRINT_ERROR ("inet_pton errno=%d\n", errno);
-		}
-#else
-		/* IPv6 needs inet_pton; inet_addr() doesn't support it.
-		 */
-		sockaddr.sin_addr.s_addr = inet_addr (srv->listen_to.buf);
-#endif
-	}
-
-	re = bind (srv_socket, (struct sockaddr *)&sockaddr, sizeof(struct sockaddr_in));
-	return (re == 0) ? ret_ok : ret_error;
+	ret = cherokee_socket_bind (sock, port, &srv->listen_to);
+	if (ret != ret_ok) return ret;
+	
+	return ret_ok;
 }
 
 
 static ret_t
-initialize_server_socket6 (cherokee_server_t *srv, unsigned short port, int *srv_socket_ret)
+initialize_server_socket6 (cherokee_server_t *srv, cherokee_socket_t *sock, unsigned short port)
 {
-#ifdef HAVE_IPV6
-	int re;
-	int srv_socket;
-	struct sockaddr_in6 sockaddr;
+#ifndef HAVE_IPV6
+	return ret_no_sys;
+#else
+	ret_t ret;
 
-	/* Create the socket
+	/* Create the socket, and set its properties
 	 */
-	srv_socket = socket (AF_INET6, SOCK_STREAM, 0);
-	if (srv_socket < 0) {
-		PRINT_ERROR_S ("Error creating IPv6 server socket.. switching to IPv4\n");
-		srv->ipv6 = false;
-		return ret_error;
-	}
+	ret = cherokee_socket_set_client (sock, AF_INET6);
+	if (ret != ret_ok) return ret;
 
-	*srv_socket_ret = srv_socket;
-	set_server_socket_opts(srv_socket);
+	ret = set_server_fd_socket_opts (SOCKET_FD(sock));
+	if (ret != ret_ok) return ret;
 
 	/* Bind the socket
 	 */
-	memset (&sockaddr, 0, sizeof(struct sockaddr_in6));
-
-	sockaddr.sin6_port   = htons (port);  /* Transport layer port #   */
-	sockaddr.sin6_family = AF_INET6;      /* AF_INET6                 */
-
-	if (cherokee_buffer_is_empty (&srv->listen_to)) {
-		sockaddr.sin6_addr = in6addr_any; 
-	} else {
-		re = inet_pton (sockaddr.sin6_family, srv->listen_to.buf, &sockaddr.sin6_addr);
-		if (re == -1) {
-			PRINT_ERROR ("inet_pton errno=%d\n", errno);
-		}
-	}
-
-	re = bind (srv_socket, (struct sockaddr *)&sockaddr, sizeof(struct sockaddr_in6));
-	return (re == 0) ? ret_ok : ret_error;
+	ret = cherokee_socket_bind (sock, port, &srv->listen_to);
+	if (ret != ret_ok) return ret;
+	
+	return ret_ok;
 #endif
 }
 
@@ -590,11 +555,15 @@ print_banner (cherokee_server_t *srv)
 	 */
 	cherokee_buffer_add_va (n, "Cherokee Web Server %s: ", PACKAGE_VERSION);
 
-	if (srv->socket_tls != -1 && srv->socket != -1) {
+	if (cherokee_socket_configured (&srv->socket) &&
+	    cherokee_socket_configured (&srv->socket_tls))
+	{
 		cherokee_buffer_add_va (n, "Listening on ports %d and %d", srv->port, srv->port_tls);
 	} else {
-		cherokee_buffer_add_va (n, "Listening on port %d", 
-					(srv->socket != -1)? srv->port : srv->port_tls);
+		if (cherokee_socket_configured (&srv->socket)) 
+			cherokee_buffer_add_va (n, "Listening on port %d", srv->port);
+		else 
+			cherokee_buffer_add_va (n, "Listening on port %d", srv->port_tls);
 	}
 
 	if (srv->chrooted) {
@@ -669,50 +638,40 @@ print_banner (cherokee_server_t *srv)
 
 
 static ret_t
-initialize_server_socket (cherokee_server_t *srv, unsigned short port, int *srv_socket_ptr)
+initialize_server_socket (cherokee_server_t *srv, cherokee_socket_t *socket, unsigned short port)
 {
-	int   flags;
-	int   srv_socket;
-	ret_t ret = ret_error;
+	ret_t ret;
 
+	/* Initialize the socket
+	 */
 #ifdef HAVE_IPV6
 	if (srv->ipv6) {
-		ret = initialize_server_socket6 (srv, port, srv_socket_ptr);
+		ret = initialize_server_socket6 (srv, socket, port);
 	}
+#else
+	ret = ret_not_found;
 #endif
 
 	if ((srv->ipv6 == false) || (ret != ret_ok)) {
-		ret = initialize_server_socket4 (srv, port, srv_socket_ptr);
+		ret = initialize_server_socket4 (srv, socket, port);
 	}
 
-	if (ret != 0) {
-		uid_t uid = getuid();
-		gid_t gid = getgid();
-
-		PRINT_ERROR ("Can't bind() socket (port=%d, UID=%d, GID=%d)\n", port, uid, gid);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Can't bind() socket (port=%d, UID=%d, GID=%d)\n", 
+			     port, getuid(), getgid());
 		return ret_error;
 	}
 	   
-	srv_socket = *srv_socket_ptr;
-
 	/* Set no-delay mode
 	 */
-#ifdef _WIN32
-	flags = 1;
-	ret = ioctlsocket (srv_socket, FIONBIO, (u_long)&flags);
-#else
-	flags = fcntl (srv_socket, F_GETFL, 0);
-	return_if_fail (flags != -1, ret_error);
-	
-	ret = fcntl (srv_socket, F_SETFL, flags | O_NDELAY);
-	return_if_fail (ret >= 0, ret_error);
-#endif	
+	ret = cherokee_socket_set_nodelay (socket);
+	if (ret != ret_ok) return ret;
 
 	/* Listen
 	 */
-	ret = listen (srv_socket, srv->listen_queue);
-	if (ret < 0) {
-		close (srv_socket);
+	ret = cherokee_socket_listen (socket, srv->listen_queue);
+	if (ret != ret_ok) {
+		cherokee_socket_close (socket);
 		return ret_error;
 	}
 
@@ -740,11 +699,11 @@ initialize_server_threads (cherokee_server_t *srv)
 	 * add the server socket to the fdpoll of the sync thread
 	 */
 #ifndef HAVE_PTHREAD
-	ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, srv->socket, 0);
+	ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, S_SOCKET_FD(srv->socket), 0);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	if (srv->tls_enabled) {
-		ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, srv->socket_tls, 0);
+		ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, S_SOCKET_FD(srv->socket_tls), 0);
 		if (unlikely(ret < ret_ok)) return ret;
 	}
 #endif
@@ -802,8 +761,8 @@ init_vservers_tls (cherokee_server_t *srv)
 
 	/* Initialize the server TLS socket
 	 */
-	if (srv->socket_tls == -1) {
-		ret = initialize_server_socket (srv, srv->port_tls, &srv->socket_tls);
+	if (! cherokee_socket_is_connected (&srv->socket_tls)) {
+		ret = initialize_server_socket (srv, &srv->socket_tls, srv->port_tls);
 		if (unlikely(ret != ret_ok)) return ret;
 	}
 
@@ -903,8 +862,8 @@ cherokee_server_init (cherokee_server_t *srv)
 	/* If the server has a previous server socket opened, Eg:
 	 * because a SIGHUP, it shouldn't init the server socket.
 	 */
-	if (srv->socket == -1) {
-		ret = initialize_server_socket (srv, srv->port, &srv->socket);
+	if (! cherokee_socket_is_connected (&srv->socket)) {
+		ret = initialize_server_socket (srv, &srv->socket, srv->port);
 		if (unlikely(ret != ret_ok)) return ret;
 	}
 
@@ -986,9 +945,7 @@ cherokee_server_init (cherokee_server_t *srv)
 
 	/* Print the server banner
 	 */
-	print_banner (srv);
-
-	return ret_ok;
+	return print_banner (srv);
 }
 
 

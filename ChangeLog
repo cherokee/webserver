@@ -1,5 +1,23 @@
 2006-11-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/thread.c (cherokee_thread_step_SINGLE_THREAD)
+	(cherokee_thread_step_MULTI_THREAD): A few changes to adapt the
+	code to latest changes.
+
+	* cherokee/server-protected.h: the sockets aren no longer
+	int's. Now, they are cherokee_socket_t objects, which makes much
+	more sense and will allow us run the server on Unix sockets.
+
+	* cherokee/socket.h,
+	cherokee/socket.c (cherokee_socket_set_nodelay): Added new method.
+	(cherokee_socket_listen): Added new method.
+	(cherokee_socket_bind): Addned new method.
+	(cherokee_socket_set_client): Almost rewritten.
+
+	* cherokee/socket.h (cherokee_socket_is_connected,
+	cherokee_socket_is_connected): Added two new macros, and did a bit
+	of clean up.
+
 	* configure.in: Added a new --disable-epoll parameter. By default,
 	when it's cross compiling, it'll assume that epoll() works without
 	testing it (it cannot execute a test program to check it out), so

@@ -1405,7 +1405,7 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd, cherokee_boolean_t d
 
 	/* Reset the server socket
 	 */
-	cherokee_fdpoll_reset (thd->fdpoll, srv->socket);
+	cherokee_fdpoll_reset (thd->fdpoll, S_SOCKET_FD(srv->socket));
 
 	/* If the thread is full of connections, it should not
 	 * get new connections
@@ -1426,12 +1426,12 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd, cherokee_boolean_t d
 	if (re <= 0) goto out;
 
 	do {
-		re = __accept_from_server (thd, srv->socket, non_TLS);
+		re = __accept_from_server (thd, S_SOCKET_FD(srv->socket), non_TLS);
 	} while (__should_accept_more_from_server (thd, re));
 
 	if (srv->tls_enabled) {
 		do {
-			re = __accept_from_server (thd, srv->socket_tls, TLS);
+			re = __accept_from_server (thd, S_SOCKET_FD(srv->socket_tls), TLS);
 		} while (__should_accept_more_from_server (thd, re));
 	}
 
@@ -1714,12 +1714,12 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 		    (thd->active_list_num == 0) &&
 		    (thd->polling_list_num == 0) && (!dont_block)) {
 			step_MULTI_THREAD_TLS_block (thd, fdwatch_msecs, 
-						     srv->socket, &THREAD_SRV(thd)->accept_mutex, 	
-						     srv->socket_tls, &THREAD_SRV(thd)->accept_tls_mutex);
+						     S_SOCKET_FD(srv->socket), &THREAD_SRV(thd)->accept_mutex, 	
+						     S_SOCKET_FD(srv->socket_tls), &THREAD_SRV(thd)->accept_tls_mutex);
 		} else {
 			step_MULTI_THREAD_TLS_nonblock (thd, fdwatch_msecs, 
-							srv->socket, &THREAD_SRV(thd)->accept_mutex, 	
-							srv->socket_tls, &THREAD_SRV(thd)->accept_tls_mutex);
+							S_SOCKET_FD(srv->socket), &THREAD_SRV(thd)->accept_mutex, 	
+							S_SOCKET_FD(srv->socket_tls), &THREAD_SRV(thd)->accept_tls_mutex);
 		}
 		
 		goto out;
@@ -1731,9 +1731,9 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 	if ((thd->exit == false) &&
 	    (thd->active_list_num == 0) && 
 	    (thd->polling_list_num == 0) && (!dont_block)) {
-		step_MULTI_THREAD_block (thd, srv->socket, &THREAD_SRV(thd)->accept_mutex, fdwatch_msecs);
+		step_MULTI_THREAD_block (thd, S_SOCKET_FD(srv->socket), &THREAD_SRV(thd)->accept_mutex, fdwatch_msecs);
 	} else {
-		step_MULTI_THREAD_nonblock (thd, srv->socket, &THREAD_SRV(thd)->accept_mutex, fdwatch_msecs);
+		step_MULTI_THREAD_nonblock (thd, S_SOCKET_FD(srv->socket), &THREAD_SRV(thd)->accept_mutex, fdwatch_msecs);
 	}
 	
 out:

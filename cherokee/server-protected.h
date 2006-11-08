@@ -107,9 +107,8 @@ struct cherokee_server {
 
 	/* Main socket
 	 */
-	int                        socket;
-	int                        socket_tls;
-	cherokee_poll_type_t       fdpoll_method;
+	cherokee_socket_t          socket;
+	cherokee_socket_t          socket_tls;
 
 #ifdef HAVE_PTHREAD
 	pthread_mutex_t            accept_mutex;
@@ -123,6 +122,7 @@ struct cherokee_server {
  	int                        ncpus;
 	int                        max_fds;
 	uint32_t                   system_fd_limit;
+	cherokee_poll_type_t       fdpoll_method;
 
 	/* Networking config
 	 */

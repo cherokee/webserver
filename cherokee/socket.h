@@ -99,14 +99,14 @@ typedef enum {
 /* Socket address
  */
 typedef union {
-	struct sockaddr    sa;
-	struct sockaddr_in sa_in;
+	struct sockaddr         sa;
+	struct sockaddr_in      sa_in;
 
 #ifdef HAVE_SOCKADDR_UN
-	struct sockaddr_un sa_un;
+	struct sockaddr_un      sa_un;
 #endif
 #ifdef HAVE_SOCKADDR_IN6
-	struct sockaddr_in6 sa_in6;
+	struct sockaddr_in6     sa_in6;
 #endif
 #ifdef HAVE_SOCKADDR_STORAGE
 	struct sockaddr_storage sa_stor;
@@ -117,33 +117,36 @@ typedef union {
 /* Socket
  */
 typedef struct {
-	int                       socket;
-	cherokee_sockaddr_t       client_addr;
-	socklen_t                 client_addr_len;
-	cherokee_socket_status_t  status;
-	cherokee_socket_type_t    is_tls;
+	int                        socket;
+	cherokee_sockaddr_t        client_addr;
+	socklen_t                  client_addr_len;
+	cherokee_socket_status_t   status;
+	cherokee_socket_type_t     is_tls;
 
 #ifdef HAVE_TLS
 	cherokee_boolean_t         initialized;
 	cherokee_virtual_server_t *vserver_ref;
 #endif
 #ifdef HAVE_GNUTLS	
-	gnutls_session  session;
+	gnutls_session             session;
 #endif
 #ifdef HAVE_OPENSSL
-	SSL            *session;
-	SSL_CTX        *ssl_ctx;  /* Only client socket */
+	SSL                       *session;
+	SSL_CTX                   *ssl_ctx;  /* Only client socket */
 #endif
 } cherokee_socket_t;
 
 
+#define S_SOCKET(s)            ((cherokee_socket_t)(s))
+#define S_SOCKET_FD(s)         (S_SOCKET(s).socket)
+
 #define SOCKET(s)              ((cherokee_socket_t *)(s))
 #define SOCKET_FD(s)           (SOCKET(s)->socket)
-#define SOCKET_AF(s)           (SOCKET(s)->client_addr.sa.sa_family)
 #define SOCKET_ADDR(s)         (SOCKET(s)->client_addr)
+#define SOCKET_AF(s)           (SOCKET(s)->client_addr.sa.sa_family)
 #define SOCKET_ADDR_UNIX(s)    (SOCKET(s)->client_addr.sa_un)
-#define SOCKET_ADDR_IPv4(s)    ((struct sockaddr_in  *)&SOCKET(s)->client_addr)
-#define SOCKET_ADDR_IPv6(s)    ((struct sockaddr_in6 *)&SOCKET(s)->client_addr)
+#define SOCKET_ADDR_IPv4(s)    ((struct sockaddr_in  *) &SOCKET_ADDR(s))
+#define SOCKET_ADDR_IPv6(s)    ((struct sockaddr_in6 *) &SOCKET_ADDR(s))
 #define SOCKET_STATUS(s)       (SOCKET(s)->status)
 
 #define SOCKET_SIN_PORT(s)     (SOCKET(s)->client_addr.sa_in.sin_port)
@@ -161,35 +164,41 @@ typedef struct {
                                     } while (0)
 #endif
 
+#define cherokee_socket_configured(c)    (SOCKET_FD(c) >= 0)
+#define cherokee_socket_is_connected(c)  (cherokee_socket_configured(c) && \
+					  (SOCKET_STATUS(c) != socket_closed))
 
-ret_t cherokee_socket_new           (cherokee_socket_t **socket);
-ret_t cherokee_socket_free          (cherokee_socket_t  *socket);
+ret_t cherokee_socket_new               (cherokee_socket_t **socket);
+ret_t cherokee_socket_free              (cherokee_socket_t  *socket);
 
-ret_t cherokee_socket_init          (cherokee_socket_t *socket);
-ret_t cherokee_socket_mrproper      (cherokee_socket_t *socket);
-ret_t cherokee_socket_clean         (cherokee_socket_t *socket);
+ret_t cherokee_socket_init              (cherokee_socket_t *socket);
+ret_t cherokee_socket_mrproper          (cherokee_socket_t *socket);
+ret_t cherokee_socket_clean             (cherokee_socket_t *socket);
 
-ret_t cherokee_socket_init_tls        (cherokee_socket_t *socket, cherokee_virtual_server_t *vserver);
-ret_t cherokee_socket_init_client_tls (cherokee_socket_t *socket);
+ret_t cherokee_socket_init_tls          (cherokee_socket_t *socket, cherokee_virtual_server_t *vserver);
+ret_t cherokee_socket_init_client_tls   (cherokee_socket_t *socket);
 
-ret_t cherokee_socket_close         (cherokee_socket_t *socket);
-ret_t cherokee_socket_shutdown      (cherokee_socket_t *socket, int how);
-ret_t cherokee_socket_accept        (cherokee_socket_t *socket, int server_socket);
-ret_t cherokee_socket_set_client    (cherokee_socket_t *socket, int type);
+ret_t cherokee_socket_close             (cherokee_socket_t *socket);
+ret_t cherokee_socket_shutdown          (cherokee_socket_t *socket, int how);
+ret_t cherokee_socket_accept            (cherokee_socket_t *socket, int server_socket);
 
-ret_t cherokee_socket_write         (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t *written);
-ret_t cherokee_socket_read          (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t count, size_t *read);
-ret_t cherokee_socket_sendfile      (cherokee_socket_t *socket, int fd, size_t size, off_t *offset, ssize_t *sent);
-ret_t cherokee_socket_connect       (cherokee_socket_t *socket);
+ret_t cherokee_socket_set_client        (cherokee_socket_t *socket, unsigned short int type);
+ret_t cherokee_socket_bind              (cherokee_socket_t *socket, int port, cherokee_buffer_t *listen_to);
+ret_t cherokee_socket_listen            (cherokee_socket_t *socket, int backlog);
 
+ret_t cherokee_socket_write             (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t *written);
+ret_t cherokee_socket_read              (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t count, size_t *read);
+ret_t cherokee_socket_sendfile          (cherokee_socket_t *socket, int fd, size_t size, off_t *offset, ssize_t *sent);
+ret_t cherokee_socket_connect           (cherokee_socket_t *socket);
+
+ret_t cherokee_socket_set_nodelay       (cherokee_socket_t *socket);
 ret_t cherokee_socket_has_block_timeout (cherokee_socket_t *socket);
 ret_t cherokee_socket_set_block_timeout (cherokee_socket_t *socket, cuint_t timeout);
 
-ret_t cherokee_socket_ntop          (cherokee_socket_t *socket, char *buf, size_t buf_size);
-ret_t cherokee_socket_pton          (cherokee_socket_t *socket, cherokee_buffer_t *buf);
-ret_t cherokee_socket_gethostbyname (cherokee_socket_t *socket, cherokee_buffer_t *hostname);
-ret_t cherokee_socket_set_status    (cherokee_socket_t *socket, cherokee_socket_status_t status);
-
+ret_t cherokee_socket_ntop              (cherokee_socket_t *socket, char *buf, size_t buf_size);
+ret_t cherokee_socket_pton              (cherokee_socket_t *socket, cherokee_buffer_t *buf);
+ret_t cherokee_socket_gethostbyname     (cherokee_socket_t *socket, cherokee_buffer_t *hostname);
+ret_t cherokee_socket_set_status        (cherokee_socket_t *socket, cherokee_socket_status_t status);
 
 /* Low level functions
  */
