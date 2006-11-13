@@ -63,7 +63,6 @@
 # include <openssl/rand.h>
 #endif
 
-
 #include "buffer.h"
 #include "virtual_server.h"
 
@@ -76,6 +75,10 @@
 #  else
 #    define CHE_INET_ADDRSTRLEN 16
 #  endif
+#endif
+
+#ifndef AF_LOCAL
+# define AF_LOCAL AF_UNIX
 #endif
 
 
@@ -142,12 +145,13 @@ typedef struct {
 
 #define SOCKET(s)              ((cherokee_socket_t *)(s))
 #define SOCKET_FD(s)           (SOCKET(s)->socket)
-#define SOCKET_ADDR(s)         (SOCKET(s)->client_addr)
 #define SOCKET_AF(s)           (SOCKET(s)->client_addr.sa.sa_family)
-#define SOCKET_ADDR_UNIX(s)    (SOCKET(s)->client_addr.sa_un)
+#define SOCKET_STATUS(s)       (SOCKET(s)->status)
+
+#define SOCKET_ADDR(s)         (SOCKET(s)->client_addr)
+#define SOCKET_ADDR_UNIX(s)    ((struct sockaddr_un  *) &SOCKET_ADDR(s))
 #define SOCKET_ADDR_IPv4(s)    ((struct sockaddr_in  *) &SOCKET_ADDR(s))
 #define SOCKET_ADDR_IPv6(s)    ((struct sockaddr_in6 *) &SOCKET_ADDR(s))
-#define SOCKET_STATUS(s)       (SOCKET(s)->status)
 
 #define SOCKET_SIN_PORT(s)     (SOCKET(s)->client_addr.sa_in.sin_port)
 #define SOCKET_SIN_ADDR(s)     (SOCKET(s)->client_addr.sa_in.sin_addr)

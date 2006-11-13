@@ -250,7 +250,6 @@ AC_SEARCH_LIBS(bind, socket)
 AC_SEARCH_LIBS(listen, socket)
 AC_SEARCH_LIBS(setsockopt, socket)
 
-
 dnl
 dnl Check for fd events inspect functions
 dnl

@@ -105,6 +105,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 	cherokee_socket_init (&n->socket);
 	cherokee_socket_init (&n->socket_tls);
 
+	cherokee_buffer_init (&n->unix_socket);
+
 	n->ipv6            = true;
 	n->fdpoll_method   = cherokee_poll_UNSET;
 
@@ -324,6 +326,8 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	/* File descriptors
 	 */
+	cherokee_buffer_mrproper (&srv->unix_socket);
+
 	cherokee_socket_close (&srv->socket);
 	cherokee_socket_mrproper (&srv->socket);
 
@@ -545,6 +549,28 @@ initialize_server_socket6 (cherokee_server_t *srv, cherokee_socket_t *sock, unsi
 
 
 static ret_t
+initialize_server_socket_unix (cherokee_server_t *srv, cherokee_socket_t *sock, unsigned short port)
+{
+#ifndef AF_LOCAL
+	return ret_no_sys;
+#else
+	ret_t ret;
+
+	/* Create the socket, and set its properties
+	 */
+	ret = cherokee_socket_set_client (sock, AF_LOCAL);
+	if (ret != ret_ok) return ret;
+
+	/* Bind the socket
+	 */
+	ret = cherokee_socket_bind (sock, port, &srv->listen_to);
+	if (ret != ret_ok) return ret;
+	
+	return ret_ok;
+#endif
+}
+
+static ret_t
 print_banner (cherokee_server_t *srv)
 {
 	char *p;
@@ -644,21 +670,33 @@ initialize_server_socket (cherokee_server_t *srv, cherokee_socket_t *socket, uns
 
 	/* Initialize the socket
 	 */
+	ret = ret_not_found;
+
+#ifdef AF_LOCAL
+	if (! cherokee_buffer_is_empty (&srv->unix_socket)) {
+		ret = initialize_server_socket_unix (srv, socket, port);		
+	}
+#endif
+
 #ifdef HAVE_IPV6
-	if (srv->ipv6) {
+	if (srv->ipv6 && (ret != ret_ok)) {
 		ret = initialize_server_socket6 (srv, socket, port);
 	}
 #else
 	ret = ret_not_found;
 #endif
 
-	if ((srv->ipv6 == false) || (ret != ret_ok)) {
+	if (ret != ret_ok) {
 		ret = initialize_server_socket4 (srv, socket, port);
 	}
 
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Can't bind() socket (port=%d, UID=%d, GID=%d)\n", 
-			     port, getuid(), getgid());
+		if (cherokee_buffer_is_empty (&srv->unix_socket)) 
+			PRINT_ERROR ("Can't bind() socket (port=%d, UID=%d, GID=%d)\n", 
+				     port, getuid(), getgid());
+		else
+			PRINT_ERROR ("Can't bind() socket (unix=%s, UID=%d, GID=%d)\n", 
+				     srv->unix_socket.buf, getuid(), getgid());
 		return ret_error;
 	}
 	   
@@ -1306,6 +1344,10 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "keepalive_max_requests")) {
 		srv->keepalive_max = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "unix_socket")) {
+		cherokee_buffer_clean (&srv->unix_socket);
+		cherokee_buffer_add_buffer (&srv->unix_socket, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "panic_action")) {
 		cherokee_buffer_clean (&srv->panic_action);
