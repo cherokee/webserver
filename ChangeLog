@@ -1,3 +1,50 @@
+2006-11-13  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.c:
+        - remove redundant spaces in blank lines;
+
+	- add a couple of unlikely(pbuf == NULL)
+	  for failed allocations;
+
+	- fix realloc() handling in order to avoid a memory leak;
+	  if realloc returns NULL then the original pointer
+	  to memory content is not touched and it is still valid
+	  (no free happens);
+	  NOTE: I don't think this is a real issue because
+	  usually it never happens on PCs, anyway as in theory
+	  it _may_ happen (maybe only on some micro-embedded-system),
+	  it's better to handle it properly;
+
+        - remove cherokee_buffer_replace(),
+	  it looks like a stub function and it is not used by anybody;
+
+        - optimize cherokee_buffer_replace_string(),
+	  if substring is not found in "buf" or if resulting length is 0
+	  then there is no need to do something (copy / alloc memory).	
+
+	* cherokee/sendfile.c:
+        - add a new constant MAX_SF_BLK_SIZE
+	  (max. sendfile block size)
+	  to limit size of data sent by each sendfile call
+	  because this can improve a lot things on small
+	  or old systems (FreeBSD 4.x, Linux 2.2, etc.);
+	  NOTE: right now default is set to 4 MB
+	        which should be good even for monster systems
+	        (i.e. up to 10-100 GB / sec. of disk I/O).
+	  NOTE: maybe in the near future we will add a new parameter
+	        in configuration file to set the value
+	        at runtime / startup;
+
+        - cherokee_socket_sendfile():
+	  - if size of data to be sent is 0 then return
+	    without calling sendfile;
+
+	  - limit size of data to MAX_SF_BLK_SIZE;
+
+	  - fix FreeBSD return error handling,
+	    only (re) variable has to be tested for error value,
+	    return ret_eagain only if errno == EAGAIN && *sent == 0.
+	
 2006-11-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/thread.c (cherokee_thread_step_SINGLE_THREAD)

@@ -94,6 +94,16 @@ extern int32_t sendfile (int out_fd, int in_fd, int32_t *offset, uint32_t count)
 #include "virtual_server.h"
 
 
+/* Max. sendfile block size (bytes): limiting size of data sent by
+ * each sendfile call may improve responsiveness, reduce memory
+ * pressure, prevent blocking calls, etc.
+ * 
+ * NOTE: try to reduce block size (down to 64 KB) on small or old
+ * systems and see if something improves under heavy load.
+ */
+#define MAX_SF_BLK_SIZE		(65536 * 64)	/* limit size of block size */
+
+
 ret_t
 cherokee_socket_init (cherokee_socket_t *socket)
 {
@@ -685,6 +695,11 @@ cherokee_socket_set_client (cherokee_socket_t *sock, unsigned short int type)
 		memset (&sock->client_addr, 0, sock->client_addr_len);
 		break;
 #endif
+#ifdef AF_LOCAL
+	case AF_LOCAL:
+		memset (&sock->client_addr, 0, sizeof (struct sockaddr_un));
+		break;
+#endif		
 	default:
 		SHOULDNT_HAPPEN;
 		return ret_error;
@@ -741,13 +756,18 @@ cherokee_bind_v6 (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_t
 }
 
 
-ret_t 
-cherokee_socket_listen (cherokee_socket_t *socket, int backlog)
+static ret_t
+cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 {
 	int re;
 
-	re = listen (SOCKET_FD(socket), backlog);
-	if (re < 0) return ret_error;
+	strncpy (SOCKET_SUN_PATH (socket), listen_to->buf, sizeof(SOCKET_SUN_PATH (socket)) -1);
+	sock->client_addr_len = sizeof(SOCKET_ADDR_UNIX(sock)->sun_family) + listen_to->len;
+
+	mktemp (SOCKET_SUN_PATH (socket));
+
+	re = bind (SOCKET_FD(sock), SOCKET_ADDR_UNIX(sock), sock->client_addr_len);
+	if (re != 0) return ret_error;
 
 	return ret_ok;
 }
@@ -765,12 +785,28 @@ cherokee_socket_bind (cherokee_socket_t *sock, int port, cherokee_buffer_t *list
 	case AF_INET6:
 		return cherokee_bind_v6 (sock, port, listen_to);
 #endif
+#ifdef AF_LOCAL
+	case AF_LOCAL:
+		return cherokee_bind_local (sock, listen_to);
+#endif
 	default:
 		break;
 	}
 	
 	SHOULDNT_HAPPEN;
 	return ret_error;
+}
+
+
+ret_t 
+cherokee_socket_listen (cherokee_socket_t *socket, int backlog)
+{
+	int re;
+
+	re = listen (SOCKET_FD(socket), backlog);
+	if (re < 0) return ret_error;
+
+	return ret_ok;
 }
 
 
@@ -1073,6 +1109,18 @@ cherokee_socket_read (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t 
 ret_t 
 cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t *offset, ssize_t *sent)
 {
+	/* If there is nothing to send then return now,
+	 * this maybe needed in some systems (i.e. *BSD)
+	 * because value 0 may have special meanings.
+	 */
+	if (size == 0)
+		return ret_ok;
+
+	/* Limit size of data that has to be sent.
+	 */
+	if (size > MAX_SF_BLK_SIZE)
+		size = MAX_SF_BLK_SIZE;
+
 #if defined(LINUX_SENDFILE_API) || defined(HAVE_SENDFILE64)
 
 	/* Linux sendfile
@@ -1102,7 +1150,7 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 
 #elif HAVE_SENDFILE_BROKEN
 
-	/* Some Linux 2.4 kernels doesn't support sendfile in a LFS
+	/* Some Linux 2.4 kernels don't support sendfile in a LFS
 	 * environment.
 	 */
 	return ret_no_sys;
@@ -1126,6 +1174,7 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 	hdtrl.iov_base = NULL;
 	hdtrl.iov_len  = 0;
 
+	*sent = 0;
 
 	/* FreeBSD sendfile: in_fd and out_fd are reversed
 	 *
@@ -1144,11 +1193,20 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 
 	}  while (re == -1 && errno == EINTR);
 
-	if (*sent < 0) {
-		if (errno == EAGAIN) {
-			return ret_eagain;
+	if (re == -1) {
+		switch (errno) {
+		case ENOSYS:
+			return ret_no_sys;
+		case EAGAIN:
+			if (*sent < 1)
+				return ret_eagain;
+
+			/* else it's ok, something has been sent.
+			 */
+			break;
+		default:
+			return ret_error;
 		}
-		return ret_error;
 	}
 	*offset = *offset + *sent;
 
@@ -1198,9 +1256,11 @@ cherokee_socket_gethostbyname (cherokee_socket_t *socket, cherokee_buffer_t *hos
 		SHOULDNT_HAPPEN;
 		return ret_no_sys;
 #else
-		SOCKET_ADDR_UNIX(socket).sun_family = AF_UNIX;
 		memset ((char*) SOCKET_SUN_PATH (socket), 0, sizeof (SOCKET_ADDR_UNIX(socket)));
+
+		SOCKET_ADDR_UNIX(socket)->sun_family = AF_UNIX;
 		strncpy (SOCKET_SUN_PATH (socket), hostname->buf, hostname->len);
+
 		return ret_ok;
 #endif
 	}
@@ -1216,7 +1276,7 @@ cherokee_socket_connect (cherokee_socket_t *socket)
 
 	if (SOCKET_AF(socket) == AF_UNIX) {
 #ifndef _WIN32
-		r = connect (SOCKET_FD(socket), (struct sockaddr *) &SOCKET_ADDR_UNIX(socket), sizeof(SOCKET_ADDR_UNIX(socket)));
+		r = connect (SOCKET_FD(socket), (struct sockaddr *) SOCKET_ADDR_UNIX(socket), sizeof(SOCKET_ADDR_UNIX(socket)));
 #else
 		SHOULDNT_HAPPEN;
 		return ret_no_sys;
