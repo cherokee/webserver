@@ -198,11 +198,11 @@ cherokee_virtual_server_have_tls (cherokee_virtual_server_t *vserver)
 #ifndef HAVE_TLS
 	return ret_not_found;
 #endif
-	if (cherokee_buffer_is_empty (&vserver->server_cert))
+	if (! cherokee_buffer_is_empty (&vserver->server_cert))
 		return ret_ok;
-	if (cherokee_buffer_is_empty (&vserver->server_key))
+	if (! cherokee_buffer_is_empty (&vserver->server_key))
 		return ret_ok;
-	if (cherokee_buffer_is_empty (&vserver->ca_cert))
+	if (! cherokee_buffer_is_empty (&vserver->ca_cert))
 		return ret_ok;
 
 	return ret_not_found;

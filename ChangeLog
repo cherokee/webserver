@@ -1,5 +1,8 @@
 2006-11-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/virtual_server.c (cherokee_virtual_server_have_tls):
+	Bug fixed. It was returning a wrong value here.
+
 	* cherokee/socket.c (cherokee_bind_local): Fixed.
 
 	* cherokee/socket.c (cherokee_socket_sendfile): Added initial
