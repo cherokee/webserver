@@ -141,7 +141,7 @@ typedef struct {
 
 
 #define S_SOCKET(s)            ((cherokee_socket_t)(s))
-#define S_SOCKET_FD(s)         (S_SOCKET(s).socket)
+#define S_SOCKET_FD(s)         (s.socket)
 
 #define SOCKET(s)              ((cherokee_socket_t *)(s))
 #define SOCKET_FD(s)           (SOCKET(s)->socket)
@@ -155,6 +155,7 @@ typedef struct {
 
 #define SOCKET_SIN_PORT(s)     (SOCKET(s)->client_addr.sa_in.sin_port)
 #define SOCKET_SIN_ADDR(s)     (SOCKET(s)->client_addr.sa_in.sin_addr)
+
 #define SOCKET_SUN_PATH(s)     (SOCKET(s)->client_addr.sa_un.sun_path)
 
 #define SOCKET_ADDRESS_IPv4(s) (SOCKET_ADDR_IPv4(s)->sin_addr.s_addr)

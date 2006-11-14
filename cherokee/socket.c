@@ -762,10 +762,14 @@ cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 {
 	int re;
 
-	strncpy (SOCKET_SUN_PATH (socket), listen_to->buf, sizeof(SOCKET_SUN_PATH (socket)) -1);
+	if ((listen_to->len <= 0) ||
+	    (listen_to->len >= sizeof(SOCKET_SUN_PATH(sock))))
+		return ret_error;
+
+	memcpy (SOCKET_SUN_PATH(sock), listen_to->buf, listen_to->len + 1);
 	sock->client_addr_len = sizeof(SOCKET_ADDR_UNIX(sock)->sun_family) + listen_to->len;
 
-	mktemp (SOCKET_SUN_PATH (socket));
+	mktemp (SOCKET_SUN_PATH(sock));
 
 	re = bind (SOCKET_FD(sock), SOCKET_ADDR_UNIX(sock), sock->client_addr_len);
 	if (re != 0) return ret_error;
@@ -1158,9 +1162,21 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 
 #elif SOLARIS_SENDFILE_API
 
-	/* TODO!!
-	 */
-	return ret_no_sys;
+	do {
+		*sent = sendfile (SOCKET_FD(socket),     /* int   out_fd */
+				  fd,                    /* int    in_fd */
+				  offset,                /* off_t   *off */
+				  size);                 /* size_t   len */
+	} while ((*sent == -1) && (errno == EINTR));
+
+	if (*sent < 0) {
+		switch (errno) {
+		case EAFNOSUPPORT: return ret_no_sys;
+		case EAGAIN:       return ret_eagain;
+		}
+		
+		return ret_error;
+	}
 
 #elif FREEBSD_SENDFILE_API
 	int            re;

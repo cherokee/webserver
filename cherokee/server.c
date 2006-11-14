@@ -563,7 +563,7 @@ initialize_server_socket_unix (cherokee_server_t *srv, cherokee_socket_t *sock, 
 
 	/* Bind the socket
 	 */
-	ret = cherokee_socket_bind (sock, port, &srv->listen_to);
+	ret = cherokee_socket_bind (sock, -1, &srv->unix_socket);
 	if (ret != ret_ok) return ret;
 	
 	return ret_ok;
@@ -573,91 +573,91 @@ initialize_server_socket_unix (cherokee_server_t *srv, cherokee_socket_t *sock, 
 static ret_t
 print_banner (cherokee_server_t *srv)
 {
-	char *p;
-	char *method;
-	CHEROKEE_NEW(n,buffer);
+	char             *p;
+	char             *method;
+	cherokee_buffer_t n = CHEROKEE_BUF_INIT;
 
 	/* First line
 	 */
-	cherokee_buffer_add_va (n, "Cherokee Web Server %s: ", PACKAGE_VERSION);
+	cherokee_buffer_add_va (&n, "Cherokee Web Server %s: ", PACKAGE_VERSION);
 
 	if (cherokee_socket_configured (&srv->socket) &&
 	    cherokee_socket_configured (&srv->socket_tls))
 	{
-		cherokee_buffer_add_va (n, "Listening on ports %d and %d", srv->port, srv->port_tls);
+		cherokee_buffer_add_va (&n, "Listening on ports %d and %d", srv->port, srv->port_tls);
 	} else {
 		if (cherokee_socket_configured (&srv->socket)) 
-			cherokee_buffer_add_va (n, "Listening on port %d", srv->port);
+			cherokee_buffer_add_va (&n, "Listening on port %d", srv->port);
 		else 
-			cherokee_buffer_add_va (n, "Listening on port %d", srv->port_tls);
+			cherokee_buffer_add_va (&n, "Listening on port %d", srv->port_tls);
 	}
 
 	if (srv->chrooted) {
-		cherokee_buffer_add_str (n, ", chrooted");
+		cherokee_buffer_add_str (&n, ", chrooted");
 	}
 
 	/* TLS / SSL
 	 */
 	if (srv->tls_enabled) {
-#if defined(HAVE_GNUTLS)
-		cherokee_buffer_add_str (n, ", with TLS support via GNUTLS");
-#elif defined(HAVE_OPENSSL)
-		cherokee_buffer_add_str (n, ", with TLS support via OpenSSL");
+#ifdef HAVE_GNUTLS
+		cherokee_buffer_add_str (&n, ", with TLS support via GNUTLS");
+#elif HAVE_OPENSSL
+		cherokee_buffer_add_str (&n, ", with TLS support via OpenSSL");
 #endif
 	} else {
-		cherokee_buffer_add_str (n, ", TLS disabled");
+		cherokee_buffer_add_str (&n, ", TLS disabled");
 	}
 
 	/* IPv6
 	 */
 #ifdef HAVE_IPV6
 	if (srv->ipv6) {
-		cherokee_buffer_add_str (n, ", IPv6 enabled");		
+		cherokee_buffer_add_str (&n, ", IPv6 enabled");		
 	} else
 #endif
-		cherokee_buffer_add_str (n, ", IPv6 disabled");
+		cherokee_buffer_add_str (&n, ", IPv6 disabled");
 
 	/* Polling method
 	 */
 	cherokee_fdpoll_get_method_str (srv->main_thread->fdpoll, &method);
-	cherokee_buffer_add_va (n, ", using %s", method);
+	cherokee_buffer_add_va (&n, ", using %s", method);
 
 	/* File descriptor limit
 	 */
-	cherokee_buffer_add_va (n, ", %d fds limit", srv->system_fd_limit);
+	cherokee_buffer_add_va (&n, ", %d fds limit", srv->system_fd_limit);
 
 	/* Threading stuff
 	 */
 	if (srv->thread_num <= 1) {
-		cherokee_buffer_add_str (n, ", single thread");
+		cherokee_buffer_add_str (&n, ", single thread");
 	} else {
-		cherokee_buffer_add_va (n, ", %d threads", srv->thread_num);
-		cherokee_buffer_add_va (n, ", %d fds in each", srv->system_fd_limit / (srv->thread_num));	
+		cherokee_buffer_add_va (&n, ", %d threads", srv->thread_num);
+		cherokee_buffer_add_va (&n, ", %d fds in each", srv->system_fd_limit / (srv->thread_num));	
 
 		switch (srv->thread_policy) {
 #ifdef HAVE_PTHREAD
 		case SCHED_FIFO:
-			cherokee_buffer_add_str (n, ", FIFO scheduling policy");
+			cherokee_buffer_add_str (&n, ", FIFO scheduling policy");
 			break;
 		case SCHED_RR:
-			cherokee_buffer_add_str (n, ", RR scheduling policy");
+			cherokee_buffer_add_str (&n, ", RR scheduling policy");
 			break;
 #endif
 		default:
-			cherokee_buffer_add_str (n, ", standard scheduling policy");
+			cherokee_buffer_add_str (&n, ", standard scheduling policy");
 			break;
 		}
 	}
 
 	/* Print it!
 	 */
-	for (p = n->buf+TERMINAL_WIDTH; p < n->buf+n->len; p+=75) {
+	for (p = n.buf+TERMINAL_WIDTH; p < n.buf+n.len; p+=75) {
 		while (*p != ',') p--;
 		*p = '\n';
 	}
 
-	printf ("%s\n", n->buf);
-	cherokee_buffer_free (n);
+	printf ("%s\n", n.buf);
+	cherokee_buffer_mrproper (&n);
 	
 	return ret_ok;
 }

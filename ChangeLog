@@ -1,3 +1,13 @@
+2006-11-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.c (cherokee_bind_local): Fixed.
+
+	* cherokee/socket.c (cherokee_socket_sendfile): Added initial
+	Solaris implementation.
+
+	* cherokee/server.c (print_banner): Not it uses a buffer rather
+	than a *buffer.
+
 2006-11-13  A.D.F  <adefacc@tin.it>
 
 	* cherokee/buffer.c:
