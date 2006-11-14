@@ -1,5 +1,10 @@
 2006-11-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/078-AccessAny.py (CONF): Added priority entry.
+
+	* cherokee/access.c (parse_netmask): Added exception for 0 bits
+	long masks. Added a few traces as well.
+
 	* cherokee/virtual_server.c (cherokee_virtual_server_have_tls):
 	Bug fixed. It was returning a wrong value here.
 
