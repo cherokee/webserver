@@ -90,7 +90,7 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 	props = PROP_COMMON(*_props);
 
 	ret = cherokee_handler_file_configure (conf, srv, (cherokee_module_props_t **)&props->props_file);
-	if (ret != ret_ok) return ret;
+	if ((ret != ret_ok) && (ret != ret_deny)) return ret;
 
 	return cherokee_handler_dirlist_configure (conf, srv, (cherokee_module_props_t **)&props->props_dirlist);
 }

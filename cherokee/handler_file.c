@@ -78,7 +78,7 @@ cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t
 			props->use_cache = atoi (subconf->val.buf);
 		} else {
 			PRINT_MSG ("ERROR: Handler file: Unknown key: '%s'\n", subconf->key.buf);
-			return ret_error;
+			return ret_deny;
 		}
 	}
 

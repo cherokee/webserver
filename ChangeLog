@@ -1,3 +1,15 @@
+2006-11-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/113-HeaderFile.py, qa/114-HeaderFile2.py: Fixed. There were a
+	couple of TODO flags here.
+
+	* cherokee/handler_common.c (cherokee_handler_common_configure):
+	Handle ret_deny.  The key may be managed by dirlist rather than by
+	file.
+
+	* cherokee/handler_file.c (cherokee_handler_file_configure):
+	Return ret_deny if it finds an unknown configuration entry.
+
 2006-11-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/078-AccessAny.py (CONF): Added priority entry.
