@@ -1,5 +1,7 @@
 2006-11-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (print_banner): Added compilation date.
+
 	* qa/113-HeaderFile.py, qa/114-HeaderFile2.py: Fixed. There were a
 	couple of TODO flags here.
 

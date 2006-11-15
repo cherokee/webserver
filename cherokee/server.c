@@ -579,7 +579,7 @@ print_banner (cherokee_server_t *srv)
 
 	/* First line
 	 */
-	cherokee_buffer_add_va (&n, "Cherokee Web Server %s: ", PACKAGE_VERSION);
+	cherokee_buffer_add_va (&n, "Cherokee Web Server %s (%s): ", PACKAGE_VERSION, __DATE__);
 
 	if (cherokee_socket_configured (&srv->socket) &&
 	    cherokee_socket_configured (&srv->socket_tls))
