@@ -688,16 +688,16 @@ initialize_server_socket (cherokee_server_t *srv, cherokee_socket_t *socket, uns
 
 	if (ret != ret_ok) {
 		ret = initialize_server_socket4 (srv, socket, port);
-	}
 
-	if (ret != ret_ok) {
-		if (cherokee_buffer_is_empty (&srv->unix_socket)) 
-			PRINT_ERROR ("Can't bind() socket (port=%d, UID=%d, GID=%d)\n", 
-				     port, getuid(), getgid());
-		else
-			PRINT_ERROR ("Can't bind() socket (unix=%s, UID=%d, GID=%d)\n", 
-				     srv->unix_socket.buf, getuid(), getgid());
-		return ret_error;
+		if (ret != ret_ok) {
+			if (! cherokee_buffer_is_empty (&srv->unix_socket)) 
+				PRINT_ERROR ("Can't bind() socket (unix=%s, UID=%d, GID=%d)\n", 
+					     srv->unix_socket.buf, getuid(), getgid());
+			else
+				PRINT_ERROR ("Can't bind() socket (port=%d, UID=%d, GID=%d)\n", 
+					     port, getuid(), getgid());
+			return ret_error;
+		}
 	}
 	   
 	/* Set no-delay mode

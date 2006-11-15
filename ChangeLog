@@ -3,6 +3,7 @@
 	* themes/default_header.html: Added "generator" meta entry.
 
 	* cherokee/server.c (print_banner): Added compilation date.
+	(initialize_server_socket): Little clean up.
 
 	* qa/113-HeaderFile.py, qa/114-HeaderFile2.py: Fixed. There were a
 	couple of TODO flags here.
