@@ -1225,7 +1225,7 @@ get_range (cherokee_connection_t *conn, char *ptr, int ptr_len)
 	}
 	tmp[num_len] = '\0';
 	if (num_len != 0) {
-		conn->range_start = atoll (tmp);
+		conn->range_start = strtoll (tmp, (char **)NULL, 10);
 		if (conn->range_start < 0) {
 			return ret_error;
 		}
@@ -1251,7 +1251,7 @@ get_range (cherokee_connection_t *conn, char *ptr, int ptr_len)
 			num_len++;
 		}
 		tmp[num_len] = '\0';
-		conn->range_end = atoll (tmp);
+		conn->range_end = strtoll (tmp, (char **)NULL, 10);
 		if (conn->range_end < 1){
 			return ret_error;
 		}

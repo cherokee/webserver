@@ -1,3 +1,18 @@
+2006-11-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.h: Inclusion of arpa/inet.h has been moved after
+	the inclusion of netinet/in.h.
+
+	* cherokee/fdpoll-kqueue.c: Included sys/types.h. Needed by
+	FreeBSD.
+
+	* cherokee/macros.h: Added stdlib.h inclusion.
+
+	* cherokee/handler_cgi_base.c (parse_header),
+	cherokee/connection.c (get_range): atoll() calls have been
+	replaced by strtoll() calls. It was failing on FreeBSD because of
+	this.
+
 2006-11-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* themes/default_header.html: Added "generator" meta entry.

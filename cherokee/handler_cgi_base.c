@@ -663,7 +663,7 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
 			cherokee_buffer_add (&tmp, begin+16, end - (begin+16));
-			cgi->content_length = atoll (tmp.buf);
+			cgi->content_length = strtoll (tmp.buf, (char **)NULL, 10);
 			cherokee_buffer_mrproper (&tmp);
 
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);

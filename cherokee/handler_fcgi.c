@@ -292,6 +292,8 @@ cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 ret_t 
 cherokee_handler_fcgi_free (cherokee_handler_fcgi_t *hdl)
 {
+	TRACE (ENTRIES, "fcgi handler free: %p\n", hdl);
+
 	cherokee_socket_close (&hdl->socket);
 	cherokee_socket_mrproper (&hdl->socket);
 
