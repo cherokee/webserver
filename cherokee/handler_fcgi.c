@@ -165,7 +165,7 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	ret_t                    ret;
 	size_t                   read = 0;
 	cherokee_handler_fcgi_t *fcgi = HDL_FCGI(cgi);
-
+	
 	ret = cherokee_socket_read (&fcgi->socket, &fcgi->write_buffer, DEFAULT_READ_SIZE, &read);
 
 	switch (ret) {
@@ -279,6 +279,8 @@ cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 	n->post_len    = 0;
 	
 	cherokee_socket_init (&n->socket);
+	cherokee_socket_set_nodelay (&n->socket);
+
 	cherokee_buffer_init (&n->write_buffer);
 	cherokee_buffer_ensure_size (&n->write_buffer, 512);
 
@@ -520,6 +522,8 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 	}
 
 	TRACE (ENTRIES, "Connected sucessfully try=%d, fd=%d\n", try, hdl->socket.socket);
+
+	cherokee_fd_set_nonblocking (SOCKET_FD(&hdl->socket));
 	return ret_ok;
 }
 
@@ -532,9 +536,18 @@ do_send (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 	
 	ret = cherokee_socket_write (&hdl->socket, buffer, &written);
-	if (ret != ret_ok) {
+	printf ("send ret %d\n", ret);
+	switch (ret) {
+	case ret_ok:
+		return ret_ok;
+	case ret_eagain:
+		cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), HANDLER_CONN(hdl), 
+						     hdl->socket.socket, 1, false);
+		return ret_eagain;
+	default:
+		printf ("Error? %d\n", ret);
 		conn->error_code = http_bad_gateway;
-		return ret;
+		return ret_error;
 	}
 	
 	cherokee_buffer_move_to_begin (buffer, written);

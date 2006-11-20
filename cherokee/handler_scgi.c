@@ -278,6 +278,8 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 	}
 	
  	TRACE (ENTRIES, "connected fd=%d\n", hdl->socket.socket); 
+
+	cherokee_fd_set_nonblocking (SOCKET_FD(&hdl->socket));
  	return ret_ok; 
 }
 

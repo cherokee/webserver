@@ -1,3 +1,11 @@
+2006-11-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_scgi.c (connect_to_server),
+	cherokee/fcgi_manager.c (reconnect), cherokee/handler_fcgi.c
+	(connect_to_server): Socket connecting the server with the
+	application server must be turned non-blocking right after being
+	accepted. Fixed.
+
 2006-11-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/socket.h: Inclusion of arpa/inet.h has been moved after

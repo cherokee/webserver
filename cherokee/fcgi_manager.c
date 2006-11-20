@@ -189,6 +189,8 @@ reconnect (cherokee_fcgi_manager_t *mgr, cherokee_thread_t *thd, cherokee_boolea
 	cherokee_fd_set_nonblocking (mgr->socket.socket);
 
 	TRACE (ENTRIES, "Connected sucessfully try=%d, fd=%d\n", try, mgr->socket.socket);
+
+	cherokee_fd_set_nonblocking (SOCKET_FD(&mgr->socket));
 	return ret_ok;
 }
 
