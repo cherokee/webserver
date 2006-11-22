@@ -209,10 +209,11 @@ cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cheroke
 		child = search_child (current, &tmp);
 		if (child == NULL) {
 			child = add_new_child (current, &tmp);
+			if (child == NULL) return ret_error;
+		}
 
-			if (final) {
-				cherokee_buffer_add_buffer (&child->val, val);
-			}
+		if (final) {
+			cherokee_buffer_add_buffer (&child->val, val);
 		}
 
 		/* Prepare for next step
