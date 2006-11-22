@@ -83,7 +83,7 @@ cherokee_post_set_len (cherokee_post_t *post, size_t len)
 		char *ptr;
 		char  template[64];
 		
-		strncpy (template, "/tmp/cherokee_post_XXXXXX", 64); 
+		strncpy (template, "/tmp/cherokee_post_XXXXXX", sizeof(template)); 
 		
 		/* Generate a unique name
 		 */

@@ -1,5 +1,9 @@
 2006-11-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_fcgi.c (do_send): Post handling was
+	broken. Actually, I broke it with another commit a couple of days
+	ago. It's working again.
+
 	* cherokee/config_node.c (cherokee_config_node_add): Fixes bug
 	#104. It was messing up the configuration tree if the entries were
 	not sorted.

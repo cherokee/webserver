@@ -536,16 +536,14 @@ do_send (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 	
 	ret = cherokee_socket_write (&hdl->socket, buffer, &written);
-	printf ("send ret %d\n", ret);
 	switch (ret) {
 	case ret_ok:
-		return ret_ok;
+		break;
 	case ret_eagain:
 		cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), HANDLER_CONN(hdl), 
 						     hdl->socket.socket, 1, false);
 		return ret_eagain;
 	default:
-		printf ("Error? %d\n", ret);
 		conn->error_code = http_bad_gateway;
 		return ret_error;
 	}
