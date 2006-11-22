@@ -213,6 +213,7 @@ cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cheroke
 		}
 
 		if (final) {
+			cherokee_buffer_clean (&child->val);
 			cherokee_buffer_add_buffer (&child->val, val);
 		}
 
