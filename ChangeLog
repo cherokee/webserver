@@ -1,3 +1,8 @@
+2006-11-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in: Added new --enable-beta parameter. It allows to
+	build beta versions based on the subversion revision number. 
+
 2006-11-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_scgi.c (connect_to_server),

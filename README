@@ -40,7 +40,7 @@ cd cherokee && make -f Makefile.embedded
 
 8.- Windows compilation
 -----------------------
-./configure --prefix=/usr --sysconfdir=/etc --enable-trace --enable-static-module=all --enable-static --enable-shared=no
+./configure --prefix=/usr --sysconfdir=/etc --enable-trace --enable-static-module=all --enable-static --enable-shared=no --enable-beta
 
 
 --
