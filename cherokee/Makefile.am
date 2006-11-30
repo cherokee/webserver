@@ -891,7 +891,8 @@ logger.h \
 handler.h \
 encoder.h \
 connection.h \
-module_loader.h \
+plugin.h \
+plugin_loader.h \
 nonce.h \
 \
 downloader.h \

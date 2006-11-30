@@ -1,5 +1,9 @@
 2006-11-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/Makefile.am (libcherokeeinclude_HEADERS): Replace
+	"module_loader.h" by "plugin_loader.h".  Added "plugin.h" as well.
+	It fixes bug #110.
+	
 	* cherokee/handler_dirlist.h, cherokee/handler_dirlist.c
 	(render_parent_directory, cherokee_handler_dirlist_step),
 	themes/default_entry.html: It wasn't adding the "Parent Directory"
