@@ -582,13 +582,15 @@ print_banner (cherokee_server_t *srv)
 	cherokee_buffer_add_va (&n, "Cherokee Web Server %s (%s): ", PACKAGE_VERSION, __DATE__);
 
 	if (cherokee_socket_configured (&srv->socket) &&
-	    cherokee_socket_configured (&srv->socket_tls))
-	{
+	    cherokee_socket_configured (&srv->socket_tls)) {
 		cherokee_buffer_add_va (&n, "Listening on ports %d and %d", srv->port, srv->port_tls);
 	} else {
-		if (cherokee_socket_configured (&srv->socket)) 
-			cherokee_buffer_add_va (&n, "Listening on port %d", srv->port);
-		else 
+		if (cherokee_socket_configured (&srv->socket)) {
+			if (cherokee_buffer_is_empty (&srv->unix_socket))
+				cherokee_buffer_add_va (&n, "Listening on port %d", srv->port);
+			else
+				cherokee_buffer_add_va (&n, "Listening on %s", srv->unix_socket.buf);
+		} else 
 			cherokee_buffer_add_va (&n, "Listening on port %d", srv->port_tls);
 	}
 

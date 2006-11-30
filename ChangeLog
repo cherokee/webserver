@@ -1,5 +1,8 @@
 2006-11-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (print_banner): Print the right banner when
+	it's listening a unix socket.
+
 	* cherokee/socket.c (cherokee_bind_local): Now it removes the
 	socket if it was already there (checking that it's certainly a
 	socket).
