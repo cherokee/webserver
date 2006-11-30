@@ -747,7 +747,8 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 	/* File
 	 */
-	replace_token (buffer, "%file%", name);
+	replace_token (buffer, "%file_name%", name);
+	replace_token (buffer, "%file_link%", name);
 
 	/* Date
 	 */
@@ -811,6 +812,37 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 
 static ret_t
+render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
+{
+	char                             *icon     = NULL;
+	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
+	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
+
+	cherokee_buffer_add_buffer (buffer, &props->entry);
+
+#ifndef CHEROKEE_EMBEDDED
+	if (icons != NULL) {
+		icon = icons->parentdir_icon.buf;
+	}
+#endif
+
+	replace_token (buffer, "%icon%", icon);
+	replace_token (buffer, "%icon_alt%", "[DIR]");
+
+	replace_token (buffer, "%file_link%", "../");
+	replace_token (buffer, "%file_name%", "Parent Directory");
+
+	replace_token (buffer, "%date%", NULL);
+	replace_token (buffer, "%size_unit%", NULL);
+	replace_token (buffer, "%size%", "-");
+	replace_token (buffer, "%user%", NULL);
+	replace_token (buffer, "%group%", NULL);
+
+	return ret_ok;
+}
+
+
+static ret_t
 replace_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
 	/* Public dir
@@ -855,6 +887,12 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 
 		if (buffer->len > DEFAULT_READ_SIZE)
 			return ret_ok;
+		dhdl->phase = dirlist_phase_add_parent_dir;
+
+	case dirlist_phase_add_parent_dir:
+		ret = render_parent_directory (dhdl, buffer);
+		if (unlikely (ret != ret_ok)) return ret;
+
 		dhdl->phase = dirlist_phase_add_entries;
 
 	case dirlist_phase_add_entries:

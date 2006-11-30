@@ -1,5 +1,10 @@
 2006-11-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_dirlist.h, cherokee/handler_dirlist.c
+	(render_parent_directory, cherokee_handler_dirlist_step),
+	themes/default_entry.html: It wasn't adding the "Parent Directory"
+	link to the generated pages. It fixes bug #106.
+
 	* cherokee.conf.sample.pre: After installing Cherokee, the default
 	website is server. Later on, if the index.html is removed, the
 	iocache object will still keep its data, so if the server receives
