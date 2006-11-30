@@ -1,5 +1,12 @@
 2006-11-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee.conf.sample.pre: After installing Cherokee, the default
+	website is server. Later on, if the index.html is removed, the
+	iocache object will still keep its data, so if the server receives
+	some request for the index, it will reply with a 404 error instead
+	of displaying directory index (it was using the common). It fixes
+	bug #109.
+
 	* cherokee/server.c (print_banner): Print the right banner when
 	it's listening a unix socket.
 

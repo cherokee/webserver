@@ -30,6 +30,7 @@ vserver!default!logger!access = /var/log/cherokee.access
 vserver!default!logger!error = /var/log/cherokee.error
 
 vserver!default!directory!/!handler = common
+vserver!default!directory!/!handler!iocache = 0
 vserver!default!directory!/!priority = 1
 
 vserver!default!directory!/icons!document_root = %prefix%/share/cherokee/icons/
