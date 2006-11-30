@@ -1,5 +1,8 @@
 2006-11-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_redir.c (cherokee_handler_redir_new): Fixes
+	little memory leak.
+
         * cherokee/handler_redir.c, cherokee/handler_redir.h,
 	cherokee/handler_error_redir.c, cherokee/module_loader.c,
 	cherokee/handler_server_info.c, cherokee/module_loader.h,

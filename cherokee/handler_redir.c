@@ -293,7 +293,7 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 			 */
 			ret = match_and_substitute (n);
 			if (ret == ret_eagain) {
-				cherokee_handler_redir_free (n);
+				cherokee_handler_free (HANDLER(n));
 				return ret_eagain;
 			}
 		}
