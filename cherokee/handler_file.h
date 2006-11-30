@@ -36,7 +36,7 @@
 #include "handler.h"
 #include "connection.h"
 #include "mime.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 
 /* Data types
  */
@@ -47,7 +47,7 @@ typedef struct {
 
 
 typedef struct {
-	cherokee_handler_t handler;
+	cherokee_handler_t     handler;
 	
 	int                    fd;
 	off_t                  offset;
@@ -62,12 +62,12 @@ typedef struct {
 
 #define PROP_FILE(x)      ((cherokee_handler_file_props_t *)(x))
 #define HDL_FILE(x)       ((cherokee_handler_file_t *)(x))
-#define HDL_FILE_PROP(x)  (PROP_FILE(HANDLER(x)->props))
+#define HDL_FILE_PROP(x)  (PROP_FILE(MODULE(x)->props))
 
 
 /* Library init function
  */
-void  MODULE_INIT(file)                 (cherokee_module_loader_t *loader);
+void  PLUGIN_INIT_NAME(file)            (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_file_new         (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_file_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);

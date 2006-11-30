@@ -27,7 +27,13 @@
 
 #include "connection.h"
 #include "connection-protected.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
+
+
+/* Plug-in initialization
+ */
+PLUGIN_INFO_VALIDATOR_EASIEST_INIT (plain, http_auth_basic | http_auth_digest);
+
 
 
 static ret_t 
@@ -38,7 +44,7 @@ props_free (cherokee_validator_plain_props_t *props)
 }
 
 ret_t 
-cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_validator_props_t **_props)
+cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                             ret;
 	cherokee_config_node_t           *subconf;
@@ -47,11 +53,10 @@ cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_serve
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_plain_props);
 
-		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), 
-						    VALIDATOR_PROPS_FREE(props_free));
-		cherokee_buffer_init (&n->password_file);
-		
-		*_props = VALIDATOR_PROPS(n);
+		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), MODULE_PROPS_FREE(props_free));
+
+		cherokee_buffer_init (&n->password_file);		
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_PLAIN(*_props);
@@ -75,13 +80,13 @@ cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_serve
 
 
 ret_t 
-cherokee_validator_plain_new (cherokee_validator_plain_t **plain, cherokee_validator_props_t *props)
+cherokee_validator_plain_new (cherokee_validator_plain_t **plain, cherokee_module_props_t *props)
 {	
 	CHEROKEE_NEW_STRUCT(n,validator_plain);
 
 	/* Init 		
 	 */
-	cherokee_validator_init_base (VALIDATOR(n), props);
+	cherokee_validator_init_base (VALIDATOR(n), VALIDATOR_PROPS(props), PLUGIN_INFO_VALIDATOR_PTR(plain));
 	VALIDATOR(n)->support = http_auth_basic | http_auth_digest;
 
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_plain_free;
@@ -198,11 +203,3 @@ cherokee_validator_plain_add_headers (cherokee_validator_plain_t *plain, cheroke
 }
 
 
-/*   Library init function
- */
-void
-MODULE_INIT(plain) (cherokee_module_loader_t *loader)
-{
-}
-
-VALIDATOR_MODULE_INFO_INIT_EASY (plain, http_auth_basic | http_auth_digest);

@@ -31,6 +31,18 @@
 #include "header-protected.h"
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_HANDLER_EASIEST_INIT (error, http_all_methods);
+
+
+ret_t 
+cherokee_handler_error_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
+{
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props)
 {
@@ -39,7 +51,7 @@ cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 	   
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base(HANDLER(n), cnt, props);
+	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(error));
 	HANDLER(n)->support = hsupport_error | hsupport_length;
 
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_error_init;

@@ -49,7 +49,7 @@ typedef struct {
 
 ret_t cherokee_logger_ncsa_new       (cherokee_logger_t     **logger, cherokee_config_node_t *config);
 ret_t cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t *logger, cherokee_config_node_t *config);
-ret_t cherokee_logger_ncsa_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props);
+ret_t cherokee_logger_ncsa_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
 
 /* virtual methods implementation
  */

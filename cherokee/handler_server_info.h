@@ -29,7 +29,7 @@
 #include "buffer.h"
 #include "handler.h"
 #include "connection.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 
 
 /* Data types
@@ -52,12 +52,12 @@ typedef struct {
 
 #define HDL_SRV_INFO(x)       ((cherokee_handler_server_info_t *)(x))
 #define PROP_SRV_INFO(x)      ((cherokee_handler_server_info_props_t *)(x))
-#define HDL_SRV_INFO_PROPS(x) (PROP_SRV_INFO(HANDLER(x)->props))
+#define HDL_SRV_INFO_PROPS(x) (PROP_SRV_INFO(MODULE(x)->props))
 
 
 /* Library init function
  */
-void MODULE_INIT(server_info) (cherokee_module_loader_t *loader);
+void  PLUGIN_INIT_NAME(server_info)      (cherokee_plugin_loader_t *loader);
 ret_t cherokee_handler_server_info_new   (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
 
 /* virtual methods implementation

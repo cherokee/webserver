@@ -837,12 +837,13 @@ logger.h \
 logger.c \
 thread.h \
 thread.c \
+plugin.h \
 module.h \
 module.c \
 validator.h \
 validator.c \
-module_loader.h \
-module_loader.c \
+plugin_loader.h \
+plugin_loader.c \
 icons.h \
 icons.c \
 handler_error.c \

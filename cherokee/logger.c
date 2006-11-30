@@ -46,13 +46,13 @@ struct cherokee_logger_private {
 #define PRIV(x)  (LOGGER(x)->priv)
 
 ret_t
-cherokee_logger_init_base (cherokee_logger_t *logger)
+cherokee_logger_init_base (cherokee_logger_t *logger, cherokee_plugin_info_t *info)
 {
 	CHEROKEE_NEW_TYPE(priv, struct cherokee_logger_private);
 
 	/* Init the base class
 	 */
-	cherokee_module_init_base (MODULE(logger));
+	cherokee_module_init_base (MODULE(logger), NULL, info);
 
 	/* Pure virtual methods
 	 */
@@ -65,7 +65,7 @@ cherokee_logger_init_base (cherokee_logger_t *logger)
 	logger->priv->backup_mode = false;
 	CHEROKEE_MUTEX_INIT (&PRIV(logger)->mutex, NULL);
 
-	cherokee_buffer_new (&logger->buffer);
+	cherokee_buffer_init (&logger->buffer);
 
 	return ret_ok;
 }
@@ -79,10 +79,7 @@ cherokee_logger_free (cherokee_logger_t *logger)
 {
 	ret_t ret;
 
-	if (logger->buffer) {
-		cherokee_buffer_free (logger->buffer);
-		logger->buffer = NULL;
-	}
+	cherokee_buffer_mrproper (&logger->buffer);
 
 	CHEROKEE_MUTEX_DESTROY (&PRIV(logger)->mutex);
 
@@ -232,8 +229,8 @@ cherokee_logger_set_backup_mode (cherokee_logger_t *logger, cherokee_boolean_t a
 	/* Free the buffer and create a new one in order to ensure
 	 * it didn't get too big while the logger was in backup mode.
 	 */
-	cherokee_buffer_free (logger->buffer);
-	cherokee_buffer_new (&logger->buffer);
+	cherokee_buffer_mrproper (&logger->buffer);
+	cherokee_buffer_init (&logger->buffer);
 
 	return ret_ok;
 }

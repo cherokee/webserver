@@ -51,14 +51,18 @@
 #include "header.h"
 #include "header-protected.h"
 
-#ifdef HAVE_PTHREAD
-pthread_mutex_t buffer_lock = PTHREAD_MUTEX_INITIALIZER;
-#endif
+/* Plug-in initialization
+ */
+PLUGIN_INFO_LOGGER_EASIEST_INIT (w3c);
 
 
 /* Documentation:
  * - http://www.w3.org/TR/WD-logfile
  */
+
+#ifdef HAVE_PTHREAD
+pthread_mutex_t buffer_lock = PTHREAD_MUTEX_INITIALIZER;
+#endif
 
 /* Some constants
  */
@@ -66,13 +70,6 @@ static char *month[]   = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 			  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", NULL};
 
 #define IN_ADDR(c) ((struct in_addr) (c).sin_addr)
-
-
-ret_t 
-cherokee_logger_w3c_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props)
-{
-	return ret_ok;
-}
 
 
 ret_t
@@ -84,7 +81,7 @@ cherokee_logger_w3c_new  (cherokee_logger_t **logger, cherokee_config_node_t *co
 	
 	/* Init the base class object
 	 */
-	cherokee_logger_init_base(LOGGER(n));
+	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(w3c));
 
 	MODULE(n)->init         = (logger_func_init_t) cherokee_logger_w3c_init;
 	MODULE(n)->free         = (logger_func_free_t) cherokee_logger_w3c_free;
@@ -351,23 +348,4 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 
 	return ret_ok;
 }
-
-
-
-
-/* Library init function
- */
-MODULE_INFO_INIT_EASY (logger, w3c);
-
-static cherokee_boolean_t _w3c_is_init = false;
-
-void
-MODULE_INIT(w3c) (cherokee_module_loader_t *loader)
-{
-	/* Init flag
-	 */
-	if (_w3c_is_init) return;
-	_w3c_is_init = true;
-}
-
 

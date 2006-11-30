@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "balancer.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "server-protected.h"
 #include "source_interpreter.h"
 
@@ -32,11 +32,11 @@
 
 
 ret_t 
-cherokee_balancer_init_base (cherokee_balancer_t *balancer)
+cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info_t *info)
 {
 	/* Init the base class
 	 */
-	cherokee_module_init_base (MODULE(balancer));
+	cherokee_module_init_base (MODULE(balancer), NULL, info);
 
 	/* Virtual methods
 	 */
@@ -198,12 +198,12 @@ cherokee_balancer_instance (cherokee_buffer_t       *name,
 {
 	ret_t                   ret;
 	balancer_new_func_t     new_func;
-	cherokee_module_info_t *info      = NULL;
+	cherokee_plugin_info_t *info      = NULL;
 	
-	ret = cherokee_module_loader_get (&srv->loader, name->buf, &info);
+	ret = cherokee_plugin_loader_get (&srv->loader, name->buf, &info);
 	if (ret != ret_ok) return ret;
 	
-	new_func = (balancer_new_func_t) info->new_func;
+	new_func = (balancer_new_func_t) info->instance;
 	ret = new_func (balancer);
 	if (ret != ret_ok) return ret;
 

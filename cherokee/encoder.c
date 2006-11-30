@@ -27,9 +27,9 @@
 
 
 ret_t 
-cherokee_encoder_init_base (cherokee_encoder_t *enc)
+cherokee_encoder_init_base (cherokee_encoder_t *enc, cherokee_plugin_info_t *info)
 {
-	cherokee_module_init_base (MODULE(enc));
+	cherokee_module_init_base (MODULE(enc), NULL, info);
 
 	enc->encode      = NULL;
 	enc->add_headers = NULL;

@@ -29,7 +29,7 @@
 
 #include "handler.h"
 #include "buffer.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "socket.h"
 #include "balancer.h"
 #include "handler_cgi_base.h"
@@ -55,17 +55,8 @@ typedef enum {
 } cherokee_handler_fastcgi_post_t;
 
 
-typedef struct {
-	cherokee_handler_cgi_base_t     base;
-
-	cherokee_balancer_t            *balancer;
-	cherokee_list_t                 fastcgi_env_ref;
-
-	cuint_t                         nsockets;
-	cuint_t                         nkeepalive;
-	cuint_t                         npipeline;
-} cherokee_handler_fastcgi_props_t;
-
+/* Data structure
+ */
 typedef struct {
 	cherokee_handler_cgi_base_t     base;
 
@@ -82,12 +73,28 @@ typedef struct {
 } cherokee_handler_fastcgi_t;
 
 #define HDL_FASTCGI(x)       ((cherokee_handler_fastcgi_t *)(x))
-#define PROP_FASTCGI(x)      ((cherokee_handler_fastcgi_props_t *)(x))
-#define HDL_FASTCGI_PROPS(x) (PROP_FASTCGI(HANDLER(x)->props))
+
+
+/* Properties data structure
+ */
+typedef struct {
+	cherokee_handler_cgi_base_t     base;
+
+	cherokee_balancer_t            *balancer;
+	cherokee_list_t                 fastcgi_env_ref;
+
+	cuint_t                         nsockets;
+	cuint_t                         nkeepalive;
+	cuint_t                         npipeline;
+} cherokee_handler_fastcgi_props_t;
+
+#define PROP_FASTCGI(x)          ((cherokee_handler_fastcgi_props_t *)(x))
+#define HANDLER_FASTCGI_PROPS(x) (PROP_FASTCGI(MODULE(x)->props))
+
  
 /* Library init function
  */
-void  MODULE_INIT(fastcgi) (cherokee_module_loader_t *loader);
+void  PLUGIN_INIT_NAME(fastcgi)            (cherokee_plugin_loader_t *loader);
 
 /* Methods
  */

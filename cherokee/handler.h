@@ -61,12 +61,13 @@ typedef ret_t (* handler_func_new_t)         (void **handler, void *cnt, cheroke
 typedef ret_t (* handler_func_init_t)        (void  *handler);
 typedef ret_t (* handler_func_step_t)        (void  *handler, cherokee_buffer_t *buffer);
 typedef ret_t (* handler_func_add_headers_t) (void  *handler, cherokee_buffer_t *buffer);
+typedef ret_t (* handler_func_configure_t)   (cherokee_config_node_t *, cherokee_server_t *, cherokee_module_props_t **);
+
 
 /* Data types
  */
 typedef struct {
 	cherokee_module_t           module;
-	cherokee_module_props_t    *props;
 
 	/* Pure virtual methods
 	 */
@@ -90,9 +91,41 @@ typedef struct {
 #define HANDLER_SUPPORT_COMPLEX_HEADERS(h) (HANDLER(h)->support & hsupport_complex_headers)
 #define HANDLER_SUPPORT_ERROR(h)           (HANDLER(h)->support & hsupport_error)
 
+
+/* Module information
+ */
+typedef struct {
+	cherokee_module_props_t  base;
+	cherokee_http_method_t   valid_methods;
+} cherokee_handler_props_t;
+
+#define HANDLER_PROPS(x)                   ((cherokee_handler_props_t *)(x))
+
+
+/* Easy initialization
+ */
+#define HANDLER_CONF_PROTOTYPE(name)                                \
+	ret_t cherokee_handler_ ## name ## _configure (             \
+		cherokee_config_node_t   *,                         \
+		cherokee_server_t        *,                         \
+	 	cherokee_module_props_t **)
+
+#define PLUGIN_INFO_HANDLER_EASY_INIT(name, methods)                \
+	HANDLER_CONF_PROTOTYPE(name);                               \
+                                                                    \
+	PLUGIN_INFO_HANDLER_INIT(name, cherokee_handler,            \
+		(void *)cherokee_handler_ ## name ## _new,          \
+		(void *)cherokee_handler_ ## name ## _configure,    \
+                methods)     
+
+#define PLUGIN_INFO_HANDLER_EASIEST_INIT(name, methods)             \
+	PLUGIN_EMPTY_INIT_FUNCTION(name)                            \
+	PLUGIN_INFO_HANDLER_EASY_INIT(name, methods)
+
+
 /* Handler methods
  */
-ret_t cherokee_handler_init_base   (cherokee_handler_t  *hdl, void *conn, cherokee_module_props_t *props);
+ret_t cherokee_handler_init_base   (cherokee_handler_t  *hdl, void *conn, cherokee_handler_props_t *props, cherokee_plugin_info_handler_t *info);
 ret_t cherokee_handler_free_base   (cherokee_handler_t  *hdl);
 
 /* Handler virtual methods
@@ -102,6 +135,10 @@ ret_t cherokee_handler_free        (cherokee_handler_t  *hdl);
 ret_t cherokee_handler_step        (cherokee_handler_t  *hdl, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_add_headers (cherokee_handler_t  *hdl, cherokee_buffer_t *buffer);
 
+/* Handler properties methods
+ */
+ret_t cherokee_handler_props_init_base  (cherokee_handler_props_t *props, module_func_props_free_t free_func);
+ret_t cherokee_handler_props_free_base  (cherokee_handler_props_t *props);
 
 CHEROKEE_END_DECLS
 

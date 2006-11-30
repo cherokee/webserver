@@ -45,7 +45,7 @@
 #include "connection-protected.h"
 #include "server.h"
 #include "server-protected.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "icons.h"
 #include "common.h"
 
@@ -61,7 +61,13 @@ struct file_entry {
 typedef struct file_entry file_entry_t;
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_HANDLER_EASIEST_INIT (dirlist, http_get);
 
+
+/* Methods implementation
+ */
 static ret_t
 load_theme_load_file (cherokee_buffer_t *theme_path, char *file, cherokee_buffer_t *output)
 {
@@ -154,7 +160,7 @@ cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 	cherokee_buffer_mrproper (&props->entry);
 	cherokee_buffer_mrproper (&props->css);
 
-	return cherokee_module_props_free_base (MODULE_PROPS(props));
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
 
@@ -170,8 +176,8 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_dirlist_props);
 		
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
-						 MODULE_PROPS_FREE(cherokee_handler_dirlist_props_free));
+		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+						  MODULE_PROPS_FREE(cherokee_handler_dirlist_props_free));
 
 		n->show_size   = true;
 		n->show_date   = true;
@@ -331,11 +337,10 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base (HANDLER(n), cnt, props);
+	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(dirlist));
 
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_dirlist_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_dirlist_free;
-	MODULE(n)->get_name     = (module_func_get_name_t) cherokee_handler_dirlist_get_name;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_dirlist_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_dirlist_add_headers; 
 
@@ -907,20 +912,3 @@ cherokee_handler_dirlist_add_headers (cherokee_handler_dirlist_t *dhdl, cherokee
 	cherokee_buffer_add_str (buffer, "Content-Type: text/html; charset=iso-8859-1"CRLF);
 	return ret_ok;
 }
-
-
-void  
-cherokee_handler_dirlist_get_name (cherokee_handler_dirlist_t *dhdl, char **name)
-{
-	*name = "dirlist";
-}
-
-
-/* Library init function
- */
-void
-MODULE_INIT(dirlist) (cherokee_module_loader_t *loader)
-{
-}
-
-HANDLER_MODULE_INFO_INIT_EASY (dirlist, http_get);

@@ -36,11 +36,10 @@
 
 
 ret_t 
-cherokee_validator_init_base (cherokee_validator_t *validator, cherokee_validator_props_t *props)
+cherokee_validator_init_base (cherokee_validator_t *validator, cherokee_validator_props_t *props, cherokee_plugin_info_validator_t *info)
 {
-	cherokee_module_init_base (MODULE(validator));
+	cherokee_module_init_base (MODULE(validator), MODULE_PROPS(props), PLUGIN_INFO(info));
 
-	validator->props = props;
 	validator->check = NULL;
 
 	cherokee_buffer_init (&validator->user);
@@ -429,33 +428,19 @@ cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
 }
 
 
+/* Validator properties
+ */
+
 ret_t 
-cherokee_validator_props_init_base (cherokee_validator_props_t *valp, validator_props_func_free_t free_func)
+cherokee_validator_props_init_base  (cherokee_validator_props_t *props, module_func_props_free_t free_func)
 {
-	valp->free = free_func;
-	return ret_ok;
+	props->valid_methods = http_auth_nothing;
+	return cherokee_module_props_init_base (MODULE_PROPS(props), free_func);
 }
 
 
 ret_t 
-cherokee_validator_props_free_base (cherokee_validator_props_t *valp)
+cherokee_validator_props_free_base  (cherokee_validator_props_t *props)
 {
-	free (valp);
-	return ret_ok;
-}
-
-
-ret_t 
-cherokee_validator_props_free (cherokee_validator_props_t *valp)
-{
-	if (valp == NULL) 
-		return ret_error;
-
-	if (valp->free == NULL) {
-		SHOULDNT_HAPPEN;
-		return ret_error;
-	}
-
-	valp->free (valp);
-	return ret_ok;
+	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }

@@ -33,7 +33,7 @@
 #include "list.h"
 #include "buffer.h"
 #include "handler.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 
 
 typedef enum {
@@ -99,12 +99,12 @@ typedef struct {
 
 #define PROP_DIRLIST(x)      ((cherokee_handler_dirlist_props_t *)(x))
 #define HDL_DIRLIST(x)       ((cherokee_handler_dirlist_t *)(x))
-#define HDL_DIRLIST_PROP(x)  (PROP_DIRLIST(HANDLER(x)->props))
+#define HDL_DIRLIST_PROP(x)  (PROP_DIRLIST(MODULE(x)->props))
 
 
 /* Library init function
  */
-void MODULE_INIT(dirlist)                  (cherokee_module_loader_t *loader);
+void PLUGIN_INIT_NAME(dirlist)             (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_dirlist_new         (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *properties);
 ret_t cherokee_handler_dirlist_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);

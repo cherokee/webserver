@@ -34,9 +34,7 @@
 #include "connection-protected.h"
 #include "server.h"
 #include "server-protected.h"
-#include "module_loader.h"
-
-
+#include "plugin_loader.h"
 
 #define PAGE_HEADER                                                                                     \
 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">" CRLF\
@@ -98,6 +96,13 @@
 "</div></body></html>"                                                                             
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_HANDLER_EASIEST_INIT (server_info, http_get);
+
+
+/* Methods implementation
+ */
 static ret_t 
 props_free (cherokee_handler_server_info_props_t *props)
 {
@@ -267,8 +272,8 @@ build_modules_table_content_while (const char *key, void *value, void *params[])
 	int *validators = (int *) params[5];
 	int *generic    = (int *) params[6];
 
-	cherokee_module_loader_entry_t *entry = value;
-	cherokee_module_info_t         *mod   = entry->info;
+	cherokee_plugin_loader_entry_t *entry = value;
+	cherokee_plugin_info_t         *mod   = entry->info;
 
 	if (mod->type & cherokee_logger) {
 		*loggers += 1;
@@ -397,7 +402,7 @@ cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection
 	
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base(HANDLER(n), cnt, props);
+	cherokee_handler_init_base(HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(server_info));
 	   
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_server_info_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_server_info_free;
@@ -481,13 +486,3 @@ cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl, c
 
 	return ret_ok;
 }
-
-
-/* Library init function
- */
-void
-MODULE_INIT(server_info) (cherokee_module_loader_t *loader)
-{
-}
-
-HANDLER_MODULE_INFO_INIT_EASY (server_info, http_get);

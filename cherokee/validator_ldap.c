@@ -26,7 +26,7 @@
 
 #include <errno.h>
 
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "validator_ldap.h"
 #include "connection-protected.h"
 #include "util.h"
@@ -38,6 +38,12 @@
 #ifndef LDAP_OPT_SUCCESS
 # define LDAP_OPT_SUCCESS 0
 #endif
+
+
+/* Plug-in initialization
+ */
+PLUGIN_INFO_VALIDATOR_EASIEST_INIT (ldap, http_auth_basic);
+
 
 
 static ret_t 
@@ -55,7 +61,7 @@ props_free (cherokee_validator_ldap_props_t *props)
 
 
 ret_t 
-cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_validator_props_t **_props)
+cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	cherokee_list_t                 *i;
 	cherokee_validator_ldap_props_t *props;
@@ -63,8 +69,7 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_ldap_props);
 
-		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), 
-						    VALIDATOR_PROPS_FREE(props_free));
+		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), MODULE_PROPS_FREE(props_free));
 
 		n->port = LDAP_DEFAULT_PORT;
 		n->tls  = false;
@@ -76,7 +81,7 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 		cherokee_buffer_init (&n->filter);
 		cherokee_buffer_init (&n->ca_file);
 		
-		*_props = VALIDATOR_PROPS(n);
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_LDAP(*_props);
@@ -216,14 +221,14 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 
 
 ret_t 
-cherokee_validator_ldap_new (cherokee_validator_ldap_t **ldap, cherokee_validator_props_t *props)
+cherokee_validator_ldap_new (cherokee_validator_ldap_t **ldap, cherokee_module_props_t *props)
 {	  
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT(n,validator_ldap);
 
 	/* Init 		
 	 */
-	cherokee_validator_init_base (VALIDATOR(n), props);
+	cherokee_validator_init_base (VALIDATOR(n), VALIDATOR_PROPS(props), PLUGIN_INFO_VALIDATOR_PTR(ldap));
 	VALIDATOR(n)->support = http_auth_basic;
 
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_ldap_free;
@@ -389,12 +394,4 @@ cherokee_validator_ldap_add_headers (cherokee_validator_ldap_t *ldap, cherokee_c
 }
 
 
-/* Library init function
- */
-void
-MODULE_INIT(ldap) (cherokee_module_loader_t *loader)
-{
-}
-
-VALIDATOR_MODULE_INFO_INIT_EASY (ldap, http_auth_basic);
 

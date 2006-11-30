@@ -57,7 +57,7 @@ typedef struct {
 	/* Validator
 	 */
 	validator_func_new_t        validator_new_func;
-	cherokee_validator_props_t *validator_properties; 
+	cherokee_module_props_t    *validator_properties; 
 
 	cherokee_buffer_t          *auth_realm;
 	cherokee_http_auth_t        authentication;
@@ -72,7 +72,7 @@ ret_t cherokee_config_entry_free     (cherokee_config_entry_t  *entry);
 ret_t cherokee_config_entry_init     (cherokee_config_entry_t  *entry);
 ret_t cherokee_config_entry_mrproper (cherokee_config_entry_t  *entry);
 
-ret_t cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_module_info_t *modinfo); 
+ret_t cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_plugin_info_handler_t *modinfo); 
 ret_t cherokee_config_entry_complete    (cherokee_config_entry_t *entry, cherokee_config_entry_t *parent, cherokee_boolean_t same_type);
 ret_t cherokee_config_entry_inherit     (cherokee_config_entry_t *entry);
 

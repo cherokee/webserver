@@ -38,8 +38,7 @@ typedef struct {
 
 /* Library init function
  */
-void MODULE_INIT(phpcgi) (cherokee_module_loader_t *loader);
-
+void  PLUGIN_INIT_NAME(phpcgi)     (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_phpcgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_phpcgi_init (cherokee_handler_t  *hdl);

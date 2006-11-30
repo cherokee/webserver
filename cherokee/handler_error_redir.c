@@ -28,7 +28,7 @@
 #include "handler_error_redir.h"
 
 #include "connection.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "connection-protected.h"
 
 
@@ -126,8 +126,8 @@ cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_
  */
 static cherokee_boolean_t _error_redir_is_init = false;
 
-void
-MODULE_INIT(error_redir) (cherokee_module_loader_t *loader)
+void  
+PLUGIN_INIT_NAME(error_redir) (cherokee_plugin_loader_t *loader)
 {
 	/* Is init?
 	 */
@@ -136,7 +136,7 @@ MODULE_INIT(error_redir) (cherokee_module_loader_t *loader)
 	   
 	/* Load the dependences
 	 */
-	cherokee_module_loader_load (loader, "redir");
+	cherokee_plugin_loader_load (loader, "redir");
 }
 
-HANDLER_MODULE_INFO_INIT_EASY (error_redir, http_all_methods);
+PLUGIN_INFO_HANDLER_EASY_INIT (error_redir, http_all_methods);

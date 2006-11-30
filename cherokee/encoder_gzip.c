@@ -26,7 +26,11 @@
 
 #include "crc32.h"
 #include "encoder_gzip.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
+
+/* Plug-in initialization
+ */
+PLUGIN_INFO_ENCODER_EASIEST_INIT (gzip);
 
 /* Specs:
  * GZIP file format specification version 4.3:
@@ -63,12 +67,6 @@ static unsigned char gzip_header[gzip_header_len] = {0x1F, 0x8B,   /* 16 bits: I
  */
 
 ret_t 
-cherokee_encoder_gzip_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props)
-{
-	return ret_ok;
-}
-
-ret_t 
 cherokee_encoder_gzip_new (cherokee_encoder_gzip_t **encoder)
 {
 	cuint_t workspacesize;
@@ -76,7 +74,7 @@ cherokee_encoder_gzip_new (cherokee_encoder_gzip_t **encoder)
 
 	/* Init 	
 	 */
-	cherokee_encoder_init_base (ENCODER(n));
+	cherokee_encoder_init_base (ENCODER(n), PLUGIN_INFO_PTR(gzip));
 
 	MODULE(n)->init         = (encoder_func_init_t) cherokee_encoder_gzip_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_encoder_gzip_free;
@@ -91,8 +89,10 @@ cherokee_encoder_gzip_new (cherokee_encoder_gzip_t **encoder)
 	n->add_header = true;
 
 	workspacesize = zlib_deflate_workspacesize();
+
 	n->workspace = malloc (workspacesize);
-	if (unlikely (n->workspace == NULL)) return ret_nomem;
+	if (unlikely (n->workspace == NULL)) 
+		return ret_nomem;
 
 	memset (n->workspace, 0, workspacesize);
 	memset (&n->stream, 0, sizeof(z_stream));
@@ -311,21 +311,3 @@ cherokee_encoder_gzip_flush (cherokee_encoder_gzip_t *encoder, cherokee_buffer_t
 	return ret_ok;
 }
 
-
-
-/*   Library init function
- */
-
-MODULE_INFO_INIT_EASY (encoder, gzip);
-
-
-static cherokee_boolean_t _gzip_is_init = false;
-
-void
-MODULE_INIT(gzip) (cherokee_module_loader_t *loader)
-{
-	/* Init flag
-	 */
-	if (_gzip_is_init) return;
-	_gzip_is_init = true;
-}

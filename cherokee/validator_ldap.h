@@ -34,7 +34,7 @@
 
 
 typedef struct {
-	cherokee_validator_props_t base;
+	cherokee_module_props_t    base;
 
 	cherokee_buffer_t          server;
 	cint_t                     port;
@@ -56,11 +56,11 @@ typedef struct {
 
 #define LDAP(x)          ((cherokee_validator_ldap_t *)(x))
 #define PROP_LDAP(p)     ((cherokee_validator_ldap_props_t *)(p))
-#define VAL_LDAP_PROP(x) (PROP_LDAP(VALIDATOR(x)->props))
+#define VAL_LDAP_PROP(x) (PROP_LDAP(MODULE(x)->props))
 
 
-ret_t cherokee_validator_ldap_new  (cherokee_validator_ldap_t **ldap, cherokee_validator_props_t *props);
-ret_t cherokee_validator_ldap_free (cherokee_validator_ldap_t  *ldap);
+ret_t cherokee_validator_ldap_new         (cherokee_validator_ldap_t **ldap, cherokee_module_props_t *props);
+ret_t cherokee_validator_ldap_free        (cherokee_validator_ldap_t  *ldap);
 
 ret_t cherokee_validator_ldap_check       (cherokee_validator_ldap_t  *ldap, cherokee_connection_t *conn);
 ret_t cherokee_validator_ldap_add_headers (cherokee_validator_ldap_t  *ldap, cherokee_connection_t *conn, cherokee_buffer_t *buf);

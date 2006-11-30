@@ -37,6 +37,13 @@
 	add_env_pair (cgi, key, sizeof(key)-1, val, len)
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_HANDLER_EASIEST_INIT (scgi, http_get | http_post | http_head);
+
+
+/* Methods implementation
+ */
 static ret_t 
 props_free (cherokee_handler_scgi_props_t *props)
 {
@@ -49,7 +56,7 @@ props_free (cherokee_handler_scgi_props_t *props)
 	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));
 }
 
-static ret_t 
+ret_t 
 cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                          ret;
@@ -61,10 +68,11 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_scgi_props);
 
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
-						 MODULE_PROPS_FREE(props_free));
-		n->balancer = NULL;
+		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n), 
+							   MODULE_PROPS_FREE(props_free));
+
 		INIT_LIST_HEAD(&n->scgi_env_ref);   // TODO: finish this
+		n->balancer = NULL;
 
 		*_props = MODULE_PROPS(n);
 	}
@@ -159,7 +167,8 @@ cherokee_handler_scgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 	
 	/* Init the base class
 	 */
-	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, props, add_env_pair, read_from_scgi);
+	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, PLUGIN_INFO_HANDLER_PTR(scgi), 
+					HANDLER_PROPS(props), add_env_pair, read_from_scgi);
 
 	/* Virtual methods
 	 */
@@ -396,11 +405,3 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 
 	return ret_ok;
 }
-
-
-void
-MODULE_INIT(scgi) (cherokee_module_loader_t *loader)
-{
-}
-
-HANDLER_MODULE_INFO_INIT_EASY (scgi, http_get | http_post | http_head);

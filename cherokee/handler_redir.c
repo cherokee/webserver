@@ -36,6 +36,13 @@
 #define ENTRIES "handler,redir"
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_HANDLER_EASIEST_INIT (redir, http_all_methods);
+
+
+/* Methods implementation
+ */
 #ifndef CHEROKEE_EMBEDDED
 
 struct cre_list {
@@ -261,7 +268,7 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 	
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base(HANDLER(n), cnt, props);
+	cherokee_handler_init_base(HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(redir));
 	
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_redir_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_redir_free;
@@ -367,7 +374,7 @@ props_free (cherokee_handler_redir_props_t *props)
 }
 
 
-static ret_t 
+ret_t 
 cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                           ret;
@@ -407,15 +414,5 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 	
 	return ret_ok;
 }
-
-
-/* Library init function
- */
-void 
-MODULE_INIT(redir) (cherokee_module_loader_t *loader)
-{
-}
-
-HANDLER_MODULE_INFO_INIT_EASY (redir, http_all_methods);
 
 

@@ -42,7 +42,8 @@
 ret_t 
 cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi, 
 				cherokee_connection_t                    *conn,
-				cherokee_module_props_t                  *props,
+				cherokee_plugin_info_handler_t           *info,
+				cherokee_handler_props_t                 *props,
 				cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
 				cherokee_handler_cgi_base_read_from_cgi_t read_from_cgi)
 {
@@ -50,7 +51,7 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base (HANDLER(cgi), conn, props);
+	cherokee_handler_init_base (HANDLER(cgi), conn, props, info);
 
 	/* Supported features
 	 */
@@ -82,7 +83,7 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 
 	/* Read the properties
 	 */
-	if (HDL_CGI_BASE_PROPS(cgi)->is_error_handler) {
+	if (HANDLER_CGI_BASE_PROPS(cgi)->is_error_handler) {
 		HANDLER(cgi)->support |= hsupport_error;		
 	}
 	
@@ -123,6 +124,12 @@ env_item_free (void *p)
 }
 
 ret_t 
+cherokee_handler_cgi_base_props_init_base (cherokee_handler_cgi_base_props_t *props, module_func_props_free_t free_func)
+{
+	return cherokee_handler_props_init_base (HANDLER_PROPS(props), free_func);
+}
+
+ret_t 
 cherokee_handler_cgi_base_props_free (cherokee_handler_cgi_base_props_t *props)
 {
 	cherokee_list_t *i, *tmp;
@@ -133,7 +140,7 @@ cherokee_handler_cgi_base_props_free (cherokee_handler_cgi_base_props_t *props)
 		env_item_free (i);
 	}
 	
-	return cherokee_module_props_free_base (MODULE_PROPS(props));
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
 ret_t 
@@ -413,17 +420,18 @@ cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t          
 ret_t 
 cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee_connection_t *conn)
 {
-	ret_t              ret;
-	cherokee_list_t   *i;
-	cherokee_buffer_t *name;
-	cuint_t            len = 0;
-	char              *p   = "";
-	cherokee_buffer_t  tmp = CHEROKEE_BUF_INIT;
+	ret_t                               ret;
+	cherokee_list_t                    *i;
+	cherokee_buffer_t                  *name;
+	cuint_t                             len      = 0;
+	char                               *p        = "";
+	cherokee_buffer_t                  tmp       = CHEROKEE_BUF_INIT;
+	cherokee_handler_cgi_base_props_t *cgi_props = HANDLER_CGI_BASE_PROPS(cgi); 
 
 	/* Add user defined variables at the beginning,
 	 * these have precedence..
 	 */
-	list_for_each (i, &HDL_CGI_BASE_PROPS(cgi)->system_env) {
+	list_for_each (i, &cgi_props->system_env) {
 		env_item_t *env = (env_item_t *)i;			
 		cgi->add_env_pair (cgi, 
 				   env->env.buf, env->env.len, 
@@ -438,7 +446,7 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	/* SCRIPT_NAME:
 	 * It is the request without the pathinfo if it exists
 	 */	
-	if (cherokee_buffer_is_empty (&HDL_CGI_BASE_PROPS(cgi)->script_alias)) {
+	if (cherokee_buffer_is_empty (&cgi_props->script_alias)) {
 		if (cgi->param.len > 0) {
 			/* phpcgi request	
 			 */
@@ -460,7 +468,7 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 
 	cherokee_buffer_clean (&tmp);
 	
-	if (HDL_CGI_BASE_PROPS(cgi)->check_file &&
+	if (cgi_props->check_file &&
 	    (conn->web_directory.len > 1))
 	{
 		cherokee_buffer_add_buffer (&tmp, &conn->web_directory);
@@ -490,7 +498,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 	struct stat                        st;
 	cint_t                             pathinfo_len = 0;
 	cherokee_connection_t             *conn         = HANDLER_CONN(cgi);
-	cherokee_handler_cgi_base_props_t *props        = HDL_CGI_BASE_PROPS(cgi);
+	cherokee_handler_cgi_base_props_t *props        = HANDLER_CGI_BASE_PROPS(cgi);
 
 	/* ScriptAlias: If there is a ScriptAlias directive, it
 	 * doesn't need to find the executable file..

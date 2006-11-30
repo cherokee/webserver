@@ -32,11 +32,11 @@
 
 
 ret_t
-cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn, cherokee_module_props_t *props)
+cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn, cherokee_handler_props_t *props, cherokee_plugin_info_handler_t *info)
 {
 	/* Init the base class
 	 */
-	cherokee_module_init_base (MODULE(hdl));
+	cherokee_module_init_base (MODULE(hdl), MODULE_PROPS(props), PLUGIN_INFO(info));
 
 	/* Pure virtual methods
 	 */
@@ -45,8 +45,7 @@ cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn, cherokee_module
 
 	/* Parent reference
 	 */
-	hdl->connection = conn;
-	hdl->props      = props;
+	hdl->connection    = conn;
 
 	return ret_ok;
 }
@@ -129,3 +128,21 @@ cherokee_handler_step (cherokee_handler_t *hdl, cherokee_buffer_t *buffer)
 }
 
 
+
+/* Handler properties methods
+ */
+
+ret_t 
+cherokee_handler_props_init_base (cherokee_handler_props_t *props, module_func_props_free_t free_func)
+{
+	props->valid_methods = http_unknown;
+
+	return cherokee_module_props_init_base (MODULE_PROPS(props), free_func);
+}
+
+
+ret_t 
+cherokee_handler_props_free_base (cherokee_handler_props_t *props)
+{
+	return cherokee_module_props_free_base (MODULE_PROPS(props));
+}

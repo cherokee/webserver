@@ -33,9 +33,15 @@
 
 #define ERR_STR(x) 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_HANDLER_EASIEST_INIT (admin, http_get | http_post);
 
-static ret_t
-cherokee_handler_admin_configure ()
+
+/* Methods implementation
+ */
+ret_t
+cherokee_handler_admin_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	return ret_ok;
 }
@@ -48,11 +54,10 @@ cherokee_handler_admin_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base (HANDLER(n), cnt, props);
+	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(admin));
 
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_admin_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_admin_free;
-	MODULE(n)->get_name     = (module_func_get_name_t) cherokee_handler_admin_get_name;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_admin_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_admin_add_headers; 
 
@@ -185,19 +190,3 @@ cherokee_handler_admin_add_headers (cherokee_handler_admin_t *ahdl, cherokee_buf
 	cherokee_buffer_add_va (buffer, "Content-length: %lu" CRLF, ahdl->reply.len);
 	return ret_ok;
 }
-
-void  
-cherokee_handler_admin_get_name (cherokee_handler_admin_t *ahdl, const char **name)
-{
-	*name = "admin";
-}
-
-
-/* Library init function
- */
-void
-MODULE_INIT(admin) (cherokee_module_loader_t *loader)
-{
-}
-
-HANDLER_MODULE_INFO_INIT_EASY (admin, http_get | http_post);

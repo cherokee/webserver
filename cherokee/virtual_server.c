@@ -376,7 +376,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
 	cherokee_buffer_t         *tmp;
-	cherokee_module_info_t    *info    = NULL;
+	cherokee_plugin_info_t    *info    = NULL;
 	cherokee_virtual_server_t *vserver = ((void **)data)[0];
 	cherokee_config_entry_t   *entry   = ((void **)data)[1];
 
@@ -401,11 +401,13 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "handler")) {
 		tmp = &conf->val;
 		
-		ret = cherokee_module_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
+		ret = cherokee_plugin_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
 		if (ret != ret_ok) return ret;
 		
 		if (info->configure) {
-			ret = info->configure (conf, vserver->server_ref, (void **) &entry->handler_properties);
+			handler_func_configure_t configure = info->configure;
+
+			ret = configure (conf, vserver->server_ref, &entry->handler_properties);
 			if (ret != ret_ok) return ret;
 		}
 		
@@ -413,25 +415,27 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		cherokee_config_entry_set_handler (entry, info);		
 
 	} else if (equal_buf_str (&conf->key, "auth")) {
-		cherokee_module_info_validator_t *vinfo;
+		cherokee_plugin_info_validator_t *vinfo;
 	   
 		/* Load module
 		 */
 		tmp = &conf->val;
 
-		ret = cherokee_module_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
+		ret = cherokee_plugin_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
 		if (ret != ret_ok) return ret;
 
-		entry->validator_new_func = info->new_func;
+		entry->validator_new_func = info->instance;
 
 		if (info->configure) {
-			ret = info->configure (conf, vserver->server_ref, (void **) &entry->validator_properties);
+			validator_func_configure_t configure = info->configure;
+
+			ret = configure (conf, vserver->server_ref, &entry->validator_properties);
 			if (ret != ret_ok) return ret;
 		}
 
 		/* Configure the entry
 		 */
-		vinfo = (cherokee_module_info_validator_t *)info;
+		vinfo = (cherokee_plugin_info_validator_t *)info;
 
 		ret = cherokee_validator_configure (conf, entry);
 		if (ret != ret_ok) return ret;
@@ -473,23 +477,25 @@ add_error_handler (cherokee_config_node_t *config, cherokee_virtual_server_t *vs
 {
 	ret_t                    ret;
 	cherokee_config_entry_t *entry;
-	cherokee_module_info_t  *info   = NULL;
+	cherokee_plugin_info_t  *info   = NULL;
 	cherokee_buffer_t       *name   = &config->val;
 
 	ret = cherokee_config_entry_new (&entry);
 	if (unlikely (ret != ret_ok)) return ret;
 
-	ret = cherokee_module_loader_get (&SRV(vserver->server_ref)->loader, name->buf, &info);
+	ret = cherokee_plugin_loader_get (&SRV(vserver->server_ref)->loader, name->buf, &info);
 	if (ret != ret_ok) return ret;
 		
 	if (info->configure) {
-		ret = info->configure (config, vserver->server_ref, (void **) &entry->handler_properties);
+		handler_func_configure_t configure = info->configure;
+
+		ret = configure (config, vserver->server_ref, &entry->handler_properties);
 		if (ret != ret_ok) return ret;
 	}
 		
 	TRACE(ENTRIES, "Error handler: %s\n", name->buf);
 
-	cherokee_config_entry_set_handler (entry, info);		
+	cherokee_config_entry_set_handler (entry, PLUGIN_INFO_HANDLER(info));		
 	vserver->error_handler = entry;
 
 	return ret_ok;
@@ -601,7 +607,7 @@ add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 {
 	ret_t                   ret;
 	logger_func_new_t       func_new;
-	cherokee_module_info_t *info      = NULL;
+	cherokee_plugin_info_t *info      = NULL;
 	cherokee_server_t      *srv       = SRV(vserver->server_ref);
 
 	if (cherokee_buffer_is_empty (&config->val)) {
@@ -609,13 +615,13 @@ add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 		return ret_error;
 	}
 
-	ret = cherokee_module_loader_get (&srv->loader, config->val.buf, &info);
+	ret = cherokee_plugin_loader_get (&srv->loader, config->val.buf, &info);
 	if (ret < ret_ok) {
 		PRINT_MSG ("ERROR: Couldn't load logger module '%s'\n", config->val.buf);
 		return ret_error;
 	}
 
-	func_new = (logger_func_new_t) info->new_func;
+	func_new = (logger_func_new_t) info->instance;
 	if (func_new == NULL) return ret_error;
 
 	ret = func_new ((void **) &vserver->logger, config);

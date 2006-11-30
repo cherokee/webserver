@@ -46,6 +46,13 @@
 #define ENTRIES "proxy,handler"
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_HANDLER_EASIEST_INIT (proxy, http_get | http_post | http_head);
+
+
+/* Methods implementation
+ */
 static ret_t 
 props_free (cherokee_handler_proxy_props_t *props)
 {
@@ -102,10 +109,9 @@ cherokee_handler_proxy_new  (cherokee_handler_t **hdl, cherokee_connection_t *cn
 
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base (HANDLER(n), cnt, props);
+	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(proxy));
 
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_proxy_free;
-	MODULE(n)->get_name     = (module_func_get_name_t) cherokee_handler_proxy_get_name;
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_proxy_init;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_proxy_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_proxy_add_headers;
@@ -136,13 +142,6 @@ cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 	cherokee_downloader_mrproper (&hdl->client);
 
 	return ret_ok;
-}
-
-
-void  
-cherokee_handler_proxy_get_name (cherokee_handler_proxy_t *hdl, const char **name)
-{
-	*name = "proxy";
 }
 
 
@@ -325,13 +324,4 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *phdl,
 	return ret;
 }
 
-
-/*   Library init function
- */
-void
-MODULE_INIT(proxy) (cherokee_module_loader_t *loader)
-{
-}
-
-HANDLER_MODULE_INFO_INIT_EASY (proxy, http_get | http_post | http_head);
 

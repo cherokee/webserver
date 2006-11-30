@@ -29,8 +29,8 @@
 #include "connection.h"
 
 typedef struct {
-	cherokee_validator_props_t base;
-	cherokee_buffer_t          password_file;
+	cherokee_module_props_t base;
+	cherokee_buffer_t       password_file;
 } cherokee_validator_htdigest_props_t;
 
 typedef struct {
@@ -39,13 +39,13 @@ typedef struct {
 
 #define HTDIGEST(x)          ((cherokee_validator_htdigest_t *)(x))
 #define PROP_HTDIGEST(p)     ((cherokee_validator_htdigest_props_t *)(p))
-#define VAL_HTDIGEST_PROP(x) (PROP_HTDIGEST(VALIDATOR(x)->props))
+#define VAL_HTDIGEST_PROP(x) (PROP_HTDIGEST (MODULE(x)->props))
 
 
-ret_t cherokee_validator_htdigest_new  (cherokee_validator_htdigest_t **htdigest, cherokee_validator_props_t *props);
-ret_t cherokee_validator_htdigest_free (cherokee_validator_htdigest_t  *htdigest);
+ret_t cherokee_validator_htdigest_new         (cherokee_validator_htdigest_t **htdigest, cherokee_module_props_t *props);
+ret_t cherokee_validator_htdigest_free        (cherokee_validator_htdigest_t  *htdigest);
 
-ret_t cherokee_validator_htdigest_check       (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn);
-ret_t cherokee_validator_htdigest_add_headers (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *buf);
+ret_t cherokee_validator_htdigest_check       (cherokee_validator_htdigest_t  *htdigest, cherokee_connection_t *conn);
+ret_t cherokee_validator_htdigest_add_headers (cherokee_validator_htdigest_t  *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *buf);
 
 #endif /* CHEROKEE_VALIDATOR_HTDIGEST_H */

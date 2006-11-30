@@ -29,8 +29,8 @@
 #include "connection.h"
 
 typedef struct {
-	cherokee_validator_props_t base;
-	cherokee_buffer_t          password_file;
+	cherokee_module_props_t  base;
+	cherokee_buffer_t        password_file;
 } cherokee_validator_htpasswd_props_t;
 
 typedef struct {
@@ -39,11 +39,11 @@ typedef struct {
 
 #define HTPASSWD(x)          ((cherokee_validator_htpasswd_t *)(x))
 #define PROP_HTPASSWD(p)     ((cherokee_validator_htpasswd_props_t *)(p))
-#define VAL_HTPASSWD_PROP(x) (PROP_HTPASSWD(VALIDATOR(x)->props))
+#define VAL_HTPASSWD_PROP(x) (PROP_HTPASSWD (MODULE(x)->props))
 
 
-ret_t cherokee_validator_htpasswd_new  (cherokee_validator_htpasswd_t **htpasswd, cherokee_validator_props_t *props);
-ret_t cherokee_validator_htpasswd_free (cherokee_validator_htpasswd_t  *htpasswd);
+ret_t cherokee_validator_htpasswd_new         (cherokee_validator_htpasswd_t **htpasswd, cherokee_module_props_t *props);
+ret_t cherokee_validator_htpasswd_free        (cherokee_validator_htpasswd_t  *htpasswd);
 
 ret_t cherokee_validator_htpasswd_check       (cherokee_validator_htpasswd_t  *htpasswd, cherokee_connection_t *conn);
 ret_t cherokee_validator_htpasswd_add_headers (cherokee_validator_htpasswd_t  *htpasswd, cherokee_connection_t *conn, cherokee_buffer_t *buf);

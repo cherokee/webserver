@@ -33,7 +33,7 @@
 #include "handler.h"
 #include "downloader.h"
 #include "downloader-protected.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "buffer.h"
 #include "table.h"
 #include "connection.h"
@@ -59,7 +59,7 @@ typedef struct {
 
 /* Library init function
  */
-void  MODULE_INIT(proxy)         (cherokee_module_loader_t *loader);
+void  PLUGIN_INIT_NAME(proxy)    (cherokee_plugin_loader_t *loader);
 ret_t cherokee_handler_proxy_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
 
 

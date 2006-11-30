@@ -33,7 +33,7 @@
 #include "connection.h"
 #include "connection-protected.h"
 #include "module.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "connection.h"
 #include "handler_common.h"
 #include "handler_redir.h"
@@ -160,17 +160,16 @@ cherokee_handler_nn_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_pr
 static cherokee_boolean_t _nn_is_init = false;
 
 void
-MODULE_INIT(nn) (cherokee_module_loader_t *loader)
+PLUGIN_INIT_NAME(nn) (cherokee_plugin_loader_t *loader)
 {
 	/* Is init?
 	 */
-	if (_nn_is_init)
-		return;
+	if (_nn_is_init) return;
+	_nn_is_init = true;
 	   
 	/* Load the dependences
 	 */
-	_nn_is_init = true;
-	cherokee_module_loader_load (loader, "common");
+	cherokee_plugin_loader_load (loader, "common");
 }
 
-HANDLER_MODULE_INFO_INIT_EASY (nn, http_all_methods);
+PLUGIN_INFO_HANDLER_EASY_INIT (nn, http_all_methods);

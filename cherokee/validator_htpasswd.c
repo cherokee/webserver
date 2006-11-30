@@ -29,7 +29,7 @@
 # include <crypt.h>
 #endif
 
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "connection.h"
 #include "connection-protected.h"
 #include "sha1.h"
@@ -38,16 +38,20 @@
 #define CRYPT_SALT_LENGTH 2
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_VALIDATOR_EASIEST_INIT (htpasswd, http_auth_basic);
+
+
 static ret_t 
 props_free (cherokee_validator_htpasswd_props_t *props)
 {
 	cherokee_buffer_mrproper (&props->password_file);
-
 	return cherokee_validator_props_free_base (VALIDATOR_PROPS(props));
 }
 
 ret_t 
-cherokee_validator_htpasswd_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_validator_props_t **_props)
+cherokee_validator_htpasswd_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                                ret;
 	cherokee_config_node_t              *subconf;
@@ -56,11 +60,10 @@ cherokee_validator_htpasswd_configure (cherokee_config_node_t *conf, cherokee_se
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_htpasswd_props);
 
-		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), 
-						    VALIDATOR_PROPS_FREE(props_free));
+		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), MODULE_PROPS_FREE(props_free));
 		cherokee_buffer_init (&n->password_file);
 		
-		*_props = VALIDATOR_PROPS(n);
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_HTPASSWD(*_props);
@@ -74,13 +77,13 @@ cherokee_validator_htpasswd_configure (cherokee_config_node_t *conf, cherokee_se
 }
 
 ret_t 
-cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd, cherokee_validator_props_t *props)
+cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd, cherokee_module_props_t *props)
 {	  
 	CHEROKEE_NEW_STRUCT(n,validator_htpasswd);
 
 	/* Init 	
 	 */
-	cherokee_validator_init_base (VALIDATOR(n), props);
+	cherokee_validator_init_base (VALIDATOR(n), VALIDATOR_PROPS(props), PLUGIN_INFO_VALIDATOR_PTR(htpasswd));
 	VALIDATOR(n)->support = http_auth_basic;
 
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_htpasswd_free;
@@ -360,13 +363,4 @@ cherokee_validator_htpasswd_add_headers (cherokee_validator_htpasswd_t *htpasswd
 	return ret_ok;
 }
 
-
-/* Library init function
- */
-void
-MODULE_INIT(htpasswd) (cherokee_module_loader_t *loader)
-{
-}
-
-VALIDATOR_MODULE_INFO_INIT_EASY (htpasswd, http_auth_basic);
 

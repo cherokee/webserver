@@ -80,7 +80,7 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 	}
 
 	if (entry->validator_properties != NULL) {
-		cherokee_validator_props_free (entry->validator_properties);
+		cherokee_module_props_free (entry->validator_properties);
 		entry->validator_properties = NULL;
 	}
 	
@@ -119,17 +119,17 @@ cherokee_config_entry_free (cherokee_config_entry_t *entry)
 
 
 ret_t 
-cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_module_info_t *modinfo)
+cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_plugin_info_handler_t *plugin_info)
 {
-	return_if_fail (modinfo != NULL, ret_error);
+	return_if_fail (plugin_info != NULL, ret_error);
 
-	if (modinfo->type != cherokee_handler) {
+	if (PLUGIN_INFO(plugin_info)->type != cherokee_handler) {
 		PRINT_ERROR ("Directory '%s' has not a handler module!\n", entry->document_root->buf);
 		return ret_error;
 	}
 
-	entry->handler_new_func = (handler_func_new_t) modinfo->new_func;
-	entry->handler_methods  = MODULE_INFO_HANDLER(modinfo)->valid_methods;
+	entry->handler_new_func = PLUGIN_INFO(plugin_info)->instance;
+	entry->handler_methods  = plugin_info->valid_methods;
 
 	return ret_ok;
 }

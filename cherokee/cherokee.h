@@ -52,7 +52,8 @@
 #include <cherokee/handler.h>
 #include <cherokee/encoder.h>
 #include <cherokee/connection.h>
-#include <cherokee/module_loader.h>
+#include <cherokee/plugin.h>
+#include <cherokee/plugin_loader.h>
 #include <cherokee/nonce.h>
 
 /* Client library

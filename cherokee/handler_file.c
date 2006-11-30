@@ -46,10 +46,17 @@
 #define ENTRIES "handler,file"
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_HANDLER_EASIEST_INIT (file, http_get | http_head);
+
+
+/* Methods implementation
+ */
 ret_t 
 cherokee_handler_file_props_free (cherokee_handler_file_props_t *props)
 {
-	return cherokee_module_props_free_base (MODULE_PROPS(props));
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
 
@@ -62,8 +69,8 @@ cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_file_props);
 
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
-						 MODULE_PROPS_FREE(cherokee_handler_file_props_free));
+		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+						  MODULE_PROPS_FREE(cherokee_handler_file_props_free));
 
 		n->use_cache = true;
 		*_props = MODULE_PROPS(n);
@@ -93,10 +100,9 @@ cherokee_handler_file_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 	
 	/* Init the base class object
 	 */
-	cherokee_handler_init_base (HANDLER(n), cnt, props);
+	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(file));
 
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_file_free;
-	MODULE(n)->get_name     = (module_func_get_name_t) cherokee_handler_file_get_name;
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_file_init;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_file_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_file_add_headers;
@@ -130,13 +136,6 @@ cherokee_handler_file_free (cherokee_handler_file_t *fhdl)
 	}
 
 	return ret_ok;
-}
-
-
-void  
-cherokee_handler_file_get_name (cherokee_handler_file_t *module, const char **name)
-{
-	*name = "file";
 }
 
 
@@ -707,12 +706,3 @@ exit_sendfile:
 	return ret_ok;
 }
 
-
-/*   Library init function
- */
-void
-MODULE_INIT(file) (cherokee_module_loader_t *loader)
-{
-}
-
-HANDLER_MODULE_INFO_INIT_EASY (file, http_get | http_head);

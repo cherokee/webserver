@@ -1001,11 +1001,11 @@ for mod in $modules; do
 	AC_MSG_CHECKING([module "$mod"])
 
 	if echo $use_static_module | grep $mod >/dev/null || echo $use_static_module | grep all >/dev/null; then
-		 ext_defs="$ext_defs \n extern cherokee_module_info_t cherokee_${mod}_info;"
+		 ext_defs="$ext_defs \n extern cherokee_plugin_info_t cherokee_${mod}_info;"
 
-		 headers="$headers \n void MODULE_INIT($mod) (cherokee_module_loader_t *loader);"
-		 add_calls="$add_calls \n add_static_entry (loader, \"$mod\", &cherokee_${mod}_info);"
-		 init_calls="$init_calls \n MODULE_INIT($mod)(loader);"
+		 headers="$headers \n void PLUGIN_INIT_NAME($mod) (cherokee_plugin_loader_t *loader);"
+		 add_calls="$add_calls \n add_static_entry (loader, \"$mod\", PLUGIN_INFO_PTR($mod));"
+		 init_calls="$init_calls \n PLUGIN_INIT_NAME($mod)(loader);"
 
 	      AC_MSG_RESULT([static])
 	else

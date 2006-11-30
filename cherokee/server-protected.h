@@ -48,7 +48,7 @@
 #include "virtual_server.h"
 #include "encoder_table.h"
 #include "thread.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "icons.h"
 #include "iocache.h"
 #include "regex.h"
@@ -89,7 +89,7 @@ struct cherokee_server {
 
 	/* Modules
 	 */
-	cherokee_module_loader_t   loader;
+	cherokee_plugin_loader_t   loader;
 	cherokee_encoder_table_t   encoders;
 
 	/* Tables: icons, iocache

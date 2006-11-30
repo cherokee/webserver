@@ -29,7 +29,7 @@
 
 #include "handler.h"
 #include "buffer.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "socket.h"
 #include "handler_cgi_base.h"
 #include "balancer.h"
@@ -51,12 +51,12 @@ typedef struct {
 
 #define HDL_SCGI(x)       ((cherokee_handler_scgi_t *)(x))
 #define PROP_SCGI(x)      ((cherokee_handler_scgi_props_t *)(x))
-#define HDL_SCGI_PROPS(x) (PROP_SCGI(HANDLER(x)->props))
+#define HDL_SCGI_PROPS(x) (PROP_SCGI(MODULE(x)->props))
 
  
 /* Library init function
  */
-void MODULE_INIT(scgi) (cherokee_module_loader_t *loader);
+void PLUGIN_INIT_NAME(scgi)      (cherokee_plugin_loader_t *loader);
 
 /* Methods
  */

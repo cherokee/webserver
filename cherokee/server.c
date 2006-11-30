@@ -204,7 +204,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* Module loader
 	 */
-	cherokee_module_loader_init (&n->loader);
+	cherokee_plugin_loader_init (&n->loader);
 
 	/* Virtual servers table
 	 */
@@ -371,7 +371,7 @@ cherokee_server_free (cherokee_server_t *srv)
 	/* Module loader: It must be the last action to be performed
 	 * because it will close all the opened modules.
 	 */
-	cherokee_module_loader_mrproper (&srv->loader);
+	cherokee_plugin_loader_mrproper (&srv->loader);
 
 	free (srv);	
 	return ret_ok;
@@ -1200,7 +1200,7 @@ add_encoder (cherokee_config_node_t *node, void *data)
 	ret_t                           ret;
 	cherokee_encoder_table_entry_t *enc      = NULL;
 	cherokee_matching_list_t       *matching = NULL;
-	cherokee_module_info_t         *info     = NULL;
+	cherokee_plugin_info_t         *info     = NULL;
  	cherokee_server_t              *srv      = SRV(data);
 
 	TRACE(ENTRIES, "Encoder: %s\n", node->key.buf);
@@ -1215,7 +1215,7 @@ add_encoder (cherokee_config_node_t *node, void *data)
 
 	/* Load the module library and set the info
 	 */
-	ret = cherokee_module_loader_get (&srv->loader, node->key.buf, &info);
+	ret = cherokee_plugin_loader_get (&srv->loader, node->key.buf, &info);
 	if (ret != ret_ok) goto error;
 
 	ret = cherokee_encoder_table_entry_new (&enc);
@@ -1471,7 +1471,7 @@ configure_server (cherokee_server_t *srv)
 		 */
 		ret = cherokee_config_node_get (subconf, "module_dir", &subconf2);
 		if (ret == ret_ok) {
-			ret = cherokee_module_loader_set_directory (&srv->loader, &subconf2->val);
+			ret = cherokee_plugin_loader_set_directory (&srv->loader, &subconf2->val);
 			if (ret != ret_ok) return ret;
 		}
 

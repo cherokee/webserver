@@ -54,11 +54,32 @@ typedef struct {
 #define BAL(b)  ((cherokee_balancer_t *)(b))
 
 
-typedef ret_t (* balancer_new_func_t)      (cherokee_balancer_t **balancer);
-typedef ret_t (* balancer_free_func_t)     (cherokee_balancer_t  *balancer);
+typedef ret_t (* balancer_new_func_t)  (cherokee_balancer_t **balancer);
+typedef ret_t (* balancer_free_func_t) (cherokee_balancer_t  *balancer);
 
 
-ret_t cherokee_balancer_init_base  (cherokee_balancer_t *balancer);
+/* Easy initialization
+ */
+#define BALANCER_CONF_PROTOTYPE(name)                              \
+	ret_t cherokee_balancer_ ## name ## _configure (           \
+		cherokee_balancer_t    *,                          \
+		cherokee_config_node_t *)
+
+#define PLUGIN_INFO_BALANCER_EASY_INIT(name)                       \
+	BALANCER_CONF_PROTOTYPE(name);                             \
+                                                                   \
+	PLUGIN_INFO_INIT(name, cherokee_balancer,                  \
+		(void *)cherokee_balancer_ ## name ## _new,        \
+		(void *)cherokee_balancer_ ## name ## _configure)
+
+#define PLUGIN_INFO_BALANCER_EASIEST_INIT(name)                    \
+	PLUGIN_EMPTY_INIT_FUNCTION(name)                           \
+	PLUGIN_INFO_BALANCER_EASY_INIT(name)
+
+
+/* Balancer methods
+ */
+ret_t cherokee_balancer_init_base  (cherokee_balancer_t *balancer, cherokee_plugin_info_t *info);
 ret_t cherokee_balancer_mrproper   (cherokee_balancer_t *balancer);
 ret_t cherokee_balancer_configure  (cherokee_balancer_t *balancer, cherokee_config_node_t *conf);
 

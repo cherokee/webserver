@@ -26,7 +26,7 @@
 #include "http.h"
 #include "validator_pam.h"
 #include "connection-protected.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 
 #include <security/pam_appl.h>
 
@@ -35,21 +35,26 @@
 #define CHEROKEE_AUTH_SERVICE "cherokee"
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_VALIDATOR_EASIEST_INIT (pam, http_auth_basic);
+
+
 ret_t
-cherokee_validator_pam_configure ()
+cherokee_validator_pam_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props)
 {
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_validator_pam_new (cherokee_validator_pam_t **pam, cherokee_validator_props_t *props)
+cherokee_validator_pam_new (cherokee_validator_pam_t **pam, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT(n,validator_pam);
 
 	/* Init 
 	 */
-	cherokee_validator_init_base (VALIDATOR(n), props);
+	cherokee_validator_init_base (VALIDATOR(n), VALIDATOR_PROPS(props), PLUGIN_INFO_VALIDATOR_PTR(pam));
 	VALIDATOR(n)->support = http_auth_basic;
 
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_pam_free;
@@ -217,12 +222,4 @@ cherokee_validator_pam_add_headers (cherokee_validator_pam_t  *pam, cherokee_con
 }
 
 
-/* Library init function
- */
-void
-MODULE_INIT(pam) (cherokee_module_loader_t *loader)
-{
-}
-
-VALIDATOR_MODULE_INFO_INIT_EASY (pam, http_auth_basic);
 

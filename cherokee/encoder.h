@@ -65,10 +65,32 @@ typedef struct {
 #define ENCODER_CONN(x) (CONN(ENCODER(x)->conn))
 
 
+/* Easy initialization
+ */
+#define ENCODER_CONF_PROTOTYPE(name)                                \
+	ret_t cherokee_encoder_ ## name ## _configure (             \
+		cherokee_config_node_t   *,                         \
+		cherokee_server_t        *,                         \
+	 	cherokee_module_props_t **)
+
+#define PLUGIN_INFO_ENCODER_EASY_INIT(name)                         \
+	ENCODER_CONF_PROTOTYPE(name);                               \
+                                                                    \
+	PLUGIN_INFO_INIT(name, cherokee_encoder,                    \
+		(void *)cherokee_encoder_ ## name ## _new,          \
+		(void *)NULL)
+
+#define PLUGIN_INFO_ENCODER_EASIEST_INIT(name)                      \
+	PLUGIN_EMPTY_INIT_FUNCTION(name)                            \
+	PLUGIN_INFO_ENCODER_EASY_INIT(name)
+
+
 /* Methods
  */
-ret_t cherokee_encoder_init_base   (cherokee_encoder_t *enc);
+ret_t cherokee_encoder_init_base   (cherokee_encoder_t *enc, cherokee_plugin_info_t *info);
 
+/* Encoder virtual methods
+ */
 ret_t cherokee_encoder_free        (cherokee_encoder_t *enc);
 ret_t cherokee_encoder_add_headers (cherokee_encoder_t *enc, cherokee_buffer_t *buf);
 ret_t cherokee_encoder_init        (cherokee_encoder_t *enc, void *conn);

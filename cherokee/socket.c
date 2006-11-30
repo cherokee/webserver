@@ -1068,14 +1068,14 @@ cherokee_writev (cherokee_socket_t *socket, const struct iovec *vector, uint16_t
 ret_t       
 cherokee_socket_write (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t *written)
 {
-	ret_t   ret;
-	size_t _written;
+	ret_t  ret;
+	size_t tmp = 0;
 
-	ret = cherokee_write (socket, buf->buf, buf->len, &_written);
+	ret = cherokee_write (socket, buf->buf, buf->len, &tmp);
 
-	TRACE (ENTRIES",write", "write fd=%d len=%d ret=%d done=%d\n", socket->socket, buf->len, ret, _written);
+	TRACE (ENTRIES",write", "write fd=%d len=%d ret=%d done=%d\n", socket->socket, buf->len, ret, tmp);
 
-	*written = _written;
+	*written = tmp;
 	return ret;
 }
 

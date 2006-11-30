@@ -36,7 +36,7 @@
 #include "handler.h"
 #include "list.h"
 #include "handler_cgi_base.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 
 
 #define ENV_VAR_NUM 80
@@ -62,14 +62,14 @@ typedef struct {
 #endif
 } cherokee_handler_cgi_t;
 
-#define HDL_CGI(x)       ((cherokee_handler_cgi_t *)(x))
-#define PROP_CGI(x)      ((cherokee_handler_cgi_props_t *)(x))
-#define HDL_CGI_PROPS(x) (PROP_CGI(HANDLER(x)->props))
+#define HDL_CGI(x)           ((cherokee_handler_cgi_t *)(x))
+#define PROP_CGI(x)          ((cherokee_handler_cgi_props_t *)(x))
+#define HANDLER_CGI_PROPS(x) (PROP_CGI (MODULE(x)->props))
 
 
 /* Library init function
  */
-void MODULE_INIT(cgi) (cherokee_module_loader_t *loader);
+void  PLUGIN_INIT_NAME(cgi)            (cherokee_plugin_loader_t *loader);
 
 /* Methods
  */

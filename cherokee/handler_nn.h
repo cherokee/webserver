@@ -27,12 +27,12 @@
 
 #include "common-internal.h"
 #include "handler.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 
 
 /* Library init function
  */
-void MODULE_INIT(nn) (cherokee_module_loader_t *loader);
+void  PLUGIN_INIT_NAME(nn)     (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_nn_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
 ret_t cherokee_handler_nn_init (cherokee_handler_t  *hdl);

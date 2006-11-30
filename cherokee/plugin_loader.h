@@ -26,8 +26,8 @@
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
 
-#ifndef CHEROKEE_MODULE_LOADER_H
-#define CHEROKEE_MODULE_LOADER_H
+#ifndef CHEROKEE_PLUGIN_LOADER_H
+#define CHEROKEE_PLUGIN_LOADER_H
 
 #include <cherokee/common.h>
 #include <cherokee/module.h>
@@ -36,32 +36,31 @@
 CHEROKEE_BEGIN_DECLS
 
 typedef struct {
-	cherokee_module_info_t *info;
+	cherokee_plugin_info_t *info;
 	void                   *dlopen_ref;
-} cherokee_module_loader_entry_t;
+} cherokee_plugin_loader_entry_t;
 
 typedef struct {
-	cherokee_table_t  table;
-	cherokee_buffer_t module_dir;
-} cherokee_module_loader_t;
+	cherokee_table_t        table;
+	cherokee_buffer_t       module_dir;
+} cherokee_plugin_loader_t;
 
 #define MODINFO(x)   ((cherokee_module_info_t *) (x))
-#define MODLOADER(x) ((cherokee_module_loader_t *) (x))
+#define MODLOADER(x) ((cherokee_plugin_loader_t *) (x))
 
 
-ret_t cherokee_module_loader_init     (cherokee_module_loader_t *loader);
-ret_t cherokee_module_loader_mrproper (cherokee_module_loader_t *loader);
+ret_t cherokee_plugin_loader_init           (cherokee_plugin_loader_t *loader);
+ret_t cherokee_plugin_loader_mrproper       (cherokee_plugin_loader_t *loader);
 
-ret_t cherokee_module_loader_get            (cherokee_module_loader_t *loader, char *modname, cherokee_module_info_t **info);
+ret_t cherokee_plugin_loader_set_directory  (cherokee_plugin_loader_t *loader, cherokee_buffer_t *dir);
+ret_t cherokee_plugin_loader_load           (cherokee_plugin_loader_t *loader, char *modname);
+ret_t cherokee_plugin_loader_load_no_global (cherokee_plugin_loader_t *loader, char *modname);
+ret_t cherokee_plugin_loader_unload         (cherokee_plugin_loader_t *loader, char *modname);
 
-ret_t cherokee_module_loader_set_directory  (cherokee_module_loader_t *loader, cherokee_buffer_t *dir);
-ret_t cherokee_module_loader_load           (cherokee_module_loader_t *loader, char *modname);
-ret_t cherokee_module_loader_load_no_global (cherokee_module_loader_t *loader, char *modname);
-ret_t cherokee_module_loader_unload         (cherokee_module_loader_t *loader, char *modname);
-
-ret_t cherokee_module_loader_get_info (cherokee_module_loader_t *loader, char *modname, cherokee_module_info_t **info);
-ret_t cherokee_module_loader_get_sym  (cherokee_module_loader_t *loader, char *modname, char *name, void **sym);
+ret_t cherokee_plugin_loader_get            (cherokee_plugin_loader_t *loader, char *modname, cherokee_plugin_info_t **info);
+ret_t cherokee_plugin_loader_get_info       (cherokee_plugin_loader_t *loader, char *modname, cherokee_plugin_info_t **info);
+ret_t cherokee_plugin_loader_get_sym        (cherokee_plugin_loader_t *loader, char *modname, char *name, void **sym);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_MODULE_LOADER_H */
+#endif /* CHEROKEE_PLUGIN_LOADER_H */

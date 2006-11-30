@@ -25,7 +25,13 @@
 #include "common-internal.h"
 
 #include "balancer_round_robin.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
+
+
+/* Plug-in initialization
+ */
+PLUGIN_INFO_BALANCER_EASIEST_INIT (round_robin);
+
 
 static ret_t
 dispatch (cherokee_balancer_round_robin_t *balancer, 
@@ -34,7 +40,7 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 
 ret_t 
-cherokee_balancer_round_robin_configure (cherokee_balancer_t  *balancer, cherokee_config_node_t *conf)
+cherokee_balancer_round_robin_configure (cherokee_balancer_t *balancer, cherokee_config_node_t *conf)
 {
 	ret_t ret;
 
@@ -52,7 +58,7 @@ cherokee_balancer_round_robin_new (cherokee_balancer_t **bal)
 
 	/* Init 	
 	 */
-	cherokee_balancer_init_base (BAL(n));
+	cherokee_balancer_init_base (BAL(n), PLUGIN_INFO_PTR(round_robin));
 
 	MODULE(n)->free  = (module_func_free_t) cherokee_balancer_round_robin_free;
 	BAL(n)->dispatch = (balancer_dispatch_func_t) dispatch;
@@ -101,13 +107,3 @@ error:
 }
 
 
-
-/* Module stuff
- */
-
-MODULE_INFO_INIT_EASY (balancer, round_robin);
-
-void
-MODULE_INIT(round_robin) (cherokee_module_loader_t *loader)
-{
-}

@@ -36,28 +36,28 @@ typedef struct {
 } cherokee_validator_mysql_t;
 
 typedef struct {
-	cherokee_validator_props_t	base;
+	cherokee_module_props_t	base;
 	
-	cherokee_buffer_t		host;
-	cint_t				port;
-	cherokee_buffer_t               unix_socket;
+	cherokee_buffer_t	host;
+	cint_t			port;
+	cherokee_buffer_t       unix_socket;
 	
-	cherokee_buffer_t               user;
-	cherokee_buffer_t		passwd;
-	cherokee_buffer_t		database;
-	cherokee_buffer_t		query;
+	cherokee_buffer_t       user;
+	cherokee_buffer_t	passwd;
+	cherokee_buffer_t	database;
+	cherokee_buffer_t	query;
 
-	cherokee_boolean_t              use_md5_passwd;
+	cherokee_boolean_t      use_md5_passwd;
 	
 } cherokee_validator_mysql_props_t;
 
 #define MYSQL(x)           ((cherokee_validator_mysql_t *)(x))
 #define PROP_MYSQL(p)      ((cherokee_validator_mysql_props_t *)(p))
-#define VAL_MYSQL_PROP(x)  (PROP_MYSQL(VALIDATOR(x)->props))
+#define VAL_MYSQL_PROP(x)  (PROP_MYSQL (MODULE(x)->props))
 
-ret_t cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_validator_props_t **_props);
+ret_t cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);
 
-ret_t cherokee_validator_mysql_new         (cherokee_validator_mysql_t **mysql, cherokee_validator_props_t *props);
+ret_t cherokee_validator_mysql_new         (cherokee_validator_mysql_t **mysql, cherokee_module_props_t *props);
 ret_t cherokee_validator_mysql_free        (cherokee_validator_mysql_t  *mysql);
 ret_t cherokee_validator_mysql_check       (cherokee_validator_mysql_t  *mysql, cherokee_connection_t *conn);
 ret_t cherokee_validator_mysql_add_headers (cherokee_validator_mysql_t  *mysql, cherokee_connection_t *conn, cherokee_buffer_t *buf);

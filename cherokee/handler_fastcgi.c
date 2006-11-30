@@ -39,6 +39,13 @@
 	set_env_pair (cgi, key, sizeof(key)-1, val, len)
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_HANDLER_EASIEST_INIT (fastcgi, http_get | http_post | http_head);
+
+
+/* Methods implementation
+ */
 static ret_t 
 props_free (cherokee_handler_fastcgi_props_t *props)
 {
@@ -50,7 +57,7 @@ props_free (cherokee_handler_fastcgi_props_t *props)
 	return cherokee_handler_cgi_base_props_free (PROP_CGI_BASE(props));
 }
 
-static ret_t 
+ret_t 
 cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                             ret;
@@ -62,10 +69,10 @@ cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_serve
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_fastcgi_props);
 		
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
-						 MODULE_PROPS_FREE(props_free));		
+		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n), 
+							   MODULE_PROPS_FREE(props_free));		
 
-		INIT_LIST_HEAD(&n->fastcgi_env_ref);
+		INIT_LIST_HEAD (&n->fastcgi_env_ref);
 
 		n->balancer   = NULL;
 		n->nsockets   = NSOCKS_DEFAULT;
@@ -241,7 +248,8 @@ cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 	
 	/* Init the base class
 	 */
-	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, props, set_env_pair, read_from_fastcgi);
+	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, PLUGIN_INFO_HANDLER_PTR(fastcgi), 
+					HANDLER_PROPS(props), set_env_pair, read_from_fastcgi);
 
 	/* Virtual methods
 	 */
@@ -300,7 +308,7 @@ get_dispatcher (cherokee_handler_fastcgi_t *hdl, cherokee_fcgi_dispatcher_t **di
 	cherokee_source_t                *src         = NULL;
 	cherokee_thread_t                *thread      = HANDLER_THREAD(hdl);
         cherokee_table_t                 *dispatchers = thread->fastcgi_servers;
-	cherokee_handler_fastcgi_props_t *props       = HDL_FASTCGI_PROPS(hdl);
+	cherokee_handler_fastcgi_props_t *props       = HANDLER_FASTCGI_PROPS(hdl);
 
 	/* Choose the server
 	 */
@@ -705,16 +713,4 @@ cherokee_handler_fastcgi_init (cherokee_handler_fastcgi_t *hdl)
 
 	return ret_error;
 }
-
-
-/* Module init
- */
-void  
-MODULE_INIT(fastcgi) (cherokee_module_loader_t *loader)
-{
-	printf ("IMPORTANT: This \"fastcgi\" module is NOT ready to be used. Please,\n");
-	printf ("modify your configuration in order to use the \"fcgi\" module instead.\n\n");
-}
-
-HANDLER_MODULE_INFO_INIT_EASY (fastcgi, http_get | http_post | http_head);
 

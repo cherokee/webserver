@@ -117,14 +117,14 @@ cherokee_encoder_table_entry_free (cherokee_encoder_table_entry_t *eentry)
 
 
 ret_t 
-cherokee_encoder_table_entry_get_info  (cherokee_encoder_table_entry_t *eentry, cherokee_module_info_t *info)
+cherokee_encoder_table_entry_get_info  (cherokee_encoder_table_entry_t *eentry, cherokee_plugin_info_t *info)
 {
 	if (info->type != cherokee_encoder) {
 		PRINT_ERROR ("ERROR: Wrong module type(%d): not a encoder\n", info->type);
 		return ret_error;
 	}
 
-	eentry->func_new = info->new_func;
+	eentry->func_new = info->instance;
 	return ret_ok;
 }
 

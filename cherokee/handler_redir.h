@@ -27,7 +27,7 @@
 
 #include "common.h"
 #include "handler.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "list.h"
 
 
@@ -46,12 +46,12 @@ typedef struct {
 
 #define PROP_REDIR(x)      ((cherokee_handler_redir_props_t *)(x))
 #define HDL_REDIR(x)       ((cherokee_handler_redir_t *)(x))
-#define HDL_REDIR_PROPS(x) (PROP_REDIR(HANDLER(x)->props))
+#define HDL_REDIR_PROPS(x) (PROP_REDIR(MODULE(x)->props))
 
 
 /* Library init function
  */
-void MODULE_INIT(redir) (cherokee_module_loader_t *loader);
+void  PLUGIN_INIT_NAME(redir)    (cherokee_plugin_loader_t *loader);
 ret_t cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);
 
 /* virtual methods implementation

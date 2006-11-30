@@ -44,6 +44,13 @@ static void set_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 			  char *key, int key_len, 
 			  char *val, int val_len);
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_HANDLER_EASIEST_INIT (fcgi, http_get | http_post | http_head);
+
+
+/* Methods implementation
+ */
 static ret_t
 process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cherokee_buffer_t *outbuf)
 {
@@ -205,7 +212,7 @@ props_free (cherokee_handler_fcgi_props_t *props)
 }
 
 
-static ret_t 
+ret_t 
 cherokee_handler_fcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                          ret;
@@ -217,9 +224,10 @@ cherokee_handler_fcgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_fcgi_props);
 
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
-						 MODULE_PROPS_FREE(props_free));
-		INIT_LIST_HEAD(&n->server_list);
+		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n),
+							   MODULE_PROPS_FREE(props_free));
+
+		INIT_LIST_HEAD (&n->server_list);
 		n->balancer = NULL;
 
 		*_props = MODULE_PROPS(n);
@@ -261,7 +269,8 @@ cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 
 	/* Init the base class
 	 */
-	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, props, set_env_pair, read_from_fcgi);
+	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, PLUGIN_INFO_HANDLER_PTR(fcgi), 
+					HANDLER_PROPS(props), set_env_pair, read_from_fcgi);
 	
 	/* Virtual methods
 	 */
@@ -492,7 +501,7 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 	int                            try   = 0;
 	cherokee_source_t             *src   = NULL;
 	cherokee_connection_t         *conn  = HANDLER_CONN(hdl);
-	cherokee_handler_fcgi_props_t *props = HDL_FCGI_PROPS(hdl);
+	cherokee_handler_fcgi_props_t *props = HANDLER_FCGI_PROPS(hdl);
 
 	ret = cherokee_balancer_dispatch (props->balancer, conn, &src);
 	if (ret != ret_ok) return ret;
@@ -532,7 +541,7 @@ static ret_t
 do_send (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 {
 	ret_t                  ret;
-	size_t                 written = 0;
+	size_t                 written;
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 	
 	ret = cherokee_socket_write (&hdl->socket, buffer, &written);
@@ -540,8 +549,8 @@ do_send (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 	case ret_ok:
 		break;
 	case ret_eagain:
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), HANDLER_CONN(hdl), 
-						     hdl->socket.socket, 1, false);
+		if (written > 0)
+			break;
 		return ret_eagain;
 	default:
 		conn->error_code = http_bad_gateway;
@@ -729,14 +738,4 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 	cherokee_buffer_clean (&hdl->write_buffer);
 	return ret_ok;
 }
-
-
-/* Module init
- */
-void  
-MODULE_INIT(fcgi) (cherokee_module_loader_t *loader)
-{
-}
-
-HANDLER_MODULE_INFO_INIT_EASY (fcgi, http_get | http_post | http_head);
 

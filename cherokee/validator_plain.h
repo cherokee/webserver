@@ -29,8 +29,8 @@
 #include "connection.h"
 
 typedef struct {
-	cherokee_validator_props_t base;
-	cherokee_buffer_t          password_file;
+	cherokee_module_props_t  base;
+	cherokee_buffer_t        password_file;
 } cherokee_validator_plain_props_t;
 
 typedef struct {
@@ -39,11 +39,11 @@ typedef struct {
 
 #define PLAIN(x)          ((cherokee_validator_plain_t *)(x))
 #define PROP_PLAIN(p)     ((cherokee_validator_plain_props_t *)(p))
-#define VAL_PLAIN_PROP(x) (PROP_PLAIN(VALIDATOR(x)->props))
+#define VAL_PLAIN_PROP(x) (PROP_PLAIN (MODULE(x)->props))
 
 
-ret_t cherokee_validator_plain_new  (cherokee_validator_plain_t **plain, cherokee_validator_props_t *props);
-ret_t cherokee_validator_plain_free (cherokee_validator_plain_t  *plain);
+ret_t cherokee_validator_plain_new         (cherokee_validator_plain_t **plain, cherokee_module_props_t *props);
+ret_t cherokee_validator_plain_free        (cherokee_validator_plain_t  *plain);
 
 ret_t cherokee_validator_plain_check       (cherokee_validator_plain_t  *plain, cherokee_connection_t *conn);
 ret_t cherokee_validator_plain_add_headers (cherokee_validator_plain_t  *plain, cherokee_connection_t *conn, cherokee_buffer_t *buf);

@@ -48,7 +48,7 @@ typedef struct {
 
 /* Methods
  */
-ret_t cherokee_encoder_gzip_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props);
+ret_t cherokee_encoder_gzip_configure   (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
 
 ret_t cherokee_encoder_gzip_new         (cherokee_encoder_gzip_t **encoder);
 ret_t cherokee_encoder_gzip_free        (cherokee_encoder_gzip_t  *encoder);

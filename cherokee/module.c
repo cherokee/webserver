@@ -26,38 +26,44 @@
 #include "module.h"
 
 ret_t 
-cherokee_module_init_base  (cherokee_module_t *module)
+cherokee_module_init_base (cherokee_module_t *module, cherokee_module_props_t *props, cherokee_plugin_info_t *info)
 {
-	   module->instance = NULL;
-	   module->init     = NULL;
-	   module->get_name = NULL;
-	   module->free     = NULL;
+	/* Properties
+	 */
+	module->info     = info;
+	module->props    = props;
 
-	   return ret_ok;
+	/* Virtual methods
+	 */
+	module->instance = NULL;
+	module->init     = NULL;
+	module->free     = NULL;
+
+	return ret_ok;
 }
 
 
-void
+ret_t 
 cherokee_module_get_name (cherokee_module_t *module, const char **name)
 {
-	/* Sanity check
-	 */
-	if (module == NULL) return;
+	if (module->info == NULL)
+		return ret_not_found;
 
-	if (module->get_name != NULL) {
-		module->get_name (module, name);
-		return;
+	if (module->info->name == NULL) {
+		SHOULDNT_HAPPEN;
+		return ret_error;
 	}
 
-	*name = "unknown";
+	*name = module->info->name;
+	return ret_ok;
 }
 
 
 
 /* Module properties
  */
-ret_t 
-cherokee_module_props_init_base (cherokee_module_props_t *prop, module_props_func_free_t free_func)
+ret_t
+cherokee_module_props_init_base (cherokee_module_props_t *prop, module_func_props_free_t free_func)
 {
 	prop->free = free_func;
 	return ret_ok;

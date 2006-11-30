@@ -30,6 +30,7 @@
 #include "handler_file.h"
 #include "handler_dirlist.h"
 
+
 typedef struct {
 	cherokee_module_props_t           base;
 	cherokee_handler_file_props_t    *props_file;
@@ -41,7 +42,7 @@ typedef struct {
 
 /* Library init function
  */
-void  common_init                        (cherokee_module_loader_t *loader);
+void  PLUGIN_INIT_NAME(common)           (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_common_configure  (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
 ret_t cherokee_handler_common_new        (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props);

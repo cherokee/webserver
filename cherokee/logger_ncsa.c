@@ -55,6 +55,11 @@
 #include "module.h"
 
 
+/* Plug-in initialization
+ */
+PLUGIN_INFO_LOGGER_EASIEST_INIT (ncsa);
+
+
 /* Some constants
  */
 static char *month[] = {
@@ -62,14 +67,6 @@ static char *month[] = {
 	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec", 
 	NULL
 };
-
-
-
-ret_t 
-cherokee_logger_ncsa_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, void **props)
-{
-	return ret_ok;
-}
 
 
 ret_t
@@ -80,7 +77,7 @@ cherokee_logger_ncsa_new (cherokee_logger_t **logger, cherokee_config_node_t *co
 	
 	/* Init the base class object
 	 */
-	cherokee_logger_init_base(LOGGER(n));
+	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(ncsa));
 
 	MODULE(n)->init         = (logger_func_init_t) cherokee_logger_ncsa_init;
 	MODULE(n)->free         = (logger_func_free_t) cherokee_logger_ncsa_free;
@@ -433,19 +430,3 @@ cherokee_logger_ncsa_reopen (cherokee_logger_ncsa_t *logger)
 	return open_output (logger);
 }
 
-
-
-/*   Library init function
- */
-MODULE_INFO_INIT_EASY (logger, ncsa);
-
-static cherokee_boolean_t _ncsa_is_init = false;
-
-void
-MODULE_INIT(ncsa) (cherokee_module_loader_t *loader)
-{
-	/* Init flag
-	 */
-	if (_ncsa_is_init) return;
-	_ncsa_is_init = true;
-}

@@ -48,7 +48,7 @@
 #endif
 
 #include "module.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "handler_cgi.h"
 #include "connection.h"
 #include "connection-protected.h"
@@ -69,6 +69,11 @@ static char *php_names[] = {
 	"php-cgi",
 	NULL
 };
+
+
+/* Plugin initialization
+ */
+PLUGIN_INFO_HANDLER_EASY_INIT (phpcgi, http_get | http_post | http_head);
 
 
 static ret_t
@@ -212,7 +217,7 @@ props_free (cherokee_handler_phpcgi_props_t *props)
 }
 
 
-static ret_t 
+ret_t 
 cherokee_handler_phpcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	cherokee_list_t                 *i;
@@ -246,8 +251,8 @@ cherokee_handler_phpcgi_configure (cherokee_config_node_t *conf, cherokee_server
  */
 static cherokee_boolean_t _phpcgi_is_init = false;
 
-void
-MODULE_INIT(phpcgi) (cherokee_module_loader_t *loader)
+void  
+PLUGIN_INIT_NAME(phpcgi) (cherokee_plugin_loader_t *loader)
 {
 	/* Is init?
 	 */
@@ -256,8 +261,6 @@ MODULE_INIT(phpcgi) (cherokee_module_loader_t *loader)
 	
 	/* Load the dependences
 	 */
-	cherokee_module_loader_load (loader, "cgi");
+	cherokee_plugin_loader_load (loader, "cgi");
 }
-
-HANDLER_MODULE_INFO_INIT_EASY (phpcgi, http_get | http_post | http_head);
 

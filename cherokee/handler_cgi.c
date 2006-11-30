@@ -70,6 +70,12 @@ static ret_t fork_and_execute_cgi_unix (cherokee_handler_cgi_t *cgi);
 #define set_env(cgi,k,v,vl) cherokee_handler_cgi_add_env_pair(cgi, k, sizeof(k)-1, v, vl)
 
 
+/* Plugin initialization
+ */
+PLUGIN_INFO_HANDLER_EASY_INIT (cgi, http_get | http_post | http_head);
+
+
+
 static ret_t
 read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 {
@@ -107,14 +113,15 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 
 
 ret_t
-cherokee_handler_cgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
+cherokee_handler_cgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
 	int i;
 	CHEROKEE_NEW_STRUCT (n, handler_cgi);
 	
 	/* Init the base class
 	 */
-	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, props, cherokee_handler_cgi_add_env_pair, read_from_cgi);
+	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, PLUGIN_INFO_HANDLER_PTR(cgi), 
+					HANDLER_PROPS(props), cherokee_handler_cgi_add_env_pair, read_from_cgi);
 
 	/* Virtual methods
 	 */
@@ -267,8 +274,8 @@ cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_cgi_props);
 
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
-						 MODULE_PROPS_FREE(cherokee_handler_cgi_props_free));
+		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n), 
+							   MODULE_PROPS_FREE(cherokee_handler_cgi_props_free));
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -524,7 +531,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	/* Change the execution user?
 	 */
-	if (HDL_CGI_BASE_PROPS(cgi_base)->change_user) {
+	if (HANDLER_CGI_PROPS(cgi_base)->change_user) {
 		struct stat info;
 			
 		re = stat (argv[1], &info);
@@ -763,7 +770,6 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 
 /* Library init function
  */
-
 static cherokee_boolean_t _cgi_is_init = false;
 
 #if 0
@@ -777,8 +783,8 @@ child_finished(int sng)
 }
 #endif
 
-void
-MODULE_INIT(cgi) (cherokee_module_loader_t *loader)
+void  
+PLUGIN_INIT_NAME(cgi) (cherokee_plugin_loader_t *loader)
 {
 	if (_cgi_is_init) return;
 	_cgi_is_init = true;
@@ -788,5 +794,3 @@ MODULE_INIT(cgi) (cherokee_module_loader_t *loader)
 #endif
 }
 
-
-HANDLER_MODULE_INFO_INIT_EASY (cgi, http_get | http_post | http_head);

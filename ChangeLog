@@ -1,8 +1,58 @@
+2006-11-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+        * cherokee/handler_redir.c, cherokee/handler_redir.h,
+	cherokee/handler_error_redir.c, cherokee/module_loader.c,
+	cherokee/handler_server_info.c, cherokee/module_loader.h,
+	cherokee/handler_error_redir.h, cherokee/handler_server_info.h,
+	cherokee/plugin_loader.c, cherokee/handler_admin.c,
+	cherokee/handler_cgi_base.c, cherokee/plugin_loader.h,
+	cherokee/handler_admin.h, cherokee/handler_cgi_base.h,
+	cherokee/handler_dirlist.c, cherokee/handler_nn.c,
+	cherokee/handler_dirlist.h, cherokee/virtual_server.c,
+	cherokee/handler_nn.h, cherokee/handler_common.c,
+	cherokee/module.c, cherokee/validator_ldap.c,
+	cherokee/config_entry.c, cherokee/handler_common.h,
+	cherokee/module.h, cherokee/validator_ldap.h,
+	cherokee/config_entry.h, cherokee/validator_plain.c,
+	cherokee/validator_plain.h, cherokee/validator.c,
+	cherokee/encoder_table.c, cherokee/validator.h,
+	cherokee/encoder_table.h, cherokee/validator_htpasswd.c,
+	cherokee/plugin.h, cherokee/validator_htpasswd.h,
+	cherokee/handler_file., cherokee/handler., cherokee/encoder.c,
+	cherokee/handler_file.h, cherokee/handler.h, cherokee/encoder.h,
+	cherokee/Makefile.am, cherokee/handler_fcgi.c,
+	cherokee/balancer_round_robin.c, cherokee/encoder_gzip.c,
+	cherokee/handler_fcgi.h, cherokee/handler_fastcgi.c,
+	cherokee/encoder_gzip.h, cherokee/handler_fastcgi.h,
+	cherokee/balancer.c, cherokee/balancer.h,
+	cherokee/handler_proxy.c, cherokee/handler_scgi.c,
+	cherokee/logger_ncsa.c, cherokee/handler_proxy.h,
+	cherokee/handler_error.c, cherokee/handler_scgi.h,
+	cherokee/logger_ncsa.h, cherokee/handler_error.h,
+	cherokee/handler_cgi.c, cherokee/server-protected.h,
+	cherokee/handler_cgi.h, cherokee/validator_mysql.c,
+	cherokee/logger.c, cherokee/validator_mysql.h,
+	cherokee/validator_htdigest.c, cherokee/logger.h,
+	cherokee/validator_htdigest.h, cherokee/cherokee.h,
+	cherokee/server.c, cherokee/handler_phpcgi.c,
+	cherokee/handler_phpcgi.h, cherokee/logger_combined.c,
+	cherokee/validator_pam.c, cherokee/validator_pam.h,
+	cherokee/socket.c, cherokee/logger_w3c.c: "module" has been
+	splitted into module and plug-in.
+
+	* cherokee/handler_fcgi.c (do_send): Do not move the connection to
+	polling if it receives a ret_eagain when it tries to write the
+	post content.
+
+	* cherokee/socket.c (cherokee_socket_write): Better
+	initialization.  Fixes a potential memory corruption problem.
+	
 2006-11-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_fcgi.c (do_send): Post handling was
 	broken. Actually, I broke it with another commit a couple of days
-	ago. It's working again.
+	ago. It's working again. This problem showed up using Gallery 2,
+	there were people who couldn't upload pictures.
 
 	* cherokee/config_node.c (cherokee_config_node_add): Fixes bug
 	#104. It was messing up the configuration tree if the entries were

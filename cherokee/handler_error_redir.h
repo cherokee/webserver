@@ -29,7 +29,7 @@
 
 #include "handler.h"
 #include "connection.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 
 typedef struct {
 	cherokee_handler_t handler;
@@ -47,9 +47,9 @@ typedef struct {
 
 /* Library init function
  */
-void MODULE_INIT(error_redir) (cherokee_module_loader_t *loader);
+void  PLUGIN_INIT_NAME(error_redir)          (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props);
-ret_t cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
+ret_t cherokee_handler_error_redir_new       (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props);
 
 #endif /* CHEROKEE_HANDLER_ERROR_REDIR_H */

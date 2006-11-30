@@ -24,8 +24,13 @@
 
 #include "common-internal.h"
 #include "validator_htdigest.h"
-#include "module_loader.h"
+#include "plugin_loader.h"
 #include "connection-protected.h"
+
+
+/* Plug-in initialization
+ */
+PLUGIN_INFO_VALIDATOR_EASIEST_INIT (htdigest, http_auth_basic | http_auth_digest);
 
 
 static ret_t 
@@ -36,7 +41,7 @@ props_free (cherokee_validator_htdigest_props_t *props)
 }
 
 ret_t 
-cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_validator_props_t **_props)
+cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                                ret;
 	cherokee_config_node_t              *subconf;
@@ -45,11 +50,10 @@ cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_se
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_htdigest_props);
 
-		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), 
-						    VALIDATOR_PROPS_FREE(props_free));
+		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), MODULE_PROPS_FREE(props_free));
 		cherokee_buffer_init (&n->password_file);
 		
-		*_props = VALIDATOR_PROPS(n);
+		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_HTDIGEST(*_props);
@@ -64,13 +68,13 @@ cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_se
 
 
 ret_t 
-cherokee_validator_htdigest_new (cherokee_validator_htdigest_t **htdigest, cherokee_validator_props_t *props)
+cherokee_validator_htdigest_new (cherokee_validator_htdigest_t **htdigest, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT(n,validator_htdigest);
 
 	/* Init 	
 	 */
-	cherokee_validator_init_base (VALIDATOR(n), props);
+	cherokee_validator_init_base (VALIDATOR(n), VALIDATOR_PROPS(props), PLUGIN_INFO_VALIDATOR_PTR(htdigest));
 	VALIDATOR(n)->support = http_auth_basic | http_auth_digest;
 
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_htdigest_free;
@@ -262,13 +266,4 @@ cherokee_validator_htdigest_add_headers (cherokee_validator_htdigest_t *htdigest
 }
 
 
-
-/* Library init function
- */
-void
-MODULE_INIT(htdigest) (cherokee_module_loader_t *loader)
-{
-}
-
-VALIDATOR_MODULE_INFO_INIT_EASY (htdigest, http_auth_basic | http_auth_digest);
 

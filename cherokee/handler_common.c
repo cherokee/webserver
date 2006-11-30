@@ -65,7 +65,7 @@ cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)
 		props->props_dirlist = NULL;
 	}
 
-	return cherokee_module_props_free_base (MODULE_PROPS(props));
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
 
@@ -78,8 +78,8 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_common_props);
 
-		cherokee_module_props_init_base (MODULE_PROPS(n),
-						 MODULE_PROPS_FREE(cherokee_handler_common_props_free));
+		cherokee_handler_props_init_base (HANDLER_PROPS(n),
+						  MODULE_PROPS_FREE(cherokee_handler_common_props_free));
 
 		n->props_file    = NULL;
 		n->props_dirlist = NULL;
@@ -333,16 +333,16 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
  */
 static cherokee_boolean_t _common_is_init = false;
 
-void
-MODULE_INIT(common) (cherokee_module_loader_t *loader)
+void  
+PLUGIN_INIT_NAME(common) (cherokee_plugin_loader_t *loader)
 {
 	if (_common_is_init) return;
 	_common_is_init = true;
 
 	/* Load the dependences
 	 */
-	cherokee_module_loader_load (loader, "file");
-	cherokee_module_loader_load (loader, "dirlist");
+	cherokee_plugin_loader_load (loader, "file");
+	cherokee_plugin_loader_load (loader, "dirlist");
 }
 
-HANDLER_MODULE_INFO_INIT_EASY (common, http_all_methods);
+PLUGIN_INFO_HANDLER_EASY_INIT (common, http_all_methods);
