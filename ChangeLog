@@ -1,5 +1,8 @@
 2006-11-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* configure.in (PACKAGE_PATCH_VERSION): It must be defined even if
+	it isn't a Beta release.  It fixes bug #105.
+
 	* cherokee/handler_redir.c (cherokee_handler_redir_new): Fixes
 	little memory leak.
 
