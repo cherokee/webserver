@@ -760,16 +760,35 @@ cherokee_bind_v6 (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_t
 static ret_t
 cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 {
-	int re;
+	int         re;
+	struct stat buf;
 
+	/* Sanity check
+	 */
 	if ((listen_to->len <= 0) ||
 	    (listen_to->len >= sizeof(SOCKET_SUN_PATH(sock))))
 		return ret_error;
+	
+	/* Remove the socket if it already exists
+	 */
+	re = stat (listen_to->buf, &buf);
+	if (re == 0) {
+		if (! S_ISSOCK(buf.st_mode)) {
+			PRINT_ERROR ("ERROR: %s isn't a socket!\n", listen_to->buf);
+			return ret_error;			
+		}
 
+		re = unlink (listen_to->buf);
+		if (re != 0) {
+			PRINT_ERROR ("ERROR: Couldn't remove %s\n", listen_to->buf);
+			return ret_error;
+		}
+	}
+
+	/* Create the socket
+	 */
 	memcpy (SOCKET_SUN_PATH(sock), listen_to->buf, listen_to->len + 1);
 	sock->client_addr_len = sizeof(SOCKET_ADDR_UNIX(sock)->sun_family) + listen_to->len;
-
-	mktemp (SOCKET_SUN_PATH(sock));
 
 	re = bind (SOCKET_FD(sock), SOCKET_ADDR_UNIX(sock), sock->client_addr_len);
 	if (re != 0) return ret_error;

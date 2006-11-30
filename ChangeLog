@@ -1,5 +1,9 @@
 2006-11-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/socket.c (cherokee_bind_local): Now it removes the
+	socket if it was already there (checking that it's certainly a
+	socket).
+
 	* configure.in (PACKAGE_PATCH_VERSION): It must be defined even if
 	it isn't a Beta release.  It fixes bug #105.
 
