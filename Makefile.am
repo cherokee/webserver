@@ -149,6 +149,10 @@ uninstall-local: uninstall-local-config
 		echo "rm -f $(cherokeeconfdir)/mods-available/icons"; \
 		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mods-available/icons; \
 	fi
+	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-enabled/icons ; then \
+		echo "rm -f $(cherokeeconfdir)/mods-enabled/icons"; \
+		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mods-enabled/icons; \
+	fi
 
 test:
 	$(MAKE) -C qa test
