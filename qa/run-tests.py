@@ -86,6 +86,10 @@ if type(pause) == types.StringType:
     else:
         pause = sys.maxint
 
+# Look for PHP
+PHPCGI_PATH = look_for_php()
+if not PHPCGI_PATH: sys.exit(1)
+
 # Configuration file base
 CONF_BASE = """
 #

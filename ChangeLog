@@ -1,5 +1,9 @@
 2006-12-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py, qa/conf.py (PHP_DIRS, PHP_NAMES), qa/util.py
+	(look_for_php): Added PHP autodetection. If PHPCGI_PATH is set to
+	"auto" it will look for the interpreter.
+
 	* cherokee/plugin_loader.c (execute_init_func): Fixes plugin's
 	init function look up. (load_common): Better error management.
 	(get_sym_from_dlopen_handler): it was calling dlerror() too many

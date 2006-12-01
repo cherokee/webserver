@@ -1,4 +1,5 @@
-import random
+import os, random
+from conf import *
 
 def str_random_generate (n):
     c = ""
@@ -71,3 +72,16 @@ def str_random (n):
     str_buf += tmp
     return str_buf[offset:]
 
+
+def look_for_php():    
+    if PHPCGI_PATH != "auto":
+        return PHPCGI_PATH
+
+    for p in PHP_DIRS:
+        for n in PHP_NAMES:
+            php = os.path.join(p,n)
+            if os.path.exists(php):
+                return php
+
+    print "ERROR: PHP interpreter not found"
+    return None
