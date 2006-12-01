@@ -206,7 +206,7 @@ get_sym_from_dlopen_handler (void *dl_handle, const char *sym)
 	dlerror();
 	re = (void *) dlsym(dl_handle, sym);
 	if ((error = dlerror()) != NULL)  {
-		PRINT_MSG ("ERROR: %s\n", dlerror());
+		PRINT_MSG ("ERROR: %s\n", error);
 		return NULL;
 	}
 	
@@ -262,7 +262,7 @@ execute_init_func (cherokee_plugin_loader_t *loader, const char *module, entry_t
 
 	/* Build the init function name
 	 */
-	ret = cherokee_buffer_add_va (&init_name, "cherokee_module_%s_init", module);
+	ret = cherokee_buffer_add_va (&init_name, "cherokee_plugin_%s_init", module);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	/* Get the function
@@ -415,7 +415,8 @@ load_common (cherokee_plugin_loader_t *loader, char *modname, int flags)
 
 	/* Execute init function
 	 */
-	execute_init_func (loader, modname, entry);
+	ret = execute_init_func (loader, modname, entry);
+	if (ret != ret_ok) return ret;
 
 	return ret_ok;
 }
