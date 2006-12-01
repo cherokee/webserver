@@ -1,7 +1,10 @@
 2006-12-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/socket.c: There were a couple of includes missing. It
+	was generating a compilation error on Solaris. Fixes bug #111.
+
 	* Makefile.am (uninstall-local): It wasn't removing one of the
-	symbolics.
+	symbolic links.
 
 2006-11-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 

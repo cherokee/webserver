@@ -60,7 +60,6 @@
 # include <time.h>
 #endif
 
-
 /* sendfile() function related includes
  */
 #if defined(LINUX_SENDFILE_API) 
@@ -85,6 +84,8 @@ extern int32_t sendfile (int out_fd, int in_fd, int32_t *offset, uint32_t count)
 #define ENTRIES "socket"
 
 
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
