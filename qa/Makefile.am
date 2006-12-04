@@ -136,7 +136,10 @@ run-tests.py \
 131-ChangeUser-phpcgi.py \
 132-file-ContentType.py \
 133-If-None-Match.py \
-134-HTTP_headers.py
+134-HTTP_headers.py \
+135-RedirParams.py \
+136-BadRange.py \
+137-Mime1.py
 
 test:
 	./run-tests.py
