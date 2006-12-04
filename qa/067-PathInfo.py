@@ -31,4 +31,4 @@ class Test (TestBase):
         self.WriteFile (www, "pathinfo/test.php", 0444, '<?php echo "PathInfo is: ".$_SERVER[PATH_INFO]; ?>')
 
     def Precondition (self):
-        return os.path.exists (PHPCGI_PATH)
+        return os.path.exists (look_for_php())

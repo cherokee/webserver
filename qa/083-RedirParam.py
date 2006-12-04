@@ -23,5 +23,5 @@ class Test (TestBase):
                         '<?php echo "one=".$_GET["arg1"]." two=".$_GET["arg2"]?>')
 
     def Precondition (self):
-        return os.path.exists (PHPCGI_PATH)
+        return os.path.exists (look_for_php())
 

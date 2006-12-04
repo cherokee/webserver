@@ -19,4 +19,4 @@ class Test (TestBase):
         self.WriteFile (d, "post.php", 0444, '<?php echo $_POST["magic"] ?>')
 
     def Precondition (self):
-        return os.path.exists (PHPCGI_PATH)
+        return os.path.exists (look_for_php())

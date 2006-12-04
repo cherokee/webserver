@@ -25,7 +25,7 @@ class Test (TestBase):
         self.request           = "GET /respin1/%s/ HTTP/1.0\r\n" % (MAGIC)
         self.expected_error    = 200        
         self.expected_content  = "param is %s" % (MAGIC)
-        self.conf              = CONF % (PHPCGI_PATH)
+        self.conf              = CONF % (look_for_php())
 
     def Prepare (self, www):
         d = self.Mkdir (www, "respin1-cgi")
@@ -33,4 +33,4 @@ class Test (TestBase):
                         '<?php echo "param is ". $_GET["param"]; ?>')
 
     def Precondition (self):
-        return os.path.exists (PHPCGI_PATH)
+        return os.path.exists (look_for_php())

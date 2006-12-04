@@ -6,23 +6,33 @@ CHEROKEE_MODS     = "/usr/lib/cherokee"
 
 STRACE_PATH       = "/usr/bin/strace"
 VALGRIND_PATH     = "/usr/bin/valgrind"
-PYTHON_PATH       = "/usr/bin/python2.4"
+PYTHON_PATH       = "auto"
 PHPCGI_PATH       = "auto"
+PHP_FCGI_PORT     = 1979
 
 SSL_CERT_FILE     = "/etc/cherokee/ssl/cherokee.pem"
 SSL_CERT_KEY_FILE = "/etc/cherokee/ssl/cherokee.pem"
 SSL_CA_FILE       = "/etc/cherokee/ssl/cherokee.pem"
 
-PHP_FCGI_PORT     = 1979
 
+# Paths
+#
 PHP_DIRS          = ["/usr/lib/cgi-bin/",
                      "/usr/bin/",
                      "/usr/local/bin/",
                      "/opt/csw/php5/bin/"]
-
+PYTHON_DIRS       = ["/usr/bin",
+                     "/usr/local/bin",
+                     "/opt/csw/bin"]
+# Names
+#
 PHP_NAMES         = ["php5-cgi",
                      "php-cgi",
                      "php4-cgi"
                      "php5",
                      "php",
                      "php4"]
+PYTHON_NAMES      = ["python2.5",
+                     "python2.4",
+                     "python",
+                     "python2.3"]

@@ -21,7 +21,7 @@ class Test (TestBase):
         self.expected_error    = 200
         self.expected_content  = "I'm %s" % (USER)
 
-        self.conf = CONF % (PHPCGI_PATH)
+        self.conf = CONF % (look_for_php())
 
     def Prepare (self, www):
         d = self.Mkdir (www, "change_user1", 0777)
@@ -34,4 +34,4 @@ class Test (TestBase):
         if os.geteuid() != 0:
             return False
 
-        return os.path.exists (PHPCGI_PATH)
+        return os.path.exists (look_for_php())

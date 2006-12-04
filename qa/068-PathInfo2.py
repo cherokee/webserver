@@ -14,7 +14,7 @@ class Test (TestBase):
         self.name = "PathInfo, phpcgi"
 
         self.request           = "GET /pathinfo2/deep/deep/test.php%s HTTP/1.0\r\n" %(PATH_INFO)
-        self.conf              = CONF % (PHPCGI_PATH)
+        self.conf              = CONF % (look_for_php())
         self.expected_error    = 200
         self.expected_content  = "PathInfo is: "+PATH_INFO
 
@@ -24,4 +24,4 @@ class Test (TestBase):
                         '<?php echo "PathInfo is: ".$_SERVER[PATH_INFO]; ?>')
 
     def Precondition (self):
-        return os.path.exists (PHPCGI_PATH)
+        return os.path.exists (look_for_php())

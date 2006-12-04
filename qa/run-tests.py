@@ -86,9 +86,11 @@ if type(pause) == types.StringType:
     else:
         pause = sys.maxint
 
-# Look for PHP
-PHPCGI_PATH = look_for_php()
-if not PHPCGI_PATH: sys.exit(1)
+# Check the interpreters
+print "Interpreters"
+print_key('PHP',    look_for_php())
+print_key('Python', look_for_python())
+print
 
 # Configuration file base
 CONF_BASE = """
@@ -116,11 +118,11 @@ extensions!php!handler!balancer = round_robin
 extensions!php!handler!balancer!type = interpreter
 extensions!php!handler!balancer!local1!host = localhost:%d
 extensions!php!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
-extensions!php!handler!balancer!local1!interpreter = %s -b %d""" % (PHP_FCGI_PORT, PHPCGI_PATH, PHP_FCGI_PORT)
+extensions!php!handler!balancer!local1!interpreter = %s -b %d""" % (PHP_FCGI_PORT, look_for_php(), PHP_FCGI_PORT)
 
 PHP_CGI = """extensions!php!handler = phpcgi
 extensions!php!priority = 10000
-extensions!php!handler!interpreter = %s""" % (PHPCGI_PATH)
+extensions!php!handler!interpreter = %s""" % (look_for_php())
 
 
 if fcgi:
@@ -189,7 +191,10 @@ if port is None:
             name = server[server.rfind('/') + 1:]
             os.execl (server, name, "-C", cfg_file)
     else:
-        print "PID: %d - %s" % (pid, CHEROKEE_PATH)
+        print "Server"
+        print_key ('PID', str(pid));
+        print_key ('Path', CHEROKEE_PATH)
+        print
         time.sleep(7)
 
 its_clean = False
@@ -205,8 +210,8 @@ def clean_up():
         os.unlink (cfg_file)
         shutil.rmtree (www, True)
     else:
-        print "Test directory %s" % (www)
-        print "Configuration  %s" %(cfg_file)
+        print_key ("Testdir", www)
+        print_key ("Config",  cfg_file)
         print
 
     # Kill the server

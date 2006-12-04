@@ -38,7 +38,7 @@ class Test (TestBase):
                         ?>""")
 
     def Precondition (self):
-        if not os.path.exists (PHPCGI_PATH):
+        if not os.path.exists (look_for_php()):
             return False
 
         f = os.popen("ps -p %d -L | wc -l" % (os.getpid()))

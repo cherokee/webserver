@@ -27,5 +27,5 @@ class Test (TestBase):
                             "<?php echo 'Post: '.$_POST['var']; ?>")
 
     def Precondition (self):
-        return os.path.exists (PHPCGI_PATH)
+        return os.path.exists (look_for_php())
 

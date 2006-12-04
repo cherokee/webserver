@@ -20,7 +20,7 @@ class Test (TestBase):
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.forbidden_content = COMMENT
-        self.conf              = CONF % (PHPCGI_PATH)
+        self.conf              = CONF % (look_for_php())
 
     def Prepare (self, www):
         self.Mkdir (www, "inherit3/dir1/dir2/dir3")
@@ -28,5 +28,5 @@ class Test (TestBase):
                         '<?php %s echo "%s"; ?>'%(COMMENT,MAGIC))
 
     def Precondition (self):
-        return os.path.exists (PHPCGI_PATH)
+        return os.path.exists (look_for_php())
 

@@ -1,5 +1,23 @@
 2006-12-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/031-Post+urlencoded2.py, qa/101-HugePost.py,
+	qa/083-RedirParam.py, qa/080-Extension2.py, qa/060-BigPost.py,
+	qa/029-Post+Without-lenght.py, qa/127-SCGI-Post.py,
+	qa/087-Location.py, qa/134-HTTP_headers.py, qa/037-PHP-post.py,
+	qa/072-Inherit3.py, qa/run-tests.py, qa/135-RedirParams.py,
+	qa/081-DocumentRoot-Common-index.py, qa/066-DirectoryIndex3.py,
+	qa/126-SCGI.py, qa/128-ValidMethod-common.py,
+	qa/116-RequestTiny.py, qa/038-PHP-get.py, qa/035-PHP-simple.py,
+	qa/065-DirectoryIndex2.py, qa/131-ChangeUser-phpcgi.py,
+	qa/079-Extension.py, qa/133-If-None-Match.py,
+	qa/064-DirectoryIndex.py, qa/068-PathInfo2.py, qa/067-PathInfo.py,
+	qa/115-Respin.py: Now it uses the look_for_python() function
+	instead of PYTHON_PATH.
+
+	* qa/util.py (look_for_python): Added new function to look for the
+	Python interpreter. Now it works in the same way the PHP
+	interpreter detection does.
+
 	* qa/137-Mime1.py, qa/Makefile.am (EXTRA_DIST): Added new QA test
 	to ensure that Content-type header is properly sent to the client.
 

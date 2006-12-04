@@ -73,15 +73,49 @@ def str_random (n):
     return str_buf[offset:]
 
 
+__php_ref = None
 def look_for_php():    
+    global __php_ref
+
+    if __php_ref != None:
+        return __php_ref
+    
     if PHPCGI_PATH != "auto":
+        __php_ref = php
         return PHPCGI_PATH
 
     for p in PHP_DIRS:
         for n in PHP_NAMES:
             php = os.path.join(p,n)
             if os.path.exists(php):
+                __php_ref = php
                 return php
 
     print "ERROR: PHP interpreter not found"
     return None
+
+
+__python_ref = None
+def look_for_python():
+    global __python_ref
+
+    if __python_ref != None:
+        return __python_ref    
+
+    if PYTHON_PATH != "auto":
+        __python_ref = py
+        return PYTHON_PATH
+
+    for p in PYTHON_DIRS:
+        for n in PYTHON_NAMES:
+            py = os.path.join(p,n)
+            if os.path.exists(py):
+                __python_ref = py
+                return py
+
+    print "ERROR: Python interpreter not found"
+    return None
+
+
+def print_key (key, val):
+    print "%10s: %s" % (key, val)

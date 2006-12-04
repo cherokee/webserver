@@ -11,7 +11,7 @@ class Test (TestBase):
         TestBase.__init__ (self)
         self.name = "Post request without length"
 
-        self.conf           = CONF % (PHPCGI_PATH)
+        self.conf           = CONF % (look_for_php())
         self.request        = "POST /post1/test.php HTTP/1.0\r\n"
         self.expected_error = 411
 

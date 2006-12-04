@@ -40,8 +40,8 @@ class Test (TestBase):
     def Prepare (self, www):
         scgi_file = self.WriteFile (www, "scgi_test1.scgi", 0444, SCRIPT)
 
-        self.conf = CONF % (DIR, DIR, DIR, DIR, PORT, DIR, PYTHON_PATH, scgi_file, DIR)
+        self.conf = CONF % (DIR, DIR, DIR, DIR, PORT, DIR, look_for_python(), scgi_file, DIR)
 
     def Precondition (self):
-        re = os.system ("%s -c 'import scgi.scgi_server' 2>/dev/null" % (PYTHON_PATH)) 
+        re = os.system ("%s -c 'import scgi.scgi_server' 2>/dev/null" % (look_for_python())) 
         return (re == 0)

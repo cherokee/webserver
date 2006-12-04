@@ -22,4 +22,4 @@ class Test (TestBase):
         self.WriteFile (d, "test_index.html", 0444, MAGIC)
 
     def Precondition (self):
-        return os.path.exists (PHPCGI_PATH)
+        return os.path.exists (look_for_php())
