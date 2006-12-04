@@ -4,7 +4,7 @@ vserver!default!ssl_certificate_file = %sysconfdir%/cherokee/ssl/cherokee.pem
 
 ## This is the private key of your certificate, PEM-encoded.
 ##
-vserver!default!ssl_certificate_keyring = %sysconfdir%/cherokee/ssl/cherokee.pem
+vserver!default!ssl_certificate_key_file = %sysconfdir%/cherokee/ssl/cherokee.pem
 
 ## This is a file containing all certification authorities that you trust.
 ## Tip: you can just use the file cert.pem
