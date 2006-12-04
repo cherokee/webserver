@@ -482,6 +482,9 @@ cherokee_config_node_read_list (cherokee_config_node_t           *conf,
 		return ret_not_found;
 
 	for (;;) {
+		while ((*ptr == ' ') && (*ptr != '\0'))
+			ptr++;
+
 		stop = strchr (ptr, ',');
 		if (stop != NULL) *stop = '\0';
 	

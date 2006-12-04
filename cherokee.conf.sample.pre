@@ -17,8 +17,7 @@ server!pid_file = /var/run/cherokee.pid
 server!server_tokens = full
 server!encoder!gzip!allow = html,html,txt
 server!panic_action = %prefix%/bin/cherokee-panic
-server!mime_file = %sysconfdir%/cherokee/mime.types
-server!mime_file = %sysconfdir%/cherokee/mime.compression.types
+server!mime_files = %sysconfdir%/cherokee/mime.types, %sysconfdir%/cherokee/mime.compression.types
 
 # Default virtual server
 #

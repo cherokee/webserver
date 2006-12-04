@@ -28,6 +28,8 @@
 #include "mime-protected.h"
 #include "util.h"
 
+#define ENTRIES "mime"
+
 
 ret_t 
 cherokee_mime_new (cherokee_mime_t **mime)
@@ -119,6 +121,7 @@ cherokee_mime_load_mime_types (cherokee_mime_t *mime, char *filename)
 	cherokee_buffer_t  ext  = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t  type = CHEROKEE_BUF_INIT;
 
+	TRACE(ENTRIES, "Loading mime file: '%s'\n", filename);
 
 	ret = cherokee_buffer_read_file (&file, filename);
 	if (ret != ret_ok) goto error;
@@ -193,6 +196,8 @@ cherokee_mime_load_mime_types (cherokee_mime_t *mime, char *filename)
 			 */
 			cherokee_buffer_add (&ext, p, tmp-p);
 			cherokee_table_add (&mime->mime_table, ext.buf, entry);
+
+			TRACE(ENTRIES, "Adding mime '%s' -> '%s'\n", ext.buf, type.buf);
 
 			p = tmp;
 		}

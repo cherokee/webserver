@@ -1277,9 +1277,10 @@ add_vserver (cherokee_config_node_t *node, void *data)
 
 
 static ret_t 
-load_mime_file (cherokee_server_t *srv, cherokee_buffer_t *mime_file)
+load_mime_file (char *file, void *data)
 {
-	ret_t ret;
+	ret_t              ret;
+	cherokee_server_t *srv = SRV(data);
 
 #ifndef CHEROKEE_EMBEDDED 
 	if (srv->mime == NULL) {
@@ -1290,9 +1291,9 @@ load_mime_file (cherokee_server_t *srv, cherokee_buffer_t *mime_file)
 		}
 	}
 
-	ret = cherokee_mime_load_mime_types (srv->mime, mime_file->buf);
+	ret = cherokee_mime_load_mime_types (srv->mime, file);
 	if (ret < ret_ok) {
-		PRINT_MSG ("Couldn't load MIME configuration file %s\n", mime_file->buf);
+		PRINT_MSG ("Couldn't load MIME configuration file '%s'\n", file);
 		return ret;
 	}
 #endif
@@ -1363,8 +1364,8 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_clean (&srv->pidfile);
 		cherokee_buffer_add_buffer (&srv->pidfile, &conf->val);
 
-	} else if (equal_buf_str (&conf->key, "mime_file")) {
-		ret = load_mime_file (srv, &conf->val);
+	} else if (equal_buf_str (&conf->key, "mime_files")) {
+		ret = cherokee_config_node_read_list (conf, NULL, load_mime_file, srv);
 		if (ret != ret_ok) return ret;
 
 	} else if (equal_buf_str (&conf->key, "listen")) {
