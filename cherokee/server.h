@@ -36,14 +36,6 @@
 
 CHEROKEE_BEGIN_DECLS
 
-typedef enum {
-	cherokee_version_product,
-	cherokee_version_minor,  
-	cherokee_version_minimal,
-	cherokee_version_os,
-	cherokee_version_full
-} cherokee_server_token_t;
-
 typedef struct cherokee_server cherokee_server_t;
 typedef void (* cherokee_server_reinit_cb_t) (cherokee_server_t *new_srv);
 

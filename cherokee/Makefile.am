@@ -702,6 +702,8 @@ common.h \
 common-internal.h \
 util.h \
 util.c \
+version.h \
+version.c \
 buffer.h \
 buffer.c \
 table.h \
@@ -874,6 +876,7 @@ cherokee.h \
 macros.h \
 common.h \
 util.h \
+version.h \
 buffer.h\
 fdpoll.h \
 table.h \

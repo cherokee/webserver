@@ -683,15 +683,8 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 	else
 		port = srv->port_tls;
 	
-	switch (srv->server_token) {
-	case cherokee_version_product:
-		cherokee_buffer_add_version (&dhdl->server_software, port, ver_full_html);
-	case cherokee_version_minor:
-	case cherokee_version_minimal:
-	case cherokee_version_os:
-	case cherokee_version_full:
-		cherokee_buffer_add_version (&dhdl->server_software, port, ver_port_html);
-	}
+	ret = cherokee_version_add_w_port (&dhdl->server_software, srv->server_token, port);
+	if (unlikely (ret != ret_ok)) return ret;
 
  	return ret_ok;
 }

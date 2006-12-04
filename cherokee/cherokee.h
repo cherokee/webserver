@@ -32,6 +32,7 @@
 #include <cherokee/macros.h>
 #include <cherokee/common.h>
 #include <cherokee/util.h>
+#include <cherokee/version.h>
 #include <cherokee/buffer.h>
 #include <cherokee/fdpoll.h>
 #include <cherokee/table.h>

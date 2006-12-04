@@ -53,7 +53,6 @@
 
 #include <cherokee/buffer.h>
 
-
 CHEROKEE_BEGIN_DECLS
 
 #ifdef _WIN32

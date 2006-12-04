@@ -674,43 +674,6 @@ cherokee_buffer_print_debug (cherokee_buffer_t *buf, int len)
 }
 
 
-ret_t 
-cherokee_buffer_add_version (cherokee_buffer_t *buf, int port, cherokee_version_t ver)
-{
-	ret_t       ret;
-	static char port_str[6];
-	static int  port_len = 0;
-
-	if (port_len == 0) {
-		port_len = snprintf (port_str, 6, "%d", port);
-	}
-
-	switch (ver) {
-	case ver_full_html:
-		cherokee_buffer_ensure_size (buf, buf->len + 29 + sizeof(PACKAGE_VERSION) + 6 + port_len + 10);
-
-		cherokee_buffer_add_str (buf, 
-					 "<address>Cherokee web server " PACKAGE_VERSION " Port ");
-		cherokee_buffer_add (buf, port_str, port_len);
-		cherokee_buffer_add_str (buf, "</address>");
-		break;
-
-	case ver_port_html:
-		cherokee_buffer_ensure_size (buf, buf->len + 34 + port_len + 10);
-
-		cherokee_buffer_add_str (buf, "<address>Cherokee web server Port ");
-		cherokee_buffer_add (buf, port_str, port_len);
-		cherokee_buffer_add_str (buf, "</address>");
-		break;
-
-	default:	
-		SHOULDNT_HAPPEN;
-	}
-
-	return ret;
-}
-
-
 /*
  * Unescape a string that may have escaped characters %xx
  * where xx is the hexadecimal number equal to the character ascii value.

@@ -82,6 +82,7 @@ cherokee_handler_error_free (cherokee_handler_error_t *hdl)
 static ret_t
 build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *buffer)
 {
+	ret_t              ret;
 	cuint_t            port;
 	cherokee_buffer_t *escaped = NULL;
 
@@ -177,11 +178,9 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 	else 
  		port = CONN_SRV(cnt)->port_tls;
 
-	if (CONN_SRV(cnt)->server_token <= cherokee_version_product) {
-		cherokee_buffer_add_version (buffer, port, ver_port_html);
-	} else {
-		cherokee_buffer_add_version (buffer, port, ver_full_html);
-	}
+	ret = cherokee_version_add_w_port (buffer, CONN_SRV(cnt)->server_token, port);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	cherokee_buffer_add_str (buffer, "</body></html>"); 
 
 	return ret_ok;

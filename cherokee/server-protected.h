@@ -55,6 +55,7 @@
 #include "nonce.h"
 #include "mime.h"
 #include "config_node.h"
+#include "version.h"
 
 
 struct cherokee_server {

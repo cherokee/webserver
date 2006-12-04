@@ -1267,3 +1267,4 @@ cherokee_close_fd (cint_t fd)
 	
 	return (re == 0) ? ret_ok : ret_error;
 }
+
