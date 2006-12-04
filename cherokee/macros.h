@@ -71,6 +71,19 @@
 # define lt_ok(x)    (x <  ret_ok)
 #endif
 
+#if defined(__GNUC__)
+# define __GNUC_VERSION	\
+ 	(__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+# else
+# define __GNUC_VERSION	0
+#endif
+
+#if __GNUC_VERSION >= 30000
+# define must_check  __attribute__ ((warn_unused_result))
+#else 
+# define must_check  
+#endif
+
 #define DEFAULT_RECV_SIZE             1024
 #define DEFAULT_READ_SIZE             8192
 #define MAX_HEADER_LEN                4096

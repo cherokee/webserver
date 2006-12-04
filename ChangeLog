@@ -1,3 +1,8 @@
+2006-12-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/macros.h (__GNUC_VERSION, must_check): Added new
+	macros.
+
 2006-12-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/run-tests.py, qa/conf.py (PHP_DIRS, PHP_NAMES), qa/util.py
