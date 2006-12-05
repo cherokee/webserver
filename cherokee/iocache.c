@@ -423,6 +423,7 @@ cherokee_iocache_stat_get (cherokee_iocache_t *iocache, char *filename, cherokee
 	ret = iocache_entry_update_stat (new, filename, iocache);
 	if (ret != ret_ok) {
 		CHEROKEE_MUTEX_UNLOCK (&iocache->files_lock);
+		iocache_entry_free(new);
 		return ret;
 	}
 
