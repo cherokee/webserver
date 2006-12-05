@@ -103,14 +103,14 @@ server!listen = 127.0.0.1
 server!panic_action = /usr/bin/cherokee-panic
 server!encoder!gzip!allow = txt
 server!pid_file = %s
-server!mime_file = ../mime.types.sample
-server!module_dir = ../cherokee/.libs/
+server!mime_files = %s
+server!module_dir = %s
 
 vserver!default!document_root = %s
 vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php
 vserver!default!directory!/!handler = common
 vserver!default!directory!/!priority = 1
-""" % (PORT, pid, www)
+""" % (PORT, pid, CHEROKEE_MIME, CHEROKEE_MODS, www)
 
 PHP_FCGI = """extensions!php!handler = fcgi
 extensions!php!priority = 10000
@@ -194,6 +194,8 @@ if port is None:
         print "Server"
         print_key ('PID', str(pid));
         print_key ('Path', CHEROKEE_PATH)
+        print_key ('Mime', CHEROKEE_MIME)
+        print_key ('Mods', CHEROKEE_MODS)
         print
         time.sleep(7)
 

@@ -11,7 +11,7 @@ x-world/x-vrml                                  vrm vrml wrl
 """ % (TYPE, EXTENSION)
 
 CONF = """
-server!mime_file = %s
+server!mime_files = %s
 """
 
 class Test (TestBase):

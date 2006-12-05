@@ -2,7 +2,8 @@ PORT = 1978
 HOST = "localhost"
 
 CHEROKEE_PATH     = "../cherokee/cherokee"
-CHEROKEE_MODS     = "/usr/lib/cherokee"
+CHEROKEE_MODS     = "../cherokee/.libs/"
+CHEROKEE_MIME     = "../mime.types.sample"
 
 STRACE_PATH       = "/usr/bin/strace"
 VALGRIND_PATH     = "/usr/bin/valgrind"
