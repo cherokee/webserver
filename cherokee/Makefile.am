@@ -731,8 +731,8 @@ sha1.h \
 sha1.c \
 match.h \
 match.c \
-tdate_parse.h \
-tdate_parse.c \
+dtm.h \
+dtm.c \
 header.h \
 header-protected.h \
 header.c \

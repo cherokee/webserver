@@ -32,7 +32,7 @@
 
 #include "server.h"
 #include "server-protected.h"
-#include "tdate_parse.h"
+#include "dtm.h"
 #include "mime.h"
 #include "header.h"
 #include "header-protected.h"
@@ -164,7 +164,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 
 		has_modified_since = true;
 
-		req_time = tdate_parse (header);			
+		req_time = cherokee_dtm_str2time (header);			
 		if (req_time == -1) {
 			cherokee_logger_write_string (
 				CONN_VSRV(conn)->logger, 
@@ -235,7 +235,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 		tmp = *end; 
 		*end = '\0'; 
 		
-		req_time = tdate_parse (header);			
+		req_time = cherokee_dtm_str2time (header);			
 		if (req_time == -1) {
 			cherokee_logger_write_string (
 				CONN_VSRV(conn)->logger, 

@@ -1,3 +1,11 @@
+2006-12-05  A.D.F  <adefacc@tin.it>
+
+	* cherokee/tdate_parse.h, cherokee/tdate_parse.c, cherokee/dtm.h,
+	cherokee/dtm.c, cherokee/Makefile.am
+	(libcherokee_base_la_SOURCES): Date parsing functions have been
+	rewritten from scratch. These ones are between 12 and 16 faster
+	than the previous ones.
+
 2006-12-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* mods-ssl.sample.pre: Typo fixed.
