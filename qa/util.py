@@ -81,8 +81,8 @@ def look_for_php():
         return __php_ref
     
     if PHPCGI_PATH != "auto":
-        __php_ref = php
-        return PHPCGI_PATH
+        __php_ref = PHPCGI_PATH
+        return __php_ref
 
     for p in PHP_DIRS:
         for n in PHP_NAMES:
@@ -92,7 +92,8 @@ def look_for_php():
                 return php
 
     print "ERROR: PHP interpreter not found"
-    return None
+    __php_ref = ''
+    return __php_ref
 
 
 __python_ref = None
@@ -103,8 +104,8 @@ def look_for_python():
         return __python_ref    
 
     if PYTHON_PATH != "auto":
-        __python_ref = py
-        return PYTHON_PATH
+        __python_ref = PYTHON_PATH
+        return __python_ref
 
     for p in PYTHON_DIRS:
         for n in PYTHON_NAMES:
@@ -114,7 +115,8 @@ def look_for_python():
                 return py
 
     print "ERROR: Python interpreter not found"
-    return None
+    __python_ref = ''
+    return __python_ref
 
 
 def print_key (key, val):
