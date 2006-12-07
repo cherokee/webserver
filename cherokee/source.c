@@ -55,33 +55,33 @@ cherokee_source_mrproper (cherokee_source_t *src)
 
 
 ret_t 
-cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *socket)
+cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 {
 	ret_t ret;
 
 	/* UNIX socket
 	 */
 	if (! cherokee_buffer_is_empty (&src->unix_socket)) {
-		ret = cherokee_socket_set_client (socket, AF_UNIX);
+		ret = cherokee_socket_set_client (sock, AF_UNIX);
 		if (ret != ret_ok) return ret;
 		
-		ret = cherokee_socket_gethostbyname (socket, &src->unix_socket);
+		ret = cherokee_socket_gethostbyname (sock, &src->unix_socket);
 		if (ret != ret_ok) return ret;
 
-		return cherokee_socket_connect (socket);
+		return cherokee_socket_connect (sock);
 	}
 
 	/* INET socket
 	 */
-	ret = cherokee_socket_set_client (socket, AF_INET);
+	ret = cherokee_socket_set_client (sock, AF_INET);
 	if (ret != ret_ok) return ret;
 	
-	ret = cherokee_socket_gethostbyname (socket, &src->host);
+	ret = cherokee_socket_gethostbyname (sock, &src->host);
 	if (ret != ret_ok) return ret;
 	
-	SOCKET_SIN_PORT(socket) = htons(src->port);
+	SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
  	
-	return cherokee_socket_connect (socket);
+	return cherokee_socket_connect (sock);
 }
 
 

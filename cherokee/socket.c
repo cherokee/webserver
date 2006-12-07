@@ -1307,23 +1307,27 @@ cherokee_socket_gethostbyname (cherokee_socket_t *socket, cherokee_buffer_t *hos
 
 
 ret_t 
-cherokee_socket_connect (cherokee_socket_t *socket)
+cherokee_socket_connect (cherokee_socket_t *sock)
 {
 	int r;
 
-	if (SOCKET_AF(socket) == AF_UNIX) {
-#ifndef _WIN32
-		r = connect (SOCKET_FD(socket), (struct sockaddr *) SOCKET_ADDR_UNIX(socket), sizeof(SOCKET_ADDR_UNIX(socket)));
-#else
-		SHOULDNT_HAPPEN;
-		return ret_no_sys;
-#endif
-	} else {
+	switch (SOCKET_AF(sock)) {
+	case AF_INET:
+		r = connect (SOCKET_FD(sock), (struct sockaddr *) &SOCKET_ADDR(sock), sizeof(struct sockaddr_in));
+		break;
 #ifdef HAVE_IPV6
-		r = connect (SOCKET_FD(socket), (struct sockaddr *) &SOCKET_ADDR(socket), sizeof(struct sockaddr_in6));
-#else
-		r = connect (SOCKET_FD(socket), (struct sockaddr *) &SOCKET_ADDR(socket), sizeof(struct sockaddr_in));
+	case AF_INET6:
+		r = connect (SOCKET_FD(sock), (struct sockaddr *) &SOCKET_ADDR(sock), sizeof(struct sockaddr_in6));
+		break;
 #endif
+#ifdef AF_LOCAL
+	case AF_LOCAL:
+		r = connect (SOCKET_FD(sock), (struct sockaddr *) SOCKET_ADDR_UNIX(sock), sizeof(SOCKET_ADDR_UNIX(sock)));
+		break;
+#endif	
+	default:
+		SHOULDNT_HAPPEN;
+		return ret_no_sys;			
 	}
 
 	if (r < 0) {
@@ -1345,7 +1349,7 @@ cherokee_socket_connect (cherokee_socket_t *socket)
 		}
 	}
 
-	socket->status = socket_reading;
+	sock->status = socket_reading;
 	return ret_ok;
 }
 
