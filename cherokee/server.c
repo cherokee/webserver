@@ -464,8 +464,9 @@ set_server_fd_socket_opts (int socket)
 	 */
 #ifdef TCP_MAXSEG
 	on = 64000;
-	re = setsockopt (socket, SOL_SOCKET, TCP_MAXSEG, &on, sizeof(on));
-	if (re != 0) return ret_error;
+	setsockopt (socket, SOL_SOCKET, TCP_MAXSEG, &on, sizeof(on));
+
+	/* Do no check the returned value */
 #endif	
 
 	/* SO_LINGER
