@@ -268,8 +268,11 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 
 		ret = cherokee_source_interpreter_spawn (src_int);
 		if (ret != ret_ok) {
-			TRACE (ENTRIES, "Couldn't spawn: %s\n", src->host.buf ? src->host.buf : src->unix_socket.buf);
-			return ret;
+			if (src_int->interpreter.buf)
+				TRACE (ENTRIES, "Couldn't spawn: %s\n", src_int->interpreter.buf);
+			else
+				TRACE (ENTRIES, "There was no interpreter to be spawned %s", "\n");
+			return ret_error;
 		}
 		
 		while (true) {

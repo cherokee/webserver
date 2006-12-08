@@ -1,3 +1,13 @@
+2006-12-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/source_interpreter.c (cherokee_source_interpreter_spawn):
+	Added little check.  The interpreter may not be defined.
+
+	* cherokee/handler_scgi.c (connect_to_server),
+	cherokee/handler_fcgi.c (connect_to_server),
+	cherokee/fcgi_manager.c (reconnect): Error handling has been
+	slightly improved.
+
 2006-12-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/source.c (cherokee_source_connect), cherokee/socket.c
