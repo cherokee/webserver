@@ -55,18 +55,26 @@
 
 
 static char *php_paths[] = {
+#ifndef _WIN32
 	"/usr/lib/cgi-bin/",
 	"/usr/local/bin/",
 	"/usr/bin/",
+#else
+	"C:/PHP/",
+#endif
 	NULL
 };
 
 static char *php_names[] = {
+#ifndef _WIN32
 	"php-cgi",
 	"php", 
 	"php5", 
 	"php4", 
 	"php-cgi",
+#else
+	"PHP.EXE",
+#endif
 	NULL
 };
 

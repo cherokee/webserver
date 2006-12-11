@@ -1,5 +1,9 @@
 2006-12-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_phpcgi.c: Added Win32 path and name. Now, it
+	shouldn't be necessary to define the interpreter if it's installer
+	on c:\php\php.exe
+
 	* cherokee/fcgi_manager.c (reconnect): Compilation problem. Fixes
 	#116. Reported by bervik@citromail.hu.
 
