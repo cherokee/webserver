@@ -42,9 +42,6 @@ AC_DEFUN([AX_LIB_MYSQL],
 
             found_mysql="yes"
             AC_MSG_RESULT([yes])
-        else
-            found_mysql="no"
-            AC_MSG_RESULT([no])
         fi
     fi
 
