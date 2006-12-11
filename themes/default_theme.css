@@ -45,3 +45,15 @@ tbody td
   padding-top: 3px;
   padding-left: 1px;
 }
+
+.logo 
+{
+ display: block;
+ border: 0px;
+}
+
+.icon 
+{
+ display: block;
+ border: 0px;
+}

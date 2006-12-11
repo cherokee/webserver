@@ -1,5 +1,10 @@
 2006-12-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* themes/default_header.html: Replaced border="0" entry by a
+	class="logo" one.
+
+	* themes/default_theme.css: Added to new entries: .logo and .icon
+
 	* m4/mysql.m4: It mysql_config wasn't found, it was printing "no"
 	twice. Fixed.
 
