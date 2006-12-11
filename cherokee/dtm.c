@@ -41,21 +41,25 @@
 
 #include "dtm.h"
 
-typedef struct RecNameLen_s {
-	const char  *name1;		/* first name */
-	size_t       len1;		/* first name length */
-	const char  *name2;		/* second name */
-	size_t       len2;		/* second name length */
-} RecNameLen_t;
 
-
-/*
-** Returns TRUE if it matches an existing weekday name.
+/* Local macro.
 */
-static int
-cvt_wday_name2idx( const char* str_wday, size_t len_wday, int* ptm_wday )
-{
-	static RecNameLen_t wday_tab[] = {
+#define is_leap(y)	( (y) % 4 == 0 && ( (y) % 100 || (y) % 400 == 0 ) )
+
+
+/* Local structs and types.
+ */
+typedef struct DtmNameLen_s {
+	const char  *name1;		/* first name  (short, 3 letters) */
+	size_t       len1;		/* first name length */
+	const char  *name2;		/* second name (long) */
+	size_t       len2;		/* second name length */
+} DtmNameLen_t;
+
+
+/* Weekday names (short and long names).
+ */
+static DtmNameLen_t wday_name_tab[] = {
 	{ "Sun", 3, "Sunday",    6 },
 	{ "Mon", 3, "Monday",    6 },
 	{ "Tue", 3, "Tuesday",   7 },
@@ -65,80 +69,10 @@ cvt_wday_name2idx( const char* str_wday, size_t len_wday, int* ptm_wday )
 	{ "Sat", 3, "Saturday",  8 }
 	};
 
-	/* Fast test on min. length.
-	*/
-	if (len_wday < 3)
-		return 0;
 
-	/* Fast guess of day of week.
-	*/
-	switch( str_wday[0] ) {
-		case 's':
-		case 'S':
-			if ( str_wday[1] == 'u' ||
-			     str_wday[1] == 'U')
-				*ptm_wday = 0;
-			else
-				*ptm_wday = 6;
-			break;
-
-		case 'm':
-		case 'M':
-			*ptm_wday = 1;
-			break;
-
-		case 't':
-		case 'T':
-			if ( str_wday[1] == 'u' ||
-			     str_wday[1] == 'U')
-				*ptm_wday = 2;
-			else
-				*ptm_wday = 4;
-			break;
-
-		case 'w':
-		case 'W':
-			*ptm_wday = 3;
-			break;
-
-		case 'f':
-		case 'F':
-			*ptm_wday = 5;
-			break;
-
-		default:
-			return 0;
-	}
-
-	/* If length matches the length of short name, then compare the name.
-	*/
-	if ( len_wday == wday_tab[*ptm_wday].len1 ) {
-		return ( strncasecmp(
-			str_wday,
-			wday_tab[*ptm_wday].name1,
-			wday_tab[*ptm_wday].len1 ) == 0 );
-	}
-
-	/* If length matches the length of long name, then compare the name.
-	*/
-	if ( len_wday == wday_tab[*ptm_wday].len2 ) {
-		return ( strncasecmp(
-			str_wday,
-			wday_tab[*ptm_wday].name2,
-			wday_tab[*ptm_wday].len2 ) == 0 );
-	}
-
-	/* No match.
-	*/
-	return 0;
-}
-
-
-/* Returns TRUE if it matches an existing month name. */
-static int
-cvt_mon_name2idx( const char* str_mon, size_t len_mon, int* ptm_mon )
-{
-	static RecNameLen_t mon_tab[] = {
+/* Month names (short and long names).
+ */
+static DtmNameLen_t month_name_tab[] = {
 	{ "Jan", 3, "January",   7 },
 	{ "Feb", 3, "February",  8 },
 	{ "Mar", 3, "March",     5 },
@@ -153,92 +87,220 @@ cvt_mon_name2idx( const char* str_mon, size_t len_mon, int* ptm_mon )
 	{ "Dec", 3, "December",  8 }
 	};
 
+
+/* Number of days in each month (non leap year).
+ */
+static const int month_days_tab[12] = {
+	31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+	};
+
+
+/* Number of days in the years for each month (non leap year).
+ */
+static const int month_ydays_tab[12] = {
+	0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334
+	};
+
+
+/* Given the weekday index (...6),
+** it returns the short name of the weekday.
+*/
+const char *
+cherokee_dtm_wday_name(int idxName)
+{
+	if (idxName < 0 || idxName > 6)
+		return "???";
+	return wday_name_tab[idxName].name1;
+}
+
+
+/* Given the index of the month (0...11),
+** it returns the short name of the month.
+*/
+const char *
+cherokee_dtm_month_name(int idxName)
+{
+	if (idxName < 0 || idxName > 11)
+		return "???";
+	return month_name_tab[idxName].name1;
+}
+
+
+/*
+** Returns TRUE if it matches an existing weekday name.
+*/
+static int
+cvt_wday_name2idx( const char* str_wday, size_t len_wday, struct tm *ptm )
+{
+	int tm_wday = 0;
+
+	/* Fast test on min. length.
+	*/
+	if (len_wday < 3)
+		return 0;
+
+	/* Fast guess of day of week (Sunday ... Saturday).
+	*/
+	switch( str_wday[0] ) {
+		case 's':
+		case 'S':
+			if ( str_wday[1] == 'u' ||
+			     str_wday[1] == 'U')
+				tm_wday = 0;
+			else
+				tm_wday = 6;
+			break;
+
+		case 'm':
+		case 'M':
+			tm_wday = 1;
+			break;
+
+		case 't':
+		case 'T':
+			if ( str_wday[1] == 'u' ||
+			     str_wday[1] == 'U')
+				tm_wday = 2;
+			else
+				tm_wday = 4;
+			break;
+
+		case 'w':
+		case 'W':
+			tm_wday = 3;
+			break;
+
+		case 'f':
+		case 'F':
+			tm_wday = 5;
+			break;
+
+		default:
+			return 0;
+	}
+	/* Assign the value.
+	 */
+	ptm->tm_wday = tm_wday;
+
+	/* If length matches the length of short name, then compare the name.
+	*/
+	if ( len_wday == wday_name_tab[tm_wday].len1 ) {
+		return ( strncasecmp(
+			str_wday,
+			wday_name_tab[tm_wday].name1,
+			wday_name_tab[tm_wday].len1 ) == 0 );
+	}
+
+	/* If length matches the length of long name, then compare the name.
+	*/
+	if ( len_wday == wday_name_tab[tm_wday].len2 ) {
+		return ( strncasecmp(
+			str_wday,
+			wday_name_tab[tm_wday].name2,
+			wday_name_tab[tm_wday].len2 ) == 0 );
+	}
+
+	/* No match.
+	*/
+	return 0;
+}
+
+
+/* Returns TRUE if it matches an existing month name. */
+static int
+cvt_mon_name2idx( const char* str_mon, size_t len_mon, struct tm *ptm )
+{
+	int tm_mon = 0;
+
 	/* First fast test on min. length.
 	*/
 	if (len_mon < 3)
 		return 0;
 
-	/* Fast guess of month name.
+	/* Fast guess of month name (January ... December).
 	*/
 	switch( str_mon[0] ) {
 		case 'j':
 		case 'J':
 			if ( str_mon[1] == 'a' ||
 			     str_mon[1] == 'A')
-				*ptm_mon = 0;
+				tm_mon = 0;
 			else
 			if ( str_mon[2] == 'n' ||
 			     str_mon[2] == 'N')
-				*ptm_mon = 5;
+				tm_mon = 5;
 			else
-				*ptm_mon = 6;
+				tm_mon = 6;
 			break;
 
 		case 'f':
 		case 'F':
-			*ptm_mon = 1;
+			tm_mon = 1;
 			break;
 
 		case 'm':
 		case 'M':
 			if ( str_mon[2] == 'r' ||
 			     str_mon[2] == 'R')
-				*ptm_mon = 2;
+				tm_mon = 2;
 			else
-				*ptm_mon = 4;
+				tm_mon = 4;
 			break;
 
 		case 'a':
 		case 'A':
 			if ( str_mon[2] == 'r' ||
 			     str_mon[2] == 'R')
-				*ptm_mon = 3;
+				tm_mon = 3;
 			else
-				*ptm_mon = 7;
+				tm_mon = 7;
 			break;
 
 		case 's':
 		case 'S':
-			*ptm_mon = 8;
+			tm_mon = 8;
 			break;
 
 		case 'o':
 		case 'O':
-			*ptm_mon = 9;
+			tm_mon = 9;
 			break;
 
 		case 'n':
 		case 'N':
-			*ptm_mon = 10;
+			tm_mon = 10;
 			break;
 
 		case 'd':
 		case 'D':
-			*ptm_mon = 11;
+			tm_mon = 11;
 			break;
 
 		default:
 			return 0;
 	}
+	/* Assign the value.
+	*/
+	ptm->tm_mon = tm_mon;
 
 	/* If length matches the length of short name, then compare the name.
 	*/
-	if ( len_mon == mon_tab[*ptm_mon].len1 )
+	if ( len_mon == month_name_tab[tm_mon].len1 )
 	{
 		return ( strncasecmp(
 			str_mon,
-			mon_tab[*ptm_mon].name1,
-			mon_tab[*ptm_mon].len1 ) == 0 );
+			month_name_tab[tm_mon].name1,
+			month_name_tab[tm_mon].len1 ) == 0 );
 	}
 
 	/* If length matches the length of long name, then compare the name.
 	*/
-	if ( len_mon == mon_tab[*ptm_mon].len2 )
+	if ( len_mon == month_name_tab[tm_mon].len2 )
 	{
 		return ( strncasecmp(
 			str_mon,
-			mon_tab[*ptm_mon].name2,
-			mon_tab[*ptm_mon].len2 ) == 0 );
+			month_name_tab[tm_mon].name2,
+			month_name_tab[tm_mon].len2 ) == 0 );
 	}
 
 	/* No match.
@@ -252,22 +314,20 @@ cvt_mon_name2idx( const char* str_mon, size_t len_mon, int* ptm_mon )
 ** Returns TRUE if it matches one of the above date-time formats.
 */
 static int
-dft_dmyhmsr2tm( char *cp, struct tm *ptm )
+dft_dmyhms2tm( char *psz, struct tm *ptm )
 {
 	size_t idx = 0;
 
-	--idx;
-	do {
-		++idx;
-	}
-	while( cp[idx] == ' ' );
-
-	cp += idx;
-	idx = 0;
-
+	/* Caller has already skipped blank characters.
+	*/
 	ptm->tm_wday = 0;
 
-	if ( cp[2] == ':' ) {
+	/* Date formats known here, start with two digits.
+	 */
+	if ( !isdigit( psz[0] ) || !isdigit( psz[1] ) )
+		return 0;
+
+	if ( psz[2] == ':' ) {
 
 		/* HH:MM:SS GMT DD-mth-YY
 		*/
@@ -275,186 +335,186 @@ dft_dmyhmsr2tm( char *cp, struct tm *ptm )
 		/* hour, min, sec
 		*/
 		if (
-			!isdigit( cp[0] ) || !isdigit( cp[1] ) ||
-			cp[2] != ':' ||
-			!isdigit( cp[3] ) || !isdigit( cp[4] ) ||
-			cp[5] != ':' ||
-			!isdigit( cp[6] ) || !isdigit( cp[7] )
+		/*	!isdigit( psz[0] ) || !isdigit( psz[1] ) ||
+		 *	psz[2] != ':' ||
+		 */
+			!isdigit( psz[3] ) || !isdigit( psz[4] ) ||
+			psz[5] != ':' ||
+			!isdigit( psz[6] ) || !isdigit( psz[7] )
 			)
 			return 0;
 
-		ptm->tm_hour = (cp[0] - '0') * 10 + (cp[1] - '0');
-		ptm->tm_min  = (cp[3] - '0') * 10 + (cp[4] - '0');
-		ptm->tm_sec  = (cp[6] - '0') * 10 + (cp[7] - '0');
+		ptm->tm_hour = (psz[0] - '0') * 10 + (psz[1] - '0');
+		ptm->tm_min  = (psz[3] - '0') * 10 + (psz[4] - '0');
+		ptm->tm_sec  = (psz[6] - '0') * 10 + (psz[7] - '0');
 
 		idx += 8;
-		if ( cp[idx] != ' ')
+		if ( psz[idx] != ' ')
 			return 0;
 		do {
 			++idx;
 		}
-		while( cp[idx] == ' ' );
+		while( psz[idx] == ' ' );
 
-		cp += idx;
+		psz += idx;
 		idx = 0;
 
-		if ( cp[0] != 'G' ||
-		     cp[1] != 'M' ||
-		     cp[2] != 'T' ||
-		     cp[3] != ' ' )
+		if ( psz[0] != 'G' ||
+		     psz[1] != 'M' ||
+		     psz[2] != 'T' ||
+		     psz[3] != ' ' )
 			return 0;
 
 		idx += 3;
 		do {
 			++idx;
 		}
-		while( cp[idx] == ' ' );
-		cp += idx;
+		while( psz[idx] == ' ' );
+		psz += idx;
 
 		/* day
 		*/
 		ptm->tm_mday = 0;
-		for ( idx = 0; idx < 2 && isdigit( cp[idx] ); ++idx ) {
-			ptm->tm_mday = ptm->tm_mday * 10  + (cp[idx] - '0');
+		for ( idx = 0; idx < 2 && isdigit( psz[idx] ); ++idx ) {
+			ptm->tm_mday = ptm->tm_mday * 10 + (psz[idx] - '0');
 		}
 		if ( idx == 0 )
 			return 0;
 
-		if ( cp[idx] != '-')
+		if ( psz[idx] != '-')
 			return 0;
 
 		++idx;
-		cp += idx;
+		psz += idx;
 
 		/* month
 		*/
 		ptm->tm_mon = 0;
-		for ( idx = 0; isalpha( cp[idx] ); ++idx )
+		for ( idx = 0; isalpha( psz[idx] ); ++idx )
 			;
 
-		if (! cvt_mon_name2idx( cp, idx, &(ptm->tm_mon) ) )
+		if (! cvt_mon_name2idx( psz, idx, ptm ) )
 			return 0;
 
-		if ( cp[idx] != '-')
+		if ( psz[idx] != '-')
 			return 0;
 
 		++idx;
-		cp += idx;
+		psz += idx;
 
 		/* year
 		*/
 		ptm->tm_year = 0;
-		for ( idx = 0; idx < 4 && isdigit( cp[idx] ); ++idx ) {
-			ptm->tm_year = ptm->tm_year * 10  + (cp[idx] - '0');
+		for ( idx = 0; idx < 4 && isdigit( psz[idx] ); ++idx ) {
+			ptm->tm_year = ptm->tm_year * 10 + (psz[idx] - '0');
 		}
 		if ( idx == 0 )
 			return 0;
 
-		if ( isdigit( cp[idx] ) )
+		if ( isdigit( psz[idx] ) )
 			return 0;
 
-	} else {
+		/* OK, date deformatted and converted.
+		 */
+		return 1;
+	}
+
+	if ( psz[2] == '-') {
 
 		/* DD-mth-YY HH:MM:SS GMT
 		*/
 
 		/* day
 		*/
-		ptm->tm_mday = 0;
-		for ( idx = 0; idx < 2 && isdigit( cp[idx] ); ++idx ) {
-			ptm->tm_mday = ptm->tm_mday * 10  + (cp[idx] - '0');
-		}
-		if ( idx == 0 )
-			return 0;
-
-		if ( cp[idx] != '-')
-			return 0;
-
-		++idx;
-		cp += idx;
+		ptm->tm_mday = (psz[0] - '0') * 10 + (psz[1] - '0');
+		psz += 3;
 
 		/* month
 		*/
 		ptm->tm_mon = 0;
-		for ( idx = 0; isalpha( cp[idx] ); ++idx )
+		for ( idx = 0; isalpha( psz[idx] ); ++idx )
 			;
-		if (! cvt_mon_name2idx( cp, idx, &(ptm->tm_mon) ) )
+		if (! cvt_mon_name2idx( psz, idx, ptm ) )
 			return 0;
 
-		if ( cp[idx] != '-')
+		if ( psz[idx] != '-')
 			return 0;
 		++idx;
-		cp += idx;
+		psz += idx;
 
 		/* year
 		*/
 		ptm->tm_year = 0;
-		for ( idx = 0; idx < 4 && isdigit( cp[idx] ); ++idx ) {
-			ptm->tm_year = ptm->tm_year * 10  + (cp[idx] - '0');
+		for ( idx = 0; idx < 4 && isdigit( psz[idx] ); ++idx ) {
+			ptm->tm_year = ptm->tm_year * 10 + (psz[idx] - '0');
 		}
 		if ( idx == 0 )
 			return 0;
 
-		if ( cp[idx] != ' ' )
+		if ( psz[idx] != ' ' )
 			return 0;
 
 		do {
 			++idx;
 		}
-		while( cp[idx] == ' ' );
+		while( psz[idx] == ' ' );
 
-		cp += idx;
+		psz += idx;
 		idx = 0;
 
 		/* hour, min, sec
 		*/
 		if (
-			!isdigit( cp[0] ) || !isdigit( cp[1] ) ||
-			cp[2] != ':' ||
-			!isdigit( cp[3] ) || !isdigit( cp[4] ) ||
-			cp[5] != ':' ||
-			!isdigit( cp[6] ) || !isdigit( cp[7] )
+			!isdigit( psz[0] ) || !isdigit( psz[1] ) ||
+			psz[2] != ':' ||
+			!isdigit( psz[3] ) || !isdigit( psz[4] ) ||
+			psz[5] != ':' ||
+			!isdigit( psz[6] ) || !isdigit( psz[7] )
 			)
 			return 0;
 
-		ptm->tm_hour = (cp[0] - '0') * 10 + (cp[1] - '0');
-		ptm->tm_min  = (cp[3] - '0') * 10 + (cp[4] - '0');
-		ptm->tm_sec  = (cp[6] - '0') * 10 + (cp[7] - '0');
+		ptm->tm_hour = (psz[0] - '0') * 10 + (psz[1] - '0');
+		ptm->tm_min  = (psz[3] - '0') * 10 + (psz[4] - '0');
+		ptm->tm_sec  = (psz[6] - '0') * 10 + (psz[7] - '0');
 
 		idx += 8;
-		if ( cp[idx] != ' ')
+		if ( psz[idx] != ' ')
 			return 0;
 		do {
 			++idx;
 		}
-		while( cp[idx] == ' ' );
-		cp += idx;
+		while( psz[idx] == ' ' );
+		psz += idx;
 		idx = 0;
 
-		if ( cp[0] != 'G' ||
-		     cp[1] != 'M' ||
-		     cp[2] != 'T' )
+		if ( psz[0] != 'G' ||
+		     psz[1] != 'M' ||
+		     psz[2] != 'T' )
 			return 0;
 		idx += 3;
+
+		/* OK, date deformatted and converted.
+		 */
+		return 1;
 	}
-	return 1;
+
+	/* Unknown date format.
+	 */
+	return 0;
 }
 
 
-/* is leap year */
-#define is_leap(y)	( (y) % 4 == 0 && ( (y) % 100 || (y) % 400 == 0 ) )
-
-/* Basically the same as mktime().
+/* It's almost the same as mktime(),
+** excepted for the following assumptions:
+**    - it assumes to handle only UTC/GMT times,
+**      thus ignoring time zone and daylight saving time;
+**    - field values must be right (within the expected ranges).
 */
 static time_t
-cvt_tm2time( struct tm* ptm )
+cvt_tm2time( struct tm *ptm )
 {
 	time_t t;
 	int tm_year = ptm->tm_year + 1900;
-
-	static int monthtab[12] = {
-		0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334
-	};
 
 	/* Years since epoch, converted to days. */
 	t = ( ptm->tm_year - 70 ) * 365;
@@ -463,7 +523,7 @@ cvt_tm2time( struct tm* ptm )
 	t += ( ptm->tm_year - 69 ) / 4;
 
 	/* Days for the beginning of this month. */
-	t += monthtab[ptm->tm_mon];
+	t += month_ydays_tab[ptm->tm_mon];
 
 	/* Leap day for this year. */
 	if ( ptm->tm_mon >= 2 && is_leap( tm_year ) )
@@ -481,34 +541,18 @@ cvt_tm2time( struct tm* ptm )
 }
 
 
-#ifdef DTM_DBG
-#define RET_TIME_ERR(n)		return ((time_t) (n))
-#else
-#define RET_TIME_ERR(n)		return ((time_t) -1)
-#endif
-
 /*
 ** Deformat a date time string from one of the http formats
 ** (commonly used) to a time_t time.
 ** (str) is assumed to be a zero terminated string.
+** On error, it returns DTM_TIME_EVAL (-1).
 */
 time_t
-cherokee_dtm_str2time( char* str )
+cherokee_dtm_str2time( char* cstr )
 {
 	struct tm tm;
-	char* cp;
+	char* psz = cstr;
 	size_t idx = 0;
-#ifdef CHECK_MIN_LEN
-	size_t len = 0;
-#endif /* CHECK_MIN_LEN */
-	int tm_sec = 0;
-	int tm_min = 0;
-	int tm_hour = 0;
-	int tm_wday = 0;
-	int tm_mday = 0;
-	int tm_mon  = 0;
-	int tm_year = 0;
-	time_t t;
 
 	/* Zero struct tm.
 	*/
@@ -516,35 +560,26 @@ cherokee_dtm_str2time( char* str )
 
 	/* Skip initial blank character(s).
 	*/
-	for ( cp = str; *cp == ' ' || *cp == '\t'; ++cp )
-		continue;
-
-#ifdef CHECK_MIN_LEN
-	/* Test min. length.
-	*/
-	len = strlen( cp );
-	if ( len < 21 )
-		RET_TIME_ERR(-1);
-#endif /* CHECK_MIN_LEN */
+	while ( *psz == ' ' || *psz == '\t' )
+		++psz;
 
 	/* Guess category of date time.
 	*/
-	if ( isalpha( *cp ) ) {
+	if ( isalpha( *psz ) ) {
 		/* wdy[,] ...
 		** wdy = short or long name of the day of week.
 		*/
 
-		/* deformat day of week
+		/* deformat day (name) of week
 		*/
-		tm_wday = 0;
-		for ( idx = 0; isalpha( cp[idx] ); ++idx )
+		for ( idx = 0; isalpha( psz[idx] ); ++idx )
 			;
-		if (! cvt_wday_name2idx( cp, idx, &tm_wday ) )
-			RET_TIME_ERR(-2);
+		if (! cvt_wday_name2idx( psz, idx, &tm ) )
+			return DTM_TIME_EVAL;
 
 		/* Another guess of the type of date time format.
 		*/
-		if ( cp[idx] == ',' ) {
+		if ( psz[idx] == ',' ) {
 
 			/* -----------------------------
 			 * wdy, DD mth YYYY HH:MM:SS GMT
@@ -555,99 +590,96 @@ cherokee_dtm_str2time( char* str )
 			/* Skip white spaces.
 			*/
 			++idx;
-			if ( cp[idx] != ' ')
-				RET_TIME_ERR(-3);
+			if ( psz[idx] != ' ')
+				return DTM_TIME_EVAL;
 			do {
 				++idx;
 			}
-			while( cp[idx] == ' ' );
-			cp += idx;
+			while( psz[idx] == ' ' );
+			psz += idx;
 
 			/* Deformat day of month.
 			*/
-			tm_mday = 0;
-			for ( idx = 0; idx < 2 && isdigit( cp[idx] ); ++idx ) {
-				tm_mday = tm_mday * 10  + (cp[idx] - '0');
+			for ( idx = 0; idx < 2 && isdigit( psz[idx] ); ++idx ) {
+				tm.tm_mday = tm.tm_mday * 10 + (psz[idx] - '0');
 			}
 			if ( idx == 0 )
-				RET_TIME_ERR(-4);
+				return DTM_TIME_EVAL;
 
 			/* Skip field separator(s).
 			*/
-			if ( cp[idx] != ' ' && cp[idx] != '-')
-				RET_TIME_ERR(-5);
+			if ( psz[idx] != ' ' && psz[idx] != '-')
+				return DTM_TIME_EVAL;
 			do {
 				++idx;
 			}
-			while( cp[idx] == ' ' || cp[idx] == '-' );
-			cp += idx;
+			while( psz[idx] == ' ' || psz[idx] == '-' );
+			psz += idx;
 
 			/* Deformat month.
 			*/
-			tm_mon = 0;
-			for ( idx = 0; isalpha( cp[idx] ); ++idx )
+			for ( idx = 0; isalpha( psz[idx] ); ++idx )
 				;
-			if (! cvt_mon_name2idx( cp, idx, &tm_mon ) )
-				RET_TIME_ERR(-6);
+			if (! cvt_mon_name2idx( psz, idx, &tm ) )
+				return DTM_TIME_EVAL;
 
 			/* Skip field separator(s).
 			*/
-			if ( cp[idx] != ' ' && cp[idx] != '-')
-				RET_TIME_ERR(-7);
+			if ( psz[idx] != ' ' && psz[idx] != '-')
+				return DTM_TIME_EVAL;
 			do {
 				++idx;
 			}
-			while( cp[idx] == ' ' || cp[idx] == '-' );
-			cp += idx;
+			while( psz[idx] == ' ' || psz[idx] == '-' );
+			psz += idx;
 
 			/* Deformat year.
 			*/
-			tm_year = 0;
-			for ( idx = 0; idx < 4 && isdigit( cp[idx] ); ++idx ) {
-				tm_year = tm_year * 10  + (cp[idx] - '0');
+			for ( idx = 0; idx < 4 && isdigit( psz[idx] ); ++idx ) {
+				tm.tm_year = tm.tm_year * 10 + (psz[idx] - '0');
 			}
 			if ( idx == 0 )
-				RET_TIME_ERR(-8);
+				return DTM_TIME_EVAL;
 
 			/* Skip field separator(s).
 			*/
-			if ( cp[idx] != ' ')
-				RET_TIME_ERR(-9);
+			if ( psz[idx] != ' ')
+				return DTM_TIME_EVAL;
 			do {
 				++idx;
 			}
-			while( cp[idx] == ' ' );
-			cp += idx;
+			while( psz[idx] == ' ' );
+			psz += idx;
 			idx = 0;
 
 			/* Deformat hours, minutes, seconds.
 			*/
-			if (!isdigit( cp[0] ) || !isdigit( cp[1] ) ||
-			    cp[2] != ':' ||
-			    !isdigit( cp[3] ) || !isdigit( cp[4] ) ||
-			    cp[5] != ':' ||
-			    !isdigit( cp[6] ) || !isdigit( cp[7] )
+			if (!isdigit( psz[0] ) || !isdigit( psz[1] ) ||
+			    psz[2] != ':' ||
+			    !isdigit( psz[3] ) || !isdigit( psz[4] ) ||
+			    psz[5] != ':' ||
+			    !isdigit( psz[6] ) || !isdigit( psz[7] )
 			   ) {
-				RET_TIME_ERR(-10);
+				return DTM_TIME_EVAL;
 			}
-			tm_hour = (cp[0] - '0') * 10 + (cp[1] - '0');
-			tm_min  = (cp[3] - '0') * 10 + (cp[4] - '0');
-			tm_sec  = (cp[6] - '0') * 10 + (cp[7] - '0');
+			tm.tm_hour = (psz[0] - '0') * 10 + (psz[1] - '0');
+			tm.tm_min  = (psz[3] - '0') * 10 + (psz[4] - '0');
+			tm.tm_sec  = (psz[6] - '0') * 10 + (psz[7] - '0');
 
 			/* Skip field separator(s).
 			*/
 			idx += 8;
-			while( cp[idx] == ' ')
+			while( psz[idx] == ' ')
 				++idx;
-			cp += idx;
+			psz += idx;
 			idx = 0;
 
 			/* Time Zone (always Greenwitch Mean Time)
 			*/
-			if ( cp[0] != 'G' ||
-			     cp[1] != 'M' ||
-			     cp[2] != 'T') {
-				RET_TIME_ERR(-11);
+			if ( psz[0] != 'G' ||
+			     psz[1] != 'M' ||
+			     psz[2] != 'T') {
+				return DTM_TIME_EVAL;
 			}
 
 		} else {
@@ -658,92 +690,90 @@ cherokee_dtm_str2time( char* str )
 			 * --------------------------
 			*/
 
-			if ( cp[idx] != ' ')
-				RET_TIME_ERR(-12);
+			if ( psz[idx] != ' ')
+				return DTM_TIME_EVAL;
 			do {
 				++idx;
 			}
-			while( cp[idx] == ' ' );
-			cp += idx;
+			while( psz[idx] == ' ' );
+			psz += idx;
 
 			/* Deformat month.
 			*/
-			tm_mon = 0;
-			for ( idx = 0; isalpha( cp[idx] ); ++idx )
+			for ( idx = 0; isalpha( psz[idx] ); ++idx )
 				;
-			if (! cvt_mon_name2idx( cp, idx, &tm_mon ) )
-				RET_TIME_ERR(-13);
+			if (! cvt_mon_name2idx( psz, idx, &tm ) )
+				return DTM_TIME_EVAL;
 
 			/* Skip field separator(s).
 			*/
-			if ( cp[idx] != ' ')
-				RET_TIME_ERR(-14);
+			if ( psz[idx] != ' ')
+				return DTM_TIME_EVAL;
 			do {
 				++idx;
 			}
-			while( cp[idx] == ' ');
-			cp += idx;
+			while( psz[idx] == ' ');
+			psz += idx;
 
 			/* Deformat day of month.
 			*/
-			tm_mday = 0;
-			for ( idx = 0; idx < 2 && isdigit( cp[idx] ); ++idx ) {
-				tm_mday = tm_mday * 10  + (cp[idx] - '0');
+			for ( idx = 0; idx < 2 && isdigit( psz[idx] ); ++idx ) {
+				tm.tm_mday = tm.tm_mday * 10 + (psz[idx] - '0');
 			}
 			if ( idx == 0 )
-				RET_TIME_ERR(-15);
+				return DTM_TIME_EVAL;
 
 			/* Skip field separator(s).
 			*/
-			if ( cp[idx] != ' ')
-				RET_TIME_ERR(-16);
+			if ( psz[idx] != ' ')
+				return DTM_TIME_EVAL;
 			do {
 				++idx;
 			}
-			while( cp[idx] == ' ' );
-			cp += idx;
+			while( psz[idx] == ' ' );
+			psz += idx;
 			idx = 0;
 
 			/* Deformat hours, minutes, seconds.
 			*/
 			if (
-				!isdigit( cp[0] ) || !isdigit( cp[1] ) ||
-				cp[2] != ':' ||
-				!isdigit( cp[3] ) || !isdigit( cp[4] ) ||
-				cp[5] != ':' ||
-				!isdigit( cp[6] ) || !isdigit( cp[7] )
+				!isdigit( psz[0] ) || !isdigit( psz[1] ) ||
+				psz[2] != ':' ||
+				!isdigit( psz[3] ) || !isdigit( psz[4] ) ||
+				psz[5] != ':' ||
+				!isdigit( psz[6] ) || !isdigit( psz[7] )
 			   ) {
-				RET_TIME_ERR(-17);
+				return DTM_TIME_EVAL;
 			}
-			tm_hour = (cp[0] - '0') * 10 + (cp[1] - '0');
-			tm_min  = (cp[3] - '0') * 10 + (cp[4] - '0');
-			tm_sec  = (cp[6] - '0') * 10 + (cp[7] - '0');
+			tm.tm_hour = (psz[0] - '0') * 10 + (psz[1] - '0');
+			tm.tm_min  = (psz[3] - '0') * 10 + (psz[4] - '0');
+			tm.tm_sec  = (psz[6] - '0') * 10 + (psz[7] - '0');
 
 			/* Skip field separator(s).
 			*/
 			idx += 8;
-			if ( cp[idx] != ' ')
-				RET_TIME_ERR(-18);
+			if ( psz[idx] != ' ')
+				return DTM_TIME_EVAL;
 			do {
 				++idx;
 			}
-			while( cp[idx] == ' ' );
-			cp += idx;
+			while( psz[idx] == ' ' );
+			psz += idx;
 			idx = 0;
 
 			/* Optional Time Zone (always Greenwitch Mean Time)
 			*/
-			if ( cp[0] == 'G' ) {
-				if ( cp[1] != 'M' ||
-				     cp[2] != 'T' ||
-				     cp[3] != ' ' )
-					RET_TIME_ERR(-19);
+			if ( psz[0] == 'G' ) {
+				if ( psz[1] != 'M' ||
+				     psz[2] != 'T' ||
+				     psz[3] != ' ' )
+					return DTM_TIME_EVAL;
 				idx = 3;
 				do {
 					++idx;
 				}
-				while ( cp[idx] == ' ' );
-				cp += idx;
+				while ( psz[idx] == ' ' );
+				psz += idx;
 				idx = 0;
 			}
 			/* else C asctime() format
@@ -751,76 +781,114 @@ cherokee_dtm_str2time( char* str )
 
 			/* Deformat year.
 			*/
-			tm_year = 0;
-			for ( idx = 0; idx < 4 && isdigit( cp[idx] ); ++idx ) {
-				tm_year = tm_year * 10  + (cp[idx] - '0');
+			for ( idx = 0; idx < 4 && isdigit( psz[idx] ); ++idx ) {
+				tm.tm_year = tm.tm_year * 10 + (psz[idx] - '0');
 			}
 			if ( idx == 0 )
-				RET_TIME_ERR(-20);
+				return DTM_TIME_EVAL;
 
-			if ( isdigit( cp[idx] ) )
-				RET_TIME_ERR(-21);
-			cp += idx;
+			if ( isdigit( psz[idx] ) )
+				return DTM_TIME_EVAL;
+			psz += idx;
 			idx = 0;
 
 		}
 	} else
-	if ( isdigit( *cp ) ) {
+	if ( isdigit( *psz ) ) {
 		/* Uncommon date-time formats
 		 * -------------------------- 
 		 * HH:MM:SS GMT DD-mth-YY
 		 * DD-mth-YY HH:MM:SS GMT
 		 * --------------------------
 		*/
-		if ( !dft_dmyhmsr2tm( cp, &tm ) )
-			RET_TIME_ERR(-22);
-		tm_sec  = tm.tm_sec;
-		tm_min  = tm.tm_min;
-		tm_hour = tm.tm_hour;
-		tm_mday = tm.tm_mday;
-		tm_mon  = tm.tm_mon;
-		tm_year = tm.tm_year;
-		tm_wday = tm.tm_wday;
+		if ( !dft_dmyhms2tm( psz, &tm ) )
+			return DTM_TIME_EVAL;
+
 	} else {
 		/* Bad date or unknown date-time format
 		*/
-		RET_TIME_ERR(-23);
+		return DTM_TIME_EVAL;
 	}
 
-	if ( tm_year >  1900 )
-		tm_year -= 1900;
+	if ( tm.tm_year >  1900 )
+		tm.tm_year -= 1900;
 	else
-	if ( tm_year < 70 )
-		tm_year += 100;
+	if ( tm.tm_year < 70 )
+		tm.tm_year += 100;
 
 	/* Test field values
 	 * NOTE: time has to be in the range 01-Jan-1970 - 31-Dec-2036.
 	*/
-	if ( tm_year < 70 || tm_year > 136 ||
-	   /*tm_mon  <  0 || tm_mon  >  11 ||*/
-	     tm_mday <  1 || tm_mday >  31 ||
-	     tm_hour <  0 || tm_hour >  23 ||
-	     tm_min  <  0 || tm_min  >  59 ||
-	     tm_sec  <  0 || tm_sec  >  59 )
-		RET_TIME_ERR(-24);
+	if ( tm.tm_year < 70 || tm.tm_year > 136 ||
+	  /* it's guaranteed that tm_mon is always within this range:
+	   * tm.tm_mon  <  0 || tm.tm_mon  >  11 ||
+	   */
+	     tm.tm_mday <  1 || tm.tm_mday >  31 ||
+	     tm.tm_hour <  0 || tm.tm_hour >  23 ||
+	     tm.tm_min  <  0 || tm.tm_min  >  59 ||
+	     tm.tm_sec  <  0 || tm.tm_sec  >  59 )
+		return DTM_TIME_EVAL;
 
-	/* Assign field values.
+	/* OK, convert struct tm to time_t and return result.
 	*/
-	tm.tm_sec  = tm_sec;
-	tm.tm_min  = tm_min;
-	tm.tm_hour = tm_hour;
-	tm.tm_mday = tm_mday;
-	tm.tm_mon  = tm_mon;
-	tm.tm_year = tm_year;
-	tm.tm_wday = tm_wday;
+	return cvt_tm2time( &tm );
+}
 
-	/* Convert struct tm to time_t.
-	*/
-	t = cvt_tm2time( &tm );
 
-	/* Return time.
+/* Format an RFC1123 GMT time assuming that (ptm) parameter
+** refers to GMT timezone without daylight savings (of course).
+** NOTE: in HTTP headers, week day and month names MUST be in English !
+*/
+size_t
+cherokee_dtm_gmttm2str( char *bufstr, size_t bufsize, struct tm *ptm )
+{
+	unsigned int uYear;
+
+	uYear = (unsigned int) ptm->tm_year + 1900;
+
+	if ( ptm == NULL || bufsize < DTM_SIZE_GMTTM_STR ) {
+		bufstr[0] = '\0';
+		return 0;
+	}
+
+	bufstr[ 0] = wday_name_tab[ ptm->tm_wday ].name1[0];
+	bufstr[ 1] = wday_name_tab[ ptm->tm_wday ].name1[1];
+	bufstr[ 2] = wday_name_tab[ ptm->tm_wday ].name1[2];
+	bufstr[ 3] = ',';
+	bufstr[ 4] = ' ';
+	bufstr[ 5] = (char) ('0' + (ptm->tm_mday / 10) );
+	bufstr[ 6] = (char) ('0' + (ptm->tm_mday % 10) );
+	bufstr[ 7] = ' ';
+	bufstr[ 8] = month_name_tab[ ptm->tm_mon ].name1[0];
+	bufstr[ 9] = month_name_tab[ ptm->tm_mon ].name1[1];
+	bufstr[10] = month_name_tab[ ptm->tm_mon ].name1[2];
+	bufstr[11] = ' ';
+	bufstr[12] = (char) ( '0' + ( uYear / 1000 ) % 10 );
+	bufstr[13] = (char) ( '0' + ( uYear /  100 ) % 10 );
+	bufstr[14] = (char) ( '0' + ( uYear /   10 ) % 10 );
+	bufstr[15] = (char) ( '0' + ( uYear %   10 ) );
+	bufstr[16] = ' ';
+	bufstr[17] = (char) ( '0' + ( ptm->tm_hour / 10 ) );
+	bufstr[18] = (char) ( '0' + ( ptm->tm_hour % 10 ) );
+	bufstr[19] = ':';
+	bufstr[20] = (char) ( '0' + ( ptm->tm_min  / 10 ) );
+	bufstr[21] = (char) ( '0' + ( ptm->tm_min  % 10 ) );
+	bufstr[22] = ':';
+	bufstr[23] = (char) ( '0' + ( ptm->tm_sec  / 10 ) );
+	bufstr[24] = (char) ( '0' + ( ptm->tm_sec  % 10 ) );
+	bufstr[25] = ' ';
+	bufstr[26] = 'G';
+	bufstr[27] = 'M';
+	bufstr[28] = 'T';
+	bufstr[29] = '\0';
+
+#if    DTM_LEN_GMTTM_STR != 29
+#error DTM_LEN_GMTTM_STR != 29
+#endif /* DTM_LEN_GMTTM_STR */
+
+	/* Return constant length
 	*/
-	return t;
+	return DTM_LEN_GMTTM_STR;
 }
 
 /* EOF */

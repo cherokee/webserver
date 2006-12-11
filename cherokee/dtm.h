@@ -39,7 +39,17 @@
 
 CHEROKEE_BEGIN_DECLS
 
-time_t cherokee_dtm_str2time (char *str);
+#define DTM_TIME_EVAL		((time_t) -1)
+#define DTM_LEN_GMTTM_STR	29
+#define DTM_SIZE_GMTTM_STR	(DTM_LEN_GMTTM_STR + 1)
+
+const
+char  *cherokee_dtm_wday_name (int idxName);
+const
+char  *cherokee_dtm_month_name(int idxName);
+
+time_t cherokee_dtm_str2time  (char *cstr);
+size_t cherokee_dtm_gmttm2str (char *bufstr, size_t bufsize, struct tm *ptm);
 
 CHEROKEE_END_DECLS
 

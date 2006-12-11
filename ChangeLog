@@ -1,3 +1,22 @@
+2006-12-10  A.D.F  <adefacc@tin.it>
+
+	* cherokee/dtm.h:
+	- added constant DTM_TIME_EVAL;
+        - new function prototypes:
+		cherokee_dtm_wday_name();
+		cherokee_dtm_month_name();
+                cherokee_dtm_gmttm2str();
+
+	* cherokee/dtm.c:
+	- general cleanup;
+	- added new internal arrays;
+	- added new functions to convert a weekday index (0-6)
+	  or a month index (0-11) to the corresponding short name
+	  (3 characters long);
+        - added new function cherokee_dtm_gmttm2str() in order
+	  to allow fast conversion from a gmt struct tm
+	  to a string (40 mlsec. for 100000 calls on my PC).
+
 2006-12-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/source_interpreter.c (cherokee_source_interpreter_spawn):
