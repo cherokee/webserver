@@ -50,6 +50,9 @@ cherokee_reqs_list_entry_new  (cherokee_reqs_list_entry_t **entry)
 ret_t 
 cherokee_reqs_list_entry_free (cherokee_reqs_list_entry_t *entry)
 {
+	if (entry == NULL)
+		return ret_ok;
+
 	cherokee_buffer_mrproper (&entry->request);
 	cherokee_config_entry_mrproper (CONF_ENTRY(entry));
 	

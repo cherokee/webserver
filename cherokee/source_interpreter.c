@@ -181,6 +181,11 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 	if (re == -1) return ret_error;
 #endif
 
+	/* Sanity check
+	 */
+	if (cherokee_buffer_is_empty (&src->interpreter)) 
+		return ret_not_found;
+
 	/* Maybe set a custom enviroment variable set 
 	 */
 	envp = (src->custom_env) ? src->custom_env : empty_envp;
