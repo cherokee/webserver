@@ -582,13 +582,19 @@ add_request (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver,
 {
 #ifndef CHEROKEE_EMBEDDED
 	ret_t                       ret;
-	cherokee_reqs_list_entry_t *entry;
+	cherokee_reqs_list_entry_t *entry = NULL;
 
 	ret = cherokee_reqs_list_entry_new (&entry);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) { 
+		cherokee_reqs_list_entry_free (entry);
+		return ret;
+	}
 
 	ret = init_entry (vserver, config, CONF_ENTRY(entry));
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) {
+		cherokee_reqs_list_entry_free (entry);
+		return ret;
+	}
 
 	cherokee_buffer_add_buffer (&entry->request, &config->key);
 
