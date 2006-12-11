@@ -18,12 +18,12 @@ a
   color: #cc0000;
 }
 
-
 table
 { 
   width: 500px;
   font-size: small;
   height: 100%;
+  margin: 0 auto;
 }
 
 thead td
@@ -48,12 +48,13 @@ tbody td
 
 .logo 
 {
- display: block;
- border: 0px;
+  display: block;
+  border: 0px;
+  margin: 0 auto;
 }
 
 .icon 
 {
- display: block;
- border: 0px;
+  display: block;
+  border: 0px;
 }
