@@ -1,5 +1,10 @@
 2006-12-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_cgi_base.c (add_systemroot_env)
+	(cherokee_handler_cgi_base_build_basic_env): It adds a new
+	SYSTEMROOT environment variable when running in Win32. I should
+	fix #115.
+
 	* cherokee/handler_phpcgi.c: Added Win32 path and name. Now, it
 	shouldn't be necessary to define the interpreter if it's installer
 	on c:\php\php.exe
