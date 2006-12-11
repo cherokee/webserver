@@ -161,11 +161,11 @@ reconnect (cherokee_fcgi_manager_t *mgr, cherokee_thread_t *thd, cherokee_boolea
 	 */
 	ret = cherokee_source_connect (src, &mgr->socket);
 	if (ret != ret_ok) {
-		cherokee_source_interpreter_t *src2 = SOURCE_INT(src);
+		cherokee_source_interpreter_t *src_int = SOURCE_INT(src);
 
 		/* It didn't sucess to connect, so lets spawn a new server
 		 */
-		ret = cherokee_source_interpreter_spawn (src2);
+		ret = cherokee_source_interpreter_spawn (src_int);
 		if (ret != ret_ok) {
 			if (src_int->interpreter.buf)
 				TRACE (ENTRIES, "Couldn't spawn: %s\n", src_int->interpreter.buf);
