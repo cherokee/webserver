@@ -1,3 +1,25 @@
+2006-12-11  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.h: 
+	- new function prototype:
+		cherokee_buffer_ensure_addlen();
+	
+	* cherokee/buffer.c: 
+        - added new function cherokee_buffer_ensure_addlen()
+	  in order to ensure that there is enough space
+	  to add n characters to the buffer, useful to lower
+	  the number of reallocations when it is known
+	  how much space is needed (more or less);
+
+	- added constant REALLOC_EXTRA_SIZE to each realloc()
+	  call; it is useful to lower the number of realloc()
+	  calls, especially when using functions like
+	  cherokee_buffer_add*() with small chunks;
+
+	- added 1 to a few calls to cherokee_buffer_ensure_size
+	  in order to always allow space for a final '\0',
+	  which is included in "size" counting.
+
 2006-12-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* themes/default_header.html: Replaced border="0" entry by a

@@ -41,7 +41,9 @@
 #include "sha1.h"
 
 
-#define TO_HEX(c) (c > 9 ? c+'a'-10 : c+'0')
+#define REALLOC_EXTRA_SIZE	0
+#define TO_HEX(c)               (c > 9 ? c+'a'-10 : c+'0')
+
 
 ret_t
 cherokee_buffer_new (cherokee_buffer_t **buf)
@@ -153,11 +155,12 @@ cherokee_buffer_add (cherokee_buffer_t *buf, char *txt, size_t size)
 	 */
 	if (free < (size+1)) {
 		char *pbuf;
-		pbuf = (char *) realloc(buf->buf, buf->size + size - free + 1);
+		int newsize = buf->size + size - free + REALLOC_EXTRA_SIZE + 1;
+		pbuf = (char *) realloc(buf->buf, newsize);
 		if (unlikely (pbuf == NULL)) 
 			return ret_nomem;
 		buf->buf = pbuf;
-		buf->size += size - free + 1;
+		buf->size = newsize;
 	}
 
 	/* Copy	
@@ -250,11 +253,12 @@ cherokee_buffer_add_char_n (cherokee_buffer_t *buf, char c, int num)
 	 */
 	if (free < (num+1)) {
 		char *pbuf;
-		pbuf = (char *) realloc(buf->buf, buf->size + num - free + 1);
+		int newsize = buf->size + num - free + REALLOC_EXTRA_SIZE + 1;
+		pbuf = (char *) realloc(buf->buf, newsize);
 		if (unlikely (pbuf == NULL))
 			return ret_nomem;
 		buf->buf = pbuf;
-		buf->size += num - free + 1;
+		buf->size = newsize;
 	}
 
 	memset (buf->buf+buf->len, c, num);
@@ -275,11 +279,12 @@ cherokee_buffer_prepend (cherokee_buffer_t  *buf, char *txt, size_t size)
 	 */
 	if (free < (size+1)) {
 		char *pbuf;
-		pbuf = (char *) realloc(buf->buf, buf->size + size - free + 1);
+		int newsize = buf->size + size - free + REALLOC_EXTRA_SIZE + 1;
+		pbuf = (char *) realloc(buf->buf, newsize);
 		if (unlikely (pbuf == NULL))
 			return ret_nomem;
 		buf->buf = pbuf;
-		buf->size += size - free + 1;
+		buf->size = newsize;
 	}
 
 	memmove (buf->buf+size, buf->buf, buf->len);
@@ -329,13 +334,26 @@ cherokee_buffer_move_to_begin (cherokee_buffer_t *buf, int pos)
 
 
 ret_t
+cherokee_buffer_ensure_addlen (cherokee_buffer_t *buf, size_t addlen)
+{
+	if (addlen < 0)
+		return ret_error;
+
+	if (buf->len + addlen < buf->size)
+		return ret_ok;
+
+	return cherokee_buffer_ensure_size (buf, ((size_t)buf->len + addlen));
+}
+
+
+ret_t
 cherokee_buffer_ensure_size (cherokee_buffer_t *buf, size_t size)
 {
 	char *pbuf;
 
 	/* Maybe it doesn't need it
 	 */
-	if (size < buf->len) 
+	if (size <= buf->len) 
 		return ret_ok;
 
 	/* If it is a new buffer, take memory and return
@@ -614,7 +632,7 @@ cherokee_buffer_multiply (cherokee_buffer_t *buf, int num)
 	int i, initial_size;
 
 	initial_size = buf->len;
-	cherokee_buffer_ensure_size (buf, buf->len * num);
+	cherokee_buffer_ensure_size (buf, buf->len * num + 1);
 
 	for (i=0; i<num; i++) {
 		cherokee_buffer_add (buf, buf->buf, initial_size);
@@ -939,7 +957,7 @@ cherokee_buffer_encode_base64 (cherokee_buffer_t *buf)
 
 	/* Get memory
 	 */
-	ret = cherokee_buffer_ensure_size (&new_buf, (buf->len+4)*4/3);
+	ret = cherokee_buffer_ensure_size (&new_buf, (buf->len+4)*4/3 + 1);
 	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Encode
