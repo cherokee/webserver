@@ -103,4 +103,16 @@ class SCGIHandler (SocketServer.BaseRequestHandler):
 class SCGIServer(SocketServer.ThreadingTCPServer):
     def __init__(self, handler_class=SCGIHandler, host="", port=4000):
         self.allow_reuse_address = True
-        SocketServer.TCPServer.__init__ (self, (host, port), handler_class)
+        SocketServer.ThreadingTCPServer.__init__ (self, (host, port), handler_class)
+
+class SCGIServerFork (SocketServer.ForkingTCPServer):
+    def __init__(self, handler_class=SCGIHandler, host="", port=4000):
+        self.allow_reuse_address = True
+        SocketServer.ForkingTCPServer.__init__ (self, (host, port), handler_class)
+
+
+def ServerFactory (threading=False, *args, **kargs):
+    if threading:
+        return SCGIServer(*args, **kargs)
+    else:
+        return SCGIServerFork(*args, **kargs)

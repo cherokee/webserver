@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pyscgi import SCGIHandler, SCGIServer
+from pyscgi import ServerFactory, SCGIHandler
 
 DEFAULT_PORT = 4000
  
@@ -20,7 +20,7 @@ class MyHandler(SCGIHandler):
         self.print_env()
 
 def main():
-    srv = SCGIServer(handler_class=MyHandler, port=DEFAULT_PORT)
+    srv = ServerFactory(handler_class=MyHandler, port=DEFAULT_PORT)
     srv.serve_forever()
 
 if __name__ == "__main__":

@@ -1,3 +1,14 @@
+2006-12-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* tests/test1_env.py, tests/test2_post.py: Updated for using
+	ServerFactory.
+
+	* pyscgi/pyscgi.py: Added new SCGIServerFork class implementing a
+	forking server. So far I had only a Thread based one.
+
+	* pyscgi/pyscgi.py (ServerFactory): Added a new factory function
+	to instance servers.
+
 2006-12-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* pyscgi/pyscgi.py, tests/test1_env.py, tests/test2_post.py: First

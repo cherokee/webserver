@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pyscgi import SCGIHandler, SCGIServer
+from pyscgi import SCGIHandler, ServerFactory
 
 DEFAULT_PORT = 4000
 POST_EXAMPLE = """
@@ -36,7 +36,7 @@ class MyHandler(SCGIHandler):
         self.output.write(POST_EXAMPLE)
 
 def main():
-    srv = SCGIServer(handler_class=MyHandler, port=DEFAULT_PORT)
+    srv = ServerFactory(handler_class=MyHandler, port=DEFAULT_PORT)
     srv.serve_forever()
 
 if __name__ == "__main__":
