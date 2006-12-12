@@ -1,5 +1,9 @@
 2006-12-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* 1.1 Released
+
+	* setup.py: Version bumped
+
 	* tests/test1_env.py, tests/test2_post.py: Updated for using
 	ServerFactory.
 
