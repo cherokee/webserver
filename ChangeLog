@@ -1,5 +1,7 @@
 2006-12-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* README: Updated.
+
 	* configure.in: The initial CFLAGS was missing after testing for
 	the pthread_rwlock_t structure. Fixed.  Reported by Marcus
 	Rueckert <darix@web.de>
