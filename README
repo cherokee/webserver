@@ -1,46 +1,100 @@
 Cherokee Web Server
 ===================
 
-A mailing-list cherokee@cherokee-project.com is available, to subscribe:
+Web site
+--------
+  http://www.cherokee-project.com
+
+
+License
+-------
+  Currently Cherokee is being released under GPL v2. Read the COPYING
+  file for more information.
+  
+
+Mailing lists
+-------------
+  There are a few mailing list available. Please, do not hesitate to
+  subscribe to any on them:
+
     http://www.cherokee-project.com/cgi-bin/mailman/listinfo/cherokee
 
-The list archive is at:
+  This is the main mailing list, where questions are sent and general
+  discussion takes place.
+
+  There are also a few technical mailing list. Developers and package
+  maintainers usually subscribe to these mailing list as well:
+
+    http://www.cherokee-project.com/cgi-bin/mailman/listinfo/bugs
+    http://www.cherokee-project.com/cgi-bin/mailman/listinfo/cherokee-commits
+
+  The mailing lists archives are available  at:
+
     http://www.cherokee-project.com/archives/
 
 
+IRC channel
+-----------
+  irc.freenode.net, channel #cherokee  
 
-1.- How to compile it
----------------------
-./configure --prefix=/usr --sysconfdir=/etc
 
-2.- How to create dinamyc modules
----------------------------------
-It's the default way.
-
-3.- How to compile the module xyz statically in the libcherokee
----------------------------------------------------------------
-./configure --prefix=/usr --sysconfdir=/etc --enable-static-module=xyz
-
-4.- How to build statically
+Building form a tar.gz file
 ---------------------------
-./configure --prefix=/usr --sysconfdir=/etc --enable-static-module=all
+  Run ./configure, with some options if you wish. The standard options
+  are documented in the INSTALL file.  The only interesting ones are
+  the usual --prefix=/usr and --sysconfdir=/etc
 
-5.- How to optimize in a Pentium4
----------------------------------
-make CFLAGS="-march=pentium4 -O3 -pipe -fomit-frame-pointer -fforce-addr -falign-functions=4 -fprefetch-loop-arrays"
+  Do "make", and then do "make install" (possibly as root if the
+  destination permissions require that).
 
-6.- How to create a self signed certificate for TLS
----------------------------------------------------
-openssl req -days 1000 -new -x509 -nodes -out /etc/cherokee/ssl/cherokee.pem -keyout /etc/cherokee/ssl/cherokee.pem
+  That's all.
 
-7.- How to compile the embedded version
---------------------------------------
-./configure --prefix=/usr --sysconfdir=/etc --disable-pthread --disable-tls --disable-largefile --disable-pcre
-cd cherokee && make -f Makefile.embedded 
 
-8.- Windows compilation
------------------------
-./configure --prefix=/usr --sysconfdir=/etc --enable-trace --enable-static-module=all --enable-static --enable-shared=no --enable-beta
+Building form the repository
+----------------------------
+  Check out the code from SVN, following the instructions at:
+
+    http://www.cherokee-project.com/svn
+
+  cd into the source directory and run ./autogen.sh to setup the
+  environment (you need the standard autoconf tools to do so).
+
+  Then, continue with the following instructions...
+
+
+FAQ
+---
+   Here is a list of the most frequently asked questions:
+
+  How to compile it
+  ------------------
+   ./configure --prefix=/usr --sysconfdir=/etc
+
+  How to create dinamyc modules
+  -----------------------------
+   It's the default way.
+
+  How to compile the module xyz statically in the libcherokee
+  -----------------------------------------------------------
+   ./configure --prefix=/usr --sysconfdir=/etc --enable-static-module=xyz
+
+  How to build statically
+  -----------------------
+   ./configure --prefix=/usr --sysconfdir=/etc --enable-static-module=all
+
+  How to create a self signed certificate for TLS
+  -----------------------------------------------
+    openssl req -days 1000 -new -x509 -nodes -out /etc/cherokee/ssl/cherokee.pem -keyout /etc/cherokee/ssl/cherokee.pem
+
+  How to compile the embedded version (u-cherokee)
+  ------------------------------------------------
+   ./configure --prefix=/usr --sysconfdir=/etc --disable-pthread --disable-tls --disable-largefile --disable-pcre
+   cd cherokee
+   make -f Makefile.embedded 
+
+  How to compile it on Windows
+  ----------------------------
+   ./configure --prefix=/usr --sysconfdir=/etc --enable-trace --enable-static-module=all --enable-static --enable-shared=no --enable-beta
 
 
 --
