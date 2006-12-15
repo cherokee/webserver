@@ -15,6 +15,8 @@ SSL_CERT_FILE     = "/etc/cherokee/ssl/cherokee.pem"
 SSL_CERT_KEY_FILE = "/etc/cherokee/ssl/cherokee.pem"
 SSL_CA_FILE       = "/etc/cherokee/ssl/cherokee.pem"
 
+SERVER_DELAY      = 10
+
 
 # Paths
 #

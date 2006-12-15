@@ -182,9 +182,11 @@ if port is None:
     pid = os.fork()
     if pid == 0:
         if valgrind:
+#           os.execl (VALGRIND_PATH, "valgrind", "--tool=helgrind", server, "-C", cfg_file)
 #           os.execl (VALGRIND_PATH, "valgrind", "--tool=callgrind", server, "-C", cfg_file)
 #           os.execl (VALGRIND_PATH, "valgrind", "--tool=cachegrind", server, "-C", cfg_file)
             os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=20", "-v", server, "-C", cfg_file)
+#           os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", server, "-C", cfg_file)
         elif strace:
             os.execl (STRACE_PATH, "strace", server, "-C", cfg_file)            
         else:
@@ -197,7 +199,12 @@ if port is None:
         print_key ('Mime', CHEROKEE_MIME)
         print_key ('Mods', CHEROKEE_MODS)
         print
-        time.sleep(7)
+
+        for s in range(SERVER_DELAY):
+           sys.stdout.write ("Tests will start in %d secs\r" % (SERVER_DELAY - s - 1))
+           sys.stdout.flush()
+           time.sleep(1)
+        print '\n'
 
 its_clean = False
 def clean_up():
