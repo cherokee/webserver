@@ -72,6 +72,9 @@ dnl Path version
 AC_SUBST(PACKAGE_PATCH_VERSION)
 AC_DEFINE_UNQUOTED(PACKAGE_PATCH_VERSION, "${PACKAGE_PATCH_VERSION}", [Version string])
 
+dnl Initial CFLAGS
+AC_MSG_CHECKING(initial CFLAGS)
+AC_MSG_RESULT($CFLAGS)
 
 dnl Check for CPU / vendor / OS
 AC_CANONICAL_HOST
@@ -201,7 +204,6 @@ AC_CHECK_HEADERS(sys/socket.h sys/un.h netinet/in.h arpa/inet.h netinet/tcp.h sy
 AC_CHECK_HEADERS(sys/resource.h resource.h unistd.h syslog.h stdint.h inttypes.h error.h pwd.h sys/uio.h)
 AC_CHECK_HEADERS(pthread.h netdb.h stdarg.h sys/filio.h sys/varargs.h sys/select.h sys/mman.h grp.h winsock.h)
 AC_CHECK_HEADERS(winsock.h winsock2.h)
-
 
 AC_SYS_LARGEFILE
 
@@ -448,33 +450,36 @@ then
 
 		AC_MSG_CHECKING([for pthread_rwlock_t support])
 		have_pthread_rwlock_t=yes
+
 		AC_TRY_COMPILE([#include <pthread.h>],
 			[pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;],
 			AC_MSG_RESULT([ok]),
 
-		dnl Didn't find rwlock_t. 
-		dnl Try defining _XOPEN_SOURCE=500
-		dnl
-		oldcflags="$CFLAGS"
-		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
+ 		     dnl Didn't find rwlock_t. 
+		     dnl Try defining _XOPEN_SOURCE=500
+		     dnl
+		     oldcflags="$CFLAGS"
+		     CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
 
-		AC_TRY_COMPILE([#include <pthread.h>], 
-			[pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;]
-		,
-			AC_MSG_RESULT([-D_XOPEN_SOURCE=500])
-			PTHREAD_CFLAGS="$PTHREAD_CFLAGS -D_XOPEN_SOURCE=500"
-			AC_SUBST(PTHREAD_CFLAGS)
-			# AC_DEFINE(_XOPEN_SOURCE, 500, [Define this if it is needed for pthread_rwlock_t support])
-		,
-			# AC_MSG_ERROR([pthread_rwlock_t support missing]))
-		))
+		     AC_TRY_COMPILE([#include <pthread.h>], 
+			    [pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;]
+  		     ,
+			    AC_MSG_RESULT([-D_XOPEN_SOURCE=500])
+			    PTHREAD_CFLAGS="$PTHREAD_CFLAGS -D_XOPEN_SOURCE=500"
+			    AC_SUBST(PTHREAD_CFLAGS)
+			    # AC_DEFINE(_XOPEN_SOURCE, 500, [Define this if it is needed for pthread_rwlock_t support])
+		     ,
+			    have_pthread_rwlock_t=no
+			    # AC_MSG_ERROR([pthread_rwlock_t support missing]))
+		     )
+			
+			CFLAGS="$oldcflags"
+		)
 
 		if test "$have_pthread_rwlock_t" = yes; then
 			AC_DEFINE(HAVE_PTHREAD_RWLOCK_T, 1, [Define if your pthread library includes pthread_rwlock_t])
 		fi
-
-		CFLAGS="$oldcflags"
-
+		
 		with_pthread="yes"
 	fi
 fi

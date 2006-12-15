@@ -1,3 +1,9 @@
+2006-12-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in: The initial CFLAGS was missing after testing for
+	the pthread_rwlock_t structure. Fixed.  Reported by Marcus
+	Rueckert <darix@web.de>
+
 2006-12-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* themes/default_header.html, themes/default_theme.css: Couple of
