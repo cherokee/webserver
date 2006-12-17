@@ -1903,7 +1903,7 @@ cherokee_connection_log_or_delay (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_log_delayed (cherokee_connection_t *conn)
 {
-	ret_t ret;
+	ret_t ret = ret_ok;
 
 	if ((conn->log_at_end) && (conn->logger_ref)) {
 		ret = cherokee_logger_write_access (conn->logger_ref, conn);

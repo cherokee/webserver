@@ -889,6 +889,7 @@ build_server_string (cherokee_server_t *srv)
 ret_t
 cherokee_server_init (cherokee_server_t *srv) 
 {   
+	int            re;
 	ret_t          ret;
 	struct passwd *ent;
 
@@ -978,7 +979,11 @@ cherokee_server_init (cherokee_server_t *srv)
 
 	/* Change current directory
 	 */
-	chdir ("/");
+	re = chdir ("/");
+	if (re < 0) {
+		PRINT_ERROR ("Couldn't chmod(\"/\"): %s\n", strerror(errno));
+		return ret_error;
+	}
 
 	/* Create the threads
 	 */
@@ -1768,7 +1773,8 @@ cherokee_server_get_backup_mode (cherokee_server_t *srv, cherokee_boolean_t *act
 ret_t 
 cherokee_server_write_pidfile (cherokee_server_t *srv)
 {
-	FILE *file;
+	size_t  written;
+	FILE   *file;
 	CHEROKEE_TEMP(buffer, 10);
 
 	if (cherokee_buffer_is_empty (&srv->pidfile))
@@ -1781,8 +1787,11 @@ cherokee_server_write_pidfile (cherokee_server_t *srv)
 	}
 
 	snprintf (buffer, buffer_size, "%d\n", getpid());
-	fwrite (buffer, 1, strlen(buffer), file);
+	written = fwrite (buffer, 1, strlen(buffer), file);
 	fclose (file);
+
+	if (written <= 0)
+		return ret_error;
 
 	return ret_ok;
 }

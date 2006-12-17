@@ -100,8 +100,8 @@ static ret_t
 stat_file (cherokee_boolean_t useit, cherokee_iocache_t *iocache, struct stat *nocache_info, 
 	   char *path, cherokee_iocache_entry_t **io_entry, struct stat **info)
 {	
-	int   re;
 	ret_t ret;
+	int   re  = -1;
 
 	/* Without cache
 	 */

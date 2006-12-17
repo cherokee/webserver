@@ -282,7 +282,9 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd, cher
 		return ret_error;
 	}
 
-	ret = ret_error;
+	ret      = ret_error;
+	ret_auth = ret_error;
+
 	while (!feof(f)) {
 		if (fgets (line, line_size, f) == NULL)
 			continue;

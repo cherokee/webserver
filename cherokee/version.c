@@ -42,6 +42,8 @@ cherokee_version_add (cherokee_buffer_t *buf, cherokee_server_token_t level)
 		ret = cherokee_buffer_add_str (buf, "Cherokee web server " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION " (" OS_TYPE ")");
 	case cherokee_version_full:
 		ret = cherokee_buffer_add_str (buf, "Cherokee web server " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION " (" OS_TYPE ")");
+	default:
+		ret = ret_error;
 	}
 
 	return ret;
@@ -64,6 +66,8 @@ cherokee_version_add_w_port (cherokee_buffer_t *buf, cherokee_server_token_t lev
 		ret = cherokee_buffer_add_va (buf, "Cherokee web server Port %d " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION " (" OS_TYPE ")", port);
 	case cherokee_version_full:
 		ret = cherokee_buffer_add_va (buf, "Cherokee web server Port %d " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION " (" OS_TYPE ")", port);
+	default:
+		ret = ret_error;
 	}
 
 	return ret;

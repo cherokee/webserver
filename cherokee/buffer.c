@@ -608,7 +608,7 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 		case EIO:        return ret_error;
 		}
 
-		PRINT_ERROR ("ERROR: read(%d, %u,..) -> errno=%d '%s'\n", fd, size, errno, strerror(errno));
+		PRINT_ERROR ("ERROR: read(%d, " FMT_OFFSET ",..) -> errno=%d '%s'\n", fd, size, errno, strerror(errno));
 		return ret_error;
 	}
 	else if (len == 0) {
@@ -645,11 +645,11 @@ cherokee_buffer_multiply (cherokee_buffer_t *buf, int num)
 ret_t
 cherokee_buffer_print_debug (cherokee_buffer_t *buf, int len)
 {
-	int           i, length;
-	char          text[67];
-	char*         hex_text;
-	char*         ascii_text;
-	unsigned char tmp;
+	int            i, length;
+	char           text[67];
+	unsigned char  tmp;
+	char          *hex_text   = NULL;
+	char          *ascii_text = NULL;
 
 	if ((len == -1) || (buf->len <= len)) {
 		length = buf->len;

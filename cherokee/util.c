@@ -608,7 +608,7 @@ reswitch:
 			len += width;
 			goto reswitch;
 		case 'c':
-			va_arg(ap, int);
+			(void) va_arg(ap, int);
 			len++;
 			break;
 		case 'o':

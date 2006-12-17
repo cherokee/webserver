@@ -1,3 +1,42 @@
+2006-12-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/validator_htpasswd.c (cherokee_validator_htpasswd_check):
+	Better initialization.  It makes the validator safer is the
+	password file is empty.
+
+	* cherokee/handler_common.c (stat_file): Better initialization.
+
+	* cherokee/handler_fcgi.h: post_len property is now size_t instead
+	cuint_t.
+
+	* cherokee/handler_scgi.c (build_header): Changed %d by FMT_OFFSET
+	for printing to post length.
+
+	* cherokee/server.c (cherokee_server_init): Check chdir() returned
+	value.
+
+	* cherokee/server.c (cherokee_server_write_pidfile): Check
+	fwrite() returned cdde.
+
+	* cherokee/connection.c (cherokee_connection_log_delayed): It
+	could return an uninitialized value under some circunstances.
+	Fixed.
+
+	* cherokee/socket.h (OPENSSL_LAST_ERROR): Better initialization.
+	Now it's a bit safer.
+
+	* cherokee/buffer.c (cherokee_buffer_read_from_fd): Changed "%u"
+	by FMT_OFFSET to print a size_t.
+	(cherokee_buffer_print_debug): variables hex_text, and ascii_text
+	weren't initilizated.
+
+	* cherokee/version.c (cherokee_version_add)
+	(cherokee_version_add_w_port): Compilation warning fixd: 'ret' may
+	be used uninitialized in this function
+
+	* cherokee/util.c (cherokee_estimate_va_length): Compilation
+	warning fixed. util.c:611: warning: value computed is not used
+
 2006-12-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* README: Updated.

@@ -239,7 +239,7 @@ build_header (cherokee_handler_scgi_t *hdl)
 	cuint_t len;
 	char    tmp[64];
 
-	len = snprintf (tmp, 64, "%d", hdl->post_len);
+	len = snprintf (tmp, 64, FMT_OFFSET, hdl->post_len);
 	
 	set_env (HDL_CGI_BASE(hdl), "CONTENT_LENGTH", tmp, len);
 	set_env (HDL_CGI_BASE(hdl), "SCGI", "1", 1);
