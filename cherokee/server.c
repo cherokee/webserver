@@ -79,6 +79,7 @@
 #include "ncpus.h"
 #include "mime.h"
 #include "util.h"
+#include "dtm.h"
 #include "fdpoll.h"
 #include "fdpoll-protected.h"
 #include "regex.h"
@@ -1094,15 +1095,15 @@ update_bogo_now (cherokee_server_t *srv)
 	
 	cherokee_buffer_clean (&srv->bogo_now_string);
 	cherokee_buffer_add_va_fixed (&srv->bogo_now_string,
-				      "%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
-				      cherokee_weekdays[srv->bogo_now_tm.tm_wday], 
-				      srv->bogo_now_tm.tm_mday,
-				      cherokee_months[srv->bogo_now_tm.tm_mon], 
-				      srv->bogo_now_tm.tm_year + 1900,
-				      srv->bogo_now_tm.tm_hour,
-				      srv->bogo_now_tm.tm_min,
-				      srv->bogo_now_tm.tm_sec,
-				      sign, offset);
+				"%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
+	            cherokee_dtm_wday_name(srv->bogo_now_tm.tm_wday),
+	            srv->bogo_now_tm.tm_mday,
+	            cherokee_dtm_month_name(srv->bogo_now_tm.tm_mon),
+	            srv->bogo_now_tm.tm_year + 1900,
+	            srv->bogo_now_tm.tm_hour,
+	            srv->bogo_now_tm.tm_min,
+	            srv->bogo_now_tm.tm_sec,
+	            sign, offset);
 
 	CHEROKEE_RWLOCK_UNLOCK (&srv->bogo_now_mutex);      /* 2.- release */
 }

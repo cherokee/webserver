@@ -65,8 +65,6 @@ CHEROKEE_BEGIN_DECLS
 
 /* Some global information
  */
-const extern char *cherokee_months[]; 
-const extern char *cherokee_weekdays[]; 
 
 /* System
  */

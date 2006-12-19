@@ -264,7 +264,11 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	cherokee_buffer_escape_clean (conn->request_escape);
 	cherokee_buffer_escape_set_ref (conn->request_escape, &conn->request);
 
+#ifdef CHEROKEE_EMBEDDED
 	cherokee_buffer_mrproper (&conn->request_original);
+#else
+	cherokee_buffer_clean (&conn->request_original);
+#endif
 	cherokee_buffer_mrproper (&conn->encoder_buffer);
 
 	cherokee_buffer_clean (&conn->pathinfo);
@@ -412,7 +416,7 @@ build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffe
 	 * Eg: WWW-Authenticate: Basic realm=""
 	 */
 	if (conn->auth_type & http_auth_basic) {
-		cherokee_buffer_ensure_size (buffer, 31 + conn->realm_ref->len + 4);
+		cherokee_buffer_ensure_addlen (buffer, 31 + conn->realm_ref->len + 4);
 		cherokee_buffer_add_str (buffer, "WWW-Authenticate: Basic realm=\"");
 		cherokee_buffer_add_buffer (buffer, conn->realm_ref);
 		cherokee_buffer_add_str (buffer, "\""CRLF);
@@ -425,7 +429,7 @@ build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffe
 		cherokee_buffer_t new_nonce = CHEROKEE_BUF_INIT;
 		/* Realm
 		 */
-		cherokee_buffer_ensure_size (buffer, 32 + conn->realm_ref->len + 4);
+		cherokee_buffer_ensure_addlen (buffer, 32 + conn->realm_ref->len + 4);
 		cherokee_buffer_add_str (buffer, "WWW-Authenticate: Digest realm=\"");
 		cherokee_buffer_add_buffer (buffer, conn->realm_ref);
 		cherokee_buffer_add_str (buffer, "\", ");
@@ -448,7 +452,7 @@ build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffe
 static void
 build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 {	
-	/* Build the response header
+	/* Build the response header.
 	 */
 	cherokee_buffer_clean (buffer);
 
@@ -498,8 +502,7 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 
 	/* Authentication
 	 */
-	if ((conn->realm_ref != NULL) && (conn->error_code == http_unauthorized))
-	{
+	if ((conn->realm_ref != NULL) && (conn->error_code == http_unauthorized)) {
 		build_response_header__authenticate (conn, buffer);
 	}
 
@@ -539,6 +542,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 
 	/* Try to get the headers from the handler
 	 */
+	cherokee_buffer_ensure_size (&(conn->header_buffer), 384);
 	ret = cherokee_handler_add_headers (conn->handler, &conn->header_buffer);
 	switch (ret) {
 	case ret_ok:
@@ -559,7 +563,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 			conn->keepalive = 0;
 		}
 	}
-	
+
 	/* Add the server headers	
 	 */
 	if (! (conn->handler->support & hsupport_dont_add_headers)) {
@@ -1542,7 +1546,7 @@ cherokee_connection_get_dir_entry (cherokee_connection_t *conn, cherokee_dirs_ta
 	    (conn->request.buf[conn->request.len-1] != '/') &&
 	    (strcmp (conn->request.buf, conn->web_directory.buf) == 0))
 	{
-		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + 1);
+		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + 4);
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
 		cherokee_buffer_add (&conn->redirect, "/", 1);
 
@@ -1856,15 +1860,15 @@ cherokee_connection_open_request (cherokee_connection_t *conn)
 	       conn->request.buf,
 	       conn->local_directory.buf);
 
-	/* If the connection is keep-alive, have a look at the
-	 * handler to see if supports it.
+	/* If the connection is keep-alive
+	 * then verify whether the handler supports it.
 	 */
 	if ((HANDLER_SUPPORT_LENGTH(conn->handler) == 0) && 
 	    (HANDLER_SUPPORT_MAYBE_LENGTH(conn->handler) == 0)) {
 		conn->keepalive = 0;
 	}
-	
-	/* Ensure the space for writting
+
+	/* Ensure the space for writing
 	 */
 	cherokee_buffer_ensure_size (&conn->buffer, DEFAULT_READ_SIZE+1);
 

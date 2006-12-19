@@ -1,3 +1,55 @@
+2006-12-19  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.h:
+        - new function prototypes cherokee_buffer_add_*long*().
+
+	* cherokee/buffer.c:
+	- changed value of REALLOC_EXTRA_SIZE
+	  from 0 to 16;
+        - added new fast formatting function prototypes for numbers
+	  (nice to have as a counterpart of string copies):
+	  - cherokee_buffer_add_long10();
+	  - cherokee_buffer_add_ulong10();
+	  - cherokee_buffer_add_ullong10();
+	  - cherokee_buffer_add_ulong16();
+	  - cherokee_buffer_add_ullong16();
+	- reverted your last change in
+	  cherokee_buffer_read_from_fd() PRINT_ERROR(...FMT_OFFSET...)
+	  because size_t is not an off_t
+	  (in most systems size_t is always an unsigned int
+	   or even an uint32_t);
+
+  	      NOTE: I guess that, sooner or later,
+	      we will have to change the type of len and size
+	      fields of cherokee_buffer_t, from int to size_t
+	      (lot of code to review, maybe it's a 0.7 thing).
+
+	* cherokee/util.h:
+	- removed references to cherokee_weekdays[] and
+	  cherokee_months[];
+
+	* cherokee/util.c:
+	- removed arrays cherokee_weekdays[] and
+	  cherokee_months[] (see dtm.c);
+	- minor space reformatting;
+
+	* cherokee/server.c:
+	- replaced cherokee_weekdays[] and cherokee_months[]
+	  with the equivalent cherokee_dtm_wday_name()
+	  and cherokee_dtm_month_name();
+
+	* cherokee/connection.c:
+	- added a call to cherokee_buffer_ensure_size(header_buffer, 384)
+	  before the call to "add_headers" function callback;
+	- added a few other cherokee_buffer_ensure_size() and
+	  cherokee_buffer_ensure_addlen();
+
+	* cherokee/handler_file.c:
+	- replaced Etag: with ETag:;
+	- added a call to cherokee_dtm_gmttm2str();
+	- replaced a few simple cherokee_buffer_add_va()
+	  with single calls to cherokee_buffer_add*().
+
 2006-12-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/validator_htpasswd.c (cherokee_validator_htpasswd_check):

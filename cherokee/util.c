@@ -84,11 +84,7 @@
 
 #define ENTRIES "util"
 
-
 const char *cherokee_version    = PACKAGE_VERSION;
-const char *cherokee_months[]   = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-				   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-const char *cherokee_weekdays[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
 
 /* This function is licenced under:
@@ -547,12 +543,12 @@ cherokee_estimate_va_length (char *fmt, va_list ap)
 	cuint_t             len = 0;
 
 
-#define LEN_NUM(base)       \
-	do {	            \
+#define LEN_NUM(base) \
+	do {                \
 		ul /= base; \
 		len++;      \
         } while (ul > 0);   \
-	len++;
+	len++
 
 
 	for (;;) {
@@ -570,7 +566,7 @@ reswitch:
 		switch (ch = *fmt++) {
 		case 's':
 			p = va_arg(ap, char *);
-			len += strlen (p? p: "(null)");
+			len += strlen (p ? p : "(null)");
 			break;
 		case 'd':
 			ul = lflag ? va_arg(ap, culong_t) : va_arg(ap, int);

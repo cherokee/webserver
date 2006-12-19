@@ -165,17 +165,17 @@ check_cached (cherokee_handler_file_t *fhdl)
 		has_modified_since = true;
 
 		req_time = cherokee_dtm_str2time (header);			
-		if (req_time == -1) {
+		if (unlikely (req_time == DTM_TIME_EVAL)) {
 			cherokee_logger_write_string (
 				CONN_VSRV(conn)->logger, 
 				"Warning: Unparseable time '%s'",
 				header);
-		}
-		*end = tmp;   /* restore */
-		
-		if (req_time == -1) {
+			/* restore end of line */
+			*end = tmp;
 			return ret_ok;
 		}
+		/* restore end of line */
+		*end = tmp;
 		
 		/* The file is cached in the client
 		 */
@@ -197,14 +197,14 @@ check_cached (cherokee_handler_file_t *fhdl)
 	if (ret == ret_ok)  {
 		int    tmp_len;
 		CHEROKEE_TEMP(tmp,100);
-		
+
 		has_etag = true;
-		
-		tmp_len = snprintf (tmp, tmp_size, "%lx=" FMT_OFFSET_HEX, fhdl->info->st_mtime, fhdl->info->st_size);
+
+		tmp_len = snprintf (tmp, tmp_size, "%lx=" FMT_OFFSET_HEX,
+				fhdl->info->st_mtime, fhdl->info->st_size);
 
 		if ((header_len == tmp_len) && 
-		    (strncmp (header, tmp, tmp_len) == 0))
-		{
+		    (strncmp (header, tmp, tmp_len) == 0)) {
 			not_modified_etag = true;
 		}
 	}
@@ -236,17 +236,15 @@ check_cached (cherokee_handler_file_t *fhdl)
 		*end = '\0'; 
 		
 		req_time = cherokee_dtm_str2time (header);			
-		if (req_time == -1) {
+		if (unlikely (req_time == DTM_TIME_EVAL)) {
 			cherokee_logger_write_string (
 				CONN_VSRV(conn)->logger, 
 				"Warning: Unparseable time '%s'",
 				header);
-		}
-		*end = tmp;
-		
-		if (req_time == -1) {
+			*end = tmp;
 			return ret_ok;
 		}
+		*end = tmp;
 
 		/* If the entity tag given in the If-Range header
 		 * matches the current entity tag for the entity, then
@@ -543,29 +541,27 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 				   cherokee_buffer_t       *buffer)
 {
 	ret_t                  ret;
-	off_t                  length;
-	struct tm              modified_tm;
+	size_t                 szlen = 0;
+	off_t                  content_length = 0;
+	struct tm              modified_tm = { 0 };
+	char                   bufstr[DTM_SIZE_GMTTM_STR];
 	cherokee_connection_t *conn         = HANDLER_CONN(fhdl);
 
-	/* Etag
+	/* ETag:
 	 */
 	if (conn->header.version >= http_version_11) { 
-		cherokee_buffer_add_va (buffer, "Etag: %lx=" FMT_OFFSET_HEX CRLF, fhdl->info->st_mtime, fhdl->info->st_size);
+		cherokee_buffer_add_va (buffer, "ETag: %lx=" FMT_OFFSET_HEX CRLF, fhdl->info->st_mtime, fhdl->info->st_size);
 	}
 
 	/* Last-Modified:
 	 */
 	cherokee_gmtime (&fhdl->info->st_mtime, &modified_tm);
 
-	cherokee_buffer_add_va (buffer,
-				"Last-Modified: %s, %02d %s %d %02d:%02d:%02d GMT"CRLF,
-				cherokee_weekdays[modified_tm.tm_wday],
-				modified_tm.tm_mday,
-				cherokee_months[modified_tm.tm_mon], 
-				modified_tm.tm_year + 1900,
-				modified_tm.tm_hour,
-				modified_tm.tm_min,
-				modified_tm.tm_sec);
+	szlen = cherokee_dtm_gmttm2str(bufstr, DTM_SIZE_GMTTM_STR, &modified_tm);
+
+	cherokee_buffer_add_str(buffer, "Last-Modified: ");
+	cherokee_buffer_add    (buffer, bufstr, szlen);
+	cherokee_buffer_add_str(buffer, CRLF);
 
 #ifndef CHEROKEE_EMBEDDED
 	/* Add MIME related headers: 
@@ -582,7 +578,9 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 		
 		ret = cherokee_mime_entry_get_maxage (fhdl->mime, &maxage);             
 		if (ret == ret_ok) {
-			cherokee_buffer_add_va (buffer, "Cache-Control: max-age=%u"CRLF, maxage);
+			cherokee_buffer_add_str    (buffer, "Cache-Control: max-age=");
+			cherokee_buffer_add_ulong10(buffer, (culong_t) maxage);
+			cherokee_buffer_add_str    (buffer, CRLF);
 		}
 	}
 #endif
@@ -600,9 +598,9 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 	/* We stat()'ed the file in the handler constructor
 	 */
-	length = conn->range_end - conn->range_start;		
-	if (unlikely (length < 0))
-		length = 0;
+	content_length = conn->range_end - conn->range_start;		
+	if (unlikely (content_length < 0))
+		content_length = 0;
 
 	if (conn->encoder == NULL) {
 		if (conn->error_code == http_partial_content) {
@@ -613,11 +611,11 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 						conn->range_end - 1,
 						fhdl->info->st_size);
 		}
-		
-		cherokee_buffer_add_va (buffer, "Content-Length: " FMT_OFFSET CRLF, length);
+
+		cherokee_buffer_add_va (buffer, "Content-Length: " FMT_OFFSET CRLF, content_length);
 
 	} else {
-		/* Can't use Keep-alive w/o "Content-length:", so
+		/* Can't use Keep-alive w/o "Content-length:", so disable it.
 		 */
 		conn->keepalive = 0;
 	}
