@@ -1,3 +1,25 @@
+2006-12-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_admin.c (cherokee_handler_admin_init): Fixed
+	post lenght type.
+
+	* cherokee/post.h, cherokee/post.c (cherokee_post_get_len,
+	cherokee_post_set_len): size_t -> off_t
+
+	* cherokee/handler_fastcgi.h, cherokee/handler_fcgi.h,
+	cherokee/handler_scgi.h, cherokee/handler_scgi.c (build_header):
+	post_len property should be off_t. Fixed and set the right
+	fomating string parameter.
+
+	* cherokee/post.h: size, received and walk_offset type are now
+	off_t rather than size_t.
+
+	* cherokee/macros.h (FMT_SIZE, FMT_SIZE_HEX, CST_SIZE): Added new
+	macros to defize the format string of a size_t value.
+
+	* configure.in: Added check for the size of size_t, int and
+	unsigned int.
+
 2006-12-19  A.D.F  <adefacc@tin.it>
 
 	* cherokee/buffer.h:

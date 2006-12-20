@@ -47,7 +47,7 @@ typedef struct {
 	cherokee_handler_cgi_base_t   base;
 	cherokee_socket_t             socket;
 	cherokee_handler_fcgi_post_t  post_phase;
-	size_t                        post_len;
+	off_t                         post_len;
 	cherokee_buffer_t             write_buffer;
 } cherokee_handler_fcgi_t;
 

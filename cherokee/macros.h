@@ -232,18 +232,30 @@
 #define INT_TO_POINTER(integer) ((void*)((long)(integer)))
 
 
-/* Format string for off_t
+/* Format string for off_t and size_t
  */
 #if (SIZEOF_OFF_T == SIZEOF_UNSIGNED_LONG_LONG)
 # define FMT_OFFSET "%llu"
 # define FMT_OFFSET_HEX "%llx"
 # define CST_OFFSET unsigned long long
-#elif (SIZEOF_OFF_T ==  SIZEOF_UNSIGNED_LONG)
+#elif (SIZEOF_OFF_T == SIZEOF_UNSIGNED_LONG)
 # define FMT_OFFSET "%lu"
 # define FMT_OFFSET_HEX "%lx"
 # define CST_OFFSET unsigned long
 #else
 # error Unknown size of off_t 
+#endif
+
+#if (SIZEOF_SIZE_T == SIZEOF_UNSIGNED_INT)
+# define FMT_SIZE "%d"
+# define FMT_SIZE_HEX "%x"
+# define CST_SIZE unsigned int
+#elif (SIZEOF_SIZE_T == SIZEOF_UNSIGNED_LONG_LONG)
+# define FMT_SIZE "%llu"
+# define FMT_SIZE_HEX "%llx"
+# define CST_SIZE unsigned long long
+#else
+# error Unknown size of size_t 
 #endif
 
 

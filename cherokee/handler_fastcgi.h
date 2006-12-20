@@ -63,7 +63,7 @@ typedef struct {
 	cuint_t                         id;
 	cuchar_t                        generation;	
 	cherokee_buffer_t               write_buffer;	
-	size_t                          post_len;
+	off_t                           post_len;
 
 	cherokee_fcgi_manager_t        *manager;
 	cherokee_fcgi_dispatcher_t     *dispatcher;

@@ -123,7 +123,7 @@ ret_t
 cherokee_handler_admin_init (cherokee_handler_admin_t *ahdl)
 {
 	char                    *tmp;
-	size_t                   postl;
+	offset_t                 postl;
 	ret_t                    ret  = ret_ok;
 	cherokee_buffer_t        post = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t        line = CHEROKEE_BUF_INIT;

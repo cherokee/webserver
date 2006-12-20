@@ -74,7 +74,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 
 
 ret_t 
-cherokee_post_set_len (cherokee_post_t *post, size_t len)
+cherokee_post_set_len (cherokee_post_t *post, offset_t len)
 {
 	post->type = (len > POST_SIZE_TO_DISK) ? post_in_tmp_file : post_in_memory;
 	post->size = len;
@@ -118,7 +118,7 @@ cherokee_post_got_all (cherokee_post_t *post)
 }
 
 ret_t 
-cherokee_post_get_len (cherokee_post_t *post, size_t *len)
+cherokee_post_get_len (cherokee_post_t *post, offset_t *len)
 {
 	*len = post->size;
 	return ret_ok;

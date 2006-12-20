@@ -46,7 +46,7 @@ typedef struct {
 	cherokee_handler_cgi_base_t  base;
 	cherokee_buffer_t            header;
 	cherokee_socket_t            socket;
-	size_t                       post_len;
+	off_t                        post_len;
 } cherokee_handler_scgi_t;
 
 #define HDL_SCGI(x)       ((cherokee_handler_scgi_t *)(x))

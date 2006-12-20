@@ -260,11 +260,10 @@ do_download__finish (cherokee_downloader_t *downloader, void *param)
 static ret_t
 do_download (cherokee_downloader_t *downloader, cherokee_fdpoll_t *fdpoll)
 {
-	int   num;
-	ret_t ret;
+	ret_t                        ret;
 	cherokee_downloader_status_t status;
-	int headers_are_read = 0;
-	int reading = 0;
+	cint_t                       headers_are_read = 0;
+	cint_t                       reading          = 0;
 
 	do_download__init(downloader,NULL);
 
