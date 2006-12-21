@@ -802,11 +802,18 @@ dnl
 have_pam="disabled"
 AC_ARG_ENABLE(pam, AC_HELP_STRING([--disable-pam],[Disable PAM support]), use_pam="$enableval", use_pam="yes")
 if test "x$use_pam" = "xyes"; then
-     AC_CHECK_LIB(pam, _pam_dispatch, have_pam=yes, have_pam=no)
+     AC_CHECK_LIB(pam, pam_start, have_pam=yes, have_pam=no)
+     AC_CHECK_LIB(pam, _pam_dispatch, have_pam_dispatch=yes, have_pam_dispatch=no)
      AC_CHECK_HEADER(security/pam_modules.h, have_pam_include=yes, have_pam_include=no)
      AC_CHECK_HEADERS(security/_pam_macros.h security/pam_appl.h)
 fi
+
 AM_CONDITIONAL(HAVE_PAM, test "$have_pam $have_pam_include" = "yes yes")
+
+if test "$have_pam_dispatch" = "yes"; then
+	AC_DEFINE(HAVE_PAM_DISPATCH, 1, [Have _pam_dispatch function])
+fi
+
 
 dnl
 dnl crypt() and crypt_r()

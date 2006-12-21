@@ -1,3 +1,13 @@
+2006-12-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in: Added test for the _pam_dispatch() function in the
+	libpam library. It defines the HAVE_PAM_DISPATCH macro.
+
+	* cherokee/validator_pam.c (cherokee_validator_pam_check): Now it
+	uses pam_fail_delay() and pam_authenticate() rather than
+	_pam_dispatch() if available. Patch by Marcus Rueckert
+	<darix@web.de>
+
 2006-12-21  A.D.F  <adefacc@tin.it>
 
 	* cherokee/buffer.c: cherokee_buffer_add_long10(), use cuint_t
