@@ -112,6 +112,7 @@ int
 main (int argc, char *argv[]) 
 {
 	int          re,i;
+	size_t       r;
 	FILE        *file;
 	char        *filename_in;
 	char        *filename_out;
@@ -144,8 +145,11 @@ main (int argc, char *argv[])
 	}
 	   
 	content = (char *) malloc (sizeof(char) * (info.st_size+1));
-	fread (content, 1, info.st_size, file);
+	r = fread (content, 1, info.st_size, file);
 	fclose (file);
+
+	if (r <= 0)
+		return 1;
 
 	/* Replace the strings
 	 */
@@ -162,11 +166,13 @@ main (int argc, char *argv[])
 	/* Write down the new file
 	 */
 	file = (strcmp (filename_out, "-") == 0) ? stdout : fopen (filename_out, "w");
-	fwrite (content, 1, strlen(content), file);
+	r = fwrite (content, 1, strlen(content), file);
 	fclose (file);
 
-	free (content);
+	if (r <= 0)
+		return 1;
 
+	free (content);
 	return 0;
 }
 
