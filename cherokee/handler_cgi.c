@@ -509,13 +509,18 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	/* Change the directory 
 	 */
 	if (! cherokee_buffer_is_empty (&conn->effective_directory)) {
-		chdir (conn->effective_directory.buf);
+		re = chdir (conn->effective_directory.buf);
 	} else {
 		char *file = strrchr (absolute_path, '/');
 
 		*file = '\0';
-		chdir (absolute_path);
+		re = chdir (absolute_path);
 		*file = '/';
+	}
+
+	if (re < 0) {
+		printf ("Status: 500" CRLF_CRLF);
+		exit(1);
 	}
 
 	/* Build de argv array
