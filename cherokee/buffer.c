@@ -214,7 +214,7 @@ ret_t
 cherokee_buffer_add_long10 (cherokee_buffer_t *buf, clong_t lNum)
 {
 	unsigned long	ulNum = (unsigned long) lNum;
-	uint    flgNeg = 0;
+	cuint_t flgNeg = 0;
 	int     newlen = 0;
 	size_t  i = (IOS_NUMBUF - 1);
 	char    szOutBuf[IOS_NUMBUF];
