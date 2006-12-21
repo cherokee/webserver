@@ -246,7 +246,7 @@ parse_netmask (char *netmask, subnet_item_t *n)
 	}
 
 	num = strtol(netmask, NULL, 10);
-	if (num <= LONG_MIN) 
+	if (num < 0) 
 		return ret_error;
 
 	/* Sanity checks
