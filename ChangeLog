@@ -1,3 +1,19 @@
+2006-12-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/balancer.c (cherokee_balancer_configure): Added a new
+	"host" type.  It allows to add pure host nodes to a balancer (so
+	far, it only supported "interpreter" entries).
+
+	* configure.in, cherokee/Makefile.am: Added support for the new
+	mirror module.
+
+	* cherokee/source.c (cherokee_source_new): Added new function. 
+
+	* cherokee/handler_mirror.h, cherokee/handler_mirror.c: Added new
+	handler.  It implements a redirector based on the balancer
+	modules.  Basically, it relays the request on a host port pair and
+	then forwards the response to the client.
+
 2006-12-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_admin.c (cherokee_handler_admin_init): Fixed
@@ -1978,7 +1994,7 @@
 2005-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/header.c (cherokee_header_get_request_w_args): Added
-	new funcion.
+	new function.
 
 	* qa/107-Priority1.py, qa/108-Priority2.py, qa/109-Priority3.py,
 	qa/110-Priority4.py, qa/Makefile.am: Added new tests to check
@@ -4564,7 +4580,7 @@
 
 2004-05-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* src/main.c (panic_handler): Funcion `panic' has been renamed to
+	* src/main.c (panic_handler): Function `panic' has been renamed to
 	panic_handler because it was causing a linkage error on MacOS X.
 
 	* configure.in (cherokee_version_len): Check form _pam_dispatch
@@ -6576,7 +6592,7 @@
 	sendfile() bug on FreeBSD. Thanks to Pablo Neira.
 
 	* aclocal.m4 (HAVE_PTHREAD): Removed SAMBA_SENDFILE
-	funcion.  Added sendfile.samba.m4
+	function.  Added sendfile.samba.m4
 
 	* etr_socket_nsl.m4: Added new func ETR_SOCKET_NSL
 	http://ac-archive.sourceforge.net

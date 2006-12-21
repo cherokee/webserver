@@ -625,8 +625,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 
 ret_t
-cherokee_handler_file_step (cherokee_handler_file_t *fhdl, 
-			    cherokee_buffer_t       *buffer)
+cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *buffer)
 {
 	off_t                  total;
 	int                    size;

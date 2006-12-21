@@ -30,6 +30,16 @@
 #define ENTRIES "source,src"
 
 
+ret_t
+cherokee_source_new (cherokee_source_t **src)
+{
+	CHEROKEE_NEW_STRUCT (n, source);
+	
+	*src = n;
+	return cherokee_source_init (n);
+}
+
+
 ret_t 
 cherokee_source_init (cherokee_source_t *src)
 {

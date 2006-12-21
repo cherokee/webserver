@@ -66,10 +66,11 @@ cherokee_balancer_mrproper (cherokee_balancer_t *balancer)
 ret_t 
 cherokee_balancer_configure (cherokee_balancer_t *balancer, cherokee_config_node_t *conf)
 {
-	ret_t              ret;
-	cherokee_list_t   *i;
-	cherokee_buffer_t *buf;
-	cherokee_boolean_t interpreter = false;
+	ret_t               ret;
+	cherokee_list_t    *i;
+	cherokee_buffer_t  *buf;
+	cherokee_boolean_t  interpreter = false;
+	cherokee_boolean_t  host        = false;
 
 	/* Look for the type of the source objects
 	 */
@@ -81,6 +82,8 @@ cherokee_balancer_configure (cherokee_balancer_t *balancer, cherokee_config_node
 	
 	if (equal_buf_str (buf, "interpreter")) {
 		interpreter = true;
+	} else if (equal_buf_str (buf, "host")) {
+		host = true;
 	} else {
 		PRINT_ERROR ("ERROR: Balancer: Unknown type '%s'\n", buf->buf);
 		return ret_error;
@@ -105,6 +108,13 @@ cherokee_balancer_configure (cherokee_balancer_t *balancer, cherokee_config_node
 			if (ret != ret_ok) return ret;
 
 			src = SOURCE(src2);
+
+		} else if (host) {
+			ret = cherokee_source_new (&src);
+			if (ret != ret_ok) return ret;
+			
+			ret = cherokee_source_configure (src, subconf);
+			if (ret != ret_ok) return ret;
 		}
 		
 		cherokee_balancer_add_source (balancer, src);

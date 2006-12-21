@@ -48,12 +48,12 @@ typedef struct {
 
 #define SOURCE(s)  ((cherokee_source_t *)(s))
 
-ret_t cherokee_source_init      (cherokee_source_t *src);
-ret_t cherokee_source_mrproper  (cherokee_source_t *src);
-ret_t cherokee_source_configure (cherokee_source_t *src, cherokee_config_node_t *conf);
+ret_t cherokee_source_new       (cherokee_source_t **src);
+ret_t cherokee_source_init      (cherokee_source_t  *src);
+ret_t cherokee_source_mrproper  (cherokee_source_t  *src);
+ret_t cherokee_source_configure (cherokee_source_t  *src, cherokee_config_node_t *conf);
 
-ret_t cherokee_source_connect  (cherokee_source_t *src, cherokee_socket_t *socket);
-
+ret_t cherokee_source_connect   (cherokee_source_t  *src, cherokee_socket_t *socket);
 
 CHEROKEE_END_DECLS
 
