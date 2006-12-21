@@ -412,7 +412,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		}
 		
 		TRACE(ENTRIES, "Handler: %s\n", tmp->buf);
-		cherokee_config_entry_set_handler (entry, info);		
+		cherokee_config_entry_set_handler (entry, PLUGIN_INFO_HANDLER(info));
 
 	} else if (equal_buf_str (&conf->key, "auth")) {
 		cherokee_plugin_info_validator_t *vinfo;
