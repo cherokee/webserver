@@ -27,6 +27,7 @@
 
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
+#include <unistd.h>
 
 
 CHEROKEE_BEGIN_DECLS
