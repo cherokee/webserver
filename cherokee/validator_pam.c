@@ -181,10 +181,11 @@ cherokee_validator_pam_check (cherokee_validator_pam_t  *pam, cherokee_connectio
 	 * means PAM_AUTHENTICATE
 	 */
 	ret = _pam_dispatch (pamhandle, 0, 1);
-
 #else
-	PRINT_ERROR_S ("Unsupported PAM library\n");
-	goto unauthorized;
+
+	/* If it fails, it will probably block
+	 */
+	ret = pam_authenticate (pamhandle, 0);
 #endif
 
 	if (ret != PAM_SUCCESS) {
