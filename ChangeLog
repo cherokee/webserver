@@ -1,3 +1,8 @@
+2006-12-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/plugin.h (PLUGIN_EMPTY_INIT_FUNCTION,
+	PLUGIN_INFO_INIT): Compilation warning fixed.
+
 2006-12-23  Alberto Ruiz  <aruiz@synaptia.net> 
 
 	* windows/cherokee.nsi.in: Added package icon.

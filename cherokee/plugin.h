@@ -84,7 +84,7 @@ typedef struct {
 /* Convenience macros
  */
 #define PLUGIN_INFO_INIT(name, type, func, conf)                    \
- 	cherokee_plugin_info_handler_t                              \
+ 	cherokee_plugin_info_t                                      \
 	        PLUGIN_INFO_NAME(name) =   	                    \
 		{	type,	 		  	  	    \
 			func,		 			    \
@@ -131,6 +131,7 @@ typedef struct {
 	void                                                        \
 	PLUGIN_INIT_NAME(name) (cherokee_plugin_loader_t *loader)   \
 	{                                                           \
+		;                                                   \
 	}                                                           \
 								    \
 
