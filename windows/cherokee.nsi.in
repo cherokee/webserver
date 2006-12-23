@@ -18,6 +18,9 @@ ShowInstDetails show
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 
+!define MUI_ICON "cherokee_pkg.ico"
+!define MUI_UNICON "cherokee_pkg.ico"
+
 !define MUI_FINISHPAGE_LINK "Visit the Cherokee site for the latest news!!"
 !define MUI_FINISHPAGE_LINK_LOCATION "http://www.cherokee-project.com/"
 

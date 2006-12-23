@@ -1,3 +1,11 @@
+2006-12-23  Alberto Ruiz  <aruiz@synaptia.net> 
+
+	* windows/cherokee.nsi.in: Added package icon.
+
+	* windows/cherokee.ico: Updated.
+
+	* windows/cherokee_pkg.ico: Added ew icon.	
+	
 2006-12-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/post.h: Fixes MacOS X compilation. Fixes #120.
