@@ -140,7 +140,11 @@ struct cherokee_server {
 	/* Server name
 	 */
 	cherokee_server_token_t    server_token;
+
 	cherokee_buffer_t          server_string;
+	cherokee_buffer_t          ext_server_string;
+	cherokee_buffer_t          ext_server_w_port_string;
+	cherokee_buffer_t          ext_server_w_port_tls_string;
 
 	/* User/group and chroot
 	 */

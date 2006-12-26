@@ -361,6 +361,7 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	 */
 	n->dir_ptr          = NULL;
 	n->file_ptr         = NULL;
+	n->software_str_ref = NULL;
 	n->longest_filename = 0;
 
 	/* Choose the sorting key
@@ -382,7 +383,6 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	 */
 	cherokee_buffer_init (&n->header);
 	cherokee_buffer_init (&n->public_dir);
-	cherokee_buffer_init (&n->server_software);
 
 	/* Check the theme
 	 */
@@ -406,7 +406,6 @@ cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 
 	cherokee_buffer_mrproper (&dhdl->header);
 	cherokee_buffer_mrproper (&dhdl->public_dir);
-	cherokee_buffer_mrproper (&dhdl->server_software);
 
 	list_for_each_safe (i, tmp, &dhdl->dirs) {
 		cherokee_list_del (i);
@@ -652,7 +651,6 @@ ret_t
 cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 {
 	ret_t                  ret;
-	cuint_t                port;
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 	cherokee_server_t     *srv  = HANDLER_SRV(dhdl);
 
@@ -679,12 +677,9 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 	/* Server software string
 	 */
 	if (conn->socket.is_tls == non_TLS)
-		port = srv->port;
+		dhdl->software_str_ref = &srv->ext_server_w_port_string;
 	else
-		port = srv->port_tls;
-	
-	ret = cherokee_version_add_w_port (&dhdl->server_software, srv->server_token, port);
-	if (unlikely (ret != ret_ok)) return ret;
+		dhdl->software_str_ref = &srv->ext_server_w_port_tls_string;
 
  	return ret_ok;
 }
@@ -844,7 +839,7 @@ replace_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t
 
 	/* Server software
 	 */
-	replace_token (buffer, "%server_software%", dhdl->server_software.buf);
+	replace_token (buffer, "%server_software%", dhdl->software_str_ref->buf);
 
 	/* Notice
 	 */

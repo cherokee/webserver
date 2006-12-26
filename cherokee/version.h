@@ -46,6 +46,7 @@ typedef enum {
 
 ret_t cherokee_version_add        (cherokee_buffer_t *buf, cherokee_server_token_t level);
 ret_t cherokee_version_add_w_port (cherokee_buffer_t *buf, cherokee_server_token_t level, cuint_t port);
+ret_t cherokee_version_add_simple (cherokee_buffer_t *buf, cherokee_server_token_t level);
 
 
 CHEROKEE_END_DECLS

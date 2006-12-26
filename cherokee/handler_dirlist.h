@@ -95,7 +95,7 @@ typedef struct {
  	cherokee_buffer_t        header;
 
 	cherokee_buffer_t        public_dir;
-	cherokee_buffer_t        server_software;
+	cherokee_buffer_t       *software_str_ref;
 } cherokee_handler_dirlist_t;
 
 #define PROP_DIRLIST(x)      ((cherokee_handler_dirlist_props_t *)(x))

@@ -225,6 +225,9 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	n->server_token = cherokee_version_full;
 	cherokee_buffer_init (&n->server_string);
+	cherokee_buffer_init (&n->ext_server_string);
+	cherokee_buffer_init (&n->ext_server_w_port_string);
+	cherokee_buffer_init (&n->ext_server_w_port_tls_string);
 
 	/* Loggers
 	 */
@@ -364,7 +367,12 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	cherokee_buffer_mrproper (&srv->bogo_now_string);
 	cherokee_buffer_mrproper (&srv->timeout_header);
+
 	cherokee_buffer_mrproper (&srv->server_string);
+	cherokee_buffer_mrproper (&srv->ext_server_string);
+	cherokee_buffer_mrproper (&srv->ext_server_w_port_string);
+	cherokee_buffer_mrproper (&srv->ext_server_w_port_tls_string);
+
 	cherokee_buffer_mrproper (&srv->listen_to);
 	cherokee_buffer_mrproper (&srv->chroot);
 	cherokee_buffer_mrproper (&srv->pidfile);
@@ -853,37 +861,29 @@ set_fdmax_limit (cherokee_server_t *srv)
 }
 
 
-static void
-build_server_string (cherokee_server_t *srv)
+static ret_t
+init_server_strings (cherokee_server_t *srv)
 {
+	ret_t ret;
+
 	cherokee_buffer_clean (&srv->server_string);
+	cherokee_buffer_clean (&srv->ext_server_string);
+	cherokee_buffer_clean (&srv->ext_server_w_port_string);
+	cherokee_buffer_clean (&srv->ext_server_w_port_tls_string);
 
-	/* Cherokee
-	 */
-	cherokee_buffer_add_str (&srv->server_string, "Cherokee"); 
-	if (srv->server_token <= cherokee_version_product) 
-		return;
+	ret = cherokee_version_add_w_port (&srv->ext_server_w_port_string, srv->server_token, srv->port);
+	if (ret != ret_ok) return ret;
 
-	/* Cherokee/x.y
-	 */
-	cherokee_buffer_add_va (&srv->server_string, "/%s.%s", PACKAGE_MAJOR_VERSION, PACKAGE_MINOR_VERSION);
-	if (srv->server_token <= cherokee_version_minor) 
-		return;
+	ret = cherokee_version_add_w_port (&srv->ext_server_w_port_tls_string, srv->server_token, srv->port_tls);
+	if (ret != ret_ok) return ret;
 
-	/* Cherokee/x.y.z-betaXX
-	 */
-	cherokee_buffer_add_va (&srv->server_string, ".%s", PACKAGE_MICRO_VERSION PACKAGE_PATCH_VERSION);
-	if (srv->server_token <= cherokee_version_minimal) 
-		return;
+	ret = cherokee_version_add (&srv->ext_server_string, srv->server_token);
+	if (ret != ret_ok) return ret;
 
-	/* Cherokee/x.y.z-betaXX (UNIX)
-	 */
-	cherokee_buffer_add_va (&srv->server_string, " (%s)", OS_TYPE);
-	if (srv->server_token <= cherokee_version_os) return;
+	ret = cherokee_version_add_simple (&srv->server_string, srv->server_token);
+	if (ret != ret_ok) return ret;
 
-	/* Cherokee/x.y.z-betaXX (UNIX) Ext1/x.y Ext2/x.y
-	 * TODO
-	 */
+	return ret_ok;
 }
 
 
@@ -896,7 +896,8 @@ cherokee_server_init (cherokee_server_t *srv)
 
 	/* Build the server string
 	 */
-	build_server_string (srv);
+	ret = init_server_strings (srv);
+	if (ret != ret_ok) return ret;
 
 	/* Set the FD number limit
 	 */
