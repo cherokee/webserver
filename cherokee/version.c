@@ -34,14 +34,19 @@ cherokee_version_add (cherokee_buffer_t *buf, cherokee_server_token_t level)
 	switch (level) {
 	case cherokee_version_product:
 		ret = cherokee_buffer_add_str (buf, "Cherokee web server");
+		break;
 	case cherokee_version_minor:
 		ret = cherokee_buffer_add_str (buf, "Cherokee web server " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION);
+		break;
 	case cherokee_version_minimal:
 		ret = cherokee_buffer_add_str (buf, "Cherokee web server " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION);
+		break;
 	case cherokee_version_os:
 		ret = cherokee_buffer_add_str (buf, "Cherokee web server " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION " (" OS_TYPE ")");
+		break;
 	case cherokee_version_full:
 		ret = cherokee_buffer_add_str (buf, "Cherokee web server " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION PACKAGE_PATCH_VERSION " (" OS_TYPE ")");
+		break;
 	default:
 		SHOULDNT_HAPPEN;
 		ret = ret_error;
@@ -59,14 +64,19 @@ cherokee_version_add_w_port (cherokee_buffer_t *buf, cherokee_server_token_t lev
 	switch (level) {
 	case cherokee_version_product:
 		ret = cherokee_buffer_add_va (buf, "Cherokee web server Port %d", port);
+		break;
 	case cherokee_version_minor:
 		ret = cherokee_buffer_add_va (buf, "Cherokee web server Port %d " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION, port);
+		break;
 	case cherokee_version_minimal:
 		ret = cherokee_buffer_add_va (buf, "Cherokee web server Port %d " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION, port);
+		break;
 	case cherokee_version_os:
 		ret = cherokee_buffer_add_va (buf, "Cherokee web server Port %d " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION " (" OS_TYPE ")", port);
+		break;
 	case cherokee_version_full:
 		ret = cherokee_buffer_add_va (buf, "Cherokee web server Port %d " PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION PACKAGE_PATCH_VERSION " (" OS_TYPE ")", port);
+		break;
 	default:
 		SHOULDNT_HAPPEN;
 		ret = ret_error;
@@ -84,14 +94,19 @@ cherokee_version_add_simple (cherokee_buffer_t *buf, cherokee_server_token_t lev
 	switch (level) {
 	case cherokee_version_product:
 		ret = cherokee_buffer_add_str (buf, "Cherokee");
+		break;
 	case cherokee_version_minor:
 		ret = cherokee_buffer_add_str (buf, "Cherokee/" PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION);
+		break;
 	case cherokee_version_minimal:
 		ret = cherokee_buffer_add_str (buf, "Cherokee/" PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION);
+		break;
 	case cherokee_version_os:
 		ret = cherokee_buffer_add_str (buf, "Cherokee/" PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION " (" OS_TYPE ")");
+		break;
 	case cherokee_version_full:
 		ret = cherokee_buffer_add_str (buf, "Cherokee/" PACKAGE_MAJOR_VERSION "." PACKAGE_MINOR_VERSION "." PACKAGE_MICRO_VERSION PACKAGE_PATCH_VERSION " (" OS_TYPE ")");
+		break;
 	default:
 		SHOULDNT_HAPPEN;
 		ret = ret_error;
