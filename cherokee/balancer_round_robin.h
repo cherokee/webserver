@@ -38,7 +38,7 @@ typedef struct {
 #endif	
 } cherokee_balancer_round_robin_t;
 
-#define BAL_RR(x)       ((cherokee_balancer_round_robin_file_t *)(x))
+#define BAL_RR(x)       ((cherokee_balancer_round_robin_t *)(x))
 
 
 ret_t cherokee_balancer_round_robin_new       (cherokee_balancer_t **balancer);

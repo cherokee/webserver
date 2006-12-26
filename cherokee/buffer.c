@@ -1445,7 +1445,7 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 	const char *substring_position;
 
 	/* Verify formal parameters
-	 * (those which are not tested should raise a segment violation).
+	 * (those which are not tested would raise a segment violation).
 	 */
 	if (buf->buf == NULL ||
 	    substring == NULL || substring_length < 1 ||
@@ -1462,8 +1462,8 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 			break;
 
 		result_length += (replacement_length - substring_length);
-	} 
-
+	}
+	
 	/* If no substring have been found, then return now.
 	 */
 	if (p == buf->buf)
@@ -1480,7 +1480,7 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 	/* Take the new memory chunk
 	 */
 	result = (char *) malloc (result_length + 1);
-	if (result == NULL)
+	if (unlikely (result == NULL))
 		return ret_nomem;
 
 	/* Build the new string
