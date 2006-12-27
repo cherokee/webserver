@@ -19,15 +19,11 @@ cherokee_logrotate.1
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cherokee.pc
 
-# Replacement utility
-noinst_PROGRAMS = cherokee_replace
-cherokee_replace_SOURCES = cherokee_replace.c
-
 # Configuration files
 cherokeeconfdir = $(sysconfdir)/cherokee
 
 .sample.pre.sample:
-	$(top_builddir)/cherokee_replace $< $@ "%sysconfdir%" "${sysconfdir}" "%datadir%" "${datadir}" "%prefix%" "${prefix}" "%wwwroot%" "${WWW_ROOT}"
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%wwwroot%|${WWW_ROOT}|g" $< > $@
 
 CONFS_PRE =              \
 cherokee.conf.sample.pre \
