@@ -25,6 +25,7 @@
 #include "common-internal.h"
 #include "source.h"
 #include "config_node.h"
+#include "resolv_cache.h"
 #include "util.h"
 
 #define ENTRIES "source,src"
@@ -67,7 +68,11 @@ cherokee_source_mrproper (cherokee_source_t *src)
 ret_t 
 cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 {
-	ret_t ret;
+	ret_t                    ret;
+	cherokee_resolv_cache_t *resolv;
+
+	ret = cherokee_resolv_cache_get_default (&resolv);
+        if (unlikely (ret!=ret_ok)) return ret;
 
 	/* UNIX socket
 	 */
@@ -75,7 +80,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		ret = cherokee_socket_set_client (sock, AF_UNIX);
 		if (ret != ret_ok) return ret;
 		
-		ret = cherokee_socket_gethostbyname (sock, &src->unix_socket);
+		ret = cherokee_resolv_cache_get_host (resolv, src->unix_socket.buf, sock);
 		if (ret != ret_ok) return ret;
 
 		return cherokee_socket_connect (sock);
@@ -86,7 +91,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	ret = cherokee_socket_set_client (sock, AF_INET);
 	if (ret != ret_ok) return ret;
 	
-	ret = cherokee_socket_gethostbyname (sock, &src->host);
+	ret = cherokee_resolv_cache_get_host (resolv, src->host.buf, sock);
 	if (ret != ret_ok) return ret;
 	
 	SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);

@@ -82,6 +82,9 @@
 #endif
 
 #ifdef HAVE_PTHREAD
+# define CHEROKEE_MUTEX_T(n)          pthread_mutex_t n
+# define CHEROKEE_RWLOCK_T(n)         pthread_rwlock_t n
+
 # define CHEROKEE_MUTEX_LOCK(m)       pthread_mutex_lock(m)
 # define CHEROKEE_MUTEX_UNLOCK(m)     pthread_mutex_unlock(m)
 # define CHEROKEE_MUTEX_INIT(m,n)     pthread_mutex_init(m,n)
@@ -96,6 +99,9 @@
 # define CHEROKEE_RWLOCK_UNLOCK(m)    pthread_rwlock_unlock(m)
 # define CHEROKEE_RWLOCK_DESTROY(m)   pthread_rwlock_destroy(m)
 #else
+# define CHEROKEE_MUTEX_T(n)          
+# define CHEROKEE_RWLOCK_T(n)         
+
 # define CHEROKEE_MUTEX_LOCK(m)
 # define CHEROKEE_MUTEX_UNLOCK(m)
 # define CHEROKEE_MUTEX_INIT(m,n)  

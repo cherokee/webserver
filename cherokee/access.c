@@ -338,7 +338,7 @@ cherokee_access_add_domain (cherokee_access_t *entry, char *domain)
 	ret = cherokee_resolv_cache_get_default (&resolv);
 	if (unlikely(ret!=ret_ok)) return ret;
 
-	ret = cherokee_resolv_cache_resolve (resolv, domain, &ip);
+	ret = cherokee_resolv_cache_get_ipstr (resolv, domain, &ip);
 	if (unlikely(ret!=ret_ok)) return ret;
 
 	TRACE (ENTRIES, "Access: domain '%s'\n", domain);

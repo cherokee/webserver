@@ -30,6 +30,7 @@
 #define CHEROKEE_RESOLV_CACHE_H
 
 #include <cherokee/common.h>
+#include <cherokee/socket.h>
 
 
 CHEROKEE_BEGIN_DECLS
@@ -40,12 +41,12 @@ typedef struct cherokee_resolv_cache cherokee_resolv_cache_t;
 
 ret_t cherokee_resolv_cache_get_default (cherokee_resolv_cache_t **resolv);
 
-ret_t cherokee_resolv_cache_init     (cherokee_resolv_cache_t *resolv);
-ret_t cherokee_resolv_cache_mrproper (cherokee_resolv_cache_t *resolv);
+ret_t cherokee_resolv_cache_init      (cherokee_resolv_cache_t *resolv);
+ret_t cherokee_resolv_cache_mrproper  (cherokee_resolv_cache_t *resolv);
+ret_t cherokee_resolv_cache_clean     (cherokee_resolv_cache_t *resolv);
 
-ret_t cherokee_resolv_cache_resolve  (cherokee_resolv_cache_t *resolv,  const char *domain, const char **ip);
-ret_t cherokee_resolv_cache_clean    (cherokee_resolv_cache_t *resolv);
-
+ret_t cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t *resolv,  const char *domain, const char **ip);
+ret_t cherokee_resolv_cache_get_host  (cherokee_resolv_cache_t *resolv,  const char *domain, cherokee_socket_t *sock);
 
 CHEROKEE_END_DECLS
 

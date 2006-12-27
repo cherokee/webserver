@@ -36,103 +36,197 @@
 #include "table.h"
 
 
+typedef struct {
+	struct in_addr    addr;
+	cherokee_buffer_t ip_str;
+} cherokee_resolv_cache_entry_t;
+
 struct cherokee_resolv_cache {
-	   cherokee_table_t table;
-
-#ifdef HAVE_PTHREAD
-	   pthread_rwlock_t lock;
-#endif
+	cherokee_table_t table;
+	CHEROKEE_RWLOCK_T(lock);
 };
-
 
 static cherokee_resolv_cache_t *__global_resolv = NULL;
 
 
+/* Entries
+ */
+static ret_t 
+entry_new (cherokee_resolv_cache_entry_t **entry)
+{
+	CHEROKEE_NEW_STRUCT(n, resolv_cache_entry);
+	
+	cherokee_buffer_init (&n->ip_str);
+	memset (&n->addr, 0, sizeof(n->addr));
+
+	*entry = n;
+	return ret_ok;
+}
+
+
+static void
+entry_free (void *entry)
+{
+	cherokee_resolv_cache_entry_t *e = entry;
+
+	cherokee_buffer_mrproper (&e->ip_str);
+	free(entry);
+}
+
+
+static ret_t
+entry_fill_up (cherokee_resolv_cache_entry_t *entry, const char *domain)
+{
+	ret_t  ret;
+	char  *tmp;
+
+	ret = cherokee_gethostbyname (domain, &entry->addr); 
+	if (unlikely (ret != ret_ok)) return ret;
+
+	tmp = inet_ntoa (entry->addr);
+	if (tmp == NULL) return ret;
+	
+	cherokee_buffer_add (&entry->ip_str, tmp, strlen(tmp));
+	return ret_ok;
+}
+
+
+
+/* Table
+ */
 ret_t 
 cherokee_resolv_cache_init (cherokee_resolv_cache_t *resolv)
 {
-	   ret_t ret;
+	ret_t ret;
 
-	   ret = cherokee_table_init (&resolv->table);
-	   if (unlikely (ret != ret_ok)) return ret;
+	ret = cherokee_table_init (&resolv->table);
+	if (unlikely (ret != ret_ok)) return ret;
 
-	   CHEROKEE_RWLOCK_INIT (&resolv->lock, NULL);
-
-	   return ret_ok;
+	CHEROKEE_RWLOCK_INIT (&resolv->lock, NULL);
+	return ret_ok;
 }
 
 
 ret_t 
 cherokee_resolv_cache_mrproper (cherokee_resolv_cache_t *resolv)
 {
-	   cherokee_table_mrproper (&resolv->table);
-	   CHEROKEE_RWLOCK_DESTROY (&resolv->lock);
-
-	   return ret_ok;
-}
-
-
-ret_t 
-cherokee_resolv_cache_get_default (cherokee_resolv_cache_t **resolv)
-{
-	if (__global_resolv != NULL) {
-		*resolv = __global_resolv;
-		return ret_ok;
-	}
-	
-	*resolv = (cherokee_resolv_cache_t *) malloc (sizeof(cherokee_resolv_cache_t));
-	return cherokee_resolv_cache_init (*resolv);
-}
-
-
-static ret_t
-resolve (const char *domain, const char **ip)
-{
-	ret_t           ret;
-	char           *tmp;
-	struct in_addr  addr;
-	
-	ret = cherokee_gethostbyname (domain, &addr); 
-	if (unlikely (ret != ret_ok)) return ret;
-
-	tmp = inet_ntoa (addr);
-	*ip = strdup (tmp);
+	cherokee_table_mrproper (&resolv->table);
+	CHEROKEE_RWLOCK_DESTROY (&resolv->lock);
 
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_resolv_cache_resolve (cherokee_resolv_cache_t *resolv, const char *domain, const char **ip)
+cherokee_resolv_cache_get_default (cherokee_resolv_cache_t **resolv)
 {
-	   ret_t ret;
+	ret_t                    ret;
+	cherokee_resolv_cache_t *n;
+	
+	if (unlikely (__global_resolv == NULL)) {
+		n = (cherokee_resolv_cache_t *) malloc (sizeof(cherokee_resolv_cache_t));
+		if (n == NULL) return ret_nomem;
 
-	   /* Look for the name in the cache
-	    */
-	   CHEROKEE_RWLOCK_WRITER (&resolv->lock);
-	   ret = cherokee_table_get (&resolv->table, (char *)domain, (void **)ip);
-	   CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
-	   if (ret == ret_ok) return ret_ok;
+		ret = cherokee_resolv_cache_init (n);
+		if (ret != ret_ok) return ret;
 
-	   /* Damn it! It isn't there..
-	    */
-	   ret = resolve (domain, ip);
-	   if (ret != ret_ok) return ret;
+		__global_resolv = n;
+	}
 
-	   CHEROKEE_RWLOCK_WRITER (&resolv->lock);
-	   ret = cherokee_table_add (&resolv->table, (char *)domain, (void **)*ip);
-	   CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
-
-	   return ret;
+	*resolv = __global_resolv;
+	return ret_ok;
 }
 
 
 ret_t 
 cherokee_resolv_cache_clean (cherokee_resolv_cache_t *resolv)
 {
-	   CHEROKEE_RWLOCK_WRITER (&resolv->lock);
-	   cherokee_table_clean2 (&resolv->table, free);
-	   CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
+	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
+	cherokee_table_clean2 (&resolv->table, entry_free);
+	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
-	   return ret_ok;
+	return ret_ok;
+}
+
+
+static ret_t
+table_add_new_entry (cherokee_resolv_cache_t *resolv, const char *domain, cherokee_resolv_cache_entry_t **entry)
+{
+	ret_t                          ret;
+	cherokee_resolv_cache_entry_t *n;
+
+	/* Instance the entry
+	 */
+	ret = entry_new (&n);
+	if (unlikely (ret != ret)) 
+		return ret;
+
+	/* Fill it up
+	 */
+	ret = entry_fill_up (n, domain);
+	if (unlikely (ret != ret)) {
+		entry_free (n);
+		return ret;
+	}
+	
+	/* Add it to the table
+	 */
+	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
+	ret = cherokee_table_add (&resolv->table, (char *)domain, (void **)n);
+	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
+
+	*entry = n;
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t *resolv, const char *domain, const char **ip)
+{
+	ret_t                          ret;
+	cherokee_resolv_cache_entry_t *entry = NULL;
+
+	/* Look for the name in the cache
+	 */
+	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
+	ret = cherokee_table_get (&resolv->table, (char *)domain, (void **)&entry);
+	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
+
+	if (ret != ret_ok) {
+		/* Bad luck: it wasn't cached
+		 */
+		ret = table_add_new_entry (resolv, domain, &entry);
+		if (ret != ret_ok) return ret;
+	}
+
+	/* Return the ip string
+	 */
+	*ip = entry->ip_str.buf;
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv, const char *domain, cherokee_socket_t *sock)
+{
+	ret_t                          ret;
+	cherokee_resolv_cache_entry_t *entry = NULL;
+
+	/* Look for the name in the cache
+	 */
+	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
+	ret = cherokee_table_get (&resolv->table, (char *)domain, (void **)&entry);
+	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
+
+	if (ret != ret_ok) {
+		/* Bad luck: it wasn't cached
+		 */
+		ret = table_add_new_entry (resolv, domain, &entry);
+		if (ret != ret_ok) return ret;
+	}
+
+	/* Copy the address
+	 */
+	memcpy (&SOCKET_SIN_ADDR(sock), &entry->addr, sizeof(entry->addr));
+	return ret_ok;
 }

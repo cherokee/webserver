@@ -1,3 +1,20 @@
+2006-12-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/access.c (cherokee_access_add_domain): Updated to fit
+	the latest resolv cache changes.
+
+	* cherokee/source.c (cherokee_source_connect): Now it uses the
+	resolv cache rather that a plain call to
+	cherokee_socket_gethostbyname(). It speeds up *cgi connections
+	about a 15-20%.
+
+	* cherokee/resolv_cache.h, cherokee/resolv_cache.c: Many changes
+	along the code: fixes and improvements. Added a new method as
+	well.
+
+	* cherokee/common-internal.h (CHEROKEE_RWLOCK_T,
+	CHEROKEE_MUTEX_T): Added new macros.
+
 2006-12-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/server.c (init_server_strings, build_server_string):
