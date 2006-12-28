@@ -33,7 +33,7 @@
 #include <dirent.h>
 #include <errno.h>
 
-#define ERROR       1
+#define EXIT_ERROR     1
 #define WATCH_SLEEP 1000
 
 
@@ -124,13 +124,13 @@ main (int argc, char *argv[])
 	cherokee_sys_fdlimit_get (&fds_num);
 
 	ret = cherokee_fdpoll_best_new (&fdpoll, fds_num, fds_num);
-	if (ret != ret_ok) return ERROR;
+	if (ret != ret_ok) return EXIT_ERROR;
 	   
 	ret = cherokee_admin_client_new (&client);
-	if (ret != ret_ok) return ERROR;
+	if (ret != ret_ok) return EXIT_ERROR;
 
 	ret = cherokee_tls_init ();
-	if (ret != ret_ok) return ERROR;
+	if (ret != ret_ok) return EXIT_ERROR;
 
 	/* Set the request
 	 */
@@ -142,19 +142,19 @@ main (int argc, char *argv[])
 	ret = cherokee_admin_client_prepare (client, fdpoll, &url);
  	if (ret != ret_ok) {
 		PRINT_ERROR_S ("Client prepare failed\n");
-		return ERROR;
+		return EXIT_ERROR;
 	}
 
 	ret = cherokee_admin_client_connect (client);
  	if (ret != ret_ok) {
 		PRINT_ERROR_S ("Couldn't connect\n");
-		return ERROR;
+		return EXIT_ERROR;
 	}
 	
 	/* Look for the log name
 	 */
 	ret = look_for_logname (argv[2], &logname);
-	if (ret != ret_ok) return ERROR;
+	if (ret != ret_ok) return EXIT_ERROR;
 
 	/* Set the server in to backup mode
 	 */
@@ -168,7 +168,7 @@ main (int argc, char *argv[])
 		cherokee_http_code_to_string (code, &error);
 
 		printf ("%s\n", error);
-		return ERROR;
+		return EXIT_ERROR;
 	}
 	printf ("OK\n");
 
@@ -191,7 +191,7 @@ main (int argc, char *argv[])
 		cherokee_http_code_to_string (code, &error);
 
 		printf ("%s\n", error);
-		return ERROR;
+		return EXIT_ERROR;
 	}
 	printf ("OK\n");
 

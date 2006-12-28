@@ -1,6 +1,9 @@
 2006-12-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* cherokee/socket.c: A few Win32 compiletion fixes. Patch by Brian
+	* cherokee/cherokee_logrotate.c (main): Rename ERROR to
+	EXIT_ERROR, there was a conflict with some Win32 headers.
+
+	* cherokee/socket.c: A few Win32 compilation fixes. Patch by Brian
 	Rosner <brosner@gmail.com>
 
 	* cherokee/virtual_server.h: rx, tx should be off_t rather than
