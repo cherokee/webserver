@@ -1,5 +1,25 @@
 2006-12-28  A.D.F  <adefacc@tin.it>
 
+	*cherokee/thread.h:
+        - added new field cherokee_buffer_t tmp_buf
+	  that now can be used to handle temporary contents
+	  by cherokee_buffer_*() (fast) functions;
+
+	* cherokee/thread.c:
+        - added allocation (4096 bytes) and free of tmp_buf
+	  on creation and on death of each thread;
+
+	* cherokee/handler_file.c:
+        - check_cached(),
+          replaced one snprintf() call
+	  for the equivalent cherokee_buffer_*() calls
+	  (same code as in cherokee_handler_file_add_headers();
+
+	Above modifications speed up cherokee HTTP 304 Not Modified for
+	static files by around 8% (+-2%): 9300 -> 10000 requests / sec.
+
+2006-12-28  A.D.F  <adefacc@tin.it>
+	
 	* cherokee/buffer.h:
 	- added cherokee_buffer_add_llong10();
 

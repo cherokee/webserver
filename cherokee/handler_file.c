@@ -150,6 +150,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 	cherokee_boolean_t     not_modified_ms    = false;
 	cherokee_boolean_t     not_modified_etag  = false;
 	cherokee_connection_t *conn               = HANDLER_CONN(fhdl);
+	cherokee_thread_t     *thread             = HANDLER_THREAD(fhdl);
 
 	/* Based in time
 	 */
@@ -195,18 +196,28 @@ check_cached (cherokee_handler_file_t *fhdl)
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_if_none_match, &header, &header_len);
 	if (ret == ret_ok)  {
-		int    tmp_len;
-		CHEROKEE_TEMP(tmp,100);
+		cherokee_buffer_t *tmp = THREAD_TMP_BUF(thread);
 
-		has_etag = true;
+		/* Temporary buffer has already been pre-allocated,
+		 * so here its length is only reset.
+		 */
+		cherokee_buffer_clean (tmp);
 
-		tmp_len = snprintf (tmp, tmp_size, "%lx=" FMT_OFFSET_HEX,
-				fhdl->info->st_mtime, fhdl->info->st_size);
+		/* Build ETag value
+		 */
+		cherokee_buffer_add_ullong16 (tmp, (cullong_t) fhdl->info->st_mtime);
+		cherokee_buffer_add_str      (tmp, "=");
+		cherokee_buffer_add_ullong16 (tmp, (cullong_t) fhdl->info->st_size);
 
-		if ((header_len == tmp_len) && 
-		    (strncmp (header, tmp, tmp_len) == 0)) {
+		/* Compare ETag(s)
+		 */
+		if ((header_len == tmp->len) && 
+		    (strncmp (header, tmp->buf, tmp->len) == 0)) 
+		{
 			not_modified_etag = true;
 		}
+
+		has_etag = true;
 	}
 
 	/* If both If-Modified-Since and ETag have been found then

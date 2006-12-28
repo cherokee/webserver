@@ -211,6 +211,11 @@ cherokee_thread_new  (cherokee_thread_t **thd, void *server, cherokee_thread_typ
 	memset (&n->bogo_now_tm, 0, sizeof (struct tm));
 	cherokee_buffer_init (&n->bogo_now_string);
 
+	/* Temporary buffer used by utility functions
+       	 */
+	cherokee_buffer_init (&n->tmp_buf);
+	cherokee_buffer_ensure_size (&n->tmp_buf, 4096);	
+
 	/* Accepting information
 	 */
 	n->accept.recalculate    = 0;
@@ -1260,6 +1265,7 @@ cherokee_thread_free (cherokee_thread_t *thd)
 	cherokee_list_t *i, *tmp;
 
 	cherokee_buffer_mrproper (&thd->bogo_now_string);
+	cherokee_buffer_mrproper (&thd->tmp_buf);
 
 	cherokee_fdpoll_free (thd->fdpoll);
 	thd->fdpoll = NULL;
