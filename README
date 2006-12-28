@@ -96,6 +96,10 @@ FAQ
   ----------------------------
    ./configure --prefix=/usr --sysconfdir=/etc --enable-trace --enable-static-module=all --enable-static --enable-shared=no --enable-beta
 
+  How to cross compile the Win32 version from Linux
+  -------------------------------------------------
+   http://alobbs.com/news/1201
+
 
 --
 Alvaro Lopez Ortega
