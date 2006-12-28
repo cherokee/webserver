@@ -31,12 +31,13 @@ if test -z "$ac_cv_readdir_args"; then
     ], ac_cv_readdir_args=3)
 fi
 
-AC_ARG_ENABLE(readdir_r,
-[  --enable-readdir_r		    enable support for readdir_r],,
-disable_readdir_r="no")
+AC_ARG_ENABLE([readdir_r],
+              AC_HELP_STRING([--disable-readdir_r], [disable readdir_r usage]),
+		    want_readdir_r="$enableval",
+		    want_readdir_r="yes")
 
-if test "$disable_readdir_r" = "yes"; then
-    AC_MSG_RESULT(support disabled)
+if test "x$want_readdir_r" != "xyes"; then
+    AC_MSG_RESULT(disabled)
 elif test -z "$ac_cv_readdir_args"; then
     AC_MSG_RESULT(no)
 else
