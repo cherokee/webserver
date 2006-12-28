@@ -65,8 +65,8 @@ typedef struct {
 	cherokee_list_t              index_list;      /* Eg: index.html, index.php  */
 
 	struct {                                      /* Number of bytes {up,down}loaded */
-		size_t               tx;
-		size_t               rx;
+		off_t                tx;
+		off_t                rx;
 		CHEROKEE_MUTEX_T    (tx_mutex);
 		CHEROKEE_MUTEX_T    (rx_mutex);
 	} data;
@@ -94,11 +94,10 @@ typedef struct {
 #define VSERVER_LOGGER(v) (LOGGER(VSERVER(v)->logger))
 
 
-ret_t cherokee_virtual_server_new   (cherokee_virtual_server_t **vserver, void *server);
-ret_t cherokee_virtual_server_free  (cherokee_virtual_server_t  *vserver);
-ret_t cherokee_virtual_server_clean (cherokee_virtual_server_t  *vserver);
-
-ret_t cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver, cherokee_buffer_t *name, cherokee_config_node_t *config);
+ret_t cherokee_virtual_server_new       (cherokee_virtual_server_t **vserver, void *server);
+ret_t cherokee_virtual_server_free      (cherokee_virtual_server_t  *vserver);
+ret_t cherokee_virtual_server_clean     (cherokee_virtual_server_t  *vserver);
+ret_t cherokee_virtual_server_configure (cherokee_virtual_server_t  *vserver, cherokee_buffer_t *name, cherokee_config_node_t *config);
 
 ret_t cherokee_virtual_server_init_tls  (cherokee_virtual_server_t *vserver);
 ret_t cherokee_virtual_server_have_tls  (cherokee_virtual_server_t *vserver);
