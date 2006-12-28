@@ -28,11 +28,8 @@
 #include "server-protected.h"
 
 struct cherokee_nonce_table {
-	cherokee_table_t table;
-
-#ifdef HAVE_PTHREAD
-	pthread_mutex_t access;
-#endif
+	cherokee_table_t  table;
+	CHEROKEE_MUTEX_T (access);
 };
 
 

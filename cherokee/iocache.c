@@ -66,10 +66,7 @@ typedef struct {
 	time_t                   mmap_update;
 	cint_t                   ref_counter;
 	cint_t                   usages;
-
-#ifdef HAVE_PTHREAD
-	pthread_mutex_t          lock;
-#endif
+	CHEROKEE_MUTEX_T        (lock);
 } cherokee_iocache_entry_extension_t;
 
 
@@ -78,10 +75,7 @@ struct cherokee_iocache {
 	cherokee_table_t   files;
 	cuint_t            files_num;
 	cuint_t            files_usages;
-
-#ifdef HAVE_PTHREAD
-	pthread_mutex_t    files_lock;
-#endif	
+	CHEROKEE_MUTEX_T  (files_lock);
 };
 
 

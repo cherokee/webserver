@@ -32,10 +32,8 @@
 typedef struct {
 	cherokee_balancer_t  balancer;
 
-	cuint_t              last_one;
-#ifdef HAVE_PTHREAD
-	pthread_mutex_t      last_one_mutex;
-#endif	
+	cuint_t              last_one;	
+	CHEROKEE_MUTEX_T    (last_one_mutex);
 } cherokee_balancer_round_robin_t;
 
 #define BAL_RR(x)       ((cherokee_balancer_round_robin_t *)(x))

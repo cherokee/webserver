@@ -34,13 +34,8 @@
 
 
 struct cherokee_logger_private {
-	/* Mutex
-	 */
-#ifdef HAVE_PTHREAD
-	pthread_mutex_t mutex;
-#endif
-
-	cherokee_boolean_t backup_mode;
+	CHEROKEE_MUTEX_T   (mutex);
+	cherokee_boolean_t  backup_mode;
 };
 
 #define PRIV(x)  (LOGGER(x)->priv)

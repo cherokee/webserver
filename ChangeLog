@@ -1,3 +1,11 @@
+2006-12-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/virtual_server.h, cherokee/regex.c,
+	cherokee/balancer_round_robin.h, cherokee/nonce.c,
+	cherokee/fcgi_dispatcher.h, cherokee/server-protected.h,
+	cherokee/logger.c, cherokee/iocache.c: Replaced #ifdef
+	HAVE_PTHREAD with the new CHEROKEE_{RWLOCK,MUTEX}_T macros.
+
 2006-12-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee_replace.c, Makefile.am (.sample.pre.sample):

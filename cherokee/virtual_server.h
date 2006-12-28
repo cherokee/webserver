@@ -67,11 +67,8 @@ typedef struct {
 	struct {                                      /* Number of bytes {up,down}loaded */
 		size_t               tx;
 		size_t               rx;
-
-#ifdef HAVE_PTHREAD
-		pthread_mutex_t      tx_mutex;
-		pthread_mutex_t      rx_mutex;
-#endif
+		CHEROKEE_MUTEX_T    (tx_mutex);
+		CHEROKEE_MUTEX_T    (rx_mutex);
 	} data;
 
 	cherokee_buffer_t            server_cert;

@@ -65,9 +65,7 @@ struct cherokee_server {
 	time_t                       bogo_now;
 	struct tm                    bogo_now_tm;
 	cherokee_buffer_t            bogo_now_string;
-#ifdef HAVE_PTHREAD
-	pthread_rwlock_t             bogo_now_mutex;
-#endif
+	CHEROKEE_RWLOCK_T           (bogo_now_mutex);
 
 	/* Exit related
 	 */
@@ -111,11 +109,9 @@ struct cherokee_server {
 	cherokee_socket_t          socket;
 	cherokee_socket_t          socket_tls;
 
-#ifdef HAVE_PTHREAD
-	pthread_mutex_t            accept_mutex;
-# ifdef HAVE_TLS
-	pthread_mutex_t            accept_tls_mutex;	
-# endif
+	CHEROKEE_MUTEX_T          (accept_mutex);
+#ifdef HAVE_TLS
+	CHEROKEE_MUTEX_T          (accept_tls_mutex);
 #endif
 
 	/* System related

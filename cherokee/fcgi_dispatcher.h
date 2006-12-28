@@ -38,10 +38,7 @@ typedef struct {
 
 	cherokee_list_t          queue;
 	cherokee_thread_t       *thread;
-
-#ifdef HAVE_PTHREAD
-	pthread_mutex_t          lock;
-#endif
+	CHEROKEE_MUTEX_T        (lock);
 } cherokee_fcgi_dispatcher_t;
 
 #define FCGI_DISPATCHER(f) ((cherokee_fcgi_dispatcher_t *)(f))

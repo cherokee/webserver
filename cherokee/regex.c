@@ -29,10 +29,8 @@
 
 
 struct cherokee_regex_table {
-	cherokee_table_t *cache;
-#ifdef HAVE_PTHREAD
-	pthread_rwlock_t rwlock;
-#endif
+	cherokee_table_t   *cache;
+	CHEROKEE_RWLOCK_T  (rwlock);
 };
 
 
