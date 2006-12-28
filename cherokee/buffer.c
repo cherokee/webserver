@@ -213,11 +213,11 @@ cherokee_buffer_add_buffer (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
 ret_t
 cherokee_buffer_add_long10 (cherokee_buffer_t *buf, clong_t lNum)
 {
-	unsigned long	ulNum = (unsigned long) lNum;
-	cuint_t flgNeg = 0;
-	int     newlen = 0;
-	size_t  i = (IOS_NUMBUF - 1);
-	char    szOutBuf[IOS_NUMBUF];
+	culong_t ulNum = (culong_t) lNum;
+	cuint_t  flgNeg = 0;
+	int      newlen = 0;
+	size_t   i = (IOS_NUMBUF - 1);
+	char     szOutBuf[IOS_NUMBUF];
 
 	if (lNum < 0L) {
 		flgNeg = 1;
@@ -257,9 +257,54 @@ cherokee_buffer_add_long10 (cherokee_buffer_t *buf, clong_t lNum)
 
 
 ret_t
-cherokee_buffer_add_ulong10 (cherokee_buffer_t *buf, culong_t culNum)
+cherokee_buffer_add_llong10 (cherokee_buffer_t *buf, cllong_t lNum)
 {
-	unsigned long ulNum = culNum;
+	cullong_t ulNum = (cullong_t) lNum;
+	cuint_t  flgNeg = 0;
+	int      newlen = 0;
+	size_t   i = (IOS_NUMBUF - 1);
+	char     szOutBuf[IOS_NUMBUF];
+
+	if (lNum < 0L) {
+		flgNeg = 1;
+		ulNum = -ulNum;
+	}
+
+	szOutBuf[i] = '\0';
+
+	/* Convert number to string
+	 */
+	do {
+		szOutBuf[--i] = (char) ((ulNum % 10) + '0');
+	}
+	while ((ulNum /= 10) != 0);
+
+	/* Set sign in any case
+	*/
+	szOutBuf[--i] = '-';
+	i += (flgNeg ^ 1);
+
+	/* Verify free space in buffer and if needed then enlarge it.
+	*/
+	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
+	if (unlikely( newlen >= buf->size )) {
+		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
+			return ret_nomem;
+	}
+
+	/* Copy	including '\0'
+	 */
+	strcpy (buf->buf + buf->len, &szOutBuf[i]);
+
+	buf->len = newlen;
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_buffer_add_ulong10 (cherokee_buffer_t *buf, culong_t ulNum)
+{
 	int     newlen = 0;
 	size_t  i = (IOS_NUMBUF - 1);
 	char    szOutBuf[IOS_NUMBUF];
@@ -292,9 +337,8 @@ cherokee_buffer_add_ulong10 (cherokee_buffer_t *buf, culong_t culNum)
 
 
 ret_t
-cherokee_buffer_add_ullong10 (cherokee_buffer_t *buf, cullong_t culNum)
+cherokee_buffer_add_ullong10 (cherokee_buffer_t *buf, cullong_t ulNum)
 {
-	unsigned long long ulNum = culNum;
 	int     newlen = 0;
 	size_t  i = (IOS_NUMBUF - 1);
 	char    szOutBuf[IOS_NUMBUF];
@@ -330,9 +374,8 @@ cherokee_buffer_add_ullong10 (cherokee_buffer_t *buf, cullong_t culNum)
 ** Add a number in hexadecimal format to (buf).
 */
 ret_t
-cherokee_buffer_add_ulong16 (cherokee_buffer_t *buf, culong_t culNum)
+cherokee_buffer_add_ulong16 (cherokee_buffer_t *buf, culong_t ulNum)
 {
-	unsigned long ulNum = culNum;
 	size_t  i = (IOS_NUMBUF - 1);
 	int     ival = 0;
 	int     newlen = 0;
@@ -370,9 +413,8 @@ cherokee_buffer_add_ulong16 (cherokee_buffer_t *buf, culong_t culNum)
 ** Add a number in hexadecimal format to (buf).
 */
 ret_t
-cherokee_buffer_add_ullong16 (cherokee_buffer_t *buf, cullong_t culNum)
+cherokee_buffer_add_ullong16 (cherokee_buffer_t *buf, cullong_t ulNum)
 {
-	unsigned long long ulNum = culNum;
 	size_t  i = (IOS_NUMBUF - 1);
 	int     ival = 0;
 	int     newlen = 0;
@@ -1335,7 +1377,7 @@ cherokee_buffer_encode_hex (cherokee_buffer_t *buf)
 	char *new_buf;
 
 	new_buf = (char *) malloc((buf->len * 2)+1);
-	if (new_buf == NULL) {
+	if (unlikely (new_buf == NULL)) {
 		return ret_error;
 	}
 

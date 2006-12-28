@@ -550,7 +550,14 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	/* ETag:
 	 */
 	if (conn->header.version >= http_version_11) { 
-		cherokee_buffer_add_va (buffer, "ETag: %lx=" FMT_OFFSET_HEX CRLF, fhdl->info->st_mtime, fhdl->info->st_size);
+		/*
+		 * "ETag: %lx=" FMT_OFFSET_HEX CRLF
+		 */
+		cherokee_buffer_add_str     (buffer, "ETag: ");
+		cherokee_buffer_add_ullong16(buffer, (cullong_t) fhdl->info->st_mtime);
+		cherokee_buffer_add_str     (buffer, "=");
+		cherokee_buffer_add_ullong16(buffer, (cullong_t) fhdl->info->st_size);
+		cherokee_buffer_add_str     (buffer, CRLF);
 	}
 
 	/* Last-Modified:
@@ -572,9 +579,9 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 		cuint_t            maxage;
 		
 		cherokee_mime_entry_get_type (fhdl->mime, &mime);
-		cherokee_buffer_add_str (buffer, "Content-Type: ");
-		cherokee_buffer_add_buffer (buffer, mime);
-		cherokee_buffer_add_str (buffer, CRLF);
+		cherokee_buffer_add_str   (buffer, "Content-Type: ");
+		cherokee_buffer_add_buffer(buffer, mime);
+		cherokee_buffer_add_str   (buffer, CRLF);
 		
 		ret = cherokee_mime_entry_get_maxage (fhdl->mime, &maxage);             
 		if (ret == ret_ok) {
@@ -604,15 +611,25 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 	if (conn->encoder == NULL) {
 		if (conn->error_code == http_partial_content) {
-			cherokee_buffer_add_va (buffer,
-						"Content-Range: bytes " FMT_OFFSET "-"
-						FMT_OFFSET "/" FMT_OFFSET CRLF,
-						conn->range_start,
-						conn->range_end - 1,
-						fhdl->info->st_size);
+			/*
+			 * "Content-Range: bytes " FMT_OFFSET "-" FMT_OFFSET
+			 *                                    "/" FMT_OFFSET CRLF
+			 */
+			cherokee_buffer_add_str     (buffer, "Content-Range: bytes ");
+			cherokee_buffer_add_ullong10(buffer, (cullong_t)conn->range_start);
+			cherokee_buffer_add_str     (buffer, "-");
+			cherokee_buffer_add_ullong10(buffer, (cullong_t)(conn->range_end - 1));
+			cherokee_buffer_add_str     (buffer, "/");
+			cherokee_buffer_add_ullong10(buffer, (cullong_t)fhdl->info->st_size);
+			cherokee_buffer_add_str     (buffer, CRLF);
 		}
 
-		cherokee_buffer_add_va (buffer, "Content-Length: " FMT_OFFSET CRLF, content_length);
+		/*
+		 * "Content-Length: " FMT_OFFSET CRLF
+		 */
+		cherokee_buffer_add_str     (buffer, "Content-Length: ");
+		cherokee_buffer_add_ullong10(buffer, (cullong_t) content_length);
+		cherokee_buffer_add_str     (buffer, CRLF);
 
 	} else {
 		/* Can't use Keep-alive w/o "Content-length:", so disable it.

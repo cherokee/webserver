@@ -1,3 +1,21 @@
+2006-12-28  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.h:
+	- added cherokee_buffer_add_llong10();
+
+	* cherokee/buffer.c:
+        - added cherokee_buffer_add_llong10();
+	- added unlikely in the test condition for a malloc() failure;
+
+	* cherokee/handler_file.c:
+	- cherokee_handler_file_add_headers(),
+	  replaced cherokee_buffer_add_va() calls
+	  for cherokee_buffer_add_str|*long1x() calls.
+
+	Above listed modifications speed up cherokee by around 10% (+-2%)
+	when retrieving a small file (index.html) whose size is 810 bytes,
+	i.e.: 8550 -> 9500 requests / sec.
+	
 2006-12-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* m4/libwww.m4: Fixed.
