@@ -697,7 +697,7 @@ cherokee_socket_set_client (cherokee_socket_t *sock, unsigned short int type)
 		memset (&sock->client_addr, 0, sock->client_addr_len);
 		break;
 #endif
-#ifdef AF_LOCAL
+#ifdef HAVE_SOCKADDR_UN
 	case AF_LOCAL:
 		memset (&sock->client_addr, 0, sizeof (struct sockaddr_un));
 		break;
@@ -729,7 +729,7 @@ cherokee_bind_v4 (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_t
 		if (ret != ret_ok) return ret;
 	}
 
-	re = bind (SOCKET_FD(sock), SOCKET_ADDR_IPv4(sock), sock->client_addr_len);
+	re = bind (SOCKET_FD(sock), (struct sockaddr *)&SOCKET_ADDR(sock), sock->client_addr_len);
 	if (re != 0) return ret_error;
 
 	return ret_ok;
@@ -751,7 +751,7 @@ cherokee_bind_v6 (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_t
 		if (ret != ret_ok) return ret;
 	}
 
-	re = bind (SOCKET_FD(sock), SOCKET_ADDR_IPv6(sock), sock->client_addr_len);
+	re = bind (SOCKET_FD(sock), (struct sockaddr *)&SOCKET_ADDR(sock), sock->client_addr_len);
 	if (re != 0) return ret_error;
 
 	return ret_ok;
@@ -761,6 +761,7 @@ cherokee_bind_v6 (cherokee_socket_t *sock, int port, cherokee_buffer_t *listen_t
 static ret_t
 cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 {
+#ifdef HAVE_SOCKADDR_UN
 	int         re;
 	struct stat buf;
 
@@ -795,6 +796,9 @@ cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 	if (re != 0) return ret_error;
 
 	return ret_ok;
+#else
+	return ret_no_sys;
+#endif
 }
 
 
@@ -810,7 +814,7 @@ cherokee_socket_bind (cherokee_socket_t *sock, int port, cherokee_buffer_t *list
 	case AF_INET6:
 		return cherokee_bind_v6 (sock, port, listen_to);
 #endif
-#ifdef AF_LOCAL
+#ifdef HAVE_SOCKADDR_UN
 	case AF_LOCAL:
 		return cherokee_bind_local (sock, listen_to);
 #endif
@@ -1320,7 +1324,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		r = connect (SOCKET_FD(sock), (struct sockaddr *) &SOCKET_ADDR(sock), sizeof(struct sockaddr_in6));
 		break;
 #endif
-#ifdef AF_LOCAL
+#ifdef HAVE_SOCKADDR_UN
 	case AF_LOCAL:
 		r = connect (SOCKET_FD(sock), (struct sockaddr *) SOCKET_ADDR_UNIX(sock), sizeof(SOCKET_ADDR_UNIX(sock)));
 		break;
