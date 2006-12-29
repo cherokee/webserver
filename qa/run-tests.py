@@ -102,7 +102,7 @@ CONF_BASE = """
 server!port =  %d
 server!keepalive = 1 
 server!listen = 127.0.0.1
-server!panic_action = /usr/bin/cherokee-panic
+server!panic_action = %s
 server!encoder!gzip!allow = txt
 server!pid_file = %s
 server!mime_files = %s
@@ -112,7 +112,7 @@ vserver!default!document_root = %s
 vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php
 vserver!default!directory!/!handler = common
 vserver!default!directory!/!priority = 1
-""" % (PORT, pid, CHEROKEE_MIME, CHEROKEE_MODS, www)
+""" % (PORT, CHEROKEE_PANIC, pid, CHEROKEE_MIME, CHEROKEE_MODS, www)
 
 PHP_FCGI = """extensions!php!handler = fcgi
 extensions!php!priority = 10000
@@ -196,8 +196,8 @@ if port is None:
 #           os.execl (VALGRIND_PATH, "valgrind", "--tool=helgrind", server, "-C", cfg_file)
 #           os.execl (VALGRIND_PATH, "valgrind", "--tool=cachegrind", server, "-C", cfg_file)
 #           os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=20", "-v", server, "-C", cfg_file)
-#           os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", server, "-C", cfg_file)
-            os.execl (VALGRIND_PATH, "valgrind", "--tool=callgrind", "--dump-instr=yes", "--trace-jump=yes", "-v", server, "-C", cfg_file)
+            os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", server, "-C", cfg_file)
+#           os.execl (VALGRIND_PATH, "valgrind", "--tool=callgrind", "--dump-instr=yes", "--trace-jump=yes", "-v", server, "-C", cfg_file)
         elif strace:
             os.execl (STRACE_PATH, "strace", server, "-C", cfg_file)            
         else:
