@@ -4,7 +4,11 @@
 # Possible actions are:
 #   mail - mail the error. You need a working MTA in the system.
 #   cat  - just print it
-action=mail
+if [ `which mail` ]; then
+   action=mail
+else
+   action=cal
+fi
 
 # Redirect all output to our mail command
 (
