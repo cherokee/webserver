@@ -119,6 +119,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	/* Exit related
 	 */
 	n->wanna_exit      = false;
+	n->wanna_reinit    = false;
 	n->reinit_callback = NULL;
 	
 	/* Server config
@@ -1131,7 +1132,7 @@ cherokee_server_unlock_threads (cherokee_server_t *srv)
 }
 
 
-void
+ret_t
 cherokee_server_step (cherokee_server_t *srv)
 {
 	ret_t ret;
@@ -1159,9 +1160,14 @@ cherokee_server_step (cherokee_server_t *srv)
 
 	/* Wanna exit?
 	 */
-	if (srv->wanna_exit) {
+	if (unlikely (srv->wanna_reinit)) {
 		cherokee_server_reinit (srv);
 	}
+	
+	if (unlikely (srv->wanna_exit)) 
+		return ret_ok;
+	
+	return ret_eagain;
 }
 
 
@@ -1662,7 +1668,7 @@ ret_t
 cherokee_server_handle_HUP (cherokee_server_t *srv, cherokee_server_reinit_cb_t callback)
 {
 	srv->reinit_callback = callback;
-	srv->wanna_exit      = true;
+	srv->wanna_reinit    = true;
 
 	return ret_ok;
 }

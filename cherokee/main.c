@@ -187,9 +187,9 @@ main (int argc, char **argv)
 	ret = common_server_initialization (srv);
 	if (ret < ret_ok) return 2;
 
-	for (;;) {
-		cherokee_server_step (srv);
-	}
+	do {
+		ret = cherokee_server_step (srv);
+	} while (ret == ret_eagain);
 	
 	cherokee_server_free (srv);
 

@@ -46,7 +46,7 @@ ret_t cherokee_server_init               (cherokee_server_t  *srv);
 ret_t cherokee_server_clean              (cherokee_server_t  *srv);
 ret_t cherokee_server_free               (cherokee_server_t  *srv);
 
-void  cherokee_server_step               (cherokee_server_t *srv);
+ret_t cherokee_server_step               (cherokee_server_t *srv);
 void  cherokee_server_set_min_latency    (cherokee_server_t *srv, int msecs);
 ret_t cherokee_server_unlock_threads     (cherokee_server_t *srv);
 

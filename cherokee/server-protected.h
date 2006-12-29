@@ -71,6 +71,7 @@ struct cherokee_server {
 	 */
 	cherokee_buffer_t            panic_action;
 	cherokee_boolean_t           wanna_exit;
+	cherokee_boolean_t           wanna_reinit;
 	cherokee_server_reinit_cb_t  reinit_callback;
 	
 	/* Virtual servers
