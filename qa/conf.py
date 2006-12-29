@@ -5,6 +5,10 @@ CHEROKEE_PATH     = "../cherokee/cherokee"
 CHEROKEE_MODS     = "../cherokee/.libs/"
 CHEROKEE_MIME     = "../mime.types.sample"
 
+LOGGER_TYPE       = "combined"
+LOGGER_ACCESS     = "access.log"
+LOGGER_ERROR      = "error.log"
+
 STRACE_PATH       = "/usr/bin/strace"
 VALGRIND_PATH     = "/usr/bin/valgrind"
 PYTHON_PATH       = "auto"

@@ -1010,7 +1010,7 @@ flush_vserver (const char *key, void *value)
 }
 
 
-void static 
+static void
 flush_logs (cherokee_server_t *srv)
 {
 	flush_vserver (NULL, srv->vserver_default);
@@ -1664,6 +1664,16 @@ cherokee_server_handle_HUP (cherokee_server_t *srv, cherokee_server_reinit_cb_t 
 	srv->reinit_callback = callback;
 	srv->wanna_exit      = true;
 
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_server_handle_TERM (cherokee_server_t *srv)
+{
+	srv->wanna_exit = true;
+
+	flush_logs (srv);
 	return ret_ok;
 }
 

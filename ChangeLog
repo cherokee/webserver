@@ -1,3 +1,11 @@
+2006-12-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/run-tests.py: Added a new -l parameter lo enable logging.
+
+	* cherokee/main.c (prepare_to_die), cherokee/server.h,
+	cherokee/server.c (cherokee_server_handle_TERM): Added new signal
+	TERM handle function. It flushes the log files before dying.
+
 2006-12-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* README: Added a reference on how to cross compile it server.

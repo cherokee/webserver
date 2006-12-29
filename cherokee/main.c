@@ -70,6 +70,11 @@ panic_handler (int code)
 	cherokee_server_handle_panic (srv);
 }
 
+static void
+prepare_to_die (int code)
+{
+	cherokee_server_handle_TERM (srv);
+}
 
 static void
 restart_server_cb (cherokee_server_t *new_srv)
@@ -80,7 +85,6 @@ restart_server_cb (cherokee_server_t *new_srv)
 	ret = common_server_initialization (srv);
 	if (ret != ret_ok) exit(3);
 }
-
 
 static void
 restart_server (int code)
@@ -104,6 +108,10 @@ common_server_initialization (cherokee_server_t *srv)
 #ifdef SIGSEGV
         signal (SIGSEGV, panic_handler);
 #endif
+#ifdef SIGTERM
+        signal (SIGTERM, prepare_to_die);
+#endif
+
 	if (document_root != NULL) {
 		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 

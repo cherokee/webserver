@@ -35,6 +35,7 @@ port     = None
 method   = None
 nobody   = False
 fcgi     = True
+log      = False
 
 server   = CHEROKEE_PATH
 
@@ -72,6 +73,7 @@ for p in param:
     elif p     == '-s': ssl      = True
     elif p     == '-x': strace   = True
     elif p     == '-b': nobody   = True
+    elif p     == '-l': log      = True
     elif p[:2] == '-n': num      = int(p[2:])
     elif p[:2] == '-t': thds     = int(p[2:])
     elif p[:2] == '-p': port     = int(p[2:])
@@ -133,14 +135,23 @@ else:
 for php in php_ext.split("\n"):
     CONF_BASE += "vserver!default!%s\n" % (php)
 
-if ssl:
-    CONF_BASE += """vserver!default!ssl_certificate_file = %s
-                    vserver!default!ssl_certificate_key_file = %s
-                    vserver!default!ssl_cal_list_file = %s
-                 """ % (SSL_CERT_FILE, SSL_CERT_KEY_FILE, SSL_CA_FILE)
-
 if method:
     CONF_BASE += "server!poll_method = %s" % (method)
+
+if ssl:
+    CONF_BASE += """
+vserver!default!ssl_certificate_file = %s
+vserver!default!ssl_certificate_key_file = %s
+vserver!default!ssl_cal_list_file = %s
+""" % (SSL_CERT_FILE, SSL_CERT_KEY_FILE, SSL_CA_FILE)
+
+if log:
+    CONF_BASE += """
+vserver!default!logger = %s
+vserver!default!logger!access = %s
+vserver!default!logger!error = %s
+""" % (LOGGER_TYPE, LOGGER_ACCESS, LOGGER_ERROR)
+
 
 # Import modules 
 mods = []
