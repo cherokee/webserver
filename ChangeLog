@@ -1,5 +1,8 @@
 2006-12-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py: Panic script path fixed. Now it accepts both
+	global and relative paths.
+	
 	* qa/run-tests.py, qa/conf.py: cherokee-panic path is now relative
 	to the source package rather than to system one.
 

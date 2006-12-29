@@ -94,6 +94,12 @@ print_key('PHP',    look_for_php())
 print_key('Python', look_for_python())
 print
 
+# Set the panic script
+panic = CHEROKEE_PANIC
+
+if panic[0] != '/':
+    panic = os.path.normpath (os.path.join (os.getcwd(), CHEROKEE_PANIC))
+
 # Configuration file base
 CONF_BASE = """
 #
@@ -112,7 +118,7 @@ vserver!default!document_root = %s
 vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php
 vserver!default!directory!/!handler = common
 vserver!default!directory!/!priority = 1
-""" % (PORT, CHEROKEE_PANIC, pid, CHEROKEE_MIME, CHEROKEE_MODS, www)
+""" % (PORT, panic, pid, CHEROKEE_MIME, CHEROKEE_MODS, www)
 
 PHP_FCGI = """extensions!php!handler = fcgi
 extensions!php!priority = 10000
