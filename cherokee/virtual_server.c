@@ -627,10 +627,17 @@ add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 		return ret_error;
 	}
 
+	/* Instance a new logger
+	 */
 	func_new = (logger_func_new_t) info->instance;
 	if (func_new == NULL) return ret_error;
 
 	ret = func_new ((void **) &vserver->logger, config);
+	if (ret != ret_ok) return ret;
+
+	/* Logger initialization
+	 */
+	ret = cherokee_logger_init (vserver->logger);
 	if (ret != ret_ok) return ret;
 	
 	return ret_ok;
