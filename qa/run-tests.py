@@ -29,7 +29,7 @@ ssl      = False
 clean    = True
 kill     = True
 quiet    = False
-valgrind = False
+valgrind = None
 strace   = False
 port     = None
 method   = None
@@ -69,7 +69,6 @@ for p in param:
     elif p     == '-k': kill     = False
     elif p     == '-f': fcgi     = False    
     elif p     == '-q': quiet    = True
-    elif p     == '-v': valgrind = True
     elif p     == '-s': ssl      = True
     elif p     == '-x': strace   = True
     elif p     == '-b': nobody   = True
@@ -80,6 +79,7 @@ for p in param:
     elif p[:2] == '-d': pause    = p[2:]
     elif p[:2] == '-m': method   = p[2:]
     elif p[:2] == '-e': server   = p[2:]
+    elif p[:2] == '-v': valgrind = p[2:]
 
 # Fix up pause
 if type(pause) == types.StringType:
@@ -199,11 +199,14 @@ if port is None:
     pid = os.fork()
     if pid == 0:
         if valgrind:
-#           os.execl (VALGRIND_PATH, "valgrind", "--tool=helgrind", server, "-C", cfg_file)
-#           os.execl (VALGRIND_PATH, "valgrind", "--tool=cachegrind", server, "-C", cfg_file)
-#           os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=20", "-v", server, "-C", cfg_file)
-            os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", server, "-C", cfg_file)
-#           os.execl (VALGRIND_PATH, "valgrind", "--tool=callgrind", "--dump-instr=yes", "--trace-jump=yes", "-v", server, "-C", cfg_file)
+            if valgrind[:3] == 'hel':
+                os.execl (VALGRIND_PATH, "valgrind", "--tool=helgrind", server, "-C", cfg_file)
+            elif valgrind[:3] == 'cac':
+                os.execl (VALGRIND_PATH, "valgrind", "--tool=cachegrind", server, "-C", cfg_file)
+            elif valgrind[:3] == 'cal':
+                os.execl (VALGRIND_PATH, "valgrind", "--tool=callgrind", "--dump-instr=yes", "--trace-jump=yes", "-v", server, "-C", cfg_file)
+            else:
+                os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", server, "-C", cfg_file)
         elif strace:
             os.execl (STRACE_PATH, "strace", server, "-C", cfg_file)            
         else:
