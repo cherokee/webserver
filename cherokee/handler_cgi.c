@@ -545,7 +545,11 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 		re = stat (script, &info);
 		if (re >= 0) {
 			re = setuid (info.st_uid);
-			/* TODO: If fails, log it */
+			if (re != 0) {
+				cherokee_logger_write_string (CONN_VSRV(conn)->logger, 
+							      "%s: couldn't set UID %d",
+							      script, info.st_uid);
+			}
 		}
 	}
 
@@ -553,15 +557,19 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	 */
 	re = execve (absolute_path, argv, cgi->envp);
 	if (re < 0) {
-		switch (errno) {
+		int err = errno;
+
+		switch (err) {
 		case ENOENT:
 			printf ("Status: 404" CRLF_CRLF);
 			break;
 		default:
-			/* TODO: Append a new error log entry */
 			printf ("Status: 500" CRLF_CRLF);
 		}
 
+		cherokee_logger_write_string (CONN_VSRV(conn)->logger, 
+					      "couldn't execute '%s': %s",
+					      absolute_path, strerror(err));
 		exit(1);
 	}
 
