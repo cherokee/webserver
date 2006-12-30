@@ -1,5 +1,12 @@
 2006-12-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/138-ChangeUser-cgi.py: Added new QA test to ensure we don't
+	break it again.
+
+	* cherokee/handler_cgi.c (manage_child_cgi_process): "Change user"
+	feature fixed. It wasn't working properly for CGI files. It fixes
+	bug #126
+
 	* cherokee/handler_error.c: Do not use cherokee_buffer_add_va in
 	the most used cases. It's kind of slow.
 

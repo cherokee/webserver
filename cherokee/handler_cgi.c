@@ -467,6 +467,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	/* Child process
 	 */
 	int                          re;
+	char                        *script;
 	cherokee_connection_t       *conn          = HANDLER_CONN(cgi);
 	cherokee_handler_cgi_base_t *cgi_base      = HDL_CGI_BASE(cgi);
 	char                        *absolute_path = cgi_base->executable.buf;
@@ -530,8 +531,10 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	if (cgi_base->param.len > 0) {
 		argv[1] = cgi_base->param.buf;
 		argv[2] = cgi_base->param_extra.buf;
+		script  = cgi_base->param.buf;
 	} else {
 		argv[1] = cgi_base->param_extra.buf;
+		script  = absolute_path;
 	}
 
 	/* Change the execution user?
@@ -539,9 +542,10 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	if (HANDLER_CGI_PROPS(cgi_base)->change_user) {
 		struct stat info;
 			
-		re = stat (argv[1], &info);
+		re = stat (script, &info);
 		if (re >= 0) {
-			setuid (info.st_uid);
+			re = setuid (info.st_uid);
+			/* TODO: If fails, log it */
 		}
 	}
 
@@ -554,13 +558,14 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 			printf ("Status: 404" CRLF_CRLF);
 			break;
 		default:
+			/* TODO: Append a new error log entry */
 			printf ("Status: 500" CRLF_CRLF);
 		}
 
 		exit(1);
 	}
 
-	/* OH MY GOD!!! an error is here 
+	/* There is no way, it could reach this point.
 	 */
 	SHOULDNT_HAPPEN;
 	exit(2);
