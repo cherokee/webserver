@@ -1,5 +1,8 @@
 2006-12-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_error.c: Do not use cherokee_buffer_add_va in
+	the most used cases. It's kind of slow.
+
 	* cherokee/mime_entry.c: mime_name property is now an static
 	entry.
 

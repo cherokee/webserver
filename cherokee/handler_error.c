@@ -146,9 +146,9 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 		break;		
 	case http_moved_permanently:
 	case http_moved_temporarily:
-		cherokee_buffer_add_va (buffer, 
-			"The document has moved <A HREF=\"%s\">here</A>.",
-			cnt->redirect.buf);
+		cherokee_buffer_add_str    (buffer, "The document has moved <A HREF=\"");
+		cherokee_buffer_add_buffer (buffer, &cnt->redirect);
+		cherokee_buffer_add_str    (buffer, "\">here</A>.");
 		break;
 	case http_unauthorized:
 		cherokee_buffer_add_str (buffer, 
@@ -246,11 +246,15 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 
 	/* Usual headers
 	 */
-	cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);
-	cherokee_buffer_add_va  (buffer, "Content-length: %d"CRLF, hdl->content.len);
-	cherokee_buffer_add_str (buffer, "Cache-Control: no-cache"CRLF);
-	cherokee_buffer_add_str (buffer, "Pragma: no-cache"CRLF);		
-	cherokee_buffer_add_str (buffer, "P3P: CP=3DNOI NID CURa OUR NOR UNI"CRLF);
+	cherokee_buffer_add_str     (buffer, "Content-Type: text/html"CRLF);
+
+	cherokee_buffer_add_str     (buffer, "Content-length: ");
+	cherokee_buffer_add_ulong10 (buffer, hdl->content.len);
+	cherokee_buffer_add_str     (buffer, CRLF);
+
+	cherokee_buffer_add_str     (buffer, "Cache-Control: no-cache"CRLF);
+	cherokee_buffer_add_str     (buffer, "Pragma: no-cache"CRLF);		
+	cherokee_buffer_add_str     (buffer, "P3P: CP=3DNOI NID CURa OUR NOR UNI"CRLF);
 
 	return ret_ok;
 }
