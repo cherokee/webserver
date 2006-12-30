@@ -777,5 +777,12 @@ cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver, cherokee_
 	ret = cherokee_config_node_while (config, configure_virtual_server_property, vserver);
 	if (ret != ret_ok) return ret;
 
+	/* Perform some sanity checks
+	 */
+	if (cherokee_buffer_is_empty (&vserver->root)) {
+		PRINT_MSG ("ERROR: Virtual host '%s' needs a document_root\n", name->buf);
+		return ret_error;
+	}
+
 	return ret_ok;
 }
