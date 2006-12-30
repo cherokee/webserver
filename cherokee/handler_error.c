@@ -61,7 +61,7 @@ cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 	
 	/* Init
 	 */
-	ret = cherokee_buffer_new (&n->content);
+	ret = cherokee_buffer_init (&n->content);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	/* Return the object
@@ -74,7 +74,7 @@ cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 ret_t 
 cherokee_handler_error_free (cherokee_handler_error_t *hdl)
 {
-	cherokee_buffer_free (hdl->content);
+	cherokee_buffer_mrproper (&hdl->content);
 	return ret_ok;
 }
 
@@ -193,7 +193,7 @@ cherokee_handler_error_init (cherokee_handler_error_t *hdl)
 	 * because it's forbidden by the RFC.
 	 */
 	if (http_code_with_body (conn->error_code)) {
-		ret = build_hardcoded_response_page (conn, hdl->content);
+		ret = build_hardcoded_response_page (conn, &hdl->content);
 		if (unlikely(ret < ret_ok)) return ret;
 	}
 
@@ -247,7 +247,7 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	/* Usual headers
 	 */
 	cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);
-	cherokee_buffer_add_va  (buffer, "Content-length: %d"CRLF, hdl->content->len);
+	cherokee_buffer_add_va  (buffer, "Content-length: %d"CRLF, hdl->content.len);
 	cherokee_buffer_add_str (buffer, "Cache-Control: no-cache"CRLF);
 	cherokee_buffer_add_str (buffer, "Pragma: no-cache"CRLF);		
 	cherokee_buffer_add_str (buffer, "P3P: CP=3DNOI NID CURa OUR NOR UNI"CRLF);
@@ -263,7 +263,7 @@ cherokee_handler_error_step (cherokee_handler_error_t *hdl, cherokee_buffer_t *b
 
 	/* Usual content
 	 */
-	ret = cherokee_buffer_add_buffer (buffer, hdl->content);
+	ret = cherokee_buffer_add_buffer (buffer, &hdl->content);
 	if (unlikely(ret < ret_ok)) return ret;
 	   
 	return ret_eof_have_data;

@@ -32,7 +32,7 @@
 
 typedef struct {
 	cherokee_handler_t handler;
-	cherokee_buffer_t *content;
+	cherokee_buffer_t  content;
 } cherokee_handler_error_t;
 
 #define ERR_HANDLER(x)  ((cherokee_handler_error_t *)(x))
