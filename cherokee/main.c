@@ -120,14 +120,22 @@ common_server_initialization (cherokee_server_t *srv)
 
 		ret = cherokee_server_read_config_string (srv, &tmp);
 		cherokee_buffer_mrproper (&tmp);
-	} else {
-		char *config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
-		ret = cherokee_server_read_config_file (srv, config);
-	}
 
-	if (ret != ret_ok) {
-		PRINT_MSG_S ("Couldn't read the config file\n");
-		return ret_error;
+		if (ret != ret_ok) {
+			PRINT_MSG ("Couldn't start serving directory %s\n", document_root);
+			return ret_error;
+		}
+
+	} else {
+		char *config;
+
+		config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
+		ret = cherokee_server_read_config_file (srv, config);
+
+		if (ret != ret_ok) {
+			PRINT_MSG ("Couldn't read the config file: %s\n", config);
+			return ret_error;
+		}
 	}
 		
 	if (daemon_mode)

@@ -1,5 +1,10 @@
 2006-12-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c (common_server_initialization): The error
+	reporting has been improved. It wasn't printing the path of the
+	configuration file, neither the path of the directory that it
+	could be serving.
+
 	* cherokee/handler_cgi.c (manage_child_cgi_process): Now it logs
 	an error when something nasty happens trying to execute a CGI.
 
