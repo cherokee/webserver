@@ -1,3 +1,9 @@
+2007-01-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main_admin.c (config_server): Added getopt support and
+	two parameters: port (-r) and document_root (-d). The
+	configuration has been updated as well: switched from PHP to SCGI.
+
 2006-12-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/virtual_server.c (cherokee_virtual_server_configure):
