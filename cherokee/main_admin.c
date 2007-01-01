@@ -59,9 +59,11 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/about!priority = 2\n");
 
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/theme!handler = file\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/theme!handler!iocache = 0\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/theme!priority = 3\n");
 
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/yui!handler = file\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/yui!handler!iocache = 0\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/yui!priority = 4\n");
 
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler = scgi\n");
