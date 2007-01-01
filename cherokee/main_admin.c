@@ -68,9 +68,8 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer = round_robin\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer!type = interpreter\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer!local1!host = localhost:4000\n");
+	cherokee_buffer_add_va  (&buf, "vserver!default!directory!/!handler!balancer!local1!interpreter = %s/server.sh\n", document_root);
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!priority = 1000\n");
-
-	printf ("%s", buf.buf);
 
 	ret = cherokee_server_read_config_string (srv, &buf);
 	if (ret != ret_ok) return ret;
