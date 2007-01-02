@@ -196,7 +196,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_if_none_match, &header, &header_len);
 	if (ret == ret_ok)  {
-		cherokee_buffer_t *tmp = THREAD_TMP_BUF(thread);
+		cherokee_buffer_t *tmp = THREAD_TMP_BUF1(thread);
 
 		/* Temporary buffer has already been pre-allocated,
 		 * so here its length is only reset.

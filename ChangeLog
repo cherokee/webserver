@@ -1,3 +1,35 @@
+2007-01-02  A.D.F  <adefacc@tin.it>
+
+	* cherokee/handler_error.c (build_hardcoded_response_page):
+	- added a cherokee_buffer_ensure_addlen(buffer, 1000)
+	  to avoid too many reallocations;
+        - replaced cherokee_buffer_add_va() for equivalent
+	  cherokee_buffer_add_*() calls;
+
+	* cherokee/buffer.c:
+        - added cherokee_buffer_substitute_string()
+	  which takes an additional parameter (destination buffer)
+	  and so does not need to reallocate memory unless
+	  this is really needed (cherokee_buffer_replace_string())
+	  has not been touched);
+
+	* cherokee/thread.h, cherokee/thread.c:
+	- added a second temporary buffer to cherokee_thread_t
+	  because the need for two temporary buffers is not uncommon;
+
+	* cherokee/handler_file.c:
+	- changed macro from THREAD_TMP_BUF() to THREAD_TMP_BUF1();
+
+	* cherokee/handler_dirlist.c:
+	- changed code to use cherokee_buffer_substitute_string()
+	  by using two temporary buffers (coming from the current thread)
+	  and alternating the substitutions from one temporary
+	  buffer to the other (stuff is copied from source to destination
+	  if cherokee_buffer_substitute_string() returns ret_ok;
+	- changed name to the token macro,
+	  from: replace_token();
+	    to: substitute_token().
+	
 2007-01-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main_admin.c (config_server): Added getopt support and

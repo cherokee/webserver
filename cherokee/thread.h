@@ -67,7 +67,8 @@ typedef struct {
 	struct tm               bogo_now_tm;
 	cherokee_buffer_t       bogo_now_string;
 
-	cherokee_buffer_t       tmp_buf;
+	cherokee_buffer_t       tmp_buf1;
+	cherokee_buffer_t       tmp_buf2;
 	
 	void                   *server;
 	cherokee_boolean_t      exit;
@@ -95,7 +96,8 @@ typedef struct {
 #define THREAD(x)         ((cherokee_thread_t *)(x))
 #define THREAD_SRV(t)     (SRV(THREAD(t)->server))
 #define THREAD_IS_REAL(t) (THREAD(t)->real_thread)
-#define THREAD_TMP_BUF(t) (&THREAD(t)->tmp_buf)
+#define THREAD_TMP_BUF1(t) (&THREAD(t)->tmp_buf1)
+#define THREAD_TMP_BUF2(t) (&THREAD(t)->tmp_buf2)
 
 
 #ifdef HAVE_PTHREAD

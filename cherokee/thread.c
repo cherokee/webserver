@@ -213,8 +213,10 @@ cherokee_thread_new  (cherokee_thread_t **thd, void *server, cherokee_thread_typ
 
 	/* Temporary buffer used by utility functions
        	 */
-	cherokee_buffer_init (&n->tmp_buf);
-	cherokee_buffer_ensure_size (&n->tmp_buf, 4096);	
+	cherokee_buffer_init (&n->tmp_buf1);
+	cherokee_buffer_init (&n->tmp_buf2);
+	cherokee_buffer_ensure_size (&n->tmp_buf1, 4096);	
+	cherokee_buffer_ensure_size (&n->tmp_buf2, 4096);	
 
 	/* Accepting information
 	 */
@@ -1265,7 +1267,8 @@ cherokee_thread_free (cherokee_thread_t *thd)
 	cherokee_list_t *i, *tmp;
 
 	cherokee_buffer_mrproper (&thd->bogo_now_string);
-	cherokee_buffer_mrproper (&thd->tmp_buf);
+	cherokee_buffer_mrproper (&thd->tmp_buf1);
+	cherokee_buffer_mrproper (&thd->tmp_buf2);
 
 	cherokee_fdpoll_free (thd->fdpoll);
 	thd->fdpoll = NULL;

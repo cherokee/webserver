@@ -62,7 +62,8 @@ cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 	/* Init
 	 */
 	ret = cherokee_buffer_init (&n->content);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	/* Return the object
 	 */
@@ -84,18 +85,27 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 {
 	cherokee_buffer_t *escaped = NULL;
 
+	/* Avoid too many reallocations.
+	 */
+	cherokee_buffer_ensure_addlen (buffer, 1000);
+
+	/* Build error message.
+	 */
+
+	/* Add document header
+	 */
 	cherokee_buffer_add_str (buffer, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">" CRLF);
 	   
 	/* Add page title
 	 */
-	cherokee_buffer_add_str (buffer, "<html><head><title>");
+	cherokee_buffer_add_str (buffer, "<html>" CRLF "<head><title>");
 	cherokee_http_code_copy (cnt->error_code, buffer);
 
 	/* Add big banner
 	 */
-	cherokee_buffer_add_str (buffer, "</title></head><body><h1>");
+	cherokee_buffer_add_str (buffer, "</title></head>" CRLF "<body>" CRLF "<h1>");
 	cherokee_http_code_copy (cnt->error_code, buffer);
-	cherokee_buffer_add_str (buffer, "</h1>");
+	cherokee_buffer_add_str (buffer, "</h1>" CRLF);
 
 	/* Maybe add some info
 	 */
@@ -109,53 +119,65 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 
 			cherokee_buffer_escape_get_html (cnt->request_escape, &req_html_ref);
 
-			cherokee_buffer_ensure_size (buffer, 18 + req_html_ref->len + 30);
+			cherokee_buffer_ensure_addlen (buffer, 19 + req_html_ref->len + 30);
 			cherokee_buffer_add_str (buffer, "The requested URL ");
 			cherokee_buffer_add_buffer (buffer, req_html_ref);
 			cherokee_buffer_add_str (buffer, " was not found on this server.");
 		}
 		break;
+
 	case http_bad_request:
 		cherokee_buffer_add_str (buffer, 
 			"Your browser sent a request that this server could not understand.");
 
 		cherokee_buffer_escape_html (cnt->header.input_buffer, &escaped);
-		if (escaped == NULL)
-			cherokee_buffer_add_va (buffer, "<p><pre>%s</pre>", cnt->header.input_buffer->buf);
-		else {
-			cherokee_buffer_add_va (buffer, "<p><pre>%s</pre>", escaped->buf);
+		if (escaped == NULL) {
+			cherokee_buffer_add_str   (buffer, "<p><pre>");
+			cherokee_buffer_add_buffer(buffer, cnt->header.input_buffer);
+			cherokee_buffer_add_str   (buffer, "</pre>");
+		} else {
+			cherokee_buffer_add_str   (buffer, "<p><pre>");
+			cherokee_buffer_add_buffer(buffer, escaped);
+			cherokee_buffer_add_str   (buffer, "</pre>");
 			cherokee_buffer_free (escaped);
 			escaped = NULL;
 		}
 		break;
-        case http_access_denied:
+
+	case http_access_denied:
 		cherokee_buffer_add_str (buffer,
 			"You have no access to the requested URL");
 		break;
+
 	case http_request_entity_too_large:
 		cherokee_buffer_add_str (buffer,
 			"The length of request entity exceeds the capacity limit for this server.");
 		break;
+
 	case http_request_uri_too_long:
 		cherokee_buffer_add_str (buffer,
 			"The length of requested URL exceeds the capacity limit for this server.");
 		break;		
+
 	case http_range_not_satisfiable:
 		cherokee_buffer_add_str (buffer,
 			"The requested range was not satisfiable.");
 		break;		
+
 	case http_moved_permanently:
 	case http_moved_temporarily:
-		cherokee_buffer_add_str    (buffer, "The document has moved <A HREF=\"");
+		cherokee_buffer_add_str    (buffer, "The document has moved <a href=\"");
 		cherokee_buffer_add_buffer (buffer, &cnt->redirect);
-		cherokee_buffer_add_str    (buffer, "\">here</A>.");
+		cherokee_buffer_add_str    (buffer, "\">here</a>.");
 		break;
+
 	case http_unauthorized:
 		cherokee_buffer_add_str (buffer, 
 			"This server could not verify that you are authorized to access the requested URL.  "
 			"Either you supplied the wrong credentials (e.g., bad password), "
 			"or your browser doesn't know how to supply the credentials required.");
 		break;
+
 	case http_upgrade_required:
 		cherokee_buffer_add_str (buffer,
 			"The requested resource can only be retrieved using SSL.  The server is "
@@ -163,20 +185,21 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 			"support it. Either upgrade your client, or try requesting the page "
 			"using https://");
 		break;
+
 	default:
 		break;
 	}
-	   
+
 	/* Add page footer
 	 */
-	cherokee_buffer_add_str (buffer, "<p><hr>");	
+	cherokee_buffer_add_str (buffer, CRLF "<p><hr>" CRLF);
 
 	if (cnt->socket.is_tls == non_TLS)
 		cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->ext_server_w_port_string);
 	else 
 		cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->ext_server_w_port_tls_string);
 
-	cherokee_buffer_add_str (buffer, "</body></html>"); 
+	cherokee_buffer_add_str (buffer, CRLF "</body>" CRLF "</html>" CRLF);
 
 	return ret_ok;
 }
@@ -194,7 +217,8 @@ cherokee_handler_error_init (cherokee_handler_error_t *hdl)
 	 */
 	if (http_code_with_body (conn->error_code)) {
 		ret = build_hardcoded_response_page (conn, &hdl->content);
-		if (unlikely(ret < ret_ok)) return ret;
+		if (unlikely(ret < ret_ok))
+			return ret;
 	}
 
 	return ret_ok;
@@ -249,7 +273,7 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	cherokee_buffer_add_str     (buffer, "Content-Type: text/html"CRLF);
 
 	cherokee_buffer_add_str     (buffer, "Content-length: ");
-	cherokee_buffer_add_ulong10 (buffer, hdl->content.len);
+	cherokee_buffer_add_ulong10 (buffer, (culong_t) hdl->content.len);
 	cherokee_buffer_add_str     (buffer, CRLF);
 
 	cherokee_buffer_add_str     (buffer, "Cache-Control: no-cache"CRLF);
@@ -268,7 +292,8 @@ cherokee_handler_error_step (cherokee_handler_error_t *hdl, cherokee_buffer_t *b
 	/* Usual content
 	 */
 	ret = cherokee_buffer_add_buffer (buffer, &hdl->content);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 	   
 	return ret_eof_have_data;
 }

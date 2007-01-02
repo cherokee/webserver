@@ -1506,7 +1506,7 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 		result_length += (replacement_length - substring_length);
 	}
 	
-	/* If no substring have been found, then return now.
+	/* If no substring has been found, then return now.
 	 */
 	if (p == buf->buf)
 		return ret_ok;
@@ -1553,6 +1553,95 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 	buf->buf  = result;
 	buf->len  = result_length;
 	buf->size = result_length + 1;
+
+	return ret_ok;	
+}
+
+
+/* Returns:
+ *  ret_ok          bufdst has been written with the substitution string(s)
+ *  ret_not_found   substring not found in bufsrc
+ *  ret_deny        bad formal parameters
+ *  ret_xxx         fatal error (failed allocation, etc.)
+ */
+ret_t 
+cherokee_buffer_substitute_string (cherokee_buffer_t *bufsrc, 
+				   cherokee_buffer_t *bufdst,
+				   char *substring,   int substring_length, 
+				   char *replacement, int replacement_length)
+{
+	ret_t       ret;
+	int         remaining_length;
+	int         result_length;
+	char       *result_position;
+	const char *p;
+	const char *substring_position;
+
+	/* Verify formal parameters
+	 * (those which are not tested would raise a segment violation).
+	 */
+	if (bufsrc->buf == NULL ||
+	    bufdst->buf == NULL ||
+	    substring == NULL || substring_length < 1 ||
+	    replacement == NULL || replacement_length < 0)
+		return ret_deny;
+
+	/* Clean / reset destination buffer.
+	 */
+	bufdst->buf[0] = '\0';
+	bufdst->len = 0;
+
+	/* Calculate the new size
+	 */
+	result_length = bufsrc->len;
+	for (p = bufsrc->buf; ; p = substring_position + substring_length) {
+		substring_position = strstr (p, substring);
+
+		if (substring_position == NULL)
+			break;
+
+		result_length += (replacement_length - substring_length);
+	}
+	
+	/* If no substring has been found, then return now.
+	 */
+	if (p == bufsrc->buf)
+		return ret_not_found;
+
+	/* If resulting length is zero, then return now.
+	 */
+	if (result_length < 1) {
+		return ret_ok;
+	}
+
+	/* Preset size of destination buffer.
+	 */
+	ret = cherokee_buffer_ensure_size(bufdst, result_length + 2);
+
+	/* Build the new string
+	 */
+	result_position = bufdst->buf;
+
+	for (p = bufsrc->buf; ; p = substring_position + substring_length) {
+		substring_position = strstr (p, substring);
+
+		if (substring_position == NULL) {
+			remaining_length = (int) (&(bufsrc->buf[bufsrc->len]) - p);
+			memcpy (result_position, p, remaining_length);
+			result_position += remaining_length;
+			break;
+		}
+		memcpy (result_position, p, substring_position - p);
+		result_position += (int) (substring_position - p);
+
+		memcpy (result_position, replacement, replacement_length);
+		result_position += replacement_length;
+	}	
+
+	/* Terminate the destination buffer
+	 */
+	*result_position = '\0';
+	bufdst->len  = result_length;
 
 	return ret_ok;	
 }

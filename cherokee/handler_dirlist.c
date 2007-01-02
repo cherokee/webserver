@@ -388,8 +388,7 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	 */
 	if (cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->entry)  ||
 	    cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->header) ||
-	    cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->footer))
-	{
+	    cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->footer)) {
 		PRINT_ERROR_S ("The theme is incomplete\n");
 		return ret_error;
 	}
@@ -686,13 +685,13 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 
 
 static ret_t
-replace_token_guts (cherokee_buffer_t *buf, char *token, char token_len, char *replacement)
+substitute_token_guts (cherokee_buffer_t *buf1, cherokee_buffer_t *buf2, char *token, char token_len, char *replacement)
 {
 	if (replacement == NULL) {
-		return cherokee_buffer_replace_string (buf, token, token_len, "", 0);
+		return cherokee_buffer_substitute_string (buf1, buf2, token, token_len, "", 0);
 	}
 
-	return cherokee_buffer_replace_string (buf, token, token_len, replacement, strlen(replacement));
+	return cherokee_buffer_substitute_string (buf1, buf2, token, token_len, replacement, strlen(replacement));
 }
 
 static ret_t
@@ -705,13 +704,26 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
 	cherokee_buffer_t                *tmp      = &dhdl->header;
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
+	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
+	size_t                            idx_tmp  = 0;
+	cherokee_buffer_t                *vtmp[2];
 
-#define replace_token(buf,token,val) \
-	replace_token_guts(buf,token,sizeof(token)-1,val)
+#define substitute_token(idx, token, val) \
+	(idx = (substitute_token_guts(vtmp[idx], vtmp[(idx) ^ 1], token, sizeof(token)-1, (val)) == ret_ok ? (idx ^ 1) : (idx & 1)))
+
+	/* Initialize array of tmp buffers
+	 */
+	vtmp[0] = THREAD_TMP_BUF1(thread);
+	vtmp[1] = THREAD_TMP_BUF2(thread);
+
+	/* Clear tmp buffers.
+	 */
+	cherokee_buffer_clean(vtmp[0]);
+	cherokee_buffer_clean(vtmp[1]);
 
 	/* Add entry text
 	 */
-	cherokee_buffer_add_buffer (buffer, &props->entry);
+	cherokee_buffer_add_buffer (vtmp[0], &props->entry);
 	
 	/* Add the icon
 	 */
@@ -730,13 +742,13 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	}
 #endif
 
-	replace_token (buffer, "%icon_alt%", alt);
-	replace_token (buffer, "%icon%", icon);
+	substitute_token (idx_tmp, "%icon_alt%", alt);
+	substitute_token (idx_tmp, "%icon%", icon);
 
 	/* File
 	 */
-	replace_token (buffer, "%file_name%", name);
-	replace_token (buffer, "%file_link%", name);
+	substitute_token (idx_tmp, "%file_name%", name);
+	substitute_token (idx_tmp, "%file_link%", name);
 
 	/* Date
 	 */
@@ -745,29 +757,29 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		cherokee_buffer_ensure_size (tmp, 33);
 
 		strftime (tmp->buf, 32, "%d-%b-%Y %H:%M", localtime(&file->stat.st_mtime));
-		replace_token (buffer, "%date%", tmp->buf);
+		substitute_token (idx_tmp, "%date%", tmp->buf);
 	} 
 
 	/* Size
 	 */
 	if (props->show_size) {
 		if (is_dir) {
-			replace_token (buffer, "%size_unit%", NULL);
-			replace_token (buffer, "%size%", "-");
+			substitute_token (idx_tmp, "%size_unit%", NULL);
+			substitute_token (idx_tmp, "%size%", "-");
 		} else {
 			char *unit;
 
 			cherokee_buffer_clean (tmp);
-			cherokee_buffer_ensure_size (tmp, 6);
+			cherokee_buffer_ensure_size (tmp, 8);
 
 			cherokee_strfsize (file->stat.st_size, tmp->buf);
 
 			unit = tmp->buf;
 			while ((*unit >= '0')  && (*unit <= '9')) unit++;
 
-			replace_token (buffer, "%size_unit%", unit);
+			substitute_token (idx_tmp, "%size_unit%", unit);
 			*unit = '\0';
-			replace_token (buffer, "%size%", tmp->buf);
+			substitute_token (idx_tmp, "%size%", tmp->buf);
 		}
 	} 
 
@@ -780,7 +792,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		user = getpwuid (file->stat.st_uid);
 		name = (char *) (user->pw_name) ? user->pw_name : "unknown";
 
-		replace_token (buffer, "%user%", name);
+		substitute_token (idx_tmp, "%user%", name);
 	} 
 
 	/* Group
@@ -792,8 +804,12 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		user = getgrgid (file->stat.st_gid);
 		group = (char *) (user->gr_name) ? user->gr_name : "unknown";
 		
-		replace_token (buffer, "%group%", group);
+		substitute_token (idx_tmp, "%group%", group);
 	}
+
+	/* Add final result to buffer
+	 */
+	cherokee_buffer_add_buffer (buffer, vtmp[idx_tmp]);
 
 	return ret_ok;
 }
@@ -805,8 +821,23 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 	char                             *icon     = NULL;
 	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
+	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
+	cherokee_buffer_t                *vtmp[2];
+	size_t                            idx_tmp = 0;
 
-	cherokee_buffer_add_buffer (buffer, &props->entry);
+	/* Initialize array of tmp buffers
+	 */
+	vtmp[0] = THREAD_TMP_BUF1(thread);
+	vtmp[1] = THREAD_TMP_BUF2(thread);
+
+	/* Clear tmp buffers.
+	 */
+	cherokee_buffer_clean(vtmp[0]);
+	cherokee_buffer_clean(vtmp[1]);
+
+	/* Add entry text
+	 */
+	cherokee_buffer_add_buffer (vtmp[0], &props->entry);
 
 #ifndef CHEROKEE_EMBEDDED
 	if (icons != NULL) {
@@ -814,45 +845,71 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 	}
 #endif
 
-	replace_token (buffer, "%icon%", icon);
-	replace_token (buffer, "%icon_alt%", "[DIR]");
+	substitute_token (idx_tmp, "%icon%", icon);
+	substitute_token (idx_tmp, "%icon_alt%", "[DIR]");
 
-	replace_token (buffer, "%file_link%", "../");
-	replace_token (buffer, "%file_name%", "Parent Directory");
+	substitute_token (idx_tmp, "%file_link%", "../");
+	substitute_token (idx_tmp, "%file_name%", "Parent Directory");
 
-	replace_token (buffer, "%date%", NULL);
-	replace_token (buffer, "%size_unit%", NULL);
-	replace_token (buffer, "%size%", "-");
-	replace_token (buffer, "%user%", NULL);
-	replace_token (buffer, "%group%", NULL);
+	substitute_token (idx_tmp, "%date%", NULL);
+	substitute_token (idx_tmp, "%size_unit%", NULL);
+	substitute_token (idx_tmp, "%size%", "-");
+	substitute_token (idx_tmp, "%user%", NULL);
+	substitute_token (idx_tmp, "%group%", NULL);
+
+	/* Add final result to buffer
+	 */
+	cherokee_buffer_add_buffer (buffer, vtmp[idx_tmp]);
 
 	return ret_ok;
 }
 
 
 static ret_t
-replace_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
+render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, cherokee_buffer_t *bufpattern)
 {
+	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
+	cherokee_buffer_t                *vtmp[2];
+	size_t                            idx_tmp = 0;
+
+	/* Initialize array of tmp buffers
+	 */
+	vtmp[0] = THREAD_TMP_BUF1(thread);
+	vtmp[1] = THREAD_TMP_BUF2(thread);
+
+	/* Clear tmp buffers.
+	 */
+	cherokee_buffer_clean(vtmp[0]);
+	cherokee_buffer_clean(vtmp[1]);
+
+	/* Add entry text
+	 */
+	cherokee_buffer_add_buffer (vtmp[0], bufpattern);
+
 	/* Public dir
 	 */
-	replace_token (buffer, "%public_dir%", dhdl->public_dir.buf);
+	substitute_token (idx_tmp, "%public_dir%", dhdl->public_dir.buf);
 
 	/* Server software
 	 */
-	replace_token (buffer, "%server_software%", dhdl->software_str_ref->buf);
+	substitute_token (idx_tmp, "%server_software%", dhdl->software_str_ref->buf);
 
 	/* Notice
 	 */
-	replace_token (buffer, "%notice%", dhdl->header.buf);
+	substitute_token (idx_tmp, "%notice%", dhdl->header.buf);
 
 	/* Orders
 	 */
-	replace_token (buffer, "%order_name%", 
+	substitute_token (idx_tmp, "%order_name%", 
 		       (dhdl->sort == Name_Down) ? "N" : "n");
-	replace_token (buffer, "%order_size%", 
+	substitute_token (idx_tmp, "%order_size%", 
 		       (dhdl->sort == Size_Down) ? "S" : "s");
-	replace_token (buffer, "%order_date%", 
+	substitute_token (idx_tmp, "%order_date%", 
 		       (dhdl->sort == Date_Down) ? "D" : "d");
+
+	/* Add final result to buffer
+	 */
+	cherokee_buffer_add_buffer (buffer, vtmp[idx_tmp]);
 
 	return ret_ok;
 }
@@ -861,18 +918,15 @@ replace_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t
 ret_t
 cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
-	ret_t                             ret;
+	ret_t                             ret = ret_ok;
 	cherokee_handler_dirlist_props_t *props = HDL_DIRLIST_PROP(dhdl);
 
 	switch (dhdl->phase) {
 	case dirlist_phase_add_header:
 		/* Add the theme header
 		 */
-		cherokee_buffer_add_buffer (buffer, &props->header);
-
-		ret = replace_header_footer_vbles (dhdl, buffer);
+		ret = render_header_footer_vbles (dhdl, buffer, &props->header);
 		if (unlikely (ret != ret_ok)) return ret;
-
 		if (buffer->len > DEFAULT_READ_SIZE)
 			return ret_ok;
 		dhdl->phase = dirlist_phase_add_parent_dir;
@@ -880,11 +934,9 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 	case dirlist_phase_add_parent_dir:
 		ret = render_parent_directory (dhdl, buffer);
 		if (unlikely (ret != ret_ok)) return ret;
-
 		dhdl->phase = dirlist_phase_add_entries;
 
 	case dirlist_phase_add_entries:
-
 		/* Print the directories first
 		 */
 		while (dhdl->dir_ptr) {
@@ -895,7 +947,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 			render_file (dhdl, buffer, (file_entry_t *)dhdl->dir_ptr);
 			dhdl->dir_ptr = dhdl->dir_ptr->next;
 
-			/* Maybe it has readed enought
+			/* Maybe it has readed enough data
 			 */
 			if (buffer->len > DEFAULT_READ_SIZE) 
 				return ret_ok;
@@ -911,20 +963,18 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 			render_file (dhdl, buffer, (file_entry_t *) dhdl->file_ptr);
 			dhdl->file_ptr = dhdl->file_ptr->next;
 
-			/* Maybe it has readed enought
+			/* Maybe it has readed enough data
 			 */
 			if (buffer->len > DEFAULT_READ_SIZE) 
 				return ret_ok;
 		}
-
 		dhdl->phase = dirlist_phase_add_footer;
 
 	case dirlist_phase_add_footer:
-		cherokee_buffer_add_buffer (buffer, &props->footer);
-
-		ret = replace_header_footer_vbles (dhdl, buffer);
+		/* Add the theme footer
+		 */
+		ret = render_header_footer_vbles (dhdl, buffer, &props->footer);
 		if (unlikely (ret != ret_ok)) return ret;
-
 		break;
 	}
 
