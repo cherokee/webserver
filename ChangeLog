@@ -1,5 +1,22 @@
 2007-01-03  A.D.F  <adefacc@tin.it>
 
+	* cherokee/socket.c (cherokee_socket_sendfile): 
+	- remove || defined(HAVE_SENDFILE64) because it is generic
+	  and here we must compile code by using specific
+	  OS api (HPUX sendfile64() is not like Linux sendfile64());
+
+        - if HAVE_BROKEN_LINUX_SENDFILE or HAVE_SENDFILE_BROKEN
+	  is defined then return "ret_no_sys" instead
+	  of triggering a SHOULDNT_HAPPEN at the end of the function.
+
+	  NOTE: this case happens in Linux 2.2.x and some 2.4.x
+	        when large file support is enabled but
+	        native sendfile does not support loff_t,
+	        see also: config.h (#define _FILE_OFFSET_BITS 64).
+
+	  NOTE: maybe it would not be a bad idea to set
+	        --disable-largefile as default setting in Linux 2.2.x.
+
 	* cherokee/buffer.c:
         - added a few comments to cherokee_buffer_substitute_string().
 

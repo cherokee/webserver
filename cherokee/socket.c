@@ -1150,7 +1150,13 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 	if (size > MAX_SF_BLK_SIZE2)
 		size = MAX_SF_BLK_SIZE;
 
-#if defined(LINUX_SENDFILE_API) || defined(HAVE_SENDFILE64)
+#if defined(HAVE_BROKEN_LINUX_SENDFILE) || defined(HAVE_SENDFILE_BROKEN)
+	/* Large file support is set but native Linux 2.2 or 2.4 sendfile()
+	 * does not support _FILE_OFFSET_BITS 64
+	 */
+	return ret_no_sys;
+
+#elif defined(LINUX_SENDFILE_API)
 
 	/* Linux sendfile
 	 *
@@ -1175,14 +1181,6 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 
 		return ret_error;
 	}
-	
-
-#elif HAVE_SENDFILE_BROKEN
-
-	/* Some Linux 2.4 kernels don't support sendfile in a LFS
-	 * environment.
-	 */
-	return ret_no_sys;
 
 #elif SOLARIS_SENDFILE_API
 
