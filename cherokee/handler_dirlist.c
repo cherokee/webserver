@@ -49,8 +49,6 @@
 #include "icons.h"
 #include "common.h"
 
-#define DEFAULT_NAME_LEN 40
-
 
 struct file_entry {
 	cherokee_list_t  list_entry;
@@ -83,6 +81,7 @@ load_theme_load_file (cherokee_buffer_t *theme_path, char *file, cherokee_buffer
 	return ret_ok;
 }
 
+
 static ret_t
 parse_if (cherokee_buffer_t *buf, char *if_entry, cherokee_boolean_t show)
 {
@@ -114,6 +113,7 @@ error:
 	return ret_error;	
 }
 
+
 static ret_t
 parse_macros_in_buffer (cherokee_buffer_t *buf, cherokee_handler_dirlist_props_t *props)
 {
@@ -124,6 +124,7 @@ parse_macros_in_buffer (cherokee_buffer_t *buf, cherokee_handler_dirlist_props_t
 
 	return ret_ok;
 }
+
 
 static ret_t
 load_theme (cherokee_buffer_t *theme_path, cherokee_handler_dirlist_props_t *props)
@@ -684,20 +685,60 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 }
 
 
+/* Substitute all instances of (token) found in vbuf[*pidx_buf];
+ * if at least one (token) instance is found, then contents
+ * resulting from substitution(s) are copied to the buffer
+ * in next position of (vbuf) and (*pidx_buf) is updated to point
+ * to current content buffer.
+ * NOTE: only the first 2 positions in vbuf are used
+ *       (flip/flop algorithm).
+ */
 static ret_t
-substitute_token_guts (cherokee_buffer_t *buf1, cherokee_buffer_t *buf2, char *token, char token_len, char *replacement)
+substitute_vbuf_token (
+		cherokee_buffer_t **vbuf, size_t *pidx_buf,
+		char *token, int token_len,
+		char *replacement)
 {
-	if (replacement == NULL) {
-		return cherokee_buffer_substitute_string (buf1, buf2, token, token_len, "", 0);
-	}
+	ret_t ret;
 
-	return cherokee_buffer_substitute_string (buf1, buf2, token, token_len, replacement, strlen(replacement));
+	if (replacement == NULL)
+		replacement = "";
+
+	/* Substitute all instances of token in vbuf[*pidx_buf],
+	 * if everything goes well then result is copied in next index position
+	 * of vbuf[] and in this case we can increment the index position.
+	 * NOTE: *pidx_buf ^= 1 is faster than *pidx_buf = (*pidx_buf + 1) % 2
+	 */
+	ret = cherokee_buffer_substitute_string (
+			vbuf[*pidx_buf], vbuf[*pidx_buf ^ 1],
+			token, token_len, replacement, strlen(replacement));
+	if (ret == ret_ok)
+		*pidx_buf ^= 1;
+
+	return ret;
 }
+
+
+/* Useful macros to declare, to initialize and to handle an array of
+ * two flip/flop temporary buffers (used for substitution purposes).
+ */
+
+#define VTMP_INIT_SUBST(thread, vtmp, buffer_pattern) \
+	vtmp[0] = THREAD_TMP_BUF1(thread);	      \
+	vtmp[1] = THREAD_TMP_BUF2(thread);	      \
+	cherokee_buffer_clean (vtmp[0]);              \
+	cherokee_buffer_clean (vtmp[1]);	      \
+	cherokee_buffer_add_buffer (vtmp[0], (buffer_pattern))
+
+#define VTMP_SUBSTITUTE_TOKEN(token, val)             \
+	substitute_vbuf_token (vtmp, &idx_tmp, (token), sizeof(token)-1, (val))
+
 
 static ret_t
 render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_entry_t *file)
 {
 	cherokee_boolean_t                is_dir;
+	cherokee_buffer_t                *vtmp[2];
 	char                             *alt      = NULL;
 	char                             *icon     = NULL;
 	char                             *name     = (char *) &file->info.d_name;
@@ -705,26 +746,12 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	cherokee_buffer_t                *tmp      = &dhdl->header;
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
 	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
-	size_t                            idx_tmp  = 0;
-	cherokee_buffer_t                *vtmp[2];
+	size_t                            idx_tmp  = 0; 
 
-#define substitute_token(idx, token, val) \
-	(idx = (substitute_token_guts(vtmp[idx], vtmp[(idx) ^ 1], token, sizeof(token)-1, (val)) == ret_ok ? (idx ^ 1) : (idx & 1)))
-
-	/* Initialize array of tmp buffers
+	/* Initialize temporary substitution buffers
 	 */
-	vtmp[0] = THREAD_TMP_BUF1(thread);
-	vtmp[1] = THREAD_TMP_BUF2(thread);
+	VTMP_INIT_SUBST (thread, vtmp, &props->entry);
 
-	/* Clear tmp buffers.
-	 */
-	cherokee_buffer_clean(vtmp[0]);
-	cherokee_buffer_clean(vtmp[1]);
-
-	/* Add entry text
-	 */
-	cherokee_buffer_add_buffer (vtmp[0], &props->entry);
-	
 	/* Add the icon
 	 */
 	is_dir = S_ISDIR(file->stat.st_mode);
@@ -742,13 +769,13 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	}
 #endif
 
-	substitute_token (idx_tmp, "%icon_alt%", alt);
-	substitute_token (idx_tmp, "%icon%", icon);
+	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", alt);
+	VTMP_SUBSTITUTE_TOKEN ("%icon%", icon);
 
 	/* File
 	 */
-	substitute_token (idx_tmp, "%file_name%", name);
-	substitute_token (idx_tmp, "%file_link%", name);
+	VTMP_SUBSTITUTE_TOKEN ("%file_name%", name);
+	VTMP_SUBSTITUTE_TOKEN ("%file_link%", name);
 
 	/* Date
 	 */
@@ -757,15 +784,15 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		cherokee_buffer_ensure_size (tmp, 33);
 
 		strftime (tmp->buf, 32, "%d-%b-%Y %H:%M", localtime(&file->stat.st_mtime));
-		substitute_token (idx_tmp, "%date%", tmp->buf);
+		VTMP_SUBSTITUTE_TOKEN ("%date%", tmp->buf);
 	} 
 
 	/* Size
 	 */
 	if (props->show_size) {
 		if (is_dir) {
-			substitute_token (idx_tmp, "%size_unit%", NULL);
-			substitute_token (idx_tmp, "%size%", "-");
+			VTMP_SUBSTITUTE_TOKEN ("%size_unit%", NULL);
+			VTMP_SUBSTITUTE_TOKEN ("%size%", "-");
 		} else {
 			char *unit;
 
@@ -777,9 +804,9 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 			unit = tmp->buf;
 			while ((*unit >= '0')  && (*unit <= '9')) unit++;
 
-			substitute_token (idx_tmp, "%size_unit%", unit);
+			VTMP_SUBSTITUTE_TOKEN ("%size_unit%", unit);
 			*unit = '\0';
-			substitute_token (idx_tmp, "%size%", tmp->buf);
+			VTMP_SUBSTITUTE_TOKEN ("%size%", tmp->buf);
 		}
 	} 
 
@@ -792,7 +819,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		user = getpwuid (file->stat.st_uid);
 		name = (char *) (user->pw_name) ? user->pw_name : "unknown";
 
-		substitute_token (idx_tmp, "%user%", name);
+		VTMP_SUBSTITUTE_TOKEN ("%user%", name);
 	} 
 
 	/* Group
@@ -804,7 +831,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		user = getgrgid (file->stat.st_gid);
 		group = (char *) (user->gr_name) ? user->gr_name : "unknown";
 		
-		substitute_token (idx_tmp, "%group%", group);
+		VTMP_SUBSTITUTE_TOKEN ("%group%", group);
 	}
 
 	/* Add final result to buffer
@@ -818,26 +845,16 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 static ret_t
 render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
+	cherokee_buffer_t                *vtmp[2];
 	char                             *icon     = NULL;
 	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
-	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
-	cherokee_buffer_t                *vtmp[2];
-	size_t                            idx_tmp = 0;
+ 	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
+	size_t                            idx_tmp  = 0; 
 
-	/* Initialize array of tmp buffers
+	/* Initialize temporary substitution buffers
 	 */
-	vtmp[0] = THREAD_TMP_BUF1(thread);
-	vtmp[1] = THREAD_TMP_BUF2(thread);
-
-	/* Clear tmp buffers.
-	 */
-	cherokee_buffer_clean(vtmp[0]);
-	cherokee_buffer_clean(vtmp[1]);
-
-	/* Add entry text
-	 */
-	cherokee_buffer_add_buffer (vtmp[0], &props->entry);
+	VTMP_INIT_SUBST (thread, vtmp, &props->entry);
 
 #ifndef CHEROKEE_EMBEDDED
 	if (icons != NULL) {
@@ -845,17 +862,17 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 	}
 #endif
 
-	substitute_token (idx_tmp, "%icon%", icon);
-	substitute_token (idx_tmp, "%icon_alt%", "[DIR]");
+	VTMP_SUBSTITUTE_TOKEN ("%icon%", icon);
+	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", "[DIR]");
 
-	substitute_token (idx_tmp, "%file_link%", "../");
-	substitute_token (idx_tmp, "%file_name%", "Parent Directory");
+	VTMP_SUBSTITUTE_TOKEN ("%file_link%", "../");
+	VTMP_SUBSTITUTE_TOKEN ("%file_name%", "Parent Directory");
 
-	substitute_token (idx_tmp, "%date%", NULL);
-	substitute_token (idx_tmp, "%size_unit%", NULL);
-	substitute_token (idx_tmp, "%size%", "-");
-	substitute_token (idx_tmp, "%user%", NULL);
-	substitute_token (idx_tmp, "%group%", NULL);
+	VTMP_SUBSTITUTE_TOKEN ("%date%", NULL);
+	VTMP_SUBSTITUTE_TOKEN ("%size_unit%", NULL);
+	VTMP_SUBSTITUTE_TOKEN ("%size%", "-");
+	VTMP_SUBSTITUTE_TOKEN ("%user%", NULL);
+	VTMP_SUBSTITUTE_TOKEN ("%group%", NULL);
 
 	/* Add final result to buffer
 	 */
@@ -866,46 +883,33 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 
 
 static ret_t
-render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, cherokee_buffer_t *bufpattern)
+render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, cherokee_buffer_t *buf_pattern)
 {
-	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
-	cherokee_buffer_t                *vtmp[2];
-	size_t                            idx_tmp = 0;
+	cherokee_buffer_t  *vtmp[2];
+	cherokee_thread_t  *thread   = HANDLER_THREAD(dhdl);
+	size_t              idx_tmp  = 0; 
 
-	/* Initialize array of tmp buffers
+	/* Initialize temporary substitution buffers
 	 */
-	vtmp[0] = THREAD_TMP_BUF1(thread);
-	vtmp[1] = THREAD_TMP_BUF2(thread);
-
-	/* Clear tmp buffers.
-	 */
-	cherokee_buffer_clean(vtmp[0]);
-	cherokee_buffer_clean(vtmp[1]);
-
-	/* Add entry text
-	 */
-	cherokee_buffer_add_buffer (vtmp[0], bufpattern);
+	VTMP_INIT_SUBST (thread, vtmp, buf_pattern);
 
 	/* Public dir
 	 */
-	substitute_token (idx_tmp, "%public_dir%", dhdl->public_dir.buf);
+	VTMP_SUBSTITUTE_TOKEN ("%public_dir%", dhdl->public_dir.buf);
 
 	/* Server software
 	 */
-	substitute_token (idx_tmp, "%server_software%", dhdl->software_str_ref->buf);
+	VTMP_SUBSTITUTE_TOKEN ("%server_software%", dhdl->software_str_ref->buf);
 
 	/* Notice
 	 */
-	substitute_token (idx_tmp, "%notice%", dhdl->header.buf);
+	VTMP_SUBSTITUTE_TOKEN ("%notice%", dhdl->header.buf);
 
 	/* Orders
 	 */
-	substitute_token (idx_tmp, "%order_name%", 
-		       (dhdl->sort == Name_Down) ? "N" : "n");
-	substitute_token (idx_tmp, "%order_size%", 
-		       (dhdl->sort == Size_Down) ? "S" : "s");
-	substitute_token (idx_tmp, "%order_date%", 
-		       (dhdl->sort == Date_Down) ? "D" : "d");
+	VTMP_SUBSTITUTE_TOKEN ("%order_name%", (dhdl->sort == Name_Down) ? "N" : "n");
+	VTMP_SUBSTITUTE_TOKEN ("%order_size%", (dhdl->sort == Size_Down) ? "S" : "s");
+	VTMP_SUBSTITUTE_TOKEN ("%order_date%", (dhdl->sort == Date_Down) ? "D" : "d");
 
 	/* Add final result to buffer
 	 */

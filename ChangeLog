@@ -1,3 +1,21 @@
+2007-01-03  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.c:
+        - added a few comments to cherokee_buffer_substitute_string().
+
+	* cherokee/handler_dirlist.c:
+        - removed unused define DEFAULT_NAME_LEN 40;
+	- renamed substitute_token_guts() -> substitute_vbuf_token()
+	  and changed it:
+	  - added an array of two temporary buffers;
+	  - added a parameter pidx_buf to update the index
+	    of last content buffer to be used in next calls
+	    as source buffer;
+        - added a few macros _VTMP_* to hide details about
+	  declaration of substitution variables and repeated code.
+
+	* A few changes by Alvaro over these ones.
+	
 2007-01-02  A.D.F  <adefacc@tin.it>
 
 	* cherokee/handler_error.c (build_hardcoded_response_page):

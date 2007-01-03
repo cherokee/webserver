@@ -1558,7 +1558,13 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 }
 
 
-/* Returns:
+/* Substitute (substring)s found in (bufsrc) with (replacement)
+ * and writes the resulting content to (bufdst).
+ * NOTE: (bufdst) is written only if at least on (substring) instance
+ *       is found in (bufsrc), in this case return value is ret_ok;
+ *       if (substring) is NOT found in (bufsrc) then nothing is done
+ *       in order to avoid an unnecessary copy of data.
+ * Returns:
  *  ret_ok          bufdst has been written with the substitution string(s)
  *  ret_not_found   substring not found in bufsrc
  *  ret_deny        bad formal parameters
