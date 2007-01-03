@@ -1138,6 +1138,13 @@ cherokee_socket_read (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t 
 ret_t 
 cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t *offset, ssize_t *sent)
 {
+	static cherokee_boolean_t no_sys = false;
+
+	/* Exit if there is no sendfile() function in the system
+	 */
+	if (unlikely (no_sys)) 
+		return ret_no_sys;
+
  	/* If there is nothing to send then return now, this may be
  	 * needed in some systems (i.e. *BSD) because value 0 may have
  	 * special meanings or trigger occasional hidden bugs.
@@ -1175,7 +1182,9 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 		
 	if (*sent < 0) {
 		switch (errno) {
-		case ENOSYS: return ret_no_sys;
+		case ENOSYS: 
+			no_sys = true;
+			return ret_no_sys;
 		case EAGAIN: return ret_eagain;
 		}
 
@@ -1235,6 +1244,7 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 	if (re == -1) {
 		switch (errno) {
 		case ENOSYS:
+			no_sys = true;
 			return ret_no_sys;
 		case EAGAIN:
 			if (*sent < 1)

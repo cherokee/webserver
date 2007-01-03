@@ -534,10 +534,6 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 				(fhdl->info->st_size <  srv->sendfile.max) &&
 				(conn->socket.is_tls == non_TLS));
 
-# ifdef HAVE_SENDFILE_BROKEN
-	fhdl->using_sendfile = false;
-# endif
-
 	if (fhdl->using_sendfile) {
 		cherokee_connection_set_cork (conn, 1);
 	}

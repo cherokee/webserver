@@ -1,3 +1,17 @@
+2007-01-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.c (cherokee_socket_sendfile): Added a static
+	boolean variable to store whether the system doesn't support the
+	sendfile() function, in that way, this wrapper function will
+	return faster since the systems reports ENOSYS once.
+
+	* cherokee/handler_file.c (cherokee_handler_file_init): Removed
+	check for HAVE_SENDFILE_BROKEN.
+
+	* configure.in: Removed sendfile() test. It was declaring a
+	superfluous macro called HAVE_SENDFILE_BROKEN if the system had a
+	buggy sendfile implementation (like in some Linux 2.2 versions).
+
 2007-01-03  A.D.F  <adefacc@tin.it>
 
 	* cherokee/socket.c (cherokee_socket_sendfile): 

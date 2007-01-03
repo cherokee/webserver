@@ -662,19 +662,6 @@ ETR_SOCKET_NSL
 # From sendfile_samba.m4
 SENDFILE_CHECK
 
-# Is sendfile broken?
-AC_MSG_CHECKING(if sendfile works)
-AC_RUN_IFELSE([#include <errno.h>
-            int main() {
-               int o = 0;
-               if (-1 == sendfile(0, 0, &o, 0) && errno == ENOSYS) return -1;
-               return 0;
-            } ], 
-            AC_MSG_RESULT(yes), 
-            [ AC_MSG_RESULT(no) 
-              AC_DEFINE([HAVE_SENDFILE_BROKEN], [1], [broken sendfile])],
-		  AC_MSG_RESULT(cross, assuming: yes))
-
 # readdir_r()
 LIBWWW_READDIR_R_TYPE
 
