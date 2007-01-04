@@ -4,6 +4,7 @@
  *
  * Authors:
  *      Juan Cespedes <cespedes@debian.org>
+ *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
  * Copyright (C) 2001-2006 Alvaro Lopez Ortega
  *
@@ -22,20 +23,24 @@
  * USA
  */
 
-int 
+#include "common-internal.h"
+#include "match.h"
+
+
+ret_t
 match (const char *pattern, const char *filename) 
 {
 	if (!pattern[0] && !filename[0]) {
-		return 1;
+		return ret_ok;
 	} else if (!pattern[0]) {
-		return 0;
+		return ret_not_found;
 	} else if (pattern[0]=='?' && filename[0]) {
 		return match(&pattern[1], &filename[1]);
 	} else if (pattern[0]!='*') {
 		if (pattern[0]==filename[0]) {
 			return match(&pattern[1], &filename[1]);
 		} else {
-			return 0;
+			return ret_not_found;
 		}
 	}   /* Hay un '*' */
 
@@ -43,9 +48,9 @@ match (const char *pattern, const char *filename)
 	
 	do {
 		if (match(pattern, filename)) {
-			return 1;
+			return ret_ok;
 		}
 	} while (*filename++);
 	
-	return 0;
+	return ret_not_found;
 }

@@ -4,6 +4,7 @@
  *
  * Authors:
  *      Juan Cespedes <cespedes@debian.org>
+ *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
  * Copyright (C) 2001-2006 Alvaro Lopez Ortega
  *
@@ -22,9 +23,11 @@
  * USA
  */
 
-#ifndef __CHEROKEE_MATCH__
-#define __CHEROKEE_MATCH__
+#ifndef CHEROKEE_MATCH
+#define CHEROKEE_MATCH
 
-int match (const char *pattern, const char *filename);
+#include <cherokee/common.h>
 
-#endif /* __CHEROKEE_MATCH__ */
+ret_t match (const char *pattern, const char *filename);
+
+#endif /* CHEROKEE_MATCH */

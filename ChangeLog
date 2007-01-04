@@ -1,3 +1,10 @@
+2007-01-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/icons.c (match_file): Updated for the new interface of
+	the match() function.
+
+	* cherokee/match.c (match): Now it returns ret_t rather than int.
+
 2007-01-04  A.D.F  <adefacc@tin.it>
 
 	* cherokee/handler_file.c (cherokee_handler_file_step): 

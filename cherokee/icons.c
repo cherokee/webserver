@@ -128,7 +128,7 @@ match_file (const char *pattern,
 	    void       *icon,
 	    void       *param_file)
 {
-	return (match (pattern, (char *)param_file));
+	return (match (pattern, (char *)param_file) == ret_ok);
 }
 
 
