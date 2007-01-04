@@ -1,3 +1,17 @@
+2007-01-04  A.D.F  <adefacc@tin.it>
+
+	* cherokee/socket.c (cherokee_socket_sendfile):
+        - add new errno codes:
+	  - EINVAL (Linux), in Linux 2.4,
+	    if a FS (file system) does not support mmap operations
+	    then it cannot support sendfile too
+	    and in this case errno is set to EINVAL
+	    (see Linux 2.4 man page);
+	  - ENOSYS (all OS), it could be useful in other OS too
+	    (i.e. BSD, etc.);
+	  - EWOULDBLOCK, if it is != EAGAIN then handle it
+	    as EAGAIN.
+	
 2007-01-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/socket.c (cherokee_socket_sendfile): Added a static

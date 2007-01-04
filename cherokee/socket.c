@@ -1182,10 +1182,22 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 		
 	if (*sent < 0) {
 		switch (errno) {
+		case EAGAIN:
+#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
+		case EWOULDBLOCK:
+#endif
+			return ret_eagain;
+		case EINVAL:
+			/* maybe sendfile is not supported by this FS (no mmap available),
+			 * since more than one FS can be used (ext2, ext3, ntfs, etc.)
+			 * we should retry with emulated sendfile (read+write).
+			 */
+			return ret_no_sys;
 		case ENOSYS: 
+			/* This kernel does not support sendfile at all.
+			 */
 			no_sys = true;
 			return ret_no_sys;
-		case EAGAIN: return ret_eagain;
 		}
 
 		return ret_error;
@@ -1202,10 +1214,19 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 
 	if (*sent < 0) {
 		switch (errno) {
-		case EAFNOSUPPORT: return ret_no_sys;
-		case EAGAIN:       return ret_eagain;
+		case EAGAIN:
+#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
+		case EWOULDBLOCK:
+#endif
+			return ret_eagain;
+		case ENOSYS: 
+			/* This kernel does not support sendfile at all.
+			 */
+			no_sys = true;
+			return ret_no_sys;
+		case EAFNOSUPPORT:
+			return ret_no_sys;
 		}
-		
 		return ret_error;
 	}
 
@@ -1243,16 +1264,19 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 
 	if (re == -1) {
 		switch (errno) {
-		case ENOSYS:
-			no_sys = true;
-			return ret_no_sys;
 		case EAGAIN:
+#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
+		case EWOULDBLOCK:
+#endif
 			if (*sent < 1)
 				return ret_eagain;
 
 			/* else it's ok, something has been sent.
 			 */
 			break;
+		case ENOSYS:
+			no_sys = true;
+			return ret_no_sys;
 		default:
 			return ret_error;
 		}
@@ -1281,8 +1305,15 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 	} while ((*sent == -1) && (errno == EINTR));
 
 	if (*sent < 0) {
-		if (errno == EAGAIN) {
+		switch (errno) {
+		case EAGAIN:
+#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
+		case EWOULDBLOCK:
+#endif
 			return ret_eagain;
+		case ENOSYS:
+			no_sys = true;
+			return ret_no_sys;
 		}
 		return ret_error;
 	}
