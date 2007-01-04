@@ -702,7 +702,9 @@ exit_sendfile:
 	if ((fhdl->offset + buffer->size) > conn->range_end) {
 		size = conn->range_end - fhdl->offset + 1;
 	} else {
-		size = buffer->size;
+		/* Align read size on a 4 byte limit
+		 */
+		size = (buffer->size & ~3);
 	}
 
 	/* Read

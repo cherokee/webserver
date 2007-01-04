@@ -1,5 +1,15 @@
 2007-01-04  A.D.F  <adefacc@tin.it>
 
+	* cherokee/handler_file.c (cherokee_handler_file_step): 
+        - align read size on a 4 byte limit,
+	  right now read buffer has a size of DEFAULT_READ_SIZE (8192)
+	  + 1 for '\0', so with this patch we end up
+	  reading ((8192 + 1) & ~3) which is 8192;
+
+	* cherokee/post.c (cherokee_post_walk_to_fd): 
+	- read DEFAULT_READ_SIZE chunks of data,
+	  faster than DEFAULT_READ_SIZE - 1;
+
 	* cherokee/socket.c (cherokee_socket_sendfile):
         - add new errno codes:
 	  - EINVAL (Linux), in Linux 2.4,

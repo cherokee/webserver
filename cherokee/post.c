@@ -227,12 +227,12 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 		return cherokee_post_walk_finished (post);
 
 	case post_in_tmp_file:
-		cherokee_buffer_ensure_size (&post->info, DEFAULT_READ_SIZE);
+		cherokee_buffer_ensure_size (&post->info, DEFAULT_READ_SIZE+1);
 
 		/* Read from the temp file is needed
 		 */
 		if (cherokee_buffer_is_empty (&post->info)) {
-			ur = fread (post->info.buf, 1, DEFAULT_READ_SIZE - 1, post->tmp_file_p);
+			ur = fread (post->info.buf, 1, DEFAULT_READ_SIZE, post->tmp_file_p);
 			if (ur <= 0) {
 				return (feof(post->tmp_file_p)) ? ret_ok : ret_error;
 			}
