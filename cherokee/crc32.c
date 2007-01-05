@@ -8,10 +8,10 @@
 #include <sys/types.h>
 
 /*
- * This code implements the AUTODIN II polynomial
+ * This code implements the AUTODIN II polynomial.
  * The variable corresponding to the macro argument "crc" should
  * be an unsigned long.
- * Oroginal code  by Spencer Garrett <srg@quick.com>
+ * Original code by Spencer Garrett <srg@quick.com>
  */
 
 #define _CRC32_(crc, ch)	 (crc = (crc >> 8) ^ crc32tab[(crc ^ (ch)) & 0xff])
@@ -88,22 +88,23 @@ static const unsigned int crc32tab[256] = {
 	0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
 };
 
+
 crc_t
 crc32_sz(char *buf, int size)
 {
-	   return crc32_partial_sz (0, buf, size);
+	return crc32_partial_sz (0, buf, size);
 }
+
 
 crc_t
 crc32_partial_sz (crc_t crc_in, char *buf, int size)
 {
 	unsigned int crc = ~crc_in;
-	char	   *p;
-	int			len,
-				nr;
-	len = 0;
-	nr = size;
-	for (len += nr, p = buf; nr--; ++p)
+	char	*p;
+	int		nr;
+
+	for (nr = size, p = buf; nr--; ++p)
 		_CRC32_(crc, *p);
+
 	return ~crc;
 }

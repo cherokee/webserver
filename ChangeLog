@@ -1,5 +1,11 @@
 2007-01-05  A.D.F  <adefacc@tin.it>
 
+	* cherokee/crc32.c: 
+        - cleanup formatting (tabs, spaces, etc.);
+	- correct mispellings;
+	- crc32_partial_sz(),
+	  remove unused variable len.
+	
 	* cherokee/buffer.c: 
         - cleanups, one instruction per line,
 	  put each "return xxx;" on its own line;
