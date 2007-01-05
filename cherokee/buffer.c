@@ -808,23 +808,25 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 	/* Stat() the file
 	 */
 	r = stat (filename, &info);
-	if (r != 0) return ret_error;
+	if (r != 0)
+		return ret_error;
 
 	/* Is a regular file?
 	 */
-	if (S_ISREG(info.st_mode) == 0) {
+	if (S_ISREG(info.st_mode) == 0)
 		return ret_error;
-	}
 
 	/* Maybe get memory
 	 */
 	ret = cherokee_buffer_ensure_size (buf, buf->len + info.st_size + 1);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	/* Open the file
 	 */
 	f = open (filename, CHE_O_READ);
-	if (f < 0) return ret_error;
+	if (f < 0)
+		return ret_error;
 
 	/* Read the content
 	 */
@@ -851,15 +853,25 @@ ret_t
 cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_t *ret_size)
 {
 	int  len;
-	char tmp[size+1];
 
-	len = read (fd, tmp, size);
+	/* Ensure there is enough space in buffer
+	 * NOTE: usually the caller should have already allocated
+	 *       enough space for the buffer, so this is a security measure
+	 */
+	cherokee_buffer_ensure_addlen(buf, size);
+
+	/* Read data at the end of the buffer
+	 */
+	len = read (fd, &(buf->buf[buf->len]), size);
 	if (len < 0) {
 		/* On error
 		 */
 		switch (errno) {
 		case EINTR:      return ret_eagain;
 		case EAGAIN:     return ret_eagain;
+#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
+		case EWOULDBLOCK:return ret_eagain;
+#endif
 		case EPIPE:      return ret_eof;
 		case ECONNRESET: return ret_eof;
 		case EIO:        return ret_error;
@@ -874,10 +886,12 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 		return ret_eof;
 	}
 
-	/* Add readed information
+	/* Add readed length, terminate buffer and return
 	 */
-	cherokee_buffer_add (buf, tmp, len);
 	*ret_size = len;
+	buf->len += len;
+
+	buf->buf[buf->len] = '\0';
 
 	return ret_ok;
 }
@@ -982,9 +996,8 @@ cherokee_buffer_unescape_uri (cherokee_buffer_t *buffer)
 #define hex2dec_m(c)	( (int) hex2dec_tab[ ( (unsigned char )(c) ) ] )
 #define hex2dec_m2(c1, c2)	( hex2dec_m(c1) * 16 + hex2dec_m(c2)  )
 
-	if (unlikely (buffer->buf == NULL)) {
+	if (unlikely (buffer->buf == NULL))
 		return ret_error;
-	}
 
 	/* Verify if unescaping is needed.
 	 */
@@ -1070,13 +1083,16 @@ cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t **maybe_n
 	/* Create a new buffer
 	 */
 	ret = cherokee_buffer_new (maybe_new);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	ret = cherokee_buffer_ensure_size (*maybe_new, buf->len + extra + 1);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	ret = cherokee_buffer_add_buffer (*maybe_new, buf);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	buf = *maybe_new;
 
@@ -1215,7 +1231,8 @@ cherokee_buffer_encode_base64 (cherokee_buffer_t *buf)
 	/* Get memory
 	 */
 	ret = cherokee_buffer_ensure_size (&new_buf, (buf->len+4)*4/3 + 1);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Encode
 	 */
@@ -1450,8 +1467,17 @@ cherokee_buffer_add_chunked (cherokee_buffer_t *buf, char *txt, size_t size)
 {
 	ret_t ret;
 
-	ret = cherokee_buffer_add_va (buf, "0x%x"CRLF, size);
-	if (unlikely(ret < ret_ok)) return ret_ok;
+	ret = cherokee_buffer_add_str    (buf, "0x");
+	if (unlikely(ret < ret_ok))
+		return ret_ok;
+
+	ret = cherokee_buffer_add_ulong16(buf, (culong_t) size);
+	if (unlikely(ret < ret_ok))
+		return ret_ok;
+
+	ret = cherokee_buffer_add_str    (buf, CRLF);
+	if (unlikely(ret < ret_ok))
+		return ret_ok;
 
 	return cherokee_buffer_add (buf, txt, size);
 }
@@ -1463,12 +1489,12 @@ cherokee_buffer_add_buffer_chunked (cherokee_buffer_t *buf, cherokee_buffer_t *b
 	return cherokee_buffer_add_chunked (buf, buf2->buf, buf2->len);
 }
 
+
 char  
 cherokee_buffer_end_char (cherokee_buffer_t *buf)
 {
-	if ((buf->buf == NULL) || (buf->len <= 0)) {
+	if ((buf->buf == NULL) || (buf->len <= 0))
 		return '\0';
-	}
 
 	return buf->buf[buf->len-1];
 }

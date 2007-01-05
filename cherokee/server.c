@@ -212,8 +212,9 @@ cherokee_server_new  (cherokee_server_t **srv)
 	/* Virtual servers table
 	 */
 	INIT_LIST_HEAD (&n->vservers);
+	INIT_LIST_HEAD (&n->vservers_list);
 
-	cherokee_table_init (&n->vservers_ref);
+//	cherokee_table_init (&n->vservers_ref);
 
 	cherokee_virtual_server_new (&n->vserver_default, n);
 	return_if_fail (n->vserver_default!=NULL, ret_nomem);
@@ -277,11 +278,13 @@ free_virtual_servers (cherokee_server_t *srv)
 {
 	cherokee_list_t *i, *j;
 
-	list_for_each_safe (i, j, &srv->vservers) {
+	list_for_each_safe (i, j, &srv->vservers_list) {
 		cherokee_virtual_server_free (VSERVER(i));
 	}
 
-	cherokee_table_mrproper (&srv->vservers_ref);
+	
+	cherokee_list_wildcards_clean (&srv->vservers, cherokee_virtual_server_free);
+//	cherokee_table_mrproper (&srv->vservers_ref);
 }
 
 
@@ -782,10 +785,10 @@ initialize_server_threads (cherokee_server_t *srv)
 
 
 static void
-for_each_vserver_init_tls_func (const char *key, void *value)
+vserver_init_tls (cherokee_virtual_server_t *vserver)
 {
 	ret_t ret;
-	cherokee_virtual_server_t *vserver = VSERVER(value);
+	 = VSERVER(value);
 
 	ret = cherokee_virtual_server_init_tls (vserver);
 	if (ret < ret_ok) {
@@ -809,7 +812,8 @@ static ret_t
 init_vservers_tls (cherokee_server_t *srv)
 {
 #ifdef HAVE_TLS
-	ret_t ret;
+	ret_t   ret;
+	list_t *i;
 
 	/* Initialize the server TLS socket
 	 */
@@ -826,7 +830,10 @@ init_vservers_tls (cherokee_server_t *srv)
 		return ret_error;
 	}
 
-	cherokee_table_foreach (&srv->vservers_ref, for_each_vserver_init_tls_func);
+	list_for_each (i, &srv->vservers) {
+		vserver_init_tls (LIST_WILDCARDS_ENTRY(i)->value);
+	}
+//	cherokee_table_foreach (&srv->vservers_ref, for_each_vserver_init_tls_func);
 #endif
 
 	return ret_ok;	
@@ -919,8 +926,18 @@ cherokee_server_init (cherokee_server_t *srv)
 	srv->tls_enabled = (ret == ret_ok);
 
 	if (srv->tls_enabled == false) {
-		ret = cherokee_table_while (&srv->vservers_ref, while_vserver_check_tls_func, NULL, NULL, NULL);
-		srv->tls_enabled = (ret == ret_ok);
+		list_t                    *i;
+		cherokee_virtual_server_t *vsrv;
+
+		list_for_each (i, &srv->vservers) {
+			vsrv = LIST_WILDCARDS_ENTRY(i)->value;
+
+			ret = cherokee_virtual_server_have_tls (vsrv);
+			if (ret == ret_ok) 
+				srv->tls_enabled = true;
+		}
+//		ret = cherokee_table_while (&srv->vservers_ref, while_vserver_check_tls_func, NULL, NULL, NULL);
+//		srv->tls_enabled = (ret == ret_ok);
 	}
 
 	if (srv->tls_enabled) {
@@ -999,23 +1016,34 @@ cherokee_server_init (cherokee_server_t *srv)
 }
 
 
-static void
-flush_vserver (const char *key, void *value)
-{
-	/* There's no logger in this virtual server
-	 */
-	if ((value == NULL) || (VSERVER_LOGGER(value) == NULL))
-		return;
+/* static void */
+/* flush_vserver (const char *key, void *value) */
+/* { */
+/* 	/\* There's no logger in this virtual server */
+/* 	 *\/ */
+/* 	if ((value == NULL) || (VSERVER_LOGGER(value) == NULL)) */
+/* 		return; */
 
-	cherokee_logger_flush (VSERVER_LOGGER(value));
-}
+/* 	cherokee_logger_flush (VSERVER_LOGGER(value)); */
+/* } */
 
 
 static void
 flush_logs (cherokee_server_t *srv)
 {
+	list_t                    *i;
+	cherokee_virtual_server_t *vsrv;
+
 	flush_vserver (NULL, srv->vserver_default);
-	cherokee_table_foreach (&srv->vservers_ref, flush_vserver);
+//	cherokee_table_foreach (&srv->vservers_ref, flush_vserver);
+
+	list_for_each (i, &srv->vservers) {
+		vsrv = LIST_WILDCARDS_ENTRY(i)->value;
+
+		if (VSERVER_LOGGER(vsrv)) {
+			cherokee_logger_flush (VSERVER_LOGGER(vsrv));
+		}
+	}
 }
 
 
@@ -1277,7 +1305,7 @@ add_vserver (cherokee_config_node_t *node, void *data)
 		ret = cherokee_table_add (&srv->vservers_ref, node->key.buf, vsrv);
 		if (ret != ret_ok) return ret;
 
-		cherokee_list_add (LIST(vsrv), &srv->vservers);
+		cherokee_list_add (LIST(vsrv), &srv->vservers_list);
 
 		param[0] = srv;
 		param[1] = vsrv;

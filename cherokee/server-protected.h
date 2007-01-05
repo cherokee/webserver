@@ -56,6 +56,7 @@
 #include "mime.h"
 #include "config_node.h"
 #include "version.h"
+#include "list_wildcards.h"
 
 
 struct cherokee_server {
@@ -76,8 +77,10 @@ struct cherokee_server {
 	
 	/* Virtual servers
 	 */
-	cherokee_list_t            vservers;
-	cherokee_table_t           vservers_ref;
+//	cherokee_list_t            vservers;
+//	cherokee_table_t           vservers_ref;
+	cherokee_list_wildcards_t *vservers;
+	cherokee_list_t            vservers_list;
 	cherokee_virtual_server_t *vserver_default;
 	
 	/* Threads

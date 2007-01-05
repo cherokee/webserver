@@ -1,3 +1,36 @@
+2007-01-05  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.c: 
+        - cleanups, one instruction per line,
+	  put each "return xxx;" on its own line;
+
+	- cleanups, remove unneeded braces { } when
+	  there is only one instruction after an if;
+
+	- cherokee_buffer_read_from_fd(),
+	  remove the usage of the temporary local buffer,
+	  declared as char tmp[size+1];  this has the following
+	  advantages:
+	  - as "size+1" is not a constant the change restores
+	    pure C language rules (i.e. no gcc / C++ extensions);
+	  - data is read directly into destination buf,
+	    avoiding a data copy;
+	    NOTE: for best performances caller should pass an
+		  empty buffer (where buf->buf address
+		  is aligned on a page boundary or
+		  at least on a sizeof(int));
+
+	- cherokee_buffer_read_from_fd(),
+	  add EWOULDBLOCK for those rare OS where it is different
+	  from EAGAIN;
+
+	- cherokee_buffer_add_chunked(),
+	  substitute slow cherokee_buffer_add_va() with
+	  equivalent fast cherokee_buffer_add_*() calls;
+	  NOTE: this is a win because chunks can be
+		as small as 1 - 8 KB and
+		so at Gigabits speed this improvement matters;
+	
 2007-01-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/icons.c (match_file): Updated for the new interface of
