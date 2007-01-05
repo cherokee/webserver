@@ -1,5 +1,10 @@
 2007-01-05  A.D.F  <adefacc@tin.it>
 
+	* cherokee/connection.c: 
+        - small formatting cleanups;
+        - substitute cherokee_buffer_add_va(s) with equivalent
+          cherokee_buffer_add_*() calls (micro speedups).
+
 	* cherokee/handler_error.c (cherokee_handler_error_add_headers):
         - replace switch(conn->error_code) with an if comparison;
 	- substitute cherokee_buffer_add_va() with equivalent

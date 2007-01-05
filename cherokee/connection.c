@@ -422,14 +422,18 @@ build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffe
 		cherokee_buffer_add_str (buffer, "\""CRLF);
 	}
 
-	/* Digest Authenticatiom
-	 * Eg: WWW-Authenticate: Digest realm="", qop="auth,auth-int", nonce="", opaque=""
+	/* Digest Authentication, Eg:
+	 * WWW-Authenticate: Digest realm="", qop="auth,auth-int",
+	 *                   nonce="", opaque=""
 	 */
 	if (conn->auth_type & http_auth_digest) {
 		cherokee_buffer_t new_nonce = CHEROKEE_BUF_INIT;
+
+		cherokee_buffer_ensure_addlen (buffer,
+						32 + conn->realm_ref->len + 4 + 32 + 32);
+
 		/* Realm
 		 */
-		cherokee_buffer_ensure_addlen (buffer, 32 + conn->realm_ref->len + 4);
 		cherokee_buffer_add_str (buffer, "WWW-Authenticate: Digest realm=\"");
 		cherokee_buffer_add_buffer (buffer, conn->realm_ref);
 		cherokee_buffer_add_str (buffer, "\", ");
@@ -437,7 +441,11 @@ build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffe
 		/* Nonce
 		 */
 		cherokee_nonce_table_generate (CONN_SRV(conn)->nonces, conn, &new_nonce);
-		cherokee_buffer_add_va (buffer, "nonce=\"%s\", ", new_nonce.buf);
+		/* "nonce=\"%s\", "
+		 */
+		cherokee_buffer_add_str    (buffer, "nonce=\"");
+		cherokee_buffer_add_buffer (buffer, &new_nonce);
+		cherokee_buffer_add_str    (buffer, "\", ");
 				
 		/* Quality of protection: auth, auth-int, auth-conf
 		 * Algorithm: MD5
@@ -1223,7 +1231,9 @@ get_range (cherokee_connection_t *conn, char *ptr, int ptr_len)
 
 	/* Read the start position
 	 */
-	while ((ptr[num_len] != '-') && (ptr[num_len] != '\0') && (num_len < tmp_size-1)) {
+	while ((ptr[num_len] != '-') &&
+	       (ptr[num_len] != '\0') &&
+	       (num_len < tmp_size-1)) {
 		tmp[num_len] = ptr[num_len];
 		num_len++;
 	}
@@ -1271,7 +1281,6 @@ get_range (cherokee_connection_t *conn, char *ptr, int ptr_len)
 	}
 
 	return ret_ok;
-	
 }
 
 
@@ -1282,8 +1291,7 @@ post_init (cherokee_connection_t *conn)
 	long     post_len;
 	char    *info     = NULL;
 	cuint_t  info_len = 0;
-
-	CHEROKEE_TEMP(buf,64);
+	CHEROKEE_TEMP(buf, 64);
 
 	/* Get the header "Content-Lenght" content
 	 */
@@ -1334,7 +1342,8 @@ parse_userdir (cherokee_connection_t *conn)
 		 * from http://www.alobbs.com/~alo 
 		 * to   http://www.alobbs.com/~alo/
 		 */
-		cherokee_buffer_add_va (&conn->redirect, "%s/", conn->request.buf);
+		cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
+		cherokee_buffer_add_str    (&conn->redirect, "/");
 
 		conn->error_code = http_moved_permanently;
 		return ret_error;
