@@ -255,17 +255,16 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	if (!http_code_with_body (conn->error_code))
 		return ret_ok;
 
-	switch (conn->error_code) {
-	case http_range_not_satisfiable:
+	if (conn->error_code == http_range_not_satisfiable) {
 		/* The handler that attended the request has put the content 
 		 * length in conn->range_end in order to allow it to send the
 		 * right length to the client.
+		 *
+		 * "Content-Range: bytes *" "/" FMT_OFFSET CRLF
 		 */
-		cherokee_buffer_add_va (buffer,
-				"Content-Range: bytes */"FMT_OFFSET CRLF,
-				conn->range_end);
-	default:
-		break;
+		cherokee_buffer_add_str     (buffer, "Content-Range: bytes */");
+		cherokee_buffer_add_ullong10(buffer, (cullong_t)conn->range_end);
+		cherokee_buffer_add_str     (buffer, CRLF);
 	}
 
 	/* Usual headers

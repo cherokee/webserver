@@ -1,5 +1,10 @@
 2007-01-05  A.D.F  <adefacc@tin.it>
 
+	* cherokee/handler_error.c (cherokee_handler_error_add_headers):
+        - replace switch(conn->error_code) with an if comparison;
+	- substitute cherokee_buffer_add_va() with equivalent
+	  cherokee_buffer_add_*() calls like in handler_file.c.
+	
 	* cherokee/crc32.c: 
         - cleanup formatting (tabs, spaces, etc.);
 	- correct mispellings;
