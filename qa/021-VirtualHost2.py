@@ -4,7 +4,8 @@ MAGIC = "Second virtual Host test magic string"
 
 CONF = """
 vserver!first.domain!document_root = %s
-vserver!first.domain!alias = second.domain
+vserver!first.domain!domain!1 = first.domain
+vserver!first.domain!domain!2 = second.domain
 vserver!first.domain!directory!/!handler = common
 vserver!first.domain!directory!/!priority = 10
 """

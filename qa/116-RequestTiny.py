@@ -4,15 +4,16 @@ MAGIC = "The one and only.. Cherokee! :-)"
 HOST  = "request_mini"
 
 CONF = """
-vserver!%s!document_root = %s
-vserver!%s!directory!/!handler = file
-vserver!%s!directory!/!priority = 10
+vserver!<domain>!document_root = %s
+vserver!<domain>!domain!1 = <domain>
+vserver!<domain>!directory!/!handler = file
+vserver!<domain>!directory!/!priority = 10
 
-vserver!%s!request!^/$!handler = redir
-vserver!%s!request!^/$!handler!rewrite!1!show = 0
-vserver!%s!request!^/$!handler!rewrite!1!regex = ^.*$
-vserver!%s!request!^/$!handler!rewrite!1!substring = /index.php
-vserver!%s!request!^/$!priority = 11
+vserver!<domain>!request!^/$!handler = redir
+vserver!<domain>!request!^/$!handler!rewrite!1!show = 0
+vserver!<domain>!request!^/$!handler!rewrite!1!regex = ^.*$
+vserver!<domain>!request!^/$!handler!rewrite!1!substring = /index.php
+vserver!<domain>!request!^/$!priority = 11
 """ 
 
 class Test (TestBase):
@@ -29,7 +30,9 @@ class Test (TestBase):
     def Prepare (self, www):
         host_dir = self.Mkdir (www, "tmp_host_request_mini")
 
-        self.conf = CONF % (HOST, host_dir, HOST, HOST, HOST, HOST, HOST, HOST, HOST)
+        self.conf = CONF % (host_dir)
+        self.conf = self.conf.replace ('<domain>', HOST)
+
         for php in self.php_conf.split("\n"):
             self.conf += "vserver!%s!%s\n" % (HOST, php)
 

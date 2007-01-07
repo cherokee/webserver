@@ -4,6 +4,7 @@ MAGIC = "First virtual Host test magic string"
 
 CONF = """
 vserver!cherokee.test!document_root = %s
+vserver!cherokee.test!domain!1 = cherokee.test
 vserver!cherokee.test!directory!/!handler = common
 vserver!cherokee.test!directory!/!priority = 10
 """

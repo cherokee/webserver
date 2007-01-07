@@ -1,3 +1,40 @@
+2007-01-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/139-domain-wildcards1.py: Added new QA test to test wildcard
+	domain names.
+
+	* qa/020-VirtualHost.py, qa/021-VirtualHost2.py, qa/044-Home.py,
+	qa/045-Home2.py, qa/066-DirectoryIndex3.py, qa/094-URL-request.py,
+	qa/116-RequestTiny.py, qa/117-DomainToDir.py, qa/121-NoUserDir.py,
+	qa/124-DomainToDir2.py, qa/125-domain-redir1.py,
+	qa/135-RedirParams.py: Examples modified to work with the little
+	syntax modification that this change set introduces. I've also
+	done some clean up (there were way too many '%s')
+	
+	* cherokee/virtual_server.c: Added new domains property. It's a
+	new virtual server names class object (a list in which it stores
+	its domain names).
+
+	The domain name configuration has been moved to this class.
+	Previously we were configuring it inside the server.c file, right
+	before adding the virtual server to the old virtual server table.
+	Now, all that stuff has changed. There is no such table, and the
+	configuration is performed in the right place.
+
+	* cherokee/server.c: All the virtual server related code has been
+	modified to work with the last improvements: TLS detection,
+	instance, configuration, log flushing, and free.
+
+	A new method, names cherokee_server_get_vserver() has been added
+	as well.
+	
+	* cherokee/connection.c: Modified to work with the latest changes
+	related to virtual server names.
+
+	* cherokee/virtual_server_names.h,
+	cherokee/virtual_server_names.c: New class. It handles the virtual
+	server domain names.
+	
 2007-01-05  A.D.F  <adefacc@tin.it>
 
 	* cherokee/connection.c: 

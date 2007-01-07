@@ -4,16 +4,19 @@ DOMAIN = "server_domain_to_domain1"
 PATH   = "/file1/param"
 
 CONF = """        
-vserver!%s!document_root = %s
-vserver!%s!directory!/!handler = redir
-vserver!%s!directory!/!handler!rewrite!1!show = 1
-vserver!%s!directory!/!handler!rewrite!1!regex = ^/(.*)$
-vserver!%s!directory!/!handler!rewrite!1!substring = http://www.%s/$1
-vserver!%s!directory!/!priority = 10
+vserver!<domain>!document_root = /faked
 
-vserver!www.%s!document_root = %s
-vserver!www.%s!directory!/!handler = file
-vserver!www.%s!directory!/!priority = 10
+vserver!<domain>!domain!1 = <domain>
+vserver!<domain>!directory!/!handler = redir
+vserver!<domain>!directory!/!handler!rewrite!1!show = 1
+vserver!<domain>!directory!/!handler!rewrite!1!regex = ^/(.*)$
+vserver!<domain>!directory!/!handler!rewrite!1!substring = http://www.<domain>/$1
+vserver!<domain>!directory!/!priority = 10
+
+vserver!www.<domain>!document_root = %s
+vserver!www.<domain>!domain!1 = www.<domain>
+vserver!www.<domain>!directory!/!handler = file
+vserver!www.<domain>!directory!/!priority = 10
 """
 
 class Test (TestBase):
@@ -29,6 +32,5 @@ class Test (TestBase):
     def Prepare (self, www):
         srvr = self.Mkdir (www, "domain_%s" % (DOMAIN))
 
-        self.conf = CONF % (DOMAIN, srvr, DOMAIN, DOMAIN, DOMAIN, DOMAIN, DOMAIN, DOMAIN,
-                            DOMAIN, srvr, DOMAIN, DOMAIN)
-
+        self.conf = CONF % (srvr)
+        self.conf = self.conf.replace('<domain>', DOMAIN)

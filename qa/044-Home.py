@@ -1,7 +1,10 @@
 from base import *
 
 CONF = """
+vserver!missing.host1!document_root = /faked
+
 vserver!missing.host1!user_dir = public_html
+vserver!missing.host1!domain!1 = missing.host1
 vserver!missing.host1!user_dir!directory!/!handler = common
 """
 
@@ -15,4 +18,3 @@ class Test (TestBase):
         self.conf             = CONF
         self.expected_error   = 404
 
-# "UserDir public_html { Directory / { Handler common }}"

@@ -1443,9 +1443,9 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		ret = get_host (conn, host, host_len);
 		if (unlikely(ret < ret_ok)) goto error;
 		
-		/* Set the virtual host reference
+		/* Set the virtual server reference
 		 */
-		cherokee_table_get (&CONN_SRV(conn)->vservers_ref, conn->host.buf, &conn->vserver);
+		cherokee_server_get_vserver (CONN_SRV(conn), &conn->host, &conn->vserver);
 		break;
 
 	default:

@@ -42,13 +42,15 @@
 #include "logger.h"
 #include "config_node.h"
 #include "virtual_entries.h"
+#include "virtual_server_names.h"
 
 
 typedef struct {
 	cherokee_list_t              list_entry;
-
-	cherokee_buffer_t            name;            /* Default name.   Eg: www.alobbs.com */
 	void                        *server_ref;      /* Ref to server */
+
+	cherokee_buffer_t            name;            /* Name.    Eg: server1 */
+	cherokee_vserver_names_t     domains;         /* Domains. Eg: www.alobbs.com */
 
 	cherokee_virtual_entries_t   entry;
 
@@ -100,7 +102,7 @@ ret_t cherokee_virtual_server_clean     (cherokee_virtual_server_t  *vserver);
 ret_t cherokee_virtual_server_configure (cherokee_virtual_server_t  *vserver, cherokee_buffer_t *name, cherokee_config_node_t *config);
 
 ret_t cherokee_virtual_server_init_tls  (cherokee_virtual_server_t *vserver);
-ret_t cherokee_virtual_server_have_tls  (cherokee_virtual_server_t *vserver);
+ret_t cherokee_virtual_server_has_tls   (cherokee_virtual_server_t *vserver);
 
 void  cherokee_virtual_server_add_rx    (cherokee_virtual_server_t *vserver, size_t rx);
 void  cherokee_virtual_server_add_tx    (cherokee_virtual_server_t *vserver, size_t tx);

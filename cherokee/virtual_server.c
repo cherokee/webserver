@@ -92,6 +92,8 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	ret = cherokee_buffer_init (&n->name);
 	if (unlikely(ret < ret_ok)) return ret;
 
+	INIT_LIST_HEAD (&n->domains);
+
 	ret = cherokee_buffer_init (&n->userdir);
 	if (unlikely(ret < ret_ok)) return ret;
 
@@ -137,6 +139,8 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 #endif
 
 	cherokee_buffer_mrproper (&vserver->name);
+	cherokee_vserver_names_mrproper (&vserver->domains);
+
 	cherokee_buffer_mrproper (&vserver->root);
 
 	if (vserver->logger != NULL) {
@@ -193,7 +197,7 @@ generate_rsa_params (gnutls_rsa_params *rsa_params)
 
 
 ret_t 
-cherokee_virtual_server_have_tls (cherokee_virtual_server_t *vserver)
+cherokee_virtual_server_has_tls (cherokee_virtual_server_t *vserver)
 {
 #ifndef HAVE_TLS
 	return ret_not_found;
@@ -609,6 +613,20 @@ add_request (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver,
 
 
 static ret_t 
+add_domain (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
+{
+	ret_t ret;
+
+	TRACE (ENTRIES, "Adding vserver '%s' domain name '%s'\n", vserver->name.buf, config->val.buf);
+
+	ret = cherokee_vserver_names_add_name (&vserver->domains, &config->val);
+	if (ret != ret_ok) return ret;
+
+	return ret_ok;
+}
+
+
+static ret_t 
 add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 {
 	ret_t                   ret;
@@ -726,6 +744,11 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 			ret = add_request (CONFIG_NODE(i), vserver, &vserver->entry);
 			if (ret != ret_ok) return ret;
 		}
+	} else if (equal_buf_str (&conf->key, "domain")) {
+		cherokee_config_node_foreach (i, conf) {
+			ret = add_domain (CONFIG_NODE(i), vserver);
+			if (ret != ret_ok) return ret;		
+		}
 	} else if (equal_buf_str (&conf->key, "error_handler")) {
 		ret = add_error_handler (conf, vserver);
 		if (ret != ret_ok) return ret;
@@ -749,9 +772,6 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_init (&vserver->ca_cert);
 		cherokee_buffer_add_buffer (&vserver->ca_cert, &conf->val);
 		
-	} else if (equal_buf_str (&conf->key, "alias")) {
-		/* Ignore it, server config already did this for us..
-		 */
 	} else {
 		PRINT_MSG ("ERROR: Virtual Server: Unknown key '%s'\n", key);
 		return ret_error;

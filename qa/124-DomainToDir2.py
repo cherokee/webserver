@@ -6,12 +6,13 @@ DIR    = "/dir1"
 PATH   = "/file1/param"
 
 CONF = """        
-vserver!%s!document_root = %s
-vserver!%s!directory!%s!handler = redir
-vserver!%s!directory!%s!handler!rewrite!1!show = 1
-vserver!%s!directory!%s!handler!rewrite!1!regex = ^(.*)$
-vserver!%s!directory!%s!handler!rewrite!1!substring = %s$1
-vserver!%s!directory!%s!priority = 10
+vserver!<domain>!document_root = %s
+vserver!<domain>!domain!1 = <domain>
+vserver!<domain>!directory!<dir>!handler = redir
+vserver!<domain>!directory!<dir>!handler!rewrite!1!show = 1
+vserver!<domain>!directory!<dir>!handler!rewrite!1!regex = ^(.*)$
+vserver!<domain>!directory!<dir>!handler!rewrite!1!substring = %s$1
+vserver!<domain>!directory!<dir>!priority = 10
 """
 
 class Test (TestBase):
@@ -27,6 +28,7 @@ class Test (TestBase):
     def Prepare (self, www):
         srvr = self.Mkdir (www, "domain_%s" % (DOMAIN))
 
-        self.conf = CONF % (DOMAIN, srvr, DOMAIN, DIR, DOMAIN, DIR,
-                            DOMAIN, DIR, DOMAIN, DIR, URL, DOMAIN, DIR)
+        self.conf = CONF % (srvr, URL)
+        self.conf = self.conf.replace ('<domain>', DOMAIN)
+        self.conf = self.conf.replace ('<dir>', DIR)
 

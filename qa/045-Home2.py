@@ -5,7 +5,10 @@ from base import *
 PUBLIC_HTML = "public_html"
 
 CONF = """
+vserver!testhost1!document_root = /faked
+
 vserver!testhost1!user_dir = %s
+vserver!testhost1!domain!1 = testhost1
 vserver!testhost1!user_dir!directory!/!handler = common
 """
 

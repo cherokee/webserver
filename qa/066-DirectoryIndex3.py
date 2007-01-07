@@ -5,6 +5,7 @@ CONF = """
 vserver!directoryindex3!directory!/!handler = common
 vserver!directoryindex3!directory_index = index.php,/super_test_index.php
 vserver!directoryindex3!document_root = %s
+vserver!directoryindex3!domain!1 = directoryindex3
 """
 
 

@@ -5,17 +5,18 @@ REQUEST = "function"
 PARAMS  = "one=001&two=002"
 
 CONF = """
-vserver!%s!document_root = %s
+vserver!<domain>!document_root = %s
+vserver!<domain>!domain!1 = <domain>
 
-vserver!%s!request!^/([^\?]*)$!handler = redir
-vserver!%s!request!^/([^\?]*)$!handler!rewrite!1!show = 1
-vserver!%s!request!^/([^\?]*)$!handler!rewrite!1!substring = /index.php?q=$1
-vserver!%s!request!^/([^\?]*)$!priority = 1350
+vserver!<domain>!request!^/([^\?]*)$!handler = redir
+vserver!<domain>!request!^/([^\?]*)$!handler!rewrite!1!show = 1
+vserver!<domain>!request!^/([^\?]*)$!handler!rewrite!1!substring = /index.php?q=$1
+vserver!<domain>!request!^/([^\?]*)$!priority = 1350
 
-vserver!%s!request!^/([^\?]*)\?(.*)$!handler = redir
-vserver!%s!request!^/([^\?]*)\?(.*)$!handler!rewrite!2!show = 1
-vserver!%s!request!^/([^\?]*)\?(.*)$!handler!rewrite!2!substring = /index.php?q=$1&$2
-vserver!%s!request!^/([^\?]*)\?(.*)$!priority = 1351
+vserver!<domain>!request!^/([^\?]*)\?(.*)$!handler = redir
+vserver!<domain>!request!^/([^\?]*)\?(.*)$!handler!rewrite!2!show = 1
+vserver!<domain>!request!^/([^\?]*)\?(.*)$!handler!rewrite!2!substring = /index.php?q=$1&$2
+vserver!<domain>!request!^/([^\?]*)\?(.*)$!priority = 1351
 """
 
 class Test (TestBase):
@@ -31,8 +32,8 @@ class Test (TestBase):
         d  = self.Mkdir (www, "hidde_w_params_server")
         d2 = self.Mkdir (d, "hidde_w_params")
 
-        self.conf = CONF % (SERVER, d, SERVER, SERVER, SERVER,
-                            SERVER, SERVER, SERVER, SERVER, SERVER)
+        self.conf = CONF % (d)
+        self.conf = self.conf.replace ('<domain>', SERVER)
 
     def Precondition (self):
         return os.path.exists (look_for_php())

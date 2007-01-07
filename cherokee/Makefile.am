@@ -848,8 +848,8 @@ reqs_list_entry.c \
 server-protected.h \
 server.h \
 server.c \
-virtual_server_list.h \
-virtual_server_list.c \
+virtual_server_names.h \
+virtual_server_names.c \
 virtual_server.h \
 virtual_server.c \
 encoder.h \
