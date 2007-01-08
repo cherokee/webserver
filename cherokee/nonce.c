@@ -98,8 +98,6 @@ cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces, cherokee_connecti
 	/* Generate nonce string
 	 */
 	cherokee_buffer_add_va (&crc, "%x", POINTER_TO_INT(conn));
-	cherokee_buffer_crc32 (&crc);
-
 	cherokee_buffer_add_va (nonce, "%x%x%s", CONN_SRV(conn)->bogo_now, rand(), crc.buf);
 	cherokee_buffer_encode_md5_digest (nonce);
 

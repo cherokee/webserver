@@ -1,5 +1,8 @@
 2007-01-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/nonce.c (cherokee_nonce_table_generate): Removed
+	unnecessary call to cherokee_buffer_crc32(). Reported by A.D.F.
+
 	* cherokee/virtual_server_names.c (cherokee_vserver_name_entry_match),
 	cherokee/icons.c (match_file): Adapted to the new
 	cherokee_wildcard API.
