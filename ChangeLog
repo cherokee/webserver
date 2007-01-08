@@ -1,3 +1,18 @@
+2007-01-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/virtual_server_names.c (cherokee_vserver_name_entry_match),
+	cherokee/icons.c (match_file): Adapted to the new
+	cherokee_wildcard API.
+
+	* cherokee/server.c (cherokee_server_get_vserver): Added new TRACE
+	entry.
+
+	* cherokee/match.c (cherokee_wildcard_match): match() has been
+	replaced by this new function. It is faster, non-recursive and
+	fixes a bug in the previous version.
+
+	* cherokee/match.h: Promoted as public API.
+
 2007-01-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/139-domain-wildcards1.py: Added new QA test to test wildcard

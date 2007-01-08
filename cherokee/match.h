@@ -3,7 +3,6 @@
 /* Cherokee
  *
  * Authors:
- *      Juan Cespedes <cespedes@debian.org>
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
  * Copyright (C) 2001-2006 Alvaro Lopez Ortega
@@ -23,11 +22,19 @@
  * USA
  */
 
+#if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
+# error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
+#endif
+
 #ifndef CHEROKEE_MATCH
 #define CHEROKEE_MATCH
 
 #include <cherokee/common.h>
 
-ret_t match (const char *pattern, const char *filename);
+CHEROKEE_BEGIN_DECLS
+
+ret_t cherokee_wildcard_match (const char *pattern, const char *text);
+
+CHEROKEE_END_DECLS
 
 #endif /* CHEROKEE_MATCH */

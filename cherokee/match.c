@@ -3,7 +3,6 @@
 /* Cherokee
  *
  * Authors:
- *      Juan Cespedes <cespedes@debian.org>
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
  * Copyright (C) 2001-2006 Alvaro Lopez Ortega
@@ -28,29 +27,43 @@
 
 
 ret_t
-match (const char *pattern, const char *filename) 
+cherokee_wildcard_match (const char *pattern, const char *text) 
 {
-	if (!pattern[0] && !filename[0]) {
-		return ret_ok;
-	} else if (!pattern[0]) {
-		return ret_not_found;
-	} else if (pattern[0]=='?' && filename[0]) {
-		return match(&pattern[1], &filename[1]);
-	} else if (pattern[0]!='*') {
-		if (pattern[0]==filename[0]) {
-			return match(&pattern[1], &filename[1]);
-		} else {
+	cint_t      ch;
+	const char *retry_text     = NULL;
+	const char *retry_pattern  = NULL;
+
+	while (*text || *pattern) {
+		ch = *pattern++;
+		
+		switch (ch) {
+		case '*':
+			retry_pattern = pattern;
+			retry_text = text;
+			break;
+
+		case '?':
+			if (*text++ == '\0')
+				return ret_not_found;
+			break;
+		default:
+			if (*text == ch) {
+				if (*text) text++;
+				break;
+			}
+
+			if (*text) {
+				pattern = retry_pattern;
+				text    = ++retry_text;
+				break;
+			}
+
 			return ret_not_found;
 		}
-	}   /* Hay un '*' */
 
-	pattern++;
-	
-	do {
-		if (match(pattern, filename)) {
-			return ret_ok;
-		}
-	} while (*filename++);
-	
-	return ret_not_found;
+		if (pattern == NULL)
+			return ret_not_found;
+	}
+
+	return ret_ok;
 }

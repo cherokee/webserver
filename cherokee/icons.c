@@ -128,7 +128,10 @@ match_file (const char *pattern,
 	    void       *icon,
 	    void       *param_file)
 {
-	return (match (pattern, (char *)param_file) == ret_ok);
+	ret_t ret;
+
+	ret = cherokee_wildcard_match (pattern, (char *)param_file);
+	return (ret == ret_ok);
 }
 
 

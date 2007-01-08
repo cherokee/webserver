@@ -1806,6 +1806,7 @@ cherokee_server_get_vserver (cherokee_server_t *srv, cherokee_buffer_t *name, ch
 
 		ret = cherokee_vserver_names_find (&vserver->domains, name);
 		if (ret == ret_ok) {
+			TRACE (ENTRIES, "Virtual server '%s' matched domain '%s'\n", vserver->name.buf, name->buf);
 			*vsrv = vserver;
 			return ret_ok;
 		}

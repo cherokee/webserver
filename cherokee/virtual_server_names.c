@@ -109,7 +109,7 @@ cherokee_vserver_name_entry_match (cherokee_vserver_name_entry_t *entry, cheroke
 {
                 
 	if (entry->is_wildcard) 
-		return match (entry->name.buf, name->buf);
+		return cherokee_wildcard_match (entry->name.buf, name->buf);
 
 	return cherokee_buffer_cmp_buf (&entry->name, name); 
 }
