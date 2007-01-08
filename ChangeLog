@@ -1,5 +1,7 @@
 2007-01-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main_admin.c (CONFIG_FILE_HELP): Fixes help string.
+
 	* cherokee/nonce.c (cherokee_nonce_table_generate): Removed
 	unnecessary call to cherokee_buffer_crc32(). Reported by A.D.F.
 

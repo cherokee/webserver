@@ -33,7 +33,7 @@
 #include "config_entry.h"
 
 #define GETOPT_OPT           "d:p:"
-#define CONFIG_FILE_HELP     "[-r DIR] [-p PORT]"
+#define CONFIG_FILE_HELP     "[-d DIR] [-p PORT]"
 
 #define DEFAULT_PORT         9090
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin/"
