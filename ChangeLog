@@ -1,3 +1,12 @@
+2007-01-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/126-SCGI.py, qa/127-SCGI-Post.py: Adapted to use 'pyscgi'
+	instead of old 'scgi' python module.
+
+	* qa/pyscgi.py: Added a local copy of the pyscgi module.
+	
+	* qa/base.py (TestBase.CopyFile): Added new method
+
 2007-01-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main_admin.c (CONFIG_FILE_HELP): Fixes help string.

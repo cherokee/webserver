@@ -255,6 +255,9 @@ class TestBase:
         os.chmod(fullpath, mode)
         return fullpath
 
+    def CopyFile (self, src, dst):
+        open (dst, 'w').write (open (src, 'r').read())
+
     def Remove (self, www, filename):
         fullpath = os.path.join (www, filename)
         if os.path.isfile(fullpath):
