@@ -1,9 +1,9 @@
 import os
 from base import *
 
-DIR   = "/SCGI2/"
+DIR   = "/SCGI3/"
 MAGIC = "Cherokee and SCGI rocks!"
-PORT  = 5002
+PORT  = 5003
 
 SCRIPT = """
 from pyscgi import *
@@ -12,7 +12,9 @@ class TestHandler (SCGIHandler):
     def handle_request (self):
         self.handle_post()
         self.output.write('Content-Type: text/plain\\r\\n\\r\\n')
-        self.output.write('Post: %%s\\n' %% (self.post))
+
+        for v in self.env:
+            self.output.write('%%s: %%s\\n' %% (v, self.env[v]))
 
 SCGIServer(TestHandler, port=%d).serve_forever()
 """ % (PORT)
@@ -30,18 +32,15 @@ vserver!default!directory!<dir>!priority = 1270
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
-        self.name = "SCGI II: Post"
+        self.name = "SCGI III: Variables"
 
-        self.request           = "POST %s HTTP/1.0\r\n" %(DIR) +\
-                                 "Content-type: application/x-www-form-urlencoded\r\n" +\
-                                 "Content-length: %d\r\n" % (len(MAGIC))
-        self.post              = MAGIC
+        self.request           = "GET %s HTTP/1.0\r\n" %(DIR) 
         self.expected_error    = 200
-        self.expected_content  = "Post: "+MAGIC
-        self.forbidden_content = ["pyscgi", "SCGIServer", "write"]
+        self.expected_content  = ['PATH_INFO:', 'QUERY_STRING:']
+        self.forbidden_content = ['pyscgi', 'SCGIServer', 'write']
 
     def Prepare (self, www):
-        scgi_file = self.WriteFile (www, "scgi_test2.scgi", 0444, SCRIPT)
+        scgi_file = self.WriteFile (www, "scgi_test3.scgi", 0444, SCRIPT)
 
         pyscgi = os.path.join (www, 'pyscgi.py')
         if not os.path.exists (pyscgi):

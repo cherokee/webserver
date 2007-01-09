@@ -114,10 +114,6 @@ add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 	static char              zero = '\0';
 	cherokee_handler_scgi_t *scgi = HDL_SCGI(cgi_base);
 
-	if (val_len == 0) {
-		return;
-	}
-
 	cherokee_buffer_ensure_size (&scgi->header, scgi->header.len + key_len + val_len + 3);
 
 	cherokee_buffer_add (&scgi->header, key, key_len);

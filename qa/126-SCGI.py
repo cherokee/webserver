@@ -33,7 +33,7 @@ class Test (TestBase):
         self.request           = "GET %s HTTP/1.0\r\n" %(DIR)
         self.expected_error    = 200
         self.expected_content  = MAGIC
-        self.forbidden_content = ["scgi.scgi_server", "SCGIServer", "write"]
+        self.forbidden_content = ["pyscgi", "SCGIServer", "write"]
 
     def Prepare (self, www):
         scgi_file = self.WriteFile (www, "scgi_test1.scgi", 0444, SCRIPT)

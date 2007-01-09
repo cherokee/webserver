@@ -139,7 +139,10 @@ run-tests.py \
 134-HTTP_headers.py \
 135-RedirParams.py \
 136-BadRange.py \
-137-Mime1.py
+137-Mime1.py \
+138-ChangeUser-cgi.py \
+139-domain-wildcards1.py \
+140-SCGI-EmptyVars.py 
 
 test:
 	./run-tests.py
