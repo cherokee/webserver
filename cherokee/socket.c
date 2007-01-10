@@ -8,7 +8,7 @@
  * Some patches by:
  *      Ricardo Cardenes Medina <ricardo@conysis.com>
  *
- * Copyright (C) 2001-2006 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2007 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
