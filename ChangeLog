@@ -1,5 +1,9 @@
 2007-01-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_fcgi.c (send_no_post,
+	cherokee_handler_fcgi_init): It wasn't sending the STDIN empty
+	package to notify it is closed. Reported by bil.
+
 	* qa/141-FastCGI-EmptyVars.py: Added new QA test to ensure that
 	PATH_INFO and QUERY_STRING are sent to the FastCGI servers even if
 	there are empty strings.

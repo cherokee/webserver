@@ -572,6 +572,24 @@ do_send (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 
 
 static ret_t
+send_no_post (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buf)
+{
+	switch (hdl->post_phase) {
+	case fcgi_post_init:
+		add_empty_packet (hdl, FCGI_STDIN);
+		hdl->post_phase = fcgi_post_write;
+
+	case fcgi_post_write:
+		return do_send (hdl, buf);
+
+	default:
+		SHOULDNT_HAPPEN;
+	}
+	return ret_error;
+}
+
+
+static ret_t
 send_post (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buf)
 {
 	ret_t                    ret;
@@ -685,7 +703,7 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 {
 	ret_t                  ret;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
-
+	
 	switch (HDL_CGI_BASE(hdl)->init_phase) {
 	case hcgi_phase_build_headers:
 		TRACE (ENTRIES, "Init %s\n", "begins");
@@ -732,6 +750,9 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 		 */
 		if (hdl->post_len > 0) {
 			return send_post (hdl, &hdl->write_buffer);
+		} else {
+			ret = send_no_post (hdl, &hdl->write_buffer);
+			if (ret != ret_ok) return ret;
 		}
 		break;
 	}
