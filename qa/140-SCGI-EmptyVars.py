@@ -25,7 +25,7 @@ vserver!default!directory!<dir>!handler!balancer = round_robin
 vserver!default!directory!<dir>!handler!balancer!type = interpreter
 vserver!default!directory!<dir>!handler!balancer!local_scgi2!host = localhost:%d
 vserver!default!directory!<dir>!handler!balancer!local_scgi2!interpreter = %s %s
-vserver!default!directory!<dir>!priority = 1270
+vserver!default!directory!<dir>!priority = 1400
 """
 
 

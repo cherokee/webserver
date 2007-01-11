@@ -1,5 +1,12 @@
 2007-01-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/141-FastCGI-EmptyVars.py: Added new QA test to ensure that
+	PATH_INFO and QUERY_STRING are sent to the FastCGI servers even if
+	there are empty strings.
+
+	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_build_basic_env):
+	Added SERVER_NAME variable. WSGI was complaining because of this.
+
 	* qa/fcgi.py: Added new python module.
 
 	* qa/Makefile.am (EXTRA_DIST): Added pyscgi.py and fcgi.py

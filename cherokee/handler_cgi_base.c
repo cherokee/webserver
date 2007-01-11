@@ -256,6 +256,7 @@ cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t          
 	/* Set the basic variables
 	 */
 	set_env (cgi, "SERVER_SOFTWARE",   "Cherokee " PACKAGE_VERSION, 9 + (sizeof(PACKAGE_VERSION) - 1));
+	set_env (cgi, "SERVER_NAME",       "Cherokee", 8);
 	set_env (cgi, "SERVER_SIGNATURE",  "<address>Cherokee web server</address>", 38);
 	set_env (cgi, "GATEWAY_INTERFACE", "CGI/1.1", 7);
 	set_env (cgi, "PATH",              "/bin:/usr/bin:/sbin:/usr/sbin", 29);
