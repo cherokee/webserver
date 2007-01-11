@@ -1,3 +1,9 @@
+2007-01-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/fcgi.py: Added new python module.
+
+	* qa/Makefile.am (EXTRA_DIST): Added pyscgi.py and fcgi.py
+
 2007-01-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_fcgi.c, cherokee/handler_fcgi.h,

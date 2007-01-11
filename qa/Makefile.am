@@ -2,6 +2,8 @@ EXTRA_DIST = \
 conf.py \
 base.py \
 util.py \
+pyscgi.py \
+fcgi.py \
 run-tests.py \
 001-basic.py \
 002-MissingProtocol.py \
