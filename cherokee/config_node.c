@@ -332,7 +332,7 @@ cherokee_config_node_parse_string (cherokee_config_node_t *conf, cherokee_buffer
 			begin++;
 		}
 
-		/* Mark the EOL
+		/* Look for the EOL
 		 */
 		eol = cherokee_min_str (strchr(begin, '\n'), 
 					strchr(begin, '\r'));
@@ -340,6 +340,8 @@ cherokee_config_node_parse_string (cherokee_config_node_t *conf, cherokee_buffer
 		if (eol == NULL) 
 			break;
 
+		/* Check that it's long enough
+		 */
 		if (eol - begin <= 4) {
 			begin = eol + 1;
 			continue;
@@ -349,16 +351,27 @@ cherokee_config_node_parse_string (cherokee_config_node_t *conf, cherokee_buffer
 		/* Read the line 
 		 */
 		if (*begin != '#') {
+			cuint_t val_len;
+
 			equal = strstr (begin, " = ");
 			if (equal == NULL) goto error;
 		
 			tmp = equal;
+
+			/* Skip whites: end of the key
+			 */
 			while (*tmp == ' ') tmp--;
 			cherokee_buffer_add (&key, begin, (tmp + 1) - begin);
 			
 			tmp = equal + 3;
 			while (*tmp == ' ') tmp++;		
-			cherokee_buffer_add (&val, tmp, strlen(tmp));
+
+			/* Skip whites: end of the value
+			 */
+			val_len = strlen(tmp);
+			while (tmp[val_len-1] == ' ') val_len--;
+
+			cherokee_buffer_add (&val, tmp, val_len);
 
 			TRACE(ENTRIES, "'%s' => '%s'\n", key.buf, val.buf);
 

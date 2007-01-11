@@ -1,5 +1,8 @@
 2007-01-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/config_node.c (cherokee_config_node_parse_string):
+	Whites after the value must be skipped. This fixes bug #128.
+
 	* cherokee/handler_fcgi.c (send_no_post,
 	cherokee_handler_fcgi_init): It wasn't sending the STDIN empty
 	package to notify it is closed. Reported by bil.
