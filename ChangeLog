@@ -1,3 +1,8 @@
+2007-01-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* contrib/05to06.py (Syntax._process_server): Updated to the
+	lastest domain management changes. (commited in 2007-01-07 by me)
+
 2007-01-13  A.D.F  <adefacc@tin.it>
 
 	* cherokee/buffer.h:

@@ -561,20 +561,23 @@ class Syntax:
 
         if kind == 'list':
             l = map(lambda x: x.strip(), val.split(','))
-            vserver = l[0]
-            aliases = l[1:]
+            domains = l
         else:
-            vserver = val
-            aliases = []
+            domains = [val]
+
+        vserver = domains[0]
 
         kind, val = self._lex.get_token()
         if kind != '{': raise "Expected {"
 
+        i = 0
+        for v in domains:
+            i = i + 1
+            print "vserver!%s!domain!%d = %s" % (vserver, i, v)
+
         while True:
             more = self._process_virtual_server_content (vserver)
             if not more: break
-
-        print "vserver!%s!alias = %s" % (vserver, reduce (lambda x,y: x+','+y, aliases))
 
         kind, val = self._lex.get_token()
         if kind != '}': raise "Expected }, got %s=%s" % (kind,val)
