@@ -80,25 +80,25 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 {
 	cherokee_url_t *url = REQUEST_URL(request);
 
-	/* 100 bytes is enought for a small header
+	/* 200 bytes should be enough for a small header
 	 */
-	cherokee_buffer_ensure_size (buf, 100);
+	cherokee_buffer_ensure_size (buf, 200);
 
 	/* Add main request line: 
 	 * GET /dir/object HTTP/1.1
 	 */
 	switch (request->method) {
 	case http_get:
-		cherokee_buffer_add (buf, "GET ", 4); 		
+		cherokee_buffer_add_str (buf, "GET "); 		
 		break;
 	case http_post:
-		cherokee_buffer_add (buf, "POST ", 5); 		
+		cherokee_buffer_add_str (buf, "POST "); 		
 		break;
 	case http_head:
-		cherokee_buffer_add (buf, "HEAD ", 5); 		
+		cherokee_buffer_add_str (buf, "HEAD "); 		
 		break;
 	case http_put:
-		cherokee_buffer_add (buf, "PUT ", 4); 		
+		cherokee_buffer_add_str (buf, "PUT "); 		
 		break;
 	default:
 		SHOULDNT_HAPPEN;
@@ -123,31 +123,34 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	/* Add "Host:" header - in HTTP/1.1
 	 */
 	if (REQUEST_VERSION(request) == http_version_11) {
-		cherokee_buffer_add (buf, "Host: ", 6);
+		cherokee_buffer_add_str    (buf, "Host: ");
 		cherokee_buffer_add_buffer (buf, URL_HOST(url));
-		cherokee_buffer_add_str (buf, CRLF);
+		cherokee_buffer_add_str    (buf, CRLF);
 	}
 
 	/* Post information
 	 */
 	if (request->post_len != 0) {
-
-		cherokee_buffer_add_va (buf, "Content-Length: "FMT_OFFSET CRLF, request->post_len);
+		/* "Content-Length: " FMT_OFFSET CRLF, request->post_len;
+		 */
+		cherokee_buffer_add_str     (buf, "Content-Length: ");
+		cherokee_buffer_add_ullong10(buf, (cullong_t) request->post_len);
+		cherokee_buffer_add_str     (buf, CRLF);
 	}
 	
 	/* Add "Connection:" header
 	 */
 	if (REQUEST_KEEPALIVE(request)) {
-		cherokee_buffer_add_str (buf, "Connection: Keep-alive"CRLF); 
+		cherokee_buffer_add_str (buf, "Connection: Keep-Alive"CRLF); 
 	} else {
-		cherokee_buffer_add_str (buf, "Connection: Close"CRLF); 
+		cherokee_buffer_add_str (buf, "Connection: close"CRLF); 
 	}
 
 	/* Authentication
 	 */
 	if (!cherokee_buffer_is_empty(&url->user) ||
-	    !cherokee_buffer_is_empty(&url->passwd)) 
-	{
+	    !cherokee_buffer_is_empty(&url->passwd)) {
+
 		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
 		cherokee_buffer_add_va (&tmp, "%s:%s", url->user.buf, url->passwd.buf);
@@ -174,9 +177,9 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 ret_t 
 cherokee_request_header_add_header (cherokee_request_header_t *request, char *ptr, cuint_t len)
 {
-	cherokee_buffer_ensure_size (&request->extra_headers, request->extra_headers.len + len + 2);
+	cherokee_buffer_ensure_addlen (&request->extra_headers, len + CSZLEN(CRLF));
 	cherokee_buffer_add (&request->extra_headers, ptr, len);
-	cherokee_buffer_add (&request->extra_headers, CRLF, 2);
+	cherokee_buffer_add_str (&request->extra_headers, CRLF);
 
 	return ret_ok;
 }

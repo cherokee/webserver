@@ -1,3 +1,42 @@
+2007-01-13  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.h:
+	- added prototype for new function
+	  cherokee_buffer_add_char().
+
+	* cherokee/buffer.c:
+	- added new function
+	  cherokee_buffer_add_char() to add a single char
+	  to buffer.
+
+	* cherokee/connection.c:
+	- small formatting cleanups;
+	- fixed capitalization of header keywords
+	  (Keep-alive -> Keep-Alive and Close -> close)
+	  in order to make them to look exactly as written
+	  in RFC specifications
+	  (even if header keywords must be read
+	   in a case insensitive way);
+        - substituted a couple of cherokee_buffer_add_str(s)
+	  with equivalent cherokee_buffer_add_char() calls.
+
+	* cherokee/nonce.c:
+	- substituted a few cherokee_buffer_add_va()
+	  with equivalent cherokee_buffer_add_*() calls
+	  (micro speedup).
+
+	* cherokee/request.c:
+	- small cleanups;
+	- substituted cherokee_buffer_add(buf, constant_string, len)
+	  with equivalent cherokee_buffer_add_str() calls;
+	- substituted a few cherokee_buffer_add_va()
+	  with equivalent cherokee_buffer_add_*() calls
+	  (micro speedup);
+	- removed the allocation / deallocation
+	  of a local new_once buffer in favour of the standard
+	  THREAD_TMP_BUF1() temporary buffer
+	  (micro speedup).
+
 2007-01-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/config_node.c (cherokee_config_node_parse_string):

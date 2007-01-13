@@ -241,7 +241,7 @@ cherokee_buffer_add_long10 (cherokee_buffer_t *buf, clong_t lNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely( newlen >= buf->size )) {
+	if (unlikely (newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -287,7 +287,7 @@ cherokee_buffer_add_llong10 (cherokee_buffer_t *buf, cllong_t lNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely( newlen >= buf->size )) {
+	if (unlikely (newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -321,7 +321,7 @@ cherokee_buffer_add_ulong10 (cherokee_buffer_t *buf, culong_t ulNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely( newlen >= buf->size )) {
+	if (unlikely (newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -355,7 +355,7 @@ cherokee_buffer_add_ullong10 (cherokee_buffer_t *buf, cullong_t ulNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely( newlen >= buf->size )) {
+	if (unlikely (newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -394,7 +394,7 @@ cherokee_buffer_add_ulong16 (cherokee_buffer_t *buf, culong_t ulNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely( newlen >= buf->size )) {
+	if (unlikely (newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -433,7 +433,7 @@ cherokee_buffer_add_ullong16 (cherokee_buffer_t *buf, cullong_t ulNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely( newlen >= buf->size )) {
+	if (unlikely (newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -508,6 +508,31 @@ cherokee_buffer_add_va (cherokee_buffer_t *buf, char *format, ...)
 }
 
 
+ret_t
+cherokee_buffer_add_char (cherokee_buffer_t *buf, char c)
+{	   
+	/* Add char (fast path)
+	 */
+	if (likely (buf->len + 1 < buf->size)) {
+		buf->buf[buf->len++] = c;
+		buf->buf[buf->len] = '\0';
+		return ret_ok;
+	}
+
+	/* Get memory
+	 */
+	if (unlikely (realloc_inc_bufsize(buf, 1)) != ret_ok)
+		return ret_nomem;
+
+	/* Add char
+	 */
+	buf->buf[buf->len++] = c;
+	buf->buf[buf->len] = '\0';
+
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_buffer_add_char_n (cherokee_buffer_t *buf, char c, int num)
 {
@@ -529,7 +554,6 @@ cherokee_buffer_add_char_n (cherokee_buffer_t *buf, char c, int num)
 
 	return ret_ok;
 }
-
 
 
 ret_t
@@ -819,7 +843,7 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 	/* Maybe get memory
 	 */
 	ret = cherokee_buffer_ensure_size (buf, buf->len + info.st_size + 1);
-	if (unlikely(ret != ret_ok))
+	if (unlikely (ret != ret_ok))
 		return ret;
 
 	/* Open the file
@@ -1083,15 +1107,15 @@ cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t **maybe_n
 	/* Create a new buffer
 	 */
 	ret = cherokee_buffer_new (maybe_new);
-	if (unlikely(ret != ret_ok))
+	if (unlikely (ret != ret_ok))
 		return ret;
 
 	ret = cherokee_buffer_ensure_size (*maybe_new, buf->len + extra + 1);
-	if (unlikely(ret != ret_ok))
+	if (unlikely (ret != ret_ok))
 		return ret;
 
 	ret = cherokee_buffer_add_buffer (*maybe_new, buf);
-	if (unlikely(ret != ret_ok))
+	if (unlikely (ret != ret_ok))
 		return ret;
 
 	buf = *maybe_new;
@@ -1298,7 +1322,7 @@ cherokee_buffer_encode_md5_digest (cherokee_buffer_t *buf)
 
 	cherokee_buffer_ensure_size (buf, 34);
 
-	for (i=0; i<16; i++) {
+	for (i = 0; i < 16; ++i) {
 		int tmp;
 
 		tmp = ((digest[i] >> 4) & 0xf);
@@ -1383,7 +1407,7 @@ cherokee_buffer_encode_sha1_base64 (cherokee_buffer_t *buf)
 
 	return ret_ok;
 }
-#endif
+#endif	/* ! CHEROKEE_EMBEDDED */
 
 
 ret_t 
@@ -1468,15 +1492,15 @@ cherokee_buffer_add_chunked (cherokee_buffer_t *buf, char *txt, size_t size)
 	ret_t ret;
 
 	ret = cherokee_buffer_add_str    (buf, "0x");
-	if (unlikely(ret < ret_ok))
+	if (unlikely (ret < ret_ok))
 		return ret_ok;
 
 	ret = cherokee_buffer_add_ulong16(buf, (culong_t) size);
-	if (unlikely(ret < ret_ok))
+	if (unlikely (ret < ret_ok))
 		return ret_ok;
 
 	ret = cherokee_buffer_add_str    (buf, CRLF);
-	if (unlikely(ret < ret_ok))
+	if (unlikely (ret < ret_ok))
 		return ret_ok;
 
 	return cherokee_buffer_add (buf, txt, size);

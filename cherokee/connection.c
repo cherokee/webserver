@@ -253,10 +253,10 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		conn->encoder = NULL;
 	}
 
-        if (conn->polling_fd != -1) {
-                close (conn->polling_fd);
-                conn->polling_fd = -1;
-        }
+	if (conn->polling_fd != -1) {
+		close (conn->polling_fd);
+		conn->polling_fd = -1;
+	}
 
 	cherokee_post_mrproper (&conn->post);
 
@@ -427,7 +427,8 @@ build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffe
 	 *                   nonce="", opaque=""
 	 */
 	if (conn->auth_type & http_auth_digest) {
-		cherokee_buffer_t new_nonce = CHEROKEE_BUF_INIT;
+		cherokee_thread_t *thread = CONN_THREAD(conn);
+		cherokee_buffer_t *new_nonce = THREAD_TMP_BUF1(thread);
 
 		cherokee_buffer_ensure_addlen (buffer,
 						32 + conn->realm_ref->len + 4 + 32 + 32);
@@ -440,19 +441,17 @@ build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffe
 
 		/* Nonce
 		 */
-		cherokee_nonce_table_generate (CONN_SRV(conn)->nonces, conn, &new_nonce);
+		cherokee_nonce_table_generate (CONN_SRV(conn)->nonces, conn, new_nonce);
 		/* "nonce=\"%s\", "
 		 */
 		cherokee_buffer_add_str    (buffer, "nonce=\"");
-		cherokee_buffer_add_buffer (buffer, &new_nonce);
+		cherokee_buffer_add_buffer (buffer, new_nonce);
 		cherokee_buffer_add_str    (buffer, "\", ");
 				
 		/* Quality of protection: auth, auth-int, auth-conf
 		 * Algorithm: MD5
 		 */
 		cherokee_buffer_add_str (buffer, "qop=\"auth\", algorithm=\"MD5\""CRLF);
-
-		cherokee_buffer_mrproper (&new_nonce);
 	}
 }
 
@@ -493,7 +492,7 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 		cherokee_buffer_add_buffer (buffer, &CONN_SRV(conn)->timeout_header);
 
 	} else {
-		cherokee_buffer_add_str (buffer, "Connection: Close"CRLF);
+		cherokee_buffer_add_str (buffer, "Connection: close"CRLF);
 	}
 
 	/* Date
@@ -1216,7 +1215,7 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, 
 	/* Build the local_directory:
 	 */
 	cherokee_buffer_add (&conn->local_directory, pwd.pw_dir, strlen(pwd.pw_dir));
-	cherokee_buffer_add_str (&conn->local_directory, "/");
+	cherokee_buffer_add_char   (&conn->local_directory, '/');
 	cherokee_buffer_add_buffer (&conn->local_directory, &vsrv->userdir);
 
 	return ret_ok;
@@ -1343,7 +1342,7 @@ parse_userdir (cherokee_connection_t *conn)
 		 * to   http://www.alobbs.com/~alo/
 		 */
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
-		cherokee_buffer_add_str    (&conn->redirect, "/");
+		cherokee_buffer_add_char   (&conn->redirect, '/');
 
 		conn->error_code = http_moved_permanently;
 		return ret_error;
@@ -1796,11 +1795,11 @@ cherokee_connection_parse_header (cherokee_connection_t *conn, cherokee_encoder_
 	char    *ptr;
 	cuint_t  ptr_len;
 
-	/* Look for "Connection: Keep-Alive / Close"
+	/* Look for "Connection: Keep-Alive / close"
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_connection, &ptr, &ptr_len);
-	if (ret == ret_ok) 
-	{
+	if (ret == ret_ok) {
+
 		if (strncasecmp (ptr, "close", 5) == 0) {
 			conn->keepalive = 0;
 		}

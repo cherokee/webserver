@@ -93,12 +93,14 @@ cherokee_nonce_table_check (cherokee_nonce_table_t *nonces, cherokee_buffer_t *n
 ret_t 
 cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces, cherokee_connection_t *conn, cherokee_buffer_t *nonce)
 {
-	cherokee_buffer_t crc = CHEROKEE_BUF_INIT;
-
 	/* Generate nonce string
 	 */
-	cherokee_buffer_add_va (&crc, "%x", POINTER_TO_INT(conn));
-	cherokee_buffer_add_va (nonce, "%x%x%s", CONN_SRV(conn)->bogo_now, rand(), crc.buf);
+	cherokee_buffer_add_ullong16(nonce, (cullong_t) CONN_SRV(conn)->bogo_now);
+	cherokee_buffer_add_ulong16 (nonce, (culong_t) rand());
+	cherokee_buffer_add_ulong16 (nonce, (culong_t) POINTER_TO_INT(conn));
+
+	/* Compute MD5 and overwrite buffer content without reallocating it !
+	 */
 	cherokee_buffer_encode_md5_digest (nonce);
 
 	/* Copy the nonce and add to the table
@@ -107,9 +109,8 @@ cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces, cherokee_connecti
 	cherokee_table_add (TABLE(nonces), nonce->buf, NULL);
 	CHEROKEE_MUTEX_UNLOCK (&nonces->access);
 
-	/* Clean up
+	/* Return
 	 */
-	cherokee_buffer_mrproper (&crc);
 	return ret_ok;
 }
 
