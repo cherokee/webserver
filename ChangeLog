@@ -46,6 +46,17 @@
 	* cherokee/handler_common.c:
 	- use THREAD_TMP_BUF[12]() to avoid reallocations;
 
+	* cherokee/handler_nn.c:
+	- get_nearest() renamed to get_nearest_name();
+	- get_nearest(), use THREAD_TMP_BUF[12]() to avoid
+	  reallocations;
+
+	* cherokee/nonce.c:
+	- add a missing cherokee_buffer_clean();
+
+	* cherokee/validator_htpasswd.c:
+	- use THREAD_TMP_BUF[12]() to avoid reallocations.
+	
 2007-01-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/05to06.py (Syntax._process_server): Updated to the
