@@ -379,7 +379,7 @@ downloader_step (cherokee_downloader_t *downloader)
 
 
 ret_t 
-cherokee_downloader_step (cherokee_downloader_t *downloader)
+cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2)
 {
 	ret_t ret;
 
@@ -398,8 +398,9 @@ cherokee_downloader_step (cherokee_downloader_t *downloader)
 
 		/* Build the request header
 		 */
-		ret = cherokee_request_header_build_string (req, &downloader->request_header);
-		if (unlikely(ret < ret_ok)) return ret;
+		ret = cherokee_request_header_build_string (req, &downloader->request_header, tmp1, tmp2);
+		if (unlikely(ret < ret_ok))
+			return ret;
 
 		/* Deal with the connection
 		 */

@@ -76,7 +76,7 @@ cherokee_request_header_clean (cherokee_request_header_t *request)
 
 
 ret_t 
-cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf)
+cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2)
 {
 	cherokee_url_t *url = REQUEST_URL(request);
 
@@ -151,14 +151,18 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	if (!cherokee_buffer_is_empty(&url->user) ||
 	    !cherokee_buffer_is_empty(&url->passwd)) {
 
-		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+		cherokee_buffer_clean (tmp1);
+		cherokee_buffer_clean (tmp2);
 
-		cherokee_buffer_add_va (&tmp, "%s:%s", url->user.buf, url->passwd.buf);
-		cherokee_buffer_encode_base64 (&tmp);
+		cherokee_buffer_add_buffer (tmp1, &url->user);
+		cherokee_buffer_add_char   (tmp1, ':');
+		cherokee_buffer_add_buffer (tmp1, &url->passwd);
+
+		cherokee_buffer_encode_base64 (tmp1, tmp2);
 		
-		cherokee_buffer_add_va (buf, "Authorization: Basic %s"CRLF, tmp.buf);
-
-		cherokee_buffer_mrproper (&tmp);
+		cherokee_buffer_add_str    (buf, "Authorization: Basic ");
+		cherokee_buffer_add_buffer (buf, tmp2);
+		cherokee_buffer_add_str    (buf, CRLF);
 	}
 
 	/* Extra headers

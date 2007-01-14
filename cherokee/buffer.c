@@ -1239,29 +1239,36 @@ cherokee_buffer_decode_base64 (cherokee_buffer_t *buf)
 }
 
 
+/* Encode base64 from source (buf) to destination (encoded).
+ * NOTE: resulting (encoded) content is always longer than source (buf).
+ * Source (buf) is not touched (rewritten or reallocated).
+ */
 ret_t 
-cherokee_buffer_encode_base64 (cherokee_buffer_t *buf)
+cherokee_buffer_encode_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
 	cuchar_t         *in;
 	cuchar_t         *out;
 	ret_t             ret;
 	int               i, j;
 	cuint_t           inlen   = buf->len;
-	cherokee_buffer_t new_buf = CHEROKEE_BUF_INIT;
-		
+
 	static const char base64tab[]=
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 	/* Get memory
 	 */
-	ret = cherokee_buffer_ensure_size (&new_buf, (buf->len+4)*4/3 + 1);
+	ret = cherokee_buffer_ensure_size (encoded, (buf->len+4)*4/3 + 1);
 	if (unlikely (ret != ret_ok))
 		return ret;
 
-	/* Encode
+	/* Cleanup destination buffer
+	 */
+	cherokee_buffer_clean (encoded);
+
+	/* Encode source to destination
 	 */
 	in  = (cuchar_t *) buf->buf;
-	out = (cuchar_t *) new_buf.buf;
+	out = (cuchar_t *) encoded->buf;
 
 	for (i=0, j=0; i < inlen; i += 3) {
 		int     a=0,b=0,c=0;
@@ -1286,15 +1293,7 @@ cherokee_buffer_encode_base64 (cherokee_buffer_t *buf)
 	}
 
 	out[j]  = '\0';
-	new_buf.len = j;
-
-	/* Set the encoded string
-	 */
-	free (buf->buf);
-
-	buf->buf  = new_buf.buf;
-	buf->len  = new_buf.len;	
-	buf->size = new_buf.size;
+	encoded->len = j;
 
 	return ret_ok;
 }
@@ -1357,6 +1356,11 @@ cherokee_buffer_encode_md5 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 
 
 #ifndef CHEROKEE_EMBEDDED
+
+/* Encode sha1, source buffer (buf) is not touched,
+ * whereas destination buffer (encoded) is overwritten
+ * but possibly not reallocated.
+ */
 ret_t 
 cherokee_buffer_encode_sha1 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
@@ -1375,74 +1379,65 @@ cherokee_buffer_encode_sha1 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 }
 
 
+/* Encode sha1 in base64, both source (buf) and destination (encoded)
+ * buffers are overwritten, but possibly not reallocated.
+ */
 ret_t 
-cherokee_buffer_encode_sha1_base64 (cherokee_buffer_t *buf) 
+cherokee_buffer_encode_sha1_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded) 
 {
-	cuint_t           ntmp;
-	char             *ctmp;
-	cherokee_buffer_t encoded = CHEROKEE_BUF_INIT;
-
-	cherokee_buffer_ensure_size (&encoded, (SHA1_DIGEST_SIZE * 2) + 1);	
-
-	cherokee_buffer_encode_sha1 (buf, &encoded);
-	cherokee_buffer_encode_base64 (&encoded);
-
-	/* Swap buffers
+	/* Prepare destination buffer
 	 */
-	ctmp = buf->buf;
-	buf->buf = encoded.buf;
-	encoded.buf = ctmp;
+	cherokee_buffer_ensure_size (encoded, (SHA1_DIGEST_SIZE * 2) + 1);	
+	cherokee_buffer_clean (encoded);
 
-	ntmp = buf->len;
-	buf->len = encoded.len;
-	encoded.len = ntmp;
-
-	ntmp = buf->size;
-	buf->size = encoded.size;
-	encoded.size = ntmp;
-
-	/* Clean and return
+	/* Encode sha1 + base64
 	 */
-	cherokee_buffer_mrproper (&encoded);
+	cherokee_buffer_encode_sha1 (buf, encoded);
+	cherokee_buffer_encode_base64 (encoded, buf);
+
+	/* Copy result to destination buffer
+	 */
+	cherokee_buffer_clean (encoded);
+	cherokee_buffer_add_buffer (encoded, buf);
 
 	return ret_ok;
 }
 #endif	/* ! CHEROKEE_EMBEDDED */
 
 
+/* Encode in hexadecimal characters, source buffer (buf) is not touched,
+ * whereas destination buffer (encoded) is overwritten
+ * but possibly not reallocated.
+ */
 ret_t 
-cherokee_buffer_encode_hex (cherokee_buffer_t *buf)
+cherokee_buffer_encode_hex (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 {
-	unsigned int  i;
-	unsigned char j;
-	char *new_buf;
+	cuchar_t        *in;
+	cuchar_t        *out;
+	cuint_t         j;
+	cuint_t         i;
+	cuint_t         inlen = buf->len;
 
-	new_buf = (char *) malloc((buf->len * 2)+1);
-	if (unlikely (new_buf == NULL)) {
-		return ret_error;
+	/* Prepare destination buffer
+	 */
+	cherokee_buffer_ensure_size (encoded, (inlen * 2 + 1));	
+	cherokee_buffer_clean (encoded);
+
+	/* Encode source to destination
+	 */
+	in  = (cuchar_t *) buf->buf;
+	out = (cuchar_t *) encoded->buf;
+
+	for (i = 0; i != inlen; ++i) {
+		j = ( (*in >> 4) & 0xf );
+		*out++ = (cuchar_t) TO_HEX(j);
+
+		j =   (*in++ & 0xf);
+		*out++ = (cuchar_t) TO_HEX(j);
 	}
 
-	for (i = 0; i < buf->len; i++) {
-		j = (buf->buf[i] >> 4) & 0xf;
-		if (j <= 9)
-			new_buf[i*2] = (j + '0');
-		else
-			new_buf[i*2] = (j + 'a' - 10);
-
-		j = buf->buf[i] & 0xf;
-		if (j <= 9)
-			new_buf[i*2+1] = (j + '0');
-		else
-			new_buf[i*2+1] = (j + 'a' - 10);
-	}
-
-	new_buf[buf->len*2] = '\0';
-
-	free (buf->buf);
-
-	buf->len *= 2;
-	buf->size = buf->len + 1;
-	buf->buf  = new_buf;
+	*out = '\0';
+	encoded->len = (int) (inlen * 2);
 
 	return ret_ok;
 }

@@ -35,7 +35,7 @@
 typedef struct {
 	cherokee_list_t         list_entry;
 	cherokee_url_t          url;
-	
+
 	uint16_t                pipeline;
 	cherokee_boolean_t      keepalive;
 	cherokee_http_method_t  method;
@@ -59,6 +59,6 @@ ret_t cherokee_request_header_clean    (cherokee_request_header_t *request);
 ret_t cherokee_request_header_mrproper (cherokee_request_header_t *request);
 
 ret_t cherokee_request_header_add_header   (cherokee_request_header_t *request, char *ptr, cuint_t len);
-ret_t cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf);
+ret_t cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2);
 
 #endif /* CHEROKEE_REQUEST_H */

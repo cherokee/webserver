@@ -60,7 +60,7 @@ ret_t cherokee_downloader_get_reply_code  (cherokee_downloader_t *downloader, ch
 ret_t cherokee_downloader_post_set        (cherokee_downloader_t *downloader, cherokee_post_t *post);
 ret_t cherokee_downloader_post_reset      (cherokee_downloader_t *downloader);
 
-ret_t cherokee_downloader_step            (cherokee_downloader_t *downloader);
+ret_t cherokee_downloader_step            (cherokee_downloader_t *downloader, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2);
 ret_t cherokee_downloader_reuse           (cherokee_downloader_t *downloader);
 ret_t cherokee_downloader_connect         (cherokee_downloader_t *downloader);
 

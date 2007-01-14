@@ -30,6 +30,7 @@
 #endif
 
 #include "plugin_loader.h"
+#include "thread.h"
 #include "connection.h"
 #include "connection-protected.h"
 #include "sha1.h"
@@ -210,8 +211,10 @@ validate_md5 (cherokee_connection_t *conn, const char *magic, char *crypted)
 static ret_t
 validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 {	
-	cherokee_buffer_t sha1_client = CHEROKEE_BUF_INIT;
 	cuint_t           c_len       = strlen (crypted);
+	cherokee_thread_t *thread = CONN_THREAD(conn);
+	cherokee_buffer_t *sha1_buf1 = THREAD_TMP_BUF1(thread);
+	cherokee_buffer_t *sha1_buf2 = THREAD_TMP_BUF2(thread);
 
 	/* Check the size. It should be: "{SHA1}" + Base64(SHA1(info))
 	 */
@@ -222,11 +225,13 @@ validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 		return ret_error;
  
 	/* Decode user
-	 */ 
-	cherokee_buffer_add_buffer (&sha1_client, &conn->validator->passwd);
-	cherokee_buffer_encode_sha1_base64 (&sha1_client);
+	 */
+	cherokee_buffer_clean (sha1_buf1);
+	cherokee_buffer_clean (sha1_buf2);
+	cherokee_buffer_add_buffer (sha1_buf1, &conn->validator->passwd);
+	cherokee_buffer_encode_sha1_base64 (sha1_buf1, sha1_buf2);
 
-	if (strcmp (sha1_client.buf, crypted) == 0)
+	if (strcmp (sha1_buf2->buf, crypted) == 0)
 		return ret_ok;
 
 	return ret_error;

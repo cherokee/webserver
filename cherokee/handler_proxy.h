@@ -53,8 +53,9 @@ typedef struct {
 } cherokee_handler_proxy_t;
 
 #define PROP_PROXY(x)      ((cherokee_handler_proxy_props_t *)(x))
-#define HDL_PROXY(x)       ((cherokee_handler_proxy_t *)(p))
+#define HDL_PROXY(x)       ((cherokee_handler_proxy_t *)(x))
 #define HDL_PROXY_PROPS(x) (PROP_PROXY(HANDLER(x)->props))
+#define HDL_PROXY_HANDLER(x)  ( &((x)->handler) )
 
 
 /* Library init function

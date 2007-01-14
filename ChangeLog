@@ -1,3 +1,51 @@
+2007-01-14  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.h:
+        - changed prototypes of:
+          - cherokee_buffer_encode_base64();
+          - cherokee_buffer_encode_sha1_base64();
+          - cherokee_buffer_encode_hex();
+	  to add a second destination buffer in order
+	  to avoid unneeded allocations / reallocations.
+
+	* cherokee/buffer.c:
+        - added a second parameter to:
+          - cherokee_buffer_encode_base64();
+          - cherokee_buffer_encode_sha1_base64();
+          - cherokee_buffer_encode_hex().
+
+	* cherokee/downloader.h:
+        - changed prototype of cherokee_downloader_step()
+	  in order to pass two temporary buffers;
+
+	* cherokee/downloader.c:
+	- changed cherokee_downloader_step() in order
+	  to use two temporary buffers to avoid
+	  allocations / reallocations when handling buffers
+	  in called functions
+	  (i.e. cherokee_request_header_build_string());
+
+	* cherokee/handler_proxy.h:
+	- added new macros;
+
+	* cherokee/handler_proxy.c:
+	- passed two temporary buffers to cherokee_downloader_step();
+
+	* cherokee/request.h:
+	- changed prototype of cherokee_request_header_build_string();
+
+	* cherokee/request.c:
+	- cherokee_request_header_build_string().
+	  now it uses two permanent temporary buffers in order
+	  to avoid reallocations.
+
+	* cherokee/admin_client.c:
+	- sparse fixes to improve readability and performances
+	  (new two temporary buffers for cherokee_downloader_step());
+
+	* cherokee/handler_common.c:
+	- use THREAD_TMP_BUF[12]() to avoid reallocations;
+
 2007-01-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/05to06.py (Syntax._process_server): Updated to the

@@ -248,8 +248,11 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *phdl,
 	cuint_t            skip;
 	cherokee_boolean_t rw;
 	cherokee_buffer_t *reply_header = &phdl->client.reply_header;
+	cherokee_thread_t *thread = HANDLER_THREAD(HDL_PROXY_HANDLER(phdl));
+	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(thread);
+	cherokee_buffer_t *tmp2 = THREAD_TMP_BUF2(thread);
 
-	ret = cherokee_downloader_step (&phdl->client);
+	ret = cherokee_downloader_step (&phdl->client, tmp1, tmp2);
 
 	switch (ret) {
 	case ret_ok:
@@ -292,8 +295,11 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *phdl,
 			     cherokee_buffer_t        *buffer)
 {
 	ret_t ret;
+	cherokee_thread_t *thread = HANDLER_THREAD(HDL_PROXY_HANDLER(phdl));
+	cherokee_buffer_t *tmp1 = THREAD_TMP_BUF1(thread);
+	cherokee_buffer_t *tmp2 = THREAD_TMP_BUF2(thread);
 
-	ret = cherokee_downloader_step (&phdl->client);
+	ret = cherokee_downloader_step (&phdl->client, tmp1, tmp2);
 
 	switch (ret) {
 	case ret_ok:

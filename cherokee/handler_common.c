@@ -229,6 +229,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	/* Is it a directory
 	 */
 	if (S_ISDIR(info->st_mode)) {
+		cherokee_thread_t        *thread      = CONN_THREAD(conn);
 		cherokee_list_t *i;
 
 		cherokee_iocache_mmap_release (iocache, file);
@@ -254,7 +255,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 			/* Check if the index is fullpath
 			 */
 			if (*index == '/') {
-				cherokee_buffer_t new_local_dir = CHEROKEE_BUF_INIT; 
+				cherokee_buffer_t *new_local_dir = THREAD_TMP_BUF1(thread);
 
 				/* This means there is a configuration entry like:
 				 * 'DirectoryIndex index.php, /index_default.php'
@@ -267,15 +268,16 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 				/* Lets reconstruct the local directory
 				 */
-				cherokee_buffer_add_buffer (&new_local_dir, &CONN_VSRV(conn)->root);
-				cherokee_buffer_add (&new_local_dir, index, index_len);
+				cherokee_buffer_clean (new_local_dir);
+				cherokee_buffer_add_buffer (new_local_dir, &CONN_VSRV(conn)->root);
+				cherokee_buffer_add (new_local_dir, index, index_len);
 				
-				ret = stat_file (use_iocache, iocache, &nocache_info, new_local_dir.buf, &file, &info);
+				ret = stat_file (use_iocache, iocache, &nocache_info, new_local_dir->buf, &file, &info);
 				exists = (ret == ret_ok);
 				cherokee_iocache_mmap_release (iocache, file);
 
-				cherokee_buffer_mrproper (&new_local_dir);
-				if (!exists) continue;
+				if (!exists)
+					continue;
 
 				/* Build the new request before respin
 				 */

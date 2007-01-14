@@ -30,6 +30,7 @@
 #include <unistd.h>
 #include <dirent.h>
 
+#include "thread.h"
 #include "connection.h"
 #include "connection-protected.h"
 #include "module.h"
@@ -56,7 +57,8 @@ get_nearest_from_directory (char *directory, char *request, cherokee_buffer_t *o
 	cherokee_boolean_t found    = false;
 
 	dir = opendir(directory);
-	if (dir == NULL) goto go_out;
+	if (dir == NULL)
+		goto go_out;
 
 	while ((entry = readdir (dir)) != NULL)
 	{ 
@@ -82,14 +84,17 @@ go_out:
 }
 
 
-ret_t
-get_nearest (cherokee_buffer_t *local_dir,
-	     cherokee_buffer_t *request,
-	     cherokee_buffer_t *output)
+static ret_t
+get_nearest_name (
+			cherokee_connection_t *conn,
+			cherokee_buffer_t *local_dir,
+			cherokee_buffer_t *request,
+			cherokee_buffer_t *output)
 {
 	char              *rest;
 	ret_t              ret = ret_ok;
-	cherokee_buffer_t  req = CHEROKEE_BUF_INIT;       /* Request w/o last word */
+	cherokee_thread_t *thread = CONN_THREAD(conn);
+	cherokee_buffer_t *req = THREAD_TMP_BUF1(thread);/* Request w/o last word */
 
 	/* Build the local request path
 	 */
@@ -99,13 +104,13 @@ get_nearest (cherokee_buffer_t *local_dir,
 	}
 	rest++;
 
-	cherokee_buffer_add_buffer (&req, local_dir);
-	cherokee_buffer_add (&req, request->buf, rest - request->buf);
+	cherokee_buffer_clean (req);
+	cherokee_buffer_add_buffer (req, local_dir);
+	cherokee_buffer_add (req, request->buf, rest - request->buf);
 	
 	/* Copy the new filename to the output buffer
 	 */
-	ret = get_nearest_from_directory (req.buf, rest, output);
-	cherokee_buffer_mrproper (&req);
+	ret = get_nearest_from_directory (req->buf, rest, output);
 
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
@@ -124,9 +129,7 @@ cherokee_handler_nn_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_pr
 	ret_t                  ret;
 	struct stat            info;
 	int                    stat_ret;
-	cherokee_connection_t *conn;
-
-	conn = CONN(cnt);
+	cherokee_connection_t *conn   = CONN(cnt);
 
 	cherokee_buffer_add (&conn->local_directory, conn->request.buf, conn->request.len);
 	stat_ret = stat (conn->local_directory.buf, &info);
@@ -138,13 +141,13 @@ cherokee_handler_nn_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_pr
 		return cherokee_handler_common_new (hdl, cnt, props);
 	} 
 
-	/* It doesn't exit, lets redirect it..
+	/* It doesn't exists, let's redirect it..
 	 */
 	cherokee_buffer_clean (&conn->redirect);
 
-	ret = get_nearest (&conn->local_directory, &conn->request, &conn->redirect);
+	ret = get_nearest_name (conn, &conn->local_directory, &conn->request, &conn->redirect);
 	if (unlikely (ret != ret_ok)) {
-		CONN(cnt)->error_code = http_not_found;
+		conn->error_code = http_not_found;
 		return ret_error;
 	}
 
