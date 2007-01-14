@@ -258,7 +258,7 @@ do_download__finish (cherokee_downloader_t *downloader, void *param)
 
 
 static ret_t
-do_download (cherokee_downloader_t *downloader, cherokee_fdpoll_t *fdpoll)
+do_download (cherokee_downloader_t *downloader, cherokee_fdpoll_t *fdpoll, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2)
 {
 	ret_t                        ret;
 	cherokee_downloader_status_t status;
@@ -279,7 +279,7 @@ do_download (cherokee_downloader_t *downloader, cherokee_fdpoll_t *fdpoll)
 
 			/* Do some work
 			 */
-			ret = cherokee_downloader_step (downloader);
+			ret = cherokee_downloader_step (downloader, tmp1, tmp2);
 
 			cherokee_downloader_get_status(downloader, &status);
 			switch (ret) {
@@ -346,6 +346,8 @@ main (int argc, char **argv)
 	cuint_t fdlimit;
 	cherokee_fdpoll_t     *fdpoll;
 	cherokee_downloader_t *downloader;
+	cherokee_buffer_t     tmp1 = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t     tmp2 = CHEROKEE_BUF_INIT;
 
 
 	struct option long_options[] = {
@@ -357,6 +359,9 @@ main (int argc, char **argv)
 		{"header",        required_argument, NULL,  0 },
 		{NULL, 0, NULL, 0}
 	};
+
+	cherokee_buffer_ensure_size (&tmp1, 1024);
+	cherokee_buffer_ensure_size (&tmp2, 1024);
 
 	/* Build the fd poll object..
 	 */
@@ -446,7 +451,7 @@ main (int argc, char **argv)
 
 		/* Download it!
 		 */
-		ret = do_download (downloader, fdpoll);
+		ret = do_download (downloader, fdpoll, &tmp1, &tmp2);
 		if ((ret != ret_ok) && (ret != ret_eof)) {
 			return EXIT_ERROR;
 		}

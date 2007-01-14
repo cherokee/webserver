@@ -1,5 +1,8 @@
 2007-01-14  A.D.F  <adefacc@tin.it>
 
+	* cget/main.c: Updated for the latest cherokee_downloader_step()
+	modifications.
+
 	* cherokee/buffer.h:
         - changed prototypes of:
           - cherokee_buffer_encode_base64();
