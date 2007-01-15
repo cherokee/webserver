@@ -657,7 +657,8 @@ class Lexer:
             while True:
                 word += self._txt[0]
                 self._txt = self._txt[1:]
-                if word[-1] == '"' or len(self._txt) is 0: break
+                if word[-2] != '\\':
+                    if word[-1] == '"' or len(self._txt) is 0: break
             return word
 
         # Common word
@@ -701,7 +702,7 @@ class Lexer:
         word = self._get_word()
         if len(word) is 0:
             return None, None
-            
+
         try:
             int_val = int(word)
         except:
@@ -716,7 +717,7 @@ class Lexer:
 
         # Quoted string
         if word[0] == word[-1] == '"':
-            return 'str',word
+            return 'str',word[1:-1]
 
         # List
         if word.find(',') != -1:

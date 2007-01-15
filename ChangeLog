@@ -1,3 +1,8 @@
+2007-01-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* contrib/05to06.py (Lexer._get_word): It wasn't processing quoted
+	strings if they contained \" characters. Fixed.
+
 2007-01-14  A.D.F  <adefacc@tin.it>
 
 	* cget/main.c: Updated for the latest cherokee_downloader_step()
