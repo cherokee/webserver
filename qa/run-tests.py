@@ -154,8 +154,9 @@ vserver!default!ssl_cal_list_file = %s
 if log:
     CONF_BASE += """
 vserver!default!logger = %s
-vserver!default!logger!access = %s
-vserver!default!logger!error = %s
+vserver!default!logger!access!type = file
+vserver!default!logger!access!filename = %s
+vserver!default!logger!error!type = stderr
 """ % (LOGGER_TYPE, LOGGER_ACCESS, LOGGER_ERROR)
 
 

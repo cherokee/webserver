@@ -101,133 +101,75 @@ cherokee_logger_ncsa_new (cherokee_logger_t **logger, cherokee_config_node_t *co
 ret_t 
 cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t *logger, cherokee_config_node_t *config)
 {
-	ret_t              ret;
-	cherokee_buffer_t *tmp;
+	ret_t                   ret;
+	cherokee_config_node_t *subconf;
 
-	/* Init
+	/* Init the logger writers
 	 */
-	cherokee_buffer_init (&logger->accesslog);
-	cherokee_buffer_init (&logger->errorlog);
+	ret = cherokee_logger_writer_init (&logger->writer_access);
+	if (ret != ret_ok) return ret;
 
-	logger->errorlog_fd        = NULL;
-	logger->accesslog_fd       = NULL;
-	logger->combined           = false;
-	
-	ret = cherokee_config_node_read (config, "access", &tmp);
+	ret = cherokee_logger_writer_init (&logger->writer_error);
+	if (ret != ret_ok) return ret;
+
+	/* Configure them
+	 */
+	ret = cherokee_config_node_get (config, "access", &subconf);
 	if (ret == ret_ok) {
-		cherokee_buffer_add_buffer (&logger->accesslog, tmp);
+		ret = cherokee_logger_writer_configure (&logger->writer_access, subconf);
+		if (ret != ret_ok) return ret;
 	}
 
-	ret = cherokee_config_node_read (config, "error", &tmp);
+	ret = cherokee_config_node_get (config, "error", &subconf);
 	if (ret == ret_ok) {
-		cherokee_buffer_add_buffer (&logger->errorlog, tmp);
+		ret = cherokee_logger_writer_configure (&logger->writer_error, subconf);
+		if (ret != ret_ok) return ret;
 	}
 	
 	return ret_ok;
-}
-
-
-static ret_t 
-open_output (cherokee_logger_ncsa_t *logger)
-{
-	if (cherokee_buffer_is_empty (&logger->accesslog) ||
-	    cherokee_buffer_is_empty (&logger->errorlog))
-	{
-		openlog ("Cherokee", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
-		return ret_ok;
-	}
-
-	logger->accesslog_fd = fopen (logger->accesslog.buf, "a+");
-	if (logger->accesslog_fd == NULL) {
-		PRINT_ERROR("cherokee_logger_ncsa: error opening %s for append\n", logger->accesslog.buf); 
-		return ret_error;
-	}
-#ifndef _WIN32
-	fcntl (fileno (logger->accesslog_fd), F_SETFD, 1);
-#endif	
-
-        logger->errorlog_fd  = fopen (logger->errorlog.buf, "a+");
-	if (logger->errorlog_fd == NULL) {
-		PRINT_ERROR("cherokee_logger_ncsa: error opening %s for append\n", logger->errorlog.buf); 
-		return ret_error;
-	}
-#ifndef _WIN32
-	fcntl (fileno (logger->errorlog_fd), F_SETFD, 1);
-#endif
-
-	return ret_ok;
-}
-
-
-static ret_t
-close_output (cherokee_logger_ncsa_t *logger)
-{
-	int n   = 2;
-	int ret = 0;
-
-	if (logger->errorlog_fd != NULL) {
-		ret = fclose (logger->errorlog_fd);
-		logger->errorlog_fd = NULL;
-		n--;
-	}
-	
-	if (logger->accesslog_fd != NULL) {
-		ret |= fclose (logger->accesslog_fd);
-		logger->accesslog_fd = NULL;
-		n--;
-	}
-	
-	if (n != 0) {
-		closelog();
-	}
-	
-	return (ret == 0) ? ret_ok : ret_error;
 }
 
 
 ret_t 
 cherokee_logger_ncsa_init (cherokee_logger_ncsa_t *logger)
 {
-	return open_output (logger);
+	ret_t ret;
+
+	ret = cherokee_logger_writer_open (&logger->writer_access);
+	if (ret != ret_ok) return ret;
+
+	ret = cherokee_logger_writer_open (&logger->writer_error);
+	if (ret != ret_ok) return ret;
+
+	return ret_ok;
 }
 
 
 ret_t
 cherokee_logger_ncsa_free (cherokee_logger_ncsa_t *logger)
 {
-	cherokee_buffer_mrproper (&logger->accesslog);
-	cherokee_buffer_mrproper (&logger->errorlog);
+	ret_t ret;
 
-	return close_output (logger);
+	ret = cherokee_logger_writer_mrproper (&logger->writer_access);
+	if (ret != ret_ok) return ret;
+
+	ret = cherokee_logger_writer_mrproper (&logger->writer_error);
+	if (ret != ret_ok) return ret;
+
+	return ret_ok;
 }
 
 
 ret_t 
 cherokee_logger_ncsa_flush (cherokee_logger_ncsa_t *logger)
 {
-	int tmp;
+	ret_t ret;
 
-	if (cherokee_buffer_is_empty (LOGGER_BUFFER(logger))) {
-		return ret_ok;
-	}
+	cherokee_logger_writer_lock (&logger->writer_access);
+	ret = cherokee_logger_writer_flush (&logger->writer_access);
+	cherokee_logger_writer_unlock (&logger->writer_access);
 
-	if (logger->accesslog_fd == NULL) {
-		cherokee_syslog (LOG_INFO, LOGGER_BUFFER(logger));
-		return cherokee_buffer_clean (LOGGER_BUFFER(logger));
-	}
-
-
-	tmp = fwrite (LOGGER_BUFFER(logger)->buf, 1, LOGGER_BUFFER(logger)->len, logger->accesslog_fd); 
-	fflush (logger->accesslog_fd);
-	if (tmp < 0) {
-		return ret_error;
-	}
-
-	if (tmp == LOGGER_BUFFER(logger)->len) {
-		return cherokee_buffer_clean (LOGGER_BUFFER(logger));
-	} 
-
-	return cherokee_buffer_drop_endding (LOGGER_BUFFER(logger), tmp);
+	return ret;
 }
 
 
@@ -345,77 +287,81 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 ret_t 
 cherokee_logger_ncsa_write_string (cherokee_logger_ncsa_t *logger, const char *string)
 {
-	/* Write it down in the file..
-	 */
-	if (logger->accesslog_fd != NULL) {
-		int ret;
-		ret = fprintf (logger->accesslog_fd, "%s", string);
+	ret_t              ret;
+	cherokee_buffer_t *log;
 
-		return (ret > 0) ? ret_ok : ret_error;
-	} 
+	cherokee_logger_writer_lock (&logger->writer_access);
 
-	/* .. or, send it to syslog
-	 */
-	syslog (LOG_INFO, "%s", string);
+	ret = cherokee_logger_writer_get_buf (&logger->writer_access, &log);
+	if (unlikely (ret != ret_ok)) goto error;
+
+	cherokee_buffer_add (log, (char *)string, strlen(string));
+
+	cherokee_logger_writer_unlock (&logger->writer_access);
 	return ret_ok;
+
+error:
+	cherokee_logger_writer_unlock (&logger->writer_access);
+	return ret_error;
 }
 
 
 ret_t
 cherokee_logger_ncsa_write_access (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt)
 {
-	ret_t             ret;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	ret_t              ret;
+	cherokee_buffer_t *log;
 
-	/* Build the log string
+	cherokee_logger_writer_lock (&logger->writer_access);
+
+	/* Get the buffer
 	 */
-	ret = build_log_string (logger, cnt, &tmp);
-	if (unlikely(ret < ret_ok)) return ret;
+	ret = cherokee_logger_writer_get_buf (&logger->writer_access, &log);
+	if (unlikely (ret != ret_ok)) goto error;
+
+	/* Add the new string
+	 */
+	ret = build_log_string (logger, cnt, log);
+	if (unlikely (ret != ret_ok)) goto error;
 	
-	/* Add it to the logger buffer
-	 */
-	ret = cherokee_buffer_add_buffer (LOGGER_BUFFER(logger), &tmp);
-	if (unlikely(ret < ret_ok)) return ret;
-
-	cherokee_buffer_mrproper (&tmp);
+	cherokee_logger_writer_unlock (&logger->writer_access);
 	return ret_ok;
+
+error:
+	cherokee_logger_writer_unlock (&logger->writer_access);
+	return ret_error;
 }
 
 
 ret_t 
 cherokee_logger_ncsa_write_error (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt)
 {
-	ret_t             ret;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	ret_t              ret;
+	cherokee_buffer_t *log;
 
-	/* Build the log string
+	cherokee_logger_writer_lock (&logger->writer_error);
+
+	/* Get the buffer
 	 */
-	ret = build_log_string (logger, cnt, &tmp);
-	if (unlikely(ret < ret_ok)) return ret;
-
-	/* Write it in the error file
+	ret = cherokee_logger_writer_get_buf (&logger->writer_error, &log);
+	if (unlikely (ret != ret_ok)) goto error;
+	
+	/* Add the new string
 	 */
-	if (logger->errorlog_fd != NULL) {
-		cuint_t wrote;
+	ret = build_log_string (logger, cnt, log);
+	if (unlikely (ret != ret_ok)) goto error;
 
-		do {
-			wrote = fwrite (tmp.buf, 1, tmp.len, logger->errorlog_fd); 
-			if (wrote < 0) break;
-
-			cherokee_buffer_move_to_begin (&tmp, wrote);
-		} while (! cherokee_buffer_is_empty(&tmp));
-
-                fflush(logger->errorlog_fd);
-
-		return (wrote > 0) ? ret_ok : ret_error;
-	}
-
-	/* or, send it to syslog
+	/* It's an error. Flush it!
 	 */
-	cherokee_syslog (LOG_ERR, &tmp);
-	cherokee_buffer_mrproper (&tmp);
-
+	ret = cherokee_logger_writer_flush (&logger->writer_error);
+	if (unlikely (ret != ret_ok)) goto error;
+	
+	cherokee_logger_writer_unlock (&logger->writer_error);
 	return ret_ok;
+
+error:
+	cherokee_logger_writer_unlock (&logger->writer_error);
+	return ret_error;
 }
 
 
@@ -424,9 +370,9 @@ cherokee_logger_ncsa_reopen (cherokee_logger_ncsa_t *logger)
 {
 	ret_t ret;
 
-	ret = close_output (logger);
-	if (unlikely(ret != ret_ok)) return ret;
+	ret  = cherokee_logger_writer_reopen (&logger->writer_access);
+	ret |= cherokee_logger_writer_reopen (&logger->writer_error);
 
-	return open_output (logger);
+	return (ret == ret_ok) ? ret_ok : ret_error;
 }
 

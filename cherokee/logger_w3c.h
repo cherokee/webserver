@@ -27,8 +27,8 @@
  * USA
  */
 
-#ifndef CHEROKEE_LOGGER_W3C_COMMON_H
-#define CHEROKEE_LOGGER_W3C_COMMON_H
+#ifndef CHEROKEE_LOGGER_W3C_H
+#define CHEROKEE_LOGGER_W3C_H
 
 #include "common.h"
 
@@ -39,14 +39,12 @@
 
 #include "connection.h"
 #include "logger.h"
-
+#include "logger_writer.h"
 
 typedef struct {
-	cherokee_logger_t logger;
-	
-	cherokee_boolean_t header_added;
-	cherokee_buffer_t  filename;
-	FILE              *file;
+	cherokee_logger_t        logger;	
+	cherokee_boolean_t       header_added;
+	cherokee_logger_writer_t writer;
 } cherokee_logger_w3c_t;
 
 
@@ -64,4 +62,4 @@ ret_t cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_
 ret_t cherokee_logger_w3c_write_error  (cherokee_logger_w3c_t *logger, cherokee_connection_t *conn);
 ret_t cherokee_logger_w3c_write_string (cherokee_logger_w3c_t *logger, const char *string);
 
-#endif /* CHEROKEE_LOGGER_W3C_COMMON_H */
+#endif /* CHEROKEE_LOGGER_W3C_H */

@@ -1,3 +1,20 @@
+2007-01-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee.conf.sample.pre, qa/run-tests.py: Updated for the new
+	logger configuration.
+
+	* cherokee/logger_w3c.h, cherokee/logger_w3c.c: Idem. Now it uses
+	a logger writer object.
+
+	* cherokee/logger_ncsa.h, cherokee/logger_ncsa.c: Adapted to use a
+	couple of logger writer objets. Besides the functionality it has
+	won, it should also be slightly faster.
+
+	* cherokee/logger_writer.h, cherokee/logger_writer.c,
+	cherokee/Makefile.am: Added new classs. It implements the logic of
+	where a logger writes the information. The current implementation
+	supports: files, syslog, stderr, and pipes to logging programs.
+
 2007-01-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/05to06.py (Lexer._get_word): It wasn't processing quoted

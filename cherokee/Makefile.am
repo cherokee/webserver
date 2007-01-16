@@ -858,6 +858,8 @@ encoder_table.h \
 encoder_table.c \
 logger.h \
 logger.c \
+logger_writer.h \
+logger_writer.c \
 thread.h \
 thread.c \
 plugin.h \
