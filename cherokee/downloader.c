@@ -89,6 +89,9 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 	ret = cherokee_header_new (&n->header);	
 	if (unlikely(ret != ret_ok)) return ret;
 
+	cherokee_buffer_init (&n->tmp1);
+	cherokee_buffer_init (&n->tmp2);
+
 	/* Init the properties
 	 */
 	n->phase             = downloader_phase_init;
@@ -131,6 +134,9 @@ cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 	cherokee_buffer_mrproper (&downloader->request_header);
 	cherokee_buffer_mrproper (&downloader->reply_header);
 	cherokee_buffer_mrproper (&downloader->body);
+
+	cherokee_buffer_mrproper (&downloader->tmp1);
+	cherokee_buffer_mrproper (&downloader->tmp2);
 
 	cherokee_socket_close (&downloader->socket);
 	cherokee_socket_mrproper (&downloader->socket);
@@ -257,7 +263,7 @@ downloader_send_buffer (cherokee_downloader_t *downloader, cherokee_buffer_t *bu
 
 
 static ret_t
-downloader_header_read (cherokee_downloader_t *downloader)
+downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2)
 {
 	ret_t               ret;
 	cuint_t             len;
@@ -321,12 +327,9 @@ downloader_header_read (cherokee_downloader_t *downloader)
 		 */
 		ret = cherokee_header_has_known (downloader->header, header_content_length);
 		if (ret == ret_ok) {
-			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-
-			ret = cherokee_header_copy_known (downloader->header, header_content_length, &tmp);
-			downloader->content_length = atoi (tmp.buf);
-
-			cherokee_buffer_mrproper (&tmp);
+			cherokee_buffer_clean (tmp1);
+			ret = cherokee_header_copy_known (downloader->header, header_content_length, tmp1);
+			downloader->content_length = atoi (tmp1->buf);
 		}
 
 		return ret_ok;
@@ -379,10 +382,19 @@ downloader_step (cherokee_downloader_t *downloader)
 
 
 ret_t 
-cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2)
+cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *ext_tmp1, cherokee_buffer_t *ext_tmp2)
 {
-	ret_t ret;
+	ret_t              ret;
+	cherokee_buffer_t *tmp1;
+	cherokee_buffer_t *tmp2;
 
+	/* Set the temporal buffer
+	 */
+	tmp1 = (ext_tmp1) ? ext_tmp1 : &downloader->tmp1;
+	tmp1 = (ext_tmp2) ? ext_tmp2 : &downloader->tmp2;
+
+	/* Process it
+	 */
 	switch (downloader->phase) {
 	case downloader_phase_init: {
 		cherokee_request_header_t *req = &downloader->request;
@@ -440,7 +452,7 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 	case downloader_phase_read_headers:
 		TRACE(ENTRIES, "Phase %s\n", "read_headers");
 
-		ret = downloader_header_read (downloader);
+		ret = downloader_header_read (downloader, tmp1, tmp2);
 		if (unlikely(ret != ret_ok)) return ret;
 
 		/* We have the header parsed, continue..

@@ -54,6 +54,7 @@ cherokee_logger_init_base (cherokee_logger_t *logger, cherokee_plugin_info_t *in
 	logger->priv         = priv;
 	logger->write_access = NULL;
 	logger->write_error  = NULL;
+	logger->max_size     = DEFAULT_LOGGER_MAX_BUFSIZE;
 
 	/* Private
 	 */	
@@ -61,6 +62,7 @@ cherokee_logger_init_base (cherokee_logger_t *logger, cherokee_plugin_info_t *in
 	CHEROKEE_MUTEX_INIT (&PRIV(logger)->mutex, NULL);
 
 	cherokee_buffer_init (&logger->buffer);
+	cherokee_buffer_ensure_size (&logger->buffer, logger->max_size);
 
 	return ret_ok;
 }

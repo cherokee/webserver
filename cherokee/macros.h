@@ -96,6 +96,7 @@
 #define CGI_TIMEOUT                   65
 #define MSECONS_TO_LINGER             2000
 #define POST_SIZE_TO_DISK             32768
+#define DEFAULT_LOGGER_MAX_BUFSIZE    32768
 
 #define IOCACHE_MAX_FILE_SIZE            50000
 #define IOCACHE_DEFAULT_CLEAN_ELAPSE     10

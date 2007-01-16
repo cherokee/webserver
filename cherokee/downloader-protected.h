@@ -73,6 +73,9 @@ struct cherokee_downloader {
 	} info;
 
 	cherokee_downloader_status_t status;
+
+	cherokee_buffer_t            tmp1;
+	cherokee_buffer_t            tmp2;
 };
 
 

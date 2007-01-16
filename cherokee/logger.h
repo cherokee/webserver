@@ -37,8 +37,8 @@
 #include <cherokee/table.h>
 #include <cherokee/buffer.h>
 
-
 CHEROKEE_BEGIN_DECLS
+
 
 /* Callback function definitions
  */
@@ -67,7 +67,7 @@ typedef struct {
 	/* Buffer 
 	 */
 	cherokee_buffer_t               buffer;
-
+	size_t                          max_size;
 } cherokee_logger_t;
 
 #define LOGGER(x)        ((cherokee_logger_t *)(x))

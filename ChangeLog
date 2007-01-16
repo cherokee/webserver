@@ -1,4 +1,12 @@
+2007-01-16  A.D.F  <adefacc@tin.it>
+
+	* cherokee/downloader.c (downloader_header_read): use a permanent
+	  temporary buffer instead of a local one.
+	
 2007-01-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/downloader.c, cherokee/downloader.h: Added two temporal
+	buffers. It will use them if no other buffers are provided.
 
 	* cherokee/logger_ncsa.c, cherokee/logger_w3c.c: Removed all calls
 	to cherokee_logger_writer_{lock,unlock}().
