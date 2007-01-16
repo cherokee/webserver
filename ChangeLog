@@ -1,5 +1,15 @@
 2007-01-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/logger_ncsa.c, cherokee/logger_w3c.c: Removed all calls
+	to cherokee_logger_writer_{lock,unlock}().
+
+	* cherokee/logger_writer.h, cherokee/logger_writer.c: Removed all
+	the references to the mutex. A logger writer is an object that
+	lives inside a logger, and the logger is already a thread safe
+	object, and hence, there is no need to have a semaphore here. The
+	cherokee_logger_writter_lock() and
+	cherokee_logger_writter_unlock() have been removed.
+	
 	* cherokee.conf.sample.pre, qa/run-tests.py: Updated for the new
 	logger configuration.
 

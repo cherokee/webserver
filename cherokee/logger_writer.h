@@ -45,7 +45,6 @@ typedef enum {
 typedef struct {
 	cherokee_logger_writer_types_t type;
 
-	CHEROKEE_MUTEX_T              (mutex);	
 	cherokee_buffer_t              buffer;
 
 	cherokee_buffer_t              filename;  /* file            */
@@ -61,10 +60,7 @@ ret_t cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherok
 ret_t cherokee_logger_writer_open      (cherokee_logger_writer_t *writer);
 ret_t cherokee_logger_writer_reopen    (cherokee_logger_writer_t *writer);
 
-void  cherokee_logger_writer_lock      (cherokee_logger_writer_t *writer);
 ret_t cherokee_logger_writer_get_buf   (cherokee_logger_writer_t *writer, cherokee_buffer_t **buf);
-void  cherokee_logger_writer_unlock    (cherokee_logger_writer_t *writer);
-
 ret_t cherokee_logger_writer_flush     (cherokee_logger_writer_t *writer);
 
 CHEROKEE_END_DECLS

@@ -39,8 +39,6 @@
 ret_t 
 cherokee_logger_writer_init (cherokee_logger_writer_t *writer)
 {
-	CHEROKEE_MUTEX_INIT (&writer->mutex, NULL);
-
 	writer->type = cherokee_logger_writer_syslog;
 	writer->fd   = -1;
 	
@@ -55,8 +53,6 @@ cherokee_logger_writer_init (cherokee_logger_writer_t *writer)
 ret_t 
 cherokee_logger_writer_mrproper (cherokee_logger_writer_t *writer)
 {
-	CHEROKEE_MUTEX_DESTROY (&writer->mutex);
-
 	if (writer->fd != -1) {
 		close (writer->fd);
 		writer->fd = -1;
@@ -272,19 +268,5 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer)
 	}
 
 	return ret_ok;
-}
-
-
-void
-cherokee_logger_writer_lock (cherokee_logger_writer_t *writer)
-{
-	CHEROKEE_MUTEX_LOCK (&writer->mutex);
-}
-
-
-void
-cherokee_logger_writer_unlock (cherokee_logger_writer_t *writer)
-{
-	CHEROKEE_MUTEX_UNLOCK (&writer->mutex);
 }
 

@@ -136,13 +136,7 @@ cherokee_logger_w3c_reopen (cherokee_logger_w3c_t *logger)
 ret_t
 cherokee_logger_w3c_flush (cherokee_logger_w3c_t *logger)
 {
-	ret_t ret;
-
-	cherokee_logger_writer_lock (&logger->writer);
-	ret = cherokee_logger_writer_flush (&logger->writer);
-	cherokee_logger_writer_unlock (&logger->writer);
-
-	return ret;
+	return cherokee_logger_writer_flush (&logger->writer);
 }
 
 
@@ -159,10 +153,8 @@ cherokee_logger_w3c_write_error  (cherokee_logger_w3c_t *logger, cherokee_connec
 
 	/* Get the logger writer buffer
 	 */
-	cherokee_logger_writer_lock (&logger->writer);
-
 	ret = cherokee_logger_writer_get_buf (&logger->writer, &log);
-	if (unlikely (ret != ret_ok)) goto error;
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Read the bogonow value from the server
 	 */
@@ -192,12 +184,7 @@ cherokee_logger_w3c_write_error  (cherokee_logger_w3c_t *logger, cherokee_connec
 				conn_time->tm_sec,
 				method,
 				request->buf);
-
-	cherokee_logger_writer_unlock (&logger->writer);
 	return ret_ok;
-error:
-	cherokee_logger_writer_unlock (&logger->writer);
-	return ret_error;
 }
 
 
@@ -207,19 +194,11 @@ cherokee_logger_w3c_write_string (cherokee_logger_w3c_t *logger, const char *str
 	ret_t              ret;
 	cherokee_buffer_t *log;
 
-	cherokee_logger_writer_lock (&logger->writer);
-
 	ret = cherokee_logger_writer_get_buf (&logger->writer, &log);
-	if (unlikely (ret != ret_ok)) goto error;
+	if (unlikely (ret != ret_ok)) return ret;
 
 	cherokee_buffer_add (log, (char *)string, strlen(string));
-
-	cherokee_logger_writer_unlock (&logger->writer);
 	return ret_ok;
-
-error:
-	cherokee_logger_writer_unlock (&logger->writer);
-	return ret_error;
 }
 
 
@@ -236,10 +215,8 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 
 	/* Get the logger writer buffer
 	 */
-	cherokee_logger_writer_lock (&logger->writer);
-
 	ret = cherokee_logger_writer_get_buf (&logger->writer, &log);
-	if (unlikely (ret != ret_ok)) goto error;
+	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Read the bogonow value from the server
 	 */
@@ -283,11 +260,6 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 				conn_time->tm_sec,
 				method,
 				request->buf);
-
-	cherokee_logger_writer_unlock (&logger->writer);
 	return ret_ok;
-error:
-	cherokee_logger_writer_unlock (&logger->writer);
-	return ret_error;
 }
 
