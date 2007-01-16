@@ -3,7 +3,6 @@
 /* Cherokee
  *
  * Authors:
- * 
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
  * This piece of code by:

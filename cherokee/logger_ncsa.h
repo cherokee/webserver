@@ -42,13 +42,6 @@ typedef struct {
 
 	cherokee_logger_writer_t writer_access;
 	cherokee_logger_writer_t writer_error;
-
-
-/* 	cherokee_buffer_t  accesslog; */
-/* 	cherokee_buffer_t  errorlog; */
-
-/* 	FILE *accesslog_fd; */
-/* 	FILE *errorlog_fd; */
 } cherokee_logger_ncsa_t;
 
 
