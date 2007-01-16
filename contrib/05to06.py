@@ -165,7 +165,7 @@ class Syntax:
             if kind != 'str': raise "Malformed Allow"
 
             kind, val_ip = self._lex.get_token()
-            if kind != 'str': raise "Malformed Allow from"
+            if not kind in ['str', 'list']: raise "Malformed Allow from"
 
             print '%s!allow_from = %s' % (prefix, val_ip)
             
@@ -259,14 +259,23 @@ class Syntax:
                 break
             if kind != 'str': raise "Malformed Log"
 
+            val1 = val1.lower()
+
+            if val1.startswith('access'):
+                entry = 'access'
+            elif val1.startswith('error'):
+                entry = 'error'
+            else:
+                raise "Unknown Log entry " + val1
+
             kind, val2 = self._lex.get_token()
             if kind != 'path': raise "Malformed Log"
-
-            val1_low = val1.lower()
-            if val1_low in self.similar_entries:
-                val1 = self.similar_entries[val1_low]
-
-            print "%s!%s = %s" % (prefix, val1, val2)
+            
+            if val2[0] == '/' or val2[1:2] == ':\\':
+                print "%s!%s!type = file" % (prefix, entry)
+                print "%s!%s!filename = %s" % (prefix, entry, val2)
+            elif val == 'syslog':
+                print "%s!%s!type = syslog" % (prefix, entry)
 
     def _process_icons_content (self):
         kind, val = self._lex.get_token()
@@ -430,12 +439,27 @@ class Syntax:
             kind, val = self._lex.get_token()
             if kind != '}': raise "Malformed ErrorHandler"
 
+        elif kind == 'log':
+            kind, log_val = self._lex.get_token()
+            if kind != 'str': raise "Malformed Log"
+            
+            kind, val = self._lex.get_token()
+            if kind != '{':
+                self._lex.rewind()
+                return True
+
+            prefix = 'vserver!%s!logger' % (vserver)
+            print "%s = %s" % (prefix, log_val)
+            self._process_log (prefix)
+
+            kind, val = self._lex.get_token()
+            if kind != '}': raise "Malformed Log"
+
         else:
             self._lex.rewind()            
             return False
 
         return True
-    
 
     def _process_server_content (self):
         kind, val = self._lex.get_token()
@@ -475,21 +499,6 @@ class Syntax:
 
             kind, val = self._lex.get_token()
             if kind != '}': raise "Malformed encoder"
-
-        elif kind == 'log':
-            kind, log_val = self._lex.get_token()
-            if kind != 'str': raise "Malformed Log"
-            
-            kind, val = self._lex.get_token()
-            if kind != '{':
-                self._lex.rewind()
-                return True
-
-            prefix = 'server!log!%s' % (log_val)
-            self._process_log (prefix)
-
-            kind, val = self._lex.get_token()
-            if kind != '}': raise "Malformed Log"
 
         elif kind == 'server':
             self._lex.rewind()
