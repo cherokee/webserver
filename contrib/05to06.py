@@ -135,14 +135,34 @@ class Syntax:
                         kind, regex_val = self._lex.get_token()
                         if kind != 'str': raise "Expected a str"
 
-                        print '%s!handler!rewrite!%d!regex = %s' % (prefix, regex_num, regex_val)
-
                         kind, url_val = self._lex.get_token()
-                        if kind != 'str': raise "Expected a str"
+                        if kind == '}':
+                            self._lex.rewind()
+                            print '%s!handler!rewrite!%d!substring = %s' % (prefix, regex_num, regex_val)
+                            regex_num = regex_num + 1
+                            continue
 
-                        print '%s!handler!rewrite!%d!substring = %s' % (prefix, regex_num, url_val)
-                        regex_num = regex_num + 1
-                        continue
+                        elif kind == 'str':
+                            print '%s!handler!rewrite!%d!regex = %s' % (prefix, regex_num, regex_val)
+                            print '%s!handler!rewrite!%d!substring = %s' % (prefix, regex_num, url_val)
+                            regex_num = regex_num + 1
+                            continue
+
+                        else:
+                            raise "Expected a str or '}'"
+
+
+#                        kind, regex_val = self._lex.get_token()
+#                        if kind != 'str': raise "Expected a str"
+
+#                        print '%s!handler!rewrite!%d!regex = %s' % (prefix, regex_num, regex_val)
+
+#                        kind, url_val = self._lex.get_token()
+#                        if kind != 'str': raise "Expected a str"
+
+#                        print '%s!handler!rewrite!%d!substring = %s' % (prefix, regex_num, url_val)
+#                        regex_num = regex_num + 1
+#                        continue
 
                     
                 # Default case
@@ -746,7 +766,7 @@ class Lexer:
         for c in word:
             if not c in string.letters and \
                not c in string.digits and \
-               not c in "._&?=:\\/*":
+               not c in "._-&?=:\\/*":
                 is_name = False
         if is_name:
             return 'str',word
