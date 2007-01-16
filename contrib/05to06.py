@@ -60,7 +60,8 @@ class Syntax:
                        'listenqueuesize':       'listen_queue_size',
                        'sslcertificatefile':    'ssl_certificate_file',
                        'sslcertificatekeyfile': 'ssl_certificate_key_file',
-                       'sslcalistfile':         'ssl_cal_list_file'                       
+                       'sslcalistfile':         'ssl_cal_list_file',
+                       'directoryindex':        'directory_index'
                        }
     
     def __init__ (self, lex):
@@ -92,7 +93,9 @@ class Syntax:
                 
                 elif kind == 'server':
                     kind, val_prop_val = self._lex.get_token()
-                    print '%s!handler!server = %s' % (prefix, val_prop_val)
+                    print '%s!handler!balancer = round_robin' % (prefix)
+                    print '%s!handler!balancer!type= interpreter' % (prefix)
+                    print '%s!handler!balancer!entry1!host = %s' % (prefix, val_prop_val)
 
                     kind, val = self._lex.get_token()
                     if kind != '{':
@@ -109,10 +112,10 @@ class Syntax:
                             val = val.lower()
                             if val == 'env':
                                 kind_prop_val, val_prop_val = self._lex.get_token()
-                                print "%s!handler!server!env!%s = %s" % (prefix, val_prop, val_prop_val)
+                                print "%s!handler!balancer!entry1!env!%s = %s" % (prefix, val_prop, val_prop_val)
 
                             else:
-                                print "%s!handler!server!%s = %s" % (prefix, val, val_prop)
+                                print "%s!handler!balancer!entry1!%s = %s" % (prefix, val, val_prop)
                     continue
 
                 elif kind == 'str':
@@ -140,6 +143,7 @@ class Syntax:
                         print '%s!handler!rewrite!%d!substring = %s' % (prefix, regex_num, url_val)
                         regex_num = regex_num + 1
                         continue
+
                     
                 # Default case
                 val_prop_low = val_prop.lower()
@@ -421,6 +425,7 @@ class Syntax:
             if kind != '{': raise "Malformed ErrorHandler"
 
             prefix = 'vserver!%s!error_handler' % (vserver)
+            print "%s = %s" % (prefix, handler_val)
 
             while True:
                 kind, error_val = self._lex.get_token()

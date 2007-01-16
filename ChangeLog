@@ -1,5 +1,14 @@
 2007-01-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* contrib/05to06.py (Syntax._process_virtual_server_content): 
+	error_handler fixed. It wasn't adding the handler.
+
+	* contrib/05to06.py (Syntax._process_entry_guts): Handler /
+	Balancer conversion fixed. It was using of notation.
+
+	* contrib/05to06.py (Syntax): It must translate DirectoryIndex
+	into directory_index. Fixed.
+
 	* contrib/05to06.py (Syntax._process_entry_guts): Allow from
 	should accept str and list. Fixed.
 
