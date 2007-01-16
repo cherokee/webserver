@@ -94,7 +94,7 @@ class Syntax:
                 elif kind == 'server':
                     kind, val_prop_val = self._lex.get_token()
                     print '%s!handler!balancer = round_robin' % (prefix)
-                    print '%s!handler!balancer!type= interpreter' % (prefix)
+                    print '%s!handler!balancer!type = interpreter' % (prefix)
                     print '%s!handler!balancer!entry1!host = %s' % (prefix, val_prop_val)
 
                     kind, val = self._lex.get_token()
