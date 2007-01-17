@@ -39,6 +39,8 @@ typedef struct {
 	cherokee_logger_t logger;
 
 	cherokee_boolean_t combined;
+	cherokee_buffer_t  referer;
+	cherokee_buffer_t  useragent;
 
 	cherokee_logger_writer_t writer_access;
 	cherokee_logger_writer_t writer_error;

@@ -39,12 +39,15 @@
 ret_t 
 cherokee_logger_writer_init (cherokee_logger_writer_t *writer)
 {
-	writer->type = cherokee_logger_writer_syslog;
-	writer->fd   = -1;
-	
-	cherokee_buffer_init (&writer->buffer);
-	cherokee_buffer_init (&writer->filename);
+	writer->type    = cherokee_logger_writer_syslog;
+	writer->fd      = -1;
+	writer->max_bufsize = DEFAULT_LOGGER_MAX_BUFSIZE;
+
 	cherokee_buffer_init (&writer->command);
+	cherokee_buffer_init (&writer->filename);
+	cherokee_buffer_init (&writer->buffer);
+
+	cherokee_buffer_ensure_size (&writer->buffer, writer->max_bufsize + 1);
 
 	return ret_ok;
 }
@@ -179,7 +182,7 @@ cherokee_logger_writer_open (cherokee_logger_writer_t *writer)
 			PRINT_MSG ("Couldn't open '%s' for appending\n", writer->filename.buf);
 			return ret_error;
 		}
-
+		CLOSE_ON_EXEC(writer->fd);
 		return ret_ok;
 
 	default:
@@ -232,6 +235,7 @@ ret_t
 cherokee_logger_writer_flush (cherokee_logger_writer_t *writer)
 {
 	int re;
+	size_t buflen = MIN(writer->max_bufsize, writer->buffer.len);
 
 	/* The internal buffer might be empty
 	 */
@@ -249,10 +253,10 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer)
 
 	case cherokee_logger_writer_pipe:
 	case cherokee_logger_writer_file:
-		re = write (writer->fd, writer->buffer.buf, writer->buffer.len);
+		re = write (writer->fd, writer->buffer.buf, buflen);
 		if (re < 0) return ret_error;
 
-		cherokee_buffer_drop_endding (&writer->buffer, re);
+		cherokee_buffer_move_to_begin (&writer->buffer, re);
 		if (! cherokee_buffer_is_empty (&writer->buffer))
 			return ret_eagain;
 		break;

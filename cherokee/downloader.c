@@ -388,10 +388,10 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 	cherokee_buffer_t *tmp1;
 	cherokee_buffer_t *tmp2;
 
-	/* Set the temporal buffer
+	/* Set the temporary buffers
 	 */
 	tmp1 = (ext_tmp1) ? ext_tmp1 : &downloader->tmp1;
-	tmp1 = (ext_tmp2) ? ext_tmp2 : &downloader->tmp2;
+	tmp2 = (ext_tmp2) ? ext_tmp2 : &downloader->tmp2;
 
 	/* Process it
 	 */

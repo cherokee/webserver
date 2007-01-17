@@ -45,11 +45,13 @@ typedef enum {
 typedef struct {
 	cherokee_logger_writer_types_t type;
 
+	int                            fd;         /* file and pipe   */
+	size_t                         max_bufsize;/* max. size of buffer */
 	cherokee_buffer_t              buffer;
 
 	cherokee_buffer_t              filename;  /* file            */
-	int                            fd;        /* file and pipe   */
 	cherokee_buffer_t              command;   /* pipe            */
+
 } cherokee_logger_writer_t;
 
 

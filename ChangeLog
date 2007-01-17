@@ -1,3 +1,32 @@
+2007-01-17  A.D.F  <adefacc@tin.it>
+
+	* cherokee/downloader.c: 
+        - downloader_downloader_step,
+          fixed a mismatch in variable name.
+
+	* cherokee/logger_writer.h:
+        - added new field: max_bufsize;
+
+	* cherokee/logger_writer.c:
+        - pre-allocate internal buffer to logger->max_bufsize;
+	- logger_writer_flush(),
+	  added close-on-exec of log file;
+	- write at most max_bufsize bytes (+7% - 8% speedup)
+	  which is assumed to be a power of two;
+	- fixed partial write(), after a partial write()
+	  the ending unwritten bytes have to be moved to
+	  the beginning of the buffer
+
+	* cherokee/logger_ncsa.h:
+	- added two new field as temporary buffers:
+	  - referer;
+	  - useragent.
+
+	* cherokee/logger_ncsa.c:
+        - removed the usage of temporary local buffers,
+          (costly), now we use only preallocated buffers;
+	- minor cleanups.
+
 2007-01-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/05to06.py (Syntax._process_entry_guts): Rewrites
