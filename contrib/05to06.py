@@ -150,20 +150,6 @@ class Syntax:
 
                         else:
                             raise "Expected a str or '}'"
-
-
-#                        kind, regex_val = self._lex.get_token()
-#                        if kind != 'str': raise "Expected a str"
-
-#                        print '%s!handler!rewrite!%d!regex = %s' % (prefix, regex_num, regex_val)
-
-#                        kind, url_val = self._lex.get_token()
-#                        if kind != 'str': raise "Expected a str"
-
-#                        print '%s!handler!rewrite!%d!substring = %s' % (prefix, regex_num, url_val)
-#                        regex_num = regex_num + 1
-#                        continue
-
                     
                 # Default case
                 val_prop_low = val_prop.lower()
