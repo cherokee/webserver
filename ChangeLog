@@ -1,3 +1,32 @@
+2007-01-18  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.h:
+        - cherokee_buffer_add(),
+	  added const qualifier to 2nd parameter;
+
+	* cherokee/buffer.c:
+        - cherokee_buffer_add(),
+	  added const qualifier to 2nd parameter;
+
+	* cherokee/logger_writer.c:
+        - now log buffer has a bigger size (1 page or 4096 bytes)
+	  so that now max_bufsize can be used as a threshold
+	  to flush buffer contents.
+
+	* cherokee/logger_ncsa.h:	
+        - added new fields to cherokee_logger_ncsa_t:
+	  - tz;
+	  - now_time;
+	  - now_dtm.
+
+	* cherokee/logger_ncsa.c:
+        - build_log_string():
+          - speed-uo of around +12% - 14% by:
+	    - creating datetime string only when now_time changes;
+	    - using faster cherokee_buffer_add*() calls
+	      instead of cherokee_buffer_add_va();
+	  - fixed log format (a space was missing, etc.).
+	
 2007-01-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/config_reader.h, cherokee/config_reader.c,

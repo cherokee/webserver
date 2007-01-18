@@ -47,7 +47,7 @@ cherokee_logger_writer_init (cherokee_logger_writer_t *writer)
 	cherokee_buffer_init (&writer->filename);
 	cherokee_buffer_init (&writer->buffer);
 
-	cherokee_buffer_ensure_size (&writer->buffer, writer->max_bufsize + 1);
+	cherokee_buffer_ensure_size (&writer->buffer, writer->max_bufsize + 4096);
 
 	return ret_ok;
 }

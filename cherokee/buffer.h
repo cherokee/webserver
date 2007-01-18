@@ -62,7 +62,7 @@ ret_t cherokee_buffer_init               (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_mrproper           (cherokee_buffer_t  *buf);
 void  cherokee_buffer_swap_buffers       (cherokee_buffer_t  *buf, cherokee_buffer_t *second);       
 
-ret_t cherokee_buffer_add                (cherokee_buffer_t  *buf, char *txt, size_t size);
+ret_t cherokee_buffer_add                (cherokee_buffer_t  *buf, const char *txt, size_t size);
 ret_t cherokee_buffer_add_long10         (cherokee_buffer_t  *buf, clong_t lNum);
 ret_t cherokee_buffer_add_llong10        (cherokee_buffer_t  *buf, cllong_t lNum);
 ret_t cherokee_buffer_add_ulong10        (cherokee_buffer_t  *buf, culong_t ulNum);

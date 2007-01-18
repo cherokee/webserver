@@ -178,7 +178,7 @@ realloc_new_bufsize (cherokee_buffer_t *buf, size_t newsize)
 
 
 ret_t
-cherokee_buffer_add (cherokee_buffer_t *buf, char *txt, size_t size)
+cherokee_buffer_add (cherokee_buffer_t *buf, const char *txt, size_t size)
 {	   
 	int free = buf->size - buf->len;
 

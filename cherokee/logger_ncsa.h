@@ -29,6 +29,7 @@
 #ifndef CHEROKEE_LOGGER_NCSA_H
 #define CHEROKEE_LOGGER_NCSA_H
 
+#include <time.h>
 #include "common-internal.h"
 #include "connection.h"
 #include "logger.h"
@@ -39,6 +40,11 @@ typedef struct {
 	cherokee_logger_t logger;
 
 	cherokee_boolean_t combined;
+
+	long               tz;
+	time_t             now_time;
+
+	cherokee_buffer_t  now_dtm;
 	cherokee_buffer_t  referer;
 	cherokee_buffer_t  useragent;
 
