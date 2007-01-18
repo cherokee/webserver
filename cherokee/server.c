@@ -86,6 +86,7 @@
 #include "fcgi_manager.h"
 #include "connection-protected.h"
 #include "nonce.h"
+#include "config_reader.h"
 
 #define ENTRIES "core,server"
 
@@ -1530,22 +1531,30 @@ cherokee_server_read_config_string (cherokee_server_t *srv, cherokee_buffer_t *s
 ret_t 
 cherokee_server_read_config_file (cherokee_server_t *srv, char *fullpath)
 {
-	ret_t ret;
+	ret_t             ret;
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+
+	cherokee_buffer_add (&tmp, fullpath, strlen(fullpath));
 
 	/* Load the main file
 	 */
-	ret = cherokee_config_reader_parse (&srv->config, fullpath);
-	if (ret != ret_ok) return ret;
+	ret = cherokee_config_reader_parse (&srv->config, &tmp);
+	if (ret != ret_ok) goto error;
 
 	ret = configure_server (srv);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) goto error;
 
 	/* Clean up
 	 */
 	ret = cherokee_config_node_mrproper (&srv->config);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) goto error;
 
+	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
+
+error:
+	cherokee_buffer_mrproper (&tmp);
+	return ret;
 }
 
 
