@@ -1,5 +1,12 @@
 2007-01-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/config_reader.h, cherokee/config_reader.c,
+	cherokee/config_node.h, cherokee/config_node.c,
+	cherokee/server.c (cherokee_server_read_config_string),
+	cherokee/Makefile.am: Configuration reading methods have been
+	splitted from the config_node class. They didn't make sense over
+	there.
+
 	* cherokee.conf.sample.pre: Error log fixed.
 
 	* cherokee/logger.h, cherokee/logger.c: "buffer" property removed.

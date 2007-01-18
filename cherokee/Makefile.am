@@ -877,6 +877,8 @@ nonce.h \
 nonce.c \
 config_node.h \
 config_node.c \
+config_reader.h \
+config_reader.c \
 balancer.h \
 balancer.c \
 source.h \
