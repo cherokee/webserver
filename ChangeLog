@@ -1,5 +1,7 @@
 2007-01-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee.conf.sample.pre: Error log fixed.
+
 	* cherokee/logger.h, cherokee/logger.c: "buffer" property removed.
 	It wasn't needed any longer.
 

@@ -28,7 +28,7 @@ vserver!default!logger = combined
 vserver!default!logger!access!type = file
 vserver!default!logger!access!filename = /var/log/cherokee.access
 vserver!default!logger!error!type = file
-vserver!default!logger!error = /var/log/cherokee.error
+vserver!default!logger!error!filename = /var/log/cherokee.error
 
 vserver!default!directory!/!handler = common
 vserver!default!directory!/!handler!iocache = 0
