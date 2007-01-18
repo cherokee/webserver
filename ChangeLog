@@ -1,3 +1,21 @@
+2007-01-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection_info.c (cherokee_connection_info_fill_up),
+	cherokee/dirs_table.c (relink_func),
+	cherokee/encoder_gzip.c (do_encode),
+	cherokee/virtual_server.c (cherokee_virtual_server_set_documentroot),
+	cherokee/logger_ncsa.c (cherokee_logger_ncsa_write_string),
+	cherokee/logger_w3c.c (cherokee_logger_w3c_write_string),
+	cherokee/header.c (cherokee_header_copy_version,
+	cherokee_header_copy_method),
+	cherokee/handler_redir.c (substitute_groups),
+	cherokee/handler_fastcgi.c (send_post): Removed (char *) casting
+	in the calls to cherokee_buffer_add()
+
+	* cherokee/config_node.c: Added config_reader.h inclusion. It also
+	removes casting to char pointer in the cherokee_buffer_add()
+	calls.
+
 2007-01-18  A.D.F  <adefacc@tin.it>
 
 	* cherokee/buffer.h:

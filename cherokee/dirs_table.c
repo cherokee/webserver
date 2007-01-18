@@ -154,7 +154,7 @@ relink_func (const char *key_, void *value, void *param)
 
 	/* It has to look the the parent of this directory
 	 */
-	cherokee_buffer_add (&key, (char *)key_, strlen(key_));
+	cherokee_buffer_add (&key, key_, strlen(key_));
 
 	do {
 		void *parent = NULL;

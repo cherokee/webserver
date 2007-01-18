@@ -68,7 +68,7 @@ substitute_groups (cherokee_buffer_t *url, const char *subject,
 			if (*s == '$')
 				dollar = true;
 			else 
-				cherokee_buffer_add (url, (char *)s, 1);
+				cherokee_buffer_add (url, (const char *)s, 1);
 			continue;
 		}
 
@@ -79,14 +79,14 @@ substitute_groups (cherokee_buffer_t *url, const char *subject,
 				dollar = false;
 				continue;
 			}
-			cherokee_buffer_add (url, (char *)substring, strlen(substring));
+			cherokee_buffer_add (url, substring, strlen(substring));
 			pcre_free_substring (substring);
 
 		} else {
 			/* If it is not a number, add both characters 
 			 */
 			cherokee_buffer_add_str (url, "$");
-			cherokee_buffer_add (url, (char *)s, 1);
+			cherokee_buffer_add (url, (const char *)s, 1);
 		}
 		
 		dollar = false;

@@ -166,7 +166,7 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_con
 		cherokee_module_get_name (MODULE(conn->handler), &handler_name);
 		
 		if (handler_name)
-			cherokee_buffer_add (&info->handler, (char *)handler_name, strlen(handler_name));
+			cherokee_buffer_add (&info->handler, handler_name, strlen(handler_name));
 	}
 
 	/* Total size

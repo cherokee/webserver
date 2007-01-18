@@ -197,7 +197,7 @@ cherokee_logger_w3c_write_string (cherokee_logger_w3c_t *logger, const char *str
 	ret = cherokee_logger_writer_get_buf (&logger->writer, &log);
 	if (unlikely (ret != ret_ok)) return ret;
 
-	cherokee_buffer_add (log, (char *)string, strlen(string));
+	cherokee_buffer_add (log, string, strlen(string));
 	return ret_ok;
 }
 

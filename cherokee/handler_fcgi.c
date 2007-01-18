@@ -616,7 +616,7 @@ send_post (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buf)
 		/* Add space for the header, it'll filled out later on..
 		 */
 		if (cherokee_buffer_is_empty (buf)) {
-			cherokee_buffer_add (buf, (char *)&empty_header, sizeof (FCGI_Header));
+			cherokee_buffer_add (buf, (const char *)&empty_header, sizeof (FCGI_Header));
 		}
 
 		/* Take a chunck of post

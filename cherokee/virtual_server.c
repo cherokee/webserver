@@ -340,7 +340,7 @@ ret_t
 cherokee_virtual_server_set_documentroot (cherokee_virtual_server_t *vserver, const char *documentroot)
 {
 	cherokee_buffer_clean (&vserver->root);
-	cherokee_buffer_add (&vserver->root, (char *)documentroot, strlen(documentroot));
+	cherokee_buffer_add (&vserver->root, documentroot, strlen(documentroot));
 
 	return ret_ok;
 }

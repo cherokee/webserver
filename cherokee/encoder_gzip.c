@@ -224,7 +224,7 @@ do_encode (cherokee_encoder_gzip_t *encoder,
          * +---+---+---+---+---+---+---+---+---+---+
 	 */
 	if (encoder->add_header) {
-		cherokee_buffer_add (out, (char *)gzip_header, gzip_header_len);
+		cherokee_buffer_add (out, (const char *)gzip_header, gzip_header_len);
 		encoder->add_header = false;
 	}
 

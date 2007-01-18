@@ -25,6 +25,7 @@
 #include "common-internal.h"
 
 #include "config_node.h"
+#include "config_reader.h"
 #include "util.h"
 
 #define ENTRIES "config"
@@ -135,9 +136,9 @@ cherokee_config_node_add (cherokee_config_node_t *conf, const char *key, cheroke
 		 */
 		sep = strchr (begin, '!');
 		if (sep != NULL) {
-			cherokee_buffer_add (&tmp, (char *)begin, sep - begin);
+			cherokee_buffer_add (&tmp, begin, sep - begin);
 		} else {
-			cherokee_buffer_add (&tmp, (char *)begin, strlen(begin));
+			cherokee_buffer_add (&tmp, begin, strlen(begin));
 			final = true;
 		}
 
@@ -190,9 +191,9 @@ cherokee_config_node_get (cherokee_config_node_t *conf, const char *key, cheroke
 		 */
 		sep = strchr (begin, '!');
 		if (sep != NULL) {
-			cherokee_buffer_add (&tmp, (char *)begin, sep - begin);
+			cherokee_buffer_add (&tmp, begin, sep - begin);
 		} else {
-			cherokee_buffer_add (&tmp, (char *)begin, strlen(begin));
+			cherokee_buffer_add (&tmp, begin, strlen(begin));
 			final = true;
 		}
 

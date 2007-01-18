@@ -887,7 +887,7 @@ cherokee_trace (const char *entry, const char *file, int line, const char *func,
 		return;
 	}
        
-	cherokee_buffer_add (&entries, (char *)entry, strlen(entry));
+	cherokee_buffer_add (&entries, entry, strlen(entry));
 
 	for (lentry = entries.buf;;) {
 		lentry_end = strchr (lentry, ',');

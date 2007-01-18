@@ -510,7 +510,7 @@ send_post (cherokee_handler_fastcgi_t *hdl, cherokee_buffer_t *buf)
 		TRACE (ENTRIES, "id=%d gen=%d, Post phase = read\n", hdl->id, hdl->generation);
 
 		if (cherokee_buffer_is_empty (buf)) {
-			cherokee_buffer_add (buf, (char *)&empty_header, sizeof (FCGI_Header));
+			cherokee_buffer_add (buf, (const char *)&empty_header, sizeof (FCGI_Header));
 		}
 
 		ret = cherokee_post_walk_read (&conn->post, buf, POST_PACKAGE_LEN);
