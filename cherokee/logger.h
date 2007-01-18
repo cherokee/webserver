@@ -35,7 +35,6 @@
 #include <cherokee/common.h>
 #include <cherokee/module.h>
 #include <cherokee/table.h>
-#include <cherokee/buffer.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -64,14 +63,10 @@ typedef struct {
 	logger_func_write_error_t       write_error;
 	logger_func_write_string_t      write_string;
 
-	/* Buffer 
-	 */
-	cherokee_buffer_t               buffer;
 	size_t                          max_size;
 } cherokee_logger_t;
 
-#define LOGGER(x)        ((cherokee_logger_t *)(x))
-#define LOGGER_BUFFER(b) (&LOGGER(b)->buffer)
+#define LOGGER(x) ((cherokee_logger_t *)(x))
 
 
 /* Easy initialization

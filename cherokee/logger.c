@@ -61,9 +61,6 @@ cherokee_logger_init_base (cherokee_logger_t *logger, cherokee_plugin_info_t *in
 	logger->priv->backup_mode = false;
 	CHEROKEE_MUTEX_INIT (&PRIV(logger)->mutex, NULL);
 
-	cherokee_buffer_init (&logger->buffer);
-	cherokee_buffer_ensure_size (&logger->buffer, logger->max_size);
-
 	return ret_ok;
 }
 
@@ -75,8 +72,6 @@ ret_t
 cherokee_logger_free (cherokee_logger_t *logger)
 {
 	ret_t ret;
-
-	cherokee_buffer_mrproper (&logger->buffer);
 
 	CHEROKEE_MUTEX_DESTROY (&PRIV(logger)->mutex);
 
@@ -222,12 +217,6 @@ cherokee_logger_set_backup_mode (cherokee_logger_t *logger, cherokee_boolean_t a
 
 	ret = cherokee_logger_flush (logger);
 	if (unlikely(ret != ret_ok)) return ret;
-
-	/* Free the buffer and create a new one in order to ensure
-	 * it didn't get too big while the logger was in backup mode.
-	 */
-	cherokee_buffer_mrproper (&logger->buffer);
-	cherokee_buffer_init (&logger->buffer);
 
 	return ret_ok;
 }
