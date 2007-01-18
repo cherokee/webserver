@@ -7,7 +7,7 @@ def is_letter(x):
 
 
 def print_block(info, len):
-    print 'ret = cherokee_buffer_add (buffer, (char *)\\\n' + info + ', ' + str(len) + ');'
+    print 'ret = cherokee_buffer_add (buffer, \\\n' + info + ', ' + str(len) + ');'
     print 'if (ret < ret_ok) return ret;\n'
 
 file = open (sys.argv[1], "r")
