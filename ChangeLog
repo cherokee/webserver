@@ -1,3 +1,9 @@
+2007-01-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* contrib/05to06.py (Syntax._process_entry_guts): Handler "Env"
+	property management has been fixed.  It needs three parameters
+	rather than only two as the rest of the properties.
+
 2007-01-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/bin2buffer.py (print_block): Do not print the casting to

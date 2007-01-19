@@ -123,6 +123,17 @@ class Syntax:
                     if val_prop_low == 'justabout':
                         print '%s!handler!just_about = 1' % (prefix)
                         continue 
+
+                    elif val_prop_low == 'env':
+                        kind, val_env_name = self._lex.get_token()
+                        if kind != 'str': raise "Expected a str"
+
+                        kind, val_env_val = self._lex.get_token()
+                        if kind != 'str': raise "Expected a str"
+
+                        print '%s!handler!env!%s = %s' % (prefix, val_env_name, val_env_val)
+                        continue 
+
                     elif val_prop_low == 'show' or \
                          val_prop_low == 'rewrite':
                         kind, val_prop = self._lex.get_token()
