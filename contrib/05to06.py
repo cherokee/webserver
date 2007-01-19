@@ -643,6 +643,8 @@ class Syntax:
         if not self._vserver_has_document_root:
             print "vserver!%s!document_root = %s" % (vserver, FAKED_DOCUMENT_ROOT)
 
+        print
+
     def process_sentence (self):
         kind, val = self._lex.get_token()
         if kind == None: return False

@@ -1,8 +1,12 @@
 2007-01-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* contrib/05to06.py: Adds a blank like after each virtual host.
+	It makes easier to edit the generated file later on.
+	
 	* contrib/05to06.py: Adds a faked DocumentRoot if the virtual
 	server didn't contain one.  0.5 wasn't checking for a
 	document_root but 0.6 does. It is no more than a work around.
+	This script isn't meant to be perfect, just useful.
 
 	* contrib/05to06.py: Now, it adds the "priority" entry to all the
 	directory, extension and request entries it processes.
