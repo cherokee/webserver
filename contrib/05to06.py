@@ -10,6 +10,9 @@
 import sys
 import string
 
+FAKED_DOCUMENT_ROOT = '/faked'
+
+
 class Syntax:
     srv_entries =     {'port':                  'int',
                        'porttls':               'int',
@@ -33,7 +36,6 @@ class Syntax:
                        }
 
     vsrv_entries =    {'directoryindex':        'list',
-                       'documentroot':          'path',
                        'sslcertificatefile':    'path',
                        'sslcertificatekeyfile': 'path',
                        'sslcalistfile':         'path'
@@ -386,6 +388,13 @@ class Syntax:
 
             print "vserver!%s!%s = %s" % (vserver, kind, str(val_val))
 
+        elif kind == 'documentroot':
+            kind, val = self._lex.get_token()
+            if kind != 'path': raise "Malformed DocumentRoot"
+
+            print "vserver!%s!document_root = %s" % (vserver, val)
+            self._vserver_has_document_root = True
+
         elif kind == 'directory':
             kind, dir_val = self._lex.get_token()
 
@@ -622,6 +631,8 @@ class Syntax:
             i = i + 1
             print "vserver!%s!domain!%d = %s" % (vserver, i, v)
 
+        self._vserver_has_document_root = False
+
         while True:
             more = self._process_virtual_server_content (vserver)
             if not more: break
@@ -629,6 +640,8 @@ class Syntax:
         kind, val = self._lex.get_token()
         if kind != '}': raise "Expected }, got %s=%s" % (kind,val)
 
+        if not self._vserver_has_document_root:
+            print "vserver!%s!document_root = %s" % (vserver, FAKED_DOCUMENT_ROOT)
 
     def process_sentence (self):
         kind, val = self._lex.get_token()
