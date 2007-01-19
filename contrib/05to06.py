@@ -138,6 +138,17 @@ class Syntax:
                          val_prop_low == 'rewrite':
                         kind, val_prop = self._lex.get_token()
 
+                        # dirlist
+                        if val_prop_low == 'show':
+                            if 'size'  in val_prop or \
+                               'date'  in val_prop or \
+                               'owner' in val_prop:
+                                print '%s!handler!size = %d' % (prefix, 'size' in val_prop)
+                                print '%s!handler!date = %d' % (prefix, 'date' in val_prop)
+                                print '%s!handler!user = %d' % (prefix, 'owner' in val_prop)
+                                continue
+                            
+                        # redir
                         rewrite = (kind == 'str' and val_prop.lower() == 'rewrite')
                         if not rewrite: self._lex.rewind()
 

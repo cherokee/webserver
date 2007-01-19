@@ -1,5 +1,8 @@
 2007-01-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* contrib/05to06.py (Syntax._process_entry_guts): Added an
+	exception for handling the "Show" property of dirlist.
+
 	* contrib/05to06.py (Syntax._process_entry_guts): Handler "Env"
 	property management has been fixed.  It needs three parameters
 	rather than only two as the rest of the properties.
