@@ -267,6 +267,9 @@ class Syntax:
             more = self._process_entry_guts (prefix)
             if not more: break
 
+        print "%s!priority = %d" % (prefix, self._vserver_last_priority * 10)
+        self._vserver_last_priority += 1
+
     def _process_encoder (self, prefix):
         while True:
             kind, val = self._lex.get_token()
@@ -595,6 +598,8 @@ class Syntax:
         return True
 
     def _process_server (self):
+        self._vserver_last_priority = 1
+
         kind, val = self._lex.get_token()
         if kind != 'server': raise "Expected server"
 
