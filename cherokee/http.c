@@ -99,6 +99,7 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_moved_permanently:        *str = http_moved_permanently_string; break;
 	case http_moved_temporarily:        *str = http_moved_temporarily_string; break;
 	case http_unauthorized:             *str = http_unauthorized_string; break;
+	case http_see_other:                *str = http_see_other_string; break;
 	case http_not_modified:             *str = http_not_modified_string; break;
 	case http_bad_request:              *str = http_bad_request_string; break;
 	case http_access_denied:            *str = http_access_denied_string; break;
@@ -137,6 +138,7 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (partial_content);
 		entry_code (moved_permanently);
 		entry_code (moved_temporarily);
+		entry_code (see_other);
 		entry_code (not_modified);
 		entry_code (bad_request);
 		entry_code (unauthorized);
