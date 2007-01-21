@@ -93,26 +93,27 @@ ret_t
 cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 {
 	switch (code) {
-	case http_ok:  	                 *str = http_ok_string; break;
-	case http_accepted:              *str = http_accepted_string; break;
-	case http_partial_content:       *str = http_partial_content_string; break;
-	case http_moved_permanently:     *str = http_moved_permanently_string; break;
-	case http_moved_temporarily:     *str = http_moved_temporarily_string; break;
-	case http_unauthorized:          *str = http_unauthorized_string; break;
-	case http_not_modified:          *str = http_not_modified_string; break;
-	case http_bad_request:           *str = http_bad_request_string; break;
-	case http_access_denied:         *str = http_access_denied_string; break;
-	case http_not_found:             *str = http_not_found_string; break;
-	case http_method_not_allowed:    *str = http_method_not_allowed_string; break;
-	case http_length_required:       *str = http_length_required_string; break;
-	case http_request_uri_too_long:  *str = http_request_uri_too_long_string; break;
-	case http_range_not_satisfiable: *str = http_range_not_satisfiable_string; break;
-	case http_upgrade_required:      *str = http_upgrade_required_string; break;
-	case http_internal_error:        *str = http_internal_error_string; break;
-	case http_bad_gateway:           *str = http_bad_gateway_string; break;
-	case http_service_unavailable:   *str = http_service_unavailable_string; break;
-	case http_continue:              *str = http_continue_string; break;
-	case http_switching_protocols:   *str = http_switching_protocols_string; break;
+	case http_ok:  	                    *str = http_ok_string; break;
+	case http_accepted:                 *str = http_accepted_string; break;
+	case http_partial_content:          *str = http_partial_content_string; break;
+	case http_moved_permanently:        *str = http_moved_permanently_string; break;
+	case http_moved_temporarily:        *str = http_moved_temporarily_string; break;
+	case http_unauthorized:             *str = http_unauthorized_string; break;
+	case http_not_modified:             *str = http_not_modified_string; break;
+	case http_bad_request:              *str = http_bad_request_string; break;
+	case http_access_denied:            *str = http_access_denied_string; break;
+	case http_not_found:                *str = http_not_found_string; break;
+	case http_method_not_allowed:       *str = http_method_not_allowed_string; break;
+	case http_length_required:          *str = http_length_required_string; break;
+	case http_request_entity_too_large: *str = http_request_entity_too_large_string; break;
+	case http_request_uri_too_long:     *str = http_request_uri_too_long_string; break;
+	case http_range_not_satisfiable:    *str = http_range_not_satisfiable_string; break;
+	case http_upgrade_required:         *str = http_upgrade_required_string; break;
+	case http_internal_error:           *str = http_internal_error_string; break;
+	case http_bad_gateway:              *str = http_bad_gateway_string; break;
+	case http_service_unavailable:      *str = http_service_unavailable_string; break;
+	case http_continue:                 *str = http_continue_string; break;
+	case http_switching_protocols:      *str = http_switching_protocols_string; break;
 	default:
 		*str = "500 Unknown error";
 		return ret_error;
@@ -143,6 +144,7 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (not_found);
 		entry_code (method_not_allowed);
 		entry_code (length_required);
+		entry_code (request_entity_too_large);
 		entry_code (request_uri_too_long);
 		entry_code (range_not_satisfiable);
 		entry_code (upgrade_required);

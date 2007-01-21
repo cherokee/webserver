@@ -63,7 +63,8 @@ class Syntax:
                        'sslcertificatefile':    'ssl_certificate_file',
                        'sslcertificatekeyfile': 'ssl_certificate_key_file',
                        'sslcalistfile':         'ssl_cal_list_file',
-                       'directoryindex':        'directory_index'
+                       'directoryindex':        'directory_index',
+                       'scriptalias':           'script_alias'
                        }
     
     def __init__ (self, lex):

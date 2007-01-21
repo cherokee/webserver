@@ -380,14 +380,6 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 	if ((entry != NULL) && (entry->handler_new_func != NULL)) {
 		ret = entry->handler_new_func ((void **) &conn->handler, conn, entry->handler_properties);
 		if (ret == ret_ok) goto out;
-
-#ifdef TRACE_ENABLED
-		{ 
-			const char *name = NULL;
-			cherokee_module_get_name (MODULE(conn->handler), &name);
-			TRACE(ENTRIES, "New handler %s\n", name);
-		}
-#endif
 	} 
 
 	/* If something was wrong, try with the default error handler
@@ -395,6 +387,15 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 	ret = cherokee_handler_error_new (&conn->handler, conn, NULL);
 
 out:
+#ifdef TRACE_ENABLED
+	{ 
+		const char *name = NULL;
+
+		cherokee_module_get_name (MODULE(conn->handler), &name);
+		TRACE(ENTRIES, "New handler %s\n", name);
+	}
+#endif
+
 	/* Nothing should be mmaped any longer
 	 */
 	if (conn->mmaped != NULL) {

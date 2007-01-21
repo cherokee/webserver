@@ -1,3 +1,20 @@
+2007-01-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/http.c (cherokee_http_code_copy)
+	(cherokee_http_code_to_string): request_entity_too_large wasn't
+	supported.
+
+	* contrib/05to06.py (Syntax): Added a 'ScriptAlias' to
+	script_alias rule.
+	
+	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_build_envp):
+	Removed TRACE.  It was printing it inside the response header.
+
+2007-01-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection.c (cherokee_connection_setup_error_handler):
+	Trace block relocated.
+
 2007-01-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/05to06.py: Adds a blank like after each virtual host.

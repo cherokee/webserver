@@ -500,7 +500,6 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 		cherokee_buffer_add (&tmp, p, len);
 	
 	cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, tmp.buf, tmp.len);
-	TRACE (ENTRIES, "SCRIPT_NAME '%s'\n", tmp.buf);
 
 	/* SCRIPT_FILENAME
 	 * It depends on the type of CGI (CGI, SCGI o FastCGI):
