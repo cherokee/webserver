@@ -1,3 +1,29 @@
+2007-01-21  A.D.F  <adefacc@tin.it>
+
+	* cherokee/logger_w3c.c:
+        - cherokee_logger_w3c_write_error(),
+	  added header if needed;
+	- cherokee_logger_w3c_writer_error()
+          cherokee_logger_w3c_writer_access():
+          - fixed format string for date header.
+	
+	* cherokee/logger_w3c.h:
+        - added new fields to cherokee_logger_ncsa_t:
+          - now_time;
+          - now_buf.
+
+	* cherokee/logger_w3c.c:
+        - cherokee_logger_w3c_write_access(),
+          cherokee_logger_w3c_writer_error():
+	  - sped up execution by formatting time only
+	    once a second and by not using
+	    cherokee_buffer_add_va() in the fast path;
+	  - added buffer flush.
+
+	* cherokee/logger_ncsa.c:
+        - cherokee_logger_ncsa_write_string(),
+	  added buffer flush.
+
 2007-01-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/http.h (http_see_other_string),

@@ -318,7 +318,16 @@ cherokee_logger_ncsa_write_string (cherokee_logger_ncsa_t *logger, const char *s
 	if (unlikely (ret != ret_ok)) return ret;
 
 	ret = cherokee_buffer_add (log, string, strlen(string));
-	return ret;
+ 	if (unlikely (ret != ret_ok)) return ret;
+  
+  	if (log->len > logger->writer_access.max_bufsize) {
+		/* Buffer is full, flush it!
+		 */
+		ret = cherokee_logger_writer_flush (&logger->writer_access);
+		if (unlikely (ret != ret_ok)) return ret;
+	}
+
+	return ret_ok;
 }
 
 

@@ -71,8 +71,7 @@ static char *month[]   = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 ret_t
 cherokee_logger_w3c_new  (cherokee_logger_t **logger, cherokee_config_node_t *config)
 {
-	ret_t                   ret;
-	cherokee_config_node_t *subconf;
+	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, logger_w3c);
 	
 	/* Init the base class object
@@ -85,25 +84,49 @@ cherokee_logger_w3c_new  (cherokee_logger_t **logger, cherokee_config_node_t *co
 	LOGGER(n)->write_error  = (logger_func_write_error_t) cherokee_logger_w3c_write_error;
 	LOGGER(n)->write_access = (logger_func_write_access_t) cherokee_logger_w3c_write_access;
 	LOGGER(n)->write_string = (logger_func_write_string_t) cherokee_logger_w3c_write_string;
-	
-	/* Init properties
-	 */
-	n->header_added = false;
 
-	/* Init logger writer
-	 */
-	ret = cherokee_logger_writer_init (&n->writer);
-	if (ret != ret_ok) return ret;
-	
-	ret = cherokee_config_node_get (config, "all", &subconf);
-	if (ret == ret_ok) {
-		ret = cherokee_logger_writer_configure (&n->writer, subconf);
-		if (ret != ret_ok) return ret;
-	}
+	ret = cherokee_logger_w3c_init_base (n, config);
+	if (unlikely(ret < ret_ok)) return ret;
 
+	/* Return the object
+	 */
 	*logger = LOGGER(n);
 	return ret_ok;
 }
+
+
+ret_t 
+cherokee_logger_w3c_init_base (cherokee_logger_w3c_t *logger, cherokee_config_node_t *config)
+{
+	ret_t                   ret;
+	cherokee_config_node_t *subconf;
+
+	/* Init Properties
+	 */
+	logger->header_added = false;
+	logger->now_time = (time_t) -1;
+
+	/* Init the local buffers
+	 */
+	cherokee_buffer_init (&logger->now_buf);
+	cherokee_buffer_ensure_size (&logger->now_buf,   64);
+
+	/* Init the logger writers
+	 */
+	ret = cherokee_logger_writer_init (&logger->writer);
+	if (ret != ret_ok) return ret;
+
+	/* Configure them
+	 */
+	ret = cherokee_config_node_get (config, "all", &subconf);
+	if (ret == ret_ok) {
+		ret = cherokee_logger_writer_configure (&logger->writer, subconf);
+		if (ret != ret_ok) return ret;
+	}
+
+	return ret_ok;
+}
+
 
 
 ret_t 
@@ -111,6 +134,8 @@ cherokee_logger_w3c_init (cherokee_logger_w3c_t *logger)
 {
 	ret_t ret;
 
+	/* Open the log writer.
+	 */
 	ret = cherokee_logger_writer_open (&logger->writer);
 	if (ret != ret_ok) return ret;
 
@@ -121,6 +146,7 @@ cherokee_logger_w3c_init (cherokee_logger_w3c_t *logger)
 ret_t
 cherokee_logger_w3c_free (cherokee_logger_w3c_t *logger)
 {
+	cherokee_buffer_mrproper (&logger->now_buf);
 	cherokee_logger_writer_mrproper (&logger->writer);
 	return ret_ok;
 }
@@ -144,46 +170,72 @@ ret_t
 cherokee_logger_w3c_write_error  (cherokee_logger_w3c_t *logger, cherokee_connection_t *cnt)
 {
 	ret_t              ret;
-	long int           z;
+	cuint_t            method_len = 0;
 	const char        *method;
-	struct tm         *conn_time;
 	cherokee_buffer_t *log;
 	cherokee_buffer_t *request;
-	static long       *this_timezone = NULL;
 
 	/* Get the logger writer buffer
 	 */
 	ret = cherokee_logger_writer_get_buf (&logger->writer, &log);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Read the bogonow value from the server
 	 */
-	conn_time = &CONN_THREAD(cnt)->bogo_now_tm;
+	if (unlikely (logger->now_time != CONN_THREAD(cnt)->bogo_now)) {
+		struct tm *pnow_tm;
 
-	/* Get the timezone reference
-	 */
-	if (this_timezone == NULL) {
-		this_timezone = cherokee_get_timezone_ref();
+		logger->now_time = CONN_THREAD(cnt)->bogo_now;
+		pnow_tm = &CONN_THREAD(cnt)->bogo_now_tm;
+
+		cherokee_buffer_clean (&logger->now_buf);
+		cherokee_buffer_add_va (&logger->now_buf, 
+				"%02d:%02d:%02d ",
+				pnow_tm->tm_hour, 
+				pnow_tm->tm_min, 
+				pnow_tm->tm_sec);
 	}
-	
-	z = - (*this_timezone / 60);
 
-	/* The method
+	if (unlikely (! logger->header_added)) {
+		struct tm *pnow_tm = &CONN_THREAD(cnt)->bogo_now_tm;
+
+		cherokee_buffer_add_va (log,
+					"#Version 1.0\n"
+					"#Date: %02d-%s-%4d %02d:%02d:%02d\n"
+					"#Fields: time cs-method cs-uri\n",
+					pnow_tm->tm_mday, 
+					month[pnow_tm->tm_mon], 
+					1900 + pnow_tm->tm_year,
+					pnow_tm->tm_hour, 
+					pnow_tm->tm_min, 
+					pnow_tm->tm_sec);
+		logger->header_added = true;
+	}
+
+	/* HTTP method
 	 */
-	cherokee_http_method_to_string (cnt->header.method, &method, NULL);
+	cherokee_http_method_to_string (cnt->header.method, &method, &method_len);
 
 	/* Build the string
 	 */
 	request = cherokee_buffer_is_empty(&cnt->request_original) ? 
 		&cnt->request : &cnt->request_original;
 
-	cherokee_buffer_add_va (log, 
-				"%02d:%02d:%02d [error] %s %s\n",
-				conn_time->tm_hour, 
-				conn_time->tm_min, 
-				conn_time->tm_sec,
-				method,
-				request->buf);
+	cherokee_buffer_add_buffer (log, &logger->now_buf);
+	cherokee_buffer_add_str    (log, "[error] ");
+	cherokee_buffer_add        (log, method, (size_t) method_len);
+	cherokee_buffer_add_char   (log, ' ');
+	cherokee_buffer_add_buffer (log, request);
+	cherokee_buffer_add_char   (log, '\n');
+
+	if (log->len < logger->writer.max_bufsize)
+		return ret_ok;
+
+	/* Buffer is full, flush it!
+	 */
+	ret = cherokee_logger_writer_flush (&logger->writer);
+
 	return ret_ok;
 }
 
@@ -197,7 +249,16 @@ cherokee_logger_w3c_write_string (cherokee_logger_w3c_t *logger, const char *str
 	ret = cherokee_logger_writer_get_buf (&logger->writer, &log);
 	if (unlikely (ret != ret_ok)) return ret;
 
-	cherokee_buffer_add (log, string, strlen(string));
+	ret = cherokee_buffer_add (log, string, strlen(string));
+ 	if (unlikely (ret != ret_ok)) return ret;
+  
+  	if (log->len > logger->writer.max_bufsize) {
+		/* Buffer is full, flush it!
+		 */
+		ret = cherokee_logger_writer_flush (&logger->writer);
+		if (unlikely (ret != ret_ok)) return ret;
+	}
+
 	return ret_ok;
 }
 
@@ -206,12 +267,10 @@ ret_t
 cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connection_t *cnt)
 {
 	ret_t              ret;
-	long int           z;
+	cuint_t            method_len = 0;
 	const char        *method;
-	struct tm         *conn_time;
 	cherokee_buffer_t *log;
 	cherokee_buffer_t *request;
-	static long       *this_timezone = NULL;
 
 	/* Get the logger writer buffer
 	 */
@@ -220,46 +279,58 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 
 	/* Read the bogonow value from the server
 	 */
-	conn_time = &CONN_THREAD(cnt)->bogo_now_tm;
+	if (unlikely (logger->now_time != CONN_THREAD(cnt)->bogo_now)) {
+		struct tm *pnow_tm;
 
-	if (! logger->header_added) {
+		logger->now_time = CONN_THREAD(cnt)->bogo_now;
+		pnow_tm = &CONN_THREAD(cnt)->bogo_now_tm;
+
+		cherokee_buffer_clean (&logger->now_buf);
+		cherokee_buffer_add_va (&logger->now_buf, 
+				"%02d:%02d:%02d ",
+				pnow_tm->tm_hour, 
+				pnow_tm->tm_min, 
+				pnow_tm->tm_sec);
+	}
+
+	if (unlikely (! logger->header_added)) {
+		struct tm *pnow_tm = &CONN_THREAD(cnt)->bogo_now_tm;
+
 		cherokee_buffer_add_va (log,
 					"#Version 1.0\n"
-					"#Date: %d02-%s-%4d %02d:%02d:%02d\n"
+					"#Date: %02d-%s-%4d %02d:%02d:%02d\n"
 					"#Fields: time cs-method cs-uri\n",
-					conn_time->tm_mday, 
-					month[conn_time->tm_mon], 
-					1900 + conn_time->tm_year,
-					conn_time->tm_hour, 
-					conn_time->tm_min, 
-					conn_time->tm_sec);
+					pnow_tm->tm_mday, 
+					month[pnow_tm->tm_mon], 
+					1900 + pnow_tm->tm_year,
+					pnow_tm->tm_hour, 
+					pnow_tm->tm_min, 
+					pnow_tm->tm_sec);
 		logger->header_added = true;
 	}
-	
-	/* Get the timezone reference
-	 */
-	if (this_timezone == NULL) {
-		this_timezone = cherokee_get_timezone_ref();
-	}
-	
-	z = - (*this_timezone / 60);
 
 	/* HTTP Method
 	 */
-	cherokee_http_method_to_string (cnt->header.method, &method, NULL);
+	cherokee_http_method_to_string (cnt->header.method, &method, &method_len);
 
 	/* Build the string
 	 */
 	request = cherokee_buffer_is_empty(&cnt->request_original) ? 
 		&cnt->request : &cnt->request_original;
 
-	cherokee_buffer_add_va (log,
-				"%02d:%02d:%02d %s %s\n",
-				conn_time->tm_hour, 
-				conn_time->tm_min, 
-				conn_time->tm_sec,
-				method,
-				request->buf);
+	cherokee_buffer_add_buffer (log, &logger->now_buf);
+	cherokee_buffer_add        (log, method, (size_t) method_len);
+	cherokee_buffer_add_char   (log, ' ');
+	cherokee_buffer_add_buffer (log, request);
+	cherokee_buffer_add_char   (log, '\n');
+
+	if (log->len < logger->writer.max_bufsize)
+		return ret_ok;
+
+	/* Buffer is full, flush it!
+	 */
+	ret = cherokee_logger_writer_flush (&logger->writer);
+
 	return ret_ok;
 }
 

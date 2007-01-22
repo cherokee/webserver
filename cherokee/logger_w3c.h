@@ -35,6 +35,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <time.h>
 
 #include "connection.h"
 #include "logger.h"
@@ -43,11 +44,14 @@
 typedef struct {
 	cherokee_logger_t        logger;	
 	cherokee_boolean_t       header_added;
+	time_t                   now_time;
+	cherokee_buffer_t        now_buf;
 	cherokee_logger_writer_t writer;
 } cherokee_logger_w3c_t;
 
 
 ret_t cherokee_logger_w3c_new (cherokee_logger_t **logger, cherokee_config_node_t *config);
+ret_t cherokee_logger_w3c_init_base (cherokee_logger_w3c_t *logger, cherokee_config_node_t *config);
 
 /* virtual methods implementation
  */
