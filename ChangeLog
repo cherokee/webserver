@@ -1,3 +1,31 @@
+2007-01-22  A.D.F  <adefacc@tin.it>
+
+	* cherokee/connection-protected.h:
+        - rename cherokee_connection_pre_lingering_close()
+	      to cherokee_connection_shutdown_wr();
+
+	* cherokee/connection.c:
+        - rename cherokee_connection_pre_lingering_close()
+	      to cherokee_connection_shutdown_wr();
+	- fix cherokee_connection_mrproper()
+	  in order to always execute cleanup even if
+	  one function fails.
+
+	* cherokee/thread.c:
+        - rename cherokee_connection_pre_lingering_close()
+	      to cherokee_connection_shutdown_wr();
+
+	* cherokee/socket.c:
+	- added ENOTCONN to the error codes which are not logged
+	  (because they can happen under certain conditions);
+	- cherokee_socket_read(), cherokee_socket_write(),
+	  cherokee_socket_writev(), now errors which are not
+	  logged lead to ret_error instead of ret_eof.
+
+	* cherokee/logger_writer.c:
+	- added a loop around write() in order to retry write()
+	  in case of EINTR error (signal interrupt).
+
 2007-01-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main.c (BASIC_CONFIG): iocache should be off in the

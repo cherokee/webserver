@@ -326,17 +326,17 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_mrproper (cherokee_connection_t *conn)
 {
-	ret_t ret;
-
+	/* Close and clean socket, objects, etc.
+	 * IGNORING ERRORS in order to not leave things
+	 * in an uncleaned / undetermined state.
+	 */
 	conn->keepalive = 0;
-	
+
 	/* Close and clean the socket
 	 */
-	ret = cherokee_socket_close (&conn->socket);
-	if (unlikely(ret < ret_ok)) return ret;
+	cherokee_socket_close (&conn->socket);
 
-	ret = cherokee_socket_clean (&conn->socket);
-	if (unlikely(ret < ret_ok)) return ret;
+	cherokee_socket_clean (&conn->socket);
 
 	/* Clean the connection object
 	 */
@@ -349,7 +349,6 @@ cherokee_connection_mrproper (cherokee_connection_t *conn)
 
 	return ret_ok;
 }
-
 
 
 ret_t
@@ -825,7 +824,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 
 
 ret_t 
-cherokee_connection_pre_lingering_close (cherokee_connection_t *conn)
+cherokee_connection_shutdown_wr (cherokee_connection_t *conn)
 {
 	/* At this point, we don't want to follow the TLS protocol
 	 * any longer.
@@ -1899,9 +1898,8 @@ cherokee_connection_log_or_delay (cherokee_connection_t *conn)
 	if (conn->log_at_end == 0) {
 		if (conn->logger_ref != NULL) {
 			if (http_type_400(conn->error_code) ||
-			    http_type_500(conn->error_code)) 
-			{
-				ret = cherokee_logger_write_error (conn->logger_ref, conn);				
+			    http_type_500(conn->error_code)) {
+				ret = cherokee_logger_write_error (conn->logger_ref, conn);
 			} else {
 				ret = cherokee_logger_write_access (conn->logger_ref, conn);
 			}

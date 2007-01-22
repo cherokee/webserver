@@ -29,6 +29,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdlib.h>
+#include <errno.h>
 #include <fcntl.h>
 
 #ifdef HAVE_SYSLOG_H
@@ -253,8 +255,11 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer)
 
 	case cherokee_logger_writer_pipe:
 	case cherokee_logger_writer_file:
-		re = write (writer->fd, writer->buffer.buf, buflen);
-		if (re < 0) return ret_error;
+		do {
+			re = write (writer->fd, writer->buffer.buf, buflen);
+		} while (re == -1 && errno == EINTR);
+		if (re < 0)
+			return ret_error;
 
 		cherokee_buffer_move_to_begin (&writer->buffer, re);
 		if (! cherokee_buffer_is_empty (&writer->buffer))

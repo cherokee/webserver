@@ -907,12 +907,16 @@ cherokee_write (cherokee_socket_t *socket, const char *buf, int buf_len, size_t 
 		case EAGAIN:      
 		case EINTR:       
 			return ret_eagain;
+
 		case EPIPE:       
+#ifdef ENOTCONN
+		case ENOTCONN:
+#endif
 		case ETIMEDOUT:
 		case ECONNRESET:  
 		case EHOSTUNREACH:
 			socket->status = socket_closed;
-			return ret_eof;
+			return ret_error;
 		}
 	
 		PRINT_ERROR ("ERROR: write(%d, ..) -> errno=%d '%s'\n", 
@@ -1012,14 +1016,18 @@ cherokee_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t *done)
 		case EINTR:      
 		case EAGAIN:    
 			return ret_eagain;
+
 		case EBADF:
 		case EPIPE: 
 		case ENOTSOCK:
+#ifdef ENOTCONN
+		case ENOTCONN:
+#endif
 		case ETIMEDOUT:
 		case ECONNRESET:
 		case EHOSTUNREACH:
 			socket->status = socket_closed;
-			return ret_eof;
+			return ret_error;
 		}
 
 		PRINT_ERROR ("ERROR: read(%d, ..) -> errno=%d '%s'\n", 
@@ -1072,13 +1080,17 @@ cherokee_writev (cherokee_socket_t *socket, const struct iovec *vector, uint16_t
 		case EAGAIN:
 		case EINTR: 
 			return ret_eagain;
+
 		case EPIPE:
+#ifdef ENOTCONN
+		case ENOTCONN:
+#endif
 		case ETIMEDOUT:
 		case ECONNRESET:
 			socket->status = socket_closed;
-			return ret_eof;
+			return ret_error;
 		}
-	       
+
 		PRINT_ERROR ("ERROR: writev(%d, ..) -> errno=%d '%s'\n", 
 			     SOCKET_FD(socket), err, strerror(err));
 		return ret_error;

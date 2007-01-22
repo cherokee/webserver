@@ -443,7 +443,7 @@ purge_maybe_lingering (cherokee_thread_t *thread, cherokee_connection_t *conn)
 
 	/* Shutdown writing, and try to read some trash
 	 */
-	ret = cherokee_connection_pre_lingering_close (conn);
+	ret = cherokee_connection_shutdown_wr (conn);
 	switch (ret) {
 	case ret_ok:
 	case ret_eagain:
@@ -477,7 +477,7 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 	 * cork before shutdown or before a close).
 	 */
 	if (conn->keepalive <= 0) {
-		ret = cherokee_connection_pre_lingering_close (conn);
+		ret = cherokee_connection_shutdown_wr (conn);
 		switch (ret) {
 		case ret_ok:
 		case ret_eagain:
@@ -1217,7 +1217,7 @@ process_active_connections (cherokee_thread_t *thd)
 			
 		case phase_shutdown: 
 
-			ret = cherokee_connection_pre_lingering_close (conn);
+			ret = cherokee_connection_shutdown_wr (conn);
 			switch (ret) {
 			case ret_ok:
 			case ret_eagain:

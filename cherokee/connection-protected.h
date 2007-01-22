@@ -199,7 +199,7 @@ ret_t cherokee_connection_mrproper               (cherokee_connection_t  *conn);
 
 /* Close
  */
-ret_t cherokee_connection_pre_lingering_close    (cherokee_connection_t *conn);
+ret_t cherokee_connection_shutdown_wr            (cherokee_connection_t *conn);
 ret_t cherokee_connection_linger_read            (cherokee_connection_t *conn);
 
 /* Connection I/O
