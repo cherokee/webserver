@@ -1,3 +1,8 @@
+2007-01-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/server.c (cherokee_server_read_config_string):
+	Bugfix. It was trying to parse a string if it was a filename.
+
 2007-01-21  A.D.F  <adefacc@tin.it>
 
 	* cherokee/logger_w3c.c:

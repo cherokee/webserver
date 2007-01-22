@@ -1513,7 +1513,7 @@ cherokee_server_read_config_string (cherokee_server_t *srv, cherokee_buffer_t *s
 
 	/* Load the main file
 	 */
-	ret = cherokee_config_reader_parse (&srv->config, string);
+	ret = cherokee_config_reader_parse_string (&srv->config, string);
 	if (ret != ret_ok) return ret;
 
 	ret = configure_server (srv);
