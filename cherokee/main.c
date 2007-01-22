@@ -46,7 +46,8 @@
 #endif 
 
 #define BASIC_CONFIG                                                                         \
-	"vserver!default!directory!/!handler  = common\n"                                    \
+	"vserver!default!directory!/!handler = common\n"                                     \
+	"vserver!default!directory!/!handler!iocache = 0\n"                                  \
 	"vserver!default!directory!/!priority = 1\n"                                         \
 	"vserver!default!directory!/icons!handler = file\n"                                  \
 	"vserver!default!directory!/icons!document_root = " CHEROKEE_ICONSDIR "\n"           \

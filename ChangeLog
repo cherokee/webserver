@@ -1,5 +1,8 @@
 2007-01-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c (BASIC_CONFIG): iocache should be off in the
+	default config.
+
 	* cherokee/server.c (cherokee_server_read_config_string):
 	Bugfix. It was trying to parse a string if it was a filename.
 
