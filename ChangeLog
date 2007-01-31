@@ -1,3 +1,29 @@
+2007-01-30  A.D.F  <adefacc@tin.it>
+
+	* cherokee/macros.h:
+        - added LOGGER_MIN_BUFSIZE and LOGGER_MAX_BUFSIZE
+	  to limit value read from configuration file;
+
+	* cherokee/logger.h:
+        - removed max_bufsize (it was unused);
+
+	* cherokee/logger.c:
+        - removed max_bufsize (it was unused);
+
+ 	* cherokee/logger_w3c.c:
+	- removed redundant if (unlikely(ret != ret_ok));
+
+ 	* cherokee/logger_ncsa.c:
+	- removed redundant if (unlikely(ret != ret_ok));
+
+ 	* cherokee/logger_writer.h:
+	- added LOGGER_OVF_BUFSIZE whose value has to be
+	  added to max_bufsize to size the log buffer;
+
+ 	* cherokee/logger_writer.c:
+	- added parameter "bufsize" to the parameters
+	  read from configuration file.	
+	
 2007-01-22  A.D.F  <adefacc@tin.it>
 
 	* cherokee/connection-protected.h:

@@ -346,8 +346,18 @@ cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t          
 
 	/* Set REQUEST_URI 
 	 */
+	{
+		cherokee_handler_cgi_base_props_t *cgi_props = HANDLER_CGI_BASE_PROPS(cgi); 
+		printf ("script_name %s\n", cgi_props->script_alias.buf);
+	}
+
 	cherokee_buffer_clean (tmp);
-	cherokee_header_copy_request_w_args (&conn->header, tmp);
+//	cherokee_header_copy_request_w_args (&conn->header, tmp);
+	cherokee_buffer_add_buffer (tmp, &conn->request);
+	if (! cherokee_buffer_is_empty (&conn->query_string)) {
+		cherokee_buffer_add_char (tmp, '?');
+		cherokee_buffer_add_buffer (tmp, &conn->query_string);
+	}
 	set_env (cgi, "REQUEST_URI", tmp->buf, tmp->len);
 
 	/* Set HTTPS

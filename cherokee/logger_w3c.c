@@ -236,7 +236,7 @@ cherokee_logger_w3c_write_error  (cherokee_logger_w3c_t *logger, cherokee_connec
 	 */
 	ret = cherokee_logger_writer_flush (&logger->writer);
 
-	return ret_ok;
+	return ret;
 }
 
 
@@ -252,14 +252,14 @@ cherokee_logger_w3c_write_string (cherokee_logger_w3c_t *logger, const char *str
 	ret = cherokee_buffer_add (log, string, strlen(string));
  	if (unlikely (ret != ret_ok)) return ret;
   
-  	if (log->len > logger->writer.max_bufsize) {
-		/* Buffer is full, flush it!
-		 */
-		ret = cherokee_logger_writer_flush (&logger->writer);
-		if (unlikely (ret != ret_ok)) return ret;
-	}
+  	if (log->len < logger->writer.max_bufsize)
+		return ret_ok;
 
-	return ret_ok;
+	/* Buffer is full, flush it!
+	 */
+	ret = cherokee_logger_writer_flush (&logger->writer);
+
+	return ret;
 }
 
 
@@ -331,6 +331,6 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 	 */
 	ret = cherokee_logger_writer_flush (&logger->writer);
 
-	return ret_ok;
+	return ret;
 }
 

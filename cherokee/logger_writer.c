@@ -49,7 +49,7 @@ cherokee_logger_writer_init (cherokee_logger_writer_t *writer)
 	cherokee_buffer_init (&writer->filename);
 	cherokee_buffer_init (&writer->buffer);
 
-	cherokee_buffer_ensure_size (&writer->buffer, writer->max_bufsize + 4096);
+	cherokee_buffer_ensure_size (&writer->buffer, writer->max_bufsize + LOGGER_OVF_BUFSIZE);
 
 	return ret_ok;
 }
@@ -75,7 +75,9 @@ ret_t
 cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherokee_config_node_t *config)
 {
 	ret_t              ret;
-	cherokee_buffer_t *tmp;
+	size_t             nval = 0;
+	cherokee_buffer_t *tmp  = NULL;
+	cherokee_buffer_t *tmp2 = NULL;
 
 	/* Check the type
 	 */
@@ -114,6 +116,49 @@ cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherokee_con
 	} else {
 		PRINT_MSG ("Unknown logger writer type '%s'\n", tmp->buf);
 		return ret_error;
+	}
+
+
+	/* Read buffer size (bytes)
+	 */
+	ret = cherokee_config_node_read (config, "bufsize", &tmp2);
+	if (ret != ret_ok) {
+		/* Item not found, but it's OK because it is optional.
+		 */
+		return ret_ok;
+	}
+
+	if (cherokee_buffer_is_empty (tmp2))
+		return ret_ok;
+
+	nval = (size_t) atoi (tmp2->buf);
+	if (nval > 0 && nval < LOGGER_MIN_BUFSIZE)
+		nval = LOGGER_MIN_BUFSIZE;
+	else
+	if (nval > LOGGER_MAX_BUFSIZE)
+		nval = LOGGER_MAX_BUFSIZE;
+
+	/* NOTE: nval is always >= 0 because it is unsigned
+	 */
+	if (writer->max_bufsize != nval) {
+		/* Reallocate buffer to the new size
+		 */
+		cherokee_buffer_mrproper (&writer->buffer);
+		writer->max_bufsize = nval;
+		ret = cherokee_buffer_ensure_size (
+			&writer->buffer,
+			writer->max_bufsize + LOGGER_OVF_BUFSIZE);
+		if (ret != ret_ok) {
+			PRINT_ERROR ("Allocation logger->max_bufsize %u failed !\n", writer->max_bufsize);
+			/* Set log to "unbuffered".
+			 */
+			writer->max_bufsize = 0;
+			PRINT_MSG ("Set logger->writer->max_bufsize %u\n", writer->max_bufsize);
+			cherokee_buffer_ensure_size (
+				&writer->buffer,
+				writer->max_bufsize + LOGGER_OVF_BUFSIZE);
+			return ret;
+		}
 	}
 
 	return ret_ok;
@@ -208,7 +253,12 @@ cherokee_logger_writer_reopen (cherokee_logger_writer_t *writer)
 	case cherokee_logger_writer_pipe:
 	case cherokee_logger_writer_stderr:
 		if (writer->fd != -1) {
-			close (writer->fd);
+			/* Don't close file if it is stderr
+			 */
+			if (writer->type != cherokee_logger_writer_stderr ||
+				writer->fd != STDERR_FILENO) {
+				close (writer->fd);
+			}
 			writer->fd = -1;
 		}
 		break;
@@ -248,8 +298,9 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer)
 	 */
 	switch (writer->type) {
 	case cherokee_logger_writer_stderr:
-		fprintf (stderr, "%s", writer->buffer.buf);
-
+		/* In this case we ignore errors.
+		 */
+		fwrite (writer->buffer.buf, 1, writer->buffer.len, stderr);
 		cherokee_buffer_clean (&writer->buffer);
 		break;
 

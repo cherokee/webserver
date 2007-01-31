@@ -63,7 +63,6 @@ typedef struct {
 	logger_func_write_error_t       write_error;
 	logger_func_write_string_t      write_string;
 
-	size_t                          max_size;
 } cherokee_logger_t;
 
 #define LOGGER(x) ((cherokee_logger_t *)(x))

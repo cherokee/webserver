@@ -259,21 +259,23 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 	cherokee_buffer_add        (buf, ipaddr, strlen(ipaddr));
 	cherokee_buffer_add_str    (buf, " - ");
 	cherokee_buffer_add        (buf, username, username_len);
+	/* " [date time] "
+	 */
 	cherokee_buffer_add_buffer (buf, &logger->now_dtm);
 	cherokee_buffer_add        (buf, method, method_len);
-	cherokee_buffer_add_str    (buf, " ");
+	cherokee_buffer_add_char   (buf, ' ');
 	cherokee_buffer_add_buffer (buf, request);
-	cherokee_buffer_add_str    (buf, " ");
+	cherokee_buffer_add_char   (buf, ' ');
 	cherokee_buffer_add        (buf, version, version_len);
 	cherokee_buffer_add_str    (buf, "\" ");
 	cherokee_buffer_add_long10 (buf, cnt->error_code);
-	cherokee_buffer_add_str    (buf, " ");
+	cherokee_buffer_add_char   (buf, ' ');
 	cherokee_buffer_add_ullong10 (buf, (cullong_t) (cnt->range_end - cnt->range_start));
 
 	/* Look for the "combined" information
 	 */
 	if (!logger->combined) {
-		cherokee_buffer_add_str (buf, "\n");
+		cherokee_buffer_add_char (buf, '\n');
 		return ret_ok;
 	}
 
@@ -320,14 +322,14 @@ cherokee_logger_ncsa_write_string (cherokee_logger_ncsa_t *logger, const char *s
 	ret = cherokee_buffer_add (log, string, strlen(string));
  	if (unlikely (ret != ret_ok)) return ret;
   
-  	if (log->len > logger->writer_access.max_bufsize) {
-		/* Buffer is full, flush it!
-		 */
-		ret = cherokee_logger_writer_flush (&logger->writer_access);
-		if (unlikely (ret != ret_ok)) return ret;
-	}
+  	if (log->len < logger->writer_access.max_bufsize)
+		return ret_ok;
 
-	return ret_ok;
+	/* Buffer is full, flush it!
+	 */
+	ret = cherokee_logger_writer_flush (&logger->writer_access);
+
+	return ret;
 }
 
 
@@ -377,9 +379,8 @@ cherokee_logger_ncsa_write_error (cherokee_logger_ncsa_t *logger, cherokee_conne
 	/* It's an error. Flush it!
 	 */
 	ret = cherokee_logger_writer_flush (&logger->writer_error);
-	if (unlikely (ret != ret_ok)) return ret;
 
-	return ret_ok;
+	return ret;
 }
 
 
