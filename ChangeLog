@@ -1,3 +1,26 @@
+2007-02-03  A.D.F  <adefacc@tin.it>
+
+	* cherokee/logger_writer.h:
+        - added new #define LOGGER_BUF_PAGESIZE 4096
+          to round down write count to a multiple of above value
+	  if the data size to write is > LOGGER_BUF_PAGESIZE;
+	  this preserves the write speed-up and
+	  allows to write as much data as possible without limiting
+	  the chunk size to logger_writer->max_bufsize;
+	  this fixes the cases when max_bufsize is set
+	  to a low value (0 - 16KB or < max request size).
+
+	* cherokee/logger_writer.c:
+        - avoided duplicated code by using new local function
+	  logger_writer_close_file();
+	- configuration, added saner tests on max_bufsize values;
+	- do not use write_fd if the log stream is stderr;
+	- do not close log file if it is stderr;
+	- cherokee_logger_writer_flush(),
+	  fixed error handling in order to always flush internal buffer
+	  on fatal write errors, because we don't want it
+	  to grow up too much (that data is lost anyway).
+	
 2007-02-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/run-tests.py: Fixed to work just with "-v" (without
