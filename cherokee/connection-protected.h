@@ -81,6 +81,13 @@ typedef enum {
 	phase_lingering
 } cherokee_connection_phase_t;
 
+typedef enum {
+	conn_op_nothing    = 0,
+	conn_op_log_at_end = 1,
+	conn_op_root_index = 1 << 1,
+	conn_op_tcp_cork   = 1 << 2
+} cherokee_connection_options_t;
+
 
 struct cherokee_connection {
 	cherokee_list_t               list_entry;
@@ -98,13 +105,11 @@ struct cherokee_connection {
 	/* Socket stuff
 	 */
 	cherokee_socket_t             socket;
-	int                           tcp_cork;
+	cherokee_http_upgrade_t       upgrade;
 		
 	cherokee_logger_t            *logger_ref;
-	int                           log_at_end;
-	
 	cherokee_handler_t           *handler;
-	cherokee_http_upgrade_t       upgrade;
+	cherokee_connection_options_t options;
 	
 	/* Buffers
 	 */

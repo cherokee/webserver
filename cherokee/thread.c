@@ -499,8 +499,8 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 
 	/* TCP cork
 	 */
-	if (conn->tcp_cork) {
-		cherokee_connection_set_cork (conn, 0);
+	if (conn->options & conn_op_tcp_cork) {
+		cherokee_connection_set_cork (conn, false);
 	}
 
 	/* Clean the connection

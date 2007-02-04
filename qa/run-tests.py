@@ -199,7 +199,7 @@ pid = -1
 if port is None:
     pid = os.fork()
     if pid == 0:
-        if valgrind:
+        if valgrind != None:
             if valgrind[:3] == 'hel':
                 os.execl (VALGRIND_PATH, "valgrind", "--tool=helgrind", server, "-C", cfg_file)
             elif valgrind[:3] == 'cac':

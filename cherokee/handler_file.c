@@ -671,8 +671,8 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 		 * chunk of the file with sendfile().  It's time to turn
 		 * off again the TCP_CORK flag
 		 */
-		if (conn->tcp_cork) {
-			cherokee_connection_set_cork (conn, 0);
+		if (conn->options & conn_op_tcp_cork) {
+			cherokee_connection_set_cork (conn, false);
 		}
 
 		if (ret == ret_no_sys) {

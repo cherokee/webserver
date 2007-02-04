@@ -282,15 +282,19 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				/* Build the new request before respin
 				 */
 				cherokee_buffer_clean (&conn->local_directory);
+				cherokee_buffer_clean (&conn->request_original);
+				cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+
 				cherokee_buffer_clean (&conn->request);
 				cherokee_buffer_add (&conn->request, index, index_len);				
 
 				TRACE (ENTRIES, "top level index matched %s\n", index);
 
+				BIT_SET (conn->options, conn_op_root_index);
 				return ret_eagain;
 			}
 
-			/* Stat() the possible new path
+			/* stat() the possible new path
 			 */
 			cherokee_buffer_add (&conn->local_directory, index, index_len);
 			ret = stat_file (use_iocache, iocache, &nocache_info, conn->local_directory.buf, &file, &info);

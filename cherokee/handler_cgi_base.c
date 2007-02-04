@@ -344,19 +344,22 @@ cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t          
 	else 
 		set_env (cgi, "PATH_INFO", "", 0);
 
-	/* Set REQUEST_URI 
+	/* Set REQUEST_URI:
+	 *
+	 * Use request + query_string unless the connections has been
+	 * redirected from common and targets a full path index file. 
 	 */
-	{
-		cherokee_handler_cgi_base_props_t *cgi_props = HANDLER_CGI_BASE_PROPS(cgi); 
-		printf ("script_name %s\n", cgi_props->script_alias.buf);
-	}
-
 	cherokee_buffer_clean (tmp);
-//	cherokee_header_copy_request_w_args (&conn->header, tmp);
-	cherokee_buffer_add_buffer (tmp, &conn->request);
-	if (! cherokee_buffer_is_empty (&conn->query_string)) {
-		cherokee_buffer_add_char (tmp, '?');
-		cherokee_buffer_add_buffer (tmp, &conn->query_string);
+
+	if (conn->options & conn_op_root_index) {
+		cherokee_header_copy_request_w_args (&conn->header, tmp);
+	} 
+	else {
+		cherokee_buffer_add_buffer (tmp, &conn->request);
+		if (! cherokee_buffer_is_empty (&conn->query_string)) {
+			cherokee_buffer_add_char (tmp, '?');
+			cherokee_buffer_add_buffer (tmp, &conn->query_string);
+		}
 	}
 	set_env (cgi, "REQUEST_URI", tmp->buf, tmp->len);
 

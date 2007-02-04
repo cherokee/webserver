@@ -234,6 +234,10 @@
 #define POINTER_TO_INT(pointer) ((long)(pointer))
 #define INT_TO_POINTER(integer) ((void*)((long)(integer)))
 
+/* Bit masks
+ */
+#define BIT_SET(var,bit)    var |= bit
+#define BIT_UNSET(var,bit)  var &= (~bit)
 
 /* Format string for off_t and size_t
  */

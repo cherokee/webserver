@@ -1,3 +1,41 @@
+2007-02-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/run-tests.py: Fixed to work just with "-v" (without
+	specifying with valgrind tool it should use).
+
+	* cherokee/handler_file.c (cherokee_handler_file_step): Updated to
+	the latest conn->option and tcp_cork changes.
+
+	* cherokee/connection.h,
+	cherokee/connection.c (cherokee_connection_set_cork): Now the
+	"enable" parameter is cherokee_boolean_t rather than int.
+
+	* cherokee/connection-protected.h: Added new enum type
+	cherokee_connection_options_t and a new property "options" to the
+	connection class.
+	
+
+	* cherokee/handler_common.c (cherokee_handler_common_new): If the
+	connection needs to be redirected/reprocessed, it copys the
+	request to the request_original and sets a flag if it's a
+	redirection to a index file starting by / (fullpath index file).
+	
+	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_build_basic_env):
+	Checks the connection options. If it has been redirected from a
+	"common" handler and targets a fullpath index, it seems to need to
+	use the original request as the REQUEST_URI.
+
+	* cherokee/macros.h (BIT_SET, BIT_UNSET): Added new macros to ease
+	bit masks manupulation.
+	
+	* cherokee/connection-protected.h: log_at_end and tcp_cork
+	properties have been removed. Now they're bits in the options
+	entry.
+
+	* cherokee/connection.c (cherokee_connection_log_or_delay,
+	cherokee_connection_log_delayed): Rewritten using the option
+	property.
+
 2007-01-30  A.D.F  <adefacc@tin.it>
 
 	* cherokee/macros.h:

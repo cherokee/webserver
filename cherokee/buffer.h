@@ -101,8 +101,8 @@ ret_t cherokee_buffer_substitute_string  (cherokee_buffer_t  *bufsrc, cherokee_b
 ret_t cherokee_buffer_ensure_addlen      (cherokee_buffer_t  *buf, size_t alen);
 ret_t cherokee_buffer_ensure_size        (cherokee_buffer_t  *buf, size_t size);
 
-int   cherokee_buffer_is_endding         (cherokee_buffer_t  *buf, char c);
-char  cherokee_buffer_end_char           (cherokee_buffer_t  *buf);
+int    cherokee_buffer_is_endding        (cherokee_buffer_t  *buf, char c);
+char   cherokee_buffer_end_char          (cherokee_buffer_t  *buf);
 size_t cherokee_buffer_cnt_spn           (cherokee_buffer_t  *buf, int offset, char *str);
 size_t cherokee_buffer_cnt_cspn          (cherokee_buffer_t  *buf, int offset, char *str);
 

@@ -91,13 +91,13 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	   
 	INIT_LIST_HEAD(&n->list_entry);
 
-	n->tcp_cork          = 0;
 	n->error_code        = http_ok;
 	n->phase             = phase_reading_header;
 	n->phase_return      = phase_nothing;
 	n->auth_type         = http_auth_nothing;
 	n->req_auth_type     = http_auth_nothing;
 	n->upgrade           = http_upgrade_nothing;
+	n->options           = conn_op_nothing;
 	n->handler           = NULL; 
 	n->encoder           = NULL;
 	n->logger_ref        = NULL;
@@ -105,7 +105,6 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->range_start       = 0;
 	n->range_end         = 0;
 	n->vserver           = NULL;
-	n->log_at_end        = 1;
 	n->arguments         = NULL;
 	n->realm_ref         = NULL;
 	n->mmaped            = NULL;
@@ -227,12 +226,11 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->auth_type         = http_auth_nothing;
 	conn->req_auth_type     = http_auth_nothing;
 	conn->upgrade           = http_upgrade_nothing;
+	conn->options           = conn_op_nothing;
 	conn->error_code        = http_ok;
 	conn->range_start       = 0;
 	conn->range_end         = 0;
 	conn->logger_ref        = NULL;
-	conn->tcp_cork          = 0;
-	conn->log_at_end        = 1;
 	conn->realm_ref         = NULL;
 	conn->mmaped            = NULL;
 	conn->rx                = 0;	
@@ -734,7 +732,7 @@ cherokee_connection_reading_check (cherokee_connection_t *conn)
 
 
 ret_t 
-cherokee_connection_set_cork (cherokee_connection_t *conn, int enable)
+cherokee_connection_set_cork (cherokee_connection_t *conn, cherokee_boolean_t enable)
 {
 	int on = 0;
 	int fd;
@@ -753,7 +751,7 @@ cherokee_connection_set_cork (cherokee_connection_t *conn, int enable)
 		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,  &on, sizeof on);
 	}
 
-	conn->tcp_cork = enable;
+	BIT_SET (conn->options, conn_op_tcp_cork);
 #endif
 
 	return ret_ok;
@@ -1887,24 +1885,37 @@ cherokee_connection_open_request (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_log_or_delay (cherokee_connection_t *conn)
 {
-	ret_t ret = ret_ok;
-	
-	if (conn->handler == NULL) {
-		conn->log_at_end = 0;
-	} else {
-		conn->log_at_end = ! HANDLER_SUPPORT_LENGTH(conn->handler);
-	}
+	ret_t              ret;
+	cherokee_boolean_t at_end;
 
-	if (conn->log_at_end == 0) {
-		if (conn->logger_ref != NULL) {
-			if (http_type_400(conn->error_code) ||
-			    http_type_500(conn->error_code)) {
-				ret = cherokee_logger_write_error (conn->logger_ref, conn);
-			} else {
-				ret = cherokee_logger_write_access (conn->logger_ref, conn);
-			}
-			conn->log_at_end = 0;
-		}
+	/* Check whether it should log at end or not..
+	 */
+	if (conn->handler == NULL)
+		at_end = true;
+	else
+		at_end = ! HANDLER_SUPPORT_LENGTH(conn->handler);
+	
+	/* Set the option bit mask
+	 */
+	if (at_end)
+		BIT_SET (conn->options, conn_op_log_at_end);
+	else 
+		BIT_UNSET (conn->options, conn_op_log_at_end);
+
+	/* Return if there is no logger or has to log_at_end
+	 */
+	if (conn->logger_ref == NULL)
+		return ret_ok;
+	if (conn->options & conn_op_log_at_end)
+		return ret_ok;
+
+	/* Log it
+	 */
+	if (http_type_400(conn->error_code) ||
+	    http_type_500(conn->error_code)) {
+		ret = cherokee_logger_write_error (conn->logger_ref, conn);
+	} else {
+		ret = cherokee_logger_write_access (conn->logger_ref, conn);
 	}
 
 	return ret;
@@ -1914,14 +1925,23 @@ cherokee_connection_log_or_delay (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_log_delayed (cherokee_connection_t *conn)
 {
-	ret_t ret = ret_ok;
+	ret_t ret;
 
-	if ((conn->log_at_end) && (conn->logger_ref)) {
-		ret = cherokee_logger_write_access (conn->logger_ref, conn);
-		conn->log_at_end = false;
-	}
+	/* Check whether if needs to log now of not
+	 */
+	if (conn->logger_ref == NULL)
+		return ret_ok;
+	if (! (conn->options & conn_op_log_at_end))
+		return ret_ok;
 
-	return ret;
+	/* Log it
+	 */
+	BIT_UNSET (conn->options, conn_op_log_at_end);
+
+	ret = cherokee_logger_write_access (conn->logger_ref, conn);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	return ret_ok;
 }
 
 
