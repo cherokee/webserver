@@ -36,21 +36,22 @@ This module has been written as part of the Cherokee project:
 # POSSIBILITY OF SUCH DAMAGE.
 
 import SocketServer
+import traceback
 
-__version__ = '1.0'
+__version__ = '1.1'
 __author__  = 'Alvaro Lopez Ortega'
 
 
-class SCGIHandler (SocketServer.BaseRequestHandler):
+class SCGIHandler (SocketServer.StreamRequestHandler):
     def __init__ (self, request, client_address, server):
-        self.env  = {}
-        self.post = None
-        SocketServer.BaseRequestHandler.__init__ (self, request, client_address, server)
+        self.env    = {}
+        self.post   = None
+        SocketServer.StreamRequestHandler.__init__ (self, request, client_address, server)
 
     def __read_netstring_size (self):
         size = ""
         while 1:
-            c = self.input.read(1)
+            c = self.rfile.read(1)
             if c == ':':
                 break
             elif not c:
@@ -62,12 +63,12 @@ class SCGIHandler (SocketServer.BaseRequestHandler):
         data = ""
         size = self.__read_netstring_size()
         while size > 0:
-            s = self.input.read(size)
+            s = self.rfile.read(size)
             if not s:
                 raise IOError, 'Malformed netstring'
             data += s
             size -= len(s)
-            if self.input.read(1) != ',':
+            if self.rfile.read(1) != ',':
                 raise IOError, 'Missing netstring terminator'
         return data
 
@@ -84,20 +85,21 @@ class SCGIHandler (SocketServer.BaseRequestHandler):
         if not self.env.has_key('CONTENT_LENGTH'):
             return
         length = int(self.env['CONTENT_LENGTH'])
-        self.post = self.input.read(length)
+        self.post = self.rfile.read(length)
 
     def handle (self):
-        self.input = self.request.makefile('r')
-        self.output = self.request.makefile('w')
-
         self.__read_env()
-        self.handle_request()
-        self.output.close()
-        self.input.close()
+
+        try:
+            self.handle_request()
+        except:
+            traceback.print_exc()
+            self.request.finish()
+            self.request.close()
 
     def handle_request (self):
-        self.output.write("Content-Type: text/plain\r\n\r\n")
-        self.output.write("handle_request() should be overridden")
+        self.wfile.write("Content-Type: text/plain\r\n\r\n")
+        self.wfile.write("handle_request() should be overridden")
 
 
 class SCGIServer(SocketServer.ThreadingTCPServer):

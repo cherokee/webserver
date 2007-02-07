@@ -1,3 +1,15 @@
+2007-02-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* pyscgi/pyscgi.py (SCGIHandler.__init__): It inherits from
+	StreamRequestHandler rather than from BaseRequestHandler.
+
+2007-01-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* pyscgi/pyscgi.py (SCGIHandler.handle): self.handle_request() is
+	now inside a try clause. That method have to be implement by the
+	user, so there is a change of something going wrong, in which case
+	the server should close the in/out descriptiors as well.
+
 2006-12-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* 1.1 Released
