@@ -1,4 +1,19 @@
 2007-02-03  A.D.F  <adefacc@tin.it>
+	* cherokee/macros.h:
+        - micro-fix to BIT_UNSET() macro in order
+	  to work properly even with arguments like these:
+		BIT_UNSET(var, opt1|opt2);
+
+	* cherokee/connection-protected:
+	- small "cosmetic" cleanups, move field "options"
+	  near field upgrade;
+	- etc.
+
+	* cherokee/connection.c:
+	- fix, "log_at_end" must be set to true in init / cleanup code,
+	  otherwise logging does not work.
+
+2007-02-03  A.D.F  <adefacc@tin.it>
 
 	* cherokee/logger_writer.h:
         - added new #define LOGGER_BUF_PAGESIZE 4096

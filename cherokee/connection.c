@@ -97,7 +97,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->auth_type         = http_auth_nothing;
 	n->req_auth_type     = http_auth_nothing;
 	n->upgrade           = http_upgrade_nothing;
-	n->options           = conn_op_nothing;
+	n->options           = conn_op_log_at_end;
 	n->handler           = NULL; 
 	n->encoder           = NULL;
 	n->logger_ref        = NULL;
@@ -226,7 +226,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->auth_type         = http_auth_nothing;
 	conn->req_auth_type     = http_auth_nothing;
 	conn->upgrade           = http_upgrade_nothing;
-	conn->options           = conn_op_nothing;
+	conn->options           = conn_op_log_at_end;
 	conn->error_code        = http_ok;
 	conn->range_start       = 0;
 	conn->range_end         = 0;

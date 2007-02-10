@@ -83,9 +83,9 @@ typedef enum {
 
 typedef enum {
 	conn_op_nothing    = 0,
-	conn_op_log_at_end = 1,
-	conn_op_root_index = 1 << 1,
-	conn_op_tcp_cork   = 1 << 2
+	conn_op_log_at_end = (1 << 0),
+	conn_op_root_index = (1 << 1),
+	conn_op_tcp_cork   = (1 << 2)
 } cherokee_connection_options_t;
 
 
@@ -106,11 +106,11 @@ struct cherokee_connection {
 	 */
 	cherokee_socket_t             socket;
 	cherokee_http_upgrade_t       upgrade;
-		
+	cherokee_connection_options_t options;
+
 	cherokee_logger_t            *logger_ref;
 	cherokee_handler_t           *handler;
-	cherokee_connection_options_t options;
-	
+
 	/* Buffers
 	 */
 	cherokee_buffer_t             incoming_header;  /* -> header               */
