@@ -104,7 +104,8 @@ typedef enum {
 	http_upgrade_required         = 426,
 	http_internal_error           = 500,
 	http_bad_gateway              = 502,
-	http_service_unavailable      = 503
+	http_service_unavailable      = 503,
+	http_gateway_timeout          = 504
 } cherokee_http_t;
 
 #define http_continue_string                 "100 Continue"
@@ -129,6 +130,7 @@ typedef enum {
 #define http_internal_error_string           "500 Internal Server Error"
 #define http_bad_gateway_string              "502 Bad gateway"
 #define http_service_unavailable_string      "503 Service Unavailable"
+#define http_gateway_timeout_string          "504 Gatewat Timeout"
 
 #define http_type_200_max 206
 #define http_type_300_max 307

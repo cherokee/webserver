@@ -115,6 +115,7 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_service_unavailable:      *str = http_service_unavailable_string; break;
 	case http_continue:                 *str = http_continue_string; break;
 	case http_switching_protocols:      *str = http_switching_protocols_string; break;
+	case http_gateway_timeout:          *str = http_gateway_timeout_string; break;
 	default:
 		*str = "500 Unknown error";
 		return ret_error;
@@ -153,6 +154,7 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (internal_error);
 		entry_code (bad_gateway);
 		entry_code (service_unavailable);
+		entry_code (gateway_timeout);
 	default:
  		PRINT_ERROR ("ERROR: Unknown HTTP status code %d\n", code);
  		cherokee_buffer_add_str (buf, http_internal_error_string);

@@ -147,6 +147,23 @@ cherokee_min_str (char *s1, char *s2)
 }
 
 
+char *
+cherokee_max_str (char *s1, char *s2)
+{
+	if ((s1 == NULL) && 
+	    (s2 == NULL)) return NULL;
+
+	if ((s1 != NULL) && 
+	    (s2 == NULL)) return s1;
+
+	if ((s2 != NULL) && 
+	    (s1 == NULL)) return s2;
+	
+	return (s1>s2) ? s1 : s2;
+}
+
+
+
 ret_t 
 cherokee_sys_fdlimit_get (cuint_t *limit)
 {
@@ -1264,3 +1281,29 @@ cherokee_close_fd (cint_t fd)
 	return (re == 0) ? ret_ok : ret_error;
 }
 
+
+ret_t 
+cherokee_get_shell (const char **shell, const char **binary)
+{
+	char *t1, *t2;
+
+	/* Set the shell path
+	 */
+#ifdef _WIN32
+	*shell = getenv("ComSpec");
+#else
+	*shell = "/bin/sh";
+#endif
+
+	/* Find the binary
+	 */
+	t1 = rindex (*shell, '\\');
+	t2 = rindex (*shell, '/');
+
+	t1 = cherokee_max_str (t1, t2);
+	if (t1 == NULL) return ret_error;
+
+	*binary = &t1[1];
+
+	return ret_ok;
+}

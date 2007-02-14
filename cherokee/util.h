@@ -74,6 +74,7 @@ ret_t cherokee_tls_init (void);
  */
 int     cherokee_isbigendian        (void);
 char   *cherokee_min_str            (char *s1, char *s2);
+char   *cherokee_max_str            (char *s1, char *s2);
 char   *cherokee_strfsize           (unsigned long long size, char *buf);
 size_t  cherokee_strlcat            (char *dst, const char *src, size_t siz);
 int     cherokee_estimate_va_length (char *format, va_list ap);
@@ -99,6 +100,7 @@ ret_t cherokee_fd_set_nonblocking (int fd);
 ret_t cherokee_sys_fdlimit_get (cuint_t *limit);
 ret_t cherokee_sys_fdlimit_set (cuint_t  limit);
 ret_t cherokee_close_fd        (cint_t fd);
+ret_t cherokee_get_shell       (const char **shell, const char **binary);
 void  cherokee_trace (const char *entry, const char *file, int line, const char *func, const char *fmt, ...);
 
 /* Path walking
