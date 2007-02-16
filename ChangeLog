@@ -1,3 +1,9 @@
+2007-02-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in: GNUTLS detection is now based on PKG_CHECK_MODULES
+	instead of on its own m4 file. There were many people reporting
+	problems because of this. 
+
 2007-02-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/http.h, cherokee/http.c (cherokee_http_code_to_string)

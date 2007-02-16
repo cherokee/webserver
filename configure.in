@@ -885,11 +885,11 @@ then
 		dnl
 		dnl GNUTLS
 		dnl
-		AM_PATH_LIBGNUTLS(1.0.4, [have_gnutls=yes], [have_gnutls=no])
+		PKG_CHECK_MODULES(GNUTLS, gnutls >= "1.0.4", [have_gnutls=yes], [have_gnutls=no])
 		if test "$have_gnutls" = "yes"
 		then
-		        TLS_LIBS="$LIBGNUTLS_LIBS"
-		        TLS_CFLAGS="$LIBGNUTLS_CFLAGS"
+			   TLS_LIBS="$GNUTLS_LIBS"
+			   TLS_CFLAGS="$GNUTLS_CFLAGS"
 			   AC_SUBST(TLS_LIBS)
 			   AC_SUBST(TLS_CFLAGS)
 
