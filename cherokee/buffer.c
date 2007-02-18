@@ -1605,8 +1605,8 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 
 /* Substitute (substring)s found in (bufsrc) with (replacement)
  * and writes the resulting content to (bufdst).
- * NOTE: (bufdst) is written only if at least on (substring) instance
- *       is found in (bufsrc), in this case return value is ret_ok;
+ * NOTE: (bufdst) is written only if at least one (substring) instance
+ *       is found in (bufsrc); in that case return value is ret_ok;
  *       if (substring) is NOT found in (bufsrc) then nothing is done
  *       in order to avoid an unnecessary copy of data.
  * Returns:

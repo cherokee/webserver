@@ -74,7 +74,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 
 
 ret_t 
-cherokee_post_set_len (cherokee_post_t *post, offset_t len)
+cherokee_post_set_len (cherokee_post_t *post, off_t len)
 {
 	post->type = (len > POST_SIZE_TO_DISK) ? post_in_tmp_file : post_in_memory;
 	post->size = len;
@@ -82,15 +82,15 @@ cherokee_post_set_len (cherokee_post_t *post, offset_t len)
 	if (post->type == post_in_tmp_file) {
 		char *ptr;
 		char  template[64];
-		
+
 		strncpy (template, "/tmp/cherokee_post_XXXXXX", sizeof(template)); 
-		
+
 		/* Generate a unique name
 		 */
 		ptr = mktemp (template);
 		if (unlikely (ptr == NULL)) 
 			return ret_error;
-		
+
 		cherokee_buffer_add (&post->tmp_file, ptr, strlen(ptr));
 
 		/* Open the file for writting
@@ -99,7 +99,7 @@ cherokee_post_set_len (cherokee_post_t *post, offset_t len)
 		if (unlikely (post->tmp_file_p == NULL)) 
 			return ret_error;
 	}
-	
+
 	return ret_ok;
 }
 
@@ -118,7 +118,7 @@ cherokee_post_got_all (cherokee_post_t *post)
 }
 
 ret_t 
-cherokee_post_get_len (cherokee_post_t *post, offset_t *len)
+cherokee_post_get_len (cherokee_post_t *post, off_t *len)
 {
 	*len = post->size;
 	return ret_ok;

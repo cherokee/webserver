@@ -1285,7 +1285,7 @@ static ret_t
 post_init (cherokee_connection_t *conn)
 {
 	ret_t    ret;
-	long     post_len;
+	off_t    post_len;
 	char    *info     = NULL;
 	cuint_t  info_len = 0;
 	CHEROKEE_TEMP(buf, 64);
@@ -1308,7 +1308,7 @@ post_init (cherokee_connection_t *conn)
 	memcpy (buf, info, info_len);
 	buf[info_len] = '\0';
 		
-	post_len = atol(buf);
+	post_len = (off_t) atol(buf);
 	if (post_len < 0) {
 		conn->error_code = http_bad_request;
 		return ret_error;
@@ -1442,7 +1442,8 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		
 		/* Set the virtual server reference
 		 */
-		cherokee_server_get_vserver (CONN_SRV(conn), &conn->host, &conn->vserver);
+		cherokee_server_get_vserver (CONN_SRV(conn), &conn->host, 
+					     (cherokee_virtual_server_t **) &conn->vserver);
 		break;
 
 	default:

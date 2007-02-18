@@ -1,3 +1,17 @@
+2007-02-18  A.D.F  <adefacc@tin.it>
+
+	* cherokee/post.h, cherokee/post.c cherokee/connection.c,
+	cherokee/handler_admin.c:
+        - use off_t instead of offset_t in order
+	  to compile cherokee when off_t has a size of 4 bytes
+	  instead of 8 (i.e. on embedded systems or when
+	  --disable-largefile is given on configure command line).
+
+	* cherokee/connection-protected.h:
+        - don't use "enum" for bit flags because more than
+	  one option can be set, so its better to explicitely use
+	  an unsigned int as data type.
+	
 2007-02-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* configure.in: GNUTLS detection is now based on PKG_CHECK_MODULES

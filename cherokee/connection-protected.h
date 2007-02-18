@@ -81,12 +81,13 @@ typedef enum {
 	phase_lingering
 } cherokee_connection_phase_t;
 
-typedef enum {
-	conn_op_nothing    = 0,
-	conn_op_log_at_end = (1 << 0),
-	conn_op_root_index = (1 << 1),
-	conn_op_tcp_cork   = (1 << 2)
-} cherokee_connection_options_t;
+
+#define conn_op_nothing       0
+#define conn_op_log_at_end   (1 << 0)
+#define conn_op_root_index   (1 << 1)
+#define conn_op_tcp_cork     (1 << 2)
+
+typedef cuint_t cherokee_connection_options_t;
 
 
 struct cherokee_connection {
