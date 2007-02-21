@@ -32,14 +32,15 @@
 #include "server-protected.h"
 #include "config_entry.h"
 
-#define GETOPT_OPT           "d:p:"
-#define CONFIG_FILE_HELP     "[-d DIR] [-p PORT]"
+#define GETOPT_OPT           "d:p:a"
+#define CONFIG_FILE_HELP     "[-d DIR] [-p PORT] [-a]"
 
 #define DEFAULT_PORT         9090
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin/"
 
-static int   port          = DEFAULT_PORT;
-static char *document_root = DEFAULT_DOCUMENTROOT;
+static int                 port          = DEFAULT_PORT;
+static char               *document_root = DEFAULT_DOCUMENTROOT;
+static cherokee_boolean_t  bind_local    = true;
 
 
 static ret_t
@@ -50,8 +51,10 @@ config_server (cherokee_server_t *srv)
 
 	cherokee_buffer_add_va  (&buf, "server!port = %d\n", port);
 	cherokee_buffer_add_str (&buf, "server!ipv6 = 0\n");
-	cherokee_buffer_add_str (&buf, "server!listen = 127.0.0.1\n");
 	cherokee_buffer_add_str (&buf, "server!max_connection_reuse = 0\n");
+
+	if (bind_local)
+		cherokee_buffer_add_str (&buf, "server!listen = 127.0.0.1\n");
 
 	cherokee_buffer_add_va  (&buf, "vserver!default!document_root = %s\n", document_root);
 
@@ -88,6 +91,9 @@ process_parameters (int argc, char **argv)
 
 	while ((c = getopt(argc, argv, GETOPT_OPT)) != -1) {
 		switch(c) {
+		case 'a':
+			bind_local = false;
+			break;
 		case 'p':
 			port = atoi(optarg);
 			break;
