@@ -1,3 +1,10 @@
+2007-02-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/header.c: Included ctype.h. isspace() was undefined.
+
+	* cherokee/handler_server_info.c (server_info_build_page): Now it
+	uses cherokee_version_add instead of the old check.
+
 2007-02-22  A.D.F  <adefacc@tin.it>
 
 	* cherokee/header.c:

@@ -38,6 +38,8 @@
 # include <strings.h>
 #endif
 
+#include <ctype.h>
+
 
 // #define HEADER_INTERNAL_DEBUG
 

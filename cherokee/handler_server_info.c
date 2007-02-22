@@ -337,10 +337,10 @@ build_icons_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 static void
 server_info_build_page (cherokee_handler_server_info_t *hdl)
 {
-	const char        *ver;
 	cherokee_server_t *srv;
 	cherokee_buffer_t *buf;
 	cherokee_buffer_t *table;
+	cherokee_buffer_t  ver = CHEROKEE_BUF_INIT;
 
 	/* Init
 	 */
@@ -349,10 +349,8 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 	   
 	/* Add the page begining
 	 */
-	ver = (HANDLER_SRV(hdl)->server_token == cherokee_version_product) ?
-		"" : PACKAGE_VERSION;
-
-	cherokee_buffer_add_va (buf, PAGE_HEADER, ver);
+	cherokee_version_add (&ver, HANDLER_SRV(hdl)->server_token);
+	cherokee_buffer_add_va (buf, PAGE_HEADER, ver.buf);
 
 	if (! HDL_SRV_INFO_PROPS(hdl)->just_about) {
 
@@ -392,6 +390,8 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 	/* Add the page ending
 	 */
 	cherokee_buffer_add_str (buf, PAGE_FOOT);
+
+	cherokee_buffer_mrproper (&ver);
 }
 
 
