@@ -486,7 +486,8 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 	ret_t  ret;
 	char  *begin = buffer->buf;
 	char  *end   = NULL;
-	char  *colon;
+	char  *val_beg;
+	char  *val_end;
 	char  *header_end;
 	char  chr_header_end;
 
@@ -522,7 +523,7 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 	}
 	header_end = &(buffer->buf[hdr->input_header_len]);
 
-	/* Terminate current request space (there maybe other
+	/* Terminate current request space (there may be other
 	 * pipelined requests in the buffer) after the EOH.
 	 */
 	chr_header_end = *header_end;
@@ -568,6 +569,8 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 	while ((begin < header_end) && (end = get_new_line(begin)) != NULL)
 	{
 		cuint_t header_len;
+		int		val_offs;
+		int		val_len;
 		char    first_char;
 		char    chr_end    = *end;
 
@@ -575,16 +578,36 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 
 		/* Current line may have embedded CR+SP or CRLF+SP 
 		 */
-		colon = strchr (begin, ':');
-		if (colon == NULL) {
+		val_beg = strchr (begin, ':');
+		if (unlikely (val_beg == NULL))
 			goto next;
-		}
-		
-		if (end < colon + 2) {
-			goto next;
-		}
 
-		header_len = colon - begin;
+		/* Header name must be at least 1 character long.
+		 */
+		if (unlikely (val_beg == begin))
+			goto next;
+
+		/* Empty values are skipped.
+		 */
+		if (unlikely (end <= val_beg + 1))
+			goto next;
+
+		header_len = val_beg - begin;
+
+		/* Trim heading and leading spaces from header value.
+		 */
+		++val_beg;
+		val_beg += strspn(val_beg, LWS);
+		val_end = end - 1;
+		while (val_end > val_beg && isspace(*val_end)) {
+			val_end--;
+		}
+		val_end++;
+
+		val_offs = val_beg - buffer->buf;
+		val_len  = val_end - val_beg;
+		if (unlikely (val_len < 1))
+			goto next;
 
 		first_char = *begin;
 		if (first_char > 'Z')
@@ -598,69 +621,69 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 		switch (first_char) {
 		case 'A':
 			if (header_equals ("Accept-Encoding", header_accept_encoding, begin, header_len)) {
-				ret = add_known_header (hdr, header_accept_encoding, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_accept_encoding, val_offs, val_len);
 			} else if (header_equals ("Accept-Charset", header_accept_charset, begin, header_len)) {
-				ret = add_known_header (hdr, header_accept_charset, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_accept_charset, val_offs, val_len);
 			} else if (header_equals ("Accept-Language", header_accept_language, begin, header_len)) {
-				ret = add_known_header (hdr, header_accept_language, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_accept_language, val_offs, val_len);
 			} else if (header_equals ("Accept", header_accept, begin, header_len)) {
-				ret = add_known_header (hdr, header_accept, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_accept, val_offs, val_len);
 			} else if (header_equals ("Authorization", header_authorization, begin, header_len)) {
-				ret = add_known_header (hdr, header_authorization, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_authorization, val_offs, val_len);
 			} else goto unknown; 
 			break;
 		case 'C':
 			if (header_equals ("Connection", header_connection, begin, header_len)) {
-				ret = add_known_header (hdr, header_connection, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_connection, val_offs, val_len);
 			} else if (header_equals ("Content-Length", header_content_length, begin, header_len)) {
-				ret = add_known_header (hdr, header_content_length, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_content_length, val_offs, val_len);
 			} else if (header_equals ("Cookie", header_cookie, begin, header_len)) {
-				ret = add_known_header (hdr, header_cookie, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_cookie, val_offs, val_len);
 			} else goto unknown;
 			break;
 		case 'H':
 			if (header_equals ("Host", header_host, begin, header_len)) {
-				ret = add_known_header (hdr, header_host, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_host, val_offs, val_len);
 			} else goto unknown;
 			break;
 		case 'I':
 			if (header_equals ("If-Modified-Since", header_if_modified_since, begin, header_len)) {
-				ret = add_known_header (hdr, header_if_modified_since, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_if_modified_since, val_offs, val_len);
 			} else if (header_equals ("If-None-Match", header_if_none_match, begin, header_len)) {
-				ret = add_known_header (hdr, header_if_none_match, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_if_none_match, val_offs, val_len);
 			} else if (header_equals ("If-Range", header_if_range, begin, header_len)) {
-				ret = add_known_header (hdr, header_if_range, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_if_range, val_offs, val_len);
 			} else goto unknown;
 			break;
 		case 'K':
 			if (header_equals ("Keep-Alive", header_keepalive, begin, header_len)) {
-				ret = add_known_header (hdr, header_keepalive, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_keepalive, val_offs, val_len);
 			} else goto unknown;
 			break;
 		case 'L':
 			if (header_equals ("Location", header_location, begin, header_len)) {
-				ret = add_known_header (hdr, header_location, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_location, val_offs, val_len);
 			} else goto unknown;
 			break;
 		case 'R':
 			if (header_equals ("Range", header_range, begin, header_len)) {
-				ret = add_known_header (hdr, header_range, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_range, val_offs, val_len);
 			} else if (header_equals ("Referer", header_referer, begin, header_len)) {
-				ret = add_known_header (hdr, header_referer, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_referer, val_offs, val_len);
 			} else goto unknown;
 			break;
 		case 'U':
 			if (header_equals ("Upgrade", header_upgrade, begin, header_len)) {
-				ret = add_known_header (hdr, header_upgrade, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_upgrade, val_offs, val_len);
 			} else if (header_equals ("User-Agent", header_user_agent, begin, header_len)) {
-				ret = add_known_header (hdr, header_user_agent, (colon+2)-buffer->buf, end-colon-2);
+				ret = add_known_header (hdr, header_user_agent, val_offs, val_len);
 			} else goto unknown;
 			break;
 		default:
 		unknown:
 			/* Add a unknown header
 			 */
-			ret = add_unknown_header (hdr, begin-buffer->buf, (colon+2)-buffer->buf, end-colon-2);
+			ret = add_unknown_header (hdr, begin-buffer->buf, val_offs, val_len);
 		}
 
 		if (ret < ret_ok) {
@@ -672,7 +695,8 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 	next:
 		*end = chr_end;
 
-		while ((*end == CHR_CR) || (*end == CHR_LF)) end++;
+		while ((*end == CHR_CR) || (*end == CHR_LF))
+			end++;
 		begin = end;
 	}
 
