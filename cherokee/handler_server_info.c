@@ -271,6 +271,7 @@ build_modules_table_content_while (const char *key, void *value, void *params[])
 	int *encoders   = (int *) params[4];
 	int *validators = (int *) params[5];
 	int *generic    = (int *) params[6];
+	int *balancer   = (int *) params[7];
 
 	cherokee_plugin_loader_entry_t *entry = value;
 	cherokee_plugin_info_t         *mod   = entry->info;
@@ -285,6 +286,8 @@ build_modules_table_content_while (const char *key, void *value, void *params[])
 		*validators += 1;
 	} else if (mod->type & cherokee_generic) {
 		*generic += 1;
+	} else if (mod->type & cherokee_balancer) {
+		*balancer += 1;
 	} else {
 		PRINT_ERROR("Unknown module type (%d)\n", mod->type);
 	}
@@ -300,7 +303,8 @@ build_modules_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	cuint_t  encoders   = 0;
 	cuint_t  validators = 0;	   
 	cuint_t  generic    = 0;
-	void    *params[]   = {buf, srv, &loggers, &handlers, &encoders, &validators, &generic};
+	cuint_t  balancers  = 0;
+	void    *params[]   = {buf, srv, &loggers, &handlers, &encoders, &validators, &generic, &balancers};
 
 	cherokee_table_while (&srv->loader.table, 
 			      (cherokee_table_while_func_t) build_modules_table_content_while, 
@@ -310,6 +314,7 @@ build_modules_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	table_add_row_int (buf, "Handlers", handlers);
 	table_add_row_int (buf, "Encoders",  encoders);
 	table_add_row_int (buf, "Validators", validators);
+	table_add_row_int (buf, "Balancers", balancers);
 	table_add_row_int (buf, "Generic", generic);
 }
 

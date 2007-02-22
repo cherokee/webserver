@@ -1,5 +1,8 @@
 2007-02-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_server_info.c: Now it shows balancers
+	information in the Modules table as well.
+	
 	* cherokee/handler_server_info.c (build_server_table_content):
 	Threads number was wrong. Fixed.
 
