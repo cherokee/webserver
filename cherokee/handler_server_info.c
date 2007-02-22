@@ -67,7 +67,7 @@
 "  <tr class=\"h\"><td>"                                                                            CRLF\
 "    <a href=\"http://www.cherokee-project.com/\">"                                                 CRLF\
 "      <img border=\"0\" src=\"?logo\" alt=\"Cherokee Logo\" /></a>"                                CRLF\
-"    <h1 class=\"p\">Cherokee Version %s</h1>"                                                      CRLF\
+"    <h1 class=\"p\">%s</h1>"                                                                       CRLF\
 "  </td></tr>"                                                                                      CRLF\
 "</table><br />"
 
