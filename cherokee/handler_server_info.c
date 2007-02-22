@@ -228,7 +228,7 @@ build_server_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	const char *on  = "On";
 	const char *off = "Off";
 
-	table_add_row_int (buf, "Thread Number ", (srv->ncpus == -1) ? 1 : srv->ncpus);
+	table_add_row_int (buf, "Thread Number ", srv->thread_num);
 	table_add_row_str (buf, "IPv6 ", (srv->ipv6 == 1) ? on : off);
 	table_add_row_str (buf, "TLS support ", (SOCKET_FD(&srv->socket_tls) != -1) ? on : off);
 	table_add_row_int (buf, "TLS port ", SOCKET_FD(&srv->port_tls));
