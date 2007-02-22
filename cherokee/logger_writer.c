@@ -37,6 +37,10 @@
 # include <syslog.h>
 #endif
 
+#ifndef O_LARGEFILE
+# define O_LARGEFILE 0
+#endif
+
 
 ret_t 
 cherokee_logger_writer_init (cherokee_logger_writer_t *writer)
