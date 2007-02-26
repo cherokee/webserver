@@ -633,8 +633,9 @@ cherokee_buffer_ensure_size (cherokee_buffer_t *buf, size_t size)
 	char *pbuf;
 
 	/* Maybe it doesn't need it
+	 * if buf->size == 0 and size == 0 then buf can be NULL.
 	 */
-	if (size <= buf->len) 
+	if (size <= buf->size) 
 		return ret_ok;
 
 	/* If it is a new buffer, take memory and return

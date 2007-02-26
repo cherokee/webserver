@@ -1,3 +1,38 @@
+2007-02-26  A.D.F  <adefacc@tin.it>
+
+	* cherokee/macros.h:
+	- increase DEFAULT_RECV_SIZE from 1024 to 2048;
+
+	* cherokee/socket.h:
+	- renamed cherokee_socket_read()  to cherokee_socket_bufread();
+	- renamed cherokee_socket_write() to cherokee_socket_bufwrite();
+	- renamed cherokee_read()         to cherokee_socket_read();
+	- renamed cherokee_write()        to cherokee_socket_write();
+	- renamed cherokee_writev()       to cherokee_socket_writev();
+
+	* cherokee/socket.c:
+	- HAVE_GNUTLS and HAVE_OPENSSL defines are mutually
+	  exclusive, so apply #if ... #elif sections consistently;
+	- micro speed-up of cherokee_socket_*read() and
+	  cherokee_socket_*write*() by adding likely / unlikely
+	  and by shortening fast path;
+	- now cherokee_socket_read() and cherokee_socket_write*()
+	  don't accept NULL pointers anymore;  it was a waste
+	  to handle those cases only for lingering reads;
+	- cherokee_socket_writev(),
+	  fixed calculation of data sent to socket.
+
+	* cherokee/connection.c:
+	- cherokee_connection_linger_read(),
+	  removed static buffer shared by all threads,
+	  now linger data is read into thread->tmp_buf1;
+	- renamed a few cherokee_socket_*() functions;
+
+	* cherokee/downloader.c, cherokee/fcgi_manager.c,
+	cherokee/handler_fcgi.c, cherokee/handler_mirror.c,
+	cherokee/handler_scgi.c, - renamed a few cherokee_socket_*()
+	functions.
+
 2007-02-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_server_info.c: Now it shows balancers

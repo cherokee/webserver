@@ -84,7 +84,7 @@
 # define must_check  
 #endif
 
-#define DEFAULT_RECV_SIZE             1024
+#define DEFAULT_RECV_SIZE             2048
 #define DEFAULT_READ_SIZE             8192
 #define MAX_HEADER_LEN                4096
 #define MAX_HEADER_CRLF               8 

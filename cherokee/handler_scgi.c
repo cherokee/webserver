@@ -130,7 +130,7 @@ read_from_scgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer
 	size_t                   read = 0;
 	cherokee_handler_scgi_t *scgi = HDL_SCGI(cgi_base);
 	
-	ret = cherokee_socket_read (&scgi->socket, buffer, 4096, &read);
+	ret = cherokee_socket_bufread (&scgi->socket, buffer, 4096, &read);
 
 	switch (ret) {
 	case ret_eagain:
@@ -299,7 +299,7 @@ send_header (cherokee_handler_scgi_t *hdl)
 	size_t                 written = 0;
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 	
-	ret = cherokee_socket_write (&hdl->socket, &hdl->header, &written);
+	ret = cherokee_socket_bufwrite (&hdl->socket, &hdl->header, &written);
 	if (ret != ret_ok) {
 		conn->error_code = http_bad_gateway;
 		return ret;

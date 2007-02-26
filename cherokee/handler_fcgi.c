@@ -173,7 +173,7 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	size_t                   read = 0;
 	cherokee_handler_fcgi_t *fcgi = HDL_FCGI(cgi);
 	
-	ret = cherokee_socket_read (&fcgi->socket, &fcgi->write_buffer, DEFAULT_READ_SIZE, &read);
+	ret = cherokee_socket_bufread (&fcgi->socket, &fcgi->write_buffer, DEFAULT_READ_SIZE, &read);
 
 	switch (ret) {
 	case ret_eagain:
@@ -547,7 +547,7 @@ do_send (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 	size_t                 written;
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 	
-	ret = cherokee_socket_write (&hdl->socket, buffer, &written);
+	ret = cherokee_socket_bufwrite (&hdl->socket, buffer, &written);
 	switch (ret) {
 	case ret_ok:
 		break;

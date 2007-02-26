@@ -600,7 +600,7 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 	 * It is becase it has been sent in a writev()
 	 */
 	if (cherokee_buffer_is_empty (&conn->buffer)) {
-		ret = cherokee_write (&conn->socket, conn->mmaped, conn->mmaped_len, &re);
+		ret = cherokee_socket_write (&conn->socket, conn->mmaped, conn->mmaped_len, &re);
 		switch (ret) {
 		case ret_eof:
 		case ret_eagain:
@@ -629,7 +629,7 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 	bufs[1].iov_base = conn->mmaped;
 	bufs[1].iov_len  = conn->mmaped_len;
 
-	ret = cherokee_writev (&conn->socket, bufs, 2, &re);
+	ret = cherokee_socket_writev (&conn->socket, bufs, 2, &re);
 
 	switch (ret) {
 	case ret_ok: 
@@ -694,14 +694,14 @@ ret_t
 cherokee_connection_recv (cherokee_connection_t *conn, cherokee_buffer_t *buffer, off_t *len)
 {
 	ret_t  ret;
-	size_t readed = 0;
+	size_t cnt_read = 0;
 	
-	ret = cherokee_socket_read (&conn->socket, buffer, DEFAULT_RECV_SIZE, &readed);
+	ret = cherokee_socket_bufread (&conn->socket, buffer, DEFAULT_RECV_SIZE, &cnt_read);
 
 	switch (ret) {
 	case ret_ok:
-		cherokee_connection_rx_add (conn, readed);
-		*len = readed;
+		cherokee_connection_rx_add (conn, cnt_read);
+		*len = cnt_read;
 		return ret_ok;
 
 	case ret_eof:
@@ -766,7 +766,7 @@ cherokee_connection_send_header (cherokee_connection_t *conn)
 
 	/* Send the buffer content
 	 */
-	ret = cherokee_socket_write (&conn->socket, &conn->buffer, &sent);
+	ret = cherokee_socket_bufwrite (&conn->socket, &conn->buffer, &sent);
 	if (unlikely(ret != ret_ok)) return ret;
 	
 	/* Add to the connection traffic counter
@@ -795,7 +795,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 
 	/* Send the buffer content
 	 */
-	ret = cherokee_socket_write (&conn->socket, &conn->buffer, &sent);
+	ret = cherokee_socket_bufwrite (&conn->socket, &conn->buffer, &sent);
 	if (unlikely(ret != ret_ok)) return ret;
 
 	/* Add to the connection traffic counter
@@ -846,12 +846,15 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 {
 	ret_t  ret;
 	int    retries = 2;
-	size_t readed  = 0;
-	
+	cherokee_thread_t *thread = CONN_THREAD(conn);
+	cherokee_buffer_t *tmp1   = THREAD_TMP_BUF1(thread);
+
 	while (true) {
+		size_t cnt_read  = 0;
+
 		/* Read from the socket to nowhere
 		 */
-		ret = cherokee_socket_read (&conn->socket, NULL, DEFAULT_RECV_SIZE, &readed);
+		ret = cherokee_socket_read (&conn->socket, tmp1->buf, tmp1->size, &cnt_read);
 		switch (ret) {
 		case ret_eof:
 			TRACE(ENTRIES, "%s\n", "eof");
@@ -860,15 +863,16 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 			TRACE(ENTRIES, "%s\n", "error");
 			return ret;
 		case ret_eagain:
-			TRACE(ENTRIES, "readed %d, eagain\n", readed);
+			TRACE(ENTRIES, "read %u, eagain\n", cnt_read);
 			return ret;
 		case ret_ok:
-			TRACE(ENTRIES, "readed %d, ok/eagain\n", readed);
-			if (readed > 0 && --retries > 0)
+			TRACE(ENTRIES, "read %u, ok\n", cnt_read);
+			if (cnt_read > 0 && --retries > 0)
 				continue;
 			return ret;
 		default:
 			RET_UNKNOWN(ret);               
+			break;
 		}
 		return ret_error;
 	}
@@ -1404,6 +1408,9 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	 */
 	ret = cherokee_header_copy_request (&conn->header, &conn->request);
 	if (unlikely (ret < ret_ok)) goto error;
+
+	printf ("len %d\n", conn->request.len);
+	printf ("buf %d\n", conn->request.buf);
 
 	ret = cherokee_header_copy_query_string (&conn->header, &conn->query_string);
 	if (unlikely (ret < ret_ok)) goto error;	

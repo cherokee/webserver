@@ -437,7 +437,7 @@ cherokee_fcgi_manager_step (cherokee_fcgi_manager_t *mgr)
 	size_t size = 0; 
 
 	if (mgr->read_buffer.len < sizeof(FCGI_Header)) {
-		ret = cherokee_socket_read (&mgr->socket, &mgr->read_buffer, DEFAULT_READ_SIZE, &size);
+		ret = cherokee_socket_bufread (&mgr->socket, &mgr->read_buffer, DEFAULT_READ_SIZE, &size);
 		switch (ret) {
 		case ret_ok:
 			TRACE (ENTRIES, "%d bytes readed\n", size);
@@ -472,7 +472,7 @@ cherokee_fcgi_manager_send_remove (cherokee_fcgi_manager_t *mgr, cherokee_buffer
 	ret_t  ret;
 	size_t written = 0;
 	
-	ret = cherokee_socket_write (&mgr->socket, buf, &written);
+	ret = cherokee_socket_bufwrite (&mgr->socket, buf, &written);
 	switch (ret) {
 	case ret_ok:
 		TRACE (ENTRIES, "Sent %db\n", written);

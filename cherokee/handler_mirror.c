@@ -171,7 +171,7 @@ send_header (cherokee_handler_mirror_t *hdl)
 	if (hdl->header_sent >= header->len)
 		return ret_ok;
 
-	ret = cherokee_socket_write (&hdl->socket, header, &written);
+	ret = cherokee_socket_bufwrite (&hdl->socket, header, &written);
 	if (ret != ret_ok) {
 		conn->error_code = http_bad_gateway;
 		return ret;
@@ -267,7 +267,7 @@ cherokee_handler_mirror_step (cherokee_handler_mirror_t *hdl, cherokee_buffer_t 
 	ret_t  ret;
 	size_t got = 0;
 
-	ret = cherokee_socket_read (&hdl->socket, buffer, DEFAULT_READ_SIZE, &got);
+	ret = cherokee_socket_bufread (&hdl->socket, buffer, DEFAULT_READ_SIZE, &got);
 	switch (ret) {
 	case ret_ok:
 		TRACE (ENTRIES, "%d bytes readed\n", got);

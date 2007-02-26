@@ -241,7 +241,7 @@ downloader_send_buffer (cherokee_downloader_t *downloader, cherokee_buffer_t *bu
 	size_t             written = 0;
 	cherokee_socket_t *sock    = &downloader->socket;;
 
-	ret = cherokee_socket_write (sock, buf, &written);
+	ret = cherokee_socket_bufwrite (sock, buf, &written);
 	switch (ret) {
 	case ret_ok:
 		/* Drop the header that has been sent
@@ -270,7 +270,7 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 	size_t              readed = 0;
 	cherokee_socket_t  *sock   = &downloader->socket;
 
-	ret = cherokee_socket_read (sock, &downloader->reply_header, DEFAULT_RECV_SIZE, &readed);
+	ret = cherokee_socket_bufread (sock, &downloader->reply_header, DEFAULT_RECV_SIZE, &readed);
 	switch (ret) {
 	case ret_eof:     
 		return ret_eof;
@@ -356,7 +356,7 @@ downloader_step (cherokee_downloader_t *downloader)
 	size_t              readed = 0;
 	cherokee_socket_t  *sock   = &downloader->socket;
 
-	ret = cherokee_socket_read (sock, &downloader->body, DEFAULT_RECV_SIZE, &readed);
+	ret = cherokee_socket_bufread (sock, &downloader->body, DEFAULT_RECV_SIZE, &readed);
 	switch (ret) {
 	case ret_eagain:
 		return ret_eagain;

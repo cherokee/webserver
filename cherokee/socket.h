@@ -192,8 +192,8 @@ ret_t cherokee_socket_set_client        (cherokee_socket_t *socket, unsigned sho
 ret_t cherokee_socket_bind              (cherokee_socket_t *socket, int port, cherokee_buffer_t *listen_to);
 ret_t cherokee_socket_listen            (cherokee_socket_t *socket, int backlog);
 
-ret_t cherokee_socket_write             (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t *written);
-ret_t cherokee_socket_read              (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t count, size_t *read);
+ret_t cherokee_socket_bufwrite          (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t *written);
+ret_t cherokee_socket_bufread           (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t count, size_t *read);
 ret_t cherokee_socket_sendfile          (cherokee_socket_t *socket, int fd, size_t size, off_t *offset, ssize_t *sent);
 ret_t cherokee_socket_connect           (cherokee_socket_t *socket);
 
@@ -208,9 +208,9 @@ ret_t cherokee_socket_set_status        (cherokee_socket_t *socket, cherokee_soc
 
 /* Low level functions
  */
-ret_t cherokee_read   (cherokee_socket_t *socket, char *buf, int buf_size, size_t *read);
-ret_t cherokee_write  (cherokee_socket_t *socket, const char *buf, int len, size_t *written);
-ret_t cherokee_writev (cherokee_socket_t *socket, const struct iovec *vector, uint16_t vector_len, size_t *written);
+ret_t cherokee_socket_read   (cherokee_socket_t *socket, char *buf, int buf_size, size_t *pcnt_read);
+ret_t cherokee_socket_write  (cherokee_socket_t *socket, const char *buf, int len, size_t *pcnt_written);
+ret_t cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, uint16_t vector_len, size_t *pcnt_written);
 
 /* Extra
  */
