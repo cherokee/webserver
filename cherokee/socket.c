@@ -842,9 +842,6 @@ cherokee_socket_listen (cherokee_socket_t *socket, int backlog)
 }
 
 
-/* WARNING: all parameters MUST be valid,
- *          NULL pointers lead to a crash.
- */
 ret_t 
 cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, size_t *pcnt_written)
 {
@@ -853,7 +850,7 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
 	return_if_fail (buf != NULL, ret_error);
 
 #ifdef HAVE_TLS
-	if (likely (socket->is_tls != TLS) {
+	if (likely (socket->is_tls != TLS)) {
 #endif
 		len = send (SOCKET_FD(socket), buf, buf_len, 0);
 		if (likely (len > 0) ) {
