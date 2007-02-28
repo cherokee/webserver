@@ -1,5 +1,10 @@
 2007-02-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/buffer.c (cherokee_buffer_read_from_fd): It was reading
+	too much. This function adds a EOS character at the end of the
+	buffer, so the read() call can use all the buffer but the last
+	characted. That is reserved for the \0. Fixed.
+
 	* cherokee/connection.c (cherokee_connection_get_dir_entry): I
 	have detected an out of memory (by 1 byte) in this function.
 	Added a new conditions to the block check entry that tries to
