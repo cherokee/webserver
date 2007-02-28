@@ -236,7 +236,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 		/* Maybe it has to be redirected
 		 */
-		if (conn->request.buf[conn->request.len-1] != '/') {
+		if (cherokee_buffer_end_char (&conn->request) != '/') {
 			TRACE (ENTRIES, "going for %s\n", "handler_dir");
 			return cherokee_handler_dirlist_new (hdl, cnt, MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
 		}
