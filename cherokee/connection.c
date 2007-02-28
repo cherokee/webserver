@@ -1409,9 +1409,6 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	ret = cherokee_header_copy_request (&conn->header, &conn->request);
 	if (unlikely (ret < ret_ok)) goto error;
 
-	printf ("len %d\n", conn->request.len);
-	printf ("buf %d\n", conn->request.buf);
-
 	ret = cherokee_header_copy_query_string (&conn->header, &conn->query_string);
 	if (unlikely (ret < ret_ok)) goto error;	
 
