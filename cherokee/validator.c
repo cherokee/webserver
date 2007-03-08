@@ -164,13 +164,13 @@ cherokee_validator_parse_digest (cherokee_validator_t *validator, char *str, cui
 	 */
 	cherokee_buffer_add (&auth, str, str_len);
 
-	entry = str;
-	end = str + str_len;
-	
+	entry = auth.buf;
+	end   = auth.buf + auth.len;
+
 	do {
 		/* Skip some chars
 		 */
-		while ((*entry == CHR_SP)  ||
+		while ((*entry == CHR_SP) ||
 		       (*entry == CHR_CR) || 
 		       (*entry == CHR_LF)) entry++;
 
