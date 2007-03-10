@@ -1,3 +1,23 @@
+2007-03-10  A.D.F  <adefacc@tin.it>
+
+	* cherokee/socket.c:
+	- cherokee_socket_read(),
+	  - added new assertion to prevent a read of 0 bytes
+	    (which could lead to an undefined behaviour);
+	  - GNUTLS_E_INTERRUPTED is now properly handled (EINTR);
+	  - both SSL_ERROR_WANT_READ and SSL_ERROR_WANT_WRITE
+	    have to be handled as well;
+
+	- cherokee_socket_write(),
+	  - added new assertion to prevent a write of 0 bytes
+	    (which could lead to an undefined behaviour);
+	  - GNUTLS_E_INTERRUPTED is now properly handled (EINTR);
+	  - both SSL_ERROR_WANT_READ and SSL_ERROR_WANT_WRITE
+	    have to be handled as well;
+
+	- cherokee_socket_writev(),
+	  - added support for TLS connections.
+
 2007-03-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/validator.c (cherokee_validator_parse_digest):

@@ -70,16 +70,16 @@
 
 #elif defined(HPUX_SENDFILE_API)
 # include <sys/socket.h>
-# include <sys/uio.h>
 
 #elif defined(FREEBSD_SENDFILE_API)
 # include <sys/types.h>
 # include <sys/socket.h>
-# include <sys/uio.h>
 
 #elif defined(LINUX_BROKEN_SENDFILE_API)
 extern int32_t sendfile (int out_fd, int in_fd, int32_t *offset, uint32_t count);
 #endif
+
+#include <sys/uio.h>		/* sendfile and writev() */
 
 #define ENTRIES "socket"
 
@@ -842,26 +842,36 @@ cherokee_socket_listen (cherokee_socket_t *socket, int backlog)
 }
 
 
+/* WARNING: all parameters MUST be valid,
+ *          NULL pointers lead to a crash.
+ */
 ret_t 
 cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, size_t *pcnt_written)
 {
 	ssize_t len;
 
-	return_if_fail (buf != NULL, ret_error);
+	*pcnt_written = 0;
+
+	/* There must be something to send, otherwise behaviour is undefined
+	 * and as we don't want this case, we have to enforce assertions.
+	 */
+	return_if_fail (buf != NULL && buf_len > 0, ret_error);
 
 #ifdef HAVE_TLS
 	if (likely (socket->is_tls != TLS)) {
 #endif
 		len = send (SOCKET_FD(socket), buf, buf_len, 0);
 		if (likely (len > 0) ) {
-			/* Return info
+			/* Return n. of bytes sent.
 			 */
 			*pcnt_written = len;
 			return ret_ok;
 		}
 		if (len == 0) {
-			socket->status = socket_closed;
-			return ret_eof;
+			/* Very strange, socket is ready but nothing has been written,
+			 * retry later.
+			 */
+			return ret_eagain;
 		}
 		/* else len < 0 */
 		{
@@ -906,17 +916,19 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
 	}
 
 	if (len == 0) {
-		socket->status = socket_closed;
-		return ret_eof;
+		/* Very strange, socket is ready but nothing has been written,
+		 * retry later.
+		 */
+		return ret_eagain;
 	}
 
 	{	/* len < 0 */
 		switch (len) {
 			case GNUTLS_E_PUSH_ERROR:
-			case GNUTLS_E_INTERRUPTED:
 			case GNUTLS_E_INVALID_SESSION: 
 				socket->status = socket_closed;
 				return ret_eof;
+			case GNUTLS_E_INTERRUPTED:
 			case GNUTLS_E_AGAIN:           
 				return ret_eagain;
 		}
@@ -938,17 +950,21 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
 	}
 
 	if (len == 0) {
+		/* maybe socket was closed by client, no write was performed
+		 */
+		int re = SSL_get_error (socket->session, len);
 		socket->status = socket_closed;
 		return ret_eof;
 	}
 
 	{	/* len < 0 */
-		int re;
-
-		re = SSL_get_error (socket->session, len);
+		int re = SSL_get_error (socket->session, len);
 		switch (re) {
-			case SSL_ERROR_WANT_WRITE: return ret_eagain;
-			case SSL_ERROR_SSL:        return ret_error;
+			case SSL_ERROR_WANT_READ:
+			case SSL_ERROR_WANT_WRITE:
+				return ret_eagain;
+			case SSL_ERROR_SSL:
+				return ret_error;
 		}
 
 		PRINT_ERROR ("ERROR: SSL_write (%d, ..) -> err=%d '%s'\n", 
@@ -972,12 +988,15 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 {
 	ssize_t len;
 
-	return_if_fail (buf != NULL, ret_error);
+	*pcnt_read = 0;
+
+	/* There must be something to read, otherwise behaviour is undefined
+	 * and as we don't want this case, we have to enforce assertions.
+	 */
+	return_if_fail (buf != NULL && buf_size > 0, ret_error);
 
 	if (unlikely (socket->status == socket_closed))
 		return ret_eof;
-
-	*pcnt_read = 0;
 
 #ifdef HAVE_TLS
 	if (likely (socket->is_tls != TLS)) {
@@ -1052,6 +1071,7 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 		case GNUTLS_E_UNEXPECTED_PACKET_LENGTH:
 			socket->status = socket_closed;
 			return ret_eof;
+		case GNUTLS_E_INTERRUPTED:
 		case GNUTLS_E_AGAIN:
 			return ret_eagain;
 		}
@@ -1080,6 +1100,7 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 		re = SSL_get_error (socket->session, len);
 		switch (re) {
 		case SSL_ERROR_WANT_READ:   
+		case SSL_ERROR_WANT_WRITE:   
 			return ret_eagain;
 		case SSL_ERROR_ZERO_RETURN: 
 			socket->status = socket_closed;
@@ -1107,76 +1128,137 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 ret_t 
 cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, uint16_t vector_len, size_t *pcnt_written)
 {
-	int re;
 
-#ifdef _WIN32
-	int i;
-	size_t total;
-	
-	for (i = 0, re = 0, total = 0; i < vector_len; i++, vector++) {
-		re = send (SOCKET_FD(socket), vector->iov_base, vector->iov_len, 0);
-		if (re < 0)
-			break;
-		total += re;
-		if (re != vector->iov_len)
-			break;
-	}
-	*pcnt_written = total;
-
-	/* if we have sent at least one byte,
-	 * then return OK.
-	 */
-	if (likely (total > 0))
-		return ret_ok;
-
-	if (re == 0) {
-		int err = SOCK_ERRNO();
-		if (i == vector_len)
-			return ret_ok;
-		/* Retry later.
-		 */
-		return ret_eagain;
-	}
-#else
 	*pcnt_written = 0;
 
-	re = writev (SOCKET_FD(socket), vector, vector_len);
+	/* There must be something to send, otherwise behaviour is undefined
+	 * and as we don't want this case, we have to enforce assertions.
+	 */
+	return_if_fail (vector != NULL && vector_len > 0, ret_error);
 
-	if (likely (re > 0)) {
-		*pcnt_written = (size_t) re;
-		return ret_ok;
-	}
-	if (re == 0)
-		return ret_eagain;
+#ifdef HAVE_TLS
+	if (likely (socket->is_tls != TLS))
 #endif
+	{
+		int re;
+#ifdef _WIN32
+		int i;
+		size_t total;
 
-	if (re < 0) {
-		int err = SOCK_ERRNO();
-		
-		switch (err) {
-#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
-		case EWOULDBLOCK:
-#endif
-		case EAGAIN:
-		case EINTR: 
+		for (i = 0, re = 0, total = 0; i < vector_len; i++) {
+			re = send (SOCKET_FD(socket), vector[i].iov_base, vector[i].iov_len, 0);
+			if (re < 0)
+				break;
+			total += re;
+			if (re != vector[i].iov_len)
+				break;
+		}
+		*pcnt_written = total;
+
+		/* if we have sent at least one byte,
+		 * then return OK.
+		 */
+		if (likely (total > 0))
+			return ret_ok;
+
+		if (re == 0) {
+			int err = SOCK_ERRNO();
+			if (i == vector_len)
+				return ret_ok;
+			/* Retry later.
+			 */
 			return ret_eagain;
-
-		case EPIPE:
-#ifdef ENOTCONN
-		case ENOTCONN:
-#endif
-		case ETIMEDOUT:
-		case ECONNRESET:
-			socket->status = socket_closed;
-			return ret_error;
 		}
 
-		PRINT_ERROR ("ERROR: writev(%d, ..) -> errno=%d '%s'\n", 
+#else	/* ! WIN32 */
+
+		re = writev (SOCKET_FD(socket), vector, vector_len);
+
+		if (likely (re > 0)) {
+			*pcnt_written = (size_t) re;
+			return ret_ok;
+		}
+		if (re == 0) {
+			int i;
+			/* Find out whether there was something to send or not.
+			 */
+			for (i = 0; i < vector_len; i++) {
+				if (vector[i].iov_base != NULL && vector[i].iov_len > 0)
+					break;
+			}
+			if (i < vector_len)
+				return ret_eagain;
+			/* No, nothing to send, so return ok.
+			 */
+			return ret_ok;
+		}
+#endif
+		if (re < 0) {
+			int err = SOCK_ERRNO();
+		
+			switch (err) {
+#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
+			case EWOULDBLOCK:
+#endif
+			case EAGAIN:
+			case EINTR: 
+				return ret_eagain;
+
+			case EPIPE:
+#ifdef ENOTCONN
+			case ENOTCONN:
+#endif
+			case ETIMEDOUT:
+			case ECONNRESET:
+				socket->status = socket_closed;
+				return ret_error;
+			}
+
+			PRINT_ERROR ("ERROR: writev(%d, ..) -> errno=%d '%s'\n", 
 			     SOCKET_FD(socket), err, strerror(err));
-		return ret_error;
+			return ret_error;
+		}
 	}
-	
+
+#ifdef HAVE_TLS
+	/* TLS connection.
+	 */
+#if  defined (HAVE_GNUTLS) || defined (HAVE_OPENSSL)
+	/* Here we don't worry about sparing a few CPU cycles,
+	 * so we reuse the single send case for TLS.
+	 */
+	{
+	int i = 0;
+	ret_t ret = ret_ok;
+	size_t cnt   = 0;
+
+	for (i = 0, re = 0, total = 0; i < vector_len; i++, vector++) {
+
+		if (vector[i].iov_base == NULL || vector[i].iov_len == 0)
+			continue;
+
+		cnt = 0;
+		ret = cherokee_socket_write (socket, vector[i].iov_base, vector[i].iov_len, &cnt);
+		*pcnt_written += cnt;
+
+		if (ret == ret_ok)
+			continue;
+
+		/* else != ret_ok
+		 */
+		if (*pcnt_written != 0)
+			return ret_ok;
+		/* Nothing has been written, return error code.
+		 */
+		return ret;
+	}
 	return ret_ok;
+#else
+	return ret_error;
+#endif
+
+#endif	/* HAVE_TLS */
+
 }
 
 
