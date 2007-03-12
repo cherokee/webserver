@@ -1071,7 +1071,6 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 		case GNUTLS_E_UNEXPECTED_PACKET_LENGTH:
 			socket->status = socket_closed;
 			return ret_eof;
-		case GNUTLS_E_INTERRUPTED:
 		case GNUTLS_E_AGAIN:
 			return ret_eagain;
 		}
@@ -1221,44 +1220,43 @@ cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, u
 	}
 
 #ifdef HAVE_TLS
-	/* TLS connection.
-	 */
-#if  defined (HAVE_GNUTLS) || defined (HAVE_OPENSSL)
-	/* Here we don't worry about sparing a few CPU cycles,
-	 * so we reuse the single send case for TLS.
+#if defined (HAVE_GNUTLS) || defined (HAVE_OPENSSL)
+
+	/* TLS connection: Here we don't worry about sparing a few CPU
+	 * cycles, so we reuse the single send case for TLS.
 	 */
 	{
-	int i = 0;
-	ret_t ret = ret_ok;
-	size_t cnt   = 0;
+		int      i;
+		ret_t  ret;
+		size_t cnt;
+		
+		for (i = 0; i < vector_len; i++, vector++) {
 
-	for (i = 0, re = 0, total = 0; i < vector_len; i++, vector++) {
+			if (vector[i].iov_base == NULL || vector[i].iov_len == 0)
+				continue;
+			
+			cnt = 0;
+			ret = cherokee_socket_write (socket, vector[i].iov_base, vector[i].iov_len, &cnt);
+			*pcnt_written += cnt;
+			
+			if (ret == ret_ok)
+				continue;
 
-		if (vector[i].iov_base == NULL || vector[i].iov_len == 0)
-			continue;
+			/* else != ret_ok
+			 */
+			if (*pcnt_written != 0)
+				return ret_ok;
+			/* Nothing has been written, return error code.
+			 */
+			return ret;
+		}
 
-		cnt = 0;
-		ret = cherokee_socket_write (socket, vector[i].iov_base, vector[i].iov_len, &cnt);
-		*pcnt_written += cnt;
-
-		if (ret == ret_ok)
-			continue;
-
-		/* else != ret_ok
-		 */
-		if (*pcnt_written != 0)
-			return ret_ok;
-		/* Nothing has been written, return error code.
-		 */
-		return ret;
+		return ret_ok;
 	}
-	return ret_ok;
 #else
 	return ret_error;
 #endif
-
 #endif	/* HAVE_TLS */
-
 }
 
 

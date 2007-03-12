@@ -1,3 +1,19 @@
+2007-03-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.c (cherokee_socket_writev): Fixed. It wasn't
+	compiling.
+
+	* cherokee/socket.c (cherokee_socket_read): removed the
+	GNUTLS_E_INTERRUPTED case.  It seems to have the same value than
+	GNUTLS_E_AGAIN.
+
+	* cherokee/common-internal.h: Added a macro to define INT_MAX if
+	necessary.
+
+	* Makefile.am (SUBDIRS): Moved doc to the last place, in order to
+	ensure that if something happens processing that directory, all
+	the rest of the directories were already processed.
+
 2007-03-10  A.D.F  <adefacc@tin.it>
 
 	* cherokee/socket.c:

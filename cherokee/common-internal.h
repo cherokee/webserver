@@ -167,4 +167,16 @@ char *strsep(char **str, const char *delims);
 char *strcasestr(char *s, char *find);
 #endif
 
+/* Int limit
+ */
+#ifndef INT_MAX
+# if (SIZEOF_INT == 4)
+#  define INT_MAX 0x7fffffffL          /* 2^32 - 1 */
+# elif (SIZEOF_INT == 8)
+#  define INT_MAX 0x7fffffffffffffffL  /* 2^64 - 1 */
+# else
+#  error "Can't define INT_MAX"
+# endif
+#endif
+
 #endif /* CHEROKEE_COMMON_INTERNAL_H */
