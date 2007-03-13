@@ -417,9 +417,6 @@ AC_CHECK_FUNC(getopt_long, have_getopt_long="yes")
 AM_CONDITIONAL(HAVE_GETOPT_LONG, test x"$have_getopt_long" = "xyes")
 
 
-
-
-
 dnl
 dnl Pthread
 dnl

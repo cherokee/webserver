@@ -406,12 +406,13 @@ cherokee_socket_init_tls (cherokee_socket_t *socket, cherokee_virtual_server_t *
 	re = gnutls_handshake (socket->session);
 
 	switch (re) {
+#if (GNUTLS_E_INTERRUPTED != GNUTLS_E_AGAIN)
+	case GNUTLS_E_INTERRUPTED:
+#endif
 	case GNUTLS_E_AGAIN:
 		return ret_eagain;
-	case GNUTLS_E_INTERRUPTED:
-		return ret_error;
 	}
-	
+
 	if (re < 0) {
 		PRINT_ERROR ("ERROR: Init GNUTLS: Handshake has failed: %s\n", gnutls_strerror(re));
 		return ret_error;
@@ -928,7 +929,9 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
 			case GNUTLS_E_INVALID_SESSION: 
 				socket->status = socket_closed;
 				return ret_eof;
+#if (GNUTLS_E_INTERRUPTED != GNUTLS_E_AGAIN)
 			case GNUTLS_E_INTERRUPTED:
+#endif
 			case GNUTLS_E_AGAIN:           
 				return ret_eagain;
 		}
@@ -1066,11 +1069,13 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 	{	/* len < 0 */
 		switch (len) {
 		case GNUTLS_E_PUSH_ERROR:
-		case GNUTLS_E_INTERRUPTED:              
 		case GNUTLS_E_INVALID_SESSION:
 		case GNUTLS_E_UNEXPECTED_PACKET_LENGTH:
 			socket->status = socket_closed;
 			return ret_eof;
+#if (GNUTLS_E_INTERRUPTED != GNUTLS_E_AGAIN)
+		case GNUTLS_E_INTERRUPTED:              
+#endif
 		case GNUTLS_E_AGAIN:
 			return ret_eagain;
 		}
@@ -1139,16 +1144,22 @@ cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, u
 	if (likely (socket->is_tls != TLS))
 #endif
 	{
-		int re;
+		int re = 0;
 #ifdef _WIN32
 		int i;
 		size_t total;
 
 		for (i = 0, re = 0, total = 0; i < vector_len; i++) {
+			if (vector[i].iov_len == 0)
+				continue;
 			re = send (SOCKET_FD(socket), vector[i].iov_base, vector[i].iov_len, 0);
 			if (re < 0)
 				break;
+
 			total += re;
+
+			/* if it is a partial send, then stop sending data
+			 */
 			if (re != vector[i].iov_len)
 				break;
 		}
@@ -1230,7 +1241,7 @@ cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, u
 		ret_t  ret;
 		size_t cnt;
 		
-		for (i = 0; i < vector_len; i++, vector++) {
+		for (i = 0; i < vector_len; i++) {
 
 			if (vector[i].iov_base == NULL || vector[i].iov_len == 0)
 				continue;
@@ -1238,14 +1249,15 @@ cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, u
 			cnt = 0;
 			ret = cherokee_socket_write (socket, vector[i].iov_base, vector[i].iov_len, &cnt);
 			*pcnt_written += cnt;
-			
-			if (ret == ret_ok)
+
+			if (ret == ret_ok && cnt == vector[i].iov_len)
 				continue;
 
-			/* else != ret_ok
+			/* else != ret_ok || cnt != vector[i].iov_len
 			 */
 			if (*pcnt_written != 0)
 				return ret_ok;
+
 			/* Nothing has been written, return error code.
 			 */
 			return ret;
@@ -1601,8 +1613,10 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket)
 		re = gnutls_handshake (socket->session);
 		if (re < 0) {
 			switch (re) {
-			case GNUTLS_E_AGAIN:
+#if (GNUTLS_E_INTERRUPTED != GNUTLS_E_AGAIN)
 			case GNUTLS_E_INTERRUPTED:
+#endif
+			case GNUTLS_E_AGAIN:
 				break;
 			default:
 				return ret_error;
