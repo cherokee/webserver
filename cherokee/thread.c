@@ -1021,7 +1021,12 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 
 			default:
-				RET_UNKNOWN(ret);
+				if ((MODULE(conn->handler)->info) &&
+				    (MODULE(conn->handler)->info->name)) 
+					PRINT_ERROR ("Unknown ret %d from handler %s\n", ret,
+						     MODULE(conn->handler)->info->name);
+				else
+					RET_UNKNOWN(ret);
 			}
 			
 			/* If it is an error, and the connection has not a handler to manage

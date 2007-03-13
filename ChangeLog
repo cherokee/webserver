@@ -1,3 +1,9 @@
+2007-03-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/thread.c (process_active_connections): Tries to report
+	the handler name when a ret code is found after calling the
+	handler init method.
+
 2007-03-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/socket.c (cherokee_socket_writev): Fixed. It wasn't

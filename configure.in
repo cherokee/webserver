@@ -91,20 +91,7 @@ AC_MSG_CHECKING([host platform characteristics])
 	     os_string="Win32"
           libdl=
           ;;
-	*-*-*netbsd*)
-		thread_ldflags="-pthread"	
-          libdl=
-          ;;
-	*-*-*freebsd*|*-*-*openbsd*|*-*-*dragonfly*)
-		thread_ldflags="-pthread"
-          libdl="-pthread"
-          ;;
 	*-*-linux*)
-		thread_ldflags="-lpthread"
-          libdl="-ldl"
-          ;;
-	*-*-hpux*)
-		thread_ldflags="-lpthread"
           libdl="-ldl"
           ;;
 	*-*-solaris*)
@@ -112,10 +99,15 @@ AC_MSG_CHECKING([host platform characteristics])
 		setenv_is_threadsafe="yes"
           libdl="-ldl"
           ;;
+	*-*-hpux*)
+          libdl="-ldl"
+          ;;
+	*-*-*freebsd*|*-*-*openbsd*|*-*-*netbsd*|*-*-*dragonfly*)
+          libdl=
+          ;;
 	*-*-darwin*)
 		so_suffix=dylib
 		mod_suffix=so
-		thread_ldflags="-pthread"
           libdl="-ldl"
           ;;
 	*)
@@ -425,6 +417,9 @@ AC_CHECK_FUNC(getopt_long, have_getopt_long="yes")
 AM_CONDITIONAL(HAVE_GETOPT_LONG, test x"$have_getopt_long" = "xyes")
 
 
+
+
+
 dnl
 dnl Pthread
 dnl
@@ -437,20 +432,7 @@ if test "x$with_pthread" = "xyes"
 then
 	ACX_PTHREAD( , AC_MSG_ERROR([POSIX threads missing]))
 
-	dnl I'm not sure about it..
-	dnl but I've had problems compiling in some GNU/Linux machines
-	dnl because ACX_PTHREAD didn't add -lpthread
-	if test "x$PTHREAD_LIBS" =  "x"
-	then
-#	   AC_CHECK_LIB(pthread, pthread_create, 
-#				 [PTHREAD_LIBS="-lpthread"
-#				  AC_SUBST(PTHREAD_LIBS)])
-		PTHREAD_LIBS="$thread_ldflags"
- 		AC_SUBST(PTHREAD_LIBS)
-	fi
-
 	if test "$acx_pthread_ok" = "yes"; then
-
 		AC_MSG_CHECKING([for pthread_rwlock_t support])
 		have_pthread_rwlock_t=yes
 
@@ -482,14 +464,14 @@ then
 		if test "$have_pthread_rwlock_t" = yes; then
 			AC_DEFINE(HAVE_PTHREAD_RWLOCK_T, 1, [Define if your pthread library includes pthread_rwlock_t])
 		fi
+
+		AC_CHECK_FUNC(pthread_attr_setschedpolicy, have_pthread_attr_setschedpolicy=yes)
+		if test x"$have_pthread_attr_setschedpolicy" = "xyes"; then
+		  AC_DEFINE(HAVE_PTHREAD_SETSCHEDPOLICY, 1, [Pthread support pthread_attr_setschedpolicy])
+		fi
 		
 		with_pthread="yes"
 	fi
-fi
-
-AC_CHECK_FUNC(pthread_attr_setschedpolicy, have_pthread_attr_setschedpolicy=yes)
-if test x"$have_pthread_attr_setschedpolicy" = "xyes"; then
-  AC_DEFINE(HAVE_PTHREAD_SETSCHEDPOLICY, 1, [Pthread support pthread_attr_setschedpolicy])
 fi
 
 dnl
