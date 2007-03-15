@@ -1,5 +1,7 @@
 2007-03-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* configure.in (CRYPT_LIBS): Tries to fix crypt() on MacOS X.
+
 	* qa/run-tests.py: Adds a new "Deps" line.
 
 	* cherokee/server.c, cherokee/plugin_loader.c,

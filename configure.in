@@ -820,31 +820,42 @@ fi
 
 
 dnl
-dnl crypt() and crypt_r()
+dnl crypt()
 dnl
-AC_CHECK_HEADERS(crypt.h, have_crypt_include=yes, have_crypt_include=no)
+AC_CHECK_HEADERS(crypt.h)
 
-AC_CHECK_LIB(crypt, crypt, have_crypt_lib="yes")
-AM_CONDITIONAL(HAVE_CRYPT, test "$have_crypt_lib $have_crypt_include" = "yes yes")
-if test "$have_crypt_lib" = "yes"; then
-	AC_DEFINE(HAVE_CRYPT, 1, [Have crypt function])
-fi
-
-AC_CHECK_LIB(crypt, crypt_r, have_crypt_r_lib="yes")
-AM_CONDITIONAL(HAVE_CRYPT_R, test "$have_crypt_r_lib $have_crypt_include" = "yes yes")
-if test "$have_crypt_r_lib" = "yes"; then
-	AC_DEFINE(HAVE_CRYPT_R, 1, [Have crypt_r function])
-fi
-
+AC_CHECK_FUNC(crypt, system_crypt="yes", system_crypt="no")
+AC_CHECK_LIB(crypt, crypt, have_crypt_lib="yes", have_crypt_lib="no")
 if test "x$have_crypt_lib" = "xyes"; then
 	CRYPT_LIBS="-lcrypt"
 	AC_SUBST(CRYPT_LIBS)
 fi
 
+use_crypt="no"
+if test "$system_crypt $have_crypt_lib" != "no no"; then
+   use_crypt="yes"
+   AC_DEFINE(HAVE_CRYPT, 1, [Have crypt function])
+fi
+AM_CONDITIONAL(HAVE_CRYPT, test "$use_crypt" = "yes")
+
+
+dnl
+dnl crypt_r()
+dnl
+AC_CHECK_FUNC(crypt_r, system_crypt_r="yes", system_crypt_r="no")
+AC_CHECK_LIB(crypt, crypt_r, have_crypt_r_lib="yes", have_crypt_r_lib="no")
+
+use_crypt_r="no"
+if test "$system_crypt_r $have_crypt_lib_r" != "no no"; then
+   use_crypt_r="yes"
+   AC_DEFINE(HAVE_CRYPT_R, 1, [Have crypt_r function])
+fi
+
+
 dnl
 dnl crypt_r and pthread 
 dnl
-if test "$have_crypt_r_lib" = "yes"; then
+if test "$use_crypt_r" = "yes"; then
 	dnl
 	dnl struct crypt_data
 	dnl
