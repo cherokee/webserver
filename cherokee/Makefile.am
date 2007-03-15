@@ -2,7 +2,6 @@
 
 INCLUDES = \
 $(TLS_CFLAGS) \
-$(PTHREAD_CFLAGS) \
 -I$(top_srcdir) \
 -DCHEROKEE_COMPILATION \
 -DCHEROKEE_PLUGINDIR="\"$(plugindir)\"" \
@@ -625,15 +624,11 @@ libcherokee-config.la
 libcherokee_base_la_LDFLAGS = $(common_ldflags)
 libcherokee_base_la_LIBADD = \
 $(TLS_LIBS) \
-$(PTHREAD_LIBS) \
-$(PTHREAD_CFLAGS) \
 $(external_pcre_lib)
 
 libcherokee_client_la_LDFLAGS = $(common_ldflags)
 libcherokee_client_la_LIBADD = \
 $(TLS_LIBS) \
-$(PTHREAD_LIBS) \
-$(PTHREAD_CFLAGS) \
 libcherokee-base.la
 
 libcherokee_server_la_LDFLAGS = $(common_ldflags)
@@ -643,8 +638,6 @@ $(static_validator_mysql_flags)
 
 libcherokee_server_la_LIBADD = \
 $(TLS_LIBS) \
-$(PTHREAD_LIBS) \
-$(PTHREAD_CFLAGS) \
 $(static_validator_pam_lib) \
 $(static_validator_ldap_lib)  \
 $(static_validator_htpasswd_lib) \
@@ -654,8 +647,6 @@ libcherokee-base.la
 
 libcherokee_config_la_LDFLAGS = $(common_ldflags)
 libcherokee_config_la_LIBADD = \
-$(PTHREAD_LIBS) \
-$(PTHREAD_CFLAGS) \
 libcherokee-base.la \
 libcherokee-client.la \
 libcherokee-server.la
@@ -969,8 +960,6 @@ sbin_PROGRAMS = cherokee cherokee-admin
 
 cherokee_SOURCES = main.c
 cherokee_LDADD   = \
-$(PTHREAD_LIBS) \
-$(PTHREAD_CFLAGS) \
 libcherokee-base.la \
 libcherokee-server.la
 cherokee_LDFLAGS = -export-dynamic

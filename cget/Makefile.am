@@ -1,20 +1,16 @@
 ## Cherokee: src/cget/Makefile.am  -*- makefile -*-
 
-INCLUDES = \
+INCLUDES = -I. \
 -DCHEROKEE_COMPILATION \
--I. \
 -I${top_srcdir} \
 -I${top_srcdir}/cherokee \
 $(TLS_CFLAGS) \
-$(PTHREAD_CFLAGS) \
 $(LARGEFILE_CFLAGS)
 
 
 cget_LDADD = \
-../cherokee/libcherokee-client.la \
 $(TLS_LIBS) \
-$(PTHREAD_LIBS) \
-$(PTHREAD_CFLAGS)
+../cherokee/libcherokee-client.la 
 
 cget_SOURCES = \
 main.c

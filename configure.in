@@ -478,11 +478,11 @@ then
 			    [pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;]
   		     ,
 			    AC_MSG_RESULT([-D_XOPEN_SOURCE=500])
-			    PTHREAD_CFLAGS="$PTHREAD_CFLAGS -D_XOPEN_SOURCE=500"
-			    AC_SUBST(PTHREAD_CFLAGS)
+			    CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
 			    # AC_DEFINE(_XOPEN_SOURCE, 500, [Define this if it is needed for pthread_rwlock_t support])
 		     ,
 			    have_pthread_rwlock_t=no
+			    AC_MSG_RESULT([no])
 			    # AC_MSG_ERROR([pthread_rwlock_t support missing]))
 		     )
 			
