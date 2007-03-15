@@ -846,7 +846,7 @@ AC_CHECK_FUNC(crypt_r, system_crypt_r="yes", system_crypt_r="no")
 AC_CHECK_LIB(crypt, crypt_r, have_crypt_r_lib="yes", have_crypt_r_lib="no")
 
 use_crypt_r="no"
-if test "$system_crypt_r $have_crypt_lib_r" != "no no"; then
+if test "$system_crypt_r $have_crypt_r_lib" != "no no"; then
    use_crypt_r="yes"
    AC_DEFINE(HAVE_CRYPT_R, 1, [Have crypt_r function])
 fi
