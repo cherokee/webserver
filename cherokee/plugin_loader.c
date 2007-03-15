@@ -229,7 +229,7 @@ dylib_open (cherokee_plugin_loader_t  *loader,
 
 	/* Build the path string
 	 */
-	ret = cherokee_buffer_add_va (&tmp, "%s/libplugin_%s." SO_SUFFIX, loader->module_dir.buf, libname);
+	ret = cherokee_buffer_add_va (&tmp, "%s/libplugin_%s." MOD_SUFFIX, loader->module_dir.buf, libname);
 	if (unlikely(ret < ret_ok)) return ret;
 	
 	/* Open the library	

@@ -1,3 +1,9 @@
+2007-03-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/plugin_loader.c (dylib_open): SO_SUFFIX replaced by
+	MOD_SUFFIX.  Modules were not working on MacOS X if Cherokee was
+	dynamically compiled.
+
 2007-03-13  A.D.F  <adefacc@tin.it>
 
 	* cherokee/socket.c:
