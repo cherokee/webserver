@@ -113,12 +113,13 @@ server!encoder!gzip!allow = txt
 server!pid_file = %s
 server!mime_files = %s
 server!module_dir = %s
+server!module_deps = %s
 
 vserver!default!document_root = %s
 vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php
 vserver!default!directory!/!handler = common
 vserver!default!directory!/!priority = 1
-""" % (PORT, panic, pid, CHEROKEE_MIME, CHEROKEE_MODS, www)
+""" % (PORT, panic, pid, CHEROKEE_MIME, CHEROKEE_MODS, CHEROKEE_DEPS, www)
 
 PHP_FCGI = """extensions!php!handler = fcgi
 extensions!php!priority = 10000

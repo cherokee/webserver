@@ -1441,7 +1441,8 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		ret = cherokee_config_node_while (conf, add_encoder, srv);
 		if (ret != ret_ok) return ret;
 
-	} else if (equal_buf_str (&conf->key, "module_dir")) {
+	} else if (equal_buf_str (&conf->key, "module_dir") ||
+		   equal_buf_str (&conf->key, "module_deps")) {
 		/* Ignore it: Previously handled 
 		 */
 
@@ -1465,11 +1466,17 @@ configure_server (cherokee_server_t *srv)
 	TRACE (ENTRIES, "Configuring %s\n", "server");
 	ret = cherokee_config_node_get (&srv->config, "server", &subconf);
 	if (ret == ret_ok) {
-		/* Modules dir
+		/* Modules dir and deps
 		 */
 		ret = cherokee_config_node_get (subconf, "module_dir", &subconf2);
 		if (ret == ret_ok) {
 			ret = cherokee_plugin_loader_set_directory (&srv->loader, &subconf2->val);
+			if (ret != ret_ok) return ret;
+		}
+
+		ret = cherokee_config_node_get (subconf, "module_deps", &subconf2);
+		if (ret == ret_ok) {
+			ret = cherokee_plugin_loader_set_deps_dir (&srv->loader, &subconf2->val);
 			if (ret != ret_ok) return ret;
 		}
 

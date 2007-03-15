@@ -1,5 +1,10 @@
 2007-03-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c, cherokee/plugin_loader.c,
+	cherokee/plugin_loader.h, qa/run-tests.py, qa/conf.py: Added a new
+	configuration key "module_deps" to allow setting the plug-in
+	dependency files.
+
 	* cherokee/plugin_loader.c (dylib_open): SO_SUFFIX replaced by
 	MOD_SUFFIX.  Modules were not working on MacOS X if Cherokee was
 	dynamically compiled.

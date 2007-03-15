@@ -174,10 +174,19 @@ cherokee_plugin_loader_init (cherokee_plugin_loader_t *loader)
 	ret = cherokee_table_init (&loader->table);
 	if (unlikely(ret < ret_ok)) return ret;
 	
+	/* Plug-in dir
+	 */
 	ret = cherokee_buffer_init (&loader->module_dir);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	cherokee_buffer_add_str (&loader->module_dir, CHEROKEE_PLUGINDIR);
+
+	/* Plug-in dependencies dir
+	 */
+	ret = cherokee_buffer_init (&loader->deps_dir);
+	if (unlikely(ret < ret_ok)) return ret;
+
+	cherokee_buffer_add_str (&loader->deps_dir, CHEROKEE_DEPSDIR);
 
 	ret = load_static_linked_modules (loader);
 	if (unlikely(ret < ret_ok)) return ret;
@@ -338,7 +347,7 @@ check_deps_file (cherokee_plugin_loader_t *loader, char *modname)
 	char              temp[128];
 	cherokee_buffer_t filename = CHEROKEE_BUF_INIT;
 
-	cherokee_buffer_add_va (&filename, "%s/%s.deps", CHEROKEE_DEPSDIR, modname);
+	cherokee_buffer_add_va (&filename, "%s/%s.deps", loader->deps_dir.buf, modname);
 	file = fopen (filename.buf, "r");
 	if (file == NULL) goto exit;
 
@@ -527,6 +536,16 @@ cherokee_plugin_loader_set_directory  (cherokee_plugin_loader_t *loader, cheroke
 {
 	cherokee_buffer_clean (&loader->module_dir);
 	cherokee_buffer_add_buffer (&loader->module_dir, dir);
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_plugin_loader_set_deps_dir (cherokee_plugin_loader_t *loader, cherokee_buffer_t *dir)
+{
+	cherokee_buffer_clean (&loader->deps_dir);
+	cherokee_buffer_add_buffer (&loader->deps_dir, dir);
 
 	return ret_ok;
 }

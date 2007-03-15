@@ -421,6 +421,7 @@ dnl
 dnl Pthread
 dnl
 with_pthread="yes"
+have_pthread="no"
 AC_ARG_ENABLE(pthread, AC_HELP_STRING([--disable-pthread],[Disable threading support]),
 		    with_pthread="$enableval", with_pthread="yes")
 
@@ -438,6 +439,7 @@ then
            if test "$GCC" = "yes" ; then
               if test -z "$PRESET_LDFLAGS"; then
                 LDFLAGS="$LDFLAGS -pthread"
+			 have_pthread="yes"
               fi
            fi
 		 AC_MSG_RESULT([-pthread])
@@ -450,13 +452,16 @@ then
               CFLAGS="$CFLAGS -mt"
 		    AC_MSG_RESULT([-mt])
            fi
+	      have_pthread="yes"
            ;;
 	  *)
 		 AC_MSG_RESULT([no])
  		 ;;
      esac
 
-     AC_CHECK_LIB(pthread, main)
+	if test "$have_pthread" != "yes"; then
+        AC_CHECK_LIB(pthread, main, have_pthread=yes, have_pthread=no)
+     fi
 
 	dnl
 	dnl More detailed checks on the pthread support
@@ -497,9 +502,12 @@ then
 	if test x"$have_pthread_attr_setschedpolicy" = "xyes"; then
 	     AC_DEFINE(HAVE_PTHREAD_SETSCHEDPOLICY, 1, [Pthread support pthread_attr_setschedpolicy])
 	fi
-		
-	with_pthread="yes"
 fi
+
+if test "$have_pthread" = "yes"; then
+	AC_DEFINE(HAVE_PTHREAD, 1, [Have pthread support])
+fi
+
 
 dnl
 dnl Is setenv() threadsafe?
@@ -1095,7 +1103,7 @@ for m in $methods; do
 	echo "Polling method $i      $m"
 	i=`expr $i + 1`
 done
-echo "Threading support     $with_pthread"
+echo "Threading support     $have_pthread"
 echo "TLS support           $have_tls"
 echo "PCRE library          $have_pcre"
 echo "Compatible PAM        $have_pam"

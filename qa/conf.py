@@ -3,6 +3,7 @@ HOST = "localhost"
 
 CHEROKEE_PATH     = "../cherokee/cherokee"
 CHEROKEE_MODS     = "../cherokee/.libs/"
+CHEROKEE_DEPS     = "../cherokee/"
 CHEROKEE_MIME     = "../mime.types.sample"
 CHEROKEE_PANIC    = "../cherokee/cherokee-panic"
 

@@ -43,6 +43,7 @@ typedef struct {
 typedef struct {
 	cherokee_table_t        table;
 	cherokee_buffer_t       module_dir;
+	cherokee_buffer_t       deps_dir;
 } cherokee_plugin_loader_t;
 
 #define MODINFO(x)   ((cherokee_module_info_t *) (x))
@@ -53,6 +54,7 @@ ret_t cherokee_plugin_loader_init           (cherokee_plugin_loader_t *loader);
 ret_t cherokee_plugin_loader_mrproper       (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_plugin_loader_set_directory  (cherokee_plugin_loader_t *loader, cherokee_buffer_t *dir);
+ret_t cherokee_plugin_loader_set_deps_dir   (cherokee_plugin_loader_t *loader, cherokee_buffer_t *dir);
 ret_t cherokee_plugin_loader_load           (cherokee_plugin_loader_t *loader, char *modname);
 ret_t cherokee_plugin_loader_load_no_global (cherokee_plugin_loader_t *loader, char *modname);
 ret_t cherokee_plugin_loader_unload         (cherokee_plugin_loader_t *loader, char *modname);
