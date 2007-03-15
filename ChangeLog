@@ -1,5 +1,7 @@
 2007-03-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py: Adds a new "Deps" line.
+
 	* cherokee/server.c, cherokee/plugin_loader.c,
 	cherokee/plugin_loader.h, qa/run-tests.py, qa/conf.py: Added a new
 	configuration key "module_deps" to allow setting the plug-in

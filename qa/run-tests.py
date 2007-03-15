@@ -220,6 +220,7 @@ if port is None:
         print_key ('Path', CHEROKEE_PATH)
         print_key ('Mime', CHEROKEE_MIME)
         print_key ('Mods', CHEROKEE_MODS)
+        print_key ('Deps', CHEROKEE_DEPS)
         print
 
         for s in range(SERVER_DELAY):
