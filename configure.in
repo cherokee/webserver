@@ -433,12 +433,15 @@ then
 	dnl
 	AC_MSG_CHECKING([for special a pthread case])
 
+	oldcflags="$CFLAGS"
      CFLAGS="$CFLAGS -D_REENTRANT"
+	PTHREAD_CFLAGS="-D_REENTRANT"
+
 	case "$host" in
     	   i386-unknown-freebsd*)
            if test "$GCC" = "yes" ; then
               if test -z "$PRESET_LDFLAGS"; then
-                LDFLAGS="$LDFLAGS -pthread"
+                PTHREAD_LDFLAGS="-pthread"
 			 have_pthread="yes"
               fi
            fi
@@ -447,9 +450,11 @@ then
        *-solaris2.*)
            if test "$GCC" = "yes" ; then
               CFLAGS="$CFLAGS -pthreads"
+              PTHREAD_CFLAGS="-pthreads"
 		    AC_MSG_RESULT([-pthreads])
            else
               CFLAGS="$CFLAGS -mt"
+              PTHREAD_CFLAGS="-mt"
 		    AC_MSG_RESULT([-mt])
            fi
 	      have_pthread="yes"
@@ -467,47 +472,55 @@ then
 	dnl More detailed checks on the pthread support
 	dnl
 	AC_MSG_CHECKING([for pthread_rwlock_t support])
-	have_pthread_rwlock_t=yes
 
+	have_pthread_rwlock_t=yes
 	AC_TRY_COMPILE([#include <pthread.h>],
 			[pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;],
-			AC_MSG_RESULT([ok]),
+			compiled=yes, compiled=no)
 
- 		     dnl Didn't find rwlock_t. 
-		     dnl Try defining _XOPEN_SOURCE=500
-		     dnl
-		     oldcflags="$CFLAGS"
-		     CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
+	if test "$compiled" = "yes"; then
+	   	AC_MSG_RESULT([ok])
+	else
+	     dnl Didn't find rwlock_t. 
+	     dnl Try defining _XOPEN_SOURCE=500
+	     dnl
+		oldcflags2="$CFLAGS"
+		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
 
-		     AC_TRY_COMPILE([#include <pthread.h>], 
-			    [pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;]
-  		     ,
-			    AC_MSG_RESULT([-D_XOPEN_SOURCE=500])
-			    CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
-			    # AC_DEFINE(_XOPEN_SOURCE, 500, [Define this if it is needed for pthread_rwlock_t support])
-		     ,
-			    have_pthread_rwlock_t=no
-			    AC_MSG_RESULT([no])
-			    # AC_MSG_ERROR([pthread_rwlock_t support missing]))
-		     )
-			
-			CFLAGS="$oldcflags"
-		)
+		AC_TRY_COMPILE([#include <pthread.h>], 
+			    [pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;],
+			    compiled=yes, compiled=no)
 
-	if test "$have_pthread_rwlock_t" = yes; then
+		if test "$compiled" = "yes"; then
+		    AC_MSG_RESULT([-D_XOPEN_SOURCE=500])
+		    PTHREAD_CFLAGS="-D_XOPEN_SOURCE=500"
+		else
+		    have_pthread_rwlock_t=no
+		    AC_MSG_RESULT([no])
+		fi
+
+		CFLAGS="$oldcflags2"
+	fi
+
+	if test "$have_pthread_rwlock_t" = "yes"; then
 		AC_DEFINE(HAVE_PTHREAD_RWLOCK_T, 1, [Define if your pthread library includes pthread_rwlock_t])
+	else
+		AC_MSG_ERROR([pthread_rwlock_t support missing])
 	fi
 
 	AC_CHECK_FUNC(pthread_attr_setschedpolicy, have_pthread_attr_setschedpolicy=yes)
 	if test x"$have_pthread_attr_setschedpolicy" = "xyes"; then
 	     AC_DEFINE(HAVE_PTHREAD_SETSCHEDPOLICY, 1, [Pthread support pthread_attr_setschedpolicy])
 	fi
+
+	CFLAGS="$oldcflags"
 fi
 
 if test "$have_pthread" = "yes"; then
 	AC_DEFINE(HAVE_PTHREAD, 1, [Have pthread support])
+	AC_SUBST(PTHREAD_CFLAGS)
+	AC_SUBST(PTHREAD_LIBS)
 fi
-
 
 dnl
 dnl Is setenv() threadsafe?

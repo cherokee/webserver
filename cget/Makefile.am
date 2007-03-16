@@ -5,6 +5,8 @@ INCLUDES = -I. \
 -I${top_srcdir} \
 -I${top_srcdir}/cherokee \
 $(TLS_CFLAGS) \
+$(PTHREAD_LIBS) \
+$(PTHREAD_CFLAGS) \
 $(LARGEFILE_CFLAGS)
 
 
