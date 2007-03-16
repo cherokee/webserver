@@ -1,5 +1,8 @@
 2007-03-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/util.py (check_php_interpreter): Added a test to check
+	whether the PHP interpreter support fastcgi or not.
+
 	* configure.in (CRYPT_LIBS): Tries to fix crypt() on MacOS X.
 
 	* qa/run-tests.py: Adds a new "Deps" line.

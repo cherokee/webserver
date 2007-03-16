@@ -73,6 +73,12 @@ def str_random (n):
     return str_buf[offset:]
 
 
+def check_php_interpreter (fullpath):
+    f = os.popen ("%s -v" % (fullpath))
+    all = reduce (lambda x,y: x+y, f.readlines())
+    f.close()
+    return "cgi-fcgi" in all
+
 __php_ref = None
 def look_for_php():    
     global __php_ref
@@ -82,6 +88,8 @@ def look_for_php():
     
     if PHPCGI_PATH != "auto":
         __php_ref = PHPCGI_PATH
+        if not check_php_interpreter(__php_ref):
+            print "%s doesn't support fcgi"
         return __php_ref
 
     for p in PHP_DIRS:
@@ -89,6 +97,8 @@ def look_for_php():
             php = os.path.join(p,n)
             if os.path.exists(php):
                 __php_ref = php
+                if not check_php_interpreter(__php_ref):
+                    print "%s doesn't support fcgi"
                 return php
 
     print "ERROR: PHP interpreter not found"
