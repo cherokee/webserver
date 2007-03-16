@@ -1,3 +1,8 @@
+2007-03-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in: MacOS X doesn't support
+	PTHREAD_RWLOCK_INITIALIZER, changed by pthread_rwlock_init().
+
 2007-03-15  A.D.F  <adefacc@tin.it>
 
 	* cherokee/socket.c:

@@ -478,7 +478,7 @@ then
 
 	have_pthread_rwlock_t=yes
 	AC_TRY_COMPILE([#include <pthread.h>],
-			[pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;],
+			[pthread_rwlock_t rwlock; pthread_rwlock_init( &rwlock, NULL);],
 			compiled=yes, compiled=no)
 
 	if test "$compiled" = "yes"; then
@@ -491,7 +491,7 @@ then
 		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
 
 		AC_TRY_COMPILE([#include <pthread.h>], 
-			    [pthread_rwlock_t rwlock=PTHREAD_RWLOCK_INITIALIZER;],
+			    [pthread_rwlock_t rwlock; pthread_rwlock_init( &rwlock, NULL);],
 			    compiled=yes, compiled=no)
 
 		if test "$compiled" = "yes"; then
