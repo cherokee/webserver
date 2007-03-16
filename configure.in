@@ -1025,7 +1025,7 @@ fi
 if test "x$have_mysql" != "xyes"; then
 	modules=`echo $modules | sed s/mysql//`
 fi
-if test "$have_crypt_lib $have_crypt_include" != "yes yes"; then
+if test "$use_crypt" != "yes"; then
 	modules=`echo $modules | sed s/htpasswd//`
 fi
 
@@ -1095,11 +1095,12 @@ if test "$have_port"         = yes; then methods="${methods}port ";   fi
 if test "$have_win32_select" = yes; then methods="${methods}win32 ";  fi
 if test "$have_select"       = yes; then methods="${methods}select";  fi
 
-crypt_type="no"
-if test "$have_crypt_lib" = "yes" && test "$have_crypt_r_lib" = "yes"; then
+if test "$use_crypt_r" = "yes"; then
 	crypt_type="multithread"
-elif test "$have_crypt_lib" = "yes"; then
+elif test "$use_crypt" = "yes"; then
 	crypt_type="single thread"
+else
+	crypt_type="no"
 fi
 
 echo
