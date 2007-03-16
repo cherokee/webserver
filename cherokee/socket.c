@@ -890,10 +890,10 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
 #ifdef ENOTCONN
 			case ENOTCONN:
 #endif
-			case ETIMEDOUT:
 			case ECONNRESET:  
-			case EHOSTUNREACH:
 				socket->status = socket_closed;
+			case ETIMEDOUT:
+			case EHOSTUNREACH:
 				return ret_error;
 			}
 	
@@ -956,7 +956,8 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
 		/* maybe socket was closed by client, no write was performed
 		 */
 		int re = SSL_get_error (socket->session, len);
-		socket->status = socket_closed;
+		if (re == SSL_ERROR_ZERO_RETURN)
+			socket->status = socket_closed;
 		return ret_eof;
 	}
 
@@ -1029,16 +1030,14 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 			case EAGAIN:    
 				return ret_eagain;
 
-			case EBADF:
 			case EPIPE: 
-			case ENOTSOCK:
 #ifdef ENOTCONN
 			case ENOTCONN:
 #endif
-			case ETIMEDOUT:
 			case ECONNRESET:
-			case EHOSTUNREACH:
 				socket->status = socket_closed;
+			case ETIMEDOUT:
+			case EHOSTUNREACH:
 				return ret_error;
 			}
 
@@ -1079,7 +1078,7 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 		case GNUTLS_E_AGAIN:
 			return ret_eagain;
 		}
-			
+
 		PRINT_ERROR ("ERROR: GNUTLS: gnutls_record_recv(%d, ..) -> err=%d '%s'\n", 
 			SOCKET_FD(socket), (int)len, gnutls_strerror(len));
 		return ret_error;
@@ -1218,9 +1217,10 @@ cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, u
 #ifdef ENOTCONN
 			case ENOTCONN:
 #endif
-			case ETIMEDOUT:
 			case ECONNRESET:
 				socket->status = socket_closed;
+			case ETIMEDOUT:
+			case EHOSTUNREACH:
 				return ret_error;
 			}
 

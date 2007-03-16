@@ -1,3 +1,10 @@
+2007-03-15  A.D.F  <adefacc@tin.it>
+
+	* cherokee/socket.c:
+        - set socket->status = socket_closed only when
+	  connection has been interrupted without any doubt
+	  (EPIPE, ECONNRESET, ENOTCONN).	
+
 2007-03-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/util.py (check_php_interpreter): Added a test to check
