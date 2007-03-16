@@ -466,6 +466,9 @@ then
 
 	if test "$have_pthread" != "yes"; then
         AC_CHECK_LIB(pthread, main, have_pthread=yes, have_pthread=no)
+	   if test "$have_pthread" = "yes"; then
+	   	 PTHREAD_LIBS="-lpthread"   
+	   fi
      fi
 
 	dnl
