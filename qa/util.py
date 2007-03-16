@@ -87,22 +87,20 @@ def look_for_php():
         return __php_ref
     
     if PHPCGI_PATH != "auto":
-        __php_ref = PHPCGI_PATH
-        if not check_php_interpreter(__php_ref):
-            print "%s doesn't support fcgi"
-        return __php_ref
+        if check_php_interpreter (PHPCGI_PATH):
+            __php_ref = PHPCGI_PATH
+            return __php_ref
 
     for p in PHP_DIRS:
         for n in PHP_NAMES:
             php = os.path.join(p,n)
             if os.path.exists(php):
-                __php_ref = php
-                if not check_php_interpreter(__php_ref):
-                    print "%s doesn't support fcgi"
-                return php
+                if check_php_interpreter(php):
+                    __php_ref = php
+                    return php
 
-    print "ERROR: PHP interpreter not found"
-    __php_ref = ''
+    error = "Couldn't find a suitable PHP interpreter (with fastcgi support)"
+    __php_ref = error
     return __php_ref
 
 
