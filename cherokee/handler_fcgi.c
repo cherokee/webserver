@@ -730,7 +730,7 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 		ret = connect_to_server (hdl);
 		if (unlikely (ret != ret_ok)) {
 			conn->error_code = http_service_unavailable;
-			return ret; 
+			return ret_error; 
 		}
 
 		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_send_headers;

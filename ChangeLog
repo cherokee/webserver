@@ -1,3 +1,11 @@
+2007-03-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_scgi.c (cherokee_handler_scgi_init): Return
+	ret_error rather than ret. Under some weird circunstances thread.c
+	was receiving a ret_deny from this funcion. It's safer to return
+	ret_error in these functions and be sure the connection is handled
+	properly.
+
 2007-03-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* configure.in: MacOS X doesn't support

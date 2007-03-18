@@ -357,7 +357,7 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 		ret = cherokee_handler_cgi_base_extract_path (HDL_CGI_BASE(hdl), false);
 		if (unlikely (ret < ret_ok)) {
 			conn->error_code = http_internal_error;
-			return ret;
+			return ret_error;
 		}
 		
 		/* Prepare Post
@@ -372,7 +372,7 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 		ret = build_header (hdl);
 		if (unlikely (ret != ret_ok)) {
 			conn->error_code = http_internal_error;
-			return ret;
+			return ret_error;
 		}
 
 		/* Connect	
@@ -380,7 +380,7 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 		ret = connect_to_server (hdl);
 		if (unlikely (ret != ret_ok)) {
 			conn->error_code = http_service_unavailable;
-			return ret;
+			return ret_error;
 		}
 		
 		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_send_headers;
