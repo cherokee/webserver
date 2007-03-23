@@ -1,3 +1,10 @@
+2007-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/resolv_cache.c (cherokee_resolv_cache_get_host,
+	cherokee_resolv_cache_get_ipstr): A call to CHEROKEE_RWLOCK_READER
+	was enough. CHEROKEE_RWLOCK_WRITER was too much. Reported by Cesar
+	Fernandez Gago.
+
 2007-03-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_scgi.c (cherokee_handler_scgi_init): Return

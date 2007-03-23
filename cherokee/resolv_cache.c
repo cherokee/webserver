@@ -188,7 +188,7 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t *resolv, const char *do
 
 	/* Look for the name in the cache
 	 */
-	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
+	CHEROKEE_RWLOCK_READER (&resolv->lock);
 	ret = cherokee_table_get (&resolv->table, (char *)domain, (void **)&entry);
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
@@ -214,7 +214,7 @@ cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv, const char *dom
 
 	/* Look for the name in the cache
 	 */
-	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
+	CHEROKEE_RWLOCK_READER (&resolv->lock);
 	ret = cherokee_table_get (&resolv->table, (char *)domain, (void **)&entry);
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
