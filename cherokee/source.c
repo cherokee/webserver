@@ -31,14 +31,10 @@
 #define ENTRIES "source,src"
 
 
-ret_t
-cherokee_source_new (cherokee_source_t **src)
-{
-	CHEROKEE_NEW_STRUCT (n, source);
-	
-	*src = n;
-	return cherokee_source_init (n);
-}
+/* Implements _new() and _free() 
+ */
+CHEROKEE_ADD_FUNC_NEW  (source);
+CHEROKEE_ADD_FUNC_FREE (source);
 
 
 ret_t 

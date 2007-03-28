@@ -895,7 +895,7 @@ init_server_strings (cherokee_server_t *srv)
 
 
 ret_t
-cherokee_server_init (cherokee_server_t *srv) 
+cherokee_server_initialize (cherokee_server_t *srv) 
 {   
 	int            re;
 	ret_t          ret;

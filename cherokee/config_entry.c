@@ -34,16 +34,10 @@ typedef enum {
 } prop_table_types_t;
 
 
-ret_t 
-cherokee_config_entry_new (cherokee_config_entry_t **entry)
-{
-	CHEROKEE_NEW_STRUCT (n, config_entry);
-		
-	cherokee_config_entry_init (n);
-
-	*entry = n;	
-	return ret_ok;
-}
+/* Implements _new() and _free() 
+ */
+CHEROKEE_ADD_FUNC_NEW  (config_entry);
+CHEROKEE_ADD_FUNC_FREE (config_entry);
 
 
 ret_t 
@@ -104,16 +98,6 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 		entry->users = NULL;
 	}
 
-	return ret_ok;
-}
-
-
-ret_t 
-cherokee_config_entry_free (cherokee_config_entry_t *entry) 
-{
-	cherokee_config_entry_mrproper (entry);
-
-	free (entry);
 	return ret_ok;
 }
 

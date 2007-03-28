@@ -47,32 +47,10 @@
 #define TO_HEX(c)               ((c) > 9 ? (c) + 'a' - 10 : (c) + '0')
 
 
-ret_t
-cherokee_buffer_new (cherokee_buffer_t **buf)
-{
-	CHEROKEE_NEW_STRUCT(n, buffer);
-
-	n->buf  = NULL;
-	n->size = 0;
-	n->len  = 0;
-
-	*buf = n;
-	return ret_ok;
-}
-
-
-ret_t
-cherokee_buffer_free (cherokee_buffer_t *buf)
-{
-	if (buf->buf) {
-		free (buf->buf);
-		buf->buf = NULL;
-	}
-
-	free (buf);	
-	return ret_ok;
-}
-
+/* Implements _new() and _free() 
+ */
+CHEROKEE_ADD_FUNC_NEW  (buffer);
+CHEROKEE_ADD_FUNC_FREE (buffer);
 
 ret_t 
 cherokee_buffer_init (cherokee_buffer_t *buf)
@@ -89,9 +67,13 @@ cherokee_buffer_mrproper (cherokee_buffer_t *buf)
 {
 	if (buf->buf) {
 		free (buf->buf);
+		buf->buf = NULL;
 	}
 
-	return cherokee_buffer_init (buf);
+	buf->len  = 0;
+	buf->size = 0;
+
+	return ret_ok;
 }
 
 ret_t

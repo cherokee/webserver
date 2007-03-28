@@ -31,6 +31,12 @@
 #define ENTRIES "config"
 
 
+/* Implements _new() and _free() 
+ */
+CHEROKEE_ADD_FUNC_NEW  (config_node);
+CHEROKEE_ADD_FUNC_FREE (config_node);
+
+
 ret_t 
 cherokee_config_node_init (cherokee_config_node_t *conf)
 {
@@ -40,17 +46,6 @@ cherokee_config_node_init (cherokee_config_node_t *conf)
 	cherokee_buffer_init (&conf->key);
 	cherokee_buffer_init (&conf->val);
 	
-	return ret_ok;
-}
-
-ret_t 
-cherokee_config_node_new (cherokee_config_node_t **conf)
-{
-	CHEROKEE_NEW_STRUCT(n,config_node);
-
-	cherokee_config_node_init (n);
-
-	*conf = n;
 	return ret_ok;
 }
 
@@ -67,15 +62,6 @@ cherokee_config_node_mrproper (cherokee_config_node_t *conf)
 		cherokee_config_node_free (CONFIG_NODE(i));
 	}
 
-	return ret_ok;
-}
-
-ret_t 
-cherokee_config_node_free (cherokee_config_node_t *conf)
-{
-	cherokee_config_node_mrproper (conf);
-
-	free (conf);
 	return ret_ok;
 }
 

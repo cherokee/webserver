@@ -1,3 +1,29 @@
+2007-03-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/source.c, cherokee/source.h, cherokee/header.c,
+	cherokee/buffer.c, cherokee/config_entry.c,
+	cherokee/config_node.c: Clean up: all these classes now use the
+	new CHEROKEE_ADD_FUNC_NEW and CHEROKEE_ADD_FUNC_FREE macros.
+
+	* cherokee/macros.h (CHEROKEE_ADD_FUNC_NEW,
+	CHEROKEE_ADD_FUNC_FREE): Added two new macros to implement
+	_new/_free methods by using _init/_mrproper. It's a pretty
+	mechanic thing, so I think it worth adding a macro.
+
+	* cherokee/dirs_table.h,
+	cherokee/dirs_table.c (cherokee_dirs_table_free,
+	cherokee_dirs_table_new): Methods removed. They are not longer
+	needed.
+
+	* cherokee/socket.h, cherokee/socket.c (cherokee_socket_new,
+	cherokee_socket_free): These methods have been removed, they are
+	no longer needed.
+	
+	* cherokee/main.c, cherokee/main_admin.c,
+	cherokee/server.c (cherokee_server_init): Reanamed to
+	cherokee_server_initialize. _init/_mrproper are method names that
+	already have a meaning it should respect.
+	
 2007-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/resolv_cache.c (cherokee_resolv_cache_get_host,

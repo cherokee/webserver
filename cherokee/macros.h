@@ -184,6 +184,32 @@
 # define MAX(x,y) ((x>y) ? x : y)
 #endif
 
+/* Automatic functions:
+ * These macros implement _new/_free by using _init/_mrproper.
+ */
+#define CHEROKEE_ADD_FUNC_NEW(klass)  \
+	ret_t                                                         \
+	cherokee_ ## klass ## _new (cherokee_ ## klass ## _t **obj) { \
+		ret_t ret;                                            \
+		CHEROKEE_NEW_STRUCT (n, klass);                       \
+		                                                      \
+		ret = cherokee_ ## klass ## _init (n);                \
+		if (unlikely (ret != ret_ok)) return ret;             \
+		                                                      \
+		*obj = n;                                             \
+		return ret_ok;                                        \
+	}
+
+#define CHEROKEE_ADD_FUNC_FREE(klass)  \
+	ret_t                                                         \
+	cherokee_ ## klass ## _free (cherokee_ ## klass ## _t *obj) { \
+		cherokee_ ## klass ## _mrproper (obj);                \
+		                                                      \
+		free (obj);                                           \
+		return ret_ok;                                        \
+	}
+
+
 /* Printing macros
  */
 #ifdef __GNUC__

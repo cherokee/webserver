@@ -122,7 +122,7 @@ main (int argc, char **argv)
 	ret = config_server (srv);
 	if (ret != ret_ok) return 2;
 
-	ret = cherokee_server_init (srv);
+	ret = cherokee_server_initialize (srv);
 	if (ret != ret_ok) return 3;
 
 	for (;;) {

@@ -155,21 +155,6 @@ cherokee_socket_mrproper (cherokee_socket_t *socket)
 	return ret_ok;
 }
 
-ret_t
-cherokee_socket_new (cherokee_socket_t **socket)
-{
- 	CHEROKEE_NEW_STRUCT (n, socket);
-
-	/* Init 
-	 */
-	cherokee_socket_init (n);
-	
-	/* Return it
-	 */
-	*socket = n;
-	return ret_ok;
-}
-
 
 ret_t 
 cherokee_socket_clean (cherokee_socket_t *socket)
@@ -439,16 +424,6 @@ cherokee_socket_init_tls (cherokee_socket_t *socket, cherokee_virtual_server_t *
 # endif
 
 #endif	/* HAVE_TLS */
-	return ret_ok;
-}
-
-
-ret_t
-cherokee_socket_free (cherokee_socket_t *socket)
-{
-	cherokee_socket_mrproper (socket);
-
-	free (socket);
 	return ret_ok;
 }
 

@@ -84,6 +84,12 @@ clean_headers (cherokee_header_t *hdr)
 }
 
 
+/* Implements _new() and _free() 
+ */
+CHEROKEE_ADD_FUNC_NEW  (header);
+CHEROKEE_ADD_FUNC_FREE (header);
+
+
 ret_t 
 cherokee_header_init (cherokee_header_t *hdr)
 {
@@ -126,24 +132,6 @@ ret_t
 cherokee_header_mrproper (cherokee_header_t *hdr)
 {
 	clean_unknown_headers (hdr);
-	return ret_ok;
-}
-
-ret_t 
-cherokee_header_new (cherokee_header_t **hdr)
-{
-	CHEROKEE_NEW_STRUCT(n,header);
-
-	*hdr = n;
-	return cherokee_header_init (n);
-}
-
-ret_t 
-cherokee_header_free (cherokee_header_t *hdr)
-{
-	cherokee_header_mrproper (hdr);
-
-	free (hdr);
 	return ret_ok;
 }
 

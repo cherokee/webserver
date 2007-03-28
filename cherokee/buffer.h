@@ -55,11 +55,12 @@ typedef struct {
 
 ret_t cherokee_buffer_new                (cherokee_buffer_t **buf);
 ret_t cherokee_buffer_free               (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_clean              (cherokee_buffer_t  *buf);
-ret_t cherokee_buffer_dup                (cherokee_buffer_t  *buf, cherokee_buffer_t **dup);
-
 ret_t cherokee_buffer_init               (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_mrproper           (cherokee_buffer_t  *buf);
+
+ret_t cherokee_buffer_clean              (cherokee_buffer_t  *buf);
+
+ret_t cherokee_buffer_dup                (cherokee_buffer_t  *buf, cherokee_buffer_t **dup);
 void  cherokee_buffer_swap_buffers       (cherokee_buffer_t  *buf, cherokee_buffer_t *second);       
 
 ret_t cherokee_buffer_add                (cherokee_buffer_t  *buf, const char *txt, size_t size);

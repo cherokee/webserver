@@ -38,21 +38,6 @@
 
 
 ret_t 
-cherokee_dirs_table_new (cherokee_dirs_table_t **pt)
-{
-	return cherokee_table_new(pt);
-}
-
-ret_t 
-cherokee_dirs_table_free (cherokee_dirs_table_t *pt)
-{
-	return cherokee_table_free2 (
-		TABLE(pt), 
-		(cherokee_table_free_item_t) cherokee_config_entry_free);
-}
-
-
-ret_t 
 cherokee_dirs_table_init (cherokee_dirs_table_t *pt)
 {
 	return cherokee_table_init (pt);
