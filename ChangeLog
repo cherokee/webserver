@@ -1,3 +1,9 @@
+2007-04-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in, Makefile.am (SUBDIRS): Removed doc directory.
+	Documentation is in bad shape. It doesn't worth distributing it
+	until we don't get it properly fixed.
+
 2007-03-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* themes/default_theme.css: Fixes default theme. File entries

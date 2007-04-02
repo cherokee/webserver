@@ -1,6 +1,6 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-SUBDIRS = m4 contrib www icons themes qa cherokee cget windows doc
+SUBDIRS = m4 contrib www icons themes qa cherokee cget windows
 bin_SCRIPTS = cherokee-config
 SUFFIXES = .sample.pre .sample
 
