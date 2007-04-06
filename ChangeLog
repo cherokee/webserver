@@ -1,3 +1,8 @@
+2007-04-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* themes/default_theme.css: There were two table entries. Mixed
+	them.
+
 2007-04-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* configure.in, Makefile.am (SUBDIRS): Removed doc directory.

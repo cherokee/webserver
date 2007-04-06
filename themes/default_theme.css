@@ -24,17 +24,12 @@ table
   height: 100%;
   margin: 0 auto;
   text-align: left;
+  border-spacing: 0px;
 }
 
 thead td
 { 
   border-bottom: 1px solid #3465a4;
-  padding: 0px;
-  border-spacing: 0px;
-}
-
-table
-{ 
   padding: 0px;
   border-spacing: 0px;
 }
