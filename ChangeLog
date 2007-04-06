@@ -1,5 +1,15 @@
 2007-04-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/fdpoll-epoll.c (_free): Free the memory only if was
+	allocated previously. It is called from _new() it might happen the
+	some of the memory chunks were not alloced yet.
+
+	* cherokee/fdpoll-epoll.c (fdpoll_epoll_new): It was a quite
+	important bug.  File descriptor tables were not propely
+	initializated. It was using memset(len) initializing "len" bytes
+	rather than "len" ints. It's fixed now.. and the stability problem
+	I detected seems to be gone.
+
 	* themes/default_theme.css: There were two table entries. Mixed
 	them.
 

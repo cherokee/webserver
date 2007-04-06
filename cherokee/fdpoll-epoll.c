@@ -64,9 +64,12 @@ _free (cherokee_fdpoll_epoll_t *fdp)
 	if (fdp->ep_fd > 0)
 		close (fdp->ep_fd);
 
-        free (fdp->ep_events);
-        free (fdp->epoll_rs2idx);
-        free (fdp->epoll_idx2rs);
+	if (fdp->ep_events)
+		free (fdp->ep_events);
+	if (fdp->epoll_rs2idx)
+		free (fdp->epoll_rs2idx);
+	if (fdp->epoll_idx2rs)
+		free (fdp->epoll_idx2rs);
         
         free (fdp);        
         return ret_ok;
@@ -161,7 +164,7 @@ _check (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 	/* Sanity check: is it a wrong fd?
 	 */
 	if (fd < 0) return -1;
-
+	
 	/* If fdidx is -1 is because the _reset() function
 	 */
 	fdidx = fdp->epoll_idx2rs[fd];
@@ -261,19 +264,21 @@ fdpoll_epoll_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 	/* Look for max fd limit	
 	 */
 	n->ep_readyfds  = 0;
-	n->ep_events    = (struct epoll_event *) malloc (sizeof(struct epoll_event) * nfd->system_nfiles);
-	n->epoll_rs2idx = (int *) malloc (sizeof(int) * nfd->system_nfiles);
-	n->epoll_idx2rs = (int *) malloc (sizeof(int) * nfd->system_nfiles);
+	n->ep_events    = (struct epoll_event *) malloc (sizeof(struct epoll_event) * (nfd->system_nfiles + 1));
+	n->epoll_rs2idx = (int *) malloc (sizeof(int) * (nfd->system_nfiles + 1));
+	n->epoll_idx2rs = (int *) malloc (sizeof(int) * (nfd->system_nfiles + 1));
 
 	/* If anyone fails free all and return ret_nomem 
 	 */
 	if ((!n->ep_events ) || (!n->epoll_rs2idx) || (!n->epoll_idx2rs)) {
-		_free (n);
+		_free(n);
 		return ret_nomem;
 	}
 
-	memset (n->epoll_rs2idx, -1, nfd->system_nfiles);
-	memset (n->epoll_idx2rs, -1, nfd->system_nfiles);
+	for (re=0; re < (nfd->system_nfiles + 1); re++) {
+		n->epoll_rs2idx[re] = -1;
+		n->epoll_idx2rs[re] = -1;
+	}
 
 	n->ep_fd = epoll_create (nfd->nfiles + 1);
 	if (n->ep_fd < 0) {
