@@ -1,5 +1,9 @@
 2007-04-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/fdpoll-port.c (fdpoll_port_new, _watch): Same problem
+	as in fdpoll_epoll_new(). A memset() wasn't initializing all the
+	integers it was meant to.
+
 	* cherokee/fdpoll-epoll.c (_free): Free the memory only if was
 	allocated previously. It is called from _new() it might happen the
 	some of the memory chunks were not alloced yet.

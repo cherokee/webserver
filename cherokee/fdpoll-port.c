@@ -154,7 +154,9 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 	timeout.tv_sec  = timeout_msecs/1000L;
 	timeout.tv_nsec = ( timeout_msecs % 1000L ) * 1000000L;
 
-	memset(fdp->port_activefd, -1, FDPOLL(fdp)->system_nfiles);
+	for (i=0; i<FDPOLL(fdp)->system_nfiles; i++) {
+		fdp->port_activefd[i] = -1;
+	}
 
 	/* First call to get the number of file descriptors with activity
 	 */
@@ -252,6 +254,7 @@ _set_mode (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 ret_t 
 fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 {
+	cuint_t            i;
 	cherokee_fdpoll_t *nfd;
 	CHEROKEE_NEW_STRUCT (n, fdpoll_port);
 
@@ -285,7 +288,9 @@ fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 		return ret_nomem;
 	}
 
-	memset(n->port_activefd, -1, nfd->system_nfiles);
+	for (i=0; i < nfd->system_nfiles; i++) {
+		n->port_activefd[i] = -1;
+	}
 
 	if ( (n->port = port_create()) == -1 ) {
 		_free( n );
