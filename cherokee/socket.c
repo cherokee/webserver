@@ -79,7 +79,9 @@
 extern int32_t sendfile (int out_fd, int in_fd, int32_t *offset, uint32_t count);
 #endif
 
-#include <sys/uio.h>		/* sendfile and writev() */
+#ifdef HAVE_SYS_UIO_H
+# include <sys/uio.h>		/* sendfile and writev() */
+#endif
 
 #define ENTRIES "socket"
 

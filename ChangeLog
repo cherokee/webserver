@@ -1,3 +1,8 @@
+2007-04-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.c: Prevent to include uio.h is the header
+	doesn't exist. Win32 cross compiling was failing because of this.
+
 2007-04-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/fdpoll-port.c (fdpoll_port_new, _watch): Same problem
