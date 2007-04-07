@@ -1,5 +1,8 @@
 2007-04-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cget/Makefile.am (cget_LDADD): Use pthread libs only for
+	linking. Do not pass them to the compiler.
+
 	* cherokee/util.c (cherokee_get_shell): s/rindex/strrchr/
 
 	* cherokee/socket.c: Prevent to include uio.h is the header

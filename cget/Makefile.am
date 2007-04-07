@@ -5,13 +5,13 @@ INCLUDES = -I. \
 -I${top_srcdir} \
 -I${top_srcdir}/cherokee \
 $(TLS_CFLAGS) \
-$(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 $(LARGEFILE_CFLAGS)
 
 
 cget_LDADD = \
 $(TLS_LIBS) \
+$(PTHREAD_LIBS) \
 ../cherokee/libcherokee-client.la 
 
 cget_SOURCES = \
