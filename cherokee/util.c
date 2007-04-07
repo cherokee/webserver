@@ -1297,8 +1297,8 @@ cherokee_get_shell (const char **shell, const char **binary)
 
 	/* Find the binary
 	 */
-	t1 = rindex (*shell, '\\');
-	t2 = rindex (*shell, '/');
+	t1 = strrchr (*shell, '\\');
+	t2 = strrchr (*shell, '/');
 
 	t1 = cherokee_max_str (t1, t2);
 	if (t1 == NULL) return ret_error;

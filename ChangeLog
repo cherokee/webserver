@@ -1,5 +1,7 @@
 2007-04-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/util.c (cherokee_get_shell): s/rindex/strrchr/
+
 	* cherokee/socket.c: Prevent to include uio.h is the header
 	doesn't exist. Win32 cross compiling was failing because of this.
 
