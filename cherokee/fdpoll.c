@@ -43,14 +43,14 @@ cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys
 #else			
 		return ret_no_sys;
 #endif	
-		
+
 	case cherokee_poll_port:
 #if HAVE_PORT
 		return fdpoll_port_new (fdp, sys_limit, limit);
 #else			
 		return ret_no_sys;
 #endif	
-		
+
 	case cherokee_poll_poll:
 #if HAVE_POLL		
 		return fdpoll_poll_new (fdp, sys_limit, limit);
@@ -64,7 +64,7 @@ cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys
 #else			
 		return ret_no_sys;
 #endif
-		
+
 	case cherokee_poll_select:
 #if HAVE_SELECT	
 		return fdpoll_select_new (fdp, sys_limit, limit);
@@ -75,7 +75,7 @@ cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys
 		SHOULDNT_HAPPEN;
 		return ret_error;
 	}
-	
+
 	SHOULDNT_HAPPEN;
 	return ret_error;
 }
@@ -85,25 +85,25 @@ ret_t
 cherokee_fdpoll_best_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 {
 	ret_t ret;
-	
+
 	ret = cherokee_fdpoll_new (fdp, cherokee_poll_epoll, sys_limit, limit);
 	if (ret == ret_ok) return ret_ok;
-	
+
 	ret = cherokee_fdpoll_new (fdp, cherokee_poll_poll, sys_limit, limit);
 	if (ret == ret_ok) return ret_ok;
-	
+
 	ret = cherokee_fdpoll_new (fdp, cherokee_poll_kqueue, sys_limit, limit);
 	if (ret == ret_ok) return ret_ok;
-	
+
 	ret = cherokee_fdpoll_new (fdp, cherokee_poll_port, sys_limit, limit);
 	if (ret == ret_ok) return ret_ok;
-	
+
 	ret = cherokee_fdpoll_new (fdp, cherokee_poll_win32, sys_limit, limit);
 	if (ret == ret_ok) return ret_ok;
 
 	ret = cherokee_fdpoll_new (fdp, cherokee_poll_select, sys_limit, limit);
 	if (ret == ret_ok) return ret_ok;
-	
+
 	SHOULDNT_HAPPEN;
 	return ret_error;
 }
@@ -148,6 +148,13 @@ cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, char **str)
 
 
 ret_t
+cherokee_fdpoll_is_empty (cherokee_fdpoll_t *fdp)
+{
+	return (fdp->npollfds <= 0);
+}
+
+
+ret_t
 cherokee_fdpoll_is_full (cherokee_fdpoll_t *fdp)
 {
 	return (fdp->npollfds >= (fdp->nfiles - 2));
@@ -185,10 +192,10 @@ cherokee_fdpoll_reset (cherokee_fdpoll_t *fdp, int fd)
 }
 
 
-void  
+ret_t  
 cherokee_fdpoll_set_mode (cherokee_fdpoll_t *fdp, int fd, int rw)
 {
-	fdp->set_mode (fdp, fd, rw);
+	return fdp->set_mode (fdp, fd, rw);
 }
 
 

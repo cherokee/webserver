@@ -96,9 +96,10 @@
 #define CGI_TIMEOUT                   65
 #define MSECONS_TO_LINGER             2000
 #define POST_SIZE_TO_DISK             32768
-#define LOGGER_MIN_BUFSIZE                0
+#define LOGGER_MIN_BUFSIZE            0
 #define DEFAULT_LOGGER_MAX_BUFSIZE    32768
 #define LOGGER_MAX_BUFSIZE            (4 * 1024 * 1024)
+#define MIN_SYSTEM_FD_NUM             10
 
 #define IOCACHE_MAX_FILE_SIZE            50000
 #define IOCACHE_DEFAULT_CLEAN_ELAPSE     10
@@ -142,7 +143,7 @@
 
 
 #define SHOULDNT_HAPPEN \
-	do { fprintf (stderr, "file %s:%d (%s): this shouldn't happend\n",  \
+	do { fprintf (stderr, "file %s:%d (%s): this shouldn't happen\n",  \
 		      __FILE__, __LINE__, __cherokee_func__);               \
 	} while (0)
 
@@ -154,6 +155,10 @@
 
 #define CHEROKEE_NEW_STRUCT(obj,type) \
 	cherokee_ ## type ## _t * obj = (cherokee_ ## type ## _t *) malloc (sizeof(cherokee_ ## type ## _t)); \
+	return_if_fail (obj != NULL, ret_nomem)
+
+#define CHEROKEE_CNEW_STRUCT(nmemb,obj,type) \
+	cherokee_ ## type ## _t * obj = (cherokee_ ## type ## _t *) calloc ((nmemb), sizeof(cherokee_ ## type ## _t)); \
 	return_if_fail (obj != NULL, ret_nomem)
 
 #define CHEROKEE_NEW(obj,type)                   \

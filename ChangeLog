@@ -1,3 +1,73 @@
+2007-04-10  A.D.F  <adefacc@tin.it>
+
+	* cherokee/macros.h:
+        - correct a mispelling in SHOULDNT_HAPPEN macro;
+	- added new macro CHEROKEE_CNEW_STRUCT
+	  to allocate 1 - n zeroed structures (just like calloc);
+	  well given the name we could default (nmemb)
+	  parameter to 1 and hardcode it inside the macro;
+
+	* cherokee/fdpoll-protected.h:
+	- fdpoll_func_set_mode_t, changed return type
+	  from void to ret_t because (in theory) it can fail
+	  (at least in some implementations);
+
+	* cherokee/fdpoll.h:
+	- changed prototype of cherokee_fdpoll_set_mode()
+	  in order to return a ret_t instead of void;
+
+	* cherokee/fdpoll.c:
+	- sparse space fixes (indentation, etc.);
+	- added function: cherokee_fdpoll_is_empty();
+	- cherokee_fdpoll_set_mode(), changed, now it returns ret_t;
+
+	* cherokee/fdpoll-epoll.c:
+	- sparse space fixes (indentation, etc.);
+	- cherokee_fdpoll_epoll_t: removed epoll_idx2rs (it was unused)
+	  and renamed epoll_rs2idx in epoll_fd2idx;
+	- added robustness checks to _free() (against NULL pointers, etc.)
+	  and removed "if (ptr != NULL)" branches because they are not required
+	  by ANSI free (and an ANSI C compiler is required by Cherokee,
+	  besides this I remember that also pre or not fully compliant ANSI C
+	  compilers / libraries often implemented test against NULL in free(),
+	  at least since 1988-1992);
+	- now _set_mode() returns a ret_t;
+	- added other tests to the remaining functions to improve robustness;
+	- moved the positions of a few functions in order
+	  to keep it consistent with other files;
+
+	* cherokee/fdpoll-poll.c:
+	- sparse space fixes (indentation, etc.);
+	- added robustness checks to _free() (against NULL pointers, etc.);
+	- added other tests to the remaining functions to improve robustness;
+	- now _set_mode() returns a ret_t;
+
+	* cherokee/fdpoll-select.c:
+	- now _set_mode() returns a ret_t;
+
+	* cherokee/fdpoll-port.c:
+	- now _set_mode() returns a ret_t;
+
+	* cherokee/fdpoll-kqueue.c:
+	- now _set_mode() returns a ret_t;
+
+	* cherokee/fdpoll-win32.c:
+	- now _set_mode() returns a ret_t;
+	
+	* cherokee/server.c:
+	- sparse space fixes (indentation, etc.);
+	- fixed a few comments;
+	- added robustness tests to force a few values
+	  (number of threads, number of file descriptors per thread,
+	   minimum number of file descriptors, etc.)
+	  within reasonable limits which allow Cherokee to work well.
+
+	* cherokee/thread.c:
+	- sparse space fixes (indentation, etc.);
+	- added a few SHOULDNT_HAPPEN and some more tests
+	  (they should be useful to find out some issues
+	   under heavy loads).
+
 2007-04-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cget/Makefile.am (cget_LDADD): Use pthread libs only for

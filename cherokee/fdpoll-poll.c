@@ -28,9 +28,9 @@
 #include <poll.h>
 #include <errno.h>
 
+#define POLL_ERROR  (POLLHUP | POLLERR | POLLNVAL)
 #define POLL_READ   (POLLIN  | POLL_ERROR)
 #define POLL_WRITE  (POLLOUT | POLL_ERROR)
-#define POLL_ERROR  (POLLHUP | POLLERR | POLLNVAL)
 
 
 /***********************************************************************/
@@ -45,19 +45,25 @@
 typedef struct {
 	struct cherokee_fdpoll poll;
 
-        struct pollfd *pollfds;
-        int           *fdidx;
+	struct pollfd *pollfds;
+	int           *fdidx;
 } cherokee_fdpoll_poll_t;
 
 
 static ret_t
 _free (cherokee_fdpoll_poll_t *fdp)
 {
-        free (fdp->pollfds);
-        free (fdp->fdidx);      
-        free (fdp);
+	if (fdp == NULL)
+		return ret_ok;
+
+	free (fdp->pollfds);
+	free (fdp->fdidx);      
+
+	/* Caller has to set this pointer to NULL.
+	 */
+	free (fdp);
         
-        return ret_ok;
+	return ret_ok;
 }
 
 
@@ -66,126 +72,141 @@ _add (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 {
 	cherokee_fdpoll_t *nfd = FDPOLL(fdp);
 
-        /* Check the fd limit
-         */
-        if (cherokee_fdpoll_is_full(nfd)) {
-                return ret_error;
-        }
+	/* Check the fd limit
+	 */
+	if (cherokee_fdpoll_is_full(nfd)) {
+		return ret_error;
+	}
 
-        fdp->pollfds[nfd->npollfds].fd      = fd;
+	fdp->pollfds[nfd->npollfds].fd      = fd;
 	fdp->pollfds[nfd->npollfds].revents = 0; 
 
-        switch (rw) {
-        case 0:  
-                fdp->pollfds[nfd->npollfds].events = POLLIN; 
-                break;
-        case 1: 
-                fdp->pollfds[nfd->npollfds].events = POLLOUT;
-                break;
+	switch (rw) {
+	case 0:  
+		fdp->pollfds[nfd->npollfds].events = POLLIN; 
+		break;
+	case 1: 
+		fdp->pollfds[nfd->npollfds].events = POLLOUT;
+		break;
 	default:
 		SHOULDNT_HAPPEN;
-        }
-        fdp->fdidx[fd] = nfd->npollfds;
-        nfd->npollfds++;
+		return ret_error;
+	}
 
-        return ret_ok;
+	fdp->fdidx[fd] = nfd->npollfds;
+	nfd->npollfds++;
+
+	return ret_ok;
 }
 
 
-static void 
+static ret_t
 _set_mode (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 {
-        fdp->pollfds[fdp->fdidx[fd]].events = rw ? POLLOUT : POLLIN;
+	fdp->pollfds[fdp->fdidx[fd]].events = (rw ? POLLOUT : POLLIN);
+	return ret_ok;
 }
+
 
 static ret_t
 _del (cherokee_fdpoll_poll_t *fdp, int fd)
 {
-        int                idx = fdp->fdidx[fd];
+	int                idx = fdp->fdidx[fd];
 	cherokee_fdpoll_t *nfd = FDPOLL(fdp);
 
-        if (idx < 0 || idx >= nfd->nfiles) {
-                PRINT_ERROR ("Error droping socket '%d' from fdpoll\n", idx);
-                return ret_error;
-        }
+	if (idx < 0 || idx >= nfd->nfiles) {
+		PRINT_ERROR ("Error dropping socket '%d' from fdpoll\n", idx);
+		return ret_error;
+	}
+
+	/* Check the fd counter.
+	 */
+	if (cherokee_fdpoll_is_empty (nfd)) {
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
 
 	/* Decrease the total number of descriptors
 	 */
-        nfd->npollfds--;
+	nfd->npollfds--;
 
 	/* Move the last one to the empty space
 	 */
-	if (nfd->npollfds > 0) {
-		memcpy (&fdp->pollfds[idx], &fdp->pollfds[nfd->npollfds], sizeof(struct pollfd));
+	if (idx != nfd->npollfds) {
+		fdp->pollfds[idx] = fdp->pollfds[nfd->npollfds];
 		fdp->fdidx[fdp->pollfds[idx].fd] = idx;
 	}
 
 	/* Clean the new empty entry
 	 */
-        fdp->fdidx[fd]                      = -1;
-        fdp->pollfds[nfd->npollfds].fd      = -1;
+	fdp->fdidx[fd]                      = -1;
+	fdp->pollfds[nfd->npollfds].fd      = -1;
 	fdp->pollfds[nfd->npollfds].events  = 0; 
 	fdp->pollfds[nfd->npollfds].revents = 0; 
 
-        return ret_ok;
-}
-
-
-static int
-_watch (cherokee_fdpoll_poll_t *fdp, int timeout_msecs)
-{
-	if (FDPOLL(fdp)->npollfds < 0) {
-		SHOULDNT_HAPPEN;
-	}
-		
-        return poll (fdp->pollfds, FDPOLL(fdp)->npollfds, timeout_msecs);
+	return ret_ok;
 }
 
 
 static int
 _check (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 {
-	short revents = fdp->pollfds[fdp->fdidx[fd]].revents;
+	int revents;
+	int idx = fdp->fdidx[fd];
 
-	if (revents & POLLNVAL) {
-		_del (fdp, fd);
+	if (idx < 0 || idx >= FDPOLL(fdp)->nfiles)
+		return -1;
+
+	revents = fdp->pollfds[idx].revents;
+
+	switch (rw) {
+		case 0: 
+			return revents & POLL_READ;
+		case 1: 
+			return revents & POLL_WRITE;
+		default: 
+			SHOULDNT_HAPPEN;
+			return -1;
 	}
-
-        switch (rw) {
-        case 0: 
-                return revents & POLL_READ;
-        case 1: 
-                return revents & POLL_WRITE;
-        default: 
-                SHOULDNT_HAPPEN;
-                return -1;
-        }
 }
 
 
 static ret_t
 _reset (cherokee_fdpoll_poll_t *fdp, int fd)
 {
+	/* fdp->fdidx[fd] = -1;
+	 */
 	return ret_ok;
+}
+
+
+static int
+_watch (cherokee_fdpoll_poll_t *fdp, int timeout_msecs)
+{
+	if (unlikely (FDPOLL(fdp)->npollfds < 0)) {
+		SHOULDNT_HAPPEN;
+	}
+
+	return poll (fdp->pollfds, FDPOLL(fdp)->npollfds, timeout_msecs);
 }
 
 
 ret_t
 fdpoll_poll_new (cherokee_fdpoll_t **fdp, int system_fd_limit, int fd_limit)
 {
-        int                i;
+	int                i;
 	cherokee_fdpoll_t *nfd;
-        CHEROKEE_NEW_STRUCT (n, fdpoll_poll);
-        
+	CHEROKEE_CNEW_STRUCT (1, n, fdpoll_poll);
+
 	nfd = FDPOLL(n);
 
 	/* Init base class properties
 	 */
 	nfd->type          = cherokee_poll_poll;
-        nfd->nfiles        = fd_limit;
-        nfd->system_nfiles = system_fd_limit;
-        nfd->npollfds      = 0;
-        
+	nfd->nfiles        = fd_limit;
+	nfd->system_nfiles = system_fd_limit;
+	nfd->npollfds      = 0;
+
 	/* Init base class virtual methods
 	 */
 	nfd->free      = (fdpoll_func_free_t) _free;
@@ -196,28 +217,33 @@ fdpoll_poll_new (cherokee_fdpoll_t **fdp, int system_fd_limit, int fd_limit)
 	nfd->check     = (fdpoll_func_check_t) _check;
 	nfd->watch     = (fdpoll_func_watch_t) _watch;	
 
-        /* Get memory: pollfds structs
-         */
-        n->pollfds = (struct pollfd *) malloc (sizeof(struct pollfd) * nfd->nfiles);
-        return_if_fail (n->pollfds, ret_nomem);
-        
-        for (i=0; i < nfd->nfiles; i++) {
-                n->pollfds[i].fd      = -1;
+	/* Get memory: pollfds structs
+	 */
+	n->pollfds = (struct pollfd *) calloc (nfd->nfiles, sizeof(struct pollfd));
+	if (n->pollfds == NULL) {
+		_free(n);
+		return ret_nomem;
+	}
+	for (i = 0; i < nfd->nfiles; i++) {
+		n->pollfds[i].fd      = -1;
 		n->pollfds[i].events  =  0;
 		n->pollfds[i].revents =  0;
-        }
+	}
 
-        /* Get memory: reverse fd index
-         */
-        n->fdidx = (int*) malloc (sizeof(int) * nfd->system_nfiles);
-        return_if_fail (n->fdidx, ret_nomem);
-        
-        for (i=0; i < nfd->system_nfiles; i++) {
-                n->fdidx[i] = -1;
-        }
+	/* Get memory: reverse fd index
+	 */
+	n->fdidx = (int*) calloc (nfd->system_nfiles, sizeof(int));
+	if (n->fdidx == NULL) {
+		_free(n);
+		return ret_nomem;
+	}
+	for (i = 0; i < nfd->system_nfiles; i++) {
+		n->fdidx[i] = -1;
+	}
 
-        /* Return the object
-         */
-        *fdp = nfd;
-        return ret_ok;
+	/* Return the object
+	 */
+	*fdp = nfd;
+	return ret_ok;
 }
+

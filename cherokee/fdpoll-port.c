@@ -234,7 +234,7 @@ _reset (cherokee_fdpoll_port_t *fdp, int fd)
 }
 
 
-static void
+static ret_t
 _set_mode (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 {
 	int rc;
@@ -247,7 +247,9 @@ _set_mode (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 	if ( rc == -1 ) {
 		PRINT_ERROR ("ERROR: port_associate: fd %d: %s\n", fd, 
 			     strerror(errno));
+		return ret_error;
 	}
+	return ret_ok;
 }
 
 

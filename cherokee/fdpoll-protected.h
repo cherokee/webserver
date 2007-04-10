@@ -32,7 +32,7 @@ typedef ret_t (* fdpoll_func_free_t)     (void  *fdpoll);
 typedef ret_t (* fdpoll_func_add_t)      (void  *fdpoll, int fd, int rw);
 typedef ret_t (* fdpoll_func_del_t)      (void  *fdpoll, int fd);
 typedef ret_t (* fdpoll_func_reset_t)    (void  *fdpoll, int fd);
-typedef void  (* fdpoll_func_set_mode_t) (void  *fdpoll, int fd, int rw);
+typedef ret_t (* fdpoll_func_set_mode_t) (void  *fdpoll, int fd, int rw);
 typedef int   (* fdpoll_func_check_t)    (void  *fdpoll, int fd, int rw);
 typedef int   (* fdpoll_func_watch_t)    (void  *fdpoll, int timeout_msecs);
 typedef ret_t (* fdpoll_func_is_full_t)  (void  *fdpoll);

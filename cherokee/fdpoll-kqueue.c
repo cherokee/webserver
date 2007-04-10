@@ -213,7 +213,7 @@ _reset (cherokee_fdpoll_kqueue_t *fdp, int fd)
 }
 
 
-static void
+static ret_t
 _set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 {
 	/* If transitioning from r -> w or from w -> r
@@ -221,13 +221,14 @@ _set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 	 * no longer interested on it.
 	 */
 	if ( rw && (fdp->fdinterest[fd] == 0) ) {
-		_add_change(fdp, fd, 0, EV_DELETE);
+		return _add_change(fdp, fd, 0, EV_DELETE);
 	} else if ( (rw==0 ) && (fdp->fdinterest[fd] == 1) ) {
-		_add_change(fdp, fd, 1, EV_DELETE);
+		return _add_change(fdp, fd, 1, EV_DELETE);
 	}
 
-	_add_change( fdp, fd, rw, EV_ADD );
+	return _add_change( fdp, fd, rw, EV_ADD );
 }
+
 
 ret_t 
 fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)

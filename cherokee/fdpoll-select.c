@@ -148,7 +148,7 @@ _del (cherokee_fdpoll_select_t *fdp, int fd)
 }
 
 
-static void  
+static ret_t
 _set_mode (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 {
         ret_t ret;
@@ -156,7 +156,7 @@ _set_mode (cherokee_fdpoll_select_t *fdp, int fd, int rw)
         ret = _del (fdp, fd);
         if (unlikely(ret < ret_ok)) return;
 
-        _add (fdp, fd, rw);
+        return _add (fdp, fd, rw);
 }
 
 

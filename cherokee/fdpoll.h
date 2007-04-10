@@ -58,7 +58,7 @@ ret_t cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, char **name);
 ret_t cherokee_fdpoll_add        (cherokee_fdpoll_t *fdp, int fd, int rw);
 ret_t cherokee_fdpoll_del        (cherokee_fdpoll_t *fdp, int fd);
 ret_t cherokee_fdpoll_reset      (cherokee_fdpoll_t *fdp, int fd);
-void  cherokee_fdpoll_set_mode   (cherokee_fdpoll_t *fdp, int fd, int rw);
+ret_t cherokee_fdpoll_set_mode   (cherokee_fdpoll_t *fdp, int fd, int rw);
 int   cherokee_fdpoll_check      (cherokee_fdpoll_t *fdp, int fd, int rw);
 int   cherokee_fdpoll_watch      (cherokee_fdpoll_t *fdp, int timeout_msecs);
 ret_t cherokee_fdpoll_is_full    (cherokee_fdpoll_t *fdp);

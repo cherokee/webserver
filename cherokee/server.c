@@ -732,11 +732,23 @@ static ret_t
 initialize_server_threads (cherokee_server_t *srv)
 {	
 	ret_t ret;
-	int   i, fds_per_thread;
+	int   i, fds_per_thread, max_fds;
 
-	/* Get the system fd number limit
+	/* Leave some spare fds.
 	 */
-	fds_per_thread = srv->system_fd_limit / srv->thread_num;
+	if (srv->system_fd_limit < MIN_SYSTEM_FD_NUM) {
+		PRINT_ERROR("srv->system_fd_limit %d < %d !\n", srv->system_fd_limit, MIN_SYSTEM_FD_NUM);
+		return ret_error;
+	}
+	max_fds = srv->system_fd_limit - 5;
+
+	/* Set fd upper limit for threads.
+	 * FIXME: when using a very high number of threads
+	 *        some fds may be left unused (not a big problem).
+	 */
+	if (srv->thread_num > max_fds)
+		srv->thread_num = max_fds;
+	fds_per_thread = max_fds / srv->thread_num;
 
 	/* Create the main thread
 	 */
@@ -757,11 +769,11 @@ initialize_server_threads (cherokee_server_t *srv)
 	}
 #endif
 
-	/* If Cherokee is compiles in multi-thread mode, it has to
-	 * launch the threads
+	/* If Cherokee has been compiled in multi-thread mode,
+	 * then it may need to launch other threads.
 	 */
 #ifdef HAVE_PTHREAD
-	for (i=0; i<srv->thread_num - 1; i++) {
+	for (i = 0; i < srv->thread_num - 1; i++) {
 		cherokee_thread_t *thread;
 
 		ret = cherokee_thread_new (&thread, srv, thread_async, 
@@ -847,6 +859,11 @@ set_fdmax_limit (cherokee_server_t *srv)
 	/* Try to raise the fd number system limit
 	 */
 	if (srv->max_fds != -1) {
+		/* max_fds sanity check
+		 */
+		if (srv->max_fds < MIN_SYSTEM_FD_NUM)
+			srv->max_fds = MIN_SYSTEM_FD_NUM;
+
 		/* Set it	
 		 */
 		ret = cherokee_sys_fdlimit_set (srv->max_fds);
@@ -856,7 +873,7 @@ set_fdmax_limit (cherokee_server_t *srv)
 		}
 	}
 
-	/* Get system fd limimt.. has it been increased?
+	/* Get system fd limit ... has it been increased?
 	 */
 	ret = cherokee_sys_fdlimit_get (&srv->system_fd_limit);
 	if (ret < ret_ok) {
@@ -904,12 +921,18 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	/* Build the server string
 	 */
 	ret = init_server_strings (srv);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	/* Set the FD number limit
 	 */
 	ret = set_fdmax_limit (srv);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
+	if (srv->system_fd_limit < 10) {
+		PRINT_ERROR("Number of system files too low (%d < 10) !\n", srv->system_fd_limit);
+		return ret_error;
+	}
 
 	/* If the server has a previous server socket opened, Eg:
 	 * because a SIGHUP, it shouldn't init the server socket.
@@ -928,33 +951,44 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		if (ret != ret_ok) return ret;
 	}
 
-        /* Get the CPU number
+	/* Get the CPU number
 	 */
 #ifndef CHEROKEE_EMBEDDED
 	dcc_ncpus (&srv->ncpus);
+	if (srv->ncpus < 1) {
+		PRINT_ERROR("Bad number of processors (%d < 1), use default 1 !\n", srv->ncpus);
+		srv->ncpus = 1;
+	}
 #else
 	srv->ncpus = 1;
 #endif
-	if (srv->ncpus == -1) {
-		PRINT_ERROR_S ("Can not deternime the number of processors\n");
-		srv->ncpus = 1;
-	}
 
-	/*  Maybe recalculate the thread number
+	/* Verify the thread number and force it within sane limits.
+	 * See also subsequent fds_per_threads.
 	 */
-	if (srv->thread_num == -1) {
 #ifdef HAVE_PTHREAD
+	if (srv->thread_num < 1) {
 		srv->thread_num = srv->ncpus * 5;
-#else
-		srv->thread_num = 1;
-#endif
 	}
-		
+	if (srv->thread_num + 5 >= srv->system_fd_limit) {
+		srv->thread_num = srv->system_fd_limit - 5;
+		if (srv->thread_num < 1)
+			srv->thread_num = 1;
+	}
+#else
+	srv->thread_num = 1;
+#endif
+
 	/* Check the number of reusable connections
 	 */
-	if (srv->max_conn_reuse == -1) {
+	if (srv->max_conn_reuse == -1)
 		srv->max_conn_reuse = DEFAULT_CONN_REUSE;
-	}
+
+	if (srv->max_conn_reuse > srv->system_fd_limit - 10)
+		srv->max_conn_reuse = srv->system_fd_limit - 10;
+
+	if (srv->max_conn_reuse < 0)
+		srv->max_conn_reuse = 0;
 
 	/* Get the passwd file entry before chroot
 	 */
@@ -984,14 +1018,15 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	 */
 	re = chdir ("/");
 	if (re < 0) {
-		PRINT_ERROR ("Couldn't chmod(\"/\"): %s\n", strerror(errno));
+		PRINT_ERROR ("Couldn't chdir(\"/\"): %s\n", strerror(errno));
 		return ret_error;
 	}
 
 	/* Create the threads
 	 */
 	ret = initialize_server_threads (srv);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	/* Print the server banner
 	 */
