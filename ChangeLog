@@ -1,3 +1,17 @@
+2007-04-11  A.D.F  <adefacc@tin.it>
+
+	* cherokee/fdpoll-kqueue.c, cherokee/fdpoll-port.c,
+	cherokee/fdpoll-win32.c, cherokee/fdpoll-select.c:
+        - sparse space fixes (indentation, etc.);
+        - ANSI C _free(ptr);
+        - cherokee_fdpoll_xxx_new():
+		- use CHEROKEE_CNEW_STRUCT() to allocate a zeroed struct;
+		- use calloc() instead of malloc() so that all arrays
+		  are pre-initialized to zero (in some files this is not
+		  useful / required, but it is better to be consistent with
+		  the majority of the other fdpoll-*.c files);
+		- added missing tests on ptr == NULL and _free() calls.
+
 2007-04-10  A.D.F  <adefacc@tin.it>
 
 	* cherokee/macros.h:

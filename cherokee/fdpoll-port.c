@@ -74,14 +74,14 @@ fd_associate( cherokee_fdpoll_port_t *fdp, int fd, void *rw )
 	int rc;
 	
 	rc = port_associate (fdp->port,                /* port */
-			     PORT_SOURCE_FD,           /* source */
-			     fd,                       /* object */
-			     rw?POLL_WRITE:POLL_READ,  /* events */
-			     rw);                      /* user data */
+	                     PORT_SOURCE_FD,           /* source */
+	                     fd,                       /* object */
+	                     rw?POLL_WRITE:POLL_READ,  /* events */
+	                     rw);                      /* user data */
 
 	if ( rc == -1 ) {
-                PRINT_ERROR ("ERROR: port_associate: fd %d: %s\n", fd, 
-			     strerror(errno));
+		PRINT_ERROR ("ERROR: port_associate: fd %d: %s\n", fd, 
+				strerror(errno));
 		return ret_error;
 	}
 	
@@ -92,15 +92,23 @@ fd_associate( cherokee_fdpoll_port_t *fdp, int fd, void *rw )
 static ret_t 
 _free (cherokee_fdpoll_port_t *fdp)
 {
-	if ( fdp->port > 0 ) { 
+	if (fdp == NULL)
+		return ret_ok;
+
+	if ( fdp->port >= 0 ) { 
 		close (fdp->port);
 	}
-	
+
+	/* ANSI C required, so that free() can handle NULL pointers
+	 */
 	free( fdp->port_events );
 	free( fdp->port_activefd );
-	
+
+	/* Caller has to set this pointer to NULL.
+	 */
 	free( fdp );
-        return ret_ok;	   
+
+	return ret_ok;	   
 }
 
 
@@ -111,8 +119,8 @@ _add (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 
 	rc = fd_associate(fdp, fd, rw?WRITE:READ);
 	if ( rc == -1 ) {
-                PRINT_ERROR ("ERROR: port_associate: fd %d: %s\n", fd, 
-			     strerror(errno));
+		PRINT_ERROR ("ERROR: port_associate: fd %d: %s\n", fd, 
+				strerror(errno));
 		return ret_error;
 	}
 
@@ -127,8 +135,8 @@ _del (cherokee_fdpoll_port_t *fdp, int fd)
 	int rc;
 
 	rc = port_dissociate( fdp->port,      /* port */
-			      PORT_SOURCE_FD, /* source */
-			      fd); /* object */
+	                      PORT_SOURCE_FD, /* source */
+	                      fd);            /* object */
 	if ( rc == -1 ) {
 		PRINT_ERROR ("ERROR: port_dissociate: %d,%s\n", fd, 
 			     strerror(errno));
@@ -189,14 +197,13 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 		nfd = fdp->port_events[i].portev_object;
 		fdp->port_activefd[nfd] = fdp->port_events[i].portev_events;
 		rc = fd_associate( fdp, 
-				   nfd, 
-				   fdp->port_events[i].portev_user);
+		                   nfd, 
+		                   fdp->port_events[i].portev_user);
 		if ( rc < 0 ) {
 			PRINT_ERROR ("ERROR: port_associate: %s\n", 
-				     strerror(errno));
+					strerror(errno));
 		}
 	}
-
 
 	return fdp->port_readyfds;
 }
@@ -240,15 +247,16 @@ _set_mode (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 	int rc;
 
 	rc = port_associate( fdp->port,
-			     PORT_SOURCE_FD,
-			     fd,
-			     rw ? POLLOUT : POLLIN,
-			     rw ? WRITE   : READ);
+	                     PORT_SOURCE_FD,
+	                     fd,
+	                     rw ? POLLOUT : POLLIN,
+	                     rw ? WRITE   : READ);
 	if ( rc == -1 ) {
 		PRINT_ERROR ("ERROR: port_associate: fd %d: %s\n", fd, 
-			     strerror(errno));
+				strerror(errno));
 		return ret_error;
 	}
+
 	return ret_ok;
 }
 
@@ -258,7 +266,7 @@ fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 {
 	cuint_t            i;
 	cherokee_fdpoll_t *nfd;
-	CHEROKEE_NEW_STRUCT (n, fdpoll_port);
+	CHEROKEE_CNEW_STRUCT (1, n, fdpoll_port);
 
 	nfd = FDPOLL(n);
 
@@ -279,13 +287,14 @@ fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 	nfd->check         = (fdpoll_func_check_t) _check;
 	nfd->watch         = (fdpoll_func_watch_t) _watch;	
 
-	/*
+	/* Allocate data
 	 */
+	n->port = -1;
 	n->port_readyfds = 0;
-	n->port_events = ( port_event_t *)malloc(sizeof(port_event_t)*nfd->nfiles);
-	n->port_activefd = (int *)malloc(sizeof(int) * nfd->system_nfiles);
+	n->port_events   = (port_event_t *) calloc(nfd->nfiles, sizeof(port_event_t));
+	n->port_activefd = (int *) calloc(nfd->system_nfiles, sizeof(int));
 
-	if ( (!n->port_events) || (!n->port_activefd) ) {
+	if ( n->port_events == NULL || n->port_activefd == NULL ) {
 		_free( n );
 		return ret_nomem;
 	}
@@ -304,3 +313,4 @@ fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 	*fdp = nfd;
 	return ret_ok;
 }
+

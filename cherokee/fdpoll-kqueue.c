@@ -71,14 +71,22 @@ typedef struct {
 static ret_t 
 _free (cherokee_fdpoll_kqueue_t *fdp)
 {
-	close( fdp->kqueue );
+	if (fdp == NULL)
+		return ret_ok;
 
+	if (fdp->kqueue >= 0)
+		close( fdp->kqueue );
+
+	/* ANSI C required, so that free() can handle NULL pointers
+	 */
 	free( fdp->changelist );
 	free( fdp->fdevents );
 	free( fdp->fdinterest );
-	
+
+	/* Caller has to set this pointer to NULL.
+	 */
 	free( fdp );
-        return ret_ok;
+	return ret_ok;
 }
 
 
@@ -234,7 +242,7 @@ ret_t
 fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 {
 	cherokee_fdpoll_t *nfd;
-	CHEROKEE_NEW_STRUCT (n, fdpoll_kqueue);
+	CHEROKEE_CNEW_STRUCT (1, n, fdpoll_kqueue);
 
 	nfd = FDPOLL(n);
 
@@ -257,18 +265,16 @@ fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 
 	/* Init kqueue specific variables
 	 */
+	n->kqueue          = -1;
 	n->nchanges        = 0;
-	n->changelist      = ( struct kevent *)malloc(sizeof(struct kevent)*2*
-						      nfd->nfiles);
-	n->fdevents        = (int *)malloc(sizeof(int) * nfd->system_nfiles);
-	n->fdinterest      = (int *)malloc(sizeof(int) * nfd->system_nfiles);
+	n->changelist      = (struct kevent *) calloc(nfd->nfiles * 2, sizeof(struct kevent));
+	n->fdevents        = (int *) calloc (nfd->system_nfiles, sizeof(int));
+	n->fdinterest      = (int *) calloc (nfd->system_nfiles, sizeof(int));
 
-	if ( (!n->fdevents) || (!n->changelist) || (!n->fdinterest) ) {
+	if (n->fdevents == NULL || n->changelist == NULL || n->fdinterest == NULL) {
 		_free( n );
 		return ret_nomem;
 	}
-
-	memset(n->fdevents, 0, sizeof(int)*nfd->system_nfiles);
 
 	if ( (n->kqueue = kqueue()) == -1 ) {
 		_free( n );
