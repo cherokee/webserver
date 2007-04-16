@@ -85,7 +85,7 @@
 /* Socket status
  */
 typedef enum {
-	socket_reading,
+	socket_reading = 0,
 	socket_writing,
 	socket_closed
 } cherokee_socket_status_t;

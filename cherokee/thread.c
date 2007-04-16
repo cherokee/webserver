@@ -345,7 +345,7 @@ purge_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 	 */
 	cherokee_connection_mrproper (conn);
 
-	/* Add it to the rusable list
+	/* Add it to the reusable list
 	 */	
 	connection_reuse_or_free (thread, conn);
 }
@@ -646,17 +646,17 @@ process_active_connections (cherokee_thread_t *thd)
 				
 			default:
 				RET_UNKNOWN(ret);
+				purge_closed_connection (thd, conn);
+				continue;
 			}
 			conn->phase = phase_tls_handshake;;
 			
 		case phase_tls_handshake:
 			ret = cherokee_socket_init_tls (&conn->socket, CONN_VSRV(conn));
+
 			switch (ret) {
+
 			case ret_eagain:
-				continue;
-				
-			case ret_error:
-				purge_closed_connection (thd, conn);
 				continue;
 				
 			case ret_ok:
@@ -671,8 +671,14 @@ process_active_connections (cherokee_thread_t *thd)
 				conn->phase = phase_reading_header;
 				break;
 
+			case ret_error:
+				purge_closed_connection (thd, conn);
+				continue;
+				
 			default:
 				RET_UNKNOWN(ret);
+				purge_closed_connection (thd, conn);
+				break;
 			}
 			break;
 
@@ -691,10 +697,6 @@ process_active_connections (cherokee_thread_t *thd)
 				}
 				continue;
 				
-			case ret_error:
-				purge_maybe_lingering (thd, conn);
-				continue;
-				
 			case ret_eof:
 				/* Finish..
 				 */
@@ -705,9 +707,15 @@ process_active_connections (cherokee_thread_t *thd)
 
 				cherokee_post_commit_buf (&conn->post, len);
 				break;
+
+			case ret_error:
+				purge_closed_connection (thd, conn);
+				continue;
 				
 			default:
 				RET_UNKNOWN(ret);
+				purge_closed_connection (thd, conn);
+				continue;
 			}
 			
 			/* Turn the connection in write mode
@@ -734,6 +742,8 @@ process_active_connections (cherokee_thread_t *thd)
 					continue;
 				default:
 					RET_UNKNOWN(ret);
+					purge_closed_connection (thd, conn);
+					continue;
 				}
 			}
 
@@ -751,6 +761,8 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			default:
 				RET_UNKNOWN(ret);
+				purge_closed_connection (thd, conn);
+				continue;
 			}
 
 			/* Check security after read
@@ -777,6 +789,8 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			default:
 				RET_UNKNOWN(ret);
+				purge_closed_connection (thd, conn);
+				continue;
 			}
 
 			/* fall down */
@@ -1019,6 +1033,7 @@ process_active_connections (cherokee_thread_t *thd)
 						     MODULE(conn->handler)->info->name);
 				else
 					RET_UNKNOWN(ret);
+				break;
 			}
 			
 			/* If it is an error, and the connection has not a handler to manage
@@ -1165,19 +1180,18 @@ process_active_connections (cherokee_thread_t *thd)
 				ret = cherokee_connection_send (conn);
 
 				switch (ret) {
-				case ret_eof:
+				case ret_ok:
 					maybe_purge_closed_connection (thd, conn);
 					continue;
 
-				case ret_error:
-					purge_maybe_lingering (thd, conn);
-					continue;
-					
 				case ret_eagain:
 					break;
 
+				case ret_eof:
+				case ret_error:
 				default:	
-					maybe_purge_closed_connection (thd, conn);
+					purge_closed_connection (thd, conn);
+					/* purge_maybe_lingering (thd, conn); */
 					continue;
 				}
 				break;
@@ -1186,14 +1200,14 @@ process_active_connections (cherokee_thread_t *thd)
 				ret = cherokee_connection_send (conn);
 
 				switch (ret) {
-				case ret_eof:
-					maybe_purge_closed_connection (thd, conn);
+				case ret_ok:
 					continue;
+				case ret_eof:
 				case ret_error:
-					purge_maybe_lingering (thd, conn);
-					continue;					
 				default:
-					break;
+					purge_closed_connection (thd, conn);
+					/* purge_maybe_lingering (thd, conn); */
+					continue;
 				}
 				break;
 
@@ -1209,6 +1223,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 			default:
 				RET_UNKNOWN(ret);
+				purge_maybe_lingering (thd, conn);
 			}
 			break;
 			
@@ -1230,6 +1245,7 @@ process_active_connections (cherokee_thread_t *thd)
 				purge_closed_connection (thd, conn);
 				continue;
 			}
+			/* fall down */
 		
 		case phase_lingering: 
 
@@ -1243,8 +1259,9 @@ process_active_connections (cherokee_thread_t *thd)
 				purge_closed_connection (thd, conn);
 				continue;
 			default:
-				purge_closed_connection (thd, conn);
 				RET_UNKNOWN(ret);
+				purge_closed_connection (thd, conn);
+				break;
 			}
 			break;
 

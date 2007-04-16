@@ -1,3 +1,13 @@
+2007-04-14  A.D.F  <adefacc@tin.it>
+
+	* cherokee/socket.h:
+        - be explicit in initializing socket_reading to 0,
+	  because fdpoll* code requires this value;
+
+	* cherokee/thread.c:
+	- fix comment mispelling;
+	- always close connection on send error.
+
 2007-04-11  A.D.F  <adefacc@tin.it>
 
 	* cherokee/fdpoll-kqueue.c, cherokee/fdpoll-port.c,
