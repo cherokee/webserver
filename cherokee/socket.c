@@ -440,8 +440,7 @@ cherokee_socket_close (cherokee_socket_t *socket)
 	}
 
 #ifdef HAVE_TLS
-	if (socket->is_tls == TLS) {
-
+	if (socket->is_tls == TLS && socket->session != NULL) {
 #if   defined (HAVE_GNUTLS)
 
 		gnutls_bye (socket->session, GNUTLS_SHUT_WR);

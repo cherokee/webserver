@@ -1,3 +1,17 @@
+2007-04-17  A.D.F  <adefacc@tin.it>
+
+	* cherokee/socket.c:
+        - cleanup HTTPS session only if it is not NULL;
+
+	* cherokee/server.c:
+	- force good limits for max. number of fds;
+
+	* cherokee/thread.c:
+        - __accept_from_server(),
+	  fix locking and always close new accepted fd
+	  on error (fixes a socket leak which lead
+	  to many idle connections left open).
+	
 2007-04-14  A.D.F  <adefacc@tin.it>
 
 	* cherokee/socket.h:

@@ -1357,13 +1357,15 @@ __accept_from_server (cherokee_thread_t *thd, int srv_socket, cherokee_socket_ty
 	/* Lets add the new connection
 	 */
 	ret = cherokee_thread_add_connection (thd, new_conn);
-	if (unlikely (ret < ret_ok)) {
-		goto error;
-	}
 
 	/* Release the thread ownership
 	 */
 	CHEROKEE_MUTEX_UNLOCK (&thd->ownership);
+
+	if (unlikely (ret < ret_ok)) {
+		cherokee_close_fd (new_fd);
+		goto error;
+	}
 
 	TRACE (ENTRIES, "new conn %p, fd %d\n", new_conn, new_fd);
 
@@ -1372,6 +1374,10 @@ __accept_from_server (cherokee_thread_t *thd, int srv_socket, cherokee_socket_ty
 error:
 	TRACE (ENTRIES, "error accepting connection! fd %d\n", srv_socket);
 
+	/* New socket has alread been closed,
+	 * so here we reinit fd to default init value.
+	 */
+	SOCKET_FD(&new_conn->socket) = -1;
 	connection_reuse_or_free (thd, new_conn);
 	return 0;
 }

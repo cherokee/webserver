@@ -733,6 +733,9 @@ initialize_server_threads (cherokee_server_t *srv)
 {	
 	ret_t ret;
 	int   i, fds_per_thread, max_fds;
+#ifdef HAVE_PTHREAD
+	int   thr_fds, spare_fds;
+#endif
 
 	/* Leave some spare fds.
 	 */
@@ -740,7 +743,13 @@ initialize_server_threads (cherokee_server_t *srv)
 		PRINT_ERROR("srv->system_fd_limit %d < %d !\n", srv->system_fd_limit, MIN_SYSTEM_FD_NUM);
 		return ret_error;
 	}
-	max_fds = srv->system_fd_limit - 5;
+	if (srv->system_fd_limit > 1024)
+		max_fds = srv->system_fd_limit - 20;
+	else
+	if (srv->system_fd_limit > 100)
+		max_fds = srv->system_fd_limit - 10;
+	else
+		max_fds = srv->system_fd_limit - 5;
 
 	/* Set fd upper limit for threads.
 	 * FIXME: when using a very high number of threads
@@ -749,6 +758,10 @@ initialize_server_threads (cherokee_server_t *srv)
 	if (srv->thread_num > max_fds)
 		srv->thread_num = max_fds;
 	fds_per_thread = max_fds / srv->thread_num;
+#ifdef HAVE_PTHREAD
+	thr_fds = fds_per_thread * srv->thread_num;
+	spare_fds = max_fds - thr_fds;
+#endif
 
 	/* Create the main thread
 	 */
@@ -775,9 +788,20 @@ initialize_server_threads (cherokee_server_t *srv)
 #ifdef HAVE_PTHREAD
 	for (i = 0; i < srv->thread_num - 1; i++) {
 		cherokee_thread_t *thread;
+		int                fds_per_thread1 = fds_per_thread;
+
+		/* Add one more fd to this thread,
+		 * this is useful if we are using a huge number of threads
+		 * (i.e. 1000 or more) and we don't want to leave lots of
+		 * unused fds.
+		 */
+		if (spare_fds > 0) {
+			spare_fds--;
+			fds_per_thread1++;
+		}
 
 		ret = cherokee_thread_new (&thread, srv, thread_async, 
-					   srv->fdpoll_method, srv->system_fd_limit, fds_per_thread);
+		            srv->fdpoll_method, srv->system_fd_limit, fds_per_thread1);
 		if (unlikely(ret < ret_ok)) return ret;
 		
 		thread->thread_pref = (i % 2)? thread_normal_tls : thread_tls_normal;
