@@ -73,6 +73,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	/* UNIX socket
 	 */
 	if (! cherokee_buffer_is_empty (&src->unix_socket)) {
+		ret = cherokee_socket_close (sock);
 		ret = cherokee_socket_set_client (sock, AF_UNIX);
 		if (ret != ret_ok) return ret;
 		
@@ -84,9 +85,10 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 
 	/* INET socket
 	 */
+	ret = cherokee_socket_close (sock);
 	ret = cherokee_socket_set_client (sock, AF_INET);
 	if (ret != ret_ok) return ret;
-	
+
 	ret = cherokee_resolv_cache_get_host (resolv, src->host.buf, sock);
 	if (ret != ret_ok) return ret;
 	

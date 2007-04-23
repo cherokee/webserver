@@ -99,7 +99,22 @@
 #define LOGGER_MIN_BUFSIZE            0
 #define DEFAULT_LOGGER_MAX_BUFSIZE    32768
 #define LOGGER_MAX_BUFSIZE            (4 * 1024 * 1024)
-#define MIN_SYSTEM_FD_NUM             10
+#define MIN_SYSTEM_FD_NUM             20	/* range: 16 - 64 */
+#define MIN_SPARE_FDS                 10	/* range:  8 - 20 */
+#define MIN_MAX_FDS                    4	/* range:  4 ... 32000 */
+
+#if (MIN_SYSTEM_FD_NUM < 16) 
+#error MIN_SYSTEM_FD_NUM too low, < 16 !
+#endif
+#if (MIN_SPARE_FDS < 8)
+#error MIN_SPARE_FDS too low, < 8 !
+#endif
+#if (MIN_MAX_FDS < 4)
+#error MIN_MAX_FDS too low, < 4 !
+#endif
+#if (((MIN_SYSTEM_FD_NUM - MIN_SPARE_FDS) / 2) < MIN_MAX_FDS)
+#error MIN_SYSTEM_FD_NUM too low or MIN_SPARE FDS too high !
+#endif
 
 #define IOCACHE_MAX_FILE_SIZE            50000
 #define IOCACHE_DEFAULT_CLEAN_ELAPSE     10

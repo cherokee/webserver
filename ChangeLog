@@ -1,3 +1,25 @@
+2007-04-22  A.D.F  <adefacc@tin.it>
+
+	* cherokee/macros.h:
+        - new macros to handler minimum number of system fds,
+	  spare fds (used by standard I/O streams, i.e. stdin, etc.)
+	  and minimum number of file descriptors really available
+	  to Cherokee.
+
+	* cherokee/source.c:
+        - fixed a socket fd leak in cherokee_source_connect(),
+	  that function does both the open and the connect,
+	  if it fails, caller may retry it, but of course
+	  if socket is open then it must be closed before the retry.
+
+	* cherokee/server.c:
+	- fix the max number of threads againts max. number of
+	  max_fds.
+
+	* cherokee/fdpoll.c:
+	- now that we leave half of fds free to be used to open files, etc.
+	  we can raise the max_fds limit to its real value
+
 2007-04-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main.c (process_parameters): Added -h parameter. Patch

@@ -157,7 +157,7 @@ cherokee_fdpoll_is_empty (cherokee_fdpoll_t *fdp)
 ret_t
 cherokee_fdpoll_is_full (cherokee_fdpoll_t *fdp)
 {
-	return (fdp->npollfds >= (fdp->nfiles - 2));
+	return (fdp->npollfds >= fdp->nfiles);
 }
 
 

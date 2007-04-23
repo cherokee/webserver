@@ -90,6 +90,11 @@
 
 #define ENTRIES "core,server"
 
+/* Number of spare fds, used for stdin, stdout, stderr, etc.
+ * Set it between 5 and 20.
+ */
+#define MIN_SPARE_FDS	10
+
 ret_t
 cherokee_server_new  (cherokee_server_t **srv)
 {
@@ -635,7 +640,7 @@ print_banner (cherokee_server_t *srv)
 
 	/* File descriptor limit
 	 */
-	cherokee_buffer_add_va (&n, ", %d fds limit", srv->system_fd_limit);
+	cherokee_buffer_add_va (&n, ", %d fds system limit, max. %d connections ", srv->system_fd_limit, srv->max_fds);
 
 	/* Threading stuff
 	 */
@@ -643,7 +648,7 @@ print_banner (cherokee_server_t *srv)
 		cherokee_buffer_add_str (&n, ", single thread");
 	} else {
 		cherokee_buffer_add_va (&n, ", %d threads", srv->thread_num);
-		cherokee_buffer_add_va (&n, ", %d fds in each", srv->system_fd_limit / (srv->thread_num));	
+		cherokee_buffer_add_va (&n, ", %d fds per thread", (srv->max_fds / srv->thread_num));	
 
 		switch (srv->thread_policy) {
 #ifdef HAVE_PTHREAD
@@ -732,35 +737,28 @@ static ret_t
 initialize_server_threads (cherokee_server_t *srv)
 {	
 	ret_t ret;
-	int   i, fds_per_thread, max_fds;
+	int   i, fds_per_thread;
 #ifdef HAVE_PTHREAD
 	int   thr_fds, spare_fds;
 #endif
 
-	/* Leave some spare fds.
+	/* Verify max_fds value
 	 */
-	if (srv->system_fd_limit < MIN_SYSTEM_FD_NUM) {
-		PRINT_ERROR("srv->system_fd_limit %d < %d !\n", srv->system_fd_limit, MIN_SYSTEM_FD_NUM);
+	if (srv->max_fds < MIN_MAX_FDS)
 		return ret_error;
-	}
-	if (srv->system_fd_limit > 1024)
-		max_fds = srv->system_fd_limit - 20;
-	else
-	if (srv->system_fd_limit > 100)
-		max_fds = srv->system_fd_limit - 10;
-	else
-		max_fds = srv->system_fd_limit - 5;
 
 	/* Set fd upper limit for threads.
-	 * FIXME: when using a very high number of threads
-	 *        some fds may be left unused (not a big problem).
 	 */
-	if (srv->thread_num > max_fds)
-		srv->thread_num = max_fds;
-	fds_per_thread = max_fds / srv->thread_num;
+	if (srv->thread_num > srv->max_fds)
+		srv->thread_num = srv->max_fds;
+	else
+	if (srv->thread_num < 1)
+		srv->thread_num = 1;
+
+	fds_per_thread = srv->max_fds / srv->thread_num;
 #ifdef HAVE_PTHREAD
 	thr_fds = fds_per_thread * srv->thread_num;
-	spare_fds = max_fds - thr_fds;
+	spare_fds = srv->max_fds - thr_fds;
 #endif
 
 	/* Create the main thread
@@ -827,7 +825,7 @@ check_vservers_tls (cherokee_server_t *srv)
 			return ret_ok;
 		}
 	}
-	
+
 	ret = cherokee_virtual_server_has_tls (srv->vserver_default);
 	if (ret == ret_ok) {
 		TRACE (ENTRIES, "Virtual Server %s: TLS enabled\n", "default");
@@ -953,8 +951,24 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	ret = set_fdmax_limit (srv);
 	if (unlikely(ret < ret_ok))
 		return ret;
-	if (srv->system_fd_limit < 10) {
-		PRINT_ERROR("Number of system files too low (%d < 10) !\n", srv->system_fd_limit);
+
+	/* Verify if there are enough fds.
+	 */
+	if (srv->system_fd_limit < MIN_SYSTEM_FD_NUM) {
+		PRINT_ERROR("Number of system files too low (%d < %d) !\n", srv->system_fd_limit, MIN_SYSTEM_FD_NUM);
+		return ret_error;
+	}
+
+	/* Set max_fds used for max. number of accepted connections.
+	 * NOTE: max_fds is roughly half of max. system limit because
+	 *       for each accepted connection we reserve 1 spare fd
+	 *       that can be used for opening a file or for making
+	 *       a new connection to a backend server
+	 *       (i.e. FastCGI, SCGI, mirror, etc.).
+	 */
+	srv->max_fds = (srv->system_fd_limit - MIN_SPARE_FDS) / 2;
+	if (srv->max_fds < MIN_MAX_FDS) {
+		PRINT_ERROR("Number of max. connection too low %d < %d !\n", srv->max_fds, MIN_MAX_FDS);
 		return ret_error;
 	}
 
@@ -994,8 +1008,8 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	if (srv->thread_num < 1) {
 		srv->thread_num = srv->ncpus * 5;
 	}
-	if (srv->thread_num + 5 >= srv->system_fd_limit) {
-		srv->thread_num = srv->system_fd_limit - 5;
+	if (srv->thread_num > srv->max_fds) {
+		srv->thread_num = srv->max_fds;
 		if (srv->thread_num < 1)
 			srv->thread_num = 1;
 	}
@@ -1008,11 +1022,8 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	if (srv->max_conn_reuse == -1)
 		srv->max_conn_reuse = DEFAULT_CONN_REUSE;
 
-	if (srv->max_conn_reuse > srv->system_fd_limit - 10)
-		srv->max_conn_reuse = srv->system_fd_limit - 10;
-
-	if (srv->max_conn_reuse < 0)
-		srv->max_conn_reuse = 0;
+	if (srv->max_conn_reuse > srv->max_fds)
+		srv->max_conn_reuse = srv->max_fds;
 
 	/* Get the passwd file entry before chroot
 	 */
