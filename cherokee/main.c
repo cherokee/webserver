@@ -38,7 +38,7 @@
 #define DEFAULT_CONFIG_FILE "/etc/cherokee/cherokee.conf"
 
 #ifndef CHEROKEE_EMBEDDED
-# define GETOPT_OPT  "C:br:"
+# define GETOPT_OPT  "C:r:bhv"
 # define CONFIG_FILE_HELP "[-C configfile] [-r]"
 #else
 # define GETOPT_OPT  "br:"
@@ -171,8 +171,14 @@ process_parameters (int argc, char **argv)
 			document_root = strdup(optarg);
 			break;
 
+		case 'v':
+			fprintf (stdout, "%s\n", PACKAGE_STRING);
+			exit(1);
+			break;
+
+		case 'h':
 		default:
-			fprintf (stderr, "Usage: %s " CONFIG_FILE_HELP "[-b]\n", argv[0]);
+			fprintf (stderr, "Usage: %s " CONFIG_FILE_HELP "[-b] -h -v\n", argv[0]);
 			exit(1);
 		}
 	}

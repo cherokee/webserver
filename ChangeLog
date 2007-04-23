@@ -1,3 +1,8 @@
+2007-04-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main.c (process_parameters): Added -h parameter. Patch
+	by Diego Escalante <dieguito@gmail.com>
+
 2007-04-17  A.D.F  <adefacc@tin.it>
 
 	* cherokee/socket.c:
