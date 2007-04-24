@@ -975,10 +975,12 @@ libcherokee-base.la \
 libcherokee-server.la
 cherokee_LDFLAGS = -export-dynamic
 
+#
+# Cherokee admin
+#
 cherokee_admin_SOURCES = main_admin.c
 cherokee_admin_LDADD   = $(cherokee_LDADD)
 cherokee_admin_LDFLAGS = $(cherokee_LDFLAGS)
-
 
 #
 # Log rotate utility

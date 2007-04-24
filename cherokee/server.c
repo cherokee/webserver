@@ -640,7 +640,7 @@ print_banner (cherokee_server_t *srv)
 
 	/* File descriptor limit
 	 */
-	cherokee_buffer_add_va (&n, ", %d fds system limit, max. %d connections ", srv->system_fd_limit, srv->max_fds);
+	cherokee_buffer_add_va (&n, ", %d fds system limit, max. %d connections", srv->system_fd_limit, srv->max_fds);
 
 	/* Threading stuff
 	 */
