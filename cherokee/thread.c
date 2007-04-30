@@ -89,12 +89,12 @@ update_bogo_now_internal (cherokee_thread_t *thd)
 	/* Update struct tm
 	 */
 	memcpy (&thd->bogo_now_tm, &srv->bogo_now_tm, sizeof(struct tm));
-	
+
 	/* Update cherokee_buffer_t
 	 */
 	cherokee_buffer_clean (&thd->bogo_now_string);
 	cherokee_buffer_add_buffer (&thd->bogo_now_string, &srv->bogo_now_string);
-	
+
 }
 
 
@@ -549,7 +549,7 @@ process_polling_connections (cherokee_thread_t *thd)
 
 		/* Check the "extra" file descriptor
 		 */
-		re = cherokee_fdpoll_check (thd->fdpoll, conn->polling_fd, 0);
+		re = cherokee_fdpoll_check (thd->fdpoll, conn->polling_fd, FDPOLL_MODE_READ);
 		switch (re) {
 		case -1:
 			/* Error, move back the connection
@@ -1316,13 +1316,13 @@ __accept_from_server (cherokee_thread_t *thd, int srv_socket, cherokee_socket_ty
 	int                    new_fd;
 	cherokee_sockaddr_t    new_sa;
 	cherokee_connection_t *new_conn;
-	
+
 	/* Return if there're no new connections
 	 */
-	if (cherokee_fdpoll_check (thd->fdpoll, srv_socket, 0) == 0) {
+	if (cherokee_fdpoll_check (thd->fdpoll, srv_socket, FDPOLL_MODE_READ) == 0) {
 		return 0;
 	}
-	
+
 	/* Try to get a new connection
 	 */
 	ret = cherokee_socket_accept_fd (srv_socket, &new_fd, &new_sa);
@@ -1349,7 +1349,7 @@ __accept_from_server (cherokee_thread_t *thd, int srv_socket, cherokee_socket_ty
 	if (tls == TLS) {
 		new_conn->phase = phase_tls_handshake;
 	}
-	
+
 	/* It is about to add a new connection to the thread, 
 	 * so it MUST adquire the thread ownership now.
 	 */
@@ -1766,12 +1766,12 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 		    (thd->active_list_num == 0) &&
 		    (thd->polling_list_num == 0) && (!dont_block)) {
 			step_MULTI_THREAD_TLS_block (thd, fdwatch_msecs, 
-						     S_SOCKET_FD(srv->socket), &THREAD_SRV(thd)->accept_mutex, 	
-						     S_SOCKET_FD(srv->socket_tls), &THREAD_SRV(thd)->accept_tls_mutex);
+			    S_SOCKET_FD(srv->socket), &THREAD_SRV(thd)->accept_mutex, 	
+			    S_SOCKET_FD(srv->socket_tls), &THREAD_SRV(thd)->accept_tls_mutex);
 		} else {
 			step_MULTI_THREAD_TLS_nonblock (thd, fdwatch_msecs, 
-							S_SOCKET_FD(srv->socket), &THREAD_SRV(thd)->accept_mutex, 	
-							S_SOCKET_FD(srv->socket_tls), &THREAD_SRV(thd)->accept_tls_mutex);
+			    S_SOCKET_FD(srv->socket), &THREAD_SRV(thd)->accept_mutex, 	
+			    S_SOCKET_FD(srv->socket_tls), &THREAD_SRV(thd)->accept_tls_mutex);
 		}
 		
 		goto out;

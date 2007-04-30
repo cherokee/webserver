@@ -1,5 +1,10 @@
 2007-04-30  A.D.F  <adefacc@tin.it>
 
+	* cherokee/thread.c:
+        - substitute 0 for FDPOLL_MODE_READ in remaining
+	  cherokee_fdpoll_check() calls;
+	- spaces / indentation cleanup.	
+	
 	* cherokee/fdpoll.h:
 	- added new macros FDPOLL_MODE_*.
 
