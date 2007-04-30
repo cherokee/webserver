@@ -1,3 +1,21 @@
+2007-04-30  A.D.F  <adefacc@tin.it>
+
+	* cherokee/fdpoll.h:
+	- added new macros FDPOLL_MODE_*.
+
+	* cherokee/macros.h:
+        - added new macro MIN_THR_FDS and related tests.
+
+	* cherokee/server.c:
+	- adjusted minimum number of fds (file descriptors)
+	  per thread;
+        - substituted numeric constants 0 / 1 with
+	  equivalent defines FDPOLL_MODE_*.
+
+	* cherokee/thread.c, cherokee/fdpoll-*.c:
+        - substituted numeric constants 0 / 1 with
+	  equivalent defines FDPOLL_MODE_*.
+	
 2007-04-22  A.D.F  <adefacc@tin.it>
 
 	* cherokee/macros.h:

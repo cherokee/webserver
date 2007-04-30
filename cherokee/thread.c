@@ -79,12 +79,13 @@ update_bogo_now_internal (cherokee_thread_t *thd)
 
 	/* Has it changed?
 	 */
-	if (thd->bogo_now == srv->bogo_now) return;
+	if (thd->bogo_now == srv->bogo_now)
+		return;
 
 	/* Update time_t
 	 */
 	thd->bogo_now = srv->bogo_now;
-	
+
 	/* Update struct tm
 	 */
 	memcpy (&thd->bogo_now_tm, &srv->bogo_now_tm, sizeof(struct tm));
@@ -1374,7 +1375,7 @@ __accept_from_server (cherokee_thread_t *thd, int srv_socket, cherokee_socket_ty
 error:
 	TRACE (ENTRIES, "error accepting connection! fd %d\n", srv_socket);
 
-	/* New socket has alread been closed,
+	/* New socket has already been closed,
 	 * so here we reinit fd to default init value.
 	 */
 	SOCKET_FD(&new_conn->socket) = -1;
@@ -1485,7 +1486,7 @@ step_MULTI_THREAD_block (cherokee_thread_t *thd, int socket, pthread_mutex_t *mu
 
 	CHEROKEE_MUTEX_LOCK (mutex);
 	
-	ret = cherokee_fdpoll_add (thd->fdpoll, socket, 0);
+	ret = cherokee_fdpoll_add (thd->fdpoll, socket, FDPOLL_MODE_READ);
 	if (unlikely (ret < ret_ok)) {
 		CHEROKEE_MUTEX_UNLOCK (mutex);
 		return ret_error;
@@ -1533,7 +1534,7 @@ step_MULTI_THREAD_nonblock (cherokee_thread_t *thd, int socket, pthread_mutex_t 
 
 	/* Now, it owns the socket..
 	 */
-	ret = cherokee_fdpoll_add (thd->fdpoll, socket, 0);
+	ret = cherokee_fdpoll_add (thd->fdpoll, socket, FDPOLL_MODE_READ);
 	if (unlikely (ret < ret_ok)) {
 		CHEROKEE_MUTEX_UNLOCK (mutex);
 		return ret_error;
@@ -1571,7 +1572,7 @@ step_MULTI_THREAD_TLS_nonblock (cherokee_thread_t *thd, int fdwatch_msecs,
 	 */
 	unlock = CHEROKEE_MUTEX_TRY_LOCK (mutex);
 	if (!unlock) {
-		ret = cherokee_fdpoll_add (thd->fdpoll, socket, 0);
+		ret = cherokee_fdpoll_add (thd->fdpoll, socket, FDPOLL_MODE_READ);
 		if (ret < ret_ok) {
 			goto error;
 		}
@@ -1583,7 +1584,7 @@ step_MULTI_THREAD_TLS_nonblock (cherokee_thread_t *thd, int fdwatch_msecs,
 	 */
 	unlock_tls = CHEROKEE_MUTEX_TRY_LOCK (mutex_tls);
 	if (!unlock_tls) {
-		ret = cherokee_fdpoll_add (thd->fdpoll, socket_tls, 0);
+		ret = cherokee_fdpoll_add (thd->fdpoll, socket_tls, FDPOLL_MODE_READ);
 		if (unlikely (ret < ret_ok)) 
 			goto error;
 
@@ -1665,7 +1666,7 @@ step_MULTI_THREAD_TLS_block (cherokee_thread_t *thd, int fdwatch_msecs,
 	 */
 	CHEROKEE_MUTEX_LOCK (mutex1);
 
-	ret = cherokee_fdpoll_add (thd->fdpoll, socket1, 0);
+	ret = cherokee_fdpoll_add (thd->fdpoll, socket1, FDPOLL_MODE_READ);
 	if (ret < ret_ok) {
 		CHEROKEE_MUTEX_UNLOCK (mutex1);
 		return ret_error;
@@ -1678,7 +1679,7 @@ step_MULTI_THREAD_TLS_block (cherokee_thread_t *thd, int fdwatch_msecs,
 #if 0
 	unlock2 = CHEROKEE_MUTEX_TRY_LOCK (mutex2);
 	if (!unlock2) {
-		ret = cherokee_fdpoll_add (thd->fdpoll, socket2, 0);
+		ret = cherokee_fdpoll_add (thd->fdpoll, socket2, FDPOLL_MODE_READ);
 		if (ret < ret_ok) {
 			CHEROKEE_MUTEX_UNLOCK (mutex1);
 			CHEROKEE_MUTEX_UNLOCK (mutex2);
@@ -1856,7 +1857,7 @@ cherokee_thread_add_connection (cherokee_thread_t *thd, cherokee_connection_t  *
 {
 	ret_t ret;
 
-	ret = cherokee_fdpoll_add (thd->fdpoll, SOCKET_FD(&conn->socket), 0);
+	ret = cherokee_fdpoll_add (thd->fdpoll, SOCKET_FD(&conn->socket), FDPOLL_MODE_READ);
 	if (unlikely (ret < ret_ok)) return ret;
 
 	conn_set_mode (thd, conn, socket_reading);
@@ -2011,7 +2012,7 @@ cherokee_thread_retire_active_connection (cherokee_thread_t *thd, cherokee_conne
 ret_t 
 cherokee_thread_inject_active_connection (cherokee_thread_t *thd, cherokee_connection_t *conn)
 {
-	cherokee_fdpoll_add (thd->fdpoll, SOCKET_FD(&conn->socket), 1);
+	cherokee_fdpoll_add (thd->fdpoll, SOCKET_FD(&conn->socket), FDPOLL_MODE_WRITE);
 	add_connection (thd, conn);
 
 	return ret_ok;

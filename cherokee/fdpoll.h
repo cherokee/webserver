@@ -34,6 +34,10 @@
 
 CHEROKEE_BEGIN_DECLS
 
+#define FDPOLL_MODE_NONE	(-1)	/* no mode set */
+#define FDPOLL_MODE_READ	0	/* poll read  side */
+#define FDPOLL_MODE_WRITE	1	/* poll write side */
+
 typedef enum {
 	cherokee_poll_epoll,
 	cherokee_poll_kqueue,

@@ -82,10 +82,10 @@ _add (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 	fdp->pollfds[nfd->npollfds].revents = 0; 
 
 	switch (rw) {
-	case 0:  
+	case FDPOLL_MODE_READ:
 		fdp->pollfds[nfd->npollfds].events = POLLIN; 
 		break;
-	case 1: 
+	case FDPOLL_MODE_WRITE:
 		fdp->pollfds[nfd->npollfds].events = POLLOUT;
 		break;
 	default:
@@ -103,7 +103,7 @@ _add (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 static ret_t
 _set_mode (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 {
-	fdp->pollfds[fdp->fdidx[fd]].events = (rw ? POLLOUT : POLLIN);
+	fdp->pollfds[fdp->fdidx[fd]].events = (rw == FDPOLL_MODE_WRITE ? POLLOUT : POLLIN);
 	return ret_ok;
 }
 
@@ -160,9 +160,9 @@ _check (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 	revents = fdp->pollfds[idx].revents;
 
 	switch (rw) {
-		case 0: 
+		case FDPOLL_MODE_READ:
 			return revents & POLL_READ;
-		case 1: 
+		case FDPOLL_MODE_WRITE:
 			return revents & POLL_WRITE;
 		default: 
 			SHOULDNT_HAPPEN;

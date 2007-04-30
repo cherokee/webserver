@@ -95,10 +95,10 @@ _add (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 	ev.data.u64 = 0;
 	ev.data.fd = fd;
 	switch (rw) {
-	case 0: 
+	case FDPOLL_MODE_READ:
 		ev.events = EPOLLIN | EPOLLERR | EPOLLHUP; 
 		break;
-	case 1: 
+	case FDPOLL_MODE_WRITE:
 		ev.events = EPOLLOUT | EPOLLERR | EPOLLHUP;  
 		break;
 	default:
@@ -181,9 +181,9 @@ _check (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 	events = fdp->ep_events[fdidx].events;
 
 	switch (rw) {
-	case 0: 
+	case FDPOLL_MODE_READ:
 		return events & (EPOLLIN  | EPOLLERR | EPOLLHUP);
-	case 1: 
+	case FDPOLL_MODE_WRITE:
 		return events & (EPOLLOUT | EPOLLERR | EPOLLHUP);
 	default:
 		return -1;
@@ -214,10 +214,10 @@ _set_mode (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 	ev.data.fd  = fd;
 
 	switch (rw) {
-	case 0: 
+	case FDPOLL_MODE_READ:
 		ev.events = EPOLLIN; 
 		break;
-	case 1: 
+	case FDPOLL_MODE_WRITE:
 		ev.events = EPOLLOUT; 
 		break;
 	default:

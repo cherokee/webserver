@@ -35,11 +35,6 @@
 # define INFTIM -1
 #endif
 
-typedef enum {
-	fdp_read  = 0,
-	fdp_write = 1
-} cherokee_fdpoll_rw_t;
-
 
 /***********************************************************************/
 /* This fdpoll backend is based on the select() one..                  */
@@ -95,10 +90,10 @@ _add (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 
 	fdp->select_fds[nfd->npollfds] = fd;
 	switch (rw) {
-		case fdp_read: 
+		case FDPOLL_MODE_READ:
 			FD_SET (fd, &fdp->master_rfdset); 
 			break;
-		case fdp_write: 
+		case FDPOLL_MODE_WRITE:
 			FD_SET (fd, &fdp->master_wfdset);
 			break;
 		default: 
@@ -159,9 +154,9 @@ static int
 _check (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 {
 	switch (rw) {
-		case fdp_read: 
+		case FDPOLL_MODE_READ:
 			return FD_ISSET (fd, &fdp->working_rfdset);
-		case fdp_write: 
+		case FDPOLL_MODE_WRITE:
 			return FD_ISSET (fd, &fdp->working_wfdset);
 	}
 

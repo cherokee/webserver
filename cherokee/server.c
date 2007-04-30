@@ -690,7 +690,7 @@ initialize_server_socket (cherokee_server_t *srv, cherokee_socket_t *socket, uns
 
 #ifdef AF_LOCAL
 	if (! cherokee_buffer_is_empty (&srv->unix_socket)) {
-		ret = initialize_server_socket_unix (srv, socket, port);		
+		ret = initialize_server_socket_unix (srv, socket, port);
 	}
 #endif
 
@@ -737,7 +737,7 @@ static ret_t
 initialize_server_threads (cherokee_server_t *srv)
 {	
 	ret_t ret;
-	int   i, fds_per_thread;
+	int   i, fds_per_thread, fds_per_thread1;
 #ifdef HAVE_PTHREAD
 	int   thr_fds, spare_fds;
 #endif
@@ -749,33 +749,42 @@ initialize_server_threads (cherokee_server_t *srv)
 
 	/* Set fd upper limit for threads.
 	 */
-	if (srv->thread_num > srv->max_fds)
-		srv->thread_num = srv->max_fds;
-	else
+#ifdef HAVE_PTHREAD
+	if (srv->thread_num > (srv->max_fds / MIN_THR_FDS))
+		srv->thread_num = (srv->max_fds / MIN_THR_FDS);
+
 	if (srv->thread_num < 1)
 		srv->thread_num = 1;
-
+#else
+	srv->thread_num = 1;
+#endif
 	fds_per_thread = srv->max_fds / srv->thread_num;
 #ifdef HAVE_PTHREAD
 	thr_fds = fds_per_thread * srv->thread_num;
 	spare_fds = srv->max_fds - thr_fds;
 #endif
+	fds_per_thread1 = fds_per_thread;
+	if (spare_fds > 0) {
+		spare_fds--;
+		fds_per_thread1++;
+	}
 
 	/* Create the main thread
 	 */
 	ret = cherokee_thread_new (&srv->main_thread, srv, thread_sync, 
-				   srv->fdpoll_method, srv->system_fd_limit, fds_per_thread);
-	if (unlikely(ret < ret_ok)) return ret;
+				   srv->fdpoll_method, srv->system_fd_limit, fds_per_thread1);
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	/* If Cherokee is compiled in single thread mode, it has to
 	 * add the server socket to the fdpoll of the sync thread
 	 */
 #ifndef HAVE_PTHREAD
-	ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, S_SOCKET_FD(srv->socket), 0);
+	ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, S_SOCKET_FD(srv->socket), FDPOLL_MODE_READ);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	if (srv->tls_enabled) {
-		ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, S_SOCKET_FD(srv->socket_tls), 0);
+		ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, S_SOCKET_FD(srv->socket_tls), FDPOLL_MODE_READ);
 		if (unlikely(ret < ret_ok)) return ret;
 	}
 #endif
@@ -786,13 +795,13 @@ initialize_server_threads (cherokee_server_t *srv)
 #ifdef HAVE_PTHREAD
 	for (i = 0; i < srv->thread_num - 1; i++) {
 		cherokee_thread_t *thread;
-		int                fds_per_thread1 = fds_per_thread;
 
 		/* Add one more fd to this thread,
 		 * this is useful if we are using a huge number of threads
 		 * (i.e. 1000 or more) and we don't want to leave lots of
 		 * unused fds.
 		 */
+		fds_per_thread1 = fds_per_thread;
 		if (spare_fds > 0) {
 			spare_fds--;
 			fds_per_thread1++;
@@ -800,9 +809,10 @@ initialize_server_threads (cherokee_server_t *srv)
 
 		ret = cherokee_thread_new (&thread, srv, thread_async, 
 		            srv->fdpoll_method, srv->system_fd_limit, fds_per_thread1);
-		if (unlikely(ret < ret_ok)) return ret;
+		if (unlikely(ret < ret_ok))
+			return ret;
 		
-		thread->thread_pref = (i % 2)? thread_normal_tls : thread_tls_normal;
+		thread->thread_pref = (i % 2) ? thread_normal_tls : thread_tls_normal;
 
 		cherokee_list_add (LIST(thread), &srv->thread_list);
 	}
@@ -1008,8 +1018,11 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	if (srv->thread_num < 1) {
 		srv->thread_num = srv->ncpus * 5;
 	}
-	if (srv->thread_num > srv->max_fds) {
-		srv->thread_num = srv->max_fds;
+	/* Limit the number of threads
+	 * so that each thread has at least 2 fds available.
+	 */
+	if (srv->thread_num > (srv->max_fds / MIN_THR_FDS)) {
+		srv->thread_num = (srv->max_fds / MIN_THR_FDS);
 		if (srv->thread_num < 1)
 			srv->thread_num = 1;
 	}

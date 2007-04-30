@@ -117,7 +117,7 @@ _add (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 {
 	int rc;
 
-	rc = fd_associate(fdp, fd, rw?WRITE:READ);
+	rc = fd_associate(fdp, fd, (rw == FDPOLL_MODE_WRITE ? WRITE : READ));
 	if ( rc == -1 ) {
 		PRINT_ERROR ("ERROR: port_associate: fd %d: %s\n", fd, 
 				strerror(errno));
@@ -222,10 +222,10 @@ _check (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 	if ( events == -1 ) return 0;
 
 	switch (rw) {
-	case 0:
+	case FDPOLL_MODE_READ:
 		events &= (POLL_READ | POLL_ERROR);
 		break;
-	case 1:
+	case FDPOLL_MODE_WRITE:
 		events &= (POLL_WRITE | POLL_ERROR);
 		break;
 	}
@@ -249,8 +249,8 @@ _set_mode (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 	rc = port_associate( fdp->port,
 	                     PORT_SOURCE_FD,
 	                     fd,
-	                     rw ? POLLOUT : POLLIN,
-	                     rw ? WRITE   : READ);
+	                    (rw == FDPOLL_MODE_WRITE ? POLLOUT : POLLIN),
+	                    (rw == FDPOLL_MODE_WRITE ? WRITE   : READ));
 	if ( rc == -1 ) {
 		PRINT_ERROR ("ERROR: port_associate: fd %d: %s\n", fd, 
 				strerror(errno));

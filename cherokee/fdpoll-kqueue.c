@@ -104,10 +104,10 @@ _add_change(cherokee_fdpoll_kqueue_t *fdp, int fd, int rw, int change )
 	event = &fdp->changelist[index];
 	event->ident = fd;
 	switch (rw) {
-	case 0:
+	case FDPOLL_MODE_READ:
 		event->filter = EVFILT_READ;
 		break;
-	case 1:
+	case FDPOLL_MODE_WRITE:
 		event->filter = EVFILT_WRITE;
 		break;
 	default:
@@ -116,7 +116,7 @@ _add_change(cherokee_fdpoll_kqueue_t *fdp, int fd, int rw, int change )
 	event->flags = change;
 	event->fflags = 0;
 
-	fdp->fdinterest[fd]=rw;
+	fdp->fdinterest[fd] = rw;
 	fdp->nchanges++;
 	return ret_ok;
 }
@@ -200,10 +200,10 @@ _check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 	events = fdp->fdevents[fd];
 	
 	switch (rw) {
-	case 0:
+	case FDPOLL_MODE_READ:
 		events &= KQUEUE_READ_EVENT;
 		break;
-	case 1:
+	case FDPOLL_MODE_WRITE:
 		events &= KQUEUE_WRITE_EVENT;
 		break;
 	default:
@@ -228,10 +228,12 @@ _set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 	 * disable any active event on the fd as we are
 	 * no longer interested on it.
 	 */
-	if ( rw && (fdp->fdinterest[fd] == 0) ) {
-		return _add_change(fdp, fd, 0, EV_DELETE);
-	} else if ( (rw==0 ) && (fdp->fdinterest[fd] == 1) ) {
-		return _add_change(fdp, fd, 1, EV_DELETE);
+	if ( rw == FDPOLL_MODE_WRITE &&
+	    fdp->fdinterest[fd] == FDPOLL_MODE_READ ) {
+		return _add_change(fdp, fd, FDPOLL_MODE_READ, EV_DELETE);
+	}
+	if ( rw == FDPOLL_MODE_READ && fdp->fdinterest[fd] == FDPOLL_MODE_WRITE ) {
+		return _add_change(fdp, fd, FDPOLL_MODE_WRITE, EV_DELETE);
 	}
 
 	return _add_change( fdp, fd, rw, EV_ADD );
