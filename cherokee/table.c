@@ -142,7 +142,14 @@ cherokee_table_add (cherokee_table_t *tab, char *key, void *value)
 	unsigned int index;
 
 	re = avl_insert_by_key (tab, strdup(key), value, &index);
-	if (unlikely (re != 0)) return ret_error;
+	if (unlikely (re != 0)) {
+		switch (re) {
+		case -2:
+			return ret_deny;
+		default:
+			return ret_error;
+		}
+	}
 
 	return ret_ok;
 }

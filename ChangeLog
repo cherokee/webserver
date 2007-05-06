@@ -1,3 +1,12 @@
+2007-05-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/table.c (cherokee_table_add),
+	cherokee/avl.c (avl_insert_by_key): Return ret_deny if it tries to
+	insert an element that was already on the table. Until now, it was
+	just ignoring the operation while it was returning
+	ret_ok. Obviously it was wrong. This change may have some unwanted
+	side effects, stay tuned.
+
 2007-04-30  A.D.F  <adefacc@tin.it>
 
 	* cherokee/thread.c:
