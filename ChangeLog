@@ -1,5 +1,8 @@
 2007-05-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/avl.c (avl_insert_by_key): Micro-optimization: Move the
+	less probable case to the last position.
+
 	* cherokee/table.c (cherokee_table_add),
 	cherokee/avl.c (avl_insert_by_key): Return ret_deny if it tries to
 	insert an element that was already on the table. Until now, it was

@@ -139,11 +139,8 @@ avl_insert_by_key (avl_tree *ob, void *key, void *value, unsigned int *index)
 
 		while (1) {
 			cmpa = ob->compare_fun (ob->compare_arg, key, p->key);
-			if (cmpa == 0) {
-				/* The element is already in the tree
-				 */
-				return -2;
-			} else if (cmpa < 1) {
+
+			if (cmpa < 0) {
 				/* move left */
 				AVL_SET_RANK (p, (AVL_GET_RANK (p) + 1));
 				q = p->left;
@@ -162,7 +159,7 @@ avl_insert_by_key (avl_tree *ob, void *key, void *value, unsigned int *index)
 					s = q;
 				}
 				p = q;
-			} else {
+			} else if (cmpa > 0) {
 				/* move right */
 				q = p->right;
 				*index += AVL_GET_RANK(p);
@@ -181,6 +178,10 @@ avl_insert_by_key (avl_tree *ob, void *key, void *value, unsigned int *index)
 					s = q;
 				}
 				p = q;
+			} else {
+				/* The element is already in the tree
+				 */
+				return -2;
 			}
 		}
 
