@@ -90,10 +90,9 @@
 
 #define ENTRIES "core,server"
 
-/* Number of spare fds, used for stdin, stdout, stderr, etc.
- * Set it between 5 and 20.
+/* Number of listen fds (HTTP + HTTPS)
  */
-#define MIN_SPARE_FDS	10
+#define MAX_LISTEN_FDS 2
 
 ret_t
 cherokee_server_new  (cherokee_server_t **srv)
@@ -155,6 +154,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	n->max_fds         = -1;
 	n->system_fd_limit = -1;
+	n->max_conns       =  0;
+	n->max_keepalive_conns =  0;
 	n->max_conn_reuse  = -1;
 
 	n->listen_queue    = 1024;
@@ -396,14 +397,16 @@ change_execution_user (cherokee_server_t *srv, struct passwd *ent)
 {
 	int error;
 
-/*         /\* Get user information */
-/* 	 *\/ */
-/* 	ent = getpwuid (srv->user); */
-/* 	if (ent == NULL) { */
-/* 		PRINT_ERROR ("Can't get username for UID %d\n", srv->user); */
-/* 		return ret_error; */
-/* 	} */
-	
+#if 0
+	/* Get user information
+	*/
+	ent = getpwuid (srv->user);
+	if (ent == NULL) {
+		PRINT_ERROR ("Can't get username for UID %d\n", srv->user);
+		return ret_error;
+	}
+#endif
+
 	/* Reset `groups' attributes.
 	 */
 	if (srv->user_orig == 0) {
@@ -640,12 +643,13 @@ print_banner (cherokee_server_t *srv)
 
 	/* File descriptor limit
 	 */
-	cherokee_buffer_add_va (&n, ", %d fds system limit, max. %d connections", srv->system_fd_limit, srv->max_fds);
+	cherokee_buffer_add_va (&n, ", %d fds system limit, max. %d connections", srv->system_fd_limit, srv->max_conns);
 
 	/* Threading stuff
 	 */
 	if (srv->thread_num <= 1) {
 		cherokee_buffer_add_str (&n, ", single thread");
+		cherokee_buffer_add_va (&n, ", %d fds per thread", srv->max_fds);	
 	} else {
 		cherokee_buffer_add_va (&n, ", %d threads", srv->thread_num);
 		cherokee_buffer_add_va (&n, ", %d fds per thread", (srv->max_fds / srv->thread_num));	
@@ -737,10 +741,15 @@ static ret_t
 initialize_server_threads (cherokee_server_t *srv)
 {	
 	ret_t ret;
-	int   i, fds_per_thread, fds_per_thread1;
+	int   i, fds_per_thread, fds_per_thread1, conns_per_thread;
 #ifdef HAVE_PTHREAD
 	int   thr_fds, spare_fds;
 #endif
+
+	/* Reset max. conns value
+	 */
+	srv->max_conns = 0;
+	srv->max_keepalive_conns = 0;
 
 	/* Verify max_fds value
 	 */
@@ -758,36 +767,50 @@ initialize_server_threads (cherokee_server_t *srv)
 #else
 	srv->thread_num = 1;
 #endif
-	fds_per_thread = srv->max_fds / srv->thread_num;
+
+	fds_per_thread1 = fds_per_thread = srv->max_fds / srv->thread_num;
+
 #ifdef HAVE_PTHREAD
 	thr_fds = fds_per_thread * srv->thread_num;
 	spare_fds = srv->max_fds - thr_fds;
-#endif
-	fds_per_thread1 = fds_per_thread;
-	if (spare_fds > 0) {
-		spare_fds--;
-		fds_per_thread1++;
+
+	/* Add a couple more fds to this thread,
+	 * this is useful if we are using a huge number of threads
+	 * (i.e. 1000 or more) and we don't want to leave lots of
+	 * unused fds.
+	 */
+	if (spare_fds >= 2) {
+		spare_fds -= 2;
+		fds_per_thread1 += 2;
 	}
+#else
+	fds_per_thread1 -= MAX_LISTEN_FDS;
+#endif
+	/* Max. number of connections is halved because opening a new file
+	 * or using a socket to connect to an external helper
+	 * might be required to satisfy a request coming from an accepted
+	 * and thus already open connection.
+	 */
+	conns_per_thread = fds_per_thread1 / 2;
+	srv->max_conns += conns_per_thread;
+	fds_per_thread1 += MAX_LISTEN_FDS;
 
 	/* Create the main thread
 	 */
 	ret = cherokee_thread_new (&srv->main_thread, srv, thread_sync, 
-				   srv->fdpoll_method, srv->system_fd_limit, fds_per_thread1);
+			srv->fdpoll_method, srv->system_fd_limit,
+			fds_per_thread1, conns_per_thread);
 	if (unlikely(ret < ret_ok))
 		return ret;
 
 	/* If Cherokee is compiled in single thread mode, it has to
 	 * add the server socket to the fdpoll of the sync thread
 	 */
-#ifndef HAVE_PTHREAD
-	ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, S_SOCKET_FD(srv->socket), FDPOLL_MODE_READ);
-	if (unlikely(ret < ret_ok)) return ret;
-
-	if (srv->tls_enabled) {
-		ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, S_SOCKET_FD(srv->socket_tls), FDPOLL_MODE_READ);
-		if (unlikely(ret < ret_ok)) return ret;
+	if (srv->thread_num == 1) {
+		ret = cherokee_thread_accept_on (srv->main_thread);
+		if (unlikely(ret < ret_ok))
+			return ret;
 	}
-#endif
 
 	/* If Cherokee has been compiled in multi-thread mode,
 	 * then it may need to launch other threads.
@@ -796,19 +819,23 @@ initialize_server_threads (cherokee_server_t *srv)
 	for (i = 0; i < srv->thread_num - 1; i++) {
 		cherokee_thread_t *thread;
 
-		/* Add one more fd to this thread,
+		/* Add a couple more fds to this thread,
 		 * this is useful if we are using a huge number of threads
 		 * (i.e. 1000 or more) and we don't want to leave lots of
 		 * unused fds.
 		 */
 		fds_per_thread1 = fds_per_thread;
-		if (spare_fds > 0) {
-			spare_fds--;
-			fds_per_thread1++;
+		if (spare_fds >= 2) {
+			spare_fds -= 2;
+			fds_per_thread1 += 2;
 		}
+		conns_per_thread = fds_per_thread1 / 2;
+		srv->max_conns += conns_per_thread;
+		fds_per_thread1 += MAX_LISTEN_FDS;
 
 		ret = cherokee_thread_new (&thread, srv, thread_async, 
-		            srv->fdpoll_method, srv->system_fd_limit, fds_per_thread1);
+				srv->fdpoll_method, srv->system_fd_limit,
+				fds_per_thread1, conns_per_thread);
 		if (unlikely(ret < ret_ok))
 			return ret;
 		
@@ -818,6 +845,16 @@ initialize_server_threads (cherokee_server_t *srv)
 	}
 #endif
 
+	/* Set keepalive limit for open connections.
+	 * NOTE: this limit has to be lower (93%)
+	 *       than conns_accept limit (95% - 99%) used for threads.
+	 */
+	srv->max_keepalive_conns = srv->max_conns - (srv->max_conns / 16);
+	if (srv->max_keepalive_conns + 6 > srv->max_conns)
+		srv->max_keepalive_conns = srv->max_conns - 6;
+
+	/* OK, return.
+	 */
 	return ret_ok;
 }
 
@@ -976,9 +1013,9 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	 *       a new connection to a backend server
 	 *       (i.e. FastCGI, SCGI, mirror, etc.).
 	 */
-	srv->max_fds = (srv->system_fd_limit - MIN_SPARE_FDS) / 2;
+	srv->max_fds = (srv->system_fd_limit - MIN_SPARE_FDS);
 	if (srv->max_fds < MIN_MAX_FDS) {
-		PRINT_ERROR("Number of max. connection too low %d < %d !\n", srv->max_fds, MIN_MAX_FDS);
+		PRINT_ERROR("Number of max. fds too low %d < %d !\n", srv->max_fds, MIN_MAX_FDS);
 		return ret_error;
 	}
 
@@ -1219,11 +1256,20 @@ cherokee_server_step (cherokee_server_t *srv)
 {
 	ret_t ret;
 
-	/* Get the time
+	/* Get the server time.
 	 */
 	update_bogo_now (srv);
-	ret = cherokee_thread_step (srv->main_thread, true);
 
+	/* Execute thread step.
+	 */
+#ifndef HAVE_PTHREAD
+	ret = cherokee_thread_step_SINGLE_THREAD (srv->main_thread);
+#else
+	if (srv->thread_num == 1)
+		ret = cherokee_thread_step_SINGLE_THREAD (srv->main_thread);
+	else
+		ret = cherokee_thread_step_MULTI_THREAD (srv->main_thread, true);
+#endif
 	/* Logger flush 
 	 */
 	if (srv->log_flush_next < srv->bogo_now) {
@@ -1243,7 +1289,9 @@ cherokee_server_step (cherokee_server_t *srv)
 	/* Wanna exit?
 	 */
 	if (unlikely (srv->wanna_reinit)) {
-		cherokee_server_reinit (srv);
+		ret = cherokee_server_reinit (srv);
+		if (ret != ret_ok)
+			return ret;
 	}
 	
 	if (unlikely (srv->wanna_exit)) 
@@ -1251,6 +1299,7 @@ cherokee_server_step (cherokee_server_t *srv)
 	
 	return ret_eagain;
 }
+
 
 static ret_t 
 matching_list_add_allow_cb  (char *val, void *data)
@@ -1680,6 +1729,28 @@ cherokee_server_daemonize (cherokee_server_t *srv)
 
 
 ret_t 
+cherokee_server_get_conns_num (cherokee_server_t *srv, cuint_t *num)
+{
+	cuint_t          conns_num = 0;
+	cherokee_list_t *thread;
+
+	/* Open HTTP connections number
+	 */
+	list_for_each (thread, &srv->thread_list) {
+		conns_num += THREAD(thread)->conns_num;
+	}
+	
+	conns_num += srv->main_thread->conns_num;
+
+	/* Return out parameters
+	 */
+	*num = conns_num;
+
+	return ret_ok;
+}
+
+
+ret_t 
 cherokee_server_get_active_conns (cherokee_server_t *srv, cuint_t *num)
 {
 	cuint_t          active = 0;
@@ -1710,13 +1781,9 @@ cherokee_server_get_reusable_conns (cherokee_server_t *srv, cuint_t *num)
 	/* Reusable connections
 	 */
 	list_for_each (thread, &srv->thread_list) {
-		list_for_each (i, &THREAD(thread)->reuse_list) {
-			reusable++;
-		}
+		reusable += THREAD(thread)->reuse_list_num;
 	}
-	list_for_each (i, &THREAD(srv->main_thread)->reuse_list) {
-		reusable++;
-	}
+	reusable += srv->main_thread->reuse_list_num;
 
 	/* Return out parameters
 	 */

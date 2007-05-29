@@ -56,6 +56,7 @@ ret_t cherokee_server_read_config_string (cherokee_server_t *srv, cherokee_buffe
 ret_t cherokee_server_daemonize          (cherokee_server_t *srv);
 ret_t cherokee_server_write_pidfile      (cherokee_server_t *srv);
 
+ret_t cherokee_server_get_conns_num      (cherokee_server_t *srv, cuint_t *num);
 ret_t cherokee_server_get_active_conns   (cherokee_server_t *srv, cuint_t *num);
 ret_t cherokee_server_get_reusable_conns (cherokee_server_t *srv, cuint_t *num);
 ret_t cherokee_server_get_total_traffic  (cherokee_server_t *srv, size_t *rx, size_t *tx);

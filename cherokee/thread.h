@@ -73,14 +73,20 @@ typedef struct {
 	void                   *server;
 	cherokee_boolean_t      exit;
 
-	int                     active_list_num;
+	cherokee_boolean_t      is_accepting_conns; /* true=accepts new conns */
+
+	int                     conns_num;          /* open connections */
+	int                     conns_max;          /* max. connections */
+	int                     conns_accept;       /* accept limit */
+
+	int                     active_list_num;    /* active connections */
 	cherokee_list_t         active_list;
-	int                     polling_list_num;
+	int                     polling_list_num;   /* polling connections */
 	cherokee_list_t         polling_list;
 	cherokee_list_t         reuse_list;
-	int                     reuse_list_num;
+	int                     reuse_list_num;     /* reusable connections objs */
 
-	int                     pending_conns_num;   /* Waiting pipelining connections */
+	int                     pending_conns_num;  /* Waiting pipelining connections */
 
 	struct {
 		uint32_t        continuous;
@@ -101,16 +107,18 @@ typedef struct {
 
 
 #ifdef HAVE_PTHREAD
-# define cherokee_thread_step(t,b) cherokee_thread_step_MULTI_THREAD(t,b)
 ret_t cherokee_thread_step_MULTI_THREAD  (cherokee_thread_t *thd, cherokee_boolean_t dont_block);
 #else
-# define cherokee_thread_step(t,b) cherokee_thread_step_SINGLE_THREAD(t,b)
-ret_t cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd, cherokee_boolean_t dont_block);
+# define cherokee_thread_step_MULTI_THREAD(t,b) cherokee_thread_step_SINGLE_THREAD(t)
 #endif
+ret_t cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd);
 
 
-ret_t cherokee_thread_new  (cherokee_thread_t **thd, void *server, cherokee_thread_type_t type, cherokee_poll_type_t fdtype, int system_fd_num, int fd_num);
+ret_t cherokee_thread_new  (cherokee_thread_t **thd, void *server, cherokee_thread_type_t type, cherokee_poll_type_t fdtype, int system_fd_num, int fd_num, int conns_max);
 ret_t cherokee_thread_free (cherokee_thread_t  *thd);
+
+ret_t cherokee_thread_accept_on                  (cherokee_thread_t  *thd);
+ret_t cherokee_thread_accept_off                 (cherokee_thread_t  *thd);
 
 ret_t cherokee_thread_unlock                     (cherokee_thread_t *thd);
 ret_t cherokee_thread_wait_end                   (cherokee_thread_t *thd);

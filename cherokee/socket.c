@@ -631,9 +631,32 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 	len = sizeof (cherokee_sockaddr_t);
 	new_socket = accept (server_socket, &sa->sa, &len);
 	if (new_socket < 0) {
-		return ret_error;
+		int err = SOCK_ERRNO();
+		/* Caller has to retry the call on ret_deny.
+		 */
+		switch (err) {
+#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
+		case EWOULDBLOCK:
+#endif	
+		case EAGAIN:      
+		case EINTR:       
+			/* no data or error.
+			 */
+			return ret_eagain;
+#ifdef ECONNABORTED
+		case ECONNABORTED:
+			/* aborted connection, retry immediately
+			 */
+			return ret_deny;
+#endif
+		default:
+			/* error
+			 */
+			return ret_error;
+		}
+		/* NOTREACHED */
 	}		
-	
+
 	/* Disable Nagle's algorithm for this connection
 	 * so that there is no delay involved when sending data
 	 * which don't fill up a full IP datagram.
@@ -1180,7 +1203,7 @@ cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, u
 #endif
 		if (re < 0) {
 			int err = SOCK_ERRNO();
-		
+
 			switch (err) {
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
 			case EWOULDBLOCK:

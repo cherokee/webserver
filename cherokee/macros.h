@@ -101,8 +101,8 @@
 #define LOGGER_MAX_BUFSIZE            (4 * 1024 * 1024)
 #define MIN_SYSTEM_FD_NUM             20	/* range: 16 - 64 */
 #define MIN_SPARE_FDS                 10	/* range:  8 - 20 */
-#define MIN_MAX_FDS                    4	/* range:  4 ... 32000 */
-#define MIN_THR_FDS                    4	/* range:  4 ... 32000 */
+#define MIN_MAX_FDS                    8	/* range:  8 ... 65000 */
+#define MIN_THR_FDS                    8	/* range:  8 ... 65000 */
 
 #if (MIN_SYSTEM_FD_NUM < 16) 
 #error MIN_SYSTEM_FD_NUM too low, < 16 !
@@ -110,16 +110,16 @@
 #if (MIN_SPARE_FDS < 8)
 #error MIN_SPARE_FDS too low, < 8 !
 #endif
-#if (MIN_MAX_FDS < 4)
-#error MIN_MAX_FDS too low, < 4 !
+#if (MIN_MAX_FDS < 8)
+#error MIN_MAX_FDS too low, < 8 !
 #endif
-#if (MIN_THR_FDS < 4)
-#error MIN_THR_FDS too low, < 4 !
+#if (MIN_THR_FDS < 8)
+#error MIN_THR_FDS too low, < 8 !
 #endif
 #if (MIN_THR_FDS > MIN_MAX_FDS)
 #error MIN_THR_FDS too high, > MIN_MAX_FDS !
 #endif
-#if (((MIN_SYSTEM_FD_NUM - MIN_SPARE_FDS) / 2) < MIN_MAX_FDS)
+#if ((MIN_SYSTEM_FD_NUM - MIN_SPARE_FDS) < MIN_MAX_FDS)
 #error MIN_SYSTEM_FD_NUM too low or MIN_SPARE FDS too high !
 #endif
 
@@ -198,6 +198,14 @@
 #define CHEROKEE_NEW_TYPE(obj,type) \
 	type * obj = (type *) malloc(sizeof(type)); \
 	return_if_fail (obj != NULL, ret_nomem)	
+
+/* We assume to have a C ANSI free().
+ */
+#define CHEROKEE_FREE(obj) \
+	do {		\
+	free (obj);	\
+	(obj) = NULL;	\
+	} while (0)
 
 #define CHEROKEE_TEMP(obj, size)                 \
         const unsigned int obj ## _size = size;  \

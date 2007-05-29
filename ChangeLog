@@ -1,3 +1,81 @@
+2007-05-22  A.D.F  <adefacc@tin.it>
+
+	* cherokee/macros.h:
+        - use saner values in defines;
+
+	* cherokee/thread.h:
+        - added new fields to struct cherokee_thread_t
+          in order to keep exact numbers of connections per thread;
+        - added new parameter to cherokee_thread_new();
+        - added new functions (for SINGLE THREAD):
+                cherokee_thread_accept_on();
+                cherokee_thread_accept_off();
+
+	* cherokee/thread.c:
+	- cherokee_thread_new():
+	  - added new test conditions, calculation
+	    of conns_accept limit, etc.;
+
+        -cherokee_thread_step_SINGLE_THREAD() and
+	  cherokee_thread_step_MULTI_THREAD():
+          - added code to disable accepting new connections
+            when there are no more free slots (100% full)
+            and to reenable accepting new connections
+            when the number of connections is below 95% - 99%;
+	  - removed calls to cherokee_fdpoll_is_full()
+	    (by using #ifdef 0 ... #endif) because now
+	    we test the number of open connections and
+	    because cherokee_fdpoll_add() tests upper limit
+	    and returns error if it is reached;
+          - now cherokee_fdpoll_watch() is always called
+            in order to avoid a busy wait loop when
+            there are no more free connection slots.
+
+        - process_active_connections():
+          - added tests on total server number of open connections,
+	    if the number is > max_keepalive limit
+	    then keepalive is disabled until that number
+	    goes down (high water principle);
+	    this is done because if the server reaches the max number
+	    of connections and open connections are kept alive,
+	    then the server is no more able to accept new connections
+	    (for minutes or even for hours);
+
+	- other minor space cleanups.
+
+	* cherokee/server.c:
+        - removed local define MIN_SPARE_FDS;
+        - added local define MIN_LISTEN_FDS;
+        - better distribution of spare fds for each thread;
+	- forced a minimum number of fds per thread by
+	  lowering the number of requested threads to reach
+	  a minimum number as set in macros.h;
+	- now if srv->thread_num == 1 then
+	  cherokee_thread_step_SINGLE_THREAD() is called
+	  even if the server has been compiled with HAVE_PTHREAD 1
+	  (this speedup connection handling by 2% - 3%);
+	- set max_keepalive limit to 93% of max. number of connections
+	  so that server tries to close connections before
+	  it reaches 100% of opened connections (this should prevent
+	  the scenario where server is not able to accept new connections
+	  for minutes or even hours);
+	- print_banner(),
+	  added new information about max. server connections, etc.;
+	- minor space cleanups;
+
+	* cherokee/handler_server_info.c:
+	- added new info about current number of server connections
+	  (which is different from the number of active connections);
+
+	* cherokee/socket.c:
+	- cherokee_socket_accept_fd(),
+	  now ECONNABORTED returns ret_deny,
+	  so callers should call this function again (retry loop)
+	  instead of giving up and execute the process phase
+	  (this should speed up a lot the server when clients
+	   try to connect and abort connections before they
+	   are accepted by server).
+	
 2007-05-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/avl.c (avl_insert_by_key): Micro-optimization: Move the

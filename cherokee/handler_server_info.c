@@ -253,12 +253,15 @@ build_server_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 static void
 build_connections_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
-	cuint_t active;
-	cuint_t reusable;
+	cuint_t conns_num = 0;
+	cuint_t active = 0;
+	cuint_t reusable = 0;
 	
+	cherokee_server_get_conns_num (srv, &conns_num);
 	cherokee_server_get_active_conns (srv, &active);
 	cherokee_server_get_reusable_conns (srv, &reusable);
 
+	table_add_row_int (buf, "Open connections", conns_num);
 	table_add_row_int (buf, "Active connections", active);
 	table_add_row_int (buf, "Reusable connections", reusable);
 }

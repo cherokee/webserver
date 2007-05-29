@@ -121,6 +121,11 @@ struct cherokee_server {
 	uint32_t                   system_fd_limit;
 	cherokee_poll_type_t       fdpoll_method;
 
+	/* Connection related.
+	 */
+	int                        max_conns;
+	int                        max_keepalive_conns;
+
 	/* Networking config
 	 */
 	cherokee_boolean_t         ipv6;
