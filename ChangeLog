@@ -1,3 +1,10 @@
+2007-05-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/server.c (cherokee_server_initialize): Not being able
+	to jail the server inside the chroot is important enough to abort
+	execution. Previously to this change, it was only warning about
+	the problem.
+
 2007-05-22  A.D.F  <adefacc@tin.it>
 
 	* cherokee/macros.h:
