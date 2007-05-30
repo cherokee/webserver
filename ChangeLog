@@ -1,5 +1,10 @@
 2007-05-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c (cherokee_connection_send): It wasn't
+	returning ret_eagain when there was remaining information in the
+	connection buffer. This bug showed up because both IE7 and FF2 had
+	problems loading some files on Windows.
+
 	* cherokee/server.c (cherokee_server_initialize): Not being able
 	to jail the server inside the chroot is important enough to abort
 	execution. Previously to this change, it was only warning about

@@ -806,8 +806,10 @@ cherokee_connection_send (cherokee_connection_t *conn)
 	 */
 	if (sent == conn->buffer.len) {
 		cherokee_buffer_clean (&conn->buffer);
+		ret = ret_ok;
 	} else if (sent != 0) {
 		cherokee_buffer_move_to_begin (&conn->buffer, sent);
+		ret = ret_eagain;
 	}
 	
 	/* If this connection has a handler without content-length support
@@ -817,7 +819,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 		conn->range_end += sent;
 	}
 
-	return ret_ok;
+	return ret;
 }
 
 
