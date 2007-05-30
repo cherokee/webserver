@@ -1,3 +1,22 @@
+2007-05-30  A.D.F  <adefacc@tin.it>
+
+	* cherokee/connection.c:
+        - added a few return(s) after RET_UNKNOWN()
+	  because it is only a debug print (it does no return);
+	- cherokee_connection_send*():
+	  - reworked code after cherokee_socket_writev()
+	    in order to speedup things for small writes;
+	  - added a couple of FIXME (to avoid ptr. void math).
+
+	* cherokee/thread.c:
+        - cherokee_thread_new:
+	  - added a comment to replace hardcoded numbers
+	    with a formula;
+
+	- process_active_connections(),
+	  - added a few decrease of private connection counter
+	    before each purge_closed_connection().
+	
 2007-05-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/connection.c (cherokee_connection_send): It wasn't

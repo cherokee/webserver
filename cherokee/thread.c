@@ -210,6 +210,7 @@ cherokee_thread_new  (
 	}
 
 	/* Set upper accept limit to 95% - 99% of conns_max.
+	 * TODO: change the following hardcoded limits into a formula.
 	 */
 	if (conns_max > 40) {
 		conns_accept = conns_max - (conns_max / 20);
@@ -633,6 +634,12 @@ process_active_connections (cherokee_thread_t *thd)
 	cherokee_server_t     *srv  = SRV(thd->server);
 
 	/* Get total connection count.
+	 * NOTE: when there are 2 or more threads,
+	 *       the real connection count can change while this thread
+	 *       is processing connections;  as taking and releasing
+	 *       a lock might slow down things, we keep a private
+	 *       counter (srv_conns_num) that we decrease on every
+	 *       connection close; this should be enough for now.
 	 */
 	cherokee_server_get_conns_num (srv, &srv_conns_num);
 
@@ -764,6 +771,7 @@ process_active_connections (cherokee_thread_t *thd)
 				/* Finish..
 				 */
 				if (!cherokee_post_got_all (&conn->post)) {
+					srv_conns_num--;
 					purge_closed_connection (thd, conn);
 					continue;
 				}
@@ -824,10 +832,12 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			case ret_eof:
 			case ret_error:
+				srv_conns_num--;
 				purge_closed_connection (thd, conn);
 				continue;
 			default:
 				RET_UNKNOWN(ret);
+				srv_conns_num--;
 				purge_closed_connection (thd, conn);
 				continue;
 			}
@@ -852,10 +862,12 @@ process_active_connections (cherokee_thread_t *thd)
 				conn->phase = phase_reading_header;
 				continue;
 			case ret_error:
+				srv_conns_num--;
 				purge_closed_connection (thd, conn);
 				continue;
 			default:
 				RET_UNKNOWN(ret);
+				srv_conns_num--;
 				purge_closed_connection (thd, conn);
 				continue;
 			}
@@ -1118,9 +1130,10 @@ process_active_connections (cherokee_thread_t *thd)
 				ret = cherokee_connection_setup_error_handler (conn);
 				if (ret != ret_ok) {
 					
-					/* It could not change the handler to an error managing handler,
-					 * so it is a critical error
+					/* It could not change the handler to an error
+					 * managing handler, so it is a critical error.
 					 */					
+					srv_conns_num--;
 					purge_closed_connection (thd, conn);
 					continue;
 				}
@@ -1276,6 +1289,7 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_eof:
 				case ret_error:
 				default:
+					srv_conns_num--;
 					purge_closed_connection (thd, conn);
 					/* purge_maybe_lingering (thd, conn); */
 					continue;
@@ -1313,6 +1327,7 @@ process_active_connections (cherokee_thread_t *thd)
 				/* Error, no linger and no last read,
 				 * just close the connection.
 				 */
+				srv_conns_num--;
 				purge_closed_connection (thd, conn);
 				continue;
 			}
@@ -1327,10 +1342,12 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			case ret_eof:
 			case ret_error:
+				srv_conns_num--;
 				purge_closed_connection (thd, conn);
 				continue;
 			default:
 				RET_UNKNOWN(ret);
+				srv_conns_num--;
 				purge_closed_connection (thd, conn);
 				break;
 			}

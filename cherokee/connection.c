@@ -594,6 +594,7 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 {
 	size_t  re;
 	ret_t   ret;
+	int16_t	nvec = 1;
 	struct iovec bufs[2];
 
 	/* 1.- Special case: There is not header to send
@@ -616,8 +617,11 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 		
 		cherokee_connection_tx_add (conn, re);
 
-		conn->mmaped_len -= re;
+		/* FIXME: conn->mmaped is a ptr. to void
+		 * so ptr. math should be avoided.
+		 */
 		conn->mmaped     += re;
+		conn->mmaped_len -= (off_t) re;
 
 		return (conn->mmaped_len <= 0) ? ret_ok : ret_eagain;
 	}
@@ -626,10 +630,12 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 	 */
 	bufs[0].iov_base = conn->buffer.buf;
 	bufs[0].iov_len  = conn->buffer.len;
-	bufs[1].iov_base = conn->mmaped;
-	bufs[1].iov_len  = conn->mmaped_len;
-
-	ret = cherokee_socket_writev (&conn->socket, bufs, 2, &re);
+	if (likely( conn->mmaped_len > 0 )) {
+		bufs[1].iov_base = conn->mmaped;
+		bufs[1].iov_len  = conn->mmaped_len;
+		nvec = 2;
+	}
+	ret = cherokee_socket_writev (&conn->socket, bufs, nvec, &re);
 
 	switch (ret) {
 	case ret_ok: 
@@ -645,32 +651,43 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 
 	default:
 		RET_UNKNOWN(ret);
-	}
-	
-	/* If writev() has not sent all data
-	 */
-	if (re < conn->buffer.len + conn->mmaped_len) {
-		int offset;
-
-		if (re <= conn->buffer.len) {
-			cherokee_buffer_move_to_begin (&conn->buffer, re);
-			return ret_eagain;
-		}
-		
-		offset = re - conn->buffer.len;
-		conn->mmaped     += offset;
-		conn->mmaped_len -= offset;
-
-		cherokee_buffer_clean (&conn->buffer);
-
-		return ret_eagain;
+		return ret_error;
 	}
 
 	/* Add to the connection traffic counter
 	 */
 	cherokee_connection_tx_add (conn, re);
 
-	return ret_ok;
+	/* If writev() has sent all data. 
+	 */
+	if (re == (size_t) (conn->buffer.len + conn->mmaped_len)) {
+		cherokee_buffer_clean (&conn->buffer);
+		return ret_ok;
+	}
+
+	/* writev() may not have sent all data.
+	 */
+	if (re <= (size_t) conn->buffer.len) {
+		cherokee_buffer_move_to_begin (&conn->buffer, re);
+		if (conn->mmaped_len > 0)
+			return ret_eagain;
+		return ret_ok;
+	}
+
+	/* writev() has not sent all data:
+	 * re > conn->buffer.len && conn->mmaped_len > 0;
+	 */
+	re -= (size_t) conn->buffer.len;
+
+	/* FIXME: conn->mmaped is a ptr. to void
+	 * so ptr. math should be avoided.
+	 */
+	conn->mmaped     += re;
+	conn->mmaped_len -= (off_t) re;
+
+	cherokee_buffer_clean (&conn->buffer);
+
+	return ret_eagain;
 }
 
 
@@ -711,9 +728,9 @@ cherokee_connection_recv (cherokee_connection_t *conn, cherokee_buffer_t *buffer
 
 	default:
 		RET_UNKNOWN(ret);		
+		return ret_error;
 	}
-
-	return ret_error;
+	/* NOTREACHED */
 }
 
 
@@ -773,14 +790,14 @@ cherokee_connection_send_header (cherokee_connection_t *conn)
 	 */
 	cherokee_connection_tx_add (conn, sent);
 
-	/* Drop out the sent info
+	/* Drop out the sent data
 	 */
 	if (sent == conn->buffer.len) {
 		cherokee_buffer_clean (&conn->buffer);
 		return ret_ok;
 	}
 
-	/* There are still info waiting to be sent
+	/* There is still some data waiting to be sent
 	 */
 	cherokee_buffer_move_to_begin (&conn->buffer, sent);
 	return ret_eagain;
@@ -811,7 +828,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 		cherokee_buffer_move_to_begin (&conn->buffer, sent);
 		ret = ret_eagain;
 	}
-	
+
 	/* If this connection has a handler without content-length support
 	 * it has to count the bytes sent
 	 */
@@ -910,6 +927,7 @@ cherokee_connection_step (cherokee_connection_t *conn)
 
 	default:
 		RET_UNKNOWN(step_ret);
+		return step_ret;
 	}
 
 	/* May be encode..
@@ -1454,6 +1472,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 
 	default:
 		RET_UNKNOWN(ret);
+		return ret_error;
 	}
 
 	/* Userdir requests
@@ -1526,6 +1545,7 @@ cherokee_connection_send_switching (cherokee_connection_t *conn)
 
 	default:
 		RET_UNKNOWN(ret);
+		return ret;
 	}
 
 	return ret_ok;
