@@ -1,3 +1,10 @@
+2007-05-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/thread.c (process_active_connections): It was not
+	checking for the ret_eagain after calling to the
+	cherokee_connection_send() function. It was causing some
+	handlers (like the fcgi one) to truncate the output.
+
 2007-05-30  A.D.F  <adefacc@tin.it>
 
 	* cherokee/connection.c:

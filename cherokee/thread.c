@@ -1266,10 +1266,8 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_ok:
 					maybe_purge_closed_connection (thd, conn);
 					continue;
-
 				case ret_eagain:
 					break;
-
 				case ret_eof:
 				case ret_error:
 				default:	
@@ -1286,6 +1284,8 @@ process_active_connections (cherokee_thread_t *thd)
 				switch (ret) {
 				case ret_ok:
 					continue;
+				case ret_eagain:
+					break;
 				case ret_eof:
 				case ret_error:
 				default:
