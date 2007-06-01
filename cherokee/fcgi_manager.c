@@ -485,9 +485,8 @@ cherokee_fcgi_manager_send_remove (cherokee_fcgi_manager_t *mgr, cherokee_buffer
 		return ret;
 	default:
 		RET_UNKNOWN(ret);
+		return ret;
 	}
-
-	return ret_ok;
 }
 
 

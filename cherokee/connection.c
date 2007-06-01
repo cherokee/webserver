@@ -869,7 +869,7 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 	cherokee_buffer_t *tmp1   = THREAD_TMP_BUF1(thread);
 
 	while (true) {
-		size_t cnt_read  = 0;
+		size_t cnt_read = 0;
 
 		/* Read from the socket to nowhere
 		 */
@@ -886,14 +886,14 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 			return ret;
 		case ret_ok:
 			TRACE(ENTRIES, "read %u, ok\n", cnt_read);
-			if (cnt_read > 0 && --retries > 0)
+			if (cnt_read == tmp1->size && --retries > 0)
 				continue;
 			return ret;
 		default:
 			RET_UNKNOWN(ret);               
-			break;
+			return ret_error;
 		}
-		return ret_error;
+		/* NOTREACHED */
 	}
 }
 
@@ -1031,9 +1031,9 @@ get_encoding (cherokee_connection_t    *conn,
 	}
 
 	*end = '\0'; /* (1) */
-	
+
 	i1 = ptr;
-	
+
 	do {
 		i2 = strchr (i1, ',');
 		if (!i2) i2 = strchr (i1, ';');
@@ -1114,7 +1114,7 @@ get_authorization (cherokee_connection_t *conn,
 	end = cherokee_min_str (end, end2);
 	if (end == NULL) 
 		return ret_error;
-	
+
 	ptr_len -= (ptr + ptr_len) - end;
 
 	/* Skip "Basic " or "Digest "
@@ -1151,7 +1151,7 @@ get_authorization (cherokee_connection_t *conn,
 		PRINT_ERROR_S ("Unknown authentication method\n");
 		return ret_error;
 	}
-	
+
 	return ret_ok;
 }
 
@@ -1233,7 +1233,7 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, 
 		conn->error_code = http_not_found;
 		return ret_error;
 	}
-	
+
 	/* Build the local_directory:
 	 */
 	cherokee_buffer_add (&conn->local_directory, pwd.pw_dir, strlen(pwd.pw_dir));
@@ -1265,7 +1265,7 @@ get_range (cherokee_connection_t *conn, char *ptr, int ptr_len)
 			return ret_error;
 		}
 	}
-	
+
 	/* Advance the pointer
 	 */
 	ptr += num_len;
@@ -1331,7 +1331,7 @@ post_init (cherokee_connection_t *conn)
 
 	memcpy (buf, info, info_len);
 	buf[info_len] = '\0';
-		
+
 	post_len = (off_t) atol(buf);
 	if (post_len < 0) {
 		conn->error_code = http_bad_request;
@@ -1423,7 +1423,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		cherokee_post_append (&conn->post, conn->incoming_header.buf + header_len, post_len);
 		cherokee_buffer_drop_endding (&conn->incoming_header, post_len);
 	}
-	
+
 	/* Copy the request and query string
 	 */
 	ret = cherokee_header_copy_request (&conn->header, &conn->request);
@@ -1478,8 +1478,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	/* Userdir requests
 	 */
 	if ((!cherokee_buffer_is_empty (&CONN_VSRV(conn)->userdir)) && 
-	    cherokee_connection_is_userdir (conn)) 
-	{
+	    cherokee_connection_is_userdir (conn)) {
 		ret = parse_userdir (conn);
 		if (ret != ret_ok) return ret;
 	}
@@ -1577,8 +1576,7 @@ cherokee_connection_get_dir_entry (cherokee_connection_t *conn, cherokee_dirs_ta
 	 */
 	if ((conn->request.len > 1) &&
 	    (cherokee_buffer_end_char (&conn->request) != '/') &&
-	    (cherokee_buffer_cmp_buf (&conn->request, &conn->web_directory) == ret_ok))
-	{
+	    (cherokee_buffer_cmp_buf (&conn->request, &conn->web_directory) == ret_ok)) {
 		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + 4);
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
 		cherokee_buffer_add (&conn->redirect, "/", 1);
@@ -1680,7 +1678,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 	if (ret != ret_ok) {
 		goto unauthorized;
 	}
-	
+
 	/* Create the validator object
 	 */
 	ret = config_entry->validator_new_func ((void **) &conn->validator, 
@@ -1698,8 +1696,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 
 	/* Check if the user is in the list
 	 */
-	if (config_entry->users != NULL)
-	{
+	if (config_entry->users != NULL) {
 		void *foo;
 
 		if (cherokee_buffer_is_empty (&conn->validator->user)) {
@@ -1921,7 +1918,7 @@ cherokee_connection_log_or_delay (cherokee_connection_t *conn)
 		at_end = true;
 	else
 		at_end = ! HANDLER_SUPPORT_LENGTH(conn->handler);
-	
+
 	/* Set the option bit mask
 	 */
 	if (at_end)

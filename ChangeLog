@@ -1,3 +1,18 @@
+2007-06-01  A.D.F  <adefacc@tin.it>
+
+	* cherokee/connection.c:
+        - sparse cleanups;
+	- cherokee_connection_linger_read(),
+	  retry read only if tmp_buf has been completely filled
+	  so that we spare one read during linger phase
+	  (cherokee_connection_linger_read() is called
+	   in thread.c -> purge_connection() too, so it should
+	   try to read EOF if EOF has not been read yet);
+
+	* cherokee/fcgi_manager.c:	
+        - cherokee_fcgi_manager_send_remove(),
+	  removed redundant break (replaced by a return).
+
 2007-05-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/thread.c (process_active_connections): It was not
