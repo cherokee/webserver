@@ -1,3 +1,10 @@
+2007-05-11  A.D.F  <adefacc@tin.it>
+
+	* cherokee/handler_common.c: 
+        - always test for ret == ret_ok before assigning
+	  result to boolean variables;
+        - sparse space cleanups;
+
 2007-06-01  A.D.F  <adefacc@tin.it>
 
 	* cherokee/connection.c:

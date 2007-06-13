@@ -116,19 +116,19 @@ stat_file (cherokee_boolean_t useit, cherokee_iocache_t *iocache, struct stat *n
 				return ret_not_found;
 			case EACCES: 
 				return ret_deny;
-			default:     
+			default:
 				return ret_error;
 			}
 		}
 
-		*info = nocache_info;		
+		*info = nocache_info;
 		return ret_ok;
-	} 
+	}
 
 	/* I/O cache
 	 */
 #ifndef CHEROKEE_EMBEDDED
-	ret = cherokee_iocache_stat_get (iocache, path, io_entry);
+	ret = cherokee_iocache_get_or_create_w_stat (iocache, path, io_entry);
 
 	TRACE (ENTRIES, "%s, use_iocache=%d re=%d\n", path, useit, re);
 
@@ -299,8 +299,8 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 			cherokee_buffer_add (&conn->local_directory, index, index_len);
 			ret = stat_file (use_iocache, iocache, &nocache_info, conn->local_directory.buf, &file, &info);
 
-			exists = (ret == ret_ok);
-			is_dir = S_ISDIR(info->st_mode);
+			exists =  (ret == ret_ok);
+			is_dir = ((ret == ret_ok) && S_ISDIR(info->st_mode));
 
 			cherokee_iocache_mmap_release (iocache, file);
 			cherokee_buffer_drop_endding (&conn->local_directory, index_len);
