@@ -43,6 +43,7 @@
 #include <cherokee/url.h>
 #include <cherokee/header.h>
 #include <cherokee/resolv_cache.h>
+#include <cherokee/post.h>
 
 /* Server library
  */

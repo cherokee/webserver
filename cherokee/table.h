@@ -63,7 +63,6 @@ ret_t cherokee_table_len       (cherokee_table_t *tab, size_t *len);
 
 ret_t cherokee_table_foreach   (cherokee_table_t *tab, cherokee_table_foreach_func_t func);
 ret_t cherokee_table_while     (cherokee_table_t *tab, cherokee_table_while_func_t func, void *param, char **key, void **value);
-ret_t cherokee_table_clean_up  (cherokee_table_t *tab, cherokee_table_while_func_t func, void *param);
 
 CHEROKEE_END_DECLS
 

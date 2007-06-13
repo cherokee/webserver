@@ -313,36 +313,19 @@ stat_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn
 	ret_t              ret;
 	cherokee_server_t *srv = CONN_SRV(conn);
 
-	/* Without cache
-	 */
-	if (! HDL_FILE_PROP(fhdl)->use_cache) {
-		re = stat (conn->local_directory.buf, &fhdl->cache_info);
-		if (re < 0) {
-			switch (errno) {
-			case ENOENT: 
-				conn->error_code = http_not_found;
-				break;
-			case EACCES: 
-				conn->error_code = http_access_denied;
-				break;
-			default:     
-				conn->error_code = http_internal_error;
-			}
-
-			cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
-			return ret_error;
-		}
-
-		*info = &fhdl->cache_info;		
-		return ret_ok;
-	} 
-
 	/* I/O cache
 	 */
 #ifndef CHEROKEE_EMBEDDED
-	ret = cherokee_iocache_stat_get (srv->iocache, conn->local_directory.buf, io_entry);
-	if (ret != ret_ok) {
+	if (HDL_FILE_PROP(fhdl)->use_cache) {
+		ret = cherokee_iocache_get_or_create_w_stat (srv->iocache, conn->local_directory.buf, io_entry);
 		switch (ret) {
+		case ret_ok:
+			*info = &(*io_entry)->state;
+			return ret_ok;
+
+		case ret_no_sys:
+			goto without;
+
 		case ret_not_found:
 			conn->error_code = http_not_found;
 			break;
@@ -353,13 +336,29 @@ stat_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn
 			conn->error_code = http_internal_error;
 		}
 		
-		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
 		return ret_error;		
 	}
-
-	*info = &(*io_entry)->state;
-	return ret_ok;
 #endif 
+
+	/* Without cache
+	 */
+without:
+	re = stat (conn->local_directory.buf, &fhdl->cache_info);
+	if (re >= 0) {
+		*info = &fhdl->cache_info;		
+		return ret_ok;
+	}
+
+	switch (errno) {
+	case ENOENT: 
+		conn->error_code = http_not_found;
+		break;
+	case EACCES: 
+		conn->error_code = http_access_denied;
+		break;
+	default:     
+		conn->error_code = http_internal_error;
+	}
 
 	return ret_error;
 }
@@ -370,7 +369,6 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 {
 	ret_t                     ret;
 	cherokee_boolean_t        use_io   = false;
-	cherokee_iocache_entry_t *io_entry = NULL;
 	cherokee_connection_t    *conn     = HANDLER_CONN(fhdl);
 	cherokee_server_t        *srv      = HANDLER_SRV(fhdl);
 
@@ -383,8 +381,11 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 
 	/* Query the I/O cache
 	 */
-	ret = stat_local_directory (fhdl, conn, &io_entry, &fhdl->info);
-	if (ret != ret_ok) return ret;
+	ret = stat_local_directory (fhdl, conn, &conn->io_entry_ref, &fhdl->info);
+	if (ret != ret_ok) {
+		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);		
+		return ret;
+	}
 
 	/* Ensure it is a file
 	 */
@@ -429,35 +430,25 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	TRACE(ENTRIES, "Using iocache %d\n", use_io);
 	
 	if (use_io) {
-		ret = cherokee_iocache_mmap_lookup (srv->iocache,
-						    conn->local_directory.buf,
-						    &io_entry);
+//		if (conn->io_entry_ref)
+//			cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
+		ret = cherokee_iocache_get_or_create_w_mmap (srv->iocache,
+							     conn->local_directory.buf,
+							     &conn->io_entry_ref, 
+							     &fhdl->fd);
 
-		TRACE(ENTRIES, "iocache looked up, local=%s ret=%d\n", conn->local_directory.buf, ret);
-			
-		if ((ret != ret_ok) || 
-		    (io_entry->mmaped == NULL))
-		{
-			/* Open fhdl->fd
-			 */
-			ret = open_local_directory (fhdl, conn);
-			if (ret != ret_ok) {
-				cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
-				return ret;
-			}
+		TRACE (ENTRIES, "iocache looked up, local=%s ret=%d\n", 
+		       conn->local_directory.buf, ret);
 
-			/* Map the file
-			 */
-			ret = cherokee_iocache_mmap_get_w_fd (srv->iocache,
-							      conn->local_directory.buf,
-							      fhdl->fd,
-							      &io_entry);
-
-			TRACE(ENTRIES, "Got it from the iocache fd=%d, entry=%p\n", fhdl->fd, io_entry);
-		}
-
-		if (ret == ret_ok) {
-			conn->io_entry_ref = io_entry;
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_no_sys:
+			use_io = false;
+			break;
+		default:
+			cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
+			return ret_error;
 		}
 	}
 #endif
@@ -510,7 +501,9 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 
 	/* Set mmap or file position
 	 */
-	if (conn->io_entry_ref != NULL) {
+	if ((conn->io_entry_ref != NULL) &&
+	    (conn->io_entry_ref->mmaped != NULL)) 
+	{
 		/* Set the mmap info
 		 */
 		conn->mmaped     = conn->io_entry_ref->mmaped + conn->range_start;
@@ -548,11 +541,11 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 				   cherokee_buffer_t       *buffer)
 {
 	ret_t                  ret;
-	size_t                 szlen = 0;
-	off_t                  content_length = 0;
-	struct tm              modified_tm = { 0 };
 	char                   bufstr[DTM_SIZE_GMTTM_STR];
-	cherokee_connection_t *conn         = HANDLER_CONN(fhdl);
+	size_t                 szlen          = 0;
+	off_t                  content_length = 0;
+	struct tm              modified_tm    = { 0 };
+	cherokee_connection_t *conn           = HANDLER_CONN(fhdl);
 
 	/* ETag:
 	 */

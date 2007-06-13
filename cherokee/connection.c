@@ -108,6 +108,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->arguments         = NULL;
 	n->realm_ref         = NULL;
 	n->mmaped            = NULL;
+	n->mmaped_len        = 0;
 	n->io_entry_ref      = NULL;
 	n->thread            = NULL;
 	n->rx                = 0;	
@@ -216,7 +217,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 #ifndef CHEROKEE_EMBEDDED
 	if (conn->io_entry_ref != NULL) {
 		cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
-		conn->io_entry_ref = NULL;		
+		conn->io_entry_ref = NULL;	
 	}
 #endif
 
@@ -233,6 +234,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->logger_ref        = NULL;
 	conn->realm_ref         = NULL;
 	conn->mmaped            = NULL;
+	conn->mmaped_len        = 0;
 	conn->rx                = 0;	
 	conn->tx                = 0;
 	conn->rx_partial        = 0;	
@@ -333,7 +335,6 @@ cherokee_connection_mrproper (cherokee_connection_t *conn)
 	/* Close and clean the socket
 	 */
 	cherokee_socket_close (&conn->socket);
-
 	cherokee_socket_clean (&conn->socket);
 
 	/* Clean the connection object
@@ -395,13 +396,15 @@ out:
 
 	/* Nothing should be mmaped any longer
 	 */
-	if (conn->mmaped != NULL) {
+	if (conn->io_entry_ref != NULL) {
 #ifndef CHEROKEE_EMBEDDED
 		ret = cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
-		conn->mmaped       = NULL;
-		conn->io_entry_ref = NULL;
 #endif
 	}
+
+	conn->io_entry_ref = NULL;
+	conn->mmaped       = NULL;
+	conn->mmaped_len   = 0;
 
 	return ret;
 }

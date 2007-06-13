@@ -1283,6 +1283,13 @@ cherokee_server_step (cherokee_server_t *srv)
 	 */
 	if (srv->iocache_clean_next < srv->bogo_now) {
 		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
+		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
+		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
+		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
+		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
+		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
+		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
+		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
 		srv->iocache_clean_next = srv->bogo_now + IOCACHE_DEFAULT_CLEAN_ELAPSE;
 	}
 #endif

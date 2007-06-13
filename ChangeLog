@@ -1,3 +1,13 @@
+2007-06-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_common.c, cherokee/macros.h,
+	cherokee/handler_file.c, cherokee/Makefile.am, cherokee/table.h,
+	cherokee//cherokee.h, cherokee/iocache.c, cherokee/connection.c,
+	cherokee/iocache.h, cherokee/server.c: Many changes that aim to
+	fix the IOcache class. It is still failing though, this is the
+	first approach to solve the problem, but there is still work to be
+	done.
+
 2007-05-11  A.D.F  <adefacc@tin.it>
 
 	* cherokee/handler_common.c: 
