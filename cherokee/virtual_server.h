@@ -26,6 +26,7 @@
 #define CHEROKEE_VIRTUAL_SERVER_H
 
 #include "common-internal.h"
+#include <unistd.h>
 
 #ifdef HAVE_GNUTLS
 # include <gnutls/extra.h>

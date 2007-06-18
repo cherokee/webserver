@@ -1,3 +1,8 @@
+2007-06-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/virtual_server.h: Included unistd.h. Fixes a FreeBSD
+	compilation problem. Reported by Brian Rosner.
+
 2007-06-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_common.c, cherokee/macros.h,
