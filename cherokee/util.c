@@ -356,25 +356,19 @@ static pthread_mutex_t gmtime_mutex = PTHREAD_MUTEX_INITIALIZER;
 struct tm *
 cherokee_gmtime (const time_t *timep, struct tm *result)
 {
-#ifndef HAVE_PTHREAD
-	struct tm *tmp;
-
-	tmp = gmtime (timep);
-	memcpy (result, tmp, sizeof(struct tm));
-	return result;	
-#else 
-# ifdef HAVE_GMTIME_R
+#ifdef HAVE_GMTIME_R
+	/* Use the thread safe version anyway (no data copy).
+	 */
 	return gmtime_r (timep, result);
-# else
+#else
 	struct tm *tmp;
 
 	CHEROKEE_MUTEX_LOCK (&gmtime_mutex);
-	tmp = gmtime (timep);
-	memcpy (result, tmp, sizeof(struct tm));
+	if (likely ((tmp = gmtime (timep)) != NULL))
+		memcpy (result, tmp, sizeof(struct tm));
 	CHEROKEE_MUTEX_UNLOCK (&gmtime_mutex);
 
-	return result;
-# endif
+	return (tmp == NULL ? NULL : result);
 #endif
 }
 
@@ -386,25 +380,19 @@ static pthread_mutex_t localtime_mutex = PTHREAD_MUTEX_INITIALIZER;
 struct tm *
 cherokee_localtime (const time_t *timep, struct tm *result)
 {
-#ifndef HAVE_PTHREAD
-	struct tm *tmp;
-
-	tmp = localtime (timep);
-	memcpy (result, tmp, sizeof(struct tm));
-	return result;	
-#else 
-# ifdef HAVE_LOCALTIME_R
+#ifdef HAVE_LOCALTIME_R
+	/* Use the thread safe version anyway (no data copy).
+	 */
 	return localtime_r (timep, result);
-# else
+#else
 	struct tm *tmp;
 
 	CHEROKEE_MUTEX_LOCK (&localtime_mutex);
-	tmp = localtime (timep);
-	memcpy (result, tmp, sizeof(struct tm));
+	if (likely ((tmp = localtime (timep)) != NULL))
+		memcpy (result, tmp, sizeof(struct tm));
 	CHEROKEE_MUTEX_UNLOCK (&localtime_mutex);
 
-	return result;
-# endif
+	return (tmp == NULL ? NULL : result);
 #endif
 }
 
@@ -448,24 +436,26 @@ cherokee_readdir (DIR *dirstream, struct dirent *entry, struct dirent **result)
 # elif defined(HAVE_READDIR_R_3)
 	return readdir_r (dirstream, entry, result);
 # else
-        struct dirent *ptr;
-        int            ret = 0;
+	struct dirent *ptr;
+	int            ret = 0;
 
 	CHEROKEE_MUTEX_LOCK (&readdir_mutex);
 
-        errno = 0;
-        ptr = readdir(dirstream);
+	errno = 0;
+	ptr = readdir(dirstream);
         
-        if (!ptr && errno != 0)
-                ret = errno;
+	if (!ptr && errno != 0)
+		ret = errno;
 
-        if (ptr)
-                memcpy(entry, ptr, sizeof(*ptr));
+	if (ptr)
+		memcpy(entry, ptr, sizeof(*ptr));
 
-        *result = ptr;
+	*result = ptr;
 	
 	CHEROKEE_MUTEX_UNLOCK (&readdir_mutex);
-        return ret;
+
+	return ret;
+
 # endif
 #endif
 }
@@ -664,22 +654,22 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
 	
 #if !defined(HAVE_PTHREAD) || (defined(HAVE_PTHREAD) && !defined(HAVE_GETHOSTBYNAME_R))
 
-        struct hostent *host;
+	struct hostent *host;
 
-        CHEROKEE_MUTEX_LOCK (&__global_gethostbyname_mutex);
-        /* Resolv the host name
-         */
-        host = gethostbyname (hostname);
-        if (host == NULL) {
-                CHEROKEE_MUTEX_UNLOCK (&__global_gethostbyname_mutex);
-                return ret_error;
-        }
+	CHEROKEE_MUTEX_LOCK (&__global_gethostbyname_mutex);
+	/* Resolv the host name
+	*/
+	host = gethostbyname (hostname);
+	if (host == NULL) {
+		CHEROKEE_MUTEX_UNLOCK (&__global_gethostbyname_mutex);
+		return ret_error;
+	}
 
-        /* Copy the address
-         */
-        memcpy (addr, host->h_addr, host->h_length);
-        CHEROKEE_MUTEX_UNLOCK (&__global_gethostbyname_mutex);
-        return ret_ok;
+	/* Copy the address
+	*/
+	memcpy (addr, host->h_addr, host->h_length);
+	CHEROKEE_MUTEX_UNLOCK (&__global_gethostbyname_mutex);
+	return ret_ok;
 
 #elif defined(HAVE_PTHREAD) && defined(HAVE_GETHOSTBYNAME_R)
 
@@ -688,49 +678,49 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
  */
 # define GETHOSTBYNAME_R_BUF_LEN 512
 
-        int             r;
-        int             h_errnop;
-        struct hostent  hs;
-        struct hostent *hp = NULL;
-        char   tmp[GETHOSTBYNAME_R_BUF_LEN];
+	int             r;
+	int             h_errnop;
+	struct hostent  hs;
+	struct hostent *hp = NULL;
+	char   tmp[GETHOSTBYNAME_R_BUF_LEN];
         
 
 # ifdef SOLARIS
-        /* Solaris 10:
-         * struct hostent *gethostbyname_r
-         *        (const char *, struct hostent *, char *, int, int *h_errnop);
-         */
-        hp = gethostbyname_r (hostname, &hs, tmp, 
-			      GETHOSTBYNAME_R_BUF_LEN - 1, &h_errnop);
-        if (hp == NULL) {
-                return ret_error;
-        }       
-# else
-        /* Linux glibc2:
-         *  int gethostbyname_r (const char *name,
-         *         struct hostent *ret, char *buf, size_t buflen,
-         *         struct hostent **result, int *h_errnop);
-         */
-        r = gethostbyname_r (hostname, 
-                             &hs, tmp, GETHOSTBYNAME_R_BUF_LEN - 1, 
-                             &hp, &h_errnop);
-        if (r != 0) {
-                return ret_error;
-        }
-# endif  
+	/* Solaris 10:
+	 * struct hostent *gethostbyname_r
+	 *        (const char *, struct hostent *, char *, int, int *h_errnop);
+	 */
+	hp = gethostbyname_r (hostname, &hs, tmp, 
+			GETHOSTBYNAME_R_BUF_LEN - 1, &h_errnop);
 
-        /* Copy the address
-         */
+	if (hp == NULL)
+		return ret_error;
+
+# else
+	/* Linux glibc2:
+	 *  int gethostbyname_r (const char *name,
+	 *         struct hostent *ret, char *buf, size_t buflen,
+	 *         struct hostent **result, int *h_errnop);
+	 */
+	r = gethostbyname_r (hostname, 
+			&hs, tmp, GETHOSTBYNAME_R_BUF_LEN - 1, 
+			&hp, &h_errnop);
+	if (r != 0)
+		return ret_error;
+# endif  
+	/* Copy the address
+	 */
 	if (hp == NULL)
 		return ret_not_found;
 
-        memcpy (addr, hp->h_addr, hp->h_length);
+	memcpy (addr, hp->h_addr, hp->h_length);
 
-        return ret_ok;
+	return ret_ok;
 #else
-
-        SHOULDNT_HAPPEN;
-        return ret_error;
+	/* Bad case !
+	 */
+	SHOULDNT_HAPPEN;
+	return ret_error;
 #endif
 }
 
@@ -832,12 +822,12 @@ cherokee_isbigendian (void)
 	/* From Harbison & Steele.  
 	 */
 	union {                                 
-                long l;
-                char c[sizeof(long)];
-        } u;
+		long l;
+		char c[sizeof(long)];
+	} u;
 
-        u.l = 1;
-        return (u.c[sizeof(long) - 1] == 1);
+	u.l = 1;
+	return (u.c[sizeof(long) - 1] == 1);
 }
 
 
@@ -1052,14 +1042,12 @@ cherokee_parse_query_string (cherokee_buffer_t *qstring, cherokee_table_t *argum
 
 	string = qstring->buf;
 
-	while ((token = (char *) strsep(&string, "&")) != NULL)
-	{
+	while ((token = (char *) strsep(&string, "&")) != NULL) {
 		char *equ, *key, *val;
 
 		if (token == NULL) continue;
 
-		if ((equ = strchr(token, '=')))
-		{
+		if ((equ = strchr(token, '='))) {
 			*equ = '\0';
 
 			key = token;
@@ -1102,12 +1090,13 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 	char          *ptr;
 	struct passwd *tmp;
 
- 	CHEROKEE_MUTEX_LOCK (&__global_getpwnam_mutex);
+	CHEROKEE_MUTEX_LOCK (&__global_getpwnam_mutex);
 	
 	tmp = getpwnam (name);
-	if (tmp == NULL) 
+	if (tmp == NULL) {
+		CHEROKEE_MUTEX_UNLOCK (&__global_getpwnam_mutex);
 		return ret_error;
-
+	}
 	if (tmp->pw_name)   pw_name_len   = strlen(tmp->pw_name);
 	if (tmp->pw_passwd) pw_passwd_len = strlen(tmp->pw_passwd);
 	if (tmp->pw_gecos)  pw_gecos_len  = strlen(tmp->pw_gecos);
@@ -1115,9 +1104,12 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 	if (tmp->pw_shell)  pw_shell_len  = strlen(tmp->pw_shell);
 
 	if ((pw_name_len + pw_passwd_len + 
-	     pw_gecos_len + pw_dir_len + pw_shell_len) > buflen)
+	     pw_gecos_len + pw_dir_len + pw_shell_len + 5) >= buflen) {
+		/* Buffer overflow.
+		 */
+		CHEROKEE_MUTEX_UNLOCK (&__global_getpwnam_mutex);
 		return ret_error;
-
+	}
 	memset (buf, 0, buflen);
 	ptr = buf;
 
@@ -1154,7 +1146,7 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 		ptr += pw_shell_len + 1;
 	}
 
-        CHEROKEE_MUTEX_UNLOCK (&__global_getpwnam_mutex);
+	CHEROKEE_MUTEX_UNLOCK (&__global_getpwnam_mutex);
 	return ret_ok;
 
 #elif HAVE_GETPWNAM_R_5
@@ -1198,18 +1190,23 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 	char         *ptr;
 	struct group *tmp;
 
-        CHEROKEE_MUTEX_LOCK (&__global_getgrnam_mutex);
+	CHEROKEE_MUTEX_LOCK (&__global_getgrnam_mutex);
 
 	tmp = getgrnam (name);
-	if (tmp == NULL) 
+	if (tmp == NULL) {
+		CHEROKEE_MUTEX_UNLOCK (&__global_getgrnam_mutex);
 		return ret_error;
+	}
 
-	if (tmp->gr_name)   gr_name_len   = strlen(tmp->gr_name);
-	if (tmp->gr_passwd) gr_passwd_len = strlen(tmp->gr_passwd);
+	if (tmp->gr_name)
+		gr_name_len   = strlen(tmp->gr_name);
+	if (tmp->gr_passwd)
+		gr_passwd_len = strlen(tmp->gr_passwd);
 
-	if ((gr_name_len + gr_passwd_len) > buflen)
+	if ((gr_name_len + gr_passwd_len + 2) >= buflen) {
+		CHEROKEE_MUTEX_UNLOCK (&__global_getgrnam_mutex);
 		return ret_error;
-
+	}
 	memset (buf, 0, buflen);
 	ptr = buf;
 
@@ -1230,7 +1227,8 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 	/* TODO: Duplicate char **tmp->gr_mem
 	 */
 
-        CHEROKEE_MUTEX_UNLOCK (&__global_getgrnam_mutex);
+	CHEROKEE_MUTEX_UNLOCK (&__global_getgrnam_mutex);
+
 	return ret_ok;
 
 #elif HAVE_GETGRNAM_R_5
@@ -1238,7 +1236,8 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 	struct group *tmp;
 
 	re = getgrnam_r (name, grbuf, buf, buflen, &tmp);
-	if (re != 0) return ret_error;
+	if (re != 0)
+		return ret_error;
 
 	return ret_ok;
 
@@ -1248,10 +1247,12 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 #ifdef _POSIX_PTHREAD_SEMANTICS
 	int re;
 	re = getgrnam_r (name, grbuf, buf, buflen, &result);
-	if (re != 0) return ret_error;
+	if (re != 0)
+		return ret_error;
 #else
 	result = getgrnam_r (name, grbuf, buf, buflen);
-	if (result == NULL) return ret_error;	
+	if (result == NULL)
+		return ret_error;	
 #endif
 
 	return ret_ok;

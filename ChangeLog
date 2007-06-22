@@ -1,3 +1,24 @@
+2007-05-21  A.D.F  <adefacc@tin.it>
+
+	* cherokee/connection_info.c:
+        - fix, added MUTEX_UNLOCK where required;
+        - space cleanups;
+
+	* cherokee/thread:
+        - space cleanup;
+
+	* cherokee/util.c:
+	- fix, test return value of gmtime(), getpwnam(), etc.
+	  calls because they may fail and we don't want
+	  to crash the server because of a NULL pointer
+	  dereference;
+	- improvement, if thread safe functions (i.e. gmtime_r())
+	  are available then always use them
+	  because they are a bit faster and avoid code duplication
+	  for #ifndef HAVE_PTHREAD case;
+        - fix, added MUTEX_UNLOCK where required;
+        - space cleanups.
+	
 2007-06-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/virtual_server.h: Included unistd.h. Fixes a FreeBSD

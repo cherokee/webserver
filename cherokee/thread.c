@@ -967,7 +967,7 @@ process_active_connections (cherokee_thread_t *thd)
 				break;
 			case ret_ok:
 				if (cherokee_buffer_is_empty (&conn->local_directory)) {
-					if (is_userdir) 
+					if (is_userdir)
 						ret = cherokee_connection_build_local_directory_userdir (conn, CONN_VSRV(conn), &entry);
 					else
 						ret = cherokee_connection_build_local_directory (conn, CONN_VSRV(conn), &entry);
