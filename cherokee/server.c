@@ -98,9 +98,6 @@ ret_t
 cherokee_server_new  (cherokee_server_t **srv)
 {
 	ret_t ret;
-
-	/* Get memory
-	 */
 	CHEROKEE_NEW_STRUCT(n, server);
 	
 	/* Thread list
@@ -1282,13 +1279,6 @@ cherokee_server_step (cherokee_server_t *srv)
 	/* Clean IO cache
 	 */
 	if (srv->iocache_clean_next < srv->bogo_now) {
-		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
-		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
-		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
-		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
-		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
-		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
-		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
 		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
 		srv->iocache_clean_next = srv->bogo_now + IOCACHE_DEFAULT_CLEAN_ELAPSE;
 	}

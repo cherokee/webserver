@@ -1,3 +1,11 @@
+2007-05-25  A.D.F  <adefacc@tin.it>
+	* cherokee/server.c:
+        - removed multiple calls to cherokee_iocache_cleanup();
+        - space cleanups;
+
+	* cherokee/win32_misc.c:
+        - space / indentation cleanup.
+
 2007-05-21  A.D.F  <adefacc@tin.it>
 
 	* cherokee/connection_info.c:
