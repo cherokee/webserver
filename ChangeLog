@@ -1,3 +1,8 @@
+2007-06-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/win32_misc.c (win_strerror): Fixed infinite
+	recursion. Patch by Ross Smith II, and Gisle Vanem.
+
 2007-05-25  A.D.F  <adefacc@tin.it>
 	* cherokee/server.c:
         - removed multiple calls to cherokee_iocache_cleanup();

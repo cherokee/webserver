@@ -385,7 +385,8 @@ char *win_strerror (int err)
 	char  *p;
 
 	if (err >= 0 && err < sys_nerr) {
-		strncpy (buf, strerror(err), sizeof(buf)-1);
+		/* Call the strerror() func, do not use the macro! */
+		strncpy (buf, (strerror)(err), sizeof(buf)-1);
 		buf [sizeof(buf)-1] = '\0';
 	} else {
 		if (!get_winsock_error (err, buf, sizeof(buf)) &&
