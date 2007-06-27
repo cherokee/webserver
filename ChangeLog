@@ -1,3 +1,8 @@
+2007-06-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/win32_misc.c: Shouldn't return a pointer to a local
+	buffer; that memory would be already being used by another
+	function when the string is needed.
 
 2007-06-27  A.D.F  <adefacc@tin.it>
 

@@ -619,16 +619,17 @@ int win_dlclose (const void *dll_handle)
 /*
  * TODO: make this function thread-safe (by using some smart trick).
  */
+static char win_dlerror_buf[1024];  /* WARNING!! not thread-safe */
+
 const char *win_dlerror (void)
 {
-	static char errbuf[1024];  /* WARNING!! not thread-safe */
-
-	if (!last_error)
+	if (! last_error)
 		return (NULL);
 
-	snprintf (errbuf, sizeof(errbuf)-1, "%s(): %s",
+	snprintf (win_dlerror_buf, sizeof(win_dlerror_buf)-1, "%s(): %s",
 			last_func, win_strerror(last_error));
-	return (errbuf);
+
+	return (win_dlerror_buf);
 }
 
 #endif  /* CHEROKEE_EMBEDDED */
