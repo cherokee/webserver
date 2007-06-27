@@ -39,7 +39,8 @@ cherokee_vserver_names_add_name (cherokee_vserver_names_t *list, cherokee_buffer
 	/* Create a new name object
 	 */
 	ret = cherokee_vserver_name_entry_new (&entry, name);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	/* Add the new entry
 	 */
@@ -52,15 +53,16 @@ cherokee_vserver_names_add_name (cherokee_vserver_names_t *list, cherokee_buffer
 ret_t 
 cherokee_vserver_names_find (cherokee_vserver_names_t *list, cherokee_buffer_t *name)
 {
-        ret_t            ret;
-        cherokee_list_t *i;
+	ret_t            ret;
+	cherokee_list_t *i;
 
-        list_for_each (i, list) {
+	list_for_each (i, list) {
 		ret = cherokee_vserver_name_entry_match (VSERVER_NAME(i), name);
-		if (ret == ret_ok) return ret_ok;
-        }
+		if (ret == ret_ok)
+			return ret_ok;
+	}
 
-        return ret_not_found;
+	return ret_not_found;
 }
 
 
@@ -68,38 +70,37 @@ ret_t
 cherokee_vserver_names_mrproper (cherokee_vserver_names_t *list)
 {
 	cherokee_list_t *i, *tmp;
-	
-        list_for_each_safe (i, tmp, list) {
+
+	list_for_each_safe (i, tmp, list) {
 		cherokee_vserver_name_entry_free (VSERVER_NAME(i));
 	}
-	
+
 	return ret_ok;
 }
 
 
-
 /* Virtual server name entry
  */
-
 ret_t 
 cherokee_vserver_name_entry_new (cherokee_vserver_name_entry_t **entry, cherokee_buffer_t *name)
 {
 	CHEROKEE_NEW_STRUCT (n, vserver_name_entry);
-	
+
 	/* It's a list node
 	 */
 	INIT_LIST_HEAD (&n->node);
-	
+
 	/* Name entry
 	 */
 	cherokee_buffer_init (&n->name);
-        cherokee_buffer_add_buffer (&n->name, name);
+	cherokee_buffer_add_buffer (&n->name, name);
 
 	/* Check if the name contains wildcards
-         */
-        n->is_wildcard = (strchr (name->buf, '*') || strchr (name->buf, '?'));
+	 */
+	n->is_wildcard = (strchr (name->buf, '*') || strchr (name->buf, '?'));
 
 	*entry = n;
+
 	return ret_ok;
 }
 
@@ -107,7 +108,6 @@ cherokee_vserver_name_entry_new (cherokee_vserver_name_entry_t **entry, cherokee
 ret_t 
 cherokee_vserver_name_entry_match (cherokee_vserver_name_entry_t *entry, cherokee_buffer_t *name)
 {
-                
 	if (entry->is_wildcard) 
 		return cherokee_wildcard_match (entry->name.buf, name->buf);
 
@@ -119,7 +119,7 @@ ret_t
 cherokee_vserver_name_entry_free (cherokee_vserver_name_entry_t *entry)
 {
 	cherokee_buffer_mrproper (&entry->name);
-	
+
 	free (entry);
 	return ret_ok;
 }

@@ -42,7 +42,7 @@ ret_t
 cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 {
 	ret_t ret;
-       	CHEROKEE_NEW_STRUCT (n, virtual_server);
+	CHEROKEE_NEW_STRUCT (n, virtual_server);
 
 	INIT_LIST_HEAD (&n->list_entry);
 	INIT_LIST_HEAD (&n->index_list);
@@ -56,11 +56,13 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	/* Virtual entries
 	 */
 	ret = cherokee_virtual_entries_init (&n->entry);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	ret = cherokee_virtual_entries_init (&n->userdir_entry);
-	if (ret != ret_ok) return ret;
-	
+	if (ret != ret_ok)
+		return ret;
+
 	/* Data transference 
 	 */
 	n->data.rx         = 0;
@@ -76,7 +78,8 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 
 #ifdef HAVE_TLS
 	ret = cherokee_table_init (&n->session_cache);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 # ifdef HAVE_GNUTLS
 	n->credentials     = NULL;
@@ -84,18 +87,22 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 # ifdef HAVE_OPENSSL
 	n->context         = NULL;
 # endif 
-#endif
+
+#endif /* HAVE_TLS */
 
 	ret = cherokee_buffer_init (&n->root);
-	if (unlikely(ret < ret_ok)) return ret;	
+	if (unlikely(ret < ret_ok))
+		return ret;	
 	
 	ret = cherokee_buffer_init (&n->name);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	INIT_LIST_HEAD (&n->domains);
 
 	ret = cherokee_buffer_init (&n->userdir);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	/* Return the object
 	 */
@@ -151,7 +158,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 		cherokee_table_free (vserver->logger_props);
 		vserver->logger_props = NULL;
 	}
-	
+
 	cherokee_buffer_mrproper (&vserver->userdir);
 
 	/* Destroy the virtual_entries
@@ -195,20 +202,17 @@ generate_rsa_params (gnutls_rsa_params *rsa_params)
 #endif /* HAVE_GNUTLS */
 
 
-
 ret_t 
 cherokee_virtual_server_has_tls (cherokee_virtual_server_t *vserver)
 {
-#ifndef HAVE_TLS
-	return ret_not_found;
-#endif
+#ifdef HAVE_TLS
 	if (! cherokee_buffer_is_empty (&vserver->server_cert))
 		return ret_ok;
 	if (! cherokee_buffer_is_empty (&vserver->server_key))
 		return ret_ok;
 	if (! cherokee_buffer_is_empty (&vserver->ca_cert))
 		return ret_ok;
-
+#endif
 	return ret_not_found;
 }
 
@@ -216,11 +220,9 @@ cherokee_virtual_server_has_tls (cherokee_virtual_server_t *vserver)
 ret_t 
 cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 {
+#ifdef HAVE_TLS
 	int rc;
 
-#ifndef HAVE_TLS
-	return ret_ok;
-#endif
 	/* Check if all of them are empty
 	 */
 	if (cherokee_buffer_is_empty (&vsrv->ca_cert)    &&
@@ -235,13 +237,13 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 	    cherokee_buffer_is_empty (&vsrv->server_cert))
 		return ret_error;
 
-#ifdef HAVE_GNUTLS
-        rc = gnutls_certificate_allocate_credentials (&vsrv->credentials);
+# ifdef HAVE_GNUTLS
+	rc = gnutls_certificate_allocate_credentials (&vsrv->credentials);
 	if (rc < 0) {
 		PRINT_ERROR_S ("ERROR: Couldn't allocate credentials.\n");
 		return ret_error;
 	}
-	
+
 	/* CA file
 	 */
 	rc = gnutls_certificate_set_x509_trust_file (vsrv->credentials,
@@ -270,9 +272,9 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 	gnutls_certificate_set_dh_params (vsrv->credentials, vsrv->dh_params);
 	gnutls_anon_set_server_dh_params (vsrv->credentials, vsrv->dh_params);
 	gnutls_certificate_set_rsa_export_params (vsrv->credentials, vsrv->rsa_params);
-#endif
+# endif
 
-#ifdef HAVE_OPENSSL
+# ifdef HAVE_OPENSSL
 	/* Init the OpenSSL context
 	 */
 	vsrv->context = SSL_CTX_new (SSLv23_server_method());
@@ -312,7 +314,9 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 		PRINT_ERROR_S("ERROR: OpenSSL: Private key does not match the certificate public key\n");
 		return ret_error;
 	}
-#endif
+# endif
+
+#endif /* HAVE_TLS */
 
 	return ret_ok;
 }
@@ -369,7 +373,8 @@ add_access (char *address, void *data)
 	}
 
 	ret = cherokee_access_add (entry->access, address);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	return ret_ok;
 }
@@ -386,10 +391,11 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 
 	if (equal_buf_str (&conf->key, "priority")) {
 		entry->priority = atoi(conf->val.buf);
-		
+
 	} else if (equal_buf_str (&conf->key, "allow_from")) {
 		ret = cherokee_config_node_read_list (conf, NULL, add_access, entry);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 
 	} else if (equal_buf_str (&conf->key, "document_root")) {
 		cherokee_config_node_read_path (conf, NULL, &tmp);
@@ -404,29 +410,32 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "handler")) {
 		tmp = &conf->val;
-		
+
 		ret = cherokee_plugin_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
-		if (ret != ret_ok) return ret;
-		
+		if (ret != ret_ok)
+			return ret;
+
 		if (info->configure) {
 			handler_func_configure_t configure = info->configure;
 
 			ret = configure (conf, vserver->server_ref, &entry->handler_properties);
-			if (ret != ret_ok) return ret;
+			if (ret != ret_ok)
+				return ret;
 		}
-		
+
 		TRACE(ENTRIES, "Handler: %s\n", tmp->buf);
 		cherokee_config_entry_set_handler (entry, PLUGIN_INFO_HANDLER(info));
 
 	} else if (equal_buf_str (&conf->key, "auth")) {
 		cherokee_plugin_info_validator_t *vinfo;
-	   
+
 		/* Load module
 		 */
 		tmp = &conf->val;
 
 		ret = cherokee_plugin_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 
 		entry->validator_new_func = info->instance;
 
@@ -442,7 +451,8 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		vinfo = (cherokee_plugin_info_validator_t *)info;
 
 		ret = cherokee_validator_configure (conf, entry);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 
 		if ((entry->authentication & vinfo->valid_methods) != entry->authentication) {
 			PRINT_MSG ("ERROR: '%s' unsupported methods\n", tmp->buf);
@@ -470,7 +480,8 @@ init_entry (cherokee_virtual_server_t *vserver, cherokee_config_node_t *config, 
 	void  *params[2] = { vserver, entry };
 
 	ret = cherokee_config_node_while (config, init_entry_property, (void *)params);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	return ret_ok;
 }
@@ -485,18 +496,21 @@ add_error_handler (cherokee_config_node_t *config, cherokee_virtual_server_t *vs
 	cherokee_buffer_t       *name   = &config->val;
 
 	ret = cherokee_config_entry_new (&entry);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	ret = cherokee_plugin_loader_get (&SRV(vserver->server_ref)->loader, name->buf, &info);
-	if (ret != ret_ok) return ret;
-		
+	if (ret != ret_ok)
+		return ret;
+
 	if (info->configure) {
 		handler_func_configure_t configure = info->configure;
 
 		ret = configure (config, vserver->server_ref, &entry->handler_properties);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 	}
-		
+
 	TRACE(ENTRIES, "Error handler: %s\n", name->buf);
 
 	cherokee_config_entry_set_handler (entry, PLUGIN_INFO_HANDLER(info));		
@@ -516,10 +530,12 @@ add_directory (cherokee_config_node_t *config, cherokee_virtual_server_t *vserve
 	/* Create a new entry
 	 */
 	ret = cherokee_config_entry_new (&entry);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	ret = init_entry (vserver, config, entry);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 	
 	if (equal_buf_str (&config->key, "/")) {
 		TRACE(ENTRIES, "Adding %s\n", "default directory");
@@ -550,26 +566,30 @@ add_extensions (cherokee_config_node_t *config, cherokee_virtual_server_t *vserv
 	char                      *ext = config->key.buf;
 
 	ret = cherokee_config_entry_new (&entry);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	ret = init_entry (vserver, config, entry);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	for (;;) {
 		end = strchr (ext, ',');
-		if (end != NULL) *end = '\0';
+		if (end != NULL)
+			*end = '\0';
 
 		ret = cherokee_exts_table_has (&ventry->exts, ext);
 		if (ret != ret_not_found) {
 			PRINT_MSG ("ERROR: Extension '%s' was already set\n", ext);
 			return ret_error;
 		}
-	
+
 		TRACE(ENTRIES, "Adding '%s' extension, priority %d\n", ext, entry->priority);
-		
+
 		ret = cherokee_exts_table_add (&ventry->exts, ext, entry);
-		if (ret != ret_ok) return ret;
-		
+		if (ret != ret_ok)
+			return ret;
+
 		if (end == NULL)
 			break;
 
@@ -605,7 +625,8 @@ add_request (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver,
 	TRACE(ENTRIES, "Adding '%s' request, priority %d\n", config->key.buf, CONF_ENTRY(entry)->priority);
 
 	ret = cherokee_reqs_list_add (&ventry->reqs, entry, SRV(vserver->server_ref)->regexs);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 #endif
 
 	return ret_ok;
@@ -620,7 +641,8 @@ add_domain (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 	TRACE (ENTRIES, "Adding vserver '%s' domain name '%s'\n", vserver->name.buf, config->val.buf);
 
 	ret = cherokee_vserver_names_add_name (&vserver->domains, &config->val);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	return ret_ok;
 }
@@ -648,16 +670,19 @@ add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 	/* Instance a new logger
 	 */
 	func_new = (logger_func_new_t) info->instance;
-	if (func_new == NULL) return ret_error;
+	if (func_new == NULL)
+		return ret_error;
 
 	ret = func_new ((void **) &vserver->logger, config);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	/* Logger initialization
 	 */
 	ret = cherokee_logger_init (vserver->logger);
-	if (ret != ret_ok) return ret;
-	
+	if (ret != ret_ok)
+		return ret;
+
 	return ret_ok;
 }
 
@@ -682,7 +707,8 @@ configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *v
 	if (ret == ret_ok) {
 		cherokee_config_node_foreach (i, subconf) {
 			ret = add_directory (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
-			if (ret != ret_ok) return ret;
+			if (ret != ret_ok)
+				return ret;
 		}
 	}
 
@@ -690,7 +716,8 @@ configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *v
 	if (ret == ret_ok) {
 		cherokee_config_node_foreach (i, subconf) {
 			ret = add_extensions (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
-			if (ret != ret_ok) return ret;
+			if (ret != ret_ok)
+				return ret;
 		}
 	}
 
@@ -698,7 +725,8 @@ configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *v
 	if (ret == ret_ok) {
 		cherokee_config_node_foreach (i, subconf) {
 			ret = add_request (CONFIG_NODE(i), vserver, &vserver->userdir_entry);
-			if (ret != ret_ok) return ret;
+			if (ret != ret_ok)
+				return ret;
 		}
 	}
 
@@ -717,7 +745,8 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 
 	if (equal_buf_str (&conf->key, "document_root")) {
 		ret = cherokee_config_node_read_path (conf, NULL, &tmp);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 		
 		ret = cherokee_virtual_server_set_documentroot (vserver, (const char *)tmp->buf);
 		if (ret != ret_ok) {
@@ -727,35 +756,42 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "user_dir")) {
 		ret = configure_user_dir (conf, vserver);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 
 	} else if (equal_buf_str (&conf->key, "directory")) {
 		cherokee_config_node_foreach (i, conf) {
 			ret = add_directory (CONFIG_NODE(i), vserver, &vserver->entry);
-			if (ret != ret_ok) return ret;
+			if (ret != ret_ok)
+				return ret;
 		}
 	} else if (equal_buf_str (&conf->key, "extensions")) {
 		cherokee_config_node_foreach (i, conf) {
 			ret = add_extensions (CONFIG_NODE(i), vserver, &vserver->entry);
-			if (ret != ret_ok) return ret;
+			if (ret != ret_ok)
+				return ret;
 		}
 	} else if (equal_buf_str (&conf->key, "request")) {
 		cherokee_config_node_foreach (i, conf) {
 			ret = add_request (CONFIG_NODE(i), vserver, &vserver->entry);
-			if (ret != ret_ok) return ret;
+			if (ret != ret_ok)
+				return ret;
 		}
 	} else if (equal_buf_str (&conf->key, "domain")) {
 		cherokee_config_node_foreach (i, conf) {
 			ret = add_domain (CONFIG_NODE(i), vserver);
-			if (ret != ret_ok) return ret;		
+			if (ret != ret_ok)
+				return ret;		
 		}
 	} else if (equal_buf_str (&conf->key, "error_handler")) {
 		ret = add_error_handler (conf, vserver);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 
 	} else if (equal_buf_str (&conf->key, "logger")) {
 		ret = add_logger (conf, vserver);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 
 	} else if (equal_buf_str (&conf->key, "directory_index")) {
 		cherokee_config_node_read_list (conf, NULL, add_directory_index, vserver);
@@ -763,7 +799,7 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "ssl_certificate_file")) {
 		cherokee_buffer_init (&vserver->server_cert);
 		cherokee_buffer_add_buffer (&vserver->server_cert, &conf->val);
-		
+
 	} else if (equal_buf_str (&conf->key, "ssl_certificate_key_file")) {
 		cherokee_buffer_init (&vserver->server_key);
 		cherokee_buffer_add_buffer (&vserver->server_key, &conf->val);
@@ -771,12 +807,12 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "ssl_ca_list_file")) {
 		cherokee_buffer_init (&vserver->ca_cert);
 		cherokee_buffer_add_buffer (&vserver->ca_cert, &conf->val);
-		
+
 	} else {
 		PRINT_MSG ("ERROR: Virtual Server: Unknown key '%s'\n", key);
 		return ret_error;
 	}
-	
+
 	return ret_ok;
 }
 
@@ -795,7 +831,8 @@ cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver, cherokee_
 	/* Parse properties
 	 */
 	ret = cherokee_config_node_while (config, configure_virtual_server_property, vserver);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	/* Perform some sanity checks
 	 */

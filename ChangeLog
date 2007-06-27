@@ -1,3 +1,14 @@
+
+2007-06-27  A.D.F  <adefacc@tin.it>
+
+	* cherokee/levenshtein_distance.c,
+	  cherokee/virtual_server_names.c,
+	  cherokee/virtual_server.c,
+	  cherokee/virtual_entries.c
+	  - space / indentation / style cleanups;
+	  - changed #ifdef HAVE_TLS ... #endif
+	    scope in order to not compile unreacheable code.
+
 2007-06-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/win32_misc.c: Shouldn't return a pointer to a local
