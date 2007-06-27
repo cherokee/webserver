@@ -1,9 +1,16 @@
+
+2007-06-27  A.D.F  <adefacc@tin.it>
+
+	* cherokee/server.c:
+	- removed multiple calls to cherokee_iocache_cleanup();
+
 2007-06-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/win32_misc.c (win_strerror): Fixed infinite
 	recursion. Patch by Ross Smith II, and Gisle Vanem.
 
-2007-05-25  A.D.F  <adefacc@tin.it>
+2007-06-25  A.D.F  <adefacc@tin.it>
+
 	* cherokee/server.c:
         - removed multiple calls to cherokee_iocache_cleanup();
         - space cleanups;
@@ -11,7 +18,7 @@
 	* cherokee/win32_misc.c:
         - space / indentation cleanup.
 
-2007-05-21  A.D.F  <adefacc@tin.it>
+2007-06-21  A.D.F  <adefacc@tin.it>
 
 	* cherokee/connection_info.c:
         - fix, added MUTEX_UNLOCK where required;
@@ -57,17 +64,17 @@
 2007-06-01  A.D.F  <adefacc@tin.it>
 
 	* cherokee/connection.c:
-        - sparse cleanups;
-	- cherokee_connection_linger_read(),
-	  retry read only if tmp_buf has been completely filled
-	  so that we spare one read during linger phase
-	  (cherokee_connection_linger_read() is called
-	   in thread.c -> purge_connection() too, so it should
-	   try to read EOF if EOF has not been read yet);
+	  - sparse cleanups;
+	  - cherokee_connection_linger_read(),
+	    retry read only if tmp_buf has been completely filled
+	    so that we spare one read during linger phase
+	    (cherokee_connection_linger_read() is called
+	    in thread.c -> purge_connection() too, so it should
+	    try to read EOF if EOF has not been read yet);
 
 	* cherokee/fcgi_manager.c:	
-        - cherokee_fcgi_manager_send_remove(),
-	  removed redundant break (replaced by a return).
+	  - cherokee_fcgi_manager_send_remove(),
+	    removed redundant break (replaced by a return).
 
 2007-05-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 

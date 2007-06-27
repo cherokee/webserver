@@ -203,9 +203,9 @@ cherokee_url_build_string (cherokee_url_t *url, cherokee_buffer_t *buf)
 	cherokee_buffer_add_buffer (buf, &url->host);
 
 	if (((url->protocol == http)  && (url->port != 80)) ||
-	    ((url->protocol == https) && (url->port != 443))) 
-	{
-		cherokee_buffer_add_va (buf, ":%d", url->port);
+	    ((url->protocol == https) && (url->port != 443))) {
+		cherokee_buffer_add_char (buf, ':');
+		cherokee_buffer_add_ulong10 (buf, (culong_t) url->port);
 	}
 
 	cherokee_buffer_add_buffer (buf, &url->request);
