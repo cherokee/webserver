@@ -1,8 +1,9 @@
 
 2007-06-27  A.D.F  <adefacc@tin.it>
 
-	* cherokee/server.c:
-	- removed multiple calls to cherokee_iocache_cleanup();
+	* cherokee/url.c:
+	  - replaced cherokee_buffer_add_va() with equivalent
+	    but faster cherokee_buffer_add_xxx() functions.
 
 2007-06-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
