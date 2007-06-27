@@ -1,6 +1,13 @@
 
 2007-06-27  A.D.F  <adefacc@tin.it>
 
+	* cherokee/win32_misc.c
+	  - added a few TODO comments on non-thread safe
+	    functions;
+	  - micro style cleanups.
+
+2007-06-27  A.D.F  <adefacc@tin.it>
+
 	* cherokee/url.c:
 	  - replaced cherokee_buffer_add_va() with equivalent
 	    but faster cherokee_buffer_add_xxx() functions.
@@ -55,7 +62,7 @@
 	first approach to solve the problem, but there is still work to be
 	done.
 
-2007-05-11  A.D.F  <adefacc@tin.it>
+2007-06-11  A.D.F  <adefacc@tin.it>
 
 	* cherokee/handler_common.c: 
         - always test for ret == ret_ok before assigning

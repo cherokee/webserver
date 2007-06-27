@@ -374,10 +374,12 @@ static char *get_winsock_error (int err, char *buf, size_t len)
 
 /*
  * A smarter strerror()
+ *
+ * TODO: make this function thread-safe (by using some smart trick).
  */
 char *win_strerror (int err)
 {
-	static char buf[512];   /* !! not thread-safe */
+	static char buf[512];   /* WARNING!! not thread-safe */
 	DWORD  lang  = MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT);
 	DWORD  flags = FORMAT_MESSAGE_FROM_SYSTEM |
 	               FORMAT_MESSAGE_IGNORE_INSERTS |
@@ -614,9 +616,12 @@ int win_dlclose (const void *dll_handle)
 }
 
 
+/*
+ * TODO: make this function thread-safe (by using some smart trick).
+ */
 const char *win_dlerror (void)
 {
-	static char errbuf[1024];  /* !! not thread-safe */
+	static char errbuf[1024];  /* WARNING!! not thread-safe */
 
 	if (!last_error)
 		return (NULL);
@@ -625,6 +630,7 @@ const char *win_dlerror (void)
 			last_func, win_strerror(last_error));
 	return (errbuf);
 }
+
 #endif  /* CHEROKEE_EMBEDDED */
 
 
@@ -1003,7 +1009,7 @@ cherokee_win32_stat (const char *path, struct stat *buf)
 
 	re = stat ((const char *)p, buf);
 
-	for (e-=1; e>0; e--) {
+	for (e -= 1; e > 0; e--) {
 		p[len-(e+1)] = '/';
 	}
 
