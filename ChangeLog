@@ -1,4 +1,23 @@
 
+2007-06-29  A.D.F  <adefacc@tin.it>
+
+	* cherokee/macros.h
+	  - added new macros: CHEROKEE_MK_TYPE, CHEROKEE_MK_NEW,
+	    CHEROKEE_DCL_STRUCT;
+	  - modified other CHEROKEE_* macros in order to avoid
+	    macro duplication.
+
+2007-06-29  A.D.F  <adefacc@tin.it>
+
+	* cherokee/validator_plain.c,
+	  cherokee/validator_pam.c,
+	  cherokee/validator_mysql.c,
+	  cherokee/validator_ldap.c,
+	  cherokee/validator_htpasswd.c,
+	  cherokee/validator_htdigest.c,
+	  cherokee/validator.c
+	  - space / indentation / style cleanups.
+
 2007-06-27  A.D.F  <adefacc@tin.it>
 
 	* cherokee/levenshtein_distance.c,

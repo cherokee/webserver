@@ -175,24 +175,54 @@
 	} while (0)
 
 
-#define CHEROKEE_NEW_STRUCT(obj,type) \
-	cherokee_ ## type ## _t * obj = (cherokee_ ## type ## _t *) malloc (sizeof(cherokee_ ## type ## _t)); \
+/* Make cherokee type.
+ */
+#define CHEROKEE_MK_TYPE(type) \
+	cherokee_ ## type ## _t
+
+/* Make cherokee new type function.
+ */
+#define CHEROKEE_MK_NEW(obj,type) \
+	cherokee_ ## type ## _new (& obj )
+
+/* Declare struct.
+ */
+#define CHEROKEE_DCL_STRUCT(obj,type) \
+	CHEROKEE_MK_TYPE(type) * obj
+
+/* Declare and allocate a new struct.
+ */
+#define CHEROKEE_NEW_STRUCT(obj,type)                              \
+	CHEROKEE_DCL_STRUCT(obj,type) = (CHEROKEE_MK_TYPE(type) *) \
+	malloc (sizeof(CHEROKEE_MK_TYPE(type)));                   \
 	return_if_fail (obj != NULL, ret_nomem)
 
-#define CHEROKEE_CNEW_STRUCT(nmemb,obj,type) \
-	cherokee_ ## type ## _t * obj = (cherokee_ ## type ## _t *) calloc ((nmemb), sizeof(cherokee_ ## type ## _t)); \
+/* Declare and allocate a zeroed new struct.
+ */
+#define CHEROKEE_CNEW_STRUCT(nmemb,obj,type)                       \
+	CHEROKEE_DCL_STRUCT(obj,type) = (CHEROKEE_MK_TYPE(type) *) \
+	calloc ((nmemb), sizeof(CHEROKEE_MK_TYPE(type)));          \
 	return_if_fail (obj != NULL, ret_nomem)
 
+/* Declare and initialize a new object.
+ */
 #define CHEROKEE_NEW(obj,type)                   \
-	cherokee_ ## type ## _t * obj;           \
-	cherokee_ ## type ## _new (& obj );      \
+	CHEROKEE_DCL_STRUCT(obj,type) = NULL;    \
+	CHEROKEE_MK_NEW(obj,type);               \
 	return_if_fail (obj != NULL, ret_nomem)
 
+/* Decleare and initialize two new object.
+ * NOTE: if the second object allocation fails,
+ *       then we leak memory of obj1, anyway, as this is a half disaster,
+ *       and it is likely that cherokee will exit because of this,
+ *       we don't care too much (for now).
+ */
 #define CHEROKEE_NEW2(obj1,obj2,type)             \
-	cherokee_ ## type ## _t * obj1, *obj2;    \
-	cherokee_ ## type ## _new (& obj1 );      \
-	cherokee_ ## type ## _new (& obj2 );      \
-	return_if_fail (obj1 != NULL, ret_nomem); \
+	CHEROKEE_DCL_STRUCT(obj1,type) = NULL;    \
+	CHEROKEE_DCL_STRUCT(obj2,type) = NULL;    \
+	CHEROKEE_MK_NEW(obj1,type);               \
+	CHEROKEE_MK_NEW(obj2,type);               \
+	return_if_fail (obj1 != NULL, ret_nomem)  \
 	return_if_fail (obj2 != NULL, ret_nomem)
 
 #define CHEROKEE_NEW_TYPE(obj,type) \
