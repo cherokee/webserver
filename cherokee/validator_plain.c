@@ -43,6 +43,7 @@ props_free (cherokee_validator_plain_props_t *props)
 	return cherokee_validator_props_free_base (VALIDATOR_PROPS(props));
 }
 
+
 ret_t 
 cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
@@ -114,11 +115,10 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_conn
 	FILE  *f;
 	ret_t  ret;
 
-        if (unlikely ((conn->validator == NULL) || 
-		      cherokee_buffer_is_empty(&conn->validator->user)))
-	{
-                return ret_error;
-        }
+	if (unlikely ((conn->validator == NULL) || 
+	    cherokee_buffer_is_empty(&conn->validator->user))) {
+		return ret_error;
+	}
 
 	f = fopen (VAL_PLAIN_PROP(plain)->password_file.buf, "r"); 
 	if (f == NULL) {
@@ -154,7 +154,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_conn
 		/* Is this the right user? 
 		 */
 		if (strncmp (conn->validator->user.buf, line, 
-			     conn->validator->user.len) != 0) {
+		        conn->validator->user.len) != 0) {
 			continue;
 		}
 
@@ -182,7 +182,8 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_conn
 
 		case http_auth_digest:
 			ret = cherokee_validator_digest_check (VALIDATOR(plain), pass, conn);
-			if (ret == ret_ok) goto go_out;
+			if (ret == ret_ok)
+				goto go_out;
 			break;
 
 		default:
@@ -201,5 +202,4 @@ cherokee_validator_plain_add_headers (cherokee_validator_plain_t *plain, cheroke
 {
 	return ret_ok;
 }
-
 

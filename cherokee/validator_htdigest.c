@@ -40,6 +40,7 @@ props_free (cherokee_validator_htdigest_props_t *props)
 	return cherokee_validator_props_free_base (VALIDATOR_PROPS(props));
 }
 
+
 ret_t 
 cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
@@ -100,6 +101,7 @@ cherokee_validator_htdigest_free (cherokee_validator_htdigest_t *htdigest)
 	return ret_ok;
 }
 
+
 static ret_t
 build_HA1 (cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
@@ -107,6 +109,7 @@ build_HA1 (cherokee_connection_t *conn, cherokee_buffer_t *buf)
 	cherokee_buffer_encode_md5_digest (buf);
 	return ret_ok;
 }
+
 
 static ret_t
 extract_user_entry (cherokee_buffer_t *file, char *user_, char **user, char **realm, char **passwd)
@@ -127,25 +130,26 @@ extract_user_entry (cherokee_buffer_t *file, char *user_, char **user, char **re
 		/* Check the user
 		 */
 		if ((pos[user_len] == ':') && 
-		    (strncmp (pos, user_, user_len) == 0))
-		{
+		    (strncmp (pos, user_, user_len) == 0)) {
 			char *tmp;
 
 			*user = pos;
-			
+
 			tmp = strchr(pos, ':');
-			if (!tmp) return ret_error;
+			if (!tmp)
+				return ret_error;
 			*tmp = '\0';
 			*realm = tmp + 1;
-			
+
 			tmp = strchr (*realm, ':');
-			if (!tmp) return ret_error;
+			if (!tmp)
+				return ret_error;
 			*tmp = '\0';
 			*passwd = tmp + 1;
 
 			return ret_ok;
 		}
-		
+
 		/* Look for the next line
 		 */
 		pos = eol;
@@ -169,7 +173,8 @@ validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *
 	/* Extact the right entry information
 	 */
 	ret = extract_user_entry (file, conn->validator->user.buf, &user, &realm, &passwd);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	/* Build the hash
 	 */
@@ -179,7 +184,7 @@ validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *
 	 */
 	equal = (strncmp(ha1.buf, passwd, ha1.len) == 0);
 	cherokee_buffer_mrproper (&ha1);
-	
+
 	return (equal) ? ret_ok : ret_not_found;
 }
 
@@ -201,18 +206,20 @@ validate_digest (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t 
 	/* Extact the right entry information
 	 */
 	ret = extract_user_entry (file, conn->validator->user.buf, &user, &realm, &passwd);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	/* Build the hash:
 	 * In this case passwd is the HA1 hash: md5(user:realm:passwd)
 	 */
 	ret = cherokee_validator_digest_response (VALIDATOR(htdigest), passwd, &buf, conn);
-	if (unlikely(ret != ret_ok)) goto go_out;
-	
+	if (unlikely(ret != ret_ok))
+		goto go_out;
+
 	/* Compare and return
 	 */
 	ret = cherokee_buffer_cmp_buf (&conn->validator->response, &buf);
-	
+
 go_out:
 	cherokee_buffer_mrproper (&buf);
 	return ret;
@@ -227,7 +234,8 @@ cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest, cher
 	
 	/* Ensure that we have all what we need
 	 */
-	if ((conn->validator == NULL) || cherokee_buffer_is_empty (&conn->validator->user)) 
+	if ((conn->validator == NULL) ||
+	    cherokee_buffer_is_empty (&conn->validator->user)) 
 		return ret_error;
 
 	if (cherokee_buffer_is_empty (&VAL_HTDIGEST_PROP(htdigest)->password_file))
@@ -264,6 +272,4 @@ cherokee_validator_htdigest_add_headers (cherokee_validator_htdigest_t *htdigest
 {
 	return ret_ok;
 }
-
-
 

@@ -74,7 +74,6 @@ cherokee_validator_pam_free (cherokee_validator_pam_t *pam)
 }
 
 
-
 /*
  * auth_pam_talker: supply authentication information to PAM when asked
  *
@@ -158,7 +157,7 @@ cherokee_validator_pam_check (cherokee_validator_pam_t  *pam, cherokee_connectio
 	 */
 #ifdef HAVE_PAM_FAIL_DELAY
 	ret = pam_fail_delay (pamhandle, 0);
-        if (ret != PAM_SUCCESS) {
+	if (ret != PAM_SUCCESS) {
 		cherokee_buffer_t msg = CHEROKEE_BUF_INIT;
 		
 		cherokee_buffer_add_str (&msg, "Setting pam fail delay failed");
@@ -231,6 +230,4 @@ cherokee_validator_pam_add_headers (cherokee_validator_pam_t  *pam, cherokee_con
 {
 	return ret_ok;
 }
-
-
 

@@ -51,6 +51,7 @@ props_free (cherokee_validator_htpasswd_props_t *props)
 	return cherokee_validator_props_free_base (VALIDATOR_PROPS(props));
 }
 
+
 ret_t 
 cherokee_validator_htpasswd_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
@@ -63,7 +64,7 @@ cherokee_validator_htpasswd_configure (cherokee_config_node_t *conf, cherokee_se
 
 		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), MODULE_PROPS_FREE(props_free));
 		cherokee_buffer_init (&n->password_file);
-		
+
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -109,7 +110,6 @@ cherokee_validator_htpasswd_free (cherokee_validator_htpasswd_t *htpasswd)
 	cherokee_validator_free_base (VALIDATOR(htpasswd));
 	return ret_ok;
 }
-
 
 
 #if !defined(HAVE_CRYPT_R) && defined(HAVE_PTHREAD)
@@ -324,7 +324,7 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd, cher
 		if (strncmp (cryp, "$apr1$", 6) == 0) {
 			const char *magic = "$apr1$";
 			ret_auth = validate_md5 (conn, magic, cryp);
-			
+
 		} else if (strncmp (cryp, "$1$", 3) == 0) {
 			const char *magic = "$1$";
 			ret_auth = validate_md5 (conn, magic, cryp);
@@ -350,15 +350,15 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd, cher
 
 	/* Check the authentication returned value
 	 */
-	if (ret_auth < ret_ok) {
+	if (ret_auth < ret_ok)
 		return ret_auth;
-	}
 
 	/* 2.- Security check:
 	 * Is the client trying to download the passwd file?
 	 */
 	ret = request_isnt_passwd_file (htpasswd, conn);	
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	return ret_ok;
 }
@@ -369,5 +369,4 @@ cherokee_validator_htpasswd_add_headers (cherokee_validator_htpasswd_t *htpasswd
 {
 	return ret_ok;
 }
-
 
