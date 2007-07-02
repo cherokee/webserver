@@ -1,6 +1,12 @@
 
 2007-07-02  A.D.F  <adefacc@tin.it>
 
+	* cherokee/win32_misc.c
+	  - win_strerror(): moved a string termination;
+	  - win_dlerror(): added missing ';' (my bad).
+
+2007-07-02  A.D.F  <adefacc@tin.it>
+
 	* cherokee/plugin_loader.c
 	  - removed redundant call to cherokee_buffer_mrproper (my bad);
 	  - removed a goto;

@@ -393,7 +393,6 @@ char *win_strerror (int err, char *buf, size_t bufsize)
 		return NULL;
 
 	buf[0] = '\0';
-	buf [bufsize-1] = '\0';
 
 	if (err >= 0 && err < sys_nerr) {
 		/* Call the strerror() func, do not use the macro! */
@@ -404,6 +403,8 @@ char *win_strerror (int err, char *buf, size_t bufsize)
 			buf, bufsize - 1, NULL))
 			snprintf (buf, bufsize, "Unknown error %d (%#x)", err, err);
 	}
+
+	buf [bufsize-1] = '\0';
 
 	/* strip trailing '\r\n' or '\n'.
 	 */
@@ -637,7 +638,7 @@ const char *win_dlerror (void)
 
 	{
 	static char win_dlerror_buf[ERROR_MAX_BUFSIZE];
-	char buf[ERROR_MAX_BUFSIZE]
+	char buf[ERROR_MAX_BUFSIZE];
 	snprintf (win_dlerror_buf, sizeof(win_dlerror_buf)-1, "%s(): %s",
 			last_func, win_strerror(last_error, buf, sizeof(buf)));
 	}
