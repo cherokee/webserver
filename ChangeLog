@@ -1,6 +1,15 @@
 
 2007-07-02  A.D.F  <adefacc@tin.it>
 
+	* cherokee/win32_misc.c
+	  - added comments about MUTEX_LOCK protection to win_dlerror();
+
+	* cherokee/plugin_loader.c
+	  - added MUTEX_LOCK protection to dlerror() calls;
+	  - added a few missing cherokee_buffer_mrproper() calls.
+
+2007-07-02  A.D.F  <adefacc@tin.it>
+
 	* cherokee/util.h
 	  - added new cherokee_strerror_r() prototype;
 

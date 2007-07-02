@@ -40,6 +40,11 @@
 typedef cherokee_plugin_loader_entry_t entry_t;
 
 
+#if defined(HAVE_PTHREAD)
+static pthread_mutex_t dlerror_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
+
+
 #ifdef CHEROKEE_EMBEDDED
 
 ret_t
@@ -212,13 +217,17 @@ get_sym_from_dlopen_handler (void *dl_handle, const char *sym)
 	   
 	/* Clear the possible error and look for the symbol
 	 */
+
+	CHEROKEE_MUTEX_LOCK (&dlerror_mutex);
 	dlerror();
 	re = (void *) dlsym(dl_handle, sym);
 	if ((error = dlerror()) != NULL)  {
 		PRINT_MSG ("ERROR: %s\n", error);
+		CHEROKEE_MUTEX_UNLOCK (&dlerror_mutex);
 		return NULL;
 	}
-	
+	CHEROKEE_MUTEX_UNLOCK (&dlerror_mutex);
+
 	return re;
 }
 
@@ -239,15 +248,21 @@ dylib_open (cherokee_plugin_loader_t  *loader,
 	/* Build the path string
 	 */
 	ret = cherokee_buffer_add_va (&tmp, "%s/libplugin_%s." MOD_SUFFIX, loader->module_dir.buf, libname);
-	if (unlikely(ret < ret_ok)) return ret;
-	
+	if (unlikely(ret < ret_ok)) {
+		cherokee_buffer_mrproper (&tmp);
+		return ret;
+	}
 	/* Open the library	
 	 */
+	CHEROKEE_MUTEX_LOCK (&dlerror_mutex);
 	lib = dlopen (tmp.buf, flags);
 	if (lib == NULL) {
 		PRINT_ERROR ("ERROR: dlopen(%s): %s\n", tmp.buf, dlerror());
+		CHEROKEE_MUTEX_UNLOCK (&dlerror_mutex);
+		cherokee_buffer_mrproper (&tmp);
 		goto error;
 	}
+	CHEROKEE_MUTEX_UNLOCK (&dlerror_mutex);
 
 	/* Free the memory
 	 */
@@ -272,19 +287,24 @@ execute_init_func (cherokee_plugin_loader_t *loader, const char *module, entry_t
 	/* Build the init function name
 	 */
 	ret = cherokee_buffer_add_va (&init_name, "cherokee_plugin_%s_init", module);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok)) {
+		cherokee_buffer_mrproper (&init_name);
+		return ret;
+	}
 
 	/* Get the function
 	 */
-	if (entry->dlopen_ref == NULL) 
+	if (entry->dlopen_ref == NULL) {
+		cherokee_buffer_mrproper (&init_name);
 		return ret_error;
+	}
 
 	init_func = get_sym_from_dlopen_handler (entry->dlopen_ref, init_name.buf);
 		
 	/* Only try to execute if it exists
 	 */
 	if (init_func == NULL) {
-		PRINT_ERROR ("WARNING: %s doesn't found\n", init_name.buf);
+		PRINT_ERROR ("WARNING: %s was not found\n", init_name.buf);
 
 		cherokee_buffer_mrproper (&init_name);
 		return ret_not_found;
@@ -319,24 +339,20 @@ get_info (cherokee_plugin_loader_t  *loader,
 	 */
 	ret = dylib_open (loader, module, flags, dl_handler);
 	if (ret != ret_ok) {
-		ret = ret_error;
-		goto error;
+		cherokee_buffer_mrproper (&info_name);
+		return ret_error;
 	}
 	
 	*info = get_sym_from_dlopen_handler (*dl_handler, info_name.buf);
 	if (*info == NULL) {
-		ret = ret_not_found;
-		goto error;
+		cherokee_buffer_mrproper (&info_name);
+		return ret_not_found;
 	}
 
 	/* Free the info struct string
 	 */
 	cherokee_buffer_mrproper (&info_name);
 	return ret_ok;
-
-error:
-	cherokee_buffer_mrproper (&info_name);
-	return ret;	
 }
 
 
@@ -356,12 +372,15 @@ check_deps_file (cherokee_plugin_loader_t *loader, char *modname)
 		char *ret;
 
 		ret = fgets (temp, 127, file);
-		if (ret == NULL) break;
+		if (ret == NULL)
+			break;
 
 		len = strlen (temp); 
 
-		if (len < 2) continue;
-		if (temp[0] == '#') continue;
+		if (len < 2)
+			continue;
+		if (temp[0] == '#')
+			continue;
 		
 		if (temp[len-1] == '\n')
 			temp[len-1] = '\0';
@@ -389,12 +408,14 @@ load_common (cherokee_plugin_loader_t *loader, char *modname, int flags)
 	/* If it is already loaded just return 
 	 */
 	ret = cherokee_table_get (&loader->table, modname, (void **)&entry);
-	if (ret == ret_ok) return ret_ok;
+	if (ret == ret_ok)
+		return ret_ok;
 	
 	/* Check deps
 	 */
 	ret = check_deps_file (loader, modname);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	/* Get the module info
 	 */
@@ -420,12 +441,18 @@ load_common (cherokee_plugin_loader_t *loader, char *modname, int flags)
 	entry->info       = info; 
 	
 	ret = cherokee_table_add (&loader->table, modname, entry);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok)) {
+		dlclose (entry->dlopen_ref);
+		free(entry);
+		return ret;
+	}
 
 	/* Execute init function
 	 */
 	ret = execute_init_func (loader, modname, entry);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) {
+		return ret;
+	}
 
 	return ret_ok;
 }
@@ -459,7 +486,8 @@ cherokee_plugin_loader_unload (cherokee_plugin_loader_t *loader, char *modname)
 	/* Remove item from the table
 	 */
 	ret = cherokee_table_del (&loader->table, modname, (void **)&entry);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	/* Free the resources
 	 */

@@ -626,16 +626,17 @@ int win_dlclose (const void *dll_handle)
 
 
 /*
- * TODO: make this function thread-safe (by using some smart trick).
+ * NOTE: this function is alwasy called under a mutex_lock protection,
+ *       so returning a pointer to a internal static buffer works
+ *       even in a threaded environment.
  */
-static char win_dlerror_buf[1024];  /* WARNING!! not thread-safe */
-
 const char *win_dlerror (void)
 {
 	if (! last_error)
 		return (NULL);
 
-	{	/* FIXME, error buf should be passed by caller. */
+	{
+	static char win_dlerror_buf[ERROR_MAX_BUFSIZE];
 	char buf[ERROR_MAX_BUFSIZE]
 	snprintf (win_dlerror_buf, sizeof(win_dlerror_buf)-1, "%s(): %s",
 			last_func, win_strerror(last_error, buf, sizeof(buf)));
@@ -655,7 +656,7 @@ const char *win_dlerror (void)
 #define	INADDRSZ      4
 #define	INT16SZ	    2
 
-/* Set both incase user was dumb enough to use the original strerror()
+/* Set both in case user was dumb enough to use the original strerror()
  */
 #define SET_ERRNO(e)  WSASetLastError (errno = (e))
 
