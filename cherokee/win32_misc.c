@@ -74,7 +74,8 @@ void init_win32 (void)
 
 	re = WSAStartup (MAKEWORD(1,1), &wsa_data);
 	if (re != 0) {
-		PRINT_ERROR ("WSAStartup failed; %s\n", win_strerror(GetLastError()));
+		char errbuf[ERROR_MAX_BUFSIZE];
+		PRINT_ERROR ("WSAStartup failed; %s\n", win_strerror(GetLastError(), errbuf, sizeof(errbuf)));
 		exit (-1);
 	}
 
@@ -375,26 +376,33 @@ static char *get_winsock_error (int err, char *buf, size_t len)
 /*
  * A smarter strerror()
  *
- * TODO: make this function thread-safe (by using some smart trick).
+ * NOTE: buf is a buffer passed by caller of at least ERROR_MIN_BUFSIZE size.
  */
-char *win_strerror (int err)
+char *win_strerror (int err, char *buf, size_t bufsize)
 {
-	static char buf[512];   /* WARNING!! not thread-safe */
 	DWORD  lang  = MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT);
 	DWORD  flags = FORMAT_MESSAGE_FROM_SYSTEM |
 	               FORMAT_MESSAGE_IGNORE_INSERTS |
 	               FORMAT_MESSAGE_MAX_WIDTH_MASK;
 	char  *p;
 
+	if (buf == NULL)
+		return NULL;
+
+	if (bufsize < ERROR_MIN_BUFSIZE)
+		return NULL;
+
+	buf[0] = '\0';
+	buf [bufsize-1] = '\0';
+
 	if (err >= 0 && err < sys_nerr) {
 		/* Call the strerror() func, do not use the macro! */
-		strncpy (buf, (strerror)(err), sizeof(buf)-1);
-		buf [sizeof(buf)-1] = '\0';
+		strncpy (buf, (strerror)(err), bufsize - 1);
 	} else {
-		if (!get_winsock_error (err, buf, sizeof(buf)) &&
+		if (!get_winsock_error (err, buf, bufsize - 1) &&
 		    !FormatMessage (flags, NULL, err, lang,
-			buf, sizeof(buf)-1, NULL))
-			sprintf (buf, "Unknown error %d (%#x)", err, err);
+			buf, bufsize - 1, NULL))
+			snprintf (buf, bufsize, "Unknown error %d (%#x)", err, err);
 	}
 
 	/* strip trailing '\r\n' or '\n'.
@@ -403,6 +411,7 @@ char *win_strerror (int err)
 		*p = '\0';
 	if ((p = strrchr(buf,'\r')) != NULL && (p - buf) >= 1)
 		*p = '\0';
+
 	return (buf);
 }
 
@@ -626,9 +635,11 @@ const char *win_dlerror (void)
 	if (! last_error)
 		return (NULL);
 
+	{	/* FIXME, error buf should be passed by caller. */
+	char buf[ERROR_MAX_BUFSIZE]
 	snprintf (win_dlerror_buf, sizeof(win_dlerror_buf)-1, "%s(): %s",
-			last_func, win_strerror(last_error));
-
+			last_func, win_strerror(last_error, buf, sizeof(buf)));
+	}
 	return (win_dlerror_buf);
 }
 

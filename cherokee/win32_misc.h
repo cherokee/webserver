@@ -32,11 +32,10 @@
 
 #undef  localtime_r       /* in <pthread.h> */
 #define SHUT_WR           SD_SEND
-#define strerror(e)       win_strerror(e)
 #define pipe(h)           _pipe(h,0,0)
 
 void          init_win32          (void);
-char         *win_strerror        (int err);
+char         *win_strerror        (int err, char *buf, size_t bufsize);
 struct tm    *localtime_r         (const time_t *time, struct tm *tm);
 unsigned int  sleep               (unsigned int seconds);
 

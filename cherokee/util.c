@@ -86,6 +86,36 @@
 
 const char *cherokee_version    = PACKAGE_VERSION;
 
+/* Given an error number (errno) it returns an error string.
+ * Parameters "buf" and "bufsize" are passed by caller
+ * in order to make the function "thread safe".
+ * If the error number is unknown
+ * then an "Unknown error nnn" string is returned.
+ */
+char *
+cherokee_strerror_r (int err, char *buf, size_t bufsize)
+{
+#ifdef _WIN32
+	return win_strerror (err, buf, bufsize);
+#else
+	char *p;
+	if (buf == NULL)
+		return NULL;
+
+	if (bufsize < ERROR_MIN_BUFSIZE)
+		return NULL;
+
+	if ((p = strerror(err)) == NULL) {
+		buf[0] = '\0';
+		snprintf(buf, bufsize, "Unknown error %d (errno)", err);
+		buf[bufsize-1] = '\0';
+		return buf;
+	}
+
+	return p;
+#endif
+}
+
 
 /* This function is licenced under:
  * The Apache Software License, Version 1.1

@@ -1,4 +1,33 @@
 
+2007-07-02  A.D.F  <adefacc@tin.it>
+
+	* cherokee/util.h
+	  - added new cherokee_strerror_r() prototype;
+
+	* cherokee/util.c
+	  - added new cherokee_strerror_r() function
+	    in order to ensure thread safety;
+
+	* cherokee/win32_misc.h
+	  - changed win_strerror() prototype;
+
+	* cherokee/win32_misc.c
+	  - changed win_strerror() function to accept
+	    a buffer in formal parameters;
+
+	* cherokee/buffer.c,
+	  cherokee/cherokee_logrotate.c,
+	  cherokee/fdpoll_epoll.c,
+	  cherokee/fdpoll_kqueue.c,
+	  cherokee/fdpoll_port.c,
+	  cherokee/handler_cgi.c,
+	  cherokee/logger_writer.c,
+	  cherokee/ncpus.c,
+	  cherokee/server.c,
+	  cherokee/socket.c,
+	  cherokee/validator_ldap.c
+	  - replaced strerror() with cherokee_strerror_r() calls.
+
 2007-06-29  A.D.F  <adefacc@tin.it>
 
 	* cherokee/macros.h

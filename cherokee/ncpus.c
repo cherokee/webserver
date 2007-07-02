@@ -24,6 +24,7 @@
 
 #include "config.h"
 #include "ncpus.h"
+#include "util.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -56,7 +57,8 @@ int dcc_ncpus(int *ncpus)
         *ncpus = psd.psd_proc_cnt;
         return 0;
     } else {
-        fprintf (stderr, "pstat_getdynamic failed: %s", strerror(errno));
+	char buferr[ERROR_MAX_BUFSIZE];
+        fprintf (stderr, "pstat_getdynamic failed: %s", cherokee_strerror_r(errno, buferr, sizeof(buferr)));
         *ncpus = -1;
         return EXIT_DISTCC_FAILED;
     }
@@ -108,8 +110,9 @@ int dcc_ncpus(int *ncpus)
     if (sysctl(mib, 2, ncpus, &len, NULL, 0) == 0)
         return 0;
     else {
+	char buferr[ERROR_MAX_BUFSIZE];
         fprintf(stderr,"sysctl(CTL_HW:HW_NCPU) failed: %s",
-                     strerror(errno));
+                     cherokee_strerror_r(errno, buferr, sizeof(buferr)));
         return EXIT_DISTCC_FAILED;
     }
 }
@@ -137,8 +140,9 @@ int dcc_ncpus(int *ncpus)
 #endif
     
     if (*ncpus == -1) {
+	char buferr[ERROR_MAX_BUFSIZE];
         fprintf(stderr,"sysconf(_SC_NPROCESSORS_ONLN) failed: %s",
-                     strerror(errno));
+                     cherokee_strerror_r(errno, buferr, sizeof(buferr)));
         return EXIT_DISTCC_FAILED;
     } else if (*ncpus == 0) {
 	/* if there are no cpus, what are we running on?  But it has

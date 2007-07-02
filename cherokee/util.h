@@ -55,6 +55,11 @@
 
 CHEROKEE_BEGIN_DECLS
 
+/* Error buffer size for cherokee_strerror_r().
+ */
+#define ERROR_MIN_BUFSIZE	64	/* min. buffer size */
+#define ERROR_MAX_BUFSIZE	512	/* max. buffer size */
+
 #ifdef _WIN32
 # define cherokee_stat(path,buf) cherokee_win32_stat(path,buf)
 # define cherokee_error          GetLastError()
@@ -72,6 +77,7 @@ ret_t cherokee_tls_init (void);
 
 /* String management functions
  */
+char   *cherokee_strerror_r         (int err, char *buf, size_t bufsize);
 int     cherokee_isbigendian        (void);
 char   *cherokee_min_str            (char *s1, char *s2);
 char   *cherokee_max_str            (char *s1, char *s2);
