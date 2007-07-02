@@ -1,6 +1,13 @@
 
 2007-07-02  A.D.F  <adefacc@tin.it>
 
+	* cherokee/plugin_loader.c
+	  - removed redundant call to cherokee_buffer_mrproper (my bad);
+	  - removed a goto;
+	  - space / indentation cleanups.
+
+2007-07-02  A.D.F  <adefacc@tin.it>
+
 	* cherokee/win32_misc.c
 	  - added comments about MUTEX_LOCK protection to win_dlerror();
 
