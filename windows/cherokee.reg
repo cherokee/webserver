@@ -1,0 +1,12 @@
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Cherokee Project]
+@=""
+"config_file"="Cherokee.conf"
+"exe_path"="C:\\Cherokee\\Cherokee.exe"
+"log_append"="1"
+"log_path"="C:\\Cherokee\\cherokee.log"
+"priority"="NORMAL_PRIORITY_CLASS"
+"startup_options"=""
+"startup_directory"="C:\\Cherokee"
+

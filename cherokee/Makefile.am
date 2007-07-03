@@ -690,7 +690,9 @@ win32_src = \
 unix4win32.h \
 unix4win32.c \
 win32_misc.h \
-win32_misc.c
+win32_misc.c \
+win32_cservice.h \
+win32_cservice.c
 endif
 
 libcherokee_base_la_SOURCES = \
@@ -992,9 +994,21 @@ cherokee_logrotate_SOURCES = cherokee_logrotate.c
 cherokee_logrotate_LDADD = libcherokee-base.la libcherokee-client.la libcherokee-server.la libcherokee-config.la
 
 #
+# Win32 service
+#
+if PLATFORM_WIN32
+win32_cherokeeserv = win32_cherokeeserv
+else
+win32_cherokeeserv =
+endif
+
+win32_cherokeeserv_SOURCES = win32_cherokeeserv.c
+win32_cherokeeserv_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la 
+
+#
 # Test programs
 #
-noinst_PROGRAMS = cherokee_show 
+noinst_PROGRAMS = cherokee_show $(win32_cherokeeserv)
 
 cherokee_show_SOURCES = cherokee_show.c 
 cherokee_show_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la 

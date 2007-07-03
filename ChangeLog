@@ -1,5 +1,13 @@
 2007-07-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/win32_cservice.h, cherokee/win32_cservice.c,
+	cherokee/win32_cherokeeserv.c, windows/cherokee.reg: Added a Win32
+	service. Code by Ross Smith II <cherokeespam@netebb.com>
+	
+	* cherokee/Makefile.am (win32_cherokeeserv), windows/cherokee.reg:
+	Created new binary target, and added win32_cservice.h,
+	win32_cservice.c and win32_cherokeeserv.c
+
 	* cherokee/win32_misc.c: Fixed Emacs indentation mark.
 	(win_dlerror): Fixed compilation problem around win_dlerror_buf.
 

@@ -5,5 +5,6 @@ cherokee.nsi          \
 cherokee.nsi.in       \
 cherokee.ico          \
 cherokee_pkg.ico      \
-install.bat   
+install.bat           \
+cherokee.reg
 
