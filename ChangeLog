@@ -1,3 +1,7 @@
+2007-07-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* windows/cherokee.nsi.in: MUI_ICON and MUI_ICON needed to be
+	undefined.
 
 2007-07-03  A.D.F  <adefacc@tin.it>
 

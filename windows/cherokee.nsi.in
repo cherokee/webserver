@@ -18,6 +18,8 @@ ShowInstDetails show
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 
+!undef MUI_ICON
+!undef MUI_UNICON
 !define MUI_ICON "cherokee_pkg.ico"
 !define MUI_UNICON "cherokee_pkg.ico"
 
