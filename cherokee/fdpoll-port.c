@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "fdpoll-protected.h"
+#include "util.h"
 
 #include <stdio.h>
 #include <poll.h>

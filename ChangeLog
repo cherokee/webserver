@@ -1,4 +1,11 @@
 
+2007-07-03  A.D.F  <adefacc@tin.it>
+
+	* cherokee/fdpoll-epoll.c,
+	  cherokee/fdpoll-kqueue.c,
+	  cherokee/fdpoll-port.c
+	  - added include file util.h (compilation fix).
+
 2007-07-02  A.D.F  <adefacc@tin.it>
 
 	* cherokee/win32_misc.c
