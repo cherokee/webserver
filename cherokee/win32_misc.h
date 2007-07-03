@@ -4,6 +4,7 @@
  *
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
+ *      Ross Smith II <cherokee at smithii.com>
  *
  * Copyright (C) 2001-2007 Alvaro Lopez Ortega
  *
@@ -40,5 +41,6 @@ struct tm    *localtime_r         (const time_t *time, struct tm *tm);
 unsigned int  sleep               (unsigned int seconds);
 
 int           cherokee_win32_stat (const char *path, struct stat *buf);
+int           cherokee_win32_shutdown_signaled();
 
 #endif /* CHEROKEE_WIN32_MISC_H */

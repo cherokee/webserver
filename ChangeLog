@@ -1,5 +1,16 @@
 2007-07-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/win32_misc.c: Fixed Emacs indentation mark.
+	(win_dlerror): Fixed compilation problem around win_dlerror_buf.
+
+	* cherokee/win32_misc.h, cherokee/win32_misc.c: Added new func
+	cherokee_win32_shutdown_signaled(). Patch by Ross Smith II
+	<cherokee@smithii.com>
+
+	* cherokee/server.c (cherokee_server_step): Call
+	cherokee_win32_shutdown_signaled() before checking if the server
+	wants to stop iterating. (srv->wanna_exit)
+
 	* windows/cherokee.nsi.in: MUI_ICON and MUI_ICON needed to be
 	undefined.
 

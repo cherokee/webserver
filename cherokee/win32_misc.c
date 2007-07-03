@@ -1,10 +1,11 @@
-/* -*- Mode: C; TABs are evil */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 5; tab-width: 5 -*- */
 
 /* Cherokee
  *
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *      Gisle Vanem <giva@bgnett.no>
+ *      Ross Smith II <cherokee at smithii.com>
  *
  * Copyright (C) 2001-2007 Alvaro Lopez Ortega
  *
@@ -53,6 +54,22 @@
 # define _ctor
 #endif
 
+#define EXIT_EVENT_NAME "cherokee_exit_1"
+#define CLEAR(x) memset(&(x), 0, sizeof(x))
+
+struct security_attributes { 
+     SECURITY_ATTRIBUTES sa;
+     SECURITY_DESCRIPTOR sd;
+};
+
+/* bool definition 
+ */
+#ifndef bool
+# define bool  int
+#endif
+
+/* Globals 
+ */
 static int     win_trace = 0;
 static SOCKET  first_sock_num;
 static WSADATA wsa_data;
@@ -633,16 +650,16 @@ int win_dlclose (const void *dll_handle)
  */
 const char *win_dlerror (void)
 {
-	if (! last_error)
-		return (NULL);
-
-	{
-	static char win_dlerror_buf[ERROR_MAX_BUFSIZE];
-	char buf[ERROR_MAX_BUFSIZE];
-	snprintf (win_dlerror_buf, sizeof(win_dlerror_buf)-1, "%s(): %s",
-			last_func, win_strerror(last_error, buf, sizeof(buf)));
-	}
-	return (win_dlerror_buf);
+     char buf[ERROR_MAX_BUFSIZE];
+     static char win_dlerror_buf[ERROR_MAX_BUFSIZE];
+        
+     if (! last_error)
+          return (NULL);
+     
+     snprintf (win_dlerror_buf, sizeof(win_dlerror_buf)-1, "%s(): %s",
+               last_func, win_strerror(last_error, buf, sizeof(buf)));
+     
+     return (win_dlerror_buf);
 }
 
 #endif  /* CHEROKEE_EMBEDDED */
@@ -1030,3 +1047,45 @@ cherokee_win32_stat (const char *path, struct stat *buf)
 	return re;
 }
 
+static bool
+init_security_attributes_allow_all (struct security_attributes *obj)
+{
+	CLEAR (*obj);
+
+	obj->sa.nLength = sizeof (SECURITY_ATTRIBUTES);
+	obj->sa.lpSecurityDescriptor = &obj->sd;
+	obj->sa.bInheritHandle = TRUE;
+	if (!InitializeSecurityDescriptor (&obj->sd, SECURITY_DESCRIPTOR_REVISION))
+		return FALSE;
+	if (!SetSecurityDescriptorDacl (&obj->sd, TRUE, NULL, FALSE))
+		return FALSE;
+	return TRUE;
+}
+
+static HANDLE
+create_event (const char *name, bool allow_all, bool initial_state, bool manual_reset)
+{
+	if (allow_all)
+	{
+		struct security_attributes sa;
+		if (!init_security_attributes_allow_all (&sa))
+			return NULL;
+		return CreateEvent (&sa.sa, (BOOL)manual_reset, (BOOL)initial_state, name);
+	}
+	else
+		return CreateEvent (NULL, (BOOL)manual_reset, (BOOL)initial_state, name);
+}
+
+int
+cherokee_win32_shutdown_signaled()
+{
+	static HANDLE exit_event = NULL;
+
+	if (!exit_event) {
+		exit_event = create_event (EXIT_EVENT_NAME, TRUE, FALSE, FALSE);
+		if (!exit_event)
+		  return 1;
+	}
+
+	return WaitForSingleObject (exit_event, (DWORD) 0) == WAIT_OBJECT_0;
+}
