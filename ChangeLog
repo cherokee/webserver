@@ -1,3 +1,12 @@
+2007-07-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/post.c (cherokee_post_mrproper): Checks if unlink() has
+	returned an error, and warn if so.
+
+	* cherokee/post.c, cherokee/cherokee/post.h: It does no longer use
+	a FILE * for read/write the temporal files.  The call to mktemp()
+	has been changed by a call to mkstemp() (safer).
+
 2007-07-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/win32_cservice.h, cherokee/win32_cservice.c,

@@ -47,7 +47,7 @@ typedef struct {
 	cherokee_buffer_t    info;
 
 	cherokee_buffer_t    tmp_file;
-	FILE                *tmp_file_p;
+	int                  tmp_file_fd;
 } cherokee_post_t;
 
 #define POST(x)      ((cherokee_post_t *)(x))
