@@ -15,6 +15,7 @@ Usage: %s [parameters] [tests]
   -n<NUM>       Repetitions
   -t<NUM>       Number of threads of the server
   -p<NUM>       Server port
+  -m<FLOAT>     Delay between tests (secs)
 
   -d<NUM>       Number of pauses
   -e<PATH>      Path to the binary of the server

@@ -26,6 +26,7 @@ from help import *
 num      = 1
 thds     = 1
 pause    = 0
+tpause   = 0.0
 ssl      = False
 clean    = True
 kill     = True
@@ -79,6 +80,7 @@ for p in param:
     elif p[:2] == '-n': num      = int(p[2:])
     elif p[:2] == '-t': thds     = int(p[2:])
     elif p[:2] == '-p': port     = int(p[2:])
+    elif p[:2] == '-m': tpause   = float(p[2:])
     elif p[:2] == '-d': pause    = p[2:]
     elif p[:2] == '-m': method   = p[2:]
     elif p[:2] == '-e': server   = p[2:]
@@ -311,6 +313,10 @@ def mainloop_iterator(objs):
                 print "Success"
                 obj.Clean()
 
+            if tpause > 0.0:
+                print "Sleeping %2.2f seconds..\r" % (tpause),
+                sys.stdout.flush()
+                time.sleep (tpause)
 
 if ssl:
     port = 443

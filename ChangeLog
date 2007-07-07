@@ -1,5 +1,8 @@
 2007-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py, qa/help.py: Added new parameter -m to allow
+	adding delays between tests.
+
 	* qa/run-tests.py, qa/help.py (help_print_parameters): Added a
 	help message and a new parameter -h.
 
