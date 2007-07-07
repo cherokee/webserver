@@ -314,8 +314,9 @@ def mainloop_iterator(objs):
                 obj.Clean()
 
             if tpause > 0.0:
-                print "Sleeping %2.2f seconds..\r" % (tpause),
-                sys.stdout.flush()
+                if not quiet:
+                    print "Sleeping %2.2f seconds..\r" % (tpause),
+                    sys.stdout.flush()
                 time.sleep (tpause)
 
 if ssl:
