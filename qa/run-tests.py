@@ -20,6 +20,7 @@ import tempfile
 
 from base import *
 from conf import *
+from help import *
 
 # Configuration parameters
 num      = 1
@@ -36,6 +37,7 @@ method   = None
 nobody   = False
 fcgi     = True
 log      = False
+help     = False
 
 server   = CHEROKEE_PATH
 
@@ -65,6 +67,7 @@ if len(files) == 0:
 
 # Process the parameters
 for p in param:
+    print p
     if   p     == '-c': clean    = False
     elif p     == '-k': kill     = False
     elif p     == '-f': fcgi     = False    
@@ -73,6 +76,7 @@ for p in param:
     elif p     == '-x': strace   = True
     elif p     == '-b': nobody   = True
     elif p     == '-l': log      = True
+    elif p     == '-h': help     = True
     elif p[:2] == '-n': num      = int(p[2:])
     elif p[:2] == '-t': thds     = int(p[2:])
     elif p[:2] == '-p': port     = int(p[2:])
@@ -80,6 +84,13 @@ for p in param:
     elif p[:2] == '-m': method   = p[2:]
     elif p[:2] == '-e': server   = p[2:]
     elif p[:2] == '-v': valgrind = p[2:]
+    else:
+        help = True
+
+# Print help
+if help:
+    help_print_parameters()
+    sys.exit(1)
 
 # Fix up pause
 if type(pause) == types.StringType:

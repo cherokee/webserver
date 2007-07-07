@@ -1,5 +1,9 @@
+2007-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-2007-07-03  A.D.F  <adefacc@tin.it>
+	* qa/run-tests.py, qa/help.py (help_print_parameters): Added a
+	help message and a new parameter -h.
+
+2007-07-07  A.D.F  <adefacc@tin.it>
 
 	* cherokee/connection.c
 	  - cherokee_connection_send_header_and mmaped():
