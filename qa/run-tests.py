@@ -67,7 +67,6 @@ if len(files) == 0:
 
 # Process the parameters
 for p in param:
-    print p
     if   p     == '-c': clean    = False
     elif p     == '-k': kill     = False
     elif p     == '-f': fcgi     = False    
