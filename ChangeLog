@@ -1,3 +1,10 @@
+2007-07-07  A.D.F  <adefacc@tin.it>
+
+	* cherokee/cherokee-panic
+	  - added a second call to mktemp that is called
+	    whenever the first call with -t option fails
+	    (old versions of mktemp(1) don't have -t option).
+
 2007-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/run-tests.py, qa/help.py: Added new parameter -m to allow

@@ -84,7 +84,8 @@ fi
 
 	# Get the backtrace
 	if [ x$debugger = x$gdb ]; then 
-	     tmp_cmd=`mktemp -t` || exit 1
+	     tmp_cmd=`mktemp -t` ||
+	     tmp_cmd=`mktemp "/tmp/chrk.XXXXXX"` || exit 1
 
 		( echo "print cherokee_version"
 		  echo "thread apply all bt full"
