@@ -595,38 +595,41 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 {
-	size_t  re;
+	size_t  re = 0;
 	ret_t   ret;
 	int16_t	nvec = 1;
 	struct iovec bufs[2];
 
 	/* 1.- Special case: There is not header to send
-	 * It is becase it has been sent in a writev()
+	 * because it has been sent by writev() (see below)
 	 */
 	if (cherokee_buffer_is_empty (&conn->buffer)) {
 		ret = cherokee_socket_write (&conn->socket, conn->mmaped, conn->mmaped_len, &re);
-		switch (ret) {
-		case ret_eof:
-		case ret_eagain:
-			return ret;
+		if (unlikely (ret != ret_ok) ) {
+			switch (ret) {
+			case ret_eof:
+			case ret_eagain:
+				return ret;
 
-		case ret_error:
-			conn->keepalive = 0;
-			return ret_error;
+			case ret_error:
+				conn->keepalive = 0;
+				return ret;
 
-		default:
-			break;
-		}
-		
+			default:
+				conn->keepalive = 0;
+				RET_UNKNOWN(ret);
+				return ret_error;
+			}
+		}		
 		cherokee_connection_tx_add (conn, re);
 
-		/* FIXME: conn->mmaped is a ptr. to void
-		 * so ptr. math should be avoided.
+		/* NOTE: conn->mmaped is a ptr. to void
+		 * so we have to apply ptr. math carefully.
 		 */
-		conn->mmaped     += re;
+		conn->mmaped      = (void *) ( ((char *)conn->mmaped) + re );
 		conn->mmaped_len -= (off_t) re;
 
-		return (conn->mmaped_len <= 0) ? ret_ok : ret_eagain;
+		return (conn->mmaped_len > 0) ? ret_eagain : ret_ok;
 	}
 
 	/* 2.- There are header and mmaped content to send
@@ -639,58 +642,48 @@ cherokee_connection_send_header_and_mmaped (cherokee_connection_t *conn)
 		nvec = 2;
 	}
 	ret = cherokee_socket_writev (&conn->socket, bufs, nvec, &re);
+	if (unlikely (ret != ret_ok)) {
+		switch (ret) {
 
-	switch (ret) {
-	case ret_ok: 
-		break;
+		case ret_eof:
+		case ret_eagain: 
+			return ret;
 
-	case ret_eof:
-	case ret_eagain: 
-		return ret;
+		case ret_error:
+			conn->keepalive = 0;
+			return ret_error;
 
-	case ret_error:
-		conn->keepalive = 0;
-		return ret_error;
-
-	default:
-		RET_UNKNOWN(ret);
-		return ret_error;
+		default:
+			RET_UNKNOWN(ret);
+			return ret_error;
+		}
 	}
-
 	/* Add to the connection traffic counter
 	 */
 	cherokee_connection_tx_add (conn, re);
 
-	/* If writev() has sent all data. 
+	/* writev() may not have sent all headers data.
 	 */
-	if (re == (size_t) (conn->buffer.len + conn->mmaped_len)) {
-		cherokee_buffer_clean (&conn->buffer);
-		return ret_ok;
-	}
-
-	/* writev() may not have sent all data.
-	 */
-	if (re <= (size_t) conn->buffer.len) {
+	if (unlikely (re < (size_t) conn->buffer.len)) {
+		/* Partial header data sent.
+		 */
 		cherokee_buffer_move_to_begin (&conn->buffer, re);
-		if (conn->mmaped_len > 0)
-			return ret_eagain;
-		return ret_ok;
+		return ret_eagain;
 	}
 
-	/* writev() has not sent all data:
-	 * re > conn->buffer.len && conn->mmaped_len > 0;
+	/* OK, all headers have been sent,
+	 * subtract from amount sent and clean header buffer.
 	 */
 	re -= (size_t) conn->buffer.len;
-
-	/* FIXME: conn->mmaped is a ptr. to void
-	 * so ptr. math should be avoided.
-	 */
-	conn->mmaped     += re;
-	conn->mmaped_len -= (off_t) re;
-
 	cherokee_buffer_clean (&conn->buffer);
 
-	return ret_eagain;
+	/* NOTE: conn->mmaped is a ptr. to void
+	 * so we have to apply ptr. math carefully.
+	 */
+	conn->mmaped      = (void *) ( ((char *)conn->mmaped) + re );
+	conn->mmaped_len -= (off_t) re;
+
+	return (conn->mmaped_len > 0) ? ret_eagain : ret_ok;
 }
 
 

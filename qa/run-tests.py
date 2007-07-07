@@ -298,7 +298,7 @@ def mainloop_iterator(objs):
                     clean_up()
                 sys.exit(1)
             elif not quiet:
-                print "Sucess"
+                print "Success"
                 obj.Clean()
 
 

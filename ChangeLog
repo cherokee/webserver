@@ -1,3 +1,15 @@
+
+2007-07-03  A.D.F  <adefacc@tin.it>
+
+	* cherokee/connection.c
+	  - cherokee_connection_send_header_and mmaped():
+	    - always decrement conn->mmaped_len;
+	    - avoid ptr. math with pointers to void
+	      by using a cast to (char *) and then back to (void *).
+
+	* qa/run-tests.py
+	  - Corrected mispelled word (Sucess -> Success).
+
 2007-07-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/post.c (cherokee_post_mrproper): Checks if unlink() has
