@@ -144,7 +144,9 @@ run-tests.py \
 137-Mime1.py \
 138-ChangeUser-cgi.py \
 139-domain-wildcards1.py \
-140-SCGI-EmptyVars.py 
+140-SCGI-EmptyVars.py \
+141-FastCGI-EmptyVars.py \
+142-SCGI-ExtraVars.py
 
 test:
 	./run-tests.py

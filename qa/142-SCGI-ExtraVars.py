@@ -1,8 +1,14 @@
 import os
 from base import *
 
-DIR  = "/SCGI3/"
-PORT = 5003
+DIR  = "/SCGI4/"
+PORT = 5004
+
+HDR1 = "X-Whatever"
+VAL1 = "Value1"
+
+HDR2 = "Something"
+VAL2 = "Second"
 
 SCRIPT = """
 from pyscgi import *
@@ -20,26 +26,28 @@ SCGIServer(TestHandler, port=%d).serve_forever()
 
 CONF = """
 vserver!default!directory!<dir>!handler = scgi
+vserver!default!directory!<dir>!handler!pass_req_headers = 1
 vserver!default!directory!<dir>!handler!balancer = round_robin
 vserver!default!directory!<dir>!handler!balancer!type = interpreter
-vserver!default!directory!<dir>!handler!balancer!local_scgi3!host = localhost:%d
-vserver!default!directory!<dir>!handler!balancer!local_scgi3!interpreter = %s %s
-vserver!default!directory!<dir>!priority = 1400
+vserver!default!directory!<dir>!handler!balancer!local_scgi4!host = localhost:%d
+vserver!default!directory!<dir>!handler!balancer!local_scgi4!interpreter = %s %s
+vserver!default!directory!<dir>!priority = 1420
 """
-
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
-        self.name = "SCGI III: Variables"
+        self.name = "SCGI IV: Extra variables"
 
-        self.request           = "GET %s HTTP/1.0\r\n" %(DIR) 
+        self.request           = "GET %s HTTP/1.0\r\n" %(DIR) + \
+                                 "%s: %s\r\n" % (HDR1, VAL1)  + \
+                                 "%s: %s\r\n" % (HDR2, VAL2)
         self.expected_error    = 200
-        self.expected_content  = ['PATH_INFO:', 'QUERY_STRING:']
+        self.expected_content  = ['%s: %s'%(HDR1, VAL1), '%s: %s'%(HDR2, VAL2)]
         self.forbidden_content = ['pyscgi', 'SCGIServer', 'write']
 
     def Prepare (self, www):
-        scgi_file = self.WriteFile (www, "scgi_test3.scgi", 0444, SCRIPT)
+        scgi_file = self.WriteFile (www, "scgi_test4.scgi", 0444, SCRIPT)
 
         pyscgi = os.path.join (www, 'pyscgi.py')
         if not os.path.exists (pyscgi):

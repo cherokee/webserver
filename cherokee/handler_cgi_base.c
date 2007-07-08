@@ -168,6 +168,7 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 	props->is_error_handler = false;
 	props->change_user      = false;
 	props->check_file       = true;
+	props->pass_req_headers = false;
 
 	/* Parse the configuration tree
 	 */
@@ -196,6 +197,9 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 
 		} else if (equal_buf_str (&subconf->key, "check_file")) {
 			props->check_file = atoi(subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "pass_req_headers")) {
+			props->pass_req_headers = atoi(subconf->val.buf);
 		}
 	}
 
@@ -452,6 +456,18 @@ cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t          
 }
 
 
+static ret_t
+foreach_header_add_unknown_variable (cherokee_buffer_t *header, cherokee_buffer_t *content, void *data)
+{
+	cherokee_handler_cgi_base_t *cgi = HDL_CGI_BASE(data);
+	
+	cgi->add_env_pair (cgi, 
+			   header->buf, header->len, 
+			   content->buf, content->len);
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee_connection_t *conn)
 {
@@ -472,6 +488,14 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 				   env->env.buf, env->env.len, 
 				   env->val.buf, env->val.len);
 	}		
+
+	/* Pass request headers.
+	 * Usually X-Something..
+	 */
+	if (cgi_props->pass_req_headers) {
+		cherokee_header_foreach_unknown (&conn->header, 
+						 foreach_header_add_unknown_variable, cgi);
+	}
 
 	/* Add the basic enviroment variables
 	 */

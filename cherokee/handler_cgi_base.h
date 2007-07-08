@@ -84,6 +84,7 @@ typedef struct {
 	cherokee_buffer_t                  script_alias;
  	cherokee_boolean_t                 check_file;	
 	cherokee_boolean_t                 is_error_handler;
+	cherokee_boolean_t                 pass_req_headers;
 } cherokee_handler_cgi_base_props_t;
 
 #define PROP_CGI_BASE(x)               ((cherokee_handler_cgi_base_props_t *)(x))

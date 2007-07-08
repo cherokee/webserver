@@ -1,3 +1,18 @@
+2007-07-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/142-SCGI-ExtraVars.py, qa/Makefile.am (EXTRA_DIST): New QA
+	test. It checks the new 'pass_req_headers' parameter.
+
+	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_build_envp,
+	foreach_header_add_unknown_variable): Added new configuration
+	token 'pass_req_headers' (boolean). It allows to enable to copy
+	all the unknown headers to the CGI-based handler, whether it's
+	SCGI, FastCGI or CGI.
+
+	* cherokee/header.h,
+	cherokee/header.c (cherokee_header_foreach_unknown): Added new
+	method.
+
 2007-07-07  A.D.F  <adefacc@tin.it>
 
 	* cherokee/cherokee-panic

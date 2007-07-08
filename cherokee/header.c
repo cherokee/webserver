@@ -943,3 +943,33 @@ cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, i
 	return ret_ok;
 }
 
+
+ret_t 
+cherokee_header_foreach_unknown (cherokee_header_t *hdr, cherokee_header_foreach_func_t func, void *data)
+{
+	int               i;
+	cherokee_buffer_t tmp_hdr = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp_val = CHEROKEE_BUF_INIT;
+	
+	HEADER_INTERNAL_CHECK(hdr);
+
+	for (i=0; i < hdr->unknowns_len; i++) {
+		char *begin      = hdr->unknowns[i].header_off      + hdr->input_buffer->buf;
+		char *begin_info = hdr->unknowns[i].header_info_off + hdr->input_buffer->buf;
+
+		cherokee_buffer_add (&tmp_hdr, begin, 
+				     (hdr->unknowns[i].header_info_off - 2) - hdr->unknowns[i].header_off);
+				     
+		cherokee_buffer_add (&tmp_val, begin_info,
+				     hdr->unknowns[i].header_info_len);
+
+		func (&tmp_hdr, &tmp_val, data);
+
+		cherokee_buffer_clean (&tmp_hdr);
+		cherokee_buffer_clean (&tmp_val);
+	}
+
+	cherokee_buffer_mrproper (&tmp_hdr);
+	cherokee_buffer_mrproper (&tmp_val);
+	return ret_ok;
+}

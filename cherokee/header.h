@@ -86,7 +86,7 @@ ret_t cherokee_header_parse               (cherokee_header_t *hdr, cherokee_buff
 ret_t cherokee_header_has_header          (cherokee_header_t *hdr, cherokee_buffer_t *buffer, int tail_len);
 
 ret_t cherokee_header_get_length          (cherokee_header_t *hdr, cuint_t *len);
-ret_t cherokee_header_for_each            (cherokee_header_t *hdr, void *);
+ret_t cherokee_header_foreach_unknown     (cherokee_header_t *hdr, cherokee_header_foreach_func_t func, void *data);
 
 ret_t cherokee_header_copy_request        (cherokee_header_t *hdr, cherokee_buffer_t *request);
 ret_t cherokee_header_copy_query_string   (cherokee_header_t *hdr, cherokee_buffer_t *query_string);
