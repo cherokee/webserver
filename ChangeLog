@@ -1,3 +1,9 @@
+2007-07-10  Brian Rosner  <brosner@gmail.com>
+
+        * themes/default_header.html, themes/default_entry.html: Fixed
+        an issue where User and Group did not display correctly when
+        they are configured to display.
+
 2007-07-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/fdpoll.h: It was missing cherokee_fdpoll_is_empty()
