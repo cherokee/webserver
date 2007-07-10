@@ -156,7 +156,7 @@ _set_mode (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 	ret_t ret;
 
 	ret = _del (fdp, fd);
-	if (unlikely(ret < ret_ok)) return;
+	if (unlikely(ret < ret_ok)) return ret;
 
 	return _add (fdp, fd, rw);
 }
