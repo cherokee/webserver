@@ -119,34 +119,38 @@ _add_change(cherokee_fdpoll_kqueue_t *fdp, int fd, int rw, int change )
 
 	fdp->fdinterest[fd] = rw;
 	fdp->nchanges++;
+
 	return ret_ok;
 }
+
 
 static ret_t
 _add (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 {
 	int re;
-	
+
 	re = _add_change( fdp, fd, rw, EV_ADD);
 	if ( re == ret_ok) {
 		FDPOLL(fdp)->npollfds++;
 	}
-	
+
 	return re;
 }
+
 
 static ret_t
 _del (cherokee_fdpoll_kqueue_t *fdp, int fd)
 {
-       int re;
-	       
-       re = _add_change( fdp, fd, fdp->fdinterest[fd], EV_DELETE);
-       if ( re == ret_ok) {
-	       FDPOLL(fdp)->npollfds--;
-       }
-       
-       return re;
+	int re;
+ 
+	re = _add_change( fdp, fd, fdp->fdinterest[fd], EV_DELETE);
+	if ( re == ret_ok) {
+		FDPOLL(fdp)->npollfds--;
+	}
+
+	return re;
 }
+
 
 static int
 _watch (cherokee_fdpoll_kqueue_t *fdp, int timeout_msecs)
@@ -185,7 +189,7 @@ _watch (cherokee_fdpoll_kqueue_t *fdp, int timeout_msecs)
 			}
 		}
 	}
-	
+
 	return n_events;
 }
 
@@ -194,13 +198,14 @@ static int
 _check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 {
 	uint32_t events;
-	
+
 	/* Sanity check: is it a wrong fd?
 	 */
-	if ( fd < 0 ) return -1;
-	
+	if ( fd < 0 )
+		return -1;
+
 	events = fdp->fdevents[fd];
-	
+
 	switch (rw) {
 	case FDPOLL_MODE_READ:
 		events &= KQUEUE_READ_EVENT;
@@ -211,7 +216,7 @@ _check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 	default:
 		SHOULDNT_HAPPEN;
 	}
-	
+
 	return events;
 }
 
@@ -243,7 +248,7 @@ _set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 
 
 ret_t 
-fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
+fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 {
 	cherokee_fdpoll_t *nfd;
 	CHEROKEE_CNEW_STRUCT (1, n, fdpoll_kqueue);
@@ -253,8 +258,8 @@ fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 	/* Init base class properties
 	 */
 	nfd->type          = cherokee_poll_kqueue;
-	nfd->nfiles        = limit;
-	nfd->system_nfiles = sys_limit;
+	nfd->nfiles        = fd_limit;
+	nfd->system_nfiles = sys_fd_limit;
 	nfd->npollfds      = 0;
 
 	/* Init base class virtual methods

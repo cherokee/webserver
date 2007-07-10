@@ -144,7 +144,8 @@ _set_mode (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 	ret_t ret;
 
 	ret = _del (fdp, fd);
-	if (unlikely(ret < ret_ok)) return;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	return _add (fdp, fd, rw);
 }
@@ -227,8 +228,16 @@ fdpoll_win32_new (cherokee_fdpoll_t **fdp, int system_fd_limit, int fd_limit)
 	cherokee_fdpoll_t *nfd;
 	CHEROKEE_CNEW_STRUCT (1, n, fdpoll_select);
 
+	/* Verify that the max. number of selectable fds
+	 * is below the max. acceptable limit per select set.
+	 */
+	if (fd_limit > FD_SETSIZE) {
+		_free(n);
+		return ret_error;
+	}
+
 	nfd = FDPOLL(n);
-        
+
 	/* Init base class properties
 	 */
 	nfd->type          = cherokee_poll_win32;

@@ -1,8 +1,36 @@
+2007-07-10  A.D.F  <adefacc@tin.it>
+
+	* cherokee/fdpoll.c
+	  - cherokee_fdpoll_new():
+	    - added error test on max. sys_fd_limit and fd_limit.
+
+	* cherokee/fdpoll.h,
+	  cherokee/fdpoll-protected.h
+	  - updated function prototypes.
+
+	* cherokee/fdpoll-epoll.c,
+	  cherokee/fdpoll-kqueue.c
+	  - renamed sys_limit to sys_fd_limit and limit to fd_limit
+	    in order to be consistent with other fdpoll-*.c modules;
+	  - space cleanups.
+
+	* cherokee/fdpoll-select.c
+	  - _watch():
+	    - use proper type as return value;
+	  - fdpoll_select_new():
+	    - added error test on max. sys_fd_limit.
+
+	* cherokee/fdpoll-win32.c
+	  - _set_mode():
+	    - added missing return value;
+	  - fdpoll_win32_new():
+	    - added error test on max. fd_limit.
+
 2007-07-10  Brian Rosner  <brosner@gmail.com>
 
-        * themes/default_header.html, themes/default_entry.html: Fixed
-        an issue where User and Group did not display correctly when
-        they are configured to display.
+	* themes/default_header.html, themes/default_entry.html:
+	  - fixed an issue where User and Group did not display correctly
+	    when they were configured to display.
 
 2007-07-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 

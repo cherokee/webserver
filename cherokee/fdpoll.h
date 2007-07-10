@@ -52,7 +52,7 @@ typedef enum {
 
 typedef struct cherokee_fdpoll cherokee_fdpoll_t;
 
-ret_t cherokee_fdpoll_new        (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys_limit, int limit);
+ret_t cherokee_fdpoll_new        (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys_fd_limit, int fd_limit);
 ret_t cherokee_fdpoll_best_new   (cherokee_fdpoll_t **fdp, int sys_limit, int limit);
 ret_t cherokee_fdpoll_free       (cherokee_fdpoll_t  *fdp);
 

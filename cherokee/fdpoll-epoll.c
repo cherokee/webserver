@@ -256,7 +256,7 @@ _watch (cherokee_fdpoll_epoll_t *fdp, int timeout_msecs)
 
 
 ret_t 
-fdpoll_epoll_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
+fdpoll_epoll_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 {
 	int                re;
 	cherokee_fdpoll_t *nfd;
@@ -267,8 +267,8 @@ fdpoll_epoll_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 	/* Init base class properties
 	 */
 	nfd->type          = cherokee_poll_epoll;
-	nfd->nfiles        = limit;
-	nfd->system_nfiles = sys_limit;
+	nfd->nfiles        = fd_limit;
+	nfd->system_nfiles = sys_fd_limit;
 	nfd->npollfds      = 0;
 
 	/* Init base class virtual methods

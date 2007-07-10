@@ -156,7 +156,8 @@ _set_mode (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 	ret_t ret;
 
 	ret = _del (fdp, fd);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	return _add (fdp, fd, rw);
 }
@@ -215,7 +216,7 @@ _watch (cherokee_fdpoll_select_t *fdp, int timeout_msecs)
 	}
 
 	if (r <= 0) {
-		return ret_error;
+		return r;
 	}
 
 	ridx = 0;
@@ -238,13 +239,20 @@ _reset (cherokee_fdpoll_select_t *fdp, int fd)
 }
 
 
-
 ret_t 
 fdpoll_select_new (cherokee_fdpoll_t **fdp, int system_fd_limit, int fd_limit)
 {
 	int                i;
 	cherokee_fdpoll_t *nfd;
 	CHEROKEE_CNEW_STRUCT (1, n, fdpoll_select);
+
+	/* Verify that the max. number of system fds
+	 * is below the max. acceptable limit.
+	 */
+	if (system_fd_limit > FD_SETSIZE) {
+		_free(n);
+		return ret_error;
+	}
 
 	nfd = FDPOLL(n);
         

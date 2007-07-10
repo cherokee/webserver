@@ -27,47 +27,50 @@
 
 
 ret_t 
-cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys_limit, int limit)
+cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys_fd_limit, int fd_limit)
 {
+	if (sys_fd_limit < MIN_MAX_FDS || sys_fd_limit < fd_limit)
+		return ret_error;
+
 	switch (type) {
 	case cherokee_poll_epoll:
 #if HAVE_EPOLL	
-		return fdpoll_epoll_new (fdp, sys_limit, limit);
+		return fdpoll_epoll_new (fdp, sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
 #endif
 
 	case cherokee_poll_kqueue:
 #if HAVE_KQUEUE	
-		return fdpoll_kqueue_new (fdp, sys_limit, limit);
+		return fdpoll_kqueue_new (fdp, sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
 #endif	
 
 	case cherokee_poll_port:
 #if HAVE_PORT
-		return fdpoll_port_new (fdp, sys_limit, limit);
+		return fdpoll_port_new (fdp, sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
 #endif	
 
 	case cherokee_poll_poll:
 #if HAVE_POLL		
-		return fdpoll_poll_new (fdp, sys_limit, limit);
+		return fdpoll_poll_new (fdp, sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
 #endif	
 
 	case cherokee_poll_win32:
 #if HAVE_WIN32_SELECT
-		return fdpoll_win32_new (fdp, sys_limit, limit);
+		return fdpoll_win32_new (fdp, sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
 #endif
 
 	case cherokee_poll_select:
 #if HAVE_SELECT	
-		return fdpoll_select_new (fdp, sys_limit, limit);
+		return fdpoll_select_new (fdp, sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
 #endif	
@@ -76,8 +79,7 @@ cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys
 		return ret_error;
 	}
 
-	SHOULDNT_HAPPEN;
-	return ret_error;
+	/* NOTREACHED */
 }
 
 
