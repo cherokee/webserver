@@ -89,22 +89,11 @@ struct cherokee_iocache {
 	cuint_t            files_max;
 	cuint_t            files_usages;
 	CHEROKEE_MUTEX_T  (files_lock);
+
+	/* cleaning up stuff */
+	float              average;
+	cherokee_list_t    to_delete;
 };
-
-
-typedef struct {
-	cherokee_iocache_t *iocache;
-	float               average;
-	cherokee_list_t     to_delete;
-} clean_up_params_t;
-
-
-typedef struct {
-	cherokee_list_t           list;
-	cherokee_iocache_entry_t *file;
-	const char               *filename;
-} to_delete_entry_t;
-
 
 
 #define PUBL(o) ((cherokee_iocache_entry_t *)(o))
@@ -178,6 +167,7 @@ iocache_entry_new (cherokee_iocache_entry_t **entry)
 
 	PRIV(n)->test1    = 123456;
 	PRIV(n)->test2    = 987654;
+	PUBL(n)->cleaned     = 0;
 
 	*entry = PUBL(n);
 	return ret_ok;
@@ -219,6 +209,7 @@ iocache_free_entry (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry
 
 	PRIV(entry)->test1 = 0;
 	PRIV(entry)->test2 = 0;
+	entry->cleaned = 6969;
 
 	/* Free the entry object
 	 */
@@ -359,6 +350,11 @@ test_entry (cherokee_iocache_entry_t *file, char *p)
 		printf ("%s: wasn't an obj2 %p\n", p, file);
 		exit(1);
 	}
+
+	if (PUBL(file)->cleaned != 0) { 
+		printf("%s: entry previously cleared %p\n", p, file); 
+		exit(1);
+	}
 }
 
 
@@ -366,29 +362,29 @@ static int
 iocache_clean_up_each (const char *key, void *value, void *param)
 {
 	float                               usage;
-	clean_up_params_t                  *params = param;
-	cherokee_iocache_entry_t           *file   = IOCACHE_ENTRY(value); 
-	cherokee_iocache_entry_extension_t *entry  = PRIV(value);
+	cherokee_iocache_t                 *iocache    = IOCACHE(param);
+	cherokee_iocache_entry_t           *entry      = IOCACHE_ENTRY(value); 
+	cherokee_iocache_entry_extension_t *entry_priv = PRIV(value);
 
-	test_entry (file, "clean_up_each");
-	
+	test_entry (entry, "clean_up_each");
+
 	/* Reset usage value
 	 */
-	usage = (float) entry->usages;
-	entry->usages = 0;
+	usage = (float) entry_priv->usages;
+	entry_priv->usages = 0;
 
 	/* Is it in use or worth keeping?
 	 */
-	if ((entry->ref_counter > 0) ||
-	    (usage > params->average)) 
+	if ((entry_priv->ref_counter > 0) ||
+	    (usage > iocache->average)) 
 	{
 		goto out;
 	}
 
 	/* Then, it should be deleted
 	 */
-	entry->name_ref = key;
-	cherokee_list_add (&entry->to_be_deleted, &params->to_delete);
+	entry_priv->name_ref = key;
+	cherokee_list_add_tail (&entry_priv->to_be_deleted, &iocache->to_delete);
 
 out:
 	return false;
@@ -400,7 +396,6 @@ cherokee_iocache_clean_up (cherokee_iocache_t *iocache, cuint_t num)
 {
 	ret_t              ret;
 	float              average;
-	clean_up_params_t  params;
 	cherokee_list_t   *i, *tmp;
 
 	CHEROKEE_MUTEX_LOCK (&iocache->files_lock);
@@ -410,35 +405,46 @@ cherokee_iocache_clean_up (cherokee_iocache_t *iocache, cuint_t num)
 
 	average = (iocache->files_usages / iocache->files_num) + 1;
 
-	params.iocache = iocache;
-	params.average = average;
-	INIT_LIST_HEAD(&params.to_delete);
+	iocache->average = average;
+	INIT_LIST_HEAD(&iocache->to_delete);
 
 	/* Check entry by entry
 	 */
 	cherokee_table_while (&iocache->files,       /* table obj */
 			      iocache_clean_up_each, /* func */
-			      &params,               /* param */
+			      iocache,               /* param */
 			      NULL,                  /* key */
 			      NULL);                 /* value */
 
+	{ int n = 0;
+		list_for_each_safe (i, tmp, &iocache->to_delete) { n++; }
+		printf ("cleanup list len %d\n", n);
+	}
+
 	/* Remove some files
 	 */
-	list_for_each_safe (i, tmp, &params.to_delete) {
+	list_for_each_safe (i, tmp, &iocache->to_delete) {
+		cherokee_iocache_entry_extension_t *ret_entry;
 		cherokee_iocache_entry_extension_t *entry;
 
 		entry = list_entry (i, cherokee_iocache_entry_extension_t, to_be_deleted);
-		cherokee_list_del (&entry->to_be_deleted);
+		test_entry (IOCACHE_ENTRY(entry), "clean_up_for");
 
-		test_entry (entry, "clean_up_for");
-
-		ret = cherokee_table_del (&iocache->files, (char *)entry->name_ref, NULL);
+		ret = cherokee_table_del (&iocache->files, (char *)entry->name_ref, (void **)&ret_entry);
 		if (unlikely (ret != ret_ok)) {
-			return ret;
+			printf ("ARGGGGGGGGGGGGGGGGGGH1\n");
+			exit(1);
 		}
+		entry->name_ref = NULL; /* freed in table::del() */
+
+		if (entry != ret_entry) {
+			printf ("entries mismatch!!!! entry=%p ret_entry=%p\n", entry, ret_entry);
+			exit(1);
+		}
+
+		cherokee_list_del (&entry->to_be_deleted);
 		iocache_free_entry (iocache, IOCACHE_ENTRY(entry));
 	}
-
 
 	/* Reset statistics values
 	 */
@@ -511,7 +517,10 @@ cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, char *filena
 		if (unlikely (ret != ret_ok)) goto error;
 
 		ret = cherokee_table_add (&iocache->files, filename, *ret_file);
-		if (unlikely (ret != ret_ok)) goto error_free;
+		if (unlikely (ret != ret_ok)) {
+			printf ("ARGGGGGGGGGGGGGGGGGGH2\n");
+			goto error_free;
+		}
 
 		iocache->files_num++;
 	} 
@@ -564,7 +573,10 @@ cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, char *filena
 			if (unlikely (ret != ret_ok)) goto error;
 			
 			ret = cherokee_table_add (&iocache->files, filename, *ret_file);
-			if (unlikely (ret != ret_ok)) goto error_free;
+			if (unlikely (ret != ret_ok)) {
+				printf ("ARGGGGGGGGGGGGGGGGGGH3\n");
+				goto error_free;
+			}
 			
 			iocache->files_num++;
 		}

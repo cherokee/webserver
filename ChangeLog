@@ -1,3 +1,16 @@
+2007-07-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/table.c: Adapted to use the new AVL class. There are a
+	few temporal methods that need to be improved. I'll work on it in
+	the next days.
+
+	* cherokee/avl.c, cherokee/avl.h: Rewritten from scratch. It uses
+	cherokee_buffer_t's as the index of the nodes, so it should be
+	slightly faster than the previous implementation.
+
+	* cherokee/connection.c (cherokee_connection_setup_error_handler):
+	It is safer to return ret_ok instead of ret in this case. Fixed.
+
 2007-07-10  A.D.F  <adefacc@tin.it>
 
 	* cherokee/fdpoll.c

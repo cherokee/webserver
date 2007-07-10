@@ -31,15 +31,22 @@
 
 #include <cherokee/common.h>
 #include <cherokee/avl.h>
+#include <cherokee/buffer.h>
 
 
 CHEROKEE_BEGIN_DECLS
+
+typedef struct cherokee_table_node cherokee_table_node_t;
+
+typedef struct {
+	cherokee_avl_t         avl;
+	cherokee_boolean_t     case_sensitive;
+} cherokee_table_t;
 
 typedef void (* cherokee_table_free_item_t)    (void *key);
 typedef void (* cherokee_table_foreach_func_t) (const char *key, void *value);
 typedef int  (* cherokee_table_while_func_t)   (const char *key, void *value, void *param);
 
-typedef struct _avl_tree cherokee_table_t;
 #define TABLE(x) ((cherokee_table_t *)(x))
 
 

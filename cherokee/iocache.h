@@ -38,6 +38,8 @@ typedef struct {
 	struct stat       state;
 	void             *mmaped;
 	size_t            mmaped_len;
+
+	int cleaned;
 } cherokee_iocache_entry_t;
 
 #define IOCACHE(x)       ((cherokee_iocache_t *)(x))

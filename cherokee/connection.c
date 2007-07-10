@@ -398,7 +398,7 @@ out:
 	 */
 	if (conn->io_entry_ref != NULL) {
 #ifndef CHEROKEE_EMBEDDED
-		ret = cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
+		cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
 #endif
 	}
 
@@ -406,7 +406,7 @@ out:
 	conn->mmaped       = NULL;
 	conn->mmaped_len   = 0;
 
-	return ret;
+	return ret_ok;
 }
 
 

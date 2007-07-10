@@ -24,197 +24,167 @@
 
 #include "common-internal.h"
 #include "table.h"
-#include "avl.h"
 
-#include <string.h>
-#include <strings.h>
+#define AVL_HANDLE     void *
+#define AVL_KEY        cherokee_buffer_t *
+#define AVL_MAX_DEPTH  45
 
-
-static int
-equal (void *avl_param, void *key, void *val)
-{
-/*	printf ("equal (%s, %s) = %d\n", key, val, strcmp((const char *)key, (const char *)val)); */
-	return strcmp((const char *)key, (const char *)val);
-}
-
-static int
-equal_case (void *avl_param, void *key, void *val)
-{
-	return strcasecmp((const char *)key, (const char *)val);
-}
+#include "avl_if.h"
 
 
-ret_t
-cherokee_table_new (cherokee_table_t **tab)
-{
-	*tab = avl_new_avl_tree (equal, NULL);
-	if (unlikely (*tab == NULL)) return ret_nomem;
-
-	return ret_ok;
-}
-
-
-ret_t
+ret_t 
 cherokee_table_init (cherokee_table_t *tab)
-{
-	avl_node * root = avl_new_avl_node(NULL, NULL, NULL);
-	if (unlikely (root == NULL)) 
-		return ret_nomem;
-
-	tab->root        = root;
-	tab->length      = 0;
-	tab->compare_fun = equal;
-	tab->compare_arg = NULL;
-	
-	return ret_ok;
-}
-
-
-ret_t
-cherokee_table_init_case (cherokee_table_t *tab)
 {
 	ret_t ret;
 
-	ret = cherokee_table_init (tab);
+	ret = cherokee_avl_init (&tab->avl);
 	if (unlikely (ret != ret_ok)) return ret;
 
-	tab->compare_fun = equal_case;
-
-	return ret_ok;
-}
-
-
-ret_t
-cherokee_table_mrproper2 (cherokee_table_t *tab, cherokee_table_free_item_t free_func) 
-{
-	avl_free_avl_mrproper (tab, 
-			       (avl_free_key_fun_type)free, 
-			       (avl_free_key_fun_type)free_func);
+	tab->case_sensitive = false;
 	return ret_ok;
 }
 
 ret_t 
-cherokee_table_free2 (cherokee_table_t  *tab, cherokee_table_free_item_t free_func)
+cherokee_table_init_case (cherokee_table_t *tab)
 {
-	cherokee_table_mrproper2 (tab, free_func);
+	ret_t ret;
+	ret = cherokee_avl_init (&tab->avl);
+	if (unlikely (ret != ret_ok)) return ret;
 
-	free (tab);
-	return ret_ok;	
+	tab->case_sensitive = true;
+	return ret_ok;
 }
 
 
-ret_t
-cherokee_table_free (cherokee_table_t *tab)
-{
-	return cherokee_table_free2 (tab, free);
+ret_t 
+cherokee_table_free2 (cherokee_table_t *tab, cherokee_table_free_item_t func) 
+{ 
+	cherokee_table_clean (tab);
+	cherokee_table_free (tab);
+	return ret_ok; 
 }
+
+
+ret_t 
+cherokee_table_clean (cherokee_table_t *tab) 
+{ 
+	return cherokee_table_clean2 (tab, NULL);
+}
+
+
+ret_t 
+cherokee_table_clean2 (cherokee_table_t *tab, cherokee_table_free_item_t func) 
+{ 
+	// TODO
+	return ret_ok; 
+}
+
 
 ret_t
 cherokee_table_mrproper (cherokee_table_t *tab) 
-{
-	return cherokee_table_mrproper2 (tab, NULL);
-}
-
-
-ret_t
-cherokee_table_clean (cherokee_table_t *tab)
-{
-	cherokee_table_mrproper2 (tab, NULL);
-	return cherokee_table_init (tab);
+{ 
+	return cherokee_table_clean (tab);
 }
 
 
 ret_t 
-cherokee_table_clean2 (cherokee_table_t *tab, cherokee_table_free_item_t free_func)
-{
-	if (unlikely (tab == NULL)) 
-		return ret_error;
-
-	cherokee_table_mrproper2 (tab, free_func);
-	return cherokee_table_init(tab);
+cherokee_table_mrproper2 (cherokee_table_t *tab, cherokee_table_free_item_t func) 
+{ 
+	return cherokee_table_clean2 (tab, func);
 }
 
 
-ret_t
+CHEROKEE_ADD_FUNC_NEW(table);
+CHEROKEE_ADD_FUNC_FREE(table);
+
+
+ret_t 
 cherokee_table_add (cherokee_table_t *tab, char *key, void *value)
 {
-	int          re;
-	unsigned int index;
+	ret_t             ret;
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
-	re = avl_insert_by_key (tab, strdup(key), value, &index);
-	if (unlikely (re != 0)) {
-		switch (re) {
-		case -2:
-			return ret_deny;
-		default:
-			return ret_error;
-		}
-	}
+	cherokee_buffer_add (&tmp, key, strlen(key));
+	ret = cherokee_avl_add (&tab->avl, &tmp, value);
+	cherokee_buffer_mrproper (&tmp);
 
-	return ret_ok;
+	return ret;
 }
 
-void *
+
+void* 
 cherokee_table_get_val (cherokee_table_t *tab, char *key)
 {
-	ret_t  ret;
-	void  *val = NULL;
+	void  *re = NULL;
 
-	ret = cherokee_table_get (tab, key, &val);	
-	if (unlikely (ret != ret_ok)) return NULL;
-
-	return val;
+	cherokee_table_get (tab, key, &re);
+	return re;
 }
 
-ret_t
-cherokee_table_get (cherokee_table_t *tab, char *key, void **ret_val)
+
+ret_t 
+cherokee_table_get (cherokee_table_t *tab, char *key, void **val)
 {
-	int re; 
+	ret_t ret;
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
-	re = avl_get_item_by_key (tab, key, ret_val);
-	if (unlikely (re != 0)) return ret_not_found;
+	cherokee_buffer_add (&tmp, key, strlen(key));
+	ret = cherokee_avl_get (&tab->avl, &tmp, val);
+	cherokee_buffer_mrproper (&tmp);
 
-	return ret_ok;
+	return ret;
 }
 
 
-ret_t
+ret_t 
 cherokee_table_del (cherokee_table_t *tab, char *key, void **val)
 {
-	int re;
+	ret_t ret;
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
-	re = avl_remove_by_key (tab, key, (avl_free_key_fun_type)free, val);
-	if (unlikely (re != 0)) return ret_error;
+	cherokee_buffer_add (&tmp, key, strlen(key));
+	ret = cherokee_avl_get (&tab->avl, &tmp, val);
+	cherokee_buffer_mrproper (&tmp);
 
-	return ret_ok;
+	return ret;
 }
 
 
 ret_t 
 cherokee_table_len (cherokee_table_t *tab, size_t *len)
 {
-	*len = tab->length;
+	return cherokee_avl_len (&tab->avl, len);
+}
+
+
+
+ret_t 
+each_func_avl_to_table (cherokee_buffer_t *key, void *value, void *param)
+{
+	// To be removed
+	cherokee_table_foreach_func_t func = param;
+	func (key->buf, value);
 	return ret_ok;
 }
-
-
-static int
-foreach_wrapper (void *key, void *val, void *iter_arg)
-{
-	cherokee_table_foreach_func_t func = (cherokee_table_foreach_func_t)iter_arg;
-
-	func (key, val);
-	return 0;
-}
-
 
 ret_t 
 cherokee_table_foreach (cherokee_table_t *tab, cherokee_table_foreach_func_t func)
 {
-	int re;
+	return cherokee_avl_while (&tab->avl, each_func_avl_to_table, func, NULL, NULL);
+}
 
-	re = avl_iterate_inorder (tab, foreach_wrapper, (void *)func, NULL, NULL);
-	if (unlikely (re != 0)) return ret_error;
+
+ret_t 
+while_func_avl_to_table (cherokee_buffer_t *key, void *value, void *param)
+{
+	// To be removed
+	int                          re;
+	void                       **params   = param;
+	cherokee_table_while_func_t  func     = params[0];
+	void                        *data     = params[1];
+
+	re = func (key->buf, value, data);
+	if (re != 0) return ret_not_found;
 
 	return ret_ok;
 }
@@ -223,10 +193,13 @@ cherokee_table_foreach (cherokee_table_t *tab, cherokee_table_foreach_func_t fun
 ret_t 
 cherokee_table_while (cherokee_table_t *tab, cherokee_table_while_func_t func, void *param, char **key, void **value)
 {
-	int re;
+	ret_t              ret;
+	cherokee_buffer_t *key_buf  = NULL;
+	void              *params[] = { func, param };
 
-	re = avl_iterate_inorder (tab, (avl_iter_fun_type)func, param, (void **)key, value);
-	if (re == 0) return ret_not_found;
+	ret = cherokee_avl_while (&tab->avl, while_func_avl_to_table, (void *)params, &key_buf, value);
+	if (key && key_buf)
+		*key = key_buf->buf;
 
-	return ret_ok;
+	return ret;
 }
