@@ -1,5 +1,8 @@
 2007-07-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/fdpoll.h: It was missing cherokee_fdpoll_is_empty()
+	prototype declaration.
+
 	* cherokee/fdpoll-select.c (_set_mode): Return the error code on
 	error.
 

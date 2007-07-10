@@ -66,6 +66,7 @@ ret_t cherokee_fdpoll_set_mode   (cherokee_fdpoll_t *fdp, int fd, int rw);
 int   cherokee_fdpoll_check      (cherokee_fdpoll_t *fdp, int fd, int rw);
 int   cherokee_fdpoll_watch      (cherokee_fdpoll_t *fdp, int timeout_msecs);
 ret_t cherokee_fdpoll_is_full    (cherokee_fdpoll_t *fdp);
+int   cherokee_fdpoll_is_empty   (cherokee_fdpoll_t *fdp);
 
 CHEROKEE_END_DECLS
 
