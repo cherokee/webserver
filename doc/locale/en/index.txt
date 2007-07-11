@@ -1,0 +1,132 @@
+============================
+Cherokee 0.6.0 Documentation
+============================
+
+Welcome to the 0.6.0 documentation.
+
+************************
+Compiling and Installing
+************************
+
+Cherokee runs on many different platforms.  Look for your platform below to see more specific instructions.  If you are not comfortable with rolling your own Cherokee then check our listings of pre-compiled binaries.
+
+    - Unix_
+    - Windows_
+
+**************
+Configuration_
+**************
+
+test
+
+*******
+Modules
+*******
+
+There are four different types of modules in Cherokee.  You have handlers_, validators_, loggers_, and encoders_.
+
+---------
+Handlers_
+---------
+    - file_ - **File Sending**
+      
+      The file handler serves files from the filesystem.
+    
+    - dirlist_ - **Directory Listings**
+      
+      The dirlist handler displays directory listings when a directory is
+      requested.
+    
+    - common_ - **Common Behavior**
+    
+      Combines both file_ and dirlist_ handler functionality to behave similar
+      to common web servers.
+    
+    - redir_ - **Redirections**
+    
+      Perform simple and/or complex redirections using regexes.
+    
+    - cgi_ - **CGI Execution**
+    
+      Executes CGI programs.
+    
+    - scgi_ - **SCGI Server Support**
+    
+      Communicates with SCGI servers.
+    
+    - fcgi_ - **FastCGI Server Support**
+    
+      Communicates with FastCGI servers.
+
+-----------
+Validators_
+-----------
+    - htdigest_ - **Something**
+    
+      Uses something to perform HTTP authentication.
+
+    - htpasswd_ - **Something**
+
+      Uses something to perform HTTP authentication.
+    
+    - ldap_ - **LDAP Authentication**
+    
+      Uses a LDAP directory to perform HTTP authentication.
+
+    - mysql_ - **MySQL Authentication**
+      
+      Uses a MySQL database to perform HTTP authentication.
+    
+    - pam_ - **PAM Authentication**
+    
+      Uses PAM to perform HTTP authentication.
+    
+    - plain_ - **Plain Flat File Authentication**
+    
+      Uses a plain flat file to perform HTTP authentication.
+
+--------
+Loggers_
+--------
+    - combined_ - **Combined Log Format**
+    
+      Logging using the combined log format.  Very common among other web
+      servers.
+    
+    - ncsa_ - **NCSA Log Format**
+    
+      Logging using the NCSA log format.
+    
+    - w3c_ - **W3C Log Format**
+    
+      Logging using the W3C log format.
+
+
+.. _Unix: compiling_and_installing_unix.html
+.. _Windows: compiling_and_installing_windows.html
+
+.. _Configuration: configuration.html
+
+.. _Handlers: handlers.html
+.. _file: handlers/file.html
+.. _dirlist: handlers/dirlist.html
+.. _common: handlers/common.html
+.. _redir: handlers/redir.html
+.. _cgi: handlers/cgi.html
+.. _scgi: handlers/scgi.html
+.. _fcgi: handlers/fcgi.html
+
+.. _Validators: validators.html
+.. _htdigest: validators/htdigest.html
+.. _htpasswd: validators/htpasswd.html
+.. _ldap: validators/ldap.html
+.. _mysql: validators/mysql.html
+.. _pam: validators/pam.html
+.. _plain: validators/plain.html
+
+.. _Loggers: loggers.html
+.. _combined: loggers/combined.html
+.. _ncsa: loggers/ncsa.html
+.. _w3c: loggers/w3c.html
+
+.. _Encoders: encoders.html

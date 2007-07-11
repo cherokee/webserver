@@ -1,0 +1,35 @@
+dirlist Handler
+===============
+
+The **dirlist** handler builds a list of directories and files within the requested directory.
+
+Parameters
+**********
+
+=======================  ==============  ======================================
+Parameters               Type            Description
+=======================  ==============  ======================================
+``theme``                string          Optional. The theme to use when
+                                         displaying the directory listings.
+                                         Default: ``default``.
+
+``size``                 boolean         Optional. Display the size of files in
+                                         the listings. Default: ``1``.
+
+``date``                 boolean         Optional. Display the last modification
+                                         date of the files and directories in
+                                         the listings. Default: ``1``.
+
+``user``                 boolean         Optional. Display the owner of the
+                                         files and directories in the listings.
+                                         Default: ``0``.
+
+``group``                boolean         Optional. Display the group ownership
+                                         of the files and directories in the
+                                         listings. Default ``0``.
+=======================  ==============  ======================================
+
+Examples
+********
+
+There are none now.

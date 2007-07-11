@@ -1,0 +1,26 @@
+file Handler
+============
+
+The **file** handler serves files from its document root.
+
+Parameters
+**********
+
+=======================  ==============  ======================================
+Parameters               Type            Description
+=======================  ==============  ======================================
+``iocache``              boolean         Optional. Default: ``1``.
+=======================  ==============  ======================================
+
+Examples
+********
+
+The following example sets the default document root to **/var/www** and tells Cherokee to use the file handler on the requested **/images** directory.  This will serve files from **/var/www/images**::
+
+    vserver!default!document_root = /var/www
+    vserver!default!directory!/images!handler = file
+
+If a directory contains files that are updated often you will want to turn off the **iocache** to prevent automatic caching of these files::
+
+    vserver!default!directory!/docs!handler = file
+    vserver!default!directory!/docs!handler!iocache = 0

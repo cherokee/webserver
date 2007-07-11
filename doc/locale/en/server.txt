@@ -1,0 +1,16 @@
+===================
+Server Configuation
+===================
+
+Binding
+-------
+
+When the server starts up it will need to bind to a port to listen for connections.  By default Cherokee will attempt to listen on port 80, the HTTP protocol standard port.  You can define which port Cherokee listens on with the configuration::
+
+    server!port = 80
+
+To listen on port 80 you will need root privileges.  Any port greater than 1024 will not need root privileges.  The ``server!port`` configuration just tells Cherokee to bind the HTTP protocol to the given port.  To adjust the port number for TLS/SSL you must use::
+
+    server!port_tls = 443
+
+Port 443 is the HTTPS standard port and is set by default.

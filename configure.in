@@ -1112,6 +1112,7 @@ contrib/Makefile
 icons/Makefile
 m4/Makefile 
 qa/Makefile
+doc/Makefile
 themes/Makefile 
 windows/Makefile
 windows/cherokee.nsi

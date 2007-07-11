@@ -1,3 +1,12 @@
+2007-07-11  Brian Rosner  <brosner@gmail.com>
+
+	* doc/*,
+	  configure.in,
+	  Makefile.am
+	  - Rewrote the entire documentation system. Everything is done
+	    inside Python using the Django template classes and ReST for
+	    the documentation.
+
 2007-07-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/table.c: Adapted to use the new AVL class. There are a
