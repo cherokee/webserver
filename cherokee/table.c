@@ -25,13 +25,6 @@
 #include "common-internal.h"
 #include "table.h"
 
-#define AVL_HANDLE     void *
-#define AVL_KEY        cherokee_buffer_t *
-#define AVL_MAX_DEPTH  45
-
-#include "avl_if.h"
-
-
 ret_t 
 cherokee_table_init (cherokee_table_t *tab)
 {
@@ -145,6 +138,10 @@ cherokee_table_del (cherokee_table_t *tab, char *key, void **val)
 	cherokee_buffer_add (&tmp, key, strlen(key));
 	ret = cherokee_avl_get (&tab->avl, &tmp, val);
 	cherokee_buffer_mrproper (&tmp);
+
+	// Temporal
+	ret = cherokee_avl_check (&tab->avl);
+	if (ret != ret_ok) exit(1);
 
 	return ret;
 }
