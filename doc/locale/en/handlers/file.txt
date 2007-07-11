@@ -15,12 +15,15 @@ Parameters               Type            Description
 Examples
 ********
 
-The following example sets the default document root to **/var/www** and tells Cherokee to use the file handler on the requested **/images** directory.  This will serve files from **/var/www/images**::
+The following example sets the default document root to **/var/www** and tells
+Cherokee to use the file handler on the requested **/images** directory.  This
+will serve files from **/var/www/images**::
 
     vserver!default!document_root = /var/www
     vserver!default!directory!/images!handler = file
 
-If a directory contains files that are updated often you will want to turn off the **iocache** to prevent automatic caching of these files::
+If a directory contains files that are updated often you will want to turn off
+the **iocache** to prevent automatic caching of these files::
 
     vserver!default!directory!/docs!handler = file
     vserver!default!directory!/docs!handler!iocache = 0

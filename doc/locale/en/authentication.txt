@@ -14,4 +14,5 @@ digest
     This method is by far the most secure, but also more complex.  Most modern
     web browsers support this method.
 
-Cherokee comes with a number of validators: htpassword, htdigest, PAM, LDAP, MySQL, and a plain text file.
+Cherokee comes with a number of validators: htpassword, htdigest, PAM, LDAP,
+MySQL, and a plain text file.

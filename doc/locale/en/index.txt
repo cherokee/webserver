@@ -8,7 +8,9 @@ Welcome to the 0.6.0 documentation.
 Compiling and Installing
 ************************
 
-Cherokee runs on many different platforms.  Look for your platform below to see more specific instructions.  If you are not comfortable with rolling your own Cherokee then check our listings of pre-compiled binaries.
+Cherokee runs on many different platforms.  Look for your platform below to see
+more specific instructions.  If you are not comfortable with rolling your own
+Cherokee then check our listings of pre-compiled binaries.
 
     - Unix_
     - Windows_
@@ -23,7 +25,8 @@ test
 Modules
 *******
 
-There are four different types of modules in Cherokee.  You have handlers_, validators_, loggers_, and encoders_.
+There are four different types of modules in Cherokee.  You have handlers_,
+validators_, loggers_, and encoders_.
 
 ---------
 Handlers_

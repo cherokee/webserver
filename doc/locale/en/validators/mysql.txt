@@ -31,11 +31,13 @@ Parameters
                                hashed with MD5.  Default: ``0``.
     =========================  ================================================
 
-The ``query`` parameter is given an argument ``${user}`` so you can query against it.  Take a look at the following example::
+The ``query`` parameter is given an argument ``${user}`` so you can query
+against it.  Take a look at the following example::
 
     SELECT password FROM auth_users WHERE username = '${user}'
 
-The query must return one row with one column as the password.  The name of the column does not matter.
+The query must return one row with one column as the password.  The name of the
+column does not matter.
 
 Compatibility
 *************

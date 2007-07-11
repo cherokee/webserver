@@ -1,7 +1,8 @@
 dirlist Handler
 ===============
 
-The **dirlist** handler builds a list of directories and files within the requested directory.
+The **dirlist** handler builds a list of directories and files within the
+requested directory.
 
 Parameters
 **********

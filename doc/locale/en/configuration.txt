@@ -2,7 +2,8 @@
 Configuration
 =============
 
-The default location for Cherokee configuration files are ``/etc/cherokee``, but this may vary based on distribution or installation parameters.
+The default location for Cherokee configuration files are ``/etc/cherokee``, but
+this may vary based on distribution or installation parameters.
 
 *****
 Files
@@ -18,20 +19,28 @@ cherokee.conf
 Syntax
 ******
 
-The syntax to the Cherokee configuration may look cryptic initially.  However, it is very logical and with a little bit of studying will come pretty natural.  The configuration is esstenially a tree of nodes.  Each node is delimited with a ``!`` character.  Take a look at the following example::
+The syntax to the Cherokee configuration may look cryptic initially.  However,
+it is very logical and with a little bit of studying will come pretty natural.
+The configuration is esstenially a tree of nodes.  Each node is delimited with a
+``!`` character.  Take a look at the following example::
 
     server!port = 80
 
-This tells the server that it should listen on port 80.  To get a little more complex take a look at this example::
+This tells the server that it should listen on port 80.  To get a little more
+complex take a look at this example::
 
     vserver!default!priority = 1
 
-This defines the priority to 1 for the default virtual server.  You can take a look at the Virtual Server documentation to get a better idea of what is possible.
+This defines the priority to 1 for the default virtual server.  You can take a
+look at the Virtual Server documentation to get a better idea of what is
+possible.
 
 **************************
 Inclusion of Configuration
 **************************
 
-Sometimes it is nice to break out your configuration into several logical files to be more modular as well as more organized.  You can use the ``include`` configuration to accomplish this.  Here is an example::
+Sometimes it is nice to break out your configuration into several logical files
+to be more modular as well as more organized.  You can use the ``include``
+configuration to accomplish this.  Here is an example::
 
     include = /etc/cherokee/advanced.conf

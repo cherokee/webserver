@@ -1,5 +1,21 @@
 2007-07-11  Brian Rosner  <brosner@gmail.com>
 
+       * doc/locale/en/handlers/common.txt,
+         doc/locale/en/handlers/dirlist.txt,
+         doc/locale/en/handlers/file.txt,
+         doc/locale/en/server.txt,
+         doc/locale/en/configuration.txt,
+         doc/locale/en/index.txt,
+         doc/locale/en/validators/mysql.txt,
+         doc/locale/en/authentication.txt
+         - fixed line wrapping to work better on consoles of 80 chars.
+
+      * doc/build_docs.py
+        - fixed the docutils requirement.  even though it is still
+          required, it just doesn't fail now.
+
+2007-07-11  Brian Rosner  <brosner@gmail.com>
+
 	* doc/*,
 	  configure.in,
 	  Makefile.am
