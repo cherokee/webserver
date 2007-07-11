@@ -247,6 +247,16 @@ _set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 }
 
 
+ret_t
+fdpoll_kqueue_get_fdlimits (int *system_fd_limit, int *fd_limit)
+{
+	*system_fd_limit = 0;
+	*fd_limit = 0;
+
+	return ret_ok;
+}
+
+
 ret_t 
 fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 {

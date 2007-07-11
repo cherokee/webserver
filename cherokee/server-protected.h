@@ -118,6 +118,7 @@ struct cherokee_server {
 	 */
  	int                        ncpus;
 	int                        max_fds;
+	int                        fds_per_thread;
 	uint32_t                   system_fd_limit;
 	cherokee_poll_type_t       fdpoll_method;
 

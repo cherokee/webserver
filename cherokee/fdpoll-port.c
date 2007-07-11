@@ -264,6 +264,16 @@ _set_mode (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 }
 
 
+ret_t
+fdpoll_port_get_fdlimits (int *system_fd_limit, int *fd_limit)
+{
+	*system_fd_limit = 0;
+	*fd_limit = 0;
+
+	return ret_ok;
+}
+
+
 ret_t 
 fdpoll_port_new (cherokee_fdpoll_t **fdp, int sys_limit, int limit)
 {

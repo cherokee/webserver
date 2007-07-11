@@ -26,7 +26,72 @@
 #include "fdpoll-protected.h"
 
 
-ret_t 
+/* Returns max. fd limits (system and fdpoll set).
+ * NOTE: 0 means unlimited,
+ *     > 0 max. acceptable limit for cherokee_fdpoll_new().
+ */
+ret_t
+cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, int *sys_fd_limit, int *fd_limit)
+{
+	/* Initialize values.
+	 */
+	*sys_fd_limit = 0;
+	*fd_limit = 0;
+
+	/* Call the proper method to get system and per fdpoll set limits.
+	 */
+	switch (type) {
+	case cherokee_poll_epoll:
+#if HAVE_EPOLL	
+		return fdpoll_epoll_get_fdlimits (sys_fd_limit, fd_limit);
+#else			
+		return ret_no_sys;
+#endif
+
+	case cherokee_poll_kqueue:
+#if HAVE_KQUEUE	
+		return fdpoll_kqueue_get_fdlimits(sys_fd_limit, fd_limit);
+#else			
+		return ret_no_sys;
+#endif	
+
+	case cherokee_poll_port:
+#if HAVE_PORT
+		return fdpoll_port_get_fdlimits(sys_fd_limit, fd_limit);
+#else			
+		return ret_no_sys;
+#endif	
+
+	case cherokee_poll_poll:
+#if HAVE_POLL		
+		return fdpoll_poll_get_fdlimits (sys_fd_limit, fd_limit);
+#else			
+		return ret_no_sys;
+#endif	
+
+	case cherokee_poll_win32:
+#if HAVE_WIN32_SELECT
+		return fdpoll_win32_get_fdlimits (sys_fd_limit, fd_limit);
+#else			
+		return ret_no_sys;
+#endif
+
+	case cherokee_poll_select:
+#if HAVE_SELECT	
+		return fdpoll_select_get_fdlimits (sys_fd_limit, fd_limit);
+#else			
+		return ret_no_sys;
+#endif	
+	default:
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
+
+	/* NOTREACHED */
+}
+
+
+ret_t
 cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys_fd_limit, int fd_limit)
 {
 	if (sys_fd_limit < MIN_MAX_FDS || sys_fd_limit < fd_limit)

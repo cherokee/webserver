@@ -1,3 +1,32 @@
+2007-07-11  A.D.F  <adefacc@tin.it>
+
+	* cherokee/fdpoll.h
+	  - added cherokee_fdpoll_get_fdlimits() prototype.
+
+	* cherokee/fdpoll.c
+	  - added cherokee_fdpoll_get_fdlimits() in order to get
+	    max. system and poll-set fd limits.
+
+	* cherokee/fdpoll-protected.h
+	  - added fdpoll_*_get_fdlimits() function prototypes.
+
+	* cherokee/fdpoll-epoll.c,
+	  cherokee/fdpoll-kqueue.c,
+	  cherokee/fdpoll-port.c,
+	  cherokee/fdpoll-poll.c,
+	  cherokee/fdpoll-select.c,
+	  cherokee/fdpoll-win32.c
+	  - added fdpoll_*_get_fdlimits() to get specific
+	    fd limits.
+
+	* cherokee/server.c
+	  - added test and auto-tune code for fdpoll system and per poll-set
+	    fd limits before cherokee_fdpoll_new();
+	    NOTE: new tests and auto-tune code are performed only
+	          if a poller name (epoll, poll, etc.) is specified
+		  among configuration parameters (righ now,
+	          these tests are meaningful only for select based pollers).
+
 2007-07-11  Brian Rosner  <brosner@gmail.com>
 
 	* doc/build_docs.py

@@ -150,6 +150,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->timeout         = 15;
 
 	n->max_fds         = -1;
+	n->fds_per_thread  = -1;
 	n->system_fd_limit = -1;
 	n->max_conns       =  0;
 	n->max_keepalive_conns =  0;
@@ -646,10 +647,10 @@ print_banner (cherokee_server_t *srv)
 	 */
 	if (srv->thread_num <= 1) {
 		cherokee_buffer_add_str (&n, ", single thread");
-		cherokee_buffer_add_va (&n, ", %d fds per thread", srv->max_fds);	
+		cherokee_buffer_add_va (&n, ", %d fds per thread", srv->fds_per_thread);	
 	} else {
 		cherokee_buffer_add_va (&n, ", %d threads", srv->thread_num);
-		cherokee_buffer_add_va (&n, ", %d fds per thread", (srv->max_fds / srv->thread_num));	
+		cherokee_buffer_add_va (&n, ", %d fds per thread", srv->fds_per_thread);	
 
 		switch (srv->thread_policy) {
 #ifdef HAVE_PTHREAD
@@ -750,8 +751,10 @@ initialize_server_threads (cherokee_server_t *srv)
 
 	/* Verify max_fds value
 	 */
-	if (srv->max_fds < MIN_MAX_FDS)
+	if (srv->max_fds < MIN_MAX_FDS) {
+		PRINT_ERROR ("max_fds %d < %d MIN_MAX_FDS\n", srv->max_fds, MIN_MAX_FDS);
 		return ret_error;
+	}
 
 	/* Set fd upper limit for threads.
 	 */
@@ -783,6 +786,37 @@ initialize_server_threads (cherokee_server_t *srv)
 #else
 	fds_per_thread1 -= MAX_LISTEN_FDS;
 #endif
+	/* Get fdpoll limits.
+	 */
+	if (srv->fdpoll_method != cherokee_poll_UNSET) {
+		int sys_fd_limit = 0;
+		int poll_fd_limit = 0;
+
+		ret = cherokee_fdpoll_get_fdlimits (
+			srv->fdpoll_method, &sys_fd_limit, &poll_fd_limit);
+		if (ret != ret_ok) {
+			PRINT_ERROR ("cherokee_fdpoll_get_fdlimits: failed %d (poll_type %d)\n", (int)ret, (int) srv->fdpoll_method);
+			return ret_error;
+		}
+
+		/* Test system fd limit (no autotune here).
+		 */
+		if (sys_fd_limit > 0 &&
+		    srv->system_fd_limit > sys_fd_limit) {
+			PRINT_ERROR ("system_fd_limit %d > %d sys_fd_limit\n", srv->system_fd_limit, sys_fd_limit);
+			return ret_error;
+		}
+
+		/* If polling set limit has too many fds,
+		 * then decrease that number.
+		 */
+		if (poll_fd_limit > 0 &&
+		    fds_per_thread1 > poll_fd_limit) {
+			PRINT_ERROR ("fds_per_thread1 %d > %d poll_fd_limit (reduce that limit)\n", fds_per_thread1, poll_fd_limit);
+			fds_per_thread1 = poll_fd_limit - MAX_LISTEN_FDS;
+		}
+	}
+
 	/* Max. number of connections is halved because opening a new file
 	 * or using a socket to connect to an external helper
 	 * might be required to satisfy a request coming from an accepted
@@ -791,22 +825,27 @@ initialize_server_threads (cherokee_server_t *srv)
 	conns_per_thread = fds_per_thread1 / 2;
 	srv->max_conns += conns_per_thread;
 	fds_per_thread1 += MAX_LISTEN_FDS;
+	srv->fds_per_thread = fds_per_thread1;
 
 	/* Create the main thread
 	 */
 	ret = cherokee_thread_new (&srv->main_thread, srv, thread_sync, 
 			srv->fdpoll_method, srv->system_fd_limit,
 			fds_per_thread1, conns_per_thread);
-	if (unlikely(ret < ret_ok))
+	if (unlikely(ret < ret_ok)) {
+		PRINT_ERROR("cherokee_thread_new (main_thread) failed %d\n", ret);
 		return ret;
+	}
 
 	/* If Cherokee is compiled in single thread mode, it has to
 	 * add the server socket to the fdpoll of the sync thread
 	 */
 	if (srv->thread_num == 1) {
 		ret = cherokee_thread_accept_on (srv->main_thread);
-		if (unlikely(ret < ret_ok))
+		if (unlikely(ret < ret_ok)) {
+			PRINT_ERROR("cherokee_thread_accept_on failed %d\n", ret);
 			return ret;
+		}
 	}
 
 	/* If Cherokee has been compiled in multi-thread mode,
@@ -833,8 +872,10 @@ initialize_server_threads (cherokee_server_t *srv)
 		ret = cherokee_thread_new (&thread, srv, thread_async, 
 				srv->fdpoll_method, srv->system_fd_limit,
 				fds_per_thread1, conns_per_thread);
-		if (unlikely(ret < ret_ok))
+		if (unlikely(ret < ret_ok)) {
+			PRINT_ERROR("cherokee_thread_new() failed %d\n", ret);
 			return ret;
+		}
 		
 		thread->thread_pref = (i % 2) ? thread_normal_tls : thread_tls_normal;
 

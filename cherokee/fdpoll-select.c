@@ -239,6 +239,16 @@ _reset (cherokee_fdpoll_select_t *fdp, int fd)
 }
 
 
+ret_t
+fdpoll_select_get_fdlimits (int *system_fd_limit, int *fd_limit)
+{
+	*system_fd_limit = FD_SETSIZE;
+	*fd_limit = 0;
+
+	return ret_ok;
+}
+
+
 ret_t 
 fdpoll_select_new (cherokee_fdpoll_t **fdp, int system_fd_limit, int fd_limit)
 {
