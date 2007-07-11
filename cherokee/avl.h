@@ -55,6 +55,7 @@ ret_t cherokee_avl_del       (cherokee_avl_t *avl, cherokee_buffer_t *key, void 
 ret_t cherokee_avl_len       (cherokee_avl_t *avl, size_t *len);
 ret_t cherokee_avl_while     (cherokee_avl_t *avl, cherokee_avl_while_func_t func, void *param, cherokee_buffer_t **key, void **value);
 
+ret_t cherokee_avl_check     (cherokee_avl_t *avl);
 ret_t cherokee_avl_print     (cherokee_avl_t *avl);
 
 CHEROKEE_END_DECLS

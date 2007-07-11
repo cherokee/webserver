@@ -1,3 +1,9 @@
+2007-07-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/avl.h, cherokee/avl.c (cherokee_avl_check): Added new
+	check() method to the AVL class. It ensures that the order and
+	balance is correct.
+
 2007-07-11  Brian Rosner  <brosner@gmail.com>
 
        * doc/locale/en/handlers/common.txt,
@@ -23,7 +29,7 @@
 	    inside Python using the Django template classes and ReST for
 	    the documentation.
 
-2007-07-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+2007-07-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/table.c: Adapted to use the new AVL class. There are a
 	few temporal methods that need to be improved. I'll work on it in

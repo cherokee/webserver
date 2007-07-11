@@ -552,3 +552,54 @@ cherokee_avl_print (cherokee_avl_t *avl)
 	   print_node (avl->root);
 	   return ret_ok;
 }
+
+
+static ret_t
+check_node (cherokee_avl_node_t *node) 
+{
+	   int re;
+
+	   /* Empty */
+	   if (node == NULL)
+			 return ret_ok;
+
+	   /* No child */
+	   if ((node->left == NULL) &&
+		  (node->right == NULL))
+			 return ret_ok;
+
+	   /* Check order */
+	   if (node->left) {
+			 re = compare_buffers (&node->id, &node->left->id);
+			 if (re >= 0) {
+				    PRINT_ERROR ("Invalid link: node('%s') -> node('%s')\n",
+							  node->id.buf, node->left->id.buf);
+			 }
+	   }
+
+	   if (node->right) {
+			 re = compare_buffers (&node->id, &node->left->id);
+			 if (re <= 0) {
+				    PRINT_ERROR ("Invalid link: node('%s') -> node('%s')\n",
+							  node->id.buf, node->right->id.buf);
+			 }
+	   }
+
+	   /* Check balance */
+	   if (( node->left &&  node->right && (node->balance !=  0)) ||
+		  (!node->left &&  node->right && (node->balance !=  1)) ||
+		  ( node->left && !node->right && (node->balance != -1)))
+	   {
+			 PRINT_ERROR ("Wrong balance=%d at '%s'\n", node->balance, node->id.buf);
+	   }
+
+	   return ret_ok;
+}
+
+ret_t
+cherokee_avl_check (cherokee_avl_t *avl)
+{
+	   return check_node (avl->root);
+}
+
+
