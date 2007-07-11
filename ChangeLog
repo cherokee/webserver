@@ -1,3 +1,9 @@
+2007-07-11  Brian Rosner  <brosner@gmail.com>
+
+	* doc/build_docs.py
+	  - ignores hidden files
+	  - various clean-ups for 80 char consoles.
+
 2007-07-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/avl.h, cherokee/avl.c (cherokee_avl_check): Added new

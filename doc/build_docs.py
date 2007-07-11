@@ -45,11 +45,16 @@ def build_document(text):
 
         _suppress_blockquote_child_nodes = (
             nodes.bullet_list, nodes.enumerated_list, nodes.definition_list,
-            nodes.literal_block, nodes.doctest_block, nodes.line_block, nodes.table
+            nodes.literal_block, nodes.doctest_block, nodes.line_block,
+            nodes.table
         )
 
         def _bq_is_valid(self, node):
-            return len(node.children) != 1 or not isinstance(node.children[0], self._suppress_blockquote_child_nodes)
+            return len(node.children) != 1 or \
+                not isinstance(*(
+                    node.children[0],
+                    self._suppress_blockquote_child_nodes
+                ))
 
         def visit_block_quote(self, node):
             if self._bq_is_valid(node):
@@ -89,7 +94,8 @@ def main():
     from django.conf import settings
     settings.configure(**{
         'TEMPLATE_DEBUG': False,
-        'TEMPLATE_LOADERS': ('django.template.loaders.filesystem.load_template_source',),
+        'TEMPLATE_LOADERS':
+            ('django.template.loaders.filesystem.load_template_source',),
         'TEMPLATE_DIRS': ('templates/',)
     })
     
@@ -100,12 +106,18 @@ def main():
     #
     for d, dirs, files in os.walk(lang_dir):
         
-        media_root = os.path.join(*['..' for i in xrange(len(d.split('/')) - 2) if not d.endswith('/')] + ['media/'])
+        media_root = os.path.join(
+            *['..' for i in xrange(len(d.split('/')) - 2) \
+                if not d.endswith('/')] + ['media/'])
         
-        for filename in files:
-            inf = open(os.path.join(d, filename))
-            data = inf.read()
-            inf.close()
+        for ifile in files:
+            # ignore hidden files
+            if ifile.startswith('.'):
+                continue
+            
+            fp = open(os.path.join(d, ifile))
+            data = fp.read()
+            fp.close()
             
             if docutils:
                 parts = build_document(data)
@@ -124,9 +136,11 @@ def main():
             })
             
             # write the compiled html doc
-            ouf = open(os.path.join(write_dir, '%s.html' % filename.split('.')[0]), 'w')
-            ouf.write(doc_detail_template.render(c))
-            ouf.close()
+            ofile = os.path.join(write_dir, '%s.html' % \
+                ifile.split('.')[0])
+            fp = open(ofile, 'w')
+            fp.write(doc_detail_template.render(c))
+            fp.close()
     
     # move the media directory to the output_dir
     shutil.copytree('media', os.path.join(output_dir, 'media'))
