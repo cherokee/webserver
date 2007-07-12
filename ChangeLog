@@ -1,3 +1,32 @@
+
+2007-07-12  A.D.F  <adefacc@tin.it>
+
+	* cherokee/macros.h
+	  - added get_buf_str(b) macro to get the string member
+	    of a buffer_t.
+
+	* cherokee/fdpoll.h
+	  - added cherokee_fdpoll_str_to_method() prototype.
+
+	* cherokee/fdpoll.c
+	  - added cherokee_fdpoll_str_to_method() function.
+
+	* cherokee/fdpoll-select.c,
+	  cherokee/fdpoll-win32.c
+	  - renamed maxfd_changed to maxfd_recompute.
+
+	* cherokee/server.c
+	  - configure_server_property():
+	    - replaced sequence of equal_buf_str() calls with a call to
+	      cherokee_fdpoll_str_to_method();
+	    - added a call to cherokee_fdpoll_get_fdlimits()
+	      to verify whether the chosen poll method is supported by
+	      current environment / OS.
+
+	* cherokee/*.c
+	  - added a few comments;
+	  - minor space cleanups.
+
 2007-07-11  A.D.F  <adefacc@tin.it>
 
 	* cherokee/fdpoll.h

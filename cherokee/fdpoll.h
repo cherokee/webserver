@@ -58,8 +58,9 @@ ret_t cherokee_fdpoll_new        (cherokee_fdpoll_t **fdp, cherokee_poll_type_t 
 ret_t cherokee_fdpoll_best_new   (cherokee_fdpoll_t **fdp, int sys_limit, int limit);
 ret_t cherokee_fdpoll_free       (cherokee_fdpoll_t  *fdp);
 
-ret_t cherokee_fdpoll_get_method (cherokee_fdpoll_t *fdp, cherokee_poll_type_t *type);
-ret_t cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, char **name);
+ret_t cherokee_fdpoll_get_method (cherokee_fdpoll_t *fdp, cherokee_poll_type_t *poll_type);
+ret_t cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, char **str_method);
+ret_t cherokee_fdpoll_str_to_method  (char *str_method, cherokee_poll_type_t *poll_method);
 
 ret_t cherokee_fdpoll_add        (cherokee_fdpoll_t *fdp, int fd, int rw);
 ret_t cherokee_fdpoll_del        (cherokee_fdpoll_t *fdp, int fd);

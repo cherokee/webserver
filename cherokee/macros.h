@@ -152,6 +152,8 @@
 	(((b)->len == sizeof(str)-1) &&	\
 	 (strncasecmp((b)->buf, str, sizeof(str)-1) == 0))
 
+#define get_buf_str(b)		((b)->buf)
+
 #define return_if_fail(expr,ret) \
 	if (!(expr)) {                                                      \
 		fprintf (stderr,                                            \

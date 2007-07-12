@@ -183,6 +183,7 @@ cherokee_fdpoll_get_method (cherokee_fdpoll_t *fdp, cherokee_poll_type_t *type)
 	return ret_ok;
 }
 
+
 ret_t 
 cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, char **str)
 {
@@ -200,17 +201,59 @@ cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, char **str)
 		*str = "poll";
 		break;
 	case cherokee_poll_win32:
-		* str = "win32";
+		*str = "win32";
 		break;
 	case cherokee_poll_select:
-		* str = "select";
+		*str = "select";
 		break;
 	default:
 		SHOULDNT_HAPPEN;
+		*str = "unknown";
 		return ret_error;
 	}
 
 	return ret_ok;
+}
+
+
+/* Given a string poll type, returns the poll type.
+ */
+ret_t 
+cherokee_fdpoll_str_to_method (char *str, cherokee_poll_type_t *poll_type)
+{
+	if (equal_str(str, "epoll")) {
+		*poll_type = cherokee_poll_epoll;
+		return ret_ok;
+	}
+
+	if (equal_str(str, "kqueue")) {
+		*poll_type = cherokee_poll_kqueue;
+		return ret_ok;
+	}
+
+	if (equal_str(str, "port")) {
+		*poll_type = cherokee_poll_port;
+		return ret_ok;
+	}
+
+	if (equal_str(str, "poll")) {
+		*poll_type = cherokee_poll_poll;
+		return ret_ok;
+	}
+
+	if (equal_str(str, "win32")) {
+		*poll_type = cherokee_poll_win32;
+		return ret_ok;
+	}
+
+	if (equal_str(str, "select")) {
+		*poll_type = cherokee_poll_select;
+		return ret_ok;
+	}
+
+	/* Unknown type.
+	 */
+	return ret_error;
 }
 
 

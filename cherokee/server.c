@@ -792,8 +792,7 @@ initialize_server_threads (cherokee_server_t *srv)
 		int sys_fd_limit = 0;
 		int poll_fd_limit = 0;
 
-		ret = cherokee_fdpoll_get_fdlimits (
-			srv->fdpoll_method, &sys_fd_limit, &poll_fd_limit);
+		ret = cherokee_fdpoll_get_fdlimits (srv->fdpoll_method, &sys_fd_limit, &poll_fd_limit);
 		if (ret != ret_ok) {
 			PRINT_ERROR ("cherokee_fdpoll_get_fdlimits: failed %d (poll_type %d)\n", (int)ret, (int) srv->fdpoll_method);
 			return ret_error;
@@ -825,9 +824,12 @@ initialize_server_threads (cherokee_server_t *srv)
 	conns_per_thread = fds_per_thread1 / 2;
 	srv->max_conns += conns_per_thread;
 	fds_per_thread1 += MAX_LISTEN_FDS;
+
+	/* Set mean fds per thread.
+	 */
 	srv->fds_per_thread = fds_per_thread1;
 
-	/* Create the main thread
+	/* Create the main thread (only structures, not a real thread)
 	 */
 	ret = cherokee_thread_new (&srv->main_thread, srv, thread_sync, 
 			srv->fdpoll_method, srv->system_fd_limit,
@@ -869,6 +871,11 @@ initialize_server_threads (cherokee_server_t *srv)
 		srv->max_conns += conns_per_thread;
 		fds_per_thread1 += MAX_LISTEN_FDS;
 
+		/* NOTE: mean fds per thread has already been set above.
+		 */
+
+		/* Create a real thread.
+		 */
 		ret = cherokee_thread_new (&thread, srv, thread_async, 
 				srv->fdpoll_method, srv->system_fd_limit,
 				fds_per_thread1, conns_per_thread);
@@ -1546,20 +1553,29 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_add_buffer (&srv->listen_to, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "poll_method")) {
-		if (equal_buf_str (&conf->val, "epoll")) {
-			srv->fdpoll_method = cherokee_poll_epoll;
-		} else if (equal_buf_str (&conf->val, "port")) {
-			srv->fdpoll_method = cherokee_poll_port;
-		} else if (equal_buf_str (&conf->val, "kqueue")) {
-			srv->fdpoll_method = cherokee_poll_kqueue;
-		} else if (equal_buf_str (&conf->val, "poll")) {
-			srv->fdpoll_method = cherokee_poll_poll;
-		} else if (equal_buf_str (&conf->val, "win32")) {
-			srv->fdpoll_method = cherokee_poll_win32;
-		} else if (equal_buf_str (&conf->val, "select")) {
-			srv->fdpoll_method = cherokee_poll_select;
-		} else {
-			PRINT_MSG ("ERROR: Unknown polling method '%s'\n", conf->val.buf);
+		char *str = get_buf_str(&conf->val);
+		int  sys_fd_limit = 0;
+		int  thr_fd_limit = 0;
+
+		/* Convert poll method string to type.
+		 */
+		ret = cherokee_fdpoll_str_to_method(str, &(srv->fdpoll_method));
+		if (ret != ret_ok) {
+			PRINT_MSG ("ERROR: Unknown polling method '%s'\n", str);
+			return ret_error;
+		}
+
+		/* Verify whether the method is supported by this OS.
+		 */
+		ret = cherokee_fdpoll_get_fdlimits (srv->fdpoll_method, &sys_fd_limit, &thr_fd_limit);
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_no_sys:
+			PRINT_MSG ("ERROR: polling method '%s' is NOT supported by this OS\n", str);
+			return ret;
+		default:
+			PRINT_MSG ("ERROR: polling method '%s' has NOT been recognized (internal ERROR)\n", str);
 			return ret_error;
 		}
 

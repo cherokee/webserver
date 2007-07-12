@@ -61,7 +61,7 @@ typedef struct {
 	int    *select_fdidx;
 	int    *select_rfdidx;
 	int     maxfd;
-	int     maxfd_changed;
+	int     maxfd_recompute;
 } cherokee_fdpoll_select_t;
 
 
@@ -143,7 +143,7 @@ _del (cherokee_fdpoll_select_t *fdp, int fd)
 	FD_CLR (fd, &fdp->master_wfdset);
 
 	if (fd >= fdp->maxfd) {
-		fdp->maxfd_changed = 1;
+		fdp->maxfd_recompute = 1;
 	}
 
 	return ret_ok;
@@ -180,7 +180,7 @@ _check (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 static int
 select_get_maxfd (cherokee_fdpoll_select_t *fdp) 
 {
-	if (fdp->maxfd_changed) {
+	if (fdp->maxfd_recompute) {
 		int i;
 
 		fdp->maxfd = -1;
@@ -190,7 +190,7 @@ select_get_maxfd (cherokee_fdpoll_select_t *fdp)
 			}
 		}
 
-		fdp->maxfd_changed = 0;
+		fdp->maxfd_recompute = 0;
 	}
 
 	return fdp->maxfd;
@@ -288,12 +288,12 @@ fdpoll_select_new (cherokee_fdpoll_t **fdp, int system_fd_limit, int fd_limit)
 	FD_ZERO (&n->master_rfdset);
 	FD_ZERO (&n->master_wfdset);
 
-	n->select_fds    = (int*) calloc(nfd->nfiles, sizeof(int));
-	n->select_rfdidx = (int*) calloc(nfd->nfiles, sizeof(int));
-	n->select_fdidx  = (int*) calloc(nfd->system_nfiles, sizeof(int));
-	n->fd_rw         = (int*) calloc(nfd->system_nfiles, sizeof(int));
-	n->maxfd         = -1;
-	n->maxfd_changed =  0;
+	n->select_fds      = (int*) calloc(nfd->nfiles, sizeof(int));
+	n->select_rfdidx   = (int*) calloc(nfd->nfiles, sizeof(int));
+	n->select_fdidx    = (int*) calloc(nfd->system_nfiles, sizeof(int));
+	n->fd_rw           = (int*) calloc(nfd->system_nfiles, sizeof(int));
+	n->maxfd           = -1;
+	n->maxfd_recompute =  0;
 
 	if (n->select_fds == NULL ||
 	    n->select_rfdidx == NULL ||
