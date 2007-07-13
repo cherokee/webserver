@@ -1,5 +1,8 @@
 2007-07-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* doc/build_docs.py, doc/Makefile.am: Default building directory
+	is no longer "./build". Changed to ./
+	
 	* doc/Makefile.am (CLEANFILES): Added new cleaning rule
 
 	* cherokee/server.c (cherokee_server_get_reusable_conns): Clean

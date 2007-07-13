@@ -68,7 +68,7 @@ def build_document(text):
 
 def main():
     
-    output_dir = './output'
+    output_dir = '.'
     
     #
     # get the language to compile

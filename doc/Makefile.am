@@ -1,32 +1,32 @@
 docdir = $(datadir)/doc/cherokee/
 doc_DATA = \
-output/index.html \
-output/authentication.html \
-output/configuration.html \
-output/loggers.html \
-output/server.html \
-output/vserver.html
+index.html \
+authentication.html \
+configuration.html \
+loggers.html \
+server.html \
+vserver.html
 
 dochandlersdir = $(docdir)handlers/
 dochandlers_DATA = \
-output/handlers/common.html \
-output/handlers/dirlist.html \
-output/handlers/file.html \
-output/handlers/redir.html
+handlers/common.html \
+handlers/dirlist.html \
+handlers/file.html \
+handlers/redir.html
 
 docloggersdir = $(docdir)loggers/
 docloggers_DATA = \
-output/loggers/combined.html \
-output/loggers/ncsa.html \
-output/loggers/w3c.html
+loggers/combined.html \
+loggers/ncsa.html \
+loggers/w3c.html
 
 docmediacssdir = $(docdir)media/css/
 docmediacss_DATA = \
-output/media/css/documentation.css
+media/css/documentation.css
 
 docvalidatorsdir = $(docdir)validators/
 docvalidators_DATA = \
-output/validators/mysql.html
+validators/mysql.html
 
 GENERATED_FILES = \
 $(doc_DATA) \
@@ -41,5 +41,5 @@ $(GENERATED_FILES)
 CLEANFILES = \
 $(GENERATED_FILES) 
 
-output/index.html:
+index.html:
 	python build_docs.py
