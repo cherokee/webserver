@@ -1,4 +1,3 @@
-
 docdir = $(datadir)/doc/cherokee/
 doc_DATA = \
 output/index.html \
@@ -29,13 +28,18 @@ docvalidatorsdir = $(docdir)validators/
 docvalidators_DATA = \
 output/validators/mysql.html
 
-EXTRA_DIST = \
+GENERATED_FILES = \
 $(doc_DATA) \
 $(dochandlers_DATA) \
 $(docloggers_DATA) \
 $(docmediacss_DATA) \
 $(docvalidators_DATA)
 
+EXTRA_DIST = \
+$(GENERATED_FILES) 
+
+CLEANFILES = \
+$(GENERATED_FILES) 
+
 output/index.html:
 	python build_docs.py
-    
