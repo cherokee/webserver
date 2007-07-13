@@ -41,5 +41,5 @@ $(GENERATED_FILES)
 CLEANFILES = \
 $(GENERATED_FILES) 
 
-index.html:
+$(GENERATED_FILES):
 	python build_docs.py
