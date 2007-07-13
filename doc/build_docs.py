@@ -84,10 +84,6 @@ def main():
             print 'language %s does not exist.' % lang
             raise SystemExit
     
-    # delete output_dir if it already exists
-    if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
-    
     #
     # configure django to make templates work
     #
@@ -141,9 +137,6 @@ def main():
             fp = open(ofile, 'w')
             fp.write(doc_detail_template.render(c))
             fp.close()
-    
-    # move the media directory to the output_dir
-    shutil.copytree('media', os.path.join(output_dir, 'media'))
 
 if __name__ == '__main__':
     main()

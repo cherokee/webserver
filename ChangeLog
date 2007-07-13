@@ -1,3 +1,8 @@
+2007-07-13  Brian Rosner  <brosner@gmail.com>
+
+	* doc/build_docs.py: removed code to delete output_dir and moving
+	the media folder to output_dir.
+
 2007-07-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* doc/build_docs.py, doc/Makefile.am: Default building directory
