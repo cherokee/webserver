@@ -12,7 +12,10 @@ dochandlers_DATA = \
 handlers/common.html \
 handlers/dirlist.html \
 handlers/file.html \
-handlers/redir.html
+handlers/redir.html \
+handlers/cgi.html \
+handlers/fastcgi.html \
+handlers/scgi.html
 
 docloggersdir = $(docdir)loggers/
 docloggers_DATA = \
@@ -22,7 +25,12 @@ loggers/w3c.html
 
 docvalidatorsdir = $(docdir)validators/
 docvalidators_DATA = \
-validators/mysql.html
+validators/htdigest.html \
+validators/htpasswd.html \
+validators/ldap.html \
+validators/mysql.html \
+validators/pam.html \
+validators/plain.html
 
 docmediacssdir = $(docdir)media/css/
 docmediacss_DATA = \
