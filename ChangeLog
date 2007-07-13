@@ -1,3 +1,7 @@
+2007-07-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/avl.c: Many changes. It should be working much better
+	now. For instance, it's no longer recursive.
 
 2007-07-12  A.D.F  <adefacc@tin.it>
 
