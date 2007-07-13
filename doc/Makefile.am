@@ -20,23 +20,23 @@ loggers/combined.html \
 loggers/ncsa.html \
 loggers/w3c.html
 
-docmediacssdir = $(docdir)media/css/
-docmediacss_DATA = \
-media/css/documentation.css
-
 docvalidatorsdir = $(docdir)validators/
 docvalidators_DATA = \
 validators/mysql.html
+
+docmediacssdir = $(docdir)media/css/
+docmediacss_DATA = \
+media/css/documentation.css
 
 GENERATED_FILES = \
 $(doc_DATA) \
 $(dochandlers_DATA) \
 $(docloggers_DATA) \
-$(docmediacss_DATA) \
 $(docvalidators_DATA)
 
 EXTRA_DIST = \
-$(GENERATED_FILES) 
+$(GENERATED_FILES) \
+$(docmediacss_DATA)
 
 CLEANFILES = \
 $(GENERATED_FILES) 
