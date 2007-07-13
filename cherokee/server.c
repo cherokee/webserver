@@ -1838,7 +1838,7 @@ ret_t
 cherokee_server_get_reusable_conns (cherokee_server_t *srv, cuint_t *num)
 {
 	cuint_t          reusable = 0;
-	cherokee_list_t *thread, *i;
+	cherokee_list_t *thread;
 
 	/* Reusable connections
 	 */

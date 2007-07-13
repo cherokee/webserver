@@ -1,5 +1,8 @@
 2007-07-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (cherokee_server_get_reusable_conns): Clean
+	up: Removed unused variable.
+
 	* cherokee/avl.c: Many changes. It should be working much better
 	now. For instance, it's no longer recursive.
 
