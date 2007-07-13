@@ -1,0 +1,21 @@
+pam Validator
+==================
+
+The pam validator uses the *Pluggable Authentication Module* to validate the
+username/password combination.
+
+Parameters
+**********
+
+None
+
+Compatibility
+*************
+
+This validator is compatible with the **basic** scheme.
+
+Example
+*******
+::
+    
+    vserver!default!directory!/secret!
