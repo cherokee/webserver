@@ -1,5 +1,9 @@
 2007-07-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py: If the server runs with Valgrind, wait 10 more
+	seconds to start the tests. There were many occasions in which the
+	servers wasn't ready when the first test was executed.
+
 	* cherokee/handler_common.c: Updated. Now it uses the new iocache
 	interface (buffers instead of char pointers).
 
