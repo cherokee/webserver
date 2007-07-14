@@ -66,9 +66,6 @@
 typedef struct {
 	cherokee_iocache_entry_t base;
 
-	/* check 1 */
-	cuint_t                  test1;
-
 	time_t                   stat_update;
 	time_t                   mmap_update;
 	cint_t                   ref_counter;
@@ -77,9 +74,6 @@ typedef struct {
 	/* unref */
 	cherokee_list_t          to_be_deleted;
 	cherokee_buffer_t       *name_ref;
-
-	/* check 2 */
-	cuint_t                  test2;
 } cherokee_iocache_entry_extension_t;
 
 
@@ -166,10 +160,6 @@ iocache_entry_new (cherokee_iocache_entry_t **entry)
 	PUBL(n)->mmaped      = NULL;
 	PUBL(n)->mmaped_len  = 0;
 
-	PRIV(n)->test1    = 123456;
-	PRIV(n)->test2    = 987654;
-	PUBL(n)->cleaned     = 0;
-
 	*entry = PUBL(n);
 	return ret_ok;
 }
@@ -207,10 +197,6 @@ iocache_free_entry (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry
 		entry->mmaped     = NULL;
 		entry->mmaped_len = 0;
 	}
-
-	PRIV(entry)->test1 = 0;
-	PRIV(entry)->test2 = 0;
-	entry->cleaned = 6969;
 
 	/* Free the entry object
 	 */
