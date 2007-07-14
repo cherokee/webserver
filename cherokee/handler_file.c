@@ -317,7 +317,7 @@ stat_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn
 	 */
 #ifndef CHEROKEE_EMBEDDED
 	if (HDL_FILE_PROP(fhdl)->use_cache) {
-		ret = cherokee_iocache_get_or_create_w_stat (srv->iocache, conn->local_directory.buf, io_entry);
+		ret = cherokee_iocache_get_or_create_w_stat (srv->iocache, &conn->local_directory, io_entry);
 		switch (ret) {
 		case ret_ok:
 			*info = &(*io_entry)->state;
@@ -430,10 +430,10 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	TRACE(ENTRIES, "Using iocache %d\n", use_io);
 	
 	if (use_io) {
-//		if (conn->io_entry_ref)
-//			cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
+		if (conn->io_entry_ref)
+			cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
 		ret = cherokee_iocache_get_or_create_w_mmap (srv->iocache,
-							     conn->local_directory.buf,
+							     &conn->local_directory,
 							     &conn->io_entry_ref, 
 							     &fhdl->fd);
 

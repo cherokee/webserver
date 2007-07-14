@@ -1,3 +1,8 @@
+2007-07-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/iocache.c: Now it uses an AVL tree instead of a
+	table. It also accepts cherokee_buffer_t* paths instead of char*
+
 2007-07-13  Brian Rosner  <brosner@gmail.com>
 
 	* doc/Makefile.am: forgot to include new documentation into

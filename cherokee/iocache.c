@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "iocache.h"
 
-#include "table.h"
+#include "avl.h"
 #include "list.h"
 #include "buffer.h"
 #include "server-protected.h"
@@ -75,7 +75,7 @@ typedef struct {
 
 	/* unref */
 	cherokee_list_t          to_be_deleted;
-	const char              *name_ref;
+	cherokee_buffer_t       *name_ref;
 
 	/* check 2 */
 	cuint_t                  test2;
@@ -84,7 +84,7 @@ typedef struct {
 
 struct cherokee_iocache {
 	cherokee_server_t *srv;
-	cherokee_table_t   files;
+	cherokee_avl_t     files;
 	cuint_t            files_num;
 	cuint_t            files_max;
 	cuint_t            files_usages;
@@ -108,7 +108,7 @@ cherokee_iocache_new (cherokee_iocache_t **iocache, cherokee_server_t *srv)
 {
 	CHEROKEE_NEW_STRUCT (n, iocache);
 
-	cherokee_table_init (&n->files);
+	cherokee_avl_init   (&n->files);
 	CHEROKEE_MUTEX_INIT (&n->files_lock, NULL);
 
 	n->files_num     = 0;
@@ -224,11 +224,11 @@ iocache_free_entry (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry
 
 
 static ret_t
-iocache_entry_update_stat (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry, char *filename)
+iocache_entry_update_stat (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry, cherokee_buffer_t *filename)
 {
 	int re;
 
-	re = cherokee_stat (filename, &entry->state);
+	re = cherokee_stat (filename->buf, &entry->state);
 	if (re < 0) {
 		switch (errno) {
 		case EACCES: 
@@ -248,7 +248,7 @@ iocache_entry_update_stat (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 
 
 static ret_t
-iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry, char *filename, int fd, int *ret_fd)
+iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry, cherokee_buffer_t *filename, int fd, int *ret_fd)
 {
 	ret_t ret;
 
@@ -268,7 +268,7 @@ iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 	/* Maybe it is already opened
 	 */
 	if (fd < 0) {
-		fd = open (filename, O_RDONLY|O_BINARY);
+		fd = open (filename->buf, O_RDONLY|O_BINARY);
 		if (unlikely (fd < 0)) return ret_error;
 	}
 
@@ -313,7 +313,7 @@ iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 
 
 static ret_t
-iocache_entry_maybe_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry, char *filename, int fd, int *ret_fd)
+iocache_entry_maybe_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry, cherokee_buffer_t *filename, int fd, int *ret_fd)
 {
 	cherokee_boolean_t update;
 
@@ -359,7 +359,7 @@ test_entry (cherokee_iocache_entry_t *file, char *p)
 
 
 static int
-iocache_clean_up_each (const char *key, void *value, void *param)
+iocache_clean_up_each (cherokee_buffer_t *key, void *value, void *param)
 {
 	float                               usage;
 	cherokee_iocache_t                 *iocache    = IOCACHE(param);
@@ -410,11 +410,11 @@ cherokee_iocache_clean_up (cherokee_iocache_t *iocache, cuint_t num)
 
 	/* Check entry by entry
 	 */
-	cherokee_table_while (&iocache->files,       /* table obj */
-			      iocache_clean_up_each, /* func */
-			      iocache,               /* param */
-			      NULL,                  /* key */
-			      NULL);                 /* value */
+	cherokee_avl_while (&iocache->files,       /* table obj */
+			    iocache_clean_up_each, /* func */
+			    iocache,               /* param */
+			    NULL,                  /* key */
+			    NULL);                 /* value */
 
 	{ int n = 0;
 		list_for_each_safe (i, tmp, &iocache->to_delete) { n++; }
@@ -424,13 +424,13 @@ cherokee_iocache_clean_up (cherokee_iocache_t *iocache, cuint_t num)
 	/* Remove some files
 	 */
 	list_for_each_safe (i, tmp, &iocache->to_delete) {
-		cherokee_iocache_entry_extension_t *ret_entry;
+		cherokee_iocache_entry_extension_t *ret_entry = NULL;
 		cherokee_iocache_entry_extension_t *entry;
 
 		entry = list_entry (i, cherokee_iocache_entry_extension_t, to_be_deleted);
 		test_entry (IOCACHE_ENTRY(entry), "clean_up_for");
 
-		ret = cherokee_table_del (&iocache->files, (char *)entry->name_ref, (void **)&ret_entry);
+		ret = cherokee_avl_del (&iocache->files, entry->name_ref, (void **)&ret_entry);
 		if (unlikely (ret != ret_ok)) {
 			printf ("ARGGGGGGGGGGGGGGGGGGH1\n");
 			exit(1);
@@ -467,9 +467,10 @@ free_while_func (const char *key, void *value, void *param)
 static ret_t 
 cherokee_iocache_free (cherokee_iocache_t *iocache)
 {
-	cherokee_table_while (&iocache->files, 
-			      (cherokee_table_while_func_t)free_while_func, 
-			      iocache, NULL, NULL);
+	cherokee_avl_while (&iocache->files, 
+			    (cherokee_avl_while_func_t)free_while_func, 
+			    iocache, 
+			    NULL, NULL);
 
 	CHEROKEE_MUTEX_DESTROY (&iocache->files_lock);
 
@@ -497,7 +498,7 @@ hit (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *file)
 
 
 ret_t
-cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, char *filename, cherokee_iocache_entry_t **ret_file)
+cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, cherokee_buffer_t *filename, cherokee_iocache_entry_t **ret_file)
 {
 	ret_t                     ret;
 	cherokee_iocache_entry_t *entry;
@@ -506,7 +507,7 @@ cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, char *filena
 
 	/* Look inside the table
 	 */
-	ret = cherokee_table_get (&iocache->files, filename, (void **)ret_file);
+	ret = cherokee_avl_get (&iocache->files, filename, (void **)ret_file);
 	if (ret != ret_ok) {
 		if (iocache->files_num >= iocache->files_max) {
 			ret = ret_no_sys;
@@ -516,7 +517,7 @@ cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, char *filena
 		ret = iocache_entry_new (ret_file);
 		if (unlikely (ret != ret_ok)) goto error;
 
-		ret = cherokee_table_add (&iocache->files, filename, *ret_file);
+		ret = cherokee_avl_add (&iocache->files, filename, *ret_file);
 		if (unlikely (ret != ret_ok)) {
 			printf ("ARGGGGGGGGGGGGGGGGGGH2\n");
 			goto error_free;
@@ -552,7 +553,7 @@ error:
 
 
 ret_t 
-cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, char *filename, cherokee_iocache_entry_t **ret_file, int *ret_fd)
+cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, cherokee_buffer_t *filename, cherokee_iocache_entry_t **ret_file, int *ret_fd)
 {
 	ret_t                     ret;
 	cherokee_iocache_entry_t *entry;
@@ -562,7 +563,7 @@ cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, char *filena
 	/* Fetch or create the entry object
 	 */
 	if (*ret_file == NULL) {
-		ret = cherokee_table_get (&iocache->files, filename, (void **)ret_file);
+		ret = cherokee_avl_get (&iocache->files, filename, (void **)ret_file);
 		if (ret != ret_ok) {
 			if (iocache->files_num >= iocache->files_max) {
 				ret = ret_no_sys;
@@ -572,7 +573,7 @@ cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, char *filena
 			ret = iocache_entry_new (ret_file);
 			if (unlikely (ret != ret_ok)) goto error;
 			
-			ret = cherokee_table_add (&iocache->files, filename, *ret_file);
+			ret = cherokee_avl_add (&iocache->files, filename, *ret_file);
 			if (unlikely (ret != ret_ok)) {
 				printf ("ARGGGGGGGGGGGGGGGGGGH3\n");
 				goto error_free;

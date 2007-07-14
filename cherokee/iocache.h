@@ -54,7 +54,7 @@ ret_t cherokee_iocache_clean_up      (cherokee_iocache_t *iocache, cuint_t num);
 
 ret_t cherokee_iocache_mmap_release  (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *file);
 
-ret_t cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, char *filename, cherokee_iocache_entry_t **ret_file, int *fd);
-ret_t cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, char *filename, cherokee_iocache_entry_t **ret_file);
+ret_t cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, cherokee_buffer_t *filename, cherokee_iocache_entry_t **ret_file, int *fd);
+ret_t cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, cherokee_buffer_t *filename, cherokee_iocache_entry_t **ret_file);
 
 #endif /* CHEROKEE_IOCACHE_H */
