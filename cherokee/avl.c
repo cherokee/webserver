@@ -238,7 +238,7 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 	cherokee_boolean_t   is_left;
 	cherokee_avl_node_t *path[MAX_HEIGHT];
 	cherokee_avl_node_t *node   = tree->root;
-	cherokee_avl_node_t *parent = NULL;;
+	cherokee_avl_node_t *parent = NULL;
 	cint_t               idx    = 1;
 
 	path[0] = NULL;
