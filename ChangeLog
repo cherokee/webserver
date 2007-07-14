@@ -1,5 +1,8 @@
 2007-07-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/avl.c (cherokee_avl_del): Bugfix. Recursion array base
+	is 0, not 1.
+
 	* cherokee/avl.c (cherokee_avl_del): Return the value in the third
 	parameter (double pointer).
 

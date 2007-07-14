@@ -353,7 +353,7 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 	if (avl->root == NULL)
 		return ret_not_found;
 
-	path[idx] = NULL;
+	path[0] = NULL;
 
 	while (true) {
 		re = compare_buffers (key, &node->id);
