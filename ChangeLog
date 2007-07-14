@@ -1,5 +1,7 @@
 2007-07-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/iocache.c: Clean up and added a few TRACE entries.
+
 	* qa/run-tests.py, qa/help.py: Depending on the machine and
 	environment, ten additional seconds to start the server might not
 	be enough. This change adds a new parameter -r that allows to

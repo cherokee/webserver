@@ -45,6 +45,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#define ENTRIES "iocache"
 
 #define FRESHNESS_TIME_STAT 300
 #define FRESHNESS_TIME_MMAP 600
@@ -252,6 +253,8 @@ iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 {
 	ret_t ret;
 
+	TRACE(ENTRIES, "Update mmap: %s\n", filename->buf);
+
 	/* The stat information has to be fresh enough
 	 */
 	if (iocache->srv->bogo_now >= (PRIV(entry)->stat_update + FRESHNESS_TIME_STAT)) {
@@ -333,40 +336,12 @@ iocache_entry_maybe_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_e
 }
 
 
-static void
-test_entry (cherokee_iocache_entry_t *file, char *p) 
-{
-	if (!file) {
-		printf ("%s: NULLLLLLLLL!", p);
-		exit(1);
-	}
-
-	if (PRIV(file)->test1 != 123456) {
-		printf ("%s: wasn't an obj %p\n", p, file);
-		exit(1);
-	}
-
-	if (PRIV(file)->test2 != 987654) {
-		printf ("%s: wasn't an obj2 %p\n", p, file);
-		exit(1);
-	}
-
-	if (PUBL(file)->cleaned != 0) { 
-		printf("%s: entry previously cleared %p\n", p, file); 
-		exit(1);
-	}
-}
-
-
 static int
 iocache_clean_up_each (cherokee_buffer_t *key, void *value, void *param)
 {
 	float                               usage;
 	cherokee_iocache_t                 *iocache    = IOCACHE(param);
-	cherokee_iocache_entry_t           *entry      = IOCACHE_ENTRY(value); 
 	cherokee_iocache_entry_extension_t *entry_priv = PRIV(value);
-
-	test_entry (entry, "clean_up_each");
 
 	/* Reset usage value
 	 */
@@ -399,6 +374,7 @@ cherokee_iocache_clean_up (cherokee_iocache_t *iocache, cuint_t num)
 	cherokee_list_t   *i, *tmp;
 
 	CHEROKEE_MUTEX_LOCK (&iocache->files_lock);
+	TRACE(ENTRIES, "Clean-up: %d files\n", iocache->files_num);
 
 	if (iocache->files_num < CACHE_SIZE)
 		goto ok;
@@ -416,10 +392,13 @@ cherokee_iocache_clean_up (cherokee_iocache_t *iocache, cuint_t num)
 			    NULL,                  /* key */
 			    NULL);                 /* value */
 
-	{ int n = 0;
+#ifdef TRACE_ENABLED
+	{ 
+		int n = 0;
 		list_for_each_safe (i, tmp, &iocache->to_delete) { n++; }
-		printf ("cleanup list len %d\n", n);
+		TRACE(ENTRIES, "Clean-up list length: %d\n", n);
 	}
+#endif
 
 	/* Remove some files
 	 */
@@ -428,19 +407,11 @@ cherokee_iocache_clean_up (cherokee_iocache_t *iocache, cuint_t num)
 		cherokee_iocache_entry_extension_t *entry;
 
 		entry = list_entry (i, cherokee_iocache_entry_extension_t, to_be_deleted);
-		test_entry (IOCACHE_ENTRY(entry), "clean_up_for");
 
 		ret = cherokee_avl_del (&iocache->files, entry->name_ref, (void **)&ret_entry);
-		if (unlikely (ret != ret_ok)) {
-			printf ("ARGGGGGGGGGGGGGGGGGGH1\n");
-			exit(1);
-		}
-		entry->name_ref = NULL; /* freed in table::del() */
+		if (unlikely (ret != ret_ok)) return ret;
 
-		if (entry != ret_entry) {
-			printf ("entries mismatch!!!! entry=%p ret_entry=%p\n", entry, ret_entry);
-			exit(1);
-		}
+		entry->name_ref = NULL; /* freed in table::del() */
 
 		cherokee_list_del (&entry->to_be_deleted);
 		iocache_free_entry (iocache, IOCACHE_ENTRY(entry));
@@ -504,6 +475,7 @@ cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, cherokee_buf
 	cherokee_iocache_entry_t *entry;
 
 	CHEROKEE_MUTEX_LOCK (&iocache->files_lock);
+	TRACE(ENTRIES, "With stat: %s\n", filename->buf);
 
 	/* Look inside the table
 	 */
@@ -559,6 +531,7 @@ cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, cherokee_buf
 	cherokee_iocache_entry_t *entry;
 
 	CHEROKEE_MUTEX_LOCK (&iocache->files_lock);
+	TRACE(ENTRIES, "With mmap: %s\n", filename->buf);
 
 	/* Fetch or create the entry object
 	 */
@@ -630,8 +603,12 @@ cherokee_iocache_mmap_release (cherokee_iocache_t *iocache, cherokee_iocache_ent
 {
 	ret_t ret;
 
-	if (file == NULL)
+	if (file == NULL) {
+		TRACE(ENTRIES, "Release: %s\n", "NULL");
 		return ret_not_found;
+	}
+
+	TRACE(ENTRIES, "Release: %s\n", PRIV(file)->name_ref->buf);
 
 	CHEROKEE_MUTEX_LOCK (&iocache->files_lock);
 	ret = iocache_entry_unref (file);
