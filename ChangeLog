@@ -1,5 +1,8 @@
 2007-07-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_common.c: Updated. Now it uses the new iocache
+	interface (buffers instead of char pointers).
+
 	* cherokee/avl.c (cherokee_avl_del): Bugfix. Recursion array base
 	is 0, not 1.
 

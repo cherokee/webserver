@@ -98,7 +98,7 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 
 static ret_t
 stat_file (cherokee_boolean_t useit, cherokee_iocache_t *iocache, struct stat *nocache_info, 
-	   char *path, cherokee_iocache_entry_t **io_entry, struct stat **info)
+	   cherokee_buffer_t *path, cherokee_iocache_entry_t **io_entry, struct stat **info)
 {	
 	ret_t ret;
 	int   re  = -1;
@@ -106,9 +106,9 @@ stat_file (cherokee_boolean_t useit, cherokee_iocache_t *iocache, struct stat *n
 	/* Without cache
 	 */
 	if (!useit) {
-		re = cherokee_stat (path, nocache_info);
+		re = cherokee_stat (path->buf, nocache_info);
 
-		TRACE (ENTRIES, "%s, use_iocache=%d re=%d\n", path, useit, re);
+		TRACE (ENTRIES, "%s, use_iocache=%d re=%d\n", path->buf, useit, re);
 
 		if (re < 0) {
 			switch (errno) {
@@ -130,7 +130,7 @@ stat_file (cherokee_boolean_t useit, cherokee_iocache_t *iocache, struct stat *n
 #ifndef CHEROKEE_EMBEDDED
 	ret = cherokee_iocache_get_or_create_w_stat (iocache, path, io_entry);
 
-	TRACE (ENTRIES, "%s, use_iocache=%d re=%d\n", path, useit, re);
+	TRACE (ENTRIES, "%s, use_iocache=%d re=%d\n", path->buf, useit, re);
 
 	if (ret != ret_ok) {
 		switch (ret) {
@@ -179,7 +179,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	cherokee_iocache_get_default (&iocache);
 #endif
 
-	ret = stat_file (use_iocache, iocache, &nocache_info, conn->local_directory.buf, &file, &info);
+	ret = stat_file (use_iocache, iocache, &nocache_info, &conn->local_directory, &file, &info);
 	exists = (ret == ret_ok);
 
 	TRACE (ENTRIES, "request: '%s', local: '%s', exists %d\n", 
@@ -272,7 +272,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				cherokee_buffer_add_buffer (new_local_dir, &CONN_VSRV(conn)->root);
 				cherokee_buffer_add (new_local_dir, index, index_len);
 				
-				ret = stat_file (use_iocache, iocache, &nocache_info, new_local_dir->buf, &file, &info);
+				ret = stat_file (use_iocache, iocache, &nocache_info, new_local_dir, &file, &info);
 				exists = (ret == ret_ok);
 				cherokee_iocache_mmap_release (iocache, file);
 
@@ -297,7 +297,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 			/* stat() the possible new path
 			 */
 			cherokee_buffer_add (&conn->local_directory, index, index_len);
-			ret = stat_file (use_iocache, iocache, &nocache_info, conn->local_directory.buf, &file, &info);
+			ret = stat_file (use_iocache, iocache, &nocache_info, &conn->local_directory, &file, &info);
 
 			exists =  (ret == ret_ok);
 			is_dir = ((ret == ret_ok) && S_ISDIR(info->st_mode));
