@@ -26,6 +26,7 @@ from help import *
 num      = 1
 thds     = 1
 pause    = 0
+delay    = 0
 tpause   = 0.0
 ssl      = False
 clean    = True
@@ -41,7 +42,6 @@ log      = False
 help     = False
 
 server   = CHEROKEE_PATH
-delay    = SERVER_DELAY
 
 # Make the DocumentRoot directory
 www = tempfile.mkdtemp ("cherokee_www")
@@ -81,6 +81,7 @@ for p in param:
     elif p[:2] == '-n': num      = int(p[2:])
     elif p[:2] == '-t': thds     = int(p[2:])
     elif p[:2] == '-p': port     = int(p[2:])
+    elif p[:2] == '-r': delay    = int(p[2:])
     elif p[:2] == '-m': tpause   = float(p[2:])
     elif p[:2] == '-d': pause    = p[2:]
     elif p[:2] == '-m': method   = p[2:]
@@ -236,11 +237,8 @@ if port is None:
         print_key ('Deps', CHEROKEE_DEPS)
         print
 
-        if valgrind != None:
-            delay += 10
-
         for s in range(delay):
-           sys.stdout.write ("Tests will start in %d secs\r" % (delay - s - 1))
+           sys.stdout.write ("Tests will start in %d secs\r" % (SERVER_DELAY + delay - s - 1))
            sys.stdout.flush()
            time.sleep(1)
         print '\n'

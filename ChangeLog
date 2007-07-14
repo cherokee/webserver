@@ -1,5 +1,11 @@
 2007-07-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py, qa/help.py: Depending on the machine and
+	environment, ten additional seconds to start the server might not
+	be enough. This change adds a new parameter -r that allows to
+	specify how long the test runner should wait before running the
+	first one. Eg: CHEROKEE_TRACE="all" ./run-tests.py -v -c -r50
+	
 	* qa/run-tests.py: If the server runs with Valgrind, wait 10 more
 	seconds to start the tests. There were many occasions in which the
 	servers wasn't ready when the first test was executed.
