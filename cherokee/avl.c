@@ -357,9 +357,11 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 
 	while (true) {
 		re = compare_buffers (key, &node->id);
-		if (re == 0)
+		if (re == 0) {
+			if (value) 
+				*value = node->value;
 			break;
-		else if (re < 0) {
+		} else if (re < 0) {
 			if (!node->left_child)
 				return ret_not_found;
 			path[idx++] = node;
