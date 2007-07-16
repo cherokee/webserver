@@ -1,4 +1,7 @@
 2007-07-16  Brian Rosner  <brosner@gmail.com>
+	
+	* www/doc/django: updated django to r5717 and added VERSION file
+	  to keep track of what version is being used.
 
 	* www/index.html: made the default index.html pass w3c validation
 	  defined by the DOCTYPE.
