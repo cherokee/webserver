@@ -615,6 +615,16 @@ cherokee_avl_add_ptr (cherokee_avl_t *avl, const char *key, void *value)
 
 
 ret_t 
+cherokee_avl_del_ptr (cherokee_avl_t *avl, const char *key, void **value)
+{
+	cherokee_buffer_t tmp_key;
+
+	cherokee_buffer_fake (&tmp_key, (const char *)key, strlen(key));
+	return cherokee_avl_del (avl, &tmp_key, value);
+}
+
+
+ret_t 
 cherokee_avl_while (cherokee_avl_t *avl, cherokee_avl_while_func_t func, void *param, cherokee_buffer_t **key, void **value)
 {
 	ret_t                ret;

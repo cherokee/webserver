@@ -1,5 +1,8 @@
 2007-07-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/avl.h, cherokee/avl.c (cherokee_avl_del_ptr): Added
+	missing method.
+
 	* cherokee/resolv_cache.c (cherokee_resolv_cache_clean):
 	cherokee_table_t to cherokee_avl_t convertion.
 
