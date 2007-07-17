@@ -94,7 +94,7 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 	}
 
 	if (entry->users != NULL) {
-		cherokee_table_free (entry->users);
+		cherokee_avl_free (entry->users, free);
 		entry->users = NULL;
 	}
 

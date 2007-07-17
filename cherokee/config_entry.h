@@ -27,7 +27,7 @@
 
 #include "common-internal.h"
 
-#include "table.h"
+#include "avl.h"
 #include "handler.h"
 #include "http.h"
 #include "validator.h"
@@ -37,7 +37,7 @@
 
 
 typedef struct {
-	/* Parent table_entry
+	/* Parent entry
 	 */
 	void                       *parent;
 	cuint_t                     priority;
@@ -61,7 +61,7 @@ typedef struct {
 
 	cherokee_buffer_t          *auth_realm;
 	cherokee_http_auth_t        authentication;
-	cherokee_table_t           *users;
+	cherokee_avl_t             *users;
 } cherokee_config_entry_t; 
 
 #define CONF_ENTRY(x) ((cherokee_config_entry_t *)(x))

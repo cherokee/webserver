@@ -67,8 +67,10 @@ cherokee_avl_node_mrproper (cherokee_avl_node_t *node)
 }
 
 
-/* Tree
+
+/* Tree constructor / destructor 
  */
+
 ret_t 
 cherokee_avl_init (cherokee_avl_t *avl)
 {
@@ -78,21 +80,7 @@ cherokee_avl_init (cherokee_avl_t *avl)
 	return ret_ok;
 }
 
-
-ret_t 
-cherokee_avl_set_case (cherokee_avl_t *avl, cherokee_boolean_t case_insensitive)
-{
-	avl->case_insensitive = case_insensitive;
-	return ret_ok;
-}
-
-
-ret_t 
-cherokee_avl_mrproper (cherokee_avl_t *avl)
-{
-	// TODO !
-	return ret_ok;
-}
+CHEROKEE_ADD_FUNC_NEW (avl);
 
 
 static ret_t
@@ -100,17 +88,38 @@ mrproper2_while (cherokee_buffer_t *key, void *value, void *param)
 {
 	cherokee_avl_value_free_func_t free_func = param;
 
-	free_func(value);
+	if (free_func) {
+		free_func(value);
+	}
+
 	return ret_ok;
 }
 
 ret_t 
-cherokee_avl_mrproper2 (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_func)
+cherokee_avl_mrproper (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_func)
 {
+	/* Free all the entries
+	 */
 	cherokee_avl_while (avl, mrproper2_while, free_func, NULL, NULL);
-	return cherokee_avl_mrproper (avl);
+
+	/* Clean the entries as well
+	 */
+//      TODO !
+
+	return ret_ok;
 }
 
+ret_t 
+cherokee_avl_free (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_func)
+{
+	cherokee_avl_mrproper (avl, free_func);
+	free (avl);
+	return ret_ok;
+}
+
+
+/* Tree methods
+ */
 
 static int 
 compare_buffers (cherokee_buffer_t *A,
@@ -127,6 +136,15 @@ compare_buffers (cherokee_buffer_t *A,
 		else
 			return strcmp (A->buf, B->buf);
 	}
+}
+
+
+
+ret_t 
+cherokee_avl_set_case (cherokee_avl_t *avl, cherokee_boolean_t case_insensitive)
+{
+	avl->case_insensitive = case_insensitive;
+	return ret_ok;
 }
 
 

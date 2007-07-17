@@ -45,8 +45,7 @@ ret_t
 cherokee_exts_table_mrproper (cherokee_exts_table_t *et)
 {
 	cherokee_list_content_free (&et->list, (cherokee_list_free_func) cherokee_config_entry_free);
-	cherokee_avl_mrproper (&et->avl);
-
+	cherokee_avl_mrproper (&et->avl, NULL);
 	return ret_ok;
 }
 

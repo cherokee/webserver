@@ -51,7 +51,7 @@
 
 #include "http.h"
 #include "list.h"
-#include "table.h"
+#include "avl.h"
 #include "buffer_escape.h"
 #include "socket.h"
 #include "header.h"
@@ -142,7 +142,7 @@ struct cherokee_connection {
 	cherokee_buffer_t             pathinfo;            /* /param1 */
 	cherokee_buffer_t             userdir;             /* 'alo' in http://www.alobbs.com/~alo/thing */
 	cherokee_buffer_t             query_string;	
-	cherokee_table_t             *arguments;
+	cherokee_avl_t               *arguments;
 
 	cherokee_buffer_t             host;
 	cherokee_buffer_t             effective_directory;

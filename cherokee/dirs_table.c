@@ -44,20 +44,11 @@ cherokee_dirs_table_init (cherokee_dirs_table_t *pt)
 }
 
 
-static ret_t 
-mrproper_each (cherokee_buffer_t *key, void *value, void *param)
-{
-	cherokee_config_entry_free (CONF_ENTRY(value));
-	return ret_ok;
-}
-
 ret_t 
 cherokee_dirs_table_mrproper (cherokee_dirs_table_t *pt)
 {
-	cherokee_avl_while (AVL(pt),
-			    mrproper_each,
-			    NULL, NULL, NULL);
-	return cherokee_avl_mrproper (AVL(pt));
+	return cherokee_avl_mrproper (AVL(pt), 
+				      (cherokee_avl_value_free_func_t) cherokee_config_entry_free);
 }
 
 

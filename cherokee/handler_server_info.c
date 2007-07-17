@@ -440,13 +440,13 @@ cherokee_handler_server_info_free (cherokee_handler_server_info_t *hdl)
 ret_t 
 cherokee_handler_server_info_init (cherokee_handler_server_info_t *hdl)
 {
-	ret_t  ret;
-	void  *param;
-	int    web_interface = 1;
+	ret_t   ret;
+	void   *param;
+	cint_t  web_interface = 1;
 
 	cherokee_connection_parse_args (HANDLER_CONN(hdl));
-		
-	ret = cherokee_table_get (HANDLER_CONN(hdl)->arguments, "logo", &param);
+
+	ret = cherokee_avl_get_ptr (HANDLER_CONN(hdl)->arguments, "logo", &param);
 	if (ret == ret_ok) {
 		
 		/* Build the logo

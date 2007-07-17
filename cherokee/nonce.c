@@ -24,11 +24,12 @@
 
 #include "common-internal.h"
 #include "nonce.h"
+#include "avl.h"
 #include "connection-protected.h"
 #include "server-protected.h"
 
 struct cherokee_nonce_table {
-	cherokee_table_t  table;
+	cherokee_avl_t    table;
 	CHEROKEE_MUTEX_T (access);
 };
 
@@ -38,7 +39,7 @@ cherokee_nonce_table_new (cherokee_nonce_table_t **nonces)
 {
 	CHEROKEE_NEW_STRUCT(n, nonce_table);
 
-	cherokee_table_init (TABLE(n));
+	cherokee_avl_init (&n->table);
 	CHEROKEE_MUTEX_INIT (&n->access, NULL);
 
 	*nonces = n;
@@ -50,7 +51,7 @@ ret_t
 cherokee_nonce_table_free (cherokee_nonce_table_t *nonces)
 {
 	CHEROKEE_MUTEX_DESTROY (&nonces->access);
-	cherokee_table_free2 (TABLE(nonces), free);
+	cherokee_avl_free (&nonces->table, free);
 
 	return ret_ok;
 }
@@ -63,9 +64,9 @@ cherokee_nonce_table_remove (cherokee_nonce_table_t *nonces, cherokee_buffer_t *
 	void  *non = NULL;
 
 	CHEROKEE_MUTEX_LOCK (&nonces->access);
-	ret = cherokee_table_get (TABLE(nonces), nonce->buf, &non);
+	ret = cherokee_avl_get (&nonces->table, nonce, &non);
 	if (ret == ret_ok) {
-		cherokee_table_del (TABLE(nonces), nonce->buf, NULL);
+		cherokee_avl_del (&nonces->table, nonce, NULL);
 	}
 	CHEROKEE_MUTEX_UNLOCK (&nonces->access);
 
@@ -81,7 +82,7 @@ cherokee_nonce_table_check (cherokee_nonce_table_t *nonces, cherokee_buffer_t *n
 	void  *non = NULL;
 
 	CHEROKEE_MUTEX_LOCK (&nonces->access);
-	ret = cherokee_table_get (TABLE(nonces), nonce->buf, &non);
+	ret = cherokee_avl_get (&nonces->table, nonce, &non);
 	CHEROKEE_MUTEX_UNLOCK (&nonces->access);
 
 	if (ret != ret_ok) return ret_not_found;
@@ -107,7 +108,7 @@ cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces, cherokee_connecti
 	/* Copy the nonce and add to the table
 	 */
 	CHEROKEE_MUTEX_LOCK (&nonces->access);
-	cherokee_table_add (TABLE(nonces), nonce->buf, NULL);
+	cherokee_avl_add (&nonces->table, nonce, NULL);
 	CHEROKEE_MUTEX_UNLOCK (&nonces->access);
 
 	/* Return

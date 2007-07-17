@@ -30,7 +30,7 @@
 #define CHEROKEE_UTIL_H
 
 #include <cherokee/common.h>
-#include <cherokee/table.h>
+#include <cherokee/avl.h>
 
 #ifdef HAVE_NETINET_IN_H
 # include <netinet/in.h>
@@ -125,7 +125,7 @@ ret_t cherokee_split_arguments    (cherokee_buffer_t *request,
 ret_t cherokee_short_path         (cherokee_buffer_t *path);
 
 ret_t cherokee_parse_query_string (cherokee_buffer_t *qstring, 
-				   cherokee_table_t  *arguments);
+				   cherokee_avl_t  *arguments);
 
 
 CHEROKEE_END_DECLS

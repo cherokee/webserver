@@ -193,7 +193,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	}
 
 	if (conn->arguments != NULL) {
-		cherokee_table_free2 (conn->arguments, free);
+		cherokee_avl_free (conn->arguments, free);
 		conn->arguments = NULL;
 	}
 
@@ -286,7 +286,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	}
 
 	if (conn->arguments != NULL) {
-		cherokee_table_free2 (conn->arguments, free);
+		cherokee_avl_free (conn->arguments, free);
 		conn->arguments = NULL;
 	}
 
@@ -1699,7 +1699,7 @@ cherokee_connection_check_authentication (cherokee_connection_t *conn, cherokee_
 			goto unauthorized;			
 		}
 
-		ret = cherokee_table_get (config_entry->users, conn->validator->user.buf, &foo);
+		ret = cherokee_avl_get (config_entry->users, &conn->validator->user, &foo);
 		if (ret != ret_ok) {
 			goto unauthorized;
 		}
@@ -1866,7 +1866,7 @@ cherokee_connection_parse_args (cherokee_connection_t *conn)
 
 	/* Build a new table 
 	 */
-	ret = cherokee_table_new (&conn->arguments);
+	ret = cherokee_avl_new (&conn->arguments);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	/* Parse the header

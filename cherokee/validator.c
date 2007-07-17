@@ -422,7 +422,7 @@ cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
 
 		} else if (equal_buf_str (&subconf->key, "users")) {
 			if (entry->users == NULL) {
-				cherokee_table_new (&entry->users);
+				cherokee_avl_new (&entry->users);
 			}
 
 			ret = cherokee_config_node_read_list (subconf, NULL, add_user, entry->users);

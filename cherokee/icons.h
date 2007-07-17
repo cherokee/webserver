@@ -37,6 +37,7 @@ typedef struct {
 	cherokee_avl_t    suffixes;
 	cherokee_avl_t    files_matching;	
 
+	cherokee_buffer_t blank_icon;
 	cherokee_buffer_t default_icon;
 	cherokee_buffer_t directory_icon;
 	cherokee_buffer_t parentdir_icon;

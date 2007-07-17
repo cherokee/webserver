@@ -1062,7 +1062,7 @@ cherokee_get_timezone_ref (void)
 
 
 ret_t 
-cherokee_parse_query_string (cherokee_buffer_t *qstring, cherokee_table_t *arguments)
+cherokee_parse_query_string (cherokee_buffer_t *qstring, cherokee_avl_t *arguments)
 {
  	char *string;
 	char *token; 
@@ -1083,11 +1083,11 @@ cherokee_parse_query_string (cherokee_buffer_t *qstring, cherokee_table_t *argum
 			key = token;
 			val = equ+1;
 
-			cherokee_table_add (arguments, key, strdup(val));
+			cherokee_avl_add_ptr (arguments, key, strdup(val));
 
 			*equ = '=';
 		} else {
-			cherokee_table_add (arguments, token, NULL);
+			cherokee_avl_add_ptr (arguments, token, NULL);
 		}
 
 		/* UGLY hack, part 1:

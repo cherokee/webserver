@@ -53,10 +53,11 @@ cherokee_icons_new (cherokee_icons_t **icons)
 
 	/* Defaults
 	 */
+	cherokee_buffer_init (&n->blank_icon);
 	cherokee_buffer_init (&n->default_icon);
 	cherokee_buffer_init (&n->directory_icon);
 	cherokee_buffer_init (&n->parentdir_icon);
-	
+
 	*icons = n;
 	return ret_ok;
 }
@@ -74,10 +75,11 @@ cherokee_icons_free (cherokee_icons_t *icons)
 {
 	/* It stores buffers as values,
 	 */
-	cherokee_avl_mrproper2 (&icons->files, free_entry);
-	cherokee_avl_mrproper2 (&icons->suffixes, free_entry);
-	cherokee_avl_mrproper2 (&icons->files_matching, free_entry);
+	cherokee_avl_mrproper (&icons->files, free_entry);
+	cherokee_avl_mrproper (&icons->suffixes, free_entry);
+	cherokee_avl_mrproper (&icons->files_matching, free_entry);
 
+	cherokee_buffer_mrproper (&icons->blank_icon);
 	cherokee_buffer_mrproper (&icons->default_icon);
 	cherokee_buffer_mrproper (&icons->directory_icon);
 	cherokee_buffer_mrproper (&icons->parentdir_icon);
@@ -192,7 +194,8 @@ cherokee_icons_get_icon (cherokee_icons_t   *icons,
 		return ret_ok;
 	}
 
-	return ret_not_found;
+	*icon_ret = &icons->blank_icon;
+	return ret_ok;
 }
 
 

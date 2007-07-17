@@ -30,7 +30,6 @@
 #define CHEROKEE_NONCE_TABLE_H
 
 #include <cherokee/common.h>
-#include <cherokee/table.h>
 #include <cherokee/connection.h>
 
 

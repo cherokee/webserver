@@ -370,7 +370,7 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	n->phase = dirlist_phase_add_header;
 	n->sort  = Name_Down;
 
-	ret = cherokee_table_get (HANDLER_CONN(n)->arguments, "order", (void **) &value);
+	ret = cherokee_avl_get_ptr (HANDLER_CONN(n)->arguments, "order", (void **) &value);
 	if (ret == ret_ok) {
 		if      (value[0] == 'N') n->sort = Name_Up;
 		else if (value[0] == 'n') n->sort = Name_Down;
@@ -768,14 +768,19 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 			
 			cherokee_buffer_fake (&name_buf, name, strlen(name));
 			ret = cherokee_icons_get_icon (icons, &name_buf, &icon);
-			if (ret != ret_ok) 
-				icon = "blank.png";
+			if (ret != ret_ok) return ret;
 		}
 	}
 #endif
 
+	if (icons && (icon == NULL))
+		icon = &icons->blank_icon;
+
 	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", alt);
-	VTMP_SUBSTITUTE_TOKEN ("%icon%", icon);
+	if (icon && icon->buf)
+		VTMP_SUBSTITUTE_TOKEN ("%icon%", icon->buf);
+	else
+		VTMP_SUBSTITUTE_TOKEN ("%icon%", "");
 
 	/* File
 	 */

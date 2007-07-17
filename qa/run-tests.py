@@ -26,7 +26,6 @@ from help import *
 num      = 1
 thds     = 1
 pause    = 0
-delay    = 0
 tpause   = 0.0
 ssl      = False
 clean    = True
@@ -42,6 +41,7 @@ log      = False
 help     = False
 
 server   = CHEROKEE_PATH
+delay    = SERVER_DELAY
 
 # Make the DocumentRoot directory
 www = tempfile.mkdtemp ("cherokee_www")
@@ -238,7 +238,7 @@ if port is None:
         print
 
         for s in range(delay):
-           sys.stdout.write ("Tests will start in %d secs\r" % (SERVER_DELAY + delay - s - 1))
+           sys.stdout.write ("Tests will start in %d secs\r" % (delay - s - 1))
            sys.stdout.flush()
            time.sleep(1)
         print '\n'

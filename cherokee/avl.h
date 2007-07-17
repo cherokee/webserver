@@ -46,9 +46,11 @@ typedef struct {
 typedef ret_t (* cherokee_avl_while_func_t)      (cherokee_buffer_t *key, void *value, void *param);
 typedef void  (* cherokee_avl_value_free_func_t) (void *param);
 
-ret_t cherokee_avl_init      (cherokee_avl_t *avl);
-ret_t cherokee_avl_mrproper  (cherokee_avl_t *avl);
-ret_t cherokee_avl_mrproper2 (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_func);
+ret_t cherokee_avl_new       (cherokee_avl_t **avl);
+ret_t cherokee_avl_free      (cherokee_avl_t  *avl, cherokee_avl_value_free_func_t free_func);
+
+ret_t cherokee_avl_init      (cherokee_avl_t  *avl);
+ret_t cherokee_avl_mrproper  (cherokee_avl_t  *avl, cherokee_avl_value_free_func_t free_func);
 
 ret_t cherokee_avl_add       (cherokee_avl_t *avl, cherokee_buffer_t *key, void  *value);
 ret_t cherokee_avl_add_ptr   (cherokee_avl_t *avl,        const char *key, void  *value);
