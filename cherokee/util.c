@@ -1075,9 +1075,10 @@ cherokee_parse_query_string (cherokee_buffer_t *qstring, cherokee_avl_t *argumen
 	while ((token = (char *) strsep(&string, "&")) != NULL) {
 		char *equ, *key, *val;
 
-		if (token == NULL) continue;
+		if (*token == '\0')
+			continue;
 
-		if ((equ = strchr(token, '='))) {
+		if ((equ = strchr(token, '=')) != NULL) {
 			*equ = '\0';
 
 			key = token;

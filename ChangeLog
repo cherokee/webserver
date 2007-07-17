@@ -1,3 +1,8 @@
+2007-07-17  A.D.F  <adefacc@tin.it>
+
+	* cherokee/util.c
+	  - cherokee_parse_query_string(), skip empty tokens.
+
 2007-07-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/142-SCGI-ExtraVars.py (PORT): If was duplicated with QA test
