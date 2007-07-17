@@ -31,7 +31,6 @@
 #define CHEROKEE_HEADER_PROTECTED_H
 
 #include "buffer.h"
-#include "table.h"
 #include "http.h"
 
 

@@ -34,7 +34,6 @@
 
 #include <cherokee/common.h>
 #include <cherokee/module.h>
-#include <cherokee/table.h>
 
 CHEROKEE_BEGIN_DECLS
 

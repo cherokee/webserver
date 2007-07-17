@@ -94,8 +94,8 @@ typedef struct {
 		uint32_t        recalculate;		
 	} accept;
 
-	cherokee_avl_t             *fastcgi_servers;
-	cherokee_table_free_item_t  fastcgi_free_func;
+	cherokee_avl_t                 *fastcgi_servers;
+	cherokee_avl_value_free_func_t  fastcgi_free_func;
 
 } cherokee_thread_t;
 

@@ -35,7 +35,6 @@
 #include <cherokee/version.h>
 #include <cherokee/buffer.h>
 #include <cherokee/fdpoll.h>
-#include <cherokee/table.h>
 #include <cherokee/http.h>
 #include <cherokee/list.h>
 #include <cherokee/mime_entry.h>

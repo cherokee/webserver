@@ -28,7 +28,6 @@
 #include "common.h"
 #include "buffer.h"
 #include "module.h"
-#include "table.h"
 #include "http.h"
 #include "connection.h"
 #include "config_node.h"

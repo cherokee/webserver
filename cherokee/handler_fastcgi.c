@@ -276,7 +276,7 @@ cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_modu
          * FastCGI manager container table, and set the freeing func.
          */
         if (CONN_THREAD(cnt)->fastcgi_servers == NULL) {
-                CONN_THREAD(cnt)->fastcgi_free_func = (cherokee_table_free_item_t) cherokee_fcgi_dispatcher_free;
+                CONN_THREAD(cnt)->fastcgi_free_func = (cherokee_avl_value_free_func_t) cherokee_fcgi_dispatcher_free;
                 cherokee_avl_new (&CONN_THREAD(cnt)->fastcgi_servers);
         }
 

@@ -77,7 +77,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	cherokee_buffer_init (&n->ca_cert);
 
 #ifdef HAVE_TLS
-	ret = cherokee_table_init (&n->session_cache);
+	ret = cherokee_avl_init (&n->session_cache);
 	if (unlikely(ret < ret_ok))
 		return ret;
 
@@ -129,7 +129,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	}
 
 #ifdef HAVE_TLS
-	cherokee_table_mrproper (&vserver->session_cache);
+	cherokee_avl_mrproper (&vserver->session_cache, NULL); //FIXIT
 
 # ifdef HAVE_GNUTLS
 	if (vserver->credentials != NULL) {
@@ -155,7 +155,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 		vserver->logger = NULL;
 	}
 	if (vserver->logger_props != NULL) {
-		cherokee_table_free (vserver->logger_props);
+		cherokee_avl_free (vserver->logger_props, NULL); // FIXIT
 		vserver->logger_props = NULL;
 	}
 

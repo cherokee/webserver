@@ -1,5 +1,18 @@
 2007-07-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/module.h, cherokee/validator.c, cherokee/encoder_table.c,
+	cherokee/validator.h, cherokee/regex.c, cherokee/thread.h,
+	cherokee/handler.h, cherokee/header.h, cherokee/handler_fastcgi.c,
+	cherokee/handler_proxy.h, cherokee/mime.h, cherokee/logger.h,
+	cherokee/cherokee.h, cherokee/dirs_table.c, cherokee/mime_entry.h,
+	cherokee/socket.c: Removed all the cherokee_table_t references.
+
+	* cherokee/table.h, cherokee/table.c, cherokee/Makefile.am:
+	cherokee_table_t does no longer exist.
+
+	* cherokee/validator.c: 
+
 	* cherokee/plugin_loader.h, cherokee/plugin_loader.c,
 	cherokee/handler_fastcgi.c, cherokee/thread.h, cherokee/thread.c:
 	cherokee_table_t to cherokee_avl_t convertion.

@@ -726,8 +726,6 @@ version.h \
 version.c \
 buffer.h \
 buffer.c \
-table.h \
-table.c \
 buffer_escape.h \
 buffer_escape.c \
 socket.h \
@@ -906,7 +904,6 @@ util.h \
 version.h \
 buffer.h\
 fdpoll.h \
-table.h \
 http.h \
 mime.h \
 mime_entry.h \

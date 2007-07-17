@@ -30,7 +30,6 @@
 #define CHEROKEE_MIME_H
 
 #include <cherokee/common.h>
-#include <cherokee/table.h>
 #include <cherokee/buffer.h>
 #include <cherokee/list.h>
 #include <cherokee/mime_entry.h>

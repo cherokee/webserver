@@ -35,7 +35,6 @@
 #include "downloader-protected.h"
 #include "plugin_loader.h"
 #include "buffer.h"
-#include "table.h"
 #include "connection.h"
 #include "balancer.h"
 

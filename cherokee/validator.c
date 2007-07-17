@@ -395,7 +395,7 @@ add_method (char *method, void *data)
 static ret_t 
 add_user  (char *val, void *data)
 {
-	return cherokee_table_add (TABLE(data), val, NULL);
+	return cherokee_avl_add_ptr (AVL(data), val, NULL);
 }
 
 

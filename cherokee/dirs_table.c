@@ -123,12 +123,12 @@ cherokee_dirs_table_add (cherokee_dirs_table_t *pt, char *dir, cherokee_config_e
 
 	/* Add to "dir <-> plugin_entry" table
 	 */
-	return cherokee_table_add (TABLE(pt), dir, (void*)plugin_entry);
+	return cherokee_avl_add_ptr (AVL(pt), dir, (void*)plugin_entry);
 }
 
 
 int
-relink_func (const char *key_, void *value, void *param)
+relink_func (cherokee_buffer_t *key_, void *value, void *param)
 {
 	ret_t                        ret;
 	char                        *slash;
@@ -138,7 +138,7 @@ relink_func (const char *key_, void *value, void *param)
 
 	/* It has to look the the parent of this directory
 	 */
-	cherokee_buffer_add (&key, key_, strlen(key_));
+	cherokee_buffer_add_buffer (&key, key_);
 
 	do {
 		void *parent = NULL;
@@ -170,5 +170,5 @@ out:
 ret_t 
 cherokee_dirs_table_relink (cherokee_dirs_table_t *pt)
 {
-	return cherokee_table_while (TABLE(pt), relink_func, pt, NULL, NULL);
+	return cherokee_avl_while (AVL(pt), relink_func, pt, NULL, NULL);
 }

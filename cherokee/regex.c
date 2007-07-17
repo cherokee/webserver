@@ -24,7 +24,7 @@
 
 #include "common-internal.h"
 #include "regex.h"
-#include "table.h"
+#include "avl.h"
 #include "pcre/pcre.h"
 
 

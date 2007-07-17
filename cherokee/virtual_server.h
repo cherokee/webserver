@@ -37,6 +37,7 @@
 # include <openssl/ssl.h>
 #endif
 
+#include "avl.h"
 #include "list.h"
 #include "handler.h"
 #include "config_entry.h"
@@ -59,7 +60,7 @@ typedef struct {
 	cherokee_config_entry_t     *error_handler;   /* Default internal error handler   */
 
 	cherokee_logger_t           *logger;          /* Logger obj              */
-	cherokee_table_t            *logger_props;    /* Logger properties table */
+	cherokee_avl_t              *logger_props;    /* Logger properties table */
 
 	cherokee_buffer_t            root;            /* Document root. Eg: /var/www */
 	cherokee_buffer_t            userdir;         /* Eg: public_html             */
@@ -79,7 +80,7 @@ typedef struct {
 	cherokee_buffer_t            ca_cert;
 
 #ifdef HAVE_TLS
-	cherokee_table_t             session_cache;
+	cherokee_avl_t               session_cache;
 
 # ifdef HAVE_GNUTLS
 	gnutls_certificate_server_credentials credentials;

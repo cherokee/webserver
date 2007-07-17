@@ -30,7 +30,6 @@
 #define CHEROKEE_HANDLER_H
 
 #include <cherokee/common.h>
-#include <cherokee/table.h>
 #include <cherokee/module.h>
 #include <cherokee/buffer.h>
 

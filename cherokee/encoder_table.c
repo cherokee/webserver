@@ -38,7 +38,7 @@ cherokee_encoder_table_init  (cherokee_encoder_table_t *et)
 ret_t 
 cherokee_encoder_table_mrproper (cherokee_encoder_table_t *et)
 {
-	return cherokee_avl_mrproper (et, (cherokee_table_free_item_t) cherokee_encoder_table_entry_free);
+	return cherokee_avl_mrproper (et, (cherokee_avl_value_free_func_t)cherokee_encoder_table_entry_free);
 }
 
 

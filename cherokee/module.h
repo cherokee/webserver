@@ -32,7 +32,6 @@
 #include <cherokee/common.h>
 #include <cherokee/plugin.h>
 #include <cherokee/config_node.h>
-#include <cherokee/table.h>
 #include <cherokee/server.h>
 
 
