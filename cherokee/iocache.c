@@ -217,6 +217,8 @@ iocache_entry_update_stat (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 
 	re = cherokee_stat (filename->buf, &entry->state);
 	if (re < 0) {
+		TRACE(ENTRIES, "Couldn't update stat: errno=%d\n", re);
+
 		switch (errno) {
 		case EACCES: 
 			return ret_deny;
@@ -251,6 +253,7 @@ iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 	/* Only map regular files
 	 */
 	if (unlikely (! S_ISREG(entry->state.st_mode))) {
+		TRACE(ENTRIES, "Not a regular file: %s\n", filename->buf);
 		return ret_deny;
 	}
 
@@ -258,7 +261,10 @@ iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 	 */
 	if (fd < 0) {
 		fd = open (filename->buf, O_RDONLY|O_BINARY);
-		if (unlikely (fd < 0)) return ret_error;
+		if (unlikely (fd < 0)) {
+			TRACE(ENTRIES, "Couldn't open(): %s\n", filename->buf);
+			return ret_error;
+		}
 	}
 
 	*ret_fd = fd;
@@ -284,6 +290,8 @@ iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 
 	if (entry->mmaped == MAP_FAILED) {
 		int err = errno;
+		TRACE(ENTRIES, "%s mmap() failed: errno=%d\n", filename->buf, err);
+
 		switch (err) {
 		case EAGAIN:
 		case ENOMEM:
@@ -468,22 +476,29 @@ cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, cherokee_buf
 	ret = cherokee_avl_get (&iocache->files, filename, (void **)ret_file);
 	if (ret != ret_ok) {
 		if (iocache->files_num >= iocache->files_max) {
+			*ret_file = NULL;
 			ret = ret_no_sys;
 			goto error;
 		}
 
 		ret = iocache_entry_new (ret_file);
-		if (unlikely (ret != ret_ok)) goto error;
+		if (unlikely (ret != ret_ok)) 
+			goto error;
 
 		ret = cherokee_avl_add (&iocache->files, filename, *ret_file);
-		if (unlikely (ret != ret_ok)) {
-			printf ("ARGGGGGGGGGGGGGGGGGGH2\n");
+		if (unlikely (ret != ret_ok))
 			goto error_free;
-		}
+
+		TRACE(ENTRIES, "Added new '%s': %p\n", filename->buf, ret_file);
 
 		iocache->files_num++;
 	} 
-	
+#ifdef TRACE_ENABLED
+	else {
+		TRACE(ENTRIES, "Found in cache '%s': %p\n", filename->buf, ret_file);
+	}
+#endif
+
 	/* Reference it
 	 */
 	entry = *ret_file;
@@ -534,9 +549,10 @@ cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, cherokee_buf
 			
 			ret = cherokee_avl_add (&iocache->files, filename, *ret_file);
 			if (unlikely (ret != ret_ok)) {
-				printf ("ARGGGGGGGGGGGGGGGGGGH3\n");
 				goto error_free;
 			}
+
+			TRACE(ENTRIES, "Added new '%s': %p\n", filename->buf, ret_file);
 			
 			iocache->files_num++;
 		}
@@ -545,6 +561,11 @@ cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, cherokee_buf
 		 */
 		iocache_entry_ref(*ret_file);
 	}
+#ifdef TRACE_ENABLED
+	else {
+		TRACE(ENTRIES, "Found in cache '%s': %p\n", filename->buf, ret_file);
+	}
+#endif
 
 	/* Update statistics
 	 */
@@ -594,7 +615,12 @@ cherokee_iocache_mmap_release (cherokee_iocache_t *iocache, cherokee_iocache_ent
 		return ret_not_found;
 	}
 
-	TRACE(ENTRIES, "Release: %s\n", PRIV(file)->name_ref->buf);
+#ifdef TRACE_ENABLED
+	if (PRIV(file)->name_ref)
+		TRACE(ENTRIES, "Release: %s\n", PRIV(file)->name_ref->buf);
+	else
+		TRACE(ENTRIES, "Releasing obj with no name_ref %s", "\n");
+#endif
 
 	CHEROKEE_MUTEX_LOCK (&iocache->files_lock);
 	ret = iocache_entry_unref (file);

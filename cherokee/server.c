@@ -1417,7 +1417,7 @@ add_encoder (cherokee_config_node_t *node, void *data)
  
 	/* Set in the encoders table
 	 */
-	ret = cherokee_encoder_table_set (&srv->encoders, node->key.buf, enc);
+	ret = cherokee_encoder_table_set (&srv->encoders, &node->key, enc);
 	if (ret != ret_ok) goto error;
 
 	return ret_ok;

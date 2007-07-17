@@ -31,29 +31,29 @@
 ret_t 
 cherokee_encoder_table_init  (cherokee_encoder_table_t *et)
 {
-	return cherokee_table_init (et);
+	return cherokee_avl_init (et);
 }
 
 
 ret_t 
 cherokee_encoder_table_mrproper (cherokee_encoder_table_t *et)
 {
-	return cherokee_table_mrproper2 (et, (cherokee_table_free_item_t) 
-					 cherokee_encoder_table_entry_free);
+	return cherokee_avl_mrproper2 (et, (cherokee_table_free_item_t) 
+				       cherokee_encoder_table_entry_free);
 }
 
 
 ret_t 
-cherokee_encoder_table_set (cherokee_encoder_table_t *et, char *encoder, cherokee_encoder_table_entry_t *entry)
+cherokee_encoder_table_set (cherokee_encoder_table_t *et, cherokee_buffer_t *encoder, cherokee_encoder_table_entry_t *entry)
 {
-	return cherokee_table_add (et, encoder, entry);
+	return cherokee_avl_add (et, encoder, entry);
 }
 
 
 ret_t
 cherokee_encoder_table_get (cherokee_encoder_table_t *et, char *encoder, cherokee_encoder_table_entry_t **entry) 
 {
-	return cherokee_table_get (et, encoder, (void **)entry);
+	return cherokee_avl_get_ptr (et, encoder, (void **)entry);
 }
 
 

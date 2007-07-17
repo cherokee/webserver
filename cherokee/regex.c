@@ -29,7 +29,7 @@
 
 
 struct cherokee_regex_table {
-	cherokee_table_t   *cache;
+	cherokee_avl_t      cache;
 	CHEROKEE_RWLOCK_T  (rwlock);
 };
 
@@ -42,7 +42,7 @@ cherokee_regex_table_new  (cherokee_regex_table_t **table)
 	/* Init
 	 */
 	CHEROKEE_RWLOCK_INIT (&n->rwlock, NULL);
-	cherokee_table_new (&n->cache);
+	cherokee_avl_init (&n->cache);
 	
 	/* Return the new object
 	 */
@@ -55,9 +55,8 @@ ret_t
 cherokee_regex_table_free (cherokee_regex_table_t *table)
 {
 	CHEROKEE_RWLOCK_DESTROY (&table->rwlock);
-	cherokee_table_free2 (table->cache, free);
-	
-	free (table);
+
+	cherokee_avl_mrproper2 (&table->cache, free);
 	return ret_ok;
 }
 
@@ -65,9 +64,10 @@ cherokee_regex_table_free (cherokee_regex_table_t *table)
 static ret_t
 _add (cherokee_regex_table_t *table, char *pattern, void **regex)
 {
-	void       *tmp;
+	ret_t      ret; 
 	const char *error_msg;
 	int         error_offset;
+	void       *tmp           = NULL;
 
 	/* It wasn't in the cache. Lets go to compile the pattern..
 	 * First of all, we have to check again the table because another 
@@ -75,8 +75,10 @@ _add (cherokee_regex_table_t *table, char *pattern, void **regex)
 	 */
 	CHEROKEE_RWLOCK_WRITER (&table->rwlock);
 
-	tmp = (pcre*)cherokee_table_get_val (table->cache, pattern);
-	if (tmp != NULL) {
+	ret = cherokee_avl_get_ptr (&table->cache, pattern, &tmp);
+	if ((tmp != NULL) && 
+	    (ret == ret_ok)) 
+	{
 		if (regex != NULL)
 			*regex = tmp;
 
@@ -92,7 +94,7 @@ _add (cherokee_regex_table_t *table, char *pattern, void **regex)
 		return ret_error;
 	}
 	
-	cherokee_table_add (table->cache, pattern, tmp);
+	cherokee_avl_add_ptr (&table->cache, pattern, tmp);
 	CHEROKEE_RWLOCK_UNLOCK (&table->rwlock);
 	
 	if (regex != NULL)
@@ -105,12 +107,15 @@ _add (cherokee_regex_table_t *table, char *pattern, void **regex)
 ret_t 
 cherokee_regex_table_get (cherokee_regex_table_t *table, char *pattern, void **regex)
 {
+	ret_t ret;
+
 	/* Check if it is already in the cache
 	 */
 	CHEROKEE_RWLOCK_READER(&table->rwlock);
-	*regex = (pcre*)cherokee_table_get_val (table->cache, pattern);
+	ret = cherokee_avl_get_ptr (&table->cache, pattern, regex);
 	CHEROKEE_RWLOCK_UNLOCK(&table->rwlock);
-	if (*regex != NULL) return ret_ok;
+	if (ret == ret_ok)
+		return ret_ok;
 	
 	/* It wasn't there; add a new entry
 	 */

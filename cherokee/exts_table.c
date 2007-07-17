@@ -32,7 +32,7 @@ cherokee_exts_table_init (cherokee_exts_table_t *et)
 {
 	ret_t ret;
 
-	ret = cherokee_table_init(&et->table);
+	ret = cherokee_avl_init(&et->avl);
 	if (unlikely (ret != ret_ok)) return ret;
 
 	INIT_LIST_HEAD(&et->list);
@@ -45,7 +45,7 @@ ret_t
 cherokee_exts_table_mrproper (cherokee_exts_table_t *et)
 {
 	cherokee_list_content_free (&et->list, (cherokee_list_free_func) cherokee_config_entry_free);
-	cherokee_table_mrproper (&et->table);
+	cherokee_avl_mrproper (&et->avl);
 
 	return ret_ok;
 }
@@ -60,7 +60,7 @@ cherokee_exts_table_get (cherokee_exts_table_t *et, cherokee_buffer_t *requested
 	dot = strrchr (requested_url->buf, '.');
 	if (dot == NULL) return ret_not_found;
 
-	ret = cherokee_table_get (&et->table, dot+1, (void **)&entry);
+	ret = cherokee_avl_get_ptr (&et->avl, dot+1, (void **)&entry);
 	if (ret != ret_ok) return ret;
 
 	TRACE (ENTRIES, "Match with \"%s\"\n", dot+1);
@@ -89,13 +89,14 @@ cherokee_exts_table_add  (cherokee_exts_table_t *et, char *ext, cherokee_config_
 	/* Add to the table. It is ok if many entries point to the same
 	 * plugin entry object.
 	 */
-	TRACE ("ADD: et %p table %p ext %s\n", et, &et->table, ext);
+	TRACE ("ADD: et %p avl %p ext %s\n", et, &et->avl, ext);
 
-	return cherokee_table_add (&et->table, ext, plugin_entry);
+	return cherokee_avl_add_ptr (&et->avl, ext, plugin_entry);
 }
 
 ret_t 
 cherokee_exts_table_has (cherokee_exts_table_t *et, char *ext)
 {
-	return (cherokee_table_get_val (&et->table, ext) == NULL) ? ret_not_found : ret_ok;
+	void *foo;
+	return cherokee_avl_get_ptr (&et->avl, ext, &foo);
 }

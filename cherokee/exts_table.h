@@ -29,11 +29,11 @@
 #include "buffer.h"
 #include "config_entry.h"
 #include "list.h"
-#include "table.h"
+#include "avl.h"
 
 
 typedef struct {
-	cherokee_table_t table;
+	cherokee_avl_t   avl;
 	cherokee_list_t  list;
 } cherokee_exts_table_t;
 

@@ -27,7 +27,7 @@
 
 #include "common-internal.h"
 
-#include "table.h"
+#include "avl.h"
 #include "encoder.h"
 #include "matching_list.h"
 #include "module.h"
@@ -38,7 +38,7 @@ typedef struct {
 } cherokee_encoder_table_entry_t;
 
 
-typedef cherokee_table_t cherokee_encoder_table_t;
+typedef cherokee_avl_t cherokee_encoder_table_t;
 #define ETABLE(x) ((cherokee_encoder_table_t *)(x))
 
 
@@ -47,8 +47,8 @@ typedef cherokee_table_t cherokee_encoder_table_t;
 ret_t cherokee_encoder_table_init              (cherokee_encoder_table_t *et);
 ret_t cherokee_encoder_table_mrproper          (cherokee_encoder_table_t *et);
 
+ret_t cherokee_encoder_table_set               (cherokee_encoder_table_t *et, cherokee_buffer_t *encoder, cherokee_encoder_table_entry_t  *entry);
 ret_t cherokee_encoder_table_get               (cherokee_encoder_table_t *et, char *encoder, cherokee_encoder_table_entry_t **entry);
-ret_t cherokee_encoder_table_set               (cherokee_encoder_table_t *et, char *encoder, cherokee_encoder_table_entry_t  *entry);
 ret_t cherokee_encoder_table_new_encoder       (cherokee_encoder_table_t *et, char *encoder, char *ext, cherokee_encoder_t **new_encoder);
 
 /* Encoder entry methods

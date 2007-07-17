@@ -1,3 +1,47 @@
+2007-07-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/icons.c: Converted to use cherokee_buffer_t * instead
+	of char *.
+
+	* cherokee/avl.c (cherokee_avl_mrproper2): Added new method.
+
+	* cherokee/exts_table.c, cherokee/regex.c, cherokee/mime.c,
+	cherokee/encoder_table.c: cherokee_table_t replaced by a
+	cherokee_avl_t.
+
+	* cherokee/avl.c (cherokee_avl_get_ptr): Added new method.
+	(cherokee_avl_add_ptr): Added new method.
+
+	* cherokee/table.c (cherokee_table_add, cherokee_table_get)
+	(cherokee_table_del): Optimized to use cherokee_buffer_fake
+	instead of allocating and freeing memory. It should improve the
+	performance a little bit.
+
+	* cherokee/buffer.h (cherokee_buffer_fake): Added new method.
+
+	* cherokee/handler_common.c (stat_file): Fixed to handle
+	ret_no_sys. It's returned when the iocache reaches its limit.
+
+	* cherokee/table.c (cherokee_table_get_val): Removed. It was a
+	mitake to add that method; we should rather use
+	cherokee_table_get().
+
+	* cherokee/exts_table.c (cherokee_exts_table_has),
+	cherokee/regex.c (cherokee_regex_table_get, _add): We shouldn't
+	use cherokee_table_get_val(). Moved to use cherokee_table_get().
+ 
+	* cherokee/dirs_table.c, cherokee/dirs_table.h: This class used to
+	be based on cherokee_table. Switch to cherokee_avl in order to
+	improve the performance.
+
+	* cherokee/iocache.c: Added a new TRACE entries.
+
+	* cherokee/handler_file.c (cherokee_handler_file_init): There was
+	an invalid call to cherokee_iocache_mmap_release() that was the
+	cause of the infamous 'iocache bug' that has been bothering us for
+	a couple of weeks. As soon as I have removed it, everything began
+	to work just fine.
+
 2007-07-16  Brian Rosner  <brosner@gmail.com>
 	
 	* www/doc/django: updated django to r5717 and added VERSION file

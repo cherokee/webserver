@@ -40,16 +40,24 @@
 ret_t 
 cherokee_dirs_table_init (cherokee_dirs_table_t *pt)
 {
-	return cherokee_table_init (pt);
+	return cherokee_avl_init (pt);
 }
 
+
+static ret_t 
+mrproper_each (cherokee_buffer_t *key, void *value, void *param)
+{
+	cherokee_config_entry_free (CONF_ENTRY(value));
+	return ret_ok;
+}
 
 ret_t 
 cherokee_dirs_table_mrproper (cherokee_dirs_table_t *pt)
 {
-	return cherokee_table_mrproper2 (
-		TABLE(pt), 
-		(cherokee_table_free_item_t) cherokee_config_entry_free);
+	cherokee_avl_while (AVL(pt),
+			    mrproper_each,
+			    NULL, NULL, NULL);
+	return cherokee_avl_mrproper (AVL(pt));
 }
 
 
@@ -64,7 +72,7 @@ cherokee_dirs_table_get (cherokee_dirs_table_t *pt, cherokee_buffer_t *requested
 	cherokee_buffer_add_buffer (web_directory, requested_url);
 
 	do {
-		ret = cherokee_table_get (pt, web_directory->buf, (void **)&entry);
+		ret = cherokee_avl_get (AVL(pt), web_directory, (void **)&entry);
 		
 		/* Found
 		 */
@@ -154,7 +162,7 @@ relink_func (const char *key_, void *value, void *param)
 			key.len -= ((key.buf + key.len) - slash -1);
 		}
 
-		ret = cherokee_table_get (table, key.buf, &parent);
+		ret = cherokee_avl_get (table, &key, &parent);
 		if (ret == ret_ok) {
 			entry->parent = parent;
 			goto out;

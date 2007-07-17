@@ -103,49 +103,52 @@ stat_file (cherokee_boolean_t useit, cherokee_iocache_t *iocache, struct stat *n
 	ret_t ret;
 	int   re  = -1;
 
-	/* Without cache
-	 */
-	if (!useit) {
-		re = cherokee_stat (path->buf, nocache_info);
-
-		TRACE (ENTRIES, "%s, use_iocache=%d re=%d\n", path->buf, useit, re);
-
-		if (re < 0) {
-			switch (errno) {
-			case ENOENT: 
-				return ret_not_found;
-			case EACCES: 
-				return ret_deny;
-			default:
-				return ret_error;
-			}
-		}
-
-		*info = nocache_info;
-		return ret_ok;
-	}
-
 	/* I/O cache
 	 */
 #ifndef CHEROKEE_EMBEDDED
-	ret = cherokee_iocache_get_or_create_w_stat (iocache, path, io_entry);
+	if (useit) {
+		ret = cherokee_iocache_get_or_create_w_stat (iocache, path, io_entry);		
+		TRACE (ENTRIES, "%s, use_iocache=1 rer=%d\n", path->buf, ret);
 
-	TRACE (ENTRIES, "%s, use_iocache=%d re=%d\n", path->buf, useit, re);
-
-	if (ret != ret_ok) {
 		switch (ret) {
+		case ret_ok:
+			*info = &(*io_entry)->state;
+			return ret_ok;
+
 		case ret_not_found:
 			return ret_not_found;
+
+		case ret_no_sys:
+			goto without;
 		case ret_deny:
 			return ret_deny;
 		default:
 			return ret_error;
 		}
+		
 	}
-
-	*info = &(*io_entry)->state;
-	return ret_ok;
 #endif
+
+
+	/* Without cache
+	 */
+without:
+	re = cherokee_stat (path->buf, nocache_info);
+	TRACE (ENTRIES, "%s, use_iocache=0 re=%d\n", path->buf, re);
+
+	if (re >= 0) {
+		*info = nocache_info;
+		return ret_ok;
+	}
+	
+	switch (errno) {
+	case ENOENT: 
+		return ret_not_found;
+	case EACCES: 
+		return ret_deny;
+	default:
+		return ret_error;
+	}
 
 	return ret_error;
 }

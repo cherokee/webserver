@@ -41,6 +41,7 @@ ret_t
 cherokee_table_init_case (cherokee_table_t *tab)
 {
 	ret_t ret;
+
 	ret = cherokee_avl_init (&tab->avl);
 	if (unlikely (ret != ret_ok)) return ret;
 
@@ -52,8 +53,8 @@ cherokee_table_init_case (cherokee_table_t *tab)
 ret_t 
 cherokee_table_free2 (cherokee_table_t *tab, cherokee_table_free_item_t func) 
 { 
-	cherokee_table_clean (tab);
-	cherokee_table_free (tab);
+	cherokee_table_mrproper2 (tab, func);
+	free(tab);
 	return ret_ok; 
 }
 
@@ -64,12 +65,19 @@ cherokee_table_clean (cherokee_table_t *tab)
 	return cherokee_table_clean2 (tab, NULL);
 }
 
+static int
+free_entry (const char *key, void *value, void *param)
+{
+	cherokee_table_free_item_t func = param;
+	func (value);
+	return 0;
+}
+
 
 ret_t 
 cherokee_table_clean2 (cherokee_table_t *tab, cherokee_table_free_item_t func) 
 { 
-	// TODO
-	return ret_ok; 
+	return cherokee_avl_while (&tab->avl, free_entry, func, NULL, NULL);
 }
 
 
@@ -94,56 +102,30 @@ CHEROKEE_ADD_FUNC_FREE(table);
 ret_t 
 cherokee_table_add (cherokee_table_t *tab, char *key, void *value)
 {
-	ret_t             ret;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
 
-	cherokee_buffer_add (&tmp, key, strlen(key));
-	ret = cherokee_avl_add (&tab->avl, &tmp, value);
-	cherokee_buffer_mrproper (&tmp);
-
-	return ret;
-}
-
-
-void* 
-cherokee_table_get_val (cherokee_table_t *tab, char *key)
-{
-	void  *re = NULL;
-
-	cherokee_table_get (tab, key, &re);
-	return re;
+	cherokee_buffer_fake (&tmp, key, strlen(key));
+	return cherokee_avl_add (&tab->avl, &tmp, value);
 }
 
 
 ret_t 
 cherokee_table_get (cherokee_table_t *tab, char *key, void **val)
 {
-	ret_t ret;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
 
-	cherokee_buffer_add (&tmp, key, strlen(key));
-	ret = cherokee_avl_get (&tab->avl, &tmp, val);
-	cherokee_buffer_mrproper (&tmp);
-
-	return ret;
+	cherokee_buffer_fake (&tmp, key, strlen(key));
+	return cherokee_avl_get (&tab->avl, &tmp, val);
 }
 
 
 ret_t 
 cherokee_table_del (cherokee_table_t *tab, char *key, void **val)
 {
-	ret_t ret;
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t tmp;
 
-	cherokee_buffer_add (&tmp, key, strlen(key));
-	ret = cherokee_avl_get (&tab->avl, &tmp, val);
-	cherokee_buffer_mrproper (&tmp);
-
-	// Temporal
-	ret = cherokee_avl_check (&tab->avl);
-	if (ret != ret_ok) exit(1);
-
-	return ret;
+	cherokee_buffer_fake (&tmp, key, strlen(key));
+	return cherokee_avl_get (&tab->avl, &tmp, val);
 }
 
 
@@ -154,8 +136,7 @@ cherokee_table_len (cherokee_table_t *tab, size_t *len)
 }
 
 
-
-ret_t 
+static ret_t 
 each_func_avl_to_table (cherokee_buffer_t *key, void *value, void *param)
 {
 	// To be removed

@@ -318,6 +318,8 @@ stat_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn
 #ifndef CHEROKEE_EMBEDDED
 	if (HDL_FILE_PROP(fhdl)->use_cache) {
 		ret = cherokee_iocache_get_or_create_w_stat (srv->iocache, &conn->local_directory, io_entry);
+		TRACE (ENTRIES, "%s, use_iocache=1 ret=%d\n", conn->local_directory.buf, ret);
+
 		switch (ret) {
 		case ret_ok:
 			*info = &(*io_entry)->state;
@@ -344,6 +346,8 @@ stat_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn
 	 */
 without:
 	re = stat (conn->local_directory.buf, &fhdl->cache_info);
+	TRACE (ENTRIES, "%s, use_iocache=0 ret=%d\n", conn->local_directory.buf, re);
+
 	if (re >= 0) {
 		*info = &fhdl->cache_info;		
 		return ret_ok;
@@ -420,8 +424,8 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	/* Is this file cached in the io cache?
 	 */
 #ifndef CHEROKEE_EMBEDDED
-	use_io = ((HDL_FILE_PROP(fhdl)->use_cache) &&
-		  (conn->encoder == NULL) &&
+	use_io = ((conn->encoder == NULL) &&
+		  (HDL_FILE_PROP(fhdl)->use_cache) &&
 		  (conn->socket.is_tls == non_TLS) &&
 		  (fhdl->info->st_size <= IOCACHE_MAX_FILE_SIZE) &&
 		  (http_method_with_body (conn->header.method)));
@@ -430,8 +434,6 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	TRACE(ENTRIES, "Using iocache %d\n", use_io);
 	
 	if (use_io) {
-		if (conn->io_entry_ref)
-			cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
 		ret = cherokee_iocache_get_or_create_w_mmap (srv->iocache,
 							     &conn->local_directory,
 							     &conn->io_entry_ref, 

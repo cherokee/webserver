@@ -72,7 +72,17 @@ cherokee_avl_node_mrproper (cherokee_avl_node_t *node)
 ret_t 
 cherokee_avl_init (cherokee_avl_t *avl)
 {
-	avl->root = NULL;
+	avl->root             = NULL;
+	avl->case_insensitive = false;
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_avl_set_case (cherokee_avl_t *avl, cherokee_boolean_t case_insensitive)
+{
+	avl->case_insensitive = case_insensitive;
 	return ret_ok;
 }
 
@@ -80,20 +90,43 @@ cherokee_avl_init (cherokee_avl_t *avl)
 ret_t 
 cherokee_avl_mrproper (cherokee_avl_t *avl)
 {
+	// TODO !
 	return ret_ok;
+}
+
+
+static ret_t
+mrproper2_while (cherokee_buffer_t *key, void *value, void *param)
+{
+	cherokee_avl_value_free_func_t free_func = param;
+
+	free_func(value);
+	return ret_ok;
+}
+
+ret_t 
+cherokee_avl_mrproper2 (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_func)
+{
+	cherokee_avl_while (avl, mrproper2_while, free_func, NULL, NULL);
+	return cherokee_avl_mrproper (avl);
 }
 
 
 static int 
 compare_buffers (cherokee_buffer_t *A,
-		 cherokee_buffer_t *B)
+		 cherokee_buffer_t *B,
+		 cherokee_boolean_t case_insensitive)
 {
 	if (A->len > B->len)
 		return A->len - B->len;
 	else if (B->len > A->len)
 		return - (B->len - A->len);
-	else
-		return strcmp (A->buf, B->buf);
+	else {
+		if (unlikely(case_insensitive))
+			return strcasecmp (A->buf, B->buf);
+		else
+			return strcmp (A->buf, B->buf);
+	}
 }
 
 
@@ -253,7 +286,7 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 	/* Insert the node
 	 */
 	while (true) {
-		re = compare_buffers (&child->id, &node->id);
+		re = compare_buffers (&child->id, &node->id, tree->case_insensitive);
 
 		if (re < 0) {
 			/* Insert it on the left */
@@ -356,7 +389,7 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 	path[0] = NULL;
 
 	while (true) {
-		re = compare_buffers (key, &node->id);
+		re = compare_buffers (key, &node->id, avl->case_insensitive);
 		if (re == 0) {
 			if (value) 
 				*value = node->value;
@@ -515,7 +548,7 @@ cherokee_avl_get (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 		return ret_not_found;
 
 	while (true) {
-		re = compare_buffers (key, &node->id);
+		re = compare_buffers (key, &node->id, avl->case_insensitive);
 		if (re == 0) {
 			if (value)
 				*value = node->value;
@@ -540,6 +573,26 @@ cherokee_avl_get (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 
 /* Commodity methods
  */
+
+ret_t 
+cherokee_avl_get_ptr (cherokee_avl_t *avl, const char *key, void **value)
+{
+	cherokee_buffer_t tmp_key;
+
+	cherokee_buffer_fake (&tmp_key, (const char *)key, strlen(key));
+	return cherokee_avl_get (avl, &tmp_key, value);
+}
+
+
+ret_t 
+cherokee_avl_add_ptr (cherokee_avl_t *avl, const char *key, void *value)
+{
+	cherokee_buffer_t tmp_key;
+
+	cherokee_buffer_fake (&tmp_key, (const char *)key, strlen(key));
+	return cherokee_avl_add (avl, &tmp_key, value);
+}
+
 
 ret_t 
 cherokee_avl_while (cherokee_avl_t *avl, cherokee_avl_while_func_t func, void *param, cherokee_buffer_t **key, void **value)
@@ -683,3 +736,5 @@ cherokee_avl_check (cherokee_avl_t *avl)
 {
 	return node_check (avl->root);
 }
+
+

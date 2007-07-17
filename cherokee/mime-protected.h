@@ -26,10 +26,10 @@
 #define CHEROKEE_MIME_PROTECTED_H
 
 #include "list.h"
-#include "table.h"
+#include "avl.h"
 
 struct cherokee_mime {
-	cherokee_table_t mime_table;
+	cherokee_avl_t   mime_table;
 	cherokee_list_t  mime_list;
 	cherokee_list_t  name_list;
 };

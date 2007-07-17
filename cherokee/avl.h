@@ -38,23 +38,28 @@ typedef struct cherokee_avl_node cherokee_avl_node_t;
 
 typedef struct {
 	cherokee_avl_node_t *root;
+	cherokee_boolean_t   case_insensitive;
 } cherokee_avl_t;
 
 #define AVL(a) ((cherokee_avl_t *)(a))
 
-typedef ret_t (* cherokee_avl_while_func_t) (cherokee_buffer_t *key, void *value, void *param);
-
+typedef ret_t (* cherokee_avl_while_func_t)      (cherokee_buffer_t *key, void *value, void *param);
+typedef void  (* cherokee_avl_value_free_func_t) (void *param);
 
 ret_t cherokee_avl_init      (cherokee_avl_t *avl);
 ret_t cherokee_avl_mrproper  (cherokee_avl_t *avl);
+ret_t cherokee_avl_mrproper2 (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_func);
 
-ret_t cherokee_avl_get       (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value);
 ret_t cherokee_avl_add       (cherokee_avl_t *avl, cherokee_buffer_t *key, void  *value);
+ret_t cherokee_avl_add_ptr   (cherokee_avl_t *avl,        const char *key, void  *value);
 ret_t cherokee_avl_del       (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value);
+ret_t cherokee_avl_get       (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value);
+ret_t cherokee_avl_get_ptr   (cherokee_avl_t *avl,        const char *key, void **value);
 
 ret_t cherokee_avl_len       (cherokee_avl_t *avl, size_t *len);
 ret_t cherokee_avl_while     (cherokee_avl_t *avl, cherokee_avl_while_func_t func, void *param, cherokee_buffer_t **key, void **value);
 
+ret_t cherokee_avl_set_case  (cherokee_avl_t *avl, cherokee_boolean_t case_sensitive);
 ret_t cherokee_avl_check     (cherokee_avl_t *avl);
 ret_t cherokee_avl_print     (cherokee_avl_t *avl);
 

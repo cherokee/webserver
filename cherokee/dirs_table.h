@@ -26,11 +26,11 @@
 #define CHEROKEE_DIRS_TABLE_H
 
 #include "common.h"
-#include "table.h"
+#include "avl.h"
 #include "config_entry.h"
 
 
-typedef cherokee_table_t cherokee_dirs_table_t;  /* Web_directory -> config_entry */
+typedef cherokee_avl_t cherokee_dirs_table_t;  /* Web_directory -> config_entry */
 #define DTABLE(x) ((cherokee_dirs_table_t *)(x))
 
 

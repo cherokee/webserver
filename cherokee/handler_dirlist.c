@@ -737,10 +737,11 @@ substitute_vbuf_token (
 static ret_t
 render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_entry_t *file)
 {
+	ret_t                             ret;
 	cherokee_boolean_t                is_dir;
 	cherokee_buffer_t                *vtmp[2];
 	char                             *alt      = NULL;
-	char                             *icon     = NULL;
+	cherokee_buffer_t                *icon     = NULL;
 	char                             *name     = (char *) &file->info.d_name;
 	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
 	cherokee_buffer_t                *tmp      = &dhdl->header;
@@ -761,10 +762,14 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 #ifndef CHEROKEE_EMBEDDED
 	if (icons != NULL) {
 		if (is_dir) {
-			icon = icons->directory_icon.buf;
+			icon = &icons->directory_icon;
 		} else {
-			cherokee_icons_get_icon (icons, name, &icon);
-			if (icon == NULL) icon = "blank.png";
+			cherokee_buffer_t name_buf;
+			
+			cherokee_buffer_fake (&name_buf, name, strlen(name));
+			ret = cherokee_icons_get_icon (icons, &name_buf, &icon);
+			if (ret != ret_ok) 
+				icon = "blank.png";
 		}
 	}
 #endif

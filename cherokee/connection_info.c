@@ -76,6 +76,7 @@ cherokee_connection_info_free (cherokee_connection_info_t *info)
 ret_t 
 cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_connection_t *conn)
 {
+	ret_t                        ret;
 	const char                  *handler_name = NULL;
  	cherokee_icons_t            *icons        = CONN_SRV(conn)->icons;
 	cherokee_connection_phase_t  phase;
@@ -196,7 +197,7 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_con
 	    (!cherokee_buffer_is_empty (&info->request)))
 	{
 		char              *tmp;
-		char              *icon;
+		cherokee_buffer_t *icon;
 		cherokee_buffer_t  name = CHEROKEE_BUF_INIT;
 
 		cherokee_buffer_add_buffer (&name, &info->request);
@@ -209,9 +210,9 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_con
 		if (tmp != NULL) 
 			cherokee_buffer_move_to_begin (&name, tmp - name.buf);
 		
-		cherokee_icons_get_icon (icons, name.buf, &icon);
-		if (icon != NULL)
-			cherokee_buffer_add (&info->icon, icon, strlen(icon));
+		ret = cherokee_icons_get_icon (icons, &name, &icon);
+		if (ret == ret_ok)
+			cherokee_buffer_add_buffer (&info->icon, icon);
 
 		cherokee_buffer_mrproper (&name);
 	}

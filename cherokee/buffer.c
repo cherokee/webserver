@@ -62,6 +62,15 @@ cherokee_buffer_init (cherokee_buffer_t *buf)
 	return ret_ok;
 }
 
+void
+cherokee_buffer_fake (cherokee_buffer_t *buf, const char *str, cuint_t len)
+{
+	buf->buf  = (char *)str;
+	buf->len  = len;
+	buf->size = len + 1;
+}
+
+
 ret_t 
 cherokee_buffer_mrproper (cherokee_buffer_t *buf)
 {

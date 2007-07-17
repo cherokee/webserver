@@ -36,7 +36,7 @@ cherokee_mime_new (cherokee_mime_t **mime)
 {
 	CHEROKEE_NEW_STRUCT(n, mime);
 
-	cherokee_table_init (&n->mime_table);
+	cherokee_avl_init (&n->mime_table);
 
 	INIT_LIST_HEAD(&n->mime_list);
 	INIT_LIST_HEAD(&n->name_list);
@@ -56,7 +56,7 @@ cherokee_mime_free (cherokee_mime_t *mime)
 	if (mime == NULL)
 		return ret_ok;
 
-	cherokee_table_mrproper (&mime->mime_table);
+	cherokee_avl_mrproper (&mime->mime_table);
 
 	list_for_each_safe (i, tmp, &mime->mime_list) {
 		cherokee_list_del (i);
@@ -71,13 +71,13 @@ cherokee_mime_free (cherokee_mime_t *mime)
 ret_t 
 cherokee_mime_set_by_suffix (cherokee_mime_t *mime, char *suffix, cherokee_mime_entry_t *entry)
 {
-	return cherokee_table_add (&mime->mime_table, suffix, (void *)entry);
+	return cherokee_avl_add_ptr (&mime->mime_table, suffix, (void *)entry);
 }
 
 ret_t 
 cherokee_mime_get_by_suffix (cherokee_mime_t *mime, char *suffix, cherokee_mime_entry_t **entry)
 {
-	return cherokee_table_get (&mime->mime_table, suffix, (void **)entry);
+	return cherokee_avl_get_ptr (&mime->mime_table, suffix, (void **)entry);
 }
 
 
@@ -195,7 +195,7 @@ cherokee_mime_load_mime_types (cherokee_mime_t *mime, char *filename)
 			/* Add it to the table
 			 */
 			cherokee_buffer_add (&ext, p, tmp-p);
-			cherokee_table_add (&mime->mime_table, ext.buf, entry);
+			cherokee_avl_add (&mime->mime_table, &ext, entry);
 
 			TRACE(ENTRIES, "Adding mime '%s' -> '%s'\n", ext.buf, type.buf);
 
