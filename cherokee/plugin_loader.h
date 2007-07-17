@@ -31,7 +31,7 @@
 
 #include <cherokee/common.h>
 #include <cherokee/module.h>
-#include <cherokee/table.h>
+#include <cherokee/avl.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -41,7 +41,7 @@ typedef struct {
 } cherokee_plugin_loader_entry_t;
 
 typedef struct {
-	cherokee_table_t        table;
+	cherokee_avl_t          table;
 	cherokee_buffer_t       module_dir;
 	cherokee_buffer_t       deps_dir;
 } cherokee_plugin_loader_t;

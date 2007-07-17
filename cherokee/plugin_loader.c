@@ -34,7 +34,6 @@
 # endif
 #endif
 
-#include "table.h"
 #include "buffer.h"
 
 typedef cherokee_plugin_loader_entry_t entry_t;
@@ -139,7 +138,7 @@ add_static_entry (cherokee_plugin_loader_t *loader, const char *name, void *info
 	entry->dlopen_ref = dlopen (NULL, RTLD_BASE);
 	entry->info       = info; 
 
-	cherokee_table_add (&loader->table, (char *)name, entry);
+	cherokee_avl_add_ptr (&loader->table, (char *)name, entry);
 }
 
 
@@ -176,7 +175,7 @@ cherokee_plugin_loader_init (cherokee_plugin_loader_t *loader)
 {
 	ret_t ret;
 	
-	ret = cherokee_table_init (&loader->table);
+	ret = cherokee_avl_init (&loader->table);
 	if (unlikely(ret < ret_ok))
 		return ret;
 	
@@ -208,7 +207,7 @@ ret_t
 cherokee_plugin_loader_mrproper (cherokee_plugin_loader_t *loader)
 {
 	cherokee_buffer_mrproper (&loader->module_dir);
-	cherokee_table_mrproper2 (&loader->table, (cherokee_table_free_item_t)free_entry);
+	cherokee_avl_mrproper (&loader->table, free_entry);
 	return ret_ok;
 }
 
@@ -408,7 +407,7 @@ load_common (cherokee_plugin_loader_t *loader, char *modname, int flags)
 
 	/* If it is already loaded just return 
 	 */
-	ret = cherokee_table_get (&loader->table, modname, (void **)&entry);
+	ret = cherokee_avl_get_ptr (&loader->table, modname, (void **)&entry);
 	if (ret == ret_ok)
 		return ret_ok;
 	
@@ -441,7 +440,7 @@ load_common (cherokee_plugin_loader_t *loader, char *modname, int flags)
 	entry->dlopen_ref = dl_handle;
 	entry->info       = info; 
 	
-	ret = cherokee_table_add (&loader->table, modname, entry);
+	ret = cherokee_avl_add_ptr (&loader->table, modname, entry);
 	if (unlikely(ret != ret_ok)) {
 		dlclose (entry->dlopen_ref);
 		free(entry);
@@ -486,7 +485,7 @@ cherokee_plugin_loader_unload (cherokee_plugin_loader_t *loader, char *modname)
 
 	/* Remove item from the table
 	 */
-	ret = cherokee_table_del (&loader->table, modname, (void **)&entry);
+	ret = cherokee_avl_del_ptr (&loader->table, modname, (void **)&entry);
 	if (ret != ret_ok)
 		return ret;
 
@@ -508,7 +507,7 @@ cherokee_plugin_loader_get_info (cherokee_plugin_loader_t *loader, char *modname
 	ret_t    ret;
 	entry_t *entry;
 
-	ret = cherokee_table_get (&loader->table, modname, (void **)&entry);
+	ret = cherokee_avl_get_ptr (&loader->table, modname, (void **)&entry);
 	if (ret != ret_ok)
 		return ret;
 
@@ -526,7 +525,7 @@ cherokee_plugin_loader_get_sym  (cherokee_plugin_loader_t *loader, char *modname
 
 	/* Get the symbol from a dynamic library
 	 */
-	ret = cherokee_table_get (&loader->table, modname, (void **)&entry);
+	ret = cherokee_avl_get_ptr (&loader->table, modname, (void **)&entry);
 	if (ret != ret_ok)
 		return ret;
 
