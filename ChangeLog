@@ -1,3 +1,7 @@
+2007-07-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* doc/Makefile.am: Inhibit concurrent compilation.
+
 2007-07-17  A.D.F  <adefacc@tin.it>
 
 	* cherokee/util.c

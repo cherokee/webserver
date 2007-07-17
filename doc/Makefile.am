@@ -50,4 +50,9 @@ CLEANFILES = \
 $(GENERATED_FILES) 
 
 $(GENERATED_FILES):
-	python build_docs.py
+	@[ -f .building ] || {      \
+		echo "Building doc.."; \
+		touch .building;       \
+		python build_docs.py;  \
+		rm -f .building;       \
+	}
