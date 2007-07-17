@@ -42,6 +42,11 @@ struct cherokee_avl_node {
 };
 
 
+static cherokee_avl_node_t *node_first (cherokee_avl_t *avl);
+static cherokee_avl_node_t *node_prev  (cherokee_avl_node_t *node);
+static cherokee_avl_node_t *node_next  (cherokee_avl_node_t *node);
+
+
 /* Nodes
  */
 static ret_t 
@@ -83,28 +88,24 @@ cherokee_avl_init (cherokee_avl_t *avl)
 CHEROKEE_ADD_FUNC_NEW (avl);
 
 
-static ret_t
-mrproper2_while (cherokee_buffer_t *key, void *value, void *param)
-{
-	cherokee_avl_value_free_func_t free_func = param;
-
-	if (free_func) {
-		free_func(value);
-	}
-
-	return ret_ok;
-}
-
 ret_t 
 cherokee_avl_mrproper (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_func)
 {
-	/* Free all the entries
-	 */
-	cherokee_avl_while (avl, mrproper2_while, free_func, NULL, NULL);
+	cherokee_avl_node_t *node;
+	cherokee_avl_node_t *next;
 
-	/* Clean the entries as well
-	 */
-//      TODO !
+	node = node_first (avl);
+  
+	while (node) {
+		next = node_next (node);
+
+		cherokee_buffer_mrproper (&node->id);
+		if (free_func)
+			free_func (node->value);
+
+		free (node);
+		node = next;
+	}
 
 	return ret_ok;
 }
@@ -149,17 +150,6 @@ cherokee_avl_set_case (cherokee_avl_t *avl, cherokee_boolean_t case_insensitive)
 
 
 static cherokee_avl_node_t *
-node_prev (cherokee_avl_node_t *node)
-{
-	cherokee_avl_node_t *tmp = node->left;
-
-	if (node->left_child)
-		while (tmp->right_child)
-			tmp = tmp->right;
-	return tmp;
-}
-
-static cherokee_avl_node_t *
 node_first (cherokee_avl_t *avl)
 {
 	cherokee_avl_node_t *tmp;
@@ -185,6 +175,18 @@ node_next (cherokee_avl_node_t *node)
 			tmp = tmp->left;
 	return tmp;
 }
+
+static cherokee_avl_node_t *
+node_prev (cherokee_avl_node_t *node)
+{
+	cherokee_avl_node_t *tmp = node->left;
+
+	if (node->left_child)
+		while (tmp->right_child)
+			tmp = tmp->right;
+	return tmp;
+}
+
 
 static cherokee_avl_node_t *
 node_rotate_left (cherokee_avl_node_t *node)

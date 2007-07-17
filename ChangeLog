@@ -1,5 +1,7 @@
 2007-07-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/avl.c (cherokee_avl_mrproper): Implemented.
+
 	* qa/run-tests.py: Count down fixed.
 
 	* cherokee/util.h, cherokee/util.c, cherokee/connection.c,
