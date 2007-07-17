@@ -2,7 +2,7 @@ import os
 from base import *
 
 DIR  = "/SCGI4/"
-PORT = 5004
+PORT = 5005
 
 HDR1 = "X-Whatever"
 VAL1 = "Value1"

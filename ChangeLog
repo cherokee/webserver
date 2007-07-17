@@ -1,5 +1,8 @@
 2007-07-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/142-SCGI-ExtraVars.py (PORT): If was duplicated with QA test
+	#141. It's fixed noew.
+
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,
 	cherokee/module.h, cherokee/validator.c, cherokee/encoder_table.c,
 	cherokee/validator.h, cherokee/regex.c, cherokee/thread.h,
