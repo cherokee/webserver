@@ -33,7 +33,7 @@
 
 #include "resolv_cache.h"
 #include "util.h"
-#include "table.h"
+#include "avl.h"
 
 
 typedef struct {
@@ -42,7 +42,7 @@ typedef struct {
 } cherokee_resolv_cache_entry_t;
 
 struct cherokee_resolv_cache {
-	cherokee_table_t table;
+	cherokee_avl_t    table;
 	CHEROKEE_RWLOCK_T(lock);
 };
 
@@ -99,7 +99,7 @@ cherokee_resolv_cache_init (cherokee_resolv_cache_t *resolv)
 {
 	ret_t ret;
 
-	ret = cherokee_table_init (&resolv->table);
+	ret = cherokee_avl_init (&resolv->table);
 	if (unlikely (ret != ret_ok)) return ret;
 
 	CHEROKEE_RWLOCK_INIT (&resolv->lock, NULL);
@@ -110,7 +110,7 @@ cherokee_resolv_cache_init (cherokee_resolv_cache_t *resolv)
 ret_t 
 cherokee_resolv_cache_mrproper (cherokee_resolv_cache_t *resolv)
 {
-	cherokee_table_mrproper (&resolv->table);
+	cherokee_avl_mrproper (&resolv->table, entry_free);
 	CHEROKEE_RWLOCK_DESTROY (&resolv->lock);
 
 	return ret_ok;
@@ -142,7 +142,7 @@ ret_t
 cherokee_resolv_cache_clean (cherokee_resolv_cache_t *resolv)
 {
 	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
-	cherokee_table_clean2 (&resolv->table, entry_free);
+	cherokee_avl_mrproper (&resolv->table, entry_free);
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	return ret_ok;
@@ -172,7 +172,7 @@ table_add_new_entry (cherokee_resolv_cache_t *resolv, const char *domain, cherok
 	/* Add it to the table
 	 */
 	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
-	ret = cherokee_table_add (&resolv->table, (char *)domain, (void **)n);
+	ret = cherokee_avl_add_ptr (&resolv->table, (char *)domain, (void **)n);
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	*entry = n;
@@ -189,7 +189,7 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t *resolv, const char *do
 	/* Look for the name in the cache
 	 */
 	CHEROKEE_RWLOCK_READER (&resolv->lock);
-	ret = cherokee_table_get (&resolv->table, (char *)domain, (void **)&entry);
+	ret = cherokee_avl_get_ptr (&resolv->table, (char *)domain, (void **)&entry);
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	if (ret != ret_ok) {
@@ -215,7 +215,7 @@ cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv, const char *dom
 	/* Look for the name in the cache
 	 */
 	CHEROKEE_RWLOCK_READER (&resolv->lock);
-	ret = cherokee_table_get (&resolv->table, (char *)domain, (void **)&entry);
+	ret = cherokee_avl_get_ptr (&resolv->table, (char *)domain, (void **)&entry);
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	if (ret != ret_ok) {
