@@ -267,7 +267,7 @@ build_connections_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 }
 
 static int
-build_modules_table_content_while (const char *key, void *value, void *params[])
+build_modules_table_content_while (cherokee_buffer_t *key, void *value, void *params[])
 {
 	int *loggers    = (int *) params[2];
 	int *handlers   = (int *) params[3];
@@ -309,9 +309,9 @@ build_modules_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	cuint_t  balancers  = 0;
 	void    *params[]   = {buf, srv, &loggers, &handlers, &encoders, &validators, &generic, &balancers};
 
-	cherokee_table_while (&srv->loader.table, 
-			      (cherokee_table_while_func_t) build_modules_table_content_while, 
-			      params, NULL, NULL);
+	cherokee_avl_while (&srv->loader.table, 
+			    (cherokee_avl_while_func_t) build_modules_table_content_while, 
+			    params, NULL, NULL);
 
 	table_add_row_int (buf, "Loggers", loggers);
 	table_add_row_int (buf, "Handlers", handlers);

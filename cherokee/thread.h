@@ -36,7 +36,7 @@
 #include "connection.h"
 #include "connection-protected.h"
 #include "fdpoll.h"
-#include "table.h"
+#include "avl.h"
 
 
 typedef enum {
@@ -94,7 +94,7 @@ typedef struct {
 		uint32_t        recalculate;		
 	} accept;
 
-	cherokee_table_t           *fastcgi_servers;
+	cherokee_avl_t             *fastcgi_servers;
 	cherokee_table_free_item_t  fastcgi_free_func;
 
 } cherokee_thread_t;

@@ -1384,7 +1384,7 @@ cherokee_thread_free (cherokee_thread_t *thd)
 	/* FastCGI
 	 */
 	if (thd->fastcgi_servers != NULL) {
-		cherokee_table_free2 (thd->fastcgi_servers, thd->fastcgi_free_func);
+		cherokee_avl_free (thd->fastcgi_servers, thd->fastcgi_free_func);
 		thd->fastcgi_servers = NULL;
 	}
 

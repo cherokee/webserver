@@ -277,7 +277,7 @@ cherokee_handler_fastcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_modu
          */
         if (CONN_THREAD(cnt)->fastcgi_servers == NULL) {
                 CONN_THREAD(cnt)->fastcgi_free_func = (cherokee_table_free_item_t) cherokee_fcgi_dispatcher_free;
-                cherokee_table_new (&CONN_THREAD(cnt)->fastcgi_servers);
+                cherokee_avl_new (&CONN_THREAD(cnt)->fastcgi_servers);
         }
 
 	/* Return the object
@@ -307,7 +307,7 @@ get_dispatcher (cherokee_handler_fastcgi_t *hdl, cherokee_fcgi_dispatcher_t **di
 	ret_t                             ret;
 	cherokee_source_t                *src         = NULL;
 	cherokee_thread_t                *thread      = HANDLER_THREAD(hdl);
-        cherokee_table_t                 *dispatchers = thread->fastcgi_servers;
+        cherokee_avl_t                   *dispatchers = thread->fastcgi_servers;
 	cherokee_handler_fastcgi_props_t *props       = HANDLER_FASTCGI_PROPS(hdl);
 
 	/* Choose the server
@@ -317,12 +317,12 @@ get_dispatcher (cherokee_handler_fastcgi_t *hdl, cherokee_fcgi_dispatcher_t **di
 
 	/* Get the manager
 	 */
-	ret = cherokee_table_get (dispatchers, src->original.buf, (void **)dispatcher);
+	ret = cherokee_avl_get (dispatchers, &src->original, (void **)dispatcher);
 	if (ret == ret_not_found) {
 		ret = cherokee_fcgi_dispatcher_new (dispatcher, thread, src, props->nsockets, props->nkeepalive, props->npipeline);
 		if (unlikely (ret != ret_ok)) return ret;
 
-		ret = cherokee_table_add (dispatchers, src->original.buf, *dispatcher);
+		ret = cherokee_avl_add (dispatchers, &src->original, *dispatcher);
 		if (unlikely (ret != ret_ok)) return ret;
 	}
 
