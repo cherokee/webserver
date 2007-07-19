@@ -1431,51 +1431,58 @@ __accept_from_server (cherokee_thread_t *thd, int srv_socket, cherokee_socket_ty
 		return 0;
 	}
 
+	/* We got a new_conn object, on error we can goto error.
+	 */
 	ret = cherokee_socket_set_sockaddr (&new_conn->socket, new_fd, &new_sa);
+
+	/* It is about to add a new connection to the thread, 
+	 * so it MUST adquire the thread ownership
+	 * (do it now to better handle error cases).
+	 */
+	CHEROKEE_MUTEX_LOCK (&thd->ownership);
+
 	if (unlikely(ret < ret_ok)) {
 		PRINT_ERROR_S ("ERROR: Trying to set sockaddr\n");
-		cherokee_close_fd (new_fd);
 		goto error;
 	}
 
-	/* May active the TLS support
+	/* TLS support, set initial connection phase.
 	*/
 	if (tls == TLS) {
 		new_conn->phase = phase_tls_handshake;
 	}
 
-	/* It is about to add a new connection to the thread, 
-	 * so it MUST adquire the thread ownership now.
-	 */
-	CHEROKEE_MUTEX_LOCK (&thd->ownership);
-
 	/* Lets add the new connection
 	 */
 	ret = cherokee_thread_add_connection (thd, new_conn);
+	if (unlikely (ret < ret_ok))
+		goto error;
+
+	thd->conns_num++;
 
 	/* Release the thread ownership
 	 */
 	CHEROKEE_MUTEX_UNLOCK (&thd->ownership);
-
-	if (unlikely (ret < ret_ok)) {
-		cherokee_close_fd (new_fd);
-		goto error;
-	}
-
-	thd->conns_num++;
 
 	TRACE (ENTRIES, "new conn %p, fd %d\n", new_conn, new_fd);
 
 	return 1;
 
 error:
-	TRACE (ENTRIES, "error accepting connection! fd %d\n", srv_socket);
+	TRACE (ENTRIES, "error accepting connection fd %d from fd %d\n", new_fd, srv_socket);
 
-	/* New socket has already been closed,
-	 * so here we reinit fd to default init value.
+	/* Close new socket and reset its socket fd to default value.
 	 */
+	cherokee_close_fd (new_fd);
 	SOCKET_FD(&new_conn->socket) = -1;
+
+	/* Don't waste / reuse this new_conn object.
+	 */
 	connection_reuse_or_free (thd, new_conn);
+
+	/* Release the thread ownership
+	 */
+	CHEROKEE_MUTEX_UNLOCK (&thd->ownership);
 	return 0;
 }
 
