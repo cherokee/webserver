@@ -433,7 +433,7 @@ cherokee_socket_init_tls (cherokee_socket_t *socket, cherokee_virtual_server_t *
 ret_t       
 cherokee_socket_close (cherokee_socket_t *socket)
 {
-	int re;
+	ret_t ret;
 
 	if (socket->socket < 0) {
 		return ret_error;
@@ -455,19 +455,15 @@ cherokee_socket_close (cherokee_socket_t *socket)
 	}
 #endif	/* HAVE_TLS */
 
-#ifdef _WIN32
-	re = closesocket (socket->socket);
-#else	
-	re = close (socket->socket);
-#endif
+	ret = cherokee_close_fd (socket->socket);
 
-	TRACE (ENTRIES",close", "fd=%d is_tls=%d re=%d\n", socket->socket, socket->is_tls, re);
+	TRACE (ENTRIES",close", "fd=%d is_tls=%d re=%d\n", socket->socket, socket->is_tls, (int) ret);
 
 	socket->socket = -1;
 	socket->status = socket_closed;
 	socket->is_tls = non_TLS;
 
-	return (re == 0) ? ret_ok : ret_error;
+	return ret;
 }
 
 
@@ -577,11 +573,13 @@ cherokee_socket_accept (cherokee_socket_t *socket, int server_socket)
 	cherokee_sockaddr_t sa;
 
 	ret = cherokee_socket_accept_fd (server_socket, &fd, &sa);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	ret = cherokee_socket_set_sockaddr (socket, fd, &sa);
 	if (unlikely(ret < ret_ok)) {
 		cherokee_close_fd (fd);
+		SOCKET_FD(socket) = -1;
 		return ret;
 	}
 
