@@ -1,8 +1,13 @@
 2007-07-19  A.D.F  <adefacc@tin.it>
 
+	* cherokee/fcgi_manager.c
+	  - removed double call to cherokee_fd_set_nonblocking().
+
+2007-07-19  A.D.F  <adefacc@tin.it>
+
 	* cherokee/thread.c
 	  - __accept_from_server(), fixed a very uncommon memory leak
-	    on a connection object;
+	    on a new connection object;
 	  - enlarged MUTEX_LOCK / MUTEX_UNLOCK section.
 
 2007-07-19  A.D.F  <adefacc@tin.it>
