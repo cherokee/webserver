@@ -1897,7 +1897,7 @@ cherokee_server_handle_panic (cherokee_server_t *srv)
 	int               re;
 	cherokee_buffer_t cmd = CHEROKEE_BUF_INIT;
 
-	PRINT_ERROR_S ("Cherokee feels panic!\n");
+	PRINT_MSG_S ("Cherokee feels panic!\n");
 	
 	if ((srv == NULL) || (srv->panic_action.len <= 0)) {
 		goto fin;

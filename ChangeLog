@@ -1,3 +1,9 @@
+2007-07-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/server.c (cherokee_server_handle_panic): PRINT_ERROR_S
+	to PRINT_MSG_S. Source file and line number doesn't help im this
+	case.
+
 2007-07-19  A.D.F  <adefacc@tin.it>
 
 	* cherokee/fcgi_manager.c
@@ -29,7 +35,7 @@
 2007-07-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/142-SCGI-ExtraVars.py (PORT): If was duplicated with QA test
-	#141. It's fixed noew.
+	#141. It's fixed now.
 
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,
 	cherokee/module.h, cherokee/validator.c, cherokee/encoder_table.c,
