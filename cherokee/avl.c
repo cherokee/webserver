@@ -94,6 +94,9 @@ cherokee_avl_mrproper (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_
 	cherokee_avl_node_t *node;
 	cherokee_avl_node_t *next;
 
+	if (unlikely (avl == NULL))
+		return ret_ok;
+
 	node = node_first (avl);
   
 	while (node) {
@@ -154,7 +157,7 @@ node_first (cherokee_avl_t *avl)
 {
 	cherokee_avl_node_t *tmp;
 
-	if (!avl->root)
+	if (!avl->root)	
 		return NULL;
 
 	tmp = avl->root;

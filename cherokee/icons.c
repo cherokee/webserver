@@ -73,6 +73,9 @@ free_entry (void *param)
 ret_t
 cherokee_icons_free (cherokee_icons_t *icons)
 {
+	if (unlikely (icons == NULL))
+		return ret_ok;
+
 	/* It stores buffers as values,
 	 */
 	cherokee_avl_mrproper (&icons->files, free_entry);

@@ -1,7 +1,11 @@
 2007-07-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/icons.c (cherokee_icons_free),
+	cherokee/avl.c (node_first): Protected. I was crashing when it was
+	NULL.
+
 	* cherokee/server.c (cherokee_server_handle_panic): PRINT_ERROR_S
-	to PRINT_MSG_S. Source file and line number doesn't help im this
+	to PRINT_MSG_S. Source file and line number don't help in this
 	case.
 
 2007-07-19  A.D.F  <adefacc@tin.it>
