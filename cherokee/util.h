@@ -107,7 +107,11 @@ ret_t cherokee_sys_fdlimit_get (cuint_t *limit);
 ret_t cherokee_sys_fdlimit_set (cuint_t  limit);
 ret_t cherokee_close_fd        (cint_t fd);
 ret_t cherokee_get_shell       (const char **shell, const char **binary);
-void  cherokee_trace (const char *entry, const char *file, int line, const char *func, const char *fmt, ...);
+
+/* Debug
+ */
+void  cherokee_trace       (const char *entry, const char *file, int line, const char *func, const char *fmt, ...);
+void  cherokee_print_errno (int error, char *format, ...);
 
 /* Path walking
  */
@@ -126,7 +130,6 @@ ret_t cherokee_short_path         (cherokee_buffer_t *path);
 
 ret_t cherokee_parse_query_string (cherokee_buffer_t *qstring, 
 				   cherokee_avl_t  *arguments);
-
 
 CHEROKEE_END_DECLS
 

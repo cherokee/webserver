@@ -1340,3 +1340,27 @@ cherokee_get_shell (const char **shell, const char **binary)
 
 	return ret_ok;
 }
+
+
+void
+cherokee_print_errno (int error, char *format, ...) 
+{
+	va_list           ap;
+	char             *errstr;
+	char              err_tmp[ERROR_MAX_BUFSIZE];
+	cherokee_buffer_t buffer = CHEROKEE_BUF_INIT;
+
+	cherokee_buffer_add_str (&buffer, "ERROR: ");
+	errstr = cherokee_strerror_r (error, err_tmp, sizeof(err_tmp));
+
+	va_start (ap, format);
+	cherokee_buffer_add_va_list (&buffer, format, ap);
+	va_end (ap);
+
+	cherokee_buffer_add_str (&buffer, "\n");
+
+	cherokee_buffer_replace_string (&buffer, "${errno}", 8, errstr, strlen(errstr));
+	PRINT_MSG_S (buffer.buf);
+
+	cherokee_buffer_mrproper (&buffer);
+}

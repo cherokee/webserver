@@ -1,5 +1,8 @@
 2007-07-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/util.h, cherokee/util.c (cherokee_print_errno): Added
+	new printing error function.
+
 	* cherokee/regex.c (cherokee_regex_table_free): Again, another
 	little tiny memory leak. The server leaked 41 bytes on each
 	reload. Fixed.
