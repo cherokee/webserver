@@ -164,6 +164,23 @@ iocache_entry_new (cherokee_iocache_entry_t **entry)
 	return ret_ok;
 }
 
+static ret_t
+iocache_entry_free (cherokee_iocache_entry_t *entry)
+{
+	/* Free the object
+	 */
+	if (entry->mmaped != NULL) {
+		munmap (entry->mmaped, entry->mmaped_len);
+
+		entry->mmaped     = NULL;
+		entry->mmaped_len = 0;
+	}
+
+	/* Free the entry object
+	 */
+	free (entry);
+	return ret_ok;
+}
 
 static ret_t
 iocache_entry_ref (cherokee_iocache_entry_t *entry)
@@ -189,24 +206,15 @@ iocache_entry_unref (cherokee_iocache_entry_t *entry)
 static ret_t
 iocache_free_entry (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry)
 {
-	/* Free the object
-	 */
-	if (entry->mmaped != NULL) {
-		munmap (entry->mmaped, entry->mmaped_len);
+	ret_t ret;
 
-		entry->mmaped     = NULL;
-		entry->mmaped_len = 0;
-	}
-
-	/* Free the entry object
-	 */
-	free (entry);
+	ret = iocache_entry_free (entry);
 
 	/* Update the obj counter
 	 */
 	iocache->files_num--;
 
-	return ret_ok;
+	return ret;
 }
 
 
@@ -421,22 +429,11 @@ ok:
 }
 
 
-static ret_t
-free_while_func (const char *key, void *value, void *param)
-{
-	iocache_free_entry (IOCACHE(param), IOCACHE_ENTRY(value));
-	return ret_ok;
-}
-
-
 static ret_t 
 cherokee_iocache_free (cherokee_iocache_t *iocache)
 {
-	cherokee_avl_while (&iocache->files, 
-			    (cherokee_avl_while_func_t)free_while_func, 
-			    iocache, 
-			    NULL, NULL);
-
+	cherokee_avl_mrproper (&iocache->files, 
+			       (cherokee_func_free_t) iocache_entry_free);
 	CHEROKEE_MUTEX_DESTROY (&iocache->files_lock);
 
 	free (iocache);

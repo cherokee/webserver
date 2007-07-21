@@ -260,17 +260,23 @@ digest_HA2 (cherokee_validator_t *validator, cherokee_buffer_t *buf, cherokee_co
 {
 	ret_t       ret;
 	const char *method;
+	cuint_t     method_len;
 
 	/* Sanity check
 	 */
 	if (cherokee_buffer_is_empty (&validator->uri))
 		return ret_deny;
 
-	ret = cherokee_http_method_to_string (conn->header.method, &method, NULL);
+	ret = cherokee_http_method_to_string (conn->header.method, &method, &method_len);
 	if (unlikely (ret != ret_ok))
 		return ret;
 
-	cherokee_buffer_add_va (buf, "%s:%s", method, validator->uri.buf);
+	cherokee_buffer_ensure_size (buf, method_len + 1 + validator->uri.len);
+
+	cherokee_buffer_add        (buf, method, method_len);
+	cherokee_buffer_add_str    (buf, ":");
+	cherokee_buffer_add_buffer (buf, &validator->uri);
+
 	cherokee_buffer_encode_md5_digest (buf);	
 
 	return ret_ok;
@@ -309,23 +315,24 @@ cherokee_validator_digest_response (cherokee_validator_t  *validator,
 	cherokee_buffer_ensure_size (buf, 32 + a2.len + validator->nonce.len + 4);
 
 	cherokee_buffer_add (buf, A1, 32);
-	cherokee_buffer_add (buf, ":", 1);
+	cherokee_buffer_add_str (buf, ":");
 	cherokee_buffer_add_buffer (buf, &validator->nonce);
-	cherokee_buffer_add (buf, ":", 1);
+	cherokee_buffer_add_str (buf, ":");
 
 	if (!cherokee_buffer_is_empty (&validator->qop)) {
 		if (!cherokee_buffer_is_empty (&validator->nc))
 			cherokee_buffer_add_buffer (buf, &validator->nc);		
-		cherokee_buffer_add (buf, ":", 1);
+		cherokee_buffer_add_str (buf, ":");
 		if (!cherokee_buffer_is_empty (&validator->cnonce))
 			cherokee_buffer_add_buffer (buf, &validator->cnonce);		
-		cherokee_buffer_add (buf, ":", 1);
+		cherokee_buffer_add_str (buf, ":");
 		cherokee_buffer_add_buffer (buf, &validator->qop);		
-		cherokee_buffer_add (buf, ":", 1);
+		cherokee_buffer_add_str (buf, ":");
 	}
 
 	cherokee_buffer_add_buffer (buf, &a2);
 	cherokee_buffer_encode_md5_digest (buf);
+	cherokee_buffer_mrproper (&a2);
 
 	return ret_ok;
 
@@ -336,7 +343,7 @@ error:
 
 
 ret_t 
-cherokee_validator_digest_check (cherokee_validator_t *validator, char *passwd, cherokee_connection_t *conn)
+cherokee_validator_digest_check (cherokee_validator_t *validator, cherokee_buffer_t *passwd, cherokee_connection_t *conn)
 {
 	ret_t             ret;
 	cherokee_buffer_t a1   = CHEROKEE_BUF_INIT;
@@ -350,10 +357,16 @@ cherokee_validator_digest_check (cherokee_validator_t *validator, char *passwd, 
 
 	/* Build A1
 	 */
-	cherokee_buffer_add_va (&a1, "%s:%s:%s", 
-				validator->user.buf,
-				validator->realm.buf,
-				passwd);
+	cherokee_buffer_ensure_size (&a1, 
+				     validator->user.len  + 1 + 
+				     validator->realm.len + 1 + 
+				     passwd->len);
+
+	cherokee_buffer_add_buffer (&a1, &validator->user);
+	cherokee_buffer_add_str    (&a1, ":");
+	cherokee_buffer_add_buffer (&a1, &validator->realm);
+	cherokee_buffer_add_str    (&a1, ":");
+	cherokee_buffer_add_buffer (&a1, passwd);
 
 	cherokee_buffer_encode_md5_digest (&a1);
 

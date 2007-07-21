@@ -289,7 +289,7 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 		break;
 
 	case http_auth_digest:
-		ret = cherokee_validator_digest_check (VALIDATOR(mysql), db_passwd.buf, conn);
+		ret = cherokee_validator_digest_check (VALIDATOR(mysql), &db_passwd, conn);
 		break;
 
 	default:

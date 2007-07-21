@@ -6,13 +6,19 @@ from util import *
 MAGIC  = str_random (100)
 LENGTH = 100
 OFFSET = 15
+DIR    = "range_start_noio"
+
+CONF = """
+vserver!default!directory!<dir>!handler = file
+vserver!default!directory!<dir>!handler!iocache = 0
+"""
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
-        self.name = "Content Range, start"
+        self.name = "Content Range no-iocache, start"
 
-        self.request                 = "GET /Range100b HTTP/1.0\r\n" +\
+        self.request                 = "GET /%s/Range100b HTTP/1.0\r\n" % (DIR) + \
                                        "Range: bytes=%d-\r\n" % (OFFSET)
         length = LENGTH - OFFSET 
         self.expected_error          = 206
@@ -20,5 +26,7 @@ class Test (TestBase):
         self.forbidden_content       = MAGIC[:OFFSET]
 
     def Prepare (self, www):
-        self.WriteFile (www, "Range100b", 0444, MAGIC)
+        test_dir = self.Mkdir (www, DIR)
+        self.WriteFile (test_dir, "Range100b", 0444, MAGIC)
 
+        self.conf = CONF.replace('<dir>', test_dir)

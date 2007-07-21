@@ -82,9 +82,9 @@ struct cherokee_server {
 	/* Threads
 	 */
 	cherokee_thread_t         *main_thread;
-	int                        thread_num;
+	cint_t                     thread_num;
 	cherokee_list_t            thread_list;
-	int                        thread_policy;
+	cint_t                     thread_policy;
 
 	/* Modules
 	 */
@@ -122,10 +122,12 @@ struct cherokee_server {
 	uint32_t                   system_fd_limit;
 	cherokee_poll_type_t       fdpoll_method;
 
-	/* Connection related.
+	/* Connection related
 	 */
-	int                        max_conns;
-	int                        max_keepalive_conns;
+	cint_t                     conns_max;
+	cint_t                     conns_reuse_max;
+	cint_t                     conns_keepalive_max;
+	cuint_t                    conns_num_bogo;
 
 	/* Networking config
 	 */
@@ -182,7 +184,6 @@ struct cherokee_server {
 
 	/* Performance
 	 */
-	int                        max_conn_reuse;
 
 	/* PID
 	 */

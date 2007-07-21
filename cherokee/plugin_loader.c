@@ -207,6 +207,8 @@ ret_t
 cherokee_plugin_loader_mrproper (cherokee_plugin_loader_t *loader)
 {
 	cherokee_buffer_mrproper (&loader->module_dir);
+	cherokee_buffer_mrproper (&loader->deps_dir);
+
 	cherokee_avl_mrproper (&loader->table, free_entry);
 	return ret_ok;
 }

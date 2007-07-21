@@ -38,12 +38,14 @@ CHEROKEE_BEGIN_DECLS
 
 
 typedef struct {
-	cherokee_list_t   list;
+	cherokee_list_t      list;
 	
-	cherokee_buffer_t original;
-	cherokee_buffer_t unix_socket;
-	cherokee_buffer_t host;
-	cint_t            port;
+	cherokee_buffer_t    original;
+	cherokee_buffer_t    unix_socket;
+	cherokee_buffer_t    host;
+	cint_t               port;
+
+	cherokee_func_free_t free;
 } cherokee_source_t;
 
 #define SOURCE(s)  ((cherokee_source_t *)(s))

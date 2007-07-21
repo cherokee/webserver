@@ -55,7 +55,17 @@ cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info
 ret_t 
 cherokee_balancer_mrproper (cherokee_balancer_t *balancer)
 {
+	cuint_t            i;
+	cherokee_source_t *source;
+
+	/* Free sources
+	 */
 	if (balancer->sources != NULL) {
+		for (i=0; i < balancer->sources_len; i++) {
+			source = balancer->sources[i];
+			cherokee_source_free (source);
+		}
+
 		free (balancer->sources);
 	}
 

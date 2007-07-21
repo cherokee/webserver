@@ -42,10 +42,9 @@ typedef struct {
 #define SOURCE_INT(s)  ((cherokee_source_interpreter_t *)(s))
 
 
-ret_t cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src);
-ret_t cherokee_source_interpreter_free (cherokee_source_interpreter_t  *src);
+ret_t cherokee_source_interpreter_new       (cherokee_source_interpreter_t **src);
+ret_t cherokee_source_interpreter_configure (cherokee_source_interpreter_t  *src, cherokee_config_node_t *conf);
 
-ret_t cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, cherokee_config_node_t *conf);
 ret_t cherokee_source_interpreter_add_env   (cherokee_source_interpreter_t *src, char *env, char *val);
 ret_t cherokee_source_interpreter_spawn     (cherokee_source_interpreter_t *src);
 

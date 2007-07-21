@@ -112,87 +112,112 @@ cherokee_validator_plain_free (cherokee_validator_plain_t *plain)
 ret_t 
 cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_connection_t *conn)
 {
-	FILE  *f;
-	ret_t  ret;
+	ret_t              ret;
+	const char        *p;
+	const char        *end;
+	cherokee_buffer_t  file  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  buser = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  bpass = CHEROKEE_BUF_INIT;
 
 	if (unlikely ((conn->validator == NULL) || 
 	    cherokee_buffer_is_empty(&conn->validator->user))) {
 		return ret_error;
 	}
 
-	f = fopen (VAL_PLAIN_PROP(plain)->password_file.buf, "r"); 
-	if (f == NULL) {
-		return ret_error;
+	ret = cherokee_buffer_read_file (&file, VAL_PLAIN_PROP(plain)->password_file.buf);
+	if (ret != ret_ok) {
+		ret = ret_error;
+		goto out;
 	}
 
-	ret = ret_error;
-	while (!feof(f)) {
-		int   len;
-		char *pass;
-		CHEROKEE_TEMP(line, 256);
+	if (! cherokee_buffer_is_endding(&file, '\n'))
+		cherokee_buffer_add_str (&file, "\n");
 
-		if (fgets (line, line_size, f) == NULL)
-			continue;
+	p   = file.buf;
+	end = file.buf + file.len;
 
-		len = strlen (line);
-
-		if (len <= 3) 
-			continue;
-			 
-		if (line[0] == '#')
-			continue;
-
-		if (line[len-1] == '\n') 
-			line[len-1] = '\0';
-			 
-		/* Split into user and encrypted password. 
+	while (p < end) {
+		char *eol;
+		char *colon;
+		
+		/* Look for the EOL
 		 */
-		pass = strchr (line, ':');
-		if (pass == NULL) continue;
-		*pass++ = '\0';
-			 
-		/* Is this the right user? 
+		eol = strchr (p, '\n');
+		if (eol == NULL) {
+			ret = ret_ok;
+			goto out;
+		}
+		*eol = '\0';
+
+		/* Skip comments
 		 */
-		if (strncmp (conn->validator->user.buf, line, 
-		        conn->validator->user.len) != 0) {
-			continue;
+		if (p[0] == '#')
+			goto next;
+
+		colon = strchr (p, ':');
+		if (colon == NULL) {
+			goto next;
 		}
 
-		/* Validate it
+		/* Is it the right user?
 		 */
+		cherokee_buffer_clean (&buser);
+		cherokee_buffer_add (&buser, p, colon - p);
+		
+		ret = cherokee_buffer_cmp_buf (&buser, &conn->validator->user);
+		if (ret != ret_ok)
+			goto next;
+
+		/* Check the password
+		 */
+		cherokee_buffer_clean (&bpass);
+		cherokee_buffer_add (&bpass, colon+1, eol - (colon+1));
+
 		switch (conn->req_auth_type) {
 		case http_auth_basic:
 			/* Empty password
-			 */
-			if (conn->validator->passwd.len <= 0) {
-				if (strlen(pass) == 0) {
-					ret = ret_ok;
-					goto go_out;
-				}
-				continue;
+			 */			 
+			if (cherokee_buffer_is_empty (&bpass) &&
+			    cherokee_buffer_is_empty (&conn->validator->passwd)) {
+				ret = ret_ok;
+				goto out;
 			}
 
 			/* Check the passwd
 			 */
-			if (strcmp (conn->validator->passwd.buf, pass) == 0) {
-				ret = ret_ok;
-				goto go_out;
-			}
-			break;
+			ret = cherokee_buffer_cmp_buf (&bpass, &conn->validator->passwd);
+			if (ret != ret_ok) 
+				ret = ret_deny;
+			goto out;
 
 		case http_auth_digest:
-			ret = cherokee_validator_digest_check (VALIDATOR(plain), pass, conn);
-			if (ret == ret_ok)
-				goto go_out;
-			break;
+			ret = cherokee_validator_digest_check (VALIDATOR(plain), &bpass, conn);
+			goto out;
 
 		default:
 			SHOULDNT_HAPPEN;
 		}
+
+		/* A user entry has been tested and failed
+		 */
+		ret = ret_deny;
+		goto out;
+
+	next:
+		p = eol + 1;
+
+		/* Reached the end without success 
+		 */
+		if (p >= end) {
+			ret = ret_deny;
+			goto out;
+		}
 	}
 
-go_out:
-	fclose(f);
+out:
+ 	cherokee_buffer_mrproper (&file);
+ 	cherokee_buffer_mrproper (&buser);
+ 	cherokee_buffer_mrproper (&bpass);
 	return ret;
 }
 

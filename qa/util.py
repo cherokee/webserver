@@ -1,5 +1,13 @@
-import os, random
+import os, sys, time, random
 from conf import *
+
+def count_down (msg, nsecs, nl=True):
+    for s in range(nsecs):
+        sys.stdout.write ((msg+'\r') % (nsecs - s - 1))
+        sys.stdout.flush()
+        time.sleep(1)
+    if nl:
+        print
 
 def str_random_generate (n):
     c = ""

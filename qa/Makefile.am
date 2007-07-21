@@ -146,7 +146,13 @@ run-tests.py \
 139-domain-wildcards1.py \
 140-SCGI-EmptyVars.py \
 141-FastCGI-EmptyVars.py \
-142-SCGI-ExtraVars.py
+142-SCGI-ExtraVars.py \
+143-ContentRange-NoIO.py \
+144-ContentRange2-NoIO.py \
+145-ContentRange3-NoIO.py \
+146-ContentRange4-NoIO.py \
+147-ContentRange-Double-NoIO.py \
+148-ContentRange-Double2-NoIO.py
 
 test:
 	./run-tests.py

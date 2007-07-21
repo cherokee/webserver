@@ -50,28 +50,32 @@ static cherokee_avl_node_t *node_next  (cherokee_avl_node_t *node);
 /* Nodes
  */
 static ret_t 
-cherokee_avl_node_init (cherokee_avl_node_t *node, cherokee_buffer_t *key, void *value)
+node_new (cherokee_avl_node_t **node, cherokee_buffer_t *key, void *value)
 {
-	node->balance     = 0;
-	node->left        = NULL;
-	node->right       = NULL;
-	node->left_child  = false;
-	node->right_child = false;
-	node->value       = value;
+	CHEROKEE_NEW_STRUCT (n, avl_node);
 
-	cherokee_buffer_init (&node->id);
-	cherokee_buffer_add_buffer (&node->id, key);
+	n->balance     = 0;
+	n->left        = NULL;
+	n->right       = NULL;
+	n->left_child  = false;
+	n->right_child = false;
+	n->value       = value;
+
+	cherokee_buffer_init (&n->id);
+	cherokee_buffer_add_buffer (&n->id, key);
+
+	*node = n;
 	return ret_ok;
 }
 
 static ret_t 
-cherokee_avl_node_mrproper (cherokee_avl_node_t *node)
+node_free (cherokee_avl_node_t *node)
 {
 	cherokee_buffer_mrproper (&node->id);
+
+	free (node);
 	return ret_ok;
 }
-
-
 
 /* Tree constructor / destructor 
  */
@@ -89,7 +93,7 @@ CHEROKEE_ADD_FUNC_NEW (avl);
 
 
 ret_t 
-cherokee_avl_mrproper (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_func)
+cherokee_avl_mrproper (cherokee_avl_t *avl, cherokee_func_free_t free_func)
 {
 	cherokee_avl_node_t *node;
 	cherokee_avl_node_t *next;
@@ -102,11 +106,10 @@ cherokee_avl_mrproper (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_
 	while (node) {
 		next = node_next (node);
 
-		cherokee_buffer_mrproper (&node->id);
 		if (free_func)
 			free_func (node->value);
+		node_free (node);
 
-		free (node);
 		node = next;
 	}
 
@@ -114,7 +117,7 @@ cherokee_avl_mrproper (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_
 }
 
 ret_t 
-cherokee_avl_free (cherokee_avl_t *avl, cherokee_avl_value_free_func_t free_func)
+cherokee_avl_free (cherokee_avl_t *avl, cherokee_func_free_t free_func)
 {
 	cherokee_avl_mrproper (avl, free_func);
 	free (avl);
@@ -135,7 +138,7 @@ compare_buffers (cherokee_buffer_t *A,
 	else if (B->len > A->len)
 		return - (B->len - A->len);
 	else {
-		if (unlikely(case_insensitive))
+		if (case_insensitive)
 			return strcasecmp (A->buf, B->buf);
 		else
 			return strcmp (A->buf, B->buf);
@@ -340,8 +343,7 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 			}
 
 		} else {
-			cherokee_avl_node_mrproper (child);
-			free (child);
+			node_free (child);
 			return;
 		}
 	}
@@ -380,12 +382,12 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 ret_t 
 cherokee_avl_add (cherokee_avl_t *avl, cherokee_buffer_t *key, void *value)
 {
-	ret_t ret;
-	CHEROKEE_NEW_STRUCT (n, avl_node);
+	ret_t                ret;
+	cherokee_avl_node_t *n = NULL;
 
 	/* Create the new AVL node
 	 */
-	ret = cherokee_avl_node_init (n, key, value);
+	ret = node_new (&n, key, value);
 	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Add th node to the tree
@@ -556,6 +558,7 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 		}
 	}
 	
+	node_free (node);
 	return ret_ok;
 }
 
@@ -769,5 +772,4 @@ cherokee_avl_check (cherokee_avl_t *avl)
 {
 	return node_check (avl->root);
 }
-
 

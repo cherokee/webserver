@@ -68,6 +68,7 @@ typedef unsigned short      cushort_t;
 typedef unsigned long       culong_t;
 typedef unsigned long long  cullong_t;
 
+typedef void (*cherokee_func_free_t) (void *);
 
 CHEROKEE_END_DECLS
 

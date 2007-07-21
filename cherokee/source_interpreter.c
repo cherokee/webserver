@@ -32,6 +32,8 @@
 
 #define ENTRIES "source,src,interpreter"
 
+static void interpreter_free (void *src);
+
 
 ret_t 
 cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
@@ -44,15 +46,18 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	n->custom_env     = NULL;
 	n->custom_env_len = 0;
 
+	SOURCE(n)->free   = (cherokee_func_free_t)interpreter_free;
+
 	*src = n;
 	return ret_ok;
 }
 
 
 static void
-free_custon_env (cherokee_source_interpreter_t *src)
+free_custon_env (void *ptr)
 {
-	cuint_t i;
+	cuint_t                        i;
+	cherokee_source_interpreter_t *src = ptr;
 	
 	for (i=0; src->custom_env[i] != NULL; i++) {
 		free (src->custom_env[i]);
@@ -62,17 +67,18 @@ free_custon_env (cherokee_source_interpreter_t *src)
 }
 
 
-ret_t 
-cherokee_source_interpreter_free (cherokee_source_interpreter_t *src)
+static void
+interpreter_free (void *ptr)
 {
-	cherokee_source_mrproper (SOURCE(src));
+	cherokee_source_interpreter_t *src = ptr;
+
+	/* Only frees its stuff, the rest will be freed by
+	 * cherokee_source_t.
+	 */
 	cherokee_buffer_mrproper (&src->interpreter);
 
 	if (src->custom_env)
 		free_custon_env (src);
-
-	free (src);
-	return ret_ok;
 }
 
 

@@ -152,9 +152,11 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->max_fds         = -1;
 	n->fds_per_thread  = -1;
 	n->system_fd_limit = -1;
-	n->max_conns       =  0;
-	n->max_keepalive_conns =  0;
-	n->max_conn_reuse  = -1;
+
+	n->conns_max           =  0;
+	n->conns_reuse_max     = -1;
+	n->conns_keepalive_max =  0;
+	n->conns_num_bogo      =  0;
 
 	n->listen_queue    = 1024;
 	n->sendfile.min    = 32768;
@@ -641,7 +643,7 @@ print_banner (cherokee_server_t *srv)
 
 	/* File descriptor limit
 	 */
-	cherokee_buffer_add_va (&n, ", %d fds system limit, max. %d connections", srv->system_fd_limit, srv->max_conns);
+	cherokee_buffer_add_va (&n, ", %d fds system limit, max. %d connections", srv->system_fd_limit, srv->conns_max);
 
 	/* Threading stuff
 	 */
@@ -746,8 +748,9 @@ initialize_server_threads (cherokee_server_t *srv)
 
 	/* Reset max. conns value
 	 */
-	srv->max_conns = 0;
-	srv->max_keepalive_conns = 0;
+	srv->conns_max           = 0;
+	srv->conns_num_bogo      = 0;
+	srv->conns_keepalive_max = 0;
 
 	/* Verify max_fds value
 	 */
@@ -822,7 +825,7 @@ initialize_server_threads (cherokee_server_t *srv)
 	 * and thus already open connection.
 	 */
 	conns_per_thread = fds_per_thread1 / 2;
-	srv->max_conns += conns_per_thread;
+	srv->conns_max += conns_per_thread;
 	fds_per_thread1 += MAX_LISTEN_FDS;
 
 	/* Set mean fds per thread.
@@ -868,7 +871,7 @@ initialize_server_threads (cherokee_server_t *srv)
 			fds_per_thread1 += 2;
 		}
 		conns_per_thread = fds_per_thread1 / 2;
-		srv->max_conns += conns_per_thread;
+		srv->conns_max += conns_per_thread;
 		fds_per_thread1 += MAX_LISTEN_FDS;
 
 		/* NOTE: mean fds per thread has already been set above.
@@ -894,9 +897,9 @@ initialize_server_threads (cherokee_server_t *srv)
 	 * NOTE: this limit has to be lower (93%)
 	 *       than conns_accept limit (95% - 99%) used for threads.
 	 */
-	srv->max_keepalive_conns = srv->max_conns - (srv->max_conns / 16);
-	if (srv->max_keepalive_conns + 6 > srv->max_conns)
-		srv->max_keepalive_conns = srv->max_conns - 6;
+	srv->conns_keepalive_max = srv->conns_max - (srv->conns_max / 16);
+	if (srv->conns_keepalive_max + 6 > srv->conns_max)
+		srv->conns_keepalive_max = srv->conns_max - 6;
 
 	/* OK, return.
 	 */
@@ -1114,11 +1117,11 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 	/* Check the number of reusable connections
 	 */
-	if (srv->max_conn_reuse == -1)
-		srv->max_conn_reuse = DEFAULT_CONN_REUSE;
+	if (srv->conns_reuse_max == -1)
+		srv->conns_reuse_max = DEFAULT_CONN_REUSE;
 
-	if (srv->max_conn_reuse > srv->max_fds)
-		srv->max_conn_reuse = srv->max_fds;
+	if (srv->conns_reuse_max > srv->max_fds)
+		srv->conns_reuse_max = srv->max_fds;
 
 	/* Get the passwd file entry before chroot
 	 */
@@ -1131,7 +1134,8 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	/* Chroot
 	 */
 	if (! cherokee_buffer_is_empty (&srv->chroot)) {
-		srv->chrooted = (chroot (srv->chroot.buf) == 0);
+		re = chroot (srv->chroot.buf);
+		srv->chrooted = (re == 0);
 		if (srv->chrooted == 0) {
 			char buferr[ERROR_MAX_BUFSIZE];
 			PRINT_ERROR ("Cannot chroot() to '%s': %s\n", srv->chroot.buf, cherokee_strerror_r(errno, buferr, sizeof(buferr)));
@@ -1233,6 +1237,12 @@ cherokee_server_reinit (cherokee_server_t *srv)
 	return ret_ok;
 }
 
+static void
+update_bogo_conns_num (cherokee_server_t *srv)
+{
+	cherokee_server_get_conns_num (srv, &srv->conns_num_bogo);
+}
+
 
 static void
 update_bogo_now (cherokee_server_t *srv)
@@ -1263,16 +1273,17 @@ update_bogo_now (cherokee_server_t *srv)
 #endif
 	
 	cherokee_buffer_clean (&srv->bogo_now_string);
-	cherokee_buffer_add_va_fixed (&srv->bogo_now_string,
-				"%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
-	            cherokee_dtm_wday_name(srv->bogo_now_tm.tm_wday),
-	            srv->bogo_now_tm.tm_mday,
-	            cherokee_dtm_month_name(srv->bogo_now_tm.tm_mon),
-	            srv->bogo_now_tm.tm_year + 1900,
-	            srv->bogo_now_tm.tm_hour,
-	            srv->bogo_now_tm.tm_min,
-	            srv->bogo_now_tm.tm_sec,
-	            sign, offset);
+	cherokee_buffer_add_va_fixed (
+		&srv->bogo_now_string,
+		"%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
+		cherokee_dtm_wday_name(srv->bogo_now_tm.tm_wday),
+		srv->bogo_now_tm.tm_mday,
+		cherokee_dtm_month_name(srv->bogo_now_tm.tm_mon),
+		srv->bogo_now_tm.tm_year + 1900,
+		srv->bogo_now_tm.tm_hour,
+		srv->bogo_now_tm.tm_min,
+		srv->bogo_now_tm.tm_sec,
+		sign, offset);
 
 	CHEROKEE_RWLOCK_UNLOCK (&srv->bogo_now_mutex);      /* 2.- release */
 }
@@ -1307,6 +1318,7 @@ cherokee_server_step (cherokee_server_t *srv)
 	/* Get the server time.
 	 */
 	update_bogo_now (srv);
+	update_bogo_conns_num (srv);
 
 	/* Execute thread step.
 	 */
@@ -1511,7 +1523,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		srv->sendfile.max = atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "max_connection_reuse")) {
-		srv->max_conn_reuse = atoi (conf->val.buf);
+		srv->conns_reuse_max = atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "ipv6")) {
 		srv->ipv6 = atoi (conf->val.buf);
@@ -1807,7 +1819,6 @@ cherokee_server_get_conns_num (cherokee_server_t *srv, cuint_t *num)
 	/* Return out parameters
 	 */
 	*num = conns_num;
-
 	return ret_ok;
 }
 

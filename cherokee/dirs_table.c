@@ -48,7 +48,7 @@ ret_t
 cherokee_dirs_table_mrproper (cherokee_dirs_table_t *pt)
 {
 	return cherokee_avl_mrproper (AVL(pt), 
-				      (cherokee_avl_value_free_func_t) cherokee_config_entry_free);
+				      (cherokee_func_free_t) cherokee_config_entry_free);
 }
 
 

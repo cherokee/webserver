@@ -1,8 +1,76 @@
 2007-07-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/regex.c (cherokee_regex_table_free): Again, another
+	little tiny memory leak. The server leaked 41 bytes on each
+	reload. Fixed.
+
+	* cherokee/plugin_loader.c (cherokee_plugin_loader_mrproper):
+	Fixed nano memory leak - no more than 30 or 40 bytes.
+
+	* cherokee/avl.c, cherokee/avl.h, cherokee/dirs_table.c,
+	cherokee/encoder_table.c, cherokee/handler_fastcgi.c,
+	cherokee/iocache.c, cherokee/thread.h: Converted to use
+	cherokee_func_free()
+
+	* cherokee/common.h: Added new function type: cherokee_func_free.
+
+	* cherokee/source_interpreter.c, cherokee/source_interpreter.h,
+	cherokee/source.h, cherokee/source.c: Another little tiny memory
+	leak has been fixed here. The freed object wasn't calling its
+	predecessor destructor.
+
+	* cherokee/balancer.c (cherokee_balancer_mrproper): Memory leak
+	fixed. It wasn't freeing the source objects.
+
+	* cherokee/validator_plain.c (cherokee_validator_plain_check):
+	Rewritten from scratch. Now, it uses temporal buffers instead of a
+	fixed size temporal array - among other improvements.
+
+	* cherokee/validator.c (cherokee_validator_digest_check),
+	cherokee/validator_plain.c (cherokee_validator_plain_check),
+	cherokee/validator_mysql.c (cherokee_validator_mysql_check),
+	cherokee/validator.h: The battle against char * continues! Another
+	parameter char * converted to our sweet cherokee_buffer_t *.
+
+	* cherokee/validator.c (digest_HA2,
+	cherokee_validator_digest_check): Slightly optimized, a call to
+	cherokee_buffer_add_va() has been replaced.
+
+	* cherokee/validator.c (cherokee_validator_digest_response): Fixed
+	a 32 bytes memory leak.
+
+	* cherokee/iocache.c (cherokee_iocache_free): Now it uses
+	cherokee_avl_mrproper() instead of cherokee_avl_while() plus
+	free(). Besides the correctness, it fixed a memory leak.
+
+	* cherokee/avl.c: Clean up: avl_node_* static methods renamed.
+	Rewritten as _new/_free instead of _init/_mrproper.
+	(cherokee_avl_mrproper): Rewritten to use node_free().
+
+	* cherokee/thread.c (process_active_connections),
+	cheroke/server.c, cherokee/server-protected.h: Reworked in order
+	to remove the call to cherokee_server_get_conns_num(). A thread
+	should never query or access other threads (and that's exactly
+	what method was doing).
+
+	* cherokee/thread.c (cherokee_thread_free): It wasn't freeing the
+	reusable connections. Fixed.
+
+	* qa/util.py (count_down): Refactored. There were two places in
+	which it needed count-downs. This is the common function.
+
+	* qa/run-tests.py (clean_up): Added a little pause. We should give
+	the server sometime to die gratefully between the SIGTERM and
+	SIGKILL signals.
+
+	* qa/Makefile.am, qa/143-ContentRange-NoIO.py,
+	qa/144-ContentRange2-NoIO.py, qa/145-ContentRange3-NoIO.py,
+	qa/146-ContentRange4-NoIO.py, qa/147-ContentRange-Double-NoIO.py,
+	qa/148-ContentRange-Double2-NoIO.py: Added 6 new test to check
+	partial file management without IOcache.
+
 	* cherokee/icons.c (cherokee_icons_free),
-	cherokee/avl.c (node_first): Protected. I was crashing when it was
-	NULL.
+	cherokee/avl.c (node_first): Protected against NULL pointers. 
 
 	* cherokee/server.c (cherokee_server_handle_panic): PRINT_ERROR_S
 	to PRINT_MSG_S. Source file and line number don't help in this

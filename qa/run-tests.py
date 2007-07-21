@@ -237,11 +237,8 @@ if port is None:
         print_key ('Deps', CHEROKEE_DEPS)
         print
 
-        for s in range(delay):
-           sys.stdout.write ("Tests will start in %d secs\r" % (delay - s - 1))
-           sys.stdout.flush()
-           time.sleep(1)
-        print '\n'
+        # Count down
+        count_down ("Tests will start in %d secs", delay)
 
 its_clean = False
 def clean_up():
@@ -262,8 +259,14 @@ def clean_up():
 
     # Kill the server
     if kill and pid > 0:
+        print "Sending SIGTERM.."
         os.kill (pid, signal.SIGTERM)
-        time.sleep (.5)
+        if valgrind != None:
+            linger = 8
+        else:
+            linger = 4
+        count_down ("Will kill the server in %d secs", linger)
+        print "Sending SIGKILL.."
         os.kill (pid, signal.SIGKILL)
 
 def mainloop_iterator(objs):

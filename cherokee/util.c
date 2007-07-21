@@ -105,9 +105,10 @@ cherokee_strerror_r (int err, char *buf, size_t bufsize)
 	if (bufsize < ERROR_MIN_BUFSIZE)
 		return NULL;
 
-	if ((p = strerror(err)) == NULL) {
+	p = strerror(err);
+	if (p == NULL) {
 		buf[0] = '\0';
-		snprintf(buf, bufsize, "Unknown error %d (errno)", err);
+		snprintf (buf, bufsize, "Unknown error %d (errno)", err);
 		buf[bufsize-1] = '\0';
 		return buf;
 	}

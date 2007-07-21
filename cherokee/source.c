@@ -45,6 +45,7 @@ cherokee_source_init (cherokee_source_t *src)
 	cherokee_buffer_init (&src->host);
 
 	src->port = -1;
+	src->free = NULL;
 
 	return ret_ok;
 }
@@ -53,6 +54,9 @@ cherokee_source_init (cherokee_source_t *src)
 ret_t 
 cherokee_source_mrproper (cherokee_source_t *src)
 {
+	if (src->free)
+		src->free (src);
+
 	cherokee_buffer_mrproper (&src->original);
 	cherokee_buffer_mrproper (&src->unix_socket);
 	cherokee_buffer_mrproper (&src->host);
