@@ -57,8 +57,6 @@ cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn, cherokee_handle
 ret_t
 cherokee_handler_free (cherokee_handler_t *hdl)
 {
-	ret_t ret;
-
 	/* Sanity check
 	 */
 	return_if_fail (hdl != NULL, ret_error);
@@ -66,12 +64,9 @@ cherokee_handler_free (cherokee_handler_t *hdl)
 	if (MODULE(hdl)->free == NULL) {
 		return ret_error;
 	}
-
-	/* Call the destructor virtual method
-	 */
-	ret = MODULE(hdl)->free (hdl); 
-	if (unlikely(ret < ret_ok)) return ret;
 	
+	MODULE(hdl)->free (hdl); 
+
 	/* Free the handler memory
 	 */
 	free (hdl);

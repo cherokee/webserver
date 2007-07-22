@@ -1,5 +1,8 @@
 2007-07-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler.c (cherokee_handler_free): Free the handler
+	even of something goes wrong with the ->free method.
+
 	* cherokee/handler_error.c (build_hardcoded_response_page),
 	cherokee/connection-protected.h, cherokee/connection.c: Adapted to
 	the new cherokee_buffer_escape_html() interface and the
