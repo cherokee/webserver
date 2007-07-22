@@ -52,7 +52,7 @@
 #include "http.h"
 #include "list.h"
 #include "avl.h"
-#include "buffer_escape.h"
+//#include "buffer_escape.h"
 #include "socket.h"
 #include "header.h"
 #include "logger.h"
@@ -147,11 +147,7 @@ struct cherokee_connection {
 	cherokee_buffer_t             host;
 	cherokee_buffer_t             effective_directory;
 	cherokee_buffer_t             redirect;
-
-	/* Espace versions
-	 */
 	cherokee_buffer_t             request_original;
-	cherokee_buffer_escape_t     *request_escape;      /* Buffer escape for the request */
 
 	/* Authentication
 	 */

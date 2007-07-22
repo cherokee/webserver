@@ -1,3 +1,19 @@
+2007-07-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_error.c (build_hardcoded_response_page),
+	cherokee/connection-protected.h, cherokee/connection.c: Adapted to
+	the new cherokee_buffer_escape_html() interface and the
+	buffer_escape removal.
+
+	* cherokee/buffer_escape.h, cherokee/buffer_escape.c,
+	cherokee/Makefile.am: Removed.  This class was a mistake and
+	should no longer exist.
+
+	* cherokee/buffer.c (cherokee_buffer_escape_html),
+	cherokee/buffer.h: Reworked: instead the allocating a new buffer
+	it generates the escaped version inside the second buffer provided
+	as argument.
+
 2007-07-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/util.h, cherokee/util.c (cherokee_print_errno): Added

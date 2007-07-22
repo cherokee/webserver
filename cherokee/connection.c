@@ -69,7 +69,6 @@
 #include "dirs_table.h"
 #include "handler_error.h"
 #include "buffer.h"
-#include "buffer_escape.h"
 #include "config_entry.h"
 #include "encoder_table.h"
 #include "server-protected.h"
@@ -139,9 +138,6 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	cherokee_buffer_init (&n->query_string);
 	cherokee_buffer_init (&n->request_original);
 
-	cherokee_buffer_escape_new (&n->request_escape);
-	cherokee_buffer_escape_set_ref (n->request_escape, &n->request);
-
 	cherokee_socket_init (&n->socket);
 	cherokee_header_init (&n->header);
 	cherokee_post_init (&n->post);
@@ -169,7 +165,6 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 
 	cherokee_post_mrproper (&conn->post);
 	
-	cherokee_buffer_escape_free (conn->request_escape);
 	cherokee_buffer_mrproper (&conn->request);
 	cherokee_buffer_mrproper (&conn->request_original);
 
@@ -261,8 +256,6 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	cherokee_post_mrproper (&conn->post);
 
 	cherokee_buffer_clean (&conn->request);
-	cherokee_buffer_escape_clean (conn->request_escape);
-	cherokee_buffer_escape_set_ref (conn->request_escape, &conn->request);
 
 #ifdef CHEROKEE_EMBEDDED
 	cherokee_buffer_mrproper (&conn->request_original);

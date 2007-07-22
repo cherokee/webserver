@@ -1070,7 +1070,7 @@ cherokee_buffer_unescape_uri (cherokee_buffer_t *buffer)
 
 
 ret_t 
-cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t **maybe_new)
+cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
 {
 	ret_t   ret;
 	cuint_t i;
@@ -1081,12 +1081,12 @@ cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t **maybe_n
 	/* Verify string termination,
 	 * we assume there are no '\0' inside buffer.
 	 */
-	if (buf->buf[buf->len] != '\0')
-		buf->buf[buf->len]  = '\0';
+	if (src->buf[src->len] != '\0')
+		src->buf[src->len]  = '\0';
 
 	/* Verify if string has to be escaped.
 	 */
-	if ((p0 = strpbrk(buf->buf, "<>&\"")) == NULL)
+	if ((p0 = strpbrk (src->buf, "<>&\"")) == NULL)
 		return ret_not_found;
 
 	/* Count extra characters
@@ -1110,24 +1110,18 @@ cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t **maybe_n
 
 	/* Verify there are no embedded '\0'.
 	 */
-	if ( ((int) (p - buf->buf)) != buf->len)
+	if ( ((int) (p - src->buf)) != src->len)
 		return ret_error;
 
-	/* Create a new buffer
+	/* Copy the buffer
 	 */
-	ret = cherokee_buffer_new (maybe_new);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	cherokee_buffer_clean (buf);
 
-	ret = cherokee_buffer_ensure_size (*maybe_new, buf->len + extra + 1);
-	if (unlikely (ret != ret_ok))
-		return ret;
-
-	ret = cherokee_buffer_add_buffer (*maybe_new, buf);
-	if (unlikely (ret != ret_ok))
-		return ret;
-
-	buf = *maybe_new;
+	ret = cherokee_buffer_ensure_size (buf, src->len + extra + 1);
+	if (ret != ret_ok) return ret;
+	
+	ret = cherokee_buffer_add_buffer (buf, src);
+	if (ret != ret_ok) return ret;
 
 	/* Make the changes
 	 */

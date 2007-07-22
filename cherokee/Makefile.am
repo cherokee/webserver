@@ -726,8 +726,6 @@ version.h \
 version.c \
 buffer.h \
 buffer.c \
-buffer_escape.h \
-buffer_escape.c \
 socket.h \
 socket.c \
 fdpoll.h \
