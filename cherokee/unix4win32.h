@@ -152,8 +152,6 @@ const char *inet_ntop (int af, const void *addr, char *buf, size_t size);
 int         inet_pton (int af, const char *src, void *dst);
 int         inet_aton (const char *cp, struct in_addr *addr);
 
-#if !defined(CHEROKEE_EMBEDDED)
-
 /* <dlfcn.h> emulation
  */
 #define RTLD_NOW  0
@@ -168,9 +166,6 @@ void       *win_dlopen  (const char *dll_name, int flags);
 void       *win_dlsym   (const void *dll_handle, const char *func_name);
 int         win_dlclose (const void *dll_handle);
 const char *win_dlerror (void);
-
-#endif  /* CHEROKEE_EMBEDDED */
-
 
 /* Unix mmap() emulation
  */

@@ -1358,8 +1358,6 @@ cherokee_buffer_encode_md5 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 }
 
 
-#ifndef CHEROKEE_EMBEDDED
-
 /* Encode sha1, source buffer (buf) is not touched,
  * whereas destination buffer (encoded) is overwritten
  * but possibly not reallocated.
@@ -1405,7 +1403,6 @@ cherokee_buffer_encode_sha1_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *e
 
 	return ret_ok;
 }
-#endif	/* ! CHEROKEE_EMBEDDED */
 
 
 /* Encode in hexadecimal characters, source buffer (buf) is not touched,

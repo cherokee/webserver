@@ -194,7 +194,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 #endif
 	CHEROKEE_MUTEX_INIT (&n->accept_mutex, NULL);
 
-#ifndef CHEROKEE_EMBEDDED
 	/* IO Cache cache
 	 */
 	cherokee_iocache_new_default (&n->iocache, n);
@@ -210,7 +209,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	ret = cherokee_nonce_table_new (&n->nonces);
 	if (unlikely(ret < ret_ok)) return ret;	
-#endif
 
 	/* Module loader
 	 */
@@ -253,9 +251,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* Config
 	 */
-#ifndef CHEROKEE_EMBEDDED
 	cherokee_config_node_init (&n->config);
-#endif
 	
 	/* Return the object
 	 */
@@ -353,12 +349,10 @@ cherokee_server_free (cherokee_server_t *srv)
 	 */
 	cherokee_encoder_table_mrproper (&srv->encoders);
 
-#ifndef CHEROKEE_EMBEDDED
 	cherokee_mime_free (srv->mime);
 	cherokee_icons_free (srv->icons);
 	cherokee_regex_table_free (srv->regexs);
 	cherokee_iocache_free_default (srv->iocache);
-#endif
 
 	cherokee_nonce_table_free (srv->nonces);
 	
@@ -1086,15 +1080,11 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 	/* Get the CPU number
 	 */
-#ifndef CHEROKEE_EMBEDDED
 	dcc_ncpus (&srv->ncpus);
 	if (srv->ncpus < 1) {
 		PRINT_ERROR("Bad number of processors (%d < 1), use default 1 !\n", srv->ncpus);
 		srv->ncpus = 1;
 	}
-#else
-	srv->ncpus = 1;
-#endif
 
 	/* Verify the thread number and force it within sane limits.
 	 * See also subsequent fds_per_threads.
@@ -1337,14 +1327,12 @@ cherokee_server_step (cherokee_server_t *srv)
 		srv->log_flush_next = srv->bogo_now + srv->log_flush_elapse;
 	}
 
-#ifndef CHEROKEE_EMBEDDED
 	/* Clean IO cache
 	 */
 	if (srv->iocache_clean_next < srv->bogo_now) {
 		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
 		srv->iocache_clean_next = srv->bogo_now + IOCACHE_DEFAULT_CLEAN_ELAPSE;
 	}
-#endif
 
 #ifdef _WIN32
 	if (cherokee_win32_shutdown_signaled())
@@ -1474,7 +1462,6 @@ load_mime_file (char *file, void *data)
 	ret_t              ret;
 	cherokee_server_t *srv = SRV(data);
 
-#ifndef CHEROKEE_EMBEDDED 
 	if (srv->mime == NULL) {
 		ret = cherokee_mime_new (&srv->mime);
 		if (ret < ret_ok) {
@@ -1488,7 +1475,6 @@ load_mime_file (char *file, void *data)
 		PRINT_MSG ("Couldn't load MIME configuration file '%s'\n", file);
 		return ret;
 	}
-#endif
 
 	return ret_ok;
 }
@@ -1694,7 +1680,6 @@ configure_server (cherokee_server_t *srv)
 
 	/* Icons
 	 */
-#ifndef CHEROKEE_EMBEDDED
 	TRACE (ENTRIES, "Configuring %s\n", "icons");
 	ret = cherokee_config_node_get (&srv->config, "icons", &subconf);
 	if (ret == ret_ok) {
@@ -1704,7 +1689,6 @@ configure_server (cherokee_server_t *srv)
 		ret =  cherokee_icons_configure (srv->icons, subconf);
 		if (ret != ret_ok) return ret;
 	}
-#endif 
 	
 	/* Load the virtual servers
 	 */

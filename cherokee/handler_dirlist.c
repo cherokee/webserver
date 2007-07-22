@@ -504,7 +504,6 @@ cmp_date_up (cherokee_list_t *a, cherokee_list_t *b)
 static void
 list_sort_by_type (cherokee_list_t *list, cherokee_dirlist_sort_t sort)
 {
-#ifndef CHEROKEE_EMBEDDED
 	switch (sort) {
 	case Name_Down:
 		cherokee_list_sort (list, cmp_name_down);
@@ -525,7 +524,6 @@ list_sort_by_type (cherokee_list_t *list, cherokee_dirlist_sort_t sort)
 		cherokee_list_sort (list, cmp_date_up);
 		break;
 	}
-#endif
 }
 
 
@@ -759,7 +757,6 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 	alt = (is_dir) ? "[DIR]" : "[   ]";
 	
-#ifndef CHEROKEE_EMBEDDED
 	if (icons != NULL) {
 		if (is_dir) {
 			icon = &icons->directory_icon;
@@ -771,7 +768,6 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 			if (ret != ret_ok) return ret;
 		}
 	}
-#endif
 
 	if (icons && (icon == NULL))
 		icon = &icons->blank_icon;
@@ -865,12 +861,9 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 	/* Initialize temporary substitution buffers
 	 */
 	VTMP_INIT_SUBST (thread, vtmp, &props->entry);
-
-#ifndef CHEROKEE_EMBEDDED
 	if (icons != NULL) {
 		icon = icons->parentdir_icon.buf;
 	}
-#endif
 
 	VTMP_SUBSTITUTE_TOKEN ("%icon%", icon);
 	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", "[DIR]");

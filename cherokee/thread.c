@@ -1223,7 +1223,6 @@ process_active_connections (cherokee_thread_t *thd)
 			 * the file content and stop processing the connection.
 			 */
 			if (conn->mmaped != NULL) {
-#ifndef CHEROKEE_EMBEDDED
 				ret = cherokee_connection_send_header_and_mmaped (conn);
 				switch (ret) {
 				case ret_eagain:
@@ -1241,7 +1240,6 @@ process_active_connections (cherokee_thread_t *thd)
 					maybe_purge_closed_connection (thd, conn);
 					continue;
 				}
-#endif
 			}
 
 			/* Handler step: read or make new data to send

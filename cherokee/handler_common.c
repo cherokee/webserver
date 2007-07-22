@@ -47,10 +47,6 @@
 
 #define ENTRIES "handler,common"
 
-#ifdef CHEROKEE_EMBEDDED
-# define cherokee_iocache_mmap_release(iocache,file)
-#endif
-
 
 ret_t
 cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)
@@ -105,7 +101,6 @@ stat_file (cherokee_boolean_t useit, cherokee_iocache_t *iocache, struct stat *n
 
 	/* I/O cache
 	 */
-#ifndef CHEROKEE_EMBEDDED
 	if (useit) {
 		ret = cherokee_iocache_get_or_create_w_stat (iocache, path, io_entry);		
 		TRACE (ENTRIES, "%s, use_iocache=1 rer=%d\n", path->buf, ret);
@@ -127,8 +122,6 @@ stat_file (cherokee_boolean_t useit, cherokee_iocache_t *iocache, struct stat *n
 		}
 		
 	}
-#endif
-
 
 	/* Without cache
 	 */
@@ -176,12 +169,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	 */
 	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
 
-#ifdef CHEROKEE_EMBEDDED
-	use_iocache = false;
-#else
 	cherokee_iocache_get_default (&iocache);
-#endif
-
 	ret = stat_file (use_iocache, iocache, &nocache_info, &conn->local_directory, &file, &info);
 	exists = (ret == ret_ok);
 

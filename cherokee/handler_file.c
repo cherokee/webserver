@@ -315,7 +315,6 @@ stat_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn
 
 	/* I/O cache
 	 */
-#ifndef CHEROKEE_EMBEDDED
 	if (HDL_FILE_PROP(fhdl)->use_cache) {
 		ret = cherokee_iocache_get_or_create_w_stat (srv->iocache, &conn->local_directory, io_entry);
 		TRACE (ENTRIES, "%s, use_iocache=1 ret=%d\n", conn->local_directory.buf, ret);
@@ -340,7 +339,6 @@ stat_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn
 		
 		return ret_error;		
 	}
-#endif 
 
 	/* Without cache
 	 */
@@ -400,7 +398,6 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 
 	/* Look for the mime type
 	 */
-#ifndef CHEROKEE_EMBEDDED
 	if (srv->mime != NULL) {
 		char *ext;
 
@@ -409,7 +406,6 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 			ret = cherokee_mime_get_by_suffix (srv->mime, ext+1, &fhdl->mime);
 		}
 	}
-#endif
 
 	/* Is it cached on the client?
 	 */
@@ -423,7 +419,6 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 
 	/* Is this file cached in the io cache?
 	 */
-#ifndef CHEROKEE_EMBEDDED
 	use_io = ((conn->encoder == NULL) &&
 		  (HDL_FILE_PROP(fhdl)->use_cache) &&
 		  (conn->socket.is_tls == non_TLS) &&
@@ -453,7 +448,6 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 			return ret_error;
 		}
 	}
-#endif
 
 	/* Maybe open the file
 	 */
@@ -572,7 +566,6 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	cherokee_buffer_add    (buffer, bufstr, szlen);
 	cherokee_buffer_add_str(buffer, CRLF);
 
-#ifndef CHEROKEE_EMBEDDED
 	/* Add MIME related headers: 
 	 * "Content-Type:" and "Cache-Control: max-age="
 	 */
@@ -592,7 +585,6 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 			cherokee_buffer_add_str    (buffer, CRLF);
 		}
 	}
-#endif
 
 	/* If it's replying "304 Not Modified", we're done here
 	 */

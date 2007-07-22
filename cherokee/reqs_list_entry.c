@@ -26,7 +26,7 @@
 #include "reqs_list_entry.h"
 
 ret_t 
-cherokee_reqs_list_entry_new  (cherokee_reqs_list_entry_t **entry)
+cherokee_reqs_list_entry_new (cherokee_reqs_list_entry_t **entry)
 {
 	CHEROKEE_NEW_STRUCT (n, reqs_list_entry);
 

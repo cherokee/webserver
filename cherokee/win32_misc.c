@@ -48,12 +48,7 @@
 /* __declspec(dllexport) */ const struct in6_addr in6addr_any = IN6ADDR_ANY_INIT;
 #endif
 
-#ifdef CHEROKEE_EMBEDDED
-# define _ctor __attribute__ ((constructor))
-#else
-# define _ctor
-#endif
-
+#define _ctor
 #define EXIT_EVENT_NAME "cherokee_exit_1"
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
@@ -104,7 +99,6 @@ void init_win32 (void)
 }
 
 
-#if !defined(CHEROKEE_EMBEDDED)
 BOOL APIENTRY DllMain (HANDLE dll_handle, DWORD reason, LPVOID reserved)
 {
 	if (reason == DLL_PROCESS_ATTACH)
@@ -114,7 +108,6 @@ BOOL APIENTRY DllMain (HANDLE dll_handle, DWORD reason, LPVOID reserved)
 	(void) reserved;
 	return (TRUE);
 }
-#endif
 
 
 int getdtablesize (void)
@@ -184,25 +177,6 @@ int dcc_ncpus (int *ncpus)
 	*ncpus = sys_info.dwNumberOfProcessors;
 	return (ret_ok);
 }
-
-
-#if defined(CHEROKEE_EMBEDDED) && 0
-#include "handler_phpcgi.h"
-
-
-ret_t cherokee_handler_phpcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_table_t *properties)
-{
-	SHOULDNT_HAPPEN;
-	return ret_error;
-}
-
-
-ret_t cherokee_handler_phpcgi_init (cherokee_handler_t *hdl)
-{
-	SHOULDNT_HAPPEN;
-	return ret_error;
-}
-#endif
 
 
 /*
@@ -572,7 +546,6 @@ int win_munmap (const void *file_ptr, size_t size)
 }
 
 
-#if !defined(CHEROKEE_EMBEDDED)
 /*
  * dlopen() emulation.
  */
@@ -661,8 +634,6 @@ const char *win_dlerror (void)
      
      return (win_dlerror_buf);
 }
-
-#endif  /* CHEROKEE_EMBEDDED */
 
 
 /*

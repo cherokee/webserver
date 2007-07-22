@@ -209,12 +209,10 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	size_t             crlf_len;
 	cherokee_server_t *srv = CONN_SRV(conn);
 
-#ifndef CHEROKEE_EMBEDDED
 	if (conn->io_entry_ref != NULL) {
 		cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
 		conn->io_entry_ref = NULL;	
 	}
-#endif
 
 	conn->timeout           = -1;
 	conn->phase             = phase_reading_header;
@@ -254,15 +252,10 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	}
 
 	cherokee_post_mrproper (&conn->post);
+	cherokee_buffer_mrproper (&conn->encoder_buffer);
 
 	cherokee_buffer_clean (&conn->request);
-
-#ifdef CHEROKEE_EMBEDDED
-	cherokee_buffer_mrproper (&conn->request_original);
-#else
 	cherokee_buffer_clean (&conn->request_original);
-#endif
-	cherokee_buffer_mrproper (&conn->encoder_buffer);
 
 	cherokee_buffer_clean (&conn->pathinfo);
 	cherokee_buffer_clean (&conn->local_directory);
@@ -390,9 +383,7 @@ out:
 	/* Nothing should be mmaped any longer
 	 */
 	if (conn->io_entry_ref != NULL) {
-#ifndef CHEROKEE_EMBEDDED
 		cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
-#endif
 	}
 
 	conn->io_entry_ref = NULL;
@@ -1621,7 +1612,6 @@ cherokee_connection_get_req_entry (cherokee_connection_t *conn, cherokee_reqs_li
 
 	/* Look in the extension table
 	 */
-#ifndef CHEROKEE_EMBEDDED
 	ret = cherokee_reqs_list_get (reqs, &conn->request, config_entry, conn);
 	switch (ret) {
 	case ret_not_found:
@@ -1642,9 +1632,6 @@ cherokee_connection_get_req_entry (cherokee_connection_t *conn, cherokee_reqs_li
 	conn->auth_type = config_entry->authentication;
 
 	return ret;
-#else
-	return ret_ok;
-#endif
 }
 
 

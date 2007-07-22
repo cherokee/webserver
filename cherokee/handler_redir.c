@@ -43,8 +43,6 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (redir, http_all_methods);
 
 /* Methods implementation
  */
-#ifndef CHEROKEE_EMBEDDED
-
 struct cre_list {
 	cherokee_list_t    item;
 	pcre              *re;
@@ -257,9 +255,6 @@ cre_entry_free (struct cre_list *n)
 }
 
 
-#endif /* CHEROKEE_EMBEDDED */
-
-
 ret_t 
 cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {
@@ -279,8 +274,6 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 
 	n->use_previous_match   = false;
 
-#ifndef CHEROKEE_EMBEDDED
-
 	/* If there is an explitic redirection on the connection don't
 	 * even bother looking in the properties. Go straight for it.
 	 */
@@ -298,8 +291,7 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 			}
 		}
 	}
-#endif
-	
+
 	/* Return the new handler obj
 	 */
 	*hdl = HANDLER(n);
@@ -364,11 +356,9 @@ props_free (cherokee_handler_redir_props_t *props)
 
 	cherokee_buffer_mrproper (&props->url);
 
-#ifndef CHEROKEE_EMBEDDED 
 	list_for_each_safe (i, tmp, &props->regex_list) {
 		cre_entry_free ((struct cre_list *)i);
 	}
-#endif
 
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
@@ -402,13 +392,11 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 			cherokee_buffer_clean (&props->url);
 			cherokee_buffer_add_buffer (&props->url, &subconf->val);
 
-#ifndef CHEROKEE_EMBEDDED
 		} else if (equal_buf_str (&subconf->key, "rewrite")) {
 			cherokee_config_node_foreach (j, subconf) {
 				ret = configure_rewrite (CONFIG_NODE(j), srv, PROP_REDIR(props));
 				if (ret != ret_ok) return ret;
 			}
-#endif
 		}
 	}
 	

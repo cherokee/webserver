@@ -37,13 +37,8 @@
 
 #define DEFAULT_CONFIG_FILE "/etc/cherokee/cherokee.conf"
 
-#ifndef CHEROKEE_EMBEDDED
 # define GETOPT_OPT  "C:r:bhv"
 # define CONFIG_FILE_HELP "[-C configfile] [-r]"
-#else
-# define GETOPT_OPT  "br:"
-# define CONFIG_FILE_HELP ""
-#endif 
 
 #define BASIC_CONFIG                                                                         \
 	"vserver!default!directory!/!handler = common\n"                                     \

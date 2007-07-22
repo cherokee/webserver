@@ -1,5 +1,17 @@
 2007-07-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_redir.c, cherokee/read_config_embedded.c,
+	cherokee/read_config_embedded.h, cherokee/plugin_loader.c,
+	cherokee/handler_dirlist.c, cherokee/virtual_server.c,
+	cherokee/win32_misc.c, cherokee/handler_common.c,
+	cherokee/thread.c, cherokee/buffer.c, cherokee/handler_file.c,
+	cherokee/main.c, cherokee/unix4win32.h,
+	cherokee/Makefile.embedded, cherokee/connection.c,
+	cherokee/server.c, cherokee/virtual_entries.c,
+	cherokee/reqs_list_entry.c: CHEROKEE_EMBEDDED removed. Nobody was
+	using it; it didn't make sense to continue maintaining
+	it. Besides, embedded devices are much more powerful nowadays.
+
 	* cherokee/handler.c (cherokee_handler_free): Free the handler
 	even of something goes wrong with the ->free method.
 

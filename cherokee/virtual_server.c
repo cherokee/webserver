@@ -604,7 +604,6 @@ add_extensions (cherokee_config_node_t *config, cherokee_virtual_server_t *vserv
 static ret_t 
 add_request (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver, cherokee_virtual_entries_t *ventry)
 {
-#ifndef CHEROKEE_EMBEDDED
 	ret_t                       ret;
 	cherokee_reqs_list_entry_t *entry = NULL;
 
@@ -625,9 +624,8 @@ add_request (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver,
 	TRACE(ENTRIES, "Adding '%s' request, priority %d\n", config->key.buf, CONF_ENTRY(entry)->priority);
 
 	ret = cherokee_reqs_list_add (&ventry->reqs, entry, SRV(vserver->server_ref)->regexs);
-	if (ret != ret_ok)
+	if (unlikely (ret != ret_ok))
 		return ret;
-#endif
 
 	return ret_ok;
 }

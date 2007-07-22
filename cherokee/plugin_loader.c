@@ -28,10 +28,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef CHEROKEE_EMBEDDED
-# ifdef HAVE_DLFCN_H
+#ifdef HAVE_DLFCN_H
 #  include <dlfcn.h>
-# endif
 #endif
 
 #include "buffer.h"
@@ -43,80 +41,8 @@ typedef cherokee_plugin_loader_entry_t entry_t;
 static pthread_mutex_t dlerror_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
-
-#ifdef CHEROKEE_EMBEDDED
-
-ret_t
-cherokee_plugin_loader_init  (cherokee_plugin_loader_t *loader)
-{
-	return ret_ok;
-}
-
-ret_t 
-cherokee_plugin_loader_mrproper (cherokee_plugin_loader_t *loader)
-{  
-	return ret_ok; 
-}
-
-ret_t 
-cherokee_plugin_loader_load (cherokee_plugin_loader_t *loader, char *modname)
-{
-	extern void MODULE_INIT(common)   (cherokee_plugin_loader_t *);
-	extern void MODULE_INIT(file)     (cherokee_plugin_loader_t *);
-	extern void MODULE_INIT(redir)    (cherokee_plugin_loader_t *);
-	extern void MODULE_INIT(dirlist)  (cherokee_plugin_loader_t *);
-	extern void MODULE_INIT(cgi)      (cherokee_plugin_loader_t *);
-	extern void MODULE_INIT(phpcgi)   (cherokee_plugin_loader_t *);
-	extern void MODULE_INIT(htdigest) (cherokee_plugin_loader_t *);
-
-	if      (strcmp(modname, "common")   == 0) MODULE_INIT(common) (NULL);
-	else if (strcmp(modname, "file")     == 0) MODULE_INIT(file) (NULL);
-	else if (strcmp(modname, "redir")    == 0) MODULE_INIT(redir) (NULL);
-	else if (strcmp(modname, "dirlist")  == 0) MODULE_INIT(dirlist) (NULL);
-	else if (strcmp(modname, "cgi")      == 0) MODULE_INIT(cgi) (NULL);
-	else if (strcmp(modname, "phpcgi")   == 0) MODULE_INIT(phpcgi) (NULL);
-	else if (strcmp(modname, "htdigest") == 0) MODULE_INIT(htdigest) (NULL);
-	else return ret_error;
-
-	return ret_ok;
-}
-
-ret_t 
-cherokee_plugin_loader_unload (cherokee_plugin_loader_t *loader, char *modname)
-{
-	return ret_ok;
-}
-
-ret_t 
-cherokee_plugin_loader_get_info (cherokee_plugin_loader_t *loader, char *modname, cherokee_plugin_info_t **info)
-{
-	extern cherokee_plugin_info_t cherokee_common_info;
-	extern cherokee_plugin_info_t cherokee_file_info;
-	extern cherokee_plugin_info_t cherokee_redir_info;
-	extern cherokee_plugin_info_t cherokee_dirlist_info;
-	extern cherokee_plugin_info_t cherokee_cgi_info;
-	extern cherokee_plugin_info_t cherokee_phpcgi_info;
-	extern cherokee_plugin_info_t cherokee_htdigest_info;
-
-	if      (strcmp(modname, "common")   == 0) *info = &cherokee_common_info;
-	else if (strcmp(modname, "file")     == 0) *info = &cherokee_file_info;
-	else if (strcmp(modname, "redir")    == 0) *info = &cherokee_redir_info;
-	else if (strcmp(modname, "dirlist")  == 0) *info = &cherokee_dirlist_info;
-	else if (strcmp(modname, "cgi")      == 0) *info = &cherokee_cgi_info;
-	else if (strcmp(modname, "phpcgi")   == 0) *info = &cherokee_phpcgi_info;
-	else if (strcmp(modname, "htdigest") == 0) *info = &cherokee_htdigest_info;
-	else return ret_error;
-
-	return ret_ok;
-}
-
-
-#else 
-
-
 /* This is the non-embedded implementation
  */
-
 #include "loader.autoconf.h"
 
 #ifdef HAVE_RTLDNOW	
@@ -544,9 +470,6 @@ cherokee_plugin_loader_get_sym  (cherokee_plugin_loader_t *loader, char *modname
 	*sym = tmp;
 	return ret_ok;
 }
-
-
-#endif /* CHEROKEE_EMBEDDED */
 
 
 ret_t 
