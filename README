@@ -86,12 +86,6 @@ FAQ
   -----------------------------------------------
     openssl req -days 1000 -new -x509 -nodes -out /etc/cherokee/ssl/cherokee.pem -keyout /etc/cherokee/ssl/cherokee.pem
 
-  How to compile the embedded version (u-cherokee)
-  ------------------------------------------------
-   ./configure --prefix=/usr --sysconfdir=/etc --disable-pthread --disable-tls --disable-largefile --disable-pcre
-   cd cherokee
-   make -f Makefile.embedded 
-
   How to compile it on Windows
   ----------------------------
    ./configure --prefix=/usr --sysconfdir=/etc --enable-trace --enable-static-module=all --enable-static --enable-shared=no --enable-beta
