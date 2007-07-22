@@ -58,8 +58,7 @@ ret_t cherokee_buffer_init               (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_mrproper           (cherokee_buffer_t  *buf);
 void  cherokee_buffer_fake               (cherokee_buffer_t  *buf, const char *str, cuint_t len);
 
-ret_t cherokee_buffer_clean              (cherokee_buffer_t  *buf);
-
+void  cherokee_buffer_clean              (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_dup                (cherokee_buffer_t  *buf, cherokee_buffer_t **dup);
 void  cherokee_buffer_swap_buffers       (cherokee_buffer_t  *buf, cherokee_buffer_t *second);       
 
@@ -78,10 +77,8 @@ ret_t cherokee_buffer_add_char_n         (cherokee_buffer_t  *buf, char c, int n
 ret_t cherokee_buffer_add_buffer         (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
 ret_t cherokee_buffer_prepend            (cherokee_buffer_t  *buf, char *txt, size_t size);
 
-ret_t cherokee_buffer_cmp                (cherokee_buffer_t  *buf, char *txt, cuint_t txt_len);
-ret_t cherokee_buffer_cmp_buf            (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
-ret_t cherokee_buffer_case_cmp           (cherokee_buffer_t  *buf, char *txt, cuint_t txt_len);
-ret_t cherokee_buffer_case_cmp_buf       (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+cint_t cherokee_buffer_cmp_buf           (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+cint_t cherokee_buffer_case_cmp_buf      (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
 
 ret_t cherokee_buffer_read_file          (cherokee_buffer_t  *buf, char *filename);
 ret_t cherokee_buffer_read_from_fd       (cherokee_buffer_t  *buf, int fd, size_t size, size_t *ret_size);

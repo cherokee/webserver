@@ -112,6 +112,7 @@ cherokee_validator_plain_free (cherokee_validator_plain_t *plain)
 ret_t 
 cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_connection_t *conn)
 {
+	int                re;
 	ret_t              ret;
 	const char        *p;
 	const char        *end;
@@ -164,8 +165,8 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_conn
 		cherokee_buffer_clean (&buser);
 		cherokee_buffer_add (&buser, p, colon - p);
 		
-		ret = cherokee_buffer_cmp_buf (&buser, &conn->validator->user);
-		if (ret != ret_ok)
+		re = cherokee_buffer_cmp_buf (&buser, &conn->validator->user);
+		if (re != 0)
 			goto next;
 
 		/* Check the password
@@ -185,8 +186,8 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_conn
 
 			/* Check the passwd
 			 */
-			ret = cherokee_buffer_cmp_buf (&bpass, &conn->validator->passwd);
-			if (ret != ret_ok) 
+			re = cherokee_buffer_cmp_buf (&bpass, &conn->validator->passwd);
+			if (re != 0) 
 				ret = ret_deny;
 			goto out;
 

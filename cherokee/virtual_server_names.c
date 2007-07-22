@@ -108,10 +108,13 @@ cherokee_vserver_name_entry_new (cherokee_vserver_name_entry_t **entry, cherokee
 ret_t 
 cherokee_vserver_name_entry_match (cherokee_vserver_name_entry_t *entry, cherokee_buffer_t *name)
 {
+	int re;
+
 	if (entry->is_wildcard) 
 		return cherokee_wildcard_match (entry->name.buf, name->buf);
 
-	return cherokee_buffer_cmp_buf (&entry->name, name); 
+	re = cherokee_buffer_cmp_buf (&entry->name, name); 
+	return (re == 0) ? ret_ok : ret_deny;
 }
 
 

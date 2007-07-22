@@ -285,7 +285,8 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 	 */
 	switch (conn->req_auth_type) {
 	case http_auth_basic:
-		ret = cherokee_buffer_case_cmp_buf (&user_passwd, &db_passwd);
+		re = cherokee_buffer_case_cmp_buf (&user_passwd, &db_passwd);
+		ret = (re == 0) ? ret_ok : ret_deny;
 		break;
 
 	case http_auth_digest:

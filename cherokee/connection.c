@@ -1572,7 +1572,7 @@ cherokee_connection_get_dir_entry (cherokee_connection_t *conn, cherokee_dirs_ta
 	 */
 	if ((conn->request.len > 1) &&
 	    (cherokee_buffer_end_char (&conn->request) != '/') &&
-	    (cherokee_buffer_cmp_buf (&conn->request, &conn->web_directory) == ret_ok)) {
+	    (cherokee_buffer_cmp_buf (&conn->request, &conn->web_directory) == 0)) {
 		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + 4);
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
 		cherokee_buffer_add (&conn->redirect, "/", 1);

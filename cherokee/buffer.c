@@ -85,14 +85,12 @@ cherokee_buffer_mrproper (cherokee_buffer_t *buf)
 	return ret_ok;
 }
 
-ret_t
+void
 cherokee_buffer_clean (cherokee_buffer_t *buf)
 {
-	if (likely ((buf->buf != NULL) && (buf->len != 0)) ) {
+	if (buf->buf != NULL)
 		buf->buf[0] = '\0';
-	}
 	buf->len = 0;
-	return ret_ok;
 }
 
 void
@@ -586,8 +584,10 @@ cherokee_buffer_move_to_begin (cherokee_buffer_t *buf, int pos)
 	if (pos <= 0) 
 		return ret_ok;
 
-	if (pos >= buf->len) 
-		return cherokee_buffer_clean(buf);
+	if (pos >= buf->len) {
+		cherokee_buffer_clean(buf);
+		return ret_ok;
+	}
 
 	/* At this point: 0 < pos < buf->len 
 	 */
@@ -692,15 +692,16 @@ cherokee_buffer_swap_chars (cherokee_buffer_t *buffer, char a, char b)
 ret_t 
 cherokee_buffer_remove_dups (cherokee_buffer_t *buffer, char c)
 {
-	char *a      = buffer->buf;
-	int   offset = 0;
+	char       *a      = buffer->buf;
+	const char *end    = buffer->buf + buffer->len;
+	cuint_t     offset = 0;
 
 	if (buffer->len < 2) {
 		return ret_ok;
 	}
 
 	do {
-		if ((a[0] == c) && (a[offset+1] == c)) {
+		if ((*a == c) && (a[offset+1] == c)) {
 			offset++;
 			continue;
 		}
@@ -708,7 +709,7 @@ cherokee_buffer_remove_dups (cherokee_buffer_t *buffer, char c)
 		a++;
 		*a = a[offset];
 
-	} while ((a && *a != '\0') && (a < buffer->buf + buffer->len) && (offset+1 < buffer->len));
+	} while ((a < end) && (offset+1 < buffer->len));
 
 	buffer->len -= offset;
 	buffer->buf[buffer->len] = '\0';
@@ -753,6 +754,7 @@ cherokee_buffer_remove_chunk (cherokee_buffer_t *buf, int from, int len)
 }
 
 
+/*
 ret_t 
 cherokee_buffer_cmp (cherokee_buffer_t *buf, char *txt, cuint_t txt_len)
 {
@@ -761,29 +763,42 @@ cherokee_buffer_cmp (cherokee_buffer_t *buf, char *txt, cuint_t txt_len)
 
 	return (strcmp (buf->buf, txt) == 0) ? ret_ok : ret_deny;
 }
+*/
 
-
-ret_t
-cherokee_buffer_cmp_buf (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
+cint_t
+cherokee_buffer_cmp_buf (cherokee_buffer_t *A, cherokee_buffer_t *B)
 {
-	return cherokee_buffer_cmp (buf, buf2->buf, buf2->len);
+	if (A->len > B->len)
+		return A->len - B->len;
+	else if (B->len > A->len)
+		return - (B->len - A->len);
+
+	return strncmp (A->buf, B->buf, B->len);
+
+//	return cherokee_buffer_cmp (buf, buf2->buf, buf2->len);
 }
 
 
-ret_t 
+/*
+int
 cherokee_buffer_case_cmp (cherokee_buffer_t *buf, char *txt, cuint_t txt_len)
 {
-	if (buf->len != txt_len)
-		return ret_deny;
 
-	return (strcasecmp (buf->buf, txt) == 0) ? ret_ok : ret_deny;
+//	return (strcasecmp (buf->buf, txt) == 0) ? ret_ok : ret_deny;
 }
+*/
 
-
-ret_t
-cherokee_buffer_case_cmp_buf (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
+cint_t
+cherokee_buffer_case_cmp_buf (cherokee_buffer_t *A, cherokee_buffer_t *B)
 {
-	return cherokee_buffer_case_cmp (buf, buf2->buf, buf2->len);
+	if (A->len > B->len)
+		return A->len - B->len;
+	else if (B->len > A->len)
+		return - (B->len - A->len);
+
+	return strncasecmp (A->buf, B->buf, B->len);
+
+//	return cherokee_buffer_case_cmp (buf, buf2->buf, buf2->len);
 }
 
 

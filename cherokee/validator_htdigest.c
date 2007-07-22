@@ -192,6 +192,7 @@ validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *
 static ret_t
 validate_digest (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *file)
 {
+	int                re;
 	ret_t              ret;
 	char              *user   = NULL;
 	char              *realm  = NULL;
@@ -218,11 +219,11 @@ validate_digest (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t 
 
 	/* Compare and return
 	 */
-	ret = cherokee_buffer_cmp_buf (&conn->validator->response, &buf);
+	re = cherokee_buffer_cmp_buf (&conn->validator->response, &buf);
 
 go_out:
 	cherokee_buffer_mrproper (&buf);
-	return ret;
+	return (re == 0) ? ret_ok : ret_deny;
 }
 
 
