@@ -1023,11 +1023,6 @@ unix4win32.c \
 win32_misc.h \
 win32_misc.c
 
-EMBEDDED_VERSION_FILES = \
-Makefile.embedded \
-read_config_embedded.h \
-read_config_embedded.c
-
 EXTRA_DIST = \
 $(pcre_src) \
 $(win32_src) \
@@ -1036,6 +1031,5 @@ $(bin_SCRIPTS) \
 $(cherokeedeps_DATA) \
 $(cherokeedata_DATA) \
 $(WINDOWS_PORT_FILES) \
-$(EMBEDDED_VERSION_FILES) \
 loader.autoconf.h \
 loader.autoconf.inc
