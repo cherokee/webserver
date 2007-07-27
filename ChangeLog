@@ -1,3 +1,8 @@
+2007-07-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/run-tests.py: Added new option for showing how much memory is
+	the server using during the QA test execution.
+
 2007-07-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/run-tests.py, qa/help.py (HELP_PRINT_PARAMETERS): -m was

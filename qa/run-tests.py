@@ -39,6 +39,7 @@ nobody   = False
 fcgi     = True
 log      = False
 help     = False
+memproc  = False
 
 server   = CHEROKEE_PATH
 delay    = SERVER_DELAY
@@ -78,6 +79,7 @@ for p in param:
     elif p     == '-b': nobody   = True
     elif p     == '-l': log      = True
     elif p     == '-h': help     = True
+    elif p     == '-o': memproc  = True
     elif p[:2] == '-n': num      = int(p[2:])
     elif p[:2] == '-t': thds     = int(p[2:])
     elif p[:2] == '-p': port     = int(p[2:])
@@ -236,6 +238,17 @@ if port is None:
         print_key ('Mods', CHEROKEE_MODS)
         print_key ('Deps', CHEROKEE_DEPS)
         print
+
+        if memproc:
+            cmd = 'xterm -e "             \
+            ( while :; do                 \
+               [ -d /proc/%d ] || break;  \
+               date;                      \
+               cat /proc/%d/status 2>/dev/null | egrep \'(VmSize|VmData|SleepAVG)\'; \
+               echo;                      \
+               sleep 1;                   \
+            done; ) | less -b1024 -O/tmp/cherokee_mem.txt" &' % (pid, pid)
+            os.system(cmd)
 
         # Count down
         count_down ("Tests will start in %d secs", delay)
