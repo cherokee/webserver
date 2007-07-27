@@ -82,7 +82,7 @@ for p in param:
     elif p[:2] == '-t': thds     = int(p[2:])
     elif p[:2] == '-p': port     = int(p[2:])
     elif p[:2] == '-r': delay    = int(p[2:])
-    elif p[:2] == '-m': tpause   = float(p[2:])
+    elif p[:2] == '-j': tpause   = float(p[2:])
     elif p[:2] == '-d': pause    = p[2:]
     elif p[:2] == '-m': method   = p[2:]
     elif p[:2] == '-e': server   = p[2:]

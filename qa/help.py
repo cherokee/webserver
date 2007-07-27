@@ -16,7 +16,7 @@ Usage: %s [parameters] [tests]
   -t<NUM>       Number of threads of the server
   -p<NUM>       Server port
   -r<NUM>       Starting delay (secs)
-  -m<FLOAT>     Delay between tests (secs)
+  -j<FLOAT>     Delay between tests (secs)
 
   -d<NUM>       Number of pauses
   -e<PATH>      Path to the binary of the server

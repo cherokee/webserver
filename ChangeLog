@@ -1,3 +1,8 @@
+2007-07-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/run-tests.py, qa/help.py (HELP_PRINT_PARAMETERS): -m was
+	duplicated. The "delay between tests" parameter is now -j.
+
 2007-07-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_redir.c, cherokee/read_config_embedded.c,
