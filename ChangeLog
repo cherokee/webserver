@@ -1,5 +1,15 @@
 2007-07-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/util.c (cherokee_mkstemp): Added new function. It wraps
+	mkstemp() and cherokee_win32_mkstemp().
+
+2007-07-23  Ross Smith II <cherokeespam at netebb.com>
+
+	* cherokee/post.c, cherokee/win32_misc.c, cherokee/win32_misc.h:
+	Add mkstemp() functionality missing in MinGW.
+
+2007-07-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
 	* qa/run-tests.py: Added new option for showing how much memory is
 	the server using during the QA test execution.
 
@@ -502,7 +512,7 @@
 
 	* cherokee/win32_cservice.h, cherokee/win32_cservice.c,
 	cherokee/win32_cherokeeserv.c, windows/cherokee.reg: Added a Win32
-	service. Code by Ross Smith II <cherokeespam@netebb.com>
+	service. Code by Ross Smith II <cherokeespam at netebb.com>
 	
 	* cherokee/Makefile.am (win32_cherokeeserv), windows/cherokee.reg:
 	Created new binary target, and added win32_cservice.h,
@@ -513,7 +523,7 @@
 
 	* cherokee/win32_misc.h, cherokee/win32_misc.c: Added new func
 	cherokee_win32_shutdown_signaled(). Patch by Ross Smith II
-	<cherokee@smithii.com>
+	<cherokeespam at netebb.com>
 
 	* cherokee/server.c (cherokee_server_step): Call
 	cherokee_win32_shutdown_signaled() before checking if the server

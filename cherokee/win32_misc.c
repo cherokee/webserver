@@ -48,6 +48,10 @@
 /* __declspec(dllexport) */ const struct in6_addr in6addr_any = IN6ADDR_ANY_INIT;
 #endif
 
+#ifndef O_LARGEFILE
+# define O_LARGEFILE 0
+#endif
+
 #define _ctor
 #define EXIT_EVENT_NAME "cherokee_exit_1"
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
@@ -1059,4 +1063,47 @@ cherokee_win32_shutdown_signaled()
 	}
 
 	return WaitForSingleObject (exit_event, (DWORD) 0) == WAIT_OBJECT_0;
+}
+
+int
+cherokee_win32_mkstemp (cherokee_buffer_t *buffer)
+{
+	int fd = -1;
+	static char tmp_file[MAX_PATH + 14] = {0};
+
+	while (1) {
+		char buferr[ERROR_MAX_BUFSIZE];
+
+		static char tmp_path[MAX_PATH + 14] = {0};
+		static UINT uUnique = 0;
+
+		*tmp_file = '\0';
+
+		if (!*tmp_path) {
+			if (!GetTempPath (sizeof(tmp_path), tmp_path)) {
+				cherokee_strerror_r (GetLastError (), buferr, sizeof(buferr));
+				PRINT_MSG ("Couldn't get temporary path: %s", buferr);
+				/* strcpy (tmp_path, "\\"); /* TODO FIXME use c:\Progra~\cherokee\var\tmp ? */
+				break;
+			}
+		}
+
+		if (!GetTempFileName (tmp_path, "chp", uUnique++, tmp_file)) {
+			cherokee_strerror_r (GetLastError(), buferr, sizeof(buferr));
+			PRINT_MSG ("Couldn't generate temporary file name: %s", buferr);
+			break;
+		}
+
+		fd = open (tmp_file, O_APPEND | O_WRONLY | O_CREAT | O_LARGEFILE | O_BINARY, 0600);
+		if (fd == -1) {
+			PRINT_MSG ("Couldn't create '%s': %s", tmp_file, strerror(errno));
+			break;
+		}
+
+		break;
+	}
+
+	cherokee_buffer_add_str (buffer, tmp_file);
+
+	return fd;
 }

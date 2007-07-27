@@ -26,9 +26,12 @@
 #ifndef CHEROKEE_WIN32_MISC_H
 #define CHEROKEE_WIN32_MISC_H
 
+#include "common-internal.h"
+
 #include <fcntl.h>
 #include <winsock2.h>
-#include "common-internal.h"
+
+#include "buffer.h"
 
 
 #undef  localtime_r       /* in <pthread.h> */
@@ -42,5 +45,6 @@ unsigned int  sleep               (unsigned int seconds);
 
 int           cherokee_win32_stat (const char *path, struct stat *buf);
 int           cherokee_win32_shutdown_signaled();
+int           cherokee_win32_mkstemp (cherokee_buffer_t *buffer);
 
 #endif /* CHEROKEE_WIN32_MISC_H */

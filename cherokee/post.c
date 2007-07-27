@@ -84,6 +84,8 @@ cherokee_post_mrproper (cherokee_post_t *post)
 ret_t 
 cherokee_post_set_len (cherokee_post_t *post, off_t len)
 {
+	ret_t ret;
+
 	post->type = (len > POST_SIZE_TO_DISK) ? post_in_tmp_file : post_in_memory;
 	post->size = len;
 
@@ -92,10 +94,8 @@ cherokee_post_set_len (cherokee_post_t *post, off_t len)
 
 		/* Generate a unique name
 		 */
-		post->tmp_file_fd = mkstemp (post->tmp_file.buf);
-		if (unlikely (post->tmp_file_fd < 0)) {
-			return ret_error;
-		}
+		ret = cherokee_mkstemp (&post->tmp_file, &post->tmp_file_fd);
+		if (unlikely (ret != ret_ok)) return ret;
 	}
 
 	return ret_ok;

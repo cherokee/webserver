@@ -1364,3 +1364,19 @@ cherokee_print_errno (int error, char *format, ...)
 
 	cherokee_buffer_mrproper (&buffer);
 }
+
+ret_t 
+cherokee_mkstemp (cherokee_buffer_t *buffer, int *fd)
+{
+	int re;
+
+#ifdef _WIN32
+	re = cherokee_win32_mkstemp (buffer);
+#else
+	re = mkstemp (buffer->buf);	
+#endif
+	if (re < 0) return ret_error;
+
+	*fd = re;
+	return ret_ok;
+}
