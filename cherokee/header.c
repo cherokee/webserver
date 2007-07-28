@@ -255,10 +255,10 @@ parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 
 #define detect_method(l,str,mthd)           		  \
 	if (cmp_str (line+1, ((const char *)str" ")+1)) { \
-		hdr->method = http_ ## mthd;              \
-		*pointer += sizeof(str);                  \
-		return ret_ok;                            \
-        }                                                 \
+		hdr->method = http_ ## mthd;    \
+		*pointer += sizeof(str);        \
+		return ret_ok;                  \
+	}
 
 	/* Check the first letter of the method name, if it matches it
 	 * can continue with the rest.
@@ -364,7 +364,8 @@ parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char *
 	/* Get the method
 	 */
 	ret = parse_method (hdr, line, &begin);
-	if (unlikely (ret != ret_ok)) goto error;
+	if (unlikely (ret != ret_ok))
+		goto error;
 
 	/* Get the protocol version
 	 */	
@@ -418,7 +419,8 @@ parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char *
 		char   *host = begin + 7;
 
 		dir = strchr (host, '/');
-		if (dir == NULL) goto error;
+		if (dir == NULL)
+			goto error;
 
 		/* Add the host header
 		 */
@@ -556,8 +558,7 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 
 	/* Parse the rest of headers
 	 */
-	while ((begin < header_end) && (end = get_new_line(begin)) != NULL)
-	{
+	while ((begin < header_end) && (end = get_new_line(begin)) != NULL) {
 		cuint_t header_len;
 		int		val_offs;
 		int		val_len;
@@ -620,7 +621,8 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 				ret = add_known_header (hdr, header_accept, val_offs, val_len);
 			} else if (header_equals ("Authorization", header_authorization, begin, header_len)) {
 				ret = add_known_header (hdr, header_authorization, val_offs, val_len);
-			} else goto unknown; 
+			} else
+				goto unknown; 
 			break;
 		case 'C':
 			if (header_equals ("Connection", header_connection, begin, header_len)) {
@@ -629,12 +631,14 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 				ret = add_known_header (hdr, header_content_length, val_offs, val_len);
 			} else if (header_equals ("Cookie", header_cookie, begin, header_len)) {
 				ret = add_known_header (hdr, header_cookie, val_offs, val_len);
-			} else goto unknown;
+			} else
+				goto unknown;
 			break;
 		case 'H':
 			if (header_equals ("Host", header_host, begin, header_len)) {
 				ret = add_known_header (hdr, header_host, val_offs, val_len);
-			} else goto unknown;
+			} else
+				goto unknown;
 			break;
 		case 'I':
 			if (header_equals ("If-Modified-Since", header_if_modified_since, begin, header_len)) {
@@ -643,31 +647,36 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 				ret = add_known_header (hdr, header_if_none_match, val_offs, val_len);
 			} else if (header_equals ("If-Range", header_if_range, begin, header_len)) {
 				ret = add_known_header (hdr, header_if_range, val_offs, val_len);
-			} else goto unknown;
+			} else
+				goto unknown;
 			break;
 		case 'K':
 			if (header_equals ("Keep-Alive", header_keepalive, begin, header_len)) {
 				ret = add_known_header (hdr, header_keepalive, val_offs, val_len);
-			} else goto unknown;
+			} else
+				goto unknown;
 			break;
 		case 'L':
 			if (header_equals ("Location", header_location, begin, header_len)) {
 				ret = add_known_header (hdr, header_location, val_offs, val_len);
-			} else goto unknown;
+			} else
+				goto unknown;
 			break;
 		case 'R':
 			if (header_equals ("Range", header_range, begin, header_len)) {
 				ret = add_known_header (hdr, header_range, val_offs, val_len);
 			} else if (header_equals ("Referer", header_referer, begin, header_len)) {
 				ret = add_known_header (hdr, header_referer, val_offs, val_len);
-			} else goto unknown;
+			} else
+				goto unknown;
 			break;
 		case 'U':
 			if (header_equals ("Upgrade", header_upgrade, begin, header_len)) {
 				ret = add_known_header (hdr, header_upgrade, val_offs, val_len);
 			} else if (header_equals ("User-Agent", header_user_agent, begin, header_len)) {
 				ret = add_known_header (hdr, header_user_agent, val_offs, val_len);
-			} else goto unknown;
+			} else
+				goto unknown;
 			break;
 		default:
 		unknown:
@@ -733,7 +742,8 @@ cherokee_header_copy_unknown (cherokee_header_t *hdr, char *name, int name_len, 
 	cuint_t  info_len;
 
 	ret = cherokee_header_get_unknown (hdr, name, name_len, &info, &info_len);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	return cherokee_buffer_add (buf, info, info_len);
 }
@@ -774,7 +784,8 @@ cherokee_header_copy_known (cherokee_header_t *hdr, cherokee_common_header_t hea
 	cuint_t  info_len = 0;
 
 	ret = cherokee_header_get_known (hdr, header, &info, &info_len);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	return cherokee_buffer_add (buf, info, info_len); 
 }
@@ -791,7 +802,8 @@ cherokee_header_copy_request (cherokee_header_t *hdr, cherokee_buffer_t *request
 	}
 
 	ret = cherokee_buffer_add (request, hdr->input_buffer->buf + hdr->request_off, hdr->request_len);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	return cherokee_buffer_unescape_uri (request);
 }
@@ -808,7 +820,8 @@ cherokee_header_copy_query_string (cherokee_header_t *hdr, cherokee_buffer_t *qu
 	}
 
 	ret = cherokee_buffer_add (query_string, hdr->input_buffer->buf + hdr->query_string_off, hdr->query_string_len);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	return ret_ok;
 }
@@ -843,7 +856,8 @@ cherokee_header_copy_request_w_args (cherokee_header_t *hdr, cherokee_buffer_t *
 	}
 
 	ret = cherokee_buffer_add (request, hdr->input_buffer->buf + hdr->request_off, hdr->request_args_len);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	return cherokee_buffer_unescape_uri (request);
 }
@@ -857,7 +871,8 @@ cherokee_header_copy_method (cherokee_header_t *hdr, cherokee_buffer_t *buf)
 	cuint_t     len;
 
 	ret = cherokee_http_method_to_string (HDR_METHOD(hdr), &tmp, &len);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	return cherokee_buffer_add (buf, tmp, len);
 }
@@ -871,7 +886,8 @@ cherokee_header_copy_version (cherokee_header_t *hdr, cherokee_buffer_t *buf)
 	cuint_t     len;
 
 	ret = cherokee_http_version_to_string (HDR_VERSION(hdr), &tmp, &len);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	return cherokee_buffer_add (buf, tmp, len);
 }
@@ -917,7 +933,7 @@ cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, i
 		/* Bad parameter value 
 		 */
 		return ret_error;
-        }
+	}
 
 	/* Look for the starting point
 	 */

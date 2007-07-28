@@ -168,7 +168,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 	cherokee_sockaddr_t addr;
 
 	/* This code is meant to, in some way, signal the FastCGI that
-	 * it is centainly a FastCGI.  The fcgi client will execute
+	 * it is certainly a FastCGI.  The fcgi client will execute
 	 * getpeername (FCGI_LISTENSOCK_FILENO) and, then if it is a
 	 * fcgi, error will have the ENOTCONN value.
 	 */

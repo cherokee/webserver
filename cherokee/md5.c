@@ -144,7 +144,7 @@ MD5Final(md5byte digest[16], struct MD5Context *ctx)
 
 /* This is the central step in the MD5 algorithm. */
 #define MD5STEP(f,w,x,y,z,in,s) \
-	 (w += f(x,y,z) + in, w = (w<<s | w>>(32-s)) + x)
+	(w += f(x,y,z) + in, w = (w<<s | w>>(32-s)) + x)
 
 /*
  * The core of the MD5 algorithm, this alters an existing MD5 hash to

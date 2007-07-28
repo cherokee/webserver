@@ -156,20 +156,20 @@ cherokee_matching_list_match (cherokee_matching_list_t *mlist, char *match)
 	case default_allow:
 		return match_default_allow (mlist, match);
 		break;
-		
+
 	case default_deny:
 		return match_default_deny (mlist, match);
 		break;
-		
+
 	case deny_allow:
 		return match_deny_allow (mlist, match);
 		break;
-		
+
 	case allow_deny:
 		return match_allow_deny (mlist, match);
 		break;
 	}
-	
+
 	SHOULDNT_HAPPEN;
 	return 0;
 }

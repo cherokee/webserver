@@ -38,13 +38,16 @@ cherokee_icons_new (cherokee_icons_t **icons)
 	CHEROKEE_NEW_STRUCT(n, icons);
 
 	ret = cherokee_avl_init (&n->files);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	ret = cherokee_avl_init (&n->files_matching);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	ret = cherokee_avl_init (&n->suffixes);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	/* Files and Suffixes are case insensitive
 	 */
@@ -99,14 +102,14 @@ cherokee_icons_add_file (cherokee_icons_t *icons, cherokee_buffer_t *icon, chero
 	cherokee_buffer_t *tmp = NULL;
 
 	ret = cherokee_buffer_dup (icon, &tmp);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	if ((strchr (file->buf, '*') != NULL) ||
-	    (strchr (file->buf, '?') != NULL)) 
-	{
+	    (strchr (file->buf, '?') != NULL)) {
 		return cherokee_avl_add (&icons->files_matching, file, tmp);
 	}
-	
+
 	return cherokee_avl_add (&icons->files, file, tmp);
 }
 
@@ -118,7 +121,8 @@ cherokee_icons_add_suffix (cherokee_icons_t *icons, cherokee_buffer_t *icon, che
 	cherokee_buffer_t *tmp = NULL;
 
 	ret = cherokee_buffer_dup (icon, &tmp);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	cherokee_avl_add (&icons->suffixes, suffix, tmp);
 	return ret_ok;
@@ -174,21 +178,24 @@ cherokee_icons_get_icon (cherokee_icons_t   *icons,
 	/* Look for the filename
 	 */
 	ret = cherokee_avl_get (&icons->files, file, (void **)icon_ret);
-	if (ret == ret_ok) return ret_ok;
+	if (ret == ret_ok)
+		return ret_ok;
 
 	/* Look for the suffix
 	 */
 	suffix = strrchr (file->buf, '.');
 	if (suffix != NULL) {
 		ret = cherokee_avl_get_ptr (&icons->suffixes, suffix+1, (void **)icon_ret);
-		if (ret == ret_ok) return ret_ok;
+		if (ret == ret_ok)
+			return ret_ok;
 	}
 	
 	/* Look for the wildcat matching
 	 */
 	ret = cherokee_avl_while (&icons->files_matching, match_file, 
 				  file, NULL, (void **)icon_ret);
-	if (ret == ret_ok) return ret_ok;
+	if (ret == ret_ok)
+		return ret_ok;
 
 	/* Default one
 	 */
@@ -239,7 +246,8 @@ configure_file (cherokee_config_node_t *config, void *data)
 	params[1] = &config->key;
 
 	ret = cherokee_config_node_read_list (config, NULL, add_file, params);
-	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
+	if ((ret != ret_ok) && (ret != ret_not_found))
+		return ret;
 	
 	return ret_ok;
 }
@@ -254,7 +262,8 @@ configure_suffix (cherokee_config_node_t *config, void *data)
 	params[1] = &config->key;
 
 	ret = cherokee_config_node_read_list (config, NULL, add_suffix, params);
-	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
+	if ((ret != ret_ok) && (ret != ret_not_found))
+		return ret;
 	
 	return ret_ok;
 }
@@ -269,13 +278,15 @@ cherokee_icons_configure (cherokee_icons_t *icons, cherokee_config_node_t *confi
 	ret = cherokee_config_node_get (config, "file", &subconf);
 	if (ret == ret_ok) {
 		ret = cherokee_config_node_while (subconf, configure_file, icons);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 	}
 
 	ret = cherokee_config_node_get (config, "suffix", &subconf);
 	if (ret == ret_ok) {
 		ret = cherokee_config_node_while (subconf, configure_suffix, icons);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 	}
 	
 	ret = cherokee_config_node_get (config, "directory", &subconf);

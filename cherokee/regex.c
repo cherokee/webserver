@@ -78,9 +78,7 @@ _add (cherokee_regex_table_t *table, char *pattern, void **regex)
 	CHEROKEE_RWLOCK_WRITER (&table->rwlock);
 
 	ret = cherokee_avl_get_ptr (&table->cache, pattern, &tmp);
-	if ((tmp != NULL) && 
-	    (ret == ret_ok)) 
-	{
+	if ((tmp != NULL) && (ret == ret_ok)) {
 		if (regex != NULL)
 			*regex = tmp;
 

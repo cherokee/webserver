@@ -39,7 +39,7 @@
 
 /* 0 ... 63 => ascii - 64 */
 static unsigned char itoa64[] =
-    "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 static char *
 to64(unsigned long v, int n)
@@ -76,7 +76,7 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 	 * if so.  Otherwise just use the string up to the first '$' as the salt.
 	 */
 	sp = salt;
-	
+
 	/* If it starts with the magic string, then skip that.
 	 */
 	magic_len = strlen (magic);
@@ -124,11 +124,12 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 	memset(final, '\0', sizeof final);
 
 	/* Then something really weird... */
-	for (j = 0, i = strlen(pw); i != 0; i >>= 1)
+	for (j = 0, i = strlen(pw); i != 0; i >>= 1) {
 		if (i & 1)
 			MD5Update(&ctx, final + j, 1);
 		else
 			MD5Update(&ctx, (unsigned char *)pw + j, 1);
+	}
 
 	/* Now make the output string 
 	 */

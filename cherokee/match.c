@@ -46,6 +46,7 @@ cherokee_wildcard_match (const char *pattern, const char *text)
 			if (*text++ == '\0')
 				return ret_not_found;
 			break;
+
 		default:
 			if (*text == ch) {
 				if (*text) text++;

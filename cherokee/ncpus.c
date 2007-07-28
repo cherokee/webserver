@@ -52,16 +52,17 @@
 
 int dcc_ncpus(int *ncpus)
 {
-    struct pst_dynamic psd; 
-    if (pstat_getdynamic(&psd, sizeof(psd), 1, 0) != -1) {
-        *ncpus = psd.psd_proc_cnt;
-        return 0;
-    } else {
-	char buferr[ERROR_MAX_BUFSIZE];
-        fprintf (stderr, "pstat_getdynamic failed: %s", cherokee_strerror_r(errno, buferr, sizeof(buferr)));
-        *ncpus = -1;
-        return EXIT_DISTCC_FAILED;
-    }
+	struct pst_dynamic psd; 
+	if (pstat_getdynamic(&psd, sizeof(psd), 1, 0) != -1) {
+		*ncpus = psd.psd_proc_cnt;
+		return 0;
+	} else {
+		char buferr[ERROR_MAX_BUFSIZE];
+		fprintf (stderr, "pstat_getdynamic failed: %s",
+			cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		*ncpus = -1;
+		return EXIT_DISTCC_FAILED;
+	}
 }
 
 
@@ -78,17 +79,18 @@ extern void s$get_module_info (char_varying *module_name, void *mip,
 
 int dcc_ncpus(int *ncpus)
 {
-short int code;
-module_info mi;
-char_varying(66) module_name;
+	short int code;
+	module_info mi;
+	char_varying(66) module_name;
 
-     strcpy_vstr_nstr (&module_name, "");
-     mi.version = MODULE_INFO_VERSION_1;
-     s$get_module_info ((char_varying *)&module_name, (void *)&mi, &code);
-     if (code != 0)
-          *ncpus = 1;    /* safe guess... */
-     else *ncpus = mi.n_user_cpus;
-     return 0;
+	strcpy_vstr_nstr (&module_name, "");
+	mi.version = MODULE_INFO_VERSION_1;
+	s$get_module_info ((char_varying *)&module_name, (void *)&mi, &code);
+	if (code != 0)
+		*ncpus = 1;    /* safe guess... */
+	else
+		*ncpus = mi.n_user_cpus;
+	return 0;
 }
 
 #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__APPLE__)
@@ -103,18 +105,18 @@ char_varying(66) module_name;
 #include <sys/sysctl.h>
 int dcc_ncpus(int *ncpus)
 {
-    int mib[2];
-    size_t len = sizeof(*ncpus);
-    mib[0] = CTL_HW;
-    mib[1] = HW_NCPU;
-    if (sysctl(mib, 2, ncpus, &len, NULL, 0) == 0)
-        return 0;
-    else {
-	char buferr[ERROR_MAX_BUFSIZE];
-        fprintf(stderr,"sysctl(CTL_HW:HW_NCPU) failed: %s",
-                     cherokee_strerror_r(errno, buferr, sizeof(buferr)));
-        return EXIT_DISTCC_FAILED;
-    }
+	int mib[2];
+	size_t len = sizeof(*ncpus);
+	mib[0] = CTL_HW;
+	mib[1] = HW_NCPU;
+	if (sysctl(mib, 2, ncpus, &len, NULL, 0) == 0)
+		return 0;
+	else {
+		char buferr[ERROR_MAX_BUFSIZE];
+		fprintf(stderr,"sysctl(CTL_HW:HW_NCPU) failed: %s",
+			cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		return EXIT_DISTCC_FAILED;
+	}
 }
 
 #elif !defined (_WIN32) /* every other system but Windows */
@@ -129,27 +131,29 @@ int dcc_ncpus(int *ncpus)
 int dcc_ncpus(int *ncpus)
 {
 #if defined(_SC_NPROCESSORS_ONLN)
-    /* Linux, Solaris, Tru64, UnixWare 7, and Open UNIX 8  */
-    *ncpus = sysconf(_SC_NPROCESSORS_ONLN);
+	/* Linux, Solaris, Tru64, UnixWare 7, and Open UNIX 8  */
+	*ncpus = sysconf(_SC_NPROCESSORS_ONLN);
 #elif defined(_SC_NPROC_ONLN)
-    /* IRIX */
-    *ncpus = sysconf(_SC_NPROC_ONLN);
+	/* IRIX */
+	*ncpus = sysconf(_SC_NPROC_ONLN);
 #else
 #warning "Please port this function"
-    *ncpus = -1;                /* unknown */
+	*ncpus = -1;                /* unknown */
 #endif
     
-    if (*ncpus == -1) {
-	char buferr[ERROR_MAX_BUFSIZE];
-        fprintf(stderr,"sysconf(_SC_NPROCESSORS_ONLN) failed: %s",
-                     cherokee_strerror_r(errno, buferr, sizeof(buferr)));
-        return EXIT_DISTCC_FAILED;
-    } else if (*ncpus == 0) {
-	/* if there are no cpus, what are we running on?  But it has
-         * apparently been observed to happen on ARM Linux */
-	*ncpus = 1;
-    }
+	if (*ncpus == -1) {
+		char buferr[ERROR_MAX_BUFSIZE];
+		fprintf(stderr,"sysconf(_SC_NPROCESSORS_ONLN) failed: %s",
+			cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		return EXIT_DISTCC_FAILED;
+	} else if (*ncpus == 0) {
+		/* If there are no cpus, what are we running on ?
+		 * NOTE: it has apparently been observed to happen on ARM Linux
+		 */
+		*ncpus = 1;
+	}
 
-    return 0;
+	return 0;
 }
 #endif
+

@@ -1,3 +1,18 @@
+2007-07-28  A.D.F  <adefacc@tin.it>
+
+	* cherokee/source_interpreter.c,
+	  cherokee/sha1.c,
+	  cherokee/regex.c,
+	  cherokee/post.c,
+	  cherokee/ncpus.c,
+	  cherokee/md5crypt.c,
+	  cherokee/md5.c,
+	  cherokee/matching_list.c,
+	  cherokee/match.c,
+	  cherokee/icons.c,
+	  cherokee/header.c
+	  - space / indentation / code style cleanups.
+
 2007-07-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/util.c (cherokee_mkstemp): Added new function. It wraps

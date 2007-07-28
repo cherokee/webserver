@@ -76,7 +76,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 	}
 
 	cherokee_buffer_mrproper (&post->info);
-       	
+
 	return ret_ok;
 }
 
@@ -147,7 +147,7 @@ cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 	case post_in_memory:
 		post->received += size;
 		return ret_ok;
-		
+
 	case post_in_tmp_file:
 		if (post->tmp_file_fd == -1)
 			return ret_error;
@@ -189,7 +189,7 @@ cherokee_post_walk_finished (cherokee_post_t *post)
 	default:
 		break;
 	}
-	
+
 	SHOULDNT_HAPPEN;
 	return ret_error;
 }
@@ -200,7 +200,7 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 {
 	ssize_t r;
 	size_t  ur;
-	
+
 	/* Sanity check
 	 */
 	if (fd < 0) return ret_error;
@@ -238,7 +238,7 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 				/* Couldn't read */
 				return ret_error;
 			}
-			
+
 			post->info.len     = ur;
 			post->info.buf[ur] = '\0';
 		}
