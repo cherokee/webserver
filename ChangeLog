@@ -499,9 +499,9 @@
 
 	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_build_envp,
 	foreach_header_add_unknown_variable): Added new configuration
-	token 'pass_req_headers' (boolean). It allows to enable to copy
-	all the unknown headers to the CGI-based handler, whether it's
-	SCGI, FastCGI or CGI.
+	token 'pass_req_headers' (boolean). It allows to enable the
+	transparent copy of all the unknown headers of a CGI-based handler,
+	whether it's SCGI, FastCGI or CGI.
 
 	* cherokee/header.h,
 	cherokee/header.c (cherokee_header_foreach_unknown): Added new
@@ -656,7 +656,7 @@
 2007-06-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/win32_misc.c: Shouldn't return a pointer to a local
-	buffer; that memory would be already being used by another
+	buffer; that memory is already being used by another
 	function when the string is needed.
 
 2007-06-27  A.D.F  <adefacc@tin.it>
@@ -719,7 +719,7 @@
 	cherokee//cherokee.h, cherokee/iocache.c, cherokee/connection.c,
 	cherokee/iocache.h, cherokee/server.c: Many changes that aim to
 	fix the IOcache class. It is still failing though, this is the
-	first approach to solve the problem, but there is still work to be
+	first approach to solve the problem, so there is still work to be
 	done.
 
 2007-06-11  A.D.F  <adefacc@tin.it>
@@ -767,7 +767,7 @@
 	    with a formula;
 
 	- process_active_connections(),
-	  - added a few decrease of private connection counter
+	  - added a few decrements of private connection counter
 	    before each purge_closed_connection().
 	
 2007-05-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -898,7 +898,7 @@
 2007-04-22  A.D.F  <adefacc@tin.it>
 
 	* cherokee/macros.h:
-        - new macros to handler minimum number of system fds,
+        - new macros to handle the minimum number of system fds,
 	  spare fds (used by standard I/O streams, i.e. stdin, etc.)
 	  and minimum number of file descriptors really available
 	  to Cherokee.
@@ -1046,15 +1046,15 @@
 	as in fdpoll_epoll_new(). A memset() wasn't initializing all the
 	integers it was meant to.
 
-	* cherokee/fdpoll-epoll.c (_free): Free the memory only if was
-	allocated previously. It is called from _new() it might happen the
-	some of the memory chunks were not alloced yet.
+	* cherokee/fdpoll-epoll.c (_free): Free the memory only if it was
+	allocated previously. It is called from _new(), it might happen
+	that a few memory chunks were not allocated yet.
 
 	* cherokee/fdpoll-epoll.c (fdpoll_epoll_new): It was a quite
 	important bug.  File descriptor tables were not propely
 	initializated. It was using memset(len) initializing "len" bytes
-	rather than "len" ints. It's fixed now.. and the stability problem
-	I detected seems to be gone.
+	rather than "len" ints. It's fixed now ... and the stability problem
+	I detected looks like to be gone.
 
 	* themes/default_theme.css: There were two table entries. Mixed
 	them.
@@ -1062,13 +1062,13 @@
 2007-04-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* configure.in, Makefile.am (SUBDIRS): Removed doc directory.
-	Documentation is in bad shape. It doesn't worth distributing it
+	Documentation is in bad shape. It is not worth distributing it
 	until we don't get it properly fixed.
 
 2007-03-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* themes/default_theme.css: Fixes default theme. File entries
-	should be left hand aligned and they were centered.
+	should be left hand aligned, instead they were centered.
 
 2007-03-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -1080,7 +1080,7 @@
 	* cherokee/macros.h (CHEROKEE_ADD_FUNC_NEW,
 	CHEROKEE_ADD_FUNC_FREE): Added two new macros to implement
 	_new/_free methods by using _init/_mrproper. It's a pretty
-	mechanic thing, so I think it worth adding a macro.
+	mechanic thing, so I think it is worth adding a macro.
 
 	* cherokee/dirs_table.h,
 	cherokee/dirs_table.c (cherokee_dirs_table_free,
@@ -1106,7 +1106,7 @@
 2007-03-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_scgi.c (cherokee_handler_scgi_init): Return
-	ret_error rather than ret. Under some weird circunstances thread.c
+	ret_error rather than ret. Under some weird circumstances thread.c
 	was receiving a ret_deny from this funcion. It's safer to return
 	ret_error in these functions and be sure the connection is handled
 	properly.
@@ -1126,7 +1126,7 @@
 2007-03-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/util.py (check_php_interpreter): Added a test to check
-	whether the PHP interpreter support fastcgi or not.
+	whether the PHP interpreter supports fastcgi or not.
 
 	* configure.in (CRYPT_LIBS): Tries to fix crypt() on MacOS X.
 
@@ -1155,7 +1155,7 @@
 	
 2007-03-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* cherokee/thread.c (process_active_connections): Tries to report
+	* cherokee/thread.c (process_active_connections): Try to report
 	the handler name when a ret code is found after calling the
 	handler init method.
 
@@ -1209,7 +1209,7 @@
 	memory access from this code line.
 
 	* cherokee/buffer.c (cherokee_buffer_read_from_fd): It was reading
-	too much. This function adds a EOS character at the end of the
+	too much data. This function adds an EOS character at the end of the
 	buffer, so the read() call can use all the buffer but the last
 	character. That is reserved for the \0. Fixed.
 
@@ -1297,9 +1297,9 @@
 
 	* m4/pkg.m4: Added new macro definition file. Even if it isn't the
 	right thing to do I think we have to keep this file in the
-	repository by the moment.  Even with the change from GNUTLS' m4 to
+	repository for the moment.  Even with the change from GNUTLS' m4 to
 	the pkg-config call there was no way to compile Cherokee trunk in
-	MacOS X without installing aditional software. This should fix it.
+	MacOS X without installing additional software. This should fix it.
 
 2007-02-18  A.D.F  <adefacc@tin.it>
 
@@ -1382,9 +1382,9 @@
 	
 
 	* cherokee/handler_common.c (cherokee_handler_common_new): If the
-	connection needs to be redirected/reprocessed, it copys the
+	connection needs to be redirected/reprocessed, it copies the
 	request to the request_original and sets a flag if it's a
-	redirection to a index file starting by / (fullpath index file).
+	redirection to an index file starting by / (fullpath index file).
 	
 	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_build_basic_env):
 	Checks the connection options. If it has been redirected from a
@@ -1392,7 +1392,7 @@
 	use the original request as the REQUEST_URI.
 
 	* cherokee/macros.h (BIT_SET, BIT_UNSET): Added new macros to ease
-	bit masks manupulation.
+	bit masks manipulation.
 	
 	* cherokee/connection-protected.h: log_at_end and tcp_cork
 	properties have been removed. Now they're bits in the options
@@ -1494,7 +1494,7 @@
 
 	* cherokee/http.h (http_see_other_string),
 	cherokee/http.c (cherokee_http_code_copy,
-	cherokee_http_code_to_string): Added htt_see_other HTTP code
+	cherokee_http_code_to_string): Added http_see_other HTTP code
 	entries: HTTP 303, "See Other".
 	
 	* cherokee/http.c (cherokee_http_code_copy)
@@ -1514,11 +1514,11 @@
 
 2007-01-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* contrib/05to06.py: Adds a blank like after each virtual host.
+	* contrib/05to06.py: Add a blank like after each virtual host.
 	It makes easier to edit the generated file later on.
 	
-	* contrib/05to06.py: Adds a faked DocumentRoot if the virtual
-	server didn't contain one.  0.5 wasn't checking for a
+	* contrib/05to06.py: Add a faked DocumentRoot if the virtual
+	server doesn't contain one.  0.5 wasn't checking for a
 	document_root but 0.6 does. It is no more than a work around.
 	This script isn't meant to be perfect, just useful.
 
@@ -1535,7 +1535,7 @@
 2007-01-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/bin2buffer.py (print_block): Do not print the casting to
-	(char *)
+	(char *).
 
 	* cherokee/connection_info.c (cherokee_connection_info_fill_up),
 	cherokee/dirs_table.c (relink_func), cherokee/logo.inc,
@@ -1638,7 +1638,7 @@
 	error_handler fixed. It wasn't adding the handler.
 
 	* contrib/05to06.py (Syntax._process_entry_guts): Handler /
-	Balancer conversion fixed. It was using of notation.
+	Balancer conversion fixed. It was using the right notation.
 
 	* contrib/05to06.py (Syntax): It must translate DirectoryIndex
 	into directory_index. Fixed.
@@ -2338,7 +2338,7 @@
 2006-12-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_admin.c (cherokee_handler_admin_init): Fixed
-	post lenght type.
+	post length type.
 
 	* cherokee/post.h, cherokee/post.c (cherokee_post_get_len,
 	cherokee_post_set_len): size_t -> off_t
@@ -2346,7 +2346,7 @@
 	* cherokee/handler_fastcgi.h, cherokee/handler_fcgi.h,
 	cherokee/handler_scgi.h, cherokee/handler_scgi.c (build_header):
 	post_len property should be off_t. Fixed and set the right
-	fomating string parameter.
+	formatting string parameter.
 
 	* cherokee/post.h: size, received and walk_offset type are now
 	off_t rather than size_t.
@@ -2412,13 +2412,13 @@
 2006-12-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/validator_htpasswd.c (cherokee_validator_htpasswd_check):
-	Better initialization.  It makes the validator safer is the
-	password file is empty.
+	Better initialization.  It makes the validator safer
+	if the password file is empty.
 
 	* cherokee/handler_common.c (stat_file): Better initialization.
 
 	* cherokee/handler_fcgi.h: post_len property is now size_t instead
-	cuint_t.
+	of cuint_t.
 
 	* cherokee/handler_scgi.c (build_header): Changed %d by FMT_OFFSET
 	for printing to post length.
@@ -2427,7 +2427,7 @@
 	value.
 
 	* cherokee/server.c (cherokee_server_write_pidfile): Check
-	fwrite() returned cdde.
+	fwrite() returned code.
 
 	* cherokee/connection.c (cherokee_connection_log_delayed): It
 	could return an uninitialized value under some circunstances.
@@ -2446,7 +2446,7 @@
 	be used uninitialized in this function
 
 	* cherokee/util.c (cherokee_estimate_va_length): Compilation
-	warning fixed. util.c:611: warning: value computed is not used
+	warning fixed. util.c:611: warning: value computed is not used.
 
 2006-12-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -2499,7 +2499,7 @@
 	fix #115.
 
 	* cherokee/handler_phpcgi.c: Added Win32 path and name. Now, it
-	shouldn't be necessary to define the interpreter if it's installer
+	shouldn't be necessary to define the interpreter if it's installed
 	on c:\php\php.exe
 
 	* cherokee/fcgi_manager.c (reconnect): Compilation problem. Fixes
@@ -2509,7 +2509,7 @@
 	<meta /> entry.
 
 	* cherokee/virtual_server.c (add_request): The error management
-	has been slightly improved.  It was leaking when a error occurred.
+	has been slightly improved.  It was leaking when an error occurred.
 
 2006-12-10  A.D.F  <adefacc@tin.it>
 
@@ -2564,8 +2564,8 @@
 	* cherokee/tdate_parse.h, cherokee/tdate_parse.c, cherokee/dtm.h,
 	cherokee/dtm.c, cherokee/Makefile.am
 	(libcherokee_base_la_SOURCES): Date parsing functions have been
-	rewritten from scratch. These ones are between 12 and 16 faster
-	than the previous ones.
+	rewritten from scratch. These ones are between 12 and 16 times
+	faster than the previous ones.
 
 2006-12-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -2587,7 +2587,7 @@
 
 	* cherokee/server.c (configure_server_property): Configuration key
 	"mime_file" has been renamed to "mime_files". Now it accepts a
-	list fo files rather than a single one.
+	list of files rather than a single file name.
 
 	* qa/031-Post+urlencoded2.py, qa/101-HugePost.py,
 	qa/083-RedirParam.py, qa/080-Extension2.py, qa/060-BigPost.py,
@@ -2660,7 +2660,7 @@
 	it isn't a Beta release.  It fixes bug #105.
 
 	* cherokee/handler_redir.c (cherokee_handler_redir_new): Fixes
-	little memory leak.
+	a tiny memory leak.
 
         * cherokee/handler_redir.c, cherokee/handler_redir.h,
 	cherokee/handler_error_redir.c, cherokee/module_loader.c,
@@ -2728,8 +2728,8 @@
 	* cherokee/handler_scgi.c (connect_to_server),
 	cherokee/fcgi_manager.c (reconnect), cherokee/handler_fcgi.c
 	(connect_to_server): Socket connecting the server with the
-	application server must be turned non-blocking right after being
-	accepted. Fixed.
+	application server must be marked as non-blocking soon after having
+	been accepted. Fixed.
 
 2006-11-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -2834,9 +2834,10 @@
 	(cherokee_thread_step_MULTI_THREAD): A few changes to adapt the
 	code to latest changes.
 
-	* cherokee/server-protected.h: the sockets aren no longer
-	int's. Now, they are cherokee_socket_t objects, which makes much
-	more sense and will allow us run the server on Unix sockets.
+	* cherokee/server-protected.h: the sockets are no longer
+	int(s). Now, they are cherokee_socket_t objects, which makes much
+	more sense and will allow us to make the server easily portable
+	even on non Unix OS.
 
 	* cherokee/socket.h,
 	cherokee/socket.c (cherokee_socket_set_nodelay): Added new method.
@@ -2874,7 +2875,7 @@
 	and therefore it was keepling only the last one. QA tests showed
 	it up.
 
-	* cherokee/validator_ldap.c (LDAP_OPT_SUCCESS): Defines it if it
+	* cherokee/validator_ldap.c (LDAP_OPT_SUCCESS): Define it if it
 	wasn't defined previously (like in Solaris).
 
 	* cherokee/validator_ldap.c (validate_dn): Takes care of
@@ -2902,7 +2903,7 @@
 	"try_include" clause.  If inclusion fails it'll okay.
 
 	* configure.in (HAVE_GNUTLS, HAVE_OPENSSL): There is no reason to
-	show such a fancy warning message is gnutls or openssl is not
+	show such a fancy warning message whenever gnutls or openssl are not
 	found. Removed.
 
 	* configure.in: Added check for struct tm.tm_gmtoff
@@ -3001,7 +3002,7 @@
 	make u-cherokee compile again.
 
 	* cherokee/handler_file.c (cherokee_handler_file_init): use_io
-	cache logic was wrong. There was a extra "not" that was fucking it
+	cache logic was wrong. There was an extra "not" that was fucking it
 	up.  Thanks to A.D.F for noticing there was something wrong with
 	the iocache behaviour.
 
@@ -3017,7 +3018,7 @@
 	"ssl_certificate_key_file" and "ssl_ca_list_file".
 
 	* cherokee/virtual_server.h, cherokee/virtual_server.c:
-	server_cert, server_key and ca_cert are not longer char *, not
+	server_cert, server_key and ca_cert are no longer char *, nor
 	they are cherokee_buffer_t's.
 
 	* doc/develop/Makefile.am (EXTRA_DIST),
@@ -3103,9 +3104,9 @@
 	work alright.
 
 	* cherokee/handler_file.c (cherokee_handler_file_init): Now it
-	stores the file lenght in conn->range_end if the response is going
+	stores the file length in conn->range_end if the response is going
 	to be http_range_not_satisfiable, in this way the error handler is
-	able to know the lenght and hence to send the right response.
+	able to know the length and hence to send the right response.
 
 	* cherokee/handler_error.c (cherokee_handler_error_add_headers):
 	Added new http_range_not_satisfiable exception case.
@@ -3152,7 +3153,7 @@
 	needed.
 
 	* cherokee/thread.c (process_active_connections): There was an
-	unhandler error case here. It was the source of some stability
+	unhandled error case here. It was the source of some stability
 	problems detected in 0.5.1.  This problem was reported by Cesar
 	Fernandez and Rodolfo Pilas (thanks guys!)
 
@@ -3162,12 +3163,12 @@
 	cherokee/handler_dirlist.c, cherokee/validator_plain.c,
 	cherokee/validator_plain.h, cherokee/validator_htpasswd.c,
 	cherokee/validator_htdigest.c, cherokee/handler_phpcgi.c: A few
-	memory management problem have been fixed it (due to previous
+	memory management problems have been fixed (it was caused by previous
 	commit).
 
 	* cherokee/server.c (cherokee_server_read_config_string): It
-	doesn't make sente to keep the configuration nodes when the server
-	start running, so now it frees it as soon as everything is parsed.
+	doesn't make sense to keep the configuration nodes when the server
+	starts running, so now it frees them as soon as everything is parsed.
 
 	* cherokee/config_node.h,
 	cherokee/config_node.c (cherokee_config_node_new,
@@ -3230,8 +3231,8 @@
 	implementations are new.  2.- I've added a new configuration
 	system much more generic than the previous one (it doesn't require
 	yacc or lex any longer! but it isn't meant to be written by hand
-	though). 3.- Most of the modules have been updated to read its
-	configuration with the new method.
+	though). 3.- Most of the modules have been updated to read their
+	configuration by using the new method.
 
 	* qa/031-Post+urlencoded2.py, qa/112-NiceError-CGI.py,
 	qa/034-DirIndex2.py, qa/083-RedirParam.py,
@@ -3285,13 +3286,13 @@
 	written before the server changes its user identity.
 
 	* cherokee.1, cherokee_logrotate.1, doc/develop/Intro.txt, README,
-	sites-default.sample.pre, windows/cherokee.nsi.in: URL poiting to
+	sites-default.sample.pre, windows/cherokee.nsi.in: URL pointing to
 	alobbs.com has been fixed to point to 0x50.org.  Patch by Gunnar
 	Wolf <gwolf@gwolf.org>
 	
 2006-04-08  Rodrigo Fernandez-Vizarra  <rfdzvizarra@yahoo.ie>
 
-	* cget/main.c: Modified cget not to use the event interface of the
+	* cget/main.c: Modified cget to not use the event interface of the
 	download and to use the new interface to query the status of a
 	download
 
@@ -3405,7 +3406,7 @@
 
 	* cherokee/handler_cgi_base.c, cherokee/handler_cgi_base.h,
 	cherokee/ext_source.c, cherokee/read_config_grammar.y,
-	cherokee/handler_fcgi.c: Many thing fixed in here.  Some
+	cherokee/handler_fcgi.c: Many things fixed here.  Some
 	environment variables were fixed. New code to signal the FastCGI
 	that it is certainly a Fastcgi, and some clean up.
 
@@ -3480,7 +3481,7 @@
 	cherokee/handler_dirlist.c, cherokee/handler_file.c,
 	cherokee/handler_error.c, cherokee/connection.c: Some clean up.
 	There were many cherokee_buffer_add() calls with hardcoded
-	lenghts.  I have changed them for cherokee_buffer_add_str calls.
+	lengths.  I have changed them for cherokee_buffer_add_str calls.
 
 	* cherokee/handler_file.c (check_cached): Fixed to work with
 	If-Range as a known header.
@@ -3566,14 +3567,14 @@
 
 2006-02-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* cherokee/thread.c (process_active_connections): Lingering close
-	related bug fixed.
+	* cherokee/thread.c (process_active_connections): Fixed
+	lingering close related bug.
 
 2006-02-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/read_config_embedded.c, cherokee/handler_common.c,
 	cherokee/handler_file.c, cherokee/Makefile.embedded: There were
-	some problem with the IOCache in the embedded version.  This patch
+	some problems with the IOCache in the embedded version.  This patch
 	fixes them.
 
 	* cherokee/read_config_embedded.c (cherokee_embedded_read_config):
@@ -3587,11 +3588,11 @@
 	* cherokee/handler_fastcgi.c (send_post): Oops! I forgot to
 	implement the POST. O:-)
 
-	* cherokee/socket.c: A few little problem were fixed.
+	* cherokee/socket.c: A few little problems were fixed.
 
 2006-02-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* cherokee/handler_cgi.c (fork_and_execute_cgi_win32): A few bug
+	* cherokee/handler_cgi.c (fork_and_execute_cgi_win32): A few bugs
 	were fixed.
 
 	* cherokee/handler_redir.h, cherokee/handler_redir.c: is_hidden
@@ -3620,7 +3621,7 @@
 	* cherokee.nsi, configure.in: Added new file
 
 	* handler_gnomevfs.h handler_gnomevfs.c, cherokee/Makefile.am,
-	configure.in: Gnome-VFS stuff removed.  We are not longer
+	configure.in: Gnome-VFS stuff removed.  We are no longer
 	supporting it.
 
 2006-02-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -3703,7 +3704,7 @@
 
 	* cherokee/util.c (cherokee_trace): Now, it can log the debugging
 	information in syslog.  It is handy for debugging the server when
-	it has been launched as daemon (-b switch).
+	it has been launched as a daemon (-b switch).
 
 	* cherokee/util.c (cherokee_estimate_va_length): Added support for
 	%p entries.
@@ -3765,8 +3766,8 @@
 	out of the buffer. Fixed.
 
 	* cherokee/handler_cgi.c (parse_header): It should access directly
-	to conn->header_buffer. There is local variable called "buffer"
-	for that. Actually, is the same buffer, but it is cleaner in this
+	to conn->header_buffer. There is a local variable called "buffer"
+	for that. Actually, it is the same buffer, but it is cleaner in this
 	way.
 
 	* qa/run-tests.py: Now the -d option (pause for attach a debugger)
@@ -3826,7 +3827,7 @@
 
 	* cherokee/fcgi_manager.c (process_buffer): strndup() is
 	unimplemented in both OpenSolaris and BSDes. I have replaced the
-	code which was using strndup() a couple of call to the
+	code which was using strndup() with a couple of calls to the
 	cherokee_buffer_*() API.
 
 	* configure.in: It uses printf rather than echo and sed in order
@@ -3835,7 +3836,7 @@
 	
 2006-01-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* cherokee/util.c (cherokee_trace): Little improvement. I was
+	* cherokee/util.c (cherokee_trace): Small improvement. I was
 	calling getenv many times if the TRACE_ENV variable wasn't set.
 	Now, it does it only once.
 
@@ -3850,7 +3851,7 @@
 
 	* cherokee/handler_fastcgi.c (cherokee_handler_fastcgi_add_headers):
 	If the connection could write the request to the server, but it
-	has an ret_error trying to read the reply, it means it must launch
+	has a ret_error trying to read the reply, it means it must launch
 	a new one.
 
 	* cherokee/fcgi_manager.c, cherokee/fcgi_manager.h,
@@ -3873,7 +3874,7 @@
 2006-01-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/http.c (entry): There was a memory corruption problem
-	here. It came from of the yesterday commits.
+	here. It came from the commits done yesterday.
 
 	* mime.compression.types.sample, Makefile.am (uninstall-local,
 	install-data-local): Added mime.compression.types.sample
@@ -3889,7 +3890,7 @@
 	file.  It also accepts a new configuration entry in the main
 	grammar: MimeType to replace the old functionality.  This big
 	change shouldn't generate any kind of regression, besides the fact
-	the configuration file format has change slightly.
+	the configuration file format has changed slightly.
 
 	* mime.conf.sample, cherokee/mime_grammar.y,
 	cherokee/mime_scanner.l: Removed.
@@ -3950,7 +3951,7 @@
 
 	* cherokee/server.c (update_bogo_now): Fixed, now it sends the
 	header with the right GMT value. Until now, it was using the
-	coverted time to GMT (which was the same time, but it is king of
+	coverted time to GMT (which was the same time, but it is a kind of
 	weird to be in GMT+1 and reply header like being in GMT).
 
 	* cherokee/logger_w3c.c (cherokee_logger_w3c_write_access)
@@ -3985,8 +3986,8 @@
 
 2006-01-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* www/Makefile.am: It shouldn't overwrtie /var/www/index.html if
-	it already exits. Fixed.
+	* www/Makefile.am: It shouldn't overwrite /var/www/index.html if
+	it already exists. Fixed.
 
 2006-01-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -4113,7 +4114,7 @@
 2005-12-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_fastcgi.c (cherokee_handler_fastcgi_init): It
-	is going to use just one connection to each FastCGI server instead
+	is going to use just one connection for each FastCGI server instead
 	of one per thread as I thought previously.
 
 	* cherokee/regex.c (_add): Potential SegFault fixed.
@@ -4167,7 +4168,7 @@
 	* cherokee/thread.c (cherokee_thread_new): Letf-hand
 	thread->server casted with the SRV() macro.
 
-	* cherokee/typed_table.c: There were some wrong casting calling
+	* cherokee/typed_table.c: There were some wrong casts in calling
 	cherokee_typed_table_get()
 
 	* cherokee/avl/avl.c: s/new/new_entry/g
@@ -4177,8 +4178,8 @@
 
 	* cherokee/list.h: Renamed new variables to new_entry
 
-	* cherokee/handler_dirlist.c (generate_file_entry): Added casting
-	to malloc.
+	* cherokee/handler_dirlist.c (generate_file_entry): Added a cast
+	before malloc().
 
 	* cherokee/resolv_cache.h: Added CHEROKEE_BEGIN_DECLS
 
@@ -5222,7 +5223,7 @@
 	* 0.4.23 released
 
 	* cherokee/server.c (cherokee_server_new): Bugfix. There was a
-	incorrect value as string lenght.
+	incorrect value as string length.
 
 	* qa/72-Inherit3.py (Test.Precondition): Precondition fixed.
 
