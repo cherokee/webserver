@@ -7,7 +7,7 @@
 	    from 5 to 8 characters to avoid buffer overflows.
 
 	* cherokee/util.c
-	  - cherokee_strfisize(),
+	  - cherokee_strfsize(),
 	    added a cast to (long long) in order to do a proper comparison;
 	  - removed a few blank lines.
 
@@ -67,7 +67,7 @@
 	it. Besides, embedded devices are much more powerful nowadays.
 
 	* cherokee/handler.c (cherokee_handler_free): Free the handler
-	even of something goes wrong with the ->free method.
+	even if something goes wrong with the ->free method.
 
 	* cherokee/handler_error.c (build_hardcoded_response_page),
 	cherokee/connection-protected.h, cherokee/connection.c: Adapted to
@@ -79,7 +79,7 @@
 	should no longer exist.
 
 	* cherokee/buffer.c (cherokee_buffer_escape_html),
-	cherokee/buffer.h: Reworked: instead the allocating a new buffer
+	cherokee/buffer.h: Reworked: instead of allocating a new buffer
 	it generates the escaped version inside the second buffer provided
 	as argument.
 
@@ -104,15 +104,15 @@
 
 	* cherokee/source_interpreter.c, cherokee/source_interpreter.h,
 	cherokee/source.h, cherokee/source.c: Another little tiny memory
-	leak has been fixed here. The freed object wasn't calling its
+	leak has been fixed here. The fred object wasn't calling its
 	predecessor destructor.
 
 	* cherokee/balancer.c (cherokee_balancer_mrproper): Memory leak
 	fixed. It wasn't freeing the source objects.
 
 	* cherokee/validator_plain.c (cherokee_validator_plain_check):
-	Rewritten from scratch. Now, it uses temporal buffers instead of a
-	fixed size temporal array - among other improvements.
+	Rewritten from scratch. Now, it uses temporary buffers instead of a
+	fixed size temporary array - among other improvements.
 
 	* cherokee/validator.c (cherokee_validator_digest_check),
 	cherokee/validator_plain.c (cherokee_validator_plain_check),
@@ -139,7 +139,7 @@
 	cheroke/server.c, cherokee/server-protected.h: Reworked in order
 	to remove the call to cherokee_server_get_conns_num(). A thread
 	should never query or access other threads (and that's exactly
-	what method was doing).
+	what that method was doing).
 
 	* cherokee/thread.c (cherokee_thread_free): It wasn't freeing the
 	reusable connections. Fixed.
@@ -148,7 +148,7 @@
 	which it needed count-downs. This is the common function.
 
 	* qa/run-tests.py (clean_up): Added a little pause. We should give
-	the server sometime to die gratefully between the SIGTERM and
+	the server some time to die gracefully between the SIGTERM and
 	SIGKILL signals.
 
 	* qa/Makefile.am, qa/143-ContentRange-NoIO.py,
@@ -194,7 +194,7 @@
 
 2007-07-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* qa/142-SCGI-ExtraVars.py (PORT): If was duplicated with QA test
+	* qa/142-SCGI-ExtraVars.py (PORT): It was duplicated with QA test
 	#141. It's fixed now.
 
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,
@@ -260,7 +260,7 @@
 	ret_no_sys. It's returned when the iocache reaches its limit.
 
 	* cherokee/table.c (cherokee_table_get_val): Removed. It was a
-	mitake to add that method; we should rather use
+	mistake to add that method; we should rather use
 	cherokee_table_get().
 
 	* cherokee/exts_table.c (cherokee_exts_table_has),
@@ -289,7 +289,7 @@
 
 2007-07-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* cherokee/iocache.c: Clean up and added a few TRACE entries.
+	* cherokee/iocache.c: Cleaned up and added a few TRACE entries.
 
 	* qa/run-tests.py, qa/help.py: Depending on the machine and
 	environment, ten additional seconds to start the server might not
@@ -341,7 +341,7 @@
 	up: Removed unused variable.
 
 	* cherokee/avl.c: Many changes. It should be working much better
-	now. For instance, it's no longer recursive.
+	now, i.e.: it's no longer recursive, etc.
 
 2007-07-12  A.D.F  <adefacc@tin.it>
 
@@ -425,7 +425,7 @@
          - fixed line wrapping to work better on consoles of 80 chars.
 
       * doc/build_docs.py
-        - fixed the docutils requirement.  even though it is still
+        - fixed the docutils requirement;  even if it is still
           required, it just doesn't fail now.
 
 2007-07-11  Brian Rosner  <brosner@gmail.com>
@@ -440,7 +440,7 @@
 2007-07-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/table.c: Adapted to use the new AVL class. There are a
-	few temporal methods that need to be improved. I'll work on it in
+	few temporary methods that need to be improved. I'll work on it in
 	the next days.
 
 	* cherokee/avl.c, cherokee/avl.h: Rewritten from scratch. It uses
@@ -539,7 +539,7 @@
 	returned an error, and warn if so.
 
 	* cherokee/post.c, cherokee/cherokee/post.h: It does no longer use
-	a FILE * for read/write the temporal files.  The call to mktemp()
+	a FILE * for read/write the temporary files.  The call to mktemp()
 	has been changed by a call to mkstemp() (safer).
 
 2007-07-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -1656,7 +1656,7 @@
 	
 2007-01-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* cherokee/downloader.c, cherokee/downloader.h: Added two temporal
+	* cherokee/downloader.c, cherokee/downloader.h: Added two temporary
 	buffers. It will use them if no other buffers are provided.
 
 	* cherokee/logger_ncsa.c, cherokee/logger_w3c.c: Removed all calls
