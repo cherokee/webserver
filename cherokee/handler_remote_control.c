@@ -103,7 +103,7 @@ cherokee_handler_remote_control_init (cherokee_handler_remote_control_t *hdl)
 	ret = cherokee_table_get (HANDLER_CONN(hdl)->arguments, "rx", &param);
 	if (ret == ret_ok) {
 		size_t rx, tx;
-		char tmp[5];
+		char tmp[8];
 
 		cherokee_server_get_total_traffic (HANDLER_SRV(hdl), &rx, &tx);
 		cherokee_strfsize (rx, tmp);
@@ -113,7 +113,7 @@ cherokee_handler_remote_control_init (cherokee_handler_remote_control_t *hdl)
 	ret = cherokee_table_get (HANDLER_CONN(hdl)->arguments, "tx", &param);
 	if (ret == ret_ok) {
 		size_t rx, tx;
-		char tmp[5];
+		char tmp[8];
 
 		cherokee_server_get_total_traffic (HANDLER_SRV(hdl), &rx, &tx);
 		cherokee_strfsize (tx, tmp);

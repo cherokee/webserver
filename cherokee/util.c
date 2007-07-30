@@ -133,7 +133,7 @@ cherokee_strfsize (unsigned long long size, char *buf)
 	const char *o = ord;
 	int remain;
 
-	if (size < 0) {
+	if (((long long) size) < 0) {
 		return strcpy(buf, "  - ");
 	}
 	if (size < 973) {
@@ -159,7 +159,6 @@ cherokee_strfsize (unsigned long long size, char *buf)
 		return buf;
 	} while (1);
 }
-
 
 
 char *
@@ -192,7 +191,6 @@ cherokee_max_str (char *s1, char *s2)
 	
 	return (s1>s2) ? s1 : s2;
 }
-
 
 
 ret_t 

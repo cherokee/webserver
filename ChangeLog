@@ -1,3 +1,16 @@
+2007-07-30  A.D.F  <adefacc@tin.it>
+
+	* cherokee/admin_server.c,
+	  cherokee/handler_remote_control.c,
+	  cherokee/handler_server_info.c
+	  - fix, enlarged tmp buffer passed to cherokee_strfsize()
+	    from 5 to 8 characters to avoid buffer overflows.
+
+	* cherokee/util.c
+	  - cherokee_strfisize(),
+	    added a cast to (long long) in order to do a proper comparison;
+	  - removed a few blank lines.
+
 2007-07-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_fastcgi.c (cherokee_handler_fastcgi_configure):

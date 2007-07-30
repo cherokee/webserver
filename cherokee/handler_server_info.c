@@ -204,7 +204,7 @@ static void
 add_data_sent_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
 	size_t rx, tx;
-	char tmp[5];
+	char tmp[8];
 
 	cherokee_server_get_total_traffic (srv, &rx, &tx);
 	
