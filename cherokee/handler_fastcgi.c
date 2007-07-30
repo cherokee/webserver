@@ -102,10 +102,10 @@ cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_serve
 			}
 			
 		} else if (equal_buf_str (&subconf->key, "keepalive")) {
-			props->npipeline = atoi(subconf->val.buf);
+			props->nkeepalive = atoi(subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "pipeline")) {
-			props->nkeepalive = atoi(subconf->val.buf);
+			props->npipeline = atoi(subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "socket")) {
 			props->nsockets = atoi(subconf->val.buf);

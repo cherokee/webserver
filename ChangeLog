@@ -1,3 +1,9 @@
+2007-07-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_fastcgi.c (cherokee_handler_fastcgi_configure):
+	Configuration parsing fix. Reported by Brian Kerrick Nickel
+	<brian.nickel@gmail.com>.
+
 2007-07-28  A.D.F  <adefacc@tin.it>
 
 	* cherokee/source_interpreter.c,
