@@ -222,11 +222,13 @@ configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cheroke
 	ret = cherokee_config_node_read (conf, "regex", &regex);
 	if (ret == ret_ok) {
 		ret = cherokee_regex_table_get (srv->regexs, regex->buf, (void **)&re);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 	} 
 
 	ret = cherokee_config_node_read (conf, "substring", &substring);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	/* New RegEx
 	 */
@@ -402,5 +404,4 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 	
 	return ret_ok;
 }
-
 

@@ -123,10 +123,12 @@ cherokee_handler_proxy_new  (cherokee_handler_t **hdl, cherokee_connection_t *cn
 	/* Init
 	 */
 	ret = cherokee_downloader_init(&n->client);
-	if ( ret != ret_ok ) return ret;
+	if ( ret != ret_ok )
+		return ret;
 
 	ret = cherokee_buffer_init(&n->url);
-	if ( ret != ret_ok ) return ret;
+	if ( ret != ret_ok )
+		return ret;
 
 	/* Return the object
 	 */
@@ -154,7 +156,8 @@ add_extra_headers (cherokee_handler_proxy_t *hdl)
 	char                  *end    = header->buf + header->len;
 
 	i = strstr (header->buf, CRLF);
-	if (i == NULL) return ret_error;
+	if (i == NULL)
+		return ret_error;
 
 	for (i += 2; i<end;) {
 		char *nl; 
@@ -163,8 +166,7 @@ add_extra_headers (cherokee_handler_proxy_t *hdl)
 		if (nl == NULL) break;
 
 		if ((strncasecmp (i, "Host:", 5) != 0) &&
-		    (strncasecmp (i, "Connection:", 11) != 0)) 
-		{
+		    (strncasecmp (i, "Connection:", 11) != 0)) {
 			cherokee_request_header_add_header (&hdl->client.request, i, nl - i);
 		}
 
@@ -191,33 +193,40 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	/* Construct the URL host + request + pathinfo + query_string
 	 */
 	ret = cherokee_buffer_add_buffer (&hdl->url, &conn->host);
-	if ( ret != ret_ok ) return ret;
+	if ( ret != ret_ok )
+		return ret;
 	
 	ret = cherokee_buffer_add_buffer (&hdl->url, &conn->request); 
-	if ( ret != ret_ok ) return ret;
+	if ( ret != ret_ok )
+		return ret;
 	
 	ret = cherokee_buffer_add_buffer (&hdl->url, &conn->pathinfo);
-	if ( ret != ret_ok ) return ret;
+	if ( ret != ret_ok )
+		return ret;
 	
 	if (! cherokee_buffer_is_empty (&conn->query_string)) {
 		ret = cherokee_buffer_add (&hdl->url, "?", 1);
-		if ( ret != ret_ok ) return ret;
+		if ( ret != ret_ok )
+			return ret;
 
 		ret = cherokee_buffer_add_buffer (&hdl->url, &conn->query_string);
-		if ( ret != ret_ok ) return ret;
+		if ( ret != ret_ok )
+			return ret;
 	}
 
 	/* Fill in the downloader object. 
 	 */
 	ret = cherokee_downloader_set_url(&hdl->client, &hdl->url);
-	if ( ret != ret_ok ) return ret;
+	if ( ret != ret_ok )
+		return ret;
 
 	TRACE(ENTRIES, "Request: %s\n", hdl->client.request.url.host.buf);
 
 	/* Extra headers
 	 */
 	ret = add_extra_headers (hdl);
-	if ( ret != ret_ok ) return ret;
+	if ( ret != ret_ok )
+		return ret;
 	
 	/* Post
 	 */
@@ -228,10 +237,12 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	/* Properties
 	 */
 	ret = cherokee_downloader_set_keepalive (&hdl->client, false); 
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	ret = cherokee_downloader_connect (&hdl->client);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 
 	TRACE(ENTRIES, "client->downloader->socket: %d\n",  SOCKET_FD(&hdl->client.socket)); 
@@ -306,8 +317,10 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *phdl,
 	case ret_eof_have_data:
 		break;
 	case ret_eagain:
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(phdl), HANDLER_CONN(phdl),
-						     SOCKET_FD(&phdl->client.socket), 0, false);
+		cherokee_thread_deactive_to_polling (
+				HANDLER_THREAD(phdl),
+				HANDLER_CONN(phdl),
+				SOCKET_FD(&phdl->client.socket), 0, false);
 		return ret_eagain;
 	case ret_eof:
 		break;
@@ -329,5 +342,4 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *phdl,
 
 	return ret;
 }
-
 

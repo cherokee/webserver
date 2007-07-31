@@ -94,10 +94,12 @@ parse_if (cherokee_buffer_t *buf, char *if_entry, cherokee_boolean_t show)
 	cherokee_buffer_add_str (&token, "%");
 
 	begin = strstr (buf->buf, token.buf);
-	if (begin == NULL) goto error;
+	if (begin == NULL)
+		goto error;
 	
 	end = strstr (begin, "%fi%");
-	if (end == NULL) goto error;
+	if (end == NULL)
+		goto error;
 
 	if (show) {
 		cherokee_buffer_remove_chunk (buf, end - buf->buf, 4);		
@@ -178,7 +180,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 		CHEROKEE_NEW_STRUCT (n, handler_dirlist_props);
 		
 		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  MODULE_PROPS_FREE(cherokee_handler_dirlist_props_free));
+			MODULE_PROPS_FREE(cherokee_handler_dirlist_props_free));
 
 		n->show_size   = true;
 		n->show_date   = true;
@@ -244,8 +246,7 @@ is_header_file (cherokee_handler_dirlist_t *dhdl, char *filename)
 {
 	cherokee_list_t *i;
 
-	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) 
-	{
+	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) {
 		if (strcmp (filename, LIST_ITEM_INFO(i)) == 0)
 			return true;
 	}
@@ -293,8 +294,7 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 		if ((name[0] == '.') ||
 		    (name[0] == '#') ||
 		    (name[n->name_len-1] == '~') ||
-		    is_header_file (dhdl, name))
-		{
+		    is_header_file (dhdl, name)) {
 			continue;
 		}
 		
@@ -427,8 +427,8 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
 	if ((cherokee_buffer_is_empty (&conn->request)) ||
-	    (!cherokee_buffer_is_endding (&conn->request, '/')))
-	{
+	    (!cherokee_buffer_is_endding (&conn->request, '/'))) {
+
 		cherokee_buffer_clean (&conn->redirect);
 		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + conn->userdir.len + 4);
 
@@ -478,7 +478,8 @@ cmp_date_down (cherokee_list_t *a, cherokee_list_t *b)
 	file_entry_t *f2 = (file_entry_t *)b;
 
 	diff = f1->stat.st_mtime - f2->stat.st_mtime;
-	if (diff == 0) cmp_name_down (a,b);
+	if (diff == 0)
+		cmp_name_down (a,b);
 
 	return diff;
 }

@@ -75,7 +75,7 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 		CHEROKEE_NEW_STRUCT (n, handler_common_props);
 
 		cherokee_handler_props_init_base (HANDLER_PROPS(n),
-						  MODULE_PROPS_FREE(cherokee_handler_common_props_free));
+			MODULE_PROPS_FREE(cherokee_handler_common_props_free));
 
 		n->props_file    = NULL;
 		n->props_dirlist = NULL;

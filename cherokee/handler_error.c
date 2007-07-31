@@ -285,4 +285,3 @@ cherokee_handler_error_step (cherokee_handler_error_t *hdl, cherokee_buffer_t *b
 	return ret_eof_have_data;
 }
 
-

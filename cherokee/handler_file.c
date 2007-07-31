@@ -410,9 +410,7 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	/* Is it cached on the client?
 	 */
 	ret = check_cached (fhdl);
-	if ((ret != ret_ok) ||
-	    (fhdl->not_modified)) 
-	{
+	if ((ret != ret_ok) || (fhdl->not_modified)) {
 		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
 		return ret;
 	}
@@ -474,8 +472,7 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	/* Range 1: Check the range and file size
 	 */
 	if (unlikely ((conn->range_start > fhdl->info->st_size) ||
-		      (conn->range_end   > fhdl->info->st_size)))
-	{
+		      (conn->range_end   > fhdl->info->st_size))) {
 		conn->range_end  = fhdl->info->st_size;
 		conn->error_code = http_range_not_satisfiable;
 		return ret_error;
@@ -498,13 +495,13 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	/* Set mmap or file position
 	 */
 	if ((conn->io_entry_ref != NULL) &&
-	    (conn->io_entry_ref->mmaped != NULL)) 
-	{
+	    (conn->io_entry_ref->mmaped != NULL)) {
 		/* Set the mmap info
 		 */
 		conn->mmaped     = conn->io_entry_ref->mmaped + conn->range_start;
-		conn->mmaped_len = conn->io_entry_ref->mmaped_len - (
-			conn->range_start + (conn->io_entry_ref->mmaped_len - conn->range_end));
+		conn->mmaped_len = conn->io_entry_ref->mmaped_len -
+			( conn->range_start +
+			 (conn->io_entry_ref->mmaped_len - conn->range_end));
 	} else {
 		/* Seek the file if needed
 		 */
@@ -667,7 +664,8 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 			goto exit_sendfile;
 		}
 
-		if (ret < ret_ok) return ret;
+		if (ret < ret_ok)
+			return ret;
 
 		/* This connection is not using the cherokee_connection_send() method,
 		 * so we have to update the connection traffic counter here.

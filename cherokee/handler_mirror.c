@@ -56,7 +56,7 @@ cherokee_handler_mirror_configure (cherokee_config_node_t *conf, cherokee_server
 		CHEROKEE_NEW_STRUCT (n, handler_mirror_props);
 
 		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
-						  MODULE_PROPS_FREE(cherokee_handler_mirror_props_free));
+			MODULE_PROPS_FREE(cherokee_handler_mirror_props_free));
 
 		n->balancer = NULL;
 		*_props = MODULE_PROPS(n);
@@ -142,7 +142,8 @@ connect_to_server (cherokee_handler_mirror_t *hdl)
 	cherokee_handler_mirror_props_t *props = HDL_MIRROR_PROPS(hdl);
 
 	ret = cherokee_balancer_dispatch (props->balancer, conn, &src);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
  	ret = cherokee_source_connect (src, &hdl->socket); 
 	switch (ret) {

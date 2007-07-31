@@ -163,8 +163,11 @@ cherokee_handler_scgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 	
 	/* Init the base class
 	 */
-	cherokee_handler_cgi_base_init (HDL_CGI_BASE(n), cnt, PLUGIN_INFO_HANDLER_PTR(scgi), 
-					HANDLER_PROPS(props), add_env_pair, read_from_scgi);
+	cherokee_handler_cgi_base_init (
+			HDL_CGI_BASE(n), cnt,
+			PLUGIN_INFO_HANDLER_PTR(scgi), 
+			HANDLER_PROPS(props),
+			add_env_pair, read_from_scgi);
 
 	/* Virtual methods
 	 */
@@ -215,7 +218,8 @@ netstringer (cherokee_buffer_t *buf)
 	CHEROKEE_TEMP(num,16);
 
 	len = snprintf (num, num_size, "%d:", buf->len);
-	if (len < 0) return ret_error;
+	if (len < 0)
+		return ret_error;
 
 	cherokee_buffer_ensure_size (buf, buf->len + len + 2);
 	cherokee_buffer_prepend (buf, num, len);

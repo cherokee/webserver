@@ -79,14 +79,14 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 		error = atoi (subconf->key.buf);
 		if (!http_type_300 (error) &&
 		    !http_type_400 (error) &&
-		    !http_type_500 (error)) 
-		{
+		    !http_type_500 (error)) {
 			PRINT_ERROR ("ERROR: error_redir: Wrong error code: '%s'\n", subconf->key.buf);
 			continue;
 		}
 
 		entry = (error_entry_t *) malloc (sizeof(error_entry_t));
-		if (entry == NULL) return ret_nomem;
+		if (entry == NULL)
+			return ret_nomem;
 
 		INIT_LIST_HEAD (&entry->entry);
 		entry->error = error;
@@ -140,3 +140,4 @@ PLUGIN_INIT_NAME(error_redir) (cherokee_plugin_loader_t *loader)
 }
 
 PLUGIN_INFO_HANDLER_EASY_INIT (error_redir, http_all_methods);
+

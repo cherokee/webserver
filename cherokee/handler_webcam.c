@@ -57,52 +57,54 @@ cherokee_handler_webcam_new (cherokee_handler_t **hdl, void *cnt, cherokee_table
 static ret_t
 grab_image (cherokee_handler_webcam_t *hdl)
 {
-	   /* TODO
-	    */
-	   return ret_ok;
+	/* TODO
+	 */
+	return ret_ok;
 }
 
 
 ret_t 
 cherokee_handler_webcam_init (cherokee_handler_webcam_t *hdl)
 {
-	   ret_t ret;
+	ret_t ret;
 
-	   ret = grab_image (hdl);
-	   if (ret < ret_ok) return ret;
+	ret = grab_image (hdl);
+	if (ret < ret_ok)
+		return ret;
 
-	   return ret_ok;
+	return ret_ok;
 }
 
 
 ret_t 
 cherokee_handler_webcam_free (cherokee_handler_webcam_t *hdl)
 {
-	   if (hdl->jpeg != NULL) {
-			 free (hdl->jpeg);
-	   }
+	if (hdl->jpeg != NULL) {
+		free (hdl->jpeg);
+	}
 
-	   return ret_ok;
+	return ret_ok;
 }
 
 
 ret_t 
 cherokee_handler_webcam_add_headers (cherokee_handler_webcam_t *hdl, cherokee_buffer_t *buffer)
 {
-	   cherokee_buffer_add_str (buffer, "Content-Type: image/jpeg"CRLF);
-	   return ret_ok;
+	cherokee_buffer_add_str (buffer, "Content-Type: image/jpeg"CRLF);
+	return ret_ok;
 }
 
 
 ret_t 
 cherokee_handler_webcam_step (cherokee_handler_webcam_t *hdl, cherokee_buffer_t *buffer)
 {
-	   ret_t ret;
+	ret_t ret;
 
-	   ret = cherokee_buffer_add (buffer, hdl->jpeg, hdl->jpeg_len);
-	   if (ret < ret_ok) return ret;
+	ret = cherokee_buffer_add (buffer, hdl->jpeg, hdl->jpeg_len);
+	if (ret < ret_ok)
+		return ret;
 
-	   return ret_eof_have_data;	   
+	return ret_eof_have_data;	   
 }
 
 
@@ -113,6 +115,9 @@ static cherokee_boolean_t _is_init = false;
 void 
 webcam_init (cherokee_module_loader_t *loader)
 {
-	   if (_is_init) return;
-	   _is_init = true;
+	if (_is_init)
+		return;
+
+	_is_init = true;
 }
+

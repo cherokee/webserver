@@ -61,7 +61,8 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 	 * We'll need it later
 	 */
 	ret = cherokee_connection_parse_args (conn);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	/* Init to default values
 	 */
@@ -150,8 +151,9 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 	cherokee_list_t                   *i, *j;
 	cherokee_handler_cgi_base_props_t *props;
 
-	/* Sanity check: This class is pure virtual, it shouldn't allocate memory here. 
-	 * Check that the object space has been already instanced by it father.
+	/* Sanity check: This class is pure virtual,
+	 * it shouldn't allocate memory here. 
+	 * Check that the object space has been already instanced by its father.
 	 */
 	if (*_props == NULL) {
 		SHOULDNT_HAPPEN;
@@ -177,7 +179,8 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 
 		if (equal_buf_str (&subconf->key, "script_alias")) {
 			ret = cherokee_buffer_add_buffer (&props->script_alias, &subconf->val);
-			if (ret != ret_ok) return ret;
+			if (ret != ret_ok)
+				return ret;
 
 		} else if (equal_buf_str (&subconf->key, "env")) {
 			cherokee_config_node_foreach (j, subconf) {
@@ -185,7 +188,8 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 				cherokee_config_node_t *subconf2 = CONFIG_NODE(j);
 
 				env = env_item_new (&subconf2->key, &subconf2->val);
-				if (env == NULL) return ret_error;
+				if (env == NULL)
+					return ret_error;
 
 				cherokee_list_add_tail (LIST(env), &props->system_env);
 			}
@@ -236,7 +240,8 @@ add_win32_systemroot_env (cherokee_handler_cgi_base_t              *cgi,
 	char *root;
 
 	root = getenv("SYSTEMROOT");
-	if (!root) return;
+	if (!root)
+		return;
 
 	set_env (cgi, "SYSTEMROOT", root, strlen(root));
 }
@@ -244,10 +249,11 @@ add_win32_systemroot_env (cherokee_handler_cgi_base_t              *cgi,
 
 
 ret_t 
-cherokee_handler_cgi_base_build_basic_env (cherokee_handler_cgi_base_t              *cgi, 
-					   cherokee_handler_cgi_base_add_env_pair_t  set_env_pair,
-					   cherokee_connection_t                    *conn,
-					   cherokee_buffer_t                        *tmp)
+cherokee_handler_cgi_base_build_basic_env (
+			cherokee_handler_cgi_base_t              *cgi, 
+			cherokee_handler_cgi_base_add_env_pair_t  set_env_pair,
+			cherokee_connection_t                    *conn,
+			cherokee_buffer_t                        *tmp)
 {
 	int      re;
 	ret_t    ret;
@@ -527,9 +533,7 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 
 	cherokee_buffer_clean (&tmp);
 	
-	if (cgi_props->check_file &&
-	    (conn->web_directory.len > 1))
-	{
+	if (cgi_props->check_file && (conn->web_directory.len > 1)) {
 		cherokee_buffer_add_buffer (&tmp, &conn->web_directory);
 	}
 
@@ -688,8 +692,7 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	 * In this case, we have to remove the last two characters
 	 */
 	if ((buffer->len > 4) &&
-	    (strncmp (CRLF_CRLF, buffer->buf + buffer->len - 4, 4) == 0))
-	{
+	    (strncmp (CRLF_CRLF, buffer->buf + buffer->len - 4, 4) == 0)) {
 		cherokee_buffer_drop_endding (buffer, 2);
 	}
 	
@@ -704,7 +707,8 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 		if (end == NULL) break;
 
 		end2 = end;
-		while (((*end2 == CHR_CR) || (*end2 == CHR_LF)) && (*end2 != '\0')) end2++;
+		while (((*end2 == CHR_CR) || (*end2 == CHR_LF)) && (*end2 != '\0'))
+			end2++;
 
 		if (strncasecmp ("Status: ", begin, 8) == 0) {
 			int  code;
@@ -853,7 +857,8 @@ cherokee_handler_cgi_base_split_pathinfo (cherokee_handler_cgi_base_t *cgi, cher
 	/* Look for the pathinfo
 	 */
 	ret = cherokee_split_pathinfo (buf, init_pos, allow_dirs, &pathinfo, &pathinfo_len);
-	if (ret == ret_not_found) return ret;
+	if (ret == ret_not_found)
+		return ret;
 
 	/* Split the string
 	 */

@@ -144,7 +144,8 @@ cherokee_handler_phpcgi_new  (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 	/* Create the new handler CGI object
 	 */
 	ret = cherokee_handler_cgi_new (hdl, cnt, props);
-	if (unlikely(ret != ret_ok)) return ret;
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	cgi = HDL_CGI_BASE(*hdl);
 	   
@@ -264,7 +265,8 @@ PLUGIN_INIT_NAME(phpcgi) (cherokee_plugin_loader_t *loader)
 {
 	/* Is init?
 	 */
-	if (_phpcgi_is_init) return;
+	if (_phpcgi_is_init)
+		return;
 	_phpcgi_is_init = true;
 	
 	/* Load the dependences

@@ -170,19 +170,21 @@ do_reap (void)
 
 	/* Reap defunct children until there aren't any more. 
 	 */
-	for (child_count = 0; ; ++child_count)
-        {
+	for (child_count = 0; ; ++child_count) {
+
 		pid = waitpid (-1, &status, WNOHANG);
 
-                /* none left */
-		if (pid == 0) break;
-
-		else if (pid < 0) {
+		/* none left */
+		if (pid == 0)
+			break;
+		else
+		if (pid < 0) {
 			/* because of ptrace */
-			if (errno == EINTR) continue;
+			if (errno == EINTR)
+				continue;
 			break;
 		}
-        }
+	}
 #endif
 
 	return child_count;
@@ -275,7 +277,7 @@ cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t 
 		CHEROKEE_NEW_STRUCT (n, handler_cgi_props);
 
 		cherokee_handler_cgi_base_props_init_base (PROP_CGI_BASE(n), 
-							   MODULE_PROPS_FREE(cherokee_handler_cgi_props_free));
+			MODULE_PROPS_FREE(cherokee_handler_cgi_props_free));
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -303,7 +305,8 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 	/* Build the new envp entry
 	 */
 	entry = (char *) malloc (name_len + content_len + 2); 
-	if (entry == NULL) return;
+	if (entry == NULL)
+		return;
 
 	memcpy (entry, name, name_len);
 	entry[name_len] = '=';
@@ -333,7 +336,8 @@ add_environment (cherokee_handler_cgi_t *cgi, cherokee_connection_t *conn)
 	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
 
 	ret = cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(cgi), conn);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* CONTENT_LENGTH
 	 */

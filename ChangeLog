@@ -1,3 +1,8 @@
+2007-07-31  A.D.F  <adefacc@tin.it>
+
+	* cherokee/handler_*.c
+	  - space / indentation / code style cleanups.
+
 2007-07-30  A.D.F  <adefacc@tin.it>
 
 	* cherokee/admin_server.c,

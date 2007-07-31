@@ -60,8 +60,7 @@ get_nearest_from_directory (char *directory, char *request, cherokee_buffer_t *o
 	if (dir == NULL)
 		goto go_out;
 
-	while ((entry = readdir (dir)) != NULL)
-	{ 
+	while ((entry = readdir (dir)) != NULL) { 
 		int dis;
 			 
 		if (!strncmp (entry->d_name, ".", 1)) continue;
@@ -167,7 +166,8 @@ PLUGIN_INIT_NAME(nn) (cherokee_plugin_loader_t *loader)
 {
 	/* Is init?
 	 */
-	if (_nn_is_init) return;
+	if (_nn_is_init)
+		return;
 	_nn_is_init = true;
 	   
 	/* Load the dependences
@@ -176,3 +176,4 @@ PLUGIN_INIT_NAME(nn) (cherokee_plugin_loader_t *loader)
 }
 
 PLUGIN_INFO_HANDLER_EASY_INIT (nn, http_all_methods);
+
