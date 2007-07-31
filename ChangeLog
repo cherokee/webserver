@@ -1,3 +1,8 @@
+2007-07-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee.conf.sample.pre: Added css and js as extension as
+	should be gzip encoded by default (if the client supports it).
+
 2007-07-31  A.D.F  <adefacc@tin.it>
 
 	* cherokee/handler_*.c
@@ -22,6 +27,10 @@
 	Configuration parsing fix. Reported by Brian Kerrick Nickel
 	<brian.nickel@gmail.com>.
 
+2007-07-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* 0.6.0 Beta 2 released: based on r863
+	
 2007-07-28  A.D.F  <adefacc@tin.it>
 
 	* cherokee/source_interpreter.c,
