@@ -35,7 +35,7 @@ cherokee_matching_list_new (cherokee_matching_list_t **mlist)
 	INIT_LIST_HEAD(&n->list_allow);
 	INIT_LIST_HEAD(&n->list_deny);
 	   
-	n->type = default_allow;
+	n->type = default_deny;
 
 	*mlist = n;
 	return ret_ok;

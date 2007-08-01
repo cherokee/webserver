@@ -1,5 +1,9 @@
 2007-07-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/matching_list.c (cherokee_matching_list_new): Fixed
+	default behaviour. It shouldn't use the encoder unless the
+	extension is explicitly specified.
+
 	* cherokee.conf.sample.pre: Added css and js as extension as
 	should be gzip encoded by default (if the client supports it).
 
