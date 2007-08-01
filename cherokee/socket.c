@@ -653,7 +653,7 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 			return ret_error;
 		}
 		/* NOTREACHED */
-	}		
+	}
 
 	/* Disable Nagle's algorithm for this connection
 	 * so that there is no delay involved when sending data

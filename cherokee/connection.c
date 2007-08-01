@@ -741,14 +741,14 @@ cherokee_connection_set_cork (cherokee_connection_t *conn, cherokee_boolean_t en
 
 		on = 1;
 		setsockopt(fd, IPPROTO_TCP, TCP_CORK,  &on, sizeof on);
+		BIT_SET (conn->options, conn_op_tcp_cork);
 	} else {
 		setsockopt(fd, IPPROTO_TCP, TCP_CORK,  &on, sizeof on);
 
 		on = 1;
 		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,  &on, sizeof on);
+		BIT_UNSET (conn->options, conn_op_tcp_cork);
 	}
-
-	BIT_SET (conn->options, conn_op_tcp_cork);
 #endif
 
 	return ret_ok;

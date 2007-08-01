@@ -521,7 +521,7 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 				(conn->socket.is_tls == non_TLS));
 
 	if (fhdl->using_sendfile) {
-		cherokee_connection_set_cork (conn, 1);
+		cherokee_connection_set_cork (conn, true);
 	}
 #endif
 	
