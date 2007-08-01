@@ -64,6 +64,9 @@ endif
 #
 # LDFLAGS for libraries
 #
+library_soname = \
+-version-info $(CHEROKEE_CURRENT):$(CHEROKEE_REVISION):$(CHEROKEE_AGE)
+
 if PLATFORM_WIN32
 no_undefined = -no-undefined -Wl,--export-all-symbols
 module_ldflags_w32 = -lcherokee-base -lcherokee-config -lcherokee-server
@@ -622,21 +625,21 @@ libcherokee-config.la
 # the macro puts -pthread into cflags, but we want to link
 # with this flag too, so stick it into the ldflags if it's there...
 # extra cflags at link time can't hurt
-libcherokee_base_la_LDFLAGS = $(common_ldflags)
+libcherokee_base_la_LDFLAGS = $(common_ldflags) $(library_soname)
 libcherokee_base_la_LIBADD = \
 $(TLS_LIBS) \
 $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 $(external_pcre_lib)
 
-libcherokee_client_la_LDFLAGS = $(common_ldflags)
+libcherokee_client_la_LDFLAGS = $(common_ldflags) $(library_soname)
 libcherokee_client_la_LIBADD = \
 $(TLS_LIBS) \
 $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 libcherokee-base.la
 
-libcherokee_server_la_LDFLAGS = $(common_ldflags)
+libcherokee_server_la_LDFLAGS = $(common_ldflags) $(library_soname)
 libcherokee_server_la_CFLAGS = \
 $(static_validator_htpasswd_flags) \
 $(static_validator_mysql_flags)
@@ -652,7 +655,7 @@ $(static_validator_mysql_lib) \
 $(static_handler_proxy_lib) \
 libcherokee-base.la
 
-libcherokee_config_la_LDFLAGS = $(common_ldflags)
+libcherokee_config_la_LDFLAGS = $(common_ldflags) $(library_soname)
 libcherokee_config_la_LIBADD = \
 $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \

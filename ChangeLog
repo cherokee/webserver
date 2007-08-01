@@ -1,5 +1,12 @@
 2007-07-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/Makefile.am (library_soname): Added the -version-info
+	parameter to the libraries' LDFLAGS in order specify the soname.
+	Patch by Marcus Rueckert <darix@web.de>.
+
+	* configure.in: Added three exported variables defining the
+	libraries soname.
+
 	* cherokee/handler_dirlist.h, cherokee/handler_dirlist.c: Blank
 	icon hack reverted. It has ended up being a bad idea.
 
