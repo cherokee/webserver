@@ -770,14 +770,8 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		}
 	}
 
-	if (icons && (icon == NULL))
-		icon = &icons->blank_icon;
-
 	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", alt);
-	if (icon && icon->buf)
-		VTMP_SUBSTITUTE_TOKEN ("%icon%", icon->buf);
-	else
-		VTMP_SUBSTITUTE_TOKEN ("%icon%", "");
+	VTMP_SUBSTITUTE_TOKEN ("%icon%", icon->buf);
 
 	/* File
 	 */

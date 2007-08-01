@@ -1,5 +1,11 @@
 2007-07-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_dirlist.h, cherokee/handler_dirlist.c: Blank
+	icon hack reverted. It has ended up being a bad idea.
+
+	* cherokee/icons.c (cherokee_icons_get_icon): Little bug it. It
+	was supposing an element of the AVL matched when it might not.
+
 	* cherokee/matching_list.c (cherokee_matching_list_new): Fixed
 	default behaviour. It shouldn't use the encoder unless the
 	extension is explicitly specified.

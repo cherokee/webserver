@@ -56,7 +56,6 @@ cherokee_icons_new (cherokee_icons_t **icons)
 
 	/* Defaults
 	 */
-	cherokee_buffer_init (&n->blank_icon);
 	cherokee_buffer_init (&n->default_icon);
 	cherokee_buffer_init (&n->directory_icon);
 	cherokee_buffer_init (&n->parentdir_icon);
@@ -85,7 +84,6 @@ cherokee_icons_free (cherokee_icons_t *icons)
 	cherokee_avl_mrproper (&icons->suffixes, free_entry);
 	cherokee_avl_mrproper (&icons->files_matching, free_entry);
 
-	cherokee_buffer_mrproper (&icons->blank_icon);
 	cherokee_buffer_mrproper (&icons->default_icon);
 	cherokee_buffer_mrproper (&icons->directory_icon);
 	cherokee_buffer_mrproper (&icons->parentdir_icon);
@@ -192,9 +190,9 @@ cherokee_icons_get_icon (cherokee_icons_t   *icons,
 	
 	/* Look for the wildcat matching
 	 */
-	ret = cherokee_avl_while (&icons->files_matching, match_file, 
-				  file, NULL, (void **)icon_ret);
-	if (ret == ret_ok)
+	cherokee_avl_while (&icons->files_matching, match_file, 
+			    file, NULL, (void **)icon_ret);
+	if (*icon_ret)
 		return ret_ok;
 
 	/* Default one
@@ -204,8 +202,8 @@ cherokee_icons_get_icon (cherokee_icons_t   *icons,
 		return ret_ok;
 	}
 
-	*icon_ret = &icons->blank_icon;
-	return ret_ok;
+	PRINT_MSG_S ("A default icons is needed\n");
+	return ret_error;
 }
 
 
