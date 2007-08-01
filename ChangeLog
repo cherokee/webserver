@@ -1,3 +1,9 @@
+2007-08-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/avl, cherokee/dict: Removed. They are no longer used in
+	the server and hence it doesn't make sense to keep them in the
+	code base. Reported by A.D.F
+	
 2007-08-01  A.D.F  <adefacc@tin.it>
 
 	* cherokee/connection.c
