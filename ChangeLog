@@ -1,3 +1,8 @@
+2007-08-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* tests/test1_env.py, tests/test2_post.py: Updated to use rfile
+	and wfile instead of input and output.
+
 2007-02-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* pyscgi/pyscgi.py (SCGIHandler.__init__): It inherits from

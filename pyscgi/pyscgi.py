@@ -93,9 +93,12 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         try:
             self.handle_request()
         except:
-            traceback.print_exc()
-            self.request.finish()
-            self.request.close()
+            traceback.print_exc()  # Print the error
+
+        try:
+            self.finish()          # Closes wfile and rfile
+            self.request.close()   # ..
+        except: pass
 
     def handle_request (self):
         self.wfile.write("Content-Type: text/plain\r\n\r\n")
