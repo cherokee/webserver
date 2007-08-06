@@ -1,5 +1,10 @@
-2007-08-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+2007-08-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_dirlist.c (render_file): Bug fix. It was
+	crashing when there was no icon configuration.
+
+2007-08-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+	
 	* cherokee/avl, cherokee/dict: Removed. They are no longer used in
 	the server and hence it doesn't make sense to keep them in the
 	code base. Reported by A.D.F

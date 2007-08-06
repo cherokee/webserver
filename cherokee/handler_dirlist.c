@@ -771,7 +771,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	}
 
 	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", alt);
-	VTMP_SUBSTITUTE_TOKEN ("%icon%", icon->buf);
+	VTMP_SUBSTITUTE_TOKEN ("%icon%", icon ? icon->buf : NULL);
 
 	/* File
 	 */
