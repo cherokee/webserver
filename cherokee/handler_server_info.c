@@ -337,6 +337,9 @@ server_info_build_logo (cherokee_handler_server_info_t *hdl)
 static void
 build_icons_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
+	if (! srv->icons)
+		return;
+
 	table_add_row_str (buf, "Default icon", (srv->icons->default_icon.len > 0) ? srv->icons->default_icon.buf : "");
 	table_add_row_str (buf, "Directory icon", (srv->icons->directory_icon.len > 0) ? srv->icons->directory_icon.buf : "");
 	table_add_row_str (buf, "Parent directory icon", (srv->icons->parentdir_icon.len > 0) ? srv->icons->parentdir_icon.buf : "");
@@ -347,8 +350,8 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 {
 	cherokee_server_t *srv;
 	cherokee_buffer_t *buf;
-	cherokee_buffer_t *table;
-	cherokee_buffer_t  ver = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  table = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  ver   = CHEROKEE_BUF_INIT;
 
 	/* Init
 	 */
@@ -364,35 +367,34 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 
 		/* General table
 		 */
-		cherokee_buffer_new (&table);
-		build_general_table_content (table, srv);
-		server_info_add_table (buf, "General Information", "general", table);
+		build_general_table_content (&table, srv);
+		server_info_add_table (buf, "General Information", "general", &table);
 
 		/* Server table
 		 */
-		cherokee_buffer_clean (table);
-		build_server_table_content (table, srv);
-		server_info_add_table (buf, "Server Core", "server_core", table);
+		cherokee_buffer_clean (&table);
+		build_server_table_content (&table, srv);
+		server_info_add_table (buf, "Server Core", "server_core", &table);
 
 		/* Connections table
 		 */
-		cherokee_buffer_clean (table);
-		build_connections_table_content (table, srv);
-		server_info_add_table (buf, "Current connections", "connections", table);
+		cherokee_buffer_clean (&table);
+		build_connections_table_content (&table, srv);
+		server_info_add_table (buf, "Current connections", "connections", &table);
 
 		/* Modules table
 		 */
-		cherokee_buffer_clean (table);
-		build_modules_table_content (table, srv);
-		server_info_add_table (buf, "Modules", "modules", table);
+		cherokee_buffer_clean (&table);
+		build_modules_table_content (&table, srv);
+		server_info_add_table (buf, "Modules", "modules", &table);
 
 		/* Icons
 		 */
-		cherokee_buffer_clean (table);
-		build_icons_table_content (table, srv);
-		server_info_add_table (buf, "Icons", "icons", table);
+		cherokee_buffer_clean (&table);
+		build_icons_table_content (&table, srv);
+		server_info_add_table (buf, "Icons", "icons", &table);
 
-		cherokee_buffer_free (table);
+		cherokee_buffer_mrproper (&table);
 	}
 
 	/* Add the page ending

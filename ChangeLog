@@ -1,5 +1,9 @@
 2007-08-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_server_info.c (server_info_build_page): Fixes a
+	bug when no icons are configured. It also convers a buffer pointer
+	into a local buffer.
+
 	* cherokee/handler_dirlist.c (render_file): Bug fix. It was
 	crashing when there was no icon configuration.
 
