@@ -71,6 +71,7 @@
 #endif
 
 #if defined(HAVE_GNUTLS)
+# include <gcrypt.h>
 # include <gnutls/gnutls.h>
 #elif defined(HAVE_OPENSSL)
 # include <openssl/lhash.h>
