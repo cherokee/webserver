@@ -903,6 +903,7 @@ macros.h \
 common.h \
 util.h \
 version.h \
+avl.h \
 buffer.h\
 fdpoll.h \
 http.h \
@@ -923,6 +924,7 @@ connection.h \
 plugin.h \
 plugin_loader.h \
 nonce.h \
+config_node.h \
 \
 downloader.h \
 \

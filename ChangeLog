@@ -1,5 +1,10 @@
 2007-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/resolv_cache.c, cherokee/resolv_cache.h,
+	cherokee/Makefile.am: <cherokee/cherokee.h> was broken. It
+	couldn't been used by third party programs. This patch fixes the
+	inclusion for the main header file.
+
 	* cherokee/cherokee/validator_ldap.c, cherokee/fdpoll-epoll.c,
 	cherokee/macros.h, cherokee/buffer.c, cherokee/logger_writer.c,
 	cherokee/ncpus.c, cherokee/util.c, cherokee/fdpoll-port.c,

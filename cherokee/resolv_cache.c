@@ -34,6 +34,7 @@
 #include "resolv_cache.h"
 #include "util.h"
 #include "avl.h"
+#include "socket.h"
 
 
 typedef struct {
@@ -207,9 +208,10 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t *resolv, const char *do
 
 
 ret_t 
-cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv, const char *domain, cherokee_socket_t *sock)
+cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv, const char *domain, void *sock_)
 {
 	ret_t                          ret;
+	cherokee_socket_t             *sock  = sock_;
 	cherokee_resolv_cache_entry_t *entry = NULL;
 
 	/* Look for the name in the cache
