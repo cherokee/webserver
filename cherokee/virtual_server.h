@@ -81,6 +81,7 @@ typedef struct {
 
 #ifdef HAVE_TLS
 	cherokee_avl_t               session_cache;
+	CHEROKEE_MUTEX_T            (session_cache_mutex);
 
 # ifdef HAVE_GNUTLS
 	gnutls_certificate_server_credentials credentials;

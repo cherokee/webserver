@@ -198,84 +198,144 @@ cherokee_socket_clean (cherokee_socket_t *socket)
 
 #ifdef HAVE_GNUTLS
 
+static const gnutls_datum err_datum = { NULL, 0 };
+
 static gnutls_datum
 db_retrieve (void *ptr, gnutls_datum key)
 {
-	ret_t              ret;
-	cherokee_avl_t    *cache;
-	gnutls_datum       new    = { NULL, 0 };
-	cherokee_socket_t *socket = SOCKET(ptr);
-
-	/* printf ("db::retrieve\n"); */
-
-	if (unlikely (socket->vserver_ref == NULL)) {
+	ret_t                      ret;
+	cherokee_avl_t            *cache;
+	cherokee_virtual_server_t *vserver;
+	gnutls_datum               session;
+	cherokee_buffer_t          faked;
+	cherokee_buffer_t          strkey  = CHEROKEE_BUF_INIT;
+	cherokee_socket_t         *socket  = SOCKET(ptr);
+	
+	/* Sanity check
+	 */
+	vserver = socket->vserver_ref;
+	if (unlikely (vserver == NULL)) {
 		PRINT_ERROR_S ("No virtual server reference\n");
-		return new;
+		return err_datum;
 	}
 
-	cache = &socket->vserver_ref->session_cache;
+	cache = &vserver->session_cache;
+
+	/* Build the key string
+	 */
+	cherokee_buffer_fake (&faked, (char *)key.data, key.size);
+	ret = cherokee_buffer_encode_hex (&faked, &strkey);
+	if (ret != ret_ok) {
+		cherokee_buffer_mrproper (&strkey);
+		return err_datum;
+	}
 
 	/* Get (and remove) the object from the session cache
 	 */
-	ret = cherokee_avl_del_ptr (cache, (char *)key.data, (void **)&new);
-	if (ret != ret_ok) return new;
+	CHEROKEE_MUTEX_LOCK (&vserver->session_cache_mutex);
+	ret = cherokee_avl_get (cache, &strkey, (void **)&session);
+	CHEROKEE_MUTEX_UNLOCK (&vserver->session_cache_mutex);
 
-	return new;
+	if (ret == ret_ok) {
+		TRACE (ENTRIES",ssl", "fd=%d key=%s - found=%p\n", socket->socket, strkey.buf, session);
+		cherokee_buffer_mrproper (&strkey);
+		return session;
+	}
+
+	/* Failure
+	 */
+	TRACE (ENTRIES",ssl", "fd=%d key=%s - error=%d\n", socket->socket, strkey.buf, ret);
+	cherokee_buffer_mrproper (&strkey);
+	return err_datum; 
 }
 
 static int
 db_remove (void *ptr, gnutls_datum key)
 {
-	ret_t              ret;
-	cherokee_avl_t    *cache;
-	gnutls_datum      *n      = NULL;
-	cherokee_socket_t *socket = SOCKET(ptr);
+	ret_t                      ret;
+	cherokee_avl_t            *cache;
+	cherokee_virtual_server_t *vserver;
+	cherokee_buffer_t          faked;
+	cherokee_buffer_t          strkey  = CHEROKEE_BUF_INIT;
+	gnutls_datum              *n      = NULL;
+	cherokee_socket_t         *socket = SOCKET(ptr);
 
-	/* printf ("db::remove\n"); */
-
-	if (unlikely (socket->vserver_ref == NULL)) {
+	/* Sanity check
+	 */
+	vserver = socket->vserver_ref;
+	if (unlikely (vserver == NULL)) {
 		PRINT_ERROR_S ("No virtual server reference\n");
 		return 1;
 	}
 
-	cache = &socket->vserver_ref->session_cache;
-/*	ret = cherokee_session_cache_del (cache, key.data, key.size); */
+	cache = &vserver->session_cache;
 
-	ret = cherokee_avl_del_ptr (cache, (char *)key.data, NULL);	
-	if (n != NULL)
-		free (n);
+	/* Build the key string
+	 */
+	cherokee_buffer_fake (&faked, (char *)key.data, key.size);
+	ret = cherokee_buffer_encode_hex (&faked, &strkey);
+	if (ret != ret_ok) {
+		cherokee_buffer_mrproper (&strkey);
+		return -1;
+	}
 
-	return (ret == ret_ok) ? 0 : 1;
+	/* Remove the entry
+	 */
+	CHEROKEE_MUTEX_LOCK (&vserver->session_cache_mutex);
+	ret = cherokee_avl_del (cache, &strkey, (void **)&n);
+	CHEROKEE_MUTEX_UNLOCK (&vserver->session_cache_mutex);
+
+	if ((ret == ret_ok) && (n != NULL)) {
+		TRACE (ENTRIES",ssl", "fd=%d key=%s - found=%p ret=%d\n", socket->socket, strkey.buf, n, ret);
+		cherokee_buffer_mrproper (&strkey);
+		gnutls_free (n->data);
+		gnutls_free (n);
+		return 0;
+	}
+
+	TRACE (ENTRIES",ssl", "fd=%d key=%s - exiting ret=%d\n", socket->socket, strkey.buf, ret);
+	cherokee_buffer_mrproper (&strkey);
+	return -1;
 }
 
 static int
 db_store (void *ptr, gnutls_datum key, gnutls_datum data)
 {
-	ret_t              ret;
-	gnutls_datum      *n;
-	cherokee_avl_t    *cache;
-	cherokee_socket_t *socket = SOCKET(ptr);
+	ret_t                      ret;
+	cherokee_avl_t            *cache;
+	cherokee_virtual_server_t *vserver;
+	cherokee_buffer_t          faked;
+	cherokee_buffer_t          strkey  = CHEROKEE_BUF_INIT;
+	cherokee_socket_t         *socket = SOCKET(ptr);
 
-	/* printf ("db::store\n"); */
-
-	if (socket->vserver_ref == NULL) {
+	/* Remove the entry
+	 */
+	vserver = socket->vserver_ref;
+	if (vserver == NULL) {
 		PRINT_ERROR_S ("No virtual server reference\n");
 		return 1;
 	}
 
-	cache = &socket->vserver_ref->session_cache;
+	cache = &vserver->session_cache;
 
-	n = (gnutls_datum *) malloc (sizeof (gnutls_datum));
-	if (n == NULL) return 1;
+	/* Build the key string
+	 */
+	cherokee_buffer_fake (&faked, (char *)key.data, key.size);
+	ret = cherokee_buffer_encode_hex (&faked, &strkey);
+	if (ret != ret_ok) {
+		cherokee_buffer_mrproper (&strkey);
+		return -1;
+	}
 
-	memcpy (n, &data, sizeof (gnutls_datum));
+	/* Add the copy to the table
+	 */
+	CHEROKEE_MUTEX_LOCK (&vserver->session_cache_mutex);
+	ret = cherokee_avl_add (cache, &strkey, &data);
+	CHEROKEE_MUTEX_UNLOCK (&vserver->session_cache_mutex);
 
-/*	ret = cherokee_session_cache_add (cache, key.data, key.size, data.data, data.size);
-	cherokee_session_cache_add (cache, key */
-
-	ret = cherokee_avl_add_ptr (cache, (char *)key.data, n);
-
-	return (ret == ret_ok) ? 0 : 1;
+	TRACE (ENTRIES",ssl", "fd=%d key=%s - added=%p ret=%d\n", socket->socket, strkey.buf, &data, ret);
+	cherokee_buffer_mrproper (&strkey);
+	return (ret == ret_ok) ? 0 : -1;
 }
 
 #endif /* HAVE_GNUTLS */

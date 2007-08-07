@@ -81,6 +81,8 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	if (unlikely(ret < ret_ok))
 		return ret;
 
+	CHEROKEE_MUTEX_INIT(&n->session_cache_mutex, NULL);
+
 # ifdef HAVE_GNUTLS
 	n->credentials     = NULL;
 # endif
@@ -130,6 +132,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 
 #ifdef HAVE_TLS
 	cherokee_avl_mrproper (&vserver->session_cache, NULL); //FIXIT
+	CHEROKEE_MUTEX_DESTROY (&vserver->session_cache_mutex);
 
 # ifdef HAVE_GNUTLS
 	if (vserver->credentials != NULL) {
