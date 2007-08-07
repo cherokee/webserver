@@ -200,8 +200,7 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 	pid_t pid; 
 
 	if (pipe (to_log_fds)) { 
-		char buferr[ERROR_MAX_BUFSIZE];
-		PRINT_MSG ("Pipe error: %s\n", cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		PRINT_ERRNO (errno, "Pipe error: '${errno}'");
 		return ret_error;
 	}
 
@@ -222,10 +221,7 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 		SHOULDNT_HAPPEN;
 
 	case -1:
-		{
-		char buferr[ERROR_MAX_BUFSIZE];
-		PRINT_MSG ("Fork failed: %s\n", cherokee_strerror_r(errno, buferr, sizeof(buferr)));
-		}
+		PRINT_ERRNO (errno, "Fork failed: '${errno}'");
 		break;
 
 	default:

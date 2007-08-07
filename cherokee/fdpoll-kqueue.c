@@ -174,8 +174,7 @@ _watch (cherokee_fdpoll_kqueue_t *fdp, int timeout_msecs)
 			  &timeout);
 	fdp->nchanges=0;
 	if ( n_events < 0 ) {
-		char buferr[ERROR_MAX_BUFSIZE];
-		PRINT_ERROR ("ERROR: kevent: %s\n", cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		PRINT_ERRNO (errno, "kevent: '${errno}'");
 		return 0;
 	} else if ( n_events > 0 ) {
 		memset(fdp->fdevents, 0, FDPOLL(fdp)->system_nfiles*sizeof(int));

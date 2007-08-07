@@ -458,8 +458,7 @@ _fd_set_properties (int fd, int add_flags, int remove_flags)
 	flags &= ~remove_flags;
 
 	if (fcntl (fd, F_SETFL, flags) == -1) {
-		char buferr[ERROR_MAX_BUFSIZE];
-		PRINT_ERROR ("ERROR: Setting pipe properties fd=%d: %s\n", fd, cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		PRINT_ERRNO (errno, "Setting pipe properties fd=%d: '${errno}'", fd);
 		return ret_error;
 	}	
 
@@ -563,6 +562,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	re = execve (absolute_path, argv, cgi->envp);
 	if (re < 0) {
 		int err = errno;
+		char buferr[ERROR_MAX_BUFSIZE];
 
 		switch (err) {
 		case ENOENT:
@@ -572,13 +572,10 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 			printf ("Status: 500" CRLF_CRLF);
 		}
 
-		{
-		char buferr[ERROR_MAX_BUFSIZE];
 		cherokee_logger_write_string (CONN_VSRV(conn)->logger, 
 			"couldn't execute '%s': %s",
 			absolute_path,
 			cherokee_strerror_r(err, buferr, sizeof(buferr)));
-		}
 		exit(1);
 	}
 

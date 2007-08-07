@@ -158,9 +158,8 @@ init_ldap_connection (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_p
 	 */
 	ldap->conn = ldap_init (props->server.buf, props->port);
 	if (ldap->conn == NULL) {
-		char buferr[ERROR_MAX_BUFSIZE];
-		PRINT_ERROR ("ERROR: LDAP validator: Couldn't connect to LDAP: %s:%d: %s\n", 
-			     props->server.buf, props->port, cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		PRINT_ERRNO (errno, "Couldn't connect to LDAP: %s:%d: '${errno}'", 
+			     props->server.buf, props->port);
 		return ret_error;
 	}
 

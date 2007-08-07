@@ -907,10 +907,8 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 		case ECONNRESET: return ret_eof;
 		case EIO:        return ret_error;
 		}
-		{
-		char buferr[ERROR_MAX_BUFSIZE];
-		PRINT_ERROR ("ERROR: read(%d, %u,..) -> errno=%d '%s'\n", fd, size, errno, cherokee_strerror_r(errno, buferr, sizeof(buferr)));
-		}
+
+		PRINT_ERRNO (errno, "read(%d, %u,..): '${errno}'", fd, size);
 		return ret_error;
 	}
 	else if (len == 0) {

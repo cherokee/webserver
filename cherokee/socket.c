@@ -953,11 +953,8 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
 			case EHOSTUNREACH:
 				return ret_error;
 			}
-			{	
-			char buferr[ERROR_MAX_BUFSIZE];
-			PRINT_ERROR ("ERROR: write(%d, ..) -> errno=%d '%s'\n", 
-				SOCKET_FD(socket), err, cherokee_strerror_r(err, buferr, sizeof(buferr)));
-			}
+
+			PRINT_ERRNO (err, "write(%d, ..): '${errno}'", SOCKET_FD(socket));
 			return ret_error;
 		}
 
@@ -1099,11 +1096,8 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 			case EHOSTUNREACH:
 				return ret_error;
 			}
-			{
-			char buferr[ERROR_MAX_BUFSIZE];
-			PRINT_ERROR ("ERROR: read(%d, ..) -> errno=%d '%s'\n", 
-				SOCKET_FD(socket), err, cherokee_strerror_r(err, buferr, sizeof(buferr)));
-			}
+
+			PRINT_ERRNO (err, "read(%d, ..): '${errno}'", SOCKET_FD(socket));
 			return ret_error;
 		}
 
@@ -1284,11 +1278,8 @@ cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, u
 			case EHOSTUNREACH:
 				return ret_error;
 			}
-			{
-			char buferr[ERROR_MAX_BUFSIZE];
-			PRINT_ERROR ("ERROR: writev(%d, ..) -> errno=%d '%s'\n", 
-			     SOCKET_FD(socket), err, cherokee_strerror_r(err, buferr, sizeof(buferr)));
-			}
+
+			PRINT_ERRNO (err, "writev(%d, ..): '${errno}'", SOCKET_FD(socket));
 			return ret_error;
 		}
 	}
@@ -1630,12 +1621,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 #endif
 			return ret_eagain;
 		default:
-#if 1
-			{
-			char buferr[ERROR_MAX_BUFSIZE];
-			PRINT_ERROR ("ERROR: Can not connect: %s\n", cherokee_strerror_r(err, buferr, sizeof(buferr)));
-			}
-#endif
+			PRINT_ERRNO (err, "Cannot connect: '${errno}'");
 			return ret_error;
 		}
 	}
@@ -1801,9 +1787,9 @@ cherokee_socket_set_block_timeout (cherokee_socket_t *socket, cuint_t timeout)
 	re = setsockopt (socket->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
 	if (re < 0) {
 		int err = errno;
-		char buferr[ERROR_MAX_BUFSIZE];
-		PRINT_ERROR ("Couldn't set SO_RCVTIMEO, fd=%d, timeout=%d: %s\n", 
-			     socket->socket, timeout, cherokee_strerror_r(err, buferr, sizeof(buferr)));
+
+		PRINT_ERRNO (err, "Couldn't set SO_RCVTIMEO, fd=%d, timeout=%d: '${errno}'", 
+			     SOCKET_FD(socket), timeout);
 		return ret_error;
 	}
 #else

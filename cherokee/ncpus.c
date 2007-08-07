@@ -57,10 +57,8 @@ int dcc_ncpus(int *ncpus)
 		*ncpus = psd.psd_proc_cnt;
 		return 0;
 	} else {
-		char buferr[ERROR_MAX_BUFSIZE];
-		fprintf (stderr, "pstat_getdynamic failed: %s",
-			cherokee_strerror_r(errno, buferr, sizeof(buferr)));
 		*ncpus = -1;
+		PRINT_ERRNO (errno, "pstat_getdynamic failed: '${errno}'");
 		return EXIT_DISTCC_FAILED;
 	}
 }
@@ -112,9 +110,7 @@ int dcc_ncpus(int *ncpus)
 	if (sysctl(mib, 2, ncpus, &len, NULL, 0) == 0)
 		return 0;
 	else {
-		char buferr[ERROR_MAX_BUFSIZE];
-		fprintf(stderr,"sysctl(CTL_HW:HW_NCPU) failed: %s",
-			cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		PRINT_ERRNO (errno, "sysctl(CTL_HW:HW_NCPU) failed: '${errno}'");
 		return EXIT_DISTCC_FAILED;
 	}
 }
@@ -142,9 +138,7 @@ int dcc_ncpus(int *ncpus)
 #endif
     
 	if (*ncpus == -1) {
-		char buferr[ERROR_MAX_BUFSIZE];
-		fprintf(stderr,"sysconf(_SC_NPROCESSORS_ONLN) failed: %s",
-			cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		PRINT_ERRNO (errno, "sysconf(_SC_NPROCESSORS_ONLN) failed: '${errno}'");
 		return EXIT_DISTCC_FAILED;
 	} else if (*ncpus == 0) {
 		/* If there are no cpus, what are we running on ?

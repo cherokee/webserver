@@ -1127,8 +1127,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		re = chroot (srv->chroot.buf);
 		srv->chrooted = (re == 0);
 		if (srv->chrooted == 0) {
-			char buferr[ERROR_MAX_BUFSIZE];
-			PRINT_ERROR ("Cannot chroot() to '%s': %s\n", srv->chroot.buf, cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+			PRINT_ERRNO (errno, "Cannot chroot() to '%s': '${errno}'", srv->chroot.buf);
 			return ret_error;
 		}
 	} 
@@ -1144,8 +1143,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	 */
 	re = chdir ("/");
 	if (re < 0) {
-		char buferr[ERROR_MAX_BUFSIZE];
-		PRINT_ERROR ("Couldn't chdir(\"/\"): %s\n", cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		PRINT_ERRNO (errno, "Couldn't chdir(\"/\"): '${errno}'");
 		return ret_error;
 	}
 
@@ -2002,8 +2000,7 @@ cherokee_server_write_pidfile (cherokee_server_t *srv)
 
 	file = fopen (srv->pidfile.buf, "w");
 	if (file == NULL) {
-		char buferr[ERROR_MAX_BUFSIZE];
-		PRINT_MSG ("ERROR: Can't write PID file '%s': %s\n", srv->pidfile.buf, cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		PRINT_ERRNO (errno, "Cannot write PID file '%s': '${errno}'", srv->pidfile.buf);
 		return ret_error;
 	}
 

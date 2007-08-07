@@ -1,5 +1,15 @@
 2007-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/cherokee/validator_ldap.c, cherokee/fdpoll-epoll.c,
+	cherokee/macros.h, cherokee/buffer.c, cherokee/logger_writer.c,
+	cherokee/ncpus.c, cherokee/util.c, cherokee/fdpoll-port.c,
+	cherokee/handler_cgi.c, cherokee/cherokee_logrotate.c,
+	cherokee/fdpoll-kqueue.c, cherokee/server.c, cherokee/socket.c:
+	errno related error reports cleaned up. They now use
+	PRINT_ERRNO and cherokee_print_errno() underneath.
+	
+	* cherokee/macros.h (PRINT_ERRNO): Added new macro.
+
 	* cherokee/virtual_server.h, cherokee/virtual_server.c,
 	cherokee/socket.c: GNUTLS support reworked. Session AVL is now
 	protected by a semaphore.

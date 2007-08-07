@@ -176,8 +176,7 @@ main (int argc, char *argv[])
 	 */
 	re = rename (argv[2], logname.buf);
 	if (re != 0) {
-		char buferr[ERROR_MAX_BUFSIZE];
-		PRINT_ERROR("Could not move '%s' to '%s': %s\n", argv[2], logname.buf, cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+		PRINT_ERRNO (errno, "Could not move '%s' to '%s': '${errno}'", argv[2], logname.buf);
 	}
 	printf ("Log file '%s' moved to '%s' successfully\n", argv[2], logname.buf);
 	
