@@ -35,6 +35,8 @@
 #include "server.h"
 #include "server-protected.h"
 #include "plugin_loader.h"
+#include "connection_info.h"
+
 
 #define PAGE_HEADER                                                                                     \
 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">" CRLF\
@@ -75,7 +77,7 @@
 "<a href=\"http://www.alobbs.com\">Alvaro Lopez Ortega</a> &lt;alvaro@alobbs.com&gt;"
 
 #define LICENSE                                                                                         \
-"<p>Copyright (C) 2001, 2002, 2003, 2004, 2005 " AUTHOR "</p>"                                      CRLF\
+"<p>Copyright (C) 2001 - 2007 " AUTHOR "</p>"                                                       CRLF\
 "<p>This program is free software; you can redistribute it and/or"                                  CRLF\
 "modify it under the terms of version 2 of the GNU General Public"                                  CRLF\
 "License as published by the Free Software Foundation.</p>"                                         CRLF\
@@ -121,7 +123,9 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 
 		cherokee_module_props_init_base (MODULE_PROPS(n), 
 						 MODULE_PROPS_FREE(props_free));		
-		n->just_about = false;
+		n->just_about         = false;
+		n->connection_details = false;
+
 		*_props = MODULE_PROPS(n);
 	}
 
@@ -132,6 +136,8 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 
 		if (equal_buf_str (&subconf->key, "just_about")) {
 			props->just_about = atoi(subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "connection_details")) {
+			props->connection_details = atoi(subconf->val.buf);
 		} else {
 			PRINT_MSG ("ERROR: Handler file: Unknown key: '%s'\n", subconf->key.buf);
 			return ret_error;
@@ -155,6 +161,13 @@ static void
 table_add_row_str (cherokee_buffer_t *buf, const char *name, const char *value)
 {
 	cherokee_buffer_add_va (buf, "<tr><td class=\"e\">%s</td><td class=\"v\">%s</td></tr>"CRLF, name, value);
+}
+
+static void
+table_add_row_buf (cherokee_buffer_t *buf, const char *name, cherokee_buffer_t *value)
+{
+	char *cvalue = (value->len > 0) ? value->buf : "";
+	table_add_row_str (buf, name, cvalue);
 }
 
 static void
@@ -254,8 +267,8 @@ static void
 build_connections_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
 	cuint_t conns_num = 0;
-	cuint_t active = 0;
-	cuint_t reusable = 0;
+	cuint_t active    = 0;
+	cuint_t reusable  = 0;
 	
 	cherokee_server_get_conns_num (srv, &conns_num);
 	cherokee_server_get_active_conns (srv, &active);
@@ -340,14 +353,56 @@ build_icons_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	if (! srv->icons)
 		return;
 
-	table_add_row_str (buf, "Default icon", (srv->icons->default_icon.len > 0) ? srv->icons->default_icon.buf : "");
-	table_add_row_str (buf, "Directory icon", (srv->icons->directory_icon.len > 0) ? srv->icons->directory_icon.buf : "");
-	table_add_row_str (buf, "Parent directory icon", (srv->icons->parentdir_icon.len > 0) ? srv->icons->parentdir_icon.buf : "");
+	table_add_row_buf (buf, "Default icon", &srv->icons->default_icon);
+	table_add_row_buf (buf, "Directory icon", &srv->icons->directory_icon);
+	table_add_row_buf (buf, "Parent directory icon", &srv->icons->parentdir_icon);
 }
+
+
+static void
+build_connection_details_content (cherokee_buffer_t *buf, cherokee_list_t *infos) 
+{
+	char tmp[8];
+	cherokee_list_t *i, *j;
+
+	list_for_each_safe (i, j, infos) {
+		cherokee_connection_info_t *info = CONN_INFO(i);
+
+		table_add_row_buf (buf, "ID",            &info->id);
+		table_add_row_buf (buf, "Remote IP",     &info->ip);
+		table_add_row_buf (buf, "Phase",         &info->phase);
+		table_add_row_buf (buf, "Request",       &info->request);
+		table_add_row_buf (buf, "Handler",       &info->handler);
+
+		cherokee_strfsize (atoi(info->rx.buf), tmp);
+		table_add_row_str (buf, "Info sent", tmp);
+
+		cherokee_strfsize (atoi(info->tx.buf), tmp);
+		table_add_row_str (buf, "Info received", tmp);
+
+		if (! cherokee_buffer_is_empty (&info->total_size)) {
+			cherokee_strfsize (atoi(info->total_size.buf), tmp);
+			table_add_row_str (buf, "Total Size", tmp);
+		}
+
+		if (! cherokee_buffer_is_empty (&info->percent)) {
+			cherokee_buffer_add_str (&info->percent, "%");
+			table_add_row_buf (buf, "Percentage", &info->percent);
+		}
+
+		if (! cherokee_buffer_is_empty (&info->icon))
+			table_add_row_buf (buf, "Icon", &info->icon);
+
+		table_add_row_str (buf, "", "");
+		cherokee_connection_info_free (info);
+	}
+}
+
 
 static void
 server_info_build_page (cherokee_handler_server_info_t *hdl)
 {
+	ret_t              ret;
 	cherokee_server_t *srv;
 	cherokee_buffer_t *buf;
 	cherokee_buffer_t  table = CHEROKEE_BUF_INIT;
@@ -386,19 +441,34 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 		 */
 		cherokee_buffer_clean (&table);
 		build_modules_table_content (&table, srv);
-		server_info_add_table (buf, "Modules", "modules", &table);
+		server_info_add_table (buf, "Loaded Modules", "modules", &table);
 
 		/* Icons
 		 */
 		cherokee_buffer_clean (&table);
 		build_icons_table_content (&table, srv);
 		server_info_add_table (buf, "Icons", "icons", &table);
-
-		cherokee_buffer_mrproper (&table);
 	}
+
+	/* Print all the current connections details
+	 */
+	if  (HDL_SRV_INFO_PROPS(hdl)->connection_details) {
+		cherokee_list_t infos;
+	       
+		INIT_LIST_HEAD (&infos);
+
+		ret = cherokee_connection_info_list_server (&infos, HANDLER_SRV(hdl), HANDLER(hdl));
+		if (ret == ret_ok) {				
+			cherokee_buffer_clean (&table);
+			build_connection_details_content (&table, &infos);
+			server_info_add_table (buf, "Current connections details", "connection_details", &table);			
+		}
+	}
+
 
 	/* Add the page ending
 	 */
+	cherokee_buffer_mrproper (&table);
 	cherokee_buffer_add_str (buf, PAGE_FOOT);
 
 	cherokee_buffer_mrproper (&ver);

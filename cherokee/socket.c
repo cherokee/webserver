@@ -204,7 +204,7 @@ static gnutls_datum
 db_retrieve (void *ptr, gnutls_datum key)
 {
 	ret_t                      ret;
-	cherokee_avl_t            *cache;
+	cherokee_avl_r_t          *cache;
 	cherokee_virtual_server_t *vserver;
 	gnutls_datum               session;
 	cherokee_buffer_t          faked;
@@ -232,10 +232,7 @@ db_retrieve (void *ptr, gnutls_datum key)
 
 	/* Get (and remove) the object from the session cache
 	 */
-	CHEROKEE_MUTEX_LOCK (&vserver->session_cache_mutex);
-	ret = cherokee_avl_get (cache, &strkey, (void **)&session);
-	CHEROKEE_MUTEX_UNLOCK (&vserver->session_cache_mutex);
-
+	ret = cherokee_avl_r_get (cache, &strkey, (void **)&session);
 	if (ret == ret_ok) {
 		TRACE (ENTRIES",ssl", "fd=%d key=%s - found=%p\n", socket->socket, strkey.buf, session);
 		cherokee_buffer_mrproper (&strkey);
@@ -253,7 +250,7 @@ static int
 db_remove (void *ptr, gnutls_datum key)
 {
 	ret_t                      ret;
-	cherokee_avl_t            *cache;
+	cherokee_avl_r_t          *cache;
 	cherokee_virtual_server_t *vserver;
 	cherokee_buffer_t          faked;
 	cherokee_buffer_t          strkey  = CHEROKEE_BUF_INIT;
@@ -281,10 +278,7 @@ db_remove (void *ptr, gnutls_datum key)
 
 	/* Remove the entry
 	 */
-	CHEROKEE_MUTEX_LOCK (&vserver->session_cache_mutex);
-	ret = cherokee_avl_del (cache, &strkey, (void **)&n);
-	CHEROKEE_MUTEX_UNLOCK (&vserver->session_cache_mutex);
-
+	ret = cherokee_avl_r_del (cache, &strkey, (void **)&n);
 	if ((ret == ret_ok) && (n != NULL)) {
 		TRACE (ENTRIES",ssl", "fd=%d key=%s - found=%p ret=%d\n", socket->socket, strkey.buf, n, ret);
 		cherokee_buffer_mrproper (&strkey);
@@ -302,10 +296,10 @@ static int
 db_store (void *ptr, gnutls_datum key, gnutls_datum data)
 {
 	ret_t                      ret;
-	cherokee_avl_t            *cache;
+	cherokee_avl_r_t          *cache;
 	cherokee_virtual_server_t *vserver;
 	cherokee_buffer_t          faked;
-	cherokee_buffer_t          strkey  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t          strkey = CHEROKEE_BUF_INIT;
 	cherokee_socket_t         *socket = SOCKET(ptr);
 
 	/* Remove the entry
@@ -329,9 +323,7 @@ db_store (void *ptr, gnutls_datum key, gnutls_datum data)
 
 	/* Add the copy to the table
 	 */
-	CHEROKEE_MUTEX_LOCK (&vserver->session_cache_mutex);
-	ret = cherokee_avl_add (cache, &strkey, &data);
-	CHEROKEE_MUTEX_UNLOCK (&vserver->session_cache_mutex);
+	ret = cherokee_avl_r_add (cache, &strkey, &data);
 
 	TRACE (ENTRIES",ssl", "fd=%d key=%s - added=%p ret=%d\n", socket->socket, strkey.buf, &data, ret);
 	cherokee_buffer_mrproper (&strkey);
@@ -390,7 +382,7 @@ initialize_tls_session (cherokee_socket_t *socket, cherokee_virtual_server_t *vs
 	 */
 	gnutls_dh_set_prime_bits (socket->session, 1024);
 
-	/* Set the session DB manage functions
+	/* Set the session DB management functions
 	 */
 	gnutls_db_set_retrieve_function (socket->session, db_retrieve);
 	gnutls_db_set_remove_function   (socket->session, db_remove);
@@ -439,12 +431,15 @@ ret_t
 cherokee_socket_init_tls (cherokee_socket_t *socket, cherokee_virtual_server_t *vserver)
 {
 #ifdef HAVE_TLS
-	int re;
+	int   re;
+	ret_t ret;
 	
 	socket->is_tls = TLS;
 
 	if (socket->initialized == false) {
-		initialize_tls_session (socket, vserver);
+		ret = initialize_tls_session (socket, vserver);
+		if (ret != ret_ok) return ret;
+
 		socket->initialized = true;
 	}
 

@@ -38,6 +38,7 @@
 #endif
 
 #include "avl.h"
+#include "avl_r.h"
 #include "list.h"
 #include "handler.h"
 #include "config_entry.h"
@@ -80,8 +81,7 @@ typedef struct {
 	cherokee_buffer_t            ca_cert;
 
 #ifdef HAVE_TLS
-	cherokee_avl_t               session_cache;
-	CHEROKEE_MUTEX_T            (session_cache_mutex);
+	cherokee_avl_r_t             session_cache;
 
 # ifdef HAVE_GNUTLS
 	gnutls_certificate_server_credentials credentials;

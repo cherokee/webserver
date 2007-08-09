@@ -1,3 +1,33 @@
+2007-08-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection_info.c (cherokee_connection_info_list_thread):
+	Now, it includes polling connections as well.
+
+	* cherokee/connection_info.c (cherokee_connection_info_fill_up):
+	Bug fixed. It was failing to generate the IP property; the buffer
+	had length after the IP was added.
+
+	* cherokee/handler_server_info.c, cherokee/handler_server_info.h:
+	Added an additional configuration parameter "connection_details"
+	that, when activated, display data about all the connections that
+	the server is currently handling.
+
+	* cherokee/server.c (cherokee_server_del_connection): Integrated
+	with thread->ownership. Now it's safe (but slower) to use this
+	method.
+
+	* cherokee/socket.c (cherokee_socket_init_tls): Fail if the
+	internal initialization function fails. So far, it wasn't checking
+	the returning value.
+
+	* cherokee/virtual_server.h, cherokee/virtual_server.c,
+	cherokee/socket.c: Switched to use the new cherokee_avl_r_t. It
+	was using a avl_t plus a mutex; now it's slightly cleaner (and
+	should be faster as well).
+
+	* cherokee/avl_r.h, cherokee/avl_r.c: Added new class: Thread-safe
+	AVL. It uses cherokee_avl_t underneath.
+
 2007-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/util.c: This little tiny patch fixes the GNUTLS

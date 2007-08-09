@@ -69,4 +69,4 @@ ret_t cherokee_avl_print     (cherokee_avl_t *avl);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_TABLE_H */
+#endif /* CHEROKEE_AVL_H */

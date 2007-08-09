@@ -142,19 +142,21 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_con
 
 	/* From
 	 */
-	if (conn->socket.socket > 0) {
+	if (conn->socket.socket >= 0) {
 		cherokee_buffer_ensure_size (&info->ip, CHE_INET_ADDRSTRLEN + 1);
+		memset (info->ip.buf, 0, info->ip.size);
 		cherokee_socket_ntop (&conn->socket, info->ip.buf, info->ip.size - 1);
+		info->ip.len = strlen(info->ip.buf);
 	}
 
 	/* Request
 	 */
 	if (! cherokee_buffer_is_empty (&conn->request_original)) {
 		cherokee_buffer_add_buffer (&info->request, &conn->request_original);
-	} 
-	else if (! cherokee_buffer_is_empty (&conn->request)) {
+
+	} else if (! cherokee_buffer_is_empty (&conn->request)) {
 		cherokee_buffer_add_buffer (&info->request, &conn->request);
-	}
+	} 
 
 	/* Transference
 	 */
@@ -254,6 +256,14 @@ cherokee_connection_info_list_thread (cherokee_list_t *list, void *_thread, cher
 		cherokee_connection_info_fill_up (n, CONN(i));
 		cherokee_list_add (LIST(n), list);
 	}
+
+	list_for_each (i, &thread->polling_list) {
+		CHEROKEE_NEW(n,connection_info);
+
+		cherokee_connection_info_fill_up (n, CONN(i));
+		cherokee_list_add (LIST(n), list);
+	}
+
 	ret = ret_ok;
 	if (cherokee_list_empty (list))
 		ret = ret_not_found;

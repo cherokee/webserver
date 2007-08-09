@@ -1923,6 +1923,10 @@ cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
 	id = strtol (id_str, NULL, 10);
 
 	list_for_each (t, &srv->thread_list) {
+		cherokee_thread_t *thread = THREAD(t);
+
+		CHEROKEE_MUTEX_LOCK (&thread->ownership);
+
 		list_for_each (c, &THREAD(t)->active_list) {
 			cherokee_connection_t *conn = CONN(c);
 
@@ -1931,10 +1935,12 @@ cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
 				    (conn->phase != phase_lingering))
 				{
 					conn->phase = phase_shutdown;
+					CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
 					return ret_ok;
 				}
 			}
 		}
+		CHEROKEE_MUTEX_UNLOCK (&thread->ownership);
 	}
 
 	return ret_not_found;

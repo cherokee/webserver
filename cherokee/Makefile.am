@@ -712,6 +712,8 @@ $(win32_src) \
 cherokee.h \
 avl.h \
 avl.c \
+avl_r.h \
+avl_r.c \
 http.h \
 http.c \
 list.h \
@@ -904,6 +906,7 @@ common.h \
 util.h \
 version.h \
 avl.h \
+avl_r.h \
 buffer.h\
 fdpoll.h \
 http.h \
