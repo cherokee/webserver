@@ -892,7 +892,7 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 
 	/* Read data at the end of the buffer
 	 */
-	len = read (fd, &(buf->buf[buf->len]), size - 1);
+	len = read (fd, &(buf->buf[buf->len]), size);
 	if (len < 0) {
 		/* On error
 		 */

@@ -16,7 +16,14 @@
 	    "additional length" instead of "additional size"
 	    (this is really required because now we have
 	     cherokee_buffer_ensure_size() so the old semantic of
-	     cherokee_buffer_ensure_addlen() had to go anyway).
+	     cherokee_buffer_ensure_addlen() had to go anyway);
+
+	  - cherokee_buffer_read_from_fd(), now we can read full size
+	    instead of size - 1, so it fixes the case of a read size
+	    of 1 byte, because now the function can return ret_ok
+	    instead of (wrong) ret_eof (theoretical case because
+	    in practice there is only one caller that passes 4096
+	    as read size).
 
 2007-08-10  A.D.F  <adefacc@tin.it>
 
