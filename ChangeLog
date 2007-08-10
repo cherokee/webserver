@@ -1,3 +1,10 @@
+2007-08-10  A.D.F  <adefacc@tin.it>
+
+	* cherokee/handler_server_info.c
+	  - build_connection_details_content(), use strtoll()
+	    instead of atoi() because those counters come from an off_t
+	    data type which can be 64 bit (long long).
+
 2007-08-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/connection_info.c (cherokee_connection_info_list_thread):

@@ -374,14 +374,14 @@ build_connection_details_content (cherokee_buffer_t *buf, cherokee_list_t *infos
 		table_add_row_buf (buf, "Request",       &info->request);
 		table_add_row_buf (buf, "Handler",       &info->handler);
 
-		cherokee_strfsize (atoi(info->rx.buf), tmp);
+		cherokee_strfsize (strtoll(info->rx.buf, (char**)NULL, 10), tmp);
 		table_add_row_str (buf, "Info sent", tmp);
 
-		cherokee_strfsize (atoi(info->tx.buf), tmp);
+		cherokee_strfsize (strtoll(info->tx.buf, (char**)NULL, 10), tmp);
 		table_add_row_str (buf, "Info received", tmp);
 
 		if (! cherokee_buffer_is_empty (&info->total_size)) {
-			cherokee_strfsize (atoi(info->total_size.buf), tmp);
+			cherokee_strfsize (strtoll(info->total_size.buf, (char**)NULL, 10), tmp);
 			table_add_row_str (buf, "Total Size", tmp);
 		}
 
