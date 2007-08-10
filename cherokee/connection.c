@@ -536,21 +536,22 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	 */
 	cherokee_buffer_ensure_size (&(conn->header_buffer), 384);
 	ret = cherokee_handler_add_headers (conn->handler, &conn->header_buffer);
-	switch (ret) {
-	case ret_ok:
-		break;
+	if (unlikely (ret != ret_ok)) {
+		switch (ret) {
 
-	case ret_eof:
-	case ret_error:
-	case ret_eagain:
-		return ret;
+		case ret_eof:
+		case ret_error:
+		case ret_eagain:
+			return ret;
 
-	default:
-		RET_UNKNOWN(ret);
-		return ret_error;
+		default:
+			RET_UNKNOWN(ret);
+			return ret_error;
+		}
 	}
 
-	if (HANDLER_SUPPORT_MAYBE_LENGTH(conn->handler)) {
+	if (HANDLER_SUPPORT_MAYBE_LENGTH(conn->handler) &&
+		conn->keepalive != 0) {
 		if (strcasestr (conn->header_buffer.buf, "Content-Length: ") == NULL) {
 			conn->keepalive = 0;
 		}
@@ -558,15 +559,12 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 
 	/* Add the server headers	
 	 */
-	if (! (conn->handler->support & hsupport_dont_add_headers)) {
+	if (! (conn->handler->support & hsupport_dont_add_headers))
 		build_response_header (conn, &conn->buffer);
-	}
 
 	/* Add handler headers
 	 */
-	if (! cherokee_buffer_is_empty (&conn->header_buffer)) {
-		cherokee_buffer_add_buffer (&conn->buffer, &conn->header_buffer);
-	}
+	cherokee_buffer_add_buffer (&conn->buffer, &conn->header_buffer);
 
 	/* END of response
 	 */

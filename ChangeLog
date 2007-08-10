@@ -25,6 +25,12 @@
 	    in practice there is only one caller that passes 4096
 	    as read size).
 
+	* cherokee/connection.c
+	  - cherokee_connection_build_header(), micro-optimizations:
+		- don't search for Content-Length: unless it is really
+		  necessary;
+		- removed unneeded if condition (it should be always true).
+
 2007-08-10  A.D.F  <adefacc@tin.it>
 
 	* cherokee/handler_server_info.c
