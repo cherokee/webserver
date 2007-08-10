@@ -1123,7 +1123,6 @@ process_active_connections (cherokee_thread_t *thd)
 					/* It could not change the handler to an error
 					 * managing handler, so it is a critical error.
 					 */					
-//					srv_conns_num--;
 					conns_freed++;
 					purge_closed_connection (thd, conn);
 					continue;
@@ -1164,17 +1163,15 @@ process_active_connections (cherokee_thread_t *thd)
 			if ((http_type_300 (conn->error_code) || 
 			     http_type_400 (conn->error_code) ||
 			     http_type_500 (conn->error_code)) &&
-			    (!HANDLER_SUPPORT_ERROR(conn->handler)))								      
-			{
+			    (!HANDLER_SUPPORT_ERROR(conn->handler))) {
 				conn->phase = phase_setup_connection;
 				continue;				
 			}
 
 			/* If it has mmaped content, skip next stage
 			 */		     
-			if (conn->mmaped != NULL) {
+			if (conn->mmaped != NULL)
 				goto phase_send_headers_EXIT;
-			}
 
 			conn->phase = phase_send_headers;
 
@@ -1192,7 +1189,7 @@ process_active_connections (cherokee_thread_t *thd)
 					maybe_purge_closed_connection (thd, conn);
 					continue;
 				}
-				else if (http_type_300(conn->error_code)) {
+				if (http_type_300(conn->error_code)) {
 					maybe_purge_closed_connection (thd, conn);
 					continue;
 				}
@@ -1200,7 +1197,6 @@ process_active_connections (cherokee_thread_t *thd)
 
 			case ret_eof:
 			case ret_error:
-//				srv_conns_num--;
 				conns_freed++;
 				purge_closed_connection (thd, conn);
 				continue;
@@ -1261,7 +1257,6 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_eof:
 				case ret_error:
 				default:	
-//					srv_conns_num--;
 					conns_freed++;
 					purge_closed_connection (thd, conn);
 					/* purge_maybe_lingering (thd, conn); */
@@ -1280,7 +1275,6 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_eof:
 				case ret_error:
 				default:
-//					srv_conns_num--;
 					conns_freed++;
 					purge_closed_connection (thd, conn);
 					/* purge_maybe_lingering (thd, conn); */
@@ -1319,7 +1313,6 @@ process_active_connections (cherokee_thread_t *thd)
 				/* Error, no linger and no last read,
 				 * just close the connection.
 				 */
-//				srv_conns_num--;
 				conns_freed++;
 				purge_closed_connection (thd, conn);
 				continue;
@@ -1335,13 +1328,11 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			case ret_eof:
 			case ret_error:
-//				srv_conns_num--;
 				conns_freed++;
 				purge_closed_connection (thd, conn);
 				continue;
 			default:
 				RET_UNKNOWN(ret);
-//				srv_conns_num--;
 				conns_freed++;
 				purge_closed_connection (thd, conn);
 				break;

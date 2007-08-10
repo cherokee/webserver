@@ -31,6 +31,9 @@
 		  necessary;
 		- removed unneeded if condition (it should be always true).
 
+	* cherokee/thread.c
+	  - process_active_connections(), micro cleanups.
+
 2007-08-10  A.D.F  <adefacc@tin.it>
 
 	* cherokee/handler_server_info.c
