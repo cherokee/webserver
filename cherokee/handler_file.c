@@ -623,7 +623,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 		cherokee_buffer_add_str     (buffer, CRLF);
 
 	} else {
-		/* Can't use Keep-alive w/o "Content-length:", so disable it.
+		/* Can't use Keep-alive w/o "Content-Length:", so disable it.
 		 */
 		conn->keepalive = 0;
 	}

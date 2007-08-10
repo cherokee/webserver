@@ -259,7 +259,7 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	 */
 	cherokee_buffer_add_str     (buffer, "Content-Type: text/html"CRLF);
 
-	cherokee_buffer_add_str     (buffer, "Content-length: ");
+	cherokee_buffer_add_str     (buffer, "Content-Length: ");
 	cherokee_buffer_add_ulong10 (buffer, (culong_t) hdl->content.len);
 	cherokee_buffer_add_str     (buffer, CRLF);
 

@@ -302,7 +302,7 @@ cherokee_handler_cgi_base_build_basic_env (
 		}
 	}
 
-	/* Content-type and Content-lenght (if available) 
+	/* Content-Type and Content-Lenght (if available) 
 	 */
 	cherokee_buffer_clean (tmp);
 	ret = cherokee_header_copy_unknown (&conn->header, "Content-Type", 12, tmp);
@@ -729,7 +729,7 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 			continue;
 		}
 
-		else if (strncasecmp ("Content-length: ", begin, 16) == 0) {
+		else if (strncasecmp ("Content-Length: ", begin, 16) == 0) {
 			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
 			cherokee_buffer_add (&tmp, begin+16, end - (begin+16));

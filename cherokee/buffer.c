@@ -570,9 +570,8 @@ cherokee_buffer_prepend (cherokee_buffer_t  *buf, char *txt, size_t size)
 int   
 cherokee_buffer_is_endding (cherokee_buffer_t *buf, char c)
 {
-	if (cherokee_buffer_is_empty(buf)) {
+	if (cherokee_buffer_is_empty(buf))
 		return 0;
-	}
 
 	return (buf->buf[buf->len - 1] == c);
 }
@@ -614,7 +613,7 @@ cherokee_buffer_ensure_addlen (cherokee_buffer_t *buf, size_t addlen)
 	if (buf->len + addlen < buf->size)
 		return ret_ok;
 
-	return cherokee_buffer_ensure_size (buf, ((size_t)buf->len + addlen));
+	return cherokee_buffer_ensure_size (buf, ((size_t)buf->len + addlen + 1));
 }
 
 

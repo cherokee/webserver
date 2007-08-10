@@ -323,7 +323,7 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 			cherokee_buffer_drop_endding (&downloader->reply_header, body_chunk);
 		}
 
-		/* Try to read the "Content-length" response header
+		/* Try to read the "Content-Length" response header
 		 */
 		ret = cherokee_header_has_known (downloader->header, header_content_length);
 		if (ret == ret_ok) {

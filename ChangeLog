@@ -1,5 +1,25 @@
 2007-08-10  A.D.F  <adefacc@tin.it>
 
+	* cherokee/handler_server_info.c,
+	  cherokee/handler_admin.c,
+	  cherokee/handler_cgi_base.c,
+	  cherokee/handler_file.c,
+	  cherokee/handler_error.c,
+	  cherokee/downloader.c,
+	  cherokee/connection.c
+	  - cosmetic change,
+	    use "Content-Length:" instead of "Content-length:";
+
+	* cherokee/buffer.c
+	  - cherokee_buffer_ensure_addlen(), add 1 to required size,
+	    because it is more correct to consider "addlen" as
+	    "additional length" instead of "additional size"
+	    (this is really required because now we have
+	     cherokee_buffer_ensure_size() so the old semantic of
+	     cherokee_buffer_ensure_addlen() had to go anyway).
+
+2007-08-10  A.D.F  <adefacc@tin.it>
+
 	* cherokee/handler_server_info.c
 	  - build_connection_details_content(), use strtoll()
 	    instead of atoi() because those counters come from an off_t

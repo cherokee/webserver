@@ -187,6 +187,6 @@ cherokee_handler_admin_step (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *
 ret_t 
 cherokee_handler_admin_add_headers (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *buffer)
 {
-	cherokee_buffer_add_va (buffer, "Content-length: %lu" CRLF, ahdl->reply.len);
+	cherokee_buffer_add_va (buffer, "Content-Length: %lu" CRLF, ahdl->reply.len);
 	return ret_ok;
 }

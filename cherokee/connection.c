@@ -551,7 +551,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	}
 
 	if (HANDLER_SUPPORT_MAYBE_LENGTH(conn->handler)) {
-		if (strcasestr (conn->header_buffer.buf, "Content-length: ") == NULL) {
+		if (strcasestr (conn->header_buffer.buf, "Content-Length: ") == NULL) {
 			conn->keepalive = 0;
 		}
 	}
@@ -809,7 +809,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 		ret = ret_eagain;
 	}
 
-	/* If this connection has a handler without content-length support
+	/* If this connection has a handler without Content-Length support
 	 * it has to count the bytes sent
 	 */
 	if (!HANDLER_SUPPORT_LENGTH(conn->handler)) {
