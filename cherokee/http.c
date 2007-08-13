@@ -33,6 +33,7 @@
 	         *str = name_str;                      \
  		 return ret_ok;
 
+
 ret_t 
 cherokee_http_method_to_string (cherokee_http_method_t method, const char **str, cuint_t *len)
 {
@@ -89,19 +90,29 @@ cherokee_http_version_to_string (cherokee_http_version_t version, const char **s
 	return ret_error;
 }
 
+
 ret_t
 cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 {
 	switch (code) {
+
+	/* 2xx
+	 */
 	case http_ok:  	                    *str = http_ok_string; break;
 	case http_accepted:                 *str = http_accepted_string; break;
 	case http_partial_content:          *str = http_partial_content_string; break;
+
+	/* 3xx
+	 */
 	case http_moved_permanently:        *str = http_moved_permanently_string; break;
 	case http_moved_temporarily:        *str = http_moved_temporarily_string; break;
-	case http_unauthorized:             *str = http_unauthorized_string; break;
 	case http_see_other:                *str = http_see_other_string; break;
 	case http_not_modified:             *str = http_not_modified_string; break;
+
+	/* 4xx
+	 */
 	case http_bad_request:              *str = http_bad_request_string; break;
+	case http_unauthorized:             *str = http_unauthorized_string; break;
 	case http_access_denied:            *str = http_access_denied_string; break;
 	case http_not_found:                *str = http_not_found_string; break;
 	case http_method_not_allowed:       *str = http_method_not_allowed_string; break;
@@ -110,12 +121,21 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_request_uri_too_long:     *str = http_request_uri_too_long_string; break;
 	case http_range_not_satisfiable:    *str = http_range_not_satisfiable_string; break;
 	case http_upgrade_required:         *str = http_upgrade_required_string; break;
+
+	/* 5xx
+	 */
 	case http_internal_error:           *str = http_internal_error_string; break;
+	case http_not_implemented:          *str = http_not_implemented_string; break;
 	case http_bad_gateway:              *str = http_bad_gateway_string; break;
 	case http_service_unavailable:      *str = http_service_unavailable_string; break;
+	case http_gateway_timeout:          *str = http_gateway_timeout_string; break;
+	case http_version_not_supported:    *str = http_version_not_supported_string; break;
+
+	/* 1xx
+	*/
 	case http_continue:                 *str = http_continue_string; break;
 	case http_switching_protocols:      *str = http_switching_protocols_string; break;
-	case http_gateway_timeout:          *str = http_gateway_timeout_string; break;
+
 	default:
 		*str = "500 Unknown error";
 		return ret_error;
@@ -123,6 +143,7 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 
 	return ret_ok;
 }
+
 
 ret_t 
 cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
@@ -132,15 +153,22 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 	   return cherokee_buffer_add (buf, http_ ## c ## _string, sizeof(http_ ## c ## _string)-1)
 
 	switch (code) {
-		entry_code (continue);
-		entry_code (switching_protocols);
+
+		/* 2xx
+		 */
 		entry_code (ok);
 		entry_code (accepted);
 		entry_code (partial_content);
+
+		/* 3xx
+		 */
 		entry_code (moved_permanently);
 		entry_code (moved_temporarily);
 		entry_code (see_other);
 		entry_code (not_modified);
+
+		/* 4xx
+		 */
 		entry_code (bad_request);
 		entry_code (unauthorized);
 		entry_code (access_denied);
@@ -151,10 +179,21 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (request_uri_too_long);
 		entry_code (range_not_satisfiable);
 		entry_code (upgrade_required);
+
+		/* 5xx
+		 */
 		entry_code (internal_error);
+		entry_code (not_implemented);
 		entry_code (bad_gateway);
 		entry_code (service_unavailable);
 		entry_code (gateway_timeout);
+		entry_code (version_not_supported);
+
+		/* 1xx
+		 */
+		entry_code (continue);
+		entry_code (switching_protocols);
+
 	default:
  		PRINT_ERROR ("ERROR: Unknown HTTP status code %d\n", code);
  		cherokee_buffer_add_str (buf, http_internal_error_string);

@@ -103,9 +103,11 @@ typedef enum {
 	http_range_not_satisfiable    = 416,
 	http_upgrade_required         = 426,
 	http_internal_error           = 500,
+	http_not_implemented          = 501,
 	http_bad_gateway              = 502,
 	http_service_unavailable      = 503,
-	http_gateway_timeout          = 504
+	http_gateway_timeout          = 504,
+	http_version_not_supported    = 505
 } cherokee_http_t;
 
 #define http_continue_string                 "100 Continue"
@@ -128,9 +130,11 @@ typedef enum {
 #define http_range_not_satisfiable_string    "416 Requested range not satisfiable"
 #define http_upgrade_required_string         "426 Upgrade Required"
 #define http_internal_error_string           "500 Internal Server Error"
+#define http_not_implemented_string          "501 Not Implemented"
 #define http_bad_gateway_string              "502 Bad gateway"
 #define http_service_unavailable_string      "503 Service Unavailable"
 #define http_gateway_timeout_string          "504 Gatewat Timeout"
+#define http_version_not_supported_string    "505 HTTP Version Not Supported"
 
 #define http_type_200_max 206
 #define http_type_300_max 307

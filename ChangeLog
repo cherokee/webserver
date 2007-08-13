@@ -17,8 +17,15 @@
 	  - build_response_header__authenticate(), removed a couple
 	    of calls to cherokee_buffer_ensure_addlen() because
 	    they are no more needed in that place (buffer is large enough
-	    and buffer reallocation already take care to use increments
+	    and buffer reallocations already take care to use increments
 	    with predefined chunk size).
+
+	* cherokee/http.h,
+	  cherokee/http.c
+	  - added two new HTTP errors:
+	    - 501 Not Implemented;
+	    - 505 HTTP Version Not Supported;
+	    NOTE: this is in preparation of their future use.
 
 2007-08-10  A.D.F  <adefacc@tin.it>
 
