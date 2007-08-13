@@ -1,3 +1,25 @@
+2007-08-13  A.D.F  <adefacc@tin.it>
+
+	* cherokee/server.c
+	  - added srv->bogo_now to cherokee_win32_shutdown_signalled()
+	    call;
+
+	* cherokee/win32_misc.h,
+	  cherokee/win32_misc.c
+	  - added a formal parameter (time) to
+	    cherokee_win32_shutdown_signalled(), in order to execute
+	    shutdown test only once a second;
+
+	* cherokee/connection.c
+	  - build_response_header(), don't add headers with this version;
+	  - moved a cherokee_buffer_ensure_size(header_buffer)
+	    near to the other call to cherokee_buffer_ensure_size(buffer);
+	  - build_response_header__authenticate(), removed a couple
+	    of calls to cherokee_buffer_ensure_addlen() because
+	    they are no more needed in that place (buffer is large enough
+	    and buffer reallocation already take care to use increments
+	    with predefined chunk size).
+
 2007-08-10  A.D.F  <adefacc@tin.it>
 
 	* cherokee/handler_server_info.c,

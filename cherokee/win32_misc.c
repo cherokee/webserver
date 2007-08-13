@@ -1022,6 +1022,7 @@ cherokee_win32_stat (const char *path, struct stat *buf)
 	return re;
 }
 
+
 static bool
 init_security_attributes_allow_all (struct security_attributes *obj)
 {
@@ -1051,19 +1052,35 @@ create_event (const char *name, bool allow_all, bool initial_state, bool manual_
 		return CreateEvent (NULL, (BOOL)manual_reset, (BOOL)initial_state, name);
 }
 
-int
-cherokee_win32_shutdown_signaled()
+
+/* This function is called by only one task
+ * and it returns true if the process has to stop / exit.
+ */
+bool
+cherokee_win32_shutdown_signaled(time_t bogo_now)
 {
 	static HANDLE exit_event = NULL;
+	static time_t bogo_prev = 0;
 
 	if (!exit_event) {
 		exit_event = create_event (EXIT_EVENT_NAME, TRUE, FALSE, FALSE);
 		if (!exit_event)
-		  return 1;
+			return true;
 	}
 
+	/* If at least one second has not elapsed since last test,
+	 * then return now.
+	 */
+	if (bogo_prev == bogo_now)
+		return false;
+
+	bogo_prev = bogo_now;
+
+	/* OK, test and return result.
+	 */
 	return WaitForSingleObject (exit_event, (DWORD) 0) == WAIT_OBJECT_0;
 }
+
 
 int
 cherokee_win32_mkstemp (cherokee_buffer_t *buffer)

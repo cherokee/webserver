@@ -1333,11 +1333,11 @@ cherokee_server_step (cherokee_server_t *srv)
 	}
 
 #ifdef _WIN32
-	if (cherokee_win32_shutdown_signaled())
+	if (cherokee_win32_shutdown_signaled(srv->bogo_now))
 		srv->wanna_exit = true;
 #endif
 
-	/* Wanna exit?
+	/* Wanna reinit ?
 	 */
 	if (unlikely (srv->wanna_reinit)) {
 		ret = cherokee_server_reinit (srv);
@@ -1345,6 +1345,8 @@ cherokee_server_step (cherokee_server_t *srv)
 			return ret;
 	}
 	
+	/* Wanna exit ?
+	 */
 	if (unlikely (srv->wanna_exit)) 
 		return ret_ok;
 	

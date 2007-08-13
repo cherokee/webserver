@@ -30,6 +30,7 @@
 
 #include <fcntl.h>
 #include <winsock2.h>
+#include <time.h>
 
 #include "buffer.h"
 
@@ -44,7 +45,7 @@ struct tm    *localtime_r         (const time_t *time, struct tm *tm);
 unsigned int  sleep               (unsigned int seconds);
 
 int           cherokee_win32_stat (const char *path, struct stat *buf);
-int           cherokee_win32_shutdown_signaled();
+bool          cherokee_win32_shutdown_signaled(time_t bogo_now);
 int           cherokee_win32_mkstemp (cherokee_buffer_t *buffer);
 
 #endif /* CHEROKEE_WIN32_MISC_H */

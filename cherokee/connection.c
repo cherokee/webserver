@@ -401,7 +401,6 @@ build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffe
 	 * Eg: WWW-Authenticate: Basic realm=""
 	 */
 	if (conn->auth_type & http_auth_basic) {
-		cherokee_buffer_ensure_addlen (buffer, 31 + conn->realm_ref->len + 4);
 		cherokee_buffer_add_str (buffer, "WWW-Authenticate: Basic realm=\"");
 		cherokee_buffer_add_buffer (buffer, conn->realm_ref);
 		cherokee_buffer_add_str (buffer, "\""CRLF);
@@ -414,9 +413,6 @@ build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffe
 	if (conn->auth_type & http_auth_digest) {
 		cherokee_thread_t *thread = CONN_THREAD(conn);
 		cherokee_buffer_t *new_nonce = THREAD_TMP_BUF1(thread);
-
-		cherokee_buffer_ensure_addlen (buffer,
-						32 + conn->realm_ref->len + 4 + 32 + 32);
 
 		/* Realm
 		 */
@@ -452,9 +448,9 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	 */
 	switch (conn->header.version) {
 	case http_version_09:
-		/* TODO: remove HTTP headers in this version */
-		cherokee_buffer_add_str (buffer, "HTTP/0.9 "); 
-		break;
+		/* There are no HTTP headers in this version.
+		 */
+		return;
 	case http_version_10:
 		cherokee_buffer_add_str (buffer, "HTTP/1.0 "); 
 		break;
@@ -534,7 +530,6 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 
 	/* Try to get the headers from the handler
 	 */
-	cherokee_buffer_ensure_size (&(conn->header_buffer), 384);
 	ret = cherokee_handler_add_headers (conn->handler, &conn->header_buffer);
 	if (unlikely (ret != ret_ok)) {
 		switch (ret) {
@@ -1868,19 +1863,21 @@ cherokee_connection_open_request (cherokee_connection_t *conn)
 	 * then verify whether the handler supports it.
 	 */
 	if ((HANDLER_SUPPORT_LENGTH(conn->handler) == 0) && 
-	    (HANDLER_SUPPORT_MAYBE_LENGTH(conn->handler) == 0)) {
+	    (HANDLER_SUPPORT_MAYBE_LENGTH(conn->handler) == 0) &&
+		conn->keepalive != 0) {
 		conn->keepalive = 0;
 	}
 
-	/* Ensure the space for writing
+	/* Ensure the space for headers and I/O buffer
 	 */
+	cherokee_buffer_ensure_size (&conn->header_buffer, 384);
 	cherokee_buffer_ensure_size (&conn->buffer, DEFAULT_READ_SIZE+1);
 
 	return cherokee_handler_init (conn->handler);
 }
 
 
-ret_t 
+ret_t
 cherokee_connection_log_or_delay (cherokee_connection_t *conn)
 {
 	ret_t              ret;
