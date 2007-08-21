@@ -5,6 +5,6 @@ class Test (TestBase):
         TestBase.__init__ (self)
         self.name = "Wrong Protocol"
 
-        self.expected_error = 400
+        self.expected_error = 505
         self.request        = "GET / HTTP/1.3\r\n" 
 

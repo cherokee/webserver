@@ -26,6 +26,11 @@
 	  cherokee/downloader.c
 	  - added formal parameter (HTTP) error_code.
 
+	* qa/003-UnknownMethod.py,
+	  qa/004-UnknownMethod+MissingProtocol.py,
+	  qa/006-WrongProtocol.py
+	  - changed expected HTTP response codes (400 -> 501, 400 -> 505).
+
 2007-08-13  A.D.F  <adefacc@tin.it>
 
 	* cherokee/server.c
