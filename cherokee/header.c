@@ -193,52 +193,69 @@ add_unknown_header (cherokee_header_t *hdr, off_t header_off, off_t info_off, in
 
 
 static ret_t
-parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char **next_pos)
+parse_response_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char **next_pos, cherokee_http_t *error_code)
 {
 	char *line  = buf->buf;
 	char *begin = buf->buf;
 	char  tmp[4];
 	char *end;
+	size_t  len;
 
-	end = strchr (line, CHR_CR);
-	if (end == NULL) {
-		return ret_error;
-	}
+	/* NOTE: here we deal only with HTTP/1.0 or higher.
+	 */
+	len = strcspn(line, CRLF);
+	end = &line[len];
 
 	/* Some security checks
 	 */
-	if (buf->len < 14) {
+	if (len < 14 || buf->len < 14) {
 		return ret_error;
 	}
 
 	/* Return next line
 	 */
-	*next_pos = end + 2;
+	switch (*end) {
+		case CHR_CR:
+			if (end[1] != CHR_LF)
+				return ret_error;
+			*next_pos = end + 2;
+			break;
+		case CHR_LF:
+			*next_pos = end + 1;
+			break;
+		default:
+			return ret_error;
+	}
 
 	/* Example:
 	 * HTTP/1.0 403 Forbidden
 	 */
-	if (unlikely(! cmp_str(begin, "HTTP/"))) {
+	if (unlikely(! cmp_str(begin, "HTTP/1."))) {
+		/* TODO: improve parser
+		 * (if ! "HTTP/" then leave default http_bad_request).
+		 */
+		*error_code = http_version_not_supported;
+		return ret_error;
+	}
+
+	if (unlikely(! isdigit(begin[7]))) {
 		return ret_error;
 	}
 
 	/* Get the HTTP version
 	 */
 	switch (begin[7]) {
-	case '1':
-		hdr->version = http_version_11; 
-		break;
 	case '0':
 		hdr->version = http_version_10; 
 		break;
-	case '9':
-		hdr->version = http_version_09; 
-		break;
+	case '1':
 	default:
-		return ret_error;
+		hdr->version = http_version_11; 
+		break;
 	}
 
 	/* Read the response code
+	 * TODO: skip spaces properly (usually there is only one blank).
 	 */
 	memcpy (tmp, begin+9, 3);
 	tmp[3] = '\0';
@@ -323,20 +340,25 @@ parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 
 
 static ret_t
-parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char **next_pos)
+parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char **next_pos, cherokee_http_t *error_code)
 {
 	ret_t  ret;
 	char  *line  = buf->buf;
 	char  *begin = buf->buf;
+	char  *begin_ver = buf->buf;
 	char  *end;
 	char  *ptr;
 	char  *restore;
 	char  chr_end;
+	size_t len = 0;
+	size_t len_ver = 0;
 
 	/* Basic security check. The shortest possible request
-	 * "GET / HTTP/1.0" is 14 characters long..
+	 * "GET / HTTP/1.0" is 14 characters long but we want
+	 * to reply to HTTP/0.9 requests too which don't have
+	 * HTTP version.
 	 */
-	if (unlikely(buf->len < 14)) {
+	if (unlikely(buf->len < 6)) {
 		return ret_error;
 	}
 
@@ -351,65 +373,93 @@ parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char *
 		++end;
 		/* Return begin of next line 
 		 */
+		len = (size_t) (end - line);
 		*next_pos = end + 1;
 	} else {
 		/* Return begin of next line 
 		 */
+		len = (size_t) (end - line);
 		*next_pos = end + 2;
 	}
 	chr_end = *end;
 	*end = '\0';
 	restore = end;
 
+	/* Check shortest string length "GET /"
+	 */
+	if (len < 5)
+		goto error;
+
 	/* Get the method
 	 */
 	ret = parse_method (hdr, line, &begin);
-	if (unlikely (ret != ret_ok))
-		goto error;
-
-	/* Get the protocol version
-	 */	
-	switch (end[-1]) {
-	case '1':
-		if (unlikely (! cmp_str (end-8, "HTTP/1.1")))
-			goto error;
-		hdr->version = http_version_11; 
-		break;
-	case '0':
-		if (unlikely (! cmp_str (end-8, "HTTP/1.0")))
-			goto error;
-		hdr->version = http_version_10; 
-		break;
-	case '9':
-		if (unlikely (! cmp_str (end-8, "HTTP/0.9")))
-			goto error;
-		hdr->version = http_version_09; 
-		break;
-	default:
+	if (unlikely (ret != ret_ok)) {
+		*error_code = http_not_implemented;
 		goto error;
 	}
 
+	/* Skip other blank spaces between method and URI.
+	 */
+	begin += strspn (begin, LBS);
+
+	/* Length of URI.
+	 */
+	len = strcspn (begin, LBS);
+	if (len == 0)
+		goto error;
+
+	if (begin[len] == '\0') {
+		/* HTTP/0.9 has no HTTP version string and
+		 * it is not supported by this server.
+		 */
+		*error_code = http_version_not_supported;
+		goto error;
+	}
+
+	begin_ver = &begin[len];
+	begin_ver += strspn (begin_ver, LBS);
+	len_ver = (size_t) (end - begin_ver);
+
+	/* Verify "HTTP/x.x" pattern.
+	 */
+	if (len_ver != 8 ||
+	    !isdigit(begin_ver[5]) ||
+	    begin_ver[6] != '.' ||
+	    !isdigit(begin_ver[7]) ||
+	    !cmp_str (begin_ver, "HTTP/")) {
+		goto error;
+	}
+
+	/* Get the protocol version.
+	 */
+	if (begin_ver[5] != '1' || begin_ver[7] > '1') {
+		*error_code = http_version_not_supported;
+		goto error;
+	}
+
+	hdr->version = (begin_ver[7] == '1' ? http_version_11 : http_version_10); 
+
 	/* Skip the HTTP version string: " HTTP/x.y"
 	 */
-	end -= 9;
+	end = &begin[len];
 
 	/* Look for the QueryString
 	 */
-	hdr->request_args_len = end - begin;
+	hdr->request_args_len = len;
 	ptr = strchr (begin, '?');
 
 	if (ptr) {
 		end = ptr;
-		hdr->query_string_off = ++ptr - buf->buf;
-		hdr->query_string_len = (unsigned long) strchr(ptr, ' ') - (unsigned long) ptr;
+		hdr->query_string_off = (off_t) (++ptr - buf->buf);
+		hdr->query_string_len = (cint_t) (&begin[len] - ptr);
 	} else {
 		hdr->query_string_len = 0;
 	}
 
 	/* Get the request
 	 */
-	hdr->request_off = begin - buf->buf;
-	hdr->request_len = end - begin;
+	hdr->request_off = (off_t)  (begin - buf->buf);
+	hdr->request_len = (cint_t) (end - begin);
 
 	/* Check if the request is a full URL
 	 */
@@ -417,8 +467,14 @@ parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char *
 	if (cmp_str (begin, "http://")) {
 		char   *dir;
 		char   *host = begin + 7;
+		char   end_chr = *end;
 
+		if (host[0] == '/' || host[0] == '.')
+			goto error;
+
+		*end = '\0';
 		dir = strchr (host, '/');
+		*end = end_chr;
 		if (dir == NULL)
 			goto error;
 
@@ -473,7 +529,7 @@ get_new_line (char *string)
 
 
 ret_t 
-cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherokee_type_header_t type)
+cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherokee_type_header_t type, cherokee_http_t *error_code)
 {
 	ret_t  ret;
 	char  *begin = buffer->buf;
@@ -482,6 +538,10 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 	char  *val_end;
 	char  *header_end;
 	char  chr_header_end;
+
+	/* Set default error code.
+	 */
+	*error_code = http_bad_request;
 
 	/* Check the buffer content
 	 */
@@ -528,7 +588,7 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 		/* Parse request. Something like this:
 		 * GET /icons/compressed.png HTTP/1.1CRLF
 		 */
-		ret = parse_request_first_line (hdr, buffer, &begin);
+		ret = parse_request_first_line (hdr, buffer, &begin, error_code);
 		if (unlikely(ret < ret_ok)) {
 			PRINT_DEBUG ("ERROR: Failed to parse header_type_request:\n===\n%s===\n", buffer->buf);
 			*header_end = chr_header_end;
@@ -537,7 +597,7 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 		break;
 
 	case header_type_response:
-		ret = parse_response_first_line (hdr, buffer, &begin);
+		ret = parse_response_first_line (hdr, buffer, &begin, error_code);
 		if (unlikely(ret < ret_ok)) {
 			PRINT_DEBUG ("ERROR: Failed to parse header_type_response:\n===\n%s===\n", buffer->buf);
 			*header_end = chr_header_end;
@@ -922,10 +982,11 @@ cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, i
 	}
 
 	/* Do we have enough information ?
+	 * len("GET /" LF_LF) = 7                   (HTTP/0.9)
 	 * len("GET /" CRLF_CRLF) = 9               (HTTP/0.9)
 	 * len("GET / HTTP/1.0" CRLF_CRLF) = 18     (HTTP/1.x)
 	 */
-	if (unlikely (buffer->len < 18)) {
+	if (unlikely (buffer->len < 7)) {
 		return ret_not_found;
 	}
 

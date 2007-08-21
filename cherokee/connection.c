@@ -1367,15 +1367,15 @@ ret_t
 cherokee_connection_get_request (cherokee_connection_t *conn)
 {
 	ret_t    ret;
+	cherokee_http_t error_code = http_bad_request;
 	char    *host, *upgrade, *cnt;
 	cuint_t  host_len, upgrade_len, cnt_len;
 
 	/* Header parsing
 	 */
-	ret = cherokee_header_parse (&conn->header, &conn->incoming_header, header_type_request);
-	if (ret < ret_ok) {
+	ret = cherokee_header_parse (&conn->header, &conn->incoming_header, header_type_request, &error_code);
+	if (unlikely (ret < ret_ok))
 		goto error;
-	}
 
 	/* Maybe read the POST data
 	 */
@@ -1486,7 +1486,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	return ret_ok;	
 
 error:
-	conn->error_code = http_bad_request;
+	conn->error_code = error_code;
 	return ret_error;
 }
 

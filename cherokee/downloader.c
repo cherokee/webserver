@@ -269,6 +269,7 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 	cuint_t             len;
 	size_t              readed = 0;
 	cherokee_socket_t  *sock   = &downloader->socket;
+	cherokee_http_t     error_code = http_bad_request;
 
 	ret = cherokee_socket_bufread (sock, &downloader->reply_header, DEFAULT_RECV_SIZE, &readed);
 	switch (ret) {
@@ -302,8 +303,10 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 		/* Parse the header
 		 */
 		ret = cherokee_header_parse (downloader->header,
-					     &downloader->reply_header,
-					     header_type_response);		
+		                             &downloader->reply_header,
+		                             header_type_response,
+		                             &error_code
+		);		
 		if (unlikely(ret != ret_ok)) return ret_error;
 
 		/* Look for the length, it will need to drop out the header from the buffer

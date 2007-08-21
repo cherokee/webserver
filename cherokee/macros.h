@@ -139,6 +139,7 @@
 #define CRLF_CRLF "\r\n\r\n"    /* EOHs (End Of Headers) */
 #define CRLF      "\r\n"        /* EOH (End Of Header Line) */
 #define LWS       " \t\r\n"     /* HTTP linear white space */
+#define LBS       " \t"         /* HTTP linear blank space */
 #define CHR_CR    '\r'          /* Carriage return */
 #define CHR_LF    '\n'          /* Line feed (new line) */
 #define CHR_SP    ' '           /* Space */

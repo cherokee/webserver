@@ -1,3 +1,31 @@
+2007-08-21  A.D.F  <adefacc@tin.it>
+
+	* cherokee/macros.h
+	  - added LBS macro (HTTP linear blank space);
+
+	* cherokee/header.h
+	  - parse_request_first_line() + parse_response_first_line() +
+	    cherokee_header_parse():
+	    - added formal parameter "error_code" (HTTP error code);
+
+	* cherokee/header.c
+	  - parse_request_first_line() + parse_response_first_line() +
+	    cherokee_header_parse():
+	    - added formal parameter "error_code" (HTTP error code);
+	  - parse_request_first_line():
+	    - added support for:
+	      - HTTP 505 version not supported;
+	      - HTTP 501 (method) not implemented;
+	    - partially rewritten the HTTP request parser in order
+	      to be more standard conformant;
+	  - cherokee_header_has_header(), lowered minimum HTTP request length
+	    in order to handle properly HTTP/0.9 requests too
+	    (which are refused with error: HTTP 505 Version Not Implemented);
+
+	* cherokee/connection.c,
+	  cherokee/downloader.c
+	  - added formal parameter (HTTP) error_code.
+
 2007-08-13  A.D.F  <adefacc@tin.it>
 
 	* cherokee/server.c
