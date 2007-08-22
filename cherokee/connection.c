@@ -447,10 +447,6 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	/* Add protocol string + error_code
 	 */
 	switch (conn->header.version) {
-	case http_version_09:
-		/* There are no HTTP headers in this version.
-		 */
-		return;
 	case http_version_10:
 		cherokee_buffer_add_str (buffer, "HTTP/1.0 "); 
 		break;

@@ -1,3 +1,10 @@
+2007-08-22  A.D.F  <adefacc@tin.it>
+
+	* cherokee/connection.c,
+	  cherokee/request.c
+	  - removed a few remaining statements involved in HTTP/0.9 support
+	    (which has just been removed).
+
 2007-08-21  A.D.F  <adefacc@tin.it>
 
 	* cherokee/macros.h

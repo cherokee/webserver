@@ -102,6 +102,7 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 		break;
 	default:
 		SHOULDNT_HAPPEN;
+		return ret_error;
 	}
 
 	cherokee_buffer_add_buffer (buf, URL_REQUEST(url));
@@ -113,11 +114,9 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	case http_version_10:
 		cherokee_buffer_add_str (buf, " HTTP/1.0" CRLF);
 		break;
-	case http_version_09:
-		cherokee_buffer_add_str (buf, " HTTP/0.9" CRLF);
-		break;
 	default:
 		SHOULDNT_HAPPEN;
+		return ret_error;
 	}
 
 	/* Add "Host:" header - in HTTP/1.1
@@ -177,6 +176,7 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 
 	return ret_ok;
 }
+
 
 ret_t 
 cherokee_request_header_add_header (cherokee_request_header_t *request, char *ptr, cuint_t len)
