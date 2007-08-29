@@ -1,3 +1,9 @@
+2007-08-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/Makefile.am (libplugin_server_info_la_LDFLAGS): The
+	server_info handler needs to be linked against cherokee-config.
+	Bug reported by Juan Badia <jubapa@gmail.com>
+
 2007-08-22  A.D.F  <adefacc@tin.it>
 
 	* cherokee/connection.c,

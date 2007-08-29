@@ -95,7 +95,7 @@ handler_server_info.c \
 handler_server_info.h \
 logo.inc 
 
-libplugin_server_info_la_LDFLAGS = $(module_ldflags) 
+libplugin_server_info_la_LDFLAGS = $(module_ldflags) -lcherokee-config
 libplugin_server_info_la_SOURCES = $(handler_server_info)
 
 if STATIC_HANDLER_SERVER_INFO
@@ -404,7 +404,7 @@ encoder_gzip = \
 encoder_gzip.h \
 encoder_gzip.c
 
-libplugin_gzip_la_LDFLAGS = $(module_ldflags)  
+libplugin_gzip_la_LDFLAGS = $(module_ldflags)
 libplugin_gzip_la_SOURCES = $(encoder_gzip)
 
 if STATIC_ENCODER_GZIP
