@@ -1,3 +1,10 @@
+2007-08-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/util.c (cherokee_tls_init): Set the GNUTLS property
+	GCRYCTL_ENABLE_QUICK_RANDOM in order to speed up initialization.
+	On Linux, it was taking ages to launch the server because of that
+	kernel bug (I can not believe it's a feature)
+
 2007-08-30  Juan Badia  <jubapa@gmail.com>
 
 	* cherokee/server.c (cherokee_server_new): Removed double
