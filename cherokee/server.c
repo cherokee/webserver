@@ -164,7 +164,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	n->icons           = NULL;
 	n->regexs          = NULL;
-	n->icons           = NULL;
 	n->iocache         = NULL;
 
 	cherokee_buffer_init (&n->listen_to);

@@ -1,3 +1,8 @@
+2007-08-30  Juan Badia  <jubapa@gmail.com>
+
+	* cherokee/server.c (cherokee_server_new): Removed double
+	initialization of the ->icons object property.
+
 2007-08-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/Makefile.am (libplugin_server_info_la_LDFLAGS): The
