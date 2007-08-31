@@ -1,0 +1,52 @@
+================================
+Compiling and installing in Unix
+================================
+
+Some examples to compiling and installing cherokee in Unix.
+
+----------------
+The simplest way
+----------------
+
+Go to the directory and run.
+
+    - $> **./configure** To configure the package for your system.   
+    - $> **make**     To compile the package.
+    - $> **make install** To install the programs and any data files.
+
+
+------------------------------
+Install and config directories
+------------------------------
+
+The process is basicly the same but introducing some parameters.
+
+    - $> **./configure --prefix=/usr --sysconfdir=/etc** To install cherokee in /usr/sbin and all the config files in /etc/cherokee
+    - $> **make**     To compile the package.
+    - $> **make install** To install the programs and any data files.
+
+----------------
+Others arguments
+----------------
+
+If you want to learn more about ``configure`` you can run **./configure --help**
+
+=========================  =======================================
+Parameters                 Description
+=========================  =======================================
+``--with-wwwroot=DIR``     Specifies the Root directory
+``--disable-epoll``        Disable epoll() support
+``--disable-pthread``      Disable threading support
+``--disable-readdir_r``    Disable readdir_r usage
+``--disable-ipv6``         Disable IPv6 support
+``--disable-pam``          Disable PAM support
+``--disable-tls``          Disable TLS/SSL support
+``--enable-tls=``          gnutls|openssl
+=========================  =======================================
+
+
+   
+         
+
+
+    

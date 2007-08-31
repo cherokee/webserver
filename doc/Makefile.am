@@ -5,7 +5,8 @@ authentication.html \
 configuration.html \
 loggers.html \
 server.html \
-vserver.html
+vserver.html \
+compiling_and_installing_unix.html
 
 dochandlersdir = $(docdir)handlers/
 dochandlers_DATA = \

@@ -19,4 +19,146 @@ for TLS/SSL you must use::
 
     server!port_tls = 443
 
-Port 443 is the HTTPS standard port and is set by default.
+None::
+
+    server!max_fds = 
+
+None::
+
+    server!listen_queue =
+
+To change the number of the threads per cpu. By default is 5::
+
+    server!thread_number = 5
+
+None::
+
+    server!sendfile_min =
+
+None::
+
+    server!sendfile_max =
+
+None::
+
+    server!max_connection_reuse =
+
+To allow or diasavle IPv6. If you set to 0 IPv6 is disable. By default is 1::
+
+    server!ipv6 = 0 
+
+The number of seconds before receives and sends time out. By default is 60::
+
+    server!timeout = 60  
+
+None::
+
+    server!log_flush_elapse = 
+
+Whether or not to allow persistent connections (more than one request per connection). Set to "0" to deactivate. By default is 1::
+
+   server!keepalive = 1 
+
+This directive limits the number of requests allowed per connection when KeepAlive is on. By default is 500::
+
+   server!keepalive_max_requests = 500 
+
+Unix Socket::
+
+   server!unix_socket = Unix Socket 
+
+Script or program to run in case of chrokee's crushing. By default is cheroke-panic::
+
+   server!panic_action = /usr/sbin/cherokee-panic
+
+This directive changes the root directory for cherokee:: 
+
+   server!chroot = /var/
+
+On startup, Cherokee saves the process id of the parent server process to the file cherokee.pid. Both, the feature and the filename can be changed with the PidFile directive. The process-id is for use by the administrator in restarting and terminating the daemon by sending signals to the parent process; For more information see the Stopping and Restarting page::
+
+   server!pid_file = /var/run/cherokee.pid
+
+Files where Mime Files are described::
+
+   server!mime_files = /etc//cherokee/mime.types, /etc//cherokee/mime.compression.types
+
+It is also possible to set a listening interface. To make the server accept connections only with one of the interface, for example, 193.127.101.100 just use::
+
+   server!listen = 193.127.101.100
+
+Unless you want to try a spefic method don't declare this. Cherokee will chose the best way available::
+
+   server!poll_method = epoll 
+
+========================= ===========
+Parameters                Description
+========================= ===========
+epoll                     
+kqueue                    
+port                      
+poll                      
+win32
+select
+========================= ===========
+
+This directive configures what you return as the Server HTTP response Header. The default is 'Full' which sends information about the OS-Type and compiled in modules.  Full conveys the most information,and Product the least::
+
+   server!server_tokens = full 
+
+=========================  =======================================
+Parameters                 Description
+=========================  =======================================
+Product                    Cherokee
+Minor                      Cherokee/0.0
+Minimal                    Cherokee/0.0.0
+OS                         Cherokee/0.0.0 (UNIX)
+Full                       Cherokee/0.0.0 (UNIX) Ext/0.0 Ext2/0.0
+=========================  =======================================
+
+How the threads are scheduled after being blocked before the critical section::
+
+   server!thread_policy = fifo
+
+=========================  =======================================
+Parameters                 Description
+=========================  =======================================
+fifo                       First in first out 
+rr                         Round Robin
+other                      By default in Linux
+=========================  =======================================
+
+The User directive configures which user the Cherokee daemon will normally run as. By default, Cherokee runs as root which is considered undesirable in all but the most trustful network configurations. The User directive used in conjunction with the Group directive instructs the daemon to switch to the specified user and group as quickly as possible after startup. It is only possible to change the user and/or group if the server runs initially as root, otherwhise it will change it. There are two possible formats: using the user or group name, or using the system ID.
+For example, to set the User and Group to "www-data"::
+
+   server!user = www-data 
+   server!group = www-data
+
+To use any kind of encoder you have to set ``server!encoder`` directives. Cherokee only has gzip encoder. All encoders have two options allow and deny. On one hand the **allow** let cherokee comress these files, on the other hand **deny** don't let cherokee compress the files.For example::
+
+   server!encoder!gzip!allow = html,htm
+   server!encoder!gzip!deny  = jpg,png,gz
+
+Where cherokee modules are installed. By default you don't need to set this directive::
+
+   server!module_dir = /usr/lib/cherokee/
+
+Where dependency cherokee mdules are defined. By default you don't need to set this directive::
+
+   server!module_deps= /usr/share/cherokee/deps/
+
+Example
+*******
+
+This parameters are set by default::
+
+   server!port = 80
+   server!port_tls = 443
+   server!timeout = 60
+   server!keepalive = 1
+   server!keepalive_max_requests = 500
+   server!pid_file = /var/run/cherokee.pid
+   server!server_tokens = full
+   server!encoder!gzip!allow = html,htm,txt,css
+   server!panic_action = /usr//bin/cherokee-panic
+   server!mime_files = /etc//cherokee/mime.types, /etc//cherokee/mime.compression.types

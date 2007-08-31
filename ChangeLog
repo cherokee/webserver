@@ -1,3 +1,10 @@
+2007-08-31  Juan Badia  <jubapa@gmail.com>
+
+	* doc/Makefile.am, doc/cherokee/server.txt: Updated.
+
+	* doc/cherokee/compiling_and_installing_unix: Added new
+	documentation file covering compiling and installation.
+
 2007-08-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/util.c (cherokee_tls_init): Set the GNUTLS property
