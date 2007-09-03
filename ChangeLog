@@ -1,5 +1,7 @@
 2007-09-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* pcre/*: Removed. This code was dated on Dec. 2003.
+
 	* configure.in: Added new --enable-internal-pcre parameter to the
 	configure script. It forces the use of the internal PCRE copy
 	rather than the system-wide one.
