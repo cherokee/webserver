@@ -538,10 +538,13 @@ return i + 1;
 /* The code for doing this is held in a separate file that is also included in
 pcretest.c. It defines a function called print_internals(). */
 
-#ifdef DEBUG
-#include "printint.c"
+/* Cherokee: Do NOT include printint.c 
+ */
+#if 0 
+# ifdef DEBUG
+#  include "printint.c"
+# endif
 #endif
-
 
 
 /*************************************************
@@ -5171,7 +5174,11 @@ if ((re->options & PCRE_REQCHSET) != 0)
     else printf("Req char = \\x%02x%s\n", ch, caseless);
   }
 
+/* Cherokee HACK: Custom printing is NOT supported.
+ */
+#if 0
 print_internals(re, stdout);
+#endif
 
 /* This check is done here in the debugging case so that the code that
 was compiled can be seen. */
