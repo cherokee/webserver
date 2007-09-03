@@ -43,12 +43,19 @@ zlib/zlib.h    \
 zlib/zutil.h
 
 pcre_src = \
-pcre/get.c \
+pcre/ucp.h \
 pcre/pcre.h \
-pcre/pcre.c \
-pcre/internal.h \
-pcre/chartables.c \
-pcre/configuration.h
+pcre/local_config.h \
+pcre/pcre_internal.h \
+pcre/pcre_try_flipped.c \
+pcre/pcre_chartables.c \
+pcre/pcre_fullinfo.c \
+pcre/pcre_newline.c \
+pcre/pcre_globals.c \
+pcre/pcre_compile.c \
+pcre/pcre_tables.c \
+pcre/pcre_exec.c \
+pcre/pcre_get.c 
 
 getopt_src =  \
 getopt/getopt.h  \
@@ -1032,6 +1039,7 @@ win32_misc.h \
 win32_misc.c
 
 EXTRA_DIST = \
+pcre/LICENCE \
 $(pcre_src) \
 $(win32_src) \
 $(getopt_src) \

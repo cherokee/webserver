@@ -1,5 +1,8 @@
 2007-09-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* pcre/*, cherokee/Makefile.am: Added a new subset of PCRE library
+	dated on Aug 2007.
+
 	* pcre/*: Removed. This code was dated on Dec. 2003.
 
 	* configure.in: Added new --enable-internal-pcre parameter to the
