@@ -1,3 +1,9 @@
+2007-09-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in: Added new --enable-internal-pcre parameter to the
+	configure script. It forces the use of the internal PCRE copy
+	rather than the system-wide one.
+
 2007-08-02  Juan Badia  <jubapa@gmail.com>
 
 	* cherokee/pcre/pcre.c: It was not compiling with the DEBUG

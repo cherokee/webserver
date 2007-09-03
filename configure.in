@@ -813,15 +813,21 @@ AC_TRY_COMPILE([],
 dnl
 dnl Check for pcre library
 dnl
-AC_CHECK_LIB(pcre, pcre_compile, have_pcre_lib=yes, have_pcre_lib=no)
-AC_CHECK_HEADER(pcre.h, have_pcre_include=yes, have_pcre_include=no)
-if test "$have_pcre_lib $have_pcre_include" = "yes yes"; then
-   have_pcre="yes"
-else
-   have_pcre="built-in"
-fi
-AM_CONDITIONAL(USE_INTERNAL_PCRE, test $have_pcre = "built-in")
+have_pcre="built-in"
 
+AC_ARG_ENABLE(internal_pcre, 
+		    AC_HELP_STRING([--enable-internal-pcre],[Enable internal PCRE]), 
+		    use_internal_pcre="$enableval", use_internal_pcre="no")
+
+if test "x$use_internal_pcre" != "xyes"; then
+  AC_CHECK_LIB(pcre, pcre_compile, have_pcre_lib=yes, have_pcre_lib=no)
+  AC_CHECK_HEADER(pcre.h, have_pcre_include=yes, have_pcre_include=no)
+  if test "$have_pcre_lib $have_pcre_include" = "yes yes"; then
+     have_pcre="yes"
+  fi
+fi
+
+AM_CONDITIONAL(USE_INTERNAL_PCRE, test $have_pcre = "built-in")
 
 dnl
 dnl PAM
