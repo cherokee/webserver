@@ -1,5 +1,8 @@
 2007-09-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c: There wasn't a reason not to use the
+	common-internal.h header file here.
+
 	* cherokee/macros.h, cherokee/ncpus.c, cherokee/fdpoll-port.c,
 	cherokee/server.c, cherokee/socket.c: PRINT_ERRNO related fixes. A
 	new macro PRINT_ERRNO_S is now in place to fix compilation with

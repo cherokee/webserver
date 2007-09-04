@@ -22,18 +22,13 @@
  * USA
  */
 
-#include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "common-internal.h"
 #include <signal.h>
-#include <unistd.h>
-#include <string.h>
+#include "server.h"
 
 #ifdef HAVE_GETOPT_H
 # include <getopt.h>
 #endif
-
-#include "server.h"
 
 #define DEFAULT_CONFIG_FILE "/etc/cherokee/cherokee.conf"
 
