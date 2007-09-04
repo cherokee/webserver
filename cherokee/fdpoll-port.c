@@ -166,10 +166,11 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 
 	/* First call to get the number of file descriptors with activity
 	 */
-	rc = port_getn (fdp->port, fdp->port_events, 0,	&fdp->port_readyfds,
-			&timeout);
+	rc = port_getn (fdp->port, fdp->port_events, 0,	
+			(uint_t *)&fdp->port_readyfds,
+		        &timeout);
 	if ( rc < 0 ) {
-		PRINT_ERRNO (errno, "port_getn: '${errno}'");
+		PRINT_ERRNO_S (errno, "port_getn: '${errno}'");
 		return 0;
 	}
 
@@ -185,7 +186,7 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 	rc = port_getn (fdp->port, fdp->port_events,FDPOLL(fdp)->nfiles, 
 			&fdp->port_readyfds, &timeout);
 	if ( ( (rc < 0) && (errno != ETIME) ) || (fdp->port_readyfds == -1)) {
-		PRINT_ERRNO (errno, "port_getn: '${errno}'");
+		PRINT_ERRNO_S (errno, "port_getn: '${errno}'");
 		return 0;
 	}
 
@@ -198,7 +199,7 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 		                   nfd, 
 		                   fdp->port_events[i].portev_user);
 		if ( rc < 0 ) {
-			PRINT_ERRNO (errno, "port_associate: '${errno}'");
+			PRINT_ERRNO_S (errno, "port_associate: '${errno}'");
 		}
 	}
 

@@ -304,8 +304,9 @@
 # endif
 #endif
 
-#define PRINT_ERROR_S(str) PRINT_ERROR("%s",str)
-#define PRINT_MSG_S(str)   PRINT_MSG("%s",str)
+#define PRINT_ERRNO_S(e,str) PRINT_ERRNO(e, str, "")
+#define PRINT_ERROR_S(str)   PRINT_ERROR("%s",str)
+#define PRINT_MSG_S(str)     PRINT_MSG("%s",str)
 
 /* Tracing facility
  */

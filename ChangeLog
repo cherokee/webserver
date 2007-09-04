@@ -1,3 +1,10 @@
+2007-09-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/macros.h, cherokee/ncpus.c, cherokee/fdpoll-port.c,
+	cherokee/server.c, cherokee/socket.c: PRINT_ERRNO related fixes. A
+	new macro PRINT_ERRNO_S is now in place to fix compilation with
+	non-gcc compilers.
+	
 2007-09-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* pcre/*, cherokee/Makefile.am: Added a new subset of PCRE library

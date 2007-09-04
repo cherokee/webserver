@@ -138,7 +138,7 @@ int dcc_ncpus(int *ncpus)
 #endif
     
 	if (*ncpus == -1) {
-		PRINT_ERRNO (errno, "sysconf(_SC_NPROCESSORS_ONLN) failed: '${errno}'");
+		PRINT_ERRNO_S (errno, "sysconf(_SC_NPROCESSORS_ONLN) failed: '${errno}'");
 		return EXIT_DISTCC_FAILED;
 	} else if (*ncpus == 0) {
 		/* If there are no cpus, what are we running on ?

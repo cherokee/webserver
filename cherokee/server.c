@@ -1142,7 +1142,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	 */
 	re = chdir ("/");
 	if (re < 0) {
-		PRINT_ERRNO (errno, "Couldn't chdir(\"/\"): '${errno}'");
+		PRINT_ERRNO_S (errno, "Couldn't chdir(\"/\"): '${errno}'");
 		return ret_error;
 	}
 

@@ -1616,7 +1616,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 #endif
 			return ret_eagain;
 		default:
-			PRINT_ERRNO (err, "Cannot connect: '${errno}'");
+			PRINT_ERRNO_S (err, "Cannot connect: '${errno}'");
 			return ret_error;
 		}
 	}
