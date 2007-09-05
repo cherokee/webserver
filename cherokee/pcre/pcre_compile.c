@@ -51,13 +51,6 @@ supporting internal functions that are not used by other modules. */
 #include "pcre_internal.h"
 
 
-/* When DEBUG is defined, we need the pcre_printint() function, which is also
-used by pcretest. DEBUG is not defined when building a production library. */
-
-#ifdef DEBUG
-#include "pcre_printint.src"
-#endif
-
 
 /* Macro for setting individual bits in class bitmaps. */
 
@@ -6039,7 +6032,6 @@ if ((re->options & PCRE_REQCHSET) != 0)
     else printf("Req char = \\x%02x%s\n", ch, caseless);
   }
 
-pcre_printint(re, stdout, TRUE);
 
 /* This check is done here in the debugging case so that the code that
 was compiled can be seen. */

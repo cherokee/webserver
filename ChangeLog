@@ -1,3 +1,10 @@
+2007-08-04  Juan Badia  <jubapa@gmail.com>
+
+	* cherokee/pcre/pcre_compile.c: This solves the error when I try
+	to compile cherokee-trunk with -DDEBUG. However it doesn't create
+	the file pcre_printint.src, neither declares the fucntion
+	pcre_printint.
+	
 2007-09-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main.c: There wasn't a reason not to use the
