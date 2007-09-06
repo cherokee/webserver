@@ -89,7 +89,7 @@ typedef struct {
 #define HANDLER_SUPPORT_MAYBE_LENGTH(h)    (HANDLER(h)->support & hsupport_maybe_length)
 #define HANDLER_SUPPORT_COMPLEX_HEADERS(h) (HANDLER(h)->support & hsupport_complex_headers)
 #define HANDLER_SUPPORT_ERROR(h)           (HANDLER(h)->support & hsupport_error)
-
+#define HANDLER_SUPPORTS(h,s)              (HANDLER(h)->support & hsupport_ ## s)
 
 /* Module information
  */

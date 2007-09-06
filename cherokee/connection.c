@@ -524,25 +524,28 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 {
 	ret_t ret;
 
+	/* If the handler requires not to add headers, exit.
+	 */
+	if (HANDLER_SUPPORTS (conn->handler, dont_add_headers)) 
+		return ret_ok;
+
 	/* Try to get the headers from the handler
 	 */
 	ret = cherokee_handler_add_headers (conn->handler, &conn->header_buffer);
 	if (unlikely (ret != ret_ok)) {
 		switch (ret) {
-
 		case ret_eof:
 		case ret_error:
 		case ret_eagain:
 			return ret;
-
 		default:
 			RET_UNKNOWN(ret);
 			return ret_error;
 		}
 	}
 
-	if (HANDLER_SUPPORT_MAYBE_LENGTH(conn->handler) &&
-		conn->keepalive != 0) {
+	if ((conn->keepalive != 0) &&
+	    HANDLER_SUPPORTS(conn->handler, maybe_length)) {
 		if (strcasestr (conn->header_buffer.buf, "Content-Length: ") == NULL) {
 			conn->keepalive = 0;
 		}
@@ -550,15 +553,11 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 
 	/* Add the server headers	
 	 */
-	if (! (conn->handler->support & hsupport_dont_add_headers))
-		build_response_header (conn, &conn->buffer);
+	build_response_header (conn, &conn->buffer);
 
-	/* Add handler headers
+	/* Add handler headers end EOH
 	 */
 	cherokee_buffer_add_buffer (&conn->buffer, &conn->header_buffer);
-
-	/* END of response
-	 */
 	cherokee_buffer_add_str (&conn->buffer, CRLF);
 
 	return ret_ok;
