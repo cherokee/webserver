@@ -526,7 +526,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 
 	/* If the handler requires not to add headers, exit.
 	 */
-	if (HANDLER_SUPPORTS (conn->handler, dont_add_headers)) 
+	if (HANDLER_SUPPORTS (conn->handler, hsupport_dont_add_headers)) 
 		return ret_ok;
 
 	/* Try to get the headers from the handler
@@ -545,7 +545,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	}
 
 	if ((conn->keepalive != 0) &&
-	    HANDLER_SUPPORTS(conn->handler, maybe_length)) {
+	    HANDLER_SUPPORTS(conn->handler, hsupport_maybe_length)) {
 		if (strcasestr (conn->header_buffer.buf, "Content-Length: ") == NULL) {
 			conn->keepalive = 0;
 		}
@@ -800,7 +800,7 @@ cherokee_connection_send (cherokee_connection_t *conn)
 	/* If this connection has a handler without Content-Length support
 	 * it has to count the bytes sent
 	 */
-	if (!HANDLER_SUPPORT_LENGTH(conn->handler)) {
+	if (!HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
 		conn->range_end += sent;
 	}
 
@@ -1796,7 +1796,7 @@ cherokee_connection_parse_header (cherokee_connection_t *conn, cherokee_encoder_
 
 	/* Look for "Range:" 
 	 */
-	if (HANDLER_SUPPORT_RANGE(conn->handler)) {
+	if (HANDLER_SUPPORTS (conn->handler, hsupport_range)) {
 		ret = cherokee_header_get_known (&conn->header, header_range, &ptr, &ptr_len);
 		if (ret == ret_ok) {
 			if (strncmp (ptr, "bytes=", 6) == 0) {
@@ -1857,9 +1857,9 @@ cherokee_connection_open_request (cherokee_connection_t *conn)
 	/* If the connection is keep-alive
 	 * then verify whether the handler supports it.
 	 */
-	if ((HANDLER_SUPPORT_LENGTH(conn->handler) == 0) && 
-	    (HANDLER_SUPPORT_MAYBE_LENGTH(conn->handler) == 0) &&
-		conn->keepalive != 0) {
+	if ((HANDLER_SUPPORTS (conn->handler, hsupport_length) == 0) && 
+	    (HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length) == 0) &&
+	    conn->keepalive != 0) {
 		conn->keepalive = 0;
 	}
 
@@ -1883,7 +1883,7 @@ cherokee_connection_log_or_delay (cherokee_connection_t *conn)
 	if (conn->handler == NULL)
 		at_end = true;
 	else
-		at_end = ! HANDLER_SUPPORT_LENGTH(conn->handler);
+		at_end = ! HANDLER_SUPPORTS (conn->handler, hsupport_length);
 
 	/* Set the option bit mask
 	 */

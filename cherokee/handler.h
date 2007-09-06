@@ -80,16 +80,12 @@ typedef struct {
 } cherokee_handler_t;
 
 
-#define HANDLER(x)                         ((cherokee_handler_t *)(x))
-#define HANDLER_CONN(h)                    (CONN(HANDLER(h)->connection))
-#define HANDLER_SRV(h)                     (CONN_SRV(HANDLER_CONN(h)))
-#define HANDLER_THREAD(h)                  (CONN_THREAD(HANDLER_CONN(h)))
-#define HANDLER_SUPPORT_RANGE(h)           (HANDLER(h)->support & hsupport_range)
-#define HANDLER_SUPPORT_LENGTH(h)          (HANDLER(h)->support & hsupport_length)
-#define HANDLER_SUPPORT_MAYBE_LENGTH(h)    (HANDLER(h)->support & hsupport_maybe_length)
-#define HANDLER_SUPPORT_COMPLEX_HEADERS(h) (HANDLER(h)->support & hsupport_complex_headers)
-#define HANDLER_SUPPORT_ERROR(h)           (HANDLER(h)->support & hsupport_error)
-#define HANDLER_SUPPORTS(h,s)              (HANDLER(h)->support & hsupport_ ## s)
+#define HANDLER(x)             ((cherokee_handler_t *)(x))
+#define HANDLER_CONN(h)        (CONN(HANDLER(h)->connection))
+#define HANDLER_SRV(h)         (CONN_SRV(HANDLER_CONN(h)))
+#define HANDLER_THREAD(h)      (CONN_THREAD(HANDLER_CONN(h)))
+#define HANDLER_SUPPORTS(h,s)  (HANDLER(h)->support & s)
+
 
 /* Module information
  */

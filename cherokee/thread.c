@@ -1113,7 +1113,7 @@ process_active_connections (cherokee_thread_t *thd)
  			if ((http_type_300(conn->error_code) || 
 			     http_type_400(conn->error_code) ||
 			     http_type_500(conn->error_code)) &&
-			    conn->handler && (!HANDLER_SUPPORT_ERROR(conn->handler)))
+			    conn->handler && (!HANDLER_SUPPORTS (conn->handler, hsupport_error)))
 			{
 				/* Try to setup an error handler
 				 */
@@ -1163,7 +1163,7 @@ process_active_connections (cherokee_thread_t *thd)
 			if ((http_type_300 (conn->error_code) || 
 			     http_type_400 (conn->error_code) ||
 			     http_type_500 (conn->error_code)) &&
-			    (!HANDLER_SUPPORT_ERROR(conn->handler))) {
+			    (!HANDLER_SUPPORTS (conn->handler, hsupport_error))) {
 				conn->phase = phase_setup_connection;
 				continue;				
 			}

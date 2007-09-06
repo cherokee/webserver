@@ -1,5 +1,8 @@
 2007-09-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/thread.c cherokee/handler.h cherokee/connection.c:
+	Handler support macros cleaned up.
+
 	* cherokee/connection.c (cherokee_connection_build_header): If the
 	handler doesn't support to add headers, don't even call the
 	handler method.  It shouldn't adding the server headers either.
