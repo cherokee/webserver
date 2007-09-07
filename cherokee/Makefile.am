@@ -9,6 +9,7 @@ $(PTHREAD_CFLAGS) \
 -DCHEROKEE_DEPSDIR=\""$(cherokeedepsdir)"\" \
 -DCHEROKEE_DATADIR=\""$(cherokeedatadir)"\" \
 -DCHEROKEE_CONFDIR=\""$(sysconfdir)/cherokee"\" \
+-DCHEROKEE_SRV_PATH=\""$(prefix)/sbin/cherokee"\" \
 -DCHEROKEE_ICONSDIR=\""$(prefix)/share/cherokee/icons"\" \
 -DCHEROKEE_THEMEDIR=\""$(prefix)/share/cherokee/themes"\"
 
@@ -978,7 +979,7 @@ $(dynamic_balancer_round_robin_lib)
 #
 # Main binary: Cherokee server
 #
-sbin_PROGRAMS = cherokee cherokee-admin
+sbin_PROGRAMS = cherokee cherokee-guardian cherokee-admin
 
 cherokee_SOURCES = main.c
 cherokee_LDADD   = \
@@ -989,11 +990,17 @@ libcherokee-server.la
 cherokee_LDFLAGS = -export-dynamic
 
 #
+# Cherokee guardians
+#
+cherokee_guardian_SOURCES = main_guardian.c
+
+#
 # Cherokee admin
 #
 cherokee_admin_SOURCES = main_admin.c
 cherokee_admin_LDADD   = $(cherokee_LDADD)
 cherokee_admin_LDFLAGS = $(cherokee_LDFLAGS)
+
 
 #
 # Log rotate utility

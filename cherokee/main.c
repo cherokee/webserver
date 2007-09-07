@@ -32,8 +32,8 @@
 
 #define DEFAULT_CONFIG_FILE "/etc/cherokee/cherokee.conf"
 
-# define GETOPT_OPT  "C:r:bhv"
-# define CONFIG_FILE_HELP "[-C configfile] [-r]"
+# define GETOPT_OPT  "C:r:bhvg"
+# define CONFIG_FILE_HELP "[-C configfile] [-r] [-g]"
 
 #define BASIC_CONFIG                                                                         \
 	"vserver!default!directory!/!handler = common\n"                                     \
@@ -152,20 +152,16 @@ process_parameters (int argc, char **argv)
 		case 'C':
 			config_file = strdup(optarg);
 			break;
-
 		case 'b':
 			daemon_mode = true;
 			break;
-
 		case 'r':
 			document_root = strdup(optarg);
 			break;
-
 		case 'v':
 			fprintf (stdout, "%s\n", PACKAGE_STRING);
 			exit(1);
 			break;
-
 		case 'h':
 		default:
 			fprintf (stderr, "Usage: %s " CONFIG_FILE_HELP "[-b] -h -v\n", argv[0]);
