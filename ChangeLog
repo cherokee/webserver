@@ -1,3 +1,11 @@
+2007-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection.c (cherokee_connection_build_header),
+	cherokee/handler_proxy.c (cherokee_handler_proxy_new),
+	cherokee/handler_mirror.c (cherokee_handler_mirror_new),
+	cherokee/handler.h,: Constant hsupport_dont_add_headers renamed to
+	hsupport_skip_headers.
+
 2007-09-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/thread.c cherokee/handler.h cherokee/connection.c:

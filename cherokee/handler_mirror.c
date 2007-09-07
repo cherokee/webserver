@@ -105,7 +105,7 @@ cherokee_handler_mirror_new  (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 
 	/* Supported features
 	 */
-	HANDLER(n)->support     = hsupport_dont_add_headers;
+	HANDLER(n)->support     = hsupport_skip_headers;
 
 	/* Init
 	 */

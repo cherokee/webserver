@@ -526,7 +526,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 
 	/* If the handler requires not to add headers, exit.
 	 */
-	if (HANDLER_SUPPORTS (conn->handler, hsupport_dont_add_headers)) 
+	if (HANDLER_SUPPORTS (conn->handler, hsupport_skip_headers)) 
 		return ret_ok;
 
 	/* Try to get the headers from the handler

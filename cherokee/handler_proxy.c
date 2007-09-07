@@ -118,7 +118,7 @@ cherokee_handler_proxy_new  (cherokee_handler_t **hdl, cherokee_connection_t *cn
 
 	/* Supported features
 	 */
-	HANDLER(n)->support     = hsupport_length | hsupport_range | hsupport_dont_add_headers;
+	HANDLER(n)->support     = hsupport_length | hsupport_range | hsupport_skip_headers;
 
 	/* Init
 	 */
