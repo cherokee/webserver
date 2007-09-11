@@ -1,5 +1,8 @@
 2007-09-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/common-internal.h: As long as this header file defines
+	the PRINT_ERRNO it ought to include <errno.h>.
+
 	* cherokee/buffer.c, cherokee/buffer.h: Restored to method that
 	used to exist a few versions ago: cherokee_buffer_cmp() and
 	cherokee_buffer_case_cmp().
