@@ -753,17 +753,6 @@ cherokee_buffer_remove_chunk (cherokee_buffer_t *buf, int from, int len)
 }
 
 
-/*
-ret_t 
-cherokee_buffer_cmp (cherokee_buffer_t *buf, char *txt, cuint_t txt_len)
-{
-	if (buf->len != txt_len)
-		return ret_deny;
-
-	return (strcmp (buf->buf, txt) == 0) ? ret_ok : ret_deny;
-}
-*/
-
 cint_t
 cherokee_buffer_cmp_buf (cherokee_buffer_t *A, cherokee_buffer_t *B)
 {
@@ -773,19 +762,16 @@ cherokee_buffer_cmp_buf (cherokee_buffer_t *A, cherokee_buffer_t *B)
 		return - (B->len - A->len);
 
 	return strncmp (A->buf, B->buf, B->len);
-
-//	return cherokee_buffer_cmp (buf, buf2->buf, buf2->len);
 }
 
-
-/*
-int
-cherokee_buffer_case_cmp (cherokee_buffer_t *buf, char *txt, cuint_t txt_len)
+cint_t
+cherokee_buffer_cmp (cherokee_buffer_t *buf, char *txt, cuint_t txt_len)
 {
-
-//	return (strcasecmp (buf->buf, txt) == 0) ? ret_ok : ret_deny;
+	cherokee_buffer_t tmp;
+	cherokee_buffer_fake (&tmp, txt, txt_len);
+	return cherokee_buffer_cmp_buf (buf, &tmp);
 }
-*/
+
 
 cint_t
 cherokee_buffer_case_cmp_buf (cherokee_buffer_t *A, cherokee_buffer_t *B)
@@ -796,8 +782,14 @@ cherokee_buffer_case_cmp_buf (cherokee_buffer_t *A, cherokee_buffer_t *B)
 		return - (B->len - A->len);
 
 	return strncasecmp (A->buf, B->buf, B->len);
+}
 
-//	return cherokee_buffer_case_cmp (buf, buf2->buf, buf2->len);
+cint_t
+cherokee_buffer_case_cmp (cherokee_buffer_t *buf, char *txt, cuint_t txt_len)
+{
+	cherokee_buffer_t tmp;
+	cherokee_buffer_fake (&tmp, txt, txt_len);
+	return cherokee_buffer_case_cmp_buf (buf, &tmp);
 }
 
 

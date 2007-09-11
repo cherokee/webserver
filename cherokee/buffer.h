@@ -77,7 +77,9 @@ ret_t cherokee_buffer_add_char_n         (cherokee_buffer_t  *buf, char c, int n
 ret_t cherokee_buffer_add_buffer         (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
 ret_t cherokee_buffer_prepend            (cherokee_buffer_t  *buf, char *txt, size_t size);
 
+cint_t cherokee_buffer_cmp               (cherokee_buffer_t  *buf, char *txt, cuint_t txt_len);
 cint_t cherokee_buffer_cmp_buf           (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+cint_t cherokee_buffer_case_cmp          (cherokee_buffer_t  *buf, char *txt, cuint_t txt_len);
 cint_t cherokee_buffer_case_cmp_buf      (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
 
 ret_t cherokee_buffer_read_file          (cherokee_buffer_t  *buf, char *filename);
