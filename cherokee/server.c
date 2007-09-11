@@ -99,6 +99,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT(n, server);
+
+	cherokee_trace_init ();
 	
 	/* Thread list
 	 */

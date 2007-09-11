@@ -735,6 +735,8 @@ common.h \
 common-internal.h \
 util.h \
 util.c \
+trace.h \
+trace.c \
 version.h \
 version.c \
 buffer.h \

@@ -31,6 +31,7 @@
 
 #include <cherokee/common.h>
 #include <cherokee/avl.h>
+#include <cherokee/trace.h>
 
 #ifdef HAVE_NETINET_IN_H
 # include <netinet/in.h>

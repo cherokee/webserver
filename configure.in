@@ -130,10 +130,16 @@ dnl
 AC_ARG_ENABLE(os_string, AC_HELP_STRING([--enable-os-string=STR], [Set a customized OS type string]), [os_string="$enableval"])
 AC_DEFINE_UNQUOTED(OS_TYPE, "${os_string}", [OS type])
 
+AM_CONDITIONAL(PLATFORM_WIN32, test x"$os_string" = "xWin32")
+
+dnl
+dnl Tracing
+dnl
 AC_ARG_ENABLE(trace, AC_HELP_STRING([--enable-trace], [Enable trace facility]), 
    [enable_trace="$enableval"
     AC_DEFINE(TRACE_ENABLED, 1, [Trace facility])
    ], [enable_trace="no"])
+
 
 dnl
 dnl Dynamic library loading library
@@ -141,11 +147,6 @@ dnl
 LIBS="$LIBS $libdl"
 AC_DEFINE_UNQUOTED(SO_SUFFIX, "${so_suffix}", [Dynamic loading libraries extension])
 AC_DEFINE_UNQUOTED(MOD_SUFFIX, "${mod_suffix}", [Dynamic modules extension])
-
-dnl
-dnl Platforms
-dnl
-AM_CONDITIONAL(PLATFORM_WIN32, test x"$os_string" = "xWin32")
 
 dnl
 dnl Libtool options

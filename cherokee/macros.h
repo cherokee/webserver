@@ -310,13 +310,13 @@
 
 /* Tracing facility
  */
-#ifdef TRACE_ENABLED
-# define TRACE_ENV "CHEROKEE_TRACE"
+#define TRACE_ENV "CHEROKEE_TRACE"
 
+#ifdef TRACE_ENABLED
 # ifdef __GNUC__
-#  define TRACE(fmt,arg...) cherokee_trace (fmt, __FILE__, __LINE__, __cherokee_func__, ##arg)
+#  define TRACE(fmt,arg...) cherokee_trace_do_trace (fmt, __FILE__, __LINE__, __cherokee_func__, ##arg)
 # else
-#  define TRACE(fmt,...) cherokee_trace (fmt, __FILE__, __LINE__, __cherokee_func__, __VA_ARGS__)
+#  define TRACE(fmt,...) cherokee_trace_do_trace (fmt, __FILE__, __LINE__, __cherokee_func__, __VA_ARGS__)
 # endif
 #else
 # ifdef __GNUC__

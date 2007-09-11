@@ -1,3 +1,12 @@
+2007-09-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/trace.h, cherokee/trace.c, cherokee/macros.h,
+	cherokee/Makefile.am, cherokee/util.c, cherokee/util.h,
+	cherokee/cherokee.h, cherokee/server.c, configure.in: Tracing
+	facility moved to an independent file. The code has been slightly
+	reworked in order to allow the modification of the modules been
+	traced dynamically.
+
 2007-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main_guardian.c, cherokee/Makefile.am: The Cherokee

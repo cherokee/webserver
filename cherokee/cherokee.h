@@ -43,6 +43,7 @@
 #include <cherokee/header.h>
 #include <cherokee/resolv_cache.h>
 #include <cherokee/post.h>
+#include <cherokee/trace.h>
 
 /* Server library
  */
