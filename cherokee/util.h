@@ -51,6 +51,7 @@
 
 #include <time.h>
 #include <dirent.h>
+#include <errno.h>
 
 #include <cherokee/buffer.h>
 

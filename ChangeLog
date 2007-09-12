@@ -1,3 +1,8 @@
+2007-09-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/common-internal.h cherokee/buffer.h cherokee/util.h:
+	Couple of minor changes related to the buffer class.
+
 2007-09-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/common-internal.h: As long as this header file defines

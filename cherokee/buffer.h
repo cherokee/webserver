@@ -49,8 +49,8 @@ typedef struct {
 
 #define cherokee_buffer_is_empty(b)        (BUF(b)->len == 0)
 #define cherokee_buffer_add_str(b,s)       cherokee_buffer_add (b, s, CSZLEN(s))
-#define cherokee_buffer_cmp_str(b,s)       cherokee_buffer_cmp (b, s, sizeof(s))
-#define cherokee_buffer_case_cmp_str(b,s)  cherokee_buffer_case_cmp (b, s, sizeof(s))
+#define cherokee_buffer_cmp_str(b,s)       cherokee_buffer_cmp (b, s, sizeof(s)-1)
+#define cherokee_buffer_case_cmp_str(b,s)  cherokee_buffer_case_cmp (b, s, sizeof(s)-1)
 
 ret_t cherokee_buffer_new                (cherokee_buffer_t **buf);
 ret_t cherokee_buffer_free               (cherokee_buffer_t  *buf);
