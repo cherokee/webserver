@@ -4,7 +4,7 @@
 # Possible actions are:
 #   mail - mail the error. You need a working MTA in the system.
 #   cat  - just print it
-if [ `which mail` ]; then
+if [ -x /usr/sbin/sendmail ]; then
    action=mail
 else
    action=cat
@@ -28,12 +28,19 @@ fi
 	    action="$2"
 	fi
 
+	# Mail header
+	if [ x$action = xmail ]; then
+	    echo "To: root"
+	    echo "Subject: Segfault in Cherokee"
+	    echo
+	fi
+
+	# Find out what binary we're debugging
 	if [ ! -d "/proc/$pid" ]; then
 		echo "$0: No such process: $pid"
 		exit 1
 	fi
 
-	# Find out what binary we're debugging
 	if [ $os = "Linux" ]; then 
 	     BINARYNAME=`readlink "/proc/$pid/exe"`
 	elif [ $os = "SunOS" ]; then
@@ -43,7 +50,7 @@ fi
 	     exit 1
 	fi
 
-	# Generic header for our email
+	# Generic header for the report
 	echo "The Cherokee 'panic action' script, $0,"
 	echo "was called for pid $pid ($BINARYNAME)."
 	echo
@@ -101,7 +108,7 @@ fi
 ) | ( 
     case "$action" in
 	   mail)
-		  mail -s "Segfault in Cherokee" root
+		  /usr/sbin/sendmail -t
 		  ;;
 	   cat)
 		  cat -

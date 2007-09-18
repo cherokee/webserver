@@ -170,7 +170,9 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	cherokee_buffer_init (&n->listen_to);
 	cherokee_buffer_init (&n->chroot);
+
 	cherokee_buffer_init (&n->panic_action);
+	cherokee_buffer_add_str (&n->panic_action, CHEROKEE_PANIC_PATH);
 
 	/* Bogo now
 	 */

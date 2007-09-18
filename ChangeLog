@@ -1,5 +1,13 @@
 2007-09-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/cherokee-panic: It should use sendfile rather than mail
+	or mailx. It is a more standard application.
+
+	* cherokee/Makefile.am (-DCHEROKEE_PANIC_PATH),
+	cherokee/server.c (cherokee_server_new): Added panic_action to the
+	default configuration. From now on, if the server crashes it will
+	call cherokee-panic by default.
+
 	* cherokee/cherokee-panic: Fixed typo. It also slightly improves
 	the error reporting on case of an incorrect action.
 
