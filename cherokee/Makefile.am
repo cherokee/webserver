@@ -11,7 +11,8 @@ $(PTHREAD_CFLAGS) \
 -DCHEROKEE_CONFDIR=\""$(sysconfdir)/cherokee"\" \
 -DCHEROKEE_SRV_PATH=\""$(prefix)/sbin/cherokee"\" \
 -DCHEROKEE_ICONSDIR=\""$(prefix)/share/cherokee/icons"\" \
--DCHEROKEE_THEMEDIR=\""$(prefix)/share/cherokee/themes"\"
+-DCHEROKEE_THEMEDIR=\""$(prefix)/share/cherokee/themes"\" \
+-DCHEROKEE_PANIC_PATH=\""$(prefix)/bin/cherokee-panic"\"
 
 #
 # Scripts
