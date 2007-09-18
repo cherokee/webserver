@@ -1,3 +1,8 @@
+2007-09-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/cherokee-panic: Fixed typo. It also slightly improves
+	the error reporting on case of an incorrect action.
+
 2007-09-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/common-internal.h cherokee/buffer.h cherokee/util.h:
