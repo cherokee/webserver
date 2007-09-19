@@ -1,3 +1,7 @@
+2007-09-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cget/main.c: Quite a few small fixes and micro-improvements.
+
 2007-09-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/cherokee-panic: It should use sendfile rather than mail
