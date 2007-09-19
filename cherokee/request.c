@@ -182,8 +182,6 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	 */
 	cherokee_buffer_add_str (buf, CRLF);
 
-	printf ("------>%s\n", buf->buf);
-
 	return ret_ok;
 }
 
