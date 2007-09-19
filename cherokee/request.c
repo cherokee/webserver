@@ -38,6 +38,7 @@ cherokee_request_header_init (cherokee_request_header_t *request)
 	 */
 	request->method    = http_get;
 	request->version   = http_version_11;
+	request->proxy     = false;
 	request->keepalive = true;
 	request->pipeline  = 1;
 	request->post_len  = 0;
@@ -74,10 +75,20 @@ cherokee_request_header_clean (cherokee_request_header_t *request)
 	return ret_ok;
 }
 
+ret_t 
+cherokee_request_header_uses_proxy (cherokee_request_header_t *request, cherokee_boolean_t proxy)
+{
+	request->proxy = proxy;
+	return ret_ok;
+}
+
 
 ret_t 
 cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2)
 {
+	ret_t           ret;
+	const char     *ptr;
+	cuint_t         len;
 	cherokee_url_t *url = REQUEST_URL(request);
 
 	/* 200 bytes should be enough for a small header
@@ -87,23 +98,20 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	/* Add main request line: 
 	 * GET /dir/object HTTP/1.1
 	 */
-	switch (request->method) {
-	case http_get:
-		cherokee_buffer_add_str (buf, "GET "); 		
-		break;
-	case http_post:
-		cherokee_buffer_add_str (buf, "POST "); 		
-		break;
-	case http_head:
-		cherokee_buffer_add_str (buf, "HEAD "); 		
-		break;
-	case http_put:
-		cherokee_buffer_add_str (buf, "PUT "); 		
-		break;
-	default:
-		SHOULDNT_HAPPEN;
-		return ret_error;
-	}
+	ret = cherokee_http_method_to_string (request->method, &ptr, &len);
+	if (ret != ret_ok) return ret;
+
+	ret = cherokee_buffer_add (buf, ptr, len);
+	if (ret != ret_ok) return ret;
+
+	cherokee_buffer_add_str (buf, " ");
+
+	/* Check if the requests goes through a proxy
+	 */
+	if (request->proxy) {
+		cherokee_buffer_add_str (buf, "http://");
+		cherokee_buffer_add_buffer (buf, URL_HOST(url));
+	} 
 
 	cherokee_buffer_add_buffer (buf, URL_REQUEST(url));
 
@@ -173,6 +181,8 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	/* Finish the header
 	 */
 	cherokee_buffer_add_str (buf, CRLF);
+
+	printf ("------>%s\n", buf->buf);
 
 	return ret_ok;
 }

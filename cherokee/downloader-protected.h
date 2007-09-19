@@ -55,6 +55,8 @@ struct cherokee_downloader {
 	cherokee_buffer_t            body;
 
 	cherokee_post_t             *post;
+	cherokee_buffer_t            proxy;
+	cuint_t                      proxy_port;
 
 	cherokee_socket_t            socket;
 	cherokee_sockaddr_t          sockaddr;
@@ -77,7 +79,6 @@ struct cherokee_downloader {
 	cherokee_buffer_t            tmp1;
 	cherokee_buffer_t            tmp2;
 };
-
 
 
 ret_t cherokee_downloader_init     (cherokee_downloader_t  *downloader);

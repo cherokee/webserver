@@ -203,7 +203,8 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 
 	/* Sanity check
 	 */
-	if (fd < 0) return ret_error;
+	if (fd < 0) 
+		return ret_error;
 
 	/* Send a chunk..
 	 */

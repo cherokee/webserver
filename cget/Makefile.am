@@ -15,6 +15,8 @@ $(PTHREAD_LIBS) \
 ../cherokee/libcherokee-client.la 
 
 cget_SOURCES = \
-main.c
+main.c \
+proxy.h \
+proxy.c
 
 bin_PROGRAMS = cget

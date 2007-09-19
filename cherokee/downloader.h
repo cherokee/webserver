@@ -42,12 +42,12 @@ typedef struct cherokee_downloader cherokee_downloader_t;
 #define DOWNLOADER(d) ((cherokee_downloader_t *)(d))
 
 typedef enum {
-	downloader_status_none = 0x0,
-	downloader_status_headers_sent = 0x1,
-	downloader_status_post_sent = 0x2,
+	downloader_status_none             = 0x0,
+	downloader_status_headers_sent     = 0x1,
+	downloader_status_post_sent        = 0x2,
 	downloader_status_headers_received = 0x4,
-	downloader_status_data_available = 0x8,
-	downloader_status_finished = 0x10
+	downloader_status_data_available   = 0x8,
+	downloader_status_finished         = 0x10
 } cherokee_downloader_status_t;
 
 ret_t cherokee_downloader_new             (cherokee_downloader_t **downloader);
@@ -55,6 +55,8 @@ ret_t cherokee_downloader_free            (cherokee_downloader_t  *downloader);
 
 ret_t cherokee_downloader_set_url         (cherokee_downloader_t *downloader, cherokee_buffer_t *url);
 ret_t cherokee_downloader_set_keepalive   (cherokee_downloader_t *downloader, cherokee_boolean_t active);
+ret_t cherokee_downloader_set_proxy       (cherokee_downloader_t *downloader, cherokee_buffer_t *proxy, cuint_t port);
+
 ret_t cherokee_downloader_get_reply_code  (cherokee_downloader_t *downloader, cherokee_http_t *code);
 
 ret_t cherokee_downloader_post_set        (cherokee_downloader_t *downloader, cherokee_post_t *post);

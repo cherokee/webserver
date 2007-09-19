@@ -1,5 +1,15 @@
 2007-09-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/request.c (cherokee_request_header_build_string): Moved
+	to use cherokee_http_* methods instead of local switches for
+	converting the http method into a string.
+	
+	* cget/proxy.h, cget/proxy.c, cherokee/request.h, , cget/main.c,
+	cherokee/request.c (cherokee_request_header_build_string),
+	cherokee/downloader.h, cherokee/downloader.c: Added proxy
+	support. Cget inherits this feature of the cherokee-client
+	library.
+
 	* cget/main.c: Quite a few small fixes and micro-improvements.
 
 2007-09-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>

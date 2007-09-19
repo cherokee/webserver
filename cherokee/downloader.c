@@ -47,24 +47,6 @@
 
 
 ret_t 
-cherokee_downloader_new (cherokee_downloader_t **downloader)
-{
-	ret_t ret;
-	CHEROKEE_NEW_STRUCT(n, downloader);
-
-	/* Init
-	 */
-	ret = cherokee_downloader_init (n);
-	if (unlikely(ret != ret_ok)) return ret;
-
-	/* Return the object
-	 */
-	*downloader = n;
-	return ret_ok;
-}
-
-
-ret_t 
 cherokee_downloader_init (cherokee_downloader_t *n)
 {
 	ret_t ret;
@@ -88,6 +70,9 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 
 	ret = cherokee_header_new (&n->header);	
 	if (unlikely(ret != ret_ok)) return ret;
+
+	cherokee_buffer_init (&n->proxy);
+	n->proxy_port = 0;
 
 	cherokee_buffer_init (&n->tmp1);
 	cherokee_buffer_init (&n->tmp2);
@@ -115,16 +100,6 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 
 
 ret_t 
-cherokee_downloader_free (cherokee_downloader_t *downloader)
-{
-	cherokee_downloader_mrproper (downloader);
-
-	free (downloader);
-	return ret_ok;
-}
-
-
-ret_t 
 cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 {
 	/* Free the memory
@@ -134,6 +109,7 @@ cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 	cherokee_buffer_mrproper (&downloader->request_header);
 	cherokee_buffer_mrproper (&downloader->reply_header);
 	cherokee_buffer_mrproper (&downloader->body);
+	cherokee_buffer_mrproper (&downloader->proxy);
 
 	cherokee_buffer_mrproper (&downloader->tmp1);
 	cherokee_buffer_mrproper (&downloader->tmp2);
@@ -145,6 +121,10 @@ cherokee_downloader_mrproper (cherokee_downloader_t *downloader)
 
 	return ret_ok;
 }
+
+
+CHEROKEE_ADD_FUNC_NEW (downloader);
+CHEROKEE_ADD_FUNC_FREE (downloader);
 
 
 ret_t 
@@ -171,6 +151,29 @@ cherokee_downloader_set_keepalive (cherokee_downloader_t *downloader, cherokee_b
 
 
 ret_t 
+cherokee_downloader_set_proxy (cherokee_downloader_t *downloader, cherokee_buffer_t *proxy, cuint_t port)
+{
+	char *tmp;
+
+	/* Skip 'http(s)://'
+	 */
+	tmp = strchr (proxy->buf, '/');
+	if (tmp == NULL) 
+		tmp = proxy->buf;
+	else
+		tmp += 2;
+
+	/* Copy the values
+	 */
+	cherokee_buffer_clean (&downloader->proxy);
+	cherokee_buffer_add (&downloader->proxy, tmp, strlen(tmp));
+
+	downloader->proxy_port = port;
+	return ret_ok;
+}
+
+
+ret_t 
 cherokee_downloader_get_reply_code (cherokee_downloader_t *downloader, cherokee_http_t *code)
 {
 	*code = downloader->header->response;
@@ -178,12 +181,13 @@ cherokee_downloader_get_reply_code (cherokee_downloader_t *downloader, cherokee_
 }
 
 
-ret_t 
-cherokee_downloader_connect (cherokee_downloader_t *downloader)
+static ret_t 
+connect_to (cherokee_downloader_t *downloader, cherokee_buffer_t *host, cuint_t port, int protocol)
 {
 	ret_t               ret;
 	cherokee_socket_t  *sock = &downloader->socket;
-	cherokee_url_t     *url  = &downloader->request.url;
+
+	TRACE(ENTRIES, "host=%s port=%d proto=%d\n", host->buf, port, protocol);
 
 	/* Create the socket
 	 */
@@ -192,34 +196,57 @@ cherokee_downloader_connect (cherokee_downloader_t *downloader)
 	
 	/* Set the port
 	 */
-	SOCKET_SIN_PORT(sock) = htons(url->port);
+	SOCKET_SIN_PORT(sock) = htons(port);
 
-	/* Find the IP from the hostname
-	 * Maybe it is a IP..
+	/* Supposing it's an IP: convert it.
 	 */
-	ret = cherokee_socket_pton (sock, &url->host);
+	ret = cherokee_socket_pton (sock, host);
 	if (ret != ret_ok) {
 
-		/* Ops! no, it could be a hostname..
-		 * Try to resolv it!
+		/* Ops! It might be a hostname. Try to resolve it.
 		 */
- 		ret = cherokee_socket_gethostbyname (sock, &url->host);
+ 		ret = cherokee_socket_gethostbyname (sock, host);
 		if (unlikely(ret != ret_ok)) return ret_error;
 	}
 
 	/* Connect to server
 	 */
 	ret = cherokee_socket_connect (sock);
+	TRACE(ENTRIES, "socket=%p ret=%d\n", sock, ret);
 	if (unlikely(ret != ret_ok)) return ret;
-
-	/* Enables nonblocking I/O.
-	 */
-	cherokee_fd_set_nonblocking (SOCKET_FD(sock));
 
 	/* Is this connection TLS?
 	 */
-	if (url->protocol == https) {
+	if (protocol == https) {
 		ret = cherokee_socket_init_client_tls (sock);
+		if (ret != ret_ok) return ret;
+	}
+
+	TRACE(ENTRIES, "Exists socket=%p\n", sock);
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_downloader_connect (cherokee_downloader_t *downloader)
+{
+	ret_t               ret;
+	cherokee_boolean_t  uses_proxy;
+	cherokee_url_t     *url  = &downloader->request.url;
+
+	/* Does it use a proxy?
+	 */
+	uses_proxy = ! cherokee_buffer_is_empty (&downloader->proxy);
+	ret = cherokee_request_header_uses_proxy (&downloader->request, uses_proxy);
+	if (ret != ret_ok) return ret;
+	
+	/* Connect
+	 */
+	if (uses_proxy) {
+		ret = connect_to (downloader, &downloader->proxy, downloader->proxy_port, http);
+		if (ret != ret_ok) return ret;
+	} else {
+		ret = connect_to (downloader, &url->host, url->port, url->protocol);
 		if (ret != ret_ok) return ret;
 	}
 
@@ -395,6 +422,8 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 	 */
 	tmp1 = (ext_tmp1) ? ext_tmp1 : &downloader->tmp1;
 	tmp2 = (ext_tmp2) ? ext_tmp2 : &downloader->tmp2;
+
+	TRACE (ENTRIES, "phase=%d\n", downloader->phase);
 
 	/* Process it
 	 */

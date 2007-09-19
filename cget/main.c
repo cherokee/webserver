@@ -5,7 +5,7 @@
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
  *
- * Copyright (C) 2001-2006 Alvaro Lopez Ortega
+ * Copyright (C) 2001-2007 Alvaro Lopez Ortega
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -55,6 +55,8 @@
 #include "downloader-protected.h"
 #include "socket.h"
 #include "header-protected.h"      /* FIXME! */
+
+#include "proxy.h"
 
 #define EXIT_OK    0
 #define EXIT_ERROR 1
@@ -337,6 +339,8 @@ main (int argc, char **argv)
 	cint_t                 param_num;
 	cint_t                 long_index;
 	cherokee_downloader_t *downloader;
+	cherokee_buffer_t      proxy       = CHEROKEE_BUF_INIT;
+	cuint_t                proxy_port;
 
 	struct option long_options[] = {
 		/* Options without arguments */
@@ -401,7 +405,10 @@ main (int argc, char **argv)
 		return EXIT_OK;
 	}
 
+	/* Tracing and proxy discovering..
+	 */
 	cherokee_trace_init();
+	cget_find_proxy (&proxy, &proxy_port);
 
 	for (val=optind; val<optind+param_num; val++) {
 		cherokee_buffer_t url = CHEROKEE_BUF_INIT;
@@ -418,6 +425,11 @@ main (int argc, char **argv)
 
 		ret = cherokee_downloader_init(downloader);
 		if (ret != ret_ok) return EXIT_ERROR;
+
+		if (! cherokee_buffer_is_empty (&proxy)) {
+			ret = cherokee_downloader_set_proxy (downloader, &proxy, proxy_port);
+			if (ret != ret_ok) return EXIT_ERROR;
+		}
 
 		ret = cherokee_downloader_set_url (downloader, &url);
 		if (ret != ret_ok) return EXIT_ERROR;
