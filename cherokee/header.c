@@ -355,8 +355,8 @@ parse_request_first_line (cherokee_header_t *hdr, cherokee_buffer_t *buf, char *
 
 	/* Basic security check. The shortest possible request
 	 * "GET / HTTP/1.0" is 14 characters long but we want
-	 * to reply to HTTP/0.9 requests too which don't have
-	 * HTTP version.
+	 * to reply (with an error message) to HTTP/0.9 requests too
+	 * (HTTP/0.9 don't have " HTTP/x.x" version).
 	 */
 	if (unlikely(buf->len < 6)) {
 		return ret_error;
