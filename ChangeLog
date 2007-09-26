@@ -1,3 +1,9 @@
+2007-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/header.c (detect_method): Fixed method detection on
+	64bit machines. Issue explanation and patch from Stefan de Konink
+	<skinkie@xs4all.nl>.
+
 2007-09-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/request.c (cherokee_request_header_build_string): Moved
