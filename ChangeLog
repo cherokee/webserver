@@ -1,3 +1,11 @@
+2007-09-27  Stefan de Konink <skinkie@xs4all.nl>, A.D.F  <adefacc@tin.it>
+
+	* cherokee/header.c
+	  - parse_method(), fixed macro detect_method()
+	    in order to avoid an automatic conversion from
+	    a constant string to a char pointer which leads to a wrong
+	    string comparison (sizeof(ptr)).
+
 2007-09-26  A.D.F  <adefacc@tin.it>
 
 	* cherokee/header.c

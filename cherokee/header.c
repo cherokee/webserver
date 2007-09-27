@@ -271,7 +271,7 @@ parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 	char chr = *line;
 
 #define detect_method(l,str,mthd)           		  \
-	if (cmp_str (line+1, (str" ")+1)) { \
+	if (cmp_str (line, (str" "))) { \
 		hdr->method = http_ ## mthd;    \
 		*pointer += sizeof(str);        \
 		return ret_ok;                  \
