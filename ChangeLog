@@ -1,3 +1,10 @@
+2007-10-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* The __init__.py file inside the pyscgi module is empty, this
+	means that to import the module properly I need to type: 
+	from pyscgi.pyscgi import *, instead of: from pyscgi import *
+	Patch by Alberto Ruiz <aruiz@gnome.org>
+
 2007-08-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* tests/test1_env.py, tests/test2_post.py: Updated to use rfile
