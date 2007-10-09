@@ -17,8 +17,13 @@ test -z "$AUTOMAKE" && AUTOMAKE=automake
 test -z "$ACLOCAL" && ACLOCAL=aclocal
 test -z "$AUTOCONF" && AUTOCONF=autoconf
 test -z "$AUTOHEADER" && AUTOHEADER=autoheader
-test -z "$LIBTOOL" && LIBTOOL=libtool
-test -z "$LIBTOOLIZE" && LIBTOOLIZE=libtoolize
+if [ -x /usr/bin/glibtool ]; then
+ test -z "$LIBTOOL" && LIBTOOL=glibtool
+ test -z "$LIBTOOLIZE" && LIBTOOLIZE=glibtoolize
+else
+ test -z "$LIBTOOL" && LIBTOOL=libtool
+ test -z "$LIBTOOLIZE" && LIBTOOLIZE=libtoolize
+fi
 
 ($AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
 	echo

@@ -1,3 +1,9 @@
+2007-10-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* autogen.sh: Added check for glibtool. Without this, it wasn't
+	compiling on OS X without using a custom LIBTOOL environment
+	variable.
+
 2007-09-27  Stefan de Konink <skinkie@xs4all.nl>, A.D.F  <adefacc@tin.it>
 
 	* cherokee/header.c
