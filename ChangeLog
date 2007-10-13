@@ -4,6 +4,9 @@
 	with OpenSSL support on OS X because there were a few undefined
 	symbols from this library.
 
+	* configure.in: PAM detection fixed/improved. Depending on the
+	case, it could fail to compile because of this check.
+
 2007-10-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* autogen.sh: Added check for glibtool. Without this, it wasn't
