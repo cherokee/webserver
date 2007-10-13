@@ -964,6 +964,8 @@ then
 		dnl
 		dnl OpenSSL
 		dnl
+		AC_CHECK_LIB(crypto, BN_init)
+
 		AC_CHECK_HEADERS([openssl/engine.h])
 		AC_CHECK_LIB(ssl, SSL_accept, [have_openssl=yes], [have_openssl=no])
 		if test "$have_openssl" = "yes"

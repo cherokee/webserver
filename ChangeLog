@@ -1,3 +1,9 @@
+2007-10-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in: Added libcrypto detection. It was not compiling
+	with OpenSSL support on OS X because there were a few undefined
+	symbols from this library.
+
 2007-10-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* autogen.sh: Added check for glibtool. Without this, it wasn't
