@@ -32,8 +32,8 @@
 
 #define DEFAULT_CONFIG_FILE "/etc/cherokee/cherokee.conf"
 
-# define GETOPT_OPT  "C:r:bhvg"
-# define CONFIG_FILE_HELP "[-C configfile] [-r] [-g]"
+#define GETOPT_OPT  "C:r:bhvg"
+#define CONFIG_FILE_HELP "[-C configfile] [-r] [-g]"
 
 #define BASIC_CONFIG                                                                         \
 	"vserver!default!directory!/!handler = common\n"                                     \
@@ -45,6 +45,9 @@
 	"vserver!default!directory!/cherokee_themes!handler = file\n"                        \
 	"vserver!default!directory!/cherokee_themes!document_root = " CHEROKEE_THEMEDIR "\n" \
 	"vserver!default!directory!/cherokee_themes!priority = 3\n"                          \
+	"icons!default = unknown.png\n"                                                      \
+	"icons!directory = folder.png\n"      	                                             \
+	"icons!parent_directory = back.png\n"                                                \
 	"try_include = " CHEROKEE_CONFDIR "/mods-enabled\n"
 
 static cherokee_server_t  *srv           = NULL;

@@ -64,6 +64,7 @@ typedef struct {
 	cherokee_boolean_t       show_date;
 	cherokee_boolean_t       show_user;
 	cherokee_boolean_t       show_group;
+	cherokee_boolean_t       show_icons;
 
 	/* Theme
 	 */
@@ -71,6 +72,10 @@ typedef struct {
 	cherokee_buffer_t        footer;
 	cherokee_buffer_t        entry;
 	cherokee_buffer_t        css;
+
+	/* Paths
+	 */
+	cherokee_buffer_t        icon_web_dir;
 } cherokee_handler_dirlist_props_t;
 
 

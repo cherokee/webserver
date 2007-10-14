@@ -1,5 +1,16 @@
 2007-10-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* themes/default_entry.html: Icons directory is no longer
+	hard-coded to /icons/
+
+	* cherokee/handler_dirlist.c, cherokee/handler_dirlist.h: Added
+	new property icon_web_dir. It specifies the web directory under
+	which the icons will be located.
+
+	* cherokee/main.c (BASIC_CONFIG): Added hardcoded entries for the
+	most basic icons. In the case a more icons are defined it'll
+	overwrite these entries.
+
 	* cherokee/source_interpreter.c (cherokee_source_interpreter_spawn):
 	Ensure that the forked process dies after the execve() call.
 

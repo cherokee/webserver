@@ -49,6 +49,8 @@
 #include "icons.h"
 #include "common.h"
 
+#define ICON_WEB_DIR_DEFAULT "/icons/"
+
 
 struct file_entry {
 	cherokee_list_t  list_entry;
@@ -123,6 +125,7 @@ parse_macros_in_buffer (cherokee_buffer_t *buf, cherokee_handler_dirlist_props_t
 	parse_if (buf, "date",  props->show_date);
 	parse_if (buf, "user",  props->show_user);
 	parse_if (buf, "group", props->show_group);
+	parse_if (buf, "icon",  props->show_icons);
 
 	return ret_ok;
 }
@@ -162,6 +165,7 @@ cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 	cherokee_buffer_mrproper (&props->footer);
 	cherokee_buffer_mrproper (&props->entry);
 	cherokee_buffer_mrproper (&props->css);
+	cherokee_buffer_mrproper (&props->icon_web_dir);
 
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
@@ -186,11 +190,15 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 		n->show_date   = true;
 		n->show_user   = false;
 		n->show_group  = false;
+		n->show_icons  = true;
 
 		cherokee_buffer_init (&n->header);
 		cherokee_buffer_init (&n->footer);
 		cherokee_buffer_init (&n->entry);
 		cherokee_buffer_init (&n->css);
+
+		cherokee_buffer_init (&n->icon_web_dir);
+		cherokee_buffer_add_str (&n->icon_web_dir, ICON_WEB_DIR_DEFAULT);
 
 		INIT_LIST_HEAD (&n->notice_files);
 		
@@ -215,7 +223,11 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 
 		} else if (equal_buf_str (&subconf->key, "theme")) {
 			theme = subconf->val.buf;
-		
+
+		} else if (equal_buf_str (&subconf->key, "icon_dir")) {
+			cherokee_buffer_clean (&props->icon_web_dir);
+			cherokee_buffer_add_buffer (&props->icon_web_dir, &subconf->val);
+
 		} else if (equal_buf_str (&subconf->key, "notice_files")) {
 			ret = cherokee_config_node_convert_list (subconf, NULL, &props->notice_files);
 			if (unlikely (ret != ret_ok)) return ret;
@@ -364,6 +376,12 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	n->file_ptr         = NULL;
 	n->software_str_ref = NULL;
 	n->longest_filename = 0;
+
+	/* Check if icons can be used
+	 */
+	if (HDL_DIRLIST_PROP(n)->show_icons) {
+		HDL_DIRLIST_PROP(n)->show_icons = (HANDLER_SRV(n)->icons != NULL);
+	}
 
 	/* Choose the sorting key
 	 */
@@ -755,15 +773,14 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	/* Add the icon
 	 */
 	is_dir = S_ISDIR(file->stat.st_mode);
-
 	alt = (is_dir) ? "[DIR]" : "[   ]";
-	
-	if (icons != NULL) {
+
+	if (props->show_icons) {
 		if (is_dir) {
 			icon = &icons->directory_icon;
 		} else {
 			cherokee_buffer_t name_buf;
-			
+
 			cherokee_buffer_fake (&name_buf, name, strlen(name));
 			ret = cherokee_icons_get_icon (icons, &name_buf, &icon);
 			if (ret != ret_ok) return ret;
@@ -771,7 +788,15 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	}
 
 	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", alt);
-	VTMP_SUBSTITUTE_TOKEN ("%icon%", icon ? icon->buf : NULL);
+
+	if (icon) {
+		cherokee_buffer_clean (tmp);
+		cherokee_buffer_add_buffer (tmp, &props->icon_web_dir);
+		cherokee_buffer_add_buffer (tmp, icon);
+		VTMP_SUBSTITUTE_TOKEN ("%icon%", tmp->buf);
+	} else {
+		VTMP_SUBSTITUTE_TOKEN ("%icon%", NULL);
+	}
 
 	/* File
 	 */
@@ -847,20 +872,23 @@ static ret_t
 render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
 	cherokee_buffer_t                *vtmp[2];
-	char                             *icon     = NULL;
 	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
  	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
+	cherokee_buffer_t                *tmp      = &dhdl->header;
 	size_t                            idx_tmp  = 0; 
 
 	/* Initialize temporary substitution buffers
 	 */
 	VTMP_INIT_SUBST (thread, vtmp, &props->entry);
-	if (icons != NULL) {
-		icon = icons->parentdir_icon.buf;
+
+	if (props->show_icons) {
+		cherokee_buffer_clean (tmp);
+		cherokee_buffer_add_str (tmp, ICON_WEB_DIR_DEFAULT);
+		cherokee_buffer_add_buffer (tmp, &icons->parentdir_icon);
+		VTMP_SUBSTITUTE_TOKEN ("%icon%", tmp->buf);
 	}
 
-	VTMP_SUBSTITUTE_TOKEN ("%icon%", icon);
 	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", "[DIR]");
 
 	VTMP_SUBSTITUTE_TOKEN ("%file_link%", "../");
