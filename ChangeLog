@@ -1,3 +1,8 @@
+2007-10-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/source_interpreter.c (cherokee_source_interpreter_spawn):
+	Ensure that the forked process dies after the execve() call.
+
 2007-10-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* configure.in: Added libcrypto detection. It was not compiling

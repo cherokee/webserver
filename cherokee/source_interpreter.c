@@ -229,6 +229,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 			exit (1);
 		}
 
+		exit ((re == 0) ? 0 : 1);
 	case -1:
 		goto error;
 		
