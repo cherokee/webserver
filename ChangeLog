@@ -1,3 +1,9 @@
+2007-10-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_cgi.c (cherokee_handler_cgi_add_env_pair)
+	(manage_child_cgi_process): It tries to fix:
+	http://code.google.com/p/cherokee/issues/detail?id=23
+
 2007-10-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* themes/default_entry.html: Icons directory is no longer

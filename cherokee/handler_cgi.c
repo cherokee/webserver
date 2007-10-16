@@ -304,6 +304,9 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 
 	/* Build the new envp entry
 	 */
+	if (name == NULL)
+		return;
+
 	entry = (char *) malloc (name_len + content_len + 2); 
 	if (entry == NULL)
 		return;
@@ -331,8 +334,8 @@ static ret_t
 add_environment (cherokee_handler_cgi_t *cgi, cherokee_connection_t *conn)
 {
 	ret_t                        ret;
-	char                        *lenght;
-	cuint_t                      lenght_len;
+	char                        *length;
+	cuint_t                      length_len;
 	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
 
 	ret = cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(cgi), conn);
@@ -341,9 +344,9 @@ add_environment (cherokee_handler_cgi_t *cgi, cherokee_connection_t *conn)
 
 	/* CONTENT_LENGTH
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_content_length, &lenght, &lenght_len);
+	ret = cherokee_header_get_known (&conn->header, header_content_length, &length, &length_len);
 	if (ret == ret_ok)
-		set_env (cgi_base, "CONTENT_LENGTH", lenght, lenght_len);
+		set_env (cgi_base, "CONTENT_LENGTH", length, length_len);
 
 	/* SCRIPT_FILENAME
 	 */
@@ -572,10 +575,11 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 			printf ("Status: 500" CRLF_CRLF);
 		}
 
-		cherokee_logger_write_string (CONN_VSRV(conn)->logger, 
-			"couldn't execute '%s': %s",
-			absolute_path,
-			cherokee_strerror_r(err, buferr, sizeof(buferr)));
+		/* Don't use the logging system (concurrency issues)
+		 */
+		PRINT_ERROR ("Couldn't execute '%s': %s",
+			     absolute_path,
+			     cherokee_strerror_r(err, buferr, sizeof(buferr)));
 		exit(1);
 	}
 
