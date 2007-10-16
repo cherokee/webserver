@@ -577,7 +577,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 		/* Don't use the logging system (concurrency issues)
 		 */
-		PRINT_ERROR ("Couldn't execute '%s': %s",
+		PRINT_ERROR ("Couldn't execute '%s': %s\n",
 			     absolute_path,
 			     cherokee_strerror_r(err, buferr, sizeof(buferr)));
 		exit(1);
