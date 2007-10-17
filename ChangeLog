@@ -1,3 +1,27 @@
+
+2007-10-17  A.D.F  <adefacc@tin.it>
+
+	* cherokee/server.h,
+	  cherokee/server.c
+	  - cherokee_server_step:
+	    - added a few flush_logs() calls to be sure to always write
+	      all the buffered content;
+	    - optimized if jump: as wanna_reinit and wanna_exit conditions
+	      are really unlikely to happen, they have been moved after
+	      a simple likely test (wanna_reinit | wanna_exit) == 0;
+	      NOTE the use of | instead of ||, we can do this because
+	      cherokee_boolean_t is an int;
+	  - added cherokee_server_stop() to close all connections before
+	    freeing properly the server class;
+	    NOTE: closing all the open connections and stopping the server
+	          in a sane way, might require additional fixes
+	          (because of locking issues).
+
+	* cherokee/main.c,
+	  cherokee/main_admin.c
+	  - replaced cherokee_server_free() with cherokee_server_stop().
+
+
 2007-10-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_cgi.c (cherokee_handler_cgi_add_env_pair)

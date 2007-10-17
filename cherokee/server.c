@@ -1182,6 +1182,41 @@ flush_logs (cherokee_server_t *srv)
 
 
 ret_t 
+cherokee_server_stop (cherokee_server_t **psrv)
+{
+	ret_t                        ret;
+	cherokee_server_t           *srv   = NULL;
+
+	if (psrv == NULL)
+		return ret_error;
+
+	if (*psrv == NULL)
+		return ret_ok;
+
+	srv = *psrv;
+
+
+	/* Close all connections
+	 */
+	close_all_connections (srv);
+
+	/* Flush logs
+	 */
+	flush_logs (srv);
+
+	/* Destroy the server object
+	 */
+	ret = cherokee_server_free (srv);
+	if (ret != ret_ok)
+		return ret;
+
+	srv = *psrv = NULL;
+
+	return ret_ok;
+}
+
+
+ret_t 
 cherokee_server_reinit (cherokee_server_t *srv)
 {
 	ret_t                        ret;
@@ -1204,20 +1239,19 @@ cherokee_server_reinit (cherokee_server_t *srv)
 
 	reinit_cb = srv->reinit_callback;
 
-	/* Close all connections
+	/* Stop and destroy the server.
 	 */
-	close_all_connections (srv);
+	ret = cherokee_server_stop (&srv);
+	if (ret != ret_ok)
+		return ret;
 
-	/* Destroy the server object
-	 */
-	ret = cherokee_server_free (srv);
-	if (ret != ret_ok) return ret;
 	srv = NULL;
 
 	/* Create a new one
 	 */
 	ret = cherokee_server_new (&new_srv);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	/* Send event
 	 */
@@ -1227,6 +1261,7 @@ cherokee_server_reinit (cherokee_server_t *srv)
 
 	return ret_ok;
 }
+
 
 static void
 update_bogo_conns_num (cherokee_server_t *srv)
@@ -1336,23 +1371,37 @@ cherokee_server_step (cherokee_server_t *srv)
 	}
 
 #ifdef _WIN32
-	if (cherokee_win32_shutdown_signaled(srv->bogo_now))
+	if (unlikely (cherokee_win32_shutdown_signaled(srv->bogo_now)))
 		srv->wanna_exit = true;
 #endif
 
+	/* Wanna reinit or exit ?
+	 */
+	if (likely ((srv->wanna_reinit | srv->wanna_exit) == 0))
+		return ret_eagain;
+
 	/* Wanna reinit ?
 	 */
-	if (unlikely (srv->wanna_reinit)) {
+	if (srv->wanna_reinit) {
 		ret = cherokee_server_reinit (srv);
-		if (ret != ret_ok)
-			return ret;
+
+		/* NOTE: we MUST return in any case because
+		 * the old srv server should have just been destroyed and
+		 * a new server should have been created,
+		 * in this case we cannot use the old srv ptr.
+		 */
+		return ret;
 	}
 	
 	/* Wanna exit ?
 	 */
-	if (unlikely (srv->wanna_exit)) 
+	if (srv->wanna_exit) {
+		flush_logs (srv);
 		return ret_ok;
-	
+	}
+
+	/* Should not be reached.
+	 */
 	return ret_eagain;
 }
 
