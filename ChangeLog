@@ -3,6 +3,10 @@
 
 	* cherokee/server.h,
 	  cherokee/server.c
+	  - cherokee_server_handle_TERM:
+	    - removed flush_logs() call in order to prevent a possible
+	      deadlock if a signal arise inside MUTEX_LOCK ... MUTEX_UNLOCK
+	      section in logger.c;
 	  - cherokee_server_step:
 	    - added a few flush_logs() calls to be sure to always write
 	      all the buffered content;

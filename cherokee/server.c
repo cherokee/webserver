@@ -1933,7 +1933,6 @@ cherokee_server_handle_TERM (cherokee_server_t *srv)
 {
 	srv->wanna_exit = true;
 
-	flush_logs (srv);
 	return ret_ok;
 }
 
