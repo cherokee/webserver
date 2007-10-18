@@ -195,7 +195,8 @@ main (int argc, char **argv)
 		ret = cherokee_server_step (srv);
 	} while (ret == ret_eagain);
 	
-	cherokee_server_stop (&srv);
+	cherokee_server_stop (srv);
+	cherokee_server_free (srv);
 
 	if (config_file)
 		free (config_file);

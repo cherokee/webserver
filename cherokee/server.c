@@ -1182,19 +1182,12 @@ flush_logs (cherokee_server_t *srv)
 
 
 ret_t 
-cherokee_server_stop (cherokee_server_t **psrv)
+cherokee_server_stop (cherokee_server_t *srv)
 {
 	ret_t                        ret;
-	cherokee_server_t           *srv   = NULL;
 
-	if (psrv == NULL)
-		return ret_error;
-
-	if (*psrv == NULL)
+	if (srv == NULL)
 		return ret_ok;
-
-	srv = *psrv;
-
 
 	/* Close all connections
 	 */
@@ -1203,14 +1196,6 @@ cherokee_server_stop (cherokee_server_t **psrv)
 	/* Flush logs
 	 */
 	flush_logs (srv);
-
-	/* Destroy the server object
-	 */
-	ret = cherokee_server_free (srv);
-	if (ret != ret_ok)
-		return ret;
-
-	srv = *psrv = NULL;
 
 	return ret_ok;
 }
@@ -1239,12 +1224,17 @@ cherokee_server_reinit (cherokee_server_t *srv)
 
 	reinit_cb = srv->reinit_callback;
 
-	/* Stop and destroy the server.
+	/* Stop the server.
 	 */
-	ret = cherokee_server_stop (&srv);
+	ret = cherokee_server_stop (srv);
 	if (ret != ret_ok)
 		return ret;
 
+	/* Destroy the server.
+	 */
+	ret = cherokee_server_free (srv);
+	if (ret != ret_ok)
+		return ret;
 	srv = NULL;
 
 	/* Create a new one
@@ -1931,7 +1921,8 @@ cherokee_server_handle_HUP (cherokee_server_t *srv, cherokee_server_reinit_cb_t 
 ret_t 
 cherokee_server_handle_TERM (cherokee_server_t *srv)
 {
-	srv->wanna_exit = true;
+	if (srv != NULL)
+		srv->wanna_exit = true;
 
 	return ret_ok;
 }

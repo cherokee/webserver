@@ -129,6 +129,8 @@ main (int argc, char **argv)
 		cherokee_server_step (srv);
 	}
 	
-	cherokee_server_stop (&srv);
+	cherokee_server_stop (srv);
+	cherokee_server_free (srv);
+
 	return 0;
 }

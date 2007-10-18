@@ -1,3 +1,13 @@
+2007-10-18  A.D.F  <adefacc@tin.it>
+
+	* cherokee/server.h,
+	  cherokee/server.c,
+	  cherokee/main.c,
+	  cherokee/main_admin.c
+	  - changed cherokee_server_stop() to only stop the server
+	    without destroying it;
+	  - added cherokee_server_free() call after cherokee_server_stop()
+	    function calls.
 
 2007-10-17  A.D.F  <adefacc@tin.it>
 
@@ -24,7 +34,6 @@
 	* cherokee/main.c,
 	  cherokee/main_admin.c
 	  - replaced cherokee_server_free() with cherokee_server_stop().
-
 
 2007-10-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
