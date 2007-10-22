@@ -506,10 +506,6 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	_fd_set_properties (STDOUT_FILENO, 0, O_NONBLOCK);
 	_fd_set_properties (STDERR_FILENO, 0, O_NONBLOCK);
 
-	/* Set SIGPIPE
-	 */
-	signal (SIGPIPE, SIG_DFL);
-
 	/* Sets the new environ. 
 	 */			
 	add_environment (cgi, conn);
@@ -559,6 +555,21 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 			}
 		}
 	}
+
+	/* Reset the server-wide signal handlers
+	 */
+#ifdef SIGPIPE
+	signal (SIGPIPE, SIG_DFL);
+#endif
+#ifdef SIGHUP
+        signal (SIGHUP,  SIG_DFL);
+#endif
+#ifdef SIGSEGV
+        signal (SIGSEGV, SIG_DFL);
+#endif
+#ifdef SIGTERM
+        signal (SIGTERM, SIG_DFL);
+#endif
 
 	/* Lets go.. execute it!
 	 */

@@ -1,3 +1,14 @@
+2007-10-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/fdpoll-kqueue.c (_watch): Micro clean up: removes two
+	unused variables.
+
+	* cherokee/handler_cgi.c (manage_child_cgi_process): The CGI
+	process shouldn't use the server-wide signal handers. Now it
+	resets SIGPIPE, SIGHUP, SIGSEGV and SIGTERM to its original value.
+	This patch also moves the call to signal() right before calling
+	execve().
+
 2007-10-18  A.D.F  <adefacc@tin.it>
 
 	* cherokee/server.h,
