@@ -34,6 +34,11 @@
 
 #include "buffer.h"
 
+/* bool definition
+ */
+#ifndef bool
+# define bool  int
+#endif
 
 #undef  localtime_r       /* in <pthread.h> */
 #define SHUT_WR           SD_SEND

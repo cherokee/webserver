@@ -1,3 +1,11 @@
+2007-10-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/win32_misc.h, cherokee/win32_misc.c,
+	cherokee/Makefile.am: Path by Ross Smith II
+	<cherokeespam@netebb.com>. Fixes Win32 compilation: move bool
+	definition to the header files and inhibits cherokee-guardian
+	compilation on Windows.
+
 2007-10-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/fdpoll-kqueue.c (_watch): Micro clean up: removes two

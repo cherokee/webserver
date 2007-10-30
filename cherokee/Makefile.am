@@ -982,7 +982,11 @@ $(dynamic_balancer_round_robin_lib)
 #
 # Main binary: Cherokee server
 #
-sbin_PROGRAMS = cherokee cherokee-guardian cherokee-admin
+sbin_PROGRAMS = cherokee cherokee-admin
+
+if !PLATFORM_WIN32
+sbin_PROGRAMS += cherokee-guardian
+endif
 
 cherokee_SOURCES = main.c
 cherokee_LDADD   = \

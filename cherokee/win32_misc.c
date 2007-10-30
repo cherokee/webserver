@@ -61,11 +61,6 @@ struct security_attributes {
      SECURITY_DESCRIPTOR sd;
 };
 
-/* bool definition 
- */
-#ifndef bool
-# define bool  int
-#endif
 
 /* Globals 
  */
