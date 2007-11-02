@@ -13,7 +13,7 @@
 
 	* cherokee/handler_cgi.c (manage_child_cgi_process): The CGI
 	process shouldn't use the server-wide signal handers. Now it
-	resets SIGPIPE, SIGHUP, SIGSEGV and SIGTERM to its original value.
+	resets SIGPIPE, SIGHUP, SIGSEGV and SIGTERM to their original value.
 	This patch also moves the call to signal() right before calling
 	execve().
 
@@ -155,8 +155,8 @@
 	cherokee/Makefile.am, cherokee/util.c, cherokee/util.h,
 	cherokee/cherokee.h, cherokee/server.c, configure.in: Tracing
 	facility moved to an independent file. The code has been slightly
-	reworked in order to allow the modification of the modules been
-	traced dynamically.
+	reworked in order to allow the modification of the modules
+	that are traced dynamically.
 
 2007-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -177,8 +177,8 @@
 	Handler support macros cleaned up.
 
 	* cherokee/connection.c (cherokee_connection_build_header): If the
-	handler doesn't support to add headers, don't even call the
-	handler method.  It shouldn't adding the server headers either.
+	handler doesn't support "add headers" method, don't even call the
+	handler method.  It shouldn't add the server headers either.
 	It fixes: http://code.google.com/p/cherokee/issues/detail?id=17
 
 	* cherokee/handler.h (HANDLER_SUPPORTS): Added new macro. There is
@@ -393,7 +393,7 @@
 
 	* cherokee/resolv_cache.c, cherokee/resolv_cache.h,
 	cherokee/Makefile.am: <cherokee/cherokee.h> was broken. It
-	couldn't been used by third party programs. This patch fixes the
+	couldn't be used by third party programs. This patch fixes the
 	inclusion for the main header file.
 
 	* cherokee/cherokee/validator_ldap.c, cherokee/fdpoll-epoll.c,
@@ -469,8 +469,8 @@
 	* cherokee/admin_server.c,
 	  cherokee/handler_remote_control.c,
 	  cherokee/handler_server_info.c
-	  - fix, enlarged tmp buffer passed to cherokee_strfsize()
-	    from 5 to 8 characters to avoid buffer overflows.
+	  - micro-optimization, enlarged tmp buffer passed to
+	    cherokee_strfsize() from 5 to 8 characters.
 
 	* cherokee/util.c
 	  - cherokee_strfsize(),
