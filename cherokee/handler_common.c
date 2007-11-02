@@ -46,7 +46,7 @@
 #include "connection.h"
 
 #define ENTRIES "handler,common"
-
+#define DEFAULT_ALLOW_PATHINFO true
 
 ret_t
 cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)
@@ -68,7 +68,8 @@ cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)
 ret_t 
 cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
-	ret_t ret;
+	ret_t                            ret;
+	cherokee_config_node_t          *subconf;
 	cherokee_handler_common_props_t *props;
 
 	if (*_props == NULL) {
@@ -77,17 +78,29 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 		cherokee_handler_props_init_base (HANDLER_PROPS(n),
 			MODULE_PROPS_FREE(cherokee_handler_common_props_free));
 
-		n->props_file    = NULL;
-		n->props_dirlist = NULL;
+		n->props_file     = NULL;
+		n->props_dirlist  = NULL;
+		n->allow_pathinfo = DEFAULT_ALLOW_PATHINFO;
 
 		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_COMMON(*_props);
 
+	/* Parse 'common' parameters
+	 */
+	ret = cherokee_config_node_get (conf, "allow_pathinfo", &subconf);
+	if (ret == ret_ok) {
+		props->allow_pathinfo = atoi(subconf->val.buf);
+	}
+
+	/* Parse 'file' parameters
+	 */
 	ret = cherokee_handler_file_configure (conf, srv, (cherokee_module_props_t **)&props->props_file);
 	if ((ret != ret_ok) && (ret != ret_deny)) return ret;
 
+	/* Parse 'dirlist' parameters
+	 */
 	return cherokee_handler_dirlist_configure (conf, srv, (cherokee_module_props_t **)&props->props_dirlist);
 }
 
@@ -181,6 +194,13 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		char  *pathinfo;
 		int    pathinfo_len;
 		int    begin;
+
+		/* If PathInfo is not allowed just return 'Not Found'
+		 */
+		if (! PROP_COMMON(props)->allow_pathinfo) {
+			conn->error_code = http_not_found; 
+			return ret_error;
+		}
 
 		/* Maybe it could stat() the file because the request contains
 		 * a PathInfo string at the end..

@@ -1,3 +1,11 @@
+2007-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/149-Common-PathInfo.py, qa/150-Common-No-PathInfo.py: Added
+	two new QA tests to ensure that the latest change works.
+
+	* cherokee/handler_common.c, cherokee/handler_common.h: Added new
+	configuration key "allow_pathinfo".
+
 2007-10-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/win32_misc.h, cherokee/win32_misc.c,
