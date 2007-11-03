@@ -475,7 +475,7 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	/* Date
 	 */
 	cherokee_buffer_add_str (buffer, "Date: ");
-	cherokee_buffer_add_buffer (buffer, &CONN_SRV(conn)->bogo_now_string);
+	cherokee_buffer_add_buffer (buffer, &CONN_SRV(conn)->bogo_now_strgmt);
 	cherokee_buffer_add_str (buffer, CRLF);
 
 	/* Add the Server header

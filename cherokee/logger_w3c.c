@@ -187,7 +187,7 @@ cherokee_logger_w3c_write_error  (cherokee_logger_w3c_t *logger, cherokee_connec
 		struct tm *pnow_tm;
 
 		logger->now_time = CONN_THREAD(cnt)->bogo_now;
-		pnow_tm = &CONN_THREAD(cnt)->bogo_now_tm;
+		pnow_tm = &CONN_THREAD(cnt)->bogo_now_tmloc;
 
 		cherokee_buffer_clean (&logger->now_buf);
 		cherokee_buffer_add_va (&logger->now_buf, 
@@ -198,7 +198,7 @@ cherokee_logger_w3c_write_error  (cherokee_logger_w3c_t *logger, cherokee_connec
 	}
 
 	if (unlikely (! logger->header_added)) {
-		struct tm *pnow_tm = &CONN_THREAD(cnt)->bogo_now_tm;
+		struct tm *pnow_tm = &CONN_THREAD(cnt)->bogo_now_tmloc;
 
 		cherokee_buffer_add_va (log,
 					"#Version 1.0\n"
@@ -283,7 +283,7 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 		struct tm *pnow_tm;
 
 		logger->now_time = CONN_THREAD(cnt)->bogo_now;
-		pnow_tm = &CONN_THREAD(cnt)->bogo_now_tm;
+		pnow_tm = &CONN_THREAD(cnt)->bogo_now_tmloc;
 
 		cherokee_buffer_clean (&logger->now_buf);
 		cherokee_buffer_add_va (&logger->now_buf, 
@@ -294,7 +294,7 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 	}
 
 	if (unlikely (! logger->header_added)) {
-		struct tm *pnow_tm = &CONN_THREAD(cnt)->bogo_now_tm;
+		struct tm *pnow_tm = &CONN_THREAD(cnt)->bogo_now_tmloc;
 
 		cherokee_buffer_add_va (log,
 					"#Version 1.0\n"

@@ -88,12 +88,13 @@ update_bogo_now_internal (cherokee_thread_t *thd)
 
 	/* Update struct tm
 	 */
-	memcpy (&thd->bogo_now_tm, &srv->bogo_now_tm, sizeof(struct tm));
+	memcpy (&thd->bogo_now_tmgmt, &srv->bogo_now_tmgmt, sizeof(struct tm));
+	memcpy (&thd->bogo_now_tmloc, &srv->bogo_now_tmloc, sizeof(struct tm));
 
 	/* Update cherokee_buffer_t
 	 */
-	cherokee_buffer_clean (&thd->bogo_now_string);
-	cherokee_buffer_add_buffer (&thd->bogo_now_string, &srv->bogo_now_string);
+	cherokee_buffer_clean (&thd->bogo_now_strgmt);
+	cherokee_buffer_add_buffer (&thd->bogo_now_strgmt, &srv->bogo_now_strgmt);
 
 }
 
@@ -255,8 +256,8 @@ cherokee_thread_new  (
 	/* Bogo now stuff
 	 */
 	n->bogo_now = 0;
-	memset (&n->bogo_now_tm, 0, sizeof (struct tm));
-	cherokee_buffer_init (&n->bogo_now_string);
+	memset (&n->bogo_now_tmgmt, 0, sizeof (struct tm));
+	cherokee_buffer_init (&n->bogo_now_strgmt);
 
 	/* Temporary buffer used by utility functions
 	 */
@@ -1354,7 +1355,7 @@ cherokee_thread_free (cherokee_thread_t *thd)
 {
 	cherokee_list_t *i, *tmp;
 
-	cherokee_buffer_mrproper (&thd->bogo_now_string);
+	cherokee_buffer_mrproper (&thd->bogo_now_strgmt);
 	cherokee_buffer_mrproper (&thd->tmp_buf1);
 	cherokee_buffer_mrproper (&thd->tmp_buf2);
 

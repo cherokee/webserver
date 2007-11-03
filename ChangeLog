@@ -1,3 +1,29 @@
+2007-11-03  A.D.F  <adefacc@tin.it>
+
+	* cherokee/server-protected.h, cherokee/server.c,
+	  cherokee/thread.h, cherokee/thread.c,
+	  cherokee/connection.c,
+	  cherokee/logger_ncsa.c, cherokee/logger_w3c.c
+	  - added RFC-1123 date-time format to try to fix issue 24
+	    (http://code.google.com/p/cherokee/issues/detail?id=24);
+	    now there are two distinct times: local and GMT time,
+	    right now only RFC-1123 date-time string is generated and
+	    stored into bogo_now_strgmt;  should a local time string
+	    be useful, then it could be easily added; things changed:
+	    - added new fields to cherokee_server struct:
+		- bogo_now_tzloc_sign;
+		- bogo_now_tzloc_offset;
+		- bogo_now_tmloc;
+		- bogo_now_tmgmt;
+		- bogo_now_strgmt;
+	    - removed a few fields from cherokee_server struct:
+		- bogo_now_tm;
+		- bogo_now_string;
+	    - server.c -> update_bogo_now: changed;
+	    - connection.c, use new date-time string in RFC-1123 format;
+	    - logger*.c use the new localtime variable names
+	      (no functional change).
+
 2007-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/149-Common-PathInfo.py, qa/150-Common-No-PathInfo.py: Added

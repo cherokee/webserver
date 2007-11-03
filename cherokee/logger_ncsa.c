@@ -210,7 +210,7 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 		struct tm *pnow_tm;
 
 		logger->now_time = CONN_THREAD(cnt)->bogo_now;
-		pnow_tm = &CONN_THREAD(cnt)->bogo_now_tm;
+		pnow_tm = &CONN_THREAD(cnt)->bogo_now_tmloc;
 		cherokee_buffer_clean (&logger->now_dtm);
 		cherokee_buffer_add_va (&logger->now_dtm, 
 				" [%02d/%s/%d:%02d:%02d:%02d %c%02d%02d] \"",

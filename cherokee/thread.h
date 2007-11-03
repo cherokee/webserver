@@ -64,8 +64,9 @@ typedef struct {
 	cherokee_thread_pref_t  thread_pref;
 
 	time_t                  bogo_now;
-	struct tm               bogo_now_tm;
-	cherokee_buffer_t       bogo_now_string;
+	struct tm               bogo_now_tmgmt;
+	struct tm               bogo_now_tmloc;
+	cherokee_buffer_t       bogo_now_strgmt;
 
 	cherokee_buffer_t       tmp_buf1;
 	cherokee_buffer_t       tmp_buf2;

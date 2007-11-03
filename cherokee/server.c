@@ -98,7 +98,7 @@ ret_t
 cherokee_server_new  (cherokee_server_t **srv)
 {
 	ret_t ret;
-	CHEROKEE_NEW_STRUCT(n, server);
+	CHEROKEE_CNEW_STRUCT(1, n, server);
 
 	cherokee_trace_init ();
 	
@@ -177,12 +177,13 @@ cherokee_server_new  (cherokee_server_t **srv)
 	/* Bogo now
 	 */
 	n->bogo_now        = 0;
+	n->bogo_now_tzloc_sign = '+';
+	n->bogo_now_tzloc_offset = 0;
 	CHEROKEE_RWLOCK_INIT (&n->bogo_now_mutex, NULL);
 
 	CHEROKEE_RWLOCK_WRITER (&n->bogo_now_mutex);
-	cherokee_buffer_init (&n->bogo_now_string);
-	cherokee_buffer_ensure_size (&n->bogo_now_string, 
-				     sizeof("Sun, 01 Sep 2006 00:00:00 GMT+00"));
+	cherokee_buffer_init (&n->bogo_now_strgmt);
+	cherokee_buffer_ensure_size (&n->bogo_now_strgmt, DTM_SIZE_GMTTM_STR);
 	CHEROKEE_RWLOCK_UNLOCK (&n->bogo_now_mutex);
 
 	/* Time managing hack
@@ -366,7 +367,7 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_virtual_server_free (srv->vserver_default);
 	srv->vserver_default = NULL;
 
-	cherokee_buffer_mrproper (&srv->bogo_now_string);
+	cherokee_buffer_mrproper (&srv->bogo_now_strgmt);
 	cherokee_buffer_mrproper (&srv->timeout_header);
 
 	cherokee_buffer_mrproper (&srv->server_string);
@@ -1263,8 +1264,6 @@ update_bogo_conns_num (cherokee_server_t *srv)
 static void
 update_bogo_now (cherokee_server_t *srv)
 {
-	char    sign;
-	cuint_t offset;
 	time_t  newtime;
 
 	/* Read the time
@@ -1273,33 +1272,38 @@ update_bogo_now (cherokee_server_t *srv)
 	if (srv->bogo_now >= newtime) 
 		return;
 
-	/* Update the internal variable
+	/* Update internal variables
 	 */
 	CHEROKEE_RWLOCK_WRITER (&srv->bogo_now_mutex);      /* 1.- lock as writer */
-	
+
 	srv->bogo_now = newtime;
-	cherokee_localtime (&newtime, &srv->bogo_now_tm);
+
+	/* Convert time to both GMT and local time struct
+	 */
+	cherokee_gmtime    (&newtime, &srv->bogo_now_tmgmt);
+	cherokee_localtime (&newtime, &srv->bogo_now_tmloc);
 
 #ifdef HAVE_STRUCT_TM_GMTOFF
-	sign = srv->bogo_now_tm.tm_gmtoff < 0 ? '-' : '+';
-	offset = abs(srv->bogo_now_tm.tm_gmtoff / 3600);
+	srv->bogo_now_tzloc_sign = srv->bogo_now_tmloc.tm_gmtoff < 0 ? '-' : '+';
+	srv->bogo_now_tzloc_offset = abs(srv->bogo_now_tmloc.tm_gmtoff / 3600);
 #else
-	sign = timezone < 0 ? '-' : '+';
-	offset = abs(timezone / 3600);
+	srv->bogo_now_tzloc_sign = timezone < 0 ? '-' : '+';
+	srv->bogo_now_tzloc_offset = abs(timezone / 3600);
 #endif
 	
-	cherokee_buffer_clean (&srv->bogo_now_string);
-	cherokee_buffer_add_va_fixed (
-		&srv->bogo_now_string,
-		"%s, %02d %s %d %02d:%02d:%02d GMT%c%d",
-		cherokee_dtm_wday_name(srv->bogo_now_tm.tm_wday),
-		srv->bogo_now_tm.tm_mday,
-		cherokee_dtm_month_name(srv->bogo_now_tm.tm_mon),
-		srv->bogo_now_tm.tm_year + 1900,
-		srv->bogo_now_tm.tm_hour,
-		srv->bogo_now_tm.tm_min,
-		srv->bogo_now_tm.tm_sec,
-		sign, offset);
+	cherokee_buffer_clean (&srv->bogo_now_strgmt);
+	{
+	size_t  szlen = 0;
+	char bufstr[DTM_SIZE_GMTTM_STR + 2];
+
+	szlen = cherokee_dtm_gmttm2str (bufstr, sizeof(bufstr),
+	                                &srv->bogo_now_tmgmt);
+	cherokee_buffer_add (&srv->bogo_now_strgmt, bufstr, szlen);
+	}
+
+	/* NOTE: a local time string should have {+-}timezone_offset (hours)
+	 *       added to date-time GMT string.
+	 */
 
 	CHEROKEE_RWLOCK_UNLOCK (&srv->bogo_now_mutex);      /* 2.- release */
 }
