@@ -1028,6 +1028,24 @@ dnl Check for MySQL 4.0.0 support
 dnl
 AX_LIB_MYSQL(4.0.0)
 
+dnl
+dnl Python's docutils
+dnl 
+AC_MSG_CHECKING([for Python's docutils])
+if python -c "import docutils" >/dev/null 2>/dev/null; then
+  docutils_found=yes
+else
+  docutils_found=no
+fi
+AM_CONDITIONAL(PYTHON_DOCUTILS, test "x$docutils_found" = "xyes")
+AC_MSG_RESULT([$docutils_found])
+
+if test "x$docutils_found" != "xyes"; then
+  echo
+  echo "*WARNING*: Python module docutils is not installed!"
+  echo "           It will not be able to recompile the documentation."
+  echo
+fi
 
 dnl
 dnl WWW root directory

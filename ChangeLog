@@ -1,3 +1,8 @@
+2007-11-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+       * configure.in: Added check for Python's docutils module. It warns
+       if it is not installed.
+
 2007-11-03  A.D.F  <adefacc@tin.it>
 
 	* cherokee/server-protected.h, cherokee/server.c,
