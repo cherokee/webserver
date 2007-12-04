@@ -292,7 +292,7 @@ cherokee_validator_digest_response (cherokee_validator_t  *validator,
 	ret_t              ret;
 	cherokee_buffer_t a2 = CHEROKEE_BUF_INIT;
 
-	/* A1 has to be in string of lenght 32:
+	/* A1 has to be in string of length 32:
 	 * MD5_digest(user":"realm":"passwd)
 	 */
 

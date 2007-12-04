@@ -139,7 +139,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	cherokee_buffer_init (&n->request_original);
 
 	cherokee_socket_init (&n->socket);
-	cherokee_header_init (&n->header);
+	cherokee_header_init (&n->header, header_type_request);
 	cherokee_post_init (&n->post);
 
 	*conn = n;
@@ -1282,7 +1282,7 @@ post_init (cherokee_connection_t *conn)
 	cuint_t  info_len = 0;
 	CHEROKEE_TEMP(buf, 64);
 
-	/* Get the header "Content-Lenght" content
+	/* Get the header "Content-Length" content
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_content_length, &info, &info_len);
 	if (ret != ret_ok) {
@@ -1368,7 +1368,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 
 	/* Header parsing
 	 */
-	ret = cherokee_header_parse (&conn->header, &conn->incoming_header, header_type_request, &error_code);
+	ret = cherokee_header_parse (&conn->header, &conn->incoming_header, &error_code);
 	if (unlikely (ret < ret_ok))
 		goto error;
 

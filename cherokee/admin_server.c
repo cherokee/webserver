@@ -45,7 +45,7 @@ cherokee_admin_server_reply_set_port (cherokee_handler_admin_t *ahdl, cherokee_b
 {
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
 	srv = srv;
-	cherokee_buffer_add (reply, "ok\n", 3);
+	cherokee_buffer_add_str (reply, "ok\n");
 	return ret_ok;
 }
 
@@ -65,7 +65,7 @@ cherokee_admin_server_reply_set_port_tls (cherokee_handler_admin_t *ahdl, cherok
 {
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
 	srv = srv;
-	cherokee_buffer_add (reply, "ok\n", 3);
+	cherokee_buffer_add_str (reply, "ok\n");
 	return ret_ok;
 }
 
@@ -236,9 +236,9 @@ cherokee_admin_server_reply_set_backup_mode (cherokee_handler_admin_t *ahdl, che
 
 	/* Read if the resquest if for turning it on or off
 	 */
-	if (!strncmp (question->buf, "set server.backup_mode on", 25)) {
+	if (cherokee_buffer_cmp_str (question, "set server.backup_mode on") == 0) { 
 		mode = true;
-	} else if (!strncmp (question->buf, "set server.backup_mode off", 26)) {
+	} else if (cherokee_buffer_cmp_str (question, "set server.backup_mode off") == 0) { 
 		mode = false;
 	} else {
 		return ret_error;
@@ -261,3 +261,37 @@ cherokee_admin_server_reply_set_backup_mode (cherokee_handler_admin_t *ahdl, che
 	return ret_ok;
 }
 
+
+/* Trace
+ */
+
+ret_t 
+cherokee_admin_server_reply_get_trace (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
+{
+	ret_t              ret;
+	cherokee_buffer_t *modules_ref = NULL;
+
+	ret = cherokee_trace_get_trace (&modules_ref);
+	if (ret != ret_ok) return ret;
+
+	if (cherokee_buffer_is_empty (modules_ref)) {
+		cherokee_buffer_add_str (reply, "server.trace is None\n");
+	} else {
+		cherokee_buffer_add_va (reply, "server.trace is %s\n", modules_ref->buf);
+	}
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_admin_server_reply_set_trace (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
+{
+	ret_t ret;
+
+	ret = cherokee_trace_set_modules (question);
+	if (ret != ret_ok) return ret;
+
+	cherokee_buffer_add_str (reply, "ok\n");
+	return ret_ok;
+}

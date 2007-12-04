@@ -56,6 +56,7 @@ struct cherokee_header {
 
 	/* Properties
 	 */
+	cherokee_header_type_t  type;
 	cherokee_http_version_t version;
 	cherokee_http_method_t  method;
 	cherokee_http_t         response;

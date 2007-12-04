@@ -90,7 +90,7 @@ cherokee_fcgi_manager_mrproper (cherokee_fcgi_manager_t *mgr)
 
 
 static void
-update_conn_list_lenght (cherokee_fcgi_manager_t *mgr, cuint_t id)
+update_conn_list_length (cherokee_fcgi_manager_t *mgr, cuint_t id)
 {
 	if (mgr->conn.id2conn[id].conn == NULL) {
 		/* There is room of one connection, notify it
@@ -312,7 +312,7 @@ process_package (cherokee_fcgi_manager_t *mgr, cherokee_buffer_t *inbuf)
 		HDL_CGI_BASE(hdl)->got_eof    = true;
 		mgr->conn.id2conn[id].eof = true;
 
-		update_conn_list_lenght (mgr, id);
+		update_conn_list_length (mgr, id);
 
 /* 		printf ("READ:END id=%d gen=%d", id, hdl->generation); */
 		break;
@@ -422,7 +422,7 @@ cherokee_fcgi_manager_unregister (cherokee_fcgi_manager_t *mgr, cherokee_connect
 	}
 
 	mgr->conn.id2conn[hdl->id].conn = NULL;       
-	update_conn_list_lenght (mgr, hdl->id);
+	update_conn_list_length (mgr, hdl->id);
 
 	return ret_ok;
 }

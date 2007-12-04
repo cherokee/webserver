@@ -45,12 +45,6 @@ cherokee_url_init (cherokee_url_t *url)
 	ret = cherokee_buffer_init (&url->request);
  	if (unlikely(ret < ret_ok)) return ret;
 
-	ret = cherokee_buffer_init (&url->user);
- 	if (unlikely(ret < ret_ok)) return ret;
-
-	ret = cherokee_buffer_init (&url->passwd);
- 	if (unlikely(ret < ret_ok)) return ret;
-	
 	/* Set default values
 	 */
 	url->port = 80;
@@ -63,9 +57,6 @@ cherokee_url_mrproper (cherokee_url_t *url)
 {
 	cherokee_buffer_mrproper (&url->host);
 	cherokee_buffer_mrproper (&url->request);
-	cherokee_buffer_mrproper (&url->user);
-	cherokee_buffer_mrproper (&url->passwd);
-
 	return ret_ok;
 }
 
@@ -77,8 +68,6 @@ cherokee_url_clean (cherokee_url_t *url)
 
 	cherokee_buffer_clean (&url->host);
 	cherokee_buffer_clean (&url->request);
-	cherokee_buffer_clean (&url->user);
-	cherokee_buffer_clean (&url->passwd);
 
 	return ret_ok;
 }
@@ -112,7 +101,10 @@ parse_protocol (cherokee_url_t *url, char *string, cuint_t *len)
 
 
 static ret_t 
-cherokee_url_parse_ptr (cherokee_url_t *url, char *url_string)
+cherokee_url_parse_guts (cherokee_url_t    *url, 
+			 cherokee_buffer_t *url_buf,
+			 cherokee_buffer_t *user_ret, 
+			 cherokee_buffer_t *password_ret)
 {
 	ret_t    ret;
 	cuint_t  len = 0 ;
@@ -124,10 +116,10 @@ cherokee_url_parse_ptr (cherokee_url_t *url, char *url_string)
 	
 	/* Drop protocol, if exists..
 	 */
-	ret = parse_protocol (url, url_string, &len);
+	ret = parse_protocol (url, url_buf->buf, &len);
 	if (unlikely(ret < ret_ok)) return ret_error;
 	
-	tmp = url_string + len;
+	tmp = url_buf->buf + len;
 
 	/* User (and password)
 	 */
@@ -137,11 +129,14 @@ cherokee_url_parse_ptr (cherokee_url_t *url, char *url_string)
 
 		sep = strchr (tmp, ':');
 		if (sep == NULL) {
-			cherokee_buffer_add (&url->user, tmp, arroba - tmp);
+			cherokee_buffer_clean (user_ret);
+			cherokee_buffer_add (user_ret, tmp, arroba - tmp);
 		} else {
-			cherokee_buffer_add (&url->user, tmp, sep - tmp);
+			cherokee_buffer_clean (user_ret);
+			cherokee_buffer_add (user_ret, tmp, sep - tmp);
 			sep++;
-			cherokee_buffer_add (&url->passwd, sep, arroba - sep);
+			cherokee_buffer_clean (password_ret);
+			cherokee_buffer_add (password_ret, sep, arroba - sep);
 		}
 
 		tmp = arroba + 1;
@@ -186,14 +181,17 @@ cherokee_url_parse_ptr (cherokee_url_t *url, char *url_string)
 }
 
 
-ret_t 
-cherokee_url_parse (cherokee_url_t *url, cherokee_buffer_t *string)
+ret_t
+cherokee_url_parse (cherokee_url_t    *url, 
+		    cherokee_buffer_t *string,
+		    cherokee_buffer_t *user_ret, 
+		    cherokee_buffer_t *password_ret)
 {
-	if (cherokee_buffer_is_empty(string)) {
+	if (cherokee_buffer_is_empty (string)) {
 		return ret_error;
 	}
 
-	return cherokee_url_parse_ptr (url, string->buf);
+	return cherokee_url_parse_guts (url, string, user_ret, password_ret);
 }
 
 
@@ -220,8 +218,5 @@ cherokee_url_print (cherokee_url_t *url)
 	printf ("Host:    %s\n", url->host.buf);
 	printf ("Request: %s\n", url->request.buf);
 	printf ("Port:    %d\n", url->port);
-	printf ("User:    %s\n", url->user.buf);
-	printf ("Pass:    %s\n", url->passwd.buf);
-
 	return ret_ok;
 }

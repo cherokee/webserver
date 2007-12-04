@@ -238,7 +238,7 @@ parse_netmask (char *netmask, subnet_item_t *n)
 	}
 
 
-	/* Lenght mask
+	/* Length mask
 	 * Eg: 16
 	 */
 	if (strlen(netmask) > 3) {

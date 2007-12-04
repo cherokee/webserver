@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 
-/* Cherokee Benchmarker
+/* Cherokee
  *
  * Authors:
  *      Alvaro Lopez Ortega <alvaro@alobbs.com>
@@ -26,46 +26,26 @@
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
 
-#ifndef CHEROKEE_URL_H
-#define CHEROKEE_URL_H
+#ifndef CHEROKEE_ASYNC_DOWNLOADER__H
+#define CHEROKEE_ASYNC_DOWNLOADER_H
 
-#include <stdlib.h>
 #include <cherokee/common.h>
-#include <cherokee/list.h>
-#include <cherokee/buffer.h>
+#include <cherokee/downloader.h>
 
 CHEROKEE_BEGIN_DECLS
 
+typedef struct cherokee_downloader_async cherokee_downloader_async_t;
+#define DOWNLOADER_ASYNC(d) ((cherokee_downloader_async_t *)(d))
 
-typedef struct {	
-	cherokee_buffer_t  host;
-	cuint_t            port;
-	cherokee_buffer_t  request;
-	
-	enum {
-		http,
-		https
-	}                  protocol;
+ret_t cherokee_downloader_async_new        (cherokee_downloader_async_t **downloader);
+ret_t cherokee_downloader_async_free       (cherokee_downloader_async_t  *downloader);
+ret_t cherokee_downloader_async_init       (cherokee_downloader_async_t  *downloader);
+ret_t cherokee_downloader_async_mrproper   (cherokee_downloader_async_t  *downloader);
 
-} cherokee_url_t;
-
-#define URL(u)           ((cherokee_url_t *)(u))
-#define URL_PORT(u)      (URL(u)->port)
-#define URL_HOST(u)      (&URL(u)->host)
-#define URL_REQUEST(u)   (&URL(u)->request)
-
-
-ret_t cherokee_url_init     (cherokee_url_t *url);
-ret_t cherokee_url_clean    (cherokee_url_t *url);
-ret_t cherokee_url_mrproper (cherokee_url_t *url);
-
-ret_t cherokee_url_parse        (cherokee_url_t *url, cherokee_buffer_t *string, cherokee_buffer_t *user_ret, cherokee_buffer_t *password_ret);
-ret_t cherokee_url_build_string (cherokee_url_t *url, cherokee_buffer_t *buf);
-
-ret_t cherokee_url_print (cherokee_url_t *url);
-
+ret_t cherokee_downloader_async_set_fdpoll (cherokee_downloader_async_t  *downloader, cherokee_fdpoll_t *fdpoll);
+ret_t cherokee_downloader_async_connect    (cherokee_downloader_async_t  *downloader);
+ret_t cherokee_downloader_async_step       (cherokee_downloader_async_t  *downloader);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_URL_H */
-
+#endif /* CHEROKEE_ASYNC_DOWNLOADER_H */

@@ -338,7 +338,7 @@ cherokee_logger_ncsa_write_access (cherokee_logger_ncsa_t *logger, cherokee_conn
 {
 	ret_t              ret;
 	cherokee_buffer_t *log;
-
+	
 	/* Get the buffer
 	 */
 	ret = cherokee_logger_writer_get_buf (&logger->writer_access, &log);

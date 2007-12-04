@@ -12,7 +12,7 @@ $(PTHREAD_CFLAGS) \
 -DCHEROKEE_SRV_PATH=\""$(prefix)/sbin/cherokee"\" \
 -DCHEROKEE_ICONSDIR=\""$(prefix)/share/cherokee/icons"\" \
 -DCHEROKEE_THEMEDIR=\""$(prefix)/share/cherokee/themes"\" \
--DCHEROKEE_PANIC_PATH=\""$(prefix)/bin/cherokee-panic"\"
+-DCHEROKEE_PANIC_PATH=\""$(prefix)/bin/cherokee-panic"\" 
 
 #
 # Scripts
@@ -784,7 +784,9 @@ request.h \
 request.c \
 downloader.h \
 downloader-protected.h \
-downloader.c 
+downloader.c \
+downloader_async.h \
+downloader_async.c
 
 
 if STATIC_HANDLER_FCGI
@@ -1012,10 +1014,12 @@ cherokee_admin_LDFLAGS = $(cherokee_LDFLAGS)
 #
 # Log rotate utility
 #
-bin_PROGRAMS = cherokee_logrotate
+bin_PROGRAMS = cherokee_tweak
 
-cherokee_logrotate_SOURCES = cherokee_logrotate.c
-cherokee_logrotate_LDADD = libcherokee-base.la libcherokee-client.la libcherokee-server.la libcherokee-config.la
+cherokee_tweak_SOURCES = main_tweak.c
+cherokee_tweak_LDADD = libcherokee-base.la libcherokee-client.la libcherokee-server.la libcherokee-config.la
+
+
 
 #
 # Win32 service
@@ -1032,10 +1036,7 @@ win32_cherokeeserv_LDADD = libcherokee-config.la libcherokee-base.la libcherokee
 #
 # Test programs
 #
-noinst_PROGRAMS = cherokee_show $(win32_cherokeeserv)
-
-cherokee_show_SOURCES = cherokee_show.c 
-cherokee_show_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la 
+noinst_PROGRAMS = $(win32_cherokeeserv)
 
 # test_SOURCES = test.c
 # test_LDADD = libcherokee-config.la libcherokee-base.la libcherokee-client.la 

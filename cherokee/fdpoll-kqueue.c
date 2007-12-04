@@ -156,7 +156,7 @@ static int
 _watch (cherokee_fdpoll_kqueue_t *fdp, int timeout_msecs)
 {
 	struct timespec  timeout;
-	int              i, re, fd;
+	int              i;
 	int              n_events;
 
 

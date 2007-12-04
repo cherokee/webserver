@@ -68,7 +68,7 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 	ret = cherokee_socket_init (&n->socket);
 	if (unlikely(ret != ret_ok)) return ret;	
 
-	ret = cherokee_header_new (&n->header);	
+	ret = cherokee_header_new (&n->header, header_type_response);	
 	if (unlikely(ret != ret_ok)) return ret;
 
 	cherokee_buffer_init (&n->proxy);
@@ -130,15 +130,7 @@ CHEROKEE_ADD_FUNC_FREE (downloader);
 ret_t 
 cherokee_downloader_set_url (cherokee_downloader_t *downloader, cherokee_buffer_t *url_string)
 {
-	ret_t                      ret;
-	cherokee_request_header_t *req = &downloader->request;
-
-	/* Parse the string in a URL object
-	 */
-	ret = cherokee_url_parse (&req->url, url_string);
-	if (unlikely(ret < ret_ok)) return ret;
-	
-	return ret_ok;
+	return cherokee_request_header_parse_string (&downloader->request, url_string);
 }
 
 
@@ -170,6 +162,15 @@ cherokee_downloader_set_proxy (cherokee_downloader_t *downloader, cherokee_buffe
 
 	downloader->proxy_port = port;
 	return ret_ok;
+}
+
+
+ret_t
+cherokee_downloader_set_auth (cherokee_downloader_t *downloader, 
+			      cherokee_buffer_t     *user, 
+			      cherokee_buffer_t     *password)
+{
+	return cherokee_request_header_set_auth (&downloader->request, http_auth_basic, user, password);
 }
 
 
@@ -313,7 +314,7 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 
 		/* Check the header. Is it complete? 
 		 */
-		ret = cherokee_header_has_header (downloader->header, &downloader->reply_header, readed+4);
+		ret = cherokee_header_has_header (downloader->header, &downloader->reply_header, 0);
 		switch (ret) {
 		case ret_ok:
 			break;
@@ -331,10 +332,8 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 		 */
 		ret = cherokee_header_parse (downloader->header,
 		                             &downloader->reply_header,
-		                             header_type_response,
-		                             &error_code
-		);		
-		if (unlikely(ret != ret_ok)) return ret_error;
+		                             &error_code);
+		if (unlikely (ret != ret_ok)) return ret_error;
 
 		/* Look for the length, it will need to drop out the header from the buffer
 		 */
@@ -345,6 +344,9 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 		if (downloader->reply_header.len > len) {
 			uint32_t body_chunk;
 			
+			/* Skip the CRLF separator and copy the body
+			 */
+			len += 2;
 			body_chunk = downloader->reply_header.len - len;
 			
 			downloader->info.body_recv += body_chunk;
@@ -360,6 +362,8 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 			cherokee_buffer_clean (tmp1);
 			ret = cherokee_header_copy_known (downloader->header, header_content_length, tmp1);
 			downloader->content_length = atoi (tmp1->buf);
+
+			TRACE (ENTRIES, "Known lenght: %d bytes\n", downloader->content_length);
 		}
 
 		return ret_ok;
@@ -438,6 +442,7 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 		if (downloader->post != NULL) {
 			req->method = http_post;
 			cherokee_post_walk_reset (downloader->post);
+			req->post_len = downloader->post->size;
 		}
 
 		/* Build the request header
@@ -471,7 +476,6 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 
 		if (downloader->post != NULL) {
 			ret = cherokee_post_walk_to_fd (downloader->post, downloader->socket.socket, NULL, NULL);
-
 /*			ret = send_post (downloader); */
 /* 			ret = downloader_send_buffer (downloader, downloader->post_ref); */
 			if (unlikely(ret != ret_ok)) return ret;
@@ -541,6 +545,8 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 ret_t 
 cherokee_downloader_post_set (cherokee_downloader_t *downloader, cherokee_post_t *post)
 {
+	TRACE(ENTRIES, "post=%p\n", post);
+
 	if (downloader->post != NULL) {
 		PRINT_ERROR_S ("WARNING: Overwriting post info\n");
 	}
@@ -553,8 +559,15 @@ cherokee_downloader_post_set (cherokee_downloader_t *downloader, cherokee_post_t
 ret_t 
 cherokee_downloader_reuse (cherokee_downloader_t *downloader)
 {
+	TRACE(ENTRIES, "%p\n", downloader);
+
 	downloader->phase = downloader_phase_init;
 	downloader->post  = NULL;
+
+	downloader->info.request_sent = 0;
+	downloader->info.headers_recv = 0;
+	downloader->info.post_sent    = 0;
+	downloader->info.body_recv    = 0;
 
 	cherokee_buffer_clean (&downloader->request_header);
 	cherokee_buffer_clean (&downloader->reply_header);

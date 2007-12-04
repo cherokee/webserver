@@ -29,8 +29,10 @@
 
 #include "util.h"
 #include "buffer.h"
-#include "downloader.h"
+#include "downloader_async.h"
 #include "downloader-protected.h"
+
+#define ENTRIES "admin,client"
 
 
 typedef enum {
@@ -41,16 +43,15 @@ typedef enum {
 
 
 struct cherokee_admin_client {
-	cherokee_post_t          *post;
-	cherokee_buffer_t        *url_ref;
-	cherokee_buffer_t         request;
-	cherokee_buffer_t         reply;
-	cherokee_buffer_t         tmp1;
-	cherokee_buffer_t         tmp2;
+	cherokee_downloader_async_t *downloader;
 
-	admin_phase_t             phase;
-	cherokee_fdpoll_t        *poll_ref;
-	cherokee_downloader_t     downloader;
+	cherokee_buffer_t           *url_ref;
+	cherokee_buffer_t            request;
+	cherokee_buffer_t            reply;
+
+	cherokee_post_t              post;
+	admin_phase_t                phase;
+	cherokee_fdpoll_t           *poll_ref;
 };
 
 #define strcmp_begin(line,sub)       strncmp(line, sub, strlen(sub))
@@ -68,16 +69,11 @@ cherokee_admin_client_new (cherokee_admin_client_t **admin)
 
 	n->poll_ref     = NULL;
 	n->url_ref      = NULL;
-	n->post         = NULL;
 
-	cherokee_downloader_init (&n->downloader);
+	cherokee_post_init (&n->post);
+	cherokee_downloader_async_new (&n->downloader);
 	cherokee_buffer_init (&n->request);
 	cherokee_buffer_init (&n->reply);
-	cherokee_buffer_init (&n->tmp1);
-	cherokee_buffer_init (&n->tmp2);
-
-	cherokee_buffer_ensure_size(&n->tmp1, 512);
-	cherokee_buffer_ensure_size(&n->tmp2, 512);
 
 	/* Return the object
 	 */
@@ -91,10 +87,8 @@ cherokee_admin_client_free (cherokee_admin_client_t *admin)
 {
 	cherokee_buffer_mrproper (&admin->request);
 	cherokee_buffer_mrproper (&admin->reply);
-	cherokee_buffer_mrproper (&admin->tmp1);
-	cherokee_buffer_mrproper (&admin->tmp2);
 
-	cherokee_downloader_mrproper (&admin->downloader);
+	cherokee_downloader_async_free (admin->downloader);
 
 	free (admin);
 	return ret_ok;
@@ -112,15 +106,21 @@ on_downloader_finish (void *_downloader, void *_param)
 
 
 ret_t 
-cherokee_admin_client_prepare (cherokee_admin_client_t *admin, cherokee_fdpoll_t *poll, cherokee_buffer_t *url)
+cherokee_admin_client_prepare (cherokee_admin_client_t *admin, 
+			       cherokee_fdpoll_t       *poll,
+			       cherokee_buffer_t       *url,
+			       cherokee_buffer_t       *user,
+			       cherokee_buffer_t       *pass)
 {
 	ret_t                  ret;
-	cherokee_downloader_t *downloader = &admin->downloader;
+	cherokee_downloader_t *downloader = DOWNLOADER(admin->downloader);
 
 	admin->phase    = admin_phase_init;
 
 	admin->poll_ref = poll;
 	admin->url_ref  = url;
+
+	TRACE(ENTRIES, "fdpoll=%p url=%p\n", poll, url);
 
 	/* Sanity check
 	 */
@@ -133,20 +133,25 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin, cherokee_fdpoll_t
 	
 	/* Set up the downloader object properties
 	 */
-#warning "Fix this!"
-
-/* 	ret = cherokee_downloader_set_fdpoll (downloader, admin->poll_ref, true); */
-/* 	if (unlikely (ret != ret_ok)) return ret; */
+	ret = cherokee_downloader_async_set_fdpoll (downloader, admin->poll_ref);
+	if (unlikely (ret != ret_ok)) return ret;
 	
-	ret = cherokee_downloader_set_url (&admin->downloader, admin->url_ref); 
+	ret = cherokee_downloader_set_url (downloader, admin->url_ref); 
 	if (unlikely (ret != ret_ok)) return ret;
 
 	ret = cherokee_downloader_set_keepalive (downloader, true);
 	if (unlikely (ret != ret_ok)) return ret;
 
+	/* Set the authentication data
+	 */
+	ret = cherokee_downloader_set_auth (downloader, user, pass);
+	if (unlikely (ret != ret_ok)) return ret;	
+
+#warning "Fix this!"
 /* 	ret = cherokee_downloader_connect_event (downloader, downloader_event_finish, on_downloader_finish, admin); */
 /* 	if (unlikely (ret != ret_ok)) return ret; */
 
+	TRACE(ENTRIES, "Exists obj=%p\n", admin);
 	return ret_ok;
 }
 
@@ -154,24 +159,22 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin, cherokee_fdpoll_t
 ret_t 
 cherokee_admin_client_connect (cherokee_admin_client_t *admin)
 {
-	return cherokee_downloader_connect (&admin->downloader);
+	return cherokee_downloader_async_connect (admin->downloader);
 }
 
 ret_t 
 cherokee_admin_client_get_reply_code (cherokee_admin_client_t *admin, cherokee_http_t *code)
 {
-	return cherokee_downloader_get_reply_code (&admin->downloader, code);
+	return cherokee_downloader_get_reply_code (DOWNLOADER(admin->downloader), code);
 }
 
 ret_t 
 cherokee_admin_client_reuse (cherokee_admin_client_t *admin)
 {
-	cherokee_downloader_reuse (&admin->downloader);
+	cherokee_downloader_reuse (DOWNLOADER(admin->downloader));
 
 	cherokee_buffer_clean (&admin->request);
 	cherokee_buffer_clean (&admin->reply);
-	cherokee_buffer_clean (&admin->tmp1);
-	cherokee_buffer_clean (&admin->tmp2);
 
 	admin->phase = admin_phase_init;
 	return ret_ok;
@@ -181,8 +184,9 @@ cherokee_admin_client_reuse (cherokee_admin_client_t *admin)
 ret_t
 cherokee_admin_client_internal_step (cherokee_admin_client_t *admin)
 {
-	ret_t                  ret;
-	cherokee_downloader_t *downloader = &admin->downloader;
+	ret_t ret;
+
+	TRACE(ENTRIES, "Enters phase=%d\n", admin->phase);
 
 	/* Has it finished?
 	 */
@@ -196,9 +200,10 @@ cherokee_admin_client_internal_step (cherokee_admin_client_t *admin)
 
 	/* It's stepping
 	 */
-	ret = cherokee_downloader_step (downloader, &admin->tmp1, &admin->tmp2);
+	ret = cherokee_downloader_async_step (admin->downloader);
 	switch (ret) {
 	case ret_eof:
+	case ret_eof_have_data:
 		return ret_ok;
 	case ret_error:
 	case ret_eagain:
@@ -216,15 +221,16 @@ cherokee_admin_client_internal_step (cherokee_admin_client_t *admin)
 static void
 prepare_and_set_post (cherokee_admin_client_t *admin, char *str, cuint_t str_len)
 {
-	cherokee_downloader_t *downloader = &admin->downloader;
+	cherokee_downloader_t *downloader = DOWNLOADER(admin->downloader);
 
+	cherokee_downloader_set_url (downloader, admin->url_ref); 
 	cherokee_buffer_add (&admin->request, str, str_len); 
 
-	cherokee_downloader_reuse (downloader); 
-	cherokee_downloader_set_url (downloader, admin->url_ref); 
-	/* Fixme
-	cherokee_downloader_post_set (downloader, &admin->request); 
+	/* Build and set the post object
 	 */
+	cherokee_post_init (&admin->post);
+	cherokee_post_set_len (&admin->post, str_len);
+	cherokee_post_append (&admin->post, str, str_len);
 	cherokee_downloader_post_set (downloader, &admin->post); 
 
 	admin->phase = admin_phase_stepping;
@@ -238,10 +244,33 @@ prepare_and_set_post (cherokee_admin_client_t *admin, char *str, cuint_t str_len
 	if ((string == NULL) || (strlen(string) == 0)) \
 		return ret_error; \
 	if (strncmp (string, substr, sizeof(substr)-1)) { \
-		if (0) PRINT_ERROR ("ERROR: Uknown response len(%d): '%s'\n", strlen(string), string); \
+		PRINT_ERROR ("ERROR: Uknown response len(%d): '%s'\n", strlen(string), string); \
 		return ret_error; \
 	} \
 	string += sizeof(substr)-1;
+
+
+static ret_t
+check_and_skip_literal (cherokee_buffer_t *buf, const char *literal) 
+{
+	cint_t  re;
+	cuint_t len;
+	
+	len = strlen(literal);
+	cherokee_buffer_trim (buf);
+
+	re = strncmp (buf->buf, literal, len);
+	if (re != 0) {
+#if 0
+		PRINT_ERROR ("ERROR: Couldn't find len(%d):'%s' in len(%d):'%s'\n", 
+			     strlen(literal), literal, buf->len, buf->buf);
+#endif
+		return ret_error;
+	}
+
+	cherokee_buffer_move_to_begin (buf, len);
+	return ret_ok;
+}
 
 
 static ret_t
@@ -250,6 +279,8 @@ common_processing (cherokee_admin_client_t *admin,
 		   void *argument) 
 {
 	ret_t ret;
+
+	TRACE(ENTRIES, "phase %d\n", admin->phase);
 
 	switch (admin->phase) {
 	case admin_phase_init:
@@ -277,10 +308,14 @@ ask_get_port (cherokee_admin_client_t *admin, void *arg)
 }
 
 static ret_t
-parse_reply_get_port (char *reply, cuint_t *port)
+parse_reply_get_port (cherokee_buffer_t *reply, cuint_t *port)
 {
-	CHECK_AND_SKIP_LITERAL (reply, "server.port is ");
-	*port = strtol (reply, NULL, 10);
+	ret_t ret;
+
+	ret = check_and_skip_literal (reply, "server.port is ");
+	if (ret != ret_ok) return ret;
+
+	*port = strtol (reply->buf, NULL, 10);
 	return ret_ok;
 }
 
@@ -292,7 +327,7 @@ cherokee_admin_client_ask_port (cherokee_admin_client_t *admin, cuint_t *port)
 	ret = common_processing (admin, ask_get_port, NULL);
 	if (ret != ret_ok) return ret;
 
-	return parse_reply_get_port (admin->downloader.body.buf, port);
+	return parse_reply_get_port (&DOWNLOADER(admin->downloader)->body, port);
 }
 
 
@@ -305,11 +340,14 @@ ask_get_port_tls (cherokee_admin_client_t *admin, void *arg)
 }
 
 static ret_t
-parse_reply_get_port_tls (char *reply, cuint_t *port)
+parse_reply_get_port_tls (cherokee_buffer_t *reply, cuint_t *port)
 {
-	CHECK_AND_SKIP_LITERAL (reply, "server.port_tls is ");
+	ret_t ret;
 
-	*port = strtol (reply, NULL, 10);
+	ret = check_and_skip_literal (reply, "server.port_tls is ");
+	if (ret != ret_ok) return ret;
+
+	*port = strtol (reply->buf, NULL, 10);
 	return ret_ok;
 }
 
@@ -321,7 +359,7 @@ cherokee_admin_client_ask_port_tls (cherokee_admin_client_t *admin, cuint_t *por
 	ret = common_processing (admin, ask_get_port_tls, NULL);
 	if (ret != ret_ok) return ret;
 
-	return parse_reply_get_port_tls (admin->downloader.body.buf, port);
+	return parse_reply_get_port_tls (&DOWNLOADER(admin->downloader)->body, port);
 }
 
 
@@ -334,11 +372,14 @@ ask_get_rx (cherokee_admin_client_t *admin, void *arg)
 }
 
 static ret_t
-parse_reply_get_rx (char *reply, cherokee_buffer_t *rx)
+parse_reply_get_rx (cherokee_buffer_t *reply, cherokee_buffer_t *rx)
 {
-	CHECK_AND_SKIP_LITERAL (reply, "server.rx is ");
+	ret_t ret;
 
-	cherokee_buffer_add (rx, reply, strlen(reply));
+	ret = check_and_skip_literal (reply, "server.rx is ");
+	if (ret != ret_ok) return ret;
+
+	cherokee_buffer_add_buffer (rx, reply);
 	return ret_ok;
 }
 
@@ -350,7 +391,7 @@ cherokee_admin_client_ask_rx (cherokee_admin_client_t *admin, cherokee_buffer_t 
 	ret = common_processing (admin, ask_get_rx, NULL);
 	if (ret != ret_ok) return ret;
 
-	return parse_reply_get_rx (admin->downloader.body.buf, rx);	
+	return parse_reply_get_rx (&DOWNLOADER(admin->downloader)->body, rx);	
 }
 
 
@@ -363,11 +404,14 @@ ask_get_tx (cherokee_admin_client_t *admin, void *args)
 }
 
 static ret_t
-parse_reply_get_tx (char *reply, cherokee_buffer_t *tx)
+parse_reply_get_tx (cherokee_buffer_t *reply, cherokee_buffer_t *tx)
 {
-	CHECK_AND_SKIP_LITERAL (reply, "server.tx is ");
+	ret_t ret;
 
-	cherokee_buffer_add (tx, reply, strlen(reply));
+	ret = check_and_skip_literal (reply, "server.tx is ");
+	if (ret != ret_ok) return ret;
+
+	cherokee_buffer_add_buffer (tx, reply);
 	return ret_ok;
 }
 
@@ -379,7 +423,7 @@ cherokee_admin_client_ask_tx (cherokee_admin_client_t *admin, cherokee_buffer_t 
 	ret = common_processing (admin, ask_get_tx, NULL);
 	if (ret != ret_ok) return ret;
 
-	return parse_reply_get_tx (admin->downloader.body.buf, tx);	
+	return parse_reply_get_tx (&DOWNLOADER(admin->downloader)->body, tx);	
 }
 
 
@@ -469,7 +513,7 @@ cherokee_admin_client_ask_connections (cherokee_admin_client_t *admin, cherokee_
 	ret = common_processing (admin, ask_get_connections, NULL);
 	if (ret != ret_ok) return ret;
 
-	return parse_reply_get_connections (admin->downloader.body.buf, conns_list);		
+	return parse_reply_get_connections (DOWNLOADER(admin->downloader)->body.buf, conns_list);		
 }
 
 
@@ -506,7 +550,7 @@ cherokee_admin_client_del_connection  (cherokee_admin_client_t *admin, char *id)
 	ret = common_processing (admin, ask_del_connection, id);
 	if (ret != ret_ok) return ret;
 
-	return parse_reply_del_connection (admin->downloader.body.buf, id);	
+	return parse_reply_del_connection (DOWNLOADER(admin->downloader)->body.buf, id);	
 }
 
 
@@ -519,11 +563,14 @@ ask_thread_number (cherokee_admin_client_t *admin, void *arg)
 }
 
 static ret_t
-parse_reply_thread_number (char *reply, cherokee_buffer_t *num)
+parse_reply_thread_number (cherokee_buffer_t *reply, cherokee_buffer_t *num)
 {
-	CHECK_AND_SKIP_LITERAL (reply, "server.thread_num is ");
+	ret_t ret;
 
-	cherokee_buffer_add (num, reply, strlen(reply));
+	ret = check_and_skip_literal (reply, "server.thread_num is ");
+	if (ret != ret_ok) return ret;
+
+	cherokee_buffer_add_buffer (num, reply);
 	return ret_ok;
 }
 
@@ -535,7 +582,7 @@ cherokee_admin_client_ask_thread_num  (cherokee_admin_client_t *admin, cherokee_
 	ret = common_processing (admin, ask_thread_number, NULL);
 	if (ret != ret_ok) return ret;
 
-	return parse_reply_thread_number (admin->downloader.body.buf, num);
+	return parse_reply_thread_number (&DOWNLOADER(admin->downloader)->body, num);
 }
 
 
@@ -574,5 +621,74 @@ cherokee_admin_client_set_backup_mode (cherokee_admin_client_t *admin, cherokee_
 	ret = common_processing (admin, set_backup_mode, INT_TO_POINTER(active));
 	if (ret != ret_ok) return ret;
 
-	return parse_reply_set_backup_mode (admin->downloader.body.buf, active);	
+	return parse_reply_set_backup_mode (DOWNLOADER(admin->downloader)->body.buf, active);	
+}
+
+
+/* Tracing
+ */
+static void
+ask_trace (cherokee_admin_client_t *admin, void *arg)
+{
+	SET_POST (admin, "get server.trace");
+}
+
+static ret_t
+parse_reply_trace (cherokee_buffer_t *reply, cherokee_buffer_t *trace)
+{
+	ret_t ret;
+
+	ret = check_and_skip_literal (reply, "server.trace is ");
+	if (ret != ret_ok) return ret;
+
+	cherokee_buffer_add_buffer (trace, reply);
+	return ret_ok;
+}
+
+ret_t 
+cherokee_admin_client_ask_trace (cherokee_admin_client_t *admin, cherokee_buffer_t *trace)
+{
+	ret_t ret;
+
+	ret = common_processing (admin, ask_trace, NULL);
+	if (ret != ret_ok) return ret;
+
+	return parse_reply_trace (&DOWNLOADER(admin->downloader)->body, trace);
+}
+
+
+static ret_t
+check_reply_trace (cherokee_buffer_t *reply, cherokee_buffer_t *trace)
+{
+	ret_t ret;
+
+	ret = check_and_skip_literal (reply, "ok");
+	if (ret != ret_ok) return ret;
+
+	return ret_ok;
+}
+
+static void
+set_trace_mode (cherokee_admin_client_t *admin, void *arg)
+{
+	cherokee_buffer_t *trace = arg;
+	cherokee_buffer_t  tmp   = CHEROKEE_BUF_INIT;
+	
+	cherokee_buffer_add_str (&tmp, "set server.trace ");
+	cherokee_buffer_add_buffer (&tmp, trace);
+	cherokee_buffer_add_str (&tmp, "\n");
+
+	prepare_and_set_post (admin, tmp.buf, tmp.len);
+	cherokee_buffer_mrproper (&tmp);
+}
+
+ret_t 
+cherokee_admin_client_set_trace (cherokee_admin_client_t *admin, cherokee_buffer_t *trace)
+{
+	ret_t ret;
+
+	ret = common_processing (admin, set_trace_mode, trace);
+	if (ret != ret_ok) return ret;
+
+	return check_reply_trace (&DOWNLOADER(admin->downloader)->body, trace);
 }

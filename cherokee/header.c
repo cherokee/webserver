@@ -84,17 +84,12 @@ clean_headers (cherokee_header_t *hdr)
 }
 
 
-/* Implements _new() and _free() 
- */
-CHEROKEE_ADD_FUNC_NEW  (header);
-CHEROKEE_ADD_FUNC_FREE (header);
-
-
 ret_t 
-cherokee_header_init (cherokee_header_t *hdr)
+cherokee_header_init (cherokee_header_t *hdr, cherokee_header_type_t type)
 {
 	/* Known headers
 	 */
+	hdr->type = type;
 	clean_known_headers (hdr);
 
 	/* Unknown headers
@@ -134,6 +129,21 @@ cherokee_header_mrproper (cherokee_header_t *hdr)
 	clean_unknown_headers (hdr);
 	return ret_ok;
 }
+
+ret_t 
+cherokee_header_new (cherokee_header_t **hdr, cherokee_header_type_t type)
+{
+	ret_t ret;
+	CHEROKEE_NEW_STRUCT (n, header);
+
+	ret = cherokee_header_init (n, type);
+	if (unlikely (ret != ret_ok)) return ret;
+
+	*hdr = n;
+	return ret_ok;
+}
+
+CHEROKEE_ADD_FUNC_FREE (header);
 
 
 ret_t 
@@ -529,242 +539,6 @@ get_new_line (char *string)
 
 
 ret_t 
-cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherokee_type_header_t type, cherokee_http_t *error_code)
-{
-	ret_t  ret;
-	char  *begin = buffer->buf;
-	char  *end   = NULL;
-	char  *val_beg;
-	char  *val_end;
-	char  *header_end;
-	char  chr_header_end;
-
-	/* Set default error code.
-	 */
-	*error_code = http_bad_request;
-
-	/* Check the buffer content
-	 */
-	if ((buffer->buf == NULL) || (buffer->len < 5)) {
-		PRINT_ERROR_S ("ERROR: Calling cherokee_header_parse() with an empty header\n");
-		return ret_error;
-	}
-
-	/* Set the header buffer
-	 */
-	hdr->input_buffer = buffer;
-
-#ifdef HEADER_INTERNAL_DEBUG
-	hdr->input_buffer_crc = cherokee_buffer_crc32 (buffer);
-#endif
-
-	/* header_len should have already been set by a previous call
-	 * to cherokee_header_has_header() but if not we call it now.
-	 */
-	if (unlikely (hdr->input_header_len < 1)) {
-		/* Strange, anyway go on and look for EOH 
-		 */
-		ret = cherokee_header_has_header(hdr, buffer, buffer->len);
-		if (ret != ret_ok) {
-			if (ret == ret_not_found)
-				PRINT_ERROR("ERROR: EOH not found:\n===\n%s===\n", buffer->buf);
-			else
-				PRINT_ERROR("ERROR: Too many initial CRLF:\n===\n%s===\n", buffer->buf);
-			return ret_error;
-		}
-	}
-	header_end = &(buffer->buf[hdr->input_header_len]);
-
-	/* Terminate current request space (there may be other
-	 * pipelined requests in the buffer) after the EOH.
-	 */
-	chr_header_end = *header_end;
-	*header_end = '\0';
-
-	/* Parse the special first line
-	 */
-	switch (type) {
-	case header_type_request:
-		/* Parse request. Something like this:
-		 * GET /icons/compressed.png HTTP/1.1CRLF
-		 */
-		ret = parse_request_first_line (hdr, buffer, &begin, error_code);
-		if (unlikely(ret < ret_ok)) {
-			PRINT_DEBUG ("ERROR: Failed to parse header_type_request:\n===\n%s===\n", buffer->buf);
-			*header_end = chr_header_end;
-			return ret;
-		}
-		break;
-
-	case header_type_response:
-		ret = parse_response_first_line (hdr, buffer, &begin, error_code);
-		if (unlikely(ret < ret_ok)) {
-			PRINT_DEBUG ("ERROR: Failed to parse header_type_response:\n===\n%s===\n", buffer->buf);
-			*header_end = chr_header_end;
-			return ret;
-		}
-		break;
-
-	case header_type_basic:
-		/* Don't do anything
-		 */
-		break;
-
-	default:
-		*header_end = chr_header_end;
-		SHOULDNT_HAPPEN;
-	}
-
-
-	/* Parse the rest of headers
-	 */
-	while ((begin < header_end) && (end = get_new_line(begin)) != NULL) {
-		cuint_t header_len;
-		int		val_offs;
-		int		val_len;
-		char    first_char;
-		char    chr_end    = *end;
-
-		*end = '\0';
-
-		/* Current line may have embedded CR+SP or CRLF+SP 
-		 */
-		val_beg = strchr (begin, ':');
-		if (unlikely (val_beg == NULL))
-			goto next;
-
-		/* Header name must be at least 1 character long.
-		 */
-		if (unlikely (val_beg == begin))
-			goto next;
-
-		/* Empty values are skipped.
-		 */
-		if (unlikely (end <= val_beg + 1))
-			goto next;
-
-		header_len = val_beg - begin;
-
-		/* Trim heading and leading spaces from header value.
-		 */
-		++val_beg;
-		val_beg += strspn(val_beg, LWS);
-		val_end = end - 1;
-		while (val_end > val_beg && isspace(*val_end)) {
-			val_end--;
-		}
-		val_end++;
-
-		val_offs = val_beg - buffer->buf;
-		val_len  = val_end - val_beg;
-		if (unlikely (val_len < 1))
-			goto next;
-
-		first_char = *begin;
-		if (first_char > 'Z')
-			first_char -=  'a' - 'A';
-
-
-#define header_equals(str,hdr_enum,begin,len) ((len == (sizeof(str)-1)) && \
-					       (hdr->header[hdr_enum].info_off == 0) && \
-					       (strncasecmp (begin, str, sizeof(str)-1) == 0))
-
-		switch (first_char) {
-		case 'A':
-			if (header_equals ("Accept-Encoding", header_accept_encoding, begin, header_len)) {
-				ret = add_known_header (hdr, header_accept_encoding, val_offs, val_len);
-			} else if (header_equals ("Accept-Charset", header_accept_charset, begin, header_len)) {
-				ret = add_known_header (hdr, header_accept_charset, val_offs, val_len);
-			} else if (header_equals ("Accept-Language", header_accept_language, begin, header_len)) {
-				ret = add_known_header (hdr, header_accept_language, val_offs, val_len);
-			} else if (header_equals ("Accept", header_accept, begin, header_len)) {
-				ret = add_known_header (hdr, header_accept, val_offs, val_len);
-			} else if (header_equals ("Authorization", header_authorization, begin, header_len)) {
-				ret = add_known_header (hdr, header_authorization, val_offs, val_len);
-			} else
-				goto unknown; 
-			break;
-		case 'C':
-			if (header_equals ("Connection", header_connection, begin, header_len)) {
-				ret = add_known_header (hdr, header_connection, val_offs, val_len);
-			} else if (header_equals ("Content-Length", header_content_length, begin, header_len)) {
-				ret = add_known_header (hdr, header_content_length, val_offs, val_len);
-			} else if (header_equals ("Cookie", header_cookie, begin, header_len)) {
-				ret = add_known_header (hdr, header_cookie, val_offs, val_len);
-			} else
-				goto unknown;
-			break;
-		case 'H':
-			if (header_equals ("Host", header_host, begin, header_len)) {
-				ret = add_known_header (hdr, header_host, val_offs, val_len);
-			} else
-				goto unknown;
-			break;
-		case 'I':
-			if (header_equals ("If-Modified-Since", header_if_modified_since, begin, header_len)) {
-				ret = add_known_header (hdr, header_if_modified_since, val_offs, val_len);
-			} else if (header_equals ("If-None-Match", header_if_none_match, begin, header_len)) {
-				ret = add_known_header (hdr, header_if_none_match, val_offs, val_len);
-			} else if (header_equals ("If-Range", header_if_range, begin, header_len)) {
-				ret = add_known_header (hdr, header_if_range, val_offs, val_len);
-			} else
-				goto unknown;
-			break;
-		case 'K':
-			if (header_equals ("Keep-Alive", header_keepalive, begin, header_len)) {
-				ret = add_known_header (hdr, header_keepalive, val_offs, val_len);
-			} else
-				goto unknown;
-			break;
-		case 'L':
-			if (header_equals ("Location", header_location, begin, header_len)) {
-				ret = add_known_header (hdr, header_location, val_offs, val_len);
-			} else
-				goto unknown;
-			break;
-		case 'R':
-			if (header_equals ("Range", header_range, begin, header_len)) {
-				ret = add_known_header (hdr, header_range, val_offs, val_len);
-			} else if (header_equals ("Referer", header_referer, begin, header_len)) {
-				ret = add_known_header (hdr, header_referer, val_offs, val_len);
-			} else
-				goto unknown;
-			break;
-		case 'U':
-			if (header_equals ("Upgrade", header_upgrade, begin, header_len)) {
-				ret = add_known_header (hdr, header_upgrade, val_offs, val_len);
-			} else if (header_equals ("User-Agent", header_user_agent, begin, header_len)) {
-				ret = add_known_header (hdr, header_user_agent, val_offs, val_len);
-			} else
-				goto unknown;
-			break;
-		default:
-		unknown:
-			/* Add a unknown header
-			 */
-			ret = add_unknown_header (hdr, begin-buffer->buf, val_offs, val_len);
-		}
-
-		if (ret < ret_ok) {
-			PRINT_ERROR_S ("ERROR: Failed to add_(un)known_header()\n");
-			*header_end = chr_header_end;
-			return ret;
-		}
-
-	next:
-		*end = chr_end;
-
-		while ((*end == CHR_CR) || (*end == CHR_LF))
-			end++;
-		begin = end;
-	}
-
-	*header_end = chr_header_end;
-	return ret_ok;
-}
-
-
-ret_t 
 cherokee_header_get_length (cherokee_header_t *hdr, cuint_t *len)
 {
 	*len = hdr->input_header_len;
@@ -953,8 +727,24 @@ cherokee_header_copy_version (cherokee_header_t *hdr, cherokee_buffer_t *buf)
 }
 
 
-ret_t 
-cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, int tail_len)
+static ret_t 
+has_header_response (cherokee_header_t *hdr, cherokee_buffer_t *buffer, int tail_len)
+{
+	char *tmp;
+
+	tmp = strstr (buffer->buf, CRLF_CRLF);
+	if (tmp == NULL) 
+		return ret_not_found;
+
+	/* Content until CRLF_CRLF plus two of the last line CRLF
+	 */
+	hdr->input_header_len = (tmp - buffer->buf) + 2;
+	return ret_ok;
+}
+
+
+static ret_t 
+has_header_request (cherokee_header_t *hdr, cherokee_buffer_t *buffer, int tail_len)
 {
 	char   *start;
 	char   *end;
@@ -1017,6 +807,268 @@ cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, i
 	 */
 	hdr->input_header_len = ((int) (end - buffer->buf)) + CSZLEN(CRLF_CRLF);
 
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, int tail_len)
+{
+	switch (hdr->type) {
+	case header_type_request:
+		return has_header_request (hdr, buffer, tail_len);
+
+	case header_type_response:
+	case header_type_basic:
+		return has_header_response (hdr, buffer, tail_len);
+
+	default:
+		SHOULDNT_HAPPEN;
+	}
+
+	return ret_error;
+}
+
+
+ret_t 
+cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherokee_http_t *error_code)
+{
+	ret_t  ret;
+	char  *val_beg;
+	char  *val_end;
+	char  *header_end;
+	char  chr_header_end;
+	char  *begin           = buffer->buf;
+	char  *end             = NULL;
+
+	/* Set default error code.
+	 */
+	*error_code = http_bad_request;
+
+	/* Check the buffer content
+	 */
+	if ((buffer->buf == NULL) || (buffer->len < 5)) {
+		PRINT_ERROR_S ("ERROR: Calling cherokee_header_parse() with an empty header\n");
+		return ret_error;
+	}
+
+	/* Set the header buffer
+	 */
+	hdr->input_buffer = buffer;
+
+#ifdef HEADER_INTERNAL_DEBUG
+	hdr->input_buffer_crc = cherokee_buffer_crc32 (buffer);
+#endif
+
+	/* header_len should have already been set by a previous call
+	 * to cherokee_header_has_header() but if not we call it now.
+	 */
+	if (unlikely (hdr->input_header_len < 1)) {
+		/* Strange, anyway go on and look for EOH 
+		 */
+		ret = has_header_request (hdr, buffer, buffer->len);
+		if (ret != ret_ok) {
+			if (ret == ret_not_found)
+				PRINT_ERROR("ERROR: EOH not found:\n===\n%s===\n", buffer->buf);
+			else
+				PRINT_ERROR("ERROR: Too many initial CRLF:\n===\n%s===\n", buffer->buf);
+			return ret_error;
+		}
+	}
+	header_end = &(buffer->buf[hdr->input_header_len]);
+
+	/* Terminate current request space (there may be other
+	 * pipelined requests in the buffer) after the EOH.
+	 */
+	chr_header_end = *header_end;
+	*header_end = '\0';
+
+	/* Parse the special first line
+	 */
+	switch (hdr->type) {
+	case header_type_request:
+		/* Parse request. Something like this:
+		 * GET /icons/compressed.png HTTP/1.1CRLF
+		 */
+		ret = parse_request_first_line (hdr, buffer, &begin, error_code);
+		if (unlikely(ret < ret_ok)) {
+			PRINT_DEBUG ("ERROR: Failed to parse header_type_request:\n===\n%s===\n", buffer->buf);
+			*header_end = chr_header_end;
+			return ret;
+		}
+		break;
+
+	case header_type_response:
+		ret = parse_response_first_line (hdr, buffer, &begin, error_code);
+		if (unlikely(ret < ret_ok)) {
+			PRINT_DEBUG ("ERROR: Failed to parse header_type_response:\n===\n%s===\n", buffer->buf);
+			*header_end = chr_header_end;
+			return ret;
+		}
+		break;
+
+	case header_type_basic:
+		/* Don't do anything
+		 */
+		break;
+
+	default:
+		*header_end = chr_header_end;
+		SHOULDNT_HAPPEN;
+	}
+
+
+	/* Parse the rest of headers
+	 */
+	while ((begin < header_end)) {
+		cuint_t header_len;
+		int	val_offs;
+		int	val_len;
+		char    first_char;
+		char    chr_end;
+
+		/* Check where the line ends
+		 */
+		end = get_new_line(begin);
+		if (end == NULL)
+			break;
+
+		chr_end = *end;;
+		*end    = '\0';
+
+		/* Current line may have embedded CR+SP or CRLF+SP 
+		 */
+		val_beg = strchr (begin, ':');
+		if (unlikely (val_beg == NULL))
+			goto next;
+
+		/* Header name must be at least 1 character long.
+		 */
+		if (unlikely (val_beg == begin))
+			goto next;
+
+		/* Empty values are skipped.
+		 */
+		if (unlikely (end <= val_beg + 1))
+			goto next;
+
+		header_len = val_beg - begin;
+
+		/* Trim heading and leading spaces from header value.
+		 */
+		++val_beg;
+		val_beg += strspn(val_beg, LWS);
+		val_end = end - 1;
+		while (val_end > val_beg && isspace(*val_end)) {
+			val_end--;
+		}
+		val_end++;
+
+		val_offs = val_beg - buffer->buf;
+		val_len  = val_end - val_beg;
+		if (unlikely (val_len < 1))
+			goto next;
+
+		first_char = *begin;
+		if (first_char > 'Z')
+			first_char -=  'a' - 'A';
+
+
+#define header_equals(str,hdr_enum,begin,len) ((len == (sizeof(str)-1)) && \
+					       (hdr->header[hdr_enum].info_off == 0) && \
+					       (strncasecmp (begin, str, sizeof(str)-1) == 0))
+
+		switch (first_char) {
+		case 'A':
+			if (header_equals ("Accept-Encoding", header_accept_encoding, begin, header_len)) {
+				ret = add_known_header (hdr, header_accept_encoding, val_offs, val_len);
+			} else if (header_equals ("Accept-Charset", header_accept_charset, begin, header_len)) {
+				ret = add_known_header (hdr, header_accept_charset, val_offs, val_len);
+			} else if (header_equals ("Accept-Language", header_accept_language, begin, header_len)) {
+				ret = add_known_header (hdr, header_accept_language, val_offs, val_len);
+			} else if (header_equals ("Accept", header_accept, begin, header_len)) {
+				ret = add_known_header (hdr, header_accept, val_offs, val_len);
+			} else if (header_equals ("Authorization", header_authorization, begin, header_len)) {
+				ret = add_known_header (hdr, header_authorization, val_offs, val_len);
+			} else
+				goto unknown; 
+			break;
+		case 'C':
+			if (header_equals ("Connection", header_connection, begin, header_len)) {
+				ret = add_known_header (hdr, header_connection, val_offs, val_len);
+			} else if (header_equals ("Content-Length", header_content_length, begin, header_len)) {
+				ret = add_known_header (hdr, header_content_length, val_offs, val_len);
+			} else if (header_equals ("Cookie", header_cookie, begin, header_len)) {
+				ret = add_known_header (hdr, header_cookie, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
+		case 'H':
+			if (header_equals ("Host", header_host, begin, header_len)) {
+				ret = add_known_header (hdr, header_host, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
+		case 'I':
+			if (header_equals ("If-Modified-Since", header_if_modified_since, begin, header_len)) {
+				ret = add_known_header (hdr, header_if_modified_since, val_offs, val_len);
+			} else if (header_equals ("If-None-Match", header_if_none_match, begin, header_len)) {
+				ret = add_known_header (hdr, header_if_none_match, val_offs, val_len);
+			} else if (header_equals ("If-Range", header_if_range, begin, header_len)) {
+				ret = add_known_header (hdr, header_if_range, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
+		case 'K':
+			if (header_equals ("Keep-Alive", header_keepalive, begin, header_len)) {
+				ret = add_known_header (hdr, header_keepalive, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
+		case 'L':
+			if (header_equals ("Location", header_location, begin, header_len)) {
+				ret = add_known_header (hdr, header_location, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
+		case 'R':
+			if (header_equals ("Range", header_range, begin, header_len)) {
+				ret = add_known_header (hdr, header_range, val_offs, val_len);
+			} else if (header_equals ("Referer", header_referer, begin, header_len)) {
+				ret = add_known_header (hdr, header_referer, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
+		case 'U':
+			if (header_equals ("Upgrade", header_upgrade, begin, header_len)) {
+				ret = add_known_header (hdr, header_upgrade, val_offs, val_len);
+			} else if (header_equals ("User-Agent", header_user_agent, begin, header_len)) {
+				ret = add_known_header (hdr, header_user_agent, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
+		default:
+		unknown:
+			/* Add a unknown header
+			 */
+			ret = add_unknown_header (hdr, begin-buffer->buf, val_offs, val_len);
+		}
+
+		if (ret < ret_ok) {
+			PRINT_ERROR_S ("ERROR: Failed to add_(un)known_header()\n");
+			*header_end = chr_header_end;
+			return ret;
+		}
+
+	next:
+		*end = chr_end;
+
+		while ((*end == CHR_CR) || (*end == CHR_LF))
+			end++;
+		begin = end;
+	}
+
+	*header_end = chr_header_end;
 	return ret_ok;
 }
 

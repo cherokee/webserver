@@ -1720,3 +1720,36 @@ cherokee_buffer_add_comma_marks (cherokee_buffer_t  *buf)
 	return ret_ok;
 }
 
+
+ret_t 
+cherokee_buffer_trim (cherokee_buffer_t *buf)
+{
+	cuint_t s, e;
+	cuint_t len;
+
+	if (buf->len <= 0)
+		return ret_ok;
+
+	for (s=0; s < buf->len; s++) {
+		char c = buf->buf[s];
+
+		if (c != ' ' && c != '\t' && c != '\r' && c != '\n')
+			break;
+	}
+
+	for (e=0; e < (buf->len - s); e++) {
+		char c = buf->buf[buf->len-(e+1)];
+
+		if (c != ' ' && c != '\t' && c != '\r' && c != '\n')
+			break;		
+	}
+
+	len = buf->len - (s + e);
+
+	memmove (buf->buf, buf->buf+s, len);
+
+	buf->len = len;
+	buf->buf[len] = '\0';
+
+	return ret_ok;
+}

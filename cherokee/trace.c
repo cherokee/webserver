@@ -70,7 +70,10 @@ cherokee_trace_set_modules (cherokee_buffer_t *modules)
 	/* Store a copy of the modules
 	 */
 	cherokee_buffer_clean (&trace.modules);
-	cherokee_buffer_add_buffer (&trace.modules, modules);
+
+	if (cherokee_buffer_case_cmp_str (modules, "none") != 0) {
+		cherokee_buffer_add_buffer (&trace.modules, modules);
+	}
 	
 	/* Check where to log
 	 */
@@ -118,7 +121,7 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 				do_log = true;
 		}
 
-		if (lentry_end == NULL)
+		if ((lentry_end == NULL) || (do_log))
 			break;
 
 		lentry = lentry_end + 1;
@@ -153,5 +156,16 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 
 out:
 	cherokee_buffer_mrproper (&entries);
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_trace_get_trace (cherokee_buffer_t **buf_ref)
+{
+	if (buf_ref == NULL)
+		return ret_not_found;
+
+	*buf_ref = &trace.modules;
 	return ret_ok;
 }

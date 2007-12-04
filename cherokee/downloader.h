@@ -56,6 +56,7 @@ ret_t cherokee_downloader_free            (cherokee_downloader_t  *downloader);
 ret_t cherokee_downloader_set_url         (cherokee_downloader_t *downloader, cherokee_buffer_t *url);
 ret_t cherokee_downloader_set_keepalive   (cherokee_downloader_t *downloader, cherokee_boolean_t active);
 ret_t cherokee_downloader_set_proxy       (cherokee_downloader_t *downloader, cherokee_buffer_t *proxy, cuint_t port);
+ret_t cherokee_downloader_set_auth        (cherokee_downloader_t *downloader, cherokee_buffer_t *user, cherokee_buffer_t *password);
 
 ret_t cherokee_downloader_get_reply_code  (cherokee_downloader_t *downloader, cherokee_http_t *code);
 
@@ -67,7 +68,6 @@ ret_t cherokee_downloader_reuse           (cherokee_downloader_t *downloader);
 ret_t cherokee_downloader_connect         (cherokee_downloader_t *downloader);
 
 ret_t cherokee_downloader_get_status      (cherokee_downloader_t *downloader, cherokee_downloader_status_t *status);
-
 ret_t cherokee_downloader_is_request_sent (cherokee_downloader_t *downloader);
 
 CHEROKEE_END_DECLS

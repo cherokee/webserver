@@ -62,6 +62,7 @@ struct cherokee_downloader {
 	cherokee_sockaddr_t          sockaddr;
 
 	cherokee_downloader_phase_t  phase;
+	cherokee_downloader_status_t status;
 
 	int                          content_length;
 
@@ -73,8 +74,6 @@ struct cherokee_downloader {
 		uint32_t post_sent;
 		uint32_t body_recv;
 	} info;
-
-	cherokee_downloader_status_t status;
 
 	cherokee_buffer_t            tmp1;
 	cherokee_buffer_t            tmp2;

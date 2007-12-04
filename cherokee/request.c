@@ -38,6 +38,7 @@ cherokee_request_header_init (cherokee_request_header_t *request)
 	 */
 	request->method    = http_get;
 	request->version   = http_version_11;
+	request->auth      = http_auth_nothing;
 	request->proxy     = false;
 	request->keepalive = true;
 	request->pipeline  = 1;
@@ -47,6 +48,8 @@ cherokee_request_header_init (cherokee_request_header_t *request)
 	if (unlikely(ret < ret_ok)) return ret;
 
 	cherokee_buffer_init (&request->extra_headers);
+	cherokee_buffer_init (&request->user);
+	cherokee_buffer_init (&request->password);
 	
 	return ret_ok;
 }
@@ -55,7 +58,10 @@ cherokee_request_header_init (cherokee_request_header_t *request)
 ret_t 
 cherokee_request_header_mrproper (cherokee_request_header_t *request)
 {
+	cherokee_buffer_mrproper (&request->user);
+	cherokee_buffer_mrproper (&request->password);
 	cherokee_buffer_mrproper (&request->extra_headers);
+
 	cherokee_url_mrproper (&request->url);
 	return ret_ok;
 }
@@ -80,6 +86,13 @@ cherokee_request_header_uses_proxy (cherokee_request_header_t *request, cherokee
 {
 	request->proxy = proxy;
 	return ret_ok;
+}
+
+
+ret_t 
+cherokee_request_header_parse_string (cherokee_request_header_t *request, cherokee_buffer_t *url_string)
+{
+	return cherokee_url_parse (&request->url, url_string, &request->user, &request->password);
 }
 
 
@@ -140,9 +153,9 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	if (request->post_len != 0) {
 		/* "Content-Length: " FMT_OFFSET CRLF, request->post_len;
 		 */
-		cherokee_buffer_add_str     (buf, "Content-Length: ");
-		cherokee_buffer_add_ullong10(buf, (cullong_t) request->post_len);
-		cherokee_buffer_add_str     (buf, CRLF);
+		cherokee_buffer_add_str      (buf, "Content-Length: ");
+		cherokee_buffer_add_ullong10 (buf, (cullong_t) request->post_len);
+		cherokee_buffer_add_str      (buf, CRLF);
 	}
 	
 	/* Add "Connection:" header
@@ -155,15 +168,14 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 
 	/* Authentication
 	 */
-	if (!cherokee_buffer_is_empty(&url->user) ||
-	    !cherokee_buffer_is_empty(&url->passwd)) {
-
+	if (! cherokee_buffer_is_empty (&request->user) ||
+	    ! cherokee_buffer_is_empty (&request->password)) {
 		cherokee_buffer_clean (tmp1);
 		cherokee_buffer_clean (tmp2);
 
-		cherokee_buffer_add_buffer (tmp1, &url->user);
+		cherokee_buffer_add_buffer (tmp1, &request->user);
 		cherokee_buffer_add_char   (tmp1, ':');
-		cherokee_buffer_add_buffer (tmp1, &url->passwd);
+		cherokee_buffer_add_buffer (tmp1, &request->password);
 
 		cherokee_buffer_encode_base64 (tmp1, tmp2);
 		
@@ -181,6 +193,23 @@ cherokee_request_header_build_string (cherokee_request_header_t *request, cherok
 	/* Finish the header
 	 */
 	cherokee_buffer_add_str (buf, CRLF);
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_request_header_set_auth (cherokee_request_header_t *request, 
+				  cherokee_http_auth_t       auth,
+				  cherokee_buffer_t         *user,
+				  cherokee_buffer_t         *password)
+{
+	request->auth = auth;
+
+	cherokee_buffer_clean (&request->user);
+	cherokee_buffer_clean (&request->password);
+
+	cherokee_buffer_add_buffer (&request->user, user);
+	cherokee_buffer_add_buffer (&request->password, password);
 
 	return ret_ok;
 }

@@ -4,7 +4,7 @@ icons!default = unknown.png
 icons!directory = folder.png
 icons!parent_directory = back.png
 
-icons!file!core = core
+Icons!file!core = core
 icons!file!*README* = readme.png
 
 icons!suffix!text.png = txt,text

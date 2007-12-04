@@ -43,6 +43,10 @@ typedef struct {
 	cherokee_http_version_t version;
 	off_t                   post_len;
 	cherokee_buffer_t       extra_headers;
+
+	cherokee_http_auth_t    auth;
+	cherokee_buffer_t       user;
+	cherokee_buffer_t       password;
 } cherokee_request_header_t;
 
 
@@ -59,8 +63,11 @@ ret_t cherokee_request_header_init     (cherokee_request_header_t *request);
 ret_t cherokee_request_header_clean    (cherokee_request_header_t *request);
 ret_t cherokee_request_header_mrproper (cherokee_request_header_t *request);
 
+ret_t cherokee_request_header_parse_string (cherokee_request_header_t *request, cherokee_buffer_t *url_string);
+ret_t cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2);
+
 ret_t cherokee_request_header_uses_proxy   (cherokee_request_header_t *request, cherokee_boolean_t proxy);
 ret_t cherokee_request_header_add_header   (cherokee_request_header_t *request, char *ptr, cuint_t len);
-ret_t cherokee_request_header_build_string (cherokee_request_header_t *request, cherokee_buffer_t *buf, cherokee_buffer_t *tmp1, cherokee_buffer_t *tmp2);
+ret_t cherokee_request_header_set_auth     (cherokee_request_header_t *request, cherokee_http_auth_t auth, cherokee_buffer_t *user, cherokee_buffer_t *password);
 
 #endif /* CHEROKEE_REQUEST_H */

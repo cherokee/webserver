@@ -1185,8 +1185,6 @@ flush_logs (cherokee_server_t *srv)
 ret_t 
 cherokee_server_stop (cherokee_server_t *srv)
 {
-	ret_t                        ret;
-
 	if (srv == NULL)
 		return ret_ok;
 
@@ -2001,8 +1999,10 @@ cherokee_server_set_backup_mode (cherokee_server_t *srv, cherokee_boolean_t acti
 	ret_t            ret;
 	cherokee_list_t *i;
 
-	ret = cherokee_logger_set_backup_mode (srv->vserver_default->logger, active);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (srv->vserver_default->logger) {
+		ret = cherokee_logger_set_backup_mode (srv->vserver_default->logger, active);
+		if (unlikely (ret != ret_ok)) return ret;
+	}
 
 	list_for_each (i, &srv->vservers) {
 		cherokee_logger_t *logger = VSERVER(i)->logger;
@@ -2025,8 +2025,10 @@ cherokee_server_get_backup_mode (cherokee_server_t *srv, cherokee_boolean_t *act
 
 	*active = false;
 
-	cherokee_logger_get_backup_mode (srv->vserver_default->logger, active);
-	if (*active == true) return ret_ok;
+	if (srv->vserver_default->logger) {
+		cherokee_logger_get_backup_mode (srv->vserver_default->logger, active);
+		if (*active == true) return ret_ok;
+	}
 
 	list_for_each (i, &srv->vservers) {
 		cherokee_logger_t *logger = VSERVER(i)->logger;

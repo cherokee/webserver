@@ -39,6 +39,9 @@ ret_t cherokee_admin_server_reply_get_rx (cherokee_handler_admin_t *ahdl, cherok
 ret_t cherokee_admin_server_reply_get_connections (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
 ret_t cherokee_admin_server_reply_del_connection  (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
 
+ret_t cherokee_admin_server_reply_get_trace (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
+ret_t cherokee_admin_server_reply_set_trace (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
+
 ret_t cherokee_admin_server_reply_get_thread_num  (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
 ret_t cherokee_admin_server_reply_set_backup_mode (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply);
 

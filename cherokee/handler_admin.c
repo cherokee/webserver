@@ -87,15 +87,15 @@ process_request_line (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *line)
 {
 #define COMP(str,sub) strncmp(str, sub, sizeof(sub)-1)
 	
-	if (!COMP (line->buf, "get server.port"))
-		return cherokee_admin_server_reply_get_port (ahdl, line, &ahdl->reply);
-	else if (!COMP (line->buf, "set server.port"))
-		return cherokee_admin_server_reply_set_port (ahdl, line, &ahdl->reply);
-
-	else if (!COMP (line->buf, "get server.port_tls"))
+	if (!COMP (line->buf, "get server.port_tls"))
 		return cherokee_admin_server_reply_get_port_tls (ahdl, line, &ahdl->reply);
 	else if (!COMP (line->buf, "set server.port_tls"))
 		return cherokee_admin_server_reply_set_port_tls (ahdl, line, &ahdl->reply);
+
+	else if (!COMP (line->buf, "get server.port"))
+		return cherokee_admin_server_reply_get_port (ahdl, line, &ahdl->reply);
+	else if (!COMP (line->buf, "set server.port"))
+		return cherokee_admin_server_reply_set_port (ahdl, line, &ahdl->reply);
 
 	else if (!COMP (line->buf, "get server.rx"))
 		return cherokee_admin_server_reply_get_rx (ahdl, line, &ahdl->reply);
@@ -113,6 +113,11 @@ process_request_line (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *line)
 
 	else if (!COMP (line->buf, "set server.backup_mode")) 
 		return cherokee_admin_server_reply_set_backup_mode (ahdl, line, &ahdl->reply);
+
+	else if (!COMP (line->buf, "set server.trace")) 
+		return cherokee_admin_server_reply_set_trace (ahdl, line, &ahdl->reply);
+	else if (!COMP (line->buf, "get server.trace")) 
+		return cherokee_admin_server_reply_get_trace (ahdl, line, &ahdl->reply);
 
 	SHOULDNT_HAPPEN;
 	return ret_error;

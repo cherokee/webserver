@@ -94,16 +94,16 @@ main (int argc, char *argv[])
 	CHECK_ERROR ("port");
 	printf ("Port is %d\n", port);
 
-	RUN_CLIENT1 (client, fdpoll, cherokee_admin_client_ask_port_tls, &port);
+	RUN_CLIENT1 (client, cherokee_admin_client_ask_port_tls, &port);
 	CHECK_ERROR ("port_tls");
 	printf ("Port TLS is %d\n", port);
 	
-	RUN_CLIENT1 (client, fdpoll, cherokee_admin_client_ask_rx, &buf);
+	RUN_CLIENT1 (client, cherokee_admin_client_ask_rx, &buf);
 	CHECK_ERROR ("rx");
 	printf ("Server RX is %s\n", buf.buf);
 	cherokee_buffer_clean (&buf);
 
-	RUN_CLIENT1 (client, fdpoll, cherokee_admin_client_ask_tx, &buf);
+	RUN_CLIENT1 (client, cherokee_admin_client_ask_tx, &buf);
 	CHECK_ERROR ("tx");
 	printf ("Server TX is %s\n", buf.buf);
 

@@ -89,6 +89,8 @@ cherokee_post_set_len (cherokee_post_t *post, off_t len)
 	post->type = (len > POST_SIZE_TO_DISK) ? post_in_tmp_file : post_in_memory;
 	post->size = len;
 
+	TRACE(ENTRIES, "len=%d type=%d\n", len, post->type);
+
 	if (post->type == post_in_tmp_file) {
 		cherokee_buffer_add_str (&post->tmp_file, "/tmp/cherokee_post_XXXXXX");
 
@@ -126,6 +128,8 @@ cherokee_post_get_len (cherokee_post_t *post, off_t *len)
 ret_t 
 cherokee_post_append (cherokee_post_t *post, char *str, size_t len)
 {
+	TRACE(ENTRIES, "appends=%d bytes\n", len);
+
 	cherokee_buffer_add (&post->info, str, len);
 	cherokee_post_commit_buf (post, len);
 	return ret_ok;
@@ -181,17 +185,22 @@ cherokee_post_walk_reset (cherokee_post_t *post)
 ret_t 
 cherokee_post_walk_finished (cherokee_post_t *post)
 {
+	ret_t ret;
+
 	switch (post->type) {
 	case post_in_memory:
-		return (post->walk_offset >= post->info.len) ? ret_ok : ret_eagain;
+		ret = (post->walk_offset >= post->info.len) ? ret_ok : ret_eagain;
+		break;
 	case post_in_tmp_file:
-		return (post->walk_offset >= post->size) ? ret_ok : ret_eagain;
+		ret = (post->walk_offset >= post->size) ? ret_ok : ret_eagain;
+		break;
 	default:
+		ret = ret_error;
 		break;
 	}
 
-	SHOULDNT_HAPPEN;
-	return ret_error;
+	TRACE(ENTRIES, "ret=%d\n", ret);
+	return ret;
 }
 
 
@@ -220,7 +229,7 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 			return  ret_error; 			
 		}
 
-		TRACE(ENTRIES, "wrote %d\n", r);
+		TRACE(ENTRIES, "wrote %d bytes from memory\n", r);
 
 		post->walk_offset += r;
 		return cherokee_post_walk_finished (post);
