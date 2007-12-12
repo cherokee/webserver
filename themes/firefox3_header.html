@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html><head>
+ <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+ <link rel="stylesheet" type="text/css" media="screen" href="/cherokee_themes/firefox3/theme.css" />
+ <title>Index of %public_dir%</title>
+</head>
+<body>
+ <h1>Index of %public_dir%</h1>
+ <pre>%notice%</pre>
+ <table>
+  <thead>
+   <tr>
+    <th><a href="?order=%order_name%">Name</a></th>
+    %if size%<th><a href="?order=%order_size%">Size</a></th>%fi%
+    %if date%<th><a href="?order=%order_date%">Last Modified</a></th>%fi%
+    %if user%<th><a href="#">User</a></th>%fi%
+    %if group%<th><a href="#">Group</a></th>%fi%
+   </tr>
+  </thead>
+  <tbody>

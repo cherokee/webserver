@@ -1,3 +1,10 @@
+2007-12-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* themes/Makefile.am, themes/firefox3_header.html,
+	themes/firefox3_footer.html, themes/firefox3_entry.html,
+	themes/firefox3_theme.css: Added new handler dirlist theme based
+	on the Firefox3 (ftp?) directory listing.
+
 2007-11-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
        * configure.in: Added check for Python's docutils module. It warns
