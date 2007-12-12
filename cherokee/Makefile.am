@@ -1,6 +1,7 @@
 ## Cherokee: cherokee/Makefile.am  -*- makefile -*-
 
 INCLUDES = \
+-DPCRE_STATIC \
 $(TLS_CFLAGS) \
 $(PTHREAD_CFLAGS) \
 -I$(top_srcdir) \
@@ -270,7 +271,7 @@ handler_redir = \
 handler_redir.c \
 handler_redir.h
 
-libplugin_redir_la_LDFLAGS = $(module_ldflags)  
+libplugin_redir_la_LDFLAGS = $(module_ldflags)
 libplugin_redir_la_SOURCES = $(handler_redir)
 
 if STATIC_HANDLER_REDIR

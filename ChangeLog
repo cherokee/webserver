@@ -1,5 +1,8 @@
 2007-12-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/Makefile.am: Minor fix to make Cherokee to
+	cross-compile to Win32.
+
 	* themes/Makefile.am, themes/firefox3_header.html,
 	themes/firefox3_footer.html, themes/firefox3_entry.html,
 	themes/firefox3_theme.css: Added new handler dirlist theme based
