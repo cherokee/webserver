@@ -1,3 +1,12 @@
+2007-12-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection.c (cherokee_connection_get_request): On
+	Windows it should replace the '\' characters in the request with /
+	characters.
+
+	* cherokee/buffer.c (cherokee_buffer_unescape_uri): Added a couple
+	of TRACE entries.
+
 2007-12-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/Makefile.am: Minor fix to make Cherokee to

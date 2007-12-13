@@ -40,6 +40,7 @@
 #include "crc32.h"
 #include "sha1.h"
 
+#define ENTRIES "core,buffer"
 
 #define REALLOC_EXTRA_SIZE     16
 #define IOS_NUMBUF             64	/* I/O size of digits buffer */
@@ -1015,8 +1016,10 @@ cherokee_buffer_unescape_uri (cherokee_buffer_t *buffer)
 	char *ptgt;
 	int   len;
 
-#define hex2dec_m(c)	( (int) hex2dec_tab[ ( (unsigned char )(c) ) ] )
-#define hex2dec_m2(c1, c2)	( hex2dec_m(c1) * 16 + hex2dec_m(c2)  )
+#define hex2dec_m(c)	   ( (int) hex2dec_tab[ ( (unsigned char )(c) ) ] )
+#define hex2dec_m2(c1, c2) ( hex2dec_m(c1) * 16 + hex2dec_m(c2) )
+
+	TRACE(ENTRIES, "Prev: %s\n", buffer->buf);
 
 	if (unlikely (buffer->buf == NULL))
 		return ret_error;
@@ -1054,6 +1057,8 @@ cherokee_buffer_unescape_uri (cherokee_buffer_t *buffer)
 
 #undef hex2dec_m2
 #undef hex2dec_m
+
+	TRACE(ENTRIES, "Post: %s\n", buffer->buf);
 	return ret_ok;
 }
 
