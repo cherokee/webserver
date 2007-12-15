@@ -26,15 +26,15 @@
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
 
-#ifndef CHEROKEE_HUMAN_SORT_H
-#define CHEROKEE_HUMAN_SORT_H
+#ifndef CHEROKEE_HUMAN_STRCMP_H
+#define CHEROKEE_HUMAN_STRCMP_H
 
 #include <cherokee/common.h>
 
 CHEROKEE_BEGIN_DECLS
 
-int cherokee_human_sort (const char *a, const char *b);
+int cherokee_human_strcmp (const char *a, const char *b);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_HUMAN_SORT_H */
+#endif /* CHEROKEE_HUMAN_STRCMP_H */

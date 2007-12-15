@@ -23,7 +23,7 @@
  */
 
 #include "common-internal.h"
-#include "human_sort.h"
+#include "human_strcmp.h"
 
 #include <ctype.h>
 
@@ -54,7 +54,7 @@ parsenum (const char *a, const char **a_ret)
 
 
 int 
-cherokee_human_sort (const char *a, const char *b)
+cherokee_human_strcmp (const char *a, const char *b)
 {
 	int a0;
 	int b0;

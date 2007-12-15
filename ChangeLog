@@ -1,7 +1,7 @@
 2007-12-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_dirlist.c (cmp_name_down): Now, the dirlist
-	handler uses cherokee_human_sort() instead of strcmp() for a
+	handler uses cherokee_human_strcmp() instead of strcmp() for a
 	better file listing.
 
 	* cherokee/human_sort.h, cherokee/human_sort.c,
