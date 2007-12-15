@@ -1,3 +1,13 @@
+2007-12-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_dirlist.c (cmp_name_down): Now, the dirlist
+	handler uses cherokee_human_sort() instead of strcmp() for a
+	better file listing.
+
+	* cherokee/human_sort.h, cherokee/human_sort.c,
+	cherokee/Makefile.am: Added new file with a more human friendly
+	strcmp() function.
+
 2007-12-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/connection.c (cherokee_connection_get_request): On

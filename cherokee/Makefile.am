@@ -737,6 +737,8 @@ common.h \
 common-internal.h \
 util.h \
 util.c \
+human_sort.h \
+human_sort.c \
 trace.h \
 trace.c \
 version.h \

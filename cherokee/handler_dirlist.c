@@ -48,6 +48,7 @@
 #include "plugin_loader.h"
 #include "icons.h"
 #include "common.h"
+#include "human_sort.h"
 
 #define ICON_WEB_DIR_DEFAULT "/icons/"
 
@@ -471,7 +472,8 @@ cmp_name_down (cherokee_list_t *a, cherokee_list_t *b)
 	file_entry_t *f1 = (file_entry_t *)a;
 	file_entry_t *f2 = (file_entry_t *)b;
 
-	return strcmp((char*) &f1->info.d_name, (char*) &f2->info.d_name);
+	return cherokee_human_sort ((const char *) &f1->info.d_name, 
+				    (const char *) &f2->info.d_name);
 }
 
 
