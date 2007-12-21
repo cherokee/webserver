@@ -36,7 +36,7 @@ parsenum (const char *a, const char **a_ret)
 	/* Parse the number
 	 */
 	++a;
-	while (isnumber(*a)) {
+	while (isdigit(*a)) {
 		result *= 10;
 		result += *a - '0';
 		++a;
@@ -71,12 +71,12 @@ cherokee_human_strcmp (const char *a, const char *b)
 	/* Iterate
 	 */
 	while (*a && *b) {
-		if (isnumber(*a))
+		if (isdigit(*a))
 			a0 = parsenum(a, &a) + 256;
 		else
 			a0 = tolower(*a);
 
-		if (isnumber(*b))
+		if (isdigit(*b))
 			b0 = parsenum(b, &b) + 256;
 		else
 			b0 = tolower(*b);

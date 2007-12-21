@@ -86,14 +86,14 @@ load_theme_load_file (cherokee_buffer_t *theme_path, char *file, cherokee_buffer
 
 
 static ret_t
-parse_if (cherokee_buffer_t *buf, char *if_entry, cherokee_boolean_t show)
+parse_if (cherokee_buffer_t *buf, char *if_entry, size_t len_entry, cherokee_boolean_t show)
 {
 	char              *begin;
 	char              *end;
 	cherokee_buffer_t  token = CHEROKEE_BUF_INIT;
 	
 	cherokee_buffer_add_str (&token, "%if ");
-	cherokee_buffer_add (&token, if_entry, strlen(if_entry));
+	cherokee_buffer_add (&token, if_entry, len_entry);
 	cherokee_buffer_add_str (&token, "%");
 
 	begin = strstr (buf->buf, token.buf);
@@ -122,12 +122,15 @@ error:
 static ret_t
 parse_macros_in_buffer (cherokee_buffer_t *buf, cherokee_handler_dirlist_props_t *props)
 {
-	parse_if (buf, "size",  props->show_size);
-	parse_if (buf, "date",  props->show_date);
-	parse_if (buf, "user",  props->show_user);
-	parse_if (buf, "group", props->show_group);
-	parse_if (buf, "icon",  props->show_icons);
+#define STR_SZ(str)	str, CSZLEN(str)
 
+	parse_if (buf, STR_SZ("size"),  props->show_size);
+	parse_if (buf, STR_SZ("date"),  props->show_date);
+	parse_if (buf, STR_SZ("user"),  props->show_user);
+	parse_if (buf, STR_SZ("group"), props->show_group);
+	parse_if (buf, STR_SZ("icon"),  props->show_icons);
+
+#undef STR_SZ
 	return ret_ok;
 }
 
@@ -466,6 +469,7 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 	return ret_ok;
 }
 
+
 static int 
 cmp_name_down (cherokee_list_t *a, cherokee_list_t *b)
 {
@@ -480,29 +484,34 @@ cmp_name_down (cherokee_list_t *a, cherokee_list_t *b)
 static int 
 cmp_size_down (cherokee_list_t *a, cherokee_list_t *b)
 {
-	int           diff;
 	file_entry_t *f1 = (file_entry_t *)a;
 	file_entry_t *f2 = (file_entry_t *)b;
 	
-	diff = f1->stat.st_size - f2->stat.st_size;
-	if (diff == 0) cmp_name_down (a,b);
+	if (f1->stat.st_size > f2->stat.st_size)
+		return 1;
 
-	return diff;
+	if (f1->stat.st_size < f2->stat.st_size)
+		return -1;
+
+	return cmp_name_down (a,b);
 }
+
 
 static int 
 cmp_date_down (cherokee_list_t *a, cherokee_list_t *b)
 {
-	int           diff;
 	file_entry_t *f1 = (file_entry_t *)a;
 	file_entry_t *f2 = (file_entry_t *)b;
 
-	diff = f1->stat.st_mtime - f2->stat.st_mtime;
-	if (diff == 0)
-		cmp_name_down (a,b);
+	if (f1->stat.st_mtime > f2->stat.st_mtime)
+		return 1;
 
-	return diff;
+	if (f1->stat.st_mtime < f2->stat.st_mtime)
+		return -1;
+
+	return cmp_name_down (a,b);
 }
+
 
 static int 
 cmp_name_up (cherokee_list_t *a, cherokee_list_t *b)
@@ -510,17 +519,20 @@ cmp_name_up (cherokee_list_t *a, cherokee_list_t *b)
 	return -cmp_name_down(a,b);
 }
 
+
 static int 
 cmp_size_up (cherokee_list_t *a, cherokee_list_t *b)
 {
 	return -cmp_size_down(a,b);
 }
 
+
 static int 
 cmp_date_up (cherokee_list_t *a, cherokee_list_t *b)
 {
 	return -cmp_date_down(a,b);
 }
+
 
 static void
 list_sort_by_type (cherokee_list_t *list, cherokee_dirlist_sort_t sort)
@@ -874,6 +886,7 @@ static ret_t
 render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
 	cherokee_buffer_t                *vtmp[2];
+	cherokee_buffer_t                *icon     = NULL;
 	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
  	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
@@ -885,10 +898,16 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 	VTMP_INIT_SUBST (thread, vtmp, &props->entry);
 
 	if (props->show_icons) {
+		icon = &icons->parentdir_icon;
+	}
+
+	if (icon) {
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_add_str (tmp, ICON_WEB_DIR_DEFAULT);
-		cherokee_buffer_add_buffer (tmp, &icons->parentdir_icon);
+		cherokee_buffer_add_buffer (tmp, &props->icon_web_dir);
+		cherokee_buffer_add_buffer (tmp, icon);
 		VTMP_SUBSTITUTE_TOKEN ("%icon%", tmp->buf);
+	} else {
+		VTMP_SUBSTITUTE_TOKEN ("%icon%", NULL);
 	}
 
 	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", "[DIR]");
