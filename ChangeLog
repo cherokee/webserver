@@ -1,5 +1,9 @@
 2007-12-21  A.D.F  <adefacc@tin.it>
 
+	* mods-icons.conf.sample
+	  - added a few more extensions and moved default icon
+	    from first to third position in order to make it work.
+
 	* cherokee/human_strcmp.c
 	  - replaced isnumber() with isdigit() (more portable and standard),
 	    because isnumber() is not available everywhere.
