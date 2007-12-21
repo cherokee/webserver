@@ -76,7 +76,7 @@ load_theme_load_file (cherokee_buffer_t *theme_path, char *file, cherokee_buffer
 
 	cherokee_buffer_add_buffer (&path, theme_path);
 	cherokee_buffer_add (&path, file, strlen(file));
-	
+
 	cherokee_buffer_clean (output);
 	cherokee_buffer_read_file (output, path.buf);
 
@@ -244,16 +244,15 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 		theme = "default";
 
 	ret = cherokee_buffer_add_va (&theme_path, CHEROKEE_THEMEDIR"/%s/", theme);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 	
 	ret = load_theme (&theme_path, props);
 	if (ret != ret_ok) {
 		PRINT_MSG ("Couldn't load theme '%s': %s\n", theme, theme_path.buf);
-		return ret;
 	}
-	
 	cherokee_buffer_mrproper (&theme_path);
-	return ret_ok;
+	return ret;
 }
 
 
@@ -797,7 +796,8 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 			cherokee_buffer_fake (&name_buf, name, strlen(name));
 			ret = cherokee_icons_get_icon (icons, &name_buf, &icon);
-			if (ret != ret_ok) return ret;
+			if (ret != ret_ok)
+				return ret;
 		}
 	}
 

@@ -5,6 +5,8 @@
 	    because isnumber() is not available everywhere.
 
 	* cherokee/handler_dirlist.c
+	  - cherokee_handler_dirlist_configure(),
+	    fixed a memory leak on load_theme() failure;
 	  - parse_if(), added a new formal parameter (len_entry)
 	    to avoid a superfluous strlen() on strings
 	    whose length is already known by caller;
