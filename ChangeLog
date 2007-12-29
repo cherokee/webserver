@@ -1,3 +1,9 @@
+2007-12-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* pyscgi/pyscgi.py: Fixed communication issue between the SCGI
+	application and the web server. The information follow could
+	fail because EAGAIN errors. It is fixed now.
+
 2007-10-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* The __init__.py file inside the pyscgi module is empty, this

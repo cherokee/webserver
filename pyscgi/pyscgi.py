@@ -37,8 +37,9 @@ This module has been written as part of the Cherokee project:
 
 import SocketServer
 import traceback
+import errno
 
-__version__ = '1.1'
+__version__ = '1.2'
 __author__  = 'Alvaro Lopez Ortega'
 
 
@@ -48,10 +49,22 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         self.post   = None
         SocketServer.StreamRequestHandler.__init__ (self, request, client_address, server)
 
+    def __safe_read (self, lenght):
+         while True: 
+            try:
+                return self.rfile.read(lenght)
+            except OSError, e:
+                if e.errno == errno.EAGAIN:
+                    continue
+            except IOError, e:
+                if e.errno == errno.EAGAIN:
+                    continue
+            raise
+
     def __read_netstring_size (self):
         size = ""
         while 1:
-            c = self.rfile.read(1)
+            c = self.__safe_read(1)
             if c == ':':
                 break
             elif not c:
@@ -63,12 +76,12 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         data = ""
         size = self.__read_netstring_size()
         while size > 0:
-            s = self.rfile.read(size)
+            s = self.__safe_read(size)
             if not s:
                 raise IOError, 'Malformed netstring'
             data += s
             size -= len(s)
-            if self.rfile.read(1) != ',':
+            if self.__safe_read(1) != ',':
                 raise IOError, 'Missing netstring terminator'
         return data
 
@@ -85,7 +98,7 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         if not self.env.has_key('CONTENT_LENGTH'):
             return
         length = int(self.env['CONTENT_LENGTH'])
-        self.post = self.rfile.read(length)
+        self.post = self.__safe_read(length)
 
     def handle (self):
         self.__read_env()
