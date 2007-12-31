@@ -1,3 +1,15 @@
+2007-12-31  A.D.F  <adefacc@tin.it>
+
+	* mime.c
+	  - changed cherokee_mime_load_mime_types()
+	    to interpret a sequence of digits preceded by '.'
+	    as a max-age value in seconds for that mime type
+	    (instead of interpreting it as a file extension);
+	    i.e. to set a max-age of 65 seconds in mime.types for html files:
+
+	    # mime type       [ .number ]  extension1 [ extensions ... ]
+	    text/html		.65	html htm shtml
+
 2007-12-21  A.D.F  <adefacc@tin.it>
 
 	* mods-icons.conf.sample

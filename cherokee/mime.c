@@ -115,6 +115,7 @@ ret_t
 cherokee_mime_load_mime_types (cherokee_mime_t *mime, char *filename)
 {
 	ret_t              ret;
+	cuint_t            maxage = 0;
 	char              *p;
 	char              *end;
 	cherokee_buffer_t  file = CHEROKEE_BUF_INIT;
@@ -175,31 +176,64 @@ cherokee_mime_load_mime_types (cherokee_mime_t *mime, char *filename)
 
 		cherokee_mime_entry_set_type (entry, type.buf);
 			
-		/* Adds its extensions
+		/* Adds its max-age and file extensions.
 		 */
-		p = tmp;
-		while (p < nl) {
+		for (p = tmp; p < nl; p = tmp) {
 			cherokee_buffer_clean (&ext);
 			
 			/* Look for the next extension
 			 */
-			while ((*p == ' ') || (*p == '\t')) p++;
-			if (p >= nl) break;
+			while ((*p == ' ') || (*p == '\t'))
+				p++;
+			if (p >= nl)
+				break;
 
 			c1 = strchr (p, ' ');
 			c2 = strchr (p, '\t');
 
 			tmp  = cherokee_min_str (c1, c2);
-			if (tmp == NULL) tmp = nl;
+			if (tmp == NULL)
+				tmp = nl;
 
-			/* Add it to the table
+			if (*p == '.') {
+				char *p2 = p;
+
+				/* It could be a max-age value.
+				 */
+				for (++p2, len = 0; p2 < tmp; ++p2, ++len) {
+					if (!isdigit(*p2))
+						break;
+				}
+				/* If it is too short or
+				 * it is not made of digits only
+				 * then ignore this value.
+				 */
+				if (len < 1 || p2 < tmp)
+					continue;
+
+				/* Convert max-age value.
+				 */
+				if (len > 9) {
+					maxage = (cuint_t) 999999999;
+				} else {
+					maxage = (cuint_t) atoi(p + 1);
+				}
+
+				/* Set max-age value.
+				 */
+				cherokee_mime_entry_set_maxage(entry, maxage);
+
+				TRACE(ENTRIES, "Set max-age %9u, mime type '%s'\n", maxage, type.buf);
+
+				continue;
+			}
+
+			/* Add this file extension to the table.
 			 */
 			cherokee_buffer_add (&ext, p, tmp-p);
 			cherokee_avl_add (&mime->mime_table, &ext, entry);
 
-			TRACE(ENTRIES, "Adding mime '%s' -> '%s'\n", ext.buf, type.buf);
-
-			p = tmp;
+			TRACE(ENTRIES, "Added mime '%s' -> '%s'\n", ext.buf, type.buf);
 		}
 
 	next_line:
