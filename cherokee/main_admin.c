@@ -32,14 +32,16 @@
 #include "server-protected.h"
 #include "config_entry.h"
 
-#define GETOPT_OPT           "d:p:a"
-#define CONFIG_FILE_HELP     "[-d DIR] [-p PORT] [-a]"
+#define GETOPT_OPT           "d:p:aC:"
+#define CONFIG_FILE_HELP     "[-d DIR] [-p PORT] [-C FILE] [-a]"
 
 #define DEFAULT_PORT         9090
-#define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin/"
-
+#define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin"
+#define DEFAULT_CONFIG_FILE  CHEROKEE_CONFDIR "/cherokee.conf"
+ 
 static int                 port          = DEFAULT_PORT;
 static char               *document_root = DEFAULT_DOCUMENTROOT;
+static char               *config_file   = DEFAULT_CONFIG_FILE;
 static cherokee_boolean_t  bind_local    = true;
 
 
@@ -61,19 +63,15 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/about!handler = server_info\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/about!priority = 2\n");
 
-	cherokee_buffer_add_str (&buf, "vserver!default!directory!/theme!handler = file\n");
-	cherokee_buffer_add_str (&buf, "vserver!default!directory!/theme!handler!iocache = 0\n");
-	cherokee_buffer_add_str (&buf, "vserver!default!directory!/theme!priority = 3\n");
-
-	cherokee_buffer_add_str (&buf, "vserver!default!directory!/yui!handler = file\n");
-	cherokee_buffer_add_str (&buf, "vserver!default!directory!/yui!handler!iocache = 0\n");
-	cherokee_buffer_add_str (&buf, "vserver!default!directory!/yui!priority = 4\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/static!handler = file\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/static!handler!iocache = 0\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/static!priority = 3\n");
 
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler = scgi\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer = round_robin\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer!type = interpreter\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer!local1!host = localhost:4000\n");
-	cherokee_buffer_add_va  (&buf, "vserver!default!directory!/!handler!balancer!local1!interpreter = %s/server.sh\n", document_root);
+	cherokee_buffer_add_va  (&buf, "vserver!default!directory!/!handler!balancer!local1!interpreter = python %s/server.py %s\n", document_root, config_file);
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!priority = 1000\n");
 
 	ret = cherokee_server_read_config_string (srv, &buf);
@@ -99,6 +97,9 @@ process_parameters (int argc, char **argv)
 			break;
 		case 'd':
 			document_root = strdup(optarg);
+			break;
+		case 'C':
+			config_file = strdup(optarg);
 			break;
 		default:
 			fprintf (stderr, "Usage: %s " CONFIG_FILE_HELP "\n", argv[0]);

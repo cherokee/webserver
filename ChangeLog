@@ -1,3 +1,22 @@
+2008-01-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin, admin/advanced.help.html, admin/config.py,
+	admin/default.template.html, admin/entry.help.html,
+	admin/Entry.py, admin/Form.py, admin/general.help.html,
+	admin/icon.help.html, admin/main.help.html,
+	admin/main.template.html, admin/Makefile.am, admin/mime.help.html,
+	admin/Page.py, admin/PageAdvanced.py, admin/PageApply.py,
+	admin/PageEntry.py, admin/PageGeneral.py, admin/PageIcon.py,
+	admin/PageMain.py, admin/PageMime.py, admin/PageVServer.py,
+	admin/PageVServers.py, admin/pyscgi.py, admin/server.py,
+	admin/Table.py, admin/Theme.py, admin/validations.py,
+	admin/VirtualServer.py, admin/vserver.help.html,
+	admin/vservers.help.html, configure.in, Makefile.am: Merge of the
+	new adminitration interface (early beta state).
+
+	* cherokee/main_admin.c: Added new parameter -C. It allow to
+	specify the configuration file that should be edited.
+
 2007-12-31  A.D.F  <adefacc@tin.it>
 
 	* mime.c

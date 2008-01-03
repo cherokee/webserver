@@ -1153,6 +1153,7 @@ themes/Makefile
 windows/Makefile
 windows/cherokee.nsi
 www/Makefile 
+admin/Makefile
 ])
 
 
