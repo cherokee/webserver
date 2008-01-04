@@ -749,6 +749,9 @@ cherokee_connection_send_header (cherokee_connection_t *conn)
 	ret_t  ret;
 	size_t sent = 0;
 
+	if (cherokee_buffer_is_empty (&conn->buffer))
+		return ret_ok;
+
 	/* Send the buffer content
 	 */
 	ret = cherokee_socket_bufwrite (&conn->socket, &conn->buffer, &sent);

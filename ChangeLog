@@ -1,3 +1,10 @@
+2008-01-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection.c (cherokee_connection_send_header): Do not
+	try to send the header if there is no header to be sent.
+
+	* cherokee/handler_mirror.c: Added a few new trace points.
+
 2008-01-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin, admin/advanced.help.html, admin/config.py,

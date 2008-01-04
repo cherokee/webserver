@@ -215,6 +215,8 @@ cherokee_handler_mirror_init (cherokee_handler_mirror_t *hdl)
 
 	switch (hdl->phase) {
 	case hmirror_phase_connect:
+		TRACE(ENTRIES, "Connect begins %s", "\n");
+
 		/* Connect to the remote server
 		 */
 		ret = connect_to_server (hdl);
@@ -230,6 +232,8 @@ cherokee_handler_mirror_init (cherokee_handler_mirror_t *hdl)
 		hdl->phase = hmirror_phase_send_headers;
 
 	case hmirror_phase_send_headers:
+		TRACE(ENTRIES, "Send headers begins %s", "\n");
+
 		/* Send the header
 		 */
 		ret = send_header (hdl);
@@ -238,6 +242,8 @@ cherokee_handler_mirror_init (cherokee_handler_mirror_t *hdl)
 		hdl->phase = hmirror_phase_send_post;
 
 	case hmirror_phase_send_post:
+		TRACE(ENTRIES, "Send post len=%d\n", hdl->post_len);
+
 		/* Send the post, if any
 		 */
 		if ((hdl->post_len > 0) && 
@@ -250,6 +256,7 @@ cherokee_handler_mirror_init (cherokee_handler_mirror_t *hdl)
 		break;
 	}
 
+	TRACE(ENTRIES, "finished: %s\n", "ret_ok");
 	return ret_ok;
 }
 
@@ -257,6 +264,8 @@ cherokee_handler_mirror_init (cherokee_handler_mirror_t *hdl)
 ret_t 
 cherokee_handler_mirror_add_headers (cherokee_handler_mirror_t *hdl, cherokee_buffer_t *buffer)
 {
+	TRACE(ENTRIES, "does nothing: %s\n", "ret_ok");
+
 	/* do nothing */
 	return ret_ok;
 }
