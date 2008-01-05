@@ -67,6 +67,9 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/static!handler!iocache = 0\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/static!priority = 3\n");
 
+	cherokee_buffer_add_str (&buf, "vserver!default!request!^/favicon.ico$!handler = file\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!request!^/favicon.ico$!priority = 4\n");
+
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler = scgi\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer = round_robin\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer!type = interpreter\n");

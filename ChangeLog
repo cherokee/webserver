@@ -1,3 +1,8 @@
+2008-01-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main_admin.c (config_server): Do not try to use the
+	SCGI for serving /favicon.ico, use the file handler instead.
+
 2008-01-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/connection.c (cherokee_connection_send_header): Do not
