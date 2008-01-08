@@ -16,3 +16,4 @@
 [ ] WebDAV handler
 [ ] Generic caching (HTTP-Cache)
 [ ] AIO based fdpoll
+[ ] Memcached support
