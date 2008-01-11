@@ -72,7 +72,7 @@ class Handler(pyscgi.SCGIHandler):
         post = cgi.parse_qs(self.post, keep_blank_values=1)
         
         # Execute page
-        body = page.Handle(uri, post)
+        body = page.HandleRequest(uri, post)
         if body[0] == '/':
             status   = "302 Moved Temporarily"
             headers += "Location: %s\r\n" % (body)

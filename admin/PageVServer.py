@@ -11,10 +11,10 @@ DATA_VALIDATION = [
 ]
 
 
-class PageVServer (PageMenu):
+class PageVServer (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, cfg)
-        self._id         = 'vserver'
+        PageMenu.__init__ (self, 'vserver', cfg)
+        FormHelper.__init__ (self, 'vserver', cfg)
         self._priorities = None
 
     def _op_render (self):

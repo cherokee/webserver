@@ -21,10 +21,10 @@ DATA_VALIDATION = [
 ]
 
 
-class PageGeneral (PageMenu):
+class PageGeneral (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, cfg)
-        self._id  = 'general'
+        PageMenu.__init__ (self, 'general', cfg)
+        FormHelper.__init__ (self, 'general', cfg)
 
     def _op_render (self):
         content = self._render_content()

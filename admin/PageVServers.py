@@ -3,10 +3,10 @@ from Form import *
 from Table import *
 from Entry import *
 
-class PageVServers (PageMenu):
+class PageVServers (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, cfg)
-        self._id = 'vserver'
+        PageMenu.__init__ (self, 'vserver', cfg)
+        FormHelper.__init__ (self, 'vserver', cfg)
 
     def _op_render (self):
         content = self._render_vserver_list()

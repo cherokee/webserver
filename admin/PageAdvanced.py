@@ -24,10 +24,10 @@ POLL_METHODS = [
 DATA_VALIDATION = []
 
 
-class PageAdvanced (PageMenu):
+class PageAdvanced (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, cfg)
-        self._id  = 'advanced'
+        PageMenu.__init__ (self, 'advanced', cfg)
+        FormHelper.__init__ (self, 'advanced', cfg)
 
     def _op_render (self):
         content = self._render_content()

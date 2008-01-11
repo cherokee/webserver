@@ -17,6 +17,8 @@ PageVServers.py \
 Table.py \
 Theme.py \
 VirtualServer.py \
+Module.py \
+ModuleFile.py \
 config.py \
 pyscgi.py \
 server.py \

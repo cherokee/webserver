@@ -3,10 +3,10 @@ from Form import *
 from Table import *
 from Entry import *
 
-class PageIcon (PageMenu):
+class PageIcon (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, cfg)
-        self._id  = 'icon'
+        PageMenu.__init__ (self, 'icon', cfg)
+        FormHelper.__init__ (self, 'icon', cfg)
 
     def _op_render (self):
         content = self._render_icon_list()

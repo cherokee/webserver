@@ -8,10 +8,10 @@ DATA_VALIDATION = [
     ("server!mime_files", validate_path_list),
 ]
 
-class PageMime (PageMenu):
+class PageMime (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, cfg)
-        self._id  = 'mime'
+        PageMenu.__init__ (self, 'mime', cfg)
+        FormHelper.__init__ (self, 'mime', cfg)
 
     def _op_handler (self, uri, post):
         if uri.startswith('/update'):
