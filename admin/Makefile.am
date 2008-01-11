@@ -19,6 +19,8 @@ Theme.py \
 VirtualServer.py \
 Module.py \
 ModuleFile.py \
+ModuleDirlist.py \
+ModuleCommon.py \
 config.py \
 pyscgi.py \
 server.py \
