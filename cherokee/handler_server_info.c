@@ -69,15 +69,15 @@
 "  <tr class=\"h\"><td>"                                                                            CRLF\
 "    <a href=\"http://www.cherokee-project.com/\">"                                                 CRLF\
 "      <img border=\"0\" src=\"?logo\" alt=\"Cherokee Logo\" /></a>"                                CRLF\
-"    <h1 class=\"p\">%s</h1>"                                                                       CRLF\
+"    <h1 class=\"p\">{cherokee_name}</h1>"                                                          CRLF\
 "  </td></tr>"                                                                                      CRLF\
 "</table><br />"
 
 #define AUTHOR                                                                                          \
-"<a href=\"http://www.alobbs.com\">Alvaro Lopez Ortega</a> &lt;alvaro@alobbs.com&gt;"
+"<a href=\"http://www.alobbs.com/\">Alvaro Lopez Ortega</a> &lt;alvaro@alobbs.com&gt;"
 
 #define LICENSE                                                                                         \
-"<p>Copyright (C) 2001 - 2007 " AUTHOR "</p>"                                                       CRLF\
+"<p>Copyright (C) 2001 - 2008 " AUTHOR "</p>"                                                       CRLF\
 "<p>This program is free software; you can redistribute it and/or"                                  CRLF\
 "modify it under the terms of version 2 of the GNU General Public"                                  CRLF\
 "License as published by the Free Software Foundation.</p>"                                         CRLF\
@@ -416,7 +416,8 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 	/* Add the page begining
 	 */
 	cherokee_version_add (&ver, HANDLER_SRV(hdl)->server_token);
-	cherokee_buffer_add_va (buf, PAGE_HEADER, ver.buf);
+	cherokee_buffer_add_str (buf, PAGE_HEADER);
+	cherokee_buffer_replace_string (buf, "{cherokee_name}", 15, ver.buf, ver.len);
 
 	if (! HDL_SRV_INFO_PROPS(hdl)->just_about) {
 
@@ -478,6 +479,7 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 ret_t
 cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props)
 {
+	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_server_info);
 	
 	/* Init the base class object
@@ -493,8 +495,13 @@ cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection
 
 	/* Init
 	 */
-	cherokee_buffer_init (&n->buffer);
-	cherokee_buffer_ensure_size (&n->buffer, 4*1024);
+	ret = cherokee_buffer_init (&n->buffer);
+	if (unlikely(ret != ret_ok)) 
+		return ret;
+
+	ret = cherokee_buffer_ensure_size (&n->buffer, 4*1024);
+	if (unlikely(ret != ret_ok)) 
+		return ret;
 
 	*hdl = HANDLER(n);
 	return ret_ok;

@@ -1,3 +1,11 @@
+2008-01-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_server_info.c (PAGE_HEADER)
+	(server_info_build_page): There was a potential problem here. I
+	have changed a call to a long cherokee_buffer_add_va in which a %s
+	was replaced with a call to cherokee_buffer_add_str() and a string
+	replacement. It is much more stable (at least on OS X).
+
 2008-01-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main_admin.c (config_server): Do not try to use the
