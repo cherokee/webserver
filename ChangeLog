@@ -1,5 +1,8 @@
 2008-01-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+        * cherokee/main_admin.c (main): Added win32 initialization. It
+	also ignores SIGPIPE. Fixes Google#29.
+	
 	* cherokee/handler_server_info.c (PAGE_HEADER)
 	(server_info_build_page): There was a potential problem here. I
 	have changed a call to a long cherokee_buffer_add_va in which a %s

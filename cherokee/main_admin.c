@@ -23,14 +23,12 @@
  */
 
 #include "common-internal.h"
+#include <signal.h>
+#include "server.h"
 
 #ifdef HAVE_GETOPT_H
 # include <getopt.h>
 #endif
-
-#include "virtual_server.h"
-#include "server-protected.h"
-#include "config_entry.h"
 
 #define GETOPT_OPT           "d:p:aC:"
 #define CONFIG_FILE_HELP     "[-d DIR] [-p PORT] [-C FILE] [-a]"
@@ -117,6 +115,14 @@ main (int argc, char **argv)
 {
 	ret_t              ret;
 	cherokee_server_t *srv;
+
+#ifdef _WIN32
+	init_win32();
+#endif	
+
+#ifdef SIGPIPE
+        signal (SIGPIPE, SIG_IGN);
+#endif
 
 	process_parameters (argc, argv);
 
