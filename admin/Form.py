@@ -1,6 +1,7 @@
 import re
 
 from Entry import *
+from Module import *
 
 FORM_TEMPLATE = """
 <form action="%%action%%" method="%%method%%">
@@ -84,13 +85,43 @@ class FormHelper (WebComponent):
         button = form.Render ('<input type="hidden" name="%s" value="" />' % (cfg_key))
         self.AddTableEntry (table, title, cfg_key, (button,))
 
-    def AddTableOptions (self, table, title, cfg_key, options):
+    def AddTableOptions (self, table, title, cfg_key, options, *args, **kwargs):
         try:
             value = self._cfg[cfg_key].value
-            options = EntryOptions (cfg_key, options, selected=value)
+            ops = EntryOptions (cfg_key, options, selected=value, *args, **kwargs)
         except AttributeError:
-            options = EntryOptions (cfg_key, options)
-        table += (title, options)
+            ops = EntryOptions (cfg_key, options, *args, **kwargs)
+
+        table += (title, ops)
+        return value
+
+    def AddTableOptions_w_Properties (self, table, title, cfg_key, options, 
+                                      props, props_prefix="prop_"):
+        # The Table entry itself
+        value = self.AddTableOptions (table, title, cfg_key, options, id="%s" % (cfg_key), 
+                                      onChange="options_active_prop('%s','%s');" % (cfg_key, props_prefix))
+        # The entries that come after
+        props_txt  = ''
+        for name, desc in options:
+            props_txt  += '<div id="%s%s">%s</div>\n' % (props_prefix, name, props[name])
+
+        # Show active property
+        update = '<script type="text/javascript">\n' + \
+                 '   options_active_prop("%s","%s");\n' % (cfg_key, props_prefix) + \
+                 '</script>\n';
+        return props_txt + update
+
+    def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, options):
+        props = {}
+        for name, desc in options:
+            try:
+                props_widget = module_obj_factory (name, self._cfg, cfg_key)
+                render = props_widget._op_render()
+            except IOError:
+                render = "Couldn't load the properties module: %s" % (name)
+            props[name] = render
+
+        return self.AddTableOptions_w_Properties (table, title, cfg_key, options, props)
 
     def AddTableCheckbox (self, table, title, cfg_key):
         value = None

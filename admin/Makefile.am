@@ -1,5 +1,7 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
+SUBDIRS = static
+
 adminpydir = "$(datadir)/cherokee/admin"
 adminpy_DATA = \
 Entry.py \

@@ -43,3 +43,4 @@ class Table:
 
     def Set (self, x, y, txt):
         self._content[y][x] = txt
+

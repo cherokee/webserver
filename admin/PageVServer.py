@@ -3,6 +3,7 @@ from Form import *
 from Table import *
 from Entry import *
 from PageEntry import *
+from PageLogger import *
 from VirtualServer import *
 from validations import *
 
@@ -10,15 +11,11 @@ DATA_VALIDATION = [
     ("vserver!.*?!.*?!priority", validate_positive_int)
 ]
 
-
 class PageVServer (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'vserver', cfg)
         FormHelper.__init__ (self, 'vserver', cfg)
         self._priorities = None
-
-    def _op_render (self):
-        raise "no"
 
     def _op_handler (self, uri, post):
         assert (len(uri) > 1)
@@ -74,6 +71,36 @@ class PageVServer (PageMenu, FormHelper):
         self.AddTableEntry (table, 'Directory Index', '%s!directory_index' % (pre))
         txt += str(table)
 
+        txt += "<h2>Logging</h2>"
+
+        table = Table(2)
+        props = {}
+        t1 = Table(2)
+        self.AddTableEntry (t1, 'Filename', '%s!logger!access!filename' % (pre))
+        t2 = Table(2)
+        self.AddTableEntry (t2, 'Command', '%s!logger!access!command' % (pre))
+        props['stderr'] = ''
+        props['syslog'] = ''
+        props['file']   = str(t1)
+        props['exec']   = str(t2)
+        e = self.AddTableOptions_w_Properties (table, "Access", '%s!logger!access!type' % (pre), 
+                                               LOGGER_WRITERS, props, 'log1')
+        txt += str(table) + e
+
+        table = Table(2)
+        props = {}
+        t1 = Table(2)
+        self.AddTableEntry (t1, 'Filename', '%s!logger!error!filename' % (pre))
+        t2 = Table(2)
+        self.AddTableEntry (t2, 'Command', '%s!logger!error!command' % (pre))
+        props['stderr'] = ''
+        props['syslog'] = ''
+        props['file']   = str(t1)
+        props['exec']   = str(t2)
+        e = self.AddTableOptions_w_Properties (table, "Error", '%s!logger!error!type' % (pre), 
+                                               LOGGER_WRITERS, props, 'log2')
+        txt += str(table) + e        
+
         txt += "<h2>Security</h2>"
         table = Table(2)
         self.AddTableEntry (table, 'Certificate',     '%s!ssl_certificate_file' % (pre))
@@ -86,8 +113,8 @@ class PageVServer (PageMenu, FormHelper):
 
         form = Form ("/%s/%s/update" % (self._id, host))
         txt = form.Render(txt)
-
         txt += self._render_add_rule(host)
+
         return txt
 
     def _render_add_rule (self, host):
