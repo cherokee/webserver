@@ -23,6 +23,7 @@ Module.py \
 ModuleFile.py \
 ModuleDirlist.py \
 ModuleCommon.py \
+ModuleServerInfo.py \
 config.py \
 pyscgi.py \
 server.py \
