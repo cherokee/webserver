@@ -19,6 +19,22 @@ function make_visible (DivID, visible)
     }
 }
 
+function comment_out (DivID, visible)
+{
+    var o = get_by_id(DivID);
+    var c = o.innerHTML;
+
+    if (visible) {
+		  if (c.substring(0,5) == '<!-- ') {
+				o.innerHTML = c.substring (5, c.length-5);
+		  }
+    } else {
+		  if (c.substring(0,5) != '<!-- ') {
+				o.innerHTML = '<!-- ' + c + ' -->';
+		  }
+    }
+}
+
 function options_active_prop (options_id, props_prefix)
 {
 	   var form     = get_by_id (options_id);	   
@@ -30,9 +46,9 @@ function options_active_prop (options_id, props_prefix)
 			 var s_str = props_prefix + selected;
 
 			 if (i_str == s_str) {
-				    make_visible (i_str, 1);
+				    comment_out (i_str, 1);
 			 } else {
-				    make_visible (i_str, 0);
+				    comment_out (i_str, 0);
 			 }
 	   }
 }
