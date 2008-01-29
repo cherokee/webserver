@@ -14,7 +14,7 @@ class ModuleDirlist (Module, FormHelper):
         FormHelper.__init__ (self, 'dirlist', cfg)
 
     def _op_render (self):
-        txt = '<h3>File details</h3>'
+        txt = '<h3>Listing</h3>'
         table = Table(2)
         self.AddTableCheckbox (table, "Show size", "%s!size" % (self._prefix))
         self.AddTableCheckbox (table, "Show date", "%s!date" % (self._prefix))

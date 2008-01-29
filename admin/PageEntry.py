@@ -95,15 +95,15 @@ class PageEntry (PageMenu, FormHelper):
         txt = '<h1>%s</h1>' % (self._get_title())
 
         table = Table(2)
-        self.AddTableOptions (table, 'Handler',       '%s!handler'%(pre), HANDLERS)
-        self.AddTableEntry   (table, 'Document Root', '%s!document_root'%(pre))
+        e = self.AddTableOptions_w_ModuleProperties (table, 'Handler', '%s!handler'%(pre), HANDLERS)
+        self.AddTableEntry (table, 'Document Root', '%s!document_root'%(pre))
         txt += str(table)
+
+        txt += '<h2>Handler properties</h2>'
+        txt += e
 
         txt += '<h2>Authentication</h2>'
         txt += self._render_auth ()
-
-        txt += '<h2>Handler properties</h2>'
-        txt += self._render_handler_properties ()
 
         form = Form ('/vserver/%s/prio/%s/update' % (self._host, self._prio))
         return form.Render(txt)

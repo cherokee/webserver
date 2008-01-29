@@ -90,6 +90,7 @@ class FormHelper (WebComponent):
             value = self._cfg[cfg_key].value
             ops = EntryOptions (cfg_key, options, selected=value, *args, **kwargs)
         except AttributeError:
+            value = ''
             ops = EntryOptions (cfg_key, options, *args, **kwargs)
 
         table += (title, ops)
