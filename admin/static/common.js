@@ -26,7 +26,7 @@ function comment_out (DivID, visible)
 
     if (visible) {
 		  if (c.substring(0,5) == '<!-- ') {
-				o.innerHTML = c.substring (5, c.length-5);
+				o.innerHTML = c.substring (5, c.length-4);
 		  }
     } else {
 		  if (c.substring(0,5) != '<!-- ') {
