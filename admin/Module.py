@@ -7,12 +7,15 @@ class Module:
         self._prefix = prefix
 
 def module_obj_factory (name, cfg, prefix):
+    # Assemble module name
+    mod_name = reduce (lambda x,y: x+y, map(lambda x: x.capitalize(), name.split('_')))
+
     # Load the module source file
-    mod = imp.load_source (name, "Module%s.py" % (name.capitalize()))
+    mod = imp.load_source (name, "Module%s.py" % (mod_name))
     sys.modules[name] = mod
 
     # Instance the object
-    src = "mod_obj = mod.Module%s(cfg, prefix)" % (name.capitalize())
+    src = "mod_obj = mod.Module%s(cfg, prefix)" % (mod_name)
     exec(src)
 
     return mod_obj
