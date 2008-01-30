@@ -2,7 +2,7 @@ from Form import *
 from Table import *
 from Module import *
 
-from PageEntry import *
+from consts import *
 
 class ModuleRoundRobin (Module, FormHelper):
     def __init__ (self, cfg, prefix):

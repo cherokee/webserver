@@ -4,6 +4,7 @@ SUBDIRS = static
 
 adminpydir = "$(datadir)/cherokee/admin"
 adminpy_DATA = \
+consts.py \
 Entry.py \
 Form.py \
 Page.py \

@@ -2,10 +2,9 @@ from Form import *
 from Table import *
 from Module import *
 from validations import *
+from consts import *
 
-from PageEntry import *
 from ModuleCgi import *
-
 
 class ModuleFcgi (ModuleCgiBase):
     def __init__ (self, cfg, prefix):

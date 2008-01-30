@@ -2,8 +2,7 @@ from Page import *
 from Form import *
 from Table import *
 from Entry import *
-from PageEntry import *
-from PageLogger import *
+from consts import *
 from VirtualServer import *
 from validations import *
 
