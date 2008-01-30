@@ -30,6 +30,10 @@ ENTRY_TYPES = [
     ('request',    'Regular Expression')
 ]
 
+BALANCERS = [
+    ('round_robin', "Round Robin")
+]
+
 
 class PageEntry (PageMenu, FormHelper):
     def __init__ (self, cfg):

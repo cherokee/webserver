@@ -28,8 +28,7 @@ class ModuleCgi (ModuleCgiBase):
         ModuleCgiBase.__init__ (self, cfg, prefix)
 
     def _op_render (self):
-        txt = '<h2>Base</h2>'
-        txt += ModuleCgiBase._op_render (self)
+        return ModuleCgiBase._op_render (self)
 
     def _op_apply_changes (self, uri, post):
         return ModuleCgiBase._op_apply_changes (uri, post)
