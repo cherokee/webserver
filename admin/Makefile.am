@@ -27,6 +27,12 @@ ModuleCommon.py \
 ModuleServerInfo.py \
 ModuleCgi.py \
 ModuleFcgi.py \
+ModuleAuth.py \
+ModuleHtdigest.py \
+ModuleLdap.py \
+ModulePlain.py \
+ModuleHtpasswd.py \
+ModuleMysql.py \
 config.py \
 pyscgi.py \
 server.py \

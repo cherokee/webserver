@@ -23,6 +23,12 @@ VALIDATORS = [
     ('mysql',    'MySQL server')
 ]
 
+VALIDATOR_METHODS = [
+    ('basic',        'Basic'),
+    ('digest',       'Digest'),
+    ('basic,digest', 'Basic or Digest')
+]
+
 LOGGERS = [
     ('',           'None'),
     ('combined',   'Apache compatible'),
