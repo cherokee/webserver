@@ -25,11 +25,11 @@ class ModuleFcgi (ModuleCgiBase):
 
     def _op_apply_changes (self, uri, post):
         # Apply balancer changes
-        pre  = "%s!balancer" % (self._conf_prefix)
+        pre  = "%s!balancer" % (self._prefix)
         name = self._cfg[pre].value
 
         props = module_obj_factory (name, self._cfg, pre)
         props._op_apply_changes (uri, post)
         
         # And CGI changes
-        return ModuleCgiBase._op_apply_changes (uri, post)
+        return ModuleCgiBase._op_apply_changes (self, uri, post)

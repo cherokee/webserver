@@ -34,6 +34,11 @@ BALANCERS = [
     ('round_robin', "Round Robin")
 ]
 
+BALANCER_TYPES = [
+    ('interpreter', 'Local interpreter'),
+    ('host',        'Remote host')
+]
+
 
 class PageEntry (PageMenu, FormHelper):
     def __init__ (self, cfg):
