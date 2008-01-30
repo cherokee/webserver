@@ -104,6 +104,8 @@ class FormHelper (WebComponent):
         # The entries that come after
         props_txt  = ''
         for name, desc in options:
+            if not name:
+                continue
             props_txt  += '<div id="%s%s">%s</div>\n' % (props_prefix, name, props[name])
 
         # Show active property
@@ -115,6 +117,8 @@ class FormHelper (WebComponent):
     def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, options):
         props = {}
         for name, desc in options:
+            if not name:
+                continue
             try:
                 props_widget = module_obj_factory (name, self._cfg, cfg_key)
                 render = props_widget._op_render()

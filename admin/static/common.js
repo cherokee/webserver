@@ -22,7 +22,10 @@ function make_visible (DivID, visible)
 function comment_out (DivID, visible)
 {
     var o = get_by_id(DivID);
-    var c = o.innerHTML;
+    var c;
+
+    if (o == null) return;
+    c = o.innerHTML;
 
     if (visible) {
 		  if (c.substring(0,5) == '<!-- ') {

@@ -96,8 +96,10 @@ class PageEntry (PageMenu, FormHelper):
     def _render_auth (self):
         pre = self._conf_prefix
 
+        txt   = ""
         table = Table(2)
-        self.AddTableOptions (table, 'Validator', '%s!auth'%(pre), VALIDATORS)
+        e = self.AddTableOptions_w_ModuleProperties (table, 'Validator', '%s!auth'%(pre), VALIDATORS)
+        txt += str(table) + e
 
-        return str(table)
+        return txt
 
