@@ -140,7 +140,10 @@ class FormHelper (WebComponent):
 
         table += (title, entry)
 
-    def ValidateChanges (self, post, validation):
+    # Applying changes
+    #
+
+    def _ValidateChanges (self, post, validation):
         for rule in validation:
             regex, validation_func = rule
             p = re.compile (regex)
@@ -151,3 +154,28 @@ class FormHelper (WebComponent):
                         continue
                     tmp = validation_func (value)
                     post[post_entry] = [tmp]
+
+    def ApplyChanges (self, checkboxes, post, validation=None):
+        # Validate changes
+        if validation:
+            self._ValidateChanges (post, validation)
+        
+        # Apply checkboxes
+        for key in checkboxes:
+            if key in post:
+                self._cfg[key] = post[key][0]
+            else:
+                self._cfg[key] = "0"
+
+        # Apply text entries
+        for confkey in post:
+            if not confkey in checkboxes:
+                value = post[confkey][0]
+                if not value:
+                    del (self._cfg[confkey])
+                else:
+                    self._cfg[confkey] = value
+        
+    def ApplyChangesPrefix (self, prefix, checkboxes, post, validation=None):
+        checkboxes_pre = map(lambda x, p=prefix: "%s!%s"%(p,x), checkboxes)
+        return self.ApplyChanges (checkboxes_pre, post, validation)

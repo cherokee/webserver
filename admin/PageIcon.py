@@ -43,20 +43,6 @@ class PageIcon (PageMenu, FormHelper):
         # Return the URL
         return "/%s" % (self._id)
 
-    def _op_apply_changes (self, post):
-        print str(post)
-
-        # Modify posted entries
-        for confkey in post:
-            value = post[confkey][0]
-            if not value:
-                del(self._cfg[confkey])
-            else:
-                self._cfg[confkey] = value
-
-        # Return the URL
-        return "/%s" % (self._id)
-
     def _render_icon_list (self):        
         # Special icons
         #
@@ -64,11 +50,13 @@ class PageIcon (PageMenu, FormHelper):
         table += ('', 'Icon file')
         icons = self._cfg['icons']
 
-        txt = '<h2>Special Icons</h2>'        
         self.AddTableEntry (table, 'Default', 'icons!default')
         self.AddTableEntry (table, 'Directory', 'icons!directory')
         self.AddTableEntry (table, 'Parent Dir.', 'icons!parent_directory')
-        txt += str(table)
+
+        form = Form ("/%s/update" % (self._id))
+        txt = '<h2>Special Icons</h2>'        
+        txt += form.Render(str(table))
         
         # Files
         #
@@ -82,10 +70,11 @@ class PageIcon (PageMenu, FormHelper):
                 self.AddTableEntryRemove (table, entry, 'icons!file!%s' % (entry))
             txt += str(table)
 
-        ta1 = Table (3)
         fo1 = Form ("/%s/add_file" % (self._id), add_submit=False)
         en1 = Entry('file_new_match', 'text')
         en2 = Entry('file_new_file', 'text')
+        ta1 = Table (3,1)
+        ta1 += ('File', 'Icon', '')
         ta1 += (en1, en2, SUBMIT_ADD)
         txt += "<h3>Add file</h3>"
         txt += fo1.Render(str(ta1))
@@ -102,13 +91,18 @@ class PageIcon (PageMenu, FormHelper):
                 self.AddTableEntryRemove (table, entry, 'icons!suffix!%s' % (entry))
             txt += str(table)
 
-        ta1 = Table (3)
         fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False)
         en1 = Entry('suffix_new_file', 'text')
         en2 = Entry('suffix_new_exts', 'text')
+        ta1 = Table (3,1)
+        ta1 += ('Icon', 'Extensions', '')
         ta1 += (en1, en2, SUBMIT_ADD)
         txt += "<h3>Add suffix</h3>"
         txt += fo1.Render(str(ta1))
 
-        form = Form ("/%s/update" % (self._id))
-        return form.Render(txt)
+        return txt
+
+    def _op_apply_changes (self, post):
+        print "PASA"
+        self.ApplyChanges ([], post)
+        return "/%s" % (self._id)

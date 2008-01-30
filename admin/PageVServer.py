@@ -45,13 +45,6 @@ class PageVServer (PageMenu, FormHelper):
         self._cfg["%s!handler"%(pre)]  = handler
         self._cfg["%s!priority"%(pre)] = priority
 
-    def _op_apply_changes (self, post):
-        self.ValidateChanges (post, DATA_VALIDATION)
-
-        # Modify posted entries
-        for confkey in post:
-            self._cfg[confkey] = post[confkey][0]
-
     def _op_render_vserver_details (self, host, uri):
         content = self._render_vserver_guts (host)
 
@@ -151,3 +144,6 @@ class PageVServer (PageMenu, FormHelper):
             table += (link, type, e1, e2)
         txt += str(table)
         return txt
+
+    def _op_apply_changes (self, post):
+        self.ApplyChanges ([], post, DATA_VALIDATION)

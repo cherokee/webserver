@@ -39,13 +39,6 @@ class PageAdvanced (PageMenu, FormHelper):
         self._op_apply_changes (post)
         return "/%s" % (self._id)
 
-    def _op_apply_changes (self, post):
-        self.ValidateChanges (post, DATA_VALIDATION)
-
-        # Modify posted entries
-        for confkey in post:
-            self._cfg[confkey] = post[confkey][0]
-
     def _render_content (self):
         txt = "<h2>System tweaking</h2>"
         table = Table(2)
@@ -72,5 +65,6 @@ class PageAdvanced (PageMenu, FormHelper):
         form = Form ("/%s/update" % (self._id))
         return form.Render(txt)
 
-
+    def _op_apply_changes (self, post):
+        self.ApplyChanges ([], post, DATA_VALIDATION) 
 

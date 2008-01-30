@@ -15,7 +15,7 @@ class PageMime (PageMenu, FormHelper):
 
     def _op_handler (self, uri, post):
         if uri.startswith('/update'):
-            return self._op_update (post)
+            return self._op_apply_changes(post)
         raise 'Unknown method'
 
     def _op_render (self):
@@ -26,18 +26,8 @@ class PageMime (PageMenu, FormHelper):
 
         return Page.Render(self)
 
-    def _op_update (self, post):
-        self.ValidateChanges (post, DATA_VALIDATION)
-
-        # Add keys to configuration
-        for key in post:
-            value = post[key][0]
-            print key, '=', value
-            if value:
-                self._cfg[key] = value
-            else:
-                del(self._cfg[key])
-        # Return the URL
+    def _op_apply_changes (self, post):
+        self.ApplyChanges ([], post, DATA_VALIDATION)
         return "/%s" % (self._id)
 
     def _render_icon_list (self):

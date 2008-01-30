@@ -13,11 +13,4 @@ class ModuleServerInfo (Module, FormHelper):
         return str(table)
 
     def _op_apply_changes (self, uri, post):
-        # 'Just About' checkbox
-        key = '%s!just_about' % self._prefix 
-        if key in post:
-            self._cfg[key] = post[key][0]
-        else:
-            self._cfg[key] = "0"
-
-
+        self.ApplyChangesPrefix (self._prefix, ['just_about'], post)

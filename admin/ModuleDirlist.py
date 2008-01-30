@@ -32,18 +32,5 @@ class ModuleDirlist (Module, FormHelper):
         return txt
 
     def _op_apply_changes (self, uri, post):
-        self.ValidateChanges (post, DATA_VALIDATION)
-
-        # Text entries
-        for confkey in post:
-            self._cfg[confkey] = post[confkey][0]
-
-        # Rest: Checkboxes
-        for k in ['size', 'date', 'user', 'group']:
-            key = '%s!%s' % (self._prefix, k)
-            if key in post:
-                self._cfg[key] = post[key][0]
-            else:
-                self._cfg[key] = "0"
-                
-        
+        checkboxes = ['size', 'date', 'user', 'group']
+        self.ApplyChangesPrefix (self._prefix, checkboxes, post, DATA_VALIDATION)

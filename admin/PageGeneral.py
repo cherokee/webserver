@@ -20,7 +20,6 @@ DATA_VALIDATION = [
     ("server!port.*",    validate_tcp_port)
 ]
 
-
 class PageGeneral (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'general', cfg)
@@ -35,20 +34,6 @@ class PageGeneral (PageMenu, FormHelper):
     def _op_handler (self, uri, post):
         self._op_apply_changes (post)
         return "/%s" % (self._id)
-
-    def _op_apply_changes (self, post):
-        self.ValidateChanges (post, DATA_VALIDATION)
-
-        # Modify posted entries
-        for confkey in post:
-            self._cfg[confkey] = post[confkey][0]
-
-        # Additionaly, the checkboxes
-        for checkbox in ['server!ipv6', 'server!keepalive']:
-            if checkbox in post:
-                self._cfg[checkbox] = post[checkbox][0]
-            else:
-                self._cfg[checkbox] = "0"
 
     def _render_content (self):
         txt = "<h2>Networking</h2>"
@@ -80,3 +65,7 @@ class PageGeneral (PageMenu, FormHelper):
 
         form = Form ("/%s/update" % (self._id))
         return form.Render(txt)
+
+    def _op_apply_changes (self, post):
+        self.ApplyChanges (['server!ipv6', 'server!keepalive'], post, 
+                           validation = DATA_VALIDATION)

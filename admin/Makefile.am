@@ -24,6 +24,7 @@ ModuleFile.py \
 ModuleDirlist.py \
 ModuleCommon.py \
 ModuleServerInfo.py \
+ModuleCgi.py \
 config.py \
 pyscgi.py \
 server.py \
