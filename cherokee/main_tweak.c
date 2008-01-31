@@ -399,7 +399,7 @@ main (int argc, char *argv[])
 	/* Ensure that there's a command
 	 */
 	if ((command.len <= 0) || (url.len <= 0)) {
-		PRINT_MSG ("ERROR: A command and the administration URL are needed\n\n");
+		PRINT_MSG_S ("ERROR: A command and the administration URL are needed\n\n");
 		print_usage();
 		exit (EXIT_ERROR);
 	}
@@ -408,7 +408,7 @@ main (int argc, char *argv[])
 	 */
 	if (cherokee_buffer_cmp_str (&command, "trace") == 0) {
 		if (trace.len <= 0) {
-			PRINT_MSG ("ERROR: Trace needs a -t option\n\n");
+			PRINT_MSG_S ("ERROR: Trace needs a -t option\n\n");
 			print_usage();
 			exit (EXIT_ERROR);
 		}
@@ -416,7 +416,7 @@ main (int argc, char *argv[])
 
 	} else if (cherokee_buffer_cmp_str (&command, "logrotate") == 0) {
 		if (log.len <= 0) {
-			PRINT_MSG ("ERROR: Logrotate needs -u and -l options\n\n");
+			PRINT_MSG_S ("ERROR: Logrotate needs -u and -l options\n\n");
 			print_usage();
 			exit (EXIT_ERROR);
 		}
@@ -426,7 +426,7 @@ main (int argc, char *argv[])
 		do_print_info (&url, &user, &password);
 
 	} else {
-		PRINT_MSG ("ERROR: Command not recognized\n\n");
+		PRINT_MSG_S ("ERROR: Command not recognized\n\n");
 		print_help();
 		exit (EXIT_ERROR);		
 	}
