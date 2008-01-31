@@ -13,7 +13,7 @@ class ModuleLdap (ModuleAuthBase):
         self.AddTableEntry (table, "Bind Password", "%s!bind_pw"%(self._prefix))
         self.AddTableEntry (table, "Base Domain", "%s!base_dn"%(self._prefix))
         self.AddTableEntry (table, "Filter", "%s!filter"%(self._prefix))
-        self.AddTableCheckbox (table, 'Use TLS', "%s!tls"%(self._prefix))
+        self.AddTableCheckbox (table, 'Use TLS', "%s!tls"%(self._prefix), False)
         self.AddTableEntry (table, "CA File", "%s!ca_file"%(self._prefix))
 
         txt  = ModuleAuthBase._op_render (self)

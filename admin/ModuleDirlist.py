@@ -16,10 +16,10 @@ class ModuleDirlist (Module, FormHelper):
     def _op_render (self):
         txt = '<h3>Listing</h3>'
         table = Table(2)
-        self.AddTableCheckbox (table, "Show size", "%s!size" % (self._prefix))
-        self.AddTableCheckbox (table, "Show date", "%s!date" % (self._prefix))
-        self.AddTableCheckbox (table, "Show user", "%s!user" % (self._prefix))
-        self.AddTableCheckbox (table, "Show group", "%s!group" % (self._prefix))
+        self.AddTableCheckbox (table, "Show Size",  "%s!size" %(self._prefix), True)
+        self.AddTableCheckbox (table, "Show Date",  "%s!date" %(self._prefix), True)
+        self.AddTableCheckbox (table, "Show User",  "%s!user" %(self._prefix), False)
+        self.AddTableCheckbox (table, "Show Group", "%s!group"%(self._prefix), False)
         txt += str(table)
         
         txt += '<h3>Theming</h3>'

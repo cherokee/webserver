@@ -10,16 +10,18 @@ class ModuleRoundRobin (Module, FormHelper):
         FormHelper.__init__ (self, 'round_robin', cfg)
 
     def _op_render (self):
-        cfg = self._cfg[self._prefix]
-
-        tipe  = cfg['type'].value
-        hosts = filter (lambda x: x != 'type', cfg)
+        try:
+            cfg = self._cfg[self._prefix]
+            hosts = filter (lambda x: x != 'type', cfg)
+        except:
+            hosts = []
 
         # Render tables
         t1 = Table(2)
         for host in hosts:
             pre = '%s!%s' % (self._prefix, host)
-            self.AddTableEntry (t1, 'Host', '%s!host'%(pre))
+            self.AddTableEntryRemove (t1, 'Host', '%s!host'%(pre))
+        self.AddTableEntry (t1, 'New host', self._prefix)
 
         t2 = Table(2)
         for host in hosts:

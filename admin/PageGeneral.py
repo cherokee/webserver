@@ -40,14 +40,14 @@ class PageGeneral (PageMenu, FormHelper):
         table = Table(2)
         self.AddTableEntry    (table, 'Port',     'server!port')
         self.AddTableEntry    (table, 'Port TLS', 'server!port_tls')
-        self.AddTableCheckbox (table, 'IPv6',     'server!ipv6')
+        self.AddTableCheckbox (table, 'IPv6',     'server!ipv6', True)
         self.AddTableEntry    (table, 'Listen',   'server!listen')
         txt += str(table)
 
         txt += "<h2>Basic Behaviour</h2>"
         table = Table(2)
         self.AddTableEntry    (table, 'Timeout',        'server!timeout')
-        self.AddTableCheckbox (table, 'KeepAlive',      'server!keepalive')
+        self.AddTableCheckbox (table, 'KeepAlive',      'server!keepalive', True)
         self.AddTableOptions  (table, 'Server Tokens',  'server!server_tokens', PRODUCT_TOKENS)
         txt += str(table)
 

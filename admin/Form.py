@@ -128,19 +128,27 @@ class FormHelper (WebComponent):
 
         return self.AddTableOptions_w_Properties (table, title, cfg_key, options, props)
 
-    def AddTableCheckbox (self, table, title, cfg_key):
-        value = None
+    def AddTableCheckbox (self, table, title, cfg_key, default=None):
         try:
             tmp = self._cfg[cfg_key].value.lower()
             if tmp in ["on", "1", "true"]: 
-                value = "1"
+                value = '1'
+            else:
+                value = '0'
         except:
-            pass
+            value = None
 
-        if value:
+        if value == '1':
             entry = Entry (cfg_key, 'checkbox', checked=value)
-        else:
+        elif value == '0':
             entry = Entry (cfg_key, 'checkbox')
+        else:
+            if default == True:
+                entry = Entry (cfg_key, 'checkbox', checked='1')
+            elif default == False:
+                entry = Entry (cfg_key, 'checkbox')
+            else:
+                entry = Entry (cfg_key, 'checkbox')
 
         table += (title, entry)
 

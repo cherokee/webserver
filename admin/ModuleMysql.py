@@ -14,7 +14,7 @@ class ModuleMysql (ModuleAuthBase):
         self.AddTableEntry (table, "DB Password", "%s!user"%(self._prefix))
         self.AddTableEntry (table, "Database", "%s!database"%(self._prefix))
         self.AddTableEntry (table, "Query", "%s!query"%(self._prefix))
-        self.AddTableCheckbox (table, 'Use MD5 Passwords', "%s!use_md5_passwd"%(self._prefix))
+        self.AddTableCheckbox (table, 'Use MD5 Passwords', "%s!use_md5_passwd"%(self._prefix), False)
 
         txt  = ModuleAuthBase._op_render (self)
         txt += '<h3>MySQL connection</h3>'
