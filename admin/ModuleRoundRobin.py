@@ -16,24 +16,35 @@ class ModuleRoundRobin (Module, FormHelper):
         except:
             hosts = []
 
-        # Render tables
-        t1 = Table(2)
+        # Render tables: as Hosts
+        t1 = Table(2,1)
+        t1 += ('Host', '')
         for host in hosts:
             pre = '%s!%s' % (self._prefix, host)
-            self.AddTableEntryRemove (t1, 'Host', '%s!host'%(pre))
-        self.AddTableEntry (t1, 'New host', self._prefix)
+            e_host = Entry('%s!host'%(pre), 'text', self._cfg)
+            t1 += (e_host, SUBMIT_DEL)
 
-        t2 = Table(2)
+        en1 = Entry('new_host', 'text')
+        t1 += (en1, SUBMIT_ADD)
+
+        # Render tables: as Interpreters
+        t2 = Table(3,1)
+        t2 += ('Host', 'Interpreter', '')
         for host in hosts:
             pre = '%s!%s' % (self._prefix, host)
-            self.AddTableEntry (t2, 'Host', '%s!host'%(pre))
-            self.AddTableEntry (t2, 'Interpreter', '%s!interpreter'%(pre))
+            e_host = Entry('%s!host'%(pre), 'text', self._cfg)
+            e_inte = Entry('%s!interpreter'%(pre), 'text', self._cfg)
+            t2 += (e_host, e_inte, SUBMIT_DEL)
 
+        e_host = Entry('new_host', 'text')
+        e_inte = Entry('new_interpreter', 'text')
+        t2 += (e_host, e_inte, SUBMIT_ADD)
+
+        # General selector
         props = {}
         props ['host']        = str(t1)
         props ['interpreter'] = str(t2)
 
-        # General selector
         table = Table(2)
         e = self.AddTableOptions_w_Properties (table, "Information sources", 
                                                "%s!type"%(self._prefix), BALANCER_TYPES, props)

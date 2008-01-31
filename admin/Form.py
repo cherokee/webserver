@@ -68,12 +68,7 @@ class FormHelper (WebComponent):
         WebComponent.__init__ (self, id, cfg)
 
     def AddTableEntry (self, table, title, cfg_key, extra_cols=None):
-        try:
-            value = self._cfg[cfg_key].value
-            entry = Entry (cfg_key, 'text', value=value)
-        except AttributeError:
-            entry = Entry (cfg_key, 'text')
-
+        entry = Entry (cfg_key, 'text', self._cfg)
         tup = (title, entry)
         if extra_cols:
             tup += extra_cols

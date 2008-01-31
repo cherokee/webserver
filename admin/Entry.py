@@ -1,9 +1,19 @@
 class Entry:
-    def __init__ (self, name, type, *args, **kwargs):
+    def __init__ (self, name, type, cfg=None, *args, **kwargs):
         self._name   = name
         self._type   = type
         self._args   = args
         self._kwargs = kwargs
+
+        if cfg:
+            self._init_value (cfg)
+
+    def _init_value (self, cfg):
+        try:
+            value = cfg[self._name].value
+            self._kwargs['value'] = value
+        except:
+            pass
 
     def __str__ (self):
         props = 'name="%s" type="%s"' % (self._name, self._type)
@@ -12,6 +22,7 @@ class Entry:
             props += ' %s="%s"' % (prop, self._kwargs[prop])
 
         return "<input %s />" % (props)
+
 
 
 class EntryOptions:
