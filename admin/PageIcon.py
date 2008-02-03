@@ -103,6 +103,5 @@ class PageIcon (PageMenu, FormHelper):
         return txt
 
     def _op_apply_changes (self, post):
-        print "PASA"
         self.ApplyChanges ([], post)
         return "/%s" % (self._id)

@@ -208,7 +208,7 @@ class Config:
             t.close()
             s.close()
         except:
-            print "Could copy configuration to ", self.file+'.backup'
+            print ("Could copy configuration to " + self.file+'.backup')
 
         # Write the new one
         cfg = self.serialize()

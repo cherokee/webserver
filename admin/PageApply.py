@@ -19,7 +19,7 @@ class PageApply (PageMenu):
     def _restart (self):
         pid_cfg = self._cfg["server!pid_file"]
         if not pid_cfg:
-            print "No PID file"
+            print ("No PID file")
             return True
 
         pid_file = pid_cfg.value
@@ -29,7 +29,7 @@ class PageApply (PageMenu):
         try:
             f = open (pid_file, "r")
         except IOError:
-            print "Couldn't read PID file"
+            print ("Couldn't read PID file")
             return True
         
         pid = int(f.readline())
