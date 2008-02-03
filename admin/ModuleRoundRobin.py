@@ -50,6 +50,31 @@ class ModuleRoundRobin (Module, FormHelper):
                                                "%s!type"%(self._prefix), BALANCER_TYPES, props)
         return str(table) + e
 
+    def __find_name (self):
+        i = 1
+        while True:
+            key = "%s!%d" % (self._prefix, i)
+            tmp = self._cfg[key]
+            if not tmp: 
+                return str(i)
+            i += 1
+
     def _op_apply_changes (self, uri, post):
+        # Add new 'Host' or 'Interpreter'
+        if 'new_host' in post or \
+           'new_interpreter' in post:
+            num = self.__find_name()
+
+        if post['new_host']:
+            key = "%s!%s!host" % (self._prefix, num)
+            self._cfg[key] = post['new_host'][0]
+            del(post['new_host'])
+
+        if post['new_interpreter']:
+            key = "%s!%s!interpreter" % (self._prefix, num)
+            self._cfg[key] = post['new_interpreter'][0]
+            del(post['new_interpreter'])
+
+        # Everything else
         self.ApplyChanges ([], post)
 
