@@ -22,19 +22,12 @@ function make_visible (DivID, visible)
 function comment_out (DivID, visible)
 {
     var o = get_by_id(DivID);
-    var c;
-
     if (o == null) return;
-    c = o.innerHTML;
 
     if (visible) {
-		  if (c.substring(0,5) == '<!-- ') {
-				o.innerHTML = c.substring (5, c.length-4);
-		  }
+		  o.style.display = 'block';
     } else {
-		  if (c.substring(0,5) != '<!-- ') {
-				o.innerHTML = '<!-- ' + c + ' -->';
-		  }
+		  o.style.display = 'none';
     }
 }
 

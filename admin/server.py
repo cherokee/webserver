@@ -99,7 +99,7 @@ def main():
     cfg_file = sys.argv[1]
     cfg = Config(cfg_file)
     
-    print "Server running.. PID=%d" % (os.getpid())
+    print ("Server running.. PID=%d" % (os.getpid()))
     while True:
         # Do it
         srv.handle_request()
