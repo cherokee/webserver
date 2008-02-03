@@ -27,6 +27,7 @@ ModuleCommon.py \
 ModuleServerInfo.py \
 ModuleCgi.py \
 ModuleFcgi.py \
+ModuleScgi.py \
 ModuleAuth.py \
 ModuleHtdigest.py \
 ModuleLdap.py \

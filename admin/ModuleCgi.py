@@ -4,9 +4,9 @@ from Module import *
 from validations import *
 
 class ModuleCgiBase (Module, FormHelper):
-    def __init__ (self, cfg, prefix):
-        Module.__init__ (self, 'cgi', cfg, prefix)
-        FormHelper.__init__ (self, 'cgi', cfg)
+    def __init__ (self, cfg, prefix, name):
+        Module.__init__ (self, name, cfg, prefix)
+        FormHelper.__init__ (self, name, cfg)
 
     def _op_render (self):
         table = Table(2)
@@ -25,7 +25,7 @@ class ModuleCgiBase (Module, FormHelper):
 
 class ModuleCgi (ModuleCgiBase):
     def __init__ (self, cfg, prefix):
-        ModuleCgiBase.__init__ (self, cfg, prefix)
+        ModuleCgiBase.__init__ (self, cfg, prefix, 'cgi')
 
     def _op_render (self):
         return ModuleCgiBase._op_render (self)

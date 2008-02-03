@@ -6,9 +6,9 @@ from consts import *
 
 from ModuleCgi import *
 
-class ModuleFcgi (ModuleCgiBase):
+class ModuleScgi (ModuleCgiBase):
     def __init__ (self, cfg, prefix):
-        ModuleCgiBase.__init__ (self, cfg, prefix, 'fcgi')
+        ModuleCgiBase.__init__ (self, cfg, prefix, 'scgi')
 
     def _op_render (self):
         txt = '<h3>General</h3>'
