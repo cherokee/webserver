@@ -58,6 +58,31 @@ vserver!default!extensions!php!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
 vserver!default!extensions!php!handler!balancer!local1!interpreter = /usr/lib/cgi-bin/php -b 1234
 vserver!default!extensions!php!priority = 99999
 
+# Icons
+#
+icons!directory = folder.png
+icons!parent_directory = back.png
+icons!default = unknown.png
+
+icons!file!bomb.png = core
+icons!file!readme.png = README
+
+icons!suffix!blank.png = html,htm
+icons!suffix!text.png = txt,text,doc,rtf,sdw
+icons!suffix!image.png = jpg,jpeg,jpe,png,gif,xcf,bmp,pcx,tiff,tif,cdr,psd,xpm,xbm
+icons!suffix!sound.png = au,snd,mid,midi,kar,mpga,mpega,mp2,mp3,m3u,sid,wav,aif,aiff,aifc,gsm,m3u,wma,wax,ra,rm,ram,pls,sd2,ogg
+icons!suffix!movie.png = avi,ogg,mpeg,mpga,mpe,mpg,mpeg3,mp2,dl,fli,qt,mov,movie
+icons!suffix!compressed.png = tar,gz,bz2,zip,rar,ace,lha,Z,z,7z
+icons!suffix!binary.png = bin,exe,com,msi,out
+icons!suffix!script.png = sh,csh,ksh,tcl,tk,py,pl,php
+icons!suffix!tex.png = tex,latex,ltx,sty,cls
+icons!suffix!ps.png = ps,eps,ai
+icons!suffix!pdf.png = pdf
+icons!suffix!iso.png = iso,ngr,cue
+icons!suffix!java.png = java,class,jar
+
+
+
 include = %sysconfdir%/cherokee/mods-enabled
 include = %sysconfdir%/cherokee/sites-enabled
 

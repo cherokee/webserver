@@ -31,7 +31,6 @@ mods-ssl.sample.pre      \
 performance.conf.sample.pre
 
 CONFS_DONE =           \
-mods-icons.conf.sample \
 mime.types.sample      \
 mime.compression.types.sample
 
@@ -107,12 +106,6 @@ install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	@if test -d $(DESTDIR)$(sysconfdir)/pam.d && test ! -d $(DESTDIR)$(sysconfdir)/pam.d/cherokee ; then \
 		$(INSTALL_DATA) $(top_srcdir)/pam.d_cherokee $(DESTDIR)$(sysconfdir)/pam.d/cherokee; \
 	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/icons ; then \
-		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mods-available/icons"; \
-	else \
-		$(INSTALL_DATA) $(top_builddir)/mods-icons.conf.sample $(DESTDIR)$(cherokeeconfdir)/mods-available/icons; \
-		$(SHELL) -c "cd $(DESTDIR)$(cherokeeconfdir)/mods-enabled/ && $(LN_S) ../mods-available/icons ."; \
-	fi
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl ; then \
 		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl"; \
 	else \
@@ -140,14 +133,6 @@ uninstall-local: uninstall-local-config
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl ; then \
 		echo "rm -f $(cherokeeconfdir)/mods-available/ssl"; \
 		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/icons ; then \
-		echo "rm -f $(cherokeeconfdir)/mods-available/icons"; \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mods-available/icons; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-enabled/icons ; then \
-		echo "rm -f $(cherokeeconfdir)/mods-enabled/icons"; \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mods-enabled/icons; \
 	fi
 
 test:
