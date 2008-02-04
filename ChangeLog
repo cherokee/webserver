@@ -1,3 +1,23 @@
+2008-02-04  A.D.F  <adefacc@tin.it>
+
+	* mime.types.sample:
+	  - add a few more comments about syntax of the file;
+	  - included the content of mime.compression.types.sample
+	    into mime.types.sample;
+	    NOTE: workaround for Cherokee 0.6x.
+
+	* cherokee.conf.sample.pre:
+	  - removed mime.compression.types file from
+	    mime_files = %sysconfdir%/cherokee/mime.types
+	    assignment;
+	    NOTE: mime_files variable can accept ONLY 1 file.
+
+2008-02-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* advanced.conf.sample.pre:
+	Removed file because it was not used anymore
+	(it had the Cherokee 5.x configuration format).
+
 2008-02-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee.conf.sample.pre, mods-icons.conf.sample, Makefile.am:

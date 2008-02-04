@@ -17,10 +17,21 @@
 #  precedence over those listed here.
 #
 #  Note: Compression schemes like "gzip", "bzip", and "compress" are not
-#  actually "mime-types".  They are "encodings" and hence must _not_ have
+#  actually "mime-types".  They are "encodings" and hence should _not_ have
 #  entries in this file to map their extensions.  The "mime-type" of an
 #  encoded file refers to the type of data that has been encoded, not the
-#  type of encoding.
+#  type of encoding;  anyway as mime encodings will be added in Cherokee 0.7x
+#  with all tricks to work well, compressed mime encodings are treated
+#  like mime types in Cherokee 0.6x.
+#
+#  Syntax:
+#
+#  mime_type  [ .max_age_seconds ]  file_extension1 [ file_extensions ... ]
+#
+#  Example:
+#
+#  # set a max age Cache-Control header of 86400 seconds (1 day) for jpeg files
+#  image/jpeg	.86400	jpeg jpg jpe
 #
 ###############################################################################
 
@@ -120,6 +131,10 @@ application/wordperfect				wpd
 application/wordperfect5.1			wp5
 application/x400-bp
 application/xhtml+xml				xhtml xht
+# NOTE: if you need to set different max-age values for xml and xsl files,
+#       then add another (undocumented) entry, i.e:
+#	application/xml	  .10	xml
+#	application/xsl	  .3600	xsl
 application/xml					xml xsl
 application/xml-dtd
 application/xml-external-parsed-entity
@@ -730,3 +745,20 @@ x-conference/x-cooltalk				ice
 x-world/x-vrml					vrm vrml wrl
 
 
+###############################################################################
+#
+#  These are not MIME types, but we can treat them like that..
+#
+###############################################################################
+
+application/zip				.zip
+application/rar				.rar
+application/bzip2				.bz2
+application/gzip				.gz
+application/x-tar				.tar
+application/x-gzip				.gz	.tgz
+application/x-stuffit			.sit	.sea
+application/octetstream			.7z
+application/octetstream			.ace
+
+# EOF
