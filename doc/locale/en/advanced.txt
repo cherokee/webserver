@@ -34,6 +34,10 @@ Cherokee 0.6 handles:
 Server
 ------
 
+The server configuration keys define some of the server-wide
+properties, such as the user under which the server ought to run if it
+is run as root or whether to use keep-alive connections.
+
 ================================ ======== ======================================
 **Key**                          **Type** **Description**
 -------------------------------- -------- --------------------------------------
@@ -65,3 +69,8 @@ server!group                     String/  Change effective group
                                  Number
 ================================ ======== ======================================
 
+Virtual Server
+--------------
+
+A virtual servers contains the information related to one or more
+domains under the same configuration. 
