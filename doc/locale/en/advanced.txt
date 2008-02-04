@@ -1,0 +1,67 @@
+=====================
+Advanced Configuation
+=====================
+
+Introduction
+------------
+
+Cherokee's configuration system is based on a internal text file
+format that the average user should not know about. This configuration
+file is read by the server and modified by the administration
+interface, so unless you are not developing Cherokee or a really
+advanced user, the following format description will not be very
+interesting to you.
+
+Said that, let's proceed to describe the configuration file format. It
+is basically a text file that contains a tree where final nodes
+contains values. Let's see a basic example:
+
+::
+
+    server!port = 80
+    server!keepalive = 1
+
+Most of the modules and plug-ins reads a piece of the tree to
+configure itself. It provides a extremely flexible configuration
+capabilities for the price of a fairly complex text file. However, I
+would like to point again that users should never read of modify the
+configuration file by hand, so it is a format the only developers
+should know about.
+
+The following blocks will summarize the configuration keys that
+Cherokee 0.6 handles:
+
+Server
+------
+
+================================ ======== ======================================
+**Key**                          **Type** **Description**
+-------------------------------- -------- --------------------------------------
+server!port                      Number   TCP port for HTTP
+server!port_tls                  Number   TCP port for HTTPS
+server!max_fds                   Number   Max open file descriptors
+server!listen_queue              Number   Length of the listen queue
+server!thread_number             Number   Number of threads
+server!sendfile_min              Number   Minimum file size of using sendfile
+server!sendfile_max              Number   Maximum file size of using sendfile
+server!max_connection_reuse      Number   How many connections to reuse
+server!ipv6                      Bool     Whether to use IPv6
+server!timeout                   Number   Connections timeout
+server!log_flush_elapse          Number   Time between log flushes
+server!keepalive                 Bool     Allow keepalive connections
+server!keepalive_max_requests    Number   How many keepalive reqs per connection
+server!unix_socket               Path     Listen to a Unix socket
+server!panic_action              Path     Path to cherokee-panic
+server!chroot                    Bool     Whether to use chroot
+server!pid_file                  Path     PID file
+server!mime_files                List     Path list to mime type files
+server!listen                    IP       Listen NIC
+server!poll_method               String   Which poll method it should use
+server!server_tokens             String   Server identification: minor, minimal, os, full
+server!thread_policy             String   Thread policy: fifo, rr, other
+server!user                      String/  Change effective user
+                                 Number
+server!group                     String/  Change effective group
+                                 Number
+================================ ======== ======================================
+
