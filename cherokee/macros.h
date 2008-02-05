@@ -94,7 +94,7 @@
 #define TERMINAL_WIDTH                80
 #define DEFAULT_TRAFFIC_UPDATE        10
 #define CGI_TIMEOUT                   65
-#define MSECONS_TO_LINGER             2000
+#define MSECONDS_TO_LINGER            2000
 #define POST_SIZE_TO_DISK             32768
 #define LOGGER_MIN_BUFSIZE            0
 #define DEFAULT_LOGGER_MAX_BUFSIZE    32768

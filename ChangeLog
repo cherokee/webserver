@@ -1,7 +1,17 @@
+
+2008-02-05  A.D.F  <adefacc@tin.it>
+
+	* macros.h, connection.c:
+	  - fixed mispelling, renamed MSECONS_TO_LINGER to MSECONDS_TO_LINGER.
+
+	* handler_file.c:
+	  - added HTTP header "Expires: RFC1123 date" for HTTP/1.0 connections
+	    in order to complete support for max-age cache control.
+
 2008-02-04  A.D.F  <adefacc@tin.it>
 
 	* mime.types.sample:
-	  - add a few more comments about syntax of the file;
+	  - added a few more comments about syntax of the file;
 	  - included the content of mime.compression.types.sample
 	    into mime.types.sample;
 	    NOTE: workaround for Cherokee 0.6x.
