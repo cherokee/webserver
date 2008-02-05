@@ -142,6 +142,19 @@ auth                                     String   Validator (module) that protec
 only_secure                              Bool     Allow only secure (https) connections
 ======================================== ======== ======================================
 
+The ``auth`` entry deserves a little more attention, actually. It
+restricts the access to some of the objects accessed by the web
+servers based on a number of properties that are defined as its child
+properties:
+
+======================================== ======== ======================================
+**Key**                                  **Type** **Description**
+---------------------------------------- -------- --------------------------------------
+auth!methods                             List     Allowed methods (basic, digest)
+auth!realm                               String   Realm of the resource
+auth!users                               List     List of allowed users
+======================================== ======== ======================================
+
 So, here are a few examples about how this notation works:
 
 - The default virtual server uses the "common" handler as default
@@ -164,12 +177,18 @@ So, here are a few examples about how this notation works:
     vserver!example!directory!/!priority = 1
     vserver!example!directory!/!allow_from = 127.0.0.1,::1
 
-- Jpeg files should be handled as files:
+- ISO images should be handled as files and are protected by a
+  htdigest file using only Digest authentication:
 
   ::
 
-    vserver!default!extensions!jpg,jpeg,JPG!handler = file
-    vserver!default!extensions!jpg,jpeg,JPG!priority = 1
+    vserver!default!extensions!iso,ISO!handler = file
+    vserver!default!extensions!iso,ISO!priority = 1
+    vserver!default!extensions!iso,ISO!auth = htdigest
+    vserver!default!extensions!iso,ISO!auth!realm = My secret isos
+    vserver!default!extensions!iso,ISO!auth!methods = digest
+    vserver!default!extensions!iso,ISO!auth!passwdfile = /var/passwd/isos.htdigest
+    
 
 Logs
 ----
