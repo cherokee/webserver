@@ -578,8 +578,8 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 		ret = cherokee_mime_entry_get_maxage (fhdl->mime, &maxage);             
 		if (ret == ret_ok) {
 			/* Cache-Control, note that we add it in any case
-		     * because it can be useful for client and / or transparent
-			 * proxies (working in the middle with HTTP/1.1 connections) too.
+			 * because it can be useful for clients and / or transparent
+			 * proxies (working with HTTP/1.1 connections) too.
 			 */
 			cherokee_buffer_add_str    (buffer, "Cache-Control: max-age=");
 			cherokee_buffer_add_ulong10(buffer, (culong_t) maxage);
