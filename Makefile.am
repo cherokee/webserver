@@ -27,7 +27,6 @@ cherokeeconfdir = $(sysconfdir)/cherokee
 
 CONFS_PRE =              \
 cherokee.conf.sample.pre \
-mods-ssl.sample.pre      \
 performance.conf.sample.pre
 
 CONFS_DONE =           \
