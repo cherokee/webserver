@@ -1,25 +1,20 @@
-============================
-Cherokee 0.6.0 Documentation
-============================
+==========================
+Cherokee 0.6 Documentation
+==========================
 
-Welcome to the 0.6.0 documentation.
+Welcome to the 0.6 documentation.
 
-************************
-Compiling and Installing
-************************
+*************
+Configuration
+*************
 
-Cherokee runs on many different platforms.  Look for your platform below to see
-more specific instructions.  If you are not comfortable with rolling your own
-Cherokee then check our listings of pre-compiled binaries.
+The Cherokee web server is configured through a user friendly web
+interface named ``cherokee-admin``:
 
-    - Unix_
-    - Windows_
+   - TODO: Include a screenshot here.
 
-**************
-Configuration_
-**************
+Here you can find more information about the `server configuration`_.
 
-test
 
 *******
 Modules
@@ -28,9 +23,9 @@ Modules
 There are four different types of modules in Cherokee.  You have handlers_,
 validators_, loggers_, and encoders_.
 
----------
-Handlers_
----------
+--------
+Handlers
+--------
     - file_ - **File Sending**
       
       The file handler serves files from the filesystem.
@@ -61,9 +56,9 @@ Handlers_
     
       Communicates with FastCGI servers.
 
------------
-Validators_
------------
+----------
+Validators
+----------
     - htdigest_ - **Something**
     
       Uses something to perform HTTP authentication.
@@ -89,8 +84,16 @@ Validators_
       Uses a plain flat file to perform HTTP authentication.
 
 --------
-Loggers_
+Encoders
 --------
+
+    - gzip_ - **GZip compression**
+    
+      Encodes the output with GZip
+
+-------
+Loggers
+-------
     - combined_ - **Combined Log Format**
     
       Logging using the combined log format.  Very common among other web
@@ -105,12 +108,24 @@ Loggers_
       Logging using the W3C log format.
 
 
+************************
+Compiling and Installing
+************************
+
+Cherokee runs on many different platforms.  Look for your platform below to see
+more specific instructions.  If you are not comfortable with rolling your own
+Cherokee then check our listings of pre-compiled binaries.
+
+    - Unix_
+    - Windows_
+
+
 .. _Unix: compiling_and_installing_unix.html
 .. _Windows: compiling_and_installing_windows.html
 
-.. _Configuration: configuration.html
+.. _server configuration: configuration.html
 
-.. _Handlers: handlers.html
+.. _Handlers: #handlers
 .. _file: handlers/file.html
 .. _dirlist: handlers/dirlist.html
 .. _common: handlers/common.html
@@ -119,7 +134,7 @@ Loggers_
 .. _scgi: handlers/scgi.html
 .. _fcgi: handlers/fcgi.html
 
-.. _Validators: validators.html
+.. _Validators: #validators
 .. _htdigest: validators/htdigest.html
 .. _htpasswd: validators/htpasswd.html
 .. _ldap: validators/ldap.html
@@ -127,9 +142,10 @@ Loggers_
 .. _pam: validators/pam.html
 .. _plain: validators/plain.html
 
-.. _Loggers: loggers.html
+.. _Loggers: #loggers
 .. _combined: loggers/combined.html
 .. _ncsa: loggers/ncsa.html
 .. _w3c: loggers/w3c.html
 
-.. _Encoders: encoders.html
+.. _Encoders: #encoders
+.. _gzip: encoders/gzip.html

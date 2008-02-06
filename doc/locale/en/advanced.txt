@@ -14,9 +14,7 @@ interesting to you.
 
 Said that, let's proceed to describe the configuration file format. It
 is basically a text file that contains a tree where final nodes
-contains values. Let's see a basic example:
-
-::
+contains values. Let's see a basic example::
 
     server!port = 80
     server!keepalive = 1
@@ -158,18 +156,14 @@ auth!users                               List     List of allowed users
 So, here are a few examples about how this notation works:
 
 - The default virtual server uses the "common" handler as default
-  choice for its root directory:
-
-  ::
+  choice for its root directory::
 
     vserver!default!directory!/!handler = common
     vserver!default!directory!/!priority = 1
 
 - The \*.example.com and \*.examples.org domains are restricted to be
   accessed from the local loop interface, and have to be handled as a
-  FastCGI:
-
-  ::
+  FastCGI::
 
     vserver!example!domains!1 = *.example.com
     vserver!example!domains!2 = *.example.org
@@ -178,9 +172,7 @@ So, here are a few examples about how this notation works:
     vserver!example!directory!/!allow_from = 127.0.0.1,::1
 
 - ISO images should be handled as files and are protected by a
-  htdigest file using only Digest authentication:
-
-  ::
+  htdigest file using only Digest authentication::
 
     vserver!default!extensions!iso,ISO!handler = file
     vserver!default!extensions!iso,ISO!priority = 1
@@ -223,13 +215,25 @@ named ``filename`` and for exec ``command``.
 
 Examples:
 
-- Apache format logs to the regular files:
-
-  ::
+- Apache format logs to the regular files::
 
     vserver!default!logger = combined
     vserver!default!logger!access!type = file
     vserver!default!logger!access!filename = /var/log/cherokee.access.log
     vserver!default!logger!error!type = file
     vserver!default!logger!error!filename = /var/log/cherokee.error.log
+
+
+Inclusion of Configuration
+--------------------------
+
+Sometimes it is nice to break out your configuration into several logical files
+to be more modular as well as more organized.  You can use the ``include``
+configuration to accomplish this.  Here is an example::
+
+    include = /etc/cherokee/advanced.conf
+    
+or even, it is possible to specify a directory of which all the files will be included::
+
+    include = /etc/cherokee/mods-enabled/
 

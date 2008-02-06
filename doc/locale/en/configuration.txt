@@ -2,45 +2,32 @@
 Configuration
 =============
 
-The default location for Cherokee configuration files are ``/etc/cherokee``, but
-this may vary based on distribution or installation parameters.
+Cherokee provides an administration interface name ``cherokee-admin``
+that allows to configure the web server without having to worry about
+editing a text file written with a certain syntax. 
 
-*****
-Files
-*****
+Once the ``cherokee-admin`` server is launched, there will be an
+administration web interface available at http://localhost:9090/ ready
+for working with the configuration.
 
-cherokee.conf
-    This is the main configuration file that Cherokee will look for.  It will
-    typically include server and virtual server configuration.  You are not
-    limited to put all of your configuration in this file.  Cherokee supports
-    configuation inclusion with the use of ``include``.
 
-******
-Syntax
-******
+**********
+Developers
+**********
 
-The syntax to the Cherokee configuration may look cryptic initially.  However,
-it is very logical and with a little bit of studying will come pretty natural.
-The configuration is esstenially a tree of nodes.  Each node is delimited with a
-``!`` character.  Take a look at the following example::
+The administration interface is highly recommended, and in fact the
+only administration mechanism that should be used to configure
+Cherokee. However, there is another way in which Cherokee developers
+and very advance users can modify the configuration.
 
-    server!port = 80
+The default location for Cherokee configuration file is
+``/etc/cherokee``, but this may vary based on distribution or
+installation parameters. It is a special formatted text file than can
+be modified by hand if you are completely sure about what you are
+doing. We recommend you not do so.
 
-This tells the server that it should listen on port 80.  To get a little more
-complex take a look at this example::
+There is a document explaining how the `internal configuration
+system`_ works and its main keys.
 
-    vserver!default!priority = 1
+.. _internal configuration system: advanced.html
 
-This defines the priority to 1 for the default virtual server.  You can take a
-look at the Virtual Server documentation to get a better idea of what is
-possible.
-
-**************************
-Inclusion of Configuration
-**************************
-
-Sometimes it is nice to break out your configuration into several logical files
-to be more modular as well as more organized.  You can use the ``include``
-configuration to accomplish this.  Here is an example::
-
-    include = /etc/cherokee/advanced.conf
