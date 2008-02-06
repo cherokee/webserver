@@ -67,9 +67,17 @@ def build_document(text):
     return publish_parts(text, writer=CherokeeHTMLWriter())
 
 def main():
-    
     output_dir = '.'
     
+    #
+    # Check parameters
+    #
+    verbose = False
+    if '-v' in sys.argv:
+        verbose = True
+        sys.argv.remove('-v')
+    
+
     #
     # get the language to compile
     #
@@ -83,7 +91,7 @@ def main():
         if not os.path.exists(lang_dir):
             print ('language %s does not exist.' % lang)
             raise SystemExit
-    
+
     #
     # configure django to make templates work
     #
@@ -114,11 +122,18 @@ def main():
             # ignore non text files
             if not ifile.endswith('.txt'):
                 continue
+            
+            # Output filename
+            html_file = "%s.html" % ifile.split('.')[0]
 
             fp = open(os.path.join(d, ifile))
             data = fp.read()
             fp.close()
-            
+
+            if verbose:
+                sys.stdout.write("Compiling %s.. " % (html_file))
+                sys.stdout.flush()
+
             if docutils:
                 parts = build_document(data)
             else:
@@ -136,11 +151,14 @@ def main():
             })
             
             # write the compiled html doc
-            ofile = os.path.join(write_dir, '%s.html' % \
-                ifile.split('.')[0])
+            ofile = os.path.join (write_dir, html_file)
+
             fp = open(ofile, 'w')
             fp.write(doc_detail_template.render(c))
             fp.close()
+
+            if verbose:
+                print ("OK")
 
 if __name__ == '__main__':
     main()

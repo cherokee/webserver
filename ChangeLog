@@ -1,5 +1,11 @@
 2008-02-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* doc/build_docs.py: Added support for a new -v parameter and
+	verbose output.
+
+	* doc/Makefile.am: Execute build_docs.py with verbose output by
+	default.
+
 	* doc/build_docs.py: It skips all the files that do not end with
 	".txt". It was processing many unneeded files such as SVN property
 	files and editor temporal files.
