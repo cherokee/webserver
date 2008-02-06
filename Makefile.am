@@ -106,11 +106,6 @@ install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	@if test -d $(DESTDIR)$(sysconfdir)/pam.d && test ! -d $(DESTDIR)$(sysconfdir)/pam.d/cherokee ; then \
 		$(INSTALL_DATA) $(top_srcdir)/pam.d_cherokee $(DESTDIR)$(sysconfdir)/pam.d/cherokee; \
 	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl ; then \
-		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl"; \
-	else \
-		$(INSTALL_DATA) $(top_builddir)/mods-ssl.sample $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl; \
-	fi
 	$(mkinstalldirs) $(DESTDIR)$(localstatedir)
 
 uninstall-local: uninstall-local-config
@@ -129,10 +124,6 @@ uninstall-local: uninstall-local-config
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.compression.types ; then \
 		echo "rm -f $(cherokeeconfdir)/mime.compression.types"; \
 		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mime.compression.types; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl ; then \
-		echo "rm -f $(cherokeeconfdir)/mods-available/ssl"; \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mods-available/ssl; \
 	fi
 
 test:

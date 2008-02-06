@@ -1,5 +1,12 @@
 2008-02-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee.conf.sample.pre: Removed commented entries. This file
+	is not meant to be read by humans, and those parameters can
+	already be set via cherokee-admin.
+
+	* mods-ssl.sample.pre, Makefile.am: mods-ssl.sample has been
+	removed; cherokee-admin handles it.
+
 	* doc/build_docs.py: Added support for a new -v parameter and
 	verbose output.
 
