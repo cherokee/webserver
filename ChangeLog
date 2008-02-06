@@ -1,3 +1,8 @@
+2008-02-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* doc/build_docs.py: It skips all the files that do not end with
+	".txt". It was processing many unneeded files such as SVN property
+	files and editor temporal files.
 
 2008-02-05  A.D.F  <adefacc@tin.it>
 

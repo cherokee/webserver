@@ -81,7 +81,7 @@ def main():
     finally:
         lang_dir = 'locale/%s/' % lang
         if not os.path.exists(lang_dir):
-            print 'language %s does not exist.' % lang
+            print ('language %s does not exist.' % lang)
             raise SystemExit
     
     #
@@ -105,12 +105,16 @@ def main():
         media_root = os.path.join(
             *['..' for i in xrange(len(d.split('/')) - 2) \
                 if not d.endswith('/')] + ['media/'])
-        
+
         for ifile in files:
             # ignore hidden files
             if ifile.startswith('.'):
                 continue
             
+            # ignore non text files
+            if not ifile.endswith('.txt'):
+                continue
+
             fp = open(os.path.join(d, ifile))
             data = fp.read()
             fp.close()
