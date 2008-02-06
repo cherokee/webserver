@@ -21,7 +21,7 @@ Modules
 *******
 
 There are four different types of modules in Cherokee.  You have handlers_,
-validators_, loggers_, and encoders_.
+validators_, loggers_, encoders_ and balancers_.
 
 --------
 Handlers
@@ -107,6 +107,12 @@ Loggers
     
       Logging using the W3C log format.
 
+---------
+Balancers
+---------
+    - `round robin`_ - **Round Robin load balancer**
+    
+
 
 ************************
 Compiling and Installing
@@ -149,3 +155,6 @@ Cherokee then check our listings of pre-compiled binaries.
 
 .. _Encoders: #encoders
 .. _gzip: encoders/gzip.html
+
+.. _Balancers: #balancers
+.. _round robin: balancers/round_robin.html
