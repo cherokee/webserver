@@ -2,6 +2,19 @@
 
 SUBDIRS = static
 
+SUFFIXES = .py.pre .py
+
+.py.pre.py:
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%wwwroot%|${WWW_ROOT}|g" $< > $@
+
+PY_PRE = \
+configured.py.pre
+
+generateddir = "$(datadir)/cherokee/admin"
+generated_DATA = \
+$(PY_PRE:.py.pre=.py)
+
+
 adminpydir = "$(datadir)/cherokee/admin"
 adminpy_DATA = \
 consts.py \
@@ -53,5 +66,6 @@ vserver.help.html \
 vservers.help.html
 
 EXTRA_DIST = \
+$(PY_PRE) \
 $(adminpy_DATA) \
 $(adminhelp_DATA)
