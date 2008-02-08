@@ -1,16 +1,23 @@
 import os
 import sys
+import time
 import signal
 
+from configured import *
+
+DEFAULT_DELAY = 2
 DEFAULT_PID_LOCATIONS = [
     '/var/run/cherokee.pid',
-    '/usr/local/var/run/cherokee.pid',
-    '/opt/cherokee/var/run/cherokee.pid'
+    os.path.join (PREFIX, 'var/run/cherokee.pid')
 ]
 
 
+# Cherokee Management 'factory':
+# 
+
 cherokee_management = None
-def get_cherokee_management (cfg):
+
+def cherokee_management_get (cfg):
     global cherokee_management
 
     # Fast path
@@ -21,6 +28,13 @@ def get_cherokee_management (cfg):
     cherokee_management = CherokeeManagement(cfg)
     return cherokee_management
 
+def cherokee_management_reset ():
+    global cherokee_management
+    cherokee_management = None
+
+
+# Cherokee Management class
+#
 
 class CherokeeManagement:
     def __init__ (self, cfg):
@@ -41,7 +55,18 @@ class CherokeeManagement:
         return is_PID_alive (self._pid)
 
     def launch (self):
-        print ("TODO: Launch server")
+        pid = os.fork()
+        if pid == 0:
+            os.execl (CHEROKEE_SRV_PATH)
+        elif pid > 0:
+            time.sleep (DEFAULT_DELAY)
+            
+    def stop (self):
+        if not self._pid:
+            return
+        os.kill (self._pid, signal.SIGQUIT)
+        os.waitpid (self._pid, 0)
+        
 
     # Protected
     #
@@ -79,7 +104,7 @@ class CherokeeManagement:
         os.kill (self._pid, signal.SIGHUP)
 
 
-def is_PID_alive (pid, filter):
+def is_PID_alive (pid, filter='cherokee'):
     if sys.platform == 'win32':
         raise 'TODO'
     else:

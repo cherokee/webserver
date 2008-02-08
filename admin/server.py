@@ -64,12 +64,19 @@ class Handler(pyscgi.SCGIHandler):
             else:
                 page = PageVServer(cfg)
         elif uri.startswith('/apply'):
-            manager = get_cherokee_management (cfg)
+            manager = cherokee_management_get (cfg)
             manager.save()
+            cherokee_management_reset()
             body = "/"
         elif uri.startswith('/launch'):
-            manager = get_cherokee_management (cfg)
+            manager = cherokee_management_get (cfg)
             manager.launch()
+            cherokee_management_reset()
+            body = "/"
+        elif uri.startswith('/stop'):
+            manager = cherokee_management_get (cfg)
+            manager.stop()
+            cherokee_management_reset()
             body = "/"
         else:
             page = PageMain(cfg)

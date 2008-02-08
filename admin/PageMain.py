@@ -21,7 +21,7 @@ class PageMain (PageMenu):
     def __init__ (self, cfg=None):
         PageMenu.__init__ (self, 'main', cfg)
 
-        self.manager = get_cherokee_management (cfg)
+        self.manager = cherokee_management_get (cfg)
 
     def _op_render (self):
         self.AddMacroContent ('title', 'Welcome to Cherokee Admin')
