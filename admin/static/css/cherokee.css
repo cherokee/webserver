@@ -1,0 +1,96 @@
+body {
+    background: #fff url(../images/background.png) left top repeat-x;
+    font-family: helvetica, arial, sans-serif;
+    font-size: small;
+    text-align: center;
+}
+
+.clearfix:after {
+    content: "."; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;
+}
+
+.clearfix {display: inline-block;}
+
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+.clearfix {display: block;}
+/* End hide from IE-mac */
+
+#container {
+    width: 770px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#bar {
+    float: left;
+    width:179px;
+}
+
+#workarea {
+    float: right;
+    margin-top: 10px;
+    background: transparent url(../images/workarea.png) left top no-repeat;
+    width: 591px;
+    min-height: 550px;
+}
+
+#workarea-inner {
+    padding: 1.5em 1em;
+}
+
+#nav {
+}
+
+#nav li {
+    font-size: 12px;
+    height: 27px;
+    min-height: 27px;
+}
+
+#nav li a {
+    padding-left: 16px;
+    padding-top: 7px;
+    display: block;
+    color: #204a87;
+    text-decoration: none;
+}
+
+#nav li:hover {
+    background: transparent url(../images/menu-highlight.png) left top no-repeat;
+}
+
+#body-general #general,
+#body-vserver #vserver,
+#body-icon #icon,
+#body-mime #mime,
+#body-advanced #advanced
+{
+    background: transparent url(../images/menu-active.png) left top no-repeat;
+}
+
+#logo {
+    text-align: center;
+}
+
+#version {
+    font-size: 80%;
+    color: #3465a4;
+    text-align: center;
+}
+
+
+h1 {
+    color: #204a87;
+    font-weight: normal;
+    font-size: 150%;
+    margin-bottom: 0.5em;
+}
+
+p {
+    line-height: 1.1em;
+}

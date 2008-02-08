@@ -3,37 +3,34 @@ from Theme import *
 from Entry import *
         
 PAGE_MENU_LAYOUT = """
-<table border="1">
- <tr><td>
-  <table border="1">
-   <tr>
-    <td>%(menu)s</td>
-    <td>
-     %(content)s
-    </td>
-   </tr>
-  </table>
- </td></tr>
- <tr><td>
-  %(help)s
- </td></tr>
-</table>
+    <div id="container">
+        <div id="bar">
+	   <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
+	   <div id="version">Version: 0.6.0</div>
+            %(menu)s
+        </div>
+        <div id="workarea"><div id="workarea-inner">
+     	<div id="help">%(help)s</div>
+        %(content)s
+        </div></div>
+    </div>
+    <div class="clearfix"></div>
 """
 
 PAGE_MENU_MENU = """
-<ul>
- <li><a href="/general">General</a></li>
- <li><a href="/vserver">Virtual Servers</a></li>
- <li><a href="/icon">Icons</a></li>
- <li><a href="/mime">Mime Types</a></li>
- <li><a href="/advanced">Advanced</a></li>
+<ul id="nav">
+<li id="general"><a href="/general">General</a></li>
+<li id="vserver"><a href="/vserver">Virtual Servers</a></li>
+<li id="icon"><a href="/icons">Icons</a></li>
+<li id="mime"><a href="/mime">Mime Types</a></li>
+<li id="advanced"><a href="/advanced">Advanced</a></li>
 </ul>
 
 <form action="/apply" method="post">
  <input type="submit" value="Apply Changes" />
 </form>
-"""
 
+"""
 
 class Page (WebComponent):
     def __init__ (self, id, cfg=None):
@@ -56,6 +53,7 @@ class PageMenu (Page):
     def __init__ (self, id, cfg):
         Page.__init__ (self, id, cfg)
 
+        self.AddMacroContent ('current', id)
         self.AddMacroContent ('body', PAGE_MENU_LAYOUT)
         self.AddMacroContent ('menu', PAGE_MENU_MENU)
 
