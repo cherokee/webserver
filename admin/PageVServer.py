@@ -56,7 +56,9 @@ class PageVServer (PageMenu, FormHelper):
         pre = "vserver!%s" % (host)
         cfg = self._cfg[pre]
 
-        txt = "<h2>Basics</h2>"
+        txt = "<h1>Virtual Server: %s</h1>" % (host)
+
+        txt += "<h2>Basics</h2>"
         table = Table(2)
         self.AddTableEntry (table, 'Document Root',   '%s!document_root' % (pre))
         self.AddTableEntry (table, 'Domains',         '%s!domain' % (pre))

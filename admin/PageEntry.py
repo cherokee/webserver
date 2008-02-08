@@ -61,9 +61,11 @@ class PageEntry (PageMenu, FormHelper):
         return Page.Render(self)
 
     def _get_title (self):
+        txt = '<a href="/vserver/%s">%s</a> - ' % (self._host, self._host)
         for n in range(len(ENTRY_TYPES)):
             if ENTRY_TYPES[n][0] == self._entry[0]:
-                return "%s: %s" % (ENTRY_TYPES[n][1], self._entry[1])
+                txt += "%s: %s" % (ENTRY_TYPES[n][1], self._entry[1])
+                return txt
 
     def _render_guts (self):
         pre = self._conf_prefix
