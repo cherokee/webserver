@@ -8,6 +8,7 @@ import stat
 import time
 import pyscgi
 import thread
+import signal
 
 # Application modules
 #
@@ -103,6 +104,9 @@ class Handler(pyscgi.SCGIHandler):
 # Server
 #
 def main():
+    # Try to avoid zombie processes 
+    signal.signal(signal.SIGCHLD, signal.SIG_IGN)
+
     # Move to the server directory
     pathname, scriptname = os.path.split(sys.argv[0])
     os.chdir(os.path.abspath(pathname))

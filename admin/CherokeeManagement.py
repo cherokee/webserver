@@ -57,6 +57,7 @@ class CherokeeManagement:
     def launch (self):
         pid = os.fork()
         if pid == 0:
+            os.setsid()
             os.execl (CHEROKEE_SRV_PATH)
         elif pid > 0:
             time.sleep (DEFAULT_DELAY)
