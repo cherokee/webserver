@@ -1,8 +1,8 @@
 from Page import *
 
 class PageMain (PageMenu):
-    def __init__ (self):
-        PageMenu.__init__ (self, 'main', cfg=None)
+    def __init__ (self, cfg=None):
+        PageMenu.__init__ (self, 'main', cfg)
 
     def _op_render (self):
         self.AddMacroContent ('title', 'Welcome to Cherokee Admin')

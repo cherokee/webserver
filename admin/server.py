@@ -19,8 +19,8 @@ from PageMime import *
 from PageVServer import *
 from PageVServers import *
 from PageEntry import *
-from PageApply import *
 from PageAdvanced import *
+from CherokeeManagement import *
 
 # Constants
 #
@@ -40,6 +40,7 @@ class Handler(pyscgi.SCGIHandler):
     def handle_request (self):
         global cfg
 
+        page    = None
         headers = ""
         body    = ""
         status  = "200 OK"
@@ -63,16 +64,25 @@ class Handler(pyscgi.SCGIHandler):
             else:
                 page = PageVServer(cfg)
         elif uri.startswith('/apply'):
-            page = PageApply(cfg)
+            manager = get_cherokee_management (cfg)
+            manager.save()
+            body = "/"
+        elif uri.startswith('/launch'):
+            manager = get_cherokee_management (cfg)
+            manager.launch()
+            body = "/"
         else:
-            page = PageMain()
+            page = PageMain(cfg)
 
         # Handle post
         self.handle_post()
         post = cgi.parse_qs(self.post, keep_blank_values=1)
         
         # Execute page
-        body = page.HandleRequest(uri, post)
+        if page:
+            body = page.HandleRequest(uri, post)
+
+        # Is it a redirection?
         if body[0] == '/':
             status   = "302 Moved Temporarily"
             headers += "Location: %s\r\n" % (body)

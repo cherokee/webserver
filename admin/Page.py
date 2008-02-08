@@ -1,6 +1,7 @@
 from Form import *
 from Theme import *
 from Entry import *
+from CherokeeManagement import *
         
 PAGE_MENU_LAYOUT = """
 <table border="1">
@@ -33,6 +34,19 @@ PAGE_MENU_MENU = """
  <input type="submit" value="Apply Changes" />
 </form>
 
+%(status)s
+"""
+
+SERVER_RUNNING = """
+Server is running
+"""
+
+SERVER_NOT_RUNNING = """
+Server is not running <br />
+
+<form action="/launch" method="post">
+ <input type="submit" value="Launch" />
+</form>
 """
 
 
@@ -40,10 +54,16 @@ class Page (WebComponent):
     def __init__ (self, id, cfg=None):
         WebComponent.__init__ (self, id, cfg)
 
-        self.macros = {}
-        self.theme  = Theme('default')
+        self.macros  = {}
+        self.theme   = Theme('default')
+        self.manager = get_cherokee_management (cfg)
 
     def Render (self):
+        if self.manager.is_alive():
+            self.macros['status'] = SERVER_RUNNING
+        else:
+            self.macros['status'] = SERVER_NOT_RUNNING
+
         return self.theme.BuildTemplate (self.macros, self._id)
 
     def AddMacroContent (self, key, value):

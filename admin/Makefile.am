@@ -9,7 +9,6 @@ Entry.py \
 Form.py \
 Page.py \
 PageAdvanced.py \
-PageApply.py \
 PageEntry.py \
 PageGeneral.py \
 PageIcon.py \
@@ -37,7 +36,8 @@ ModuleMysql.py \
 config.py \
 pyscgi.py \
 server.py \
-validations.py
+validations.py \
+CherokeeManagement.py
 
 adminhelpdir = "$(datadir)/cherokee/admin"
 adminhelp_DATA = \
