@@ -1155,6 +1155,9 @@ windows/cherokee.nsi
 www/Makefile 
 admin/Makefile
 admin/static/Makefile
+admin/static/js/Makefile
+admin/static/css/Makefile
+admin/static/images/Makefile
 ])
 
 

@@ -1,8 +1,4 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-adminstaticdir = "$(datadir)/cherokee/admin/static"
-adminstatic_DATA = \
-common.js 
+SUBDIRS = js css images
 
-EXTRA_DIST = \
-$(adminstatic_DATA)
