@@ -21,6 +21,7 @@ from PageVServer import *
 from PageVServers import *
 from PageEntry import *
 from PageAdvanced import *
+from PageErrorWritable import *
 from CherokeeManagement import *
 
 # Constants
@@ -46,7 +47,15 @@ class Handler(pyscgi.SCGIHandler):
         body    = ""
         status  = "200 OK"
         uri     = self.env['REQUEST_URI']
-        
+
+        # Ensure that the configuration file is writable
+        if not cfg.writable():
+            page = PageErrorWritable (cfg)
+            self.wfile.write ('Status: 200 OK\r\n\r\n' +
+                              page.HandleRequest (uri, None))
+            return
+
+        # Check the URL        
         if uri.startswith('/general'):
             page = PageGeneral(cfg)
         elif uri.startswith('/icon'):
@@ -79,8 +88,10 @@ class Handler(pyscgi.SCGIHandler):
             manager.stop()
             cherokee_management_reset()
             body = "/"
-        else:
+        elif uri == '/':
             page = PageMain(cfg)
+        else:
+            body = "/"
 
         # Handle post
         self.handle_post()

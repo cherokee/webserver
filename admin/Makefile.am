@@ -29,6 +29,7 @@ PageMain.py \
 PageMime.py \
 PageVServer.py \
 PageVServers.py \
+PageErrorWritable.py \
 Table.py \
 Theme.py \
 VirtualServer.py \
@@ -54,8 +55,10 @@ CherokeeManagement.py
 
 adminhelpdir = "$(datadir)/cherokee/admin"
 adminhelp_DATA = \
-advanced.help.html \
 default.template.html \
+error_writable.template.html \
+error_writable.help.html \
+advanced.help.html \
 entry.help.html \
 general.help.html \
 icon.help.html \
