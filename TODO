@@ -19,3 +19,5 @@
 [ ] AIO based fdpoll
 [ ] Memcached support
 [ ] Chuncked encoding
+[ ] Dtrace hooks
+[ ] priv.h on Solaris
