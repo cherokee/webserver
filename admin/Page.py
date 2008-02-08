@@ -7,15 +7,15 @@ PAGE_MENU_LAYOUT = """
  <tr><td>
   <table border="1">
    <tr>
-    <td>%%menu%%</td>
+    <td>%(menu)s</td>
     <td>
-     %%content%%
+     %(content)s
     </td>
    </tr>
   </table>
  </td></tr>
  <tr><td>
-  %%help%%
+  %(help)s
  </td></tr>
 </table>
 """
@@ -40,14 +40,14 @@ class Page (WebComponent):
     def __init__ (self, id, cfg=None):
         WebComponent.__init__ (self, id, cfg)
 
+        self.macros = {}
         self.theme  = Theme('default')
-        self.macros = []
 
     def Render (self):
         return self.theme.BuildTemplate (self.macros, self._id)
 
     def AddMacroContent (self, key, value):
-        self.macros.append ((key, value))
+        self.macros[key] = value
 
     def Read (self, name):
         return self.theme.ReadFile(name)

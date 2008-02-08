@@ -4,14 +4,14 @@ from Entry import *
 from Module import *
 
 FORM_TEMPLATE = """
-<form action="%%action%%" method="%%method%%">
-  %%content%%
-  %%submit%%
+<form action="%(action)s" method="%(method)s">
+  %(content)s
+  %(submit)s
 </form>
 """
 
 SUBMIT_BUTTON = """
-<input type="submit" %%submit_props%%/>
+<input type="submit" %(submit_props)s />
 """
 
 class WebComponent:
@@ -45,22 +45,21 @@ class Form:
         self._submit_label = submit_label
         
     def Render (self, content=''):
-        txt = FORM_TEMPLATE 
-        txt = txt.replace ('%%action%%', self._action)
-        txt = txt.replace ('%%method%%', self._method)
-        txt = txt.replace ('%%content%%', content)
-
+        keys = {'submit':       '',
+                'submit_props': '',
+                'content':      content,
+                'action':       self._action,
+                'method':       self._method}
+                
         if self._add_submit:
-            txt = txt.replace ('%%submit%%', SUBMIT_BUTTON)
-        else:
-            txt = txt.replace ('%%submit%%', '')
-
+            keys['submit'] = SUBMIT_BUTTON
         if self._submit_label:
-            txt = txt.replace ('%%submit_props%%', 'value="%s" '%(self._submit_label))
-        else:
-            txt = txt.replace ('%%submit_props%%', '')
+            keys['submit_props'] = 'value="%s" '%(self._submit_label)
 
-        return txt
+        render = FORM_TEMPLATE
+        while '%(' in render:
+            render = render % keys
+        return render
 
     
 class FormHelper (WebComponent):

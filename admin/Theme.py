@@ -8,16 +8,12 @@ class Theme:
     # Public Methods
     #
     def BuildTemplate (self, keys, id):
-        help = self._read_file ("%s.help.html" % (id))
-        keys.append(('help', help))
+        keys['help'] = self._read_file ("%s.help.html"%(id))
 
-        txt = self._template
-        for tuple in keys:
-            key     = '%%'+ tuple[0] +'%%'
-            content = tuple[1]
-            txt = txt.replace (key, content)
-
-        return txt
+        render = self._template
+        while '%(' in render:
+            render = render % keys
+        return render
 
     def ReadFile (self, name):
         filename = "%s.html" % (name)
