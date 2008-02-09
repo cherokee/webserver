@@ -16,12 +16,13 @@ class Entry:
             pass
 
     def __str__ (self):
+        error = '<div id="error_%s"></div>' % (self._name)
         props = 'name="%s" type="%s"' % (self._name, self._type)
 
         for prop in self._kwargs:
             props += ' %s="%s"' % (prop, self._kwargs[prop])
 
-        return "<input %s />" % (props)
+        return "<input %s />"%(props) + error
 
 
 

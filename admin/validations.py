@@ -7,19 +7,19 @@ def validate_tcp_port (value):
     try:
         tmp = int(value)
     except:
-        raise "Invalid port"        
+        raise ValueError, 'Invalid port'
     if tmp < 0 or tmp > 0xFFFF - 1:
-        raise "Invalid port"
+        raise ValueError, 'Invalid port'
     return value
 
 def validate_path (value):
     if not value:
-        raise 'No path'
+        raise ValueError, 'No path'
     if value[0] == '/':
         return value
     if value[1:3] == ":\\":
         return value
-    raise 'Broken path'
+    raise ValueError, 'Broken path'
 
 def validate_path_list (value):
     re = []
@@ -30,5 +30,5 @@ def validate_path_list (value):
 def validate_positive_int (value):
     tmp = int(value)
     if tmp < 0:
-        raise "Negative"
+        raise ValueError, 'Negative'
     return value

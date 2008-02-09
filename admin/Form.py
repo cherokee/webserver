@@ -150,6 +150,7 @@ class FormHelper (WebComponent):
     #
 
     def _ValidateChanges (self, post, validation):
+        errors = {}
         for rule in validation:
             regex, validation_func = rule
             p = re.compile (regex)
@@ -158,13 +159,22 @@ class FormHelper (WebComponent):
                     value = post[post_entry][0]
                     if not value:
                         continue
-                    tmp = validation_func (value)
-                    post[post_entry] = [tmp]
+                    try:
+                        tmp = validation_func (value)
+                        post[post_entry] = [tmp]
+                    except ValueError, error:
+                        errors['error_%s'%(post_entry)] = error
+
+        if not len(errors):
+            return None
+        return errors
 
     def ApplyChanges (self, checkboxes, post, validation=None):
         # Validate changes
         if validation:
-            self._ValidateChanges (post, validation)
+            errors = self._ValidateChanges (post, validation)
+            if errors:
+                return errors
         
         # Apply checkboxes
         for key in checkboxes:
