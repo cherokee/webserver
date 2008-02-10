@@ -17,7 +17,8 @@ PRODUCT_TOKENS = [
 DATA_VALIDATION = [
     ("server!keepalive", validate_boolean),
     ("server!ipv6",      validate_boolean),
-    ("server!port.*",    validate_tcp_port)
+    ("server!port.*",    validate_tcp_port),
+    ("server!listen",    validate_ip)
 ]
 
 class PageGeneral (PageMenu, FormHelper):

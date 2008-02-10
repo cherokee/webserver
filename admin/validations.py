@@ -32,3 +32,21 @@ def validate_positive_int (value):
     if tmp < 0:
         raise ValueError, 'It cannot be negative'
     return value
+
+def validate_ip (value):
+    if ':' in value:
+        return validate_ipv6(value)
+    return validate_ipv4(value)
+
+def validate_ipv4 (value):
+    parts = value.split('.')
+    if len(parts) != 4:
+        raise ValueError, 'Malformed IPv4'
+    for byte in parts:
+        try:
+            v = int(byte)
+        except:
+            raise ValueError, 'Malformed IPv4 entry'
+        if v < 0 or v > 255:
+            raise ValueError, 'IPv4 entry out of range'
+    return value
