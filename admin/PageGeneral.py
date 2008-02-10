@@ -41,10 +41,10 @@ class PageGeneral (PageMenu, FormHelper):
     def _render_content (self):
         txt = "<h2>Networking</h2>"
         table = Table(2)
-        self.AddEntry    (table, 'Port',     'server!port')
-        self.AddEntry    (table, 'Port TLS', 'server!port_tls')
+        self.AddTableEntry    (table, 'Port',     'server!port')
+        self.AddTableEntry    (table, 'Port TLS', 'server!port_tls')
         self.AddTableCheckbox (table, 'IPv6',     'server!ipv6', True)
-        self.AddEntry    (table, 'Listen',   'server!listen')
+        self.AddTableEntry    (table, 'Listen',   'server!listen')
         txt += str(table)
 
         txt += "<h2>Basic Behaviour</h2>"

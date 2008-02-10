@@ -67,7 +67,7 @@ class FormHelper (WebComponent):
         WebComponent.__init__ (self, id, cfg)
         self.errors = {}
 
-    def AddEntry (self, table, title, cfg_key, extra_cols=None):
+    def AddTableEntry (self, table, title, cfg_key, extra_cols=None):
         # Input
         entry = Entry (cfg_key, 'text', self._cfg)
         txt = str(entry)
@@ -81,17 +81,6 @@ class FormHelper (WebComponent):
         tup = (title, txt)
         if extra_cols:
             tup += extra_cols
-        table += tup
-
-    def AddTableEntry (self, table, title, cfg_key, extra_cols=None):
-        """ TODO: Deprecate this method:
-            AddEntry() should be used instead.
-        """
-        entry = Entry (cfg_key, 'text', self._cfg)
-        tup = (title, entry)
-        if extra_cols:
-            tup += extra_cols
-
         table += tup
 
     def AddTableEntryRemove (self, table, title, cfg_key):
