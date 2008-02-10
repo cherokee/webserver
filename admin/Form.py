@@ -65,8 +65,29 @@ class Form:
 class FormHelper (WebComponent):
     def __init__ (self, id, cfg):
         WebComponent.__init__ (self, id, cfg)
+        self.errors = {}
+
+    def AddEntry (self, table, title, cfg_key, errors, extra_cols=None):
+        # Input
+        entry = Entry (cfg_key, 'text', self._cfg)
+        txt = str(entry)
+
+        # Error
+        if errors:
+            if cfg_key in errors.keys():
+                msg, val = errors[cfg_key]
+                txt += '<div class="error"><b>%s</b>: %s</div>' % (val, msg)
+
+        # Add to the table
+        tup = (title, txt)
+        if extra_cols:
+            tup += extra_cols
+        table += tup
 
     def AddTableEntry (self, table, title, cfg_key, extra_cols=None):
+        """ TODO: Deprecate this method:
+            AddEntry() should be used instead.
+        """
         entry = Entry (cfg_key, 'text', self._cfg)
         tup = (title, entry)
         if extra_cols:
@@ -146,11 +167,19 @@ class FormHelper (WebComponent):
 
         table += (title, entry)
 
+    # Errors
+    #
+
+    def _error_add (self, key, wrong_val, msg):
+        self.errors[key] = (msg, str(wrong_val))
+        
+    def has_errors (self):
+        return len(self.errors) > 0
+
     # Applying changes
     #
 
     def _ValidateChanges (self, post, validation):
-        errors = {}
         for rule in validation:
             regex, validation_func = rule
             p = re.compile (regex)
@@ -163,21 +192,17 @@ class FormHelper (WebComponent):
                         tmp = validation_func (value)
                         post[post_entry] = [tmp]
                     except ValueError, error:
-                        errors['error_%s'%(post_entry)] = error
-
-        if not len(errors):
-            return None
-        return errors
+                        self._error_add (post_entry, value, error)
 
     def ApplyChanges (self, checkboxes, post, validation=None):
         # Validate changes
         if validation:
-            errors = self._ValidateChanges (post, validation)
-            if errors:
-                return errors
+            self._ValidateChanges (post, validation)
         
         # Apply checkboxes
         for key in checkboxes:
+            if key in self.errors:
+                continue
             if key in post:
                 self._cfg[key] = post[key][0]
             else:
@@ -185,6 +210,8 @@ class FormHelper (WebComponent):
 
         # Apply text entries
         for confkey in post:
+            if confkey in self.errors:
+                continue
             if not confkey in checkboxes:
                 value = post[confkey][0]
                 if not value:

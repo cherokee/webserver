@@ -33,15 +33,18 @@ class PageGeneral (PageMenu, FormHelper):
 
     def _op_handler (self, uri, post):
         self._op_apply_changes (post)
+        if self.has_errors():
+            return self._op_render ()
+
         return "/%s" % (self._id)
 
     def _render_content (self):
         txt = "<h2>Networking</h2>"
         table = Table(2)
-        self.AddTableEntry    (table, 'Port',     'server!port')
-        self.AddTableEntry    (table, 'Port TLS', 'server!port_tls')
+        self.AddEntry    (table, 'Port',     'server!port', self.errors)
+        self.AddEntry    (table, 'Port TLS', 'server!port_tls', self.errors)
         self.AddTableCheckbox (table, 'IPv6',     'server!ipv6', True)
-        self.AddTableEntry    (table, 'Listen',   'server!listen')
+        self.AddEntry    (table, 'Listen',   'server!listen', self.errors)
         txt += str(table)
 
         txt += "<h2>Basic Behaviour</h2>"

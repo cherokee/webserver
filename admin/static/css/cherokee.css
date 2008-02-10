@@ -94,3 +94,7 @@ h1 {
 p {
     line-height: 1.1em;
 }
+
+.error {
+    color: #CC0000;
+}
