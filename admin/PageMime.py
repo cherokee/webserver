@@ -1,11 +1,12 @@
+import validations
+
 from Page import *
 from Table import *
 from Entry import *
 from Form import *
-from validations import *
 
 DATA_VALIDATION = [
-    ("server!mime_files", validate_path_list),
+    ("server!mime_files", validations.is_path_list),
 ]
 
 class PageMime (PageMenu, FormHelper):

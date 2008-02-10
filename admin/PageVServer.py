@@ -1,13 +1,14 @@
+import validations
+
 from Page import *
 from Form import *
 from Table import *
 from Entry import *
 from consts import *
 from VirtualServer import *
-from validations import *
 
 DATA_VALIDATION = [
-    ("vserver!.*?!.*?!priority", validate_positive_int)
+    ("vserver!.*?!.*?!priority", validations.is_positive_int)
 ]
 
 class PageVServer (PageMenu, FormHelper):

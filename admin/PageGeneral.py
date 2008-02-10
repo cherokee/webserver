@@ -1,8 +1,9 @@
+import validations
+
 from Page import *
 from Table import *
 from Entry import *
 from Form import *
-from validations import *
 
 
 PRODUCT_TOKENS = [
@@ -15,10 +16,12 @@ PRODUCT_TOKENS = [
 ]
 
 DATA_VALIDATION = [
-    ("server!keepalive", validate_boolean),
-    ("server!ipv6",      validate_boolean),
-    ("server!port.*",    validate_tcp_port),
-    ("server!listen",    validate_ip)
+    ("server!keepalive", validations.is_boolean),
+    ("server!ipv6",      validations.is_boolean),
+    ("server!port.*",    validations.is_tcp_port),
+    ("server!listen",    validations.is_ip),
+    ("server!chroot",    validations.is_local_dir_exists),
+    ("server!pid_file",  validations.parent_is_dir),
 ]
 
 class PageGeneral (PageMenu, FormHelper):

@@ -1,9 +1,11 @@
-def validate_boolean (value):
+import os.path
+
+def is_boolean (value):
     if value.lower() in ['on', '1', 'true']:
         return '1'
     return '0'
 
-def validate_tcp_port (value):
+def is_tcp_port (value):
     try:
         tmp = int(value)
     except:
@@ -12,7 +14,7 @@ def validate_tcp_port (value):
         raise ValueError, 'Out of the range (1 to 65534)'
     return value
 
-def validate_path (value):
+def is_path (value):
     if not value:
         raise ValueError, 'Path cannot be empty'
     if value[0] == '/':
@@ -21,24 +23,24 @@ def validate_path (value):
         return value
     raise ValueError, 'Malformed path'
 
-def validate_path_list (value):
+def is_path_list (value):
     re = []
     for p in value.split(','):
-        re.append(validate_path(p))
+        re.append(is_path(p))
     return reduce(lambda x,y: x+','+y, re)
 
-def validate_positive_int (value):
+def is_positive_int (value):
     tmp = int(value)
     if tmp < 0:
         raise ValueError, 'It cannot be negative'
     return value
 
-def validate_ip (value):
+def is_ip (value):
     if ':' in value:
-        return validate_ipv6(value)
-    return validate_ipv4(value)
+        return is_ipv6(value)
+    return is_ipv4(value)
 
-def validate_ipv4 (value):
+def is_ipv4 (value):
     parts = value.split('.')
     if len(parts) != 4:
         raise ValueError, 'Malformed IPv4'
@@ -49,4 +51,31 @@ def validate_ipv4 (value):
             raise ValueError, 'Malformed IPv4 entry'
         if v < 0 or v > 255:
             raise ValueError, 'IPv4 entry out of range'
+    return value
+
+def is_ipv6 (value):
+    from socket import inet_pton, AF_INET6
+    try: 
+        tmp = inet_pton(AF_INET6, value)
+    except:
+        raise ValueError, 'Malformed IPv6'
+    return value
+    
+def is_local_dir_exists (value):
+    value = is_path (value)
+
+    if not os.path.exists(value):
+        raise ValueError, 'Path does not exits'
+
+    if not os.path.isdir(value):
+        raise ValueError, 'Path is not a directory'
+
+    return value
+
+def parent_is_dir (value):
+    value = is_path (value)
+
+    dirname, filename = os.path.split(value)
+    is_local_dir_exists (dirname)
+
     return value
