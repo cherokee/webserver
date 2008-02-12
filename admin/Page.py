@@ -39,6 +39,8 @@ class Page (WebComponent):
         self.macros  = {}
         self.theme   = Theme('default')
 
+        self.AddMacroContent ('current', id)
+
     def Render (self):
         return self.theme.BuildTemplate (self.macros, self._id)
 
@@ -53,7 +55,6 @@ class PageMenu (Page):
     def __init__ (self, id, cfg):
         Page.__init__ (self, id, cfg)
 
-        self.AddMacroContent ('current', id)
         self.AddMacroContent ('body', PAGE_MENU_LAYOUT)
         self.AddMacroContent ('menu', PAGE_MENU_MENU)
 
