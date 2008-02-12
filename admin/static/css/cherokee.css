@@ -114,4 +114,22 @@ p {
     color: #CC0000;
 }
 
+#help-area {
+    
+}
+
+#help {
+    float: right;
+    padding: 1em;
+    font-size: 85%;
+}
+
+#help-contents {
+    background: #f3f7fc url(../images/help.png) 4px 4px no-repeat;
+    border-top: 1px solid #bacce2;
+    border-bottom: 1px solid #bacce2;
+    display: none;
+    padding: 1em 1em 1em 40px;
+    margin-bottom: 1em;
+}
 

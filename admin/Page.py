@@ -10,7 +10,9 @@ PAGE_MENU_LAYOUT = """
             %(menu)s
         </div>
         <div id="workarea"><div id="workarea-inner">
-     	<div id="help">%(help)s</div>
+        <div id="help-area"><a id="help" name="help" href="#help" onclick="toggle_help();">Help</a>
+     	    <div id="help-contents">%(help)s</div>
+        </div>
         %(content)s
         </div></div>
     </div>

@@ -48,3 +48,14 @@ function options_active_prop (options_id, props_prefix)
 			 }
 	   }
 }
+
+function toggle_help()
+{
+    if ($("#help-contents").is(":hidden")) {
+        $("#help").html('Close');
+        $("#help-contents").fadeIn("fast");
+    } else {
+        $("#help").html('Help');
+        $("#help-contents").fadeOut("fast", function() { $("#help").fadeIn() });
+    }
+}

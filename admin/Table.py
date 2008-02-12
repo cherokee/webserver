@@ -4,7 +4,7 @@ SUBMIT_DEL = SUBMIT_GENERIC % ('Del')
 
 
 class Table:
-    def __init__ (self, cols, title_top=0, title_left=0, style='border="1"'):
+    def __init__ (self, cols, title_top=0, title_left=0, style=''):
         self._cols       = cols
         self._title_top  = title_top
         self._title_left = title_left
