@@ -33,8 +33,9 @@ class PageVServer (PageMenu, FormHelper):
             self._op_add_new_entry(host, post)
             return "/%s/%s" % (self._id, host)            
         elif uri.endswith('/remove'):
-            del(self._cfg["vserver!%s" % (host)])
-            return '/vservers'
+            if host != "default":
+                del(self._cfg["vserver!%s" % (host)])
+            return '/vserver'
         else:
             default_render = True
 
