@@ -124,9 +124,13 @@ class Config:
 
         # Build ConfigNode tree
         if file:
-            f = open (file, "r")
-            self._parse (f.read())
-            f.close()
+            try:
+                f = open (file, "r")
+            except:
+                pass
+            else:
+                self._parse (f.read())
+                f.close()
 
     def _create_path (self, path):
         node = self.root
@@ -189,13 +193,6 @@ class Config:
             del (parent._child[child_name])
 
     # Serialization
-    def writable (self):
-        try:
-            open (self.file, "a")
-        except:
-            return False
-        return True
-
     def serialize (self):
         return self.root.serialize()
 
@@ -216,3 +213,14 @@ class Config:
         t = open (self.file, 'w')
         t.write (cfg)
         t.close()
+
+    # Checks
+    def is_writable (self):
+        try:
+            open (self.file, "a")
+        except:
+            return False
+        return True
+
+    def has_tree (self):
+        return len(self.root._child) > 0

@@ -21,7 +21,7 @@ from PageVServer import *
 from PageVServers import *
 from PageEntry import *
 from PageAdvanced import *
-from PageErrorWritable import *
+from PageError import *
 from CherokeeManagement import *
 
 # Constants
@@ -49,8 +49,12 @@ class Handler(pyscgi.SCGIHandler):
         uri     = self.env['REQUEST_URI']
 
         # Ensure that the configuration file is writable
-        if not cfg.writable():
-            page = PageErrorWritable (cfg)
+        if not cfg.has_tree():
+            page = PageError (cfg, PageError.CONFIG_NOT_FOUND)
+        elif not cfg.is_writable():
+            page = PageError (cfg, PageError.CONFIG_NOT_WRITABLE)
+
+        if page:
             self.wfile.write ('Status: 200 OK\r\n\r\n' +
                               page.HandleRequest (uri, None))
             return

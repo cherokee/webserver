@@ -8,7 +8,8 @@ class Theme:
     # Public Methods
     #
     def BuildTemplate (self, keys, id):
-        keys['help'] = self._read_file ("%s.help.html"%(id))
+        if 'help' not in keys.keys():
+            keys['help'] = self._read_file ("%s.help.html"%(id))
 
         render = self._template
         while '%(' in render:
