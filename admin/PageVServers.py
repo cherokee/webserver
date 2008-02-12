@@ -38,8 +38,8 @@ class PageVServers (PageMenu, FormHelper):
         table = Table(3,1)
         table += ('Name', 'Document Root')
         fo1 = Form ("/%s/add_vserver" % (self._id), add_submit=False)
-        en1 = Entry ("new_vserver_name", "text")
-        en2 = Entry ("new_vserver_droot", "text")
+        en1 = self.InstanceEntry ("new_vserver_name", "text")
+        en2 = self.InstanceEntry ("new_vserver_droot", "text")
         table += (en1, en2, SUBMIT_ADD)
 
         txt += "<h3>Add new Virtual Server</h3>"

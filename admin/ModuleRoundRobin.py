@@ -21,10 +21,10 @@ class ModuleRoundRobin (Module, FormHelper):
         t1 += ('Host', '')
         for host in hosts:
             pre = '%s!%s' % (self._prefix, host)
-            e_host = Entry('%s!host'%(pre), 'text', self._cfg)
+            e_host = self.InstanceEntry('%s!host'%(pre), 'text', self._cfg)
             t1 += (e_host, SUBMIT_DEL)
 
-        en1 = Entry('new_host', 'text')
+        en1 = self.InstanceEntry('new_host', 'text')
         t1 += (en1, SUBMIT_ADD)
 
         # Render tables: as Interpreters
@@ -32,12 +32,12 @@ class ModuleRoundRobin (Module, FormHelper):
         t2 += ('Host', 'Interpreter', '')
         for host in hosts:
             pre = '%s!%s' % (self._prefix, host)
-            e_host = Entry('%s!host'%(pre), 'text', self._cfg)
-            e_inte = Entry('%s!interpreter'%(pre), 'text', self._cfg)
+            e_host = self.InstanceEntry('%s!host'%(pre), 'text', self._cfg)
+            e_inte = self.InstanceEntry('%s!interpreter'%(pre), 'text', self._cfg)
             t2 += (e_host, e_inte, SUBMIT_DEL)
 
-        e_host = Entry('new_host', 'text')
-        e_inte = Entry('new_interpreter', 'text')
+        e_host = self.InstanceEntry('new_host', 'text')
+        e_inte = self.InstanceEntry('new_interpreter', 'text')
         t2 += (e_host, e_inte, SUBMIT_ADD)
 
         # General selector

@@ -71,8 +71,8 @@ class PageIcon (PageMenu, FormHelper):
             txt += str(table)
 
         fo1 = Form ("/%s/add_file" % (self._id), add_submit=False)
-        en1 = Entry('file_new_match', 'text')
-        en2 = Entry('file_new_file', 'text')
+        en1 = self.InstanceEntry('file_new_match', 'text')
+        en2 = self.InstanceEntry('file_new_file', 'text')
         ta1 = Table (3,1)
         ta1 += ('File', 'Icon', '')
         ta1 += (en1, en2, SUBMIT_ADD)
@@ -92,8 +92,8 @@ class PageIcon (PageMenu, FormHelper):
             txt += str(table)
 
         fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False)
-        en1 = Entry('suffix_new_file', 'text')
-        en2 = Entry('suffix_new_exts', 'text')
+        en1 = self.InstanceEntry('suffix_new_file', 'text')
+        en2 = self.InstanceEntry('suffix_new_exts', 'text')
         ta1 = Table (3,1)
         ta1 += ('Icon', 'Extensions', '')
         ta1 += (en1, en2, SUBMIT_ADD)
