@@ -85,10 +85,25 @@ body {
 
 
 h1 {
-    color: #204a87;
+    color: #c00;
     font-weight: normal;
     font-size: 150%;
     margin-bottom: 0.5em;
+}
+
+h2 {
+    color: #204a87;
+    font-weight: normal;
+    font-size: 120%;
+    letter-spacing: -1px;
+    margin: 0.4em 0;
+}
+
+h3 {
+    color: #666;
+    font-size: 100%;
+    font-weight: bold;
+    margin: 0.4em 0;
 }
 
 p {
@@ -98,3 +113,5 @@ p {
 .error {
     color: #CC0000;
 }
+
+
