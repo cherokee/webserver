@@ -8,7 +8,8 @@ from consts import *
 from VirtualServer import *
 
 DATA_VALIDATION = [
-    ("vserver!.*?!.*?!priority", validations.is_positive_int)
+    ("vserver!.*?!document_root", validations.is_local_dir_exists),
+    ("vserver!.*?!(directory|extensions|request)!.*?!priority", validations.is_positive_int)
 ]
 
 class PageVServer (PageMenu, FormHelper):
@@ -21,10 +22,13 @@ class PageVServer (PageMenu, FormHelper):
         assert (len(uri) > 1)
 
         host = uri.split('/')[1]
+        default_render = False
 
         if uri.endswith('/update'):
             self._op_apply_changes (post)
-            return "/%s/%s" % (self._id, host)
+            if not self.has_errors():
+                return "/%s/%s" % (self._id, host)
+            default_render = True
         elif uri.endswith('/add_new_entry'):
             self._op_add_new_entry(host, post)
             return "/%s/%s" % (self._id, host)            
@@ -32,6 +36,9 @@ class PageVServer (PageMenu, FormHelper):
             del(self._cfg["vserver!%s" % (host)])
             return '/vservers'
         else:
+            default_render = True
+
+        if default_render:
             self._priorities = VServerEntries (host, self._cfg)
             return self._op_render_vserver_details (host, uri[len(host)+1:])
 
@@ -115,10 +122,10 @@ class PageVServer (PageMenu, FormHelper):
     def _render_add_rule (self, host):
         # Add new rule
         txt      = ''
-        entry    = Entry        ('add_new_entry',    'text')
+        entry    = self.InstanceEntry ('add_new_entry', 'text')
         type     = EntryOptions ('add_new_type',      ENTRY_TYPES, selected='directory')
         handler  = EntryOptions ('add_new_handler',   HANDLERS,    selected='common')
-        priority = Entry        ('add_new_priority', 'text')
+        priority = self.InstanceEntry ('add_new_priority', 'text')
         
         table  = Table(5,1)
         table += ('Entry', 'Type', 'Handler', 'Priority')
@@ -142,7 +149,7 @@ class PageVServer (PageMenu, FormHelper):
             pre  = 'vserver!%s!%s!%s' % (host, type, name)
             link = '<a href="/vserver/%s/prio/%s">%s</a>' % (host, prio, name)
             e1   = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
-            e2   = Entry        ('%s!priority' % (pre), 'text', value=prio)
+            e2   = self.InstanceEntry ('%s!priority' % (pre), 'text', value=prio)
             table += (link, type, e1, e2)
         txt += str(table)
         return txt

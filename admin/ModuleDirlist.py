@@ -1,11 +1,12 @@
+import validations 
+
 from Form import *
 from Table import *
 from Module import *
-from validations import *
 
 DATA_VALIDATION = [
-    ('^vserver!.+?!.+?!.+?!handler!icon_dir',     validate_path),
-    ('^vserver!.+?!.+?!.+?!handler!notice_files', validate_path_list),
+    ('^vserver!.+?!.+?!.+?!handler!icon_dir',     validations.is_path),
+    ('^vserver!.+?!.+?!.+?!handler!notice_files', validations.is_path_list),
 ]
 
 class ModuleDirlist (Module, FormHelper):

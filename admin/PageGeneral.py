@@ -38,8 +38,7 @@ class PageGeneral (PageMenu, FormHelper):
     def _op_handler (self, uri, post):
         self._op_apply_changes (post)
         if self.has_errors():
-            return self._op_render ()
-
+            return self._op_render()
         return "/%s" % (self._id)
 
     def _render_content (self):

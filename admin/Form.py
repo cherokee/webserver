@@ -66,16 +66,22 @@ class FormHelper (WebComponent):
     def __init__ (self, id, cfg):
         WebComponent.__init__ (self, id, cfg)
         self.errors = {}
-
-    def AddTableEntry (self, table, title, cfg_key, extra_cols=None):
-        # Input
-        entry = Entry (cfg_key, 'text', self._cfg)
+    
+    def InstanceEntry (self, cfg_key, tipe, **kwargs):
+        # Instance an Entry
+        entry = Entry (cfg_key, tipe, self._cfg, **kwargs)
         txt = str(entry)
 
-        # Error
+        # Check whether there is a related error
         if cfg_key in self.errors.keys():
             msg, val = self.errors[cfg_key]
             txt += '<div class="error"><b>%s</b>: %s</div>' % (val, msg)
+
+        return txt
+
+    def AddTableEntry (self, table, title, cfg_key, extra_cols=None):
+        # Get the entry
+        txt = self.InstanceEntry (cfg_key, 'text')
 
         # Add to the table
         tup = (title, txt)
