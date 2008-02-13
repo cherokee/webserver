@@ -110,6 +110,14 @@ p {
     line-height: 1.1em;
 }
 
+table td {
+    padding: 0.2em;
+}
+
+table td label {
+    float: right;
+}
+
 .error {
     color: #CC0000;
 }

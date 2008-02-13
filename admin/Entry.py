@@ -17,7 +17,7 @@ class Entry:
 
     def __str__ (self):
         error = '<div id="error_%s"></div>' % (self._name)
-        props = 'name="%s" type="%s"' % (self._name, self._type)
+        props = 'id="%s" name="%s" type="%s"' % (self._name, self._name, self._type)
 
         for prop in self._kwargs:
             props += ' %s="%s"' % (prop, self._kwargs[prop])
@@ -35,7 +35,7 @@ class EntryOptions:
         self._selected = None
 
     def __str__ (self):
-        props = 'name="%s"' % (self._name)
+        props = 'id="%s" name="%s"' % (self._name, self._name)
 
         for prop in self._kwargs:
             if prop == "selected":

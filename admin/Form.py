@@ -79,12 +79,17 @@ class FormHelper (WebComponent):
 
         return txt
 
+    def Label(self, title, for_id):
+        txt = '<label for="%s">%s</label>' % (for_id, title)
+        return txt
+
     def AddTableEntry (self, table, title, cfg_key, extra_cols=None):
         # Get the entry
         txt = self.InstanceEntry (cfg_key, 'text')
 
         # Add to the table
-        tup = (title, txt)
+        label = self.Label(title, cfg_key);
+        tup = (label, txt)
         if extra_cols:
             tup += extra_cols
         table += tup
@@ -102,7 +107,8 @@ class FormHelper (WebComponent):
             value = ''
             ops = EntryOptions (cfg_key, options, *args, **kwargs)
 
-        table += (title, ops)
+        label = self.Label(title, cfg_key);
+        table += (label, ops)
         return value
 
     def AddTableOptions_w_Properties (self, table, title, cfg_key, options, 
@@ -159,7 +165,8 @@ class FormHelper (WebComponent):
             else:
                 entry = Entry (cfg_key, 'checkbox')
 
-        table += (title, entry)
+        label = self.Label(title, cfg_key);
+        table += (label, entry)
 
     # Errors
     #
