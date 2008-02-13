@@ -61,12 +61,12 @@ class PageIcon (PageMenu, FormHelper):
         try:
             value   = self._cfg[cfg_key].value
             options = EntryOptions (cfg_key, file_options, 
-                                    onChange='return update_icon(\'%s\');'%(cfg_key), 
+                                    onChange='return option_icons_update(\'%s\');'%(cfg_key), 
                                     selected=value)
         except:
             value   = ''
             options = EntryOptions (cfg_key, file_options,
-                                    onChange='return update_icon(\'%s\');'%(cfg_key))
+                                    onChange='return option_icons_update(\'%s\');'%(cfg_key))
 
         # Get the image
         image = self._get_img_from_icon (value, cfg_key)
