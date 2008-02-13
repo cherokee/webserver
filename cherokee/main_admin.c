@@ -68,6 +68,11 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf, "vserver!default!request!^/favicon.ico$!handler = file\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!request!^/favicon.ico$!priority = 4\n");
 
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/icons_local!handler = file\n");
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/icons_local!handler!iocache = 0\n");
+	cherokee_buffer_add_va  (&buf, "vserver!default!directory!/icons_local!document_root = %s\n", CHEROKEE_ICONSDIR);
+	cherokee_buffer_add_str (&buf, "vserver!default!directory!/icons_local!priority = 5\n");
+
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler = scgi\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer = round_robin\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer!type = interpreter\n");

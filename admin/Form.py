@@ -94,6 +94,10 @@ class FormHelper (WebComponent):
             tup += extra_cols
         table += tup
 
+    def InstanceButton (self, name, url):
+        # FIXME: Use JQuery for async call here
+        return '<input type="button" value="%s" value="" />' % (name)
+
     def AddTableEntryRemove (self, table, title, cfg_key):
         form = Form ("/%s/update" % (self._id), submit_label="Del")
         button = form.Render ('<input type="hidden" name="%s" value="" />' % (cfg_key))
