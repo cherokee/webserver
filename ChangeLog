@@ -1,3 +1,11 @@
+2008-02-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/server.c (cherokee_server_read_config_string): Added a
+	new function to check whether the server is ready or not. By the
+	moment it only checks if all the virtual server have a document
+	root, but more checks must be added to this function in the near
+	future.
+
 2008-02-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee.conf.sample.pre: Removed commented entries. This file

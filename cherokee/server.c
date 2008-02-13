@@ -1747,6 +1747,32 @@ configure_server (cherokee_server_t *srv)
 }
 
 
+static ret_t
+perform_post_configure_checks (cherokee_server_t *srv)
+{
+	int              re;
+	cherokee_list_t *i;
+
+	/* Ensure that Virtual servers have a document root
+	 */
+	re = cherokee_buffer_is_empty (&(srv->vserver_default)->root);
+	if (re) {
+		PRINT_MSG_S ("Default Virtual Server needs a Document Root\n");
+		return ret_error;
+	}
+
+	list_for_each (i, &srv->vservers) {
+		re = cherokee_buffer_is_empty (&VSERVER(i)->root);
+		if (re) {
+			PRINT_MSG ("Virtual Server  needs a Document Root\n");
+			return ret_error;
+		}
+	}
+
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_server_read_config_string (cherokee_server_t *srv, cherokee_buffer_t *string)
 {
@@ -1758,6 +1784,11 @@ cherokee_server_read_config_string (cherokee_server_t *srv, cherokee_buffer_t *s
 	if (ret != ret_ok) return ret;
 
 	ret = configure_server (srv);
+	if (ret != ret_ok) return ret;
+
+	/* Ensure that the server is ready
+	 */
+	ret = perform_post_configure_checks (srv);
 	if (ret != ret_ok) return ret;
 
 	/* Clean up
@@ -1784,6 +1815,11 @@ cherokee_server_read_config_file (cherokee_server_t *srv, char *fullpath)
 
 	ret = configure_server (srv);
 	if (ret != ret_ok) goto error;
+
+	/* Ensure that the server is ready
+	 */
+	ret = perform_post_configure_checks (srv);
+	if (ret != ret_ok) return ret;
 
 	/* Clean up
 	 */
