@@ -7,6 +7,12 @@ cherokee-logo-bar.png \
 menu-active.png \
 menu-highlight.png \
 workarea.png \
+help.png \
+button-left.png \
+button-right.png \
+dialog-information.png \
+dialog-warning.png \
+dialog-error.png \
 collapsed.gif \
 expanded.gif
 
