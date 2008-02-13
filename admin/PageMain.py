@@ -2,19 +2,31 @@ from Page import *
 from CherokeeManagement import *
 
 SERVER_RUNNING = """
-Server is running <br />
-
-<form action="/stop" method="post">
- <input type="submit" value="Stop" />
+<div class="dialog-information">
+<form id="run-form" action="/stop" method="post">
+<h2>Server status</h2>
+<p>Server is running.
+<div style="float: right;">
+ <a class="button" href="#" onclick="this.blur(); $('#run-form').submit(); return false;"><span>Stop</span></a>
+ </div>
 </form>
+</p>
+<div class="clearfix"></div>
+</div>
 """
 
 SERVER_NOT_RUNNING = """
-Server is not running <br />
-
-<form action="/launch" method="post">
- <input type="submit" value="Launch" />
+<div class="dialog-warning">
+<form id="run-form" action="/launch" method="post">
+<h2>Server status</h2>
+<p>Server is not running.
+<div style="float: right;">
+ <a class="button" href="#" onclick="this.blur(); $('#run-form').submit(); return false;"><span>Launch</span></a>
+</div>
+</p>
 </form>
+<div class="clearfix"></div>
+</div>
 """
 
 class PageMain (PageMenu):
