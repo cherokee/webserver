@@ -6,7 +6,9 @@ background.png \
 cherokee-logo-bar.png \
 menu-active.png \
 menu-highlight.png \
-workarea.png
+workarea.png \
+collapsed.gif \
+expanded.gif
 
 EXTRA_DIST = \
 $(adminstatic_DATA)

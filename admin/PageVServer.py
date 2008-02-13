@@ -64,20 +64,22 @@ class PageVServer (PageMenu, FormHelper):
     def _render_vserver_guts (self, host):
         pre = "vserver!%s" % (host)
         cfg = self._cfg[pre]
-
+        
+        tabs = []
         txt = "<h1>Virtual Server: %s</h1>" % (host)
 
-        txt += "<h2>Basics</h2>"
+        # Basics
         table = Table(2)
         self.AddTableEntry (table, 'Document Root',   '%s!document_root' % (pre))
         self.AddTableEntry (table, 'Domains',         '%s!domain' % (pre))
         self.AddTableEntry (table, 'Directory Index', '%s!directory_index' % (pre))
-        txt += str(table)
+        tabs += [('Basics', str(table))]
 
-        txt += "<h2>Logging</h2>"
-
+        # Logging
+        tmp   = ''
         table = Table(2)
         props = {}
+
         t1 = Table(2)
         self.AddTableEntry (t1, 'Filename', '%s!logger!access!filename' % (pre))
         t2 = Table(2)
@@ -88,7 +90,7 @@ class PageVServer (PageMenu, FormHelper):
         props['exec']   = str(t2)
         e = self.AddTableOptions_w_Properties (table, "Access", '%s!logger!access!type' % (pre), 
                                                LOGGER_WRITERS, props, 'log1')
-        txt += str(table) + e
+        tmp += str(table) + e
 
         table = Table(2)
         props = {}
@@ -102,23 +104,25 @@ class PageVServer (PageMenu, FormHelper):
         props['exec']   = str(t2)
         e = self.AddTableOptions_w_Properties (table, "Error", '%s!logger!error!type' % (pre), 
                                                LOGGER_WRITERS, props, 'log2')
-        txt += str(table) + e        
+        tmp += str(table) + e        
+        tabs += [('Logging', tmp)]
 
-        txt += "<h2>Security</h2>"
+        # Security
         table = Table(2)
         self.AddTableEntry (table, 'Certificate',     '%s!ssl_certificate_file' % (pre))
         self.AddTableEntry (table, 'Certificate key', '%s!ssl_certificate_key_file' % (pre))
         self.AddTableEntry (table, 'CA List',         '%s!ssl_ca_list_file' % (pre))
-        txt += str(table)
+        tabs += [('Security', str(table))]
 
-        txt += "<h2>Rules</h2>"
-        txt += self._render_rules (host, cfg['directory'], cfg['extensions'], cfg['request'])
+        # Behaviour
+        tmp  = self._render_rules (host, cfg['directory'], cfg['extensions'], cfg['request'])
+        tmp += self._render_add_rule(host)
+        tabs += [('Behaviour', tmp)]
+
+        txt += self.InstanceTab (tabs)
 
         form = Form ("/%s/%s/update" % (self._id, host))
-        txt = form.Render(txt)
-        txt += self._render_add_rule(host)
-
-        return txt
+        return form.Render(txt)
 
     def _render_add_rule (self, host):
         # Add new rule

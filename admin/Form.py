@@ -83,6 +83,25 @@ class FormHelper (WebComponent):
         txt = '<label for="%s">%s</label>' % (for_id, title)
         return txt
 
+    def InstanceTab (self, entries):
+        # HTML
+        txt = '<dl class="tab" id="tab_%s">' % (self._id)
+        for title, content in entries:
+            txt += '<dt>%s</dt>\n' % (title)
+            txt += '<dd>%s</dd>\n' % (content)
+        txt += '</dl>'
+
+        # Javascript
+        txt += '<script type="text/javascript">'
+        txt += 'jQuery("#tab_%s").Accordion({' % (self._id)
+        txt += '  autoheight: true,';
+        txt += '  animated: "easeslide",';
+        txt += '  alwaysOpen: false';
+        txt += '});' 
+        txt += '</script>'
+
+        return txt
+
     def AddTableEntry (self, table, title, cfg_key, extra_cols=None):
         # Get the entry
         txt = self.InstanceEntry (cfg_key, 'text')

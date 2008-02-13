@@ -141,3 +141,16 @@ table td label {
     margin-bottom: 1em;
 }
 
+.tab dt {
+    background:#CCCCCC url(../images/collapsed.gif) no-repeat scroll 0px 4px;
+    color: #204a87;
+    font-weight: normal;
+    font-size: 120%;
+    letter-spacing: -1px;
+    text-indent:14px;
+    margin: 0.4em 0;
+}
+
+.tab dt.selected {
+    background-image: url(../images/expanded.gif);
+}
