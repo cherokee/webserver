@@ -121,7 +121,7 @@ table td label {
 .error {
     color: #CC0000;
 }
-
+/** HELP **/
 #help-area {
     
 }
@@ -140,6 +140,43 @@ table td label {
     padding: 1em 1em 1em 40px;
     margin-bottom: 1em;
 }
+/** INFO **/
+.dialog-information {
+    background: #dbffb8 url(../images/dialog-information.png) 4px 4px no-repeat;
+    background: #e9ffd4 url(../images/dialog-information.png) 4px 4px no-repeat;
+    border-top: 1px solid #73d216;
+    border-bottom: 1px solid #73d216;
+    padding: 1em 1em 1em 40px;
+    margin: 1em 0;
+}
+/** WARNING **/
+.dialog-warning {
+    background: #fbf7da url(../images/dialog-warning.png) 4px 4px no-repeat;
+    border-top: 1px solid #edd400;
+    border-bottom: 1px solid #edd400;
+    padding: 1em 1em 1em 40px;
+    margin: 1em 0;
+}
+/** ERROR **/
+.dialog-error {
+    background: #ffe7e7 url(../images/dialog-error.png) 4px 4px no-repeat;
+    border-top: 1px solid #c00;
+    border-bottom: 1px solid #c00;
+    padding: 1em 1em 1em 40px;
+    margin: 1em 0;
+}
+
+.dialog-information h2, 
+.dialog-warning h2,
+.dialog-error h2 
+{
+    margin: 0 0 0.3em 0;
+    padding: 0;
+    font-size: 100%;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #000;
+}
 
 .tab dt {
     background:#CCCCCC url(../images/collapsed.gif) no-repeat scroll 0px 4px;
@@ -153,4 +190,35 @@ table td label {
 
 .tab dt.selected {
     background-image: url(../images/expanded.gif);
+}
+
+a.button {
+    background: transparent url('../images/button-right.png') no-repeat scroll top right;
+    color: #486991;
+    display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+    height: 24px;
+    overflow: hidden;
+    margin-right: 6px;
+    padding-right: 18px;
+    text-decoration: none;
+}
+
+a.button span {
+    background: transparent url('../images/button-left.png') no-repeat;
+    display: block;
+    line-height: 14px;
+    padding: 5px 0 5px 18px;
+}
+
+a.button:active {
+    background-position: bottom right;
+    color: #122c4d;
+    outline: none; 
+}
+
+a.button:active span {
+    background-position: bottom left;
+    padding: 6px 0 4px 18px; 
 }
