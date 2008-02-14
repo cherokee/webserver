@@ -60,8 +60,12 @@ class PageEntry (PageMenu, FormHelper):
         self.AddMacroContent ('content', content)
         return Page.Render(self)
 
-    def _get_title (self):
-        txt = '<a href="/vserver/%s">%s</a> - ' % (self._host, self._host)
+    def _get_title (self, html=False):
+        if html:
+            txt = '<a href="/vserver/%s">%s</a> - ' % (self._host, self._host)
+        else:
+            txt = '%s - ' % (self._host)
+
         for n in range(len(ENTRY_TYPES)):
             if ENTRY_TYPES[n][0] == self._entry[0]:
                 txt += "%s: %s" % (ENTRY_TYPES[n][1], self._entry[1])
@@ -69,7 +73,7 @@ class PageEntry (PageMenu, FormHelper):
 
     def _render_guts (self):
         pre = self._conf_prefix
-        txt = '<h1>%s</h1>' % (self._get_title())
+        txt = '<h1>%s</h1>' % (self._get_title (html=True))
 
         table = Table(2)
         e = self.AddTableOptions_w_ModuleProperties (table, 'Handler', '%s!handler'%(pre), HANDLERS)
