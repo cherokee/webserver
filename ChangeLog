@@ -1,3 +1,10 @@
+2008-02-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main.c (DEFAULT_CONFIG_FILE): It should use
+	CHEROKEE_CONFDIR instead of supposing "/etc/cherokee". This fixes
+	an issue running Cherokee without the "-C" parameter when it is
+	not installed in the default location.
+
 2008-02-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/server.c (cherokee_server_read_config_string): Added a

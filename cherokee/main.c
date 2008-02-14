@@ -30,7 +30,7 @@
 # include <getopt.h>
 #endif
 
-#define DEFAULT_CONFIG_FILE "/etc/cherokee/cherokee.conf"
+#define DEFAULT_CONFIG_FILE CHEROKEE_CONFDIR "/cherokee.conf"
 
 #define GETOPT_OPT  "C:r:bhvg"
 #define CONFIG_FILE_HELP "[-C configfile] [-r] [-g]"
