@@ -26,6 +26,11 @@ class PageEntry (PageMenu, FormHelper):
         self._prio        = temp[3]        
         self._priorities  = VServerEntries (self._host, self._cfg)
         self._entry       = self._priorities[self._prio]
+
+        # Entry not found
+        if not self._entry:
+            return "/vserver/%s" % (self._host)
+
         self._conf_prefix = 'vserver!%s!%s!%s' % (self._host, self._entry[0], self._entry[1])
 
         # Check what to do..
