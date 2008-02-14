@@ -79,6 +79,8 @@ class CherokeeManagement:
         pid_cfg = self._cfg["server!pid_file"]
         if pid_cfg:
             pid_file = pid_cfg.value
+            if not os.access (pid_file, os.R_OK):
+                pid_file = None
 
         # If there wasn't an entry..
         if not pid_file:
@@ -88,7 +90,6 @@ class CherokeeManagement:
                     break
 
         if not pid_file:
-            print ("Couldn't find a suitable PID file")
             return
 
         try:
