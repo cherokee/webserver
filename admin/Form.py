@@ -234,6 +234,9 @@ class FormHelper (WebComponent):
 
         # Apply text entries
         for confkey in post:
+            if not '!' in confkey:
+                continue
+
             if confkey in self.errors:
                 continue
             if not confkey in checkboxes:
