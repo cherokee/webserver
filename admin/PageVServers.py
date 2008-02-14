@@ -52,6 +52,10 @@ class PageVServers (PageMenu, FormHelper):
         droot = post['new_vserver_droot'][0]
         pre   = 'vserver!%s' % (name)
 
+        # Do not add the server if it already exists
+        if name in self._cfg['vserver']:
+            return '/vserver'
+
         self._cfg['%s!document_root' % (pre)] = droot
         self._cfg['%s!directory!/!handler' % (pre)]  = "common"
         self._cfg['%s!directory!/!priority' % (pre)] = "100"
