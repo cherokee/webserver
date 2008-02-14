@@ -83,7 +83,6 @@ def is_local_file_exists (value):
 
     return value
 
-
 def parent_is_dir (value):
     value = is_path (value)
 
