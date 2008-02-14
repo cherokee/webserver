@@ -72,6 +72,18 @@ def is_local_dir_exists (value):
 
     return value
 
+def is_local_file_exists (value):
+    value = is_path (value)
+
+    if not os.path.exists(value):
+        raise ValueError, 'Path does not exits'
+
+    if not os.path.isfile(value):
+        raise ValueError, 'Path is not a regular file'
+
+    return value
+
+
 def parent_is_dir (value):
     value = is_path (value)
 

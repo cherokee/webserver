@@ -1,8 +1,10 @@
+import validations
+
 from Page import *
 from Table import *
 from Entry import *
 from Form import *
-from validations import *
+
 
 THREAD_POLICY = [
     ('',      'Default'),
@@ -21,7 +23,16 @@ POLL_METHODS = [
     ('win32',  'Win32')
 ]
 
-DATA_VALIDATION = []
+DATA_VALIDATION = [
+    ("server!max_fds",                validations.is_positive_int),
+    ("server!sendfile_min",           validations.is_positive_int),
+    ("server!sendfile_max",           validations.is_positive_int),
+    ('server!panic_action',           validations.is_local_file_exists),
+    ('server!listen_queue',           validations.is_positive_int),
+    ('server!max_connection_reuse',   validations.is_positive_int),
+    ('server!log_flush_elapse',       validations.is_positive_int),
+    ('server!keepalive_max_requests', validations.is_positive_int)
+]
 
 
 class PageAdvanced (PageMenu, FormHelper):
@@ -37,6 +48,8 @@ class PageAdvanced (PageMenu, FormHelper):
 
     def _op_handler (self, uri, post):
         self._op_apply_changes (post)
+        if self.has_errors():
+            return self._op_render()
         return "/%s" % (self._id)
 
     def _render_content (self):
