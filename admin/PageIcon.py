@@ -87,11 +87,10 @@ class PageIcon (PageMenu, FormHelper):
         # Include its JavaScript file
         #
         txt = '<script src="/static/js/icons.js" type="text/javascript"></script>'
+        tabs = []
         
         # Special icons
         #
-        txt += '<h2>Special Icons</h2>'        
-
         table = Table(3)
         icons = self._cfg['icons']
 
@@ -103,7 +102,7 @@ class PageIcon (PageMenu, FormHelper):
         table += (im_dir, 'Directory',    op_dir)
         table += (im_par, 'Go to Parent', op_par)
 
-        txt += str(table)
+        tabs += [('Special Icons', str(table))]
         
         # Files
         #
@@ -111,14 +110,14 @@ class PageIcon (PageMenu, FormHelper):
         table += ('', 'Match', 'File')
         icons = self._cfg['icons!file']
 
-        txt += '<h2>Files</h2>'        
+        tmp = ''
         if icons:
             for entry in icons:
                 cfg_key = 'icons!file!%s' % (entry)
                 op, im = self._get_options_icons (cfg_key)
                 button = self.InstanceButton ("Del", "/%s/update"%(self._id))
                 table += (im, entry, op, button)
-            txt += str(table)
+            tmp += str(table)
 
         # New file
         fo1 = Form ("/%s/add_file" % (self._id), add_submit=False)
@@ -127,8 +126,10 @@ class PageIcon (PageMenu, FormHelper):
         ta1 = Table (4,1)
         ta1 += ('', 'File', 'Icon', '')
         ta1 += (im1, en1, op1, SUBMIT_ADD)
-        txt += "<h3>Add file</h3>"
-        txt += fo1.Render(str(ta1))
+        tmp += "<h3>Add file</h3>"
+        tmp += fo1.Render(str(ta1))
+
+        tabs += [('Files', tmp)]
 
         # Suffixes
         #
@@ -136,7 +137,7 @@ class PageIcon (PageMenu, FormHelper):
         table += ('', 'File', 'Extensions', '')
         icons = self._cfg['icons!suffix']
 
-        txt += '<h2>Suffixes</h2>'
+        tmp = ''
         if icons:
             for icon in icons:
                 cfg_key  = 'icons!suffix!%s' % (icon)
@@ -145,7 +146,7 @@ class PageIcon (PageMenu, FormHelper):
                 entry    = self.InstanceEntry (cfg_key, 'text')
                 button   = self.InstanceButton ('Del', '/%s/update'%(self._id))
                 table += (im, icon, entry, button)
-            txt += str(table)
+            tmp += str(table)
 
         # New suffix
         fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False)
@@ -154,9 +155,12 @@ class PageIcon (PageMenu, FormHelper):
         ta1 = Table (4,1)
         ta1 += ('', 'Icon', 'Extensions', '')
         ta1 += (im1, op1, en2, SUBMIT_ADD)
-        txt += "<h3>Add suffix</h3>"
-        txt += fo1.Render(str(ta1))
+        tmp += "<h3>Add suffix</h3>"
+        tmp += fo1.Render(str(ta1))
 
+        tabs += [('Extensions', tmp)]
+
+        txt += self.InstanceTab (tabs)
         return txt
 
     def _op_apply_changes (self, post):
