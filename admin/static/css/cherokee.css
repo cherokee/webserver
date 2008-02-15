@@ -142,7 +142,6 @@ table td label {
 }
 /** INFO **/
 .dialog-information {
-    background: #dbffb8 url(../images/dialog-information.png) 4px 4px no-repeat;
     background: #e9ffd4 url(../images/dialog-information.png) 4px 4px no-repeat;
     border-top: 1px solid #73d216;
     border-bottom: 1px solid #73d216;
