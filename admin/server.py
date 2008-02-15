@@ -53,6 +53,8 @@ class Handler(pyscgi.SCGIHandler):
             page = PageError (cfg, PageError.CONFIG_NOT_FOUND)
         elif not cfg.is_writable():
             page = PageError (cfg, PageError.CONFIG_NOT_WRITABLE)
+        elif not os.path.isdir(CHEROKEE_ICONSDIR):
+            page = PageError (cfg, PageError.ICONS_DIR_MISSING)
 
         if page:
             self.wfile.write ('Status: 200 OK\r\n\r\n' +
