@@ -5,7 +5,7 @@ SUBDIRS = static
 SUFFIXES = .py.pre .py
 
 .py.pre.py:
-	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%wwwroot%|${WWW_ROOT}|g" $< > $@
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%version%|${PACKAGE_VERSION}|g" $< > $@
 
 PY_PRE = \
 configured.py.pre

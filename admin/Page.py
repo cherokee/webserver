@@ -1,12 +1,13 @@
 from Form import *
 from Theme import *
 from Entry import *
+from configured import *
         
 PAGE_BASIC_LAYOUT = """
     <div id="container">
         <div id="bar">
 	   <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
-	   <div id="version">Version: 0.6.0</div>
+	   <div id="version">Version: %(version)s</div>
         </div>
         <div id="workarea"><div id="workarea-inner">
         %(content)s
@@ -19,7 +20,7 @@ PAGE_MENU_LAYOUT = """
     <div id="container">
         <div id="bar">
 	   <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
-	   <div id="version">Version: 0.6.0</div>
+	   <div id="version">Version: %(version)s</div>
             %(menu)s
         </div>
         <div id="workarea"><div id="workarea-inner">
@@ -55,6 +56,7 @@ class Page (WebComponent):
         self.theme   = Theme('default')
 
         self.AddMacroContent ('current', id)
+        self.AddMacroContent ('version', VERSION)
 
     def Render (self):
         return self.theme.BuildTemplate (self.macros, self._id)
