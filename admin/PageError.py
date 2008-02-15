@@ -11,7 +11,7 @@ class PageError (Page):
     def _op_render (self):
         self.AddMacroContent ('menu', '')
         self.AddMacroContent ('help', '')
-        self.AddMacroContent ('body', PAGE_MENU_LAYOUT)
+        self.AddMacroContent ('body', PAGE_BASIC_LAYOUT)
         self.AddMacroContent ('title', 'ERROR: %s'%(ERRORS_TITLE[self.type]))
         self.AddMacroContent ('content', self.Read('error_%s.template'%(self.type)))
         self.AddMacroContent ('cherokee_conf', self._cfg.file)

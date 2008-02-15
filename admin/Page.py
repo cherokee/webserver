@@ -2,6 +2,19 @@ from Form import *
 from Theme import *
 from Entry import *
         
+PAGE_BASIC_LAYOUT = """
+    <div id="container">
+        <div id="bar">
+	   <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
+	   <div id="version">Version: 0.6.0</div>
+        </div>
+        <div id="workarea"><div id="workarea-inner">
+        %(content)s
+        </div></div>
+    </div>
+    <div class="clearfix"></div>
+"""
+
 PAGE_MENU_LAYOUT = """
     <div id="container">
         <div id="bar">
