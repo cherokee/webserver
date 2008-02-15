@@ -165,6 +165,22 @@ table td label {
     padding: 1em 1em 1em 40px;
     margin: 1em 0;
 }
+/** OFFLINE **/
+.dialog-offline {
+    background: #fbf7da url(../images/offline.png) 4px 4px no-repeat;
+    border-top: 1px solid #edd400;
+    border-bottom: 1px solid #edd400;
+    padding: 1em 1em 1em 80px;
+    margin: 1em 0;
+}
+/** ONLINE **/
+.dialog-online {
+    background: #e9ffd4 url(../images/online.png) 4px 4px no-repeat;
+    border-top: 1px solid #73d216;
+    border-bottom: 1px solid #73d216;
+    padding: 1em 1em 1em 80px;
+    margin: 1em 0;
+}
 
 .dialog-information h2, 
 .dialog-warning h2,

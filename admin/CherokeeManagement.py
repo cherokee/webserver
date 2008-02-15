@@ -66,8 +66,10 @@ class CherokeeManagement:
         if not self._pid:
             return
         os.kill (self._pid, signal.SIGQUIT)
-        os.waitpid (self._pid, 0)
-        
+        try:
+            os.waitpid (self._pid, 0)
+        except:
+            pass
 
     # Protected
     #

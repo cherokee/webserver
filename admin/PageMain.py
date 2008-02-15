@@ -2,30 +2,32 @@ from Page import *
 from CherokeeManagement import *
 
 SERVER_RUNNING = """
-<div class="dialog-information">
-<form id="run-form" action="/stop" method="post">
-<h2>Server status</h2>
-<p>Server is running.
-<div style="float: right;">
- <a class="button" href="#" onclick="this.blur(); $('#run-form').submit(); return false;"><span>Stop</span></a>
- </div>
-</form>
-</p>
-<div class="clearfix"></div>
+<div class="dialog-online">
+ <form id="run-form" action="/stop" method="post">
+  <h2>Server status</h2>
+  <p>
+   Server is running.
+   <div style="float: right;">
+    <a class="button" href="#" onclick="this.blur(); $('#run-form').submit(); return false;"><span>Stop</span></a>
+   </div>
+  </p>
+ </form>
+ <div class="clearfix"></div>
 </div>
 """
 
 SERVER_NOT_RUNNING = """
-<div class="dialog-warning">
-<form id="run-form" action="/launch" method="post">
-<h2>Server status</h2>
-<p>Server is not running.
-<div style="float: right;">
- <a class="button" href="#" onclick="this.blur(); $('#run-form').submit(); return false;"><span>Launch</span></a>
-</div>
-</p>
-</form>
-<div class="clearfix"></div>
+<div class="dialog-offline">
+ <form id="run-form" action="/launch" method="post">
+  <h2>Server status</h2>
+  <p>
+   Server is not running.
+   <div style="float: right;">
+    <a class="button" href="#" onclick="this.blur(); $('#run-form').submit(); return false;"><span>Launch</span></a>
+   </div>
+  </p>
+ </form>
+ <div class="clearfix"></div>
 </div>
 """
 
