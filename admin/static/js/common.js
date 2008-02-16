@@ -74,7 +74,7 @@ function post_del_key (url, cfg_key)
 
 function post_add_entry_key (url, entry_name, cfg_key)
 {
-	   var obj  = document.getElementById("entry_name");
+	   var obj  = document.getElementById(entry_name);
 	   var post = cfg_key + "=" + obj.value;
 
 	   jQuery.post (url, post, 
