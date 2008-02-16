@@ -1,3 +1,5 @@
+import validations
+
 from Page import *
 from Form import *
 from Table import *
@@ -5,6 +7,10 @@ from Entry import *
 from VirtualServer import *
 from Module import *
 from consts import *
+
+DATA_VALIDATION = [
+    ("vserver!.*?!(directory|extensions|request)!.*?!document_root", validations.is_local_dir_exists)
+]
 
 class PageEntry (PageMenu, FormHelper):
     def __init__ (self, cfg):
@@ -35,11 +41,17 @@ class PageEntry (PageMenu, FormHelper):
 
         # Check what to do..
         if uri.endswith('/update'):
-            return self._op_update (uri, post)
+            self._op_apply_changes (uri, post)
+            if self.has_errors():
+                return self._op_default (uri)
 
-        return self._op_default (uri, post)
+            parts = uri.split('/')
+            prio_url = '/vserver/' + reduce (lambda x,y: '%s/%s'%(x,y), parts[:-1])
+            return prio_url
+
+        return self._op_default (uri)
     
-    def _op_update (self, uri, post):
+    def _op_apply_changes (self, uri, post):
         # Handler properties
         pre  = "%s!handler" % (self._conf_prefix)
         name = self._cfg[pre].value
@@ -47,16 +59,10 @@ class PageEntry (PageMenu, FormHelper):
         props = module_obj_factory (name, self._cfg, pre)
         props._op_apply_changes (uri, post)
 
-        # Modify posted entries
-        for confkey in post:
-            self._cfg[confkey] = post[confkey][0]        
+        # Apply changes
+        self.ApplyChanges ([], post, DATA_VALIDATION)
 
-        # Redirect
-        parts = uri.split('/')
-        prio_url = '/vserver/' + reduce (lambda x,y: '%s/%s'%(x,y), parts[:-1])
-        return prio_url
-
-    def _op_default (self, uri, post):
+    def _op_default (self, uri):
         # Render page
         title   = self._get_title()
         content = self._render_guts()

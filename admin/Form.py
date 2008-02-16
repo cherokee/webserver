@@ -114,11 +114,9 @@ class FormHelper (WebComponent):
         table += tup
 
     def InstanceButton (self, name, **kwargs):
-        # FIXME: Use JQuery for async call here
         extra = ""
         for karg in kwargs:
             extra += '%s="%s" '%(karg, kwargs[karg])
-
         return '<input type="button" value="%s" %s/>' % (name, extra)
 
     def AddTableEntryRemove (self, table, title, cfg_key):
