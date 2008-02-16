@@ -62,6 +62,6 @@ class PageVServers (PageMenu, FormHelper):
 
         self._cfg['%s!document_root' % (pre)] = droot
         self._cfg['%s!directory!/!handler' % (pre)]  = "common"
-        self._cfg['%s!directory!/!priority' % (pre)] = "100"
+        self._cfg['%s!directory!/!priority' % (pre)] = "1"
 
         return '/vserver/%s' % (name)
