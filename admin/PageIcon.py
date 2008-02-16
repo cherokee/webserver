@@ -106,17 +106,20 @@ class PageIcon (PageMenu, FormHelper):
         
         # Files
         #
-        table = Table(4, 1)
-        table += ('', 'Match', 'File')
         icons = self._cfg['icons!file']
 
         tmp = ''
-        if icons:
+        if icons.has_child():
+            table = Table(4, 1)
+            table += ('', 'Match', 'File')
+
             for entry in icons:
                 cfg_key = 'icons!file!%s' % (entry)
                 op, im = self._get_options_icons (cfg_key)
-                button = self.InstanceButton ("Del")
+                js = "post_del_key('/icons/update', '%s');" % (cfg_key)
+                button = self.InstanceButton ('Del', onClick=js)
                 table += (im, entry, op, button)
+
             tmp += str(table)
 
         # New file
@@ -133,19 +136,22 @@ class PageIcon (PageMenu, FormHelper):
 
         # Suffixes
         #
-        table = Table(4, 1)
-        table += ('', 'File', 'Extensions', '')
         icons = self._cfg['icons!suffix']
 
         tmp = ''
-        if icons:
+        if icons.has_child():
+            table = Table(4, 1)
+            table += ('', 'File', 'Extensions', '')
+
             for icon in icons:
                 cfg_key  = 'icons!suffix!%s' % (icon)
                 im = self._get_img_from_icon (icon, cfg_key)
 
                 entry    = self.InstanceEntry (cfg_key, 'text')
-                button   = self.InstanceButton ('Del')
+                js       = "post_del_key('/icons/update', '%s');" % (cfg_key)
+                button   = self.InstanceButton ('Del', onClick=js)
                 table += (im, icon, entry, button)
+
             tmp += str(table)
 
         # New suffix

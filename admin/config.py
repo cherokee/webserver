@@ -116,6 +116,8 @@ class ConfigNode (object):
 
         cfg.value = val        
 
+    def has_child (self):
+        return len(self._child) > 0
 
 class Config:
     def __init__ (self, file=None):

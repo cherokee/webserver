@@ -187,7 +187,8 @@ class PageVServer (PageMenu, FormHelper):
                 domain = cfg_domains[i].value
                 cfg_key = "vserver!%s!domain!%s" % (host, i)
                 en = self.InstanceEntry (cfg_key, 'text')
-                bu = self.InstanceButton ("Del", onClick="post_del_key('/vserver/%s/update','%s');"%(host, cfg_key))
+                js = "post_del_key('/vserver/%s/update','%s');" % (host, cfg_key)
+                bu = self.InstanceButton ("Del", onClick=js)
                 table += (en, bu)
 
             txt += str(table)
