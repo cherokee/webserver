@@ -63,11 +63,11 @@ function toggle_help()
 
 function post_del_key (url, cfg_key)
 {
-	   var post = cfg_key +"=";
+	   var post = cfg_key + "=";
 
 	   jQuery.post (url, post, 
-              function(data, textStatus) {
-                window.location.reload();
+              function (data, textStatus) {
+                  window.location.reload();
               }
 	   );
 }
@@ -78,7 +78,7 @@ function post_add_entry_key (url, entry_name, cfg_key)
 	   var post = cfg_key + "=" + obj.value;
 
 	   jQuery.post (url, post, 
-	         function(data, textStatus) {
+	         function (data, textStatus) {
                 window.location.reload();
               }
         );

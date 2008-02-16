@@ -30,7 +30,11 @@ class PageVServers (PageMenu, FormHelper):
         if vservers:
             for vserver in vservers:
                 link = '<a href="/vserver/%s">%s</a>' % (vserver, vserver)
-                link_del = '<a href="/vserver/%s/remove">Remove</a>' % (vserver)
+                if vserver != "default":
+                    js = "post_del_key('/vserver/ajax_update', 'vserver!%s');"%(vserver)
+                    link_del = self.InstanceButton ("Del", onClick=js)
+                else:
+                    link_del = ''
                 table += (link, link_del)
             txt += str(table)
 

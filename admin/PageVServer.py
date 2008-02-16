@@ -36,13 +36,15 @@ class PageVServer (PageMenu, FormHelper):
             if not self.has_errors():
                 return "/%s/%s" % (self._id, host)
             default_render = True
+
+        elif uri.endswith('/ajax_update'):
+            self._op_apply_changes (post)
+            return 'ok'
+
         elif uri.endswith('/add_new_entry'):
             self._op_add_new_entry(host, post)
             return "/%s/%s" % (self._id, host)            
-        elif uri.endswith('/remove'):
-            if host != "default":
-                del(self._cfg["vserver!%s" % (host)])
-            return '/vserver'
+
         else:
             default_render = True
 
