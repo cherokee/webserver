@@ -8,14 +8,14 @@ from consts import *
 from VirtualServer import *
 
 DATA_VALIDATION = [
-    ("vserver!.*?!document_root",              validations.is_local_dir_exists),
-    ("vserver!.*?!ssl_certificate_file",       validations.is_local_file_exists),
-    ("vserver!.*?!ssl_certificate_key_file",   validations.is_local_file_exists),
-    ("vserver!.*?!ssl_ca_list_file",           validations.is_local_file_exists),
-    ("vserver!default!logger!access!filename", validations.parent_is_dir),
-    ("vserver!default!logger!error!filename",  validations.parent_is_dir),
-    ("vserver!default!logger!access!command",  validations.is_local_file_exists),
-    ("vserver!default!logger!error!command",   validations.is_local_file_exists),
+    ("vserver!.*?!document_root",            validations.is_local_dir_exists),
+    ("vserver!.*?!ssl_certificate_file",     validations.is_local_file_exists),
+    ("vserver!.*?!ssl_certificate_key_file", validations.is_local_file_exists),
+    ("vserver!.*?!ssl_ca_list_file",         validations.is_local_file_exists),
+    ("vserver!.*?!logger!access!filename",   validations.parent_is_dir),
+    ("vserver!.*?!logger!error!filename",    validations.parent_is_dir),
+    ("vserver!.*?!logger!access!command",    validations.is_local_file_exists),
+    ("vserver!.*?!logger!error!command",     validations.is_local_file_exists),
     ("vserver!.*?!(directory|extensions|request)!.*?!priority", validations.is_positive_int)
 ]
 
