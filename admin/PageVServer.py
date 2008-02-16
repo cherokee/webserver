@@ -78,7 +78,6 @@ class PageVServer (PageMenu, FormHelper):
         # Basics
         table = Table(2)
         self.AddTableEntry (table, 'Document Root',   '%s!document_root' % (pre))
-        self.AddTableEntry (table, 'Domains',         '%s!domain' % (pre))
         self.AddTableEntry (table, 'Directory Index', '%s!directory_index' % (pre))
         tabs += [('Basics', str(table))]
 
@@ -173,7 +172,9 @@ class PageVServer (PageMenu, FormHelper):
     def _render_hosts (self, host):
         cfg_domains = self._cfg["vserver!%s!domain"%(host)]
 
+        txt       = ""
         available = "1"
+
         if cfg_domains:
             table = Table(2,1)
             table += ('Domain pattern', '')
@@ -186,7 +187,7 @@ class PageVServer (PageMenu, FormHelper):
                 bu = self.InstanceButton ("Del", onClick="post_del_key('/vserver/%s/update','%s');"%(host, cfg_key))
                 table += (en, bu)
 
-            txt  = str(table)
+            txt += str(table)
 
             # Look for firs available
             i = 1
@@ -206,7 +207,6 @@ class PageVServer (PageMenu, FormHelper):
         }
         </script>
         """
-
 
         txt += "<h3>Add new domain name</h3>"
         txt += DOMAIN_ADD_JS
