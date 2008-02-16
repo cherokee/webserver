@@ -59,3 +59,27 @@ function toggle_help()
         $("#help-contents").fadeOut("fast", function() { $("#help").fadeIn() });
     }
 }
+
+
+function post_del_key (url, cfg_key)
+{
+	   var post = cfg_key +"=";
+
+	   jQuery.post (url, post, 
+              function(data, textStatus) {
+                window.location.reload();
+              }
+	   );
+}
+
+function post_add_entry_key (url, entry_name, cfg_key)
+{
+	   var obj  = document.getElementById("entry_name");
+	   var post = cfg_key + "=" + obj.value;
+
+	   jQuery.post (url, post, 
+	         function(data, textStatus) {
+                window.location.reload();
+              }
+        );
+}

@@ -82,6 +82,15 @@ class PageVServer (PageMenu, FormHelper):
         self.AddTableEntry (table, 'Directory Index', '%s!directory_index' % (pre))
         tabs += [('Basics', str(table))]
 
+        # Domains
+        tmp = self._render_hosts(host)
+        tabs += [('Domain names', tmp)]
+        
+        # Behaviour
+        tmp  = self._render_rules (host, cfg['directory'], cfg['extensions'], cfg['request'])
+        tmp += self._render_add_rule(host)
+        tabs += [('Behaviour', tmp)]
+
         # Logging
         tmp   = ''
         table = Table(2)
@@ -121,11 +130,6 @@ class PageVServer (PageMenu, FormHelper):
         self.AddTableEntry (table, 'CA List',         '%s!ssl_ca_list_file' % (pre))
         tabs += [('Security', str(table))]
 
-        # Behaviour
-        tmp  = self._render_rules (host, cfg['directory'], cfg['extensions'], cfg['request'])
-        tmp += self._render_add_rule(host)
-        tabs += [('Behaviour', tmp)]
-
         txt += self.InstanceTab (tabs)
 
         form = Form ("/%s/%s/update" % (self._id, host))
@@ -163,6 +167,55 @@ class PageVServer (PageMenu, FormHelper):
             e1   = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
             e2   = self.InstanceEntry ('%s!priority' % (pre), 'text', value=prio)
             table += (link, type, e1, e2)
+        txt += str(table)
+        return txt
+
+    def _render_hosts (self, host):
+        cfg_domains = self._cfg["vserver!%s!domain"%(host)]
+
+        available = "1"
+        if cfg_domains:
+            table = Table(2,1)
+            table += ('Domain pattern', '')
+
+            # Build list
+            for i in cfg_domains:
+                domain = cfg_domains[i].value
+                cfg_key = "vserver!%s!domain!%s" % (host, i)
+                en = self.InstanceEntry (cfg_key, 'text')
+                bu = self.InstanceButton ("Del", onClick="post_del_key('/vserver/%s/update','%s');"%(host, cfg_key))
+                table += (en, bu)
+
+            txt  = str(table)
+
+            # Look for firs available
+            i = 1
+            while True:
+                if not cfg_domains[str(i)]:
+                    available = str(i)
+                    break
+                i += 1
+
+        DOMAIN_ADD_JS = """
+        <script type="text/javascript">
+        submit_new_domain = function(host, domain_id) {
+            return post_add_entry_key (
+                          "/vserver/"+host+"/update",
+                          "new_domain",
+                          "vserver!" + host + "!domain!" + domain_id);
+        }
+        </script>
+        """
+
+
+        txt += "<h3>Add new domain name</h3>"
+        txt += DOMAIN_ADD_JS
+
+        table = Table(2)
+        en = self.InstanceEntry ("new_domain", 'text')
+        bu = self.InstanceButton ("Add", onClick="submit_new_domain('%s','%s');"%(host, available))
+        table += (en, bu)
+
         txt += str(table)
         return txt
 

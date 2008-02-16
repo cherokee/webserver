@@ -115,7 +115,7 @@ class PageIcon (PageMenu, FormHelper):
             for entry in icons:
                 cfg_key = 'icons!file!%s' % (entry)
                 op, im = self._get_options_icons (cfg_key)
-                button = self.InstanceButton ("Del", "/%s/update"%(self._id))
+                button = self.InstanceButton ("Del")
                 table += (im, entry, op, button)
             tmp += str(table)
 
@@ -144,7 +144,7 @@ class PageIcon (PageMenu, FormHelper):
                 im = self._get_img_from_icon (icon, cfg_key)
 
                 entry    = self.InstanceEntry (cfg_key, 'text')
-                button   = self.InstanceButton ('Del', '/%s/update'%(self._id))
+                button   = self.InstanceButton ('Del')
                 table += (im, icon, entry, button)
             tmp += str(table)
 

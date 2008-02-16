@@ -113,9 +113,13 @@ class FormHelper (WebComponent):
             tup += extra_cols
         table += tup
 
-    def InstanceButton (self, name, url):
+    def InstanceButton (self, name, **kwargs):
         # FIXME: Use JQuery for async call here
-        return '<input type="button" value="%s" value="" />' % (name)
+        extra = ""
+        for karg in kwargs:
+            extra += '%s="%s" '%(karg, kwargs[karg])
+
+        return '<input type="button" value="%s" %s/>' % (name, extra)
 
     def AddTableEntryRemove (self, table, title, cfg_key):
         form = Form ("/%s/update" % (self._id), submit_label="Del")
