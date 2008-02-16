@@ -42,6 +42,7 @@ ModuleCgi.py \
 ModuleFcgi.py \
 ModuleScgi.py \
 ModuleAuth.py \
+ModuleAdmin.py \
 ModuleHtdigest.py \
 ModuleLdap.py \
 ModulePlain.py \

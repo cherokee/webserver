@@ -11,7 +11,8 @@ HANDLERS = [
     ('cgi',         'CGI'),
     ('fcgi',        'FastCGI'),
     ('scgi',        'SCGI'),
-    ('server_info', 'Server Info')
+    ('server_info', 'Server Info'),
+    ('admin',       'Remote Administration')
 ]
 
 VALIDATORS = [
