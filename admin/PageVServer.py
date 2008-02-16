@@ -32,18 +32,19 @@ class PageVServer (PageMenu, FormHelper):
         default_render = False
 
         if uri.endswith('/update'):
-            self._op_apply_changes (post)
+            # It's adding a new entry
+            if 'add_new_entry' in post:
+                return self._op_add_new_entry (host, post)
+            
+            # It's updating properties
+            self._op_apply_changes (host, post)
             if not self.has_errors():
                 return "/%s/%s" % (self._id, host)
             default_render = True
 
         elif uri.endswith('/ajax_update'):
-            self._op_apply_changes (post)
+            self._op_apply_changes (host, post)
             return 'ok'
-
-        elif uri.endswith('/add_new_entry'):
-            self._op_add_new_entry(host, post)
-            return "/%s/%s" % (self._id, host)            
 
         else:
             default_render = True
@@ -61,6 +62,8 @@ class PageVServer (PageMenu, FormHelper):
         pre = "vserver!%s!%s!%s" % (host, type, entry)
         self._cfg["%s!handler"%(pre)]  = handler
         self._cfg["%s!priority"%(pre)] = priority
+
+        return "/%s/%s/prio/%s" % (self._id, host, priority)
 
     def _op_render_vserver_details (self, host, uri):
         content = self._render_vserver_guts (host)
@@ -144,14 +147,12 @@ class PageVServer (PageMenu, FormHelper):
         handler  = EntryOptions ('add_new_handler',   HANDLERS,    selected='common')
         priority = self.InstanceEntry ('add_new_priority', 'text')
         
-        table  = Table(5,1)
+        table  = Table(4,1)
         table += ('Entry', 'Type', 'Handler', 'Priority')
-        table += (entry, type, handler, priority, SUBMIT_ADD)
-
-        form1  = Form("/%s/%s/add_new_entry" % (self._id, host), add_submit=False)
+        table += (entry, type, handler, priority)
 
         txt += "<h3>Add new rule</h3>"
-        txt += form1.Render(str(table))
+        txt += str(table)
         return txt
 
     def _render_rules (self, host, dirs_cfg, exts_cfg, reqs_cfg):
@@ -221,5 +222,5 @@ class PageVServer (PageMenu, FormHelper):
         txt += str(table)
         return txt
 
-    def _op_apply_changes (self, post):
+    def _op_apply_changes (self, host, post):
         self.ApplyChanges ([], post, DATA_VALIDATION)
