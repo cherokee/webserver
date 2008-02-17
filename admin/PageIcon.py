@@ -46,10 +46,19 @@ class PageIcon (PageMenu, FormHelper):
         # Return the URL
         return "/%s" % (self._id)
 
-    def _get_options_icons (self, cfg_key):
+    def _get_options_icons (self, cfg_key, file_filter=None):
+        file_options = []
+
+        # No icon
+        if file_filter and not file_filter(''):
+            file_options.append (('', 'None'))
+
         # Build icons list
-        file_options = [('', 'None')]
         for file in os.listdir (CHEROKEE_ICONSDIR):
+            if file_filter:
+                ignore = file_filter (file)
+                if ignore: continue
+
             f = file.lower()
             if (f.endswith(".jpg") or
                 f.endswith(".png") or
@@ -147,16 +156,17 @@ class PageIcon (PageMenu, FormHelper):
                 cfg_key  = 'icons!suffix!%s' % (icon)
                 im = self._get_img_from_icon (icon, cfg_key)
 
-                entry    = self.InstanceEntry (cfg_key, 'text')
-                js       = "post_del_key('/icons/update', '%s');" % (cfg_key)
-                button   = self.InstanceButton ('Del', onClick=js)
+                entry  = self.InstanceEntry (cfg_key, 'text')
+                js     = "post_del_key('/icons/update', '%s');" % (cfg_key)
+                button = self.InstanceButton ('Del', onClick=js)
                 table += (im, icon, entry, button)
 
             tmp += str(table)
 
         # New suffix
         fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False)
-        op1, im1 = self._get_options_icons ('suffix_new_file')
+        op1, im1 = self._get_options_icons ('suffix_new_file', 
+                                            self._filter_icons_in_suffixes)
         en2 = self.InstanceEntry('suffix_new_exts', 'text')
         ta1 = Table (4,1)
         ta1 += ('', 'Icon', 'Extensions', '')
@@ -172,3 +182,11 @@ class PageIcon (PageMenu, FormHelper):
     def _op_apply_changes (self, post):
         self.ApplyChanges ([], post)
         return "/%s" % (self._id)
+
+    def _filter_icons_in_suffixes (self, file):
+        cfg = self._cfg['icons!suffix']
+        if not cfg:
+            return False
+        if not file:
+            return True
+        return file in cfg.keys()

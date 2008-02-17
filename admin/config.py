@@ -119,6 +119,10 @@ class ConfigNode (object):
     def has_child (self):
         return len(self._child) > 0
 
+    def keys (self):
+        return self._child.keys()
+
+
 class Config:
     def __init__ (self, file=None):
         self.root = ConfigNode()
@@ -226,3 +230,4 @@ class Config:
 
     def has_tree (self):
         return len(self.root._child) > 0
+
