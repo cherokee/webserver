@@ -33,7 +33,8 @@ class PageVServer (PageMenu, FormHelper):
 
         if uri.endswith('/update'):
             # It's adding a new entry
-            if 'add_new_entry' in post:
+            if 'add_new_entry' in post and \
+                len (post['add_new_entry'][0]) > 0:
                 return self._op_add_new_entry (host, post)
             
             # It's updating properties
