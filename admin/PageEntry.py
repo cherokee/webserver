@@ -60,7 +60,7 @@ class PageEntry (PageMenu, FormHelper):
         props._op_apply_changes (uri, post)
 
         # Apply changes
-        self.ApplyChanges ([], post, DATA_VALIDATION)
+        self.ApplyChanges (["%s!only_secure"%(self._conf_prefix)], post, DATA_VALIDATION)
 
     def _op_default (self, uri):
         # Render page
@@ -89,6 +89,8 @@ class PageEntry (PageMenu, FormHelper):
         table = Table(2)
         e = self.AddTableOptions_w_ModuleProperties (table, 'Handler', '%s!handler'%(pre), HANDLERS)
         self.AddTableEntry (table, 'Document Root', '%s!document_root'%(pre))
+        self.AddTableCheckbox (table, 'Only Secure', '%s!only_secure'%(pre), False)
+
         txt += str(table)
 
         txt += '<h2>Handler properties</h2>'
