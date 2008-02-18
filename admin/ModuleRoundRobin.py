@@ -21,7 +21,7 @@ class ModuleRoundRobin (Module, FormHelper):
         t1 += ('Host', '')
         for host in hosts:
             pre = '%s!%s' % (self._prefix, host)
-            e_host = self.InstanceEntry('%s!host'%(pre), 'text', self._cfg)
+            e_host = self.InstanceEntry('%s!host'%(pre), 'text')
             t1 += (e_host, SUBMIT_DEL)
 
         en1 = self.InstanceEntry('new_host', 'text')
@@ -32,8 +32,8 @@ class ModuleRoundRobin (Module, FormHelper):
         t2 += ('Host', 'Interpreter', '')
         for host in hosts:
             pre = '%s!%s' % (self._prefix, host)
-            e_host = self.InstanceEntry('%s!host'%(pre), 'text', self._cfg)
-            e_inte = self.InstanceEntry('%s!interpreter'%(pre), 'text', self._cfg)
+            e_host = self.InstanceEntry('%s!host'%(pre), 'text')
+            e_inte = self.InstanceEntry('%s!interpreter'%(pre), 'text')
             t2 += (e_host, e_inte, SUBMIT_DEL)
 
         e_host = self.InstanceEntry('new_host', 'text')
