@@ -46,7 +46,7 @@ class PageIcon (PageMenu, FormHelper):
         # Return the URL
         return "/%s" % (self._id)
 
-    def _get_options_icons (self, cfg_key, file_filter=None):
+    def _get_options_icons (self, cfg_key, file_filter=None, selected=None):
         file_options = []
 
         # No icon
@@ -66,19 +66,24 @@ class PageIcon (PageMenu, FormHelper):
                 f.endswith(".svg")):
                 file_options.append((file, file))
 
+        # Check selected
+        if not selected:
+            try:
+                selected = self._cfg[cfg_key].value
+            except:
+                pass
+
         # Build the options
-        try:
-            value   = self._cfg[cfg_key].value
+        if selected:
             options = EntryOptions (cfg_key, file_options, 
                                     onChange='return option_icons_update(\'%s\');'%(cfg_key), 
-                                    selected=value)
-        except:
-            value   = ''
+                                    selected=selected)
+        else:
             options = EntryOptions (cfg_key, file_options,
                                     onChange='return option_icons_update(\'%s\');'%(cfg_key))
 
         # Get the image
-        image = self._get_img_from_icon (value, cfg_key)
+        image = self._get_img_from_icon (selected, cfg_key)
         return options, image
 
     def _get_img_from_icon (self, icon_name, cfg_key):
@@ -87,7 +92,8 @@ class PageIcon (PageMenu, FormHelper):
 
         local_file  = os.path.join (CHEROKEE_ICONSDIR, icon_name)
         if not os.path.exists (local_file):
-            return '<div id="image_%s"></div>'%(cfg_key)
+            comment = "<!-- Couldn't find %s -->" % (icon_name)
+            return '<div id="image_%s">%s</div>' % (cfg_key, comment)
 
         remote_file = os.path.join ('/icons_local', icon_name)
         return '<div id="image_%s"><img src="%s" /></div>' % (cfg_key, remote_file)
@@ -122,12 +128,14 @@ class PageIcon (PageMenu, FormHelper):
             table = Table(4, 1)
             table += ('', 'Match', 'File')
 
-            for entry in icons:
-                cfg_key = 'icons!file!%s' % (entry)
-                op, im = self._get_options_icons (cfg_key)
+            for icon_name in icons:
+                cfg_key = 'icons!file!%s' % (icon_name)
+                match   = self._cfg[cfg_key].value
+                print "icon", icon_name, "match", match
+                op, im = self._get_options_icons (cfg_key, selected=icon_name)
                 js = "post_del_key('/icons/update', '%s');" % (cfg_key)
                 button = self.InstanceButton ('Del', onClick=js)
-                table += (im, entry, op, button)
+                table += (im, match, op, button)
 
             tmp += str(table)
 
