@@ -1,7 +1,11 @@
 ## Cherokee: icons/Makefile.am  -*- makefile -*-
 
+LICENSE = \
+README.txt
+
 cherokeeiconsdir = "$(prefix)/share/cherokee/icons/"
 cherokeeicons_DATA = \
+$(LICENSE) \
 arrow_turn_left.png \
 blank.png \
 bomb.png \
