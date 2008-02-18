@@ -118,7 +118,7 @@ class PageIcon (PageMenu, FormHelper):
         icons = self._cfg['icons!file']
 
         tmp = ''
-        if icons.has_child():
+        if icons and icons.has_child():
             table = Table(4, 1)
             table += ('', 'Match', 'File')
 
@@ -148,7 +148,7 @@ class PageIcon (PageMenu, FormHelper):
         icons = self._cfg['icons!suffix']
 
         tmp = ''
-        if icons.has_child():
+        if icons and icons.has_child():
             table = Table(4, 1)
             table += ('', 'File', 'Extensions', '')
 
