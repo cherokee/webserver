@@ -2,24 +2,31 @@
 
 cherokeeiconsdir = "$(prefix)/share/cherokee/icons/"
 cherokeeicons_DATA = \
-back.png \
-binary.png \
+arrow_turn_left.png \
 blank.png \
 bomb.png \
-compressed.png \
+camera.png \
+cd.png \
+color_wheel.png \
+css.png \
+cup.png \
+film.png \
+font.png \
 folder.png \
-image.png \
-movie.png \
-pdf.png \
-ps.png \
-readme.png \
+html.png \
+music.png \
+package.png \
+page_white.png \
+page_white_acrobat.png \
+page_white_actionscript.png \
+page_white_c.png \
+page_white_go.png \
+page_white_office.png \
+page_white_php.png \
+page_white_text.png \
 script.png \
-sound.png \
-tex.png \
-text.png \
-iso.png \
-java.png \
-unknown.png
+ruby.png \
+control_play.png
 
 EXTRA_DIST = \
 $(cherokeeicons_DATA)

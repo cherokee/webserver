@@ -62,25 +62,30 @@ vserver!default!extensions!php!priority = 99999
 # Icons
 #
 icons!directory = folder.png
-icons!parent_directory = back.png
-icons!default = unknown.png
+icons!parent_directory = arrow_turn_left.png
+icons!default = page_white.png
 
 icons!file!bomb.png = core
-icons!file!readme.png = *README*
+icons!file!page_white_go.png = *README*
 
-icons!suffix!blank.png = html,htm
-icons!suffix!text.png = txt,text,doc,rtf,sdw
-icons!suffix!image.png = jpg,jpeg,jpe,png,gif,xcf,bmp,pcx,tiff,tif,cdr,psd,xpm,xbm
-icons!suffix!sound.png = au,snd,mid,midi,kar,mpga,mpega,mp2,mp3,m3u,sid,wav,aif,aiff,aifc,gsm,m3u,wma,wax,ra,rm,ram,pls,sd2,ogg
-icons!suffix!movie.png = avi,ogg,mpeg,mpga,mpe,mpg,mpeg3,mp2,dl,fli,qt,mov,movie
-icons!suffix!compressed.png = tar,gz,bz2,zip,rar,ace,lha,Z,z,7z
-icons!suffix!binary.png = bin,exe,com,msi,out
-icons!suffix!script.png = sh,csh,ksh,tcl,tk,py,pl,php
-icons!suffix!tex.png = tex,latex,ltx,sty,cls
-icons!suffix!ps.png = ps,eps,ai
-icons!suffix!pdf.png = pdf
-icons!suffix!iso.png = iso,ngr,cue
-icons!suffix!java.png = java,class,jar
+icons!suffix!html.png = html,htm
+icons!suffix!css.png = css
+icons!suffix!page_white_c.png = c,cpp
+icons!suffix!page_white_php.png = php
+icons!suffix!page_while_acrobat.png = pdf
+icons!suffix!page_white_office.png = doc,ppt,xls
+icons!suffix!page_white_text.png = txt,text,rtf,sdw
+icons!suffix!font.png = ttf
+icons!suffix!music.png = au,snd,mid,midi,kar,mpga,mpega,mp2,mp3,m3u,sid,wav,aif,aiff,aifc,gsm,m3u,wma,wax,ra,rm,ram,pls,sd2,ogg
+icons!suffix!package.png = tar,gz,bz2,zip,rar,ace,lha,Z,z,7z
+icons!suffix!film.png = avi,ogg,mpeg,mpga,mpe,mpg,mpeg3,mp2,dl,fli,qt,mov,movie
+icons!suffix!cup.png = java,class,jar
+icons!suffix!cd.png = iso,ngr,cue
+icons!suffix!camera.png = jpg,jpeg,jpe
+icons!suffix!color_wheel.png = png,gif,xcf,bmp,pcx,tiff,tif,cdr,psd,xpm,xbm
+icons!suffix!script.png = sh,csh,ksh,tcl,tk,py,pl
+icons!suffix!ruby.png = rb
+icons!suffix!control_play.png = bin,exe,com,msi,out
 
 #
 # Include files
