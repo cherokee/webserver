@@ -86,6 +86,7 @@ icons!suffix!color_wheel.png = png,gif,xcf,bmp,pcx,tiff,tif,cdr,psd,xpm,xbm
 icons!suffix!script.png = sh,csh,ksh,tcl,tk,py,pl
 icons!suffix!ruby.png = rb
 icons!suffix!control_play.png = bin,exe,com,msi,out
+icons!suffix!email.png = eml,mbox,box,email,mbx
 
 #
 # Include files

@@ -26,7 +26,8 @@ page_white_php.png \
 page_white_text.png \
 script.png \
 ruby.png \
-control_play.png
+control_play.png \
+email.png
 
 EXTRA_DIST = \
 $(cherokeeicons_DATA)
