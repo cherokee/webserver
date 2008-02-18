@@ -39,8 +39,9 @@ import SocketServer
 import traceback
 import socket
 import errno
+import sys
 
-__version__ = '1.4'
+__version__ = '1.5'
 __author__  = 'Alvaro Lopez Ortega'
 
 
@@ -106,7 +107,8 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         try:
             self.handle_request()
         except:
-            traceback.print_exc()  # Print the error
+            if sys.exc_type != SystemExit:
+                traceback.print_exc()  # Print the error
 
         try:
             self.finish()          # Closes wfile and rfile
