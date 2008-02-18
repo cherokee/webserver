@@ -39,9 +39,11 @@ $(CONFS_PRE:.sample.pre=.sample)
 WINDOWS_PORT_FILES = \
 config.h.win32
 
-DISTCLEANFILES = \
-cherokee.pc      \
+CLEANFILES = \
 $(CONFS)
+
+DISTCLEANFILES = \
+cherokee.pc
 
 COMPILATION_TESTS = \
 debian_testing.sh   \
@@ -127,4 +129,3 @@ uninstall-local: uninstall-local-config
 
 test:
 	$(MAKE) -C qa test
-

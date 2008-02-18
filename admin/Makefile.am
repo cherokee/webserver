@@ -14,7 +14,6 @@ generateddir = "$(datadir)/cherokee/admin"
 generated_DATA = \
 $(PY_PRE:.py.pre=.py)
 
-
 adminpydir = "$(datadir)/cherokee/admin"
 adminpy_DATA = \
 consts.py \
@@ -74,3 +73,6 @@ EXTRA_DIST = \
 $(PY_PRE) \
 $(adminpy_DATA) \
 $(adminhelp_DATA)
+
+CLEANFILES = \
+$(generated_DATA)
