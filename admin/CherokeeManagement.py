@@ -105,7 +105,10 @@ class CherokeeManagement:
     def _restart (self):
         if not self._pid:
             return
-        os.kill (self._pid, signal.SIGHUP)
+        try:
+            os.kill (self._pid, signal.SIGHUP)
+        except:
+            pass
 
 
 def is_PID_alive (pid, filter='cherokee'):

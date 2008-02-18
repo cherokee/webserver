@@ -42,10 +42,12 @@ PAGE_MENU_MENU = """
 <li id="advanced"><a href="/advanced">Advanced</a></li>
 </ul>
 
-<form action="/apply" method="post">
- <input type="submit" value="Apply Changes" />
+<br />
+<form id="form-apply" action="/apply" method="post">
+ <div style="float: center;">
+  <a class="button" href="#" onclick="this.blur(); $('#form-apply').submit(); return false;"><span>Apply</span></a>
+ </div>
 </form>
-
 """
 
 class Page (WebComponent):
