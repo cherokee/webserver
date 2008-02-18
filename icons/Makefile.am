@@ -27,7 +27,8 @@ page_white_text.png \
 script.png \
 ruby.png \
 control_play.png \
-email.png
+email.png \
+printer.png
 
 EXTRA_DIST = \
 $(cherokeeicons_DATA)

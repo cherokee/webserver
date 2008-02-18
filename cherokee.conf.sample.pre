@@ -70,7 +70,7 @@ icons!file!page_white_go.png = *README*
 
 icons!suffix!html.png = html,htm
 icons!suffix!css.png = css
-icons!suffix!page_white_c.png = c,cpp
+icons!suffix!page_white_c.png = c,h,cpp
 icons!suffix!page_white_php.png = php
 icons!suffix!page_white_acrobat.png = pdf
 icons!suffix!page_white_office.png = doc,ppt,xls
@@ -87,6 +87,7 @@ icons!suffix!script.png = sh,csh,ksh,tcl,tk,py,pl
 icons!suffix!ruby.png = rb
 icons!suffix!control_play.png = bin,exe,com,msi,out
 icons!suffix!email.png = eml,mbox,box,email,mbx
+icons!suffix!printer.png = ps,eps
 
 #
 # Include files
