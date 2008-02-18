@@ -131,8 +131,7 @@ class PageIcon (PageMenu, FormHelper):
             for icon_name in icons:
                 cfg_key = 'icons!file!%s' % (icon_name)
                 match   = self._cfg[cfg_key].value
-                print "icon", icon_name, "match", match
-                op, im = self._get_options_icons (cfg_key, selected=icon_name)
+                op, im  = self._get_options_icons (cfg_key, selected=icon_name)
                 js = "post_del_key('/icons/update', '%s');" % (cfg_key)
                 button = self.InstanceButton ('Del', onClick=js)
                 table += (im, match, op, button)
