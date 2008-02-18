@@ -1764,7 +1764,7 @@ perform_post_configure_checks (cherokee_server_t *srv)
 	list_for_each (i, &srv->vservers) {
 		re = cherokee_buffer_is_empty (&VSERVER(i)->root);
 		if (re) {
-			PRINT_MSG ("Virtual Server  needs a Document Root\n");
+			PRINT_MSG_S ("Virtual Server  needs a Document Root\n");
 			return ret_error;
 		}
 	}
