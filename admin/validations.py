@@ -1,3 +1,4 @@
+import string
 import os.path
 
 def is_boolean (value):
@@ -89,4 +90,11 @@ def parent_is_dir (value):
     dirname, filename = os.path.split(value)
     is_local_dir_exists (dirname)
 
+    return value
+
+def is_safe_id (value):
+    for v in value:
+        if v not in string.ascii_letters and \
+           v not in "_-":
+           raise ValueError, 'Invalid character '+v
     return value

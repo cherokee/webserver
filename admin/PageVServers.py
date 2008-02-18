@@ -1,7 +1,14 @@
+import validations
+
 from Page import *
 from Form import *
 from Table import *
 from Entry import *
+
+DATA_VALIDATION = [
+    ("new_vserver_name",  validations.is_safe_id),
+    ("new_vserver_droot", validations.is_local_dir_exists),
+]
 
 class PageVServers (PageMenu, FormHelper):
     def __init__ (self, cfg):
@@ -18,7 +25,10 @@ class PageVServers (PageMenu, FormHelper):
 
     def _op_handler (self, uri, post):
         if uri.startswith('/add_vserver'):
-            return self._op_add_vserver (post)
+            tmp = self._op_add_vserver (post)
+            if self.has_errors():
+                return self._op_render()
+            return tmp
         raise 'Unknown method'
             
     def _render_vserver_list (self):        
@@ -52,6 +62,10 @@ class PageVServers (PageMenu, FormHelper):
         return txt
 
     def _op_add_vserver (self, post):
+        self._ValidateChanges (post, DATA_VALIDATION)
+        if self.has_errors():
+            return
+
         name  = post['new_vserver_name'][0]
         droot = post['new_vserver_droot'][0]
         pre   = 'vserver!%s' % (name)
