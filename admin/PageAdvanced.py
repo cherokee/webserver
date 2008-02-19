@@ -75,7 +75,7 @@ class PageAdvanced (PageMenu, FormHelper):
         table = Table(2)
         self.AddTableEntry    (table, 'Listening queue lenght', 'server!listen_queue')
         self.AddTableEntry    (table, 'Reuse connections',      'server!max_connection_reuse')
-        self.AddTableEntry    (table, 'Log flush time',         'server!log_flush_elapse')
+        self.AddTableEntry    (table, 'Log flush time (<i>secs</i>)','server!log_flush_elapse')
         self.AddTableEntry    (table, 'Max keepalive requests', 'server!keepalive_max_requests')
         txt += self.Indent(table)
 
