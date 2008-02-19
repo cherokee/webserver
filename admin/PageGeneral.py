@@ -47,21 +47,21 @@ class PageGeneral (PageMenu, FormHelper):
         self.AddTableEntry    (table, 'Port TLS', 'server!port_tls')
         self.AddTableCheckbox (table, 'IPv6',     'server!ipv6', True)
         self.AddTableEntry    (table, 'Listen',   'server!listen')
-        txt += str(table)
+        txt += self.Indent(table)
 
         txt += "<h2>Basic Behaviour</h2>"
         table = Table(2)
         self.AddTableEntry    (table, 'Timeout',        'server!timeout')
         self.AddTableCheckbox (table, 'KeepAlive',      'server!keepalive', True)
         self.AddTableOptions  (table, 'Server Tokens',  'server!server_tokens', PRODUCT_TOKENS)
-        txt += str(table)
+        txt += self.Indent(table)
 
         txt += "<h2>Server Permissions</h2>"
         table = Table(2)
         self.AddTableEntry (table, 'User',   'server!user')
         self.AddTableEntry (table, 'User',   'server!group')
         self.AddTableEntry (table, 'Chroot', 'server!chroot')
-        txt += str(table)
+        txt += self.Indent(table)
 
         form = Form ("/%s/update" % (self._id))
         return form.Render(txt)

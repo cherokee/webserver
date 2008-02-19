@@ -35,8 +35,8 @@ class PageMime (PageMenu, FormHelper):
         table = Table(2, 1)
         self.AddTableEntry (table, 'Files', 'server!mime_files')
 
-        txt  = '<h2>System-wide MIME types file</h2>'        
-        txt += str(table)
+        txt  = '<h1>System-wide MIME types file</h1>'        
+        txt += self.Indent(table)
 
         form = Form ('%s/update' % (self._id))
         return form.Render(txt)

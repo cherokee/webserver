@@ -58,7 +58,7 @@ class PageAdvanced (PageMenu, FormHelper):
         table = Table(2)
         self.AddTableOptions  (table, 'Thread Policy',          'server!thread_policy', THREAD_POLICY)
         self.AddTableEntry    (table, 'File descriptor number', 'server!max_fds')
-        txt += str(table)
+        txt += self.Indent(table)
 
         txt += "<h2>Server tweaking</h2>"
         table = Table(2)
@@ -67,7 +67,7 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddTableEntry    (table, 'Sendfile max size', 'server!sendfile_max')
         self.AddTableEntry    (table, 'Panic action',      'server!panic_action')
         self.AddTableEntry    (table, 'PID file',          'server!pid_file')
-        txt += str(table)
+        txt += self.Indent(table)
 
         txt += "<h2>Server behaviour</h2>"
         table = Table(2)
@@ -75,7 +75,7 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddTableEntry    (table, 'Reuse connections',      'server!max_connection_reuse')
         self.AddTableEntry    (table, 'Log flush time',         'server!log_flush_elapse')
         self.AddTableEntry    (table, 'Max keepalive requests', 'server!keepalive_max_requests')
-        txt += str(table)
+        txt += self.Indent(table)
 
         form = Form ("/%s/update" % (self._id))
         return form.Render(txt)

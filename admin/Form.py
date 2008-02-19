@@ -67,6 +67,9 @@ class FormHelper (WebComponent):
         WebComponent.__init__ (self, id, cfg)
         self.errors = {}
     
+    def Indent (self, content):
+        return '<div class="indented">%s</div>' %(content)
+        
     def InstanceEntry (self, cfg_key, tipe, **kwargs):
         # Instance an Entry
         entry = Entry (cfg_key, tipe, self._cfg, **kwargs)
