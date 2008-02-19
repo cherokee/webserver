@@ -4,6 +4,11 @@ from Module import *
 
 from consts import *
 
+RR_COMMENT = """
+The <i>Round Robin</i> balancer can either access remote servers or
+launch local application servers and connect to them.
+"""
+
 class ModuleRoundRobin (Module, FormHelper):
     def __init__ (self, cfg, prefix):
         Module.__init__ (self, 'round_robin', cfg, prefix)
@@ -50,12 +55,13 @@ class ModuleRoundRobin (Module, FormHelper):
 
         # General selector
         props = {}
-        props ['host']        = str(t1)
-        props ['interpreter'] = t2_txt
+        props ['host']        = self.Indent(t1)
+        props ['interpreter'] = self.Indent(t2_txt)
 
         table = Table(2)
         e = self.AddTableOptions_w_Properties (table, "Information sources", 
                                                "%s!type"%(self._prefix), BALANCER_TYPES, props)
+        txt += self.Dialog (RR_COMMENT)
         txt += str(table) + e
 
         return txt

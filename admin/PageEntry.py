@@ -93,14 +93,13 @@ class PageEntry (PageMenu, FormHelper):
         table = Table(2)
         e = self.AddTableOptions_w_ModuleProperties (table, 'Handler', '%s!handler'%(pre), HANDLERS)
         self.AddTableEntry (table, 'Document Root', '%s!document_root'%(pre))
-        self.AddTableCheckbox (table, 'Only Secure', '%s!only_secure'%(pre), False)
 
         tmp += str(table)
 
         tmp += '<h2>Handler properties</h2>'
         tmp += e
 
-        tmp += '<h2>Authentication</h2>'
+        tmp += '<h2>Security</h2>'
         tmp += self._render_auth ()
 
         txt += self.Indent(tmp)
@@ -122,7 +121,8 @@ class PageEntry (PageMenu, FormHelper):
 
         txt   = ""
         table = Table(2)
-        e = self.AddTableOptions_w_ModuleProperties (table, 'Validator', '%s!auth'%(pre), VALIDATORS)
+        self.AddTableCheckbox (table, 'Only Secure', '%s!only_secure'%(pre), False)
+        e = self.AddTableOptions_w_ModuleProperties (table, 'Authentication', '%s!auth'%(pre), VALIDATORS)
         txt += str(table) + e
 
         return txt

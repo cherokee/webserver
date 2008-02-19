@@ -6,6 +6,12 @@ from consts import *
 
 from ModuleCgi import *
 
+FCGI_PARAMS_COMMENT = """
+The FastCGI handler can distribute the workload between multiple
+servers. Thus, a balancer must be configured in order to point the
+handler to the application servers.
+"""
+
 class ModuleFcgi (ModuleCgiBase):
     PROPERTIES = ModuleCgiBase.PROPERTIES + [
         'balancer'
@@ -19,11 +25,13 @@ class ModuleFcgi (ModuleCgiBase):
         txt += ModuleCgiBase._op_render (self)
 
         txt += '<h3>FastCGI specific</h3>'
+        txt += self.Dialog (FCGI_PARAMS_COMMENT)
+
         table = Table(2)
         prefix = "%s!balancer" % (self._prefix)
         e = self.AddTableOptions_w_ModuleProperties (table, "Balancer", prefix, BALANCERS)
 
-        txt += str(table) + e
+        txt += str(table) + self.Indent(e)
         return txt
 
     def _op_apply_changes (self, uri, post):

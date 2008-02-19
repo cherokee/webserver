@@ -70,6 +70,9 @@ class FormHelper (WebComponent):
     def Indent (self, content):
         return '<div class="indented">%s</div>' %(content)
         
+    def Dialog (self, txt, tipe='information'):
+        return '<div class="dialog-%s">%s</div>' % (tipe, txt)
+
     def InstanceEntry (self, cfg_key, tipe, **kwargs):
         # Instance an Entry
         entry = Entry (cfg_key, tipe, self._cfg, **kwargs)

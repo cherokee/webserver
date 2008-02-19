@@ -142,6 +142,13 @@ table td label {
 }
 /** INFO **/
 .dialog-information {
+    background: #f3fbfb url(../images/dialog-information.png) 4px 4px no-repeat;
+    border-top: 1px solid #bacce2;
+    border-bottom: 1px solid #bacce2;
+    padding: 1em 1em 1em 40px;
+    margin: 1em 0;
+}
+.dialog-important-information {
     background: #e9ffd4 url(../images/dialog-information.png) 4px 4px no-repeat;
     border-top: 1px solid #73d216;
     border-bottom: 1px solid #73d216;

@@ -23,7 +23,7 @@ class ModuleCgiBase (Module, FormHelper):
         self.AddTableEntry    (table, "Change to UID", "%s!change_user"  % (self._prefix))
         self.AddTableCheckbox (table, "Error handler", "%s!error_handler"% (self._prefix), False)
         self.AddTableCheckbox (table, "Check file",    "%s!check_file"   % (self._prefix), True)
-        self.AddTableCheckbox (table, "Pass Request Headers", "%s!pass_req_headers" % (self._prefix), False)
+        self.AddTableCheckbox (table, "Pass Request",  "%s!pass_req_headers" % (self._prefix), False)
         txt += str(table)
 
         return txt

@@ -16,7 +16,7 @@ HANDLERS = [
 ]
 
 VALIDATORS = [
-    ('',         'No authentication'),
+    ('',         'None'),
     ('plain',    'Plain text file'),
     ('htpasswd', 'Htpasswd file'),
     ('htdigest', 'Htdigest file'),
