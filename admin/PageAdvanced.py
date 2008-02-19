@@ -25,6 +25,7 @@ POLL_METHODS = [
 
 DATA_VALIDATION = [
     ("server!max_fds",                validations.is_positive_int),
+    ("server!pid_file",               validations.parent_is_dir),
     ("server!sendfile_min",           validations.is_positive_int),
     ("server!sendfile_max",           validations.is_positive_int),
     ('server!panic_action',           validations.is_local_file_exists),
@@ -65,6 +66,7 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddTableEntry    (table, 'Sendfile min size', 'server!sendfile_min')
         self.AddTableEntry    (table, 'Sendfile max size', 'server!sendfile_max')
         self.AddTableEntry    (table, 'Panic action', 'server!panic_action')
+        self.AddTableEntry    (table, 'PID file', 'server!pid_file')
         txt += str(table)
 
         txt += "<h2>Server behaviour</h2>"

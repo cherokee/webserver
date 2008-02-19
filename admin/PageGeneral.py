@@ -21,7 +21,6 @@ DATA_VALIDATION = [
     ("server!port.*",    validations.is_tcp_port),
     ("server!listen",    validations.is_ip),
     ("server!chroot",    validations.is_local_dir_exists),
-    ("server!pid_file",  validations.parent_is_dir),
 ]
 
 class PageGeneral (PageMenu, FormHelper):
@@ -62,11 +61,6 @@ class PageGeneral (PageMenu, FormHelper):
         self.AddTableEntry (table, 'User',   'server!user')
         self.AddTableEntry (table, 'User',   'server!group')
         self.AddTableEntry (table, 'Chroot', 'server!chroot')
-        txt += str(table)
-
-        txt += "<h2>System Paths</h2>"
-        table = Table(2)
-        self.AddTableEntry (table, 'PID file', 'server!pid_file')
         txt += str(table)
 
         form = Form ("/%s/update" % (self._id))
