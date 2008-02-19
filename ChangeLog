@@ -1,3 +1,13 @@
+2008-02-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/matching_list.c (cherokee_matching_list_configure):
+	Implemented. Uses the code removed from server.c plus a few checks
+	to set the default behaviour: allow/deny.
+
+	* cherokee/server.c (add_encoder): There were a three functions
+	that should have been in this location. Matching lists must be
+	configured from its own class.
+
 2008-02-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main.c (DEFAULT_CONFIG_FILE): It should use

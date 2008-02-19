@@ -42,6 +42,41 @@ cherokee_matching_list_new (cherokee_matching_list_t **mlist)
 }
 
 
+static ret_t 
+matching_list_add_allow_cb  (char *val, void *data)
+{
+	return cherokee_matching_list_add_allow (MLIST(data), val);
+}
+
+
+static ret_t 
+matching_list_add_deny_cb  (char *val, void *data)
+{
+	return cherokee_matching_list_add_deny (MLIST(data), val);
+}
+
+
+ret_t 
+cherokee_matching_list_configure (cherokee_matching_list_t *mlist, cherokee_config_node_t *config)
+{
+	ret_t ret;
+	ret_t ret2;
+
+	ret = cherokee_config_node_read_list (config, "allow", matching_list_add_allow_cb, mlist);
+	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
+
+	ret2 = cherokee_config_node_read_list (config, "deny", matching_list_add_deny_cb, mlist);
+	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
+
+	if ((ret == ret_ok) && (ret2 == ret_not_found))
+		mlist->type = default_deny;
+	if ((ret == ret_not_found) && (ret2 == ret_ok))
+		mlist->type = default_allow;
+
+	return ret_ok;
+}
+
+
 static void
 free_list (cherokee_list_t *list)
 {

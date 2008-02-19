@@ -1399,35 +1399,6 @@ cherokee_server_step (cherokee_server_t *srv)
 
 
 static ret_t 
-matching_list_add_allow_cb  (char *val, void *data)
-{
-	return cherokee_matching_list_add_allow (MLIST(data), val);
-}
-
-
-static ret_t 
-matching_list_add_deny_cb  (char *val, void *data)
-{
-	return cherokee_matching_list_add_deny (MLIST(data), val);
-}
-
-
-static ret_t 
-matching_list_configure (cherokee_matching_list_t *mlist, cherokee_config_node_t *config)
-{
-	ret_t ret;
-
-	ret = cherokee_config_node_read_list (config, "allow", matching_list_add_allow_cb, mlist);
-	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
-
-	ret = cherokee_config_node_read_list (config, "deny", matching_list_add_deny_cb, mlist);
-	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
-
-	return ret_ok;
-}
-
-
-static ret_t 
 add_encoder (cherokee_config_node_t *node, void *data)
 {
 	ret_t                           ret;
@@ -1443,7 +1414,7 @@ add_encoder (cherokee_config_node_t *node, void *data)
 	ret = cherokee_matching_list_new (&matching);
 	if (ret != ret_ok) goto error;
 
-	ret = matching_list_configure (matching, node);
+	ret = cherokee_matching_list_configure (matching, node);
 	if (ret != ret_ok) goto error;	
 
 	/* Load the module library and set the info
