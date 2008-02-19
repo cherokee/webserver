@@ -2,6 +2,8 @@ from ModuleFile import *
 from ModuleDirlist import *
 
 class ModuleCommon:
+    PROPERTIES = ModuleFile.PROPERTIES + ModuleDirlist.PROPERTIES
+
     def __init__ (self, cfg, prefix):
         self._file = ModuleFile (cfg, prefix)
         self._dirlist = ModuleDirlist (cfg, prefix)

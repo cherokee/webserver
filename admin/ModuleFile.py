@@ -3,6 +3,10 @@ from Table import *
 from Module import *
 
 class ModuleFile (Module, FormHelper):
+    PROPERTIES = [
+        'io_cache'
+    ]
+
     def __init__ (self, cfg, prefix):
         Module.__init__ (self, 'file', cfg, prefix)
         FormHelper.__init__ (self, 'file', cfg)

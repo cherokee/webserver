@@ -62,6 +62,24 @@ class PageEntry (PageMenu, FormHelper):
         # Apply changes
         self.ApplyChanges (["%s!only_secure"%(self._conf_prefix)], post, DATA_VALIDATION)
 
+        # Clean old properties
+        self.conf_props_clean_up ()
+
+    def conf_props_clean_up (self):
+        pre     = "%s!handler" % (self._conf_prefix)
+        handler = self._cfg[pre].value
+        module  = module_obj_factory (handler, self._cfg, pre)
+        props   = module.__class__.PROPERTIES
+
+        to_be_deleted = []
+        for entry in self._cfg[pre]:
+            prop_cfg = "%s!%s" % (pre, entry)
+            if entry not in props:
+                to_be_deleted.append (prop_cfg)
+
+        for entry in to_be_deleted:
+            del(self._cfg[entry])
+
     def _op_default (self, uri):
         # Render page
         title   = self._get_title()

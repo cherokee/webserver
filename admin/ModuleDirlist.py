@@ -10,6 +10,13 @@ DATA_VALIDATION = [
 ]
 
 class ModuleDirlist (Module, FormHelper):
+    PROPERTIES = [
+        'size', 'date',
+        'user', 'group',
+        'theme', 'icon_dir',
+        'notice_files'
+    ]
+
     def __init__ (self, cfg, prefix):
         Module.__init__ (self, 'dirlist', cfg, prefix)
         FormHelper.__init__ (self, 'dirlist', cfg)

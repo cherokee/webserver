@@ -3,6 +3,11 @@ from Table import *
 from Module import *
 
 class ModuleServerInfo (Module, FormHelper):
+    PROPERTIES = [
+        'just_about',
+        'connection_details'
+    ]
+
     def __init__ (self, cfg, prefix):
         Module.__init__ (self, 'server_info', cfg, prefix)
         FormHelper.__init__ (self, 'server_info', cfg)

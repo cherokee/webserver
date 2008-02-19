@@ -4,6 +4,14 @@ from Module import *
 from validations import *
 
 class ModuleCgiBase (Module, FormHelper):
+    PROPERTIES = [
+        'script_alias',
+        'change_user',
+        'error_handler',
+        'check_file',
+        'pass_req_headers'
+    ]
+
     def __init__ (self, cfg, prefix, name):
         Module.__init__ (self, name, cfg, prefix)
         FormHelper.__init__ (self, name, cfg)

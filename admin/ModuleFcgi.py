@@ -7,6 +7,10 @@ from consts import *
 from ModuleCgi import *
 
 class ModuleFcgi (ModuleCgiBase):
+    PROPERTIES = ModuleCgiBase.PROPERTIES + [
+        'balancer'
+    ]
+
     def __init__ (self, cfg, prefix):
         ModuleCgiBase.__init__ (self, cfg, prefix, 'fcgi')
 
