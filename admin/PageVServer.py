@@ -233,4 +233,30 @@ class PageVServer (PageMenu, FormHelper):
         return txt
 
     def _op_apply_changes (self, host, post):
+        # Apply changes
         self.ApplyChanges ([], post, DATA_VALIDATION)
+
+        # Clean old logger properties
+        self._cleanup_logger_cfg (host)
+
+    def _cleanup_logger_cfg (self, host):
+        cfg_key = "vserver!%s!logger" % (host)
+        try:
+            logger  = self._cfg[cfg_key].value
+        except:
+            return
+
+        to_be_deleted = []
+        for entry in self._cfg[cfg_key]:
+            if logger == "stderr" or \
+               logger == "syslog":
+                to_be_deleted.append(cfg_key)
+            elif logger == "file" and \
+                 entry != "filename":
+                to_be_deleted.append(cfg_key)
+            elif logger == "exec" and \
+                 entry != "command":
+                to_be_deleted.append(cfg_key)
+
+        for entry in to_be_deleted:
+            del(self._cfg[entry])

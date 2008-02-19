@@ -252,3 +252,18 @@ class FormHelper (WebComponent):
     def ApplyChangesPrefix (self, prefix, checkboxes, post, validation=None):
         checkboxes_pre = map(lambda x, p=prefix: "%s!%s"%(p,x), checkboxes)
         return self.ApplyChanges (checkboxes_pre, post, validation)
+
+    def CleanUp_conf_props (self, cfg_key, name):
+        module  = module_obj_factory (name, self._cfg, cfg_key)
+        props   = module.__class__.PROPERTIES
+
+        to_be_deleted = []
+        for entry in self._cfg[cfg_key]:
+            prop_cfg = "%s!%s" % (cfg_key, entry)
+            if entry not in props:
+                to_be_deleted.append (prop_cfg)
+
+        for entry in to_be_deleted:
+            del(self._cfg[entry])
+
+
