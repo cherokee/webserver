@@ -73,6 +73,9 @@ class FormHelper (WebComponent):
     def Dialog (self, txt, tipe='information'):
         return '<div class="dialog-%s">%s</div>' % (tipe, txt)
 
+    def HiddenInput (self, key, value):
+        return '<input type="hidden" value="%s" id="%s" name="%s" />' % (value, key, key)
+
     def InstanceEntry (self, cfg_key, tipe, **kwargs):
         # Instance an Entry
         entry = Entry (cfg_key, tipe, self._cfg, **kwargs)
@@ -161,13 +164,13 @@ class FormHelper (WebComponent):
                  '</script>\n';
         return props_txt + update
 
-    def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, options):
+    def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, options, **kwargs):
         props = {}
         for name, desc in options:
             if not name:
                 continue
             try:
-                props_widget = module_obj_factory (name, self._cfg, cfg_key)
+                props_widget = module_obj_factory (name, self._cfg, cfg_key, **kwargs)
                 render = props_widget._op_render()
             except IOError:
                 render = "Couldn't load the properties module: %s" % (name)

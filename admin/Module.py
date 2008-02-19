@@ -6,7 +6,7 @@ class Module:
         self._cfg    = cfg
         self._prefix = prefix
 
-def module_obj_factory (name, cfg, prefix):
+def module_obj_factory (name, cfg, prefix, **kwargs):
     # Assemble module name
     mod_name = reduce (lambda x,y: x+y, map(lambda x: x.capitalize(), name.split('_')))
 
@@ -18,8 +18,8 @@ def module_obj_factory (name, cfg, prefix):
     src = "mod_obj = mod.Module%s(cfg, prefix)" % (mod_name)
     exec(src)
 
-    return mod_obj
+    # Add properties
+    for prop in kwargs:
+        mod_obj.__dict__[prop] = kwargs[prop]
 
-if __name__ == "__main__":
-    mod_obj = module_obj_factory("file", None)
-    print mod_obj.Render()
+    return mod_obj

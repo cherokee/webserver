@@ -32,6 +32,7 @@ class PageEntry (PageMenu, FormHelper):
         self._prio        = temp[3]        
         self._priorities  = VServerEntries (self._host, self._cfg)
         self._entry       = self._priorities[self._prio]
+        self._update_url  = '/vserver/%s/prio/%s/update' % (self._host, self._prio)
 
         # Entry not found
         if not self._entry:
@@ -46,7 +47,7 @@ class PageEntry (PageMenu, FormHelper):
                 return self._op_default (uri)
 
             parts = uri.split('/')
-            prio_url = '/vserver/' + reduce (lambda x,y: '%s/%s'%(x,y), parts[:-1])
+            prio_url = '/vserver/' + '/'.join(parts[:-1])
             return prio_url
 
         return self._op_default (uri)
@@ -91,7 +92,8 @@ class PageEntry (PageMenu, FormHelper):
         tmp = ''
 
         table = Table(2)
-        e = self.AddTableOptions_w_ModuleProperties (table, 'Handler', '%s!handler'%(pre), HANDLERS)
+        e = self.AddTableOptions_w_ModuleProperties (table, 'Handler', '%s!handler'%(pre),
+                                                     HANDLERS, update_url=self._update_url)
         self.AddTableEntry (table, 'Document Root', '%s!document_root'%(pre))
 
         tmp += str(table)
@@ -103,7 +105,7 @@ class PageEntry (PageMenu, FormHelper):
         tmp += self._render_auth ()
 
         txt += self.Indent(tmp)
-        form = Form ('/vserver/%s/prio/%s/update' % (self._host, self._prio))
+        form = Form (self._update_url)
         return form.Render(txt)
 
     def _render_handler_properties (self):

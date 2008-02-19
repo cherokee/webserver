@@ -76,35 +76,33 @@ class ModuleRoundRobin (Module, FormHelper):
             i += 1
 
     def _render_envs (self, cfg_key):
-        """
-        vserver!default!extensions!php!handler!balancer!entry1!env!PHP_FCGI_MAX_REQUESTS = 100
-        vserver!default!extensions!php!handler!balancer!entry1!env!PHP_FCGI_CHILDREN = 2
-        """
         txt = ''
         cfg = self._cfg[cfg_key]
 
         # Current environment
         if cfg and cfg.has_child():
-            table = Table(3)
+            table = Table(4)
             for env in cfg:
+                host        = cfg_key.split('!')[1]
                 cfg_key_env = "%s!%s" % (cfg_key, env)
 
-                js = "post_del_key('/%s/update', '%s');" % (self._id, cfg_key)
-                print "!!!JS", js
+                js = "post_del_key('%s', '%s');" % (self.update_url, cfg_key_env)
                 button = self.InstanceButton ('Del', onClick=js)
-                self.AddTableEntry (table, env, cfg_key_env, (button,))
+                table += (env, '=', self._cfg[cfg_key_env].value, button)
             txt += str(table)
 
         # Add new environment variable
-        en_env = self.InstanceEntry('balancer_new_env', 'text')
+        en_env = self.InstanceEntry('balancer_new_env',     'text')
         en_val = self.InstanceEntry('balancer_new_env_val', 'text')
-        js     = "" # "post_del_key('/icons/update', '%s');" % (cfg_key)
-        button = self.InstanceButton ('Add', onClick=js)
+        hidden = self.HiddenInput  ('balancer_new_env_key', cfg_key)
+
+        js     = "post_del_key('%s', '%s');" % (self.update_url, cfg_key)
+        button = self.InstanceButton ('Add', onClick=js) 
 
         table = Table(3,1)
         table += ('Variable', 'Value', '')
         table += (en_env, en_val, button)
-        txt += str(table)
+        txt += str(table) + hidden
 
         return txt
 
@@ -114,15 +112,38 @@ class ModuleRoundRobin (Module, FormHelper):
            'new_interpreter' in post:
             num = self.__find_name()
 
-        if post['new_host']:
+        # New host
+        if 'new_host' in post and post['new_host'][0]:
             key = "%s!%s!host" % (self._prefix, num)
             self._cfg[key] = post['new_host'][0]
             del(post['new_host'])
 
-        if post['new_interpreter']:
+        if 'new_interpreter' in post and post['new_interpreter'][0]:
             key = "%s!%s!interpreter" % (self._prefix, num)
             self._cfg[key] = post['new_interpreter'][0]
             del(post['new_interpreter'])
+
+        # New environment variable
+        env = None
+        val = None
+        key = None
+        if 'balancer_new_env' in post and \
+            post['balancer_new_env'][0]:
+            env = post['balancer_new_env'][0]
+            del(post['balancer_new_env'])
+            
+        if 'balancer_new_env_val' in post and \
+            post['balancer_new_env_val'][0]:
+            val = post['balancer_new_env_val'][0]
+            del(post['balancer_new_env_val'])
+
+        if 'balancer_new_env_key' in post and \
+            post['balancer_new_env_key'][0]:
+            key = post['balancer_new_env_key'][0]
+            del(post['balancer_new_env_key'])
+            
+        if env and val and key:
+            self._cfg["%s!%s"%(key, env)] = val
 
         # Everything else
         self.ApplyChanges ([], post)
