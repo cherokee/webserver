@@ -28,6 +28,7 @@ PageMain.py \
 PageMime.py \
 PageVServer.py \
 PageVServers.py \
+PageEncoders.py \
 PageError.py \
 Table.py \
 Theme.py \
@@ -67,7 +68,9 @@ main.help.html \
 main.template.html \
 mime.help.html \
 vserver.help.html \
-vservers.help.html
+vservers.help.html \
+encoder.help.html
+
 
 EXTRA_DIST = \
 $(PY_PRE) \

@@ -52,3 +52,7 @@ BALANCER_TYPES = [
     ('interpreter', 'Local interpreter'),
     ('host',        'Remote host')
 ]
+
+ENCODERS = [
+    ('gzip',     'GZip')
+]
