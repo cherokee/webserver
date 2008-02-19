@@ -125,6 +125,8 @@ class PageIcon (PageMenu, FormHelper):
 
         tmp = ''
         if icons and icons.has_child():
+            tmp += "<h3>File list</h3>"
+
             table = Table(4, 1)
             table += ('', 'Match', 'File')
 
@@ -136,7 +138,7 @@ class PageIcon (PageMenu, FormHelper):
                 button = self.InstanceButton ('Del', onClick=js)
                 table += (im, match, op, button)
 
-            tmp += str(table)
+            tmp += self.Indent(table)
 
         # New file
         fo1 = Form ("/%s/add_file" % (self._id), add_submit=False)
@@ -146,7 +148,7 @@ class PageIcon (PageMenu, FormHelper):
         ta1 += ('', 'File', 'Icon', '')
         ta1 += (im1, en1, op1, SUBMIT_ADD)
         tmp += "<h3>Add file</h3>"
-        tmp += fo1.Render(str(ta1))
+        tmp += fo1.Render(self.Indent(ta1))
 
         tabs += [('Files', tmp)]
 
@@ -156,6 +158,8 @@ class PageIcon (PageMenu, FormHelper):
 
         tmp = ''
         if icons and icons.has_child():
+            tmp += "<h3>Extension list</h3>"
+
             table = Table(4, 1)
             table += ('', 'File', 'Extensions', '')
 
@@ -168,7 +172,7 @@ class PageIcon (PageMenu, FormHelper):
                 button = self.InstanceButton ('Del', onClick=js)
                 table += (im, icon, entry, button)
 
-            tmp += str(table)
+            tmp += self.Indent(table)
 
         # New suffix
         fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False)
@@ -179,7 +183,7 @@ class PageIcon (PageMenu, FormHelper):
         ta1 += ('', 'Icon', 'Extensions', '')
         ta1 += (im1, op1, en2, SUBMIT_ADD)
         tmp += "<h3>Add suffix</h3>"
-        tmp += fo1.Render(str(ta1))
+        tmp += fo1.Render(self.Indent(ta1))
 
         tabs += [('Extensions', tmp)]
 
