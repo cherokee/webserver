@@ -41,7 +41,9 @@ class PageGeneral (PageMenu, FormHelper):
         return "/%s" % (self._id)
 
     def _render_content (self):
-        txt = "<h2>Networking</h2>"
+        txt = "<h1>General Settings</h1>"
+
+        txt += "<h2>Networking</h2>"
         table = Table(2)
         self.AddTableEntry    (table, 'Port',     'server!port')
         self.AddTableEntry    (table, 'Port TLS', 'server!port_tls')

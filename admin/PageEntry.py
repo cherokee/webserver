@@ -88,20 +88,22 @@ class PageEntry (PageMenu, FormHelper):
     def _render_guts (self):
         pre = self._conf_prefix
         txt = '<h1>%s</h1>' % (self._get_title (html=True))
+        tmp = ''
 
         table = Table(2)
         e = self.AddTableOptions_w_ModuleProperties (table, 'Handler', '%s!handler'%(pre), HANDLERS)
         self.AddTableEntry (table, 'Document Root', '%s!document_root'%(pre))
         self.AddTableCheckbox (table, 'Only Secure', '%s!only_secure'%(pre), False)
 
-        txt += str(table)
+        tmp += str(table)
 
-        txt += '<h2>Handler properties</h2>'
-        txt += e
+        tmp += '<h2>Handler properties</h2>'
+        tmp += e
 
-        txt += '<h2>Authentication</h2>'
-        txt += self._render_auth ()
+        tmp += '<h2>Authentication</h2>'
+        tmp += self._render_auth ()
 
+        txt += self.Indent(tmp)
         form = Form ('/vserver/%s/prio/%s/update' % (self._host, self._prio))
         return form.Render(txt)
 

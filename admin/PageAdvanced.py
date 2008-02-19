@@ -54,7 +54,9 @@ class PageAdvanced (PageMenu, FormHelper):
         return "/%s" % (self._id)
 
     def _render_content (self):
-        txt = "<h2>System tweaking</h2>"
+        txt = "<h1>Advanced configuration</h1>"
+
+        txt += "<h2>System tweaking</h2>"
         table = Table(2)
         self.AddTableOptions  (table, 'Thread Policy',          'server!thread_policy', THREAD_POLICY)
         self.AddTableEntry    (table, 'File descriptor number', 'server!max_fds')

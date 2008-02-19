@@ -150,7 +150,7 @@ class FormHelper (WebComponent):
         for name, desc in options:
             if not name:
                 continue
-            props_txt  += '<div id="%s%s">%s</div>\n' % (props_prefix, name, props[name])
+            props_txt += '<div id="%s%s">%s</div>\n' % (props_prefix, name, props[name])
 
         # Show active property
         update = '<script type="text/javascript">\n' + \

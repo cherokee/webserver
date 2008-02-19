@@ -101,7 +101,9 @@ class PageIcon (PageMenu, FormHelper):
     def _render_icon_list (self):        
         # Include its JavaScript file
         #
-        txt = '<script src="/static/js/icons.js" type="text/javascript"></script>'
+        txt  = '<script src="/static/js/icons.js" type="text/javascript"></script>'
+        txt += "<h1>Icons configuration</h1>"
+
         tabs = []
         
         # Special icons

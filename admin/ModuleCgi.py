@@ -17,14 +17,16 @@ class ModuleCgiBase (Module, FormHelper):
         FormHelper.__init__ (self, name, cfg)
 
     def _op_render (self):
+        txt   = ""
         table = Table(2)
         self.AddTableEntry    (table, "Script Alias",  "%s!script_alias" % (self._prefix))
         self.AddTableEntry    (table, "Change to UID", "%s!change_user"  % (self._prefix))
         self.AddTableCheckbox (table, "Error handler", "%s!error_handler"% (self._prefix), False)
         self.AddTableCheckbox (table, "Check file",    "%s!check_file"   % (self._prefix), True)
         self.AddTableCheckbox (table, "Pass Request Headers", "%s!pass_req_headers" % (self._prefix), False)
+        txt += str(table)
 
-        return str(table)
+        return txt
 
     def _op_apply_changes (self, uri, post):
         checkboxes = ['error_handler', 'check_file', 'pass_req_headers']

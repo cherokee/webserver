@@ -10,6 +10,8 @@ class ModuleRoundRobin (Module, FormHelper):
         FormHelper.__init__ (self, 'round_robin', cfg)
 
     def _op_render (self):
+        txt = ''
+
         try:
             cfg = self._cfg[self._prefix]
             hosts = filter (lambda x: x != 'type', cfg)
@@ -28,14 +30,20 @@ class ModuleRoundRobin (Module, FormHelper):
         t1 += (en1, SUBMIT_ADD)
 
         # Render tables: as Interpreters
-        t2 = Table(3,1)
-        t2 += ('Host', 'Interpreter', '')
+        t2_txt = ''
         for host in hosts:
             pre = '%s!%s' % (self._prefix, host)
             e_host = self.InstanceEntry('%s!host'%(pre), 'text')
             e_inte = self.InstanceEntry('%s!interpreter'%(pre), 'text')
-            t2 += (e_host, e_inte, SUBMIT_DEL)
+            e_envs = self._render_envs('%s!env'%(pre))
 
+            t2 = Table(2)
+            t2 += ('Host', e_host)
+            t2 += ('Interpreter', e_inte)
+            t2 += ('Environment', e_envs)
+            t2_txt += str(t2)
+
+        t2 = Table(3)
         e_host = self.InstanceEntry('new_host', 'text')
         e_inte = self.InstanceEntry('new_interpreter', 'text')
         t2 += (e_host, e_inte, SUBMIT_ADD)
@@ -43,12 +51,14 @@ class ModuleRoundRobin (Module, FormHelper):
         # General selector
         props = {}
         props ['host']        = str(t1)
-        props ['interpreter'] = str(t2)
+        props ['interpreter'] = t2_txt
 
         table = Table(2)
         e = self.AddTableOptions_w_Properties (table, "Information sources", 
                                                "%s!type"%(self._prefix), BALANCER_TYPES, props)
-        return str(table) + e
+        txt += str(table) + e
+
+        return txt
 
     def __find_name (self):
         i = 1
@@ -58,6 +68,39 @@ class ModuleRoundRobin (Module, FormHelper):
             if not tmp: 
                 return str(i)
             i += 1
+
+    def _render_envs (self, cfg_key):
+        """
+        vserver!default!extensions!php!handler!balancer!entry1!env!PHP_FCGI_MAX_REQUESTS = 100
+        vserver!default!extensions!php!handler!balancer!entry1!env!PHP_FCGI_CHILDREN = 2
+        """
+        txt = ''
+        cfg = self._cfg[cfg_key]
+
+        # Current environment
+        if cfg and cfg.has_child():
+            table = Table(3)
+            for env in cfg:
+                cfg_key_env = "%s!%s" % (cfg_key, env)
+
+                js = "post_del_key('/%s/update', '%s');" % (self._id, cfg_key)
+                print "!!!JS", js
+                button = self.InstanceButton ('Del', onClick=js)
+                self.AddTableEntry (table, env, cfg_key_env, (button,))
+            txt += str(table)
+
+        # Add new environment variable
+        en_env = self.InstanceEntry('balancer_new_env', 'text')
+        en_val = self.InstanceEntry('balancer_new_env_val', 'text')
+        js     = "" # "post_del_key('/icons/update', '%s');" % (cfg_key)
+        button = self.InstanceButton ('Add', onClick=js)
+
+        table = Table(3,1)
+        table += ('Variable', 'Value', '')
+        table += (en_env, en_val, button)
+        txt += str(table)
+
+        return txt
 
     def _op_apply_changes (self, uri, post):
         # Add new 'Host' or 'Interpreter'
