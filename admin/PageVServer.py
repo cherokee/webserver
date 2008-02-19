@@ -31,6 +31,13 @@ class PageVServer (PageMenu, FormHelper):
 
         host = uri.split('/')[1]
         default_render = False
+        
+        # Check whether host exists
+        cfg = self._cfg['vserver!%s'%(host)]
+        if not cfg:
+            return '/vserver/'
+        if not cfg.has_child():
+            return '/vserver/'
 
         if uri.endswith('/update'):
             # It's adding a new entry
