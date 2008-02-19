@@ -214,6 +214,16 @@ table td label {
     background-image: url(../images/expanded.gif);
 }
 
+
+.tab dt:hover {
+    background:#efefef url(../images/collapsed.gif) no-repeat scroll 0px 4px;
+}      
+	  
+.tab dt.selected:hover {
+    background:#efefef url(../images/expanded.gif) no-repeat scroll 0px 4px; 
+}
+	       
+	       
 a.button {
     background: transparent url('../images/button-right.png') no-repeat scroll top right;
     color: #486991;
