@@ -237,3 +237,7 @@ a.button:active span {
     background-position: bottom left;
     padding: 6px 0 4px 18px; 
 }
+
+.indented {
+    margin-left: 20px;
+}

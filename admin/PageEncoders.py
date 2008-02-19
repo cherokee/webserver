@@ -58,30 +58,31 @@ class PageEncoders (PageMenu, FormHelper):
         raise 'Unknown method'
 
     def _render_encoder_list (self):
+        txt     = ''
         cfg_key = 'server!encoder'
         cfg     = self._cfg[cfg_key]
 
-        txt  = "<h1>Information encoding</h1>"
-        txt += COMMENT
-
+        txt += "<h1>Information encoding</h1>"
+        txt += self.Indent(COMMENT)
+        
         # Current encoders
         if cfg and cfg.has_child():
             txt += "<h2>Encoders</h2>"
 
-            table = Table(2)
+            txt2  = ''
             for encoder in cfg:
                 cfg_key = '%s!%s'%(cfg_key, encoder)
                 mlist = MatchingList (self._cfg, cfg_key)
-                txt += "<h3>%s</h3>" % (encoder)
-                txt += mlist._op_render()
-
+                txt2 += "<h3>%s</h3>" % (encoder)
+                txt2 += mlist._op_render()
                 js = "post_del_key('/%s/update', '%s');" % (self._id, cfg_key)
                 button = self.InstanceButton ('Del', onClick=js)
+                txt2 += button
+                txt2 += "<hr />"
 
-                txt += button
-                txt += "<hr />"
-            txt += str(table)
-
+            if txt2.endswith("<hr />"):
+                txt2 = txt2[:-6]
+            txt += self.Indent(txt2)
         # Add new encoder
         if not cfg:
             encoders_left = ENCODERS
@@ -102,7 +103,7 @@ class PageEncoders (PageMenu, FormHelper):
             bu1 = self.InstanceButton ("Add", onClick=js)
 
             table += (ops, bu1)
-            txt += str(table)
+            txt += self.Indent(str(table))
 
         return txt
 
