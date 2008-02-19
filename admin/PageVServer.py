@@ -16,7 +16,8 @@ DATA_VALIDATION = [
     ("vserver!.*?!logger!error!filename",    validations.parent_is_dir),
     ("vserver!.*?!logger!access!command",    validations.is_local_file_exists),
     ("vserver!.*?!logger!error!command",     validations.is_local_file_exists),
-    ("vserver!.*?!(directory|extensions|request)!.*?!priority", validations.is_positive_int)
+    ("vserver!.*?!(directory|extensions|request)!.*?!priority", validations.is_positive_int),
+    ("add_new_priority",                     validations.is_positive_int)
 ]
 
 class PageVServer (PageMenu, FormHelper):
@@ -35,7 +36,10 @@ class PageVServer (PageMenu, FormHelper):
             # It's adding a new entry
             if 'add_new_entry' in post and \
                 len (post['add_new_entry'][0]) > 0:
-                return self._op_add_new_entry (host, post)
+                self._op_add_new_entry (host, post)
+                if self.has_errors():
+                    self._priorities = VServerEntries (host, self._cfg)
+                    return self._op_render_vserver_details (host, uri[len(host)+1:])
             
             # It's updating properties
             self._op_apply_changes (host, post)
@@ -55,6 +59,10 @@ class PageVServer (PageMenu, FormHelper):
             return self._op_render_vserver_details (host, uri[len(host)+1:])
 
     def _op_add_new_entry (self, host, post):
+        self._ValidateChanges (post, DATA_VALIDATION)
+        if self.has_errors():
+            return
+
         entry    = post['add_new_entry'][0]
         type     = post['add_new_type'][0]
         handler  = post['add_new_handler'][0]
