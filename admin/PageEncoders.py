@@ -8,7 +8,11 @@ from consts import *
 DATA_VALIDATION = [
 ]
 
-# server!encoder!gzip!allow = html,html,txt,css,js
+COMMENT = """
+<p>In this section you can configure the server encoders, which
+basically means that you can define where you want it to compress the
+information being sent with GZip.</p>
+"""
 
 class MatchingList (FormHelper):
     OPTIONS = [
@@ -54,9 +58,11 @@ class PageEncoders (PageMenu, FormHelper):
         raise 'Unknown method'
 
     def _render_encoder_list (self):
-        txt     = ''
         cfg_key = 'server!encoder'
         cfg     = self._cfg[cfg_key]
+
+        txt  = "<h1>Information encoding</h1>"
+        txt += COMMENT
 
         # Current encoders
         if cfg and cfg.has_child():

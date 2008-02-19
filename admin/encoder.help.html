@@ -1,2 +1,14 @@
-Encoders help: to be written
+<p>The server encoders are the modules that transform the information
+that the server, in one way or the other, generates (reading the hard
+drive, relaying on a FastCGI application server, executing a CGI,
+etc).</p>
+
+<p>The most important encoders are the compressors. They deflate the
+information before it is sent to the client, and therefore speeds up
+the request response (there is less information to be sent).</p>
+
+<p>At this time only the most widespread encoder is supported: GZip.
+We suggest to use it only with the text base files; trying to encode
+images or archives will only increase CPU load for nothing.</p>
+
 
