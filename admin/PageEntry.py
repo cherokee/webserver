@@ -9,7 +9,8 @@ from Module import *
 from consts import *
 
 DATA_VALIDATION = [
-    ("vserver!.*?!(directory|extensions|request)!.*?!document_root", validations.is_local_dir_exists)
+    ("vserver!.*?!(directory|extensions|request)!.*?!document_root", validations.is_local_dir_exists),
+    ("vserver!.*?!(directory|extensions|request)!.*?!allow_from",    validations.is_ip_or_netmask_list)
 ]
 
 class PageEntry (PageMenu, FormHelper):
@@ -109,7 +110,7 @@ class PageEntry (PageMenu, FormHelper):
         tmp += e
 
         tmp += '<h2>Security</h2>'
-        tmp += self._render_auth ()
+        tmp += self._render_security ()
 
         txt += self.Indent(tmp)
         form = Form (self.submit_url)
@@ -125,12 +126,13 @@ class PageEntry (PageMenu, FormHelper):
             return "Couldn't load the properties module"
         return props._op_render()
 
-    def _render_auth (self):
+    def _render_security (self):
         pre = self._conf_prefix
 
         txt   = ""
         table = Table(2)
         self.AddTableCheckbox (table, 'Only Secure', '%s!only_secure'%(pre), False)
+        self.AddTableEntry    (table, 'Allow From',  '%s!allow_from' %(pre))
         e = self.AddTableOptions_w_ModuleProperties (table, 'Authentication', 
                                                      '%s!auth'%(pre), VALIDATORS)
         txt += str(table) + e

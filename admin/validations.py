@@ -41,6 +41,11 @@ def is_ip (value):
         return is_ipv6(value)
     return is_ipv4(value)
 
+def is_netmask (value):
+    if ':' in value:
+        return is_netmask_ipv6(value)
+    return is_netmask_ipv4(value)
+
 def is_ipv4 (value):
     parts = value.split('.')
     if len(parts) != 4:
@@ -98,3 +103,66 @@ def is_safe_id (value):
            v not in "_-":
            raise ValueError, 'Invalid character '+v
     return value
+
+def int2bin(n, count=24):
+    """returns the binary of integer n, using count number of digits"""
+    return "".join([str((n >> y) & 1) for y in range(count-1, -1, -1)])
+
+def is_netmask_ipv4 (value):
+    bits = None
+    try:
+        bits = int(value)
+        if bits > 0 and bits <= 32:
+            return value
+    except:
+        pass
+
+    if not "." in value:
+        raise ValueError, 'Neither a number or an IPv4'
+
+    is_ipv4 (value)
+
+    bin = ''
+    for part in value.split("."):
+        bin += int2bin(int(part), 8)
+        
+    zeros_began = False
+    for d in bin:
+        if d == '1' and zeros_began:
+            raise ValueError, 'Invalid mask'
+        if d == '0' and not zeros_began:
+            zeros_began = True
+                
+    return value
+
+def is_netmask_ipv6 (value):
+    bits = None
+    try:
+        bits = int(value)
+        if bits > 0 and bits <= 128:
+            return value
+    except:
+        pass
+
+    # TODO
+    return value
+
+def is_ip_or_netmask (value):
+    if not '/' in value:
+        return is_ip (value)
+
+    parts = value.split('/')
+    if len(parts) != 2:
+        raise ValueError, 'Malformed entry (netmask)'
+    
+    ip = is_ip (parts[0])
+    nm = is_netmask (parts[1])
+
+    return "%s/%s" % (ip, nm)
+
+def is_ip_or_netmask_list (value):
+    re = []
+    for entry in value.split(','):
+        e = entry.strip()
+        re.append(is_ip_or_netmask(e))
+    return ','.join(re)
