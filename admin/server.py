@@ -3,7 +3,6 @@
 import os
 import re
 import sys
-import cgi
 import stat
 import time
 import pyscgi
@@ -13,6 +12,7 @@ import signal
 # Application modules
 #
 from config import *
+from Post import *
 from PageMain import *
 from PageGeneral import *
 from PageIcon import *
@@ -110,8 +110,10 @@ class Handler(pyscgi.SCGIHandler):
 
         # Handle post
         self.handle_post()
-        post = cgi.parse_qs(self.post, keep_blank_values=1)
+        post = Post (self.post)
         
+        print "~~~~", uri, post
+
         # Execute page
         if page:
             body = page.HandleRequest(uri, post)

@@ -19,6 +19,7 @@ adminpy_DATA = \
 consts.py \
 Entry.py \
 Form.py \
+Post.py \
 Page.py \
 PageAjaxUpdate.py \
 PageAdvanced.py \
