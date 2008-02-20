@@ -148,7 +148,7 @@ class FormHelper (WebComponent):
         assert (self.submit_url)
 
         # The Table entry itself
-        js = "options_changed('%s','%s');" % (self.submit_url, cfg_key)
+        js = "options_changed('/ajax/update','%s');" % (cfg_key)
 
         value = self.AddTableOptions (table, title, cfg_key, options,
                                       onChange=js)

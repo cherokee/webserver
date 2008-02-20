@@ -20,6 +20,7 @@ consts.py \
 Entry.py \
 Form.py \
 Page.py \
+PageAjaxUpdate.py \
 PageAdvanced.py \
 PageEntry.py \
 PageGeneral.py \

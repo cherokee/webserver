@@ -23,6 +23,7 @@ from PageEncoders import *
 from PageEntry import *
 from PageAdvanced import *
 from PageError import *
+from PageAjaxUpdate import *
 from CherokeeManagement import *
 
 # Constants
@@ -48,7 +49,7 @@ class Handler(pyscgi.SCGIHandler):
         body    = ""
         status  = "200 OK"
         uri     = self.env['REQUEST_URI']
-
+        
         # Ensure that the configuration file is writable
         if not cfg.has_tree():
             page = PageError (cfg, PageError.CONFIG_NOT_FOUND)
@@ -100,6 +101,8 @@ class Handler(pyscgi.SCGIHandler):
             manager.stop()
             cherokee_management_reset()
             body = "/"
+        elif uri.startswith('/ajax/update'):
+            page = PageAjaxUpdate (cfg)
         elif uri == '/':
             page = PageMain(cfg)
         else:
