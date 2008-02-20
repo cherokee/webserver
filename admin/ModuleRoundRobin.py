@@ -31,14 +31,16 @@ class ModuleRoundRobin (Module, FormHelper):
             for host in hosts:
                 pre = '%s!%s' % (self._prefix, host)
                 e_host = self.InstanceEntry('%s!host'%(pre), 'text')
-                t1 += (e_host, SUBMIT_DEL)
-            t1_txt = str(t1)
+                js = "post_del_key('%s', '%s');" % (self.submit_url, pre)
+                button = self.InstanceButton ('Del', onClick=js)
+                t1 += (e_host, button)
+            t1_txt += str(t1)
                 
-        t1 = Table(2,1)
         en1 = self.InstanceEntry('new_host', 'text')
+        t1  = Table(2,1)
         t1 += ('New host', '')
         t1 += (en1, SUBMIT_ADD)
-        t1_txt = str(t1)
+        t1_txt += str(t1)
 
         # Render tables: as Interpreters
         t2_txt = ''
@@ -122,41 +124,26 @@ class ModuleRoundRobin (Module, FormHelper):
         return txt
 
     def _op_apply_changes (self, uri, post):
-        # Add new 'Host' or 'Interpreter'
-        if 'new_host' in post or \
-           'new_interpreter' in post:
+        new_host        = post.pop('new_host')
+        new_interpreter = post.pop('new_interpreter')
+
+        # Addind new host/interpreter
+        if new_host or new_interpreter:
             num = self.__find_name()
 
-        # New host
-        if 'new_host' in post and post['new_host'][0]:
-            key = "%s!%s!host" % (self._prefix, num)
-            self._cfg[key] = post['new_host'][0]
-            del(post['new_host'])
-
-        if 'new_interpreter' in post and post['new_interpreter'][0]:
-            key = "%s!%s!interpreter" % (self._prefix, num)
-            self._cfg[key] = post['new_interpreter'][0]
-            del(post['new_interpreter'])
-
+            if new_host:
+                key = "%s!%s!host" % (self._prefix, num)
+                self._cfg[key] = new_host
+        
+            if new_interpreter:
+                key = "%s!%s!interpreter" % (self._prefix, num)
+                self._cfg[key] = new_interpreter
+        
         # New environment variable
-        env = None
-        val = None
-        key = None
-        if 'balancer_new_env' in post and \
-            post['balancer_new_env'][0]:
-            env = post['balancer_new_env'][0]
-            del(post['balancer_new_env'])
-            
-        if 'balancer_new_env_val' in post and \
-            post['balancer_new_env_val'][0]:
-            val = post['balancer_new_env_val'][0]
-            del(post['balancer_new_env_val'])
-
-        if 'balancer_new_env_key' in post and \
-            post['balancer_new_env_key'][0]:
-            key = post['balancer_new_env_key'][0]
-            del(post['balancer_new_env_key'])
-            
+        env = post.pop('balancer_new_env')
+        val = post.pop('balancer_new_env_val')
+        key = post.pop('balancer_new_env_key')
+                    
         if env and val and key:
             self._cfg["%s!%s"%(key, env)] = val
 

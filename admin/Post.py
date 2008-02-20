@@ -12,7 +12,7 @@ class Post:
         if not len(vals) > 0:
             return None
 
-        return vals
+        return vals[0]
 
     def get_val (self, key):
         tmp = self._smart_chooser(key)

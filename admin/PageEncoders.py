@@ -112,11 +112,7 @@ class PageEncoders (PageMenu, FormHelper):
         return "/%s" % (self._id)
     
     def _op_apply_add_encoder (self, post):
-        try:
-            encoder = post['new_encoder'][0]
-        except:
-            return "/%s" % (self._id)
-
+        encoder = post.get_val('new_encoder')
         if not encoder:
             return "/%s" % (self._id)
 

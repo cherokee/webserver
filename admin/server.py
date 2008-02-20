@@ -112,8 +112,6 @@ class Handler(pyscgi.SCGIHandler):
         self.handle_post()
         post = Post (self.post)
         
-        print "~~~~", uri, post
-
         # Execute page
         if page:
             body = page.HandleRequest(uri, post)
