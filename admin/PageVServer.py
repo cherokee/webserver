@@ -175,8 +175,8 @@ class PageVServer (PageMenu, FormHelper):
 
     def _render_rules (self, host, dirs_cfg, exts_cfg, reqs_cfg):
         txt    = ''
-        table  = Table(4,1)
-        table += ('', 'Type', 'Handler', 'Priority')
+        table  = Table(5,1)
+        table += ('', 'Type', 'Handler', 'Priority', '')
         
         # Rule list
         for rule in self._priorities:
@@ -186,7 +186,11 @@ class PageVServer (PageMenu, FormHelper):
             link = '<a href="/vserver/%s/prio/%s">%s</a>' % (host, prio, name)
             e1   = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
             e2   = self.InstanceEntry ('%s!priority' % (pre), 'text', value=prio)
-            table += (link, type, e1, e2)
+
+            js = "post_del_key('%s', '%s');" % (self.submit_url, pre)
+            button = self.InstanceButton ('Del', onClick=js)
+
+            table += (link, type, e1, e2, button)
         txt += str(table)
         return txt
 
