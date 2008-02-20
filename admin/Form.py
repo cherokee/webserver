@@ -178,7 +178,7 @@ class FormHelper (WebComponent):
 
         return self.AddTableOptions_w_Properties (table, title, cfg_key, options, props)
 
-    def AddTableCheckbox (self, table, title, cfg_key, default=None):
+    def InstanceCheckbox (self, cfg_key, default=None):
         try:
             tmp = self._cfg[cfg_key].value.lower()
             if tmp in ["on", "1", "true"]: 
@@ -199,7 +199,10 @@ class FormHelper (WebComponent):
                 entry = Entry (cfg_key, 'checkbox')
             else:
                 entry = Entry (cfg_key, 'checkbox')
+        return entry
 
+    def AddTableCheckbox (self, table, title, cfg_key, default=None):
+        entry = self.InstanceCheckbox (cfg_key, default)
         label = self.Label(title, cfg_key);
         table += (label, entry)
 

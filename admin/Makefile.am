@@ -37,6 +37,7 @@ Module.py \
 ModuleFile.py \
 ModuleDirlist.py \
 ModuleCommon.py \
+ModuleRedir.py \
 ModuleServerInfo.py \
 ModuleCgi.py \
 ModuleFcgi.py \

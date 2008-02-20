@@ -96,7 +96,7 @@ class ModuleRoundRobin (Module, FormHelper):
         en_val = self.InstanceEntry('balancer_new_env_val', 'text')
         hidden = self.HiddenInput  ('balancer_new_env_key', cfg_key)
 
-        js     = "post_del_key('%s', '%s');" % (self.update_url, cfg_key)
+        js     = "post_add_entry_key('%s', '%s');" % (self.update_url, cfg_key)
         button = self.InstanceButton ('Add', onClick=js) 
 
         table = Table(3,1)

@@ -8,6 +8,7 @@ HANDLERS = [
     ('common',      'List & Send'),
     ('file',        'Static content'),
     ('dirlist',     'Only listing'),
+    ('redir',       'Redirection'),
     ('cgi',         'CGI'),
     ('fcgi',        'FastCGI'),
     ('scgi',        'SCGI'),
