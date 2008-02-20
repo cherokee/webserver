@@ -16,8 +16,8 @@ SUBMIT_BUTTON = """
 
 class WebComponent:
     def __init__ (self, id, cfg):
-        self._id  = id
-        self._cfg = cfg
+        self._id         = id
+        self._cfg        = cfg
 
     def _op_handler (self, ruri, post):
         raise "Should have been overridden"
@@ -38,11 +38,10 @@ class WebComponent:
         return self._op_handler(ruri, post)
 
 class Form:
-    def __init__ (self, action, method='post', add_submit=True, submit_label=None):
+    def __init__ (self, action, method='post', add_submit=True):
         self._action       = action
         self._method       = method
         self._add_submit   = add_submit
-        self._submit_label = submit_label
         
     def Render (self, content=''):
         keys = {'submit':       '',
@@ -53,8 +52,6 @@ class Form:
                 
         if self._add_submit:
             keys['submit'] = SUBMIT_BUTTON
-        if self._submit_label:
-            keys['submit_props'] = 'value="%s" '%(self._submit_label)
 
         render = FORM_TEMPLATE
         while '%(' in render:
@@ -65,8 +62,13 @@ class Form:
 class FormHelper (WebComponent):
     def __init__ (self, id, cfg):
         WebComponent.__init__ (self, id, cfg)
-        self.errors = {}
+
+        self.errors     = {}
+        self.submit_url = None
     
+    def set_submit_url (self, url):
+        self.submit_url = url
+
     def Indent (self, content):
         return '<div class="indented">%s</div>' %(content)
         
@@ -129,11 +131,6 @@ class FormHelper (WebComponent):
 
         return '<input type="button" value="%s" %s/>' % (name, extra)
 
-    def AddTableEntryRemove (self, table, title, cfg_key):
-        form = Form ("/%s/update" % (self._id), submit_label="Del")
-        button = form.Render ('<input type="hidden" name="%s" value="" />' % (cfg_key))
-        self.AddTableEntry (table, title, cfg_key, (button,))
-
     def AddTableOptions (self, table, title, cfg_key, options, *args, **kwargs):
         try:
             value = self._cfg[cfg_key].value
@@ -146,11 +143,15 @@ class FormHelper (WebComponent):
         table += (label, ops)
         return value
 
-    def AddTableOptions_w_Properties (self, table, title, cfg_key, options, 
+    def AddTableOptions_w_Properties (self, table, title, cfg_key, options,
                                       props, props_prefix="prop_"):
+        assert (self.submit_url)
+
         # The Table entry itself
-        value = self.AddTableOptions (table, title, cfg_key, options, id="%s" % (cfg_key), 
-                                      onChange="options_active_prop('%s','%s');" % (cfg_key, props_prefix))
+        js = "options_changed('%s','%s');" % (self.submit_url, cfg_key)
+
+        value = self.AddTableOptions (table, title, cfg_key, options,
+                                      onChange=js)
         # The entries that come after
         props_txt  = ''
         for name, desc in options:
@@ -165,12 +166,16 @@ class FormHelper (WebComponent):
         return props_txt + update
 
     def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, options, **kwargs):
+        assert (self.submit_url)
+
+        # Instance all the modules
         props = {}
         for name, desc in options:
             if not name:
                 continue
             try:
-                props_widget = module_obj_factory (name, self._cfg, cfg_key, **kwargs)
+                props_widget = module_obj_factory (name, self._cfg, cfg_key, 
+                                                   self.submit_url, **kwargs)
                 render = props_widget._op_render()
             except IOError:
                 render = "Couldn't load the properties module: %s" % (name)
@@ -266,7 +271,7 @@ class FormHelper (WebComponent):
         return self.ApplyChanges (checkboxes_pre, post, validation)
 
     def CleanUp_conf_props (self, cfg_key, name):
-        module  = module_obj_factory (name, self._cfg, cfg_key)
+        module  = module_obj_factory (name, self._cfg, cfg_key, self.submit_url)
         props   = module.__class__.PROPERTIES
 
         to_be_deleted = []

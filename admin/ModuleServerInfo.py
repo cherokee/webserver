@@ -8,8 +8,8 @@ class ModuleServerInfo (Module, FormHelper):
         'connection_details'
     ]
 
-    def __init__ (self, cfg, prefix):
-        Module.__init__ (self, 'server_info', cfg, prefix)
+    def __init__ (self, cfg, prefix, submit_url):
+        Module.__init__ (self, 'server_info', cfg, prefix, submit_url)
         FormHelper.__init__ (self, 'server_info', cfg)
 
     def _op_render (self):

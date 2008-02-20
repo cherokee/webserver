@@ -2,8 +2,8 @@ from Table import *
 from ModuleAuth import *
 
 class ModulePlain (ModuleAuthBase):
-    def __init__ (self, cfg, prefix):
-        ModuleAuthBase.__init__ (self, cfg, prefix, 'plain')
+    def __init__ (self, cfg, prefix, submit):
+        ModuleAuthBase.__init__ (self, cfg, prefix, 'plain', submit)
 
     def _op_render (self):
         table = Table(2)

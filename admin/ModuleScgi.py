@@ -11,8 +11,8 @@ class ModuleScgi (ModuleCgiBase):
         'balancer'
     ]
 
-    def __init__ (self, cfg, prefix):
-        ModuleCgiBase.__init__ (self, cfg, prefix, 'scgi')
+    def __init__ (self, cfg, prefix, submit):
+        ModuleCgiBase.__init__ (self, cfg, prefix, 'scgi', submit)
 
     def _op_render (self):
         txt = '<h3>General</h3>'
@@ -21,19 +21,18 @@ class ModuleScgi (ModuleCgiBase):
         txt += '<h3>FastCGI specific</h3>'
         table = Table(2)
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddTableOptions_w_ModuleProperties (table, "Balancer", prefix, BALANCERS,
-                                                     update_url=self.update_url)
-
+        e = self.AddTableOptions_w_ModuleProperties (table, "Balancer", prefix, BALANCERS)
         txt += str(table) + e
         return txt
 
     def _op_apply_changes (self, uri, post):
         # Apply balancer changes
         pre  = "%s!balancer" % (self._prefix)
-        name = self._cfg[pre].value
-
-        props = module_obj_factory (name, self._cfg, pre)
-        props._op_apply_changes (uri, post)
+        cfg  = self._cfg[pre]
+        if cfg and cfg.value:
+            name = cfg.value
+            props = module_obj_factory (name, self._cfg, pre, self.submit_url)
+            props._op_apply_changes (uri, post)
         
         # And CGI changes
         return ModuleCgiBase._op_apply_changes (self, uri, post)

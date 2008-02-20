@@ -5,8 +5,8 @@ from validations import *
 from consts import *
 
 class ModuleAuthBase (Module, FormHelper):
-    def __init__ (self, cfg, prefix, name):
-        Module.__init__ (self, name, cfg, prefix)
+    def __init__ (self, cfg, prefix, name, submit):
+        Module.__init__ (self, name, cfg, prefix, submit)
         FormHelper.__init__ (self, name, cfg)
 
     def _op_render (self):

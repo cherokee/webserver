@@ -12,9 +12,9 @@ class ModuleCgiBase (Module, FormHelper):
         'pass_req_headers'
     ]
 
-    def __init__ (self, cfg, prefix, name):
-        Module.__init__ (self, name, cfg, prefix)
+    def __init__ (self, cfg, prefix, name, submit_url):
         FormHelper.__init__ (self, name, cfg)
+        Module.__init__ (self, name, cfg, prefix, submit_url)
 
     def _op_render (self):
         txt   = ""
@@ -34,11 +34,11 @@ class ModuleCgiBase (Module, FormHelper):
 
 
 class ModuleCgi (ModuleCgiBase):
-    def __init__ (self, cfg, prefix):
-        ModuleCgiBase.__init__ (self, cfg, prefix, 'cgi')
+    def __init__ (self, cfg, prefix, submit_url):
+        ModuleCgiBase.__init__ (self, cfg, prefix, 'cgi', submit_url)
 
     def _op_render (self):
         return ModuleCgiBase._op_render (self)
 
     def _op_apply_changes (self, uri, post):
-        return ModuleCgiBase._op_apply_changes (uri, post)
+        return ModuleCgiBase._op_apply_changes (self, uri, post)

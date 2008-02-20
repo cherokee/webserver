@@ -17,8 +17,8 @@ class ModuleDirlist (Module, FormHelper):
         'notice_files'
     ]
 
-    def __init__ (self, cfg, prefix):
-        Module.__init__ (self, 'dirlist', cfg, prefix)
+    def __init__ (self, cfg, prefix, submit_url):
+        Module.__init__ (self, 'dirlist', cfg, prefix, submit_url)
         FormHelper.__init__ (self, 'dirlist', cfg)
 
     def _op_render (self):

@@ -21,7 +21,7 @@ class PageEntry (PageMenu, FormHelper):
     def _op_render (self):
         raise "no"
 
-    def _op_handler (self, uri, post):
+    def _parse_uri (self, uri):
         assert (len(uri) > 1)
         assert ("prio" in uri)
         
@@ -32,8 +32,15 @@ class PageEntry (PageMenu, FormHelper):
         self._prio        = temp[3]        
         self._priorities  = VServerEntries (self._host, self._cfg)
         self._entry       = self._priorities[self._prio]
-        self._update_url  = '/vserver/%s/prio/%s/update' % (self._host, self._prio)
+        
+        # Set the submit URL
+        url = '/vserver/%s/prio/%s/update' % (self._host, self._prio)
+        self.set_submit_url (url)
 
+    def _op_handler (self, uri, post):
+        # Parse the URI
+        self._parse_uri (uri)
+        
         # Entry not found
         if not self._entry:
             return "/vserver/%s" % (self._host)
@@ -57,7 +64,7 @@ class PageEntry (PageMenu, FormHelper):
         pre  = "%s!handler" % (self._conf_prefix)
         name = self._cfg[pre].value
 
-        props = module_obj_factory (name, self._cfg, pre)
+        props = module_obj_factory (name, self._cfg, pre, self.submit_url)
         props._op_apply_changes (uri, post)
 
         # Apply changes
@@ -93,7 +100,7 @@ class PageEntry (PageMenu, FormHelper):
 
         table = Table(2)
         e = self.AddTableOptions_w_ModuleProperties (table, 'Handler', '%s!handler'%(pre),
-                                                     HANDLERS, update_url=self._update_url)
+                                                     HANDLERS)
         self.AddTableEntry (table, 'Document Root', '%s!document_root'%(pre))
 
         tmp += str(table)
@@ -105,7 +112,7 @@ class PageEntry (PageMenu, FormHelper):
         tmp += self._render_auth ()
 
         txt += self.Indent(tmp)
-        form = Form (self._update_url)
+        form = Form (self.submit_url)
         return form.Render(txt)
 
     def _render_handler_properties (self):
@@ -113,7 +120,7 @@ class PageEntry (PageMenu, FormHelper):
         name = self._cfg[pre].value
 
         try:
-            props = module_obj_factory (name, self._cfg, pre)
+            props = module_obj_factory (name, self._cfg, pre, self.submit_url)
         except IOError:
             return "Couldn't load the properties module"
         return props._op_render()
@@ -124,7 +131,8 @@ class PageEntry (PageMenu, FormHelper):
         txt   = ""
         table = Table(2)
         self.AddTableCheckbox (table, 'Only Secure', '%s!only_secure'%(pre), False)
-        e = self.AddTableOptions_w_ModuleProperties (table, 'Authentication', '%s!auth'%(pre), VALIDATORS)
+        e = self.AddTableOptions_w_ModuleProperties (table, 'Authentication', 
+                                                     '%s!auth'%(pre), VALIDATORS)
         txt += str(table) + e
 
         return txt

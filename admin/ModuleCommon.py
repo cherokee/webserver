@@ -4,9 +4,9 @@ from ModuleDirlist import *
 class ModuleCommon:
     PROPERTIES = ModuleFile.PROPERTIES + ModuleDirlist.PROPERTIES
 
-    def __init__ (self, cfg, prefix):
-        self._file = ModuleFile (cfg, prefix)
-        self._dirlist = ModuleDirlist (cfg, prefix)
+    def __init__ (self, cfg, prefix, submit_url):
+        self._file = ModuleFile (cfg, prefix, submit_url)
+        self._dirlist = ModuleDirlist (cfg, prefix, submit_url)
 
     def _op_render (self):
         txt = ''

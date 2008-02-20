@@ -10,9 +10,9 @@ launch local application servers and connect to them.
 """
 
 class ModuleRoundRobin (Module, FormHelper):
-    def __init__ (self, cfg, prefix):
-        Module.__init__ (self, 'round_robin', cfg, prefix)
+    def __init__ (self, cfg, prefix, submit_url):
         FormHelper.__init__ (self, 'round_robin', cfg)
+        Module.__init__ (self, 'round_robin', cfg, prefix, submit_url)
 
     def _op_render (self):
         txt = ''
@@ -24,15 +24,21 @@ class ModuleRoundRobin (Module, FormHelper):
             hosts = []
 
         # Render tables: as Hosts
+        t1_txt = ''
+        if hosts:
+            t1 = Table(2,1)
+            t1 += ('Host', '')
+            for host in hosts:
+                pre = '%s!%s' % (self._prefix, host)
+                e_host = self.InstanceEntry('%s!host'%(pre), 'text')
+                t1 += (e_host, SUBMIT_DEL)
+            t1_txt = str(t1)
+                
         t1 = Table(2,1)
-        t1 += ('Host', '')
-        for host in hosts:
-            pre = '%s!%s' % (self._prefix, host)
-            e_host = self.InstanceEntry('%s!host'%(pre), 'text')
-            t1 += (e_host, SUBMIT_DEL)
-
         en1 = self.InstanceEntry('new_host', 'text')
+        t1 += ('New host', '')
         t1 += (en1, SUBMIT_ADD)
+        t1_txt = str(t1)
 
         # Render tables: as Interpreters
         t2_txt = ''
@@ -47,20 +53,27 @@ class ModuleRoundRobin (Module, FormHelper):
             t2 += ('Interpreter', e_inte)
             t2 += ('Environment', e_envs)
             t2_txt += str(t2)
+            t2_txt += "<hr />"
 
-        t2 = Table(3)
+        if t2_txt.endswith("<hr />"):
+            t2_txt = t2_txt[:-6]
+
+        t2 = Table(3,1)
+        t2 += ('Host', 'Interpreter', '')
         e_host = self.InstanceEntry('new_host', 'text')
         e_inte = self.InstanceEntry('new_interpreter', 'text')
         t2 += (e_host, e_inte, SUBMIT_ADD)
+        t2_txt += str(t2)
 
         # General selector
         props = {}
-        props ['host']        = self.Indent(t1)
+        props ['host']        = self.Indent(t1_txt)
         props ['interpreter'] = self.Indent(t2_txt)
 
         table = Table(2)
         e = self.AddTableOptions_w_Properties (table, "Information sources", 
-                                               "%s!type"%(self._prefix), BALANCER_TYPES, props)
+                                               "%s!type"%(self._prefix), 
+                                               BALANCER_TYPES, props)
         txt += self.Dialog (RR_COMMENT)
         txt += str(table) + e
 
@@ -86,7 +99,7 @@ class ModuleRoundRobin (Module, FormHelper):
                 host        = cfg_key.split('!')[1]
                 cfg_key_env = "%s!%s" % (cfg_key, env)
 
-                js = "post_del_key('%s', '%s');" % (self.update_url, cfg_key_env)
+                js = "post_del_key('%s', '%s');" % (self.submit_url, cfg_key_env)
                 button = self.InstanceButton ('Del', onClick=js)
                 table += (env, '=', self._cfg[cfg_key_env].value, button)
             txt += str(table)
@@ -96,7 +109,7 @@ class ModuleRoundRobin (Module, FormHelper):
         en_val = self.InstanceEntry('balancer_new_env_val', 'text')
         hidden = self.HiddenInput  ('balancer_new_env_key', cfg_key)
 
-        js     = "post_add_entry_key('%s', '%s');" % (self.update_url, cfg_key)
+        js     = "post_add_entry_key('%s', '%s');" % (self.submit_url, cfg_key)
         button = self.InstanceButton ('Add', onClick=js) 
 
         table = Table(3,1)

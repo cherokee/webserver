@@ -2,8 +2,8 @@ from Table import *
 from ModuleAuth import *
 
 class ModuleMysql (ModuleAuthBase):
-    def __init__ (self, cfg, prefix):
-        ModuleAuthBase.__init__ (self, cfg, prefix, 'mysql')
+    def __init__ (self, cfg, prefix, submit):
+        ModuleAuthBase.__init__ (self, cfg, prefix, 'mysql', submit)
 
     def _op_render (self):
         table = Table(2)

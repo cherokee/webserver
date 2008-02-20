@@ -16,8 +16,8 @@ class ModuleRedir (Module, FormHelper):
         "rewrite"
     ]
 
-    def __init__ (self, cfg, prefix):
-        Module.__init__ (self, 'redir', cfg, prefix)
+    def __init__ (self, cfg, prefix, submit_url):
+        Module.__init__ (self, 'redir', cfg, prefix, submit_url)
         FormHelper.__init__ (self, 'redir', cfg)
 
     def _get_cfg_val (self, cfg_key):
@@ -42,7 +42,7 @@ class ModuleRedir (Module, FormHelper):
                 show      = self.InstanceCheckbox ('%s!show'%(cfg_key_rule))
                 regex     = self._get_cfg_val('%s!regex'    %(cfg_key_rule))
                 substring = self._get_cfg_val('%s!substring'%(cfg_key_rule))
-                js = "post_del_key('%s', '%s');" % (self.update_url, cfg_key_rule)
+                js = "post_del_key('%s', '%s');" % (self.submit_url, cfg_key_rule)
                 button    = self.InstanceButton ('Del', onClick=js)
                 table += (show, regex, substring, button)
 

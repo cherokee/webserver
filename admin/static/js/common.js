@@ -33,10 +33,11 @@ function comment_out (DivID, visible)
 
 function options_active_prop (options_id, props_prefix)
 {
-	   var form     = get_by_id (options_id);	   
-	   var options  = form.options;
+	   var thisform = get_by_id (options_id);	   
+	   var options  = thisform.options;
 	   var selected = options[options.selectedIndex].value;
 
+	   /* Show the righ entry */
 	   for (i=0; i<options.length; i++) {
 			 var i_str = props_prefix + options[i].value;
 			 var s_str = props_prefix + selected;
@@ -47,6 +48,22 @@ function options_active_prop (options_id, props_prefix)
 				    comment_out (i_str, 0);
 			 }
 	   }
+}
+
+function options_changed (url, options_id)
+{
+	   var thisform = get_by_id (options_id);	   
+	   var options  = thisform.options;
+	   var selected = options[options.selectedIndex].value;
+
+	   /* POST the new value and reload */
+	   var post = options_id + "=" + selected;
+
+	   jQuery.post (url, post,
+              function (data, textStatus) {
+                  window.location.reload();
+              }
+	   );
 }
 
 function toggle_help()
@@ -74,7 +91,7 @@ function post_del_key (url, cfg_key)
 
 function post_add_entry_key (url, entry_name, cfg_key)
 {
-	   var obj  = document.getElementById(entry_name);
+	   var obj  = get_by_id(entry_name);
 	   var post = cfg_key + "=" + obj.value;
 
 	   jQuery.post (url, post, 
