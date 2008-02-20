@@ -127,7 +127,7 @@ class PageVServer (PageMenu, FormHelper):
         props['file']   = str(t1)
         props['exec']   = str(t2)
         e = self.AddTableOptions_w_Properties (table, "Access", '%s!logger!access!type' % (pre), 
-                                               LOGGER_WRITERS, props, 'log1')
+                                               LOGGER_WRITERS, props)
         tmp += str(table) + e
 
         table = Table(2)
@@ -141,7 +141,7 @@ class PageVServer (PageMenu, FormHelper):
         props['file']   = str(t1)
         props['exec']   = str(t2)
         e = self.AddTableOptions_w_Properties (table, "Error", '%s!logger!error!type' % (pre), 
-                                               LOGGER_WRITERS, props, 'log2')
+                                               LOGGER_WRITERS, props)
         tmp += str(table) + e        
         tabs += [('Logging', tmp)]
 

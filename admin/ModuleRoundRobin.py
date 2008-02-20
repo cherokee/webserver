@@ -72,12 +72,12 @@ class ModuleRoundRobin (Module, FormHelper):
         }
 
         txt += self.Dialog (RR_COMMENT)
+        print "%s!type" % (self._prefix), "**** RENDER"
 
         table = Table(2)
         e = self.AddTableOptions_w_Properties (table, "Information sources", 
                                                "%s!type" % (self._prefix), 
-                                               BALANCER_TYPES, props, 
-                                               "info_sources_")
+                                               BALANCER_TYPES, props)
         txt += str(table) + e
 
         return txt

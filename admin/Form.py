@@ -63,9 +63,10 @@ class FormHelper (WebComponent):
     def __init__ (self, id, cfg):
         WebComponent.__init__ (self, id, cfg)
 
-        self.errors     = {}
-        self.submit_url = None
-    
+        self.errors      = {}
+        self.submit_url  = None
+        self.autoops_pre = 1
+        
     def set_submit_url (self, url):
         self.submit_url = url
 
@@ -143,15 +144,18 @@ class FormHelper (WebComponent):
         table += (label, ops)
         return value
 
-    def AddTableOptions_w_Properties (self, table, title, cfg_key, options,
-                                      props, props_prefix="prop_"):
+    def AddTableOptions_w_Properties (self, table, title, cfg_key, options, props):
         assert (self.submit_url)
 
         # The Table entry itself
         js = "options_changed('/ajax/update','%s');" % (cfg_key)
 
-        value = self.AddTableOptions (table, title, cfg_key, options,
-                                      onChange=js)
+        value = self.AddTableOptions (table, title, cfg_key, options, onChange=js)
+
+        # Properties prefix
+        props_prefix = "auto_options_%d_" % (self.autoops_pre)
+        self.autoops_pre += 1
+
         # The entries that come after
         props_txt  = ''
         for name, desc in options:
@@ -165,8 +169,7 @@ class FormHelper (WebComponent):
                  '</script>\n';
         return props_txt + update
 
-    def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, 
-                                            options, props_prefix, **kwargs):
+    def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, options, **kwargs):
         assert (self.submit_url)
 
         # Instance all the modules
@@ -182,8 +185,7 @@ class FormHelper (WebComponent):
                 render = "Couldn't load the properties module: %s" % (name)
             props[name] = render
 
-        return self.AddTableOptions_w_Properties (table, title, cfg_key, 
-                                                  options, props, props_prefix)
+        return self.AddTableOptions_w_Properties (table, title, cfg_key, options, props)
 
     def InstanceCheckbox (self, cfg_key, default=None):
         try:
