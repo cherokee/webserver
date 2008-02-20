@@ -10,6 +10,12 @@ DATA_VALIDATION = [
     ("new_vserver_droot", validations.is_local_dir_exists),
 ]
 
+COMMENT = """
+<p>'Virtual Server' is an abstraction mechanism that allows to define
+a custom number of parameter and rules that have to be apply to one or
+more domains.</p>
+"""
+
 class PageVServers (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'vserver', cfg)
@@ -34,10 +40,13 @@ class PageVServers (PageMenu, FormHelper):
     def _render_vserver_list (self):        
         vservers = self._cfg['vserver']
         txt = "<h1>Virtual Servers</h1>"
+        txt += self.Dialog (COMMENT)
         
         # Render Virtual Server list
         table = Table(2)
         if vservers:
+            txt += "<h3>Virtual Server List</h3>"
+        
             for vserver in vservers:
                 link = '<a href="/vserver/%s">%s</a>' % (vserver, vserver)
                 if vserver != "default":
@@ -46,7 +55,7 @@ class PageVServers (PageMenu, FormHelper):
                 else:
                     link_del = ''
                 table += (link, link_del)
-            txt += str(table)
+            txt += self.Indent(table)
 
         # Add new Virtual Server
         table = Table(3,1)
