@@ -29,11 +29,11 @@ class PageIcon (PageMenu, FormHelper):
         raise 'Unknown method'
 
     def _op_add_file (self, post):
-        match = post['file_new_match'][0]
-        file  = post['file_new_file'][0]
+        match = post.get_val('file_new_match')
+        file  = post.get_val('file_new_file')
 
         # Add it to the config
-        self._cfg["icons!file!%s" % (match)] = file
+        self._cfg["icons!file!%s" % (file)] = match
         # Return the URL
         return "/%s" % (self._id)
 
@@ -72,7 +72,7 @@ class PageIcon (PageMenu, FormHelper):
                 selected = self._cfg[cfg_key].value
             except:
                 pass
-
+            
         # Build the options
         if selected:
             options = EntryOptions (cfg_key, file_options, 

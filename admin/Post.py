@@ -18,7 +18,7 @@ class Post:
         tmp = self._smart_chooser(key)
         if not tmp: 
             return None
-        return tmp[0]
+        return tmp
 
     def pop (self, key):
         val = self._smart_chooser(key)
