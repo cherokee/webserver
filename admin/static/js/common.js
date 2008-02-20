@@ -50,9 +50,10 @@ function options_active_prop (options_id, props_prefix)
 	   }
 }
 
-function options_changed (url, options_id)
+
+function options_changed (url, options_id, parent_id)
 {
-	   var thisform = get_by_id (options_id);	   
+	   var thisform = $("#"+parent_id).children("#"+options_id)[0];
 	   var options  = thisform.options;
 	   var selected = options[options.selectedIndex].value;
 

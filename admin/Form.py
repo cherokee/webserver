@@ -58,14 +58,15 @@ class Form:
             render = render % keys
         return render
 
-    
+
 class FormHelper (WebComponent):
+    autoops_pre = 1
+
     def __init__ (self, id, cfg):
         WebComponent.__init__ (self, id, cfg)
 
         self.errors      = {}
         self.submit_url  = None
-        self.autoops_pre = 1
         
     def set_submit_url (self, url):
         self.submit_url = url
@@ -129,16 +130,25 @@ class FormHelper (WebComponent):
         extra = ""
         for karg in kwargs:
             extra += '%s="%s" '%(karg, kwargs[karg])
-
         return '<input type="button" value="%s" %s/>' % (name, extra)
 
     def AddTableOptions (self, table, title, cfg_key, options, *args, **kwargs):
+        # Dirty hack! PoC (1)
+        wrap_id = None
+        if 'wrap_id' in kwargs:
+            wrap_id = kwargs['wrap_id']
+            del(kwargs['wrap_id'])
+
         try:
             value = self._cfg[cfg_key].value
             ops = EntryOptions (cfg_key, options, selected=value, *args, **kwargs)
         except AttributeError:
             value = ''
             ops = EntryOptions (cfg_key, options, *args, **kwargs)
+
+        # Dirty hack! PoC (2)
+        if wrap_id:
+            ops = '<div id="%s" name="%s">%s</div>'%(wrap_id, wrap_id, ops)
 
         label = self.Label(title, cfg_key);
         table += (label, ops)
@@ -147,14 +157,14 @@ class FormHelper (WebComponent):
     def AddTableOptions_w_Properties (self, table, title, cfg_key, options, props):
         assert (self.submit_url)
 
-        # The Table entry itself
-        js = "options_changed('/ajax/update','%s');" % (cfg_key)
-
-        value = self.AddTableOptions (table, title, cfg_key, options, onChange=js)
-
         # Properties prefix
-        props_prefix = "auto_options_%d_" % (self.autoops_pre)
-        self.autoops_pre += 1
+        props_prefix = "auto_options_%d_" % (FormHelper.autoops_pre)
+        FormHelper.autoops_pre += 1
+
+        # The Table entry itself
+        js = "options_changed('/ajax/update','%s', '%s');" % (cfg_key, props_prefix)
+        value = self.AddTableOptions (table, title, cfg_key, options, 
+                                      onChange=js, wrap_id=props_prefix)
 
         # The entries that come after
         props_txt  = ''
@@ -167,6 +177,7 @@ class FormHelper (WebComponent):
         update = '<script type="text/javascript">\n' + \
                  '   options_active_prop("%s","%s");\n' % (cfg_key, props_prefix) + \
                  '</script>\n';
+
         return props_txt + update
 
     def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, options, **kwargs):

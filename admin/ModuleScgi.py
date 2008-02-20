@@ -18,12 +18,13 @@ class ModuleScgi (ModuleCgiBase):
         txt = '<h3>General</h3>'
         txt += ModuleCgiBase._op_render (self)
 
-        txt += '<h3>FastCGI specific</h3>'
+        txt += '<h3>SCGI specific</h3>'
+
         table = Table(2)
         prefix = "%s!balancer" % (self._prefix)
         e = self.AddTableOptions_w_ModuleProperties (table, "Balancer",
                                                      prefix, BALANCERS)
-        txt += str(table) + e
+        txt += str(table) + self.Indent(e)
         return txt
 
     def _op_apply_changes (self, uri, post):
