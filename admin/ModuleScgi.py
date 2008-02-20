@@ -21,7 +21,8 @@ class ModuleScgi (ModuleCgiBase):
         txt += '<h3>FastCGI specific</h3>'
         table = Table(2)
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddTableOptions_w_ModuleProperties (table, "Balancer", prefix, BALANCERS)
+        e = self.AddTableOptions_w_ModuleProperties (table, "Balancer", prefix, 
+                                                     BALANCERS, "scgi_balancer")
         txt += str(table) + e
         return txt
 

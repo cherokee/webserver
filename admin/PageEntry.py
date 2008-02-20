@@ -100,7 +100,7 @@ class PageEntry (PageMenu, FormHelper):
 
         table = Table(2)
         e = self.AddTableOptions_w_ModuleProperties (table, 'Handler', '%s!handler'%(pre),
-                                                     HANDLERS)
+                                                     HANDLERS, "entry_handler_")
         self.AddTableEntry (table, 'Document Root', '%s!document_root'%(pre))
 
         tmp += str(table)
@@ -132,7 +132,8 @@ class PageEntry (PageMenu, FormHelper):
         table = Table(2)
         self.AddTableCheckbox (table, 'Only Secure', '%s!only_secure'%(pre), False)
         e = self.AddTableOptions_w_ModuleProperties (table, 'Authentication', 
-                                                     '%s!auth'%(pre), VALIDATORS)
+                                                     '%s!auth'%(pre), VALIDATORS,
+                                                     "entry_auth_")
         txt += str(table) + e
 
         return txt

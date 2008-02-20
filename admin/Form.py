@@ -165,7 +165,8 @@ class FormHelper (WebComponent):
                  '</script>\n';
         return props_txt + update
 
-    def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, options, **kwargs):
+    def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, 
+                                            options, props_prefix, **kwargs):
         assert (self.submit_url)
 
         # Instance all the modules
@@ -181,7 +182,8 @@ class FormHelper (WebComponent):
                 render = "Couldn't load the properties module: %s" % (name)
             props[name] = render
 
-        return self.AddTableOptions_w_Properties (table, title, cfg_key, options, props)
+        return self.AddTableOptions_w_Properties (table, title, cfg_key, 
+                                                  options, props, props_prefix)
 
     def InstanceCheckbox (self, cfg_key, default=None):
         try:

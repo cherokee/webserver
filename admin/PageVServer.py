@@ -30,8 +30,10 @@ class PageVServer (PageMenu, FormHelper):
         assert (len(uri) > 1)
 
         host = uri.split('/')[1]
-        default_render = False
-        
+        self.set_submit_url ('/vserver/%s/update'%(host))
+
+        default_render = False  
+      
         # Check whether host exists
         cfg = self._cfg['vserver!%s'%(host)]
         if not cfg:
@@ -152,7 +154,7 @@ class PageVServer (PageMenu, FormHelper):
 
         txt += self.InstanceTab (tabs)
 
-        form = Form ("/%s/%s/update" % (self._id, host))
+        form = Form (self.submit_url)
         return form.Render(txt)
 
     def _render_add_rule (self, host):
@@ -203,7 +205,7 @@ class PageVServer (PageMenu, FormHelper):
                 domain = cfg_domains[i].value
                 cfg_key = "vserver!%s!domain!%s" % (host, i)
                 en = self.InstanceEntry (cfg_key, 'text')
-                js = "post_del_key('/vserver/%s/update','%s');" % (host, cfg_key)
+                js = "post_del_key('%s','%s');" % (self.submit_url, cfg_key)
                 bu = self.InstanceButton ("Del", onClick=js)
                 table += (en, bu)
 

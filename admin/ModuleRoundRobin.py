@@ -66,15 +66,18 @@ class ModuleRoundRobin (Module, FormHelper):
         t2_txt += str(t2)
 
         # General selector
-        props = {}
-        props ['host']        = self.Indent(t1_txt)
-        props ['interpreter'] = self.Indent(t2_txt)
+        props = {
+            'host':        self.Indent(t1_txt),
+            'interpreter': self.Indent(t2_txt)
+        }
+
+        txt += self.Dialog (RR_COMMENT)
 
         table = Table(2)
         e = self.AddTableOptions_w_Properties (table, "Information sources", 
-                                               "%s!type"%(self._prefix), 
-                                               BALANCER_TYPES, props)
-        txt += self.Dialog (RR_COMMENT)
+                                               "%s!type" % (self._prefix), 
+                                               BALANCER_TYPES, props, 
+                                               "info_sources_")
         txt += str(table) + e
 
         return txt
