@@ -2,6 +2,10 @@ from Table import *
 from ModuleAuth import *
 
 class ModuleHtpasswd (ModuleAuthBase):
+    PROPERTIES = ModuleAuthBase.PROPERTIES + [
+        'passwdfile'
+    ]
+
     def __init__ (self, cfg, prefix, submit):
         ModuleAuthBase.__init__ (self, cfg, prefix, 'htpasswd', submit)
 

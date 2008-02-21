@@ -2,6 +2,13 @@ from Table import *
 from ModuleAuth import *
 
 class ModuleLdap (ModuleAuthBase):
+    PROPERTIES = ModuleAuthBase.PROPERTIES + [
+        'server', 'port', 
+        'bind_dn', 'base_dn',
+        'filter', 'tls', 
+        'ca_file'
+    ]
+
     def __init__ (self, cfg, prefix, submit):
         ModuleAuthBase.__init__ (self, cfg, prefix, 'ldap', submit)
 
@@ -24,5 +31,5 @@ class ModuleLdap (ModuleAuthBase):
     def _op_apply_changes (self, uri, post):
         self.ApplyChangesPrefix (self._prefix, ['tls'], post)
 
-        post2 = filter(lambda x: x!='tls', post)
-        ModuleAuthBase._op_apply_changes (self, uri, post2)
+        post.pop('tls')
+        ModuleAuthBase._op_apply_changes (self, uri, post)

@@ -2,6 +2,12 @@ from Table import *
 from ModuleAuth import *
 
 class ModuleMysql (ModuleAuthBase):
+    PROPERTIES = ModuleAuthBase.PROPERTIES + [
+        'host', 'port', 'unix_socket',
+        'user', 'passwd', 'database',
+        'query', 'use_md5_passwd'
+    ]
+
     def __init__ (self, cfg, prefix, submit):
         ModuleAuthBase.__init__ (self, cfg, prefix, 'mysql', submit)
 
@@ -11,7 +17,7 @@ class ModuleMysql (ModuleAuthBase):
         self.AddTableEntry (table, "Port", "%s!port"%(self._prefix))
         self.AddTableEntry (table, "Unix Socket", "%s!unix_socket"%(self._prefix))
         self.AddTableEntry (table, "DB User", "%s!user"%(self._prefix))
-        self.AddTableEntry (table, "DB Password", "%s!user"%(self._prefix))
+        self.AddTableEntry (table, "DB Password", "%s!passwd"%(self._prefix))
         self.AddTableEntry (table, "Database", "%s!database"%(self._prefix))
         self.AddTableEntry (table, "Query", "%s!query"%(self._prefix))
         self.AddTableCheckbox (table, 'Use MD5 Passwords', "%s!use_md5_passwd"%(self._prefix), False)

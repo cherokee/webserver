@@ -104,6 +104,12 @@ def is_safe_id (value):
            raise ValueError, 'Invalid character '+v
     return value
 
+def is_safe_id_list (value):
+    ids = [id.strip() for id in value.split(',')]
+    for id in ids:
+        is_safe_id (id)
+    return ','.join(ids)
+
 def int2bin(n, count=24):
     """returns the binary of integer n, using count number of digits"""
     return "".join([str((n >> y) & 1) for y in range(count-1, -1, -1)])
@@ -166,3 +172,12 @@ def is_ip_or_netmask_list (value):
         e = entry.strip()
         re.append(is_ip_or_netmask(e))
     return ','.join(re)
+
+def is_not_empty (value):
+    if len(value) <= 0:
+        raise ValueError, 'Malformed entry (netmask)'
+    return value
+
+def debug_fail (value):
+    raise ValueError, 'Forced failure'
+    

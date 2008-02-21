@@ -62,17 +62,15 @@ class PageEntry (PageMenu, FormHelper):
     
     def _op_apply_changes (self, uri, post):
         # Handler properties
-        pre  = "%s!handler" % (self._conf_prefix)
-        name = self._cfg[pre].value
+        pre = "%s!handler" % (self._conf_prefix)
+        self.ApplyChanges_OptionModule (pre, uri, post)
 
-        props = module_obj_factory (name, self._cfg, pre, self.submit_url)
-        props._op_apply_changes (uri, post)
+        # Validator properties
+        pre = "%s!auth" % (self._conf_prefix)
+        self.ApplyChanges_OptionModule (pre, uri, post)
 
         # Apply changes
         self.ApplyChanges (["%s!only_secure"%(self._conf_prefix)], post, DATA_VALIDATION)
-
-        # Clean old properties
-        self.CleanUp_conf_props (pre, name)
 
     def _op_default (self, uri):
         # Render page

@@ -173,6 +173,9 @@ class FormHelper (WebComponent):
         # Render active option
         if name:
             try:
+                # Inherit the errors, if any
+                kwargs['errors'] = self.errors
+                
                 props_widget = module_obj_factory (name, self._cfg, cfg_key, 
                                                    self.submit_url, **kwargs)
                 render = props_widget._op_render()
@@ -248,6 +251,16 @@ class FormHelper (WebComponent):
 
     # Applying changes
     #
+    
+    def Validate_NotEmpty (self, post, cfg_key, error_msg):
+        try:
+            cfg_val = self._cfg[cfg_key].value
+        except:
+            cfg_val = None
+
+        if not cfg_val and \
+           not post.get_val(cfg_key):
+            self._error_add (cfg_key, '', error_msg)
 
     def _ValidateChanges (self, post, validation):
         for rule in validation:
@@ -296,9 +309,22 @@ class FormHelper (WebComponent):
         checkboxes_pre = ["%s!%s"%(prefix, x) for x in checkboxes]
         return self.ApplyChanges (checkboxes_pre, post, validation)
 
-    def CleanUp_conf_props (self, cfg_key, name):
-        module  = module_obj_factory (name, self._cfg, cfg_key, self.submit_url)
-        props   = module.__class__.PROPERTIES
+    def ApplyChanges_OptionModule (self, cfg_key, uri, post):
+        try:
+            name = self._cfg[cfg_key].value
+        except:
+            return
+
+        # Instance module and apply the changes
+        module = module_obj_factory (name, self._cfg, cfg_key, self.submit_url)
+        module._op_apply_changes (uri, post)
+
+        # Include module errors
+        for error in module.errors:
+            self.errors[error] = module.errors[error]
+
+        # Clean up properties
+        props = module.__class__.PROPERTIES
 
         to_be_deleted = []
         for entry in self._cfg[cfg_key]:
@@ -308,5 +334,4 @@ class FormHelper (WebComponent):
 
         for entry in to_be_deleted:
             del(self._cfg[entry])
-
 
