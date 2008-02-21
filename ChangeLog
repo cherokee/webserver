@@ -1,5 +1,10 @@
 2008-02-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/Makefile.am (libcherokee_base_la_SOURCES):
+	config_node.c, config_node.h, config_reader.h and config_reader.c
+	are now part of libcherokee_client (instead of part of
+	libcherokee_server).
+
 	* cherokee/main.c (BASIC_CONFIG): Updated to the new icon set.
 
 	* cherokee/matching_list.c (cherokee_matching_list_configure):

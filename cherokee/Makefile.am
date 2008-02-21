@@ -778,7 +778,11 @@ regex.c \
 resolv_cache.h \
 resolv_cache.c \
 post.h \
-post.c 
+post.c \
+config_node.h \
+config_node.c \
+config_reader.h \
+config_reader.c 
 
 libcherokee_client_la_SOURCES = \
 url.h \
@@ -894,10 +898,6 @@ handler_error.c \
 handler_error.h \
 nonce.h \
 nonce.c \
-config_node.h \
-config_node.c \
-config_reader.h \
-config_reader.c \
 balancer.h \
 balancer.c \
 source.h \
