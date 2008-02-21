@@ -257,6 +257,7 @@ class PageVServer (PageMenu, FormHelper):
         try:
             logger  = self._cfg[cfg_key].value
         except:
+            del(self._cfg[cfg_key])
             return
 
         to_be_deleted = []
@@ -272,4 +273,5 @@ class PageVServer (PageMenu, FormHelper):
                 to_be_deleted.append(cfg_key)
 
         for entry in to_be_deleted:
-            del(self._cfg[entry])
+            key = "%s!%s" % (cfg_key, entry)
+            del(self._cfg[key])
