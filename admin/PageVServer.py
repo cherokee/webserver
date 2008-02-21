@@ -31,9 +31,8 @@ class PageVServer (PageMenu, FormHelper):
 
         host = uri.split('/')[1]
         self.set_submit_url ('/vserver/%s'%(host))
+        self.submit_ajax_url = "/vserver/%s/ajax_update"%(host) 
 
-        default_render = False  
-      
         # Check whether host exists
         cfg = self._cfg['vserver!%s'%(host)]
         if not cfg:
@@ -41,41 +40,32 @@ class PageVServer (PageMenu, FormHelper):
         if not cfg.has_child():
             return '/vserver/'
 
+        default_render = False 
+
         if post.get_val('is_submit'):
-            # It's adding a new entry
-            if 'add_new_entry' in post and \
-                len (post['add_new_entry'][0]) > 0:
+            if post.get_val('add_new_entry'):
+                # It's adding a new entry
                 self._op_add_new_entry (host, post)
-                if self.has_errors():
-                    self._priorities = VServerEntries (host, self._cfg)
-                    return self._op_render_vserver_details (host, uri[len(host)+1:])
-            
-            # It's updating properties
-            self._op_apply_changes (host, post)
-            if not self.has_errors():
-                return "/%s/%s" % (self._id, host)
-            default_render = True
+            else:
+                # It's updating properties
+                self._op_apply_changes (host, post)
 
         elif uri.endswith('/ajax_update'):
             self._op_apply_changes (host, post)
             return 'ok'
 
-        else:
-            default_render = True
-
-        if default_render:
-            self._priorities = VServerEntries (host, self._cfg)
-            return self._op_render_vserver_details (host, uri[len(host)+1:])
+        self._priorities = VServerEntries (host, self._cfg)
+        return self._op_render_vserver_details (host, uri[len(host)+1:])
 
     def _op_add_new_entry (self, host, post):
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
 
-        entry    = post['add_new_entry'][0]
-        type     = post['add_new_type'][0]
-        handler  = post['add_new_handler'][0]
-        priority = post['add_new_priority'][0]
+        entry    = post.pop('add_new_entry')
+        type     = post.pop('add_new_type')
+        handler  = post.pop('add_new_handler')
+        priority = post.pop('add_new_priority')
 
         pre = "vserver!%s!%s!%s" % (host, type, entry)
         self._cfg["%s!handler"%(pre)]  = handler
@@ -187,7 +177,7 @@ class PageVServer (PageMenu, FormHelper):
             e1   = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
             e2   = self.InstanceEntry ('%s!priority' % (pre), 'text', value=prio)
 
-            js = "post_del_key('%s', '%s');" % (self.submit_url, pre)
+            js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
             button = self.InstanceButton ('Del', onClick=js)
 
             table += (link, type, e1, e2, button)
@@ -200,7 +190,8 @@ class PageVServer (PageMenu, FormHelper):
         txt       = ""
         available = "1"
 
-        if cfg_domains:
+        if cfg_domains and \
+           cfg_domains.has_child():
             table = Table(2,1)
             table += ('Domain pattern', '')
 
@@ -209,37 +200,26 @@ class PageVServer (PageMenu, FormHelper):
                 domain = cfg_domains[i].value
                 cfg_key = "vserver!%s!domain!%s" % (host, i)
                 en = self.InstanceEntry (cfg_key, 'text')
-                js = "post_del_key('%s','%s');" % (self.submit_url, cfg_key)
+                js = "post_del_key('%s','%s');" % (self.submit_ajax_url, cfg_key)
                 bu = self.InstanceButton ("Del", onClick=js)
                 table += (en, bu)
 
             txt += str(table)
 
-            # Look for firs available
-            i = 1
-            while True:
-                if not cfg_domains[str(i)]:
-                    available = str(i)
-                    break
-                i += 1
+        # Look for firs available
+        i = 1
+        while cfg_domains:
+            if not cfg_domains[str(i)]:
+                available = str(i)
+                break
+            i += 1
 
-        DOMAIN_ADD_JS = """
-        <script type="text/javascript">
-        submit_new_domain = function(host, domain_id) {
-            return post_add_entry_key (
-                          "/vserver/"+host+"/update",
-                          "new_domain",
-                          "vserver!" + host + "!domain!" + domain_id);
-        }
-        </script>
-        """
-
+        # Add new domain
         txt += "<h3>Add new domain name</h3>"
-        txt += DOMAIN_ADD_JS
-
         table = Table(2)
-        en = self.InstanceEntry ("new_domain", 'text')
-        bu = self.InstanceButton ("Add", onClick="submit_new_domain('%s','%s');"%(host, available))
+        cfg_key = "vserver!%s!domain!%s" % (host, available)
+        en = self.InstanceEntry (cfg_key, 'text')
+        bu = self.InstanceButton ("Add", onClick="submit();")
         table += (en, bu)
 
         txt += str(table)
