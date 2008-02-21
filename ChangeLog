@@ -1,3 +1,10 @@
+2008-02-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/matching_list.c (cherokee_matching_list_configure):
+	Added code to parse the !type configuration property and check
+	whether it is default_allow, default_deny, deny_allow or
+	allow_deny.
+
 2008-02-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/matching_list.c (cherokee_matching_list_configure):

@@ -59,9 +59,12 @@ matching_list_add_deny_cb  (char *val, void *data)
 ret_t 
 cherokee_matching_list_configure (cherokee_matching_list_t *mlist, cherokee_config_node_t *config)
 {
-	ret_t ret;
-	ret_t ret2;
+	ret_t              ret;
+	ret_t              ret2;
+	cherokee_buffer_t *buf;
 
+	/* Allow and Deny lists
+	 */
 	ret = cherokee_config_node_read_list (config, "allow", matching_list_add_allow_cb, mlist);
 	if ((ret != ret_ok) && (ret != ret_not_found)) return ret;
 
@@ -73,6 +76,24 @@ cherokee_matching_list_configure (cherokee_matching_list_t *mlist, cherokee_conf
 	if ((ret == ret_not_found) && (ret2 == ret_ok))
 		mlist->type = default_allow;
 
+	/* Type
+	 */
+	ret = cherokee_config_node_read (config, "type", &buf);
+	if (ret == ret_ok) {
+		if (! cherokee_buffer_cmp_str (buf, "default_allow")) {
+			mlist->type = default_allow;
+		} else if (! cherokee_buffer_cmp_str (buf, "default_deny")) {
+			mlist->type = default_deny;
+		} else if (! cherokee_buffer_cmp_str (buf, "deny_allow")) {
+			mlist->type = deny_allow;
+		} else if (! cherokee_buffer_cmp_str (buf, "allow_deny")) {
+			mlist->type = allow_deny;
+		} else {
+			PRINT_MSG ("ERROR: Unknown matching list type '%s'\n", buf->buf);
+			return ret_error;
+		}
+	}
+	
 	return ret_ok;
 }
 
