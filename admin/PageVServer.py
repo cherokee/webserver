@@ -255,8 +255,11 @@ class PageVServer (PageMenu, FormHelper):
     def _cleanup_logger_cfg (self, host):
         cfg_key = "vserver!%s!logger" % (host)
         try:
-            logger  = self._cfg[cfg_key].value
+            logger = self._cfg[cfg_key].value
         except:
+            logger = None
+
+        if logger == None:
             del(self._cfg[cfg_key])
             return
 
