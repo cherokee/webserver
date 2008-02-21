@@ -4,6 +4,7 @@ import time
 import signal
 import select
 
+from consts import *
 from configured import *
 
 DEFAULT_DELAY = 2
@@ -108,6 +109,14 @@ class CherokeeManagement:
             os.waitpid (self._pid, 0)
         except:
             pass
+
+    def create_config (self, file):
+        if os.path.exists (file):
+            return
+
+        f = open(file, 'w+')
+        f.write (CHEROKEE_MIN_DEFAULT_CONFIG)
+        f.close()
 
     # Protected
     #

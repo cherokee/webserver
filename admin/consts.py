@@ -57,3 +57,12 @@ BALANCER_TYPES = [
 ENCODERS = [
     ('gzip',     'GZip')
 ]
+
+
+
+CHEROKEE_MIN_DEFAULT_CONFIG = """# Default configuration
+vserver!default!document_root = /tmp
+vserver!default!directory!/!handler = common
+vserver!default!directory!/!priority = 1
+"""
+

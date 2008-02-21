@@ -13,7 +13,7 @@ class ModuleFile (Module, FormHelper):
 
     def _op_render (self):
         table = Table(2)
-        self.AddTableCheckbox (table, "I/O cache", "%s!io_cache" % (self._prefix), True)
+        self.AddTableCheckbox (table, "Use I/O cache", "%s!io_cache" % (self._prefix), True)
         return str(table)
 
     def _op_apply_changes (self, uri, post):

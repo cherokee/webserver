@@ -52,7 +52,8 @@ class Handler(pyscgi.SCGIHandler):
         
         # Ensure that the configuration file is writable
         if not cfg.has_tree():
-            page = PageError (cfg, PageError.CONFIG_NOT_FOUND)
+            if not uri.startswith('/create_config'):
+                page = PageError (cfg, PageError.CONFIG_NOT_FOUND)
         elif not cfg.is_writable():
             page = PageError (cfg, PageError.CONFIG_NOT_WRITABLE)
         elif not os.path.isdir(CHEROKEE_ICONSDIR):
@@ -101,6 +102,12 @@ class Handler(pyscgi.SCGIHandler):
             manager.stop()
             cherokee_management_reset()
             body = "/"
+        elif uri.startswith('/create_config'):
+            manager = cherokee_management_get (cfg)
+            manager.create_config (cfg.file)
+            cherokee_management_reset()
+            cfg = Config (cfg.file)
+            body = "/"
         elif uri.startswith('/ajax/update'):
             page = PageAjaxUpdate (cfg)
         elif uri == '/':
@@ -111,7 +118,7 @@ class Handler(pyscgi.SCGIHandler):
         # Handle post
         self.handle_post()
         post = Post (self.post)
-        
+
         # Execute page
         if page:
             body = page.HandleRequest(uri, post)
@@ -124,7 +131,6 @@ class Handler(pyscgi.SCGIHandler):
         # Send result
         self.wfile.write('Status: %s\r\n' % (status) +
                          headers + '\r\n' + body)
-
 
 
 # Server

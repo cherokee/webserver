@@ -222,11 +222,11 @@ class Config:
 
     # Checks
     def is_writable (self):
-        try:
-            open (self.file, "a")
-        except:
+        import os
+
+        if not os.path.exists (self.file):
             return False
-        return True
+        return os.access (self.file, os.W_OK)
 
     def has_tree (self):
         return len(self.root._child) > 0
