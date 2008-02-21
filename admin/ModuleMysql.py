@@ -19,7 +19,7 @@ class ModuleMysql (ModuleAuthBase):
         self.AddTableEntry (table, "DB User", "%s!user"%(self._prefix))
         self.AddTableEntry (table, "DB Password", "%s!passwd"%(self._prefix))
         self.AddTableEntry (table, "Database", "%s!database"%(self._prefix))
-        self.AddTableEntry (table, "Query", "%s!query"%(self._prefix))
+        self.AddTableEntry (table, "SQL Query", "%s!query"%(self._prefix))
         self.AddTableCheckbox (table, 'Use MD5 Passwords', "%s!use_md5_passwd"%(self._prefix), False)
 
         txt  = ModuleAuthBase._op_render (self)
@@ -29,7 +29,16 @@ class ModuleMysql (ModuleAuthBase):
         return txt
 
     def _op_apply_changes (self, uri, post):
+        # These values must be filled out
+        for key, msg in [('host', 'Host'),
+                         ('user', 'DB User'),
+                         ('query', 'SQL query'),
+                         ('database', 'Database')]:
+            pre = '%s!%s' % (self._prefix, key)
+            self.Validate_NotEmpty (post, pre, '%s can not be empty'%(msg))
+            
+        # Apply TLS
         self.ApplyChangesPrefix (self._prefix, ['use_md5_passwd'], post)
+        post.pop('use_md5_passwd')
 
-        post2 = filter(lambda x: x!='use_md5_passwd', post)
-        ModuleAuthBase._op_apply_changes (self, uri, post2)
+        ModuleAuthBase._op_apply_changes (self, uri, post)

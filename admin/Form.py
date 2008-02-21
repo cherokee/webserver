@@ -88,8 +88,10 @@ class FormHelper (WebComponent):
         # Check whether there is a related error
         if cfg_key in self.errors.keys():
             msg, val = self.errors[cfg_key]
-            txt += '<div class="error"><b>%s</b>: %s</div>' % (val, msg)
-
+            if val:
+                txt += '<div class="error"><b>%s</b>: %s</div>' % (val, msg)
+            else:
+                txt += '<div class="error">%s</div>' % (msg)
         return txt
 
     def Label(self, title, for_id):
@@ -175,7 +177,6 @@ class FormHelper (WebComponent):
             try:
                 # Inherit the errors, if any
                 kwargs['errors'] = self.errors
-                
                 props_widget = module_obj_factory (name, self._cfg, cfg_key, 
                                                    self.submit_url, **kwargs)
                 render = props_widget._op_render()

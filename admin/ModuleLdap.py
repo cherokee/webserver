@@ -29,7 +29,15 @@ class ModuleLdap (ModuleAuthBase):
         return txt
 
     def _op_apply_changes (self, uri, post):
+        # These values must be filled out
+        for key, msg in [('server', 'Server'),
+                         ('bind_dn', 'Bind Domain'),
+                         ('base_dn', 'Base Domain')]:
+            pre = '%s!%s' % (self._prefix, key)
+            self.Validate_NotEmpty (post, pre, '%s can not be empty'%(msg))
+            
+        # Apply TLS
         self.ApplyChangesPrefix (self._prefix, ['tls'], post)
-
         post.pop('tls')
+
         ModuleAuthBase._op_apply_changes (self, uri, post)
