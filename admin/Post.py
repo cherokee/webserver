@@ -1,7 +1,7 @@
 import cgi
 
 class Post:
-    def __init__ (self, raw):
+    def __init__ (self, raw=''):
         self._vars = cgi.parse_qs (raw, keep_blank_values=1)
     
     def _smart_chooser (self, key):

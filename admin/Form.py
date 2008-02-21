@@ -84,8 +84,8 @@ class FormHelper (WebComponent):
     def Indent (self, content):
         return '<div class="indented">%s</div>' %(content)
         
-    def Dialog (self, txt, tipe='information'):
-        return '<div class="dialog-%s">%s</div>' % (tipe, txt)
+    def Dialog (self, txt, type_='information'):
+        return '<div class="dialog-%s">%s</div>' % (type_, txt)
 
     def HiddenInput (self, key, value):
         return '<input type="hidden" value="%s" id="%s" name="%s" />' % (value, key, key)

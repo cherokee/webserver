@@ -2,8 +2,8 @@ import validations
 
 from Page import *
 from Table import *
-from Entry import *
 from Form import *
+from consts import *
 
 DATA_VALIDATION = [
     ("server!max_fds",                validations.is_positive_int),

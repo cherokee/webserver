@@ -14,6 +14,12 @@ basically means that you can define where you want it to compress the
 information being sent with GZip.</p>
 """
 
+DATA_VALIDATION = [
+    ("server!encoder!.*?!allow", validations.is_safe_id_list),
+    ("server!encoder!.*?!deny",  validations.is_safe_id_list)
+]
+
+
 class MatchingList (FormHelper):
     OPTIONS = [
         ('default_deny',  'Deny by default'),
@@ -22,13 +28,14 @@ class MatchingList (FormHelper):
         ('allow_deny',    'Allow, Deny')
     ]
 
-    def __init__ (self, cfg, pre):
+    def __init__ (self, cfg, pre, errors):
         FormHelper.__init__ (self, 'matching_list', cfg)
         self._prefix = pre
+        self.errors  = errors
         
     def _op_render (self):
         txt   = ''
-        table = Table(2)
+        table = Table(3)
         self.AddTableOptions  (table, 'Type',  '%s!type' %(self._prefix), self.OPTIONS)
         self.AddTableEntry    (table, 'Allow', '%s!allow'%(self._prefix))
         self.AddTableEntry    (table, 'Deny',  '%s!deny' %(self._prefix))
@@ -47,15 +54,17 @@ class PageEncoders (PageMenu, FormHelper):
 
         self.AddMacroContent ('title', 'Encoders configuration')
         self.AddMacroContent ('content', content)
-
         return Page.Render(self)
 
     def _op_handler (self, uri, post):
-        if uri.startswith('/update'):
-            return self._op_apply_changes (post)
+        if post.get_val('is_submit') or \
+           uri.startswith('/update'):
+            self._op_apply_changes (post)
         elif uri.startswith('/add_encoder'):
-            return self._op_apply_add_encoder (post)
-        raise 'Unknown method'
+            self._op_apply_add_encoder (post)
+        else:
+            raise 'Unknown method'
+        return self._op_render()        
 
     def _render_encoder_list (self):
         txt     = ''
@@ -68,21 +77,22 @@ class PageEncoders (PageMenu, FormHelper):
         # Current encoders
         if cfg and cfg.has_child():
             txt += "<h2>Encoders</h2>"
-
-            txt2  = ''
+            
+            encs_txt = []
             for encoder in cfg:
+                txt2    = ''
                 cfg_key = '%s!%s'%(cfg_key, encoder)
-                mlist = MatchingList (self._cfg, cfg_key)
+
+                mlist = MatchingList (self._cfg, cfg_key, self.errors)
                 txt2 += "<h3>%s</h3>" % (encoder)
                 txt2 += mlist._op_render()
                 js = "post_del_key('/%s/update', '%s');" % (self._id, cfg_key)
                 button = self.InstanceButton ('Del', onClick=js)
                 txt2 += button
-                txt2 += "<hr />"
+                encs_txt.append(txt2)
 
-            if txt2.endswith("<hr />"):
-                txt2 = txt2[:-6]
-            txt += self.Indent(txt2)
+            txt += self.Indent("<hr />".join(encs_txt))
+
         # Add new encoder
         if not cfg:
             encoders_left = ENCODERS
@@ -105,10 +115,11 @@ class PageEncoders (PageMenu, FormHelper):
             table += (ops, bu1)
             txt += self.Indent(str(table))
 
-        return txt
+        form = Form ("/%s" % (self._id))
+        return form.Render(txt)
 
     def _op_apply_changes (self, post):
-        self.ApplyChanges ([], post)
+        self.ApplyChanges ([], post, DATA_VALIDATION)
         return "/%s" % (self._id)
     
     def _op_apply_add_encoder (self, post):

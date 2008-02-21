@@ -61,7 +61,7 @@ class Handler(pyscgi.SCGIHandler):
 
         if page:
             self.wfile.write ('Status: 200 OK\r\n\r\n' +
-                              page.HandleRequest (uri, None))
+                              page.HandleRequest (uri, Post()))
             return
 
         # Check the URL        
