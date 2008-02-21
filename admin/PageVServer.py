@@ -104,35 +104,7 @@ class PageVServer (PageMenu, FormHelper):
         tabs += [('Behaviour', tmp)]
 
         # Logging
-        tmp   = ''
-        table = Table(2)
-        props = {}
-
-        t1 = Table(2)
-        self.AddTableEntry (t1, 'Filename', '%s!logger!access!filename' % (pre))
-        t2 = Table(2)
-        self.AddTableEntry (t2, 'Command', '%s!logger!access!command' % (pre))
-        props['stderr'] = ''
-        props['syslog'] = ''
-        props['file']   = str(t1)
-        props['exec']   = str(t2)
-        e = self.AddTableOptions_w_Properties (table, "Access", '%s!logger!access!type' % (pre), 
-                                               LOGGER_WRITERS, props)
-        tmp += str(table) + e
-
-        table = Table(2)
-        props = {}
-        t1 = Table(2)
-        self.AddTableEntry (t1, 'Filename', '%s!logger!error!filename' % (pre))
-        t2 = Table(2)
-        self.AddTableEntry (t2, 'Command', '%s!logger!error!command' % (pre))
-        props['stderr'] = ''
-        props['syslog'] = ''
-        props['file']   = str(t1)
-        props['exec']   = str(t2)
-        e = self.AddTableOptions_w_Properties (table, "Error", '%s!logger!error!type' % (pre), 
-                                               LOGGER_WRITERS, props)
-        tmp += str(table) + e        
+        tmp = self._render_logger(host)
         tabs += [('Logging', tmp)]
 
         # Security
@@ -177,11 +149,66 @@ class PageVServer (PageMenu, FormHelper):
             e1   = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
             e2   = self.InstanceEntry ('%s!priority' % (pre), 'text', value=prio)
 
-            js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
-            button = self.InstanceButton ('Del', onClick=js)
+            if not (type == 'directory' and name == '/'):
+                js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
+                button = self.InstanceButton ('Del', onClick=js)
+            else:
+                button = ''
 
             table += (link, type, e1, e2, button)
         txt += str(table)
+        return txt
+
+    def _render_logger (self, host):
+        pre = 'vserver!%s'%(host)
+
+        # Writers
+        writers = '<h3>Writers</h3>'
+
+        table = Table(2)
+        t1 = Table(2)
+        self.AddTableEntry (t1, 'Filename', '%s!logger!access!filename' % (pre))
+        t2 = Table(2)
+        self.AddTableEntry (t2, 'Command', '%s!logger!access!command' % (pre))
+        props = {
+            'stderr': '',
+            'syslog': '',
+            'file':   str(t1),
+            'exec':   str(t2)
+        }
+        e = self.AddTableOptions_w_Properties (table, 'Access',
+                                               '%s!logger!access!type' % (pre), 
+                                               LOGGER_WRITERS, props)
+        writers += self.Indent(str(table) + e)
+
+        table = Table(2)
+        t1 = Table(2)
+        self.AddTableEntry (t1, 'Filename', '%s!logger!error!filename' % (pre))
+        t2 = Table(2)
+        self.AddTableEntry (t2, 'Command', '%s!logger!error!command' % (pre))
+        props = {
+            'stderr': '',
+            'syslog': '',
+            'file':   str(t1),
+            'exec':   str(t2)
+        }
+        e = self.AddTableOptions_w_Properties (table, 'Error',
+                                               '%s!logger!error!type' % (pre), 
+                                               LOGGER_WRITERS, props)
+        writers += self.Indent(str(table) + e)
+
+        # Format
+        props = {}
+        for logger, desc in LOGGERS:
+            if not logger:
+                continue
+            props[logger] = writers
+         
+        table = Table(2)
+        e = self.AddTableOptions_w_Properties (table, 'Format', '%s!logger'%(pre), 
+                                               LOGGERS, props)
+        txt  = '<h3>Logging Format</h3>'
+        txt += self.Indent(str(table)) + e
         return txt
 
     def _render_hosts (self, host):
