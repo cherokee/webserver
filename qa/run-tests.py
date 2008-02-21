@@ -5,7 +5,7 @@
 # Authors:
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
-# Copyright (C) 2001-2007 Alvaro Lopez Ortega
+# Copyright (C) 2001-2008 Alvaro Lopez Ortega
 # This file is distributed under the GPL license.
 
 import os
