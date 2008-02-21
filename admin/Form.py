@@ -154,6 +154,35 @@ class FormHelper (WebComponent):
         table += (label, ops)
         return value
 
+    def AddTableOptions_Reload (self, table, title, cfg_key, options, **kwargs):
+        assert (self.submit_url)
+
+        # Properties prefix
+        props_prefix = "auto_options_%d_" % (FormHelper.autoops_pre)
+        FormHelper.autoops_pre += 1
+
+        # The Table entry itself
+        js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, props_prefix)
+        name = self.AddTableOptions (table, title, cfg_key, options, 
+                                     onChange=js, wrap_id=props_prefix)
+        
+        # If there was no cfg value, pick the first
+        if not name:
+            name = options[0][0]
+        
+        # Render active option
+        if name:
+            try:
+                props_widget = module_obj_factory (name, self._cfg, cfg_key, 
+                                                   self.submit_url, **kwargs)
+                render = props_widget._op_render()
+            except IOError:
+                render = "Couldn't load the properties module: %s" % (name)
+        else:
+            render = ''
+        
+        return render
+
     def AddTableOptions_w_Properties (self, table, title, cfg_key, options, props):
         assert (self.submit_url)
 
@@ -163,8 +192,8 @@ class FormHelper (WebComponent):
 
         # The Table entry itself
         js = "options_changed('/ajax/update','%s', '%s');" % (cfg_key, props_prefix)
-        value = self.AddTableOptions (table, title, cfg_key, options, 
-                                      onChange=js, wrap_id=props_prefix)
+        self.AddTableOptions (table, title, cfg_key, options, 
+                              onChange=js, wrap_id=props_prefix)
 
         # The entries that come after
         props_txt  = ''
@@ -179,24 +208,6 @@ class FormHelper (WebComponent):
                  '</script>\n';
 
         return props_txt + update
-
-    def AddTableOptions_w_ModuleProperties (self, table, title, cfg_key, options, **kwargs):
-        assert (self.submit_url)
-
-        # Instance all the modules
-        props = {}
-        for name, desc in options:
-            if not name:
-                continue
-            try:
-                props_widget = module_obj_factory (name, self._cfg, cfg_key, 
-                                                   self.submit_url, **kwargs)
-                render = props_widget._op_render()
-            except IOError:
-                render = "Couldn't load the properties module: %s" % (name)
-            props[name] = render
-
-        return self.AddTableOptions_w_Properties (table, title, cfg_key, options, props)
 
     def InstanceCheckbox (self, cfg_key, default=None):
         try:
@@ -282,7 +293,7 @@ class FormHelper (WebComponent):
                     self._cfg[confkey] = value
         
     def ApplyChangesPrefix (self, prefix, checkboxes, post, validation=None):
-        checkboxes_pre = map(lambda x, p=prefix: "%s!%s"%(p,x), checkboxes)
+        checkboxes_pre = ["%s!%s"%(prefix, x) for x in checkboxes]
         return self.ApplyChanges (checkboxes_pre, post, validation)
 
     def CleanUp_conf_props (self, cfg_key, name):

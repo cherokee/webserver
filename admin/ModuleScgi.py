@@ -22,8 +22,7 @@ class ModuleScgi (ModuleCgiBase):
 
         table = Table(2)
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddTableOptions_w_ModuleProperties (table, "Balancer",
-                                                     prefix, BALANCERS)
+        e = self.AddTableOptions_Reload (table, "Balancer", prefix, BALANCERS)
         txt += str(table) + self.Indent(e)
         return txt
 

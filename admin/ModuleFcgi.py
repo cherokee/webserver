@@ -30,8 +30,7 @@ class ModuleFcgi (ModuleCgiBase):
         table = Table(2)
         prefix = "%s!balancer" % (self._prefix)
         assert (self.submit_url)
-        e = self.AddTableOptions_w_ModuleProperties (table, "Balancer", 
-                                                     prefix, BALANCERS)
+        e = self.AddTableOptions_Reload (table, "Balancer", prefix, BALANCERS)
         txt += str(table) + self.Indent(e)
         return txt
 
