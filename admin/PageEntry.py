@@ -32,10 +32,10 @@ class PageEntry (PageMenu, FormHelper):
         self._host        = temp[1]
         self._prio        = temp[3]        
         self._priorities  = VServerEntries (self._host, self._cfg)
-        self._entry       = self._priorities[self._prio]
-        
+        self._entry       = self._priorities[self._prio]        
+
         # Set the submit URL
-        url = '/vserver/%s/prio/%s/update' % (self._host, self._prio)
+        url = '/vserver/%s/prio/%s' % (self._host, self._prio)
         self.set_submit_url (url)
 
     def _op_handler (self, uri, post):
@@ -49,14 +49,8 @@ class PageEntry (PageMenu, FormHelper):
         self._conf_prefix = 'vserver!%s!%s!%s' % (self._host, self._entry[0], self._entry[1])
 
         # Check what to do..
-        if uri.endswith('/update'):
+        if post.get_val('is_submit'):
             self._op_apply_changes (uri, post)
-            if self.has_errors():
-                return self._op_default (uri)
-
-            parts = uri.split('/')
-            prio_url = '/vserver/' + '/'.join(parts[:-1])
-            return prio_url
 
         return self._op_default (uri)
     
@@ -128,7 +122,7 @@ class PageEntry (PageMenu, FormHelper):
 
         txt   = ""
         table = Table(2)
-        self.AddTableCheckbox (table, 'Only Secure', '%s!only_secure'%(pre), False)
+        self.AddTableCheckbox (table, 'Only https', '%s!only_secure'%(pre), False)
         self.AddTableEntry    (table, 'Allow From',  '%s!allow_from' %(pre))
 
         e = self.AddTableOptions_Reload (table, 'Authentication', '%s!auth'%(pre), VALIDATORS)

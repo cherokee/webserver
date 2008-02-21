@@ -7,6 +7,7 @@ FORM_TEMPLATE = """
 <form action="%(action)s" method="%(method)s">
   %(content)s
   %(submit)s
+  <input type="hidden" name="is_submit", value="1" />
 </form>
 """
 
@@ -16,23 +17,32 @@ SUBMIT_BUTTON = """
 
 class WebComponent:
     def __init__ (self, id, cfg):
-        self._id         = id
-        self._cfg        = cfg
+        self._id  = id
+        self._cfg = cfg
 
-    def _op_handler (self, ruri, post):
-        raise "Should have been overridden"
+    def _op_handler (self, uri, post):
+        if post.get_val('is_submit'):
+            self._op_apply_changes (uri, post)
+        return self._op_render()
 
     def _op_render (self):
         raise "Should have been overridden"
 
+    def _apply_changes (self, uri, post):
+        raise "Should have been overridden"
+
     def HandleRequest (self, uri, post):
+        # Is this a form submit
+        is_submit = post.get_val('is_submit')
+
+        # Check the URL
         parts = uri.split('/')[2:]        
         if parts:
-            ruri = '/' + reduce (lambda x,y: '%s/%s'%(x,y), parts)
+            ruri = '/' + '/'.join(parts)
         else:
             ruri = '/'
 
-        if len(ruri) <= 1:
+        if len(ruri) <= 1 and not is_submit:
             return self._op_render()
 
         return self._op_handler(ruri, post)
@@ -311,6 +321,7 @@ class FormHelper (WebComponent):
         return self.ApplyChanges (checkboxes_pre, post, validation)
 
     def ApplyChanges_OptionModule (self, cfg_key, uri, post):
+        # Read the option entry value
         try:
             name = self._cfg[cfg_key].value
         except:
@@ -325,6 +336,7 @@ class FormHelper (WebComponent):
             self.errors[error] = module.errors[error]
 
         # Clean up properties
+        tmp = """
         props = module.__class__.PROPERTIES
 
         to_be_deleted = []
@@ -335,4 +347,4 @@ class FormHelper (WebComponent):
 
         for entry in to_be_deleted:
             del(self._cfg[entry])
-
+        """

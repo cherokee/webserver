@@ -30,7 +30,7 @@ class PageVServer (PageMenu, FormHelper):
         assert (len(uri) > 1)
 
         host = uri.split('/')[1]
-        self.set_submit_url ('/vserver/%s/update'%(host))
+        self.set_submit_url ('/vserver/%s'%(host))
 
         default_render = False  
       
@@ -41,7 +41,7 @@ class PageVServer (PageMenu, FormHelper):
         if not cfg.has_child():
             return '/vserver/'
 
-        if uri.endswith('/update'):
+        if post.get_val('is_submit'):
             # It's adding a new entry
             if 'add_new_entry' in post and \
                 len (post['add_new_entry'][0]) > 0:

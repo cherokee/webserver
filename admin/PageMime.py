@@ -14,11 +14,6 @@ class PageMime (PageMenu, FormHelper):
         PageMenu.__init__ (self, 'mime', cfg)
         FormHelper.__init__ (self, 'mime', cfg)
 
-    def _op_handler (self, uri, post):
-        if uri.startswith('/update'):
-            return self._op_apply_changes(post)
-        raise 'Unknown method'
-
     def _op_render (self):
         content = self._render_icon_list()
 
@@ -27,7 +22,7 @@ class PageMime (PageMenu, FormHelper):
 
         return Page.Render(self)
 
-    def _op_apply_changes (self, post):
+    def _op_apply_changes (self, uri, post):
         self.ApplyChanges ([], post, DATA_VALIDATION)
         return "/%s" % (self._id)
 
@@ -38,5 +33,5 @@ class PageMime (PageMenu, FormHelper):
         txt  = '<h1>System-wide MIME types file</h1>'        
         txt += self.Indent(table)
 
-        form = Form ('%s/update' % (self._id))
+        form = Form ('/%s' % (self._id))
         return form.Render(txt)

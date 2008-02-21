@@ -58,6 +58,23 @@ ENCODERS = [
     ('gzip',     'GZip')
 ]
 
+THREAD_POLICY = [
+    ('',      'Default'),
+    ('fifo',  'FIFO'),
+    ('rr',    'Round-robin'),
+    ('other', 'Dynamic')
+]
+
+POLL_METHODS = [
+    ('',       'Automatic'),
+    ('epoll',  'epoll() - Linux >= 2.6'),
+    ('kqueue', 'kqueue() - BSD, OS X'),
+    ('ports',  'Solaris ports - >= 10'),
+    ('poll',   'poll()'),
+    ('select', 'select()'),
+    ('win32',  'Win32')
+]
+
 
 
 CHEROKEE_MIN_DEFAULT_CONFIG = """# Default configuration

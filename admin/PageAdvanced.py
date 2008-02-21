@@ -5,24 +5,6 @@ from Table import *
 from Entry import *
 from Form import *
 
-
-THREAD_POLICY = [
-    ('',      'Default'),
-    ('fifo',  'FIFO'),
-    ('rr',    'Round-robin'),
-    ('other', 'Dynamic')
-]
-
-POLL_METHODS = [
-    ('',       'Automatic'),
-    ('epoll',  'epoll() - Linux >= 2.6'),
-    ('kqueue', 'kqueue() - BSD, OS X'),
-    ('ports',  'Solaris ports - >= 10'),
-    ('poll',   'poll()'),
-    ('select', 'select()'),
-    ('win32',  'Win32')
-]
-
 DATA_VALIDATION = [
     ("server!max_fds",                validations.is_positive_int),
     ("server!pid_file",               validations.parent_is_dir),
@@ -46,12 +28,6 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddMacroContent ('title', 'Advanced configuration')
         self.AddMacroContent ('content', content)
         return Page.Render(self)
-
-    def _op_handler (self, uri, post):
-        self._op_apply_changes (post)
-        if self.has_errors():
-            return self._op_render()
-        return "/%s" % (self._id)
 
     def _render_content (self):
         txt = "<h1>Advanced configuration</h1>"
@@ -79,9 +55,9 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddTableEntry    (table, 'Max keepalive requests', 'server!keepalive_max_requests')
         txt += self.Indent(table)
 
-        form = Form ("/%s/update" % (self._id))
+        form = Form ("/%s" % (self._id))
         return form.Render(txt)
 
-    def _op_apply_changes (self, post):
+    def _op_apply_changes (self, uri, post):
         self.ApplyChanges ([], post, DATA_VALIDATION) 
 

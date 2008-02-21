@@ -34,12 +34,6 @@ class PageGeneral (PageMenu, FormHelper):
         self.AddMacroContent ('content', content)
         return Page.Render(self)
 
-    def _op_handler (self, uri, post):
-        self._op_apply_changes (post)
-        if self.has_errors():
-            return self._op_render()
-        return "/%s" % (self._id)
-
     def _render_content (self):
         txt = "<h1>General Settings</h1>"
 
@@ -65,9 +59,9 @@ class PageGeneral (PageMenu, FormHelper):
         self.AddTableEntry (table, 'Chroot', 'server!chroot')
         txt += self.Indent(table)
 
-        form = Form ("/%s/update" % (self._id))
+        form = Form ("/%s" % (self._id))
         return form.Render(txt)
 
-    def _op_apply_changes (self, post):
+    def _op_apply_changes (self, uri, post):
         self.ApplyChanges (['server!ipv6', 'server!keepalive'], post, 
                            validation = DATA_VALIDATION)
