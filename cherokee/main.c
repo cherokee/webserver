@@ -45,9 +45,9 @@
 	"vserver!default!directory!/cherokee_themes!handler = file\n"                        \
 	"vserver!default!directory!/cherokee_themes!document_root = " CHEROKEE_THEMEDIR "\n" \
 	"vserver!default!directory!/cherokee_themes!priority = 3\n"                          \
-	"icons!default = unknown.png\n"                                                      \
+	"icons!default = page_white.png\n"                                                   \
 	"icons!directory = folder.png\n"      	                                             \
-	"icons!parent_directory = back.png\n"                                                \
+	"icons!parent_directory = arrow_turn_left.png\n"                                     \
 	"try_include = " CHEROKEE_CONFDIR "/mods-enabled\n"
 
 static cherokee_server_t  *srv           = NULL;
