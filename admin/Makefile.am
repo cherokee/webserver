@@ -63,6 +63,7 @@ default.template.html \
 error_not_writable.template.html \
 error_not_found.template.html \
 error_icons_dir_missing.template.html \
+error_couldnt_launch.template.html \
 advanced.help.html \
 entry.help.html \
 general.help.html \
