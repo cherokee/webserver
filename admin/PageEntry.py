@@ -102,8 +102,8 @@ class PageEntry (PageMenu, FormHelper):
 
         tmp += '<h2>Security</h2>'
         tmp += self._render_security ()
-
         txt += self.Indent(tmp)
+
         form = Form (self.submit_url)
         return form.Render(txt)
 

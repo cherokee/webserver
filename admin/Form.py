@@ -288,6 +288,15 @@ class FormHelper (WebComponent):
                     except ValueError, error:
                         self._error_add (post_entry, value, error)
 
+    def ApplyCheckbox (self, post, cfg_key):
+        if cfg_key in self.errors:
+            return
+
+        if cfg_key in post:
+            self._cfg[cfg_key] = post.pop(cfg_key)
+        else:
+            self._cfg[cfg_key] = "0"
+
     def ApplyChanges (self, checkboxes, post, validation=None):
         # Validate changes
         if validation:
@@ -295,12 +304,7 @@ class FormHelper (WebComponent):
         
         # Apply checkboxes
         for key in checkboxes:
-            if key in self.errors:
-                continue
-            if key in post:
-                self._cfg[key] = post[key][0]
-            else:
-                self._cfg[key] = "0"
+            self.ApplyCheckbox (post, key)
 
         # Apply text entries
         for confkey in post:
