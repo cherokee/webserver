@@ -70,7 +70,7 @@ class Form:
 
 
 class FormHelper (WebComponent):
-    autoops_pre = 1
+    options_wrap_num = 1
 
     def __init__ (self, id, cfg):
         WebComponent.__init__ (self, id, cfg)
@@ -144,13 +144,10 @@ class FormHelper (WebComponent):
             extra += '%s="%s" '%(karg, kwargs[karg])
         return '<input type="button" value="%s" %s/>' % (name, extra)
 
-    def AddTableOptions (self, table, title, cfg_key, options, *args, **kwargs):
-        # Dirty hack! PoC (1)
-        wrap_id = None
-        if 'wrap_id' in kwargs:
-            wrap_id = kwargs['wrap_id']
-            del(kwargs['wrap_id'])
+    def _get_auto_wrap_id (self):
+        return "options_wrap_%d" % (FormHelper.options_wrap_num)
 
+    def AddTableOptions (self, table, title, cfg_key, options, *args, **kwargs):
         try:
             value = self._cfg[cfg_key].value
             ops = EntryOptions (cfg_key, options, selected=value, *args, **kwargs)
@@ -158,25 +155,30 @@ class FormHelper (WebComponent):
             value = ''
             ops = EntryOptions (cfg_key, options, *args, **kwargs)
 
-        # Dirty hack! PoC (2)
-        if wrap_id:
-            ops = '<div id="%s" name="%s">%s</div>'%(wrap_id, wrap_id, ops)
+        # Auto wrap
+        auto_wrap_id = self._get_auto_wrap_id()
+        FormHelper.options_wrap_num += 1
 
-        label = self.Label(title, cfg_key);
+        ops = '<div id="%s" name="%s">%s</div>'%(auto_wrap_id, auto_wrap_id, ops)
+        label = self.Label(title, cfg_key)
         table += (label, ops)
+
         return value
+
+    def AddTableOptions_Ajax (self, table, title, cfg_key, options, *args, **kwargs):
+        wrap_id = self._get_auto_wrap_id()
+        js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, wrap_id)
+        kwargs['onChange'] = js
+
+        return self.AddTableOptions (table, title, cfg_key, options, *args, **kwargs)
 
     def AddTableOptions_Reload (self, table, title, cfg_key, options, **kwargs):
         assert (self.submit_url)
 
-        # Properties prefix
-        props_prefix = "auto_options_%d_" % (FormHelper.autoops_pre)
-        FormHelper.autoops_pre += 1
-
         # The Table entry itself
-        js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, props_prefix)
-        name = self.AddTableOptions (table, title, cfg_key, options, 
-                                     onChange=js, wrap_id=props_prefix)
+        auto_wrap_id = self._get_auto_wrap_id()
+        js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, auto_wrap_id)
+        name = self.AddTableOptions (table, title, cfg_key, options, onChange=js)
         
         # If there was no cfg value, pick the first
         if not name:
@@ -200,25 +202,22 @@ class FormHelper (WebComponent):
     def AddTableOptions_w_Properties (self, table, title, cfg_key, options, props):
         assert (self.submit_url)
 
-        # Properties prefix
-        props_prefix = "auto_options_%d_" % (FormHelper.autoops_pre)
-        FormHelper.autoops_pre += 1
-
         # The Table entry itself
-        js = "options_changed('/ajax/update','%s', '%s');" % (cfg_key, props_prefix)
-        self.AddTableOptions (table, title, cfg_key, options, 
-                              onChange=js, wrap_id=props_prefix)
+        auto_wrap_id = self._get_auto_wrap_id()
+
+        js = "options_active_prop('%s', '%s');" % (cfg_key, auto_wrap_id)
+        self.AddTableOptions (table, title, cfg_key, options, onChange=js)
 
         # The entries that come after
         props_txt  = ''
         for name, desc in options:
             if not name:
                 continue
-            props_txt += '<div id="%s%s">%s</div>\n' % (props_prefix, name, props[name])
+            props_txt += '<div id="%s_%s">%s</div>\n' % (auto_wrap_id, name, props[name])
 
         # Show active property
         update = '<script type="text/javascript">\n' + \
-                 '   options_active_prop("%s","%s");\n' % (cfg_key, props_prefix) + \
+                 '   options_active_prop("%s","%s");\n' % (cfg_key, auto_wrap_id) + \
                  '</script>\n';
 
         return props_txt + update

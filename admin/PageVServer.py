@@ -20,6 +20,14 @@ DATA_VALIDATION = [
     ("add_new_priority",                     validations.is_positive_int)
 ]
 
+LOGGER_ACCESS_NOTE = """
+<p>This is the log where the information on the requests that the server receives is stored.</p>
+"""
+
+LOGGER_ERROR_NOTE = """
+<p>Invalid requests and unexpected issues are logged here:</p>
+"""
+
 class PageVServer (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'vserver', cfg)
@@ -160,55 +168,56 @@ class PageVServer (PageMenu, FormHelper):
         return txt
 
     def _render_logger (self, host):
-        pre = 'vserver!%s'%(host)
+        pre = 'vserver!%s!logger'%(host)
 
-        # Writers
-        writers = '<h3>Writers</h3>'
-
+        # Logger
         table = Table(2)
-        t1 = Table(2)
-        self.AddTableEntry (t1, 'Filename', '%s!logger!access!filename' % (pre))
-        t2 = Table(2)
-        self.AddTableEntry (t2, 'Command', '%s!logger!access!command' % (pre))
-        props = {
-            'stderr': '',
-            'syslog': '',
-            'file':   str(t1),
-            'exec':   str(t2)
-        }
-        e = self.AddTableOptions_w_Properties (table, 'Access',
-                                               '%s!logger!access!type' % (pre), 
-                                               LOGGER_WRITERS, props)
-        writers += self.Indent(str(table) + e)
+        self.AddTableOptions_Ajax (table, 'Format', pre, LOGGERS)
 
-        table = Table(2)
-        t1 = Table(2)
-        self.AddTableEntry (t1, 'Filename', '%s!logger!error!filename' % (pre))
-        t2 = Table(2)
-        self.AddTableEntry (t2, 'Command', '%s!logger!error!command' % (pre))
-        props = {
-            'stderr': '',
-            'syslog': '',
-            'file':   str(t1),
-            'exec':   str(t2)
-        }
-        e = self.AddTableOptions_w_Properties (table, 'Error',
-                                               '%s!logger!error!type' % (pre), 
-                                               LOGGER_WRITERS, props)
-        writers += self.Indent(str(table) + e)
-
-        # Format
-        props = {}
-        for logger, desc in LOGGERS:
-            if not logger:
-                continue
-            props[logger] = writers
-         
-        table = Table(2)
-        e = self.AddTableOptions_w_Properties (table, 'Format', '%s!logger'%(pre), 
-                                               LOGGERS, props)
         txt  = '<h3>Logging Format</h3>'
-        txt += self.Indent(str(table)) + e
+        txt += self.Indent(str(table))
+        
+        # Writers
+        if self._cfg.get_val(pre):
+            writers = ''
+
+            # Accesses
+            cfg_key = "%s!access!type"%(pre)
+            table = Table(2)
+            self.AddTableOptions_Ajax (table, 'Accesses', cfg_key, LOGGER_WRITERS)
+            writers += self.Dialog(LOGGER_ACCESS_NOTE)
+            writers += str(table)
+
+            access = self._cfg.get_val(cfg_key)
+            if access == 'file':
+                t1 = Table(2)
+                self.AddTableEntry (t1, 'Filename', '%s!access!filename' % (pre))
+                writers += self.Indent(t1)
+            elif access == 'exec':
+                t1 = Table(2)
+                self.AddTableEntry (t1, 'Command', '%s!access!command' % (pre))
+                writers += self.Indent(t1)
+
+            # Error
+            cfg_key = "%s!error!type"%(pre)
+            table = Table(2)
+            self.AddTableOptions_Ajax (table, 'Errors', cfg_key, LOGGER_WRITERS)
+            writers += self.Dialog(LOGGER_ERROR_NOTE)
+            writers += str(table)
+
+            error = self._cfg.get_val(cfg_key)
+            if error == 'file':
+                t1 = Table(2)
+                self.AddTableEntry (t1, 'Filename', '%s!error!filename' % (pre))
+                writers += self.Indent(t1)
+            elif error == 'exec':
+                t1 = Table(2)
+                self.AddTableEntry (t1, 'Command', '%s!error!command' % (pre))
+                writers += self.Indent(t1)
+
+            txt += '<h3>Writers</h3>'
+            txt += self.Indent(writers)
+
         return txt
 
     def _render_hosts (self, host):

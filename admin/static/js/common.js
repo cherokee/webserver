@@ -10,6 +10,20 @@ function get_by_id (id)
 	   return document.all[id];
 }
 
+function get_by_id_and_class (id, klass)
+{
+	   var ret;
+
+        $(klass).each(function(i) {
+		  if (this.id == id) {
+				ret = this;
+				return false;
+            }
+	   });
+
+	   return ret;
+}
+
 function make_visible (DivID, visible)
 {
     if(document.layers) {	   
@@ -31,21 +45,35 @@ function comment_out (DivID, visible)
     }
 }
 
+function comment_out_class (id, klass, visible)
+{
+    var o = get_by_id_and_class (id, klass);
+    if (o == null) return;
+
+    if (visible) {
+		  o.style.display = 'block';
+    } else {
+		  o.style.display = 'none';
+    }
+}
+
+
+
 function options_active_prop (options_id, props_prefix)
 {
-	   var thisform = get_by_id (options_id);	   
-	   var options  = thisform.options;
-	   var selected = options[options.selectedIndex].value;
+	   var thisselect = get_by_id_and_class (options_id, 'select');
+	   var options    = thisselect.options;
+	   var selected   = options[options.selectedIndex].value;
 
 	   /* Show the righ entry */
 	   for (i=0; i<options.length; i++) {
-			 var i_str = props_prefix + options[i].value;
-			 var s_str = props_prefix + selected;
+			 var i_str = props_prefix + '_' + options[i].value;
+			 var s_str = props_prefix + '_' + selected;
 
 			 if (i_str == s_str) {
-				    comment_out (i_str, 1);
+				    comment_out_class (i_str, 'div', 1);
 			 } else {
-				    comment_out (i_str, 0);
+				    comment_out_class (i_str, 'div', 0);
 			 }
 	   }
 }
