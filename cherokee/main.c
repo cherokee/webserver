@@ -167,7 +167,7 @@ process_parameters (int argc, char **argv)
 			break;
 		case 'h':
 		default:
-			fprintf (stderr, "Usage: %s " CONFIG_FILE_HELP "[-b] -h -v\n", argv[0]);
+			fprintf (stderr, "Usage: %s " CONFIG_FILE_HELP " [-b] -h -v\n", argv[0]);
 			exit(1);
 		}
 	}

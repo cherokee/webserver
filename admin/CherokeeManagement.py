@@ -2,7 +2,8 @@ import os
 import sys
 import time
 import signal
-import select
+from select import select
+from subprocess import *
 
 from consts import *
 from configured import *
@@ -12,6 +13,13 @@ DEFAULT_PID_LOCATIONS = [
     '/var/run/cherokee.pid',
     os.path.join (PREFIX, 'var/run/cherokee.pid')
 ]
+
+CHEROKEE_MIN_DEFAULT_CONFIG = """# Default configuration
+server!pid_file = %s
+vserver!default!document_root = /tmp
+vserver!default!directory!/!handler = common
+vserver!default!directory!/!priority = 1
+""" % (DEFAULT_PID_LOCATIONS[0])
 
 
 # Cherokee Management 'factory':
@@ -57,50 +65,37 @@ class CherokeeManagement:
         return is_PID_alive (self._pid)
 
     def launch (self):
-        sys.stdout.flush()
-        sys.stderr.flush()
+        def daemonize():
+            os.setsid() 
 
-        errout, errin = os.pipe()        
+        p = Popen ([CHEROKEE_SRV_PATH], stdout=PIPE, stderr=PIPE, preexec_fn=daemonize)
+        stdout_f,  stderr_f  = (p.stdout, p.stderr)
+        stdout_fd, stderr_fd = stdout_f.fileno(), stderr_f.fileno()
+        stdout,    stderr    = '', ''
 
-        try: 
-            pid = os.fork() 
-            if pid == 0:
-                os.dup2(errin, 2)
-                try:
-                    os.setsid() 
-                    os.chdir("/") 
-                    os.umask(0) 
-                except:
-                    pass
-                try:
-                    os.execl(CHEROKEE_SRV_PATH)
-                finally:
-                    os._exit(1)
-        except OSError, e: 
-            print >>sys.stderr, "fork #2 failed: %d (%s)" % (e.errno, e.strerror) 
-            sys.exit(1)         
+        while True:
+            r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
 
-        print "Cherokee PID %d" % pid 
+            if e:
+                self._pid = None
+                return "Could access file descriptors: " + str(e)
 
-        os.close(errin)
-        childerr = os.fdopen(errout, 'r')
+            if stdout_fd in r:
+                stdout += stdout_f.read(1)
+            if stderr_fd in r:
+                stderr += stderr_f.read(1)
 
-        errors = []
-        for i in range(5):
-            r,w,x = select.select ([errout], [], [], 1)
-            print r,w,x
-            if errout in r:
-                error = childerr.readline().strip()
-                if not error: continue
-                errors.append (error)
+            if stderr.count('\n'):
+                self._pid = None
+                return stderr
 
-        if not errors:
-            self._pid = pid
-            return
+            if stdout.count('\n') > 1:
+                break
 
-        self._pid = None
-        return '\r'.join (errors)
-            
+        self._pid = p.pid
+        time.sleep(2)
+        return None
+
     def stop (self):
         if not self._pid:
             return

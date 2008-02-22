@@ -675,6 +675,7 @@ print_banner (cherokee_server_t *srv)
 	}
 
 	printf ("%s\n", n.buf);
+	fflush (stdout);
 	cherokee_buffer_mrproper (&n);
 	
 	return ret_ok;

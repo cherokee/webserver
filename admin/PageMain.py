@@ -35,13 +35,12 @@ class PageMain (PageMenu):
     def __init__ (self, cfg=None):
         PageMenu.__init__ (self, 'main', cfg)
 
-        self.manager = cherokee_management_get (cfg)
-
     def _op_render (self):
         self.AddMacroContent ('title', 'Welcome to Cherokee Admin')
         self.AddMacroContent ('content', self.Read('main.template'))
 
-        if self.manager.is_alive():
+        manager = cherokee_management_get (self._cfg)
+        if manager.is_alive():
             self.AddMacroContent ('status', SERVER_RUNNING)
         else:
             self.AddMacroContent ('status', SERVER_NOT_RUNNING)
