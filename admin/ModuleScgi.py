@@ -29,6 +29,11 @@ class ModuleScgi (ModuleCgiBase):
     def _op_apply_changes (self, uri, post):
         # Apply balancer changes
         pre  = "%s!balancer" % (self._prefix)
+
+        new_balancer = post.pop(pre)
+        if new_balancer:
+            self._cfg[pre] = new_balancer
+
         cfg  = self._cfg[pre]
         if cfg and cfg.value:
             name = cfg.value
