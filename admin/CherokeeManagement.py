@@ -68,7 +68,7 @@ class CherokeeManagement:
         def daemonize():
             os.setsid() 
 
-        p = Popen ([CHEROKEE_SRV_PATH], stdout=PIPE, stderr=PIPE, preexec_fn=daemonize)
+        p = Popen ([CHEROKEE_SRV_PATH], stdout=PIPE, stderr=PIPE, preexec_fn=daemonize, close_fds=True)
         stdout_f,  stderr_f  = (p.stdout, p.stderr)
         stdout_fd, stderr_fd = stdout_f.fileno(), stderr_f.fileno()
         stdout,    stderr    = '', ''
