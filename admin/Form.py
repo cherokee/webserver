@@ -111,20 +111,33 @@ class FormHelper (WebComponent):
     def InstanceTab (self, entries):
         # HTML
         txt = '<dl class="tab" id="tab_%s">' % (self._id)
+        num = 0
         for title, content in entries:
-            txt += '<dt>%s</dt>\n' % (title)
+            txt += '<dt num="%d">%s</dt>\n' % (num, title)
             txt += '<dd>%s</dd>\n' % (content)
+            num += 1
         txt += '</dl>'
 
         # Javascript
-        txt += '<script type="text/javascript">'
-        txt += 'jQuery("#tab_%s").Accordion({' % (self._id)
-        txt += '  autoheight: true,';
-        txt += '  animated: "easeslide",';
-        txt += '  alwaysOpen: false';
-        txt += '});' 
-        txt += '</script>'
+        txt += '''
+        <script type="text/javascript">
+          var settings = {
+             autoheight: true,
+             alwaysOpen: true,
+             animated:   'easeslide'
+          };
 
+          open_tab = get_cookie('open_tab');
+          if (open_tab) {
+            settings['active'] = parseInt(open_tab);
+          } 
+
+          jQuery("#tab_%s").Accordion(settings).change(
+            function (event, newHeader, oldHeader) { 
+              document.cookie = "open_tab=" + newHeader.attr("num");
+          });
+        </script>
+        ''' % (self._id)
         return txt
 
     def AddTableEntry (self, table, title, cfg_key, extra_cols=None):

@@ -68,10 +68,7 @@ class PageIcon (PageMenu, FormHelper):
 
         # Check selected
         if not selected:
-            try:
-                selected = self._cfg[cfg_key].value
-            except:
-                pass
+            selected = self._cfg.get_val(cfg_key)
             
         # Build the options
         if selected:
@@ -134,7 +131,7 @@ class PageIcon (PageMenu, FormHelper):
 
             for icon_name in icons:
                 cfg_key = 'icons!file!%s' % (icon_name)
-                match   = self._cfg[cfg_key].value
+                match   = self._cfg.get_val(cfg_key)
                 op, im  = self._get_options_icons (cfg_key, selected=icon_name)
                 js = "post_del_key('/icons/update', '%s');" % (cfg_key)
                 button = self.InstanceButton ('Del', onClick=js)

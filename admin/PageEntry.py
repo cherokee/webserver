@@ -109,7 +109,7 @@ class PageEntry (PageMenu, FormHelper):
 
     def _render_handler_properties (self):
         pre  = "%s!handler" % (self._conf_prefix)
-        name = self._cfg[pre].value
+        name = self._cfg.get_val(pre)
 
         try:
             props = module_obj_factory (name, self._cfg, pre, self.submit_url)

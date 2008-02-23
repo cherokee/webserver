@@ -72,7 +72,7 @@ class PageEncoders (PageMenu, FormHelper):
         cfg     = self._cfg[cfg_key]
 
         txt += "<h1>Information encoding</h1>"
-        txt += self.Indent(COMMENT)
+        txt += self.Dialog(COMMENT)
         
         # Current encoders
         if cfg and cfg.has_child():

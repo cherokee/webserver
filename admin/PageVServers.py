@@ -43,18 +43,28 @@ class PageVServers (PageMenu, FormHelper):
         txt += self.Dialog (COMMENT)
         
         # Render Virtual Server list
-        table = Table(2)
-        if vservers:
+        if vservers: 
             txt += "<h3>Virtual Server List</h3>"
-        
+
+            table = Table(4)
+            table += ('Name', 'Document Root', 'Logging', '')
+
             for vserver in vservers:
+                document_root = self._cfg.get_val('vserver!%s!document_root'%(vserver), '')
+                logger_val    = self._cfg.get_val('vserver!%s!logger'%(vserver))
+
+                if logger_val:
+                    logging = 'yes'
+                else:
+                    logging = 'no'
+
                 link = '<a href="/vserver/%s">%s</a>' % (vserver, vserver)
                 if vserver != "default":
                     js = "post_del_key('/vserver/ajax_update', 'vserver!%s');"%(vserver)
                     link_del = self.InstanceButton ("Del", onClick=js)
                 else:
                     link_del = ''
-                table += (link, link_del)
+                table += (link, document_root, logging, link_del)
             txt += self.Indent(table)
 
         # Add new Virtual Server

@@ -47,9 +47,9 @@ class PageGeneral (PageMenu, FormHelper):
 
         txt += "<h2>Basic Behaviour</h2>"
         table = Table(2)
-        self.AddTableEntry    (table, 'Timeout',        'server!timeout')
-        self.AddTableCheckbox (table, 'KeepAlive',      'server!keepalive', True)
-        self.AddTableOptions  (table, 'Server Tokens',  'server!server_tokens', PRODUCT_TOKENS)
+        self.AddTableEntry    (table, 'Timeout (<i>secs</i>)', 'server!timeout')
+        self.AddTableCheckbox (table, 'KeepAlive',           'server!keepalive', True)
+        self.AddTableOptions  (table, 'Server Tokens',       'server!server_tokens', PRODUCT_TOKENS)
         txt += self.Indent(table)
 
         txt += "<h2>Server Permissions</h2>"

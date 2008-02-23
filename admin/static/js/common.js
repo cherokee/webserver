@@ -129,3 +129,17 @@ function post_add_entry_key (url, entry_name, cfg_key)
               }
         );
 }
+
+
+function get_cookie (key) 
+{
+  var i = document.cookie.indexOf (key+'=');
+  if (i < 0) return;
+
+  i += key.length + 1;
+
+  var e = document.cookie.indexOf(';', i);
+  if (e < 0) e = document.cookie.length;
+
+  return unescape (document.cookie.substring (i, e));
+}

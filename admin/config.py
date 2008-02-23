@@ -13,13 +13,13 @@ class ConfigNode (object):
 
     value = property (_get_value, _set_value)
 
-    def get_val (self, key):
+    def get_val (self, key, default=None):
         try:
             subcfg = self[key]
         except:
-            return None
+            return default
         if not subcfg:
-            return None
+            return default
         return subcfg.value
 
     # Get child
@@ -202,8 +202,8 @@ class Config:
         pres = reduce (lambda x,y: "%s!%s" % (x,y), preg[:-1])
         return (self[pres], pres, last)
 
-    def get_val (self, path):
-        return self.root.get_val (path)
+    def get_val (self, path, default=None):
+        return self.root.get_val (path, default)
 
     def __delitem__ (self, path):
         parent, parent_path, child_name = self._get_parent_node (path)

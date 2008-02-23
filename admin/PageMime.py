@@ -9,6 +9,11 @@ DATA_VALIDATION = [
     ("server!mime_files", validations.is_path_list),
 ]
 
+COMMENT = """
+<p>Here you can define which MIME types files you want Cherokee to
+query when it servers static content.</p>
+"""
+
 class PageMime (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'mime', cfg)
@@ -27,10 +32,11 @@ class PageMime (PageMenu, FormHelper):
         return "/%s" % (self._id)
 
     def _render_icon_list (self):
+        txt  = '<h1>MIME types</h1>'        
+        txt += self.Dialog(COMMENT)
+
         table = Table(2, 1)
         self.AddTableEntry (table, 'Files', 'server!mime_files')
-
-        txt  = '<h1>System-wide MIME types file</h1>'        
         txt += self.Indent(table)
 
         form = Form ('/%s' % (self._id))

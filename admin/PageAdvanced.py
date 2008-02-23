@@ -17,6 +17,11 @@ DATA_VALIDATION = [
     ('server!keepalive_max_requests', validations.is_positive_int)
 ]
 
+WARNING = """
+<p><b>WARNING</b>: This section contains advanced configuration
+paramters. We recommend you not to change anything unless you are
+completely sure about what you are doing.</p>
+"""
 
 class PageAdvanced (PageMenu, FormHelper):
     def __init__ (self, cfg):
@@ -31,6 +36,7 @@ class PageAdvanced (PageMenu, FormHelper):
 
     def _render_content (self):
         txt = "<h1>Advanced configuration</h1>"
+        txt += self.Dialog(WARNING, 'warning')
 
         txt += "<h2>System tweaking</h2>"
         table = Table(2)
