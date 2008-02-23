@@ -212,29 +212,6 @@ class FormHelper (WebComponent):
         
         return render
 
-    def AddTableOptions_w_Properties (self, table, title, cfg_key, options, props):
-        assert (self.submit_url)
-
-        # The Table entry itself
-        auto_wrap_id = self._get_auto_wrap_id()
-
-        js = "options_active_prop('%s', '%s');" % (cfg_key, auto_wrap_id)
-        self.AddTableOptions (table, title, cfg_key, options, onChange=js)
-
-        # The entries that come after
-        props_txt  = ''
-        for name, desc in options:
-            if not name:
-                continue
-            props_txt += '<div id="%s_%s">%s</div>\n' % (auto_wrap_id, name, props[name])
-
-        # Show active property
-        update = '<script type="text/javascript">\n' + \
-                 '   options_active_prop("%s","%s");\n' % (cfg_key, auto_wrap_id) + \
-                 '</script>\n';
-
-        return props_txt + update
-
     def InstanceCheckbox (self, cfg_key, default=None):
         try:
             tmp = self._cfg[cfg_key].value.lower()
