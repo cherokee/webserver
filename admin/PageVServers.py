@@ -60,7 +60,7 @@ class PageVServers (PageMenu, FormHelper):
 
                 link = '<a href="/vserver/%s">%s</a>' % (vserver, vserver)
                 if vserver != "default":
-                    js = "post_del_key('/vserver/ajax_update', 'vserver!%s');"%(vserver)
+                    js = "post_del_key('/vserver/ajax/update', 'vserver!%s');"%(vserver)
                     link_del = self.InstanceButton ("Del", onClick=js)
                 else:
                     link_del = ''
