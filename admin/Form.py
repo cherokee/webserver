@@ -7,7 +7,7 @@ FORM_TEMPLATE = """
 <form action="%(action)s" method="%(method)s">
   %(content)s
   %(submit)s
-  <input type="hidden" name="is_submit", value="1" />
+  <input type="hidden" name="is_submit" value="1" />
 </form>
 """
 
