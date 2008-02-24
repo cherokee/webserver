@@ -319,7 +319,7 @@ class FormHelper (WebComponent):
 
     def ApplyChanges_OptionModule (self, cfg_key, uri, post):
         # Read the option entry value
-        name = self._cfg.pop(cfg_key)
+        name = self._cfg.get_val(cfg_key)
         if name: return
 
         # Instance module and apply the changes
