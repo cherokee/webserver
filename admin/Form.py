@@ -282,7 +282,11 @@ class FormHelper (WebComponent):
             return
 
         if cfg_key in post:
-            self._cfg[cfg_key] = post.pop(cfg_key)
+            value = post.pop(cfg_key)
+            if value.lower() in ['on', '1']:
+                self._cfg[cfg_key] = '1'
+            else:
+                self._cfg[cfg_key] = '0'
         else:
             self._cfg[cfg_key] = "0"
 
@@ -315,10 +319,8 @@ class FormHelper (WebComponent):
 
     def ApplyChanges_OptionModule (self, cfg_key, uri, post):
         # Read the option entry value
-        try:
-            name = self._cfg[cfg_key].value
-        except:
-            return
+        name = self._cfg.pop(cfg_key)
+        if name: return
 
         # Instance module and apply the changes
         module = module_obj_factory (name, self._cfg, cfg_key, self.submit_url)
@@ -329,7 +331,6 @@ class FormHelper (WebComponent):
             self.errors[error] = module.errors[error]
 
         # Clean up properties
-        tmp = """
         props = module.__class__.PROPERTIES
 
         to_be_deleted = []
@@ -340,4 +341,3 @@ class FormHelper (WebComponent):
 
         for entry in to_be_deleted:
             del(self._cfg[entry])
-        """
