@@ -66,16 +66,31 @@ class PageVServer (PageMenu, FormHelper):
         return self._op_render_vserver_details (host, uri[len(host)+1:])
 
     def _op_add_new_entry (self, host, post):
-        self._ValidateChanges (post, DATA_VALIDATION)
+        # The 'add_new_entry' checking function depends on 
+        # the whether 'add_new_type' is a directory, an extension
+        # or a regular extension
+        validation = DATA_VALIDATION
+
+        type_ = post.pop('add_new_type')
+        print type_
+        if type_ == 'directory':
+            validation += [('add_new_entry', validations.is_path)]
+        elif type_ == 'extensions':
+            validation += [('add_new_entry', validations.is_safe_id_list)]
+        elif type_ == 'request':
+            validation += [('add_new_entry', validations.is_regex)]
+
+        # Apply changes
+        self._ValidateChanges (post, validation)
         if self.has_errors():
             return
 
         entry    = post.pop('add_new_entry')
-        type     = post.pop('add_new_type')
+        type_    = post.pop('add_new_type')
         handler  = post.pop('add_new_handler')
         priority = post.pop('add_new_priority')
 
-        pre = "vserver!%s!%s!%s" % (host, type, entry)
+        pre = "vserver!%s!%s!%s" % (host, type_, entry)
         self._cfg["%s!handler"%(pre)]  = handler
         self._cfg["%s!priority"%(pre)] = priority
 

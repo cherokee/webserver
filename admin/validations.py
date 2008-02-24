@@ -181,3 +181,6 @@ def is_not_empty (value):
 def debug_fail (value):
     raise ValueError, 'Forced failure'
     
+def is_regex (value):
+    # Can a regular expression be checked?
+    return value
