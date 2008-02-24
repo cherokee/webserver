@@ -93,7 +93,7 @@ class CherokeeManagement:
                 break
 
         self._pid = p.pid
-        time.sleep(2)
+        time.sleep (DEFAULT_DELAY)
         return None
 
     def stop (self):
