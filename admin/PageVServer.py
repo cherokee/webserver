@@ -69,7 +69,7 @@ class PageVServer (PageMenu, FormHelper):
         # The 'add_new_entry' checking function depends on 
         # the whether 'add_new_type' is a directory, an extension
         # or a regular extension
-        validation = DATA_VALIDATION
+        validation = DATA_VALIDATION[:]
 
         type_ = post.get_val('add_new_type')
         if type_ == 'directory':
