@@ -20,7 +20,7 @@ class VServerEntries:
         if reqs_cfg:
             for r_name in reqs_cfg:
                 prio = reqs_cfg[r_name]['priority'].value
-                self._rules.append (('request', r_name, prio, exts_cfg[e_name]))
+                self._rules.append (('request', r_name, prio, exts_cfg[r_name]))
 
         self._rules.sort(lambda x,y: cmp(int(x[2]), int(y[2])))
 
