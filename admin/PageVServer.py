@@ -73,7 +73,7 @@ class PageVServer (PageMenu, FormHelper):
 
         type_ = post.get_val('add_new_type')
         if type_ == 'directory':
-            validation += [('add_new_entry', validations.is_path)]
+            validation += [('add_new_entry', validations.is_dir_formated)]
         elif type_ == 'extensions':
             validation += [('add_new_entry', validations.is_safe_id_list)]
         elif type_ == 'request':

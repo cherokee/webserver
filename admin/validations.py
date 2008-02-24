@@ -23,6 +23,16 @@ def is_path (value):
         return value
     raise ValueError, 'Malformed path'
 
+def is_dir_formated (value):
+    is_path (value)
+
+    try:
+        while value[-1] in ['/', '\\']:
+            value = value[:-1]
+    except:
+        is_not_empty('')
+    return value
+
 def is_path_list (value):
     re = []
     for p in value.split(','):
