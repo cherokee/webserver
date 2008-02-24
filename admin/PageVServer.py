@@ -71,8 +71,7 @@ class PageVServer (PageMenu, FormHelper):
         # or a regular extension
         validation = DATA_VALIDATION
 
-        type_ = post.pop('add_new_type')
-        print type_
+        type_ = post.get_val('add_new_type')
         if type_ == 'directory':
             validation += [('add_new_entry', validations.is_path)]
         elif type_ == 'extensions':

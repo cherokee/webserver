@@ -100,7 +100,7 @@ def parent_is_dir (value):
 def is_safe_id (value):
     for v in value:
         if v not in string.letters + string.digits and \
-           v not in "_-":
+           v not in "_-.":
            raise ValueError, 'Invalid character '+v
     return value
 
