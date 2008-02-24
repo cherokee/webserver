@@ -36,7 +36,7 @@ class ModuleRedir (Module, FormHelper):
                 show      = self.InstanceCheckbox ('%s!show'%(cfg_key_rule))
                 regex     = self._cfg.get_val('%s!regex'    %(cfg_key_rule))
                 substring = self._cfg.get_val('%s!substring'%(cfg_key_rule))
-                js = "post_del_key('/ajax/update', '%s');" % (self.submit_url, cfg_key_rule)
+                js = "post_del_key('/ajax/update', '%s');" % (cfg_key_rule)
                 button    = self.InstanceButton ('Del', onClick=js)
                 table += (show, regex, substring, button)
 
