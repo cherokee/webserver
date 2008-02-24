@@ -76,8 +76,7 @@ class Handler(pyscgi.SCGIHandler):
         elif uri.startswith('/advanced'):
             page = PageAdvanced(cfg)
         elif uri == '/vserver' or \
-             uri == '/vserver/' or \
-             uri == '/vserver/add_vserver':
+             uri == '/vserver/':
             page = PageVServers(cfg)
         elif uri.startswith('/vserver/'):
             if "/prio/" in uri:

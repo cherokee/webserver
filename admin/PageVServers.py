@@ -30,13 +30,12 @@ class PageVServers (PageMenu, FormHelper):
         return Page.Render(self)
 
     def _op_handler (self, uri, post):
-        if uri.startswith('/add_vserver'):
+        if post.get_val('is_submit'):
             tmp = self._op_add_vserver (post)
             if self.has_errors():
                 return self._op_render()
-            return tmp
-        raise 'Unknown method'
-            
+        return self._op_render()
+
     def _render_vserver_list (self):        
         vservers = self._cfg['vserver']
         txt = "<h1>Virtual Servers</h1>"
@@ -70,7 +69,7 @@ class PageVServers (PageMenu, FormHelper):
         # Add new Virtual Server
         table = Table(3,1)
         table += ('Name', 'Document Root')
-        fo1 = Form ("/%s/add_vserver" % (self._id), add_submit=False)
+        fo1 = Form ("/%s" % (self._id), add_submit=False)
         en1 = self.InstanceEntry ("new_vserver_name", "text")
         en2 = self.InstanceEntry ("new_vserver_droot", "text")
         table += (en1, en2, SUBMIT_ADD)
@@ -81,12 +80,17 @@ class PageVServers (PageMenu, FormHelper):
         return txt
 
     def _op_add_vserver (self, post):
+        # Ensure that no entry in empty
+        for key in ['new_vserver_name', 'new_vserver_droot']:
+            if not post.get_val(key):
+                self._error_add (key, '', 'Cannot be empty')
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
 
-        name  = post['new_vserver_name'][0]
-        droot = post['new_vserver_droot'][0]
+        name  = post.pop('new_vserver_name')
+        droot = post.pop('new_vserver_droot')
         pre   = 'vserver!%s' % (name)
 
         # Do not add the server if it already exists

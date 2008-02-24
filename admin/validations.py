@@ -16,8 +16,7 @@ def is_tcp_port (value):
     return value
 
 def is_path (value):
-    if not value:
-        raise ValueError, 'Path cannot be empty'
+    is_not_empty(value)
     if value[0] == '/':
         return value
     if value[1:3] == ":\\":
@@ -175,7 +174,7 @@ def is_ip_or_netmask_list (value):
 
 def is_not_empty (value):
     if len(value) <= 0:
-        raise ValueError, 'Malformed entry (netmask)'
+        raise ValueError, 'Cannot be empty'
     return value
 
 def debug_fail (value):

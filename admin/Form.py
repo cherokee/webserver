@@ -268,7 +268,7 @@ class FormHelper (WebComponent):
             p = re.compile (regex)
             for post_entry in post:
                 if p.match(post_entry):
-                    value = post[post_entry][0]
+                    value = post.get_val(post_entry)
                     if not value:
                         continue
                     try:
