@@ -102,11 +102,15 @@ class CherokeeManagement:
     def stop (self):
         if not self._pid:
             return
-        try:
-            os.kill (self._pid, signal.SIGQUIT)
-            os.waitpid (self._pid, 0)
-        except:
-            pass
+
+        try: os.kill (self._pid, signal.SIGQUIT)
+        except: pass
+
+        try: os.waitpid (self._pid, 0)
+        except: pass
+        
+        self._pid = None
+        time.sleep (DEFAULT_DELAY)
 
     def create_config (self, file):
         if os.path.exists (file):
