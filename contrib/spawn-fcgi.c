@@ -35,7 +35,17 @@ THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 
-#include "common.h"
+#include "common-internal.h"
+#include "socket.h"
+#include "util.h"
+
+#ifdef HAVE_FCNTL_H
+# include <fcntl.h>
+#endif
+
+#ifdef HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#endif
 
 #ifndef FCGI_LISTENSOCK_FILENO
 # define FCGI_LISTENSOCK_FILENO 0
@@ -259,14 +269,14 @@ int fcgi_spawn_connection(char *appPath, char *addr, unsigned short port, const 
 
 
 void show_version () {
-	char *b = "spawn-fcgi" "-" PACKAGE_VERSION \
+	char *b = "spawn-fcgi" " Cherokee-" PACKAGE_VERSION \
 " - spawns fastcgi processes\n"
 ;
 	write(1, b, strlen(b));
 }
 
 void show_help () {
-	char *b = "spawn-fcgi" "-" PACKAGE_VERSION \
+	char *b = "spawn-fcgi" " Cherokee-" PACKAGE_VERSION \
 " - spawns fastcgi processes\n" \
 "usage:\n" \
 " -f <fcgiapp> filename of the fcgi-application\n" \
