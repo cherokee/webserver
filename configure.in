@@ -415,7 +415,6 @@ dnl TCP_CORK
 dnl
 HYDRA_TCP_CORK
 
-
 dnl
 dnl Check for GNU getopt_long()
 dnl
@@ -792,6 +791,8 @@ int main(void) {
 if test x"$ac_cv_so_rcvtimeo_broken" = x"yes"; then
   AC_DEFINE(HAVE_BROKEN_SO_RCVTIMEO, 1, [Define if setsockopt(SO_RCVTIMEO) is broken])
 fi
+
+AC_CHECK_TYPE(socklen_t, int)
 
 dnl
 dnl Check of __func__ and co..
