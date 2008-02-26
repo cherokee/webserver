@@ -1,4 +1,6 @@
-/* File borrowed from lighttpd
+/* File borrowed from lighttpd. I have only cleaned up the headers
+ * inclusion mess. Its original license follows:
+ *                            Alvaro Lopez Ortega <alvaro@gnu.org> 
  */
 
 /*

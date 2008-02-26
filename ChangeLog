@@ -1,3 +1,8 @@
+2008-02-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in: Added checks for libgcrypt and libgpg-error. Both
+	libraries are GNUTLS dependencies.
+
 2008-02-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/Makefile.am (libcherokee_base_la_SOURCES):

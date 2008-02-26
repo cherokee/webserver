@@ -792,7 +792,9 @@ if test x"$ac_cv_so_rcvtimeo_broken" = x"yes"; then
   AC_DEFINE(HAVE_BROKEN_SO_RCVTIMEO, 1, [Define if setsockopt(SO_RCVTIMEO) is broken])
 fi
 
-AC_CHECK_TYPE(socklen_t, int)
+AC_CHECK_TYPE(socklen_t, int, ,[[
+#include <netinet/in.h>
+]])
 
 dnl
 dnl Check of __func__ and co..
@@ -951,6 +953,10 @@ then
 		then
 			   TLS_LIBS="$GNUTLS_LIBS"
 			   TLS_CFLAGS="$GNUTLS_CFLAGS"
+
+			   AC_CHECK_LIB(gcrypt, gcry_control, [TLS_LIBS="$TLS_LIBS -lgcrypt"])
+			   AC_CHECK_LIB(gpg-error, gpg_strerror, [TLS_LIBS="$TLS_LIBS -lgpg-error"])
+
 			   AC_SUBST(TLS_LIBS)
 			   AC_SUBST(TLS_CFLAGS)
 
