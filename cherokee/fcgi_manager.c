@@ -438,7 +438,7 @@ cherokee_fcgi_manager_step (cherokee_fcgi_manager_t *mgr)
 		ret = cherokee_socket_bufread (&mgr->socket, &mgr->read_buffer, DEFAULT_READ_SIZE, &size);
 		switch (ret) {
 		case ret_ok:
-			TRACE (ENTRIES, "%d bytes readed\n", size);
+			TRACE (ENTRIES, "%d bytes read\n", size);
 			break;
 
 		case ret_eof:

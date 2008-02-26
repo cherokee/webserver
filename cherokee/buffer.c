@@ -909,7 +909,7 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 		return ret_eof;
 	}
 
-	/* Add readed length, terminate buffer and return
+	/* Add read length, terminate buffer and return
 	 */
 	*ret_size = len;
 	buf->len += len;

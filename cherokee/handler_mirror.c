@@ -280,7 +280,7 @@ cherokee_handler_mirror_step (cherokee_handler_mirror_t *hdl, cherokee_buffer_t 
 	ret = cherokee_socket_bufread (&hdl->socket, buffer, DEFAULT_READ_SIZE, &got);
 	switch (ret) {
 	case ret_ok:
-		TRACE (ENTRIES, "%d bytes readed\n", got);
+		TRACE (ENTRIES, "%d bytes read\n", got);
 		return ret_ok;
 
 	case ret_eagain:

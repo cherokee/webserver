@@ -295,11 +295,11 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 {
 	ret_t               ret;
 	cuint_t             len;
-	size_t              readed = 0;
-	cherokee_socket_t  *sock   = &downloader->socket;
+	size_t              read_      = 0;
+	cherokee_socket_t  *sock       = &downloader->socket;
 	cherokee_http_t     error_code = http_bad_request;
 
-	ret = cherokee_socket_bufread (sock, &downloader->reply_header, DEFAULT_RECV_SIZE, &readed);
+	ret = cherokee_socket_bufread (sock, &downloader->reply_header, DEFAULT_RECV_SIZE, &read_);
 	switch (ret) {
 	case ret_eof:     
 		return ret_eof;
@@ -310,7 +310,7 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 	case ret_ok: 
 		/* Count
 		 */
-		downloader->info.headers_recv += readed;
+		downloader->info.headers_recv += read_;
 
 		/* Check the header. Is it complete? 
 		 */
@@ -387,10 +387,10 @@ static ret_t
 downloader_step (cherokee_downloader_t *downloader)
 {
 	ret_t               ret;
-	size_t              readed = 0;
-	cherokee_socket_t  *sock   = &downloader->socket;
+	size_t              read_ = 0;
+	cherokee_socket_t  *sock  = &downloader->socket;
 
-	ret = cherokee_socket_bufread (sock, &downloader->body, DEFAULT_RECV_SIZE, &readed);
+	ret = cherokee_socket_bufread (sock, &downloader->body, DEFAULT_RECV_SIZE, &read_);
 	switch (ret) {
 	case ret_eagain:
 		return ret_eagain;
@@ -398,7 +398,7 @@ downloader_step (cherokee_downloader_t *downloader)
 	case ret_ok:
 		/* Count
 		 */
-		downloader->info.body_recv += readed;
+		downloader->info.body_recv += read_;
 
 		/* Has it finished?
 		 */

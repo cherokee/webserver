@@ -80,14 +80,14 @@ static ret_t
 read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 {
 	ret_t                   ret;
- 	size_t                  readed = 0;
-	cherokee_handler_cgi_t *cgi    = HDL_CGI(cgi_base);
+ 	size_t                  read_ = 0;
+	cherokee_handler_cgi_t *cgi   = HDL_CGI(cgi_base);
 
 	/* Read the data from the pipe:
 	 */
-	ret = cherokee_buffer_read_from_fd (buffer, cgi->pipeInput, 4096, &readed);
+	ret = cherokee_buffer_read_from_fd (buffer, cgi->pipeInput, 4096, &read_);
 	
-	TRACE (ENTRIES, "read... ret=%d %d\n", ret, readed);
+	TRACE (ENTRIES, "read... ret=%d %d\n", ret, read_);
 
 	switch (ret) {
 	case ret_eagain:
@@ -95,7 +95,7 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
 		return ret_eagain;
 
 	case ret_ok:
-		TRACE (ENTRIES, "%d bytes read\n", readed);
+		TRACE (ENTRIES, "%d bytes read\n", read_);
 		return ret_ok;
 
 	case ret_eof:

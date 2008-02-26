@@ -998,7 +998,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 			render_file (dhdl, buffer, (file_entry_t *)dhdl->dir_ptr);
 			dhdl->dir_ptr = dhdl->dir_ptr->next;
 
-			/* Maybe it has readed enough data
+			/* Maybe it has read enough data
 			 */
 			if (buffer->len > DEFAULT_READ_SIZE) 
 				return ret_ok;
@@ -1014,7 +1014,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 			render_file (dhdl, buffer, (file_entry_t *) dhdl->file_ptr);
 			dhdl->file_ptr = dhdl->file_ptr->next;
 
-			/* Maybe it has readed enough data
+			/* Maybe it has read enough data
 			 */
 			if (buffer->len > DEFAULT_READ_SIZE) 
 				return ret_ok;

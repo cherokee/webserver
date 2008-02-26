@@ -139,7 +139,7 @@ read_from_scgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer
 		return ret_eagain;
 
 	case ret_ok:
-		TRACE (ENTRIES, "%d bytes readed\n", read);
+		TRACE (ENTRIES, "%d bytes read\n", read);
 		return ret_ok;
 
 	case ret_eof:
