@@ -9,6 +9,8 @@ class ModuleLdap (ModuleAuthBase):
         'ca_file'
     ]
 
+    METHODS = ['basic']
+
     def __init__ (self, cfg, prefix, submit):
         ModuleAuthBase.__init__ (self, cfg, prefix, 'ldap', submit)
 

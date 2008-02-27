@@ -8,6 +8,8 @@ class ModuleMysql (ModuleAuthBase):
         'query', 'use_md5_passwd'
     ]
 
+    METHODS = ['basic', 'digest']
+
     def __init__ (self, cfg, prefix, submit):
         ModuleAuthBase.__init__ (self, cfg, prefix, 'mysql', submit)
 

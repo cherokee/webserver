@@ -3,6 +3,8 @@ from ModuleAuth import *
 class ModulePam (ModuleAuthBase):
     PROPERTIES = ModuleAuthBase.PROPERTIES
 
+    METHODS = ['basic']
+
     def __init__ (self, cfg, prefix, submit):
         ModuleAuthBase.__init__ (self, cfg, prefix, 'pam', submit)
 

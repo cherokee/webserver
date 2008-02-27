@@ -12,6 +12,8 @@ class ModuleHtpasswd (ModuleAuthBase):
         'passwdfile'
     ]
 
+    METHODS = ['basic']
+
     def __init__ (self, cfg, prefix, submit):
         ModuleAuthBase.__init__ (self, cfg, prefix, 'htpasswd', submit)
 

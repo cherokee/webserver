@@ -12,6 +12,8 @@ class ModulePlain (ModuleAuthBase):
         'passwdfile'
     ]
 
+    METHODS = ['basic', 'digest']
+
     def __init__ (self, cfg, prefix, submit):
         ModuleAuthBase.__init__ (self, cfg, prefix, 'plain', submit)
 

@@ -22,13 +22,24 @@ class ModuleAuthBase (Module, FormHelper):
 
     def _op_render (self):
         table = Table(2)
-        self.AddTableOptions (table, "Methods", "%s!methods"%(self._prefix), VALIDATOR_METHODS)
+
+        if len(self.METHODS) > 1:
+            self.AddTableOptions (table, "Methods", "%s!methods"%(self._prefix), VALIDATOR_METHODS)
+        else:
+            table += ('Method', self.METHODS[0])
+
         self.AddTableEntry   (table, "Realm",   "%s!realm"  %(self._prefix))
         self.AddTableEntry   (table, "Users",   "%s!users"  %(self._prefix))
         return str(table)
 
     def _op_apply_changes (self, uri, post):
+        # Check Realm
         pre = '%s!realm' % (self._prefix)
         self.Validate_NotEmpty (post, pre, 'Realm can not be empty')
 
+        # Auto-methods
+        if len(self.METHODS) <= 1:
+            self._cfg['%s!methods'%(self._prefix)] = self.METHODS[0]
+
+        # the rest
         self.ApplyChanges ([], post, DATA_VALIDATION)
