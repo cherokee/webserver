@@ -116,8 +116,14 @@ class CherokeeManagement:
         if os.path.exists (file):
             return
 
+        conf_sample = os.path.join(CHEROKEE_ADMINDIR, "cherokee.conf.sample")
+        if os.path.exists (conf_sample):
+            content = open(conf_sample, 'r').read()
+        else:
+            content = CHEROKEE_MIN_DEFAULT_CONFIG
+
         f = open(file, 'w+')
-        f.write (CHEROKEE_MIN_DEFAULT_CONFIG)
+        f.write (content)
         f.close()
 
     # Protected

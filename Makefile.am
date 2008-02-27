@@ -21,6 +21,7 @@ pkgconfig_DATA = cherokee.pc
 
 # Configuration files
 cherokeeconfdir = $(sysconfdir)/cherokee
+cherokeeadmindir = $(datadir)/cherokee/admin
 
 .sample.pre.sample:
 	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%wwwroot%|${WWW_ROOT}|g" $< > $@
@@ -89,6 +90,7 @@ install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	else \
 		$(INSTALL_DATA) $(top_builddir)/cherokee.conf.sample $(DESTDIR)$(cherokeeconfdir)/cherokee.conf; \
 	fi
+	$(INSTALL_DATA) $(top_builddir)/cherokee.conf.sample $(DESTDIR)$(cherokeeadmindir)/cherokee.conf.sample
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample ; then \
 		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample"; \
 	else \
