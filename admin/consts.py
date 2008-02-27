@@ -76,4 +76,7 @@ POLL_METHODS = [
     ('win32',  'Win32')
 ]
 
-
+REDIR_SHOW = [
+    ('1', 'External'),
+    ('0', 'Internal')
+]
