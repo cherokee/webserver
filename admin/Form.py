@@ -261,8 +261,25 @@ class FormHelper (WebComponent):
         if not cfg_val and \
            not post.get_val(cfg_key):
             self._error_add (cfg_key, '', error_msg)
+    
+    def ValidateChange_SingleKey (self, key, post, validation):
+        for regex, validation_func in validation:
+            p = re.compile (regex)
+            if p.match (key):
+                value = post.get_val(key)
+                if not value:
+                    continue
+                try:
+                    tmp = validation_func (value)
+                    post[key] = [tmp]
+                except ValueError, error:
+                    self._error_add (key, value, error)
 
     def _ValidateChanges (self, post, validation):
+        for post_entry in post:
+            self.ValidateChange_SingleKey (post_entry, post, validation)
+
+    def _ValidateChanges_2 (self, post, validation):
         for rule in validation:
             regex, validation_func = rule
             p = re.compile (regex)

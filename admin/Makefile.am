@@ -46,6 +46,7 @@ ModuleFcgi.py \
 ModuleScgi.py \
 ModuleBalancer.py \
 ModuleMirror.py \
+ModuleErrorRedir.py \
 ModuleAuth.py \
 ModuleAdmin.py \
 ModuleHtdigest.py \

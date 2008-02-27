@@ -17,6 +17,11 @@ HANDLERS = [
     ('admin',       'Remote Administration')
 ]
 
+ERROR_HANDLERS = [
+    ('',            'Default errors'),
+    ('error_redir', 'Custom redirections')
+]
+
 VALIDATORS = [
     ('',         'None'),
     ('plain',    'Plain text file'),
@@ -80,4 +85,20 @@ POLL_METHODS = [
 REDIR_SHOW = [
     ('1', 'External'),
     ('0', 'Internal')
+]
+
+ERROR_CODES = [
+    ('400', '400 Bad Request'),
+    ('403', '403 Forbidden'),
+    ('404', '404 Not Found'),
+    ('405', '405 Method Not Allowed'),
+    ('413', '413 Request Entity too large'),
+    ('414', '414 Request-URI too long'),
+    ('416', '416 Requested range not satisfiable'),
+    ('500', '500 Internal Server Error'),
+    ('501', '501 Not Implemented'),
+    ('502', '502 Bad gateway'),
+    ('503', '503 Service Unavailable'),
+    ('504', '504 Gatewat Timeout'),
+    ('505', '505 HTTP Version Not Supported')
 ]

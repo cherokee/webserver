@@ -56,10 +56,10 @@ class PageVServer (PageMenu, FormHelper):
                 self._op_add_new_entry (host, post)
             else:
                 # It's updating properties
-                self._op_apply_changes (host, post)
+                self._op_apply_changes (host, uri, post)
 
         elif uri.endswith('/ajax_update'):
-            self._op_apply_changes (host, post)
+            self._op_apply_changes (host, uri, post)
             return 'ok'
 
         self._priorities = VServerEntries (host, self._cfg)
@@ -125,6 +125,10 @@ class PageVServer (PageMenu, FormHelper):
         tmp += self._render_add_rule(host)
         tabs += [('Behaviour', tmp)]
 
+        # Error handlers
+        tmp = self._render_error_handler(host)
+        tabs += [('Error handler', tmp)]        
+
         # Logging
         tmp = self._render_logger(host)
         tabs += [('Logging', tmp)]
@@ -140,6 +144,18 @@ class PageVServer (PageMenu, FormHelper):
 
         form = Form (self.submit_url)
         return form.Render(txt)
+
+    def _render_error_handler (self, host):
+        txt = ''
+        pre = 'vserver!%s' % (host)
+        
+        table = Table(2)
+        e = self.AddTableOptions_Reload (table, 'Error Handler',
+                                         '%s!error_handler' % (pre), 
+                                         ERROR_HANDLERS)
+        txt += str(table) + self.Indent(e)
+
+        return txt
 
     def _render_add_rule (self, host):
         # Add new rule
@@ -275,7 +291,12 @@ class PageVServer (PageMenu, FormHelper):
         txt += str(table)
         return txt
 
-    def _op_apply_changes (self, host, post):
+    def _op_apply_changes (self, host, uri, post):
+        pre = "vserver!%s" % (host)
+
+        # Error handler
+        self.ApplyChanges_OptionModule ('%s!error_handler'%(pre), uri, post)
+
         # Apply changes
         self.ApplyChanges ([], post, DATA_VALIDATION)
 

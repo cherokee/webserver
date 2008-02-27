@@ -193,3 +193,19 @@ def debug_fail (value):
 def is_regex (value):
     # Can a regular expression be checked?
     return value
+
+def is_http_url (value):
+    if not value.startswith('http://'):
+        raise ValueError, 'http:// missing'
+    return value
+
+def is_url_or_path (value):
+    if value.startswith('http://'):
+        return is_http_url (value)
+
+    if value.startswith('/'):
+        return is_path (value)
+
+    raise ValueError, 'Not a URL, nor a path'
+
+
