@@ -24,10 +24,12 @@ class ModuleAuthBase (Module, FormHelper):
         table = Table(2)
 
         if len(self.METHODS) > 1:
-            self.AddTableOptions (table, "Methods", "%s!methods"%(self._prefix), VALIDATOR_METHODS)
+            methods = VALIDATOR_METHODS
         else:
-            table += ('Method', self.METHODS[0])
+            method = self.METHODS[0]
+            methods = filter (lambda x,m=method: x[0] == method, VALIDATOR_METHODS)
 
+        self.AddTableOptions (table, "Methods", "%s!methods"%(self._prefix), methods)
         self.AddTableEntry   (table, "Realm",   "%s!realm"  %(self._prefix))
         self.AddTableEntry   (table, "Users",   "%s!users"  %(self._prefix))
         return str(table)
