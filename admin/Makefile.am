@@ -53,6 +53,7 @@ ModuleLdap.py \
 ModulePlain.py \
 ModuleHtpasswd.py \
 ModuleMysql.py \
+ModulePam.py \
 config.py \
 pyscgi.py \
 server.py \

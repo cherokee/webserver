@@ -23,7 +23,8 @@ VALIDATORS = [
     ('htpasswd', 'Htpasswd file'),
     ('htdigest', 'Htdigest file'),
     ('ldap',     'LDAP server'),
-    ('mysql',    'MySQL server')
+    ('mysql',    'MySQL server'),
+    ('pam',      'PAM')
 ]
 
 VALIDATOR_METHODS = [
