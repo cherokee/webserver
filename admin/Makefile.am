@@ -44,6 +44,8 @@ ModuleServerInfo.py \
 ModuleCgi.py \
 ModuleFcgi.py \
 ModuleScgi.py \
+ModuleBalancer.py \
+ModuleMirror.py \
 ModuleAuth.py \
 ModuleAdmin.py \
 ModuleHtdigest.py \

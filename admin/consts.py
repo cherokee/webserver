@@ -13,6 +13,7 @@ HANDLERS = [
     ('fcgi',        'FastCGI'),
     ('scgi',        'SCGI'),
     ('server_info', 'Server Info'),
+    ('mirror',      'Generic balancer'),
     ('admin',       'Remote Administration')
 ]
 
