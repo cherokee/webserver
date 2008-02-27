@@ -279,21 +279,6 @@ class FormHelper (WebComponent):
         for post_entry in post:
             self.ValidateChange_SingleKey (post_entry, post, validation)
 
-    def _ValidateChanges_2 (self, post, validation):
-        for rule in validation:
-            regex, validation_func = rule
-            p = re.compile (regex)
-            for post_entry in post:
-                if p.match(post_entry):
-                    value = post.get_val(post_entry)
-                    if not value:
-                        continue
-                    try:
-                        tmp = validation_func (value)
-                        post[post_entry] = [tmp]
-                    except ValueError, error:
-                        self._error_add (post_entry, value, error)
-
     def ApplyCheckbox (self, post, cfg_key):
         if cfg_key in self.errors:
             return
