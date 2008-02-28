@@ -32,6 +32,7 @@ PageVServer.py \
 PageVServers.py \
 PageEncoders.py \
 PageError.py \
+PageFeedback.py \
 Table.py \
 Theme.py \
 VirtualServer.py \

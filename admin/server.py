@@ -22,6 +22,7 @@ from PageVServers import *
 from PageEncoders import *
 from PageEntry import *
 from PageAdvanced import *
+from PageFeedback import *
 from PageError import *
 from PageAjaxUpdate import *
 from CherokeeManagement import *
@@ -75,6 +76,8 @@ class Handler(pyscgi.SCGIHandler):
             page = PageMime(cfg)
         elif uri.startswith('/advanced'):
             page = PageAdvanced(cfg)
+        elif uri.startswith('/feedback'):
+            page = PageFeedback(cfg)
         elif uri == '/vserver' or \
              uri == '/vserver/':
             page = PageVServers(cfg)

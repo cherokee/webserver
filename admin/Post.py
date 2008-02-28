@@ -14,14 +14,16 @@ class Post:
 
         return vals[0]
 
-    def get_val (self, key):
+    def get_val (self, key, not_found=None):
         tmp = self._smart_chooser(key)
         if not tmp: 
-            return None
+            return not_found
         return tmp
 
-    def pop (self, key):
+    def pop (self, key, not_found=None):
         val = self._smart_chooser(key)
+        if not val: 
+            return not_found
         if key in self._vars:
             del(self[key])
         return val

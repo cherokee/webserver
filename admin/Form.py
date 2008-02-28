@@ -22,7 +22,9 @@ class WebComponent:
 
     def _op_handler (self, uri, post):
         if post.get_val('is_submit'):
-            self._op_apply_changes (uri, post)
+            tmp = self._op_apply_changes (uri, post)
+            if tmp:
+                return tmp
         return self._op_render()
 
     def _op_render (self):
