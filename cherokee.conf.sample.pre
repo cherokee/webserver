@@ -56,7 +56,7 @@ vserver!default!extensions!php!handler!balancer = round_robin
 vserver!default!extensions!php!handler!balancer!type = interpreter
 vserver!default!extensions!php!handler!balancer!local1!host = localhost:1234
 vserver!default!extensions!php!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
-vserver!default!extensions!php!handler!balancer!local1!interpreter = /usr/lib/cgi-bin/php -b 1234
+vserver!default!extensions!php!handler!balancer!local1!interpreter = %phpcgi% -b 1234
 vserver!default!extensions!php!priority = 99999
 
 # Icons

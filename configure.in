@@ -1064,6 +1064,52 @@ AC_SUBST(WWW_ROOT)
 
 
 dnl
+dnl Look for misc binaries
+dnl
+AC_PATH_PROG(PHPCGI, php-cgi)
+AC_ARG_VAR(PHPCGI, [path to PHP-cgi])
+
+AC_MSG_CHECKING([$PHPCGI supports FastCGI])
+$PHPCGI -v | grep 'cgi-fcgi' >/dev/null 2>/dev/null
+if test $? != 0; then
+   PHPCGI=""
+   AC_MSG_RESULT([no])
+else
+   AC_MSG_RESULT([yes])
+fi
+
+if test "x$PHPCGI" = "x"; then
+   for n in php-cgi php; do
+     for p in /usr/lib/cgi-bin /usr/bin /usr/local/bin; do
+       phpcgi_path="$p/php-cgi"
+	  AC_MSG_CHECKING([for $phpcgi_path])
+	  if test -x "$phpcgi_path"; then
+	     $phpcgi_path -v | grep 'cgi-fcgi' >/dev/null 2>/dev/null
+		if test $? = 0; then
+		  PHPCGI=$phpcgi_path
+	       AC_MSG_RESULT([yes])
+		else
+	       AC_MSG_RESULT([not fcgi])
+		fi
+		break
+	  else
+	     AC_MSG_RESULT([no])
+	  fi
+     done
+	if test "x$PHPCGI" != x; then
+	  break;
+	fi
+   done
+fi
+
+if test "x$PHPCGI" = "x"; then
+   PHPCGI="php-cgi"
+fi
+
+AC_SUBST(PHPCGI)
+
+
+dnl
 dnl Options
 dnl
 use_static_module=""
