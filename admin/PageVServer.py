@@ -51,7 +51,8 @@ class PageVServer (PageMenu, FormHelper):
         default_render = False 
 
         if post.get_val('is_submit'):
-            if post.get_val('add_new_entry'):
+            if post.get_val('add_new_entry') and \
+               post.get_val('add_new_priority'):
                 # It's adding a new entry
                 self._op_add_new_entry (host, post)
             else:
