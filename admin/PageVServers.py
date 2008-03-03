@@ -45,7 +45,7 @@ class PageVServers (PageMenu, FormHelper):
         if vservers: 
             txt += "<h3>Virtual Server List</h3>"
 
-            table = Table(4)
+            table = Table(4, style='width="100%"')
             table += ('Name', 'Document Root', 'Logging', '')
 
             for vserver in vservers:
