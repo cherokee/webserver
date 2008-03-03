@@ -18,8 +18,8 @@ more domains.</p>
 
 class PageVServers (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, 'vserver', cfg)
-        FormHelper.__init__ (self, 'vserver', cfg)
+        PageMenu.__init__ (self, 'vservers', cfg)
+        FormHelper.__init__ (self, 'vservers', cfg)
 
     def _op_render (self):
         content = self._render_vserver_list()
@@ -43,7 +43,7 @@ class PageVServers (PageMenu, FormHelper):
         
         # Render Virtual Server list
         if vservers: 
-            txt += "<h3>Virtual Server List</h3>"
+            txt += "<h2>Virtual Server List</h2>"
 
             table = Table(4, style='width="100%"')
             table += ('Name', 'Document Root', 'Logging', '')
@@ -69,12 +69,12 @@ class PageVServers (PageMenu, FormHelper):
         # Add new Virtual Server
         table = Table(3,1)
         table += ('Name', 'Document Root')
-        fo1 = Form ("/%s" % (self._id), add_submit=False)
+        fo1 = Form ("/vserver", add_submit=False)
         en1 = self.InstanceEntry ("new_vserver_name", "text")
         en2 = self.InstanceEntry ("new_vserver_droot", "text")
         table += (en1, en2, SUBMIT_ADD)
 
-        txt += "<h3>Add new Virtual Server</h3>"
+        txt += "<h2>Add new Virtual Server</h2>"
         txt += fo1.Render(str(table))
 
         return txt
