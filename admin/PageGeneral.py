@@ -55,7 +55,7 @@ class PageGeneral (PageMenu, FormHelper):
         txt += "<h2>Server Permissions</h2>"
         table = Table(2)
         self.AddTableEntry (table, 'User',   'server!user')
-        self.AddTableEntry (table, 'User',   'server!group')
+        self.AddTableEntry (table, 'Group',  'server!group')
         self.AddTableEntry (table, 'Chroot', 'server!chroot')
         txt += self.Indent(table)
 
