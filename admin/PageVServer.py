@@ -113,8 +113,8 @@ class PageVServer (PageMenu, FormHelper):
 
         # Basics
         table = Table(2)
-        self.AddTableEntry (table, 'Document Root',   '%s!document_root' % (pre))
-        self.AddTableEntry (table, 'Directory Index', '%s!directory_index' % (pre))
+        self.AddTableEntry (table, 'Document Root',     '%s!document_root' % (pre))
+        self.AddTableEntry (table, 'Directory Indexes', '%s!directory_index' % (pre))
         tabs += [('Basics', str(table))]
 
         # Domains

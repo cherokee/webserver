@@ -260,3 +260,8 @@ a.button:active span {
 .indented {
     margin-left: 20px;
 }
+
+.help_p {
+    margin-left: 15px;
+    text-align: justify;
+}
