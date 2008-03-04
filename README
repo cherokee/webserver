@@ -42,7 +42,7 @@ Building form a tar.gz file
 ---------------------------
   Run ./configure, with some options if you wish. The standard options
   are documented in the INSTALL file.  The only interesting ones are
-  the usual --prefix=/usr and --sysconfdir=/etc
+  the usual --prefix=/usr, --localstatedir=/var and --sysconfdir=/etc
 
   Do "make", and then do "make install" (possibly as root if the
   destination permissions require that).
@@ -68,19 +68,20 @@ FAQ
 
   How to compile it
   ------------------
-   ./configure --prefix=/usr --sysconfdir=/etc
+   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+   make
 
   How to create dinamyc modules
   -----------------------------
    It's the default way.
 
-  How to compile the module xyz statically in the libcherokee
-  -----------------------------------------------------------
-   ./configure --prefix=/usr --sysconfdir=/etc --enable-static-module=xyz
+  How to configure the module xyz to be linked statically
+  -------------------------------------------------------
+   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=xyz
 
-  How to build statically
-  -----------------------
-   ./configure --prefix=/usr --sysconfdir=/etc --enable-static-module=all
+  How to build everyhing statically
+  ---------------------------------
+   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all
 
   How to create a self signed certificate for TLS
   -----------------------------------------------
@@ -88,7 +89,7 @@ FAQ
 
   How to compile it on Windows
   ----------------------------
-   ./configure --prefix=/usr --sysconfdir=/etc --enable-trace --enable-static-module=all --enable-static --enable-shared=no --enable-beta
+   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-trace --enable-static-module=all --enable-static --enable-shared=no --enable-beta
 
   How to cross compile the Win32 version
   --------------------------------------
