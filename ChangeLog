@@ -1,5 +1,8 @@
 2008-03-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* Makefile.am, cherokee.conf.sample.pre, admin/Makefile.am,
+	admin/configured.py.pre: Replaced /var by %localstatedir%.
+
 	* contrib/spawn-fcgi.c: Added wait.h header. Fixes compilation on
 	Solaris 10.
 

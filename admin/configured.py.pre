@@ -4,9 +4,11 @@ PREFIX     = "%prefix%"
 DATADIR    = "%datadir%"
 WWWROOT    = "%wwwroot%"
 SYSCONFDIR = "%sysconfdir%"
+LOCALSTATE = "%localstatedir%"
 VERSION    = "%version%"
 
 CHEROKEE_SRV_PATH   = join (PREFIX, "sbin/cherokee")
+CHEROKEE_GUARDIAN   = join (PREFIX, "sbin/cherokee-guardian")
 CHEROKEE_ADMINDIR   = join (PREFIX, "share/cherokee/admin")
 CHEROKEE_ICONSDIR   = join (PREFIX, "share/cherokee/icons")
 CHEROKEE_THEMEDIR   = join (PREFIX, "share/cherokee/themes")

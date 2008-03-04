@@ -24,7 +24,7 @@ cherokeeconfdir = $(sysconfdir)/cherokee
 cherokeeadmindir = $(datadir)/cherokee/admin
 
 .sample.pre.sample:
-	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
 
 CONFS_PRE =              \
 cherokee.conf.sample.pre \

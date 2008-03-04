@@ -13,10 +13,10 @@ server!port_tls = 443
 server!timeout = 60
 server!keepalive = 1
 server!keepalive_max_requests = 500
-server!pid_file = /var/run/cherokee.pid
 server!server_tokens = full
 server!encoder!gzip!allow = html,html,txt,css,js
 server!panic_action = %prefix%/bin/cherokee-panic
+server!pid_file = %localstatedir%/run/cherokee.pid
 server!mime_files = %sysconfdir%/cherokee/mime.types
 
 # Default virtual server
@@ -26,10 +26,10 @@ vserver!default!directory_index = index.php,index.html
 
 vserver!default!logger = combined
 vserver!default!logger!access!type = file
-vserver!default!logger!access!filename = /var/log/cherokee.access
+vserver!default!logger!access!filename = %localstatedir%/log/cherokee.access
 vserver!default!logger!access!buffsize = 16384
 vserver!default!logger!error!type = file
-vserver!default!logger!error!filename = /var/log/cherokee.error
+vserver!default!logger!error!filename = %localstatedir%/log/cherokee.error
 
 vserver!default!directory!/!handler = common
 vserver!default!directory!/!handler!iocache = 0
