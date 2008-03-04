@@ -1,3 +1,8 @@
+2008-03-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* contrib/spawn-fcgi.c: Added wait.h header. Fixes compilation on
+	Solaris 10.
+
 2008-02-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* configure.in: Added checks for libgcrypt and libgpg-error. Both

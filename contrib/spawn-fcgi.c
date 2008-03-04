@@ -47,6 +47,10 @@ THE POSSIBILITY OF SUCH DAMAGE.
 # include <sys/stat.h>
 #endif
 
+#ifdef HAVE_SYS_WAIT_H
+# include <sys/wait.h>
+#endif
+
 #ifndef FCGI_LISTENSOCK_FILENO
 # define FCGI_LISTENSOCK_FILENO 0
 #endif
