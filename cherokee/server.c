@@ -2062,7 +2062,7 @@ cherokee_server_write_pidfile (cherokee_server_t *srv)
 	if (cherokee_buffer_is_empty (&srv->pidfile))
 		return ret_not_found;
 
-	file = fopen (srv->pidfile.buf, "w");
+	file = fopen (srv->pidfile.buf, "w+");
 	if (file == NULL) {
 		PRINT_ERRNO (errno, "Cannot write PID file '%s': '${errno}'", srv->pidfile.buf);
 		return ret_error;

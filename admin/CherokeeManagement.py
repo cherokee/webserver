@@ -49,7 +49,7 @@ def cherokee_management_reset ():
 class CherokeeManagement:
     def __init__ (self, cfg):
         self._cfg = cfg
-        self._pid = self._get_running_pid()
+        self._pid = self._get_guardian_pid()
 
     # Public
     #
@@ -68,7 +68,7 @@ class CherokeeManagement:
         def daemonize():
             os.setsid() 
 
-        p = Popen ([CHEROKEE_SRV_PATH, '-C', self._cfg.file], 
+        p = Popen ([CHEROKEE_GUARDIAN, '-C', self._cfg.file], 
                    stdout=PIPE, stderr=PIPE, 
                    preexec_fn=daemonize, close_fds=True)
 
@@ -98,18 +98,16 @@ class CherokeeManagement:
         self._pid = p.pid
         time.sleep (DEFAULT_DELAY)
         return None
-
-    def stop (self):
-        if not self._pid:
-            return
-
-        try: os.kill (self._pid, signal.SIGQUIT)
-        except: pass
-
-        try: os.waitpid (self._pid, 0)
-        except: pass
         
+    def stop (self):
+        # Stop Cherokee Guardian
+        self.__stop_process (self._pid)
         self._pid = None
+        
+        # Stop Cherokee
+        pid = self._get_cherokee_pid()
+        self.__stop_process (pid)
+                
         time.sleep (DEFAULT_DELAY)
 
     def create_config (self, file):
@@ -129,33 +127,15 @@ class CherokeeManagement:
     # Protected
     #
 
-    def _get_running_pid (self):
-        pid_file = None
+    def _get_guardian_pid (self):
+        pid_file = os.path.join (CHEROKEE_VAR_RUN, "cherokee-guardian.pid")
+        return self.__read_pid_file (pid_file)
 
-        # Look up the configuration
-        pid_cfg = self._cfg["server!pid_file"]
-        if pid_cfg:
-            pid_file = pid_cfg.value
-            if not os.access (pid_file, os.R_OK):
-                pid_file = None
-
-        # If there wasn't an entry..
+    def _get_cherokee_pid (self):
+        pid_file = self._cfg.get_val("server!pid_file")
         if not pid_file:
-            for file in DEFAULT_PID_LOCATIONS:
-                if os.access (file, os.R_OK):
-                    pid_file = file
-                    break
-
-        if not pid_file:
-            return
-
-        try:
-            f = open (pid_file, "r")
-        except IOError:
-            print ("Couldn't read PID file: %s" % (pid_file))
-            return
-        
-        return int(f.readline())
+            pid_file = os.path.join (CHEROKEE_VAR_RUN, "cherokee-guardian.pid")
+        return self.__read_pid_file (pid_file)
 
     def _restart (self):
         if not self._pid:
@@ -165,8 +145,30 @@ class CherokeeManagement:
         except:
             pass
 
+    # Private
+    #
 
-def is_PID_alive (pid, filter='cherokee'):
+    def __read_pid_file (self, file):
+        if not os.access (file, os.R_OK):
+            return
+        f = open (file, "r")
+        pid = int(f.readline())
+        try: f.close()
+        except: pass
+        return pid
+
+    def __stop_process (self, pid):
+        if not pid: 
+            return
+
+        try: os.kill (pid, signal.SIGQUIT)
+        except: pass
+
+        try: os.waitpid (pid, 0)
+        except: pass
+
+
+def is_PID_alive (pid, filter='cherokee-guardian'):
     if sys.platform == 'win32':
         raise 'TODO'
     else:

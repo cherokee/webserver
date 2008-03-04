@@ -35,7 +35,7 @@
 
 #define ERROR_DELAY       3000 * 1000
 #define RESTARTING_DELAY   500 * 1000
-
+#define PID_FILE          CHEROKEE_VAR_RUN "/cherokee-guardian.pid"
 
 static cherokee_boolean_t exit_guardian = false;
 static pid_t              pid;
@@ -128,6 +128,22 @@ process_wait (pid_t pid)
 	return ret_ok;
 }
 
+static void
+save_pid_file (int pid)
+{
+	FILE *file;
+	char  tmp[10];
+
+	file = fopen (PID_FILE, "w+");
+	if (file == NULL) {
+		PRINT_MSG ("Cannot write PID file '%s'\n", PID_FILE);
+	}
+
+	snprintf (tmp, sizeof(tmp), "%d\n", getpid());
+	fwrite (tmp, 1, strlen(tmp), file);
+	fclose (file);
+}
+
 
 int
 main (int argc, char *argv[])
@@ -143,6 +159,8 @@ main (int argc, char *argv[])
 			exit (1);
 		}
 		
+		save_pid_file(pid);
+
 		ret = process_wait (pid);
 		usleep ((ret == ret_ok) ? RESTARTING_DELAY : ERROR_DELAY);
 	} 

@@ -9,6 +9,7 @@ $(PTHREAD_CFLAGS) \
 -DCHEROKEE_PLUGINDIR="\"$(plugindir)\"" \
 -DCHEROKEE_DEPSDIR=\""$(cherokeedepsdir)"\" \
 -DCHEROKEE_DATADIR=\""$(cherokeedatadir)"\" \
+-DCHEROKEE_VAR_RUN=\""$(localstatedir)/run"\" \
 -DCHEROKEE_CONFDIR=\""$(sysconfdir)/cherokee"\" \
 -DCHEROKEE_SRV_PATH=\""$(prefix)/sbin/cherokee"\" \
 -DCHEROKEE_ICONSDIR=\""$(prefix)/share/cherokee/icons"\" \
@@ -580,16 +581,15 @@ endif
 #
 # Validator mysql
 #
-if HAVE_MYSQL
 validator_mysql = \
 validator_mysql.c \
 validator_mysql.h
 
-libplugin_mysql_la_LDFLAGS = $(module_ldflags)
+libplugin_mysql_la_LDFLAGS = $(module_ldflags) $(MYSQL_LDFLAGS)
 libplugin_mysql_la_SOURCES = $(validator_mysql)
-libplugin_mysql_la_LIBADD  = $(MYSQL_LDFLAGS)
 libplugin_mysql_la_CFLAGS  = $(MYSQL_CFLAGS)
 
+if HAVE_MYSQL
 if STATIC_VALIDATOR_MYSQL
 static_validator_mysql_src   = $(validator_mysql)
 static_validator_mysql_lib   = $(MYSQL_LDFLAGS)
@@ -1062,6 +1062,7 @@ $(pcre_src) \
 $(win32_src) \
 $(getopt_src) \
 $(bin_SCRIPTS) \
+$(validator_mysql) \
 $(cherokeedeps_DATA) \
 $(cherokeedata_DATA) \
 $(WINDOWS_PORT_FILES) \
