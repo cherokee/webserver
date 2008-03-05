@@ -1050,7 +1050,7 @@ AC_MSG_RESULT([$docutils_found])
 if test "x$docutils_found" != "xyes"; then
   echo
   echo "*WARNING*: Python module docutils is not installed!"
-  echo "           It will not be able to recompile the documentation."
+  echo "           It will not be able to generate the documentation."
   echo
 fi
 
@@ -1070,12 +1070,16 @@ AC_PATH_PROG(PHPCGI, php-cgi)
 AC_ARG_VAR(PHPCGI, [path to PHP-cgi])
 
 AC_MSG_CHECKING([$PHPCGI supports FastCGI])
-$PHPCGI -v | grep 'cgi-fcgi' >/dev/null 2>/dev/null
-if test $? != 0; then
-   PHPCGI=""
+if test "x$PHPCGI" = "x"; then
    AC_MSG_RESULT([no])
 else
-   AC_MSG_RESULT([yes])
+   $PHPCGI -v | grep 'cgi-fcgi' >/dev/null 2>/dev/null
+   if test $? != 0; then
+      PHPCGI=""
+      AC_MSG_RESULT([no])
+   else
+      AC_MSG_RESULT([yes])
+   fi
 fi
 
 if test "x$PHPCGI" = "x"; then
