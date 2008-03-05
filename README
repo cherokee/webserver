@@ -38,7 +38,7 @@ IRC channel
   irc.freenode.net, channel #cherokee  
 
 
-Building form a tar.gz file
+Building from a tar.gz file
 ---------------------------
   Run ./configure, with some options if you wish. The standard options
   are documented in the INSTALL file.  The only interesting ones are
