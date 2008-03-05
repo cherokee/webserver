@@ -12,7 +12,7 @@ DATA_VALIDATION = [
 
 COMMENT = """
 <p>'Virtual Server' is an abstraction mechanism that allows to define
-a custom number of parameter and rules that have to be apply to one or
+a custom number of parameters and rules that have to be applied to one or
 more domains.</p>
 """
 

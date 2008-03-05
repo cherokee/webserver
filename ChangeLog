@@ -1,3 +1,6 @@
+2008-03-05  Taher Shihadeh <taher@unixwars.com>
+	* admin/*: Several files needed corrections for consistency.
+	
 2008-03-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* Makefile.am, cherokee.conf.sample.pre, admin/Makefile.am,

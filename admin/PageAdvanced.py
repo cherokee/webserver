@@ -19,7 +19,7 @@ DATA_VALIDATION = [
 
 WARNING = """
 <p><b>WARNING</b>: This section contains advanced configuration
-paramters. We recommend you not to change anything unless you are
+paramters. We recommend not changing  anything unless you are
 completely sure about what you are doing.</p>
 """
 

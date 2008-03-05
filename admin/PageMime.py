@@ -11,7 +11,7 @@ DATA_VALIDATION = [
 
 COMMENT = """
 <p>Here you can define which MIME types files you want Cherokee to
-query when it servers static content.</p>
+query when it serves static content.</p>
 """
 
 class PageMime (PageMenu, FormHelper):
