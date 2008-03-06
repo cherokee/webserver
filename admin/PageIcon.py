@@ -103,6 +103,41 @@ class PageIcon (PageMenu, FormHelper):
 
         tabs = []
         
+        # Suffixes
+        #
+        icons = self._cfg['icons!suffix']
+
+        tmp = ''
+        if icons and icons.has_child():
+            tmp += "<h3>Extension list</h3>"
+
+            table = Table(4, 1)
+            table += ('', 'File', 'Extensions', '')
+
+            for icon in icons:
+                cfg_key  = 'icons!suffix!%s' % (icon)
+                im = self._get_img_from_icon (icon, cfg_key)
+
+                entry  = self.InstanceEntry (cfg_key, 'text')
+                js     = "post_del_key('/icons/update', '%s');" % (cfg_key)
+                button = self.InstanceButton ('Del', onClick=js)
+                table += (im, icon, entry, button)
+
+            tmp += self.Indent(table)
+
+        # New suffix
+        fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False)
+        op1, im1 = self._get_options_icons ('suffix_new_file', 
+                                            self._filter_icons_in_suffixes)
+        en2 = self.InstanceEntry('suffix_new_exts', 'text')
+        ta1 = Table (4,1)
+        ta1 += ('', 'Icon', 'Extensions', '')
+        ta1 += (im1, op1, en2, SUBMIT_ADD)
+        tmp += "<h3>Add suffix</h3>"
+        tmp += fo1.Render(self.Indent(ta1))
+
+        tabs += [('Extensions', tmp)]
+
         # Special icons
         #
         table = Table(3)
@@ -151,40 +186,6 @@ class PageIcon (PageMenu, FormHelper):
 
         tabs += [('Files', tmp)]
 
-        # Suffixes
-        #
-        icons = self._cfg['icons!suffix']
-
-        tmp = ''
-        if icons and icons.has_child():
-            tmp += "<h3>Extension list</h3>"
-
-            table = Table(4, 1)
-            table += ('', 'File', 'Extensions', '')
-
-            for icon in icons:
-                cfg_key  = 'icons!suffix!%s' % (icon)
-                im = self._get_img_from_icon (icon, cfg_key)
-
-                entry  = self.InstanceEntry (cfg_key, 'text')
-                js     = "post_del_key('/icons/update', '%s');" % (cfg_key)
-                button = self.InstanceButton ('Del', onClick=js)
-                table += (im, icon, entry, button)
-
-            tmp += self.Indent(table)
-
-        # New suffix
-        fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False)
-        op1, im1 = self._get_options_icons ('suffix_new_file', 
-                                            self._filter_icons_in_suffixes)
-        en2 = self.InstanceEntry('suffix_new_exts', 'text')
-        ta1 = Table (4,1)
-        ta1 += ('', 'Icon', 'Extensions', '')
-        ta1 += (im1, op1, en2, SUBMIT_ADD)
-        tmp += "<h3>Add suffix</h3>"
-        tmp += fo1.Render(self.Indent(ta1))
-
-        tabs += [('Extensions', tmp)]
 
         txt += self.InstanceTab (tabs)
         return txt
