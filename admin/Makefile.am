@@ -79,7 +79,8 @@ main.template.html \
 mime.help.html \
 vserver.help.html \
 vservers.help.html \
-encoder.help.html
+encoder.help.html \
+feedback.help.html
 
 
 EXTRA_DIST = \
