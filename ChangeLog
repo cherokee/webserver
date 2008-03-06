@@ -1,6 +1,11 @@
+2008-03-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+ 	* cherokee/icons.c (cherokee_icons_get_icon): Fixed a call to
+ 	cherokee_avl_while() that could end up generating a SEGFAULT.
+
 2008-03-05  Taher Shihadeh <taher@unixwars.com>
 	* admin/*: Several files needed corrections for consistency.
-	
+
 2008-03-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* Makefile.am, cherokee.conf.sample.pre, admin/Makefile.am,

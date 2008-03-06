@@ -158,7 +158,7 @@ match_file (cherokee_buffer_t *key, void *value, void *param)
 	cherokee_buffer_t *param_file = param;
 
 	ret = cherokee_wildcard_match (key->buf, param_file->buf);
-	if (ret == ret_ok) 
+	if (ret == ret_ok)
 		return ret_deny;
 
 	return ret_ok;
@@ -170,8 +170,9 @@ cherokee_icons_get_icon (cherokee_icons_t   *icons,
 			 cherokee_buffer_t  *file,
 			 cherokee_buffer_t **icon_ret)
 {
-	ret_t  ret;
-	char  *suffix;
+	ret_t              ret;
+	char              *suffix;
+	cherokee_buffer_t *tmp_buf = NULL;
 
 	/* Look for the filename
 	 */
@@ -190,10 +191,17 @@ cherokee_icons_get_icon (cherokee_icons_t   *icons,
 	
 	/* Look for the wildcat matching
 	 */
-	cherokee_avl_while (&icons->files_matching, match_file, 
-			    file, NULL, (void **)icon_ret);
-	if (*icon_ret)
+	ret = cherokee_avl_while (&icons->files_matching, /* table    */
+				  match_file,             /* function */
+				  file,                   /* param    */
+				  NULL,                   /* ret: key */
+				  (void **)&tmp_buf);     /* ret: val */
+	if ((ret != ret_ok) &&
+	    (tmp_buf != NULL)) 
+	{
+		*icon_ret = tmp_buf;
 		return ret_ok;
+	}
 
 	/* Default one
 	 */
