@@ -38,7 +38,7 @@ SERVER_NOT_RUNNING = """
 class PageMain (PageMenu, FormHelper):
     def __init__ (self, cfg=None):
         PageMenu.__init__ (self, 'main', cfg)
-        FormHelper.__init__ (self, 'general', cfg)
+        FormHelper.__init__ (self, 'main', cfg)
 
     def _op_render (self):
         self.AddMacroContent ('title', 'Welcome to Cherokee Admin')
