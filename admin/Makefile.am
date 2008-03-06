@@ -56,6 +56,7 @@ ModulePlain.py \
 ModuleHtpasswd.py \
 ModuleMysql.py \
 ModulePam.py \
+ModuleRoundRobin.py \
 config.py \
 pyscgi.py \
 server.py \
