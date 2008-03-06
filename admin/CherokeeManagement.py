@@ -89,6 +89,7 @@ class CherokeeManagement:
                 stderr += stderr_f.read(1)
 
             if stderr.count('\n'):
+                self.__stop_process (p.pid)
                 self._pid = None
                 return stderr
 
@@ -113,6 +114,10 @@ class CherokeeManagement:
     def create_config (self, file):
         if os.path.exists (file):
             return
+
+        dirname = os.path.dirname(file)
+        if not os.path.exists (dirname):
+            os.mkdir (dirname)
 
         conf_sample = os.path.join(CHEROKEE_ADMINDIR, "cherokee.conf.sample")
         if os.path.exists (conf_sample):
@@ -168,21 +173,20 @@ class CherokeeManagement:
         except: pass
 
 
-def is_PID_alive (pid, filter='cherokee-guardian'):
-    if sys.platform == 'win32':
-        raise 'TODO'
-    else:
-        f = os.popen('/bin/ps -e')
-        lines = f.readlines()
-        try:
+def is_PID_alive (pid):
+    if sys.platform.startswith('linux') or \
+       sys.platform.startswith('sunos'):
+        return os.path.exists('/proc/%s'%(pid))
+
+    elif sys.platform == 'darwin':
+        f = os.popen('/bin/ps -p %s'%(pid))
+        alive = len(f.readlines()) >= 2
+        try: 
             f.close()
-        except:
-            pass
+        except: pass
+        return alive
 
-        for line in lines:
-            if not filter in line:
-                continue
+    elif sys.platform == 'win32':
+        None
 
-            pid_alive = int(line.strip().split(' ')[0])
-            if pid == pid_alive:
-                return True
+    raise 'TODO'
