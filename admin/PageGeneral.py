@@ -60,8 +60,8 @@ class PageGeneral (PageMenu, FormHelper):
         txt += self.Indent(table)
 
         form = Form ("/%s" % (self._id))
-        return form.Render(txt)
-
+        return form.Render(txt,DEFAULT_SUBMIT_VALUE)
+	
     def _op_apply_changes (self, uri, post):
         self.ApplyChanges (['server!ipv6', 'server!keepalive'], post, 
                            validation = DATA_VALIDATION)

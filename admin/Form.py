@@ -14,6 +14,7 @@ FORM_TEMPLATE = """
 SUBMIT_BUTTON = """
 <input type="submit" %(submit_props)s />
 """
+DEFAULT_SUBMIT_VALUE= 'value="Submit"'
 
 class WebComponent:
     def __init__ (self, id, cfg):
@@ -55,9 +56,9 @@ class Form:
         self._method       = method
         self._add_submit   = add_submit
         
-    def Render (self, content=''):
+    def Render (self, content='', submit_props='' ):
         keys = {'submit':       '',
-                'submit_props': '',
+                'submit_props': submit_props,
                 'content':      content,
                 'action':       self._action,
                 'method':       self._method}

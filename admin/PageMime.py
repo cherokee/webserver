@@ -40,4 +40,4 @@ class PageMime (PageMenu, FormHelper):
         txt += self.Indent(table)
 
         form = Form ('/%s' % (self._id))
-        return form.Render(txt)
+        return form.Render(txt,DEFAULT_SUBMIT_VALUE)
