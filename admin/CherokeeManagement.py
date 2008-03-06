@@ -178,7 +178,8 @@ def is_PID_alive (pid):
        sys.platform.startswith('sunos'):
         return os.path.exists('/proc/%s'%(pid))
 
-    elif sys.platform == 'darwin':
+    elif sys.platform == 'darwin' or \
+         "bsd" in sys.platform.lower():
         f = os.popen('/bin/ps -p %s'%(pid))
         alive = len(f.readlines()) >= 2
         try: 
