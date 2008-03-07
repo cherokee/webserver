@@ -1,3 +1,9 @@
+2008-03-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee.conf.sample.pre: Removed a couple of "include" entries.
+	As long as cherokee-admin does not manage this kind of entries,
+	the default configuration file should not use it.
+
 2008-03-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
  	* cherokee/icons.c (cherokee_icons_get_icon): Fixed a call to

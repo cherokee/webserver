@@ -89,9 +89,4 @@ icons!suffix!control_play.png = bin,exe,com,msi,out
 icons!suffix!email.png = eml,mbox,box,email,mbx
 icons!suffix!printer.png = ps,eps
 
-#
-# Include files
-#
-include = %sysconfdir%/cherokee/mods-enabled
-include = %sysconfdir%/cherokee/sites-enabled
 
