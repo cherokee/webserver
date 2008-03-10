@@ -2099,7 +2099,7 @@ cherokee_server_get_vserver (cherokee_server_t *srv, cherokee_buffer_t *name, ch
 
 		re = cherokee_buffer_cmp_buf (name, &vserver->name);
 		if (re == 0) {
-			TRACE (ENTRIES, "Virtual server '%s' mached by its alias\n", vserver->name.buf);
+			TRACE (ENTRIES, "Virtual server '%s' matched by its alias\n", vserver->name.buf);
 			*vsrv = vserver;
 			return ret_ok;
 		}
