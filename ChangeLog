@@ -1,5 +1,8 @@
 2008-03-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (cherokee_server_get_vserver): If no vserver
+	names match the requested domain, try to match the domain alias.
+
 	* qa/util.py (get_free_port): Added new function to assign the tcp
 	ports dynamically.
 
