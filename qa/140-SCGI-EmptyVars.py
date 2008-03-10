@@ -2,7 +2,7 @@ import os
 from base import *
 
 DIR  = "/SCGI3/"
-PORT = 5003
+PORT = get_free_port()
 
 SCRIPT = """
 from pyscgi import *

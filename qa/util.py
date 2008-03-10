@@ -137,3 +137,10 @@ def look_for_python():
 
 def print_key (key, val):
     print "%10s: %s" % (key, val)
+
+
+__free_port = 5000
+def get_free_port():
+    global __free_port
+    __free_port += 1
+    return __free_port

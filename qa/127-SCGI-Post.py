@@ -3,7 +3,7 @@ from base import *
 
 DIR   = "/SCGI2/"
 MAGIC = "Cherokee and SCGI rocks!"
-PORT  = 5002
+PORT  = get_free_port()
 
 SCRIPT = """
 from pyscgi import *

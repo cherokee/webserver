@@ -1,3 +1,12 @@
+2008-03-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/util.py (get_free_port): Added new function to assign the tcp
+	ports dynamically.
+
+	* qa/127-SCGI-Post.py, qa/140-SCGI-EmptyVars.py, qa/126-SCGI.py,
+	qa/141-FastCGI-EmptyVars.py, qa/142-SCGI-ExtraVars.py: Adapted to
+	use get_free_port().
+
 2008-03-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee.conf.sample.pre: Removed a couple of "include" entries.

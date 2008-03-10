@@ -3,7 +3,7 @@ from base import *
 
 DIR   = "/FCGI-EmptyVars/"
 MAGIC = "Cherokee and FastCGI rocks!"
-PORT  = 5004
+PORT  = get_free_port()
 
 SCRIPT = """
 from fcgi import *
