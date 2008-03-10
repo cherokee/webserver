@@ -510,37 +510,43 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 
 	/* SCRIPT_NAME:
 	 * It is the request without the pathinfo if it exists
-	 */	
-	if (cherokee_buffer_is_empty (&cgi_props->script_alias)) {
-		if (cgi->param.len > 0) {
-			/* phpcgi request	
-			 */
-			name = &cgi->param;
-		} else {
-			/* cgi, scgi or fastcgi	
-			 */
-			name = &cgi->executable;
-		}
-
-		if (conn->local_directory.len > 0){
-			p = name->buf + conn->local_directory.len - 1;
-			len = (name->buf + name->len) - p;
-		} else {
-			p = name->buf;
-			len = name->len;
-		}
-	}
-
+	 */
 	cherokee_buffer_clean (&tmp);
-	
-	if (cgi_props->check_file && (conn->web_directory.len > 1)) {
-		cherokee_buffer_add_buffer (&tmp, &conn->web_directory);
-	}
 
-	if (len > 0)
-		cherokee_buffer_add (&tmp, p, len);
+	if (! cgi_props->check_file) {
+		/* SCGI or FastCGI */
+
+		if (conn->web_directory.len > 1) {
+			cherokee_buffer_add_buffer (&tmp, &conn->web_directory);
+		}
+		
+		cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, tmp.buf, tmp.len);
+
+	} else {
+		if (cherokee_buffer_is_empty (&cgi_props->script_alias)) {
+			if (cgi->param.len > 0) {
+				name = &cgi->param;      /* phpcgi */
+			} else {
+				name = &cgi->executable; /* cgi */
+			}
+			if (conn->local_directory.len > 0){
+				p = name->buf + conn->local_directory.len - 1;
+				len = (name->buf + name->len) - p;
+			} else {
+				p = name->buf;
+				len = name->len;
+			}
+		}
 	
-	cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, tmp.buf, tmp.len);
+		if (conn->web_directory.len > 1) {
+			cherokee_buffer_add_buffer (&tmp, &conn->web_directory);
+		}
+
+		if (len > 0)
+			cherokee_buffer_add (&tmp, p, len);
+
+		cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, tmp.buf, tmp.len);
+	}
 
 	/* SCRIPT_FILENAME
 	 * It depends on the type of CGI (CGI, SCGI o FastCGI):
@@ -581,6 +587,25 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 		cherokee_buffer_add (&conn->pathinfo, 
 				     conn->request.buf + conn->web_directory.len, 
 				     conn->request.len - conn->web_directory.len);
+		return ret_ok;
+	}
+
+	/* No file checking: mainly for FastCGI and SCGI
+	 */
+	if ((! props->check_file) &&
+	    (! cherokee_buffer_is_empty(&conn->web_directory))) 
+	{
+		if (conn->request.len == 1) {
+			cherokee_buffer_add_str (&conn->pathinfo, "/");
+
+		} else if (conn->web_directory.len == 1) {
+			cherokee_buffer_add_buffer (&conn->pathinfo, &conn->request);
+						    
+		} else {
+			cherokee_buffer_add (&conn->pathinfo,
+					     conn->request.buf + conn->web_directory.len,
+					     conn->request.len - conn->web_directory.len);
+		}
 		return ret_ok;
 	}
 

@@ -154,7 +154,10 @@ run-tests.py \
 147-ContentRange-Double-NoIO.py \
 148-ContentRange-Double2-NoIO.py \
 149-Common-PathInfo.py \
-150-Common-No-PathInfo.py
+150-Common-No-PathInfo.py \
+151-SCGI-vars.py \
+152-SCGI-vars2.py \
+153-SCGI-vars-root.py
 
 test:
 	./run-tests.py

@@ -1,5 +1,14 @@
 2008-03-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_extract_path):
+	Added a couple of special cases to ensure that the server works
+	properly when a RoR or a Django SCGI/FastCGI is used domain-wide.
+
+	* qa/151-SCGI-vars.py, qa/152-SCGI-vars2.py,
+	qa/153-SCGI-vars-root.py, qa/Makefile.am (EXTRA_DIST): Added a few
+	new tests to ensure that SCGI/FastCGI behaves as expected with
+	Django and RoR.
+
 	* cherokee/server.c (cherokee_server_get_vserver): If no vserver
 	names match the requested domain, try to match the domain alias.
 
