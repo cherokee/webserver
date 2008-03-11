@@ -1,0 +1,61 @@
+
+FastCGI
+=======
+
+The fcgi handler queries to [FastCGI] servers, such as PHP, in order to execute
+scripts. It is basically the same thing as CGI but *much faster*.
+
+**Note**
+	   The "fastcgi" module also implements the FastCGI protocol. It is a  
+	   more complete implementation than "fcgi" although it is also more  
+	   complex. Actually, fcgi become the standard choice because the PHP  
+	   interpreter was kind of buggy when it had to demultiplex multiple  
+	   requests from the same socket.
+
+This module accepts one parameter, and at the same time, supports all the 
+CGI handler parameters:
+
+    * Server path or hostname:port: It defines a server entry 
+
+Each Server parameter accepts these sub-parameters:
+
+    * Interpreter: Defines the command line of the interpreter for this 
+      server. This sub-parameter only available for FastCGI servers which are 
+      running in the same computer with the webserver. The webserver will try to run 
+      the command line if it fails to connect to the specified address in Server 
+      parameter. If you run the FastCGI servers manually, this sub-parameter is not needed.
+
+    * Env variable:value pair: Set an environment variable for the FastCGI servers. 
+
+      The **PHP_FCGI_CHILDREN** environment variable is mandatory for PHP FastCGI servers. 
+      It defines how much children should serve the requests coming from the webserver. 
+
+      If you define **PHP_FCGI_MAX_REQUESTS**, the value should be negative so that PHP would 
+      take the request as much as possible. If you left it unset, PHP will take the 
+      default value (500) and your 500th request will be rejected and FCGI handler will 
+      spew Error 500 (Internal server error) for it. 
+
+
+If multiple Server entries defined, the requests will be round-robinly served by 
+each of Server entry.
+
+Examples
+--------
+This example shows a typical usage of FastCGI. It connects to a FastCGI server located 
+in localhost in port 8002. If no server is running, the webserver will run the FastCGI 
+server by issuing command defined in Interpreter sub-parameter:
+
+.. image:: ../media/images/admin_handler_fastcgi1.png
+   :alt: Fastcgi
+   :align: center
+
+This example shows a typical usage of multiple FastCGI servers. It connects to a 
+FastCGI servers located in several locations. If no server is running in the local 
+computer, the webserver will run the FastCGI server by issuing command defined in 
+Interpreter sub-parameter. Note that for remote FastCGI servers, you are responsible
+to run the FastCGI servers there manually:
+
+.. image:: ../media/images/admin_handler_fastcgi2.png
+   :alt: Fastcgi
+   :align: center
+

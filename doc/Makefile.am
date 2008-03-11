@@ -7,7 +7,13 @@ loggers.html \
 server.html \
 vserver.html \
 compiling_and_installing_unix.html \
-advanced.html
+cross_compile_cherokee.html \
+internal_configuration.html \
+advanced.html \
+admin.html \
+download.html \
+How_to_generate_SSL_keys.html\
+icons.html
 
 dochandlersdir = $(docdir)handlers/
 dochandlers_DATA = \
@@ -25,6 +31,14 @@ loggers/combined.html \
 loggers/ncsa.html \
 loggers/w3c.html
 
+docencodersdir = $(docdir)encoders/
+docencoders_DATA = \
+encoders/gzip.html
+
+docbalancersdir = $(docdir)balancers/
+docbalancers_DATA = \
+balancers/round_robin.html
+
 docvalidatorsdir = $(docdir)validators/
 docvalidators_DATA = \
 validators/htdigest.html \
@@ -38,15 +52,44 @@ docmediacssdir = $(docdir)media/css/
 docmediacss_DATA = \
 media/css/documentation.css
 
+docmediaimagesdir = $(docdir)media/images/
+docmediaimages_DATA = \
+media/images/admin_handler_fastcgi2.png \
+media/images/admin_index.png \
+media/images/admin_handler_fastcgi1.png \
+media/images/admin_vserver.png \
+media/images/admin_vserver_errors.png \
+media/images/admin_icons3.png \
+media/images/admin_handler_file.png \
+media/images/admin_behaviour.png \
+media/images/admin_launch.png \
+media/images/admin_vserver_loggers.png \
+media/images/admin_handler_cgi.png \
+media/images/admin_icons2.png \
+media/images/admin_handler_cgi2.png \
+media/images/admin_general.png \
+media/images/admin_icons1.png \
+media/images/admin_encoding.png \
+media/images/admin_validators_plain.png \
+media/images/admin_validators_pam.png \
+media/images/admin_advanced.png \
+media/images/admin_handler_dirlist.png \
+media/images/admin_handler_dirlist_ex.png
+
 GENERATED_FILES = \
 $(doc_DATA) \
 $(dochandlers_DATA) \
 $(docloggers_DATA) \
-$(docvalidators_DATA)
+$(docvalidators_DATA) \
+$(docbalancers_DATA) \
+$(docencoders_DATA)
+
 
 EXTRA_DIST = \
 $(GENERATED_FILES) \
-$(docmediacss_DATA)
+$(docmediacss_DATA) \
+$(docmediaimages_DATA)
+
 
 CLEANFILES = \
 $(GENERATED_FILES) 

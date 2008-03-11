@@ -1,0 +1,134 @@
+
+Virtual Servers
+---------------
+
+'Virtual Server' is an abstraction mechanism that allows you to define a custom 
+number of parameters and rules that have to be applied to one or more domains.
+
+In a Cherokee server there must be at least one virtual server named default, 
+and there is not a maximum number. 
+It is important to know that this server cannot be deleted.
+
+When the server receives a request it will try to match the domain name specified 
+in the virtual server that should handle it. In case no virtual server matches 
+the request, default will be used.
+
+
+Add new Virtual Server
+~~~~~~~~~~~~~~~~~~~~~~
+You have to enter the server name and a valid Document Root directory in 
+order to create a new virtual server.
+
+.. image:: media/images/admin_vserver.png
+   :alt: Virtual server
+   :align: center
+
+* Document Root
+  This directive sets the directory from which Cherokee will serve files. 
+  Unless matched other posterior rule, the server appends the path from 
+  the requested URL to the document root to make the path to the document::
+
+  	 http://www.example.com/index.html refers to /var/www/index.html
+
+* Name
+
+  Name is an alias. The domain names handled by the virtual server should be 
+  specified later in the virtual server details page.
+
+
+Now, we can configure our new virtual server. 
+
+Basics
+~~~~~~
+
+  * Directory Indexes
+
+    The DirectoryIndex directive sets the list of resources to look for, when 
+    the client requests an index of the directory by specifying a / at the end 
+    of the directory name. Several URLs may be given, in which case the server 
+    will return the first one that it finds. If none of the resources exist, the 
+    server will reply according to the handler behavior.
+
+    Note that the documents do not need to be relative to the directory::
+
+ 	    DirectoryIndex index.html, index.txt, /cgi-bin/index.pl
+
+    would cause the CGI script /cgi-bin/index.pl to be executed if neither 
+    index.html or index.txt existed in a directory.
+
+    There is an special case in which the directory index entry starts with 
+    a slash. For example, /cgi-bin/index.pl. In that case, it will use it as 
+    the object accessible under that public address of the same virtual server,
+    so it will take care about the possible configuration of 
+    the /cgi-bin/ directory and/or the pl extension.
+
+
+Domain names
+~~~~~~~~~~~~
+    Set's the FQDN that will match with the virtual server::
+
+    		xyz.com, www.xyz.com, xyz.org, xyz.org
+
+Behaviour
+~~~~~~~~~
+  There is a common group of parameters which modify the server behavior. It 
+  can be configured depending on the directory requested, the extension of the 
+  file requested or a regular expression. 
+
+  * **Directory**: The entry Directory encloses a group of directives which will
+    apply only to the named directory and sub-directories of that directory. 
+
+  * **Extensions**: The entry extensions doesn't care about directories, it will 
+    just look for the extension of the object requested. 
+
+  * **Regular Expressions**: The Request entry provides a powerful way to apply 
+    custom options to requests. It is a complement for the Directory and Extension 
+    entries. Basically, there are two differences between them:
+
+    + It uses regular expressions to define the requests in which the configuration 
+      will be applied.
+
+    + These entries are able to use the connection parameters (both, pathinfo 
+      and query string). In this way, it is possible to set rules based on 
+      parameter values. 
+
+  * The priority which will be applied (the bigger the higher).
+  
+
+.. image:: media/images/admin_behaviour.png
+   :alt: Virtual server
+   :align: center
+
+  
+Error Handler
+~~~~~~~~~~~~~
+  We can easily redirect errors to a custom path or website. 
+
+.. image:: media/images/admin_vserver_errors.png
+   :alt: Virtual server
+   :align: center
+
+Logging
+~~~~~~~
+  The loggers are a type of Cherokee modules to write the server log information using 
+  different destinations and/or formats: 
+
+    * Destination: File, syslog, data base, etc.
+    * Format: Combined_, NCSA_, W3C_
+
+  If a virtual server doest't have a logger set up it will not log anything.
+  
+.. image:: media/images/admin_vserver_loggers.png
+   :alt: Virtual server
+   :align: center
+
+Security
+~~~~~~~~
+  The virtual server must be configured with the path to the certificate before using 
+  secure connections (https). There is a document which might help to to generate SSL keys_
+ 
+
+.. _keys: How_to_generate_SSL_keys.html
+.. _Combined: loggers/combined.html
+.. _NCSA: loggers/ncsa.html
+.. _W3C: loggers/w3c.html

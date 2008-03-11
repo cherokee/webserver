@@ -1,20 +1,15 @@
-common Handler
+
+Common Handler
 ==============
 
 The **common** handler performs a common behavior of a web server.  It depends
 on the **file** and **dirlist** handlers.  When a directory is requested it will
 display its contents, but if a file is requested it will serve the file.
 
-Parameters
-**********
-
 Please refer to file_ and dirlist_ handlers for a list of parameters.
 
-.. _file: file.html
-.. _dirlist: dirlist.html
-
 Examples
-********
+--------
 
 The following examples enables a user to view the contents of **/download** and
 download files::
@@ -26,3 +21,7 @@ To display a header file when **common** displays directory contents use::
 
     vserver!default!directory!/download!handler = common
     vserver!default!directory!/download!handler
+
+
+.. _file: file.html
+.. _dirlist: dirlist.html

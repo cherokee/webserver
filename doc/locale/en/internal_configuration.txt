@@ -1,0 +1,238 @@
+Advanced Configuration
+======================
+
+Introduction
+------------
+
+Cherokee's configuration system is based on a internal text file
+format that the average user should not know about. This configuration
+file is read by the server and modified by the administration
+interface, so unless you are not developing Cherokee or a really
+advanced user, the following format description will not be very
+interesting to you.
+
+Said that, let's proceed to describe the configuration file format. It
+is basically a text file that contains a tree where final nodes
+contains values. Let's see a basic example::
+
+    server!port = 80
+    server!keepalive = 1
+
+Most of the modules and plug-ins reads a piece of the tree to
+configure itself. It provides a extremely flexible configuration
+capabilities for the price of a fairly complex text file. However, I
+would like to point again that users should never read of modify the
+configuration file by hand, so it is a format the only developers
+should know about.
+
+The following blocks will summarize the configuration keys that
+Cherokee 0.6 handles:
+
+Server
+------
+
+The server configuration keys define some of the server-wide
+properties, such as the user under which the server ought to run if it
+is run as root or whether to use keep-alive connections.
+
+================================ ======== ======================================
+**Key**                          **Type** **Description**
+-------------------------------- -------- --------------------------------------
+server!port                      Number   TCP port for HTTP
+server!port_tls                  Number   TCP port for HTTPS
+server!max_fds                   Number   Max open file descriptors
+server!listen_queue              Number   Length of the listen queue
+server!thread_number             Number   Number of threads
+server!sendfile_min              Number   Minimum file size of using sendfile
+server!sendfile_max              Number   Maximum file size of using sendfile
+server!max_connection_reuse      Number   How many connections to reuse
+server!ipv6                      Bool     Whether to use IPv6
+server!timeout                   Number   Connections timeout
+server!log_flush_elapse          Number   Time between log flushes
+server!keepalive                 Bool     Allow keepalive connections
+server!keepalive_max_requests    Number   How many keepalive reqs per connection
+server!unix_socket               Path     Listen to a Unix socket
+server!panic_action              Path     Path to cherokee-panic
+server!chroot                    Bool     Whether to use chroot
+server!pid_file                  Path     PID file
+server!mime_files                List     Path list to mime type files
+server!listen                    IP       Listen NIC
+server!poll_method               String   Which poll method it should use
+server!server_tokens             String   Server identification: minor, minimal, os, full
+server!thread_policy             String   Thread policy: fifo, rr, other
+server!user                      String/  Change effective user
+                                 Number
+server!group                     String/  Change effective group
+                                 Number
+================================ ======== ======================================
+
+Virtual Server
+--------------
+
+A virtual servers contains the information related to one or more
+domains under the same configuration. In a Cherokee server there must
+be at least one virtual server named ``default``, and there is not a
+maximum number.
+
+The prefix this type of entries ``vserver``, and by far, it is the
+most common type of entry.
+
+======================================== ======== ======================================
+**Key**                                  **Type** **Description**
+---------------------------------------- -------- --------------------------------------
+vserver!default!documment_root           Path     Document Root path
+vserver!default!user_dir                 String   Users web directory (for ~ requests)
+vserver!default!domain! ``id``           String   Domain name, admits wildcats          
+vserver!default!error_handler            String   Defines the error handler module
+vserver!default!directory_index          List     String list: Directory indexes
+vserver!default!ssl_certificate_file     Path     TLS/SSL certificate file
+vserver!default!ssl_certificate_key_file Path     TLS/SSL certificate key file
+vserver!default!ssl_ca_list_file         Path     TLS/SSL CA list file
+======================================== ======== ======================================
+
+Besides these configuration keys there are a few other more complex
+that needs further explanation:
+
+Directories, Requests and Regular Expressions
+---------------------------------------------
+
+These entries are located inside Virtual Servers. They basically
+specify the behaviour of the web server by setting how to handle each
+request based on the requested object and parameters.
+
+There are three kinds of entries. All the three sort of entries admit
+the same parameters, and depending on each case, the entry is followed
+with the directory name, the extension list or the regular expression:
+
+:Directory:
+  The directories specify how to handle its content.
+
+  Example: the root directory of the default virtual host would be represented by
+
+  ``vserver!default!directory!/``
+
+:Extension:
+  It specifies a list of extension and how they should be handled.
+
+  Eg: the JPG extensions is 
+
+  ``vserver!default!extensions!jpg,jpeg``
+
+:Requests:
+  When a request matches a regular expression entry, it uses its configuration.
+
+  Eg: requests beginning with 'a' and PHP extension
+
+  ``vserver!default!request!^a.*\.php$``
+
+The following parameters are concatenated with any of the previous
+kind of entries:
+
+======================================== ======== ======================================
+**Key**                                  **Type** **Description**
+---------------------------------------- -------- --------------------------------------
+priority                                 Number   Priority in to the rules list
+directory_root                           Path     Special Directory Root for the request
+allow_from                               List     List of IP/Domain allowed to access the resource
+handler                                  String   Handler (module) that handles the request
+auth                                     String   Validator (module) that protects the resource
+only_secure                              Bool     Allow only secure (https) connections
+======================================== ======== ======================================
+
+The ``auth`` entry deserves a little more attention, actually. It
+restricts the access to some of the objects accessed by the web
+servers based on a number of properties that are defined as its child
+properties:
+
+======================================== ======== ======================================
+**Key**                                  **Type** **Description**
+---------------------------------------- -------- --------------------------------------
+auth!methods                             List     Allowed methods (basic, digest)
+auth!realm                               String   Realm of the resource
+auth!users                               List     List of allowed users
+======================================== ======== ======================================
+
+So, here are a few examples about how this notation works:
+
+- The default virtual server uses the "common" handler as default
+  choice for its root directory::
+
+    vserver!default!directory!/!handler = common
+    vserver!default!directory!/!priority = 1
+
+- The \*.example.com and \*.examples.org domains are restricted to be
+  accessed from the local loop interface, and have to be handled as a
+  FastCGI::
+
+    vserver!example!domains!1 = *.example.com
+    vserver!example!domains!2 = *.example.org
+    vserver!example!directory!/!handler = fcgi
+    vserver!example!directory!/!priority = 1
+    vserver!example!directory!/!allow_from = 127.0.0.1,::1
+
+- ISO images should be handled as files and are protected by a
+  htdigest file using only Digest authentication::
+
+    vserver!default!extensions!iso,ISO!handler = file
+    vserver!default!extensions!iso,ISO!priority = 1
+    vserver!default!extensions!iso,ISO!auth = htdigest
+    vserver!default!extensions!iso,ISO!auth!realm = My secret isos
+    vserver!default!extensions!iso,ISO!auth!methods = digest
+    vserver!default!extensions!iso,ISO!auth!passwdfile = /var/passwd/isos.htdigest
+    
+
+Logs
+----
+
+The log files are defined as properties inside the Virtual Server
+hierarchy under a ``logger`` entry with the following properties:
+
+======================================== ======== ======================================
+**Key**                                  **Type** **Description**
+---------------------------------------- -------- --------------------------------------
+logger                                   String   Output format (validator name)
+logger!access                            Node     Defines the access log file
+logger!error                             Node     Defines the error log file
+======================================== ======== ======================================
+
+and them, both access and error accept a number of parameters
+depending on its property ``type`` which specifies where the logging
+information will be written. It can be either: 
+
+======================================== ===============================================
+**Logger writer Type**                   **Description**
+---------------------------------------- -----------------------------------------------
+file                                     Write a file
+syslog                                   Use the system logging mechanism
+stderr                                   Use the standard output
+exec                                     Execute a program with each line
+======================================== ===============================================
+
+If either ``file`` or ``exec`` is used, there is an additional
+parameter that has to be set. In the case of file, a sub-property
+named ``filename`` and for exec ``command``. 
+
+Examples:
+
+- Apache format logs to the regular files::
+
+    vserver!default!logger = combined
+    vserver!default!logger!access!type = file
+    vserver!default!logger!access!filename = /var/log/cherokee.access.log
+    vserver!default!logger!error!type = file
+    vserver!default!logger!error!filename = /var/log/cherokee.error.log
+
+
+Inclusion of Configuration
+--------------------------
+
+Sometimes it is nice to break out your configuration into several logical files
+to be more modular as well as more organized.  You can use the ``include``
+configuration to accomplish this.  Here is an example::
+
+    include = /etc/cherokee/advanced.conf
+    
+or even, it is possible to specify a directory of which all the files will be included::
+
+    include = /etc/cherokee/mods-enabled/
+

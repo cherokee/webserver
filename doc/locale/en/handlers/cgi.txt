@@ -1,0 +1,31 @@
+
+CGI executing
+=============
+
+The cgi handler executes CGI programs.
+
+This module accepts three parameters:
+
+    * **Script Alias**: It defines a kind of execution interpreter
+    * **ErrorHandler**: Use CGI output as error message
+    * **ChangeUser**: It interprets each CGI as it owner user 
+
+
+Examples
+--------
+
+This is a pretty common example. It defines a directory called cgi which points 
+to a path out of the Sever root directory where are located the CGI programs.
+
+.. image:: ../media/images/admin_handler_cgi.png
+   :alt: Cgi
+   :align: center
+
+
+This example shows how to use the script alias parameter. When /example is visited, 
+it will run /usr/lib/cgi-bin/awstats.pl
+
+.. image:: ../media/images/admin_handler_cgi2.png
+   :alt: Cgi
+   :align: center
+

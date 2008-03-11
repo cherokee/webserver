@@ -1,16 +1,15 @@
-==============
 Authentication
 ==============
 
 There are two types of authentication:
 
-basic
+*basic*
     This method sends the username and password in clear text over the network.
     It is not the most secure method.  If the connection to the web server is
-    through HTTPS then this method is as secure as the encrpytion used.  This
+    through HTTPS then this method is as secure as the encryption used.  This
     method is very easy to implement, so most clients support it.
 
-digest
+*digest*
     This method is by far the most secure, but also more complex.  Most modern
     web browsers support this method.
 

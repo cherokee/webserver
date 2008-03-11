@@ -1,31 +1,53 @@
-================================
+
 Compiling and installing in Unix
 ================================
 
-Some examples to compiling and installing cherokee in Unix.
+Dependencies
+------------
+The following requirements exists for building Cherokee:
 
-----------------
+* Building tools: Cherokee is built on the top of the autoconf and automake 
+  tools, hence your systems has to have some basic system programs like a sh 
+  shell, make and a ANSI C compiler. We have compiled Cherokee in various 
+  platforms with different compilers, so it shouldn't't be a problem.
+
+* Optional: 
+
+  * Python: Cherokee includes a number of Quality Assurances tests 
+    written in Python language. If you are planning to contribute code
+    into the project, or you just want to test everything is working in 
+    the server, you will need a Python interpreter installed on your system.
+
+    * Python docutils: in order to generate the documentation from text files. 
+
+  * TLS libraries: Cherokee supports two different SSL/TLS 
+    libraries: OpenSSL and GNUTLS, you need to have one of those libraries 
+    with its development files. 
+
+
 The simplest way
 ----------------
 
-Go to the directory and run.
+First, download_ a fresh copy of Cherokee, then run:
 
-    - $> **./configure** To configure the package for your system.   
-    - $> **make**     To compile the package.
+    - $> **./configure --localstatedir=/var --prefix=/usr --sysconfdir=/etc
+      --with-wwwroot=/var/www** To configure the package for your system.   
+    - $> **make** To compile the package.
     - $> **make install** To install the programs and any data files.
 
 
-------------------------------
 Install and config directories
 ------------------------------
 
-The process is basicly the same but introducing some parameters.
+If you need auto-start cherokee at boot (through init's runlevel) you can 
+find a start/stop script into the contrib source directory::
 
-    - $> **./configure --prefix=/usr --sysconfdir=/etc** To install cherokee in /usr/sbin and all the config files in /etc/cherokee
-    - $> **make**     To compile the package.
-    - $> **make install** To install the programs and any data files.
+	cp contrib/cherokee /etc/init.d/
 
-----------------
+Additionally, you need to create symlinks at the correct runlevels rc directories, 
+this can can be done by many ways and distributions offer its own tools to 
+do it. 
+
 Others arguments
 ----------------
 
@@ -45,8 +67,48 @@ Parameters                 Description
 =========================  =======================================
 
 
-   
-         
+Debugging tools
+---------------
+If you need to debug the behaviour of the web server (or an application), there 
+are some helpful tools available for you. 
 
+* To start with, if you are using gcc and you want to compile the Cherokee
+  with debug information just execute make like this::
 
+    make CFLAGS="-O0 -g3"
+
+  And then you'll be able to execute gdb, cgdb, gdbtui..  
+
+* You can use autoconf to set up cherokee to use static modules::
+
+    ./autogen.sh --localstatedir=/var --prefix=/usr --sysconfdir=/etc \
+    --with-wwwroot=/var/www --enable-static-module=all --enable-static --enable-shared=no 
+
+* You can also enable a new cool feature: CHEROKEE_TRACE, which will let you trace the
+  behaviour with an human-readable output::
+
+   --enable-trace
+
+Now, when you are going to launch the web server, just add the CHEROKEE_TRACE variable, 
+with the desired options::
+
+	cherokee# CHEROKEE_TRACE="common" cherokee
+	Cherokee Web Server 0.6.0 (Mar  8 2008): Listening on port 80, TLS disabled
+	IPv6 enabled, using epoll, 1024 fds system limit, max. 507 connections
+	5 threads, 206 fds per thread, standard scheduling policy
+	handler_common.c:0143 (                     stat_file): /var/www//images/powered_by_cherokee.png, use_iocache=0 re=0
+	handler_common.c:0190 (   cherokee_handler_common_new): request: '/images/powered_by_cherokee.png', local: '/var/www//images/powered_by_cherokee.png', exists 1
+	handler_common.c:0236 (   cherokee_handler_common_new): going for handler_file
+	handler_common.c:0143 (                     stat_file): /var/www//images/default-bg.png, use_iocache=0 re=0
+	handler_common.c:0190 (   cherokee_handler_common_new): request: '/images/default-bg.png', local: '/var/www//images/default-bg.png', exists 1
+	handler_common.c:0236 (   cherokee_handler_common_new): going for handler_file
+	handler_common.c:0143 (                     stat_file): /var/www//images/cherokee-logo.png, use_iocache=0 re=0
+	handler_common.c:0190 (   cherokee_handler_common_new): request: '/images/cherokee-logo.png', local: '/var/www//images/cherokee-logo.png', exists 1
+	handler_common.c:0236 (   cherokee_handler_common_new): going for handler_file
+
+Of course, you can trace all the modules (handlers, loggers..) you need::
+
+   CHEROKEE_TRACE="common,static,io_cache" /usr/bin/cherokee
+   CHEROKEE_TRACE="all" /usr/bin/cherokee
     
+.. _download: download.html

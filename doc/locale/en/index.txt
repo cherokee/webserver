@@ -1,29 +1,58 @@
+
 ==========================
 Cherokee 0.6 Documentation
 ==========================
 
 Welcome to the 0.6 documentation.
 
-*************
+
+Compiling and Installing
+------------------------
+
+If you are not comfortable with rolling your own Cherokee, then check our 
+listings of pre-compiled binaries_.
+Specific instructions for building your own copy available at: 
+
+    - Unix_
+    - Windows_
+    - How to `cross compile Cherokee`_ (Win32 from Linux, OS X) 
+
 Configuration
-*************
+-------------
 
 The Cherokee web server is configured through a user friendly web
-interface named ``cherokee-admin``:
+interface named `Cherokee Admin`_
 
-   - TODO: Include a screenshot here.
+.. image:: media/images/admin_index.png
+        :alt: Cherokee Admin interface
+        :align: center
 
-Here you can find more information about the `server configuration`_.
+You can find more information about the `server configuration`_. 
+Alternatively, you can find `internal configuration system`_ which is not the 
+recommended way to configure Cherokee.
 
+Advanced Configuration
+----------------------
+There are some `advanced options`_ which might help you in the proccess of tunning your Cherokee 
+server. 
 
-*******
+Virtual Servers
+---------------
+Your websites should be organizated into diferent `virtual servers`_, allowing 
+cherokee to use only the modules/validators needed on demand.
+
+Icons
+-----
+The icons_ configuration associates a icon image with one or more file 
+extensions. This information will be used mainly by the dirlist_ handler.
+
+-------
 Modules
-*******
+-------
 
 There are four different types of modules in Cherokee.  You have handlers_,
 validators_, loggers_, encoders_ and balancers_.
 
---------
 Handlers
 --------
     - file_ - **File Sending**
@@ -56,7 +85,6 @@ Handlers
     
       Communicates with FastCGI servers.
 
-----------
 Validators
 ----------
     - htdigest_ - **Something**
@@ -83,15 +111,16 @@ Validators
     
       Uses a plain flat file to perform HTTP authentication.
 
---------
 Encoders
 --------
+The encoders allow to transform whatever information the server 
+is sending as a response of a request, no matter the handler that 
+is generating it. 
 
     - gzip_ - **GZip compression**
     
       Encodes the output with GZip
 
--------
 Loggers
 -------
     - combined_ - **Combined Log Format**
@@ -107,29 +136,24 @@ Loggers
     
       Logging using the W3C log format.
 
----------
 Balancers
 ---------
     - `round robin`_ - **Round Robin load balancer**
     
 
 
-************************
-Compiling and Installing
-************************
-
-Cherokee runs on many different platforms.  Look for your platform below to see
-more specific instructions.  If you are not comfortable with rolling your own
-Cherokee then check our listings of pre-compiled binaries.
-
-    - Unix_
-    - Windows_
-
-
 .. _Unix: compiling_and_installing_unix.html
 .. _Windows: compiling_and_installing_windows.html
+.. _cross compile Cherokee: cross_compile_cherokee.html
 
 .. _server configuration: configuration.html
+
+.. _Cherokee Admin: admin.html
+.. _internal configuration system: internal_configuration.html
+.. _advanced options: advanced.html
+.. _virtual servers: vserver.html
+.. _download: download.html
+.. _icons: icons.html
 
 .. _Handlers: #handlers
 .. _file: handlers/file.html
@@ -138,7 +162,7 @@ Cherokee then check our listings of pre-compiled binaries.
 .. _redir: handlers/redir.html
 .. _cgi: handlers/cgi.html
 .. _scgi: handlers/scgi.html
-.. _fcgi: handlers/fcgi.html
+.. _fcgi: handlers/fastcgi.html
 
 .. _Validators: #validators
 .. _htdigest: validators/htdigest.html
@@ -158,3 +182,5 @@ Cherokee then check our listings of pre-compiled binaries.
 
 .. _Balancers: #balancers
 .. _round robin: balancers/round_robin.html
+
+.. _binaries:  http://www.cherokee-project.com/downloads  

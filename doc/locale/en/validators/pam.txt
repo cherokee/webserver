@@ -1,21 +1,30 @@
-pam Validator
-==================
+
+Pam Validator
+=============
 
 The pam validator uses the *Pluggable Authentication Module* to validate the
 username/password combination.
 
 Parameters
-**********
+----------
 
-None
+Users: You can restrict to some local system users
 
 Compatibility
-*************
+-------------
 
 This validator is compatible with the **basic** scheme.
 
 Example
-*******
+~~~~~~~
+.. image:: ../media/images/admin_validators_pam.png
+        :alt: Validator PAM
+        :align: center
+
+Requires a valid user and password system pair to access the protected 
+directory. It will be available for all local users. 
+
+
 ::
     
     vserver!default!directory!/secret!

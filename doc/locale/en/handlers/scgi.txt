@@ -1,0 +1,5 @@
+
+SCGI
+====
+
+The scgi handler allow Cherokee to communicate with SCGI programs.

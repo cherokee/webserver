@@ -1,10 +1,10 @@
-mysql Validator
+Mysql Validator
 ===============
 
 The MySQL validator allows you to authenticate a user against a MySQL database.
 
 Parameters
-**********
+----------
 
     =========================  ================================================
     Parameter                  Description
@@ -40,12 +40,12 @@ The query must return one row with one column as the password.  The name of the
 column does not matter.
 
 Compatibility
-*************
+-------------
 
 This validator is compatible with both **basic** and **digest** schemes.
 
 Example
-*******
+~~~~~~~
 ::
 
     vserver!default!directory!/members!handler = mysql
