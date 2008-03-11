@@ -6,23 +6,24 @@ configuration.html \
 loggers.html \
 vserver.html \
 compiling_and_installing_unix.html \
+compiling_and_installing_windows.html \
 cross_compile_cherokee.html \
 internal_configuration.html \
 advanced.html \
 admin.html \
 download.html \
-How_to_generate_SSL_keys.html\
+How_to_generate_SSL_keys.html \
 icons.html
 
 dochandlersdir = $(docdir)handlers/
 dochandlers_DATA = \
-handlers/common.html \
 handlers/dirlist.html \
 handlers/file.html \
 handlers/redir.html \
 handlers/cgi.html \
 handlers/fastcgi.html \
-handlers/scgi.html
+handlers/scgi.html \
+handlers/onlylisting.html
 
 docloggersdir = $(docdir)loggers/
 docloggers_DATA = \
@@ -73,7 +74,10 @@ media/images/admin_validators_plain.png \
 media/images/admin_validators_pam.png \
 media/images/admin_advanced.png \
 media/images/admin_handler_dirlist.png \
-media/images/admin_handler_dirlist_ex.png
+media/images/admin_handler_dirlist_ex.png \
+media/images/admin_handler_onlylisting.png \
+media/images/admin_handler_onlylisting_ex.png
+
 
 GENERATED_FILES = \
 $(doc_DATA) \

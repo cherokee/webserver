@@ -1,18 +1,14 @@
 
-Dirlist Handler
-===============
+Only Listing Handler
+====================
 
-The **dirlist** handler builds a list of directories and files within the
-requested directory.
+The **Only Listing** handler builds a list of directories and files within the
+requested directory, **but doesn't let you download the contents**. Refer to 
+`List & Send`_ for the opposite behaviour.
 
-It is possible the change the default theme used when displaying the directory
-listings, and it is also possible to create a new one:
-
-::
-
-	   $ ls /usr/share/cherokee/themes/firefox3/
-	   entry.html  footer.html  header.html  theme.css
-
+It is possible the change the default theme, it works in the same way that 
+`List & Send`_
+listings
 
 Parameters
 ----------
@@ -20,13 +16,6 @@ Parameters
 =======================  ==============  ======================================
 Parameters               Type            Description
 =======================  ==============  ======================================
-``pathInfo``             boolean         Makes the handler to stop parsing the
-                                         pathinfo string.
-
-``iocache``              boolean         Optional. It will use an internal I/O 
-                                         cache to improve the server performance.
-                                         Default: ``1``.
-	
 ``theme``                string          Optional. The theme to use when
                                          displaying the directory listings.
                                          Default: ``default``.
@@ -45,32 +34,21 @@ Parameters               Type            Description
 ``group``                boolean         Optional. Display the group ownership
                                          of the files and directories in the
                                          listings. Default ``0``.
-
 =======================  ==============  ======================================
-
-
-* Note, **Pathinfo** explained::
-
-    $ echo "This a test" > /tmp/1/2/test
-    $ curl http://localhost:9999/1/2/test
-    This a test
-    $ curl http://localhost:9999/1/2/test/this/is/pathinfo
-    This a test
-    $ curl http://localhost:9999/1/2/test.no -D - | grep HTTP
-    HTTP/1.1 404 Not Found
-
 
 Examples
 ~~~~~~~~
 
 With this configuration: 
 
-.. image:: ../media/images/admin_handler_dirlist.png
-        :alt: Dirlist configuration
+.. image:: ../media/images/admin_handler_onlylisting.png
+        :alt: Only listing configuration
         :align: center
 
 Will return something like: 
 
-.. image:: ../media/images/admin_handler_dirlist_ex.png
-        :alt: Dirlist example
+.. image:: ../media/images/admin_handler_onlylisting_ex.png
+        :alt: Only listing example
         :align: center
+
+.. _List & Send: dirlist.html

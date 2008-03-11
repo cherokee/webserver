@@ -13,10 +13,8 @@ Parameters               Type            Description
 ``iocache``              Boolean         Optional. Default: ``1``.
 =======================  ==============  ======================================
 
-    * IOCache: By default it will use an internal I/O cache to improve 
-      the server performance. If you don't want to use it with a directory just 
-      unset it using this parameter. 
-
+By default it will use an internal I/O cache to improve the server performance. 
+If you don't want to use it with a directory just unset it using this parameter. 
 
 It is a good idea to disable to I/O cache if the content of the directory changes
 often
@@ -44,5 +42,3 @@ the **iocache** to prevent automatic caching of these files::
 
     vserver!default!directory!/docs!handler = file
     vserver!default!directory!/docs!handler!iocache = 0
-
-

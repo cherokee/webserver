@@ -33,8 +33,9 @@ recommended way to configure Cherokee.
 
 Advanced Configuration
 ----------------------
-There are some `advanced options`_ which might help you in the proccess of tunning your Cherokee 
-server. 
+
+There are some `advanced options`_ which might help you in the proccess of
+tunning your Cherokee server. 
 
 Virtual Servers
 ---------------
@@ -58,17 +59,18 @@ Handlers
     - file_ - **File Sending**
       
       The file handler serves files from the filesystem.
-    
-    - dirlist_ - **Directory Listings**
+   
+    - dirlist_ - **List & Send**
       
-      The dirlist handler displays directory listings when a directory is
-      requested.
-    
-    - common_ - **Common Behavior**
-    
       Combines both file_ and dirlist_ handler functionality to behave similar
-      to common web servers.
-    
+      to common web servers, it will displays directory listings when a directory is
+      requested.
+
+    - onlylisting_ - **Only listing**
+      
+      Displays directory listings when a directory is requested, but it 
+      doesn't let you download it's contents. 
+        
     - redir_ - **Redirections**
     
       Perform simple and/or complex redirections using regexes.
@@ -158,11 +160,11 @@ Balancers
 .. _Handlers: #handlers
 .. _file: handlers/file.html
 .. _dirlist: handlers/dirlist.html
-.. _common: handlers/common.html
 .. _redir: handlers/redir.html
 .. _cgi: handlers/cgi.html
 .. _scgi: handlers/scgi.html
 .. _fcgi: handlers/fastcgi.html
+.. _onlylisting: handlers/onlylisting.html
 
 .. _Validators: #validators
 .. _htdigest: validators/htdigest.html
