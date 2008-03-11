@@ -1146,7 +1146,7 @@ ext_defs=""
 for mod in $modules; do
 	AC_MSG_CHECKING([module "$mod"])
 
-	if echo $use_static_module | grep $mod >/dev/null || echo $use_static_module | grep all >/dev/null; then
+	if echo $use_static_module | grep -w $mod >/dev/null || echo $use_static_module | grep all >/dev/null; then
 		 ext_defs="$ext_defs \n extern cherokee_plugin_info_t cherokee_${mod}_info;"
 
 		 headers="$headers \n void PLUGIN_INIT_NAME($mod) (cherokee_plugin_loader_t *loader);"
