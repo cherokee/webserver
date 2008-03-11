@@ -4,7 +4,6 @@ index.html \
 authentication.html \
 configuration.html \
 loggers.html \
-server.html \
 vserver.html \
 compiling_and_installing_unix.html \
 cross_compile_cherokee.html \

@@ -64,7 +64,52 @@ server!user                      String/  Change effective user
                                  Number
 server!group                     String/  Change effective group
                                  Number
+server!module_dir                Path     Path to the plug-in directory
+server!module_deps               Path     Path to the plug-in inter-dependencies files
 ================================ ======== ======================================
+
+``server!server_tokens`` parameters
+
+=========================  =======================================
+Value                      Description
+=========================  =======================================
+Product                    Cherokee
+Minor                      Cherokee/0.0
+Minimal                    Cherokee/0.0.0
+OS                         Cherokee/0.0.0 (UNIX)
+Full                       Cherokee/0.0.0 (UNIX) Ext/0.0 Ext2/0.0
+=========================  =======================================
+
+``server!thread_policy`` parameters
+
+=========================  =======================================
+Value                      Description
+=========================  =======================================
+fifo                       First in first out 
+rr                         Round Robin
+other                      By default in Linux
+=========================  =======================================
+
+
+Server Encoders
+---------------
+
+The ``server!encoder`` configuration branch allows to configure encode
+plug-ins. Each entry accept a number of options:
+
+=========================  =================================================
+Parameter                  Description
+=========================  =================================================
+type                       Set the matching policy: deny_allow or allow_deny
+allow                      List of extension to encode
+deny                       List of extension that shouldn't be encoded
+=========================  =================================================
+
+Example::
+
+   server!encoder!gzip!allow = html,htm
+   server!encoder!gzip!deny  = jpg,png,gz
+
 
 Virtual Server
 --------------
@@ -92,6 +137,7 @@ vserver!default!ssl_ca_list_file         Path     TLS/SSL CA list file
 
 Besides these configuration keys there are a few other more complex
 that needs further explanation:
+
 
 Directories, Requests and Regular Expressions
 ---------------------------------------------
