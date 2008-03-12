@@ -146,7 +146,7 @@ class CherokeeManagement:
         if not self._pid:
             return
         try:
-            os.kill (self._pid, signal.SIGHUP)
+            os.kill (self._pid, signal.SIGUSR1)
         except:
             pass
 
