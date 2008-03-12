@@ -41,21 +41,56 @@ static cherokee_boolean_t exit_guardian = false;
 static pid_t              pid;
 
 
+static ret_t
+process_wait (pid_t pid)
+{
+	pid_t re;
+	int   exitcode = 0;
+
+	re = waitpid (pid, &exitcode, 0);
+	if (re == -1) 
+		return ret_error;
+
+	if (WIFEXITED(exitcode)) {
+		int re = WEXITSTATUS(exitcode);
+
+		/* Child terminated normally */ 
+		PRINT_MSG ("Server PID=%d exited re=%d\n", pid, re);
+		if (re != 0) 
+			return ret_error;
+	} 
+	else if (WIFSIGNALED(exitcode)) {
+		/* Child process terminated by a signal */
+		PRINT_MSG ("Server PID=%d received a signal=%d\n", pid, WTERMSIG(exitcode));
+	}
+
+	return ret_ok;
+}
+
+
 static void 
 guardian_signals_handler (int sig, siginfo_t *si, void *context) 
 {
 	int exitcode;
 
 	switch (sig) {
-	case SIGHUP:
+	case SIGUSR1:
 		/* Restart Cherokee */
 		kill (pid, SIGINT);
+		process_wait (pid);
 		break;
 
 	case SIGCHLD:
 		/* Child exited */
 		wait (&exitcode);
 		break;
+
+	case SIGTERM:
+		/* Kill child and exit */
+		kill (pid, SIGTERM);
+		process_wait (pid);
+		exit(0);
+
 	default:
 		/* Forward the signal */
 		kill (pid, sig);
@@ -74,7 +109,6 @@ set_guardian_signals (void)
 
 	act.sa_handler = SIG_IGN;
 	sigaction (SIGPIPE, &act, NULL);
-	sigaction (SIGUSR1, &act, NULL);
 	
 	/* Signals it handles
 	 */
@@ -85,6 +119,7 @@ set_guardian_signals (void)
 	sigaction (SIGHUP,  &act, NULL);
 	sigaction (SIGSEGV, &act, NULL);
 	sigaction (SIGTERM, &act, NULL);
+	sigaction (SIGUSR1, &act, NULL);
 }
 
 static pid_t
@@ -123,31 +158,6 @@ process_launch (const char *path, int argc, char *argv[])
 	return pid;
 }
 
-static ret_t
-process_wait (pid_t pid)
-{
-	pid_t re;
-	int   exitcode = 0;
-
-	re = waitpid (pid, &exitcode, 0);
-	if (re == -1) 
-		return ret_error;
-
-	if (WIFEXITED(exitcode)) {
-		int re = WEXITSTATUS(exitcode);
-
-		/* Child terminated normally */ 
-		PRINT_MSG ("Server PID=%d exited re=%d\n", pid, re);
-		if (re != 0) 
-			return ret_error;
-	} 
-	else if (WIFSIGNALED(exitcode)) {
-		/* Child process terminated by a signal */
-		PRINT_MSG ("Server PID=%d received a signal=%d\n", pid, WTERMSIG(exitcode));
-	}
-
-	return ret_ok;
-}
 
 static void
 save_pid_file (int pid)

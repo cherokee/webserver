@@ -1,5 +1,9 @@
 2008-03-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main_guardian.: Signal management has changed. From now
+	on: SIGTERM kills the child and make guardian to exit; and SIGUSR1
+	restarts the child process.
+
 	* cherokee/main_guardian.c (process_launch): It had to check
 	whether -b was used, in which case it had to daemonize itself and
 	remove the parameter for argv.
