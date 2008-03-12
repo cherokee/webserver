@@ -1,5 +1,7 @@
 2008-03-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/advanced.help.html: Written. The file was empty.
+
 	* admin/CherokeeManagement.py (CherokeeManagement._restart):
 	Updated to reflect the last change on cherokee-guardian. Now it
 	sends SIGUSR1 instead of SIGHUP.

@@ -1,1 +1,39 @@
-advanced help file
+<h2>System tweaking</h2>
+
+<p class="help_p">This section contains a couple of options that set
+how we want the operating system to treat Cherokee. The most important
+option here is the <b>File descriptor number</b> limit. It defines how
+many file descriptors the server can handle. If the server fails to
+reply some requests under heavy loads, this limit needs to be
+increased.</p>
+
+<h2>Server tweaking</h2>
+
+<p class="help_p">The web server can be configured to use some system
+call under certain circumstances. Using the <b>Polling method</b> it
+is possible to force the server to use an specific file description
+polling method. It is not recommended though.</p>
+
+<p class="help_p">The <b>sendfile</b> minimum and maximum limit can he
+set to point the server when to use this system call. Depending on the
+operating system these limit can vary.</p>
+
+<p class="help_p">Finally, the <b>Panic Action</b> option allows to
+define a program that will be called if, by some reason, the server
+fails. By default, it should be <em>cherokee-panic</em>.</p>
+
+<h2>Server behaviour</h2>
+
+<p class="help_p">The <b>Reuse Connections</b> field allows to set the
+number of how many internal connections should be hold for reuse. It's
+an optimization tweaking option.</p>
+
+<p class="help_p"><b>Log flush time</b> sets the number of seconds
+between log consolidations (flushes). To raise this number usually
+have a significant positive impact on performance.</p>
+
+<p class="help_p">Finally, the <b>Max Keepalive requests</b> allows to
+specify the number of request that a single connection should reply if
+it uses keep-alive. A high number is usually okay.</p>
+
+
