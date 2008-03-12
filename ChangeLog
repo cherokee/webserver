@@ -1,3 +1,9 @@
+2008-03-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main_guardian.c (process_launch): It had to check
+	whether -b was used, in which case it had to daemonize itself and
+	remove the parameter for argv.
+
 2008-03-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_extract_path):

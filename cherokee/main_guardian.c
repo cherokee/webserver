@@ -90,8 +90,29 @@ set_guardian_signals (void)
 static pid_t
 process_launch (const char *path, int argc, char *argv[])
 {
+	int   i;
 	pid_t pid;
+	int   daemonize = 0;
 
+	/* Look for the '-b' parameter
+	 */
+	for (i=0; i<argc; i++) {
+		if (strcmp(argv[i], "-b") == 0) {
+			daemonize = 1;
+			argv[i]   = "";
+		}
+	}
+
+	if (daemonize) {
+		pid = fork();
+		if (pid != 0) 
+			exit(0);
+		close(0);
+		setsid();
+	}
+
+	/* Execute the server
+	 */
 	pid = fork();
 	if (pid == 0) {
 		argv[0] = CHEROKEE_SRV_PATH;
