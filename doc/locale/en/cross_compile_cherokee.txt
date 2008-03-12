@@ -41,7 +41,7 @@ and execute a quite long "configure" command::
         --enable-shared=no --enable-beta    \
         CC=i586-mingw32msvc-gcc
 
-reached this point, we are ready to build it by simply typing::
+Once reached this point, we are ready to build it by simply typing::
 
         $ make
 
@@ -51,8 +51,7 @@ Cherokee-Win32 from OS X
 ------------------------
 
 First of all, you will have to install MinGW for OS X and to check out the
-latest
-version of the source code, then fetch, uncompress and install
+latest version of the source code, then fetch, uncompress and install
 pthreads-win32::
 
          unzip pthreads-w32-2-8-0-release.exe
@@ -68,7 +67,7 @@ Then you will have to set a few environment variables::
          AR=i386-mingw32-ar
          RC=i386-mingw32-windres
 
-run the configuration script::
+and run the configuration script::
 
    ac_cv_func_malloc_0_nonnull=yes \
    ac_cv_func_realloc_0_nonnull=yes \

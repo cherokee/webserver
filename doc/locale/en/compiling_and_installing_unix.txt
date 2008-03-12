@@ -1,19 +1,19 @@
 
-Compiling and installing in Unix
+Compiling and installing on Unix
 ================================
 
 Dependencies
 ------------
-The following requirements exists for building Cherokee:
+The following requirements exist for building Cherokee:
 
-* Building tools: Cherokee is built on the top of the autoconf and automake 
+* Building tools: Cherokee is built on top of the autoconf and automake 
   tools, hence your systems has to have some basic system programs like a sh 
-  shell, make and a ANSI C compiler. We have compiled Cherokee in various 
-  platforms with different compilers, so it shouldn't't be a problem.
+  shell, make and an ANSI C compiler. We have compiled Cherokee in various 
+  platforms with different compilers, so it shouldn't be a problem.
 
 * Optional: 
 
-  * Python: Cherokee includes a number of Quality Assurances tests 
+  * Python: Cherokee includes a number of Quality Assurance tests 
     written in Python language. If you are planning to contribute code
     into the project, or you just want to test everything is working in 
     the server, you will need a Python interpreter installed on your system.
@@ -21,7 +21,7 @@ The following requirements exists for building Cherokee:
     * Python docutils: in order to generate the documentation from text files. 
 
   * TLS libraries: Cherokee supports two different SSL/TLS 
-    libraries: OpenSSL and GNUTLS, you need to have one of those libraries 
+    libraries: OpenSSL and GNUTLS. You need to have one of those libraries 
     with its development files. 
 
 
@@ -39,14 +39,14 @@ First, download_ a fresh copy of Cherokee, then run:
 Install and config directories
 ------------------------------
 
-If you need auto-start cherokee at boot (through init's runlevel) you can 
-find a start/stop script into the contrib source directory::
+If you need to auto-start cherokee at boot (through init's runlevel) you can 
+find a start/stop script in the contrib source directory::
 
 	cp contrib/cherokee /etc/init.d/
 
-Additionally, you need to create symlinks at the correct runlevels rc directories, 
-this can can be done by many ways and distributions offer its own tools to 
-do it. 
+Additionally, you need to create symlinks at the correct rc directory of the 
+appropiate runlevel. This can can be done in many ways and usually each distribution 
+offers its own tools to do so. 
 
 Others arguments
 ----------------
@@ -69,23 +69,23 @@ Parameters                 Description
 
 Debugging tools
 ---------------
-If you need to debug the behaviour of the web server (or an application), there 
+If you need to debug the behavior of the web server (or an application), there 
 are some helpful tools available for you. 
 
-* To start with, if you are using gcc and you want to compile the Cherokee
+* To start with, if you are using gcc and you want to compile Cherokee
   with debug information just execute make like this::
 
     make CFLAGS="-O0 -g3"
 
   And then you'll be able to execute gdb, cgdb, gdbtui..  
 
-* You can use autoconf to set up cherokee to use static modules::
+* You can use autoconf to set up Cherokee to use static modules::
 
     ./autogen.sh --localstatedir=/var --prefix=/usr --sysconfdir=/etc \
     --with-wwwroot=/var/www --enable-static-module=all --enable-static --enable-shared=no 
 
 * You can also enable a new cool feature: CHEROKEE_TRACE, which will let you trace the
-  behaviour with an human-readable output::
+  behavior with a human-readable output::
 
    --enable-trace
 

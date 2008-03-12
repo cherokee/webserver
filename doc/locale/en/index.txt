@@ -11,7 +11,7 @@ Compiling and Installing
 
 If you are not comfortable with rolling your own Cherokee, then check our 
 listings of pre-compiled binaries_.
-Specific instructions for building your own copy available at: 
+Specific instructions for building your own copy are available at: 
 
     - Unix_
     - Windows_
@@ -28,14 +28,14 @@ interface named `Cherokee Admin`_
         :align: center
 
 You can find more information about the `server configuration`_. 
-Alternatively, you can find `internal configuration system`_ which is not the 
-recommended way to configure Cherokee.
+Alternatively, you can find information about the `internal configuration system`_ 
+which is not the recommended way to configure Cherokee.
 
 Advanced Configuration
 ----------------------
 
-There are some `advanced options`_ which might help you in the proccess of
-tunning your Cherokee server. 
+There are some `advanced options`_ which might help you in the process of
+tuning your Cherokee server. 
 
 Virtual Servers
 ---------------
@@ -44,14 +44,14 @@ cherokee to use only the modules/validators needed on demand.
 
 Icons
 -----
-The icons_ configuration associates a icon image with one or more file 
+The icons_ configuration associates an icon image with one or more file 
 extensions. This information will be used mainly by the dirlist_ handler.
 
 -------
 Modules
 -------
 
-There are four different types of modules in Cherokee.  You have handlers_,
+There are five different types of module in Cherokee. You have handlers_,
 validators_, loggers_, encoders_ and balancers_.
 
 Handlers
@@ -62,14 +62,14 @@ Handlers
    
     - dirlist_ - **List & Send**
       
-      Combines both file_ and dirlist_ handler functionality to behave similar
-      to common web servers, it will displays directory listings when a directory is
+      Combines both file_ and dirlist_ handler functionality to behave similarly
+      to common web servers, it will display directory listings when a directory is
       requested.
 
     - onlylisting_ - **Only listing**
       
       Displays directory listings when a directory is requested, but it 
-      doesn't let you download it's contents. 
+      doesn't let you download its contents. 
         
     - redir_ - **Redirections**
     
@@ -99,7 +99,7 @@ Validators
     
     - ldap_ - **LDAP Authentication**
     
-      Uses a LDAP directory to perform HTTP authentication.
+      Uses an LDAP directory to perform HTTP authentication.
 
     - mysql_ - **MySQL Authentication**
       
@@ -116,7 +116,7 @@ Validators
 Encoders
 --------
 The encoders allow to transform whatever information the server 
-is sending as a response of a request, no matter the handler that 
+is sending as a response of a request, no matter what handler 
 is generating it. 
 
     - gzip_ - **GZip compression**

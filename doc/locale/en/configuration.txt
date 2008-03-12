@@ -3,13 +3,13 @@ Configuration
 =============
 
 **Note**
-	   Cherokee provides an administration interface name  `Cherokee Admin`_
+	   Cherokee provides an administration interface named  `Cherokee Admin`_
 	   that allows to configure the web server without having to worry about
 	   editing a text file written with a certain syntax. 
 
 Once the ``cherokee-admin`` server is launched, there will be an
 administration web interface available at http://localhost:9090/ ready
-for working with the configuration.
+to work with the configuration.
 
 .. image:: media/images/admin_general.png
    :alt: General
@@ -17,14 +17,14 @@ for working with the configuration.
 
 Binding
 -------
-When the server starts it opens a port and starts listening the incoming 
-requests. By default this is the port 80 and it will use all the 
+When the server is initiated it opens a port and starts listening to incoming 
+requests. By default this is port 80 and it will use all the 
 network interfaces of the machine, which is usually the desired behavior. 
 
 
 IPv6 support
 ------------
-The IPv6 configuration key brings the possibility of activate or deactivate 
+The IPv6 configuration key brings the possibility of activating or deactivating 
 the IPv6 support at the server. If Cherokee has been compiled with IPv6 
 support (--with-ipv6), this configuration entry will be fully functional, 
 otherwise it will be ignored.
@@ -40,7 +40,7 @@ KeepAlive
 ---------
 Enables the global keep-alive support for the client requests.
 It increases the client performance by reusing a connection for more 
-than one request. It should most probably be turn on.
+than one request. It should most probably be turned on.
 
 Server Tokens
 -------------
@@ -74,16 +74,16 @@ the system ID.
 
 Developers
 ----------
-The administration interface is highly recommended, and in fact the
+The administration interface is highly recommended, and is in fact the
 only administration mechanism that should be used to configure
 Cherokee. However, there is another way in which Cherokee developers
 and very advance users can modify the configuration.
 
-The default location for Cherokee configuration file is
+The default location for Cherokee configuration files is
 ``/etc/cherokee``, but this may vary based on distribution or
-installation parameters. It is a special formatted text file than can
+installation parameters. It is a specially formatted text file that can
 be modified by hand if you are completely sure about what you are
-doing. We recommend you not do so.
+doing. We recommend you not to do so.
 
 There is a document explaining how the `internal configuration
 system`_ works and its main keys.

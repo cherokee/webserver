@@ -4,25 +4,25 @@ Advanced Configuration
 Introduction
 ------------
 
-Cherokee's configuration system is based on a internal text file
+Cherokee's configuration system is based on an internal text file
 format that the average user should not know about. This configuration
 file is read by the server and modified by the administration
-interface, so unless you are not developing Cherokee or a really
+interface, so unless you are a Cherokee developer or a really
 advanced user, the following format description will not be very
 interesting to you.
 
-Said that, let's proceed to describe the configuration file format. It
+Having said that, let's proceed to describe the configuration file format. It
 is basically a text file that contains a tree where final nodes
-contains values. Let's see a basic example::
+contain values. Let's see a basic example::
 
     server!port = 80
     server!keepalive = 1
 
-Most of the modules and plug-ins reads a piece of the tree to
-configure itself. It provides a extremely flexible configuration
+Most of the modules and plug-ins read a piece of the tree to
+configure themselves. It provides extremely flexible configuration
 capabilities for the price of a fairly complex text file. However, I
-would like to point again that users should never read of modify the
-configuration file by hand, so it is a format the only developers
+would like to point out again that users should never read of modify the
+configuration file by hand, so it is a format that only developers
 should know about.
 
 The following blocks will summarize the configuration keys that
@@ -95,14 +95,14 @@ Server Encoders
 ---------------
 
 The ``server!encoder`` configuration branch allows to configure encode
-plug-ins. Each entry accept a number of options:
+plug-ins. Each entry accepts a number of options:
 
 =========================  =================================================
 Parameter                  Description
 =========================  =================================================
 type                       Set the matching policy: deny_allow or allow_deny
-allow                      List of extension to encode
-deny                       List of extension that shouldn't be encoded
+allow                      List of extensions to encode
+deny                       List of extensions that shouldn't be encoded
 =========================  =================================================
 
 Example::
@@ -114,20 +114,20 @@ Example::
 Virtual Server
 --------------
 
-A virtual servers contains the information related to one or more
+A virtual server contains the information related to one or more
 domains under the same configuration. In a Cherokee server there must
-be at least one virtual server named ``default``, and there is not a
+be at least one virtual server named ``default``, and there is no
 maximum number.
 
-The prefix this type of entries ``vserver``, and by far, it is the
+The prefix of this type of entry is ``vserver``, and by far, it is the
 most common type of entry.
 
 ======================================== ======== ======================================
 **Key**                                  **Type** **Description**
 ---------------------------------------- -------- --------------------------------------
-vserver!default!documment_root           Path     Document Root path
-vserver!default!user_dir                 String   Users web directory (for ~ requests)
-vserver!default!domain! ``id``           String   Domain name, admits wildcats          
+vserver!default!document_root            Path     Document Root path
+vserver!default!user_dir                 String   User's web directory (for ~ requests)
+vserver!default!domain! ``id``           String   Domain name, admits wildcards          
 vserver!default!error_handler            String   Defines the error handler module
 vserver!default!directory_index          List     String list: Directory indexes
 vserver!default!ssl_certificate_file     Path     TLS/SSL certificate file
@@ -143,22 +143,22 @@ Directories, Requests and Regular Expressions
 ---------------------------------------------
 
 These entries are located inside Virtual Servers. They basically
-specify the behaviour of the web server by setting how to handle each
+specify the behavior of the web server by setting up how to handle each
 request based on the requested object and parameters.
 
-There are three kinds of entries. All the three sort of entries admit
+There are three kinds of entry. All three of them admit
 the same parameters, and depending on each case, the entry is followed
-with the directory name, the extension list or the regular expression:
+by the directory name, the extension list or the regular expression:
 
 :Directory:
-  The directories specify how to handle its content.
+  The directory specifies how to handle its contents.
 
   Example: the root directory of the default virtual host would be represented by
 
   ``vserver!default!directory!/``
 
 :Extension:
-  It specifies a list of extension and how they should be handled.
+  It specifies a list of extensions and how they should be handled.
 
   Eg: the JPG extensions is 
 
@@ -172,12 +172,12 @@ with the directory name, the extension list or the regular expression:
   ``vserver!default!request!^a.*\.php$``
 
 The following parameters are concatenated with any of the previous
-kind of entries:
+kinds of entry:
 
 ======================================== ======== ======================================
 **Key**                                  **Type** **Description**
 ---------------------------------------- -------- --------------------------------------
-priority                                 Number   Priority in to the rules list
+priority                                 Number   Priority in the rules list
 directory_root                           Path     Special Directory Root for the request
 allow_from                               List     List of IP/Domain allowed to access the resource
 handler                                  String   Handler (module) that handles the request
@@ -187,7 +187,7 @@ only_secure                              Bool     Allow only secure (https) conn
 
 The ``auth`` entry deserves a little more attention, actually. It
 restricts the access to some of the objects accessed by the web
-servers based on a number of properties that are defined as its child
+server based on a number of properties that are defined at its child
 properties:
 
 ======================================== ======== ======================================
@@ -241,7 +241,7 @@ logger!access                            Node     Defines the access log file
 logger!error                             Node     Defines the error log file
 ======================================== ======== ======================================
 
-and them, both access and error accept a number of parameters
+and then, both access and error accept a number of parameters
 depending on its property ``type`` which specifies where the logging
 information will be written. It can be either: 
 
@@ -278,7 +278,7 @@ configuration to accomplish this.  Here is an example::
 
     include = /etc/cherokee/advanced.conf
     
-or even, it is possible to specify a directory of which all the files will be included::
+or even, it is possible to specify a directory to include all of its files::
 
     include = /etc/cherokee/mods-enabled/
 

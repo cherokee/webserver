@@ -10,7 +10,7 @@ If cherokee is going to be running in the same host, just use::
 	$cherokee-admin
 
 And redirect your internet browser to 127.0.0.1:9090. By default, the interface will
-be listening on the 9090 port in 127.0.0.1. There are some advanced options thought:
+be listening on port 9090 at 127.0.0.1. There are some advanced options thought:
 
     * **-h**: Show usage
     * **-a**: Listen all interfaces
