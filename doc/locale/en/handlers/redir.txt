@@ -1,6 +1,6 @@
 
-Handler Redir
-=============
+Handler: Redirections
+=====================
 
 Redirections
 

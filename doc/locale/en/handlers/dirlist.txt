@@ -1,6 +1,6 @@
 
-Only Listing Handler
-====================
+Handler: Directory Listing
+==========================
 
 The **Only Listing** handler builds a list of directories and files
 within the requested directory, but **does not allow you to download

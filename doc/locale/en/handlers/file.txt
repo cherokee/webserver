@@ -1,6 +1,6 @@
 
-File Handler
-============
+Handler: File sending
+=====================
 
 The **file** handler serves files from its document root.  No more, no less.
 

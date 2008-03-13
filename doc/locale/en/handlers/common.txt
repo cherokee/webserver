@@ -1,6 +1,6 @@
 
-List & Send Handler
-===================
+Handler: List & Send
+====================
 
 The **List & Send** (``common`` internally) handler behaviour depends
 on whether it replies a request for a directory or a file.

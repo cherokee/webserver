@@ -57,7 +57,9 @@ validators_, loggers_, encoders_ and balancers_.
 Handlers
 --------
 
-There are a few options which are shared_ for all the handlers:
+Handler are the modules that generate the information with which the
+server responses a client request. Depending on the configuration the
+server will choose among any of the following handlers.
 
     - file_ - **File Sending**
       

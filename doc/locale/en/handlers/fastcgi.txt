@@ -1,43 +1,21 @@
 
-FastCGI
-=======
+Handler: FastCGI
+================
 
-The fcgi handler queries to [FastCGI] servers, such as PHP, in order to execute
-scripts. It is basically the same thing as CGI but *much faster*.
+The fcgi handler queries to [FastCGI] servers, such as PHP, Ruby on
+Rails or Django in order to get the request response. It is basically
+the same thing as CGI but *much faster*.
 
-**Note**
-	   The "fastcgi" module also implements the FastCGI protocol. It is a  
-	   more complete implementation than "fcgi" although it is also more  
-	   complex. Actually, fcgi become the standard choice because the PHP  
-	   interpreter was kind of buggy when it had to demultiplex multiple  
-	   requests from the same socket.
+This module accepts all the general `CGI`_ parameters. Aside, it needs
+a balancer to be configured. It is the piece of configuration that
+points the handler where to find the FastCGI servers.
 
-This module accepts one parameter, and at the same time, supports all the 
-CGI handler parameters:
-
-    * Server path or hostname:port: It defines a server entry 
-
-Each Server parameter accepts these sub-parameters:
-
-    * Interpreter: Defines the command line of the interpreter for this 
-      server. This sub-parameter only available for FastCGI servers which are 
-      running in the same computer with the webserver. The webserver will try to run 
-      the command line if it fails to connect to the specified address in Server 
-      parameter. If you run the FastCGI servers manually, this sub-parameter is not needed.
-
-    * Env variable:value pair: Set an environment variable for the FastCGI servers. 
-
-      The **PHP_FCGI_CHILDREN** environment variable is mandatory for PHP FastCGI servers. 
-      It defines how much children should serve the requests coming from the webserver. 
-
-      If you define **PHP_FCGI_MAX_REQUESTS**, the value should be negative so that PHP would 
-      take the request as much as possible. If you left it unset, PHP will take the 
-      default value (500) and your 500th request will be rejected and FCGI handler will 
-      spew Error 500 (Internal server error) for it. 
+For most of the cases there will be only one FastCGI server though. In
+that scenario the way is to configure the handler to use a `Round
+Robin`_ balancer and configure a single host or interpreter (it has no
+performance penalty).
 
 
-If multiple Server entries defined, the requests will be round-robinly served by 
-each of Server entry.
 
 Parameters
 ----------
@@ -79,3 +57,36 @@ to run the FastCGI servers there manually:
    :alt: Fastcgi
    :align: center
 
+
+Configuring PHP
+---------------
+
+The **PHP_FCGI_CHILDREN** environment variable is mandatory for PHP
+FastCGI servers.  It defines how much children should serve the
+requests coming from the webserver.
+
+If you define **PHP_FCGI_MAX_REQUESTS**, the value should be negative
+so that PHP would take the request as much as possible. If you left it
+unset, PHP will take the default value (500) and your 500th request
+will be rejected and FCGI handler will spew Error 500 (Internal server
+error) for it.
+
+
+Note for developers
+-------------------
+
+There a are two handler implementing the FastCGI protocol: "fcgi" and
+"fastcgi".
+
+The "fastcgi" module also implements the FastCGI protocol. It is a
+more complete implementation than "fcgi" although it is also more
+complex. Actually, fcgi become the standard choice because the PHP
+interpreter was kind of buggy when it had to demultiplex multiple
+requests from the same socket.
+	   
+The "fastcgi" handler will eventually become the default option.
+However, by the moment "fcgi" is a better option.
+
+
+.. _CGI: cgi.html
+.. _Round Robin: ../balancers/round_robin.html
