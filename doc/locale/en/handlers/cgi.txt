@@ -33,11 +33,3 @@ to a path out of the Sever root directory where are located the CGI programs.
    :alt: Cgi
    :align: center
 
-
-This example shows how to use the script alias parameter. When /example is visited, 
-it will run /usr/lib/cgi-bin/awstats.pl
-
-.. image:: ../media/images/admin_handler_cgi2.png
-   :alt: Cgi
-   :align: center
-

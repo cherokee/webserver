@@ -67,7 +67,6 @@ media/images/admin_launch.png \
 media/images/admin_vserver_loggers.png \
 media/images/admin_handler_cgi.png \
 media/images/admin_icons2.png \
-media/images/admin_handler_cgi2.png \
 media/images/admin_general.png \
 media/images/admin_icons1.png \
 media/images/admin_encoding.png \
