@@ -10,7 +10,7 @@ Parameters
 =======================  ==============  ======================================
 Parameters               Type            Description
 =======================  ==============  ======================================
-``iocache``              Boolean         Optional. Default: ``1``.
+``iocache``              Boolean         Optional. Default: ``Enabled``.
 =======================  ==============  ======================================
 
 By default it will use an internal I/O cache to improve the server performance. 
@@ -30,15 +30,3 @@ Lets imagine your virtual server DocumentRoot points to /var/www.
 This configuration will make Cherokee to serve files inside /var/www_static/images 
 like files.
 
-The following example sets the *default* document root to **/var/www** and tells
-Cherokee to use the file handler on the requested **/images** directory.  This
-will serve files from **/var/www/images**::
-
-    vserver!default!document_root = /var/www
-    vserver!default!directory!/images!handler = file
-
-If a directory contains files that are updated often you will want to turn off
-the **iocache** to prevent automatic caching of these files::
-
-    vserver!default!directory!/docs!handler = file
-    vserver!default!directory!/docs!handler!iocache = 0

@@ -61,18 +61,18 @@ There are a few options which are shared_ for all the handlers:
 
     - file_ - **File Sending**
       
-      The file handler serves files from the filesystem.
+      The file handler serves files straight from the filesystem.
    
-    - dirlist_ - **List & Send**
+    - dirlist_ - **Only listing**
       
-      Combines both file_ and dirlist_ handler functionality to behave similarly
+      Displays a directory content list when a directory is requested,
+      but it does not allow to download any content.
+
+    - common_ - **List & Send**
+      
+      Combines both file_ and dirlist_ handlers functionality to behave similarly
       to common web servers, it will display directory listings when a directory is
       requested.
-
-    - onlylisting_ - **Only listing**
-      
-      Displays directory listings when a directory is requested, but it 
-      doesn't let you download its contents. 
         
     - redir_ - **Redirections**
     
@@ -164,11 +164,11 @@ Balancers
 .. _Handlers: #handlers
 .. _file: handlers/file.html
 .. _dirlist: handlers/dirlist.html
+.. _common: handlers/common.html
 .. _redir: handlers/redir.html
 .. _cgi: handlers/cgi.html
 .. _scgi: handlers/scgi.html
 .. _fcgi: handlers/fastcgi.html
-.. _onlylisting: handlers/onlylisting.html
 .. _shared: handlers/shared_options.html
 
 .. _Validators: #validators

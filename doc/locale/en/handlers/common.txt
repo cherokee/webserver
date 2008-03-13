@@ -1,0 +1,54 @@
+
+List & Send Handler
+===================
+
+The **List & Send** (``common`` internally) handler behaviour depends
+on whether it replies a request for a directory or a file.
+
+In case a directory is requested, it will use the `Listing Only`_
+handler in order to list its content. And, in the case a file is
+request, it will use the `File sending`_ handler.
+
+Parameters
+----------
+
+=======================  ==============  ======================================
+Parameters               Type            Description
+=======================  ==============  ======================================
+``pathInfo``             boolean         Makes the handler to stop parsing the
+                                         pathinfo string. Default: ``Disabled``.
+=======================  ==============  ======================================
+
+Besides, it inherits all the parameters from the _file and _dirlist handlers.
+
+
+* Note, **Pathinfo** explained::
+
+    $ echo "This a test" > /tmp/1/2/test
+    $ curl http://localhost:9999/1/2/test
+    This a test
+    $ curl http://localhost:9999/1/2/test/this/is/pathinfo
+    This a test
+    $ curl http://localhost:9999/1/2/test.no -D - | grep HTTP
+    HTTP/1.1 404 Not Found
+
+
+Examples
+~~~~~~~~
+
+With this configuration: 
+
+.. image:: ../media/images/admin_handler_dirlist.png
+        :alt: Dirlist configuration
+        :align: center
+
+Will return something like: 
+
+.. image:: ../media/images/admin_handler_dirlist_ex.png
+        :alt: Dirlist example
+        :align: center
+
+.. _file: file.html
+.. _dirlist: dirlist.html
+.. _Listing Only: dirlist.html
+.. _File sending: file.html
