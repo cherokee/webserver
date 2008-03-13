@@ -1,6 +1,9 @@
 
-How to cross compile Cherokee (Win32 on Linux)
-==============================================
+How to cross compile Cherokee
+=============================
+
+Cherokee-Win32 from Linux
+-------------------------
 
 First of all, you will have to install the cross compiler::
 
@@ -33,12 +36,16 @@ and execute a quite long "configure" command::
 
         $ ac_cv_func_malloc_0_nonnull=yes   \
           ac_cv_func_realloc_0_nonnull=yes  \
-        ./configure --host=i586-mingw32msvc \
-        --prefix=/usr/i586-mingw32msvc      \
-        --disable-readdir_r --disable-tls   \
-        --enable-static-module=all          \
-        --enable-trace --enable-static      \
-        --enable-shared=no --enable-beta    \
+        ./configure                         \
+          --host=i586-mingw32msvc           \
+          --prefix=/usr/i586-mingw32msvc    \
+          --disable-readdir_r               \
+          --disable-tls                     \
+          --enable-static-module=all        \
+          --enable-trace                    \
+          --enable-static                   \
+          --enable-shared=no                \
+          --enable-beta                     \
         CC=i586-mingw32msvc-gcc
 
 Once reached this point, we are ready to build it by simply typing::
@@ -69,16 +76,16 @@ Then you will have to set a few environment variables::
 
 and run the configuration script::
 
-   ac_cv_func_malloc_0_nonnull=yes \
-   ac_cv_func_realloc_0_nonnull=yes \
-   ./configure \
-   --host=i386-mingw32 \
-   --prefix=/usr/local/i386-mingw32-3.4.5/ \
-   --enable-static \
-   --enable-shared=no \
-   --enable-static-module=all \
-   --disable-readdir_r \
-   --disable-tls \
-   --enable-beta \
-   --enable-trace \
+   ac_cv_func_malloc_0_nonnull=yes           \
+   ac_cv_func_realloc_0_nonnull=yes          \
+   ./configure                               \
+     --host=i386-mingw32                     \
+     --prefix=/usr/local/i386-mingw32-3.4.5/ \
+     --enable-static                         \
+     --enable-shared=no                      \
+     --enable-static-module=all              \
+     --disable-readdir_r                     \
+     --disable-tls                           \
+     --enable-beta                           \
+     --enable-trace                          \
    CC=i386-mingw32-gcc
