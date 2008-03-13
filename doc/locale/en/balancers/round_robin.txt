@@ -1,0 +1,19 @@
+
+Round Robin
+===========
+
+
+
+Each Server parameter accepts these sub-parameters:
+
+    * Interpreter: Defines the command line of the interpreter for this 
+      server. This sub-parameter only available for FastCGI servers which are 
+      running in the same computer with the webserver. The webserver will try to run 
+      the command line if it fails to connect to the specified address in Server 
+      parameter. If you run the FastCGI servers manually, this sub-parameter is not needed.
+
+    * Env variable:value pair: Set an environment variable for the FastCGI servers. 
+
+
+If multiple Server entries defined, the requests will be round-robinly served by 
+each of Server entry.

@@ -2,9 +2,11 @@ docdir = $(datadir)/doc/cherokee/
 doc_DATA = \
 index.html \
 authentication.html \
-configuration.html \
+general.html \
 loggers.html \
 vserver.html \
+debug.txt \
+entry.html \
 compiling_and_installing_unix.html \
 compiling_and_installing_windows.html \
 cross_compile_cherokee.html \
@@ -23,8 +25,7 @@ handlers/common.html \
 handlers/redir.html \
 handlers/cgi.html \
 handlers/fastcgi.html \
-handlers/scgi.html \
-handlers/shared_options.html
+handlers/scgi.html
 
 docloggersdir = $(docdir)loggers/
 docloggers_DATA = \

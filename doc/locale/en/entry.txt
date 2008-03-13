@@ -1,8 +1,8 @@
 
-Shared Options
-==============
+Handlers
+========
 
-There are a few options which are shared for all the handlers: 
+There are a few options which are shared among all the handlers: 
 
 
 OnlySecure

@@ -1,19 +1,11 @@
 
-Configuration
-=============
-
-**Note**
-	   Cherokee provides an administration interface named  `Cherokee Admin`_
-	   that allows to configure the web server without having to worry about
-	   editing a text file written with a certain syntax. 
-
-Once the ``cherokee-admin`` server is launched, there will be an
-administration web interface available at http://localhost:9090/ ready
-to work with the configuration.
+General Configuration
+=====================
 
 .. image:: media/images/admin_general.png
    :alt: General
    :align: center
+
 
 Binding
 -------
@@ -42,6 +34,7 @@ Enables the global keep-alive support for the client requests.
 It increases the client performance by reusing a connection for more 
 than one request. It should most probably be turned on.
 
+
 Server Tokens
 -------------
 
@@ -49,10 +42,10 @@ Server Tokens
 Parameters                 Description
 =========================  =======================================
 Product                    Cherokee
-Minor                      Cherokee/0.0
-Minimal                    Cherokee/0.0.0
-OS                         Cherokee/0.0.0 (UNIX)
-Full                       Cherokee/0.0.0 (UNIX) Ext/0.0 Ext2/0.0
+Minor                      Cherokee/0.6
+Minimal                    Cherokee/0.6.0
+OS                         Cherokee/0.6.0 (UNIX)
+Full                       Cherokee/0.6.0 (UNIX) Ext/0.0 Ext2/0.0
 =========================  =======================================
 
 By default, Cherokee will use **Full**.
@@ -71,23 +64,3 @@ possible after startup.
 There are two possible formats: using the user or group name, or using 
 the system ID.
 
-
-Developers
-----------
-The administration interface is highly recommended, and is in fact the
-only administration mechanism that should be used to configure
-Cherokee. However, there is another way in which Cherokee developers
-and very advance users can modify the configuration.
-
-The default location for Cherokee configuration files is
-``/etc/cherokee``, but this may vary based on distribution or
-installation parameters. It is a specially formatted text file that can
-be modified by hand if you are completely sure about what you are
-doing. We recommend you not to do so.
-
-There is a document explaining how the `internal configuration
-system`_ works and its main keys.
-
-
-.. _internal configuration system: internal_configuration.html
-.. _Cherokee Admin: admin.html

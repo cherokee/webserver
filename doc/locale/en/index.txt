@@ -15,45 +15,59 @@ Specific instructions for building your own copy are available at:
 
     - Unix_
     - Windows_
-    - How to `cross compile Cherokee`_ (Win32 from Linux, OS X) 
 
-Configuration
--------------
+Configuration Interface
+-----------------------
 
-The Cherokee web server is configured through a user friendly web
-interface named `Cherokee Admin`_
+Cherokee provides an administration interface named `Cherokee Admin`_
+that allows to configure the web server without having to worry about
+editing a text file written with a certain syntax.
+
 
 .. image:: media/images/admin_index.png
         :alt: Cherokee Admin interface
         :align: center
 
-You can find more information about the `server configuration`_. 
-Alternatively, you can find information about the `internal configuration system`_ 
-which *is not* the recommended way to configure Cherokee.
+General configuration
+---------------------
 
-Advanced Configuration
-----------------------
-
-There are some `advanced options`_ which might help you in the process of
-tuning your Cherokee server. 
+There are a number a `general configuration`_ entries that specify the
+most significant configuration options such as the port - or ports -
+that the server will listen to, the default timeout, whether to
+support keep-alive connections and so on.
 
 Virtual Servers
 ---------------
-Your websites should be organizated into diferent `virtual servers`_, allowing 
-cherokee to use only the modules/validators needed on demand.
+
+If you want your web server to work with more than one `virtual
+server`_ you will have just to create them. Each more will have a
+complete independent configuration: paths, behavior, logging
+facilities, etc.
+
+Encoders
+--------
+
+The encoders allow to transform whatever information the server 
+is sending as a response of a request, no matter what handler 
+is generating it. 
+
+    - gzip_ - **GZip compression**
+    
+      Encodes the output with GZip
 
 Icons
 -----
+
 The icons_ configuration associates an icon image with one or more file 
 extensions. This information will be used mainly by the dirlist_ handler.
 
--------
 Modules
 -------
 
 There are five different types of module in Cherokee. You have handlers_,
 validators_, loggers_, encoders_ and balancers_.
 
+--------
 Handlers
 --------
 
@@ -92,9 +106,9 @@ server will choose among any of the following handlers.
     
       Communicates with FastCGI servers.
 
+----------
 Validators
 ----------
-
     - htdigest_ - **Htdigest**
     
       Uses something to perform HTTP authentication.
@@ -119,16 +133,7 @@ Validators
     
       Uses a plain flat file to perform HTTP authentication.
 
-Encoders
---------
-The encoders allow to transform whatever information the server 
-is sending as a response of a request, no matter what handler 
-is generating it. 
-
-    - gzip_ - **GZip compression**
-    
-      Encodes the output with GZip
-
+-------
 Loggers
 -------
     - combined_ - **Combined Log Format**
@@ -144,22 +149,51 @@ Loggers
     
       Logging using the W3C log format.
 
+---------
 Balancers
 ---------
     - `round robin`_ - **Round Robin load balancer**
     
+
+Advanced topics
+---------------
+
+The administration interface is highly recommended, and is in fact the
+only administration mechanism that should be used to configure
+Cherokee. However, there is another way in which Cherokee developers
+and very advance users can modify the configuration.
+
+The default location for Cherokee configuration files is
+``/etc/cherokee``, but this may vary based on distribution or
+installation parameters. It is a specially formatted text file that can
+be modified by hand if you are completely sure about what you are
+doing. We recommend you not to do so.
+
+There are some `advanced options`_ which might help you in the process
+of modifying this file. Again: It is only supposed to be modified by
+advanced users.
+
+---------------------
+Other advanced topics
+---------------------
+
+    - `Debugging`_ Cherokee
+    - How to `cross compile Cherokee`_ (Win32 from Linux or OS X)
+
+
 
 
 .. _Unix: compiling_and_installing_unix.html
 .. _Windows: compiling_and_installing_windows.html
 .. _cross compile Cherokee: cross_compile_cherokee.html
 
-.. _server configuration: configuration.html
+.. _general configuration: general.html
 
 .. _Cherokee Admin: admin.html
 .. _internal configuration system: internal_configuration.html
 .. _advanced options: advanced.html
 .. _virtual servers: vserver.html
+.. _virtual server: vserver.html
 .. _download: download.html
 .. _icons: icons.html
 
@@ -193,3 +227,4 @@ Balancers
 .. _round robin: balancers/round_robin.html
 
 .. _binaries:  http://www.cherokee-project.com/downloads  
+.. _Debugging: debug.html

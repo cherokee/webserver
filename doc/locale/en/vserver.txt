@@ -1,6 +1,6 @@
-
-Virtual Servers
----------------
+==============
+Virtual Server
+==============
 
 'Virtual Server' is an abstraction mechanism that allows you to define a custom 
 number of parameters and rules that have to be applied to one or more domains.
