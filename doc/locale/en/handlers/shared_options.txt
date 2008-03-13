@@ -1,0 +1,70 @@
+
+Shared Options
+==============
+
+There are a few options which are shared for all the handlers: 
+
+
+OnlySecure
+~~~~~~~~~~
+This configuration entry determines that the directory will be served by the secure 
+server (*https*) only.
+
+If you access directory /admin or any sub-directory, throught non-secure connection 
+Cherokee will report a **426 Upgrade Required error**.
+
+
+Allow From
+~~~~~~~~~~
+This parameter lets you set up rules form allow access to the directory contents to
+some IP or IP ranges. The remote client IP will be checked with all the provided 
+list and only if the IP matches with some of the rules the access will be allowed.
+
+There are three possible entry types:
+
+    * IP addresses
+    * Host names
+    * IP ranges 
+
+In the two cases, both IPv4 and IPv6 addresses are valid.
+
+Examples
+~~~~~~~~
+Allow access only from the IPv6 localhost address::
+
+   Allow from ::1
+
+Allow access from the 127.0.0.0/8 network::
+
+   Allow from 127.0.0.0/8
+
+or it could also we written like::
+
+   Allow from 127.0.0.0/255.0.0.0
+
+It is also possible to use lists instead of a single IP or network range. And ir is 
+also possible to mix IPv4 and IPv6 addresses and networks if you want::
+
+    Allow from 192.168.0.0/16, ::1, 10.0.0.1, 3ffe:3200::/24
+
+
+Authentication
+~~~~~~~~~~~~~~
+This parameter allows to configure user/password protected entries. A validator 
+has to be used in each Auth entry in order to specify the validaton mechanism. 
+Eg: PAM_, htpasswd_, htdigest_, plain_, ldap_, mysql_.
+
+It accepts two kinds of validation schemes:
+
+    * Basic
+    * Digest 
+
+It is also possible to specify who is allowed to access the resource using the Users entry.
+
+
+.. _htdigest: ../validators/htdigest.html
+.. _htpasswd: ../validators/htpasswd.html
+.. _ldap: ../validators/ldap.html
+.. _mysql: ../validators/mysql.html
+.. _PAM: ../validators/pam.html
+.. _plain: ../validators/plain.html

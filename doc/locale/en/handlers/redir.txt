@@ -1,0 +1,81 @@
+
+Handler Redir
+=============
+
+Redirections
+
+The main idea of a redirection is telling to the web client to go to another URL 
+when the request URL matchs some rule.
+
+
+For example, if you have URLs like::
+
+    * http://example.com/inst/photogallery/viewphoto?photoid=1235
+    * http://example.com/inst/photogallery/viewcomments?photoid=1235
+    * http://example.com/inst/photogallery/admin?photoid=1235&method=delete 
+
+
+You probably would prefer URLs like::
+
+    * http://example.com/photo/1235
+    * http://example.com/photo/1235/cmts
+    * http://example.com/photo/1235/delete 
+
+
+Parameters
+----------
+
+This directive uses PCRE (Perl Compatible Regular Expressions) to make the substitution. 
+
+* Type: [External | Internal]
+
+  * **Internal**
+
+    The redirection will happen internally, hence the the internal URL in which the address 
+    is translated will be invisible for the client.
+
+  * **External**
+
+    It works in the same way as the previous one, but in this case, it will redirect 
+    the connection to the new resource.
+
+
+Virtual hosts and redirections
+
+The internals redirections, using the Rewrite key word, are limited to work in 
+the same virtual host. All the internal redirections will be processed in the 
+original virtual host, which makes quite sense in terms of security.
+
+In the case you do need the redirect some resource to another virtual host 
+and/or domain, you will have to use an explicit redirection using the external key words.
+
+
+Examples
+~~~~~~~~
+
+This example will perform a internal redirection:
+
+==================   =====================================================================
+Regular Expression	 Substitution
+==================   =====================================================================
+"/(\d+)$"            "http://example.com/inst/photogallery/viewphoto?photoid=$1"
+
+"/(\d+)/cmts"        "http://example.com/viewcomments?photoid=$1"
+
+"/(\d+)/delete"      "http://example.com/inst/photogallery/admin?photoid=$1&method=delete"
+
+==================   =====================================================================
+
+
+
+=================   ====================================================================
+Request             Internal translation
+=================   ====================================================================
+/photo/123          http://example.com/inst/photogallery/viewphoto?photoid=123
+
+/photo/213/cmts     http://example.com/viewcomments?photoid=213
+
+/photo/501/delete   http://example.com/inst/photogallery/admin?photoid=501&method=delete
+
+=================   ====================================================================
+

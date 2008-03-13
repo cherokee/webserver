@@ -29,7 +29,7 @@ interface named `Cherokee Admin`_
 
 You can find more information about the `server configuration`_. 
 Alternatively, you can find information about the `internal configuration system`_ 
-which is not the recommended way to configure Cherokee.
+which *is not* the recommended way to configure Cherokee.
 
 Advanced Configuration
 ----------------------
@@ -56,6 +56,9 @@ validators_, loggers_, encoders_ and balancers_.
 
 Handlers
 --------
+
+There are a few options which are shared_ for all the handlers:
+
     - file_ - **File Sending**
       
       The file handler serves files from the filesystem.
@@ -89,11 +92,12 @@ Handlers
 
 Validators
 ----------
-    - htdigest_ - **Something**
+
+    - htdigest_ - **Htdigest**
     
       Uses something to perform HTTP authentication.
 
-    - htpasswd_ - **Something**
+    - htpasswd_ - **Htpasswd**
 
       Uses something to perform HTTP authentication.
     
@@ -165,6 +169,7 @@ Balancers
 .. _scgi: handlers/scgi.html
 .. _fcgi: handlers/fastcgi.html
 .. _onlylisting: handlers/onlylisting.html
+.. _shared: handlers/shared_options.html
 
 .. _Validators: #validators
 .. _htdigest: validators/htdigest.html

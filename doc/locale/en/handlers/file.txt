@@ -17,11 +17,11 @@ By default it will use an internal I/O cache to improve the server performance.
 If you don't want to use it with a directory just unset it using this parameter. 
 
 It is a good idea to disable to I/O cache if the content of the directory changes
-often
+often.
 
 Examples
 ~~~~~~~~
-Let imagine your virtual server DocumentRoot points to /var/www.
+Lets imagine your virtual server DocumentRoot points to /var/www.
 
 .. image:: ../media/images/admin_handler_file.png
    :alt: Handler file
@@ -30,7 +30,7 @@ Let imagine your virtual server DocumentRoot points to /var/www.
 This configuration will make Cherokee to serve files inside /var/www_static/images 
 like files.
 
-The following example sets the default document root to **/var/www** and tells
+The following example sets the *default* document root to **/var/www** and tells
 Cherokee to use the file handler on the requested **/images** directory.  This
 will serve files from **/var/www/images**::
 

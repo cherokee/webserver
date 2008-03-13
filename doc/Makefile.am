@@ -23,7 +23,8 @@ handlers/redir.html \
 handlers/cgi.html \
 handlers/fastcgi.html \
 handlers/scgi.html \
-handlers/onlylisting.html
+handlers/onlylisting.html \
+handlers/shared_options.html
 
 docloggersdir = $(docdir)loggers/
 docloggers_DATA = \

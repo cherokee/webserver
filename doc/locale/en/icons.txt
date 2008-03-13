@@ -3,10 +3,7 @@ Icons
 =====
 
 The icons configuration file associates an icon image with one or more
-file extensions. This information will be used mainly by the dirlist handler.
-
-There are five sections on this file:
-
+file extensions. This information will be used mainly by the dirlist_ handler.
 
 * **Files**
 
@@ -41,3 +38,4 @@ There are five sections on this file:
    :align: center
 
 
+.. _dirlist: handlers/dirlist.html

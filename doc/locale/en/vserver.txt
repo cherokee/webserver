@@ -14,8 +14,8 @@ in the virtual server that should handle it. In case no virtual server matches
 the request, default will be used.
 
 
-Add new Virtual Server
-~~~~~~~~~~~~~~~~~~~~~~
+Add a new Virtual Server
+~~~~~~~~~~~~~~~~~~~~~~~~
 You have to enter the server name and a valid Document Root directory in 
 order to create a new virtual server.
 
@@ -23,7 +23,8 @@ order to create a new virtual server.
    :alt: Virtual server
    :align: center
 
-* Document Root
+* **Document Root**
+
   This directive sets the directory from which Cherokee will serve files. 
   The set of rules is checked from the highest to the lowest possible priority. 
   Once a rule is matched, the server appends the path from the requested URL to 
@@ -40,7 +41,7 @@ order to create a new virtual server.
   /secret/cgi/something then the CGI handler would be taken and it would inherit the 
   authentication specified for /secret.
 
-* Name
+* **Name**
 
   Name is an alias. The domain names handled by the virtual server should be 
   specified later in the virtual server details page.
@@ -51,7 +52,7 @@ Now, we can configure our new virtual server.
 Basics
 ~~~~~~
 
-  * Directory Indexes
+  * **Directory Indexes**
 
     The DirectoryIndex directive sets the list of resources to look for when 
     the client requests an index of the directory by specifying a / at the end 
@@ -61,7 +62,7 @@ Basics
 
     Note that the documents do not need to be relative to the directory::
 
- 	    DirectoryIndex index.html, index.txt, /cgi-bin/index.pl
+ 	    index.html, index.txt, /cgi-bin/index.pl
 
     would cause the CGI script /cgi-bin/index.pl to be executed if neither 
     index.html nor index.txt existed in a directory.
@@ -75,7 +76,7 @@ Basics
 
 Domain names
 ~~~~~~~~~~~~
-    Set's the FQDN that will match with the virtual server::
+    Set's the FQDN_ that will match with the virtual server::
 
     		xyz.com, www.xyz.com, xyz.org, xyz.org
 
@@ -137,6 +138,10 @@ Security
   The virtual server must be configured with the path to the certificate before using 
   secure connections (https). There is a document which might help to generate SSL keys_
  
+
+.. _FQDN: 
+
+**FQDN**: Full Qualified Domain Names
 
 .. _keys: How_to_generate_SSL_keys.html
 .. _Combined: loggers/combined.html
