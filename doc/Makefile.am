@@ -5,7 +5,7 @@ authentication.html \
 general.html \
 loggers.html \
 vserver.html \
-debug.txt \
+debug.html \
 entry.html \
 compiling_and_installing_unix.html \
 compiling_and_installing_windows.html \
