@@ -12,7 +12,7 @@ ERROR_MSG = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://
 
  <!-- Poem by Thomas Thurman <thomas@thurman.org.uk> -->
 
- <h1>404 File Not found</h1>
+ <h1>403 Access Denied</h1>
 
 <p>So many years have passed since first you sought
 the lands beyond the edges of the sky,
@@ -29,7 +29,7 @@ the seconds to your final voyage of all...)
 and ashes on the swell are seen no more.
 The silence surges.
 
-<p><b>Error 404</b>.
+<p><b>Error 403</b>.
  </body>
 </html>"""
 
