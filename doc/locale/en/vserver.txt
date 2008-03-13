@@ -82,9 +82,12 @@ Domain names
 
 Behavior
 ~~~~~~~~
-  There is a common group of parameters which modify the server behavior. It 
-  can be configured depending on the directory requested, the extension of the 
-  file requested or a regular expression. 
+
+  This sections allows to define a set of rules to define how the
+  server should handle the different requests. These rules can be
+  defined based on the directory that the request targets, the
+  extension of the file that it is requesting, or a regular expression
+  that may match with the request:
 
   * **Directory**: The entry Directory encloses a group of directives which will
     apply only to the named directory and sub-directories of that directory. 
@@ -103,12 +106,51 @@ Behavior
       and query string). In this way, it is possible to set rules based on 
       parameter values. 
 
-  * The priority which will be applied (the bigger, the higher).
+  It is very important to know that this rules are prioritized, the
+  bigger its priority is, the sooner that are checked against. You
+  could think of a network routing table, it is quite similar.
   
-
 .. image:: media/images/admin_behaviour.png
    :alt: Virtual server
    :align: center
+
+   Each of these behavior rules must specify which is the handler that
+   the server should use to reply the requests that matches the rule.
+   Handler are the modules that generate the information with which
+   the server responses a client request.  By default Cherokee provide
+   a number of them:
+
+    - file_ - **File Sending**
+      
+      The file handler serves files straight from the filesystem.
+   
+    - dirlist_ - **Only listing**
+      
+      Displays a directory content list when a directory is requested,
+      but it does not allow to download any content.
+
+    - common_ - **List & Send**
+      
+      Combines both file_ and dirlist_ handlers functionality to behave similarly
+      to common web servers, it will display directory listings when a directory is
+      requested.
+        
+    - redir_ - **Redirections**
+    
+      Perform simple and/or complex redirections using regexes.
+    
+    - cgi_ - **CGI Execution**
+    
+      Executes CGI programs.
+    
+    - scgi_ - **SCGI Server Support**
+    
+      Communicates with SCGI servers.
+    
+    - fcgi_ - **FastCGI Server Support**
+    
+      Communicates with FastCGI servers.
+
 
   
 Error Handler
