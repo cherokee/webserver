@@ -21,7 +21,7 @@ class ModuleCommon (Module, FormHelper):
 
         # Local properties
         table = Table(2)
-        self.AddTableCheckbox (table, 'Allow PathInfo', '%s!allow_pathinfo'%(self._prefix), True)
+        self.AddTableCheckbox (table, 'Allow PathInfo', '%s!allow_pathinfo'%(self._prefix), False)
         txt += str(table)
         
         # Copy errors to the modules, 
