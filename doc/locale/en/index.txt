@@ -61,41 +61,6 @@ Icons
 The icons_ configuration associates an icon image with one or more file 
 extensions. This information will be used mainly by the dirlist_ handler.
 
-Modules
--------
-
-----------
-Validators
-----------
-    - htdigest_ - **Htdigest**
-    
-      Uses something to perform HTTP authentication.
-
-    - htpasswd_ - **Htpasswd**
-
-      Uses something to perform HTTP authentication.
-    
-    - ldap_ - **LDAP Authentication**
-    
-      Uses an LDAP directory to perform HTTP authentication.
-
-    - mysql_ - **MySQL Authentication**
-      
-      Uses a MySQL database to perform HTTP authentication.
-    
-    - pam_ - **PAM Authentication**
-    
-      Uses PAM to perform HTTP authentication.
-    
-    - plain_ - **Plain Flat File Authentication**
-    
-      Uses a plain flat file to perform HTTP authentication.
-
----------
-Balancers
----------
-    - `round robin`_ - **Round Robin load balancer**
-    
 
 Advanced topics
 ---------------
@@ -115,9 +80,8 @@ There are some `advanced options`_ which might help you in the process
 of modifying this file. Again: It is only supposed to be modified by
 advanced users.
 
----------------------
 Other advanced topics
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
     - `Debugging`_ Cherokee
     - How to `cross compile Cherokee`_ (Win32 from Linux or OS X)
@@ -139,14 +103,6 @@ Other advanced topics
 .. _download: download.html
 .. _icons: icons.html
 .. _dirlist: handlers/dirlist.html
-
-.. _Validators: #validators
-.. _htdigest: validators/htdigest.html
-.. _htpasswd: validators/htpasswd.html
-.. _ldap: validators/ldap.html
-.. _mysql: validators/mysql.html
-.. _pam: validators/pam.html
-.. _plain: validators/plain.html
 
 .. _Encoders: #encoders
 .. _gzip: encoders/gzip.html

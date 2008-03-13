@@ -1,10 +1,11 @@
-========
-Handlers
-========
+===================
+Virtual Server Rule
+===================
 
-There are a few options which are shared among all the handlers: 
+Beside the connection handler set for the rule, there are other
+parameters that can be set in order to customize the rule behavior.
 
-----------
+
 OnlySecure
 ----------
 
@@ -15,13 +16,14 @@ If you access directory /admin or any sub-directory, throught
 non-secure connection Cherokee will report a **426 Upgrade Required
 error**.
 
-----------
-Allow From
-~~~~~~~~~~
 
-This parameter lets you set up rules form allow access to the directory contents to
-some IP or IP ranges. The remote client IP will be checked with all the provided 
-list and only if the IP matches with some of the rules the access will be allowed.
+Allow From
+----------
+
+This parameter lets you set up rules form allow access to the
+directory contents to some IP or IP ranges. The remote client IP will
+be checked with all the provided list and only if the IP matches with
+some of the rules the access will be allowed.
 
 There are three possible entry types:
 
@@ -31,7 +33,7 @@ There are three possible entry types:
 
 In the two cases, both IPv4 and IPv6 addresses are valid.
 
-~~~~~~~~
+
 Examples
 ~~~~~~~~
 
@@ -47,24 +49,55 @@ or it could also we written like::
 
    Allow from 127.0.0.0/255.0.0.0
 
-It is also possible to use lists instead of a single IP or network range. And ir is 
-also possible to mix IPv4 and IPv6 addresses and networks if you want::
+It is also possible to use lists instead of a single IP or network
+range. And ir is also possible to mix IPv4 and IPv6 addresses and
+networks if you want::
 
     Allow from 192.168.0.0/16, ::1, 10.0.0.1, 3ffe:3200::/24
 
 
 Authentication
-~~~~~~~~~~~~~~
-This parameter allows to configure user/password protected entries. A validator 
-has to be used in each Auth entry in order to specify the validaton mechanism. 
-Eg: PAM_, htpasswd_, htdigest_, plain_, ldap_, mysql_.
+--------------
 
-It accepts two kinds of validation schemes:
+This parameter allows to configure user/password protected entries. A
+validator has to be used in each Auth entry in order to specify the
+validaton mechanism. The following `validators` are available:
+
+    - htdigest_ - **Htdigest**
+    
+      Uses something to perform HTTP authentication.
+
+    - htpasswd_ - **Htpasswd**
+
+      Uses something to perform HTTP authentication.
+    
+    - ldap_ - **LDAP Authentication**
+    
+      Uses an LDAP directory to perform HTTP authentication.
+
+    - mysql_ - **MySQL Authentication**
+      
+      Uses a MySQL database to perform HTTP authentication.
+    
+    - pam_ - **PAM Authentication**
+    
+      Uses PAM to perform HTTP authentication.
+    
+    - plain_ - **Plain Flat File Authentication**
+    
+      Uses a plain flat file to perform HTTP authentication.
+
+
+It is important to take into consideration there are two different
+authentication mechanisms:
 
     * Basic
     * Digest 
 
-It is also possible to specify who is allowed to access the resource using the Users entry.
+The are some `validators` that, by limitations for the technology can
+only handle one of those mechanisms. In the case the module supports
+both of them, the interface allow to choose whether you can it to use
+only one of them, or whether both can be used.
 
 
 .. _htdigest: ../validators/htdigest.html
