@@ -64,48 +64,6 @@ extensions. This information will be used mainly by the dirlist_ handler.
 Modules
 -------
 
-There are five different types of module in Cherokee. You have handlers_,
-validators_, loggers_, encoders_ and balancers_.
-
---------
-Handlers
---------
-
-Handler are the modules that generate the information with which the
-server responses a client request. Depending on the configuration the
-server will choose among any of the following handlers.
-
-    - file_ - **File Sending**
-      
-      The file handler serves files straight from the filesystem.
-   
-    - dirlist_ - **Only listing**
-      
-      Displays a directory content list when a directory is requested,
-      but it does not allow to download any content.
-
-    - common_ - **List & Send**
-      
-      Combines both file_ and dirlist_ handlers functionality to behave similarly
-      to common web servers, it will display directory listings when a directory is
-      requested.
-        
-    - redir_ - **Redirections**
-    
-      Perform simple and/or complex redirections using regexes.
-    
-    - cgi_ - **CGI Execution**
-    
-      Executes CGI programs.
-    
-    - scgi_ - **SCGI Server Support**
-    
-      Communicates with SCGI servers.
-    
-    - fcgi_ - **FastCGI Server Support**
-    
-      Communicates with FastCGI servers.
-
 ----------
 Validators
 ----------
@@ -132,22 +90,6 @@ Validators
     - plain_ - **Plain Flat File Authentication**
     
       Uses a plain flat file to perform HTTP authentication.
-
--------
-Loggers
--------
-    - combined_ - **Combined Log Format**
-    
-      Logging using the combined log format.  Very common among other web
-      servers.
-    
-    - ncsa_ - **NCSA Log Format**
-    
-      Logging using the NCSA log format.
-    
-    - w3c_ - **W3C Log Format**
-    
-      Logging using the W3C log format.
 
 ---------
 Balancers
@@ -179,7 +121,7 @@ Other advanced topics
 
     - `Debugging`_ Cherokee
     - How to `cross compile Cherokee`_ (Win32 from Linux or OS X)
-
+    - How to `generate SSL keys`_
 
 
 
@@ -196,16 +138,7 @@ Other advanced topics
 .. _virtual server: vserver.html
 .. _download: download.html
 .. _icons: icons.html
-
-.. _Handlers: #handlers
-.. _file: handlers/file.html
 .. _dirlist: handlers/dirlist.html
-.. _common: handlers/common.html
-.. _redir: handlers/redir.html
-.. _cgi: handlers/cgi.html
-.. _scgi: handlers/scgi.html
-.. _fcgi: handlers/fastcgi.html
-.. _shared: handlers/shared_options.html
 
 .. _Validators: #validators
 .. _htdigest: validators/htdigest.html
@@ -215,11 +148,6 @@ Other advanced topics
 .. _pam: validators/pam.html
 .. _plain: validators/plain.html
 
-.. _Loggers: #loggers
-.. _combined: loggers/combined.html
-.. _ncsa: loggers/ncsa.html
-.. _w3c: loggers/w3c.html
-
 .. _Encoders: #encoders
 .. _gzip: encoders/gzip.html
 
@@ -228,3 +156,5 @@ Other advanced topics
 
 .. _binaries:  http://www.cherokee-project.com/downloads  
 .. _Debugging: debug.html
+.. _generate SSL keys: How_to_generate_SSL_keys.html
+
