@@ -1,3 +1,12 @@
+2008-03-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_file.c (cherokee_handler_file_configure),
+	cherokee/handler_dirlist.h (HDL_DIRLIST_PROP_LIST): Added special
+	case: when it finds a handler dirlist key it should ignore it
+	instead of reporting an error. The handler common shares the same
+	configuration between both (file and dirlist) handlers. It was
+	printing a confising error message about an invalid config key.
+
 2008-03-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/advanced.help.html: Written. The file was empty.

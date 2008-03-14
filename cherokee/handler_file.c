@@ -42,6 +42,7 @@
 #include "module.h"
 #include "iocache.h"
 #include "util.h"
+#include "handler_dirlist.h"
 
 #define ENTRIES "handler,file"
 
@@ -84,6 +85,23 @@ cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t
 		if (equal_buf_str (&subconf->key, "iocache")) {
 			props->use_cache = atoi (subconf->val.buf);
 		} else {
+			cuint_t             i;
+			cherokee_boolean_t  ignore;
+			const char         *dirlist_props[] = HDL_DIRLIST_PROP_LIST;
+
+			/* Check whether it is a "dirlist" property. If so, ignore it.
+			 */
+			ignore = false;
+			for (i=0; dirlist_props[i]; i++) {
+				if (! strcmp (subconf->key.buf, dirlist_props[i])) {
+					ignore = true;
+					break;
+				}
+			}
+
+			if (ignore)
+				continue;
+
 			PRINT_MSG ("ERROR: Handler file: Unknown key: '%s'\n", subconf->key.buf);
 			return ret_deny;
 		}

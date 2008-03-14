@@ -108,6 +108,9 @@ typedef struct {
 #define HDL_DIRLIST_PROP(x)  (PROP_DIRLIST(MODULE(x)->props))
 
 
+#define HDL_DIRLIST_PROP_LIST {"size", "date", "user", "group", "theme", \
+			       "icon_dir", "notice_files", NULL}
+
 /* Library init function
  */
 void PLUGIN_INIT_NAME(dirlist)             (cherokee_plugin_loader_t *loader);
