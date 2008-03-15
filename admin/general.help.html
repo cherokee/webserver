@@ -8,13 +8,20 @@ unselected the server will not use IPv6 even if the operating system
 supports it.</p>
 
 <p class="help_p"><b>Listen</b>: IP Address to which the server will
-bind to wait for incoming requests.</p>
+bind itself while waiting for incoming requests.
+This is useful if the computer has more than one IP address
+and you want to start one server per IP address.<br>
+<b>NOTE</b>If you don't specify any IP address,
+than the server will listen to all configured IP addresses.
+</p>
 
 <h2>Basic Behaviour</h2>
 <p class="help_p"><b>KeepAlive</b>: enables the global keep alive
 support for the client requests. It increases the client performance
-by reusing a connection for more than one request. It should most
-probably be turn on.</p>
+by reusing a connection for more than one request.
+It is usually a good idea leave it on, unless you end up in trillions
+of concurrent connections (i.e. more than 30000 - 40000).
+</p>
 
 <h2>Server Permissions</h2>
 <p class="help_p">If the server is launched with enough privileges,

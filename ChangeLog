@@ -1,3 +1,9 @@
+2008-03-15  A.D.F  <adefacc@tin.it>
+
+	* admin/*.help.html:
+	  - fixed mispellings and added a few more details about
+	    range values if setable fields.
+
 2008-03-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_file.c (cherokee_handler_file_configure),

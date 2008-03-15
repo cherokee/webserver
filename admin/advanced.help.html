@@ -1,24 +1,39 @@
 <h2>System tweaking</h2>
 
-<p class="help_p">This section contains a couple of options that set
+<p class="help_p">This section contains a few options that set
 how we want the operating system to treat Cherokee. The most important
-option here is the <b>File descriptor number</b> limit. It defines how
-many file descriptors the server can handle. If the server fails to
-reply some requests under heavy loads, this limit needs to be
-increased.</p>
+option here is the <b>File descriptor number</b>
+(<code>max_fds</code>) limit.<br>
+File descriptor number: range values: 128 - 32768, default OS setting
+(i.e. 1024, etc.).<br>
+It defines how many file descriptors the server can handle.<br>
+See also: <code>ulimit -f max_fds</code> shell command.<br>
+Keep in mind that the max. number of concurrent connections
+that can be handled is printed by the server at startup and
+it is roughly a bit less than (max_fds / 2).<br>
+If the server is very slow in replying to new connections
+or if it fails to accept new requests under heavy load,
+you may investigate and choose to raise this limit.<br>
+<b>NOTE</b>: using <code>select</code> or <code>win32</code>
+pollers may limit the max. number of file descriptors to a low value
+(i.e. only 256 per thread, 256 * 5 = 1280).
+</p>
 
 <h2>Server tweaking</h2>
 
 <p class="help_p">The web server can be configured to use some system
 call under certain circumstances. Using the <b>Polling method</b> it
-is possible to force the server to use an specific file description
+is possible to force the server to use a specific file descriptor
 polling method. It is not recommended though.</p>
 
 <p class="help_p">The <b>sendfile</b> minimum and maximum limit can he
 set to point the server when to use this system call. Depending on the
-operating system these limit can vary.</p>
+operating system these limit may vary.<br>
+Minimum limit: range values: 1 - 2147483647, default: 32768<br>
+Maximum limit: range values: 1 - 2147483647, default: 2147483647
+</p>
 
-<p class="help_p">Finally, the <b>Panic Action</b> option allows to
+<p class="help_p">Finally, the <b>Panic Action</b> option allows you to
 define a program that will be called if, by some reason, the server
 fails. By default, it should be <em>cherokee-panic</em>.</p>
 
@@ -26,14 +41,22 @@ fails. By default, it should be <em>cherokee-panic</em>.</p>
 
 <p class="help_p">The <b>Reuse Connections</b> field allows to set the
 number of how many internal connections should be hold for reuse. It's
-an optimization tweaking option.</p>
+an optimization tweaking option.<br>
+Reuse connections: range values: 0 - 128, default 20.
+</p>
 
 <p class="help_p"><b>Log flush time</b> sets the number of seconds
-between log consolidations (flushes). To raise this number usually
-have a significant positive impact on performance.</p>
+between log consolidations (flushes).
+Setting this number to a value greater than 1 - 2 seconds,
+usually has a significant positive impact
+on performance but this can lead to a loss of log data in case
+of an unclean server close or shutdown.<br>
+Log flush time: range values: 0 - 60, default 10.
+</p>
 
 <p class="help_p">Finally, the <b>Max Keepalive requests</b> allows to
-specify the number of request that a single connection should reply if
-it uses keep-alive. A high number is usually okay.</p>
-
+specify the max. number of HTTP requests that can be served by each
+keepalive connection. A high number is usually okay.<br>
+Max Keepalive requests: range values: 1 - 2147483647, default 500.
+</p>
 
