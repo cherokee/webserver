@@ -1,3 +1,11 @@
+2008-03-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_dirlist.h: Removed configuration property list.
+
+	* cherokee/handler_file.c (cherokee_handler_file_configure):
+	Removed error reporting on invalid confguration key. It was the
+	source of many minor issues.
+
 2008-03-15  A.D.F  <adefacc@tin.it>
 
 	* admin/*.help.html:
