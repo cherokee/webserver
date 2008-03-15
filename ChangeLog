@@ -4,6 +4,9 @@
 	  - fixed mispellings and added a few more details about
 	    range values if setable fields.
 
+	* admin/PageAdvanced.py:
+	  - fixed a mispelled word in warning help.
+
 2008-03-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_file.c (cherokee_handler_file_configure),

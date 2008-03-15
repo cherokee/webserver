@@ -19,8 +19,8 @@ DATA_VALIDATION = [
 
 WARNING = """
 <p><b>WARNING</b>: This section contains advanced configuration
-paramters. We recommend not changing  anything unless you are
-completely sure about what you are doing.</p>
+parameters. It is recommended to not change anything unless you
+really know what you are doing.</p>
 """
 
 class PageAdvanced (PageMenu, FormHelper):
