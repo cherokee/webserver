@@ -7,7 +7,7 @@ option here is the <b>File descriptor number</b>
 File descriptor number: range values: 128 - 32768, default OS setting
 (i.e. 1024, etc.).<br>
 It defines how many file descriptors the server can handle.<br>
-See also: <code>ulimit -f max_fds</code> shell command.<br>
+See also: <code>ulimit -n max_fds</code> shell command.<br>
 Keep in mind that the max. number of concurrent connections
 that can be handled is printed by the server at startup and
 it is roughly a bit less than (max_fds / 2).<br>
