@@ -25,8 +25,8 @@
  * USA
  */
 
-#include "logger.h"
 #include "common-internal.h"
+#include "logger.h"
 
 #include <stdlib.h>
 #include <string.h>

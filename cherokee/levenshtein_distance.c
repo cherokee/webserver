@@ -5,6 +5,7 @@
  *
  */
 
+#include "common-internal.h"
 #include "levenshtein_distance.h"
 
 #include <stdlib.h>

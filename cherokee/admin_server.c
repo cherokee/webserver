@@ -22,7 +22,9 @@
  * USA
  */
 
+#include "common-internal.h"
 #include "admin_server.h"
+
 #include "server-protected.h"
 #include "connection-protected.h"
 #include "connection_info.h"

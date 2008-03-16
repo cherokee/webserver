@@ -22,7 +22,7 @@
 /* Thanks to Dimitri PAPADOPOULOS-ORFANOS for researching many of the methods
  * in this file. */
 
-#include "config.h"
+#include "common-internal.h"
 #include "ncpus.h"
 #include "util.h"
 

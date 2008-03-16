@@ -22,6 +22,7 @@
  * USA
  */
 
+#include "common-internal.h"
 #include "dirs_table.h"
 
 #include <stdio.h>

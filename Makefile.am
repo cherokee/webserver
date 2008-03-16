@@ -1,8 +1,8 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-SUBDIRS = m4 contrib www icons doc themes qa cherokee cget windows admin
+SUBDIRS = m4 www icons themes qa doc . admin contrib cherokee cget windows
 bin_SCRIPTS = cherokee-config
-SUFFIXES = .sample.pre .sample
+SUFFIXES = .sample.pre .sample .h.pre .h
 
 # M4 macro file for inclusion with autoconf
 m4datadir = "$(datadir)/aclocal"
@@ -23,8 +23,18 @@ pkgconfig_DATA = cherokee.pc
 cherokeeconfdir = $(sysconfdir)/cherokee
 cherokeeadmindir = $(datadir)/cherokee/admin
 
+.h.pre.h: 
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%libdir%|${libdir}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
 .sample.pre.sample:
-	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%libdir%|${libdir}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
+
+
+CONSTANTS_PRE = \
+constants.h.pre
+
+CONSTANTS = \
+$(CONSTANTS_PRE:.h.pre=.h)
+
 
 CONFS_PRE =              \
 cherokee.conf.sample.pre \
@@ -41,7 +51,8 @@ WINDOWS_PORT_FILES = \
 config.h.win32
 
 CLEANFILES = \
-$(CONFS)
+$(CONFS) \
+$(CONSTANTS)
 
 DISTCLEANFILES = \
 cherokee.pc
@@ -62,10 +73,12 @@ cherokee.pc.in        \
 $(m4data_DATA)        \
 $(CONFS_DONE)         \
 $(CONFS_PRE)          \
+$(CONSTANTS_PRE)      \
 $(man_MANS)           \
 $(WINDOWS_PORT_FILES) \
 $(COMPILATION_TESTS)
 
+all-local: $(CONSTANTS) $(CONFS)
 
 install-data-local-config:
 	@$(mkinstalldirs) $(DESTDIR)$(pkgincludedir);
@@ -76,7 +89,6 @@ uninstall-local-config:
 		echo "rm -f $(DESTDIR)$(pkgincludedir)/cherokee-config.h"; \
 		$(RM) -f $(DESTDIR)$(pkgincludedir)/cherokee-config.h; \
 	fi
-
 
 install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)

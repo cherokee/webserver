@@ -1,20 +1,8 @@
 ## Cherokee: cherokee/Makefile.am  -*- makefile -*-
 
 INCLUDES = \
--DPCRE_STATIC \
 $(TLS_CFLAGS) \
-$(PTHREAD_CFLAGS) \
--I$(top_srcdir) \
--DCHEROKEE_COMPILATION \
--DCHEROKEE_PLUGINDIR="\"$(plugindir)\"" \
--DCHEROKEE_DEPSDIR=\""$(cherokeedepsdir)"\" \
--DCHEROKEE_DATADIR=\""$(cherokeedatadir)"\" \
--DCHEROKEE_VAR_RUN=\""$(localstatedir)/run"\" \
--DCHEROKEE_CONFDIR=\""$(sysconfdir)/cherokee"\" \
--DCHEROKEE_SRV_PATH=\""$(prefix)/sbin/cherokee"\" \
--DCHEROKEE_ICONSDIR=\""$(prefix)/share/cherokee/icons"\" \
--DCHEROKEE_THEMEDIR=\""$(prefix)/share/cherokee/themes"\" \
--DCHEROKEE_PANIC_PATH=\""$(prefix)/bin/cherokee-panic"\" 
+$(PTHREAD_CFLAGS)
 
 #
 # Scripts

@@ -1,0 +1,18 @@
+#ifndef CHEROKEE_COMPILATION_CONSTANTS_H
+#define CHEROKEE_COMPILATION_CONSTANTS_H
+
+# define CHEROKEE_COMPILATION
+# define PCRE_STATIC
+
+# define CHEROKEE_PLUGINDIR   "%libdir%/cherokee"
+# define CHEROKEE_DEPSDIR     "%datadir%/cherokee/deps"
+# define CHEROKEE_DATADIR     "%datadir%/cherokee"
+
+# define CHEROKEE_VAR_RUN     "%localstatedir%/run"
+# define CHEROKEE_CONFDIR     "%sysconfdir%/cherokee"
+# define CHEROKEE_SRV_PATH    "%prefix%/sbin/cherokee"
+# define CHEROKEE_ICONSDIR    "%prefix%/share/cherokee/icons"
+# define CHEROKEE_THEMEDIR    "%prefix%/share/cherokee/themes"
+# define CHEROKEE_PANIC_PATH  "%prefix%/bin/cherokee-panic"
+
+#endif

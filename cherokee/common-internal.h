@@ -26,6 +26,7 @@
 #define CHEROKEE_COMMON_INTERNAL_H
 
 #include <config.h>
+#include <constants.h>
 
 #ifdef _WIN32
 # include "unix4win32.h"

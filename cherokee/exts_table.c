@@ -22,6 +22,7 @@
  * USA
  */
 
+#include "common-internal.h"
 #include "exts_table.h"
 
 #define ENTRIES "exts"
