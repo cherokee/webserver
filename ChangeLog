@@ -1,3 +1,11 @@
+2008-03-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* doc/Makefile.am (.NOTPARALLEL): Documentation shouldn't be
+	generated in pararell. At this moment a simple call to
+	build_docs.py compiles it all. When it compiles in pararell, make
+	calls many times to build_docs.py so the documentation is
+	regenerated and overwritten many times.
+	
 2008-03-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_dirlist.h: Removed configuration property list.
