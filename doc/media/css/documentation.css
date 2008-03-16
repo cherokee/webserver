@@ -36,3 +36,16 @@ table.docutils th, table.docutils td {
     font-size: 13px;
     padding: 4px 2px;
 }
+
+h1 {
+  text-align: center;
+  font-size: 35px;
+  color: #900;
+}
+
+.section h1 {
+  text-align: left;
+  font-size: 22px;
+  color: #c00;
+}
+

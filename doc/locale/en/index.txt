@@ -1,13 +1,11 @@
-
 ==========================
 Cherokee 0.6 Documentation
 ==========================
 
 Welcome to the 0.6 documentation.
 
-
 Compiling and Installing
-------------------------
+========================
 
 If you are not comfortable with rolling your own Cherokee, then check our 
 listings of pre-compiled binaries_.
@@ -17,7 +15,7 @@ Specific instructions for building your own copy are available at:
     - Windows_
 
 Configuration Interface
------------------------
+=======================
 
 Cherokee provides an administration interface named `Cherokee Admin`_
 that allows to configure the web server without having to worry about
@@ -29,7 +27,7 @@ editing a text file written with a certain syntax.
         :align: center
 
 General configuration
----------------------
+=====================
 
 There are a number a `general configuration`_ entries that specify the
 most significant configuration options such as the port - or ports -
@@ -37,7 +35,7 @@ that the server will listen to, the default timeout, whether to
 support keep-alive connections and so on.
 
 Virtual Servers
----------------
+===============
 
 If you want your web server to work with more than one `virtual
 server`_ you will have just to create them. Each more will have a
@@ -45,25 +43,24 @@ complete independent configuration: paths, behavior, logging
 facilities, etc.
 
 Encoders
---------
+========
 
 The encoders allow to transform whatever information the server 
 is sending as a response of a request, no matter what handler 
 is generating it. 
 
-    - gzip_ - **GZip compression**
+    - gzip_ - GZip compression
     
       Encodes the output with GZip
 
 Icons
------
+=====
 
 The icons_ configuration associates an icon image with one or more file 
 extensions. This information will be used mainly by the dirlist_ handler.
 
-
 Advanced topics
----------------
+===============
 
 The administration interface is highly recommended, and is in fact the
 only administration mechanism that should be used to configure
@@ -81,7 +78,7 @@ of modifying this file. Again: It is only supposed to be modified by
 advanced users.
 
 Other advanced topics
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
     - `Debugging`_ Cherokee
     - How to `cross compile Cherokee`_ (Win32 from Linux or OS X)
