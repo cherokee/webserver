@@ -240,8 +240,8 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	/* Is it a directory
 	 */
 	if (S_ISDIR(info->st_mode)) {
-		cherokee_thread_t        *thread      = CONN_THREAD(conn);
-		cherokee_list_t *i;
+		cherokee_thread_t *thread = CONN_THREAD(conn);
+		cherokee_list_t   *i;
 
 		cherokee_iocache_mmap_release (iocache, file);
 

@@ -1,3 +1,9 @@
+2008-03-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_dirlist.c (check_request_finish_with_slash): It
+	must use the web_directory when redirecting a directory request
+	not ending by slash.
+
 2008-03-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/Makefile.am (INCLUDES), constants.h.pre,
