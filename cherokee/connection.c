@@ -90,36 +90,37 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	   
 	INIT_LIST_HEAD(&n->list_entry);
 
-	n->error_code        = http_ok;
-	n->phase             = phase_reading_header;
-	n->phase_return      = phase_nothing;
-	n->auth_type         = http_auth_nothing;
-	n->req_auth_type     = http_auth_nothing;
-	n->upgrade           = http_upgrade_nothing;
-	n->options           = conn_op_log_at_end;
-	n->handler           = NULL; 
-	n->encoder           = NULL;
-	n->logger_ref        = NULL;
-	n->keepalive         = 0;
-	n->range_start       = 0;
-	n->range_end         = 0;
-	n->vserver           = NULL;
-	n->arguments         = NULL;
-	n->realm_ref         = NULL;
-	n->mmaped            = NULL;
-	n->mmaped_len        = 0;
-	n->io_entry_ref      = NULL;
-	n->thread            = NULL;
-	n->rx                = 0;	
-	n->tx                = 0;
-	n->rx_partial        = 0;
-	n->tx_partial        = 0;
-	n->traffic_next      = 0;
-	n->validator         = NULL;
-	n->req_matched_ref   = NULL;
-	n->timeout           = -1;
-	n->polling_fd        = -1;
-	n->polling_multiple  = false;
+	n->error_code         = http_ok;
+	n->phase              = phase_reading_header;
+	n->phase_return       = phase_nothing;
+	n->auth_type          = http_auth_nothing;
+	n->req_auth_type      = http_auth_nothing;
+	n->upgrade            = http_upgrade_nothing;
+	n->options            = conn_op_log_at_end;
+	n->handler            = NULL; 
+	n->encoder            = NULL;
+	n->logger_ref         = NULL;
+	n->keepalive          = 0;
+	n->range_start        = 0;
+	n->range_end          = 0;
+	n->vserver            = NULL;
+	n->arguments          = NULL;
+	n->realm_ref          = NULL;
+	n->mmaped             = NULL;
+	n->mmaped_len         = 0;
+	n->io_entry_ref       = NULL;
+	n->thread             = NULL;
+	n->rx                 = 0;	
+	n->tx                 = 0;
+	n->rx_partial         = 0;
+	n->tx_partial         = 0;
+	n->traffic_next       = 0;
+	n->validator          = NULL;
+	n->req_matched_ref    = NULL;
+	n->timeout            = -1;
+	n->polling_fd         = -1;
+	n->polling_multiple   = false;
+	n->uses_document_root = false;
 
 	cherokee_buffer_init (&n->buffer);
 	cherokee_buffer_init (&n->header_buffer);
@@ -214,27 +215,28 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		conn->io_entry_ref = NULL;	
 	}
 
-	conn->timeout           = -1;
-	conn->phase             = phase_reading_header;
-	conn->phase_return      = phase_nothing;
-	conn->auth_type         = http_auth_nothing;
-	conn->req_auth_type     = http_auth_nothing;
-	conn->upgrade           = http_upgrade_nothing;
-	conn->options           = conn_op_log_at_end;
-	conn->error_code        = http_ok;
-	conn->range_start       = 0;
-	conn->range_end         = 0;
-	conn->logger_ref        = NULL;
-	conn->realm_ref         = NULL;
-	conn->mmaped            = NULL;
-	conn->mmaped_len        = 0;
-	conn->rx                = 0;	
-	conn->tx                = 0;
-	conn->rx_partial        = 0;	
-	conn->tx_partial        = 0;
-	conn->traffic_next      = 0;
-	conn->req_matched_ref   = NULL;
-	conn->polling_multiple  = false;
+	conn->timeout            = -1;
+	conn->phase              = phase_reading_header;
+	conn->phase_return       = phase_nothing;
+	conn->auth_type          = http_auth_nothing;
+	conn->req_auth_type      = http_auth_nothing;
+	conn->upgrade            = http_upgrade_nothing;
+	conn->options            = conn_op_log_at_end;
+	conn->error_code         = http_ok;
+	conn->range_start        = 0;
+	conn->range_end          = 0;
+	conn->logger_ref         = NULL;
+	conn->realm_ref          = NULL;
+	conn->mmaped             = NULL;
+	conn->mmaped_len         = 0;
+	conn->rx                 = 0;	
+	conn->tx                 = 0;
+	conn->rx_partial         = 0;	
+	conn->tx_partial         = 0;
+	conn->traffic_next       = 0;
+	conn->req_matched_ref    = NULL;
+	conn->polling_multiple   = false;
+	conn->uses_document_root = false;
 
 	if (conn->handler != NULL) {
 		cherokee_handler_free (conn->handler);
@@ -1143,6 +1145,8 @@ cherokee_connection_build_local_directory (cherokee_connection_t *conn, cherokee
 	if (entry->document_root && 
 	    entry->document_root->len >= 1) 
 	{
+		conn->uses_document_root = true;
+
 		/* Have a special DocumentRoot
 		 */
 		ret = cherokee_buffer_add_buffer (&conn->local_directory, entry->document_root);
@@ -1185,6 +1189,8 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, 
 	if (entry->document_root &&
 	    entry->document_root->len >= 1) 
 	{
+		conn->uses_document_root = true;
+
 		cherokee_buffer_add_buffer (&conn->local_directory, entry->document_root);
 
 		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);

@@ -461,8 +461,11 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 
 		/* Build the redirection
 		 */
-		if (! cherokee_buffer_is_empty (&conn->web_directory))
+		if ((conn->uses_document_root) &&
+		    (! cherokee_buffer_is_empty (&conn->web_directory))) 
+		{
 			cherokee_buffer_add_buffer (&conn->redirect, &conn->web_directory);
+		}
 
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
 		cherokee_buffer_add_str (&conn->redirect, "/");

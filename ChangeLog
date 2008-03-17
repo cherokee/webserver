@@ -1,5 +1,13 @@
 2008-03-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_dirlist.c (check_request_finish_with_slash),
+	cherokee/connection.c, cherokee/connection-protected.h,
+	qa/155-DirRedirection2.py, qa/Makefile.am (EXTRA_DIST): Added a
+	new property to the connection class that indicates whether its
+	using a custom document_root. It was needed by the dirlist to
+	build the redirection URL in case the request do not end by /. A
+	new QA test has been also written to cover this case.
+
 	* TODO: Road Map updated
 
 	* qa/154-DirRedirection.py, qa/Makefile.am (EXTRA_DIST): Added new
