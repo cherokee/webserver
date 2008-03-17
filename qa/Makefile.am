@@ -157,7 +157,8 @@ run-tests.py \
 150-Common-No-PathInfo.py \
 151-SCGI-vars.py \
 152-SCGI-vars2.py \
-153-SCGI-vars-root.py
+153-SCGI-vars-root.py \
+154-DirRedirection.py
 
 test:
 	./run-tests.py

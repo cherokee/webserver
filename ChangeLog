@@ -1,5 +1,8 @@
 2008-03-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/154-DirRedirection.py, qa/Makefile.am (EXTRA_DIST): Added new
+	QA case to cover the previous patch.
+
 	* cherokee/handler_dirlist.c (check_request_finish_with_slash): It
 	must use the web_directory when redirecting a directory request
 	not ending by slash.
