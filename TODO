@@ -1,13 +1,25 @@
-0.6.0
-=====
-
-[ ] Re-license
-[ ] Web administration interface
-
+Cherokee Web Server road map 
+============================
 
 0.7.0
-=====
+-----
+[ ] Make cherokee-admin friendlier 
+[ ] New header 'entry'
 
+0.8.0
+-----
+[ ] Mime encodings separated from mime types
+[ ] Chuncked encoding
+
+0.9.0
+-----
+[ ] full signal handling
+[ ] flexible internal error reporting (to syslog?)
+[ ] HTTP/1.0 speed up (not high priority)
+[ ] HTTP/1.1 pipelining speed up (not high priority)
+
+Later
+-----
 [ ] X-Sendfile
 [ ] WSGI handler
 [ ] Upload progress module
@@ -22,3 +34,4 @@
 [ ] Dtrace hooks
 [ ] priv.h on Solaris
 [ ] Language support (handler?)
+[ ] splice() support

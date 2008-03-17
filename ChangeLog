@@ -1,5 +1,7 @@
 2008-03-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* TODO: Road Map updated
+
 	* qa/154-DirRedirection.py, qa/Makefile.am (EXTRA_DIST): Added new
 	QA case to cover the previous patch.
 
