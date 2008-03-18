@@ -1,3 +1,7 @@
+2008-03-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee.conf.sample.pre: The "ogg" extension was duplicated.
+
 2008-03-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_dirlist.c (check_request_finish_with_slash),
