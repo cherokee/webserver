@@ -1,5 +1,9 @@
 2008-03-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* Makefile.am (install-data-local): Ensure that the admin
+	directory exists before trying to copy the configuration file
+	example.
+
 	* admin/ModuleRedir.py, admin/PageEncoders.py,
 	admin/PageVServers.py, admin/ModuleBalancer.py,
 	admin/PageVServer.py, admin/static/images/bin.png,
