@@ -58,8 +58,8 @@ class ModuleBalancerGeneric (Module, FormHelper):
                     pre = '%s!%s' % (self._prefix, host)
                     e_host = self.InstanceEntry('%s!host'%(pre), 'text')
                     js = "post_del_key('/ajax/update', '%s');" % (pre)
-                    button = self.InstanceButton ('Del', onClick=js)
-                    t1 += (e_host, button)
+                    link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                    t1 += (e_host, link_del)
                 txt += str(t1)
 
             # New host
@@ -113,8 +113,8 @@ class ModuleBalancerGeneric (Module, FormHelper):
                 cfg_key_env = "%s!%s" % (cfg_key, env)
 
                 js = "post_del_key('/ajax/update', '%s');" % (cfg_key_env)
-                button = self.InstanceButton ('Del', onClick=js)
-                table += (env, '=', self._cfg[cfg_key_env].value, button)
+                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                table += (env, '=', self._cfg[cfg_key_env].value, link_del)
             txt += str(table)
 
         # Add new environment variable

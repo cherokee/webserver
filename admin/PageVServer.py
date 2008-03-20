@@ -16,8 +16,10 @@ DATA_VALIDATION = [
     ("vserver!.*?!logger!error!filename",    validations.parent_is_dir),
     ("vserver!.*?!logger!access!command",    validations.is_local_file_exists),
     ("vserver!.*?!logger!error!command",     validations.is_local_file_exists),
-    ("vserver!.*?!(directory|extensions|request)!.*?!priority", validations.is_positive_int),
-    ("vserver!.*?!user_dir!(directory|extensions|request)!.*?!priority", validations.is_positive_int),
+    ("vserver!.*?!(directory|extensions|request)!.*?!priority", 
+                                             validations.is_positive_int),
+    ("vserver!.*?!user_dir!(directory|extensions|request)!.*?!priority", 
+                                             validations.is_positive_int),
     ("add_new_priority",                     validations.is_positive_int),
     ("userdir_add_new_priority",             validations.is_positive_int)
 ]
@@ -230,11 +232,11 @@ class PageVServer (PageMenu, FormHelper):
 
                 if not (type == 'directory' and name == '/'):
                     js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
-                    button = self.InstanceButton ('Del', onClick=js)
+                    link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 else:
-                    button = ''
+                    link_del = ''
 
-                table += (link, type, e1, e2, button)
+                table += (link, type, e1, e2, link_del)
             txt += str(table)
         return txt
 

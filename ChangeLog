@@ -1,3 +1,19 @@
+2008-03-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/ModuleRedir.py, admin/PageEncoders.py,
+	admin/PageVServers.py, admin/ModuleBalancer.py,
+	admin/PageVServer.py, admin/static/images/bin.png,
+	admin/static/images/Makefile.am, admin/Form.py,
+	admin/ModuleErrorRedir.py, admin/PageIcon.py: "Del" buttons have
+	been replaced by little "bin" icons.
+
+	* cherokee/trunk/admin/PageEntry.py,
+	cherokee/trunk/admin/PageVServer.py,
+	cherokee/trunk/admin/VirtualServer.py,
+	cherokee/trunk/admin/validations.py: "Personal Web" support is now
+	complete. It allows to configure "public_html" home
+	directories. Internally speaking: "vserver!x!user_dir!".
+
 2008-03-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee.conf.sample.pre: The "ogg" extension was duplicated.

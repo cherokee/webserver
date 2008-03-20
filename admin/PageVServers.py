@@ -60,7 +60,7 @@ class PageVServers (PageMenu, FormHelper):
                 link = '<a href="/vserver/%s">%s</a>' % (vserver, vserver)
                 if vserver != "default":
                     js = "post_del_key('/ajax/update', 'vserver!%s');"%(vserver)
-                    link_del = self.InstanceButton ("Del", onClick=js)
+                    link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 else:
                     link_del = ''
                 table += (link, document_root, logging, link_del)

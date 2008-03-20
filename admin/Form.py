@@ -160,6 +160,12 @@ class FormHelper (WebComponent):
             extra += '%s="%s" '%(karg, kwargs[karg])
         return '<input type="button" value="%s" %s/>' % (name, extra)
 
+    def InstanceImage (self, name, alt, **kwargs):
+        extra = ""
+        for karg in kwargs:
+            extra += '%s="%s" '%(karg, kwargs[karg])
+        return '<img src="/static/images/%s" alt="%s" %s/>' % (name, alt, extra)
+
     def _get_auto_wrap_id (self):
         return "options_wrap_%d" % (FormHelper.options_wrap_num)
 

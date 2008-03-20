@@ -28,8 +28,8 @@ class ModuleErrorRedir (Module, FormHelper):
             table += ('Error Code', 'URL', '')
             for error in errors:
                 js = "post_del_key('/ajax/update', '%s!%s');" % (self._prefix, error)
-                button = self.InstanceButton ('Del', onClick=js)
-                table += (error, self._cfg.get_val('%s!%s'%(self._prefix,error)), button)
+                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                table += (error, self._cfg.get_val('%s!%s'%(self._prefix,error)), link_del)
             txt += str(table)
 
         # New error

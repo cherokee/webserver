@@ -87,8 +87,8 @@ class PageEncoders (PageMenu, FormHelper):
                 txt2 += "<h3>%s</h3>" % (encoder)
                 txt2 += mlist._op_render()
                 js = "post_del_key('/%s/update', '%s');" % (self._id, cfg_key)
-                button = self.InstanceButton ('Del', onClick=js)
-                txt2 += button
+                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                txt2 += link_del
                 encs_txt.append(txt2)
 
             txt += self.Indent("<hr />".join(encs_txt))

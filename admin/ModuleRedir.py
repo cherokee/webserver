@@ -39,8 +39,8 @@ class ModuleRedir (Module, FormHelper):
                 regex     = self._cfg.get_val('%s!regex'    %(cfg_key_rule))
                 substring = self._cfg.get_val('%s!substring'%(cfg_key_rule))
                 js = "post_del_key('/ajax/update', '%s');" % (cfg_key_rule)
-                button    = self.InstanceButton ('Del', onClick=js)
-                table += (show, regex, substring, button)
+                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                table += (show, regex, substring, link_del)
 
             txt += "<h3>Rule list</h3>"
             txt += self.Indent(table)

@@ -19,7 +19,8 @@ dialog-information.png \
 dialog-warning.png \
 dialog-error.png \
 collapsed.gif \
-expanded.gif 
+expanded.gif \
+bin.png
 
 EXTRA_DIST = \
 $(adminstatic_DATA)
