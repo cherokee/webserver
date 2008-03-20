@@ -27,7 +27,8 @@ def is_dir_formated (value):
     is_path (value)
 
     try:
-        while value[-1] in ['/', '\\']:
+        while len(value) > 1 and \
+              value[-1] in ['/', '\\']:
             value = value[:-1]
     except:
         is_not_empty('')

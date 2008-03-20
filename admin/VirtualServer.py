@@ -1,14 +1,19 @@
 class VServerEntries:
-    def __init__ (self, host, cfg):
+    def __init__ (self, host, cfg, user_dir=False):
         self._cfg   = cfg
         self._host  = host
         self._rules = []
-
-        # Build the internal rules list
-        dirs_cfg = self._cfg['vserver!%s!directory'  % (self._host)]
-        exts_cfg = self._cfg['vserver!%s!extensions' % (self._host)]
-        reqs_cfg = self._cfg['vserver!%s!request'    % (self._host)]
         
+        # Build the internal rules list
+        if not user_dir:
+            dirs_cfg = self._cfg['vserver!%s!directory'  % (self._host)]
+            exts_cfg = self._cfg['vserver!%s!extensions' % (self._host)]
+            reqs_cfg = self._cfg['vserver!%s!request'    % (self._host)]
+        else:
+            dirs_cfg = self._cfg['vserver!%s!user_dir!directory'  % (self._host)]
+            exts_cfg = self._cfg['vserver!%s!user_dir!extensions' % (self._host)]
+            reqs_cfg = self._cfg['vserver!%s!user_dir!request'    % (self._host)]
+
         if dirs_cfg:
             for d_name in dirs_cfg:
                 prio = dirs_cfg[d_name]['priority'].value
@@ -39,3 +44,6 @@ class VServerEntries:
         for e in self._rules:
             if e[2] == prio:
                 return e
+
+    def __len__ (self):
+        return len(self._rules)

@@ -17,7 +17,9 @@ DATA_VALIDATION = [
     ("vserver!.*?!logger!access!command",    validations.is_local_file_exists),
     ("vserver!.*?!logger!error!command",     validations.is_local_file_exists),
     ("vserver!.*?!(directory|extensions|request)!.*?!priority", validations.is_positive_int),
-    ("add_new_priority",                     validations.is_positive_int)
+    ("vserver!.*?!user_dir!(directory|extensions|request)!.*?!priority", validations.is_positive_int),
+    ("add_new_priority",                     validations.is_positive_int),
+    ("userdir_add_new_priority",             validations.is_positive_int)
 ]
 
 LOGGER_ACCESS_NOTE = """
@@ -32,7 +34,9 @@ class PageVServer (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'vserver', cfg)
         FormHelper.__init__ (self, 'vserver', cfg)
-        self._priorities = None
+
+        self._priorities         = None
+        self._priorities_userdir = None
 
     def _op_handler (self, uri, post):
         assert (len(uri) > 1)
@@ -54,7 +58,20 @@ class PageVServer (PageMenu, FormHelper):
             if post.get_val('add_new_entry') and \
                post.get_val('add_new_priority'):
                 # It's adding a new entry
-                self._op_add_new_entry (host, post)
+                re = self._op_add_new_entry (post       = post,
+                                             cfg_prefix = 'vserver!%s' %(host),
+                                             url_prefix = '/vserver/%s'%(host))
+                if not self.has_errors() and re:
+                    return re
+            elif post.get_val('userdir_add_new_entry') and \
+                 post.get_val('userdir_add_new_priority'):
+                # It's adding a new user entry 
+                re = self._op_add_new_entry (post       = post,
+                                             cfg_prefix = 'vserver!%s!user_dir'%(host),
+                                             url_prefix = '/vserver/%s/userdir'%(host),
+                                             key_prefix = 'userdir_')
+                if not self.has_errors() and re:
+                    return re
             else:
                 # It's updating properties
                 self._op_apply_changes (host, uri, post)
@@ -63,40 +80,47 @@ class PageVServer (PageMenu, FormHelper):
             self._op_apply_changes (host, uri, post)
             return 'ok'
 
-        self._priorities = VServerEntries (host, self._cfg)
-        return self._op_render_vserver_details (host, uri[len(host)+1:])
+        self._priorities         = VServerEntries (host, self._cfg)
+        self._priorities_userdir = VServerEntries (host, self._cfg, user_dir=True)
 
-    def _op_add_new_entry (self, host, post):
+        return self._op_render_vserver_details (host)
+
+    def _op_add_new_entry (self, post, cfg_prefix, url_prefix, key_prefix=''):
+        key_add_new_type     = key_prefix + 'add_new_type'
+        key_add_new_entry    = key_prefix + 'add_new_entry'
+        key_add_new_handler  = key_prefix + 'add_new_handler'
+        key_add_new_priority = key_prefix + 'add_new_priority'
+
         # The 'add_new_entry' checking function depends on 
         # the whether 'add_new_type' is a directory, an extension
         # or a regular extension
         validation = DATA_VALIDATION[:]
 
-        type_ = post.get_val('add_new_type')
+        type_ = post.get_val(key_add_new_type)
         if type_ == 'directory':
-            validation += [('add_new_entry', validations.is_dir_formated)]
+            validation += [(key_add_new_entry, validations.is_dir_formated)]
         elif type_ == 'extensions':
-            validation += [('add_new_entry', validations.is_safe_id_list)]
+            validation += [(key_add_new_entry, validations.is_safe_id_list)]
         elif type_ == 'request':
-            validation += [('add_new_entry', validations.is_regex)]
+            validation += [(key_add_new_entry, validations.is_regex)]
 
         # Apply changes
         self._ValidateChanges (post, validation)
         if self.has_errors():
             return
 
-        entry    = post.pop('add_new_entry')
-        type_    = post.pop('add_new_type')
-        handler  = post.pop('add_new_handler')
-        priority = post.pop('add_new_priority')
+        entry    = post.pop(key_add_new_entry)
+        type_    = post.pop(key_add_new_type)
+        handler  = post.pop(key_add_new_handler)
+        priority = post.pop(key_add_new_priority)
 
-        pre = "vserver!%s!%s!%s" % (host, type_, entry)
+        pre = "%s!%s!%s" % (cfg_prefix, type_, entry)
         self._cfg["%s!handler"%(pre)]  = handler
         self._cfg["%s!priority"%(pre)] = priority
 
-        return "/%s/%s/prio/%s" % (self._id, host, priority)
+        return "%s/prio/%s" % (url_prefix, priority)
 
-    def _op_render_vserver_details (self, host, uri):
+    def _op_render_vserver_details (self, host):
         content = self._render_vserver_guts (host)
 
         self.AddMacroContent ('title', 'Virtual Server: %s' %(host))
@@ -122,9 +146,21 @@ class PageVServer (PageMenu, FormHelper):
         tabs += [('Domain names', tmp)]
         
         # Behaviour
-        tmp  = self._render_rules (host, cfg['directory'], cfg['extensions'], cfg['request'])
+        tmp = self._render_rules_generic (cfg_key    = 'vserver!%s' %(host), 
+                                          url_prefix = '/vserver/%s'%(host),
+                                          priorities = self._priorities)
         tmp += self._render_add_rule(host)
         tabs += [('Behaviour', tmp)]
+
+        # Personal Webs
+        tmp  = self._render_personal_webs (host)
+        if self._cfg.get_val('vserver!%s!user_dir'%(host)):
+            tmp += "<p><hr /></p>"
+            tmp += self._render_rules_generic (cfg_key    = 'vserver!%s!user_dir'%(host), 
+                                               url_prefix = '/vserver/%s/userdir'%(host),
+                                               priorities = self._priorities_userdir)
+            tmp += self._render_add_rule (host, prefix="userdir_")
+        tabs += [('Personal Webs', tmp)]
 
         # Error handlers
         tmp = self._render_error_handler(host)
@@ -158,13 +194,13 @@ class PageVServer (PageMenu, FormHelper):
 
         return txt
 
-    def _render_add_rule (self, host):
+    def _render_add_rule (self, host, prefix=''):
         # Add new rule
         txt      = ''
-        entry    = self.InstanceEntry ('add_new_entry', 'text')
-        type     = EntryOptions ('add_new_type',      ENTRY_TYPES, selected='directory')
-        handler  = EntryOptions ('add_new_handler',   HANDLERS,    selected='common')
-        priority = self.InstanceEntry ('add_new_priority', 'text')
+        entry    = self.InstanceEntry (prefix+'add_new_entry', 'text')
+        type     = EntryOptions (prefix+'add_new_type',    ENTRY_TYPES, selected='directory')
+        handler  = EntryOptions (prefix+'add_new_handler', HANDLERS,    selected='common')
+        priority = self.InstanceEntry (prefix+'add_new_priority', 'text')
         
         table  = Table(4,1)
         table += ('Entry', 'Type', 'Handler', 'Priority')
@@ -174,28 +210,48 @@ class PageVServer (PageMenu, FormHelper):
         txt += str(table)
         return txt
 
-    def _render_rules (self, host, dirs_cfg, exts_cfg, reqs_cfg):
-        txt    = ''
-        table  = Table(5,1)
-        table += ('', 'Type', 'Handler', 'Priority', '')
+    def _render_rules_generic (self, cfg_key, url_prefix, priorities):
+        txt = ''
+
+        if len(priorities):
+            txt += '<h3>Rule list</h3>'
+
+            table  = Table(5,1,style='width="100%%"')
+            table += ('', 'Type', 'Handler', 'Priority', '')
         
-        # Rule list
-        for rule in self._priorities:
-            type, name, prio, conf = rule
+            # Rule list
+            for rule in priorities:
+                type, name, prio, conf = rule
 
-            pre  = 'vserver!%s!%s!%s' % (host, type, name)
-            link = '<a href="/vserver/%s/prio/%s">%s</a>' % (host, prio, name)
-            e1   = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
-            e2   = self.InstanceEntry ('%s!priority' % (pre), 'text', value=prio)
+                pre  = '%s!%s!%s' % (cfg_key, type, name)
+                link = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
+                e1   = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
+                e2   = self.InstanceEntry ('%s!priority' % (pre), 'text', value=prio)
 
-            if not (type == 'directory' and name == '/'):
-                js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
-                button = self.InstanceButton ('Del', onClick=js)
-            else:
-                button = ''
+                if not (type == 'directory' and name == '/'):
+                    js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
+                    button = self.InstanceButton ('Del', onClick=js)
+                else:
+                    button = ''
 
-            table += (link, type, e1, e2, button)
+                table += (link, type, e1, e2, button)
+            txt += str(table)
+        return txt
+
+    def _render_personal_webs (self, host):
+        txt = ''
+
+        table = Table(3)
+        cfg_key = 'vserver!%s!user_dir'%(host)
+        en = self.InstanceEntry (cfg_key, 'text')
+        if self._cfg.get_val(cfg_key):
+            js = "post_del_key('%s','%s');" % (self.submit_ajax_url, cfg_key)
+            bu = self.InstanceButton ("Disable", onClick=js)
+        else: 
+            bu = ''
+        table += ('Directory name', en, bu)
         txt += str(table)
+
         return txt
 
     def _render_logger (self, host):

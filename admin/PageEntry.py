@@ -18,6 +18,7 @@ class PageEntry (PageMenu, FormHelper):
         PageMenu.__init__ (self, 'entry', cfg)
         FormHelper.__init__ (self, 'entry', cfg)
         self._priorities = None
+        self._is_userdir = False
 
     def _op_render (self):
         raise "no"
@@ -28,14 +29,22 @@ class PageEntry (PageMenu, FormHelper):
         
         # Parse the URL
         temp = uri.split('/')
+        self._is_userdir = (temp[2] == 'userdir')
 
-        self._host        = temp[1]
-        self._prio        = temp[3]        
-        self._priorities  = VServerEntries (self._host, self._cfg)
-        self._entry       = self._priorities[self._prio]        
+        if not self._is_userdir:
+            self._host        = temp[1]
+            self._prio        = temp[3]        
+            self._priorities  = VServerEntries (self._host, self._cfg)
+            self._entry       = self._priorities[self._prio]
+            url = '/vserver/%s/prio/%s' % (self._host, self._prio)
+        else:
+            self._host        = temp[1]
+            self._prio        = temp[4]        
+            self._priorities  = VServerEntries (self._host, self._cfg, user_dir=True)
+            self._entry       = self._priorities[self._prio]
+            url = '/vserver/%s/userdir/prio/%s' % (self._host, self._prio)
 
         # Set the submit URL
-        url = '/vserver/%s/prio/%s' % (self._host, self._prio)
         self.set_submit_url (url)
 
     def _op_handler (self, uri, post):
@@ -46,7 +55,10 @@ class PageEntry (PageMenu, FormHelper):
         if not self._entry:
             return "/vserver/%s" % (self._host)
 
-        self._conf_prefix = 'vserver!%s!%s!%s' % (self._host, self._entry[0], self._entry[1])
+        if not self._is_userdir:
+            self._conf_prefix = 'vserver!%s!%s!%s' % (self._host, self._entry[0], self._entry[1])
+        else:
+            self._conf_prefix = 'vserver!%s!user_dir!%s!%s' % (self._host, self._entry[0], self._entry[1])
 
         # Check what to do..
         if post.get_val('is_submit'):
