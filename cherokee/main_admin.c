@@ -77,7 +77,7 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer = round_robin\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer!type = interpreter\n");
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!handler!balancer!local1!host = localhost:4000\n");
-	cherokee_buffer_add_va  (&buf, "vserver!default!directory!/!handler!balancer!local1!interpreter = python %s/server.py %s\n", document_root, config_file);
+	cherokee_buffer_add_va  (&buf, "vserver!default!directory!/!handler!balancer!local1!interpreter = %s/server.py %s\n", document_root, config_file);
 	cherokee_buffer_add_str (&buf, "vserver!default!directory!/!priority = 1000\n");
 
 	ret = cherokee_server_read_config_string (srv, &buf);

@@ -1,5 +1,9 @@
 2008-03-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/server.py, cherokee/main_admin.c (config_server):
+	cherokee-admin calls server.py directly (without calling
+	python). server.py is now executable.
+
 	* configure.in: Check for socklen_t has been reworked.
 
 	* configure.in: Removed a few bashisms.
