@@ -100,9 +100,4 @@ $(GENERATED_FILES)
 
 .NOTPARALLEL: $(GENERATED_FILES)
 $(GENERATED_FILES):
-	@[ -f .building ] || {        \
-		echo "Building doc..";   \
-		touch .building;         \
-		python build_docs.py -v; \
-		rm -f .building;         \
-	}
+	python build_docs.py -v

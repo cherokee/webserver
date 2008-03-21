@@ -1,5 +1,8 @@
 2008-03-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* doc/Makefile.am: Removed unnecessary checks. Not concurrency is
+	already provided by make, there is no longer need for the hack.
+
 	* doc/locale/en/index.txt: Updated to point to the internal
 	configuration page. There was no link to it.
 
