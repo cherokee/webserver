@@ -1,5 +1,9 @@
 2008-03-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/Makefile.am (cherokee_tweak_LDADD), configure.in: It
+	had to include the pthread library (by adding the -pthread ld
+	parameter). This made the compilation on FreeBSD to fail.
+
 	* admin/server.py, cherokee/main_admin.c (config_server):
 	cherokee-admin calls server.py directly (without calling
 	python). server.py is now executable.

@@ -2,7 +2,7 @@ dnl -*- mode: m4-mode -*-
 dnl Process this file with autoconf to produce a configure script.
 
 AC_COPYRIGHT([
-Copyright (C) 2001-2007 Alvaro Lopez Ortega
+Copyright (C) 2001-2008 Alvaro Lopez Ortega
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of version 2 of the GNU General Public
@@ -448,7 +448,7 @@ then
     	   i386-unknown-freebsd*)
            if test "$GCC" = "yes" ; then
               if test -z "$PRESET_LDFLAGS"; then
-                PTHREAD_LDFLAGS="-pthread"
+                PTHREAD_LIBS="-pthread"
 			 have_pthread="yes"
               fi
            fi

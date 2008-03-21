@@ -1008,7 +1008,13 @@ cherokee_admin_LDFLAGS = $(cherokee_LDFLAGS)
 bin_PROGRAMS = cherokee_tweak
 
 cherokee_tweak_SOURCES = main_tweak.c
-cherokee_tweak_LDADD = libcherokee-base.la libcherokee-client.la libcherokee-server.la libcherokee-config.la
+cherokee_tweak_LDADD = \
+$(PTHREAD_LIBS) \
+$(PTHREAD_CFLAGS) \
+libcherokee-base.la \
+libcherokee-client.la \
+libcherokee-server.la \
+libcherokee-config.la
 
 
 
