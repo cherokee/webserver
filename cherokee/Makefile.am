@@ -513,7 +513,7 @@ endif
 #
 # Validator htpasswd
 #
-if HAVE_CRYPT
+if USE_CRYPT
 validator_htpasswd = \
 validator_htpasswd.c \
 validator_htpasswd.h

@@ -852,7 +852,6 @@ AM_CONDITIONAL(USE_INTERNAL_PCRE, test $have_pcre = "built-in")
 dnl
 dnl PAM
 dnl
-have_pam="disabled"
 AC_ARG_ENABLE(pam, AC_HELP_STRING([--disable-pam],[Disable PAM support]), use_pam="$enableval", use_pam="yes")
 if test "x$use_pam" = "xyes"; then
      AC_CHECK_LIB(pam, pam_start, have_pam_lib=yes, have_pam_lib=no)
@@ -861,7 +860,9 @@ if test "x$use_pam" = "xyes"; then
      AC_CHECK_HEADERS(security/_pam_macros.h security/pam_appl.h)
 fi
 
-if test "$have_pam $have_pam_lib $have_pam_include" != "yes yes yes"; then
+if test "$use_pam $have_pam_lib $have_pam_include" = "yes yes yes"; then
+   have_pam="yes"
+else
    have_pam="no"
 fi
 AM_CONDITIONAL(HAVE_PAM, test "x$have_pam" = "xyes")
@@ -887,8 +888,6 @@ if test "$system_crypt $have_crypt_lib" != "no no"; then
    use_crypt="yes"
    AC_DEFINE(HAVE_CRYPT, 1, [Have crypt function])
 fi
-AM_CONDITIONAL(HAVE_CRYPT, test "$use_crypt" = "yes")
-
 
 dnl
 dnl crypt_r()
@@ -901,7 +900,6 @@ if test "$system_crypt_r $have_crypt_r_lib" != "no no"; then
    use_crypt_r="yes"
    AC_DEFINE(HAVE_CRYPT_R, 1, [Have crypt_r function])
 fi
-
 
 dnl
 dnl crypt_r and pthread 
@@ -925,6 +923,8 @@ if test "$use_crypt_r" = "yes"; then
 
 	CFLAGS="$oldcflags"
 fi
+
+AM_CONDITIONAL(USE_CRYPT, test "x$use_crypt x$use_crypt_r" != "xno xno")
 
 
 dnl
