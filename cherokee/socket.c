@@ -417,7 +417,7 @@ initialize_tls_session (cherokee_socket_t *socket, cherokee_virtual_server_t *vs
 
 	/* Set the SSL context cache
 	 */
-	re = SSL_CTX_set_session_id_context (vserver->context, "SSL", 3);
+	re = SSL_CTX_set_session_id_context (vserver->context, (const unsigned char *)"SSL", 3);
 	if (re != 1) {
 		PRINT_ERROR_S("ERROR: OpenSSL: Unable to set SSL session-id context\n");
 	}
@@ -848,7 +848,9 @@ cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 	memcpy (SOCKET_SUN_PATH(sock), listen_to->buf, listen_to->len + 1);
 	sock->client_addr_len = sizeof(SOCKET_ADDR_UNIX(sock)->sun_family) + listen_to->len;
 
-	re = bind (SOCKET_FD(sock), SOCKET_ADDR_UNIX(sock), sock->client_addr_len);
+	re = bind (SOCKET_FD(sock), 
+		   (const struct sockaddr *)SOCKET_ADDR_UNIX(sock), 
+		   sock->client_addr_len);
 	if (re != 0) return ret_error;
 
 	return ret_ok;
@@ -1023,7 +1025,7 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
 		}
 
 		PRINT_ERROR ("ERROR: SSL_write (%d, ..) -> err=%d '%s'\n", 
-			SOCKET_FD(socket), len, ERR_error_string(re, NULL));
+			     SOCKET_FD(socket), (int)len, ERR_error_string(re, NULL));
 		return ret_error;
 	}
 #else
@@ -1163,7 +1165,7 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 		}
 
 		PRINT_ERROR ("ERROR: OpenSSL: SSL_read (%d, ..) -> err=%d '%s'\n", 
-			SOCKET_FD(socket), len, ERR_error_string(re, NULL));
+			     SOCKET_FD(socket), (int)len, ERR_error_string(re, NULL));
 		return ret_error;
 	}
 #else

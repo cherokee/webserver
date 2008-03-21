@@ -175,11 +175,13 @@ cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherokee_con
 			&writer->buffer,
 			writer->max_bufsize + LOGGER_OVF_BUFSIZE);
 		if (ret != ret_ok) {
-			PRINT_ERROR ("Allocation logger->max_bufsize %u failed !\n", writer->max_bufsize);
+			PRINT_ERROR ("Allocation logger->max_bufsize " FMT_SIZE " failed !\n", 
+				     (CST_SIZE) writer->max_bufsize);
 			/* Set log to "unbuffered".
 			 */
 			writer->max_bufsize = 0;
-			PRINT_MSG ("Set logger->writer->max_bufsize %u\n", writer->max_bufsize);
+			PRINT_MSG ("Set logger->writer->max_bufsize " FMT_SIZE "\n", 
+				   (CST_SIZE) writer->max_bufsize);
 			cherokee_buffer_ensure_size (
 				&writer->buffer,
 				writer->max_bufsize + LOGGER_OVF_BUFSIZE);

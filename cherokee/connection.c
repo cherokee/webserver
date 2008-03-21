@@ -721,10 +721,10 @@ cherokee_connection_reading_check (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_set_cork (cherokee_connection_t *conn, cherokee_boolean_t enable)
 {
-	int on = 0;
-	int fd;
-
 #ifdef HAVE_TCP_CORK
+	int fd;
+	int on = 0;
+
 	fd = SOCKET_FD(&conn->socket);
 	if (enable) {
 		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,  &on, sizeof on);

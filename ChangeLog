@@ -1,3 +1,10 @@
+2008-03-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/exts_table.c, cherokee/validator_htpasswd.c,
+	cherokee/logger_writer.c, cherokee/mime.c, cherokee/connection.c,
+	cherokee/dirs_table.c, cherokee/socket.c: This patches fixes a few
+	harmless compilation warnings.
+
 2008-03-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* Makefile.am (install-data-local): Ensure that the admin

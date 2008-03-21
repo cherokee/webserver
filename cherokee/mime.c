@@ -24,6 +24,8 @@
 
 #include "common-internal.h"
 
+#include <ctype.h>
+
 #include "mime.h"
 #include "mime-protected.h"
 #include "util.h"

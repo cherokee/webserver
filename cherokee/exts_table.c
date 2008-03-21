@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "exts_table.h"
+#include "util.h"
 
 #define ENTRIES "exts"
 
@@ -89,7 +90,7 @@ cherokee_exts_table_add  (cherokee_exts_table_t *et, char *ext, cherokee_config_
 	/* Add to the table. It is ok if many entries point to the same
 	 * plugin entry object.
 	 */
-	TRACE ("ADD: et %p avl %p ext %s\n", et, &et->avl, ext);
+	TRACE (ENTRIES, "ADD: et %p avl %p ext %s\n", et, &et->avl, ext);
 
 	return cherokee_avl_add_ptr (&et->avl, ext, plugin_entry);
 }

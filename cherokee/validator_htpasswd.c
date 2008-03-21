@@ -117,7 +117,7 @@ cherokee_validator_htpasswd_free (cherokee_validator_htpasswd_t *htpasswd)
 static pthread_mutex_t __global_crypt_r_emu_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 static ret_t
-crypt_r_emu (const char *key, const char *salt, char *compared)
+crypt_r_emu (const char *key, const char *salt, const char *compared)
 {
 	ret_t  ret;
 	char  *tmp;
@@ -136,15 +136,17 @@ crypt_r_emu (const char *key, const char *salt, char *compared)
 ret_t
 check_crypt (char *passwd, char *salt, const char *compared)
 {
-	ret_t  ret;
-	char  *tmp;
+	ret_t ret;
 
 #ifndef HAVE_PTHREAD
+	char *tmp;
+
 	tmp = crypt (passwd, salt);
 	ret = (strcmp (tmp, compared) == 0) ? ret_ok : ret_deny;
 #else
 # ifdef HAVE_CRYPT_R
-	struct crypt_data data;
+	char              *tmp;
+	struct crypt_data  data;
 
 	memset (&data, 0, sizeof(data));
 	tmp = crypt_r (passwd, salt, &data);
