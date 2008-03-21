@@ -62,20 +62,13 @@ extensions. This information will be used mainly by the dirlist_ handler.
 Advanced topics
 ===============
 
-The administration interface is highly recommended, and is in fact the
-only administration mechanism that should be used to configure
-Cherokee. However, there is another way in which Cherokee developers
-and very advance users can modify the configuration.
+There is an `advanced section`_ that allows to configure the most
+complex parameters of the server and how it works with the operating
+system.
 
-The default location for Cherokee configuration files is
-``/etc/cherokee``, but this may vary based on distribution or
-installation parameters. It is a specially formatted text file that can
-be modified by hand if you are completely sure about what you are
-doing. We recommend you not to do so.
-
-There are some `advanced options`_ which might help you in the process
-of modifying this file. Again: It is only supposed to be modified by
-advanced users.
+If you are unsure about any of the options presented within the
+advanced section, we recommend you to not change it and use the
+default value.
 
 Other advanced topics
 ---------------------
@@ -84,6 +77,21 @@ Other advanced topics
     - How to `cross compile Cherokee`_ (Win32 from Linux or OS X)
     - How to `generate SSL keys`_
 
+Internal configuration system
+-----------------------------
+
+The administration interface is highly recommended, and is in fact the
+only administration mechanism that should be used to configure
+Cherokee. However, there is another way in which Cherokee developers
+and very advance users can modify the configuration.
+
+The `internal configuration system`_ text file format is documented so
+if you are completely sure about what you are doing, you can modify it
+by hand. We recommend you not to do so.
+
+The default location for Cherokee configuration files is
+``/etc/cherokee``, but this may vary based on distribution or
+installation parameters. 
 
 
 .. _Unix: compiling_and_installing_unix.html
@@ -94,7 +102,7 @@ Other advanced topics
 
 .. _Cherokee Admin: admin.html
 .. _internal configuration system: internal_configuration.html
-.. _advanced options: advanced.html
+.. _advanced section: advanced.html
 .. _virtual servers: vserver.html
 .. _virtual server: vserver.html
 .. _download: download.html

@@ -1,5 +1,8 @@
 2008-03-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* doc/locale/en/index.txt: Updated to point to the internal
+	configuration page. There was no link to it.
+
 	* cherokee/exts_table.c, cherokee/validator_htpasswd.c,
 	cherokee/logger_writer.c, cherokee/mime.c, cherokee/connection.c,
 	cherokee/dirs_table.c, cherokee/socket.c: This patches fixes a few
