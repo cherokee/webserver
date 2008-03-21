@@ -34,7 +34,7 @@ class Test (TestBase):
     def Prepare (self, www):
         self.Mkdir (www, "cgienvs")
         self.WriteFile (www, "cgienvs/cgi.cgi", 0555,
-                        """#!/bin/bash
+                        """#!/bin/sh
 
                         echo "Content-Type: text/plain"
                         echo

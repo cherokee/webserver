@@ -1,5 +1,8 @@
 2008-03-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/069-PathInfo3.py, qa/088-CGI-envs.py: /bin/bash has been
+	replaced with /bin/sh.
+
 	* cherokee/Makefile.am (cherokee_tweak_LDADD), configure.in: It
 	had to include the pthread library (by adding the -pthread ld
 	parameter). This made the compilation on FreeBSD to fail.
