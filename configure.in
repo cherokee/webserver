@@ -792,9 +792,25 @@ if test x"$ac_cv_so_rcvtimeo_broken" = x"yes"; then
   AC_DEFINE(HAVE_BROKEN_SO_RCVTIMEO, 1, [Define if setsockopt(SO_RCVTIMEO) is broken])
 fi
 
-AC_CHECK_TYPE(socklen_t, int, ,[[
-#include <netinet/in.h>
-]])
+
+dnl
+dnl Look for socklen_t
+dnl
+AC_MSG_CHECKING([for socklen_t])
+AC_TRY_COMPILE(
+ [#include <sys/types.h>
+  #include <sys/socket.h>],
+ [socklen_t len = 42; return 0;],
+ ac_cv_type_socklen_t=yes,
+ ac_cv_type_socklen_t=no
+)
+
+if test $ac_cv_type_socklen_t != yes; then
+  AC_DEFINE(socklen_t, int, [Substitute for socklen_t])
+  AC_MSG_RESULT(int)
+else
+  AC_MSG_RESULT(yes)
+fi
 
 dnl
 dnl Check of __func__ and co..

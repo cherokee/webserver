@@ -1,5 +1,7 @@
 2008-03-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* configure.in: Check for socklen_t has been reworked.
+
 	* configure.in: Removed a few bashisms.
 
 	* doc/Makefile.am: Removed unnecessary checks. Not concurrency is
