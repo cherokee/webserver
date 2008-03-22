@@ -1223,6 +1223,8 @@ m4/Makefile
 qa/Makefile
 doc/Makefile
 themes/Makefile 
+themes/default/Makefile 
+themes/firefox3/Makefile 
 windows/Makefile
 windows/cherokee.nsi
 www/Makefile 

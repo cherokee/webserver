@@ -1,3 +1,8 @@
+2008-03-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in, themes/Makefile.am, themes/default/*,
+	themes/firefox3/*: Themes have been split in directories.
+
 2008-03-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* configure.in, cherokee/Makefile.am: crypt() and PAM detection
