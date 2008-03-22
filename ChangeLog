@@ -1,5 +1,9 @@
 2008-03-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServer.py (PageVServer._op_add_new_entry): It does
+	not require to enter a priority by hand any longer. Now it looks
+	for the highest on the list and put the new entry right after it.
+
 	* admin/PageVServer.py (PageVServer._render_rules_generic): The
 	generic rule list has been rewritten. It does no longer use the
 	Jquery sortable module.

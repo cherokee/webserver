@@ -19,9 +19,7 @@ DATA_VALIDATION = [
     ("vserver!.*?!(directory|extensions|request)!.*?!priority", 
                                              validations.is_positive_int),
     ("vserver!.*?!user_dir!(directory|extensions|request)!.*?!priority", 
-                                             validations.is_positive_int),
-    ("add_new_priority",                     validations.is_positive_int),
-    ("userdir_add_new_priority",             validations.is_positive_int)
+                                             validations.is_positive_int)
 ]
 
 LOGGER_ACCESS_NOTE = """
@@ -58,16 +56,14 @@ class PageVServer (PageMenu, FormHelper):
         default_render = False 
 
         if post.get_val('is_submit'):
-            if post.get_val('add_new_entry') and \
-               post.get_val('add_new_priority'):
+            if post.get_val('add_new_entry'):
                 # It's adding a new entry
                 re = self._op_add_new_entry (post       = post,
                                              cfg_prefix = 'vserver!%s' %(host),
                                              url_prefix = '/vserver/%s'%(host))
                 if not self.has_errors() and re:
                     return re
-            elif post.get_val('userdir_add_new_entry') and \
-                 post.get_val('userdir_add_new_priority'):
+            elif post.get_val('userdir_add_new_entry'):
                 # It's adding a new user entry 
                 re = self._op_add_new_entry (post       = post,
                                              cfg_prefix = 'vserver!%s!user_dir'%(host),
@@ -92,7 +88,6 @@ class PageVServer (PageMenu, FormHelper):
         key_add_new_type     = key_prefix + 'add_new_type'
         key_add_new_entry    = key_prefix + 'add_new_entry'
         key_add_new_handler  = key_prefix + 'add_new_handler'
-        key_add_new_priority = key_prefix + 'add_new_priority'
 
         # The 'add_new_entry' checking function depends on 
         # the whether 'add_new_type' is a directory, an extension
@@ -115,7 +110,17 @@ class PageVServer (PageMenu, FormHelper):
         entry    = post.pop(key_add_new_entry)
         type_    = post.pop(key_add_new_type)
         handler  = post.pop(key_add_new_handler)
-        priority = post.pop(key_add_new_priority)
+
+        # Look for the highest priority on the list
+        prio_max = 1
+        for c in self._cfg[cfg_prefix]:
+            for d in self._cfg["%s!%s"%(cfg_prefix,c)]:
+                pre = "%s!%s!%s!priority"%(cfg_prefix,c,d)
+                tmp = self._cfg.get_val(pre)
+                if tmp:
+                    if int(tmp) > prio_max:
+                        prio_max = int(tmp)
+        priority = str(prio_max + 100)
 
         pre = "%s!%s!%s" % (cfg_prefix, type_, entry)
         self._cfg["%s!handler"%(pre)]  = handler
@@ -203,11 +208,10 @@ class PageVServer (PageMenu, FormHelper):
         entry    = self.InstanceEntry (prefix+'add_new_entry', 'text')
         type     = EntryOptions (prefix+'add_new_type',    ENTRY_TYPES, selected='directory')
         handler  = EntryOptions (prefix+'add_new_handler', HANDLERS,    selected='common')
-        priority = self.InstanceEntry (prefix+'add_new_priority', 'text')
         
         table  = Table(4,1)
-        table += ('Entry', 'Type', 'Handler', 'Priority')
-        table += (entry, type, handler, priority)
+        table += ('Entry', 'Type', 'Handler')
+        table += (entry, type, handler)
 
         txt += "<h3>Add new rule</h3>"
         txt += str(table)
