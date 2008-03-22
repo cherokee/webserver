@@ -1,5 +1,12 @@
 2008-03-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/default.template.html, admin/PageVServer.py,
+	admin/static/js/ui.mouse.js, admin/static/js/jquery.dimensions.js,
+	admin/static/js/ui.sortable.js: Added a new fancy rule list. This
+	version does not require to write the priority of the rules by
+	hand; instead the rules are arranged by dragging and dropping
+	them.
+
 	* cherokee/buffer.c (cherokee_buffer_add_va_list): Error recovery
 	improved. In the case cherokee_estimate_va_length() misses the
 	right length it tries again with the length previously returned by

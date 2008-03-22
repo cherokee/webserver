@@ -39,7 +39,8 @@ class PageVServer (PageMenu, FormHelper):
 
         self._priorities         = None
         self._priorities_userdir = None
-
+        self._rule_table         = 1
+        
     def _op_handler (self, uri, post):
         assert (len(uri) > 1)
 
@@ -216,11 +217,10 @@ class PageVServer (PageMenu, FormHelper):
         txt = ''
 
         if len(priorities):
+            table_name = "rules%d" % (self._rule_table)
             txt += '<h3>Rule list</h3>'
+            txt += '<ul id="%s">' % (table_name)
 
-            table  = Table(5,1,style='width="100%%"')
-            table += ('', 'Type', 'Handler', 'Priority', '')
-        
             # Rule list
             for rule in priorities:
                 type, name, prio, conf = rule
@@ -228,16 +228,54 @@ class PageVServer (PageMenu, FormHelper):
                 pre  = '%s!%s!%s' % (cfg_key, type, name)
                 link = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
                 e1   = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
-                e2   = self.InstanceEntry ('%s!priority' % (pre), 'text', value=prio)
 
                 if not (type == 'directory' and name == '/'):
                     js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
                     link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 else:
                     link_del = ''
+                
+                txt += '<li class="sortableitem" key="%s">%s %s %s (%s) %s</li>' % (
+                    pre, link, type, e1, prio, link_del)
 
-                table += (link, type, e1, e2, link_del)
-            txt += str(table)
+            txt += '</ul>'
+            txt += '''<script type="text/javascript">
+                        $('#%(name)s').sortable({
+                           accept      : 'sortableitem',
+		           activeclass : 'sortableactive',
+                           hoverclass  : 'sortablehover',
+		           helperclass : 'sorthelper',
+		           opacity     : 0.5,
+		           fit         : false,
+                           update      : function(e, ui) {
+                              var post = '';
+                              var prio = 0;
+                              /* Build the new priority list 
+                               */
+                              $(e.target).children('li').each(function() {
+                                   if ($(this).hasClass('ui-sortable-helper') == false) {
+                                     if (this.parentNode != null) {
+                                       key       = $(this).attr('key');
+                                       prio = prio + 100;
+                                       post += key + "!priority=" + prio + "&";
+                                     }
+                                   }
+                              });
+
+                              if (post.length > 5) {
+                                /* Submit the list
+                                 */
+	                        jQuery.post ('%(url)s', post, 
+                                    function (data, textStatus) {
+                                      window.location.reload();
+                                    }
+	                        );
+                              }
+	                   }
+                        });
+                   </script>
+                   ''' % {'name': table_name, 
+                          'url' : self.submit_ajax_url}
         return txt
 
     def _render_personal_webs (self, host):
