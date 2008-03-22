@@ -1,5 +1,10 @@
 2008-03-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/buffer.c (cherokee_buffer_add_va_list): Error recovery
+	improved. In the case cherokee_estimate_va_length() misses the
+	right length it tries again with the length previously returned by
+	vsnprintf().
+
 	* configure.in, themes/Makefile.am, themes/default/*,
 	themes/firefox3/*: Themes have been split in directories.
 

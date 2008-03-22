@@ -460,24 +460,34 @@ ret_t
 cherokee_buffer_add_va_list (cherokee_buffer_t *buf, char *format, va_list args)
 {
 	cuint_t len;
-	cuint_t estimated_length;
+	cuint_t estimation;
 	va_list args2;
 
 	va_copy (args2, args);
 
-	estimated_length = cherokee_estimate_va_length (format, args);
-	cherokee_buffer_ensure_size (buf, buf->len + estimated_length + 2);
+	estimation = cherokee_estimate_va_length (format, args);
+	cherokee_buffer_ensure_size (buf, buf->len + estimation + 2);
 
 	len = vsnprintf (buf->buf + buf->len, buf->size - buf->len - 1, format, args2);
 	
 #if 0
-	if (estimated_length < len)
+	if (estimation < len)
 		PRINT_ERROR ("  -> '%s' -> '%s', esti=%d real=%d\n", 
-			     format, buf->buf + buf->len, estimated_length, len);
+			     format, buf->buf + buf->len, estimation, len);
 #endif
 
-	if (unlikely (len < 0)) 
+	if (unlikely (len < 0))
 		return ret_error;
+	
+	if (len > buf->size - buf->len) {
+		TRACE(ENTRIES, "Failed estimation=%d, needed=%d\n", estimation, len);
+	
+		cherokee_buffer_ensure_size (buf, buf->len + len + 2);
+		len = vsnprintf (buf->buf + buf->len, buf->size - buf->len - 1, format, args2);
+
+		if (unlikely (len < 0)) 
+			return ret_error;
+	}
 
 	buf->len += len;
 	return ret_ok;
