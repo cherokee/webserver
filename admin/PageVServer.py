@@ -218,8 +218,11 @@ class PageVServer (PageMenu, FormHelper):
 
         if len(priorities):
             table_name = "rules%d" % (self._rule_table)
+            self._rule_table += 1
+
             txt += '<h3>Rule list</h3>'
-            txt += '<ul id="%s">' % (table_name)
+            txt += '<table id="%s" class="rulestable">' % (table_name)
+            txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th></tr>'
 
             # Rule list
             for rule in priorities:
@@ -232,48 +235,36 @@ class PageVServer (PageMenu, FormHelper):
                 if not (type == 'directory' and name == '/'):
                     js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
                     link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                    extra = ''
                 else:
+                    extra = ' NoDrag="1" NoDrop="1"'
                     link_del = ''
-                
-                txt += '<li class="sortableitem" key="%s">%s %s %s (%s) %s</li>' % (
-                    pre, link, type, e1, prio, link_del)
 
-            txt += '</ul>'
+                txt += '<!-- %s --><tr id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
+                    prio, pre, extra, link, type.capitalize(), e1, link_del)
+
+            txt += '</table>\n'
             txt += '''<script type="text/javascript">
-                        $('#%(name)s').sortable({
-                           accept      : 'sortableitem',
-		           activeclass : 'sortableactive',
-                           hoverclass  : 'sortablehover',
-		           helperclass : 'sorthelper',
-		           opacity     : 0.5,
-		           fit         : false,
-                           update      : function(e, ui) {
-                              var post = '';
-                              var prio = 0;
-                              /* Build the new priority list 
-                               */
-                              $(e.target).children('li').each(function() {
-                                   if ($(this).hasClass('ui-sortable-helper') == false) {
-                                     if (this.parentNode != null) {
-                                       key       = $(this).attr('key');
-                                       prio = prio + 100;
-                                       post += key + "!priority=" + prio + "&";
-                                     }
-                                   }
-                              });
+                      $(document).ready(function() {
+                        $("#%(name)s tr:even').addClass('alt')");
 
-                              if (post.length > 5) {
-                                /* Submit the list
-                                 */
-	                        jQuery.post ('%(url)s', post, 
-                                    function (data, textStatus) {
-                                      window.location.reload();
-                                    }
-	                        );
+                        $('#%(name)s').tableDnD({
+                          onDrop: function(table, row) {
+                              var rows = table.tBodies[0].rows;
+                              var post = '';
+                              for (var i=1; i<rows.length; i++) {
+                                var prio = (i > 0) ? i*100 : 1;
+                                post += rows[i].id + '!priority=' + prio + '&';
                               }
-	                   }
+	                      jQuery.post ('%(url)s', post, 
+                                  function (data, textStatus) {
+                                      window.location.reload();  
+                                  }
+                              );
+                          }
                         });
-                   </script>
+                      });
+                      </script>
                    ''' % {'name': table_name, 
                           'url' : self.submit_ajax_url}
         return txt

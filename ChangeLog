@@ -1,5 +1,9 @@
 2008-03-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServer.py (PageVServer._render_rules_generic): The
+	generic rule list has been rewritten. It does no longer use the
+	Jquery sortable module.
+
 	* admin/default.template.html, admin/PageVServer.py,
 	admin/static/js/ui.mouse.js, admin/static/js/jquery.dimensions.js,
 	admin/static/js/ui.sortable.js: Added a new fancy rule list. This

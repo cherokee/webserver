@@ -265,3 +265,13 @@ a.button:active span {
     margin-left: 15px;
     text-align: justify;
 }
+
+.tDnD_whileDrag {
+  background-color:#ECF6FC;
+  font-weight: bold;
+}
+
+.rulestable {
+  width: 100%;
+}
+
