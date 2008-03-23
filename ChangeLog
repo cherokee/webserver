@@ -1,5 +1,8 @@
 2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/pyscgi.py: Updated to pyscgi 1.6. It fixes a writing issue
+	on OS X.
+
 	* Makefile.am, mime.types.sample, mime.compression.types.sample:
 	Example mime type files have been removed. They are no longer
 	needed.

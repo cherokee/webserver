@@ -8,6 +8,7 @@ import time
 import pyscgi
 import thread
 import signal
+import socket
 
 # Application modules
 #
@@ -61,8 +62,8 @@ class Handler(pyscgi.SCGIHandler):
             page = PageError (cfg, PageError.ICONS_DIR_MISSING)
 
         if page:
-            self.wfile.write ('Status: 200 OK\r\n\r\n' +
-                              page.HandleRequest (uri, Post()))
+            self.send ('Status: 200 OK\r\n\r\n' +
+                       page.HandleRequest (uri, Post()))
             return
 
         # Check the URL        
@@ -131,8 +132,10 @@ class Handler(pyscgi.SCGIHandler):
             headers += "Location: %s\r\n" % (body)
 
         # Send result
-        self.wfile.write('Status: %s\r\n' % (status) +
-                         headers + '\r\n' + body)
+        content = 'Status: %s\r\n' % (status) + \
+                  headers + '\r\n' + body
+
+        return self.send (content)
 
 
 # Server

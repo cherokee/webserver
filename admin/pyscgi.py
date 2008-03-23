@@ -41,7 +41,7 @@ import socket
 import errno
 import sys
 
-__version__ = '1.5'
+__version__ = '1.6'
 __author__  = 'Alvaro Lopez Ortega'
 
 
@@ -61,6 +61,18 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
                    err == errno.EINPROGRESS:
                     continue
             raise
+
+    def send(self, buf):
+        pending = len(buf)
+        offset = 0
+        while pending:
+            try:
+                sent = self.connection.send(buf[offset:])
+                pending -= sent
+                offset += sent
+            except socket.error, e:
+                if e[0]!=errno.EAGAIN:
+                    raise
 
     def __read_netstring_size (self):
         size = ""
