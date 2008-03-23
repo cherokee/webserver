@@ -1,5 +1,9 @@
 2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageMime.py (PageMime._render_mime_list),
+	admin/static/css/cherokee.css: Added a scrollbar. The default mime
+	type list is quite big. The scroll makes the page to look better.
+
 	* admin/PageMime.py (PageMime._render_mime_list): Show the mime
 	entries sorted.
 

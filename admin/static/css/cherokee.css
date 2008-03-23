@@ -275,3 +275,8 @@ a.button:active span {
   width: 100%;
 }
 
+#mimetable {
+  width: 540px;
+  height: 400px;
+  overflow: auto;
+}

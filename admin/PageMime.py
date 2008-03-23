@@ -65,10 +65,9 @@ class PageMime (PageMenu, FormHelper):
                 js = "post_del_key('/icons/update', '%s');" % (cfg_key)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (mime, e1, e2, link_del)
-            txt += str(table)
+            txt += '<div id="mimetable">%s</div>'%(str(table))
+            txt += '<hr />'
         return txt
-        form = Form ('/%s' % (self._id))
-        return form.Render(txt,DEFAULT_SUBMIT_VALUE)
 
     def _render_add_mime (self):
         txt = '<h2>Add new MIME</h2>\n'
