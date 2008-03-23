@@ -29,9 +29,8 @@
 #include "avl.h"
 
 struct cherokee_mime {
-	cherokee_avl_t   mime_table;
-	cherokee_list_t  mime_list;
-	cherokee_list_t  name_list;
+	cherokee_avl_t   ext_table;
+	cherokee_list_t  entry_list;
 };
 
 #define MIME_TABLE(m)  (&((cherokee_mime_t *)(m))->mime_table)

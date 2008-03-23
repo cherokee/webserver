@@ -33,7 +33,7 @@
 #include <cherokee/buffer.h>
 #include <cherokee/list.h>
 #include <cherokee/mime_entry.h>
-
+#include <cherokee/config_node.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -43,13 +43,8 @@ typedef struct cherokee_mime cherokee_mime_t;
 
 ret_t cherokee_mime_new             (cherokee_mime_t **mime);
 ret_t cherokee_mime_free            (cherokee_mime_t  *mime);
+ret_t cherokee_mime_configure       (cherokee_mime_t  *mime, cherokee_config_node_t *config);
 
-ret_t cherokee_mime_add_entry       (cherokee_mime_t *mime, cherokee_mime_entry_t *entry);
-ret_t cherokee_mime_load_mime_types (cherokee_mime_t *mime, char *filename);
-
-ret_t cherokee_mime_get_by_type     (cherokee_mime_t *mime, char *type,   cherokee_mime_entry_t **entry);
-
-ret_t cherokee_mime_set_by_suffix   (cherokee_mime_t *mime, char *suffix, cherokee_mime_entry_t  *entry);
 ret_t cherokee_mime_get_by_suffix   (cherokee_mime_t *mime, char *suffix, cherokee_mime_entry_t **entry);
 
 CHEROKEE_END_DECLS

@@ -1,5 +1,10 @@
 2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/mime.c, cherokee/server.c (configure_server): The mime
+	class has been reworked. Mime types are not longer read from a
+	text file; from now on, the general configuration system is used
+	instead.
+
 	* admin/PageVServer.py: Added a note explaining how rules are
 	evaluated.
 

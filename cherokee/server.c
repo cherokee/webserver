@@ -1473,30 +1473,6 @@ add_vserver (cherokee_config_node_t *conf, void *data)
 
 
 static ret_t 
-load_mime_file (char *file, void *data)
-{
-	ret_t              ret;
-	cherokee_server_t *srv = SRV(data);
-
-	if (srv->mime == NULL) {
-		ret = cherokee_mime_new (&srv->mime);
-		if (ret < ret_ok) {
-			PRINT_MSG_S ("ERROR: Couldn't get default MIME configuration file\n");
-			return ret;
-		}
-	}
-
-	ret = cherokee_mime_load_mime_types (srv->mime, file);
-	if (ret < ret_ok) {
-		PRINT_MSG ("Couldn't load MIME configuration file '%s'\n", file);
-		return ret;
-	}
-
-	return ret_ok;
-}
-
-
-static ret_t 
 configure_server_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t              ret;
@@ -1557,10 +1533,6 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "pid_file")) {
 		cherokee_buffer_clean (&srv->pidfile);
 		cherokee_buffer_add_buffer (&srv->pidfile, &conf->val);
-
-	} else if (equal_buf_str (&conf->key, "mime_files")) {
-		ret = cherokee_config_node_read_list (conf, NULL, load_mime_file, srv);
-		if (ret != ret_ok) return ret;
 
 	} else if (equal_buf_str (&conf->key, "listen")) {
 		cherokee_buffer_clean (&srv->listen_to);
@@ -1706,6 +1678,18 @@ configure_server (cherokee_server_t *srv)
 		if (ret != ret_ok) return ret;
 	}
 	
+	/* Mime
+	 */
+	TRACE (ENTRIES, "Configuring %s\n", "mime");
+	ret = cherokee_config_node_get (&srv->config, "mime", &subconf);
+	if (ret == ret_ok) {
+		ret = cherokee_mime_new (&srv->mime);
+		if (ret != ret_ok) return ret;
+		
+		ret = cherokee_mime_configure (srv->mime, subconf);
+		if (ret != ret_ok) return ret;
+	}
+
 	/* Load the virtual servers
 	 */
 	TRACE (ENTRIES, "Configuring %s\n", "virtual servers");
