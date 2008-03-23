@@ -40,10 +40,6 @@ CONFS_PRE =              \
 cherokee.conf.sample.pre \
 performance.conf.sample.pre
 
-CONFS_DONE =           \
-mime.types.sample      \
-mime.compression.types.sample
-
 CONFS = \
 $(CONFS_PRE:.sample.pre=.sample)
 
@@ -71,7 +67,6 @@ SUNWcherokee.spec     \
 pam.d_cherokee        \
 cherokee.pc.in        \
 $(m4data_DATA)        \
-$(CONFS_DONE)         \
 $(CONFS_PRE)          \
 $(CONSTANTS_PRE)      \
 $(man_MANS)           \
@@ -90,7 +85,7 @@ uninstall-local-config:
 		$(RM) -f $(DESTDIR)$(pkgincludedir)/cherokee-config.h; \
 	fi
 
-install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
+install-data-local: $(CONFS) install-data-local-config
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/ssl
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/mods-available
@@ -109,16 +104,6 @@ install-data-local: $(CONFS) $(CONFS_DONE) install-data-local-config
 	else \
 		$(INSTALL_DATA) $(top_builddir)/performance.conf.sample $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample; \
 	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.types ; then \
-		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mime.types"; \
-	else \
-		$(INSTALL_DATA) $(top_srcdir)/mime.types.sample $(DESTDIR)$(cherokeeconfdir)/mime.types; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.compression.types ; then \
-		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/mime.compression.types"; \
-	else \
-		$(INSTALL_DATA) $(top_srcdir)/mime.compression.types.sample $(DESTDIR)$(cherokeeconfdir)/mime.compression.types; \
-	fi
 	@if test -d $(DESTDIR)$(sysconfdir)/pam.d && test ! -d $(DESTDIR)$(sysconfdir)/pam.d/cherokee ; then \
 		$(INSTALL_DATA) $(top_srcdir)/pam.d_cherokee $(DESTDIR)$(sysconfdir)/pam.d/cherokee; \
 	fi
@@ -132,14 +117,6 @@ uninstall-local: uninstall-local-config
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample ; then \
 		echo "rm -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample"; \
 		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.types ; then \
-		echo "rm -f $(cherokeeconfdir)/mime.types"; \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mime.types; \
-	fi
-	@if test -f $(DESTDIR)$(cherokeeconfdir)/mime.compression.types ; then \
-		echo "rm -f $(cherokeeconfdir)/mime.compression.types"; \
-		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/mime.compression.types; \
 	fi
 
 test:

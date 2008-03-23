@@ -1,5 +1,12 @@
 2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* Makefile.am, mime.types.sample, mime.compression.types.sample:
+	Example mime type files have been removed. They are no longer
+	needed.
+
+	* cherokee.conf.sample.pre: Added a bunch of mime types. Most of
+	the old mimes have been converted.
+
 	* cherokee/mime.c, cherokee/server.c (configure_server): The mime
 	class has been reworked. Mime types are not longer read from a
 	text file; from now on, the general configuration system is used
