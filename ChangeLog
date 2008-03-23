@@ -1,3 +1,8 @@
+2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/PageVServer.py: Added a note explaining how rules are
+	evaluated.
+
 2008-03-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageVServer.py (PageVServer._op_add_new_entry): It does

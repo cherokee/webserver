@@ -30,6 +30,11 @@ LOGGER_ERROR_NOTE = """
 <p>Invalid requests and unexpected issues are logged here:</p>
 """
 
+RULE_LIST_NOTE = """
+<p>When a request is handled, the server tries to match a rule <b>from
+bottom to top</b>. The first match is applied.</p>
+"""
+
 class PageVServer (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'vserver', cfg)
@@ -210,8 +215,8 @@ class PageVServer (PageMenu, FormHelper):
         handler  = EntryOptions (prefix+'add_new_handler', HANDLERS,    selected='common')
         
         table  = Table(4,1)
-        table += ('Entry', 'Type', 'Handler')
-        table += (entry, type, handler)
+        table += ('Type', 'Entry', 'Handler')
+        table += (type, entry, handler)
 
         txt += "<h3>Add new rule</h3>"
         txt += str(table)
@@ -219,6 +224,7 @@ class PageVServer (PageMenu, FormHelper):
 
     def _render_rules_generic (self, cfg_key, url_prefix, priorities):
         txt = ''
+        txt += self.Dialog(RULE_LIST_NOTE)
 
         if len(priorities):
             table_name = "rules%d" % (self._rule_table)
