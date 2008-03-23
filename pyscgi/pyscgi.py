@@ -37,9 +37,11 @@ This module has been written as part of the Cherokee project:
 
 import SocketServer
 import traceback
+import socket
 import errno
+import sys
 
-__version__ = '1.2'
+__version__ = '1.6'
 __author__  = 'Alvaro Lopez Ortega'
 
 
@@ -53,13 +55,24 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
          while True: 
             try:
                 return self.rfile.read(lenght)
-            except OSError, e:
-                if e.errno == errno.EAGAIN:
-                    continue
-            except IOError, e:
-                if e.errno == errno.EAGAIN:
+            except socket.error, (err, strerr):
+                if err == errno.EAGAIN or \
+                   err == errno.EWOULDBLOCK or \
+                   err == errno.EINPROGRESS:
                     continue
             raise
+
+    def send(self, buf):
+        pending = len(buf)
+        offset = 0
+        while pending:
+            try:
+                sent = self.connection.send(buf[offset:])
+                pending -= sent
+                offset += sent
+            except socket.error, e:
+                if e[0]!=errno.EAGAIN:
+                    raise
 
     def __read_netstring_size (self):
         size = ""
@@ -106,7 +119,8 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         try:
             self.handle_request()
         except:
-            traceback.print_exc()  # Print the error
+            if sys.exc_type != SystemExit:
+                traceback.print_exc()  # Print the error
 
         try:
             self.finish()          # Closes wfile and rfile

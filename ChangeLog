@@ -1,3 +1,11 @@
+2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* pyscgi/pyscgi.py: Added a new method send() to write the
+	information safely. There was an issue on OS X that made large
+	responses to fail.
+
+	* pyscgi/pyscgi.py: Print all the exceptions except of SystemExit.
+
 2007-12-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* pyscgi/pyscgi.py: Fixed communication issue between the SCGI
