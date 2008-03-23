@@ -1,5 +1,8 @@
 2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageMime.py (PageMime._render_mime_list): Show the mime
+	entries sorted.
+
 	* admin/PageMime.py: Mime Type configuration page has been
 	re-implemented.
 

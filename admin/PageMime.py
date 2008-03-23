@@ -56,7 +56,9 @@ class PageMime (PageMenu, FormHelper):
         if cfg:
             table = Table(4, 1)
             table += ('Mime type', 'Extensions', 'Max Age (<i>secs</i>)')
-            for mime in cfg:
+            keys = cfg.keys()
+            keys.sort()
+            for mime in keys:
                 cfg_key = 'mime!%s'%(mime)
                 e1 = self.InstanceEntry('%s!extensions'%(cfg_key), 'text')
                 e2 = self.InstanceEntry('%s!max-age'%(cfg_key), 'text', size=6, maxlength=6)
