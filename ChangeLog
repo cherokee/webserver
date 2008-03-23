@@ -1,5 +1,8 @@
 2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageMime.py: Mime Type configuration page has been
+	re-implemented.
+
 	* admin/pyscgi.py: Updated to pyscgi 1.6. It fixes a writing issue
 	on OS X.
 
