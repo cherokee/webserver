@@ -1,5 +1,9 @@
 2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee.conf.sample.pre: "server!mime_files" configuration key
+	is no longer a valid key. Removed from the default configuration
+	file.
+
 	* admin/PageMime.py (PageMime._render_mime_list),
 	admin/static/css/cherokee.css: Added a scrollbar. The default mime
 	type list is quite big. The scroll makes the page to look better.
