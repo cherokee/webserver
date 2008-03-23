@@ -9,14 +9,14 @@ class MyHandler(SCGIHandler):
         SCGIHandler.__init__ (self, request, client_address, server)
 
     def print_env (self):
-        self.wfile.write('<table border="0">')
+        self.send('<table border="0">')
         for k, v in self.env.items():
-            self.wfile.write('<tr><td><b>%s</b></td><td>%r</td></tr>' % (k, v))
-        self.wfile.write('</table')
+            self.send('<tr><td><b>%s</b></td><td>%r</td></tr>' % (k, v))
+        self.send('</table')
 
     def handle_request (self):
-        self.wfile.write('Content-Type: text/html\r\n\r\n')
-        self.wfile.write('<h1>Environment variables</h1>')
+        self.send('Content-Type: text/html\r\n\r\n')
+        self.send('<h1>Environment variables</h1>')
         self.print_env()
 
 def main():

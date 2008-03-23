@@ -22,18 +22,18 @@ class MyHandler(SCGIHandler):
         SCGIHandler.__init__ (self, request, client_address, server)
 
     def handle_request (self):
-        self.wfile.write('Content-Type: text/html\r\n\r\n')
-        self.wfile.write('<h1>Post test</h1>')
+        self.send('Content-Type: text/html\r\n\r\n')
+        self.send('<h1>Post test</h1>')
 
         self.handle_post()
 
         if self.post:
             length = len(self.post)
             if length > 0:
-                self.wfile.write('Post len: %d <br/>'     % (length))
-                self.wfile.write('Post content: %s <br/>' % (self.post))
+                self.send('Post len: %d <br/>'     % (length))
+                self.send('Post content: %s <br/>' % (self.post))
                 return
-        self.wfile.write(POST_EXAMPLE)
+        self.send(POST_EXAMPLE)
 
 def main():
     srv = ServerFactory(handler_class=MyHandler, port=DEFAULT_PORT)
