@@ -169,12 +169,11 @@ class FormHelper (WebComponent):
     def _get_auto_wrap_id (self):
         return "options_wrap_%d" % (FormHelper.options_wrap_num)
 
-    def AddTableOptions (self, table, title, cfg_key, options, *args, **kwargs):
-        try:
-            value = self._cfg[cfg_key].value
+    def InstanceOptions (self, cfg_key, options, *args, **kwargs):
+        value = self._cfg.get_val (cfg_key)
+        if value != None:
             ops = EntryOptions (cfg_key, options, selected=value, *args, **kwargs)
-        except AttributeError:
-            value = ''
+        else:
             ops = EntryOptions (cfg_key, options, *args, **kwargs)
 
         # Auto wrap
@@ -182,8 +181,13 @@ class FormHelper (WebComponent):
         FormHelper.options_wrap_num += 1
 
         ops = '<div id="%s" name="%s">%s</div>'%(auto_wrap_id, auto_wrap_id, ops)
+        return (ops, value)
+
+    def AddTableOptions (self, table, title, cfg_key, options, *args, **kwargs):
+        entry, value = self.InstanceOptions (cfg_key, options, *args, **kwargs)
+
         label = self.Label(title, cfg_key)
-        table += (label, ops)
+        table += (label, entry)
 
         return value
 
@@ -352,3 +356,42 @@ class FormHelper (WebComponent):
 
         for entry in to_be_deleted:
             del(self._cfg[entry])
+
+    def AddPropEntry (self, table, title, cfg_key, comment=None):
+        entry = self.InstanceEntry (cfg_key, 'text')
+        label = self.Label (title, cfg_key);
+        table += (label, entry, comment)
+
+    def AddPropCheck (self, table, title, cfg_key, default, comment=None):
+        entry = self.InstanceCheckbox (cfg_key, default)
+        label = self.Label (title, cfg_key);
+        table += (label, entry, comment)
+
+    def AddPropOptions (self, table, title, cfg_key, options, comment=None):
+        entry, v = self.InstanceOptions (cfg_key, options)
+        label = self.Label (title, cfg_key);
+        table += (label, entry, comment)
+        return v
+
+class TableProps:
+    def __init__ (self):
+        self._content = []
+
+    def __add__ (self, (title, content, comment)):
+        self._content.append((title, content, comment))
+
+    def _render_entry (self, (title, content, comment)):
+        txt  = '<table class="tableprop">'
+        txt += '  <tr><th class="title">%s</th><td>%s</td></tr>' % (title, content)
+        txt += '  <tr><td colspan="2"><div class="comment">%s</div></td></tr>' % (comment)
+        txt += '</table>'
+        return txt
+
+    def __str__ (self):
+        tmp = []
+        for entry in self._content:
+            tmp.append (self._render_entry(entry))
+
+        txt = "<hr />".join(tmp)
+        return '<div class="tableprop_block">%s</div>' % (txt)
+                        

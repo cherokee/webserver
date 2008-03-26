@@ -280,3 +280,34 @@ a.button:active span {
   height: 400px;
   overflow: auto;
 }
+
+.tableprop {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableprop tr th {
+  valign: top; 
+  width:  160px;
+}
+
+.tableprop .comment {
+  color: #999;
+  font-size: 85%;
+  margin-right: 20px;
+}
+
+.tableprop .title {
+  font-weight: bold;  
+}
+
+.tableprop_block hr {
+  background: #88A;
+  border: none;
+  margin-top:10px;
+  margin-bottom:10px;
+  height: 1px;
+  width: 100%;
+  text-align: left;
+  align: left;
+}

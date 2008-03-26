@@ -1,3 +1,14 @@
+2008-03-26  Alvaro Lopez Ortega  <alo@alo.local>
+
+	* admin/Form.py, admin/Table.py, admin/static/css/cherokee.css:
+	Added support for the new format table. The new table includes
+	more information and a new layout.
+
+	* admin/PageAdvanced.py, admin/PageGeneral.py: Migrated to the new
+	table format.
+
+	* admin/PageIcon.py: Extension entries are wider now.
+
 2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee.conf.sample.pre: "server!mime_files" configuration key

@@ -118,7 +118,7 @@ class PageIcon (PageMenu, FormHelper):
                 cfg_key  = 'icons!suffix!%s' % (icon)
                 im = self._get_img_from_icon (icon, cfg_key)
 
-                entry  = self.InstanceEntry (cfg_key, 'text')
+                entry  = self.InstanceEntry (cfg_key, 'text', size=45)
                 js     = "post_del_key('/icons/update', '%s');" % (cfg_key)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (im, icon, entry, link_del)
