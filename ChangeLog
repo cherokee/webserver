@@ -1,5 +1,9 @@
 2008-03-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* Makefile.am (install-data-local): It has to create /var/log and
+	/var/run when installing, otherwise it would fail after the
+	installation if DESTDIR wasn't /.
+
 	* admin/Form.py, admin/PageVServer.py: The Virtual Server
 	configuration page has been updated to use the new table format.
 	Besides, a few changes in the table itself have been performed.

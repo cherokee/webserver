@@ -86,6 +86,9 @@ uninstall-local-config:
 	fi
 
 install-data-local: $(CONFS) install-data-local-config
+	@$(mkinstalldirs) $(DESTDIR)$(localstatedir)
+	@$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run
+	@$(mkinstalldirs) $(DESTDIR)$(localstatedir)/log
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/ssl
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/mods-available
