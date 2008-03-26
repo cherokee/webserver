@@ -198,8 +198,37 @@ class FormHelper (WebComponent):
 
         return self.AddTableOptions (table, title, cfg_key, options, *args, **kwargs)
 
+    def AddPropOptions_Reload (self, table, title, cfg_key, options, comment, **kwargs):
+        assert (self.submit_url)
+
+        # The Table entry itself
+        auto_wrap_id = self._get_auto_wrap_id()
+        js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, auto_wrap_id)
+        kwargs['onChange'] = js
+        name = self.AddPropOptions (table, title, cfg_key, options, comment, **kwargs)
+        
+        # If there was no cfg value, pick the first
+        if not name:
+            name = options[0][0]
+        
+        # Render active option
+        if name:
+            try:
+                # Inherit the errors, if any
+                kwargs['errors'] = self.errors
+                props_widget = module_obj_factory (name, self._cfg, cfg_key, 
+                                                   self.submit_url, **kwargs)
+                render = props_widget._op_render()
+            except IOError:
+                render = "Couldn't load the properties module: %s" % (name)
+        else:
+            render = ''
+        
+        return render
+
     def AddTableOptions_Reload (self, table, title, cfg_key, options, **kwargs):
         assert (self.submit_url)
+        print "DEPRECATED: AddTableOptions_Reload"
 
         # The Table entry itself
         auto_wrap_id = self._get_auto_wrap_id()
@@ -357,21 +386,23 @@ class FormHelper (WebComponent):
         for entry in to_be_deleted:
             del(self._cfg[entry])
 
-    def AddPropEntry (self, table, title, cfg_key, comment=None):
-        entry = self.InstanceEntry (cfg_key, 'text')
+    def AddProp (self, table, title, cfg_key, entry, comment=None):
         label = self.Label (title, cfg_key);
         table += (label, entry, comment)
+
+    def AddPropEntry (self, table, title, cfg_key, comment=None):
+        entry = self.InstanceEntry (cfg_key, 'text')
+        self.AddProp (table, title, cfg_key, entry, comment)
 
     def AddPropCheck (self, table, title, cfg_key, default, comment=None):
         entry = self.InstanceCheckbox (cfg_key, default)
-        label = self.Label (title, cfg_key);
-        table += (label, entry, comment)
+        self.AddProp (table, title, cfg_key, entry, comment)
 
-    def AddPropOptions (self, table, title, cfg_key, options, comment=None):
-        entry, v = self.InstanceOptions (cfg_key, options)
-        label = self.Label (title, cfg_key);
-        table += (label, entry, comment)
+    def AddPropOptions (self, table, title, cfg_key, options, comment=None, **kwargs):
+        entry, v = self.InstanceOptions (cfg_key, options, **kwargs)
+        self.AddProp (table, title, cfg_key, entry, comment)
         return v
+
 
 class TableProps:
     def __init__ (self):

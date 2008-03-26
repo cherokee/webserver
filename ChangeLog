@@ -1,4 +1,8 @@
-2008-03-26  Alvaro Lopez Ortega  <alo@alo.local>
+2008-03-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/Form.py, admin/PageVServer.py: The Virtual Server
+	configuration page has been updated to use the new table format.
+	Besides, a few changes in the table itself have been performed.
 
 	* admin/Form.py, admin/Table.py, admin/static/css/cherokee.css:
 	Added support for the new format table. The new table includes

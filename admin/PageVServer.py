@@ -35,6 +35,17 @@ RULE_LIST_NOTE = """
 bottom to top</b>. The first match is applied.</p>
 """
 
+NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server.'
+NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server.'
+NOTE_CA_LIST         = 'File with the certificates of Certification Authorities (CA) whose clients you deal with.'
+NOTE_ERROR_HANDLER   = 'Allow to select how to generate the error responses.'
+NOTE_PERSONAL_WEB    = 'Directory inside the user home directory that will be used as the root web directory.'
+NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
+NOTE_ADD_DOMAIN      = 'Adds a new domain name. Wildcards are allowed in the domain name.'
+NOTE_DOCUMENT_ROOT   = 'Virtual Server root directory.'
+NOTE_DIRECTORY_INDEX = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
+
+
 class PageVServer (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'vserver', cfg)
@@ -149,9 +160,9 @@ class PageVServer (PageMenu, FormHelper):
         txt = "<h1>Virtual Server: %s</h1>" % (host)
 
         # Basics
-        table = Table(2)
-        self.AddTableEntry (table, 'Document Root',     '%s!document_root' % (pre))
-        self.AddTableEntry (table, 'Directory Indexes', '%s!directory_index' % (pre))
+        table = TableProps()
+        self.AddPropEntry (table, 'Document Root',     '%s!document_root'%(pre),   NOTE_DOCUMENT_ROOT)
+        self.AddPropEntry (table, 'Directory Indexes', '%s!directory_index'%(pre), NOTE_DIRECTORY_INDEX)
         tabs += [('Basics', str(table))]
 
         # Domains
@@ -184,10 +195,10 @@ class PageVServer (PageMenu, FormHelper):
         tabs += [('Logging', tmp)]
 
         # Security
-        table = Table(2)
-        self.AddTableEntry (table, 'Certificate',     '%s!ssl_certificate_file' % (pre))
-        self.AddTableEntry (table, 'Certificate key', '%s!ssl_certificate_key_file' % (pre))
-        self.AddTableEntry (table, 'CA List',         '%s!ssl_ca_list_file' % (pre))
+        table = TableProps()
+        self.AddPropEntry (table, 'Certificate',     '%s!ssl_certificate_file' % (pre),     NOTE_CERT)
+        self.AddPropEntry (table, 'Certificate key', '%s!ssl_certificate_key_file' % (pre), NOTE_CERT_KEY)
+        self.AddPropEntry (table, 'CA List',         '%s!ssl_ca_list_file' % (pre),         NOTE_CA_LIST)
         tabs += [('Security', str(table))]
 
         txt += self.InstanceTab (tabs)
@@ -199,10 +210,10 @@ class PageVServer (PageMenu, FormHelper):
         txt = ''
         pre = 'vserver!%s' % (host)
         
-        table = Table(2)
-        e = self.AddTableOptions_Reload (table, 'Error Handler',
-                                         '%s!error_handler' % (pre), 
-                                         ERROR_HANDLERS)
+        table = TableProps()
+        e = self.AddPropOptions_Reload (table, 'Error Handler',
+                                        '%s!error_handler' % (pre), 
+                                        ERROR_HANDLERS, NOTE_ERROR_HANDLER)
         txt += str(table) + self.Indent(e)
 
         return txt
@@ -282,15 +293,14 @@ class PageVServer (PageMenu, FormHelper):
     def _render_personal_webs (self, host):
         txt = ''
 
-        table = Table(3)
+        table = TableProps()
         cfg_key = 'vserver!%s!user_dir'%(host)
-        en = self.InstanceEntry (cfg_key, 'text')
         if self._cfg.get_val(cfg_key):
             js = "post_del_key('%s','%s');" % (self.submit_ajax_url, cfg_key)
-            bu = self.InstanceButton ("Disable", onClick=js)
-        else: 
-            bu = ''
-        table += ('Directory name', en, bu)
+            button = self.InstanceButton ("Disable", onClick=js)
+            self.AddProp (table, 'Status', '', button, NOTE_DISABLE_PW)
+
+        self.AddPropEntry (table, 'Directory name', cfg_key, NOTE_PERSONAL_WEB)
         txt += str(table)
 
         return txt
@@ -365,10 +375,11 @@ class PageVServer (PageMenu, FormHelper):
                 cfg_key = "vserver!%s!domain!%s" % (host, i)
                 en = self.InstanceEntry (cfg_key, 'text')
                 js = "post_del_key('%s','%s');" % (self.submit_ajax_url, cfg_key)
-                bu = self.InstanceButton ("Del", onClick=js)
-                table += (en, bu)
+                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                table += (en, link_del)
 
             txt += str(table)
+            txt += "<hr />"
 
         # Look for firs available
         i = 1
@@ -379,14 +390,11 @@ class PageVServer (PageMenu, FormHelper):
             i += 1
 
         # Add new domain
-        txt += "<h3>Add new domain name</h3>"
-        table = Table(2)
+        table = TableProps()
         cfg_key = "vserver!%s!domain!%s" % (host, available)
-        en = self.InstanceEntry (cfg_key, 'text')
-        bu = self.InstanceButton ("Add", onClick="submit();")
-        table += (en, bu)
-
+        self.AddPropEntry (table, 'Add new domain name', cfg_key, NOTE_ADD_DOMAIN)
         txt += str(table)
+
         return txt
 
     def _op_apply_changes (self, host, uri, post):
