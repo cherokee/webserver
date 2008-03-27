@@ -28,7 +28,7 @@
 .SH NAME
 cherokee \- Cherokee web server
 .SH SYNOPSIS
-.B cherokee [\-C configfile] [\-b]
+.B cherokee [\-C configfile] [\-b] [\-r /directory/to/share] [\-v] [\-h]
 .SH DESCRIPTION
 \fBcherokee\fP is an extremely fast, flexible and embedable web server.
 .\" .PP
@@ -37,14 +37,24 @@ cherokee \- Cherokee web server
 This command will launch the Cherokee webserver. It accepts the
 following options:
 .TP 8
-.B \-h
-Prints a brief help message and terminates execution
 .B \-b
 Launches the server as a background process (default behaviour is to
 stay attached to the controlling terminal)
+.TP 8
 .B \-C configfile
 Specifies a configuration file other than the default
 /etc/cherokee/cherokee.conf
+.TP 8
+.B \-r /directory/to/share
+Launches a server exposing statically the specified directory. When
+launched with \-r, the configuration file is ignored, and the Cherokee
+instance runs with its default values.
+.TP 8
+.B \-h
+Prints a brief help message and terminates execution
+.TP 8
+.B \-v
+Prints Cherokee's version and terminates execution
 .SH BUGS
 .SS Bug reports
 I would appreciate hearing of any problems you have with Cherokee.  I

@@ -1,0 +1,45 @@
+.TH cherokee_tweak 1
+.SH NAME
+cherokee_tweak - Command-line interface to the Cherokee administrative interface
+.SH SYNOPSIS
+.B cherokee_tweak
+\-c command \-u url [options]
+.SH DESCRIPTION
+\fIcherokee_tweak\fP connects via HTTP to a running cherokee-admin,
+and requests it to perform one of several actions.
+.SH OPTIONS
+\fIcherokee_tweak\fP accepts the following options:
+.TP 8
+.B  \-h
+Shows brief usage information
+.TP 8
+.B  \-V
+Prints version and exits
+.TP 8
+.B  \-u STRING
+Specifies the user name with which to identify to the server
+.TP 8
+.B  \-p STRING
+Specifies the password with which to identify to the server
+.TP 8
+.B  \-c STRING
+Required option. Command to execute: logrotate, trace or info
+.TP 8
+.B  \-a URL
+Required option. URL where the administrative interface can be found.
+.TP 8
+.B  \-l PATH
+Log file to be rotated (Only to be used when -c is logrotate)
+.TP 8
+.B  \-t STRING
+Modules to be traced (Only to be used when -c is trace)
+.SH SEE ALSO
+\&\fIcherokee-admin\fR\|(8)
+.PP
+This program is a part of the Cherokee web server, \&\fIcherokee\fR\|(1)
+.SH AUTHOR
+This manual page was written by Gunnar Wolf <gwolf@debian.org>, for
+the Debian GNU/linux system (but may be used by others).
+.PP
+Cherokee itself was written by Álvaro López Ortega
+<alvaro@alobbs.com>.

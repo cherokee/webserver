@@ -1,0 +1,35 @@
+.TH cherokee-admin 8
+.SH NAME
+cherokee-admin - Runs Cherokee's administrative interface
+.SH SYNOPSIS
+.B cherokee-admin
+[\-d DIR] [\-p PORT] [\-C FILE] [\-a]
+.SH DESCRIPTION
+\fIcherokee-admin\fP runs the server for the administrative interface
+used to configure Cherokee. The interface itself will be available via
+your Web browser.
+.SH OPTIONS
+\fIcherokee-admin\fP accepts the following options:
+.TP 8
+.B  \-h
+Shows brief usage information
+.TP 8
+.B  \-a
+Specifies \fIcherokee-admin\fP to listen on all network addresses - By
+default, it binds only to 127.0.0.1 (localhost), which means you can
+only connect to it from the same system
+.TP 8
+.B  \-C
+Requests a configuration file different than the default
+/etc/cherokee/cherokee.conf to be used
+.TP 8
+.B  \-d
+Uses a custom admin-interface path
+.SH SEE ALSO
+This program is a part of the Cherokee web server, \&\fIcherokee\fR\|(1)
+.SH AUTHOR
+This manual page was written by Gunnar Wolf <gwolf@debian.org>, for
+the Debian GNU/linux system (but may be used by others).
+.PP
+Cherokee itself was written by Álvaro López Ortega
+<alvaro@alobbs.com>.

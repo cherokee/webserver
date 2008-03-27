@@ -1,0 +1,63 @@
+.TH spawn-fcgi 1
+.SH NAME
+spawn-fcgi - Spawns FastCGI processes
+.SH SYNOPSIS
+.B spawn-fcgi
+\-f <fcgiapp> \-a <addr> \-p port
+.
+.B spawn-fcgi
+\-s <path>
+.SH DESCRIPTION
+\fIcherokee_tweak\fP connects via HTTP to a running cherokee-admin,
+and requests it to perform one of several actions.
+.SH OPTIONS
+\fIspawn-fcgi\fP accepts the following options:
+.TP 8
+.B  \-h
+General usage instructions
+.TP 8
+.B  \-f <fcgiapp>
+Filename of the FastCGI application to spawn
+.TP 8
+.B  \-a <addr>
+IP address to bind to (for TCP/IP-based IPC)
+.TP 8
+.B  \-p <port>
+TCP port to bind to (for TCP/IP-based IPC)
+.TP 8
+.B  \-s <path>
+Path to the Unix-domain socket to bind to (for Unix sockets-based IPC)
+.TP 8
+.B  \-C <children>
+(PHP only) Number of children to spawn. Defaults to 5.
+.TP 8
+.B  \-F <children>
+Number of children to fork. Defaults to 1.
+.TP 8
+.B  \-P <path>
+Name of the PID file for spawned processes
+.TP 8
+.B  \-n
+No forking should take place (for daemontools)
+.TP 8
+.B  \-v
+Shows version information and exits
+.TP 8
+.B  \-c <dir>
+Chroot to specified directory (can only be invoked by root)
+.TP 8
+.B  \-u
+User ID to change to (can only be invoked by root)
+.TP 8
+.B  \-g
+Group ID to change to (can only be invoked by root)
+.SH SEE ALSO
+\&\fIcherokee-admin\fR\|(8)
+.PP
+This program is a part of the Cherokee web server, \&\fIcherokee\fR\|(1)
+.SH AUTHOR
+This manual page was written by Gunnar Wolf <gwolf@debian.org>, for
+the Debian GNU/linux system (but may be used by others).
+.PP
+Cherokee itself was written by Álvaro López Ortega
+<alvaro@alobbs.com>.
