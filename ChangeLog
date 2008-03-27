@@ -1,5 +1,9 @@
 2008-03-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c: Added new parameter -p to specify the listening
+	port. It can be used when cherokee is invoked with the -r
+	parameter (servers static content from a local directory).
+
 	* cherokee-admin.8, file cherokee_tweak.1, file spawn-fcgi.1:
 	Added new man pages. Written by Gunnar Wolf <gwolf@gwolf.org>.
 

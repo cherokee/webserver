@@ -32,8 +32,8 @@
 
 #define DEFAULT_CONFIG_FILE CHEROKEE_CONFDIR "/cherokee.conf"
 
-#define GETOPT_OPT  "C:r:bhvg"
-#define CONFIG_FILE_HELP "[-C configfile] [-r] [-g]"
+#define GETOPT_OPT  "C:r:p:bhvg"
+#define CONFIG_FILE_HELP "[-C configfile] [-r DIR [-p PORT]] [-g]"
 
 #define BASIC_CONFIG                                                                         \
 	"vserver!default!directory!/!handler = common\n"                                     \
@@ -54,6 +54,7 @@ static cherokee_server_t  *srv           = NULL;
 static char               *config_file   = NULL;
 static char               *document_root = NULL;
 static cherokee_boolean_t  daemon_mode   = false;
+static cuint_t             port          = 80;
 
 static ret_t common_server_initialization (cherokee_server_t *srv);
 
@@ -109,8 +110,10 @@ common_server_initialization (cherokee_server_t *srv)
 	if (document_root != NULL) {
 		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
-		cherokee_buffer_add_va (&tmp, "vserver!default!document_root = %s\n"
-					BASIC_CONFIG, document_root);
+		cherokee_buffer_add_va (&tmp, 
+					"server!port = %d\n"
+					"vserver!default!document_root = %s\n"
+					BASIC_CONFIG, port, document_root);
 
 		ret = cherokee_server_read_config_string (srv, &tmp);
 		cherokee_buffer_mrproper (&tmp);
@@ -160,6 +163,9 @@ process_parameters (int argc, char **argv)
 			break;
 		case 'r':
 			document_root = strdup(optarg);
+			break;
+		case 'p':
+			port = atoi(optarg);
 			break;
 		case 'v':
 			fprintf (stdout, "%s\n", PACKAGE_STRING);
