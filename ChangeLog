@@ -1,3 +1,8 @@
+2008-03-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/Makefile.am (adminpy_SCRIPTS): server.py had to be
+	installed as an executable script.
+
 2008-03-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* Makefile.am (install-data-local): It has to create /var/log and

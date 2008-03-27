@@ -15,6 +15,9 @@ generated_DATA = \
 $(PY_PRE:.py.pre=.py)
 
 adminpydir = "$(datadir)/cherokee/admin"
+adminpy_SCRIPTS = \
+server.py 
+
 adminpy_DATA = \
 consts.py \
 Entry.py \
@@ -59,7 +62,6 @@ ModulePam.py \
 ModuleRoundRobin.py \
 config.py \
 pyscgi.py \
-server.py \
 validations.py \
 CherokeeManagement.py
 
