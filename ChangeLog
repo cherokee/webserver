@@ -1,5 +1,11 @@
 2008-03-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee-admin.8, file cherokee_tweak.1, file spawn-fcgi.1:
+	Added new man pages. Written by Gunnar Wolf <gwolf@gwolf.org>.
+
+	* cherokee.1, cherokee-config.1, Makefile.am: Man pages have been
+	updated. By Gunnar Wolf <gwolf@gwolf.org>.
+
 	* admin/PageVServer.py: A few sections more have been converted to
 	the new table layout.
 

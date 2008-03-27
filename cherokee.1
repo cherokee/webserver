@@ -12,7 +12,7 @@
 .\" along with this program; see the file COPYING.  If not, write to
 .\" the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH Cherokee 1 "Dicember 20, 2001"
+.TH Cherokee 1 "December 20, 2001"
 .\" Please update the above date whenever this man page is modified.
 .\"
 .\" Some roff macros, for reference:
@@ -28,13 +28,23 @@
 .SH NAME
 cherokee \- Cherokee web server
 .SH SYNOPSIS
-.B cherokee
+.B cherokee [\-C configfile] [\-b]
 .SH DESCRIPTION
 \fBcherokee\fP is an extremely fast, flexible and embedable web server.
 .\" .PP
 .\" It also...
 .SH EXAMPLE
-cherokee &
+This command will launch the Cherokee webserver. It accepts the
+following options:
+.TP 8
+.B \-h
+Prints a brief help message and terminates execution
+.B \-b
+Launches the server as a background process (default behaviour is to
+stay attached to the controlling terminal)
+.B \-C configfile
+Specifies a configuration file other than the default
+/etc/cherokee/cherokee.conf
 .SH BUGS
 .SS Bug reports
 I would appreciate hearing of any problems you have with Cherokee.  I
@@ -48,7 +58,12 @@ cherokee-admin@cherokee-project.com with the line:
 .B subscribe cherokee
 .PP
 in the body of the message. The submission address is cherokee@cherokee-project.com.
-.\" .SH "SEE ALSO"
-.\" cherokee.conf (8)
+.SH "SEE ALSO"
+You will probably want to launch Cherokee via its guardian wrapper, -
+Please refer to \&\fIcherokee-guardian\fR\|(1)
+.
+Note that in in Debian systems, a startup/shutdown script
+/etc/init.d/cherokee is provided, and will probably be the most
+convenient invocation method.
 .SH AUTHOR
 Alvaro Lopez Ortega <alvaro@alobbs.com>.

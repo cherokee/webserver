@@ -13,7 +13,11 @@ man_MANS =        \
 cget.1            \
 cherokee.1        \
 cherokee-config.1 \
-cherokee_logrotate.1
+cherokee_logrotate.1 \
+spawn-fcgi.1      \
+cherokee_tweak.1
+
+man8_MANS = cherokee-admin.8
 
 # pkg-config
 pkgconfigdir = $(libdir)/pkgconfig
