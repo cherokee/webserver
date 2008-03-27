@@ -22,14 +22,6 @@ DATA_VALIDATION = [
                                              validations.is_positive_int)
 ]
 
-LOGGER_ACCESS_NOTE = """
-<p>This is the log where the information on the requests that the server receives is stored.</p>
-"""
-
-LOGGER_ERROR_NOTE = """
-<p>Invalid requests and unexpected issues are logged here:</p>
-"""
-
 RULE_LIST_NOTE = """
 <p>When a request is handled, the server tries to match a rule <b>from
 bottom to top</b>. The first match is applied.</p>
@@ -44,6 +36,11 @@ NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
 NOTE_ADD_DOMAIN      = 'Adds a new domain name. Wildcards are allowed in the domain name.'
 NOTE_DOCUMENT_ROOT   = 'Virtual Server root directory.'
 NOTE_DIRECTORY_INDEX = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
+NOTE_LOGGERS         = 'Logging format. Apache compatible is highly recommended here.'
+NOTE_ACCESSES        = 'Back-end with which the accesses will be stored.'
+NOTE_ERRORS          = 'Back-end with which the errors that may occur will be stored.'
+NOTE_WRT_FILE        = 'Full path to the file were the information will be saved.'
+NOTE_WRT_EXEC        = 'Path to the executable that will be invoked with each log entry.'
 
 
 class PageVServer (PageMenu, FormHelper):
@@ -309,8 +306,8 @@ class PageVServer (PageMenu, FormHelper):
         pre = 'vserver!%s!logger'%(host)
 
         # Logger
-        table = Table(2)
-        self.AddTableOptions_Ajax (table, 'Format', pre, LOGGERS)
+        table = TableProps()
+        self.AddPropOptions_Ajax (table, 'Format', pre, LOGGERS, NOTE_LOGGERS)
 
         txt  = '<h3>Logging Format</h3>'
         txt += self.Indent(str(table))
@@ -321,37 +318,37 @@ class PageVServer (PageMenu, FormHelper):
 
             # Accesses
             cfg_key = "%s!access!type"%(pre)
-            table = Table(2)
-            self.AddTableOptions_Ajax (table, 'Accesses', cfg_key, LOGGER_WRITERS)
-            writers += self.Dialog(LOGGER_ACCESS_NOTE)
+            table = TableProps()
+            self.AddPropOptions_Ajax (table, 'Accesses', cfg_key, LOGGER_WRITERS, NOTE_ACCESSES)
             writers += str(table)
 
             access = self._cfg.get_val(cfg_key)
             if access == 'file':
-                t1 = Table(2)
-                self.AddTableEntry (t1, 'Filename', '%s!access!filename' % (pre))
-                writers += self.Indent(t1)
+                t1 = TableProps()
+                self.AddPropEntry (t1, 'Filename', '%s!access!filename'%(pre), NOTE_WRT_FILE, size=40)
+                writers += str(t1)
             elif access == 'exec':
-                t1 = Table(2)
-                self.AddTableEntry (t1, 'Command', '%s!access!command' % (pre))
-                writers += self.Indent(t1)
+                t1 = TableProps()
+                self.AddPropEntry (t1, 'Command', '%s!access!command'%(pre), NOTE_WRT_EXEC, size=40)
+                writers += str(t1)
+
+            writers += "<hr />"
 
             # Error
             cfg_key = "%s!error!type"%(pre)
-            table = Table(2)
-            self.AddTableOptions_Ajax (table, 'Errors', cfg_key, LOGGER_WRITERS)
-            writers += self.Dialog(LOGGER_ERROR_NOTE)
+            table = TableProps()
+            self.AddPropOptions_Ajax (table, 'Errors', cfg_key, LOGGER_WRITERS, NOTE_ERRORS)
             writers += str(table)
 
             error = self._cfg.get_val(cfg_key)
             if error == 'file':
-                t1 = Table(2)
-                self.AddTableEntry (t1, 'Filename', '%s!error!filename' % (pre))
-                writers += self.Indent(t1)
+                t1 = TableProps()
+                self.AddPropEntry (t1, 'Filename', '%s!error!filename'%(pre), NOTE_WRT_FILE, size=40)
+                writers += str(t1)
             elif error == 'exec':
-                t1 = Table(2)
-                self.AddTableEntry (t1, 'Command', '%s!error!command' % (pre))
-                writers += self.Indent(t1)
+                t1 = TableProps()
+                self.AddPropEntry (t1, 'Command', '%s!error!command'%(pre), NOTE_WRT_EXEC, size=40)
+                writers += str(t1)
 
             txt += '<h3>Writers</h3>'
             txt += self.Indent(writers)

@@ -1,5 +1,10 @@
 2008-03-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServer.py: A few sections more have been converted to
+	the new table layout.
+
+	* admin/static/css/cherokee.css: Table headers are bold now.
+
 	* admin/Makefile.am (adminpy_SCRIPTS): server.py had to be
 	installed as an executable script.
 

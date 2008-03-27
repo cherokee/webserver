@@ -198,6 +198,13 @@ class FormHelper (WebComponent):
 
         return self.AddTableOptions (table, title, cfg_key, options, *args, **kwargs)
 
+    def AddPropOptions_Ajax (self, table, title, cfg_key, options, comment, *args, **kwargs):
+        wrap_id = self._get_auto_wrap_id()
+        js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, wrap_id)
+        kwargs['onChange'] = js
+
+        return self.AddPropOptions (table, title, cfg_key, options, comment, *args, **kwargs)
+
     def AddPropOptions_Reload (self, table, title, cfg_key, options, comment, **kwargs):
         assert (self.submit_url)
 
@@ -390,8 +397,8 @@ class FormHelper (WebComponent):
         label = self.Label (title, cfg_key);
         table += (label, entry, comment)
 
-    def AddPropEntry (self, table, title, cfg_key, comment=None):
-        entry = self.InstanceEntry (cfg_key, 'text')
+    def AddPropEntry (self, table, title, cfg_key, comment=None, **kwargs):
+        entry = self.InstanceEntry (cfg_key, 'text', **kwargs)
         self.AddProp (table, title, cfg_key, entry, comment)
 
     def AddPropCheck (self, table, title, cfg_key, default, comment=None):

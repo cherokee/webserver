@@ -311,3 +311,7 @@ a.button:active span {
   text-align: left;
   align: left;
 }
+
+table tr th {
+  font-weight: bold;
+}
