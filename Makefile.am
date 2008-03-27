@@ -16,7 +16,7 @@ cherokee-config.1    \
 cherokee_logrotate.1 \
 spawn-fcgi.1         \
 cherokee_tweak.1     \
-cherokee-admin.8
+cherokee-admin.1
 
 # pkg-config
 pkgconfigdir = $(libdir)/pkgconfig
