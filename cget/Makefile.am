@@ -6,6 +6,9 @@ $(TLS_CFLAGS) \
 $(PTHREAD_CFLAGS) \
 $(LARGEFILE_CFLAGS)
 
+# Man pag
+man_MANS = \
+cget.1
 
 cget_LDADD = \
 $(TLS_LIBS) \

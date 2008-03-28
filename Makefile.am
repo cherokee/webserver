@@ -10,10 +10,8 @@ m4data_DATA = cherokee.m4
 
 # Man pag
 man_MANS =           \
-cget.1               \
 cherokee.1           \
 cherokee-config.1    \
-cherokee_logrotate.1 \
 spawn-fcgi.1         \
 cherokee_tweak.1     \
 cherokee-admin.1
