@@ -24,6 +24,7 @@ really know what you are doing.</p>
 """
 
 NOTE_THREAD       = 'Defines which thread policy the OS should apply to the server.'
+NOTE_THREAD_NUM   = 'If empty, Cherokee will calculate the number.'
 NOTE_FD_NUM       = 'It defines how many file descriptors the server can handle.'
 NOTE_POLLING      = 'Allows to choose the internal polling mechanism.'
 NOTE_SENDFILE_MIN = 'Minimum size of a file to use sendfile(). Default: 32768.'
@@ -53,6 +54,7 @@ class PageAdvanced (PageMenu, FormHelper):
 
         txt += "<h2>System tweaking</h2>"
         table = TableProps()
+        self.AddPropEntry    (table, 'Thread Number',    'server!thread_number', NOTE_THREAD_NUM)
         self.AddPropOptions  (table, 'Thread Policy',    'server!thread_policy', THREAD_POLICY, NOTE_THREAD)
         self.AddPropEntry    (table, 'File descriptors', 'server!max_fds', NOTE_FD_NUM)
         txt += self.Indent(table)
