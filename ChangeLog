@@ -1,5 +1,7 @@
 2008-03-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* Makefile.am (man_MANS), cherokee_logrotate.1: Man page removed.
+
 	* admin/PageAdvanced.py: Added the server!thread_number
 	configuration entry.
 
