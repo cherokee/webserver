@@ -105,7 +105,7 @@ test_configuration_file (void)
 	config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
 	ret = cherokee_server_read_config_file (srv, config);
 
-	PRINT_MSG ("Configuration test: %ssuccessful\n", (ret == ret_ok)? "": "un"); 
+	PRINT_MSG ("Test on %s: %s\n", config, (ret == ret_ok)? "OK": "Failed"); 
 	return ret;
 }
 

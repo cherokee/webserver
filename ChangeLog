@@ -1,5 +1,8 @@
 2008-03-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c: (test_configuration_file): Include the
+	configuration file name in the reporting message.
+
 	* cherokee/main.c: On SIGUSR1 the server reopen the log for all
 	its virtual servers.
 
