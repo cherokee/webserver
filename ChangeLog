@@ -1,5 +1,8 @@
 2008-03-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cget/Makefile.am (EXTRA_DIST): Bugfix: cget.1 needed to be in
+	the EXTRA_DIST list.
+
 	* admin/Makefile.am (EXTRA_DIST): Bugfix: server.py must be
 	distributed.
 
