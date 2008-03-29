@@ -1,5 +1,9 @@
 2008-03-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* configure.in, cherokee/cacheline.h, cherokee/cacheline.c: Added
+	a check to guess what the L2 cache line size is. It is an initial
+	implementation, some additional work is still required.
+
 	* cget/Makefile.am (EXTRA_DIST): Bugfix: cget.1 needed to be in
 	the EXTRA_DIST list.
 

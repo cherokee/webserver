@@ -718,6 +718,8 @@ list.h \
 list.c \
 ncpus.h \
 ncpus.c \
+cacheline.h \
+cacheline.c \
 crc32.h \
 crc32.c \
 macros.h \

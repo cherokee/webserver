@@ -124,6 +124,36 @@ AC_MSG_CHECKING([host platform characteristics])
 esac
 AC_MSG_RESULT(ok)
 
+AC_MSG_CHECKING([L2 cache line size])
+case "$host_cpu" in
+	i386|i486)
+		CPU_CACHE_LINE=32
+	;;
+	i586|i686)
+		CPU_CACHE_LINE=64
+	;;
+	i786)	
+		CPU_CACHE_LINE=128
+	;;
+	athlon)	
+		CPU_CACHE_LINE=64
+	;;
+	x86_64)	
+		CPU_CACHE_LINE=64
+	;;
+	sparc*)	
+		CPU_CACHE_LINE=64
+	;;
+	powerpc)
+		CPU_CACHE_LINE=128
+	;;
+	*)
+		CPU_CACHE_LINE=128
+	;;
+esac
+AC_DEFINE_UNQUOTED(CPU_CACHE_LINE, $CPU_CACHE_LINE, [L2 cache line size])
+AC_MSG_RESULT($CPU_CACHE_LINE)
+
 dnl
 dnl OS string
 dnl
