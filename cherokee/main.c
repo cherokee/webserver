@@ -32,8 +32,8 @@
 
 #define DEFAULT_CONFIG_FILE CHEROKEE_CONFDIR "/cherokee.conf"
 
-#define GETOPT_OPT  "C:r:p:bhvg"
-#define CONFIG_FILE_HELP "[-C configfile] [-r DIR [-p PORT]] [-g]"
+#define GETOPT_OPT  "C:r:p:bhvgt"
+#define CONFIG_FILE_HELP "[-C configfile] [-r DIR [-p PORT]] [-g] [-t]"
 
 #define BASIC_CONFIG                                                                         \
 	"vserver!default!directory!/!handler = common\n"                                     \
@@ -54,6 +54,7 @@ static cherokee_server_t  *srv           = NULL;
 static char               *config_file   = NULL;
 static char               *document_root = NULL;
 static cherokee_boolean_t  daemon_mode   = false;
+static cherokee_boolean_t  just_test     = false;
 static cuint_t             port          = 80;
 
 static ret_t common_server_initialization (cherokee_server_t *srv);
@@ -88,6 +89,18 @@ restart_server (int code)
 	cherokee_server_handle_HUP (srv, restart_server_cb);
 }
 
+static ret_t
+test_configuration_file (void)
+{
+	ret_t   ret;
+	char   *config;
+
+	config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
+	ret = cherokee_server_read_config_file (srv, config);
+
+	PRINT_MSG ("Configuration test: %ssuccessful\n", (ret == ret_ok)? "": "un"); 
+	return ret;
+}
 
 static ret_t
 common_server_initialization (cherokee_server_t *srv)
@@ -134,7 +147,7 @@ common_server_initialization (cherokee_server_t *srv)
 			return ret_error;
 		}
 	}
-		
+
 	if (daemon_mode)
 		cherokee_server_daemonize (srv);
 
@@ -171,6 +184,9 @@ process_parameters (int argc, char **argv)
 			fprintf (stdout, "%s\n", PACKAGE_STRING);
 			exit(1);
 			break;
+		case 't':
+			just_test = true;
+			break;
 		case 'h':
 		default:
 			fprintf (stderr, "Usage: %s " CONFIG_FILE_HELP " [-b] -h -v\n", argv[0]);
@@ -193,6 +209,11 @@ main (int argc, char **argv)
 	if (ret < ret_ok) return 1;
 	
 	process_parameters (argc, argv);
+	
+	if (just_test) {
+		ret = test_configuration_file();
+		exit (ret);
+	}
 
 	ret = common_server_initialization (srv);
 	if (ret < ret_ok) return 2;

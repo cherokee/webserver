@@ -28,7 +28,7 @@
 .SH NAME
 cherokee \- Cherokee web server
 .SH SYNOPSIS
-.B cherokee [\-C configfile] [\-b] [\-r /directory/to/share] [\-v] [\-h]
+.B cherokee [\-C configfile] [\-b] [\-r DIR [-p PORT]] [-t] [\-v] [\-h]
 .SH DESCRIPTION
 \fBcherokee\fP is an extremely fast, flexible and embedable web server.
 .\" .PP
@@ -39,7 +39,7 @@ following options:
 .TP 8
 .B \-b
 Launches the server as a background process (default behaviour is to
-stay attached to the controlling terminal)
+stay attached to the controlling terminal).
 .TP 8
 .B \-C configfile
 Specifies a configuration file other than the default
@@ -49,6 +49,12 @@ Specifies a configuration file other than the default
 Launches a server exposing statically the specified directory. When
 launched with \-r, the configuration file is ignored, and the Cherokee
 instance runs with its default values.
+.TP 8
+.B \-p PORT
+It used with -r specifies the port to which the server will listen.
+.TP 8
+.B \-t
+Perform a sanity check on the configuration file. The server will not run.
 .TP 8
 .B \-h
 Prints a brief help message and terminates execution

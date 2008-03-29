@@ -1,3 +1,8 @@
+2008-03-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main.c (main), cherokee.1: Added the -t parameter. It
+	tests the configuration file.
+
 2008-03-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* Makefile.am (man_MANS), cget/Makefile.am (man_MANS), cget.1: The
