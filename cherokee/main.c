@@ -89,6 +89,13 @@ restart_server (int code)
 	cherokee_server_handle_HUP (srv, restart_server_cb);
 }
 
+static void
+reopen_log_files (int code)
+{	
+	printf ("Reopeing log files..\n");
+	cherokee_server_log_reopen (srv);
+}
+
 static ret_t
 test_configuration_file (void)
 {
@@ -111,7 +118,10 @@ common_server_initialization (cherokee_server_t *srv)
         signal (SIGPIPE, SIG_IGN);
 #endif
 #ifdef SIGHUP
-        signal (SIGHUP,  restart_server);
+        signal (SIGHUP, restart_server);
+#endif
+#ifdef SIGUSR1
+        signal (SIGUSR1, reopen_log_files);
 #endif
 #ifdef SIGSEGV
         signal (SIGSEGV, panic_handler);

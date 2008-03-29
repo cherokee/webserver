@@ -1986,6 +1986,31 @@ cherokee_server_del_connection (cherokee_server_t *srv, char *id_str)
 
 
 ret_t 
+cherokee_server_log_reopen (cherokee_server_t *srv)
+{
+	ret_t            ret;
+	cherokee_list_t *i;
+
+	if (srv->vserver_default->logger) {
+		ret = cherokee_logger_reopen (srv->vserver_default->logger);
+		if (unlikely (ret != ret_ok)) return ret;		
+	}
+
+	list_for_each (i, &srv->vservers) {
+		cherokee_logger_t *logger = VSERVER(i)->logger;
+		
+		if (logger == NULL) 
+			continue;
+
+		ret = cherokee_logger_reopen (logger);
+		if (unlikely (ret != ret_ok)) return ret;		
+	}
+	
+	return ret_ok;
+}
+
+
+ret_t 
 cherokee_server_set_backup_mode (cherokee_server_t *srv, cherokee_boolean_t active)
 {
 	ret_t            ret;

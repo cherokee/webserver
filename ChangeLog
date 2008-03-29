@@ -1,5 +1,10 @@
 2008-03-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c: On SIGUSR1 the server reopen the log for all
+	its virtual servers.
+
+	* cherokee/server.c (cherokee_server_log_reopen): Added new method.
+
 	* cherokee/main.c (main), cherokee.1: Added the -t parameter. It
 	tests the configuration file.
 
