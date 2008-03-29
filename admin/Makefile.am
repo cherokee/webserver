@@ -88,6 +88,7 @@ feedback.help.html
 EXTRA_DIST = \
 $(PY_PRE) \
 $(adminpy_DATA) \
+$(adminpy_SCRIPTS) \
 $(adminhelp_DATA)
 
 CLEANFILES = \

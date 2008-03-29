@@ -1,5 +1,8 @@
 2008-03-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/Makefile.am (EXTRA_DIST): Bugfix: server.py must be
+	distributed.
+
 	* cherokee/main.c: (test_configuration_file): Include the
 	configuration file name in the reporting message.
 
