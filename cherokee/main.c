@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include <signal.h>
+#include "init.h"
 #include "server.h"
 
 #ifdef HAVE_GETOPT_H
@@ -211,9 +212,7 @@ main (int argc, char **argv)
 {
 	ret_t ret;
 
-#ifdef _WIN32
-	init_win32();
-#endif	
+	cherokee_init();
 
 	ret = cherokee_server_new (&srv);
 	if (ret < ret_ok) return 1;

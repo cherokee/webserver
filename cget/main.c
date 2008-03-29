@@ -46,6 +46,7 @@
 #include <unistd.h>
 #include <strings.h>
 
+#include "init.h"
 #include "util.h"
 #include "url.h"
 #include "header.h"
@@ -407,7 +408,7 @@ main (int argc, char **argv)
 
 	/* Tracing and proxy discovering..
 	 */
-	cherokee_trace_init();
+	cherokee_init();
 	cget_find_proxy (&proxy, &proxy_port);
 
 	for (val=optind; val<optind+param_num; val++) {

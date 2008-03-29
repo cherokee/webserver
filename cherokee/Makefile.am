@@ -708,6 +708,8 @@ $(poll_select_src) \
 $(poll_win32_src) \
 $(win32_src) \
 cherokee.h \
+init.h \
+init.c \
 avl.h \
 avl.c \
 avl_r.h \

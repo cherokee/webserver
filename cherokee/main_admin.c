@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include <signal.h>
+#include "init.h"
 #include "server.h"
 
 #ifdef HAVE_GETOPT_H
@@ -129,6 +130,7 @@ main (int argc, char **argv)
         signal (SIGPIPE, SIG_IGN);
 #endif
 
+	cherokee_init();
 	process_parameters (argc, argv);
 
 	ret = cherokee_server_new (&srv);

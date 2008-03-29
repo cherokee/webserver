@@ -356,7 +356,7 @@ main (int argc, char *argv[])
 	cherokee_buffer_t  user     = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t  password = CHEROKEE_BUF_INIT;
 
-	cherokee_trace_init();
+	cherokee_init();
 	TRACE(ENTRIES, "Starts %d args\n", argc-1);
 	
 	/* Parse the parameters

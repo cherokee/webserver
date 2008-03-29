@@ -1,5 +1,14 @@
 2008-03-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/init.h, cherokee/init.c, cherokee/Makefile.am: Added a
+	new global initialization function. It works at libcherokee_base
+	level, so calling cherokee_init() is not mandatory is now
+	mandatory for all the cherokee based applications.
+
+	* cherokee/main_admin.c, cherokee/main.c, cherokee/main_tweak.c,
+	cherokee/cherokee.h, cherokee/server.c, cget/main.c: Adapted to
+	use cherokee_init().
+
 	* configure.in, cherokee/cacheline.h, cherokee/cacheline.c: Added
 	a check to guess what the L2 cache line size is. It is an initial
 	implementation, some additional work is still required.
