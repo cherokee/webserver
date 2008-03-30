@@ -12,7 +12,7 @@
 .\" along with this program; see the file COPYING.  If not, write to
 .\" the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH Cget 1 "December 20, 2001"
+.TH Cget 1 "March 31, 2008"
 .\" Please update the above date whenever this man page is modified.
 .\"
 .\" Some roff macros, for reference:
@@ -28,11 +28,44 @@
 .SH NAME
 cget \- Cherokee web downloader
 .SH SYNOPSIS
-.B cget
+.B cget [options] URL
 .SH DESCRIPTION
 \fBcget\fP is a web downloading tool
 .\" .PP
 .\" It also...
+.SH OPTIONS
+No option is mandatory. By default the web is downloaded but it is not saved. 
+If that is not the desired behavior it must be specified explicitly. 
+Below is a summary of the
+.B cget
+options.
+.PP
+Startup:
+.TP
+.B -V,  --version                
+Display version of currently installed cget and exit.
+.TP
+.B -h,  --help
+Display help screen with common options.
+.TP
+.B    
+Logging and input file:
+.TP
+.B -q,  --quiet
+Run in quiet mode: no output is displayed.
+.PP
+Download:
+.TP
+.B -O, --output-document=FILE
+Writes whatever document is downloaded to FILE
+.PP	
+HTTP options:
+.TP
+.B -s, --save-headers
+This option saves HTTP headers to the file being saved (specified with -O option)
+.TP
+.B --header=STRING
+this option inserts STRING among the headers sent in the HTTP request.
 .SH EXAMPLE
 cget http://www.cherokee-project.com/
 .SH BUGS
@@ -50,5 +83,4 @@ cherokee-admin@alobbs.com with the line:
 in the body of the message. The submission address is cherokee@alobbs.com.
 .\" .SH "SEE ALSO"
 .SH AUTHOR
-Alvaro Lopez Ortega <alvaro@alobbs.com>.
-
+Alvaro Lopez Ortega <alvaro@alobbs.com>. Manual page updated by Taher Shihadeh <taher@unixwars.com>.
