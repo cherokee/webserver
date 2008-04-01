@@ -39,7 +39,8 @@ ret_t cherokee_init (void);
 
 /* Globals
  */
-cuint_t cacheline_size;
+cuint_t cherokee_cacheline_size;
+cint_t  cherokee_cpu_number;
 
 CHEROKEE_END_DECLS
 

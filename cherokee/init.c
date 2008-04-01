@@ -26,6 +26,7 @@
 #include "init.h"
 #include "cacheline.h"
 #include "trace.h"
+#include "ncpus.h"
 
 static cherokee_boolean_t _cherokee_init = false;
 
@@ -43,9 +44,17 @@ cherokee_init (void)
 	 */
 	cherokee_trace_init();
 
+	/* Get the CPU number
+	 */
+	dcc_ncpus (&cherokee_cpu_number);
+	if (cherokee_cpu_number < 1) {
+		PRINT_ERROR ("Bad CPU number: %d, using 1\n", cherokee_cpu_number);
+		cherokee_cpu_number = 1;
+	}
+
 	/* Try to figure the L2 cache line size
 	 */
-	cherokee_cacheline_size_get (&cacheline_size);
+	cherokee_cacheline_size_get (&cherokee_cacheline_size);
 
 	_cherokee_init = true;
 	return ret_ok;

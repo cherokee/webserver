@@ -1,3 +1,8 @@
+2008-04-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/server.c, cherokee/server.h: cpu number information is
+	now a global variable instead of a property of the server class.
+
 2008-03-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/init.h, cherokee/init.c, cherokee/Makefile.am: Added a

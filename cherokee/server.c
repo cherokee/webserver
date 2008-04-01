@@ -76,7 +76,6 @@
 #include "thread.h"
 #include "socket.h"
 #include "connection.h"
-#include "ncpus.h"
 #include "mime.h"
 #include "util.h"
 #include "dtm.h"
@@ -87,6 +86,7 @@
 #include "connection-protected.h"
 #include "nonce.h"
 #include "config_reader.h"
+#include "init.h"
 
 #define ENTRIES "core,server"
 
@@ -137,7 +137,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->keepalive       = true;
 	n->keepalive_max   = MAX_KEEPALIVE;
 
-	n->ncpus           = -1;
 	n->thread_num      = -1;
 	n->thread_policy   = -1;
 
@@ -1081,21 +1080,14 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		if (ret != ret_ok) return ret;
 	}
 
-	/* Get the CPU number
-	 */
-	dcc_ncpus (&srv->ncpus);
-	if (srv->ncpus < 1) {
-		PRINT_ERROR("Bad number of processors (%d < 1), use default 1 !\n", srv->ncpus);
-		srv->ncpus = 1;
-	}
-
 	/* Verify the thread number and force it within sane limits.
 	 * See also subsequent fds_per_threads.
 	 */
 #ifdef HAVE_PTHREAD
 	if (srv->thread_num < 1) {
-		srv->thread_num = srv->ncpus * 5;
+		srv->thread_num = cherokee_cpu_number * 5;
 	}
+
 	/* Limit the number of threads
 	 * so that each thread has at least 2 fds available.
 	 */
