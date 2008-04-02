@@ -27,12 +27,15 @@
 #include "cacheline.h"
 #include "trace.h"
 #include "ncpus.h"
+#include "util.h"
 
 static cherokee_boolean_t _cherokee_init = false;
 
 ret_t 
 cherokee_init (void)
 {
+	ret_t ret;
+
 	if (_cherokee_init)
 		return ret_ok;
 
@@ -55,6 +58,14 @@ cherokee_init (void)
 	/* Try to figure the L2 cache line size
 	 */
 	cherokee_cacheline_size_get (&cherokee_cacheline_size);
+
+	/* Get the file descriptor number limit
+	 */
+	ret = cherokee_sys_fdlimit_get (&cherokee_fdlimit);
+	if (ret < ret_ok) {
+		PRINT_ERROR_S ("ERROR: Unable to get file descriptor limit\n");
+		return ret;
+	}
 
 	_cherokee_init = true;
 	return ret_ok;

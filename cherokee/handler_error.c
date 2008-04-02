@@ -182,9 +182,9 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 	cherokee_buffer_add_str (buffer, CRLF "<p><hr>" CRLF);
 
 	if (cnt->socket.is_tls == non_TLS)
-		cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->ext_server_w_port_string);
+		cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->server_string_w_port);
 	else 
-		cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->ext_server_w_port_tls_string);
+		cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->server_string_w_port_tls);
 
 	cherokee_buffer_add_str (buffer, CRLF "</body>" CRLF "</html>" CRLF);
 

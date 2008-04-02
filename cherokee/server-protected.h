@@ -94,11 +94,11 @@ struct cherokee_server {
 	cherokee_plugin_loader_t   loader;
 	cherokee_encoder_table_t   encoders;
 
-	/* Tables: icons, iocache
+	/* Tables: iocache, nonces, etc
 	 */
-	cherokee_icons_t          *icons;
 	cherokee_regex_table_t    *regexs;
 	cherokee_nonce_table_t    *nonces;
+
 	cherokee_iocache_t        *iocache;
 	time_t                     iocache_clean_next;
 
@@ -119,10 +119,10 @@ struct cherokee_server {
 
 	/* System related
 	 */
- 	int                        ncpus;
-	int                        max_fds;
-	int                        fds_per_thread;
-	uint32_t                   system_fd_limit;
+	int                        fdlimit_custom;
+	int                        fdlimit_available;
+	int                        fdlimit_per_thread;
+
 	cherokee_poll_type_t       fdpoll_method;
 
 	/* Connection related
@@ -149,9 +149,9 @@ struct cherokee_server {
 	cherokee_server_token_t    server_token;
 
 	cherokee_buffer_t          server_string;
-	cherokee_buffer_t          ext_server_string;
-	cherokee_buffer_t          ext_server_w_port_string;
-	cherokee_buffer_t          ext_server_w_port_tls_string;
+	cherokee_buffer_t          server_string_ext;
+	cherokee_buffer_t          server_string_w_port;
+	cherokee_buffer_t          server_string_w_port_tls;
 
 	/* User/group and chroot
 	 */
@@ -163,11 +163,12 @@ struct cherokee_server {
 	cherokee_buffer_t          chroot;
 	cherokee_boolean_t         chrooted;
 
-	/* Mime
+	/* Other objects
 	 */
 	cherokee_mime_t           *mime;
+	cherokee_icons_t          *icons;
 
-	/* Time
+	/* Time related
 	 */
 	int                        timeout;
 	cherokee_buffer_t          timeout_header;
@@ -183,10 +184,6 @@ struct cherokee_server {
 	/* Another config files
 	 */
 	cherokee_config_node_t     config;
-	char                      *icons_file;
-
-	/* Performance
-	 */
 
 	/* PID
 	 */

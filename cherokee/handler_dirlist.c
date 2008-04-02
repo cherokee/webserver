@@ -716,9 +716,9 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 	/* Server software string
 	 */
 	if (conn->socket.is_tls == non_TLS)
-		dhdl->software_str_ref = &srv->ext_server_w_port_string;
+		dhdl->software_str_ref = &srv->server_string_w_port;
 	else
-		dhdl->software_str_ref = &srv->ext_server_w_port_tls_string;
+		dhdl->software_str_ref = &srv->server_string_w_port_tls;
 
  	return ret_ok;
 }

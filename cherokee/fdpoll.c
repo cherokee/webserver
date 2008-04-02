@@ -94,7 +94,8 @@ cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, int *sys_fd_limit, int 
 ret_t
 cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys_fd_limit, int fd_limit)
 {
-	if (sys_fd_limit < MIN_MAX_FDS || sys_fd_limit < fd_limit)
+	if ((sys_fd_limit < fd_limit) ||
+	    (sys_fd_limit < FD_NUM_MIN_AVAILABLE))
 		return ret_error;
 
 	switch (type) {

@@ -99,28 +99,30 @@
 #define LOGGER_MIN_BUFSIZE            0
 #define DEFAULT_LOGGER_MAX_BUFSIZE    32768
 #define LOGGER_MAX_BUFSIZE            (4 * 1024 * 1024)
-#define MIN_SYSTEM_FD_NUM             20	/* range: 16 - 64 */
-#define MIN_SPARE_FDS                 10	/* range:  8 - 20 */
-#define MIN_MAX_FDS                    8	/* range:  8 ... 65000 */
-#define MIN_THR_FDS                    8	/* range:  8 ... 65000 */
 
-#if (MIN_SYSTEM_FD_NUM < 16) 
-#error MIN_SYSTEM_FD_NUM too low, < 16 !
+
+#define FD_NUM_SPARE                  10	/* range:  8 - 20 */          
+#define FD_NUM_MIN_SYSTEM             20	/* range: 16 - 64 */
+#define FD_NUM_MIN_AVAILABLE           8	/* range:  8 ... 65000 */
+#define FD_NUM_MIN_PER_THREAD          8	/* range:  8 ... 65000 */
+
+#if (FD_NUM_MIN_SYSTEM < 16) 
+# error FD_NUM_MIN_SYSTEM too low, < 16
 #endif
-#if (MIN_SPARE_FDS < 8)
-#error MIN_SPARE_FDS too low, < 8 !
+#if (FD_NUM_SPARE < 8)
+# error FD_NUM_SPARE too low, < 8
 #endif
-#if (MIN_MAX_FDS < 8)
-#error MIN_MAX_FDS too low, < 8 !
+#if (FD_NUM_MIN_AVAILABLE < 8)
+# error FD_NUM_MIN_AVAILABLE too low, < 8
 #endif
-#if (MIN_THR_FDS < 8)
-#error MIN_THR_FDS too low, < 8 !
+#if (FD_NUM_MIN_PER_THREAD < 8)
+# error FD_NUM_MIN_PER_THREAD too low, < 8
 #endif
-#if (MIN_THR_FDS > MIN_MAX_FDS)
-#error MIN_THR_FDS too high, > MIN_MAX_FDS !
+#if (FD_NUM_MIN_PER_THREAD > FD_NUM_MIN_AVAILABLE)
+# error FD_NUM_MIN_PER_THREAD too high, > FD_NUM_MIN_AVAILABLE
 #endif
-#if ((MIN_SYSTEM_FD_NUM - MIN_SPARE_FDS) < MIN_MAX_FDS)
-#error MIN_SYSTEM_FD_NUM too low or MIN_SPARE FDS too high !
+#if ((FD_NUM_MIN_SYSTEM - FD_NUM_SPARE) < FD_NUM_MIN_AVAILABLE)
+# error FD_NUM_MIN_SYSTEM too low or FD_NUM_SPARE FDS too high
 #endif
 
 #define IOCACHE_MAX_FILE_SIZE            50000
@@ -149,11 +151,8 @@
 #define equal_str(m,str) \
 	(strncasecmp(m, str, sizeof(str)-1) == 0)
 
-#define equal_buf_str(b,str)            \
-	(((b)->len == sizeof(str)-1) &&	\
-	 (strncasecmp((b)->buf, str, sizeof(str)-1) == 0))
-
-#define get_buf_str(b)		((b)->buf)
+#define equal_buf_str(b,str) \
+	(cherokee_buffer_case_cmp_str(b,str) == 0)
 
 #define return_if_fail(expr,ret) \
 	if (!(expr)) {                                                      \
@@ -236,8 +235,8 @@
  */
 #define CHEROKEE_FREE(obj) \
 	do {		\
-	free (obj);	\
-	(obj) = NULL;	\
+ 	  free (obj);	\
+	  (obj) = NULL;	\
 	} while (0)
 
 #define CHEROKEE_TEMP(obj, size)                 \

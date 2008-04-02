@@ -41,6 +41,7 @@ ret_t cherokee_init (void);
  */
 cuint_t cherokee_cacheline_size;
 cint_t  cherokee_cpu_number;
+cuint_t cherokee_fdlimit;
 
 CHEROKEE_END_DECLS
 

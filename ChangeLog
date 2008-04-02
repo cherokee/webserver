@@ -1,5 +1,21 @@
 2008-04-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server-protected.h, cherokee/server.c,
+	cherokee/handler_dirlist.c, cherokee/handler_error.c: Clean
+	up. The server string variables have been consolidated under a
+	common prefix: srv->server_string*.
+
+	* cherokee/init.c, cherokee/init.h, cherokee/fdpoll.c,
+	cherokee/macros.h, cherokee/server-protected.h, cherokee/server.c:
+	Clean up. The fdlimit variables have been consolidated under a
+	common prefix fdlimit_. Besides, cherokee_init() gets the system
+	file descriptor limit number.
+
+	* admin/static/js/Makefile.am (THIRD_PARTY): Bug fix. It had to
+	include jquery.dimensions.js and jquery.tablednd.js. The new
+	sortable rules table was not working because these two files were
+	missing.
+
 	* cherokee/server.c, cherokee/server.h: cpu number information is
 	now a global variable instead of a property of the server class.
 
