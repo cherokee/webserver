@@ -1,3 +1,17 @@
+2008-04-05  A.D.F  <adefacc@tin.it>
+
+	* cherokee/buffer.h, cherokee/buffer.c
+	  - added new function cherokee_buffer_add_escape_html()
+	    with new escape method to avoid too many data copies
+	    and trash the CPU L1 cache;
+	  - cherokee_buffer_unescape_uri(), added test on string
+	    termination character.
+
+	* cherokee/handler_error.c
+	  - replaced cherokee_buffer_escape_html() with
+	    cherokee_buffer_add_escape_html();
+	  - removed usage of tmp buffer (thanks to previous changes).
+
 2008-04-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/server-protected.h, cherokee/server.c,

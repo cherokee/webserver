@@ -1034,6 +1034,12 @@ cherokee_buffer_unescape_uri (cherokee_buffer_t *buffer)
 	if (unlikely (buffer->buf == NULL))
 		return ret_error;
 
+	/* Verify string termination,
+	 * we assume there are no '\0' inside buffer.
+	 */
+	if (buffer->buf[buffer->len] != '\0')
+		buffer->buf[buffer->len]  = '\0';
+
 	/* Verify if unescaping is needed.
 	 */
 	if ((psrc = strchr (buffer->buf, '%')) == NULL)
@@ -1074,13 +1080,17 @@ cherokee_buffer_unescape_uri (cherokee_buffer_t *buffer)
 
 
 ret_t 
-cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
+cherokee_buffer_add_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
 {
 	ret_t   ret;
-	cuint_t i;
-	cuint_t j;
-	cuint_t extra = 0;
-	char   *p0, *p;
+	size_t  len0 = 0;
+	size_t  extra = 0;
+	char   *p0, *p1, *p2;
+
+	/* Verify that source string is not empty.
+	 */
+	if (unlikely (src->buf == NULL))
+		return ret_error;
 
 	/* Verify string termination,
 	 * we assume there are no '\0' inside buffer.
@@ -1090,21 +1100,24 @@ cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
 
 	/* Verify if string has to be escaped.
 	 */
-	if ((p0 = strpbrk (src->buf, "<>&\"")) == NULL)
-		return ret_not_found;
+	if ((p0 = strpbrk (src->buf, "<>&\"")) == NULL) {
+		/* No escape found, simply add src to buf.
+		 */
+		return cherokee_buffer_add_buffer (buf, src);
+	}
 
 	/* Count extra characters
 	 */
-	for (p = p0; *p != '\0'; ++p) {
-		switch(*p) {
-			case '<':
-			case '>':
+	for (p1 = p0; *p1 != '\0'; ++p1) {
+		switch(*p1) {
+			case '<':	/* &lt; */
+			case '>':	/* &gt; */
 				extra += 3;
 				continue;
-			case '&':
+			case '&':	/* &amp; */
 				extra += 4;
 				continue;
-			case '"':
+			case '"':	/* &quot; */
 				extra += 5;
 				continue;
 			default:
@@ -1114,56 +1127,66 @@ cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
 
 	/* Verify there are no embedded '\0'.
 	 */
-	if ( ((int) (p - src->buf)) != src->len)
+	if ( ((int) (p1 - src->buf)) != src->len)
 		return ret_error;
 
-	/* Copy the buffer
+	/* Ensure there is proper buffer size.
 	 */
-	cherokee_buffer_clean (buf);
+	ret = cherokee_buffer_ensure_addlen (buf, src->len + extra + 1);
+	if (ret != ret_ok)
+		return ret;
 
-	ret = cherokee_buffer_ensure_size (buf, src->len + extra + 1);
-	if (ret != ret_ok) return ret;
-	
-	ret = cherokee_buffer_add_buffer (buf, src);
-	if (ret != ret_ok) return ret;
-
-	/* Make the changes
+	/* Escape and copy data to destination buffer.
 	 */
-	for (i = 0, j = 0; i < buf->len; i++) {
-		char c = buf->buf[i+j]; 
-
-		switch (c) {
-		case '<':
-			memmove (&buf->buf[i+j+4], &buf->buf[i+j+1], buf->len-i);
-			memcpy (&buf->buf[i+j], "&lt;", 4);
-			j += 3;
-			break;
-
-		case '>':
-			memmove (&buf->buf[i+j+4], &buf->buf[i+j+1], buf->len-i);
-			memcpy (&buf->buf[i+j], "&gt;", 4);
-			j += 3;
-			break;
-
-		case '&':
-			memmove (&buf->buf[i+j+5], &buf->buf[i+j+1], buf->len-i);
-			memcpy (&buf->buf[i+j], "&amp;", 5);
-			j += 4;
-			break;
-
-		case '"':
-			memmove (&buf->buf[i+j+6], &buf->buf[i+j+1], buf->len-i);
-			memcpy (&buf->buf[i+j], "&quot;", 6);
-			j += 5;
-			break;
-		}
+	if (p0 != src->buf) {
+		len0 = (size_t) (p0 - src->buf);
+		memcpy (&buf->buf[buf->len], src->buf, len0);
 	}
 
+	p2 = &buf->buf[buf->len + len0];
+
+	for (p1 = p0; *p1 != '\0'; ++p1) {
+		switch (*p1) {
+		case '<':
+			memcpy (p2, "&lt;", 4);
+			p2 += 4;
+			continue;
+
+		case '>':
+			memcpy (p2, "&gt;", 4);
+			p2 += 4;
+			continue;
+
+		case '&':
+			memcpy (p2, "&amp;", 5);
+			p2 += 5;
+			continue;
+
+		case '"':
+			memcpy (p2, "&quot;", 6);
+			p2 += 6;
+			continue;
+
+		default:
+			*p2++ = *p1;
+			continue;
+		}
+	}
+	
 	/* Set the new length
 	 */
-	buf->len += extra;
+	buf->len += src->len + extra;
+	buf->buf[buf->len] = '\0';
 
 	return ret_ok;
+}
+
+
+ret_t 
+cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
+{
+	cherokee_buffer_clean (buf);
+	return cherokee_buffer_add_escape_html (buf, src);
 }
 
 
@@ -1290,8 +1313,10 @@ cherokee_buffer_encode_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *encode
 		f = base64tab [((b & 15) << 2) | (c >> 6)];
 		g = base64tab [c & 63 ];
 
-		if (i + 1 >= inlen) f='=';
-		if (i + 2 >= inlen) g='=';
+		if (i + 1 >= inlen)
+			f = '=';
+		if (i + 2 >= inlen)
+			g = '=';
 
 		out[j++] = d;
 		out[j++] = e;

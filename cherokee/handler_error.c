@@ -83,8 +83,6 @@ cherokee_handler_error_free (cherokee_handler_error_t *hdl)
 static ret_t
 build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *buffer)
 {
-	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-
 	/* Avoid too many reallocations.
 	 */
 	cherokee_buffer_ensure_addlen (buffer, 1000);
@@ -112,11 +110,8 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 	switch (cnt->error_code) {
 	case http_not_found:
 		if (! cherokee_buffer_is_empty (&cnt->request)) {
-			cherokee_buffer_escape_html (&tmp, &cnt->request);
-
-			cherokee_buffer_ensure_addlen (buffer, 19 + tmp.len + 30);
 			cherokee_buffer_add_str (buffer, "The requested URL ");
-			cherokee_buffer_add_buffer (buffer, &tmp);
+			cherokee_buffer_add_escape_html (buffer, &cnt->request);
 			cherokee_buffer_add_str (buffer, " was not found on this server.");
 		}
 		break;
@@ -124,10 +119,8 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 	case http_bad_request:
 		cherokee_buffer_add_str (buffer, 
 			"Your browser sent a request that this server could not understand.");
-
-		cherokee_buffer_escape_html (&tmp, cnt->header.input_buffer);
 		cherokee_buffer_add_str   (buffer, "<p><pre>");
-		cherokee_buffer_add_buffer(buffer, &tmp);
+		cherokee_buffer_add_escape_html (buffer, cnt->header.input_buffer);
 		cherokee_buffer_add_str   (buffer, "</pre>");
 		break;
 
@@ -188,7 +181,6 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 
 	cherokee_buffer_add_str (buffer, CRLF "</body>" CRLF "</html>" CRLF);
 
-	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 }
 
