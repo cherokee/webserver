@@ -441,14 +441,28 @@ cherokee_buffer_add_ullong16 (cherokee_buffer_t *buf, cullong_t ulNum)
 ret_t 
 cherokee_buffer_add_va_fixed (cherokee_buffer_t  *buf, char *format, ...)
 {
-	cuint_t len;
+	int len;
+	int size = buf->size - buf->len;	/* final '\0' is always available */
 	va_list ap;
 
+	/* Test for minimum buffer size.
+	 */
+	if (size < 1)
+		return ret_error;
+
+	/* Format the string into the buffer.
+	 * NOTE: len does NOT include '\0', size includes '\0' (len + 1)
+	 */
 	va_start (ap, format);
-	len = vsnprintf (buf->buf + buf->len, buf->size - buf->len - 1, format, ap);
+	len = vsnprintf (buf->buf + buf->len, size, format, ap);
 	va_end (ap);
 
 	if (unlikely (len < 0)) 
+		return ret_error;
+
+	/* Don't expand buffer if there is not enough space.
+	 */
+	if (unlikely ( len >= size )) 
 		return ret_error;
 
 	buf->len += len;
@@ -459,33 +473,62 @@ cherokee_buffer_add_va_fixed (cherokee_buffer_t  *buf, char *format, ...)
 ret_t 
 cherokee_buffer_add_va_list (cherokee_buffer_t *buf, char *format, va_list args)
 {
-	cuint_t len;
-	cuint_t estimation;
+	int len;
+	int estimation;
+	int size;
+	ret_t ret;
 	va_list args2;
 
 	va_copy (args2, args);
 
+	/* Estimate resulting formatted string length.
+	 */
 	estimation = cherokee_estimate_va_length (format, args);
-	cherokee_buffer_ensure_size (buf, buf->len + estimation + 2);
+	if (unlikely (estimation) < 0) {
+		PRINT_ERROR ("  -> '%s', esti=%d ( < 0)\n", format, estimation);
+		return ret_error;
+	}
 
-	len = vsnprintf (buf->buf + buf->len, buf->size - buf->len - 1, format, args2);
-	
+	/* Ensure enough size for buffer.
+	 */
+	ret = cherokee_buffer_ensure_size (buf, buf->len + estimation + 2);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("  -> '%s', esti=%d ensure_size=%d failed !\n", format, estimation, buf->len + estimation + 2);
+		return ret;
+	}
+
+	/* Format the string into the buffer.
+	 * NOTE: len does NOT include '\0', size includes '\0' (len + 1)
+	 */
+	size = buf->size - buf->len;
+	if (size < 1) {
+		PRINT_ERROR ("  -> '%s', esti=%d size=%d ( < 1)!\n", format, estimation, size);
+		return ret_error;
+	}
+	len = vsnprintf (buf->buf + buf->len, size, format, args2);
+
 #if 0
 	if (estimation < len)
-		PRINT_ERROR ("  -> '%s' -> '%s', esti=%d real=%d\n", 
-			     format, buf->buf + buf->len, estimation, len);
+		PRINT_ERROR ("  -> '%s' -> '%s', esti=%d real=%d size=%d\n", 
+			     format, buf->buf + buf->len, estimation, len, size);
 #endif
 
 	if (unlikely (len < 0))
 		return ret_error;
-	
-	if (len > buf->size - buf->len) {
-		TRACE(ENTRIES, "Failed estimation=%d, needed=%d\n", estimation, len);
-	
+
+	/* At this point buf-size is always greater than buf-len, thus size > 0.
+	 */
+	if (len >= size) {
+		TRACE(ENTRIES, "Failed estimation=%d, needed=%d available size=%d\n", estimation, len, size);
+
 		cherokee_buffer_ensure_size (buf, buf->len + len + 2);
-		len = vsnprintf (buf->buf + buf->len, buf->size - buf->len - 1, format, args2);
+		size = buf->size - buf->len;
+		len = vsnprintf (buf->buf + buf->len, size, format, args2);
 
 		if (unlikely (len < 0)) 
+			return ret_error;
+
+		if (unlikely (len >= size)) 
 			return ret_error;
 	}
 

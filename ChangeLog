@@ -5,7 +5,10 @@
 	    with new escape method to avoid too many data copies
 	    and trash the CPU L1 cache;
 	  - cherokee_buffer_unescape_uri(), added test on string
-	    termination character.
+	    termination character;
+	  - cherokee_buffer_add_fixed(),
+	    cherokee_buffer_add_va_list(), fixed tests on buffer
+	    boundaries in order to make them standard conformant.
 
 	* cherokee/handler_error.c
 	  - replaced cherokee_buffer_escape_html() with
