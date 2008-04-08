@@ -36,7 +36,7 @@ cherokee_connection_info_new (cherokee_connection_info_t **info)
 {
 	CHEROKEE_NEW_STRUCT(n, connection_info);
 
-	INIT_LIST_HEAD(&n->list_entry);
+	INIT_LIST_HEAD(&n->list_node);
 
 	cherokee_buffer_init (&n->id);
 	cherokee_buffer_init (&n->phase);

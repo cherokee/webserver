@@ -102,7 +102,12 @@ get_by_mime_or_new (cherokee_mime_t *mime, cherokee_buffer_t *type, cherokee_mim
 	ret = cherokee_mime_entry_new (entry); 
 	if (ret != ret_ok) return ret;
 
+	ret = cherokee_mime_entry_set_type (*entry, type);
+	if (ret != ret_ok) return ret;
+
 	cherokee_list_add (LIST(*entry), &mime->entry_list);
+
+	TRACE(ENTRIES, "Type set '%s'\n", type->buf);
 	return ret_ok;
 }
 

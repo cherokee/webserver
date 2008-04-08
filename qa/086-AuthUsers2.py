@@ -1,12 +1,13 @@
 from base import *
 
 CONF = """
-vserver!default!directory!/auth2users!auth = plain
-vserver!default!directory!/auth2users!auth!methods = basic
-vserver!default!directory!/auth2users!auth!realm = Test with Users
-vserver!default!directory!/auth2users!auth!passwdfile = %s
-vserver!default!directory!/auth2users!auth!users = foo,Aladdin
-vserver!default!directory!/auth2users!priority = 860
+vserver!default!rule!directory!/auth2users!auth = plain
+vserver!default!rule!directory!/auth2users!auth!methods = basic
+vserver!default!rule!directory!/auth2users!auth!realm = Test with Users
+vserver!default!rule!directory!/auth2users!auth!passwdfile = %s
+vserver!default!rule!directory!/auth2users!auth!users = foo,Aladdin
+vserver!default!rule!directory!/auth2users!final = 0
+vserver!default!rule!directory!/auth2users!priority = 860
 """
 
 class Test (TestBase):
@@ -22,11 +23,4 @@ class Test (TestBase):
         self.WriteFile (d, "passwd", 0444, 'user:cherokee\n' + 'foo:bar\n' + 'Aladdin:open sesame\n')
 
         self.conf = CONF % (d+"/passwd")
-        
-        self.conf2             = """Directory /auth2users {
-                                     Auth Basic {
-                                          Name "Test with Users"
-                                          Method plain { PasswdFile %s }
-                                          User foo, Aladdin
-                                     }
-                                }""" % (d+"/passwd")
+

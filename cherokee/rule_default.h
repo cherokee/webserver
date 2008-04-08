@@ -22,29 +22,27 @@
  * USA
  */
 
-#ifndef CHEROKEE_EXTS_TABLE_H
-#define CHEROKEE_EXTS_TABLE_H
+#if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
+# error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
+#endif
 
-#include "common.h"
-#include "buffer.h"
-#include "config_entry.h"
-#include "list.h"
-#include "avl.h"
+#ifndef CHEROKEE_RULE_DEFAULT_H
+#define CHEROKEE_RULE_DEFAULT_H
 
+#include <cherokee/common.h>
+#include <cherokee/rule.h>
+#include <cherokee/buffer.h>
+#include <cherokee/virtual_server.h>
 
-typedef struct {
-	cherokee_avl_t   avl;
-	cherokee_list_t  list;
-} cherokee_exts_table_t;
+CHEROKEE_BEGIN_DECLS
 
-#define EXTTABLE(x) ((cherokee_exts_table_t *)(x))
+typedef cherokee_rule_t cherokee_rule_default_t;
+#define RULE_DEFAULT(x) ((cherokee_rule_default_t *)(x))
 
+ret_t cherokee_rule_default_new (cherokee_rule_t           **rule, 
+				 cherokee_buffer_t          *value, 
+				 cherokee_virtual_server_t  *vsrv);
 
-ret_t cherokee_exts_table_init     (cherokee_exts_table_t *et);
-ret_t cherokee_exts_table_mrproper (cherokee_exts_table_t *et);
+CHEROKEE_END_DECLS
 
-ret_t cherokee_exts_table_get  (cherokee_exts_table_t *et, cherokee_buffer_t *requested_url, cherokee_config_entry_t *plugin_entry);
-ret_t cherokee_exts_table_add  (cherokee_exts_table_t *et, char *ext, cherokee_config_entry_t  *plugin_entry);
-ret_t cherokee_exts_table_has  (cherokee_exts_table_t *et, char *ext);
-
-#endif /* CHEROKEE_EXTS_TABLE_H */
+#endif /* CHEROKEE_RULE_DEFAULT_H */

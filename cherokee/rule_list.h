@@ -26,26 +26,31 @@
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
 
-#ifndef CHEROKEE_REGEX_TABLE_H
-#define CHEROKEE_REGEX_TABLE_H
+#ifndef CHEROKEE_RULE_LIST_H
+#define CHEROKEE_RULE_LIST_H
 
-#include <cherokee/common.h>
+#include <cherokee/rule.h>
+#include <cherokee/list.h>
+#include <cherokee/connection.h>
 
 CHEROKEE_BEGIN_DECLS
 
-#define OVECTOR_LEN 10
+typedef struct {
+	cherokee_list_t  rules;
+	cherokee_rule_t *def_rule;
+} cherokee_rule_list_t;
 
-typedef struct cherokee_regex_table cherokee_regex_table_t;
-#define REGEX(x) ((cherokee_regex_table_t *)(x))
 
-ret_t cherokee_regex_table_new   (cherokee_regex_table_t **table);
-ret_t cherokee_regex_table_free  (cherokee_regex_table_t  *table);
-ret_t cherokee_regex_table_clean (cherokee_regex_table_t  *table);
+ret_t cherokee_rule_list_init     (cherokee_rule_list_t *list);
+ret_t cherokee_rule_list_mrproper (cherokee_rule_list_t *list);
 
-ret_t cherokee_regex_table_get  (cherokee_regex_table_t *table, char *pattern, void **pcre);
-ret_t cherokee_regex_table_add  (cherokee_regex_table_t *table, char *pattern);
+ret_t cherokee_rule_list_add      (cherokee_rule_list_t *list, cherokee_rule_t *rule);
+ret_t cherokee_rule_list_sort     (cherokee_rule_list_t *list);
 
+ret_t cherokee_rule_list_match    (cherokee_rule_list_t    *list, 
+				   cherokee_connection_t   *conn,
+				   cherokee_config_entry_t *ret_config);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_REGEX_TABLE_H */
+#endif /* CHEROKEE_RULE_LIST_H */

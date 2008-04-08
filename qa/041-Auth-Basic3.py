@@ -1,11 +1,12 @@
 from base import *
 
 CONF = """
-vserver!default!directory!/auth3!auth = plain
-vserver!default!directory!/auth3!auth!methods = basic
-vserver!default!directory!/auth3!auth!realm = Test
-vserver!default!directory!/auth3!auth!passwdfile = %s
-vserver!default!directory!/auth3!priority = 410
+vserver!default!rule!directory!/auth3!auth = plain
+vserver!default!rule!directory!/auth3!auth!methods = basic
+vserver!default!rule!directory!/auth3!auth!realm = Test
+vserver!default!rule!directory!/auth3!auth!passwdfile = %s
+vserver!default!rule!directory!/auth3!final = 0
+vserver!default!rule!directory!/auth3!priority = 410
 """
 
 class Test (TestBase):

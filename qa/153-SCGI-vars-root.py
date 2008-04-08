@@ -20,13 +20,13 @@ SCGIServer(TestHandler, port=%d).serve_forever()
 
 CONF = """
 vserver!scgi6!document_root = /fake
-vserver!scgi6!directory!/!handler = scgi
-vserver!scgi6!directory!/!handler!check_file = 0
-vserver!scgi6!directory!/!handler!balancer = round_robin
-vserver!scgi6!directory!/!handler!balancer!type = interpreter
-vserver!scgi6!directory!/!handler!balancer!1!host = localhost:%d
-vserver!scgi6!directory!/!handler!balancer!1!interpreter = %s %s
-vserver!scgi6!directory!/!priority = 1530
+vserver!scgi6!rule!default!handler = scgi
+vserver!scgi6!rule!default!handler!check_file = 0
+vserver!scgi6!rule!default!handler!balancer = round_robin
+vserver!scgi6!rule!default!handler!balancer!type = interpreter
+vserver!scgi6!rule!default!handler!balancer!1!host = localhost:%d
+vserver!scgi6!rule!default!handler!balancer!1!interpreter = %s %s
+vserver!scgi6!rule!default!priority = 1530
 """
 
 EXPECTED = [

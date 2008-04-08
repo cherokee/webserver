@@ -7,11 +7,12 @@ USER   = "username"
 PASSWD = ""
 
 CONF = """
-vserver!default!directory!/digest_empty!auth = plain
-vserver!default!directory!/digest_empty!auth!methods = digest
-vserver!default!directory!/digest_empty!auth!realm = %s
-vserver!default!directory!/digest_empty!auth!passwdfile = %s
-vserver!default!directory!/digest_empty!priority = 1300
+vserver!default!rule!directory!/digest_empty!auth = plain
+vserver!default!rule!directory!/digest_empty!auth!methods = digest
+vserver!default!rule!directory!/digest_empty!auth!realm = %s
+vserver!default!rule!directory!/digest_empty!auth!passwdfile = %s
+vserver!default!rule!directory!/digest_empty!final = 0
+vserver!default!rule!directory!/digest_empty!priority = 1300
 """
 
 class Test (TestBase):

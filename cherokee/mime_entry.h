@@ -42,7 +42,7 @@ typedef struct cherokee_mime_entry cherokee_mime_entry_t;
 ret_t cherokee_mime_entry_new  (cherokee_mime_entry_t **mentry);
 ret_t cherokee_mime_entry_free (cherokee_mime_entry_t  *mentry);
 
-ret_t cherokee_mime_entry_set_type (cherokee_mime_entry_t *mentry, char *type);
+ret_t cherokee_mime_entry_set_type (cherokee_mime_entry_t *mentry, cherokee_buffer_t *type);
 ret_t cherokee_mime_entry_get_type (cherokee_mime_entry_t *mentry, cherokee_buffer_t **name);
 
 ret_t cherokee_mime_entry_set_maxage (cherokee_mime_entry_t *mentry, cuint_t  maxage);

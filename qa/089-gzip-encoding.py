@@ -8,8 +8,8 @@ from gzip import GzipFile
 MAGIC  = "Random text follows: " + str_random (10 * 1024)
 
 CONF = """
-vserver!default!directory!/gzip1!handler = file
-vserver!default!directory!/gzip1!priority = 890
+vserver!default!rule!directory!/gzip1!handler = file
+vserver!default!rule!directory!/gzip1!priority = 890
 """
 
 

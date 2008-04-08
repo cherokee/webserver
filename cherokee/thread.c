@@ -38,7 +38,6 @@
 #include "handler_error.h"
 #include "header.h"
 #include "header-protected.h"
-#include "reqs_list_entry.h"
 #include "util.h"
 #include "fcgi_manager.h"
 
@@ -903,10 +902,9 @@ process_active_connections (cherokee_thread_t *thd)
 			/* fall down */
 			
 		case phase_setup_connection: {
-			cherokee_config_entry_t     entry; 
-			cherokee_virtual_entries_t *ventry;
-			cherokee_boolean_t          matched_req;
-			cherokee_boolean_t          is_userdir;
+			cherokee_config_entry_t  entry; 
+			cherokee_rule_list_t    *rules;
+			cherokee_boolean_t       is_userdir;
 
 			TRACE (ENTRIES, "Setup connection begins: request=\"%s\"\n", conn->request.buf);
 
@@ -936,79 +934,25 @@ process_active_connections (cherokee_thread_t *thd)
 			is_userdir = ((CONN_VSRV(conn)->userdir.len > 0) && (conn->userdir.len > 0));
 
 			if (is_userdir) {
-				ventry = &CONN_VSRV(conn)->userdir_entry;
+				rules = &CONN_VSRV(conn)->userdir_rules;
 			} else {
-				ventry = &CONN_VSRV(conn)->entry;
+				rules = &CONN_VSRV(conn)->rules;
 			}
 			
-			/* 1.- Read the extension configuration
+			/* Check against the rule list
 			 */
-			ret = cherokee_connection_get_ext_entry (conn, &ventry->exts, &entry);
+			ret = cherokee_rule_list_match (rules, conn, &entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				conn->phase = phase_init;
 				continue;
 			}
 
-			/* 2.- Read the directory configuration
-			 */
-			ret = cherokee_connection_get_dir_entry (conn, &ventry->dirs, &entry);
-			switch (ret) {
-			case ret_not_found:
-				break;
-			case ret_ok:
-				if (cherokee_buffer_is_empty (&conn->local_directory)) {
-					if (is_userdir)
-						ret = cherokee_connection_build_local_directory_userdir (conn, CONN_VSRV(conn), &entry);
-					else
-						ret = cherokee_connection_build_local_directory (conn, CONN_VSRV(conn), &entry);
-				}
-				break;
-			default:
-				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
-				continue;
-			}
-
-			if (unlikely (ret == ret_error)) {
-				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
-				continue;
-			}
-
-			/* 3.- Read Request configurations
-			 */
-			matched_req = false;
-			if (! cherokee_list_empty (&ventry->reqs)) {
-				ret = cherokee_connection_get_req_entry (conn, &ventry->reqs, &entry);
-				switch (ret) {
-				case ret_ok:
-					matched_req = true;
-					break;
-				case ret_not_found:
-					break;
-				default:
-					cherokee_connection_setup_error_handler (conn);
-					conn->phase = phase_init;
-					continue;
-				}				
-			}			
-
-			/* 4.- Default handler check
-			 */
-			if (CONN_VSRV(conn)->default_handler != NULL) {
-				cherokee_virtual_server_t *vsrv = CONN_VSRV(conn);
- 
-				cherokee_config_entry_complete (&entry, vsrv->default_handler, false);
-
-				if (conn->realm_ref == NULL) 
-					conn->realm_ref = vsrv->default_handler->auth_realm;
-				if (conn->auth_type == http_auth_nothing) 
-					conn->auth_type = vsrv->default_handler->authentication;
-
-				if (cherokee_buffer_is_empty (&conn->web_directory) && (! matched_req)) {
-					cherokee_buffer_add_str (&conn->web_directory, "/");
-				}
+			if (cherokee_buffer_is_empty (&conn->local_directory)) {
+				if (is_userdir)
+					ret = cherokee_connection_build_local_directory_userdir (conn, CONN_VSRV(conn), &entry);
+				else
+					ret = cherokee_connection_build_local_directory (conn, CONN_VSRV(conn), &entry);
 			}
 
 			/* Check of the HTTP method is supported by the handler

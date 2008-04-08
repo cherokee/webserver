@@ -127,18 +127,18 @@ server!listen = 127.0.0.1
 server!panic_action = %s
 server!encoder!gzip!allow = txt
 server!pid_file = %s
-server!mime_files = %s
 server!module_dir = %s
 server!module_deps = %s
 
 vserver!default!document_root = %s
 vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php
-vserver!default!directory!/!handler = common
-vserver!default!directory!/!priority = 1
-""" % (PORT, panic, pid, CHEROKEE_MIME, CHEROKEE_MODS, CHEROKEE_DEPS, www)
+vserver!default!rule!default!handler = common
+vserver!default!rule!default!priority = 1
+""" % (PORT, panic, pid, CHEROKEE_MODS, CHEROKEE_DEPS, www)
 
 PHP_FCGI = """extensions!php!handler = fcgi
 extensions!php!priority = 10000
+extensions!php!final = 0
 extensions!php!handler!balancer = round_robin
 extensions!php!handler!balancer!type = interpreter
 extensions!php!handler!balancer!local1!host = localhost:%d
@@ -156,7 +156,7 @@ else:
     php_ext = PHP_CGI
 
 for php in php_ext.split("\n"):
-    CONF_BASE += "vserver!default!%s\n" % (php)
+    CONF_BASE += "vserver!default!rule!%s\n" % (php)
 
 if method:
     CONF_BASE += "server!poll_method = %s" % (method)
@@ -234,7 +234,6 @@ if port is None:
         print "Server"
         print_key ('PID', str(pid));
         print_key ('Path', CHEROKEE_PATH)
-        print_key ('Mime', CHEROKEE_MIME)
         print_key ('Mods', CHEROKEE_MODS)
         print_key ('Deps', CHEROKEE_DEPS)
         print

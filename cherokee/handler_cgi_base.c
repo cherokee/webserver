@@ -194,16 +194,16 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 				cherokee_list_add_tail (LIST(env), &props->system_env);
 			}
 		} else if (equal_buf_str (&subconf->key, "error_handler")) {
-			props->is_error_handler = atoi(subconf->val.buf);
+			props->is_error_handler = !! atoi(subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "change_user")) {
-			props->change_user = atoi(subconf->val.buf);
+			props->change_user = !! atoi(subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "check_file")) {
-			props->check_file = atoi(subconf->val.buf);
+			props->check_file = !! atoi(subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "pass_req_headers")) {
-			props->pass_req_headers = atoi(subconf->val.buf);
+			props->pass_req_headers = !! atoi(subconf->val.buf);
 		}
 	}
 

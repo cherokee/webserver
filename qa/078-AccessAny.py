@@ -4,8 +4,9 @@ from os import system
 MAGIC = "Allow From anywhere"
 
 CONF = """
-vserver!default!directory!/allow_range4!allow_from = ::/0,0.0.0.0/0
-vserver!default!directory!/allow_range4!priority = 780
+vserver!default!rule!directory!/allow_range4!allow_from = ::/0,0.0.0.0/0
+vserver!default!rule!directory!/allow_range4!priority = 780
+vserver!default!rule!directory!/allow_range4!final = 0
 """
 
 class Test (TestBase):

@@ -132,8 +132,12 @@ match_and_substitute (cherokee_handler_redir_t *n)
 		/* It might be matched previosly in the request parsing..
 		 */
 		if (list->re == NULL) {
-			memcpy (ovector, conn->req_matched_ref->ovector, OVECTOR_LEN * sizeof(int));
-			rc = conn->req_matched_ref->ovecsize;
+			memcpy (ovector, 
+				conn->regex_match_ovector,
+				OVECTOR_LEN * sizeof(int));
+
+			rc = *conn->regex_match_ovecsize;
+			TRACE (ENTRIES, "Using conn->ovector, size=%d\n", rc);
 
 		} else {
 			rc = pcre_exec (list->re, NULL, subject, subject_len, 0, 0, ovector, OVECTOR_LEN);

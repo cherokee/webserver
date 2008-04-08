@@ -10,11 +10,12 @@ PASSWD       = "alo"
 PASSWD_CRYPT = "kA7oFNEzu4SrI"
 
 CONF = """
-vserver!default!directory!/htpasswd_crypt!auth = htpasswd
-vserver!default!directory!/htpasswd_crypt!auth!methods = basic
-vserver!default!directory!/htpasswd_crypt!auth!realm = %s
-vserver!default!directory!/htpasswd_crypt!auth!passwdfile = %s
-vserver!default!directory!/htpasswd_crypt!priority = 980
+vserver!default!rule!directory!/htpasswd_crypt!auth = htpasswd
+vserver!default!rule!directory!/htpasswd_crypt!auth!methods = basic
+vserver!default!rule!directory!/htpasswd_crypt!auth!realm = %s
+vserver!default!rule!directory!/htpasswd_crypt!auth!passwdfile = %s
+vserver!default!rule!directory!/htpasswd_crypt!final = 0
+vserver!default!rule!directory!/htpasswd_crypt!priority = 980
 """
 
 class Test (TestBase):

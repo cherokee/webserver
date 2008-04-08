@@ -8,11 +8,12 @@ PASSWD1 = "itissecret"
 PASSWD2 = "Itissecret"
 
 CONF = """
-vserver!default!directory!/digest3!auth = plain
-vserver!default!directory!/digest3!auth!methods = digest
-vserver!default!directory!/digest3!auth!realm = %s
-vserver!default!directory!/digest3!auth!passwdfile = %s
-vserver!default!directory!/digest3!priority = 920
+vserver!default!rule!directory!/digest3!auth = plain
+vserver!default!rule!directory!/digest3!auth!methods = digest
+vserver!default!rule!directory!/digest3!auth!realm = %s
+vserver!default!rule!directory!/digest3!auth!passwdfile = %s
+vserver!default!rule!directory!/digest3!final = 0
+vserver!default!rule!directory!/digest3!priority = 920
 """
 
 class Test (TestBase):

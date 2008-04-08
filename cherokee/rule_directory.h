@@ -22,24 +22,31 @@
  * USA
  */
 
-#ifndef CHEROKEE_REQS_LIST_H
-#define CHEROKEE_REQS_LIST_H
+#if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
+# error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
+#endif
 
-#include "common.h"
-#include "buffer.h"
-#include "list.h"
-#include "regex.h"
-#include "reqs_list_entry.h"
-#include "config_entry.h"
+#ifndef CHEROKEE_RULE_DIR_H
+#define CHEROKEE_RULE_DIR_H
 
+#include <cherokee/common.h>
+#include <cherokee/buffer.h>
+#include <cherokee/rule.h>
+#include <cherokee/virtual_server.h>
 
-typedef cherokee_list_t cherokee_reqs_list_t;
-#define REQLIST(x) ((cherokee_req_list_t *)(x))
+CHEROKEE_BEGIN_DECLS
 
-ret_t cherokee_reqs_list_init     (cherokee_reqs_list_t *rl);
-ret_t cherokee_reqs_list_mrproper (cherokee_reqs_list_t *rl);
+typedef struct {
+	cherokee_rule_t   rule;
+	cherokee_buffer_t directory;
+} cherokee_rule_directory_t;
 
-ret_t cherokee_reqs_list_get      (cherokee_reqs_list_t *rl, cherokee_buffer_t *requested_url, cherokee_config_entry_t *plugin_entry, cherokee_connection_t *conn);
-ret_t cherokee_reqs_list_add      (cherokee_reqs_list_t *rl, cherokee_reqs_list_entry_t *plugin_entry, cherokee_regex_table_t *regexs);
+#define RULE_DIRECTORY(x) ((cherokee_rule_directory_t *)(x))
 
-#endif /* CHEROKEE_REQS_LIST_H */
+ret_t cherokee_rule_directory_new (cherokee_rule_directory_t **rule, 
+				   cherokee_buffer_t          *value,
+				   cherokee_virtual_server_t  *vsrv);
+
+CHEROKEE_END_DECLS
+
+#endif /* CHEROKEE_RULE_DIR_H */

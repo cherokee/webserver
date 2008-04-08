@@ -5,11 +5,12 @@ LOGIN="Aladdin"
 PASSWD="open sesame"
 
 CONF = """
-vserver!default!directory!/auth2!auth = plain
-vserver!default!directory!/auth2!auth!methods = basic
-vserver!default!directory!/auth2!auth!realm = Test
-vserver!default!directory!/auth2!auth!passwdfile = %s
-vserver!default!directory!/auth2!priority = 400
+vserver!default!rule!directory!/auth2!auth = plain
+vserver!default!rule!directory!/auth2!auth!methods = basic
+vserver!default!rule!directory!/auth2!auth!realm = Test
+vserver!default!rule!directory!/auth2!auth!passwdfile = %s
+vserver!default!rule!directory!/auth2!final = 0
+vserver!default!rule!directory!/auth2!priority = 400
 """
 
 class Test (TestBase):

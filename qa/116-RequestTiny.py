@@ -6,14 +6,14 @@ HOST  = "request_mini"
 CONF = """
 vserver!<domain>!document_root = %s
 vserver!<domain>!domain!1 = <domain>
-vserver!<domain>!directory!/!handler = file
-vserver!<domain>!directory!/!priority = 10
+vserver!<domain>!rule!default!handler = file
+vserver!<domain>!rule!default!priority = 10
 
-vserver!<domain>!request!^/$!handler = redir
-vserver!<domain>!request!^/$!handler!rewrite!1!show = 0
-vserver!<domain>!request!^/$!handler!rewrite!1!regex = ^.*$
-vserver!<domain>!request!^/$!handler!rewrite!1!substring = /index.php
-vserver!<domain>!request!^/$!priority = 11
+vserver!<domain>!rule!request!^/$!handler = redir
+vserver!<domain>!rule!request!^/$!handler!rewrite!1!show = 0
+vserver!<domain>!rule!request!^/$!handler!rewrite!1!regex = ^.*$
+vserver!<domain>!rule!request!^/$!handler!rewrite!1!substring = /index.php
+vserver!<domain>!rule!request!^/$!priority = 11
 """ 
 
 class Test (TestBase):
@@ -34,7 +34,7 @@ class Test (TestBase):
         self.conf = self.conf.replace ('<domain>', HOST)
 
         for php in self.php_conf.split("\n"):
-            self.conf += "vserver!%s!%s\n" % (HOST, php)
+            self.conf += "vserver!%s!rule!%s\n" % (HOST, php)
 
         self.WriteFile (host_dir, "index.php", 0444, '<?php echo "%s" ?>' %(MAGIC))
         

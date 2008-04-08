@@ -3,8 +3,8 @@ from base import *
 PATH_INFO = "/param1/param2/param3"
 
 CONF = """
-vserver!default!directory!/pathinfo3!handler = cgi
-vserver!default!directory!/pathinfo3!priority = 690
+vserver!default!rule!directory!/pathinfo3!handler = cgi
+vserver!default!rule!directory!/pathinfo3!priority = 690
 """
 
 class Test (TestBase):

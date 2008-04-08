@@ -44,7 +44,6 @@
 #include "server.h"
 #include "list.h"
 #include "fdpoll.h"
-#include "dirs_table.h"
 #include "virtual_server.h"
 #include "encoder_table.h"
 #include "thread.h"

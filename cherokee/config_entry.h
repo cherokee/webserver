@@ -37,11 +37,6 @@
 
 
 typedef struct {
-	/* Parent entry
-	 */
-	void                       *parent;
-	cuint_t                     priority;
-
 	/* Properties
 	 */
 	cherokee_buffer_t          *document_root;
@@ -73,8 +68,7 @@ ret_t cherokee_config_entry_init     (cherokee_config_entry_t  *entry);
 ret_t cherokee_config_entry_mrproper (cherokee_config_entry_t  *entry);
 
 ret_t cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_plugin_info_handler_t *modinfo); 
-ret_t cherokee_config_entry_complete    (cherokee_config_entry_t *entry, cherokee_config_entry_t *parent, cherokee_boolean_t same_type);
-ret_t cherokee_config_entry_inherit     (cherokee_config_entry_t *entry);
+ret_t cherokee_config_entry_complete    (cherokee_config_entry_t *entry, cherokee_config_entry_t *source);
 
 ret_t cherokee_config_entry_print       (cherokee_config_entry_t *entry);
 

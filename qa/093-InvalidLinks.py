@@ -7,8 +7,8 @@ LINKS   = {"link1": "dir1", "link2": "file1" }
 BLINKS  = {"broken2": "del1", "broken1": "del2"}
 
 CONF = """
-vserver!default!directory!/brokenlinks1!handler = dirlist
-vserver!default!directory!/brokenlinks1!priority = 930
+vserver!default!rule!directory!/brokenlinks1!handler = dirlist
+vserver!default!rule!directory!/brokenlinks1!priority = 930
 """
 
 class Test (TestBase):

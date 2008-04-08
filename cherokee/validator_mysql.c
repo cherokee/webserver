@@ -105,7 +105,7 @@ cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_serve
 			cherokee_buffer_add_buffer (&props->query, &subconf->val);
 
 		} else if (equal_buf_str (&subconf->key, "use_md5_passwd")) {
-			props->use_md5_passwd = atoi (subconf->val.buf);
+			props->use_md5_passwd = !!atoi (subconf->val.buf);
 
 		} else if ((equal_buf_str (&subconf->key, "methods") || 
 			    equal_buf_str (&subconf->key, "realm"))) 

@@ -34,9 +34,9 @@ The silence surges.
 </html>"""
 
 CONF = """
-vserver!default!directory!/cgi_error_403_1!handler = cgi
-vserver!default!directory!/cgi_error_403_1!handler!error_handler = 1
-vserver!default!directory!/cgi_error_403_1!priority = 1120
+vserver!default!rule!directory!/cgi_error_403_1!handler = cgi
+vserver!default!rule!directory!/cgi_error_403_1!handler!error_handler = 1
+vserver!default!rule!directory!/cgi_error_403_1!priority = 1120
 """
 
 class Test (TestBase):

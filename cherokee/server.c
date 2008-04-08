@@ -1488,7 +1488,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		srv->conns_reuse_max = atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "ipv6")) {
-		srv->ipv6 = atoi (conf->val.buf);
+		srv->ipv6 = !!atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "timeout")) {
 		srv->timeout = atoi (conf->val.buf);
@@ -1497,7 +1497,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		srv->log_flush_elapse = atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "keepalive")) {
-		srv->keepalive = (atoi (conf->val.buf) == 0) ? false : true;
+		srv->keepalive = !!atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "keepalive_max_requests")) {
 		srv->keepalive_max = atoi (conf->val.buf);

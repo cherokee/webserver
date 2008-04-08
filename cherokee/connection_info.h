@@ -40,7 +40,7 @@
 CHEROKEE_BEGIN_DECLS
 
 typedef struct {
-	cherokee_list_t      list_entry;
+	cherokee_list_t      list_node;
 	cherokee_buffer_t    id;              /* ID */
 	cherokee_buffer_t    phase;           /* Current task */
 	cherokee_buffer_t    request;         /* Request string */

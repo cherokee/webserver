@@ -10,8 +10,9 @@ OFFSET2 = 40
 DIR     = "range_both_100b_noio"
 
 CONF = """
-vserver!default!directory!<dir>!handler = file
-vserver!default!directory!<dir>!handler!iocache = 0
+vserver!default!rule!directory!<dir>!handler = file
+vserver!default!rule!directory!<dir>!handler!iocache = 0
+vserver!default!rule!directory!<dir>!priority = 1470
 """
 
 

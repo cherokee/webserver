@@ -8,11 +8,11 @@ MAGIC2   = "This is virtual server *.wildcard1"
 CONF = """
 vserver!<domain>!document_root = %s
 vserver!<domain>!domain!1 = <domain>
-vserver!<domain>!directory!/!handler = file
+vserver!<domain>!rule!default!handler = file
 
 vserver!rest_<domain>!document_root = %s
 vserver!rest_<domain>!domain!1 = *.<domain>
-vserver!rest_<domain>!directory!/!handler = file
+vserver!rest_<domain>!rule!default!handler = file
 """
 
 class Test (TestBase):

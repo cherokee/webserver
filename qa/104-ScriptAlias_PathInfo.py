@@ -4,9 +4,9 @@ from base import *
 PATH_INFO   = "/this_is_the/path_info"
 
 CONF = """
-vserver!default!directory!/alias_and_pathinfo!handler = cgi
-vserver!default!directory!/alias_and_pathinfo!handler!script_alias = %s
-vserver!default!directory!/alias_and_pathinfo!priority = 1040
+vserver!default!rule!directory!/alias_and_pathinfo!handler = cgi
+vserver!default!rule!directory!/alias_and_pathinfo!handler!script_alias = %s
+vserver!default!rule!directory!/alias_and_pathinfo!priority = 1040
 """
 
 class Test (TestBase):

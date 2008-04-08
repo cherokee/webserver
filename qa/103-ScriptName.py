@@ -5,9 +5,9 @@ VIRTUAL_DIR = "/scriptname_vir"
 SCRIPT_NAME = VIRTUAL_DIR + "/exec.cgi"
 
 CONF = """
-vserver!default!directory!%s!handler = cgi
-vserver!default!directory!%s!document_root = %s
-vserver!default!directory!%s!priority = 1030
+vserver!default!rule!directory!%s!handler = cgi
+vserver!default!rule!directory!%s!document_root = %s
+vserver!default!rule!directory!%s!priority = 1030
 """
 
 class Test (TestBase):

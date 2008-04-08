@@ -7,16 +7,16 @@ CONF = """
 vserver!<domain>!document_root = /faked
 
 vserver!<domain>!domain!1 = <domain>
-vserver!<domain>!directory!/!handler = redir
-vserver!<domain>!directory!/!handler!rewrite!1!show = 1
-vserver!<domain>!directory!/!handler!rewrite!1!regex = ^/(.*)$
-vserver!<domain>!directory!/!handler!rewrite!1!substring = http://www.<domain>/$1
-vserver!<domain>!directory!/!priority = 10
+vserver!<domain>!rule!default!handler = redir
+vserver!<domain>!rule!default!handler!rewrite!1!show = 1
+vserver!<domain>!rule!default!handler!rewrite!1!regex = ^/(.*)$
+vserver!<domain>!rule!default!handler!rewrite!1!substring = http://www.<domain>/$1
+vserver!<domain>!rule!default!priority = 10
 
 vserver!www.<domain>!document_root = %s
 vserver!www.<domain>!domain!1 = www.<domain>
-vserver!www.<domain>!directory!/!handler = file
-vserver!www.<domain>!directory!/!priority = 10
+vserver!www.<domain>!rule!default!handler = file
+vserver!www.<domain>!rule!default!priority = 10
 """
 
 class Test (TestBase):

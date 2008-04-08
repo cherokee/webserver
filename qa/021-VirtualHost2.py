@@ -6,8 +6,8 @@ CONF = """
 vserver!first.domain!document_root = %s
 vserver!first.domain!domain!1 = first.domain
 vserver!first.domain!domain!2 = second.domain
-vserver!first.domain!directory!/!handler = common
-vserver!first.domain!directory!/!priority = 10
+vserver!first.domain!rule!default!handler = common
+vserver!first.domain!rule!default!priority = 10
 """
 
 class Test (TestBase):

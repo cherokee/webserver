@@ -4,11 +4,11 @@ COMMENT = "This is comment inside the CGI"
 TEXT    = "It should be printed by the CGI"
 
 CONF = """
-vserver!default!extensions!prio3!handler = file
-vserver!default!extensions!prio3!priority = 1090
+vserver!default!rule!extensions!prio3!handler = file
+vserver!default!rule!extensions!prio3!priority = 1090
 
-vserver!default!directory!/prio3/sub!handler = cgi
-vserver!default!directory!/prio3/sub!priority = 1091
+vserver!default!rule!directory!/prio3/sub!handler = cgi
+vserver!default!rule!directory!/prio3/sub!priority = 1091
 """
 
 class Test (TestBase):

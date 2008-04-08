@@ -3,7 +3,9 @@ from base import *
 MAGIC = "Allow From test 2"
 
 CONF = """
-vserver!default!directory!/allow2!allow_from = 127.0.0.1,::1
+vserver!default!rule!directory!/allow2!allow_from = 127.0.0.1,::1
+vserver!default!rule!directory!/allow2!priority = 740
+vserver!default!rule!directory!/allow2!final = 0
 """
 
 class Test (TestBase):

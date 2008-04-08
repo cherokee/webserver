@@ -54,7 +54,7 @@
 
 
 struct file_entry {
-	cherokee_list_t  list_entry;
+	cherokee_list_t  list_node;
 	struct stat      stat;
 	cuint_t          name_len;
 	struct dirent    info;          /* It *must* be the last entry */
@@ -217,13 +217,13 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 		/* Convert the properties
 		 */
 		if (equal_buf_str (&subconf->key, "size")) {
-			props->show_size = atoi (subconf->val.buf);
+			props->show_size  = !! atoi (subconf->val.buf);
 		} else if (equal_buf_str (&subconf->key, "date")) {
-			props->show_date = atoi (subconf->val.buf);
+			props->show_date  = !! atoi (subconf->val.buf);
 		} else if (equal_buf_str (&subconf->key, "user")) {
-			props->show_user = atoi (subconf->val.buf);
+			props->show_user  = !! atoi (subconf->val.buf);
 		} else if (equal_buf_str (&subconf->key, "group")) {
-			props->show_group = atoi (subconf->val.buf);
+			props->show_group = !! atoi (subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "theme")) {
 			theme = subconf->val.buf;
@@ -290,7 +290,7 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 	n = (file_entry_t *) malloc (sizeof(file_entry_t) + path->len + extra + 3);
 	if (unlikely(n == NULL)) return ret_nomem;
 
-	INIT_LIST_HEAD(&n->list_entry);
+	INIT_LIST_HEAD(&n->list_node);
 
 	for (;;) {
 		/* Read a new directory entry

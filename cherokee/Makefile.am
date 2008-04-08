@@ -87,6 +87,57 @@ $(module_ldflags_w32)
 
 
 #
+# Rule directory
+#
+rule_directory = \
+rule_directory.c \
+rule_directory.h
+
+libplugin_directory_la_LDFLAGS = $(module_ldflags)  
+libplugin_directory_la_SOURCES = $(rule_directory)
+
+if STATIC_RULE_DIRECTORY
+static_rule_directory_src = $(rule_directory)
+else
+dynamic_rule_directory_lib = libplugin_directory.la
+endif
+
+
+#
+# Rule extensions
+#
+rule_extensions = \
+rule_extensions.c \
+rule_extensions.h
+
+libplugin_extensions_la_LDFLAGS = $(module_ldflags)  
+libplugin_extensions_la_SOURCES = $(rule_extensions)
+
+if STATIC_RULE_EXTENSIONS
+static_rule_extensions_src = $(rule_extensions)
+else
+dynamic_rule_extensions_lib = libplugin_extensions.la
+endif
+
+
+#
+# Rule request
+#
+rule_request = \
+rule_request.c \
+rule_request.h
+
+libplugin_request_la_LDFLAGS = $(module_ldflags)  
+libplugin_request_la_SOURCES = $(rule_request)
+
+if STATIC_RULE_REQUEST
+static_rule_request_src = $(rule_request)
+else
+dynamic_rule_request_lib = libplugin_request.la
+endif
+
+
+#
 # Handler server_info
 #
 handler_server_info = \
@@ -810,6 +861,10 @@ endif
 
 
 libcherokee_server_la_SOURCES = \
+$(static_rule_directory_src) \
+$(static_rule_extensions_src) \
+$(static_rule_request_src) \
+\
 $(static_handler_file_src) \
 $(static_handler_admin_src) \
 $(static_handler_dirlist_src) \
@@ -848,18 +903,14 @@ connection-protected.h \
 connection.c \
 handler.h \
 handler.c \
+rule.h \
+rule.c \
+rule_list.h \
+rule_list.c \
+rule_default.h \
+rule_default.c \
 config_entry.h \
 config_entry.c \
-virtual_entries.h \
-virtual_entries.c \
-dirs_table.h \
-dirs_table.c \
-exts_table.h \
-exts_table.c \
-reqs_list.h \
-reqs_list.c \
-reqs_list_entry.h \
-reqs_list_entry.c \
 server-protected.h \
 server.h \
 server.c \
@@ -948,6 +999,9 @@ connection_info.h
 #
 plugindir = "$(libdir)/cherokee"
 plugin_LTLIBRARIES = \
+$(dynamic_rule_directory_lib) \
+$(dynamic_rule_extensions_lib) \
+$(dynamic_rule_request_lib) \
 $(dynamic_handler_cgi_lib) \
 $(dynamic_handler_phpcgi_lib) \
 $(dynamic_handler_server_info_lib) \

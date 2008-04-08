@@ -4,7 +4,9 @@ from os import system
 MAGIC = "Allow From range 2"
 
 CONF = """
-vserver!default!directory!/allow_range2!allow_from = 127.0.0.1/8
+vserver!default!rule!directory!/allow_range2!allow_from = 127.0.0.1/8
+vserver!default!rule!directory!/allow_range2!priority = 760
+vserver!default!rule!directory!/allow_range2!final = 0
 """
 
 class Test (TestBase):

@@ -44,30 +44,28 @@
 #include "config_entry.h"
 #include "logger.h"
 #include "config_node.h"
-#include "virtual_entries.h"
 #include "virtual_server_names.h"
-
+#include "rule_list.h"
 
 typedef struct {
-	cherokee_list_t              list_entry;
+	cherokee_list_t              list_node;
 	void                        *server_ref;      /* Ref to server */
 
-	cherokee_buffer_t            name;            /* Name.    Eg: server1 */
+	cherokee_buffer_t            name;            /* Name.    Eg: server1        */
 	cherokee_vserver_names_t     domains;         /* Domains. Eg: www.alobbs.com */
+	cherokee_rule_list_t         rules;           /* Rule list: vserver behavior */
 
-	cherokee_virtual_entries_t   entry;
+	cherokee_config_entry_t     *default_handler; /* Default handler             */
+	cherokee_config_entry_t     *error_handler;   /* Default error handler       */
 
-	cherokee_config_entry_t     *default_handler; /* Default handler */
-	cherokee_config_entry_t     *error_handler;   /* Default internal error handler   */
+	cherokee_logger_t           *logger;          /* Logger object               */
+	cherokee_avl_t              *logger_props;    /* Logger properties table     */
 
-	cherokee_logger_t           *logger;          /* Logger obj              */
-	cherokee_avl_t              *logger_props;    /* Logger properties table */
+	cherokee_buffer_t            userdir;         /* Eg: public_html             */
+	cherokee_rule_list_t         userdir_rules;   /* User dir behavior           */
 
 	cherokee_buffer_t            root;            /* Document root. Eg: /var/www */
-	cherokee_buffer_t            userdir;         /* Eg: public_html             */
-	cherokee_virtual_entries_t   userdir_entry;
-
-	cherokee_list_t              index_list;      /* Eg: index.html, index.php  */
+	cherokee_list_t              index_list;      /* Eg: index.html, index.php   */
 
 	struct {                                      /* Number of bytes {up,down}loaded */
 		off_t                tx;
@@ -97,7 +95,7 @@ typedef struct {
 
 #define VSERVER(v)        ((cherokee_virtual_server_t *)(v))
 #define VSERVER_LOGGER(v) (LOGGER(VSERVER(v)->logger))
-
+#define VSERVER_SRV(v)    (SRV(VSERVER(v)->server_ref))
 
 ret_t cherokee_virtual_server_new       (cherokee_virtual_server_t **vserver, void *server);
 ret_t cherokee_virtual_server_free      (cherokee_virtual_server_t  *vserver);

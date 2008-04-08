@@ -3,8 +3,8 @@ from base import *
 MAGIC = "This shouldn't be sent"
 
 CONF = """
-vserver!default!directory!/head-body!handler = common
-vserver!default!directory!/head-body!priority = 500
+vserver!default!rule!directory!/head-body!handler = common
+vserver!default!rule!directory!/head-body!priority = 500
 """
 
 class Test (TestBase):

@@ -1,9 +1,9 @@
 from base import *
 
 CONF = """
-vserver!default!directory!/redir46!handler = redir
-vserver!default!directory!/redir46!handler!url = http://www.cherokee-project.com
-vserver!default!directory!/redir46!priority = 460
+vserver!default!rule!directory!/redir46!handler = redir
+vserver!default!rule!directory!/redir46!handler!url = http://www.cherokee-project.com
+vserver!default!rule!directory!/redir46!priority = 460
 """
 
 class Test (TestBase):

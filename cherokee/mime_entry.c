@@ -62,10 +62,10 @@ cherokee_mime_entry_free (cherokee_mime_entry_t *mentry)
 
 
 ret_t 
-cherokee_mime_entry_set_type (cherokee_mime_entry_t *mentry, char *type)
+cherokee_mime_entry_set_type (cherokee_mime_entry_t *mentry, cherokee_buffer_t *type)
 {
 	cherokee_buffer_clean (&mentry->mime_name);
-	return cherokee_buffer_add (&mentry->mime_name, type, strlen(type));
+	return cherokee_buffer_add_buffer (&mentry->mime_name, type);
 }
 
 

@@ -3,9 +3,9 @@ from base import *
 MAGIC="This is the magic string for the DocumentRoot test - common"
 
 CONF = """
-vserver!default!directory!/droot!handler = common
-vserver!default!directory!/droot!document_root = %s
-vserver!default!directory!/droot!priority = 630
+vserver!default!rule!directory!/droot!handler = common
+vserver!default!rule!directory!/droot!document_root = %s
+vserver!default!rule!directory!/droot!priority = 630
 """
 
 

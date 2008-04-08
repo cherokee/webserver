@@ -7,9 +7,9 @@ REQ  = "%s/e/f" % (DIR)
 DIR2 = "%s/g/h" % (REQ)
 
 CONF = """
-vserver!default!directory!/<dir>!handler = common
-vserver!default!directory!/<dir>!document_root = %s
-vserver!default!directory!/<dir>!priority = 1550
+vserver!default!rule!directory!/<dir>!handler = common
+vserver!default!rule!directory!/<dir>!document_root = %s
+vserver!default!rule!directory!/<dir>!priority = 1550
 """
 
 class Test (TestBase):

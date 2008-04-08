@@ -3,8 +3,8 @@ from base import *
 MAGIC = "The_index_page_should_contain_this"
 
 CONF = """
-vserver!default!directory!/index2!handler = common
-vserver!default!directory!/index2!priority = 340
+vserver!default!rule!directory!/index2!handler = common
+vserver!default!rule!directory!/index2!priority = 340
 """
 
 class Test (TestBase):

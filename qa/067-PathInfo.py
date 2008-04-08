@@ -13,7 +13,8 @@ CONF = """
 # 
 #    cgi.fix_pathinfo=0
 #
-vserver!default!directory!/pathinfo!handler = common
+vserver!default!rule!directory!/pathinfo!handler = common
+vserver!default!rule!directory!/pathinfo!priority = 670
 """
 
 class Test (TestBase):

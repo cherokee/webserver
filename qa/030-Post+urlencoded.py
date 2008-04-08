@@ -2,8 +2,8 @@ import os
 from base import *
 
 CONF = """
-vserver!default!directory!/post2!handler = cgi
-vserver!default!directory!/post2!priority = 300
+vserver!default!rule!directory!/post2!handler = cgi
+vserver!default!rule!directory!/post2!priority = 300
 """
 
 class Test (TestBase):

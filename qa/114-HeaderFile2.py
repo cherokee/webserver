@@ -7,9 +7,9 @@ HEADER_CONTENT = """
 """
 
 CONF = """
-vserver!default!directory!/header_file2!handler = dirlist
-vserver!default!directory!/header_file2!handler!notice_files = noexits1.txt,header.txt,noexits2.txt
-vserver!default!directory!/header_file2!priority = 1140
+vserver!default!rule!directory!/header_file2!handler = dirlist
+vserver!default!rule!directory!/header_file2!handler!notice_files = noexits1.txt,header.txt,noexits2.txt
+vserver!default!rule!directory!/header_file2!priority = 1140
 """
 
 class Test (TestBase):

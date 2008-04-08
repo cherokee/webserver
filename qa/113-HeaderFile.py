@@ -6,9 +6,9 @@ random_str  = letters_random (POST_LENGTH)
 HEADER_CONTENT = "This is the header file of the directory"
 
 CONF = """
-vserver!default!directory!/header_file1!handler = common
-vserver!default!directory!/header_file1!handler!notice_files = header
-vserver!default!directory!/header_file1!priority = 1130
+vserver!default!rule!directory!/header_file1!handler = common
+vserver!default!rule!directory!/header_file1!handler!notice_files = header
+vserver!default!rule!directory!/header_file1!priority = 1130
 """
 
 

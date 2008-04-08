@@ -27,6 +27,10 @@
 
 #include "access.h"
 #include "http.h"
+#include "util.h"
+
+#define ENTRIES "config,rules"
+
 
 typedef enum {
 	table_handler,
@@ -43,9 +47,6 @@ CHEROKEE_ADD_FUNC_FREE (config_entry);
 ret_t 
 cherokee_config_entry_init (cherokee_config_entry_t *entry)
 {
-	entry->parent               = NULL;
-	entry->priority             = CHEROKEE_CONFIG_PRIORITY_NONE;
-
 	entry->handler_new_func     = NULL;
 	entry->handler_properties   = NULL;
 	entry->handler_methods      = http_unknown;
@@ -120,78 +121,44 @@ cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_plug
 
 
 ret_t 
-cherokee_config_entry_complete (cherokee_config_entry_t *entry, cherokee_config_entry_t *main, cherokee_boolean_t same_type)
+cherokee_config_entry_complete (cherokee_config_entry_t *entry, cherokee_config_entry_t *source)
 {
-	cherokee_boolean_t modified  = false;
-	cherokee_boolean_t overwrite = false;
-
-#define should_assign(t,s,prop,nil)  \
-       	((t->prop == nil) || ((t->prop != nil) && (s->prop != nil) && overwrite))
-
-	if (!same_type && (entry->priority < main->priority)) {
-		overwrite = true;
-	}
-
-/* 	printf ("same_type=%d, overwrite=%d, prio=%d\n", same_type, overwrite, main->priority); */
-
-	/* If a temporary config_entry inherits from valid entry, it will
-	 * get references than mustn't be free'd, like 'user'. Take care.
+	/* This method is assigning pointer to the server data. The
+	 * target entry properties must NOT be freed. Take care.
 	 */
-	if (entry->parent == NULL)
-		entry->parent = main->parent;
 
-	if (should_assign (entry, main, handler_properties, NULL))
-		entry->handler_properties = main->handler_properties;
+	if (! entry->handler_properties)
+		entry->handler_properties = source->handler_properties;
 
-	if (should_assign (entry, main, validator_properties, NULL))
-		entry->validator_properties = main->validator_properties;
+	if (! entry->validator_properties)
+		entry->validator_properties = source->validator_properties;
 
-	if (should_assign (entry, main, handler_new_func, NULL)) {
-		entry->handler_new_func = main->handler_new_func;
-		entry->handler_methods  = main->handler_methods;
-		modified = true;
-	}
-	
-	if (should_assign (entry, main, authentication, 0))
-		entry->authentication = main->authentication;
-	
-	if (should_assign (entry, main, only_secure, false))
-		entry->only_secure = main->only_secure;
-
-	if (should_assign (entry, main, access, NULL))
-		entry->access = main->access;
-	
-	if (should_assign (entry, main, validator_new_func, NULL))
-		entry->validator_new_func = main->validator_new_func;
-
-  	if (should_assign (entry, main, document_root, NULL))
- 		entry->document_root = main->document_root;	 
-	
- 	if (should_assign (entry, main, auth_realm, NULL))
- 		entry->auth_realm = main->auth_realm; 
-
-	if (should_assign (entry, main, users, NULL))
-		entry->users = main->users;
-
-	/* Finally, assign the new priority to the entry
-	 */
-	if (entry->priority < main->priority) {
-		entry->priority = main->priority;
+	if (! entry->handler_new_func) {
+		entry->handler_new_func = source->handler_new_func;
+		entry->handler_methods  = source->handler_methods;
 	}
 
-	return (modified) ? ret_ok : ret_eagain;
-}
+	if (entry->authentication == 0)
+		entry->authentication = source->authentication;
+	
+	if (entry->only_secure == false)
+		entry->only_secure = source->only_secure;
 
+	if (! entry->access)
+		entry->access = source->access;
+	
+	if (! entry->validator_new_func)
+		entry->validator_new_func = source->validator_new_func;
 
-ret_t 
-cherokee_config_entry_inherit (cherokee_config_entry_t *entry)
-{
-	cherokee_config_entry_t *parent = entry;
+	if (! entry->document_root)
+ 		entry->document_root = source->document_root;	 
+	
+	if (! entry->auth_realm)
+ 		entry->auth_realm = source->auth_realm; 
 
-	while ((parent = parent->parent) != NULL) {
-		cherokee_config_entry_complete (entry, parent, true);
-	}
-
+	if (! entry->users)
+		entry->users = source->users;
+	
 	return ret_ok;
 }
 
@@ -199,8 +166,6 @@ cherokee_config_entry_inherit (cherokee_config_entry_t *entry)
 ret_t 
 cherokee_config_entry_print (cherokee_config_entry_t *entry)
 {
-	printf ("parent:                    %p\n", entry->parent);
-	printf ("priority:                  %d\n", entry->priority);
 	printf ("document_root:             %s\n", entry->document_root ? entry->document_root->buf : "");
 	printf ("only_secure:               %d\n", entry->only_secure);
 	printf ("access:                    %p\n", entry->access);

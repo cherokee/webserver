@@ -246,7 +246,7 @@ cherokee_config_node_read (cherokee_config_node_t *conf, const char *key, cherok
 
 
 ret_t 
-cherokee_config_node_read_int  (cherokee_config_node_t *conf, const char *key, int *num)
+cherokee_config_node_read_int (cherokee_config_node_t *conf, const char *key, int *num)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *tmp;
@@ -255,6 +255,20 @@ cherokee_config_node_read_int  (cherokee_config_node_t *conf, const char *key, i
 	if (ret != ret_ok) return ret;
 
 	*num = atoi (tmp->val.buf);
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_config_node_read_bool (cherokee_config_node_t *conf, const char *key, cherokee_boolean_t *val)
+{
+	ret_t ret;
+	int   tmp;
+
+	ret = cherokee_config_node_read_int (conf, key, &tmp);
+	if (ret != ret_ok) return ret;
+
+	*val = !! tmp;
 	return ret_ok;
 }
 

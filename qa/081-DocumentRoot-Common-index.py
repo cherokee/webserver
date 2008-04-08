@@ -4,9 +4,9 @@ MAGIC1 = "First part"
 MAGIC2 = "Second part"
 
 CONF = """
-vserver!default!directory!/dr_common_index!handler = common
-vserver!default!directory!/dr_common_index!document_root = %s
-vserver!default!directory!/dr_common_index!priority = 810
+vserver!default!rule!directory!/dr_common_index!handler = common
+vserver!default!rule!directory!/dr_common_index!document_root = %s
+vserver!default!rule!directory!/dr_common_index!priority = 810
 """
 
 class Test (TestBase):

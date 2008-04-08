@@ -60,7 +60,6 @@
 #include "iocache.h"
 #include "encoder_table.h"
 #include "post.h"
-#include "reqs_list.h"
 #include "header-protected.h"
 
 
@@ -90,7 +89,7 @@ typedef cuint_t cherokee_connection_options_t;
 
 
 struct cherokee_connection {
-	cherokee_list_t               list_entry;
+	cherokee_list_t               list_node;
 
 	/* References
 	 */
@@ -182,7 +181,9 @@ struct cherokee_connection {
 	void                         *mmaped;
 	off_t                         mmaped_len;
 	cherokee_iocache_entry_t     *io_entry_ref;
-	cherokee_reqs_list_entry_t   *req_matched_ref;
+
+	int                          *regex_match_ovector;
+	int                          *regex_match_ovecsize;
 };
 
 #define CONN_SRV(c)    (SRV(CONN(c)->server))
@@ -214,10 +215,6 @@ ret_t cherokee_connection_recv                   (cherokee_connection_t *conn, c
 
 /* Internal
  */
-ret_t cherokee_connection_get_dir_entry          (cherokee_connection_t *conn, cherokee_dirs_table_t *dirs, cherokee_config_entry_t *config_entry);
-ret_t cherokee_connection_get_ext_entry          (cherokee_connection_t *conn, cherokee_exts_table_t *exts, cherokee_config_entry_t *config_entry);
-ret_t cherokee_connection_get_req_entry          (cherokee_connection_t *conn, cherokee_reqs_list_t  *reqs, cherokee_config_entry_t *config_entry);
-
 ret_t cherokee_connection_create_handler         (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
 ret_t cherokee_connection_setup_error_handler    (cherokee_connection_t *conn);
 ret_t cherokee_connection_check_authentication   (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);

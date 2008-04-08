@@ -4,12 +4,12 @@ REQUIRED  = "This is working! :-)"
 FORBIDDEN = "It shouldn't appear in the text"
 
 CONF = """
-vserver!default!directory!/extension2!handler = file
-vserver!default!directory!/extension2!priority = 800
+vserver!default!rule!directory!/extension2!handler = file
+vserver!default!rule!directory!/extension2!priority = 800
 
-vserver!default!extensions!abc,def,ghi!handler = phpcgi
-vserver!default!extensions!abc,def,ghi!handler!interpreter = %s
-vserver!default!extensions!abc,def,ghi!priority = 801
+vserver!default!rule!extensions!abc,def,ghi!handler = phpcgi
+vserver!default!rule!extensions!abc,def,ghi!handler!interpreter = %s
+vserver!default!rule!extensions!abc,def,ghi!priority = 801
 """
 
 class Test (TestBase):

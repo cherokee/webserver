@@ -23,40 +23,45 @@
  */
 
 #include "common-internal.h"
-#include "reqs_list_entry.h"
+#include "rule_default.h"
+#include "plugin_loader.h"
+#include "connection.h"
+#include "connection-protected.h"
+#include "util.h"
 
-ret_t 
-cherokee_reqs_list_entry_new (cherokee_reqs_list_entry_t **entry)
+#define ENTRIES "rule,default"
+
+PLUGIN_INFO_RULE_EASIEST_INIT(default);
+
+
+static ret_t 
+match (cherokee_rule_t *rule, cherokee_connection_t *conn)
 {
-	CHEROKEE_NEW_STRUCT (n, reqs_list_entry);
+	if (cherokee_buffer_is_empty (&conn->web_directory)) { 
+		cherokee_buffer_add_str (&conn->web_directory, "/"); 
+	} 
 
-	/* Init properties
-	 */
-	memset (n->ovector, 0, sizeof(int)*OVECTOR_LEN);
-	n->ovecsize = 0;
-
-	cherokee_buffer_init (&n->request);
-	INIT_LIST_HEAD (&n->list_node);
-
-	/* Init base class
-	 */
-	cherokee_config_entry_init (CONF_ENTRY(n));
-
-	*entry = n;	
+	TRACE(ENTRIES, "Match default: %s\n", "ret_ok");
 	return ret_ok;
 }
 
 
-ret_t 
-cherokee_reqs_list_entry_free (cherokee_reqs_list_entry_t *entry)
+ret_t
+cherokee_rule_default_new (cherokee_rule_t           **rule, 
+			   cherokee_buffer_t          *value,
+			   cherokee_virtual_server_t  *vsrv)
 {
-	if (entry == NULL)
-		return ret_ok;
+	CHEROKEE_NEW_STRUCT (n, rule_default);
 
-	cherokee_buffer_mrproper (&entry->request);
-	cherokee_config_entry_mrproper (CONF_ENTRY(entry));
-	
-	free (entry);
+	/* Parent class constructor
+	 */
+	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(default));
+
+	/* Virtual methos
+	 */
+	RULE(n)->match = (rule_func_match_t) match;
+
+	*rule = n;
 	return ret_ok;
 }
 

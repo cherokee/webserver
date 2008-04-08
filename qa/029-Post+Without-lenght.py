@@ -1,9 +1,9 @@
 from base import *
 
 CONF = """
-vserver!default!directory!/post1!handler = phpcgi
-vserver!default!directory!/post1!handler!interpreter = %s
-vserver!default!directory!/post1!priority = 290
+vserver!default!rule!directory!/post1!handler = phpcgi
+vserver!default!rule!directory!/post1!handler!interpreter = %s
+vserver!default!rule!directory!/post1!priority = 290
 """
 
 class Test (TestBase):

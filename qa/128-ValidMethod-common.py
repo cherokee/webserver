@@ -4,8 +4,8 @@ DIR   = "common_valid_methods1"
 MAGIC = "Report bugs to http://bugs.cherokee-project.com"
 
 CONF = """
-vserver!default!directory!/%s!handler = common
-vserver!default!directory!/%s!priority = 1280
+vserver!default!rule!directory!/%s!handler = common
+vserver!default!rule!directory!/%s!priority = 1280
 """
 
 class Test (TestBase):

@@ -2,8 +2,8 @@ from base import *
 
 MAGIC = "This is the magic string"
 CONF = """
-vserver!default!directory!/cgi-bin1!handler = cgi
-vserver!default!directory!/cgi-bin1!priority = 150
+vserver!default!rule!directory!/cgi-bin1!handler = cgi
+vserver!default!rule!directory!/cgi-bin1!priority = 150
 """
 
 class Test (TestBase):

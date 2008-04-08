@@ -4,8 +4,8 @@ MAGIC = "Sesamo"
 CONTENT = "This is the content of " + MAGIC
 
 CONF = """
-vserver!default!directory!/nn1!handler = nn
-vserver!default!directory!/nn1!priority = 480
+vserver!default!rule!directory!/nn1!handler = nn
+vserver!default!rule!directory!/nn1!priority = 480
 """
 
 class Test (TestBase):

@@ -3,8 +3,8 @@ from base import *
 MAGIC = "This is the content of the HTML index file"
 
 CONF = """
-vserver!default!directory!/directoryindex1!handler = common
-vserver!default!directory!/directoryindex1!priority = 640
+vserver!default!rule!directory!/directoryindex1!handler = common
+vserver!default!rule!directory!/directoryindex1!priority = 640
 """
 
 class Test (TestBase):

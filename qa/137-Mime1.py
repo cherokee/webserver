@@ -2,17 +2,14 @@ from base import *
 
 TYPE       = "example/ejemplo"
 EXTENSION  = "mime_test_1"
-MIME_TYPES = """
-application/java-archive                        jar
-application/java-serialized-object              ser
-application/java-vm                             class
-%s                                              %s
-x-world/x-vrml                                  vrm vrml wrl
-""" % (TYPE, EXTENSION)
 
-CONF = """
-server!mime_files = %s
-"""
+MIME_TYPES = """
+mime!application/java-archive!extensions = jar
+mime!application/java-serialized-object!extensions = ser
+mime!application/java-vm!extensions = class
+mime!%s!extensions = %s
+mime!x-world/x-vrml!extensions = vrm vrml wrl
+""" % (TYPE, EXTENSION)
 
 class Test (TestBase):
     def __init__ (self):
@@ -25,7 +22,6 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "mime1")
-        m = self.WriteFile (d, "mime.types", 0666, MIME_TYPES)
         f = self.WriteFile (d, "file.%s" % (EXTENSION))
 
-        self.conf = CONF % (m)
+        self.conf = MIME_TYPES

@@ -8,15 +8,18 @@ CONF = """
 vserver!<domain>!document_root = %s
 vserver!<domain>!domain!1 = <domain>
 
-vserver!<domain>!request!^/([^\?]*)$!handler = redir
-vserver!<domain>!request!^/([^\?]*)$!handler!rewrite!1!show = 1
-vserver!<domain>!request!^/([^\?]*)$!handler!rewrite!1!substring = /index.php?q=$1
-vserver!<domain>!request!^/([^\?]*)$!priority = 1350
+vserver!<domain>!rule!default!handler = server_info
+vserver!<domain>!rule!default!priority = 1
 
-vserver!<domain>!request!^/([^\?]*)\?(.*)$!handler = redir
-vserver!<domain>!request!^/([^\?]*)\?(.*)$!handler!rewrite!2!show = 1
-vserver!<domain>!request!^/([^\?]*)\?(.*)$!handler!rewrite!2!substring = /index.php?q=$1&$2
-vserver!<domain>!request!^/([^\?]*)\?(.*)$!priority = 1351
+vserver!<domain>!rule!request!^/([^\?]*)$!handler = redir
+vserver!<domain>!rule!request!^/([^\?]*)$!handler!rewrite!1!show = 1
+vserver!<domain>!rule!request!^/([^\?]*)$!handler!rewrite!1!substring = /index.php?q=$1
+vserver!<domain>!rule!request!^/([^\?]*)$!priority = 1350
+
+vserver!<domain>!rule!request!^/([^\?]*)\?(.*)$!handler = redir
+vserver!<domain>!rule!request!^/([^\?]*)\?(.*)$!handler!rewrite!2!show = 1
+vserver!<domain>!rule!request!^/([^\?]*)\?(.*)$!handler!rewrite!2!substring = /index.php?q=$1&$2
+vserver!<domain>!rule!request!^/([^\?]*)\?(.*)$!priority = 1351
 """
 
 class Test (TestBase):

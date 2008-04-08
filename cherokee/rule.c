@@ -22,24 +22,57 @@
  * USA
  */
 
-#ifndef CHEROKEE_DIRS_TABLE_H
-#define CHEROKEE_DIRS_TABLE_H
-
-#include "common.h"
-#include "avl.h"
-#include "config_entry.h"
+#include "common-internal.h"
+#include "rule.h"
+#include "connection.h"
 
 
-typedef cherokee_avl_t cherokee_dirs_table_t;  /* Web_directory -> config_entry */
-#define DTABLE(x) ((cherokee_dirs_table_t *)(x))
+ret_t
+cherokee_rule_init_base (cherokee_rule_t *rule, cherokee_plugin_info_t *info)
+{
+	INIT_LIST_HEAD (&rule->list_node);
+
+	rule->match    = NULL;
+	rule->final    = true;
+	rule->priority = CHEROKEE_RULE_PRIO_NONE;
+
+	cherokee_config_entry_init (&rule->config);
+	return ret_ok;
+}
 
 
-ret_t cherokee_dirs_table_init     (cherokee_dirs_table_t *pt);
-ret_t cherokee_dirs_table_mrproper (cherokee_dirs_table_t *pt);
+ret_t 
+cherokee_rule_free (cherokee_rule_t *rule)
+{
+	/* Sanity checks
+	 */
+	return_if_fail (rule != NULL, ret_error);
 
-ret_t cherokee_dirs_table_clean    (cherokee_dirs_table_t *pt);
-ret_t cherokee_dirs_table_get      (cherokee_dirs_table_t *pt, cherokee_buffer_t *requested_url, cherokee_config_entry_t *plugin_entry, cherokee_buffer_t *web_directory);
-ret_t cherokee_dirs_table_add      (cherokee_dirs_table_t *pt, char *dir, cherokee_config_entry_t  *plugin_entry);
-ret_t cherokee_dirs_table_relink   (cherokee_dirs_table_t *pt);
+	if (MODULE(rule)->free == NULL) {
+		return ret_error;
+	}
+	
+	MODULE(rule)->free (rule); 
 
-#endif /* CHEROKEE_DIRS_TABLE_H */
+	/* Free the rule
+	 */
+	free (rule);
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_rule_match (cherokee_rule_t *rule, void *cnt)
+{
+	/* Sanity checks
+	 */	
+	return_if_fail (rule != NULL, ret_error);
+
+	if (rule->match == NULL) {
+		return ret_error;
+	}
+
+	/* Call the real method
+	 */
+	return rule->match (rule, CONN(cnt));
+}

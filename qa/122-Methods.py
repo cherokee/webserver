@@ -7,8 +7,8 @@ class TestEntry (TestBase):
         self.expected_error = 405
 
 CONF = """        
-vserver!default!directory!/methods_group!handler = file
-vserver!default!directory!/methods_group!priority = 1220
+vserver!default!rule!directory!/methods_group!handler = file
+vserver!default!rule!directory!/methods_group!priority = 1220
 """
 
 class Test (TestCollection):

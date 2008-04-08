@@ -32,7 +32,7 @@ cherokee_request_header_init (cherokee_request_header_t *request)
 
 	/* Init the node list information
 	 */
-	INIT_LIST_HEAD (LIST(&request->list_entry));
+	INIT_LIST_HEAD (LIST(&request->list_node));
 	
 	/* Set default values
 	 */

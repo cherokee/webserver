@@ -3,9 +3,9 @@ from base import *
 PATH_INFO = "/param1/param2/param3"
 
 CONF = """
-vserver!default!directory!/pathinfo2!handler = phpcgi
-vserver!default!directory!/pathinfo2!handler!interpreter = %s
-vserver!default!directory!/pathinfo2!priority = 680
+vserver!default!rule!directory!/pathinfo2!handler = phpcgi
+vserver!default!rule!directory!/pathinfo2!handler!interpreter = %s
+vserver!default!rule!directory!/pathinfo2!priority = 680
 """
 
 class Test (TestBase):

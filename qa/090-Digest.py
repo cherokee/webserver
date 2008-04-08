@@ -3,11 +3,12 @@ from base import *
 MAGIC  = "Don't show this"
 
 CONF = """
-vserver!default!directory!/digest1!auth = plain
-vserver!default!directory!/digest1!auth!methods = digest
-vserver!default!directory!/digest1!auth!realm = Test is the realm
-vserver!default!directory!/digest1!auth!passwdfile = %s
-vserver!default!directory!/digest1!priority = 900
+vserver!default!rule!directory!/digest1!auth = plain
+vserver!default!rule!directory!/digest1!auth!methods = digest
+vserver!default!rule!directory!/digest1!auth!realm = Test is the realm
+vserver!default!rule!directory!/digest1!auth!passwdfile = %s
+vserver!default!rule!directory!/digest1!final = 0
+vserver!default!rule!directory!/digest1!priority = 900
 """
 
 class Test (TestBase):

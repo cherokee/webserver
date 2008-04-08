@@ -1,8 +1,8 @@
 from base import *
 
 CONF = """
-vserver!default!directory!/cgi-bin4!handler = cgi
-vserver!default!directory!/cgi-bin4!priority = 180
+vserver!default!rule!directory!/cgi-bin4!handler = cgi
+vserver!default!rule!directory!/cgi-bin4!priority = 180
 """
 
 class Test (TestBase):
