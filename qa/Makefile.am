@@ -159,7 +159,8 @@ run-tests.py \
 152-SCGI-vars2.py \
 153-SCGI-vars-root.py \
 154-DirRedirection.py \
-155-DirRedirection2.py
+155-DirRedirection2.py \
+156-Mime2.py
 
 test:
 	./run-tests.py

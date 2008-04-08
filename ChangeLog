@@ -1,5 +1,8 @@
 2008-04-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/156-Mime2.py, qa/Makefile.am (EXTRA_DIST): Added a new QA to
+	ensure that the max-age cache control header works.
+
 	* cherokee/rule_list.c, cherokee/rule_list.h, cherokee/rule.c,
 	cherokee/rule.h, cherokee/rule_default.c, cherokee/rule_default.h,
 	cherokee/rule_directory.c, cherokee/rule_directory.h,
