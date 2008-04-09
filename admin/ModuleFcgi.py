@@ -12,6 +12,8 @@ servers. Thus, a balancer must be configured in order to point the
 handler to the application servers.
 """
 
+NOTE_BALANCERS = 'How to deliver connection on the FastCGI server. Choose Round Robin if there is only one.'
+
 class ModuleFcgi (ModuleCgiBase):
     PROPERTIES = ModuleCgiBase.PROPERTIES + [
         'balancer'
@@ -27,10 +29,10 @@ class ModuleFcgi (ModuleCgiBase):
         txt += '<h3>FastCGI specific</h3>'
         txt += self.Dialog (FCGI_PARAMS_COMMENT)
 
-        table = Table(2)
+        table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
         assert (self.submit_url)
-        e = self.AddTableOptions_Reload (table, "Balancer", prefix, BALANCERS)
+        e = self.AddPropOptions_Reload (table, "Balancer", prefix, BALANCERS, NOTE_BALANCERS)
         txt += str(table) + self.Indent(e)
         return txt
 

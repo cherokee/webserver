@@ -4,6 +4,9 @@ from Module import *
 
 from consts import *
 
+NOTE_BALANCER = 'The source can be either a local interpreter or a remote host acting as an application server.'
+
+
 class ModuleBalancerGeneric (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url, name):
         FormHelper.__init__ (self, name, cfg)
@@ -43,10 +46,10 @@ class ModuleBalancerGeneric (Module, FormHelper):
 
         # Options
         if self.allow_type_change:
-            table = Table(2)
-            self.AddTableOptions_Reload (table, "Information sources", 
-                                         "%s!type" % (self._prefix), 
-                                         BALANCER_TYPES)
+            table = TableProps()
+            self.AddPropOptions_Reload (table, "Information sources", 
+                                        "%s!type" % (self._prefix), 
+                                        BALANCER_TYPES, NOTE_BALANCER)
             txt += str(table)
 
         if self._type == 'host':
@@ -74,11 +77,11 @@ class ModuleBalancerGeneric (Module, FormHelper):
             if hosts:
                 for host in hosts:
                     pre = '%s!%s' % (self._prefix, host)
-                    e_host = self.InstanceEntry('%s!host'%(pre), 'text')
-                    e_inte = self.InstanceEntry('%s!interpreter'%(pre), 'text')
+                    e_host = self.InstanceEntry('%s!host'%(pre), 'text', size=30)
+                    e_inte = self.InstanceEntry('%s!interpreter'%(pre), 'text', size=30)
                     e_envs = self._render_envs('%s!env'%(pre))
 
-                    t2 = Table(2)
+                    t2 = Table(2, title_left=1)
                     t2 += ('Host', e_host)
                     t2 += ('Interpreter', e_inte)
                     t2 += ('Environment', e_envs)

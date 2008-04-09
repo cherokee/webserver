@@ -312,6 +312,10 @@ a.button:active span {
   align: left;
 }
 
+table tr {
+  vertial-align: top;
+}
+
 table tr th {
   font-weight: bold;
 }

@@ -15,7 +15,7 @@ class Table:
 
         new_row = [''] * self._cols
         for i in range(len(entry)):
-            new_row[self._title_left + i] = entry[i]
+            new_row[i] = entry[i]
 
         self._content.append (new_row)
         return self
