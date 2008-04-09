@@ -13,7 +13,7 @@ vserver!default!rule!directory!/<dir>!priority = 1540
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
-        self.name              = "common -> dirlist: redir to add final /"
+        self.name              = "common-dirlist: redir to add final /"
         self.request           = "GET /%s HTTP/1.0\r\n" % (REQ)
         self.expected_error    = 301
         self.expected_content  = "Location: /%s/" % (REQ)
