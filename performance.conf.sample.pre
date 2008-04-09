@@ -12,12 +12,12 @@ server!port = 80
 server!timeout = 20
 server!keepalive = 1
 server!keepalive_max_requests = 1000
-server!pid_file = /var/run/cherokee.pid
 server!server_tokens = full
 server!panic_action = %prefix%/bin/cherokee-panic
+server!pid_file = %localstatedir%/run/cherokee.pid
 
 # Default virtual server
 #
 vserver!default!document_root = %wwwroot%
-vserver!default!directory!/!handler = file
-vserver!default!directory!/!priority = 1
+vserver!default!rule!default!handler = file
+vserver!default!rule!default!priority = 1

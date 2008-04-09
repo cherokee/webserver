@@ -1,3 +1,8 @@
+2008-04-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee.conf.sample.pre, performance.conf.sample.pre: Updated
+	to the new configuration file format.
+
 2008-04-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/156-Mime2.py, qa/Makefile.am (EXTRA_DIST): Added a new QA to

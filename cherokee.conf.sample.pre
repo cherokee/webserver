@@ -30,33 +30,33 @@ vserver!default!logger!access!buffsize = 16384
 vserver!default!logger!error!type = file
 vserver!default!logger!error!filename = %localstatedir%/log/cherokee.error
 
-vserver!default!directory!/!handler = common
-vserver!default!directory!/!handler!iocache = 0
-vserver!default!directory!/!priority = 1
+vserver!default!rule!default!handler = common
+vserver!default!rule!default!handler!iocache = 0
+vserver!default!rule!default!priority = 1
 
-vserver!default!directory!/icons!document_root = %prefix%/share/cherokee/icons/
-vserver!default!directory!/icons!handler = file
-vserver!default!directory!/icons!priority = 2
+vserver!default!rule!directory!/icons!document_root = %prefix%/share/cherokee/icons/
+vserver!default!rule!directory!/icons!handler = file
+vserver!default!rule!directory!/icons!priority = 2
 
-vserver!default!directory!/cherokee_themes!document_root = %prefix%/share/cherokee/themes/
-vserver!default!directory!/cherokee_themes!handler = file
-vserver!default!directory!/cherokee_themes!priority = 3
+vserver!default!rule!directory!/cherokee_themes!document_root = %prefix%/share/cherokee/themes/
+vserver!default!rule!directory!/cherokee_themes!handler = file
+vserver!default!rule!directory!/cherokee_themes!priority = 3
 
-vserver!default!directory!/cgi-bin!document_root = %prefix%/lib/cgi-bin/
-vserver!default!directory!/cgi-bin!handler = cgi
-vserver!default!directory!/cgi-bin!priority = 4
+vserver!default!rule!directory!/cgi-bin!document_root = %prefix%/lib/cgi-bin/
+vserver!default!rule!directory!/cgi-bin!handler = cgi
+vserver!default!rule!directory!/cgi-bin!priority = 4
 
-vserver!default!directory!/about!handler = server_info
-vserver!default!directory!/about!handler!just_about = 1
-vserver!default!directory!/about!priority = 5
+vserver!default!rule!directory!/about!handler = server_info
+vserver!default!rule!directory!/about!handler!just_about = 1
+vserver!default!rule!directory!/about!priority = 5
 
-vserver!default!extensions!php!handler = fcgi
-vserver!default!extensions!php!handler!balancer = round_robin
-vserver!default!extensions!php!handler!balancer!type = interpreter
-vserver!default!extensions!php!handler!balancer!local1!host = localhost:1234
-vserver!default!extensions!php!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
-vserver!default!extensions!php!handler!balancer!local1!interpreter = %phpcgi% -b 1234
-vserver!default!extensions!php!priority = 99999
+vserver!default!rule!extensions!php!handler = fcgi
+vserver!default!rule!extensions!php!handler!balancer = round_robin
+vserver!default!rule!extensions!php!handler!balancer!type = interpreter
+vserver!default!rule!extensions!php!handler!balancer!local1!host = localhost:1234
+vserver!default!rule!extensions!php!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
+vserver!default!rule!extensions!php!handler!balancer!local1!interpreter = %phpcgi% -b 1234
+vserver!default!rule!extensions!php!priority = 99999
 
 # Icons
 #
