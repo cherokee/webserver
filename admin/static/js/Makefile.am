@@ -3,7 +3,9 @@
 THIRD_PARTY = \
 jquery.easing.js \
 jquery.accordion.js \
-jquery-1.2.3.min.js 
+jquery-1.2.3.min.js \
+jquery.dimensions.js \
+jquery.tablednd.js
 
 adminstaticdir = "$(datadir)/cherokee/admin/static/js"
 adminstatic_DATA = \
