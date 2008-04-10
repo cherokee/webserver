@@ -138,37 +138,57 @@ Besides these configuration keys there are a few other more complex
 that needs further explanation:
 
 
-Directories, Requests and Regular Expressions
----------------------------------------------
+Defining a virtual server behavior
+----------------------------------
 
-These entries are located inside Virtual Servers. They basically
-specify the behavior of the web server by setting up how to handle each
-request based on the requested object and parameters.
+A virtual server behavior is basically defined by a rule list, which
+includes a number of rules against which each request will be checked.
 
-There are three kinds of entry. All three of them admit
-the same parameters, and depending on each case, the entry is followed
-by the directory name, the extension list or the regular expression:
+There are a number of rules types, each one checking a different
+aspect of the request. The most usual rule types are the ones that
+checks the request URI: directories, extensions and regular
+expressions.
+
+All the rules types accept the same configuration parameters, so
+independently of the rule type, the accepted sub-parameter will remain
+the same. The rule syntax for all the rule types by `default` is:
+
+vserver! ``name`` !rule! ``rule_type`` ! ``rule_match``
+
+The rule types plug-ins shipped within a standard Cherokee release
+include:
 
 :Directory:
   The directory specifies how to handle its contents.
 
-  Example: the root directory of the default virtual host would be represented by
+  Example: the *icons* directory of the default virtual host would be represented by
 
-  ``vserver!default!directory!/``
+  ``vserver!default!rule!directory!/icons``
 
 :Extension:
   It specifies a list of extensions and how they should be handled.
 
   Eg: the JPG extensions is 
 
-  ``vserver!default!extensions!jpg,jpeg``
+  ``vserver!default!rule!extensions!jpg,jpeg``
 
 :Requests:
   When a request matches a regular expression entry, it uses its configuration.
 
   Eg: requests beginning with 'a' and PHP extension
 
-  ``vserver!default!request!^a.*\.php$``
+  ``vserver!default!rule!request!^a.*\.php$``
+
+:Default: 
+
+  This rules matches every request. There must be a default rule
+  configured at the end of the rule list to handle the request that
+  did not match any other rule.
+
+  Eg: Default rule the 'default' virtual server
+
+  ``vserver!default!rule!default``
+
 
 The following parameters are concatenated with any of the previous
 kinds of entry:
@@ -202,8 +222,8 @@ So, here are a few examples about how this notation works:
 - The default virtual server uses the "common" handler as default
   choice for its root directory::
 
-    vserver!default!directory!/!handler = common
-    vserver!default!directory!/!priority = 1
+    vserver!default!rule!directory!/!handler = common
+    vserver!default!rule!directory!/!priority = 1
 
 - The \*.example.com and \*.examples.org domains are restricted to be
   accessed from the local loop interface, and have to be handled as a
@@ -211,19 +231,19 @@ So, here are a few examples about how this notation works:
 
     vserver!example!domains!1 = *.example.com
     vserver!example!domains!2 = *.example.org
-    vserver!example!directory!/!handler = fcgi
-    vserver!example!directory!/!priority = 1
-    vserver!example!directory!/!allow_from = 127.0.0.1,::1
+    vserver!example!rule!directory!/!handler = fcgi
+    vserver!example!rule!directory!/!priority = 1
+    vserver!example!rule!directory!/!allow_from = 127.0.0.1,::1
 
 - ISO images should be handled as files and are protected by a
   htdigest file using only Digest authentication::
 
-    vserver!default!extensions!iso,ISO!handler = file
-    vserver!default!extensions!iso,ISO!priority = 1
-    vserver!default!extensions!iso,ISO!auth = htdigest
-    vserver!default!extensions!iso,ISO!auth!realm = My secret isos
-    vserver!default!extensions!iso,ISO!auth!methods = digest
-    vserver!default!extensions!iso,ISO!auth!passwdfile = /var/passwd/isos.htdigest
+    vserver!default!rule!extensions!iso,ISO!handler = file
+    vserver!default!rule!extensions!iso,ISO!priority = 1
+    vserver!default!rule!extensions!iso,ISO!auth = htdigest
+    vserver!default!rule!extensions!iso,ISO!auth!realm = My secret isos
+    vserver!default!rule!extensions!iso,ISO!auth!methods = digest
+    vserver!default!rule!extensions!iso,ISO!auth!passwdfile = /var/passwd/isos.htdigest
     
 
 Logs
