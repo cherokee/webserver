@@ -55,7 +55,6 @@ server!unix_socket               Path     Listen to a Unix socket
 server!panic_action              Path     Path to cherokee-panic
 server!chroot                    Bool     Whether to use chroot
 server!pid_file                  Path     PID file
-server!mime_files                List     Path list to mime type files
 server!listen                    IP       Listen NIC
 server!poll_method               String   Which poll method it should use
 server!server_tokens             String   Server identification: minor, minimal, os, full
