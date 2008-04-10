@@ -1,5 +1,9 @@
 2008-04-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main_admin.c, admin/VirtualServer.py,
+	admin/PageVServer.py: Updated to the new configuration file
+	syntax.
+
 	* cherokee/main_admin.c (config_server): Update to the new
 	configuration format.
 

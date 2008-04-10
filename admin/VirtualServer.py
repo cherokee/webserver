@@ -3,17 +3,22 @@ class VServerEntries:
         self._cfg   = cfg
         self._host  = host
         self._rules = []
-        
+
         # Build the internal rules list
         if not user_dir:
-            dirs_cfg = self._cfg['vserver!%s!directory'  % (self._host)]
-            exts_cfg = self._cfg['vserver!%s!extensions' % (self._host)]
-            reqs_cfg = self._cfg['vserver!%s!request'    % (self._host)]
+            dirs_cfg = self._cfg['vserver!%s!rule!directory'  % (self._host)]
+            exts_cfg = self._cfg['vserver!%s!rule!extensions' % (self._host)]
+            reqs_cfg = self._cfg['vserver!%s!rule!request'    % (self._host)]
+            defa_cfg = self._cfg['vserver!%s!rule!default'    % (self._host)]
         else:
-            dirs_cfg = self._cfg['vserver!%s!user_dir!directory'  % (self._host)]
-            exts_cfg = self._cfg['vserver!%s!user_dir!extensions' % (self._host)]
-            reqs_cfg = self._cfg['vserver!%s!user_dir!request'    % (self._host)]
+            dirs_cfg = self._cfg['vserver!%s!user_dir!rule!directory'  % (self._host)]
+            exts_cfg = self._cfg['vserver!%s!user_dir!rule!extensions' % (self._host)]
+            reqs_cfg = self._cfg['vserver!%s!user_dir!rule!request'    % (self._host)]
+            defa_cfg = self._cfg['vserver!%s!user_dir!rule!default'    % (self._host)]
 
+        if defa_cfg:
+            prio = defa_cfg['priority'].value
+            self._rules.append (('default', None, prio, defa_cfg))            
         if dirs_cfg:
             for d_name in dirs_cfg:
                 prio = dirs_cfg[d_name]['priority'].value

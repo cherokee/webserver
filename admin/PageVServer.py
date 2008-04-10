@@ -8,18 +8,18 @@ from consts import *
 from VirtualServer import *
 
 DATA_VALIDATION = [
-    ("vserver!.*?!document_root",            validations.is_local_dir_exists),
-    ("vserver!.*?!ssl_certificate_file",     validations.is_local_file_exists),
-    ("vserver!.*?!ssl_certificate_key_file", validations.is_local_file_exists),
-    ("vserver!.*?!ssl_ca_list_file",         validations.is_local_file_exists),
-    ("vserver!.*?!logger!access!filename",   validations.parent_is_dir),
-    ("vserver!.*?!logger!error!filename",    validations.parent_is_dir),
-    ("vserver!.*?!logger!access!command",    validations.is_local_file_exists),
-    ("vserver!.*?!logger!error!command",     validations.is_local_file_exists),
-    ("vserver!.*?!(directory|extensions|request)!.*?!priority", 
-                                             validations.is_positive_int),
-    ("vserver!.*?!user_dir!(directory|extensions|request)!.*?!priority", 
-                                             validations.is_positive_int)
+    ("vserver!.*?!document_root",                  validations.is_local_dir_exists),
+    ("vserver!.*?!ssl_certificate_file",           validations.is_local_file_exists),
+    ("vserver!.*?!ssl_certificate_key_file",       validations.is_local_file_exists),
+    ("vserver!.*?!ssl_ca_list_file",               validations.is_local_file_exists),
+    ("vserver!.*?!logger!access!filename",         validations.parent_is_dir),
+    ("vserver!.*?!logger!error!filename",          validations.parent_is_dir),
+    ("vserver!.*?!logger!access!command",          validations.is_local_file_exists),
+    ("vserver!.*?!logger!error!command",           validations.is_local_file_exists),
+    ("vserver!.*?!rule!default!priority",          validations.is_positive_int),
+    ("vserver!.*?!rule!.*?!.*?!priority",          validations.is_positive_int),
+    ("vserver!.*?!user_dir!rule!default!priority", validations.is_positive_int),
+    ("vserver!.*?!user_dir!rule!.*?!.*?!priority", validations.is_positive_int)
 ]
 
 RULE_LIST_NOTE = """
@@ -92,6 +92,16 @@ class PageVServer (PageMenu, FormHelper):
             self._op_apply_changes (host, uri, post)
             return 'ok'
 
+        # Ensure the default rules are there
+        if not self._cfg['vserver!%s!rule!default'%(host)].has_child():
+            self._cfg["vserver!%s!rule!default!handler" %(host)] = "common"
+            self._cfg["vserver!%s!rule!default!priority"%(host)] = "1"
+
+        if self._cfg.get_val('vserver!%s!user_dir'%(host)) and \
+                not self._cfg['vserver!%s!user_dir!rule!default'%(host)]:
+            self._cfg["vserver!%s!user_dir!rule!default!handler" %(host)] = "common"
+            self._cfg["vserver!%s!user_dir!rule!default!priority"%(host)] = "1"
+
         self._priorities         = VServerEntries (host, self._cfg)
         self._priorities_userdir = VServerEntries (host, self._cfg, user_dir=True)
 
@@ -128,14 +138,14 @@ class PageVServer (PageMenu, FormHelper):
         prio_max = 1
         for c in self._cfg[cfg_prefix]:
             for d in self._cfg["%s!%s"%(cfg_prefix,c)]:
-                pre = "%s!%s!%s!priority"%(cfg_prefix,c,d)
+                pre = "%s!rule!%s!%s!priority"%(cfg_prefix,c,d)
                 tmp = self._cfg.get_val(pre)
                 if tmp:
                     if int(tmp) > prio_max:
                         prio_max = int(tmp)
         priority = str(prio_max + 100)
 
-        pre = "%s!%s!%s" % (cfg_prefix, type_, entry)
+        pre = "%s!rule!%s!%s" % (cfg_prefix, type_, entry)
         self._cfg["%s!handler"%(pre)]  = handler
         self._cfg["%s!priority"%(pre)] = priority
 
@@ -241,16 +251,21 @@ class PageVServer (PageMenu, FormHelper):
             txt += '<h3>Rule list</h3>'
             txt += '<table id="%s" class="rulestable">' % (table_name)
             txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th></tr>'
-
+            
             # Rule list
             for rule in priorities:
                 type, name, prio, conf = rule
 
-                pre  = '%s!%s!%s' % (cfg_key, type, name)
-                link = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
-                e1   = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
+                if type != 'default':
+                    pre  = '%s!rule!%s!%s' % (cfg_key, type, name)
+                    link = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
+                else:
+                    pre  = '%s!rule!%s' % (cfg_key, type)
+                    link = '<a href="%s/prio/%s">Default</a>' % (url_prefix, prio)
 
-                if not (type == 'directory' and name == '/'):
+                e1 = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
+
+                if type != 'default':
                     js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
                     link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                     extra = ''
