@@ -257,14 +257,15 @@ class PageVServer (PageMenu, FormHelper):
                 type, name, prio, conf = rule
 
                 if type != 'default':
-                    pre  = '%s!rule!%s!%s' % (cfg_key, type, name)
-                    link = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
+                    pre   = '%s!rule!%s!%s' % (cfg_key, type, name)
+                    link  = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
+                    final = self.InstanceCheckbox ('%s!final'%(pre), True)
                 else:
-                    pre  = '%s!rule!%s' % (cfg_key, type)
-                    link = '<a href="%s/prio/%s">Default</a>' % (url_prefix, prio)
+                    pre   = '%s!rule!%s' % (cfg_key, type)
+                    link  = '<a href="%s/prio/%s">Default</a>' % (url_prefix, prio)
+                    final = ""
 
                 e1 = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
-                f1 = self.InstanceCheckbox ('%s!final'%(pre), True)
 
                 if type != 'default':
                     js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
@@ -275,7 +276,7 @@ class PageVServer (PageMenu, FormHelper):
                     link_del = ''
 
                 txt += '<!-- %s --><tr id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
-                    prio, pre, extra, link, type.capitalize(), e1, f1, link_del)
+                    prio, pre, extra, link, type.capitalize(), e1, final, link_del)
 
             txt += '</table>\n'
             txt += '''<script type="text/javascript">
