@@ -7,4 +7,5 @@ spawn_fcgi_SOURCES = spawn-fcgi.c
 EXTRA_DIST = \
 cherokee \
 bin2buffer.py \
-05to06.py
+05to06.py \
+06to07.py
