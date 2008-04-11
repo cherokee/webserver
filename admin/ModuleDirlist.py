@@ -18,7 +18,7 @@ class ModuleDirlist (Module, FormHelper):
         'size', 'date',
         'user', 'group',
         'theme', 'icon_dir',
-        'notice_files'
+        'notice_files', 'symlinks'
     ]
 
     def __init__ (self, cfg, prefix, submit_url):
@@ -32,6 +32,7 @@ class ModuleDirlist (Module, FormHelper):
         self.AddTableCheckbox (table, "Show Date",  "%s!date" %(self._prefix), True)
         self.AddTableCheckbox (table, "Show User",  "%s!user" %(self._prefix), False)
         self.AddTableCheckbox (table, "Show Group", "%s!group"%(self._prefix), False)
+        self.AddTableCheckbox (table, "Allow symbolic links", "%s!symlinks"%(self._prefix), True)
         txt += str(table)
 
         txt += '<h3>Theming</h3>'
@@ -45,7 +46,7 @@ class ModuleDirlist (Module, FormHelper):
         return txt
 
     def _op_apply_changes (self, uri, post):
-        checkboxes = ['size', 'date', 'user', 'group']
+        checkboxes = ['size', 'date', 'user', 'group', 'symlinks']
         self.ApplyChangesPrefix (self._prefix, checkboxes, post, DATA_VALIDATION)
 
     def _get_theme_list (self):
