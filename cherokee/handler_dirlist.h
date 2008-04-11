@@ -65,6 +65,7 @@ typedef struct {
 	cherokee_boolean_t       show_user;
 	cherokee_boolean_t       show_group;
 	cherokee_boolean_t       show_icons;
+	cherokee_boolean_t       show_symlinks;
 
 	/* Theme
 	 */

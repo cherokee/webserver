@@ -160,7 +160,8 @@ run-tests.py \
 153-SCGI-vars-root.py \
 154-DirRedirection.py \
 155-DirRedirection2.py \
-156-Mime2.py
+156-Mime2.py \
+157-Dirlist-symlinks.py
 
 test:
 	./run-tests.py

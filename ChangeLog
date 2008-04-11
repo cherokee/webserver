@@ -1,5 +1,15 @@
 2008-04-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_dirlist.c: Added a new property 'symlinks' to
+	allow to disable the symbolic links inclusion.
+
+	* qa/157-Dirlist-symlinks.py, qa/Makefile.am (EXTRA_DIST): Added a
+	new QA to ensure that the new !symlinks property of handler_file
+	works properly.
+
+	* cherokee/util.h (cherokee_lstat): Added new macro to call
+	lstat().
+
 	* contrib/06to07.py: Added 0.6 to 0.7 configuration convertion
 	script.
 

@@ -263,6 +263,9 @@ class TestBase:
         os.chmod(fullpath, mode)
         return fullpath
 
+    def SymLink (self, source, target):
+        os.symlink (source, target)
+
     def CopyFile (self, src, dst):
         open (dst, 'w').write (open (src, 'r').read())
 

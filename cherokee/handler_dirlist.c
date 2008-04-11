@@ -190,11 +190,12 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
 			MODULE_PROPS_FREE(cherokee_handler_dirlist_props_free));
 
-		n->show_size   = true;
-		n->show_date   = true;
-		n->show_user   = false;
-		n->show_group  = false;
-		n->show_icons  = true;
+		n->show_size     = true;
+		n->show_date     = true;
+		n->show_user     = false;
+		n->show_group    = false;
+		n->show_icons    = true;
+		n->show_symlinks = true;
 
 		cherokee_buffer_init (&n->header);
 		cherokee_buffer_init (&n->footer);
@@ -224,6 +225,8 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 			props->show_user  = !! atoi (subconf->val.buf);
 		} else if (equal_buf_str (&subconf->key, "group")) {
 			props->show_group = !! atoi (subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "symlinks")) {
+			props->show_symlinks = !! atoi (subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "theme")) {
 			theme = subconf->val.buf;
@@ -324,7 +327,7 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 		
 		/* Path	
 		 */
-		re = cherokee_stat (path->buf, &n->stat);
+		re = cherokee_lstat (path->buf, &n->stat);
 		if (re < 0) {
 			cherokee_buffer_drop_endding (path, n->name_len);
 
@@ -778,6 +781,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 {
 	ret_t                             ret;
 	cherokee_boolean_t                is_dir;
+	cherokee_boolean_t                is_link;
 	cherokee_buffer_t                *vtmp[2];
 	char                             *alt      = NULL;
 	cherokee_buffer_t                *icon     = NULL;
@@ -792,9 +796,16 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	 */
 	VTMP_INIT_SUBST (thread, vtmp, &props->entry);
 
+	is_dir  = S_ISDIR(file->stat.st_mode);
+	is_link = S_ISLNK(file->stat.st_mode);
+
+	/* Check whether it is a symlink that we should skip
+	 */
+	if ((! props->show_symlinks) && is_link)
+		return ret_not_found;
+
 	/* Add the icon
 	 */
-	is_dir = S_ISDIR(file->stat.st_mode);
 	alt = (is_dir) ? "[DIR]" : "[   ]";
 
 	if (props->show_icons) {
