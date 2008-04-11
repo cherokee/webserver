@@ -1,5 +1,8 @@
 2008-04-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServer.py (PageVServer._render_rules_generic): Added
+	support for the new !final rule property.
+
 	* admin/ModuleDirlist.py: Added support for the new "Allow
 	Symbolic Links" property of the dirlist handler. 
 

@@ -250,7 +250,7 @@ class PageVServer (PageMenu, FormHelper):
 
             txt += '<h3>Rule list</h3>'
             txt += '<table id="%s" class="rulestable">' % (table_name)
-            txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th></tr>'
+            txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th><th>Final</th></tr>'
             
             # Rule list
             for rule in priorities:
@@ -264,6 +264,7 @@ class PageVServer (PageMenu, FormHelper):
                     link = '<a href="%s/prio/%s">Default</a>' % (url_prefix, prio)
 
                 e1 = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
+                f1 = self.InstanceCheckbox ('%s!final'%(pre), True)
 
                 if type != 'default':
                     js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
@@ -273,8 +274,8 @@ class PageVServer (PageMenu, FormHelper):
                     extra = ' NoDrag="1" NoDrop="1"'
                     link_del = ''
 
-                txt += '<!-- %s --><tr id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
-                    prio, pre, extra, link, type.capitalize(), e1, link_del)
+                txt += '<!-- %s --><tr id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
+                    prio, pre, extra, link, type.capitalize(), e1, f1, link_del)
 
             txt += '</table>\n'
             txt += '''<script type="text/javascript">
