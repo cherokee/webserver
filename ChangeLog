@@ -1,3 +1,7 @@
+2008-04-12  Taher Shihadeh  <taher@unixwars.com>
+
+	* cherokee/main.c: fixed bug that prevented launching with -r.
+
 2008-04-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageVServer.py (PageVServer._render_rules_generic): The

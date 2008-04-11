@@ -36,19 +36,19 @@
 #define GETOPT_OPT  "C:r:p:bhvgt"
 #define CONFIG_FILE_HELP "[-C configfile] [-r DIR [-p PORT]] [-g] [-t]"
 
-#define BASIC_CONFIG                                                                         \
-	"vserver!default!directory!/!handler = common\n"                                     \
-	"vserver!default!directory!/!handler!iocache = 0\n"                                  \
-	"vserver!default!directory!/!priority = 1\n"                                         \
-	"vserver!default!directory!/icons!handler = file\n"                                  \
-	"vserver!default!directory!/icons!document_root = " CHEROKEE_ICONSDIR "\n"           \
-	"vserver!default!directory!/icons!priority = 2\n"                                    \
-	"vserver!default!directory!/cherokee_themes!handler = file\n"                        \
-	"vserver!default!directory!/cherokee_themes!document_root = " CHEROKEE_THEMEDIR "\n" \
-	"vserver!default!directory!/cherokee_themes!priority = 3\n"                          \
-	"icons!default = page_white.png\n"                                                   \
-	"icons!directory = folder.png\n"      	                                             \
-	"icons!parent_directory = arrow_turn_left.png\n"                                     \
+#define BASIC_CONFIG                                                                              \
+	"vserver!default!rule!default!handler = common\n"                                         \
+	"vserver!default!rule!default!handler!iocache = 0\n"                                      \
+	"vserver!default!rule!default!priority = 1\n"                                             \
+	"vserver!default!rule!directory!/icons!handler = file\n"                                  \
+	"vserver!default!rule!directory!/icons!document_root = " CHEROKEE_ICONSDIR "\n"           \
+	"vserver!default!rule!directory!/icons!priority = 2\n"                                    \
+	"vserver!default!rule!directory!/cherokee_themes!handler = file\n"                        \
+	"vserver!default!rule!directory!/cherokee_themes!document_root = " CHEROKEE_THEMEDIR "\n" \
+	"vserver!default!rule!directory!/cherokee_themes!priority = 3\n"                          \
+	"icons!default = page_white.png\n"                                                        \
+	"icons!directory = folder.png\n"      	                                                  \
+	"icons!parent_directory = arrow_turn_left.png\n"                                          \
 	"try_include = " CHEROKEE_CONFDIR "/mods-enabled\n"
 
 static cherokee_server_t  *srv           = NULL;
