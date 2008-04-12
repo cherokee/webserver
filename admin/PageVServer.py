@@ -94,7 +94,8 @@ class PageVServer (PageMenu, FormHelper):
             return 'ok'
 
         # Ensure the default rules are there
-        if not self._cfg['vserver!%s!rule!default'%(host)].has_child():
+        cfg = self._cfg['vserver!%s!rule!default'%(host)]
+        if (not cfg) or (not cfg.has_child()):
             self._cfg["vserver!%s!rule!default!handler" %(host)] = "common"
             self._cfg["vserver!%s!rule!default!priority"%(host)] = "1"
 

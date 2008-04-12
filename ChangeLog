@@ -1,5 +1,8 @@
 2008-04-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServer.py: (PageVServer._op_handler): Tiny
+	bugfix. There was an insecure configuration check.
+
 	* admin/PageVServer.py: Added a new button that allows to disable
 	the logging.
 
