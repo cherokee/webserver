@@ -1,3 +1,8 @@
+2008-04-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/PageVServer.py: Added a new button that allows to disable
+	the logging.
+
 2008-04-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageAdvanced.py (PageAdvanced._render_content): Fixed

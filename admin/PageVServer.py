@@ -36,6 +36,7 @@ NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
 NOTE_ADD_DOMAIN      = 'Adds a new domain name. Wildcards are allowed in the domain name.'
 NOTE_DOCUMENT_ROOT   = 'Virtual Server root directory.'
 NOTE_DIRECTORY_INDEX = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
+NOTE_DISABLE_LOG     = 'The Logging is currently enabled.'
 NOTE_LOGGERS         = 'Logging format. Apache compatible is highly recommended here.'
 NOTE_ACCESSES        = 'Back-end with which the accesses will be stored.'
 NOTE_ERRORS          = 'Back-end with which the errors that may occur will be stored.'
@@ -320,13 +321,23 @@ class PageVServer (PageMenu, FormHelper):
         return txt
 
     def _render_logger (self, host):
+        txt   = ""
+
+        # Disable
         pre = 'vserver!%s!logger'%(host)
+        cfg = self._cfg[pre]
+        if cfg and cfg.has_child():
+            table = TableProps()
+            js = "post_del_key('%s','%s');" % (self.submit_ajax_url, pre)
+            button = self.InstanceButton ("Disable", onClick=js)
+            self.AddProp (table, 'Status', '', button, NOTE_DISABLE_LOG)
+            txt += str(table)
+        txt += "<hr />"
 
         # Logger
+        txt += '<h3>Logging Format</h3>'
         table = TableProps()
         self.AddPropOptions_Ajax (table, 'Format', pre, LOGGERS, NOTE_LOGGERS)
-
-        txt  = '<h3>Logging Format</h3>'
         txt += self.Indent(str(table))
         
         # Writers
