@@ -28,16 +28,16 @@ to alleviate the load.
 
 <h2>Server tweaking</h2>
 
-<p class="help_p">The web server can be configured to use some system
-call under certain circumstances. Using the <b>Polling method</b> it
+<p class="help_p">The web server can be configured to use specific system
+calls under certain circumstances. By using the <b>Polling method</b> it
 is possible to force the server to use a specific file descriptor
 polling method even if this is not recommended.</p>
 
-<p class="help_p">The <b>sendfile</b> minimum and maximum limit can he
-set to point the server when to use this system call. Depending on the
-operating system these limit may vary.<br>
-Min. limit: range values: 1 - 2147483647, default: 32768<br>
-Max. limit: range values: 1 - 2147483647, default: 2147483647
+<p class="help_p">The <b>sendfile</b> minimum and maximum limit can be
+set to let the server know when to use this system call. Depending on the
+operating system these limits may vary.<br>
+Min. limit: range values: 1 - 2147483647, default: 32768 bytes<br>
+Max. limit: range values: 1 - 2147483647, default: 2147483647 bytes (2 GB)
 </p>
 
 <p class="help_p">Finally, the <b>Panic Action</b> option allows you to
@@ -53,7 +53,7 @@ Reuse connections: range values: 0 - 128, default 20.
 </p>
 
 <p class="help_p"><b>Log flush time</b> sets the number of seconds
-between log buffer flushes (write to disk).
+between log buffer flushes (writes to disk).
 Setting this number to a value greater than 0 seconds,
 usually has a significant positive impact
 on performance but this can lead to a loss of log data in case
