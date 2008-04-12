@@ -1,19 +1,18 @@
 <h2>System tweaking</h2>
 
 <p class="help_p">This section contains a few options that set
-how we want the operating system to treat Cherokee. The most important
-option here is the <b>File descriptor number</b>
-(<code>fdlimit</code>) limit.<br>
-File descriptor number: range values: 128 - 32768, default OS setting
+how we want the operating system to treat Cherokee.<br>
+The <b>File descriptor number</b> (<code>fdlimit</code>) limit,
+defines how many file descriptors the server can handle.<br>
+File descriptor number: range values: 64 - 32768, default OS setting
 (i.e. 1024, etc.).<br>
-It defines how many file descriptors the server can handle.<br>
 See also: <code>ulimit -n fdlimit</code> shell command.<br>
 Keep in mind that the max. number of concurrent connections
 that can be handled is printed by the server at startup and
 it is roughly a bit less than (fdlimit / 2).<br>
 If the server is very slow in replying to new connections
 or if it fails to accept new requests under heavy load,
-you may investigate and choose to raise this limit.<br>
+you may investigate and, if needed, try to raise this limit.<br>
 <b>NOTE</b>: using <code>select</code> or <code>win32</code>
 pollers may limit the max. number of file descriptors to a low value
 (i.e. only 256 per thread, 256 * 5 = 1280).<br>
@@ -22,8 +21,21 @@ if on server system is not available or is not used
 an efficient fds polling method (i.e. epoll, kqueue, ports),
 then it is possible that the server slows down on high number of connections
 because of this fact (inefficient polling method).  In this case try
-to increase the number of thread (reserving at least 128 fds per thread)
-to alleviate the load.
+to increase the number of threads (reserving at least 32-128 fds per thread)
+to alleviate the load.<br>
+The <b>Thread Number</b> (<code>thread_number</code>)
+specifies the number of worker threads that accept and handle HTTP requests.
+The real number of threads created is printed by Cherokee at startup.<br>
+Thread number: range values: 1 - 1024, default 5 * number of CPUs.<br>
+<b>NOTE</b>: Cherokee can be configured and compiled
+to not use multithreaded code (by only using main process),
+this can be useful in very small / embedded systems that have
+very low resources and system requirements.<br>
+<b>NOTE</b>: if Cherokee has to serve lots of big files and the server
+is limited by disk/IO (including disk seeks, etc.), then it can be useful
+to increase the number of threads in order to lower latencies,
+otherwise if all file content is cached by OS and no dynamic handler (*CGI)
+is used, then the number of threads can be lowered.  Your mileage may vary.
 </p>
 
 <h2>Server tweaking</h2>
