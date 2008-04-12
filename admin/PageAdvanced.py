@@ -6,7 +6,7 @@ from Form import *
 from consts import *
 
 DATA_VALIDATION = [
-    ("server!max_fds",                validations.is_positive_int),
+    ("server!fdlimit",                validations.is_positive_int),
     ("server!pid_file",               validations.parent_is_dir),
     ("server!sendfile_min",           validations.is_positive_int),
     ("server!sendfile_max",           validations.is_positive_int),
@@ -24,15 +24,15 @@ really know what you are doing.</p>
 """
 
 NOTE_THREAD       = 'Defines which thread policy the OS should apply to the server.'
-NOTE_THREAD_NUM   = 'If empty, Cherokee will calculate the number.'
-NOTE_FD_NUM       = 'It defines how many file descriptors the server can handle.'
-NOTE_POLLING      = 'Allows to choose the internal polling mechanism.'
-NOTE_SENDFILE_MIN = 'Minimum size of a file to use sendfile(). Default: 32768.'
-NOTE_SENDFILE_MAX = 'Maximum size of a file to use sendfile(). Default: 2Gb.'
-NOTE_PANIC_ACTION = 'Fefine a program that will be called if, by some reason, the server fails. Default: <em>cherokee-panic</em>.'
-NOTE_PID_FILE     = 'Path to the PID file. If empty, the file will not be created.'
-NOTE_LISTEN_Q     = 'Length of the incoming connection queue.'
-NOTE_REUSE_CONNS  = 'Set the number of how many internal connections should be hold for reuse.'
+NOTE_THREAD_NUM   = 'If empty, Cherokee will calculate a default number.'
+NOTE_FD_NUM       = 'It defines how many file descriptors the server should handle. Default is the number showed by ulimit -n'
+NOTE_POLLING      = 'Allows to choose the internal file descriptor polling method.'
+NOTE_SENDFILE_MIN = 'Minimum size of a file to use sendfile(). Default: 32768 Bytes.'
+NOTE_SENDFILE_MAX = 'Maximum size of a file to use sendfile(). Default: 2 GB.'
+NOTE_PANIC_ACTION = 'Name a program that will be called if, by some reason, the server fails. Default: <em>cherokee-panic</em>.'
+NOTE_PID_FILE     = 'Path of the PID file. If empty, the file will not be created.'
+NOTE_LISTEN_Q     = 'Max. length of the incoming connection queue.'
+NOTE_REUSE_CONNS  = 'Set the number of how many internal connections can be hold for reuse by each thread. Default 20.'
 NOTE_FLUSH_TIME   = 'Sets the number of seconds between log consolidations (flushes). Default: 10 seconds.'
 NOTE_KEEPALIVE_RS = 'Maximum number of HTTP requests that can be served by each keepalive connection.'
 

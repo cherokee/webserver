@@ -880,9 +880,8 @@ cherokee_connection_step (cherokee_connection_t *conn)
 
 	/* Need to 'read' from handler ?
 	 */
-	if (conn->buffer.len > 0) {
+	if (conn->buffer.len > 0)
 		return ret_ok;
-	}
 
 	/* Do a step in the handler
 	 */
@@ -903,9 +902,14 @@ cherokee_connection_step (cherokee_connection_t *conn)
 		return step_ret;
 	}
 
-	/* May be encode..
+	/* Return now if no encoding is needed.
 	 */
-	if (conn->encoder != NULL) {
+	if (conn->encoder == NULL)
+		return step_ret;
+
+	/* Encode handler output.
+	 */
+	{
 		ret_t ret;
 
 		/* Encode
@@ -914,7 +918,7 @@ cherokee_connection_step (cherokee_connection_t *conn)
 		case ret_eof:
 		case ret_eof_have_data:
 			ret = cherokee_encoder_flush (conn->encoder, &conn->buffer, &conn->encoder_buffer);			
-			step_ret = (conn->encoder_buffer.len == 0)? ret_eof : ret_eof_have_data;
+			step_ret = (conn->encoder_buffer.len == 0) ? ret_eof : ret_eof_have_data;
 			break;
 		default:
 			ret = cherokee_encoder_encode (conn->encoder, &conn->buffer, &conn->encoder_buffer);

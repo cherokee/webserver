@@ -1,3 +1,20 @@
+2008-04-12  A.D.F  <adefacc@tin.it>
+
+	* admin/*.help.html:
+	  - fixed mispellings and rewritten a few sentences.
+
+	* admin/PageAdvanced.py:
+	  - replaced max_fds with fdlimit;
+	  - micro fixes to help tooltips.
+
+	* admin/PageVServer.py:
+	  - micro fixes to help tooltips.
+
+	* cherokee/connection.c:
+	  - micro optimization in cherokee_connection_step(),
+	    return early if there is no encoder configured
+	    (common fast case).
+
 2008-04-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageVServer.py: (PageVServer._op_handler): Tiny

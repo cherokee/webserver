@@ -10,8 +10,8 @@
  virtual server to handle all the domains that match with a list of
  custom wildcats. For example: </p>
 
- <p><pre class="help_p">www.alobbs.com</pre>
- <pre class="help_p"> *.example.com</pre></p>
+ <pre class="help_p">www.alobbs.com</pre>
+ <pre class="help_p"> *.example.com</pre><br>
 
  <p class="help_p">If the domain name list is empty, the domain
  alias will be used internally as its only entry.</p>
@@ -41,20 +41,20 @@
 
  <p class="help_p">However, there is another error handler that allows
  you to set a custom redirection for each different error code; in
- that way you can show you own error messages.</p>
+ that way you can show your own error messages.</p>
 
 <h2>Logging</h2>
  <p class="help_p">By default the virtual server does not log the
  server transactions, nor the error messages. In this section you have
- to specify the format with which the server should generate the
- entries and where it should store them.</p>
+ to specify the format that the server should use when writing
+ accesses and errors and where it should store them.</p>
 
  <p class="help_p">The most popular choice is <b>Apache Compatible</b>
- format and an individual file for the access log and the error
+ format using a single file for the access log and the error
  log.</p>
 
 <h2>Security</h2>
- <p class="help_p">This sections allows you to configure the required
+ <p class="help_p">This section allows you to configure the required
  files to enable the <b>TLS</b>/<b>SSL</b> support for a certain
  virtual server.</p>
 

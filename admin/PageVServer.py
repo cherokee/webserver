@@ -30,7 +30,7 @@ bottom to top</b>. The first match is applied.</p>
 NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server.'
 NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server.'
 NOTE_CA_LIST         = 'File with the certificates of Certification Authorities (CA) whose clients you deal with.'
-NOTE_ERROR_HANDLER   = 'Allow to select how to generate the error responses.'
+NOTE_ERROR_HANDLER   = 'Allows the selection of how to generate the error responses.'
 NOTE_PERSONAL_WEB    = 'Directory inside the user home directory that will be used as the root web directory.'
 NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
 NOTE_ADD_DOMAIN      = 'Adds a new domain name. Wildcards are allowed in the domain name.'
@@ -38,10 +38,10 @@ NOTE_DOCUMENT_ROOT   = 'Virtual Server root directory.'
 NOTE_DIRECTORY_INDEX = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
 NOTE_DISABLE_LOG     = 'The Logging is currently enabled.'
 NOTE_LOGGERS         = 'Logging format. Apache compatible is highly recommended here.'
-NOTE_ACCESSES        = 'Back-end with which the accesses will be stored.'
-NOTE_ERRORS          = 'Back-end with which the errors that may occur will be stored.'
-NOTE_WRT_FILE        = 'Full path to the file were the information will be saved.'
-NOTE_WRT_EXEC        = 'Path to the executable that will be invoked with each log entry.'
+NOTE_ACCESSES        = 'Back-end used to store the log accesses.'
+NOTE_ERRORS          = 'Back-end used to store the log errors.'
+NOTE_WRT_FILE        = 'Full path to the file where the information will be saved.'
+NOTE_WRT_EXEC        = 'Path to the executable that will be invoked on each log entry.'
 
 
 class PageVServer (PageMenu, FormHelper):

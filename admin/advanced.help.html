@@ -3,20 +3,27 @@
 <p class="help_p">This section contains a few options that set
 how we want the operating system to treat Cherokee. The most important
 option here is the <b>File descriptor number</b>
-(<code>max_fds</code>) limit.<br>
+(<code>fdlimit</code>) limit.<br>
 File descriptor number: range values: 128 - 32768, default OS setting
 (i.e. 1024, etc.).<br>
 It defines how many file descriptors the server can handle.<br>
-See also: <code>ulimit -n max_fds</code> shell command.<br>
+See also: <code>ulimit -n fdlimit</code> shell command.<br>
 Keep in mind that the max. number of concurrent connections
 that can be handled is printed by the server at startup and
-it is roughly a bit less than (max_fds / 2).<br>
+it is roughly a bit less than (fdlimit / 2).<br>
 If the server is very slow in replying to new connections
 or if it fails to accept new requests under heavy load,
 you may investigate and choose to raise this limit.<br>
 <b>NOTE</b>: using <code>select</code> or <code>win32</code>
 pollers may limit the max. number of file descriptors to a low value
-(i.e. only 256 per thread, 256 * 5 = 1280).
+(i.e. only 256 per thread, 256 * 5 = 1280).<br>
+<b>NOTE</b>: when setting high fdlimit values (i.e. more than 2048 - 4096 fds)
+if on server system is not available or is not used
+an efficient fds polling method (i.e. epoll, kqueue, ports),
+then it is possible that the server slows down on high number of connections
+because of this fact (inefficient polling method).  In this case try
+to increase the number of thread (reserving at least 128 fds per thread)
+to alleviate the load.
 </p>
 
 <h2>Server tweaking</h2>
@@ -24,7 +31,7 @@ pollers may limit the max. number of file descriptors to a low value
 <p class="help_p">The web server can be configured to use some system
 call under certain circumstances. Using the <b>Polling method</b> it
 is possible to force the server to use a specific file descriptor
-polling method. It is not recommended though.</p>
+polling method even if this is not recommended.</p>
 
 <p class="help_p">The <b>sendfile</b> minimum and maximum limit can he
 set to point the server when to use this system call. Depending on the
@@ -40,14 +47,14 @@ fails. By default, it should be <em>cherokee-panic</em>.</p>
 <h2>Server behaviour</h2>
 
 <p class="help_p">The <b>Reuse Connections</b> field allows to set the
-number of how many internal connections should be hold for reuse. It's
-an optimization tweaking option.<br>
+number of how many internal connections per thread should be hold for reuse.
+It's an optimization tweaking option.<br>
 Reuse connections: range values: 0 - 128, default 20.
 </p>
 
 <p class="help_p"><b>Log flush time</b> sets the number of seconds
-between log consolidations (flushes).
-Setting this number to a value greater than 1 - 2 seconds,
+between log buffer flushes (write to disk).
+Setting this number to a value greater than 0 seconds,
 usually has a significant positive impact
 on performance but this can lead to a loss of log data in case
 of an unclean server close or shutdown.<br>
