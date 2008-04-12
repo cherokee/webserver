@@ -56,7 +56,7 @@ class PageAdvanced (PageMenu, FormHelper):
         table = TableProps()
         self.AddPropEntry    (table, 'Thread Number',    'server!thread_number', NOTE_THREAD_NUM)
         self.AddPropOptions  (table, 'Thread Policy',    'server!thread_policy', THREAD_POLICY, NOTE_THREAD)
-        self.AddPropEntry    (table, 'File descriptors', 'server!max_fds', NOTE_FD_NUM)
+        self.AddPropEntry    (table, 'File descriptors', 'server!fdlimit', NOTE_FD_NUM)
         txt += self.Indent(table)
 
         txt += "<h2>Server tweaking</h2>"

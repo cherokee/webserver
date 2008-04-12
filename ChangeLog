@@ -1,3 +1,8 @@
+2008-04-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/PageAdvanced.py (PageAdvanced._render_content): Fixed
+	incorrect key.
+
 2008-04-12  Taher Shihadeh  <taher@unixwars.com>
 
 	* cherokee/main.c: fixed bug that prevented launching with -r.
