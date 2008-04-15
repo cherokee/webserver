@@ -6,14 +6,16 @@ HOST  = "request_mini"
 CONF = """
 vserver!<domain>!document_root = %s
 vserver!<domain>!domain!1 = <domain>
-vserver!<domain>!rule!default!handler = file
-vserver!<domain>!rule!default!priority = 10
 
-vserver!<domain>!rule!request!^/$!handler = redir
-vserver!<domain>!rule!request!^/$!handler!rewrite!1!show = 0
-vserver!<domain>!rule!request!^/$!handler!rewrite!1!regex = ^.*$
-vserver!<domain>!rule!request!^/$!handler!rewrite!1!substring = /index.php
-vserver!<domain>!rule!request!^/$!priority = 11
+vserver!<domain>!rule!10!match!type = default
+vserver!<domain>!rule!10!handler = file
+
+vserver!<domain>!rule!11!match!type = request
+vserver!<domain>!rule!11!match!request = ^/$
+vserver!<domain>!rule!11!handler = redir
+vserver!<domain>!rule!11!handler!rewrite!1!show = 0
+vserver!<domain>!rule!11!handler!rewrite!1!regex = ^.*$
+vserver!<domain>!rule!11!handler!rewrite!1!substring = /index.php
 """ 
 
 class Test (TestBase):

@@ -10,12 +10,13 @@ PASSWD     = "alo"
 PASSWD_MD5 = "$1$JJ3RnzaO$zpsGlLvKvMVrUW4ZNZ7Iw1"
 
 CONF = """
-vserver!default!rule!directory!/htpasswd_md5!auth = htpasswd
-vserver!default!rule!directory!/htpasswd_md5!auth!methods = basic
-vserver!default!rule!directory!/htpasswd_md5!auth!realm = %s
-vserver!default!rule!directory!/htpasswd_md5!auth!passwdfile = %s
-vserver!default!rule!directory!/htpasswd_md5!final = 0
-vserver!default!rule!directory!/htpasswd_md5!priority = 960
+vserver!default!rule!960!match!type = directory
+vserver!default!rule!960!match!directory = /htpasswd_md5
+vserver!default!rule!960!match!final = 0
+vserver!default!rule!960!auth = htpasswd
+vserver!default!rule!960!auth!methods = basic
+vserver!default!rule!960!auth!realm = %s
+vserver!default!rule!960!auth!passwdfile = %s
 """
 
 class Test (TestBase):

@@ -6,9 +6,10 @@ USER = "nobody"
 UID  = pwd.getpwnam(USER)[2]
 
 CONF = """
-vserver!default!rule!directory!/change_user2!handler = cgi
-vserver!default!rule!directory!/change_user2!handler!change_user = 1
-vserver!default!rule!directory!/change_user2!priority = 1380
+vserver!default!rule!1380!match!type = directory
+vserver!default!rule!1380!match!directory = /change_user2
+vserver!default!rule!1380!handler = cgi
+vserver!default!rule!1380!handler!change_user = 1
 """
 
 CGI_CODE = """#!/bin/sh

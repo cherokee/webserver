@@ -3,8 +3,9 @@ from base import *
 PARAMS = "param1=one&param2=two&param3"
 
 CONF = """
-vserver!default!rule!directory!/querystring!handler = cgi
-vserver!default!rule!directory!/querystring!priority = 1020
+vserver!default!rule!1020!match!type = directory
+vserver!default!rule!1020!match!directory = /querystring
+vserver!default!rule!1020!handler = cgi
 """
 
 class Test (TestBase):

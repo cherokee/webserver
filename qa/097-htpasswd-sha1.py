@@ -10,12 +10,13 @@ PASSWD      = "alo"
 PASSWD_SHA1 = "{SHA}yQ4y0eYX/0yw69R4ne1+0QmBpec="
 
 CONF = """
-vserver!default!rule!directory!/htpasswd_sha1!auth = htpasswd
-vserver!default!rule!directory!/htpasswd_sha1!auth!methods = basic
-vserver!default!rule!directory!/htpasswd_sha1!auth!realm = %s
-vserver!default!rule!directory!/htpasswd_sha1!auth!passwdfile = %s
-vserver!default!rule!directory!/htpasswd_sha1!final = 0
-vserver!default!rule!directory!/htpasswd_sha1!priority = 970
+vserver!default!rule!970!match!type = directory
+vserver!default!rule!970!match!directory = /htpasswd_sha1
+vserver!default!rule!970!match!final = 0
+vserver!default!rule!970!auth = htpasswd
+vserver!default!rule!970!auth!methods = basic
+vserver!default!rule!970!auth!realm = %s
+vserver!default!rule!970!auth!passwdfile = %s
 """
 
 class Test (TestBase):

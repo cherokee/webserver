@@ -31,19 +31,25 @@
 # include <getopt.h>
 #endif
 
-#define GETOPT_OPT           "d:p:aC:"
-#define CONFIG_FILE_HELP     "[-d DIR] [-p PORT] [-C FILE] [-a]"
+#define APP_NAME        \
+	"Cherokee Web Server: Admin"
+
+#define APP_COPY_NOTICE \
+	"Written by Alvaro Lopez Ortega <alvaro@gnu.org>\n\n"                          \
+	"Copyright (C) 2001-2008 Alvaro Lopez Ortega.\n"                               \
+	"This is free software; see the source for copying conditions.  There is NO\n" \
+	"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
 #define DEFAULT_PORT         9090
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin"
 #define DEFAULT_CONFIG_FILE  CHEROKEE_CONFDIR "/cherokee.conf"
+#define DEFAULT_BIND         "127.0.0.1"
 #define RULE                 "vserver!default!rule!"
  
-static int                 port          = DEFAULT_PORT;
-static char               *document_root = DEFAULT_DOCUMENTROOT;
-static char               *config_file   = DEFAULT_CONFIG_FILE;
-static cherokee_boolean_t  bind_local    = true;
-
+static int   port          = DEFAULT_PORT;
+static char *document_root = DEFAULT_DOCUMENTROOT;
+static char *config_file   = DEFAULT_CONFIG_FILE;
+static char *bind_to       = DEFAULT_BIND;
 
 static ret_t
 config_server (cherokee_server_t *srv) 
@@ -55,32 +61,41 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf, "server!ipv6 = 0\n");
 	cherokee_buffer_add_str (&buf, "server!max_connection_reuse = 0\n");
 
-	if (bind_local)
-		cherokee_buffer_add_str (&buf, "server!listen = 127.0.0.1\n");
+	if (bind_to)
+		cherokee_buffer_add_va (&buf, "server!listen = %s\n", bind_to);
 
 	cherokee_buffer_add_va  (&buf, "vserver!default!document_root = %s\n", document_root);
 
-	cherokee_buffer_add_str (&buf, RULE"default!handler = scgi\n");
-	cherokee_buffer_add_str (&buf, RULE"default!handler!balancer = round_robin\n");
-	cherokee_buffer_add_str (&buf, RULE"default!handler!balancer!type = interpreter\n");
-	cherokee_buffer_add_str (&buf, RULE"default!handler!balancer!local1!host = localhost:4000\n");
-	cherokee_buffer_add_va  (&buf, RULE"default!handler!balancer!local1!interpreter = %s/server.py %s\n", document_root, config_file);
-	cherokee_buffer_add_str (&buf, RULE"default!priority = 1\n");
+	cherokee_buffer_add_va  (&buf, 
+				 RULE "1!match!type = default\n"
+				 RULE "1!handler = scgi\n"
+				 RULE "1!handler!balancer = round_robin\n"
+				 RULE "1!handler!balancer!type = interpreter\n"
+				 RULE "1!handler!balancer!local1!host = localhost:4000\n"
+				 RULE "1!handler!balancer!local1!interpreter = %s/server.py %s\n", document_root, config_file);
 
-	cherokee_buffer_add_str (&buf, RULE"directory!/about!handler = server_info\n");
-	cherokee_buffer_add_str (&buf, RULE"directory!/about!priority = 2\n");
+	cherokee_buffer_add_str (&buf, 
+				 RULE "2!match!type = directory\n"
+				 RULE "2!match!directory = /about\n"
+				 RULE "2!handler = server_info\n");
 
-	cherokee_buffer_add_str (&buf, RULE"directory!/static!handler = file\n");
-	cherokee_buffer_add_str (&buf, RULE"directory!/static!handler!iocache = 0\n");
-	cherokee_buffer_add_str (&buf, RULE"directory!/static!priority = 3\n");
+	cherokee_buffer_add_str (&buf, 
+				 RULE "3!match!type = directory\n"
+				 RULE "3!match!directory = /static\n"
+				 RULE "3!handler = file\n"
+				 RULE "3!handler!iocache = 0\n");
 
-	cherokee_buffer_add_str (&buf, RULE"request!^/favicon.ico$!handler = file\n");
-	cherokee_buffer_add_str (&buf, RULE"request!^/favicon.ico$!priority = 4\n");
+	cherokee_buffer_add_str (&buf, 
+				 RULE "4!match!type = request\n"
+				 RULE "4!match!request = ^/favicon.ico$\n"
+				 RULE "4!handler = file\n");
 
-	cherokee_buffer_add_str (&buf, RULE"directory!/icons_local!handler = file\n");
-	cherokee_buffer_add_str (&buf, RULE"directory!/icons_local!handler!iocache = 0\n");
-	cherokee_buffer_add_va  (&buf, RULE"directory!/icons_local!document_root = %s\n", CHEROKEE_ICONSDIR);
-	cherokee_buffer_add_str (&buf, RULE"directory!/icons_local!priority = 5\n");
+	cherokee_buffer_add_va  (&buf, 
+				 RULE "5!match!type = directory\n"
+				 RULE "5!match!directory = /icons_local\n"
+				 RULE "5!handler = file\n"
+				 RULE "5!handler!iocache = 0\n"
+				 RULE "5!document_root = %s\n", CHEROKEE_ICONSDIR);
 
 	ret = cherokee_server_read_config_string (srv, &buf);
 	if (ret != ret_ok) return ret;
@@ -89,16 +104,42 @@ config_server (cherokee_server_t *srv)
 	return ret_ok;
 }
 
+static void
+print_help (void)
+{
+	printf (APP_NAME "\n"
+		"Usage: cherokee-admin [options]\n\n"
+		"  -h,  --help                   Print this help\n"
+		"  -V,  --version                Print version and exit\n"
+		"  -l,  --listen[=IP]            Bind net iface; no arg means all\n"
+		"  -d,  --appdir=DIR             Application directory\n"
+		"  -p,  --port=NUM               TCP port\n"
+		"  -C,  --target=PATH            Configuration file to modify\n\n"
+		"Report bugs to " PACKAGE_BUGREPORT "\n");
+}
 
 static void
 process_parameters (int argc, char **argv)
 {
 	int c;
 
-	while ((c = getopt(argc, argv, GETOPT_OPT)) != -1) {
+	struct option long_options[] = {
+		{"help",    no_argument,       NULL, 'h'},
+		{"version", no_argument,       NULL, 'V'},
+		{"bind",    optional_argument, NULL, 'b'},
+		{"appdir",  required_argument, NULL, 'd'},
+		{"port",    required_argument, NULL, 'p'},
+		{"target",  required_argument, NULL, 'C'},
+		{NULL, 0, NULL, 0}
+	};
+
+	while ((c = getopt_long(argc, argv, "hVb::d:p:C:", long_options, NULL)) != -1) {
 		switch(c) {
-		case 'a':
-			bind_local = false;
+		case 'b':
+			if (optarg)
+				bind_to = strdup(optarg);
+			else
+				bind_to = NULL;
 			break;
 		case 'p':
 			port = atoi(optarg);
@@ -109,9 +150,14 @@ process_parameters (int argc, char **argv)
 		case 'C':
 			config_file = strdup(optarg);
 			break;
+		case 'V':
+			printf (APP_NAME " " PACKAGE_VERSION "\n" APP_COPY_NOTICE);
+			exit(0);
+		case 'h':
+		case '?':
 		default:
-			fprintf (stderr, "Usage: %s " CONFIG_FILE_HELP "\n", argv[0]);
-			exit(1);
+			print_help();
+			exit(0);
 		}
 	}
 }

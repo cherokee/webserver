@@ -74,10 +74,26 @@ match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
 }
 
 
+static ret_t 
+configure (cherokee_rule_extensions_t *rule, 
+	   cherokee_config_node_t     *conf, 
+	   cherokee_virtual_server_t  *vsrv)
+{
+	ret_t              ret;
+	cherokee_buffer_t *tmp = NULL;
+
+	ret = cherokee_config_node_read (conf, "extensions", &tmp);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Rule prio=%d needs an 'extensions' property\n", 
+			     RULE(rule)->priority);
+		return ret_error;
+	}
+
+	return parse_value (tmp, &rule->extensions);
+}
+
 ret_t
-cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule, 
-			      cherokee_buffer_t           *value,
-			      cherokee_virtual_server_t   *vsrv)
+cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule)
 {
 	CHEROKEE_NEW_STRUCT (n, rule_extensions);
 
@@ -87,12 +103,12 @@ cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule,
 	
 	/* Virtual methos
 	 */
-	RULE(n)->match = (rule_func_match_t) match;
+	RULE(n)->match     = (rule_func_match_t) match;
+	RULE(n)->configure = (rule_func_configure_t) configure;
 
 	/* Properties
 	 */
 	cherokee_avl_init (&n->extensions);
-	parse_value (value, &n->extensions);
 
 	*rule = n;
  	return ret_ok;

@@ -5,9 +5,10 @@ DIR  = "dir_redirect154/a/b/c"
 REQ  = "%s/d/e" % (DIR)
 
 CONF = """
-vserver!default!rule!directory!/<dir>!handler = common
-vserver!default!rule!directory!/<dir>!document_root = %s
-vserver!default!rule!directory!/<dir>!priority = 1540
+vserver!default!rule!1540!match!type = directory
+vserver!default!rule!1540!match!directory = /<dir>
+vserver!default!rule!1540!handler = common
+vserver!default!rule!1540!document_root = %s
 """
 
 class Test (TestBase):

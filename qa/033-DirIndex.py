@@ -3,8 +3,9 @@ from base import *
 MAGIC = "The_index_page_should_contain_this"
 
 CONF = """
-vserver!default!rule!directory!/index1!handler = dirlist
-vserver!default!rule!directory!/index1!priority = 330
+vserver!default!rule!330!match!type = directory
+vserver!default!rule!330!match!directory = /index1
+vserver!default!rule!330!handler = dirlist
 """
 
 class Test (TestBase):

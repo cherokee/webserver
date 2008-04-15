@@ -2,10 +2,11 @@ import os
 from base import *
 
 CONF = """
-vserver!directoryindex3!rule!default!handler = common
-vserver!directoryindex3!directory_index = index.php,/super_test_index.php
 vserver!directoryindex3!document_root = %s
 vserver!directoryindex3!domain!1 = directoryindex3
+vserver!directoryindex3!directory_index = index.php,/super_test_index.php
+vserver!directoryindex3!rule!1!match!type = default
+vserver!directoryindex3!rule!1!handler = common
 """
 
 

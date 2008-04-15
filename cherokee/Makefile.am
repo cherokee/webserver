@@ -138,6 +138,23 @@ endif
 
 
 #
+# Rule header
+#
+rule_header = \
+rule_header.c \
+rule_header.h
+
+libplugin_header_la_LDFLAGS = $(module_ldflags)  
+libplugin_header_la_SOURCES = $(rule_header)
+
+if STATIC_RULE_HEADER
+static_rule_header_src = $(rule_header)
+else
+dynamic_rule_header_lib = libplugin_header.la
+endif
+
+
+#
 # Handler server_info
 #
 handler_server_info = \
@@ -861,9 +878,10 @@ endif
 
 
 libcherokee_server_la_SOURCES = \
-$(static_rule_directory_src) \
 $(static_rule_extensions_src) \
 $(static_rule_request_src) \
+$(static_rule_header_src) \
+$(static_rule_directory_src) \
 \
 $(static_handler_file_src) \
 $(static_handler_admin_src) \
@@ -1002,6 +1020,7 @@ plugin_LTLIBRARIES = \
 $(dynamic_rule_directory_lib) \
 $(dynamic_rule_extensions_lib) \
 $(dynamic_rule_request_lib) \
+$(dynamic_rule_header_lib) \
 $(dynamic_handler_cgi_lib) \
 $(dynamic_handler_phpcgi_lib) \
 $(dynamic_handler_server_info_lib) \

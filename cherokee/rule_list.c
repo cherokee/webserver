@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "rule_list.h"
+
 #include "util.h"
 #include "connection-protected.h"
 #include "rule_default.h"
@@ -38,7 +39,7 @@ cherokee_rule_list_init (cherokee_rule_list_t *list)
 
 	INIT_LIST_HEAD (&list->rules);
 
-	ret = cherokee_rule_default_new (&list->def_rule, NULL, NULL);
+	ret = cherokee_rule_default_new (&list->def_rule);
 	if (ret != ret_ok) return ret;
 
 	return ret_ok;

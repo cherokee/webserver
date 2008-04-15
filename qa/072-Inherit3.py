@@ -4,12 +4,14 @@ COMMENT = "/* This is a PHP comment */"
 MAGIC   = "This is th magic string"
 
 CONF = """
-vserver!default!rule!directory!/inherit3/dir1/dir2/dir3!handler = phpcgi
-vserver!default!rule!directory!/inherit3/dir1/dir2/dir3!handler!interpreter = %s
-vserver!default!rule!directory!/inherit3/dir1/dir2/dir3!priority = 720
+vserver!default!rule!720!match!type = directory
+vserver!default!rule!720!match!directory = /inherit3/dir1/dir2/dir3
+vserver!default!rule!720!handler = phpcgi
+vserver!default!rule!720!handler!interpreter = %s
 
-vserver!default!rule!directory!/inherit3!handler = file
-vserver!default!rule!directory!/inherit3!priority = 721
+vserver!default!rule!721!match!type = directory
+vserver!default!rule!721!match!directory = /inherit3
+vserver!default!rule!721!handler = file
 """
 
 class Test (TestBase):

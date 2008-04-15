@@ -99,10 +99,38 @@ restore:
 }
 
 
+static ret_t 
+configure (cherokee_rule_request_t   *rule, 
+	   cherokee_config_node_t    *conf, 
+	   cherokee_virtual_server_t *vsrv)
+{
+	ret_t ret;
+
+	/* Read the configuration entry
+	 */
+	ret = cherokee_config_node_copy (conf, "request", &rule->pattern);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Rule prio=%d needs a 'request' property", 
+			     RULE(rule)->priority);
+		return ret_error;
+	}
+
+	/* Add it to the regular extension table
+	 */
+	ret = cherokee_regex_table_add (VSERVER_SRV(vsrv)->regexs, 
+					rule->pattern.buf);
+	if (ret != ret_ok) return ret;
+	
+	ret = cherokee_regex_table_get (VSERVER_SRV(vsrv)->regexs, 
+					rule->pattern.buf, &rule->pcre);
+	if (ret != ret_ok) return ret;
+
+	return ret_ok;
+}
+
+
 ret_t
-cherokee_rule_request_new (cherokee_rule_request_t  **rule, 
-			   cherokee_buffer_t         *value,
-			   cherokee_virtual_server_t *vsrv)
+cherokee_rule_request_new (cherokee_rule_request_t  **rule)
 {
 	ret_t ret;
 
@@ -114,20 +142,13 @@ cherokee_rule_request_new (cherokee_rule_request_t  **rule,
 	
 	/* Virtual methos
 	 */
-	RULE(n)->match = (rule_func_match_t) match;
+	RULE(n)->match     = (rule_func_match_t) match;
+	RULE(n)->configure = (rule_func_configure_t) configure;
 
 	/* Properties
 	 */
-	cherokee_buffer_init (&n->pattern);
-	cherokee_buffer_add_buffer (&n->pattern, value);
-
 	n->pcre = NULL;
-
-	ret = cherokee_regex_table_add (VSERVER_SRV(vsrv)->regexs, value->buf);
-	if (ret != ret_ok) return ret;
-
-	ret = cherokee_regex_table_get (VSERVER_SRV(vsrv)->regexs, value->buf, &n->pcre);
-	if (ret != ret_ok) return ret;
+	cherokee_buffer_init (&n->pattern);
 
 	*rule = n;
  	return ret_ok;

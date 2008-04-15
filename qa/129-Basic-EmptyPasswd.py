@@ -5,12 +5,13 @@ LOGIN="Aladdin"
 PASSWD="open sesame"
 
 CONF = """
-vserver!default!rule!directory!/auth_empty!auth = plain
-vserver!default!rule!directory!/auth_empty!auth!methods = basic
-vserver!default!rule!directory!/auth_empty!auth!realm = Test Empty
-vserver!default!rule!directory!/auth_empty!auth!passwdfile = %s
-vserver!default!rule!directory!/auth_empty!final = 0
-vserver!default!rule!directory!/auth_empty!priority = 1290
+vserver!default!rule!1290!match!type = directory
+vserver!default!rule!1290!match!directory = /auth_empty
+vserver!default!rule!1290!match!final = 0
+vserver!default!rule!1290!auth = plain
+vserver!default!rule!1290!auth!methods = basic
+vserver!default!rule!1290!auth!realm = Test Empty
+vserver!default!rule!1290!auth!passwdfile = %s
 """
 
 class Test (TestBase):

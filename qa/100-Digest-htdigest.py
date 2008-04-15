@@ -8,12 +8,13 @@ PASSWD = "itissecret"
 DIR    = "digest_htdigest1"
 
 CONF = """
-vserver!default!rule!directory!<dir>!auth = htdigest
-vserver!default!rule!directory!<dir>!auth!methods = digest
-vserver!default!rule!directory!<dir>!auth!realm = %s
-vserver!default!rule!directory!<dir>!auth!passwdfile = %s
-vserver!default!rule!directory!<dir>!final = 0
-vserver!default!rule!directory!<dir>!priority = 1000
+vserver!default!rule!1000!match!type = directory
+vserver!default!rule!1000!match!directory = %s
+vserver!default!rule!1000!match!final = 0
+vserver!default!rule!1000!auth = htdigest
+vserver!default!rule!1000!auth!methods = digest
+vserver!default!rule!1000!auth!realm = %s
+vserver!default!rule!1000!auth!passwdfile = %s
 """
 
 class Test (TestBase):
@@ -66,5 +67,4 @@ class Test (TestBase):
 
         # Set the configuration
         #
-        tmp = CONF.replace ('<dir>', '/%s'%(DIR))
-        self.conf = tmp % (REALM, passfile)
+        self.conf = CONF % ('/%s'%(DIR), REALM, passfile)

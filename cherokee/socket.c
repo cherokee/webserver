@@ -1587,6 +1587,8 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 {
 	int r;
 
+	TRACE (ENTRIES, "connect type=%d\n", SOCKET_AF(sock));
+
 	switch (SOCKET_AF(sock)) {
 	case AF_INET:
 		r = connect (SOCKET_FD(sock), (struct sockaddr *) &SOCKET_ADDR(sock), sizeof(struct sockaddr_in));
@@ -1605,6 +1607,8 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		SHOULDNT_HAPPEN;
 		return ret_no_sys;			
 	}
+
+	TRACE (ENTRIES, "connect type=%d ret=%d\n", SOCKET_AF(sock), r);
 
 	if (r < 0) {
 		int err = SOCK_ERRNO();

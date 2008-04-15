@@ -32,6 +32,7 @@
 #include <cherokee/common.h>
 #include <cherokee/module.h>
 #include <cherokee/avl.h>
+#include <cherokee/plugin.h>
 
 CHEROKEE_BEGIN_DECLS
 

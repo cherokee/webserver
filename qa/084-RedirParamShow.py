@@ -1,11 +1,12 @@
 from base import *
 
 CONF = """
-vserver!default!rule!directory!/redirparam2!handler = redir
-vserver!default!rule!directory!/redirparam2!priority = 840
-vserver!default!rule!directory!/redirparam2!handler!rewrite!1!show = 1
-vserver!default!rule!directory!/redirparam2!handler!rewrite!1!regex = ^/([0-9]+)/([^\.\?/]+)$
-vserver!default!rule!directory!/redirparam2!handler!rewrite!1!substring = /this_is_the_new_path?arg1=$1&arg2=$2
+vserver!default!rule!840!match!type = directory
+vserver!default!rule!840!match!directory = /redirparam2
+vserver!default!rule!840!handler = redir
+vserver!default!rule!840!handler!rewrite!1!show = 1
+vserver!default!rule!840!handler!rewrite!1!regex = ^/([0-9]+)/([^\.\?/]+)$
+vserver!default!rule!840!handler!rewrite!1!substring = /this_is_the_new_path?arg1=$1&arg2=$2
 """
 
 class Test (TestBase):

@@ -3,18 +3,21 @@ from base import *
 MAGIC = "Cherokee_is_pure_magic"
 
 CONF = """
-vserver!default!rule!directory!/respin1!handler = common
-vserver!default!rule!directory!/respin1!priority = 1150
+vserver!default!rule!1150!match!type = directory
+vserver!default!rule!1150!match!directory = /respin1
+vserver!default!rule!1150!handler = common
 
-vserver!default!rule!directory!/respin1-cgi!handler = phpcgi
-vserver!default!rule!directory!/respin1-cgi!handler!interpreter = %s
-vserver!default!rule!directory!/respin1-cgi!priority = 1151
+vserver!default!rule!1151!match!type = directory
+vserver!default!rule!1151!match!directory = /respin1-cgi
+vserver!default!rule!1151!handler = phpcgi
+vserver!default!rule!1151!handler!interpreter = %s
 
-vserver!default!rule!request!/respin1/.+/!handler = redir
-vserver!default!rule!request!/respin1/.+/!handler!rewrite!1!show = 0
-vserver!default!rule!request!/respin1/.+/!handler!rewrite!1!regex = ^/respin1/(.+)/$
-vserver!default!rule!request!/respin1/.+/!handler!rewrite!1!substring = /respin1-cgi/file?param=$1
-vserver!default!rule!request!/respin1/.+/!priority = 1152
+vserver!default!rule!1152!match!type = request
+vserver!default!rule!1152!match!request = /respin1/.+/
+vserver!default!rule!1152!handler = redir
+vserver!default!rule!1152!handler!rewrite!1!show = 0
+vserver!default!rule!1152!handler!rewrite!1!regex = ^/respin1/(.+)/$
+vserver!default!rule!1152!handler!rewrite!1!substring = /respin1-cgi/file?param=$1
 """
 
 class Test (TestBase):

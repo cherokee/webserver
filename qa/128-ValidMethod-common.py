@@ -4,8 +4,9 @@ DIR   = "common_valid_methods1"
 MAGIC = "Report bugs to http://bugs.cherokee-project.com"
 
 CONF = """
-vserver!default!rule!directory!/%s!handler = common
-vserver!default!rule!directory!/%s!priority = 1280
+vserver!default!rule!1280!match!type = directory
+vserver!default!rule!1280!match!directory = /%s
+vserver!default!rule!1280!handler = common
 """
 
 class Test (TestBase):
@@ -19,7 +20,7 @@ class Test (TestBase):
         self.post              = "var="+MAGIC
         self.expected_error    = 200
         self.expected_content  = "Post: "+MAGIC
-        self.conf              = CONF % (DIR, DIR)
+        self.conf              = CONF % (DIR)
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)

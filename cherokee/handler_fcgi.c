@@ -188,7 +188,10 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 		return ret;
 
 	case ret_eof:
+		cgi->got_eof = true;
+		return ret;
 	case ret_error:
+		printf ("ERROR\n");
 		cgi->got_eof = true;
 		return ret;
 
@@ -534,7 +537,7 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 		
 	}
 
-	TRACE (ENTRIES, "Connected sucessfully try=%d, fd=%d\n", try, hdl->socket.socket);
+	TRACE (ENTRIES, "Connected successfully try=%d, fd=%d\n", try, hdl->socket.socket);
 
 	cherokee_fd_set_nonblocking (SOCKET_FD(&hdl->socket));
 	return ret_ok;
@@ -545,7 +548,7 @@ static ret_t
 do_send (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 {
 	ret_t                  ret;
-	size_t                 written;
+	size_t                 written = 0;
 	cherokee_connection_t *conn    = HANDLER_CONN(hdl);
 	
 	ret = cherokee_socket_bufwrite (&hdl->socket, buffer, &written);

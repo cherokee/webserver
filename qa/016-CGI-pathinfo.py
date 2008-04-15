@@ -2,8 +2,9 @@ from base import *
 
 MAGIC = "It works"
 CONF = """
-vserver!default!rule!directory!/cgi-bin2!handler = cgi
-vserver!default!rule!directory!/cgi-bin2!priority = 160
+vserver!default!rule!160!match!type = directory
+vserver!default!rule!160!match!directory = /cgi-bin2
+vserver!default!rule!160!handler = cgi
 """
 
 class Test (TestBase):

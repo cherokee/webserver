@@ -1,8 +1,9 @@
 from base import *
 
 CONF = """
-vserver!default!rule!directory!/missing!handler = nn
-vserver!default!rule!directory!/missing!priority = 490
+vserver!default!rule!490!match!type = directory
+vserver!default!rule!490!match!directory = /missing
+vserver!default!rule!490!handler = nn
 """
 
 class Test (TestBase):

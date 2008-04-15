@@ -132,23 +132,27 @@ server!module_deps = %s
 
 vserver!default!document_root = %s
 vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php
-vserver!default!rule!default!handler = common
-vserver!default!rule!default!priority = 1
+vserver!default!rule!1!match!type = default
+vserver!default!rule!1!handler = common
 """ % (PORT, panic, pid, CHEROKEE_MODS, CHEROKEE_DEPS, www)
 
-PHP_FCGI = """extensions!php!handler = fcgi
-extensions!php!priority = 10000
-extensions!php!final = 0
-extensions!php!handler!balancer = round_robin
-extensions!php!handler!balancer!type = interpreter
-extensions!php!handler!balancer!local1!host = localhost:%d
-extensions!php!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
-extensions!php!handler!balancer!local1!interpreter = %s -b %d""" % (PHP_FCGI_PORT, look_for_php(), PHP_FCGI_PORT)
+PHP_FCGI = """\
+10000!match!type = extensions
+10000!match!extensions = php
+10000!match!final = 0
+10000!handler = fcgi
+10000!handler!balancer = round_robin
+10000!handler!balancer!type = interpreter
+10000!handler!balancer!local1!host = localhost:%d
+10000!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
+10000!handler!balancer!local1!interpreter = %s -b %d""" % (PHP_FCGI_PORT, look_for_php(), PHP_FCGI_PORT)
 
-PHP_CGI = """extensions!php!handler = phpcgi
-extensions!php!priority = 10000
-extensions!php!handler!interpreter = %s""" % (look_for_php())
-
+PHP_CGI = """\
+10000!match!type = extensions
+10000!match!extensions = php
+10000!match!final = 0
+10000!handler = phpcgi
+10000!handler!interpreter = %s""" % (look_for_php())
 
 if fcgi:
     php_ext = PHP_FCGI

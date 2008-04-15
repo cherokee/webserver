@@ -1,3 +1,101 @@
+2008-04-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	(This is what a MacBook Pro battery lasts): flying from Austin to
+	Madrid. After the Linux Foundation Collaboration Summit 2008.
+
+	* cherokee/main.c, cherokee/main_admin.c, cherokee/module.h,
+	cherokee/plugin_loader.h, cherokee/rule.c, cherokee/rule.h,
+	cherokee/rule_default.c, cherokee/rule_default.h,
+	cherokee/rule_directory.c, cherokee/rule_directory.h,
+	cherokee/rule_extensions., cherokee/rule_extensions.h,
+	cherokee/rule_list.c, cherokee/rule_request.c,
+	cherokee/rule_request.h, cherokee/validator.c,
+	cherokee/virtual_server.c, qa/001-basic.py, qa/015-CGI-simple.py,
+	qa/016-CGI-pathinfo.py, qa/017-CGI-pathinfo2.py,
+	qa/018-CGI-pathinfo3.py, qa/020-VirtualHost.py,
+	qa/021-VirtualHost2.py, qa/029-Post+Without-lenght.py,
+	qa/030-Post+urlencoded.py, qa/031-Post+urlencoded2.py,
+	qa/033-DirIndex.py, qa/034-DirIndex2.py, qa/035-PHP-simple.py,
+	qa/036-DocumentRoot-common.py, qa/039-Auth-Basic.py,
+	qa/040-Auth-Basic2.py, qa/041-Auth-Basic3.py, qa/044-Home.py,
+	qa/045-Home2.py, qa/046-Redir.py, qa/047-Redir2.py, qa/048-NN.py,
+	qa/049-NN-broken.py, qa/050-HeadBody.py, qa/061-PAM.py,
+	qa/062-PAM2.py, qa/063-DocumentRoot.py, qa/064-DirectoryIndex.py,
+	qa/066-DirectoryIndex3.py, qa/067-PathInfo.py,
+	qa/068-PathInfo2.py, qa/069-PathInfo3.py, qa/070-Inherit.py,
+	qa/071-Inherit2.py, qa/072-Inherit3.py, qa/073-Access.py,
+	qa/074-Access2.py, qa/075-AccessRange.py, qa/076-AccessRange2.py,
+	qa/077-AccessRange3.py, qa/078-AccessAny.py, qa/079-Extension.py,
+	qa/080-Extension2.py, qa/081-DocumentRoot-Common-index.py,
+	qa/082-Auth-header., qa/083-RedirParam.py,
+	qa/084-RedirParamShow.py, qa/085-AuthUsers.py,
+	qa/086-AuthUsers2.py, qa/088-CGI-envs.py, qa/089-gzip-encoding.py,
+	qa/090-Digest.py, qa/091-Digest2.py, qa/092-Digest3.py,
+	qa/093-InvalidLinks.py, qa/094-URL-request.py,
+	qa/095-htpasswd-apache-md5.py, qa/096-htpasswd-md5.py,
+	qa/097-htpasswd-sha1.py, qa/098-htpasswd-crypt.py,
+	qa/099-htpasswd-plain.py, qa/100-Digest-htdigest.py,
+	qa/102-QueryString.py, qa/103-ScriptName.py,
+	qa/104-ScriptAlias_PathInfo.py, qa/105-If-Range.py,
+	qa/106-If-Range2.py, qa/107-Priority1.py, qa/108-Priority2.py,
+	qa/109-Priority3.py, qa/110-Priority4.py, qa/112-NiceError-CGI.py,
+	qa/113-HeaderFile.py, qa/114-HeaderFile2.py, qa/115-Respin.py,
+	qa/116-RequestTiny.py, qa/117-DomainToDir.py,
+	qa/118-Request-redir.py, qa/121-NoUserDir.py, qa/122-Methods.py,
+	qa/123-ImplicitRedit.py, qa/124-DomainToDir2.py,
+	qa/125-domain-redir1.py, qa/126-SCGI.py, qa/127-SCGI-Post.py,
+	qa/128-ValidMethod-common.py, qa/129-Basic-EmptyPasswd.py,
+	qa/130-Digest-EmptyPasswd.py, qa/131-ChangeUser-phpcgi.py,
+	qa/135-RedirParams.py, qa/138-ChangeUser-cgi.py,
+	qa/139-domain-wildcards1.py, qa/140-SCGI-EmptyVars.py,
+	qa/141-FastCGI-EmptyVars.py, qa/142-SCGI-ExtraVars.py,
+	qa/143-ContentRange-NoIO.py, qa/144-ContentRange2-NoIO.py,
+	qa/145-ContentRange3-NoIO.py, qa/146-ContentRange4-NoIO.py,
+	qa/147-ContentRange-Double-NoIO.py,
+	qa/148-ContentRange-Double2-NoIO.py, qa/149-Common-PathInfo.py,
+	qa/150-Common-No-PathInfo.py, qa/151-SCGI-vars.py,
+	qa/152-SCGI-vars2.py, qa/153-SCGI-vars-root.py,
+	qa/154-DirRedirection.py, qa/155-DirRedirection2.py,
+	qa/157-Dirlist-symlinks.py, qa/run-tests.py: The configuration
+	file format for 0.7 has changed again. The latest approach was
+	fair enough, although it was not as flexible as it should have
+	been. This mega-patch makes it work as the rest of the server;
+	which is, instead if receiving a buffer with an string, it
+	receives a cherokee_config_node_t reference and it is reads it
+	configuration from there. I ran into problems when I was writing
+	the header based rule plug-in because for this previous
+	implementation; not it is okay.
+
+	* cherokee/rule_header.h, cherokee/rule_header.c: Added new rule
+	type to allow to based decisions on certain header entries values.
+
+	* cherokee/config_node.c, cherokee/config_node.h: Added a new
+	convenience method for copying a key content.
+
+	* cherokee/getopt/getopt.c, cherokee/getopt/getopt1.c: Test
+	removed. There were completely useless.
+
+	* cherokee/handler_fcgi.c, cherokee/socket.c: Added a few trace
+	entries. I needed it to investigate a weird issue about the fcgi
+	handler (work on progress here).
+
+	* configure.in, cherokee/Makefile.am: Added entries for a new
+	header base rule plug-in.
+
+	* cherokee/rule_request.h (CHEROKEE_RULE_REQS_H): Fixed #if
+ 	protection against multiple inclusions.
+
+	* cherokee/main_admin.c (process_parameters): Now it adminst a
+	conditional parameter for the network interface to bind to:
+  	  cherokee-admin           --> localhost
+	  cherokee-admin --bind    --> all interfaces
+	  cherokee-admin --bind=IP --> Only IP interface
+
+	* cherokee/main.c, cherokee/main_admin.c: Ported to use
+	getopt_long. Now it accpets -- parameters and includes a better
+	version and help functions. (TODO: Update cherokee.1 and
+	cherokee-admin.1 man pages).
+
 2008-04-12  A.D.F  <adefacc@tin.it>
 
 	* admin/*.help.html:

@@ -32,10 +32,11 @@
 
 PLUGIN_INFO_RULE_EASIEST_INIT(directory);
 
-static ret_t 
+
+static ret_t
 match (cherokee_rule_directory_t *rule, cherokee_connection_t *conn)
 {
-	/* Not the same lenght 
+	/* Not the same lenght
 	 */
 	if (conn->request.len < rule->directory.len) {
 		TRACE(ENTRIES, "Match directory: rule=%s conn=%s: (shorter) ret_not_found\n",
@@ -43,10 +44,10 @@ match (cherokee_rule_directory_t *rule, cherokee_connection_t *conn)
 		return ret_not_found;
 	}
 
-	/* Does not match 
+	/* Does not match
 	 */
 	if (strncmp (rule->directory.buf, conn->request.buf, rule->directory.len) != 0) {
-		TRACE(ENTRIES, "Match directory: rule=%s conn=%s: (str) ret_not_found\n", 
+		TRACE(ENTRIES, "Match directory: rule=%s conn=%s: (str) ret_not_found\n",
 		      rule->directory.buf, conn->request.buf);
 		return ret_not_found;
 	}
@@ -76,23 +77,39 @@ match (cherokee_rule_directory_t *rule, cherokee_connection_t *conn)
 		return ret_error;
 	}
 
-	/* Set the web_directory if needed 
+	/* Set the web_directory if needed
 	 */
-	if (cherokee_buffer_is_empty (&conn->web_directory)) { 
-		cherokee_buffer_add_str (&conn->web_directory, "/"); 
-	} 
+	if (cherokee_buffer_is_empty (&conn->web_directory)) {
+		cherokee_buffer_add_str (&conn->web_directory, "/");
+	}
 
-	TRACE(ENTRIES, "Match! rule=%s conn=%s: ret_ok\n", 
+	TRACE(ENTRIES, "Match! rule=%s conn=%s: ret_ok\n",
 	      rule->directory.buf, conn->request.buf);
 
 	return ret_ok;
 }
 
 
+static ret_t
+configure (cherokee_rule_directory_t *rule,
+	   cherokee_config_node_t    *conf,
+	   cherokee_virtual_server_t *vsrv)
+{
+	ret_t ret;
+	
+	ret = cherokee_config_node_copy (conf, "directory", &rule->directory);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Rule prio=%d needs a 'directory' property", 
+			     RULE(rule)->priority);
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
 ret_t
-cherokee_rule_directory_new (cherokee_rule_directory_t **rule, 
-			     cherokee_buffer_t          *value,
-			     cherokee_virtual_server_t  *vsrv)
+cherokee_rule_directory_new (cherokee_rule_directory_t **rule)
 {
 	CHEROKEE_NEW_STRUCT (n, rule_directory);
 
@@ -102,12 +119,12 @@ cherokee_rule_directory_new (cherokee_rule_directory_t **rule,
 	
 	/* Virtual methos
 	 */
-	RULE(n)->match = (rule_func_match_t) match;
+	RULE(n)->match     = (rule_func_match_t) match;
+	RULE(n)->configure = (rule_func_configure_t) configure;
 
 	/* Properties
 	 */
 	cherokee_buffer_init (&n->directory);
-	cherokee_buffer_add_buffer (&n->directory, value);
 
 	*rule = n;
  	return ret_ok;

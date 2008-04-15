@@ -21,13 +21,14 @@ SCGIServer(TestHandler, port=%d).serve_forever()
 """ % (PORT)
 
 CONF = """
-vserver!default!rule!directory!<dir>!handler = scgi
-vserver!default!rule!directory!<dir>!handler!check_file = 0
-vserver!default!rule!directory!<dir>!handler!balancer = round_robin
-vserver!default!rule!directory!<dir>!handler!balancer!type = interpreter
-vserver!default!rule!directory!<dir>!handler!balancer!1!host = localhost:%d
-vserver!default!rule!directory!<dir>!handler!balancer!1!interpreter = %s %s
-vserver!default!rule!directory!<dir>!priority = 1510
+vserver!default!rule!1520!match!type = directory
+vserver!default!rule!1520!match!directory = <dir>
+vserver!default!rule!1520!handler = scgi
+vserver!default!rule!1520!handler!check_file = 0
+vserver!default!rule!1520!handler!balancer = round_robin
+vserver!default!rule!1520!handler!balancer!type = interpreter
+vserver!default!rule!1520!handler!balancer!1!host = localhost:%d
+vserver!default!rule!1520!handler!balancer!1!interpreter = %s %s
 """
 
 EXPECTED = [

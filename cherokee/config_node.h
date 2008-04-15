@@ -67,6 +67,8 @@ ret_t cherokee_config_node_while     (cherokee_config_node_t *conf, cherokee_con
 /* Convenience functions: value retrieving
  */
 ret_t cherokee_config_node_read       (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf);
+ret_t cherokee_config_node_copy       (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t  *buf);
+
 ret_t cherokee_config_node_read_path  (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t **buf);
 ret_t cherokee_config_node_read_int   (cherokee_config_node_t *conf, const char *key, int *num);
 ret_t cherokee_config_node_read_bool  (cherokee_config_node_t *conf, const char *key, cherokee_boolean_t *val);

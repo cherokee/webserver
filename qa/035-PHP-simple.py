@@ -1,9 +1,10 @@
 from base import *
 
 CONF = """
-vserver!default!rule!directory!/php1!handler = phpcgi
-vserver!default!rule!directory!/php1!handler!interpreter = %s
-vserver!default!rule!directory!/php1!priority = 350
+vserver!default!rule!350!match!type = directory
+vserver!default!rule!350!match!directory = /php1
+vserver!default!rule!350!handler = phpcgi
+vserver!default!rule!350!handler!interpreter = %s
 """
 
 class Test (TestBase):

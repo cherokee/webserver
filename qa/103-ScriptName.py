@@ -5,9 +5,10 @@ VIRTUAL_DIR = "/scriptname_vir"
 SCRIPT_NAME = VIRTUAL_DIR + "/exec.cgi"
 
 CONF = """
-vserver!default!rule!directory!%s!handler = cgi
-vserver!default!rule!directory!%s!document_root = %s
-vserver!default!rule!directory!%s!priority = 1030
+vserver!default!rule!1030!match!type = directory
+vserver!default!rule!1030!match!directory = %s
+vserver!default!rule!1030!handler = cgi
+vserver!default!rule!1030!document_root = %s
 """
 
 class Test (TestBase):
@@ -29,4 +30,4 @@ class Test (TestBase):
                         echo "SCRIPT_NAME = $SCRIPT_NAME"
                         """) 
 
-        self.conf = CONF % (VIRTUAL_DIR, VIRTUAL_DIR, d, VIRTUAL_DIR)
+        self.conf = CONF % (VIRTUAL_DIR, d)

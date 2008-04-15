@@ -23,51 +23,77 @@
  */
 
 #include "common-internal.h"
-#include "rule_default.h"
+#include "rule_header.h"
+
 #include "plugin_loader.h"
-#include "connection.h"
+#include "server-protected.h"
 #include "connection-protected.h"
 #include "util.h"
+#include "pcre/pcre.h"
 
-#define ENTRIES "rule,default"
+#define ENTRIES "rule,header"
 
-PLUGIN_INFO_RULE_EASIEST_INIT(default);
+PLUGIN_INFO_RULE_EASIEST_INIT(header);
 
 
 static ret_t 
-match (cherokee_rule_t *rule, cherokee_connection_t *conn)
+match (cherokee_rule_header_t *rule, 
+       cherokee_connection_t  *conn)
 {
-	if (cherokee_buffer_is_empty (&conn->web_directory)) { 
-		cherokee_buffer_add_str (&conn->web_directory, "/"); 
-	} 
-
-	TRACE(ENTRIES, "Match default: %s\n", "ret_ok");
 	return ret_ok;
 }
 
+
 static ret_t 
-configure (cherokee_rule_default_t   *rule, 
+configure (cherokee_rule_header_t    *rule, 
 	   cherokee_config_node_t    *conf, 
 	   cherokee_virtual_server_t *vsrv)
 {
+	ret_t              ret;
+	cherokee_buffer_t *header = NULL;
+
+	ret = cherokee_config_node_read (conf, "header", &header);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Rule header prio=%d needs a header entry\n", 
+			     RULE(rule)->priority);
+		return ret_error;
+	}
+
+	
+
+
+/* 	cherokee_buffer_add_buffer (&n->pattern, value); */
+
+/* 	ret = cherokee_regex_table_add (VSERVER_SRV(vsrv)->regexs, value->buf); */
+/* 	if (ret != ret_ok) return ret; */
+
+/* 	ret = cherokee_regex_table_get (VSERVER_SRV(vsrv)->regexs, value->buf, &n->pcre); */
+/* 	if (ret != ret_ok) return ret; */
+
 	return ret_ok;
 }
 
+
 ret_t
-cherokee_rule_default_new (cherokee_rule_t **rule)
+cherokee_rule_header_new (cherokee_rule_header_t **rule)
 {
-	CHEROKEE_NEW_STRUCT (n, rule_default);
+	ret_t ret;
+
+	CHEROKEE_NEW_STRUCT (n, rule_header);
 
 	/* Parent class constructor
 	 */
-	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(default));
-
+	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(header));
+	
 	/* Virtual methos
 	 */
-	RULE(n)->match     = (rule_func_match_t) match;
-	RULE(n)->configure = (rule_func_configure_t) configure;
+	RULE(n)->match = (rule_func_match_t) match;
+
+	/* Properties
+	 */
+	n->pcre = NULL;
+	cherokee_buffer_init (&n->pattern);
 
 	*rule = n;
-	return ret_ok;
+ 	return ret_ok;
 }
-

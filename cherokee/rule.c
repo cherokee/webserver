@@ -25,7 +25,9 @@
 #include "common-internal.h"
 #include "rule.h"
 #include "connection.h"
+#include "virtual_server.h"
 
+#define ENTRIES "rule"
 
 ret_t
 cherokee_rule_init_base (cherokee_rule_t *rule, cherokee_plugin_info_t *info)
@@ -61,6 +63,49 @@ cherokee_rule_free (cherokee_rule_t *rule)
 }
 
 
+static ret_t
+configure_base (cherokee_rule_t           *rule, 
+		cherokee_config_node_t    *conf, 
+		cherokee_virtual_server_t *vsrv)
+{
+	ret_t              ret;
+	cherokee_buffer_t *final = NULL;
+
+	/* Set the final value
+	 */
+	ret = cherokee_config_node_read (conf, "final", &final);
+	if (ret == ret_ok) {
+		rule->final = !! atoi(final->buf);
+		TRACE(ENTRIES, "Rule prio=%d set final to %d\n", 
+		      rule->priority, rule->final);
+	}
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_rule_configure (cherokee_rule_t *rule, cherokee_config_node_t *conf, void *vsrv)
+{
+	ret_t ret;
+
+	/* Sanity checks
+	 */	
+	return_if_fail (rule != NULL, ret_error);
+
+	if (rule->configure == NULL) {
+		return ret_error;
+	}
+
+	ret = configure_base (rule, conf, VSERVER(vsrv));
+	if (ret != ret_ok) return ret;
+
+	/* Call the real method
+	 */
+	return rule->configure (rule, conf, VSERVER(vsrv));
+}
+
+
 ret_t 
 cherokee_rule_match (cherokee_rule_t *rule, void *cnt)
 {
@@ -76,3 +121,4 @@ cherokee_rule_match (cherokee_rule_t *rule, void *cnt)
 	 */
 	return rule->match (rule, CONN(cnt));
 }
+

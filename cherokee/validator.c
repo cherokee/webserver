@@ -426,11 +426,15 @@ cherokee_validator_configure (cherokee_config_node_t *conf, void *config_entry)
 		subconf = CONFIG_NODE(i);
 
 		if (equal_buf_str (&subconf->key, "realm")) {
+			TRACE(ENTRIES, "Realm: %s\n", subconf->val.buf);
+
 			ret = cherokee_buffer_dup (&subconf->val, &entry->auth_realm);
 			if (ret != ret_ok)
 				return ret;
 
 		} else if (equal_buf_str (&subconf->key, "methods")) {
+			TRACE(ENTRIES, "Methods: %s\n", subconf->val.buf);
+
 			ret = cherokee_config_node_read_list (subconf, NULL, add_method, entry);
 			if (ret != ret_ok)
 				return ret;

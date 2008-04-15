@@ -246,6 +246,19 @@ cherokee_config_node_read (cherokee_config_node_t *conf, const char *key, cherok
 
 
 ret_t 
+cherokee_config_node_copy (cherokee_config_node_t *conf, const char *key, cherokee_buffer_t *buf)
+{
+	ret_t              ret;
+	cherokee_buffer_t *tmp = NULL;
+	
+	ret = cherokee_config_node_read (conf, key, &tmp);
+	if (ret != ret_ok) return ret;
+
+	return cherokee_buffer_add_buffer (buf, tmp);
+}
+
+
+ret_t 
 cherokee_config_node_read_int (cherokee_config_node_t *conf, const char *key, int *num)
 {
 	ret_t                   ret;

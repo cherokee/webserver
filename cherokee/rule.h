@@ -31,7 +31,9 @@
 #include <cherokee/common.h>
 #include <cherokee/module.h>
 #include <cherokee/buffer.h>
+#include <cherokee/list.h>
 #include <cherokee/config_entry.h>
+#include <cherokee/plugin.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -40,8 +42,9 @@ CHEROKEE_BEGIN_DECLS
 
 /* Callback function definitions
  */
-typedef ret_t (* rule_func_new_t)   (void **rule, cherokee_buffer_t *value, void *vsrv);
-typedef ret_t (* rule_func_match_t) (void  *rule, void *cnt);
+typedef ret_t (* rule_func_new_t)       (void **rule);
+typedef ret_t (* rule_func_configure_t) (void  *rule, cherokee_config_node_t *conf, void *vsrv);
+typedef ret_t (* rule_func_match_t)     (void  *rule, void *cnt);
 
 /* Data types
  */
@@ -57,7 +60,7 @@ typedef struct {
 
 	/* Virtual methods */
 	rule_func_match_t       match;
-
+	rule_func_configure_t   configure;
 } cherokee_rule_t;
 
 #define RULE(x) ((cherokee_rule_t *)(x))
@@ -84,6 +87,7 @@ ret_t cherokee_rule_init_base   (cherokee_rule_t *rule, cherokee_plugin_info_t *
 /* Rule virtual methods
  */
 ret_t cherokee_rule_match       (cherokee_rule_t *rule, void *cnt);
+ret_t cherokee_rule_configure   (cherokee_rule_t *rule, cherokee_config_node_t *conf, void *vsrv);
 
 CHEROKEE_END_DECLS
 

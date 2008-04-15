@@ -14,8 +14,9 @@ DOCUMENTATION = """
 """
 
 CONF = """
-vserver!default!rule!directory!/if_range2!handler = file
-vserver!default!rule!directory!/if_range2!priority = 1060
+vserver!default!rule!1060!match!type = directory
+vserver!default!rule!1060!match!directory = /if_range2
+vserver!default!rule!1060!handler = file
 """
 
 class Test (TestBase):

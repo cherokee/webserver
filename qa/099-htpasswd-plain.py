@@ -9,12 +9,13 @@ USER         = "username"
 PASSWD       = "alo"
 
 CONF = """
-vserver!default!rule!directory!/htpasswd_plain!auth = htpasswd
-vserver!default!rule!directory!/htpasswd_plain!auth!methods = basic
-vserver!default!rule!directory!/htpasswd_plain!auth!realm = %s
-vserver!default!rule!directory!/htpasswd_plain!auth!passwdfile = %s
-vserver!default!rule!directory!/htpasswd_plain!final = 0
-vserver!default!rule!directory!/htpasswd_plain!priority = 990
+vserver!default!rule!990!match!type = directory
+vserver!default!rule!990!match!directory = /htpasswd_plain
+vserver!default!rule!990!match!final = 0
+vserver!default!rule!990!auth = htpasswd
+vserver!default!rule!990!auth!methods = basic
+vserver!default!rule!990!auth!realm = %s
+vserver!default!rule!990!auth!passwdfile = %s
 """
 
 class Test (TestBase):

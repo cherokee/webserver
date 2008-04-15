@@ -26,19 +26,29 @@
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
 
-#ifndef CHEROKEE_RULE_DEFAULT_H
-#define CHEROKEE_RULE_DEFAULT_H
+#ifndef CHEROKEE_RULE_HEADER_H
+#define CHEROKEE_RULE_HEADER_H
 
 #include <cherokee/common.h>
+#include <cherokee/buffer.h>
 #include <cherokee/rule.h>
+#include <cherokee/regex.h>
 
 CHEROKEE_BEGIN_DECLS
 
-typedef cherokee_rule_t cherokee_rule_default_t;
-#define RULE_DEFAULT(x) ((cherokee_rule_default_t *)(x))
+typedef struct {
+	cherokee_rule_t   rule;
 
-ret_t cherokee_rule_default_new (cherokee_rule_t **rule);
+	int               ovector[OVECTOR_LEN];
+	int               ovecsize;
+	void             *pcre;
+	cherokee_buffer_t pattern;
+} cherokee_rule_header_t;
+
+#define RULE_HEADER(x) ((cherokee_rule_header_t *)(x))
+
+ret_t cherokee_rule_header_new (cherokee_rule_header_t **rule);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_RULE_DEFAULT_H */
+#endif /* CHEROKEE_RULE_HEADER_H */

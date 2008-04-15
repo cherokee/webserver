@@ -33,7 +33,6 @@
 #include <cherokee/buffer.h>
 #include <cherokee/rule.h>
 #include <cherokee/avl.h>
-#include <cherokee/virtual_server.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -44,9 +43,7 @@ typedef struct {
 
 #define RULE_EXTENSIONS(x) ((cherokee_rule_extensions_t *)(x))
 
-ret_t cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule, 
-				    cherokee_buffer_t           *value,
-				    cherokee_virtual_server_t   *vsrv);
+ret_t cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule);
 
 CHEROKEE_END_DECLS
 

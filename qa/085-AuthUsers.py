@@ -1,13 +1,14 @@
 from base import *
 
 CONF = """
-vserver!default!rule!directory!/auth1users!auth = plain
-vserver!default!rule!directory!/auth1users!auth!methods = basic
-vserver!default!rule!directory!/auth1users!auth!realm = Test with Users
-vserver!default!rule!directory!/auth1users!auth!passwdfile = %s
-vserver!default!rule!directory!/auth1users!auth!users = foo,alo
-vserver!default!rule!directory!/auth1users!final = 0
-vserver!default!rule!directory!/auth1users!priority = 850
+vserver!default!rule!850!match!type = directory
+vserver!default!rule!850!match!directory = /auth1users
+vserver!default!rule!850!match!final = 0
+vserver!default!rule!850!auth = plain
+vserver!default!rule!850!auth!methods = basic
+vserver!default!rule!850!auth!realm = Test with Users
+vserver!default!rule!850!auth!passwdfile = %s
+vserver!default!rule!850!auth!users = foo,alo
 """
 
 class Test (TestBase):

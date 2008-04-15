@@ -26,14 +26,13 @@
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
 
-#ifndef CHEROKEE_RULE_EXTS_H
-#define CHEROKEE_RULE_EXTS_H
+#ifndef CHEROKEE_RULE_REQS_H
+#define CHEROKEE_RULE_REQS_H
 
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
 #include <cherokee/rule.h>
 #include <cherokee/regex.h>
-#include <cherokee/virtual_server.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -47,11 +46,8 @@ typedef struct {
 } cherokee_rule_request_t;
 
 #define RULE_REQUEST(x) ((cherokee_rule_request_t *)(x))
-
-ret_t cherokee_rule_request_new (cherokee_rule_request_t  **rule, 
-				 cherokee_buffer_t         *value,
-				 cherokee_virtual_server_t *vsrv);
+ret_t cherokee_rule_request_new (cherokee_rule_request_t **rule);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_RULE_EXTS_H */
+#endif /* CHEROKEE_RULE_REQS_H */

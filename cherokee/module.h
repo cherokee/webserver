@@ -34,9 +34,7 @@
 #include <cherokee/config_node.h>
 #include <cherokee/server.h>
 
-
 CHEROKEE_BEGIN_DECLS
-
 
 /* Callback function prototipes
  */

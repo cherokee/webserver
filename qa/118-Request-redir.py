@@ -4,10 +4,11 @@ MAGIC = "I_bet_Cherokee_is_better"
 URL   = "http://www.example.com"
 
 CONF = """
-vserver!default!rule!request!^/req_redir_compact1/(.*)/!handler = redir
-vserver!default!rule!request!^/req_redir_compact1/(.*)/!handler!rewrite!1!show = 1
-vserver!default!rule!request!^/req_redir_compact1/(.*)/!handler!rewrite!1!substring = %s/$1
-vserver!default!rule!request!^/req_redir_compact1/(.*)/!priority = 1180
+vserver!default!rule!1180!match!type = request
+vserver!default!rule!1180!match!request = ^/req_redir_compact1/(.*)/
+vserver!default!rule!1180!handler = redir
+vserver!default!rule!1180!handler!rewrite!1!show = 1
+vserver!default!rule!1180!handler!rewrite!1!substring = %s/$1
 """
 
 class Test (TestBase):

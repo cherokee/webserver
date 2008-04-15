@@ -460,9 +460,10 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "only_secure")) {
 		entry->only_secure = !! atoi(conf->val.buf);
 
-	} else if ((equal_buf_str (&conf->key, "final")) ||
-		   (equal_buf_str (&conf->key, "priority"))) 
-	{
+	} else if (equal_buf_str (&conf->key, "only_secure")) {
+		entry->only_secure = !! atoi(conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "match")) {
 		/* Ignore: Previously handled 
 		 */
 	} else {
@@ -487,30 +488,6 @@ init_entry (cherokee_virtual_server_t *vserver,
 		return ret;
 
 	return ret_ok;
-}
-
-static ret_t
-init_rule (cherokee_virtual_server_t *vserver, 
-	   cherokee_config_node_t    *config,
-	   cherokee_rule_t           *rule)
-{
-	ret_t ret;
-
-	/* Check whether is rule is 'final'
-	 */
-	cherokee_config_node_read_bool (config, "final", &rule->final);
-	
-	/* Read the priority value. Needed value.
-	 */
-	ret = cherokee_config_node_read_int (config, "priority", (int *)&rule->priority);
-	if (ret != ret_ok) {
-		PRINT_ERROR("A valid 'priority' property is required: '%s'\n", config->key.buf);
-		return ret_error;
-	}
-	
-	/* Read the the config_entry properties
-	 */
-	return init_entry (vserver, config, &rule->config);
 }
 
 
@@ -548,65 +525,100 @@ add_error_handler (cherokee_config_node_t *config, cherokee_virtual_server_t *vs
 
 
 static ret_t
-add_rule_default (cherokee_config_node_t    *config, 
-		  cherokee_virtual_server_t *vserver, 
-		  cherokee_rule_list_t      *rule_list)
+configure_rule_match (cherokee_config_node_t     *config, 
+		      cherokee_virtual_server_t  *vserver, 
+		      cherokee_rule_list_t       *rule_list,
+		      cuint_t                     priority,
+		      cherokee_rule_t           **rule)
 {
-	ret_t ret;
-
-	/* Read config_node into the default rule
-	 */
-	ret = init_entry (vserver, config, &rule_list->def_rule->config);
-	if (ret != ret_ok) 
+	ret_t                   ret;
+	rule_func_new_t         func_new;
+	cherokee_buffer_t      *type      = NULL;
+	cherokee_plugin_info_t *info      = NULL;
+	cherokee_server_t      *srv       = VSERVER_SRV(vserver);
+	
+	ret = cherokee_config_node_read (config, "type", &type);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Rule match prio=%d must include a type property\n", priority);
 		return ret;
+	}
 
-	TRACE(ENTRIES, "Adding rule: type='default' %s", "\n");
+	TRACE (ENTRIES, "Adding type=%s\n", type->buf);
+
+	/* Default is compled in, the rest are loded as plug-ins
+	 */
+	if (equal_buf_str (type, "default")) {
+		func_new = (rule_func_new_t) cherokee_rule_default_new;
+
+	} else {
+		ret = cherokee_plugin_loader_get (&srv->loader, type->buf, &info);
+		if (ret < ret_ok) {
+			PRINT_MSG ("ERROR: Couldn't load rule module '%s'\n", type->buf);
+			return ret_error;
+		}
+
+		func_new = (rule_func_new_t) info->instance;
+	}
+
+	/* Instance the rule object
+	 */
+	if (func_new == NULL)
+		return ret_error;
+
+	ret = func_new ((void **) rule);
+	if ((ret != ret_ok) || (*rule == NULL))
+		return ret_error;
+
+	/* Configure it
+	 */
+	(*rule)->priority = priority;
+
+	ret = cherokee_rule_configure (*rule, config, vserver);
+	if (ret != ret_ok)
+		return ret_error;
+
 	return ret_ok;
 }
 
 
 static ret_t 
-add_rule (cherokee_buffer_t         *rule_type,
-	  cherokee_buffer_t         *rule_value,
-	  cherokee_config_node_t    *config, 
+add_rule (cherokee_config_node_t    *config, 
 	  cherokee_virtual_server_t *vserver, 
 	  cherokee_rule_list_t      *rule_list)
 {
 	ret_t                   ret;
-	rule_func_new_t         func_new;
-	cherokee_rule_t        *rule      = NULL;
-	cherokee_plugin_info_t *info      = NULL;
-	cherokee_server_t      *srv       = VSERVER_SRV(vserver);
+	cuint_t                 prio;
+	cherokee_rule_t        *rule    = NULL;
+	cherokee_config_node_t *subconf = NULL; 
 
-	/* Load the rule plugin
+	/* Validate priority
 	 */
-	ret = cherokee_plugin_loader_get (&srv->loader, rule_type->buf, &info);
-	if (ret < ret_ok) {
-		PRINT_MSG ("ERROR: Couldn't load logger module '%s'\n", config->val.buf);
+	prio = atoi(config->key.buf);
+	if (prio <= CHEROKEE_RULE_PRIO_NONE) {
+		PRINT_ERROR ("Invalid priority: '%s'\n", config->key.buf);
 		return ret_error;
 	}
-	
-	/* Instance a new rule object
-	 */
-	func_new = (rule_func_new_t) info->instance;
-	if (func_new == NULL)
-		goto failed;
 
-	ret = func_new ((void **) &rule, rule_value, vserver);
-	if (ret != ret_ok)
-		goto failed;
-	
-	/* config_node -> config_entry
+	/* Configure the rule match section
 	 */
-	ret = init_rule (vserver, config, rule);
+	ret = cherokee_config_node_get (config, "match", &subconf);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Rule prio=%d needs a 'match' section\n", prio);
+		return ret_error;
+	}
+
+	ret = configure_rule_match (subconf, vserver, rule_list, prio, &rule);
 	if (ret != ret_ok) 
 		goto failed;
 
-	/* Add the rule to the list
+	/* config_node -> config_entry
 	 */
-	TRACE(ENTRIES, "Adding rule: prio='%d' type='%s' value='%s'\n", 
-	      rule->priority, rule_type->buf, rule_value->buf);
+	ret = init_entry (vserver, config, &rule->config);
+	if (ret != ret_ok) 
+		goto failed;
 
+	/* Add the rule to the vserver's list
+	 */
 	ret = cherokee_rule_list_add (rule_list, rule);
 	if (ret != ret_ok) 
 		goto failed;
@@ -619,6 +631,7 @@ failed:
 
 	return ret_error;
 }
+
 
 static ret_t 
 add_domain (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
@@ -682,38 +695,24 @@ configure_rules (cherokee_config_node_t    *config,
 	ret_t                   ret;
 	cherokee_list_t        *i, *j;
 	cherokee_config_node_t *subconf;
-	cherokee_boolean_t      did_default = false;
+//	cherokee_boolean_t      did_default = false;
 
 	cherokee_config_node_foreach (i, config) {
 		subconf = CONFIG_NODE(i);
-
-		if (equal_buf_str (&subconf->key, "default")) {
-			ret = add_rule_default (CONFIG_NODE(i), 
-						vserver, 
-						rule_list);
-			if (ret != ret_ok) 
-				return ret;
-
-			did_default = true;
-		} else {
-			cherokee_config_node_foreach (j, subconf) {
-				ret = add_rule (&CONFIG_NODE(i)->key,
-						&CONFIG_NODE(j)->key,
-						CONFIG_NODE(j), 
-						vserver, 
-						rule_list);
-				if (ret != ret_ok) 
-					return ret;
-			}
-		}
+		
+		ret = add_rule (subconf, vserver, rule_list);
+		if (ret != ret_ok) return ret;
 	}
-	
+
+	/* Sort rules by its priority
+	 */
 	cherokee_rule_list_sort (rule_list);
 
-	if (! did_default) {
-		PRINT_ERROR ("ERROR: vserver '%s': A default rule is needed\n", vserver->name.buf);
-		return ret_error;
-	}
+// TODO:
+/* 	if (! did_default) { */
+/* 		PRINT_ERROR ("ERROR: vserver '%s': A default rule is needed\n", vserver->name.buf); */
+/* 		return ret_error; */
+/* 	} */
 
 	return ret_ok;
 }

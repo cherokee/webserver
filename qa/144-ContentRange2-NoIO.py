@@ -8,9 +8,10 @@ OFFSET = 15
 DIR    = "range_start_100k_noio"
 
 CONF = """
-vserver!default!rule!directory!<dir>!handler = file
-vserver!default!rule!directory!<dir>!handler!iocache = 0
-vserver!default!rule!directory!<dir>!priority = 1440
+vserver!default!rule!1440!match!type = directory
+vserver!default!rule!1440!match!directory = <dir>
+vserver!default!rule!1440!handler = file
+vserver!default!rule!1440!handler!iocache = 0
 """
 
 class Test (TestBase):

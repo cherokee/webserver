@@ -30,9 +30,8 @@
 #define CHEROKEE_RULE_DIR_H
 
 #include <cherokee/common.h>
-#include <cherokee/buffer.h>
 #include <cherokee/rule.h>
-#include <cherokee/virtual_server.h>
+#include <cherokee/buffer.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -43,9 +42,7 @@ typedef struct {
 
 #define RULE_DIRECTORY(x) ((cherokee_rule_directory_t *)(x))
 
-ret_t cherokee_rule_directory_new (cherokee_rule_directory_t **rule, 
-				   cherokee_buffer_t          *value,
-				   cherokee_virtual_server_t  *vsrv);
+ret_t cherokee_rule_directory_new (cherokee_rule_directory_t **rule);
 
 CHEROKEE_END_DECLS
 
