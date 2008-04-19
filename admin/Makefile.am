@@ -38,7 +38,7 @@ PageError.py \
 PageFeedback.py \
 Table.py \
 Theme.py \
-VirtualServer.py \
+RuleList.py \
 Module.py \
 ModuleFile.py \
 ModuleDirlist.py \

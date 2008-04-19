@@ -4,7 +4,7 @@ from Page import *
 from Form import *
 from Table import *
 from Entry import *
-from VirtualServer import *
+from RuleList import *
 from Module import *
 from consts import *
 
@@ -31,18 +31,18 @@ class PageEntry (PageMenu, FormHelper):
         temp = uri.split('/')
         self._is_userdir = (temp[2] == 'userdir')
 
-        if not self._is_userdir:
-            self._host        = temp[1]
-            self._prio        = temp[3]        
-            self._priorities  = VServerEntries (self._host, self._cfg)
-            self._entry       = self._priorities[self._prio]
-            url = '/vserver/%s/prio/%s' % (self._host, self._prio)
-        else:
+        if self._is_userdir:
             self._host        = temp[1]
             self._prio        = temp[4]        
-            self._priorities  = VServerEntries (self._host, self._cfg, user_dir=True)
-            self._entry       = self._priorities[self._prio]
+            self._priorities  = RuleList (self._cfg, 'vserver!%s!user_dir!rule'%(self._host))
+            self._entry       = self._priorities[int(self._prio)]
             url = '/vserver/%s/userdir/prio/%s' % (self._host, self._prio)
+        else:
+            self._host        = temp[1]
+            self._prio        = temp[3]        
+            self._priorities  = RuleList (self._cfg, 'vserver!%s!rule'%(self._host))
+            self._entry       = self._priorities[int(self._prio)]
+            url = '/vserver/%s/prio/%s' % (self._host, self._prio)
 
         # Set the submit URL
         self.set_submit_url (url)
@@ -56,9 +56,9 @@ class PageEntry (PageMenu, FormHelper):
             return "/vserver/%s" % (self._host)
 
         if not self._is_userdir:
-            self._conf_prefix = 'vserver!%s!%s!%s' % (self._host, self._entry[0], self._entry[1])
+            self._conf_prefix = 'vserver!%s!rule!%s' % (self._host, self._prio)
         else:
-            self._conf_prefix = 'vserver!%s!user_dir!%s!%s' % (self._host, self._entry[0], self._entry[1])
+            self._conf_prefix = 'vserver!%s!user_dir!rule!%s' % (self._host, self._prio)
 
         # Check what to do..
         if post.get_val('is_submit'):
@@ -94,8 +94,9 @@ class PageEntry (PageMenu, FormHelper):
             txt = '%s - ' % (self._host)
 
         for n in range(len(ENTRY_TYPES)):
-            if ENTRY_TYPES[n][0] == self._entry[0]:
-                txt += "%s: %s" % (ENTRY_TYPES[n][1], self._entry[1])
+            if ENTRY_TYPES[n][0] == self._entry.get_val('match!type'):
+                name  = self._priorities.guess_name (self._prio)
+                txt += "%s: %s" % (ENTRY_TYPES[n][1], name)
                 return txt
 
     def _render_guts (self):

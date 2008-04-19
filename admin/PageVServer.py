@@ -5,7 +5,7 @@ from Form import *
 from Table import *
 from Entry import *
 from consts import *
-from VirtualServer import *
+from RuleList import *
 
 DATA_VALIDATION = [
     ("vserver!.*?!document_root",                  validations.is_local_dir_exists),
@@ -16,10 +16,6 @@ DATA_VALIDATION = [
     ("vserver!.*?!logger!error!filename",          validations.parent_is_dir),
     ("vserver!.*?!logger!access!command",          validations.is_local_file_exists),
     ("vserver!.*?!logger!error!command",           validations.is_local_file_exists),
-    ("vserver!.*?!rule!default!priority",          validations.is_positive_int),
-    ("vserver!.*?!rule!.*?!.*?!priority",          validations.is_positive_int),
-    ("vserver!.*?!user_dir!rule!default!priority", validations.is_positive_int),
-    ("vserver!.*?!user_dir!rule!.*?!.*?!priority", validations.is_positive_int)
 ]
 
 RULE_LIST_NOTE = """
@@ -73,14 +69,14 @@ class PageVServer (PageMenu, FormHelper):
             if post.get_val('add_new_entry'):
                 # It's adding a new entry
                 re = self._op_add_new_entry (post       = post,
-                                             cfg_prefix = 'vserver!%s' %(host),
+                                             cfg_prefix = 'vserver!%s!rule' %(host),
                                              url_prefix = '/vserver/%s'%(host))
                 if not self.has_errors() and re:
                     return re
             elif post.get_val('userdir_add_new_entry'):
                 # It's adding a new user entry 
                 re = self._op_add_new_entry (post       = post,
-                                             cfg_prefix = 'vserver!%s!user_dir'%(host),
+                                             cfg_prefix = 'vserver!%s!user_dir!rule'%(host),
                                              url_prefix = '/vserver/%s/userdir'%(host),
                                              key_prefix = 'userdir_')
                 if not self.has_errors() and re:
@@ -90,22 +86,22 @@ class PageVServer (PageMenu, FormHelper):
                 self._op_apply_changes (host, uri, post)
 
         elif uri.endswith('/ajax_update'):
+            if post.get_val('update_prio'):
+                cfg_key = post.get_val('update_prefix')
+                rules = RuleList(self._cfg, cfg_key)
+                
+                changes = []
+                for tmp in post['update_prio']:
+                    changes.append(tmp.split(','))
+
+                rules.change_prios (changes)
+                return "ok"
+
             self._op_apply_changes (host, uri, post)
             return 'ok'
 
-        # Ensure the default rules are there
-        cfg = self._cfg['vserver!%s!rule!default'%(host)]
-        if (not cfg) or (not cfg.has_child()):
-            self._cfg["vserver!%s!rule!default!handler" %(host)] = "common"
-            self._cfg["vserver!%s!rule!default!priority"%(host)] = "1"
-
-        if self._cfg.get_val('vserver!%s!user_dir'%(host)) and \
-                not self._cfg['vserver!%s!user_dir!rule!default'%(host)]:
-            self._cfg["vserver!%s!user_dir!rule!default!handler" %(host)] = "common"
-            self._cfg["vserver!%s!user_dir!rule!default!priority"%(host)] = "1"
-
-        self._priorities         = VServerEntries (host, self._cfg)
-        self._priorities_userdir = VServerEntries (host, self._cfg, user_dir=True)
+        self._priorities         = RuleList(self._cfg, 'vserver!%s!rule'%(host))
+        self._priorities_userdir = RuleList(self._cfg, 'vserver!%s!user_dir!rule'%(host))
 
         return self._op_render_vserver_details (host)
 
@@ -137,21 +133,15 @@ class PageVServer (PageMenu, FormHelper):
         handler  = post.pop(key_add_new_handler)
 
         # Look for the highest priority on the list
-        prio_max = 1
-        for c in self._cfg[cfg_prefix]:
-            for d in self._cfg["%s!%s"%(cfg_prefix,c)]:
-                pre = "%s!rule!%s!%s!priority"%(cfg_prefix,c,d)
-                tmp = self._cfg.get_val(pre)
-                if tmp:
-                    if int(tmp) > prio_max:
-                        prio_max = int(tmp)
-        priority = str(prio_max + 100)
+        rules = RuleList(self._cfg, cfg_prefix)
+        priority = rules.get_highest_priority() + 100
 
-        pre = "%s!rule!%s!%s" % (cfg_prefix, type_, entry)
-        self._cfg["%s!handler"%(pre)]  = handler
-        self._cfg["%s!priority"%(pre)] = priority
+        pre = "%s!%d" % (cfg_prefix, priority)
+        self._cfg["%s!match!type"%(pre)]      = type_
+        self._cfg["%s!match!%s"%(pre, type_)] = entry
+        self._cfg["%s!handler"%(pre)]         = handler
 
-        return "%s/prio/%s" % (url_prefix, priority)
+        return "%s/prio/%d" % (url_prefix, priority)
 
     def _op_render_vserver_details (self, host):
         content = self._render_vserver_guts (host)
@@ -179,7 +169,7 @@ class PageVServer (PageMenu, FormHelper):
         tabs += [('Domain names', tmp)]
         
         # Behaviour
-        tmp = self._render_rules_generic (cfg_key    = 'vserver!%s' %(host), 
+        tmp = self._render_rules_generic (cfg_key    = 'vserver!%s!rule' %(host), 
                                           url_prefix = '/vserver/%s'%(host),
                                           priorities = self._priorities)
         tmp += self._render_add_rule(host)
@@ -189,7 +179,7 @@ class PageVServer (PageMenu, FormHelper):
         tmp  = self._render_personal_webs (host)
         if self._cfg.get_val('vserver!%s!user_dir'%(host)):
             tmp += "<p><hr /></p>"
-            tmp += self._render_rules_generic (cfg_key    = 'vserver!%s!user_dir'%(host), 
+            tmp += self._render_rules_generic (cfg_key    = 'vserver!%s!user_dir!rule'%(host), 
                                                url_prefix = '/vserver/%s/userdir'%(host),
                                                priorities = self._priorities_userdir)
             tmp += self._render_add_rule (host, prefix="userdir_")
@@ -255,30 +245,30 @@ class PageVServer (PageMenu, FormHelper):
             txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th><th>Final</th></tr>'
             
             # Rule list
-            for rule in priorities:
-                type, name, prio, conf = rule
+            for prio in priorities:
+                conf = priorities[prio]
 
-                if type != 'default':
-                    pre   = '%s!rule!%s!%s' % (cfg_key, type, name)
-                    link  = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
-                    final = self.InstanceCheckbox ('%s!final'%(pre), True)
+                type_ = conf.get_val('match!type')
+                final = conf.get_val('match!final', True)
+                name  = priorities.guess_name (prio)
+
+                pre = '%s!rule!%s' % (cfg_key, prio)
+                if type_ != 'default':
+                    link     = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
+                    final    = self.InstanceCheckbox ('%s!final'%(pre), True)
+                    js       = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
+                    link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                    extra    = ''
                 else:
-                    pre   = '%s!rule!%s' % (cfg_key, type)
-                    link  = '<a href="%s/prio/%s">Default</a>' % (url_prefix, prio)
-                    final = ""
+                    link     = '<a href="%s/prio/%s">Default</a>' % (url_prefix, prio)
+                    extra    = ' NoDrag="1" NoDrop="1"'
+                    final    = ''
+                    link_del = ''
 
                 e1 = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
 
-                if type != 'default':
-                    js = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
-                    link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
-                    extra = ''
-                else:
-                    extra = ' NoDrag="1" NoDrop="1"'
-                    link_del = ''
-
-                txt += '<!-- %s --><tr id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
-                    prio, pre, extra, link, type.capitalize(), e1, final, link_del)
+                txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
+                    prio, pre, prio, extra, link, type_.capitalize(), e1, final, link_del)
 
             txt += '</table>\n'
             txt += '''<script type="text/javascript">
@@ -288,10 +278,10 @@ class PageVServer (PageMenu, FormHelper):
                         $('#%(name)s').tableDnD({
                           onDrop: function(table, row) {
                               var rows = table.tBodies[0].rows;
-                              var post = '';
+                              var post = 'update_prefix=%(prefix)s&';
                               for (var i=1; i<rows.length; i++) {
-                                var prio = (i > 0) ? i*100 : 1;
-                                post += rows[i].id + '!priority=' + prio + '&';
+                                var prio = i*100;
+                                post += 'update_prio=' + rows[i].id + ',' + prio + '&';
                               }
 	                      jQuery.post ('%(url)s', post, 
                                   function (data, textStatus) {
@@ -302,8 +292,9 @@ class PageVServer (PageMenu, FormHelper):
                         });
                       });
                       </script>
-                   ''' % {'name': table_name, 
-                          'url' : self.submit_ajax_url}
+                   ''' % {'name':   table_name, 
+                          'url' :   self.submit_ajax_url,
+                          'prefix': cfg_key}
         return txt
 
     def _render_personal_webs (self, host):

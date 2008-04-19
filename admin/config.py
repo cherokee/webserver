@@ -182,13 +182,16 @@ class Config:
         assert (isinstance(config_node, ConfigNode))
 
         parent, parent_path, child_name = self._get_parent_node (path)
-        if parent and parent._child.has_key(child_name):
+        if parent:
+            if not parent._child.has_key(child_name):
+                parent._create_path(child_name)
             parent._child[child_name] = config_node
 
     def __setitem__ (self, path, val):
-        if not val or len(val) == 0:
-            del (self[path])
-            return
+        if not isinstance (val, ConfigNode):
+            if not val or len(val) == 0:
+                del (self[path])
+                return
 
         tmp = self[path]
         if not tmp:

@@ -32,6 +32,15 @@ def is_dir_formated (value):
             value = value[:-1]
     except:
         is_not_empty('')
+
+    # Replace double slashes
+    while True:
+        tmp = value.replace('//','/')
+        tmp = tmp.replace ('\\\\', '\\')
+        if tmp == value:
+            break
+        value = tmp
+
     return value
 
 def is_path_list (value):

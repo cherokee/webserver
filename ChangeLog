@@ -1,3 +1,15 @@
+2008-04-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee.conf.sample.pre, admin/PageEntry.py, admin/config.py,
+	admin/PageVServers.py, admin/VirtualServer.py,
+	admin/PageVServer.py, admin/validations.py,admin/Makefile.am:
+	Updated to the new configuration format.
+
+	* admin/Makefile.am (adminpy_DATA), admin/VirtualServer.py,
+	admin/RuleList.py: Replaced by RuleList.py.
+
+	* cherokee.conf.sample.pre: Updated to the new format.
+
 2008-04-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	(This is what a MacBook Pro battery lasts): flying from Austin to
