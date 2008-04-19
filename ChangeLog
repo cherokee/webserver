@@ -80,10 +80,10 @@
 	file format for 0.7 has changed again. The latest approach was
 	fair enough, although it was not as flexible as it should have
 	been. This mega-patch makes it work as the rest of the server;
-	which is, instead if receiving a buffer with an string, it
-	receives a cherokee_config_node_t reference and it is reads it
+	instead of receiving a buffer string, it receives a
+	cherokee_config_node_t reference and it is reads its
 	configuration from there. I ran into problems when I was writing
-	the header based rule plug-in because for this previous
+	the header based rule plug-in because of this previous
 	implementation; not it is okay.
 
 	* cherokee/rule_header.h, cherokee/rule_header.c: Added new rule
@@ -138,8 +138,8 @@
 	* admin/PageVServer.py: (PageVServer._op_handler): Tiny
 	bugfix. There was an insecure configuration check.
 
-	* admin/PageVServer.py: Added a new button that allows to disable
-	the logging.
+	* admin/PageVServer.py: Added a new button useful to disable
+	logging.
 
 2008-04-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -227,7 +227,7 @@
 	cherokee/server.c, cherokee/thread.c, cherokee/validator_mysql.c,
 	cherokee/virtual_entries.c, cherokee/virtual_entries.h,
 	cherokee/virtual_server.c, cherokee/virtual_server.h: A number of
-	changes have been performed the adapt the server to the new rule
+	changes have been performed to adapt the server to the new rule
 	list mechanism.
 
 	* qa/001-basic.py, qa/015-CGI-simple.py, qa/016-CGI-pathinfo.py,
@@ -484,7 +484,7 @@
 
 	* cherokee/exts_table.c, cherokee/validator_htpasswd.c,
 	cherokee/logger_writer.c, cherokee/mime.c, cherokee/connection.c,
-	cherokee/dirs_table.c, cherokee/socket.c: This patches fixes a few
+	cherokee/dirs_table.c, cherokee/socket.c: This patch fixes a few
 	harmless compilation warnings.
 
 2008-03-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -539,8 +539,8 @@
 	the main compilation.
 
 	* doc/Makefile.am (.NOTPARALLEL): Documentation shouldn't be
-	generated in pararell. At this moment a simple call to
-	build_docs.py compiles it all. When it compiles in pararell, make
+	generated in parallel. At this moment a simple call to
+	build_docs.py compiles it all. When it compiles in parallel, make
 	calls many times to build_docs.py so the documentation is
 	regenerated and overwritten many times.
 
