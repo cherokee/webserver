@@ -32,12 +32,12 @@ vserver!default!logger!error!filename = %localstatedir%/log/cherokee.error
 
 vserver!default!rule!1!match!type = default
 vserver!default!rule!1!handler = common
-vserver!default!rule!1!!handler!iocache = 0
+vserver!default!rule!1!handler!iocache = 0
 
 vserver!default!rule!2!match!type = directory
 vserver!default!rule!2!match!directory = /icons
 vserver!default!rule!2!handler = file
-vserver!default!rule!2!!document_root = %prefix%/share/cherokee/icons/
+vserver!default!rule!2!document_root = %prefix%/share/cherokee/icons/
 
 vserver!default!rule!3!match!type = directory
 vserver!default!rule!3!match!directory = /cherokee_themes
