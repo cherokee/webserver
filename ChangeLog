@@ -1,3 +1,8 @@
+2008-04-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/PageEncoders.py (MatchingList._op_render): Updated to the
+	the cherokee-admin layout.
+
 2008-04-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee.conf.sample.pre, admin/PageEntry.py, admin/config.py,
