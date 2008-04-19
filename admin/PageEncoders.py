@@ -40,8 +40,8 @@ class MatchingList (FormHelper):
         txt   = ''
         table = TableProps()
         self.AddPropOptions (table, 'Type',  '%s!type' %(self._prefix), self.OPTIONS, NOTE_MATCH_TYPE)
-        self.AddPropEntry   (table, 'Allow', '%s!allow'%(self._prefix), NOTE_MATCH_ALLOW, size=40)
-        self.AddPropEntry   (table, 'Deny',  '%s!deny' %(self._prefix), NOTE_MATCH_DENY, size=40)
+        self.AddPropEntry   (table, 'Allow', '%s!allow'%(self._prefix), NOTE_MATCH_ALLOW)
+        self.AddPropEntry   (table, 'Deny',  '%s!deny' %(self._prefix), NOTE_MATCH_DENY)
         txt += str(table)
 
         return txt

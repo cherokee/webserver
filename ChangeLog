@@ -1,5 +1,8 @@
 2008-04-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageEncoders.py, admin/PageVServer.py, admin/Entry.py:
+	Text entries are wider now (40 characters by default).
+
 	* admin/PageEncoders.py (MatchingList._op_render): Updated to the
 	the cherokee-admin layout.
 

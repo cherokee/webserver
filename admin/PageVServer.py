@@ -345,11 +345,11 @@ class PageVServer (PageMenu, FormHelper):
             access = self._cfg.get_val(cfg_key)
             if access == 'file':
                 t1 = TableProps()
-                self.AddPropEntry (t1, 'Filename', '%s!access!filename'%(pre), NOTE_WRT_FILE, size=40)
+                self.AddPropEntry (t1, 'Filename', '%s!access!filename'%(pre), NOTE_WRT_FILE)
                 writers += str(t1)
             elif access == 'exec':
                 t1 = TableProps()
-                self.AddPropEntry (t1, 'Command', '%s!access!command'%(pre), NOTE_WRT_EXEC, size=40)
+                self.AddPropEntry (t1, 'Command', '%s!access!command'%(pre), NOTE_WRT_EXEC)
                 writers += str(t1)
 
             writers += "<hr />"
@@ -363,11 +363,11 @@ class PageVServer (PageMenu, FormHelper):
             error = self._cfg.get_val(cfg_key)
             if error == 'file':
                 t1 = TableProps()
-                self.AddPropEntry (t1, 'Filename', '%s!error!filename'%(pre), NOTE_WRT_FILE, size=40)
+                self.AddPropEntry (t1, 'Filename', '%s!error!filename'%(pre), NOTE_WRT_FILE)
                 writers += str(t1)
             elif error == 'exec':
                 t1 = TableProps()
-                self.AddPropEntry (t1, 'Command', '%s!error!command'%(pre), NOTE_WRT_EXEC, size=40)
+                self.AddPropEntry (t1, 'Command', '%s!error!command'%(pre), NOTE_WRT_EXEC)
                 writers += str(t1)
 
             txt += '<h3>Writers</h3>'

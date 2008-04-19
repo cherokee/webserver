@@ -8,6 +8,9 @@ class Entry:
         if cfg:
             self._init_value (cfg)
 
+        if not 'size' is kwargs:
+            self._kwargs['size'] = 40
+
     def _init_value (self, cfg):
         try:
             value = cfg[self._name].value
