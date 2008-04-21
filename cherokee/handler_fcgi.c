@@ -188,10 +188,7 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 		return ret;
 
 	case ret_eof:
-		cgi->got_eof = true;
-		return ret;
 	case ret_error:
-		printf ("ERROR\n");
 		cgi->got_eof = true;
 		return ret;
 

@@ -252,7 +252,7 @@ class PageVServer (PageMenu, FormHelper):
                 final = conf.get_val('match!final', True)
                 name  = priorities.guess_name (prio)
 
-                pre = '%s!rule!%s' % (cfg_key, prio)
+                pre = '%s!%s' % (cfg_key, prio)
                 if type_ != 'default':
                     link     = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
                     final    = self.InstanceCheckbox ('%s!final'%(pre), True)
