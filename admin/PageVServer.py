@@ -220,7 +220,7 @@ class PageVServer (PageMenu, FormHelper):
     def _render_add_rule (self, host, prefix=''):
         # Add new rule
         txt      = ''
-        entry    = self.InstanceEntry (prefix+'add_new_entry', 'text')
+        entry    = self.InstanceEntry (prefix+'add_new_entry', 'text', size=30)
         type     = EntryOptions (prefix+'add_new_type',    ENTRY_TYPES, selected='directory')
         handler  = EntryOptions (prefix+'add_new_handler', HANDLERS,    selected='common')
         

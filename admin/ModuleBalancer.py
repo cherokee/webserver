@@ -77,8 +77,8 @@ class ModuleBalancerGeneric (Module, FormHelper):
             if hosts:
                 for host in hosts:
                     pre = '%s!%s' % (self._prefix, host)
-                    e_host = self.InstanceEntry('%s!host'%(pre), 'text', size=30)
-                    e_inte = self.InstanceEntry('%s!interpreter'%(pre), 'text', size=30)
+                    e_host = self.InstanceEntry('%s!host'%(pre), 'text')
+                    e_inte = self.InstanceEntry('%s!interpreter'%(pre), 'text')
                     e_envs = self._render_envs('%s!env'%(pre))
 
                     t2 = Table(2, title_left=1)
@@ -94,8 +94,8 @@ class ModuleBalancerGeneric (Module, FormHelper):
             # New Interpreter
             t2 = Table(3,1)
             t2 += ('Host', 'Interpreter', '')
-            e_host = self.InstanceEntry('new_host', 'text')
-            e_inte = self.InstanceEntry('new_interpreter', 'text')
+            e_host = self.InstanceEntry('new_host', 'text', size=25)
+            e_inte = self.InstanceEntry('new_interpreter', 'text', size=25)
             t2 += (e_host, e_inte, SUBMIT_ADD)
             txt += str(t2)
             
@@ -121,8 +121,8 @@ class ModuleBalancerGeneric (Module, FormHelper):
             txt += str(table)
 
         # Add new environment variable
-        en_env = self.InstanceEntry('balancer_new_env',     'text')
-        en_val = self.InstanceEntry('balancer_new_env_val', 'text')
+        en_env = self.InstanceEntry('balancer_new_env',     'text', size=20)
+        en_val = self.InstanceEntry('balancer_new_env_val', 'text', size=20)
         hidden = self.HiddenInput  ('balancer_new_env_key', cfg_key)
 
         table = Table(3,1)

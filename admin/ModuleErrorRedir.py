@@ -38,7 +38,7 @@ class ModuleErrorRedir (Module, FormHelper):
         table += ('Error', 'URL', '')
 
         options = EntryOptions ('new_error_code', ERROR_CODES)
-        entry = self.InstanceEntry('new_error_url', 'text')
+        entry = self.InstanceEntry('new_error_url', 'text', size=30)
         table += (options, entry, SUBMIT_BUTTON)
 
         txt += str(table)

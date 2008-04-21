@@ -71,9 +71,9 @@ class PageMime (PageMenu, FormHelper):
 
     def _render_add_mime (self):
         txt = '<h2>Add new MIME</h2>\n'
-        e1 = self.InstanceEntry('new_mime', 'text')
-        e2 = self.InstanceEntry('new_extensions', 'text')
-        e3 = self.InstanceEntry('new_maxage', 'text', size=6, maxlength=6)
+        e1 = self.InstanceEntry('new_mime',       'text', size=25)
+        e2 = self.InstanceEntry('new_extensions', 'text', size=35)
+        e3 = self.InstanceEntry('new_maxage',     'text', size=6, maxlength=6)
         
         table = Table(3,1)
         table += ('Mime Type', 'Extensions', 'Max Age')

@@ -8,7 +8,7 @@ class Entry:
         if cfg:
             self._init_value (cfg)
 
-        if not 'size' is kwargs:
+        if not 'size' in kwargs:
             self._kwargs['size'] = 40
 
     def _init_value (self, cfg):

@@ -46,8 +46,8 @@ class ModuleRedir (Module, FormHelper):
             txt += self.Indent(table)
 
         # Add new rule
-        en_reg  = self.InstanceEntry('rewrite_new_regex',     'text')
-        en_sub  = self.InstanceEntry('rewrite_new_substring', 'text')
+        en_reg  = self.InstanceEntry('rewrite_new_regex',     'text', size=28)
+        en_sub  = self.InstanceEntry('rewrite_new_substring', 'text', size=28)
         en_show = self._get_show_option ('rewrite_new_show')
 
         table = Table(3,1)

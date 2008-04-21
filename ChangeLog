@@ -1,3 +1,10 @@
+2008-04-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/ModuleRedir.py, admin/PageVServers.py,
+	admin/ModuleBalancer.py, admin/PageMime.py, admin/PageVServer.py,
+	admin/Entry.py, admin/ModuleErrorRedir.py: Fixed some text entry
+	lengths.
+
 2008-04-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageEncoders.py, admin/PageVServer.py, admin/Entry.py:
