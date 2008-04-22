@@ -1,5 +1,9 @@
 2008-04-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServer.py (PageVServer._op_handler): Fixes a
+	regression. When user_dir is enabled it must add a rule for the
+	default match.
+
 	* admin/PageVServer.py: Fixes a bug managing !rule!x!match!final
 	entries.
 

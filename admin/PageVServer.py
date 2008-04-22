@@ -100,6 +100,13 @@ class PageVServer (PageMenu, FormHelper):
             self._op_apply_changes (host, uri, post)
             return 'ok'
 
+        # Ensure the default rules are set
+        if self._cfg.get_val('vserver!%s!user_dir'%(host)):
+            tmp = self._cfg["vserver!%s!user_dir!rule"%(host)]
+            if not tmp:
+                self._cfg["vserver!%s!user_dir!rule!1!match!type"%(host)] = "default"
+                self._cfg["vserver!%s!user_dir!rule!1!handler"   %(host)] = "common"
+
         self._priorities         = RuleList(self._cfg, 'vserver!%s!rule'%(host))
         self._priorities_userdir = RuleList(self._cfg, 'vserver!%s!user_dir!rule'%(host))
 
