@@ -249,13 +249,12 @@ class PageVServer (PageMenu, FormHelper):
                 conf = priorities[prio]
 
                 type_ = conf.get_val('match!type')
-                final = conf.get_val('match!final', True)
                 name  = priorities.guess_name (prio)
 
                 pre = '%s!%s' % (cfg_key, prio)
                 if type_ != 'default':
                     link     = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
-                    final    = self.InstanceCheckbox ('%s!final'%(pre), True)
+                    final    = self.InstanceCheckbox ('%s!match!final'%(pre), True)
                     js       = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
                     link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                     extra    = ''
@@ -420,8 +419,15 @@ class PageVServer (PageMenu, FormHelper):
         # Error handler
         self.ApplyChanges_OptionModule ('%s!error_handler'%(pre), uri, post)
 
+        # Look for the checkboxes
+        checkboxes = []
+        tmp = self._cfg['%s!rule'%(pre)]
+        if tmp and tmp.has_child():
+            for p in tmp:
+                checkboxes.append('%s!rule!%s!match!final'%(pre,p))
+
         # Apply changes
-        self.ApplyChanges ([], post, DATA_VALIDATION)
+        self.ApplyChanges (checkboxes, post, DATA_VALIDATION)
 
         # Clean old logger properties
         self._cleanup_logger_cfg (host)
