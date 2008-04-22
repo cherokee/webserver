@@ -1,3 +1,9 @@
+2008-04-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/Form.py (FormHelper.InstanceTab): Tab switching animation
+	is dissabled now. Even it we are losing some eye-candy by
+	disabling this effect, it improves the interface usability.
+
 2008-04-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/ModuleRedir.py, admin/PageVServers.py,

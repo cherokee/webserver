@@ -127,7 +127,7 @@ class FormHelper (WebComponent):
           var settings = {
              autoheight: true,
              alwaysOpen: true,
-             animated:   'easeslide'
+             animated:   false
           };
 
           open_tab = get_cookie('open_tab');
