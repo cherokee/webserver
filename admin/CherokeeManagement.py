@@ -105,10 +105,12 @@ class CherokeeManagement:
         self.__stop_process (self._pid)
         self._pid = None
         
-        # Stop Cherokee
+        # Get the PID
         pid = self._get_cherokee_pid()
+        if not pid: return
+
+        # Stop Cherokee
         self.__stop_process (pid)
-                
         time.sleep (DEFAULT_DELAY)
 
     def create_config (self, file):
@@ -157,7 +159,10 @@ class CherokeeManagement:
         if not os.access (file, os.R_OK):
             return
         f = open (file, "r")
-        pid = int(f.readline())
+        try:
+            pid = int(f.readline())
+        except:
+            return None
         try: f.close()
         except: pass
         return pid

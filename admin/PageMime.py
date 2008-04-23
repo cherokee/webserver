@@ -60,7 +60,7 @@ class PageMime (PageMenu, FormHelper):
             keys.sort()
             for mime in keys:
                 cfg_key = 'mime!%s'%(mime)
-                e1 = self.InstanceEntry('%s!extensions'%(cfg_key), 'text')
+                e1 = self.InstanceEntry('%s!extensions'%(cfg_key), 'text', size=20)
                 e2 = self.InstanceEntry('%s!max-age'%(cfg_key), 'text', size=6, maxlength=6)
                 js = "post_del_key('/icons/update', '%s');" % (cfg_key)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)

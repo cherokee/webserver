@@ -1,3 +1,16 @@
+2008-04-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/PageMime.py (PageMime._render_mime_list): Extension
+	entries are shorter now. They should not overflow the frame
+	limits.
+
+	* admin/PageEntry.py, admin/ModuleServerInfo.py,
+	admin/ModuleFile.py: Updated to use the new layout (it adds a nice
+	comment right under the entry).
+
+	* admin/CherokeeManagement.py: Fixes a error when the PID file
+	cannot be read.
+
 2008-04-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageVServer.py (PageVServer._op_handler): Fixes a

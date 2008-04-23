@@ -2,6 +2,8 @@ from Form import *
 from Table import *
 from Module import *
 
+NOTE_IO_CACHE = 'Enables an internal I/O cache that improves performance.'
+
 class ModuleFile (Module, FormHelper):
     PROPERTIES = [
         'iocache'
@@ -12,8 +14,8 @@ class ModuleFile (Module, FormHelper):
         FormHelper.__init__ (self, 'file', cfg)
 
     def _op_render (self):
-        table = Table(2)
-        self.AddTableCheckbox (table, "Use I/O cache", "%s!iocache" % (self._prefix), True)
+        table = TableProps()
+        self.AddPropCheck (table, "Use I/O cache", "%s!iocache" % (self._prefix), True, NOTE_IO_CACHE)
         return str(table)
 
     def _op_apply_changes (self, uri, post):

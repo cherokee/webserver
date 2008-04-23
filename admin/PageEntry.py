@@ -8,6 +8,12 @@ from RuleList import *
 from Module import *
 from consts import *
 
+NOTE_DOCUMENT_ROOT = 'Allow to specify an alternative document root path.'
+NOTE_HANDLER       = 'How the connection will be handler.'
+NOTE_HTTPS_ONLY    = 'Enable to allow access to the resource only by https.'
+NOTE_ALLOW_FROM    = 'List of IPs and subnets allowed to access the resource.'
+NOTE_VALIDATOR     = 'Which, if any, will be the authentication method.'
+
 DATA_VALIDATION = [
     ("vserver!.*?!(directory|extensions|request)!.*?!document_root", validations.is_local_dir_exists),
     ("vserver!.*?!(directory|extensions|request)!.*?!allow_from",    validations.is_ip_or_netmask_list)
@@ -102,19 +108,21 @@ class PageEntry (PageMenu, FormHelper):
     def _render_guts (self):
         pre = self._conf_prefix
         txt = '<h1>%s</h1>' % (self._get_title (html=True))
-        tmp = ''
 
-        table = Table(2)
-        e = self.AddTableOptions_Reload (table, 'Handler', '%s!handler'%(pre), HANDLERS)
-        self.AddTableEntry (table, 'Document Root', '%s!document_root'%(pre))
-       
-        tmp += str(table)
+        table = TableProps()
+        e = self.AddPropOptions_Reload (table, 'Handler', '%s!handler'%(pre), 
+                                        HANDLERS, NOTE_HANDLER)
+        self.AddPropEntry (table, 'Document Root', '%s!document_root'%(pre), NOTE_DOCUMENT_ROOT)
 
-        tmp += '<h2>Handler properties</h2>'
-        tmp += e
+        txt += '<h2>General</h2>'
+        txt += self.Indent(table)
+        
+        if e:
+            txt += '<h2>Handler properties</h2>'
+            txt += self.Indent(e)
 
-        tmp += '<h2>Security</h2>'
-        tmp += self._render_security ()
+        txt += '<h2>Security</h2>'
+        tmp  = self._render_security ()
         txt += self.Indent(tmp)
 
         form = Form (self.submit_url)
@@ -134,11 +142,12 @@ class PageEntry (PageMenu, FormHelper):
         pre = self._conf_prefix
 
         txt   = ""
-        table = Table(2)
-        self.AddTableCheckbox (table, 'Only https', '%s!only_secure'%(pre), False)
-        self.AddTableEntry    (table, 'Allow From',  '%s!allow_from' %(pre))
+        table = TableProps()
+        self.AddPropCheck (table, 'Only https', '%s!only_secure'%(pre), False, NOTE_HTTPS_ONLY)
+        self.AddPropEntry (table, 'Allow From',  '%s!allow_from' %(pre), NOTE_ALLOW_FROM)
 
-        e = self.AddTableOptions_Reload (table, 'Authentication', '%s!auth'%(pre), VALIDATORS)
+        e = self.AddPropOptions_Reload (table, 'Authentication', '%s!auth'%(pre), 
+                                        VALIDATORS, NOTE_VALIDATOR)
                                                      
         txt += str(table) + e
         return txt
