@@ -169,10 +169,6 @@ main (int argc, char **argv)
 	ret_t              ret;
 	cherokee_server_t *srv;
 
-#ifdef _WIN32
-	init_win32();
-#endif	
-
 #ifdef SIGPIPE
         signal (SIGPIPE, SIG_IGN);
 #endif

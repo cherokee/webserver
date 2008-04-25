@@ -1,3 +1,8 @@
+2008-04-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main_admin.c (main): There was a unneeded Win32
+	initialization.
+
 2008-04-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/158-RuleHeader1.py, qa/159-RuleHeader2.py,
