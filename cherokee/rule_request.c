@@ -104,7 +104,8 @@ configure (cherokee_rule_request_t   *rule,
 	   cherokee_config_node_t    *conf, 
 	   cherokee_virtual_server_t *vsrv)
 {
-	ret_t ret;
+	ret_t                   ret;
+	cherokee_regex_table_t *regexs = VSERVER_SRV(vsrv)->regexs;
 
 	/* Read the configuration entry
 	 */
@@ -117,13 +118,13 @@ configure (cherokee_rule_request_t   *rule,
 
 	/* Add it to the regular extension table
 	 */
-	ret = cherokee_regex_table_add (VSERVER_SRV(vsrv)->regexs, 
-					rule->pattern.buf);
-	if (ret != ret_ok) return ret;
+	ret = cherokee_regex_table_add (regexs, rule->pattern.buf);
+	if (ret != ret_ok) 
+		return ret;
 	
-	ret = cherokee_regex_table_get (VSERVER_SRV(vsrv)->regexs, 
-					rule->pattern.buf, &rule->pcre);
-	if (ret != ret_ok) return ret;
+	ret = cherokee_regex_table_get (regexs, rule->pattern.buf, &rule->pcre);
+	if (ret != ret_ok) 
+		return ret;
 
 	return ret_ok;
 }
@@ -132,8 +133,6 @@ configure (cherokee_rule_request_t   *rule,
 ret_t
 cherokee_rule_request_new (cherokee_rule_request_t  **rule)
 {
-	ret_t ret;
-
 	CHEROKEE_NEW_STRUCT (n, rule_request);
 
 	/* Parent class constructor

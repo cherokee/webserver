@@ -32,17 +32,17 @@
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
 #include <cherokee/rule.h>
+#include <cherokee/header.h>
 #include <cherokee/regex.h>
 
 CHEROKEE_BEGIN_DECLS
 
 typedef struct {
-	cherokee_rule_t   rule;
-
-	int               ovector[OVECTOR_LEN];
-	int               ovecsize;
-	void             *pcre;
-	cherokee_buffer_t pattern;
+	cherokee_rule_t           rule;
+	cherokee_common_header_t  header;
+	cherokee_buffer_t         match;
+	cherokee_buffer_t         mismatch;
+	void                     *pcre;
 } cherokee_rule_header_t;
 
 #define RULE_HEADER(x) ((cherokee_rule_header_t *)(x))

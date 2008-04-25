@@ -161,7 +161,9 @@ run-tests.py \
 154-DirRedirection.py \
 155-DirRedirection2.py \
 156-Mime2.py \
-157-Dirlist-symlinks.py
+157-Dirlist-symlinks.py \
+158-RuleHeader1.py \
+159-RuleHeader2.py 
 
 test:
 	./run-tests.py
