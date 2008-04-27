@@ -1,3 +1,8 @@
+2008-04-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* performance.conf.sample.pre: Updated to the latest configuration
+	file format change.
+
 2008-04-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/ModuleDirlist.py (ModuleDirlist._op_render),
