@@ -1,5 +1,11 @@
 2008-04-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageEntry.py, admin/ModuleAuth.py,
+	admin/ModuleHtdigest.py, admin/ModuleLdap.py,
+	admin/ModulePlain.py, admin/ModuleHtpasswd.py,
+	admin/ModuleMysql.py: Updated to use the new style: Table to
+	TableProp, and a few header related changes.
+
 	* admin/ModuleMirror.py, admin/ModuleCgi.py: Updated to use the
 	new TableProps widget.
 

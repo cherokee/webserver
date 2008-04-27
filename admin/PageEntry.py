@@ -153,14 +153,17 @@ class PageEntry (PageMenu, FormHelper):
     def _render_security (self):
         pre = self._conf_prefix
 
-        txt   = ""
+        txt   = "<h2>Access Restrictions</h2>"
         table = TableProps()
         self.AddPropCheck (table, 'Only https', '%s!only_secure'%(pre), False, NOTE_HTTPS_ONLY)
         self.AddPropEntry (table, 'Allow From',  '%s!allow_from' %(pre), NOTE_ALLOW_FROM)
+        txt += self.Indent(table)
 
-        e = self.AddPropOptions_Reload (table, 'Authentication', '%s!auth'%(pre), 
+        txt += "<h2>Authentication</h2>"
+        table = TableProps()
+        e = self.AddPropOptions_Reload (table, 'Validation Mechanism', '%s!auth'%(pre), 
                                         VALIDATORS, NOTE_VALIDATOR)
-                                                     
-        txt += str(table) + e
+        txt += self.Indent (table)
+        txt += e
         return txt
 

@@ -1,6 +1,16 @@
 from Table import *
 from ModuleAuth import *
 
+NOTE_HOST   = 'MySQL server IP address.'
+NOTE_PORT   = 'Server port to connect to.'
+NOTE_UNIX   = 'Full path a Unix socket to communite with the data base.'
+NOTE_USER   = 'User name for connecting to the database.'
+NOTE_PASSWD = 'Password for connecting to the database.'
+NOTE_DB     = 'Database name containing the user/password pair list.'
+NOTE_SQL    = 'SQL command to execute. ${user} is replaced with the user name.'
+NOTE_MD5    = 'Active to use MD5 passwords.'
+
+
 class ModuleMysql (ModuleAuthBase):
     PROPERTIES = ModuleAuthBase.PROPERTIES + [
         'host', 'port', 'unix_socket',
@@ -14,20 +24,20 @@ class ModuleMysql (ModuleAuthBase):
         ModuleAuthBase.__init__ (self, cfg, prefix, 'mysql', submit)
 
     def _op_render (self):
-        table = Table(2)
-        self.AddTableEntry (table, "Host", "%s!host"%(self._prefix))
-        self.AddTableEntry (table, "Port", "%s!port"%(self._prefix))
-        self.AddTableEntry (table, "Unix Socket", "%s!unix_socket"%(self._prefix))
-        self.AddTableEntry (table, "DB User", "%s!user"%(self._prefix))
-        self.AddTableEntry (table, "DB Password", "%s!passwd"%(self._prefix))
-        self.AddTableEntry (table, "Database", "%s!database"%(self._prefix))
-        self.AddTableEntry (table, "SQL Query", "%s!query"%(self._prefix))
-        self.AddTableCheckbox (table, 'Use MD5 Passwords', "%s!use_md5_passwd"%(self._prefix), False)
-
         txt  = ModuleAuthBase._op_render (self)
-        txt += '<h3>MySQL connection</h3>'
-        txt += str(table)
 
+        table = TableProps()
+        self.AddPropEntry (table, "Host", "%s!host"%(self._prefix), NOTE_HOST)
+        self.AddPropEntry (table, "Port", "%s!port"%(self._prefix), NOTE_PORT)
+        self.AddPropEntry (table, "Unix Socket", "%s!unix_socket"%(self._prefix), NOTE_UNIX)
+        self.AddPropEntry (table, "DB User", "%s!user"%(self._prefix), NOTE_USER)
+        self.AddPropEntry (table, "DB Password", "%s!passwd"%(self._prefix), NOTE_PASSWD)
+        self.AddPropEntry (table, "Database", "%s!database"%(self._prefix), NOTE_DB)
+        self.AddPropEntry (table, "SQL Query", "%s!query"%(self._prefix), NOTE_SQL)
+        self.AddPropCheck (table, 'Use MD5 Passwords', "%s!use_md5_passwd"%(self._prefix), False, NOTE_MD5)
+
+        txt += '<h2>MySQL connection</h2>'
+        txt += self.Indent(table)
         return txt
 
     def _op_apply_changes (self, uri, post):

@@ -9,6 +9,10 @@ DATA_VALIDATION = [
     ('vserver!.*?!(directory|extensions|request)!.*?!auth!users', validations.is_safe_id_list)
 ]
 
+NOTE_METHODS = 'Allowed HTTP Authentication methods.'
+NOTE_REALM   = 'Name associated with the protected resource.'
+NOTE_USERS   = 'User filter. List of allowed users.'
+
 class ModuleAuthBase (Module, FormHelper):
     PROPERTIES = [
         'methods',
@@ -21,7 +25,7 @@ class ModuleAuthBase (Module, FormHelper):
         FormHelper.__init__ (self, name, cfg)
 
     def _op_render (self):
-        table = Table(2)
+        txt = ''
 
         if len(self.METHODS) > 1:
             methods = VALIDATOR_METHODS
@@ -29,10 +33,14 @@ class ModuleAuthBase (Module, FormHelper):
             method = self.METHODS[0]
             methods = filter (lambda x,m=method: x[0] == method, VALIDATOR_METHODS)
 
-        self.AddTableOptions (table, "Methods", "%s!methods"%(self._prefix), methods)
-        self.AddTableEntry   (table, "Realm",   "%s!realm"  %(self._prefix))
-        self.AddTableEntry   (table, "Users",   "%s!users"  %(self._prefix))
-        return str(table)
+        table = TableProps()
+        self.AddPropOptions (table, "Methods", "%s!methods"%(self._prefix), methods, NOTE_METHODS)
+        self.AddPropEntry   (table, "Realm",   "%s!realm"  %(self._prefix), NOTE_REALM)
+        self.AddPropEntry   (table, "Users",   "%s!users"  %(self._prefix), NOTE_USERS)
+
+        txt += "<h2>Authentication Details</h2>"
+        txt += self.Indent(table)
+        return txt
 
     def _op_apply_changes (self, uri, post):
         # Check Realm
