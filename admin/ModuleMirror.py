@@ -3,6 +3,7 @@ from Table import *
 from Module import *
 from validations import *
 from consts import *
+from ModuleBalancer import *
 
 class ModuleMirror (Module, FormHelper):
     PROPERTIES = [
@@ -16,8 +17,8 @@ class ModuleMirror (Module, FormHelper):
     def _op_render (self):
         prefix = "%s!balancer" % (self._prefix)
 
-        table = Table(2)
-        e = self.AddTableOptions_Reload (table, "Balancer", prefix, BALANCERS)
+        table = TableProps()
+        e = self.AddPropOptions_Reload (table, "Balancer", prefix, BALANCERS, NOTE_BALANCER)
         txt = str(table) + self.Indent(e)
         return txt
 

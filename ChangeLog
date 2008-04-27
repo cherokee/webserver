@@ -1,5 +1,8 @@
 2008-04-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleMirror.py, admin/ModuleCgi.py: Updated to use the
+	new TableProps widget.
+
 	* performance.conf.sample.pre: Updated to the latest configuration
 	file format change.
 

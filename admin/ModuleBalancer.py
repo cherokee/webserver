@@ -4,8 +4,8 @@ from Module import *
 
 from consts import *
 
-NOTE_BALANCER = 'The source can be either a local interpreter or a remote host acting as an application server.'
-
+NOTE_SOURCE   = 'The source can be either a local interpreter or a remote host acting as an application server.'
+NOTE_BALANCER = 'Allow to select how the connections will be dispatched.'
 
 class ModuleBalancerGeneric (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url, name):
@@ -49,7 +49,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
             table = TableProps()
             self.AddPropOptions_Reload (table, "Information sources", 
                                         "%s!type" % (self._prefix), 
-                                        BALANCER_TYPES, NOTE_BALANCER)
+                                        BALANCER_TYPES, NOTE_SOURCE)
             txt += str(table)
 
         if self._type == 'host':
