@@ -4,7 +4,7 @@ from base import *
 PATH_INFO   = "/this_is_the/path_info"
 
 CONF = """
-vserver!default!rule!1040!match!type = directory
+vserver!default!rule!1040!match = directory
 vserver!default!rule!1040!match!directory = /alias_and_pathinfo
 vserver!default!rule!1040!handler = cgi
 vserver!default!rule!1040!handler!script_alias = %s

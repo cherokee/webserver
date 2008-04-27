@@ -1,7 +1,7 @@
 from base import *
 
 CONF = """
-vserver!default!rule!820!match!type = directory
+vserver!default!rule!820!match = directory
 vserver!default!rule!820!match!directory = /auth_header
 vserver!default!rule!820!match!final = 0
 vserver!default!rule!820!auth = plain

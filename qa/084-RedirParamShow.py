@@ -1,7 +1,7 @@
 from base import *
 
 CONF = """
-vserver!default!rule!840!match!type = directory
+vserver!default!rule!840!match = directory
 vserver!default!rule!840!match!directory = /redirparam2
 vserver!default!rule!840!handler = redir
 vserver!default!rule!840!handler!rewrite!1!show = 1

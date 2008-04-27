@@ -3,7 +3,7 @@ from base import *
 MAGIC  = "Don't show this"
 
 CONF = """
-vserver!default!rule!900!match!type = directory
+vserver!default!rule!900!match = directory
 vserver!default!rule!900!match!directory = /digest1
 vserver!default!rule!900!match!final = 0
 vserver!default!rule!900!auth = plain

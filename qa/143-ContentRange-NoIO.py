@@ -9,7 +9,7 @@ OFFSET = 15
 DIR    = "range_start_noio"
 
 CONF = """
-vserver!default!rule!1430!match!type = directory
+vserver!default!rule!1430!match = directory
 vserver!default!rule!1430!match!directory = <dir>
 vserver!default!rule!1430!match!handler = file
 vserver!default!rule!1430!match!handler!iocache = 0

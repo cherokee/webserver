@@ -7,7 +7,7 @@ class TestEntry (TestBase):
         self.expected_error = 405
 
 CONF = """        
-vserver!default!rule!1220!match!type = directory
+vserver!default!rule!1220!match = directory
 vserver!default!rule!1220!match!directory = /methods_group
 vserver!default!rule!1220!handler = file
 """

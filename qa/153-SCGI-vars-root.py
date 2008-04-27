@@ -21,7 +21,7 @@ SCGIServer(TestHandler, port=%d).serve_forever()
 CONF = """
 vserver!scgi6!document_root = /fake
 
-vserver!scgi6!rule!1530!match!type = default
+vserver!scgi6!rule!1530!match = default
 vserver!scgi6!rule!1530!handler = scgi
 vserver!scgi6!rule!1530!handler = scgi
 vserver!scgi6!rule!1530!handler!check_file = 0

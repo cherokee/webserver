@@ -181,10 +181,10 @@ class FormHelper (WebComponent):
         FormHelper.options_wrap_num += 1
 
         ops = '<div id="%s" name="%s">%s</div>'%(auto_wrap_id, auto_wrap_id, ops)
-        return (ops, value)
+        return (ops, value, auto_wrap_id)
 
     def AddTableOptions (self, table, title, cfg_key, options, *args, **kwargs):
-        entry, value = self.InstanceOptions (cfg_key, options, *args, **kwargs)
+        entry, value, wrap = self.InstanceOptions (cfg_key, options, *args, **kwargs)
 
         label = self.Label(title, cfg_key)
         table += (label, entry)
@@ -406,7 +406,7 @@ class FormHelper (WebComponent):
         self.AddProp (table, title, cfg_key, entry, comment)
 
     def AddPropOptions (self, table, title, cfg_key, options, comment=None, **kwargs):
-        entry, v = self.InstanceOptions (cfg_key, options, **kwargs)
+        entry, v, w = self.InstanceOptions (cfg_key, options, **kwargs)
         self.AddProp (table, title, cfg_key, entry, comment)
         return v
 

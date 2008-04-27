@@ -1,7 +1,7 @@
 from base import *
 
 CONF = """
-vserver!default!rule!310!match!type = directory
+vserver!default!rule!310!match = directory
 vserver!default!rule!310!match!directory = /post3
 vserver!default!rule!310!handler = common
 """

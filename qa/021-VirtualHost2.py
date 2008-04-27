@@ -6,7 +6,7 @@ CONF = """
 vserver!first.domain!document_root = %s
 vserver!first.domain!domain!1 = first.domain
 vserver!first.domain!domain!2 = second.domain
-vserver!first.domain!rule!1!match!type = default
+vserver!first.domain!rule!1!match = default
 vserver!first.domain!rule!1!handler = common
 """
 

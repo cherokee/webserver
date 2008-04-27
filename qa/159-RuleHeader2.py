@@ -4,12 +4,12 @@ DIR       = "header_test2_referer_mismatch"
 REFERER   = "example.com"
 
 CONF = """
-vserver!default!rule!1590!match!type = header
+vserver!default!rule!1590!match = header
 vserver!default!rule!1590!match!header = Referer
 vserver!default!rule!1590!match!mismatch = .+\.com
 vserver!default!rule!1590!handler = cgi
 
-vserver!default!rule!1591!match!type = header
+vserver!default!rule!1591!match = header
 vserver!default!rule!1591!match!header = Referer
 vserver!default!rule!1591!match!mismatch = .+\.net
 vserver!default!rule!1591!handler = file

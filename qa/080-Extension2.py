@@ -4,11 +4,11 @@ REQUIRED  = "This is working! :-)"
 FORBIDDEN = "It shouldn't appear in the text"
 
 CONF = """
-vserver!default!rule!800!match!type = directory
+vserver!default!rule!800!match = directory
 vserver!default!rule!800!match!directory = /extension2
 vserver!default!rule!800!handler = file
 
-vserver!default!rule!801!match!type = extensions
+vserver!default!rule!801!match = extensions
 vserver!default!rule!801!match!extensions = abc,def,ghi
 vserver!default!rule!801!handler = phpcgi
 vserver!default!rule!801!handler!interpreter = %s

@@ -2,7 +2,7 @@ from base import *
 
 MAGIC = "It works"
 CONF = """
-vserver!default!rule!160!match!type = directory
+vserver!default!rule!160!match = directory
 vserver!default!rule!160!match!directory = /cgi-bin2
 vserver!default!rule!160!handler = cgi
 """

@@ -52,11 +52,11 @@ class RuleList:
 
     def get_highest_priority(self):
         keys = self._cfg[self._cfg_pre].keys()
-        keys.sort (lambda x,y: int(x) < int(y))
-        if keys:
-            return int(keys[-1])
-        else:
+        if not keys:
             return 100
+        tmp = [int(x) for x in keys]
+        tmp.sort()
+        return tmp[-1]
 
     def change_prios (self, changes):
         # Build the new child list
@@ -79,22 +79,4 @@ class RuleList:
         for item in relocated.keys():
             pre = '%s!%d' % (self._cfg_pre, item)
             self._cfg.set_sub_node (pre, relocated[item])
-
-    def guess_name (self, prio):
-        conf = self[int(prio)]
-        type_ = conf.get_val('match!type')
-        
-        if type_ == 'directory':
-            name = conf.get_val('match!directory')
-        elif type_ == 'extensions':
-            name = conf.get_val('match!extensions')
-        elif type_ == 'request':
-            name = conf.get_val('match!request')
-        elif type_ == 'default':
-            name = ''
-        else:
-            print "UNKNOWN TYPE:", type_
-            name = ''
-
-        return name
-
+    

@@ -4,11 +4,11 @@ COMMENT = "This is comment inside the CGI"
 TEXT    = "It should be printed by the CGI"
 
 CONF = """
-vserver!default!rule!1100!match!type = directory
+vserver!default!rule!1100!match = directory
 vserver!default!rule!1100!match!directory = /request_entry1
 vserver!default!rule!1100!handler = file
 
-vserver!default!rule!1101!match!type = request
+vserver!default!rule!1101!match = request
 vserver!default!rule!1101!match!request = request_entry1.*cgi$
 vserver!default!rule!1101!handler = cgi
 """

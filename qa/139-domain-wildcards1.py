@@ -9,12 +9,12 @@ CONF = """
 vserver!<domain>!document_root = %s
 vserver!<domain>!domain!1 = <domain>
 
-vserver!<domain>!rule!1!match!type = default
+vserver!<domain>!rule!1!match = default
 vserver!<domain>!rule!1!handler = file
 
 vserver!rest_<domain>!document_root = %s
 vserver!rest_<domain>!domain!1 = *.<domain>
-vserver!rest_<domain>!rule!1!match!type = default
+vserver!rest_<domain>!rule!1!match = default
 vserver!rest_<domain>!rule!1!handler = file
 """
 

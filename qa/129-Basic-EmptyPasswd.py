@@ -5,7 +5,7 @@ LOGIN="Aladdin"
 PASSWD="open sesame"
 
 CONF = """
-vserver!default!rule!1290!match!type = directory
+vserver!default!rule!1290!match = directory
 vserver!default!rule!1290!match!directory = /auth_empty
 vserver!default!rule!1290!match!final = 0
 vserver!default!rule!1290!auth = plain

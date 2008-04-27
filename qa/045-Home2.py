@@ -10,7 +10,7 @@ vserver!testhost1!document_root = /faked
 vserver!testhost1!user_dir = %s
 vserver!testhost1!domain!1 = testhost1
 
-vserver!testhost1!user_dir!rule!1!match!type = default
+vserver!testhost1!user_dir!rule!1!match = default
 vserver!testhost1!user_dir!rule!1!handler = common
 """
 

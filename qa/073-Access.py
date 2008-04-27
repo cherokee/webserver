@@ -3,7 +3,7 @@ from base import *
 MAGIC = "Allow From test"
 
 CONF = """
-vserver!default!rule!730!match!type = directory
+vserver!default!rule!730!match = directory
 vserver!default!rule!730!match!directory = /allow1
 vserver!default!rule!730!match!final = 0
 vserver!default!rule!730!allow_from = 99.99.99.99

@@ -58,7 +58,6 @@ function comment_out_class (id, klass, visible)
 }
 
 
-
 function options_active_prop (options_id, props_prefix)
 {
 	   var thisselect = get_by_id_and_class (options_id, 'select');

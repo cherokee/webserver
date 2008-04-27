@@ -39,6 +39,8 @@ NOTE_ERRORS          = 'Back-end used to store the log errors.'
 NOTE_WRT_FILE        = 'Full path to the file where the information will be saved.'
 NOTE_WRT_EXEC        = 'Path to the executable that will be invoked on each log entry.'
 
+NO_HANDLER   = "<i>No</i>"
+NO_VALIDATOR = "<i>No</i>"
 
 class PageVServer (PageMenu, FormHelper):
     def __init__ (self, cfg):
@@ -64,23 +66,23 @@ class PageVServer (PageMenu, FormHelper):
             return '/vserver/'
 
         default_render = False 
-
         if post.get_val('is_submit'):
-            if post.get_val('add_new_entry'):
-                # It's adding a new entry
+            if post.get_val('tmp!new_rule!value'):
                 re = self._op_add_new_entry (post       = post,
                                              cfg_prefix = 'vserver!%s!rule' %(host),
-                                             url_prefix = '/vserver/%s'%(host))
+                                             url_prefix = '/vserver/%s'%(host),
+                                             key_prefix = 'tmp!new_rule')
                 if not self.has_errors() and re:
                     return re
-            elif post.get_val('userdir_add_new_entry'):
-                # It's adding a new user entry 
+
+            elif post.get_val('tmp!new_rule!user_dir!value'):
                 re = self._op_add_new_entry (post       = post,
-                                             cfg_prefix = 'vserver!%s!user_dir!rule'%(host),
+                                             cfg_prefix = 'vserver!%s!user_dir!rule' %(host),
                                              url_prefix = '/vserver/%s/userdir'%(host),
-                                             key_prefix = 'userdir_')
+                                             key_prefix = 'tmp!new_rule!user_dir')
                 if not self.has_errors() and re:
                     return re
+
             else:
                 # It's updating properties
                 self._op_apply_changes (host, uri, post)
@@ -104,50 +106,52 @@ class PageVServer (PageMenu, FormHelper):
         if self._cfg.get_val('vserver!%s!user_dir'%(host)):
             tmp = self._cfg["vserver!%s!user_dir!rule"%(host)]
             if not tmp:
-                self._cfg["vserver!%s!user_dir!rule!1!match!type"%(host)] = "default"
-                self._cfg["vserver!%s!user_dir!rule!1!handler"   %(host)] = "common"
+                self._cfg["vserver!%s!user_dir!rule!1!match"   %(host)] = "default"
+                self._cfg["vserver!%s!user_dir!rule!1!handler" %(host)] = "common"
 
         self._priorities         = RuleList(self._cfg, 'vserver!%s!rule'%(host))
         self._priorities_userdir = RuleList(self._cfg, 'vserver!%s!user_dir!rule'%(host))
 
         return self._op_render_vserver_details (host)
 
-    def _op_add_new_entry (self, post, cfg_prefix, url_prefix, key_prefix=''):
-        key_add_new_type     = key_prefix + 'add_new_type'
-        key_add_new_entry    = key_prefix + 'add_new_entry'
-        key_add_new_handler  = key_prefix + 'add_new_handler'
+    def _op_add_new_entry (self, post, cfg_prefix, url_prefix, key_prefix):
+        # Build the configuration prefix
+        rules = RuleList(self._cfg, cfg_prefix)
+        priority = rules.get_highest_priority() + 100
+        pre = '%s!%d' % (cfg_prefix, priority)
+        
+        # Read the properties
+        filtered_post = {}
+        for p in post:
+            if not p.startswith(key_prefix):
+                continue
+
+            prop = p[len('%s!'%(key_prefix)):]
+            if not prop: continue
+
+            filtered_post[prop] = post[p][0]
+
+        # Look for the rule type
+        _type = post.get_val (key_prefix)
 
         # The 'add_new_entry' checking function depends on 
         # the whether 'add_new_type' is a directory, an extension
         # or a regular extension
+        rule_module = module_obj_factory (_type, self._cfg, pre, self.submit_url)
+
+        # Validate
         validation = DATA_VALIDATION[:]
+        validation += rule_module.validation
 
-        type_ = post.get_val(key_add_new_type)
-        if type_ == 'directory':
-            validation += [(key_add_new_entry, validations.is_dir_formated)]
-        elif type_ == 'extensions':
-            validation += [(key_add_new_entry, validations.is_safe_id_list)]
-        elif type_ == 'request':
-            validation += [(key_add_new_entry, validations.is_regex)]
-
-        # Apply changes
         self._ValidateChanges (post, validation)
         if self.has_errors():
             return
+        
+        # Apply the changes to the configuration tree
+        self._cfg['%s!match'%(pre)] = _type
+        rule_module.apply_cfg (filtered_post)
 
-        entry    = post.pop(key_add_new_entry)
-        type_    = post.pop(key_add_new_type)
-        handler  = post.pop(key_add_new_handler)
-
-        # Look for the highest priority on the list
-        rules = RuleList(self._cfg, cfg_prefix)
-        priority = rules.get_highest_priority() + 100
-
-        pre = "%s!%d" % (cfg_prefix, priority)
-        self._cfg["%s!match!type"%(pre)]      = type_
-        self._cfg["%s!match!%s"%(pre, type_)] = entry
-        self._cfg["%s!handler"%(pre)]         = handler
-
+        # Get to the details page
         return "%s/prio/%d" % (url_prefix, priority)
 
     def _op_render_vserver_details (self, host):
@@ -176,20 +180,22 @@ class PageVServer (PageMenu, FormHelper):
         tabs += [('Domain names', tmp)]
         
         # Behaviour
-        tmp = self._render_rules_generic (cfg_key    = 'vserver!%s!rule' %(host), 
+        pre = 'vserver!%s!rule' %(host)
+        tmp = self._render_rules_generic (cfg_key    = pre, 
                                           url_prefix = '/vserver/%s'%(host),
                                           priorities = self._priorities)
-        tmp += self._render_add_rule(host)
+        tmp += self._render_add_rule ("tmp!new_rule")
         tabs += [('Behaviour', tmp)]
 
         # Personal Webs
         tmp  = self._render_personal_webs (host)
         if self._cfg.get_val('vserver!%s!user_dir'%(host)):
             tmp += "<p><hr /></p>"
-            tmp += self._render_rules_generic (cfg_key    = 'vserver!%s!user_dir!rule'%(host), 
+            pre = 'vserver!%s!user_dir!rule'%(host)
+            tmp += self._render_rules_generic (cfg_key    = pre, 
                                                url_prefix = '/vserver/%s/userdir'%(host),
                                                priorities = self._priorities_userdir)
-            tmp += self._render_add_rule (host, prefix="userdir_")
+            tmp += self._render_add_rule ("tmp!new_rule!user_dir")
         tabs += [('Personal Webs', tmp)]
 
         # Error handlers
@@ -223,61 +229,72 @@ class PageVServer (PageMenu, FormHelper):
         txt += str(table) + self.Indent(e)
 
         return txt
-
-    def _render_add_rule (self, host, prefix=''):
-        # Add new rule
-        txt      = ''
-        entry    = self.InstanceEntry (prefix+'add_new_entry', 'text', size=30)
-        type     = EntryOptions (prefix+'add_new_type',    ENTRY_TYPES, selected='directory')
-        handler  = EntryOptions (prefix+'add_new_handler', HANDLERS,    selected='common')
-        
-        table  = Table(4,1)
-        table += ('Type', 'Entry', 'Handler')
-        table += (type, entry, handler)
-
-        txt += "<h3>Add new rule</h3>"
-        txt += str(table)
+    
+    def _render_add_rule (self, prefix):
+        txt = "<h2>Add new rule</h2>"
+        table = TableProps()
+        e = self.AddPropOptions_Reload (table, "Rule Type", prefix, RULES, "")
+        txt += self.Indent (str(table) + e)
         return txt
+
+    def _get_handler_name (self, mod_name):
+        for h in HANDLERS:
+            if h[0] == mod_name:
+                return h[1]
 
     def _render_rules_generic (self, cfg_key, url_prefix, priorities):
         txt = ''
+
+        if not len(priorities):
+            return txt
+
         txt += self.Dialog(RULE_LIST_NOTE)
 
-        if len(priorities):
-            table_name = "rules%d" % (self._rule_table)
-            self._rule_table += 1
+        table_name = "rules%d" % (self._rule_table)
+        self._rule_table += 1
 
-            txt += '<h3>Rule list</h3>'
-            txt += '<table id="%s" class="rulestable">' % (table_name)
-            txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th><th>Final</th></tr>'
+        txt += '<table id="%s" class="rulestable">' % (table_name)
+        txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th><th>Auth</th><th>Final</th></tr>'
             
-            # Rule list
-            for prio in priorities:
-                conf = priorities[prio]
+        # Rule list
+        for prio in priorities:
+            conf = priorities[prio]
 
-                type_ = conf.get_val('match!type')
-                name  = priorities.guess_name (prio)
+            _type = conf.get_val('match')
+            pre   = '%s!%s' % (cfg_key, prio)
+            
+            # Try to load the rule plugin            
+            rule_module = module_obj_factory (_type, self._cfg, pre, self.submit_url)
+            name        = rule_module.get_name()
+            name_type   = rule_module.get_type_name()
+            
+            if _type != 'default':
+                link     = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
+                js       = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
+                final    = self.InstanceCheckbox ('%s!match!final'%(pre), True)
+                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                extra    = ''
+            else:
+                link     = '<a href="%s/prio/%s">Default</a>' % (url_prefix, prio)
+                extra    = ' NoDrag="1" NoDrop="1"'
+                final    = ''
+                link_del = ''
 
-                pre = '%s!%s' % (cfg_key, prio)
-                if type_ != 'default':
-                    link     = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
-                    final    = self.InstanceCheckbox ('%s!match!final'%(pre), True)
-                    js       = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
-                    link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
-                    extra    = ''
-                else:
-                    link     = '<a href="%s/prio/%s">Default</a>' % (url_prefix, prio)
-                    extra    = ' NoDrag="1" NoDrop="1"'
-                    final    = ''
-                    link_del = ''
+            if conf.get_val('handler'):
+                handler_name = self._get_handler_name (conf['handler'].value)
+            else:
+                handler_name = NO_VALIDATOR
 
-                e1 = EntryOptions ('%s!handler' % (pre), HANDLERS, selected=conf['handler'].value)
+            if conf.get_val('auth'):
+                auth_name = self._get_handler_name (conf['auth'].value)
+            else:
+                auth_name = NO_VALIDATOR
 
-                txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
-                    prio, pre, prio, extra, link, type_.capitalize(), e1, final, link_del)
+            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
+                prio, pre, prio, extra, link, name_type, handler_name, auth_name, final, link_del)
 
-            txt += '</table>\n'
-            txt += '''<script type="text/javascript">
+        txt += '</table>\n'
+        txt += '''<script type="text/javascript">
                       $(document).ready(function() {
                         $("#%(name)s tr:even').addClass('alt')");
 
@@ -298,9 +315,9 @@ class PageVServer (PageMenu, FormHelper):
                         });
                       });
                       </script>
-                   ''' % {'name':   table_name, 
-                          'url' :   self.submit_ajax_url,
-                          'prefix': cfg_key}
+               ''' % {'name':   table_name, 
+                      'url' :   self.submit_ajax_url,
+                      'prefix': cfg_key}
         return txt
 
     def _render_personal_webs (self, host):

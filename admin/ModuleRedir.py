@@ -1,17 +1,11 @@
 from Form import *
 from Table import *
 from Module import *
-
 from consts import *
 
-
-NOTE_ON_PCRE = """
-<p>Regular expressions must be written using the <a href="http://www.pcre.org/">
-PCRE</a> syntax. Here you can find information on the 
-<a target="_blank" href="http://perldoc.perl.org/perlre.html"> regular expression 
-format</a>.</p>
-"""
-
+NOTE_SHOW         = "Defined whether the redirection will be seen by the client."
+NOTE_REGEX        = "Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc.perl.org/perlre.html\">Reference</a>."
+NOTE_SUBSTITUTION = "Target address. It can use Regular Expression substitution sub-strings."
 
 class ModuleRedir (Module, FormHelper):
     PROPERTIES = [
@@ -35,7 +29,7 @@ class ModuleRedir (Module, FormHelper):
             for rule in cfg:
                 cfg_key_rule = "%s!%s" % (cfg_key, rule)
 
-                show      = self._get_show_option ('%s!show'%(cfg_key_rule))
+                show, _,_ = self.InstanceOptions ('%s!show'%(cfg_key_rule), REDIR_SHOW)
                 regex     = self._cfg.get_val('%s!regex'    %(cfg_key_rule))
                 substring = self._cfg.get_val('%s!substring'%(cfg_key_rule))
                 js = "post_del_key('/ajax/update', '%s');" % (cfg_key_rule)
@@ -46,16 +40,12 @@ class ModuleRedir (Module, FormHelper):
             txt += self.Indent(table)
 
         # Add new rule
-        en_reg  = self.InstanceEntry('rewrite_new_regex',     'text', size=28)
-        en_sub  = self.InstanceEntry('rewrite_new_substring', 'text', size=28)
-        en_show = self._get_show_option ('rewrite_new_show')
+        table = TableProps()
+        self.AddPropOptions (table, 'Show', "rewrite_new_show", REDIR_SHOW, NOTE_SHOW)
+        self.AddPropEntry   (table, 'Regular Expression', 'rewrite_new_regex', NOTE_REGEX)
+        self.AddPropEntry   (table, 'Substitution', 'rewrite_new_substring', NOTE_SUBSTITUTION)
 
-        table = Table(3,1)
-        table += ('Type', 'Regular Expression', 'Substitution')
-        table += (en_show, en_reg, en_sub)
-
-        txt += "<h3>Add new rule</h3>"
-        txt += self.Dialog(NOTE_ON_PCRE)
+        txt += "<h2>Add new rule</h2>"
         txt += self.Indent(table)
         return txt
 
@@ -67,12 +57,6 @@ class ModuleRedir (Module, FormHelper):
             if not tmp: 
                 return str(i)
             i += 1
-
-    def _get_show_option (self, cfg_key):
-        show_val = self._cfg.get_val(cfg_key)
-        if show_val:
-            return EntryOptions (cfg_key, REDIR_SHOW, selected=show_val)
-        return EntryOptions (cfg_key, REDIR_SHOW)
 
     def _op_apply_changes (self, uri, post):
         regex  = post.pop('rewrite_new_regex')

@@ -6,7 +6,7 @@ vserver!missing.host1!document_root = /faked
 vserver!missing.host1!user_dir = public_html
 vserver!missing.host1!domain!1 = missing.host1
 
-vserver!missing.host1!user_dir!rule!1!match!type = default
+vserver!missing.host1!user_dir!rule!1!match = default
 vserver!missing.host1!user_dir!rule!1!handler = common
 """
 

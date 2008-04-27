@@ -14,7 +14,7 @@ DOCUMENTATION = """
 """
 
 CONF = """
-vserver!default!rule!1060!match!type = directory
+vserver!default!rule!1060!match = directory
 vserver!default!rule!1060!match!directory = /if_range2
 vserver!default!rule!1060!handler = file
 """

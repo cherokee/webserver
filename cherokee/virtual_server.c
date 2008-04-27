@@ -533,12 +533,13 @@ configure_rule_match (cherokee_config_node_t     *config,
 {
 	ret_t                   ret;
 	rule_func_new_t         func_new;
-	cherokee_buffer_t      *type      = NULL;
 	cherokee_plugin_info_t *info      = NULL;
+	cherokee_buffer_t      *type      = &config->val;
 	cherokee_server_t      *srv       = VSERVER_SRV(vserver);
-	
-	ret = cherokee_config_node_read (config, "type", &type);
-	if (ret != ret_ok) {
+
+	/* Sanity check
+	 */
+	if (type == NULL) {
 		PRINT_ERROR ("Rule match prio=%d must include a type property\n", priority);
 		return ret;
 	}
@@ -693,7 +694,7 @@ configure_rules (cherokee_config_node_t    *config,
 		 cherokee_rule_list_t      *rule_list)
 {
 	ret_t                   ret;
-	cherokee_list_t        *i, *j;
+	cherokee_list_t        *i; //, *j;
 	cherokee_config_node_t *subconf;
 //	cherokee_boolean_t      did_default = false;
 

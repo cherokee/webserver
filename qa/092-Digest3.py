@@ -8,7 +8,7 @@ PASSWD1 = "itissecret"
 PASSWD2 = "Itissecret"
 
 CONF = """
-vserver!default!rule!920!match!type = directory
+vserver!default!rule!920!match = directory
 vserver!default!rule!920!match!directory = /digest3
 vserver!default!rule!920!match!final = 0
 vserver!default!rule!920!auth = plain

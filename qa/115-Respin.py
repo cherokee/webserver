@@ -3,16 +3,16 @@ from base import *
 MAGIC = "Cherokee_is_pure_magic"
 
 CONF = """
-vserver!default!rule!1150!match!type = directory
+vserver!default!rule!1150!match = directory
 vserver!default!rule!1150!match!directory = /respin1
 vserver!default!rule!1150!handler = common
 
-vserver!default!rule!1151!match!type = directory
+vserver!default!rule!1151!match = directory
 vserver!default!rule!1151!match!directory = /respin1-cgi
 vserver!default!rule!1151!handler = phpcgi
 vserver!default!rule!1151!handler!interpreter = %s
 
-vserver!default!rule!1152!match!type = request
+vserver!default!rule!1152!match = request
 vserver!default!rule!1152!match!request = /respin1/.+/
 vserver!default!rule!1152!handler = redir
 vserver!default!rule!1152!handler!rewrite!1!show = 0

@@ -14,9 +14,14 @@ class ModuleFile (Module, FormHelper):
         FormHelper.__init__ (self, 'file', cfg)
 
     def _op_render (self):
+        txt = ''
+
         table = TableProps()
         self.AddPropCheck (table, "Use I/O cache", "%s!iocache" % (self._prefix), True, NOTE_IO_CACHE)
-        return str(table)
+
+        txt += '<h2>File Sending</h2>'
+        txt += self.Indent(table)
+        return txt
 
     def _op_apply_changes (self, uri, post):
         self.ApplyChangesPrefix (self._prefix, ['iocache'], post)

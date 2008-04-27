@@ -10,7 +10,7 @@ PASSWD       = "alo"
 PASSWD_CRYPT = "kA7oFNEzu4SrI"
 
 CONF = """
-vserver!default!rule!980!match!type = directory
+vserver!default!rule!980!match = directory
 vserver!default!rule!980!match!directory = /htpasswd_crypt
 vserver!default!rule!980!match!final = 0
 vserver!default!rule!980!auth = htpasswd

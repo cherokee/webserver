@@ -4,7 +4,7 @@ MAGIC1 = "First part"
 MAGIC2 = "Second part"
 
 CONF = """
-vserver!default!rule!810!match!type = directory
+vserver!default!rule!810!match = directory
 vserver!default!rule!810!match!directory = /dr_common_index
 vserver!default!rule!810!handler = common
 vserver!default!rule!810!document_root = %s

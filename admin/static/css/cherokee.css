@@ -97,7 +97,7 @@ h2 {
     font-weight: normal;
     font-size: 120%;
     letter-spacing: -1px;
-    margin: 0.4em 0;
+    margin-top: 20px;
 }
 
 h3 {
@@ -302,10 +302,10 @@ a.button:active span {
 }
 
 .tableprop_block hr {
-  background: #88A;
+  background: #DCF;
   border: none;
-  margin-top:10px;
-  margin-bottom:10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   height: 1px;
   width: 100%;
   text-align: left;

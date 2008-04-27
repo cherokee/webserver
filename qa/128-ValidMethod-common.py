@@ -4,7 +4,7 @@ DIR   = "common_valid_methods1"
 MAGIC = "Report bugs to http://bugs.cherokee-project.com"
 
 CONF = """
-vserver!default!rule!1280!match!type = directory
+vserver!default!rule!1280!match = directory
 vserver!default!rule!1280!match!directory = /%s
 vserver!default!rule!1280!handler = common
 """

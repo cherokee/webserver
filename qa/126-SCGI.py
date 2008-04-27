@@ -17,7 +17,7 @@ SCGIServerFork(TestHandler, port=%d).serve_forever()
 """ % (MAGIC, PORT)
 
 CONF = """
-vserver!default!rule!1260!match!type = directory
+vserver!default!rule!1260!match = directory
 vserver!default!rule!1260!match!directory = <dir>
 vserver!default!rule!1260!handler = scgi
 vserver!default!rule!1260!handler!balancer = round_robin

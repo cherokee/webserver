@@ -10,7 +10,7 @@ OFFSET2 = 40
 DIR     = "range_both_100b_noio"
 
 CONF = """
-vserver!default!rule!1470!match!type = directory
+vserver!default!rule!1470!match = directory
 vserver!default!rule!1470!match!directory = <dir>
 vserver!default!rule!1470!handler = file
 vserver!default!rule!1470!handler!iocache = 0

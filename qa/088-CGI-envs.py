@@ -7,7 +7,7 @@ ENV1_VALUE = "Value1"
 ENV2_VALUE = "This is the second one"
 
 CONF = """
-vserver!default!rule!880!match!type = directory
+vserver!default!rule!880!match = directory
 vserver!default!rule!880!match!directory = /cgienvs
 vserver!default!rule!880!handler = cgi
 vserver!default!rule!880!handler!env!%s = %s

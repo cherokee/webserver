@@ -4,7 +4,7 @@ MAGIC = "I_bet_Cherokee_is_better"
 URL   = "http://www.example.com"
 
 CONF = """
-vserver!default!rule!1180!match!type = request
+vserver!default!rule!1180!match = request
 vserver!default!rule!1180!match!request = ^/req_redir_compact1/(.*)/
 vserver!default!rule!1180!handler = redir
 vserver!default!rule!1180!handler!rewrite!1!show = 1

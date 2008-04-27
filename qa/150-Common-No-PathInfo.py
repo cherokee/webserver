@@ -6,7 +6,7 @@ from util import *
 DIR = "common_pathinfo_2"
 
 CONF = """
-vserver!default!rule!1500!match!type = directory
+vserver!default!rule!1500!match = directory
 vserver!default!rule!1500!match!directory = <dir>
 vserver!default!rule!1500!handler = common
 vserver!default!rule!1500!handler!allow_pathinfo = 0

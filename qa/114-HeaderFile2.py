@@ -7,7 +7,7 @@ HEADER_CONTENT = """
 """
 
 CONF = """
-vserver!default!rule!1140!match!type = directory
+vserver!default!rule!1140!match = directory
 vserver!default!rule!1140!match!directory = /header_file2
 vserver!default!rule!1140!handler = dirlist
 vserver!default!rule!1140!handler!notice_files = noexits1.txt,header.txt,noexits2.txt

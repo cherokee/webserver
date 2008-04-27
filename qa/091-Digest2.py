@@ -7,7 +7,7 @@ USER   = "username"
 PASSWD = "itissecret"
 
 CONF = """
-vserver!default!rule!910!match!type = directory
+vserver!default!rule!910!match = directory
 vserver!default!rule!910!match!directory = /digest2
 vserver!default!rule!910!match!final = 0
 vserver!default!rule!910!auth = plain

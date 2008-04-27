@@ -99,32 +99,36 @@ class PageEntry (PageMenu, FormHelper):
         else:
             txt = '%s - ' % (self._host)
 
-        for n in range(len(ENTRY_TYPES)):
-            if ENTRY_TYPES[n][0] == self._entry.get_val('match!type'):
-                name  = self._priorities.guess_name (self._prio)
-                txt += "%s: %s" % (ENTRY_TYPES[n][1], name)
-                return txt
+        # Load the rule plugin
+        _type = self._entry.get_val('match')
+        rule_module = module_obj_factory (_type, self._cfg, self._conf_prefix, self.submit_url)
+
+        txt += "%s: %s" % (rule_module.get_type_name(), rule_module.get_name())
+        return txt
 
     def _render_guts (self):
-        pre = self._conf_prefix
-        txt = '<h1>%s</h1>' % (self._get_title (html=True))
+        pre  = self._conf_prefix
+        tabs = []
+        
+        # Rule Properties
+        tabs += [('Rule', self._render_rule())]        
 
+        # Handler
         table = TableProps()
         e = self.AddPropOptions_Reload (table, 'Handler', '%s!handler'%(pre), 
                                         HANDLERS, NOTE_HANDLER)
         self.AddPropEntry (table, 'Document Root', '%s!document_root'%(pre), NOTE_DOCUMENT_ROOT)
 
-        txt += '<h2>General</h2>'
-        txt += self.Indent(table)
-        
         if e:
-            txt += '<h2>Handler properties</h2>'
-            txt += self.Indent(e)
+            tabs += [('Handler', str(table) + e)]
+        else:
+            tabs += [('Handler', str(table))]
 
-        txt += '<h2>Security</h2>'
-        tmp  = self._render_security ()
-        txt += self.Indent(tmp)
+        # Security
+        tabs += [('Security', self._render_security())]
 
+        txt  = '<h1>%s</h1>' % (self._get_title (html=True))
+        txt += self.InstanceTab (tabs)
         form = Form (self.submit_url)
         return form.Render(txt)
 
@@ -137,6 +141,14 @@ class PageEntry (PageMenu, FormHelper):
         except IOError:
             return "Couldn't load the properties module"
         return props._op_render()
+
+    def _render_rule (self):
+        pre = "%s!match"%(self._conf_prefix)
+
+        # Change the rule type
+        table = TableProps()
+        e = self.AddPropOptions_Reload (table, "Rule Type", pre, RULES, "")
+        return str(table) + e
 
     def _render_security (self):
         pre = self._conf_prefix

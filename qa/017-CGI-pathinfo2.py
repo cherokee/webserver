@@ -3,7 +3,7 @@ from base import *
 MAGIC = "Cherokee rocks"
 
 CONF = """
-vserver!default!rule!170!match!type = directory
+vserver!default!rule!170!match = directory
 vserver!default!rule!170!match!directory = /cgi-bin3
 vserver!default!rule!170!handler = cgi
 """

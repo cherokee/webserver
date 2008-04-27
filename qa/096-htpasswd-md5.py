@@ -10,7 +10,7 @@ PASSWD     = "alo"
 PASSWD_MD5 = "$1$JJ3RnzaO$zpsGlLvKvMVrUW4ZNZ7Iw1"
 
 CONF = """
-vserver!default!rule!960!match!type = directory
+vserver!default!rule!960!match = directory
 vserver!default!rule!960!match!directory = /htpasswd_md5
 vserver!default!rule!960!match!final = 0
 vserver!default!rule!960!auth = htpasswd

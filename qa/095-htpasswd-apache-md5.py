@@ -10,7 +10,7 @@ PASSWD        = "alo"
 PASSWD_APACHE = "$apr1$VVusx/..$B6P.9/IK81S3M1QNVdfdX0"
 
 CONF = """
-vserver!default!rule!950!match!type = directory
+vserver!default!rule!950!match = directory
 vserver!default!rule!950!match!directory = /apachemd5_1
 vserver!default!rule!950!match!final = 0
 vserver!default!rule!950!auth = htpasswd

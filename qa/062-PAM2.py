@@ -6,7 +6,7 @@ USER="cherokeeqa"
 PASS="invalid"
 
 CONF = """
-vserver!default!rule!620!match!type = directory
+vserver!default!rule!620!match = directory
 vserver!default!rule!620!match!directory = /privpam2
 vserver!default!rule!620!match!final = 0
 vserver!default!rule!620!auth = pam

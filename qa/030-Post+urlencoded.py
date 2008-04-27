@@ -2,7 +2,7 @@ import os
 from base import *
 
 CONF = """
-vserver!default!rule!300!match!type = directory
+vserver!default!rule!300!match = directory
 vserver!default!rule!300!match!directory = /post2
 vserver!default!rule!300!handler = cgi
 """

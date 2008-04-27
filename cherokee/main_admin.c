@@ -67,7 +67,7 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_va  (&buf, "vserver!default!document_root = %s\n", document_root);
 
 	cherokee_buffer_add_va  (&buf, 
-				 RULE "1!match!type = default\n"
+				 RULE "1!match = default\n"
 				 RULE "1!handler = scgi\n"
 				 RULE "1!handler!balancer = round_robin\n"
 				 RULE "1!handler!balancer!type = interpreter\n"
@@ -75,23 +75,23 @@ config_server (cherokee_server_t *srv)
 				 RULE "1!handler!balancer!local1!interpreter = %s/server.py %s\n", document_root, config_file);
 
 	cherokee_buffer_add_str (&buf, 
-				 RULE "2!match!type = directory\n"
+				 RULE "2!match = directory\n"
 				 RULE "2!match!directory = /about\n"
 				 RULE "2!handler = server_info\n");
 
 	cherokee_buffer_add_str (&buf, 
-				 RULE "3!match!type = directory\n"
+				 RULE "3!match = directory\n"
 				 RULE "3!match!directory = /static\n"
 				 RULE "3!handler = file\n"
 				 RULE "3!handler!iocache = 0\n");
 
 	cherokee_buffer_add_str (&buf, 
-				 RULE "4!match!type = request\n"
+				 RULE "4!match = request\n"
 				 RULE "4!match!request = ^/favicon.ico$\n"
 				 RULE "4!handler = file\n");
 
 	cherokee_buffer_add_va  (&buf, 
-				 RULE "5!match!type = directory\n"
+				 RULE "5!match = directory\n"
 				 RULE "5!match!directory = /icons_local\n"
 				 RULE "5!handler = file\n"
 				 RULE "5!handler!iocache = 0\n"

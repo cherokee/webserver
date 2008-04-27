@@ -60,6 +60,10 @@ ModuleHtpasswd.py \
 ModuleMysql.py \
 ModulePam.py \
 ModuleRoundRobin.py \
+ModuleDefault.py \
+ModuleRequest.py \
+ModuleDirectory.py \
+ModuleExtensions.py \
 config.py \
 pyscgi.py \
 validations.py \

@@ -13,6 +13,10 @@ DATA_VALIDATION = [
 
 DEFAULT_THEME = "default"
 
+NOTE_THEME        = "Choose the listing theme."
+NOTE_ICON_DIR     = "Web directory where the icon files are located. Default: <i>/icons</i>."
+NOTE_NOTICE_FILES = "List of notice files to be inserted."
+
 class ModuleDirlist (Module, FormHelper):
     PROPERTIES = [
         'size', 'date',
@@ -26,22 +30,22 @@ class ModuleDirlist (Module, FormHelper):
         FormHelper.__init__ (self, 'dirlist', cfg)
 
     def _op_render (self):
-        txt = '<h3>Listing</h3>'
-        table = Table(2)
-        self.AddTableCheckbox (table, "Show Size",  "%s!size" %(self._prefix), True)
-        self.AddTableCheckbox (table, "Show Date",  "%s!date" %(self._prefix), True)
-        self.AddTableCheckbox (table, "Show User",  "%s!user" %(self._prefix), False)
-        self.AddTableCheckbox (table, "Show Group", "%s!group"%(self._prefix), False)
-        self.AddTableCheckbox (table, "Allow symbolic links", "%s!symlinks"%(self._prefix), True)
-        txt += str(table)
+        txt = '<h2>Listing</h2>'
+        table = TableProps()
+        self.AddPropCheck (table, "Show Size",  "%s!size" %(self._prefix), True,  '')
+        self.AddPropCheck (table, "Show Date",  "%s!date" %(self._prefix), True,  '')
+        self.AddPropCheck (table, "Show User",  "%s!user" %(self._prefix), False, '')
+        self.AddPropCheck (table, "Show Group", "%s!group"%(self._prefix), False, '')
+        self.AddPropCheck (table, "Allow symbolic links", "%s!symlinks"%(self._prefix), True, '')
+        txt += self.Indent(table)
 
-        txt += '<h3>Theming</h3>'
-        table  = Table(2)
+        txt += '<h2>Theming</h2>'
+        table  = TableProps()
         themes = self._get_theme_list()
-        self.AddTableOptions (table, 'Theme',        "%s!theme" % (self._prefix), themes)
-        self.AddTableEntry   (table, 'Icons dir',    "%s!icon_dir" % (self._prefix))
-        self.AddTableEntry   (table, 'Notice files', "%s!notice_files" % (self._prefix))
-        txt += str(table)
+        self.AddPropOptions (table, 'Theme',        "%s!theme" % (self._prefix), themes, NOTE_THEME)
+        self.AddPropEntry   (table, 'Icons dir',    "%s!icon_dir" % (self._prefix), NOTE_ICON_DIR)
+        self.AddPropEntry   (table, 'Notice files', "%s!notice_files" % (self._prefix), NOTE_NOTICE_FILES)
+        txt += self.Indent(table)
 
         return txt
 

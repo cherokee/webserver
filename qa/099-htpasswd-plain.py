@@ -9,7 +9,7 @@ USER         = "username"
 PASSWD       = "alo"
 
 CONF = """
-vserver!default!rule!990!match!type = directory
+vserver!default!rule!990!match = directory
 vserver!default!rule!990!match!directory = /htpasswd_plain
 vserver!default!rule!990!match!final = 0
 vserver!default!rule!990!auth = htpasswd

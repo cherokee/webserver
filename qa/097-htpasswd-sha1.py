@@ -10,7 +10,7 @@ PASSWD      = "alo"
 PASSWD_SHA1 = "{SHA}yQ4y0eYX/0yw69R4ne1+0QmBpec="
 
 CONF = """
-vserver!default!rule!970!match!type = directory
+vserver!default!rule!970!match = directory
 vserver!default!rule!970!match!directory = /htpasswd_sha1
 vserver!default!rule!970!match!final = 0
 vserver!default!rule!970!auth = htpasswd

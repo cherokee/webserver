@@ -9,10 +9,10 @@ CONF = """
 vserver!<domain>!document_root = %s
 vserver!<domain>!domain!1 = <domain>
 
-vserver!<domain>!rule!1!match!type = default
+vserver!<domain>!rule!1!match = default
 vserver!<domain>!rule!1!handler = server_info
 
-vserver!<domain>!rule!10!match!type = directory
+vserver!<domain>!rule!10!match = directory
 vserver!<domain>!rule!10!match!directory = <dir>
 vserver!<domain>!rule!10!handler = redir
 vserver!<domain>!rule!10!handler!rewrite!1!show = 1

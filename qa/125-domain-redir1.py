@@ -7,7 +7,7 @@ CONF = """
 vserver!<domain>!document_root = /faked
 vserver!<domain>!domain!1 = <domain>
 
-vserver!<domain>!rule!10!match!type = default
+vserver!<domain>!rule!10!match = default
 vserver!<domain>!rule!10!handler = redir
 vserver!<domain>!rule!10!handler!rewrite!1!show = 1
 vserver!<domain>!rule!10!handler!rewrite!1!regex = ^/(.*)$
@@ -16,7 +16,7 @@ vserver!<domain>!rule!10!handler!rewrite!1!substring = http://www.<domain>/$1
 vserver!www.<domain>!document_root = %s
 vserver!www.<domain>!domain!1 = www.<domain>
 
-vserver!www.<domain>!rule!10!match!type = default
+vserver!www.<domain>!rule!10!match = default
 vserver!www.<domain>!rule!10!handler = file
 """
 

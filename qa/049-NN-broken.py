@@ -1,7 +1,7 @@
 from base import *
 
 CONF = """
-vserver!default!rule!490!match!type = directory
+vserver!default!rule!490!match = directory
 vserver!default!rule!490!match!directory = /missing
 vserver!default!rule!490!handler = nn
 """

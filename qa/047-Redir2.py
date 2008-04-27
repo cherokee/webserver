@@ -1,7 +1,7 @@
 from base import *
 
 CONF = """
-vserver!default!rule!470!match!type = directory
+vserver!default!rule!470!match = directory
 vserver!default!rule!470!match!directory = /redir47
 vserver!default!rule!470!handler = redir
 vserver!default!rule!470!handler!url = http://www.cherokee-project.com

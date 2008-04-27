@@ -13,7 +13,7 @@ CONF = """
 # 
 #    cgi.fix_pathinfo=0
 #
-vserver!default!rule!670!match!type = directory
+vserver!default!rule!670!match = directory
 vserver!default!rule!670!match!directory = /pathinfo
 vserver!default!rule!670!handler = common
 """

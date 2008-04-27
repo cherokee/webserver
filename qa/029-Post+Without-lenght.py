@@ -1,7 +1,7 @@
 from base import *
 
 CONF = """
-vserver!default!rule!290!match!type = directory
+vserver!default!rule!290!match = directory
 vserver!default!rule!290!match!directory = /post1
 vserver!default!rule!290!handler = phpcgi
 vserver!default!rule!290!handler!interpreter = %s

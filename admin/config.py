@@ -106,6 +106,9 @@ class ConfigNode (object):
             content += '%s = %s\n' % (path, val)
 
         for name in self._child:
+            if name == 'tmp':
+                continue
+
             node = self._child[name]
             if len(path) != 0:
                 new_path = "%s!%s" % (path, name)

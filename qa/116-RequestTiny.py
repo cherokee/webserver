@@ -7,10 +7,10 @@ CONF = """
 vserver!<domain>!document_root = %s
 vserver!<domain>!domain!1 = <domain>
 
-vserver!<domain>!rule!10!match!type = default
+vserver!<domain>!rule!10!match = default
 vserver!<domain>!rule!10!handler = file
 
-vserver!<domain>!rule!11!match!type = request
+vserver!<domain>!rule!11!match = request
 vserver!<domain>!rule!11!match!request = ^/$
 vserver!<domain>!rule!11!handler = redir
 vserver!<domain>!rule!11!handler!rewrite!1!show = 0

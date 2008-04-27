@@ -8,16 +8,16 @@ CONF = """
 vserver!<domain>!document_root = %s
 vserver!<domain>!domain!1 = <domain>
 
-vserver!<domain>!rule!1!match!type = default
+vserver!<domain>!rule!1!match = default
 vserver!<domain>!rule!1!handler = server_info
 
-vserver!<domain>!rule!1350!match!type = request
+vserver!<domain>!rule!1350!match = request
 vserver!<domain>!rule!1350!match!request = ^/([^\?]*)$
 vserver!<domain>!rule!1350!handler = redir
 vserver!<domain>!rule!1350!handler!rewrite!1!show = 1
 vserver!<domain>!rule!1350!handler!rewrite!1!substring = /index.php?q=$1
 
-vserver!<domain>!rule!1351!match!type = request
+vserver!<domain>!rule!1351!match = request
 vserver!<domain>!rule!1351!match!request = ^/([^\?]*)\?(.*)$
 vserver!<domain>!rule!1351!handler = redir
 vserver!<domain>!rule!1351!handler!rewrite!2!show = 1

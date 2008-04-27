@@ -4,7 +4,7 @@ DIR       = "header_test1_referer_match"
 REFERER   = "example.com"
 
 CONF = """
-vserver!default!rule!1580!match!type = header
+vserver!default!rule!1580!match = header
 vserver!default!rule!1580!match!header = Referer
 vserver!default!rule!1580!match!match = .+\.com
 vserver!default!rule!1580!handler = cgi

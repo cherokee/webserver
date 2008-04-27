@@ -132,12 +132,12 @@ server!module_deps = %s
 
 vserver!default!document_root = %s
 vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php
-vserver!default!rule!1!match!type = default
+vserver!default!rule!1!match = default
 vserver!default!rule!1!handler = common
 """ % (PORT, panic, pid, CHEROKEE_MODS, CHEROKEE_DEPS, www)
 
 PHP_FCGI = """\
-10000!match!type = extensions
+10000!match = extensions
 10000!match!extensions = php
 10000!match!final = 0
 10000!handler = fcgi
@@ -148,7 +148,7 @@ PHP_FCGI = """\
 10000!handler!balancer!local1!interpreter = %s -b %d""" % (PHP_FCGI_PORT, look_for_php(), PHP_FCGI_PORT)
 
 PHP_CGI = """\
-10000!match!type = extensions
+10000!match = extensions
 10000!match!extensions = php
 10000!match!final = 0
 10000!handler = phpcgi

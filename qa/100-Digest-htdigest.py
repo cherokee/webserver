@@ -8,7 +8,7 @@ PASSWD = "itissecret"
 DIR    = "digest_htdigest1"
 
 CONF = """
-vserver!default!rule!1000!match!type = directory
+vserver!default!rule!1000!match = directory
 vserver!default!rule!1000!match!directory = %s
 vserver!default!rule!1000!match!final = 0
 vserver!default!rule!1000!auth = htdigest

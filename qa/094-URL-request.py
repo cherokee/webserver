@@ -6,9 +6,9 @@ CONF = """
 vserver!request1host!document_root = %s
 vserver!request1host!domain!1 = request1host
 
-vserver!request1host!rule!1!match!type = default
+vserver!request1host!rule!1!match = default
 vserver!request1host!rule!1!handler = server_info
-vserver!request1host!rule!10!match!type = directory
+vserver!request1host!rule!10!match = directory
 vserver!request1host!rule!10!match!directory = /urlrequest1
 vserver!request1host!rule!10!handler = file
 """

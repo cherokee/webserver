@@ -34,7 +34,7 @@ The silence surges.
 </html>"""
 
 CONF = """
-vserver!default!rule!1120!match!type = directory
+vserver!default!rule!1120!match = directory
 vserver!default!rule!1120!match!directory = /cgi_error_403_1
 vserver!default!rule!1120!handler = cgi
 vserver!default!rule!1120!handler!error_handler = 1

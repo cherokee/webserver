@@ -3,7 +3,7 @@ from base import *
 MAGIC = "The_index_page_should_contain_this"
 
 CONF = """
-vserver!default!rule!340!match!type = directory
+vserver!default!rule!340!match = directory
 vserver!default!rule!340!match!directory = /index2
 vserver!default!rule!340!handler = common
 """

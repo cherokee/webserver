@@ -7,7 +7,7 @@ USER   = "username"
 PASSWD = ""
 
 CONF = """
-vserver!default!rule!1300!match!type = directory
+vserver!default!rule!1300!match = directory
 vserver!default!rule!1300!match!directory = /digest_empty
 vserver!default!rule!1300!match!final = 0
 vserver!default!rule!1300!auth = plain

@@ -19,7 +19,7 @@ SCGIServer(TestHandler, port=%d).serve_forever()
 """ % (PORT)
 
 CONF = """
-vserver!default!rule!1510!match!type = directory
+vserver!default!rule!1510!match = directory
 vserver!default!rule!1510!match!directory = <dir>
 vserver!default!rule!1510!handler = scgi
 vserver!default!rule!1510!handler!check_file = 0

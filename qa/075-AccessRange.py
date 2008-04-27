@@ -4,7 +4,7 @@ from os import system
 MAGIC = "Allow From range"
 
 CONF = """
-vserver!default!rule!750!match!type = directory
+vserver!default!rule!750!match = directory
 vserver!default!rule!750!match!directory = /allow_range1
 vserver!default!rule!750!match!final = 0
 vserver!default!rule!750!allow_from = ::1/128,127.0.0.1/32

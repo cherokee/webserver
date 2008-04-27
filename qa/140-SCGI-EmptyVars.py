@@ -19,7 +19,7 @@ SCGIServer(TestHandler, port=%d).serve_forever()
 """ % (PORT)
 
 CONF = """
-vserver!default!rule!1400!match!type = directory
+vserver!default!rule!1400!match = directory
 vserver!default!rule!1400!match!directory = <dir>
 vserver!default!rule!1400!handler = scgi
 vserver!default!rule!1400!handler!balancer = round_robin

@@ -48,14 +48,14 @@
 #define DEFAULT_CONFIG_FILE CHEROKEE_CONFDIR "/cherokee.conf"
 
 #define BASIC_CONFIG                                                      \
-	"vserver!default!rule!1!match!type = default\n"                   \
+	"vserver!default!rule!1!match = default\n"                        \
 	"vserver!default!rule!1!handler = common\n"                       \
 	"vserver!default!rule!1!handler!iocache = 0\n"                    \
-	"vserver!default!rule!2!match!type = directory\n"                 \
+	"vserver!default!rule!2!match = directory\n"                      \
 	"vserver!default!rule!2!match!directory = /icons\n"               \
 	"vserver!default!rule!2!handler = file\n"                         \
 	"vserver!default!rule!2!document_root = " CHEROKEE_ICONSDIR "\n"  \
-	"vserver!default!rule!3!match!type = directory\n"                 \
+	"vserver!default!rule!3!match = directory\n"                      \
 	"vserver!default!rule!3!match!directory = /cherokee_themes\n"     \
 	"vserver!default!rule!3!handler = file\n"                         \
 	"vserver!default!rule!3!document_root = " CHEROKEE_THEMEDIR "\n"  \

@@ -1,3 +1,31 @@
+2008-04-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/ModuleDirlist.py (ModuleDirlist._op_render),
+	admin/ModuleRedir.py (ModuleRedir._op_render): Updated to use the
+	new TableProps class instead of the plain old Table.
+
+	* cherokee/virtual_server.c (configure_rule_match), qa/*.py,
+	cherokee.conf.sample.pre, cherokee/main_admin.c, cherokee/admin.c:
+	Configuration format has changed again. The new entries weren't
+	following the style of the rest of the configuration. The change
+	is really small; however it impacts almost all of the QA cases.
+	Now, rules are defined like: "rule!<num>!match = <TYPE>" instead
+	of "rule!<num>!match!type = <TYPE>".
+
+	* admin/ModuleHeader.py, admin/Makefile.am: Added support of
+	header rules. This is a new module.
+
+	* admin/static/css/cherokee.css: This couple of minor changes make
+	the interface look much better. It basically improves the
+	PropertyTable look.
+
+	* qa/PageEntry.py, qa/config.py, qa/ModuleDefault.py,
+	qa/ModuleRequest.py, qa/ModuleExtensions.py, qa/consts.py,
+	qa/PageVServer.py, qa/static/js/common.js, qa/RuleList.py,
+	qa/Form.py, qa/ModuleDirectory.py, qa/Makefile.am: Rule types are
+	no longer hardcoded. They are independed modules, as in the the
+	server.
+
 2008-04-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main_admin.c (main): There was a unneeded Win32

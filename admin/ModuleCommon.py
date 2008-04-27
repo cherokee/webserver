@@ -4,6 +4,8 @@ from Table import *
 from ModuleFile import *
 from ModuleDirlist import *
 
+NOTE_PATHINFO = "Allow extra tailing paths"
+
 class ModuleCommon (Module, FormHelper):
     PROPERTIES = ModuleFile.PROPERTIES + ModuleDirlist.PROPERTIES + [
         'allow_pathinfo'
@@ -20,9 +22,11 @@ class ModuleCommon (Module, FormHelper):
         txt = ''
 
         # Local properties
-        table = Table(2)
-        self.AddTableCheckbox (table, 'Allow PathInfo', '%s!allow_pathinfo'%(self._prefix), False)
-        txt += str(table)
+        table = TableProps()
+        self.AddPropCheck (table, 'Allow PathInfo', '%s!allow_pathinfo'%(self._prefix), False, NOTE_PATHINFO)
+
+        txt = '<h2>Parsing</h2>'
+        txt += self.Indent(table)
         
         # Copy errors to the modules, 
         # they may need to print them

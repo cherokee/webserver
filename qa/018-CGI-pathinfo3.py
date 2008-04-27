@@ -1,7 +1,7 @@
 from base import *
 
 CONF = """
-vserver!default!rule!180!match!type = directory
+vserver!default!rule!180!match = directory
 vserver!default!rule!180!match!directory = /cgi-bin4
 vserver!default!rule!180!handler = cgi
 """
