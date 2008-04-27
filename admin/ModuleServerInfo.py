@@ -16,10 +16,14 @@ class ModuleServerInfo (Module, FormHelper):
         FormHelper.__init__ (self, 'server_info', cfg)
 
     def _op_render (self):
+        txt  = "<h2>Privacy settings</h2>"
+
         table = TableProps()
         self.AddPropCheck (table, "Just 'About'", "%s!just_about" % (self._prefix), False, NOTE_JUST_ABOUT)
         self.AddPropCheck (table, "Show Connections", "%s!connection_details" % (self._prefix), False, NOTE_CONNECTIONS)
-        return str(table)
+        txt += self.Indent(table)
+
+        return txt
 
     def _op_apply_changes (self, uri, post):
         self.ApplyChangesPrefix (self._prefix, ['just_about'], post)

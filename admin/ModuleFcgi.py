@@ -5,14 +5,7 @@ from validations import *
 from consts import *
 
 from ModuleCgi import *
-
-FCGI_PARAMS_COMMENT = """
-The FastCGI handler can distribute the workload between multiple
-servers. Thus, a balancer must be configured in order to point the
-handler to the application servers.
-"""
-
-NOTE_BALANCERS = 'How to deliver connection on the FastCGI server. Choose Round Robin if there is only one.'
+from ModuleBalancer import NOTE_BALANCER
 
 class ModuleFcgi (ModuleCgiBase):
     PROPERTIES = ModuleCgiBase.PROPERTIES + [
@@ -23,17 +16,15 @@ class ModuleFcgi (ModuleCgiBase):
         ModuleCgiBase.__init__ (self, cfg, prefix, 'fcgi', submit)
 
     def _op_render (self):
-        txt = '<h3>General</h3>'
-        txt += ModuleCgiBase._op_render (self)
+        txt = ModuleCgiBase._op_render (self)
 
-        txt += '<h3>FastCGI specific</h3>'
-        txt += self.Dialog (FCGI_PARAMS_COMMENT)
+        txt += '<h2>FastCGI specific</h2>'
 
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
         assert (self.submit_url)
-        e = self.AddPropOptions_Reload (table, "Balancer", prefix, BALANCERS, NOTE_BALANCERS)
-        txt += str(table) + self.Indent(e)
+        e = self.AddPropOptions_Reload (table, "Balancer", prefix, BALANCERS, NOTE_BALANCER)
+        txt += self.Indent (str(table) + e)
         return txt
 
     def _op_apply_changes (self, uri, post):

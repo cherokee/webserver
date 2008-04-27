@@ -5,6 +5,7 @@ from validations import *
 from consts import *
 
 from ModuleCgi import *
+from ModuleBalancer import NOTE_BALANCER
 
 class ModuleScgi (ModuleCgiBase):
     PROPERTIES = ModuleCgiBase.PROPERTIES + [
@@ -15,15 +16,14 @@ class ModuleScgi (ModuleCgiBase):
         ModuleCgiBase.__init__ (self, cfg, prefix, 'scgi', submit)
 
     def _op_render (self):
-        txt = '<h3>General</h3>'
-        txt += ModuleCgiBase._op_render (self)
+        txt = ModuleCgiBase._op_render (self)
 
-        txt += '<h3>SCGI specific</h3>'
+        txt += '<h2>SCGI specific</h2>'
 
-        table = Table(2)
+        table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddTableOptions_Reload (table, "Balancer", prefix, BALANCERS)
-        txt += str(table) + self.Indent(e)
+        e = self.AddPropOptions_Reload (table, "Balancer", prefix, BALANCERS, NOTE_BALANCER)
+        txt += self.Indent(str(table) + e)
         return txt
 
     def _op_apply_changes (self, uri, post):
