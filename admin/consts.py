@@ -1,4 +1,5 @@
 HANDLERS = [
+    ('',            'None'),
     ('common',      'List & Send'),
     ('file',        'Static content'),
     ('dirlist',     'Only listing'),

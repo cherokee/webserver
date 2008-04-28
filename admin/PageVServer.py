@@ -242,6 +242,11 @@ class PageVServer (PageMenu, FormHelper):
             if h[0] == mod_name:
                 return h[1]
 
+    def _get_auth_name (self, mod_name):
+        for h in VALIDATORS:
+            if h[0] == mod_name:
+                return h[1]
+
     def _render_rules_generic (self, cfg_key, url_prefix, priorities):
         txt = ''
 
@@ -286,7 +291,7 @@ class PageVServer (PageMenu, FormHelper):
                 handler_name = NO_VALIDATOR
 
             if conf.get_val('auth'):
-                auth_name = self._get_handler_name (conf['auth'].value)
+                auth_name = self._get_auth_name (conf['auth'].value)
             else:
                 auth_name = NO_VALIDATOR
 

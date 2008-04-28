@@ -1,5 +1,9 @@
 2008-04-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServer.py (PageVServer._get_auth_name): Fixes small
+	issue with rule entries that has only a validator (without a
+	handler).
+
 	* admin/PageGeneral.py: Entry notes are shorter now. The previous
 	note were to verbose.
 
