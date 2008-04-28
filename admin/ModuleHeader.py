@@ -17,7 +17,7 @@ HEADERS = [
 ]
 
 class ModuleHeader (Module, FormHelper):
-    validation = [('tmp!new_rule!value', validations.is_dir_formated)]
+    validation = [('tmp!new_rule!match', validations.is_regex)]
 
     def __init__ (self, cfg, prefix, submit_url):
         Module.__init__ (self, 'header', cfg, prefix, submit_url)
