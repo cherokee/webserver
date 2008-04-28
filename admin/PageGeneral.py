@@ -24,14 +24,14 @@ DATA_VALIDATION = [
 
 NOTE_PORT      = 'Defines the port that the server will listens to'
 NOTE_PORT_TLS  = 'Defines the port that the server will listens to for secure connections'
-NOTE_IPV6      = 'This option enables the IPv6 support. If it is unselected the server will not use IPv6 even if the operating system supports it.'
-NOTE_LISTEN    = 'IP Address to which the server will bind itself while waiting for incoming requests. '
-NOTE_TIMEOUT   = 'This option specifies the connection timeout'
-NOTE_KEEPALIVE = 'It enables the global keep alive support for the client requests. It increases the client performance by reusing a connection for more than one request. It is usually a good idea leave it on.'
+NOTE_IPV6      = 'Set to enable the IPv6 support. The OS must support IPv6 for this to work.'
+NOTE_LISTEN    = 'IP address of the interface to bind. It usually is empty.'
+NOTE_TIMEOUT   = 'Time interval until the server closes inactive connections.'
+NOTE_KEEPALIVE = 'Enables the server-wide keep-alive support. It increases the performance, it is usually set on.'
 NOTE_TOKENS    = 'This option allow to choose how the server identify itself.'
-NOTE_USER      = 'Changes the effective user if the server is launched with enough privileges. User names and IDs are accepted.'
-NOTE_GROUP     = 'Changes the effective group if the server is launched with enough privileges. Group names and IDs are accepted.'
-NOTE_CHROOT    = 'Jail the server inside the directory. It is important to know that, even if chroot is a security mechanism, it should not be used as the only security measure.'
+NOTE_USER      = 'Changes the effective user. User names and IDs are accepted.'
+NOTE_GROUP     = 'Changes the effective group. Group names and IDs are accepted.'
+NOTE_CHROOT    = 'Jail the server inside the directory. Don\'t use it as the only security measure.'
 
 
 class PageGeneral (PageMenu, FormHelper):
