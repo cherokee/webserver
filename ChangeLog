@@ -1,3 +1,8 @@
+2008-04-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* contrib/06to07.py: Rewritten. now it supports the lastest 0.7
+	configuration format.
+
 2008-04-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/rule_header.c, qa/158-RuleHeader1.py,
