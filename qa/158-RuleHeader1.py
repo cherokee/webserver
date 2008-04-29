@@ -18,7 +18,7 @@ echo "just a test"
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
-        self.name = "Dirlist: symlinks"
+        self.name = "Rule header: match I"
 
         self.request           = "GET /%s/test HTTP/1.0\r\n" % (DIR) + \
                                  "Referer: %s\r\n" % (REFERER)

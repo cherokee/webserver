@@ -63,19 +63,13 @@ match (cherokee_rule_header_t *rule,
 			info, info_len,
 			0, 0, NULL, 0);
 
-	if (! cherokee_buffer_is_empty (&rule->match) && (re < 0)) {
+	if (re < 0) {
 		TRACE (ENTRIES, "Request '%s' didn't match header(%d) with '%s'\n", 
 		       conn->request.buf, rule->header, rule->match.buf);
 		return ret_not_found;
 	}
 
-	if (! cherokee_buffer_is_empty (&rule->mismatch) && (re >= 0)) {
-		TRACE (ENTRIES, "Request '%s' didn't mismatch header(%d) with '%s'\n", 
-		       conn->request.buf, rule->header, rule->mismatch.buf);
-		return ret_not_found;
-	}
-
-	TRACE (ENTRIES, "Request '%s' (mis)matched header(%d) with '%s'\n", 
+	TRACE (ENTRIES, "Request '%s' matched header(%d) with '%s'\n", 
 	       conn->request.buf, rule->header, rule->match.buf);
 	return ret_ok;
 }
@@ -111,7 +105,6 @@ configure (cherokee_rule_header_t    *rule,
 {
 	ret_t                   ret;
 	cherokee_buffer_t      *header   = NULL;
-	cherokee_buffer_t      *tmp      = NULL;
 	cherokee_regex_table_t *regexs   = VSERVER_SRV(vsrv)->regexs;
 
 	/* Read the header
@@ -130,26 +123,19 @@ configure (cherokee_rule_header_t    *rule,
 	/* Read the match
 	 */
 	ret = cherokee_config_node_copy (conf, "match", &rule->match);
-	if (ret == ret_ok)
-		tmp = &rule->match;
-
-	ret = cherokee_config_node_copy (conf, "mismatch", &rule->mismatch);
-	if ((ret == ret_ok) && !tmp)
-		tmp = &rule->mismatch;
-	
-	if (tmp == NULL) {
-		PRINT_ERROR ("Rule header prio=%d needs a 'match' or 'mismatch' entry\n", 
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Rule header prio=%d needs a 'match' entry\n", 
 			     RULE(rule)->priority);
 		return ret_error;
 	}
 
 	/* Compile the regular expression
 	 */
-	ret = cherokee_regex_table_add (regexs, tmp->buf);
+	ret = cherokee_regex_table_add (regexs, rule->match.buf);
 	if (ret != ret_ok) 
 		return ret;
 	
-	ret = cherokee_regex_table_get (regexs, tmp->buf, &rule->pcre);
+	ret = cherokee_regex_table_get (regexs, rule->match.buf, &rule->pcre);
 	if (ret != ret_ok) 
 		return ret;
 
@@ -175,7 +161,6 @@ cherokee_rule_header_new (cherokee_rule_header_t **rule)
 	 */
 	n->pcre = NULL;
 	cherokee_buffer_init (&n->match);
-	cherokee_buffer_init (&n->mismatch);
 
 	*rule = n;
  	return ret_ok;

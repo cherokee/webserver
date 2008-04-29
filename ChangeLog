@@ -1,5 +1,9 @@
 2008-04-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/rule_header.c, qa/158-RuleHeader1.py,
+	qa/159-RuleHeader2.py: It should only support matches. The
+	'mismatch' behavior and configuration entries have been removed.
+
 	* admin/PageVServer.py (PageVServer._get_auth_name): Fixes small
 	issue with rule entries that has only a validator (without a
 	handler).

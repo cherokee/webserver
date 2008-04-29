@@ -41,7 +41,6 @@ typedef struct {
 	cherokee_rule_t           rule;
 	cherokee_common_header_t  header;
 	cherokee_buffer_t         match;
-	cherokee_buffer_t         mismatch;
 	void                     *pcre;
 } cherokee_rule_header_t;
 
