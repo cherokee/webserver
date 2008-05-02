@@ -12,6 +12,8 @@ vserver!default!rule!1580!handler = cgi
 
 CGI = """#!/bin/sh
 
+echo "Content-Type: text/plain"
+echo 
 echo "just a test"
 """
 

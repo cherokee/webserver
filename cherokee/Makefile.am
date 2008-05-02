@@ -155,6 +155,57 @@ endif
 
 
 #
+# Rule not
+#
+rule_not = \
+rule_not.c \
+rule_not.h
+
+libplugin_not_la_LDFLAGS = $(module_ldflags)  
+libplugin_not_la_SOURCES = $(rule_not)
+
+if STATIC_RULE_NOT
+static_rule_not_src = $(rule_not)
+else
+dynamic_rule_not_lib = libplugin_not.la
+endif
+
+
+#
+# Rule and
+#
+rule_and = \
+rule_and.c \
+rule_and.h
+
+libplugin_and_la_LDFLAGS = $(module_ldflags)  
+libplugin_and_la_SOURCES = $(rule_and)
+
+if STATIC_RULE_AND
+static_rule_and_src = $(rule_and)
+else
+dynamic_rule_and_lib = libplugin_and.la
+endif
+
+
+#
+# Rule or
+#
+rule_or = \
+rule_or.c \
+rule_or.h
+
+libplugin_or_la_LDFLAGS = $(module_ldflags)  
+libplugin_or_la_SOURCES = $(rule_or)
+
+if STATIC_RULE_OR
+static_rule_or_src = $(rule_or)
+else
+dynamic_rule_or_lib = libplugin_or.la
+endif
+
+
+#
 # Handler server_info
 #
 handler_server_info = \
@@ -878,10 +929,13 @@ endif
 
 
 libcherokee_server_la_SOURCES = \
+$(static_rule_directory_src) \
 $(static_rule_extensions_src) \
 $(static_rule_request_src) \
 $(static_rule_header_src) \
-$(static_rule_directory_src) \
+$(static_rule_not_src) \
+$(static_rule_and_src) \
+$(static_rule_or_src) \
 \
 $(static_handler_file_src) \
 $(static_handler_admin_src) \
@@ -1021,6 +1075,9 @@ $(dynamic_rule_directory_lib) \
 $(dynamic_rule_extensions_lib) \
 $(dynamic_rule_request_lib) \
 $(dynamic_rule_header_lib) \
+$(dynamic_rule_not_lib) \
+$(dynamic_rule_and_lib) \
+$(dynamic_rule_or_lib) \
 $(dynamic_handler_cgi_lib) \
 $(dynamic_handler_phpcgi_lib) \
 $(dynamic_handler_server_info_lib) \

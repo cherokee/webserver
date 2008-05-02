@@ -163,7 +163,13 @@ run-tests.py \
 156-Mime2.py \
 157-Dirlist-symlinks.py \
 158-RuleHeader1.py \
-159-RuleHeader2.py 
+159-RuleHeader2.py \
+160-RuleNot1.py \
+161-RuleNot2.py \
+162-RuleAnd1.py \
+163-RuleAnd2.py \
+164-RuleOr1.py \
+165-RuleOr2.py 
 
 test:
 	./run-tests.py

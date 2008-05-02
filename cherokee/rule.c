@@ -26,6 +26,7 @@
 #include "rule.h"
 #include "connection.h"
 #include "virtual_server.h"
+#include "util.h"
 
 #define ENTRIES "rule"
 

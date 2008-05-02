@@ -524,12 +524,11 @@ add_error_handler (cherokee_config_node_t *config, cherokee_virtual_server_t *vs
 }
 
 
-static ret_t
-configure_rule_match (cherokee_config_node_t     *config, 
-		      cherokee_virtual_server_t  *vserver, 
-		      cherokee_rule_list_t       *rule_list,
-		      cuint_t                     priority,
-		      cherokee_rule_t           **rule)
+ret_t
+cherokee_virtual_server_new_rule (cherokee_virtual_server_t  *vserver, 
+				  cherokee_config_node_t     *config, 
+				  cuint_t                     priority,
+				  cherokee_rule_t           **rule)
 {
 	ret_t                   ret;
 	rule_func_new_t         func_new;
@@ -608,7 +607,7 @@ add_rule (cherokee_config_node_t    *config,
 		return ret_error;
 	}
 
-	ret = configure_rule_match (subconf, vserver, rule_list, prio, &rule);
+	ret = cherokee_virtual_server_new_rule (vserver, subconf, prio, &rule);
 	if (ret != ret_ok) 
 		goto failed;
 

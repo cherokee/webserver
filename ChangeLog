@@ -1,3 +1,35 @@
+2008-05-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	(Another example of how long a MacBook Pro battery lasts: Flight
+	from Madrid to San Francisco).
+
+	* qa/164-RuleOr1.py, qa/165-RuleOr2.py, qa/Makefile.am: Added a
+	couple of new QA tests in order to ensure that the new "or" rule
+	works fine.
+
+	* cherokee/rule_or.h, cherokee/rule_or.c, cherokee/Makefile.am,
+	configure.in: Added a new "or" rule. It access two sub-matches
+	rules and return 'true' when the first one matches.
+
+	* qa/162-RuleAnd1.py, qa/163-RuleAnd2.py, qa/Makefile.am: Added a
+	couple of new QA tests in order to ensure that the new "and" rule
+	works as expected.
+
+	* cherokee/rule_and.h, cherokee/rule_and.c, cherokee/Makefile.am,
+	configure.in: Added a new "and" rule. It access two sub-matches
+	rules and return 'true' only when both matches the request.
+
+	* qa/160-RuleNot1.py, qa/161-RuleNot2.py, qa/Makefile.am: Added a
+	couple of new QA tests in order to ensure that the new "not" rule
+	works properly.
+
+	* cherokee/rule_not.h, cherokee/rule_not.c, cherokee/Makefile.am,
+	configure.in: Added a new "not" rule. It inverts the return value
+	of any rule.
+
+	* qa/158-RuleHeader1.py, qa/159-RuleHeader2.py: CGI code fixed; it
+	wasn't including a needed header.
+
 2008-04-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/06to07.py: Rewritten. now it supports the lastest 0.7

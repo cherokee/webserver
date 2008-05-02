@@ -256,6 +256,8 @@ class TestBase:
         return fulldir
 
     def WriteFile (self, www, filename, mode=0444, content=''):
+        assert(type(mode) == int)
+
         fullpath = os.path.join (www, filename)
         f = open (fullpath, 'w')
         f.write (content)
