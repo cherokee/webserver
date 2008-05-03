@@ -1606,7 +1606,7 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 	/* Verify formal parameters
 	 * (those which are not tested would raise a segment violation).
 	 */
-	if (buf->buf == NULL ||
+	if (buf == NULL || buf->buf == NULL ||
 	    substring == NULL || substring_length < 1 ||
 		replacement == NULL || replacement_length < 0)
 		return ret_deny;

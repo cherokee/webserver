@@ -1265,7 +1265,8 @@ cherokee_print_errno (int error, char *format, ...)
 	cherokee_buffer_t buffer = CHEROKEE_BUF_INIT;
 
 	errstr = cherokee_strerror_r (error, err_tmp, sizeof(err_tmp));
-
+	if (errstr == NULL)
+		errstr = "unknwon error (?)";
 	cherokee_buffer_ensure_size (&buffer, 128);
 	va_start (ap, format);
 	cherokee_buffer_add_va_list (&buffer, format, ap);
