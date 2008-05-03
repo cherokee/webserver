@@ -145,7 +145,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
         # Type
         if not self._type:
             self._type = self._get_type (post)
-        self._cfg['%s!type'] = self._type
+        self._cfg['%s!type'%(self._prefix)] = self._type
 
         # Addind new host/interpreter
         new_host        = post.pop('new_host')

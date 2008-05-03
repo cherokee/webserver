@@ -1,3 +1,8 @@
+2008-05-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/ModuleBalancer.py (ModuleBalancerGeneric._op_apply_changes):
+	Bugfix. It was not buiding the balancer type entry properly.
+
 2008-05-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	(Another example of how long a MacBook Pro battery lasts: Flight
