@@ -99,6 +99,7 @@ _add_change(cherokee_fdpoll_kqueue_t *fdp, int fd, int rw, int change )
 
 	index = fdp->nchanges;
 	if (index >= FDPOLL(fdp)->nfiles) {
+		PRINT_ERROR_S("kqueue_add: fdpoll is full !\n");
 		return ret_error;
 	}
 

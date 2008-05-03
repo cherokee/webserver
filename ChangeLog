@@ -1,7 +1,13 @@
+2008-05-03  A.D.F  <adefacc@tin.it>
+
+	* cherokee/fdpoll*.c,
+	  - added error message to fdpoll _add() functions;
+	  - fixed a few mispellings.
+
 2008-05-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/ModuleBalancer.py (ModuleBalancerGeneric._op_apply_changes):
-	Bugfix. It was not buiding the balancer type entry properly.
+	Bugfix. It was not building the balancer type entry properly.
 
 2008-05-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -13,16 +19,16 @@
 	works fine.
 
 	* cherokee/rule_or.h, cherokee/rule_or.c, cherokee/Makefile.am,
-	configure.in: Added a new "or" rule. It access two sub-matches
-	rules and return 'true' when the first one matches.
+	configure.in: Added a new "or" rule. It accesses two sub-matches
+	rules and returns 'true' when the first one matches.
 
 	* qa/162-RuleAnd1.py, qa/163-RuleAnd2.py, qa/Makefile.am: Added a
 	couple of new QA tests in order to ensure that the new "and" rule
 	works as expected.
 
 	* cherokee/rule_and.h, cherokee/rule_and.c, cherokee/Makefile.am,
-	configure.in: Added a new "and" rule. It access two sub-matches
-	rules and return 'true' only when both matches the request.
+	configure.in: Added a new "and" rule. It accesses two sub-matches
+	rules and returns 'true' only when both match the request.
 
 	* qa/160-RuleNot1.py, qa/161-RuleNot2.py, qa/Makefile.am: Added a
 	couple of new QA tests in order to ensure that the new "not" rule
@@ -33,7 +39,7 @@
 	of any rule.
 
 	* qa/158-RuleHeader1.py, qa/159-RuleHeader2.py: CGI code fixed; it
-	wasn't including a needed header.
+	wasn't including a required header.
 
 2008-04-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -92,12 +98,12 @@
 	qa/ModuleRequest.py, qa/ModuleExtensions.py, qa/consts.py,
 	qa/PageVServer.py, qa/static/js/common.js, qa/RuleList.py,
 	qa/Form.py, qa/ModuleDirectory.py, qa/Makefile.am: Rule types are
-	no longer hardcoded. They are independed modules, as in the the
-	server.
+	no longer hardcoded. They are independent modules, as they are
+	in the server.
 
 2008-04-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* cherokee/main_admin.c (main): There was a unneeded Win32
+	* cherokee/main_admin.c (main): There was an unneeded Win32
 	initialization.
 
 2008-04-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -256,7 +262,7 @@
 	  cherokee-admin --bind=IP --> Only IP interface
 
 	* cherokee/main.c, cherokee/main_admin.c: Ported to use
-	getopt_long. Now it accpets -- parameters and includes a better
+	getopt_long. Now it accepts -- parameters and includes a better
 	version and help functions. (TODO: Update cherokee.1 and
 	cherokee-admin.1 man pages).
 

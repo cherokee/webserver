@@ -91,7 +91,7 @@ cherokee_logger_flush (cherokee_logger_t *logger)
 	ret_t ret = ret_error;
 
 	/* If the logger is on backup mode, it shouldn't write anything
-	 * to the disk.  Maintaince tasks have been taking place.
+	 * to the disk.  Maintenance tasks have been taking place.
 	 */
 	if (logger->priv->backup_mode) {
 		return ret_ok;

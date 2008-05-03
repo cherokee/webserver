@@ -94,6 +94,7 @@ _add (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 	/* Check the fd limit
 	 */
 	if (cherokee_fdpoll_is_full(FDPOLL(fdp))) {
+		PRINT_ERROR_S("select_add: fdpoll is full !\n");
 		return ret_error;
 	}
 
