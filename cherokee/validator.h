@@ -22,6 +22,10 @@
  * USA
  */
 
+#if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
+# error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
+#endif
+
 #ifndef CHEROKEE_VALIDATOR_H
 #define CHEROKEE_VALIDATOR_H
 

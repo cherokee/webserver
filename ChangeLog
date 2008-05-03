@@ -1,3 +1,9 @@
+2008-05-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/config_entry.h, cherokee/Makefile.am, cherokee/rule.h,
+	cherokee/cherokee.h: The public cherokee.h header has been fixes
+	to include the new rule type.
+
 2008-05-03  A.D.F  <adefacc@tin.it>
 
 	* cherokee/fdpoll*.c,

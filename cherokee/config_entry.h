@@ -22,10 +22,12 @@
  * USA
  */
 
+#if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
+# error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
+#endif
+
 #ifndef CHEROKEE_CONFIG_ENTRY_H
 #define CHEROKEE_CONFIG_ENTRY_H
-
-#include "common-internal.h"
 
 #include "avl.h"
 #include "handler.h"

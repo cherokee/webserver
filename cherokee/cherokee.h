@@ -58,6 +58,8 @@
 #include <cherokee/plugin.h>
 #include <cherokee/plugin_loader.h>
 #include <cherokee/nonce.h>
+#include <cherokee/config_entry.h>
+#include <cherokee/rule.h>
 
 /* Client library
  */

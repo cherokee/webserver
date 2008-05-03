@@ -25,6 +25,7 @@
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
+
 #ifndef CHEROKEE_RULE_H
 #define CHEROKEE_RULE_H
 
@@ -32,8 +33,8 @@
 #include <cherokee/module.h>
 #include <cherokee/buffer.h>
 #include <cherokee/list.h>
-#include <cherokee/config_entry.h>
 #include <cherokee/plugin.h>
+#include <cherokee/config_entry.h>
 
 CHEROKEE_BEGIN_DECLS
 

@@ -1032,23 +1032,26 @@ admin_client.c
 libcherokeeincludedir = $(includedir)/cherokee
 libcherokeeinclude_HEADERS = \
 cherokee.h \
+\
 macros.h \
 common.h \
+init.h \
 util.h \
 version.h \
-avl.h \
-avl_r.h \
 buffer.h\
 fdpoll.h \
 http.h \
-mime.h \
-mime_entry.h \
 list.h \
+mime_entry.h \
+mime.h \
 url.h \
 header.h \
 resolv_cache.h \
 post.h \
+trace.h \
 \
+config_node.h \
+config_entry.h \
 server.h \
 module.h \
 logger.h \
@@ -1058,12 +1061,16 @@ connection.h \
 plugin.h \
 plugin_loader.h \
 nonce.h \
-config_node.h \
+rule.h \
+validator.h \
 \
 downloader.h \
 \
 admin_client.h \
-connection_info.h
+connection_info.h \
+\
+avl.h \
+avl_r.h
 
 
 #
