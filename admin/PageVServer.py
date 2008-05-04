@@ -19,7 +19,7 @@ DATA_VALIDATION = [
 ]
 
 RULE_LIST_NOTE = """
-<p>Rules are matched from <b>top to bottom</b>. Drap & drop them to reorder.</p>
+<p>Rules are evaluated from <b>top to bottom</b>. Drap & drop them to reorder.</p>
 """
 
 NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server.'
@@ -307,7 +307,7 @@ class PageVServer (PageMenu, FormHelper):
                               var rows = table.tBodies[0].rows;
                               var post = 'update_prefix=%(prefix)s&';
                               for (var i=1; i<rows.length; i++) {
-                                var prio = i*100;
+                                var prio = (rows.length - i) * 100;
                                 post += 'update_prio=' + rows[i].id + ',' + prio + '&';
                               }
 	                      jQuery.post ('%(url)s', post, 

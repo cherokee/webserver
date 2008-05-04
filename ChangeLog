@@ -1,5 +1,9 @@
 2008-05-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServer.py (PageVServer._render_rules_generic): Little
+	fix for fixing list reorder. The last change broke the drag &
+	drop.
+
 	* admin/PageVServer.py, admin/RuleList.py: Rule list has been
 	reversed. Not the highest priority stands first. It is basically
 	an usability fix.
