@@ -1,3 +1,9 @@
+2008-05-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/PageVServer.py, admin/RuleList.py: Rule list has been
+	reversed. Not the highest priority stands first. It is basically
+	an usability fix.
+
 2008-05-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/config_entry.h, cherokee/Makefile.am, cherokee/rule.h,

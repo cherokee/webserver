@@ -19,8 +19,7 @@ DATA_VALIDATION = [
 ]
 
 RULE_LIST_NOTE = """
-<p>When a request is handled, the server tries to match a rule <b>from
-bottom to top</b>. The first match is applied.</p>
+<p>Rules are matched from <b>top to bottom</b>. Drap & drop them to reorder.</p>
 """
 
 NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server.'
