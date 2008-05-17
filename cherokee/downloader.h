@@ -59,6 +59,7 @@ ret_t cherokee_downloader_set_proxy       (cherokee_downloader_t *downloader, ch
 ret_t cherokee_downloader_set_auth        (cherokee_downloader_t *downloader, cherokee_buffer_t *user, cherokee_buffer_t *password);
 
 ret_t cherokee_downloader_get_reply_code  (cherokee_downloader_t *downloader, cherokee_http_t *code);
+ret_t cherokee_downloader_get_reply_hdr   (cherokee_downloader_t *downloader, cherokee_buffer_t **header);
 
 ret_t cherokee_downloader_post_set        (cherokee_downloader_t *downloader, cherokee_post_t *post);
 ret_t cherokee_downloader_post_reset      (cherokee_downloader_t *downloader);

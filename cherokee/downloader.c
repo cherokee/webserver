@@ -223,7 +223,7 @@ connect_to (cherokee_downloader_t *downloader, cherokee_buffer_t *host, cuint_t 
 		if (ret != ret_ok) return ret;
 	}
 
-	TRACE(ENTRIES, "Exists socket=%p\n", sock);
+	TRACE(ENTRIES, "Exits ok; socket=%p\n", sock);
 	return ret_ok;
 }
 
@@ -616,6 +616,17 @@ cherokee_downloader_get_status(cherokee_downloader_t *downloader, cherokee_downl
 {
 	if (status != NULL) {
 		*status = downloader->status;
+	}
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_downloader_get_reply_hdr (cherokee_downloader_t *downloader, cherokee_buffer_t **header)
+{
+	if (header != NULL) {
+		*header = &downloader->reply_header;
 	}
 
 	return ret_ok;

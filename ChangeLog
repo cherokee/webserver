@@ -1,3 +1,10 @@
+2008-05-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* downloader.c, downloader.h, handler.h, handler_proxy.c,
+	handler_proxy.h, connection.c: Fixes a number of problems with the
+	alpha proxy handler. After these changes I have been able to point
+	my browser to Cherokee and browse the Internet successfully.
+
 2008-05-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageVServer.py (PageVServer._render_rules_generic): Little

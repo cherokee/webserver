@@ -47,7 +47,7 @@ typedef struct {
 
 typedef struct {
 	cherokee_handler_t       handler;	
-	cherokee_downloader_t    client;
+	cherokee_downloader_t    downloader;
 	cherokee_buffer_t        url;
 } cherokee_handler_proxy_t;
 
