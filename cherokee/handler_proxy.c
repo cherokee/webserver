@@ -254,16 +254,17 @@ ret_t
 cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *phdl,
 				    cherokee_buffer_t        *buffer)
 {
-	ret_t              ret; 
-	char              *begin;
-	char              *end; 
-	cuint_t            nl_len;
-	cherokee_boolean_t rw;
-	cuint_t            skip         = 0;
-	cherokee_buffer_t *reply_header = NULL;
-	cherokee_thread_t *thread       = HANDLER_THREAD(HDL_PROXY_HANDLER(phdl));
-	cherokee_buffer_t *tmp1         = THREAD_TMP_BUF1(thread);
-	cherokee_buffer_t *tmp2         = THREAD_TMP_BUF2(thread);
+	ret_t                  ret; 
+	char                  *begin;
+	char                  *end; 
+	cuint_t                nl_len;
+	cherokee_boolean_t     rw;
+	cuint_t                skip         = 0;
+	cherokee_buffer_t     *reply_header = NULL;
+	cherokee_thread_t     *thread       = HANDLER_THREAD(HDL_PROXY_HANDLER(phdl));
+	cherokee_buffer_t     *tmp1         = THREAD_TMP_BUF1(thread);
+	cherokee_buffer_t     *tmp2         = THREAD_TMP_BUF2(thread);
+	cherokee_connection_t *conn         = HANDLER_CONN(phdl);
 
 	/* Get the header
 	 */
@@ -299,6 +300,10 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *phdl,
 		/* Copy the headers
 		 */
 		cherokee_buffer_add (buffer, begin, reply_header->len - skip);
+		
+		/* And set the original HTTP error value
+		 */
+		cherokee_downloader_get_reply_code (&phdl->downloader, &conn->error_code);
 		return ret_ok;
 	}
 

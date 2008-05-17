@@ -1,5 +1,9 @@
 2008-05-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_proxy.c (cherokee_handler_proxy_add_headers):
+	It had to pass the downloader HTTP error code to the Cherokee
+	client. Now, non-200 responses work properly.
+
 	* downloader.c, downloader.h, handler.h, handler_proxy.c,
 	handler_proxy.h, connection.c: Fixes a number of problems with the
 	alpha proxy handler. After these changes I have been able to point
