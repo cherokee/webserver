@@ -49,8 +49,6 @@
 #define WATCH_SLEEP 1000
 #define ENTRIES     "tweak"
 
-#define GETOPT_OPT "hVc:a:l:t:u:p:"
-
 #define CHECK_ERROR(msg)                                          \
 	 if (ret != ret_ok) {                                     \
 	    const char      *error;                               \
