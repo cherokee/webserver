@@ -79,14 +79,13 @@ typedef struct cherokee_admin_client cherokee_admin_client_t;
 	RUN_CLIENT_LOOP(func(client,arg1,arg2,arg3))
 
 
-ret_t cherokee_admin_client_new      (cherokee_admin_client_t **admin);
-ret_t cherokee_admin_client_free     (cherokee_admin_client_t  *admin);
+ret_t cherokee_admin_client_new             (cherokee_admin_client_t **admin);
+ret_t cherokee_admin_client_free            (cherokee_admin_client_t  *admin);
 
-ret_t cherokee_admin_client_prepare        (cherokee_admin_client_t *admin, cherokee_fdpoll_t *poll, cherokee_buffer_t *url, cherokee_buffer_t *user, cherokee_buffer_t *pass);
-ret_t cherokee_admin_client_connect        (cherokee_admin_client_t *admin);
-ret_t cherokee_admin_client_reuse          (cherokee_admin_client_t *admin);
-ret_t cherokee_admin_client_internal_step  (cherokee_admin_client_t *admin);
-ret_t cherokee_admin_client_get_reply_code (cherokee_admin_client_t *admin, cherokee_http_t *code);
+ret_t cherokee_admin_client_prepare         (cherokee_admin_client_t *admin, cherokee_fdpoll_t *poll, cherokee_buffer_t *url, cherokee_buffer_t *user, cherokee_buffer_t *pass);
+ret_t cherokee_admin_client_connect         (cherokee_admin_client_t *admin);
+ret_t cherokee_admin_client_reuse           (cherokee_admin_client_t *admin);
+ret_t cherokee_admin_client_get_reply_code  (cherokee_admin_client_t *admin, cherokee_http_t *code);
 
 /* Retrieve information methods
  */

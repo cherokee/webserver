@@ -45,7 +45,7 @@ class Handler(pyscgi.SCGIHandler):
 
     def handle_request (self):
         global cfg
-
+        
         page    = None
         headers = ""
         body    = ""
@@ -163,7 +163,6 @@ def main():
         srv.handle_request()
 
     srv.server_close()
-
 
 if __name__ == '__main__':
     main()

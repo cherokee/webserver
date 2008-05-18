@@ -35,13 +35,6 @@
 #define ENTRIES "admin,client"
 
 
-typedef enum {
-	admin_phase_init,
-	admin_phase_stepping,
-	admin_phase_finished
-} admin_phase_t;
-
-
 struct cherokee_admin_client {
 	cherokee_downloader_async_t *downloader;
 
@@ -50,7 +43,6 @@ struct cherokee_admin_client {
 	cherokee_buffer_t            reply;
 
 	cherokee_post_t              post;
-	admin_phase_t                phase;
 	cherokee_fdpoll_t           *poll_ref;
 };
 
@@ -65,10 +57,8 @@ cherokee_admin_client_new (cherokee_admin_client_t **admin)
 
 	/* Init
 	 */
-	n->phase        = admin_phase_init;
-
-	n->poll_ref     = NULL;
-	n->url_ref      = NULL;
+	n->poll_ref = NULL;
+	n->url_ref  = NULL;
 
 	cherokee_post_init (&n->post);
 	cherokee_downloader_async_new (&n->downloader);
@@ -95,16 +85,6 @@ cherokee_admin_client_free (cherokee_admin_client_t *admin)
 }
 
 
-static ret_t
-on_downloader_finish (void *_downloader, void *_param)
-{
-	cherokee_admin_client_t *admin = _param;
-
-	admin->phase = admin_phase_finished;
-	return ret_ok;
-}
-
-
 ret_t 
 cherokee_admin_client_prepare (cherokee_admin_client_t *admin, 
 			       cherokee_fdpoll_t       *poll,
@@ -114,8 +94,6 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin,
 {
 	ret_t                  ret;
 	cherokee_downloader_t *downloader = DOWNLOADER(admin->downloader);
-
-	admin->phase    = admin_phase_init;
 
 	admin->poll_ref = poll;
 	admin->url_ref  = url;
@@ -133,7 +111,7 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin,
 	
 	/* Set up the downloader object properties
 	 */
-	ret = cherokee_downloader_async_set_fdpoll (downloader, admin->poll_ref);
+	ret = cherokee_downloader_async_set_fdpoll (DOWNLOADER_ASYNC(downloader), admin->poll_ref);
 	if (unlikely (ret != ret_ok)) return ret;
 	
 	ret = cherokee_downloader_set_url (downloader, admin->url_ref); 
@@ -146,10 +124,6 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin,
 	 */
 	ret = cherokee_downloader_set_auth (downloader, user, pass);
 	if (unlikely (ret != ret_ok)) return ret;	
-
-#warning "Fix this!"
-/* 	ret = cherokee_downloader_connect_event (downloader, downloader_event_finish, on_downloader_finish, admin); */
-/* 	if (unlikely (ret != ret_ok)) return ret; */
 
 	TRACE(ENTRIES, "Exists obj=%p\n", admin);
 	return ret_ok;
@@ -176,27 +150,17 @@ cherokee_admin_client_reuse (cherokee_admin_client_t *admin)
 	cherokee_buffer_clean (&admin->request);
 	cherokee_buffer_clean (&admin->reply);
 
-	admin->phase = admin_phase_init;
 	return ret_ok;
 }
 
 
-ret_t
-cherokee_admin_client_internal_step (cherokee_admin_client_t *admin)
+static ret_t
+internal_step (cherokee_admin_client_t *admin)
 {
-	ret_t ret;
+	ret_t                  ret;
+	cherokee_downloader_t *downloader = DOWNLOADER(admin->downloader);
 
-	TRACE(ENTRIES, "Enters phase=%d\n", admin->phase);
-
-	/* Has it finished?
-	 */
-	if (admin->phase == admin_phase_finished) 
-		return ret_ok;
-
-	/* Sanity check
-	 */
-	if (admin->phase != admin_phase_stepping) 
-		return ret_error;
+	TRACE(ENTRIES, "Downloader phase=%d\n", downloader->phase);
 
 	/* It's stepping
 	 */
@@ -232,8 +196,6 @@ prepare_and_set_post (cherokee_admin_client_t *admin, char *str, cuint_t str_len
 	cherokee_post_set_len (&admin->post, str_len);
 	cherokee_post_append (&admin->post, str, str_len);
 	cherokee_downloader_post_set (downloader, &admin->post); 
-
-	admin->phase = admin_phase_stepping;
 }
 
 #define SET_POST(admin,str) \
@@ -278,24 +240,29 @@ common_processing (cherokee_admin_client_t *admin,
 		   void (*conf_request_func) (cherokee_admin_client_t *admin, void *argument),
 		   void *argument) 
 {
-	ret_t ret;
+	ret_t                  ret;
+	cherokee_downloader_t *downloader = DOWNLOADER(admin->downloader);
 
-	TRACE(ENTRIES, "phase %d\n", admin->phase);
+	TRACE(ENTRIES, "Downloader phase: %d\n", downloader->phase);
 
-	switch (admin->phase) {
-	case admin_phase_init:
+	/* Initial state: needs to get the Post info
+	 */
+	if ((downloader->phase == downloader_phase_init) &&
+	    (downloader->post == NULL))
+	{
 		conf_request_func (admin, argument);
 		return ret_eagain;
-	case admin_phase_stepping:
-		ret = cherokee_admin_client_internal_step (admin);
-		return ret;
-	case admin_phase_finished:
-		return ret_ok;
-	default:
-		SHOULDNT_HAPPEN;
 	}
 
-	return ret_error;
+	/* Finished 
+	 */
+	if (downloader->phase == downloader_phase_finished)
+		return ret_ok;
+
+	/* It's iterating
+	 */
+	ret = internal_step (admin);
+	return ret;
 }
 
 

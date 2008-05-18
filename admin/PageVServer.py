@@ -8,14 +8,14 @@ from consts import *
 from RuleList import *
 
 DATA_VALIDATION = [
-    ("vserver!.*?!document_root",                  validations.is_local_dir_exists),
-    ("vserver!.*?!ssl_certificate_file",           validations.is_local_file_exists),
-    ("vserver!.*?!ssl_certificate_key_file",       validations.is_local_file_exists),
-    ("vserver!.*?!ssl_ca_list_file",               validations.is_local_file_exists),
-    ("vserver!.*?!logger!access!filename",         validations.parent_is_dir),
-    ("vserver!.*?!logger!error!filename",          validations.parent_is_dir),
-    ("vserver!.*?!logger!access!command",          validations.is_local_file_exists),
-    ("vserver!.*?!logger!error!command",           validations.is_local_file_exists),
+    ("vserver!.*?!document_root",             (validations.is_local_dir_exists, 'cfg')),
+    ("vserver!.*?!ssl_certificate_file",      (validations.is_local_file_exists, 'cfg')),
+    ("vserver!.*?!ssl_certificate_key_file",  (validations.is_local_file_exists, 'cfg')),
+    ("vserver!.*?!ssl_ca_list_file",          (validations.is_local_file_exists, 'cfg')),
+    ("vserver!.*?!logger!access!filename",    (validations.parent_is_dir, 'cfg')),
+    ("vserver!.*?!logger!error!filename",     (validations.parent_is_dir, 'cfg')),
+    ("vserver!.*?!logger!access!command",     (validations.is_local_file_exists, 'cfg')),
+    ("vserver!.*?!logger!error!command",      (validations.is_local_file_exists, 'cfg')),
 ]
 
 RULE_LIST_NOTE = """

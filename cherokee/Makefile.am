@@ -1146,7 +1146,7 @@ cherokee_admin_LDFLAGS = $(cherokee_LDFLAGS)
 #
 # Log rotate utility
 #
-bin_PROGRAMS = cherokee_tweak
+bin_PROGRAMS = cherokee-tweak
 
 cherokee_tweak_SOURCES = main_tweak.c
 cherokee_tweak_LDADD = \

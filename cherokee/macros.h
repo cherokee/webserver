@@ -332,7 +332,7 @@
 
 /* Bit masks
  */
-#define BIT_SET(var,bit)    var |= bit
+#define BIT_SET(var,bit)    var |= (bit)
 #define BIT_UNSET(var,bit)  var &= ~(bit)
 
 /* Format string for off_t and size_t

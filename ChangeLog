@@ -1,5 +1,29 @@
 2008-05-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/validations.py (is_local_file_exists)
+	(is_local_dir_exists), PageEntry.py, ModuleHtdigest.py,
+	PageAdvanced.py, ModulePlain.py, PageVServers.py, PageGeneral.py,
+	PageVServer.py, Form.py, ModuleHtpasswd.py: Added chroot support
+	to the local file/directory testing. This fix is kind of hacky: I
+	needed to import the "cfg" global in order to check whether the
+	server is jailed within a chroot. Anyway, even if it isn't clean,
+	it's a fairly acceptable solution.
+
+	* cherokee/main_tweak.c: Updated to use getopt_long(). The help
+	text has been rewritten as well.
+
+	* cherokee/Makefile.am (bin_PROGRAMS): "Cherokee tweak" binary
+	executable has changed from cherokee_tweak to cherokee-tweak. It
+	looked kind of weird with the underscore. 
+
+	* cherokee/admin_client.c: Cleaned out. The internal phase
+	property was no needed. ->dowloader->status is enough to know in
+	this case.
+
+	* cherokee/downloader.c (cherokee_downloader_step): ->status set
+	and unset code rewritten to use BIT_SET and BIT_UNSET macros. It
+	is more readable now.
+
 	* cherokee/handler_proxy.c (cherokee_handler_proxy_add_headers):
 	It had to pass the downloader HTTP error code to the Cherokee
 	client. Now, non-200 responses work properly.

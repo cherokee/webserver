@@ -10,7 +10,7 @@ DATA_VALIDATION = [
     ("server!pid_file",               validations.parent_is_dir),
     ("server!sendfile_min",           validations.is_positive_int),
     ("server!sendfile_max",           validations.is_positive_int),
-    ('server!panic_action',           validations.is_local_file_exists),
+    ('server!panic_action',          (validations.is_local_file_exists, 'cfg')),
     ('server!listen_queue',           validations.is_positive_int),
     ('server!max_connection_reuse',   validations.is_positive_int),
     ('server!log_flush_elapse',       validations.is_positive_int),

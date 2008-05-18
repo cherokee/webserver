@@ -19,7 +19,7 @@ DATA_VALIDATION = [
     ("server!ipv6",      validations.is_boolean),
     ("server!port.*",    validations.is_tcp_port),
     ("server!listen",    validations.is_ip),
-    ("server!chroot",    validations.is_local_dir_exists),
+    ("server!chroot",   (validations.is_local_dir_exists, 'cfg')),
 ]
 
 NOTE_PORT      = 'Defines the port that the server will listens to'

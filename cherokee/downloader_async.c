@@ -106,14 +106,12 @@ cherokee_downloader_async_step (cherokee_downloader_async_t *adownloader)
 {
 	int                    re;
 	int                    fd;
-	int                    rw     = FDPOLL_MODE_READ;
+	int                    rw;
 	cherokee_downloader_t *down   = DOWNLOADER(adownloader);
 	cherokee_fdpoll_t     *fdpoll = adownloader->fdpoll_ref;
 
 	TRACE(ENTRIES, "Enters obj=%p fdpoll=%p\n", adownloader, fdpoll);
-
-	if (fdpoll == NULL)
-		return ret_error;
+	return_if_fail ((fdpoll != NULL), ret_error);
 
 	/* Watch the fd poll
 	 */		
@@ -126,13 +124,14 @@ cherokee_downloader_async_step (cherokee_downloader_async_t *adownloader)
 	 */
 	if (down->phase <= downloader_phase_send_post) 
 		rw = FDPOLL_MODE_WRITE;
+	else
+		rw = FDPOLL_MODE_READ;
 
 	TRACE(ENTRIES, "rw = %d\n", rw);
 
 	/* Check the downloader fd
 	 */
 	fd = down->socket.socket;
-
 	re = cherokee_fdpoll_check (fdpoll, fd, rw);
 	switch (re) {
 	case -1:

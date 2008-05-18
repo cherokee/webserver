@@ -468,7 +468,7 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 		ret = downloader_send_buffer (downloader, &downloader->request_header);
 		if (unlikely(ret != ret_ok)) return ret;
 
-		downloader->status = downloader_status_headers_sent;
+		BIT_SET (downloader->status, downloader_status_headers_sent);
 		downloader->phase = downloader_phase_send_post;
 
 	case downloader_phase_send_post:
@@ -481,7 +481,7 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 			if (unlikely(ret != ret_ok)) return ret;
 		}
 
-		downloader->status = downloader->status | downloader_status_post_sent;
+		BIT_SET (downloader->status, downloader_status_post_sent);
 		downloader->phase = downloader_phase_read_headers;
 		break;
 
@@ -493,13 +493,14 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 
 		/* We have the header parsed, continue..
 		 */
-		downloader->status = downloader->status | downloader_status_headers_received;
+		BIT_SET (downloader->status, downloader_status_headers_received);
 		downloader->phase = downloader_phase_step;
 
 		/* Does it read the full reply in the first received chunk?
 		 */
 		if (downloader->info.body_recv >= downloader->content_length) {
-			downloader->status = downloader->status | downloader_status_data_available | downloader_status_finished;
+			BIT_SET (downloader->status, downloader_status_data_available);
+			BIT_SET (downloader->status, downloader_status_finished);
 			return ret_eof_have_data;
 		}
 
@@ -511,16 +512,18 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 		case ret_error:
 			break;
 		case ret_ok:
-			downloader->status = downloader->status | downloader_status_data_available;
+			BIT_SET (downloader->status, downloader_status_data_available);
 			break;
 		case ret_eof_have_data:
-			downloader->status = downloader->status | downloader_status_data_available | downloader_status_finished;
+			BIT_SET (downloader->status, downloader_status_data_available);
+			BIT_SET (downloader->status, downloader_status_finished);
 			break;
 		case ret_eof:
-			downloader->status = downloader->status & (~downloader_status_data_available | downloader_status_finished);
+			BIT_UNSET (downloader->status, downloader_status_data_available);
+			BIT_SET   (downloader->status, downloader_status_finished);
 			break;
 		case ret_eagain:
-			downloader->status = downloader->status & ~downloader_status_data_available;
+			BIT_UNSET (downloader->status, downloader_status_data_available);
 			break;
 		default:
 			RET_UNKNOWN(ret);
@@ -530,7 +533,8 @@ cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *
 	case downloader_phase_finished:
 		TRACE(ENTRIES, "Phase %s\n", "finished");
 
-		downloader->status = downloader->status & ~downloader_status_data_available & downloader_status_finished;
+		BIT_SET   (downloader->status, downloader_status_finished);
+		BIT_UNSET (downloader->status, downloader_status_data_available);
 		return ret_ok;
 
 	default:

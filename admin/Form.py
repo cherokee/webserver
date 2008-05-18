@@ -1,4 +1,5 @@
 import re
+import types
 
 from Entry import *
 from Module import *
@@ -312,14 +313,30 @@ class FormHelper (WebComponent):
             self._error_add (cfg_key, '', error_msg)
     
     def ValidateChange_SingleKey (self, key, post, validation):
-        for regex, validation_func in validation:
+        for regex, tmp in validation:
+            pass_cfg = False
+
+            if type(tmp) == types.FunctionType:
+                validation_func = tmp
+
+            elif type(tmp) == types.TupleType:
+                validation_func = tmp[0]
+                for k in tmp[1:]:
+                    if k == 'cfg':
+                        pass_cfg = True
+                    else:
+                        print "UNKNOWN validation option:", k
+
             p = re.compile (regex)
             if p.match (key):
                 value = post.get_val(key)
                 if not value:
                     continue
                 try:
-                    tmp = validation_func (value)
+                    if pass_cfg:
+                        tmp = validation_func (value, self._cfg)
+                    else:
+                        tmp = validation_func (value)
                     post[key] = [tmp]
                 except ValueError, error:
                     self._error_add (key, value, error)

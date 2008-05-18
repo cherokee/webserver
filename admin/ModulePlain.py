@@ -4,7 +4,8 @@ from Table import *
 from ModuleAuth import *
 
 DATA_VALIDATION = [
-    ('vserver!.*?!(directory|extensions|request)!.*?!passwdfile', validations.is_local_file_exists)
+    ('vserver!.*?!(directory|extensions|request)!.*?!passwdfile', 
+     (validations.is_local_file_exists, 'cfg'))
 ]
 
 NOTE_PASSWD = "Full path to the plain text password file."

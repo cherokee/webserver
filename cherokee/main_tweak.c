@@ -32,6 +32,18 @@
 
 #include <cherokee/cherokee.h>
 
+/* Notices 
+ */
+#define APP_NAME        \
+	"Cherokee Web Server: Tweaker"
+
+#define APP_COPY_NOTICE \
+	"Written by Alvaro Lopez Ortega <alvaro@gnu.org>\n\n"                          \
+	"Copyright (C) 2001-2008 Alvaro Lopez Ortega.\n"                               \
+	"This is free software; see the source for copying conditions.  There is NO\n" \
+	"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+
+
 #define EXIT_OK     0
 #define EXIT_ERROR  1
 #define WATCH_SLEEP 1000
@@ -57,30 +69,29 @@
 static void
 print_help (void)
 {
-	printf ("Cherokee Tweak\n"
-		"Usage: cherokee_tweak -c command -u url [options]\n\n"
-		"  -h                   Print this help\n"
-		"  -V                   Print version and exit\n\n"
-		" Secutiry:\n"
-		"  -u STRING            User name\n"
-		"  -p STRING            Password\n\n"
+	printf (APP_NAME "\n"
+		"Usage: cherokee-tweak -c command -u url [options]\n\n"
+		"  -h,  --help                   Print this help\n"
+		"  -V,  --version                Print version and exit\n\n"
 		" Required:\n"
-		"  -c STRING            Command: logrotate, trace, info\n"
-		"  -a URL               URL to the admin interface\n\n"
+		"  -c,  --command=STRING         Command: logrotate, trace, info\n"
+		"  -a,  --url=URL                URL to the admin interface\n\n"
+		" Secutiry:\n"
+		"  -u,  --user=STRING            User name\n"
+		"  -p,  --password=STRING        Password\n\n"
 		" Logrotate:\n"
-		"  -l PATH              Log file to be rotated\n\n"
+		"  -l,  --log=PATH               Log file to be rotated\n\n"
 		" Trace:\n"
-		"  -t STRING            Modules to be traced\n"
-		"\n"
-		"Report bugs to cherokee@cherokee-project.org\n");
+		"  -t,  --trace=STRING           Modules to be traced\n\n"
+		"Report bugs to " PACKAGE_BUGREPORT "\n");
 }
 
 static void
 print_usage (void)
 {
-	printf ("Cherokee Tweak\n"
-		"Usage: cherokee_tweak -c command -u url [options]\n\n"
-		"Try `cherokee_tweak --help' for more options.\n");
+	printf (APP_NAME "\n"
+		"Usage: cherokee-tweak -c command -u url [options]\n\n"
+		"Try `cherokee-tweak --help' for more options.\n");
 }
 
 static ret_t
@@ -356,20 +367,27 @@ main (int argc, char *argv[])
 	cherokee_buffer_t  user     = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t  password = CHEROKEE_BUF_INIT;
 
+	struct option long_options[] = {
+		{"help",         no_argument,       NULL, 'h'},
+		{"version",      no_argument,       NULL, 'V'},
+		{"command",      required_argument, NULL, 'c'},
+		{"url",          required_argument, NULL, 'a'},
+		{"user",         required_argument, NULL, 'u'},
+		{"password",     required_argument, NULL, 'p'},
+		{"log",          required_argument, NULL, 'l'},
+		{"trace",        required_argument, NULL, 't'},
+		{NULL, 0, NULL, 0}
+	};
+
+	/* Initialize the library
+	 */
 	cherokee_init();
 	TRACE(ENTRIES, "Starts %d args\n", argc-1);
-	
+
 	/* Parse the parameters
 	 */
- 	while ((c = getopt(argc, argv, GETOPT_OPT)) != -1) {
+	while ((c = getopt_long(argc, argv, "hVc:a:u:p:l:t:", long_options, NULL)) != -1) {
 		switch(c) {
-		case 'V':
-			printf ("Cherokee Web Server %s\n"
-				"Copyright (C) 2001-2008 Alvaro Lopez Ortega <alvaro@gnu.org>.\n\n"
-				"This is free software; see the source for copying conditions.  There is NO\n"
-				"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
-				PACKAGE_VERSION);
-			exit(0);
 		case 'u':
 			cherokee_buffer_add (&user, optarg, strlen(optarg));
 			break;
@@ -388,6 +406,9 @@ main (int argc, char *argv[])
 		case 'l':
 			cherokee_buffer_add (&log, optarg, strlen(optarg));
 			break;
+		case 'V':
+			printf (APP_NAME " " PACKAGE_VERSION "\n" APP_COPY_NOTICE);
+			exit (EXIT_OK);
 		case 'h':
 		case '?':
 		default:
