@@ -87,6 +87,7 @@ typedef enum {
 	http_switching_protocols      = 101,
 	http_ok                       = 200,
 	http_accepted                 = 202,
+	http_no_content               = 204,
 	http_partial_content          = 206,
 	http_moved_permanently        = 301,
 	http_moved_temporarily        = 302,
@@ -114,6 +115,7 @@ typedef enum {
 #define http_switching_protocols_string      "101 Switching Protocols"
 #define http_ok_string                       "200 OK"
 #define http_accepted_string                 "202 Accepted"
+#define http_no_content_string               "204 No Content"
 #define http_partial_content_string          "206 Partial Content"
 #define http_moved_permanently_string        "301 Moved Permanently"
 #define http_moved_temporarily_string        "302 Moved Temporarily"
