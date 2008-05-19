@@ -464,7 +464,7 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	/* Exit now if the handler already added all the headers
 	 */
 	if (HANDLER_SUPPORTS (conn->handler, hsupport_full_headers)) 
-		return ret_ok;
+		return;
 
 	/* Add the "Connection:" header
 	 */

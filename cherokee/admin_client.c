@@ -206,7 +206,8 @@ prepare_and_set_post (cherokee_admin_client_t *admin, char *str, cuint_t str_len
 	if ((string == NULL) || (strlen(string) == 0)) \
 		return ret_error; \
 	if (strncmp (string, substr, sizeof(substr)-1)) { \
-		PRINT_ERROR ("ERROR: Uknown response len(%d): '%s'\n", strlen(string), string); \
+		PRINT_ERROR ("ERROR: Uknown response len(" FMT_SIZE "): '%s'\n", \
+			     (CST_SIZE) strlen(string), string); \
 		return ret_error; \
 	} \
 	string += sizeof(substr)-1;
