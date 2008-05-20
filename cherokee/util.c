@@ -493,7 +493,7 @@ cherokee_readdir (DIR *dirstream, struct dirent *entry, struct dirent **result)
 
 ret_t 
 cherokee_split_pathinfo (cherokee_buffer_t  *path, 
-			 int                 init_pos,
+			 cuint_t             init_pos,
 			 int                 allow_dirs,
 			 char              **pathinfo,
 			 int                *pathinfo_len)

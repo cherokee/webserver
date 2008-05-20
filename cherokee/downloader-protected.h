@@ -64,7 +64,7 @@ struct cherokee_downloader {
 	cherokee_downloader_phase_t  phase;
 	cherokee_downloader_status_t status;
 
-	int                          content_length;
+	cuint_t                      content_length;
 
 	/* Information
 	 */

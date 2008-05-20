@@ -1236,8 +1236,8 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, 
 static ret_t
 get_range (cherokee_connection_t *conn, char *ptr, int ptr_len) 
 {
+	cuint_t num_len = 0;
 	CHEROKEE_TEMP(tmp, ptr_len+1);
-	int num_len = 0;
 
 	/* Read the start position
 	 */

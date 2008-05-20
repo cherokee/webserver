@@ -1,5 +1,9 @@
 2008-05-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* downloader-protected.h, downloader.c, buffer.c, buffer.h,
+	header.c, util.c, util.h, connection.c: More compiling warnings
+	have been fixed. In this case, most of them were signess issues.
+
 	* cherokee/handler_redir.c, cherokee/handler_error_redir.c,
 	cherokee/handler_server_info.c, cherokee/fdpoll.c,
 	cherokee/handler_admin.c, cherokee/fdpoll.h,

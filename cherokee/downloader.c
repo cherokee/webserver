@@ -84,7 +84,7 @@ cherokee_downloader_init (cherokee_downloader_t *n)
 
 	/* Lengths
 	 */
-	n->content_length    = -1;
+	n->content_length    = 0;
 
 	/* Info
 	 */

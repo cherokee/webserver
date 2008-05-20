@@ -177,7 +177,7 @@ cherokee_buffer_add (cherokee_buffer_t *buf, const char *txt, size_t size)
 
 	/* Get memory
 	 */
-	if (free < (size+1)) {
+	if ((cuint_t) free < (size+1)) {
 		if (unlikely (realloc_inc_bufsize(buf, size - free)) != ret_ok)
 			return ret_nomem;
 	}
@@ -203,10 +203,10 @@ cherokee_buffer_add_buffer (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
 ret_t
 cherokee_buffer_add_long10 (cherokee_buffer_t *buf, clong_t lNum)
 {
-	culong_t ulNum = (culong_t) lNum;
-	cuint_t  flgNeg = 0;
-	int      newlen = 0;
-	size_t   i = (IOS_NUMBUF - 1);
+	culong_t ulNum                 = (culong_t) lNum;
+	cuint_t  flgNeg                = 0;
+	int      newlen                = 0;
+	size_t   i                     = (IOS_NUMBUF - 1);
 	char     szOutBuf[IOS_NUMBUF];
 
 	if (lNum < 0L) {
@@ -231,7 +231,7 @@ cherokee_buffer_add_long10 (cherokee_buffer_t *buf, clong_t lNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely (newlen >= buf->size)) {
+	if (unlikely ((cuint_t)newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -241,7 +241,6 @@ cherokee_buffer_add_long10 (cherokee_buffer_t *buf, clong_t lNum)
 	strcpy (buf->buf + buf->len, &szOutBuf[i]);
 
 	buf->len = newlen;
-
 	return ret_ok;
 }
 
@@ -249,11 +248,11 @@ cherokee_buffer_add_long10 (cherokee_buffer_t *buf, clong_t lNum)
 ret_t
 cherokee_buffer_add_llong10 (cherokee_buffer_t *buf, cllong_t lNum)
 {
-	cullong_t ulNum = (cullong_t) lNum;
-	cuint_t  flgNeg = 0;
-	int      newlen = 0;
-	size_t   i = (IOS_NUMBUF - 1);
-	char     szOutBuf[IOS_NUMBUF];
+	cullong_t ulNum                 = (cullong_t) lNum;
+	cuint_t   flgNeg                = 0;
+	int       newlen                = 0;
+	size_t    i                     = (IOS_NUMBUF - 1);
+	char      szOutBuf[IOS_NUMBUF];
 
 	if (lNum < 0L) {
 		flgNeg = 1;
@@ -277,7 +276,7 @@ cherokee_buffer_add_llong10 (cherokee_buffer_t *buf, cllong_t lNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely (newlen >= buf->size)) {
+	if (unlikely ((cuint_t)newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -295,8 +294,8 @@ cherokee_buffer_add_llong10 (cherokee_buffer_t *buf, cllong_t lNum)
 ret_t
 cherokee_buffer_add_ulong10 (cherokee_buffer_t *buf, culong_t ulNum)
 {
-	int     newlen = 0;
-	size_t  i = (IOS_NUMBUF - 1);
+	int     newlen               = 0;
+	size_t  i                    = (IOS_NUMBUF - 1);
 	char    szOutBuf[IOS_NUMBUF];
 
 	szOutBuf[i] = '\0';
@@ -311,7 +310,7 @@ cherokee_buffer_add_ulong10 (cherokee_buffer_t *buf, culong_t ulNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely (newlen >= buf->size)) {
+	if (unlikely ((cuint_t)newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -329,8 +328,8 @@ cherokee_buffer_add_ulong10 (cherokee_buffer_t *buf, culong_t ulNum)
 ret_t
 cherokee_buffer_add_ullong10 (cherokee_buffer_t *buf, cullong_t ulNum)
 {
-	int     newlen = 0;
-	size_t  i = (IOS_NUMBUF - 1);
+	int     newlen               = 0;
+	size_t  i                    = (IOS_NUMBUF - 1);
 	char    szOutBuf[IOS_NUMBUF];
 
 	szOutBuf[i] = '\0';
@@ -345,7 +344,7 @@ cherokee_buffer_add_ullong10 (cherokee_buffer_t *buf, cullong_t ulNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely (newlen >= buf->size)) {
+	if (unlikely ((cuint_t)newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -366,9 +365,9 @@ cherokee_buffer_add_ullong10 (cherokee_buffer_t *buf, cullong_t ulNum)
 ret_t
 cherokee_buffer_add_ulong16 (cherokee_buffer_t *buf, culong_t ulNum)
 {
-	size_t  i = (IOS_NUMBUF - 1);
-	int     ival = 0;
-	int     newlen = 0;
+	size_t  i                     = (IOS_NUMBUF - 1);
+	int     ival                  = 0;
+	int     newlen                = 0;
 	char    szOutBuf[IOS_NUMBUF];
 
 	szOutBuf[i] = '\0';
@@ -384,7 +383,7 @@ cherokee_buffer_add_ulong16 (cherokee_buffer_t *buf, culong_t ulNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely (newlen >= buf->size)) {
+	if (unlikely ((cuint_t)newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -405,9 +404,9 @@ cherokee_buffer_add_ulong16 (cherokee_buffer_t *buf, culong_t ulNum)
 ret_t
 cherokee_buffer_add_ullong16 (cherokee_buffer_t *buf, cullong_t ulNum)
 {
-	size_t  i = (IOS_NUMBUF - 1);
-	int     ival = 0;
-	int     newlen = 0;
+	size_t  i                     = (IOS_NUMBUF - 1);
+	int     ival                  = 0;
+	int     newlen                = 0;
 	char    szOutBuf[IOS_NUMBUF];
 
 	szOutBuf[i] = '\0';
@@ -423,7 +422,7 @@ cherokee_buffer_add_ullong16 (cherokee_buffer_t *buf, cullong_t ulNum)
 	/* Verify free space in buffer and if needed then enlarge it.
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
-	if (unlikely (newlen >= buf->size)) {
+	if (unlikely ((cuint_t)newlen >= buf->size)) {
 		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
 			return ret_nomem;
 	}
@@ -439,7 +438,7 @@ cherokee_buffer_add_ullong16 (cherokee_buffer_t *buf, cullong_t ulNum)
 
 
 ret_t 
-cherokee_buffer_add_va_fixed (cherokee_buffer_t  *buf, char *format, ...)
+cherokee_buffer_add_va_fixed (cherokee_buffer_t *buf, char *format, ...)
 {
 	int len;
 	int size = buf->size - buf->len;	/* final '\0' is always available */
@@ -600,13 +599,13 @@ cherokee_buffer_add_char_n (cherokee_buffer_t *buf, char c, int num)
 
 
 ret_t
-cherokee_buffer_prepend (cherokee_buffer_t  *buf, char *txt, size_t size)
+cherokee_buffer_prepend (cherokee_buffer_t *buf, char *txt, size_t size)
 {
 	int free = buf->size - buf->len;
 
 	/* Get memory
 	 */
-	if (free < (size+1)) {
+	if ((cuint_t) free < (size+1)) {
 		if (unlikely (realloc_inc_bufsize(buf, size - free)) != ret_ok)
 			return ret_nomem;
 	}
@@ -703,11 +702,11 @@ cherokee_buffer_ensure_size (cherokee_buffer_t *buf, size_t size)
 
 
 ret_t 
-cherokee_buffer_drop_endding (cherokee_buffer_t *buffer, int num_chars)
+cherokee_buffer_drop_endding (cherokee_buffer_t *buffer, cuint_t num_chars)
 {
 	int num;
 
-	if ((buffer->buf == NULL) || (num_chars <= 0)) {
+	if (buffer->buf == NULL) {
 		return ret_ok;
 	}
 
@@ -723,13 +722,13 @@ cherokee_buffer_drop_endding (cherokee_buffer_t *buffer, int num_chars)
 ret_t
 cherokee_buffer_swap_chars (cherokee_buffer_t *buffer, char a, char b)
 {
-	int i = 0;
+	cuint_t i;
 
 	if (buffer->buf == NULL) {
 		return ret_ok;
 	}
 
-	for (i=0; i<buffer->len; i++) {
+	for (i=0; i < buffer->len; i++) {
 		if (buffer->buf[i] == a) {
 			buffer->buf[i] = b;
 		}
@@ -845,7 +844,7 @@ cherokee_buffer_case_cmp (cherokee_buffer_t *buf, char *txt, cuint_t txt_len)
 
 
 size_t
-cherokee_buffer_cnt_spn (cherokee_buffer_t *buf, int offset, char *str) 
+cherokee_buffer_cnt_spn (cherokee_buffer_t *buf, cuint_t offset, char *str) 
 {
 	if (unlikely ((buf->buf == NULL) || (buf->len <= offset)))
 		return 0;
@@ -855,7 +854,7 @@ cherokee_buffer_cnt_spn (cherokee_buffer_t *buf, int offset, char *str)
 
 
 size_t 
-cherokee_buffer_cnt_cspn (cherokee_buffer_t *buf, int offset, char *str) 
+cherokee_buffer_cnt_cspn (cherokee_buffer_t *buf, cuint_t offset, char *str) 
 {
 	if (unlikely ((buf->buf == NULL) || (buf->len <= offset)))
 		return 0;
@@ -865,7 +864,7 @@ cherokee_buffer_cnt_cspn (cherokee_buffer_t *buf, int offset, char *str)
 
 
 crc_t 
-cherokee_buffer_crc32 (cherokee_buffer_t  *buf)
+cherokee_buffer_crc32 (cherokee_buffer_t *buf)
 {
 	return crc32_sz (buf->buf, buf->len);
 }
@@ -995,7 +994,7 @@ cherokee_buffer_print_debug (cherokee_buffer_t *buf, int len)
 	char          *hex_text   = NULL;
 	char          *ascii_text = NULL;
 
-	if ((len == -1) || (buf->len <= len)) {
+	if ((len == -1) || (buf->len <= (cuint_t)len)) {
 		length = buf->len;
 	} else {
 		length = len;
@@ -1167,7 +1166,7 @@ cherokee_buffer_add_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
 
 	/* Verify there are no embedded '\0'.
 	 */
-	if ( ((int) (p1 - src->buf)) != src->len)
+	if ( (cuint_t)(p1 - src->buf) != src->len)
 		return ret_error;
 
 	/* Ensure there is proper buffer size.
@@ -1233,11 +1232,12 @@ cherokee_buffer_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
 ret_t 
 cherokee_buffer_decode_base64 (cherokee_buffer_t *buf)
 {
-	char space[128];
-	int  space_idx = 0;
-	int  i, phase  = 0;
-	int  d, prev_d = 0;
-	int  buf_pos   = 0;
+	cuint_t  i;
+	char     space[128];
+	int      space_idx = 0;
+	int      phase     = 0;
+	int      d, prev_d = 0;
+	int      buf_pos   = 0;
 
 	/* Base-64 decoding: This represents binary data as printable
 	 * ASCII characters. Three 8-bit binary bytes are turned into
@@ -1319,7 +1319,7 @@ cherokee_buffer_encode_base64 (cherokee_buffer_t *buf, cherokee_buffer_t *encode
 	cuchar_t         *in;
 	cuchar_t         *out;
 	ret_t             ret;
-	int               i, j;
+	cuint_t           i, j;
 	cuint_t           inlen   = buf->len;
 
 	static const char base64tab[]=
@@ -1515,7 +1515,7 @@ cherokee_buffer_encode_hex (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 ret_t 
 cherokee_buffer_decode_hex (cherokee_buffer_t *buf)
 {
-	int i;
+	cuint_t i;
 
 	static char hex_to_bin [128] = {
 		-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,    /*            */
@@ -1531,8 +1531,8 @@ cherokee_buffer_decode_hex (cherokee_buffer_t *buf)
 	for (i=0; i<buf->len/2; i++) {
 		/* It uses << 1 rather than * 2
 		 */
-		cuint_t  b1 = buf->buf[(i << 1)] & 127;
-		cuint_t  b2 = buf->buf[(i << 1) + 1] & 127;
+		cint_t b1 = buf->buf[(i << 1)] & 127;
+		cint_t b2 = buf->buf[(i << 1) + 1] & 127;
 
  		b1 = hex_to_bin[b1];
  		b2 = hex_to_bin[b2];
@@ -1768,7 +1768,7 @@ cherokee_buffer_substitute_string (cherokee_buffer_t *bufsrc,
 
 
 ret_t 
-cherokee_buffer_add_comma_marks (cherokee_buffer_t  *buf)
+cherokee_buffer_add_comma_marks (cherokee_buffer_t *buf)
 {
 	cuint_t  off, num, i;
 	char    *p;
