@@ -109,6 +109,14 @@ configure (cherokee_rule_directory_t *rule,
 	return ret_ok;
 }
 
+static ret_t
+_free (void *p)
+{
+	cherokee_rule_directory_t *rule = RULE_DIRECTORY(p);
+
+	cherokee_buffer_mrproper (&rule->directory);
+	return ret_ok;
+}
 
 ret_t
 cherokee_rule_directory_new (cherokee_rule_directory_t **rule)
@@ -123,6 +131,7 @@ cherokee_rule_directory_new (cherokee_rule_directory_t **rule)
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;
 	RULE(n)->configure = (rule_func_configure_t) configure;
+	MODULE(n)->free    = (module_func_free_t) _free;
 
 	/* Properties
 	 */

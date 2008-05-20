@@ -94,6 +94,16 @@ configure (cherokee_rule_extensions_t *rule,
 	return parse_value (tmp, &rule->extensions);
 }
 
+static ret_t
+_free (void *p)
+{
+	cherokee_rule_extensions_t *rule = RULE_EXTENSIONS(p);
+
+	cherokee_avl_free (&rule->extensions, NULL);
+	return ret_ok;
+}
+
+
 ret_t
 cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule)
 {
@@ -107,6 +117,7 @@ cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule)
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;
 	RULE(n)->configure = (rule_func_configure_t) configure;
+	MODULE(n)->free    = (module_func_free_t) _free;
 
 	/* Properties
 	 */

@@ -59,6 +59,13 @@ configure (cherokee_rule_default_t   *rule,
 	return ret_ok;
 }
 
+static ret_t
+_free (void *p)
+{
+	UNUSED(p);
+	return ret_ok;
+}
+
 ret_t
 cherokee_rule_default_new (cherokee_rule_t **rule)
 {
@@ -72,6 +79,7 @@ cherokee_rule_default_new (cherokee_rule_t **rule)
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;
 	RULE(n)->configure = (rule_func_configure_t) configure;
+	MODULE(n)->free    = (module_func_free_t) _free;
 
 	*rule = n;
 	return ret_ok;

@@ -142,6 +142,15 @@ configure (cherokee_rule_header_t    *rule,
 	return ret_ok;
 }
 
+static ret_t
+_free (void *p)
+{
+	cherokee_rule_header_t *rule = RULE_HEADER(p);
+
+	cherokee_buffer_mrproper (&rule->match);
+	return ret_ok;
+}
+
 
 ret_t
 cherokee_rule_header_new (cherokee_rule_header_t **rule)
@@ -156,6 +165,7 @@ cherokee_rule_header_new (cherokee_rule_header_t **rule)
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;
 	RULE(n)->configure = (rule_func_configure_t) configure;
+	MODULE(n)->free    = (module_func_free_t) _free;
 
 	/* Properties
 	 */

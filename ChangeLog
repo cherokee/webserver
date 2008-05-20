@@ -1,5 +1,8 @@
 2008-05-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* rule_header.c, rule_directory.c, rule_default.c, rule_request.c,
+	rule_extensions.c: Implements the ->free() methods.
+
 	* cherokee/virtual_server.c (init_entry_property): Removed duped
 	configuration entry.
 
