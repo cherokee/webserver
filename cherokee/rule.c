@@ -33,9 +33,8 @@
 ret_t
 cherokee_rule_init_base (cherokee_rule_t *rule, cherokee_plugin_info_t *info)
 {
+	cherokee_module_init_base (MODULE(rule), NULL, info);
 	INIT_LIST_HEAD (&rule->list_node);
-
-	UNUSED(info);
 
 	rule->match    = NULL;
 	rule->final    = true;

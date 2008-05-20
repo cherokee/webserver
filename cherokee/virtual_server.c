@@ -460,9 +460,6 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "only_secure")) {
 		entry->only_secure = !! atoi(conf->val.buf);
 
-	} else if (equal_buf_str (&conf->key, "only_secure")) {
-		entry->only_secure = !! atoi(conf->val.buf);
-
 	} else if (equal_buf_str (&conf->key, "match")) {
 		/* Ignore: Previously handled 
 		 */

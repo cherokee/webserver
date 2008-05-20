@@ -1,5 +1,11 @@
 2008-05-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/virtual_server.c (init_entry_property): Removed duped
+	configuration entry.
+
+	* cherokee/rule.c (cherokee_rule_init_base): Bug fix: It had to
+	initialize its underling cherokee_module_t structure.
+
 	* downloader-protected.h, downloader.c, buffer.c, buffer.h,
 	header.c, util.c, util.h, connection.c: More compiling warnings
 	have been fixed. In this case, most of them were signess issues.
