@@ -149,6 +149,8 @@ do_download__init (cherokee_downloader_t *downloader, void *param)
 {
 	cherokee_url_t *url;
 
+	UNUSED(param);
+
 	url = &downloader->request.url;
 	
 	print_tuple_str ("Host",    url->host.buf);
@@ -165,6 +167,8 @@ do_download__has_headers (cherokee_downloader_t *downloader, void *param)
 	cherokee_url_t    *url;
 	cherokee_buffer_t *req;
 	cherokee_header_t *hdr;
+
+	UNUSED(param);
 
 	url = &downloader->request.url;
 	req = &url->request;
@@ -227,6 +231,8 @@ do_download__read_body (cherokee_downloader_t *downloader, void *param)
 	char    tmp[5];
 	char    total[5];
 
+	UNUSED(param);
+
 	/* Write down
 	 */
 	len = write (output_fd, downloader->body.buf, downloader->body.len);
@@ -252,6 +258,9 @@ do_download__read_body (cherokee_downloader_t *downloader, void *param)
 static ret_t
 do_download__finish (cherokee_downloader_t *downloader, void *param)
 {
+	UNUSED (downloader);
+	UNUSED (param);
+
 	fprintf (stderr, "\n");
 	return ret_ok;
 }
