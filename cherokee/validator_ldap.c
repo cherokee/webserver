@@ -314,6 +314,7 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connect
 {
 	int                              re;
 	ret_t                            ret;
+	size_t                           size;
 	char                            *dn;
 	LDAPMessage                     *message;
 	LDAPMessage                     *first;
@@ -326,8 +327,8 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connect
 	    cherokee_buffer_is_empty (&conn->validator->user))
 		return ret_error;
 
-	re = cherokee_buffer_cnt_cspn (&conn->validator->user, 0, "*()");
-	if (re != conn->validator->user.len)
+	size = cherokee_buffer_cnt_cspn (&conn->validator->user, 0, "*()");
+	if (size != conn->validator->user.len)
 		return ret_error;
 
 	/* Build filter

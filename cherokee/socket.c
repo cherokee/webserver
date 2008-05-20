@@ -1391,6 +1391,11 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 		size = MAX_SF_BLK_SIZE;
 
 #if defined(LINUX_BROKEN_SENDFILE_API)
+	UNUSED(socket);
+	UNUSED(fd);
+	UNUSED(offset);
+	UNUSED(sent);
+
 	/* Large file support is set but native Linux 2.2 or 2.4 sendfile()
 	 * does not support _FILE_OFFSET_BITS 64
 	 */
@@ -1553,6 +1558,11 @@ cherokee_socket_sendfile (cherokee_socket_t *socket, int fd, size_t size, off_t 
 	*offset = *offset + *sent;
 
 #else
+	UNUSED(socket);
+	UNUSED(fd);
+	UNUSED(offset);
+	UNUSED(sent);
+
 	SHOULDNT_HAPPEN;
 	return ret_error;
 #endif

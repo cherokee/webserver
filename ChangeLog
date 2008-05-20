@@ -1,5 +1,8 @@
 2008-05-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/validator_ldap.c, cherokee/socket.c: Another couple of
+	small compiling warning fixed.
+
 	* rule_header.c, rule_directory.c, rule_default.c, rule_request.c,
 	rule_extensions.c: Implements the ->free() methods.
 
