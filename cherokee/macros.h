@@ -127,7 +127,6 @@
 
 #define IOCACHE_MAX_FILE_SIZE            50000
 #define IOCACHE_DEFAULT_CLEAN_ELAPSE     2
-#define IOCACHE_BASIC_SIZE               50
 
 #define EXIT_CANT_CREATE_SERVER_SOCKET4 10
 #define EXIT_SERVER_CLEAN               30
@@ -176,6 +175,7 @@
 		      __FILE__, __LINE__, __cherokee_func__, ret);          \
 	} while (0)
 
+#define UNUSED(x) ((void)(x))
 
 /* Make cherokee type.
  */

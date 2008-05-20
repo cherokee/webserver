@@ -43,6 +43,10 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (admin, http_get | http_post);
 ret_t
 cherokee_handler_admin_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
+	UNUSED(conf);
+	UNUSED(srv);
+	UNUSED(_props);
+
 	return ret_ok;
 }
 

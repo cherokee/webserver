@@ -223,7 +223,7 @@ _reset (cherokee_fdpoll_select_t *fdp, int fd)
 
 
 ret_t
-fdpoll_win32_get_fdlimits (int *system_fd_limit, int *fd_limit)
+fdpoll_win32_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 {
 	*system_fd_limit = 0;
 	*fd_limit = FD_SETSIZE;

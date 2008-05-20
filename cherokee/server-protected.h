@@ -126,9 +126,9 @@ struct cherokee_server {
 
 	/* Connection related
 	 */
-	cint_t                     conns_max;
+	cuint_t                    conns_max;
 	cint_t                     conns_reuse_max;
-	cint_t                     conns_keepalive_max;
+	cuint_t                    conns_keepalive_max;
 	cuint_t                    conns_num_bogo;
 
 	/* Networking config

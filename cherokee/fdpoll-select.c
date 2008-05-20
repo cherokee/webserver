@@ -167,6 +167,8 @@ _set_mode (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 static int   
 _check (cherokee_fdpoll_select_t *fdp, int fd, int rw)
 {
+	UNUSED(rw);
+
 	switch (fdp->fd_rw[fd]) {
 		case FDPOLL_MODE_READ:
 			return FD_ISSET (fd, &fdp->working_rfdset);
@@ -236,12 +238,15 @@ _watch (cherokee_fdpoll_select_t *fdp, int timeout_msecs)
 static ret_t 
 _reset (cherokee_fdpoll_select_t *fdp, int fd)
 {
+	UNUSED(fdp);
+	UNUSED(fd);
+
 	return ret_ok;
 }
 
 
 ret_t
-fdpoll_select_get_fdlimits (int *system_fd_limit, int *fd_limit)
+fdpoll_select_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 {
 	*system_fd_limit = FD_SETSIZE;
 	*fd_limit = 0;

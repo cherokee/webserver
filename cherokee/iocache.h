@@ -50,7 +50,7 @@ ret_t cherokee_iocache_get_default   (cherokee_iocache_t **iocache);
 ret_t cherokee_iocache_free_default  (cherokee_iocache_t  *iocache);
 
 ret_t cherokee_iocache_clean         (cherokee_iocache_t *iocache);
-ret_t cherokee_iocache_clean_up      (cherokee_iocache_t *iocache, cuint_t num);
+ret_t cherokee_iocache_clean_up      (cherokee_iocache_t *iocache);
 
 ret_t cherokee_iocache_mmap_release  (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *file);
 

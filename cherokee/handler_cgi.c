@@ -825,7 +825,10 @@ child_finished(int sng)
 void  
 PLUGIN_INIT_NAME(cgi) (cherokee_plugin_loader_t *loader)
 {
-	if (_cgi_is_init) return;
+	UNUSED(loader);
+
+	if (_cgi_is_init) 
+		return;
 	_cgi_is_init = true;
 
 #if 0

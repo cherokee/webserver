@@ -51,6 +51,8 @@ cherokee_validator_plain_configure (cherokee_config_node_t *conf, cherokee_serve
 	cherokee_config_node_t           *subconf;
 	cherokee_validator_plain_props_t *props;
 
+	UNUSED(srv);
+
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_plain_props);
 
@@ -226,6 +228,10 @@ out:
 ret_t 
 cherokee_validator_plain_add_headers (cherokee_validator_plain_t *plain, cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
+	UNUSED(plain);
+	UNUSED(conn);
+	UNUSED(buf);
+
 	return ret_ok;
 }
 

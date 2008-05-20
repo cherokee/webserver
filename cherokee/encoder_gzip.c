@@ -120,6 +120,8 @@ ret_t
 cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t *encoder,
 				   cherokee_buffer_t       *buf)
 {
+	UNUSED(encoder);
+
 	cherokee_buffer_add_str (buf, "Content-Encoding: gzip"CRLF);
 	return ret_ok;
 }

@@ -82,6 +82,8 @@ configure (cherokee_rule_extensions_t *rule,
 	ret_t              ret;
 	cherokee_buffer_t *tmp = NULL;
 
+	UNUSED(vsrv);
+
 	ret = cherokee_config_node_read (conf, "extensions", &tmp);
 	if (ret != ret_ok) {
 		PRINT_ERROR ("Rule prio=%d needs an 'extensions' property\n", 

@@ -31,7 +31,7 @@
  *     > 0 max. acceptable limit for cherokee_fdpoll_new().
  */
 ret_t
-cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, int *sys_fd_limit, int *fd_limit)
+cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, cuint_t *sys_fd_limit, cuint_t *fd_limit)
 {
 	/* Initialize values.
 	 */

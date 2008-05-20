@@ -65,6 +65,8 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 	cherokee_list_t                 *i;
 	cherokee_validator_ldap_props_t *props;
 
+	UNUSED(srv);
+
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_ldap_props);
 
@@ -256,7 +258,7 @@ cherokee_validator_ldap_free (cherokee_validator_ldap_t *ldap)
 
 
 static ret_t 
-validate_dn (cherokee_validator_ldap_t *ldap, cherokee_validator_ldap_props_t *props, char *dn, char *password)
+validate_dn (cherokee_validator_ldap_props_t *props, char *dn, char *password)
 {
 	int   re;
 	int   val;
@@ -372,7 +374,7 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connect
 
 	/* Check that it's right
 	 */
-	ret = validate_dn (ldap, props, dn, conn->validator->passwd.buf);
+	ret = validate_dn (props, dn, conn->validator->passwd.buf);
 	if (ret != ret_ok)
 		return ret;
 
@@ -392,6 +394,10 @@ cherokee_validator_ldap_check (cherokee_validator_ldap_t *ldap, cherokee_connect
 ret_t 
 cherokee_validator_ldap_add_headers (cherokee_validator_ldap_t *ldap, cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
+	UNUSED(ldap);
+	UNUSED(conn);
+	UNUSED(buf);
+
 	return ret_ok;
 }
 

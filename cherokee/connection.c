@@ -744,6 +744,9 @@ cherokee_connection_set_cork (cherokee_connection_t *conn, cherokee_boolean_t en
 		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,  &on, sizeof on);
 		BIT_UNSET (conn->options, conn_op_tcp_cork);
 	}
+#else
+	UNUSED(conn);
+	UNUSED(enable);
 #endif
 
 	return ret_ok;

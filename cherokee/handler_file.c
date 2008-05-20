@@ -67,6 +67,8 @@ cherokee_handler_file_configure (cherokee_config_node_t *conf, cherokee_server_t
 	cherokee_list_t               *i;
 	cherokee_handler_file_props_t *props;
 
+	UNUSED(srv);
+
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_file_props);
 
@@ -532,10 +534,12 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 {
 	ret_t                  ret;
 	char                   bufstr[DTM_SIZE_GMTTM_STR];
+	struct tm              modified_tm;
 	size_t                 szlen          = 0;
 	off_t                  content_length = 0;
-	struct tm              modified_tm    = { 0 };
 	cherokee_connection_t *conn           = HANDLER_CONN(fhdl);
+
+	memset (&modified_tm, 0, sizeof(struct tm));
 
 	/* ETag:
 	 */

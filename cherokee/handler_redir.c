@@ -308,6 +308,8 @@ cherokee_handler_redir_new (cherokee_handler_t **hdl, void *cnt, cherokee_module
 ret_t 
 cherokee_handler_redir_free (cherokee_handler_redir_t *rehdl)
 {
+	UNUSED(rehdl);
+
 	return ret_ok;
 }
 
@@ -351,6 +353,9 @@ cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 ret_t 
 cherokee_handler_redir_add_headers (cherokee_handler_redir_t *rehdl, cherokee_buffer_t *buffer)
 {
+	UNUSED(rehdl);
+	UNUSED(buffer);
+
 	return ret_ok;
 }
 

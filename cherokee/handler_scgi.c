@@ -214,7 +214,7 @@ cherokee_handler_scgi_free (cherokee_handler_scgi_t *hdl)
 static ret_t
 netstringer (cherokee_buffer_t *buf)
 {
-	cuint_t len;
+	cint_t len;
 	CHEROKEE_TEMP(num,16);
 
 	len = snprintf (num, num_size, "%d:", buf->len);

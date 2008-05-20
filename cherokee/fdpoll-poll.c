@@ -175,6 +175,9 @@ _check (cherokee_fdpoll_poll_t *fdp, int fd, int rw)
 static ret_t
 _reset (cherokee_fdpoll_poll_t *fdp, int fd)
 {
+	UNUSED(fdp);
+	UNUSED(fd);
+
 	/* fdp->fdidx[fd] = -1;
 	 */
 	return ret_ok;
@@ -193,7 +196,7 @@ _watch (cherokee_fdpoll_poll_t *fdp, int timeout_msecs)
 
 
 ret_t
-fdpoll_poll_get_fdlimits (int *system_fd_limit, int *fd_limit)
+fdpoll_poll_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 {
 	*system_fd_limit = 0;
 	*fd_limit = 0;

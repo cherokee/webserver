@@ -118,6 +118,8 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 	cherokee_list_t                      *i;
 	cherokee_handler_server_info_props_t *props;
 
+	UNUSED(srv);
+
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_server_info_props);
 
@@ -292,6 +294,8 @@ build_modules_table_content_while (cherokee_buffer_t *key, void *value, void *pa
 
 	cherokee_plugin_loader_entry_t *entry = value;
 	cherokee_plugin_info_t         *mod   = entry->info;
+
+	UNUSED(key);
 
 	if (mod->type & cherokee_logger) {
 		*loggers += 1;

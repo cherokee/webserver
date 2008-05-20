@@ -132,7 +132,7 @@ typedef struct {
 	void                                                        \
 	PLUGIN_INIT_NAME(name) (cherokee_plugin_loader_t *loader)   \
 	{                                                           \
-		;                                                   \
+		UNUSED(loader);					    \
 	}                                                           \
 								    \
 

@@ -275,7 +275,7 @@ do_logrotate (cherokee_buffer_t *url,
 static void
 print_entry (const char *str, char *format, ...)
 {
-	int i;
+	cuint_t i;
 	va_list ap;
 
 	printf ("%s", str);

@@ -73,6 +73,9 @@ guardian_signals_handler (int sig, siginfo_t *si, void *context)
 {
 	int exitcode;
 
+	UNUSED(si);
+	UNUSED(context);
+
 	switch (sig) {
 	case SIGUSR1:
 		/* Restart Cherokee */
@@ -129,6 +132,8 @@ process_launch (const char *path, int argc, char *argv[])
 	pid_t pid;
 	int   daemonize = 0;
 
+	UNUSED(path);
+
 	/* Look for the '-b' parameter
 	 */
 	for (i=0; i<argc; i++) {
@@ -164,6 +169,8 @@ save_pid_file (int pid)
 {
 	FILE *file;
 	char  tmp[10];
+
+	UNUSED(pid);
 
 	file = fopen (PID_FILE, "w+");
 	if (file == NULL) {

@@ -97,6 +97,8 @@ configure (cherokee_rule_directory_t *rule,
 {
 	ret_t ret;
 	
+	UNUSED(vsrv);
+
 	ret = cherokee_config_node_copy (conf, "directory", &rule->directory);
 	if (ret != ret_ok) {
 		PRINT_ERROR ("Rule prio=%d needs a 'directory' property", 

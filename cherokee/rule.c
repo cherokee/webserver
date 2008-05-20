@@ -35,6 +35,8 @@ cherokee_rule_init_base (cherokee_rule_t *rule, cherokee_plugin_info_t *info)
 {
 	INIT_LIST_HEAD (&rule->list_node);
 
+	UNUSED(info);
+
 	rule->match    = NULL;
 	rule->final    = true;
 	rule->priority = CHEROKEE_RULE_PRIO_NONE;
@@ -66,8 +68,7 @@ cherokee_rule_free (cherokee_rule_t *rule)
 
 static ret_t
 configure_base (cherokee_rule_t           *rule, 
-		cherokee_config_node_t    *conf, 
-		cherokee_virtual_server_t *vsrv)
+		cherokee_config_node_t    *conf)
 {
 	ret_t              ret;
 	cherokee_buffer_t *final = NULL;
@@ -98,7 +99,7 @@ cherokee_rule_configure (cherokee_rule_t *rule, cherokee_config_node_t *conf, vo
 		return ret_error;
 	}
 
-	ret = configure_base (rule, conf, VSERVER(vsrv));
+	ret = configure_base (rule, conf);
 	if (ret != ret_ok) return ret;
 
 	/* Call the real method

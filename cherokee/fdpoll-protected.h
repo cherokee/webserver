@@ -37,12 +37,12 @@ typedef int   (* fdpoll_func_check_t)    (void  *fdpoll, int fd, int rw);
 typedef int   (* fdpoll_func_watch_t)    (void  *fdpoll, int timeout_msecs);
 typedef ret_t (* fdpoll_func_is_full_t)  (void  *fdpoll);
 
-ret_t fdpoll_epoll_get_fdlimits  (int *sys_fd_limit, int *fd_limit);
-ret_t fdpoll_kqueue_get_fdlimits (int *sys_fd_limit, int *fd_limit);
-ret_t fdpoll_port_get_fdlimits   (int *sys_fd_limit, int *fd_limit);
-ret_t fdpoll_poll_get_fdlimits   (int *sys_fd_limit, int *fd_limit);
-ret_t fdpoll_select_get_fdlimits (int *sys_fd_limit, int *fd_limit);
-ret_t fdpoll_win32_get_fdlimits  (int *sys_fd_limit, int *fd_limit);
+ret_t fdpoll_epoll_get_fdlimits  (cuint_t *sys_fd_limit, cuint_t *fd_limit);
+ret_t fdpoll_kqueue_get_fdlimits (cuint_t *sys_fd_limit, cuint_t *fd_limit);
+ret_t fdpoll_port_get_fdlimits   (cuint_t *sys_fd_limit, cuint_t *fd_limit);
+ret_t fdpoll_poll_get_fdlimits   (cuint_t *sys_fd_limit, cuint_t *fd_limit);
+ret_t fdpoll_select_get_fdlimits (cuint_t *sys_fd_limit, cuint_t *fd_limit);
+ret_t fdpoll_win32_get_fdlimits  (cuint_t *sys_fd_limit, cuint_t *fd_limit);
 
 ret_t fdpoll_epoll_new  (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit);
 ret_t fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit);

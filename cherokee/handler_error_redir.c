@@ -60,6 +60,8 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 	cherokee_list_t                      *i;
 	cherokee_handler_error_redir_props_t *props;
 
+	UNUSED(srv);
+
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_error_redir_props);
 

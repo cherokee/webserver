@@ -272,6 +272,7 @@ common_processing (cherokee_admin_client_t *admin,
 static void
 ask_get_port (cherokee_admin_client_t *admin, void *arg)
 {
+	UNUSED(arg);
 	SET_POST (admin, "get server.port");
 }
 
@@ -304,6 +305,7 @@ cherokee_admin_client_ask_port (cherokee_admin_client_t *admin, cuint_t *port)
 static void
 ask_get_port_tls (cherokee_admin_client_t *admin, void *arg)
 {
+	UNUSED(arg);
 	SET_POST (admin, "get server.port_tls");
 }
 
@@ -336,6 +338,7 @@ cherokee_admin_client_ask_port_tls (cherokee_admin_client_t *admin, cuint_t *por
 static void
 ask_get_rx (cherokee_admin_client_t *admin, void *arg)
 {
+	UNUSED(arg);
 	SET_POST (admin, "get server.rx");
 }
 
@@ -366,8 +369,9 @@ cherokee_admin_client_ask_rx (cherokee_admin_client_t *admin, cherokee_buffer_t 
 /* TX 
  */
 static void
-ask_get_tx (cherokee_admin_client_t *admin, void *args)
+ask_get_tx (cherokee_admin_client_t *admin, void *arg)
 {
+	UNUSED(arg);
 	SET_POST (admin, "get server.tx");
 }
 
@@ -400,6 +404,7 @@ cherokee_admin_client_ask_tx (cherokee_admin_client_t *admin, cherokee_buffer_t 
 static void
 ask_get_connections (cherokee_admin_client_t *admin, void *arg)
 {
+	UNUSED(arg);
 	SET_POST (admin, "get server.connections");
 }
 
@@ -527,6 +532,7 @@ cherokee_admin_client_del_connection  (cherokee_admin_client_t *admin, char *id)
 static void
 ask_thread_number (cherokee_admin_client_t *admin, void *arg)
 {
+	UNUSED(arg);
 	SET_POST (admin, "get server.thread_num");
 }
 
@@ -598,6 +604,7 @@ cherokee_admin_client_set_backup_mode (cherokee_admin_client_t *admin, cherokee_
 static void
 ask_trace (cherokee_admin_client_t *admin, void *arg)
 {
+	UNUSED(arg);
 	SET_POST (admin, "get server.trace");
 }
 
@@ -629,6 +636,8 @@ static ret_t
 check_reply_trace (cherokee_buffer_t *reply, cherokee_buffer_t *trace)
 {
 	ret_t ret;
+
+	UNUSED(trace);
 
 	ret = check_and_skip_literal (reply, "ok");
 	if (ret != ret_ok) return ret;

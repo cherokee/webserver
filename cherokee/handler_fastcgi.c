@@ -418,7 +418,7 @@ add_extra_fastcgi_env (cherokee_handler_fastcgi_t *hdl, cuint_t *last_header_off
 
 
 static void
-fixup_padding (cherokee_buffer_t *buf, cuint_t id, cuint_t last_header_offset)
+fixup_padding (cherokee_buffer_t *buf, cuint_t last_header_offset)
 {
 	cuint_t      rest;
 	cuint_t      pad;
@@ -482,7 +482,7 @@ build_header (cherokee_handler_fastcgi_t *hdl)
 	cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(hdl), conn);
 
 	add_extra_fastcgi_env (hdl, &last_header_offset);
-	fixup_padding (&hdl->write_buffer, hdl->id, last_header_offset);
+	fixup_padding (&hdl->write_buffer, last_header_offset);
 
 	/* There are no more parameters
 	*/

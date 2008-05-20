@@ -90,6 +90,7 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 {
 	cherokee_balancer_t *gbal = BAL(balancer);
 
+	UNUSED(conn);
 	CHEROKEE_MUTEX_LOCK (&balancer->last_one_mutex);
 
 	if (gbal->sources_len <= 0)

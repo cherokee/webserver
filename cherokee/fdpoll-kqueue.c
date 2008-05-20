@@ -224,6 +224,9 @@ _check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 static ret_t
 _reset (cherokee_fdpoll_kqueue_t *fdp, int fd)
 {
+	UNUSED(fdp);
+	UNUSED(fd);
+
 	return ret_ok;
 }
 
@@ -248,7 +251,7 @@ _set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 
 
 ret_t
-fdpoll_kqueue_get_fdlimits (int *system_fd_limit, int *fd_limit)
+fdpoll_kqueue_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 {
 	*system_fd_limit = 0;
 	*fd_limit = 0;

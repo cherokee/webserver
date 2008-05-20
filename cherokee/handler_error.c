@@ -39,6 +39,10 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (error, http_all_methods);
 ret_t 
 cherokee_handler_error_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
+	UNUSED(conf);
+	UNUSED(srv);
+	UNUSED(_props);
+
 	return ret_ok;
 }
 

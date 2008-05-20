@@ -369,7 +369,7 @@ out:
 
 
 ret_t 
-cherokee_iocache_clean_up (cherokee_iocache_t *iocache, cuint_t num)
+cherokee_iocache_clean_up (cherokee_iocache_t *iocache)
 {
 	ret_t              ret;
 	float              average;

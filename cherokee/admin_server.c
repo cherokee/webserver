@@ -37,6 +37,9 @@ ret_t
 cherokee_admin_server_reply_get_port (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
+
+	UNUSED(question);
+
 	cherokee_buffer_add_va (reply, "server.port is %d\n", srv->port);
 	return ret_ok;
 }
@@ -46,7 +49,10 @@ ret_t
 cherokee_admin_server_reply_set_port (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
-	srv = srv;
+
+	UNUSED(question);
+
+	srv = srv; /* TODO */
 	cherokee_buffer_add_str (reply, "ok\n");
 	return ret_ok;
 }
@@ -58,6 +64,9 @@ ret_t
 cherokee_admin_server_reply_get_port_tls (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
+
+	UNUSED(question);
+
 	cherokee_buffer_add_va (reply, "server.port_tls is %d\n", srv->port_tls);
 	return ret_ok;
 }
@@ -66,7 +75,10 @@ ret_t
 cherokee_admin_server_reply_set_port_tls (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
-	srv = srv;
+
+	UNUSED(question);
+
+	srv = srv; /* TODO */
 	cherokee_buffer_add_str (reply, "ok\n");
 	return ret_ok;
 }
@@ -80,6 +92,8 @@ cherokee_admin_server_reply_get_tx (cherokee_handler_admin_t *ahdl, cherokee_buf
 	size_t             rx, tx;
 	char               tmp[8];
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
+
+	UNUSED(question);
 
 	cherokee_server_get_total_traffic (srv, &rx, &tx);
 
@@ -95,6 +109,8 @@ cherokee_admin_server_reply_get_rx (cherokee_handler_admin_t *ahdl, cherokee_buf
 	size_t             rx, tx;
 	char               tmp[8];
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
+
+	UNUSED(question);
 
 	cherokee_server_get_total_traffic (srv, &rx, &tx);
 
@@ -153,6 +169,8 @@ cherokee_admin_server_reply_get_connections (cherokee_handler_admin_t *ahdl, che
 	cherokee_list_t    *i, *tmp;
 	cherokee_list_t     connections = LIST_HEAD_INIT(connections);
 	cherokee_server_t  *server      = HANDLER_SRV(ahdl);
+
+	UNUSED(question);
 
 	/* Get the connection info list
 	 */
@@ -219,9 +237,10 @@ cherokee_admin_server_reply_del_connection (cherokee_handler_admin_t *ahdl, cher
 
 ret_t 
 cherokee_admin_server_reply_get_thread_num (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
-{
-	
+{	
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
+
+	UNUSED(question);
 
 	cherokee_buffer_add_va (reply, "server.thread_num is %d\n", srv->thread_num);
 	return ret_ok;
@@ -273,6 +292,9 @@ cherokee_admin_server_reply_get_trace (cherokee_handler_admin_t *ahdl, cherokee_
 	ret_t              ret;
 	cherokee_buffer_t *modules_ref = NULL;
 
+	UNUSED(ahdl);
+	UNUSED(question);
+
 	ret = cherokee_trace_get_trace (&modules_ref);
 	if (ret != ret_ok) return ret;
 
@@ -290,6 +312,8 @@ ret_t
 cherokee_admin_server_reply_set_trace (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
 	ret_t ret;
+
+	UNUSED(ahdl);
 
 	ret = cherokee_trace_set_modules (question);
 	if (ret != ret_ok) return ret;

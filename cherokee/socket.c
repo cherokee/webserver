@@ -1761,9 +1761,6 @@ cherokee_socket_set_block_timeout (cherokee_socket_t *socket, cuint_t timeout)
 		return ret_error;
 	}
 
-	if (timeout < 0)
-		timeout = 0;
-
 #if defined(SO_RCVTIMEO) && !defined(HAVE_BROKEN_SO_RCVTIMEO)
 	/* Set the socket to blocking
 	 */

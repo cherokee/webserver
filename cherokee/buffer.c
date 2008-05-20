@@ -632,11 +632,8 @@ cherokee_buffer_is_endding (cherokee_buffer_t *buf, char c)
 
 
 ret_t
-cherokee_buffer_move_to_begin (cherokee_buffer_t *buf, int pos)
+cherokee_buffer_move_to_begin (cherokee_buffer_t *buf, cuint_t pos)
 {
-	if (pos <= 0) 
-		return ret_ok;
-
 	if (pos >= buf->len) {
 		cherokee_buffer_clean(buf);
 		return ret_ok;

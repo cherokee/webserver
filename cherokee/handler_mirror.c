@@ -264,6 +264,9 @@ cherokee_handler_mirror_init (cherokee_handler_mirror_t *hdl)
 ret_t 
 cherokee_handler_mirror_add_headers (cherokee_handler_mirror_t *hdl, cherokee_buffer_t *buffer)
 {
+	UNUSED(hdl);
+	UNUSED(buffer);
+
 	TRACE(ENTRIES, "does nothing: %s\n", "ret_ok");
 
 	/* do nothing */

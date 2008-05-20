@@ -648,9 +648,12 @@ cherokee_avl_while (cherokee_avl_t *avl, cherokee_avl_while_func_t func, void *p
 	return ret_ok;
 }
 
-ret_t 
-cherokee_avl_len_each (cherokee_buffer_t *key, void *value, void *param)
+static ret_t 
+func_len_each (cherokee_buffer_t *key, void *value, void *param)
 {
+	UNUSED(key);
+	UNUSED(value);
+
 	*((size_t *)param) += 1;
 	return ret_ok;
 }
@@ -659,7 +662,7 @@ ret_t
 cherokee_avl_len (cherokee_avl_t *avl, size_t *len)
 {
 	*len = 0;
-	return cherokee_avl_while (avl, cherokee_avl_len_each, len, NULL, NULL);
+	return cherokee_avl_while (avl, func_len_each, len, NULL, NULL);
 }
 
 

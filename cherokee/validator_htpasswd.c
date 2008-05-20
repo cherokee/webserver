@@ -59,6 +59,8 @@ cherokee_validator_htpasswd_configure (cherokee_config_node_t *conf, cherokee_se
 	cherokee_config_node_t              *subconf;
 	cherokee_validator_htpasswd_props_t *props;
 
+	UNUSED(srv);
+
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_htpasswd_props);
 
@@ -369,6 +371,10 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd, cher
 ret_t 
 cherokee_validator_htpasswd_add_headers (cherokee_validator_htpasswd_t *htpasswd, cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
+	UNUSED(htpasswd);
+	UNUSED(conn);
+	UNUSED(buf);
+
 	return ret_ok;
 }
 

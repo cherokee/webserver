@@ -157,6 +157,8 @@ match_file (cherokee_buffer_t *key, void *value, void *param)
 	ret_t              ret;
 	cherokee_buffer_t *param_file = param;
 
+	UNUSED(value);
+
 	ret = cherokee_wildcard_match (key->buf, param_file->buf);
 	if (ret == ret_ok)
 		return ret_deny;

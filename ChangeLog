@@ -1,3 +1,30 @@
+2008-05-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_redir.c, cherokee/handler_error_redir.c,
+	cherokee/handler_server_info.c, cherokee/fdpoll.c,
+	cherokee/handler_admin.c, cherokee/fdpoll.h,
+	cherokee/handler_cgi_base.c, cherokee/rule_directory.c,
+	cherokee/fdpoll-select.c, cherokee/handler_dirlist.c,
+	cherokee/handler_mirror.c, cherokee/rule_default.c,
+	cherokee/validator_ldap.c, cherokee/fdpoll-epoll.c,
+	cherokee/macros.h, cherokee/validator_plain.c, cherokee/avl.c,
+	cherokee/fdpoll-poll.c, cherokee/validator_htpasswd.c,
+	cherokee/plugin.h, cherokee/buffer.c, cherokee/fdpoll-protected.h,
+	cherokee/handler_file.c, cherokee/buffer.h, cherokee/main.c,
+	cherokee/header.c, cherokee/balancer_round_robin.c,
+	cherokee/rule.c, cherokee/encoder_gzip.c, cherokee/icons.c,
+	cherokee/handler_fastcgi.c, cherokee/util.c,
+	cherokee/fdpoll-win32.c, cherokee/main_guardian.c,
+	cherokee/fdpoll-port.c, cherokee/handler_scgi.c, cherokee/post.c,
+	cherokee/handler_error.c, cherokee/admin_client.c,
+	cherokee/rule_extensions.c, cherokee/handler_cgi.c,
+	cherokee/server-protected.h, cherokee/fdpoll-kqueue.c,
+	cherokee/admin_server.c, cherokee/main_tweak.c,
+	cherokee/validator_htdigest.c, cherokee/iocache.c,
+	cherokee/connection.c, cherokee/iocache.h, cherokee/server.c,
+	cherokee/socket.c: This patch fixes a bunch of minor compiling
+	warnings, most of them related to unused variables.
+
 2008-05-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/http.h, cherokee/http.c: Added "204 No Content" HTTP

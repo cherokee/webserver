@@ -184,6 +184,8 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 	char                             *theme      = NULL;
 	cherokee_buffer_t                 theme_path = CHEROKEE_BUF_INIT;
 
+	UNUSED(srv);
+
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_dirlist_props);
 		
@@ -1056,6 +1058,8 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 ret_t
 cherokee_handler_dirlist_add_headers (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer)
 {
+	UNUSED(dhdl);
+
 	cherokee_buffer_add_str (buffer, "Content-Type: text/html; charset=iso-8859-1"CRLF);
 	return ret_ok;
 }

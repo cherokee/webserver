@@ -151,6 +151,8 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 	cherokee_list_t                   *i, *j;
 	cherokee_handler_cgi_base_props_t *props;
 
+	UNUSED(srv);
+
 	/* Sanity check: This class is pure virtual,
 	 * it shouldn't allocate memory here. 
 	 * Check that the object space has been already instanced by its father.

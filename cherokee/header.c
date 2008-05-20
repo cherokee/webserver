@@ -728,7 +728,7 @@ cherokee_header_copy_version (cherokee_header_t *hdr, cherokee_buffer_t *buf)
 
 
 static ret_t 
-has_header_response (cherokee_header_t *hdr, cherokee_buffer_t *buffer, int tail_len)
+has_header_response (cherokee_header_t *hdr, cherokee_buffer_t *buffer)
 {
 	char *tmp;
 
@@ -820,7 +820,7 @@ cherokee_header_has_header (cherokee_header_t *hdr, cherokee_buffer_t *buffer, i
 
 	case header_type_response:
 	case header_type_basic:
-		return has_header_response (hdr, buffer, tail_len);
+		return has_header_response (hdr, buffer);
 
 	default:
 		SHOULDNT_HAPPEN;

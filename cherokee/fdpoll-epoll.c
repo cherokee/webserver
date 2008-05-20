@@ -251,7 +251,7 @@ _watch (cherokee_fdpoll_epoll_t *fdp, int timeout_msecs)
 
 
 ret_t
-fdpoll_epoll_get_fdlimits (int *system_fd_limit, int *fd_limit)
+fdpoll_epoll_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 {
 	*system_fd_limit = 0;
 	*fd_limit = 0;

@@ -77,12 +77,14 @@ static ret_t common_server_initialization (cherokee_server_t *srv);
 static void
 panic_handler (int code)
 {
+	UNUSED(code);
 	cherokee_server_handle_panic (srv);
 }
 
 static void
 prepare_to_die (int code)
 {
+	UNUSED(code);
 	cherokee_server_handle_TERM (srv);
 }
 
@@ -99,6 +101,7 @@ restart_server_cb (cherokee_server_t *new_srv)
 static void
 restart_server (int code)
 {	
+	UNUSED(code);
 	printf ("Handling HUP signal..\n");
 	cherokee_server_handle_HUP (srv, restart_server_cb);
 }
@@ -106,6 +109,7 @@ restart_server (int code)
 static void
 reopen_log_files (int code)
 {	
+	UNUSED(code);
 	printf ("Reopeing log files..\n");
 	cherokee_server_log_reopen (srv);
 }

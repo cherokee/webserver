@@ -139,7 +139,7 @@ cherokee_post_append (cherokee_post_t *post, char *str, size_t len)
 ret_t 
 cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 {
-	size_t written;
+	ssize_t written;
 
 	if (size <= 0)
 		return ret_ok;
@@ -159,7 +159,7 @@ cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 		written = write (post->tmp_file_fd, post->info.buf, post->info.len); 
 		if (written < 0) return ret_error;
 
-		cherokee_buffer_move_to_begin (&post->info, written);
+		cherokee_buffer_move_to_begin (&post->info, (cuint_t)written);
 		post->received += written;
 
 		return ret_ok;
@@ -208,7 +208,6 @@ ret_t
 cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mode)
 {
 	ssize_t r;
-	size_t  ur;
 
 	/* Sanity check
 	 */
@@ -240,17 +239,17 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 		/* Read from the temp file is needed
 		 */
 		if (cherokee_buffer_is_empty (&post->info)) {
-			ur = read (post->tmp_file_fd, post->info.buf, DEFAULT_READ_SIZE);
-			if (ur == 0) {
+			r = read (post->tmp_file_fd, post->info.buf, DEFAULT_READ_SIZE);
+			if (r == 0) {
 				/* EOF */
 				return ret_ok;
-			} else if (ur < 0) {
+			} else if (r < 0) {
 				/* Couldn't read */
 				return ret_error;
 			}
 
-			post->info.len     = ur;
-			post->info.buf[ur] = '\0';
+			post->info.len    = r;
+			post->info.buf[r] = '\0';
 		}
 
 		/* Write it to the fd
@@ -285,7 +284,7 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 ret_t 
 cherokee_post_walk_read (cherokee_post_t *post, cherokee_buffer_t *buf, cuint_t len)
 {
-	size_t ur;
+	ssize_t ur;
 
 	switch (post->type) {
 	case post_in_memory:

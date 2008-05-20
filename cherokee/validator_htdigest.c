@@ -48,6 +48,8 @@ cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_se
 	cherokee_config_node_t              *subconf;
 	cherokee_validator_htdigest_props_t *props;
 
+	UNUSED(srv);
+
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_htdigest_props);
 
@@ -170,6 +172,8 @@ validate_basic (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *
 	char               *passwd = NULL;
 	cherokee_buffer_t   ha1 = CHEROKEE_BUF_INIT;
 
+	UNUSED(htdigest);
+
 	/* Extact the right entry information
 	 */
 	ret = extract_user_entry (file, conn->validator->user.buf, &user, &realm, &passwd);
@@ -271,6 +275,10 @@ out:
 ret_t 
 cherokee_validator_htdigest_add_headers (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn, cherokee_buffer_t *buf)
 {
+	UNUSED(htdigest);
+	UNUSED(conn);
+	UNUSED(buf);
+
 	return ret_ok;
 }
 

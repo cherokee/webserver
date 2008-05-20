@@ -561,7 +561,7 @@ initialize_server_socket6 (cherokee_server_t *srv, cherokee_socket_t *sock, unsi
 
 
 static ret_t
-initialize_server_socket_unix (cherokee_server_t *srv, cherokee_socket_t *sock, unsigned short port)
+initialize_server_socket_unix (cherokee_server_t *srv, cherokee_socket_t *sock)
 {
 #ifndef AF_LOCAL
 	return ret_no_sys;
@@ -691,7 +691,7 @@ initialize_server_socket (cherokee_server_t *srv, cherokee_socket_t *socket, uns
 
 #ifdef AF_LOCAL
 	if (! cherokee_buffer_is_empty (&srv->unix_socket)) {
-		ret = initialize_server_socket_unix (srv, socket, port);
+		ret = initialize_server_socket_unix (srv, socket);
 	}
 #endif
 
@@ -737,10 +737,15 @@ initialize_server_socket (cherokee_server_t *srv, cherokee_socket_t *socket, uns
 static ret_t
 initialize_server_threads (cherokee_server_t *srv)
 {	
-	ret_t ret;
-	int   i, fds_per_thread, fds_per_thread1, conns_per_thread;
+	ret_t   ret;
+	cint_t  i;
+	cuint_t fds_per_thread;
+	cuint_t fds_per_thread1;
+	cuint_t conns_per_thread;
+
 #ifdef HAVE_PTHREAD
-	int   thr_fds, spare_fds;
+	cuint_t thr_fds;
+	cuint_t spare_fds;
 #endif
 
 	/* Reset max. conns value
@@ -782,8 +787,8 @@ initialize_server_threads (cherokee_server_t *srv)
 	/* Get fdpoll limits.
 	 */
 	if (srv->fdpoll_method != cherokee_poll_UNSET) {
-		int sys_fd_limit = 0;
-		int poll_fd_limit = 0;
+		cuint_t sys_fd_limit  = 0;
+		cuint_t poll_fd_limit = 0;
 
 		ret = cherokee_fdpoll_get_fdlimits (srv->fdpoll_method, &sys_fd_limit, &poll_fd_limit);
 		if (ret != ret_ok) {
@@ -962,6 +967,8 @@ static ret_t
 raise_fd_limit (cherokee_server_t *srv, cint_t new_limit)
 {
 	ret_t ret;
+
+	UNUSED(srv);
 
 	/* Sanity check
 	 */
@@ -1343,7 +1350,7 @@ cherokee_server_step (cherokee_server_t *srv)
 	/* Clean IO cache
 	 */
 	if (srv->iocache_clean_next < srv->bogo_now) {
-		cherokee_iocache_clean_up (srv->iocache, IOCACHE_BASIC_SIZE);	
+		cherokee_iocache_clean_up (srv->iocache);	
 		srv->iocache_clean_next = srv->bogo_now + IOCACHE_DEFAULT_CLEAN_ELAPSE;
 	}
 
@@ -1523,9 +1530,9 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_add_buffer (&srv->listen_to, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "poll_method")) {
-		char *str = conf->val.buf;
-		int  sys_fd_limit = 0;
-		int  thr_fd_limit = 0;
+		char    *str          = conf->val.buf;
+		cuint_t  sys_fd_limit = 0;
+		cuint_t  thr_fd_limit = 0;
 
 		/* Convert poll method string to type.
 		 */
