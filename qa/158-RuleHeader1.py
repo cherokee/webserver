@@ -1,12 +1,13 @@
 from base import *
 
 DIR       = "header_test1_referer_match"
-REFERER   = "example.com"
+REFERER   = "example.158ext"
+MAGIC     = "Dealing with rule based headers.."
 
 CONF = """
 vserver!default!rule!1580!match = header
 vserver!default!rule!1580!match!header = Referer
-vserver!default!rule!1580!match!match = .+\.com
+vserver!default!rule!1580!match!match = .+\.158ext
 vserver!default!rule!1580!handler = cgi
 """
 
@@ -14,8 +15,8 @@ CGI = """#!/bin/sh
 
 echo "Content-Type: text/plain"
 echo 
-echo "just a test"
-"""
+echo "%s"
+""" % (MAGIC)
 
 class Test (TestBase):
     def __init__ (self):
@@ -26,9 +27,9 @@ class Test (TestBase):
                                  "Referer: %s\r\n" % (REFERER)
         self.conf              = CONF
         self.expected_error    = 200
-        self.required_content  = "just a test"
+        self.required_content  = MAGIC
         self.forbidden_content = ["/bin/sh", "echo"]
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, 'test', 755, CGI)
+        f = self.WriteFile (d, 'test', 0755, CGI)

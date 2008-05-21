@@ -1,17 +1,18 @@
 from base import *
 
 DIR       = "header_test2_referer_match"
-REFERER   = "example.com"
+REFERER   = "example.159com"
+MAGIC     = "Dealing with rule based headers (bis).."
 
 CONF = """
 vserver!default!rule!1590!match = header
 vserver!default!rule!1590!match!header = Referer
-vserver!default!rule!1590!match!match = .+\.com
+vserver!default!rule!1590!match!match = .+\.159com
 vserver!default!rule!1590!handler = file
 
 vserver!default!rule!1591!match = header
 vserver!default!rule!1591!match!header = Referer
-vserver!default!rule!1591!match!match = .+\.net
+vserver!default!rule!1591!match!match = .+\.159net
 vserver!default!rule!1591!handler = cgi
 """
 
@@ -19,8 +20,8 @@ CGI = """#!/bin/sh
 
 echo "Content-Type: text/plain"
 echo 
-echo "just a test"
-"""
+echo "%s"
+""" % (MAGIC)
 
 class Test (TestBase):
     def __init__ (self):
@@ -35,4 +36,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, 'test', 755, CGI)
+        f = self.WriteFile (d, 'test', 0755, CGI)

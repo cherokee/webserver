@@ -1,5 +1,9 @@
 2008-05-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/158-RuleHeader1.py, qa/159-RuleHeader2.py: Bug fix. These QA
+	tests were detecting .com and .net extensions, which was causing
+	random issues depending on how the QA test set was executed.
+
 	* cherokee/rule_extensions.c (parse_value): This function was
 	leaking ~100 bytes during the ->configure() invocation.
 
