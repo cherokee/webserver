@@ -1,5 +1,8 @@
 2008-05-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/rule_extensions.c (_free): Bugfix: an incorrect memory
+	free has been fixed.
+
 	* cherokee/socket.c (cherokee_socket_sendfile),
 	m4/sendfile_samba.m4: Implements sendfile() support for MacOS X.
 
