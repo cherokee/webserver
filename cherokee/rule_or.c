@@ -92,6 +92,25 @@ configure (cherokee_rule_or_t        *rule,
 	return ret_ok;
 }
 
+static ret_t
+_free (void *p)
+{
+	ret_t               ret;
+	cherokee_rule_or_t *rule = RULE_OR(p);
+
+	if (rule->left) {
+		ret = cherokee_rule_free (rule->left);
+		if (ret != ret_ok) return ret;
+	}
+
+	if (rule->right) {
+		ret = cherokee_rule_free (rule->right);
+		if (ret != ret_ok) return ret;
+	}
+
+	return ret_ok;
+}
+
 ret_t
 cherokee_rule_or_new (cherokee_rule_t **rule)
 {
@@ -105,6 +124,7 @@ cherokee_rule_or_new (cherokee_rule_t **rule)
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;
 	RULE(n)->configure = (rule_func_configure_t) configure;
+	MODULE(n)->free    = (module_func_free_t) _free;
 
 	/* Properties
 	 */

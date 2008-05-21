@@ -1,5 +1,8 @@
 2008-05-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/rule_not.c, cherokee/rule_and.c, cherokee/rule_or.c:
+	->free() methods have been added.
+
 	* cherokee/rule.c (cherokee_rule_free): Some memory was being lost
 	here when the server was restarted. It is not an important fix.
 
