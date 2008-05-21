@@ -1,5 +1,8 @@
 2008-05-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py: Added a new '-a' parameter. It randomizes the
+	QA tests before being tested against.
+
 	* qa/158-RuleHeader1.py, qa/159-RuleHeader2.py: Bug fix. These QA
 	tests were detecting .com and .net extensions, which was causing
 	random issues depending on how the QA test set was executed.
