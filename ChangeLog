@@ -1,5 +1,8 @@
 2008-05-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/rule_extensions.c (parse_value): This function was
+	leaking ~100 bytes during the ->configure() invocation.
+
 	* cherokee/server.c (cherokee_server_initialize): Tiny C&P mistake
 	fixed. There was an uninitialized buffer.
 

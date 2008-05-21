@@ -38,41 +38,21 @@ static ret_t
 parse_value (cherokee_buffer_t *value, cherokee_avl_t *extensions)
 {
 	char              *val;
+	char              *tmpp;
 	cherokee_buffer_t  tmp = CHEROKEE_BUF_INIT;
 
 	TRACE(ENTRIES, "Adding extensions: '%s'\n", value->buf);
-
 	cherokee_buffer_add_buffer (&tmp, value);
 
-	while ((val = strsep(&tmp.buf, ",")) != NULL) {
+	tmpp = tmp.buf;
+	while ((val = strsep(&tmpp, ",")) != NULL) {
+		TRACE(ENTRIES, "Adding extension: '%s'\n", val);
 		cherokee_avl_add_ptr (extensions, val, (void *)MAGIC);
 	}
 
 	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 }
-
-
-static ret_t 
-match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
-{
-	ret_t  ret;
-	char  *dot;
-	void  *foo;
-
-	dot = strrchr (conn->request.buf, '.');
-	if (dot == NULL) return ret_not_found;
-
-	ret = cherokee_avl_get_ptr (&rule->extensions, dot+1, &foo);
-        if (ret != ret_ok) {
-		TRACE(ENTRIES, "Rule extension: did not match %s", "\n");
-		return ret;
-	}
-
-	TRACE(ENTRIES, "Match %s\n", "extension");
-	return ret_ok;
-}
-
 
 static ret_t 
 configure (cherokee_rule_extensions_t *rule, 
@@ -103,6 +83,25 @@ _free (void *p)
 	return ret_ok;
 }
 
+static ret_t 
+match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
+{
+	ret_t  ret;
+	char  *dot;
+	void  *foo;
+
+	dot = strrchr (conn->request.buf, '.');
+	if (dot == NULL) return ret_not_found;
+
+	ret = cherokee_avl_get_ptr (&rule->extensions, dot+1, &foo);
+        if (ret != ret_ok) {
+		TRACE(ENTRIES, "Rule extension: did not match %s", "\n");
+		return ret;
+	}
+
+	TRACE(ENTRIES, "Match %s\n", "extension");
+	return ret_ok;
+}
 
 ret_t
 cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule)
