@@ -1,5 +1,8 @@
 2008-05-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/rule.c (cherokee_rule_free): Some memory was being lost
+	here when the server was restarted. It is not an important fix.
+
 	* cherokee/rule_extensions.c (_free): Bugfix: an incorrect memory
 	free has been fixed.
 

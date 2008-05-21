@@ -52,6 +52,12 @@ cherokee_rule_free (cherokee_rule_t *rule)
 	 */
 	return_if_fail (rule != NULL, ret_error);
 
+	/* Free the Config Entry property
+	 */
+	cherokee_config_entry_mrproper (&rule->config);
+
+	/* Call the virtual method
+	 */
 	if (MODULE(rule)->free == NULL) {
 		return ret_error;
 	}

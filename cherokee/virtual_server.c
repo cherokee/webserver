@@ -590,7 +590,7 @@ add_rule (cherokee_config_node_t    *config,
 
 	/* Validate priority
 	 */
-	prio = atoi(config->key.buf);
+	prio = atoi (config->key.buf);
 	if (prio <= CHEROKEE_RULE_PRIO_NONE) {
 		PRINT_ERROR ("Invalid priority: '%s'\n", config->key.buf);
 		return ret_error;
