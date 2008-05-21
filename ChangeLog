@@ -1,3 +1,8 @@
+2008-05-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.c (cherokee_socket_sendfile),
+	m4/sendfile_samba.m4: Implements sendfile() support for MacOS X.
+
 2008-05-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/validator_ldap.c, cherokee/socket.c: Another couple of

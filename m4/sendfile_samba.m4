@@ -79,7 +79,7 @@ samba_cv_HAVE_BROKEN_LINUX_SENDFILE=yes,samba_cv_HAVE_BROKEN_LINUX_SENDFILE=no)]
 	# BSD
 	#
 	*freebsd* | *DragonFly* )
-		AC_CACHE_CHECK([for freebsd sendfile support],samba_cv_HAVE_SENDFILE,[
+		AC_CACHE_CHECK([for BSD sendfile support],samba_cv_HAVE_SENDFILE,[
 		AC_TRY_LINK([\
 #include <sys/types.h>
 #include <unistd.h>
@@ -104,6 +104,41 @@ samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
 		found=yes
     		AC_DEFINE(HAVE_SENDFILE,1,[Whether sendfile() support is available])
 		AC_DEFINE(FREEBSD_SENDFILE_API,1,[Whether the FreeBSD sendfile() API is available])
+		AC_DEFINE(WITH_SENDFILE,1,[Whether sendfile() support should be included])
+	else
+		AC_MSG_RESULT(no);
+	fi
+	;;
+
+	# 
+	# MacOS X
+	#
+	*darwin*)
+		AC_CACHE_CHECK([for MacOS X sendfile support],samba_cv_HAVE_SENDFILE,[
+		AC_TRY_LINK([\
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <sys/uio.h>],
+[\
+	int fromfd, tofd, ret, total=0;
+	off_t offset;
+	struct sf_hdtr hdr;
+	struct iovec hdtrl;
+	hdr.headers = &hdtrl;
+	hdr.hdr_cnt = 1;
+	hdr.trailers = NULL;
+	hdr.trl_cnt = 0;
+	hdtrl.iov_base = NULL;
+	hdtrl.iov_len = 0;
+	ret = sendfile(fromfd, tofd, offset, &total, &hdr, 0);
+],
+samba_cv_HAVE_SENDFILE=yes,samba_cv_HAVE_SENDFILE=no)])
+
+	if test x"$samba_cv_HAVE_SENDFILE" = x"yes"; then
+		found=yes
+    		AC_DEFINE(HAVE_SENDFILE,1,[Whether sendfile() support is available])
+		AC_DEFINE(DARWIN_SENDFILE_API,1,[Whether the Darwin sendfile() API is available])
 		AC_DEFINE(WITH_SENDFILE,1,[Whether sendfile() support should be included])
 	else
 		AC_MSG_RESULT(no);
