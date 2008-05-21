@@ -230,7 +230,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	n->server_token = cherokee_version_full;
 	cherokee_buffer_init (&n->server_string);
-	cherokee_buffer_init (&n->server_string);
+	cherokee_buffer_init (&n->server_string_ext);
 	cherokee_buffer_init (&n->server_string_w_port);
 	cherokee_buffer_init (&n->server_string_w_port_tls);
 
@@ -368,7 +368,7 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_buffer_mrproper (&srv->timeout_header);
 
 	cherokee_buffer_mrproper (&srv->server_string);
-	cherokee_buffer_mrproper (&srv->server_string);
+	cherokee_buffer_mrproper (&srv->server_string_ext);
 	cherokee_buffer_mrproper (&srv->server_string_w_port);
 	cherokee_buffer_mrproper (&srv->server_string_w_port_tls);
 
@@ -1001,7 +1001,7 @@ init_server_strings (cherokee_server_t *srv)
 	ret_t ret;
 
 	cherokee_buffer_clean (&srv->server_string);
-	cherokee_buffer_clean (&srv->server_string);
+	cherokee_buffer_clean (&srv->server_string_ext);
 	cherokee_buffer_clean (&srv->server_string_w_port);
 	cherokee_buffer_clean (&srv->server_string_w_port_tls);
 
