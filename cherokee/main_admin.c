@@ -111,7 +111,7 @@ print_help (void)
 		"Usage: cherokee-admin [options]\n\n"
 		"  -h,  --help                   Print this help\n"
 		"  -V,  --version                Print version and exit\n"
-		"  -l,  --listen[=IP]            Bind net iface; no arg means all\n"
+		"  -b,  --bind[=IP]              Bind net iface; no arg means all\n"
 		"  -d,  --appdir=DIR             Application directory\n"
 		"  -p,  --port=NUM               TCP port\n"
 		"  -C,  --target=PATH            Configuration file to modify\n\n"
