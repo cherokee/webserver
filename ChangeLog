@@ -1,3 +1,27 @@
+2008-05-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* doc/media/images/admin_behaviour.png,
+	doc/media/images/admin_encoding.png,
+	doc/media/images/admin_vserver_errors.png,
+	doc/media/images/admin_validators_plain.png,
+	doc/media/images/admin_vserver.png,
+	doc/media/images/admin_icons1.png,
+	doc/media/images/admin_icons2.png,
+	doc/media/images/admin_handler_fastcgi1.png,
+	doc/media/images/admin_icons3.png,
+	doc/media/images/admin_handler_cgi.png,
+	doc/media/images/admin_handler_fastcgi2.png,
+	doc/media/images/admin_validators_pam.png,
+	doc/media/images/admin_advanced.png,
+	doc/media/images/admin_index.png,
+	doc/media/images/admin_handler_dirlist.png,
+	doc/media/images/admin_handler_onlylisting.png,
+	doc/media/images/admin_launch.png,
+	doc/media/images/admin_handler_file.png,
+	doc/media/images/admin_general.png,
+	doc/media/images/admin_vserver_loggers.png: All these images have
+	been updated to reflect all the cherokee-admin changes since 0.6.
+
 2008-05-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/run-tests.py: Added a new '-a' parameter. It randomizes the
