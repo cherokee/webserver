@@ -26,7 +26,7 @@ configuration file by hand, so it is a format that only developers
 should know about.
 
 The following blocks will summarize the configuration keys that
-Cherokee 0.6 handles:
+Cherokee 0.7 handles:
 
 Server
 ------
@@ -146,14 +146,16 @@ includes a number of rules against which each request will be checked.
 
 There are a number of rules types, each one checking a different
 aspect of the request. The most usual rule types are the ones that
-checks the request URI: directories, extensions and regular
-expressions.
+checks the request URI: directories, extensions, regular expressions
+and headers. 
 
-All the rules types accept the same configuration parameters, so
-independently of the rule type, the accepted sub-parameter will remain
-the same. The rule syntax for all the rule types by `default` is:
+All the rule types accept the same configuration sub-properties.
+However, the ``match`` property must be present in all the cases. It
+specifies which is the rule type and its properties.
 
-vserver! ``name`` !rule! ``rule_type`` ! ``rule_match``
+The general syntax is:
+
+vserver ! ``name`` ! rule ! ``prioriry`` ! match 
 
 The rule types plug-ins shipped within a standard Cherokee release
 include:
@@ -161,23 +163,38 @@ include:
 :Directory:
   The directory specifies how to handle its contents.
 
-  Example: the *icons* directory of the default virtual host would be represented by
+  Example: the entry with priority 20, setting the properties for the
+  *icons* directory of the default virtual host would be represented
+  by::
 
-  ``vserver!default!rule!directory!/icons``
+      vserver!default!rule!20!match!type = directory
+      vserver!default!rule!20!match!directory = /icons
 
 :Extension:
   It specifies a list of extensions and how they should be handled.
 
-  Eg: the JPG extensions is 
+  Eg: the JPG extensions is::
 
-  ``vserver!default!rule!extensions!jpg,jpeg``
+      vserver!default!rule!30!match!type = extensions
+      vserver!default!rule!30!match!extensions = jpg,jpeg
 
 :Requests:
   When a request matches a regular expression entry, it uses its configuration.
 
-  Eg: requests beginning with 'a' and PHP extension
+  Eg: requests beginning with 'a' and PHP extension::
 
-  ``vserver!default!rule!request!^a.*\.php$``
+      vserver!default!rule!40!match!type = request
+      vserver!default!rule!40!match!request = ^a.*\.php$
+
+:Header: 
+  It tries to match a regular expression against a certain header
+  entry.
+
+  Eg: check whether the Referer header matches a specific host::
+
+      vserver!default!rule!50!match!type = header
+      vserver!default!rule!50!match!header = Referer
+      vserver!default!rule!50!match!match = .+\.example\.com
 
 :Default: 
 
@@ -185,9 +202,9 @@ include:
   configured at the end of the rule list to handle the request that
   did not match any other rule.
 
-  Eg: Default rule the 'default' virtual server
+  Eg: Default rule the 'default' virtual server::
 
-  ``vserver!default!rule!default``
+      vserver!default!rule!default
 
 
 The following parameters are concatenated with any of the previous

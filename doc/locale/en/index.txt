@@ -1,8 +1,8 @@
 ==========================
-Cherokee 0.6 Documentation
+Cherokee 0.7 Documentation
 ==========================
 
-Welcome to the 0.6 documentation.
+Welcome to the 0.7 documentation.
 
 Compiling and Installing
 ========================
