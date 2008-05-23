@@ -213,8 +213,9 @@ handler_server_info.c \
 handler_server_info.h \
 logo.inc 
 
-libplugin_server_info_la_LDFLAGS = $(module_ldflags) -lcherokee-config
+libplugin_server_info_la_LDFLAGS = $(module_ldflags)
 libplugin_server_info_la_SOURCES = $(handler_server_info)
+libplugin_server_info_la_LIBADD  = libcherokee-config.la
 
 if STATIC_HANDLER_SERVER_INFO
 static_handler_server_info_src = $(handler_server_info)

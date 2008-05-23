@@ -1,5 +1,9 @@
 2008-05-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/Makefile.am (libplugin_server_info_la_LIBADD): This
+	patch fixs a compiling dependency problem. It should fix the
+	Gentoo bug 213981: http://bugs.gentoo.org/show_bug.cgi?id=213981
+
 	* cherokee/icons.c, cherokee/icons.h: The file matching AVL
 	structure has been replaced with a linked list. It is cleaner, and
 	at the end of the day, the old code was using a AVL with O(n)
