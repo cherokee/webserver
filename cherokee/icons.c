@@ -31,17 +31,48 @@
 #define ENTRIES "icons"
 
 
+typedef struct {
+	cherokee_list_t   entry;
+	cherokee_buffer_t match;
+	cherokee_buffer_t icon;
+} file_matching_t;
+
+static file_matching_t *
+matching_new (cherokee_buffer_t *file,
+	      cherokee_buffer_t *icon)
+{
+	file_matching_t *n;
+
+	n = (file_matching_t *)malloc (sizeof(file_matching_t));
+	INIT_LIST_HEAD (&n->entry);
+
+	cherokee_buffer_init (&n->match);
+	cherokee_buffer_init (&n->icon);
+	cherokee_buffer_add_buffer (&n->match, file);
+	cherokee_buffer_add_buffer (&n->icon, icon);
+
+	return n;
+}
+
+static void
+matching_free (file_matching_t *match)
+{
+	cherokee_buffer_mrproper (&match->match);
+	cherokee_buffer_mrproper (&match->icon);
+	free (match);
+}
+
+
+
 ret_t 
 cherokee_icons_new (cherokee_icons_t **icons)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT(n, icons);
 
-	ret = cherokee_avl_init (&n->files);
-	if (unlikely(ret < ret_ok))
-		return ret;
+	INIT_LIST_HEAD (&n->file_matching);
 
-	ret = cherokee_avl_init (&n->files_matching);
+	ret = cherokee_avl_init (&n->files);
 	if (unlikely(ret < ret_ok))
 		return ret;
 
@@ -75,15 +106,22 @@ free_entry (void *param)
 ret_t
 cherokee_icons_free (cherokee_icons_t *icons)
 {
+	cherokee_list_t *i, *j;
+
 	if (unlikely (icons == NULL))
 		return ret_ok;
 
-	/* It stores buffers as values,
+	/* Free the list and AVL trees
 	 */
+	list_for_each_safe (i, j, &icons->file_matching) {
+		matching_free((file_matching_t *)i);
+	}
+
 	cherokee_avl_mrproper (&icons->files, free_entry);
 	cherokee_avl_mrproper (&icons->suffixes, free_entry);
-	cherokee_avl_mrproper (&icons->files_matching, free_entry);
 
+	/* Free the special icons buffers
+	 */
 	cherokee_buffer_mrproper (&icons->default_icon);
 	cherokee_buffer_mrproper (&icons->directory_icon);
 	cherokee_buffer_mrproper (&icons->parentdir_icon);
@@ -99,14 +137,26 @@ cherokee_icons_add_file (cherokee_icons_t *icons, cherokee_buffer_t *icon, chero
 	ret_t              ret;
 	cherokee_buffer_t *tmp = NULL;
 
+	/* Add a wildcards entry
+	 */
+	if ((strchr (file->buf, '*') != NULL) ||
+	    (strchr (file->buf, '?') != NULL)) 
+	{
+		file_matching_t *match;
+
+		match = matching_new (file, icon);
+		if (unlikely (match == NULL))
+			return ret_nomem;
+
+		cherokee_list_add (&match->entry, &icons->file_matching);
+		return ret_ok;
+	} 
+
+	/* Add a plain name
+	 */
 	ret = cherokee_buffer_dup (icon, &tmp);
 	if (unlikely (ret != ret_ok))
 		return ret;
-
-	if ((strchr (file->buf, '*') != NULL) ||
-	    (strchr (file->buf, '?') != NULL)) {
-		return cherokee_avl_add (&icons->files_matching, file, tmp);
-	}
 
 	return cherokee_avl_add (&icons->files, file, tmp);
 }
@@ -152,29 +202,13 @@ cherokee_icons_set_default (cherokee_icons_t *icons, cherokee_buffer_t *icon)
 
 
 ret_t 
-match_file (cherokee_buffer_t *key, void *value, void *param)
-{
-	ret_t              ret;
-	cherokee_buffer_t *param_file = param;
-
-	UNUSED(value);
-
-	ret = cherokee_wildcard_match (key->buf, param_file->buf);
-	if (ret == ret_ok)
-		return ret_deny;
-
-	return ret_ok;
-}
-
-
-ret_t 
 cherokee_icons_get_icon (cherokee_icons_t   *icons, 
 			 cherokee_buffer_t  *file,
 			 cherokee_buffer_t **icon_ret)
 {
-	ret_t              ret;
-	char              *suffix;
-	cherokee_buffer_t *tmp_buf = NULL;
+	ret_t            ret;
+	char            *suffix;
+	cherokee_list_t *i;
 
 	/* Look for the filename
 	 */
@@ -191,21 +225,19 @@ cherokee_icons_get_icon (cherokee_icons_t   *icons,
 			return ret_ok;
 	}
 	
-	/* Look for the wildcat matching
+	/* Look for the wildcard matching
 	 */
-	ret = cherokee_avl_while (&icons->files_matching, /* table    */
-				  match_file,             /* function */
-				  file,                   /* param    */
-				  NULL,                   /* ret: key */
-				  (void **)&tmp_buf);     /* ret: val */
-	if ((ret != ret_ok) &&
-	    (tmp_buf != NULL)) 
-	{
-		*icon_ret = tmp_buf;
-		return ret_ok;
+	list_for_each (i, &icons->file_matching) {
+		file_matching_t *match = (file_matching_t *)i;
+		
+		ret = cherokee_wildcard_match (match->match.buf, file->buf);
+		if (ret == ret_ok) {
+			*icon_ret = &match->icon;
+			return ret_ok;
+		}
 	}
 
-	/* Default one
+	/* Use the default icon
 	 */
 	if (! cherokee_buffer_is_empty (&icons->default_icon)) {
 		*icon_ret = &icons->default_icon;
