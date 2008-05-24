@@ -1205,8 +1205,10 @@ for mod in $modules; do
 	fi
 done
 
+AC_MSG_CHECKING([loader.autoconf files])
 printf "$ext_defs\n"                                 > ${srcdir}/cherokee/loader.autoconf.h
 printf "$headers \n\n $add_calls \n\n $init_calls\n" > ${srcdir}/cherokee/loader.autoconf.inc
+AC_MSG_RESULT([done])
 
 dnl
 dnl Static/Dynamic modules
@@ -1242,7 +1244,7 @@ AM_CONDITIONAL(STATIC_RULE_DIRECTORY,         grep directory      $conf_h >/dev/
 AM_CONDITIONAL(STATIC_RULE_EXTENSIONS,        grep extensions     $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_REQUEST,           grep request        $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_HEADER,            grep header         $conf_h >/dev/null)
-# These must the at the end
+# These must be at the end
 AM_CONDITIONAL(STATIC_RULE_NOT,               grep _not_          $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_AND,               grep _and_          $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_OR,                grep _or_           $conf_h >/dev/null)

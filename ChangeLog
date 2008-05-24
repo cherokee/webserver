@@ -1,3 +1,13 @@
+2008-05-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/Makefile.am (INCLUDES), cget/Makefile.am: Added a new
+	-I entry for the C compiler. It was needed to allow to work in a
+	VPATH environment.
+
+	* doc/build_docs.py (main), doc/Makefile.am: A few path management
+	issues have been fixed.  There were a couple of VPATH compiling
+	issues because of this problem.
+
 2008-05-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/Makefile.am (libplugin_server_info_la_LIBADD): This

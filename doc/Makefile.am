@@ -100,4 +100,4 @@ $(GENERATED_FILES)
 
 .NOTPARALLEL: $(GENERATED_FILES)
 $(GENERATED_FILES):
-	python build_docs.py -v
+	python $(top_srcdir)/doc/build_docs.py -v

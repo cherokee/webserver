@@ -1,6 +1,7 @@
 ## Cherokee: cherokee/Makefile.am  -*- makefile -*-
 
 INCLUDES = \
+-I${top_srcdir} \
 $(TLS_CFLAGS) \
 $(PTHREAD_CFLAGS)
 

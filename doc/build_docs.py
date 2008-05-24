@@ -67,7 +67,7 @@ def build_document(text):
     return publish_parts(text, writer=CherokeeHTMLWriter())
 
 def main():
-    output_dir = '.'
+    output_dir = './'
     
     #
     # Check parameters
@@ -75,8 +75,9 @@ def main():
     verbose = False
     if '-v' in sys.argv:
         verbose = True
-        sys.argv.remove('-v')
-    
+        sys.argv.remove('-v')    
+
+    prefix = os.path.dirname(sys.argv[0])
 
     #
     # get the language to compile
@@ -87,7 +88,7 @@ def main():
         except IndexError:
             lang = 'en'
     finally:
-        lang_dir = 'locale/%s/' % lang
+        lang_dir = os.path.join (prefix, 'locale', lang)
         if not os.path.exists(lang_dir):
             print ('language %s does not exist.' % lang)
             raise SystemExit
@@ -100,7 +101,8 @@ def main():
         'TEMPLATE_DEBUG': False,
         'TEMPLATE_LOADERS':
             ('django.template.loaders.filesystem.load_template_source',),
-        'TEMPLATE_DIRS': ('templates/',)
+        'TEMPLATE_DIRS': 
+            (os.path.join (prefix, 'templates'),)
     })
     
     doc_detail_template = get_template('doc_detail.html')
@@ -139,7 +141,7 @@ def main():
             else:
                 parts = {'title': 'Unknown', 'body': 'No docutils found.'}
             
-            write_dir = os.path.join(output_dir, d.replace(lang_dir, ''))
+            write_dir = os.path.normpath (output_dir + d.replace(lang_dir, ''))
             
             if not os.path.exists(write_dir):
                 os.mkdir(write_dir)

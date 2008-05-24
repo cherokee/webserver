@@ -1,6 +1,7 @@
 ## Cherokee: src/cget/Makefile.am  -*- makefile -*-
 
 INCLUDES = -I. \
+-I${top_srcdir} \
 -I${top_srcdir}/cherokee \
 $(TLS_CFLAGS) \
 $(PTHREAD_CFLAGS) \
