@@ -1,11 +1,6 @@
 Cherokee Web Server road map 
 ============================
 
-0.7.0
------
-[ ] Make cherokee-admin friendlier 
-[ ] New header 'entry'
-
 0.8.0
 -----
 [ ] Mime encodings separated from mime types
