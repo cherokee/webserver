@@ -25,7 +25,6 @@ Later
 [ ] Generic caching (HTTP-Cache)
 [ ] AIO based fdpoll
 [ ] Memcached support
-[ ] Chuncked encoding
 [ ] Dtrace hooks
 [ ] priv.h on Solaris
 [ ] Language support (handler?)

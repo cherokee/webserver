@@ -1555,19 +1555,25 @@ cherokee_buffer_add_chunked (cherokee_buffer_t *buf, char *txt, size_t size)
 {
 	ret_t ret;
 
-	ret = cherokee_buffer_add_str    (buf, "0x");
+        /* Chunk format (simplified):
+	 *
+	 * <HEX SIZE> [ chunk extension ] CRLF
+	 * <DATA> CRLF
+	 */
+
+	ret = cherokee_buffer_add_ulong16 (buf, (culong_t)size);
 	if (unlikely (ret < ret_ok))
 		return ret_ok;
 
-	ret = cherokee_buffer_add_ulong16(buf, (culong_t) size);
+	ret = cherokee_buffer_add_str (buf, CRLF);
 	if (unlikely (ret < ret_ok))
 		return ret_ok;
 
-	ret = cherokee_buffer_add_str    (buf, CRLF);
+	ret = cherokee_buffer_add (buf, txt, size);
 	if (unlikely (ret < ret_ok))
 		return ret_ok;
 
-	return cherokee_buffer_add (buf, txt, size);
+	return cherokee_buffer_add_str (buf, CRLF);
 }
 
 

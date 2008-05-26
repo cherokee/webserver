@@ -59,6 +59,8 @@ struct cherokee_handler_cgi_base {
 	cherokee_handler_cgi_base_phase_t  init_phase;	
 	cuint_t                            got_eof;
 	char                              *extra_param;
+
+	cherokee_boolean_t                 chunked;
 	size_t                             content_length;
 
 	cherokee_buffer_t                  param; 
@@ -83,6 +85,7 @@ typedef struct {
 	cuint_t                            change_user;
 	cherokee_buffer_t                  script_alias;
  	cherokee_boolean_t                 check_file;	
+	cherokee_boolean_t                 allow_chunked;
 	cherokee_boolean_t                 is_error_handler;
 	cherokee_boolean_t                 pass_req_headers;
 } cherokee_handler_cgi_base_props_t;
