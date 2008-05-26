@@ -69,6 +69,7 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 	 */
 	cgi->init_phase          = hcgi_phase_build_headers;
 	cgi->content_length      = 0;
+	cgi->content_length_set  = false;
 	cgi->chunked             = false;
 	cgi->got_eof             = false;
 
@@ -767,6 +768,7 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 			cherokee_buffer_add (&tmp, begin+16, end - (begin+16));
 			cgi->content_length = strtoll (tmp.buf, (char **)NULL, 10);
+			cgi->content_length_set = true;
 			cherokee_buffer_mrproper (&tmp);
 
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
@@ -847,12 +849,14 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 	/* At this point, cgi->content_length has already got a value
 	 * if the response contained a Content-Length header
 	 */
-	cgi->chunked = ((cgi->content_length <= 0) &&
+	cgi->chunked = ((! cgi->content_length_set) &&
+			(cgi->content_length > 0) &&
 			(HANDLER_CGI_BASE_PROPS(cgi)->allow_chunked) &&
 			(HANDLER_CONN(cgi)->header.version == http_version_11));
 	
-	TRACE (ENTRIES, "Chunked: nolen=%d, allowed=%d, version=%d => %d\n",
-	       (cgi->content_length <= 0),
+	TRACE (ENTRIES, "Chunked: !len_set=%d, len=%d, allowed=%d, version=%d => %d\n",
+	       (! cgi->content_length_set),
+	       cgi->content_length,
 	       (HANDLER_CGI_BASE_PROPS(cgi)->allow_chunked),
 	       (HANDLER_CONN(cgi)->header.version == http_version_11),
 	       cgi->chunked);

@@ -1,5 +1,9 @@
 2008-05-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_cgi_base.h,cherokee/handler_cgi_base.c: Do not
+	use chuncked encoding when there is a content-length header. Do
+	not use it either when there is no response body.
+
 	* cherokee/buffer.c, cherokee/handler_cgi_base.h,
 	cherokee/handler_cgi_base.c: Added "Transfer-Encoding: chunked"
 	support for all the CGI based handlers: CGI, SCGI and FastCGI.
