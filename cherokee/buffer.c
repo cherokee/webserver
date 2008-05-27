@@ -201,6 +201,14 @@ cherokee_buffer_add_buffer (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
 
 
 ret_t
+cherokee_buffer_add_fsize (cherokee_buffer_t *buf, CST_SIZE size)
+{
+	
+	return ret_ok;
+}
+
+
+ret_t
 cherokee_buffer_add_long10 (cherokee_buffer_t *buf, clong_t lNum)
 {
 	culong_t ulNum                 = (culong_t) lNum;
