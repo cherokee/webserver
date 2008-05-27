@@ -203,6 +203,34 @@ cherokee_buffer_add_buffer (cherokee_buffer_t *buf, cherokee_buffer_t *buf2)
 ret_t
 cherokee_buffer_add_fsize (cherokee_buffer_t *buf, CST_SIZE size)
 {
+	ret_t       ret;
+	int         remain;
+	const char  ord[]  = "KMGTPE";
+	const char *o      = ord;
+
+	ret = cherokee_buffer_ensure_size (buf, buf->len + 8);
+	if (unlikely (ret != ret_ok)) 
+		return ret;
+
+	if (size < 973)
+		return cherokee_buffer_add_ulong10 (buf, (culong_t)size);
+
+	do {
+		remain = (int)(size & 1023);
+		size >>= 10;
+		if (size >= 973) {
+			++o;
+			continue;
+		}
+		if (size < 9 || (size == 9 && remain < 973)) {
+			if ((remain = ((remain * 5) + 256) / 512) >= 10)
+				++size, remain = 0;
+			return cherokee_buffer_add_va_fixed (buf, "%d.%d%c", (int) size, remain, *o);
+		}
+		if (remain >= 512)
+			++size;
+		return cherokee_buffer_add_va_fixed (buf, "%3d%c", (int) size, *o);
+	} while (1);
 	
 	return ret_ok;
 }

@@ -89,16 +89,21 @@ cherokee_admin_server_reply_set_port_tls (cherokee_handler_admin_t *ahdl, cherok
 ret_t 
 cherokee_admin_server_reply_get_tx (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
+	ret_t              ret;
 	size_t             rx, tx;
-	char               tmp[8];
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
 
 	UNUSED(question);
 
-	cherokee_server_get_total_traffic (srv, &rx, &tx);
+	ret = cherokee_server_get_total_traffic (srv, &rx, &tx);
+	if (unlikely (ret != ret_ok)) return ret;
 
-	cherokee_strfsize (tx, tmp);
-	cherokee_buffer_add_va (reply, "server.tx is %s", tmp);
+	ret = cherokee_buffer_add_str (reply, "server.tx is ");
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_buffer_add_fsize (reply, tx);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	return ret_ok;
 }
 
@@ -106,16 +111,21 @@ cherokee_admin_server_reply_get_tx (cherokee_handler_admin_t *ahdl, cherokee_buf
 ret_t 
 cherokee_admin_server_reply_get_rx (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
+	ret_t              ret;
 	size_t             rx, tx;
-	char               tmp[8];
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
 
 	UNUSED(question);
 
-	cherokee_server_get_total_traffic (srv, &rx, &tx);
+	ret = cherokee_server_get_total_traffic (srv, &rx, &tx);
+	if (unlikely (ret != ret_ok)) return ret;
 
-	cherokee_strfsize (rx, tmp);
-	cherokee_buffer_add_va (reply, "server.rx is %s", tmp);
+	ret = cherokee_buffer_add_str (reply, "server.rx is ");
+	if (unlikely (ret != ret_ok)) return ret;
+
+	ret = cherokee_buffer_add_fsize (reply, rx);
+	if (unlikely (ret != ret_ok)) return ret;
+
 	return ret_ok;
 }
 

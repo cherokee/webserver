@@ -19,7 +19,6 @@ Later
 [ ] WSGI handler
 [ ] Upload progress module
 [ ] mod_evasive
-[ ] New header entry
 [ ] AJPv13 handler
 [ ] WebDAV handler
 [ ] Generic caching (HTTP-Cache)

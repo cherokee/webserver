@@ -218,16 +218,19 @@ add_uptime_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 static void
 add_data_sent_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
-	size_t rx, tx;
-	char tmp[8];
-
-	cherokee_server_get_total_traffic (srv, &rx, &tx);
+	size_t            rx, tx;
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 	
-	cherokee_strfsize (tx, tmp);
-	table_add_row_str (buf, "Data sent", tmp);
+	cherokee_server_get_total_traffic (srv, &rx, &tx);
+       
+	cherokee_buffer_add_fsize (&tmp, tx);
+	table_add_row_buf (buf, "Data sent", &tmp);
 
-	cherokee_strfsize (rx, tmp);
-	table_add_row_str (buf, "Data received", tmp);
+	cherokee_buffer_clean (&tmp);
+	cherokee_buffer_add_fsize (&tmp, rx);
+	table_add_row_buf (buf, "Data received", &tmp);
+
+	cherokee_buffer_mrproper (&tmp);
 }
 
 static void
@@ -370,8 +373,8 @@ build_icons_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 static void
 build_connection_details_content (cherokee_buffer_t *buf, cherokee_list_t *infos) 
 {
-	char tmp[8];
-	cherokee_list_t *i, *j;
+	cherokee_list_t   *i, *j;
+	cherokee_buffer_t tmp    = CHEROKEE_BUF_INIT;
 
 	list_for_each_safe (i, j, infos) {
 		cherokee_connection_info_t *info = CONN_INFO(i);
@@ -381,16 +384,19 @@ build_connection_details_content (cherokee_buffer_t *buf, cherokee_list_t *infos
 		table_add_row_buf (buf, "Phase",         &info->phase);
 		table_add_row_buf (buf, "Request",       &info->request);
 		table_add_row_buf (buf, "Handler",       &info->handler);
+		
+		cherokee_buffer_clean (&tmp);
+		cherokee_buffer_add_fsize (&tmp, strtoll(info->rx.buf, (char**)NULL, 10));
+		table_add_row_buf (buf, "Info sent", &tmp);
 
-		cherokee_strfsize (strtoll(info->rx.buf, (char**)NULL, 10), tmp);
-		table_add_row_str (buf, "Info sent", tmp);
-
-		cherokee_strfsize (strtoll(info->tx.buf, (char**)NULL, 10), tmp);
-		table_add_row_str (buf, "Info received", tmp);
+		cherokee_buffer_clean (&tmp);
+		cherokee_buffer_add_fsize (&tmp, strtoll(info->tx.buf, (char**)NULL, 10));
+		table_add_row_buf (buf, "Info received", &tmp);
 
 		if (! cherokee_buffer_is_empty (&info->total_size)) {
-			cherokee_strfsize (strtoll(info->total_size.buf, (char**)NULL, 10), tmp);
-			table_add_row_str (buf, "Total Size", tmp);
+			cherokee_buffer_clean (&tmp);
+			cherokee_buffer_add_fsize (&tmp, strtoll(info->total_size.buf, (char**)NULL, 10));
+			table_add_row_buf (buf, "Total Size", &tmp);
 		}
 
 		if (! cherokee_buffer_is_empty (&info->percent)) {
@@ -404,6 +410,8 @@ build_connection_details_content (cherokee_buffer_t *buf, cherokee_list_t *infos
 		table_add_row_str (buf, "", "");
 		cherokee_connection_info_free (info);
 	}
+
+	cherokee_buffer_mrproper (&tmp);
 }
 
 

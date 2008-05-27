@@ -1,3 +1,13 @@
+2008-05-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_server_info.c, cherokee/handler_dirlist.c,
+	cherokee/admin_server.c: Fixed to use the new add_fsize method.
+
+	* cherokee/buffer.c (cherokee_buffer_add_fsize),
+	cherokee/buffer.h: Added new method to print formated sizes.
+
+	* cherokee/util.h, cherokee/util.c: cherokee_strfsize() remove.
+
 2008-05-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_cgi_base.h,cherokee/handler_cgi_base.c: Do not

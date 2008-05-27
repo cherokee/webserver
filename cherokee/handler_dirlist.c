@@ -860,8 +860,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 			cherokee_buffer_clean (tmp);
 			cherokee_buffer_ensure_size (tmp, 8);
-
-			cherokee_strfsize (file->stat.st_size, tmp->buf);
+			cherokee_buffer_add_fsize (tmp, file->stat.st_size);
 
 			unit = tmp->buf;
 			while ((*unit >= '0')  && (*unit <= '9')) unit++;

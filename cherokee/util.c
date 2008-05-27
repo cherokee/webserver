@@ -119,49 +119,6 @@ cherokee_strerror_r (int err, char *buf, size_t bufsize)
 }
 
 
-/* This function is licenced under:
- * The Apache Software License, Version 1.1
- *
- * Original name: apr_strfsize()
- *
- * Copyright (c) 2000-2003 The Apache Software Foundation.  
- * All rights reserved.
- */
-char *
-cherokee_strfsize (unsigned long long size, char *buf)
-{
-	const char ord[] = "KMGTPE";
-	const char *o = ord;
-	int remain;
-
-	if (((long long) size) < 0) {
-		return strcpy(buf, "  - ");
-	}
-	if (size < 973) {
-		sprintf(buf, "%3d ", (int) size);
-		return buf;
-	}
-	do {
-		remain = (int)(size & 1023);
-		size >>= 10;
-		if (size >= 973) {
-			++o;
-			continue;
-		}
-		if (size < 9 || (size == 9 && remain < 973)) {
-			if ((remain = ((remain * 5) + 256) / 512) >= 10)
-				++size, remain = 0;
-			sprintf(buf, "%d.%d%c", (int) size, remain, *o);
-			return buf;
-		}
-		if (remain >= 512)
-			++size;
-		sprintf(buf, "%3d%c", (int) size, *o);
-		return buf;
-	} while (1);
-}
-
-
 char *
 cherokee_min_str (char *s1, char *s2)
 {
