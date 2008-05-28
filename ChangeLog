@@ -1,3 +1,9 @@
+2008-05-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/PageVServer.py, admin/Entry.py, admin/Form.py: Adds the
+	"Enabled" string right after a CheckBox whenever the "quiet"
+	option has not been set. It fixes an usability issue.
+
 2008-05-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_server_info.c, cherokee/handler_dirlist.c,

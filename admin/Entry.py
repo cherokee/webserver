@@ -19,13 +19,20 @@ class Entry:
             pass
 
     def __str__ (self):
+        suffix = ""
+        if self._type == "checkbox":
+            if "quiet" in self._kwargs and self._kwargs["quiet"]:
+                del(self._kwargs["quiet"])
+            else:
+                suffix = " Enabled"
+
         error = '<div id="error_%s"></div>' % (self._name)
         props = 'id="%s" name="%s" type="%s"' % (self._name, self._name, self._type)
 
         for prop in self._kwargs:
             props += ' %s="%s"' % (prop, self._kwargs[prop])
 
-        return "<input %s />"%(props) + error
+        return "<input %s />"%(props) + suffix + error
 
 
 

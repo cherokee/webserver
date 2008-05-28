@@ -262,7 +262,7 @@ class FormHelper (WebComponent):
         
         return render
 
-    def InstanceCheckbox (self, cfg_key, default=None):
+    def InstanceCheckbox (self, cfg_key, default=None, quiet=False):
         try:
             tmp = self._cfg[cfg_key].value.lower()
             if tmp in ["on", "1", "true"]: 
@@ -273,16 +273,17 @@ class FormHelper (WebComponent):
             value = None
 
         if value == '1':
-            entry = Entry (cfg_key, 'checkbox', checked=value)
+            entry = Entry (cfg_key, 'checkbox', quiet=quiet, checked=value)
         elif value == '0':
-            entry = Entry (cfg_key, 'checkbox')
+            entry = Entry (cfg_key, 'checkbox', quiet=quiet)
         else:
             if default == True:
-                entry = Entry (cfg_key, 'checkbox', checked='1')
+                entry = Entry (cfg_key, 'checkbox', quiet=quiet, checked='1')
             elif default == False:
-                entry = Entry (cfg_key, 'checkbox')
+                entry = Entry (cfg_key, 'checkbox', quiet=quiet)
             else:
-                entry = Entry (cfg_key, 'checkbox')
+                entry = Entry (cfg_key, 'checkbox', quiet=quiet)
+                
         return entry
 
     def AddTableCheckbox (self, table, title, cfg_key, default=None):
