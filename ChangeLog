@@ -1,5 +1,8 @@
 2008-05-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/macros.h (CHEROKEE_CRASH): Added new macro. It might be
+	helpful under some circumstances.
+
 	* admin/PageVServer.py, admin/Entry.py, admin/Form.py: Adds the
 	"Enabled" string right after a CheckBox whenever the "quiet"
 	option has not been set. It fixes an usability issue.
@@ -2914,7 +2917,7 @@
 
 	* cherokee/validator.c (cherokee_validator_parse_digest):
 	Authentication header parsing fixed. It was failing under some
-	weird circunstances (Firefox with proxy using Digest with qpop).
+	weird circumstances (Firefox with proxy using Digest with qpop).
 
 2007-02-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -4145,7 +4148,7 @@
 	fwrite() returned code.
 
 	* cherokee/connection.c (cherokee_connection_log_delayed): It
-	could return an uninitialized value under some circunstances.
+	could return an uninitialized value under some circumstances.
 	Fixed.
 
 	* cherokee/socket.h (OPENSSL_LAST_ERROR): Better initialization.

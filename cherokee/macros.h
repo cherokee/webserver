@@ -394,4 +394,7 @@
 # define SLASH '/'
 #endif
 
+
+#define CHEROKEE_CRASH do { *((int *)(0)) = 1; } while(0)
+
 #endif /* CHEROKEE_MACROS_H */
