@@ -24,11 +24,11 @@
 
 #include "common-internal.h"
 #include "handler_scgi.h"
+
 #include "connection.h"
 #include "source_interpreter.h"
 #include "thread.h"
 #include "util.h"
-
 #include "connection-protected.h"
 
 #define ENTRIES "handler,cgi"

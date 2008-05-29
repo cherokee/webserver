@@ -64,4 +64,4 @@ ret_t cherokee_handler_scgi_new  (cherokee_handler_t     **hdl, void *cnt, chero
 ret_t cherokee_handler_scgi_free (cherokee_handler_scgi_t *hdl);
 ret_t cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl);
 
-#endif /* CHEROKEE_HANDLER_CGI_H */
+#endif /* CHEROKEE_HANDLER_SCGI_H */

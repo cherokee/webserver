@@ -909,21 +909,18 @@ downloader_async.h \
 downloader_async.c
 
 
-if STATIC_HANDLER_FCGI
+if STATIC_HANDLER_FCGI 
    common_cgi = handler_cgi_base.h \
 	     	 handler_cgi_base.c
 endif
-
 if STATIC_HANDLER_FASTCGI
    common_cgi = handler_cgi_base.h \
 	     	 handler_cgi_base.c
 endif
-
 if STATIC_HANDLER_CGI
    common_cgi = handler_cgi_base.h \
 	     	 handler_cgi_base.c
 endif
-
 if STATIC_HANDLER_SCGI
    common_cgi = handler_cgi_base.h \
 	     	 handler_cgi_base.c
