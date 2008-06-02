@@ -1,5 +1,12 @@
 2008-06-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_cgi_base.c, cherokee/handler_cgi_base.h: Added
+	X-Sendfile support. It applies to the CGI, SCGI, and FastCGI
+	handlers.
+
+	* qa/166-xsendfile1.py, qa/Makefile.am (EXTRA_DIST): Added new QA
+	test to ensure that X-Sendfile works properly.
+
 	* cherokee/handler_file.c: The handler internalls has been
 	reworked.  It was supposing &conn->local_directory to be the
 	buffer containing the local file to be send. Now the path to the
