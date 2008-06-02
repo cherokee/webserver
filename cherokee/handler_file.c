@@ -277,9 +277,11 @@ check_cached (cherokee_handler_file_t *fhdl)
 }
 
 
-static ret_t 
-open_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn)
+static ret_t
+open_local_directory (cherokee_handler_file_t *fhdl, cherokee_buffer_t *local_file)
 {
+	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
+
 	/* Check if it is already open
 	 */
 	if (fhdl->fd > 0)
@@ -287,7 +289,7 @@ open_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn
 
 	/* Open it
 	 */
-	fhdl->fd = open (conn->local_directory.buf, CHE_O_READ);
+	fhdl->fd = open (local_file->buf, CHE_O_READ);
 	if (fhdl->fd > 0) return ret_ok;
 
 	/* Manage errors
@@ -307,17 +309,21 @@ open_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn
 
 
 static ret_t
-stat_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn, cherokee_iocache_entry_t **io_entry, struct stat **info)
+stat_local_directory (cherokee_handler_file_t   *fhdl, 
+		      cherokee_buffer_t         *local_file, 
+		      cherokee_iocache_entry_t **io_entry, 
+		      struct stat              **info)
 {	
-	int                re;
-	ret_t              ret;
-	cherokee_server_t *srv = CONN_SRV(conn);
+	int                    re;
+	ret_t                  ret;
+	cherokee_connection_t *conn = HANDLER_CONN(fhdl);	
+	cherokee_server_t     *srv  = CONN_SRV(conn);
 
 	/* I/O cache
 	 */
 	if (HDL_FILE_PROP(fhdl)->use_cache) {
-		ret = cherokee_iocache_get_or_create_w_stat (srv->iocache, &conn->local_directory, io_entry);
-		TRACE (ENTRIES, "%s, use_iocache=1 ret=%d\n", conn->local_directory.buf, ret);
+		ret = cherokee_iocache_get_or_create_w_stat (srv->iocache, local_file, io_entry);
+		TRACE (ENTRIES, "%s, use_iocache=1 ret=%d\n", local_file->buf, ret);
 
 		switch (ret) {
 		case ret_ok:
@@ -343,8 +349,8 @@ stat_local_directory (cherokee_handler_file_t *fhdl, cherokee_connection_t *conn
 	/* Without cache
 	 */
 without:
-	re = stat (conn->local_directory.buf, &fhdl->cache_info);
-	TRACE (ENTRIES, "%s, use_iocache=0 ret=%d\n", conn->local_directory.buf, re);
+	re = stat (local_file->buf, &fhdl->cache_info);
+	TRACE (ENTRIES, "%s, use_iocache=0 ret=%d\n", local_file->buf, re);
 
 	if (re >= 0) {
 		*info = &fhdl->cache_info;		
@@ -367,7 +373,7 @@ without:
 
 
 ret_t 
-cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
+cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffer_t *local_file)
 {
 	ret_t                     ret;
 	char                     *ext;
@@ -375,20 +381,11 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	cherokee_connection_t    *conn     = HANDLER_CONN(fhdl);
 	cherokee_server_t        *srv      = HANDLER_SRV(fhdl);
 
-	/* Build the local file path                         1.- BUILD
-	 * Take care with "return"s until 2.
-	 */
-	if (conn->request.len > 1) {
-		cherokee_buffer_add (&conn->local_directory, conn->request.buf+1, conn->request.len-1); 
-	}
-
 	/* Query the I/O cache
 	 */
-	ret = stat_local_directory (fhdl, conn, &conn->io_entry_ref, &fhdl->info);
-	if (ret != ret_ok) {
-		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);		
+	ret = stat_local_directory (fhdl, local_file, &conn->io_entry_ref, &fhdl->info);
+	if (ret != ret_ok) 
 		return ret;
-	}
 
 	/* Ensure it is a file
 	 */
@@ -409,10 +406,8 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	/* Is it cached on the client?
 	 */
 	ret = check_cached (fhdl);
-	if ((ret != ret_ok) || (fhdl->not_modified)) {
-		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
+	if ((ret != ret_ok) || (fhdl->not_modified))
 		return ret;
-	}
 
 	/* Is this file cached in the io cache?
 	 */
@@ -427,12 +422,12 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	
 	if (use_io) {
 		ret = cherokee_iocache_get_or_create_w_mmap (srv->iocache,
-							     &conn->local_directory,
+							     local_file,
 							     &conn->io_entry_ref, 
 							     &fhdl->fd);
 
 		TRACE (ENTRIES, "iocache looked up, local=%s ret=%d\n", 
-		       conn->local_directory.buf, ret);
+		       local_file->buf, ret);
 
 		switch (ret) {
 		case ret_ok:
@@ -441,7 +436,6 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 			use_io = false;
 			break;
 		default:
-			cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
 			return ret_error;
 		}
 	}
@@ -449,17 +443,10 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 	/* Maybe open the file
 	 */
 	if ((fhdl->fd < 0) && (!use_io)) {
-		ret = open_local_directory (fhdl, conn);
-		if (ret != ret_ok) {
-			cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
+		ret = open_local_directory (fhdl, local_file);
+		if (ret != ret_ok)
 			return ret;
-		}
 	}
-
-	/* Undo the local file path                          2.- UNDO
-	 * "return" is allowed again
-	 */
-	cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
 
 	/* Is it a directory?
 	 */
@@ -525,6 +512,30 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 #endif
 	
 	return ret_ok;
+}
+
+
+ret_t 
+cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
+{
+	ret_t                  ret;
+ 	cherokee_connection_t *conn = HANDLER_CONN(fhdl); 
+
+	/* Build the local file path
+	 */
+	if (conn->request.len > 1) {
+		cherokee_buffer_add (&conn->local_directory, conn->request.buf+1, conn->request.len-1); 
+	}
+
+	ret = cherokee_handler_file_custom_init (fhdl, &conn->local_directory);
+
+	/* Undo the local directory
+	 */
+	if (conn->request.len > 1) {
+		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
+	}
+	
+	return ret;
 }
 
 
