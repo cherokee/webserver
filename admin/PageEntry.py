@@ -15,10 +15,8 @@ NOTE_ALLOW_FROM    = 'List of IPs and subnets allowed to access the resource.'
 NOTE_VALIDATOR     = 'Which, if any, will be the authentication method.'
 
 DATA_VALIDATION = [
-    ("vserver!.*?!(directory|extensions|request)!.*?!document_root", 
-     (validations.is_local_dir_exists, 'cfg')),
-    ("vserver!.*?!(directory|extensions|request)!.*?!allow_from",
-     validations.is_ip_or_netmask_list)
+    ("vserver!.*?!rule!(\d+)!document_root", (validations.is_local_dir_exists, 'cfg')),
+    ("vserver!.*?!rule!(\d+)!allow_from",     validations.is_ip_or_netmask_list)
 ]
 
 class PageEntry (PageMenu, FormHelper):
