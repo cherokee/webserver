@@ -1,5 +1,9 @@
 2008-06-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/rule_request.c (configure),
+	cherokee/rule_directory.c (configure): PRINT_ERROR calls were
+	missing the new line character.
+
 	* cherokee/handler_cgi_base.c (xsendfile_add_headers): Replaces a
 	stat() call by a check against the IO/cache.  It increases
 	performance when using X-Sendfile.

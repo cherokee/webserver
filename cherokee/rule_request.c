@@ -111,7 +111,7 @@ configure (cherokee_rule_request_t   *rule,
 	 */
 	ret = cherokee_config_node_copy (conf, "request", &rule->pattern);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Rule prio=%d needs a 'request' property", 
+		PRINT_ERROR ("Rule prio=%d needs a 'request' property\n", 
 			     RULE(rule)->priority);
 		return ret_error;
 	}
