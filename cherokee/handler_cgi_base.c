@@ -756,8 +756,7 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	char                  *end1;
 	char                  *end2;
 	char                  *begin;
-	cherokee_connection_t *conn = HANDLER_CONN(cgi);
-
+	cherokee_connection_t *conn    = HANDLER_CONN(cgi);
 	
 	if (cherokee_buffer_is_empty (buffer) || buffer->len <= 5)
 		return ret_ok;
@@ -770,10 +769,13 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 		cherokee_buffer_drop_endding (buffer, 2);
 	}
 	
+	TRACE (ENTRIES, "CGI header: %s\n", buffer->buf);
+
 	/* Process the header line by line
 	 */
 	begin = buffer->buf;
-	while (begin != NULL) {
+	while ((begin != NULL) && *begin)
+	{
 		end1 = strchr (begin, CHR_CR);
 		end2 = strchr (begin, CHR_LF);
 
@@ -781,7 +783,7 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 		if (end == NULL) break;
 
 		end2 = end;
-		while (((*end2 == CHR_CR) || (*end2 == CHR_LF)) && (*end2 != '\0'))
+		while ((*end2 == CHR_CR) || (*end2 == CHR_LF))
 			end2++;
 
 		if (strncasecmp ("Status: ", begin, 8) == 0) {
@@ -798,31 +800,36 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 			}
 
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
+			end2 = begin;
 
 			conn->error_code = code;			
 			continue;
 		}
 
 		else if (strncasecmp ("Content-Length: ", begin, 16) == 0) {
-			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+			char saved = *end;
 
-			cherokee_buffer_add (&tmp, begin+16, end - (begin+16));
-			cgi->content_length = strtoll (tmp.buf, (char **)NULL, 10);
+			*end = '\0';
+			cgi->content_length = strtoll (begin+16, (char **)NULL, 10);
 			cgi->content_length_set = true;
-			cherokee_buffer_mrproper (&tmp);
+			*end = saved;
 
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
+			end2 = begin;
 		}
 
 		else if (strncasecmp ("Location: ", begin, 10) == 0) {
 			cherokee_buffer_add (&conn->redirect, begin+10, end - (begin+10));
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
+			end2 = begin;
+		} 
 
-		} else if ((HANDLER_CGI_BASE_PROPS(cgi)->allow_xsendfile) &&
-			   (strncasecmp ("X-Sendfile: ", begin, 12) == 0)) {
+		else if ((HANDLER_CGI_BASE_PROPS(cgi)->allow_xsendfile) &&
+			 (strncasecmp ("X-Sendfile: ", begin, 12) == 0)) {
 
 			cherokee_buffer_add (&cgi->xsendfile, begin+12, end - (begin+12));
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
+			end2 = begin;
 
 			TRACE (ENTRIES, "Found X-Sendfile header: '%s'\n", cgi->xsendfile.buf);
 		}
@@ -832,7 +839,6 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 	return ret_ok;
 }
-
 
 
 ret_t 
@@ -921,6 +927,14 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 			return ret_error;
 
 		return ret_ok;
+	}
+
+	/* Content-Length response header
+	 */
+	if (cgi->content_length_set) {
+		cherokee_buffer_add_str      (outbuf, "Content-Length: ");
+		cherokee_buffer_add_ullong10 (outbuf, (cullong_t) cgi->content_length);
+		cherokee_buffer_add_str      (outbuf, CRLF);		
 	}
 
 	/* At this point, cgi->content_length has already got a value

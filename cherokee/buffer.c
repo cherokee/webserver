@@ -824,10 +824,15 @@ cherokee_buffer_remove_string (cherokee_buffer_t *buf, char *string, int string_
 
 
 ret_t 
-cherokee_buffer_remove_chunk (cherokee_buffer_t *buf, int from, int len)
+cherokee_buffer_remove_chunk (cherokee_buffer_t *buf, cuint_t from, cuint_t len)
 {
 	char *end;
 	char *begin;
+
+	if (len == buf->len) {
+		cherokee_buffer_clean (buf);
+		return ret_ok;
+	}
 
 	begin = buf->buf + from;
 	end   = begin + len;

@@ -1,4 +1,22 @@
+2008-06-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/buffer.h, cherokee/buffer.c: Type fix.
+
+	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_add_headers):
+	It was not adding the Content-Length header in any of the CGI
+	based handler.  This small change will improve performance
+	significantly, because it will allow the server and the client to
+	use keep-alive connections.
+
+	* cherokee/handler_cgi_base.c (parse_header): Fixes an potential
+	error when more than one response header were substituted at the
+	same time.
+
 2008-06-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_cgi_base.c (parse_header): Optimizes the
+	parsing of the Content-Length header. Now it uses a malloc() call
+	less. It is not much, but it's something.
 
 	* admin/ModuleCgi.py (ModuleCgiBase._op_render): Added X-Sendfile
 	support to the administration interface.
