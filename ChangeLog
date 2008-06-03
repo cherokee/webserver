@@ -1,5 +1,9 @@
 2008-06-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cget/main.c (do_download__read_body): Fixed compilation. It
+	broke on the cherokee_strfsize() to cherokee_buffer_add_fsize()
+	transition.
+
 	* cherokee/buffer.h, cherokee/buffer.c: Type fix.
 
 	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_add_headers):

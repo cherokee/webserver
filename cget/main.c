@@ -226,10 +226,9 @@ do_download__has_headers (cherokee_downloader_t *downloader, void *param)
 static ret_t
 do_download__read_body (cherokee_downloader_t *downloader, void *param)
 {
- 	ret_t   ret;
-	ssize_t len;
-	char    tmp[5];
-	char    total[5];
+ 	ret_t             ret;
+	ssize_t           len;
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
 	UNUSED(param);
 
@@ -243,14 +242,16 @@ do_download__read_body (cherokee_downloader_t *downloader, void *param)
 
 	/* Print info
 	 */
-	cherokee_strfsize (downloader->content_length, total);
-	cherokee_strfsize (downloader->info.body_recv, tmp);
+	cherokee_buffer_add_fsize (&tmp, downloader->content_length);
+	cherokee_buffer_add_str   (&tmp, " of ");
+	cherokee_buffer_add_fsize (&tmp, downloader->info.body_recv);
 
 	if (! quiet) {
-		fprintf (stderr, "\rDownloading: %s of %s", tmp, total);
+		fprintf (stderr, "\rDownloading: %s", tmp.buf);
 		fflush(stderr);
 	}
 
+	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;	
 }
 
