@@ -1,5 +1,8 @@
 2008-06-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleCgi.py (ModuleCgiBase._op_render): Added X-Sendfile
+	support to the administration interface.
+
 	* admin/PageEntry.py: Added a new check. The Default match should
 	not be changed. There ought to be a single 'default' rule.
 
