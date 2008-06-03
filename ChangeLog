@@ -1,3 +1,9 @@
+2008-06-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_cgi_base.c (xsendfile_add_headers): Replaces a
+	stat() call by a check against the IO/cache.  It increases
+	performance when using X-Sendfile.
+
 2008-06-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_cgi_base.c, cherokee/handler_cgi_base.h: Added

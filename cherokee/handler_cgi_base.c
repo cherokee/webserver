@@ -722,21 +722,28 @@ bye:
 static ret_t
 xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 {
-	int          re;
-	struct stat  info;	
+	ret_t                  ret;
+	cherokee_iocache_entry_t *cached = NULL;
+	cherokee_server_t        *srv    = HANDLER_SRV(cgi);
 
-	/* TODO: Add IOcache support here!
+	/* Get the file information
 	 */
-	re = stat (cgi->xsendfile.buf, &info);
-	if (re < 0) {
+	ret = cherokee_iocache_get_or_create_w_stat (srv->iocache, 
+						     &cgi->xsendfile, 
+						     &cached);
+	TRACE (ENTRIES, "iocache: %s, ret=%d\n", cgi->xsendfile.buf, ret);
+
+	if ((ret != ret_ok) || (! cached)) {
 		return ret_error;
 	}
 
 	/* Add Content-Length
 	 */
 	cherokee_buffer_add_str      (buffer, "Content-Length: ");
-	cherokee_buffer_add_ullong10 (buffer, (cullong_t) info.st_size);
+	cherokee_buffer_add_ullong10 (buffer, (cullong_t) cached->state.st_size);
 	cherokee_buffer_add_str      (buffer, CRLF);
+
+	cherokee_iocache_mmap_release (srv->iocache, cached);
 
 	return ret_ok;
 }
@@ -904,8 +911,7 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 		/* Instance the 'file' sub-handler
 		 */
 		handler_file_props.use_cache = true;
-
-		ret = cherokee_handler_file_new ((cherokee_handler_t **) cgi->file_handler, 
+		ret = cherokee_handler_file_new ((cherokee_handler_t **) &cgi->file_handler, 
 						 conn, MODULE_PROPS(&handler_file_props));
 		if (ret != ret_ok)
 			return ret_error;
