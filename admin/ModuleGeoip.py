@@ -3,7 +3,9 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_COUNTRIES = "Country list to which content the configuration will be applied."
+ISO3166_URL    = "http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm"
+NOTE_COUNTRIES = "List of countries from the client IPs. It must use the " + \
+                 "<a target=\"_blank\" href=\"%s\">ISO 3166</a> contry notation." % (ISO3166_URL)
 
 class ModuleGeoip (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
