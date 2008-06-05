@@ -98,7 +98,7 @@ echo "Running autoconf..."
 $AUTOCONF
 cd $ORIGDIR
 
-$srcdir/configure --enable-maintainer-mode --enable-more-warnings --enable-debug "$@"
+$srcdir/configure --enable-maintainer-mode "$@"
 
 echo 
 echo "Now type 'make' to compile $PROJECT."
