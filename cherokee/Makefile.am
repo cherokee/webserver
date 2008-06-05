@@ -156,6 +156,25 @@ endif
 
 
 #
+# Rule geoip
+#
+rule_geoip = \
+rule_geoip.c \
+rule_geoip.h
+
+libplugin_geoip_la_LDFLAGS = $(module_ldflags)  
+libplugin_geoip_la_SOURCES = $(rule_geoip)
+libplugin_geoip_la_LIBADD  = -lGeoIP
+
+if STATIC_RULE_HEADER
+static_rule_geoip_src = $(rule_geoip)
+static_rule_geoip_lib = -lGeoIP
+else
+dynamic_rule_geoip_lib = libplugin_geoip.la
+endif
+
+
+#
 # Rule not
 #
 rule_not = \
@@ -769,6 +788,7 @@ $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 $(static_validator_pam_lib) \
 $(static_validator_ldap_lib)  \
+$(static_rule_geoip_lib)  \
 $(static_validator_htpasswd_lib) \
 $(static_validator_mysql_lib) \
 $(static_handler_proxy_lib) \
@@ -932,6 +952,7 @@ $(static_rule_directory_src) \
 $(static_rule_extensions_src) \
 $(static_rule_request_src) \
 $(static_rule_header_src) \
+$(static_rule_geoip_src) \
 $(static_rule_not_src) \
 $(static_rule_and_src) \
 $(static_rule_or_src) \
@@ -1081,6 +1102,7 @@ $(dynamic_rule_directory_lib) \
 $(dynamic_rule_extensions_lib) \
 $(dynamic_rule_request_lib) \
 $(dynamic_rule_header_lib) \
+$(dynamic_rule_geoip_lib) \
 $(dynamic_rule_not_lib) \
 $(dynamic_rule_and_lib) \
 $(dynamic_rule_or_lib) \

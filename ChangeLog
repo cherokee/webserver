@@ -1,5 +1,12 @@
 2008-06-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/rule_geoip.h, cherokee/rule_geoip.c,
+	cherokee/Makefile.am, configure.in: Added a new GeoIP rule module.
+	It checks the origin IP with the GeoIP library.
+
+	* qa/167-RuleGeoIP.py, qa/Makefile.am: Added a new QA test to
+	ensure that rule_geoip actually works.
+
 	* qa/061-PAM1.py, qa/062-PAM2.py (Test.Precondition): Updated to
 	use the ->has_module method.
 

@@ -4,7 +4,8 @@ Cherokee Web Server road map
 0.8.0
 -----
 [ ] Mime encodings separated from mime types
-[ ] Chuncked encoding
+[x] Chuncked encoding
+[x] GeoIP rule
 
 0.9.0
 -----
@@ -15,7 +16,7 @@ Cherokee Web Server road map
 
 Later
 -----
-[ ] X-Sendfile
+[x] X-Sendfile
 [ ] WSGI handler
 [ ] Upload progress module
 [ ] mod_evasive

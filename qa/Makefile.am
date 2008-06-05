@@ -170,7 +170,8 @@ run-tests.py \
 163-RuleAnd2.py \
 164-RuleOr1.py \
 165-RuleOr2.py \
-166-xsendfile1.py
+166-xsendfile1.py \
+167-RuleGeoIP.py
 
 test:
 	./run-tests.py
