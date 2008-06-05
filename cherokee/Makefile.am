@@ -158,6 +158,7 @@ endif
 #
 # Rule geoip
 #
+if HAVE_GEOIP
 rule_geoip = \
 rule_geoip.c \
 rule_geoip.h
@@ -171,6 +172,7 @@ static_rule_geoip_src = $(rule_geoip)
 static_rule_geoip_lib = -lGeoIP
 else
 dynamic_rule_geoip_lib = libplugin_geoip.la
+endif
 endif
 
 

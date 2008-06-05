@@ -1,5 +1,8 @@
 2008-06-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/Makefile.am: Do not try to compile the Geoip rule
+	module if either the library or the header file is not present.
+
 	* admin/ModuleGeoip.py, admin/Makefile.am, admin/consts.py: Added
 	new module to reflect the new GeoIP rule.
 
