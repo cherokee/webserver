@@ -1,5 +1,7 @@
 2008-06-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/rule_extensions.c (match): Better tracing messages.
+
 	* autogen.sh: Removed --enable-more-warnings --enable-debug
 	parameters. They were not been used.
 

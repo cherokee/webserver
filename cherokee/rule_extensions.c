@@ -95,11 +95,11 @@ match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
 
 	ret = cherokee_avl_get_ptr (&rule->extensions, dot+1, &foo);
         if (ret != ret_ok) {
-		TRACE(ENTRIES, "Rule extension: did not match %s", "\n");
+		TRACE(ENTRIES, "Rule extension: did not match '%s'\n", dot+1);
 		return ret;
 	}
 
-	TRACE(ENTRIES, "Match %s\n", "extension");
+	TRACE(ENTRIES, "Match extension: '%s'\n", dot+1);
 	return ret_ok;
 }
 
