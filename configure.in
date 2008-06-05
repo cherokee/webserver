@@ -1082,6 +1082,20 @@ dnl
 AX_LIB_MYSQL(4.0.0)
 
 dnl
+dnl GeoIP library
+dnl
+AC_CHECK_LIB(GeoIP, GeoIP_new, have_geoip_lib=yes, have_geoip_lib=no) 
+AC_CHECK_HEADERS(GeoIP.h, have_geoip_include=yes, have_geoip_include=no) 
+
+have_geoip="no"
+if test "$have_geoip_lib $have_geoip_include" = "yes yes"; then
+   have_geoip="yes"
+fi
+
+AM_CONDITIONAL(HAVE_GEOIP, test $have_geoip = "yes")
+
+
+dnl
 dnl Python's docutils
 dnl 
 AC_MSG_CHECKING([for Python's docutils])
@@ -1310,6 +1324,7 @@ echo "PCRE library          $have_pcre"
 echo "Compatible PAM        $have_pam"
 echo "LDAP                  $have_ldap"
 echo "MySQL                 $have_mysql"
+echo "GeoIP                 $have_geoip"
 echo "crypt support         $crypt_type"
 if test "x$is_beta" = "xyes"; then
 echo "Beta release          $svn_rev"
