@@ -1,5 +1,11 @@
 2008-06-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/061-PAM1.py, qa/062-PAM2.py (Test.Precondition): Updated to
+	use the ->has_module method.
+
+	* qa/base.py (TestBase.has_module): Added new method to test
+	whether a module has been compiled.
+
 	* cherokee/rule_extensions.c (match): Better tracing messages.
 
 	* autogen.sh: Removed --enable-more-warnings --enable-debug

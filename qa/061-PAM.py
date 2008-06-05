@@ -40,12 +40,11 @@ class Test (TestBase):
         if os.getuid() != 0:
             return False
 
-        try:
-            # Check that pam module was compiled
-            pams = filter(lambda x: "pam" in x, os.listdir(CHEROKEE_MODS))
-            if len(pams) < 1:
-                return False
+        # Check that pam module was compiled
+        if not self.has_module("pam"):
+            return False
 
+        try:
             # Read the /etc/passwd file
             f = open ("/etc/passwd", "r")
             pwuser = filter(lambda x: x.find(USER) == 0, f.readlines())
