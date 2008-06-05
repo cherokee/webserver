@@ -24,7 +24,6 @@ from PageEncoders import *
 from PageEntry import *
 from PageAdvanced import *
 from PageFeedback import *
-from PageLogView import *
 from PageError import *
 from PageAjaxUpdate import *
 from CherokeeManagement import *
@@ -80,8 +79,6 @@ class Handler(pyscgi.SCGIHandler):
             page = PageAdvanced(cfg)
         elif uri.startswith('/feedback'):
             page = PageFeedback(cfg)
-        elif uri.startswith('/logview'):
-            page = PageLogView(cfg)
         elif uri == '/vserver' or \
              uri == '/vserver/':
             page = PageVServers(cfg)

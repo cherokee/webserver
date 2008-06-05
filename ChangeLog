@@ -1,8 +1,3 @@
-2008-06-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
-
-	* autogen.sh: Removed --enable-more-warnings --enable-debug
-	parameters. They were not been used.
-
 2008-06-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cget/main.c (do_download__read_body): Fixed compilation. It
