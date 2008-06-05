@@ -102,5 +102,6 @@ RULES = [
     ('directory',  'Directory'),
     ('extensions', 'Extensions'),
     ('request',    'Regular Expression'),
-    ('header',     'Header')
+    ('header',     'Header'),
+    ('geoip',      'GeoIP')
 ]

@@ -1,5 +1,8 @@
 2008-06-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleGeoip.py, admin/Makefile.am, admin/consts.py: Added
+	new module to reflect the new GeoIP rule.
+
 	* cherokee/rule_geoip.h, cherokee/rule_geoip.c,
 	cherokee/Makefile.am, configure.in: Added a new GeoIP rule module.
 	It checks the origin IP with the GeoIP library.
