@@ -9,7 +9,11 @@ cd $srcdir
 PROJECT=cherokee
 
 #include our own macros
-ACLOCAL_FLAGS="$ACLOCAL_FLAGS -I m4"
+if test x"$ACLOCAL_FLAGS" != "x"; then
+    ACLOCAL_FLAGS="$ACLOCAL_FLAGS -I m4"
+else
+    ACLOCAL_FLAGS="-I m4"
+fi
 
 DIE=0
 
