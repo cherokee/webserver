@@ -1,5 +1,7 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
+SUBDIRS = flags
+
 DARKGLASS_ICONS = \
 online.png \
 offline.png

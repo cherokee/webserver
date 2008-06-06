@@ -1,5 +1,11 @@
 2008-06-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleGeoip.py, admin/flags.py: Now the GeoIP module shows
+	a fancy flag icon besides the contry name.
+
+	* admin/static/images/Makefile.am, admin/Makefile.am,
+	configure.in: Added 245 flag images.
+
 	* qa/base.py (TestBase.has_module),
 	qa/util.py (cherokee_has_plugin): The base.has_module() is
 	replaced with cherokee_has_plugin() helper function. It is now

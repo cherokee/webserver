@@ -68,7 +68,8 @@ ModuleGeoip.py \
 config.py \
 pyscgi.py \
 validations.py \
-CherokeeManagement.py
+CherokeeManagement.py \
+flags.py
 
 adminhelpdir = "$(datadir)/cherokee/admin"
 adminhelp_DATA = \
