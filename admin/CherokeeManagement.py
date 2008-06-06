@@ -221,17 +221,14 @@ def cherokee_has_plugin (module):
     if not _built_in_list_done:
         _built_in_list_done = True
 
-        for cherokee in ["../cherokee/cherokee", CHEROKEE_SRV_PATH]:
-            try:
-                f = os.popen ("%s -i" % (cherokee))
-                cont = f.read()
-                f.close()
-            except:
-                pass
-            if cont:
-                break
-
-        print cont
+        try:
+            f = os.popen ("%s -i" % (CHEROKEE_SRV_PATH))
+            cont = f.read()
+            f.close()
+        except:
+            pass
+        if cont:
+            break
         
         try:
             line = filter(lambda x: x.startswith (" Built-in: "), cont.split("\n"))[0]
