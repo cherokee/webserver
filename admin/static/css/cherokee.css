@@ -287,7 +287,7 @@ a.button:active span {
 }
 
 .tableprop tr th {
-  valign: top; 
+  vertical-align:  middle;
   width:  160px;
 }
 
@@ -309,11 +309,10 @@ a.button:active span {
   height: 1px;
   width: 100%;
   text-align: left;
-  align: left;
 }
 
 table tr {
-  vertial-align: top;
+  vertical-align: top;
 }
 
 table tr th {

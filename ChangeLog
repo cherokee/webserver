@@ -1,5 +1,8 @@
 2008-06-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/static/css/cherokee.css: Fixes a couple of wrong
+	properties.
+
 	* admin/Form.py (FormHelper.InstanceTab): Fixes a warning in the
 	JavaScript execution.
 
