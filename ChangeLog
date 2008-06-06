@@ -1,5 +1,8 @@
 2008-06-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/Form.py (FormHelper.InstanceTab): Fixes a warning in the
+	JavaScript execution.
+
 	* admin/flags.py: Added a protection for not adding the same
 	country more than once to the list.
 

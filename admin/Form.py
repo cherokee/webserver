@@ -138,6 +138,7 @@ class FormHelper (WebComponent):
 
           jQuery("#tab_%s").Accordion(settings).change(
             function (event, newHeader, oldHeader) { 
+              if (! newHeader) return;
               document.cookie = "open_tab=" + newHeader.attr("num");
           });
         </script>
