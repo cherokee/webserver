@@ -1,5 +1,8 @@
 2008-06-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/buffer.h (cherokee_buffer_prepend_str): Added new
+	macro: it prepends constant length strings in a buffer object.
+
 	* configure.in (CHEROKEE_CONFIG_ARGS): Added a new macro to
 	contain the configure script arguments. It is exported to the
 	application definitions.
