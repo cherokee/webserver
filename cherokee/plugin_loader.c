@@ -63,6 +63,7 @@ add_static_entry (cherokee_plugin_loader_t *loader, const char *name, void *info
 	entry = malloc (sizeof(entry_t));
 	entry->dlopen_ref = dlopen (NULL, RTLD_BASE);
 	entry->info       = info; 
+	entry->built_in   = true;
 
 	cherokee_avl_add_ptr (&loader->table, (char *)name, entry);
 }
@@ -367,6 +368,7 @@ load_common (cherokee_plugin_loader_t *loader, char *modname, int flags)
 	entry = malloc (sizeof(entry_t));
 	entry->dlopen_ref = dl_handle;
 	entry->info       = info; 
+	entry->built_in   = false;
 	
 	ret = cherokee_avl_add_ptr (&loader->table, modname, entry);
 	if (unlikely(ret != ret_ok)) {
@@ -508,3 +510,30 @@ cherokee_plugin_loader_set_deps_dir (cherokee_plugin_loader_t *loader, cherokee_
 	return ret_ok;
 }
 
+
+static ret_t
+while_print_name (cherokee_buffer_t *key, void *value, void *param)
+{
+	entry_t           *entry  = value;
+	cherokee_buffer_t *buffer = param;
+
+	if (entry->built_in) {
+		cherokee_buffer_add_buffer (buffer, key);
+		cherokee_buffer_add_char   (buffer, ' ');
+	}
+
+	return ret_ok;
+}
+
+ret_t
+cherokee_plugin_loader_get_mods_info (cherokee_plugin_loader_t *loader,
+				      cherokee_buffer_t        *builtin)
+{
+	/* Build the built-in module string
+	 */
+	cherokee_avl_while (&loader->table, while_print_name, builtin, NULL, NULL);
+	if (builtin->len > 2)
+		cherokee_buffer_drop_endding (builtin, 2);
+			
+	return ret_ok;
+}

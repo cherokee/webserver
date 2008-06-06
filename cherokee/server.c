@@ -582,10 +582,10 @@ initialize_server_socket_unix (cherokee_server_t *srv, cherokee_socket_t *sock)
 #endif
 }
 
+
 static ret_t
 print_banner (cherokee_server_t *srv)
 {
-	char             *p;
 	char             *method;
 	cherokee_buffer_t n = CHEROKEE_BUF_INIT;
 
@@ -667,13 +667,7 @@ print_banner (cherokee_server_t *srv)
 
 	/* Print it!
 	 */
-	for (p = n.buf+TERMINAL_WIDTH; p < n.buf+n.len; p+=75) {
-		while (*p != ',') p--;
-		*p = '\n';
-	}
-
-	printf ("%s\n", n.buf);
-	fflush (stdout);
+	cherokee_print_wrapped (&n);
 	cherokee_buffer_mrproper (&n);
 	
 	return ret_ok;
@@ -2106,5 +2100,40 @@ cherokee_server_get_vserver (cherokee_server_t *srv, cherokee_buffer_t *name, ch
 	}
 
 	*vsrv = srv->vserver_default;
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_server_print_build_info (cherokee_server_t *srv)
+{
+	cherokee_buffer_t builtin = CHEROKEE_BUF_INIT;
+
+	/* Basic info
+	 */
+	printf ("Compilation\n");
+	printf (" Version: " PACKAGE_VERSION "\n");
+	printf (" Compiled on: " __DATE__ " " __TIME__ "\n");
+	printf (" Arguments to configure: " CHEROKEE_CONFIG_ARGS "\n");
+	printf ("\n");
+
+	/* Paths
+	 */
+	printf ("Installation\n");
+	printf (" Deps dir: " CHEROKEE_DEPSDIR "\n");
+	printf (" Data dir: " CHEROKEE_DATADIR "\n");
+	printf (" Icons dir: " CHEROKEE_ICONSDIR "\n");
+	printf (" Themes dir: " CHEROKEE_THEMEDIR "\n");
+	printf (" Plug-in dir: " CHEROKEE_PLUGINDIR "\n");
+	printf ("\n");
+
+	/* Print plug-ins information
+	 */
+	printf ("Plug-ins\n");
+	cherokee_plugin_loader_get_mods_info (&srv->loader, &builtin);
+	printf (" Built-in: %s\n", builtin.buf ? builtin.buf : "");
+	printf ("\n");
+
+	cherokee_buffer_mrproper (&builtin);
 	return ret_ok;
 }

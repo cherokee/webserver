@@ -1,5 +1,20 @@
 2008-06-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c: Added a new -i, --print-server-info parameter.
+	It prints information about the server build: compilation date,
+	flags, built-in plugins, paths, etc.
+
+	* cherokee/server.c (cherokee_server_print_build_info),
+	cherokee/server.h: Added new method to print some server
+	compilation details.
+
+	* cherokee/util.h, cherokee/util.c (cherokee_print_wrapped): Added
+	new helper function.
+
+	* cherokee/plugin_loader.c (cherokee_plugin_loader_get_mods_info),
+	cherokee/plugin_loader.h: Add new method for retrieving
+	information about the loaded modules.
+
 	* cherokee/buffer.h (cherokee_buffer_prepend_str): Added new
 	macro: it prepends constant length strings in a buffer object.
 

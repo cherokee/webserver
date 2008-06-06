@@ -69,6 +69,7 @@ static char               *config_file   = NULL;
 static char               *document_root = NULL;
 static cherokee_boolean_t  daemon_mode   = false;
 static cherokee_boolean_t  just_test     = false;
+static cherokee_boolean_t  print_modules = false;
 static cuint_t             port          = 80;
 
 static ret_t common_server_initialization (cherokee_server_t *srv);
@@ -199,7 +200,8 @@ print_help (void)
 		"  -d,  --detach                 Detach from the console\n"
 		"  -C,  --config=PATH            Configuration file\n"
 		"  -p,  --port=NUM               TCP port number\n"
-		"  -r,  --documentroot=PATH      Server directory content\n\n"
+		"  -r,  --documentroot=PATH      Server directory content\n"
+		"  -i,  --print-server-info      Print server technical information\n\n"
 		"Report bugs to " PACKAGE_BUGREPORT "\n");
 }
 
@@ -209,17 +211,18 @@ process_parameters (int argc, char **argv)
 	int c;
 
 	struct option long_options[] = {
-		{"help",         no_argument,       NULL, 'h'},
-		{"version",      no_argument,       NULL, 'V'},
-		{"detach",       no_argument,       NULL, 'd'},
-		{"test",         no_argument,       NULL, 't'},
-		{"port",         required_argument, NULL, 'p'},
-		{"documentroot", required_argument, NULL, 'r'},
-		{"config",       required_argument, NULL, 'C'},
+		{"help",              no_argument,       NULL, 'h'},
+		{"version",           no_argument,       NULL, 'V'},
+		{"detach",            no_argument,       NULL, 'd'},
+		{"test",              no_argument,       NULL, 't'},
+		{"print-server-info", no_argument,       NULL, 'i'},
+		{"port",              required_argument, NULL, 'p'},
+		{"documentroot",      required_argument, NULL, 'r'},
+		{"config",            required_argument, NULL, 'C'},
 		{NULL, 0, NULL, 0}
 	};
 
-	while ((c = getopt_long(argc, argv, "hVdtp:r:C:", long_options, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "hVdtip:r:C:", long_options, NULL)) != -1) {
 		switch(c) {
 		case 'C':
 			config_file = strdup(optarg);
@@ -235,6 +238,9 @@ process_parameters (int argc, char **argv)
 			break;
 		case 't':
 			just_test = true;
+			break;
+		case 'i':
+			print_modules = true;
 			break;
 		case 'V':
 			printf (APP_NAME " " PACKAGE_VERSION "\n" APP_COPY_NOTICE);
@@ -261,6 +267,11 @@ main (int argc, char **argv)
 	
 	process_parameters (argc, argv);
 	
+	if (print_modules) {
+		cherokee_server_print_build_info (srv);
+		exit (ret_ok);
+	}
+
 	if (just_test) {
 		ret = test_configuration_file();
 		exit (ret);

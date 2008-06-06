@@ -39,6 +39,7 @@ CHEROKEE_BEGIN_DECLS
 typedef struct {
 	cherokee_plugin_info_t *info;
 	void                   *dlopen_ref;
+	cherokee_boolean_t      built_in;
 } cherokee_plugin_loader_entry_t;
 
 typedef struct {
@@ -63,6 +64,8 @@ ret_t cherokee_plugin_loader_unload         (cherokee_plugin_loader_t *loader, c
 ret_t cherokee_plugin_loader_get            (cherokee_plugin_loader_t *loader, char *modname, cherokee_plugin_info_t **info);
 ret_t cherokee_plugin_loader_get_info       (cherokee_plugin_loader_t *loader, char *modname, cherokee_plugin_info_t **info);
 ret_t cherokee_plugin_loader_get_sym        (cherokee_plugin_loader_t *loader, char *modname, char *name, void **sym);
+
+ret_t cherokee_plugin_loader_get_mods_info  (cherokee_plugin_loader_t *loader, cherokee_buffer_t *builtin);
 
 CHEROKEE_END_DECLS
 

@@ -1258,3 +1258,19 @@ cherokee_mkstemp (cherokee_buffer_t *buffer, int *fd)
 	*fd = re;
 	return ret_ok;
 }
+
+
+void
+cherokee_print_wrapped (cherokee_buffer_t *buffer)
+{
+	char *p;
+
+	p = buffer->buf + TERMINAL_WIDTH;
+	for (; p < buffer->buf + buffer->len; p+=75) {
+		while (*p != ' ') p--;
+		*p = '\n';
+	}
+
+	printf ("%s\n", buffer->buf);
+	fflush (stdout);
+}

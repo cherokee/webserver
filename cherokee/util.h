@@ -111,6 +111,7 @@ ret_t cherokee_sys_fdlimit_get (cuint_t *limit);
 ret_t cherokee_sys_fdlimit_set (cuint_t  limit);
 ret_t cherokee_close_fd        (cint_t fd);
 ret_t cherokee_get_shell       (const char **shell, const char **binary);
+void  cherokee_print_wrapped   (cherokee_buffer_t *buffer);
 
 /* Debug
  */
