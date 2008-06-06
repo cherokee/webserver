@@ -1,5 +1,9 @@
 2008-06-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* configure.in (CHEROKEE_CONFIG_ARGS): Added a new macro to
+	contain the configure script arguments. It is exported to the
+	application definitions.
+
 	* cherokee/virtual_server.c (cherokee_virtual_server_new_rule):
 	Fixes a wrong sanity check.
 
