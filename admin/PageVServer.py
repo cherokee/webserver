@@ -6,6 +6,7 @@ from Table import *
 from Entry import *
 from consts import *
 from RuleList import *
+from CherokeeManagement import *
 
 DATA_VALIDATION = [
     ("vserver!.*?!document_root",             (validations.is_local_dir_exists, 'cfg')),
@@ -230,9 +231,16 @@ class PageVServer (PageMenu, FormHelper):
         return txt
     
     def _render_add_rule (self, prefix):
+        # Check which rules plug-ins are available
+        rules = []
+        for rule, desc in RULES:
+            if cherokee_has_plugin (rule):
+                rules.append ((rule, desc))
+
+        # Render
         txt = "<h2>Add new rule</h2>"
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, "Rule Type", prefix, RULES, "")
+        e = self.AddPropOptions_Reload (table, "Rule Type", prefix, rules, "")
         txt += self.Indent (str(table) + e)
         return txt
 

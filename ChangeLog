@@ -1,5 +1,16 @@
 2008-06-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/configured.py.pre (DATADIR, CHEROKEE_PLUGINDIR),
+	admin/Makefile.am: Added two new configuration constants.
+
+	* admin/PageVServer.py (PageVServer._render_add_rule): Only show
+	the available rule plug-ins. For instance, if GeoIP could not been
+	compiled because libGeoIP was missing, do not the option in the
+	new rule menu.
+
+	* admin/CherokeeManagement.py (cherokee_has_plugin): Added new
+	function (copied from the QA engine).
+
 	* admin/ModuleGeoip.py, admin/flags.py: Now the GeoIP module shows
 	a fancy flag icon besides the contry name.
 

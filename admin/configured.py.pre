@@ -1,6 +1,7 @@
 from os.path import join
 
 PREFIX     = "%prefix%"
+LIBDIR     = "%libdir%"
 DATADIR    = "%datadir%"
 WWWROOT    = "%wwwroot%"
 SYSCONFDIR = "%sysconfdir%"
@@ -13,6 +14,7 @@ CHEROKEE_ADMINDIR   = join (PREFIX, "share/cherokee/admin")
 CHEROKEE_ICONSDIR   = join (PREFIX, "share/cherokee/icons")
 CHEROKEE_THEMEDIR   = join (PREFIX, "share/cherokee/themes")
 CHEROKEE_PANIC_PATH = join (PREFIX, "bin/cherokee-panic")
+CHEROKEE_PLUGINDIR  = join (LIBDIR, "cherokee")
 CHEROKEE_DATADIR    = join (DATADIR, "cherokee")
 CHEROKEE_DEPSDIR    = join (DATADIR, "cherokee/deps")
 CHEROKEE_CONFDIR    = join (SYSCONFDIR, "cherokee")
