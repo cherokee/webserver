@@ -227,8 +227,6 @@ def cherokee_has_plugin (module):
             f.close()
         except:
             pass
-        if cont:
-            break
         
         try:
             line = filter(lambda x: x.startswith (" Built-in: "), cont.split("\n"))[0]

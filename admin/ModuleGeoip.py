@@ -7,6 +7,7 @@ import validations
 
 ISO3166_URL      = "http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm"
 NOTE_NEW_COUNTRY = "Add the initial country. It's possible to add more later on."
+NOTE_ADD_COUNTRY = "Pick an additional country to add to the country list."
 NOTE_COUNTRIES   = "List of countries from the client IPs. It must use the " + \
     "<a target=\"_blank\" href=\"%s\">ISO 3166</a> contry notation." % (ISO3166_URL)
 
@@ -43,7 +44,7 @@ class ModuleGeoip (Module, FormHelper):
                  cfg_key_fake, cfg_key, key_val, '/ajax/update')
 
         content = ADD_FLAGS_TO_KEY_JS + str(flags) + button
-        self.AddProp (table, 'Add Country', "", content, NOTE_NEW_COUNTRY)
+        self.AddProp (table, 'Add Country', "", content, NOTE_ADD_COUNTRY)
 
         return str(table)
     
