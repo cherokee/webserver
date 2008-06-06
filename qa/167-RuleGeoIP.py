@@ -38,7 +38,7 @@ class Test (TestBase):
     def Precondition (self):
         return True
         # Check that pam module was compiled
-        if not self.has_module("geoip"):
+        if not cherokee_has_plugin("geoip"):
             return False
         return True
 

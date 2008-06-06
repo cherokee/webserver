@@ -41,7 +41,7 @@ class Test (TestBase):
             return False
 
         # Check that pam module was compiled
-        if not self.has_module("pam"):
+        if not cherokee_has_plugin("pam"):
             return False
 
         try:

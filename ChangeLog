@@ -1,5 +1,10 @@
 2008-06-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/base.py (TestBase.has_module),
+	qa/util.py (cherokee_has_plugin): The base.has_module() is
+	replaced with cherokee_has_plugin() helper function. It is now
+	able to detect both dynamic and built-in plug-ins.
+
 	* cherokee/main.c: Added a new -i, --print-server-info parameter.
 	It prints information about the server build: compilation date,
 	flags, built-in plugins, paths, etc.

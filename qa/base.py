@@ -340,15 +340,6 @@ class TestBase:
 
             return final
 
-    def has_module (self, module):
-        try:
-            pams = filter(lambda x: module in x, os.listdir(CHEROKEE_MODS))
-            if len(pams) < 1:
-                return False
-        except:
-            return False
-        return True
-
 
 class TestCollection:
     def __init__ (self):

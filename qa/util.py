@@ -144,3 +144,37 @@ def get_free_port():
     global __free_port
     __free_port += 1
     return __free_port
+
+
+_built_in_list      = []
+_built_in_list_done = False
+
+def cherokee_has_plugin (module):
+    # Check for the dynamic plug-in
+    try:
+        mods = filter(lambda x: module in x, os.listdir(CHEROKEE_MODS))
+        if len(mods) >= 1:
+            return True
+    except:
+        pass
+
+    # Let's see whether it's built-in
+    global _built_in_list
+    global _built_in_list_done
+
+    if not _built_in_list_done:
+        _built_in_list_done = True
+
+        f = os.popen ("%s -i" % (CHEROKEE_PATH))
+        cont = f.read()
+        f.close()
+        
+        try:
+            line = filter(lambda x: x.startswith (" Built-in: "), cont.split("\n"))[0]
+            line = line.replace(" Built-in: ", "")
+            _built_in_list = line.split(" ")
+        except:
+            pass
+
+    return module in _built_in_list
+    
