@@ -535,9 +535,9 @@ cherokee_virtual_server_new_rule (cherokee_virtual_server_t  *vserver,
 
 	/* Sanity check
 	 */
-	if (type == NULL) {
+	if (cherokee_buffer_is_empty (type)) {
 		PRINT_ERROR ("Rule match prio=%d must include a type property\n", priority);
-		return ret;
+		return ret_error;
 	}
 
 	TRACE (ENTRIES, "Adding type=%s\n", type->buf);
