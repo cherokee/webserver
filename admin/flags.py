@@ -268,6 +268,11 @@ function flags_add_to_key (options_id, cfg_key, cfg_key_value, url)
     var value      = cfg_key_value + "," + selected;
     var post       = cfg_key + "=" + value;
 
+    /* Do not add the country if it's already in the list
+     */
+    if (cfg_key_value.indexOf(selected) >= 0)
+       return;
+
     jQuery.post (url, post, 
        function (data, textStatus) {
            window.location.reload();

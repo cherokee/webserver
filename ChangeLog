@@ -1,5 +1,8 @@
 2008-06-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/flags.py: Added a protection for not adding the same
+	country more than once to the list.
+
 	* admin/configured.py.pre (DATADIR, CHEROKEE_PLUGINDIR),
 	admin/Makefile.am: Added two new configuration constants.
 
