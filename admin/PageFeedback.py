@@ -1,5 +1,7 @@
 from Page import *
 from Table import *
+from CherokeeManagement import *
+
 from time import asctime
 
 INET_WARNING = """
@@ -17,6 +19,10 @@ Date:  %(date)s
 Message
 -------
 %(body)s
+
+Server Information
+------------------
+%(server)s
 
 Configuration
 -------------
@@ -82,13 +88,16 @@ class PageFeedback (PageMenu, FormHelper):
             configuration = str(self._cfg)
         else:
             configuration = 'Not included'
+
+        
         
         params = {
-            'name':  post.pop('name',  ''),
-            'email': post.pop('email', ''),
-            'body':  post.pop('body',  ''),
-            'date':  asctime(),
-            'conf':  configuration
+            'name':   post.pop('name',  ''),
+            'email':  post.pop('email', ''),
+            'body':   post.pop('body',  ''),
+            'date':   asctime(),
+            'conf':   configuration,
+            'server': cherokee_get_server_info()
         }
 
         txt = REPORT_TEMPLATE % params

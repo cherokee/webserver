@@ -202,6 +202,22 @@ def is_PID_alive (pid):
 # Plug-in checking
 #
 
+_server_info = None
+
+def cherokee_get_server_info ():
+    global _server_info
+
+    if _server_info == None:
+        try:
+            f = os.popen ("%s -i" % (CHEROKEE_SRV_PATH))
+            _server_info = f.read()
+            f.close()
+        except:
+            pass
+
+    return _server_info
+
+
 _built_in_list      = []
 _built_in_list_done = False
 

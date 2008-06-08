@@ -1,5 +1,10 @@
 2008-06-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageFeedback.py (PageFeedback._op_apply_changes),
+	admin/CherokeeManagement.py (cherokee_get_server_info): Added new
+	section to the report. It includes some more server information
+	now.
+
 	* cherokee/handler_dirlist.c (render_file): Fixes Win32
 	compilation issue. S_ISLNK is not defined on Win.
 
