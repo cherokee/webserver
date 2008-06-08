@@ -56,9 +56,17 @@ getopt/getopt.c  \
 getopt/getopt1.c \
 getopt/gettext.h
 
-
+#
+# Check whether external libraries can be used
+#
 if !HAVE_GETOPT_LONG
 internal_getopt_src=$(getopt_src)
+endif
+
+if USE_INTERNAL_PCRE
+internal_pcre_src=$(pcre_src)
+else
+external_pcre_lib=-lpcre
 endif
 
 #
@@ -746,13 +754,6 @@ else
 dynamic_balancer_round_robin_lib = libplugin_round_robin.la
 endif
 
-
-
-if USE_INTERNAL_PCRE
-internal_pcre_src=$(pcre_src)
-else
-external_pcre_lib=-lpcre
-endif
 
 
 lib_LTLIBRARIES = \
