@@ -1,3 +1,8 @@
+2008-06-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_dirlist.c (render_file): Fixes Win32
+	compilation issue. S_ISLNK is not defined on Win.
+
 2008-06-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/static/css/cherokee.css: Fixes a couple of wrong

@@ -782,9 +782,9 @@ static ret_t
 render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_entry_t *file)
 {
 	ret_t                             ret;
-	cherokee_boolean_t                is_dir;
-	cherokee_boolean_t                is_link;
 	cherokee_buffer_t                *vtmp[2];
+	cherokee_boolean_t                is_dir;
+	cherokee_boolean_t                is_link  = false;
 	char                             *alt      = NULL;
 	cherokee_buffer_t                *icon     = NULL;
 	char                             *name     = (char *) &file->info.d_name;
@@ -799,7 +799,9 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	VTMP_INIT_SUBST (thread, vtmp, &props->entry);
 
 	is_dir  = S_ISDIR(file->stat.st_mode);
+#ifdef S_ISLNK
 	is_link = S_ISLNK(file->stat.st_mode);
+#endif
 
 	/* Check whether it is a symlink that we should skip
 	 */
