@@ -1,5 +1,8 @@
 2008-06-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/unix4win32.h: Increases the default descriptors limit
+	from 64 to 1024. It's a little more realistic.
+
 	* admin/server.py (main): Override SIGCHLD only if the system
 	supports it. Fixes a Windows issue.
 

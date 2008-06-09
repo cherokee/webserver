@@ -34,11 +34,20 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 #include <process.h>
 #include <io.h>
 #include <direct.h>
+
+/* The file descriptor limit has to be raised before the winsock2.h
+ * header is included, otherwise the limit will be set to 64.
+ */
+#ifdef FD_SETSIZE
+# undef FD_SETSIZE
+#endif
+#define FD_SETSIZE 1024
+
+#include <winsock2.h>
 
 #define _POSIX_
 #include <errno.h>
