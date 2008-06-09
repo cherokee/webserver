@@ -142,7 +142,8 @@ class Handler(pyscgi.SCGIHandler):
 #
 def main():
     # Try to avoid zombie processes 
-    signal.signal(signal.SIGCHLD, signal.SIG_IGN)
+    if hasattr(signal, "SIGCHLD"):
+        signal.signal(signal.SIGCHLD, signal.SIG_IGN)
 
     # Move to the server directory
     pathname, scriptname = os.path.split(sys.argv[0])

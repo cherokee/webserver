@@ -1,3 +1,8 @@
+2008-06-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/server.py (main): Override SIGCHLD only if the system
+	supports it. Fixes a Windows issue.
+
 2008-06-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageFeedback.py (PageFeedback._op_apply_changes),
