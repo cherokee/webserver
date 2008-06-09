@@ -1,5 +1,8 @@
 2008-06-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* configure.in: It should not link against wsock and wsock2 at the
+	same time: removing wsock32 detection.
+
 	* cherokee/unix4win32.h: Increases the default descriptors limit
 	from 64 to 1024. It's a little more realistic.
 
