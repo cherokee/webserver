@@ -190,27 +190,30 @@ if test "$os_string" != "Win32"; then
 else
     LIBTOOL_EXPORT_OPTIONS=
 fi
-
 AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
 
-
-
+dnl Set the Version
 AM_INIT_AUTOMAKE(cherokee, $VERSION)
 AM_MAINTAINER_MODE
 
 AM_CONFIG_HEADER(config.h)
 AC_SUBST(VERSION)
 
-AC_PATH_PROG(cherokeepath, cherokee)
+dnl Initialize Libtool
+m4_ifdef([LT_INIT],
+  [LT_INIT([dlopen C shared static win32-dll])],
+  [AC_LIBTOOL_DLOPEN
+   AC_LIBTOOL_WIN32_DLL
+   ])
 
+dnl Paths
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
+AC_PROG_LIBTOOL
 
-AC_LIBTOOL_DLOPEN
-AC_LIBTOOL_WIN32_DLL
-AM_PROG_LIBTOOL
+AC_PATH_PROG(cherokeepath, cherokee)
 
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_MALLOC
