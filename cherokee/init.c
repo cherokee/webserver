@@ -29,6 +29,11 @@
 #include "ncpus.h"
 #include "util.h"
 
+
+cuint_t cherokee_cacheline_size;
+cint_t  cherokee_cpu_number;
+cuint_t cherokee_fdlimit;
+
 static cherokee_boolean_t _cherokee_init = false;
 
 ret_t 

@@ -39,9 +39,9 @@ ret_t cherokee_init (void);
 
 /* Globals
  */
-cuint_t cherokee_cacheline_size;
-cint_t  cherokee_cpu_number;
-cuint_t cherokee_fdlimit;
+extern cuint_t cherokee_cacheline_size;
+extern cint_t  cherokee_cpu_number;
+extern cuint_t cherokee_fdlimit;
 
 CHEROKEE_END_DECLS
 

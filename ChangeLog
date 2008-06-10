@@ -1,5 +1,8 @@
 2008-06-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/init.h, cherokee/init.c: The cherokee_* global
+	variables must be shared along all the modules. Fixed for Windows.
+
 	* cherokee/Makefile.am: The cgi, scgi, fcgi, fastcgi and phpcgi
 	handlers depend on handler_file (for X-Sendfile), so the have to
 	be dynamically linked against the plug-in.
