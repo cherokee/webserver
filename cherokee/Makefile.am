@@ -302,6 +302,7 @@ handler_cgi.h
 
 libplugin_cgi_la_LDFLAGS = $(module_ldflags)  
 libplugin_cgi_la_SOURCES = $(handler_cgi)
+libplugin_cgi_la_LIBADD  = $(dynamic_handler_file_lib)
 
 if STATIC_HANDLER_CGI
 static_handler_cgi_src = $(handler_cgi)
@@ -324,6 +325,7 @@ handler_scgi.c
 
 libplugin_scgi_la_LDFLAGS = $(module_ldflags)  
 libplugin_scgi_la_SOURCES = $(handler_scgi)
+libplugin_scgi_la_LIBADD  = $(dynamic_handler_file_lib)
 
 if STATIC_HANDLER_SCGI
 static_handler_scgi_src = $(handler_scgi)
@@ -347,6 +349,7 @@ handler_fcgi.c
 
 libplugin_fcgi_la_LDFLAGS = $(module_ldflags)  
 libplugin_fcgi_la_SOURCES = $(handler_fcgi)
+libplugin_fcgi_la_LIBADD  = $(dynamic_handler_file_lib)
 
 if STATIC_HANDLER_FCGI
 static_handler_fcgi_src = $(handler_fcgi)
@@ -374,6 +377,7 @@ handler_fastcgi.h
 
 libplugin_fastcgi_la_LDFLAGS = $(module_ldflags)  
 libplugin_fastcgi_la_SOURCES = $(handler_fastcgi)
+libplugin_fastcgi_la_LIBADD  = $(dynamic_handler_file_lib)
 
 if STATIC_HANDLER_FASTCGI
 static_handler_fastcgi_src = $(handler_fastcgi)
@@ -395,6 +399,7 @@ endif
 
 libplugin_phpcgi_la_LDFLAGS = $(module_ldflags) $(phpcgi_ldflags_win32)
 libplugin_phpcgi_la_SOURCES = $(handler_phpcgi)
+libplugin_phpcgi_la_LIBADD  = $(dynamic_handler_file_lib)
 
 if STATIC_HANDLER_PHPCGI
 static_handler_phpcgi_src = $(handler_phpcgi)
