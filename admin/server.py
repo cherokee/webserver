@@ -165,9 +165,13 @@ def main():
     cfg = Config(cfg_file)
     
     print ("Server running.. PID=%d" % (os.getpid()))
-    while True:
-        # Do it
-        srv.handle_request()
+
+    # Iterate until the user exists
+    try:
+        while True:
+            srv.handle_request()
+    except KeyboardInterrupt:
+        print "\rServer exiting.."
 
     srv.server_close()
 

@@ -1,5 +1,9 @@
 2008-06-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/server.py (main): Catch the KeyboardInterrupt exception
+	and print a nice exiting message instead of the default
+	back-trace.  Patch by Gunnar Wolf <gwolf@gwolf.org>.
+
 	* cherokee/main_admin.c (find_empty_port), admin/server.py (main):
 	cherokee-admin is smarter: it finds an empty port for the
 	connection with the SCGI instead of supposing that the port 4000
