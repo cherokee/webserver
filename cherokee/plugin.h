@@ -124,9 +124,20 @@ typedef struct {
 		(void *)cherokee_ ## type ## _ ## name ## _configure)
 
 
-/* Plugin initialization
+/* Plugin initialization function
  */
-#define PLUGIN_INIT_NAME(name)        cherokee_plugin_ ## name ## _init
+#define PLUGIN_INIT_NAME(name)  cherokee_plugin_ ## name ## _init
+#define PLUGIN_IS_INIT(name)    _## name ##_is_init
+
+#define PLUGIN_INIT_PROTOTYPE(name)         			    \
+	static cherokee_boolean_t PLUGIN_IS_INIT(name) = false;     \
+        void                                                        \
+	PLUGIN_INIT_NAME(name) (cherokee_plugin_loader_t *loader)
+
+#define PLUGIN_INIT_ONCE_CHECK(name)         		            \
+	if (PLUGIN_IS_INIT(name))				    \
+		return;						    \
+	PLUGIN_IS_INIT(name) = true
 
 #define PLUGIN_EMPTY_INIT_FUNCTION(name)                            \
 	void                                                        \
@@ -134,7 +145,7 @@ typedef struct {
 	{                                                           \
 		UNUSED(loader);					    \
 	}                                                           \
-								    \
+
 
 CHEROKEE_END_DECLS
 

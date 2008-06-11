@@ -1,5 +1,9 @@
 2008-06-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/plugin.h: Added new macros for an easier plug-in
+	initialization. Actually, these macros are interesting only for
+	exceptional (tricky) occasions.
+
 	* cherokee/Makefile.am, cherokee/scgi.deps, cherokee/fcgi.deps,
 	cherokee/fastcgi.deps, cherokee/cgi.deps: Added new dependency
 	files. Now, the CGI based depend on 'file'. These files are needed
