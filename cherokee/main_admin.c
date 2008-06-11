@@ -26,6 +26,7 @@
 #include <signal.h>
 #include "init.h"
 #include "server.h"
+#include "socket.h"
 
 #ifdef HAVE_GETOPT_H
 # include <getopt.h>
@@ -44,7 +45,7 @@
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin"
 #define DEFAULT_CONFIG_FILE  CHEROKEE_CONFDIR "/cherokee.conf"
 #define DEFAULT_BIND         "127.0.0.1"
-#define RULE                 "vserver!default!rule!"
+#define RULE_PRE             "vserver!default!rule!"
  
 static int   port          = DEFAULT_PORT;
 static char *document_root = DEFAULT_DOCUMENTROOT;
@@ -52,10 +53,45 @@ static char *config_file   = DEFAULT_CONFIG_FILE;
 static char *bind_to       = DEFAULT_BIND;
 
 static ret_t
+find_empty_port (int starting, int *port)
+{
+	ret_t             ret;
+	cherokee_socket_t s;
+	int               p    = starting;
+	cherokee_buffer_t bind = CHEROKEE_BUF_INIT;
+
+	cherokee_buffer_add_str (&bind, "127.0.0.1");
+
+	cherokee_socket_init (&s);
+	cherokee_socket_set_client (&s, AF_INET);
+
+	while (true) {
+		ret = cherokee_socket_bind (&s, p, &bind);
+		if (ret == ret_ok) 
+			break;
+
+		if (++p > 0XFFFF)
+			return ret_error;
+	}
+
+	cherokee_socket_close(&s);
+	cherokee_socket_mrproper(&s);
+	cherokee_buffer_mrproper(&bind);
+
+	*port = p;
+	return ret_ok;
+}
+
+static ret_t
 config_server (cherokee_server_t *srv) 
 {
 	ret_t             ret;
-	cherokee_buffer_t buf = CHEROKEE_BUF_INIT;
+	int               scgi_port = 4000;
+	cherokee_buffer_t buf       = CHEROKEE_BUF_INIT;
+
+	ret = find_empty_port (scgi_port, &scgi_port);
+	if (ret != ret_ok) 
+		return ret;
 
 	cherokee_buffer_add_va  (&buf, "server!port = %d\n", port);
 	cherokee_buffer_add_str (&buf, "server!ipv6 = 0\n");
@@ -67,35 +103,36 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_va  (&buf, "vserver!default!document_root = %s\n", document_root);
 
 	cherokee_buffer_add_va  (&buf, 
-				 RULE "1!match = default\n"
-				 RULE "1!handler = scgi\n"
-				 RULE "1!handler!balancer = round_robin\n"
-				 RULE "1!handler!balancer!type = interpreter\n"
-				 RULE "1!handler!balancer!local1!host = localhost:4000\n"
-				 RULE "1!handler!balancer!local1!interpreter = %s/server.py %s\n", document_root, config_file);
+				 RULE_PRE "1!match = default\n"
+				 RULE_PRE "1!handler = scgi\n"
+				 RULE_PRE "1!handler!balancer = round_robin\n"
+				 RULE_PRE "1!handler!balancer!type = interpreter\n"
+				 RULE_PRE "1!handler!balancer!local1!host = localhost:%d\n"
+				 RULE_PRE "1!handler!balancer!local1!interpreter = %s/server.py %d %s\n", 
+				 scgi_port, document_root, scgi_port, config_file);
 
 	cherokee_buffer_add_str (&buf, 
-				 RULE "2!match = directory\n"
-				 RULE "2!match!directory = /about\n"
-				 RULE "2!handler = server_info\n");
+				 RULE_PRE "2!match = directory\n"
+				 RULE_PRE "2!match!directory = /about\n"
+				 RULE_PRE "2!handler = server_info\n");
 
 	cherokee_buffer_add_str (&buf, 
-				 RULE "3!match = directory\n"
-				 RULE "3!match!directory = /static\n"
-				 RULE "3!handler = file\n"
-				 RULE "3!handler!iocache = 0\n");
+				 RULE_PRE "3!match = directory\n"
+				 RULE_PRE "3!match!directory = /static\n"
+				 RULE_PRE "3!handler = file\n"
+				 RULE_PRE "3!handler!iocache = 0\n");
 
 	cherokee_buffer_add_str (&buf, 
-				 RULE "4!match = request\n"
-				 RULE "4!match!request = ^/favicon.ico$\n"
-				 RULE "4!handler = file\n");
+				 RULE_PRE "4!match = request\n"
+				 RULE_PRE "4!match!request = ^/favicon.ico$\n"
+				 RULE_PRE "4!handler = file\n");
 
 	cherokee_buffer_add_va  (&buf, 
-				 RULE "5!match = directory\n"
-				 RULE "5!match!directory = /icons_local\n"
-				 RULE "5!handler = file\n"
-				 RULE "5!handler!iocache = 0\n"
-				 RULE "5!document_root = %s\n", CHEROKEE_ICONSDIR);
+				 RULE_PRE "5!match = directory\n"
+				 RULE_PRE "5!match!directory = /icons_local\n"
+				 RULE_PRE "5!handler = file\n"
+				 RULE_PRE "5!handler!iocache = 0\n"
+				 RULE_PRE "5!document_root = %s\n", CHEROKEE_ICONSDIR);
 
 	ret = cherokee_server_read_config_string (srv, &buf);
 	if (ret != ret_ok) return ret;

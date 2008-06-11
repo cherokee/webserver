@@ -1,5 +1,10 @@
 2008-06-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main_admin.c (find_empty_port), admin/server.py (main):
+	cherokee-admin is smarter: it finds an empty port for the
+	connection with the SCGI instead of supposing that the port 4000
+	would be empty.
+
 	* admin/ModuleRequest.py (ModuleRequest._op_render): Bugfix. It
 	was not handling the regular expression in the right way.
 

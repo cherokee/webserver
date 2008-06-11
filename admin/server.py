@@ -30,7 +30,6 @@ from CherokeeManagement import *
 
 # Constants
 #
-SCGI_PORT             = 4000
 MODIFIED_CHECK_ELAPSE = 1
 
 # Globals
@@ -141,6 +140,14 @@ class Handler(pyscgi.SCGIHandler):
 # Server
 #
 def main():
+    # Read the arguments
+    try:
+        scgi_port = int(sys.argv[1])
+        cfg_file  = sys.argv[2]
+    except:
+        print "Incorrect parameters: PORT CONFIG_FILE"
+        raise SystemExit
+
     # Try to avoid zombie processes 
     if hasattr(signal, "SIGCHLD"):
         signal.signal(signal.SIGCHLD, signal.SIG_IGN)
@@ -150,12 +157,11 @@ def main():
     os.chdir(os.path.abspath(pathname))
 
     # SCGI server
-    srv = pyscgi.ServerFactory (True, handler_class=Handler, port=SCGI_PORT)
+    srv = pyscgi.ServerFactory (True, handler_class=Handler, port=scgi_port)
     srv.socket.settimeout (MODIFIED_CHECK_ELAPSE)
 
     # Read configuration file
     global cfg
-    cfg_file = sys.argv[1]
     cfg = Config(cfg_file)
     
     print ("Server running.. PID=%d" % (os.getpid()))
