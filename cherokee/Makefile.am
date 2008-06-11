@@ -19,7 +19,11 @@ nn.deps \
 common.deps \
 combined.deps \
 error_redir.deps \
-phpcgi.deps
+phpcgi.deps \
+scgi.deps \
+fcgi.deps \
+fastcgi.deps \
+cgi.deps
 
 cherokeedatadir = "$(datadir)/cherokee"
 cherokeedata_DATA = mime_types.txt
