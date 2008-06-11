@@ -1,5 +1,8 @@
 2008-06-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleRequest.py (ModuleRequest._op_render): Bugfix. It
+	was not handling the regular expression in the right way.
+
 	* cherokee/handler_cgi_base.h, cherokee/handler_fcgi.c,
 	cherokee/handler_fastcgi.c, cherokee/handler_scgi.c,
 	cherokee/handler_cgi.c: The CGI based handled had to initialize

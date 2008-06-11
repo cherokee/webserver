@@ -14,7 +14,10 @@ class ModuleRequest (Module, FormHelper):
 
     def _op_render (self):
         table = TableProps()
-        self.AddPropEntry (table, 'Regular Expression', '%s!value'%(self._prefix), NOTE_REQUEST)
+        if self._prefix.startswith('tmp!'):
+            self.AddPropEntry (table, 'Regular Expression', '%s!value'%(self._prefix), NOTE_REQUEST)
+        else:
+            self.AddPropEntry (table, 'Regular Expression', '%s!request'%(self._prefix), NOTE_REQUEST)
         return str(table)
         
     def _op_apply_changes (self, uri, post):
