@@ -32,7 +32,24 @@
 #include "list.h"
 #include "connection.h"
 
+#define SUPPORT_XSENDFILE
 
+/* Plug-in initialization
+ */
+#ifndef SUPPORT_XSENDFILE
+# define CGI_LIB_INIT(name, methods) \
+	PLUGIN_INFO_HANDLER_EASY_INIT (name, (methods))
+#else
+# define CGI_LIB_INIT(name, methods)                          \
+	PLUGIN_INIT_PROTOTYPE(name) {	   	              \
+		PLUGIN_INIT_ONCE_CHECK(name);                 \
+		cherokee_plugin_loader_load (loader, "file"); \
+	}                                                     \
+        PLUGIN_INFO_HANDLER_EASY_INIT (name, (methods))
+#endif
+
+/* Function types
+ */
 typedef struct cherokee_handler_cgi_base cherokee_handler_cgi_base_t;
 
 typedef void  (* cherokee_handler_cgi_base_add_env_pair_t)  (cherokee_handler_cgi_base_t *cgi,
@@ -47,7 +64,6 @@ typedef enum {
 	hcgi_phase_send_headers,
 	hcgi_phase_send_post
 } cherokee_handler_cgi_base_phase_t;
-
 
 /* Data structure
  */

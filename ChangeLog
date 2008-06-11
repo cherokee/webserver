@@ -1,5 +1,10 @@
 2008-06-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_cgi_base.h, cherokee/handler_fcgi.c,
+	cherokee/handler_fastcgi.c, cherokee/handler_scgi.c,
+	cherokee/handler_cgi.c: The CGI based handled had to initialize
+	the file plugin in case X-Sendfile is supported.
+
 	* cherokee/plugin.h: Added new macros for an easier plug-in
 	initialization. Actually, these macros are interesting only for
 	exceptional (tricky) occasions.

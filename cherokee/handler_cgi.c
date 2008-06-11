@@ -72,7 +72,7 @@ static ret_t fork_and_execute_cgi_unix (cherokee_handler_cgi_t *cgi);
 
 /* Plugin initialization
  */
-PLUGIN_INFO_HANDLER_EASY_INIT (cgi, http_get | http_post | http_head);
+CGI_LIB_INIT (cgi, http_get | http_post | http_head);
 
 
 
@@ -805,34 +805,3 @@ fork_and_execute_cgi_win32 (cherokee_handler_cgi_t *cgi)
 }
 
 #endif
-
-
-/* Library init function
- */
-static cherokee_boolean_t _cgi_is_init = false;
-
-#if 0
-#include <signal.h>
-
-static void 
-child_finished(int sng)
-{
-	int status;
-	while(waitpid (0, &status, WNOHANG) > 0);
-}
-#endif
-
-void  
-PLUGIN_INIT_NAME(cgi) (cherokee_plugin_loader_t *loader)
-{
-	UNUSED(loader);
-
-	if (_cgi_is_init) 
-		return;
-	_cgi_is_init = true;
-
-#if 0
-	signal(SIGCHLD, child_finished);
-#endif
-}
-

@@ -46,7 +46,7 @@ static void set_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 
 /* Plug-in initialization
  */
-PLUGIN_INFO_HANDLER_EASIEST_INIT (fcgi, http_get | http_post | http_head);
+CGI_LIB_INIT (fcgi, http_get | http_post | http_head);
 
 
 /* Methods implementation

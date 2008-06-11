@@ -41,7 +41,7 @@
 
 /* Plug-in initialization
  */
-PLUGIN_INFO_HANDLER_EASIEST_INIT (fastcgi, http_get | http_post | http_head);
+CGI_LIB_INIT (fastcgi, http_get | http_post | http_head);
 
 
 /* Methods implementation

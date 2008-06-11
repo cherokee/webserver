@@ -36,11 +36,9 @@
 #define set_env(cgi,key,val,len) \
 	add_env_pair (cgi, key, sizeof(key)-1, val, len)
 
-
 /* Plug-in initialization
  */
-PLUGIN_INFO_HANDLER_EASIEST_INIT (scgi, http_get | http_post | http_head);
-
+CGI_LIB_INIT (scgi, http_get | http_post | http_head);
 
 /* Methods implementation
  */
