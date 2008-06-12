@@ -152,11 +152,22 @@ common_server_initialization (cherokee_server_t *srv)
 	if (document_root != NULL) {
 		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
+		/* Sanity check
+		 */
+		if (port > 0xFFFF) {
+			PRINT_ERROR ("Port %d is out of limits\n", port);
+			return ret_error;
+		}
+
+		/* Build the configuration string
+		 */
 		cherokee_buffer_add_va (&tmp, 
 					"server!port = %d\n"
 					"vserver!default!document_root = %s\n"
 					BASIC_CONFIG, port, document_root);
 
+		/* Apply it
+		 */
 		ret = cherokee_server_read_config_string (srv, &tmp);
 		cherokee_buffer_mrproper (&tmp);
 
@@ -167,7 +178,9 @@ common_server_initialization (cherokee_server_t *srv)
 
 	} else {
 		char *config;
-
+		
+		/* Read the configuration file
+		 */
 		config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
 		ret = cherokee_server_read_config_file (srv, config);
 

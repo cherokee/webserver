@@ -1,5 +1,9 @@
 2008-06-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c (common_server_initialization): Added a check to
+	ensure that the TCP port is within the limits. It fixes:
+	http://code.google.com/p/cherokee/issues/detail?id=43
+
 	* configure.in: Fixes an issue with the license notice. Reported
 	by Tim Post <echo@echoreply.us>.
 
