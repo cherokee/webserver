@@ -1,3 +1,8 @@
+2008-06-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in: Fixes an issue with the license notice. Reported
+	by Tim Post <echo@echoreply.us>.
+
 2008-06-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/server.py (main): Catch the KeyboardInterrupt exception

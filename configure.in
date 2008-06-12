@@ -1369,14 +1369,12 @@ if test "x$cherokeepath" != "x" ; then
 fi
 
 cat <<THEEND
-+--------------------------------------------------------------------+
-| License:                                                           |
-| This software is subject to the GPL License, available in this     |
-| distribution in the file COPYING.  By continuing this installation |
-| process, you are bound by the terms of this license agreement.     |
-| If you do not agree with the terms of this license, you must abort |
-| the installation process at this point.                            |
-+--------------------------------------------------------------------+
++------------------------------------------------------------------+
+| License:                                                         |
+| This software is subject to the GPL License, available in this   |
+| distribution in the file COPYING. Please, remember that any copy |
+| distribution or modification of the software is subject to it.   |
++------------------------------------------------------------------+
 
 Thank you for using Cherokee.
 THEEND
