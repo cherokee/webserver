@@ -1,3 +1,13 @@
+2008-06-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/167-RuleGeoIP.py (Test.Prepare): Configuration is not added
+	to the test server it the test won't be executed.
+
+	* qa/run-tests.py: Do not "prepare" the QA test if it will be
+	skipped. It speeds up starting and more importantly fixes a
+	problem with the QA test 167 when the GeoIP module was not
+	present.
+
 2008-06-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main.c (common_server_initialization): Added a check to

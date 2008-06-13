@@ -203,7 +203,8 @@ for m in mods:
 
 # Prepare www files
 for obj in objs:
-    obj.Prepare(www)
+    if obj.Precondition():
+        obj.Prepare(www)
 
 # Generate configuration
 mod_conf = ""

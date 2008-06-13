@@ -33,7 +33,6 @@ class Test (TestBase):
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.forbidden_content = ["/bin/sh", "echo"]
-        self.conf              = CONF % (DIR, DIR)
 
     def Precondition (self):
         return True
@@ -43,5 +42,7 @@ class Test (TestBase):
         return True
 
     def Prepare (self, www):
+        self.conf = CONF % (DIR, DIR)
+
         d = self.Mkdir (www, DIR)
         f = self.WriteFile (d, FILE, 0755, CGI)
