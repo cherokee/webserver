@@ -175,6 +175,7 @@ save_pid_file (int pid)
 	file = fopen (PID_FILE, "w+");
 	if (file == NULL) {
 		PRINT_MSG ("Cannot write PID file '%s'\n", PID_FILE);
+		return;
 	}
 
 	snprintf (tmp, sizeof(tmp), "%d\n", getpid());
