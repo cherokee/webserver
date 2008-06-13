@@ -33,8 +33,8 @@
 # include <getopt.h>
 #endif
 
-#define ERROR_DELAY       3000 * 1000
-#define RESTARTING_DELAY   500 * 1000
+#define DELAY_ERROR       3000 * 1000
+#define DELAY_RESTARTING   500 * 1000
 #define PID_FILE          CHEROKEE_VAR_RUN "/cherokee-guardian.pid"
 
 static cherokee_boolean_t exit_guardian = false;
@@ -183,26 +183,50 @@ save_pid_file (int pid)
 	fclose (file);
 }
 
+static cherokee_boolean_t
+is_single_execution (int argc, char *argv[])
+{
+	int i;
+
+	for (i=0; i<argc; i++) {
+		if (!strcmp (argv[i], "-t") || !strcmp (argv[i], "--test")    ||
+		    !strcmp (argv[i], "-h") || !strcmp (argv[i], "--help")    ||
+		    !strcmp (argv[i], "-V") || !strcmp (argv[i], "--version") ||
+		    !strcmp (argv[i], "-i") || !strcmp (argv[i], "--print-server-info"))
+			return true;
+	}
+
+	return false;
+}
 
 int
 main (int argc, char *argv[])
 {
-	ret_t ret;
+	ret_t              ret;
+	cherokee_boolean_t single_time;
 
 	set_guardian_signals();	   
+	single_time = is_single_execution (argc, argv);
 
-	while (! exit_guardian) {
+	do {
 		pid = process_launch (CHEROKEE_SRV_PATH, argc, argv);
 		if (pid < 0) {
 			PRINT_MSG ("Couldn't launch '%s'\n", CHEROKEE_SRV_PATH);
 			exit (1);
 		}
-		
-		save_pid_file(pid);
+
+		if (! single_time) 
+			save_pid_file(pid);
 
 		ret = process_wait (pid);
-		usleep ((ret == ret_ok) ? RESTARTING_DELAY : ERROR_DELAY);
-	} 
+		
+		if (single_time)
+			break;
+
+		usleep ((ret == ret_ok) ? 
+			DELAY_RESTARTING : 
+			DELAY_ERROR);
+	} while (! exit_guardian);
 
 	return 0;
 }

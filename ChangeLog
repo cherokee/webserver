@@ -1,5 +1,8 @@
 2008-06-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main_guardian.c: Do not loop when the operation is
+	meant to happen a single time. Reported by Gunnar Wolf.
+
 	* cherokee/main_guardian.c (save_pid_file): Bug fix: Do not try to
 	save the PID file if it couldn't be opened for writing.
 
