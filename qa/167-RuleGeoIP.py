@@ -35,7 +35,6 @@ class Test (TestBase):
         self.forbidden_content = ["/bin/sh", "echo"]
 
     def Precondition (self):
-        return True
         # Check that pam module was compiled
         if not cherokee_has_plugin("geoip"):
             return False
