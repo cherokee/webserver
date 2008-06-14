@@ -1,3 +1,8 @@
+2008-06-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main_guardian.c: Improves PID file management. Now it
+	cleans it up before exiting.
+
 2008-06-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main_guardian.c: Do not loop when the operation is

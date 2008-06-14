@@ -26,6 +26,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <errno.h>
 #include "server.h"
 
@@ -40,6 +41,39 @@
 static cherokee_boolean_t exit_guardian = false;
 static pid_t              pid;
 
+static void
+pid_file_save (const char *pid_file, int pid)
+{
+	FILE *file;
+	char  tmp[10];
+
+	file = fopen (pid_file, "w+");
+	if (file == NULL) {
+		PRINT_MSG ("Cannot write PID file '%s'\n", pid_file);
+		return;
+	}
+
+	snprintf (tmp, sizeof(tmp), "%d\n", pid);
+	fwrite (tmp, 1, strlen(tmp), file);
+	fclose (file);
+}
+
+static void
+pid_file_clean (const char *pid_file)
+{
+	struct stat info;
+
+	if (lstat (pid_file, &info) != 0) 
+		return;
+	if (! S_ISREG(info.st_mode))
+		return;
+	if (info.st_uid != getuid())
+		return;
+	if (info.st_size > sizeof("65535\r\n"))
+		return;
+
+	unlink (pid_file);
+}
 
 static ret_t
 process_wait (pid_t pid)
@@ -67,7 +101,6 @@ process_wait (pid_t pid)
 	return ret_ok;
 }
 
-
 static void 
 guardian_signals_handler (int sig, siginfo_t *si, void *context) 
 {
@@ -92,6 +125,7 @@ guardian_signals_handler (int sig, siginfo_t *si, void *context)
 		/* Kill child and exit */
 		kill (pid, SIGTERM);
 		process_wait (pid);
+		pid_file_clean (PID_FILE);
 		exit(0);
 
 	default:
@@ -163,26 +197,6 @@ process_launch (const char *path, int argc, char *argv[])
 	return pid;
 }
 
-
-static void
-save_pid_file (int pid)
-{
-	FILE *file;
-	char  tmp[10];
-
-	UNUSED(pid);
-
-	file = fopen (PID_FILE, "w+");
-	if (file == NULL) {
-		PRINT_MSG ("Cannot write PID file '%s'\n", PID_FILE);
-		return;
-	}
-
-	snprintf (tmp, sizeof(tmp), "%d\n", getpid());
-	fwrite (tmp, 1, strlen(tmp), file);
-	fclose (file);
-}
-
 static cherokee_boolean_t
 is_single_execution (int argc, char *argv[])
 {
@@ -208,6 +222,9 @@ main (int argc, char *argv[])
 	set_guardian_signals();	   
 	single_time = is_single_execution (argc, argv);
 
+	if (! single_time)
+		pid_file_save (PID_FILE, getpid());
+
 	do {
 		pid = process_launch (CHEROKEE_SRV_PATH, argc, argv);
 		if (pid < 0) {
@@ -215,11 +232,7 @@ main (int argc, char *argv[])
 			exit (1);
 		}
 
-		if (! single_time) 
-			save_pid_file(pid);
-
-		ret = process_wait (pid);
-		
+		ret = process_wait (pid);		
 		if (single_time)
 			break;
 
@@ -228,5 +241,6 @@ main (int argc, char *argv[])
 			DELAY_ERROR);
 	} while (! exit_guardian);
 
+	pid_file_clean (PID_FILE);
 	return 0;
 }
