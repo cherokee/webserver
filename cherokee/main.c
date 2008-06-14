@@ -223,6 +223,9 @@ process_parameters (int argc, char **argv)
 {
 	int c;
 
+	/* If any of these parameters change, main_guardian may need
+	 * to be updated.
+	 */
 	struct option long_options[] = {
 		{"help",              no_argument,       NULL, 'h'},
 		{"version",           no_argument,       NULL, 'V'},
