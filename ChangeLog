@@ -1,5 +1,9 @@
 2008-06-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* Makefile.am (install-data-local): It does not need to create the
+	mods-available, mods-enabled, sites-available, sites-enabled
+	directories any longer. Patch imported from Debian (Gunnar Wolf).
+
 	* cherokee/main_guardian.c: Improves PID file management. Now it
 	cleans it up before exiting.
 

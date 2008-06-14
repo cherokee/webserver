@@ -92,10 +92,6 @@ install-data-local: $(CONFS) install-data-local-config
 	@$(mkinstalldirs) $(DESTDIR)$(localstatedir)/log
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/ssl
-	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/mods-available
-	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/mods-enabled
-	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/sites-available
-	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/sites-enabled
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeadmindir)
 	@if test -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf ; then \
 		echo "$@ will not overwrite existing $(DESTDIR)$(cherokeeconfdir)/cherokee.conf"; \
