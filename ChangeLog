@@ -774,7 +774,7 @@
 	* cherokee/util.h (cherokee_lstat): Added new macro to call
 	lstat().
 
-	* contrib/06to07.py: Added 0.6 to 0.7 configuration convertion
+	* contrib/06to07.py: Added 0.6 to 0.7 configuration conversion
 	script.
 
 	* doc/locale/en/internal_configuration.txt: Updated to the new
@@ -2173,13 +2173,13 @@
 
 	* cherokee/plugin_loader.h, cherokee/plugin_loader.c,
 	cherokee/handler_fastcgi.c, cherokee/thread.h, cherokee/thread.c:
-	cherokee_table_t to cherokee_avl_t convertion.
+	cherokee_table_t to cherokee_avl_t conversion.
 
 	* cherokee/avl.h, cherokee/avl.c (cherokee_avl_del_ptr): Added
 	missing method.
 
 	* cherokee/resolv_cache.c (cherokee_resolv_cache_clean):
-	cherokee_table_t to cherokee_avl_t convertion.
+	cherokee_table_t to cherokee_avl_t conversion.
 
 	* cherokee/avl.c (cherokee_avl_mrproper): Implemented.
 
