@@ -1,5 +1,8 @@
 2008-06-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee-guardian.1, Makefile.am (man_MANS): Adds a missing man
+	page. Patch imported from Debian (by Gunnar Wolf).
+
 	* contrib/05to06.py (Syntax._process_entry): Fixes conversion
 	issue. Imported from Debian (by Gunnar Wolf).
 
