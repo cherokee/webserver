@@ -270,7 +270,12 @@ class Syntax:
             more = self._process_entry_guts (prefix)
             if not more: break
 
-        print "%s!priority = %d" % (prefix, self._vserver_last_priority * 10)
+        try:
+            priority = self._vserver_last_priority * 10
+        except AttributeError:
+            self._vserver_last_priority = 1
+            priority = 10
+        print "%s!priority = %d" % (prefix, priority * 10)
         self._vserver_last_priority += 1
 
     def _process_encoder (self, prefix):

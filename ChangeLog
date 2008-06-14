@@ -1,5 +1,8 @@
 2008-06-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* contrib/05to06.py (Syntax._process_entry): Fixes conversion
+	issue. Imported from Debian (by Gunnar Wolf).
+
 	* Makefile.am (install-data-local): It does not need to create the
 	mods-available, mods-enabled, sites-available, sites-enabled
 	directories any longer. Patch imported from Debian (Gunnar Wolf).
