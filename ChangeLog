@@ -1,3 +1,9 @@
+2008-06-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/thread.c (process_polling_connections)
+	(process_active_connections): Added a couple of new TRACE entries
+	that will help to trace when connections time out.
+
 2008-06-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee-guardian.1, Makefile.am (man_MANS): Adds a missing man

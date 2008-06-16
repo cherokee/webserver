@@ -588,6 +588,7 @@ process_polling_connections (cherokee_thread_t *thd)
 		/* Has it been too much without any work?
 		 */
 		if (conn->timeout < thd->bogo_now) {
+			TRACE (ENTRIES, "thread (%p) processing polling conn (%p): Time out\n", thd, conn);
 			purge_closed_polling_connection (thd, conn);
 			continue;
 		}
@@ -643,6 +644,8 @@ process_active_connections (cherokee_thread_t *thd)
 		/* Has the connection been too much time w/o any work
 		 */
 		if (conn->timeout < thd->bogo_now) {
+			TRACE (ENTRIES, "thread (%p) processing conn (%p): Time out\n", thd, conn);
+
 			conns_freed++;
 			purge_closed_connection (thd, conn);
 			continue;
