@@ -1020,6 +1020,8 @@ get_encoding (cherokee_connection_t    *conn,
 	i1 = ptr;
 
 	do {
+		while (*i1 == ' ') i1++;
+
 		i2 = strchr (i1, ',');
 		if (!i2) i2 = strchr (i1, ';');
 		if (!i2) i2 = end;

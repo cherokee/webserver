@@ -1,5 +1,9 @@
 2008-06-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c (get_encoding): Better encoder header
+	management. There were some times when it was not encoding because
+	it did not parse the header correctly.
+
 	* cherokee/thread.c (process_polling_connections)
 	(process_active_connections): Added a couple of new TRACE entries
 	that will help to trace when connections time out.
