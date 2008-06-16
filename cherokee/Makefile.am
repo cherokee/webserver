@@ -573,6 +573,23 @@ endif
 
 
 #
+# Encoder Deflate
+#
+encoder_deflate = \
+encoder_deflate.h \
+encoder_deflate.c
+
+libplugin_deflate_la_LDFLAGS = $(module_ldflags)
+libplugin_deflate_la_SOURCES = $(encoder_deflate)
+
+if STATIC_ENCODER_DEFLATE
+static_encoder_deflate_src = $(encoder_deflate)
+else
+dynamic_encoder_deflate_lib = libplugin_deflate.la
+endif
+
+
+#
 # Logger NCSA
 #
 logger_ncsa = \
@@ -990,6 +1007,7 @@ $(static_logger_ncsa_src) \
 $(static_logger_combined_src) \
 \
 $(static_encoder_gzip_src) \
+$(static_encoder_deflate_src) \
 \
 $(static_validator_pam_src) \
 $(static_validator_ldap_src) \
@@ -1134,6 +1152,7 @@ $(dynamic_handler_error_redir_lib) \
 $(dynamic_handler_common_lib) \
 $(dynamic_handler_nn_lib) \
 $(dynamic_encoder_gzip_lib) \
+$(dynamic_encoder_deflate_lib) \
 $(dynamic_logger_ncsa_lib) \
 $(dynamic_logger_combined_lib) \
 $(dynamic_logger_w3c_lib) \

@@ -1,5 +1,9 @@
 2008-06-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/encoder_deflate.c, cherokee/encoder_deflate.h,
+	cherokee/Makefile.am, configure.in: Added new encoder for the
+	deflate Content-Encoding.
+
 	* cherokee/connection.c (get_encoding): Better encoder header
 	management. There were some times when it was not encoding because
 	it did not parse the header correctly.
