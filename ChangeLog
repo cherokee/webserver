@@ -1,5 +1,8 @@
 2008-06-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (cherokee_server_print_build_info): Now it
+	prints more information about how the compilation was performed.
+
 	* cherokee/trace.c (cherokee_trace_do_trace): If "time" is added
 	to CHEROKEE_TRACE it prints the time and date at the begining of
 	each line of the log.
