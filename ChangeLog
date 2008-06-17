@@ -1,3 +1,8 @@
+2008-06-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/168-Deflate-Encoding.py, qa/Makefile.am (EXTRA_DIST): Added a
+	new QA test to check the new Deflate encoder.
+
 2008-06-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/encoder_deflate.c, cherokee/encoder_deflate.h,

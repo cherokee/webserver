@@ -129,6 +129,7 @@ server!keepalive = 1
 server!listen = 127.0.0.1
 server!panic_action = %s
 server!encoder!gzip!allow = txt
+server!encoder!deflate!allow = txt
 server!pid_file = %s
 server!module_dir = %s
 server!module_deps = %s
