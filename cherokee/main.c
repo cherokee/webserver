@@ -26,6 +26,8 @@
 #include <signal.h>
 #include "init.h"
 #include "server.h"
+#include "server-protected.h"
+#include "util.h"
 
 #ifdef HAVE_GETOPT_H
 # include <getopt.h>
@@ -284,7 +286,7 @@ main (int argc, char **argv)
 	process_parameters (argc, argv);
 	
 	if (print_modules) {
-		cherokee_server_print_build_info (srv);
+		cherokee_build_info_print (&srv->loader);
 		exit (ret_ok);
 	}
 

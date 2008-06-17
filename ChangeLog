@@ -1,5 +1,9 @@
 2008-06-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (cherokee_server_print_build_info),
+	cherokee/server.h, cherokee/main.c: Moved to utils.c as
+	cherokee_info_print(). It makes more sense there.
+
 	* cherokee/server.c (cherokee_server_print_build_info): Now it
 	prints more information about how the compilation was performed.
 

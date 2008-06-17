@@ -68,8 +68,6 @@ ret_t cherokee_server_set_backup_mode    (cherokee_server_t *srv, cherokee_boole
 ret_t cherokee_server_get_backup_mode    (cherokee_server_t *srv, cherokee_boolean_t *active);
 ret_t cherokee_server_log_reopen         (cherokee_server_t *srv);
 
-ret_t cherokee_server_print_build_info   (cherokee_server_t *srv);
-
 /* System signal callback
  */
 ret_t cherokee_server_handle_HUP   (cherokee_server_t *srv, cherokee_server_reinit_cb_t callback);
