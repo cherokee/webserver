@@ -1,5 +1,9 @@
 2008-06-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/trace.c (cherokee_trace_do_trace): If "time" is added
+	to CHEROKEE_TRACE it prints the time and date at the begining of
+	each line of the log.
+
 	* cherokee/thread.c (phase_to_str): It only needed to be compiled
 	when TRACE was enabled. Fixes compilation warning.
 

@@ -34,11 +34,13 @@
 typedef struct {
 	cherokee_buffer_t  modules;
 	cherokee_boolean_t use_syslog;
+	cherokee_boolean_t print_time;
 } cherokee_trace_t;
 
 
 static cherokee_trace_t trace = {
 	CHEROKEE_BUF_INIT, 
+	false,
 	false
 };
 
@@ -75,9 +77,10 @@ cherokee_trace_set_modules (cherokee_buffer_t *modules)
 		cherokee_buffer_add_buffer (&trace.modules, modules);
 	}
 	
-	/* Check where to log
+	/* Check the special properties
 	 */
 	trace.use_syslog = (strstr (modules->buf, "syslog") != NULL);
+	trace.print_time = (strstr (modules->buf, "time") != NULL);
 
 	return ret_ok;
 }
@@ -90,6 +93,8 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	char               *lentry;
 	char               *lentry_end;
 	va_list             args;
+	struct tm           now;
+	time_t              now_time;
 	cherokee_buffer_t  *trace_modules = &trace.modules;
 	cherokee_boolean_t  do_log        = false;
 	cherokee_buffer_t   entries       = CHEROKEE_BUF_INIT;
@@ -136,6 +141,18 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	 * 'entries' is not needed at this stage, reuse it
 	 */
 	cherokee_buffer_clean (&entries);
+	if (trace.print_time) {
+		now_time = time(NULL);
+		cherokee_localtime (&now_time, &now);
+		cherokee_buffer_add_va (&entries, "[%02d/%02d/%d:%02d:%02d:%02d] ",
+					now.tm_mday, 
+					now.tm_mon, 
+					now.tm_year + 1900,
+					now.tm_hour, 
+					now.tm_min, 
+					now.tm_sec);
+	}
+
 	cherokee_buffer_add_va (&entries, "%18s:%04d (%30s): ", file, line, func);
 
 	va_start (args, fmt);

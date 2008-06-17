@@ -48,10 +48,6 @@
 # include <sys/filio.h>     /* defines FIONBIO and FIONREAD */
 #endif
 
-#ifdef HAVE_SYS_TIME_H
-# include <sys/time.h>
-#endif
-
 #ifdef HAVE_SYS_IOCTL_H
 # include <sys/ioctl.h>
 #endif
