@@ -48,7 +48,7 @@
 static ret_t reactive_conn_from_polling  (cherokee_thread_t *thd, cherokee_connection_t *conn);
 
 
-#ifdef TRACE
+#ifdef TRACE_ENABLED
 static char *
 phase_to_str (cherokee_connection_phase_t phase)
 {
