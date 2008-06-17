@@ -1150,21 +1150,39 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 
 static void
+stop_threads (cherokee_server_t *srv)
+{
+	cherokee_list_t *i;
+
+	list_for_each (i, &srv->thread_list) {
+		THREAD(i)->exit = true;
+	}
+
+	list_for_each (i, &srv->thread_list) {
+		CHEROKEE_THREAD_JOIN (THREAD(i)->thread);
+	}
+}
+
+
+static void
 flush_logs (cherokee_server_t *srv)
 {
 	cherokee_list_t   *i;
 	cherokee_logger_t *logger;
-
-	list_for_each (i, &srv->vservers) {
-		logger = VSERVER_LOGGER(i);
-
-		if (logger)
-			cherokee_logger_flush (VSERVER_LOGGER(i));
-	}
-
+	
+	/* Main virtual server
+	 */
 	logger = VSERVER_LOGGER(srv->vserver_default);
 	if (logger) 
 		cherokee_logger_flush (VSERVER_LOGGER(srv->vserver_default));
+
+	/* Rest of the virtual servers
+	 */
+	list_for_each (i, &srv->vservers) {
+		logger = VSERVER_LOGGER(i);
+		if (logger)
+			cherokee_logger_flush (VSERVER_LOGGER(i));
+	}
 }
 
 
@@ -1353,14 +1371,9 @@ cherokee_server_step (cherokee_server_t *srv)
 		srv->wanna_exit = true;
 #endif
 
-	/* Wanna reinit or exit ?
-	 */
-	if (likely ((srv->wanna_reinit | srv->wanna_exit) == 0))
-		return ret_eagain;
-
 	/* Wanna reinit ?
 	 */
-	if (srv->wanna_reinit) {
+	if (unlikely (srv->wanna_reinit)) {
 		ret = cherokee_server_reinit (srv);
 
 		/* NOTE: we MUST return in any case because
@@ -1373,7 +1386,8 @@ cherokee_server_step (cherokee_server_t *srv)
 	
 	/* Wanna exit ?
 	 */
-	if (srv->wanna_exit) {
+	if (unlikely (srv->wanna_exit)) {
+		stop_threads (srv);
 		flush_logs (srv);
 		return ret_ok;
 	}

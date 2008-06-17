@@ -1,5 +1,10 @@
 2008-06-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (stop_threads): It must stop all the threads
+	before flushing the log files.
+
+	* cherokee/common-internal.h (CHEROKEE_THREAD_JOIN): New macro.
+
 	* cherokee/server.c (cherokee_server_print_build_info),
 	cherokee/server.h, cherokee/main.c: Moved to utils.c as
 	cherokee_info_print(). It makes more sense there.
