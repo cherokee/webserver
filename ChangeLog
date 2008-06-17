@@ -1,5 +1,11 @@
 2008-06-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageEntry.py, admin/Module.py, admin/ModuleScgi.py,
+	admin/PageEncoders.py, admin/ModuleFcgi.py, admin/PageVServer.py,
+	admin/ModuleMirror.py: Now it checks whether any plug-in is
+	present before showing it as an option in the administration
+	interface.
+
 	* admin/consts.py: Adds Deflate.
 
 	* admin/PageEncoders.py: It shows only the encoders that are

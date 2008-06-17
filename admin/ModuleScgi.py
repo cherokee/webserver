@@ -22,7 +22,8 @@ class ModuleScgi (ModuleCgiBase):
 
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddPropOptions_Reload (table, "Balancer", prefix, BALANCERS, NOTE_BALANCER)
+        e = self.AddPropOptions_Reload (table, "Balancer", prefix, 
+                                        modules_available(BALANCERS), NOTE_BALANCER)
         txt += self.Indent(str(table) + e)
         return txt
 

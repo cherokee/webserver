@@ -18,7 +18,8 @@ class ModuleMirror (Module, FormHelper):
         prefix = "%s!balancer" % (self._prefix)
 
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, "Balancer", prefix, BALANCERS, NOTE_BALANCER)
+        e = self.AddPropOptions_Reload (table, "Balancer", prefix,
+                                        modules_available(BALANCERS), NOTE_BALANCER)
 
         txt  = "<h2>Load balancing options</h2>"
         txt += self.Indent (str(table) + e)

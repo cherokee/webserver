@@ -1,4 +1,5 @@
 import imp, sys
+from CherokeeManagement import cherokee_has_plugin
 
 class Module:
     def __init__ (self, id, cfg, prefix, submit_url):
@@ -24,3 +25,17 @@ def module_obj_factory (name, cfg, prefix, submit_url, **kwargs):
         mod_obj.__dict__[prop] = kwargs[prop]
 
     return mod_obj
+
+def modules_available (module_list):
+    new_module_list = []
+
+    for entry in module_list:
+        assert (type(entry) == tuple)
+        assert (len(entry) == 2)
+        plugin, name = entry
+
+        if cherokee_has_plugin (plugin):
+            new_module_list.append(entry)
+
+    return new_module_list
+        

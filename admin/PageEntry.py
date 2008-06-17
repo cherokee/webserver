@@ -118,7 +118,7 @@ class PageEntry (PageMenu, FormHelper):
         # Handler
         table = TableProps()
         e = self.AddPropOptions_Reload (table, 'Handler', '%s!handler'%(pre), 
-                                        HANDLERS, NOTE_HANDLER)
+                                        modules_available(HANDLERS), NOTE_HANDLER)
         self.AddPropEntry (table, 'Document Root', '%s!document_root'%(pre), NOTE_DOCUMENT_ROOT)
 
         if e:
@@ -167,7 +167,7 @@ class PageEntry (PageMenu, FormHelper):
         txt += "<h2>Authentication</h2>"
         table = TableProps()
         e = self.AddPropOptions_Reload (table, 'Validation Mechanism', '%s!auth'%(pre), 
-                                        VALIDATORS, NOTE_VALIDATOR)
+                                        modules_available(VALIDATORS), NOTE_VALIDATOR)
         txt += self.Indent (table)
         txt += e
         return txt

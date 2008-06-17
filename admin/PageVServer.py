@@ -225,22 +225,18 @@ class PageVServer (PageMenu, FormHelper):
         table = TableProps()
         e = self.AddPropOptions_Reload (table, 'Error Handler',
                                         '%s!error_handler' % (pre), 
-                                        ERROR_HANDLERS, NOTE_ERROR_HANDLER)
+                                        modules_available(ERROR_HANDLERS), 
+                                        NOTE_ERROR_HANDLER)
         txt += str(table) + self.Indent(e)
 
         return txt
     
     def _render_add_rule (self, prefix):
-        # Check which rules plug-ins are available
-        rules = []
-        for rule, desc in RULES:
-            if cherokee_has_plugin (rule):
-                rules.append ((rule, desc))
-
         # Render
         txt = "<h2>Add new rule</h2>"
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, "Rule Type", prefix, rules, "")
+        e = self.AddPropOptions_Reload (table, "Rule Type", prefix, 
+                                        modules_available(RULES), "")
         txt += self.Indent (str(table) + e)
         return txt
 
@@ -364,7 +360,8 @@ class PageVServer (PageMenu, FormHelper):
         # Logger
         txt += '<h3>Logging Format</h3>'
         table = TableProps()
-        self.AddPropOptions_Ajax (table, 'Format', pre, LOGGERS, NOTE_LOGGERS)
+        self.AddPropOptions_Ajax (table, 'Format', pre, 
+                                  modules_available(LOGGERS), NOTE_LOGGERS)
         txt += self.Indent(str(table))
         
         # Writers

@@ -54,10 +54,7 @@ class PageEncoders (PageMenu, FormHelper):
         FormHelper.__init__ (self, 'encoder', cfg)
 
         # Check which encoders are available
-        self.encoders = []
-        for plugin, name in ENCODERS:
-            if cherokee_has_plugin(plugin):
-                self.encoders.append ((plugin, name))
+        self.encoders = modules_available (ENCODERS)
 
     def _op_render (self):
         content = self._render_encoder_list()
