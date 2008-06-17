@@ -642,7 +642,8 @@ process_active_connections (cherokee_thread_t *thd)
 	list_for_each_safe (i, tmp, LIST(&thd->active_list)) {
 		conn = CONN(i);
 
-		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d\n", thd, conn, conn->phase);
+		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d '%s'\n", 
+		       thd, conn, conn->phase, phase_to_str(conn->phase));
 
 		/* Has the connection been too much time w/o any work
 		 */
@@ -1386,7 +1387,7 @@ __accept_from_server (cherokee_thread_t *thd, int srv_socket, cherokee_socket_ty
 	}
 
 	/* TLS support, set initial connection phase.
-	*/
+	 */
 	if (tls == TLS) {
 		new_conn->phase = phase_tls_handshake;
 	}
