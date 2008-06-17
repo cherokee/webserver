@@ -1,5 +1,10 @@
 2008-06-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/consts.py: Adds Deflate.
+
+	* admin/PageEncoders.py: It shows only the encoders that are
+	available. Besides, fixes a little render issue.
+
 	* qa/168-Deflate-Encoding.py, qa/Makefile.am (EXTRA_DIST): Added a
 	new QA test to check the new Deflate encoder.
 

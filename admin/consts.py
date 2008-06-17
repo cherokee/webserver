@@ -57,7 +57,8 @@ BALANCER_TYPES = [
 ]
 
 ENCODERS = [
-    ('gzip',     'GZip')
+    ('gzip',     'GZip'),
+    ('deflate',  'Deflate')
 ]
 
 THREAD_POLICY = [
