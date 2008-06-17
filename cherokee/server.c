@@ -130,7 +130,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->port_tls        = 443;
 	n->tls_enabled     = false;
 
-	n->fdwatch_msecs   = 999;
+	n->fdwatch_msecs   = 1000;
 
 	n->start_time      = time(NULL);
 

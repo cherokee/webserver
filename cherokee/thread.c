@@ -48,6 +48,7 @@
 static ret_t reactive_conn_from_polling  (cherokee_thread_t *thd, cherokee_connection_t *conn);
 
 
+#ifdef TRACE
 static char *
 phase_to_str (cherokee_connection_phase_t phase)
 {
@@ -70,6 +71,7 @@ phase_to_str (cherokee_connection_phase_t phase)
 	}
 	return NULL;
 }
+#endif
 
 static void
 update_bogo_now_internal (cherokee_thread_t *thd)
@@ -627,6 +629,7 @@ process_polling_connections (cherokee_thread_t *thd)
 static ret_t 
 process_active_connections (cherokee_thread_t *thd)
 {
+	int                    re;
 	ret_t                  ret;
 	off_t                  len;
 	cherokee_list_t       *i, *tmp;
@@ -663,15 +666,13 @@ process_active_connections (cherokee_thread_t *thd)
 		 * 2.- Inspect the file descriptor if it's not shutdown
 		 *     and it's not reading header or there is no more buffered data.
 		 */
-		if ( conn->phase != phase_shutdown &&
-			(conn->phase != phase_reading_header ||
-			 conn->incoming_header.len < 1)) {
-			int num;
-
-			num = cherokee_fdpoll_check (thd->fdpoll, 
-						     SOCKET_FD(&conn->socket), 
-						     SOCKET_STATUS(&conn->socket));
-			switch (num) {
+		if ((conn->phase != phase_shutdown) &&
+		    (conn->phase != phase_reading_header || conn->incoming_header.len <= 0))
+		{
+			re = cherokee_fdpoll_check (thd->fdpoll, 
+						    SOCKET_FD(&conn->socket), 
+						    SOCKET_STATUS(&conn->socket));
+			switch (re) {
 			case -1:
 				conns_freed++;
 				purge_closed_connection(thd, conn);
