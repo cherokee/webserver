@@ -1,5 +1,8 @@
 2008-06-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/socket.c (cherokee_socket_sendfile): This patch fixes
+	and simplfies the sendfile() support of MacOS X.
+
 	* cherokee/Makefile.am (distclean-local): It has to clean the two
 	files (loader.autoconf.h loader.autoconf.inc) that the configure
 	script is generating.

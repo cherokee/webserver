@@ -1446,18 +1446,8 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	}
 
 #elif DARWIN_SENDFILE_API
-	int            re;
-	struct sf_hdtr hdr;
-	struct iovec   hdtrl;
-	off_t          _sent = size;
-
-	hdr.headers    = &hdtrl;
-	hdr.hdr_cnt    = 1;
-	hdr.trailers   = NULL;
-	hdr.trl_cnt    = 0;
-	
-	hdtrl.iov_base = NULL;
-	hdtrl.iov_len  = 0;
+	int   re;
+	off_t _sent = size;
 
 	/* MacOS X: BSD-like System Call
 	 *
@@ -1470,21 +1460,17 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 			       SOCKET_FD(socket),         /* int             s      */
 			       *offset,                   /* off_t           offset */
 			       &_sent,                    /* off_t          *len    */
-			       &hdr,                      /* struct sf_hdtr *hdtr   */
+			       NULL,                      /* struct sf_hdtr *hdtr   */
 			       0);                        /* int             flags  */
 	}  while (re == -1 && errno == EINTR);
 
 	if (re == -1) {
 		switch (errno) {
 		case EAGAIN:
-#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
-		case EWOULDBLOCK:
-#endif
-			if (*sent < 1)
-				return ret_eagain;
-
-			/* else it's ok, something has been sent.
+			/* It might have sent some information
 			 */
+			if (_sent <= 0)
+				return ret_eagain;
 			break;
 		case ENOSYS:
 			no_sys = true;
