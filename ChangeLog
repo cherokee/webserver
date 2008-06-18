@@ -1,5 +1,11 @@
 2008-06-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/CherokeeManagement.py (cherokee_has_polling_method),
+	admin/PageAdvanced.py (PageAdvanced._render_content): It shows
+	only the Polling methods that are available. It does not make
+	sense to show "Solaris ports" or "Select Win32" on MacOS X, for
+	instance.
+
 	* cherokee/info.c (cherokee_info_build_print): Print the polling
 	method like the built-in plug-ins so it is easier to parse.
 

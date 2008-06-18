@@ -221,15 +221,8 @@ def cherokee_get_server_info ():
 _built_in_list      = []
 _built_in_list_done = False
 
-def cherokee_has_plugin (module):
-    # Check for the dynamic plug-in
-    try:
-        mods = filter(lambda x: module in x, os.listdir(CHEROKEE_PLUGINDIR))
-        if len(mods) >= 1:
-            return True
-    except:
-        pass
 
+def cherokee_build_info_has (filter, module):
     # Let's see whether it's built-in
     global _built_in_list
     global _built_in_list_done
@@ -243,13 +236,29 @@ def cherokee_has_plugin (module):
             f.close()
         except:
             pass
-        
+
         try:
-            line = filter(lambda x: x.startswith (" Built-in: "), cont.split("\n"))[0]
-            line = line.replace(" Built-in: ", "")
+            filter_string = " %s: " % (filter)
+            for l in cont.split("\n"):
+                if l.startswith(filter_string):
+                    line = l.replace (filter_string, "")
+                    break
             _built_in_list = line.split(" ")
         except:
             pass
 
     return module in _built_in_list
-    
+
+def cherokee_has_plugin (module):
+    # Check for the dynamic plug-in
+    try:
+        mods = filter(lambda x: module in x, os.listdir(CHEROKEE_PLUGINDIR))
+        if len(mods) >= 1:
+            return True
+    except:
+        pass
+
+    return cherokee_build_info_has ("Built-in", module)
+
+def cherokee_has_polling_method (module):
+    return cherokee_build_info_has ("Polling methods", module)

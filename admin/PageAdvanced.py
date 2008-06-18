@@ -4,6 +4,7 @@ from Page import *
 from Table import *
 from Form import *
 from consts import *
+from CherokeeManagement import *
 
 DATA_VALIDATION = [
     ("server!fdlimit",                validations.is_positive_int),
@@ -49,6 +50,12 @@ class PageAdvanced (PageMenu, FormHelper):
         return Page.Render(self)
 
     def _render_content (self):
+        polling_methods = []
+        for name, desc in POLL_METHODS:
+            if ((not name) or \
+                cherokee_has_polling_method (name)):
+                polling_methods.append((name, desc))
+
         txt = "<h1>Advanced configuration</h1>"
         txt += self.Dialog(WARNING, 'warning')
 
@@ -61,7 +68,7 @@ class PageAdvanced (PageMenu, FormHelper):
 
         txt += "<h2>Server tweaking</h2>"
         table = TableProps()
-        self.AddPropOptions  (table, 'Polling Method',    'server!poll_method',  POLL_METHODS, NOTE_POLLING)
+        self.AddPropOptions  (table, 'Polling Method',    'server!poll_method',  polling_methods, NOTE_POLLING)
         self.AddPropEntry    (table, 'Sendfile min size', 'server!sendfile_min', NOTE_SENDFILE_MIN)
         self.AddPropEntry    (table, 'Sendfile max size', 'server!sendfile_max', NOTE_SENDFILE_MAX)
         self.AddPropEntry    (table, 'Panic action',      'server!panic_action', NOTE_PANIC_ACTION)

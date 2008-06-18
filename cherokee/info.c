@@ -97,7 +97,7 @@ cherokee_info_build_print (cherokee_server_t *srv)
 	printf (" syslog(): no\n");
 #endif
 
-	printf (" polling methods: ");
+	printf (" Polling methods: ");
 #ifdef HAVE_PORT
 	printf ("ports ");
 #endif
