@@ -1,5 +1,8 @@
 2008-06-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/info.c (cherokee_info_build_print): Print the polling
+	method like the built-in plug-ins so it is easier to parse.
+
 	* cherokee/socket.c (cherokee_socket_sendfile): This patch fixes
 	and simplfies the sendfile() support of MacOS X.
 

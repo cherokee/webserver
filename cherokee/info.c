@@ -96,38 +96,25 @@ cherokee_info_build_print (cherokee_server_t *srv)
 #else
 	printf (" syslog(): no\n");
 #endif
-	printf ("\n");
 
-
-	printf ("Polling methods\n");
+	printf (" polling methods: ");
 #ifdef HAVE_PORT
-	printf (" Solaris' port(): yes\n");
-#else
-	printf (" Solaris' port(): no\n");
+	printf ("ports ");
 #endif
 #ifdef HAVE_SELECT
-	printf (" select(): yes\n");
-#else
-	printf (" select(): no\n");
+	printf ("select ");
 #endif
 #ifdef HAVE_WIN32_SELECT
-	printf (" Win32 select(): yes\n");
-#else
-	printf (" Win32 select(): no\n");
+	printf ("win32-select ");
 #endif
 #ifdef HAVE_POLL
-	printf (" poll(): yes\n");
-#else
-	printf (" poll(): no\n");
+	printf ("poll ");
 #endif
 #ifdef HAVE_EPOLL
-	printf (" epoll(): yes\n");
-#else
-	printf (" epoll(): no\n");
+	printf ("epoll ");
 #endif
 #ifdef HAVE_KQUEUE
-	printf (" kqueue(): yes\n");
-#else
-	printf (" kqueue(): no\n");
+	printf ("kqueue");
 #endif
+	printf ("\n\n");
 }
