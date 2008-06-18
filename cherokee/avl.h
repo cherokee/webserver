@@ -55,9 +55,9 @@ ret_t cherokee_avl_add       (cherokee_avl_t *avl, cherokee_buffer_t *key, void 
 ret_t cherokee_avl_del       (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value);
 ret_t cherokee_avl_get       (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value);
 
-ret_t cherokee_avl_add_ptr   (cherokee_avl_t *avl,        const char *key, void  *value);
-ret_t cherokee_avl_del_ptr   (cherokee_avl_t *avl,        const char *key, void **value);
-ret_t cherokee_avl_get_ptr   (cherokee_avl_t *avl,        const char *key, void **value);
+ret_t cherokee_avl_add_ptr   (cherokee_avl_t *avl, const char *key, void  *value);
+ret_t cherokee_avl_del_ptr   (cherokee_avl_t *avl, const char *key, void **value);
+ret_t cherokee_avl_get_ptr   (cherokee_avl_t *avl, const char *key, void **value);
 
 ret_t cherokee_avl_len       (cherokee_avl_t *avl, size_t *len);
 ret_t cherokee_avl_while     (cherokee_avl_t *avl, cherokee_avl_while_func_t func, void *param, cherokee_buffer_t **key, void **value);

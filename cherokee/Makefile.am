@@ -1099,6 +1099,7 @@ header.h \
 resolv_cache.h \
 post.h \
 trace.h \
+avl.h \
 \
 config_node.h \
 config_entry.h \
