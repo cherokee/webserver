@@ -116,9 +116,8 @@ void  cherokee_print_wrapped   (cherokee_buffer_t *buffer);
 
 /* Debug
  */
-void  cherokee_trace            (const char *entry, const char *file, int line, const char *func, const char *fmt, ...);
-void  cherokee_print_errno      (int error, char *format, ...);
-void  cherokee_build_info_print (cherokee_plugin_loader_t *loader);
+void  cherokee_trace           (const char *entry, const char *file, int line, const char *func, const char *fmt, ...);
+void  cherokee_print_errno     (int error, char *format, ...);
 
 /* Path walking
  */

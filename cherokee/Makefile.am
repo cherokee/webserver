@@ -1068,7 +1068,9 @@ balancer.c \
 source.h \
 source.c \
 source_interpreter.h \
-source_interpreter.c
+source_interpreter.c \
+info.h \
+info.c
 
 libcherokee_config_la_SOURCES = \
 $(config_common) \

@@ -1,5 +1,10 @@
 2008-06-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/util.h, cherokee/util.c, cherokee/info.h,
+	cherokee/info.c, cherokee/Makefile.am: As long as the
+	cherokee_server_print_build_info() depends on libcherokee-server
+	functions it has to be relocated within the library.
+
 	* cherokee/avl.c (cherokee_avl_get, cherokee_avl_add)
 	(cherokee_avl_del): Added sanity check. The key must not be empty.
 
