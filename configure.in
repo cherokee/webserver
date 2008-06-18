@@ -1248,14 +1248,15 @@ for mod in $modules; do
 done
 
 AC_MSG_CHECKING([loader.autoconf files])
-printf "$ext_defs\n"                                 > ${srcdir}/cherokee/loader.autoconf.h
-printf "$headers \n\n $add_calls \n\n $init_calls\n" > ${srcdir}/cherokee/loader.autoconf.inc
+mkdir cherokee 2>/dev/null
+printf "$ext_defs\n"                                 > cherokee/loader.autoconf.h
+printf "$headers \n\n $add_calls \n\n $init_calls\n" > cherokee/loader.autoconf.inc
 AC_MSG_RESULT([done])
 
 dnl
 dnl Static/Dynamic modules
 dnl
-conf_h="${srcdir}/cherokee/loader.autoconf.h"
+conf_h="cherokee/loader.autoconf.h"
 AM_CONDITIONAL(STATIC_HANDLER_SERVER_INFO,    grep server_info    $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_FILE,           grep file           $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_HANDLER_ADMIN,          grep admin          $conf_h >/dev/null)
