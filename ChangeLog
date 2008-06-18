@@ -1,5 +1,8 @@
 2008-06-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/static/images/flags/Makefile.am (EXTRA_DIST): It was not
+	including the flags in the source code package.
+
 	* cherokee/util.h, cherokee/util.c, cherokee/info.h,
 	cherokee/info.c, cherokee/Makefile.am: As long as the
 	cherokee_server_print_build_info() depends on libcherokee-server

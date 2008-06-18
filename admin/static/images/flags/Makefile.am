@@ -250,3 +250,6 @@ scotland.png \
 europeanunion.png \
 \
 readme.txt
+
+EXTRA_DIST = \
+$(flags_DATA)
