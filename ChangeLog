@@ -1,5 +1,9 @@
 2008-06-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/Makefile.am (distclean-local): It has to clean the two
+	files (loader.autoconf.h loader.autoconf.inc) that the configure
+	script is generating.
+
 	* admin/static/images/flags/Makefile.am (EXTRA_DIST): It was not
 	including the flags in the source code package.
 

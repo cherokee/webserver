@@ -1258,3 +1258,6 @@ $(cherokeedata_DATA) \
 $(WINDOWS_PORT_FILES) \
 loader.autoconf.h \
 loader.autoconf.inc
+
+distclean-local:
+	$(RM) -f loader.autoconf.h loader.autoconf.inc
