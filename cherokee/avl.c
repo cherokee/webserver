@@ -378,6 +378,9 @@ cherokee_avl_add (cherokee_avl_t *avl, cherokee_buffer_t *key, void *value)
 	ret_t                ret;
 	cherokee_avl_node_t *n = NULL;
 
+	if (unlikely (cherokee_buffer_is_empty(key)))
+		return ret_error;
+
 	/* Create the new AVL node
 	 */
 	ret = node_new (&n, key, value);
@@ -400,6 +403,9 @@ cherokee_avl_del (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 	cherokee_avl_node_t *pbalance;
 	cherokee_avl_node_t *node     = avl->root;
 	cint_t               idx      = 1;
+
+	if (unlikely (cherokee_buffer_is_empty(key)))
+		return ret_error;
 	
 	if (avl->root == NULL)
 		return ret_not_found;
@@ -561,6 +567,9 @@ cherokee_avl_get (cherokee_avl_t *avl, cherokee_buffer_t *key, void **value)
 {
 	short                re;
 	cherokee_avl_node_t *node;
+
+	if (unlikely (cherokee_buffer_is_empty(key)))
+		return ret_error;
 	
 	node = avl->root;
 	if (!node)
