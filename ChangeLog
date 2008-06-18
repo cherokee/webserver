@@ -1,5 +1,10 @@
 2008-06-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/encoder_deflate.c (cherokee_encoder_deflate_add_headers),
+	cherokee/encoder_gzip.c (cherokee_encoder_gzip_add_headers): It
+	should add the "Vary: Accept-Encoding" header to let proxies know
+	which clients are suitable to receive the encoded content.
+
 	* admin/CherokeeManagement.py (cherokee_has_polling_method),
 	admin/PageAdvanced.py (PageAdvanced._render_content): It shows
 	only the Polling methods that are available. It does not make
