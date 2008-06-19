@@ -1,3 +1,11 @@
+2008-06-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* themes/firefox3/theme.css: Tries to clarify how this file is
+	re-distributed. It was originally distributed under MPL1.1 /
+	GPL2.0 / LGPL 2.1 licenses. We have chosen to re-distribute it
+	under any of the two GPL licenses because MPL 1.1 conflicts with
+	the GPL 2.0 license under which Cherokee is distributed.
+
 2008-06-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/encoder_deflate.c (cherokee_encoder_deflate_add_headers),
