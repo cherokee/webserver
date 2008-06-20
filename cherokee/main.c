@@ -146,6 +146,9 @@ common_server_initialization (cherokee_server_t *srv)
 #ifdef SIGSEGV
         signal (SIGSEGV, panic_handler);
 #endif
+#ifdef SIGBUS
+        signal (SIGBUS, panic_handler);
+#endif
 #ifdef SIGTERM
         signal (SIGTERM, prepare_to_die);
 #endif

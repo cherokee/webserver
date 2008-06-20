@@ -1,5 +1,12 @@
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/cherokee-panic: Added support for the
+	CHEROKEE_PANIC_OUTPUT environment variable. It also fixes the
+	script to work on MacOS X.
+
+	* cherokee/main.c (common_server_initialization): Panic handlers
+	were not working on MacOS X.
+
 	* qa/run-tests.py: Print cherokee-panic path as well.
 
 	* cherokee/macros.h (PRINT_ERRNO): Fix: It was not printing the
