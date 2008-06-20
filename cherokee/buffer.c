@@ -1291,7 +1291,7 @@ cherokee_buffer_decode_base64 (cherokee_buffer_t *buf)
 	 * "A-Za-z0-9+/".
 	 */
 
-	static const char
+	static const signed char
 		b64_decode_tab[256] = {
 			-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 00-0F */
 			-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 10-1F */

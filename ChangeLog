@@ -1,3 +1,9 @@
+2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/buffer.c (cherokee_buffer_decode_base64): Fixes an
+	issue on systems where "char" != "signed char". Patch by Müller
+	Tiziano <t...@dev-zero.ch>.
+
 2008-06-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* themes/firefox3/theme.css: Tries to clarify how this file is
