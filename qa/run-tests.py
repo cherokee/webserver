@@ -138,6 +138,7 @@ server!encoder!deflate!allow = txt
 server!pid_file = %s
 server!module_dir = %s
 server!module_deps = %s
+server!fdlimit = 8192
 
 vserver!default!document_root = %s
 vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php

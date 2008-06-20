@@ -1,5 +1,9 @@
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py: Tries to raise the initial file descriptor
+	limit to 8k files. Under some circumstances it was as low as 256
+	fds.
+
 	* admin/PageAdvanced.py: Fixes bug. It was not applying changes.
 
 	* cherokee/util.c (cherokee_getpwnam): Stabilizes the function on
