@@ -107,6 +107,11 @@ if type(pause) == types.StringType:
     else:
         pause = sys.maxint
 
+# Check threads and pauses
+if thds > 1 and pause > 1:
+    print "ERROR: -d and -t are incompatible with each other."
+    sys.exit(1)
+
 # Check the interpreters
 print "Interpreters"
 print_key('PHP',    look_for_php())
@@ -290,7 +295,13 @@ def clean_up():
         print "Sending SIGKILL.."
         os.kill (pid, signal.SIGKILL)
 
-def mainloop_iterator(objs):
+def do_pause():
+    global pause
+    print "Press <Enter> to continue.."
+    sys.stdin.readline()
+    pause = pause - 1
+
+def mainloop_iterator(objs, main_thread=True):
     global port
     global pause
     global its_clean
@@ -311,10 +322,8 @@ def mainloop_iterator(objs):
         for obj in objs:
             go_ahead = obj.Precondition()
 
-            if go_ahead and pause > 0:
-                print "Press <Enter> to continue.."
-                sys.stdin.readline()
-                pause = pause - 1
+            if go_ahead and pause > 0 and main_thread:
+                do_pause()
 
             if not quiet:
                 if ssl: print "SSL:",
@@ -358,14 +367,16 @@ def mainloop_iterator(objs):
 if ssl:
     port = 443
 
+# If we want to pause once do it before launching the threads
+if pause == 1:
+    do_pause()
+
 # Maybe launch some threads
 for n in range(thds-1):
-    objs_copy = map (lambda x: copy.copy(x), objs)
-
     t = (n * 1.0 / (thds-1))
     time.sleep(t)
 
-    thread.start_new_thread (mainloop_iterator, (objs_copy,))
+    thread.start_new_thread (mainloop_iterator, (objs[:], False))
 
 # Execute the tests
 mainloop_iterator(objs)

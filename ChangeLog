@@ -1,5 +1,8 @@
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py: Try to handle when -d (pause for debug) and
+	-t (pararell threads) are used together in the best possible way.
+
 	* cherokee/buffer.c (cherokee_buffer_decode_base64): Fixes an
 	issue on systems where "char" != "signed char". Patch by Müller
 	Tiziano <t...@dev-zero.ch>.
