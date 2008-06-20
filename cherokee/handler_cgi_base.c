@@ -722,7 +722,8 @@ bye:
 static ret_t
 xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 {
-	ret_t                  ret;
+	ret_t                     ret;
+	struct stat               l_stat;
 	cherokee_iocache_entry_t *cached = NULL;
 	cherokee_server_t        *srv    = HANDLER_SRV(cgi);
 
@@ -732,16 +733,30 @@ xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buff
 						     &cgi->xsendfile, 
 						     &cached);
 	TRACE (ENTRIES, "iocache: %s, ret=%d\n", cgi->xsendfile.buf, ret);
-
-	if ((ret != ret_ok) || (! cached)) {
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_no_sys:
+		/* Stat() it if the cache was full
+		 */
+		ret = cherokee_stat (cgi->xsendfile.buf, &l_stat);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
+		break;
+	default:
 		return ret_error;
 	}
 
 	/* Add Content-Length
 	 */
-	cherokee_buffer_add_str      (buffer, "Content-Length: ");
-	cherokee_buffer_add_ullong10 (buffer, (cullong_t) cached->state.st_size);
-	cherokee_buffer_add_str      (buffer, CRLF);
+	cherokee_buffer_add_str (buffer, "Content-Length: ");
+	if (cached) {
+		cherokee_buffer_add_ullong10 (buffer, (cullong_t) cached->state.st_size);
+	} else {
+		cherokee_buffer_add_ullong10 (buffer, (cullong_t) l_stat.st_size);
+	}
+	cherokee_buffer_add_str (buffer, CRLF);
 
 	cherokee_iocache_mmap_release (srv->iocache, cached);
 
