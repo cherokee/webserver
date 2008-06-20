@@ -86,6 +86,7 @@
 # define CHEROKEE_MUTEX_T(n)          pthread_mutex_t n
 # define CHEROKEE_RWLOCK_T(n)         pthread_rwlock_t n
 # define CHEROKEE_THREAD_JOIN(t)      pthread_join(t,NULL)
+# define CHEROKEE_THREAD_SELF         pthread_self()
 
 # define CHEROKEE_MUTEX_LOCK(m)       pthread_mutex_lock(m)
 # define CHEROKEE_MUTEX_UNLOCK(m)     pthread_mutex_unlock(m)
@@ -104,6 +105,7 @@
 # define CHEROKEE_MUTEX_T(n)          
 # define CHEROKEE_RWLOCK_T(n)         
 # define CHEROKEE_THREAD_JOIN(t)
+# define CHEROKEE_THREAD_SELF         0
 
 # define CHEROKEE_MUTEX_LOCK(m)
 # define CHEROKEE_MUTEX_UNLOCK(m)

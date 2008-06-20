@@ -1,5 +1,9 @@
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/common-internal.h (CHEROKEE_THREAD_SELF): New macro.
+
+	* cherokee/trace.c: Added support for printing the thread IDs.
+
 	* cherokee/buffer.c (cherokee_buffer_read_from_fd): Added EBADF
 	case ('Bad file descriptor').
 
