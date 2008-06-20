@@ -1,5 +1,7 @@
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageAdvanced.py: Fixes bug. It was not applying changes.
+
 	* cherokee/util.c (cherokee_getpwnam): Stabilizes the function on
 	Linux and MacOS X.
 

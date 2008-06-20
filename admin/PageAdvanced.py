@@ -8,7 +8,7 @@ from CherokeeManagement import *
 
 DATA_VALIDATION = [
     ("server!fdlimit",                validations.is_positive_int),
-    ("server!pid_file",               validations.parent_is_dir),
+    ("server!pid_file",              (validations.parent_is_dir, 'cfg')),
     ("server!sendfile_min",           validations.is_positive_int),
     ("server!sendfile_max",           validations.is_positive_int),
     ('server!panic_action',          (validations.is_local_file_exists, 'cfg')),
