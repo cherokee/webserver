@@ -248,9 +248,10 @@ if port is None:
     else:
         print "Server"
         print_key ('PID', str(pid));
-        print_key ('Path', CHEROKEE_PATH)
-        print_key ('Mods', CHEROKEE_MODS)
-        print_key ('Deps', CHEROKEE_DEPS)
+        print_key ('Path',  CHEROKEE_PATH)
+        print_key ('Mods',  CHEROKEE_MODS)
+        print_key ('Deps',  CHEROKEE_DEPS)
+        print_key ('Panic', CHEROKEE_PANIC)
         print
 
         if memproc:

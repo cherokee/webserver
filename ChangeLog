@@ -1,5 +1,7 @@
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py: Print cherokee-panic path as well.
+
 	* cherokee/macros.h (PRINT_ERRNO): Fix: It was not printing the
 	right 'file' and 'line number' values.
 
