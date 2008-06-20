@@ -1057,10 +1057,27 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 
 #elif HAVE_GETPWNAM_R_5
 	int            re;
-	struct passwd *tmp;
+	struct passwd *tmp = NULL;
 
+	/* MacOS X:
+	 * int getpwnam_r (const char     *login, 
+	 *                 struct passwd  *pwd, 
+	 *                 char           *buffer, 
+	 *                 size_t          bufsize,
+	 *                 struct passwd **result);
+	 *
+	 * Linux: 
+	 * int getpwnam_r (const char     *name, 
+	 * 	           struct passwd  *pwbuf, 
+	 *                 char           *buf,
+         *                 size_t          buflen,
+	 *                 struct passwd **pwbufp);
+	 */
 	re = getpwnam_r (name, pwbuf, buf, buflen, &tmp);
-	if (re != 0) return ret_error;
+	if ((re != 0) || (tmp == NULL)) 
+		return ret_error;
+
+	printf ("pwbuf=%p tmp=%p\n", pwbuf, tmp);
 
 	return ret_ok;
 

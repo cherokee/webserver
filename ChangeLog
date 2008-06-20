@@ -1,5 +1,8 @@
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/util.c (cherokee_getpwnam): Stabilizes the function on
+	Linux and MacOS X.
+
 	* cherokee/handler_cgi_base.c (xsendfile_add_headers): Fixes the
 	case on which the I/O cache is full, so it cannot return a
 	cacheable object - and therefore, it has to be stat()ed locally.

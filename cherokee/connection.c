@@ -1219,7 +1219,7 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, 
 
 	/* Default: it is inside the UserDir in home
 	 */
-	ret = cherokee_getpwnam (conn->userdir.buf, &pwd, tmp, 1024);
+	ret = cherokee_getpwnam (conn->userdir.buf, &pwd, tmp, sizeof(tmp));
 	if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
 		conn->error_code = http_not_found;
 		return ret_error;
