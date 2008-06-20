@@ -1,5 +1,8 @@
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/macros.h (PRINT_ERRNO): Fix: It was not printing the
+	right 'file' and 'line number' values.
+
 	* qa/run-tests.py: Tries to raise the initial file descriptor
 	limit to 8k files. Under some circumstances it was as low as 256
 	fds.
@@ -17,7 +20,7 @@
 	-t (pararell threads) are used together in the best possible way.
 
 	* cherokee/buffer.c (cherokee_buffer_decode_base64): Fixes an
-	issue on systems where "char" != "signed char". Patch by Müller
+	issue on systems where "char" != "signed char". Patch by Muller
 	Tiziano <t...@dev-zero.ch>.
 
 2008-06-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>

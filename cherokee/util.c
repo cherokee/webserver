@@ -1244,13 +1244,14 @@ cherokee_print_errno (int error, char *format, ...)
 	errstr = cherokee_strerror_r (error, err_tmp, sizeof(err_tmp));
 	if (errstr == NULL)
 		errstr = "unknwon error (?)";
+
 	cherokee_buffer_ensure_size (&buffer, 128);
 	va_start (ap, format);
 	cherokee_buffer_add_va_list (&buffer, format, ap);
 	va_end (ap);
 
 	cherokee_buffer_replace_string (&buffer, "${errno}", 8, errstr, strlen(errstr));
-	PRINT_ERROR_S (buffer.buf);
+	PRINT_MSG_S (buffer.buf);
 
 	cherokee_buffer_mrproper (&buffer);
 }
