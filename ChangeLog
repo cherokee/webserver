@@ -1,5 +1,10 @@
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* contrib/tracelor.py, contrib/Makefile.am (EXTRA_DIST): Added a
+	new script that colorizes the thread number when Cherokee-tracing
+	is using the "thread" argument. Even it is not rocket science, it
+	is definitely handy for tracing big tracing logs.
+
 	* cherokee/common-internal.h (CHEROKEE_THREAD_SELF): New macro.
 
 	* cherokee/trace.c: Added support for printing the thread IDs.
