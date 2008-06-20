@@ -14,6 +14,7 @@
 import sys
 
 RESET_COLOR = "\033[0m"
+HIGHLIGHT   = "\033[1;31;40m"
 
 _threads = {}
 _colors  = []
@@ -53,6 +54,10 @@ def main():
                 thread = line[1:end]
                 color  = thread_color (thread)
                 line = '%s%s%s %s' % (color, thread, RESET_COLOR, line[end+2:])
+
+        # Words
+        for w in sys.argv:
+            line = line.replace(w, HIGHLIGHT + w + RESET_COLOR)
 
         # Nothing else to do..
         print line,
