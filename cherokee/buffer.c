@@ -980,14 +980,18 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 		/* On error
 		 */
 		switch (errno) {
-		case EINTR:      return ret_eagain;
-		case EAGAIN:     return ret_eagain;
+		case EINTR:
+		case EAGAIN:
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
-		case EWOULDBLOCK:return ret_eagain;
+		case EWOULDBLOCK:
 #endif
-		case EPIPE:      return ret_eof;
-		case ECONNRESET: return ret_eof;
-		case EIO:        return ret_error;
+			return ret_eagain;
+		case EPIPE:
+		case EBADF:
+		case ECONNRESET:
+			return ret_eof;
+		case EIO:
+			return ret_error;
 		}
 
 		PRINT_ERRNO (errno, "read(%d, %u,..): '${errno}'", fd, size);

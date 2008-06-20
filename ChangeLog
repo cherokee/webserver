@@ -1,5 +1,8 @@
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/buffer.c (cherokee_buffer_read_from_fd): Added EBADF
+	case ('Bad file descriptor').
+
 	* cherokee/cherokee-panic: Added support for the
 	CHEROKEE_PANIC_OUTPUT environment variable. It also fixes the
 	script to work on MacOS X.
