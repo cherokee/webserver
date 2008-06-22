@@ -13,9 +13,10 @@ Usage: %s [parameters] [tests]
   -l            Run server with a log file
 
   -n<NUM>       Repetitions
-  -t<NUM>       Number of threads of the server
   -p<NUM>       Server port
   -r<NUM>       Starting delay (secs)
+  -t<NUM>       Client threads number
+  -T<NUM>       Server threads number
   -j<FLOAT>     Delay between tests (secs)
 
   -d<NUM>       Number of pauses

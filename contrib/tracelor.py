@@ -43,7 +43,7 @@ def main():
 
     while True:
         line = sys.stdin.readline()
-        if not line:
+        if len(line) < 1:
             break
 
         # Thread

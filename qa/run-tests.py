@@ -28,6 +28,7 @@ num       = 1
 thds      = 1
 pause     = 0
 tpause    = 0.0
+srv_thds  = None
 ssl       = False
 clean     = True
 kill      = True
@@ -87,6 +88,7 @@ for p in param:
     elif p[:2] == '-t': thds      = int(p[2:])
     elif p[:2] == '-p': port      = int(p[2:])
     elif p[:2] == '-r': delay     = int(p[2:])
+    elif p[:2] == '-T': srv_thds  = int(p[2:])    
     elif p[:2] == '-j': tpause    = float(p[2:])
     elif p[:2] == '-d': pause     = p[2:]
     elif p[:2] == '-m': method    = p[2:]
@@ -190,6 +192,10 @@ vserver!default!logger!access!filename = %s
 vserver!default!logger!error!type = stderr
 """ % (LOGGER_TYPE, LOGGER_ACCESS, LOGGER_ERROR)
 
+if srv_thds:
+    CONF_BASE += """
+server!thread_number = %d
+""" % (srv_thds)
 
 # Import modules 
 mods = []

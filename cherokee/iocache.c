@@ -473,6 +473,7 @@ cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, cherokee_buf
 	ret = cherokee_avl_get (&iocache->files, filename, (void **)ret_file);
 	if (ret != ret_ok) {
 		if (iocache->files_num >= iocache->files_max) {
+			TRACE(ENTRIES, "Cache full for '%s'\n", filename->buf);
 			*ret_file = NULL;
 			ret = ret_no_sys;
 			goto error;
@@ -537,6 +538,8 @@ cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, cherokee_buf
 		ret = cherokee_avl_get (&iocache->files, filename, (void **)ret_file);
 		if (ret != ret_ok) {
 			if (iocache->files_num >= iocache->files_max) {
+				TRACE(ENTRIES, "Cache full for '%s'\n", filename->buf);
+				*ret_file = NULL;
 				ret = ret_no_sys;
 				goto error;
 			}
