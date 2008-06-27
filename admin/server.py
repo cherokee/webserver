@@ -13,6 +13,7 @@ import socket
 # Application modules
 #
 from config import *
+from configured import *
 from Post import *
 from PageMain import *
 from PageGeneral import *
@@ -164,7 +165,7 @@ def main():
     global cfg
     cfg = Config(cfg_file)
     
-    print ("Server running.. PID=%d" % (os.getpid()))
+    print ("Server %s running.. PID=%d" % (VERSION, os.getpid()))
 
     # Iterate until the user exists
     try:

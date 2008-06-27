@@ -1,3 +1,8 @@
+2008-06-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/server.py: Print the python code version, so it is easier
+	to detect broken installations.
+
 2008-06-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/tracelor.py (main): Highlight the words provided in the
