@@ -34,7 +34,8 @@ def modules_available (module_list):
         assert (len(entry) == 2)
         plugin, name = entry
 
-        if cherokee_has_plugin (plugin):
+        if not len(plugin) or \
+           cherokee_has_plugin (plugin):
             new_module_list.append(entry)
 
     return new_module_list

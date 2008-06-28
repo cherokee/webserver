@@ -1,3 +1,9 @@
+2008-06-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/Module.py (modules_available): There might be entries with
+	an empty name, in which case, they ought to be added to the
+	resulting list.
+
 2008-06-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/server.py: Print the python code version, so it is easier
