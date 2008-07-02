@@ -1,5 +1,13 @@
 2008-07-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c (cherokee_connection_create_handler):
+	Clean up.
+
+	* cherokee/connection.c (cherokee_connection_build_local_directory):
+	Do not short the request string when the web directory is /. It
+	means that the Default rule matched. In this way, web_directory
+	will be / and the request will continue starting by slash.
+
 	* cherokee/handler_cgi.c (manage_child_cgi_process): Adds SIGBUS
 	for MacOS X.
 

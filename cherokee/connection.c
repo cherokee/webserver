@@ -1175,7 +1175,9 @@ cherokee_connection_build_local_directory (cherokee_connection_t *conn, cherokee
 		 * should read: /usr/share/this/rocks/cherokee	
 		 */
 		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
-		cherokee_buffer_move_to_begin (&conn->request, conn->web_directory.len);
+
+		if (conn->web_directory.len > 1)
+			cherokee_buffer_move_to_begin (&conn->request, conn->web_directory.len);
 	
 		if ((conn->request.len >= 2) && (strncmp(conn->request.buf, "//", 2) == 0)) {
 			cherokee_buffer_move_to_begin (&conn->request, 1);
@@ -1689,11 +1691,14 @@ cherokee_connection_create_handler (cherokee_connection_t *conn, cherokee_config
 	/* Create and assign a handler object
 	 */
 	ret = (config_entry->handler_new_func) ((void **)&conn->handler, conn, config_entry->handler_properties);
-	if (ret == ret_eagain) return ret_eagain;
-	if (ret != ret_ok) {
-		if ((conn->handler == NULL) && (conn->error_code == http_ok)) {
+	switch (ret) {
+	case ret_ok:
+	case ret_eagain:
+		return ret;
+	default:
+		if ((conn->handler == NULL) &&
+		    (conn->error_code == http_ok))
 			conn->error_code = http_internal_error;
-		}
 		return ret_error;
 	}
 
@@ -1712,7 +1717,6 @@ cherokee_connection_parse_header (cherokee_connection_t *conn, cherokee_encoder_
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_connection, &ptr, &ptr_len);
 	if (ret == ret_ok) {
-
 		if (strncasecmp (ptr, "close", 5) == 0) {
 			conn->keepalive = 0;
 		}
