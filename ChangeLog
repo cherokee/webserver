@@ -1,5 +1,8 @@
 2008-07-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_cgi.c (manage_child_cgi_process): Added a
+	couple of new TRACE lines.
+
 	* cherokee/connection.c (cherokee_connection_create_handler):
 	Clean up.
 

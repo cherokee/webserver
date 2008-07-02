@@ -480,6 +480,15 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 	char                        *absolute_path = cgi_base->executable.buf;
 	char                        *argv[4]       = { NULL, NULL, NULL, NULL };
 
+#ifdef TRACE_ENABLED
+	TRACE(ENTRIES, "About to execute: '%s'\n", absolute_path); 
+
+	if (! cherokee_buffer_is_empty (&conn->effective_directory))
+		TRACE(ENTRIES, "Effective directory: '%s'\n", conn->effective_directory.buf);
+	else
+		TRACE(ENTRIES, "No Effective directory %s", "\n");
+#endif
+
 	/* Close useless sides
 	 */
 	close (pipe_cgi[0]);
