@@ -1,3 +1,7 @@
+2008-07-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/util.py (cherokee_has_plugin): Updated.
+
 2008-07-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_cgi.c (manage_child_cgi_process): Added a
