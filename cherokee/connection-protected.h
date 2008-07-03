@@ -80,10 +80,11 @@ typedef enum {
 } cherokee_connection_phase_t;
 
 
-#define conn_op_nothing       0
-#define conn_op_log_at_end   (1 << 0)
-#define conn_op_root_index   (1 << 1)
-#define conn_op_tcp_cork     (1 << 2)
+#define conn_op_nothing        0
+#define conn_op_log_at_end    (1 << 0)
+#define conn_op_root_index    (1 << 1)
+#define conn_op_tcp_cork      (1 << 2)
+#define conn_op_document_root (1 << 3)
 
 typedef cuint_t cherokee_connection_options_t;
 
@@ -141,7 +142,6 @@ struct cherokee_connection {
 	cherokee_buffer_t             userdir;             /* 'alo' in http://www.alobbs.com/~alo/thing */
 	cherokee_buffer_t             query_string;	
 	cherokee_avl_t               *arguments;
-	cherokee_boolean_t            uses_document_root;
 
 	cherokee_buffer_t             host;
 	cherokee_buffer_t             effective_directory;

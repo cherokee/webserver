@@ -119,7 +119,6 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->timeout              = -1;
 	n->polling_fd           = -1;
 	n->polling_multiple     = false;
-	n->uses_document_root   = false;
 
 	cherokee_buffer_init (&n->buffer);
 	cherokee_buffer_init (&n->header_buffer);
@@ -236,7 +235,6 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->regex_match_ovector  = NULL;
 	conn->regex_match_ovecsize = NULL;
 	conn->polling_multiple     = false;
-	conn->uses_document_root   = false;
 
 	if (conn->handler != NULL) {
 		cherokee_handler_free (conn->handler);
@@ -1159,7 +1157,7 @@ cherokee_connection_build_local_directory (cherokee_connection_t *conn, cherokee
 	if (entry->document_root && 
 	    entry->document_root->len >= 1) 
 	{
-		conn->uses_document_root = true;
+		BIT_SET (conn->options, conn_op_document_root);
 
 		/* Have a special DocumentRoot
 		 */
@@ -1205,7 +1203,7 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, 
 	if (entry->document_root &&
 	    entry->document_root->len >= 1) 
 	{
-		conn->uses_document_root = true;
+		BIT_SET (conn->options, conn_op_document_root);
 
 		cherokee_buffer_add_buffer (&conn->local_directory, entry->document_root);
 
