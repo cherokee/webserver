@@ -1,5 +1,7 @@
 2008-07-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/buffer.h (cherokee_buffer_prepend_buf): New macro.
+
 	* cherokee/connection.c, cherokee/handler_dirlist.c,
 	cherokee/connection-protected.h: Clean. conn->uses_document_root
 	is now a conn->option bit instead of a object property per-se.
