@@ -1,5 +1,11 @@
 2008-07-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c (cherokee_connection_use_webdir),
+	cherokee/connection-protected.h: New method. It points whether a
+	connection can use its web_directory property (which should only
+	be used when the 'conn_op_document_root' option is set and the
+	web_directory is longer than a single character).
+
 	* cherokee/connection-protected.h, cherokee/connection.c,
 	cherokee/connection.h: Added TRACE_CONN() macro. It uses TRACE to
 	print details about a specific connection.

@@ -1177,7 +1177,7 @@ cherokee_connection_build_local_directory (cherokee_connection_t *conn, cherokee
 
 		if (conn->web_directory.len > 1)
 			cherokee_buffer_move_to_begin (&conn->request, conn->web_directory.len);
-	
+
 		if ((conn->request.len >= 2) && (strncmp(conn->request.buf, "//", 2) == 0)) {
 			cherokee_buffer_move_to_begin (&conn->request, 1);
 		}
@@ -1892,6 +1892,19 @@ cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
 	cherokee_buffer_clean (&conn->web_directory);
 
 	return ret_ok;
+}
+
+
+int
+cherokee_connection_use_webdir (cherokee_connection_t *conn)
+{
+	if (! (conn->options & conn_op_document_root))
+		return 0;
+
+	if (cherokee_buffer_is_empty (&conn->web_directory))
+		return 0;
+
+	return 1;
 }
 
 
