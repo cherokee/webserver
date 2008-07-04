@@ -1,5 +1,9 @@
 2008-07-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection-protected.h, cherokee/connection.c,
+	cherokee/connection.h: Added TRACE_CONN() macro. It uses TRACE to
+	print details about a specific connection.
+
 	* cherokee/list.h, cherokee/list.c (cherokee_list_get_len): New
 	method.
 

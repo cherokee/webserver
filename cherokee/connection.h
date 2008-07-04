@@ -41,8 +41,8 @@ typedef struct cherokee_connection cherokee_connection_t;
 
 /* Public methods
  */
-ret_t cherokee_connection_set_cork       (cherokee_connection_t *cnt, cherokee_boolean_t enable);
-ret_t cherokee_connection_parse_args     (cherokee_connection_t *cnt);
+ret_t cherokee_connection_set_cork   (cherokee_connection_t *conn, cherokee_boolean_t enable);
+ret_t cherokee_connection_parse_args (cherokee_connection_t *conn);
 
 CHEROKEE_END_DECLS
 

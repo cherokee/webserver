@@ -132,6 +132,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	cherokee_buffer_init (&n->pathinfo);
 	cherokee_buffer_init (&n->redirect);
 	cherokee_buffer_init (&n->host);
+	cherokee_buffer_init (&n->self_trace);
 
 	cherokee_buffer_init (&n->query_string);
 	cherokee_buffer_init (&n->request_original);
@@ -179,6 +180,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	cherokee_buffer_mrproper (&conn->userdir);
 	cherokee_buffer_mrproper (&conn->redirect);
 	cherokee_buffer_mrproper (&conn->host);
+	cherokee_buffer_mrproper (&conn->self_trace);
 
 	if (conn->validator != NULL) {
 		cherokee_validator_free (conn->validator);
@@ -263,6 +265,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	cherokee_buffer_clean (&conn->redirect);
 	cherokee_buffer_clean (&conn->host);
 	cherokee_buffer_clean (&conn->query_string);
+	cherokee_buffer_clean (&conn->self_trace);
 	
 	if (conn->validator != NULL) {
 		cherokee_validator_free (conn->validator);
@@ -1890,3 +1893,38 @@ cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
 
 	return ret_ok;
 }
+
+
+#ifdef TRACE_ENABLED
+char *
+cherokee_connection_print (cherokee_connection_t *conn)
+{
+	cherokee_buffer_t *buf = &conn->self_trace;
+	
+	cherokee_buffer_clean (buf);
+	cherokee_buffer_add_va (buf, "Connection %p info\n", conn);
+
+#define print_buf(title,name)						  \
+	cherokee_buffer_add_va (buf, "\t| %s: '%s' (%d)\n", title,	  \
+				conn->name.buf ? conn->name.buf : "NULL", \
+				conn->name.len);
+#define print_int(title,name)		    				  \
+	cherokee_buffer_add_va (buf, "\t| % 20s: %d\n", title, conn->name);
+
+	print_buf ("        Request", request);
+	print_buf ("  Web Directory", web_directory);
+	print_buf ("Local Directory", local_directory);
+	print_buf ("       Pathinfo", pathinfo);
+	print_buf ("       User Dir", userdir);
+	print_buf ("   Query string", query_string);
+	print_buf ("           Host", host);
+	print_buf ("       Redirect", redirect);
+	print_int ("      Keepalive", keepalive);
+
+#undef print_buf
+#undef print_int
+
+	cherokee_buffer_add_str (buf, "\t\\_\n");
+	return buf->buf;
+}
+#endif

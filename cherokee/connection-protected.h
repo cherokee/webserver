@@ -101,6 +101,7 @@ struct cherokee_connection {
 	/* ID
 	 */
 	culong_t                      id;
+	cherokee_buffer_t             self_trace;
 	
 	/* Socket stuff
 	 */
@@ -191,6 +192,7 @@ struct cherokee_connection {
 #define CONN_VSRV(c)   (VSERVER(CONN(c)->vserver))
 #define CONN_THREAD(c) (THREAD(CONN(c)->thread))
 
+#define TRACE_CONN(c)  TRACE("conn", "%s", cherokee_connection_print(c));
 
 /* Basic functions
  */
@@ -242,6 +244,7 @@ ret_t cherokee_connection_clean_for_respin       (cherokee_connection_t *conn);
 ret_t cherokee_connection_log_or_delay           (cherokee_connection_t *conn);
 ret_t cherokee_connection_log_delayed            (cherokee_connection_t *conn);
 ret_t cherokee_connection_update_vhost_traffic   (cherokee_connection_t *conn);
+char *cherokee_connection_print                  (cherokee_connection_t *conn);
 
 /* Transfers
  */
