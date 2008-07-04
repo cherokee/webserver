@@ -83,8 +83,8 @@ match (cherokee_rule_directory_t *rule, cherokee_connection_t *conn)
 		cherokee_buffer_add_str (&conn->web_directory, "/");
 	}
 
-	TRACE(ENTRIES, "Match! rule=%s conn=%s: ret_ok\n",
-	      rule->directory.buf, conn->request.buf);
+	TRACE(ENTRIES, "Match! rule=%s conn=%s web_directory=%s: ret_ok\n",
+	      rule->directory.buf, conn->request.buf, conn->web_directory.buf);
 
 	return ret_ok;
 }
