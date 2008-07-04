@@ -1,3 +1,8 @@
+2008-07-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection-protected.h (struct cherokee_connection):
+	The ->phase_return property was not needed any longer.
+
 2008-07-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/buffer.h (cherokee_buffer_prepend_buf): New macro.

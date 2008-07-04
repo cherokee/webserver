@@ -120,7 +120,6 @@ struct cherokee_connection {
 	/* State
 	 */
 	cherokee_connection_phase_t   phase;
-	cherokee_connection_phase_t   phase_return;
 	cherokee_http_t               error_code;
 	
 	/* Headers

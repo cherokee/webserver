@@ -90,7 +90,6 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 
 	n->error_code           = http_ok;
 	n->phase                = phase_reading_header;
-	n->phase_return         = phase_nothing;
 	n->auth_type            = http_auth_nothing;
 	n->req_auth_type        = http_auth_nothing;
 	n->upgrade              = http_upgrade_nothing;
@@ -215,7 +214,6 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 
 	conn->timeout              = -1;
 	conn->phase                = phase_reading_header;
-	conn->phase_return         = phase_nothing;
 	conn->auth_type            = http_auth_nothing;
 	conn->req_auth_type        = http_auth_nothing;
 	conn->upgrade              = http_upgrade_nothing;
