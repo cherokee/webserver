@@ -1,5 +1,8 @@
 2008-07-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_dirlist.c (check_request_finish_with_slash):
+	Adapted to use the new method: use_webdir.
+
 	* cherokee/connection.c (cherokee_connection_use_webdir),
 	cherokee/connection-protected.h: New method. It points whether a
 	connection can use its web_directory property (which should only

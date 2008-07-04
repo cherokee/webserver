@@ -453,8 +453,10 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
 	if ((cherokee_buffer_is_empty (&conn->request)) ||
-	    (!cherokee_buffer_is_endding (&conn->request, '/'))) {
-
+	    (!cherokee_buffer_is_endding (&conn->request, '/'))) 
+	{
+		/* Build the redirection address
+		 */
 		cherokee_buffer_clean (&conn->redirect);
 		cherokee_buffer_ensure_size (&conn->redirect, 
 					     conn->web_directory.len + conn->request.len + conn->userdir.len + 4);
@@ -464,11 +466,10 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 			cherokee_buffer_add_buffer (&conn->redirect, &conn->userdir);
 		}
 
-		/* Build the redirection
+		/* In case the connection has a custom Document Root directory,
+		 * it must add the web equivalent directory to the path (web_directory).
 		 */
-		if ((conn->options & conn_op_document_root) &&
-		    (! cherokee_buffer_is_empty (&conn->web_directory))) 
-		{
+		if (cherokee_connection_use_webdir (conn)) {
 			cherokee_buffer_add_buffer (&conn->redirect, &conn->web_directory);
 		}
 
