@@ -105,7 +105,8 @@ cherokee_list_reparent (cherokee_list_t *list, cherokee_list_t *new_entry)
 	new_entry->next->prev = new_entry;
 }
 
-void cherokee_list_sort (cherokee_list_t *head, int (*cmp)(cherokee_list_t *a, cherokee_list_t *b));
+void  cherokee_list_sort    (cherokee_list_t *head, int (*cmp)(cherokee_list_t *a, cherokee_list_t *b));
+ret_t cherokee_list_get_len (cherokee_list_t *head, size_t *len);
 
 
 /* Methods for non list elements

@@ -1,5 +1,8 @@
 2008-07-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/list.h, cherokee/list.c (cherokee_list_get_len): New
+	method.
+
 	* cherokee/connection-protected.h (struct cherokee_connection):
 	The ->phase_return property was not needed any longer.
 

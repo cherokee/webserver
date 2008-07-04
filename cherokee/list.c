@@ -27,6 +27,19 @@
 
 #include <stdlib.h>
 
+ret_t
+cherokee_list_get_len (cherokee_list_t *head, size_t *len)
+{
+	cherokee_list_t *i;		
+	cuint_t          n = 0;
+	
+	list_for_each (i, head) 
+		n++;
+
+	*len = n;
+	return ret_ok;
+}
+
 
 void 
 cherokee_list_sort (cherokee_list_t *head, int (*cmp)(cherokee_list_t *a, cherokee_list_t *b))
