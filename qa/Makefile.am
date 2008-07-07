@@ -172,7 +172,8 @@ run-tests.py \
 165-RuleOr2.py \
 166-xsendfile1.py \
 167-RuleGeoIP.py \
-168-Deflate-Encoding.py
+168-Deflate-Encoding.py \
+169-Pipermail.py
 
 test:
 	./run-tests.py

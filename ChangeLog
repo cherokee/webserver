@@ -1,5 +1,8 @@
 2008-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/169-Pipermail.py, qa/Makefile.am (EXTRA_DIST): Added new
+	QA. Covers a bug found in production.
+
 	* cherokee/connection.c: Added cherokee_connection_print(). It is
 	a function that is only called from the TRACE_CONN() macro. It
 	prints the connection object property values within the TRACE log.
