@@ -339,16 +339,6 @@ cherokee_virtual_server_add_tx (cherokee_virtual_server_t *vserver, size_t tx)
 }
 
 
-ret_t 
-cherokee_virtual_server_set_documentroot (cherokee_virtual_server_t *vserver, const char *documentroot)
-{
-	cherokee_buffer_clean (&vserver->root);
-	cherokee_buffer_add (&vserver->root, documentroot, strlen(documentroot));
-
-	return ret_ok;
-}
-
-
 static ret_t 
 add_directory_index (char *index, void *data)
 {
@@ -401,8 +391,10 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		else
 			cherokee_buffer_clean (entry->document_root);
 
-		TRACE(ENTRIES, "DocumentRoot: %s\n", tmp->buf);
 		cherokee_buffer_add_buffer (entry->document_root, tmp);
+		cherokee_fix_dirpath (entry->document_root);
+
+		TRACE(ENTRIES, "DocumentRoot: %s\n", entry->document_root->buf);
 
 	} else if (equal_buf_str (&conf->key, "handler")) {
 		tmp = &conf->val;
@@ -752,11 +744,9 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		if (ret != ret_ok)
 			return ret;
 		
-		ret = cherokee_virtual_server_set_documentroot (vserver, (const char *)tmp->buf);
-		if (ret != ret_ok) {
-			PRINT_MSG ("ERROR: Virtual server: Error setting DocumentRoot: '%s'\n", tmp->buf);
-			return ret_error;
-		}
+		cherokee_buffer_clean (&vserver->root);
+		cherokee_buffer_add_buffer (&vserver->root, tmp);
+		cherokee_fix_dirpath (&vserver->root);
 
 	} else if (equal_buf_str (&conf->key, "user_dir")) {
 		ret = configure_user_dir (conf, vserver);

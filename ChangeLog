@@ -1,5 +1,25 @@
 2008-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c: Added cherokee_connection_print(). It is
+	a function that is only called from the TRACE_CONN() macro. It
+	prints the connection object property values within the TRACE log.
+
+	* cherokee/thread.c: Moves phase_to_str() to cherokee/connection.c
+	as cherokee_connection_get_phase_str().
+
+	* cherokee/handler_cgi_base.c, cherokee/handler_file.c,
+	cherokee/handler_phpcgi.c: Fixed to work with the previous
+	cherokee_fix_dirpath() change. Now we are certain about whether a
+	path ends with a slash (it does not).
+
+	* cherokee/virtual_server.c: Added cherokee_fix_dirpath() calls
+	where needed.
+
+	* cherokee/virtual_server.c (cherokee_virtual_server_set_documentroot):
+	removed.
+
+	* cherokee/util.c, cherokee/util.h: Added cherokee_fix_dirpath().
+
 	* cherokee/iocache.c (iocache_entry_maybe_update_mmap):
 	Rewritten. It fixes an unusual bug.
 

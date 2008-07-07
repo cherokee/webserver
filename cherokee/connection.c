@@ -1913,31 +1913,87 @@ char *
 cherokee_connection_print (cherokee_connection_t *conn)
 {
 	cherokee_buffer_t *buf = &conn->self_trace;
-	
+	const char        *phase;
+
+	phase = cherokee_connection_get_phase_str (conn);
+
 	cherokee_buffer_clean (buf);
 	cherokee_buffer_add_va (buf, "Connection %p info\n", conn);
 
-#define print_buf(title,name)						  \
-	cherokee_buffer_add_va (buf, "\t| %s: '%s' (%d)\n", title,	  \
-				conn->name.buf ? conn->name.buf : "NULL", \
-				conn->name.len);
-#define print_int(title,name)		    				  \
-	cherokee_buffer_add_va (buf, "\t| % 20s: %d\n", title, conn->name);
+#define print_buf(title,name)						\
+	cherokee_buffer_add_va (buf, "\t| %s: '%s' (%d)\n", title,	\
+				(name)->buf ? (name)->buf : "",		\
+				(name)->len);
+#define print_cbuf(title,name)						\
+	print_buf(title, &conn->name)
 
-	print_buf ("        Request", request);
-	print_buf ("  Web Directory", web_directory);
-	print_buf ("Local Directory", local_directory);
-	print_buf ("       Pathinfo", pathinfo);
-	print_buf ("       User Dir", userdir);
-	print_buf ("   Query string", query_string);
-	print_buf ("           Host", host);
-	print_buf ("       Redirect", redirect);
-	print_int ("      Keepalive", keepalive);
+#define print_cint(title,name)						\
+	cherokee_buffer_add_va (buf, "\t| %s: %d\n", title, conn->name);
+
+#define print_str(title,name)						\
+	cherokee_buffer_add_va (buf, "\t| %s: %s\n", title, name);
+
+#define print_add(str)	                           			\
+	cherokee_buffer_add_str (buf, str)
+
+	print_cbuf ("        Request", request);
+	print_cbuf ("  Web Directory", web_directory);
+	print_cbuf ("Local Directory", local_directory);
+	print_cbuf ("       Pathinfo", pathinfo);
+	print_cbuf ("       User Dir", userdir);
+	print_cbuf ("   Query string", query_string);
+	print_cbuf ("           Host", host);
+	print_cbuf ("       Redirect", redirect);
+	print_cint ("      Keepalive", keepalive);
+	print_str  ("          Phase", phase);
+	print_cint ("    Range start", range_start);
+	print_cint ("      Range end", range_end);
+
+	/* Options bit fields
+	 */
+	print_add ("\t|     Option bits:");
+	if (conn->options & conn_op_log_at_end)
+		print_add (" log_at_end");
+	if (conn->options & conn_op_root_index)
+		print_add (" root_index");
+	if (conn->options & conn_op_tcp_cork)
+		print_add (" tcp_cork");
+	if (conn->options & conn_op_document_root)
+		print_add (" document_root");
+	print_add ("\n");
 
 #undef print_buf
-#undef print_int
+#undef print_cbuf
+#undef print_cint
+#undef print_str
+#undef print_add
 
 	cherokee_buffer_add_str (buf, "\t\\_\n");
 	return buf->buf;
+}
+#endif
+
+#ifdef TRACE_ENABLED
+char *
+cherokee_connection_get_phase_str (cherokee_connection_t *conn)
+{
+	switch (conn->phase) {
+	case phase_nothing:           return "Nothing";
+	case phase_switching_headers: return "Switch headers";
+	case phase_tls_handshake:     return "TLS handshake";
+	case phase_reading_header:    return "Reading header";
+	case phase_processing_header: return "Processing header";
+	case phase_read_post:         return "Read POST";
+	case phase_setup_connection:  return "Setup connection";
+	case phase_init:              return "Init connection";
+	case phase_add_headers:       return "Add headers";
+	case phase_send_headers:      return "Send headers";
+	case phase_steping:           return "Step";
+	case phase_shutdown:          return "Shutdown connection";
+	case phase_lingering:         return "Lingering close";
+	default:
+		SHOULDNT_HAPPEN;
+	}
+	return NULL;
 }
 #endif

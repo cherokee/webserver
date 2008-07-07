@@ -97,6 +97,8 @@ ret_t
 cherokee_handler_file_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_file);
+
+	TRACE_CONN(cnt);
 	
 	/* Init the base class object
 	 */
@@ -523,18 +525,12 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 
 	/* Build the local file path
 	 */
-	if (conn->request.len > 1) {
-		cherokee_buffer_add (&conn->local_directory, conn->request.buf+1, conn->request.len-1); 
-	}
-
+	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
 	ret = cherokee_handler_file_custom_init (fhdl, &conn->local_directory);
 
 	/* Undo the local directory
 	 */
-	if (conn->request.len > 1) {
-		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
-	}
-	
+	cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);	
 	return ret;
 }
 

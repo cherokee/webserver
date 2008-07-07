@@ -48,31 +48,6 @@
 static ret_t reactive_conn_from_polling  (cherokee_thread_t *thd, cherokee_connection_t *conn);
 
 
-#ifdef TRACE_ENABLED
-static char *
-phase_to_str (cherokee_connection_phase_t phase)
-{
-	switch (phase) {
-	case phase_nothing:           return "Nothing";
-	case phase_switching_headers: return "Switch headers";
-	case phase_tls_handshake:     return "TLS handshake";
-	case phase_reading_header:    return "Reading header";
-	case phase_processing_header: return "Processing header";
-	case phase_read_post:         return "Read POST";
-	case phase_setup_connection:  return "Setup connection";
-	case phase_init:              return "Init connection";
-	case phase_add_headers:       return "Add headers";
-	case phase_send_headers:      return "Send headers";
-	case phase_steping:           return "Step";
-	case phase_shutdown:          return "Shutdown connection";
-	case phase_lingering:         return "Lingering close";
-	default:
-		SHOULDNT_HAPPEN;
-	}
-	return NULL;
-}
-#endif
-
 static void
 update_bogo_now_internal (cherokee_thread_t *thd)
 {
@@ -643,7 +618,7 @@ process_active_connections (cherokee_thread_t *thd)
 		conn = CONN(i);
 
 		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d '%s'\n", 
-		       thd, conn, conn->phase, phase_to_str(conn->phase));
+		       thd, conn, conn->phase, cherokee_connection_get_phase_str (conn));
 
 		/* Has the connection been too much time w/o any work
 		 */
@@ -687,7 +662,8 @@ process_active_connections (cherokee_thread_t *thd)
 		 */
 		conn->timeout = thd->bogo_now + srv->timeout;
 
-		TRACE (ENTRIES, "conn on phase n=%d: %s\n", conn->phase, phase_to_str(conn->phase));
+		TRACE (ENTRIES, "conn on phase n=%d: %s\n", 
+		       conn->phase, cherokee_connection_get_phase_str (conn));
 
 		/* Phases
 		 */
@@ -910,9 +886,10 @@ process_active_connections (cherokee_thread_t *thd)
 			cherokee_config_entry_t  entry; 
 			cherokee_rule_list_t    *rules;
 			cherokee_boolean_t       is_userdir;
-
+			
 			TRACE (ENTRIES, "Setup connection begins: request=\"%s\"\n", conn->request.buf);
-
+			TRACE_CONN(conn);
+		     
 			/* Turn the connection in write mode
 			 */
 			conn_set_mode (thd, conn, socket_writing);

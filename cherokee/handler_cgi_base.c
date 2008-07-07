@@ -632,15 +632,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 	req_len      = conn->request.len;
 	local_len    = conn->local_directory.len;
 
-	/* It is going to concatenate two paths like: local_directory
-	 * = "/usr/share/cgi-bin/", and request = "/thing.cgi", so
-	 * there would be two slashes in the middle of the request.
-	 */
-	if (req_len > 0) {
-		cherokee_buffer_add (&conn->local_directory, 
-				     conn->request.buf + 1, 
-				     conn->request.len - 1); 
-	}	
+	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
 
 	/* Build the pathinfo string
 	 */
@@ -1033,7 +1025,10 @@ cherokee_handler_cgi_base_step (cherokee_handler_cgi_base_t *cgi, cherokee_buffe
 
 
 ret_t
-cherokee_handler_cgi_base_split_pathinfo (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buf, int init_pos, int allow_dirs) 
+cherokee_handler_cgi_base_split_pathinfo (cherokee_handler_cgi_base_t *cgi, 
+					  cherokee_buffer_t           *buf, 
+					  int                          init_pos, 
+					  int                          allow_dirs) 
 {
 	ret_t                  ret;
 	char                  *pathinfo;

@@ -172,6 +172,8 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
  	cherokee_boolean_t        use_iocache = true;
 	cherokee_connection_t    *conn        = CONN(cnt);
 
+	TRACE_CONN(conn);
+
 	/* Check some properties
 	 */
 	if (PROP_COMMON(props)->props_file != NULL) {
@@ -223,8 +225,9 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		 * to restart the connection setup phase
 		 */
 		cherokee_buffer_clean (&conn->local_directory);
-
 		cherokee_iocache_mmap_release (iocache, file);
+
+		TRACE_CONN(conn);
 		return ret_eagain;
 	}	
 
@@ -302,6 +305,8 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				TRACE (ENTRIES, "top level index matched %s\n", index);
 
 				BIT_SET (conn->options, conn_op_root_index);
+
+				TRACE_CONN(conn);
 				return ret_eagain;
 			}
 
@@ -325,9 +330,10 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 			
 			/* Add the index file to the request and clean up
 			 */
-			cherokee_buffer_drop_endding (&conn->local_directory,  conn->request.len);
-			cherokee_buffer_add (&conn->request, index, index_len);
+			cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
+			cherokee_buffer_add (&conn->request, index, index_len); 
 
+			TRACE_CONN(conn);
 			return ret_eagain;
 		}
 

@@ -356,6 +356,8 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	char  *value;
 	CHEROKEE_NEW_STRUCT (n, handler_dirlist);
 	
+	TRACE_CONN(cnt);
+
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(dirlist));

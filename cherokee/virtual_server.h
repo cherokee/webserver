@@ -113,8 +113,4 @@ ret_t cherokee_virtual_server_has_tls   (cherokee_virtual_server_t *vserver);
 void  cherokee_virtual_server_add_rx    (cherokee_virtual_server_t *vserver, size_t rx);
 void  cherokee_virtual_server_add_tx    (cherokee_virtual_server_t *vserver, size_t tx);
 
-/* Configuration
- */
-ret_t cherokee_virtual_server_set_documentroot (cherokee_virtual_server_t *vserver, const char *documentroot);
-
 #endif /* CHEROKEE_VIRTUAL_SERVER_H */

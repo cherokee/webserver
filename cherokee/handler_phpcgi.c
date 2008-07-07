@@ -206,9 +206,9 @@ cherokee_handler_phpcgi_init (cherokee_handler_t *hdl)
 	/* Add parameter to CGI handler
 	*/
 	if (cgi->param.len <= 0) {		
-		cherokee_buffer_add (&cgi->param, ld->buf, ld->len - 1);
+		cherokee_buffer_add_buffer (&cgi->param, ld);
 		cherokee_buffer_add_buffer (&cgi->param, &conn->request);
-		cherokee_handler_cgi_base_split_pathinfo (cgi, &cgi->param, ld->len + 1, false);
+		cherokee_handler_cgi_base_split_pathinfo (cgi, &cgi->param, ld->len, false);
 	}
 	
 	cherokee_handler_cgi_add_env_pair (cgi, "REDIRECT_STATUS", 15, "200", 3); 
