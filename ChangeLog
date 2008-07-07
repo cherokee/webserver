@@ -1,3 +1,8 @@
+2008-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/iocache.c (iocache_entry_maybe_update_mmap):
+	Rewritten. It fixes an unusual bug.
+
 2008-07-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/run-tests.py: Now it prints the number of tests that are

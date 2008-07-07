@@ -320,16 +320,19 @@ iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 static ret_t
 iocache_entry_maybe_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *entry, cherokee_buffer_t *filename, int fd, int *ret_fd)
 {
-	cherokee_boolean_t update;
+	cherokee_boolean_t update = true;
 
 	/* Update mmap only if..
 	 * - It is not refered and either:
 	 *   - It has no mmap
 	 *   - It is old
 	 */
-	update  = (entry->mmaped == NULL);
-	update |= (iocache->srv->bogo_now >= (PRIV(entry)->mmap_update + FRESHNESS_TIME_MMAP));
-	update &= (PRIV(entry)->ref_counter <= 1);
+	if (entry->mmaped != NULL) {
+		if (PRIV(entry)->ref_counter > 1)
+			update = false;
+		else if (iocache->srv->bogo_now < (PRIV(entry)->mmap_update + FRESHNESS_TIME_MMAP))
+			update = false;
+	}
 
 	if (! update)
 		return ret_deny;
