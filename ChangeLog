@@ -1,5 +1,10 @@
 2008-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServers.py (PageVServers._op_add_vserver): It would
+	be handy if new virtual servers included the default /icons
+	directory. This patch adds it to the default cherokee-admin
+	behavior.
+
 	* cherokee/connection.c (cherokee_connection_clean_for_respin):
 	Patch to fix a problem that was making the server to fail the QA
 	test number 169: Internal respins were not handled properly when

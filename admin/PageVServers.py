@@ -97,8 +97,12 @@ class PageVServers (PageMenu, FormHelper):
         if name in self._cfg['vserver']:
             return '/vserver'
 
-        self._cfg['%s!document_root'  % (pre)] = droot
-        self._cfg['%s!rule!1!match'   % (pre)] = 'default'
-        self._cfg['%s!rule!1!handler' % (pre)] = 'common'
+        self._cfg['%s!document_root'          % (pre)] = droot
+        self._cfg['%s!rule!1!match'           % (pre)] = 'default'
+        self._cfg['%s!rule!1!handler'         % (pre)] = 'common'
+        self._cfg['%s!rule!2!match'           % (pre)] = 'directory'
+        self._cfg['%s!rule!2!match!directory' % (pre)] = '/icons'
+        self._cfg['%s!rule!2!handler'         % (pre)] = 'file'
+        self._cfg['%s!rule!2!document_root'   % (pre)] = CHEROKEE_ICONSDIR
 
         return '/vserver/%s' % (name)
