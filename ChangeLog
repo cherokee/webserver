@@ -1,5 +1,10 @@
 2008-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c (cherokee_connection_clean_for_respin):
+	Patch to fix a problem that was making the server to fail the QA
+	test number 169: Internal respins were not handled properly when
+	the original request was using a special Directory Root.
+
 	* qa/169-Pipermail.py, qa/Makefile.am (EXTRA_DIST): Added new
 	QA. Covers a bug found in production.
 

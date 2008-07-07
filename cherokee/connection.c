@@ -1889,8 +1889,17 @@ cherokee_connection_update_vhost_traffic (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
 {
+	TRACE(ENTRIES, "Clean for respin: conn=%p\n", conn);
+
+	if (cherokee_connection_use_webdir(conn)) {
+		cherokee_buffer_prepend_buf (&conn->request, &conn->web_directory);
+		cherokee_buffer_clean (&conn->local_directory);
+		BIT_UNSET (conn->options, conn_op_document_root);
+	} 
+
 	cherokee_buffer_clean (&conn->web_directory);
 
+	TRACE_CONN(conn);
 	return ret_ok;
 }
 
