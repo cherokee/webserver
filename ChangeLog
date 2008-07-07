@@ -1,5 +1,9 @@
 2008-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* themes/default/header.html: The
+	/cherokee_themes/default/cherokee-logo.png path should be
+	/cherokee_themes/default/logo.png. Fixed.
+
 	* admin/PageVServers.py (PageVServers._op_add_vserver): It would
 	be handy if new virtual servers included the default /icons and
 	the /cherokee_themes directories. This patch adds it to the default
