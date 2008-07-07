@@ -176,7 +176,7 @@ match_and_substitute (cherokee_handler_redir_t *n)
 			if (len > 0) {
 				cherokee_buffer_clean (&conn->query_string);
 				cherokee_buffer_add (&conn->query_string, args, len);
-				cherokee_buffer_drop_endding (&conn->request, len+1);
+				cherokee_buffer_drop_ending (&conn->request, len+1);
 			}
 
 			TRACE (ENTRIES, "Hidden redirect to: request=\"%s\" query_string=\"%s\"\n", 
@@ -201,7 +201,7 @@ match_and_substitute (cherokee_handler_redir_t *n)
 
 out:
 	if (! cherokee_buffer_is_empty (&conn->query_string))
-		cherokee_buffer_drop_endding (&conn->request, conn->query_string.len + 1);
+		cherokee_buffer_drop_ending (&conn->request, conn->query_string.len + 1);
 
 	return ret;
 }
@@ -318,7 +318,7 @@ ret_t
 cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 {
 	int                    request_end;
-	char                  *request_endding;
+	char                  *request_ending;
 	cherokee_connection_t *conn = HANDLER_CONN(n);
     
 	/* Maybe ::new -> match_and_substitute() has already set
@@ -339,11 +339,11 @@ cherokee_handler_redir_init (cherokee_handler_redir_t *n)
 	/* Try with URL directive
 	 */
 	request_end = (conn->request.len - conn->web_directory.len);
-	request_endding = conn->request.buf + conn->web_directory.len;
+	request_ending = conn->request.buf + conn->web_directory.len;
 	
 	cherokee_buffer_ensure_size (&conn->redirect, request_end + HDL_REDIR_PROPS(n)->url.len +1);
 	cherokee_buffer_add_buffer (&conn->redirect, &HDL_REDIR_PROPS(n)->url);
-	cherokee_buffer_add (&conn->redirect, request_endding, request_end);
+	cherokee_buffer_add (&conn->redirect, request_ending, request_end);
 
 	conn->error_code = http_moved_permanently;
 	return ret_ok;

@@ -657,7 +657,7 @@ cherokee_buffer_prepend (cherokee_buffer_t *buf, char *txt, size_t size)
 
 
 int   
-cherokee_buffer_is_endding (cherokee_buffer_t *buf, char c)
+cherokee_buffer_is_ending (cherokee_buffer_t *buf, char c)
 {
 	if (cherokee_buffer_is_empty(buf))
 		return 0;
@@ -738,7 +738,7 @@ cherokee_buffer_ensure_size (cherokee_buffer_t *buf, size_t size)
 
 
 ret_t 
-cherokee_buffer_drop_endding (cherokee_buffer_t *buffer, cuint_t num_chars)
+cherokee_buffer_drop_ending (cherokee_buffer_t *buffer, cuint_t num_chars)
 {
 	int num;
 

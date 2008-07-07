@@ -331,7 +331,7 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 		 */
 		re = cherokee_lstat (path->buf, &n->stat);
 		if (re < 0) {
-			cherokee_buffer_drop_endding (path, n->name_len);
+			cherokee_buffer_drop_ending (path, n->name_len);
 
 			free (n);
 			return ret_error;
@@ -339,7 +339,7 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 
 		/* Clean up and exit
 		 */
-		cherokee_buffer_drop_endding (path, n->name_len);
+		cherokee_buffer_drop_ending (path, n->name_len);
 
 		*ret_entry = n;
 		return ret_ok;
@@ -455,7 +455,7 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
 	if ((cherokee_buffer_is_empty (&conn->request)) ||
-	    (!cherokee_buffer_is_endding (&conn->request, '/'))) 
+	    (!cherokee_buffer_is_ending (&conn->request, '/'))) 
 	{
 		/* Build the redirection address
 		 */
@@ -615,7 +615,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	/* Clean
 	 */
 	closedir(dir);
-	cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len); /* 2 */
+	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len); /* 2 */
 
 	/* Sort the file list
 	 */
@@ -681,7 +681,7 @@ read_notice_file (cherokee_handler_dirlist_t *dhdl)
 			cherokee_buffer_add (&conn->local_directory, filename, filename_len);
 			
 			ret = cherokee_buffer_read_file (&dhdl->header, conn->local_directory.buf);
-			cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len + filename_len); /* undo */
+			cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len + filename_len); /* undo */
 		} else {
 			ret = cherokee_buffer_read_file (&dhdl->header, filename);
 		}

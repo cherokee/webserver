@@ -178,7 +178,7 @@ look_for_logname (cherokee_buffer_t *logfile, cherokee_buffer_t *logname)
 		goto error;
 	}
 
-	cherokee_buffer_drop_endding (&dirname, (dirname.buf + dirname.len) - (tmp + 1));
+	cherokee_buffer_drop_ending (&dirname, (dirname.buf + dirname.len) - (tmp + 1));
 
 	/* Read files
 	 */
@@ -197,7 +197,7 @@ look_for_logname (cherokee_buffer_t *logfile, cherokee_buffer_t *logname)
 		cherokee_buffer_add (&dirname, file->d_name, d_name_len);
 
 		if (cherokee_buffer_cmp_buf (&dirname, logname)) {
-			cherokee_buffer_drop_endding (&dirname, d_name_len);
+			cherokee_buffer_drop_ending (&dirname, d_name_len);
 			continue;
 		}
 		
@@ -209,7 +209,7 @@ look_for_logname (cherokee_buffer_t *logfile, cherokee_buffer_t *logname)
 				max = val;
 		}
 
-		cherokee_buffer_drop_endding (&dirname, d_name_len);
+		cherokee_buffer_drop_ending (&dirname, d_name_len);
 	}
 
 	/* Build the new filename

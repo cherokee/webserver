@@ -292,7 +292,7 @@ cherokee_encoder_gzip_flush (cherokee_encoder_gzip_t *encoder, cherokee_buffer_t
  		return ret; 
  	} 
 
-	/* Add the endding:
+	/* Add the ending:
 	 * +---+---+---+---+---+---+---+---+
 	 * |     CRC32     |     ISIZE     |
          * +---+---+---+---+---+---+---+---+

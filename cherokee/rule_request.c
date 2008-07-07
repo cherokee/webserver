@@ -92,7 +92,7 @@ match (cherokee_rule_request_t *rule, cherokee_connection_t *conn)
 
 restore:
         if (! cherokee_buffer_is_empty (&conn->query_string)) {
-                cherokee_buffer_drop_endding (&conn->request, conn->query_string.len + 1);
+                cherokee_buffer_drop_ending (&conn->request, conn->query_string.len + 1);
         }
 
 	return ret;

@@ -219,7 +219,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		/* Copy the PathInfo and clean the request 
 		 */
 		cherokee_buffer_add (&conn->pathinfo, pathinfo, pathinfo_len);
-		cherokee_buffer_drop_endding (&conn->request, pathinfo_len);
+		cherokee_buffer_drop_ending (&conn->request, pathinfo_len);
 
 		/* Clean the local_directory, this connection is going
 		 * to restart the connection setup phase
@@ -231,7 +231,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		return ret_eagain;
 	}	
 
-	cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
+	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
 
 	/* Is it a file?
 	 */
@@ -319,7 +319,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 			is_dir = ((ret == ret_ok) && S_ISDIR(info->st_mode));
 
 			cherokee_iocache_mmap_release (iocache, file);
-			cherokee_buffer_drop_endding (&conn->local_directory, index_len);
+			cherokee_buffer_drop_ending (&conn->local_directory, index_len);
 
 			TRACE (ENTRIES, "trying index '%s', exists %d\n", index, exists);
 
@@ -330,7 +330,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 			
 			/* Add the index file to the request and clean up
 			 */
-			cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
+			cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
 			cherokee_buffer_add (&conn->request, index, index_len); 
 
 			TRACE_CONN(conn);
@@ -339,7 +339,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 		/* If the dir hasn't a index file, it uses dirlist
 		 */
-		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
+		cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
 		return cherokee_handler_dirlist_new (hdl, cnt, MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
 	}
 

@@ -190,7 +190,7 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_con
 		
 		point = strchr (info->percent.buf, '.');
 		if (point != NULL) 
-			cherokee_buffer_drop_endding (&info->percent, (info->percent.buf + info->percent.len) - (point + 2)); 
+			cherokee_buffer_drop_ending (&info->percent, (info->percent.buf + info->percent.len) - (point + 2)); 
 	}
 	
 	/* Local icon
@@ -206,7 +206,7 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_con
 
 		tmp = strchr (name.buf, '?');
 		if (tmp != NULL) 
-			cherokee_buffer_drop_endding (&name, (name.buf + name.len) - tmp);
+			cherokee_buffer_drop_ending (&name, (name.buf + name.len) - tmp);
 
 		tmp = strrchr (name.buf, '/');
 		if (tmp != NULL) 

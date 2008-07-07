@@ -530,7 +530,7 @@ cherokee_handler_file_init (cherokee_handler_file_t *fhdl)
 
 	/* Undo the local directory
 	 */
-	cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);	
+	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);	
 	return ret;
 }
 

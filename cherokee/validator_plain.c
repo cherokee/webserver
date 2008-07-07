@@ -133,7 +133,7 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain, cherokee_conn
 		goto out;
 	}
 
-	if (! cherokee_buffer_is_endding(&file, '\n'))
+	if (! cherokee_buffer_is_ending(&file, '\n'))
 		cherokee_buffer_add_str (&file, "\n");
 
 	p   = file.buf;

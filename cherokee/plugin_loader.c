@@ -533,7 +533,7 @@ cherokee_plugin_loader_get_mods_info (cherokee_plugin_loader_t *loader,
 	 */
 	cherokee_avl_while (&loader->table, while_print_name, builtin, NULL, NULL);
 	if (builtin->len > 2)
-		cherokee_buffer_drop_endding (builtin, 2);
+		cherokee_buffer_drop_ending (builtin, 2);
 			
 	return ret_ok;
 }

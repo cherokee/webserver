@@ -983,7 +983,7 @@ get_host (cherokee_connection_t *conn,
 	/* RFC-1034: Dot ending host names
 	 */
 	if (cherokee_buffer_end_char (&conn->host) == '.')
-		cherokee_buffer_drop_endding (&conn->host, 1);
+		cherokee_buffer_drop_ending (&conn->host, 1);
 	
 	return ret_ok;
 }
@@ -1343,7 +1343,7 @@ parse_userdir (cherokee_connection_t *conn)
 	char *begin;
 	char *end_username;
 
-	/* Find user name endding:
+	/* Find user name ending:
 	 */
 	begin = &conn->request.buf[2];
 
@@ -1413,7 +1413,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		post_len = conn->incoming_header.len - header_len;
 
 		cherokee_post_append (&conn->post, conn->incoming_header.buf + header_len, post_len);
-		cherokee_buffer_drop_endding (&conn->incoming_header, post_len);
+		cherokee_buffer_drop_ending (&conn->incoming_header, post_len);
 	}
 
 	/* Copy the request and query string

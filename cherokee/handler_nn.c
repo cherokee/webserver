@@ -132,7 +132,7 @@ cherokee_handler_nn_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_pr
 
 	cherokee_buffer_add (&conn->local_directory, conn->request.buf, conn->request.len);
 	stat_ret = stat (conn->local_directory.buf, &info);
-	cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len);
+	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
 	
 	/* Maybe the file/dir exists
 	 */

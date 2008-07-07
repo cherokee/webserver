@@ -169,7 +169,7 @@ cherokee_url_parse_guts (cherokee_url_t    *url,
 
 		/* .. and remove it
 		 */
-		ret = cherokee_buffer_drop_endding (&url->host, strlen(port));
+		ret = cherokee_buffer_drop_ending (&url->host, strlen(port));
 		if (unlikely(ret < ret_ok)) return ret;
 	}
 	

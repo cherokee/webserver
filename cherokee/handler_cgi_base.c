@@ -661,7 +661,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 					cherokee_buffer_add (&conn->pathinfo, p, end - p);
 	
 					pathinfo_len = end - p;
-					cherokee_buffer_drop_endding (&conn->local_directory, pathinfo_len);
+					cherokee_buffer_drop_ending (&conn->local_directory, pathinfo_len);
 				} 
 
 /* 				if (p <= begin) { */
@@ -707,7 +707,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 bye:
 	/* Clean up the mess
 	 */
-	cherokee_buffer_drop_endding (&conn->local_directory, (req_len - pathinfo_len) - 1);
+	cherokee_buffer_drop_ending (&conn->local_directory, (req_len - pathinfo_len) - 1);
 	return ret;
 }
 
@@ -773,7 +773,7 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 	 */
 	if ((buffer->len > 4) &&
 	    (strncmp (CRLF_CRLF, buffer->buf + buffer->len - 4, 4) == 0)) {
-		cherokee_buffer_drop_endding (buffer, 2);
+		cherokee_buffer_drop_ending (buffer, 2);
 	}
 	
 	TRACE (ENTRIES, "CGI header: %s\n", buffer->buf);
@@ -1045,7 +1045,7 @@ cherokee_handler_cgi_base_split_pathinfo (cherokee_handler_cgi_base_t *cgi,
 	 */
 	if (pathinfo_len > 0) {
 		cherokee_buffer_add (&conn->pathinfo, pathinfo, pathinfo_len);
-		cherokee_buffer_drop_endding (buf, pathinfo_len);
+		cherokee_buffer_drop_ending (buf, pathinfo_len);
 	}
 
 	TRACE (ENTRIES, "Pathinfo '%s'\n", conn->pathinfo.buf);

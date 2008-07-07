@@ -262,7 +262,7 @@ request_isnt_passwd_file (cherokee_validator_htpasswd_t *htpasswd, cherokee_conn
 	}
 
 	if (conn->request.len > 0)
-		cherokee_buffer_drop_endding (&conn->local_directory, conn->request.len-1);              /* 1: remove */
+		cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len-1);              /* 1: remove */
 
 	return ret;
 }

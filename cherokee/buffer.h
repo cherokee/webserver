@@ -92,7 +92,7 @@ ret_t cherokee_buffer_add_chunked        (cherokee_buffer_t  *buf, char *txt, si
 ret_t cherokee_buffer_add_buffer_chunked (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
 
 ret_t cherokee_buffer_move_to_begin      (cherokee_buffer_t  *buf, cuint_t pos);
-ret_t cherokee_buffer_drop_endding       (cherokee_buffer_t  *buf, cuint_t num_chars);
+ret_t cherokee_buffer_drop_ending        (cherokee_buffer_t  *buf, cuint_t num_chars);
 ret_t cherokee_buffer_multiply           (cherokee_buffer_t  *buf, int num);
 ret_t cherokee_buffer_swap_chars         (cherokee_buffer_t  *buf, char a, char b);
 ret_t cherokee_buffer_remove_dups        (cherokee_buffer_t  *buf, char c);
@@ -105,7 +105,7 @@ ret_t cherokee_buffer_trim               (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_ensure_addlen      (cherokee_buffer_t  *buf, size_t alen);
 ret_t cherokee_buffer_ensure_size        (cherokee_buffer_t  *buf, size_t size);
 
-int    cherokee_buffer_is_endding        (cherokee_buffer_t  *buf, char c);
+int    cherokee_buffer_is_ending         (cherokee_buffer_t  *buf, char c);
 char   cherokee_buffer_end_char          (cherokee_buffer_t  *buf);
 size_t cherokee_buffer_cnt_spn           (cherokee_buffer_t  *buf, cuint_t offset, char *str);
 size_t cherokee_buffer_cnt_cspn          (cherokee_buffer_t  *buf, cuint_t offset, char *str);
