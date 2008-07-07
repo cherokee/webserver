@@ -68,8 +68,8 @@ fi
 	fi
 
 	# Check the debugger
-	gdb=`type gdb 2>/dev/null | grep -v "not found" | cut -f3 -d " "`
-	dbx=`type dbx 2>/dev/null | grep -v "not found" | cut -f3 -d " "`
+	gdb=`which gdb`
+	dbx=`which dbx`
 
 	if [ x$gdb != x ]; then
 	     debugger=$gdb

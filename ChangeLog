@@ -1,5 +1,10 @@
 2008-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/cherokee-panic: The call to type has been replaced with
+	a call to 'which' which is not shell dependant. It makes the
+	script stop depending on Bash. Fixes:
+	http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=489550
+
 	* themes/default/header.html: The
 	/cherokee_themes/default/cherokee-logo.png path should be
 	/cherokee_themes/default/logo.png. Fixed.
