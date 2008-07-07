@@ -56,8 +56,9 @@ os.makedirs (tmp)
 map (lambda x: os.chmod (x, 0777), [www, tmp])
 
 # Make the files list
-files = []
-param = []
+files   = []
+param   = []
+skipped = []
 if len(sys.argv) > 1:
     argv = sys.argv[1:]
     files = filter (lambda x: x[0] != '-', argv)
@@ -282,6 +283,8 @@ def clean_up():
     if its_clean: return
     its_clean = True
 
+    print
+
     # Clean up
     if clean:
         os.unlink (cfg_file)
@@ -290,6 +293,10 @@ def clean_up():
         print_key ("Testdir", www)
         print_key ("Config",  cfg_file)
         print
+
+    # Skipped tests
+    if not quiet:
+        print "Skipped tests: %d" % (len(skipped))
 
     # Kill the server
     if kill and pid > 0:
@@ -340,7 +347,9 @@ def mainloop_iterator(objs, main_thread=True):
 
             if not go_ahead:
                 if not quiet:
-                    print "Skipped"
+                    print MESSAGE_SKIPPED
+                    if not obj in skipped:
+                        skipped.append(obj)
                 continue
     
             if port is None:
@@ -358,12 +367,12 @@ def mainloop_iterator(objs, main_thread=True):
 
             if ret is not 0:
                 if not its_clean:
-                    print "Failed"
+                    print MESSAGE_FAILED
                     print obj
                     clean_up()
                 sys.exit(1)
             elif not quiet:
-                print "Success"
+                print MESSAGE_SUCCESS
                 obj.Clean()
 
             if tpause > 0.0:
@@ -371,6 +380,7 @@ def mainloop_iterator(objs, main_thread=True):
                     print "Sleeping %2.2f seconds..\r" % (tpause),
                     sys.stdout.flush()
                 time.sleep (tpause)
+
 
 if ssl:
     port = 443

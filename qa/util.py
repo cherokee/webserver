@@ -1,6 +1,17 @@
 import os, sys, time, random
 from conf import *
 
+term = os.getenv("TERM")
+if 'color' in term:
+    MESSAGE_SUCCESS = '\033[0;48;36m Success \033[0m' # Blue
+    MESSAGE_FAILED  = '\033[0;48;31m  Failed \033[0m' # Red
+    MESSAGE_SKIPPED = '\033[0;48;33m Skipped \033[0m' # Yellow
+else:
+    MESSAGE_SUCCESS = 'Success'
+    MESSAGE_FAILED  = ' Failed'
+    MESSAGE_SKIPPED = 'Skipped'
+
+
 def count_down (msg, nsecs, nl=True):
     for s in range(nsecs):
         sys.stdout.write ((msg+'\r') % (nsecs - s - 1))
