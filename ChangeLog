@@ -1,5 +1,8 @@
 2008-07-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServers.py (PageVServers._render_vserver_list): Sort
+	the virtual server list before printing it.
+
 	* cherokee/handler_redir.c (match_and_substitute): This changeset
 	covers a corner case, when neither the connection cache nor the
 	rule sub-entry have a regular expression to be evaluated. In this

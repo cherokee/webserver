@@ -48,7 +48,11 @@ class PageVServers (PageMenu, FormHelper):
             table = Table(4, style='width="100%"')
             table += ('Name', 'Document Root', 'Logging', '')
 
-            for vserver in vservers:
+            sorted_vservers = filter (lambda x: x!='default', vservers.keys())
+            sorted_vservers.sort()
+            sorted_vservers = ['default'] + sorted_vservers
+
+            for vserver in sorted_vservers:
                 document_root = self._cfg.get_val('vserver!%s!document_root'%(vserver), '')
                 logger_val    = self._cfg.get_val('vserver!%s!logger'%(vserver))
 
