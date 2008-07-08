@@ -1,5 +1,8 @@
 2008-07-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/consts.py: 'File' is usually the most common logger. It is
+	handier if it's the first choice of the list.
+
 	* admin/PageVServers.py (PageVServers._render_vserver_list): Table
 	header should be bold.
 

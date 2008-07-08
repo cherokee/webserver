@@ -41,9 +41,9 @@ LOGGERS = [
 ]
 
 LOGGER_WRITERS = [
+    ('file',     'File'),
     ('syslog',   'System logger'),
     ('stderr',   'Standard Error'),
-    ('file',     'File'),
     ('exec',     'Execute program')
 ]
 
