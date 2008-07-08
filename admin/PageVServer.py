@@ -375,7 +375,7 @@ class PageVServer (PageMenu, FormHelper):
             writers += str(table)
 
             access = self._cfg.get_val(cfg_key)
-            if access == 'file':
+            if not access or access == 'file':
                 t1 = TableProps()
                 self.AddPropEntry (t1, 'Filename', '%s!access!filename'%(pre), NOTE_WRT_FILE)
                 writers += str(t1)
@@ -393,7 +393,7 @@ class PageVServer (PageMenu, FormHelper):
             writers += str(table)
 
             error = self._cfg.get_val(cfg_key)
-            if error == 'file':
+            if not error or error == 'file':
                 t1 = TableProps()
                 self.AddPropEntry (t1, 'Filename', '%s!error!filename'%(pre), NOTE_WRT_FILE)
                 writers += str(t1)

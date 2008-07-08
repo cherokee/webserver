@@ -1,5 +1,8 @@
 2008-07-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServer.py (PageVServer._render_logger): Show the
+	"file" entry when a new logger is selected.
+
 	* admin/consts.py: 'File' is usually the most common logger. It is
 	handier if it's the first choice of the list.
 
