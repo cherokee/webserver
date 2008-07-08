@@ -109,7 +109,7 @@ match_and_substitute (cherokee_handler_redir_t *n)
 	/* Try to match it
 	 */
 	list_for_each (i, &HDL_REDIR_PROPS(n)->regex_list) {
-		cint_t           rc;
+		cint_t           rc = 0;
 		char            *subject; 
 		cint_t           subject_len;
 		cint_t           ovector[OVECTOR_LEN];
@@ -129,17 +129,28 @@ match_and_substitute (cherokee_handler_redir_t *n)
 
 		subject_len = strlen (subject);
 
-		/* It might be matched previosly in the request parsing..
+		/* Case 1: No conn substitution, No local regex
 		 */
-		if (list->re == NULL) {
-			memcpy (ovector, 
-				conn->regex_match_ovector,
-				OVECTOR_LEN * sizeof(int));
+		if ((list->re == NULL) &&
+		    (conn->regex_match_ovector == NULL))
+		{
+			TRACE (ENTRIES, "Using conn->ovector, size=%d\n", rc);
+		} 
 
+		/* Case 2: Cached conn substitution
+		 */
+		else if (list->re == NULL) {
+			memcpy (ovector,
+				conn->regex_match_ovector,
+				OVECTOR_LEN * sizeof(cint_t));
+			
 			rc = *conn->regex_match_ovecsize;
 			TRACE (ENTRIES, "Using conn->ovector, size=%d\n", rc);
+		} 
 
-		} else {
+		/* Case 3: Use the rule-subentry regex
+		 */
+		else {
 			rc = pcre_exec (list->re, NULL, subject, subject_len, 0, 0, ovector, OVECTOR_LEN);
 			if (rc == 0) {
 				PRINT_ERROR_S("Too many groups in the regex\n");

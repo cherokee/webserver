@@ -1,3 +1,10 @@
+2008-07-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_redir.c (match_and_substitute): This changeset
+	covers a corner case, when neither the connection cache nor the
+	rule sub-entry have a regular expression to be evaluated. In this
+	case, we assume it matches the request.
+
 2008-07-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/cherokee-panic: The call to type has been replaced with
