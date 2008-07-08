@@ -1,5 +1,8 @@
 2008-07-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServers.py (PageVServers._render_vserver_list): Table
+	header should be bold.
+
 	* admin/PageVServers.py (PageVServers._render_vserver_list): Sort
 	the virtual server list before printing it.
 

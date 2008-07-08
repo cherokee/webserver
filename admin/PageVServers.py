@@ -46,7 +46,7 @@ class PageVServers (PageMenu, FormHelper):
             txt += "<h2>Virtual Server List</h2>"
 
             table = Table(4, style='width="100%"')
-            table += ('Name', 'Document Root', 'Logging', '')
+            table += ('<b>Name</b>', '<b>Document Root</b>', '<b>Logging</b>', '')
 
             sorted_vservers = filter (lambda x: x!='default', vservers.keys())
             sorted_vservers.sort()
