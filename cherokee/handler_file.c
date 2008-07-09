@@ -482,7 +482,8 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 
 	/* Set mmap or file position
 	 */
-	if ((conn->io_entry_ref != NULL) &&
+	if (use_io &&
+	    (conn->io_entry_ref != NULL) &&
 	    (conn->io_entry_ref->mmaped != NULL)) {
 		/* Set the mmap info
 		 */

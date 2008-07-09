@@ -1,3 +1,9 @@
+2008-07-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_file.c (cherokee_handler_file_custom_init):
+	Fixes a small issue with IO cache and the encoders. The server was
+	using IO cache objects even if it should not.
+
 2008-07-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageVServer.py (PageVServer._render_logger): Show the
