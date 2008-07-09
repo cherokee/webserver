@@ -1,5 +1,8 @@
 2008-07-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_dirlist.c (render_file): Print "link" instead
+	of the size when listing a link.
+
 	* cherokee/handler_file.c (cherokee_handler_file_custom_init):
 	Fixes a small issue with IO cache and the encoders. The server was
 	using IO cache objects even if it should not.

@@ -860,6 +860,9 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		if (is_dir) {
 			VTMP_SUBSTITUTE_TOKEN ("%size_unit%", NULL);
 			VTMP_SUBSTITUTE_TOKEN ("%size%", "-");
+		} else if (is_link) {
+			VTMP_SUBSTITUTE_TOKEN ("%size_unit%", NULL);
+			VTMP_SUBSTITUTE_TOKEN ("%size%", "link");
 		} else {
 			char *unit;
 
