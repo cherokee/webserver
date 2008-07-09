@@ -16,6 +16,21 @@ a custom number of parameters and rules that have to be applied to one or
 more domains.</p>
 """
 
+def domain_cmp (d1, d2):
+    d1s = d1.split('.')
+    d2s = d2.split('.')
+
+    if len(d1s) >= 2 and len(d2s) >= 2:
+        if d1s[-2] == d2s[-2]:
+            if d1s[-1] == d2s[-1]:
+                return cmp(d1,d2)
+            else:
+                return cmp(d1s[-1], d2s[-1])
+        else:
+            return cmp(d1s[-2],d2s[-2])
+    else:
+        return cmp(d1,d2)
+
 class PageVServers (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'vservers', cfg)
@@ -49,7 +64,7 @@ class PageVServers (PageMenu, FormHelper):
             table += ('<b>Name</b>', '<b>Document Root</b>', '<b>Logging</b>', '')
 
             sorted_vservers = filter (lambda x: x!='default', vservers.keys())
-            sorted_vservers.sort()
+            sorted_vservers.sort (domain_cmp)
             sorted_vservers = ['default'] + sorted_vservers
 
             for vserver in sorted_vservers:

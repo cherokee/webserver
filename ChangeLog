@@ -1,5 +1,9 @@
 2008-07-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServers.py (domain_cmp): Improves the default sorting
+	function. It takes the different domain parts into account so
+	similar domains are near of each other.
+
 	* cherokee/handler_dirlist.c (render_file): Print "link" instead
 	of the size when listing a link.
 
