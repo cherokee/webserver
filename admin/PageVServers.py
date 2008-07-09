@@ -21,9 +21,10 @@ def domain_cmp (d1, d2):
     d2s = d2.split('.')
 
     if len(d1s) >= 2 and len(d2s) >= 2:
-        if d1s[-2] == d2s[-2]:
-            if d1s[-1] == d2s[-1]:
-                return cmp(d1,d2)
+        if d1s[-2] == d2s[-2]:                    # Domain name
+            if d1s[-1] == d2s[-1]:                # TLD
+                skip = len(".".join(d2s[-2:]))
+                return cmp(d1[:-skip],d2[:-skip])
             else:
                 return cmp(d1s[-1], d2s[-1])
         else:
