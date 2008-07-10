@@ -1,5 +1,8 @@
 2008-07-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_error.c (cherokee_handler_error_add_headers):
+	Removed P3P header entry. It's useless.
+
 	* admin/PageVServers.py (PageVServers._render_vserver_list): Added
 	a new option for cloning virtual servers.
 

@@ -261,7 +261,6 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 
 	cherokee_buffer_add_str     (buffer, "Cache-Control: no-cache"CRLF);
 	cherokee_buffer_add_str     (buffer, "Pragma: no-cache"CRLF);		
-	cherokee_buffer_add_str     (buffer, "P3P: CP=3DNOI NID CURa OUR NOR UNI"CRLF);
 
 	return ret_ok;
 }
