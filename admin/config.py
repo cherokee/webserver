@@ -6,6 +6,7 @@ class ConfigNode (object):
         self._child = {}
 
     # Value
+    #
     def _get_value (self):
         return self._val
     def _set_value (self, val):
@@ -180,6 +181,16 @@ class Config:
     # Access
     def __getitem__ (self, path):
         return self.root[path]
+
+    def clone (self, path_old, path_new):
+        parent, parent_path, child_name = self._get_parent_node (path_old)
+        if self.root[path_new]:
+            return True
+        self.set_sub_node (path_new, self[path_old])
+    
+    def rename (self, path_old, path_new):
+        self.clone (path_old, path_new)
+        del(self[path_old])
 
     def set_sub_node (self, path, config_node):
         assert (isinstance(config_node, ConfigNode))

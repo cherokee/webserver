@@ -85,7 +85,8 @@ class PageVServer (PageMenu, FormHelper):
 
             else:
                 # It's updating properties
-                self._op_apply_changes (host, uri, post)
+                re = self._op_apply_changes (host, uri, post)
+                if re: return re
 
         elif uri.endswith('/ajax_update'):
             if post.get_val('update_prio'):
@@ -171,6 +172,9 @@ class PageVServer (PageMenu, FormHelper):
 
         # Basics
         table = TableProps()
+        if host != "default":
+            self._cfg['tmp!vserver_name'] = host
+            self.AddPropEntry (table, 'Virtual Server nickname', 'tmp!vserver_name', "prueba")
         self.AddPropEntry (table, 'Document Root',     '%s!document_root'%(pre),   NOTE_DOCUMENT_ROOT)
         self.AddPropEntry (table, 'Directory Indexes', '%s!directory_index'%(pre), NOTE_DIRECTORY_INDEX)
         tabs += [('Basics', str(table))]
@@ -448,6 +452,12 @@ class PageVServer (PageMenu, FormHelper):
 
     def _op_apply_changes (self, host, uri, post):
         pre = "vserver!%s" % (host)
+
+        # Vserver nickname change
+        name = post.get_val("tmp!vserver_name")
+        if name and name != host:
+            self._cfg.rename('vserver!%s'%(host), 'vserver!%s'%(name))
+            return '/vserver/'
 
         # Error handler
         self.ApplyChanges_OptionModule ('%s!error_handler'%(pre), uri, post)
