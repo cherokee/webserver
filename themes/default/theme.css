@@ -54,3 +54,7 @@ tbody td
   display: block;
   border: 0px;
 }
+
+.date {
+	font-family: "mono", "Courier New", "Courier";
+}

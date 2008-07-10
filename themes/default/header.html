@@ -16,23 +16,23 @@
 	<h1>Index of %public_dir%</h1>
 	<table>
 		<thead class="headings">
-			<tr>
+		  <tr>
 			<td style="width: 1px;">&nbsp;</td>
 			<td>
-			<a class="link" href="?order=%order_name%">Name</a>
+			<a href="?order=%order_name%">Name</a>
 			</td>
 			%if date%<td>
-			<a class="date" href="?order=%order_date%">Last Modification</a>
+			<a href="?order=%order_date%">Last Modification</a>
 			</td>%fi%
 			%if size%<td>
-			<a class="size" href="?order=%order_size%">Size</a>
+			<a href="?order=%order_size%">Size</a>
 			</td>%fi%
 			%if user%<td>
-			<a class="group" href="#">User</a>
+			<a href="#">User</a>
 			</td>%fi%
 			%if group%Group<td>
-			<a class="group" href="#">Group</a>
+			<a href="#">Group</a>
 			</td>%fi%
-			</tr>
+		  </tr>
 		</thead>
 		<tbody>

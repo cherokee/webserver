@@ -1,3 +1,8 @@
+2008-07-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* themes/default/theme.css, themes/default/header.html: Print the
+	time and date with a fixed width font.
+
 2008-07-09  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageVServers.py (domain_cmp): Improves the default sorting
