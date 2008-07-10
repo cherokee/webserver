@@ -96,7 +96,7 @@ def is_local_dir_exists (value, cfg):
         path = value
 
     if not os.path.exists(path):
-        raise ValueError, 'Path does not exits'
+        raise ValueError, 'Path does not exit'
 
     if not os.path.isdir(path):
         raise ValueError, 'Path is not a directory'
@@ -113,7 +113,7 @@ def is_local_file_exists (value, cfg):
         path = value
 
     if not os.path.exists(path):
-        raise ValueError, 'Path does not exits'
+        raise ValueError, 'Path does not exit'
 
     if not os.path.isfile(path):
         raise ValueError, 'Path is not a regular file'
