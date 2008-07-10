@@ -453,12 +453,6 @@ class PageVServer (PageMenu, FormHelper):
     def _op_apply_changes (self, host, uri, post):
         pre = "vserver!%s" % (host)
 
-        # Vserver nickname change
-        name = post.get_val("tmp!vserver_name")
-        if name and name != host:
-            self._cfg.rename('vserver!%s'%(host), 'vserver!%s'%(name))
-            return '/vserver/'
-
         # Error handler
         self.ApplyChanges_OptionModule ('%s!error_handler'%(pre), uri, post)
 
@@ -474,6 +468,13 @@ class PageVServer (PageMenu, FormHelper):
 
         # Clean old logger properties
         self._cleanup_logger_cfg (host)
+
+        # Vserver nickname change
+        name = post.get_val("tmp!vserver_name")
+        if name and name != host:
+            error = self._cfg.rename('vserver!%s'%(host), 'vserver!%s'%(name))
+            if not error:
+                return '/vserver/%s'%(name)
 
     def _cleanup_logger_cfg (self, host):
         cfg_key = "vserver!%s!logger" % (host)
