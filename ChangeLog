@@ -1,5 +1,8 @@
 2008-07-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageMain.py, admin/Table.py: The couple of tables in the
+	main page look a bit better now.
+
 	* themes/default/theme.css, themes/default/header.html: Print the
 	time and date with a fixed width font.
 

@@ -62,7 +62,7 @@ class PageMain (PageMenu, FormHelper):
         txt = ""
 
         # Server
-        table = Table(2)
+        table = Table(2, title_left=1, header_style='width="200px"')
         table += ("Server version", VERSION)
         table += ("Server prefix",  PREFIX)
         table += ("Server default path",  WWWROOT)
@@ -79,7 +79,7 @@ class PageMain (PageMenu, FormHelper):
         txt += self.Indent(table)
 
         # Configuraion
-        table = Table(2)
+        table = Table(2, title_left=1, header_style='width="200px"')
 
         file = self._cfg.file
         if file:

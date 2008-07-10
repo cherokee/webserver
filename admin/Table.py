@@ -3,12 +3,13 @@ SUBMIT_ADD = SUBMIT_GENERIC % ('Add')
 SUBMIT_DEL = SUBMIT_GENERIC % ('Del')
 
 class Table:
-    def __init__ (self, cols, title_top=0, title_left=0, style=''):
-        self._cols       = cols
-        self._title_top  = title_top
-        self._title_left = title_left
-        self._style      = style
-        self._content    = []
+    def __init__ (self, cols, title_top=0, title_left=0, style='', header_style=''):
+        self._cols         = cols
+        self._title_top    = title_top
+        self._title_left   = title_left
+        self._style        = style
+        self._header_style = header_style
+        self._content      = []
 
     def __add__ (self, entry):
         assert (type(entry) == tuple)
@@ -33,7 +34,7 @@ class Table:
                 entry = row[nentry]
                 if nrow < self._title_top or \
                    nentry < self._title_left:
-                    line += '<th>%s</th>' % (str(entry))
+                    line += '<th %s >%s</th>' % (self._header_style, str(entry))
                 else:
                     line += '<td>%s</td>' % (str(entry))
             txt += '\t<tr>%s</tr>\n' % (line)
