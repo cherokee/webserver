@@ -85,14 +85,11 @@ cherokee_handler_error_free (cherokee_handler_error_t *hdl)
 
 
 static ret_t
-build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *buffer)
+build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 {
 	/* Avoid too many reallocations.
 	 */
 	cherokee_buffer_ensure_addlen (buffer, 1000);
-
-	/* Build error message.
-	 */
 
 	/* Add document header
 	 */
@@ -101,30 +98,33 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 	/* Add page title
 	 */
 	cherokee_buffer_add_str (buffer, "<html>" CRLF "<head><title>");
-	cherokee_http_code_copy (cnt->error_code, buffer);
+	cherokee_http_code_copy (conn->error_code, buffer);
 
 	/* Add big banner
 	 */
 	cherokee_buffer_add_str (buffer, "</title></head>" CRLF "<body>" CRLF "<h1>");
-	cherokee_http_code_copy (cnt->error_code, buffer);
+	cherokee_http_code_copy (conn->error_code, buffer);
 	cherokee_buffer_add_str (buffer, "</h1>" CRLF);
 
 	/* Maybe add some info
 	 */
-	switch (cnt->error_code) {
+	switch (conn->error_code) {
 	case http_not_found:
-		if (! cherokee_buffer_is_empty (&cnt->request)) {
-			cherokee_buffer_add_str (buffer, "The requested URL ");
-			cherokee_buffer_add_escape_html (buffer, &cnt->request);
-			cherokee_buffer_add_str (buffer, " was not found on this server.");
+		cherokee_buffer_add_str (buffer, "The requested URL ");
+		if (! cherokee_buffer_is_empty (&conn->request)) {
+			if (cherokee_connection_use_webdir (conn)) {
+				cherokee_buffer_add_buffer (buffer, &conn->web_directory);
+			}
+			cherokee_buffer_add_escape_html (buffer, &conn->request);
 		}
+		cherokee_buffer_add_str (buffer, " was not found on this server.");
 		break;
 
 	case http_bad_request:
 		cherokee_buffer_add_str (buffer, 
 			"Your browser sent a request that this server could not understand.");
 		cherokee_buffer_add_str   (buffer, "<p><pre>");
-		cherokee_buffer_add_escape_html (buffer, cnt->header.input_buffer);
+		cherokee_buffer_add_escape_html (buffer, conn->header.input_buffer);
 		cherokee_buffer_add_str   (buffer, "</pre>");
 		break;
 
@@ -151,7 +151,7 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 	case http_moved_permanently:
 	case http_moved_temporarily:
 		cherokee_buffer_add_str    (buffer, "The document has moved <a href=\"");
-		cherokee_buffer_add_buffer (buffer, &cnt->redirect);
+		cherokee_buffer_add_buffer (buffer, &conn->redirect);
 		cherokee_buffer_add_str    (buffer, "\">here</a>.");
 		break;
 
@@ -178,10 +178,10 @@ build_hardcoded_response_page (cherokee_connection_t *cnt, cherokee_buffer_t *bu
 	 */
 	cherokee_buffer_add_str (buffer, CRLF "<p><hr>" CRLF);
 
-	if (cnt->socket.is_tls == non_TLS)
-		cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->server_string_w_port);
+	if (conn->socket.is_tls == non_TLS)
+		cherokee_buffer_add_buffer (buffer, &CONN_SRV(conn)->server_string_w_port);
 	else 
-		cherokee_buffer_add_buffer (buffer, &CONN_SRV(cnt)->server_string_w_port_tls);
+		cherokee_buffer_add_buffer (buffer, &CONN_SRV(conn)->server_string_w_port_tls);
 
 	cherokee_buffer_add_str (buffer, CRLF "</body>" CRLF "</html>" CRLF);
 

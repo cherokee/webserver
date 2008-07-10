@@ -1,5 +1,10 @@
 2008-07-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_error.c (build_hardcoded_response_page): This
+	handled has to take conn->web_directory into account. This patch
+	fixes a regression that I introducced a few days ago when I was
+	cleaning up the web_directory mess.
+
 	* cherokee/handler_error.c (cherokee_handler_error_add_headers):
 	Removed P3P header entry. It's useless.
 
