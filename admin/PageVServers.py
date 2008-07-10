@@ -54,6 +54,8 @@ class PageVServers (PageMenu, FormHelper):
 
     def _render_vserver_list (self):        
         vservers = self._cfg['vserver']
+        sorted_vservers = []
+
         txt = "<h1>Virtual Servers</h1>"
         txt += self.Dialog (COMMENT)
         
@@ -97,9 +99,35 @@ class PageVServers (PageMenu, FormHelper):
         txt += "<h2>Add new Virtual Server</h2>"
         txt += fo1.Render(str(table))
 
+        # Clone Virtual Server
+        table = Table(3,1, header_style='width="250px"')
+        table += ('Virtual Server', 'Clone as..')
+        fo1 = Form ("/vserver", add_submit=False)
+
+        clonable = []
+        for v in sorted_vservers:
+            clonable.append((v,v))
+
+        op1 = self.InstanceOptions ("vserver_clone_src", clonable)
+        en1 = self.InstanceEntry   ("vserver_clone_trg", "text", size=40)
+        table += (op1[0], en1, SUBMIT_CLONE)
+
+        txt += "<h2>Clone Virtual Server</h2>"
+        txt += fo1.Render(str(table))
+        
         return txt
 
     def _op_add_vserver (self, post):
+        # Check whether it's cloning a vserver
+        cloning_source = post.pop('vserver_clone_src')
+        cloning_target = post.pop('vserver_clone_trg')
+        
+        if cloning_target and cloning_source:
+            error = self._cfg.clone('vserver!%s'%(cloning_source), 
+                                    'vserver!%s'%(cloning_target))
+            if not error:
+                return '/vserver/%s'%(cloning_target)
+
         # Ensure that no entry in empty
         for key in ['new_vserver_name', 'new_vserver_droot']:
             if not post.get_val(key):

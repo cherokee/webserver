@@ -189,8 +189,10 @@ class Config:
         self.set_sub_node (path_new, self[path_old])
     
     def rename (self, path_old, path_new):
-        self.clone (path_old, path_new)
-        del(self[path_old])
+        error = self.clone (path_old, path_new)
+        if not error:
+            del(self[path_old])
+        return error
 
     def set_sub_node (self, path, config_node):
         assert (isinstance(config_node, ConfigNode))
