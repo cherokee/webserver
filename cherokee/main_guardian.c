@@ -168,10 +168,12 @@ process_launch (const char *path, int argc, char *argv[])
 
 	UNUSED(path);
 
-	/* Look for the '-b' parameter
+	/* Look for the '-d' parameter
 	 */
 	for (i=0; i<argc; i++) {
-		if (strcmp(argv[i], "-b") == 0) {
+		if ((strcmp(argv[i], "-d") == 0) &&
+		    (strcmp(argv[i], "--detach") == 0))
+		{
 			daemonize = 1;
 			argv[i]   = "";
 		}
