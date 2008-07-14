@@ -1,4 +1,4 @@
-ASCIIDOC=$(top_srcdir)/doc/build/asciidoc.py -b xhtml11 --conf-file=$(top_srcdir)/doc/build/chunked_template.conf -a cherokee_version=$(PACKAGE_VERSION)
+ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py -b xhtml11 --conf-file=$(top_srcdir)/doc/build/chunked_template.conf -a cherokee_version=$(PACKAGE_VERSION)
 
 SUFFIXES = .txt .html
 
