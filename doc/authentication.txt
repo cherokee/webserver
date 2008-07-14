@@ -1,0 +1,20 @@
+Authentication
+--------------
+
+There are two types of authentication:
+
+*basic*::
+    This method sends the username and password in clear text over the network.
+    It is not the most secure method.  If the connection to the web server is
+    through HTTPS then this method is as secure as the encryption used.  This
+    method is very easy to implement, so most clients support it.
+
+*digest*::
+    This method is by far the most secure, but also more complex.  Most modern
+    web browsers support this method.
+
+Cherokee comes with a number of validators: link:modules_validators_htpasswd.html[htpasswd], 
+link:modules_validators_htdigest.html[htdigest], link:modules_validators_pam.html[PAM], 
+link:modules_validators_ldap.html[LDAP], link:modules_validators_mysql.html[MySQL], 
+and a link:modules_validators_plain.html[plain] text file.
+

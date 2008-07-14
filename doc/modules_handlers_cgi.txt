@@ -1,0 +1,30 @@
+Handler: CGI
+------------
+
+The cgi handler executes CGI programs.
+
+Parameters
+~~~~~~~~~~
+
+This module accepts three parameters:
+
+[grid="rows"]
+```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameters              , Type           , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Script Alias            , String         , It defines a kind of execution interpreter.
+Change to UID           , String         , It interprets each CGI as it owner user.
+Error handler           , Boolean        , Use CGI output as error message.
+Check file              , Boolean        , Check if the file exists.
+Pass request            , Boolean        , Pass request headers.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Examples
+~~~~~~~~
+
+This is a pretty common example. It defines a directory called cgi which points 
+to a path out of the Sever root directory where are located the CGI programs.
+
+image::media/images/admin_handler_cgi.png[Cgi]
+

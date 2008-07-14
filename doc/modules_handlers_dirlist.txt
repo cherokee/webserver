@@ -1,0 +1,48 @@
+Handler: Directory Listing
+--------------------------
+
+The **Only Listing** handler builds a list of directories and files
+within the requested directory, but **does not allow you to download
+its content**. Refer to link:modules_handlers_common.html[List & Send] for the opposite behaviour.
+
+Parameters
+~~~~~~~~~~
+[grid="rows"]
+```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameters              , Type         , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``theme``               , string       , Optional. The theme to use when         \
+                                         displaying the directory listings.      \
+                                         Default: ``default``.
+``size``                , boolean      , Optional. Display the size of files in  \
+                                         the listings. Default: ``Enabled``.     
+``date``                , boolean      , Optional. Display the last modification \
+                                         date of the files and directories in    \
+                                         the listings. Default: ``Enabled``.
+``user``                , boolean      , Optional. Display the owner of the      \
+                                         files and directories in the listings.  \
+                                         Default: ``Disabled``.
+``group``               , boolean      , Optional. Display the group ownership   \
+                                         of the files and directories in the     \
+                                         listings. Default ``Disabled``.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is possible the change the default theme used when displaying the directory
+listings, and it is also possible to create a new one:
+
+----
+   $ ls /usr/share/cherokee/themes/firefox3/
+   entry.html  footer.html  header.html  theme.css
+----
+
+Examples
+~~~~~~~~
+
+With this configuration: 
+
+image::media/images/admin_handler_onlylisting.png[Only listing configuration]
+
+Will return something like: 
+image::media/images/admin_handler_onlylisting_ex.png[Only listing example]
+
+

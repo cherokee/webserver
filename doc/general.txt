@@ -1,0 +1,65 @@
+General Configuration
+---------------------
+
+image::media/images/admin_general.png[General]
+
+
+Binding
+~~~~~~~
+When the server is initiated it opens a port and starts listening to incoming 
+requests. By default this is port 80 and it will use all the 
+network interfaces of the machine, which is usually the desired behavior. 
+
+
+IPv6 support
+~~~~~~~~~~~~
+The IPv6 configuration key brings the possibility of activating or deactivating 
+the IPv6 support at the server. If Cherokee has been compiled with IPv6 
+support (--with-ipv6), this configuration entry will be fully functional, 
+otherwise it will be ignored.
+
+
+Timeout
+~~~~~~~
+Sets the number of seconds that Cherokee will wait before closing the 
+connection. 
+
+
+KeepAlive
+~~~~~~~~~
+Enables the global keep-alive support for the client requests.
+It increases the client performance by reusing a connection for more 
+than one request. It should most probably be turned on.
+
+
+Server Tokens
+~~~~~~~~~~~~~
+
+[grid="rows"]
+``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameters,                Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Product                  , Cherokee
+Minor                    , Cherokee/{cherokee_version}
+Minimal                  , Cherokee/{cherokee_version}
+OS                       , Cherokee/{cherokee_version} (UNIX)
+Full                     , Cherokee/{cherokee_version} (UNIX) Ext/0.0 Ext2/0.0
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, Cherokee will use **Full**.
+
+
+Execution User and Group
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The User directive configures which user the Cherokee daemon will normally 
+run as. By default, Cherokee runs as root which is considered undesirable 
+in all but the most trustful network configurations. 
+
+The User directive used in conjunction with the Group directive instructs 
+the daemon to switch to the specified user and group as quickly as 
+possible after startup. 
+
+There are two possible formats: using the user or group name, or using 
+the system ID.
+

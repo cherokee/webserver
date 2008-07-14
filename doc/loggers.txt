@@ -1,0 +1,8 @@
+Loggers
+-------
+
+Cherokee currently supports the following loggers:
+
+* link:modules_loggers_combined.html[Combined]
+* link:modules_loggers_ncsa.html[NCSA]
+* link:modules_loggers_w3c.html[W3C]

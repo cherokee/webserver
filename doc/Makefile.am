@@ -1,4 +1,11 @@
-docdir = $(datadir)/doc/cherokee/
+ASCIIDOC=$(top_srcdir)/doc/build/asciidoc.py -b xhtml11 --conf-file=$(top_srcdir)/doc/build/chunked_template.conf -a cherokee_version=$(PACKAGE_VERSION)
+
+SUFFIXES = .txt .html
+
+.txt.html:
+	$(ASCIIDOC) -o $@ $< 
+
+docdir = $(datadir)/doc/cherokee
 doc_DATA = \
 index.html \
 authentication.html \
@@ -14,47 +21,47 @@ internal_configuration.html \
 advanced.html \
 admin.html \
 download.html \
-How_to_generate_SSL_keys.html \
+generating_ssl_keys.html \
 icons.html
 
-dochandlersdir = $(docdir)handlers/
+dochandlersdir = $(docdir)/
 dochandlers_DATA = \
-handlers/file.html \
-handlers/dirlist.html \
-handlers/common.html \
-handlers/redir.html \
-handlers/cgi.html \
-handlers/fastcgi.html \
-handlers/scgi.html
+modules_handlers_file.html \
+modules_handlers_dirlist.html \
+modules_handlers_common.html \
+modules_handlers_redir.html \
+modules_handlers_cgi.html \
+modules_handlers_fastcgi.html \
+modules_handlers_scgi.html
 
-docloggersdir = $(docdir)loggers/
+docloggersdir = $(docdir)/
 docloggers_DATA = \
-loggers/combined.html \
-loggers/ncsa.html \
-loggers/w3c.html
+modules_loggers_combined.html \
+modules_loggers_ncsa.html \
+modules_loggers_w3c.html
 
-docencodersdir = $(docdir)encoders/
+docencodersdir = $(docdir)/
 docencoders_DATA = \
-encoders/gzip.html
+modules_encoders_gzip.html
 
-docbalancersdir = $(docdir)balancers/
+docbalancersdir = $(docdir)/
 docbalancers_DATA = \
-balancers/round_robin.html
+modules_balancers_round_robin.html
 
-docvalidatorsdir = $(docdir)validators/
+docvalidatorsdir = $(docdir)/
 docvalidators_DATA = \
-validators/htdigest.html \
-validators/htpasswd.html \
-validators/ldap.html \
-validators/mysql.html \
-validators/pam.html \
-validators/plain.html
+modules_validators_htdigest.html \
+modules_validators_htpasswd.html \
+modules_validators_ldap.html \
+modules_validators_mysql.html \
+modules_validators_pam.html \
+modules_validators_plain.html
 
-docmediacssdir = $(docdir)media/css/
+docmediacssdir = $(docdir)/media/css/
 docmediacss_DATA = \
-media/css/documentation.css
+media/css/cherokee_doc.css
 
-docmediaimagesdir = $(docdir)media/images/
+docmediaimagesdir = $(docdir)/media/images/
 docmediaimages_DATA = \
 media/images/admin_handler_fastcgi2.png \
 media/images/admin_index.png \
@@ -97,7 +104,3 @@ $(docmediaimages_DATA)
 
 CLEANFILES = \
 $(GENERATED_FILES) 
-
-.NOTPARALLEL: $(GENERATED_FILES)
-$(GENERATED_FILES):
-	python $(top_srcdir)/doc/build_docs.py -v
