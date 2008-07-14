@@ -7,7 +7,7 @@ Compiling and Installing
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you are not comfortable with rolling your own Cherokee, then check our 
-listings of pre-compiled link:http://www.cherokee-project.com/downloads[binaries].
+listings of pre-compiled link:http://www.cherokee-project.com/downloads.html[binaries].
 Specific instructions for building your own copy are available at: 
 
     - link:compiling_and_installing_unix.html[Unix]

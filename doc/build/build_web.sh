@@ -7,5 +7,5 @@ ASCIIDOC_HTML="python asciidoc.py -b xhtml11 --conf-file=website_template.conf -
 for i in ../*.txt
  do
    FILENAME=`echo $i | sed 's/..\///' | sed 's/\(.*\)txt/\1html/' `
-   echo $ASCIIDOC_HTML -o $FILENAME $i
+   $ASCIIDOC_HTML -o $FILENAME $i
  done
