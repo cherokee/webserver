@@ -101,6 +101,3 @@ $(GENERATED_FILES) \
 $(docmediacss_DATA) \
 $(docmediaimages_DATA)
 
-
-CLEANFILES = \
-$(GENERATED_FILES) 

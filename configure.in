@@ -1121,25 +1121,6 @@ AM_CONDITIONAL(HAVE_GEOIP, test $have_geoip = "yes")
 
 
 dnl
-dnl Python's docutils
-dnl 
-AC_MSG_CHECKING([for Python's docutils])
-if python -c "import docutils" >/dev/null 2>/dev/null; then
-  docutils_found=yes
-else
-  docutils_found=no
-fi
-AM_CONDITIONAL(PYTHON_DOCUTILS, test "x$docutils_found" = "xyes")
-AC_MSG_RESULT([$docutils_found])
-
-if test "x$docutils_found" != "xyes"; then
-  echo
-  echo "*WARNING*: Python module docutils is not installed!"
-  echo "           It will not be able to generate the documentation."
-  echo
-fi
-
-dnl
 dnl WWW root directory
 dnl
 AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root directory]),

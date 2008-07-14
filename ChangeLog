@@ -1,7 +1,13 @@
+2008-07-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* doc/Makefile.am: Removes unneeded clean.
+
+	* configure.in: Removed Python docutils check.
+
 2008-07-14  Taher Shihadeh <taher@unixwars.com>
 
         * doc/*: Changed documentation to Asciidoc. 
-       
+
 2008-07-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main_guardian.c (process_launch): This pice of code
