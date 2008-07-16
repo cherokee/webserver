@@ -944,7 +944,9 @@ post.c \
 config_node.h \
 config_node.c \
 config_reader.h \
-config_reader.c 
+config_reader.c \
+bogotime.h \
+bogotime.c
 
 libcherokee_client_la_SOURCES = \
 url.h \

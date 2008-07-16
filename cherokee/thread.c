@@ -40,6 +40,7 @@
 #include "header-protected.h"
 #include "util.h"
 #include "fcgi_manager.h"
+#include "bogotime.h"
 
 
 #define DEBUG_BUFFER(b)  fprintf(stderr, "%s:%d len=%d crc=%d\n", __FILE__, __LINE__, b->len, cherokee_buffer_crc32(b))
@@ -49,55 +50,30 @@ static ret_t reactive_conn_from_polling  (cherokee_thread_t *thd, cherokee_conne
 
 
 static void
-update_bogo_now_internal (cherokee_thread_t *thd)
+update_bogo_now (cherokee_thread_t *thd)
 {
-	cherokee_server_t *srv = THREAD_SRV(thd);
-
 	/* Has it changed?
 	 */
-	if (thd->bogo_now == srv->bogo_now)
+	if (thd->bogo_now == cherokee_bogonow_now)
 		return;
 
 	/* Update time_t
 	 */
-	thd->bogo_now = srv->bogo_now;
+	thd->bogo_now = cherokee_bogonow_now;
 
 	/* Update struct tm
 	 */
-	memcpy (&thd->bogo_now_tmgmt, &srv->bogo_now_tmgmt, sizeof(struct tm));
-	memcpy (&thd->bogo_now_tmloc, &srv->bogo_now_tmloc, sizeof(struct tm));
+	cherokee_bogotime_lock_read();
+
+	memcpy (&thd->bogo_now_tmgmt, &cherokee_bogonow_tmgmt, sizeof(struct tm));
+	memcpy (&thd->bogo_now_tmloc, &cherokee_bogonow_tmloc, sizeof(struct tm));
 
 	/* Update cherokee_buffer_t
 	 */
 	cherokee_buffer_clean (&thd->bogo_now_strgmt);
-	cherokee_buffer_add_buffer (&thd->bogo_now_strgmt, &srv->bogo_now_strgmt);
+	cherokee_buffer_add_buffer (&thd->bogo_now_strgmt, &cherokee_bogonow_strgmt);
 
-}
-
-
-static void
-update_bogo_now (cherokee_thread_t *thd)
-{
-	CHEROKEE_RWLOCK_READER (&THREAD_SRV(thd)->bogo_now_mutex);
-	update_bogo_now_internal(thd);
-	CHEROKEE_RWLOCK_UNLOCK (&THREAD_SRV(thd)->bogo_now_mutex);
-}
-
-
-static void
-try_to_update_bogo_now (cherokee_thread_t *thd)
-{
-	int unlocked;
-	cherokee_server_t *srv = THREAD_SRV(thd);
-
-	/* Try to lock
-	 */
-	unlocked = CHEROKEE_RWLOCK_TRYREADER (&srv->bogo_now_mutex);        /* 1.- lock a reader */
-	if (unlocked) return;
-
-	update_bogo_now_internal (thd);
-
-	CHEROKEE_RWLOCK_UNLOCK (&srv->bogo_now_mutex);                      /* 2.- release */
+	cherokee_bogotime_release();
 }
 
 
@@ -1521,7 +1497,7 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 
 	/* Try to update bogo_now
 	 */
-	try_to_update_bogo_now (thd);
+	cherokee_bogotime_try_update();
 
 	/* Reset the server socket.
 	 * cherokee_fdpoll_reset (thd->fdpoll, S_SOCKET_FD(srv->socket));
@@ -1859,8 +1835,7 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 
 	/* Try to update bogo_now
 	 */
-	try_to_update_bogo_now (thd);
-
+	cherokee_bogotime_try_update();
 
 	/* If the thread is full of connections, it should not
 	 * get new connections.

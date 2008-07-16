@@ -30,6 +30,7 @@
 #include "buffer.h"
 #include "server-protected.h"
 #include "util.h"
+#include "bogotime.h"
 
 #ifdef HAVE_SYS_MMAN_H
 # include <sys/mman.h>
@@ -239,7 +240,7 @@ iocache_entry_update_stat (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 		return ret_error;
 	}
 
-	PRIV(entry)->stat_update = iocache->srv->bogo_now;
+	PRIV(entry)->stat_update = cherokee_bogonow_now;
 	return ret_ok;
 }
 
@@ -253,7 +254,7 @@ iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 
 	/* The stat information has to be fresh enough
 	 */
-	if (iocache->srv->bogo_now >= (PRIV(entry)->stat_update + FRESHNESS_TIME_STAT)) {
+	if (cherokee_bogonow_now >= (PRIV(entry)->stat_update + FRESHNESS_TIME_STAT)) {
 		ret = iocache_entry_update_stat (iocache, entry, filename);
 		if (ret != ret_ok) return ret;
 	}
@@ -311,7 +312,7 @@ iocache_entry_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_entry_t
 	}
 
 	PUBL(entry)->mmaped_len  = entry->state.st_size;
-	PRIV(entry)->mmap_update = iocache->srv->bogo_now;
+	PRIV(entry)->mmap_update = cherokee_bogonow_now;
 
 	return ret_ok;
 }
@@ -330,7 +331,7 @@ iocache_entry_maybe_update_mmap (cherokee_iocache_t *iocache, cherokee_iocache_e
 	if (entry->mmaped != NULL) {
 		if (PRIV(entry)->ref_counter > 1)
 			update = false;
-		else if (iocache->srv->bogo_now < (PRIV(entry)->mmap_update + FRESHNESS_TIME_MMAP))
+		else if (cherokee_bogonow_now < (PRIV(entry)->mmap_update + FRESHNESS_TIME_MMAP))
 			update = false;
 	}
 
@@ -508,7 +509,7 @@ cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, cherokee_buf
 	
 	/* May update the stat info
 	 */
-	if (iocache->srv->bogo_now >= (PRIV(entry)->stat_update + FRESHNESS_TIME_STAT)) {
+	if (cherokee_bogonow_now >= (PRIV(entry)->stat_update + FRESHNESS_TIME_STAT)) {
 		ret = iocache_entry_update_stat (iocache, entry, filename);
 		if (unlikely (ret != ret_ok)) goto error;
 	}

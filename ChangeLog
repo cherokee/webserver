@@ -1,5 +1,14 @@
 2008-07-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/Makefile.am, cherokee/init.c,
+	cherokee/handler_server_info.c, cherokee/bogotime.c,
+	cherokee/thread.c, cherokee/bogotime.h, cherokee/nonce.c,
+	cherokee/server-protected.h, cherokee/iocache.c,
+	cherokee/connection.c, cherokee/server.c: The 'bogonow'
+	time (trick) has been moved to a separate file. It is no longer a
+	cherokee_server_t property, so it can be accessed from within any
+	class. This is mostly a clean up patch.
+
 	* cherokee/main_guardian.c (main): Clean up.
 
 2008-07-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>

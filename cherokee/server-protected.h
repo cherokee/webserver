@@ -58,19 +58,9 @@
 
 
 struct cherokee_server {
-	/* Current time
-	 */
-	time_t                       start_time;
-	time_t                       bogo_now;
-	struct tm                    bogo_now_tmloc;
-	struct tm                    bogo_now_tmgmt;
-	int                          bogo_now_tzloc_sign;
-	cuint_t                      bogo_now_tzloc_offset;
-	cherokee_buffer_t            bogo_now_strgmt;
-	CHEROKEE_RWLOCK_T           (bogo_now_mutex);
-
 	/* Exit related
 	 */
+	time_t                       start_time;
 	cherokee_buffer_t            panic_action;
 	cherokee_boolean_t           wanna_exit;
 	cherokee_boolean_t           wanna_reinit;

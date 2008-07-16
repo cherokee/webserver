@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "handler_server_info.h"
+#include "bogotime.h"
 
 #ifdef HAVE_SYS_UTSNAME_H
 # include <sys/utsname.h>
@@ -181,7 +182,7 @@ table_add_row_int (cherokee_buffer_t *buf, char *name, int value)
 static void
 add_uptime_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
-	unsigned int elapse = srv->bogo_now - srv->start_time;
+	unsigned int elapse = cherokee_bogonow_now - srv->start_time;
 	unsigned int days;
 	unsigned int hours;
 	unsigned int mins;

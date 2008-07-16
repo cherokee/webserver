@@ -27,6 +27,7 @@
 #include "avl.h"
 #include "connection-protected.h"
 #include "server-protected.h"
+#include "bogotime.h"
 
 struct cherokee_nonce_table {
 	cherokee_avl_t    table;
@@ -97,7 +98,7 @@ cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces, cherokee_connecti
 	/* Generate nonce string
 	 */
 	cherokee_buffer_clean (nonce);
-	cherokee_buffer_add_ullong16(nonce, (cullong_t) CONN_SRV(conn)->bogo_now);
+	cherokee_buffer_add_ullong16(nonce, (cullong_t) cherokee_bogonow_now);
 	cherokee_buffer_add_ulong16 (nonce, (culong_t) rand());
 	cherokee_buffer_add_ulong16 (nonce, (culong_t) POINTER_TO_INT(conn));
 

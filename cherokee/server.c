@@ -78,7 +78,6 @@
 #include "connection.h"
 #include "mime.h"
 #include "util.h"
-#include "dtm.h"
 #include "fdpoll.h"
 #include "fdpoll-protected.h"
 #include "regex.h"
@@ -87,6 +86,7 @@
 #include "nonce.h"
 #include "config_reader.h"
 #include "init.h"
+#include "bogotime.h"
 
 #define ENTRIES "core,server"
 
@@ -170,18 +170,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	cherokee_buffer_init (&n->panic_action);
 	cherokee_buffer_add_str (&n->panic_action, CHEROKEE_PANIC_PATH);
-
-	/* Bogo now
-	 */
-	n->bogo_now        = 0;
-	n->bogo_now_tzloc_sign = '+';
-	n->bogo_now_tzloc_offset = 0;
-	CHEROKEE_RWLOCK_INIT (&n->bogo_now_mutex, NULL);
-
-	CHEROKEE_RWLOCK_WRITER (&n->bogo_now_mutex);
-	cherokee_buffer_init (&n->bogo_now_strgmt);
-	cherokee_buffer_ensure_size (&n->bogo_now_strgmt, DTM_SIZE_GMTTM_STR);
-	CHEROKEE_RWLOCK_UNLOCK (&n->bogo_now_mutex);
 
 	/* Time managing hack
 	 */
@@ -364,7 +352,6 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_virtual_server_free (srv->vserver_default);
 	srv->vserver_default = NULL;
 
-	cherokee_buffer_mrproper (&srv->bogo_now_strgmt);
 	cherokee_buffer_mrproper (&srv->timeout_header);
 
 	cherokee_buffer_mrproper (&srv->server_string);
@@ -1263,63 +1250,15 @@ update_bogo_conns_num (cherokee_server_t *srv)
 }
 
 
-static void
-update_bogo_now (cherokee_server_t *srv)
-{
-	time_t  newtime;
-
-	/* Read the time
-	 */
-	newtime = time (NULL);
-	if (srv->bogo_now >= newtime) 
-		return;
-
-	/* Update internal variables
-	 */
-	CHEROKEE_RWLOCK_WRITER (&srv->bogo_now_mutex);      /* 1.- lock as writer */
-
-	srv->bogo_now = newtime;
-
-	/* Convert time to both GMT and local time struct
-	 */
-	cherokee_gmtime    (&newtime, &srv->bogo_now_tmgmt);
-	cherokee_localtime (&newtime, &srv->bogo_now_tmloc);
-
-#ifdef HAVE_STRUCT_TM_GMTOFF
-	srv->bogo_now_tzloc_sign = srv->bogo_now_tmloc.tm_gmtoff < 0 ? '-' : '+';
-	srv->bogo_now_tzloc_offset = abs(srv->bogo_now_tmloc.tm_gmtoff / 3600);
-#else
-	srv->bogo_now_tzloc_sign = timezone < 0 ? '-' : '+';
-	srv->bogo_now_tzloc_offset = abs(timezone / 3600);
-#endif
-	
-	cherokee_buffer_clean (&srv->bogo_now_strgmt);
-	{
-	size_t  szlen = 0;
-	char bufstr[DTM_SIZE_GMTTM_STR + 2];
-
-	szlen = cherokee_dtm_gmttm2str (bufstr, sizeof(bufstr),
-	                                &srv->bogo_now_tmgmt);
-	cherokee_buffer_add (&srv->bogo_now_strgmt, bufstr, szlen);
-	}
-
-	/* NOTE: a local time string should have {+-}timezone_offset (hours)
-	 *       added to date-time GMT string.
-	 */
-
-	CHEROKEE_RWLOCK_UNLOCK (&srv->bogo_now_mutex);      /* 2.- release */
-}
-
-
 ret_t
 cherokee_server_unlock_threads (cherokee_server_t *srv)
 {
 	ret_t            ret;
 	cherokee_list_t *i;
 
-	/* Update bogo_now before launch the threads
+	/* Update bogotime before launch the threads
 	 */
-	update_bogo_now (srv);
+	cherokee_bogotime_update();
 
 	/* Launch all the threads
 	 */
@@ -1339,7 +1278,7 @@ cherokee_server_step (cherokee_server_t *srv)
 
 	/* Get the server time.
 	 */
-	update_bogo_now (srv);
+	cherokee_bogotime_update ();
 	update_bogo_conns_num (srv);
 
 	/* Execute thread step.
@@ -1354,20 +1293,20 @@ cherokee_server_step (cherokee_server_t *srv)
 #endif
 	/* Logger flush 
 	 */
-	if (srv->log_flush_next < srv->bogo_now) {
+	if (srv->log_flush_next < cherokee_bogonow_now) {
 		flush_logs (srv);
-		srv->log_flush_next = srv->bogo_now + srv->log_flush_elapse;
+		srv->log_flush_next = cherokee_bogonow_now + srv->log_flush_elapse;
 	}
 
 	/* Clean IO cache
 	 */
-	if (srv->iocache_clean_next < srv->bogo_now) {
+	if (srv->iocache_clean_next < cherokee_bogonow_now) {
 		cherokee_iocache_clean_up (srv->iocache);	
-		srv->iocache_clean_next = srv->bogo_now + IOCACHE_DEFAULT_CLEAN_ELAPSE;
+		srv->iocache_clean_next = cherokee_bogonow_now + IOCACHE_DEFAULT_CLEAN_ELAPSE;
 	}
 
 #ifdef _WIN32
-	if (unlikely (cherokee_win32_shutdown_signaled(srv->bogo_now)))
+	if (unlikely (cherokee_win32_shutdown_signaled (cherokee_bogonow_now)))
 		srv->wanna_exit = true;
 #endif
 

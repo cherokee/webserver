@@ -28,6 +28,7 @@
 #include "trace.h"
 #include "ncpus.h"
 #include "util.h"
+#include "bogotime.h"
 
 
 cuint_t cherokee_cacheline_size;
@@ -51,6 +52,10 @@ cherokee_init (void)
 	/* Init the tracing facility
 	 */
 	cherokee_trace_init();
+
+	/* Init the bogotime mechanism
+	 */
+	cherokee_bogotime_init();
 
 	/* Get the CPU number
 	 */
