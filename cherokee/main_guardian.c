@@ -38,8 +38,8 @@
 #define DELAY_RESTARTING   500 * 1000
 #define PID_FILE          CHEROKEE_VAR_RUN "/cherokee-guardian.pid"
 
-static cherokee_boolean_t exit_guardian = false;
-static pid_t              pid;
+pid_t pid;
+
 
 static void
 pid_file_save (const char *pid_file, int pid)
@@ -159,14 +159,12 @@ set_guardian_signals (void)
 	sigaction (SIGUSR1, &act, NULL);
 }
 
-static pid_t
-process_launch (const char *path, int argc, char *argv[])
+static ret_t
+may_daemonize (int argc, char *argv[])
 {
 	int   i;
 	pid_t pid;
 	int   daemonize = 0;
-
-	UNUSED(path);
 
 	/* Look for the '-d' parameter
 	 */
@@ -187,12 +185,20 @@ process_launch (const char *path, int argc, char *argv[])
 		setsid();
 	}
 
+	return ret_ok;
+}
+
+static pid_t
+process_launch (const char *path, char *argv[])
+{
+	pid_t pid;
+
 	/* Execute the server
 	 */
 	pid = fork();
 	if (pid == 0) {
-		argv[0] = CHEROKEE_SRV_PATH;
-		execvp (CHEROKEE_SRV_PATH, argv);
+		argv[0] = (char *) path;
+		execvp (path, argv);
 		exit (1);
 	}
 	
@@ -224,16 +230,20 @@ main (int argc, char *argv[])
 	set_guardian_signals();	   
 	single_time = is_single_execution (argc, argv);
 
-	if (! single_time)
+	/* Turn into a daemon
+	 */
+	if (! single_time) {
+		may_daemonize (argc, argv);
 		pid_file_save (PID_FILE, getpid());
-
-	do {
-		pid = process_launch (CHEROKEE_SRV_PATH, argc, argv);
+	}
+	
+	while (true) {
+		pid = process_launch (CHEROKEE_SRV_PATH, argv);
 		if (pid < 0) {
 			PRINT_MSG ("Couldn't launch '%s'\n", CHEROKEE_SRV_PATH);
 			exit (1);
 		}
-
+		
 		ret = process_wait (pid);		
 		if (single_time)
 			break;
@@ -241,7 +251,7 @@ main (int argc, char *argv[])
 		usleep ((ret == ret_ok) ? 
 			DELAY_RESTARTING : 
 			DELAY_ERROR);
-	} while (! exit_guardian);
+	}
 
 	pid_file_clean (PID_FILE);
 	return 0;

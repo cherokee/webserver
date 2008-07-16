@@ -1,3 +1,7 @@
+2008-07-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main_guardian.c (main): Clean up.
+
 2008-07-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* doc/Makefile.am: Removes unneeded clean.
