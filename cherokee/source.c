@@ -91,7 +91,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		ret = cherokee_resolv_cache_get_host (resolv, src->unix_socket.buf, sock);
 		if (ret != ret_ok) return ret;
 
-		return cherokee_connector_connect (connector, socket);
+		return cherokee_connector_connect (connector, sock);
 	}
 
 	/* INET socket
@@ -105,7 +105,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	
 	SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
  	
-	return cherokee_connector_connect (connector, socket);
+	return cherokee_connector_connect (connector, sock);
 }
 
 
