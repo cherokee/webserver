@@ -27,6 +27,7 @@
 #include "config_node.h"
 #include "resolv_cache.h"
 #include "util.h"
+#include "connector.h"
 
 #define ENTRIES "source,src"
 
@@ -70,9 +71,15 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 {
 	ret_t                    ret;
 	cherokee_resolv_cache_t *resolv;
+	cherokee_connector_t    *connector;
 
 	ret = cherokee_resolv_cache_get_default (&resolv);
-        if (unlikely (ret!=ret_ok)) return ret;
+        if (unlikely (ret!=ret_ok)) 
+		return ret;
+
+	ret = cherokee_connector_get_default (&connector);
+        if (unlikely (ret!=ret_ok)) 
+		return ret;
 
 	/* UNIX socket
 	 */
@@ -84,7 +91,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		ret = cherokee_resolv_cache_get_host (resolv, src->unix_socket.buf, sock);
 		if (ret != ret_ok) return ret;
 
-		return cherokee_socket_connect (sock);
+		return cherokee_connector_connect (connector, socket);
 	}
 
 	/* INET socket
@@ -98,7 +105,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	
 	SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
  	
-	return cherokee_socket_connect (sock);
+	return cherokee_connector_connect (connector, socket);
 }
 
 

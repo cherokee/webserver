@@ -1072,7 +1072,9 @@ source.c \
 source_interpreter.h \
 source_interpreter.c \
 info.h \
-info.c
+info.c \
+connector.h \
+connector.c
 
 libcherokee_config_la_SOURCES = \
 $(config_common) \

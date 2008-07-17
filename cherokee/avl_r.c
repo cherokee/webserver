@@ -26,7 +26,8 @@
 #include "avl_r.h"
 
 typedef struct {
-	   CHEROKEE_RWLOCK_T(lock);
+	CHEROKEE_RWLOCK_T(lock);
+	int dummy;
 } cherokee_avl_r_priv_t;
 
 #define AVL_R_PRIV(avl_r) ((cherokee_avl_r_priv_t *)((avl_r)->priv))
@@ -36,66 +37,66 @@ typedef struct {
 ret_t
 cherokee_avl_r_init (cherokee_avl_r_t *avl_r)
 {
-	   ret_t ret;
-	   CHEROKEE_NEW_STRUCT(n, avl_r_priv);
+	ret_t ret;
+	CHEROKEE_NEW_STRUCT(n, avl_r_priv);
 
-	   ret = cherokee_avl_init (&avl_r->avl);
-	   if (ret != ret_ok) 
-			 return ret;
+	ret = cherokee_avl_init (&avl_r->avl);
+	if (ret != ret_ok) 
+		return ret;
 
-	   avl_r->priv = n;
-	   CHEROKEE_RWLOCK_INIT (AVL_R_LOCK(avl_r), NULL);
+	avl_r->priv = n;
+	CHEROKEE_RWLOCK_INIT (AVL_R_LOCK(avl_r), NULL);
 
-	   return ret_ok;
+	return ret_ok;
 }
 
 
 ret_t 
 cherokee_avl_r_mrproper (cherokee_avl_r_t *avl_r, cherokee_func_free_t free_func)
 {
-	   if (avl_r->priv) {
-			 CHEROKEE_RWLOCK_DESTROY (AVL_R_LOCK(avl_r));
-			 free (avl_r->priv);
-	   }
+	if (avl_r->priv) {
+		CHEROKEE_RWLOCK_DESTROY (AVL_R_LOCK(avl_r));
+		free (avl_r->priv);
+	}
 
-	   return cherokee_avl_mrproper (&avl_r->avl, free_func);
+	return cherokee_avl_mrproper (&avl_r->avl, free_func);
 }
 
 
 ret_t
 cherokee_avl_r_add (cherokee_avl_r_t *avl_r, cherokee_buffer_t *key, void *value)
 {
-	   ret_t ret;
+	ret_t ret;
 
-	   CHEROKEE_RWLOCK_WRITER (AVL_R_LOCK(avl_r));
-	   ret = cherokee_avl_add (&avl_r->avl, key, value);
-	   CHEROKEE_RWLOCK_UNLOCK (AVL_R_LOCK(avl_r));
+	CHEROKEE_RWLOCK_WRITER (AVL_R_LOCK(avl_r));
+	ret = cherokee_avl_add (&avl_r->avl, key, value);
+	CHEROKEE_RWLOCK_UNLOCK (AVL_R_LOCK(avl_r));
 
-	   return ret;
+	return ret;
 }
 
 
 ret_t 
 cherokee_avl_r_del (cherokee_avl_r_t *avl_r, cherokee_buffer_t *key, void **value)
 {
-	   ret_t ret;
+	ret_t ret;
 
-	   CHEROKEE_RWLOCK_WRITER (AVL_R_LOCK(avl_r));
-	   ret = cherokee_avl_del (&avl_r->avl, key, value);
-	   CHEROKEE_RWLOCK_UNLOCK (AVL_R_LOCK(avl_r));
+	CHEROKEE_RWLOCK_WRITER (AVL_R_LOCK(avl_r));
+	ret = cherokee_avl_del (&avl_r->avl, key, value);
+	CHEROKEE_RWLOCK_UNLOCK (AVL_R_LOCK(avl_r));
 
-	   return ret;
+	return ret;
 }
 
 
 ret_t 
 cherokee_avl_r_get (cherokee_avl_r_t *avl_r, cherokee_buffer_t *key, void **value)
 {
-	   ret_t ret;
+	ret_t ret;
 
-	   CHEROKEE_RWLOCK_READER (AVL_R_LOCK(avl_r));
-	   ret = cherokee_avl_get (&avl_r->avl, key, value);
-	   CHEROKEE_RWLOCK_UNLOCK (AVL_R_LOCK(avl_r));
+	CHEROKEE_RWLOCK_READER (AVL_R_LOCK(avl_r));
+	ret = cherokee_avl_get (&avl_r->avl, key, value);
+	CHEROKEE_RWLOCK_UNLOCK (AVL_R_LOCK(avl_r));
 
-	   return ret;
+	return ret;
 }

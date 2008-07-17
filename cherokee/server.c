@@ -325,6 +325,7 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_socket_close (&srv->socket);
 	cherokee_socket_mrproper (&srv->socket);
 
+	cherokee_connector_mrproper (&srv->client_connector);
 
 #ifdef HAVE_TLS
 	cherokee_socket_close (&srv->socket);
@@ -344,7 +345,7 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_iocache_free_default (srv->iocache);
 
 	cherokee_nonce_table_free (srv->nonces);
-	
+
 	/* Virtual servers
 	 */
 	free_virtual_servers (srv);
@@ -1130,6 +1131,12 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	if (unlikely(ret < ret_ok))
 		return ret;
 
+	/* Initialize the client connector
+	 */
+	cherokee_connector_init (&srv->client_connector,
+				 (srv->thread_num > 2)? srv->thread_num-1 : 1);
+	cherokee_connector_set_default (&srv->client_connector);
+
 	/* Print the server banner
 	 */
 	return print_banner (srv);
@@ -1756,6 +1763,7 @@ cherokee_server_daemonize (cherokee_server_t *srv)
         }
 #endif
 
+	UNUSED(srv);
 	return ret_ok;
 }
 

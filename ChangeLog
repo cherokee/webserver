@@ -1,3 +1,13 @@
+2008-07-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/Makefile.am, cherokee/connector.c,
+	cherokee/connector.h, cherokee/avl_r.c, cherokee/source.c,
+	cherokee/downloader.c, cherokee/server-protected.h,
+	cherokee/server.c: Added a new cherokee_connector_t class. It
+	takes care of the number of concurrent connect() calls. It may
+	happen that all the threads try to connect() to unresponsive
+	resources, so the server would block.
+
 2008-07-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/Makefile.am, cherokee/init.c,
