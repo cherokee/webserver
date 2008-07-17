@@ -380,7 +380,13 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 		/* Connect	
 		 */
 		ret = connect_to_server (hdl);
-		if (unlikely (ret != ret_ok)) {
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_deny:
+			conn->error_code = http_gateway_timeout;
+			return ret_error;
+		default:
 			conn->error_code = http_service_unavailable;
 			return ret_error;
 		}
