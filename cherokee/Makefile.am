@@ -946,7 +946,9 @@ config_node.c \
 config_reader.h \
 config_reader.c \
 bogotime.h \
-bogotime.c
+bogotime.c \
+connector.h \
+connector.c
 
 libcherokee_client_la_SOURCES = \
 url.h \
@@ -1072,9 +1074,7 @@ source.c \
 source_interpreter.h \
 source_interpreter.c \
 info.h \
-info.c \
-connector.h \
-connector.c
+info.c
 
 libcherokee_config_la_SOURCES = \
 $(config_common) \
