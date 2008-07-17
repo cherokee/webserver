@@ -133,7 +133,6 @@ struct cherokee_server {
 	unsigned short             port;
 	unsigned short             port_tls;
 	cherokee_boolean_t         tls_enabled;
-	cherokee_buffer_t          unix_socket;
 
 	/* Server name
 	 */

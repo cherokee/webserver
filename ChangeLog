@@ -1,5 +1,9 @@
 2008-07-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server-protected.h, cherokee/server.c: Removes some
+	useless code. A web server listening to a Unix socket looks (now)
+	like a dumb idea to me. (Looked like a good idea at that moment).
+
 	* cherokee/Makefile.am, cherokee/connector.c,
 	cherokee/connector.h, cherokee/avl_r.c, cherokee/source.c,
 	cherokee/downloader.c, cherokee/server-protected.h,
