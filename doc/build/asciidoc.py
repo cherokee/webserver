@@ -1757,9 +1757,11 @@ class Section:
                     and prev_sectname in ('sect-preface','sect-appendix'):
                 pass
             else:
-                warning('section title out of sequence: '
-                    'expected level %d, got level %d'
-                    % (document.level+1, Title.level))
+                # We do know about this warning..
+                ## warning('section title out of sequence: '
+                ##    'expected level %d, got level %d'
+                ##    % (document.level+1, Title.level))
+                None
         if not document.attributes.get('sectids') is None \
                 and 'id' not in AttributeList.attrs:
             # Generate ids for sections.
