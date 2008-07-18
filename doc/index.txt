@@ -71,7 +71,7 @@ Other advanced topics
 
     - link:debug.html[Debugging] Cherokee
     - How to link:cross_compile_cherokee.html[cross compile Cherokee] (Win32 from Linux or OS X)
-    - How to link:How_to_generate_SSL_keys.html[generate SSL keys]
+    - How to link:generating_ssl_keys.html[generate SSL keys]
 
 Internal configuration system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
