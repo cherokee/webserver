@@ -1,5 +1,8 @@
 2008-07-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py (mainloop_iterator): Only the main thread should
+	print the exiting message.
+
 	* cherokee/version.c (cherokee_version_add_w_port): These strings
 	were being generated with the "Port XX" before the server version
 	number (which is obviously an error).

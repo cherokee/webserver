@@ -375,7 +375,7 @@ def mainloop_iterator(objs, main_thread=True):
                 print MESSAGE_SUCCESS
                 obj.Clean()
 
-            if tpause > 0.0:
+            if main_thread and tpause > 0.0:
                 if not quiet:
                     print "Sleeping %2.2f seconds..\r" % (tpause),
                     sys.stdout.flush()
