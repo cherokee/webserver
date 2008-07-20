@@ -125,13 +125,15 @@ cherokee_thread_wait_end (cherokee_thread_t *thd)
 
 
 ret_t 
-cherokee_thread_new  (
-	cherokee_thread_t **thd, void *server, cherokee_thread_type_t type, 
-	cherokee_poll_type_t fdpoll_type, int system_fd_num, int fd_num,
-	int conns_max)
+cherokee_thread_new  (cherokee_thread_t      **thd, 
+		      void                   *server,
+		      cherokee_thread_type_t  type, 
+		      cherokee_poll_type_t    fdpoll_type,
+		      int                     system_fd_num,
+		      int                     fd_num,
+		      int                     conns_max)
 {
 	ret_t              ret;
-	int                conns_accept;
 	cherokee_server_t *srv = SRV(server);
 	CHEROKEE_CNEW_STRUCT (1, n, thread);
 
@@ -141,7 +143,25 @@ cherokee_thread_new  (
 	INIT_LIST_HEAD (LIST(&n->active_list));
 	INIT_LIST_HEAD (LIST(&n->reuse_list));
 	INIT_LIST_HEAD (LIST(&n->polling_list));
-	
+
+	n->exit               = false;
+	n->server             = server;
+	n->thread_type        = type;
+
+	n->conns_num          = 0;
+	n->conns_max          = conns_max;
+
+	n->active_list_num    = 0;
+	n->polling_list_num   = 0;
+	n->reuse_list_num     = 0;
+	n->pending_conns_num  = 0;
+	n->is_accepting_conns = false;
+
+	n->fastcgi_servers    = NULL;
+	n->fastcgi_free_func  = NULL;
+
+	/* Event poll object
+	 */
 	if (fdpoll_type == cherokee_poll_UNSET)
 		ret = cherokee_fdpoll_best_new (&n->fdpoll, system_fd_num, fd_num);
 	else
@@ -152,58 +172,18 @@ cherokee_thread_new  (
 		return ret;
 	}
 
-	n->exit              = false;
-	n->is_accepting_conns= false;
-
-	if (fd_num < conns_max ||
-	    conns_max < 4) {
+	/* Sanity check */
+	if (fd_num < conns_max) {
 		cherokee_fdpoll_free (n->fdpoll);
 		CHEROKEE_FREE(n);
 		return ret_error;
 	}
 
-	/* Set upper accept limit to 95% - 99% of conns_max.
-	 * TODO: change the following hardcoded limits into a formula.
+	/* Number of connections that the thread can accept.
 	 */
-	if (conns_max > 40) {
-		conns_accept = conns_max - (conns_max / 20);
-
-		if (srv->thread_num > 16) {
-			if (conns_accept < (conns_max - 4))
-				conns_accept = (conns_max - 4);
-		} else
-		if (srv->thread_num > 4) {
-			if (conns_accept < (conns_max - 8))
-				conns_accept = (conns_max - 8);
-		} else
-		if (srv->thread_num > 1) {
-			if (conns_accept < (conns_max - 10))
-				conns_accept = (conns_max - 10);
-		} else {
-			if (conns_accept < (conns_max - 50))
-				conns_accept = (conns_max - 50);
-		}
-		if (conns_accept == conns_max)
-			conns_accept -= 2;
-	} else {
-		conns_accept    = conns_max - 2;
-	}
-
-	n->conns_num         = 0;
-	n->conns_max         = conns_max;
-	n->conns_accept      = conns_accept;
-
-	n->active_list_num   = 0;
-	n->polling_list_num  = 0;
-	n->reuse_list_num    = 0;
-
-	n->pending_conns_num = 0;
-
-	n->server            = server;
-	n->thread_type       = type;
-
-	n->fastcgi_servers   = NULL;
-	n->fastcgi_free_func = NULL;
+	n->conns_accept = (90 * conns_max / 100);
+	if (conns_max > n->conns_accept + 5)
+		n->conns_accept = conns_max - 5;
 
 	/* Bogo now stuff
 	 */
@@ -1510,8 +1490,7 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 		if (thd->is_accepting_conns)
 			ret = cherokee_thread_accept_off (thd);
 	}
-	else
-	if (thd->conns_num < thd->conns_accept) {
+	else if (thd->conns_num < thd->conns_accept) {
 		if (!thd->is_accepting_conns)
 			ret = cherokee_thread_accept_on (thd);
 	}
@@ -1844,8 +1823,7 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 		if (thd->is_accepting_conns)
 			thd->is_accepting_conns = false;
 	}
-	else
-	if (thd->conns_num < thd->conns_accept) {
+	else if (thd->conns_num < thd->conns_accept) {
 		if (!thd->is_accepting_conns)
 			thd->is_accepting_conns = true;
 	}
