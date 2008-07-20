@@ -362,6 +362,7 @@ def mainloop_iterator(objs, main_thread=True):
             except Exception, e:
                 if not its_clean:
                     print e
+                    print obj
                     clean_up()
                 sys.exit(1)
 

@@ -80,16 +80,17 @@ class TestBase:
         else:
             s.send (request)
         
-        while 1:
-            if self.ssl:
-                try:
+        while True:
+            try:
+                if self.ssl:
                     d = self.ssl.read(8192)
-                except:
-                    d = ''
-            else:
-                d = s.recv(8192)
+                else:
+                    d = s.recv(8192)
+            except:
+                d = ''
 
-            if len(d) == 0: break
+            if not len(d):
+                break
             self.reply += d
 
         s.close()
@@ -200,7 +201,6 @@ class TestBase:
         return self._check_result()
 
     def __str__ (self):
-
         src = "\tName     = %s\n" % (self.name)
 
         if self.version == 9:
@@ -279,7 +279,7 @@ class TestBase:
             os.removedirs (fullpath)
             
     def WriteTemp (self, content):
-        while 1:
+        while True:
             name = self.tmp + "/%s" % (letters_random(40))
             if not os.path.exists(name): break
 
