@@ -1,3 +1,8 @@
+2008-07-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/run-tests.py (mainloop_iterator): Fixes a really nasty bug
+	that was making the QA sets to report weird errors.
+
 2008-07-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/run-tests.py (mainloop_iterator): Only the main thread should

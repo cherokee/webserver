@@ -362,14 +362,14 @@ def mainloop_iterator(objs, main_thread=True):
             except Exception, e:
                 if not its_clean:
                     print e
-                    print obj
+                    print_sec(obj)
                     clean_up()
                 sys.exit(1)
 
             if ret is not 0:
                 if not its_clean:
                     print MESSAGE_FAILED
-                    print obj
+                    print_sec (obj)
                     clean_up()
                 sys.exit(1)
             elif not quiet:
@@ -395,7 +395,7 @@ for n in range(thds-1):
     t = (n * 1.0 / (thds-1))
     time.sleep(t)
 
-    thread.start_new_thread (mainloop_iterator, (objs[:], False))
+    thread.start_new_thread (mainloop_iterator, (copy.deepcopy(objs), False))
 
 # Execute the tests
 mainloop_iterator(objs)

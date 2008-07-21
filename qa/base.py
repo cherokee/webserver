@@ -17,6 +17,8 @@ import tempfile
 from conf import *
 from util import *
 
+DEFAULT_READ = 8192
+
 def importfile(path):
     filename = os.path.basename(path)
     name, ext = os.path.splitext(filename)
@@ -40,10 +42,24 @@ class TestBase:
         self._initialize()
         
     def _initialize (self):
-        self.ssl               = None
-        self.reply             = ""      # "200 OK"..
-        self.version           = None    # HTTP/x.y: 9, 0 or 1
-        self.reply_err         = None    # 200
+        self.ssl                     = None
+        self.reply                   = ""      # "200 OK"..
+        self.version                 = None    # HTTP/x.y: 9, 0 or 1
+        self.reply_err               = None    # 200
+
+    def _safe_read (self, s):
+         while True: 
+            try:
+                if self.ssl:
+                    return self.ssl.read (DEFAULT_READ)
+                else:
+                    return s.recv (DEFAULT_READ)
+            except socket.error, (err, strerr):
+                if err == errno.EAGAIN or \
+                   err == errno.EWOULDBLOCK or \
+                   err == errno.EINPROGRESS:
+                    continue
+            raise
 
     def _do_request (self, port, ssl):
         for res in socket.getaddrinfo(HOST, port, socket.AF_UNSPEC, socket.SOCK_STREAM):
@@ -82,11 +98,8 @@ class TestBase:
         
         while True:
             try:
-                if self.ssl:
-                    d = self.ssl.read(8192)
-                else:
-                    d = s.recv(8192)
-            except:
+                d = self._safe_read (s)
+            except Exception, e:
                 d = ''
 
             if not len(d):
@@ -96,12 +109,11 @@ class TestBase:
         s.close()
 
     def _parse_output (self):
-        if (len(self.reply) == 0):
+        if not len(self.reply):
             raise Exception("Empty header")
-            
-        lines = string.split(self.reply, "\n")
-        reply = lines[0]        
 
+        # Protocol version
+        reply = self.reply.split('\r', 1)[0]
         if reply[:8] == "HTTP/0.9":
             self.version = 9
         elif reply[:8] == "HTTP/1.0":
@@ -111,14 +123,12 @@ class TestBase:
         else:
             raise Exception("Invalid header, len=%d: '%s'" % (len(reply), reply))
 
+        # Error code
         reply = reply[9:]
-
         try:
             self.reply_err = int (reply[:3])
         except:
             raise Exception("Invalid header, version=%d len=%d: '%s'" % (self.version, len(reply), reply))
-
-        return 0
 
     def _check_result_expected_item (self, item):
         if item.startswith("file:"):

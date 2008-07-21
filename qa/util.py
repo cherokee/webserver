@@ -1,4 +1,5 @@
-import os, sys, time, random
+import os, sys, time, random, fcntl
+
 from conf import *
 
 term = os.getenv("TERM")
@@ -219,3 +220,7 @@ def cherokee_has_plugin (module):
 
     return cherokee_build_info_has ("Built-in", module)
 
+def print_sec (content):
+    fcntl.flock (sys.stdout, fcntl.LOCK_EX)
+    print content
+    fcntl.flock (sys.stdout, fcntl.LOCK_UN)
