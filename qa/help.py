@@ -11,6 +11,7 @@ Usage: %s [parameters] [tests]
   -x            Run under Strace
   -b            Run server as nobody
   -l            Run server with a log file
+  -a            Randomize tests
 
   -n<NUM>       Repetitions
   -p<NUM>       Server port
