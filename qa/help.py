@@ -22,7 +22,7 @@ Usage: %s [parameters] [tests]
   -d<NUM>       Number of pauses
   -e<PATH>      Path to the binary of the server
   -m<STRING>    HTTP method name for the requests
-  -v<STRING>    Run under Valdrind, string=['', 'hel', 'cac', 'cal']
+  -v<STRING>    Run under Valgrind, string=['', 'hel', 'cac', 'cal']
 
 Report bugs to alvaro@gnu.org
 """

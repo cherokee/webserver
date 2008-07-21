@@ -11,8 +11,8 @@ def is_tcp_port (value):
         tmp = int(value)
     except:
         raise ValueError, 'Port must be a number'
-    if tmp < 0 or tmp > 0xFFFF - 1:
-        raise ValueError, 'Out of the range (1 to 65534)'
+    if tmp < 0 or tmp > 0xFFFF:
+        raise ValueError, 'Out of the range (1 to 65535)'
     return value
 
 def is_path (value):
