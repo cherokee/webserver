@@ -251,7 +251,12 @@ if port is None:
             os.execl (STRACE_PATH, "strace", server, "-C", cfg_file)            
         else:
             name = server[server.rfind('/') + 1:]
-            os.execl (server, name, "-C", cfg_file)
+
+            env = os.environ
+            if not env.has_key('CHEROKEE_PANIC_OUTPUT'):
+                env['CHEROKEE_PANIC_OUTPUT'] = 'stdout'
+
+            os.execle (server, name, "-C", cfg_file, env)
     else:
         print "Server"
         print_key ('PID', str(pid));
@@ -392,9 +397,7 @@ if pause == 1:
 
 # Maybe launch some threads
 for n in range(thds-1):
-    t = (n * 1.0 / (thds-1))
-    time.sleep(t)
-
+    time.sleep (random.randint(0,50) / 100.0)
     thread.start_new_thread (mainloop_iterator, (copy.deepcopy(objs), False))
 
 # Execute the tests
