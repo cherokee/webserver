@@ -1,5 +1,17 @@
 2008-07-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/iocache.c, cherokee/iocache.h
+	cherokee/connection-protected.h, cherokee/handler_cgi_base.c,
+	cherokee/handler_common.c, cherokee/thread.c, cherokee/thread.h,
+	cherokee/handler_file.c, cherokee/server-protected.h,
+	cherokee/connection.c, cherokee/server.c: The I/O cache has been
+	reimplemented. Now it uses the new cherokee_cache_t class. It
+	should be faster than its predecessor.
+
+	* cherokee/cache.c, cherokee/cache.h, cherokee/Makefile.am,
+	cherokee/cherokee.h: Added new cherokee_cache_t class. It
+	implements a generic cache policy class.
+
 	* qa/run-tests.py (mainloop_iterator): Fixes a really nasty bug
 	that was making the QA sets to report weird errors.
 

@@ -948,7 +948,9 @@ config_reader.c \
 bogotime.h \
 bogotime.c \
 connector.h \
-connector.c
+connector.c \
+cache.h \
+cache.c
 
 libcherokee_client_la_SOURCES = \
 url.h \

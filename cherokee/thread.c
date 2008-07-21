@@ -314,19 +314,19 @@ static void
 purge_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
 	/* Try last read, if previous read/write returned eof, then no
-	 *  problem, otherwise it may avoid a nasty connection reset.
+	 * problem, otherwise it may avoid a nasty connection reset.
 	 */
 	if (conn->phase == phase_lingering) {
 		cherokee_connection_linger_read (conn);
 	}
 
-	/* Maybe have a delayed log
+	/* It maybe have a delayed log
 	 */
 	cherokee_connection_log_delayed (conn);
 
-	/* close & clean the socket and clean up the connection object
+	/* Close & clean the socket and clean up the connection object
 	 */
-	cherokee_connection_mrproper (conn);
+	cherokee_connection_clean_close (conn);
 
 	if (thread->conns_num > 0)
 		thread->conns_num--;
@@ -1142,7 +1142,6 @@ process_active_connections (cherokee_thread_t *thd)
 				default:	
 					conns_freed++;
 					purge_closed_connection (thd, conn);
-					/* purge_maybe_lingering (thd, conn); */
 					continue;
 				}
 				break;
@@ -1160,7 +1159,6 @@ process_active_connections (cherokee_thread_t *thd)
 				default:
 					conns_freed++;
 					purge_closed_connection (thd, conn);
-					/* purge_maybe_lingering (thd, conn); */
 					continue;
 				}
 				break;
@@ -1203,7 +1201,6 @@ process_active_connections (cherokee_thread_t *thd)
 			/* fall down */
 		
 		case phase_lingering: 
-
 			ret = cherokee_connection_linger_read (conn);
 			switch (ret) {
 			case ret_ok:

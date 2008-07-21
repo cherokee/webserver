@@ -206,13 +206,12 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 ret_t
 cherokee_connection_clean (cherokee_connection_t *conn)
 {	   
-	uint32_t           header_len;
-	size_t             crlf_len;
-	cherokee_server_t *srv = CONN_SRV(conn);
+	uint32_t header_len;
+	size_t   crlf_len;
 
 	if (conn->io_entry_ref != NULL) {
-		cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
-		conn->io_entry_ref = NULL;	
+		cherokee_iocache_entry_unref (&conn->io_entry_ref);
+		conn->io_entry_ref = NULL;
 	}
 
 	conn->timeout              = -1;
@@ -312,28 +311,21 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 
 
 ret_t 
-cherokee_connection_mrproper (cherokee_connection_t *conn)
+cherokee_connection_clean_close (cherokee_connection_t *conn)
 {
-	/* Close and clean socket, objects, etc.
-	 * IGNORING ERRORS in order to not leave things
-	 * in an uncleaned / undetermined state.
-	 */
-	conn->keepalive = 0;
-
 	/* Close and clean the socket
 	 */
 	cherokee_socket_close (&conn->socket);
 	cherokee_socket_clean (&conn->socket);
 
+	/* Make sure the connection Keep-Alive is disabled
+	 */
+	conn->keepalive = 0;
+	cherokee_buffer_clean (&conn->incoming_header);
+
 	/* Clean the connection object
 	 */
 	cherokee_connection_clean (conn);
-
-	/* It is not a keep-alive connection, so we shouldn't
-	 * keep any previous header
-	 */
-	cherokee_buffer_clean (&conn->incoming_header);
-
 	return ret_ok;
 }
 
@@ -385,7 +377,7 @@ out:
 	/* Nothing should be mmaped any longer
 	 */
 	if (conn->io_entry_ref != NULL) {
-		cherokee_iocache_mmap_release (srv->iocache, conn->io_entry_ref);
+		cherokee_iocache_entry_unref (&conn->io_entry_ref);
 	}
 
 	conn->io_entry_ref = NULL;
@@ -844,14 +836,13 @@ cherokee_connection_shutdown_wr (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_linger_read (cherokee_connection_t *conn)
 {
-	ret_t  ret;
-	int    retries = 2;
-	cherokee_thread_t *thread = CONN_THREAD(conn);
-	cherokee_buffer_t *tmp1   = THREAD_TMP_BUF1(thread);
+	ret_t              ret;
+	size_t             cnt_read = 0;
+	int                retries  = 2;
+	cherokee_thread_t *thread   = CONN_THREAD(conn);
+	cherokee_buffer_t *tmp1     = THREAD_TMP_BUF1(thread);
 
 	while (true) {
-		size_t cnt_read = 0;
-
 		/* Read from the socket to nowhere
 		 */
 		ret = cherokee_socket_read (&conn->socket, tmp1->buf, tmp1->size, &cnt_read);
@@ -867,7 +858,8 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 			return ret;
 		case ret_ok:
 			TRACE(ENTRIES, "read %u, ok\n", cnt_read);
-			if (cnt_read == tmp1->size && --retries > 0)
+			retries--;
+			if (cnt_read == tmp1->size && retries > 0)
 				continue;
 			return ret;
 		default:

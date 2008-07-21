@@ -89,9 +89,6 @@ struct cherokee_server {
 	cherokee_regex_table_t    *regexs;
 	cherokee_nonce_table_t    *nonces;
 
-	cherokee_iocache_t        *iocache;
-	time_t                     iocache_clean_next;
-
 	/* Logging
 	 */
 	int                        log_flush_elapse;
@@ -157,6 +154,7 @@ struct cherokee_server {
 	 */
 	cherokee_mime_t           *mime;
 	cherokee_icons_t          *icons;
+	cherokee_iocache_t        *iocache;
 
 	/* Time related
 	 */

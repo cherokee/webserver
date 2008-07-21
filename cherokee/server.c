@@ -183,9 +183,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* IO Cache cache
 	 */
-	cherokee_iocache_new_default (&n->iocache, n);
+	cherokee_iocache_get_default (&n->iocache);
 	return_if_fail (n->iocache != NULL, ret_nomem);	
-	n->iocache_clean_next = 0;
 
 	/* Regexs
 	 */
@@ -338,7 +337,7 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_mime_free (srv->mime);
 	cherokee_icons_free (srv->icons);
 	cherokee_regex_table_free (srv->regexs);
-	cherokee_iocache_free_default (srv->iocache);
+	cherokee_iocache_free_default ();
 
 	cherokee_nonce_table_free (srv->nonces);
 
@@ -1263,13 +1262,6 @@ cherokee_server_step (cherokee_server_t *srv)
 	if (srv->log_flush_next < cherokee_bogonow_now) {
 		flush_logs (srv);
 		srv->log_flush_next = cherokee_bogonow_now + srv->log_flush_elapse;
-	}
-
-	/* Clean IO cache
-	 */
-	if (srv->iocache_clean_next < cherokee_bogonow_now) {
-		cherokee_iocache_clean_up (srv->iocache);	
-		srv->iocache_clean_next = cherokee_bogonow_now + IOCACHE_DEFAULT_CLEAN_ELAPSE;
 	}
 
 #ifdef _WIN32

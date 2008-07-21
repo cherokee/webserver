@@ -721,10 +721,17 @@ xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buff
 
 	/* Get the file information
 	 */
-	ret = cherokee_iocache_get_or_create_w_stat (srv->iocache, 
-						     &cgi->xsendfile, 
-						     &cached);
-	TRACE (ENTRIES, "iocache: %s, ret=%d\n", cgi->xsendfile.buf, ret);
+	if (srv->iocache) {
+		ret = cherokee_iocache_autoget (srv->iocache, 
+						&cgi->xsendfile,
+						iocache_stat,
+						&cached);
+		TRACE (ENTRIES, "iocache: %s, ret=%d\n", 
+		       cgi->xsendfile.buf, ret);
+	} else {
+		ret = ret_no_sys;
+	}
+
 	switch (ret) {
 	case ret_ok:
 		break;
@@ -750,8 +757,7 @@ xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buff
 	}
 	cherokee_buffer_add_str (buffer, CRLF);
 
-	cherokee_iocache_mmap_release (srv->iocache, cached);
-
+	cherokee_iocache_entry_unref (&cached);
 	return ret_ok;
 }
 

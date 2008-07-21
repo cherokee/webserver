@@ -27,34 +27,62 @@
 
 #include <cherokee/common.h>
 #include <cherokee/server.h>
+#include <cherokee/cache.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
-typedef struct cherokee_iocache cherokee_iocache_t;
+typedef struct {
+	cherokee_cache_t       cache;
+} cherokee_iocache_t;
 
 typedef struct {
-	struct stat       state;
-	void             *mmaped;
-	size_t            mmaped_len;
+	/* Inherirance */
+	cherokee_cache_entry_t base;
 
-	int cleaned;
+	/* Information to cache */
+	struct stat            state;
+	void                  *mmaped;
+	size_t                 mmaped_len;
 } cherokee_iocache_entry_t;
+
+typedef enum {
+	iocache_nothing = 0,
+	iocache_stat    = 1,
+	iocache_mmap    = 1 << 1
+} cherokee_iocache_info_t;
 
 #define IOCACHE(x)       ((cherokee_iocache_t *)(x))
 #define IOCACHE_ENTRY(x) ((cherokee_iocache_entry_t *)(x))
 
-ret_t cherokee_iocache_new_default   (cherokee_iocache_t **iocache, cherokee_server_t *srv);
+/* I/O cache
+ */
+ret_t cherokee_iocache_init          (cherokee_iocache_t  *iocache);
 ret_t cherokee_iocache_get_default   (cherokee_iocache_t **iocache);
-ret_t cherokee_iocache_free_default  (cherokee_iocache_t  *iocache);
+ret_t cherokee_iocache_mrproper      (cherokee_iocache_t  *iocache);
+ret_t cherokee_iocache_free_default  (void);
 
-ret_t cherokee_iocache_clean         (cherokee_iocache_t *iocache);
-ret_t cherokee_iocache_clean_up      (cherokee_iocache_t *iocache);
+/* I/O cache entry
+ */
+ret_t cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
+					cherokee_iocache_info_t    info,
+					int                       *fd);
+ret_t cherokee_iocache_entry_update    (cherokee_iocache_entry_t  *entry,
+				        cherokee_iocache_info_t    info);
 
-ret_t cherokee_iocache_mmap_release  (cherokee_iocache_t *iocache, cherokee_iocache_entry_t *file);
+ret_t cherokee_iocache_entry_unref     (cherokee_iocache_entry_t **entry);
 
-ret_t cherokee_iocache_get_or_create_w_mmap (cherokee_iocache_t *iocache, cherokee_buffer_t *filename, cherokee_iocache_entry_t **ret_file, int *fd);
-ret_t cherokee_iocache_get_or_create_w_stat (cherokee_iocache_t *iocache, cherokee_buffer_t *filename, cherokee_iocache_entry_t **ret_file);
+/* Autoget: Get or Update */
+ret_t cherokee_iocache_autoget       (cherokee_iocache_t        *iocache,
+				      cherokee_buffer_t         *file,
+				      cherokee_iocache_info_t    info,
+				      cherokee_iocache_entry_t **ret_io);
+
+ret_t cherokee_iocache_autoget_fd    (cherokee_iocache_t        *iocache,
+				      cherokee_buffer_t         *file,
+				      cherokee_iocache_info_t    info,
+				      int                       *fd, 
+				      cherokee_iocache_entry_t **ret_io);
 
 #endif /* CHEROKEE_IOCACHE_H */
