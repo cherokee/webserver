@@ -69,6 +69,7 @@ typedef struct {
 #define PUBL(o) ((cherokee_iocache_entry_t *)(o))
 #define PRIV(o) ((cherokee_iocache_entry_extension_t *)(o))
 
+
 /* Global I/O cache object
  */
 
@@ -370,15 +371,29 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 	}
 
 	if (info & iocache_mmap) {
+		/* Ensure that it can be mapped
+		 */
 		if (unlikely (! fd)) {
 			SHOULDNT_HAPPEN;
 			return ret_error;
 		}
 
+		/* Update mmap
+		 */
 		ret = ioentry_update_stat (entry);
 		if (ret != ret_ok)
 			return ret;
 
+		/* Check the size before mapping it
+		 */
+		if ((entry->state.st_size < IOCACHE_MIN_FILE_SIZE) ||
+		    (entry->state.st_size > IOCACHE_MAX_FILE_SIZE))
+		{
+			return ret_no_sys;
+		}
+
+		/* Go ahead
+		 */
 		ret = ioentry_update_mmap (entry, fd);
 		if (ret != ret_ok)
 			return ret;

@@ -125,9 +125,6 @@
 # error FD_NUM_MIN_SYSTEM too low or FD_NUM_SPARE FDS too high
 #endif
 
-#define IOCACHE_MAX_FILE_SIZE            50000
-#define IOCACHE_DEFAULT_CLEAN_ELAPSE     20
-
 #define EXIT_CANT_CREATE_SERVER_SOCKET4 10
 #define EXIT_SERVER_CLEAN               30
 #define EXIT_SERVER_READ_CONFIG         31

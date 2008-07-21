@@ -395,8 +395,16 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 	/* Query the I/O cache
 	 */
 	ret = stat_local_directory (fhdl, local_file, &io_entry, &fhdl->info);
-	if (ret != ret_ok)
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_not_found:
+		conn->error_code = http_not_found;
+		ret = ret_error;
 		goto out;
+	default:
+		goto out;
+	}
 
 	/* Ensure it is a file
 	 */
@@ -449,6 +457,10 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 		case ret_no_sys:
 			use_io = false;
 			break;
+		case ret_not_found:
+			conn->error_code = http_not_found;
+			ret = ret_error;
+			goto out;
 		default:
 			goto out;
 		}

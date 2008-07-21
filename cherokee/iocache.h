@@ -33,6 +33,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#define IOCACHE_MAX_FILE_SIZE  80000
+#define IOCACHE_MIN_FILE_SIZE      1
+
 typedef struct {
 	cherokee_cache_t       cache;
 } cherokee_iocache_t;
