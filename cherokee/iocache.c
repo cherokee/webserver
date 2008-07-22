@@ -62,6 +62,7 @@
 
 typedef struct {
 	cherokee_iocache_entry_t base;
+	ret_t                    stat_status;
 	time_t                   stat_expiration;
 	time_t                   mmap_expiration;
 	CHEROKEE_MUTEX_T        (updating);
@@ -132,6 +133,7 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 	
 	/* Init its properties
 	 */
+	PRIV(n)->stat_status     = ret_ok;
 	PRIV(n)->stat_expiration = 0;
 	PRIV(n)->mmap_expiration = 0;
 	PUBL(n)->mmaped          = NULL;
@@ -224,7 +226,7 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 	if (PRIV(entry)->stat_expiration >= cherokee_bogonow_now) {
 		TRACE (ENTRIES, "Update stat: %s: updated - skipped\n", 
 		       CACHE_ENTRY(entry)->key.buf);
-		return ret_ok;
+		return PRIV(entry)->stat_status;
 	}
 
 	/* Update stat
@@ -237,23 +239,25 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 		switch (errno) {
 		case EACCES:
 			ret = ret_deny;
-			goto error;
+			break;
 		case ENOENT:
 			ret = ret_not_found;
-			goto error;
+			break;
 		default:
+			ret = ret_error;
 			break;
 		}
 
-		return ret_error;
+		goto out;
 	}
 
+	ret = ret_ok;
 	TRACE (ENTRIES, "Updated stat: %s\n", CACHE_ENTRY(entry)->key.buf);
 
+out:
 	PRIV(entry)->stat_expiration = cherokee_bogonow_now + LASTING_STAT;
-	return ret_ok;
+	PRIV(entry)->stat_status     = ret;
 
-error:
 	return ret;
 }
 
