@@ -512,7 +512,9 @@ cherokee_access_ip_match (cherokee_access_t *entry, cherokee_socket_t *sock)
 				printf ("4 list   "); print_ip(ipv4, &IP_NODE(i)->ip); printf ("\n");
 				*/
 				TRACE (ENTRIES, "IPv4 address (%x)%s matched (ip=%x)\n", 
-				       IP_NODE(i)->ip, re ? " haven't" : "", SOCKET_ADDR_IPv4(sock)->sin_addr);
+				       IP_NODE(i)->ip.ip4,
+				       re ? " haven't" : "", 
+				       SOCKET_ADDR_IPv4(sock)->sin_addr);
 				break;
 #ifdef HAVE_IPV6
 			case ipv6:

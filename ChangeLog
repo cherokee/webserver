@@ -1,3 +1,8 @@
+2008-07-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/access.c (cherokee_access_ip_match): Fixes a out of
+	memory problem (segment fault) when the tracing was activated.
+
 2008-07-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/iocache.c, cherokee/iocache.h
