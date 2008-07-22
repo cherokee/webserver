@@ -964,8 +964,7 @@ process_active_connections (cherokee_thread_t *thd)
 			/* Server's "Keep-Alive" could be turned "Off"
 			 */
 			if (conn->keepalive != 0) {
-				if ((srv->keepalive == false) ||
-				    ((srv->conns_num_bogo - conns_freed) >= srv->conns_keepalive_max))
+				if (srv->keepalive == false) 
 					conn->keepalive = 0;
 			}
 

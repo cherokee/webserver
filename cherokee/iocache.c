@@ -64,6 +64,7 @@ typedef struct {
 	cherokee_iocache_entry_t base;
 	time_t                   stat_expiration;
 	time_t                   mmap_expiration;
+	CHEROKEE_MUTEX_T        (updating);
 } cherokee_iocache_entry_extension_t;
 
 #define PUBL(o) ((cherokee_iocache_entry_t *)(o))
@@ -135,6 +136,8 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 	PRIV(n)->mmap_expiration = 0;
 	PUBL(n)->mmaped          = NULL;
 	PUBL(n)->mmaped_len      = 0;
+
+	CHEROKEE_MUTEX_INIT (&PRIV(n)->updating, NULL);
 
 	/* Return the new object
 	 */
@@ -335,7 +338,7 @@ ioentry_update_mmap (cherokee_iocache_entry_t *entry,
 	TRACE(ENTRIES, "Updated mmap: %s\n", filename->buf);
 
 	PUBL(entry)->mmaped_len      = entry->state.st_size;
-	PRIV(entry)->stat_expiration = cherokee_bogonow_now + LASTING_MMAP;
+	PRIV(entry)->mmap_expiration = cherokee_bogonow_now + LASTING_MMAP;
 
 	return ret_ok;
 error:
@@ -362,12 +365,14 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 		return ret_ok_and_sent;
 	}
 
+	CHEROKEE_MUTEX_LOCK (&PRIV(entry)->updating);
+
 	/* Check the required info
 	 */
 	if (info & iocache_stat) {
 		ret = ioentry_update_stat (entry);
 		if (ret != ret_ok)
-			return ret;
+			goto out;
 	}
 
 	if (info & iocache_mmap) {
@@ -375,31 +380,37 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 		 */
 		if (unlikely (! fd)) {
 			SHOULDNT_HAPPEN;
-			return ret_error;
+			ret = ret_error;
+			goto out;
 		}
 
 		/* Update mmap
 		 */
 		ret = ioentry_update_stat (entry);
 		if (ret != ret_ok)
-			return ret;
+			goto out;
 
 		/* Check the size before mapping it
 		 */
 		if ((entry->state.st_size < IOCACHE_MIN_FILE_SIZE) ||
 		    (entry->state.st_size > IOCACHE_MAX_FILE_SIZE))
 		{
-			return ret_no_sys;
+			ret = ret_no_sys;
+			goto out;
 		}
 
 		/* Go ahead
 		 */
 		ret = ioentry_update_mmap (entry, fd);
 		if (ret != ret_ok)
-			return ret;
+			goto out;
 	}
 
-	return ret_ok;
+	ret = ret_ok;
+out:
+
+	CHEROKEE_MUTEX_UNLOCK (&PRIV(entry)->updating);
+	return ret;
 }
 
 
