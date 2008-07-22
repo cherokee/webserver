@@ -337,6 +337,7 @@ stat_local_directory (cherokee_handler_file_t   *fhdl,
 
 		switch (ret) {
 		case ret_ok:
+		case ret_deny:
 			*info = &(*io_entry)->state;
 			return ret_ok;
 
@@ -345,9 +346,6 @@ stat_local_directory (cherokee_handler_file_t   *fhdl,
 
 		case ret_not_found:
 			conn->error_code = http_not_found;
-			break;
-		case ret_deny:
-			conn->error_code = http_access_denied;
 			break;
 		default:
 			conn->error_code = http_internal_error;
@@ -453,6 +451,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 
 		switch (ret) {
 		case ret_ok:
+		case ret_deny:
 			break;
 		case ret_no_sys:
 			use_io = false;

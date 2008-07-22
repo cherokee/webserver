@@ -734,6 +734,7 @@ xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buff
 
 	switch (ret) {
 	case ret_ok:
+	case ret_deny:
 		break;
 	case ret_no_sys:
 		/* Stat() it if the cache was full
