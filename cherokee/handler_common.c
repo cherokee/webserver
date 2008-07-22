@@ -124,15 +124,16 @@ stat_file (cherokee_boolean_t         useit,
 
 		switch (ret) {
 		case ret_ok:
-		case ret_deny:
+		case ret_ok_and_sent:
 			*info = &(*io_entry)->state;
 			return ret_ok;
 
 		case ret_no_sys:
 			goto without;
 
+		case ret_deny:
 		case ret_not_found:
-			return ret_not_found;
+			return ret;
 		default:
 			return ret_error;
 		}

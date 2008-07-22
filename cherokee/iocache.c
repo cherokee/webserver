@@ -359,7 +359,7 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 		      CACHE_ENTRY(entry)->key.buf,
 		      CACHE_ENTRY(entry)->ref_count);
 
-		return ret_deny;
+		return ret_ok_and_sent;
 	}
 
 	/* Check the required info
