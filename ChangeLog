@@ -1,5 +1,9 @@
 2008-07-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_cgi_base.c (xsendfile_add_headers): Fixes an
+	issue between the X-Sendfile handling code and the new I/O cache
+	implementation.
+
 	* cherokee/md5crypt.c: Fixed to be reentrant. Besides, it improves
 	its internal memory management technique (that could have leaded
 	to server to a segment fault).

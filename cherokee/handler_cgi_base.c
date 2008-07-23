@@ -718,6 +718,7 @@ xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buff
 	struct stat               l_stat;
 	cherokee_iocache_entry_t *cached = NULL;
 	cherokee_server_t        *srv    = HANDLER_SRV(cgi);
+	cherokee_connection_t    *conn   = HANDLER_CONN(cgi);
 
 	/* Get the file information
 	 */
@@ -734,18 +735,25 @@ xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buff
 
 	switch (ret) {
 	case ret_ok:
-	case ret_deny:
+	case ret_ok_and_sent:
 		break;
+	case ret_deny:
+		conn->error_code = http_access_denied;
+		ret = ret_error;
+		goto out;
 	case ret_no_sys:
 		/* Stat() it if the cache was full
 		 */
 		ret = cherokee_stat (cgi->xsendfile.buf, &l_stat);
 		if (ret != ret_ok) {
-			return ret_error;
+			ret = ret_error;
+			goto out;
 		}
 		break;
 	default:
-		return ret_error;
+		conn->error_code = http_not_found;
+		ret = ret_error;
+		goto out;
 	}
 
 	/* Add Content-Length
@@ -757,9 +765,11 @@ xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buff
 		cherokee_buffer_add_ullong10 (buffer, (cullong_t) l_stat.st_size);
 	}
 	cherokee_buffer_add_str (buffer, CRLF);
+	ret = ret_ok;
 
+out:
 	cherokee_iocache_entry_unref (&cached);
-	return ret_ok;
+	return ret;
 }
 
 
@@ -924,7 +934,6 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 		ret = xsendfile_add_headers (cgi, outbuf);
 		if (ret != ret_ok) {
 			TRACE(ENTRIES, "Couldn't access X-Sendfile: %s\n", cgi->xsendfile.buf);
-			conn->error_code = http_not_found;
 			return ret_error;
 		}
 
