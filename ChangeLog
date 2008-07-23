@@ -1,3 +1,9 @@
+2008-07-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/md5crypt.c: Fixed to be reentrant. Besides, it improves
+	its internal memory management technique (that could have leaded
+	to server to a segment fault).
+
 2008-07-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/access.c (cherokee_access_ip_match): Fixes a out of

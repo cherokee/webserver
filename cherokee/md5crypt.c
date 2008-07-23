@@ -42,34 +42,35 @@ static unsigned char itoa64[] =
 	"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 static char *
-to64(unsigned long v, int n)
+to64 (char *tmp, unsigned long v, int n)
 {
-	static char buf[5];
-	char *s = buf;
+	/* We do know 'tmp' is 5 bytes long */
+	char *s = tmp;
+	memset (tmp, 0, 5);
 
 	if (n > 4)
 		return NULL;
 
-	memset(buf, '\0', sizeof(buf));
 	while (--n >= 0) {
 		*s++ = itoa64[v&0x3f];
 		v >>= 6;
 	}
 
-	return buf;
+	return tmp;
 }
 
 
 char *
 md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CRYPT_PASSWD_LEN])
 {
-	static char salt_copy[9], *p;
-	static const char *sp, *ep;
+	char salt_copy[9], *p;
+	const char *sp, *ep;
 	unsigned char final[16];
 	int sl, pl, i, j;
 	struct MD5Context ctx, ctx1;
 	unsigned long l;
 	cuint_t magic_len;
+	char  to64_buf[5];
 
 	/* Refine the salt first.  It's possible we were given an already-hashed
 	 * string as the salt argument, so extract the actual salt value from it
@@ -167,17 +168,17 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 	p = passwd + strlen(passwd);
 
 	l = (final[ 0]<<16) | (final[ 6]<<8) | final[12];
-	cherokee_strlcat(passwd, to64(l, 4), MD5CRYPT_PASSWD_LEN);
+	cherokee_strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
 	l = (final[ 1]<<16) | (final[ 7]<<8) | final[13];
-	cherokee_strlcat(passwd, to64(l, 4), MD5CRYPT_PASSWD_LEN);
+	cherokee_strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
 	l = (final[ 2]<<16) | (final[ 8]<<8) | final[14];
-	cherokee_strlcat(passwd, to64(l, 4), MD5CRYPT_PASSWD_LEN);
+	cherokee_strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
 	l = (final[ 3]<<16) | (final[ 9]<<8) | final[15];
-	cherokee_strlcat(passwd, to64(l, 4), MD5CRYPT_PASSWD_LEN);
+	cherokee_strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
 	l = (final[ 4]<<16) | (final[10]<<8) | final[ 5];
-	cherokee_strlcat(passwd, to64(l, 4), MD5CRYPT_PASSWD_LEN);
+	cherokee_strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
 	l =                    final[11]                ;
-	cherokee_strlcat(passwd, to64(l, 2), MD5CRYPT_PASSWD_LEN);
+	cherokee_strlcat (passwd, to64(to64_buf, l, 2), MD5CRYPT_PASSWD_LEN);
 
 	/* Don't leave anything around in vm they could use. 
 	 */
@@ -185,7 +186,7 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 	memset(salt_copy, 0, sizeof(salt_copy));
 	memset(&ctx, 0, sizeof(ctx));
 	memset(&ctx1, 0, sizeof(ctx1));
-	(void)to64(0, 4);
+	(void) to64(to64_buf, 0, 4);
 
 	return passwd;
 }
