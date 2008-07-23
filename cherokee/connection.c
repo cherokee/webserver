@@ -874,6 +874,7 @@ cherokee_connection_linger_read (cherokee_connection_t *conn)
 ret_t
 cherokee_connection_step (cherokee_connection_t *conn)
 {
+	ret_t ret;
 	ret_t step_ret = ret_ok;
 
 	return_if_fail (conn->handler != NULL, ret_error);
@@ -909,28 +910,22 @@ cherokee_connection_step (cherokee_connection_t *conn)
 
 	/* Encode handler output.
 	 */
-	{
-		ret_t ret;
-
-		/* Encode
-		 */
-		switch (step_ret) {
-		case ret_eof:
-		case ret_eof_have_data:
-			ret = cherokee_encoder_flush (conn->encoder, &conn->buffer, &conn->encoder_buffer);			
-			step_ret = (conn->encoder_buffer.len == 0) ? ret_eof : ret_eof_have_data;
-			break;
-		default:
-			ret = cherokee_encoder_encode (conn->encoder, &conn->buffer, &conn->encoder_buffer);
-			break;
-		}
-		if (ret < ret_ok) return ret;
-
-		/* Swap buffers	
-		 */
-		cherokee_buffer_swap_buffers (&conn->buffer, &conn->encoder_buffer);		
-		cherokee_buffer_clean (&conn->encoder_buffer);
+	switch (step_ret) {
+	case ret_eof:
+	case ret_eof_have_data:
+		ret = cherokee_encoder_flush (conn->encoder, &conn->buffer, &conn->encoder_buffer);			
+		step_ret = (conn->encoder_buffer.len == 0) ? ret_eof : ret_eof_have_data;
+		break;
+	default:
+		ret = cherokee_encoder_encode (conn->encoder, &conn->buffer, &conn->encoder_buffer);
+		break;
 	}
+	if (ret < ret_ok) return ret;
+	
+	/* Swap buffers	
+	 */
+	cherokee_buffer_swap_buffers (&conn->buffer, &conn->encoder_buffer);		
+	cherokee_buffer_clean (&conn->encoder_buffer);
 	
 	return step_ret;
 }

@@ -441,7 +441,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 	
 
 	TRACE(ENTRIES, "Using iocache %d\n", use_io);
-	
+
 	if (use_io) {
 		ret = cherokee_iocache_autoget_fd (srv->iocache,
 						   local_file,
@@ -470,6 +470,11 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 		default:
 			goto out;
 		}
+
+		/* Ensure the mmap content is ready
+		 */
+		if (io_entry->mmaped == NULL)
+			use_io = false;
 	}
 
 	/* Maybe open the file
