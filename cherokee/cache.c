@@ -280,7 +280,7 @@ update_ghost_b1 (cherokee_cache_t       *cache,
 	if (cache->len_b1 >= cache->len_b2)
 		cache->target_t1 += 1;
 	else
-		cache->target_t1 += (cache->len_b2 / cache->len_b1);
+		cache->target_t1 += (cache->len_b2 / MAX (1, cache->len_b1));
 
 	/* Move 'entry' to the top of T2, and place it in the cache
 	 */
@@ -306,7 +306,7 @@ update_ghost_b2 (cherokee_cache_t       *cache,
 	if (cache->len_b2 >= cache->len_b1)
 		cache->target_t1 -= 1;
 	else
-		cache->target_t1 -= (cache->len_b1 / cache->len_b2);
+		cache->target_t1 -=  (cache->len_b1 / MAX(1, cache->len_b2));
 
 	/* Move 'entry' to the top of T2, and place it in the cache
 	 */

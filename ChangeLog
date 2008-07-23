@@ -1,5 +1,9 @@
 2008-07-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/cache.c (update_ghost_b1, update_ghost_b2): Takes care
+	of the case when length of the list -that we are dividing by- is
+	zero.
+
 	* cherokee/handler_cgi_base.c (xsendfile_add_headers): Fixes an
 	issue between the X-Sendfile handling code and the new I/O cache
 	implementation.
