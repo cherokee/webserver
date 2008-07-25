@@ -1,5 +1,8 @@
 2008-07-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/server.py (Handler.handle_request): Implements support for
+	redirections coming from error pages.
+
 	* cherokee/handler_redir.c, cherokee/rule_request.c,
 	cherokee/rule_request.h, cherokee/connection-protected.h,
 	cherokee/connection.c: Fixes a concurrency issue. There were a few

@@ -62,9 +62,14 @@ class Handler(pyscgi.SCGIHandler):
             page = PageError (cfg, PageError.ICONS_DIR_MISSING)
 
         if page:
-            self.send ('Status: 200 OK\r\n\r\n' +
-                       page.HandleRequest (uri, Post()))
-            return
+            body = page.HandleRequest (uri, Post())
+            if body and body[0] == '/':
+                self.send ("Status: 302 Moved Temporarily\r\n" + \
+                           "Location: %s\r\n\r\n" % (body))
+                return
+            else:
+                self.send ('Status: 200 OK\r\n\r\n' + body)
+                return
 
         # Check the URL        
         if uri.startswith('/general'):
