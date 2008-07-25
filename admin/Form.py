@@ -381,7 +381,21 @@ class FormHelper (WebComponent):
                 if not value:
                     del (self._cfg[confkey])
                 else:
-                    self._cfg[confkey] = value
+                    self._cfg[confkey] = value        
+
+    def ApplyChangesDirectly (self, post):
+        for confkey in post:
+            if not '!' in confkey:
+                continue
+
+            if confkey in self.errors:
+                continue
+
+            value = post[confkey][0]
+            if not value:
+                del (self._cfg[confkey])
+            else:
+                self._cfg[confkey] = value        
         
     def ApplyChangesPrefix (self, prefix, checkboxes, post, validation=None):
         checkboxes_pre = ["%s!%s"%(prefix, x) for x in checkboxes]

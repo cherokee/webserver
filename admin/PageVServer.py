@@ -100,7 +100,7 @@ class PageVServer (PageMenu, FormHelper):
                 rules.change_prios (changes)
                 return "ok"
 
-            self._op_apply_changes (host, uri, post)
+            self.ApplyChangesDirectly (post)
             return 'ok'
 
         # Ensure the default rules are set

@@ -1,5 +1,12 @@
 2008-07-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/Form.py (FormHelper.ApplyChangesDirectly): Adds a new
+	method for accessing the configuration directly.
+
+	* admin/PageVServer.py (PageVServer._op_handler): Fixes a
+	bug. 'Final' checkboxes were deselected when submitting any other
+	information from the Virtual Server configuration page.
+
 	* admin/server.py (Handler.handle_request): Implements support for
 	redirections coming from error pages.
 
