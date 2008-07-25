@@ -233,7 +233,24 @@ class Config:
 
     # Serialization
     def serialize (self):
-        return self.root.serialize()
+        def sorter(x,y):
+            order = ['server', 'vserver', 'icons', 'mime']
+            a = x.split('!')[0]
+            b = y.split('!')[0]
+            try:
+                ai = order.index(a)
+                bi = order.index(b)
+            except:
+                return cmp(x,y)
+            if ai > bi:
+                return  1
+            elif ai < bi:
+                return -1
+            return cmp(x,y)
+
+        tmp = self.root.serialize().split('\n')
+        tmp.sort(sorter)
+        return '\n'.join(tmp)
 
     def save (self):
         # Try to make a copy
