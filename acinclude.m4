@@ -447,3 +447,27 @@ AC_MSG_RESULT(no)
 )
 
 ])
+
+AC_DEFUN([HYDRA_TCP_NOPUSH], [
+
+AC_MSG_CHECKING([whether TCP_NOPUSH is a valid TCP socket option])
+AC_TRY_COMPILE(
+#include <sys/socket.h>
+#include <netinet/tcp.h>
+#include <netinet/in.h>
+,[
+  int one = 1, fd;
+  if (setsockopt(fd, IPPROTO_TCP, TCP_NOPUSH,
+                    (void *) &one, sizeof (one)) == -1)
+      return -1;
+  return 0;
+
+],
+dnl *** FOUND
+AC_DEFINE( HAVE_TCP_NOPUSH, 1, [TCP_NOPUSH was found and will be used])
+AC_MSG_RESULT(yes),
+dnl *** NOT FOUND
+AC_MSG_RESULT(no)
+)
+
+])

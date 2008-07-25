@@ -450,6 +450,7 @@ dnl
 dnl TCP_CORK
 dnl
 HYDRA_TCP_CORK
+HYDRA_TCP_NOPUSH
 
 dnl
 dnl Check for GNU getopt_long()

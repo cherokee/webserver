@@ -1,5 +1,9 @@
 2008-07-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/socket.c, cherokee/socket.h, cherokee/connection.c,
+	configure.in, acinclude.m4: Added support for TCP_CORK on BSD and
+	OS X systems. Actually, it's called TCP_NOPUSH on those.
+
 	* admin/config.py (Config.serialize): Sorts the configuration file
 	content (it's just eye candy for Cherokee developers).
 

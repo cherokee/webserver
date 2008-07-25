@@ -720,28 +720,12 @@ cherokee_connection_reading_check (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_set_cork (cherokee_connection_t *conn, cherokee_boolean_t enable)
 {
-#ifdef HAVE_TCP_CORK
-	int fd;
-	int on = 0;
+	cherokee_socket_set_cork (&conn->socket, enable);
 
-	fd = SOCKET_FD(&conn->socket);
-	if (enable) {
-		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,  &on, sizeof on);
-
-		on = 1;
-		setsockopt(fd, IPPROTO_TCP, TCP_CORK,  &on, sizeof on);
+	if (enable)
 		BIT_SET (conn->options, conn_op_tcp_cork);
-	} else {
-		setsockopt(fd, IPPROTO_TCP, TCP_CORK,  &on, sizeof on);
-
-		on = 1;
-		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,  &on, sizeof on);
+	else
 		BIT_UNSET (conn->options, conn_op_tcp_cork);
-	}
-#else
-	UNUSED(conn);
-	UNUSED(enable);
-#endif
 
 	return ret_ok;
 }

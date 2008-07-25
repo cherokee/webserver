@@ -203,6 +203,7 @@ ret_t cherokee_socket_ntop              (cherokee_socket_t *socket, char *buf, s
 ret_t cherokee_socket_pton              (cherokee_socket_t *socket, cherokee_buffer_t *buf);
 ret_t cherokee_socket_gethostbyname     (cherokee_socket_t *socket, cherokee_buffer_t *hostname);
 ret_t cherokee_socket_set_status        (cherokee_socket_t *socket, cherokee_socket_status_t status);
+ret_t cherokee_socket_set_cork          (cherokee_socket_t *socket, cherokee_boolean_t *enable);
 
 /* Low level functions
  */

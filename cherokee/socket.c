@@ -83,6 +83,10 @@ extern int32_t sendfile (int out_fd, int in_fd, int32_t *offset, uint32_t count)
 # include <sys/uio.h>		/* sendfile and writev() */
 #endif
 
+#if !defined(TCP_CORK) && defined(TCP_NOPUSH)
+#define TCP_CORK TCP_NOPUSH
+#endif
+
 #define ENTRIES "socket"
 
 
@@ -1885,3 +1889,28 @@ cherokee_socket_set_nodelay (cherokee_socket_t *socket)
 	return ret_ok;
 }
 
+
+ret_t
+cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t *enable)
+{
+#if defined(HAVE_TCP_CORK) || defined(HAVE_TCP_NOPUSH)
+	int on;
+	int fd = socket->socket;
+
+	if (enable) {
+		on = 0;
+		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &on, sizeof on);
+		on = 1;
+		setsockopt(fd, IPPROTO_TCP, TCP_CORK, &on, sizeof on);
+	} else {
+		on = 0;
+		setsockopt(fd, IPPROTO_TCP, TCP_CORK, &on, sizeof on);
+		on = 1;
+		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &on, sizeof on);
+	}
+#else
+	UNUSED(socket);
+	UNUSED(enable);
+#endif
+	return ret_ok;
+}
