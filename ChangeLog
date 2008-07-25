@@ -1,10 +1,15 @@
 2008-07-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/iocache.c (iocache_get): It has to return the last
+	known stat() status whenever the iocache entry object cannot be
+	updated and only the stat() information is requested. It fixes a
+	hard to reproduce bug.
+
 	* cherokee/virtual_server.c, cherokee/logger.c, cherokee/cache.c,
 	cherokee/socket.c, cherokee/socket.h, cherokee/main_guardian.c,
 	cherokee/server.c: A few compilation warning have been fixed (when
 	compiling without any SSL/TLS library)
-	
+
 	* cherokee/socket.c, cherokee/socket.h, cherokee/connection.c,
 	configure.in, acinclude.m4: Added support for TCP_CORK on BSD and
 	OS X systems. Actually, it's called TCP_NOPUSH on those.

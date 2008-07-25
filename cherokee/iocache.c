@@ -456,10 +456,16 @@ iocache_get (cherokee_iocache_t        *iocache,
 		ret = cherokee_iocache_entry_update_fd (*ret_io, info, fd);
 	else
 		ret = cherokee_iocache_entry_update (*ret_io, info);		
-	if (ret != ret_ok)
-		return ret;
 
-	return ret_ok;
+	/* The entry couldn't been updated, but we have the last stat status                                                                                                                                                                
+         */
+	if ((ret == ret_ok_and_sent) &&
+            (info == iocache_stat))
+        {
+                return PRIV(*ret_io)->stat_status;
+        }
+
+	return ret;
 }
 
 ret_t
