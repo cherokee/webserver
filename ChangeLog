@@ -5885,7 +5885,7 @@
 	* cherokee/header.h, cherokee/header.c (cherokee_header_parse):
 	Added support of If-Range and If-None-Match headers.
 
-	* cherokee/buffer.c (cherokee_buffer_drop_endding): Added a little
+	* cherokee/buffer.c (cherokee_buffer_drop_ending): Added a little
 	sanity check. It isn't possible to drop negative amounts.
 
 	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_build_basic_env):
@@ -9480,7 +9480,7 @@
 
 2004-04-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* src/buffer.c (cherokee_buffer_drop_endding): Added better error
+	* src/buffer.c (cherokee_buffer_drop_ending): Added better error
 	handling.
 
 	* cherokee.conf.sample.in: Added Digest or Basic authentication
