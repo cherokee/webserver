@@ -1,5 +1,8 @@
 2008-07-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/config.py (Config.clone): Fixes an issue while cloning
+	domains. Reported by Miguel Angel Ajo.
+
 	* admin/Form.py (FormHelper.ApplyChangesDirectly): Adds a new
 	method for accessing the configuration directly.
 

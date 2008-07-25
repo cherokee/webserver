@@ -1,3 +1,4 @@
+import copy
 import types
 
 class ConfigNode (object):
@@ -186,7 +187,8 @@ class Config:
         parent, parent_path, child_name = self._get_parent_node (path_old)
         if self.root[path_new]:
             return True
-        self.set_sub_node (path_new, self[path_old])
+        copied = copy.deepcopy (self[path_old])
+        self.set_sub_node (path_new, copied)
     
     def rename (self, path_old, path_new):
         error = self.clone (path_old, path_new)
