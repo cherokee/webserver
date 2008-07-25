@@ -114,8 +114,6 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->tx_partial           = 0;
 	n->traffic_next         = 0;
 	n->validator            = NULL;
-	n->regex_match_ovector  = NULL;
-	n->regex_match_ovecsize = NULL;
 	n->timeout              = -1;
 	n->polling_fd           = -1;
 	n->polling_multiple     = false;
@@ -141,6 +139,9 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	cherokee_socket_init (&n->socket);
 	cherokee_header_init (&n->header, header_type_request);
 	cherokee_post_init (&n->post);
+
+	memset (n->regex_ovector, OVECTOR_LEN * sizeof(int), 0);
+	n->regex_ovecsize = 0;
 
 	*conn = n;
 	return ret_ok;
@@ -232,9 +233,10 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->rx_partial           = 0;	
 	conn->tx_partial           = 0;
 	conn->traffic_next         = 0;
-	conn->regex_match_ovector  = NULL;
-	conn->regex_match_ovecsize = NULL;
 	conn->polling_multiple     = false;
+
+	memset (conn->regex_ovector, OVECTOR_LEN * sizeof(int), 0);
+	conn->regex_ovecsize = 0;
 
 	if (conn->handler != NULL) {
 		cherokee_handler_free (conn->handler);

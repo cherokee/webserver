@@ -132,19 +132,20 @@ match_and_substitute (cherokee_handler_redir_t *n)
 		/* Case 1: No conn substitution, No local regex
 		 */
 		if ((list->re == NULL) &&
-		    (conn->regex_match_ovector == NULL))
+		    (conn->regex_ovecsize == 0))
 		{
-			TRACE (ENTRIES, "Using conn->ovector, size=%d\n", rc);
+			TRACE (ENTRIES, "Using conn->ovector, size=%d\n", 
+			       conn->regex_ovecsize);
 		} 
 
 		/* Case 2: Cached conn substitution
 		 */
 		else if (list->re == NULL) {
 			memcpy (ovector,
-				conn->regex_match_ovector,
+				conn->regex_ovector,
 				OVECTOR_LEN * sizeof(cint_t));
 			
-			rc = *conn->regex_match_ovecsize;
+			rc = conn->regex_ovecsize;
 			TRACE (ENTRIES, "Using conn->ovector, size=%d\n", rc);
 		} 
 

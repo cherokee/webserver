@@ -67,7 +67,7 @@ match (cherokee_rule_request_t *rule, cherokee_connection_t *conn)
 			conn->request.buf, 
 			conn->request.len, 
 			0, 0, 
-			rule->ovector, OVECTOR_LEN);
+			conn->regex_ovector, OVECTOR_LEN);
 
 	if (re < 0) {
 		TRACE (ENTRIES, "Request \"%s\" didn't match with \"%s\"\n", 
@@ -77,16 +77,10 @@ match (cherokee_rule_request_t *rule, cherokee_connection_t *conn)
 		goto restore;
 	}	
 
-	rule->ovecsize = re;
+	conn->regex_ovecsize = re;
 
 	TRACE (ENTRIES, "Request \"%s\" matches with \"%s\", ovecsize=%d\n", 
-	       conn->request.buf, rule->pattern.buf, rule->ovecsize);
-
-	/* Store a pointer to the rule. We might want to use
-	 * rule->ovectors from handler_redir later on.
-	 */
-	conn->regex_match_ovector  = &rule->ovector[0];
-	conn->regex_match_ovecsize = &rule->ovecsize;
+	       conn->request.buf, rule->pattern.buf, conn->regex_ovecsize);
 
 	ret = ret_ok;
 

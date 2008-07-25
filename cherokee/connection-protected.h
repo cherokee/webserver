@@ -61,7 +61,7 @@
 #include "encoder_table.h"
 #include "post.h"
 #include "header-protected.h"
-
+#include "regex.h"
 
 typedef enum {
 	phase_nothing,
@@ -182,8 +182,8 @@ struct cherokee_connection {
 	off_t                         mmaped_len;
 	cherokee_iocache_entry_t     *io_entry_ref;
 
-	int                          *regex_match_ovector;
-	int                          *regex_match_ovecsize;
+	int                           regex_ovector[OVECTOR_LEN];
+	int                           regex_ovecsize;
 };
 
 #define CONN_SRV(c)    (SRV(CONN(c)->server))

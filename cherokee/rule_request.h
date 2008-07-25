@@ -38,9 +38,6 @@ CHEROKEE_BEGIN_DECLS
 
 typedef struct {
 	cherokee_rule_t   rule;
-
-	int               ovector[OVECTOR_LEN];
-	int               ovecsize;
 	void             *pcre;
 	cherokee_buffer_t pattern;
 } cherokee_rule_request_t;
