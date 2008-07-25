@@ -282,7 +282,7 @@ update_ghost_b1 (cherokee_cache_t       *cache,
 	else
 		cache->target_t1 += (cache->len_b2 / MAX (1, cache->len_b1));
 
-	/* Move 'entry' to the top of T2, and place it in the cache
+	/* Move 'entry' to the top of T2, and place it in the 2cache
 	 */
 	cache_list_swap (b1, t2, entry);
 

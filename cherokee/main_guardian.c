@@ -69,7 +69,7 @@ pid_file_clean (const char *pid_file)
 		return;
 	if (info.st_uid != getuid())
 		return;
-	if (info.st_size > sizeof("65535\r\n"))
+	if (info.st_size > (int) sizeof("65535\r\n"))
 		return;
 
 	unlink (pid_file);

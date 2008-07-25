@@ -898,6 +898,8 @@ init_vservers_tls (cherokee_server_t *srv)
 				     cherokee_buffer_is_empty(&vserver->name) ? "unknown" : vserver->name.buf);
 		}
 	}
+#else
+	UNUSED (srv);
 #endif
 
 	return ret_ok;	

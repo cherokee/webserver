@@ -122,7 +122,7 @@ cherokee_logger_init (cherokee_logger_t *logger)
 }
 
 
-inline ret_t
+ret_t
 cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
 {
 	ret_t ret = ret_error;

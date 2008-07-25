@@ -156,6 +156,8 @@ cherokee_socket_mrproper (cherokee_socket_t *socket)
 		SSL_CTX_free (socket->ssl_ctx);
 		socket->ssl_ctx = NULL;
 	}
+#else
+	UNUSED (socket);
 #endif
 
 	return ret_ok;
@@ -338,10 +340,11 @@ db_store (void *ptr, gnutls_datum key, gnutls_datum data)
 
 
 
+#ifdef HAVE_TLS
+
 static ret_t
 initialize_tls_session (cherokee_socket_t *socket, cherokee_virtual_server_t *vserver)
 {
-#ifdef HAVE_TLS
 	int re;
 
 	/* Set the virtual server object reference
@@ -426,9 +429,10 @@ initialize_tls_session (cherokee_socket_t *socket, cherokee_virtual_server_t *vs
 		PRINT_ERROR_S("ERROR: OpenSSL: Unable to set SSL session-id context\n");
 	}
 # endif
-#endif
 	return ret_ok;
 }
+
+#endif /* HAVE_TLS */
 
 
 ret_t 
@@ -483,7 +487,9 @@ cherokee_socket_init_tls (cherokee_socket_t *socket, cherokee_virtual_server_t *
 		}
 	}
 # endif
-
+#else
+	UNUSED (socket);
+	UNUSED (vserver);
 #endif	/* HAVE_TLS */
 	return ret_ok;
 }
@@ -1187,7 +1193,6 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 ret_t 
 cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, uint16_t vector_len, size_t *pcnt_written)
 {
-
 	*pcnt_written = 0;
 
 	/* There must be something to send, otherwise behaviour is undefined
@@ -1320,10 +1325,10 @@ cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, u
 
 		return ret_ok;
 	}
-#else
-	return ret_error;
 #endif
 #endif	/* HAVE_TLS */
+
+	return ret_error;
 }
 
 
@@ -1790,6 +1795,8 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket)
 	}
 
 # endif
+#else 
+	UNUSED (socket);
 #endif
 	return ret_ok;
 }
@@ -1798,6 +1805,8 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket)
 ret_t
 cherokee_socket_has_block_timeout (cherokee_socket_t *socket)
 {
+	UNUSED (socket);
+
 #if defined(SO_RCVTIMEO) && !defined(HAVE_BROKEN_SO_RCVTIMEO)
 	return ret_ok;
 #else
@@ -1891,7 +1900,7 @@ cherokee_socket_set_nodelay (cherokee_socket_t *socket)
 
 
 ret_t
-cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t *enable)
+cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 {
 #if defined(HAVE_TCP_CORK) || defined(HAVE_TCP_NOPUSH)
 	int on;
