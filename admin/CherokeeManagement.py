@@ -180,7 +180,8 @@ class CherokeeManagement:
 
 def is_PID_alive (pid):
     if sys.platform.startswith('linux') or \
-       sys.platform.startswith('sunos'):
+       sys.platform.startswith('sunos') or \
+       sys.platform.startswith('irix'):
         return os.path.exists('/proc/%s'%(pid))
 
     elif sys.platform == 'darwin' or \

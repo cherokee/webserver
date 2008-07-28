@@ -1,5 +1,8 @@
 2008-07-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/CherokeeManagement.py (is_PID_alive): Added a new case to
+	support Irix.
+
 	* configure.in, cherokee/util.c: Added a new entry to support IRIX
 	compilation. (Patch by BSDero <bsdero@gmail.com>)
 
