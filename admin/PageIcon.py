@@ -126,7 +126,7 @@ class PageIcon (PageMenu, FormHelper):
             tmp += self.Indent(table)
 
         # New suffix
-        fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False)
+        fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False, auto=False)
         op1, im1 = self._get_options_icons ('suffix_new_file', 
                                             self._filter_icons_in_suffixes)
         en2 = self.InstanceEntry('suffix_new_exts', 'text')
@@ -175,7 +175,7 @@ class PageIcon (PageMenu, FormHelper):
             tmp += self.Indent(table)
 
         # New file
-        fo1 = Form ("/%s/add_file" % (self._id), add_submit=False)
+        fo1 = Form ("/%s/add_file" % (self._id), add_submit=False, auto=False)
         op1, im1 = self._get_options_icons ('file_new_file')
         en1 = self.InstanceEntry('file_new_match', 'text')
         ta1 = Table (4,1)

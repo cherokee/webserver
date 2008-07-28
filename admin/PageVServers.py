@@ -91,7 +91,7 @@ class PageVServers (PageMenu, FormHelper):
         # Add new Virtual Server
         table = Table(3,1)
         table += ('Name', 'Document Root')
-        fo1 = Form ("/vserver", add_submit=False)
+        fo1 = Form ("/vserver", add_submit=False, auto=False)
         en1 = self.InstanceEntry ("new_vserver_name",  "text", size=20)
         en2 = self.InstanceEntry ("new_vserver_droot", "text", size=40)
         table += (en1, en2, SUBMIT_ADD)
@@ -102,7 +102,7 @@ class PageVServers (PageMenu, FormHelper):
         # Clone Virtual Server
         table = Table(3,1, header_style='width="250px"')
         table += ('Virtual Server', 'Clone as..')
-        fo1 = Form ("/vserver", add_submit=False)
+        fo1 = Form ("/vserver", add_submit=False, auto=False)
 
         clonable = []
         for v in sorted_vservers:

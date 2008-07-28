@@ -12,6 +12,20 @@ FORM_TEMPLATE = """
 </form>
 """
 
+AUTO_SUBMIT_JS = """
+<script type="text/javascript">
+$(document).ready(function(event) {
+  $("#auto").change(function(event) {
+    $("#auto input").each(function() {
+      this.form.submit()
+    });
+  });
+});
+</script>
+"""
+
+AUTOFORM_TEMPLATE = FORM_TEMPLATE.replace('<form','<form id="auto"') + AUTO_SUBMIT_JS
+
 SUBMIT_BUTTON = """
 <input type="submit" %(submit_props)s />
 """
@@ -52,11 +66,12 @@ class WebComponent:
         return self._op_handler(ruri, post)
 
 class Form:
-    def __init__ (self, action, method='post', add_submit=True):
+    def __init__ (self, action, method='post', add_submit=True, auto=True):
         self._action       = action
         self._method       = method
         self._add_submit   = add_submit
-        
+        self._auto         = auto
+
     def Render (self, content='', submit_props='' ):
         keys = {'submit':       '',
                 'submit_props': submit_props,
@@ -67,7 +82,11 @@ class Form:
         if self._add_submit:
             keys['submit'] = SUBMIT_BUTTON
 
-        render = FORM_TEMPLATE
+        if self._auto:
+            render = AUTOFORM_TEMPLATE
+        else:
+            render = FORM_TEMPLATE
+
         while '%(' in render:
             render = render % keys
         return render

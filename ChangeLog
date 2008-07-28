@@ -1,3 +1,10 @@
+2008-07-28  Taher Shihadeh <taher@unixwars.com>
+	* admin/PageEntry.py, admin/PageEncoders.py, admin/PageAdvanced.py, 
+	admin/PageVServers.py, admin/PageGeneral.py, admin/PageMime.py, 
+	admin/PageVServer.py, admin/Form.py, admin/PageFeedback.py, 
+	admin/PageIcon.py: Configuration changes are submitted automatically. 
+	Many users were lost having to submit and then apply the modifications.
+
 2008-07-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/CherokeeManagement.py (is_PID_alive): Added a new case to

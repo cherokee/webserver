@@ -219,7 +219,7 @@ class PageVServer (PageMenu, FormHelper):
 
         txt += self.InstanceTab (tabs)
 
-        form = Form (self.submit_url)
+        form = Form (self.submit_url, add_submit=False)
         return form.Render(txt)
 
     def _render_error_handler (self, host):

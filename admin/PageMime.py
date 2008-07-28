@@ -47,7 +47,7 @@ class PageMime (PageMenu, FormHelper):
         content  = self._render_mime_list()
         content += self._render_add_mime()
 
-        form = Form ('/%s' % (self._id))
+        form = Form ('/%s' % (self._id), auto=False)
         return form.Render (content, DEFAULT_SUBMIT_VALUE)
 
     def _render_mime_list (self):

@@ -83,7 +83,7 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddPropEntry    (table, 'Max keepalive reqs',     'server!keepalive_max_requests', NOTE_KEEPALIVE_RS)
         txt += self.Indent(table)
 
-        form = Form ("/%s" % (self._id))
+        form = Form ("/%s" % (self._id), add_submit=False)
         return form.Render(txt,DEFAULT_SUBMIT_VALUE)
 	
     def _op_apply_changes (self, uri, post):

@@ -11,7 +11,7 @@ from consts import *
 DEFAULT_RULE_WARNING = 'The default match ought not to be changed.'
 
 NOTE_DOCUMENT_ROOT = 'Allow to specify an alternative document root path.'
-NOTE_HANDLER       = 'How the connection will be handler.'
+NOTE_HANDLER       = 'How the connection will be handled.'
 NOTE_HTTPS_ONLY    = 'Enable to allow access to the resource only by https.'
 NOTE_ALLOW_FROM    = 'List of IPs and subnets allowed to access the resource.'
 NOTE_VALIDATOR     = 'Which, if any, will be the authentication method.'
@@ -131,7 +131,7 @@ class PageEntry (PageMenu, FormHelper):
 
         txt  = '<h1>%s</h1>' % (self._get_title (html=True))
         txt += self.InstanceTab (tabs)
-        form = Form (self.submit_url)
+        form = Form (self.submit_url, add_submit=False)
         return form.Render(txt)
 
     def _render_handler_properties (self):

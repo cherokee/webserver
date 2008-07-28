@@ -70,7 +70,7 @@ class PageGeneral (PageMenu, FormHelper):
         self.AddPropEntry (table, 'Chroot', 'server!chroot', NOTE_CHROOT)
         txt += self.Indent(table)
 
-        form = Form ("/%s" % (self._id))
+        form = Form ("/%s" % (self._id), add_submit=False)
         return form.Render(txt,DEFAULT_SUBMIT_VALUE)
 	
     def _op_apply_changes (self, uri, post):

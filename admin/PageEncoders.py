@@ -122,7 +122,7 @@ class PageEncoders (PageMenu, FormHelper):
             table += (ops, bu1)
             txt += self.Indent(str(table))
 
-        form = Form ("/%s" % (self._id))
+        form = Form ("/%s" % (self._id), add_submit=False)
         return form.Render(txt,DEFAULT_SUBMIT_VALUE)
 	
     def _op_apply_changes (self, post):
