@@ -3,43 +3,50 @@
 cherokee_tweak - Command-line interface to the Cherokee administrative interface
 .SH SYNOPSIS
 .B cherokee_tweak
-\-c command \-u url [options]
+\-c command \-a url [options]
 .SH DESCRIPTION
-\fIcherokee_tweak\fP connects via HTTP to a running cherokee-admin,
+\fIcherokee_tweak\fP connects to running cherokee instance, either local or remote,
 and requests it to perform one of several actions.
 .SH OPTIONS
 \fIcherokee_tweak\fP accepts the following options:
 .TP 8
-.B  \-h
+.B  \-h, --help
 Shows brief usage information
 .TP 8
-.B  \-V
+.B  \-V, --version
 Prints version and exits
 .TP 8
-.B  \-u STRING
+.B  \-u, --user= STRING
 Specifies the user name with which to identify to the server
 .TP 8
-.B  \-p STRING
+.B  \-p, --password= STRING
 Specifies the password with which to identify to the server
 .TP 8
-.B  \-c STRING
+.B  \-c, --command=STRING
 Required option. Command to execute: logrotate, trace or info
 .TP 8
-.B  \-a URL
+.B  \-a, --url=URL
 Required option. URL where the administrative interface can be found.
+This target must be defined previously in cherokee-admin, enabling
+a "Remote Administration" type handler (Virtual Servers->Behaviour->Add new rule, 
+and then Handler->"Remote Administration"). The deffinition of a security mechanisim
+is highly encouraged.
 .TP 8
-.B  \-l PATH
+.B  \-l, --log=PATH
 Log file to be rotated (Only to be used when -c is logrotate)
 .TP 8
-.B  \-t STRING
-Modules to be traced (Only to be used when -c is trace)
+.B  \-t, --trace=STRING
+Modules to be traced (Only to be used when -c is trace). Cherokee must have
+been compiled with the --enable-trace for this to work. Everything traceable
+with CHEROKEE_TRACE can also be traced this way.
 .SH SEE ALSO
 \&\fIcherokee-admin\fR\|(8)
 .PP
 This program is a part of the Cherokee web server, \&\fIcherokee\fR\|(1)
 .SH AUTHOR
 This manual page was written by Gunnar Wolf <gwolf@debian.org>, for
-the Debian GNU/linux system (but may be used by others).
+the Debian GNU/linux system (but may be used by others). Updated by Taher
+Shihadeh <taher@unixwars.com>.
 .PP
 Cherokee itself was written by Álvaro López Ortega
 <alvaro@alobbs.com>.

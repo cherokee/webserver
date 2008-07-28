@@ -12,7 +12,7 @@
 .\" along with this program; see the file COPYING.  If not, write to
 .\" the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH Cherokee 1 "December 20, 2001"
+.TH Cherokee 1 "July 28, 2008"
 .\" Please update the above date whenever this man page is modified.
 .\"
 .\" Some roff macros, for reference:
@@ -26,9 +26,9 @@
 .\" .sp <n>    insert n+1 empty lines
 .\" for manpage-specific macros, see man(7)
 .SH NAME
-cherokee \- Cherokee web server
+cherokee \- Cherokee Web Server
 .SH SYNOPSIS
-.B cherokee [\-C configfile] [\-b] [\-r DIR [-p PORT]] [-t] [\-v] [\-h]
+.B cherokee [options]
 .SH DESCRIPTION
 \fBcherokee\fP is an extremely fast, flexible and embedable web server.
 .\" .PP
@@ -37,35 +37,41 @@ cherokee \- Cherokee web server
 This command will launch the Cherokee webserver. It accepts the
 following options:
 .TP 8
-.B \-b
+.B \-d, --detach
 Launches the server as a background process (default behaviour is to
 stay attached to the controlling terminal).
 .TP 8
-.B \-C configfile
+.B \-C, --config=PATH
 Specifies a configuration file other than the default
 /etc/cherokee/cherokee.conf
 .TP 8
-.B \-r /directory/to/share
+.B \-r, --documentroot=PATH
 Launches a server exposing statically the specified directory. When
 launched with \-r, the configuration file is ignored, and the Cherokee
 instance runs with its default values.
 .TP 8
-.B \-p PORT
-It used with -r specifies the port to which the server will listen.
+.B \-p, --port=PORT
+TCP port number to which the server will listen.
 .TP 8
-.B \-t
+.B \-t, --test
 Perform a sanity check on the configuration file. The server will not run.
 .TP 8
-.B \-h
+.B \-h, --help
 Prints a brief help message and terminates execution
 .TP 8
-.B \-v
+.B \-i, --print
+Print server technical information.TP 8
+.TP 8
+.B \-V, --version
 Prints Cherokee's version and terminates execution
 .SH BUGS
 .SS Bug reports
 I would appreciate hearing of any problems you have with Cherokee.  I
 would also like to hear from you if you have successfully used Cherokee,
 especially if you are using it for a distribution.
+.PP
+Report bugs to 
+.B http://bugs.cherokee-project.com
 .PP
 There is a mailing list for discussion among Cherokee users and for
 announcements of new and test versions. To join, send a message to
@@ -82,4 +88,4 @@ Note that in in Debian systems, a startup/shutdown script
 /etc/init.d/cherokee is provided, and will probably be the most
 convenient invocation method.
 .SH AUTHOR
-Alvaro Lopez Ortega <alvaro@alobbs.com>.
+Alvaro Lopez Ortega <alvaro@alobbs.com>. Manual page maintained by Taher Shihadeh <taher@unixwars.com>

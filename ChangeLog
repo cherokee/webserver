@@ -1,4 +1,8 @@
 2008-07-28  Taher Shihadeh <taher@unixwars.com>
+	* cherokee-tweak.1, cherokee-admin.1, cherokee.1: manpages needed
+	an update.
+	
+2008-07-28  Taher Shihadeh <taher@unixwars.com>
 	* admin/PageEntry.py, admin/PageEncoders.py, admin/PageAdvanced.py, 
 	admin/PageVServers.py, admin/PageGeneral.py, admin/PageMime.py, 
 	admin/PageVServer.py, admin/Form.py, admin/PageFeedback.py, 
