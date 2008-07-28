@@ -1,3 +1,13 @@
+2008-07-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in, cherokee/util.c: Added a new entry to support IRIX
+	compilation. (Patch by BSDero <bsdero@gmail.com>)
+
+	* cherokee/main.c, cherokee/main_guardian.c,
+	cherokee/main_tweak.c, cget/main.c: Getopt inclusion has been
+	rewritten in order to easy compilation on system with no
+	getopt_long support. (Patch by BSDero <bsdero@gmail.com>)
+
 2008-07-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/iocache.c (iocache_get): It has to return the last

@@ -26,8 +26,10 @@
 # include <config.h>
 #endif
 
-#ifdef HAVE_GETOPT_H
+#ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
+#else 
+# include "getopt/getopt.h"
 #endif
 
 #include <cherokee/cherokee.h>

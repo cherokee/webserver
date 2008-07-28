@@ -675,7 +675,7 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
 	char   tmp[GETHOSTBYNAME_R_BUF_LEN];
         
 
-# ifdef SOLARIS
+# if defined(SOLARIS) || defined(IRIX)
 	/* Solaris 10:
 	 * struct hostent *gethostbyname_r
 	 *        (const char *, struct hostent *, char *, int, int *h_errnop);

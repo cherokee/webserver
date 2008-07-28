@@ -111,6 +111,11 @@ AC_MSG_CHECKING([host platform characteristics])
 	*-*-hpux*)
           libdl="-ldl"
           ;;
+     *-*-irix6*)
+          AC_DEFINE(IRIX, 1, [It is SGI Irix])
+          setenv_is_threadsafe="yes"
+          libdl="-ldl"
+          ;;
 	*-*-*freebsd*|*-*-*openbsd*|*-*-*netbsd*|*-*-*dragonfly*)
           libdl=
           ;;
@@ -455,7 +460,6 @@ HYDRA_TCP_NOPUSH
 dnl
 dnl Check for GNU getopt_long()
 dnl
-#AC_SEARCH_LIBS(getopt_long, [iberty gnugetopt])
 AC_CHECK_HEADERS(getopt.h)
 AC_CHECK_FUNC(getopt_long, have_getopt_long="yes")
 AM_CONDITIONAL(HAVE_GETOPT_LONG, test x"$have_getopt_long" = "xyes")

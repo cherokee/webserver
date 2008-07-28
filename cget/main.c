@@ -40,7 +40,12 @@
 # include <time.h>
 #endif
 
-#include <getopt.h>
+#ifdef HAVE_GETOPT_LONG
+# include <getopt.h>
+#else 
+# include "getopt/getopt.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

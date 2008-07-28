@@ -28,8 +28,10 @@
 #include "server.h"
 #include "info.h"
 
-#ifdef HAVE_GETOPT_H
+#ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
+#else 
+# include "getopt/getopt.h"
 #endif
 
 /* Notices 
