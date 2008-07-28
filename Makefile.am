@@ -13,7 +13,7 @@ man_MANS =           \
 cherokee.1           \
 cherokee-config.1    \
 spawn-fcgi.1         \
-cherokee_tweak.1     \
+cherokee-tweak.1     \
 cherokee-admin.1     \
 cherokee-guardian.1
 
