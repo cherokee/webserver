@@ -1,3 +1,10 @@
+2008-07-29  Taher Shihadeh <taher@unixwars.com>
+	* doc/cherokee_tweak.txt: added some documentation.
+	
+2008-07-29  Milo van der Linden <milovanderlinden@gmail.com>
+	* doc/admin.txt, doc/compiling_and_installing_unix.txt: some 
+	documentation patches.
+	
 2008-07-28  Taher Shihadeh <taher@unixwars.com>
 	* cherokee-tweak.1, cherokee-admin.1, cherokee.1: manpages needed
 	an update.

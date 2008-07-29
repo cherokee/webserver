@@ -72,6 +72,7 @@ Other advanced topics
     - link:debug.html[Debugging] Cherokee
     - How to link:cross_compile_cherokee.html[cross compile Cherokee] (Win32 from Linux or OS X)
     - How to link:generating_ssl_keys.html[generate SSL keys]
+    - ling:cherokee_tweak.html[Cherokee Tweak]: command-line interface for administrative tasks.
 
 Internal configuration system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

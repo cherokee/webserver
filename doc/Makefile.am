@@ -22,7 +22,8 @@ advanced.html \
 admin.html \
 download.html \
 generating_ssl_keys.html \
-icons.html
+icons.html \
+cherokee_tweak.html
 
 dochandlersdir = $(docdir)/
 dochandlers_DATA = \
@@ -84,7 +85,8 @@ media/images/admin_advanced.png \
 media/images/admin_handler_dirlist.png \
 media/images/admin_handler_dirlist_ex.png \
 media/images/admin_handler_onlylisting.png \
-media/images/admin_handler_onlylisting_ex.png
+media/images/admin_handler_onlylisting_ex.png \
+media/images/admin_launch.png
 
 
 GENERATED_FILES = \

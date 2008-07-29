@@ -1,8 +1,8 @@
 Compiling and installing on Unix
 --------------------------------
 
-Dependencies
-~~~~~~~~~~~
+Required
+~~~~~~~~
 
 The following requirements exist for building Cherokee:
 
@@ -11,7 +11,8 @@ The following requirements exist for building Cherokee:
   shell, make and an ANSI C compiler. We have compiled Cherokee in various 
   platforms with different compilers, so it shouldn't be a problem.
 
-* Optional: 
+Optional
+~~~~~~~~ 
 
   * Python: Cherokee includes a number of Quality Assurance tests 
     written in Python language. If you are planning to contribute code
@@ -24,40 +25,51 @@ The following requirements exist for building Cherokee:
     libraries: OpenSSL and GNUTLS. You need to have one of those libraries 
     with its development files. 
 
-The simplest way
-~~~~~~~~~~~~~~~~
+Quickstart
+~~~~~~~~~~
 
-First, link:download.html[download] a fresh copy of Cherokee, then run:
+. link:download.html[Download] a fresh copy of Cherokee
+. Configure the package for your system:
++
+----
+./configure --localstatedir=/var --prefix=/usr --sysconfdir=/etc --with-wwwroot=/var/www
+----
+. Compile the package:
++
+----
+make
+----
+. Install the programs and any data files:
++
+----
+make install
+----
+. Start Cherokee link:admin.html[admin]
 
-    - $> **./configure --localstatedir=/var --prefix=/usr --sysconfdir=/etc
-      --with-wwwroot=/var/www** To configure the package for your system.   
-    - $> **make** To compile the package.
-    - $> **make install** To install the programs and any data files.
+Advanced parameters
+~~~~~~~~~~~~~~~~~~~
 
-Others parameters
-~~~~~~~~~~~~~~~~~
-
-If you want to learn more about 'configure' you can run *./configure --help*
+If you want to learn more about 'configure' you can run `./configure --help`
 
 [grid="rows"]
 ``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters,             Description
+Parameter,             Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-'--with-wwwroot=DIR',   Specifies the Root directory
-'--disable-epoll',      Disable epoll() support
-'--disable-pthread',    Disable threading support
-'--disable-readdir_r',  Disable readdir_r usage
-'--disable-ipv6',       Disable IPv6 support
-'--disable-pam',        Disable PAM support
-'--disable-tls',        Disable TLS/SSL support
-'--enable-tls=',        gnutls|openssl
+`--with-wwwroot=DIR`,   Specify the webserver root directory
+`--disable-epoll`,      Disable epoll() support
+`--disable-pthread`,    Disable threading support
+`--disable-readdir_r`,  Disable readdir_r usage
+`--disable-ipv6`,       Disable IPv6 support
+`--disable-pam`,        Disable PAM support
+`--disable-tls`,        Disable TLS/SSL support
+`--enable-tls=`,        gnutls|openssl
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Install and config directories
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Autostart
+~~~~~~~~~
 
-If you need to auto-start cherokee at boot (through init's runlevel) you can 
-find a start/stop script in the contrib source directory::
+If you need the cherokee webserver to start at boot (through init's runlevel) you can 
+find a start/stop script in the contrib source directory:
 
 ----
 cp contrib/cherokee /etc/init.d/

@@ -1,0 +1,47 @@
+Cherokee Tweak
+~~~~~~~~~~~~~~
+
+`cherokee-tweak` is a swiss army knife that allows to perform several 
+administrative tasks from the command line.
+It can connect to a running Cherokee instance, be it in the local computer or 
+at a remote location, and request it to perform several actions.
+
+These actions are:
+* Log rotation: `logrotate`.
+* Live tracing: `trace`.
+* Provide information: `info`.
+
+The program accepts the following options:
+
+[grid="rows"]
+``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameter,        Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`-h,--help`,      Show usage
+`-V, --log`, 	   Show version
+`-u, --user`,     Specifies the user name to use for authentication
+`-p, --password`, Specifies the password to use fot authentication
+`-c, --command`,  One of three commands: `logrotate`, `trace` or `info`
+`-a, --url`, 	   URL where the administrative interface can be found
+`-l, --log`, 	   Log file to be rotated (use with `-c logrotate`)
+`-t, --trace`,    Modules to be traced (use with `-c trace`)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To use `cherokee-tweak` an administrative interface must be defined within 
+Cherokee Admin. That is, you must define a path managed by the handler `Remote 
+Administration`. This can be done through the 'Virtual Servers', in 'Behaviour'
+and using the 'Add new rule' option.
+
+Please note that while you are at it, the deffinition of a security (through 
+the 'Security' tab) is highly encouraged. Although you have the choice to, you 
+should never use 'None' as security mechanisim since this would leave your 
+system exposed to third parties using `cherokee-tweak`.
+
+Also note that the usage of the `trace` command has no effect unless Cherokee 
+is compiled with the --enable-trace. This is a debugging option and it is
+unlikely to be present in binary version of Cherokee not specifically compiled
+with this in mind.
+
+Every module traceable with CHEROKEE_TRACE can also be traced this way. Refer
+to the link:debug.html[Debugging] section of the documentation for more 
+information on this matter.
