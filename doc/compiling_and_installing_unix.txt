@@ -19,7 +19,7 @@ Optional
     into the project, or you just want to test everything is working in 
     the server, you will need a Python interpreter installed on your system.
 
-    * Python docutils: in order to generate the documentation from text files. 
+  * Python docutils: in order to generate the documentation from text files. 
 
   * TLS libraries: Cherokee supports two different SSL/TLS 
     libraries: OpenSSL and GNUTLS. You need to have one of those libraries 
