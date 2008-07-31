@@ -16,6 +16,14 @@ Tasks to be documented:
 * [2] How to tune scalability (IO cache & file, number of threads, increment 
       descriptors...)
 * [3] How to setup authenticated resources
+* [4] How to configure the most spread apps servers (php, django, RoR,..)
+* [5] How to manage logs
+* [6] How to manage security (SSL/TLS, certs, etc)
+* [7] Development documentation would be nice to have, Stefan de Konink 
+      suggested example handlers *fully* documented and documenting the API, 
+      though this last thing might be slightly out of the normal user 
+      documentations scope. A Development section could be introduced when we
+      design the new general draft.
 
 Actual Structure:
 ------------------------
