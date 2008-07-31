@@ -1145,10 +1145,10 @@ $(dynamic_rule_geoip_lib) \
 $(dynamic_rule_not_lib) \
 $(dynamic_rule_and_lib) \
 $(dynamic_rule_or_lib) \
+$(dynamic_handler_file_lib) \
 $(dynamic_handler_cgi_lib) \
 $(dynamic_handler_phpcgi_lib) \
 $(dynamic_handler_server_info_lib) \
-$(dynamic_handler_file_lib) \
 $(dynamic_handler_admin_lib) \
 $(dynamic_handler_dirlist_lib) \
 $(dynamic_handler_scgi_lib) \

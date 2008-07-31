@@ -1,19 +1,25 @@
+2008-07-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/Makefile.am: Fixes a compilation issue. Handler CGI
+	should install alright now. Fixes partially bug #61:
+	http://code.google.com/p/cherokee/issues/detail?id=61
+
 2008-07-29  Taher Shihadeh <taher@unixwars.com>
 	* doc/cherokee_tweak.txt: added some documentation.
-	
+
 2008-07-29  Milo van der Linden <milovanderlinden@gmail.com>
-	* doc/admin.txt, doc/compiling_and_installing_unix.txt: some 
+	* doc/admin.txt, doc/compiling_and_installing_unix.txt: some
 	documentation patches.
-	
+
 2008-07-28  Taher Shihadeh <taher@unixwars.com>
 	* cherokee-tweak.1, cherokee-admin.1, cherokee.1: manpages needed
 	an update.
-	
+
 2008-07-28  Taher Shihadeh <taher@unixwars.com>
-	* admin/PageEntry.py, admin/PageEncoders.py, admin/PageAdvanced.py, 
-	admin/PageVServers.py, admin/PageGeneral.py, admin/PageMime.py, 
-	admin/PageVServer.py, admin/Form.py, admin/PageFeedback.py, 
-	admin/PageIcon.py: Configuration changes are submitted automatically. 
+	* admin/PageEntry.py, admin/PageEncoders.py, admin/PageAdvanced.py,
+	admin/PageVServers.py, admin/PageGeneral.py, admin/PageMime.py,
+	admin/PageVServer.py, admin/Form.py, admin/PageFeedback.py,
+	admin/PageIcon.py: Configuration changes are submitted automatically.
 	Many users were lost having to submit and then apply the modifications.
 
 2008-07-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
