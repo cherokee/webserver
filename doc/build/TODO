@@ -12,18 +12,21 @@ Needs:
 
 Tasks to be documented:
 -------------------------------------
-* [1] How to configure virtual hosts from beginning to end, step by step.
-* [2] How to tune scalability (IO cache & file, number of threads, increment 
+* <1> How to configure virtual hosts from beginning to end, step by step.
+* <2> How to tune scalability (IO cache & file, number of threads, increment 
       descriptors...)
-* [3] How to setup authenticated resources
-* [4] How to configure the most spread apps servers (php, django, RoR,..)
-* [5] How to manage logs
-* [6] How to manage security (SSL/TLS, certs, etc)
-* [7] Development documentation would be nice to have, Stefan de Konink 
+* <3> How to setup authenticated resources
+* <4> How to configure the most spread apps servers (php, django, RoR,..)
+* <5> How to manage logs
+* <6> How to manage security (SSL/TLS, certs, etc)
+* <7> Development documentation would be nice to have, Stefan de Konink 
       suggested example handlers *fully* documented and documenting the API, 
       though this last thing might be slightly out of the normal user 
       documentations scope. A Development section could be introduced when we
       design the new general draft.
+* <8> Table with equivalent functionality (and hopefully a full setup example)
+      to that of specific  mod_* Apache modules.
+* <9> Cherokee on exotic devices
 
 Actual Structure:
 ------------------------
@@ -36,113 +39,195 @@ Actual Structure:
 
   1. Download
   2. Cherokee Documentation
-	2.1. Compiling and Installing
-	2.2. Configuration Interface
-	2.3. General configuration
-	2.4. Virtual Servers
-	2.5. Encoders
-	2.6. Icons
-	2.7. Advanced topics
-	2.8. Other advanced topics
-	2.9. Internal configuration system
+    2.1. Compiling and Installing
+    2.2. Configuration Interface
+    2.3. General configuration
+    2.4. Virtual Servers
+    2.5. Encoders
+    2.6. Icons
+    2.7. Advanced topics
+    2.8. Other advanced topics
+    2.9. Internal configuration system
   3. Compiling and installing on Unix
-	3.1. Required
-	3.2. Optional
-	3.3. Quickstart
-	3.4. Advanced parameters
-	3.5. Autostart
+    3.1. Required
+    3.2. Optional
+    3.3. Quickstart
+    3.4. Advanced parameters
+    3.5. Autostart
   4. Cherokee Admin
   5. General Configuration
-	5.1. Binding
-	5.2. IPv6 support
-	5.3. Timeout
-	5.4. KeepAlive
-	5.5. Server Tokens
-	5.6. Execution User and Group
+    5.1. Binding
+    5.2. IPv6 support
+    5.3. Timeout
+    5.4. KeepAlive
+    5.5. Server Tokens
+    5.6. Execution User and Group
   6. Virtual Server
-	6.1. Add a new Virtual Server
-	6.2. Basics
-	6.3. Domain names
-	6.4. Behavior
-	6.5. Error Handler
-	6.6. Logging
-	6.7. Security
+    6.1. Add a new Virtual Server
+    6.2. Basics
+    6.3. Domain names
+    6.4. Behavior
+    6.5. Error Handler
+    6.6. Logging
+    6.7. Security
   7. Authentication
-	7.1. Htpasswd Validator
-		7.1.1. Parameters
-		7.1.2. Compatibility
-		7.1.3. Example
-	7.2. Htdigest Validator
-		7.2.1. Parameters
-		7.2.2. Compatibility
-		7.2.3. Example
-	7.3. Mysql Validator
-		7.3.1. Parameters
-		7.3.2. Compatibility
-		7.3.3. Example
-	7.4. Pam Validator
-		7.4.1. Parameters
-		7.4.2. Compatibility
-		7.4.3. Example
-	7.5. Plain Validator
-		7.5.1. Syntax
-		7.5.2. Parameters
-		7.5.3. Compatibility
-		7.5.4. Example
+    7.1. Htpasswd Validator
+        7.1.1. Parameters
+        7.1.2. Compatibility
+        7.1.3. Example
+    7.2. Htdigest Validator
+        7.2.1. Parameters
+        7.2.2. Compatibility
+        7.2.3. Example
+    7.3. Mysql Validator
+        7.3.1. Parameters
+        7.3.2. Compatibility
+        7.3.3. Example
+    7.4. Pam Validator
+        7.4.1. Parameters
+        7.4.2. Compatibility
+        7.4.3. Example
+    7.5. Plain Validator
+        7.5.1. Syntax
+        7.5.2. Parameters
+        7.5.3. Compatibility
+        7.5.4. Example
   8. Virtual Server Rule
-	8.1. OnlySecure
-	8.2. Allow From
-	8.3. Examples
-	8.4. Authentication
+    8.1. OnlySecure
+    8.2. Allow From
+    8.3. Examples
+    8.4. Authentication
   9. Icons
   10. Advanced Configuration
   11. Debugging Cherokee
   12. How to cross compile Cherokee
-	 12.1. Cherokee-Win32 from Linux
-	 12.2. Cherokee-Win32 from OS X
+     12.1. Cherokee-Win32 from Linux
+     12.2. Cherokee-Win32 from OS X
   13. How to generate SSL keys
-	 13.1. Locate CA.pl or CA.sh
-	 13.2. Create a new CA
-	 13.3. Generate a certificate request
-	 13.4. Sign the certificate request
-	 13.5. Self signed certificates
-  13. Cherokee Tweak
-  14. Internal Configuration
-	 14.1. Introduction
-	 14.2. Server
-	 14.3. Server Encoders
-	 14.4. Virtual Server
-	 14.5. Defining a virtual server behavior
-	 14.6. Logs
-	 14.7. Inclusion of Configuration
-  15. Loggers
-	 15.1. Combined
-	 15.2. NCSA
-	 15.3. W3C
-  16. Handler: CGI
-	 16.1. Parameters
-	 16.2. Examples
-  17. Handler: List & Send
-	 17.1. Parameters
-	 17.2. Examples
-  18. Handler: Directory Listing
-	 18.1. Parameters
-	 18.2. Examples
-  19. Handler: FastCGI
-	 19.1. Parameters
-	 19.2. Examples
-	 19.3. Configuring PHP
-	 19.4. Note for developers
-  20. Handler: File sending
-	 20.1. Parameters
-	 20.2. Examples
-  21. Handler: Redirections
-	 21.1. Parameters
-	 21.2. Examples
-  22. Handler: SCGI
-  23. Balancer: Round Robin
-  24. Enconder: Gzip
+     13.1. Locate CA.pl or CA.sh
+     13.2. Create a new CA
+     13.3. Generate a certificate request
+     13.4. Sign the certificate request
+     13.5. Self signed certificates
+  14. Cherokee Tweak
+  15. Internal Configuration
+     15.1. Introduction
+     15.2. Server
+     15.3. Server Encoders
+     15.4. Virtual Server
+     15.5. Defining a virtual server behavior
+     15.6. Logs
+     15.7. Inclusion of Configuration
+  16. Loggers
+     16.1. Combined
+     16.2. NCSA
+     16.3. W3C
+  17. Handler: CGI
+     17.1. Parameters
+     17.2. Examples
+  18. Handler: List & Send
+     18.1. Parameters
+     18.2. Examples
+  19. Handler: Directory Listing
+     19.1. Parameters
+     19.2. Examples
+  20. Handler: FastCGI
+     20.1. Parameters
+     20.2. Examples
+     20.3. Configuring PHP
+     20.4. Note for developers
+  21. Handler: File sending
+     21.1. Parameters
+     21.2. Examples
+  22. Handler: Redirections
+     22.1. Parameters
+     22.2. Examples
+  23. Handler: SCGI
+  24. Balancer: Round Robin
+  25. Enconder: Gzip
 
 Future structure:
 ------------------------
   To be determined. Navigability strategy must be drafted.
+  Each module could have a screenshot.
+  The proposed structure reuses the points of the previous documents shown 
+  between brackets, and between '<>' the documentation tasks proposed above. 
+
+
+  Getting started:
+    Why Cherokee?
+    Requirements
+    Download            [1]
+    Installation
+     Unix               [3]
+     Windows
+    Running Cherokee
+
+  The Cherokee Bundle:
+    cherokee
+    cherokee-admin      [4]
+    cherokee-config
+    cherokee-guardian
+    cherokee-tweak      [14]
+    spawn-fcgi
+
+  Configuration        
+    Walkthrough         <1>
+      General           [5]
+     Virtual servers    [6]
+     Encoding
+     Icons              [9]
+     Mime Types
+     Advanced           [10]
+
+  Advanced topics
+    Debugging           [11]
+    Cross compilation   [12]
+      Embedded Cherokee <9>
+    Optimizing Cherokee <2>
+
+  Cookbook
+    Equivalencies table <8>
+    Security
+      Managing logs     <5>
+      Authentication    [8] <3>
+      SSL/TLS, certs    [13]<6>
+    Setting up PHP      <4>
+    Setting up Django   <4>
+    Setting up RoR      <4>
+
+  Modules
+    Balancers
+     Round robin        [24]
+    Encoders
+     gzip               [25]
+    Handlers
+     cgi                [17]
+     common             [18]
+     dirlist            [19]
+     fastcgi            [20]
+     file               [21]
+     redir              [22]
+     scgi               [23]
+    Loggers             [16]
+     combined           [16.1]
+     ncsa               [16.2]
+     w3c                [16.3]
+    Validators          [7]
+     htdigest           [7.2]
+     htpasswd           [7.1]
+     ldap               [7.1]
+     mysql              [7.3]
+     pam                [7.4]
+     plain              [7.5]
+
+  Internal conf format  [15]
+
+  Other resources:
+    manpages
+    FAQ
+    Community
+
+  Development info      <7>
+    API introduction
+    Examples
