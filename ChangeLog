@@ -1,4 +1,8 @@
 2008-07-31  Taher Shihadeh <taher@unixwars.com>
+	* spawn-fastcgi.1: fixed a minor glitch unknowinlgy introduced in
+	the past.
+
+2008-07-31  Taher Shihadeh <taher@unixwars.com>
 	* doc/build/TODO: plan for improved documentation is needed.
 
 2008-07-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
