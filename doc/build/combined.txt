@@ -38,6 +38,8 @@ include::../cross_compile_cherokee.txt[]
 
 include::../generating_ssl_keys.txt[]
 
+include::../cherokee_tweak.txt[]
+
 include::../internal_configuration.txt[]
 
 include::../loggers.txt[]

@@ -1,5 +1,5 @@
 Cherokee Tweak
-~~~~~~~~~~~~~~
+--------------
 
 `cherokee-tweak` is a swiss army knife that allows to perform several 
 administrative tasks from the command line.
