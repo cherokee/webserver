@@ -168,6 +168,7 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 			 */
 			while (*tmp == ' ') tmp--;
 			cherokee_buffer_add (&key, begin, (tmp + 1) - begin);
+			cherokee_buffer_to_lowcase (&key);
 			
 			tmp = equal + 3;
 			while (*tmp == ' ') tmp++;		

@@ -1885,3 +1885,20 @@ cherokee_buffer_trim (cherokee_buffer_t *buf)
 
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_buffer_to_lowcase (cherokee_buffer_t *buf)
+{
+	char    c;
+	cuint_t i;
+
+	for (i=0; i<buf->len; i++) {
+		c = buf->buf[i];
+		if ((c >= 'A') && (c <= 'Z')) {
+			buf->buf[i] = c + ('a'-'A');
+		}
+	}
+
+	return ret_ok;
+}

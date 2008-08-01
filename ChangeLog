@@ -1,5 +1,10 @@
 2008-08-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/config_reader.c (cherokee_config_reader_parse_string):
+	All the configuration key and key entries must be low case.
+
+	* cherokee/buffer.c (cherokee_buffer_to_lowcase): New function.
+
 	* cherokee/http.h (http_gateway_timeout_string): Typo. Reported by
 	Miguel Angel Ajo Pelayo.
 
