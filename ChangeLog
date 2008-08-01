@@ -1,5 +1,8 @@
 2008-08-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* contrib/07to08.py, contrib/Makefile.am: Script to convert
+	Cherokee 0.7.x configurations files to the upcoming 0.8 format.
+
 	* cherokee/config_reader.c (cherokee_config_reader_parse_string):
 	All the configuration key and key entries must be low case.
 
