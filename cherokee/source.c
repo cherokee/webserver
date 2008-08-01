@@ -72,39 +72,58 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	ret_t                    ret;
 	cherokee_resolv_cache_t *resolv;
 	cherokee_connector_t    *connector;
-
-	ret = cherokee_resolv_cache_get_default (&resolv);
+	
+	ret = cherokee_connector_get_default (&connector);
         if (unlikely (ret!=ret_ok)) 
 		return ret;
 
-	ret = cherokee_connector_get_default (&connector);
+	/* Short path
+	 */
+	if (sock->socket >= 0) 
+		goto out;
+
+	/* Get required objects
+	 */
+	ret = cherokee_resolv_cache_get_default (&resolv);
         if (unlikely (ret!=ret_ok)) 
 		return ret;
 
 	/* UNIX socket
 	 */
 	if (! cherokee_buffer_is_empty (&src->unix_socket)) {
-		ret = cherokee_socket_close (sock);
 		ret = cherokee_socket_set_client (sock, AF_UNIX);
 		if (ret != ret_ok) return ret;
 		
 		ret = cherokee_resolv_cache_get_host (resolv, src->unix_socket.buf, sock);
 		if (ret != ret_ok) return ret;
 
-		return cherokee_connector_connect (connector, sock);
+		/* Set non-blocking */
+		ret = cherokee_fd_set_nonblocking (sock->socket);
+		if (ret != ret_ok)
+			PRINT_ERRNO (errno, "Failed to set nonblocking (fd=%d): ${errno}\n",
+				     sock->socket);
+
+		goto out;
 	}
 
 	/* INET socket
 	 */
-	ret = cherokee_socket_close (sock);
 	ret = cherokee_socket_set_client (sock, AF_INET);
 	if (ret != ret_ok) return ret;
-
+	
+	/* Query the host */
 	ret = cherokee_resolv_cache_get_host (resolv, src->host.buf, sock);
 	if (ret != ret_ok) return ret;
 	
 	SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
- 	
+
+	/* Set non-blocking */
+	ret = cherokee_fd_set_nonblocking (sock->socket);
+	if (ret != ret_ok)
+		PRINT_ERRNO (errno, "Failed to set nonblocking (fd=%d): ${errno}\n",
+			     sock->socket);
+
+out: 	
 	return cherokee_connector_connect (connector, sock);
 }
 

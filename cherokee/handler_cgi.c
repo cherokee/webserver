@@ -415,6 +415,9 @@ cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 		 */
 		conn->timeout = CONN_THREAD(conn)->bogo_now + CGI_TIMEOUT;
 		
+		cgi_base->init_phase = hcgi_phase_connect;
+
+	case hcgi_phase_connect:
 		/* Launch the CGI
 		 */
 		ret = fork_and_execute_cgi(cgi);

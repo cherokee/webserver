@@ -117,6 +117,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->timeout              = -1;
 	n->polling_fd           = -1;
 	n->polling_multiple     = false;
+	n->polling_mode         = FDPOLL_MODE_NONE;
 
 	cherokee_buffer_init (&n->buffer);
 	cherokee_buffer_init (&n->header_buffer);
@@ -196,7 +197,8 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 
         if (conn->polling_fd != -1) {
                 close (conn->polling_fd);
-                conn->polling_fd = -1;
+                conn->polling_fd   = -1;
+		conn->polling_mode = FDPOLL_MODE_NONE;
         }
 	
 	free (conn);
@@ -234,6 +236,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->tx_partial           = 0;
 	conn->traffic_next         = 0;
 	conn->polling_multiple     = false;
+	conn->polling_mode         = FDPOLL_MODE_NONE;
 
 	memset (conn->regex_ovector, OVECTOR_LEN * sizeof(int), 0);
 	conn->regex_ovecsize = 0;
@@ -1898,9 +1901,14 @@ cherokee_connection_print (cherokee_connection_t *conn)
 	cherokee_buffer_t *buf = &conn->self_trace;
 	const char        *phase;
 
-	phase = cherokee_connection_get_phase_str (conn);
-
 	cherokee_buffer_clean (buf);
+
+	if (conn == NULL) {
+		cherokee_buffer_add_str (buf, "Connection is NULL\n");
+		return ret_ok;
+	}
+
+	phase = cherokee_connection_get_phase_str (conn);
 	cherokee_buffer_add_va (buf, "Connection %p info\n", conn);
 
 #define print_buf(title,name)						\

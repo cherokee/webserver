@@ -173,6 +173,7 @@ struct cherokee_connection {
 	/* Polling
 	 */
 	int                           polling_fd;
+	int                           polling_mode;
 	cherokee_boolean_t            polling_multiple;
 
 	off_t                         range_start;

@@ -33,6 +33,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
+#include <fcntl.h>
 
 #ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>
@@ -611,6 +612,8 @@ reswitch:
 			break;
 		case 'p':
 			len += 2;                /* Pointer: "0x" + hex value */
+			if (sizeof(void *) > sizeof(int))
+				lflag = true;
 		case 'x':
 			ll = lflag ? va_arg(ap, clong_t) : va_arg(ap, int);
 		        if (unlikely (ll < 0)) {
@@ -789,42 +792,28 @@ cherokee_tls_init (void)
 ret_t 
 cherokee_fd_set_nonblocking (int fd)
 {
-	int tmp = 1;
+	int re;
+	int flags = 0;
 
 #ifdef _WIN32
 	tmp = ioctlsocket (fd, FIONBIO, (u_long *)&tmp);
 #else	
-	tmp = ioctl (fd, FIONBIO, &tmp);
+	flags = fcntl (fd, F_GETFL, 0);
+	if (flags < 0) {
+		PRINT_ERRNO (errno, "ERROR: fcntl/F_GETFL fd=%d: ${errno}\n", fd);
+		return ret_error;
+	}
+
+	flags |= O_NONBLOCK;
+	re = fcntl (fd, F_SETFL, flags);
 #endif
-	if (tmp < 0) {
-		PRINT_ERROR ("ERROR: Setting 'FIONBIO' in socked fd=%d\n", fd);
+	if (re < 0) {
+		PRINT_ERRNO (errno, "ERROR: Setting 'O_NONBLOCK' to socked fd=%d: ${errno}\n", fd);
 		return ret_error;
 	}
 
 	return ret_ok;
 }
-
-
-/* Return 1 if big-endian (Motorola and Sparc), not little-endian
- * (Intel and Vax).  We do this work at run-time, rather than at
- * configuration time so cross-compilation and general embedded system
- * support is simpler.
- */
-
-int
-cherokee_isbigendian (void)
-{
-	/* From Harbison & Steele.  
-	 */
-	union {                                 
-		long l;
-		char c[sizeof(long)];
-	} u;
-
-	u.l = 1;
-	return (u.c[sizeof(long) - 1] == 1);
-}
-
 
 
 ret_t

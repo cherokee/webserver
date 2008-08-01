@@ -507,13 +507,11 @@ cherokee_socket_close (cherokee_socket_t *socket)
 #ifdef HAVE_TLS
 	if (socket->is_tls == TLS && socket->session != NULL) {
 #if   defined (HAVE_GNUTLS)
-
 		gnutls_bye (socket->session, GNUTLS_SHUT_WR);
 		gnutls_deinit (socket->session);
 		socket->session = NULL;
 
 #elif defined (HAVE_OPENSSL)
-
 		SSL_shutdown (socket->session);
 
 #endif
@@ -522,7 +520,8 @@ cherokee_socket_close (cherokee_socket_t *socket)
 
 	ret = cherokee_close_fd (socket->socket);
 
-	TRACE (ENTRIES",close", "fd=%d is_tls=%d re=%d\n", socket->socket, socket->is_tls, (int) ret);
+	TRACE (ENTRIES",close", "fd=%d is_tls=%d re=%d\n", 
+	       socket->socket, socket->is_tls, (int) ret);
 
 	socket->socket = -1;
 	socket->status = socket_closed;
@@ -1085,6 +1084,9 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 		{	/* len < 0 */
 			int err = SOCK_ERRNO();
 
+			TRACE(ENTRIES",read", "Socket read error fd=%d: '%s'\n",
+			      SOCKET_FD(socket), strerror(errno));
+
 			switch (err) {
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
 			case EWOULDBLOCK:
@@ -1371,7 +1373,8 @@ cherokee_socket_bufread (cherokee_socket_t *socket, cherokee_buffer_t *buf, size
 		buf->buf[buf->len] = '\0';
 	}
 
-	TRACE (ENTRIES",bufread", "read fd=%d count=%d ret=%d read=%d\n", socket->socket, count, ret, *pcnt_read);
+	TRACE (ENTRIES",bufread", "read fd=%d count=%d ret=%d read=%d\n",
+	       socket->socket, count, ret, *pcnt_read);
 
 	return ret;
 }
@@ -1669,15 +1672,23 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		return ret_no_sys;			
 	}
 
-	TRACE (ENTRIES, "connect type=%d ret=%d\n", SOCKET_AF(sock), r);
-
 	if (r < 0) {
 		int err = SOCK_ERRNO();
 		
+		TRACE (ENTRIES",connect", "connect error type=%d errno='%s'\n", 
+		       SOCKET_AF(sock), strerror(err));
+		
 		switch (err) {
+		case EISCONN:
+			break;
 		case ECONNREFUSED:
+		case EADDRNOTAVAIL:
 			return ret_deny;
+		case ETIMEDOUT:
+			return ret_error;
 		case EAGAIN:
+		case EALREADY:
+		case EINPROGRESS:
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
 		case EWOULDBLOCK:
 #endif
@@ -1687,6 +1698,8 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 			return ret_error;
 		}
 	}
+
+	TRACE (ENTRIES",connect", "successful connect (type=%d)\n", SOCKET_AF(sock));
 
 	sock->status = socket_reading;
 	return ret_ok;

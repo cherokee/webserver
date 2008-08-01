@@ -1,8 +1,26 @@
+2008-08-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.c, cherokee/buffer.c, cherokee/connection.c,
+	cherokee/handler_cgi_base.h, cherokee/source.c, cherokee/thread.c,
+	cherokee/handler_fcgi.c, cherokee/util.c, cherokee/handler_cgi.c,
+	cherokee/connection-protected.h, cherokee/handler_scgi.h,
+	cherokee/handler_fcgi.h, cherokee/handler_scgi.c: This jumbo-patch
+	fixes a really nasty bug (and a few other minor issues I found
+	along the way) that caused Cherokee to fail to handle PHP FastCGI
+	overloads "nicely". Actually, the main problem is the lousy
+	FastCGI implementation of php-cgi, which due a design flaw, does
+	not notify when it run out of resources (child processes). This
+	patch makes Cherokee perform much better when the PHP interpreter
+	starts misbehaving. (It would be grand if the PHP crowd would have
+	fixed the php-cgi design problem.. but, well, after 5 years I have
+	lost my faith). At least now Cherokee knows how to deal with such
+	a broken implementation. <sigh!!>
+
 2008-07-31  Taher Shihadeh <taher@unixwars.com>
+
 	* spawn-fastcgi.1: fixed a minor glitch unknowinlgy introduced in
 	the past.
 
-2008-07-31  Taher Shihadeh <taher@unixwars.com>
 	* doc/build/TODO: plan for improved documentation is needed.
 
 2008-07-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -12,17 +30,21 @@
 	http://code.google.com/p/cherokee/issues/detail?id=61
 
 2008-07-29  Taher Shihadeh <taher@unixwars.com>
+
 	* doc/cherokee_tweak.txt: added some documentation.
 
 2008-07-29  Milo van der Linden <milovanderlinden@gmail.com>
+
 	* doc/admin.txt, doc/compiling_and_installing_unix.txt: some
 	documentation patches.
 
 2008-07-28  Taher Shihadeh <taher@unixwars.com>
+
 	* cherokee-tweak.1, cherokee-admin.1, cherokee.1: manpages needed
 	an update.
 
 2008-07-28  Taher Shihadeh <taher@unixwars.com>
+
 	* admin/PageEntry.py, admin/PageEncoders.py, admin/PageAdvanced.py,
 	admin/PageVServers.py, admin/PageGeneral.py, admin/PageMime.py,
 	admin/PageVServer.py, admin/Form.py, admin/PageFeedback.py,

@@ -554,7 +554,8 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, char *format, va_list args)
 	/* At this point buf-size is always greater than buf-len, thus size > 0.
 	 */
 	if (len >= size) {
-		TRACE(ENTRIES, "Failed estimation=%d, needed=%d available size=%d\n", estimation, len, size);
+		PRINT_ERROR ("Failed estimation=%d, needed=%d available size=%d: %s\n", 
+			     estimation, len, size, format);
 
 		cherokee_buffer_ensure_size (buf, buf->len + len + 2);
 		size = buf->size - buf->len;

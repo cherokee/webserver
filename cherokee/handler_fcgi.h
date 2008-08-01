@@ -45,6 +45,8 @@ typedef enum {
  */
 typedef struct {
 	cherokee_handler_cgi_base_t   base;
+	cherokee_source_t            *src_ref;
+	time_t                        spawned;
 	cherokee_socket_t             socket;
 	cherokee_handler_fcgi_post_t  post_phase;
 	off_t                         post_len;

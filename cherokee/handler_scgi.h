@@ -46,12 +46,14 @@ typedef struct {
 	cherokee_handler_cgi_base_t  base;
 	cherokee_buffer_t            header;
 	cherokee_socket_t            socket;
+	cherokee_source_t           *src_ref;
+	time_t                       spawned;
 	off_t                        post_len;
 } cherokee_handler_scgi_t;
 
-#define HDL_SCGI(x)       ((cherokee_handler_scgi_t *)(x))
-#define PROP_SCGI(x)      ((cherokee_handler_scgi_props_t *)(x))
-#define HDL_SCGI_PROPS(x) (PROP_SCGI(MODULE(x)->props))
+#define HDL_SCGI(x)           ((cherokee_handler_scgi_t *)(x))
+#define PROP_SCGI(x)          ((cherokee_handler_scgi_props_t *)(x))
+#define HANDLER_SCGI_PROPS(x) (PROP_SCGI(MODULE(x)->props))
 
  
 /* Library init function

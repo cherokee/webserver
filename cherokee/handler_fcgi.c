@@ -23,12 +23,16 @@
  */
 
 #include "common-internal.h"
+
+#include <fcntl.h>
+
 #include "handler_fcgi.h"
 #include "header.h"
 #include "connection-protected.h"
 #include "util.h"
 #include "thread.h"
 #include "source_interpreter.h"
+#include "bogotime.h"
 
 #include "fastcgi.h"
 
@@ -285,10 +289,10 @@ cherokee_handler_fcgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 	 */
 	n->post_phase  = fcgi_post_init;
 	n->post_len    = 0;
-	
-	cherokee_socket_init (&n->socket);
-	cherokee_socket_set_nodelay (&n->socket);
+	n->src_ref     = NULL;
+	n->spawned     = 0;
 
+	cherokee_socket_init (&n->socket);
 	cherokee_buffer_init (&n->write_buffer);
 	cherokee_buffer_ensure_size (&n->write_buffer, 512);
 
@@ -497,46 +501,73 @@ static ret_t
 connect_to_server (cherokee_handler_fcgi_t *hdl)
 {
 	ret_t                          ret;
-	int                            try   = 0;
-	cherokee_source_t             *src   = NULL;
-	cherokee_connection_t         *conn  = HANDLER_CONN(hdl);
-	cherokee_handler_fcgi_props_t *props = HANDLER_FCGI_PROPS(hdl);
+	cherokee_connection_t         *conn    = HANDLER_CONN(hdl);
+	cherokee_handler_fcgi_props_t *props   = HANDLER_FCGI_PROPS(hdl);
+	cherokee_source_interpreter_t *src_int = SOURCE_INT(hdl->src_ref);
 
-	ret = cherokee_balancer_dispatch (props->balancer, conn, &src);
-	if (ret != ret_ok)
-		return ret;
+	/* Get a reference to the target host
+	 */
+	if (hdl->src_ref == NULL) {
+		ret = cherokee_balancer_dispatch (props->balancer, conn, &hdl->src_ref);
+		if (ret != ret_ok)
+			return ret;
+	}
 
- 	ret = cherokee_source_connect (src, &hdl->socket); 
- 	if (ret != ret_ok) { 
-		cherokee_source_interpreter_t *src_int = SOURCE_INT(src);
+	/* Try to connect
+	 */
+ 	ret = cherokee_source_connect (hdl->src_ref, &hdl->socket); 
+	switch (ret) {
+	case ret_ok:
+		goto out;
+	case ret_deny:
+		break;
+	case ret_eagain:
+		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+							   conn,
+							   SOCKET_FD(&hdl->socket),
+							   FDPOLL_MODE_WRITE, 
+							   false);
+		if (ret != ret_ok) {
+			return ret_deny;
+		}
 
+		return ret_eagain;
+	case ret_error:
+		return ret_error;
+	default:
+		break;
+	}
+
+	/* In case it did not success, launch a interpreter
+	 */
+	if (hdl->spawned == 0) {
+		/* Launch a new interpreter */
 		ret = cherokee_source_interpreter_spawn (src_int);
 		if (ret != ret_ok) {
 			if (src_int->interpreter.buf)
-				TRACE (ENTRIES, "Couldn't spawn: %s\n", src_int->interpreter.buf);
+				TRACE (ENTRIES, "Couldn't spawn: %s\n",
+				       src_int->interpreter.buf);
 			else
-				TRACE (ENTRIES, "There was no interpreter to be spawned %s", "\n");
+				TRACE (ENTRIES, "No interpreter to be spawned %s", "\n");
 			return ret_error;
 		}
 
-		while (true) {
-			ret = cherokee_source_connect (src, &hdl->socket);
-			if (ret == ret_ok)
-				break;
+		hdl->spawned = cherokee_bogonow_now;
 
-			TRACE (ENTRIES, "Couldn't connect: %s, try %d\n", src->host.buf ? src->host.buf : src->unix_socket.buf, try);
+		/* Reset the internal socket */
+		cherokee_socket_close (&hdl->socket);
 
-			if (try++ >= 3)
-				return ret;
+	} else if (cherokee_bogonow_now > hdl->spawned + 3) {	
+		TRACE (ENTRIES, "Giving up; spawned 3 secs ago: %s\n",
+		       src_int->interpreter.buf);
+		return ret_error;
 
-			sleep (1);
-		}
-		
 	}
 
-	TRACE (ENTRIES, "Connected successfully try=%d, fd=%d\n", try, hdl->socket.socket);
+	return ret_eagain;	
 
-	cherokee_fd_set_nonblocking (SOCKET_FD(&hdl->socket));
+out:
+	TRACE (ENTRIES, "Connected successfully fd=%d\n", hdl->socket.socket);
 	return ret_ok;
 }
 
@@ -707,7 +738,7 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 	
 	switch (HDL_CGI_BASE(hdl)->init_phase) {
 	case hcgi_phase_build_headers:
-		TRACE (ENTRIES, "Init %s\n", "begins");
+		TRACE (ENTRIES, "Init: %s\n", "begins");
 
 		/* Prepare Post
 		 */
@@ -726,12 +757,19 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 		ret = build_header (hdl, &hdl->write_buffer);
 		if (unlikely (ret != ret_ok)) return ret;
 
-		/* Connect	
+		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_connect;
+
+	case hcgi_phase_connect:
+		TRACE (ENTRIES, "Init: %s\n", "connect");
+
+ 		/* Connect	
 		 */
 		ret = connect_to_server (hdl);
 		switch (ret) {
 		case ret_ok:
 			break;
+		case ret_eagain:
+			return ret_eagain;
 		case ret_deny:
 			conn->error_code = http_gateway_timeout;
 			return ret_error;
@@ -743,7 +781,7 @@ cherokee_handler_fcgi_init (cherokee_handler_fcgi_t *hdl)
 		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_send_headers;
 
 	case hcgi_phase_send_headers:
-		TRACE (ENTRIES, "Init %s\n", "send_headers");
+		TRACE (ENTRIES, "Init: %s\n", "send_headers");
 
 		/* Send the header
 		 */
