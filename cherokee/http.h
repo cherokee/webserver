@@ -135,7 +135,7 @@ typedef enum {
 #define http_not_implemented_string          "501 Not Implemented"
 #define http_bad_gateway_string              "502 Bad gateway"
 #define http_service_unavailable_string      "503 Service Unavailable"
-#define http_gateway_timeout_string          "504 Gatewat Timeout"
+#define http_gateway_timeout_string          "504 Gateway Timeout"
 #define http_version_not_supported_string    "505 HTTP Version Not Supported"
 
 #define http_type_200_max 206

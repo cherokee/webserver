@@ -1,5 +1,8 @@
 2008-08-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/http.h (http_gateway_timeout_string): Typo. Reported by
+	Miguel Angel Ajo Pelayo.
+
 	* cherokee/socket.c, cherokee/buffer.c, cherokee/connection.c,
 	cherokee/handler_cgi_base.h, cherokee/source.c, cherokee/thread.c,
 	cherokee/handler_fcgi.c, cherokee/util.c, cherokee/handler_cgi.c,
@@ -8,13 +11,13 @@
 	fixes a really nasty bug (and a few other minor issues I found
 	along the way) that caused Cherokee to fail to handle PHP FastCGI
 	overloads "nicely". Actually, the main problem is the lousy
-	FastCGI implementation of php-cgi, which due a design flaw, does
-	not notify when it run out of resources (child processes). This
-	patch makes Cherokee perform much better when the PHP interpreter
-	starts misbehaving. (It would be grand if the PHP crowd would have
-	fixed the php-cgi design problem.. but, well, after 5 years I have
-	lost my faith). At least now Cherokee knows how to deal with such
-	a broken implementation. <sigh!!>
+	FastCGI implementation of php-cgi, which due to a design flaw,
+	does not notify when it run out of resources (child processes).
+	This patch makes Cherokee perform much better when the PHP
+	interpreter starts misbehaving. (It would be grand if the PHP
+	crowd would have fixed the php-cgi design problem.. but, well,
+	after 5 years I have lost my faith). At least now Cherokee knows
+	how to deal with such a broken implementation. <sigh!!>
 
 2008-07-31  Taher Shihadeh <taher@unixwars.com>
 
