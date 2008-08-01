@@ -154,14 +154,15 @@ Future structure:
   between brackets, and between '<>' the documentation tasks proposed above. 
 
 
+  
+                          
   Getting started:
-    Why Cherokee?
-    Requirements
-    Download            [1]
+    Why Cherokee?                       why_cherokee.txt
+    Requirements                        requirements.txt
+    Download            [1]             download.txt
     Installation
-     Unix               [3]
-     Windows
-    Running Cherokee
+
+    Running Cherokee                    running_cherokee.txt
 
   The Cherokee Bundle:
     cherokee
@@ -195,6 +196,7 @@ Future structure:
     Setting up PHP      <4>
     Setting up Django   <4>
     Setting up RoR      <4>
+
 
   Modules
     Balancers
@@ -231,3 +233,5 @@ Future structure:
   Development info      <7>
     API introduction
     Examples
+
+

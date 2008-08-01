@@ -1,0 +1,75 @@
+Installation on Unix
+--------------------
+
+If you have a prepackaged version of Cherokee available in your
+Unix/Linux favorite variant, please use the provided installation
+mechanism of choice. This will provide you with automatic bootup
+scripts, consistency and dependency checks, and an easy upgrade path
+tailored to your system whenever a new package is available.
+
+If you do not find a prepackaged version that suits your needs, you
+can always download and compile your own. 
+
+Quickstart
+~~~~~~~~~~
+
+. link:download.html[Download] a fresh copy of Cherokee
+. Configure the package for your system:
++
+-----------------------------------------
+./configure --localstatedir=/var 
+            --prefix=/usr 
+            --sysconfdir=/etc 
+            --with-wwwroot=/var/www
+-----------------------------------------
+
+. Compile the package:
++
+-----------------------------------------
+make
+-----------------------------------------
+
+. Install the programs and any data files:
++
+-----------------------------------------
+make install
+-----------------------------------------
+
+. Start link:admin.html[cherokee-admin]
+
+Advanced parameters
+~~~~~~~~~~~~~~~~~~~
+
+If you want to learn more about 'configure' you can run `./configure
+--help`.
+
+[grid="rows"]
+``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameter,             Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`--with-wwwroot=DIR` , Specify the webserver root directory
+`--disable-epoll`    , Disable epoll() support
+`--disable-pthread`  , Disable threading support
+`--disable-readdir_r`, Disable readdir_r usage
+`--disable-ipv6`     , Disable IPv6 support
+`--disable-pam`      , Disable PAM support
+`--disable-tls`      , Disable TLS/SSL support
+`--enable-tls=`      , gnutls|openssl
+`--enable-trace`     , Allows debugging options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Autostart
+~~~~~~~~~
+
+If you need the cherokee webserver to start at boot (through init's
+runlevel) you can find a start/stop script in the contrib source
+directory:
+
+-----------------------------------------
+cp contrib/cherokee /etc/init.d/
+-----------------------------------------
+
+Additionally, you need to create symlinks at the correct rc directory
+of the appropriate runlevel. This can be done in many ways and usually
+each distribution offers its own tools to do so.
+

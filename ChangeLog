@@ -1,3 +1,10 @@
+2008-08-01  Taher Shihadeh <taher@unixwars.com>
+
+        * doc/build/installation_unix.txt, doc/build/download.txt,
+        doc/build/installation_windows.txt, doc/build/why_cherokee.txt,
+        doc/build/running_cherokee.txt, doc/build/TODO: beggining to
+        upload the new proposed documentation drafts.
+
 2008-08-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/07to08.py, contrib/Makefile.am: Script to convert
