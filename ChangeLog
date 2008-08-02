@@ -1,3 +1,14 @@
+2008-08-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/config_reader.c (cherokee_config_reader_parse_string):
+	Fixes the change about forcing the properties to be lowcase. It
+	was a mistake, actually. There are certain entries that should be
+	written in uppercase such as environment variables. This patch
+	removes the lower-case restriction and adds a check to ensure that
+	there is not entry with the case name and different case as child
+	of the same configuration node. Eg: vserver!001!example and
+	vserver!001!Example.
+
 2008-08-01  Taher Shihadeh <taher@unixwars.com>
 
         * doc/build/installation_unix.txt, doc/build/download.txt,

@@ -113,6 +113,35 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 }
 
 
+static ret_t
+check_config_node_sanity (cherokee_config_node_t *conf)
+{
+	cherokee_list_t *i, *j;
+	int              re;
+
+	/* Finds duplicate properties written in lower/upper-case
+	 */
+	cherokee_config_node_foreach (i, conf) 
+	{
+		cherokee_config_node_foreach (j, conf) 
+		{
+			if (i == j)
+				continue;
+
+			re = cherokee_buffer_case_cmp_buf (&CONFIG_NODE(i)->key, 
+							   &CONFIG_NODE(j)->key);
+			if (re == 0) {
+				PRINT_ERROR ("ERROR: '%s' and '%s' as child of the same node.\n",
+					     CONFIG_NODE(i)->key.buf, CONFIG_NODE(j)->key.buf);
+				return ret_error;
+			}
+		}
+	}
+
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buffer_t *buf)
 {
@@ -168,7 +197,6 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 			 */
 			while (*tmp == ' ') tmp--;
 			cherokee_buffer_add (&key, begin, (tmp + 1) - begin);
-			cherokee_buffer_to_lowcase (&key);
 			
 			tmp = equal + 3;
 			while (*tmp == ' ') tmp++;		
@@ -197,6 +225,13 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 	
 	cherokee_buffer_mrproper (&key);
 	cherokee_buffer_mrproper (&val);
+
+	/* Sanity check
+	 */
+	ret = check_config_node_sanity (conf);
+	if (ret != ret_ok)
+		return ret;
+	
 	return ret_ok;
 
 error:
