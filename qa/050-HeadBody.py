@@ -3,9 +3,9 @@ from base import *
 MAGIC = "This shouldn't be sent"
 
 CONF = """
-vserver!default!rule!500!match = directory
-vserver!default!rule!500!match!directory = /head-body
-vserver!default!rule!500!handler = common
+vserver!001!rule!500!match = directory
+vserver!001!rule!500!match!directory = /head-body
+vserver!001!rule!500!handler = common
 """
 
 class Test (TestBase):

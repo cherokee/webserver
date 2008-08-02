@@ -70,7 +70,6 @@ struct cherokee_server {
 	/* Virtual servers
 	 */
 	cherokee_list_t            vservers;
-	cherokee_virtual_server_t *vserver_default;
 	
 	/* Threads
 	 */

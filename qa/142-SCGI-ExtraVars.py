@@ -25,14 +25,14 @@ SCGIServer(TestHandler, port=%d).serve_forever()
 """ % (PORT)
 
 CONF = """
-vserver!default!rule!1420!match = directory
-vserver!default!rule!1420!match!directory = <dir>
-vserver!default!rule!1420!handler = scgi
-vserver!default!rule!1420!handler!pass_req_headers = 1
-vserver!default!rule!1420!handler!balancer = round_robin
-vserver!default!rule!1420!handler!balancer!type = interpreter
-vserver!default!rule!1420!handler!balancer!local_scgi4!host = localhost:%d
-vserver!default!rule!1420!handler!balancer!local_scgi4!interpreter = %s %s
+vserver!001!rule!1420!match = directory
+vserver!001!rule!1420!match!directory = <dir>
+vserver!001!rule!1420!handler = scgi
+vserver!001!rule!1420!handler!pass_req_headers = 1
+vserver!001!rule!1420!handler!balancer = round_robin
+vserver!001!rule!1420!handler!balancer!type = interpreter
+vserver!001!rule!1420!handler!balancer!local_scgi4!host = localhost:%d
+vserver!001!rule!1420!handler!balancer!local_scgi4!interpreter = %s %s
 """
 
 class Test (TestBase):

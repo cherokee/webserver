@@ -8,9 +8,9 @@ PRE    = "Random text follows"
 MAGIC  = PRE + ": " + str_random (10 * 1024)
 
 CONF = """
-vserver!default!rule!1680!match = directory
-vserver!default!rule!1680!match!directory = /deflate1
-vserver!default!rule!1680!handler = file
+vserver!001!rule!1680!match = directory
+vserver!001!rule!1680!match!directory = /deflate1
+vserver!001!rule!1680!handler = file
 """
 
 

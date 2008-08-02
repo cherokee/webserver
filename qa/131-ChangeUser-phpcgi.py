@@ -6,11 +6,11 @@ USER = "nobody"
 UID  = pwd.getpwnam(USER)[2]
 
 CONF = """
-vserver!default!rule!1310!match = directory
-vserver!default!rule!1310!match!directory = /change_user1
-vserver!default!rule!1310!handler = phpcgi
-vserver!default!rule!1310!handler!change_user = 1
-vserver!default!rule!1310!handler!interpreter = %s
+vserver!001!rule!1310!match = directory
+vserver!001!rule!1310!match!directory = /change_user1
+vserver!001!rule!1310!handler = phpcgi
+vserver!001!rule!1310!handler!change_user = 1
+vserver!001!rule!1310!handler!interpreter = %s
 """
 
 class Test (TestBase):

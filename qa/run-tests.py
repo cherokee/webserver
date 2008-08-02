@@ -143,10 +143,11 @@ server!module_dir = %s
 server!module_deps = %s
 server!fdlimit = 8192
 
-vserver!default!document_root = %s
-vserver!default!directory_index = test_index.html,test_index.php,/super_test_index.php
-vserver!default!rule!1!match = default
-vserver!default!rule!1!handler = common
+vserver!001!nick = default
+vserver!001!document_root = %s
+vserver!001!directory_index = test_index.html,test_index.php,/super_test_index.php
+vserver!001!rule!1!match = default
+vserver!001!rule!1!handler = common
 """ % (PORT, panic, pid, CHEROKEE_MODS, CHEROKEE_DEPS, www)
 
 PHP_FCGI = """\
@@ -173,24 +174,24 @@ else:
     php_ext = PHP_CGI
 
 for php in php_ext.split("\n"):
-    CONF_BASE += "vserver!default!rule!%s\n" % (php)
+    CONF_BASE += "vserver!001!rule!%s\n" % (php)
 
 if method:
     CONF_BASE += "server!poll_method = %s" % (method)
 
 if ssl:
     CONF_BASE += """
-vserver!default!ssl_certificate_file = %s
-vserver!default!ssl_certificate_key_file = %s
-vserver!default!ssl_cal_list_file = %s
+vserver!001!ssl_certificate_file = %s
+vserver!001!ssl_certificate_key_file = %s
+vserver!001!ssl_cal_list_file = %s
 """ % (SSL_CERT_FILE, SSL_CERT_KEY_FILE, SSL_CA_FILE)
 
 if log:
     CONF_BASE += """
-vserver!default!logger = %s
-vserver!default!logger!access!type = file
-vserver!default!logger!access!filename = %s
-vserver!default!logger!error!type = stderr
+vserver!001!logger = %s
+vserver!001!logger!access!type = file
+vserver!001!logger!access!filename = %s
+vserver!001!logger!error!type = stderr
 """ % (LOGGER_TYPE, LOGGER_ACCESS, LOGGER_ERROR)
 
 if srv_thds:

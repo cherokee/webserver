@@ -3,11 +3,12 @@ from base import *
 MAGIC = "Second virtual Host test magic string"
 
 CONF = """
-vserver!first.domain!document_root = %s
-vserver!first.domain!domain!1 = first.domain
-vserver!first.domain!domain!2 = second.domain
-vserver!first.domain!rule!1!match = default
-vserver!first.domain!rule!1!handler = common
+vserver!0210!nick = first.domain
+vserver!0210!document_root = %s
+vserver!0210!domain!1 = first.domain
+vserver!0210!domain!2 = second.domain
+vserver!0210!rule!1!match = default
+vserver!0210!rule!1!handler = common
 """
 
 class Test (TestBase):

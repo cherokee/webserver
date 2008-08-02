@@ -2,9 +2,9 @@ from base import *
 
 MAGIC = "This is the magic string"
 CONF = """
-vserver!default!rule!150!match = directory
-vserver!default!rule!150!match!directory = /cgi-bin1
-vserver!default!rule!150!handler = cgi
+vserver!001!rule!150!match = directory
+vserver!001!rule!150!match!directory = /cgi-bin1
+vserver!001!rule!150!handler = cgi
 """
 
 class Test (TestBase):

@@ -3,17 +3,17 @@ from base import *
 MAGIC = "It shouldn't inherit in this case"
 
 CONF = """
-vserver!default!rule!710!match = directory
-vserver!default!rule!710!match!directory = /inherit2/dir1/dir2/dir3
-vserver!default!rule!710!auth = plain
-vserver!default!rule!710!auth!methods = basic
-vserver!default!rule!710!auth!realm = Test
-vserver!default!rule!710!auth!passwdfile = %s
+vserver!001!rule!710!match = directory
+vserver!001!rule!710!match!directory = /inherit2/dir1/dir2/dir3
+vserver!001!rule!710!auth = plain
+vserver!001!rule!710!auth!methods = basic
+vserver!001!rule!710!auth!realm = Test
+vserver!001!rule!710!auth!passwdfile = %s
 
-vserver!default!rule!711!match = directory
-vserver!default!rule!711!match!directory = /inherit2
-vserver!default!rule!711!match!final = 0
-vserver!default!rule!711!handler = file
+vserver!001!rule!711!match = directory
+vserver!001!rule!711!match!directory = /inherit2
+vserver!001!rule!711!match!final = 0
+vserver!001!rule!711!handler = file
 """
 
 class Test (TestBase):

@@ -793,7 +793,7 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 		cherokee_buffer_drop_ending (buffer, 2);
 	}
 	
-	TRACE (ENTRIES, "CGI header: %s\n", buffer->buf);
+	TRACE (ENTRIES, "CGI header: '%s'\n", buffer->buf);
 
 	/* Process the header line by line
 	 */

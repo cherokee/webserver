@@ -5,15 +5,16 @@ MAGIC   = "Just a not rule test"
 DIR     = "DIR1"
 
 CONF = """
-vserver!<host>!document_root = %s
+vserver!1600!nick = %s
+vserver!1600!document_root = %s
 
-vserver!<host>!rule!10!match = default
-vserver!<host>!rule!10!handler = cgi
+vserver!1600!rule!10!match = default
+vserver!1600!rule!10!handler = cgi
 
-vserver!<host>!rule!20!match = not
-vserver!<host>!rule!20!match!right = directory
-vserver!<host>!rule!20!match!right!directory = /%s
-vserver!<host>!rule!20!handler = file
+vserver!1600!rule!20!match = not
+vserver!1600!rule!20!match!right = directory
+vserver!1600!rule!20!match!right!directory = /%s
+vserver!1600!rule!20!handler = file
 """
 
 CGI = """#!/bin/sh
@@ -38,8 +39,6 @@ class Test (TestBase):
         d = self.Mkdir (www, VSERVER)
         d2 = self.Mkdir (d, DIR)
 
-        tmp = CONF % (d, DIR)
-        tmp = tmp.replace ('<host>', VSERVER)
-        self.conf = tmp
+        self.conf = CONF % (VSERVER, d, DIR)
 
         f = self.WriteFile (d2, 'test', 0755, CGI)

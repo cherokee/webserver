@@ -1,13 +1,14 @@
 from base import *
 
 CONF = """
-vserver!missing.host1!document_root = /faked
+vserver!0440!nick = missing.host1
+vserver!0440!document_root = /faked
 
-vserver!missing.host1!user_dir = public_html
-vserver!missing.host1!domain!1 = missing.host1
+vserver!0440!user_dir = public_html
+vserver!0440!domain!1 = missing.host1
 
-vserver!missing.host1!user_dir!rule!1!match = default
-vserver!missing.host1!user_dir!rule!1!handler = common
+vserver!0440!user_dir!rule!1!match = default
+vserver!0440!user_dir!rule!1!handler = common
 """
 
 class Test (TestBase):

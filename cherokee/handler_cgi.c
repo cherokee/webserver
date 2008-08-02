@@ -313,6 +313,7 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 
 	memcpy (entry, name, name_len);
 	entry[name_len] = '=';
+
 	memcpy (entry + name_len + 1, content, content_len);
 
 	entry[name_len+content_len+1] = '\0';

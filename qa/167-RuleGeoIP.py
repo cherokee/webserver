@@ -5,16 +5,16 @@ DIR   = "GeoIP1_nomatch"
 FILE  = "test"
 
 CONF = """
-vserver!default!rule!1670!match = directory
-vserver!default!rule!1670!match!directory = /%s
-vserver!default!rule!1670!handler = cgi
+vserver!001!rule!1670!match = directory
+vserver!001!rule!1670!match!directory = /%s
+vserver!001!rule!1670!handler = cgi
 
-vserver!default!rule!1671!match = and
-vserver!default!rule!1671!match!left = geoip
-vserver!default!rule!1671!match!left!countries = ES,US,UK,CA
-vserver!default!rule!1671!match!right = directory
-vserver!default!rule!1671!match!right!directory = /%s
-vserver!default!rule!1671!handler = file
+vserver!001!rule!1671!match = and
+vserver!001!rule!1671!match!left = geoip
+vserver!001!rule!1671!match!left!countries = ES,US,UK,CA
+vserver!001!rule!1671!match!right = directory
+vserver!001!rule!1671!match!right!directory = /%s
+vserver!001!rule!1671!handler = file
 """
 
 CGI = """#!/bin/sh

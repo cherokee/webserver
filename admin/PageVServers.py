@@ -64,13 +64,18 @@ class PageVServers (PageMenu, FormHelper):
             txt += "<h2>Virtual Server List</h2>"
 
             table = Table(4, style='width="100%"')
-            table += ('<b>Name</b>', '<b>Document Root</b>', '<b>Logging</b>', '')
+            table += ('<b>Nickname</b>', '<b>Document Root</b>', '<b>Logging</b>', '')
 
-            sorted_vservers = filter (lambda x: x!='default', vservers.keys())
+            vservers_nick = {}
+            sorted_vservers = []
+            for v in vservers.keys():
+                nick = self._cfg.get_val('vserver!%s!nick'%(v))
+                sorted_vservers.append (nick)
+                vservers_nick[nick] = v
+
             sorted_vservers.sort (domain_cmp)
-            sorted_vservers = ['default'] + sorted_vservers
-
-            for vserver in sorted_vservers:
+            for nick in sorted_vservers:
+                vserver = vservers_nick[nick]
                 document_root = self._cfg.get_val('vserver!%s!document_root'%(vserver), '')
                 logger_val    = self._cfg.get_val('vserver!%s!logger'%(vserver))
 
@@ -79,7 +84,7 @@ class PageVServers (PageMenu, FormHelper):
                 else:
                     logging = 'no'
 
-                link = '<a href="/vserver/%s">%s</a>' % (vserver, vserver)
+                link = '<a href="/vserver/%s">%s</a>' % (vserver, nick)
                 if vserver != "default":
                     js = "post_del_key('/ajax/update', 'vserver!%s');"%(vserver)
                     link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
@@ -90,7 +95,7 @@ class PageVServers (PageMenu, FormHelper):
 
         # Add new Virtual Server
         table = Table(3,1)
-        table += ('Name', 'Document Root')
+        table += ('Nickname', 'Document Root')
         fo1 = Form ("/vserver", add_submit=False, auto=False)
         en1 = self.InstanceEntry ("new_vserver_name",  "text", size=20)
         en2 = self.InstanceEntry ("new_vserver_droot", "text", size=40)
@@ -117,15 +122,34 @@ class PageVServers (PageMenu, FormHelper):
         
         return txt
 
+    def _get_vserver_for_nick (self, nick):
+        for v in self._cfg['vserver']:
+            n = self._cfg.get_val ('vserver!%s!nick'%(v))
+            if n == nick:
+                return v
+
+    def _get_next_new_vserver (self):
+        n = 1
+        for v in self._cfg['vserver']:
+            nv = int(v)
+            if nv > n:
+                n = nv
+        return str(n+10)
+
     def _op_add_vserver (self, post):
         # Check whether it's cloning a vserver
         cloning_source = post.pop('vserver_clone_src')
         cloning_target = post.pop('vserver_clone_trg')
         
-        if cloning_target and cloning_source:
-            error = self._cfg.clone('vserver!%s'%(cloning_source), 
-                                    'vserver!%s'%(cloning_target))
+        vserver_source = self._get_vserver_for_nick (cloning_source)
+        vserver_target = self._get_next_new_vserver()
+
+        if cloning_target and cloning_source and \
+           vserver_source and vserver_target:
+            error = self._cfg.clone('vserver!%s'%(vserver_source), 
+                                    'vserver!%s'%(vserver_target))
             if not error:
+                self._cfg['vserver!%s!nick'%(vserver_target)] = cloning_target
                 return '/vserver/%s'%(cloning_target)
 
         # Ensure that no entry in empty
@@ -137,14 +161,19 @@ class PageVServers (PageMenu, FormHelper):
         if self.has_errors():
             return
 
+        # Find a new vserver number
+        n = self._get_next_new_vserver()
+        
+        num   = "%03d" % (n)
         name  = post.pop('new_vserver_name')
         droot = post.pop('new_vserver_droot')
-        pre   = 'vserver!%s' % (name)
+        pre   = 'vserver!%s' % (num)
 
         # Do not add the server if it already exists
         if name in self._cfg['vserver']:
             return '/vserver'
 
+        self._cfg['%s!nick'                   % (pre)] = name
         self._cfg['%s!document_root'          % (pre)] = droot
         self._cfg['%s!rule!1!match'           % (pre)] = 'default'
         self._cfg['%s!rule!1!handler'         % (pre)] = 'common'
@@ -159,4 +188,4 @@ class PageVServers (PageMenu, FormHelper):
         self._cfg['%s!rule!3!handler'         % (pre)] = 'file'
         self._cfg['%s!rule!3!document_root'   % (pre)] = CHEROKEE_THEMEDIR
 
-        return '/vserver/%s' % (name)
+        return '/vserver/%s' % (num)

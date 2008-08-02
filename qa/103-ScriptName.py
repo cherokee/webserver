@@ -5,10 +5,10 @@ VIRTUAL_DIR = "/scriptname_vir"
 SCRIPT_NAME = VIRTUAL_DIR + "/exec.cgi"
 
 CONF = """
-vserver!default!rule!1030!match = directory
-vserver!default!rule!1030!match!directory = %s
-vserver!default!rule!1030!handler = cgi
-vserver!default!rule!1030!document_root = %s
+vserver!001!rule!1030!match = directory
+vserver!001!rule!1030!match!directory = %s
+vserver!001!rule!1030!handler = cgi
+vserver!001!rule!1030!document_root = %s
 """
 
 class Test (TestBase):

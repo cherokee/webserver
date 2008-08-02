@@ -6,10 +6,10 @@ from util import *
 DIR = "common_pathinfo_1"
 
 CONF = """
-vserver!default!rule!1490!match = directory
-vserver!default!rule!1490!match!directory = <dir>
-vserver!default!rule!1490!handler = common
-vserver!default!rule!1490!handler!allow_pathinfo = 1
+vserver!001!rule!1490!match = directory
+vserver!001!rule!1490!match!directory = <dir>
+vserver!001!rule!1490!handler = common
+vserver!001!rule!1490!handler!allow_pathinfo = 1
 """
 
 class Test (TestBase):

@@ -52,6 +52,7 @@ typedef struct {
 	void                        *server_ref;      /* Ref to server */
 
 	cherokee_buffer_t            name;            /* Name.    Eg: server1        */
+	cuint_t                      priority;        /* Evaluation priority         */
 	cherokee_vserver_names_t     domains;         /* Domains. Eg: www.alobbs.com */
 	cherokee_rule_list_t         rules;           /* Rule list: vserver behavior */
 
@@ -100,7 +101,10 @@ typedef struct {
 ret_t cherokee_virtual_server_new       (cherokee_virtual_server_t **vserver, void *server);
 ret_t cherokee_virtual_server_free      (cherokee_virtual_server_t  *vserver);
 ret_t cherokee_virtual_server_clean     (cherokee_virtual_server_t  *vserver);
-ret_t cherokee_virtual_server_configure (cherokee_virtual_server_t  *vserver, cherokee_buffer_t *name, cherokee_config_node_t *config);
+
+ret_t cherokee_virtual_server_configure (cherokee_virtual_server_t  *vserver, 
+					 cuint_t                     prio,
+					 cherokee_config_node_t     *config);
 
 ret_t cherokee_virtual_server_new_rule  (cherokee_virtual_server_t  *vserver, 
 					 cherokee_config_node_t     *config, 

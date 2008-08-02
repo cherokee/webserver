@@ -20,13 +20,13 @@ WSGIServer(app, bindAddress=("localhost",%d)).run()
 """ % (PORT)
 
 CONF = """
-vserver!default!rule!1410!match = directory
-vserver!default!rule!1410!match!directory = <dir>
-vserver!default!rule!1410!handler = fcgi
-vserver!default!rule!1410!handler!balancer = round_robin
-vserver!default!rule!1410!handler!balancer!type = interpreter
-vserver!default!rule!1410!handler!balancer!1!host = localhost:%d
-vserver!default!rule!1410!handler!balancer!1!interpreter = %s %s
+vserver!001!rule!1410!match = directory
+vserver!001!rule!1410!match!directory = <dir>
+vserver!001!rule!1410!handler = fcgi
+vserver!001!rule!1410!handler!balancer = round_robin
+vserver!001!rule!1410!handler!balancer!type = interpreter
+vserver!001!rule!1410!handler!balancer!1!host = localhost:%d
+vserver!001!rule!1410!handler!balancer!1!interpreter = %s %s
 """
 
 

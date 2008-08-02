@@ -1,17 +1,17 @@
 from base import *
 
 CONF = """
-vserver!default!rule!700!match = directory
-vserver!default!rule!700!match!directory = /inherit1
-vserver!default!rule!700!auth = plain
-vserver!default!rule!700!auth!methods = basic
-vserver!default!rule!700!auth!realm = Test
-vserver!default!rule!700!auth!passwdfile = %s
+vserver!001!rule!700!match = directory
+vserver!001!rule!700!match!directory = /inherit1
+vserver!001!rule!700!auth = plain
+vserver!001!rule!700!auth!methods = basic
+vserver!001!rule!700!auth!realm = Test
+vserver!001!rule!700!auth!passwdfile = %s
 
-vserver!default!rule!701!match = directory
-vserver!default!rule!701!match!directory = /inherit1/dir1/dir2/dir3
-vserver!default!rule!701!match!final = 0
-vserver!default!rule!701!handler = file
+vserver!001!rule!701!match = directory
+vserver!001!rule!701!match!directory = /inherit1/dir1/dir2/dir3
+vserver!001!rule!701!match!final = 0
+vserver!001!rule!701!handler = file
 """
 
 class Test (TestBase):

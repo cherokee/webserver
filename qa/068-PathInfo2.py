@@ -3,10 +3,10 @@ from base import *
 PATH_INFO = "/param1/param2/param3"
 
 CONF = """
-vserver!default!rule!680!match = directory
-vserver!default!rule!680!match!directory = /pathinfo2
-vserver!default!rule!680!handler = phpcgi
-vserver!default!rule!680!handler!interpreter = %s
+vserver!001!rule!680!match = directory
+vserver!001!rule!680!match!directory = /pathinfo2
+vserver!001!rule!680!handler = phpcgi
+vserver!001!rule!680!handler!interpreter = %s
 """
 
 class Test (TestBase):

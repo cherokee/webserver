@@ -17,13 +17,13 @@ SCGIServerFork(TestHandler, port=%d).serve_forever()
 """ % (MAGIC, PORT)
 
 CONF = """
-vserver!default!rule!1260!match = directory
-vserver!default!rule!1260!match!directory = <dir>
-vserver!default!rule!1260!handler = scgi
-vserver!default!rule!1260!handler!balancer = round_robin
-vserver!default!rule!1260!handler!balancer!type = interpreter
-vserver!default!rule!1260!handler!balancer!local_scgi1!host = localhost:%d
-vserver!default!rule!1260!handler!balancer!local_scgi1!interpreter = %s %s
+vserver!001!rule!1260!match = directory
+vserver!001!rule!1260!match!directory = <dir>
+vserver!001!rule!1260!handler = scgi
+vserver!001!rule!1260!handler!balancer = round_robin
+vserver!001!rule!1260!handler!balancer!type = interpreter
+vserver!001!rule!1260!handler!balancer!local_scgi1!host = localhost:%d
+vserver!001!rule!1260!handler!balancer!local_scgi1!interpreter = %s %s
 """
 
 class Test (TestBase):

@@ -3,9 +3,9 @@ from base import *
 MAGIC = "This is the content of the HTML index file"
 
 CONF = """
-vserver!default!rule!640!match = directory
-vserver!default!rule!640!match!directory = /directoryindex1
-vserver!default!rule!640!handler = common
+vserver!001!rule!640!match = directory
+vserver!001!rule!640!match!directory = /directoryindex1
+vserver!001!rule!640!handler = common
 """
 
 class Test (TestBase):

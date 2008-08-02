@@ -3,20 +3,19 @@ from base import *
 MAGIC = "First virtual Host test magic string"
 
 CONF = """
-vserver!cherokee.test!document_root = %s
-vserver!cherokee.test!domain!1 = cherokee.test
-vserver!cherokee.test!rule!1!match = default
-vserver!cherokee.test!rule!1!handler = common
+vserver!0200!nick = test020
+vserver!0200!document_root = %s
+vserver!0200!domain!1 = cherokee.test
+vserver!0200!rule!1!match = default
+vserver!0200!rule!1!handler = common
 """
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "Virtual Host"
-
         self.request          = "GET /file HTTP/1.1\r\n" +\
                                 "Host: cherokee.test\r\n"
-
         self.expected_error   = 200
         self.expected_content = MAGIC
 

@@ -6,11 +6,12 @@ MAGIC     = "If UserDir isn't set, it should threat ~ as a common character"
 FILENAME  = "file"
 
 CONF = """
-vserver!<domain>!document_root = %s
-vserver!<domain>!domain!1 = <domain>
+vserver!1210!nick = %s
+vserver!1210!document_root = %s
+vserver!1210!domain!1 = <domain>
 
-vserver!<domain>!rule!10!match = default
-vserver!<domain>!rule!10!handler = common
+vserver!1210!rule!10!match = default
+vserver!1210!rule!10!handler = common
 """
 
 
@@ -31,5 +32,4 @@ class Test (TestBase):
         d2 = self.Mkdir (d, "~%s" % (USERNAME))
         self.WriteFile (d2, FILENAME, 0444, MAGIC);
 
-        self.conf = CONF % (d)
-        self.conf = self.conf.replace ('<domain>', SERVER)
+        self.conf = CONF % (SERVER, d)

@@ -1,12 +1,12 @@
 from base import *
 
 CONF = """
-vserver!default!rule!830!match = directory
-vserver!default!rule!830!match!directory = /redirparam
-vserver!default!rule!830!handler = redir
-vserver!default!rule!830!handler!rewrite!1!show = 0
-vserver!default!rule!830!handler!rewrite!1!regex = ^/([0-9]+)/(.+)$
-vserver!default!rule!830!handler!rewrite!1!substring = /redirparam/file.php?arg1=$1&arg2=$2
+vserver!001!rule!830!match = directory
+vserver!001!rule!830!match!directory = /redirparam
+vserver!001!rule!830!handler = redir
+vserver!001!rule!830!handler!rewrite!1!show = 0
+vserver!001!rule!830!handler!rewrite!1!regex = ^/([0-9]+)/(.+)$
+vserver!001!rule!830!handler!rewrite!1!substring = /redirparam/file.php?arg1=$1&arg2=$2
 """
 
 class Test (TestBase):

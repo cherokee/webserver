@@ -4,9 +4,9 @@ MAGIC = "Sesamo"
 CONTENT = "This is the content of " + MAGIC
 
 CONF = """
-vserver!default!rule!480!match = directory
-vserver!default!rule!480!match!directory = /nn1
-vserver!default!rule!480!handler = nn
+vserver!001!rule!480!match = directory
+vserver!001!rule!480!match!directory = /nn1
+vserver!001!rule!480!handler = nn
 """
 
 class Test (TestBase):

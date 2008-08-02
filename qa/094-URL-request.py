@@ -3,14 +3,15 @@ from base import *
 MAGIC = "Cherokee is pure magic"
 
 CONF = """
-vserver!request1host!document_root = %s
-vserver!request1host!domain!1 = request1host
+vserver!0940!nick = request1host
+vserver!0940!document_root = %s
+vserver!0940!domain!1 = request1host
 
-vserver!request1host!rule!1!match = default
-vserver!request1host!rule!1!handler = server_info
-vserver!request1host!rule!10!match = directory
-vserver!request1host!rule!10!match!directory = /urlrequest1
-vserver!request1host!rule!10!handler = file
+vserver!0940!rule!1!match = default
+vserver!0940!rule!1!handler = server_info
+vserver!0940!rule!10!match = directory
+vserver!0940!rule!10!match!directory = /urlrequest1
+vserver!0940!rule!10!handler = file
 """
 
 class Test (TestBase):

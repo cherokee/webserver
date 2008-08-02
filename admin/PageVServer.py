@@ -23,6 +23,7 @@ RULE_LIST_NOTE = """
 <p>Rules are evaluated from <b>top to bottom</b>. Drap & drop them to reorder.</p>
 """
 
+NOTE_NICKNAME        = 'Nickname for the virtual server.'
 NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server.'
 NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server.'
 NOTE_CA_LIST         = 'File with the certificates of Certification Authorities (CA) whose clients you deal with.'
@@ -166,15 +167,15 @@ class PageVServer (PageMenu, FormHelper):
     def _render_vserver_guts (self, host):
         pre = "vserver!%s" % (host)
         cfg = self._cfg[pre]
+        name = self._cfg.get_val ('vserver!%s!nick'%(host))
         
         tabs = []
-        txt = "<h1>Virtual Server: %s</h1>" % (host)
+        txt = "<h1>Virtual Server: %s</h1>" % (name)
 
         # Basics
         table = TableProps()
         if host != "default":
-            self._cfg['tmp!vserver_name'] = host
-            self.AddPropEntry (table, 'Virtual Server nickname', 'tmp!vserver_name', "prueba")
+            self.AddPropEntry (table, 'Virtual Server nickname', '%s!nick'%(pre), NOTE_NICKNAME)
         self.AddPropEntry (table, 'Document Root',     '%s!document_root'%(pre),   NOTE_DOCUMENT_ROOT)
         self.AddPropEntry (table, 'Directory Indexes', '%s!directory_index'%(pre), NOTE_DIRECTORY_INDEX)
         tabs += [('Basics', str(table))]
@@ -468,13 +469,6 @@ class PageVServer (PageMenu, FormHelper):
 
         # Clean old logger properties
         self._cleanup_logger_cfg (host)
-
-        # Vserver nickname change
-        name = post.get_val("tmp!vserver_name")
-        if name and name != host:
-            error = self._cfg.rename('vserver!%s'%(host), 'vserver!%s'%(name))
-            if not error:
-                return '/vserver/%s'%(name)
 
     def _cleanup_logger_cfg (self, host):
         cfg_key = "vserver!%s!logger" % (host)

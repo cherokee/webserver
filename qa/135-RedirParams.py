@@ -5,23 +5,23 @@ REQUEST = "function"
 PARAMS  = "one=001&two=002"
 
 CONF = """
-vserver!<domain>!document_root = %s
-vserver!<domain>!domain!1 = <domain>
+vserver!1350!nick = %s
+vserver!1350!document_root = %s
 
-vserver!<domain>!rule!1!match = default
-vserver!<domain>!rule!1!handler = server_info
+vserver!1350!rule!1!match = default
+vserver!1350!rule!1!handler = server_info
 
-vserver!<domain>!rule!1350!match = request
-vserver!<domain>!rule!1350!match!request = ^/([^\?]*)$
-vserver!<domain>!rule!1350!handler = redir
-vserver!<domain>!rule!1350!handler!rewrite!1!show = 1
-vserver!<domain>!rule!1350!handler!rewrite!1!substring = /index.php?q=$1
+vserver!1350!rule!10!match = request
+vserver!1350!rule!10!match!request = ^/([^\?]*)$
+vserver!1350!rule!10!handler = redir
+vserver!1350!rule!10!handler!rewrite!1!show = 1
+vserver!1350!rule!10!handler!rewrite!1!substring = /index.php?q=$1
 
-vserver!<domain>!rule!1351!match = request
-vserver!<domain>!rule!1351!match!request = ^/([^\?]*)\?(.*)$
-vserver!<domain>!rule!1351!handler = redir
-vserver!<domain>!rule!1351!handler!rewrite!2!show = 1
-vserver!<domain>!rule!1351!handler!rewrite!2!substring = /index.php?q=$1&$2
+vserver!1350!rule!20!match = request
+vserver!1350!rule!20!match!request = ^/([^\?]*)\?(.*)$
+vserver!1350!rule!20!handler = redir
+vserver!1350!rule!20!handler!rewrite!2!show = 1
+vserver!1350!rule!20!handler!rewrite!2!substring = /index.php?q=$1&$2
 """
 
 class Test (TestBase):
@@ -37,8 +37,7 @@ class Test (TestBase):
         d  = self.Mkdir (www, "hidde_w_params_server")
         d2 = self.Mkdir (d, "hidde_w_params")
 
-        self.conf = CONF % (d)
-        self.conf = self.conf.replace ('<domain>', SERVER)
+        self.conf = CONF % (SERVER, d)
 
     def Precondition (self):
         return os.path.exists (look_for_php())

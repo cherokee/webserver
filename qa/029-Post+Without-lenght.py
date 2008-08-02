@@ -1,10 +1,10 @@
 from base import *
 
 CONF = """
-vserver!default!rule!290!match = directory
-vserver!default!rule!290!match!directory = /post1
-vserver!default!rule!290!handler = phpcgi
-vserver!default!rule!290!handler!interpreter = %s
+vserver!001!rule!290!match = directory
+vserver!001!rule!290!match!directory = /post1
+vserver!001!rule!290!handler = phpcgi
+vserver!001!rule!290!handler!interpreter = %s
 """
 
 class Test (TestBase):

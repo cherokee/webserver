@@ -4,20 +4,21 @@ DOMAIN = "server_domain_to_domain1"
 PATH   = "/file1/param"
 
 CONF = """        
-vserver!<domain>!document_root = /faked
-vserver!<domain>!domain!1 = <domain>
+vserver!1250!nick = <domain>
+vserver!1250!document_root = /faked
 
-vserver!<domain>!rule!10!match = default
-vserver!<domain>!rule!10!handler = redir
-vserver!<domain>!rule!10!handler!rewrite!1!show = 1
-vserver!<domain>!rule!10!handler!rewrite!1!regex = ^/(.*)$
-vserver!<domain>!rule!10!handler!rewrite!1!substring = http://www.<domain>/$1
+vserver!1250!rule!10!match = default
+vserver!1250!rule!10!handler = redir
+vserver!1250!rule!10!handler!rewrite!1!show = 1
+vserver!1250!rule!10!handler!rewrite!1!regex = ^/(.*)$
+vserver!1250!rule!10!handler!rewrite!1!substring = http://www.<domain>/$1
 
-vserver!www.<domain>!document_root = %s
-vserver!www.<domain>!domain!1 = www.<domain>
+vserver!1251!nick = www.<domain>
+vserver!1251!document_root = %s
+vserver!1251!domain!1 = www.<domain>
 
-vserver!www.<domain>!rule!10!match = default
-vserver!www.<domain>!rule!10!handler = file
+vserver!1251!rule!10!match = default
+vserver!1251!rule!10!handler = file
 """
 
 class Test (TestBase):
@@ -34,4 +35,4 @@ class Test (TestBase):
         srvr = self.Mkdir (www, "domain_%s" % (DOMAIN))
 
         self.conf = CONF % (srvr)
-        self.conf = self.conf.replace('<domain>', DOMAIN)
+        self.conf = self.conf.replace ('<domain>', DOMAIN)

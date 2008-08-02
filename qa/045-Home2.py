@@ -5,13 +5,14 @@ from base import *
 PUBLIC_HTML = "public_html"
 
 CONF = """
-vserver!testhost1!document_root = /faked
+vserver!0450!nick = testhost1
+vserver!0450!document_root = /faked
 
-vserver!testhost1!user_dir = %s
-vserver!testhost1!domain!1 = testhost1
+vserver!0450!user_dir = %s
+vserver!0450!domain!1 = testhost1
 
-vserver!testhost1!user_dir!rule!1!match = default
-vserver!testhost1!user_dir!rule!1!handler = common
+vserver!0450!user_dir!rule!1!match = default
+vserver!0450!user_dir!rule!1!handler = common
 """
 
 class Test (TestBase):

@@ -203,9 +203,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 	/* Virtual servers list
 	 */
 	INIT_LIST_HEAD (&n->vservers);
-
-	cherokee_virtual_server_new (&n->vserver_default, n);
-	return_if_fail (n->vserver_default!=NULL, ret_nomem);
 		
 	/* Encoders 
 	 */
@@ -344,9 +341,6 @@ cherokee_server_free (cherokee_server_t *srv)
 	/* Virtual servers
 	 */
 	free_virtual_servers (srv);
-
-	cherokee_virtual_server_free (srv->vserver_default);
-	srv->vserver_default = NULL;
 
 	cherokee_buffer_mrproper (&srv->timeout_header);
 
@@ -844,7 +838,7 @@ initialize_server_threads (cherokee_server_t *srv)
 
 
 static ret_t
-check_vservers_tls (cherokee_server_t *srv)
+vservers_check_tls (cherokee_server_t *srv)
 {
 	ret_t            ret;
 	cherokee_list_t *i;
@@ -855,12 +849,6 @@ check_vservers_tls (cherokee_server_t *srv)
 			TRACE (ENTRIES, "Virtual Server %s: TLS enabled\n", VSERVER(i)->name.buf);
 			return ret_ok;
 		}
-	}
-
-	ret = cherokee_virtual_server_has_tls (srv->vserver_default);
-	if (ret == ret_ok) {
-		TRACE (ENTRIES, "Virtual Server %s: TLS enabled\n", "default");
-		return ret_ok;
 	}
 
 	return ret_not_found;
@@ -883,12 +871,6 @@ init_vservers_tls (cherokee_server_t *srv)
 
 	/* Initialize TLS in all the virtual servers
 	 */
-	ret = cherokee_virtual_server_init_tls (srv->vserver_default);
-	if (ret < ret_ok) {
-		PRINT_ERROR_S ("Can not init TLS for the default virtual server\n");
-		return ret_error;
-	}
-
 	list_for_each (i, &srv->vservers) {
 		cherokee_virtual_server_t *vserver = VSERVER(i);
 
@@ -1017,7 +999,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 	/* Init the SSL/TLS support
 	 */
-	srv->tls_enabled = (check_vservers_tls (srv) == ret_ok);
+	srv->tls_enabled = (vservers_check_tls (srv) == ret_ok);
 
 	if (srv->tls_enabled) {
 		ret = init_vservers_tls (srv);
@@ -1125,18 +1107,13 @@ flush_logs (cherokee_server_t *srv)
 	cherokee_list_t   *i;
 	cherokee_logger_t *logger;
 	
-	/* Main virtual server
-	 */
-	logger = VSERVER_LOGGER(srv->vserver_default);
-	if (logger) 
-		cherokee_logger_flush (VSERVER_LOGGER(srv->vserver_default));
-
 	/* Rest of the virtual servers
 	 */
 	list_for_each (i, &srv->vservers) {
 		logger = VSERVER_LOGGER(i);
-		if (logger)
+		if (logger) {
 			cherokee_logger_flush (VSERVER_LOGGER(i));
+		}
 	}
 }
 
@@ -1347,29 +1324,60 @@ static ret_t
 add_vserver (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
-	cherokee_virtual_server_t *vsrv;
- 	cherokee_server_t         *srv = SRV(data);
+	cuint_t                    prio;
+	cherokee_virtual_server_t *vsrv = NULL;
+ 	cherokee_server_t         *srv  = SRV(data);
 
-	TRACE (ENTRIES, "Adding vserver %s\n", conf->key.buf);
+	prio = atoi(conf->key.buf);
+	TRACE (ENTRIES, "Adding vserver prio=%d\n", prio);
 
-	if (equal_buf_str (&conf->key, "default")) {
-		vsrv = srv->vserver_default;
+	/* Create a new vserver and enqueue it
+	 */
+	ret = cherokee_virtual_server_new (&vsrv, srv);
+	if (ret != ret_ok) return ret;
 
-	} else {
-		/* Create a new vserver and enqueue it
-		 */
-		ret = cherokee_virtual_server_new (&vsrv, srv);
-		if (ret != ret_ok) return ret;
-
-		cherokee_list_add (LIST(vsrv), &srv->vservers);
-	}
-
-	ret = cherokee_virtual_server_configure (vsrv, &conf->key, conf);
+	/* Configure the new object
+	 */
+	ret = cherokee_virtual_server_configure (vsrv, prio, conf);
 	if (ret != ret_ok) return ret;	
 
+	/* Add it to the list
+	 */
+	cherokee_list_add_tail (LIST(vsrv), &srv->vservers);
 	return ret_ok;
 }
 
+
+static int 
+vserver_cmp (cherokee_list_t *a, cherokee_list_t *b)
+{
+	return (VSERVER(b)->priority - VSERVER(a)->priority);
+}
+
+static ret_t
+vservers_check_sanity (cherokee_server_t *srv)
+{
+	cherokee_virtual_server_t *vsrv;
+	size_t                     len  = 0;
+
+	/* Ensure that there is at least one vserver
+	 */
+	cherokee_list_get_len (&srv->vservers, &len);
+	if (len == 0) {
+		PRINT_ERROR ("No virtual hosts have been added.\n");
+		return ret_error;
+	}
+
+	/* Ensure that the lowest priority (last) vserver is 'default'
+	 */
+	vsrv = VSERVER(srv->vservers.prev);
+	if (! equal_buf_str (&vsrv->name, "default")) {
+		PRINT_ERROR ("Lowest priority virtual server must be 'default'.\n");
+		return ret_error;
+	}
+
+	return ret_ok;
+}
 
 static ret_t 
 configure_server_property (cherokee_config_node_t *conf, void *data)
@@ -1594,6 +1602,12 @@ configure_server (cherokee_server_t *srv)
 		if (ret != ret_ok) return ret;
 	}
 
+	cherokee_list_sort (&srv->vservers, vserver_cmp);
+
+	ret = vservers_check_sanity (srv);
+	if (ret != ret_ok)
+		return ret;
+
 	return ret_ok;
 }
 
@@ -1606,12 +1620,6 @@ perform_post_configure_checks (cherokee_server_t *srv)
 
 	/* Ensure that Virtual servers have a document root
 	 */
-	re = cherokee_buffer_is_empty (&(srv->vserver_default)->root);
-	if (re) {
-		PRINT_MSG_S ("Default Virtual Server needs a Document Root\n");
-		return ret_error;
-	}
-
 	list_for_each (i, &srv->vservers) {
 		re = cherokee_buffer_is_empty (&VSERVER(i)->root);
 		if (re) {
@@ -1786,9 +1794,6 @@ cherokee_server_get_total_traffic (cherokee_server_t *srv, size_t *rx, size_t *t
 {
 	cherokee_list_t *i;
 
-	*rx = srv->vserver_default->data.rx;
-	*tx = srv->vserver_default->data.tx;
-
 	list_for_each (i, &srv->vservers) {
 		*rx += VSERVER(i)->data.rx;
 		*tx += VSERVER(i)->data.tx;
@@ -1887,11 +1892,6 @@ cherokee_server_log_reopen (cherokee_server_t *srv)
 	ret_t            ret;
 	cherokee_list_t *i;
 
-	if (srv->vserver_default->logger) {
-		ret = cherokee_logger_reopen (srv->vserver_default->logger);
-		if (unlikely (ret != ret_ok)) return ret;		
-	}
-
 	list_for_each (i, &srv->vservers) {
 		cherokee_logger_t *logger = VSERVER(i)->logger;
 		
@@ -1911,11 +1911,6 @@ cherokee_server_set_backup_mode (cherokee_server_t *srv, cherokee_boolean_t acti
 {
 	ret_t            ret;
 	cherokee_list_t *i;
-
-	if (srv->vserver_default->logger) {
-		ret = cherokee_logger_set_backup_mode (srv->vserver_default->logger, active);
-		if (unlikely (ret != ret_ok)) return ret;
-	}
 
 	list_for_each (i, &srv->vservers) {
 		cherokee_logger_t *logger = VSERVER(i)->logger;
@@ -1937,12 +1932,6 @@ cherokee_server_get_backup_mode (cherokee_server_t *srv, cherokee_boolean_t *act
 	cherokee_list_t *i;
 
 	*active = false;
-
-	if (srv->vserver_default->logger) {
-		cherokee_logger_get_backup_mode (srv->vserver_default->logger, active);
-		if (*active == true) return ret_ok;
-	}
-
 	list_for_each (i, &srv->vservers) {
 		cherokee_logger_t *logger = VSERVER(i)->logger;
 		
@@ -1992,6 +1981,8 @@ cherokee_server_get_vserver (cherokee_server_t *srv, cherokee_buffer_t *name, ch
 	cherokee_list_t           *i;
 	cherokee_virtual_server_t *vserver;
 
+	/* Check the domain names 
+	 */
 	list_for_each (i, &srv->vservers) {
 		vserver = VSERVER(i);
 
@@ -2001,15 +1992,25 @@ cherokee_server_get_vserver (cherokee_server_t *srv, cherokee_buffer_t *name, ch
 			*vsrv = vserver;
 			return ret_ok;
 		}
+	}
+
+	/* In case there was no match, try with the nicknames
+	 */
+	list_for_each (i, &srv->vservers) {
+		vserver = VSERVER(i);
 
 		re = cherokee_buffer_cmp_buf (name, &vserver->name);
 		if (re == 0) {
-			TRACE (ENTRIES, "Virtual server '%s' matched by its alias\n", vserver->name.buf);
+			TRACE (ENTRIES, "Virtual server '%s' matched by its nick\n", vserver->name.buf);
 			*vsrv = vserver;
 			return ret_ok;
 		}
 	}
 
-	*vsrv = srv->vserver_default;
+	/* Nothing matched, return the 'default' vserver (lowest priority)
+	 */
+	*vsrv = VSERVER(srv->vservers.prev);
+
+	TRACE (ENTRIES, "No VServer matched, returning '%s'\n", (*vsrv)->name.buf);
 	return ret_ok;
 }

@@ -1926,8 +1926,8 @@ cherokee_thread_get_new_connection (cherokee_thread_t *thd, cherokee_connection_
 	new_connection->id        = last_conn_id++;
 	new_connection->thread    = thd;
 	new_connection->server    = server;
-	new_connection->vserver   = server->vserver_default;
 	new_connection->keepalive = server->keepalive_max;
+	new_connection->vserver   = VSERVER(server->vservers.prev); 
 
 	new_connection->timeout   = thd->bogo_now + THREAD_SRV(thd)->timeout;
 

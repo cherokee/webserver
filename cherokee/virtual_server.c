@@ -51,6 +51,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->error_handler   = NULL;
 	n->logger          = NULL;
 	n->logger_props    = NULL;
+	n->priority        = 0;
 
 	/* Virtual entries
 	 */
@@ -751,6 +752,10 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_add_buffer (&vserver->root, tmp);
 		cherokee_fix_dirpath (&vserver->root);
 
+	} else if (equal_buf_str (&conf->key, "nick")) {
+		cherokee_buffer_clean (&vserver->name);
+		cherokee_buffer_add_buffer (&vserver->name, &conf->val);
+
 	} else if (equal_buf_str (&conf->key, "user_dir")) {
 		ret = configure_user_dir (conf, vserver);
 		if (ret != ret_ok)
@@ -801,15 +806,15 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 
 
 ret_t 
-cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver, cherokee_buffer_t *name, cherokee_config_node_t *config)
+cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver, 
+				   cuint_t                    prio, 
+				   cherokee_config_node_t    *config)
 {
 	ret_t ret;
 
-	/* Set vserver name
+	/* Set the priority
 	 */
-	if (cherokee_buffer_is_empty (&vserver->name)) {
-		cherokee_buffer_add_buffer (&vserver->name, name);
-	}
+	vserver->priority = prio;
 
 	/* Parse properties
 	 */
@@ -819,8 +824,13 @@ cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver, cherokee_
 
 	/* Perform some sanity checks
 	 */
+	if (cherokee_buffer_is_empty (&vserver->name)) {
+		PRINT_MSG ("ERROR: Virtual host prio=%d needs a nick\n", prio);
+		return ret_error;
+	}
+
 	if (cherokee_buffer_is_empty (&vserver->root)) {
-		PRINT_MSG ("ERROR: Virtual host '%s' needs a document_root\n", name->buf);
+		PRINT_MSG ("ERROR: Virtual host '%s' needs a document_root\n", vserver->name.buf);
 		return ret_error;
 	}
 

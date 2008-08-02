@@ -6,16 +6,17 @@ MAGIC1   = "This is virtual server wildcard1"
 MAGIC2   = "This is virtual server *.wildcard1"
 
 CONF = """
-vserver!<domain>!document_root = %s
-vserver!<domain>!domain!1 = <domain>
+vserver!1390!nick = <domain>
+vserver!1390!document_root = %s
 
-vserver!<domain>!rule!1!match = default
-vserver!<domain>!rule!1!handler = file
+vserver!1390!rule!1!match = default
+vserver!1390!rule!1!handler = file
 
-vserver!rest_<domain>!document_root = %s
-vserver!rest_<domain>!domain!1 = *.<domain>
-vserver!rest_<domain>!rule!1!match = default
-vserver!rest_<domain>!rule!1!handler = file
+vserver!1391!nick = rest_<domain>
+vserver!1391!document_root = %s
+vserver!1391!domain!1 = *.<domain>
+vserver!1391!rule!1!match = default
+vserver!1391!rule!1!handler = file
 """
 
 class Test (TestBase):

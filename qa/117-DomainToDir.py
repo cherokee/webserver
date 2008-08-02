@@ -5,14 +5,14 @@ URL  = "http://www.example.com/dir/subdir/"
 PATH = "dir1/file1/param"
 
 CONF = """
-vserver!<domain>!document_root = %s
-vserver!<domain>!domain!1 = <domain>
+vserver!1170!nick = <host>
+vserver!1170!document_root = %s
 
-vserver!<domain>!rule!10!match = default
-vserver!<domain>!rule!10!handler = redir
-vserver!<domain>!rule!10!handler!rewrite!1!show = 1
-vserver!<domain>!rule!10!handler!rewrite!1!regex = ^/(.*)$
-vserver!<domain>!rule!10!handler!rewrite!1!substring = %s$1
+vserver!1170!rule!10!match = default
+vserver!1170!rule!10!handler = redir
+vserver!1170!rule!10!handler!rewrite!1!show = 1
+vserver!1170!rule!10!handler!rewrite!1!regex = ^/(.*)$
+vserver!1170!rule!10!handler!rewrite!1!substring = %s$1
 """
 
 class Test (TestBase):
@@ -29,4 +29,4 @@ class Test (TestBase):
         srvr = self.Mkdir (www, "domain_%s" % (HOST))
 
         self.conf = CONF % (srvr, URL)
-        self.conf = self.conf.replace ('<domain>', HOST)
+        self.conf = self.conf.replace ('<host>', HOST)

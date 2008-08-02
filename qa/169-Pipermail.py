@@ -6,10 +6,10 @@ DIR_WEB    = "index_droot169"
 DIR_INSIDE = "inside"
 
 CONF = """
-vserver!default!rule!1690!match = directory
-vserver!default!rule!1690!match!directory = /%s
-vserver!default!rule!1690!handler = common
-vserver!default!rule!1690!document_root = %s
+vserver!001!rule!1690!match = directory
+vserver!001!rule!1690!match!directory = /%s
+vserver!001!rule!1690!handler = common
+vserver!001!rule!1690!document_root = %s
 """ 
 
 class Test (TestBase):

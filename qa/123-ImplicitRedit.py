@@ -3,10 +3,10 @@ from base import *
 TEST_FILE = "Cherokee is the fastest one"
 
 CONF = """        
-vserver!default!rule!1230!match = directory
-vserver!default!rule!1230!match!directory = /implicit_redir1
-vserver!default!rule!1230!handler = dirlist
-vserver!default!rule!1230!document_root = %s
+vserver!001!rule!1230!match = directory
+vserver!001!rule!1230!match!directory = /implicit_redir1
+vserver!001!rule!1230!handler = dirlist
+vserver!001!rule!1230!document_root = %s
 """
 
 class Test (TestBase):

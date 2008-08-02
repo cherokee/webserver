@@ -6,18 +6,18 @@ DIR    = "/dir1"
 PATH   = "/file1/param"
 
 CONF = """        
-vserver!<domain>!document_root = %s
-vserver!<domain>!domain!1 = <domain>
+vserver!1240!nick = %s
+vserver!1240!document_root = %s
 
-vserver!<domain>!rule!1!match = default
-vserver!<domain>!rule!1!handler = server_info
+vserver!1240!rule!1!match = default
+vserver!1240!rule!1!handler = server_info
 
-vserver!<domain>!rule!10!match = directory
-vserver!<domain>!rule!10!match!directory = <dir>
-vserver!<domain>!rule!10!handler = redir
-vserver!<domain>!rule!10!handler!rewrite!1!show = 1
-vserver!<domain>!rule!10!handler!rewrite!1!regex = ^(.*)$
-vserver!<domain>!rule!10!handler!rewrite!1!substring = %s$1
+vserver!1240!rule!10!match = directory
+vserver!1240!rule!10!match!directory = <dir>
+vserver!1240!rule!10!handler = redir
+vserver!1240!rule!10!handler!rewrite!1!show = 1
+vserver!1240!rule!10!handler!rewrite!1!regex = ^(.*)$
+vserver!1240!rule!10!handler!rewrite!1!substring = %s$1
 """
 
 class Test (TestBase):
@@ -33,7 +33,6 @@ class Test (TestBase):
     def Prepare (self, www):
         srvr = self.Mkdir (www, "domain_%s" % (DOMAIN))
 
-        self.conf = CONF % (srvr, URL)
-        self.conf = self.conf.replace ('<domain>', DOMAIN)
+        self.conf = CONF % (DOMAIN, srvr, URL)
         self.conf = self.conf.replace ('<dir>', DIR)
 

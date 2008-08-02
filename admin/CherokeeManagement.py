@@ -16,9 +16,10 @@ DEFAULT_PID_LOCATIONS = [
 
 CHEROKEE_MIN_DEFAULT_CONFIG = """# Default configuration
 server!pid_file = %s
-vserver!default!document_root = /tmp
-vserver!default!directory!/!handler = common
-vserver!default!directory!/!priority = 1
+vserver!001!nick = default
+vserver!001!document_root = /tmp
+vserver!001!directory!/!handler = common
+vserver!001!directory!/!priority = 1
 """ % (DEFAULT_PID_LOCATIONS[0])
 
 
