@@ -1,5 +1,8 @@
 2008-08-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* contrib/07to08.py: Added a check to ensure that the script is
+	executed with two parameters (the input and output file paths).
+
 	* admin/CherokeeManagement.py, admin/PageVServer.py,
 	admin/PageVServers.py, cherokee.conf.sample.pre,
 	cherokee/connection.c, cherokee/handler_cgi.c,
@@ -67,8 +70,8 @@
 	administration interface ought to allow to re-order the virtual
 	server list as the rule list is reordered. There is a script
 	locate at the contrib directory that allows to easily convert
-	Cherokee 0.7.0 configuration files to this new format (Cherokee
-	0.8.0).
+	Cherokee 0.7 configuration files to this new format (Cherokee
+	0.8).
 
 2008-08-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 

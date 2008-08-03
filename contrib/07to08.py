@@ -61,6 +61,12 @@ def convert (fin, fout):
         
 
 def main ():
+    if len(sys.argv) < 3:
+        print "USAGE:"
+        print " %s /path/cherokee.conf.07 /path/cherokee.conf.08" % (sys.argv[0])
+        print
+        raise SystemExit
+
     convert (sys.argv[1], sys.argv[2])
     
 if __name__ == "__main__":
