@@ -13,12 +13,12 @@ SUFFIXES = .txt .html .inc
 docdir = $(datadir)/doc/cherokee
 doc_DATA = \
 TOC.inc \
-why_cherokee.html \
+basics_why_cherokee.html \
 basics_requirements.html \
-download.html \
-installation_unix.html \
-installation_windows.html \
-running_cherokee.html \
+basics_download.html \
+basics_installation_unix.html \
+basics_installation_windows.html \
+basics_running_cherokee.html \
 index.html \
 authentication.html \
 general.html \
