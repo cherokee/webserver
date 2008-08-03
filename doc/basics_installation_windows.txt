@@ -27,7 +27,7 @@ performance, though it would be much simpler to maintain and build.
 However, a big effort is done to ensure Cherokee's complete
 cross-platform compatibility. To be able to build Cherokee you will
 need a unix-like environment that provides the necessary tools listed
-in the link:requirements.html[requirements] section. Unfortunately
+in the link:basics_requirements.html[requirements] section. Unfortunately
 this environment is far from trivial to set up.
 
 You can either follow these instructions on how to accomplish such
@@ -95,7 +95,7 @@ fi
 
 Building
 ~~~~~~~~
-. link:download.html[Download] a fresh copy of Cherokee
+. link:basics_download.html[Download] a fresh copy of Cherokee
 . Configure the package for your system:
 +
 -------------------------------------------------------------------

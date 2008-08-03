@@ -13,7 +13,7 @@ can always download and compile your own.
 Quickstart
 ~~~~~~~~~~
 
-. link:download.html[Download] a fresh copy of Cherokee
+. link:basics_download.html[Download] a fresh copy of Cherokee
 . Configure the package for your system:
 +
 -----------------------------------------
