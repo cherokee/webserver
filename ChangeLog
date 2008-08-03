@@ -1,5 +1,8 @@
 2008-08-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServer.py (PageVServer._op_render_vserver_details):
+	Fixes the title text.
+
 	* contrib/07to08.py: Added a check to ensure that the script is
 	executed with two parameters (the input and output file paths).
 

@@ -158,8 +158,9 @@ class PageVServer (PageMenu, FormHelper):
 
     def _op_render_vserver_details (self, host):
         content = self._render_vserver_guts (host)
+        nick = self._cfg.get_val ('vserver!%s!nick'%(host))
 
-        self.AddMacroContent ('title', 'Virtual Server: %s' %(host))
+        self.AddMacroContent ('title', 'Virtual Server: %s' %(nick))
         self.AddMacroContent ('content', content)
 
         return Page.Render(self)
