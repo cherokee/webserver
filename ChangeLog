@@ -1,3 +1,7 @@
+2008-08-03  Taher Shihadeh <taher@unixwars.com>
+
+        * doc/*: more documentation contributions and refactoring.
+	
 2008-08-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageVServer.py (PageVServer._op_render_vserver_details):

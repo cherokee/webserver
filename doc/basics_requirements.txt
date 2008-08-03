@@ -1,0 +1,54 @@
+Requirements
+------------
+
+Hardware
+~~~~~~~~ 
+Cherokee is very light, completely modular and it can be tailored to
+your specific needs. As such, disk requirements will vary depending on
+the options selected for the building process. A static build for
+embedded devices can occupy as little as 200KB, give or take.
+
+In terms of processing power, it has been known to work with as
+little as 133Mhz ARM processors. It could very well work on something
+smaller, but we haven't really had the chance to try it out.
+
+
+Software
+~~~~~~~~ 
+Cherokee has no dependencies besides a standard libc. Everything else
+is optional. Obviously anything beyond mere static content serving
+must be available for Cherokee to correctly execute the task. This
+means you will need PHP if you want Cherokee to serve PHP dynamic
+content, MySQL or LDAP if you set up theses as authentication
+mechanisms for protected content and so on.
+
+If you intend to build Cherokee from source however, you will need
+several tools and libraries.
+
+* Building tools: Cherokee is built on top of the autoconf and
+  automake tools, hence your systems has to have some basic system
+  programs like an sh shell, make and an ANSI C compiler. We have
+  compiled Cherokee in various platforms with different compilers, so
+  it shouldn't be a problem.
+
+* Python: Cherokee has an administrative web interface written in
+  Python, so if you intend to use cherokee-admin you will need this. 
+  For disk space constrained environments this won't be an issue
+  since you would probably want to make a minimal install in your
+  destination host, preconfigured elsewhere. This programming language
+  is also used to generate the documentation, and Cherokee includes a
+  number of Quality Assurance tests written in it as well. If you are
+  planning to contribute code into the project, or you just want to
+  test everything is working in the server, you will need a Python
+  interpreter installed on your system.
+
+* If you are building Cherokee in a non-POSIX compliant platform such
+  as Windows, you will need a POSIX threads implementation. You can
+  disable the usage at compilation time and do without this, though,
+  but this has a dramatic impact in scalability.
+
+* If you want to make a build that serves secure content, you will
+  need TLS libraries. Cherokee supports two different SSL/TLS
+  libraries: OpenSSL and GNUTLS. You need to have one of those
+  libraries with its development files.
+

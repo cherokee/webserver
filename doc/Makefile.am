@@ -1,12 +1,24 @@
-ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py -b xhtml11 --conf-file=$(top_srcdir)/doc/build/chunked_template.conf -a cherokee_version=$(PACKAGE_VERSION)
+DOC_RELEASE=0.8.0
+ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py -b xhtml11 --conf-file=$(top_srcdir)/doc/build/chunked_template.conf -a cherokee_version=$(DOC_RELEASE)
+ASCIIDOC_TOC=python $(top_srcdir)/doc/build/asciidoc.py -b xhtml11 -s 
 
-SUFFIXES = .txt .html
+SUFFIXES = .txt .html .inc
+
+.txt.inc:
+	$(ASCIIDOC_TOC) -o $@ $< 
 
 .txt.html:
 	$(ASCIIDOC) -o $@ $< 
 
 docdir = $(datadir)/doc/cherokee
 doc_DATA = \
+TOC.inc \
+why_cherokee.html \
+basics_requirements.html \
+download.html \
+installation_unix.html \
+installation_windows.html \
+running_cherokee.html \
 index.html \
 authentication.html \
 general.html \
@@ -14,8 +26,6 @@ loggers.html \
 vserver.html \
 debug.html \
 entry.html \
-compiling_and_installing_unix.html \
-compiling_and_installing_windows.html \
 cross_compile_cherokee.html \
 internal_configuration.html \
 advanced.html \
