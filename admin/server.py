@@ -85,7 +85,8 @@ class Handler(pyscgi.SCGIHandler):
         elif uri.startswith('/feedback'):
             page = PageFeedback(cfg)
         elif uri == '/vserver' or \
-             uri == '/vserver/':
+             uri == '/vserver/' or \
+             uri == '/vserver/ajax_update':
             page = PageVServers(cfg)
         elif uri.startswith('/vserver/'):
             if "/prio/" in uri:

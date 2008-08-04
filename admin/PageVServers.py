@@ -37,6 +37,8 @@ class PageVServers (PageMenu, FormHelper):
         PageMenu.__init__ (self, 'vservers', cfg)
         FormHelper.__init__ (self, 'vservers', cfg)
 
+        self._normailze_vservers()
+
     def _op_render (self):
         content = self._render_vserver_list()
 
@@ -50,48 +52,108 @@ class PageVServers (PageMenu, FormHelper):
             tmp = self._op_add_vserver (post)
             if self.has_errors():
                 return self._op_render()
+
+        elif uri.endswith('/ajax_update'):
+            if post.get_val('update_prio'):
+                tmp = post.get_val('prios').split(',')
+                order = filter (lambda x: x, tmp)
+
+                self._reorder_vservers (order)
+                return "ok"
+
         return self._op_render()
 
-    def _render_vserver_list (self):        
-        vservers = self._cfg['vserver']
-        sorted_vservers = []
+    def _normailze_vservers (self):
+        vservers = [int(x) for x in self._cfg['vserver'].keys()]
+        vservers.sort ()
+        
+        # Rename all the virtual servers
+        for vserver in self._cfg['vserver'].keys():
+            self._cfg.rename('vserver!%s'%(vserver),
+                             'vserver!OLD_%d'%(int(vserver)))
+        
+        # Add them again
+        for i in range(len(vservers)):
+            prio = (i+1) * 10
+            self._cfg.rename ('vserver!OLD_%d'%(vservers[i]),
+                              'vserver!%d'%(prio))
 
+    def _reorder_vservers (self, changes):
+        changes.reverse()
+
+        # Rename all the virtual servers
+        for vserver in self._cfg['vserver'].keys():
+            self._cfg.rename ('vserver!%s'%(vserver),
+                              'vserver!OLD_%d'%(int(vserver)))
+
+        # Rebuild the list according to 'changes'
+        n = 10
+        for prio in changes:
+            self._cfg.rename ('vserver!OLD_%s'%(prio),
+                              'vserver!%d'%(n))
+            n += 10
+
+    def _render_vserver_list (self):        
         txt = "<h1>Virtual Servers</h1>"
         txt += self.Dialog (COMMENT)
-        
-        # Render Virtual Server list
-        if vservers: 
-            txt += "<h2>Virtual Server List</h2>"
 
-            table = Table(4, style='width="100%"')
-            table += ('<b>Nickname</b>', '<b>Document Root</b>', '<b>Logging</b>', '')
+        vservers = self._cfg['vserver']
+        table_name = 'vserver_sortable_table'
 
-            vservers_nick = {}
-            sorted_vservers = []
-            for v in vservers.keys():
-                nick = self._cfg.get_val('vserver!%s!nick'%(v))
-                sorted_vservers.append (nick)
-                vservers_nick[nick] = v
+        sorted_vservers = self._cfg['vserver'].keys()
+        sorted_vservers.sort(reverse=True)
 
-            sorted_vservers.sort (domain_cmp)
-            for nick in sorted_vservers:
-                vserver = vservers_nick[nick]
-                document_root = self._cfg.get_val('vserver!%s!document_root'%(vserver), '')
-                logger_val    = self._cfg.get_val('vserver!%s!logger'%(vserver))
+        txt += '<table id="%s" class="rulestable">' % (table_name)
+        txt += '<tr NoDrag="1" NoDrop="1"><th>Nickname</th><th>Document Root</th><th>Logging</th><th></th></tr>'
 
-                if logger_val:
-                    logging = 'yes'
-                else:
-                    logging = 'no'
+        for prio in sorted_vservers:
+            nick          = self._cfg.get_val('vserver!%s!nick'%(prio))
+            document_root = self._cfg.get_val('vserver!%s!document_root'%(prio), '')
+            logger_val    = self._cfg.get_val('vserver!%s!logger'%(prio))
 
-                link = '<a href="/vserver/%s">%s</a>' % (vserver, nick)
-                if vserver != "default":
-                    js = "post_del_key('/ajax/update', 'vserver!%s');"%(vserver)
-                    link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
-                else:
-                    link_del = ''
-                table += (link, document_root, logging, link_del)
-            txt += self.Indent(table)
+            link = '<a href="/vserver/%s">%s</a> (%s)' % (prio, nick, prio)
+            if nick == 'default':
+                extra = ' NoDrag="1" NoDrop="1"'
+            else:
+                extra = ''
+
+            if logger_val:
+                logging = 'yes'
+            else:
+                logging = 'no'
+                
+            if nick != "default":
+                js = "post_del_key('/ajax/update', 'vserver!%s');"%(prio)
+                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+            else:
+                link_del = ''
+
+            txt += '<tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (
+                prio, prio, extra, link, document_root, logging, link_del)
+
+        txt += '</table>'
+        txt += '''<script type="text/javascript">
+                      $(document).ready(function() {
+                        $("#%(name)s tr:even').addClass('alt')");
+
+                        $('#%(name)s').tableDnD({
+                          onDrop: function(table, row) {
+                              var rows = table.tBodies[0].rows;
+                              var post = 'update_prio=1&prios=';
+                              for (var i=1; i<rows.length; i++) {
+                                post += rows[i].id + ',';
+                              }
+	                      jQuery.post ('%(url)s', post, 
+                                  function (data, textStatus) {
+                                      window.location.reload();  
+                                  }
+                              );
+                          }
+                        });
+                      });
+                      </script>
+               ''' % {'name':   table_name, 
+                      'url' :   '/vserver/ajax_update'}
 
         # Add new Virtual Server
         table = Table(3,1)
@@ -111,7 +173,8 @@ class PageVServers (PageMenu, FormHelper):
 
         clonable = []
         for v in sorted_vservers:
-            clonable.append((v,v))
+            nick = self._cfg.get_val('vserver!%s!nick'%(v))
+            clonable.append((v,nick))
 
         op1 = self.InstanceOptions ("vserver_clone_src", clonable)
         en1 = self.InstanceEntry   ("vserver_clone_trg", "text", size=40)
@@ -119,8 +182,9 @@ class PageVServers (PageMenu, FormHelper):
 
         txt += "<h2>Clone Virtual Server</h2>"
         txt += fo1.Render(str(table))
-        
+
         return txt
+
 
     def _get_vserver_for_nick (self, nick):
         for v in self._cfg['vserver']:
@@ -162,9 +226,7 @@ class PageVServers (PageMenu, FormHelper):
             return
 
         # Find a new vserver number
-        n = self._get_next_new_vserver()
-        
-        num   = "%03d" % (n)
+        num   = self._get_next_new_vserver()
         name  = post.pop('new_vserver_name')
         droot = post.pop('new_vserver_droot')
         pre   = 'vserver!%s' % (num)

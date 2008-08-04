@@ -73,7 +73,7 @@ class RuleList:
             if p_entry not in relocated.keys():
                 relocated[p_entry] = self[entry]
                 
-        # Resign childs
+        # Reassign childs
         for p in self.keys():
             del (self._cfg["%s!%s" % (self._cfg_pre, p)])
 
