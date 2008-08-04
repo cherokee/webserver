@@ -195,23 +195,30 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 
 			/* Skip whites: end of the key
 			 */
-			while (*tmp == ' ') tmp--;
+			while (*tmp == ' ') 
+				tmp--;
 			cherokee_buffer_add (&key, begin, (tmp + 1) - begin);
 			
 			tmp = equal + 3;
-			while (*tmp == ' ') tmp++;		
+			while (*tmp == ' ')
+				tmp++;
 
 			/* Skip whites: end of the value
 			 */
 			val_len = strlen(tmp);
-			while (tmp[val_len-1] == ' ') val_len--;
+			while ((val_len >= 1) &&
+			       (tmp[val_len-1] == ' '))
+			{
+				val_len--;
+			}
 
 			cherokee_buffer_add (&val, tmp, val_len);
-
+			
 			TRACE(ENTRIES, "'%s' => '%s'\n", key.buf, val.buf);
-
+			
 			ret = cherokee_config_node_add_buf (conf, &key, &val);
-			if (ret != ret_ok) goto error;
+			if (ret != ret_ok) 
+				goto error;
 		}
 
 		/* Next loop

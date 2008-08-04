@@ -1,5 +1,9 @@
 2008-08-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/config_reader.c (cherokee_config_reader_parse_string):
+	Fixes an issue processing empty keys. Fixes:
+	http://code.google.com/p/cherokee/issues/detail?id=59
+
 	* admin/PageEntry.py (PageEntry._get_title): Fixes a regression.
 
 2008-08-04  Taher Shihadeh <taher@unixwars.com>
