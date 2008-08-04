@@ -111,7 +111,7 @@ class PageVServers (PageMenu, FormHelper):
             document_root = self._cfg.get_val('vserver!%s!document_root'%(prio), '')
             logger_val    = self._cfg.get_val('vserver!%s!logger'%(prio))
 
-            link = '<a href="/vserver/%s">%s</a> (%s)' % (prio, nick, prio)
+            link = '<a href="/vserver/%s">%s</a>' % (prio, nick)
             if nick == 'default':
                 extra = ' NoDrag="1" NoDrop="1"'
             else:
