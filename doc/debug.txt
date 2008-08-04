@@ -21,15 +21,19 @@ are some helpful tools available for you.
   --enable-shared=no 
 ----
 
-* You can also enable a new cool feature: CHEROKEE_TRACE, which will let you trace the
-  behavior with a human-readable output:
+* You can also enable a cool feature: the CHEROKEE_TRACE environment
+  variable to trace what is going on inside the server. To enable it
+  you must add a special flag to your `configure` or `autogen.sh`
+  statement:
 
 ----
   --enable-trace
 ----
 
-Now, when you are going to launch the web server, just add the CHEROKEE_TRACE variable, 
-with the desired options:
+  This will let you trace the behavior with a human-readable output.
+  Now, when you are going to launch the web server, just add the
+  CHEROKEE_TRACE variable, with the desired options:
+
 
 ----
 cherokee# CHEROKEE_TRACE="common" cherokee
@@ -46,10 +50,42 @@ handler_common.c:0190 (   cherokee_handler_common_new): request: '/images/cherok
 handler_common.c:0236 (   cherokee_handler_common_new): going for handler_file
 ----
 
-Of course, you can trace all the modules (handlers, loggers..) you need:
+  Of course, you can trace all the modules (handlers, loggers..) you need:
 
 ----
 CHEROKEE_TRACE="common,static,io_cache" /usr/bin/cherokee
 CHEROKEE_TRACE="all" /usr/bin/cherokee
 ----
+
+  By default the environment variable contains a list of comma separated  
+  words, that point the server which parts and actions are interesting  
+  for your trace. Besides, there are a few special cases:
+
+  - all: Activates all the trace points
+  - time: Prints the time at the beginning of the line
+  - thread: Prints the thread ID
+
+* You can also access the functionality of CHEROKE_TRACE through
+  `cherokee-tweak`. Refer to the apropriate section of the
+  documentation to learn more about this:
+  link:bundle_cherokee-tweak.html[cherokee-tweak].
+
+* Lastly a utility is provided, `contrib/tracelor.py`, to provide
+  further help to these tracing abilities. It is a little script that
+  helps to read the tracing logs by colorizing the thread references
+  and highlighting the words passed through the command line.
+
+  And example of usage would be:
+
+----
+CHEROKEE_TRACE=thread,all ./cherokee | ../contrib/tracelor.py iocache
+----
+  
+  And it would yield an output such as the following. Even if it is
+  not rocket science, it's a handy script to trace the server more
+  easily.
+
+  image::media/images/tracelor.png[Output of tracelor.py]
+
+
 
