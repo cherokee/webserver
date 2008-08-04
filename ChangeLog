@@ -1,8 +1,10 @@
+2008-08-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/PageEntry.py (PageEntry._get_title): Fixes a regression.
+
 2008-08-04  Taher Shihadeh <taher@unixwars.com>
 
 	* doc/basics_*, doc/bundle_*: completed a couple of the new sections.
-	
-2008-08-04  Taher Shihadeh <taher@unixwars.com>
 
 	* doc/modules_validators_ldap.txt: documentation for the LDAP handler.
 

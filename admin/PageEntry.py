@@ -96,10 +96,12 @@ class PageEntry (PageMenu, FormHelper):
         return Page.Render(self)
 
     def _get_title (self, html=False):
+        nick = self._cfg.get_val ('vserver!%s!nick'%(self._host))
+
         if html:
-            txt = '<a href="/vserver/%s">%s</a> - ' % (self._host, self._host)
+            txt = '<a href="/vserver/%s">%s</a> - ' % (self._host, nick)
         else:
-            txt = '%s - ' % (self._host)
+            txt = '%s - ' % (nick)
 
         # Load the rule plugin
         _type = self._entry.get_val('match')
