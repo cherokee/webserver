@@ -26,7 +26,7 @@ The latest release is at your disposal with:
 wget http://www.cherokee-project.com/cherokee-last-tarball -O -| tar zxvf -
 ---------------------------------------------------------------------------
 
-Finally, if you are a developer or simple want to test out the bleeding edge
+Finally, if you are a developer or simply want to test out the bleeding edge
 version, you can access our Subversion repository. Be advised, this is the
 development branch, so use it at your own risk!
 

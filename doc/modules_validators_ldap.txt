@@ -22,7 +22,7 @@ __filter__            , A filter that defines the conditions that must be  \
                         entry.
 __tls__               , Optional. Enable the use of TLS based integrity. \
                         Defaults to __0__.
-__ca_file__           , Optional. It Certificate File. Must be provided  \
+__ca_file__           , Optional. It's the CA filename. Must be provided  \
                         if TLS is enabled. 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -12,7 +12,7 @@
 .\" along with this program; see the file COPYING.  If not, write to
 .\" the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH Cherokee 1 "July 28, 2008"
+.TH Cherokee 1 "August 04, 2008"
 .\" Please update the above date whenever this man page is modified.
 .\"
 .\" Some roff macros, for reference:
@@ -30,40 +30,40 @@ cherokee \- Cherokee Web Server
 .SH SYNOPSIS
 .B cherokee [options]
 .SH DESCRIPTION
-\fBcherokee\fP is an extremely fast, flexible and embedable web server.
+\fBcherokee\fP is an extremely fast, flexible and embeddable web server.
 .\" .PP
 .\" It also...
-.SH EXAMPLE
+.SH OPTIONS
 This command will launch the Cherokee webserver. It accepts the
 following options:
+.TP 8
+.B \-h, --help
+Prints a brief help message and terminates execution
+.TP 8
+.B \-V, --version
+Prints Cherokee's version and terminates execution
+.TP 8
+.B \-t, --test
+Perform a sanity check on the configuration file. The server will not run.
 .TP 8
 .B \-d, --detach
 Launches the server as a background process (default behaviour is to
 stay attached to the controlling terminal).
 .TP 8
 .B \-C, --config=PATH
-Specifies a configuration file other than the default
-/etc/cherokee/cherokee.conf
+Specifies an alternative path for the configuration file to use instead
+of the default cherokee.conf
+.TP 8
+.B \-p, --port=PORT
+TCP port number to which the server will listen.
 .TP 8
 .B \-r, --documentroot=PATH
 Launches a server exposing statically the specified directory. When
 launched with \-r, the configuration file is ignored, and the Cherokee
 instance runs with its default values.
 .TP 8
-.B \-p, --port=PORT
-TCP port number to which the server will listen.
-.TP 8
-.B \-t, --test
-Perform a sanity check on the configuration file. The server will not run.
-.TP 8
-.B \-h, --help
-Prints a brief help message and terminates execution
-.TP 8
 .B \-i, --print
-Print server technical information.TP 8
-.TP 8
-.B \-V, --version
-Prints Cherokee's version and terminates execution
+Print server technical information.
 .SH BUGS
 .SS Bug reports
 I would appreciate hearing of any problems you have with Cherokee.  I

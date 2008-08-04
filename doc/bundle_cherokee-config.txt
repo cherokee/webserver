@@ -1,0 +1,46 @@
+cherokee-config
+---------------
+
+This command-line tool is less known than the rest because it is to be
+used by system administrators and developers. There is not much to be
+added besides the syntax of the command. The main usage of this
+utility is determining the used flags during the compilation and
+linking process. This is useful to build programs that make use of Cherokee.
+
+This is the full information provided by the manpage.
+**********************************************************************
+*NAME*::
+       `cherokee-config` - script to get information about the installed version
+       of Cherokee
+
+*SYNOPSIS*::
+       `cherokee-config`  [--prefix[=DIR]]   [--libs]   [--cflags]   [--version]
+       [--help]
+
+*DESCRIPTION*::
+       `cherokee-config` is  a  tool  that is used to determine the compile and
+       linker flags that should be used to compile and link programs that  use
+       Cherokee.
+
+*OPTIONS*::
+       `cherokee-config` accepts the following options:
+
+       --version
+               Print the currently installed version of CHEROKEE on
+               the standard output.
+
+
+       --libs  Print the linker flags that are necessary to  link  a  CHEROKEE
+               program.
+
+       --cflags
+               Print the compiler flags that are necessary to compile
+               a CHEROKEE program.
+
+
+       --prefix=PREFIX
+               If specified, use PREFIX instead  of  the  installation  prefix
+               that  CHEROKEE was built with when computing the output for the
+               --cflags and --libs options.  This  option  must  be  specified
+               before any --libs or --cflags options.
+**********************************************************************

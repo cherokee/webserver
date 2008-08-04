@@ -17,7 +17,7 @@ Tasks to be documented:
       descriptors...)
 * <3> How to setup authenticated resources
 * <4> How to configure the most spread apps servers (php, django, RoR,..)
-* <5> How to manage logs
+* <5> How to manage logs  (make specific mention of usage of Cherokee-Tweak).
 * <6> How to manage security (SSL/TLS, certs, etc)
 * <7> Development documentation would be nice to have, Stefan de Konink 
       suggested example handlers *fully* documented and documenting the API, 
@@ -153,82 +153,4 @@ Future structure:
   The proposed structure reuses the points of the previous documents shown 
   between brackets, and between '<>' the documentation tasks proposed above. 
 
-
-                          
-  Getting started:
-    Why Cherokee?                       why_cherokee.txt
-    Requirements                        requirements.txt
-    Download            [1]             download.txt
-    Installation
-     Unix               [3]             installation_unix.txt
-     Windows                            installation_windows.txt [incomplete]
-    Running Cherokee                    running_cherokee.txt
-
-  The Cherokee Bundle:
-    cherokee
-    cherokee-admin      [4]
-    cherokee-config
-    cherokee-guardian
-    cherokee-tweak      [14]
-    spawn-fcgi
-
-  Configuration 
-    Walkthrough         <1>
-     General            [5]
-     Virtual servers    [6]
-     Encoding
-     Icons              [9]
-     Mime Types
-     Advanced           [10]
-
-  Advanced topics
-    Debugging           [11]
-    Cross compilation   [12]
-      Embedded Cherokee <9>
-    Optimizing Cherokee <2>
-
-  Cookbook
-    Equivalencies table <8>
-    Security
-      Managing logs     <5>
-      Authentication    [8] <3>
-      SSL/TLS, certs    [13]<6>
-    Setting up PHP      <4>
-    Setting up Django   <4>
-    Setting up RoR      <4>
-
-  Modules
-    Balancers
-     Round robin        [24]
-    Encoders
-     gzip               [25]
-    Handlers
-     cgi                [17]
-     common             [18]
-     dirlist            [19]
-     fastcgi            [20]
-     file               [21]
-     redir              [22]
-     scgi               [23]
-    Loggers             [16]
-     combined           [16.1]
-     ncsa               [16.2]
-     w3c                [16.3]
-    Validators          [7]
-     htdigest           [7.2]
-     htpasswd           [7.1]
-     ldap               [7.1]
-     mysql              [7.3]
-     pam                [7.4]
-     plain              [7.5]
-
-  Internal conf format  [15]
-
-  Other resources:
-    manpages
-    FAQ
-    Community
-
-  Development info      <7>
-    API introduction
-    Examples
+  Refer to TOC.txt to see it.

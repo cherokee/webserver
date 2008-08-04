@@ -1,5 +1,6 @@
 DOC_RELEASE=0.8.0
-ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py -b xhtml11 --conf-file=$(top_srcdir)/doc/build/chunked_template.conf -a cherokee_version=$(DOC_RELEASE)
+
+ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py --unsafe -b xhtml11 --conf-file=$(top_srcdir)/doc/build/chunked_template.conf -a cherokee_version=$(DOC_RELEASE)
 ASCIIDOC_TOC=python $(top_srcdir)/doc/build/asciidoc.py -b xhtml11 -s 
 
 SUFFIXES = .txt .html .inc
@@ -18,7 +19,14 @@ basics_requirements.html \
 basics_download.html \
 basics_installation_unix.html \
 basics_installation_windows.html \
+basics_upgrade.html \
 basics_running_cherokee.html \
+bundle_cherokee.html \
+bundle_cherokee-admin.html \
+bundle_cherokee-config.html \
+bundle_cherokee-guardian.html \
+bundle_cherokee-tweak.html \
+bundle_spawn-fcgi.html \
 index.html \
 authentication.html \
 general.html \
@@ -29,38 +37,20 @@ entry.html \
 cross_compile_cherokee.html \
 internal_configuration.html \
 advanced.html \
-admin.html \
-download.html \
 generating_ssl_keys.html \
 icons.html \
-cherokee_tweak.html
-
-dochandlersdir = $(docdir)/
-dochandlers_DATA = \
+modules_balancers_round_robin.html \
+modules_encoders_gzip.html \
 modules_handlers_file.html \
 modules_handlers_dirlist.html \
 modules_handlers_common.html \
 modules_handlers_redir.html \
 modules_handlers_cgi.html \
 modules_handlers_fastcgi.html \
-modules_handlers_scgi.html
-
-docloggersdir = $(docdir)/
-docloggers_DATA = \
+modules_handlers_scgi.html \
 modules_loggers_combined.html \
 modules_loggers_ncsa.html \
-modules_loggers_w3c.html
-
-docencodersdir = $(docdir)/
-docencoders_DATA = \
-modules_encoders_gzip.html
-
-docbalancersdir = $(docdir)/
-docbalancers_DATA = \
-modules_balancers_round_robin.html
-
-docvalidatorsdir = $(docdir)/
-docvalidators_DATA = \
+modules_loggers_w3c.html \
 modules_validators_htdigest.html \
 modules_validators_htpasswd.html \
 modules_validators_ldap.html \
@@ -96,20 +86,14 @@ media/images/admin_handler_dirlist.png \
 media/images/admin_handler_dirlist_ex.png \
 media/images/admin_handler_onlylisting.png \
 media/images/admin_handler_onlylisting_ex.png \
-media/images/admin_launch.png
+media/images/admin_launch.png \
+media/images/tracelor.png \
+media/images/cherokee-tweak.png
 
-
-GENERATED_FILES = \
-$(doc_DATA) \
-$(dochandlers_DATA) \
-$(docloggers_DATA) \
-$(docvalidators_DATA) \
-$(docbalancers_DATA) \
-$(docencoders_DATA)
-
+GENERATED_FILES =   \
+$(docdir_DATA)
 
 EXTRA_DIST = \
 $(GENERATED_FILES) \
 $(docmediacss_DATA) \
 $(docmediaimages_DATA)
-

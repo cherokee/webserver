@@ -1,26 +1,7 @@
 Cherokee Documentation
 ----------------------
 
-Welcome to the Cherokee {cherokee_version} documentation.
 
-Compiling and Installing
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you are not comfortable with rolling your own Cherokee, then check our 
-listings of pre-compiled link:http://www.cherokee-project.com/downloads.html[binaries].
-Specific instructions for building your own copy are available at: 
-
-    - link:compiling_and_installing_unix.html[Unix]
-    - link:compiling_and_installing_windows.html[Windows]
-
-Configuration Interface
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Cherokee provides an administration interface named link:admin.html[Cherokee Admin] 
-that allows to configure the web server without having to worry about
-editing a text file written with a certain syntax.
-
-image::media/images/admin_index.png[Cherokee Admin interface]
 
 General configuration
 ~~~~~~~~~~~~~~~~~~~~~

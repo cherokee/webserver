@@ -1,0 +1,99 @@
+cherokee-admin
+--------------
+
+This is the administration interface that allows for hassle-free,
+simple and easy configuration of the Cherokee web server. It is the
+only administration mechanism that should be to such task and is in
+fact the only recommended option.
+
+image::media/images/admin_index.png[Cherokee Admin interface]
+
+If you want to access the administration interface from the same computer that you installed cherokee on
+simply start the administration interface by running:
+
+----
+cherokee-admin
+----
+
+Then redirect your web browser to 127.0.0.1:9090 this is the default port for the
+administration interface. 
+
+image::media/images/admin_launch.png[Cherokee admin interface]
+
+If you want to access the administration interface from another computer, you need to bind the cherokee 
+administration interface to all network interfaces:
+
+----
+cherokee-admin -b
+----
+
+WARNING: By starting cherokee-admin listening on all interfaces, everyone that can access the computer can
+alter your cherokee configuration. Don't use this in a production environment!
+It is much better to use 'ssh -L' in these cases. These are the
+necessary steps to be taken to create an SSH tunnel. This is the
+recommended way. In order to do so you must issue the following 
+command: 
+
+----
+ssh -L 9090:localhost:9090 remote_IP
+----
+
+ After that you can access the remote interface through
+ http://localhost:9090 and every request will be forwarded to the
+ remote IP running cherokee-admin.
+
+
+Of course these options can be combined to your heart's contempt.
+
+.Example:
+Make cherokee use a different configuration file, listen on port 9091 and grab
+the administration interface application from a different path:
+----
+cherokee-admin -a -P 9091 -C /etc/cherokee/cherokee2.conf \
+                 -d /path/to/svn/trunk/cherokee-admin/
+----
+
+This is the full information provided by the manpage.
+**********************************************************************
+*NAME*::
+       `cherokee-admin` - Runs Cherokee’s administrative interface
+
+*SYNOPSIS*::
+       `cherokee-admin` [-d DIR] [-p PORT] [-C FILE] [-a]
+
+*DESCRIPTION*::
+       `cherokee-admin` runs the server for the administrative interface used to
+       configure Cherokee. The interface itself will be available via your Web
+       browser.
+
+*OPTIONS*::
+       `cherokee-admin` accepts the following options:
+
+       `-h, --help`
+               Shows brief usage information
+
+       `-V, --version`
+               Show version and exit
+
+       `-b, --bind[=IP]`
+               By  default `cherokee-admin` binds only to 127.0.0.1 (localhost),
+               which means you can only connect to it from  the  same  system.
+               With this parameter you can specify the network address to lis‐
+               ten to. If no IP is provided, it will bind to all interfaces.
+
+       `-C, --target=PATH`
+               Requests  a  configuration  file  different  than  the  default
+               /etc/cherokee/cherokee.conf to be used
+
+       `-d, --appdir=DIR`
+               Uses a custom admin-interface path
+
+       `-p, --port=NUM`
+               Specifies an alternative port. By default, 9090.
+
+**********************************************************************
+
+Refer to the link:config_walkthrough.html[configuration section] for
+more in-depth explanations of the usage of the interface as a
+configuration tool.
+

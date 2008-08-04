@@ -86,6 +86,3 @@ CHEROKEE_TRACE=thread,all ./cherokee | ../contrib/tracelor.py iocache
   easily.
 
   image::media/images/tracelor.png[Output of tracelor.py]
-
-
-
