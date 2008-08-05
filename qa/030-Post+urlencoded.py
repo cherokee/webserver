@@ -2,9 +2,9 @@ import os
 from base import *
 
 CONF = """
-vserver!001!rule!300!match = directory
-vserver!001!rule!300!match!directory = /post2
-vserver!001!rule!300!handler = cgi
+vserver!1!rule!300!match = directory
+vserver!1!rule!300!match!directory = /post2
+vserver!1!rule!300!handler = cgi
 """
 
 class Test (TestBase):

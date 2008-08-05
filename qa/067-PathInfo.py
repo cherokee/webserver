@@ -13,9 +13,9 @@ CONF = """
 # 
 #    cgi.fix_pathinfo=0
 #
-vserver!001!rule!670!match = directory
-vserver!001!rule!670!match!directory = /pathinfo
-vserver!001!rule!670!handler = common
+vserver!1!rule!670!match = directory
+vserver!1!rule!670!match!directory = /pathinfo
+vserver!1!rule!670!handler = common
 """
 
 class Test (TestBase):

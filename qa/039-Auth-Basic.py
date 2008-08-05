@@ -1,13 +1,13 @@
 from base import *
 
 CONF = """
-vserver!001!rule!390!match = directory
-vserver!001!rule!390!match!directory = /auth1
-vserver!001!rule!390!match!final = 0
-vserver!001!rule!390!auth = plain
-vserver!001!rule!390!auth!methods = basic
-vserver!001!rule!390!auth!realm = Test
-vserver!001!rule!390!auth!passwdfile = %s
+vserver!1!rule!390!match = directory
+vserver!1!rule!390!match!directory = /auth1
+vserver!1!rule!390!match!final = 0
+vserver!1!rule!390!auth = plain
+vserver!1!rule!390!auth!methods = basic
+vserver!1!rule!390!auth!realm = Test
+vserver!1!rule!390!auth!passwdfile = %s
 """
 
 class Test (TestBase):

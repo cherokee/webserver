@@ -4,10 +4,10 @@ from base import *
 PATH_INFO   = "/this_is_the/path_info"
 
 CONF = """
-vserver!001!rule!1040!match = directory
-vserver!001!rule!1040!match!directory = /alias_and_pathinfo
-vserver!001!rule!1040!handler = cgi
-vserver!001!rule!1040!handler!script_alias = %s
+vserver!1!rule!1040!match = directory
+vserver!1!rule!1040!match!directory = /alias_and_pathinfo
+vserver!1!rule!1040!handler = cgi
+vserver!1!rule!1040!handler!script_alias = %s
 """
 
 class Test (TestBase):

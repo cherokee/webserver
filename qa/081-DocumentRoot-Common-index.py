@@ -4,10 +4,10 @@ MAGIC1 = "First part"
 MAGIC2 = "Second part"
 
 CONF = """
-vserver!001!rule!810!match = directory
-vserver!001!rule!810!match!directory = /dr_common_index
-vserver!001!rule!810!handler = common
-vserver!001!rule!810!document_root = %s
+vserver!1!rule!810!match = directory
+vserver!1!rule!810!match!directory = /dr_common_index
+vserver!1!rule!810!handler = common
+vserver!1!rule!810!document_root = %s
 """
 
 class Test (TestBase):

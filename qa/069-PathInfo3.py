@@ -3,9 +3,9 @@ from base import *
 PATH_INFO = "/param1/param2/param3"
 
 CONF = """
-vserver!001!rule!690!match = directory
-vserver!001!rule!690!match!directory = /pathinfo3
-vserver!001!rule!690!handler = cgi
+vserver!1!rule!690!match = directory
+vserver!1!rule!690!match!directory = /pathinfo3
+vserver!1!rule!690!handler = cgi
 """
 
 class Test (TestBase):

@@ -4,14 +4,14 @@ REQUIRED  = "This is working! :-)"
 FORBIDDEN = "It shouldn't appear in the text"
 
 CONF = """
-vserver!001!rule!800!match = directory
-vserver!001!rule!800!match!directory = /extension2
-vserver!001!rule!800!handler = file
+vserver!1!rule!800!match = directory
+vserver!1!rule!800!match!directory = /extension2
+vserver!1!rule!800!handler = file
 
-vserver!001!rule!801!match = extensions
-vserver!001!rule!801!match!extensions = abc,def,ghi
-vserver!001!rule!801!handler = phpcgi
-vserver!001!rule!801!handler!interpreter = %s
+vserver!1!rule!801!match = extensions
+vserver!1!rule!801!match!extensions = abc,def,ghi
+vserver!1!rule!801!handler = phpcgi
+vserver!1!rule!801!handler!interpreter = %s
 """
 
 class Test (TestBase):

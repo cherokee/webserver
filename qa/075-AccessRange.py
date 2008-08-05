@@ -4,10 +4,10 @@ from os import system
 MAGIC = "Allow From range"
 
 CONF = """
-vserver!001!rule!750!match = directory
-vserver!001!rule!750!match!directory = /allow_range1
-vserver!001!rule!750!match!final = 0
-vserver!001!rule!750!allow_from = ::1/128,127.0.0.1/32
+vserver!1!rule!750!match = directory
+vserver!1!rule!750!match!directory = /allow_range1
+vserver!1!rule!750!match!final = 0
+vserver!1!rule!750!allow_from = ::1/128,127.0.0.1/32
 """
 
 class Test (TestBase):

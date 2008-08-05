@@ -51,18 +51,18 @@
 #define DEFAULT_CONFIG_FILE CHEROKEE_CONFDIR "/cherokee.conf"
 
 #define BASIC_CONFIG							\
-	"vserver!001!nick = default\n"					\
-	"vserver!001!rule!1!match = default\n"				\
-	"vserver!001!rule!1!handler = common\n"				\
-	"vserver!001!rule!1!handler!iocache = 0\n"			\
-	"vserver!001!rule!2!match = directory\n"			\
-	"vserver!001!rule!2!match!directory = /icons\n"			\
-	"vserver!001!rule!2!handler = file\n"				\
-	"vserver!001!rule!2!document_root = " CHEROKEE_ICONSDIR "\n"	\
-	"vserver!001!rule!3!match = directory\n"			\
-	"vserver!001!rule!3!match!directory = /cherokee_themes\n"	\
-	"vserver!001!rule!3!handler = file\n"				\
-	"vserver!001!rule!3!document_root = " CHEROKEE_THEMEDIR "\n"	\
+	"vserver!1!nick = default\n"					\
+	"vserver!1!rule!1!match = default\n"				\
+	"vserver!1!rule!1!handler = common\n"				\
+	"vserver!1!rule!1!handler!iocache = 0\n"			\
+	"vserver!1!rule!2!match = directory\n"			\
+	"vserver!1!rule!2!match!directory = /icons\n"			\
+	"vserver!1!rule!2!handler = file\n"				\
+	"vserver!1!rule!2!document_root = " CHEROKEE_ICONSDIR "\n"	\
+	"vserver!1!rule!3!match = directory\n"			\
+	"vserver!1!rule!3!match!directory = /cherokee_themes\n"	\
+	"vserver!1!rule!3!handler = file\n"				\
+	"vserver!1!rule!3!document_root = " CHEROKEE_THEMEDIR "\n"	\
 	"icons!default = page_white.png\n"				\
 	"icons!directory = folder.png\n"				\
 	"icons!parent_directory = arrow_turn_left.png\n"		\
@@ -170,7 +170,7 @@ common_server_initialization (cherokee_server_t *srv)
 		 */
 		cherokee_buffer_add_va (&tmp, 
 					"server!port = %d\n"
-					"vserver!001!document_root = %s\n"
+					"vserver!1!document_root = %s\n"
 					BASIC_CONFIG, port, document_root);
 
 		/* Apply it

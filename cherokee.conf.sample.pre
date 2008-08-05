@@ -20,49 +20,49 @@ server!pid_file = %localstatedir%/run/cherokee.pid
 
 # Default virtual server
 #
-vserver!001!nick = default
-vserver!001!document_root = %wwwroot%
-vserver!001!directory_index = index.php,index.html
+vserver!1!nick = default
+vserver!1!document_root = %wwwroot%
+vserver!1!directory_index = index.php,index.html
 
-vserver!001!logger = combined
-vserver!001!logger!access!type = file
-vserver!001!logger!access!filename = %localstatedir%/log/cherokee.access
-vserver!001!logger!access!buffsize = 16384
-vserver!001!logger!error!type = file
-vserver!001!logger!error!filename = %localstatedir%/log/cherokee.error
+vserver!1!logger = combined
+vserver!1!logger!access!type = file
+vserver!1!logger!access!filename = %localstatedir%/log/cherokee.access
+vserver!1!logger!access!buffsize = 16384
+vserver!1!logger!error!type = file
+vserver!1!logger!error!filename = %localstatedir%/log/cherokee.error
 
-vserver!001!rule!1!match = default
-vserver!001!rule!1!handler = common
-vserver!001!rule!1!handler!iocache = 0
+vserver!1!rule!1!match = default
+vserver!1!rule!1!handler = common
+vserver!1!rule!1!handler!iocache = 0
 
-vserver!001!rule!2!match = directory
-vserver!001!rule!2!match!directory = /icons
-vserver!001!rule!2!handler = file
-vserver!001!rule!2!document_root = %prefix%/share/cherokee/icons/
+vserver!1!rule!2!match = directory
+vserver!1!rule!2!match!directory = /icons
+vserver!1!rule!2!handler = file
+vserver!1!rule!2!document_root = %prefix%/share/cherokee/icons/
 
-vserver!001!rule!3!match = directory
-vserver!001!rule!3!match!directory = /cherokee_themes
-vserver!001!rule!3!document_root = %prefix%/share/cherokee/themes/
-vserver!001!rule!3!handler = file
+vserver!1!rule!3!match = directory
+vserver!1!rule!3!match!directory = /cherokee_themes
+vserver!1!rule!3!document_root = %prefix%/share/cherokee/themes/
+vserver!1!rule!3!handler = file
 
-vserver!001!rule!4!match = directory
-vserver!001!rule!4!match!directory = /cgi-bin
-vserver!001!rule!4!document_root = %prefix%/lib/cgi-bin/
-vserver!001!rule!4!handler = cgi
+vserver!1!rule!4!match = directory
+vserver!1!rule!4!match!directory = /cgi-bin
+vserver!1!rule!4!document_root = %prefix%/lib/cgi-bin/
+vserver!1!rule!4!handler = cgi
 
-vserver!001!rule!5!match = directory
-vserver!001!rule!5!match!directory = /about
-vserver!001!rule!5!handler = server_info
-vserver!001!rule!5!handler!just_about = 1
+vserver!1!rule!5!match = directory
+vserver!1!rule!5!match!directory = /about
+vserver!1!rule!5!handler = server_info
+vserver!1!rule!5!handler!just_about = 1
 
-vserver!001!rule!99999!match = extensions
-vserver!001!rule!99999!match!extensions = php
-vserver!001!rule!99999!handler = fcgi
-vserver!001!rule!99999!handler!balancer = round_robin
-vserver!001!rule!99999!handler!balancer!type = interpreter
-vserver!001!rule!99999!handler!balancer!local1!host = localhost:1234
-vserver!001!rule!99999!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
-vserver!001!rule!99999!handler!balancer!local1!interpreter = %phpcgi% -b 1234
+vserver!1!rule!99999!match = extensions
+vserver!1!rule!99999!match!extensions = php
+vserver!1!rule!99999!handler = fcgi
+vserver!1!rule!99999!handler!balancer = round_robin
+vserver!1!rule!99999!handler!balancer!type = interpreter
+vserver!1!rule!99999!handler!balancer!local1!host = localhost:1234
+vserver!1!rule!99999!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
+vserver!1!rule!99999!handler!balancer!local1!interpreter = %phpcgi% -b 1234
 
 # Icons
 #

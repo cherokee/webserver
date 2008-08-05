@@ -7,10 +7,10 @@ HEADER_CONTENT = """
 """
 
 CONF = """
-vserver!001!rule!1140!match = directory
-vserver!001!rule!1140!match!directory = /header_file2
-vserver!001!rule!1140!handler = dirlist
-vserver!001!rule!1140!handler!notice_files = noexits1.txt,header.txt,noexits2.txt
+vserver!1!rule!1140!match = directory
+vserver!1!rule!1140!match!directory = /header_file2
+vserver!1!rule!1140!handler = dirlist
+vserver!1!rule!1140!handler!notice_files = noexits1.txt,header.txt,noexits2.txt
 """
 
 class Test (TestBase):

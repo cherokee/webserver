@@ -10,13 +10,13 @@ PASSWD        = "alo"
 PASSWD_APACHE = "$apr1$VVusx/..$B6P.9/IK81S3M1QNVdfdX0"
 
 CONF = """
-vserver!001!rule!950!match = directory
-vserver!001!rule!950!match!directory = /apachemd5_1
-vserver!001!rule!950!match!final = 0
-vserver!001!rule!950!auth = htpasswd
-vserver!001!rule!950!auth!methods = basic
-vserver!001!rule!950!auth!realm = %s
-vserver!001!rule!950!auth!passwdfile = %s
+vserver!1!rule!950!match = directory
+vserver!1!rule!950!match!directory = /apachemd5_1
+vserver!1!rule!950!match!final = 0
+vserver!1!rule!950!auth = htpasswd
+vserver!1!rule!950!auth!methods = basic
+vserver!1!rule!950!auth!realm = %s
+vserver!1!rule!950!auth!passwdfile = %s
 """
 
 class Test (TestBase):

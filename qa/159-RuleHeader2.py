@@ -5,15 +5,15 @@ REFERER   = "example.159com"
 MAGIC     = "Dealing with rule based headers (bis).."
 
 CONF = """
-vserver!001!rule!1590!match = header
-vserver!001!rule!1590!match!header = Referer
-vserver!001!rule!1590!match!match = .+\.159com
-vserver!001!rule!1590!handler = file
+vserver!1!rule!1590!match = header
+vserver!1!rule!1590!match!header = Referer
+vserver!1!rule!1590!match!match = .+\.159com
+vserver!1!rule!1590!handler = file
 
-vserver!001!rule!1591!match = header
-vserver!001!rule!1591!match!header = Referer
-vserver!001!rule!1591!match!match = .+\.159net
-vserver!001!rule!1591!handler = cgi
+vserver!1!rule!1591!match = header
+vserver!1!rule!1591!match!header = Referer
+vserver!1!rule!1591!match!match = .+\.159net
+vserver!1!rule!1591!handler = cgi
 """
 
 CGI = """#!/bin/sh

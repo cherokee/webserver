@@ -10,13 +10,13 @@ PASSWD     = "alo"
 PASSWD_MD5 = "$1$JJ3RnzaO$zpsGlLvKvMVrUW4ZNZ7Iw1"
 
 CONF = """
-vserver!001!rule!960!match = directory
-vserver!001!rule!960!match!directory = /htpasswd_md5
-vserver!001!rule!960!match!final = 0
-vserver!001!rule!960!auth = htpasswd
-vserver!001!rule!960!auth!methods = basic
-vserver!001!rule!960!auth!realm = %s
-vserver!001!rule!960!auth!passwdfile = %s
+vserver!1!rule!960!match = directory
+vserver!1!rule!960!match!directory = /htpasswd_md5
+vserver!1!rule!960!match!final = 0
+vserver!1!rule!960!auth = htpasswd
+vserver!1!rule!960!auth!methods = basic
+vserver!1!rule!960!auth!realm = %s
+vserver!1!rule!960!auth!passwdfile = %s
 """
 
 class Test (TestBase):

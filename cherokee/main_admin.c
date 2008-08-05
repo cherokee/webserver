@@ -45,7 +45,7 @@
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin"
 #define DEFAULT_CONFIG_FILE  CHEROKEE_CONFDIR "/cherokee.conf"
 #define DEFAULT_BIND         "127.0.0.1"
-#define RULE_PRE             "vserver!001!rule!"
+#define RULE_PRE             "vserver!1!rule!"
  
 static int   port          = DEFAULT_PORT;
 static char *document_root = DEFAULT_DOCUMENTROOT;
@@ -94,14 +94,15 @@ config_server (cherokee_server_t *srv)
 		return ret;
 
 	cherokee_buffer_add_va  (&buf, "server!port = %d\n", port);
+	cherokee_buffer_add_str (&buf, "server!thread_number = 1\n");
 	cherokee_buffer_add_str (&buf, "server!ipv6 = 0\n");
 	cherokee_buffer_add_str (&buf, "server!max_connection_reuse = 0\n");
 
 	if (bind_to)
 		cherokee_buffer_add_va (&buf, "server!listen = %s\n", bind_to);
 
-	cherokee_buffer_add_str (&buf, "vserver!001!nick = default\n");
-	cherokee_buffer_add_va  (&buf, "vserver!001!document_root = %s\n", document_root);
+	cherokee_buffer_add_str (&buf, "vserver!1!nick = default\n");
+	cherokee_buffer_add_va  (&buf, "vserver!1!document_root = %s\n", document_root);
 
 	cherokee_buffer_add_va  (&buf, 
 				 RULE_PRE "1!match = default\n"

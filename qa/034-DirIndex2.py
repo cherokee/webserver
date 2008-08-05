@@ -3,9 +3,9 @@ from base import *
 MAGIC = "The_index_page_should_contain_this"
 
 CONF = """
-vserver!001!rule!340!match = directory
-vserver!001!rule!340!match!directory = /index2
-vserver!001!rule!340!handler = common
+vserver!1!rule!340!match = directory
+vserver!1!rule!340!match!directory = /index2
+vserver!1!rule!340!handler = common
 """
 
 class Test (TestBase):

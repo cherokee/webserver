@@ -8,10 +8,10 @@ OFFSET = 15
 DIR    = "range_end_100k_noio"
 
 CONF = """
-vserver!001!rule!1460!match = directory
-vserver!001!rule!1460!match!directory = <dir>
-vserver!001!rule!1460!handler = file
-vserver!001!rule!1460!handler!iocache = 0
+vserver!1!rule!1460!match = directory
+vserver!1!rule!1460!match!directory = <dir>
+vserver!1!rule!1460!handler = file
+vserver!1!rule!1460!handler!iocache = 0
 """
 
 class Test (TestBase):

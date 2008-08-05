@@ -9,13 +9,13 @@ USER         = "username"
 PASSWD       = "alo"
 
 CONF = """
-vserver!001!rule!990!match = directory
-vserver!001!rule!990!match!directory = /htpasswd_plain
-vserver!001!rule!990!match!final = 0
-vserver!001!rule!990!auth = htpasswd
-vserver!001!rule!990!auth!methods = basic
-vserver!001!rule!990!auth!realm = %s
-vserver!001!rule!990!auth!passwdfile = %s
+vserver!1!rule!990!match = directory
+vserver!1!rule!990!match!directory = /htpasswd_plain
+vserver!1!rule!990!match!final = 0
+vserver!1!rule!990!auth = htpasswd
+vserver!1!rule!990!auth!methods = basic
+vserver!1!rule!990!auth!realm = %s
+vserver!1!rule!990!auth!passwdfile = %s
 """
 
 class Test (TestBase):

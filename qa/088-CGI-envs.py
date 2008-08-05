@@ -7,11 +7,11 @@ ENV1_VALUE = "Value1"
 ENV2_VALUE = "This is the second one"
 
 CONF = """
-vserver!001!rule!880!match = directory
-vserver!001!rule!880!match!directory = /cgienvs
-vserver!001!rule!880!handler = cgi
-vserver!001!rule!880!handler!env!%s = %s
-vserver!001!rule!880!handler!env!%s = %s
+vserver!1!rule!880!match = directory
+vserver!1!rule!880!match!directory = /cgienvs
+vserver!1!rule!880!handler = cgi
+vserver!1!rule!880!handler!env!%s = %s
+vserver!1!rule!880!handler!env!%s = %s
 """
 
 class Test (TestBase):

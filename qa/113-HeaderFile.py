@@ -6,10 +6,10 @@ random_str  = letters_random (POST_LENGTH)
 HEADER_CONTENT = "This is the header file of the directory"
 
 CONF = """
-vserver!001!rule!1130!match = directory
-vserver!001!rule!1130!match!directory = /header_file1
-vserver!001!rule!1130!handler = common
-vserver!001!rule!1130!handler!notice_files = header
+vserver!1!rule!1130!match = directory
+vserver!1!rule!1130!match!directory = /header_file1
+vserver!1!rule!1130!handler = common
+vserver!1!rule!1130!handler!notice_files = header
 """
 
 

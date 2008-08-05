@@ -7,10 +7,10 @@ REQ  = "%s/e/f" % (DIR)
 DIR2 = "%s/g/h" % (REQ)
 
 CONF = """
-vserver!001!rule!1550!match = directory
-vserver!001!rule!1550!match!directory = /<dir>
-vserver!001!rule!1550!handler = common
-vserver!001!rule!1550!document_root = %s
+vserver!1!rule!1550!match = directory
+vserver!1!rule!1550!match!directory = /<dir>
+vserver!1!rule!1550!handler = common
+vserver!1!rule!1550!document_root = %s
 """
 
 class Test (TestBase):

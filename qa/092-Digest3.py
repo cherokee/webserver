@@ -8,13 +8,13 @@ PASSWD1 = "itissecret"
 PASSWD2 = "Itissecret"
 
 CONF = """
-vserver!001!rule!920!match = directory
-vserver!001!rule!920!match!directory = /digest3
-vserver!001!rule!920!match!final = 0
-vserver!001!rule!920!auth = plain
-vserver!001!rule!920!auth!methods = digest
-vserver!001!rule!920!auth!realm = %s
-vserver!001!rule!920!auth!passwdfile = %s
+vserver!1!rule!920!match = directory
+vserver!1!rule!920!match!directory = /digest3
+vserver!1!rule!920!match!final = 0
+vserver!1!rule!920!auth = plain
+vserver!1!rule!920!auth!methods = digest
+vserver!1!rule!920!auth!realm = %s
+vserver!1!rule!920!auth!passwdfile = %s
 """
 
 class Test (TestBase):

@@ -4,13 +4,13 @@ COMMENT = "This is comment inside the CGI"
 TEXT    = "It should be printed by the CGI"
 
 CONF = """
-vserver!001!rule!1090!match = extensions
-vserver!001!rule!1090!match!extensions = prio3
-vserver!001!rule!1090!handler = file
+vserver!1!rule!1090!match = extensions
+vserver!1!rule!1090!match!extensions = prio3
+vserver!1!rule!1090!handler = file
 
-vserver!001!rule!1091!match = directory
-vserver!001!rule!1091!match!directory = /prio3/sub
-vserver!001!rule!1091!handler = cgi
+vserver!1!rule!1091!match = directory
+vserver!1!rule!1091!match!directory = /prio3/sub
+vserver!1!rule!1091!handler = cgi
 """
 
 class Test (TestBase):

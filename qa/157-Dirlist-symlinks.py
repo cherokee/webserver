@@ -5,10 +5,10 @@ LINK_NAME = "symbolic_link_name"
 FILE_NAME = "real_file_we_will_link"
 
 CONF = """
-vserver!001!rule!1570!match = directory
-vserver!001!rule!1570!match!directory = /<dir>
-vserver!001!rule!1570!handler = dirlist
-vserver!001!rule!1570!handler!symlinks = 0
+vserver!1!rule!1570!match = directory
+vserver!1!rule!1570!match!directory = /<dir>
+vserver!1!rule!1570!handler = dirlist
+vserver!1!rule!1570!handler!symlinks = 0
 """
 
 class Test (TestBase):

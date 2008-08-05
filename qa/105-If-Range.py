@@ -36,9 +36,9 @@ DOCUMENTATION = """
 """
 
 CONF = """
-vserver!001!rule!1050!match = directory
-vserver!001!rule!1050!match!directory = /if_range1
-vserver!001!rule!1050!handler = file
+vserver!1!rule!1050!match = directory
+vserver!1!rule!1050!match!directory = /if_range1
+vserver!1!rule!1050!handler = file
 """
 
 class Test (TestBase):

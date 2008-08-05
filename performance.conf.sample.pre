@@ -18,7 +18,7 @@ server!pid_file = %localstatedir%/run/cherokee.pid
 
 # Default virtual server
 #
-vserver!001!nick = default
-vserver!001!document_root = %wwwroot%
-vserver!001!rule!1!match = default
-vserver!001!rule!1!handler = file
+vserver!1!nick = default
+vserver!1!document_root = %wwwroot%
+vserver!1!rule!1!match = default
+vserver!1!rule!1!handler = file

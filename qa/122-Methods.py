@@ -7,9 +7,9 @@ class TestEntry (TestBase):
         self.expected_error = 405
 
 CONF = """        
-vserver!001!rule!1220!match = directory
-vserver!001!rule!1220!match!directory = /methods_group
-vserver!001!rule!1220!handler = file
+vserver!1!rule!1220!match = directory
+vserver!1!rule!1220!match!directory = /methods_group
+vserver!1!rule!1220!handler = file
 """
 
 class Test (TestCollection):

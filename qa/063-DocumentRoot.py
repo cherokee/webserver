@@ -3,10 +3,10 @@ from base import *
 MAGIC="This is the magic string for the DocumentRoot test - common"
 
 CONF = """
-vserver!001!rule!630!match = directory
-vserver!001!rule!630!match!directory = /droot
-vserver!001!rule!630!handler = common
-vserver!001!rule!630!document_root = %s
+vserver!1!rule!630!match = directory
+vserver!1!rule!630!match!directory = /droot
+vserver!1!rule!630!handler = common
+vserver!1!rule!630!document_root = %s
 """
 
 

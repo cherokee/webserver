@@ -4,10 +4,10 @@ from os import system
 MAGIC = "Allow From anywhere"
 
 CONF = """
-vserver!001!rule!780!match = directory
-vserver!001!rule!780!match!directory = /allow_range4
-vserver!001!rule!780!match!final = 0
-vserver!001!rule!780!allow_from = ::/0,0.0.0.0/0
+vserver!1!rule!780!match = directory
+vserver!1!rule!780!match!directory = /allow_range4
+vserver!1!rule!780!match!final = 0
+vserver!1!rule!780!allow_from = ::/0,0.0.0.0/0
 """
 
 class Test (TestBase):

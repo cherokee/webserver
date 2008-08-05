@@ -1,9 +1,9 @@
 from base import *
 
 CONF = """
-vserver!001!rule!490!match = directory
-vserver!001!rule!490!match!directory = /missing
-vserver!001!rule!490!handler = nn
+vserver!1!rule!490!match = directory
+vserver!1!rule!490!match!directory = /missing
+vserver!1!rule!490!handler = nn
 """
 
 class Test (TestBase):

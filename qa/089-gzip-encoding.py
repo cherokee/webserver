@@ -8,9 +8,9 @@ from gzip import GzipFile
 MAGIC  = "Random text follows: " + str_random (10 * 1024)
 
 CONF = """
-vserver!001!rule!890!match = directory
-vserver!001!rule!890!match!directory = /gzip1
-vserver!001!rule!890!handler = file
+vserver!1!rule!890!match = directory
+vserver!1!rule!890!match!directory = /gzip1
+vserver!1!rule!890!handler = file
 """
 
 

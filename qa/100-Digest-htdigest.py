@@ -8,13 +8,13 @@ PASSWD = "itissecret"
 DIR    = "digest_htdigest1"
 
 CONF = """
-vserver!001!rule!1000!match = directory
-vserver!001!rule!1000!match!directory = %s
-vserver!001!rule!1000!match!final = 0
-vserver!001!rule!1000!auth = htdigest
-vserver!001!rule!1000!auth!methods = digest
-vserver!001!rule!1000!auth!realm = %s
-vserver!001!rule!1000!auth!passwdfile = %s
+vserver!1!rule!1000!match = directory
+vserver!1!rule!1000!match!directory = %s
+vserver!1!rule!1000!match!final = 0
+vserver!1!rule!1000!auth = htdigest
+vserver!1!rule!1000!auth!methods = digest
+vserver!1!rule!1000!auth!realm = %s
+vserver!1!rule!1000!auth!passwdfile = %s
 """
 
 class Test (TestBase):

@@ -6,12 +6,12 @@ USER="cherokeeqa"
 PASS="cherokeeqa"
 
 CONF = """
-vserver!001!rule!610!match = directory
-vserver!001!rule!610!match!directory = /privpam
-vserver!001!rule!610!match!final = 0
-vserver!001!rule!610!auth = pam
-vserver!001!rule!610!auth!methods = basic
-vserver!001!rule!610!auth!realm = Test PAM
+vserver!1!rule!610!match = directory
+vserver!1!rule!610!match!directory = /privpam
+vserver!1!rule!610!match!final = 0
+vserver!1!rule!610!auth = pam
+vserver!1!rule!610!auth!methods = basic
+vserver!1!rule!610!auth!realm = Test PAM
 """
 
 

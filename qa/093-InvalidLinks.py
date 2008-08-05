@@ -7,9 +7,9 @@ LINKS   = {"link1": "dir1", "link2": "file1" }
 BLINKS  = {"broken2": "del1", "broken1": "del2"}
 
 CONF = """
-vserver!001!rule!930!match = directory
-vserver!001!rule!930!match!directory = /brokenlinks1
-vserver!001!rule!930!handler = dirlist
+vserver!1!rule!930!match = directory
+vserver!1!rule!930!match!directory = /brokenlinks1
+vserver!1!rule!930!handler = dirlist
 """
 
 class Test (TestBase):

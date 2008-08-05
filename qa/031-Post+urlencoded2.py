@@ -1,9 +1,9 @@
 from base import *
 
 CONF = """
-vserver!001!rule!310!match = directory
-vserver!001!rule!310!match!directory = /post3
-vserver!001!rule!310!handler = common
+vserver!1!rule!310!match = directory
+vserver!1!rule!310!match!directory = /post3
+vserver!1!rule!310!handler = common
 """
 
 class Test (TestBase):

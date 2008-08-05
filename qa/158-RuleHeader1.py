@@ -5,10 +5,10 @@ REFERER   = "example.158ext"
 MAGIC     = "Dealing with rule based headers.."
 
 CONF = """
-vserver!001!rule!1580!match = header
-vserver!001!rule!1580!match!header = Referer
-vserver!001!rule!1580!match!match = .+\.158ext
-vserver!001!rule!1580!handler = cgi
+vserver!1!rule!1580!match = header
+vserver!1!rule!1580!match!header = Referer
+vserver!1!rule!1580!match!match = .+\.158ext
+vserver!1!rule!1580!handler = cgi
 """
 
 CGI = """#!/bin/sh

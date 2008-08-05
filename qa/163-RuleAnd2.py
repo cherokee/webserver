@@ -5,16 +5,16 @@ DIR     = "DirAnd2"
 FILE    = "test.cgi"
 
 CONF = """
-vserver!001!rule!1630!match = directory
-vserver!001!rule!1630!match!directory = /%s
-vserver!001!rule!1630!handler = cgi
+vserver!1!rule!1630!match = directory
+vserver!1!rule!1630!match!directory = /%s
+vserver!1!rule!1630!handler = cgi
 
-vserver!001!rule!1631!match = and
-vserver!001!rule!1631!match!left = directory
-vserver!001!rule!1631!match!left!directory = /%s
-vserver!001!rule!1631!match!right = extensions
-vserver!001!rule!1631!match!right!extensions = not_cgi,other
-vserver!001!rule!1631!handler = file
+vserver!1!rule!1631!match = and
+vserver!1!rule!1631!match!left = directory
+vserver!1!rule!1631!match!left!directory = /%s
+vserver!1!rule!1631!match!right = extensions
+vserver!1!rule!1631!match!right!extensions = not_cgi,other
+vserver!1!rule!1631!handler = file
 """
 
 CGI = """#!/bin/sh

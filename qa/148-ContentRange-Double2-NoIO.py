@@ -9,10 +9,10 @@ OFFSET2 = 40*1024
 DIR     = "range_both_100k_noio"
 
 CONF = """
-vserver!001!rule!1480!match = directory
-vserver!001!rule!1480!match!directory = <dir>
-vserver!001!rule!1480!handler = file
-vserver!001!rule!1480!handler!iocache = 0
+vserver!1!rule!1480!match = directory
+vserver!1!rule!1480!match!directory = <dir>
+vserver!1!rule!1480!handler = file
+vserver!1!rule!1480!handler!iocache = 0
 """
 
 

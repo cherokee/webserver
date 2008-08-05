@@ -1,10 +1,10 @@
 from base import *
 
 CONF = """
-vserver!001!rule!470!match = directory
-vserver!001!rule!470!match!directory = /redir47
-vserver!001!rule!470!handler = redir
-vserver!001!rule!470!handler!url = http://www.cherokee-project.com
+vserver!1!rule!470!match = directory
+vserver!1!rule!470!match!directory = /redir47
+vserver!1!rule!470!handler = redir
+vserver!1!rule!470!handler!url = http://www.cherokee-project.com
 """
 
 class Test (TestBase):

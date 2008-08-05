@@ -1,14 +1,14 @@
 from base import *
 
 CONF = """
-vserver!001!rule!860!match = directory
-vserver!001!rule!860!match!directory = /auth2users
-vserver!001!rule!860!match!final = 0
-vserver!001!rule!860!auth = plain
-vserver!001!rule!860!auth!methods = basic
-vserver!001!rule!860!auth!realm = Test with Users
-vserver!001!rule!860!auth!passwdfile = %s
-vserver!001!rule!860!auth!users = foo,Aladdin
+vserver!1!rule!860!match = directory
+vserver!1!rule!860!match!directory = /auth2users
+vserver!1!rule!860!match!final = 0
+vserver!1!rule!860!auth = plain
+vserver!1!rule!860!auth!methods = basic
+vserver!1!rule!860!auth!realm = Test with Users
+vserver!1!rule!860!auth!passwdfile = %s
+vserver!1!rule!860!auth!users = foo,Aladdin
 """
 
 class Test (TestBase):

@@ -6,10 +6,10 @@ MAGIC   = str_random (100)
 DISCART = "This text should be discarted"
 
 CONF = """
-vserver!001!rule!1660!match = directory
-vserver!001!rule!1660!match!directory = /%s
-vserver!001!rule!1660!handler = cgi
-vserver!001!rule!1660!handler!xsendfile = 1
+vserver!1!rule!1660!match = directory
+vserver!1!rule!1660!match!directory = /%s
+vserver!1!rule!1660!handler = cgi
+vserver!1!rule!1660!handler!xsendfile = 1
 """
 
 CGI = """#!/bin/sh
