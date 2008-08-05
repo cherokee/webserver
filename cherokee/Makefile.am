@@ -458,12 +458,9 @@ levenshtein_distance.h \
 handler_error_nn.c \
 handler_error_nn.h
 
-if PLATFORM_WIN32
-nn_ldflags_win32 = -lplugin_common -lplugin_redir
-endif
-
-libplugin_error_nn_la_LDFLAGS = $(module_ldflags) $(nn_ldflags_win32)
+libplugin_error_nn_la_LDFLAGS = $(module_ldflags)
 libplugin_error_nn_la_SOURCES = $(handler_nn)
+libplugin_error_nn_la_LIBADD  = libcherokee-client.la libcherokee-server.la
 
 if STATIC_HANDLER_ERROR_NN
 static_handler_error_nn_src = $(handler_error_nn)
