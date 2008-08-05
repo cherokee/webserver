@@ -22,13 +22,13 @@ DATA_VALIDATION = [
     ("server!chroot",   (validations.is_local_dir_exists, 'cfg')),
 ]
 
-NOTE_PORT      = 'Defines the port that the server will listens to'
-NOTE_PORT_TLS  = 'Defines the port that the server will listens to for secure connections'
+NOTE_PORT      = 'Defines the port that the server will listen to'
+NOTE_PORT_TLS  = 'Defines the port that the server will listen to for secure connections'
 NOTE_IPV6      = 'Set to enable the IPv6 support. The OS must support IPv6 for this to work.'
-NOTE_LISTEN    = 'IP address of the interface to bind. It usually is empty.'
+NOTE_LISTEN    = 'IP address of the interface to bind. It is usually empty.'
 NOTE_TIMEOUT   = 'Time interval until the server closes inactive connections.'
-NOTE_KEEPALIVE = 'Enables the server-wide keep-alive support. It increases the performance, it is usually set on.'
-NOTE_TOKENS    = 'This option allow to choose how the server identify itself.'
+NOTE_KEEPALIVE = 'Enables the server-wide keep-alive support. It increases the performance. It is usually set on.'
+NOTE_TOKENS    = 'This option allows to choose how the server identifies itself.'
 NOTE_USER      = 'Changes the effective user. User names and IDs are accepted.'
 NOTE_GROUP     = 'Changes the effective group. Group names and IDs are accepted.'
 NOTE_CHROOT    = 'Jail the server inside the directory. Don\'t use it as the only security measure.'
@@ -56,7 +56,7 @@ class PageGeneral (PageMenu, FormHelper):
         self.AddPropEntry (table, 'Listen',   'server!listen',   NOTE_LISTEN)
         txt += self.Indent(table)
 
-        txt += "<h2>Basic Behaviour</h2>"
+        txt += "<h2>Basic Behavior</h2>"
         table = TableProps()
         self.AddPropEntry (table,  'Timeout (<i>secs</i>)', 'server!timeout',  NOTE_TIMEOUT)
         self.AddPropCheck (table,  'Keep Alive',            'server!keepalive', True, NOTE_KEEPALIVE)
