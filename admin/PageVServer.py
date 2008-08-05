@@ -28,7 +28,7 @@ NOTE_CERT            = 'This directive points to the PEM-encoded Certificate fil
 NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server.'
 NOTE_CA_LIST         = 'File with the certificates of Certification Authorities (CA) whose clients you deal with.'
 NOTE_ERROR_HANDLER   = 'Allows the selection of how to generate the error responses.'
-NOTE_PERSONAL_WEB    = 'Directory inside the user home directory that will be used as the root web directory.'
+NOTE_PERSONAL_WEB    = 'Directory inside the user home directory to use as root web directory. Disabled if empty.'
 NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
 NOTE_ADD_DOMAIN      = 'Adds a new domain name. Wildcards are allowed in the domain name.'
 NOTE_DOCUMENT_ROOT   = 'Virtual Server root directory.'
@@ -185,13 +185,13 @@ class PageVServer (PageMenu, FormHelper):
         tmp = self._render_hosts(host)
         tabs += [('Domain names', tmp)]
         
-        # Behaviour
+        # Behavior
         pre = 'vserver!%s!rule' %(host)
         tmp = self._render_rules_generic (cfg_key    = pre, 
                                           url_prefix = '/vserver/%s'%(host),
                                           priorities = self._priorities)
         tmp += self._render_add_rule ("tmp!new_rule")
-        tabs += [('Behaviour', tmp)]
+        tabs += [('Behavior', tmp)]
 
         # Personal Webs
         tmp  = self._render_personal_webs (host)

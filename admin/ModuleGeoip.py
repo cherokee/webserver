@@ -9,7 +9,7 @@ ISO3166_URL      = "http://www.iso.org/iso/country_codes/iso_3166_code_lists/eng
 NOTE_NEW_COUNTRY = "Add the initial country. It's possible to add more later on."
 NOTE_ADD_COUNTRY = "Pick an additional country to add to the country list."
 NOTE_COUNTRIES   = "List of countries from the client IPs. It must use the " + \
-    "<a target=\"_blank\" href=\"%s\">ISO 3166</a> contry notation." % (ISO3166_URL)
+    "<a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation." % (ISO3166_URL)
 
 class ModuleGeoip (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
