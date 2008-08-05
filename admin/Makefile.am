@@ -50,6 +50,7 @@ ModuleFcgi.py \
 ModuleScgi.py \
 ModuleBalancer.py \
 ModuleMirror.py \
+ModuleErrorNn.py \
 ModuleErrorRedir.py \
 ModuleAuth.py \
 ModuleAdmin.py \

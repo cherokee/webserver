@@ -15,7 +15,7 @@ HANDLERS = [
 ERROR_HANDLERS = [
     ('',            'Default errors'),
     ('error_redir', 'Custom redirections'),
-    ('nn',          'Closet match')
+    ('error_nn',    'Closet match')
 ]
 
 VALIDATORS = [

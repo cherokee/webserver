@@ -15,7 +15,6 @@ bin_SCRIPTS = cherokee-panic
 #
 cherokeedepsdir = "$(datadir)/cherokee/deps"
 cherokeedeps_DATA = \
-nn.deps \
 common.deps \
 combined.deps \
 error_redir.deps \
@@ -451,6 +450,29 @@ endif
 
 
 #
+# Handler error_nn
+#
+handler_error_nn = \
+levenshtein_distance.c \
+levenshtein_distance.h \
+handler_error_nn.c \
+handler_error_nn.h
+
+if PLATFORM_WIN32
+nn_ldflags_win32 = -lplugin_common -lplugin_redir
+endif
+
+libplugin_error_nn_la_LDFLAGS = $(module_ldflags) $(nn_ldflags_win32)
+libplugin_error_nn_la_SOURCES = $(handler_nn)
+
+if STATIC_HANDLER_ERROR_NN
+static_handler_error_nn_src = $(handler_error_nn)
+else
+dynamic_handler_error_nn_lib = libplugin_error_nn.la
+endif
+
+
+#
 # Handler common
 #
 handler_common = \
@@ -468,29 +490,6 @@ if STATIC_HANDLER_COMMON
 static_handler_common_src = $(handler_common)
 else
 dynamic_handler_common_lib = libplugin_common.la
-endif
-
-
-#
-# Handler nn
-#
-handler_nn = \
-levenshtein_distance.c \
-levenshtein_distance.h \
-handler_nn.c \
-handler_nn.h
-
-if PLATFORM_WIN32
-nn_ldflags_win32 = -lplugin_common -lplugin_redir
-endif
-
-libplugin_nn_la_LDFLAGS = $(module_ldflags) $(nn_ldflags_win32)
-libplugin_nn_la_SOURCES = $(handler_nn)
-
-if STATIC_HANDLER_NN
-static_handler_nn_src = $(handler_nn)
-else
-dynamic_handler_nn_lib = libplugin_nn.la
 endif
 
 
@@ -1000,10 +999,10 @@ $(static_handler_fcgi_src) \
 $(static_handler_fastcgi_src) \
 $(static_handler_redir_src) \
 $(static_handler_error_redir_src) \
+$(static_handler_error_nn_src) \
 $(static_handler_cgi_src) \
 $(static_handler_phpcgi_src) \
 $(static_handler_common_src) \
-$(static_handler_nn_src) \
 $(static_handler_proxy_src) \
 $(static_handler_mirror_src) \
 $(static_handler_server_info_src) \
@@ -1158,8 +1157,8 @@ $(dynamic_handler_redir_lib) \
 $(dynamic_handler_proxy_lib) \
 $(dynamic_handler_mirror_lib) \
 $(dynamic_handler_error_redir_lib) \
+$(dynamic_handler_error_nn_lib) \
 $(dynamic_handler_common_lib) \
-$(dynamic_handler_nn_lib) \
 $(dynamic_encoder_gzip_lib) \
 $(dynamic_encoder_deflate_lib) \
 $(dynamic_logger_ncsa_lib) \
