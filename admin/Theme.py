@@ -1,3 +1,5 @@
+import re
+
 _global_file_cache = {}
 
 class Theme:
@@ -13,7 +15,10 @@ class Theme:
 
         render = self._template
         while '%(' in render:
-            render = render % keys
+            for replacement in re.findall (r'\%\((\w+)\)s', render):
+                macro = '%('+replacement+')s'
+                render = render.replace (macro, keys[replacement])
+
         return render
 
     def ReadFile (self, name):

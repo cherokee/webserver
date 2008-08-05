@@ -22,11 +22,14 @@ class PageIcon (PageMenu, FormHelper):
     def _op_handler (self, uri, post):
         if uri.startswith('/update'):
             return self._op_apply_changes (post)
+
         elif uri.startswith('/add_file'):
             return self._op_add_file (post)
+
         elif uri.startswith('/add_suffix'):
             return self._op_add_suffix (post)
-        raise 'Unknown method'
+
+        raise Exception ('Unknown method')
 
     def _op_add_file (self, post):
         match = post.get_val('file_new_match')

@@ -88,7 +88,10 @@ class Form:
             render = FORM_TEMPLATE
 
         while '%(' in render:
-            render = render % keys
+            for replacement in re.findall (r'\%\((\w+)\)s', render):
+                macro = '%('+replacement+')s'
+                render = render.replace (macro, keys[replacement])
+
         return render
 
 

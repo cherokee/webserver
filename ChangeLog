@@ -1,3 +1,10 @@
+2008-08-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/Theme.py, admin/Post.py, admin/PageMime.py, admin/Form.py,
+	admin/PageIcon.py: Fixes a problem with some post entries. For
+	instance, the Mime encoding page could not remove entries
+	containing the '+' character.
+
 2008-08-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/config_reader.c (cherokee_config_reader_parse_string):

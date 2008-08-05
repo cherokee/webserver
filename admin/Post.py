@@ -1,8 +1,16 @@
 import cgi
+from urllib import unquote
 
 class Post:
     def __init__ (self, raw=''):
-        self._vars = cgi.parse_qs (raw, keep_blank_values=1)
+        self._vars = {}
+
+        tmp = cgi.parse_qs (raw, keep_blank_values=1)
+        for key in tmp:
+            self._vars[key] = []
+            for n in range(len(tmp[key])):
+                value = tmp[key][n]                
+                self._vars[key] += [unquote (value)]
     
     def _smart_chooser (self, key):
         if not key in self._vars:
