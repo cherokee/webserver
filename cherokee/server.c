@@ -596,7 +596,7 @@ print_banner (cherokee_server_t *srv)
 	 */
 	if (srv->thread_num <= 1) {
 		cherokee_buffer_add_str (&n, ", single thread");
-		cherokee_buffer_add_va (&n, ", %d fds per thread", srv->fdlimit_per_thread);	
+		cherokee_buffer_add_va (&n, ", %d fds", srv->fdlimit_per_thread);	
 	} else {
 		cherokee_buffer_add_va (&n, ", %d threads", srv->thread_num);
 		cherokee_buffer_add_va (&n, ", %d fds per thread", srv->fdlimit_per_thread);	
