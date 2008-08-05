@@ -10,9 +10,9 @@ DATA_VALIDATION = [
 ]
 
 COMMENT = """
-<p>In this section you can configure the server encoders, which
-basically means that you can define where you want it to compress the
-information being sent with GZip.</p>
+<p>In this section you can configure the server encoders. This
+basically means that you can define what information is to be
+sent compressed or not, and the compression method to use.</p>
 """
 
 DATA_VALIDATION = [
@@ -36,7 +36,7 @@ class MatchingList (FormHelper):
         FormHelper.__init__ (self, 'matching_list', cfg)
         self._prefix = pre
         self.errors  = errors
-        
+
     def _op_render (self):
         txt   = ''
         table = TableProps()
@@ -71,7 +71,7 @@ class PageEncoders (PageMenu, FormHelper):
             self._op_apply_add_encoder (post)
         else:
             raise 'Unknown method'
-        return self._op_render()        
+        return self._op_render()
 
     def _render_encoder_list (self):
         txt     = ''
@@ -80,11 +80,11 @@ class PageEncoders (PageMenu, FormHelper):
 
         txt += "<h1>Information encoding</h1>"
         txt += self.Dialog(COMMENT)
-        
+
         # Current encoders
         if cfg and cfg.has_child():
             txt += "<h2>Encoders</h2>"
-            
+
             encs_txt = []
             for encoder in cfg:
                 title   = "<h3>%s</h3>" % (encoder)
@@ -124,11 +124,11 @@ class PageEncoders (PageMenu, FormHelper):
 
         form = Form ("/%s" % (self._id), add_submit=False)
         return form.Render(txt,DEFAULT_SUBMIT_VALUE)
-	
+
     def _op_apply_changes (self, post):
         self.ApplyChanges ([], post, DATA_VALIDATION)
         return "/%s" % (self._id)
-    
+
     def _op_apply_add_encoder (self, post):
         encoder = post.get_val('new_encoder')
         if not encoder:
