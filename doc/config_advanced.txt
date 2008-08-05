@@ -69,7 +69,7 @@ Server behavior
   possible, allowing it to improve performance by not having to
   reinitialize structures in memory that can serve perfectly well for
   more than one time. It defaults to 20. Though this mechanism is an obvious
-  improvent, limiting this limit is useful for cases when a sudden
+  improvent, reducing this limit is useful for cases when a sudden
   burst of connections happens. In those cases it doesn't make much
   sense to keep reusing many more connections than those of an average
   load for any other moment.
