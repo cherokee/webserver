@@ -5,7 +5,7 @@ from Table import *
 from Module import *
 from consts import *
 
-class ModuleErrorRedir (Module, FormHelper):
+class ModuleErrorNn (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url):
         Module.__init__ (self, 'error_nn', cfg, prefix, submit_url)
         FormHelper.__init__ (self, 'error_nn', cfg)
