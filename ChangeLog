@@ -1,5 +1,9 @@
 2008-08-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_nn.c, cherokee/handler_nn.h, admin/consts.py:
+	From now on, the 'nn' handler is an error handler (it makes much
+	more sense like this).
+
 	* admin/Theme.py, admin/Post.py, admin/PageMime.py, admin/Form.py,
 	admin/PageIcon.py: Fixes a problem with some post entries. For
 	instance, the Mime encoding page could not remove entries

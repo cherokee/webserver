@@ -36,15 +36,19 @@
 #include "module.h"
 #include "plugin_loader.h"
 #include "connection.h"
-#include "handler_common.h"
-#include "handler_redir.h"
 #include "levenshtein_distance.h"
-
+#include "handler_error.h"
 
 ret_t 
-cherokee_handler_nn_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
+cherokee_handler_nn_configure (cherokee_config_node_t   *conf, 
+			       cherokee_server_t        *srv, 
+			       cherokee_module_props_t **_props)
 {
-	return cherokee_handler_common_configure (conf, srv, _props);
+	UNUSED(conf);
+	UNUSED(srv);
+	UNUSED(_props);
+
+	return ret_ok;
 }
 
 
@@ -63,8 +67,8 @@ get_nearest_from_directory (char *directory, char *request, cherokee_buffer_t *o
 	while ((entry = readdir (dir)) != NULL) { 
 		int dis;
 			 
-		if (!strncmp (entry->d_name, ".", 1)) continue;
-		if (!strncmp (entry->d_name, "..",2)) continue;
+		if (!strncmp (entry->d_name, ".",  1)) continue;
+		if (!strncmp (entry->d_name, "..", 2)) continue;
 
 		dis = distance ((char *)request, entry->d_name);
 		if (dis < min_diff) {
@@ -84,16 +88,15 @@ go_out:
 
 
 static ret_t
-get_nearest_name (
-			cherokee_connection_t *conn,
-			cherokee_buffer_t *local_dir,
-			cherokee_buffer_t *request,
-			cherokee_buffer_t *output)
+get_nearest_name (cherokee_connection_t *conn,
+		  cherokee_buffer_t     *local_dir,
+		  cherokee_buffer_t     *request,
+		  cherokee_buffer_t     *output)
 {
+	ret_t              ret;
 	char              *rest;
-	ret_t              ret = ret_ok;
 	cherokee_thread_t *thread = CONN_THREAD(conn);
-	cherokee_buffer_t *req = THREAD_TMP_BUF1(thread);/* Request w/o last word */
+	cherokee_buffer_t *req    = THREAD_TMP_BUF1(thread);
 
 	/* Build the local request path
 	 */
@@ -110,7 +113,6 @@ get_nearest_name (
 	/* Copy the new filename to the output buffer
 	 */
 	ret = get_nearest_from_directory (req->buf, rest, output);
-
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
@@ -123,31 +125,18 @@ get_nearest_name (
 
 
 ret_t 
-cherokee_handler_nn_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
+cherokee_handler_nn_new (cherokee_handler_t      **hdl, 
+			 cherokee_connection_t    *conn,
+			 cherokee_module_props_t  *props)
 {
-	ret_t                  ret;
-	struct stat            info;
-	int                    stat_ret;
-	cherokee_connection_t *conn   = CONN(cnt);
+	ret_t ret;
 
-	cherokee_buffer_add (&conn->local_directory, conn->request.buf, conn->request.len);
-	stat_ret = stat (conn->local_directory.buf, &info);
-	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
-	
-	/* Maybe the file/dir exists
-	 */
-	if (stat_ret == 0) {
-		return cherokee_handler_common_new (hdl, cnt, props);
-	} 
-
-	/* It doesn't exists, let's redirect it..
-	 */
 	cherokee_buffer_clean (&conn->redirect);
 
 	ret = get_nearest_name (conn, &conn->local_directory, &conn->request, &conn->redirect);
 	if (unlikely (ret != ret_ok)) {
 		conn->error_code = http_not_found;
-		return ret_error;
+		return cherokee_handler_error_new (hdl, conn, props);
 	}
 
 	cherokee_buffer_swap_buffers (&conn->request, &conn->redirect);
