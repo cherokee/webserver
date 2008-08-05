@@ -8,7 +8,7 @@ Usage: %s [parameters] [tests]
   -f            Do NOT use FastCGI by default
   -q            Quiet mode
   -s            Use SSL
-  -x            Run under Strace
+  -x            Run under Strace/Dtruss
   -b            Run server as nobody
   -l            Run server with a log file
   -a            Randomize tests
