@@ -10,7 +10,7 @@ from consts import *
 
 DEFAULT_RULE_WARNING = 'The default match ought not to be changed.'
 
-NOTE_DOCUMENT_ROOT = 'Allow to specify an alternative document root path.'
+NOTE_DOCUMENT_ROOT = 'Allows to specify an alternative document root path.'
 NOTE_HANDLER       = 'How the connection will be handled.'
 NOTE_HTTPS_ONLY    = 'Enable to allow access to the resource only by https.'
 NOTE_ALLOW_FROM    = 'List of IPs and subnets allowed to access the resource.'

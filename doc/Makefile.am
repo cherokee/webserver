@@ -30,6 +30,7 @@ bundle_spawn-fcgi.html \
 config_walkthrough.html \
 config_general.html \
 config_virtual_servers.html \
+config_virtual_servers_rule.html \
 config_encoding.html \
 config_icons.html \
 config_mime_types.html \
@@ -37,9 +38,6 @@ config_advanced.html \
 cookbook_cross_compilation.html \
 cookbook_authentication.html \
 cookbook_ssl.html \
-index.html \
-loggers.html \
-entry.html \
 modules_balancers_round_robin.html \
 modules_encoders_gzip.html \
 modules_encoders_deflate.html \
@@ -50,6 +48,7 @@ modules_handlers_redir.html \
 modules_handlers_cgi.html \
 modules_handlers_cgi.html \
 modules_handlers_scgi.html \
+modules_loggers.html \
 modules_loggers_combined.html \
 modules_loggers_ncsa.html \
 modules_loggers_w3c.html \

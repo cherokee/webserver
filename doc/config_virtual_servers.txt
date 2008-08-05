@@ -14,8 +14,11 @@ name specified in the virtual server that should handle it. In case no
 virtual server matches the request, default will be used.
 
 Three main options are accessible through this menu:
+
 . Virtual Server List
+
 . Add new Virtual Server
+
 . Clone Virtual Server
 
 *Cloning a Virtual Server* is simply a matter of selecting a target name
@@ -119,10 +122,29 @@ Behavior
 ~~~~~~~~
 
 This sections allows to define a set of rules to define how the server
-should handle the different requests. These rules can be defined based
-on the directory that the request targets, the extension of the file
-that it is requesting, or a regular expression that may match with the
-request:
+should handle the different requests. A summary of the existing rules is
+presented, containig several fields of information:
+
+  . *Target*: web target of the rule, be it a path, a file type, etc.
+
+  . *Type*: Rule type. The will be explained in the following
+    paragraphs.
+
+  . *Handler*: The handler that manages the requests that match this
+    rule. Read on for further details.
+
+  . *Auth*: Indicates if authentication is used for this rule. This
+    can be set up through the link:config_virtual_servers_rule.html[Rule
+    Entry] menu.
+
+  . *Final*: If this flag is present it means that no other rules will
+    be applied after this one, even if the request also matches other
+    rules with lower priority.
+
+These rules can be defined based on the directory that the request
+targets, the extension of the file that it is requesting, or a regular
+expression that may match the request. This is the list of available
+rule types:
 
   * **Directory**: The entry Directory encloses a group of directives which will
     apply only to the named directory and sub-directories of that directory.
@@ -168,12 +190,13 @@ them in the desired position.
 image::media/images/admin_behaviour.png[Virtual server]
 
 Each of these behavior rules must specify which is the handler that
-the server should use to reply the requests that matches the rule.
-Handler are the modules that generate the information with which the
+the server should use to reply to the requests that match the rule.
+Handlers are the modules that generate the information with which the
 server responds a client's request. By default Cherokee provides a
 number of them:
 
-----
+
+**********************************************************************
 - link:modules_handlers_common.html[common] - **List & Send**
 
 Combines both `Static Content` and `Only listing` handlers
@@ -223,7 +246,16 @@ or remotely).
 
 Implements an administration interface to work with
 link:bundle_cherokee-tweak.html[cherokee-tweak].
-----
+**********************************************************************
+
+
+The selection of any one of the rule targets will offer new
+configuration options through the
+link:config_virtual_servers_rule.html[Rule Entry] menu.
+
+Each of the mentioned handlers can be fine-tuned through that
+menu. Refer to each handler's documentation if you are interested in
+the available settings.
 
 
 Personal Webs
@@ -242,7 +274,9 @@ Error Handler
 Several mechanisms exist to handle errors.
 
 . Default errors
+
 . Custom redirections
+
 . Closest match
 
 Using the 'Custom redirections' error handler we can easily redirect
@@ -265,6 +299,7 @@ and/or formats:
 
 
     * Destination: File, syslog, program execution and standard error output.
+
     * Format: Combined (Apache compatible), NCSA or W3C
 
 If a virtual server doesn't have a logger set up it will not log anything.
