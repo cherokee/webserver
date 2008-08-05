@@ -33,7 +33,7 @@ NOTE_SENDFILE_MAX = 'Maximum size of a file to use sendfile(). Default: 2 GB.'
 NOTE_PANIC_ACTION = 'Name a program that will be called if, by some reason, the server fails. Default: <em>cherokee-panic</em>.'
 NOTE_PID_FILE     = 'Path of the PID file. If empty, the file will not be created.'
 NOTE_LISTEN_Q     = 'Max. length of the incoming connection queue.'
-NOTE_REUSE_CONNS  = 'Set the number of how many internal connections can be hold for reuse by each thread. Default 20.'
+NOTE_REUSE_CONNS  = 'Set the number of how many internal connections can be held for reuse by each thread. Default 20.'
 NOTE_FLUSH_TIME   = 'Sets the number of seconds between log consolidations (flushes). Default: 10 seconds.'
 NOTE_KEEPALIVE_RS = 'Maximum number of HTTP requests that can be served by each keepalive connection.'
 
@@ -75,9 +75,9 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddPropEntry    (table, 'PID file',          'server!pid_file',     NOTE_PID_FILE)
         txt += self.Indent(table)
 
-        txt += "<h2>Server behaviour</h2>"
+        txt += "<h2>Server behavior</h2>"
         table = TableProps()
-        self.AddPropEntry    (table, 'Listening queue lenght', 'server!listen_queue',           NOTE_LISTEN_Q)
+        self.AddPropEntry    (table, 'Listening queue length', 'server!listen_queue',           NOTE_LISTEN_Q)
         self.AddPropEntry    (table, 'Reuse connections',      'server!max_connection_reuse',   NOTE_REUSE_CONNS)
         self.AddPropEntry    (table, 'Log flush time',         'server!log_flush_elapse',       NOTE_FLUSH_TIME)
         self.AddPropEntry    (table, 'Max keepalive reqs',     'server!keepalive_max_requests', NOTE_KEEPALIVE_RS)
@@ -85,7 +85,7 @@ class PageAdvanced (PageMenu, FormHelper):
 
         form = Form ("/%s" % (self._id), add_submit=False)
         return form.Render(txt,DEFAULT_SUBMIT_VALUE)
-	
+
     def _op_apply_changes (self, uri, post):
-        self.ApplyChanges ([], post, DATA_VALIDATION) 
+        self.ApplyChanges ([], post, DATA_VALIDATION)
 

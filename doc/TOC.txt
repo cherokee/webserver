@@ -8,7 +8,7 @@ Getting started
    - link:basics_installation_unix.html[Unix]
    - link:basics_installation_windows.html[Windows]
  . link:basics_upgrade.html[Upgrading Cherokee]
- . link:basics_running_cherokee.txt[Running Cherokee]
+ . link:basics_running_cherokee.html[Running Cherokee]
 
 **************************
 The Cherokee Bundle
@@ -23,54 +23,58 @@ The Cherokee Bundle
 **************************
 Configuration
 **************************
-  Walkthrough         <1>	link:config_walkthrough.html
-  General             [5]	link:config_general.html
-  Virtual servers     [6]	link:config_virtual_servers.html
-  Encoding			link:config_encoding.html
-  Icons               [9]	link:config_icons.html
-  Mime Types			link:config_mime_types.html
-  Advanced            [10]	link:config_advanced.html
+  Walkthrough         <1>	link:config_walkthrough.html[]
+  . link:config_general.html[General]
+  . link:config_virtual_servers.html[Virtual servers]
+  . link:config_encoding.html[Encoding]
+  . link:config_icons.html[Icons]
+  . link:config_mime_types.html[Mime Types]
+  . link:config_advanced.html[Advanced]
 
 **************************
 Cookbook
 **************************
-  Reference table     <8>	link:cookbook_reference.html
-  Optimizing Cherokee <2>	link:cookbook_optimizing_cherokee.html
-  Cross compilation   [12]	link:cookbook_cross_compilation.html
-  Embedding Cherokee  <9>	link:cookbook_embedding_cherokee.html
-  Managing logs       <5>	link:cookbook_managing_logs.html <rotations and cherokee-tweak?>
-  Authentication      [8] <3>	link:cookbook_authentication.html
-  SSL/TLS, certs      [13]<6>	link:cookbook_ssl.html
-  Setting up PHP      <4>	link:cookbook_php.html
-  Setting up Django   <4>	link:cookbook_django.html
-  Setting up RoR      <4>	link:cookbook_ror.html
+  Reference table     <8>	link:cookbook_reference.html[]
+  Optimizing Cherokee <2>	link:cookbook_optimizing_cherokee.html[]
+  Cross compilation   [12]	link:cookbook_cross_compilation.html[]
+  Embedding Cherokee  <9>	link:cookbook_embedding_cherokee.html[]
+  Managing logs       <5>	link:cookbook_managing_logs.html[] <rotations and cherokee-tweak?>
+  Authentication      [8] <3>	link:cookbook_authentication.html[]
+  SSL/TLS, certs      [13]<6>	link:cookbook_ssl.html[]
+  Setting up PHP      <4>	link:cookbook_php.html[]
+  Setting up Django   <4>	link:cookbook_django.html[]
+  Setting up RoR      <4>	link:cookbook_ror.html[]
 
 **************************
 Modules
 **************************
-  Balancers
-    Round robin        [24]	link:modules_balancers_round_robin.html
-  Encoders
-    gzip               [25]	link:modules_encoders_gzip.html
-  Handlers
-    cgi                [17]	link:modules_handlers_cgi.html
-    common             [18]	link:modules_handlers_common.html
-    dirlist            [19]	link:modules_handlers_dirlist.html
-    fastcgi            [20]	link:modules_handlers_fastcgi.html
-    file               [21]	link:modules_handlers_file.html
-    redir              [22]	link:modules_handlers_redir.html
-    scgi               [23]	link:modules_handlers_scgi.html
-  Loggers              [16]
-    combined           [16.1]	link:modules_loggers_combined.html
-    ncsa               [16.2]	link:modules_loggers_ncsa.html
-    w3c                [16.3]	link:modules_loggers_w3c.html
-  Validators           [7]
-    htdigest           [7.2]	link:modules_validators_htdigest.html
-    htpasswd           [7.1]	link:modules_validators_htpasswd.html
-    ldap               [7.1]	link:modules_validators_ldap.html
-    mysql              [7.3]	link:modules_validators_mysql.html
-    pam                [7.4]	link:modules_validators_pam.html
-    plain              [7.5]	link:modules_validators_plain.html
+  Balancers			link:modules_balancers.html[]
+    Round robin        [24]	link:modules_balancers_round_robin.html[]
+  Encoders                 	link:modules_encoders.html[]
+    link:modules_encoders_gzip.html[gzip]
+    link:modules_encoders_deflate.html[deflate]
+  Handlers                 	link:modules_handlers.html[]
+    List & Send        [18]	link:modules_handlers_common.html[]
+    Static Content     [21]	link:modules_handlers_file.html[]
+    Only listing       [19]	link:modules_handlers_dirlist.html[]
+    Redirection        [22]	link:modules_handlers_redir.html[]
+    CGI                [17]	link:modules_handlers_cgi.html[]
+    FastCGI            [20]	link:modules_handlers_fcgi.html[]
+    SCGI               [23]	link:modules_handlers_scgi.html[]
+    Server Info            	link:modules_handlers_server_info.html[]
+    Generic balancer       	link:modules_handlers_mirror.html[]
+    Remote Administration  	link:modules_handlers_admin.html[]
+  Loggers              [16]	link:modules_loggers.html[]
+    combined           [16.1]	link:modules_loggers_combined.html[]
+    ncsa               [16.2]	link:modules_loggers_ncsa.html[]
+    w3c                [16.3]	link:modules_loggers_w3c.html[]
+  Validators           [7]	link:modules_validators.html[]
+    htdigest           [7.2]	link:modules_validators_htdigest.html[]
+    htpasswd           [7.1]	link:modules_validators_htpasswd.html[]
+    ldap               [7.1]	link:modules_validators_ldap.html[]
+    mysql              [7.3]	link:modules_validators_mysql.html[]
+    pam                [7.4]	link:modules_validators_pam.html[]
+    plain              [7.5]	link:modules_validators_plain.html[]
 
 **************************
 Other resources
@@ -81,7 +85,7 @@ Other resources
 **************************
 Development info
 **************************
-  Debugging           [11]	link:dev_debug.html
-  cherokee.conf       [15]	link:dev_cherokee.conf.html
-  API introduction		link:dev_api.html
-  Examples			link:dev_examples.html
+  . link:dev_debug.html[Debugging]
+  . link:dev_cherokee.conf.html[cherokee.conf]
+  API introduction		link:dev_api.html[]
+  Examples			link:dev_examples.html[]

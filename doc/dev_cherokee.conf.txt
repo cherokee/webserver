@@ -11,8 +11,18 @@ interface, so unless you are a Cherokee developer or a really
 advanced user, the following format description will not be very
 interesting to you.
 
+The default location for Cherokee configuration files is
+``/etc/cherokee``, but this may vary based on distribution or
+installation parameters.
+
+If you are completely sure about what you are doing, you can modify it
+by hand. We recommend you not to do so, since everything can be
+handled from link:bundle_cherokee-admin.html[cherokee-admin] and a lot
+of security measures and consistency checks are made to ensure you end
+up with a well formed `cherokee.conf` file.
+
 Having said that, let's proceed to describe the configuration file format. It
-is basically a text file that contains a tree where final nodes
+is basically a text file that contains a tree where nodes
 contain values. Let's see a basic example:
 
 ----
@@ -75,10 +85,10 @@ server!module_deps,               Path           , Path to the plug-in inter-dep
 Value                     , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Product                   , Cherokee
-Minor                     , Cherokee/0.0
-Minimal                   , Cherokee/0.0.0
-OS                        , Cherokee/0.0.0 (UNIX)
-Full                      , Cherokee/0.0.0 (UNIX) Ext/0.0 Ext2/0.0
+Minor                     , Cherokee/0.8
+Minimal                   , Cherokee/0.8.0
+OS                        , Cherokee/0.8.0 (UNIX)
+Full                      , Cherokee/0.8.0 (UNIX) Ext/0.0 Ext2/0.0
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``server!thread_policy`` parameters
@@ -87,7 +97,7 @@ Full                      , Cherokee/0.0.0 (UNIX) Ext/0.0 Ext2/0.0
 ``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Value                     , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-fifo                      , First in first out 
+fifo                      , First in first out
 rr                        , Round Robin
 other                     , By default in Linux
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,18 +135,28 @@ maximum number.
 The prefix of this type of entry is ``vserver``, and by far, it is the
 most common type of entry.
 
+Virtual servers are stored in a numbered list. The starting number
+does not really matter. What matters is that the list will be
+interpreted in an orderly fashion to prioritize some virtual servers
+over others, which can be of use depending on the way these are
+defined. The only precuation to take is making sure there are no
+repeated priorities, since the behavior in these cases in undefined.
+
+
+
 [grid="rows"]
 ```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**                                 , **Type**, **Description**
+**Key**                           , **Type**, **Description**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-vserver!default!document_root           , Path    , Document Root path
-vserver!default!user_dir                , String  , User's web directory (for ~ requests)
-vserver!default!domain! ``id``          , String  , "Domain name, admits wildcards"
-vserver!default!error_handler           , String  , Defines the error handler module
-vserver!default!directory_index         , List    , String list: Directory indexes
-vserver!default!ssl_certificate_file    , Path    , TLS/SSL certificate file
-vserver!default!ssl_certificate_key_file, Path    , TLS/SSL certificate key file
-vserver!default!ssl_ca_list_file        , Path    , TLS/SSL CA list file
+vserver!1!nick = default          , String  , The name of the Virtual Server
+vserver!1!document_root           , Path    , Document Root path
+vserver!1!user_dir                , String  , Users' web directory (for ~ requests)
+vserver!1!domain! ``id``          , String  , "Domain name, admits wildcards"
+vserver!1!error_handler           , String  , Defines the error handler module
+vserver!1!directory_index         , List    , String list: Directory indexes
+vserver!1!ssl_certificate_file    , Path    , TLS/SSL certificate file
+vserver!1!ssl_certificate_key_file, Path    , TLS/SSL certificate key file
+vserver!1!ssl_ca_list_file        , Path    , TLS/SSL CA list file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Besides these configuration keys there are a few other more complex
@@ -152,7 +172,7 @@ includes a number of rules against which each request will be checked.
 There are a number of rules types, each one checking a different
 aspect of the request. The most usual rule types are the ones that
 checks the request URI: directories, extensions, regular expressions
-and headers. 
+and headers.
 
 All the rule types accept the same configuration sub-properties.
 However, the ``match`` property must be present in all the cases. It
@@ -160,7 +180,7 @@ specifies which is the rule type and its properties.
 
 The general syntax is:
 
-vserver ! ``name`` ! rule ! ``prioriry`` ! match 
+vserver ! ``order`` ! rule ! ``prioriry`` ! match
 
 The rule types plug-ins shipped within a standard Cherokee release
 include:
@@ -168,12 +188,13 @@ include:
 *Directory*::
   The directory specifies how to handle its contents.
 
-  Example: the entry with priority 20, setting the properties for the
+  Example: an entry with priority 20, setting the properties for the
   *icons* directory of the default virtual host would be represented
   by:
 ----
-      vserver!default!rule!20!match!type = directory
-      vserver!default!rule!20!match!directory = /icons
+      vserver!1!nick = default
+      vserver!1!rule!20!match!type = directory
+      vserver!1!rule!20!match!directory = /icons
 ----
 
 *Extension*::
@@ -181,8 +202,8 @@ include:
 
   Eg: the JPG extensions is:
 ----
-      vserver!default!rule!30!match!type = extensions
-      vserver!default!rule!30!match!extensions = jpg,jpeg
+      vserver!1!rule!30!match!type = extensions
+      vserver!1!rule!30!match!extensions = jpg,jpeg
 ----
 
 *Requests*::
@@ -190,8 +211,8 @@ include:
 
   Eg: requests beginning with 'a' and PHP extension:
 -----
-      vserver!default!rule!40!match!type = request
-      vserver!default!rule!40!match!request = ^a.*\.php$
+      vserver!1!rule!40!match!type = request
+      vserver!1!rule!40!match!request = ^a.*\.php$
 ----
 
 *Header*::
@@ -201,21 +222,25 @@ include:
   Eg: check whether the Referer header matches a specific host:
 
 ----
-      vserver!default!rule!50!match!type = header
-      vserver!default!rule!50!match!header = Referer
-      vserver!default!rule!50!match!match = .+\.example\.com
+      vserver!1!rule!50!match!type = header
+      vserver!1!rule!50!match!header = Referer
+      vserver!1!rule!50!match!match = .+\.example\.com
 ----
 
 *Default*::
 
   This rules matches every request. There must be a default rule
-  configured at the end of the rule list to handle the request that
-  did not match any other rule.
+  configured at the end of the rule list to handle the requests that
+  did not match any other rule. The end of the list means the smallest
+  priority value in relative terms. It doesn't have to be `1`
+  necessarily.
 
-  Eg: Default rule the 'default' virtual server:
+  Eg: Default rule for the 'default' virtual server:
 
 ----
-      vserver!default!rule!default
+      vserver!1!rule!1!match = default
+      vserver!1!rule!1!handler = common
+      vserver!1!rule!1!handler!iocache = 0
 ----
 
 The following parameters are concatenated with any of the previous
@@ -242,7 +267,7 @@ properties:
 ```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Key**                                 , **Type**, **Description**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-auth!methods                            , List    , "Allowed methods (basic, digest)"
+auth!methods                            , List    , Allowed methods (basic & digest)
 auth!realm                              , String  , Realm of the resource
 auth!users                              , List    , List of allowed users
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -253,8 +278,9 @@ So, here are a few examples about how this notation works:
   choice for its root directory:
 
 ----
-    vserver!default!rule!directory!/!handler = common
-    vserver!default!rule!directory!/!priority = 1
+    vserver!1!nick = default
+    vserver!1!rule!directory!/!handler = common
+    vserver!1!rule!directory!/!priority = 1
 ----
 
 - The \*.example.com and \*.examples.org domains are restricted to be
@@ -262,23 +288,25 @@ So, here are a few examples about how this notation works:
   FastCGI:
 
 ----
-    vserver!example!domains!1 = *.example.com
-    vserver!example!domains!2 = *.example.org
-    vserver!example!rule!directory!/!handler = fcgi
-    vserver!example!rule!directory!/!priority = 1
-    vserver!example!rule!directory!/!allow_from = 127.0.0.1,::1
+    vserver!5!nick = example
+    vserver!5!domains!1 = *.example.com
+    vserver!5!domains!2 = *.example.org
+    vserver!5!rule!directory!/!handler = fcgi
+    vserver!5!rule!directory!/!priority = 1
+    vserver!5!rule!directory!/!allow_from = 127.0.0.1,::1
 ----
 
 - ISO images should be handled as files and are protected by a
   htdigest file using only Digest authentication:
 
 ----
-    vserver!default!rule!extensions!iso,ISO!handler = file
-    vserver!default!rule!extensions!iso,ISO!priority = 1
-    vserver!default!rule!extensions!iso,ISO!auth = htdigest
-    vserver!default!rule!extensions!iso,ISO!auth!realm = My secret isos
-    vserver!default!rule!extensions!iso,ISO!auth!methods = digest
-    vserver!default!rule!extensions!iso,ISO!auth!passwdfile = /var/passwd/isos.htdigest
+    vserver!1!nick = default
+    vserver!1!rule!extensions!iso,ISO!handler = file
+    vserver!1!rule!extensions!iso,ISO!priority = 1
+    vserver!1!rule!extensions!iso,ISO!auth = htdigest
+    vserver!1!rule!extensions!iso,ISO!auth!realm = My secret isos
+    vserver!1!rule!extensions!iso,ISO!auth!methods = digest
+    vserver!1!rule!extensions!iso,ISO!auth!passwdfile = /var/passwd/isos.htdigest
 ----
 
 Logs
@@ -298,7 +326,7 @@ logger!error                            , Node    , Defines the error log file
 
 and then, both access and error accept a number of parameters
 depending on its property ``type`` which specifies where the logging
-information will be written. It can be either: 
+information will be written. It can be either:
 
 [grid="rows"]
 ``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -312,17 +340,18 @@ exec                                    , Execute a program with each line
 
 If either ``file`` or ``exec`` is used, there is an additional
 parameter that has to be set. In the case of file, a sub-property
-named ``filename`` and for exec ``command``. 
+named ``filename`` and for exec ``command``.
 
 Examples:
 
 - Apache format logs to the regular files:
 ----
-    vserver!default!logger = combined
-    vserver!default!logger!access!type = file
-    vserver!default!logger!access!filename = /var/log/cherokee.access.log
-    vserver!default!logger!error!type = file
-    vserver!default!logger!error!filename = /var/log/cherokee.error.log
+    vserver!1!nick = default
+    vserver!1!logger = combined
+    vserver!1!logger!access!type = file
+    vserver!1!logger!access!filename = /var/log/cherokee.access.log
+    vserver!1!logger!error!type = file
+    vserver!1!logger!error!filename = /var/log/cherokee.error.log
 ----
 
 Inclusion of Configuration

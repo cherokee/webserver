@@ -1,16 +1,16 @@
 Enconder: Gzip
 --------------
 
-This is a compressiong encoder used to reduce the outgoing bandwidth consumed 
+This is a compression encoder used to reduce the outgoing bandwidth consumed
 by the server and speed up things for the client.
 
-Once again, the encoding support is based on modules, so if the configuration 
-file tell the server to load a module, it will get it ready to use, otherwise 
-there won't be any kind of support on memory.
+Once again, the encoding support is based on modules, so if the configuration
+file tells the server to load a module, it will get it ready to use, otherwise
+there won't be any kind of support in memory.
 
-It's possible to specify which file can be encoded and which ones are not. 
+It's possible to specify which files can be encoded and which ones cannot.
 
-image::media/images/admin_encoding.png[Encoder gzip]
+image::media/images/admin_encoding_gzip.png[Encoder gzip]
 
 With the previous configuration, it works as follows:
 ----
@@ -21,7 +21,7 @@ It works!
 
 ----
 $ wget -q -O - --header="Accept-encoding: gzip"  \
-  http://localhost/example.html | gzip -dc - 
+  http://localhost/example.html | gzip -dc -
 ----
 
 It works!

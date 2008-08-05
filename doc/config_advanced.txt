@@ -1,0 +1,86 @@
+Advanced Configuration
+----------------------
+
+Through this section you can fine-tune several of Cherokee's
+parameters. You should not attempt to do so unless you really know
+what you are doing. For most cases the default parameters will work
+just fine.
+
+You should at least read the chapter
+link:cookbook_optimizing_cherokee.html[Optimizing Cherokee] before you
+start tweaking things here.
+
+image::media/images/admin_advanced.png[Cherokee Admin interface]
+
+System tweaking
+~~~~~~~~~~~~~~~
+* Thread Number:
+  Adjust the number of threads for Cherokee to work with. Increasing
+  this will allow for better parallelization at the cost of system
+  resources. Highly constrained environments such as embedded devices
+  will probably be fine with just one. This doesn't translate into
+  just one connection at the time, since a thread can handle many.
+
+* Thread Policy:
+  Defines the thread policy to be applied by the OS: FIFO, Round Robin
+  or Dynamic.
+
+* File descriptors:
+  This can alter the number of file descriptors handled by the server
+  should handle. The default value is what `ulimit -n` reports. An
+  increase in this value improves performance under very high server load.
+
+Server tweaking
+~~~~~~~~~~~~~~~
+* Polling Method:
+  This affects the internal file descriptor polling method among the
+  ones supported by the OS. The full list of options is `epoll()`, `poll()`
+  and `select()`. If you don't know what this is or how this affects
+  performance, just choose `Automatic`. This will choose the most
+  efficient one among the present at any given time.
+
+* Sendfile min/max size:
+  These allow to configure the range of file sizes that can be sent
+  with `sendfile()`. Default: [32768 Bytes - 2 GB].
+
+* Panic action:
+  This specifies the program that will be called in case the server
+  fails. It defaults to `cherokee-panic`, which is provided with
+  Cherokee. This in turn performs the actions specified in the
+  `CHEROKEE_PANIC_OUTPUT` environment variable. If none is set, it will
+  attempt to send an email to the system administrator with a
+  backtrace of what happened. As a last resort, if no mailer is
+  available in the system, it will simply try to show this information
+  on screen if possible.
+
+* PID file:
+  If specified, a PID file will be created in that path. This is
+  useful to trace what is going on with Cherokee.
+
+Server behavior
+~~~~~~~~~~~~~~~
+* Listening queue length: This specifies the size of the incoming
+  connection queue. It is the effective buffer of connections that
+  will be served even if there are no connection slots available at
+  the moment.
+
+* Reuse connections:
+  Cherokee implements an intelligent mechanism to reuse connections if
+  possible, allowing it to improve performance by not having to
+  reinitialize structures in memory that can serve perfectly well for
+  more than one time. It defaults to 20. Though this mechanism is an obvious
+  improvent, limiting this limit is useful for cases when a sudden
+  burst of connections happens. In those cases it doesn't make much
+  sense to keep reusing many more connections than those of an average
+  load for any other moment.
+
+* Log flush time:
+  Time interval in seconds to wait between log updates. Defaults to 10 seconds.
+
+* Max keepalive reqs:
+  This limits the number of HTTP requests that can be served by each
+  keepalive connection. Keepalive connections improve performance, but
+  surpasing certain amount of requests per each connection is an
+  indicator that something out of the ordinary is happening. This
+  prevents the appearence of any problems related to these situations.
+

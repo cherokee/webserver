@@ -1,0 +1,297 @@
+Virtual Server
+--------------
+
+'Virtual Server' is an abstraction mechanism that allows you to define
+a custom number of parameters and rules that have to be applied to one
+or more domains.
+
+In a Cherokee server there must be at least one virtual server named
+default, and there is no maximum number. It is important to know that
+this server cannot be deleted.
+
+When the server receives a request it will try to match the domain
+name specified in the virtual server that should handle it. In case no
+virtual server matches the request, default will be used.
+
+Three main options are accessible through this menu:
+. Virtual Server List
+. Add new Virtual Server
+. Clone Virtual Server
+
+*Cloning a Virtual Server* is simply a matter of selecting a target name
+and a source virtual server currently present. Every setting will be
+duplicated. From then onwards changes applied to any of them, be it
+the original or the copied Virtual Servers, will only apply to the
+implicated one. This is a great way to set up complex domains,
+since you can use the existing ones as templates to be refined with
+further work.
+
+*To add a new Virtual Server* you have to enter the server name and a
+valid Document Root directory.
+
+image::media/images/admin_vserver.png[Virtual server]
+
+--
+- *Document Root*
+
+This directive sets the directory from which Cherokee will serve
+files. The set of rules is checked from the highest to the lowest
+possible priority. Once a rule is matched, the server appends the path
+from the requested URL to the document root to make the path to the
+document. If it is a directory, this information is used. If other
+rules apply to a parent directory, those are applied as well without
+overwriting the original behavior:
+
+----
+	http://www.example.com/index.html refers to /var/www/index.html
+----
+
+This might seem complicated but it's actually simple to
+understand. For example suppose you had a directory called /secret
+that was protected with authentication, and there was also a rule with
+higher priority for /secret/cgi that only specified to use the CGI
+handler. Under these circumstances, if a request was received for
+/secret/cgi/something then the CGI handler would be taken and it would
+inherit the authentication specified for /secret.
+
+
+- *Name*
+
+Name is an alias. The domain names handled by the virtual server
+should be specified later in the virtual server details page.
+
+--
+
+The *Virtual Server List* is by far the most interesting of these
+three main options. It gives an overview of the existing virtual
+servers, and allows to configure in detail every possible setting.
+
+image::media/images/admin_vserver_vserver.png[Virtual server overview]
+
+A detailed explanation of every tab follows.
+
+Basics
+~~~~~~
+
+--
+- *Directory Indexes*
+
+The DirectoryIndex directive sets the list of resources to look for
+when the client requests an index of the directory by specifying a /
+at the end of the directory name. Several URLs may be given, in which
+case the server will return the first one that it finds. If none of
+the resources exist, the server will reply according to the handler
+behavior.
+
+
+Note that the documents do not need to be relative to the directory:
+
+----
+	index.html,index.txt,/cgi-bin/index.pl
+----
+
+would cause the CGI script /cgi-bin/index.pl to be executed if neither
+index.html nor index.txt existed in a directory.
+
+There is a special case in which the directory index entry starts with
+a slash. For example, /cgi-bin/index.pl. In that case, it will use it
+as the object accessible under that public address of the same virtual
+server, so it will take care about the possible configuration of the
+/cgi-bin/ directory and/or the pl extension.
+
+--
+
+Domain names
+~~~~~~~~~~~~
+
+This section allows to define the list of domains that the virtual
+server implements.
+
+It can accepted either FQDN (Fully Qualified Domain Names) or wild
+card entries. For instance:
+
+----
+          example.com
+        *.example.org
+----
+
+Behavior
+~~~~~~~~
+
+This sections allows to define a set of rules to define how the server
+should handle the different requests. These rules can be defined based
+on the directory that the request targets, the extension of the file
+that it is requesting, or a regular expression that may match with the
+request:
+
+  * **Directory**: The entry Directory encloses a group of directives which will
+    apply only to the named directory and sub-directories of that directory.
+
+  * **Extensions**: The entry Extensions doesn't care about directories, it will
+    just look for the extension of the object requested.
+
+  * **Regular Expressions**: The Request entry provides a powerful way to apply
+    custom options to requests. It is a complement for the Directory and Extension
+    entries. Basically, there are two differences between them:
+
+    - It uses regular expressions to define the requests in which the configuration
+      will be applied.
+
+    - These entries are able to use the connection parameters (both pathinfo
+      and query string). In this way it is possible to set rules based on
+      parameter values.
+
+  * **Header**: This type of rule is used to modify the behavior in
+      response to the contents of HTTP headers. A regular expression
+      is needed to match against. This kind of rule can be used to
+      provide alternative contents to a specific type of users. For
+      example, it can check if the HTTP referrer header refferences
+      specific domains to allow or deny the delivery of the requested
+      information.
+
+  * **GeoIP**: If GeoIP support is present, this type of rules can be
+      added. The GeoIP library has to be present at build time for
+      this to happen. If enabled, specific behavior can be offered
+      depending on the country of origin of the requests to the web
+      server. Note that the country is determined by matching the IPs
+      to the actual list of countries handled by the library, so the
+      usage of proxies on the user side will render this resolution
+      mechanism inaccurate. An initial country must be added to the
+      rule, and more selections can be added in further steps.
+
+It is very important to know that these rules are prioritized, the
+higher its priority is, the sooner they are checked. You could
+think of a network routing table, it is quite similar. You can set the
+relative priorities among the rules by simply dragging and dropping
+them in the desired position.
+
+image::media/images/admin_behaviour.png[Virtual server]
+
+Each of these behavior rules must specify which is the handler that
+the server should use to reply the requests that matches the rule.
+Handler are the modules that generate the information with which the
+server responds a client's request. By default Cherokee provides a
+number of them:
+
+----
+- link:modules_handlers_common.html[common] - **List & Send**
+
+Combines both `Static Content` and `Only listing` handlers
+functionality to behave similarly to common web servers, it will
+display directory listings when a directory is requested and serve the
+requested files.
+
+- link:modules_handlers_file.html[Static Content] - **Static Content**
+
+This is the file handler and it serves files straight from the
+file system.
+
+- link:modules_handlers_dirlist.html[dirlist] - **Only listing**:
+
+Displays a directory content list when a directory is requested,
+but it does not allow to download any content.
+
+- link:modules_handlers_redir.html[redir] - **Redirection**
+
+Perform simple and/or complex redirections using regexes.
+
+- link:modules_handlers_cgi.html[cgi] - **CGI Execution**
+
+Executes CGI programs.
+
+- link:modules_handlers_fcgi.html[fcgi] - **FastCGI Server Support**
+
+Communicates with FastCGI servers.
+
+- link:modules_handlers_scgi.html[scgi] - **SCGI Server Support**
+
+Communicates with SCGI servers.
+
+- link:modules_handlers_server_info.html[Server Info] - **Server
+  Info**
+
+Provide some configurable information about the server.
+
+- link:modules_handlers_mirror.html[Generic balancer] - **Generic
+  balancer**
+
+Select one of the available mechanisms to distribute the load (locally
+or remotely).
+
+- link:modules_handlers_admin.html[Remote Administration] - **Remote
+  Administration**
+
+Implements an administration interface to work with
+link:bundle_cherokee-tweak.html[cherokee-tweak].
+----
+
+
+Personal Webs
+~~~~~~~~~~~~~
+
+This options allows to setup the name of a subdirectory inside the
+users' home directory that will be used as document root for personal
+web content. For instance, if `/foo` was specified, a user `bar` could
+publish the content of ~/foo at the relative URL /~bar
+This option is disabled if the 'Directory name' field is empty.
+
+
+Error Handler
+~~~~~~~~~~~~~
+
+Several mechanisms exist to handle errors.
+
+. Default errors
+. Custom redirections
+. Closest match
+
+Using the 'Custom redirections' error handler we can easily redirect
+errors to a custom path or website.
+
+image::media/images/admin_vserver_errors.png[Virtual server]
+
+The 'Closest match' error handler should never fail to deliver
+something. If a requested resource is not available, the closest match
+will be sent. The only exception to this is when nothing at all is at
+Cherokee's disposal, in which case a standard http error is sent.
+
+
+Logging
+~~~~~~~
+
+The link:modules_loggers.html[loggers] are a type of Cherokee modules
+to write the server log information using different destinations
+and/or formats:
+
+
+    * Destination: File, syslog, program execution and standard error output.
+    * Format: Combined (Apache compatible), NCSA or W3C
+
+If a virtual server doesn't have a logger set up it will not log anything.
+
+image::media/images/admin_vserver_loggers.png[Virtual server]
+
+By default Cherokee ships three loggers implementing three different
+logging formats:
+
+--
+- combined - link:modules_loggers_combined.html[Combined Log Format]
+
+Logging using the Apache log format. It is the `de facto standard` nowadays.
+
+- ncsa - link:modules_loggers_ncsa.html[NCSA Log Format]
+
+Logging using the NCSA log format.
+
+- w3c - link:modules_loggers_w3c.html[W3C Log Format]
+
+Logging using the W3C log format.
+--
+
+
+Security
+~~~~~~~~
+
+The virtual server must be configured with the path to the certificate
+before using secure connections (https). There is a document which
+might help to generate SSL link:cookbook_ssl.html[keys]

@@ -1,0 +1,19 @@
+Enconder: deflate
+-----------------
+
+This compression encoder is similar to the
+link:modules_encoders_gzip.html[gzip] encoder. The `gzip` compression
+is technically superior to `deflate`, thus this one is not set up as a
+default for new virtual servers.
+
+Just as with `gzip`, the encoding support is based on modules, so the configuration
+file must tell the server to load a module or it won't be supported.
+
+Also, as with `gzip`, it is possible to specify which files can be
+encoded and which ones cannot.
+
+The only reason to offer `deflate` encoding is for the rare cases in
+which it is supported by clients that do not support `gzip`. No modern
+web browser will lack this, but since more than one encoder can be
+offered simultaneously by Cherokee you have the choice to add or not
+`deflate` support.

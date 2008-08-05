@@ -25,22 +25,21 @@ This is the full information provided by the manpage.
 *OPTIONS*::
        `cherokee-config` accepts the following options:
 
-       --version
-               Print the currently installed version of CHEROKEE on
-               the standard output.
+       --version::
+               Print the currently installed version of CHEROKEE on the standard output.
 
 
-       --libs  Print the linker flags that are necessary to  link  a  CHEROKEE
-               program.
+       --libs::
+               Print the linker flags that are necessary to  link  a  CHEROKEE program.
 
-       --cflags
-               Print the compiler flags that are necessary to compile
-               a CHEROKEE program.
+       --cflags::
+               Print the compiler flags that are necessary to compile a CHEROKEE program.
 
 
-       --prefix=PREFIX
-               If specified, use PREFIX instead  of  the  installation  prefix
-               that  CHEROKEE was built with when computing the output for the
-               --cflags and --libs options.  This  option  must  be  specified
-               before any --libs or --cflags options.
+       --prefix=PREFIX::
+               If specified, use PREFIX instead  of  the  installation
+               prefix that  CHEROKEE was built with when computing the
+               output for the --cflags and --libs options.  This
+               option  must  be  specified before any --libs or
+               --cflags options.
 **********************************************************************

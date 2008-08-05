@@ -1,7 +1,0 @@
-Advanced Configuration
-----------------------
-
-To be written
-
-image::media/images/admin_advanced.png[Cherokee Admin interface]
-

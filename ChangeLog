@@ -1,3 +1,11 @@
+2008-08-05  Taher Shihadeh <taher@unixwars.com>
+
+	* doc/config_*, doc/bundle_*, doc/cookbook_*, doc/dev_*: dompleted
+	documenting another section, plus multiple fixes to the existing
+	sections. Some more screeshots added.
+
+	* admin/Page*.py: minor fixes.
+
 2008-08-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_nn.c, cherokee/handler_nn.h, admin/consts.py:

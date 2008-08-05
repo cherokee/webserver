@@ -1,0 +1,17 @@
+Encoding
+--------
+
+The content sent by Cherokee can be encoded or not.
+This section is used to configure what
+link:modules_encoders.htm[encoders], if any, are to be applied.
+
+You can set up the encoding method to use, and specify the list of
+content types to allow or deny to be sent encoded.
+
+image::media/images/admin_encoding.png[Available encoders]
+
+Whenever you set up a virtual server,
+link:modules_encoders_gzip.html[gzip] is enabled by default for the
+following file types: html, htm, txt, css & js
+
+You are encouraged to use this. Hardware is cheap. Bandwidth is not.

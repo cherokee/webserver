@@ -69,26 +69,28 @@ This is the full information provided by the manpage.
 *OPTIONS*::
        `cherokee-admin` accepts the following options:
 
-       `-h, --help`
+       -h, --help::
                Shows brief usage information
 
-       `-V, --version`
+       -V, --version::
                Show version and exit
 
-       `-b, --bind[=IP]`
+       -b, --bind[=IP]::
                By  default `cherokee-admin` binds only to 127.0.0.1 (localhost),
                which means you can only connect to it from  the  same  system.
-               With this parameter you can specify the network address to lis‐
-               ten to. If no IP is provided, it will bind to all interfaces.
+               With this parameter you can specify the network address
+               to listen to. If no IP is provided, it will bind to all
+               interfaces.
 
-       `-C, --target=PATH`
+
+       -C, --target=PATH::
                Requests  a  configuration  file  different  than  the  default
                /etc/cherokee/cherokee.conf to be used
 
-       `-d, --appdir=DIR`
+       -d, --appdir=DIR::
                Uses a custom admin-interface path
 
-       `-p, --port=NUM`
+       -p, --port=NUM::
                Specifies an alternative port. By default, 9090.
 
 **********************************************************************
@@ -96,4 +98,3 @@ This is the full information provided by the manpage.
 Refer to the link:config_walkthrough.html[configuration section] for
 more in-depth explanations of the usage of the interface as a
 configuration tool.
-

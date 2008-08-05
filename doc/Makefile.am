@@ -27,26 +27,28 @@ bundle_cherokee-config.html \
 bundle_cherokee-guardian.html \
 bundle_cherokee-tweak.html \
 bundle_spawn-fcgi.html \
+config_walkthrough.html \
+config_general.html \
+config_virtual_servers.html \
+config_encoding.html \
+config_icons.html \
+config_mime_types.html \
+config_advanced.html \
+cookbook_cross_compilation.html \
+cookbook_authentication.html \
+cookbook_ssl.html \
 index.html \
-authentication.html \
-general.html \
 loggers.html \
-vserver.html \
-debug.html \
 entry.html \
-cross_compile_cherokee.html \
-internal_configuration.html \
-advanced.html \
-generating_ssl_keys.html \
-icons.html \
 modules_balancers_round_robin.html \
 modules_encoders_gzip.html \
+modules_encoders_deflate.html \
 modules_handlers_file.html \
 modules_handlers_dirlist.html \
 modules_handlers_common.html \
 modules_handlers_redir.html \
 modules_handlers_cgi.html \
-modules_handlers_fastcgi.html \
+modules_handlers_cgi.html \
 modules_handlers_scgi.html \
 modules_loggers_combined.html \
 modules_loggers_ncsa.html \
@@ -56,7 +58,9 @@ modules_validators_htpasswd.html \
 modules_validators_ldap.html \
 modules_validators_mysql.html \
 modules_validators_pam.html \
-modules_validators_plain.html
+modules_validators_plain.html \
+dev_debug.html \
+dev_cherokee.conf.html
 
 docmediacssdir = $(docdir)/media/css/
 docmediacss_DATA = \
