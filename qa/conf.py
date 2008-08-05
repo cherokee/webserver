@@ -11,6 +11,7 @@ LOGGER_ACCESS     = "access.log"
 LOGGER_ERROR      = "error.log"
 
 STRACE_PATH       = "/usr/bin/strace"
+DTRUSS_PATH       = "/usr/bin/dtruss"
 VALGRIND_PATH     = "/usr/bin/valgrind"
 PYTHON_PATH       = "auto"
 PHPCGI_PATH       = "auto"

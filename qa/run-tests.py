@@ -249,7 +249,11 @@ if port is None:
             else:
                 os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", server, "-C", cfg_file)
         elif strace:
-            os.execl (STRACE_PATH, "strace", server, "-C", cfg_file)            
+            if sys.platform.startswith('darwin') or
+               sys.platform.startswith('sunos'):
+                os.execl (DTRUSS_PATH, "dtruss", server, "-C", cfg_file)
+            else:
+                os.execl (STRACE_PATH, "strace", server, "-C", cfg_file)            
         else:
             name = server[server.rfind('/') + 1:]
 

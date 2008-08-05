@@ -1,3 +1,8 @@
+2008-08-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/run-tests.py, qa/conf.py: Adds dtruss support (additionally
+	to the previous strace support).
+
 2008-08-05  Taher Shihadeh <taher@unixwars.com>
 
 	* doc/config_*, doc/bundle_*, doc/cookbook_*, doc/dev_*: dompleted
