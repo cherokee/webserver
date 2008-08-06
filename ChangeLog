@@ -1,5 +1,8 @@
 2008-08-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* configure.in: Added a check for the fork() syscall. One of the
+	logger back-ends was not working because of this.
+
 	* admin/PageVServers.py: Fixes regression. Cloning was broken.
 
 	* admin/static/images/favicon.ico, cherokee/main_admin.c,
