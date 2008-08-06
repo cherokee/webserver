@@ -10,7 +10,7 @@ Getting started
  . link:basics_running_cherokee.html[Running Cherokee]
 
 **************************
-The Cherokee Bundle
+Cherokee Bundle
 **************************
  . link:bundle_cherokee.html[cherokee]
  . link:bundle_cherokee-admin.html[cherokee-admin]
