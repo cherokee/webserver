@@ -14,13 +14,15 @@ smaller, but we haven't really had the chance to try it out.
 
 
 Software
-~~~~~~~~ 
+~~~~~~~~
 Cherokee has no dependencies besides a standard libc. Everything else
 is optional. Obviously anything beyond mere static content serving
 must be available for Cherokee to correctly execute the task. This
 means you will need PHP if you want Cherokee to serve PHP dynamic
-content, MySQL or LDAP if you set up theses as authentication
-mechanisms for protected content and so on.
+content, MySQL or LDAP development libraries if you want built-in
+support for these as authentication mechanisms for protected content
+and so on.
+
 
 If you intend to build Cherokee from source however, you will need
 several tools and libraries.
@@ -32,7 +34,7 @@ several tools and libraries.
   it shouldn't be a problem.
 
 * Python: Cherokee has an administrative web interface written in
-  Python, so if you intend to use cherokee-admin you will need this. 
+  Python, so if you intend to use cherokee-admin you will need this.
   For disk space constrained environments this won't be an issue
   since you would probably want to make a minimal install in your
   destination host, preconfigured elsewhere. This programming language
@@ -49,6 +51,6 @@ several tools and libraries.
 
 * If you want to make a build that serves secure content, you will
   need TLS libraries. Cherokee supports two different SSL/TLS
-  libraries: OpenSSL and GNUTLS. You need to have one of those
-  libraries with its development files.
-
+  libraries: OpenSSL and GNUTLS. You need to have the development
+  files of one of these in order to build a package that suits your
+  needs.

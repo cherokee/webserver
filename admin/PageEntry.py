@@ -113,13 +113,13 @@ class PageEntry (PageMenu, FormHelper):
     def _render_guts (self):
         pre  = self._conf_prefix
         tabs = []
-        
+
         # Rule Properties
-        tabs += [('Rule', self._render_rule())]        
+        tabs += [('Rule', self._render_rule())]
 
         # Handler
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, 'Handler', '%s!handler'%(pre), 
+        e = self.AddPropOptions_Reload (table, 'Handler', '%s!handler'%(pre),
                                         modules_available(HANDLERS), NOTE_HANDLER)
         self.AddPropEntry (table, 'Document Root', '%s!document_root'%(pre), NOTE_DOCUMENT_ROOT)
 
@@ -133,7 +133,7 @@ class PageEntry (PageMenu, FormHelper):
 
         txt  = '<h1>%s</h1>' % (self._get_title (html=True))
         txt += self.InstanceTab (tabs)
-        form = Form (self.submit_url, add_submit=False)
+        form = Form (self.submit_url, auto=False)
         return form.Render(txt)
 
     def _render_handler_properties (self):

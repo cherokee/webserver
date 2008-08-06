@@ -1,0 +1,49 @@
+Configuration Quickstart
+------------------------
+
+This section briefly describes the whole administration web interface
+provided by link:bundle_cherokee-admin.html[cherokee-admin]. This is
+the only recommended way of configuring Cherokee. If you are looking
+for development information, you should refer to the apropriate
+section, especially link:dev_cherokee.conf.html[cherokee.conf] file
+specification.
+
+We will first show a quick overview of the available options, followed
+by a simple walkthrough. You can learn more about the options in their
+specific documentation entries.
+
+Overview
+~~~~~~~~
+* link:config_general.html[General]::
+  There are a number of entries that specify the most significant
+  configuration options such as the port - or ports - that the server
+  will listen to, the default timeout, whether to support keep-alive
+  connections and so on.
+
+* link:config_virtual_servers.html[Virtual servers]::
+  If you want your web server to work with more than one domain you
+  will have to create link:config_virtual_servers.html[Virtual
+  servers] other than the `default` one. Each one will have a
+  completely independent configuration: paths, behavior, logging
+  facilities, etc.
+
+* link:config_encoding.html[Encoding]::
+  The encoders allow to transform whatever information the server is
+  sending as a response of a request, no matter what handler is
+  generating it.
+
+* link:config_icons.html[Icons]::
+  Associate icon images with one or more file extensions. Used to
+  offer directory listings.
+
+* link:config_mime_types.html[Mime Types]::
+  Manage MIME types.
+
+* link:config_advanced.html[Advanced]::
+  This is to configure the most complex parameters of the server and how
+  it interacts with the operating system. If you are unsure about any of
+  the options here, better not mingle with them. Default values should
+  work just fine.
+
+Walkthrough
+~~~~~~~~~~~

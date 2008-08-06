@@ -4,9 +4,8 @@ Getting started
  . link:basics_why_cherokee.html[Why Cherokee?]
  . link:basics_requirements.html[Requirements]
  . link:basics_download.html[Download]
- . link:basics_installation_unix.html[Installation]
-   - link:basics_installation_unix.html[Unix]
-   - link:basics_installation_windows.html[Windows]
+ . link:basics_installation_unix.html[Installation: Unix]
+ . link:basics_installation_windows.html[Installation: Windows]
  . link:basics_upgrade.html[Upgrading Cherokee]
  . link:basics_running_cherokee.html[Running Cherokee]
 
@@ -18,12 +17,12 @@ The Cherokee Bundle
  . link:bundle_cherokee-config.html[cherokee-config]
  . link:bundle_cherokee-guardian.html[cherokee-guardian]
  . link:bundle_cherokee-tweak.html[cherokee-tweak]
- . link:bundle_spawn-fcgi.html[spawn-fcgi]
+ . link:bundle_cget.html[cget]
 
 **************************
 Configuration
 **************************
-  Walkthrough         <1>	link:config_walkthrough.html[]
+  . Quickstart		<1>	link:config_quickstart.html[]
   . link:config_general.html[General]
   . link:config_virtual_servers.html[Virtual servers]
     - link:config_virtual_servers_rule.html[Rule Options]

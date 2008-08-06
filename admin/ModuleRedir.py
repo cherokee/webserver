@@ -15,7 +15,7 @@ class ModuleRedir (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url):
         Module.__init__ (self, 'redir', cfg, prefix, submit_url)
         FormHelper.__init__ (self, 'redir', cfg)
-                
+
     def _op_render (self):
         cfg_key = "%s!rewrite" % (self._prefix)
         cfg     = self._cfg[cfg_key]

@@ -27,7 +27,8 @@ bundle_cherokee-config.html \
 bundle_cherokee-guardian.html \
 bundle_cherokee-tweak.html \
 bundle_spawn-fcgi.html \
-config_walkthrough.html \
+bundle_cget.html \
+config_quickstart.html \
 config_general.html \
 config_virtual_servers.html \
 config_virtual_servers_rule.html \

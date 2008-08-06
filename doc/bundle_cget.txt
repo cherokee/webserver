@@ -1,0 +1,59 @@
+cget
+----
+
+This is an accessory tool developed for testing purposes of the
+capabilities of Cherokee in the early releases. Over the time new
+functionalities were included and now it can be a really handy
+tool. You might find it useful for your own scripts, especially for
+its ability to read and write HTTP headers.
+
+This is the full information provided by the manpage:
+**********************************************************************
+*NAME*::
+       `cget` - Cherokee web downloader
+
+*SYNOPSIS*::
+       `cget` [options] URL
+
+*DESCRIPTION*::
+       `cget` is a web downloading tool
+
+*OPTIONS*::
+       No  option is mandatory. By default the web is downloaded but it is not
+       saved.  If that is not  the  desired  behavior  it  must  be  specified
+       explicitly.  Below is a summary of the cget options.
+
+       Startup:
+       ~~~~~~~~
+       -V, --version::
+              Display version of currently installed cget and exit.
+
+       -h, --help::
+              Display help screen with common options.
+
+       Logging and input file:
+       ~~~~~~~~~~~~~~~~~~~~~~~
+
+       -q, --quiet::
+              Run in quiet mode: no output is displayed.
+
+       Download:
+       ~~~~~~~~~
+
+       -O, --output-document=FILE::
+              Writes whatever document is downloaded to FILE
+
+       HTTP options:
+       ~~~~~~~~~~~~~
+
+       -s, --save-headers::
+              This  option  saves HTTP headers to the file being saved (speci‐
+              fied with -O option)
+
+       --header=STRING::
+              this option inserts STRING among the headers sent  in  the  HTTP
+              request.
+
+*EXAMPLE*::
+       cget http://www.cherokee-project.com/
+**********************************************************************
