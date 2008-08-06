@@ -65,7 +65,7 @@
 
 #include "buffer.h"
 #include "virtual_server.h"
-
+#include "fdpoll.h"
 
 #ifdef INET6_ADDRSTRLEN
 # define CHE_INET_ADDRSTRLEN INET6_ADDRSTRLEN
@@ -85,9 +85,9 @@
 /* Socket status
  */
 typedef enum {
-	socket_reading = 0,
-	socket_writing,
-	socket_closed
+	socket_reading = FDPOLL_MODE_READ,
+	socket_writing = FDPOLL_MODE_WRITE,
+	socket_closed  = FDPOLL_MODE_NONE
 } cherokee_socket_status_t;
 
 
