@@ -357,15 +357,15 @@ div.toclevel4 {
 /*Left and right blocks for TOC and text */
 #wrapper {
   width:100%;
-  float:right;
-  margin-left: -200px;
+  float:left;
+  margin-right: -200px;
 }
 #content {
-  margin-left: 210px;
+  margin-right: 210px;
 }
 #nav {
   font-size: 0.8em;
   width:200px;
-  float:right;
+  float:left;
   background:#f6f6f6;
 }
