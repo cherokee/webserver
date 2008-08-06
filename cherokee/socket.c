@@ -1681,6 +1681,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		switch (err) {
 		case EISCONN:
 			break;
+		case EINVAL:
 		case ECONNREFUSED:
 		case EADDRNOTAVAIL:
 			return ret_deny;

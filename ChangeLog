@@ -1,5 +1,8 @@
 2008-08-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/socket.c (cherokee_socket_connect): EINVAL was not
+	being checked.
+
 	* cherokee/handler_scgi.c (connect_to_server),
 	cherokee/handler_fcgi.c (connect_to_server): Fixes a bug that
 	could lead the server to a crash when it was trying to spawn a new
