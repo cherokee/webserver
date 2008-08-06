@@ -92,7 +92,10 @@ media/images/admin_handler_onlylisting.png \
 media/images/admin_handler_onlylisting_ex.png \
 media/images/admin_launch.png \
 media/images/tracelor.png \
-media/images/cherokee-tweak.png
+media/images/cherokee-tweak.png \
+media/images/admin_noconfig.png \
+media/images/admin_notrunning.png \
+media/images/admin_rule_regex.png
 
 GENERATED_FILES =   \
 $(docdir_DATA)

@@ -22,7 +22,7 @@ The Cherokee Bundle
 **************************
 Configuration
 **************************
-  . Quickstart		<1>	link:config_quickstart.html[]
+  . link:config_quickstart.html[Quickstart]
   . link:config_general.html[General]
   . link:config_virtual_servers.html[Virtual servers]
     - link:config_virtual_servers_rule.html[Rule Options]
