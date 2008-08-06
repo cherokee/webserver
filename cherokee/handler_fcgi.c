@@ -501,9 +501,9 @@ static ret_t
 connect_to_server (cherokee_handler_fcgi_t *hdl)
 {
 	ret_t                          ret;
+	cherokee_source_interpreter_t *src_int;
 	cherokee_connection_t         *conn    = HANDLER_CONN(hdl);
 	cherokee_handler_fcgi_props_t *props   = HANDLER_FCGI_PROPS(hdl);
-	cherokee_source_interpreter_t *src_int = SOURCE_INT(hdl->src_ref);
 
 	/* Get a reference to the target host
 	 */
@@ -512,6 +512,8 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 		if (ret != ret_ok)
 			return ret;
 	}
+
+	src_int = SOURCE_INT(hdl->src_ref);
 
 	/* Try to connect
 	 */

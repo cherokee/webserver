@@ -1,3 +1,10 @@
+2008-08-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_scgi.c (connect_to_server),
+	cherokee/handler_fcgi.c (connect_to_server): Fixes a bug that
+	could lead the server to a crash when it was trying to spawn a new
+	interpreter.
+
 2008-08-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/run-tests.py, qa/conf.py: Adds dtruss support (additionally
