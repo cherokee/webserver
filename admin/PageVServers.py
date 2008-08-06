@@ -49,10 +49,17 @@ class PageVServers (PageMenu, FormHelper):
 
     def _op_handler (self, uri, post):
         if post.get_val('is_submit'):
-            tmp = self._op_add_vserver (post)
+            if post.get_val('vserver_clone_trg'):
+                tmp = self._op_clone_vserver (post)
+
+            elif post.get_val('new_vserver_name') or \
+                 post.get_val('new_vserver_droot'):
+                tmp = self._op_add_vserver (post)
+
             if self.has_errors():
                 return self._op_render()
-
+            return "/vserver"
+                
         elif uri.endswith('/ajax_update'):
             if post.get_val('update_prio'):
                 tmp = post.get_val('prios').split(',')
@@ -185,7 +192,6 @@ class PageVServers (PageMenu, FormHelper):
 
         return txt
 
-
     def _get_vserver_for_nick (self, nick):
         for v in self._cfg['vserver']:
             n = self._cfg.get_val ('vserver!%s!nick'%(v))
@@ -200,22 +206,25 @@ class PageVServers (PageMenu, FormHelper):
                 n = nv
         return str(n+10)
 
+    def _op_clone_vserver (self, post):
+        # Fetch data
+        prio_source = post.pop('vserver_clone_src')
+        nick_target = post.pop('vserver_clone_trg')
+        prio_target = self._get_next_new_vserver()
+
+        # Check the field has been filled out
+        if not nick_target:
+            self._error_add ('vserver_clone_trg', '', 'Cannot be empty')
+            return
+
+        # Clone it
+        error = self._cfg.clone('vserver!%s'%(prio_source), 
+                                'vserver!%s'%(prio_target))
+        if not error:
+            self._cfg['vserver!%s!nick'%(prio_target)] = nick_target
+            return '/vserver/%s'%(prio_target)
+
     def _op_add_vserver (self, post):
-        # Check whether it's cloning a vserver
-        cloning_source = post.pop('vserver_clone_src')
-        cloning_target = post.pop('vserver_clone_trg')
-        
-        vserver_source = self._get_vserver_for_nick (cloning_source)
-        vserver_target = self._get_next_new_vserver()
-
-        if cloning_target and cloning_source and \
-           vserver_source and vserver_target:
-            error = self._cfg.clone('vserver!%s'%(vserver_source), 
-                                    'vserver!%s'%(vserver_target))
-            if not error:
-                self._cfg['vserver!%s!nick'%(vserver_target)] = cloning_target
-                return '/vserver/%s'%(cloning_target)
-
         # Ensure that no entry in empty
         for key in ['new_vserver_name', 'new_vserver_droot']:
             if not post.get_val(key):

@@ -1,5 +1,7 @@
 2008-08-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageVServers.py: Fixes regression. Cloning was broken.
+
 	* admin/static/images/favicon.ico, cherokee/main_admin.c,
 	admin/static/images/Makefile.am: Adds the missing favicon.ico
 	file.
