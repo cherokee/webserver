@@ -124,10 +124,11 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "3!handler = file\n"
 				 RULE_PRE "3!handler!iocache = 0\n");
 
-	cherokee_buffer_add_str (&buf, 
+	cherokee_buffer_add_va  (&buf, 
 				 RULE_PRE "4!match = request\n"
 				 RULE_PRE "4!match!request = ^/favicon.ico$\n"
-				 RULE_PRE "4!handler = file\n");
+				 RULE_PRE "4!document_root = %s/static/images\n"
+				 RULE_PRE "4!handler = file\n", document_root);
 
 	cherokee_buffer_add_va  (&buf, 
 				 RULE_PRE "5!match = directory\n"

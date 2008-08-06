@@ -1,5 +1,9 @@
 2008-08-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/static/images/favicon.ico, cherokee/main_admin.c,
+	admin/static/images/Makefile.am: Adds the missing favicon.ico
+	file.
+
 	* cherokee/socket.c (cherokee_socket_connect): EINVAL was not
 	being checked.
 
