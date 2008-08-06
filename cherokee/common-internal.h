@@ -124,12 +124,9 @@
 
 #ifdef _WIN32
 # define SOCK_ERRNO()      WSAGetLastError()
-# define CLOSE_ON_EXEC(h)  ((void)0)
 #else
 # define SOCK_ERRNO()      errno
-# define CLOSE_ON_EXEC(h)  fcntl (h, F_SETFD, FD_CLOEXEC)
 #endif
-
 
 
 /* IMPORTANT:

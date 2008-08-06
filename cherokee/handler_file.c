@@ -554,6 +554,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 
 	if (fhdl->using_sendfile) {
 		cherokee_connection_set_cork (conn, true);
+		BIT_SET (conn->options, conn_op_tcp_cork);		
 	}
 #endif
 	
@@ -723,13 +724,14 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 						&fhdl->offset,                     /* off_t             *offset */
 						&sent);                            /* ssize_t           *sent   */
 
-		/* cherokee_handler_file_init() activated the TCP_CORK flags.
-		 * After it, the header was sent.  And now, the first
-		 * chunk of the file with sendfile().  It's time to turn
-		 * off again the TCP_CORK flag
+		/* cherokee_handler_file_init() activated the TCP_CORK
+		 * flags. Then the response header was sent. Now, the
+		 * first chunk of the file with sendfile(), so it's
+		 * time to turn off the TCP_CORK flag again.
 		 */
 		if (conn->options & conn_op_tcp_cork) {
 			cherokee_connection_set_cork (conn, false);
+			BIT_UNSET (conn->options, conn_op_tcp_cork);
 		}
 
 		if (ret == ret_no_sys) {

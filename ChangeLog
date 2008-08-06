@@ -1,3 +1,15 @@
+2008-08-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/fcgi_manager.c, cherokee/socket.c, cherokee/source.c,
+	cherokee/downloader_async.c, cherokee/common-internal.h,
+	cherokee/thread.c, cherokee/handler_file.c, cherokee/util.c,
+	cherokee/util.h, cherokee/handler_scgi.c, cherokee/connection.c,
+	cherokee/server.c, cherokee/logger_writer.c: Here is another patch
+	for a nasty bug that has been showing up every now and then since
+	long time ago. We catch ya! Hehe! Well, now, seriously: There was
+	a problem with random delays (a few milliseconds) that were being
+	caused by incorrect socket properties.
+
 2008-08-06  Taher Shihadeh <taher@unixwars.com>
 
 	* doc/basics_requirements, doc/bundle_cget.txt, doc/config_*: doc

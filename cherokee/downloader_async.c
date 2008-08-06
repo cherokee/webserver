@@ -90,7 +90,7 @@ cherokee_downloader_async_connect (cherokee_downloader_async_t *adownloader)
 	ret = cherokee_downloader_connect (down);
 	if (ret != ret_ok) return ret;
 
-	ret = cherokee_fd_set_nonblocking (down->socket.socket);
+	ret = cherokee_fd_set_nonblocking (down->socket.socket, true);
 	if (ret != ret_ok) return ret;
 
 	ret = cherokee_fdpoll_add (fdpoll, down->socket.socket, FDPOLL_MODE_WRITE);

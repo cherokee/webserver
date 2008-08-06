@@ -423,15 +423,19 @@ cherokee_server_set_min_latency (cherokee_server_t *srv, int msecs)
 static ret_t
 set_server_fd_socket_opts (int socket)
 {
+	ret_t         ret;
 	int           re;
 	int           on;
         struct linger ling = {0, 0};
 
 	/* Set 'close-on-exec'
 	 */
-	CLOSE_ON_EXEC(socket);
+	ret = cherokee_fd_set_closexec (socket);
+	if (ret != ret_ok)
+		return ret;
 		
-	/* To re-bind without wait to TIME_WAIT
+	/* To re-bind without wait to TIME_WAIT. It prevents 2MSL
+	 * delay on accept.
 	 */
 	on = 1;
 	re = setsockopt (socket, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
@@ -457,7 +461,9 @@ set_server_fd_socket_opts (int socket)
 	/* Do no check the returned value */
 #endif	
 
-	/* SO_LINGER
+	/* SO_LINGER:
+	 * Don't want to block on calls to close.
+	 *
 	 * kernels that map pages for IO end up failing if the pipe is full
          * at exit and we take away the final buffer.  this is really a kernel
          * bug but it's harmless on systems that are not broken, so...
@@ -472,11 +478,11 @@ set_server_fd_socket_opts (int socket)
 	 * attempts TCP will make to complete the connection. This option should 
 	 * not be used in code intended to be portable.
 	 *
-	 * Give clients 20s to send first data packet 
+	 * Give clients 5s to send first data packet 
 	 */
-#if defined (TCP_DEFER_ACCEPT) && defined(SOL_TCP)
-	on = 20;
-	re = setsockopt (socket, SOL_TCP, TCP_DEFER_ACCEPT, &on, sizeof(on));
+#ifdef TCP_DEFER_ACCEPT
+	on = 5;
+	re = setsockopt (socket, SOL_SOCKET, TCP_DEFER_ACCEPT, &on, sizeof(on));
 	if (re != 0) return ret_error;
 #endif
 
@@ -652,10 +658,12 @@ initialize_server_socket (cherokee_server_t *srv, cherokee_socket_t *socket, uns
 		}
 	}
 	   
-	/* Set no-delay mode
+	/* Set no-delay mode:
+	 * If no clients are waiting, accept() will return -1 immediately 
 	 */
-	ret = cherokee_socket_set_nodelay (socket);
-	if (ret != ret_ok) return ret;
+	ret = cherokee_fd_set_nodelay (socket->socket, true);
+	if (ret != ret_ok) 
+		return ret;
 
 	/* Listen
 	 */

@@ -45,6 +45,13 @@
 # include <sys/socket.h>
 #endif
 
+#ifdef HAVE_NETINET_IN_H
+# include <netinet/in.h>
+#endif
+#ifdef HAVE_NETINET_TCP_H
+# include <netinet/tcp.h>
+#endif
+
 #ifdef HAVE_SYS_FILIO_H
 # include <sys/filio.h>     /* defines FIONBIO and FIONREAD */
 #endif
@@ -66,6 +73,7 @@
 #ifdef HAVE_SYSLOG_H
 # include <syslog.h>
 #endif
+
 
 #if defined(HAVE_GNUTLS)
 # include <gcrypt.h>
@@ -789,28 +797,86 @@ cherokee_tls_init (void)
 }
 
 
+ret_t
+cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
+{
+	int re;
+	int flags;
+
+	/* TCP_NODELAY: Disable the Nagle algorithm. This means that
+         * segments are always sent as soon as possible, even if there
+         * is only a small amount of data.  When not set, data is
+         * buffered until there is a sufficient amount to send out,
+         * thereby avoiding the frequent sending of small packets,
+         * which results in poor utilization of the network.
+	 */
+#ifdef _WIN32
+	re = ioctlsocket (fd, FIONBIO, (u_long) &enable);
+#else
+ 	flags = fcntl (fd, F_GETFL, 0);
+	if (unlikely (flags == -1)) {
+		PRINT_ERRNO (errno, "ERROR: fcntl/F_GETFL fd %d: ${errno}\n", fd);
+		return ret_error;
+	}
+
+	if (enable)
+		BIT_SET (flags, O_NDELAY);
+	else 
+		BIT_UNSET (flags, O_NDELAY);
+	
+	re = fcntl (fd, F_SETFL, flags);
+#endif	
+	if (unlikely (re < 0)) {
+		PRINT_ERRNO (errno, "ERROR: Setting O_NDELAY to fd %d: ${errno}\n", fd);
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
 ret_t 
-cherokee_fd_set_nonblocking (int fd)
+cherokee_fd_set_nonblocking (int fd, cherokee_boolean_t enable)
 {
 	int re;
 	int flags = 0;
 
 #ifdef _WIN32
-	tmp = ioctlsocket (fd, FIONBIO, (u_long *)&tmp);
+	re = ioctlsocket (fd, FIONBIO, (u_long *) &enable);
 #else	
 	flags = fcntl (fd, F_GETFL, 0);
 	if (flags < 0) {
-		PRINT_ERRNO (errno, "ERROR: fcntl/F_GETFL fd=%d: ${errno}\n", fd);
+		PRINT_ERRNO (errno, "ERROR: fcntl/F_GETFL fd %d: ${errno}\n", fd);
 		return ret_error;
 	}
 
-	flags |= O_NONBLOCK;
+	if (enable)
+		BIT_SET (flags, O_NONBLOCK);
+	else
+		BIT_UNSET (flags, O_NONBLOCK);
+
 	re = fcntl (fd, F_SETFL, flags);
 #endif
 	if (re < 0) {
-		PRINT_ERRNO (errno, "ERROR: Setting 'O_NONBLOCK' to socked fd=%d: ${errno}\n", fd);
+		PRINT_ERRNO (errno, "ERROR: Setting O_NONBLOCK to fd %d: ${errno}\n", fd);
 		return ret_error;
 	}
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_fd_set_closexec (int fd)
+{
+#ifndef _WIN32
+	int re;
+
+	re = fcntl (fd, F_SETFD, FD_CLOEXEC);
+	if (re < 0) {
+		PRINT_ERRNO (errno, "ERROR: Setting FD_CLOEXEC to fd %d: ${errno}\n", fd);
+		return ret_error;
+	}
+#endif
 
 	return ret_ok;
 }

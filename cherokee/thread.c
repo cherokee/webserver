@@ -491,12 +491,6 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 
 	conn->keepalive--;
 
-	/* TCP cork
-	 */
-	if (conn->options & conn_op_tcp_cork) {
-		cherokee_connection_set_cork (conn, false);
-	}
-
 	/* Clean the connection
 	 */
 	cherokee_connection_clean (conn);
@@ -603,6 +597,7 @@ process_active_connections (cherokee_thread_t *thd)
 		 *     and it's not reading header or there is no more buffered data.
 		 */
 		if ((conn->phase != phase_shutdown) &&
+		    (conn->phase != phase_lingering) &&
 		    (conn->phase != phase_reading_header || conn->incoming_header.len <= 0))
 		{
 			re = cherokee_fdpoll_check (thd->fdpoll, 
@@ -611,7 +606,7 @@ process_active_connections (cherokee_thread_t *thd)
 			switch (re) {
 			case -1:
 				conns_freed++;
-				purge_closed_connection(thd, conn);
+				purge_closed_connection (thd, conn);
 				continue;
 			case 0:
 				continue;
@@ -1183,7 +1178,6 @@ process_active_connections (cherokee_thread_t *thd)
 			break;
 			
 		case phase_shutdown: 
-
 			ret = cherokee_connection_shutdown_wr (conn);
 			switch (ret) {
 			case ret_ok:
@@ -1202,7 +1196,7 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			}
 			/* fall down */
-		
+
 		case phase_lingering: 
 			ret = cherokee_connection_linger_read (conn);
 			switch (ret) {

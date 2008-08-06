@@ -98,7 +98,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		if (ret != ret_ok) return ret;
 
 		/* Set non-blocking */
-		ret = cherokee_fd_set_nonblocking (sock->socket);
+		ret = cherokee_fd_set_nonblocking (sock->socket, true);
 		if (ret != ret_ok)
 			PRINT_ERRNO (errno, "Failed to set nonblocking (fd=%d): ${errno}\n",
 				     sock->socket);
@@ -118,7 +118,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
 
 	/* Set non-blocking */
-	ret = cherokee_fd_set_nonblocking (sock->socket);
+	ret = cherokee_fd_set_nonblocking (sock->socket, true);
 	if (ret != ret_ok)
 		PRINT_ERRNO (errno, "Failed to set nonblocking (fd=%d): ${errno}\n",
 			     sock->socket);

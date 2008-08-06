@@ -684,9 +684,9 @@ cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockad
 ret_t
 cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *sa)
 {
+	ret_t     ret;
 	socklen_t len;
 	int       new_socket;
-	int       tmp = 1;
 
 	/* Get the new connection
 	 */
@@ -719,20 +719,27 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 		/* NOTREACHED */
 	}
 
+	/* Close-on-exec: Child processes won't inherit this fd
+	 */
+	cherokee_fd_set_closexec (new_socket);
+
 	/* Disable Nagle's algorithm for this connection
 	 * so that there is no delay involved when sending data
 	 * which don't fill up a full IP datagram.
 	 */
- 	setsockopt (new_socket, IPPROTO_TCP, TCP_NODELAY, (const void *)&tmp, sizeof(tmp));
-
-	/* Close-on-exec, really needed only
-	 * if *CGI and / or process pipes are used.
-	 */
-	CLOSE_ON_EXEC (new_socket);
+	ret = cherokee_fd_set_nodelay (new_socket, true);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Could not disable Nagle's algorithm.\n");
+		return ret_error;
+	}
 
 	/* Enables nonblocking I/O.
 	 */
-	cherokee_fd_set_nonblocking (new_socket);
+	ret = cherokee_fd_set_nonblocking (new_socket, true);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Could not set non-blocking.\n");
+		return ret_error;
+	}
 
 	*new_fd = new_socket;
 	return ret_ok;
@@ -1885,52 +1892,21 @@ cherokee_socket_set_status (cherokee_socket_t *socket, cherokee_socket_status_t 
 }
 
 
-ret_t 
-cherokee_socket_set_nodelay (cherokee_socket_t *socket)
-{
-	int   re;
-	int   fd;
-	int   flags;
-
-	fd = SOCKET_FD(socket);
-
-#ifdef _WIN32
-	flags = 1;
-	re = ioctlsocket (fd, FIONBIO, (u_long)&flags);
-	if (unlikely (re < 0))
-		return ret_error;
-#else
-	flags = fcntl (fd, F_GETFL, 0);
-	if (unlikely (flags == -1))
-		return ret_error;
-	
-	re = fcntl (fd, F_SETFL, flags | O_NDELAY);
-	if (unlikely (re < 0))
-		return ret_error;
-#endif	
-
-	return ret_ok;
-}
-
-
 ret_t
 cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 {
 #if defined(HAVE_TCP_CORK) || defined(HAVE_TCP_NOPUSH)
-	int on;
+	int re;
 	int fd = socket->socket;
 
-	if (enable) {
-		on = 0;
-		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &on, sizeof on);
-		on = 1;
-		setsockopt(fd, IPPROTO_TCP, TCP_CORK, &on, sizeof on);
-	} else {
-		on = 0;
-		setsockopt(fd, IPPROTO_TCP, TCP_CORK, &on, sizeof on);
-		on = 1;
-		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &on, sizeof on);
+	cherokee_fd_set_nodelay (fd, ! enable);
+
+	re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &enable, sizeof(enable));
+	if (re < 0) {
+		PRINT_ERRNO (errno, "ERROR: Setting TCP_CORK to fd %d: ${errno}\n", fd);
+		return ret_error;
 	}
+	
 #else
 	UNUSED(socket);
 	UNUSED(enable);

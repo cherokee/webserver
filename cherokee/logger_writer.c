@@ -240,6 +240,8 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 ret_t 
 cherokee_logger_writer_open (cherokee_logger_writer_t *writer)
 {
+	ret_t ret;
+
 	switch (writer->type) {
 	case cherokee_logger_writer_syslog:
 		/* Nothing to do, syslog already opened at startup.
@@ -261,7 +263,11 @@ cherokee_logger_writer_open (cherokee_logger_writer_t *writer)
 			PRINT_MSG ("Couldn't open '%s' for appending\n", writer->filename.buf);
 			return ret_error;
 		}
-		CLOSE_ON_EXEC(writer->fd);
+
+		ret = cherokee_fd_set_closexec (writer->fd);
+		if (ret != ret_ok)
+			return ret;
+
 		return ret_ok;
 
 	default:

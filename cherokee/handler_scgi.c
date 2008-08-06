@@ -282,7 +282,7 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
 							   conn,
 							   SOCKET_FD(&hdl->socket),
-							   FDPOLL_MODE_WRITE, 
+							   FDPOLL_MODE_WRITE,
 							   false);
 		if (ret != ret_ok) {
 			return ret_deny;

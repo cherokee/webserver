@@ -212,9 +212,18 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	uint32_t header_len;
 	size_t   crlf_len;
 
+	/* I/O cache entry reference
+	 */
 	if (conn->io_entry_ref != NULL) {
 		cherokee_iocache_entry_unref (&conn->io_entry_ref);
 		conn->io_entry_ref = NULL;
+	}
+
+	/* TCP cork
+	 */
+	if (conn->options & conn_op_tcp_cork) {
+		cherokee_connection_set_cork (conn, false);
+		BIT_UNSET (conn->options, conn_op_tcp_cork);		
 	}
 
 	conn->timeout              = -1;
