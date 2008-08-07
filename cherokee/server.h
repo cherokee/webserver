@@ -33,12 +33,10 @@
 #include <cherokee/buffer.h>
 #include <stddef.h>
 
-
 CHEROKEE_BEGIN_DECLS
 
-typedef struct cherokee_server cherokee_server_t;
-typedef void (* cherokee_server_reinit_cb_t) (cherokee_server_t *new_srv);
 
+typedef struct cherokee_server cherokee_server_t;
 #define SRV(x) ((cherokee_server_t *)(x))
 
 ret_t cherokee_server_new                (cherokee_server_t **srv);
@@ -48,7 +46,6 @@ ret_t cherokee_server_clean              (cherokee_server_t  *srv);
 ret_t cherokee_server_initialize         (cherokee_server_t *srv);
 ret_t cherokee_server_step               (cherokee_server_t *srv);
 ret_t cherokee_server_stop               (cherokee_server_t *srv);
-ret_t cherokee_server_reinit             (cherokee_server_t *srv);
 
 void  cherokee_server_set_min_latency    (cherokee_server_t *srv, int msecs);
 ret_t cherokee_server_unlock_threads     (cherokee_server_t *srv);
@@ -70,7 +67,7 @@ ret_t cherokee_server_log_reopen         (cherokee_server_t *srv);
 
 /* System signal callback
  */
-ret_t cherokee_server_handle_HUP   (cherokee_server_t *srv, cherokee_server_reinit_cb_t callback);
+ret_t cherokee_server_handle_HUP   (cherokee_server_t *srv);
 ret_t cherokee_server_handle_TERM  (cherokee_server_t *srv);
 ret_t cherokee_server_handle_panic (cherokee_server_t *srv);
 

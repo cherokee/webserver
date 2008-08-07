@@ -23,10 +23,15 @@
  */
 
 #include "common-internal.h"
+
 #include <signal.h>
+#include <unistd.h>
+
 #include "init.h"
 #include "server.h"
 #include "info.h"
+#include "server-protected.h"
+#include "util.h"
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
@@ -94,21 +99,11 @@ prepare_to_die (int code)
 }
 
 static void
-restart_server_cb (cherokee_server_t *new_srv)
-{
-	ret_t ret;
-
-	srv = new_srv;
-	ret = common_server_initialization (srv);
-	if (ret != ret_ok) exit(3);
-}
-
-static void
 restart_server (int code)
 {	
 	UNUSED(code);
 	printf ("Handling HUP signal..\n");
-	cherokee_server_handle_HUP (srv, restart_server_cb);
+	cherokee_server_handle_HUP (srv);
 }
 
 static void
@@ -122,8 +117,8 @@ reopen_log_files (int code)
 static ret_t
 test_configuration_file (void)
 {
-	ret_t   ret;
-	char   *config;
+	ret_t  ret;
+	char  *config;
 
 	config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
 	ret = cherokee_server_read_config_file (srv, config);
@@ -131,6 +126,7 @@ test_configuration_file (void)
 	PRINT_MSG ("Test on %s: %s\n", config, (ret == ret_ok)? "OK": "Failed"); 
 	return ret;
 }
+
 
 static ret_t
 common_server_initialization (cherokee_server_t *srv)
@@ -306,7 +302,7 @@ main (int argc, char **argv)
 	do {
 		ret = cherokee_server_step (srv);
 	} while (ret == ret_eagain);
-	
+
 	cherokee_server_stop (srv);
 	cherokee_server_free (srv);
 

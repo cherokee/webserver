@@ -1,6 +1,11 @@
 2008-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* cherokee/socket.c: Reimplemented using the TCP layer nondelay
+	* cherokee/main.c, cherokee/main_guardian.c,
+	cherokee/server-protected.h, cherokee/server.c, cherokee/server.h:
+	Implement gratefully restart (aka: from now on, you can upgrade
+	your Cherokee binary without killing the existing connections).
+
+	* cherokee/socket.c: Reimplemented using the TCP layer nodelay
 	property instead of the file descriptor level.
 
 	* cherokee/util.h, cherokee/util.c (cherokee_mkdir_p): Adds a new

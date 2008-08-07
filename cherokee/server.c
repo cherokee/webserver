@@ -120,7 +120,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	n->wanna_exit      = false;
 	n->wanna_reinit    = false;
-	n->reinit_callback = NULL;
 	
 	/* Server config
 	 */
@@ -316,8 +315,8 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_connector_mrproper (&srv->client_connector);
 
 #ifdef HAVE_TLS
-	cherokee_socket_close (&srv->socket);
-	cherokee_socket_mrproper (&srv->socket);
+	cherokee_socket_close (&srv->socket_tls);
+	cherokee_socket_mrproper (&srv->socket_tls);
 
 	CHEROKEE_MUTEX_DESTROY (&srv->accept_tls_mutex);
 #endif
@@ -1137,6 +1136,10 @@ cherokee_server_stop (cherokee_server_t *srv)
 	if (srv == NULL)
 		return ret_ok;
 
+	/* Stop all the threads (may be slow)
+	 */
+	stop_threads (srv);
+
 	/* Close all connections
 	 */
 	close_all_connections (srv);
@@ -1144,58 +1147,6 @@ cherokee_server_stop (cherokee_server_t *srv)
 	/* Flush logs
 	 */
 	flush_logs (srv);
-
-	return ret_ok;
-}
-
-
-ret_t 
-cherokee_server_reinit (cherokee_server_t *srv)
-{
-	ret_t                        ret;
-	cherokee_server_t           *new_srv   = NULL;
-	cherokee_server_reinit_cb_t  reinit_cb = NULL; 
-
-	if (srv->chrooted) {
-		PRINT_ERROR_S ("WARNING: Chrooted cherokee cannot be reloaded. "
-			       "Please, stop and restart it again.\n");
-		return ret_ok;
-	}
-
-#if 0
-	{
-		int tmp;
-		printf ("Handling server reinit. Press any key to continue..\n");
-		read (0, &tmp, 1);
-	}
-#endif
-
-	reinit_cb = srv->reinit_callback;
-
-	/* Stop the server.
-	 */
-	ret = cherokee_server_stop (srv);
-	if (ret != ret_ok)
-		return ret;
-
-	/* Destroy the server.
-	 */
-	ret = cherokee_server_free (srv);
-	if (ret != ret_ok)
-		return ret;
-	srv = NULL;
-
-	/* Create a new one
-	 */
-	ret = cherokee_server_new (&new_srv);
-	if (ret != ret_ok)
-		return ret;
-
-	/* Send event
-	 */
-	if ((reinit_cb != NULL) && (new_srv != NULL)) {
-		reinit_cb (new_srv);
-	}
 
 	return ret_ok;
 }
@@ -1232,8 +1183,6 @@ cherokee_server_unlock_threads (cherokee_server_t *srv)
 ret_t
 cherokee_server_step (cherokee_server_t *srv)
 {
-	ret_t ret;
-
 	/* Get the server time.
 	 */
 	cherokee_bogotime_update ();
@@ -1241,14 +1190,13 @@ cherokee_server_step (cherokee_server_t *srv)
 
 	/* Execute thread step.
 	 */
-#ifndef HAVE_PTHREAD
-	ret = cherokee_thread_step_SINGLE_THREAD (srv->main_thread);
-#else
-	if (srv->thread_num == 1)
-		ret = cherokee_thread_step_SINGLE_THREAD (srv->main_thread);
-	else
-		ret = cherokee_thread_step_MULTI_THREAD (srv->main_thread, true);
+#ifdef HAVE_PTHREAD
+	if (srv->thread_num > 1) {
+		cherokee_thread_step_MULTI_THREAD (srv->main_thread, true);
+	} else 
 #endif
+		cherokee_thread_step_SINGLE_THREAD (srv->main_thread);
+		
 	/* Logger flush 
 	 */
 	if (srv->log_flush_next < cherokee_bogonow_now) {
@@ -1264,22 +1212,27 @@ cherokee_server_step (cherokee_server_t *srv)
 	/* Wanna reinit ?
 	 */
 	if (unlikely (srv->wanna_reinit)) {
-		ret = cherokee_server_reinit (srv);
+		cherokee_list_t    *i;
+		cherokee_boolean_t  empty = true;
 
-		/* NOTE: we MUST return in any case because
-		 * the old srv server should have just been destroyed and
-		 * a new server should have been created,
-		 * in this case we cannot use the old srv ptr.
-		 */
-		return ret;
+		list_for_each (i, &srv->thread_list) {
+			if (THREAD(i)->conns_num != 0) {
+				empty = false;
+				break;
+			}
+		}
+		
+		if (empty)
+			empty = (srv->main_thread->conns_num == 0);
+
+		if (empty)
+			return ret_eof;
 	}
 	
 	/* Wanna exit ?
 	 */
 	if (unlikely (srv->wanna_exit)) {
-		stop_threads (srv);
-		flush_logs (srv);
-		return ret_ok;
+		return ret_eof;
 	}
 
 	/* Should not be reached.
@@ -1817,10 +1770,14 @@ cherokee_server_get_total_traffic (cherokee_server_t *srv, size_t *rx, size_t *t
 
 
 ret_t 
-cherokee_server_handle_HUP (cherokee_server_t *srv, cherokee_server_reinit_cb_t callback)
+cherokee_server_handle_HUP (cherokee_server_t *srv)
 {
-	srv->reinit_callback = callback;
 	srv->wanna_reinit    = true;
+	srv->keepalive       = false;
+	srv->keepalive_max   = 0;
+
+	cherokee_socket_close (&srv->socket);
+	cherokee_socket_close (&srv->socket_tls);
 
 	return ret_ok;
 }

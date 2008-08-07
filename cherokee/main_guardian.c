@@ -40,8 +40,8 @@
 #define DELAY_RESTARTING   500 * 1000
 #define PID_FILE          CHEROKEE_VAR_RUN "/cherokee-guardian.pid"
 
-pid_t pid;
-
+pid_t              pid;
+cherokee_boolean_t grateful_restart; 
 
 static void
 pid_file_save (const char *pid_file, int pid)
@@ -83,9 +83,18 @@ process_wait (pid_t pid)
 	pid_t re;
 	int   exitcode = 0;
 
-	re = waitpid (pid, &exitcode, 0);
-	if (re == -1) 
-		return ret_error;
+	while (true) {
+		re = waitpid (pid, &exitcode, 0);
+		if (re > 0)
+			break;
+		else if (errno == EINTR) 
+			if (grateful_restart)
+				break;
+			else
+				continue;
+		else 
+			return ret_error;
+	}
 
 	if (WIFEXITED(exitcode)) {
 		int re = WEXITSTATUS(exitcode);
@@ -113,14 +122,15 @@ guardian_signals_handler (int sig, siginfo_t *si, void *context)
 
 	switch (sig) {
 	case SIGUSR1:
-		/* Restart Cherokee */
+		/* Restart: the tough way */
 		kill (pid, SIGINT);
 		process_wait (pid);
 		break;
 
-	case SIGCHLD:
-		/* Child exited */
-		wait (&exitcode);
+	case SIGHUP:
+		/* Grateful restart */
+		grateful_restart = true;
+		kill (pid, SIGHUP);
 		break;
 
 	case SIGTERM:
@@ -130,6 +140,11 @@ guardian_signals_handler (int sig, siginfo_t *si, void *context)
 		pid_file_clean (PID_FILE);
 		exit(0);
 
+	case SIGCHLD:
+		/* Child exited */
+		wait (&exitcode);
+		break;
+		
 	default:
 		/* Forward the signal */
 		kill (pid, sig);
@@ -156,9 +171,9 @@ set_guardian_signals (void)
 	act.sa_flags = SA_SIGINFO;
 
 	sigaction (SIGHUP,  &act, NULL);
-	sigaction (SIGSEGV, &act, NULL);
 	sigaction (SIGTERM, &act, NULL);
 	sigaction (SIGUSR1, &act, NULL);
+	sigaction (SIGCHLD, &act, NULL);
 }
 
 static ret_t
@@ -240,13 +255,15 @@ main (int argc, char *argv[])
 	}
 	
 	while (true) {
+		grateful_restart = false;
+
 		pid = process_launch (CHEROKEE_SRV_PATH, argv);
 		if (pid < 0) {
 			PRINT_MSG ("Couldn't launch '%s'\n", CHEROKEE_SRV_PATH);
 			exit (1);
 		}
 		
-		ret = process_wait (pid);		
+		ret = process_wait (pid);
 		if (single_time)
 			break;
 
