@@ -249,7 +249,7 @@ if port is None:
             else:
                 os.execl (VALGRIND_PATH, "valgrind", "--leak-check=full", "--num-callers=40", "-v", "--leak-resolution=high", server, "-C", cfg_file)
         elif strace:
-            if sys.platform.startswith('darwin') or
+            if sys.platform.startswith('darwin') or \
                sys.platform.startswith('sunos'):
                 os.execl (DTRUSS_PATH, "dtruss", server, "-C", cfg_file)
             else:
