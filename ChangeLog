@@ -1,5 +1,9 @@
 2008-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_error_nn.c, cherokee/handler_error_nn.h,
+	qa/049-NN-broken.py, qa/048-NN.py: Fixes the NN support and adapts
+	the QA test to the new behavior (it is error handler now).
+
 	* cherokee/connection.c (cherokee_connection_parse_header): Adds a
 	check to ensure that the server will not use keepalive when it is
 	about to reach the overload limit (>95% of the total capacity).

@@ -2,27 +2,33 @@ from base import *
 
 MAGIC = "Sesamo"
 CONTENT = "This is the content of " + MAGIC
+HOST = "nn1"
 
 CONF = """
-vserver!1!rule!480!match = directory
-vserver!1!rule!480!match!directory = /nn1
-vserver!1!rule!480!handler = nn
-"""
+vserver!480!nick = %s
+vserver!480!document_root = %s
+vserver!480!rule!1!match = default
+vserver!480!rule!1!handler = file
+vserver!480!error_handler = error_nn
+""" 
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self)
         self.name = "NN"
 
-        self.request           = "GET /nn1/Xesano HTTP/1.0\r\n"
-        self.conf              = CONF
-        self.expected_error    = 200
-        self.expected_content  = CONTENT
-        self.forbidden_content = "Location: "
+        self.request           = "GET /Xesano HTTP/1.1\r\n" + \
+                                 "Host: %s\r\n" %(HOST)
+        self.expected_error    = 302
+        self.forbidden_content = CONTENT
+        self.expected_content  = "Location: /"+MAGIC
 
     def Prepare (self, www):
-        self.Mkdir (www, "nn1")
-        self.WriteFile (www, "nn1/name")
-        self.WriteFile (www, "nn1/"+MAGIC, 0444, CONTENT)
-        self.WriteFile (www, "nn1/ABCD")
-        self.WriteFile (www, "nn1/alobbs")
+        d = self.Mkdir (www, "nn1_root")
+
+        self.WriteFile (d, "name")
+        self.WriteFile (d, MAGIC, 0444, CONTENT)
+        self.WriteFile (d, "ABCD")
+        self.WriteFile (d, "alobbs")
+
+        self.conf = CONF % (HOST, d)

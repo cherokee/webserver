@@ -30,6 +30,10 @@
 #include "connection.h"
 #include "plugin_loader.h"
 
+typedef struct {
+	cherokee_handler_t handler;
+} cherokee_handler_error_nn_t;
+
 /* Library init function
  */
 void  PLUGIN_INIT_NAME(error_nn)     (cherokee_plugin_loader_t *loader);

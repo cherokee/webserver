@@ -371,7 +371,8 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 	 */
 	if ((entry != NULL) && (entry->handler_new_func != NULL)) {
 		ret = entry->handler_new_func ((void **) &conn->handler, conn, entry->handler_properties);
-		if (ret == ret_ok) goto out;
+		if (ret == ret_ok) 
+			goto out;
 	} 
 
 	/* If something was wrong, try with the default error handler
