@@ -165,14 +165,10 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	cherokee_buffer_init (&n->listen_to);
 	cherokee_buffer_init (&n->chroot);
+	cherokee_buffer_init (&n->timeout_header);
 
 	cherokee_buffer_init (&n->panic_action);
 	cherokee_buffer_add_str (&n->panic_action, CHEROKEE_PANIC_PATH);
-
-	/* Time managing hack
-	 */
-	cherokee_buffer_init (&n->timeout_header);
-	cherokee_buffer_add_str (&n->timeout_header, "Keep-Alive: timeout=15"CRLF);
 
 	/* Accepting mutexes
 	 */
@@ -935,6 +931,13 @@ init_server_strings (cherokee_server_t *srv)
 {
 	ret_t ret;
 
+	/* Timeout
+	 */
+	cherokee_buffer_add_va (&srv->timeout_header, 
+				"Keep-Alive: timeout=%d"CRLF, srv->timeout);
+
+	/* Server information
+	 */
 	cherokee_buffer_clean (&srv->server_string);
 	cherokee_buffer_clean (&srv->server_string_ext);
 	cherokee_buffer_clean (&srv->server_string_w_port);
