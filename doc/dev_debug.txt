@@ -6,15 +6,15 @@ application), there are some helpful tools available for you.
 
 * To start with, if you are using gcc and you want to compile Cherokee
   with debug information just execute make like this:
-
++
 ----
   make CFLAGS="-O0 -g3"
 ----
-
-  And then you'll be able to execute gdb, cgdb, gdbtui..
++
+And then you'll be able to execute gdb, cgdb, gdbtui..
 
 * You can use autoconf to set up Cherokee to use static modules:
-
++
 ----
   ./autogen.sh --localstatedir=/var --prefix=/usr --sysconfdir=/etc  \
   --with-wwwroot=/var/www --enable-static-module=all --enable-static \
@@ -25,42 +25,52 @@ application), there are some helpful tools available for you.
   variable to trace what is going on inside the server. To enable it
   you must add a special flag to your `configure` or `autogen.sh`
   statement:
-
++
 ----
   --enable-trace
 ----
-
-  This will let you trace the behavior with a human-readable output.
-  Now, when you are going to launch the web server, just add the
-  CHEROKEE_TRACE variable, with the desired options:
-
-
-----
++
+This will let you trace the behavior with a human-readable output.
+Now, when you are going to launch the web server, just add the
+CHEROKEE_TRACE variable, with the desired options:
++
+****
 cherokee# CHEROKEE_TRACE="common" cherokee
+
 Cherokee Web Server 0.8.0 (July 21 2008): Listening on port 80, TLS disabled
+
 IPv6 enabled, using epoll, 1024 fds system limit, max. 507 connections
+
 5 threads, 206 fds per thread, standard scheduling policyhandler_common.c:0143 (                     stat_file): /var/www//images/powered_by_cherokee.png, use_iocache=0 re=0
+
 handler_common.c:0190 (   cherokee_handler_common_new): request: '/images/powered_by_cherokee.png', local: '/var/www//images/powered_by_cherokee.png', exists 1
+
 handler_common.c:0236 (   cherokee_handler_common_new): going for handler_file
+
 handler_common.c:0143 (                     stat_file): /var/www//images/default-bg.png, use_iocache=0 re=0
+
 handler_common.c:0190 (   cherokee_handler_common_new): request: '/images/default-bg.png', local: '/var/www//images/default-bg.png', exists 1
+
 handler_common.c:0236 (   cherokee_handler_common_new): going for handler_file
+
 handler_common.c:0143 (                     stat_file): /var/www//images/cherokee-logo.png, use_iocache=0 re=0
+
 handler_common.c:0190 (   cherokee_handler_common_new): request: '/images/cherokee-logo.png', local: '/var/www//images/cherokee-logo.png', exists 1
+
 handler_common.c:0236 (   cherokee_handler_common_new): going for handler_file
-----
-
-  Of course, you can trace all the modules (handlers, loggers..) you need:
-
+****
++
+Of course, you can trace all the modules (handlers, loggers..) you need:
++
 ----
 CHEROKEE_TRACE="common,static,io_cache" /usr/bin/cherokee
 CHEROKEE_TRACE="all" /usr/bin/cherokee
 ----
-
-  By default the environment variable contains a list of comma
-  separated words, that point the server which parts and actions are
-  interesting for your trace. Besides, there are a few special cases:
-
++
+By default the environment variable contains a list of comma
+separated words, that point the server which parts and actions are
+interesting for your trace. Besides, there are a few special cases:
++
   - all: Activates all the trace points
   - time: Prints the time at the beginning of the line
   - thread: Prints the thread ID
@@ -75,15 +85,15 @@ CHEROKEE_TRACE="all" /usr/bin/cherokee
   further help to these tracing abilities. It is a little script that
   helps to read the tracing logs by colorizing the thread references
   and highlighting the words passed through the command line.
-
-  And example of usage would be:
-
++
+An example of usage would be:
++
 ----
 CHEROKEE_TRACE=thread,all ./cherokee | ../contrib/tracelor.py iocache
 ----
++
+And it would yield an output such as the following. Even if it is
+not terribly complicated, it is a handy script to trace the server more
+easily.
 
-  And it would yield an output such as the following. Even if it is
-  not terribly complicated, it is a handy script to trace the server more
-  easily.
-
-  image::media/images/tracelor.png[Output of tracelor.py]
+image::media/images/tracelor.png[Output of tracelor.py]

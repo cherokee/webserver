@@ -42,7 +42,11 @@ link:cookbook.html[Cookbook]
 ////
   Reference table     <8>	link:cookbook_reference.html[]
   Optimizing Cherokee <2>	link:cookbook_optimizing_cherokee.html[]
+////
+
   . link:cookbook_cross_compilation.html[Cross compilation]
+
+////
   Embedding Cherokee  <9>	link:cookbook_embedding_cherokee.html[]
   Managing logs       <5>	link:cookbook_managing_logs.html[] <rotations and cherokee-tweak?>
   Authentication      [8] <3>	link:cookbook_authentication.html[]

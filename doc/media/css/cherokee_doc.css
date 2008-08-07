@@ -173,13 +173,22 @@ div#footer-badges {
 }
 
 div#preamble,
-div.tableblock, div.imageblock, div.exampleblock, div.verseblock,
+div.imageblock, div.exampleblock, div.verseblock,
 div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
 div.admonitionblock {
 //  margin-left: 10%;
 //  margin-right: 10%;
 //  margin-top: 1.5em;
   margin-bottom: 1.5em;
+
+}
+
+div.tableblock {
+margin-left: 10%;
+margin-right: 10%;
+margin-top: 1.5em;
+margin-bottom: 1.5em;
+
 }
 
 div.admonitionblock {

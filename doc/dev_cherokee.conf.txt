@@ -23,8 +23,10 @@ up with a well formed `cherokee.conf` file.
 
 Having said that, let's proceed to describe the configuration file format. It
 is basically a text file that contains a tree where nodes
-contain values. Let's see a basic example:
+contain values.
 
+Let's see a basic example::
++
 ----
     server!port = 80
     server!keepalive = 1
@@ -118,7 +120,8 @@ allow                     , List of extensions to encode
 deny                      , List of extensions that shouldn't be encoded
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Example:
+Example::
++
 ----
    server!encoder!gzip!allow = html,htm
    server!encoder!gzip!deny  = jpg,png,gz
@@ -178,19 +181,20 @@ All the rule types accept the same configuration sub-properties.
 However, the ``match`` property must be present in all the cases. It
 specifies which is the rule type and its properties.
 
-The general syntax is:
-
-vserver ! ``order`` ! rule ! ``prioriry`` ! match
+The general syntax is::
++
+`vserver ! order ! rule ! prioriry ! match`
 
 The rule types plug-ins shipped within a standard Cherokee release
 include:
 
 *Directory*::
-  The directory specifies how to handle its contents.
-
-  Example: an entry with priority 20, setting the properties for the
-  *icons* directory of the default virtual host would be represented
-  by:
+The directory specifies how to handle its contents.
++
+Example: an entry with priority 20, setting the properties for the
+*icons* directory of the default virtual host would be represented
+by:
++
 ----
       vserver!1!nick = default
       vserver!1!rule!20!match!type = directory
@@ -198,29 +202,31 @@ include:
 ----
 
 *Extension*::
-  It specifies a list of extensions and how they should be handled.
-
-  Eg: the JPG extensions is:
+It specifies a list of extensions and how they should be handled.
++
+Eg: the JPG extensions is:
++
 ----
       vserver!1!rule!30!match!type = extensions
       vserver!1!rule!30!match!extensions = jpg,jpeg
 ----
 
 *Requests*::
-  When a request matches a regular expression entry, it uses its configuration.
-
-  Eg: requests beginning with 'a' and PHP extension:
+When a request matches a regular expression entry, it uses its configuration.
++
+Eg: requests beginning with 'a' and PHP extension:
++
 -----
       vserver!1!rule!40!match!type = request
       vserver!1!rule!40!match!request = ^a.*\.php$
 ----
 
 *Header*::
-  It tries to match a regular expression against a certain header
-  entry.
-
-  Eg: check whether the Referer header matches a specific host:
-
+It tries to match a regular expression against a certain header
+entry.
++
+Eg: check whether the Referer header matches a specific host:
++
 ----
       vserver!1!rule!50!match!type = header
       vserver!1!rule!50!match!header = Referer
@@ -228,21 +234,20 @@ include:
 ----
 
 *Default*::
-
-  This rules matches every request. There must be a default rule
-  configured at the end of the rule list to handle the requests that
-  did not match any other rule. The end of the list means the smallest
-  priority value in relative terms. It doesn't have to be `1`
-  necessarily.
-
-  Eg: Default rule for the 'default' virtual server:
-
+This rules matches every request. There must be a default rule
+configured at the end of the rule list to handle the requests that
+did not match any other rule. The end of the list means the smallest
+priority value in relative terms. It doesn't have to be `1`
+necessarily.
++
+Eg: Default rule for the 'default' virtual server:
++
 ----
       vserver!1!rule!1!match = default
       vserver!1!rule!1!handler = common
       vserver!1!rule!1!handler!iocache = 0
 ----
-
++
 The following parameters are concatenated with any of the previous
 kinds of entry:
 
@@ -276,7 +281,7 @@ So, here are a few examples about how this notation works:
 
 - The default virtual server uses the "common" handler as default
   choice for its root directory:
-
++
 ----
     vserver!1!nick = default
     vserver!1!rule!directory!/!handler = common
@@ -286,7 +291,7 @@ So, here are a few examples about how this notation works:
 - The \*.example.com and \*.examples.org domains are restricted to be
   accessed from the local loop interface, and have to be handled as a
   FastCGI:
-
++
 ----
     vserver!5!nick = example
     vserver!5!domains!1 = *.example.com
@@ -298,7 +303,7 @@ So, here are a few examples about how this notation works:
 
 - ISO images should be handled as files and are protected by a
   htdigest file using only Digest authentication:
-
++
 ----
     vserver!1!nick = default
     vserver!1!rule!extensions!iso,ISO!handler = file
@@ -345,6 +350,7 @@ named ``filename`` and for exec ``command``.
 Examples:
 
 - Apache format logs to the regular files:
++
 ----
     vserver!1!nick = default
     vserver!1!logger = combined
@@ -359,11 +365,16 @@ Inclusion of Configuration
 
 Sometimes it is nice to break out your configuration into several logical files
 to be more modular as well as more organized.  You can use the ``include``
-configuration to accomplish this.  Here is an example:
+configuration to accomplish this.
+
+Here is an example::
++
 ----
     include = /etc/cherokee/advanced.conf
 ----
-or even, it is possible to specify a directory to include all of its files:
+
+or even, it is possible to specify a directory to include all of its files::
++
 ----
     include = /etc/cherokee/mods-enabled/
 ----

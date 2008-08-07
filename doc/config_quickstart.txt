@@ -120,7 +120,7 @@ When you start, you will only have one virtual server called
 `default`. You can begin by cloning it as `example`.
 While you are at it you should also append the following line to your
 `/etc/hosts` file (in Windows you will find this as
-`%WINDIR%\system32\drivers\etc\hosts`
+`%WINDIR%\system32\drivers\etc\hosts`).
 
 ----
 127.0.0.1       example.net example.org
@@ -129,6 +129,7 @@ While you are at it you should also append the following line to your
 This is to allow your system to resolve requests for `example.net` or
 `example.org` locally. Of course, once you are out in the Wild (you
 know, in the Internet), you will need proper DNS records.
+
 
 *`default`*::
 We will leave default untouched except for the document root path,
@@ -139,7 +140,9 @@ in the appropriate field.
 If you access your machine by IP or a DNS resolution points in that
 direction for any particular domain, the contents of your document
 root directory will be exposed ('/var/www' by default unless you
-changed that during the build process).
+changed that during the build process). Whenever there is no match for
+a virtual server specifically defined in your list, the `default`
+virtual server will be the one responding.
 +
 Right now any file with the 'php' extension will be served after being
 processed by the PHP interpreter (you should have `php-cgi` installed
@@ -152,7 +155,6 @@ search will be performed in that order; you can configure this in the
 would want to prevent this behavior but would like to keep up
 serving whatever content is requested directly, simply change the
 `List & Send` handler for the `Static Content` handler.
-
 
 
 *`example`*::
