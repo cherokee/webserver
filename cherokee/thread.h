@@ -74,11 +74,8 @@ typedef struct {
 	void                   *server;
 	cherokee_boolean_t      exit;
 
-	cherokee_boolean_t      is_accepting_conns; /* true=accepts new conns */
-
 	int                     conns_num;          /* open connections */
-	int                     conns_max;          /* max. connections */
-	int                     conns_accept;       /* accept limit */
+	int                     conns_max;          /* max opened conns */
 
 	int                     active_list_num;    /* active connections */
 	cherokee_list_t         active_list;

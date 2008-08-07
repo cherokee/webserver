@@ -163,7 +163,7 @@
 
 
 #define SHOULDNT_HAPPEN \
-	do { fprintf (stderr, "file %s:%d (%s): this shouldn't happen\n",  \
+	do { fprintf (stderr, "file %s:%d (%s): this should not happen\n",  \
 		      __FILE__, __LINE__, __cherokee_func__);               \
 	} while (0)
 

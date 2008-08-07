@@ -1241,11 +1241,11 @@ cherokee_getgrnam (const char *name, struct group *grbuf, char *buf, size_t bufl
 
 
 ret_t 
-cherokee_close_fd (cint_t fd)
+cherokee_fd_close (int fd)
 {
 	int re;
 	
-	if (fd < 0) {
+	if (unlikely (fd < 0)) {
 		return ret_error;
 	}
 	

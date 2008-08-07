@@ -235,6 +235,9 @@ _check (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 static ret_t
 _reset (cherokee_fdpoll_port_t *fdp, int fd)
 {
+	UNUSED (fdp);
+	UNUSED (fd);
+
 	return ret_ok;
 }
 

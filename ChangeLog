@@ -1,3 +1,14 @@
+2008-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/macros.h, cherokee/socket.c, cherokee/thread.c,
+	cherokee/thread.h, cherokee/util.c, cherokee/util.h,
+	cherokee/fdpoll-port.c, cherokee/server.c: This patch makes the
+	server to reply a quickly built 503 error page when it is
+	overloaded. This is a very special case because the page is not
+	sent by using the server infrastructure but by punching a
+	pre-built string into the socket and closing it right after it.
+	Additionally, the patch also do some clean-up along the way.
+
 2008-08-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/fcgi_manager.c, cherokee/socket.c, cherokee/source.c,

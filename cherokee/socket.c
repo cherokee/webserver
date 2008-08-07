@@ -500,26 +500,38 @@ cherokee_socket_close (cherokee_socket_t *socket)
 {
 	ret_t ret;
 
+	/* Sanity check
+	 */
 	if (socket->socket < 0) {
 		return ret_error;
 	}
 
+	/* SSL/TLS shutdown
+	 */
 #ifdef HAVE_TLS
 	if (socket->is_tls == TLS && socket->session != NULL) {
-#if   defined (HAVE_GNUTLS)
+# ifdef HAVE_GNUTLS
 		gnutls_bye (socket->session, GNUTLS_SHUT_WR);
 		gnutls_deinit (socket->session);
 		socket->session = NULL;
 
-#elif defined (HAVE_OPENSSL)
+# elif defined(HAVE_OPENSSL)
 		SSL_shutdown (socket->session);
 
-#endif
+# endif
 	}
-#endif	/* HAVE_TLS */
+#endif
+	
+	/* Close the socket
+	 */
+#ifdef _WIN32
+	re = closesocket (socket->socket);
+#else
+	ret = cherokee_fd_close (socket->socket);
+#endif
 
-	ret = cherokee_close_fd (socket->socket);
-
+	/* Clean up
+	 */
 	TRACE (ENTRIES",close", "fd=%d is_tls=%d re=%d\n", 
 	       socket->socket, socket->is_tls, (int) ret);
 
@@ -606,7 +618,7 @@ cherokee_socket_pton (cherokee_socket_t *socket, cherokee_buffer_t *host)
 
 	switch (SOCKET_AF(socket)) {
 	case AF_INET:
-#if defined(HAVE_INET_PTON)
+#ifdef HAVE_INET_PTON
 		re = inet_pton (AF_INET, host->buf, &SOCKET_SIN_ADDR(socket));
 		if (re <= 0) return ret_error;
 #else		
@@ -642,7 +654,7 @@ cherokee_socket_accept (cherokee_socket_t *socket, int server_socket)
 
 	ret = cherokee_socket_set_sockaddr (socket, fd, &sa);
 	if (unlikely(ret < ret_ok)) {
-		cherokee_close_fd (fd);
+		cherokee_fd_close (fd);
 		SOCKET_FD(socket) = -1;
 		return ret;
 	}
@@ -691,6 +703,7 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 	/* Get the new connection
 	 */
 	len = sizeof (cherokee_sockaddr_t);
+
 	new_socket = accept (server_socket, &sa->sa, &len);
 	if (new_socket < 0) {
 		int err = SOCK_ERRNO();

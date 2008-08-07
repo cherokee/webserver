@@ -762,9 +762,9 @@ initialize_server_threads (cherokee_server_t *srv)
 	 * might be required to satisfy a request coming from an accepted
 	 * and thus already open connection.
 	 */
-	conns_per_thread = fds_per_thread1 / 2;
-	srv->conns_max += conns_per_thread;
-	fds_per_thread1 += MAX_LISTEN_FDS;
+	conns_per_thread  = fds_per_thread1 / 2;
+	srv->conns_max   += conns_per_thread;
+	fds_per_thread1  += MAX_LISTEN_FDS;
 
 	/* Set mean fds per thread.
 	 */
@@ -784,10 +784,14 @@ initialize_server_threads (cherokee_server_t *srv)
 	 * add the server socket to the fdpoll of the sync thread
 	 */
 	if (srv->thread_num == 1) {
-		ret = cherokee_thread_accept_on (srv->main_thread);
-		if (unlikely(ret < ret_ok)) {
-			PRINT_ERROR("cherokee_thread_accept_on failed %d\n", ret);
+		ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, S_SOCKET_FD(srv->socket), 0);
+		if (ret < ret_ok)
 			return ret;
+
+		if (srv->tls_enabled) {
+			ret = cherokee_fdpoll_add (srv->main_thread->fdpoll, S_SOCKET_FD(srv->socket_tls), 0);
+			if (ret < ret_ok)
+				return ret;
 		}
 	}
 
@@ -808,9 +812,9 @@ initialize_server_threads (cherokee_server_t *srv)
 			spare_fds -= 2;
 			fds_per_thread1 += 2;
 		}
-		conns_per_thread = fds_per_thread1 / 2;
-		srv->conns_max += conns_per_thread;
-		fds_per_thread1 += MAX_LISTEN_FDS;
+		conns_per_thread  = fds_per_thread1 / 2;
+		srv->conns_max   += conns_per_thread;
+		fds_per_thread1  += MAX_LISTEN_FDS;
 
 		/* NOTE: mean fds per thread has already been set above.
 		 */
@@ -839,8 +843,6 @@ initialize_server_threads (cherokee_server_t *srv)
 	if (srv->conns_keepalive_max + 6 > srv->conns_max)
 		srv->conns_keepalive_max = srv->conns_max - 6;
 
-	/* OK, return.
-	 */
 	return ret_ok;
 }
 
