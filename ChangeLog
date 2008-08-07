@@ -1,5 +1,8 @@
 2008-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/socket.c: Reimplemented using the TCP layer nondelay
+	property instead of the file descriptor level.
+
 	* cherokee/util.h, cherokee/util.c (cherokee_mkdir_p): Adds a new
 	function. We will need it eventually.
 

@@ -1910,19 +1910,50 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 {
 #if defined(HAVE_TCP_CORK) || defined(HAVE_TCP_NOPUSH)
 	int re;
-	int fd = socket->socket;
+	int tmp = 0;
+	int fd  = socket->socket;
 
-	cherokee_fd_set_nodelay (fd, ! enable);
+	TRACE(ENTRIES",cork", "%s TCP_CORK on fd %d\n", 
+	      enable ? "Setting" : "Removing", fd);
 
-	re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &enable, sizeof(enable));
-	if (re < 0) {
-		PRINT_ERRNO (errno, "ERROR: Setting TCP_CORK to fd %d: ${errno}\n", fd);
+	if (enable) {
+		tmp = 0;
+		re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, &tmp, sizeof(tmp));
+		if (unlikely (re < 0)) { 
+			PRINT_ERRNO (errno, "ERROR: Removing TCP_NODELAY to fd %d: ${errno}", fd);
+			return ret_error;
+		}
+
+		tmp = 1;
+		re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &tmp, sizeof(tmp));
+		if (unlikely (re < 0)) {
+			PRINT_ERRNO (errno, "ERROR: Setting TCP_CORK to fd %d: ${errno}", fd);
+			return ret_error;
+		}
+
+		return ret_ok;
+	}
+
+	tmp = 0;
+	re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &tmp, sizeof(tmp));
+	if (unlikely (re < 0)) {
+		PRINT_ERRNO (errno, "ERROR: Removing TCP_CORK to fd %d: ${errno}", fd);
 		return ret_error;
 	}
+
+	tmp = 1;
+	re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, &tmp, sizeof(tmp));
+	if (unlikely (re < 0)) { 
+		PRINT_ERRNO (errno, "ERROR: Setting TCP_NODELAY to fd %d: ${errno}", fd);
+		return ret_error;
+	}
+
+	return ret_ok;
 	
 #else
 	UNUSED(socket);
 	UNUSED(enable);
-#endif
+
 	return ret_ok;
+#endif
 }
