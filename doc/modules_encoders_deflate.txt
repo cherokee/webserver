@@ -16,4 +16,4 @@ The only reason to offer `deflate` encoding is for the rare cases in
 which it is supported by clients that do not support `gzip`. No modern
 web browser will lack this, but since more than one encoder can be
 offered simultaneously by Cherokee you have the choice to add or not
-`deflate` support.
+the support for `deflate`.

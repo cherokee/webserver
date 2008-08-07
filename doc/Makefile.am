@@ -45,7 +45,9 @@ cookbook_cross_compilation.html \
 cookbook_authentication.html \
 cookbook_ssl.html \
 modules.html \
+modules_balancers.html \
 modules_balancers_round_robin.html \
+modules_encoders.html \
 modules_encoders_gzip.html \
 modules_encoders_deflate.html \
 modules_handlers_file.html \

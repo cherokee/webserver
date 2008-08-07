@@ -1,0 +1,22 @@
+Modules: Enconders
+------------------
+
+Encoders are Cherokee modules that can be used as filters. The most
+common usage is to compress information allowing you to save
+bandwidth. You should do that whenever you can since hardware is
+mostly unexpensive while bandwidth is not. Besides, the performance
+penalization suffered due to the compression process is trivial, and
+if the content is cached you will only suffer it once.
+
+Of course it doesn't make sense to apply a processor intensive filter
+to content that can't take advantage of it (i.e., it doesn't make
+sense to try to compressed an already compressed file because there is
+nothing to gain).
+
+You can specify the filetypes to have encoding allowed or denied, and
+you can select the policy to apply to this encoding process.
+
+. Deny by default
+. Allow by default
+. Deny, Allow
+. Allow, Deny

@@ -1,8 +1,29 @@
+2008-08-07  Taher Shihadeh <taher@unixwars.com>
+
+	* cherokee-guardian.1, doc/basics_installation.txt,
+	doc/basics_installation_windows.txt, doc/basics.txt,
+	doc/basics_upgrade.txt, doc/build/chunked_template.conf,
+	doc/bundle_cget.txt, doc/bundle_cherokee-admin.txt,
+	doc/bundle_cherokee-config.txt, doc/bundle_cherokee-guardian.txt,
+	doc/bundle_cherokee-tweak.txt, doc/bundle_cherokee.txt,
+	doc/bundle.txt, doc/config_encoding.txt,
+	doc/config_quickstart.txt, doc/config.txt,
+	doc/config_virtual_servers_rule.txt,
+	doc/config_virtual_servers.txt, doc/cookbook.txt,
+	doc/dev_cherokee.conf.txt, doc/dev_debug.txt, doc/dev.txt,
+	doc/media/css/cherokee_doc.css,
+	doc/modules_balancers_round_robin.txt, doc/modules_balancers.txt,
+	doc/modules_encoders_deflate.txt, doc/modules_encoders.txt,
+	doc/modules.txt, doc/TOC.txt: editions to and several new file
+	additions. Documentation looks better now. Still lots of work to
+	do.
+
+
 2008-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main.c, cherokee/main_guardian.c,
 	cherokee/server-protected.h, cherokee/server.c, cherokee/server.h:
-	Implement gratefully restart (aka: from now on, you can upgrade
+	Implemented graceful restart (aka: from now on, you can upgrade
 	your Cherokee binary without killing the existing connections).
 
 	* cherokee/socket.c: Reimplemented using the TCP layer nodelay
@@ -20,7 +41,7 @@
 	about to reach the overload limit (>95% of the total capacity).
 
 	* cherokee/server.c (cherokee_server_new): timeout is 5 seconds
-	now. That should be more then enough for the average case.
+	now. That should be more than enough for the average case.
 
 	* cherokee/macros.h, cherokee/socket.c, cherokee/thread.c,
 	cherokee/thread.h, cherokee/util.c, cherokee/util.h,
@@ -8649,7 +8670,7 @@
 2005-02-06  Rodrigo Fernandez-Vizarra  <Rodrigo.Fernandez-Vizarra@sun.com>
 
 	* ChangeLog: Fixed a typo in my name ;-)
-      
+
 	* cherokee/Makefile.am: Changed a GNU specific rule to a GNU/BSD
 	compatible rule
 
@@ -8863,7 +8884,7 @@
 
 	* src/buffer_escape.c (cherokee_buffer_escape_free):
 	Bugfix. s/esc->internal/esc->internal[i]/
-	
+
 	* src/read_config_scanner.l, src/read_config_grammar.y: Added new
 	configuration entry "MaxConnReuse" to set the max number of
 	connection to reuse in each thread.
@@ -8891,7 +8912,7 @@
 	* src/socket.c (cherokee_socket_init_tls): Call to gnutls_bye
 	before deinit the TLS connection. It tries to fix a segmentation
 	fault detected at the production server.
-	
+
 
 2004-11-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 

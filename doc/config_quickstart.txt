@@ -14,32 +14,32 @@ specific documentation entries.
 
 Overview
 ~~~~~~~~
-* link:config_general.html[General]::
+* link:config_general.html[General]:
   There are a number of entries that specify the most significant
   configuration options such as the port - or ports - that the server
   will listen to, the default timeout, whether to support keep-alive
   connections and so on.
 
-* link:config_virtual_servers.html[Virtual servers]::
+* link:config_virtual_servers.html[Virtual servers]:
   If you want your web server to work with more than one domain you
   will have to create link:config_virtual_servers.html[Virtual
   servers] other than the `default` one. Each one will have a
   completely independent configuration: paths, behavior, logging
   facilities, etc.
 
-* link:config_encoding.html[Encoding]::
+* link:config_encoding.html[Encoding]:
   The encoders allow to transform whatever information the server is
   sending as a response of a request, no matter what handler is
   generating it.
 
-* link:config_icons.html[Icons]::
+* link:config_icons.html[Icons]:
   Associate icon images with one or more file extensions. Used to
   offer directory listings.
 
-* link:config_mime_types.html[Mime Types]::
+* link:config_mime_types.html[Mime Types]:
   Manage MIME types.
 
-* link:config_advanced.html[Advanced]::
+* link:config_advanced.html[Advanced]:
   This is to configure the most complex parameters of the server and how
   it interacts with the operating system. If you are unsure about any of
   the options here, better not mingle with them. Default values should
@@ -103,6 +103,7 @@ running, the applied modifications will also affect the instance being
 executed.
 
 This is what the `General` tab looks like:
+
 image::media/images/admin_general.png[General]
 
 We will only be modifying the *Server Permissions*. It usually is a

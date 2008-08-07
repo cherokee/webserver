@@ -1,0 +1,46 @@
+Modules: Balancers
+------------------
+
+This type of Cherokee modules allow to balance the load among several
+servers. Cherokee is completely modular, which means that the same
+balancing strategies can be implemented both directly as first level
+Cherokee handlers and as second level subsystems used by other first
+level handlers.
+
+This is the case of the link:modules_handlers_fcgi.html[FastCGI] or
+link:modules_handlers_scgi.html[SCGI] handlers that can offer load
+balancing as well.
+
+The balancer modules are selected in
+link:bundle_cherokee-admin.html[cherokee-admin] as `Generic balancing`
+handlers, that can be chosen within the
+`Handler` tab of the link:config_virtual_servers_rule.html[Rule
+Options] section.
+
+When a specific balancing strategy is selected, there are two possible
+settings as *information sources*:
+
+. *Remote*: Cherokee will simply dispatch the request to the specified
+  host. As many hosts as needed can be added, and Cherokee will simply
+  apply the balancing strategy among them. If for any reason the
+  requests made to these hosts could not be performed, the processes
+  would simply fail.
+
+. *Local*: As before, many hosts can be specified (despite the name,
+  the selection is not limited to the localhost). This works the same
+  way as the previous option. But in this case, if a request cannot be
+  responded then instead of failing directly a specified command would
+  be launched before reconnecting to try again. Te most common use of
+  this would be launching the service that should handle the request,
+  but it is a flexible mechanism that in theory could allow you to
+  reroute the information to allo you to serve SSH sessions via your
+  webserver or any other neat tricks you can think about.
+
+Note that because of Cherokee's flexibility and modularity, sometimes
+and deppending of the situation one or the other setting might not
+make much sense. In such ocasions `cherokee-admin` will simply hide
+whatever options do not apply.
+
+This is the list of currently supported balancing strategies:
+
+* link:modules_balancers_round_robin.html[Round RobinFriki]

@@ -41,7 +41,7 @@
 #define PID_FILE          CHEROKEE_VAR_RUN "/cherokee-guardian.pid"
 
 pid_t              pid;
-cherokee_boolean_t grateful_restart; 
+cherokee_boolean_t graceful_restart; 
 
 static void
 pid_file_save (const char *pid_file, int pid)
@@ -88,7 +88,7 @@ process_wait (pid_t pid)
 		if (re > 0)
 			break;
 		else if (errno == EINTR) 
-			if (grateful_restart)
+			if (graceful_restart)
 				break;
 			else
 				continue;
@@ -128,8 +128,8 @@ guardian_signals_handler (int sig, siginfo_t *si, void *context)
 		break;
 
 	case SIGHUP:
-		/* Grateful restart */
-		grateful_restart = true;
+		/* Graceful restart */
+		graceful_restart = true;
 		kill (pid, SIGHUP);
 		break;
 
@@ -244,7 +244,7 @@ main (int argc, char *argv[])
 	ret_t              ret;
 	cherokee_boolean_t single_time;
 
-	set_guardian_signals();	   
+	set_guardian_signals();
 	single_time = is_single_execution (argc, argv);
 
 	/* Turn into a daemon
@@ -253,16 +253,16 @@ main (int argc, char *argv[])
 		may_daemonize (argc, argv);
 		pid_file_save (PID_FILE, getpid());
 	}
-	
+
 	while (true) {
-		grateful_restart = false;
+		graceful_restart = false;
 
 		pid = process_launch (CHEROKEE_SRV_PATH, argv);
 		if (pid < 0) {
 			PRINT_MSG ("Couldn't launch '%s'\n", CHEROKEE_SRV_PATH);
 			exit (1);
 		}
-		
+
 		ret = process_wait (pid);
 		if (single_time)
 			break;

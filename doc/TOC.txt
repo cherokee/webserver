@@ -39,10 +39,10 @@ link:config.html[Configuration]
 link:cookbook.html[Cookbook]
 *********************************
 
-////
+/////
   Reference table     <8>	link:cookbook_reference.html[]
   Optimizing Cherokee <2>	link:cookbook_optimizing_cherokee.html[]
-////
+/////
 
   . link:cookbook_cross_compilation.html[Cross compilation]
 
@@ -60,12 +60,12 @@ link:cookbook.html[Cookbook]
 Modules
 *********************************
 
+  . link:modules_balancers.html[Balancers]
+    - link:modules_balancers_round_robin.html[Round robin]
+  . link:modules_encoders.html[Encoders]
+    - link:modules_encoders_gzip.html[gzip]
+    - link:modules_encoders_deflate.html[deflate]
 ////
-  Balancers			link:modules_balancers.html[]
-    Round robin        [24]	link:modules_balancers_round_robin.html[]
-  Encoders                 	link:modules_encoders.html[]
-    link:modules_encoders_gzip.html[gzip]
-    link:modules_encoders_deflate.html[deflate]
   Handlers                 	link:modules_handlers.html[]
     List & Send        [18]	link:modules_handlers_common.html[]
     Static Content     [21]	link:modules_handlers_file.html[]
