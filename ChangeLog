@@ -1,5 +1,9 @@
 2008-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c (cherokee_connection_parse_header): Adds a
+	check to ensure that the server will not use keepalive when it is
+	about to reach the overload limit (>95% of the total capacity).
+
 	* cherokee/server.c (cherokee_server_new): timeout is 5 seconds
 	now. That should be more then enough for the average case.
 

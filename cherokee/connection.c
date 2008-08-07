@@ -1714,6 +1714,14 @@ cherokee_connection_parse_header (cherokee_connection_t *conn, cherokee_encoder_
 		conn->keepalive = 0;
 	}
 
+	/* Don't use keepalive if the server is about to be overloaded
+	 */
+	if ((conn->keepalive) &&
+	    (CONN_THREAD(conn)->conns_max > CONN_SRV(conn)->conns_keepalive_max))
+	{
+		conn->keepalive = 0;
+	}
+
 	/* Look for "Range:" 
 	 */
 	if (HANDLER_SUPPORTS (conn->handler, hsupport_range)) {
@@ -1777,9 +1785,10 @@ cherokee_connection_open_request (cherokee_connection_t *conn)
 	/* If the connection is keep-alive
 	 * then verify whether the handler supports it.
 	 */
-	if ((HANDLER_SUPPORTS (conn->handler, hsupport_length) == 0) && 
-	    (HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length) == 0) &&
-	    conn->keepalive != 0) {
+	if ((conn->keepalive != 0) &&
+	    (HANDLER_SUPPORTS (conn->handler, hsupport_length) == 0) && 
+	    (HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length) == 0))
+	{
 		conn->keepalive = 0;
 	}
 

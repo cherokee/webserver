@@ -119,6 +119,9 @@ struct cherokee_server {
 	cuint_t                    conns_keepalive_max;
 	cuint_t                    conns_num_bogo;
 
+	cherokee_boolean_t         keepalive;
+	cuint_t                    keepalive_max;
+
 	/* Networking config
 	 */
 	cherokee_boolean_t         ipv6;
@@ -159,9 +162,6 @@ struct cherokee_server {
 	 */
 	int                        timeout;
 	cherokee_buffer_t          timeout_header;
-
-	cherokee_boolean_t         keepalive;
-	uint32_t                   keepalive_max;
 
 	struct {
 		off_t min;
