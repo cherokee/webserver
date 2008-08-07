@@ -1354,3 +1354,41 @@ cherokee_fix_dirpath (cherokee_buffer_t *buf)
 
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_mkdir_p (cherokee_buffer_t *path)
+{
+	int   re;
+        char *p;
+
+	if (cherokee_buffer_is_empty (path))
+		return ret_ok;
+
+	p = path->buf;
+	while (true) {
+		p = strchr (p+1, '/');
+		if (p == NULL)
+			break;
+
+		*p = '\0';
+		re = mkdir (path->buf, 0700);
+		if ((re != 0) && (errno != EEXIST)) {
+			PRINT_ERRNO (errno, "Could not mkdir '%s': ${errno}\n", path->buf);
+			return ret_error;
+		}
+		*p = '/';
+		
+		p++;
+		if (p > path->buf + path->len)
+			return ret_ok;
+	}
+
+	re = mkdir (path->buf, 0700);
+	if ((re != 0) && (errno != EEXIST)) {
+		PRINT_ERRNO (errno, "Could not mkdir '%s': ${errno}\n", path->buf);
+		return ret_error;
+	}
+	
+	return ret_ok;
+}

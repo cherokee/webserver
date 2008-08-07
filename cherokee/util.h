@@ -104,6 +104,7 @@ ret_t cherokee_syslog        (int priority, cherokee_buffer_t *buf);
 ret_t cherokee_getpwnam      (const char *name, struct passwd *pwbuf, char *buf, size_t buflen);
 ret_t cherokee_getgrnam      (const char *name, struct group *pwbuf, char *buf, size_t buflen);
 ret_t cherokee_mkstemp       (cherokee_buffer_t *buffer, int *fd);
+ret_t cherokee_mkdir_p       (cherokee_buffer_t *path);
 
 /* Misc
  */
