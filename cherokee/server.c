@@ -144,7 +144,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->group_orig      = getgid();
 	n->group           = n->group_orig;
 
-	n->timeout         = 15;
+	n->timeout         = 5;
 
 	n->fdlimit_custom      = -1;
 	n->fdlimit_available   = -1;

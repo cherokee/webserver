@@ -1,5 +1,8 @@
 2008-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (cherokee_server_new): timeout is 5 seconds
+	now. That should be more then enough for the average case.
+
 	* cherokee/macros.h, cherokee/socket.c, cherokee/thread.c,
 	cherokee/thread.h, cherokee/util.c, cherokee/util.h,
 	cherokee/fdpoll-port.c, cherokee/server.c: This patch makes the
