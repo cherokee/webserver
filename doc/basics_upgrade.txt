@@ -14,7 +14,9 @@ cherokee.conf file through the Python scripts provided under
 The usage is quite simple, and works the same way for all the
 scripts:
 
+----
     contrib/07to08.py /path/cherokee.conf.07 /path/cherokee.conf.08
+----
 
 If you need to upgrade from a really old release, simply apply the
 whole chain of conversions.

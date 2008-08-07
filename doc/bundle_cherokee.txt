@@ -21,28 +21,28 @@ This is the full information provided by the manpage:
 *OPTIONS*::
        This command will launch the Cherokee webserver. It accepts the following options.
 
-       -h, --help::
+       -h, --help;;
                Prints a brief help message and terminates execution
 
-       -V, --version::
+       -V, --version;;
                Prints Cherokee’s version and terminates execution
 
-       -t, --test::
+       -t, --test;;
                Perform a sanity check on the configuration  file.  The  server will not run.
 
-       -d, --detach::
+       -d, --detach;;
                Launches  the server as a background process (default behaviour is to stay attached to the controlling terminal).
 
-       -C, --config=PATH::
+       -C, --config=PATH;;
                Specifies  a  configuration  file  other   than   the   default /etc/cherokee/cherokee.conf
 
-       -p, --port=PORT::
+       -p, --port=PORT;;
                TCP port number to which the server will listen.
 
-       -r, --documentroot=PATH::
+       -r, --documentroot=PATH;;
                Launches  a server exposing statically the specified directory. When launched with -r, the configuration file is  ignored, and the Cherokee instance runs with its default values.
 
-       -i, --print::
+       -i, --print;;
                Print server technical information.
 **********************************************************************
 

@@ -1,0 +1,12 @@
+*********************************
+Getting started
+*********************************
+
+ . link:basics_why_cherokee.html[Why Cherokee?]
+ . link:basics_requirements.html[Requirements]
+ . link:basics_download.html[Download]
+ . link:basics_installation.html[Installation]
+   - link:basics_installation_unix.html[Unix]
+   - link:basics_installation_windows.html[Windows]
+ . link:basics_upgrade.html[Upgrading Cherokee]
+ . link:basics_running_cherokee.html[Running Cherokee]

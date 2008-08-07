@@ -111,8 +111,10 @@ This section allows to define the list of domains that the virtual
 server implements.
 
 It can accepted either FQDN (Fully Qualified Domain Names) or wild
-card entries. For instance:
+card entries.
 
+For instance::
++
 ----
           example.com
         *.example.org
@@ -198,52 +200,52 @@ number of them:
 
 **********************************************************************
 - link:modules_handlers_common.html[common] - **List & Send**
-
++
 Combines both `Static Content` and `Only listing` handlers
 functionality to behave similarly to common web servers, it will
 display directory listings when a directory is requested and serve the
 requested files.
 
 - link:modules_handlers_file.html[Static Content] - **Static Content**
-
++
 This is the file handler and it serves files straight from the
 file system.
 
 - link:modules_handlers_dirlist.html[dirlist] - **Only listing**:
-
++
 Displays a directory content list when a directory is requested,
 but it does not allow to download any content.
 
 - link:modules_handlers_redir.html[redir] - **Redirection**
-
++
 Perform simple and/or complex redirections using regexes.
 
 - link:modules_handlers_cgi.html[cgi] - **CGI Execution**
-
++
 Executes CGI programs.
 
 - link:modules_handlers_fcgi.html[fcgi] - **FastCGI Server Support**
-
++
 Communicates with FastCGI servers.
 
 - link:modules_handlers_scgi.html[scgi] - **SCGI Server Support**
-
++
 Communicates with SCGI servers.
 
 - link:modules_handlers_server_info.html[Server Info] - **Server
   Info**
-
++
 Provide some configurable information about the server.
 
 - link:modules_handlers_mirror.html[Generic balancer] - **Generic
   balancer**
-
++
 Select one of the available mechanisms to distribute the load (locally
 or remotely).
 
 - link:modules_handlers_admin.html[Remote Administration] - **Remote
   Administration**
-
++
 Implements an administration interface to work with
 link:bundle_cherokee-tweak.html[cherokee-tweak].
 **********************************************************************

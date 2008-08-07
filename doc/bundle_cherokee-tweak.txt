@@ -35,22 +35,22 @@ This is the full information provided by the manpage.
 *OPTIONS*::
        cherokee-tweak accepts the following options:
 
-       -h, --help::
+       -h, --help;;
                Shows brief usage information
 
-       -V, --version::
+       -V, --version;;
                Prints version and exits
 
-       -u, --user= STRING::
+       -u, --user= STRING;;
                Specifies the user name with which to identify to the server
 
-       -p, --password=STRING::
+       -p, --password=STRING;;
                Specifies the password with which to identify to the server
 
-       -c, --command=STRING::
+       -c, --command=STRING;;
                Required option. Command to execute: logrotate, trace or info
 
-       -a, --url=URL::
+       -a, --url=URL;;
                Required  option. URL where the administrative interface can be
                found.  This target must be  defined  previously  in  cherokee-
                admin, enabling a "Remote Administration" type handler (Virtual
@@ -58,10 +58,10 @@ This is the full information provided by the manpage.
                Administration").  The  deffinition of a security mechanisim is
                highly encouraged.
 
-       -l, --log=PATH::
+       -l, --log=PATH;;
                Log file to be rotated (Only to be used when -c is logrotate)
 
-       -t, --trace=STRING::
+       -t, --trace=STRING;;
                Modules to be traced (Only to be used when -c is trace). Chero‐
                kee must have been compiled with the --enable-trace for this to
                work. Everything traceable  with  CHEROKEE_TRACE  can  also  be

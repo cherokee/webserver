@@ -1,17 +1,20 @@
-**************************
-Getting started
-**************************
+*********************************
+link:basics.html[Getting started]
+*********************************
+
  . link:basics_why_cherokee.html[Why Cherokee?]
  . link:basics_requirements.html[Requirements]
  . link:basics_download.html[Download]
- . link:basics_installation_unix.html[Installation: Unix]
- . link:basics_installation_windows.html[Installation: Windows]
+ . link:basics_installation.html[Installation]
+   - link:basics_installation_unix.html[Unix]
+   - link:basics_installation_windows.html[Windows]
  . link:basics_upgrade.html[Upgrading Cherokee]
  . link:basics_running_cherokee.html[Running Cherokee]
 
-**************************
-Cherokee Bundle
-**************************
+*********************************
+link:bundle.html[Cherokee Bundle]
+*********************************
+
  . link:bundle_cherokee.html[cherokee]
  . link:bundle_cherokee-admin.html[cherokee-admin]
  . link:bundle_cherokee-config.html[cherokee-config]
@@ -19,9 +22,10 @@ Cherokee Bundle
  . link:bundle_cherokee-tweak.html[cherokee-tweak]
  . link:bundle_cget.html[cget]
 
-**************************
-Configuration
-**************************
+*********************************
+link:config.html[Configuration]
+*********************************
+
   . link:config_quickstart.html[Quickstart]
   . link:config_general.html[General]
   . link:config_virtual_servers.html[Virtual servers]
@@ -31,12 +35,14 @@ Configuration
   . link:config_mime_types.html[Mime Types]
   . link:config_advanced.html[Advanced]
 
-**************************
-Cookbook
-**************************
+*********************************
+link:cookbook.html[Cookbook]
+*********************************
+
+////
   Reference table     <8>	link:cookbook_reference.html[]
   Optimizing Cherokee <2>	link:cookbook_optimizing_cherokee.html[]
-  Cross compilation   [12]	link:cookbook_cross_compilation.html[]
+  . link:cookbook_cross_compilation.html[Cross compilation]
   Embedding Cherokee  <9>	link:cookbook_embedding_cherokee.html[]
   Managing logs       <5>	link:cookbook_managing_logs.html[] <rotations and cherokee-tweak?>
   Authentication      [8] <3>	link:cookbook_authentication.html[]
@@ -44,10 +50,13 @@ Cookbook
   Setting up PHP      <4>	link:cookbook_php.html[]
   Setting up Django   <4>	link:cookbook_django.html[]
   Setting up RoR      <4>	link:cookbook_ror.html[]
+////
 
-**************************
+*********************************
 Modules
-**************************
+*********************************
+
+////
   Balancers			link:modules_balancers.html[]
     Round robin        [24]	link:modules_balancers_round_robin.html[]
   Encoders                 	link:modules_encoders.html[]
@@ -75,17 +84,22 @@ Modules
     mysql              [7.3]	link:modules_validators_mysql.html[]
     pam                [7.4]	link:modules_validators_pam.html[]
     plain              [7.5]	link:modules_validators_plain.html[]
+////
 
-**************************
+*********************************
 Other resources
-**************************
+*********************************
+
   FAQ
   Community
 
-**************************
+*********************************
 Development info
-**************************
+*********************************
+
   . link:dev_debug.html[Debugging]
   . link:dev_cherokee.conf.html[cherokee.conf]
-  API introduction		link:dev_api.html[]
-  Examples			link:dev_examples.html[]
+////
+  . API introduction		link:dev_api.html[]
+  . Examples			link:dev_examples.html[]
+////

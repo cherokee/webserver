@@ -23,34 +23,31 @@ This is the full information provided by the manpage:
        saved.  If that is not  the  desired  behavior  it  must  be  specified
        explicitly.  Below is a summary of the cget options.
 
-       Startup:
-       ~~~~~~~~
-       -V, --version::
+- *Startup*
+
+       -V, --version;;
               Display version of currently installed cget and exit.
 
-       -h, --help::
+       -h, --help;;
               Display help screen with common options.
 
-       Logging and input file:
-       ~~~~~~~~~~~~~~~~~~~~~~~
+- *Logging and input file*
 
-       -q, --quiet::
+       -q, --quiet;;
               Run in quiet mode: no output is displayed.
 
-       Download:
-       ~~~~~~~~~
+- *Download*
 
-       -O, --output-document=FILE::
+       -O, --output-document=FILE;;
               Writes whatever document is downloaded to FILE
 
-       HTTP options:
-       ~~~~~~~~~~~~~
+- *HTTP options*
 
-       -s, --save-headers::
+       -s, --save-headers;;
               This  option  saves HTTP headers to the file being saved (speci‐
               fied with -O option)
 
-       --header=STRING::
+       --header=STRING;;
               this option inserts STRING among the headers sent  in  the  HTTP
               request.
 

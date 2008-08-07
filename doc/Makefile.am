@@ -14,13 +14,16 @@ SUFFIXES = .txt .html .inc
 docdir = $(datadir)/doc/cherokee
 doc_DATA = \
 TOC.inc \
+basics.html \
 basics_why_cherokee.html \
 basics_requirements.html \
 basics_download.html \
+basics_installation.html \
 basics_installation_unix.html \
 basics_installation_windows.html \
 basics_upgrade.html \
 basics_running_cherokee.html \
+bundle.html \
 bundle_cherokee.html \
 bundle_cherokee-admin.html \
 bundle_cherokee-config.html \
@@ -28,6 +31,7 @@ bundle_cherokee-guardian.html \
 bundle_cherokee-tweak.html \
 bundle_spawn-fcgi.html \
 bundle_cget.html \
+config.html \
 config_quickstart.html \
 config_general.html \
 config_virtual_servers.html \
@@ -36,9 +40,11 @@ config_encoding.html \
 config_icons.html \
 config_mime_types.html \
 config_advanced.html \
+cookbook.html \
 cookbook_cross_compilation.html \
 cookbook_authentication.html \
 cookbook_ssl.html \
+modules.html \
 modules_balancers_round_robin.html \
 modules_encoders_gzip.html \
 modules_encoders_deflate.html \
@@ -59,6 +65,7 @@ modules_validators_ldap.html \
 modules_validators_mysql.html \
 modules_validators_pam.html \
 modules_validators_plain.html \
+dev.html \
 dev_debug.html \
 dev_cherokee.conf.html
 

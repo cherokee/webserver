@@ -1,0 +1,11 @@
+Installation
+------------
+
+There is information available about compilation and installation for
+several platforms.
+
+* link:basics_installation_unix.html[Unix installation]
+* link:basics_installation_windows.html[Windows installation]
+
+For insight on more specific subjects such as cross-compilation or
+embedding Cherokee, check the link:cookbook.html[Cookbook].

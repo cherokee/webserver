@@ -179,8 +179,9 @@ div.admonitionblock {
 //  margin-left: 10%;
 //  margin-right: 10%;
 //  margin-top: 1.5em;
-//  margin-bottom: 1.5em;
+  margin-bottom: 1.5em;
 }
+
 div.admonitionblock {
   margin-top: 2.5em;
   margin-bottom: 2.5em;
@@ -360,10 +361,10 @@ div.toclevel4 {
   float:left;
   margin-right: -200px;
 }
-#content {
+#page_content {
   margin-right: 210px;
 }
-#nav {
+#page_nav {
   font-size: 0.8em;
   width:200px;
   float:left;

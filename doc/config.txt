@@ -1,0 +1,12 @@
+*********************************
+Configuration
+*********************************
+
+  . link:config_quickstart.html[Quickstart]
+  . link:config_general.html[General]
+  . link:config_virtual_servers.html[Virtual servers]
+    - link:config_virtual_servers_rule.html[Rule Options]
+  . link:config_encoding.html[Encoding]
+  . link:config_icons.html[Icons]
+  . link:config_mime_types.html[Mime Types]
+  . link:config_advanced.html[Advanced]

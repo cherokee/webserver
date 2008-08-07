@@ -5,7 +5,9 @@ This command-line tool is less known than the rest because it is to be
 used by system administrators and developers. There is not much to be
 added besides the syntax of the command. The main usage of this
 utility is determining the used flags during the compilation and
-linking process. This is useful to build programs that make use of Cherokee.
+linking process. This is useful to build programs that make use of
+Cherokee.
+
 
 This is the full information provided by the manpage.
 **********************************************************************
@@ -16,14 +18,14 @@ This is the full information provided by the manpage.
        cherokee-guardian
 
 *DESCRIPTION*::
-       cherokee  is  an  extremely  fast,  flexible  and embeddable web server.
-       cherokee-guardian is the recommended way to invoke cherokee -  It  will
-       launch  Cherokee with any options specified to it via the command line,
-       and monitor it. In case Cherokee ends abnormally, it  will  be  immedi‐
-       ately re-launched.
-
-       In  future  versions,  cherokee-guardian  will probably become the main
-       binary to invoke Cherokee.
+Cherokee is an extremely  fast, flexible  and embeddable
+web server. cherokee-guardian is the recommended way to invoke
+cherokee. It will launch  Cherokee with any options specified
+to it via the command line, and monitor it. In case Cherokee
+ends abnormally, it will be immediately re-launched.
++
+In future versions, cherokee-guardian will probably become the
+main binary to invoke Cherokee.
 **********************************************************************
 
 The accepcted parameters are those of the

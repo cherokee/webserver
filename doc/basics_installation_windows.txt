@@ -40,7 +40,7 @@ This is what you need to install. Check the
 link:http://www.mingw.org/[MinGW] site to download most of the
 software mentioned in the following lines.
 
-*MinGW*: minimalist GNU for Windows (GCC & binutils)
+.*MinGW*: minimalist GNU for Windows (GCC & binutils)
 
     * Download MinGW release 5.1.4 at the time of this writing.
     * Run it and select ‘Candidate’. Check base tools & g++
@@ -48,40 +48,40 @@ software mentioned in the following lines.
       C:\MinGW is fine).
 
 
-*MSYS*: Minimal SYStem
+.*MSYS*: Minimal SYStem
 
     * Download MSYS, tests were made with release 1.0.10
     * Install it in the same directory as MinGW (remove “1.0″ from
       the install path).
     * Answer y, y, c:/MinGW
     * You should add something like this to your ~/.profile to process
-      your preferences: 
-
+      your preferences:
++
 ------------------------------
 if [ -f ${HOME}/.bashrc ] then
   . ${HOME}/.bashrc
 fi
 ------------------------------
 
-*MSYS DTK*: Dev Toolkit
+.*MSYS DTK*: Dev Toolkit
 
     * Get DTK
     * Install it in the same path as above
 
-*Update Autoconf & Automake*
+.*Update Autoconf & Automake*
 
     * You might encounter problems if you do not have up to date
     `Autoconf` and `Automake`. We recommend the usage of at least
     versions 2.61 and 1.10.1, that are the ones we used.
 
-*Pthreads Win32*: POSIX Threads
+.*Pthreads Win32*: POSIX Threads
 
     * Cherokee will need these. Just download
       link:ftp://sourceware.org/pub/pthreads-win32/dll-latest/[Pthreads-Win32]
       and copy the appropriate files to /lib and /include
 
 
-*Python*
+.*Python*
 
     * You will need this, since both the build process and
       Cherokee-Admin use Python. Just

@@ -130,22 +130,21 @@ This is to allow your system to resolve requests for `example.net` or
 `example.org` locally. Of course, once you are out in the Wild (you
 know, in the Internet), you will need proper DNS records.
 
-`default`
-^^^^^^^^^
+*`default`*::
 We will leave default untouched except for the document root path,
 which we will change. This is done through the `Basics` tab.
 You could create by hand '/var/www/default' for example and set it up
 in the appropriate field.
-
++
 If you access your machine by IP or a DNS resolution points in that
 direction for any particular domain, the contents of your document
 root directory will be exposed ('/var/www' by default unless you
 changed that during the build process).
-
++
 Right now any file with the 'php' extension will be served after being
 processed by the PHP interpreter (you should have `php-cgi` installed
 in your system for this, though).
-
++
 Any requested file would be sent. If a directory is requested, a file
 called index.php or index.html will be served if it is present (the
 search will be performed in that order; you can configure this in the
@@ -154,26 +153,26 @@ would want to prevent this behavior but would like to keep up
 serving whatever content is requested directly, simply change the
 `List & Send` handler for the `Static Content` handler.
 
-`example`
-^^^^^^^^^
+
+
+*`example`*::
 For now this virtual server is an exact copy of the untouched
 `default` virtual server. Create some new directories
-'/var/wwww/example', '/var/wwww/example/auth' and
-'/var/www/example/redir', and configure the first one as default
-document root path.
-
+'/var/wwww/example' and '/var/wwww/example/auth', and configure the
+first one as default document root path.
++
 Next, setup `example.net` and `example.com` in the `Domain names` tab.
 We'll erase everything in the *Targets* list within the `Behavior`
 tab, except the `default` rule. With this we'll only be able to serve
 static content.
-
++
 Accessing the URL http://example.org should now show a list of
 available files and directories under '/var/www/example/'.
-
++
 Now lets password protect the `auth` directory. Add a new `Directory`
 class rule pointing to `/auth`. Then, through the `Security` tab, add
 a `Validation Mechanism` under `Authentication`.
-
++
 The field `Realm` is mandatory. Lets set it as `Secured Area`.
 If you choose `PAM` and impose no more restrictions, only users with
 a local account in your system will be able to access the secured zone
@@ -183,34 +182,51 @@ specific requirements. For example, had you chosen `Plain text file`
 instead of PAM you would have had to specify a `Password File`.
 For example, it could have been `/var/www/passwords.txt` with the
 following contents:
-
++
 ----
 testuser1:password1
 testuser2:password2
 ----
-
++
 Note that the rule must not be flagged as `Final`, or else no other
 rules will be applied afterwards and no access will be given to any
 contents. This is because at this point we have not defined any
 handler for the `/auth` rule and nothing would be served.
-
++
 Refer to the Cookbook for detailed examples on the different options.
-
++
 Lastly, lets configure a redirection rule by choosing a "Regular
 Expression" as the new rule type. Type the following regex: `^/rss.*$`
 Then, within the `Handler` selection tab specify a target: `/feed`
-
++
 image::media/images/admin_rule_regex.png[Regex]
-
++
 And voilà! A request of the form http://example.net/rss2 would be
 redirected to http://example.net/feed
-
++
+Note that the `Type` of the *Redirection* is `External`. This means
+the server will instruct the requesting web client to fetch the
+redirected URL, which means the client will allways know what the
+final URL is. This also means the redirection can be done to servers
+other than your own. If it were internal, the redirection would be
+invisible (no URL rewrite), but if it was done to an external server
+the `Virtual Domain` setting wouldn't apply and your `default` virtual
+domain would have to handle the connection. Having the theoretical
+content hosted elsewhere, an error would occur.
++
 A much more general redirection could be one using these values:
-
-* *Regular Expression*::
++
+*Regular Expression*;;
   `^/(.*)$`
++
+*Substitution*;;
+  http://www.example.com/example.net/$1
 
-* *Substitution*::
-  http://www.cherokee-project.com/example/$1
-
-This would redirect every petition to a mirror hosted elsewhere.
++
+Note that this rule would have to be external since `example.com` is
+not among the domains managed by our configuration.
++
+This would redirect every petition to a site hosted under
+`http://example.com/example.net`. For instance, the request for
+`http://example.net/image.jpg` would return
+`http://example.com/example.net/image.jpg`.
