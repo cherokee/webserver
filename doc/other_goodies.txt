@@ -9,18 +9,17 @@ environment.
 X-Sendfile
 ~~~~~~~~~~
 X-Sendfile is a special, non-standard HTTP header that has been
-supported by Cherokee for a long time. At first you might think it is
-no big deal, but think again.
-
-It can be enabled in any CGI, FastCGI or SCGI backend. Basicaly its
-job is to instruct the web server to ignore the content of the
-response and replace it by whatever is specified in the header. The
-main advantage of this is that it will be Cherokee the one serving the
-file, making use of all its optimizations. It is useful for processing
-script-output of e.g. php, perl, ruby or any cgi.
+supported by Cherokee for a while. At first you might think it is no
+big deal, but think again.It can be enabled in any CGI, FastCGI or
+SCGI backend. Basicaly its job is to instruct the web server to ignore
+the content of the response and replace it by whatever is specified in
+the header. The main advantage of this is that it will be Cherokee the
+one serving the file, making use of all its optimizations. It is
+useful for processing script-output of e.g. php, perl, ruby or any
+cgi.
 
 This is particularly useful because it hands the load to Cherokee, all
-the response header from the backend are forwarded, the whole
+the response headers from the backend are forwarded, the whole
 application uses a lot less resources and performs several times
 faster not having to worry about a task best suited for a web server.
 
@@ -29,8 +28,8 @@ deciding anything contemplated by your backend's logic, you speed up
 things a lot while having more resources freed, and you can even
 specify the delivery of files outside of the web server's document
 root path. Of course, this is to be done solely in controled
-environments, but it offers a huge performance gain at absolutely no
-cost.
+environments. In short, it offers a huge performance gain at
+absolutely no cost.
 
 
 Zero Downtime Update
