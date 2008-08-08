@@ -9,22 +9,25 @@ Parameters
 This module accepts three parameters:
 
 [grid="rows"]
-```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters              , Type           , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Script Alias            , String         , It defines a kind of execution interpreter.
-Change to UID           , String         , It interprets each CGI as it owner user.
-Error handler           , Boolean        , Use CGI output as error message.
-Check file              , Boolean        , Check if the file exists.
-Pass request            , Boolean        , Pass request headers.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+`~~~~~~~~~~~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameters            , Type           , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Script Alias          , String  , It defines a kind of execution interpreter. \
+                                  The CGI will be run as a parameter of this \
+                                  script.
+Change to UID         , String  , Executes each CGI under its owner's user ID.
+Error handler         , Boolean , Use CGI output as error message.
+Check file            , Boolean , Check if the file exists.
+Pass request          , Boolean , Pass request headers.
+Allow X-Sendfile      , Boolean , Use the non-standard X-Sendfile header.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Examples
 ~~~~~~~~
 
-This is a pretty common example. It defines a directory called cgi which points 
-to a path out of the Sever root directory where are located the CGI programs.
+This is a pretty common example. It defines a directory called `cgi`
+which points to a path out of the Sever root directory where the
+CGI programs are located.
 
-image::media/images/admin_handler_cgi.png[Cgi]
+image::media/images/admin_handler_cgi.png[CGI]
 

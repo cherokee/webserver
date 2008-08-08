@@ -1,22 +1,25 @@
-Handler: File sending
----------------------
+Handler: Static Content
+-----------------------
 
-The **file** handler serves files from its document root.  No more, no less.
+The **file** handler serves files from its document root.  No more, no
+less.
 
 Parameters
 ~~~~~~~~~~
 [grid="rows"]
-```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters              , Type         , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-``iocache``             , Boolean      , Optional. Default: ``Enabled``.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameters  , Type    , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``iocache`` , Boolean , Optional. Default: ``Enabled``.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By default it will use an internal I/O cache to improve the server performance. 
-If you don't want to use it with a directory just unset it using this parameter. 
+By default it will use an internal I/O cache to improve the server
+performance.
+If you don't want to use it with a directory just unset it using this
+parameter.
 
-It is a good idea to disable to I/O cache if the content of the directory changes
-often.
+It is a good idea to disable to I/O cache if the content of the
+directory changes often.
 
 Examples
 ~~~~~~~~
@@ -24,5 +27,5 @@ Lets imagine your virtual server DocumentRoot points to /var/www.
 
 image::media/images/admin_handler_file.png[Handler file]
 
-This configuration will make Cherokee to serve files inside /var/www_static/images 
-like files.
+This configuration will make Cherokee to serve each file inside
+/var/www_static/images as files.

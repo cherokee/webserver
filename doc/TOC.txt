@@ -65,29 +65,29 @@ Modules
   . link:modules_encoders.html[Encoders]
     - link:modules_encoders_gzip.html[gzip]
     - link:modules_encoders_deflate.html[deflate]
+  . link:modules_handlers.html[Handlers]
+    - link:modules_handlers_file.html[Static Content]
+    - link:modules_handlers_dirlist.html[Only listing]
+    - link:modules_handlers_common.html[List & Send]
+    - link:modules_handlers_redir.html[Redirection]
+    - link:modules_handlers_cgi.html[CGI]
 ////
-  Handlers                 	link:modules_handlers.html[]
-    List & Send        [18]	link:modules_handlers_common.html[]
-    Static Content     [21]	link:modules_handlers_file.html[]
-    Only listing       [19]	link:modules_handlers_dirlist.html[]
-    Redirection        [22]	link:modules_handlers_redir.html[]
-    CGI                [17]	link:modules_handlers_cgi.html[]
-    FastCGI            [20]	link:modules_handlers_fcgi.html[]
-    SCGI               [23]	link:modules_handlers_scgi.html[]
-    Server Info            	link:modules_handlers_server_info.html[]
-    Generic balancer       	link:modules_handlers_mirror.html[]
-    Remote Administration  	link:modules_handlers_admin.html[]
-  Loggers              [16]	link:modules_loggers.html[]
-    combined           [16.1]	link:modules_loggers_combined.html[]
-    ncsa               [16.2]	link:modules_loggers_ncsa.html[]
-    w3c                [16.3]	link:modules_loggers_w3c.html[]
-  Validators           [7]	link:modules_validators.html[]
-    htdigest           [7.2]	link:modules_validators_htdigest.html[]
-    htpasswd           [7.1]	link:modules_validators_htpasswd.html[]
-    ldap               [7.1]	link:modules_validators_ldap.html[]
-    mysql              [7.3]	link:modules_validators_mysql.html[]
-    pam                [7.4]	link:modules_validators_pam.html[]
-    plain              [7.5]	link:modules_validators_plain.html[]
+    - FastCGI            [20]	link:modules_handlers_fcgi.html[]
+    - SCGI               [23]	link:modules_handlers_scgi.html[]
+    - Server Info            	link:modules_handlers_server_info.html[]
+    - Generic balancer       	link:modules_handlers_mirror.html[]
+    - Remote Administration  	link:modules_handlers_admin.html[]
+  . link:modules_loggers.html[Loggers]
+    - combined           [16.1]	link:modules_loggers_combined.html[]
+    - ncsa               [16.2]	link:modules_loggers_ncsa.html[]
+    - w3c                [16.3]	link:modules_loggers_w3c.html[]
+  . link:modules_validators.html[Validators]
+    - htdigest           [7.2]	link:modules_validators_htdigest.html[htdigest]
+    - htpasswd           [7.1]	link:modules_validators_htpasswd.html[htpasswd]
+    - ldap               [7.1]	link:modules_validators_ldap.html[LDAP]
+    - mysql              [7.3]	link:modules_validators_mysql.html[MySQL]
+    - pam                [7.4]	link:modules_validators_pam.html[PAM]
+    - plain              [7.5]	link:modules_validators_plain.html[Plain]
 ////
 
 *********************************
@@ -96,6 +96,7 @@ Other resources
 
   FAQ
   Community
+  - link:other_goodies.html[Cherokee Goodies]
 
 *********************************
 Development info

@@ -1,33 +1,36 @@
 Handler: List & Send
 --------------------
 
-The **List & Send** (``common`` internally) handler behaviour depends
+The **List & Send** (``common`` internally) handler behavior depends
 on whether it replies a request for a directory or a file.
 
-In case a directory is requested, it will use the link:modules_handlers_dirlist.html[Listing Only]
-handler in order to list its content. And, in the case a file is
-request, it will use the link:modules_handlers_file.html[File Sending] handler.
+In case a directory is requested, it will use the
+link:modules_handlers_dirlist.html[Listing Only] handler in order to
+list its contents. And, in case a file is request, it will use the
+link:modules_handlers_file.html[File Sending] handler.
 
 Parameters
 ~~~~~~~~~~
 [grid="rows"]
-```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters              , Type           , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-``pathInfo``            , boolean        , Makes the handler to stop parsing the \
-                                           pathinfo string. Default: ``Disabled``.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameters  , Type    , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`PathInfo`  , boolean , Makes the handler to stop parsing the \
+                        pathinfo string. Default: `Disabled`.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Besides, it inherits all the parameters from the link:modules_handlers_file.html[file] and link:modules_handlers_dirlist.html[dirlist] handlers.
+Besides, it inherits all the parameters from the
+link:modules_handlers_file.html[file/Static Content] and
+link:modules_handlers_dirlist.html[dirlist/Only listing] handlers.
 
-
-* Note, **Pathinfo** explained::
+This example shows the practical effect of **pathinfo**::
++
 ----
-    $ echo "This a test" > /tmp/1/2/test
+    $ echo "This is a test" > /tmp/1/2/test
     $ curl http://localhost:9999/1/2/test
-    This a test
+    This is a test
     $ curl http://localhost:9999/1/2/test/this/is/pathinfo
-    This a test
+    This is a test
     $ curl http://localhost:9999/1/2/test.no -D - | grep HTTP
     HTTP/1.1 404 Not Found
 ----
@@ -35,10 +38,10 @@ Besides, it inherits all the parameters from the link:modules_handlers_file.html
 Examples
 ~~~~~~~~
 
-With this configuration: 
+This configuration
 
 image::media/images/admin_handler_dirlist.png[Dirlist configuration]
 
-Will return something like: 
+will return something like
 
 image::media/images/admin_handler_dirlist_ex.png[Dirlist example]

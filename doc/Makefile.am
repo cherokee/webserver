@@ -50,6 +50,7 @@ modules_balancers_round_robin.html \
 modules_encoders.html \
 modules_encoders_gzip.html \
 modules_encoders_deflate.html \
+modules_handlers.html \
 modules_handlers_file.html \
 modules_handlers_dirlist.html \
 modules_handlers_common.html \
@@ -61,12 +62,14 @@ modules_loggers.html \
 modules_loggers_combined.html \
 modules_loggers_ncsa.html \
 modules_loggers_w3c.html \
+modules_validators.html \
 modules_validators_htdigest.html \
 modules_validators_htpasswd.html \
 modules_validators_ldap.html \
 modules_validators_mysql.html \
 modules_validators_pam.html \
 modules_validators_plain.html \
+other_goodies.html \
 dev.html \
 dev_debug.html \
 dev_cherokee.conf.html

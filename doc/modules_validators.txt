@@ -1,0 +1,30 @@
+Modules: Validators
+-------------------
+
+Validator modules are used to implement an authentication mechanism.
+Those can be selected from the `Security` section of each rule you
+have in your `virtual servers`.
+
+Note this is not the `Security` section of your virtual domains. It is
+the `Security` tab within each of the rules in your `Virtual
+server`. Those are accessible from the `Behavior` section of every
+configured virtual server.
+
+Depending on the complexity of the mechanism you will have to provide
+more or less information. Here is an example of a simple validator
+interface:
+
+image::media/images/admin_validators_pam.png[Validator PAM]
+
+Refer to the link:cookbook_authentication.html[Authentication] recipe
+in the link:cookbook.html[Cookbook] for more detailed examples.
+
+This is the list of validator modules provided by Cherokee:
+
+* link:modules_validators_htdigest.html[htdigest]
+* link:modules_validators_htpasswd.html[htpasswd]
+* link:modules_validators_ldap.html[LDAP]
+* link:modules_validators_mysql.html[MySQL]
+* link:modules_validators_pam.html[PAM]
+* link:modules_validators_plain.html[Plain]
+

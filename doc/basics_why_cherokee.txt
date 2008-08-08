@@ -1,18 +1,19 @@
 Why Cherokee?
 -------------
 
-Welcome to the Cherokee {cherokee_version} documentation.
-Cherokee is high-performance web server. It is very fast, flexible and
-easy to configure. It offers support for the widespread technologies
-nowadays: FastCGI, SCGI, PHP, CGI, TLS and SSL encrypted connections,
-Virtual hosts, Authentication, on the fly encoding, Load balancing,
-Apache compatible log files, and much more.
+Welcome to the Cherokee {cherokee_version} documentation. Cherokee is
+high-performance web server. It is very fast, flexible and easy to
+configure. It offers support for the widespread technologies nowadays:
+FastCGI, SCGI, PHP, CGI, X-Sendfile, TLS and SSL encrypted
+connections, Virtual hosts, Authentication, on the fly encoding, Load
+balancing, Apache compatible log files, zero downtime updates and much
+more.
 
 It is highly efficient, extremely lightweight and provides rock solid
 stability. Among its many features there is one that deserves special
 credit: a user friendly interface called
-link:bundle_cherokee-admin.html[cherokee-admin] that is provided for a no-hassle
-configuration of every single feature of the server. This
+link:bundle_cherokee-admin.html[cherokee-admin] that is provided for a
+no-hassle configuration of every single feature of the server. This
 administration interface allows you to configure the web server
 without having to worry about editing a text file written with a
 certain syntax.
@@ -20,9 +21,9 @@ certain syntax.
 image::media/images/admin_index.png[Cherokee Admin interface]
 
 Unlike many other web servers out there, Cherokee gracefully handles
-many concurrent connections, has a low memory footprint and provides load
-balancing facilities. As such, it is suitable for usage among a wide
-variety of systems, from tiny embedded devices to huge enterprise
+many concurrent connections, has a low memory footprint and provides
+load balancing facilities. As such, it is suitable for usage among a
+wide variety of systems, from tiny embedded devices to huge enterprise
 grade infrastructures. It is also multiplatform, offering native
 performance for Unix, Linux and Windows systems.
 
@@ -33,10 +34,14 @@ and easier to maintain IT infrastructure.
 
 Best of all, Cherokee is free software, has a thoroughly designed
 architecture, is completely modular and has a clean and neat code
-base. Anyone and everyone can have access to it to study and tinker
-with, thus allowing you to customize, modify or extend everything to
-suit specific needs. It is also very actively maintained, and every
+base. Anyone and everyone can have access to the code fot study and
+tinkering, thus allowing you to customize, modify or extend everything
+to suit specific needs. It is also very actively maintained, and every
 interesting feature request is carefully considered.
+
+As you can see, Cherokee comes with many
+link:other_goodies.html[goodies] that allow to achieve unprecedented
+performance.
 
 But don't trust everything you are told. Check out the benchmarks and
 the rest of the documentation to learn more, and give it a try to

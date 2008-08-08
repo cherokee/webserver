@@ -196,7 +196,8 @@ rules will be applied afterwards and no access will be given to any
 contents. This is because at this point we have not defined any
 handler for the `/auth` rule and nothing would be served.
 +
-Refer to the Cookbook for detailed examples on the different options.
+Refer to the link:cookbook_authentication.html[Cookbook] for detailed
+examples on the different options.
 +
 Lastly, lets configure a redirection rule by choosing a "Regular
 Expression" as the new rule type. Type the following regex: `^/rss.*$`
@@ -209,13 +210,11 @@ redirected to http://example.net/feed
 +
 Note that the `Type` of the *Redirection* is `External`. This means
 the server will instruct the requesting web client to fetch the
-redirected URL, which means the client will allways know what the
+redirected URL, which means the client will always know what the
 final URL is. This also means the redirection can be done to servers
 other than your own. If it were internal, the redirection would be
-invisible (no URL rewrite), but if it was done to an external server
-the `Virtual Domain` setting wouldn't apply and your `default` virtual
-domain would have to handle the connection. Having the theoretical
-content hosted elsewhere, an error would occur.
+invisible (not showing the target  URL), but it would be limited to
+the same `virtual server`.
 +
 A much more general redirection could be one using these values:
 +
@@ -233,3 +232,6 @@ This would redirect every petition to a site hosted under
 `http://example.com/example.net`. For instance, the request for
 `http://example.net/image.jpg` would return
 `http://example.com/example.net/image.jpg`.
++
+If you need more details, Check out the documentation for the
+link:modules_handlers_redir.html[redirection] handler.

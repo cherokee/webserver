@@ -1,69 +1,78 @@
-Handler: Redirections
----------------------
+Handler: Redirection
+--------------------
 
-The main idea of a redirection is telling to the web client to go to another URL 
-when the request URL matchs some rule.
+The main idea of a redirection is telling the web client to go to
+another URL when the requested URL matches a rule.
 
-
-For example, if you have URLs like:
+For example, if you have URLs like::
++
 ----
     http://example.com/inst/photogallery/viewphoto?photoid=1235
     http://example.com/inst/photogallery/viewcomments?photoid=1235
-    http://example.com/inst/photogallery/admin?photoid=1235&method=delete 
+    http://example.com/inst/photogallery/admin?photoid=1235&method=delete
 ----
 
-You probably would prefer URLs like:
+You probably would prefer URLs like::
++
 ----
     http://example.com/photo/1235
     http://example.com/photo/1235/cmts
-    http://example.com/photo/1235/delete 
+    http://example.com/photo/1235/delete
 ----
 
 Parameters
 ~~~~~~~~~~
 
-This directive uses PCRE (Perl Compatible Regular Expressions) to make the substitution. 
+This directive uses PCRE (Perl Compatible Regular Expressions) to make
+the substitution.
 
 * Type: [External | Internal]
 
   - *Internal*:
-    The redirection will happen internally, hence the the internal URL in which the address 
-    is translated will be invisible for the client.
+    The redirection will happen internally, hence the internal URL in
+    which the address is translated will be invisible for the client.
 
   - *External*:
-    It works in the same way as the previous one, but in this case, it will redirect 
-    the connection to the new resource.
+    It works in the same way as the previous one, but in this case, it
+    will redirect the connection to the new resource.
 
+* *Regular Expression* and *Substitution* are the matching request and
+   the intended target of such petition.
 
 Virtual hosts and redirections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The internals redirections, using the Rewrite key word, are limited to work in 
-the same virtual host. All the internal redirections will be processed in the 
-original virtual host, which makes quite sense in terms of security.
+The internal redirections, using the `internal` keyword, are limited to
+work in the same virtual host. All the internal redirections will be
+processed in the original virtual host, which makes a lot of sense in
+terms of security.
 
-In the case you do need the redirect some resource to another virtual host 
-and/or domain, you will have to use an explicit redirection using the external key words.
+In case you do need to redirect a resource to another virtual host
+and/or domain, you will have to use an explicit redirection using the
+`external` keyword.
 
 
 Examples
 ~~~~~~~~
 
-This example will perform an internal redirection:
+This example will perform internal redirections:
 
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Regular Expression   , Substitution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 __"/(d+)$"__         , http://example.com/inst/photogallery/viewphoto?photoid=$1
 __"/(\d+)/cmts"__    , http://example.com/viewcomments?photoid=$1
 __"/(\d+)/delete"__  , http://example.com/inst/photogallery/admin?photoid=$1&method=delete
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Which would translate into the following redirections for the listed
+matching requests:
 
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Request               , Internal translation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 __/photo/123__        , http://example.com/inst/photogallery/viewphoto?photoid=123
 __/photo/213/cmts__   , http://example.com/viewcomments?photoid=213
 __/photo/501/delete__ , http://example.com/inst/photogallery/admin?photoid=501&method=delete
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

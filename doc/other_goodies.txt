@@ -1,0 +1,62 @@
+Cherokee goodies
+----------------
+
+There are several important but mostly unknown features of Cherokee
+that really do make a difference out in the wild, in a real production
+environment.
+
+
+X-Sendfile
+~~~~~~~~~~
+X-Sendfile is a special, non-standard HTTP header that has been
+supported by Cherokee for a long time. At first you might think it is
+no big deal, but think again.
+
+It can be enabled in any CGI, FastCGI or SCGI backend. Basicaly its
+job is to instruct the web server to ignore the content of the
+response and replace it by whatever is specified in the header. The
+main advantage of this is that it will be Cherokee the one serving the
+file, making use of all its optimizations. It is useful for processing
+script-output of e.g. php, perl, ruby or any cgi.
+
+This is particularly useful because it hands the load to Cherokee, all
+the response header from the backend are forwarded, the whole
+application uses a lot less resources and performs several times
+faster not having to worry about a task best suited for a web server.
+
+You retain the ability to check for special privileges or dynamically
+deciding anything contemplated by your backend's logic, you speed up
+things a lot while having more resources freed, and you can even
+specify the delivery of files outside of the web server's document
+root path. Of course, this is to be done solely in controled
+environments, but it offers a huge performance gain at absolutely no
+cost.
+
+
+Zero Downtime Update
+~~~~~~~~~~~~~~~~~~~~
+Cherokee has an ability hardly ever seen in any service delivering
+application, be it web content, multimedia streaming or almost any
+other server you can think of.
+
+Whenever a configuration change is applied, it is immediately
+reflected in the web server with no downtime requirements to restart
+the server. Of course the connections that are already being served
+will continue normally with the same parameters that where negotiated
+with the requesting clients, but they will not be shut down just to
+perform a menial task such as restarting the server.
+
+In fact, this mechanism is not only limited to configuration
+updates. Cherokee is so smart that it can even apply this to perform
+full program upgrades. This means you can completely replace the
+binaries for new ones, launch the enhanced versions and yet not suffer
+any downtime. Zero connection losses, no lag associated. Guaranteed.
+
+This might seem as just another cool feature, but is in fact
+huge. Just think about it: an extremely high traffic site cannot
+afford to be down. Never. Not to upgrade the webserver. Not to enhance
+it. Not to reflect a new configuration setting. Thousands of hits per
+second depend on it.
+
+With Cherokee you can cope with this and much more. With Cherokee, its
+easier done than said.

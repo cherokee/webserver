@@ -20,3 +20,8 @@ you can select the policy to apply to this encoding process.
 . Allow by default
 . Deny, Allow
 . Allow, Deny
+
+This is the list of currently provided encoders:
+
+* link:modules_encoders_gzip.html[gzip]
+* link:modules_encoders_deflate.html[deflate]

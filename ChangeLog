@@ -1,3 +1,14 @@
+2008-08-08  Taher Shihadeh <taher@unixwars.com>
+
+	* doc/modules_handlers_cgi.txt, doc/modules_validators.txt,
+	doc/modules_handlers_common.txt, doc/modules_handlers_fcgi.txt,
+	doc/modules_balancers.txt, doc/modules_handlers.txt,
+	doc/basics_why_cherokee.txt, doc/modules_handlers_redir.txt,
+	doc/config_quickstart.txt, doc/modules_handlers_file.txt,
+	doc/modules_loggers.txt, doc/modules_handlers_dirlist.txt,
+	doc/other_goodies.txt, doc/modules_encoders.txt: more
+	documentation.
+
 2008-08-07  Taher Shihadeh <taher@unixwars.com>
 
 	* cherokee-guardian.1, doc/basics_installation.txt,
@@ -17,7 +28,6 @@
 	doc/modules.txt, doc/TOC.txt: editions to and several new file
 	additions. Documentation looks better now. Still lots of work to
 	do.
-
 
 2008-08-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 

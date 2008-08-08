@@ -43,4 +43,4 @@ whatever options do not apply.
 
 This is the list of currently supported balancing strategies:
 
-* link:modules_balancers_round_robin.html[Round RobinFriki]
+* link:modules_balancers_round_robin.html[Round Robin]

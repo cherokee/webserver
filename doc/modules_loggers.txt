@@ -1,8 +1,22 @@
-Loggers
--------
+Modules: Loggers
+----------------
+
+Loggers are a type of Cherokee modules unsurpisingly used to log
+events. They can be configured on a per virtual server basis through
+each virtual server's `Logging` section.
+
+Every `logger` registers information about two types of events, *Accesses*
+and *Errors*, in a different format depending on the used `logger`.
+
+The information can be registered by any of the following mechanisms:
+
+* File: write to disk.
+* System logger: use the syslog standard.
+* Standard Error: write to stderr.
+* Execute program: send the log entry to the specified program.
 
 Cherokee currently supports the following loggers:
 
-* link:modules_loggers_combined.html[Combined]
-* link:modules_loggers_ncsa.html[NCSA]
-* link:modules_loggers_w3c.html[W3C]
+* link:modules_loggers_combined.html[Combined]: Apache compatible. *Recommended*.
+* link:modules_loggers_ncsa.html[NCSA]: NCSA style.
+* link:modules_loggers_w3c.html[W3C]: W3C standard.

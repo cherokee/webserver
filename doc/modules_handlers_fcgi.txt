@@ -75,7 +75,7 @@ more complete implementation than "fcgi" although it is also more
 complex. Actually, fcgi become the standard choice because the PHP
 interpreter was kind of buggy when it had to demultiplex multiple
 requests from the same socket.
-	   
+
 The "fastcgi" handler will eventually become the default option.
-However, by the moment "fcgi" is a better option.
+However, at the moment "fcgi" is a better option.
 

@@ -1,0 +1,26 @@
+Modules: Handlers
+-----------------
+
+Handlers are the Cherokee modules that actually manage the
+connections. You can specify what module actually must handle the
+connection for any given rule matched in your
+link:config_virtual_servers.html[Virtual servers] settings. Several
+are provided to perform a varied set of actions, though it is possible
+to develop homebrewed handlers easily once you grasp the basics of
+Cherokee's internal architecture.
+
+This is the list of standard handlers provided by Cherokee:
+
+* link:modules_handlers_common.html[common] - **List & Send**.
+* link:modules_handlers_file.html[Static Content] - **Static Content**.
+* link:modules_handlers_dirlist.html[dirlist] - **Only listing**.
+* link:modules_handlers_redir.html[redir] - **Redirection**.
+* link:modules_handlers_cgi.html[cgi] - **CGI Execution**.
+* link:modules_handlers_fcgi.html[fcgi] - **FastCGI Server Support**.
+* link:modules_handlers_scgi.html[scgi] - **SCGI Server Support**.
+* link:modules_handlers_server_info.html[Server Info] - **Server
+  Info**.
+* link:modules_handlers_mirror.html[Generic balancer] - **Generic
+  balancer**.
+* link:modules_handlers_admin.html[Remote Administration] - **Remote
+  Administration**.

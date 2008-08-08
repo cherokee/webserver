@@ -4,8 +4,8 @@ Improving the quality of Cherokee's documentation
 Needs:
 ----------
   [1] Improve the navigability of the documentation.
-  [2] Define a convenient hierarchical structure, generate a TOC, etc. 
-      Currently the structure reflects more the internal architecture of 
+  [2] Define a convenient hierarchical structure, generate a TOC, etc.
+      Currently the structure reflects more the internal architecture of
       Cherokee rather than a traditional manual.
   [3] Integrate the current docs into the new tree.
   [4] Define and document a series of typical configuration tasks.
@@ -13,11 +13,12 @@ Needs:
 Tasks to be documented:
 -------------------------------------
   <1> How to configure virtual hosts from beginning to end, step by step.
-* <2> How to tune scalability (IO cache & file, number of threads, increment 
-      descriptors...)
+* <2> How to tune scalability (IO cache & file, number of threads,
+   increase descriptors, X-Sendfile...)
 * <3> How to setup authenticated resources
 * <4> How to configure the most spread apps servers (php, django, RoR,..)
-* <5> How to manage logs  (make specific mention of usage of Cherokee-Tweak).
+* <5> How to manage logs  (make specific mention of usage of
+   Cherokee-Tweak and log backers).
 * <6> How to manage security (SSL/TLS, certs, etc)
 * <7> Development documentation
 * <8> Reference table of functionalities to be achieved (and hopefully
