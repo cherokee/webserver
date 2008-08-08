@@ -78,7 +78,10 @@ class PageFeedback (PageMenu, FormHelper):
         conn = httplib.HTTPConnection("www.cherokee-project.org")
         conn.request("POST", CHEROKEE_FEEDBACK_URL, params, headers)
         response = conn.getresponse()
-        data = response.read()
+        try:
+            data = response.read()
+        except:
+            data = 'Error reading response from the serrver'
         conn.close()
         return data
         
