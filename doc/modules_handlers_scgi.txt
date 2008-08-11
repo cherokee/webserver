@@ -1,4 +1,20 @@
 Handler: SCGI
 -------------
 
-The scgi handler allow Cherokee to communicate with SCGI programs.
+The `scgi handler` allows Cherokee to communicate with SCGI programs.
+The configuration parameters are exactly the same from the
+link:modules_handlers_fcgi.html[FastCGI], so check that section of the
+documentation if you want to set up this handler.
+
+The Simple Common Gateway Interface
+(link:http://python.ca/scgi/protocol.txt[SCGI]) protocol is a project
+to replace CGI and FastCGI with a simpler protocol to both implement
+and manage.
+
+In the end SCGI offers the same performance as FastCGI (and better
+than other methods), offers cross platform simultaneous support and is
+simple to install, run, and configure.
+
+It also supports simplified clustering on most POSIX systems for that
+extra boost in concurrency, but whether you use it or not will be
+mostly determined by your personal taste and experience.

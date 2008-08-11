@@ -11,8 +11,24 @@ server`. Those are accessible from the `Behavior` section of every
 configured virtual server.
 
 Depending on the complexity of the mechanism you will have to provide
-more or less information. Here is an example of a simple validator
-interface:
+more or less information.
+
+You will always have to provide a *Relam*, which is a name to
+associate with the authenticated resource.
+You will also have permanently the option to provide a list of *allowed
+users*, regardless of the validator chosen.
+
+It is important to take into consideration that there are two different
+authentication mechanisms:
+
+    * Basic
+    * Digest
+
+Some can only handle one of those mechanisms because of techical
+limitations. In case the module supports both of them, the interface
+allows to choose whether one or both are to be used.
+
+Here is an interface example from a simple validator:
 
 image::media/images/admin_validators_pam.png[Validator PAM]
 
@@ -28,3 +44,13 @@ This is the list of validator modules provided by Cherokee:
 * link:modules_validators_pam.html[PAM]
 * link:modules_validators_plain.html[Plain]
 
+When you set up an authentication mechanism you must remember this:
+define a rule, configure its *security* section, adjust the priority
+of this rule, and last, do not flag the rule as `Final` unless you are
+sure you don't want your request to match other rules.
+
+A frequent mistake is to define a rule for authenticated resources
+with no configured handler, mark it as `Final` and set it on top of
+the priority list. This might prompt for authentication, but being a
+`Final` rule will always deliver a failure because no handler copes
+with the request.

@@ -71,24 +71,24 @@ Modules
     - link:modules_handlers_common.html[List & Send]
     - link:modules_handlers_redir.html[Redirection]
     - link:modules_handlers_cgi.html[CGI]
-////
-    - FastCGI            [20]	link:modules_handlers_fcgi.html[]
-    - SCGI               [23]	link:modules_handlers_scgi.html[]
-    - Server Info            	link:modules_handlers_server_info.html[]
-    - Generic balancer       	link:modules_handlers_mirror.html[]
-    - Remote Administration  	link:modules_handlers_admin.html[]
+    - link:modules_handlers_fcgi.html[FastCGI]
+    - link:modules_handlers_scgi.html[SCGI]
+    - link:modules_handlers_server_info.html[Server Info]
+    - link:modules_handlers_mirror.html[Generic balancer]
+    - link:modules_handlers_admin.html[Remote Administration]
   . link:modules_loggers.html[Loggers]
-    - combined           [16.1]	link:modules_loggers_combined.html[]
-    - ncsa               [16.2]	link:modules_loggers_ncsa.html[]
-    - w3c                [16.3]	link:modules_loggers_w3c.html[]
+    - link:modules_loggers_combined.html[Combined]
+    - link:modules_loggers_ncsa.html[Common (NCSA)]
+    - link:modules_loggers_w3c.html[w3c]
   . link:modules_validators.html[Validators]
+//////
     - htdigest           [7.2]	link:modules_validators_htdigest.html[htdigest]
     - htpasswd           [7.1]	link:modules_validators_htpasswd.html[htpasswd]
     - ldap               [7.1]	link:modules_validators_ldap.html[LDAP]
     - mysql              [7.3]	link:modules_validators_mysql.html[MySQL]
-    - pam                [7.4]	link:modules_validators_pam.html[PAM]
+    - link:modules_validators_pam.html[PAM]
     - plain              [7.5]	link:modules_validators_plain.html[Plain]
-////
+//////
 
 *********************************
 Other resources

@@ -96,7 +96,7 @@
 "<tr class=\"v\"><td>" LICENSE                                                                      CRLF\
 "</td></tr>"                                                                                        CRLF\
 "</table><br />"                                                                                    CRLF\
-"</div></body></html>"                                                                             
+"</div></body></html>"
 
 
 /* Plug-in initialization
@@ -125,7 +125,7 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 		CHEROKEE_NEW_STRUCT (n, handler_server_info_props);
 
 		cherokee_module_props_init_base (MODULE_PROPS(n), 
-						 MODULE_PROPS_FREE(props_free));		
+						 MODULE_PROPS_FREE(props_free));
 		n->just_about         = false;
 		n->connection_details = false;
 
@@ -195,7 +195,7 @@ add_uptime_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 
 	hours = elapse / (60*60);
 	elapse %= (60*60);
-	
+
 	mins = elapse / 60;
 	elapse %= 60;
 
@@ -211,7 +211,7 @@ add_uptime_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	} else {
 		cherokee_buffer_add_va (tmp, "%d Seconds", elapse);
 	}
-	
+
 	table_add_row_str (buf, "Uptime", tmp->buf);
 	cherokee_buffer_free (tmp);
 }
@@ -221,9 +221,9 @@ add_data_sent_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
 	size_t            rx, tx;
 	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-	
+
 	cherokee_server_get_total_traffic (srv, &rx, &tx);
-       
+
 	cherokee_buffer_add_fsize (&tmp, tx);
 	table_add_row_buf (buf, "Data sent", &tmp);
 
@@ -275,7 +275,7 @@ build_connections_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	cuint_t conns_num = 0;
 	cuint_t active    = 0;
 	cuint_t reusable  = 0;
-	
+
 	cherokee_server_get_conns_num (srv, &conns_num);
 	cherokee_server_get_active_conns (srv, &active);
 	cherokee_server_get_reusable_conns (srv, &reusable);

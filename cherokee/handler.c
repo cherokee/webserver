@@ -51,7 +51,7 @@ cherokee_handler_init_base (cherokee_handler_t *hdl, void *conn, cherokee_handle
 }
 
 
-/* Virtual method hidding layer
+/* Virtual method hiding layer
  */
 
 ret_t

@@ -56,8 +56,11 @@ modules_handlers_dirlist.html \
 modules_handlers_common.html \
 modules_handlers_redir.html \
 modules_handlers_cgi.html \
-modules_handlers_cgi.html \
+modules_handlers_fcgi.html \
 modules_handlers_scgi.html \
+modules_handlers_server_info.html \
+modules_handlers_mirror.html \
+modules_handlers_admin.html \
 modules_loggers.html \
 modules_loggers_combined.html \
 modules_loggers_ncsa.html \

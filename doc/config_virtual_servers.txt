@@ -183,11 +183,13 @@ rule types:
       mechanism inaccurate. An initial country must be added to the
       rule, and more selections can be added in further steps.
 
-It is very important to know that these rules are prioritized, the
+It is very important to know that these rules are prioritized. The
 higher its priority is, the sooner they are checked. You could
 think of a network routing table, it is quite similar. You can set the
 relative priorities among the rules by simply dragging and dropping
-them in the desired position.
+them in the desired position (if you click on the rule name, you will be
+redirected to the rule's configuration options; if you click anywhere
+else, you will be able to drag and drop it into the desired position).
 
 image::media/images/admin_behaviour.png[Virtual server]
 

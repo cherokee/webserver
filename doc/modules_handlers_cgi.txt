@@ -17,7 +17,7 @@ Script Alias          , String  , It defines a kind of execution interpreter. \
                                   script.
 Change to UID         , String  , Executes each CGI under its owner's user ID.
 Error handler         , Boolean , Use CGI output as error message.
-Check file            , Boolean , Check if the file exists.
+Check file            , Boolean , Check whether the file exists to build PATH_INFO.
 Pass request          , Boolean , Pass request headers.
 Allow X-Sendfile      , Boolean , Use the non-standard X-Sendfile header.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

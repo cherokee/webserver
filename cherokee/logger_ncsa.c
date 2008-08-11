@@ -74,14 +74,14 @@ cherokee_logger_ncsa_new (cherokee_logger_t **logger, cherokee_config_node_t *co
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, logger_ncsa);
-	
+
 	/* Init the base class object
 	 */
 	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(ncsa));
 
 	MODULE(n)->init         = (logger_func_init_t) cherokee_logger_ncsa_init;
 	MODULE(n)->free         = (logger_func_free_t) cherokee_logger_ncsa_free;
-	
+
 	LOGGER(n)->flush        = (logger_func_flush_t) cherokee_logger_ncsa_flush;
 	LOGGER(n)->reopen       = (logger_func_reopen_t) cherokee_logger_ncsa_reopen;
 	LOGGER(n)->write_error  = (logger_func_write_error_t)  cherokee_logger_ncsa_write_error;

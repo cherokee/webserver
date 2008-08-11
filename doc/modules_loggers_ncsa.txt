@@ -1,5 +1,80 @@
 NCSA
 ~~~~
+Also known as the _Common log format_ (*CLF*). This is a standard
+format produced by many web servers and read by many log analysis
+tools. Some of the fields specified by the format might actually be
+missing if the information that should be logged is not present. These
+fields will simply be replaced by "hyphens" ("-"), which is the
+standard behavior.
 
-To be written
 
+This log format contains only basic HTTP access information: the
+requested resource and a few other pieces of information, but does not
+contain referral, user agent, or cookie information.
+
+The fields in the Common log file format are:
+----
+ host rfc1413 username date:time request statuscode bytes
+----
+
+A log file produced by this logger will look more or less like this:
+
+****
+::ffff:127.0.0.1 - - [11/Aug/2008:16:17:58 +0000] "GET /index.html HTTP/1.1" 200 2633
+****
+
+Each field of this log entry is described below.
+
+
+*host* (::ffff:127.0.0.1)  ::
+This is the remote host's IP (the client IP) or host/subdomain. It
+corresponds to the address of the device requesting the
+information. If a proxy sever exists between the user and the server,
+this address will correspond to the proxy instead of the machine
+actually requesting data.
+
+
+*rfc1413* (-) ::
+Missing piece of information. In this case it is the RFC 1413 identity
+of the client determined by identd on the clients machine, which is
+highly unreliable and should not be trusted anyway.
+
+
+*user* (-) ::
+This is the username or UID of the person requesting the document as
+determined by HTTP authentication. Since the document is not password
+protected, it is not present in this case. If it is present, the value
+should not be trusted until the user is actually authenticated.
+
+
+*date:time timezone* ([11/Aug/2008:14:18:14 +0000]) ::
+The time when the server processed  the request. The format is:
+++++
+[day/month/year:hour:minute:second zone]
+++++
++
+- day = 2*digit
+- month = 3*letter
+- year = 4*digit
+- hour = 2*digit
+- minute = 2*digit
+- second = 2*digit
+- zone = (`+' | `-') 4*digit
+
+
+*request*"GET /index.html HTTP/1.1" ::
+The request from the client is given in double quotes, and contains
+the method used by the client (GET), the requested resource
+(/index.html) and the protocol (HTTP/1.1).
+
+
+200 ::
+Status code sent back to the client. In this case it indicates a
+successful response. The full list of possible status codes can be
+found in the HTTP specification
+(link:http://www.ietf.org/rfc/rfc2616.txt[RFC2616], section 10).
+
+
+2633 ::
+The last entry is the size returned to the client excluding the
+response headers. This will be "-" if no content is returned. To log "0" for no content, use %B instead.

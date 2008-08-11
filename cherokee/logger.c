@@ -65,7 +65,7 @@ cherokee_logger_init_base (cherokee_logger_t *logger, cherokee_plugin_info_t *in
 
 
 
-/* Virtual method hidding layer
+/* Virtual method hiding layer
  */
 ret_t
 cherokee_logger_free (cherokee_logger_t *logger)
@@ -117,7 +117,7 @@ cherokee_logger_init (cherokee_logger_t *logger)
 	if (init_func) {
 		return init_func (logger);
 	}
-	
+
 	return ret_error;
 }
 
@@ -132,12 +132,12 @@ cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
 		ret = logger->write_access (logger, conn);
 		CHEROKEE_MUTEX_UNLOCK (&PRIV(logger)->mutex);
 	}
-	
+
 	return ret;
 }
 
 
-ret_t 
+ret_t
 cherokee_logger_write_error (cherokee_logger_t *logger, void *conn)
 {
 	ret_t ret = ret_error;

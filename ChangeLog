@@ -1,3 +1,16 @@
+2008-08-11  Taher Shihadeh <taher@unixwars.com>
+
+	* doc/config_virtual_servers.txt, doc/modules_balancers.txt,
+	doc/modules_handlers_admin.txt, doc/modules_handlers_cgi.txt,
+	doc/modules_handlers_fcgi.txt, doc/modules_handlers_mirror.txt,
+	doc/modules_handlers_scgi.txt,
+	doc/modules_handlers_server_info.txt,
+	doc/modules_loggers_combined.txt, doc/modules_loggers_ncsa.txt,
+	doc/modules_loggers.txt, doc/modules_loggers_w3c.txt,
+	doc/modules_validators_pam.txt, doc/modules_validators.txt,
+	doc/other_goodies.txt: several modifications and six new files
+	added.
+
 2008-08-08  Taher Shihadeh <taher@unixwars.com>
 
 	* doc/modules_handlers_cgi.txt, doc/modules_validators.txt,

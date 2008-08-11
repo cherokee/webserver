@@ -1,50 +1,63 @@
 Handler: FastCGI
 ----------------
 
-The fcgi handler queries to [FastCGI] servers, such as PHP, Ruby on
-Rails or Django in order to get the request response. It is basically
-the same thing as CGI but *much faster*.
+The fcgi handler makes queries to *FastCGI* servers, such as PHP, Ruby
+on Rails or Django in order to get the request response. FastCGI is
+scalable and language independent enhancement to CGI that provides
+high performance without limitations of server specific APIs and
+reduced overhead. It is basically the same thing as CGI but *much
+faster*.
 
-This module accepts all the general link:modules_handlers_cgi.html[CGI] parameters. Aside, 
-it needs a balancer to be configured. It is the piece of configuration that
+This module accepts all the general
+link:modules_handlers_cgi.html[CGI] parameters. Aside, it needs a
+balancer to be configured. It is the piece of configuration that
 points the handler where to find the FastCGI servers.
 
 For most of the cases there will be only one FastCGI server though. In
-that scenario the way is to configure the handler to use a 
-link:../balancers/round_robin.html[Round Robin] balancer and configure 
+that scenario the way to go would be to configure the handler to use a
+link:modules_balancers_round_robin.html[Round Robin] balancer and configure
 a single host or interpreter (it has no performance penalty).
-
 
 
 Parameters
 ~~~~~~~~~~
-[grid="rows"]
-```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters              , Type         , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Script Alias            , String       , It defines a kind of execution interpreter
-Change to UID           , String       , It interprets each CGI as it owner user 
-Error handler           , Boolean      , Use CGI output as error message 
-Check file              , Boolean      , Checks whether the target exists for    \
-                                         building the PATH_INFO
-Pass request            , Boolean      , Pass the all the special headers of the \
-                                         client request
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The options common to link:modules_handlers_cgi.html[CGI] are:
+
+[grid="rows"]
+`~~~~~~~~~~~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameters            , Type           , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Script Alias          , String  , It defines a kind of execution interpreter. \
+                                  The CGI will be run as a parameter of this \
+                                  script.
+Change to UID         , String  , Executes each CGI under its owner's user ID.
+Error handler         , Boolean , Use CGI output as error message.
+Check file            , Boolean , Check whether the file exists to build PATH_INFO.
+Pass request          , Boolean , Pass request headers.
+Allow X-Sendfile      , Boolean , Use the non-standard X-Sendfile header.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To setup the balancing options read the
+link:modules_balancers.html[Balancers] section for general information
+and the link:modules_balancers_round_robin.html[Round robin] section
+for specifics.
 
 Examples
 ~~~~~~~~
-This example shows a typical usage of FastCGI. It connects to a FastCGI server located 
-in localhost in port 8002. If no server is running, the webserver will run the FastCGI 
-server by issuing command defined in Interpreter sub-parameter:
+This example shows a typical usage of FastCGI. It connects to a
+FastCGI server located in localhost in port 8002. If no server is
+running, the webserver will run the FastCGI server by issuing the command
+defined as the *Interpreter* sub-parameter:
 
 image::media/images/admin_handler_fastcgi1.png[Fastcgi]
 
-This example shows a typical usage of multiple FastCGI servers. It connects to a 
-FastCGI servers located in several locations. If no server is running in the local 
-computer, the webserver will run the FastCGI server by issuing command defined in 
-Interpreter sub-parameter. Note that for remote FastCGI servers, you are responsible
-to run the FastCGI servers there manually:
+This example shows a typical usage of multiple FastCGI servers. It
+connects to FastCGI servers located in several locations. If no
+server is running in the local computer, the webserver will run the
+FastCGI server by issuing the specified command. Note that for remote
+FastCGI servers, you are responsible to run the FastCGI servers there
+manually:
 
 image::media/images/admin_handler_fastcgi2.png[Fastcgi]
 
@@ -57,25 +70,24 @@ FastCGI servers.  It defines how much children should serve the
 requests coming from the webserver.
 
 If you define **PHP_FCGI_MAX_REQUESTS**, the value should be negative
-so that PHP would take the request as much as possible. If you left it
+so that PHP would take as many requests as possible. If you leave it
 unset, PHP will take the default value (500) and your 500th request
-will be rejected and FCGI handler will spew Error 500 (Internal server
-error) for it.
+will be rejected and the FCGI handler will return an Error 500
+(Internal server error) for it.
 
 
 Note for developers
 ~~~~~~~~~~~~~~~~~~~
 
-
-There a are two handler implementing the FastCGI protocol: "fcgi" and
-"fastcgi".
+There a are two handlers currently  implementing the FastCGI protocol:
+"fcgi" and "fastcgi".
 
 The "fastcgi" module also implements the FastCGI protocol. It is a
 more complete implementation than "fcgi" although it is also more
-complex. Actually, fcgi become the standard choice because the PHP
-interpreter was kind of buggy when it had to demultiplex multiple
+complex. Actually, fcgi became the standard choice because the PHP
+interpreter kind of buggy when it has to demultiplex multiple
 requests from the same socket.
 
-The "fastcgi" handler will eventually become the default option.
-However, at the moment "fcgi" is a better option.
-
+The "fastcgi" handler will eventually become the default option
+because it is faster and more standard-compliant. However, at the
+moment "fcgi" is a better option.

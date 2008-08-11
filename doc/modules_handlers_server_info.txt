@@ -1,0 +1,41 @@
+Handler: Server Info
+--------------------
+The Server Info handler is used to create rules that can provide
+information about the web server. When these rules are matched,
+information regarding Cherokee's status will be displayed. The pages
+will be refreshed every 30 seconds.
+
+
+[grid="rows"]
+`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameters          , Type    , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+just_about          , boolean , Limit information to release and License.
+connection_details  , boolean , Show connection details
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enabling the `just_about` option will limit the displayed information
+to the following:
+
+* Release number of Cherokee.
+* Brief license notice.
+
+If it is disabled, some extra information will be provided regarding:
+
+* General Information
+* Server Core
+* Current connections
+* Loaded Modules
+* Icons
+
+Enabling the `connection_details` flag will provide more detailed
+information about the existing connections:
+
+* ID
+* Remote IP
+* Phase
+* Request
+* Handler
+* Info sent
+* Info received
+* Icon
