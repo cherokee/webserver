@@ -1905,6 +1905,33 @@ cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
 }
 
 
+ret_t
+cherokee_connection_clean_error_headers (cherokee_connection_t *conn)
+{
+	char *begin;
+	char *end;
+
+	if (cherokee_buffer_is_empty (&conn->header_buffer))
+		return ret_ok;
+
+	begin = strcasestr (conn->header_buffer.buf, "Content-Length: ");
+	if (begin != NULL) {
+		end = strchr (begin+16, CHR_CR);
+		if (end == NULL)
+			return ret_error;
+
+		if (end[1] == CHR_LF)
+			end++;
+
+		cherokee_buffer_remove_chunk (&conn->header_buffer, 
+					      begin - conn->header_buffer.buf, 
+					      (end-begin)+1);
+	}
+
+	return ret_ok;
+}
+
+
 int
 cherokee_connection_use_webdir (cherokee_connection_t *conn)
 {

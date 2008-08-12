@@ -982,32 +982,46 @@ process_active_connections (cherokee_thread_t *thd)
 			}
 			
 			/* If it is an error, and the connection has not a handler to manage
-			 * this error, the handler has to be changed
+			 * this error, the handler has to be changed by an error_handler.
 			 */
- 			if ((http_type_300(conn->error_code) || 
-			     http_type_400(conn->error_code) ||
-			     http_type_500(conn->error_code)) &&
-			    conn->handler && (!HANDLER_SUPPORTS (conn->handler, hsupport_error)))
-			{
-				/* Try to setup an error handler
-				 */
-				ret = cherokee_connection_setup_error_handler (conn);
-				if (ret != ret_ok) {
-					
-					/* It could not change the handler to an error
-					 * managing handler, so it is a critical error.
-					 */					
-					conns_freed++;
-					purge_closed_connection (thd, conn);
-					continue;
-				}
+			if (conn->handler == NULL) {
+				conns_freed++;
+				purge_closed_connection (thd, conn);
+				continue;
+			}
 
-				/* At this point, two different things might happen:
-				 * - It has got a common handler like handler_redir
-				 * - It has got an error handler like handler_error
-				 */
-				conn->phase = phase_init;
-				break;
+ 			if (http_type_300(conn->error_code) || 
+			    http_type_400(conn->error_code) ||
+			    http_type_500(conn->error_code))
+			{
+				if (HANDLER_SUPPORTS (conn->handler, hsupport_error)) {
+					ret = cherokee_connection_clean_error_headers (conn);
+					if (unlikely (ret != ret_ok)) {
+						conns_freed++;
+						purge_closed_connection (thd, conn);
+						continue;
+					}
+				} else {
+					/* Try to setup an error handler
+					 */
+					ret = cherokee_connection_setup_error_handler (conn);
+					if (ret != ret_ok) {
+					
+						/* It could not change the handler to an error
+						 * managing handler, so it is a critical error.
+						 */					
+						conns_freed++;
+						purge_closed_connection (thd, conn);
+						continue;
+					}
+
+					/* At this point, two different things might happen:
+					 * - It has got a common handler like handler_redir
+					 * - It has got an error handler like handler_error
+					 */
+					conn->phase = phase_init;
+					break;
+				}
 			}
 			
 			conn->phase = phase_add_headers;
