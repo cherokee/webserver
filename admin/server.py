@@ -94,8 +94,11 @@ class Handler(pyscgi.SCGIHandler):
             else:
                 page = PageVServer(cfg)
         elif uri.startswith('/apply'):
-            manager = cherokee_management_get (cfg)
-            manager.save()
+            self.handle_post()
+            post = Post(self.post)
+ 
+            manager = cherokee_management_get (cfg)            
+            manager.save (restart = post.get_val('restart'))
             cherokee_management_reset()
             body = "/"
         elif uri.startswith('/launch'):
@@ -140,7 +143,6 @@ class Handler(pyscgi.SCGIHandler):
         # Send result
         content = 'Status: %s\r\n' % (status) + \
                   headers + '\r\n' + body
-
         return self.send (content)
 
 
@@ -171,7 +173,7 @@ def main():
     global cfg
     cfg = Config(cfg_file)
     
-    print ("Server %s running.. PID=%d" % (VERSION, os.getpid()))
+    print ("Server %s running.. PID=%d Port=%d" % (VERSION, os.getpid(), scgi_port))
 
     # Iterate until the user exists
     try:

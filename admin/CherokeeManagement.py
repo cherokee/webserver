@@ -43,7 +43,6 @@ def cherokee_management_reset ():
     global cherokee_management
     cherokee_management = None
 
-
 # Cherokee Management class
 #
 
@@ -55,9 +54,14 @@ class CherokeeManagement:
     # Public
     #
 
-    def save (self, restart=True):
+    def save (self, restart=None):
         self._cfg.save()
-        if restart:
+
+        if not restart:
+            return
+        if restart.lower() == 'graceful':
+            self._restart (graceful=True)
+        else:
             self._restart()
 
     def is_alive (self):
@@ -145,11 +149,14 @@ class CherokeeManagement:
             pid_file = os.path.join (CHEROKEE_VAR_RUN, "cherokee-guardian.pid")
         return self.__read_pid_file (pid_file)
 
-    def _restart (self):
+    def _restart (self, graceful):
         if not self._pid:
             return
         try:
-            os.kill (self._pid, signal.SIGUSR1)
+            if graceful:
+                os.kill (self._pid, signal.SIGHUP)
+            else:
+                os.kill (self._pid, signal.SIGUSR1)
         except:
             pass
 

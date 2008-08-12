@@ -41,7 +41,7 @@ import socket
 import errno
 import sys
 
-__version__ = '1.6'
+__version__ = '1.7'
 __author__  = 'Alvaro Lopez Ortega'
 
 
@@ -53,14 +53,17 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
 
     def __safe_read (self, lenght):
          while True: 
-            try:
-                return self.rfile.read(lenght)
-            except socket.error, (err, strerr):
-                if err == errno.EAGAIN or \
-                   err == errno.EWOULDBLOCK or \
-                   err == errno.EINPROGRESS:
-                    continue
-            raise
+             try:
+                 chunk = self.rfile.read(lenght)
+                 return chunk
+             except socket.error, (err, strerr):
+                 if err == errno.EAGAIN or \
+                    err == errno.EWOULDBLOCK or \
+                    err == errno.EINPROGRESS:
+                     if chunk:
+                         return chunk
+                     continue
+             raise
 
     def send(self, buf):
         pending = len(buf)
@@ -109,6 +112,8 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
 
     def handle_post (self):
         if not self.env.has_key('CONTENT_LENGTH'):
+            return
+        if self.post:
             return
         length = int(self.env['CONTENT_LENGTH'])
         self.post = self.__safe_read(length)

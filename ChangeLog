@@ -1,5 +1,10 @@
 2008-08-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/pyscgi.py, admin/server.py, admin/Page.py,
+	admin/CherokeeManagement.py: Adds a option in the left hand menu
+	bar to allow users to reset the server at the same time that the
+	new configuration is written.
+
 	* admin/server.py (main): It should only bind to localhost. Fixes
 	http://code.google.com/p/cherokee/issues/detail?id=91
 
