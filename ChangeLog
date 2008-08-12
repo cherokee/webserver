@@ -1,3 +1,11 @@
+2008-08-12  Taher Shihadeh <taher@unixwars.com>
+	* doc/cookbook_ror.txt, doc/cookbook_php.txt,
+	doc/cookbook_django.txt, doc/cookbook_optimizations.txt,
+	doc/modules_handlers_cgi.txt, doc/modules_handlers_fcgi.txt,
+	doc/modules_validators_mysql.txt, doc/modules_validators_ldap.txt,
+	doc/modules_validators_pam.txt, doc/other_goodies.txt: more
+	changes and some new docs.
+
 2008-08-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/logger_writer.c, cherokee/logger_writer.h,

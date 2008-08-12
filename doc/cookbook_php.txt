@@ -1,0 +1,49 @@
+
+Setting up PHP
+--------------
+
+There is not much to learn to configure PHP with Cherokee.
+The default configuration (the one created by `cherokee-admin` from
+scratch when there is no `cherokee.conf` present) already supports
+PHP.
+
+This example shows a typical usage of FastCGI. It connects to a
+FastCGI server located in localhost in port 8002. If no server is
+running, the webserver will run the FastCGI server by issuing the command
+defined as the *Interpreter* sub-parameter:
+
+image::media/images/admin_handler_fastcgi1.png[Fastcgi]
+
+This other example shows a typical usage of multiple FastCGI
+servers. It connects to FastCGI servers located in several
+locations. If no server is running in the local computer, the
+webserver will run the FastCGI server by issuing the specified
+command. Note that for remote FastCGI servers, you are responsible to
+run the FastCGI servers there manually:
+
+image::media/images/admin_handler_fastcgi2.png[Fastcgi]
+
+The **PHP_FCGI_CHILDREN** environment variable is mandatory for PHP
+FastCGI servers.  It defines how much children should serve the
+requests coming from the webserver.
+
+If you define **PHP_FCGI_MAX_REQUESTS**, the value must be negative if
+you do not want the PHP process to ever be restarted. If you leave it
+unset, PHP will take the default value (500), after which it will be
+restarted. It is generally a good idea to let PHP be restarted to free
+up resources and possible memory leaks.
+
+
+Note that only FastCGI-enabled binaries of PHP will work with the
+FastCGI handler. Many prepackaged versions already enable this by
+default. If yours does not, you will need to build a suitable
+binary. You can check this with the `-v` parameter:
+
+----
+$ php-cgi -v
+PHP 5.2.5 (cgi-fcgi) (built: Apr 20 2008 17:11:05)
+Copyright (c) 1997-2007 The PHP Group
+Zend Engine v2.2.0, Copyright (c) 1998-2007 Zend Technologies
+----
+
+You cannot proceed unless the *"cgi-fcgi"* string is present.

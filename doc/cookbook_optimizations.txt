@@ -1,0 +1,13 @@
+Optimizing Cherokee
+-------------------
+
+To be written.
+Talk about.
+
+Check:
+ Pthreads: yes
+ Tracing: yes
+ sendfile(): yes
+ Polling methods: select poll epoll
+
+IO cache & file, number of threads, increase descriptors, X-Sendfile...

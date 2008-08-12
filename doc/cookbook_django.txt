@@ -1,0 +1,6 @@
+Setting up Django
+-----------------
+
+To be written
+
+[python-flup]

@@ -17,10 +17,24 @@ Script Alias          , String  , It defines a kind of execution interpreter. \
                                   script.
 Change to UID         , String  , Executes each CGI under its owner's user ID.
 Error handler         , Boolean , Use CGI output as error message.
-Check file            , Boolean , Check whether the file exists to build PATH_INFO.
+Check file            , Boolean , Check file existence to build PATH_INFO.
 Pass request          , Boolean , Pass request headers.
 Allow X-Sendfile      , Boolean , Use the non-standard X-Sendfile header.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Note that the link:other_goodies.html#x-sendfile[X-Sendfile] feature
+also supports `X-Accel-Redirect` headers transparently. This is to
+allow the migration of applications supporting it whithout having to
+make major code rewrites.
+
+Warning:
+~~~~~~~~
+
+The `Check file` flag affects how PATH_INFO is generated. You should
+disable this when you have an application that is running the whole
+virtual server tree, as it is a common source of problems. You can
+look at a practical example about PATH_INFO in the
+link:modules_handlers_common.html[File & Send] handler documentation.
 
 Examples
 ~~~~~~~~

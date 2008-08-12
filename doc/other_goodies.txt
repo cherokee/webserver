@@ -30,6 +30,11 @@ root path. Of course, this is to be done solely in controled
 environments. In short, it offers a huge performance gain at
 absolutely no cost.
 
+Note that the X-Sendfile feature also supports `X-Accel-Redirect`
+header, a similar feature offered by other web servers.
+This is to allow the migration of applications supporting it whithout
+having to make major code rewrites.
+
 
 [zero-downtime]
 Zero Downtime Update

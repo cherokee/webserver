@@ -41,20 +41,22 @@ link:cookbook.html[Cookbook]
 
 /////
   Reference table     <8>	link:cookbook_reference.html[]
-  Optimizing Cherokee <2>	link:cookbook_optimizing_cherokee.html[]
+  Optimizing Cherokee <2>	link:cookbook_optimizations.html[] <descriptors, iocache, x-sendfile,
 /////
 
   . link:cookbook_cross_compilation.html[Cross compilation]
 
 ////
   Embedding Cherokee  <9>	link:cookbook_embedding_cherokee.html[]
-  Managing logs       <5>	link:cookbook_managing_logs.html[] <rotations and cherokee-tweak?>
+  Managing logs       <5>	link:cookbook_managing_logs.html[] <backends, rotations and cherokee-tweak?>
   Authentication      [8] <3>	link:cookbook_authentication.html[Authentication]
   SSL/TLS, certs      [13]<6>	link:cookbook_ssl.html[]
-  Setting up PHP      <4>	link:cookbook_php.html[]
+////
+  . link:cookbook_php.html[Setting up PHP]
+//////
   Setting up Django   <4>	link:cookbook_django.html[]
   Setting up RoR      <4>	link:cookbook_ror.html[]
-////
+//////
 
 *********************************
 Modules
@@ -84,19 +86,19 @@ Modules
     - link:modules_validators_plain.html[Plain]
     - link:modules_validators_htpasswd.html[htpasswd]
     - link:modules_validators_htdigest.html[htdigest]
-//////
-    - ldap               [7.1]	link:modules_validators_ldap.html[LDAP]
-    - mysql              [7.3]	link:modules_validators_mysql.html[MySQL]
-//////
+    - link:modules_validators_ldap.html[LDAP]
+    - link:modules_validators_mysql.html[MySQL]
     - link:modules_validators_pam.html[PAM]
 
 *********************************
 Other resources
 *********************************
 
-  FAQ
-  Community
   - link:other_goodies.html[Cherokee Goodies]
+////
+  - FAQ
+  - Community
+////
 
 *********************************
 Development info
@@ -105,6 +107,6 @@ Development info
   . link:dev_debug.html[Debugging]
   . link:dev_cherokee.conf.html[cherokee.conf]
 ////
-  . API introduction		link:dev_api.html[]
-  . Examples			link:dev_examples.html[]
+  . API introduction	link:dev_api.html[]
+  . Examples		link:dev_examples.html[]
 ////

@@ -1,0 +1,10 @@
+Setting up Ruby on Rails
+------------------------
+
+To be written
+
+sudo gem update --system
+sudo gem install rails
+rails example
+cd example
+script/process/spawner fcgi

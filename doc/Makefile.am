@@ -9,7 +9,7 @@ SUFFIXES = .txt .html .inc
 	$(ASCIIDOC_TOC) -o $@ $< 
 
 .txt.html:
-	$(ASCIIDOC) -o $@ $< 
+	$(ASCIIDOC) $< 
 
 docdir = $(datadir)/doc/cherokee
 doc_DATA = \
@@ -44,6 +44,10 @@ cookbook.html \
 cookbook_cross_compilation.html \
 cookbook_authentication.html \
 cookbook_ssl.html \
+cookbook_optimizations.html \
+cookbook_php.html \
+cookbook_ror.html \
+cookbook_django.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \

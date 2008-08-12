@@ -22,59 +22,20 @@ a single host or interpreter (it has no performance penalty).
 Parameters
 ~~~~~~~~~~
 
-The options common to link:modules_handlers_cgi.html[CGI] are:
+To set up the general gateway options, read about the common
+parameters shared with the link:modules_handlers_cgi.html[CGI] handler.
 
-[grid="rows"]
-`~~~~~~~~~~~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters            , Type           , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Script Alias          , String  , It defines a kind of execution interpreter. \
-                                  The CGI will be run as a parameter of this \
-                                  script.
-Change to UID         , String  , Executes each CGI under its owner's user ID.
-Error handler         , Boolean , Use CGI output as error message.
-Check file            , Boolean , Check whether the file exists to build PATH_INFO.
-Pass request          , Boolean , Pass request headers.
-Allow X-Sendfile      , Boolean , Use the non-standard X-Sendfile header.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To setup the balancing options read the
+To set up the balancing options read the
 link:modules_balancers.html[Balancers] section for general information
 and the link:modules_balancers_round_robin.html[Round robin] section
 for specifics.
 
 Examples
 ~~~~~~~~
-This example shows a typical usage of FastCGI. It connects to a
-FastCGI server located in localhost in port 8002. If no server is
-running, the webserver will run the FastCGI server by issuing the command
-defined as the *Interpreter* sub-parameter:
-
-image::media/images/admin_handler_fastcgi1.png[Fastcgi]
-
-This example shows a typical usage of multiple FastCGI servers. It
-connects to FastCGI servers located in several locations. If no
-server is running in the local computer, the webserver will run the
-FastCGI server by issuing the specified command. Note that for remote
-FastCGI servers, you are responsible to run the FastCGI servers there
-manually:
-
-image::media/images/admin_handler_fastcgi2.png[Fastcgi]
-
-
-Configuring PHP
-~~~~~~~~~~~~~~~
-
-The **PHP_FCGI_CHILDREN** environment variable is mandatory for PHP
-FastCGI servers.  It defines how much children should serve the
-requests coming from the webserver.
-
-If you define **PHP_FCGI_MAX_REQUESTS**, the value should be negative
-so that PHP would take as many requests as possible. If you leave it
-unset, PHP will take the default value (500) and your 500th request
-will be rejected and the FCGI handler will return an Error 500
-(Internal server error) for it.
-
+Refer to the link:cookbook.html[Cookbook] if you want specific
+examples on how to configure this
+handler. The recipe about link:cookbook_php.html[setting up PHP] is a
+good starting point.
 
 Note for developers
 ~~~~~~~~~~~~~~~~~~~
