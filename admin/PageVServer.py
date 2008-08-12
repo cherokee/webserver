@@ -107,8 +107,10 @@ class PageVServer (PageMenu, FormHelper):
         if self._cfg.get_val('vserver!%s!user_dir'%(host)):
             tmp = self._cfg["vserver!%s!user_dir!rule"%(host)]
             if not tmp:
-                self._cfg["vserver!%s!user_dir!rule!1!match"   %(host)] = "default"
-                self._cfg["vserver!%s!user_dir!rule!1!handler" %(host)] = "common"
+                pre = "vserver!%s!user_dir!rule!1" %(host)
+                self._cfg["%s!match"       %(pre)] = "default"
+                self._cfg["%s!handler"     %(pre)] = "common"
+                self._cfg["%s!match!final" %(pre)] = "1"
 
         self._priorities         = RuleList(self._cfg, 'vserver!%s!rule'%(host))
         self._priorities_userdir = RuleList(self._cfg, 'vserver!%s!user_dir!rule'%(host))
@@ -290,7 +292,7 @@ class PageVServer (PageMenu, FormHelper):
             else:
                 link     = '<a href="%s/prio/%s">Default</a>' % (url_prefix, prio)
                 extra    = ' NoDrag="1" NoDrop="1"'
-                final    = ''
+                final    = self.HiddenInput ('%s!match!final'%(pre), "1")
                 link_del = ''
 
             if conf.get_val('handler'):
