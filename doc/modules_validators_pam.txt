@@ -1,5 +1,5 @@
-Pam Validator
-~~~~~~~~~~~~~
+Validator: PAM
+~~~~~~~~~~~~~~
 
 The pam validator uses the *Pluggable Authentication Module* to validate the
 username/password combination.
@@ -27,4 +27,8 @@ restriction list is provided.
 vserver!10!rule!500!auth = pam
 vserver!10!rule!500!auth!methods = basic
 vserver!10!rule!500!auth!realm = secret
+vserver!10!rule!500!match = directory
+vserver!10!rule!500!match!directory = /auth
+vserver!10!rule!500!match!final = 0
+vserver!10!rule!500!only_secure = 0
 ----

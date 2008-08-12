@@ -49,7 +49,7 @@ link:cookbook.html[Cookbook]
 ////
   Embedding Cherokee  <9>	link:cookbook_embedding_cherokee.html[]
   Managing logs       <5>	link:cookbook_managing_logs.html[] <rotations and cherokee-tweak?>
-  Authentication      [8] <3>	link:cookbook_authentication.html[]
+  Authentication      [8] <3>	link:cookbook_authentication.html[Authentication]
   SSL/TLS, certs      [13]<6>	link:cookbook_ssl.html[]
   Setting up PHP      <4>	link:cookbook_php.html[]
   Setting up Django   <4>	link:cookbook_django.html[]
@@ -81,14 +81,14 @@ Modules
     - link:modules_loggers_ncsa.html[Common (NCSA)]
     - link:modules_loggers_w3c.html[w3c]
   . link:modules_validators.html[Validators]
+    - link:modules_validators_plain.html[Plain]
+    - link:modules_validators_htpasswd.html[htpasswd]
+    - link:modules_validators_htdigest.html[htdigest]
 //////
-    - htdigest           [7.2]	link:modules_validators_htdigest.html[htdigest]
-    - htpasswd           [7.1]	link:modules_validators_htpasswd.html[htpasswd]
     - ldap               [7.1]	link:modules_validators_ldap.html[LDAP]
     - mysql              [7.3]	link:modules_validators_mysql.html[MySQL]
-    - link:modules_validators_pam.html[PAM]
-    - plain              [7.5]	link:modules_validators_plain.html[Plain]
 //////
+    - link:modules_validators_pam.html[PAM]
 
 *********************************
 Other resources

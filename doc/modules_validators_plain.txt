@@ -1,5 +1,5 @@
-Plain Validator
-~~~~~~~~~~~~~~~
+Validator: Plain
+~~~~~~~~~~~~~~~~
 
 The plain validator uses a flat-file to authenticate users.
 
@@ -13,10 +13,10 @@ Parameters
 ^^^^^^^^^^
 
 [grid="rows"]
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameter                 , Description
+`~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameter       ,           Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-__passwdfile__            , Required. The location of the user/pass file.
+__passwdfile__  ,           Required. The location of the user/pass file.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Compatibility
@@ -27,11 +27,38 @@ This validator is compatible with both **basic** and **digest** schemes.
 Example
 ^^^^^^^
 
+Here is an example of what could be reflected in the
+link:dev_cherokee.conf.html[cherokee.conf] configuration file after
+setting up this authentication mechanism. Refer to the
+link:cookbook_authentication.html[Authentication] recipe for a full
+hands-on approach.
+
 ----
-    vserver!default!directory!/secret/!
+vserver!10!rule!500!auth = plain
+vserver!10!rule!500!auth!methods = basic
+vserver!10!rule!500!auth!passwdfile = /var/www/passwd.plain
+vserver!10!rule!500!auth!realm = secret
+vserver!10!rule!500!match = directory
+vserver!10!rule!500!match!directory = /auth
+vserver!10!rule!500!match!final = 0
+vserver!10!rule!500!only_secure = 0
 ----
 
-The directory secret requieres a valid login/password pair from the /var/passwordsweb. They can authenticate with Basic or the Digest methos. 
-You can place the password file outside the web tree, in this way, remote users won't be able to fetch the list.
+The parameter that specifies the file containing the pairs
+'user:password' is mandatory. `Plain` authentication can use both
+`Basic` and `Digest` schemes.
+
+You can and should place the password file outside the web tree to
+prevent remote users from accessing the list.
 
 image::media/images/admin_validators_plain.png[Validator Plain]
+
+This could be the contents of the the file `/var/www/passwd` specified
+in this example:
+
+****
+testuser:testpassword
+cherokee:webserver
+****
+
+This would only allow access to the users `cherokee` and `testuser`.
