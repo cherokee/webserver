@@ -86,7 +86,7 @@ cherokee_info_build_print (cherokee_server_t *srv)
 #else
 	printf (" Tracing: no\n");
 #endif
-#ifdef HAVE_SENDFILE
+#ifdef WITH_SENDFILE
 	printf (" sendfile(): yes\n");
 #else
 	printf (" sendfile(): no\n");
