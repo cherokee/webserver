@@ -1,3 +1,9 @@
+2008-08-12  Taher Shihadeh <taher@unixwars.com>
+
+	* admin/ModuleLdap.py, admin/ModuleMysql.py: removed unnecessary
+	empty parameter checks for handlers that can provide default
+	values.
+
 2008-08-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_cgi_base.c (parse_header): Added a check for

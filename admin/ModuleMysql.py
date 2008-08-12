@@ -42,8 +42,7 @@ class ModuleMysql (ModuleAuthBase):
 
     def _op_apply_changes (self, uri, post):
         # These values must be filled out
-        for key, msg in [('host', 'Host'),
-                         ('user', 'DB User'),
+        for key, msg in [('user', 'DB User'),
                          ('query', 'SQL query'),
                          ('database', 'Database')]:
             pre = '%s!%s' % (self._prefix, key)

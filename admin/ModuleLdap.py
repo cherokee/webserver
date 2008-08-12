@@ -2,9 +2,9 @@ from Table import *
 from ModuleAuth import *
 
 NOTE_SERVER      = 'LDAP server IP address.'
-NOTE_PORT        = 'LDAP server port to connect to.'
-NOTE_BIND_DOMAIN = 'Domain sent during the LDAP authentication operation.'
-NOTE_BIND_PASSWD = 'Password for authenticating in the LDAP server.'
+NOTE_PORT        = 'LDAP server port to connect to. Defaults to 389'
+NOTE_BIND_DOMAIN = 'Domain sent during the LDAP authentication operation. Optional.'
+NOTE_BIND_PASSWD = 'Password to authenticate in the LDAP server.'
 NOTE_BASE_DOMAIN = 'Base domain for the web server authentications.'
 NOTE_FILTER      = 'Object filter. It can be empty.'
 NOTE_USE_TLS     = 'Enable to use secure connections between the web and LDAP servers.'
@@ -12,9 +12,9 @@ NOTE_CA_FILE     = 'CA File for the TLS connections.'
 
 class ModuleLdap (ModuleAuthBase):
     PROPERTIES = ModuleAuthBase.PROPERTIES + [
-        'server', 'port', 
+        'server', 'port',
         'bind_dn', 'base_dn',
-        'filter', 'tls', 
+        'filter', 'tls',
         'ca_file'
     ]
 
@@ -42,11 +42,10 @@ class ModuleLdap (ModuleAuthBase):
     def _op_apply_changes (self, uri, post):
         # These values must be filled out
         for key, msg in [('server', 'Server'),
-                         ('bind_dn', 'Bind Domain'),
                          ('base_dn', 'Base Domain')]:
             pre = '%s!%s' % (self._prefix, key)
             self.Validate_NotEmpty (post, pre, '%s can not be empty'%(msg))
-            
+
         # Apply TLS
         self.ApplyChangesPrefix (self._prefix, ['tls'], post)
         post.pop('tls')
