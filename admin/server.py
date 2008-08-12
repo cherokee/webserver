@@ -164,7 +164,7 @@ def main():
     os.chdir(os.path.abspath(pathname))
 
     # SCGI server
-    srv = pyscgi.ServerFactory (True, handler_class=Handler, port=scgi_port)
+    srv = pyscgi.ServerFactory (True, handler_class=Handler, host="127.0.0.1", port=scgi_port)
     srv.socket.settimeout (MODIFIED_CHECK_ELAPSE)
 
     # Read configuration file

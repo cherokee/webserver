@@ -1,3 +1,8 @@
+2008-08-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/server.py (main): It should only bind to localhost. Fixes
+	http://code.google.com/p/cherokee/issues/detail?id=91
+
 2008-08-12  Taher Shihadeh <taher@unixwars.com>
 
 	* admin/ModuleLdap.py, admin/ModuleMysql.py: removed unnecessary
