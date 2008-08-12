@@ -1,5 +1,12 @@
 2008-08-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/logger_writer.c, cherokee/logger_writer.h,
+	cherokee/logger_w3c.c, cherokee/logger_ncsa.c,
+	cherokee/connection.c, admin/PageVServer.py: This multipuorpose
+	patch clean up the logger writter class, and fixes the W3C support
+	in the administration interface. It fixes:
+	http://code.google.com/p/cherokee/issues/detail?id=89
+
 	* admin/pyscgi.py, admin/server.py, admin/Page.py,
 	admin/CherokeeManagement.py: Adds a option in the left hand menu
 	bar to allow users to reset the server at the same time that the

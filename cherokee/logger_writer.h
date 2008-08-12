@@ -36,7 +36,6 @@
 CHEROKEE_BEGIN_DECLS
 
 #define LOGGER_BUF_PAGESIZE	4096	/* page size to round down write(n) */
-#define LOGGER_OVF_BUFSIZE	4096	/* buffer size = max_bufsize + value */
 
 typedef enum {
 	cherokee_logger_writer_stderr,

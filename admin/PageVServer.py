@@ -13,10 +13,8 @@ DATA_VALIDATION = [
     ("vserver!.*?!ssl_certificate_file",      (validations.is_local_file_exists, 'cfg')),
     ("vserver!.*?!ssl_certificate_key_file",  (validations.is_local_file_exists, 'cfg')),
     ("vserver!.*?!ssl_ca_list_file",          (validations.is_local_file_exists, 'cfg')),
-    ("vserver!.*?!logger!access!filename",    (validations.parent_is_dir, 'cfg')),
-    ("vserver!.*?!logger!error!filename",     (validations.parent_is_dir, 'cfg')),
-    ("vserver!.*?!logger!access!command",     (validations.is_local_file_exists, 'cfg')),
-    ("vserver!.*?!logger!error!command",      (validations.is_local_file_exists, 'cfg')),
+    ("vserver!.*?!logger!.*?!filename",       (validations.parent_is_dir, 'cfg')),
+    ("vserver!.*?!logger!.*?!command",        (validations.is_local_file_exists, 'cfg')),
 ]
 
 RULE_LIST_NOTE = """
@@ -37,6 +35,7 @@ NOTE_DISABLE_LOG     = 'The Logging is currently enabled.'
 NOTE_LOGGERS         = 'Logging format. Apache compatible is highly recommended here.'
 NOTE_ACCESSES        = 'Back-end used to store the log accesses.'
 NOTE_ERRORS          = 'Back-end used to store the log errors.'
+NOTE_ACCESSES_ERRORS = 'Back-end used to store the log accesses and errors.'
 NOTE_WRT_FILE        = 'Full path to the file where the information will be saved.'
 NOTE_WRT_EXEC        = 'Path to the executable that will be invoked on each log entry.'
 
@@ -355,6 +354,7 @@ class PageVServer (PageMenu, FormHelper):
         # Disable
         pre = 'vserver!%s!logger'%(host)
         cfg = self._cfg[pre]
+        format = self._cfg.get_val(pre)
         if cfg and cfg.has_child():
             table = TableProps()
             js = "post_del_key('%s','%s');" % (self.submit_ajax_url, pre)
@@ -371,42 +371,62 @@ class PageVServer (PageMenu, FormHelper):
         txt += self.Indent(str(table))
         
         # Writers
-        if self._cfg.get_val(pre):
+        
+        if format:
             writers = ''
 
-            # Accesses
-            cfg_key = "%s!access!type"%(pre)
-            table = TableProps()
-            self.AddPropOptions_Ajax (table, 'Accesses', cfg_key, LOGGER_WRITERS, NOTE_ACCESSES)
-            writers += str(table)
+            # Accesses & Error together
+            if format == 'w3c':
+                cfg_key = "%s!all!type"%(pre)
+                table = TableProps()
+                self.AddPropOptions_Ajax (table, 'Accesses and Errors', cfg_key, 
+                                          LOGGER_WRITERS, NOTE_ACCESSES_ERRORS)
+                writers += str(table)
 
-            access = self._cfg.get_val(cfg_key)
-            if not access or access == 'file':
-                t1 = TableProps()
-                self.AddPropEntry (t1, 'Filename', '%s!access!filename'%(pre), NOTE_WRT_FILE)
-                writers += str(t1)
-            elif access == 'exec':
-                t1 = TableProps()
-                self.AddPropEntry (t1, 'Command', '%s!access!command'%(pre), NOTE_WRT_EXEC)
-                writers += str(t1)
+                all = self._cfg.get_val(cfg_key)
+                if not all or all == 'file':
+                    t1 = TableProps()
+                    self.AddPropEntry (t1, 'Filename', '%s!all!filename'%(pre), NOTE_WRT_FILE)
+                    writers += str(t1)
+                elif all == 'exec':
+                    t1 = TableProps()
+                    self.AddPropEntry (t1, 'Command', '%s!all!command'%(pre), NOTE_WRT_EXEC)
+                    writers += str(t1)
 
-            writers += "<hr />"
+            else:
+                # Accesses
+                cfg_key = "%s!access!type"%(pre)
+                table = TableProps()
+                self.AddPropOptions_Ajax (table, 'Accesses', cfg_key, LOGGER_WRITERS, NOTE_ACCESSES)
+                writers += str(table)
 
-            # Error
-            cfg_key = "%s!error!type"%(pre)
-            table = TableProps()
-            self.AddPropOptions_Ajax (table, 'Errors', cfg_key, LOGGER_WRITERS, NOTE_ERRORS)
-            writers += str(table)
+                access = self._cfg.get_val(cfg_key)
+                if not access or access == 'file':
+                    t1 = TableProps()
+                    self.AddPropEntry (t1, 'Filename', '%s!access!filename'%(pre), NOTE_WRT_FILE)
+                    writers += str(t1)
+                elif access == 'exec':
+                    t1 = TableProps()
+                    self.AddPropEntry (t1, 'Command', '%s!access!command'%(pre), NOTE_WRT_EXEC)
+                    writers += str(t1)
 
-            error = self._cfg.get_val(cfg_key)
-            if not error or error == 'file':
-                t1 = TableProps()
-                self.AddPropEntry (t1, 'Filename', '%s!error!filename'%(pre), NOTE_WRT_FILE)
-                writers += str(t1)
-            elif error == 'exec':
-                t1 = TableProps()
-                self.AddPropEntry (t1, 'Command', '%s!error!command'%(pre), NOTE_WRT_EXEC)
-                writers += str(t1)
+                writers += "<hr />"
+
+                # Error
+                cfg_key = "%s!error!type"%(pre)
+                table = TableProps()
+                self.AddPropOptions_Ajax (table, 'Errors', cfg_key, LOGGER_WRITERS, NOTE_ERRORS)
+                writers += str(table)
+
+                error = self._cfg.get_val(cfg_key)
+                if not error or error == 'file':
+                    t1 = TableProps()
+                    self.AddPropEntry (t1, 'Filename', '%s!error!filename'%(pre), NOTE_WRT_FILE)
+                    writers += str(t1)
+                elif error == 'exec':
+                    t1 = TableProps()
+                    self.AddPropEntry (t1, 'Command', '%s!error!command'%(pre), NOTE_WRT_EXEC)
+                    writers += str(t1)
 
             txt += '<h3>Writers</h3>'
             txt += self.Indent(writers)

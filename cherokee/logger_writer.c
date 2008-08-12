@@ -45,15 +45,15 @@
 ret_t 
 cherokee_logger_writer_init (cherokee_logger_writer_t *writer)
 {
-	writer->type    = cherokee_logger_writer_syslog;
-	writer->fd      = -1;
+	writer->type        = cherokee_logger_writer_syslog;
+	writer->fd          = -1;
 	writer->max_bufsize = DEFAULT_LOGGER_MAX_BUFSIZE;
 
 	cherokee_buffer_init (&writer->command);
 	cherokee_buffer_init (&writer->filename);
 	cherokee_buffer_init (&writer->buffer);
 
-	cherokee_buffer_ensure_size (&writer->buffer, writer->max_bufsize + LOGGER_OVF_BUFSIZE);
+	cherokee_buffer_ensure_size (&writer->buffer, writer->max_bufsize);
 
 	return ret_ok;
 }
@@ -62,13 +62,11 @@ cherokee_logger_writer_init (cherokee_logger_writer_t *writer)
 static ret_t
 logger_writer_close_file (cherokee_logger_writer_t *writer)
 {
-	ret_t	ret = ret_ok;
+	ret_t ret = ret_ok;
 
 	if (writer->fd != -1) {
-		/* Don't close file if it is stderr
-		 */
 		if (writer->type != cherokee_logger_writer_stderr) {
-			if (close (writer->fd) != 0)
+			if (cherokee_fd_close (writer->fd) != 0)
 				ret = ret_error;
 		}
 		writer->fd = -1;
@@ -96,9 +94,7 @@ ret_t
 cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherokee_config_node_t *config)
 {
 	ret_t              ret;
-	int                ival = 0;
-	cherokee_buffer_t *tmp  = NULL;
-	cherokee_buffer_t *tmp2 = NULL;
+	cherokee_buffer_t *tmp = NULL;
 
 	/* Check the type
 	 */
@@ -107,86 +103,66 @@ cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherokee_con
 		PRINT_MSG_S ("Logger writer type is needed\n");
 		return ret_ok;
 	}
-
+	
 	if (equal_buf_str (tmp, "syslog")) {
 		writer->type = cherokee_logger_writer_syslog;
-
 	} else if (equal_buf_str (tmp, "stderr")) {
 		writer->type = cherokee_logger_writer_stderr;
-
 	} else if (equal_buf_str (tmp, "file")) {
-		writer->type = cherokee_logger_writer_file;
+		writer->type = cherokee_logger_writer_file;				
+	} else if (equal_buf_str (tmp, "exec")) {
+		writer->type = cherokee_logger_writer_pipe;		
+	} else {
+		PRINT_MSG ("Unknown logger writer type '%s'\n", tmp->buf);
+		return ret_error;
+	}	
 
+	/* Extra properties
+	 */
+	switch (writer->type) {
+	case cherokee_logger_writer_file:
 		ret = cherokee_config_node_read (config, "filename", &tmp);
 		if (ret != ret_ok) { 
 			PRINT_MSG_S ("Logger writer (file): Couldn't read the filename\n");
 			return ret_error;
 		}
 		cherokee_buffer_add_buffer (&writer->filename, tmp);
+		break;
 
-	} else if (equal_buf_str (tmp, "exec")) {
-		writer->type = cherokee_logger_writer_pipe;
-
+	case cherokee_logger_writer_pipe:
 		ret = cherokee_config_node_read (config, "command", &tmp);
 		if (ret != ret_ok) { 
 			PRINT_MSG_S ("Logger writer (exec): Couldn't read the command\n");
 			return ret_error;
 		}
 		cherokee_buffer_add_buffer (&writer->command, tmp);
-
-	} else {
-		PRINT_MSG ("Unknown logger writer type '%s'\n", tmp->buf);
-		return ret_error;
+		break;
+	default:
+		break;
 	}
 
-	/* Read buffer size (bytes)
+	/* Reside the internal buffer if needed
 	 */
-	ret = cherokee_config_node_read (config, "bufsize", &tmp2);
-	if (ret != ret_ok) {
-		/* Item not found, but it's OK because it is optional.
-		 */
-		return ret_ok;
-	}
-
-	if (cherokee_buffer_is_empty (tmp2))
-		return ret_ok;
-
-	ival = atoi (tmp2->buf);
-	if (ival <= 0) {
-		ival = 0;
-	} else {
-		/* ival > 0
-		*/
-		if (ival < LOGGER_MIN_BUFSIZE)
-			ival = LOGGER_MIN_BUFSIZE;
-		else
-		if (ival > LOGGER_MAX_BUFSIZE)
-			ival = LOGGER_MAX_BUFSIZE;
-	}
-
-	/* NOTE: nval is always >= 0 because it is unsigned
-	 */
-	if (writer->max_bufsize != (size_t) ival) {
-		/* Reallocate buffer to the new size
-		 */
+	ret = cherokee_config_node_read (config, "bufsize", &tmp);
+	if (ret == ret_ok) {
+		int buf_len = atoi (tmp->buf);
+		
+		if (buf_len < LOGGER_MIN_BUFSIZE)
+			buf_len = LOGGER_MIN_BUFSIZE;
+		else if (buf_len > LOGGER_MAX_BUFSIZE)
+			buf_len = LOGGER_MAX_BUFSIZE;
+		
 		cherokee_buffer_mrproper (&writer->buffer);
-		writer->max_bufsize = (size_t) ival;
-		ret = cherokee_buffer_ensure_size (
-			&writer->buffer,
-			writer->max_bufsize + LOGGER_OVF_BUFSIZE);
+		cherokee_buffer_init (&writer->buffer);
+		
+		ret = cherokee_buffer_ensure_size (&writer->buffer, buf_len);
 		if (ret != ret_ok) {
 			PRINT_ERROR ("Allocation logger->max_bufsize " FMT_SIZE " failed !\n", 
 				     (CST_SIZE) writer->max_bufsize);
-			/* Set log to "unbuffered".
-			 */
-			writer->max_bufsize = 0;
-			PRINT_MSG ("Set logger->writer->max_bufsize " FMT_SIZE "\n", 
-				   (CST_SIZE) writer->max_bufsize);
-			cherokee_buffer_ensure_size (
-				&writer->buffer,
-				writer->max_bufsize + LOGGER_OVF_BUFSIZE);
-			return ret;
+			return ret_nomem;
 		}
+		
+		writer->max_bufsize = (size_t)buf_len;
 	}
 
 	return ret_ok;
@@ -316,7 +292,7 @@ cherokee_logger_writer_get_buf (cherokee_logger_writer_t *writer, cherokee_buffe
 ret_t 
 cherokee_logger_writer_flush (cherokee_logger_writer_t *writer)
 {
-	ret_t   ret = ret_ok;
+	ret_t ret = ret_ok;
 
 	/* The internal buffer might be empty
 	 */

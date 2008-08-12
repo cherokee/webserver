@@ -1859,7 +1859,8 @@ cherokee_connection_log_delayed (cherokee_connection_t *conn)
 	BIT_UNSET (conn->options, conn_op_log_at_end);
 
 	ret = cherokee_logger_write_access (conn->logger_ref, conn);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	return ret_ok;
 }

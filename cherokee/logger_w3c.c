@@ -128,7 +128,6 @@ cherokee_logger_w3c_init_base (cherokee_logger_w3c_t *logger, cherokee_config_no
 }
 
 
-
 ret_t 
 cherokee_logger_w3c_init (cherokee_logger_w3c_t *logger)
 {
@@ -167,7 +166,7 @@ cherokee_logger_w3c_flush (cherokee_logger_w3c_t *logger)
 
 
 ret_t 
-cherokee_logger_w3c_write_error  (cherokee_logger_w3c_t *logger, cherokee_connection_t *cnt)
+cherokee_logger_w3c_write_error (cherokee_logger_w3c_t *logger, cherokee_connection_t *cnt)
 {
 	ret_t              ret;
 	cuint_t            method_len = 0;
@@ -229,14 +228,13 @@ cherokee_logger_w3c_write_error  (cherokee_logger_w3c_t *logger, cherokee_connec
 	cherokee_buffer_add_buffer (log, request);
 	cherokee_buffer_add_char   (log, '\n');
 
-	if (log->len < logger->writer.max_bufsize)
-		return ret_ok;
-
-	/* Buffer is full, flush it!
-	 */
+	/* Error are not buffered
+	 */  	
 	ret = cherokee_logger_writer_flush (&logger->writer);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
-	return ret;
+	return ret_ok;
 }
 
 
@@ -252,14 +250,16 @@ cherokee_logger_w3c_write_string (cherokee_logger_w3c_t *logger, const char *str
 	ret = cherokee_buffer_add (log, string, strlen(string));
  	if (unlikely (ret != ret_ok)) return ret;
   
+	/* Flush buffer if full
+	 */  
   	if (log->len < logger->writer.max_bufsize)
 		return ret_ok;
 
-	/* Buffer is full, flush it!
-	 */
 	ret = cherokee_logger_writer_flush (&logger->writer);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
-	return ret;
+	return ret_ok;
 }
 
 
@@ -324,13 +324,6 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 	cherokee_buffer_add_buffer (log, request);
 	cherokee_buffer_add_char   (log, '\n');
 
-	if (log->len < logger->writer.max_bufsize)
-		return ret_ok;
-
-	/* Buffer is full, flush it!
-	 */
-	ret = cherokee_logger_writer_flush (&logger->writer);
-
-	return ret;
+	return ret_ok;
 }
 
