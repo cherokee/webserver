@@ -1,3 +1,9 @@
+2008-08-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_cgi_base.c (parse_header): Added a check for
+	the 'X-Accel-Redirect' in addition to the 'X-Sendfile' previously
+	supported. It has the exact same behavior.
+
 2008-08-11  Taher Shihadeh <taher@unixwars.com>
 
 	* doc/config_virtual_servers.txt, doc/modules_balancers.txt,
