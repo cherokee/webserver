@@ -1,5 +1,10 @@
 2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* Index: cherokee/Makefile.am, cherokee/connector.c,
+	cherokee/connector.h, cherokee/source.c, cherokee/downloader.c,
+	cherokee/server-protected.h, cherokee/server.c: The
+	cherokee_connector_t class is no longer needed. Removed.
+
 	* cherokee/main_admin.c (main): Ignore SIGCHLD. We want to be
 	there that no zombie processes lingers.
 

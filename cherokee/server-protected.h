@@ -55,7 +55,6 @@
 #include "mime.h"
 #include "config_node.h"
 #include "version.h"
-#include "connector.h"
 
 
 struct cherokee_server {
@@ -107,9 +106,7 @@ struct cherokee_server {
 	int                        fdlimit_custom;
 	int                        fdlimit_available;
 	int                        fdlimit_per_thread;
-
 	cherokee_poll_type_t       fdpoll_method;
-	cherokee_connector_t       client_connector;
 
 	/* Connection related
 	 */

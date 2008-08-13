@@ -28,7 +28,6 @@
 #include "request.h"
 #include "url.h"
 #include "header-protected.h"
-#include "connector.h"
 #include "util.h"
 
 #include <errno.h>
@@ -186,15 +185,10 @@ cherokee_downloader_get_reply_code (cherokee_downloader_t *downloader, cherokee_
 static ret_t 
 connect_to (cherokee_downloader_t *downloader, cherokee_buffer_t *host, cuint_t port, int protocol)
 {
-	ret_t                 ret;
-	cherokee_connector_t *connector = NULL;
-	cherokee_socket_t    *sock      = &downloader->socket;
+	ret_t              ret;
+	cherokee_socket_t *sock = &downloader->socket;
 
 	TRACE(ENTRIES, "host=%s port=%d proto=%d\n", host->buf, port, protocol);
-
-	ret = cherokee_connector_get_default (&connector);
-	if (ret != ret_ok)
-		return ret;
 
 	/* Create the socket
 	 */
@@ -218,7 +212,7 @@ connect_to (cherokee_downloader_t *downloader, cherokee_buffer_t *host, cuint_t 
 
 	/* Connect to server
 	 */
-	ret = cherokee_connector_connect (connector, socket);
+	ret = cherokee_socket_connect (socket);
 	TRACE(ENTRIES, "socket=%p ret=%d\n", sock, ret);
 
 	if (unlikely(ret != ret_ok)) 

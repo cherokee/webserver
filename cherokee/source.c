@@ -27,7 +27,6 @@
 #include "config_node.h"
 #include "resolv_cache.h"
 #include "util.h"
-#include "connector.h"
 
 #define ENTRIES "source,src"
 
@@ -71,11 +70,6 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 {
 	ret_t                    ret;
 	cherokee_resolv_cache_t *resolv;
-	cherokee_connector_t    *connector;
-	
-	ret = cherokee_connector_get_default (&connector);
-        if (unlikely (ret!=ret_ok)) 
-		return ret;
 
 	/* Short path
 	 */
@@ -127,7 +121,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 			     sock->socket);
 
 out: 	
-	return cherokee_connector_connect (connector, sock);
+	return cherokee_socket_connect (sock);
 }
 
 

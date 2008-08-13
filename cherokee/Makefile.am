@@ -942,8 +942,6 @@ config_reader.h \
 config_reader.c \
 bogotime.h \
 bogotime.c \
-connector.h \
-connector.c \
 cache.h \
 cache.c
 
