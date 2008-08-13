@@ -1,0 +1,66 @@
+*********************************
+link:basics.html[Getting started]
+*********************************
+
+include::basics.txt[]
+
+*********************************
+link:bundle.html[Cherokee Bundle]
+*********************************
+
+include::bundle.txt[]
+
+*********************************
+link:config.html[Configuration]
+*********************************
+
+include::config.txt[]
+
+*********************************
+link:cookbook.html[Cookbook]
+*********************************
+
+include::cookbook.txt[]
+////
+  . link:cookbook_embedding_cherokee.html[Embedding Cherokee]
+  . link:cookbook_managing_logs.html[Managing logs]
+////
+
+*********************************
+link:modules.html[Modules]
+*********************************
+
+include::modules.txt[]
+
+*********************************
+link:other.html[Other information]
+*********************************
+
+include::other.txt[]
+////
+  - FAQ
+  - Community
+////
+
+*********************************
+link:dev.html[Development info]
+*********************************
+
+include::dev.txt[]
+////
+  . link:dev_api.html[API introduction]
+  . link:dev_examples.html[Examples]
+////
+
+////////////////////////////////////////////////////
+Remaingin tasks:
+----------------
+* <3> How to setup authenticated resources <cookbook_authentication.txt>
+* <5> How to manage logs  (make specific mention of usage of
+      Cherokee-Tweak and log backers).
+* <6> How to manage security (SSL/TLS, certs, etc) <cookbook_ssl.txt>
+* <7> Development documentation
+* <8> Reference table of functionalities to be achieved (and hopefully
+      a full setup example).
+* <9> Cherokee on exotic devices
+////////////////////////////////////////////////////

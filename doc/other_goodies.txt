@@ -4,7 +4,7 @@ Cherokee goodies
 There are several important but mostly unknown features of Cherokee
 that really do make a difference in real-world production environments.
 
-[x-sendifle]
+[[x-sendifle]]
 X-Sendfile
 ~~~~~~~~~~
 X-Sendfile is a special, non-standard HTTP header that has been
@@ -36,7 +36,7 @@ This is to allow the migration of applications supporting it whithout
 having to make major code rewrites.
 
 
-[zero-downtime]
+[[zero-downtime]]
 Zero Downtime Update
 ~~~~~~~~~~~~~~~~~~~~
 Cherokee has an ability hardly ever seen in any service delivering

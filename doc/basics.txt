@@ -1,7 +1,3 @@
-*********************************
-Getting started
-*********************************
-
  . link:basics_why_cherokee.html[Why Cherokee?]
  . link:basics_requirements.html[Requirements]
  . link:basics_download.html[Download]

@@ -1,5 +1,5 @@
-How to cross compile Cherokee
------------------------------
+Cookbook: How to cross compile Cherokee
+---------------------------------------
 
 Cherokee-Win32 from Linux
 ~~~~~~~~~~~~~~~~~~~~~~~~~

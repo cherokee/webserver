@@ -1,12 +1,14 @@
-How to generate SSL keys
-------------------------
+Cookbook: SSL, TLS and certificates
+-----------------------------------
 
-Locate CA.pl or CA.sh 
+To generate SSL keys you will have to follow these steps detailed below.
+
+Locate CA.pl or CA.sh
 ~~~~~~~~~~~~~~~~~~~~~
 
-In Debian GNU/Linux are located in /usr/lib/ssl/misc/ 
+In Debian GNU/Linux those are located in /usr/lib/ssl/misc/
 
-``find / -iname CA.pl -print`` might help. 
+``find / -iname CA.pl -print`` might help.
 
 Create a new CA
 ~~~~~~~~~~~~~~~
@@ -89,13 +91,13 @@ Sign the certificate request
             commonName                = www.cherokee-project.com
             emailAddress              = sysop@cherokee-project.com
         X509v3 extensions:
-            X509v3 Basic Constraints: 
+            X509v3 Basic Constraints:
             CA:FALSE
-            Netscape Comment: 
+            Netscape Comment:
             OpenSSL Generated Certificate
-            X509v3 Subject Key Identifier: 
+            X509v3 Subject Key Identifier:
             14:6A:45:66:A2:EB:73:74:5A:C5:68:80:50:D5:48:94:DD:ED:25:F7
-            X509v3 Authority Key Identifier: 
+            X509v3 Authority Key Identifier:
             keyid:9E:E0:E2:6E:1B:02:17:F2:72:C9:0D:E3:DA:C9:E1:8F:CE:BC:6E:A2
             DirName:/C=ES/ST=Madrid/L=Madrid/O=Cherokee Team/CN=Cherokee Certificate Master/emailAddress=alvaro@alobbs.com
             serial:00
@@ -113,8 +115,8 @@ Sign the certificate request
 Self signed certificates
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-It's another way to generate certificate files. Ramon Pons sent this little script to create 
-self signed certificates::
+It's another way to generate certificate files. Ramon Pons sent this
+little script to create self signed certificates::
 
 ----
 #!/bin/sh

@@ -1,5 +1,24 @@
-Authentication
---------------
+Cookbook: Authentication
+------------------------
+
+In this section you will find information useful to set up
+authentication mechanisms with several of Cherokee's validators.
+
+You can find information and basic examples in each validator's
+documentation. This is the list of validator modules provided by
+Cherokee:
+
+* link:modules_validators_htdigest.html[htdigest]
+* link:modules_validators_htpasswd.html[htpasswd]
+* link:modules_validators_ldap.html[LDAP]
+* link:modules_validators_mysql.html[MySQL]
+* link:modules_validators_pam.html[PAM]
+* link:modules_validators_plain.html[Plain]
+
+You will also find interesting information in the
+link:modules_validators_plain.html["Validator Modules Overview"] and
+step by step examples for Plain and PAM mechanisms in the
+link:config_quickstart.html["Quickstart"] section.
 
 There are two types of authentication:
 
@@ -13,8 +32,9 @@ There are two types of authentication:
     This method is by far the most secure, but also more complex.  Most modern
     web browsers support this method.
 
-Cherokee comes with a number of validators: link:modules_validators_htpasswd.html[htpasswd], 
-link:modules_validators_htdigest.html[htdigest], link:modules_validators_pam.html[PAM], 
-link:modules_validators_ldap.html[LDAP], link:modules_validators_mysql.html[MySQL], 
-and a link:modules_validators_plain.html[plain] text file.
 
+////
+To be written
+
+Details for htdigest, htpasswd, mysql and ldap.
+////

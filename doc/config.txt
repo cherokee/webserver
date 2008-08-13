@@ -1,7 +1,3 @@
-*********************************
-Configuration
-*********************************
-
   . link:config_quickstart.html[Quickstart]
   . link:config_general.html[General]
   . link:config_virtual_servers.html[Virtual servers]

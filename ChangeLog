@@ -1,3 +1,22 @@
+2008-08-13  Taher Shihadeh <taher@unixwars.com>
+
+	* doc/basics.txt, doc/basics_why_cherokee.txt,
+	doc/build/chunked_template.conf, doc/build/combined_template.conf,
+	doc/build/combined.txt, doc/build/doc.conf, doc/bundle.txt,
+	doc/config.txt, doc/cookbook_authentication.txt,
+	doc/cookbook_cross_compilation.txt, doc/cookbook_django.txt,
+	doc/cookbook_managing_logs.txt, doc/cookbook_optimizations.txt,
+	doc/cookbook_php.txt, doc/cookbook_ror.txt, doc/cookbook_ssl.txt,
+	doc/cookbook.txt, doc/dev_api.txt, doc/dev_cherokee.conf.txt,
+	doc/dev_examples.txt, doc/dev.txt, doc/index.txt,
+	doc/modules_handlers_fcgi.txt, doc/modules_handlers_scgi.txt,
+	doc/modules.txt, doc/modules_validators_htdigest.txt,
+	doc/modules_validators_htpasswd.txt,
+	doc/modules_validators_ldap.txt, doc/modules_validators_mysql.txt,
+	doc/modules_validators_pam.txt, doc/modules_validators_plain.txt,
+	doc/other_goodies.txt, doc/other.txt: almost done with
+	documents. Added some snapshots too.
+
 2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/170-Error-ContentLength.py, qa/Makefile.am: Added a new QA

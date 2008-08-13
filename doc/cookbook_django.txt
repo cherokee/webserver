@@ -1,6 +1,88 @@
-Setting up Django
------------------
+Cookbook: Setting up Django
+---------------------------
 
-To be written
+Django is a fantastic high-level Python Web framework that can run
+nicely with Cherokee and either the
+link:modules_handlers_scgi.html[SCGI] or
+link:modules_handlers_fcgi.html[FastCGI] or handlers.
 
-[python-flup]
+To properly set up Cherokee to use Django you will need a working
+Django framework, which is not difficult at all to get ready. The
+details vary from system to system. You can refer to the official
+project's documentation for more information on
+link:http://www.djangoproject.com/documentation/install[how to install
+Django].
+
+
+On Debian based systems this will be enough:
+----
+# apt-get install python-django python-flup
+----
+
+You will need Flup because it implements the standard interface
+between Python Web applications and Web servers, so you will be using
+it to run your web application either as FastCGI or SCGI.
+
+
+Once you are done with that, you must deploy your Django project:
+
+----
+$ cd /var/www
+$ django-admin.py startproject example
+----
+
+This will create the basic structure into a new directory called
+`example`. Now you are ready to configure Cherokee. You only need to
+know how to spawn the FastCGI or SCGI, which is done with a script
+provided by your project called `manage.py`.
+
+It can be run on a TCP port or on a Unix socket. In our example we
+will be launching it as threaded server on a TCP port with SCGI
+protocol. This is acomplished with the following command, which is
+what we will have to set up in `cherokee-admin`.
+
+----
+./manage.py runfcgi method=threaded host=127.0.0.1 port=3033 protocol=scgi
+----
+
+The process is fairly simple. Set up a new rule for this new path and
+manage it with the SCGI handler. If you wanted to use the FastCGI
+handler instead you would only have to omit the last parameter and
+FastCGI would be used by default. The configuration of the handler is
+exactly the same for SCGI and FastCGI.
+
+Once you have created the new rule for your `/var/www/example
+directory`, choose the desired handler and use the following
+configuration.
+
+.Common CGI options
+Under `Common CGI options` make sure to check the `Error handler` box and
+uncheck `Check file`. This is to prevent possible errors with the
+`INFO_PATH` generation that can happen when an application, in this
+case 'Rails', manages the whole subtree. This is mentioned in the
+link:modules_handlers_cgi.html[Common CGI] section of the
+documentation.
+
+image::media/images/cookbook_django_common.png[Common CGI options]
+
+.SCGI specific
+Under `SCGI specific` make sure to add the hosts providing the
+service. Note that you will have to manually launch the `spawner` if
+you use a `Remote host` as `Information source` instead of a `Local
+interpreter`.
+
+You will simply have to add as many sources as desired, for instance
+our example uses the port 3033.
+
+[grid="rows"]
+`~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Host           , Interpreter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+localhost:3033 , `/var/www/example/manage.py runfcgi method=threaded ` \
+                 `host=127.0.0.1 port=3033 protocol=scgi`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can set up as many hosts as desired and Cherokee will balance the
+load among them.
+
+image::media/images/cookbook_django_scgi.png[SCGI specifics]

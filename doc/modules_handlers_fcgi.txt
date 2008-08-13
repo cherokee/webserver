@@ -30,12 +30,22 @@ link:modules_balancers.html[Balancers] section for general information
 and the link:modules_balancers_round_robin.html[Round robin] section
 for specifics.
 
+
+Unix Sockets
+~~~~~~~~~~~~
+
+Note that the FastCGI and SCGI handlers can directly use Unix
+sockets. You only have to specify a full path to the socket instead of
+the `host:port`, and everything will simply work.
+
+
 Examples
 ~~~~~~~~
 Refer to the link:cookbook.html[Cookbook] if you want specific
 examples on how to configure this
 handler. The recipe about link:cookbook_php.html[setting up PHP] is a
 good starting point.
+
 
 Note for developers
 ~~~~~~~~~~~~~~~~~~~

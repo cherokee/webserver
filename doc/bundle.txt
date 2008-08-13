@@ -1,7 +1,3 @@
-*********************************
-Cherokee Bundle
-*********************************
-
  . link:bundle_cherokee.html[cherokee]
  . link:bundle_cherokee-admin.html[cherokee-admin]
  . link:bundle_cherokee-config.html[cherokee-config]

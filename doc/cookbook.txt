@@ -1,4 +1,7 @@
-*********************************
-Cookbook
-*********************************
-
+  . link:cookbook_optimizations.html[Optimizing Cherokee]
+  . link:cookbook_cross_compilation.html[Cross compilation]
+  . link:cookbook_django.html[Setting up Django]
+  . link:cookbook_php.html[Setting up PHP]
+  . link:cookbook_ror.html[Setting up RoR]
+  . link:cookbook_ssl.html[SSL/TLS, certs]
+  . link:cookbook_authentication.html[Authentication]

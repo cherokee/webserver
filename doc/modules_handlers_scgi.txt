@@ -11,7 +11,7 @@ The Simple Common Gateway Interface
 to replace CGI and FastCGI with a simpler protocol to both implement
 and manage.
 
-In the end SCGI offers the same performance as FastCGI (and better
+In the end, SCGI offers the same performance as FastCGI (and better
 than other methods), offers cross platform simultaneous support and is
 simple to install, run, and configure.
 

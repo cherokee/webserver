@@ -1,19 +1,18 @@
-DOC_RELEASE=0.8.0
-
-ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py --unsafe -b xhtml11 --conf-file=$(top_srcdir)/doc/build/chunked_template.conf -a cherokee_version=$(DOC_RELEASE)
-ASCIIDOC_TOC=python $(top_srcdir)/doc/build/asciidoc.py -b xhtml11 -s 
+ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py --unsafe --conf-file=$(top_srcdir)/doc/build/doc.conf
+ASCIIDOC_TOC=python $(top_srcdir)/doc/build/asciidoc.py -s 
 
 SUFFIXES = .txt .html .inc
 
 .txt.inc:
-	$(ASCIIDOC_TOC) -o $@ $< 
+	$(ASCIIDOC_TOC) -o $@ $(top_srcdir)/doc/$< 
 
 .txt.html:
-	$(ASCIIDOC) $< 
+	$(ASCIIDOC) -o $@ $(top_srcdir)/doc/$< 
 
 docdir = $(datadir)/doc/cherokee
 doc_DATA = \
-TOC.inc \
+index.inc \
+index.html \
 basics.html \
 basics_why_cherokee.html \
 basics_requirements.html \
@@ -41,13 +40,14 @@ config_icons.html \
 config_mime_types.html \
 config_advanced.html \
 cookbook.html \
-cookbook_cross_compilation.html \
-cookbook_authentication.html \
-cookbook_ssl.html \
+cookbook_managing_logs.html \
 cookbook_optimizations.html \
+cookbook_cross_compilation.html \
+cookbook_django.html \
 cookbook_php.html \
 cookbook_ror.html \
-cookbook_django.html \
+cookbook_authentication.html \
+cookbook_ssl.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -76,6 +76,7 @@ modules_validators_ldap.html \
 modules_validators_mysql.html \
 modules_validators_pam.html \
 modules_validators_plain.html \
+other.html \
 other_goodies.html \
 dev.html \
 dev_debug.html \

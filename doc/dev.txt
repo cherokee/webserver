@@ -1,4 +1,2 @@
-*********************************
-Development info
-*********************************
-
+  . link:dev_debug.html[Debugging]
+  . link:dev_cherokee.conf.html[cherokee.conf]

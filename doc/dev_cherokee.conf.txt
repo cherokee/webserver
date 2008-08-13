@@ -39,8 +39,8 @@ would like to point out again that users should never read of modify the
 configuration file by hand, so it is a format that only developers
 should know about.
 
-The following blocks will summarize the configuration keys that
-Cherokee {cherokee_version} handles:
+The following blocks will summarize the configuration keys that the
+current Cherokee release handles:
 
 Server
 ~~~~~~
@@ -83,7 +83,7 @@ server!module_deps,               Path           , Path to the plug-in inter-dep
 ``server!server_tokens`` parameters
 
 [grid="rows"]
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Value                     , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Product                   , Cherokee
@@ -96,7 +96,7 @@ Full                      , Cherokee/0.8.0 (UNIX) Ext/0.0 Ext2/0.0
 ``server!thread_policy`` parameters
 
 [grid="rows"]
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Value                     , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 fifo                      , First in first out
@@ -112,7 +112,7 @@ The ``server!encoder`` configuration branch allows to configure encode
 plug-ins. Each entry accepts a number of options:
 
 [grid="rows"]
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Parameter                 , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 type                      , Set the matching policy: deny_allow or allow_deny
@@ -148,7 +148,7 @@ repeated priorities, since the behavior in these cases in undefined.
 
 
 [grid="rows"]
-```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Key**                           , **Type**, **Description**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 vserver!1!nick = default          , String  , The name of the Virtual Server
@@ -252,7 +252,7 @@ The following parameters are concatenated with any of the previous
 kinds of entry:
 
 [grid="rows"]
-```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`~~~~~~~~~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Key**                                 , **Type**, **Description**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 priority                                , Number  , Priority in the rules list
@@ -263,13 +263,14 @@ auth                                    , String  , Validator (module) that prot
 only_secure                             , Bool    , Allow only secure (https) connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ``auth`` entry deserves a little more attention, actually. It
-restricts the access to some of the objects accessed by the web
-server based on a number of properties that are defined at its child
-properties:
+The ``auth`` entry deserves a little more attention,
+actually. Accepted validarot modules are `htdigest, htpasswd, ldap,
+mysql, pam, plain`. It restricts the access to some of the objects
+accessed by the web server based on a number of properties that are
+defined at its child properties:
 
 [grid="rows"]
-```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`~~~~~~~~~~~~`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Key**                                 , **Type**, **Description**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 auth!methods                            , List    , Allowed methods (basic & digest)
@@ -277,7 +278,47 @@ auth!realm                              , String  , Realm of the resource
 auth!users                              , List    , List of allowed users
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-So, here are a few examples about how this notation works:
+Some validators have extra configuration keys.
+
+.htdigest, htpasswd, plain
+[grid="rows"]
+`~~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Key**           , **Type**, **Description**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+auth!passwdfile   , String  , Full path to the passwords' file. htdigest|htpasswd|plain
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.mysql
+[grid="rows"]
+`~~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Key**           , **Type**, **Description**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+auth!host           , String, MySQL host.
+auth!database       , String, Database name.
+auth!user           , String, Database user.
+auth!passwd         , String, Database password.
+auth!port           , Number, Port number of the service.
+auth!query          , String, SQL query to match users/passwords. \
+                              Replace your username for '${user}'.
+auth!use_md5_passwd , Bool  , Encrypt the passwords with MD5.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.ldap
+[grid="rows"]
+`~~~~~~~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Key**      , **Type**, **Description**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+auth!server  , String  , IP or hostname of the LDAP server.
+auth!port    , Number  , Port number of the service.
+auth!base_dn , String  , Base distinguished name.
+auth!bind_dn , String  , User
+auth!bind_pw , String  , Password
+auth!filter  , String  , LDAP search filter.
+auth!tls     , Bool    , Indicates TLS based integrity
+auth!ca_file , String  , Cert file. Must be provided if TLS is enabled.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Here are a few examples about how this notation works:
 
 - The default virtual server uses the "common" handler as default
   choice for its root directory:
@@ -312,6 +353,56 @@ So, here are a few examples about how this notation works:
     vserver!1!rule!extensions!iso,ISO!auth!realm = My secret isos
     vserver!1!rule!extensions!iso,ISO!auth!methods = digest
     vserver!1!rule!extensions!iso,ISO!auth!passwdfile = /var/passwd/isos.htdigest
+----
+
+- Authenticated directory with `htpasswd` validator:
++
+----
+vserver!10!rule!500!auth = htpasswd
+vserver!10!rule!500!auth!methods = basic
+vserver!10!rule!500!auth!passwdfile = /var/www/passwd.htpasswd
+vserver!10!rule!500!auth!realm = secret
+vserver!10!rule!500!match = directory
+vserver!10!rule!500!match!directory = /auth
+vserver!10!rule!500!match!final = 0
+vserver!10!rule!500!only_secure = 0
+----
+
+- Same example, using `mysql` validator:
++
+----
+vserver!10!rule!500!auth = mysql
+vserver!10!rule!500!auth!database = auth_users
+vserver!10!rule!500!auth!host = localhost
+vserver!10!rule!500!auth!methods = basic,digest
+vserver!10!rule!500!auth!passwd = db_passwd
+vserver!10!rule!500!auth!port = 3306
+vserver!10!rule!500!auth!query = SELECT password FROM auth_users WHERE username= '${user}'
+vserver!10!rule!500!auth!realm = secret
+vserver!10!rule!500!auth!use_md5_passwd = 1
+vserver!10!rule!500!auth!user = db_user
+vserver!10!rule!500!match = directory
+vserver!10!rule!500!match!directory = /auth
+vserver!10!rule!500!match!final = 0
+vserver!10!rule!500!only_secure = 0
+----
+
+- Same thing with `ldap` validator:
++
+----
+vserver!10!rule!500!auth = ldap
+vserver!10!rule!500!auth!base_dn = Example DN
+vserver!10!rule!500!auth!bind_dn = Directory Manager
+vserver!10!rule!500!auth!bind_pw = secretpassword
+vserver!10!rule!500!auth!methods = basic
+vserver!10!rule!500!auth!port = 389
+vserver!10!rule!500!auth!realm = secret
+vserver!10!rule!500!auth!server = ldap.example.com
+vserver!10!rule!500!auth!tls = 0
+vserver!10!rule!500!match = directory
+vserver!10!rule!500!match!directory = /auth
+vserver!10!rule!500!match!final = 0
+vserver!10!rule!500!only_secure = 0
 ----
 
 Logs

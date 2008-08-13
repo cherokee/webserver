@@ -1,6 +1,5 @@
-
-Setting up PHP
---------------
+Cookbook: Setting up PHP
+------------------------
 
 There is not much to learn to configure PHP with Cherokee.
 The default configuration (the one created by `cherokee-admin` from
