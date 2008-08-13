@@ -53,7 +53,7 @@ vserver!1!rule!4!handler = cgi
 vserver!1!rule!5!match = directory
 vserver!1!rule!5!match!directory = /about
 vserver!1!rule!5!handler = server_info
-vserver!1!rule!5!handler!just_about = 1
+vserver!1!rule!5!handler!type = just_about
 
 vserver!1!rule!99999!match = extensions
 vserver!1!rule!99999!match!extensions = php
