@@ -212,6 +212,9 @@ main (int argc, char **argv)
 #ifdef SIGPIPE
         signal (SIGPIPE, SIG_IGN);
 #endif
+#ifdef SIGCHLD
+        signal (SIGCHLD, SIG_IGN);
+#endif
 
 	cherokee_init();
 	process_parameters (argc, argv);

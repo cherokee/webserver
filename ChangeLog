@@ -1,5 +1,8 @@
 2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main_admin.c (main): Ignore SIGCHLD. We want to be
+	there that no zombie processes lingers.
+
 	* admin/static/js/common.js: Fixes a reloading issue in Firefox. I
 	do hope it does not break any other browser support. Fixes:
 	http://code.google.com/p/cherokee/issues/detail?id=77
