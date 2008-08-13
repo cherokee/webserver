@@ -55,6 +55,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
         if self._type == 'host':
             # Host list
             if hosts:
+                txt += "<h3>Hosts list</h3>"
                 t1 = Table(2,1)
                 t1 += ('Host', '')
                 for host in hosts:
@@ -63,33 +64,41 @@ class ModuleBalancerGeneric (Module, FormHelper):
                     js = "post_del_key('/ajax/update', '%s');" % (pre)
                     link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                     t1 += (e_host, link_del)
-                txt += str(t1)
+                txt += self.Indent(t1)
 
             # New host
+            txt += "<h3>Add new host</h3>"
+
             t1  = Table(2,1)
             t1 += ('New host', '')
             en1 = self.InstanceEntry('new_host', 'text')
             t1 += (en1, SUBMIT_ADD)
-            txt += str(t1)
+            txt += self.Indent(t1)
 
         elif self._type == 'interpreter':
             # Interpreter list
             if hosts:
+                txt += "<h3>Hosts list</h3>"
                 for host in hosts:
                     pre = '%s!%s' % (self._prefix, host)
                     e_host = self.InstanceEntry('%s!host'%(pre), 'text')
                     e_inte = self.InstanceEntry('%s!interpreter'%(pre), 'text')
                     e_envs = self._render_envs('%s!env'%(pre))
 
-                    t2 = Table(2, title_left=1)
-                    t2 += ('Host', e_host)
+                    js = "post_del_key('/ajax/update', '%s');" % (pre)
+                    link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+
+                    t2 = Table(3, title_left=1)
+                    t2 += ('Host', e_host, link_del)
                     t2 += ('Interpreter', e_inte)
                     t2 += ('Environment', e_envs)
-                    txt += str(t2)
+                    txt += self.Indent(t2)
                     txt += "<hr />"
 
                 if txt.endswith("<hr />"):
                     txt = txt[:-6]
+
+            txt += "<h3>Add new host</h3>"
 
             # New Interpreter
             t2 = Table(3,1)
@@ -97,7 +106,8 @@ class ModuleBalancerGeneric (Module, FormHelper):
             e_host = self.InstanceEntry('new_host', 'text', size=25)
             e_inte = self.InstanceEntry('new_interpreter', 'text', size=25)
             t2 += (e_host, e_inte, SUBMIT_ADD)
-            txt += str(t2)
+            
+            txt += self.Indent(t2)
             
         else:
             txt = 'UNKNOWN type: ' + str(self._type)

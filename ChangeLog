@@ -1,5 +1,10 @@
 2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleBalancer.py (ModuleBalancerGeneric._op_render): Adds
+	the missing "removing" option to the host entries. Fixes the first
+	part of: http://code.google.com/p/cherokee/issues/detail?id=87.
+	It also improves the page layout a little bit.
+
 	* admin/ModuleMirror.py: The "Generic balancer" handler should not
 	show an option to execute an interpreter. It does not make sense
 	for this handler. Fixes the second part of:
