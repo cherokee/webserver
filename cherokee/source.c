@@ -92,10 +92,13 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	 */
 	if (! cherokee_buffer_is_empty (&src->unix_socket)) {
 		ret = cherokee_socket_set_client (sock, AF_UNIX);
-		if (ret != ret_ok) return ret;
-		
-		ret = cherokee_resolv_cache_get_host (resolv, src->unix_socket.buf, sock);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok) 
+			return ret;
+
+		/* Copy the unix socket path */
+		ret = cherokee_socket_gethostbyname (sock, &src->unix_socket);
+		if (ret != ret_ok)
+			return ret;
 
 		/* Set non-blocking */
 		ret = cherokee_fd_set_nonblocking (sock->socket, true);

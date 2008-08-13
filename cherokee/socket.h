@@ -81,6 +81,11 @@
 # define AF_LOCAL AF_UNIX
 #endif
 
+#ifndef SUN_LEN
+#define SUN_LEN(sa)						\
+	(strlen((sa)->sun_path) +				\
+	 (size_t)(((struct sockaddr_un*)0)->sun_path))
+#endif
 
 /* Socket status
  */

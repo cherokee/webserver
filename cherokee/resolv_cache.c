@@ -165,7 +165,7 @@ table_add_new_entry (cherokee_resolv_cache_t *resolv, const char *domain, cherok
 	/* Fill it up
 	 */
 	ret = entry_fill_up (n, domain);
-	if (unlikely (ret != ret)) {
+	if (unlikely (ret != ret_ok)) {
 		entry_free (n);
 		return ret;
 	}

@@ -1,5 +1,9 @@
 2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/resolv_cache.c, cherokee/socket.c, cherokee/socket.h,
+	cherokee/source.c: Fixes the Unix socket support of the FastCGI
+	and SCGI handlers (plus some code clean up).
+
 	* cherokee/handler_mirror.c, cherokee/handler_mirror.h: Fixes the
 	TCP mirroring handler. It fixes it to use the new async client
 	connections.

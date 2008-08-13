@@ -783,7 +783,7 @@ cherokee_socket_set_client (cherokee_socket_t *sock, unsigned short int type)
 		break;
 #endif
 #ifdef HAVE_SOCKADDR_UN
-	case AF_LOCAL:
+	case AF_UNIX:
 		memset (&sock->client_addr, 0, sizeof (struct sockaddr_un));
 		break;
 #endif		
@@ -902,7 +902,7 @@ cherokee_socket_bind (cherokee_socket_t *sock, int port, cherokee_buffer_t *list
 		return cherokee_bind_v6 (sock, port, listen_to);
 #endif
 #ifdef HAVE_SOCKADDR_UN
-	case AF_LOCAL:
+	case AF_UNIX:
 		return cherokee_bind_local (sock, listen_to);
 #endif
 	default:
@@ -1653,10 +1653,13 @@ cherokee_socket_gethostbyname (cherokee_socket_t *socket, cherokee_buffer_t *hos
 		SHOULDNT_HAPPEN;
 		return ret_no_sys;
 #else
-		memset ((char*) SOCKET_SUN_PATH (socket), 0, sizeof (SOCKET_ADDR_UNIX(socket)));
+		memset ((char*) SOCKET_SUN_PATH(socket), 0, 
+			sizeof (SOCKET_ADDR_UNIX(socket)));
 
 		SOCKET_ADDR_UNIX(socket)->sun_family = AF_UNIX;
-		strncpy (SOCKET_SUN_PATH (socket), hostname->buf, hostname->len);
+
+		strncpy (SOCKET_SUN_PATH (socket), hostname->buf, 
+			 sizeof (SOCKET_ADDR_UNIX(socket)->sun_path) - sizeof(short));
 
 		return ret_ok;
 #endif
@@ -1675,16 +1678,22 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 
 	switch (SOCKET_AF(sock)) {
 	case AF_INET:
-		r = connect (SOCKET_FD(sock), (struct sockaddr *) &SOCKET_ADDR(sock), sizeof(struct sockaddr_in));
+		r = connect (SOCKET_FD(sock),
+			     (struct sockaddr *) &SOCKET_ADDR(sock), 
+			     sizeof(struct sockaddr_in));
 		break;
 #ifdef HAVE_IPV6
 	case AF_INET6:
-		r = connect (SOCKET_FD(sock), (struct sockaddr *) &SOCKET_ADDR(sock), sizeof(struct sockaddr_in6));
+		r = connect (SOCKET_FD(sock), 
+			     (struct sockaddr *) &SOCKET_ADDR(sock),
+			     sizeof(struct sockaddr_in6));
 		break;
 #endif
 #ifdef HAVE_SOCKADDR_UN
-	case AF_LOCAL:
-		r = connect (SOCKET_FD(sock), (struct sockaddr *) SOCKET_ADDR_UNIX(sock), sizeof(SOCKET_ADDR_UNIX(sock)));
+	case AF_UNIX:
+		r = connect (SOCKET_FD(sock), 
+			     (struct sockaddr *) &SOCKET_ADDR(sock), 
+			     SUN_LEN (SOCKET_ADDR_UNIX(sock)));
 		break;
 #endif	
 	default:
