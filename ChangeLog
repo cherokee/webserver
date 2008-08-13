@@ -1,3 +1,9 @@
+2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_mirror.c, cherokee/handler_mirror.h: Fixes the
+	TCP mirroring handler. It fixes it to use the new async client
+	connections.
+
 2008-08-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/connection.c (cherokee_connection_clean_error_headers),

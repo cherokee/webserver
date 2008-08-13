@@ -46,6 +46,7 @@ typedef struct {
 typedef struct {
 	cherokee_handler_t              base;
 	cherokee_socket_t               socket;
+	cherokee_source_t              *src_ref;
 
 	cherokee_handler_mirror_phase_t phase;
 	off_t                           header_sent;

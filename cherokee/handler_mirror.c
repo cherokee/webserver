@@ -27,7 +27,7 @@
 #include "header-protected.h"
 #include "connection-protected.h"
 #include "thread.h"
-
+#include "source.h"
 
 #define ENTRIES "handler,mirror"
 
@@ -112,6 +112,7 @@ cherokee_handler_mirror_new  (cherokee_handler_t **hdl, void *cnt, cherokee_modu
 	n->header_sent = 0;
 	n->post_sent   = 0;
 	n->post_len    = 0;
+	n->src_ref     = NULL;
 	n->phase       = hmirror_phase_connect;
 
 	cherokee_socket_init (&n->socket);
@@ -137,27 +138,44 @@ static ret_t
 connect_to_server (cherokee_handler_mirror_t *hdl)
 {
 	ret_t                            ret;
-	cherokee_source_t               *src   = NULL;
-	cherokee_connection_t           *conn  = HANDLER_CONN(hdl);
-	cherokee_handler_mirror_props_t *props = HDL_MIRROR_PROPS(hdl);
+	cherokee_connection_t           *conn     = HANDLER_CONN(hdl);
+	cherokee_handler_mirror_props_t *props    = HDL_MIRROR_PROPS(hdl);
 
-	ret = cherokee_balancer_dispatch (props->balancer, conn, &src);
-	if (ret != ret_ok)
-		return ret;
-
- 	ret = cherokee_source_connect (src, &hdl->socket); 
-	switch (ret) {
-	case ret_ok:
-		break;
-	case ret_deny:
-		conn->error_code = http_bad_gateway;
-		return ret_error;
-	default:
-		return ret_error;
+	if (hdl->src_ref == NULL) {
+		ret = cherokee_balancer_dispatch (props->balancer, conn, &hdl->src_ref);
+		if (ret != ret_ok)
+			return ret;
 	}
 
- 	TRACE (ENTRIES, "connected fd=%d\n", hdl->socket.socket);
-	return ret_ok;
+	/* Try to connect
+	 */
+ 	ret = cherokee_source_connect (hdl->src_ref, &hdl->socket); 
+	switch (ret) {
+	case ret_ok:
+		TRACE (ENTRIES, "Connected successfully fd=%d\n", 
+		       hdl->socket.socket);
+		return ret_ok;
+	case ret_deny:
+		break;
+	case ret_eagain:
+		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+							   conn,
+							   SOCKET_FD(&hdl->socket),
+							   FDPOLL_MODE_WRITE, 
+							   false);
+		if (ret != ret_ok) {
+			return ret_deny;
+		}
+
+		return ret_eagain;
+	case ret_error:
+		return ret_error;
+	default:
+		break;
+	}
+
+	TRACE (ENTRIES, "Couldn't connect%s", "\n");
+	return ret_error;
 }
 
 
@@ -287,13 +305,16 @@ cherokee_handler_mirror_step (cherokee_handler_mirror_t *hdl, cherokee_buffer_t 
 		return ret_ok;
 
 	case ret_eagain:
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), HANDLER_CONN(hdl), 
-						     hdl->socket.socket, 0, false);
+		cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), 
+						     HANDLER_CONN(hdl), 
+						     hdl->socket.socket, 
+						     FDPOLL_MODE_READ,
+						     false);
 		return ret_eagain;
 
 	case ret_eof:
 	case ret_error:
-		return ret_ok;
+		return ret;
 
 	default:
 		RET_UNKNOWN(ret);
