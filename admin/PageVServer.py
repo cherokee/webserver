@@ -18,7 +18,7 @@ DATA_VALIDATION = [
 ]
 
 RULE_LIST_NOTE = """
-<p>Rules are evaluated from <b>top to bottom</b>. Drap & drop them to reorder.</p>
+<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.</p>
 """
 
 NOTE_NICKNAME        = 'Nickname for the virtual server.'
