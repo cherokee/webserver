@@ -1,5 +1,10 @@
 2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/plugin_loader.c (cherokee_plugin_loader_get_mods_info):
+	The last entry for the built-in modules was not being printed
+	properly. Cherokee-admin wasn't showing some modules in the
+	interface because of this issue.
+
 	* admin/ModuleBalancer.py (ModuleBalancerGeneric._op_render): Adds
 	the missing "removing" option to the host entries. Fixes the first
 	part of: http://code.google.com/p/cherokee/issues/detail?id=87.
