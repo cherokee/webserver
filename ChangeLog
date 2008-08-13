@@ -1,5 +1,10 @@
 2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleMirror.py: The "Generic balancer" handler should not
+	show an option to execute an interpreter. It does not make sense
+	for this handler. Fixes the second part of:
+	http://code.google.com/p/cherokee/issues/detail?id=87
+
 	* cherokee/resolv_cache.c, cherokee/socket.c, cherokee/socket.h,
 	cherokee/source.c: Fixes the Unix socket support of the FastCGI
 	and SCGI handlers (plus some code clean up).
