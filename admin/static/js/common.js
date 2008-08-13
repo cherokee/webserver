@@ -112,7 +112,7 @@ function post_del_key (url, cfg_key)
 
 	   jQuery.post (url, post, 
               function (data, textStatus) {
-                  window.location.reload();
+			   window.location = window.location;
               }
 	   );
 }

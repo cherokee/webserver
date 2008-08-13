@@ -1,5 +1,9 @@
 2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/static/js/common.js: Fixes a reloading issue in Firefox. I
+	do hope it does not break any other browser support. Fixes:
+	http://code.google.com/p/cherokee/issues/detail?id=77
+
 	* cherokee/handler_server_info.c, admin/ModuleServerInfo.py: Both
 	the server info handler and its cherokee-admin module have been
 	reworked in order to make its configuration options more
