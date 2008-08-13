@@ -1,8 +1,29 @@
 Cherokee goodies
 ----------------
 
-There are several important but mostly unknown features of Cherokee
-that really do make a difference in real-world production environments.
+There are several important features of Cherokee that really do make a
+difference in real-world production environments.
+
+[[cherokee-admin]]
+Cherokee-Admin
+~~~~~~~~~~~~~~
+Cherokee bundles a one of a kind UI to set up every available feature
+without the need of editing any configuration files by hand. It is a
+modern and easy to manage application that allows to set up the server
+with speed and ease. The interface is thoroughly documented trhoughout
+Cherokee's documentation.
+
+[[cherokee-tweak]]
+Cherokee-Tweak
+~~~~~~~~~~~~~~
+The swiss-army knife of the Cherokee bundle. This little tool enables
+you, among other things, to rotate the logs with absolutely no
+downtime at all. No connections are lost. No delay happens. It can
+also be used to trace Cherokee's state on the fly, even remotely and
+on production servers.
+
+This tool has its own documentation under the
+link:bundle_cherokee-tweak.html[cherokee-tweak] section.
 
 [[x-sendifle]]
 X-Sendfile

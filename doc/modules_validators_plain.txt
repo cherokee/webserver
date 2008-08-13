@@ -33,6 +33,7 @@ in this example:
 
 ****
 testuser:testpassword
+
 cherokee:webserver
 ****
 

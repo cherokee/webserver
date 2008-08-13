@@ -33,8 +33,74 @@ There are two types of authentication:
     web browsers support this method.
 
 
+The details to set up the `htdigest` and `htpasswd` are exactly the
+same as for `plain` validation. The only difference is the tools used
+to create the passwords' file.
+
+
+.htdigest
+
+To use this handler you will need a file created by the `htdigest`
+command. It is a tool to manage user files for digest (and basic)
+authentication.
+
+****
+Syntax::
+  htdigest [ -c ] passwdfile realm username
+
+The only optional parameter is `-c`, used to create the passwdfile or
+overwrite it if it is present.
+****
+
+To create a file for a `testuser` with `testpassword` you would have
+to issue:
+
+-----
+$ htdigest -c passwords.digest secret testuser
+Adding password for testuser in realm secret.
+New password:
+Re-type new password:
+
+$ cat pass
+testuser:secret:f24f76261bcd65780b33edde00855897
+-----
+
+.htpasswd
+
+For this handle, the tool `htpasswd` is needed to create the
+files. The basic usage information is this:
+
+*****
+Usage::
+        htpasswd [-cmdpsD] passwordfile username
++
+        htpasswd -b[cmdpsD] passwordfile username password
++
+        htpasswd -n[mdps] username
++
+        htpasswd -nb[mdps] username password
+*****
+
+Refer to its documentation for details about the parameters. For our example, this
+will suffice:
+
+----
+$ htpasswd -c /var/www/.htpasswd testuser
+New password:
+Re-type new password:
+Adding password for user testuser
+
+$ cat /var/www/.htpasswd
+testuser:iqLGh2g/7bX7M
+-----
+
+Remember that it is never recommended to place the file with the
+passwords in a location fetchable from the webserver. This is true for
+plain validation, htdigest, htpasswd and whatever file based system
+you cross paths with.
+
+
 ////
 To be written
-
-Details for htdigest, htpasswd, mysql and ldap.
+Details for mysql and ldap, with screenshots.
 ////

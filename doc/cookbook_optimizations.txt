@@ -93,18 +93,17 @@ General::
 
 Advanced::
 +
-* System tweaking:
- - Threads: The default value is chosen so that it is more than enough
-   to saturate the processors. You will probably not get much out of
-   this setting, since a higher value will not produce better results
-   and a lower one will simply increase the amount of unused processor
-   power.
+* *Threads*: The default value is chosen so that it is more than enough
+  to saturate the processors. You will probably not get much out of
+  this setting, since a higher value will not produce better results
+  and a lower one will simply increase the amount of unused processor
+  power.
 +
- - File descriptors: By deffinition, the higher this limit is, the
-   less efficient will your system be in relative terms. However, it
-   is understood that if you are tweaking this value is because you
-   need to, that is, you have a very high load site. In these cases
-   increasing the file descriptors' limit makes sense because the
-   higher this limit is, the more connections Cherokee will be able to
-   handle. By default Cherokee does not touch this value and it uses
-   the one specified by your system.
+* *File descriptors*: By deffinition, the higher this limit is, the
+  less efficient will your system be in relative terms. However, it
+  is understood that if you are tweaking this value is because you
+  need to, that is, you have a very high load site. In these cases
+  increasing the file descriptors' limit makes sense because the
+  higher this limit is, the more connections Cherokee will be able to
+  handle. By default Cherokee does not touch this value and it uses
+  the one specified by your system.
