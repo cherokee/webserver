@@ -173,7 +173,8 @@ run-tests.py \
 166-xsendfile1.py \
 167-RuleGeoIP.py \
 168-Deflate-Encoding.py \
-169-Pipermail.py
+169-Pipermail.py \
+170-Error-ContentLength.py
 
 test:
 	./run-tests.py

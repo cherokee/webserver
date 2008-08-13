@@ -1,5 +1,12 @@
 2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/170-Error-ContentLength.py, qa/Makefile.am: Added a new QA
+	test to ensure that even if a CGI/SCGI/FastCGI handler (not
+	configured to send errors) replies a non-200 error with the
+	Content-Length header, it is dropped before setting the server
+	error message so there is not a duplicated header with different
+	values.
+
 	* Index: cherokee/Makefile.am, cherokee/connector.c,
 	cherokee/connector.h, cherokee/source.c, cherokee/downloader.c,
 	cherokee/server-protected.h, cherokee/server.c: The
