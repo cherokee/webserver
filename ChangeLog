@@ -1,5 +1,10 @@
 2008-08-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_server_info.c, admin/ModuleServerInfo.py: Both
+	the server info handler and its cherokee-admin module have been
+	reworked in order to make its configuration options more
+	consistent. It was showing too much internal stuff.
+
 	* cherokee/plugin_loader.c (cherokee_plugin_loader_get_mods_info):
 	The last entry for the built-in modules was not being printed
 	properly. Cherokee-admin wasn't showing some modules in the

@@ -2,14 +2,16 @@ from Form import *
 from Table import *
 from Module import *
 
-NOTE_JUST_ABOUT  = 'Show only the most basic information.'
-NOTE_CONNECTIONS = 'Show status of the ongoing connections.'
+NOTE_INFORMATION = 'Which information should be shown.'
+
+options = [
+    ('normal',             "Server Information"),
+    ('just_about',         "Only version information"),
+    ('connection_details', "Server Information + Connections")
+]
 
 class ModuleServerInfo (Module, FormHelper):
-    PROPERTIES = [
-        'just_about',
-        'connection_details'
-    ]
+    PROPERTIES = []
 
     def __init__ (self, cfg, prefix, submit_url):
         Module.__init__ (self, 'server_info', cfg, prefix, submit_url)
@@ -19,11 +21,12 @@ class ModuleServerInfo (Module, FormHelper):
         txt  = "<h2>Privacy settings</h2>"
 
         table = TableProps()
-        self.AddPropCheck (table, "Just 'About'", "%s!just_about" % (self._prefix), False, NOTE_JUST_ABOUT)
-        self.AddPropCheck (table, "Show Connections", "%s!connection_details" % (self._prefix), False, NOTE_CONNECTIONS)
+        self.AddPropOptions (table, "Show Information", 
+                             "%s!type" % (self._prefix),
+                             options, NOTE_INFORMATION)
         txt += self.Indent(table)
 
         return txt
 
     def _op_apply_changes (self, uri, post):
-        self.ApplyChangesPrefix (self._prefix, ['just_about'], post)
+        None

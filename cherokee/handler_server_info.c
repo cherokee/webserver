@@ -137,13 +137,20 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 	cherokee_config_node_foreach (i, conf) {
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
-		if (equal_buf_str (&subconf->key, "just_about")) {
-			props->just_about = atoi(subconf->val.buf);
-		} else if (equal_buf_str (&subconf->key, "connection_details")) {
-			props->connection_details = atoi(subconf->val.buf);
-		} else {
-			PRINT_MSG ("ERROR: Handler file: Unknown key: '%s'\n", subconf->key.buf);
-			return ret_error;
+		if (equal_buf_str (&subconf->key, "type")) {
+			if (equal_buf_str (&subconf->val, "normal")) {
+				
+			} else if (equal_buf_str (&subconf->val, "just_about")) {
+				props->just_about = true;
+				
+			} else if (equal_buf_str (&subconf->val, "connection_details")) {
+				props->connection_details = true;
+
+			} else {
+				PRINT_MSG ("ERROR: Handler server_info: Unknown key value: '%s'\n", 
+					   subconf->val.buf);
+				return ret_error;
+			}
 		}
 	}
 
