@@ -7,22 +7,21 @@ information about the web server. When these rules are matched,
 information regarding Cherokee's status will be displayed. The pages
 will be refreshed every 30 seconds.
 
-
 [grid="rows"]
 `~~~~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Parameters          , Type    , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-just_about          , boolean , Limit information to release and License.
-connection_details  , boolean , Show connection details
+type                , String , just_about | normal | connection_details
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Enabling the `just_about` option will limit the displayed information
-to the following:
+The type parameter specifies influences the verbosity of the output.
+
+If set to `just_about`, it will display:
 
 * Release number of Cherokee.
 * Brief license notice.
 
-If it is disabled, some extra information will be provided regarding:
+If set to `normal`, some extra information will be provided regarding:
 
 * General Information
 * Server Core
@@ -30,7 +29,7 @@ If it is disabled, some extra information will be provided regarding:
 * Loaded Modules
 * Icons
 
-Enabling the `connection_details` flag will provide more detailed
+If set to `connection_details` it will also  provide more detailed
 information about the existing connections:
 
 * ID
