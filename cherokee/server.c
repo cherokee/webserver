@@ -1290,7 +1290,12 @@ add_vserver (cherokee_config_node_t *conf, void *data)
 	cherokee_virtual_server_t *vsrv = NULL;
  	cherokee_server_t         *srv  = SRV(data);
 
-	prio = atoi(conf->key.buf);
+	prio = atoi (conf->key.buf);
+	if (prio <= 0) {
+		PRINT_ERROR ("Invalid Virtual Server entry '%s'\n", conf->key.buf);
+		return ret_error;
+	}
+
 	TRACE (ENTRIES, "Adding vserver prio=%d\n", prio);
 
 	/* Create a new vserver and enqueue it
