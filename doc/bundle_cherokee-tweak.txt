@@ -76,7 +76,7 @@ must define a path managed by the handler `Remote
 Administration`. This can be done through the 'Virtual Servers' option,
 in 'Behaviour' and using the 'Add new rule' option.
 
-image::media/images/cherokee-tweak.png[Setting up an admin interface]
+image::media/images/admin_handler_admin.png[Setting up an admin interface]
 
 Please note that while you are at it, the deffinition of a security
 (through the 'Security' tab) is highly encouraged. Although you have
