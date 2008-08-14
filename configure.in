@@ -24,7 +24,7 @@ AC_PREREQ(2.56)
 
 dnl Version
 m4_define([cherokee_major_version], [0])
-m4_define([cherokee_minor_version], [8])
+m4_define([cherokee_minor_version], [9])
 m4_define([cherokee_micro_version], [0])
 m4_define([cherokee_version], m4_format('%s.%s.%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version))
 
