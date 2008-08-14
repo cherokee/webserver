@@ -1495,9 +1495,6 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	 */
 	cherokee_bogotime_try_update();
 
-	/* Reset the server socket.
-	 * // cherokee_fdpoll_reset (thd->fdpoll, S_SOCKET_FD(srv->socket));
-	 */
 #if 0
 	if (unlikely (cherokee_fdpoll_is_full (thd->fdpoll))) {
 		goto out;
@@ -1515,6 +1512,8 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	re = cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
 	if (re <= 0)
 		goto out;
+
+	update_bogo_now (thd);
 
 	/* If the thread is full of connections, it should not
 	 * get new connections.
@@ -1566,16 +1565,8 @@ step_MULTI_THREAD_block (cherokee_thread_t *thd, int socket, pthread_mutex_t *mu
 		CHEROKEE_MUTEX_UNLOCK (mutex);
 		return ret_error;
 	}
-	/* cherokee_fdpoll_reset (thd->fdpoll, socket);
-	 */
+
 	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-	
-	/* This thread might be blocked for long long time, so it's
-	 * really important to update the local bogo now values before
-	 * accepting new connections.  Otherwhise, it will use an old
-	 * value for the new connections timeout which might be dropped
-	 * in the next step.
-	 */
 	update_bogo_now (thd);
 
 	/* Accept a new connection
@@ -1625,6 +1616,7 @@ step_MULTI_THREAD_nonblock (cherokee_thread_t *thd, int socket, pthread_mutex_t 
 	}
 
 	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
+	update_bogo_now (thd);
 
 	/* It should either accept o discard a connection
 	 */
@@ -1690,6 +1682,7 @@ step_MULTI_THREAD_TLS_nonblock (cherokee_thread_t *thd, int fdwatch_msecs,
 	/* Inspect the fds. It may sleep if nothing happens
 	 */
 	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
+	update_bogo_now (thd);
 		
 	/* accept o discard a connections
 	 */
@@ -1777,9 +1770,6 @@ step_MULTI_THREAD_TLS_block (cherokee_thread_t *thd, int fdwatch_msecs,
 		return ret_error;
 	}
 
-	/* cherokee_fdpoll_reset (thd->fdpoll, socket1); */
-	 
-
 	/* Try to lock the optional groups
 	 */
 #if 0
@@ -1791,18 +1781,12 @@ step_MULTI_THREAD_TLS_block (cherokee_thread_t *thd, int fdwatch_msecs,
 			CHEROKEE_MUTEX_UNLOCK (mutex2);
 			return ret_error;
 		}
-		/* cherokee_fdpoll_reset (thd->fdpoll, socket2);
-		 */
 	}
 #endif
 
 	/* Inspect the fds and get new connections
 	 */
 	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-
-	/* Update the thread time values before accept new connections.
-	 * This ensures an updated timeout value for it.
-	 */
 	update_bogo_now (thd);
 		
 	/* Accept / Discard connection
@@ -1907,6 +1891,8 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 	}
 	
 out:
+	update_bogo_now (thd);
+
 	/* Adquire the ownership of the thread
 	 */
 	CHEROKEE_MUTEX_LOCK (&thd->ownership);
