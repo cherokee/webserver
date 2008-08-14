@@ -30,7 +30,7 @@ class Test (TestBase):
         self.conf = CONF % (self.dr)
 
         for php in self.php_conf.split("\n"):
-            self.conf += "vserver!directoryindex3!rule!%s\n" % (php)
+            self.conf += "vserver!0660!rule!%s\n" % (php)
 
     def JustBefore (self, www):
         self.WriteFile (self.dr, "super_test_index.php", 0666, """<?php
