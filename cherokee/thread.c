@@ -606,9 +606,11 @@ process_active_connections (cherokee_thread_t *thd)
 			}
 		}
 
-		/* The connection has work to do, so do it ...
+		/* Update the connection timeout
 		 */
-		conn->timeout = thd->bogo_now + srv->timeout;
+		if (conn->phase != phase_reading_header) {
+			conn->timeout = thd->bogo_now + srv->timeout;
+		}
 
 		TRACE (ENTRIES, "conn on phase n=%d: %s\n", 
 		       conn->phase, cherokee_connection_get_phase_str (conn));
