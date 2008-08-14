@@ -89,6 +89,7 @@ media/images/admin_dirlist_cherokee.png \
 media/images/admin_encoding_gzip.png \
 media/images/admin_encoding.png \
 media/images/admin_general.png \
+media/images/admin_handler_admin.png \
 media/images/admin_handler_cgi.png \
 media/images/admin_handler_dirlist_ex.png \
 media/images/admin_handler_dirlist.png \
@@ -112,7 +113,6 @@ media/images/admin_vserver_errors.png \
 media/images/admin_vserver_loggers.png \
 media/images/admin_vserver.png \
 media/images/admin_vserver_vserver.png \
-media/images/cherokee-tweak.png \
 media/images/cookbook_django_common.png \
 media/images/cookbook_django_scgi.png \
 media/images/cookbook_ror_common.png \
