@@ -40,7 +40,7 @@ same as for `plain` validation. The only difference is the tools used
 to create the passwords' file.
 
 
-.htdigest
+=== htdigest
 
 To use this handler you will need a file created by the `htdigest`
 command. It is a tool to manage user files for digest (and basic)
@@ -67,7 +67,7 @@ $ cat pass
 testuser:secret:f24f76261bcd65780b33edde00855897
 -----
 
-.htpasswd
+=== htpasswd
 
 For this handle, the tool `htpasswd` is needed to create the
 files. The basic usage information is this:
@@ -103,6 +103,9 @@ you cross paths with.
 
 
 ////
+
+=== MySQL
+
 To be written
 Details for mysql and ldap, with screenshots.
 ////
