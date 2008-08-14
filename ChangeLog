@@ -1,5 +1,8 @@
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c: Clean up. Removes an unnecessary check that
+	was implemented in the virtual server class.
+
 	* cherokee/handler_dirlist.c (check_request_finish_with_slash):
 	Now it sends redirections using the FQDN whenever it is
 	possible (as described in the RFC). Partially fixes:
