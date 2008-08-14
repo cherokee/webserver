@@ -1,5 +1,10 @@
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_dirlist.c (check_request_finish_with_slash):
+	Now it sends redirections using the FQDN whenever it is
+	possible (as described in the RFC). Partially fixes:
+	http://code.google.com/p/cherokee/issues/detail?id=39
+
 	* cherokee/thread.c (cherokee_thread_step_MULTI_THREAD): Fixes a
 	problem with the Keep-Alive timeout.
 

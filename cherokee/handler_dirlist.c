@@ -452,6 +452,7 @@ cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 static ret_t
 check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 {
+	cuint_t                len;
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
 	if ((cherokee_buffer_is_empty (&conn->request)) ||
@@ -460,8 +461,14 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 		/* Build the redirection address
 		 */
 		cherokee_buffer_clean (&conn->redirect);
-		cherokee_buffer_ensure_size (&conn->redirect, 
-					     conn->web_directory.len + conn->request.len + conn->userdir.len + 4);
+
+		len = conn->web_directory.len + 
+		      conn->request.len + 
+		      conn->userdir.len + 
+		      conn->host.len + 
+		      sizeof("https://") + 4;
+
+		cherokee_buffer_ensure_size (&conn->redirect, len);
 
 		if (! cherokee_buffer_is_empty (&conn->userdir)) {
 			cherokee_buffer_add_str (&conn->redirect, "/~");
@@ -473,6 +480,15 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 		 */
 		if (cherokee_connection_use_webdir (conn)) {
 			cherokee_buffer_add_buffer (&conn->redirect, &conn->web_directory);
+		}
+		
+		if (! cherokee_buffer_is_empty (&conn->host)) {
+			if (conn->socket.is_tls == TLS)
+				cherokee_buffer_add_str (&conn->redirect, "https://");
+			else
+				cherokee_buffer_add_str (&conn->redirect, "http://");
+
+			cherokee_buffer_add_buffer (&conn->redirect, &conn->host);
 		}
 
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
