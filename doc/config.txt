@@ -1,8 +1,10 @@
-  . link:config_quickstart.html[Quickstart]
-  . link:config_general.html[General]
-  . link:config_virtual_servers.html[Virtual servers]
-    - link:config_virtual_servers_rule.html[Rule Options]
-  . link:config_encoding.html[Encoding]
-  . link:config_icons.html[Icons]
-  . link:config_mime_types.html[Mime Types]
-  . link:config_advanced.html[Advanced]
+== link:index.html[Index] -> Configuration
+
+  . link:config_quickstart.html[Quickstart]: Overview and walkthrough.
+  . link:config_general.html[General]: General settings.
+  . link:config_virtual_servers.html[Virtual servers]: Server definition.
+    - link:config_virtual_servers_rule.html[Rule Options]: Specifying the matching rules.
+  . link:config_encoding.html[Encoding]: Compression settings.
+  . link:config_icons.html[Icons]: Icon managment.
+  . link:config_mime_types.html[Mime Types]: Setting up the MIME types.
+  . link:config_advanced.html[Advanced]: Advanced tweaking. Not for the faint of heart.

@@ -1,3 +1,5 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
 Cookbook: How to cross compile Cherokee
 ---------------------------------------
 

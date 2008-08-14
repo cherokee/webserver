@@ -1,3 +1,5 @@
+== link:index.html[Index] -> link:config.html[Configuration] -> link:config_virtual_servers.html[Virtual servers]
+
 Virtual Server: Rules
 ---------------------
 

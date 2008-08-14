@@ -1,42 +1,96 @@
-*********************************
-link:basics.html[Getting started]
-*********************************
-
-include::basics.txt[]
+== link:index.html[Index]: Cherokee 0.8 documentation
 
 *********************************
-link:bundle.html[Cherokee Bundle]
+link:basics.html[Getting started]: Cherokee basics
 *********************************
 
-include::bundle.txt[]
+ . link:basics_why_cherokee.html[Why Cherokee?]: Feature overview.
+ . link:basics_requirements.html[Requirements]: Hardware and software requirements.
+ . link:basics_download.html[Download]: Where and how to download Cherokee.
+ . link:basics_installation.html[Installation]: Installation instructions.
+   - link:basics_installation_unix.html[Unix]: Installation on Unix/Linux platforms.
+   - link:basics_installation_windows.html[Windows]: Installation on Windows platform.
+ . link:basics_upgrade.html[Upgrading Cherokee]: Upgrading from a previous release?
+ . link:basics_running_cherokee.html[Running Cherokee]: Basic steps to run Cherokee.
 
 *********************************
-link:config.html[Configuration]
+link:bundle.html[Cherokee Bundle]: Details about each program bundled with Cherokee.
 *********************************
 
-include::config.txt[]
+ . link:bundle_cherokee.html[cherokee]: The main program.
+ . link:bundle_cherokee-admin.html[cherokee-admin]: The configuration UI.
+ . link:bundle_cherokee-config.html[cherokee-config]: Information retriever.
+ . link:bundle_cherokee-guardian.html[cherokee-guardian]: Web server safe invoker.
+ . link:bundle_cherokee-tweak.html[cherokee-tweak]: Cherokee Swiss army knife
+ . link:bundle_cget.html[cget]: Web retriever.
 
 *********************************
-link:cookbook.html[Cookbook]
+link:config.html[Configuration]: Set up process explained.
 *********************************
 
-include::cookbook.txt[]
+  . link:config_quickstart.html[Quickstart]: Overview and walkthrough.
+  . link:config_general.html[General]: General settings.
+  . link:config_virtual_servers.html[Virtual servers]: Server definition.
+    - link:config_virtual_servers_rule.html[Rule Options]: Specifying the matching rules.
+  . link:config_encoding.html[Encoding]: Compression settings.
+  . link:config_icons.html[Icons]: Icon managment.
+  . link:config_mime_types.html[Mime Types]: Setting up the MIME types.
+  . link:config_advanced.html[Advanced]: Advanced tweaking. Not for the faint of heart.
+
+*********************************
+link:cookbook.html[Cookbook]: Recipes for specific tasks.
+*********************************
+
+  . link:cookbook_optimizations.html[Optimizing Cherokee]: Recommendations and tweaks.
+  . link:cookbook_cross_compilation.html[Cross compilation]: How to cross compile Cherokee.
+  . link:cookbook_django.html[Setting up Django]: How to run Django apps with Cherokee.
+  . link:cookbook_php.html[Setting up PHP]: How to run PHP apps with Cherokee.
+  . link:cookbook_ror.html[Setting up RoR]: How to run Ruby on Rails apps with Cherokee.
+  . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
+  . link:cookbook_authentication.html[Authentication]: How to set up authenticated resources.
 ////
   . link:cookbook_embedding_cherokee.html[Embedding Cherokee]
   . link:cookbook_managing_logs.html[Managing logs]
 ////
 
 *********************************
-link:modules.html[Modules]
+link:modules.html[Modules]: Information about the standard modules.
 *********************************
 
-include::modules.txt[]
+  . link:modules_balancers.html[Balancers]: Load balancing strategies.
+    - link:modules_balancers_round_robin.html[Round robin]: Round Robin strategy.
+  . link:modules_encoders.html[Encoders]: Compression and filters.
+    - link:modules_encoders_gzip.html[gzip]: `gzip` compression.
+    - link:modules_encoders_deflate.html[deflate]: `deflate` compression.
+  . link:modules_handlers.html[Handlers]: Connection handling modules.
+    - link:modules_handlers_file.html[Static Content]: Send files..
+    - link:modules_handlers_dirlist.html[Only listing]: List directories.
+    - link:modules_handlers_common.html[List & Send]: List directories and send files.
+    - link:modules_handlers_redir.html[Redirection]: URL forwards and rewrites.
+    - link:modules_handlers_cgi.html[CGI]: Common Gateway Interface.
+    - link:modules_handlers_fcgi.html[FastCGI]: Fast Common Gateway Interface.
+    - link:modules_handlers_scgi.html[SCGI]: Simple Common Gateway Interface.
+    - link:modules_handlers_server_info.html[Server Info]: Provide info about Cherokee.
+    - link:modules_handlers_mirror.html[Generic balancer]: Load balancing module.
+    - link:modules_handlers_admin.html[Remote Administration]: Cherokee administration handler.
+  . link:modules_loggers.html[Loggers]: Logging mechanisms.
+    - link:modules_loggers_combined.html[Combined]: Combined Log Format.
+    - link:modules_loggers_ncsa.html[Common (NCSA)]: Common Log Format.
+    - link:modules_loggers_w3c.html[w3c]: W3C Log Format.
+  . link:modules_validators.html[Validators]: Authentication mechanisms.
+    - link:modules_validators_plain.html[Plain]: Plain file mechanism.
+    - link:modules_validators_htpasswd.html[htpasswd]: htpasswd mechanism.
+    - link:modules_validators_htdigest.html[htdigest]: htdigest mechanism.
+    - link:modules_validators_ldap.html[LDAP]: Lightweight Directory Acces Protocol mechanism.
+    - link:modules_validators_mysql.html[MySQL]: Database mechanism.
+    - link:modules_validators_pam.html[PAM]: Pluggable Authentication Module mechanism.
+
 
 *********************************
-link:other.html[Other information]
+link:other.html[Other information]: Miscellaneus.
 *********************************
 
-include::other.txt[]
+  - link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.
 ////
   - FAQ
   - Community
@@ -46,7 +100,8 @@ include::other.txt[]
 link:dev.html[Development info]
 *********************************
 
-include::dev.txt[]
+  . link:dev_debug.html[Debugging]: Resources available to debug Cherokee.
+  . link:dev_cherokee.conf.html[cherokee.conf]: Internal configuration specs.
 ////
   . link:dev_api.html[API introduction]
   . link:dev_examples.html[Examples]

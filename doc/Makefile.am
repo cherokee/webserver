@@ -1,17 +1,12 @@
 ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py --unsafe --conf-file=$(top_srcdir)/doc/build/doc.conf
-ASCIIDOC_TOC=python $(top_srcdir)/doc/build/asciidoc.py -s 
 
-SUFFIXES = .txt .html .inc
-
-.txt.inc:
-	$(ASCIIDOC_TOC) -o $@ $(top_srcdir)/doc/$< 
+SUFFIXES = .txt .html
 
 .txt.html:
 	$(ASCIIDOC) -o $@ $(top_srcdir)/doc/$< 
 
 docdir = $(datadir)/doc/cherokee
 doc_DATA = \
-index.inc \
 index.html \
 basics.html \
 basics_why_cherokee.html \
@@ -88,34 +83,41 @@ media/css/cherokee_doc.css
 
 docmediaimagesdir = $(docdir)/media/images/
 docmediaimages_DATA = \
-media/images/admin_handler_fastcgi2.png \
-media/images/admin_index.png \
-media/images/admin_handler_fastcgi1.png \
-media/images/admin_vserver.png \
-media/images/admin_vserver_errors.png \
-media/images/admin_icons3.png \
-media/images/admin_handler_file.png \
-media/images/admin_behaviour.png \
-media/images/admin_launch.png \
-media/images/admin_vserver_loggers.png \
-media/images/admin_handler_cgi.png \
-media/images/admin_icons2.png \
-media/images/admin_general.png \
-media/images/admin_icons1.png \
-media/images/admin_encoding.png \
-media/images/admin_validators_plain.png \
-media/images/admin_validators_pam.png \
 media/images/admin_advanced.png \
-media/images/admin_handler_dirlist.png \
+media/images/admin_behaviour.png \
+media/images/admin_dirlist_cherokee.png \
+media/images/admin_encoding_gzip.png \
+media/images/admin_encoding.png \
+media/images/admin_general.png \
+media/images/admin_handler_cgi.png \
 media/images/admin_handler_dirlist_ex.png \
-media/images/admin_handler_onlylisting.png \
+media/images/admin_handler_dirlist.png \
+media/images/admin_handler_fastcgi1.png \
+media/images/admin_handler_fastcgi2.png \
+media/images/admin_handler_file.png \
 media/images/admin_handler_onlylisting_ex.png \
+media/images/admin_handler_onlylisting.png \
+media/images/admin_icons1.png \
+media/images/admin_icons2.png \
+media/images/admin_icons3.png \
+media/images/admin_index.png \
 media/images/admin_launch.png \
-media/images/tracelor.png \
-media/images/cherokee-tweak.png \
+media/images/admin_mime.png \
 media/images/admin_noconfig.png \
 media/images/admin_notrunning.png \
-media/images/admin_rule_regex.png
+media/images/admin_rule_regex.png \
+media/images/admin_validators_pam.png \
+media/images/admin_validators_plain.png \
+media/images/admin_vserver_errors.png \
+media/images/admin_vserver_loggers.png \
+media/images/admin_vserver.png \
+media/images/admin_vserver_vserver.png \
+media/images/cherokee-tweak.png \
+media/images/cookbook_django_common.png \
+media/images/cookbook_django_scgi.png \
+media/images/cookbook_ror_common.png \
+media/images/cookbook_ror_fcgi.png \
+media/images/tracelor.png
 
 GENERATED_FILES =   \
 $(docdir_DATA)

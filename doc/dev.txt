@@ -1,2 +1,4 @@
-  . link:dev_debug.html[Debugging]
-  . link:dev_cherokee.conf.html[cherokee.conf]
+== link:index.html[Index] -> Development info
+
+  . link:dev_debug.html[Debugging]: Resources available to debug Cherokee.
+  . link:dev_cherokee.conf.html[cherokee.conf]: Internal configuration specs.

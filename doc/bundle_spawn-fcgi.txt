@@ -1,5 +1,7 @@
-spawn-fcgi
-----------
+== link:index.html[Index] -> link:bundle.html[Cherokee Bundle]
+
+Cherokee Bundle: spawn-fcgi
+---------------------------
 
 This is a tool used to spawn FastCGI processes so that any FastCGI
 application can be interfaced with Cherokee. This is, for example, how PHP is

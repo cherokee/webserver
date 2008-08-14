@@ -1,8 +1,10 @@
- . link:basics_why_cherokee.html[Why Cherokee?]
- . link:basics_requirements.html[Requirements]
- . link:basics_download.html[Download]
- . link:basics_installation.html[Installation]
-   - link:basics_installation_unix.html[Unix]
-   - link:basics_installation_windows.html[Windows]
- . link:basics_upgrade.html[Upgrading Cherokee]
- . link:basics_running_cherokee.html[Running Cherokee]
+== link:index.html[Index] -> Getting started
+
+ . link:basics_why_cherokee.html[Why Cherokee?]: Feature overview.
+ . link:basics_requirements.html[Requirements]: Hardware and software requirements.
+ . link:basics_download.html[Download]: Where and how to download Cherokee.
+ . link:basics_installation.html[Installation]: Installation instructions.
+   - link:basics_installation_unix.html[Unix]: Installation on Unix/Linux platforms.
+   - link:basics_installation_windows.html[Windows]: Installation on Windows platform.
+ . link:basics_upgrade.html[Upgrading Cherokee]: Upgrading from a previous release?
+ . link:basics_running_cherokee.html[Running Cherokee]: Basic steps to run Cherokee.

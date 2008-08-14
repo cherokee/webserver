@@ -1,3 +1,5 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
 Cookbook: Setting up Ruby on Rails
 ----------------------------------
 

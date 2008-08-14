@@ -1,5 +1,7 @@
-Cherokee goodies
-----------------
+== link:index.html[Index] -> link:other.html[Other information]
+
+Other: Cherokee goodies
+-----------------------
 
 There are several important features of Cherokee that really do make a
 difference in real-world production environments.

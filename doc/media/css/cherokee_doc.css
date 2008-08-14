@@ -84,13 +84,13 @@ tt {
 h1, h2, h3, h4, h5, h6 {
   color: #527bbd;
   font-family: sans-serif;
-  margin-top: 1.2em;
+  _margin-top: 1.2em;
   margin-bottom: 0.5em;
   line-height: 1.3;
 }
 
 h1, h2, h3 {
-  border-bottom: 2px solid silver;
+  border-bottom: 1px solid silver;
 }
 
 h2 {
@@ -360,4 +360,9 @@ div.toclevel4 {
   width:200px;
   float:left;
   background:#f6f6f6;
+}
+
+/*Navigation bar*/
+#nav_bar {
+
 }

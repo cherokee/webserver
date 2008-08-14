@@ -1,5 +1,7 @@
-cherokee
---------
+== link:index.html[Index] -> link:bundle.html[Cherokee Bundle]
+
+Cherokee Bundle: cherokee
+-------------------------
 
 This is the main Cherokee program. It can be launched in several ways
 as shown in the section link:basics_running_cherokee.txt[Running

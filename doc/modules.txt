@@ -1,29 +1,29 @@
+== link:index.html[Index] -> Modules
 
-  . link:modules_balancers.html[Balancers]
-    - link:modules_balancers_round_robin.html[Round robin]
-  . link:modules_encoders.html[Encoders]
-    - link:modules_encoders_gzip.html[gzip]
-    - link:modules_encoders_deflate.html[deflate]
-  . link:modules_handlers.html[Handlers]
-    - link:modules_handlers_file.html[Static Content]
-    - link:modules_handlers_dirlist.html[Only listing]
-    - link:modules_handlers_common.html[List & Send]
-    - link:modules_handlers_redir.html[Redirection]
-    - link:modules_handlers_cgi.html[CGI]
-    - link:modules_handlers_fcgi.html[FastCGI]
-    - link:modules_handlers_scgi.html[SCGI]
-    - link:modules_handlers_server_info.html[Server Info]
-    - link:modules_handlers_mirror.html[Generic balancer]
-    - link:modules_handlers_admin.html[Remote Administration]
-  . link:modules_loggers.html[Loggers]
-    - link:modules_loggers_combined.html[Combined]
-    - link:modules_loggers_ncsa.html[Common (NCSA)]
-    - link:modules_loggers_w3c.html[w3c]
-  . link:modules_validators.html[Validators]
-    - link:modules_validators_plain.html[Plain]
-    - link:modules_validators_htpasswd.html[htpasswd]
-    - link:modules_validators_htdigest.html[htdigest]
-    - link:modules_validators_ldap.html[LDAP]
-    - link:modules_validators_mysql.html[MySQL]
-    - link:modules_validators_pam.html[PAM]
-
+  . link:modules_balancers.html[Balancers]: Load balancing strategies.
+    - link:modules_balancers_round_robin.html[Round robin]: Round Robin strategy.
+  . link:modules_encoders.html[Encoders]: Compression and filters.
+    - link:modules_encoders_gzip.html[gzip]: `gzip` compression.
+    - link:modules_encoders_deflate.html[deflate]: `deflate` compression.
+  . link:modules_handlers.html[Handlers]: Connection handling modules.
+    - link:modules_handlers_file.html[Static Content]: Send files..
+    - link:modules_handlers_dirlist.html[Only listing]: List directories.
+    - link:modules_handlers_common.html[List & Send]: List directories and send files.
+    - link:modules_handlers_redir.html[Redirection]: URL forwards and rewrites.
+    - link:modules_handlers_cgi.html[CGI]: Common Gateway Interface.
+    - link:modules_handlers_fcgi.html[FastCGI]: Fast Common Gateway Interface.
+    - link:modules_handlers_scgi.html[SCGI]: Simple Common Gateway Interface.
+    - link:modules_handlers_server_info.html[Server Info]: Provide info about Cherokee.
+    - link:modules_handlers_mirror.html[Generic balancer]: Load balancing module.
+    - link:modules_handlers_admin.html[Remote Administration]: Cherokee administration handler.
+  . link:modules_loggers.html[Loggers]: Logging mechanisms.
+    - link:modules_loggers_combined.html[Combined]: Combined Log Format.
+    - link:modules_loggers_ncsa.html[Common (NCSA)]: Common Log Format.
+    - link:modules_loggers_w3c.html[w3c]: W3C Log Format.
+  . link:modules_validators.html[Validators]: Authentication mechanisms.
+    - link:modules_validators_plain.html[Plain]: Plain file mechanism.
+    - link:modules_validators_htpasswd.html[htpasswd]: htpasswd mechanism.
+    - link:modules_validators_htdigest.html[htdigest]: htdigest mechanism.
+    - link:modules_validators_ldap.html[LDAP]: Lightweight Directory Acces Protocol mechanism.
+    - link:modules_validators_mysql.html[MySQL]: Database mechanism.
+    - link:modules_validators_pam.html[PAM]: Pluggable Authentication Module mechanism.

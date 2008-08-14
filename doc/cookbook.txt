@@ -1,7 +1,9 @@
-  . link:cookbook_optimizations.html[Optimizing Cherokee]
-  . link:cookbook_cross_compilation.html[Cross compilation]
-  . link:cookbook_django.html[Setting up Django]
-  . link:cookbook_php.html[Setting up PHP]
-  . link:cookbook_ror.html[Setting up RoR]
-  . link:cookbook_ssl.html[SSL/TLS, certs]
-  . link:cookbook_authentication.html[Authentication]
+== link:index.html[Index] -> Cookbook
+
+  . link:cookbook_optimizations.html[Optimizing Cherokee]: Recommendations and tweaks.
+  . link:cookbook_cross_compilation.html[Cross compilation]: How to cross compile Cherokee.
+  . link:cookbook_django.html[Setting up Django]: How to run Django apps with Cherokee.
+  . link:cookbook_php.html[Setting up PHP]: How to run PHP apps with Cherokee.
+  . link:cookbook_ror.html[Setting up RoR]: How to run Ruby on Rails apps with Cherokee.
+  . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
+  . link:cookbook_authentication.html[Authentication]: How to set up authenticated resources.

@@ -1,5 +1,7 @@
-cherokee-tweak
---------------
+== link:index.html[Index] -> link:bundle.html[Cherokee Bundle]
+
+Cherokee Bundle: cherokee-tweak
+-------------------------------
 
 This command-line tool is also not as well known as it whould. Again
 this is not by a lack merits, which in fact are considerable. It's

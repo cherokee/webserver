@@ -1,5 +1,8 @@
-NCSA
-~~~~
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_loggers.html[Loggers]
+
+Logger: NCSA
+~~~~~~~~~~~~
+
 Also known as the _Common log format_ (*CLF*). This is a standard
 format produced by many web servers and read by many log analysis
 tools. Some of the fields specified by the format might actually be

@@ -1,1 +1,3 @@
-  - link:other_goodies.html[Cherokee Goodies]
+== link:index.html[Index] -> Other information
+
+  - link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.

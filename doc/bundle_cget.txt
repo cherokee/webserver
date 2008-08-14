@@ -1,5 +1,7 @@
-cget
-----
+== link:index.html[Index] -> link:bundle.html[Cherokee Bundle]
+
+Cherokee Bundle: cget
+---------------------
 
 This is an accessory tool developed for testing purposes of the
 capabilities of Cherokee in the early releases. Over the time new

@@ -1,8 +1,10 @@
+== link:index.html[Index] -> link:basics.html[Getting started]
+
 Requirements
 ------------
 
 Hardware
-~~~~~~~~ 
+~~~~~~~~
 Cherokee is very light, completely modular and it can be tailored to
 your specific needs. As such, disk requirements will vary depending on
 the options selected for the building process. A static build for

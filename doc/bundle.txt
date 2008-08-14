@@ -1,6 +1,8 @@
- . link:bundle_cherokee.html[cherokee]
- . link:bundle_cherokee-admin.html[cherokee-admin]
- . link:bundle_cherokee-config.html[cherokee-config]
- . link:bundle_cherokee-guardian.html[cherokee-guardian]
- . link:bundle_cherokee-tweak.html[cherokee-tweak]
- . link:bundle_cget.html[cget]
+== link:index.html[Index] -> Cherokee Bundle
+
+ . link:bundle_cherokee.html[cherokee]: The main program.
+ . link:bundle_cherokee-admin.html[cherokee-admin]: The configuration UI.
+ . link:bundle_cherokee-config.html[cherokee-config]: Information retriever.
+ . link:bundle_cherokee-guardian.html[cherokee-guardian]: Web server safe invoker.
+ . link:bundle_cherokee-tweak.html[cherokee-tweak]: Cherokee Swiss army knife
+ . link:bundle_cget.html[cget]: Web retriever.

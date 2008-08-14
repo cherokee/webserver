@@ -1,3 +1,5 @@
+== link:index.html[Index] -> link:basics.html[Getting started] -> link:basics_installation.html[Installation]
+
 Installation on Windows
 -----------------------
 

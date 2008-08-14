@@ -1,3 +1,5 @@
+== link:index.html[Index] -> link:dev.html[Development info]
+
 Development: API introduction
 -----------------------------
 

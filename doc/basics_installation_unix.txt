@@ -1,3 +1,5 @@
+== link:index.html[Index] -> link:basics.html[Getting started] -> link:basics_installation.html[Installation]
+
 Installation on Unix
 --------------------
 
@@ -8,7 +10,7 @@ scripts, consistency and dependency checks, and an easy upgrade path
 tailored to your system whenever a new package is available.
 
 If you do not find a prepackaged version that suits your needs, you
-can always download and compile your own. 
+can always download and compile your own.
 
 Quickstart
 ~~~~~~~~~~

@@ -1,3 +1,5 @@
+== link:index.html[Index] -> link:basics.html[Getting started]
+
 Download
 --------
 

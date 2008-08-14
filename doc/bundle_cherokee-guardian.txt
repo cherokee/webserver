@@ -1,5 +1,7 @@
-cherokee-guardian
------------------
+== link:index.html[Index] -> link:bundle.html[Cherokee Bundle]
+
+Cherokee Bundle: cherokee-guardian
+----------------------------------
 
 This command-line tool is less known than the rest because it is to be
 used by system administrators and developers. There is not much to be

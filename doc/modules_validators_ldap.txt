@@ -1,5 +1,8 @@
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_validators.html[Validators]
+
 Validator: LDAP
 ~~~~~~~~~~~~~~~
+
 The LDAP validator allows you to authenticate a user using the
 Lightweight Directory Access Protocol v3.
 

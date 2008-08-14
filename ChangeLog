@@ -1,3 +1,42 @@
+2008-08-14  Taher Shihadeh <taher@unixwars.com>
+
+	* doc/basics_download.txt, doc/basics_installation.txt,
+	doc/basics_installation_unix.txt,
+	doc/basics_installation_windows.txt, doc/basics_requirements.txt,
+	doc/basics_running_cherokee.txt, doc/basics.txt,
+	doc/basics_upgrade.txt, doc/basics_why_cherokee.txt ,
+	doc/build/build_web.sh, doc/build/doc.conf, doc/build/web.conf,
+	doc/bundle_cget.txt, doc/bundle_cherokee-config.txt,
+	doc/bundle_cherokee-guardian.txt, doc/bundle_cherokee-tweak.txt,
+	doc/bundle_cherokee.txt, doc/bundle_spawn-fcgi.txt,
+	doc/bundle.txt, doc/config_advanced.txt, doc/config_encoding.txt,
+	doc/config_general.txt, doc/config_icons.txt,
+	doc/config_mime_types.txt, doc/config_quickstart.txt,
+	doc/config.txt, doc/config_virtual_servers_rule.txt,
+	doc/config_virtual_servers.txt, doc/cookbook_authentication.txt,
+	doc/cookbook_cross_compilation.txt, doc/cookbook_django.txt,
+	doc/cookbook_managing_logs.txt, doc/cookbook_optimizations.txt,
+	doc/cookbook_php.txt, doc/cookbook_ror.txt, doc/cookbook_ssl.txt,
+	doc/cookbook.txt, doc/dev_api.txt, doc/dev_cherokee.conf.txt,
+	doc/dev_debug.txt, doc/dev_examples.txt, doc/dev.txt,
+	doc/index.txt, doc/media/css/cherokee_doc.css,
+	doc/modules_balancers_round_robin.txt, doc/modules_balancers.txt,
+	doc/modules_encoders_deflate.txt, doc/modules_encoders_gzip.txt,
+	doc/modules_encoders.txt, doc/modules_handlers_admin.txt,
+	doc/modules_handlers_cgi.txt, doc/modules_handlers_common.txt,
+	doc/modules_handlers_dirlist.txt, doc/modules_handlers_fcgi.txt,
+	doc/modules_handlers_file.txt, doc/modules_handlers_mirror.txt,
+	doc/modules_handlers_redir.txt, doc/modules_handlers_scgi.txt,
+	doc/modules_handlers_server_info.txt, doc/modules_handlers.txt,
+	doc/modules_loggers_combined.txt, doc/modules_loggers_ncsa.txt,
+	doc/modules_loggers.txt, doc/modules_loggers_w3c.txt,
+	doc/modules.txt, doc/modules_validators_htdigest.txt,
+	doc/modules_validators_htpasswd.txt,
+	doc/modules_validators_ldap.txt, doc/modules_validators_mysql.txt,
+	doc/modules_validators_pam.txt, doc/modules_validators_plain.txt,
+	doc/modules_validators.txt, doc/other_goodies.txt, doc/other.txt:
+	hopefully that is enough documentation. For now anyway. :)
+
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* qa/conf.py, qa/run-tests.py: Fixes the TLS/SSL execution.
