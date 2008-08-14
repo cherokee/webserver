@@ -1,5 +1,7 @@
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* 0.8.0 released
+
 	* doc/Makefile.am (EXTRA_DIST): Fixes an issue with the
 	documentation distribution. It was not being included in the
 	tarball.
@@ -156,7 +158,7 @@
 
 	* cherokee/logger_writer.c, cherokee/logger_writer.h,
 	cherokee/logger_w3c.c, cherokee/logger_ncsa.c,
-	cherokee/connection.c, admin/PageVServer.py: This multipuorpose
+	cherokee/connection.c, admin/PageVServer.py: This multipurpose
 	patch clean up the logger writter class, and fixes the W3C support
 	in the administration interface. It fixes:
 	http://code.google.com/p/cherokee/issues/detail?id=89
