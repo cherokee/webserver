@@ -57,24 +57,6 @@ div.exampleblock-content {
 /* IE6 sets dynamically generated links as visited. */
 div#toc a:visited { color: blue; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 a {
   text-decoration: underline;
   color: navy;
@@ -159,7 +141,7 @@ span#revision {
 div#footer {
   font-family: sans-serif;
   font-size: small;
-  border-top: 2px solid silver;
+//  border-top: 1px solid silver;
   padding-top: 0.5em;
   margin-top: 4.0em;
 }

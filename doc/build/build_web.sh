@@ -2,7 +2,7 @@
 PACKAGE_VERSION=`grep "PACKAGE_VERSION = " ../Makefile|  sed 's/\(.*\)PACKAGE_VERSION = //'`
 
 # Layout for cherokee-project.com
-ASCIIDOC_HTML="python asciidoc.py -b xhtml11 --conf-file=website_template.conf -a cherokee_version='${PACKAGE_VERSION}'" 
+ASCIIDOC_HTML="python asciidoc.py --conf-file=web.conf"
 
 for i in ../*.txt
  do
