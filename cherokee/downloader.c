@@ -212,7 +212,7 @@ connect_to (cherokee_downloader_t *downloader, cherokee_buffer_t *host, cuint_t 
 
 	/* Connect to server
 	 */
-	ret = cherokee_socket_connect (socket);
+	ret = cherokee_socket_connect (sock);
 	TRACE(ENTRIES, "socket=%p ret=%d\n", sock, ret);
 
 	if (unlikely(ret != ret_ok)) 

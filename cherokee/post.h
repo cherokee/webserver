@@ -51,7 +51,7 @@ typedef struct {
 } cherokee_post_t;
 
 #define POST(x)      ((cherokee_post_t *)(x))
-#define POST_BUF(x)  ((cherokee_buffer_t *)&POST(x)->info)
+#define POST_BUF(x)  (&POST(x)->info)
 
 
 ret_t cherokee_post_init          (cherokee_post_t *post);
