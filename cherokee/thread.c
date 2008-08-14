@@ -154,7 +154,9 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	n->active_list_num    = 0;
 	n->polling_list_num   = 0;
 	n->reuse_list_num     = 0;
+
 	n->pending_conns_num  = 0;
+	n->pending_read_num   = 0;
 
 	n->fastcgi_servers    = NULL;
 	n->fastcgi_free_func  = NULL;
@@ -580,8 +582,8 @@ process_active_connections (cherokee_thread_t *thd)
 		/* Maybe update traffic counters
 		 */
 		if ((conn->traffic_next < thd->bogo_now) &&
-		    (conn->rx != 0) &&
-		    (conn->tx != 0)) {
+		    ((conn->rx != 0) || (conn->tx != 0)))
+		{
 			cherokee_connection_update_vhost_traffic (conn);
 		}
 
@@ -602,7 +604,8 @@ process_active_connections (cherokee_thread_t *thd)
 				purge_closed_connection (thd, conn);
 				continue;
 			case 0:
-				continue;
+				if (! cherokee_socket_pending_read (&conn->socket))
+					continue;
 			}
 		}
 
@@ -1508,6 +1511,11 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 		thd->pending_conns_num = 0;
 	}
 
+	if (thd->pending_read_num > 0) {
+		fdwatch_msecs         = 0;
+		thd->pending_read_num = 0;
+	}
+
 	re = cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
 	if (re <= 0)
 		goto out;
@@ -1851,6 +1859,11 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 	if (thd->pending_conns_num > 0) {
 		fdwatch_msecs          = 0;
 		thd->pending_conns_num = 0;
+	}
+
+	if (thd->pending_read_num > 0) {
+		fdwatch_msecs         = 0;
+		thd->pending_read_num = 0;
 	}
 
 #ifdef HAVE_TLS

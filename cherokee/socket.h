@@ -190,6 +190,7 @@ ret_t cherokee_socket_init_client_tls   (cherokee_socket_t *socket);
 ret_t cherokee_socket_close             (cherokee_socket_t *socket);
 ret_t cherokee_socket_shutdown          (cherokee_socket_t *socket, int how);
 ret_t cherokee_socket_accept            (cherokee_socket_t *socket, int server_socket);
+int   cherokee_socket_pending_read      (cherokee_socket_t *socket);
 
 ret_t cherokee_socket_set_client        (cherokee_socket_t *socket, unsigned short int type);
 ret_t cherokee_socket_bind              (cherokee_socket_t *socket, int port, cherokee_buffer_t *listen_to);

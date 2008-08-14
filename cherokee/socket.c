@@ -1140,7 +1140,9 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 	len = gnutls_record_recv (socket->session, buf, buf_size);
 
 	if (likely (len > 0)) {
-		*pcnt_read = len;
+ 		*pcnt_read = len;
+		if (gnutls_record_check_pending (socket->session) > 0)
+			return ret_eagain;
 		return ret_ok;
 	}
 
@@ -1170,9 +1172,10 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 
 #elif defined (HAVE_OPENSSL)
 	len = SSL_read (socket->session, buf, buf_size);
-
 	if (likely (len > 0)) {
 		*pcnt_read = len;
+		if (SSL_pending (socket->session))
+			return ret_eagain;
 		return ret_ok;
 	}
 
@@ -1183,6 +1186,7 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 
 	{	/* len < 0 */
 		int re;
+		int error = errno;
 
 		re = SSL_get_error (socket->session, len);
 		switch (re) {
@@ -1193,6 +1197,16 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 			socket->status = socket_closed;
 			return ret_eof;
 		case SSL_ERROR_SSL:         
+			return ret_error;
+		case SSL_ERROR_SYSCALL:
+			switch (error) {
+			case EPIPE:
+			case ECONNRESET:
+				socket->status = socket_closed;
+				return ret_eof;
+			default:
+				PRINT_ERRNO (error, "SSL_read: unknown errno: ${errno}\n");
+			}
 			return ret_error;
 		}
 
@@ -1206,6 +1220,26 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 
 #endif	/* HAVE_TLS */
 
+}
+
+
+int
+cherokee_socket_pending_read (cherokee_socket_t *socket)
+{
+	if (socket->is_tls != TLS)
+		return 0;
+
+	if (unlikely ((socket->status != socket_reading) &&
+		      (socket->status != socket_writing)))
+		return 0;
+
+#ifdef HAVE_TLS
+# ifdef HAVE_GNUTLS
+	return (gnutls_record_check_pending (socket->session) > 0);
+# elif defined (HAVE_OPENSSL)
+	return (SSL_pending (socket->session) > 0);
+# endif
+#endif
 }
 
 
@@ -1374,7 +1408,10 @@ cherokee_socket_bufwrite (cherokee_socket_t *socket, cherokee_buffer_t *buf, siz
  *          NULL pointers lead to a crash.
  */
 ret_t      
-cherokee_socket_bufread (cherokee_socket_t *socket, cherokee_buffer_t *buf, size_t count, size_t *pcnt_read)
+cherokee_socket_bufread (cherokee_socket_t *socket, 
+			 cherokee_buffer_t *buf, 
+			 size_t             count, 
+			 size_t            *pcnt_read)
 {
 	ret_t    ret;
 	char    *starting;
@@ -1386,9 +1423,9 @@ cherokee_socket_bufread (cherokee_socket_t *socket, cherokee_buffer_t *buf, size
 		return ret;
 
 	starting = buf->buf + buf->len;
-
+	
 	ret = cherokee_socket_read (socket, starting, count, pcnt_read);
-	if (ret == ret_ok) {
+	if (*pcnt_read > 0) {
 		buf->len += *pcnt_read;
 		buf->buf[buf->len] = '\0';
 	}

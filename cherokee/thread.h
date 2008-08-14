@@ -85,7 +85,8 @@ typedef struct {
 	int                     reuse_list_num;     /* reusable connections objs */
 
 	int                     pending_conns_num;  /* Waiting pipelining connections */
-
+	int                     pending_read_num;   /* Conns with SSL deping read */
+	
 	struct {
 		uint32_t        continuous;
 		uint32_t        continuous_max;

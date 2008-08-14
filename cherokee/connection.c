@@ -716,8 +716,13 @@ cherokee_connection_recv (cherokee_connection_t *conn, cherokee_buffer_t *buffer
 
 	case ret_eof:
 	case ret_error:
-	case ret_eagain:
 		return ret;
+
+	case ret_eagain:
+		if (cherokee_socket_pending_read (&conn->socket)) {
+			CONN_THREAD(conn)->pending_read_num += 1;
+		}
+		return ret_eagain;
 
 	default:
 		RET_UNKNOWN(ret);		

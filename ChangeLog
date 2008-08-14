@@ -1,5 +1,12 @@
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/socket.c, cherokee/socket.h, cherokee/thread.c,
+	cherokee/thread.h, cherokee/connection.c: Fixes the TLS/SSL
+	support. It adds support for a new concept within the server: a
+	cherokee_buffer_t can have pending information to be read, so in
+	addition to the file descriptor this property must be checked
+	whenever it real status need to be known.
+
 	* qa/run-tests.py, qa/base.py: Fixes two minor issues.
 
 	* 0.8.0 released
