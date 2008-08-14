@@ -133,6 +133,7 @@ CONF_BASE = """
 # Cherokee QA tests
 #
 server!port = %d 
+server!port_tls = %s
 server!keepalive = 1 
 server!listen = 127.0.0.1
 server!panic_action = %s
@@ -148,7 +149,7 @@ vserver!1!document_root = %s
 vserver!1!directory_index = test_index.html,test_index.php,/super_test_index.php
 vserver!1!rule!1!match = default
 vserver!1!rule!1!handler = common
-""" % (PORT, panic, pid, CHEROKEE_MODS, CHEROKEE_DEPS, www)
+""" % (PORT, PORT_TLS, panic, pid, CHEROKEE_MODS, CHEROKEE_DEPS, www)
 
 PHP_FCGI = """\
 10000!match = extensions
@@ -183,7 +184,7 @@ if ssl:
     CONF_BASE += """
 vserver!1!ssl_certificate_file = %s
 vserver!1!ssl_certificate_key_file = %s
-vserver!1!ssl_cal_list_file = %s
+vserver!1!ssl_ca_list_file = %s
 """ % (SSL_CERT_FILE, SSL_CERT_KEY_FILE, SSL_CA_FILE)
 
 if log:
@@ -394,7 +395,7 @@ def mainloop_iterator(objs, main_thread=True):
 
 
 if ssl:
-    port = 443
+    port = PORT_TLS
 
 # If we want to pause once do it before launching the threads
 if pause == 1:

@@ -1,5 +1,6 @@
-PORT = 1978
-HOST = "localhost"
+PORT     = 1978
+PORT_TLS = 1979
+HOST     = "localhost"
 
 CHEROKEE_PATH     = "../cherokee/cherokee"
 CHEROKEE_MODS     = "../cherokee/.libs/"
@@ -15,7 +16,7 @@ DTRUSS_PATH       = "/usr/bin/dtruss"
 VALGRIND_PATH     = "/usr/bin/valgrind"
 PYTHON_PATH       = "auto"
 PHPCGI_PATH       = "auto"
-PHP_FCGI_PORT     = 1979
+PHP_FCGI_PORT     = 1980
 
 SSL_CERT_FILE     = "/etc/cherokee/ssl/cherokee.pem"
 SSL_CERT_KEY_FILE = "/etc/cherokee/ssl/cherokee.pem"

@@ -1,5 +1,7 @@
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/conf.py, qa/run-tests.py: Fixes the TLS/SSL execution.
+
 	* cherokee/connection-protected.h, cherokee/thread.c,
 	cherokee/connection.c: Polish the Keep-Alive management.
 
