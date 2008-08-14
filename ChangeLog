@@ -1,3 +1,8 @@
+2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection.c: Allows 3xx replies to keep the connection
+	alive.
+
 2008-08-13  Taher Shihadeh <taher@unixwars.com>
 
 	* doc/basics.txt, doc/basics_why_cherokee.txt,

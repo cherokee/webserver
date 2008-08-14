@@ -356,10 +356,6 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 	vsrv  = CONN_VSRV(conn);
 	entry = vsrv->error_handler;
 
-	/* On error, it will close the socket
-	 */
-	conn->keepalive = 0;
-
 	/* It has a common handler. It has to be freed.
 	 */
 	if (conn->handler != NULL) {
@@ -388,6 +384,14 @@ out:
 		TRACE(ENTRIES, "New handler %s\n", name);
 	}
 #endif
+
+	/* Only 3xx errors can keep the connection alive
+	 */
+	if ((! (http_type_300 (conn->error_code))) ||
+	    (! (conn->handler->support & hsupport_length)))
+	{
+		conn->keepalive = 0;
+	}
 
 	/* Nothing should be mmaped any longer
 	 */
@@ -558,11 +562,18 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 		}
 	}
 
+	/* It might need to deactive Keep-Alive
+	 */
 	if ((conn->keepalive != 0) &&
-	    HANDLER_SUPPORTS(conn->handler, hsupport_maybe_length)) {
-		if (strcasestr (conn->header_buffer.buf, "Content-Length: ") == NULL) {
-			conn->keepalive = 0;
+	    (http_method_with_body (conn->error_code)))	
+	{
+		if (HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length)) {
+			if (strcasestr (conn->header_buffer.buf, "Content-Length: ") == NULL)
+				conn->keepalive = 0;
 		}
+		
+		if (HANDLER_SUPPORTS (conn->handler, hsupport_length) == 0)
+			conn->keepalive = 0;
 	}
 
 	/* Add the server headers	
@@ -1710,7 +1721,6 @@ cherokee_connection_parse_header (cherokee_connection_t *conn, cherokee_encoder_
 		if (strncasecmp (ptr, "close", 5) == 0) {
 			conn->keepalive = 0;
 		}
-
 	} else {
 		conn->keepalive = 0;
 	}
@@ -1783,21 +1793,13 @@ cherokee_connection_open_request (cherokee_connection_t *conn)
 	       conn->request.buf,
 	       conn->local_directory.buf);
 
-	/* If the connection is keep-alive
-	 * then verify whether the handler supports it.
-	 */
-	if ((conn->keepalive != 0) &&
-	    (HANDLER_SUPPORTS (conn->handler, hsupport_length) == 0) && 
-	    (HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length) == 0))
-	{
-		conn->keepalive = 0;
-	}
-
 	/* Ensure the space for headers and I/O buffer
 	 */
 	cherokee_buffer_ensure_size (&conn->header_buffer, 384);
 	cherokee_buffer_ensure_size (&conn->buffer, DEFAULT_READ_SIZE+1);
 
+	/* Init the connection handler object
+	 */
 	return cherokee_handler_init (conn->handler);
 }
 
