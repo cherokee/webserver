@@ -1,5 +1,7 @@
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/run-tests.py, qa/base.py: Fixes two minor issues.
+
 	* 0.8.0 released
 
 	* doc/Makefile.am (EXTRA_DIST): Fixes an issue with the

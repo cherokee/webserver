@@ -92,9 +92,10 @@ class TestBase:
             request += self.post
 
         if self.ssl:
-            self.ssl.write (request)
+            n = self.ssl.write (request)
         else:
-            s.send (request)
+            n = s.send (request)
+        assert (n == len(request))
         
         while True:
             try:

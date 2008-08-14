@@ -133,7 +133,7 @@ CONF_BASE = """
 # Cherokee QA tests
 #
 server!port = %d 
-server!port_tls = %s
+server!port_tls = %d
 server!keepalive = 1 
 server!listen = 127.0.0.1
 server!panic_action = %s
