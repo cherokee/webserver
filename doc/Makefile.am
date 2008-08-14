@@ -119,10 +119,7 @@ media/images/cookbook_ror_common.png \
 media/images/cookbook_ror_fcgi.png \
 media/images/tracelor.png
 
-GENERATED_FILES =   \
-$(docdir_DATA)
-
 EXTRA_DIST = \
-$(GENERATED_FILES) \
+$(doc_DATA) \
 $(docmediacss_DATA) \
 $(docmediaimages_DATA)

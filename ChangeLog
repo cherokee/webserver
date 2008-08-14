@@ -1,3 +1,9 @@
+2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* doc/Makefile.am (EXTRA_DIST): Fixes an issue with the
+	documentation distribution. It was not being included in the
+	tarball.
+
 2008-08-14  Taher Shihadeh <taher@unixwars.com>
 
 	* doc/basics_download.txt, doc/basics_installation.txt,
