@@ -102,9 +102,39 @@ plain validation, htdigest, htpasswd and whatever file based system
 you cross paths with.
 
 
-////
-
 === MySQL
+
+Lets set up a simple server requiring authentication against a MySQL
+database to fetch any content.
+
+First, lets define a unique rule in our virtual server managed by the
+`List and Send` handler. Through the `Security` tab we can configure
+it to use MySQL as authentication mechanism. Filling up just the
+essential fields will be enough. Realm, database name, user, password
+and an SQL query that must return one row with one column as password.
+
+image::media/images/cookbook_mysql_validator.png[MySQL handler set up]
+
+In this case, we have used:
+
+----
+SELECT password FROM auth_users WHERE username = '${user}'
+----
+
+And that is about it.
+In this example you will need a MySQL server running (localhost in
+this case, as it takes the default value), a database called
+`cherokee` with `cherokee` as user and password, and a table that
+suits the shown query.
+
+When we are done, our simple virtual server should look like this:
+
+image::media/images/cookbook_mysql_rule.png[MySQL Authenticated rule]
+
+And any content requested to Cherokee will require prior
+authentication agains the database.
+
+////
 To be written
-Details for mysql and ldap, with screenshots.
+More details for mysql and ldap, with screenshots.
 ////

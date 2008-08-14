@@ -117,6 +117,8 @@ media/images/cookbook_django_common.png \
 media/images/cookbook_django_scgi.png \
 media/images/cookbook_ror_common.png \
 media/images/cookbook_ror_fcgi.png \
+media/images/cookbook_mysql_rule.png \
+media/images/cookbook_mysql_validator.png \
 media/images/tracelor.png
 
 EXTRA_DIST = \
