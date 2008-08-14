@@ -1,5 +1,8 @@
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection-protected.h, cherokee/thread.c,
+	cherokee/connection.c: Polish the Keep-Alive management.
+
 	* cherokee/server.c (add_vserver): Adds a sanity check. It makes
 	sure that the virtual server number can be actually converted into
 	an integer number.

@@ -223,6 +223,7 @@ ret_t cherokee_connection_check_authentication   (cherokee_connection_t *conn, c
 ret_t cherokee_connection_check_ip_validation    (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
 ret_t cherokee_connection_check_only_secure      (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
 ret_t cherokee_connection_check_http_method      (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
+void  cherokee_connection_set_keepalive          (cherokee_connection_t *conn);
 
 /* Iteration
  */

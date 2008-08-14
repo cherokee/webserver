@@ -923,6 +923,10 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			}
 			
+			/* Update the keep-alive property
+			 */
+			cherokee_connection_set_keepalive (conn);
+
 			/* Create the handler
 			 */
 			ret = cherokee_connection_create_handler (conn, &entry);
@@ -937,7 +941,7 @@ process_active_connections (cherokee_thread_t *thd)
 				conn->phase = phase_init;
 				continue;
 			}
-			
+
 			/* Parse the rest of headers
 			 */
 			ret = cherokee_connection_parse_header (conn, &srv->encoders);
@@ -955,13 +959,6 @@ process_active_connections (cherokee_thread_t *thd)
 		}
 			
 		case phase_init: 
-			/* Server's "Keep-Alive" could be turned "Off"
-			 */
-			if (conn->keepalive != 0) {
-				if (srv->keepalive == false) 
-					conn->keepalive = 0;
-			}
-
 			/* Look for the request
 			 */
 			ret = cherokee_connection_open_request (conn);
@@ -1948,7 +1945,6 @@ cherokee_thread_get_new_connection (cherokee_thread_t *thd, cherokee_connection_
 	new_connection->id        = last_conn_id++;
 	new_connection->thread    = thd;
 	new_connection->server    = server;
-	new_connection->keepalive = server->keepalive_max;
 	new_connection->vserver   = VSERVER(server->vservers.prev); 
 
 	new_connection->timeout   = thd->bogo_now + THREAD_SRV(thd)->timeout;

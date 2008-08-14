@@ -1707,31 +1707,50 @@ cherokee_connection_create_handler (cherokee_connection_t *conn, cherokee_config
 }
 
 
+void
+cherokee_connection_set_keepalive (cherokee_connection_t *conn)
+{
+	ret_t              ret;
+	char              *ptr;
+	cuint_t            ptr_len;
+	cherokee_server_t *srv    = CONN_SRV(conn);
+	cherokee_thread_t *thread = CONN_THREAD(conn);
+
+	/* Check whether server allows keep-alive
+	 */
+	if (srv->keepalive == false) {
+		conn->keepalive = 0;
+		return;
+	}
+
+	/* Check the Max concurrent Keep-Alive limit on this thread
+	 */
+	if (thread->conns_max > srv->conns_keepalive_max) {
+		conn->keepalive = 0;
+		return;
+	}
+
+	/* Set Keep-alive according with the 'Connection' header
+	 */
+	ret = cherokee_header_get_known (&conn->header, header_connection, &ptr, &ptr_len);
+	if (ret == ret_ok) {
+		if (strncasecmp (ptr, "close", 5) == 0) {
+			conn->keepalive = 0;
+		} else {
+			conn->keepalive = CONN_SRV(conn)->keepalive_max;
+		}
+	} else {
+		conn->keepalive = 0;
+	}
+}
+
+
 ret_t
 cherokee_connection_parse_header (cherokee_connection_t *conn, cherokee_encoder_table_t *encoders)
 {
 	ret_t    ret;
 	char    *ptr;
 	cuint_t  ptr_len;
-
-	/* Look for "Connection: Keep-Alive / close"
-	 */
-	ret = cherokee_header_get_known (&conn->header, header_connection, &ptr, &ptr_len);
-	if (ret == ret_ok) {
-		if (strncasecmp (ptr, "close", 5) == 0) {
-			conn->keepalive = 0;
-		}
-	} else {
-		conn->keepalive = 0;
-	}
-
-	/* Don't use keepalive if the server is about to be overloaded
-	 */
-	if ((conn->keepalive) &&
-	    (CONN_THREAD(conn)->conns_max > CONN_SRV(conn)->conns_keepalive_max))
-	{
-		conn->keepalive = 0;
-	}
 
 	/* Look for "Range:" 
 	 */
