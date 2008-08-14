@@ -3,13 +3,11 @@
 Cherokee Bundle: cherokee-guardian
 ----------------------------------
 
-This command-line tool is less known than the rest because it is to be
-used by system administrators and developers. There is not much to be
-added besides the syntax of the command. The main usage of this
-utility is determining the used flags during the compilation and
-linking process. This is useful to build programs that make use of
-Cherokee.
-
+This command-line tool is a wrapper for the main Cherokee
+executable. It is used as a safety net to invoke `cherokee` and to
+ensure it is always functioning. It also plays an important role in
+the link:other_goodies.html#zero-downtime[zero-downtime] mechanism
+implemented to allow graceful restarts of the server.
 
 This is the full information provided by the manpage.
 **********************************************************************

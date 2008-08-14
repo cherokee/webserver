@@ -5,10 +5,6 @@ p, li, dt, dd, div, pre, h1, h2, h3, h4, h5, h6 {
 */
 }
 
-body {
-  margin: 1em 5% 1em 5%;
-}
-
 div.quoteblock > div.content {
   padding-left: 2.0em;
 }
@@ -261,7 +257,7 @@ div.exampleblock > div.content {
   padding: 0.5em;
 }
 
-div.imageblock div.content { text-align:center; padding-left: 0; margin-left:100px; }
+div.imageblock div.content { text-align:center; padding-left: 0; //margin-left:100px; }
 div.imageblock img { border: 1px solid silver; }
 span.image img { border-style: none; }
 

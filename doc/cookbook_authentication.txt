@@ -127,14 +127,39 @@ this case, as it takes the default value), a database called
 `cherokee` with `cherokee` as user and password, and a table that
 suits the shown query.
 
+
+Assuming you have a MySQL user with privileges granted to create
+databases, a MySQL session simliar to this one would suffice:
+
+----
+$ mysql -u cherokee -D cherokee -p
+
+mysql> CREATE DATABASE cherokee;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> CREATE TABLE auth_users(
+       username varchar(32),
+       password varchar(32),
+       PRIMARY KEY (username));
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> INSERT INTO auth_users VALUES('cherokee','cherokee');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> quit
+----
+
 When we are done, our simple virtual server should look like this:
 
 image::media/images/cookbook_mysql_rule.png[MySQL Authenticated rule]
 
 And any content requested to Cherokee will require prior
-authentication agains the database.
+authentication against the database.
+
 
 ////
 To be written
-More details for mysql and ldap, with screenshots.
+More details for ldap, with screenshots.
 ////
+
+
