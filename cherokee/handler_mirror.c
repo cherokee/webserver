@@ -40,11 +40,17 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (mirror, http_all_methods);
 ret_t 
 cherokee_handler_mirror_props_free (cherokee_handler_mirror_props_t *props)
 {
+	if (props->balancer) {
+		cherokee_balancer_free (props->balancer);
+	}
+
 	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
 ret_t 
-cherokee_handler_mirror_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
+cherokee_handler_mirror_configure (cherokee_config_node_t   *conf,
+				   cherokee_server_t        *srv, 
+				   cherokee_module_props_t **_props)
 {
 	ret_t                            ret;
 	cherokee_list_t                 *i;

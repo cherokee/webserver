@@ -39,7 +39,6 @@ typedef enum {
 
 typedef struct {
 	cherokee_module_props_t  base;
-	cherokee_list_t          server_list; 	
 	cherokee_balancer_t     *balancer;
 } cherokee_handler_mirror_props_t;
 
