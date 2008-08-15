@@ -1,3 +1,10 @@
+2008-08-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/PageVServer.py (PageVServer._render_vserver_guts): Fixes
+	an unfortunate error. The administration interface fails to set
+	the security files (certificates and keys) because and previous
+	variable value messed up the property key.
+
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/socket.c, cherokee/socket.h, cherokee/thread.c,

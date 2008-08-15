@@ -214,6 +214,8 @@ class PageVServer (PageMenu, FormHelper):
         tabs += [('Logging', tmp)]
 
         # Security
+        pre = 'vserver!%s' % (host)
+
         table = TableProps()
         self.AddPropEntry (table, 'Certificate',     '%s!ssl_certificate_file' % (pre),     NOTE_CERT)
         self.AddPropEntry (table, 'Certificate key', '%s!ssl_certificate_key_file' % (pre), NOTE_CERT_KEY)
