@@ -128,7 +128,7 @@ class PageVServers (PageMenu, FormHelper):
                 logging = 'yes'
             else:
                 logging = 'no'
-                
+
             if nick != "default":
                 js = "post_del_key('/ajax/update', 'vserver!%s');"%(prio)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
@@ -139,7 +139,8 @@ class PageVServers (PageMenu, FormHelper):
                 prio, prio, extra, link, document_root, logging, link_del)
 
         txt += '</table>'
-        txt += '''<script type="text/javascript">
+        txt += '''
+                      <script type="text/javascript">
                       $(document).ready(function() {
                         $("#%(name)s tr:even').addClass('alt')");
 
@@ -150,16 +151,25 @@ class PageVServers (PageMenu, FormHelper):
                               for (var i=1; i<rows.length; i++) {
                                 post += rows[i].id + ',';
                               }
-	                      jQuery.post ('%(url)s', post, 
+                              jQuery.post ('%(url)s', post,
                                   function (data, textStatus) {
-                                      window.location.reload();  
+                                      window.location.reload();
                                   }
                               );
                           }
                         });
                       });
+
+                      $(document).ready(function(){
+                        $("table.rulestable tr:odd").addClass("odd");
+                      });
+
+                      $(document).mouseup(function(){
+                        $("table.rulestable tr:even").removeClass("odd");
+                        $("table.rulestable tr:odd").addClass("odd");
+                      });
                       </script>
-               ''' % {'name':   table_name, 
+               ''' % {'name':   table_name,
                       'url' :   '/vserver/ajax_update'}
 
         # Add new Virtual Server

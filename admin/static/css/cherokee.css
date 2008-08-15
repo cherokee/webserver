@@ -6,10 +6,10 @@ body {
 }
 
 .clearfix:after {
-    content: "."; 
-    display: block; 
-    height: 0; 
-    clear: both; 
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
     visibility: hidden;
 }
 
@@ -125,7 +125,7 @@ table td label {
 }
 /** HELP **/
 #help-area {
-    
+
 }
 
 #help {
@@ -190,9 +190,9 @@ table td label {
     margin: 1em 0;
 }
 
-.dialog-information h2, 
+.dialog-information h2,
 .dialog-warning h2,
-.dialog-error h2 
+.dialog-error h2
 {
     margin: 0 0 0.3em 0;
     padding: 0;
@@ -219,13 +219,12 @@ table td label {
 
 .tab dt:hover {
     background:#efefef url(../images/collapsed.gif) no-repeat scroll 0px 4px;
-}      
-	  
-.tab dt.selected:hover {
-    background:#efefef url(../images/expanded.gif) no-repeat scroll 0px 4px; 
 }
-	       
-	       
+
+.tab dt.selected:hover {
+    background:#efefef url(../images/expanded.gif) no-repeat scroll 0px 4px;
+}
+
 a.button {
     background: transparent url('../images/button-right.png') no-repeat scroll top right;
     color: #486991;
@@ -249,12 +248,12 @@ a.button span {
 a.button:active {
     background-position: bottom right;
     color: #122c4d;
-    outline: none; 
+    outline: none;
 }
 
 a.button:active span {
     background-position: bottom left;
-    padding: 6px 0 4px 18px; 
+    padding: 6px 0 4px 18px;
 }
 
 .indented {
@@ -298,7 +297,7 @@ a.button:active span {
 }
 
 .tableprop .title {
-  font-weight: bold;  
+  font-weight: bold;
 }
 
 .tableprop_block hr {
@@ -317,4 +316,9 @@ table tr {
 
 table tr th {
   font-weight: bold;
+}
+
+/* Alternate row color in rule list */
+table.rulestable tr.odd td {
+  background-color:#F4F7FB;
 }

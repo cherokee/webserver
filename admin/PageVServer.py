@@ -50,7 +50,7 @@ class PageVServer (PageMenu, FormHelper):
         self._priorities         = None
         self._priorities_userdir = None
         self._rule_table         = 1
-        
+
     def _op_handler (self, uri, post):
         assert (len(uri) > 1)
 
@@ -272,19 +272,19 @@ class PageVServer (PageMenu, FormHelper):
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
         txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th><th>Auth</th><th>Final</th></tr>'
-            
+
         # Rule list
         for prio in priorities:
             conf = priorities[prio]
 
             _type = conf.get_val('match')
             pre   = '%s!%s' % (cfg_key, prio)
-            
-            # Try to load the rule plugin            
+
+            # Try to load the rule plugin
             rule_module = module_obj_factory (_type, self._cfg, pre, self.submit_url)
             name        = rule_module.get_name()
             name_type   = rule_module.get_type_name()
-            
+
             if _type != 'default':
                 link     = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
                 js       = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
@@ -311,7 +311,8 @@ class PageVServer (PageMenu, FormHelper):
                 prio, pre, prio, extra, link, name_type, handler_name, auth_name, final, link_del)
 
         txt += '</table>\n'
-        txt += '''<script type="text/javascript">
+        txt += '''
+                      <script type="text/javascript">
                       $(document).ready(function() {
                         $("#%(name)s tr:even').addClass('alt')");
 
@@ -323,16 +324,25 @@ class PageVServer (PageMenu, FormHelper):
                                 var prio = (rows.length - i) * 100;
                                 post += 'update_prio=' + rows[i].id + ',' + prio + '&';
                               }
-	                      jQuery.post ('%(url)s', post, 
+                              jQuery.post ('%(url)s', post,
                                   function (data, textStatus) {
-                                      window.location.reload();  
+                                      window.location.reload();
                                   }
                               );
                           }
                         });
                       });
+
+                      $(document).ready(function(){
+                        $("table.rulestable tr:odd").addClass("odd");
+                      });
+
+                      $(document).mouseup(function(){
+                        $("table.rulestable tr:even").removeClass("odd");
+                        $("table.rulestable tr:odd").addClass("odd");
+                      });
                       </script>
-               ''' % {'name':   table_name, 
+               ''' % {'name':   table_name,
                       'url' :   self.submit_ajax_url,
                       'prefix': cfg_key}
         return txt
@@ -373,9 +383,9 @@ class PageVServer (PageMenu, FormHelper):
         self.AddPropOptions_Ajax (table, 'Format', pre, 
                                   modules_available(LOGGERS), NOTE_LOGGERS)
         txt += self.Indent(str(table))
-        
+
         # Writers
-        
+
         if format:
             writers = ''
 
