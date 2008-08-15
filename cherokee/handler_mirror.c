@@ -73,7 +73,7 @@ cherokee_handler_mirror_configure (cherokee_config_node_t *conf, cherokee_server
 			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer); 
 			if (ret != ret_ok) return ret;
 		} else {
-			PRINT_MSG ("ERROR: Handler mirrror: Unknown key: '%s'\n", subconf->key.buf);
+			PRINT_MSG ("ERROR: Handler mirror: Unknown key: '%s'\n", subconf->key.buf);
 			return ret_deny;
 		}
 	}
