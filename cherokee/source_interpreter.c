@@ -25,6 +25,9 @@
 #include "common-internal.h"
 #include "source_interpreter.h"
 #include "util.h"
+#include "connection-protected.h"
+#include "thread.h"
+#include "bogotime.h"
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -46,6 +49,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	n->custom_env     = NULL;
 	n->custom_env_len = 0;
 
+	SOURCE(n)->type   = source_interpreter;
 	SOURCE(n)->free   = (cherokee_func_free_t)interpreter_free;
 
 	*src = n;
@@ -245,4 +249,69 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 error:
 	cherokee_buffer_mrproper (&tmp);
 	return ret_error;
+}
+
+
+ret_t
+cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src, 
+					     cherokee_socket_t             *socket,
+					     cherokee_connection_t         *conn,
+					     time_t                        *spawned)
+{
+	ret_t ret;
+
+	/* Try to connect
+	 */
+ 	ret = cherokee_source_connect (SOURCE(src), socket); 
+	switch (ret) {
+	case ret_ok:
+		goto out;
+	case ret_deny:
+		break;
+	case ret_eagain:
+		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
+							   conn,
+							   SOCKET_FD(socket),
+							   FDPOLL_MODE_WRITE, 
+							   false);
+		if (ret != ret_ok) {
+			return ret_deny;
+		}
+		return ret_eagain;
+	case ret_error:
+		return ret_error;
+	default:
+		break;
+	}
+
+	/* In case it did not success, launch a interpreter
+	 */
+	if (*spawned == 0) {
+		/* Launch a new interpreter */
+		ret = cherokee_source_interpreter_spawn (src);
+		if (ret != ret_ok) {
+			if (src->interpreter.buf)
+				TRACE (ENTRIES, "Couldn't spawn: %s\n",
+				       src->interpreter.buf);
+			else
+				TRACE (ENTRIES, "No interpreter to be spawned %s", "\n");
+			return ret_error;
+		}
+
+		*spawned = cherokee_bogonow_now;
+
+		/* Reset the internal socket */
+		cherokee_socket_close (socket);
+
+	} else if (cherokee_bogonow_now > *spawned + 3) {	
+		TRACE (ENTRIES, "Giving up; spawned 3 secs ago: %s\n",
+		       src->interpreter.buf);
+		return ret_error;
+	}
+
+	return ret_eagain;	
+
+out:
+	TRACE (ENTRIES, "Connected successfully fd=%d\n", socket->socket);
+	return ret_ok;
 }

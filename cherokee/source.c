@@ -27,6 +27,8 @@
 #include "config_node.h"
 #include "resolv_cache.h"
 #include "util.h"
+#include "thread.h"
+#include "connection-protected.h"
 
 #define ENTRIES "source,src"
 
@@ -44,6 +46,7 @@ cherokee_source_init (cherokee_source_t *src)
 	cherokee_buffer_init (&src->unix_socket);
 	cherokee_buffer_init (&src->host);
 
+	src->type = source_host;
 	src->port = -1;
 	src->free = NULL;
 
@@ -122,6 +125,41 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 
 out: 	
 	return cherokee_socket_connect (sock);
+}
+
+
+ret_t
+cherokee_source_connect_polling (cherokee_source_t     *src, 
+				 cherokee_socket_t     *socket,
+				 cherokee_connection_t *conn)
+{
+	ret_t ret;
+
+ 	ret = cherokee_source_connect (src, socket); 
+	switch (ret) {
+	case ret_ok:
+		TRACE (ENTRIES, "Connected successfully fd=%d\n", socket->socket);
+		return ret_ok;
+	case ret_deny:
+		break;
+	case ret_eagain:
+		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
+							   conn,
+							   SOCKET_FD(socket),
+							   FDPOLL_MODE_WRITE, 
+							   false);
+		if (ret != ret_ok) {
+			return ret_deny;
+		}
+		return ret_eagain;
+	case ret_error:
+		return ret_error;
+	default:
+		break;
+	}
+
+	TRACE (ENTRIES, "Couldn't connect%s", "\n");
+	return ret_error;
 }
 
 

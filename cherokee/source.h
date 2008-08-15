@@ -33,19 +33,25 @@
 #include <cherokee/buffer.h>
 #include <cherokee/socket.h>
 #include <cherokee/config_node.h>
+#include <cherokee/connection.h>
 
 CHEROKEE_BEGIN_DECLS
 
+typedef enum {
+	source_host,
+	source_interpreter
+} cherokee_source_type_t;
 
 typedef struct {
-	cherokee_list_t      list;
+	cherokee_list_t        list;
 	
-	cherokee_buffer_t    original;
-	cherokee_buffer_t    unix_socket;
-	cherokee_buffer_t    host;
-	cint_t               port;
+	cherokee_source_type_t type;
+	cherokee_buffer_t      original;
+	cherokee_buffer_t      unix_socket;
+	cherokee_buffer_t      host;
+	cint_t                 port;
 
-	cherokee_func_free_t free;
+	cherokee_func_free_t   free;
 } cherokee_source_t;
 
 #define SOURCE(s)  ((cherokee_source_t *)(s))
@@ -55,8 +61,12 @@ ret_t cherokee_source_free      (cherokee_source_t  *src);
 ret_t cherokee_source_init      (cherokee_source_t  *src);
 ret_t cherokee_source_mrproper  (cherokee_source_t  *src);
 
-ret_t cherokee_source_configure (cherokee_source_t  *src, cherokee_config_node_t *conf);
-ret_t cherokee_source_connect   (cherokee_source_t  *src, cherokee_socket_t *socket);
+ret_t cherokee_source_configure (cherokee_source_t *src, cherokee_config_node_t *conf);
+ret_t cherokee_source_connect   (cherokee_source_t *src, cherokee_socket_t *socket);
+
+ret_t cherokee_source_connect_polling (cherokee_source_t     *src, 
+				       cherokee_socket_t     *socket,
+				       cherokee_connection_t *conn);
 
 CHEROKEE_END_DECLS
 

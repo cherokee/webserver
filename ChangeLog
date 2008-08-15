@@ -1,15 +1,22 @@
-2008-08-14  Taher Shihadeh <taher@unixwars.com>
-
-	* admin/PageVServers.py, admin/PageVServer.py,
-	admin/static/css/cherokee.css: addresses UI enhancement proposal
-	at http://code.google.com/p/cherokee/issues/detail?id=86.
-
 2008-08-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_mirror.c, cherokee/source_interpreter.c,
+	cherokee/source_interpreter.h, cherokee/source.c,
+	cherokee/source.h, cherokee/handler_fcgi.c,
+	cherokee/handler_scgi.c: Clean up the code where handler were
+	using 'source' object in order to connect to an external
+	information source. This path removes some code duplication.
 
 	* admin/PageVServer.py (PageVServer._render_vserver_guts): Fixes
 	an unfortunate error. The administration interface fails to set
 	the security files (certificates and keys) because a previous
 	variable value messed up the property key.
+
+2008-08-14  Taher Shihadeh <taher@unixwars.com>
+
+	* admin/PageVServers.py, admin/PageVServer.py,
+	admin/static/css/cherokee.css: addresses UI enhancement proposal
+	at http://code.google.com/p/cherokee/issues/detail?id=86.
 
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 

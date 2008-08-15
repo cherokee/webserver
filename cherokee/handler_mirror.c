@@ -147,6 +147,8 @@ connect_to_server (cherokee_handler_mirror_t *hdl)
 	cherokee_connection_t           *conn     = HANDLER_CONN(hdl);
 	cherokee_handler_mirror_props_t *props    = HDL_MIRROR_PROPS(hdl);
 
+	/* Pick a host
+	 */
 	if (hdl->src_ref == NULL) {
 		ret = cherokee_balancer_dispatch (props->balancer, conn, &hdl->src_ref);
 		if (ret != ret_ok)
@@ -155,33 +157,7 @@ connect_to_server (cherokee_handler_mirror_t *hdl)
 
 	/* Try to connect
 	 */
- 	ret = cherokee_source_connect (hdl->src_ref, &hdl->socket); 
-	switch (ret) {
-	case ret_ok:
-		TRACE (ENTRIES, "Connected successfully fd=%d\n", 
-		       hdl->socket.socket);
-		return ret_ok;
-	case ret_deny:
-		break;
-	case ret_eagain:
-		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-							   conn,
-							   SOCKET_FD(&hdl->socket),
-							   FDPOLL_MODE_WRITE, 
-							   false);
-		if (ret != ret_ok) {
-			return ret_deny;
-		}
-
-		return ret_eagain;
-	case ret_error:
-		return ret_error;
-	default:
-		break;
-	}
-
-	TRACE (ENTRIES, "Couldn't connect%s", "\n");
-	return ret_error;
+	return cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, conn);
 }
 
 

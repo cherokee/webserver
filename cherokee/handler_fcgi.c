@@ -501,9 +501,8 @@ static ret_t
 connect_to_server (cherokee_handler_fcgi_t *hdl)
 {
 	ret_t                          ret;
-	cherokee_source_interpreter_t *src_int;
-	cherokee_connection_t         *conn    = HANDLER_CONN(hdl);
-	cherokee_handler_fcgi_props_t *props   = HANDLER_FCGI_PROPS(hdl);
+	cherokee_connection_t         *conn  = HANDLER_CONN(hdl);
+	cherokee_handler_fcgi_props_t *props = HANDLER_FCGI_PROPS(hdl);
 
 	/* Get a reference to the target host
 	 */
@@ -513,64 +512,14 @@ connect_to_server (cherokee_handler_fcgi_t *hdl)
 			return ret;
 	}
 
-	src_int = SOURCE_INT(hdl->src_ref);
-
 	/* Try to connect
 	 */
- 	ret = cherokee_source_connect (hdl->src_ref, &hdl->socket); 
-	switch (ret) {
-	case ret_ok:
-		goto out;
-	case ret_deny:
-		break;
-	case ret_eagain:
-		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-							   conn,
-							   SOCKET_FD(&hdl->socket),
-							   FDPOLL_MODE_WRITE, 
-							   false);
-		if (ret != ret_ok) {
-			return ret_deny;
-		}
+	if (hdl->src_ref->type == source_host)
+		return cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, conn);		
 
-		return ret_eagain;
-	case ret_error:
-		return ret_error;
-	default:
-		break;
-	}
-
-	/* In case it did not success, launch a interpreter
-	 */
-	if (hdl->spawned == 0) {
-		/* Launch a new interpreter */
-		ret = cherokee_source_interpreter_spawn (src_int);
-		if (ret != ret_ok) {
-			if (src_int->interpreter.buf)
-				TRACE (ENTRIES, "Couldn't spawn: %s\n",
-				       src_int->interpreter.buf);
-			else
-				TRACE (ENTRIES, "No interpreter to be spawned %s", "\n");
-			return ret_error;
-		}
-
-		hdl->spawned = cherokee_bogonow_now;
-
-		/* Reset the internal socket */
-		cherokee_socket_close (&hdl->socket);
-
-	} else if (cherokee_bogonow_now > hdl->spawned + 3) {	
-		TRACE (ENTRIES, "Giving up; spawned 3 secs ago: %s\n",
-		       src_int->interpreter.buf);
-		return ret_error;
-
-	}
-
-	return ret_eagain;	
-
-out:
-	TRACE (ENTRIES, "Connected successfully fd=%d\n", hdl->socket.socket);
-	return ret_ok;
+	return cherokee_source_interpreter_connect_polling (SOURCE_INT(hdl->src_ref),
+							    &hdl->socket, conn, 
+							    &hdl->spawned);
 }
 
 

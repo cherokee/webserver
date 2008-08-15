@@ -48,6 +48,11 @@ ret_t cherokee_source_interpreter_configure (cherokee_source_interpreter_t  *src
 ret_t cherokee_source_interpreter_add_env   (cherokee_source_interpreter_t *src, char *env, char *val);
 ret_t cherokee_source_interpreter_spawn     (cherokee_source_interpreter_t *src);
 
+ret_t cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src, 
+						   cherokee_socket_t             *socket,
+						   cherokee_connection_t         *conn,
+						   time_t                        *spawned);
+
 CHEROKEE_END_DECLS
 
 #endif /* CHEROKEE_SOURCE_INTERPRETER_H */
