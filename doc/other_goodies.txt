@@ -60,8 +60,8 @@ having to make major code rewrites.
 
 
 [[zero-downtime]]
-Zero Downtime Update
-~~~~~~~~~~~~~~~~~~~~
+Zero Downtime Updates
+~~~~~~~~~~~~~~~~~~~~~
 Cherokee has an ability hardly ever seen in any service delivering
 application, be it web content, multimedia streaming or almost any
 other server you can think of.
@@ -81,11 +81,11 @@ any downtime. Zero connection losses, no lag associated. Guaranteed.
 
 This might seem as just another cool feature, but is in fact
 huge. Just think about it: an extremely high traffic site cannot
-afford to be down. Never. Not to upgrade the webserver. Not to enhance
+afford to be down. Ever. Not to upgrade the webserver. Not to enhance
 it. Not to reflect a new configuration setting. Thousands of hits per
 second depend on it.
 
-With Cherokee you can cope with this and much more. With Cherokee, its
+With Cherokee you can cope with this and much more. With Cherokee, it's
 easier done than said.
 
 [[ssl-vhosts]]

@@ -3,8 +3,8 @@
 Cherokee Bundle: cherokee-tweak
 -------------------------------
 
-This command-line tool is also not as well known as it whould. Again
-this is not by a lack merits, which in fact are considerable. It's
+This command-line tool is also not as well known as it would. Again
+this is not by lack of merits, which in fact are considerable. Its
 intended audience are also system administrators and developers.
 
 `cherokee-tweak` is a swiss army knife that allows to perform several

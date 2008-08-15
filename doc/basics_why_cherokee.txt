@@ -36,7 +36,7 @@ and easier to maintain IT infrastructure.
 
 Best of all, Cherokee is free software, has a thoroughly designed
 architecture, is completely modular and has a clean and neat code
-base. Anyone and everyone can have access to the code fot study and
+base. Anyone and everyone can have access to the code for study and
 tinkering, thus allowing you to customize, modify or extend everything
 to suit specific needs. It is also very actively maintained, and every
 interesting feature request is carefully considered.
@@ -47,5 +47,5 @@ performance.
 
 But don't trust everything you are told. Check out the benchmarks and
 the rest of the documentation to learn more, and give it a try to
-squeeze your hardware to the fullest. You will not be disapointed.
+squeeze your hardware to the fullest. You will not be disappointed.
 That you can trust.

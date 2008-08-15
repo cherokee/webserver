@@ -34,6 +34,6 @@ However, Cherokee is a very active project and has been steadily
 advancing and incorporating technical improvements. You should really be
 using link:bundle_cherokee-admin.html[cherokee-admin] to configure your
 system if you want to take full advantage of the new features. Even if
-the upgrade process is succesful, you should use the new configuration
+the upgrade process is successful, you should use the new configuration
 file as a start point and go through the normal configuration process
 using link:bundle_cherokee-admin.html[cherokee-admin].
