@@ -220,6 +220,11 @@ cherokee_balancer_instance (cherokee_buffer_t       *name,
 	balancer_new_func_t     new_func;
 	cherokee_plugin_info_t *info      = NULL;
 	
+	if (cherokee_buffer_is_empty (name)) {
+		PRINT_ERROR_S ("Balancer defined without a value\n");
+		return ret_error;
+	}
+
 	ret = cherokee_plugin_loader_get (&srv->loader, name->buf, &info);
 	if (ret != ret_ok) return ret;
 	

@@ -1,3 +1,8 @@
+2008-08-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/balancer.c (cherokee_balancer_instance): Adds a sanity
+	check (only broken configurations could fail on this check).
+
 2008-08-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_mirror.c, cherokee/source_interpreter.c,
