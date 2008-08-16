@@ -1,3 +1,7 @@
+2008-08-16  Taher Shihadeh <taher@unixwars.com>
+
+	* doc/basics_installation_svn.txt: added info.
+
 2008-08-16  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/balancer.c (cherokee_balancer_instance): Adds a sanity
@@ -10,14 +14,14 @@
 	cherokee/source.h, cherokee/handler_fcgi.c,
 	cherokee/handler_scgi.c: Clean up the code where handler were
 	using 'source' object in order to connect to an external
-	information source. This path removes some code duplication.
+	information source. This patch removes some code duplication.
 
 	* admin/PageVServer.py (PageVServer._render_vserver_guts): Fixes
 	an unfortunate error. The administration interface fails to set
 	the security files (certificates and keys) because a previous
 	variable value messed up the property key.
 
-2008-08-14  Taher Shihadeh <taher@unixwars.com>
+2008-08-15  Taher Shihadeh <taher@unixwars.com>
 
 	* admin/PageVServers.py, admin/PageVServer.py,
 	admin/static/css/cherokee.css: addresses UI enhancement proposal

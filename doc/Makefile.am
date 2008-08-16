@@ -15,6 +15,7 @@ basics_download.html \
 basics_installation.html \
 basics_installation_unix.html \
 basics_installation_windows.html \
+basics_installation_svn.html \
 basics_upgrade.html \
 basics_running_cherokee.html \
 bundle.html \
