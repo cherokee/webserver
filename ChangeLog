@@ -1,3 +1,9 @@
+2008-08-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/buffer.c (cherokee_buffer_convert_to_chunked): Added
+	new function. It converts buffer into a chunked "Transfer
+	Encoding" packet.
+
 2008-08-16  Taher Shihadeh <taher@unixwars.com>
 
 	* doc/basics_installation_svn.txt: added info.

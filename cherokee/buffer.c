@@ -1596,6 +1596,28 @@ cherokee_buffer_decode_hex (cherokee_buffer_t *buf)
 }
 
 
+ret_t
+cherokee_buffer_convert_to_chunked (cherokee_buffer_t *buf)
+{
+	int  len;
+	char tmp[40];
+
+	len = sprintf (tmp, "%x", buf->len);
+	if (unlikely (len > 40-3))
+		return ret_error;
+
+	tmp[len]   = CHR_CR;
+	tmp[len+1] = CHR_LF;
+	tmp[len+2] = '\0';
+
+	cherokee_buffer_ensure_size (buf, buf->len + len + 2);
+	cherokee_buffer_prepend (buf, tmp, len+2);
+	cherokee_buffer_add_str (buf, CRLF);
+
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_buffer_add_chunked (cherokee_buffer_t *buf, char *txt, size_t size)
 {

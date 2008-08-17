@@ -90,6 +90,7 @@ ret_t cherokee_buffer_read_from_fd       (cherokee_buffer_t  *buf, int fd, size_
 
 ret_t cherokee_buffer_add_chunked        (cherokee_buffer_t  *buf, char *txt, size_t size);
 ret_t cherokee_buffer_add_buffer_chunked (cherokee_buffer_t  *buf, cherokee_buffer_t *buf2);
+ret_t cherokee_buffer_convert_to_chunked (cherokee_buffer_t  *buf);
 
 ret_t cherokee_buffer_move_to_begin      (cherokee_buffer_t  *buf, cuint_t pos);
 ret_t cherokee_buffer_drop_ending        (cherokee_buffer_t  *buf, cuint_t num_chars);
