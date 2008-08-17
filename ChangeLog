@@ -1,5 +1,8 @@
 2008-08-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler.h, cherokee/connection.c: Slightly improves the
+	chunked encoding support.
+
 	* cherokee/buffer.c (cherokee_buffer_convert_to_chunked): Added
 	new function. It converts buffer into a chunked "Transfer
 	Encoding" packet.

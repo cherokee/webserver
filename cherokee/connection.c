@@ -486,6 +486,10 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 		cherokee_buffer_add_str (buffer, "Connection: Keep-Alive"CRLF);
 		cherokee_buffer_add_buffer (buffer, &CONN_SRV(conn)->timeout_header);
 
+	} else if (conn->handler && 
+		   HANDLER_SUPPORTS (conn->handler, hsupport_chunked)) {
+		cherokee_buffer_add_str (buffer, "Transfer-Encoding: chunked" CRLF);
+
 	} else {
 		cherokee_buffer_add_str (buffer, "Connection: close"CRLF);
 	}
@@ -572,8 +576,12 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 				conn->keepalive = 0;
 		}
 		
-		if (HANDLER_SUPPORTS (conn->handler, hsupport_length) == 0)
+		
+		if ((! HANDLER_SUPPORTS (conn->handler, hsupport_length)) &&
+		    (! HANDLER_SUPPORTS (conn->handler, hsupport_chunked)))
+		{
 			conn->keepalive = 0;
+		}
 	}
 
 	/* Add the server headers	
