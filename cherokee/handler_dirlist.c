@@ -465,7 +465,8 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 		len = conn->web_directory.len + 
 		      conn->request.len + 
 		      conn->userdir.len + 
-		      conn->host.len + 
+		      conn->host.len +
+		      sizeof(":65535") +
 		      sizeof("https://") + 4;
 
 		cherokee_buffer_ensure_size (&conn->redirect, len);
@@ -489,6 +490,11 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 				cherokee_buffer_add_str (&conn->redirect, "http://");
 
 			cherokee_buffer_add_buffer (&conn->redirect, &conn->host);
+
+			if (CONN_SRV(conn)->port != 80) {
+				cherokee_buffer_add_str (&conn->redirect, ":");
+				cherokee_buffer_add_long10 (&conn->redirect, CONN_SRV(conn)->port);
+			}
 		}
 
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->request);
