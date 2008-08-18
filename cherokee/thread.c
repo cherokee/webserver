@@ -1079,7 +1079,7 @@ process_active_connections (cherokee_thread_t *thd)
 					maybe_purge_closed_connection (thd, conn);
 					continue;
 				}
-				if (http_type_300(conn->error_code)) {
+				if (!http_code_with_body (conn->error_code)) {
 					maybe_purge_closed_connection (thd, conn);
 					continue;
 				}

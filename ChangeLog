@@ -1,5 +1,9 @@
 2008-08-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/thread.c: Fixes an issue of redirections replies over
+	Keepalive connections. This regression was introducced right
+	before releasing 0.8.0.
+	
 	* cherokee/handler_dirlist.c: Adds a final slash whenever the list
 	entry is a directory, so next request does go through a
 	redirection reply.
