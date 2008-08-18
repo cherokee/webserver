@@ -1,5 +1,9 @@
 2008-08-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_dirlist.c: Adds a final slash whenever the list
+	entry is a directory, so next request does go through a
+	redirection reply.
+	
 	* cherokee/handler_dirlist.c: Fixes an issue redirecting
 	connections when the server does not run on the port 80.
 
