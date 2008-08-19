@@ -89,7 +89,7 @@ FAQ
 
   How to compile it on Windows
   ----------------------------
-   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-trace --enable-static-module=all --enable-static --enable-shared=no --enable-beta
+   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --enable-beta --enable-trace
 
   How to cross compile the Win32 version
   --------------------------------------
