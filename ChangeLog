@@ -1,5 +1,14 @@
 2008-08-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c (cherokee_connection_set_redirect),
+	cherokee/connection-protected.h, cherokee/rule_directory.c,
+	cherokee/handler_dirlist.c, cherokee/connection.c: Fixes another
+	problem with redirections. It was failing to redirect requests
+	targeting a directory rule entry without a empty request (not even
+	the root slash). There is a new function now to perform this sort
+	of redirections, so it should be much safer to use it from
+	handler_dirilst and rule_directory.
+
 	* cherokee/handler_dirlist.c: Fixes a problem with redirections of
 	local user directories.
 	

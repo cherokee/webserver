@@ -2073,3 +2073,52 @@ cherokee_connection_get_phase_str (cherokee_connection_t *conn)
 	return NULL;
 }
 #endif
+
+
+ret_t
+cherokee_connection_set_redirect (cherokee_connection_t *conn, cherokee_buffer_t *address)
+{
+	cuint_t len;
+
+	/* Build the redirection address
+	 */
+	cherokee_buffer_clean (&conn->redirect);
+
+	len = conn->web_directory.len + 
+		address->len + 
+		conn->userdir.len + 
+		conn->host.len +
+		sizeof(":65535") +
+		sizeof("https://") + 4;
+	
+	cherokee_buffer_ensure_size (&conn->redirect, len);
+
+	/* In case the connection has a custom Document Root directory,
+	 * it must add the web equivalent directory to the path (web_directory).
+	 */
+	if (cherokee_connection_use_webdir (conn)) {
+		cherokee_buffer_add_buffer (&conn->redirect, &conn->web_directory);
+	}
+		
+	if (! cherokee_buffer_is_empty (&conn->host)) {
+		if (conn->socket.is_tls == TLS)
+			cherokee_buffer_add_str (&conn->redirect, "https://");
+		else
+			cherokee_buffer_add_str (&conn->redirect, "http://");
+		
+		cherokee_buffer_add_buffer (&conn->redirect, &conn->host);
+		
+		if (CONN_SRV(conn)->port != 80) {
+			cherokee_buffer_add_str (&conn->redirect, ":");
+			cherokee_buffer_add_long10 (&conn->redirect, CONN_SRV(conn)->port);
+		}
+	}
+	
+	if (! cherokee_buffer_is_empty (&conn->userdir)) {
+		cherokee_buffer_add_str (&conn->redirect, "/~");
+		cherokee_buffer_add_buffer (&conn->redirect, &conn->userdir);
+	}
+	
+	cherokee_buffer_add_buffer (&conn->redirect, address);
+	return ret_ok;
+}
