@@ -1132,8 +1132,6 @@ cherokee_getpwnam (const char *name, struct passwd *pwbuf, char *buf, size_t buf
 	if ((re != 0) || (tmp == NULL)) 
 		return ret_error;
 
-	printf ("pwbuf=%p tmp=%p\n", pwbuf, tmp);
-
 	return ret_ok;
 
 #elif HAVE_GETPWNAM_R_4 
