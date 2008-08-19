@@ -68,9 +68,9 @@ match (cherokee_rule_directory_t *rule, cherokee_connection_t *conn)
 	    (cherokee_buffer_end_char (&conn->request) != '/') &&
 	    (cherokee_buffer_cmp_buf (&conn->request, &rule->directory) == 0))
 	{
-		cherokee_buffer_add_str (&conn->redirect, "/");
-		cherokee_connection_set_redirect (conn, &conn->redirect);
-		cherokee_buffer_drop_ending (&conn->redirect, 1);
+		cherokee_buffer_add_str (&conn->request, "/");
+		cherokee_connection_set_redirect (conn, &conn->request);
+		cherokee_buffer_drop_ending (&conn->request, 1);
 
 		TRACE(ENTRIES, "Had to redirect to: %s\n", conn->redirect.buf);
 		conn->error_code = http_moved_permanently;

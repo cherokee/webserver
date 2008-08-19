@@ -452,15 +452,14 @@ cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 static ret_t
 check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 {
-	cuint_t                len;
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
 	if ((cherokee_buffer_is_empty (&conn->request)) ||
 	    (!cherokee_buffer_is_ending (&conn->request, '/'))) 
 	{
-		cherokee_buffer_add_str (&conn->redirect, "/");
-		cherokee_connection_set_redirect (conn, &conn->redirect);
-		cherokee_buffer_drop_ending (&conn->redirect, 1);
+		cherokee_buffer_add_str (&conn->request, "/");
+		cherokee_connection_set_redirect (conn, &conn->request);
+		cherokee_buffer_drop_ending (&conn->request, 1);
 		
 		conn->error_code = http_moved_permanently;
 		return ret_error;		
