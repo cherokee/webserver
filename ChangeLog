@@ -1,5 +1,8 @@
 2008-08-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_server_info.c (build_cache_table_content): It
+	adds a new table showing some general file caching statistics.
+
 	* cherokee/connection.c (cherokee_connection_set_redirect),
 	cherokee/connection-protected.h, cherokee/rule_directory.c,
 	cherokee/handler_dirlist.c, cherokee/connection.c: Fixes another
