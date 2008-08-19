@@ -1,3 +1,8 @@
+2008-08-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/CherokeeManagement.py: Fixes a problem with the Hard
+	restart. Reported by Miguel Angel Ajo.
+
 2008-08-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/thread.c: Fixes an issue of redirections replies over

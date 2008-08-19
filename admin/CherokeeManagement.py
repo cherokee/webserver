@@ -149,7 +149,7 @@ class CherokeeManagement:
             pid_file = os.path.join (CHEROKEE_VAR_RUN, "cherokee-guardian.pid")
         return self.__read_pid_file (pid_file)
 
-    def _restart (self, graceful):
+    def _restart (self, graceful=False):
         if not self._pid:
             return
         try:
