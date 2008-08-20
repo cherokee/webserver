@@ -1,3 +1,9 @@
+2008-08-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/util.h, cherokee/util.c (cherokee_mkdir_p): Adds a new
+	cheroke_mkdir() and fixes compilation on Windows:
+	http://code.google.com/p/cherokee/issues/detail?id=96
+
 2008-08-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_server_info.c (build_cache_table_content): It
@@ -14,7 +20,7 @@
 
 	* cherokee/handler_dirlist.c: Fixes a problem with redirections of
 	local user directories.
-	
+
 	* admin/CherokeeManagement.py: Fixes a problem with the Hard
 	restart. Reported by Miguel Angel Ajo.
 
@@ -23,16 +29,16 @@
 	* cherokee/thread.c: Fixes an issue of redirections replies over
 	Keepalive connections. This regression was introducced right
 	before releasing 0.8.0.
-	
+
 	* cherokee/handler_dirlist.c: Adds a final slash whenever the list
 	entry is a directory, so next request does go through a
 	redirection reply.
-	
+
 	* cherokee/handler_dirlist.c: Fixes an issue redirecting
 	connections when the server does not run on the port 80.
 
 2008-08-17  Alvaro Lopez Ortega  <alvaro@alobbs.com>
-	
+
 	* cherokee/handler.h, cherokee/connection.c: Slightly improves the
 	chunked encoding support.
 

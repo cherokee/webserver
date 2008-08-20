@@ -1370,7 +1370,7 @@ cherokee_mkdir_p (cherokee_buffer_t *path)
 			break;
 
 		*p = '\0';
-		re = mkdir (path->buf, 0700);
+		re = cherokee_mkdir (path->buf, 0700);
 		if ((re != 0) && (errno != EEXIST)) {
 			PRINT_ERRNO (errno, "Could not mkdir '%s': ${errno}\n", path->buf);
 			return ret_error;
@@ -1382,7 +1382,7 @@ cherokee_mkdir_p (cherokee_buffer_t *path)
 			return ret_ok;
 	}
 
-	re = mkdir (path->buf, 0700);
+	re = cherokee_mkdir (path->buf, 0700);
 	if ((re != 0) && (errno != EEXIST)) {
 		PRINT_ERRNO (errno, "Could not mkdir '%s': ${errno}\n", path->buf);
 		return ret_error;
