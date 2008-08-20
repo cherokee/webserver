@@ -78,6 +78,7 @@
 #include "header.h"
 #include "header-protected.h"
 #include "iocache.h"
+#include "dtm.h"
 
 #define ENTRIES "core,connection"
 
@@ -118,6 +119,8 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->polling_fd           = -1;
 	n->polling_multiple     = false;
 	n->polling_mode         = FDPOLL_MODE_NONE;
+	n->expiration           = cherokee_expiration_none;
+	n->expiration_time      = 0;
 
 	cherokee_buffer_init (&n->buffer);
 	cherokee_buffer_init (&n->header_buffer);
@@ -246,6 +249,8 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->traffic_next         = 0;
 	conn->polling_multiple     = false;
 	conn->polling_mode         = FDPOLL_MODE_NONE;
+	conn->expiration           = cherokee_expiration_none;
+	conn->expiration_time      = 0;
 
 	memset (conn->regex_ovector, OVECTOR_LEN * sizeof(int), 0);
 	conn->regex_ovecsize = 0;
@@ -408,7 +413,7 @@ out:
 
 
 static void
-build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
+build_response_header_authentication (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 {
 	/* Basic Authenticatiom
 	 * Eg: WWW-Authenticate: Basic realm=""
@@ -446,6 +451,42 @@ build_response_header__authenticate (cherokee_connection_t *conn, cherokee_buffe
 		 * Algorithm: MD5
 		 */
 		cherokee_buffer_add_str (buffer, "qop=\"auth\", algorithm=\"MD5\""CRLF);
+	}
+}
+
+
+static void
+build_response_header_expiration (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
+{
+	time_t    exp_time;
+	struct tm exp_tm;
+	size_t    szlen = 0;
+	char      bufstr[DTM_SIZE_GMTTM_STR + 2];
+
+	switch (conn->expiration) {
+	case cherokee_expiration_epoch:
+		cherokee_buffer_add_str (buffer, "Expires: Tue, 01 Jan 1970 00:00:01 GMT" CRLF);
+		cherokee_buffer_add_str (buffer, "Cache-Control: no-cache" CRLF);
+		break;
+	case cherokee_expiration_max:
+		cherokee_buffer_add_str (buffer, "Expires: Thu, 31 Dec 2037 23:55:55 GMT" CRLF);
+		cherokee_buffer_add_str (buffer, "Cache-Control: max-age=315360000" CRLF);
+		break;
+	case cherokee_expiration_time:
+		exp_time = (cherokee_bogonow_now + conn->expiration_time);
+		cherokee_gmtime (&exp_time, &exp_tm);
+		szlen = cherokee_dtm_gmttm2str (bufstr, sizeof(bufstr), &exp_tm);
+
+		cherokee_buffer_add_str (buffer, "Expires: ");
+		cherokee_buffer_add (buffer, bufstr, szlen);
+		cherokee_buffer_add_str (buffer, CRLF);
+
+		cherokee_buffer_add_str (buffer, "Cache-Contro: max-age=");
+		cherokee_buffer_add_long10 (buffer, conn->expiration_time);
+		cherokee_buffer_add_str (buffer, CRLF);
+		break;
+	default:
+		SHOULDNT_HAPPEN;
 	}
 }
 
@@ -509,7 +550,13 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	/* Authentication
 	 */
 	if ((conn->realm_ref != NULL) && (conn->error_code == http_unauthorized)) {
-		build_response_header__authenticate (conn, buffer);
+		build_response_header_authentication (conn, buffer);
+	}
+
+	/* Expiration
+	 */
+	if (conn->expiration != cherokee_expiration_none) {
+		build_response_header_expiration (conn, buffer);
 	}
 
 	/* Redirected connections

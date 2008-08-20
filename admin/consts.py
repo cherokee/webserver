@@ -107,3 +107,10 @@ RULES = [
     ('header',     'Header'),
     ('geoip',      'GeoIP')
 ]
+
+EXPIRATION_TYPE = [
+    ('',         'Not set'),
+    ('epoch',    'Already expired on 1970'),
+    ('max',      'Do not expire until 2038'),
+    ('time',     'Custom value')
+]

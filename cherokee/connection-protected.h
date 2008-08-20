@@ -185,6 +185,9 @@ struct cherokee_connection {
 
 	int                           regex_ovector[OVECTOR_LEN];
 	int                           regex_ovecsize;
+
+	cherokee_expiration_t         expiration;
+	time_t                        expiration_time;
 };
 
 #define CONN_SRV(c)    (SRV(CONN(c)->server))

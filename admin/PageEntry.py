@@ -10,11 +10,13 @@ from consts import *
 
 DEFAULT_RULE_WARNING = 'The default match ought not to be changed.'
 
-NOTE_DOCUMENT_ROOT = 'Allows to specify an alternative document root path.'
-NOTE_HANDLER       = 'How the connection will be handled.'
-NOTE_HTTPS_ONLY    = 'Enable to allow access to the resource only by https.'
-NOTE_ALLOW_FROM    = 'List of IPs and subnets allowed to access the resource.'
-NOTE_VALIDATOR     = 'Which, if any, will be the authentication method.'
+NOTE_DOCUMENT_ROOT   = 'Allows to specify an alternative document root path.'
+NOTE_HANDLER         = 'How the connection will be handled.'
+NOTE_HTTPS_ONLY      = 'Enable to allow access to the resource only by https.'
+NOTE_ALLOW_FROM      = 'List of IPs and subnets allowed to access the resource.'
+NOTE_VALIDATOR       = 'Which, if any, will be the authentication method.'
+NOTE_EXPIRATION      = 'Points how long the files should be cached'
+NOTE_EXPIRATION_TIME = 'How long from the object can be cached'
 
 DATA_VALIDATION = [
     ("vserver!.*?!rule!(\d+)!document_root", (validations.is_local_dir_exists, 'cfg')),
@@ -128,6 +130,9 @@ class PageEntry (PageMenu, FormHelper):
         else:
             tabs += [('Handler', str(table))]
 
+        # Expiration
+        tabs += [('Expiration', self._render_expiration())]
+
         # Security
         tabs += [('Security', self._render_security())]
 
@@ -156,6 +161,20 @@ class PageEntry (PageMenu, FormHelper):
         table = TableProps()
         e = self.AddPropOptions_Reload (table, "Rule Type", pre, RULES, "")
         return str(table) + e
+
+    def _render_expiration (self):
+        txt = ''
+        pre = "%s!expiration"%(self._conf_prefix)
+
+        table = TableProps()
+        self.AddPropOptions_Ajax (table, "Expiration", pre, EXPIRATION_TYPE, NOTE_EXPIRATION)
+
+        exp = self._cfg.get_val(pre)
+        if exp == 'time':
+            self.AddPropEntry (table, 'Time to expire', '%s!time'%(pre), NOTE_EXPIRATION_TIME)
+
+        txt += str(table)
+        return txt
 
     def _render_security (self):
         pre = self._conf_prefix

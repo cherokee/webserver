@@ -62,6 +62,9 @@ cherokee_config_entry_init (cherokee_config_entry_t *entry)
 	entry->document_root        = NULL;
 	entry->users                = NULL;
 
+	entry->expiration           = cherokee_expiration_none;
+	entry->expiration_time      = 0;
+
 	return ret_ok;
 }
 
@@ -159,6 +162,13 @@ cherokee_config_entry_complete (cherokee_config_entry_t *entry, cherokee_config_
 	if (! entry->users)
 		entry->users = source->users;
 	
+	if ((entry->expiration  == cherokee_expiration_none) &&
+	    (source->expiration != cherokee_expiration_none))
+	{
+		entry->expiration      = source->expiration;
+		entry->expiration_time = source->expiration_time;
+	}
+
 	return ret_ok;
 }
 
@@ -176,6 +186,8 @@ cherokee_config_entry_print (cherokee_config_entry_t *entry)
 	printf ("validator_properties:      %p\n", entry->validator_properties);
 	printf ("auth_realm:                %s\n", entry->auth_realm ? entry->auth_realm->buf : "");
 	printf ("users:                     %p\n", entry->users);
+	printf ("expiration type:           %d\n", entry->expiration);
+	printf ("expiration_time            %lu\n", entry->expiration_time);
 
 	return ret_ok;
 }

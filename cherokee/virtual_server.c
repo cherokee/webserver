@@ -456,6 +456,25 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "only_secure")) {
 		entry->only_secure = !! atoi(conf->val.buf);
 
+	} else if (equal_buf_str (&conf->key, "expiration")) {
+		if (equal_buf_str (&conf->val, "none")) {
+			entry->expiration = cherokee_expiration_none;
+
+		} else if (equal_buf_str (&conf->val, "epoch")) {
+			entry->expiration = cherokee_expiration_epoch;
+
+		} else if (equal_buf_str (&conf->val, "max")) {
+			entry->expiration = cherokee_expiration_max;
+
+		} else if (equal_buf_str (&conf->val, "time")) {
+			entry->expiration = cherokee_expiration_time;
+			ret = cherokee_config_node_read_long (conf, "time", &entry->expiration_time);
+			if (ret != ret_ok) {
+				PRINT_ERROR_S ("Expiration 'time' without a time property\n");
+				return ret_error;
+			}
+		}
+
 	} else if (equal_buf_str (&conf->key, "match")) {
 		/* Ignore: Previously handled 
 		 */

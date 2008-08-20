@@ -37,6 +37,12 @@
 #define CHEROKEE_CONFIG_PRIORITY_NONE    0
 #define CHEROKEE_CONFIG_PRIORITY_DEFAULT 1
 
+typedef enum {
+	cherokee_expiration_none,
+	cherokee_expiration_epoch,
+	cherokee_expiration_max,
+	cherokee_expiration_time
+} cherokee_expiration_t;
 
 typedef struct {
 	/* Properties
@@ -59,6 +65,11 @@ typedef struct {
 	cherokee_buffer_t          *auth_realm;
 	cherokee_http_auth_t        authentication;
 	cherokee_avl_t             *users;
+
+	/* Headers
+	 */
+	cherokee_expiration_t       expiration;
+	time_t                      expiration_time;
 } cherokee_config_entry_t; 
 
 #define CONF_ENTRY(x) ((cherokee_config_entry_t *)(x))

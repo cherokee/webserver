@@ -1,5 +1,12 @@
 2008-08-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/rule_list.c, cherokee/virtual_server.c,
+	cherokee/connection-protected.h, cherokee/config_entry.c,
+	cherokee/config_entry.h, cherokee/connection.c,
+	admin/PageEntry.py, admin/consts.py: Adds support por expiration
+	headers.  This patch adds support to both the server and the
+	configuration interface.
+
 	* cherokee/config_node.c (cherokee_config_node_read_long),
 	cherokee/config_node.h: Adds a new method to read long integers.
 
