@@ -90,6 +90,7 @@ char   *cherokee_min_str            (char *s1, char *s2);
 char   *cherokee_max_str            (char *s1, char *s2);
 size_t  cherokee_strlcat            (char *dst, const char *src, size_t siz);
 int     cherokee_estimate_va_length (char *format, va_list ap);
+long    cherokee_eval_formated_time (cherokee_buffer_t *buf);  
 ret_t   cherokee_fix_dirpath        (cherokee_buffer_t *buf);
 
 /* Time management functions

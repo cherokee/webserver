@@ -641,6 +641,40 @@ reswitch:
 }
 
 
+long
+cherokee_eval_formated_time (cherokee_buffer_t *buf)
+{
+	char end;
+	int  mul = 1;
+
+	if (unlikely (cherokee_buffer_is_empty (buf)))
+		return ret_ok;
+	
+	end = cherokee_buffer_end_char (buf);
+	switch (end) {
+	case 's':
+		mul = 1;
+		break;
+	case 'm':
+		mul = 60;
+		break;
+	case 'h':
+		mul = 60 * 60;
+		break;
+	case 'd':
+		mul = 60 * 60 * 24;
+		break;
+	case 'w':
+		mul = 60 * 60 * 24 * 7;
+		break;
+	default:
+		break;
+	}
+
+	return atol(buf->buf) * mul;
+}
+
+
 
 /* gethostbyname_r () emulation
  */

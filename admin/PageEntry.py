@@ -16,7 +16,8 @@ NOTE_HTTPS_ONLY      = 'Enable to allow access to the resource only by https.'
 NOTE_ALLOW_FROM      = 'List of IPs and subnets allowed to access the resource.'
 NOTE_VALIDATOR       = 'Which, if any, will be the authentication method.'
 NOTE_EXPIRATION      = 'Points how long the files should be cached'
-NOTE_EXPIRATION_TIME = 'How long from the object can be cached'
+NOTE_EXPIRATION_TIME = "How long from the object can be cached.<br />" + \
+                       "The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 2d."
 
 DATA_VALIDATION = [
     ("vserver!.*?!rule!(\d+)!document_root", (validations.is_local_dir_exists, 'cfg')),

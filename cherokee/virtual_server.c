@@ -468,11 +468,13 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 
 		} else if (equal_buf_str (&conf->val, "time")) {
 			entry->expiration = cherokee_expiration_time;
-			ret = cherokee_config_node_read_long (conf, "time", &entry->expiration_time);
+			ret = cherokee_config_node_read (conf, "time", &tmp);
 			if (ret != ret_ok) {
 				PRINT_ERROR_S ("Expiration 'time' without a time property\n");
 				return ret_error;
 			}
+
+			entry->expiration_time = cherokee_eval_formated_time (tmp);
 		}
 
 	} else if (equal_buf_str (&conf->key, "match")) {

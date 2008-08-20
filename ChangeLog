@@ -1,5 +1,10 @@
 2008-08-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/virtual_server.c, cherokee/util.c, cherokee/util.h,
+	admin/PageEntry.py: Adds support for time extensions in the
+	"Expire" sections. For instance, now it allows setting "2h" for
+	two hours, or "1w" for one week.
+
 	* admin/static/js/common.js: Fixes a weird problem with Firedfox.
 	If window.location.reload() is called it pops a dialog asking
 	whether it should resend the last post. Using the twisted:
