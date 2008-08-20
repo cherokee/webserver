@@ -1240,6 +1240,7 @@ cherokee_socket_pending_read (cherokee_socket_t *socket)
 	return (SSL_pending (socket->session) > 0);
 # endif
 #endif
+	return 0;
 }
 
 
