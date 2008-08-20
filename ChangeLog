@@ -1,5 +1,8 @@
 2008-08-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/config_node.c (cherokee_config_node_read_long),
+	cherokee/config_node.h: Adds a new method to read long integers.
+
 	* cherokee/util.h, cherokee/util.c (cherokee_mkdir_p): Adds a new
 	cheroke_mkdir() and fixes compilation on Windows:
 	http://code.google.com/p/cherokee/issues/detail?id=96
