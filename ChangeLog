@@ -1,5 +1,8 @@
 2008-08-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/Makefile.am (libcherokeeinclude_HEADERS): Installs a
+	missing header: cache.h. Reported by Stefan de Konink.
+
 	* cherokee/rule_list.c, cherokee/virtual_server.c,
 	cherokee/connection-protected.h, cherokee/config_entry.c,
 	cherokee/config_entry.h, cherokee/connection.c,

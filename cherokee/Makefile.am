@@ -1101,6 +1101,7 @@ resolv_cache.h \
 post.h \
 trace.h \
 avl.h \
+cache.h \
 \
 config_node.h \
 config_entry.h \
