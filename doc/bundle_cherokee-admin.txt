@@ -57,7 +57,7 @@ and grab the administration interface application from a different
 path:
 
 ----
-cherokee-admin -a -P 9091 -C /etc/cherokee/cherokee2.conf \
+cherokee-admin -a -p 9091 -C /etc/cherokee/cherokee2.conf \
                  -d /path/to/svn/trunk/cherokee-admin/
 ----
 

@@ -38,7 +38,10 @@ Unix Sockets
 
 Note that the FastCGI and SCGI handlers can directly use Unix
 sockets. You only have to specify a full path to the socket instead of
-the `host:port`, and everything will simply work.
+the `host:port`.
+
+For instance an entry such as something like `/var/tmp/socket-tmp.1`
+should get everything to simply work it that was the correct path.
 
 
 Examples
