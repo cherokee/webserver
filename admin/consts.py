@@ -8,6 +8,7 @@ HANDLERS = [
     ('fcgi',        'FastCGI'),
     ('scgi',        'SCGI'),
     ('server_info', 'Server Info'),
+    ('custom_error','HTTP error'),
     ('mirror',      'Generic balancer'),
     ('admin',       'Remote Administration')
 ]

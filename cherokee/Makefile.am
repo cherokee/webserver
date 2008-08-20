@@ -527,6 +527,24 @@ endif
 
 
 #
+# Handler custom_error
+#
+handler_custom_error = \
+handler_custom_error.c \
+handler_custom_error.h
+
+libplugin_custom_error_la_LDFLAGS = $(module_ldflags)  
+libplugin_custom_error_la_SOURCES = $(handler_custom_error)
+libplugin_custom_error_la_LIBADD  = libcherokee-client.la  
+
+if STATIC_HANDLER_CUSTOM_ERROR
+static_handler_custom_error_src = $(handler_custom_error)
+else
+dynamic_handler_custom_error_lib = libplugin_custom_error.la
+endif
+
+
+#
 # Handler admin
 #
 config_common = \
@@ -999,6 +1017,7 @@ $(static_handler_phpcgi_src) \
 $(static_handler_common_src) \
 $(static_handler_proxy_src) \
 $(static_handler_mirror_src) \
+$(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
 \
 $(static_logger_w3c_src) \
@@ -1151,6 +1170,7 @@ $(dynamic_handler_fastcgi_lib) \
 $(dynamic_handler_redir_lib) \
 $(dynamic_handler_proxy_lib) \
 $(dynamic_handler_mirror_lib) \
+$(dynamic_handler_custom_error_lib) \
 $(dynamic_handler_error_redir_lib) \
 $(dynamic_handler_error_nn_lib) \
 $(dynamic_handler_common_lib) \
