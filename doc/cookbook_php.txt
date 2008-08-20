@@ -9,18 +9,18 @@ scratch when there is no `cherokee.conf` present) already supports
 PHP.
 
 This example shows a typical usage of FastCGI. It connects to a
-FastCGI server located in localhost in port 8002. If no server is
+FastCGI server located in localhost in port 1234. If no server is
 running, the webserver will run the FastCGI server by issuing the command
 defined as the *Interpreter* sub-parameter:
 
 image::media/images/admin_handler_fastcgi1.png[Fastcgi]
 
 This other example shows a typical usage of multiple FastCGI
-servers. It connects to FastCGI servers located in several
-locations. If no server is running in the local computer, the
-webserver will run the FastCGI server by issuing the specified
-command. Note that for remote FastCGI servers, you are responsible to
-run the FastCGI servers there manually:
+servers. It connects to FastCGI servers in several locations. If no
+server is running in the local computer, the webserver will run the
+FastCGI server by issuing the specified command. Note that for remote
+FastCGI servers, you are responsible of running the FastCGI services
+there manually:
 
 image::media/images/admin_handler_fastcgi2.png[Fastcgi]
 

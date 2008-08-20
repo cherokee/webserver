@@ -15,8 +15,22 @@ This menu offers the following tabs:
    an independent section of the documentation to explain things named
    link:config_virtual_servers_hanlder.html[Handler Options].
 
+ . Expiration: to manage the configuration of *HTTP Cache headers*
+   used to identify cacheable content.
+
  . Security: in this section one can configure *Access Restrictions*
    and *Authentication*.
+
+Expiration
+~~~~~~~~~~
+HTTP/1.1 defines caching methods in HTTP. Cherokee-Admin can
+automatically adjust the `Cache-Control` and `Expire` headers depending
+on the values you have configured. The available options are:
+
+ . Not set: Does not write the caching headers.
+ . 1970: Corresponds to the Unix Epoch.
+ . 2038: Maximum date value representable in POSIX time.
+ . Custom Value: set a value by hand.
 
 Access Restrictions
 ~~~~~~~~~~~~~~~~~~~

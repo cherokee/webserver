@@ -28,6 +28,7 @@ If set to `normal`, some extra information will be provided regarding:
 * Current connections
 * Loaded Modules
 * Icons
+* File Caching
 
 If set to `connection_details` it will also  provide more detailed
 information about the existing connections:

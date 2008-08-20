@@ -7,6 +7,9 @@ The latest Windows bundled release is available at the
 link:http://www.cherokee-project.com/download/windows[Windows
 download] section of the Cherokee Project website.
 
+WARNING: The Windows build is currently broken. It will be fixed as
+soon as possible.  A Windows binary release will be available too.
+
 Quickstart
 ~~~~~~~~~~
 The installation process requires little explanation, as it is simply
