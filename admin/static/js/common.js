@@ -89,7 +89,7 @@ function options_changed (url, options_id, parent_id)
 
 	   jQuery.post (url, post,
               function (data, textStatus) {
-                  window.location.reload();
+   			   window.location = window.location;
               }
 	   );
 }
@@ -124,7 +124,7 @@ function post_add_entry_key (url, entry_name, cfg_key)
 
 	   jQuery.post (url, post, 
 	         function (data, textStatus) {
-                window.location.reload();
+			   window.location = window.location;
               }
         );
 }
