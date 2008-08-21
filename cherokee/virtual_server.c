@@ -219,11 +219,66 @@ cherokee_virtual_server_has_tls (cherokee_virtual_server_t *vserver)
 }
 
 
+#ifndef OPENSSL_NO_TLSEXT 
+static int
+openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
+{
+	ret_t                      ret;
+	const char                *servername;
+	cherokee_socket_t         *socket;
+	cherokee_buffer_t          tmp;
+	SSL_CTX                   *ctx;
+	cherokee_server_t         *srv       = SRV(arg);
+	cherokee_virtual_server_t *vsrv      = NULL;
+
+	/* Get the pointer to the socket 
+	 */
+	socket = SSL_get_app_data (ssl); 
+	if (unlikely (socket == NULL)) {
+		PRINT_ERROR ("Could not get the socket struct: %p\n", ssl);
+		return SSL_TLSEXT_ERR_ALERT_FATAL; 
+	}
+
+	/* Read the SNI server name
+	 */
+	servername = SSL_get_servername (ssl, TLSEXT_NAMETYPE_host_name);
+	if (servername == NULL) {
+		TRACE (ENTRIES, "No SNI: Did not provide a server name%s", "\n");
+		return SSL_TLSEXT_ERR_NOACK;
+	}
+
+	TRACE (ENTRIES, "SNI: Switching to servername='%s'\n", servername);
+
+	/* Try to match the name
+	 */
+	cherokee_buffer_fake (&tmp, servername, strlen(servername));
+	ret = cherokee_server_get_vserver (srv, &tmp, &vsrv);
+	if ((ret != ret_ok) || (vsrv == NULL)) {
+		PRINT_ERROR ("Servername did not match: '%s'\n", servername);
+		return SSL_TLSEXT_ERR_NOACK; 
+	}
+
+	TRACE (ENTRIES, "SNI: Setting new TLS context. Virtual host='%s'\n",
+	       vsrv->name.buf);
+
+	/* Set the new SSL context
+	 */
+	ctx = SSL_set_SSL_CTX (ssl, vsrv->context);
+	if (ctx != vsrv->context) {
+		PRINT_ERROR ("Could change the SSL context: servername='%s'\n", servername);
+	}
+
+	return SSL_TLSEXT_ERR_OK; 
+}
+#endif 
+
+
 ret_t 
 cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 {
 #ifdef HAVE_TLS
-	int rc;
+	int   rc;
+	char *error;
 
 	/* Check if all of them are empty
 	 */
@@ -274,6 +329,8 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 	gnutls_certificate_set_dh_params (vsrv->credentials, vsrv->dh_params);
 	gnutls_anon_set_server_dh_params (vsrv->credentials, vsrv->dh_params);
 	gnutls_certificate_set_rsa_export_params (vsrv->credentials, vsrv->rsa_params);
+
+	UNUSED(error);
 # endif
 
 # ifdef HAVE_OPENSSL
@@ -289,8 +346,6 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 	 */
 	rc = SSL_CTX_use_certificate_file (vsrv->context, vsrv->server_cert.buf, SSL_FILETYPE_PEM);
 	if (rc < 0) {
-		char *error;
-
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR("ERROR: OpenSSL: Can not use certificate file '%s':  %s\n", 
 			    vsrv->server_cert.buf, error);
@@ -301,8 +356,6 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 	 */
 	rc = SSL_CTX_use_PrivateKey_file (vsrv->context, vsrv->server_key.buf, SSL_FILETYPE_PEM);
 	if (rc < 0) {
-		char *error;
-
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR("ERROR: OpenSSL: Can not use private key file '%s': %s\n", 
 			    vsrv->server_key.buf, error);
@@ -314,6 +367,22 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 	rc = SSL_CTX_check_private_key (vsrv->context);
 	if (rc != 1) {
 		PRINT_ERROR_S("ERROR: OpenSSL: Private key does not match the certificate public key\n");
+		return ret_error;
+	}
+
+	/* Enable SNI
+	 */
+	rc = SSL_CTX_set_tlsext_servername_callback (vsrv->context, openssl_sni_servername_cb);
+	if (rc < 0) {
+		OPENSSL_LAST_ERROR(error);
+		PRINT_ERROR ("Could activate TLS SNI for '%s': %s\n", vsrv->name.buf, error);
+		return ret_error;
+	}
+
+	rc = SSL_CTX_set_tlsext_servername_arg (vsrv->context, VSERVER_SRV(vsrv));
+	if (rc < 0) {
+		OPENSSL_LAST_ERROR(error);
+		PRINT_ERROR ("Could activate TLS SNI for '%s': %s\n", vsrv->name.buf, error);
 		return ret_error;
 	}
 # endif

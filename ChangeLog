@@ -1,3 +1,9 @@
+2008-08-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/virtual_server.c, cherokee/socket.c, cherokee/socket.h,
+	cherokee/downloader.c: Adds TLS SNI support to the OpenSSL
+	backend.
+
 2008-08-20  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_custom_error.c, configure.in,

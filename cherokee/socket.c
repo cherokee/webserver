@@ -422,6 +422,10 @@ initialize_tls_session (cherokee_socket_t *socket, cherokee_virtual_server_t *vs
 		return ret_error;
 	}
 
+#ifndef OPENSSL_NO_TLSEXT 
+	SSL_set_app_data (socket->session, socket);
+#endif
+
 	/* Set the SSL context cache
 	 */
 	re = SSL_CTX_set_session_id_context (vserver->context, (const unsigned char *)"SSL", 3);
@@ -1775,7 +1779,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 
 
 ret_t 
-cherokee_socket_init_client_tls (cherokee_socket_t *socket)
+cherokee_socket_init_client_tls (cherokee_socket_t *socket, cherokee_buffer_t *host)
 {
 #ifdef HAVE_TLS
 	int re;
@@ -1820,7 +1824,10 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket)
 	} while ((re == GNUTLS_E_AGAIN) ||
 		 (re == GNUTLS_E_INTERRUPTED));
 
+	UNUSED (host);
+
 # elif defined (HAVE_OPENSSL)
+	char *error;
 
 	socket->is_tls = TLS;
 
@@ -1828,8 +1835,6 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket)
 	 */
 	socket->ssl_ctx = SSL_CTX_new (SSLv23_client_method());
 	if (socket->ssl_ctx == NULL) {
-		char *error;
-
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR ("ERROR: OpenSSL: Unable to create a new SSL context: %s\n", error);
 		return ret_error;
@@ -1845,8 +1850,6 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket)
 	 */
 	socket->session = SSL_new (socket->ssl_ctx);
 	if (socket->session == NULL) {
-		char *error;
-
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR ("ERROR: OpenSSL: Unable to create a new SSL connection "
 			     "from the SSL context: %s\n", error);
@@ -1857,8 +1860,6 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket)
 	 */
 	re = SSL_set_fd (socket->session, socket->socket);
 	if (re != 1) {
-		char *error;
-
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR ("ERROR: OpenSSL: Can not set fd(%d): %s\n", socket->socket, error);
 		return ret_error;
@@ -1866,10 +1867,17 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket)
 
 	SSL_set_connect_state (socket->session); 
 
+#ifndef OPENSSL_NO_TLSEXT 
+	re = SSL_set_tlsext_host_name (socket->session, host->buf);
+	if (re <= 0) {
+		OPENSSL_LAST_ERROR(error);
+		PRINT_ERROR ("ERROR: OpenSSL: Could set SNI server name: %s\n", error);
+		return ret_error;
+	}
+#endif
+
 	re = SSL_connect (socket->session);
 	if (re <= 0) {
-		char *error;
-
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR ("ERROR: OpenSSL: Can not connect: %s\n", error);
 		return ret_error;
@@ -1877,6 +1885,7 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket)
 
 # endif
 #else 
+	UNUSED (host);
 	UNUSED (socket);
 #endif
 	return ret_ok;

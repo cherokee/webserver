@@ -204,7 +204,7 @@ connect_to (cherokee_downloader_t *downloader, cherokee_buffer_t *host, cuint_t 
 	ret = cherokee_socket_pton (sock, host);
 	if (ret != ret_ok) {
 
-		/* Ops! It might be a hostname. Try to resolve it.
+		/* Oops! It might be a hostname. Try to resolve it.
 		 */
  		ret = cherokee_socket_gethostbyname (sock, host);
 		if (unlikely(ret != ret_ok)) return ret_error;
@@ -221,7 +221,7 @@ connect_to (cherokee_downloader_t *downloader, cherokee_buffer_t *host, cuint_t 
 	/* Is this connection TLS?
 	 */
 	if (protocol == https) {
-		ret = cherokee_socket_init_client_tls (sock);
+		ret = cherokee_socket_init_client_tls (sock, host);
 		if (ret != ret_ok) return ret;
 	}
 

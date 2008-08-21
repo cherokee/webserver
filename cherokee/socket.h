@@ -185,7 +185,7 @@ ret_t cherokee_socket_mrproper          (cherokee_socket_t *socket);
 ret_t cherokee_socket_clean             (cherokee_socket_t *socket);
 
 ret_t cherokee_socket_init_tls          (cherokee_socket_t *socket, cherokee_virtual_server_t *vserver);
-ret_t cherokee_socket_init_client_tls   (cherokee_socket_t *socket);
+ret_t cherokee_socket_init_client_tls   (cherokee_socket_t *socket, cherokee_buffer_t *host);
 
 ret_t cherokee_socket_close             (cherokee_socket_t *socket);
 ret_t cherokee_socket_shutdown          (cherokee_socket_t *socket, int how);
