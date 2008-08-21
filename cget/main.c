@@ -383,7 +383,7 @@ main (int argc, char **argv)
 
 		case 'O':
 			if (! strncmp (optarg, "-", 1)) {
-				global_fd = 1;
+				global_fd = fileno(stdout);
 			} else {
 				global_fd = open (optarg, O_WRONLY | O_CREAT, 0644);
 				if (global_fd < 0) {
