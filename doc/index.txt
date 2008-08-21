@@ -62,6 +62,7 @@ link:modules.html[Modules]: Information about the standard modules.
     - link:modules_handlers_file.html[Static Content]: Send files..
     - link:modules_handlers_dirlist.html[Only listing]: List directories.
     - link:modules_handlers_common.html[List & Send]: List directories and send files.
+    - link:modules_handlers_custom_error.html[HTTP error]: Generate custom HTTP errors.
     - link:modules_handlers_redir.html[Redirection]: URL forwards and rewrites.
     - link:modules_handlers_cgi.html[CGI]: Common Gateway Interface.
     - link:modules_handlers_fcgi.html[FastCGI]: Fast Common Gateway Interface.

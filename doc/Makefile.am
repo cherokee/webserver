@@ -53,6 +53,7 @@ modules_encoders_deflate.html \
 modules_handlers.html \
 modules_handlers_file.html \
 modules_handlers_dirlist.html \
+modules_handlers_custom_error.html \
 modules_handlers_common.html \
 modules_handlers_redir.html \
 modules_handlers_cgi.html \
@@ -92,6 +93,7 @@ media/images/admin_encoding.png \
 media/images/admin_general.png \
 media/images/admin_handler_admin.png \
 media/images/admin_handler_cgi.png \
+media/images/admin_custom_error.png \
 media/images/admin_handler_dirlist_ex.png \
 media/images/admin_handler_dirlist.png \
 media/images/admin_handler_fastcgi1.png \

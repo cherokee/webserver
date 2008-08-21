@@ -344,6 +344,15 @@ Here are a few examples about how this notation works:
     vserver!5!rule!directory!/!allow_from = 127.0.0.1,::1
 ----
 
+- Rules can be defined that return custom errors using the
+  link:modules_handlers_custom_error.html[HTTP error] handler: `custom
+  error`.
++
+----
+    vserver!10!rule!100!handler = custom_error
+    vserver!10!rule!100!handler!error = 400
+----
+
 - ISO images should be handled as files and are protected by a
   htdigest file using only Digest authentication:
 +
