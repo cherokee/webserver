@@ -31,6 +31,7 @@
 #ifdef HAVE_GNUTLS
 # include <gnutls/extra.h>
 # include <gnutls/gnutls.h>
+# include <gnutls/x509.h>
 #endif
 
 #ifdef HAVE_OPENSSL
@@ -82,8 +83,11 @@ typedef struct {
 #ifdef HAVE_TLS
 	cherokee_avl_r_t             session_cache;
 
-# ifdef HAVE_GNUTLS
+# ifdef HAVE_GNUTLS   
 	gnutls_certificate_server_credentials credentials;
+	gnutls_x509_privkey_t                 privkey_x509;
+	gnutls_x509_crt_t                     certs_x509;
+
 	gnutls_dh_params             dh_params;
 	gnutls_rsa_params            rsa_params;
 # endif

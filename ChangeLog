@@ -1,5 +1,8 @@
 2008-08-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/socket.c: Adds TLS SNI support to the GNUTLS backend.
+
 	* cherokee/virtual_server.c, cherokee/socket.c, cherokee/socket.h,
 	cherokee/downloader.c: Adds TLS SNI support to the OpenSSL
 	backend.

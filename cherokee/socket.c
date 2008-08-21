@@ -343,23 +343,27 @@ db_store (void *ptr, gnutls_datum key, gnutls_datum data)
 #ifdef HAVE_TLS
 
 static ret_t
-initialize_tls_session (cherokee_socket_t *socket, cherokee_virtual_server_t *vserver)
+initialize_tls_session (cherokee_socket_t         *socket, 
+			cherokee_virtual_server_t *vserver)
 {
+# if defined(HAVE_GNUTLS)
 	int re;
-
+	
 	/* Set the virtual server object reference
 	 */
 	socket->vserver_ref = vserver;
 
-# if defined(HAVE_GNUTLS)
 	/* Init the TLS session
 	 */
         re = gnutls_init (&socket->session, GNUTLS_SERVER);
-	if (unlikely (re != GNUTLS_E_SUCCESS)) return ret_error;
+	if (unlikely (re != GNUTLS_E_SUCCESS))
+		return ret_error;
+
+	gnutls_session_set_ptr (socket->session, socket);
 
 	/* Set the socket file descriptor
 	 */
-	gnutls_transport_set_ptr (socket->session, (gnutls_transport_ptr)socket->socket);
+  	gnutls_transport_set_ptr (socket->session, (gnutls_transport_ptr)socket->socket);
 
 	/* Load the credentials
 	 */
@@ -379,10 +383,6 @@ initialize_tls_session (cherokee_socket_t *socket, cherokee_virtual_server_t *vs
  	gnutls_credentials_set (socket->session, GNUTLS_CRD_ANON, vserver->credentials);
  	gnutls_credentials_set (socket->session, GNUTLS_CRD_CERTIFICATE, vserver->credentials);
 	
-	/* Request client certificate if any.
-	 */
-	gnutls_certificate_server_set_request (socket->session, GNUTLS_CERT_REQUEST);
-
 	/* Set the number of bits, for use in an Diffie Hellman key
 	 * exchange: minimum size of the prime that will be used for
 	 * the handshake.
@@ -396,7 +396,17 @@ initialize_tls_session (cherokee_socket_t *socket, cherokee_virtual_server_t *vs
 	gnutls_db_set_store_function    (socket->session, db_store);
 	gnutls_db_set_ptr               (socket->session, socket);
 
+	/* Request client certificate if any.
+	 */
+	gnutls_certificate_server_set_request (socket->session, GNUTLS_CERT_REQUEST);
+	gnutls_handshake_set_private_extensions (socket->session, 1);
+
 # elif defined (HAVE_OPENSSL)
+	int re;
+
+	/* Set the virtual server object reference
+	 */
+	socket->vserver_ref = vserver;
 
 	/* New session
 	 */
