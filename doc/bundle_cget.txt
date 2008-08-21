@@ -9,6 +9,8 @@ functionalities were included and now it can be a really handy
 tool. You might find it useful for your own scripts, especially for
 its ability to read and write HTTP headers.
 
+It can handle both HTTP and HTTPS requests.
+
 This is the full information provided by the manpage:
 **********************************************************************
 *NAME*::
