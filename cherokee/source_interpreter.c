@@ -225,6 +225,10 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 		close (STDOUT_FILENO);
 		close (STDERR_FILENO);
 #endif
+
+#ifdef SIGCHLD
+		signal (SIGCHLD, SIG_IGN);
+#endif
 		argv[2] = (char *)tmp.buf;
 
 		re = execve ("/bin/sh", argv, envp);
