@@ -3,7 +3,7 @@
 cherokee-admin - Runs Cherokee's administrative interface
 .SH SYNOPSIS
 .B cherokee-admin
-[\-d DIR] [\-p PORT] [\-C FILE] [\-a]
+[\-d DIR] [\-p PORT] [\-C FILE] [\-b]
 .SH DESCRIPTION
 \fIcherokee-admin\fP runs the server for the administrative interface
 used to configure Cherokee. The interface itself will be available via
@@ -18,9 +18,9 @@ Shows brief usage information
 Show version and exit
 .TP 8
 .B  \-b, --bind[=IP]
-By default \fIcherokee-admin\fP binds only to 127.0.0.1 (localhost), which 
-means you can only connect to it from the same system. With this parameter 
-you can specify the network address to listen to. If no IP is provided, 
+By default \fIcherokee-admin\fP binds only to 127.0.0.1 (localhost), which
+means you can only connect to it from the same system. With this parameter
+you can specify the network address to listen to. If no IP is provided,
 it will bind to all interfaces.
 .TP 8
 .B  \-C, --target=PATH

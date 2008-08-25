@@ -107,4 +107,5 @@ certificates on the same IP address and port.
 If SNI is supported by your SSL/TLS library, nothing of this needs to
 happen because the host info can be put in the SSL handshake. Things
 will simply work as long as there is a web browser with SNI support at
-the other side. Currently every modern web browser supports this.
+the other side. Currently every modern web browser supports this, and
+Cherokee has TLS SNI support for both the GNUTLS and OpenSSL backends.
