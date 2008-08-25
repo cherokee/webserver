@@ -99,7 +99,7 @@ wise to embed into the web server a huge interpreter that is linked
 against dozens of libraries.
 
 Second, it sounds hard to believe that mod_wsgi is faster than a plain
-an simple SCGI application writing to a Unix socket: WSGI applications
+and simple SCGI application writing to a Unix socket: WSGI applications
 can also use link:modules_handlers_fcgi.html[FastCGI] and
 link:modules_handlers_scgi.html[SCGI] backends, which are fully
 supported by Cherokee.
