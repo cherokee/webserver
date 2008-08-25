@@ -150,6 +150,7 @@ typedef enum {
 
 #define http_method_with_body(m)  ((m != http_head) && (m != http_options))
 #define http_method_with_input(m) ((m == http_post)     || \
+				   (m == http_put)      || \
 				   (m == http_mkcol)    || \
 				   (m == http_search)   || \
 				   (m == http_propfind) || \

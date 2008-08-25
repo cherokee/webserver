@@ -1,3 +1,8 @@
+2008-08-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/http.h (http_method_with_input): PUT has also
+	input. Reported/Patched by Stefan de Konink <skinkie@xs4all.nl>
+
 2008-08-21  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,
