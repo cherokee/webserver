@@ -93,7 +93,7 @@ media/images/admin_encoding.png \
 media/images/admin_general.png \
 media/images/admin_handler_admin.png \
 media/images/admin_handler_cgi.png \
-media/images/admin_custom_error.png \
+media/images/admin_handler_custom_error.png \
 media/images/admin_handler_dirlist_ex.png \
 media/images/admin_handler_dirlist.png \
 media/images/admin_handler_fastcgi1.png \

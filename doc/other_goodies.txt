@@ -96,16 +96,24 @@ cannot be supported without SNI (Server Name Indication) because a web
 server cannot see the hostname header when the SSL request is being
 processed. Technically this might have been correct in the past. The
 first thing that the server has to do is to connect with the other end
-by using SSL/TLS, so at that point, before it receives the HTTP client
-request, the crypto 'magic' already needs to have happened.
+by using SSL/TLS. The user entered host part of the URI must match the
+Common Name (CN) provided by the certificate. Since virtual hosts are in
+use, the CN of the first available certificate may or may not match
+the one specified in the early stages of TLS negotiation.
 
 However, nothing is forever.. and that applies to SSL/TLS connections
 as well. Cherokee elegantly respins the SSL layer once it knows the
 virtual server, and the magic occurs: SSL supporting several
 certificates on the same IP address and port.
 
-If SNI is supported by your SSL/TLS library, nothing of this needs to
-happen because the host info can be put in the SSL handshake. Things
+Besides this there is a cleaner, more standard aproach called
+link:http://en.wikipedia.org/wiki/Server_Name_Indication[Server Name
+Indication] (SNI) that sends the name of the virtual host during the
+TLS negotiation.
+
+If link:http://tools.ietf.org/html/rfc4366#section-3.1[SNI] is
+supported by your SSL/TLS library, the SSL layer does not need to be
+restarted. Since the host info can be put in the SSL handshake, things
 will simply work as long as there is a web browser with SNI support at
 the other side. Currently every modern web browser supports this, and
 Cherokee has TLS SNI support for both the GNUTLS and OpenSSL backends.
