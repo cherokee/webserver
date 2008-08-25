@@ -1,3 +1,4 @@
 == link:index.html[Index] -> Other information
 
+  - link:other_faq.html[FAQ]: List of Frequently Asked Questions.
   - link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.

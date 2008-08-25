@@ -74,6 +74,7 @@ modules_validators_mysql.html \
 modules_validators_pam.html \
 modules_validators_plain.html \
 other.html \
+other_faq.html \
 other_goodies.html \
 dev.html \
 dev_debug.html \

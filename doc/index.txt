@@ -91,9 +91,9 @@ link:modules.html[Modules]: Information about the standard modules.
 link:other.html[Other information]: Miscellaneus.
 *********************************
 
+  - link:other_faq.html[FAQ]: List of Frequently Asked Questions.
   - link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.
 ////
-  - FAQ
   - Community
 ////
 

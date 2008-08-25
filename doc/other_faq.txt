@@ -1,0 +1,114 @@
+== link:index.html[Index] -> link:other.html[Other information]
+
+Other: Frequently Asked Questions
+---------------------------------
+
+Here is a list of the most frequently asked questions. Please refer to
+the appropiate section of the documentation for more details.
+
+=== How to compile it
+
+----
+./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+make
+----
+
+=== How to create dinamyc modules
+
+It's the default way.
+
+=== How to configure the module xyz to be linked statically
+
+----
+./configure --prefix=/usr --sysconfdir=/etc \
+  --localstatedir=/var                      \
+  --enable-static-module=xyz
+----
+
+=== How to build everyhing statically
+
+----
+./configure --prefix=/usr --sysconfdir=/etc \
+  --localstatedir=/var                      \
+  --enable-static-module=all
+----
+
+=== How to create a self signed certificate for TLS
+
+----
+openssl req -days 1000 -new -x509 -nodes    \
+  -out /etc/cherokee/ssl/cherokee.pem       \
+  -keyout /etc/cherokee/ssl/cherokee.pem
+----
+
+=== How to compile it on Windows
+
+----
+./configure --prefix=/usr --sysconfdir=/etc  \
+  --localstatedir=/var --enable-trace        \
+  --enable-static-module=all --enable-static \
+  --enable-shared=no --enable-beta
+----
+
+=== How to cross compile the Win32 version
+
+* From Linux: http://alobbs.com/news/1201
+* From MacOS: http://alobbs.com/news/1299
+
+
+=== Accessing cherokee-admin from a remote machine does not work. Is it broken?
+
+No it is not. cherokee-admin binds only to local loopback by
+default. There are some workarounds:
+
+* Create an SSH tunnel. This is the recommended way. In order to do so
+  you must issue the following command:
++
+----
+ssh -L 9090:localhost:9090 remote_IP
+----
++
+After that you can access the remote interface through
+  http://localhost:9090 and every request will be forwarded to the
+  remote IP running cherokee-admin.
+
+
+* Launch cherokee-admin with the -b parameter in order to force it to
+  listen to all the network interfaces.
+
+* Finally you could always install cherokee on your local host,
+  configure it there and then copy the generated cherokee.conf file to
+  the device running the cherokee instance you wanted to set up.
+
+=== I cannot run cherokee-admin. Is there a way to replicate its work by hand?
+
+Yes there is. The configuration file is a plain text file and its
+syntax is well documented. Check the
+link:dev_cherokee.conf.html[cherokee.conf] internal format
+information. Notice that it is not the recommended method, but the
+format will always be kept updated to facilitate scripting tasks,
+working with embedded devices and other similar situations.
+
+=== Does Cherokee speak WSGI natively like `mod_wsgi` does?
+
+In short: no. We believe that we should not implement anything like
+`mod_wsgi` for a number of reasons.
+
+Firstly, from the architectural point of view we do not think it is
+wise to embed into the web server a huge interpreter that is linked
+against dozens of libraries.
+
+Second, it sounds hard to believe that mod_wsgi is faster than a plain
+an simple SCGI application writing to a Unix socket: WSGI applications
+can also use link:modules_handlers_fcgi.html[FastCGI] and
+link:modules_handlers_scgi.html[SCGI] backends, which are fully
+supported by Cherokee.
+
+We believe Cherokee should be as fast, light, clean and secure as
+possible, and to this end we tend to disregard bulky and monolithic
+solutions. At least until we are given very, VERY, good reasons to
+give it further consideration.
+
+Give Cherokee (SCGI|FastCGI) a try with your WSGI application.  We
+believe that besides fixing both the architectural and security flaws
+you will improve performance.
