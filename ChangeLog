@@ -1,3 +1,9 @@
+2008-08-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cget/Makefile.am (cget_LDADD): Added libcherokee-base.la to the
+	linking paramater of cget. This missing parameter might have
+	something to do with a compilation issue on LinuxFromScratch.
+
 2008-08-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/virtual_server.c: There was a wrong #ifdef that made
