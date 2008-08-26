@@ -283,7 +283,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 #endif 
 
 
-#ifdef HAVE_TLS
+#ifdef HAVE_GNUTLS
 static int
 gnutls_sni_servername_cb (gnutls_session_t  session, 
 			  gnutls_retr_st   *retr)
@@ -337,9 +337,7 @@ gnutls_sni_servername_cb (gnutls_session_t  session,
 
 	return 0;
 }
-#endif
 
-# ifdef HAVE_GNUTLS
 static int
 set_x509_key_file (cherokee_virtual_server_t *vsrv)
 {
@@ -507,6 +505,7 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 		return ret_error;
 	}
 
+#  ifndef OPENSSL_NO_TLSEXT
 	/* Enable SNI
 	 */
 	rc = SSL_CTX_set_tlsext_servername_callback (vsrv->context, openssl_sni_servername_cb);
@@ -522,6 +521,7 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 		PRINT_ERROR ("Could activate TLS SNI for '%s': %s\n", vsrv->name.buf, error);
 		return ret_error;
 	}
+#  endif /* OPENSSL_NO_TLSEXT */
 # endif
 #else
 	UNUSED (vsrv);
