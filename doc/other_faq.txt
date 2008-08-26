@@ -41,7 +41,6 @@ openssl req -days 1000 -new -x509 -nodes    \
   -keyout /etc/cherokee/ssl/cherokee.pem
 ----
 
-
 === How to access cherokee-admin from a remote machine
 
 cherokee-admin binds only to local loopback by default. There are some
@@ -91,15 +90,9 @@ plain and simple SCGI application writing to a Unix socket: WSGI
 applications can also use link:modules_handlers_fcgi.html[FastCGI] and
 link:modules_handlers_scgi.html[SCGI] backends, which are fully
 supported by Cherokee. At least running `mod_wsgi` in daemon
-mode. When run as an embedded part of the web server, as the author of
-`mod_wsgi` pointed out, there should be a performance gain because
-there is no socket involved nor any wire protocol related to
-marshalling of data across the socket. In this case the information is
-passed directly to the Python web application in the same process via
-the WSGI programmatic API. However by running this as an embedded
-component we feel that we would be violating the design principles
-mentioned above, and would affect security and reliability of the web
-server.
+mode. Running it as an embedded component could change this, but we
+feel this approach would violate the design principles mentioned above
+and would affect security and reliability of the web server.
 
 We believe Cherokee should be as fast, light, clean and secure as
 possible, and to this end we tend to disregard bulky and monolithic
