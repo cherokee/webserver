@@ -25,7 +25,7 @@ Here is an example:
 
 The description of the aditional fields follows.
 Refer to the link:modules_loggers_ncsa.html[Common Log
-Format]documentation for information about the rest of the fields.
+Format] documentation for information about the rest of the fields.
 
 
 *referrer* ("-") ::

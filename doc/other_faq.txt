@@ -41,25 +41,11 @@ openssl req -days 1000 -new -x509 -nodes    \
   -keyout /etc/cherokee/ssl/cherokee.pem
 ----
 
-=== How to compile it on Windows
 
-----
-./configure --prefix=/usr --sysconfdir=/etc  \
-  --localstatedir=/var --enable-trace        \
-  --enable-static-module=all --enable-static \
-  --enable-shared=no --enable-beta
-----
+=== How to access cherokee-admin from a remote machine
 
-=== How to cross compile the Win32 version
-
-* From Linux: http://alobbs.com/news/1201
-* From MacOS: http://alobbs.com/news/1299
-
-
-=== Accessing cherokee-admin from a remote machine does not work. Is it broken?
-
-No it is not. cherokee-admin binds only to local loopback by
-default. There are some workarounds:
+cherokee-admin binds only to local loopback by default. There are some
+workarounds:
 
 * Create an SSH tunnel. This is the recommended way. In order to do so
   you must issue the following command:
@@ -80,29 +66,40 @@ After that you can access the remote interface through
   configure it there and then copy the generated cherokee.conf file to
   the device running the cherokee instance you wanted to set up.
 
-=== I cannot run cherokee-admin. Is there a way to replicate its work by hand?
+=== How to manually write configuration files without cherokee-admin
 
-Yes there is. The configuration file is a plain text file and its
-syntax is well documented. Check the
-link:dev_cherokee.conf.html[cherokee.conf] internal format
-information. Notice that it is not the recommended method, but the
-format will always be kept updated to facilitate scripting tasks,
-working with embedded devices and other similar situations.
+The configuration file is a plain text file and its syntax is well
+documented. Check the link:dev_cherokee.conf.html[cherokee.conf]
+internal format information. Notice that manually editing the
+configuration is not the recommended method, but the format will
+always be kept updated to facilitate scripting tasks, working with
+embedded devices and other similar situations.
 
 === Does Cherokee speak WSGI natively like `mod_wsgi` does?
 
 In short: no. We believe that we should not implement anything like
 `mod_wsgi` for a number of reasons.
 
-Firstly, from the architectural point of view we do not think it is
-wise to embed into the web server a huge interpreter that is linked
-against dozens of libraries.
+* First, and purely from an architectural point, embedding an
+interpreter into the web server doesn't feel quite right. Be it a huge
+interpreter linked against dozens of libraries or be it something
+using Python's shared libraries, it doesn't fit with the design
+principles applied throughout Cherokee's code base.
 
-Second, it sounds hard to believe that mod_wsgi is faster than a plain
-and simple SCGI application writing to a Unix socket: WSGI applications
-can also use link:modules_handlers_fcgi.html[FastCGI] and
+* Second, it sounds hard to believe that `mod_wsgi` is faster than a
+plain and simple SCGI application writing to a Unix socket: WSGI
+applications can also use link:modules_handlers_fcgi.html[FastCGI] and
 link:modules_handlers_scgi.html[SCGI] backends, which are fully
-supported by Cherokee.
+supported by Cherokee. At least running `mod_wsgi` in daemon
+mode. When run as an embedded part of the web server, as the author of
+`mod_wsgi` pointed out, there should be a performance gain because
+there is no socket involved nor any wire protocol related to
+marshalling of data across the socket. In this case the information is
+passed directly to the Python web application in the same process via
+the WSGI programmatic API. However by running this as an embedded
+component we feel that we would be violating the design principles
+mentioned above, and would affect security and reliability of the web
+server.
 
 We believe Cherokee should be as fast, light, clean and secure as
 possible, and to this end we tend to disregard bulky and monolithic

@@ -30,7 +30,7 @@ Once you are done with that, you must deploy your Django project:
 
 ----
 $ cd /var/www
-$ django-admin.py startproject example
+$ django-admin startproject example
 ----
 
 This will create the basic structure into a new directory called
