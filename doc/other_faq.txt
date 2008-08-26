@@ -89,10 +89,7 @@ principles applied throughout Cherokee's code base.
 plain and simple SCGI application writing to a Unix socket: WSGI
 applications can also use link:modules_handlers_fcgi.html[FastCGI] and
 link:modules_handlers_scgi.html[SCGI] backends, which are fully
-supported by Cherokee. At least running `mod_wsgi` in daemon
-mode. Running it as an embedded component could change this, but we
-feel this approach would violate the design principles mentioned above
-and would affect security and reliability of the web server.
+supported by Cherokee.
 
 We believe Cherokee should be as fast, light, clean and secure as
 possible, and to this end we tend to disregard bulky and monolithic
