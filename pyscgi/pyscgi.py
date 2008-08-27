@@ -41,7 +41,7 @@ import socket
 import errno
 import sys
 
-__version__ = '1.6'
+__version__ = '1.8'
 __author__  = 'Alvaro Lopez Ortega'
 
 
@@ -52,14 +52,18 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         SocketServer.StreamRequestHandler.__init__ (self, request, client_address, server)
 
     def __safe_read (self, lenght):
-         while True: 
+        while True: 
+            chunk = None
             try:
-                return self.rfile.read(lenght)
+                chunk = self.rfile.read(lenght)
+                return chunk
             except socket.error, (err, strerr):
                 if err == errno.EAGAIN or \
                    err == errno.EWOULDBLOCK or \
                    err == errno.EINPROGRESS:
-                    continue
+                   if chunk:
+                       return chunk
+                   continue
             raise
 
     def send(self, buf):
@@ -110,6 +114,8 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
     def handle_post (self):
         if not self.env.has_key('CONTENT_LENGTH'):
             return
+        if self.post:
+            return
         length = int(self.env['CONTENT_LENGTH'])
         self.post = self.__safe_read(length)
 
@@ -128,8 +134,9 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         except: pass
 
     def handle_request (self):
-        self.wfile.write("Content-Type: text/plain\r\n\r\n")
-        self.wfile.write("handle_request() should be overridden")
+        self.send('Status: 200 OK\r\n')
+        self.send("Content-Type: text/plain\r\n\r\n")
+        self.send("handle_request() should be overridden")
 
 
 class SCGIServer(SocketServer.ThreadingTCPServer):

@@ -1,3 +1,12 @@
+2008-08-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* pyscgi.py (SCGIHandler.handle_request): The default handler
+	method had to use send() so reply the requests rather than the low
+	level self.wfile socket.
+
+	* Applies a couple of changes that there released with 1.7 but
+	that for some reason were not committed.
+
 2008-03-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* pyscgi/pyscgi.py: Added a new method send() to write the
