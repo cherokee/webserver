@@ -621,11 +621,9 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 		if (HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length)) {
 			if (strcasestr (conn->header_buffer.buf, "Content-Length: ") == NULL)
 				conn->keepalive = 0;
-		}
-		
-		
-		if ((! HANDLER_SUPPORTS (conn->handler, hsupport_length)) &&
-		    (! HANDLER_SUPPORTS (conn->handler, hsupport_chunked)))
+			
+		} else if ((! HANDLER_SUPPORTS (conn->handler, hsupport_length)) &&
+			   (! HANDLER_SUPPORTS (conn->handler, hsupport_chunked)))
 		{
 			conn->keepalive = 0;
 		}

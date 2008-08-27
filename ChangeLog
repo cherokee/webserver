@@ -1,3 +1,13 @@
+2008-08-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection.c (cherokee_connection_build_header): Fixes
+	a problem with scgi/fcgi/cgi and keep-alive connections. Reported
+	by Rui Lopes <rgl@ruilopes.com>
+
+	* qa/171-SCGI-Keepalive.py, qa/Makefile.am: Adds a new QA test. It
+	ensures that the SCGI handler replies Connection: Keep-Alive
+	connections without closing the connection.
+
 2008-08-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cget/Makefile.am (cget_LDADD): Added libcherokee-base.la to the
