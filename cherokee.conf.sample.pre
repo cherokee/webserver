@@ -10,7 +10,7 @@
 #
 server!port = 80
 server!port_tls = 443
-server!timeout = 60
+server!timeout = 5
 server!keepalive = 1
 server!keepalive_max_requests = 500
 server!server_tokens = full

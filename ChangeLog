@@ -1,3 +1,8 @@
+2008-08-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee.conf.sample.pre: Fixes an absurdly high default
+	timeout.
+
 2008-08-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_build_basic_env):
