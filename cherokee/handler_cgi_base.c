@@ -285,7 +285,10 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	/* Set the basic variables
 	 */
-	set_env (cgi, "SERVER_SOFTWARE",   "Cherokee " PACKAGE_VERSION, 9 + (sizeof(PACKAGE_VERSION) - 1));
+	set_env (cgi, "SERVER_SOFTWARE",
+		 HANDLER_SRV(cgi)->server_string.buf, 
+		 HANDLER_SRV(cgi)->server_string.len); 
+
 	set_env (cgi, "SERVER_NAME",       "Cherokee", 8);
 	set_env (cgi, "SERVER_SIGNATURE",  "<address>Cherokee web server</address>", 38);
 	set_env (cgi, "GATEWAY_INTERFACE", "CGI/1.1", 7);

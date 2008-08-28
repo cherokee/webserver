@@ -1,5 +1,8 @@
 2008-08-27  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_build_basic_env):
+	It was not using the right SERVER_SOFTWARE string.
+
 	* cherokee/connection.c (cherokee_connection_build_header): Fixes
 	a problem with scgi/fcgi/cgi and keep-alive connections. Reported
 	by Rui Lopes <rgl@ruilopes.com>
