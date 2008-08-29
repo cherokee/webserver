@@ -87,6 +87,13 @@
 	 (size_t)(((struct sockaddr_un*)0)->sun_path))
 #endif
 
+#ifndef OPENSSL_NO_TLSEXT
+# ifndef SSL_CTRL_SET_TLSEXT_HOSTNAME
+#  define OPENSSL_NO_TLSEXT
+# endif
+#endif
+
+
 /* Socket status
  */
 typedef enum {

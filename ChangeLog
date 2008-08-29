@@ -1,5 +1,9 @@
 2008-08-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/socket.h (OPENSSL_NO_TLSEXT): Fixes the twisted
+	OPENSSL_NO_TLSEXT define. It looks wrong to require a define is
+	case a feature is NOT present on the system.
+
 	* cherokee/socket.c, cherokee/connection-protected.h,
 	cherokee/socket.h, cherokee/source.c, cherokee/thread.c,
 	cherokee/thread.h, cherokee/handler_scgi.c, cherokee/server.c,
