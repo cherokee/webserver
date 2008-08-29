@@ -77,7 +77,7 @@ update_bogo_now (cherokee_thread_t *thd)
 }
 
 
-#ifdef HAVE_PTHREAD
+#ifdef HAVE_PTHREAD       
 static void *
 thread_routine (void *data)
 {
@@ -129,9 +129,10 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 		      void                   *server,
 		      cherokee_thread_type_t  type, 
 		      cherokee_poll_type_t    fdpoll_type,
-		      int                     system_fd_num,
-		      int                     fd_num,
-		      int                     conns_max)
+		      cint_t                  system_fd_num,
+		      cint_t                  fd_num,
+		      cint_t                  conns_max,
+		      cint_t                  keepalive_max)
 {
 	ret_t              ret;
 	cherokee_server_t *srv = SRV(server);
@@ -144,22 +145,23 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	INIT_LIST_HEAD (LIST(&n->reuse_list));
 	INIT_LIST_HEAD (LIST(&n->polling_list));
 
-	n->exit               = false;
-	n->server             = server;
-	n->thread_type        = type;
+	n->exit                = false;
+	n->server              = server;
+	n->thread_type         = type;
 
-	n->conns_num          = 0;
-	n->conns_max          = conns_max;
+	n->conns_num           = 0;
+	n->conns_max           = conns_max;
+	n->conns_keepalive_max = keepalive_max;
 
-	n->active_list_num    = 0;
-	n->polling_list_num   = 0;
-	n->reuse_list_num     = 0;
+	n->active_list_num     = 0;
+	n->polling_list_num    = 0;
+	n->reuse_list_num      = 0;
 
-	n->pending_conns_num  = 0;
-	n->pending_read_num   = 0;
+	n->pending_conns_num   = 0;
+	n->pending_read_num    = 0;
 
-	n->fastcgi_servers    = NULL;
-	n->fastcgi_free_func  = NULL;
+	n->fastcgi_servers     = NULL;
+	n->fastcgi_free_func   = NULL;
 
 	/* Event poll object
 	 */
@@ -491,6 +493,10 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 	cherokee_connection_clean (conn);
 	conn_set_mode (thread, conn, socket_reading);
 
+	/* Flush any buffered data
+	 */
+	cherokee_socket_flush (&conn->socket);
+
 	/* Update the timeout value
 	 */
 	conn->timeout = thread->bogo_now + srv->timeout;	
@@ -591,13 +597,14 @@ process_active_connections (cherokee_thread_t *thd)
 		 * 2.- Inspect the file descriptor if it's not shutdown
 		 *     and it's not reading header or there is no more buffered data.
 		 */
-		if ((conn->phase != phase_shutdown) &&
+		if ((! (conn->options & conn_op_was_polling)) &&
+		    (conn->phase != phase_shutdown) &&
 		    (conn->phase != phase_lingering) &&
 		    (conn->phase != phase_reading_header || conn->incoming_header.len <= 0))
 		{
 			re = cherokee_fdpoll_check (thd->fdpoll, 
 						    SOCKET_FD(&conn->socket), 
-						    SOCKET_STATUS(&conn->socket));
+						    conn->socket.status);
 			switch (re) {
 			case -1:
 				conns_freed++;
@@ -607,6 +614,12 @@ process_active_connections (cherokee_thread_t *thd)
 				if (! cherokee_socket_pending_read (&conn->socket))
 					continue;
 			}
+		}
+
+		/* This connection was polling a moment ago
+		 */
+		if (conn->options & conn_op_was_polling) {
+			BIT_UNSET (conn->options, conn_op_was_polling);
 		}
 
 		/* Update the connection timeout
@@ -656,7 +669,7 @@ process_active_connections (cherokee_thread_t *thd)
 				 * Had it upgraded the protocol?
 				 */
 				if (conn->error_code == http_switching_protocols) {
-					conn->phase = phase_setup_connection;					
+					conn->phase = phase_setup_connection;
 					conn->error_code = http_ok;
 					continue;
 				}
@@ -725,7 +738,8 @@ process_active_connections (cherokee_thread_t *thd)
 		case phase_reading_header: 
 			/* Maybe the buffer has a request (previous pipelined)
 			 */
-			if (! cherokee_buffer_is_empty (&conn->incoming_header)) {
+			if (! cherokee_buffer_is_empty (&conn->incoming_header))
+			{
 				ret = cherokee_header_has_header (&conn->header,
 								  &conn->incoming_header, 
 								  conn->incoming_header.len);
@@ -2076,6 +2090,8 @@ reactive_conn_from_polling (cherokee_thread_t *thd, cherokee_connection_t *conn)
 	conn->polling_fd       = -1;
 	conn->polling_multiple = false;
 	conn->polling_mode     = FDPOLL_MODE_NONE;
+
+	BIT_SET (conn->options, conn_op_was_polling);
 
 	return move_connection_to_active (thd, conn);
 }

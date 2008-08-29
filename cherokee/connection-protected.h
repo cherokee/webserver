@@ -85,6 +85,7 @@ typedef enum {
 #define conn_op_root_index    (1 << 1)
 #define conn_op_tcp_cork      (1 << 2)
 #define conn_op_document_root (1 << 3)
+#define conn_op_was_polling   (1 << 4)
 
 typedef cuint_t cherokee_connection_options_t;
 

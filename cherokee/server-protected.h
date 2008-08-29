@@ -105,14 +105,12 @@ struct cherokee_server {
 	 */
 	int                        fdlimit_custom;
 	int                        fdlimit_available;
-	int                        fdlimit_per_thread;
 	cherokee_poll_type_t       fdpoll_method;
 
 	/* Connection related
 	 */
 	cuint_t                    conns_max;
 	cint_t                     conns_reuse_max;
-	cuint_t                    conns_keepalive_max;
 	cuint_t                    conns_num_bogo;
 
 	cherokee_boolean_t         keepalive;

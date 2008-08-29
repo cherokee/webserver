@@ -147,11 +147,9 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	n->fdlimit_custom      = -1;
 	n->fdlimit_available   = -1;
-	n->fdlimit_per_thread  = -1;
 
 	n->conns_max           =  0;
 	n->conns_reuse_max     = -1;
-	n->conns_keepalive_max =  0;
 	n->conns_num_bogo      =  0;
 
 	n->listen_queue    = 1024;
@@ -595,10 +593,9 @@ print_banner (cherokee_server_t *srv)
 	 */
 	if (srv->thread_num <= 1) {
 		cherokee_buffer_add_str (&n, ", single thread");
-		cherokee_buffer_add_va (&n, ", %d fds", srv->fdlimit_per_thread);	
 	} else {
 		cherokee_buffer_add_va (&n, ", %d threads", srv->thread_num);
-		cherokee_buffer_add_va (&n, ", %d fds per thread", srv->fdlimit_per_thread);	
+		cherokee_buffer_add_va (&n, ", %d connections per thread", srv->main_thread->conns_max);
 
 		switch (srv->thread_policy) {
 #ifdef HAVE_PTHREAD
@@ -676,19 +673,14 @@ initialize_server_threads (cherokee_server_t *srv)
 	ret_t   ret;
 	cint_t  i;
 	cuint_t fds_per_thread;
-	cuint_t fds_per_thread1;
 	cuint_t conns_per_thread;
-
-#ifdef HAVE_PTHREAD
-	cuint_t thr_fds;
-	cuint_t spare_fds;
-#endif
+	cuint_t keepalive_per_thread;
+	cuint_t conns_keepalive_max;
 
 	/* Reset max. conns value
 	 */
-	srv->conns_max           = 0;
-	srv->conns_num_bogo      = 0;
-	srv->conns_keepalive_max = 0;
+	srv->conns_max      = 0;
+	srv->conns_num_bogo = 0;
 
 	/* Set fd upper limit for threads.
 	 */
@@ -702,24 +694,11 @@ initialize_server_threads (cherokee_server_t *srv)
 	srv->thread_num = 1;
 #endif
 
-	fds_per_thread1 = fds_per_thread = srv->fdlimit_available / srv->thread_num;
-
-#ifdef HAVE_PTHREAD
-	thr_fds = fds_per_thread * srv->thread_num;
-	spare_fds = srv->fdlimit_available - thr_fds;
-
-	/* Add a couple more fds to this thread,
-	 * this is useful if we are using a huge number of threads
-	 * (i.e. 1000 or more) and we don't want to leave lots of
-	 * unused fds.
+	/* Set fds and connections limits
 	 */
-	if (spare_fds >= 2) {
-		spare_fds -= 2;
-		fds_per_thread1 += 2;
-	}
-#else
-	fds_per_thread1 -= MAX_LISTEN_FDS;
-#endif
+	fds_per_thread  = (srv->fdlimit_available / srv->thread_num);
+ 	fds_per_thread -= MAX_LISTEN_FDS;
+
 	/* Get fdpoll limits.
 	 */
 	if (srv->fdpoll_method != cherokee_poll_UNSET) {
@@ -728,46 +707,58 @@ initialize_server_threads (cherokee_server_t *srv)
 
 		ret = cherokee_fdpoll_get_fdlimits (srv->fdpoll_method, &sys_fd_limit, &poll_fd_limit);
 		if (ret != ret_ok) {
-			PRINT_ERROR ("cherokee_fdpoll_get_fdlimits: failed %d (poll_type %d)\n", (int)ret, (int) srv->fdpoll_method);
+			PRINT_ERROR ("cherokee_fdpoll_get_fdlimits: failed %d (poll_type %d)\n", 
+				     (int)ret, (int) srv->fdpoll_method);
 			return ret_error;
 		}
 
-		/* Test system fd limit (no autotune here).
+		/* Test system fd limit (no autotune here)
 		 */
 		if ((sys_fd_limit > 0) &&
 		    (cherokee_fdlimit > sys_fd_limit)) {
-			PRINT_ERROR ("system_fd_limit %d > %d sys_fd_limit\n", cherokee_fdlimit, sys_fd_limit);
+			PRINT_ERROR ("system_fd_limit %d > %d sys_fd_limit\n",
+				     cherokee_fdlimit, sys_fd_limit);
 			return ret_error;
 		}
 
-		/* If polling set limit has too many fds,
-		 * then decrease that number.
+		/* If polling set limit has too many fds, then
+		 * decrease that number.
 		 */
-		if (poll_fd_limit > 0 &&
-		    fds_per_thread1 > poll_fd_limit) {
-			PRINT_ERROR ("fds_per_thread1 %d > %d poll_fd_limit (reduce that limit)\n", fds_per_thread1, poll_fd_limit);
-			fds_per_thread1 = poll_fd_limit - MAX_LISTEN_FDS;
+		if ((poll_fd_limit > 0) &&
+		    (fds_per_thread > poll_fd_limit)) 
+		{
+			PRINT_ERROR ("fds_per_thread %d > %d poll_fd_limit (reduce that limit)\n",
+				     fds_per_thread, poll_fd_limit);
+			fds_per_thread = poll_fd_limit - MAX_LISTEN_FDS;
 		}
 	}
 
-	/* Max. number of connections is halved because opening a new file
-	 * or using a socket to connect to an external helper
-	 * might be required to satisfy a request coming from an accepted
-	 * and thus already open connection.
+	/* Max conn number: Supposes two fds per connection
 	 */
-	conns_per_thread  = fds_per_thread1 / 2;
-	srv->conns_max   += conns_per_thread;
-	fds_per_thread1  += MAX_LISTEN_FDS;
+	srv->conns_max = ((srv->fdlimit_available - MAX_LISTEN_FDS) / 2);
+	if (srv->conns_max > 2)
+		srv->conns_max -= 1;
 
-	/* Set mean fds per thread.
+	/* Max keep-alive connections:
+	 * Limit over which a thread doesn't allow keepalive
 	 */
-	srv->fdlimit_per_thread = fds_per_thread1;
+	conns_keepalive_max = srv->conns_max - (srv->conns_max / 16);
+	if (conns_keepalive_max + 6 > srv->conns_max)
+		conns_keepalive_max = srv->conns_max - 6;
+
+	/* Per thread limits
+	 */
+	conns_per_thread     = (srv->conns_max / srv->thread_num);
+	keepalive_per_thread = (conns_keepalive_max / srv->thread_num);
 
 	/* Create the main thread (only structures, not a real thread)
 	 */
 	ret = cherokee_thread_new (&srv->main_thread, srv, thread_sync, 
-			srv->fdpoll_method, cherokee_fdlimit,
-			fds_per_thread1, conns_per_thread);
+				   srv->fdpoll_method, 
+				   cherokee_fdlimit,
+				   fds_per_thread, 
+				   conns_per_thread,
+				   keepalive_per_thread);
 	if (unlikely(ret < ret_ok)) {
 		PRINT_ERROR("cherokee_thread_new (main_thread) failed %d\n", ret);
 		return ret;
@@ -795,28 +786,14 @@ initialize_server_threads (cherokee_server_t *srv)
 	for (i = 0; i < srv->thread_num - 1; i++) {
 		cherokee_thread_t *thread;
 
-		/* Add a couple more fds to this thread,
-		 * this is useful if we are using a huge number of threads
-		 * (i.e. 1000 or more) and we don't want to leave lots of
-		 * unused fds.
-		 */
-		fds_per_thread1 = fds_per_thread;
-		if (spare_fds >= 2) {
-			spare_fds -= 2;
-			fds_per_thread1 += 2;
-		}
-		conns_per_thread  = fds_per_thread1 / 2;
-		srv->conns_max   += conns_per_thread;
-		fds_per_thread1  += MAX_LISTEN_FDS;
-
-		/* NOTE: mean fds per thread has already been set above.
-		 */
-
 		/* Create a real thread.
 		 */
-		ret = cherokee_thread_new (&thread, srv, thread_async, 
-				srv->fdpoll_method, cherokee_fdlimit,
-				fds_per_thread1, conns_per_thread);
+		ret = cherokee_thread_new (&thread, srv, thread_async,
+					   srv->fdpoll_method, 
+					   cherokee_fdlimit,
+					   fds_per_thread, 
+					   conns_per_thread, 
+					   keepalive_per_thread);
 		if (unlikely(ret < ret_ok)) {
 			PRINT_ERROR("cherokee_thread_new() failed %d\n", ret);
 			return ret;
@@ -827,14 +804,6 @@ initialize_server_threads (cherokee_server_t *srv)
 		cherokee_list_add (LIST(thread), &srv->thread_list);
 	}
 #endif
-
-	/* Set keepalive limit for open connections.
-	 * NOTE: this limit has to be lower (93%)
-	 *       than conns_accept limit (95% - 99%) used for threads.
-	 */
-	srv->conns_keepalive_max = srv->conns_max - (srv->conns_max / 16);
-	if (srv->conns_keepalive_max + 6 > srv->conns_max)
-		srv->conns_keepalive_max = srv->conns_max - 6;
 
 	return ret_ok;
 }

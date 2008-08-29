@@ -269,12 +269,16 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 
 	/* Try to connect
 	 */
-	if (hdl->src_ref->type == source_host)
-		return cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, conn);		
+	if (hdl->src_ref->type == source_host) {
+		ret = cherokee_source_connect_polling (hdl->src_ref, 
+						       &hdl->socket, conn);		
+	} else {
+		ret = cherokee_source_interpreter_connect_polling (SOURCE_INT(hdl->src_ref),
+								   &hdl->socket, conn, 
+								   &hdl->spawned);
+	}
 
-	return cherokee_source_interpreter_connect_polling (SOURCE_INT(hdl->src_ref),
-							    &hdl->socket, conn, 
-							    &hdl->spawned);
+	return ret;
 }
 
 
@@ -393,7 +397,8 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 		/* Send the header
 		 */
 		ret = send_header (hdl);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok) 
+			return ret;
 
 		HDL_CGI_BASE(hdl)->init_phase = hcgi_phase_send_post;
 

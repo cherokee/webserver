@@ -74,9 +74,9 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	ret_t                    ret;
 	cherokee_resolv_cache_t *resolv;
 
-	/* Short path
+	/* Short path: it's already connecting
 	 */
-	if (sock->socket >= 0) 
+	if (sock->socket >= 0)
 		goto out;
 
 	/* Get required objects
@@ -99,9 +99,10 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 
 		/* Set non-blocking */
 		ret = cherokee_fd_set_nonblocking (sock->socket, true);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
 			PRINT_ERRNO (errno, "Failed to set nonblocking (fd=%d): ${errno}\n",
 				     sock->socket);
+		}
 
 		goto out;
 	}
@@ -119,9 +120,10 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 
 	/* Set non-blocking */
 	ret = cherokee_fd_set_nonblocking (sock->socket, true);
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
 		PRINT_ERRNO (errno, "Failed to set nonblocking (fd=%d): ${errno}\n",
 			     sock->socket);
+	}
 
 out: 	
 	return cherokee_socket_connect (sock);

@@ -1,3 +1,12 @@
+2008-08-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.c, cherokee/connection-protected.h,
+	cherokee/socket.h, cherokee/source.c, cherokee/thread.c,
+	cherokee/thread.h, cherokee/handler_scgi.c, cherokee/server.c,
+	cherokee/server-protected.h, cherokee/connection.c: This patch
+	fixes a problem with Keep-Alive connections. It also cleans up a
+	few related methods.
+
 2008-08-28  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee.conf.sample.pre: Fixes an absurdly high default

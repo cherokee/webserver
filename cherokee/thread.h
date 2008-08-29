@@ -74,18 +74,19 @@ typedef struct {
 	void                   *server;
 	cherokee_boolean_t      exit;
 
-	cuint_t                 conns_num;          /* open connections */
-	cuint_t                 conns_max;          /* max opened conns */
+	cuint_t                 conns_num;           /* open connections */
+	cuint_t                 conns_max;           /* max opened conns */
+	cuint_t                 conns_keepalive_max; /* max opened conns */
 
-	int                     active_list_num;    /* active connections */
+	int                     active_list_num;     /* active connections */
 	cherokee_list_t         active_list;
-	int                     polling_list_num;   /* polling connections */
+	int                     polling_list_num;    /* polling connections */
 	cherokee_list_t         polling_list;
 	cherokee_list_t         reuse_list;
-	int                     reuse_list_num;     /* reusable connections objs */
+	int                     reuse_list_num;      /* reusable connections objs */
 
-	int                     pending_conns_num;  /* Waiting pipelining connections */
-	int                     pending_read_num;   /* Conns with SSL deping read */
+	int                     pending_conns_num;   /* Waiting pipelining connections */
+	int                     pending_read_num;    /* Conns with SSL deping read */
 	
 	struct {
 		uint32_t        continuous;
@@ -113,8 +114,16 @@ ret_t cherokee_thread_step_MULTI_THREAD  (cherokee_thread_t *thd, cherokee_boole
 ret_t cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd);
 
 
-ret_t cherokee_thread_new  (cherokee_thread_t **thd, void *server, cherokee_thread_type_t type, cherokee_poll_type_t fdtype, int system_fd_num, int fd_num, int conns_max);
-ret_t cherokee_thread_free (cherokee_thread_t  *thd);
+ret_t cherokee_thread_new                        (cherokee_thread_t     **thd, 
+			                          void                   *server, 
+			                          cherokee_thread_type_t  type, 
+			                          cherokee_poll_type_t    fdtype,
+			                          cint_t                  system_fd_num, 
+			                          cint_t                  fds_max, 
+			                          cint_t                  conns_max,
+						  cint_t                  keepalive_max);
+
+ret_t cherokee_thread_free                       (cherokee_thread_t  *thd);
 
 ret_t cherokee_thread_accept_on                  (cherokee_thread_t  *thd);
 ret_t cherokee_thread_accept_off                 (cherokee_thread_t  *thd);

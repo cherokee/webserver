@@ -1258,11 +1258,29 @@ cherokee_socket_pending_read (cherokee_socket_t *socket)
 }
 
 
+ret_t
+cherokee_socket_flush (cherokee_socket_t *socket)
+{
+	int re;
+	int op = 1;
+
+	re = setsockopt (SOCKET_FD(socket), IPPROTO_TCP, TCP_NODELAY,
+			 (const void *) &op, sizeof(int));
+	if (unlikely(re != 0))
+		return ret_error;
+
+	return ret_ok;	
+}
+
+
 /* WARNING: all parameters MUST be valid,
  *          NULL pointers lead to a crash.
  */
 ret_t 
-cherokee_socket_writev (cherokee_socket_t *socket, const struct iovec *vector, uint16_t vector_len, size_t *pcnt_written)
+cherokee_socket_writev (cherokee_socket_t  *socket, 
+			const struct iovec *vector,
+			uint16_t            vector_len,
+			size_t             *pcnt_written)
 {
 	*pcnt_written = 0;
 

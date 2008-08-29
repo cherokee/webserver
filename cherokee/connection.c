@@ -1783,7 +1783,7 @@ cherokee_connection_set_keepalive (cherokee_connection_t *conn)
 
 	/* Check the Max concurrent Keep-Alive limit on this thread
 	 */
-	if (thread->conns_max > srv->conns_keepalive_max) {
+	if (thread->conns_num >= thread->conns_keepalive_max) {
 		conn->keepalive = 0;
 		return;
 	}
@@ -1794,12 +1794,15 @@ cherokee_connection_set_keepalive (cherokee_connection_t *conn)
 	if (ret == ret_ok) {
 		if (strncasecmp (ptr, "close", 5) == 0) {
 			conn->keepalive = 0;
-		} else {
+		} else if (conn->keepalive == 0) {
 			conn->keepalive = CONN_SRV(conn)->keepalive_max;
 		}
-	} else {
-		conn->keepalive = 0;
-	}
+		return;
+	} 
+
+	/* When in doubt, disable keep-alive
+	 */
+	conn->keepalive = 0;
 }
 
 
