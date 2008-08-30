@@ -1,5 +1,9 @@
 2008-08-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleCgi.py, admin/ModuleFcgi.py, admin/ModuleScgi.py:
+	Hides the "script alias", "change user" and "check file" options
+	in the FastCGI and SCGI modules. There barely made sense there.
+
 	* admin/CherokeeManagement.py (cherokee_build_info_has): This
 	function was randomly failing because a problem with the caching
 	structure.  This patch fixing the problem.

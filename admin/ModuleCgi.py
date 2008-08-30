@@ -24,22 +24,38 @@ class ModuleCgiBase (Module, FormHelper):
         FormHelper.__init__ (self, name, cfg)
         Module.__init__ (self, name, cfg, prefix, submit_url)
 
+        self.fixed_check_file  = None
+        self.show_script_alias = True
+        self.show_change_uid   = True
+
     def _op_render (self):
         txt   = "<h2>Common CGI options</h2>"
 
         table = TableProps()
-        self.AddPropEntry (table, "Script Alias",     "%s!script_alias" % (self._prefix), NOTE_SCRIPT_ALIAS)
-        self.AddPropEntry (table, "Change to UID",    "%s!change_user"  % (self._prefix), NOTE_CHANGE_USER)
-        self.AddPropCheck (table, "Error handler",    "%s!error_handler"% (self._prefix), False, NOTE_ERROR_HANDLER)
-        self.AddPropCheck (table, "Check file",       "%s!check_file"   % (self._prefix), True,  NOTE_CHECK_FILE)
-        self.AddPropCheck (table, "Pass Request",     "%s!pass_req_headers" % (self._prefix), False, NOTE_PASS_REQ)
-        self.AddPropCheck (table, "Allow X-Sendfile", "%s!xsendfile"    % (self._prefix), False, NOTE_XSENDFILE)
+        if self.show_script_alias:
+            self.AddPropEntry (table, "Script Alias",  "%s!script_alias" % (self._prefix), NOTE_SCRIPT_ALIAS)
+        if self.show_change_uid:
+            self.AddPropEntry (table, "Change to UID", "%s!change_user"  % (self._prefix), NOTE_CHANGE_USER)
+
+        self.AddPropCheck (table, "Error handler",     "%s!error_handler"% (self._prefix), False, NOTE_ERROR_HANDLER)
+
+        if self.fixed_check_file == None:
+            self.AddPropCheck (table, "Check file",    "%s!check_file"   % (self._prefix), True,  NOTE_CHECK_FILE)
+
+        self.AddPropCheck (table, "Pass Request",      "%s!pass_req_headers" % (self._prefix), False, NOTE_PASS_REQ)
+        self.AddPropCheck (table, "Allow X-Sendfile",  "%s!xsendfile"    % (self._prefix), False, NOTE_XSENDFILE)
         txt += self.Indent(table)
 
         return txt
 
     def _op_apply_changes (self, uri, post):
-        checkboxes = ['error_handler', 'check_file', 'pass_req_headers', 'xsendfile']
+        checkboxes = ['error_handler', 'pass_req_headers', 'xsendfile']
+
+        if self.fixed_check_file == None:
+            checkboxes += ['check_file']
+        else:
+            self._cfg['%s!check_file'] = self.fixed_check_file
+
         self.ApplyChangesPrefix (self._prefix, checkboxes, post)
 
 

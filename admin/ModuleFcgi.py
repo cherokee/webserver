@@ -15,6 +15,10 @@ class ModuleFcgi (ModuleCgiBase):
     def __init__ (self, cfg, prefix, submit):
         ModuleCgiBase.__init__ (self, cfg, prefix, 'fcgi', submit)
 
+        self.fixed_check_file  = "0"
+        self.show_script_alias = False
+        self.show_change_uid   = False
+
     def _op_render (self):
         txt = ModuleCgiBase._op_render (self)
 
