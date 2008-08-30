@@ -1,16 +1,16 @@
 from Form import *
 from Table import *
-from Module import *
+from ModuleHandler import *
 from consts import *
 
 NOTE_ERRORS = 'HTTP Error that you be used to reply the request.'
 
-class ModuleCustomError (Module, FormHelper):
+class ModuleCustomError (ModuleHandler):
     PROPERTIES = []
 
     def __init__ (self, cfg, prefix, submit_url):
-        Module.__init__ (self, 'custom_error', cfg, prefix, submit_url)
-        FormHelper.__init__ (self, 'custom_error', cfg)
+        ModuleHandler.__init__ (self, 'custom_error', cfg, prefix, submit_url)
+        self.show_document_root = False
 
     def _op_render (self):
         table = TableProps()

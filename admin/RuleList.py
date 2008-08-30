@@ -52,7 +52,7 @@ class RuleList:
         return self._cfg['%s!%s' % (self._cfg_pre, str(prio))]
 
     def get_highest_priority(self):
-        keys = self._cfg[self._cfg_pre].keys()
+        keys = self._cfg.keys(self._cfg_pre)
         if not keys:
             return 100
         tmp = [int(x) for x in keys]

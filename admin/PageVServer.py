@@ -155,7 +155,7 @@ class PageVServer (PageMenu, FormHelper):
         rule_module.apply_cfg (filtered_post)
 
         # Get to the details page
-        return "%s/prio/%d" % (url_prefix, priority)
+        return "%s/rule/%d" % (url_prefix, priority)
 
     def _op_render_vserver_details (self, host):
         content = self._render_vserver_guts (host)
@@ -286,13 +286,13 @@ class PageVServer (PageMenu, FormHelper):
             name_type   = rule_module.get_type_name()
 
             if _type != 'default':
-                link     = '<a href="%s/prio/%s">%s</a>' % (url_prefix, prio, name)
+                link     = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, name)
                 js       = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
                 final    = self.InstanceCheckbox ('%s!match!final'%(pre), True, quiet=True)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 extra    = ''
             else:
-                link     = '<a href="%s/prio/%s">Default</a>' % (url_prefix, prio)
+                link     = '<a href="%s/rule/%s">Default</a>' % (url_prefix, prio)
                 extra    = ' NoDrag="1" NoDrop="1"'
                 final    = self.HiddenInput ('%s!match!final'%(pre), "1")
                 link_del = ''

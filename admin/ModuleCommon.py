@@ -1,19 +1,19 @@
 from Form import *
 from Table import *
 
+from ModuleHandler import *
 from ModuleFile import *
 from ModuleDirlist import *
 
 NOTE_PATHINFO = "Allow extra tailing paths"
 
-class ModuleCommon (Module, FormHelper):
+class ModuleCommon (ModuleHandler):
     PROPERTIES = ModuleFile.PROPERTIES + ModuleDirlist.PROPERTIES + [
         'allow_pathinfo'
     ]
 
     def __init__ (self, cfg, prefix, submit_url):
-        Module.__init__ (self, 'common', cfg, prefix, submit_url)
-        FormHelper.__init__ (self, 'common', cfg)
+        ModuleHandler.__init__ (self, 'common', cfg, prefix, submit_url)
 
         self._file    = ModuleFile    (cfg, prefix, submit_url)
         self._dirlist = ModuleDirlist (cfg, prefix, submit_url)

@@ -1,18 +1,18 @@
 from Form import *
 from Table import *
-from Module import *
+from ModuleHandler import *
 from validations import *
 from consts import *
 from ModuleBalancer import *
 
-class ModuleMirror (Module, FormHelper):
+class ModuleMirror (ModuleHandler):
     PROPERTIES = [
         'balancer'
     ]
 
     def __init__ (self, cfg, prefix, submit_url):
-        FormHelper.__init__ (self, 'mirror', cfg)
-        Module.__init__ (self, 'mirror', cfg, prefix, submit_url)
+        ModuleHandler.__init__ (self, 'mirror', cfg, prefix, submit_url)
+        self.show_document_root = False
 
     def _op_render (self):
         prefix = "%s!balancer" % (self._prefix)

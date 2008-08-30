@@ -1,17 +1,16 @@
 from Form import *
 from Table import *
-from Module import *
+from ModuleHandler import *
 
 NOTE_IO_CACHE = 'Enables an internal I/O cache that improves performance.'
 
-class ModuleFile (Module, FormHelper):
+class ModuleFile (ModuleHandler):
     PROPERTIES = [
         'iocache'
     ]
 
     def __init__ (self, cfg, prefix, submit_url):
-        Module.__init__ (self, 'file', cfg, prefix, submit_url)
-        FormHelper.__init__ (self, 'file', cfg)
+        ModuleHandler.__init__ (self, 'file', cfg, prefix, submit_url)
 
     def _op_render (self):
         txt = ''

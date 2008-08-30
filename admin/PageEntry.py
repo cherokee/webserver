@@ -36,7 +36,7 @@ class PageEntry (PageMenu, FormHelper):
 
     def _parse_uri (self, uri):
         assert (len(uri) > 1)
-        assert ("prio" in uri)
+        assert ("rule" in uri)
         
         # Parse the URL
         temp = uri.split('/')
@@ -47,13 +47,13 @@ class PageEntry (PageMenu, FormHelper):
             self._prio        = temp[4]        
             self._priorities  = RuleList (self._cfg, 'vserver!%s!user_dir!rule'%(self._host))
             self._entry       = self._priorities[int(self._prio)]
-            url = '/vserver/%s/userdir/prio/%s' % (self._host, self._prio)
+            url = '/vserver/%s/userdir/rule/%s' % (self._host, self._prio)
         else:
             self._host        = temp[1]
             self._prio        = temp[3]        
             self._priorities  = RuleList (self._cfg, 'vserver!%s!rule'%(self._host))
             self._entry       = self._priorities[int(self._prio)]
-            url = '/vserver/%s/prio/%s' % (self._host, self._prio)
+            url = '/vserver/%s/rule/%s' % (self._host, self._prio)
 
         # Set the submit URL
         self.set_submit_url (url)
@@ -124,7 +124,10 @@ class PageEntry (PageMenu, FormHelper):
         table = TableProps()
         e = self.AddPropOptions_Reload (table, 'Handler', '%s!handler'%(pre),
                                         modules_available(HANDLERS), NOTE_HANDLER)
-        self.AddPropEntry (table, 'Document Root', '%s!document_root'%(pre), NOTE_DOCUMENT_ROOT)
+
+        props = self._get_handler_properties()
+        if props and props.show_document_root:
+            self.AddPropEntry (table, 'Document Root', '%s!document_root'%(pre), NOTE_DOCUMENT_ROOT)
 
         if e:
             tabs += [('Handler', str(table) + e)]
@@ -142,15 +145,17 @@ class PageEntry (PageMenu, FormHelper):
         form = Form (self.submit_url, auto=False)
         return form.Render(txt)
 
-    def _render_handler_properties (self):
+    def _get_handler_properties (self):
         pre  = "%s!handler" % (self._conf_prefix)
         name = self._cfg.get_val(pre)
+        if not name:
+            return None
 
         try:
             props = module_obj_factory (name, self._cfg, pre, self.submit_url)
         except IOError:
-            return "Couldn't load the properties module"
-        return props._op_render()
+            return None
+        return props
 
     def _render_rule (self):
         pre = "%s!match"%(self._conf_prefix)

@@ -1,12 +1,12 @@
 from Form import *
-from Module import *
+from ModuleHandler import *
 
-class ModuleAdmin (Module, FormHelper):
+class ModuleAdmin (ModuleHandler):
     PROPERTIES = []
 
     def __init__ (self, cfg, prefix, submit):
-        Module.__init__ (self, 'admin', cfg, prefix, submit)
-        FormHelper.__init__ (self, 'admin', cfg)
+        ModuleHandler.__init__ (self, 'admin', cfg, prefix, submit)
+        self.show_document_root = False
 
     def _op_render (self):
         return ''

@@ -27,6 +27,7 @@ from PageAdvanced import *
 from PageFeedback import *
 from PageError import *
 from PageAjaxUpdate import *
+from PageWizard import *
 from CherokeeManagement import *
 
 # Constants
@@ -89,10 +90,12 @@ class Handler(pyscgi.SCGIHandler):
              uri == '/vserver/ajax_update':
             page = PageVServers(cfg)
         elif uri.startswith('/vserver/'):
-            if "/prio/" in uri:
+            if "/rule/" in uri:
                 page = PageEntry(cfg)
             else:
                 page = PageVServer(cfg)
+        elif uri.startswith('/wizard/'):
+            page = PageWizard(cfg)
         elif uri.startswith('/apply'):
             self.handle_post()
             post = Post(self.post)

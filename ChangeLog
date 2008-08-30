@@ -1,5 +1,16 @@
 2008-08-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleAdmin.py, admin/PageEntry.py, admin/server.py,
+	admin/ModuleRedir.py, admin/ModuleDirlist.py,
+	admin/ModuleHandler.py, admin/Module.py, admin/ModuleFile.py,
+	admin/ModuleServerInfo.py, admin/ModuleCustomError.py,
+	admin/ModuleScgi.py, admin/ModuleCgi.py, admin/ModuleCommon.py,
+	admin/ModuleFcgi.py, admin/PageVServer.py, admin/RuleList.py,
+	admin/ModuleMirror.py: Hides the Document Root entry box depending
+	on the case. There were a few handler with which did not make
+	sense to show it such as FastCGI, SCGI, redirections, server info,
+	etc.
+
 	* admin/config.py: Adds a couple of convenience methods and
 	improves the serialization.
 

@@ -3,7 +3,7 @@ import validations
 
 from Form import *
 from Table import *
-from Module import *
+from ModuleHandler import *
 from configured import *
 
 DATA_VALIDATION = [
@@ -17,7 +17,7 @@ NOTE_THEME        = "Choose the listing theme."
 NOTE_ICON_DIR     = "Web directory where the icon files are located. Default: <i>/icons</i>."
 NOTE_NOTICE_FILES = "List of notice files to be inserted."
 
-class ModuleDirlist (Module, FormHelper):
+class ModuleDirlist (ModuleHandler):
     PROPERTIES = [
         'size', 'date',
         'user', 'group',
@@ -26,8 +26,7 @@ class ModuleDirlist (Module, FormHelper):
     ]
 
     def __init__ (self, cfg, prefix, submit_url):
-        Module.__init__ (self, 'dirlist', cfg, prefix, submit_url)
-        FormHelper.__init__ (self, 'dirlist', cfg)
+        ModuleHandler.__init__ (self, 'dirlist', cfg, prefix, submit_url)
 
     def _op_render (self):
         txt = '<h2>Listing</h2>'

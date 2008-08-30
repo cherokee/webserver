@@ -1,6 +1,5 @@
-from Form import *
 from Table import *
-from Module import *
+from ModuleHandler import *
 from validations import *
 
 NOTE_SCRIPT_ALIAS  = 'Path to an executable that will be run with the CGI as parameter.'
@@ -10,7 +9,7 @@ NOTE_CHECK_FILE    = 'Check whether the file is in place.'
 NOTE_PASS_REQ      = 'Pass all the headers to the CGI as they were received by the web server.'
 NOTE_XSENDFILE     = 'Allow the use of the non-standard X-Sendfile header.'
 
-class ModuleCgiBase (Module, FormHelper):
+class ModuleCgiBase (ModuleHandler):
     PROPERTIES = [
         'script_alias',
         'change_user',
@@ -21,8 +20,7 @@ class ModuleCgiBase (Module, FormHelper):
     ]
 
     def __init__ (self, cfg, prefix, name, submit_url):
-        FormHelper.__init__ (self, name, cfg)
-        Module.__init__ (self, name, cfg, prefix, submit_url)
+        ModuleHandler.__init__ (self, name, cfg, prefix, submit_url)
 
         self.fixed_check_file  = None
         self.show_script_alias = True

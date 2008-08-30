@@ -1,20 +1,20 @@
 from Form import *
 from Table import *
-from Module import *
+from ModuleHandler import *
 from consts import *
 
 NOTE_SHOW         = "Defines whether the redirection will be seen by the client."
 NOTE_REGEX        = "Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc.perl.org/perlre.html\">Reference</a>."
 NOTE_SUBSTITUTION = "Target address. It can use Regular Expression substitution sub-strings."
 
-class ModuleRedir (Module, FormHelper):
+class ModuleRedir (ModuleHandler):
     PROPERTIES = [
         "rewrite"
     ]
 
     def __init__ (self, cfg, prefix, submit_url):
-        Module.__init__ (self, 'redir', cfg, prefix, submit_url)
-        FormHelper.__init__ (self, 'redir', cfg)
+        ModuleHandler.__init__ (self, 'redir', cfg, prefix, submit_url)
+        self.show_document_root = False
 
     def _op_render (self):
         cfg_key = "%s!rewrite" % (self._prefix)
