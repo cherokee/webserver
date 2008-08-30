@@ -227,36 +227,38 @@ def cherokee_get_server_info ():
     return _server_info
 
 
-_built_in_list      = []
-_built_in_list_done = False
-
+_built_in_lists = {}
 
 def cherokee_build_info_has (filter, module):
     # Let's see whether it's built-in
-    global _built_in_list
-    global _built_in_list_done
+    global _built_in_lists
 
-    if not _built_in_list_done:
-        _built_in_list_done = True
+    if not _built_in_lists.has_key(filter):
+        _built_in_lists[filter] = {}
 
         try:
             f = os.popen ("%s -i" % (CHEROKEE_SRV_PATH))
-            cont = f.read()
-            f.close()
         except:
-            pass
+            print ("ERROR: Couldn't execute '%s -i'"  % (CHEROKEE_SRV_PATH))
+            return
+
+        cont = f.read()
+
+        try:
+            f.close()
+        except: pass
 
         try:
             filter_string = " %s: " % (filter)
             for l in cont.split("\n"):
                 if l.startswith(filter_string):
                     line = l.replace (filter_string, "")
+                    _built_in_lists[filter] = line.split(" ")
                     break
-            _built_in_list = line.split(" ")
         except:
             pass
 
-    return module in _built_in_list
+    return module in _built_in_lists[filter]
 
 def cherokee_has_plugin (module):
     # Check for the dynamic plug-in
