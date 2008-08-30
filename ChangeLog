@@ -1,5 +1,8 @@
 2008-08-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/config.py: Adds a couple of convenience methods and
+	improves the serialization.
+
 	* admin/ModuleCgi.py, admin/ModuleFcgi.py, admin/ModuleScgi.py:
 	Hides the "script alias", "change user" and "check file" options
 	in the FastCGI and SCGI modules. There barely made sense there.

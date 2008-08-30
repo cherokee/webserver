@@ -231,21 +231,41 @@ class Config:
         if parent and parent._child.has_key(child_name):
             del (parent._child[child_name])
 
+    def keys (self, path):
+        tmp = self[path]
+        if not tmp:
+            return []
+        return tmp.keys()
+
+    def pop (self, key):
+        tmp = self.get_val(key)
+        del (self[key])
+        return tmp
+
     # Serialization
     def serialize (self):
         def sorter(x,y):
             order = ['server', 'vserver', 'icons', 'mime']
-            a = x.split('!')[0]
-            b = y.split('!')[0]
+            a = x.split('!')
+            b = y.split('!')
             try:
-                ai = order.index(a)
-                bi = order.index(b)
+                ai = order.index(a[0])
+                bi = order.index(b[0])
             except:
                 return cmp(x,y)
+
+            # Different tags
             if ai > bi:
                 return  1
             elif ai < bi:
                 return -1
+
+            # Sort rules: reverse
+            if ((len(a) > 3) and 
+                (a[0] == b[0] == 'vserver') and
+                (a[2] == b[2] == 'rule')):
+                return cmp (int(b[3]), int(a[3]))
+
             return cmp(x,y)
 
         tmp = self.root.serialize().split('\n')
