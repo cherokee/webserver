@@ -10,7 +10,8 @@
 
 # define CHEROKEE_VAR_RUN     "%localstatedir%/run"
 # define CHEROKEE_CONFDIR     "%sysconfdir%/cherokee"
-# define CHEROKEE_SRV_PATH    "%prefix%/sbin/cherokee"
+# define CHEROKEE_SERVER      "%prefix%/sbin/cherokee"
+# define CHEROKEE_WORKER      "%prefix%/sbin/cherokee-worker"
 # define CHEROKEE_ICONSDIR    "%prefix%/share/cherokee/icons"
 # define CHEROKEE_THEMEDIR    "%prefix%/share/cherokee/themes"
 # define CHEROKEE_PANIC_PATH  "%prefix%/bin/cherokee-panic"

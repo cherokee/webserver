@@ -23,15 +23,12 @@
  */
 
 #include "common-internal.h"
-
 #include <signal.h>
 #include <unistd.h>
-
-#include "init.h"
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <errno.h>
 #include "server.h"
-#include "info.h"
-#include "server-protected.h"
-#include "util.h"
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
@@ -39,275 +36,290 @@
 # include "getopt/getopt.h"
 #endif
 
-/* Notices 
- */
-#define APP_NAME        \
-	"Cherokee Web Server"
+#define DELAY_ERROR       3000 * 1000
+#define DELAY_RESTARTING   500 * 1000
 
-#define APP_COPY_NOTICE \
-	"Written by Alvaro Lopez Ortega <alvaro@gnu.org>\n\n"                          \
-	"Copyright (C) 2001-2008 Alvaro Lopez Ortega.\n"                               \
-	"This is free software; see the source for copying conditions.  There is NO\n" \
-	"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+#define DEFAULT_PID_FILE  CHEROKEE_VAR_RUN "/cherokee.pid"
+#define DEFAULT_CONFIG    CHEROKEE_CONFDIR "/cherokee.conf"
 
+pid_t               pid;
+char               *pid_file_path;
+cherokee_boolean_t  graceful_restart; 
 
-/* Default configuration
- */
-#define DEFAULT_CONFIG_FILE CHEROKEE_CONFDIR "/cherokee.conf"
-
-#define BASIC_CONFIG							\
-	"vserver!1!nick = default\n"					\
-	"vserver!1!rule!1!match = default\n"				\
-	"vserver!1!rule!1!handler = common\n"				\
-	"vserver!1!rule!1!handler!iocache = 0\n"			\
-	"vserver!1!rule!2!match = directory\n"			\
-	"vserver!1!rule!2!match!directory = /icons\n"			\
-	"vserver!1!rule!2!handler = file\n"				\
-	"vserver!1!rule!2!document_root = " CHEROKEE_ICONSDIR "\n"	\
-	"vserver!1!rule!3!match = directory\n"			\
-	"vserver!1!rule!3!match!directory = /cherokee_themes\n"	\
-	"vserver!1!rule!3!handler = file\n"				\
-	"vserver!1!rule!3!document_root = " CHEROKEE_THEMEDIR "\n"	\
-	"icons!default = page_white.png\n"				\
-	"icons!directory = folder.png\n"				\
-	"icons!parent_directory = arrow_turn_left.png\n"		\
-	"try_include = " CHEROKEE_CONFDIR "/mods-enabled\n"
-
-static cherokee_server_t  *srv           = NULL;
-static char               *config_file   = NULL;
-static char               *document_root = NULL;
-static cherokee_boolean_t  daemon_mode   = false;
-static cherokee_boolean_t  just_test     = false;
-static cherokee_boolean_t  print_modules = false;
-static cuint_t             port          = 80;
-
-static ret_t common_server_initialization (cherokee_server_t *srv);
-
-
-static void
-panic_handler (int code)
+static const char *
+figure_config_file (int argc, char **argv)
 {
-	UNUSED(code);
-	cherokee_server_handle_panic (srv);
+	int i;
+
+	for (i=0; i<argc; i++) {
+		if ((i+1 < argc) &&
+		    (strcmp(argv[i], "-C") == 0))
+			return argv[i+1];
+	}
+
+	return DEFAULT_CONFIG;
 }
 
-static void
-prepare_to_die (int code)
+static char *
+figure_pid_file_path (const char *config)
 {
-	UNUSED(code);
-	cherokee_server_handle_TERM (srv);
-}
+	FILE *f;
+	char *line;
+	char  tmp[512];
 
-static void
-restart_server (int code)
-{	
-	UNUSED(code);
-	printf ("Handling HUP signal..\n");
-	cherokee_server_handle_HUP (srv);
-}
+	f = fopen (config, "r");
+	if (f == NULL)
+		return NULL;
 
-static void
-reopen_log_files (int code)
-{	
-	UNUSED(code);
-	printf ("Reopeing log files..\n");
-	cherokee_server_log_reopen (srv);
-}
-
-static ret_t
-test_configuration_file (void)
-{
-	ret_t  ret;
-	char  *config;
-
-	config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
-	ret = cherokee_server_read_config_file (srv, config);
-
-	PRINT_MSG ("Test on %s: %s\n", config, (ret == ret_ok)? "OK": "Failed"); 
-	return ret;
-}
-
-
-static ret_t
-common_server_initialization (cherokee_server_t *srv)
-{
-	ret_t ret;
-
-#ifdef SIGPIPE
-        signal (SIGPIPE, SIG_IGN);
-#endif
-#ifdef SIGHUP
-        signal (SIGHUP, restart_server);
-#endif
-#ifdef SIGUSR1
-        signal (SIGUSR1, reopen_log_files);
-#endif
-#ifdef SIGSEGV
-        signal (SIGSEGV, panic_handler);
-#endif
-#ifdef SIGBUS
-        signal (SIGBUS, panic_handler);
-#endif
-#ifdef SIGTERM
-        signal (SIGTERM, prepare_to_die);
-#endif
-
-	if (document_root != NULL) {
-		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-
-		/* Sanity check
-		 */
-		if (port > 0xFFFF) {
-			PRINT_ERROR ("Port %d is out of limits\n", port);
-			return ret_error;
-		}
-
-		/* Build the configuration string
-		 */
-		cherokee_buffer_add_va (&tmp, 
-					"server!port = %d\n"
-					"vserver!1!document_root = %s\n"
-					BASIC_CONFIG, port, document_root);
-
-		/* Apply it
-		 */
-		ret = cherokee_server_read_config_string (srv, &tmp);
-		cherokee_buffer_mrproper (&tmp);
-
-		if (ret != ret_ok) {
-			PRINT_MSG ("Couldn't start serving directory %s\n", document_root);
-			return ret_error;
-		}
-
-	} else {
-		char *config;
-		
-		/* Read the configuration file
-		 */
-		config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
-		ret = cherokee_server_read_config_file (srv, config);
-
-		if (ret != ret_ok) {
-			PRINT_MSG ("Couldn't read the config file: %s\n", config);
-			return ret_error;
+	while (! feof(f)) {
+		line = fgets (tmp, sizeof(tmp), f);
+		if ((line != NULL) &&
+		    (! strcmp (line, "server!pid_file = ")))
+		{
+			fclose(f);
+			return strdup(line + 18);
 		}
 	}
 
-	if (daemon_mode)
-		cherokee_server_daemonize (srv);
+	fclose(f);
+	return strdup(DEFAULT_PID_FILE);
+}
 
-	cherokee_server_write_pidfile (srv);
+static void
+pid_file_save (const char *pid_file, int pid)
+{
+	FILE *file;
+	char  tmp[10];
 
-	ret = cherokee_server_initialize (srv);
-	if (ret != ret_ok) return ret_error;
+	file = fopen (pid_file, "w+");
+	if (file == NULL) {
+		PRINT_MSG ("Cannot write PID file '%s'\n", pid_file);
+		return;
+	}
 
-	cherokee_server_unlock_threads (srv);
+	snprintf (tmp, sizeof(tmp), "%d\n", pid);
+	fwrite (tmp, 1, strlen(tmp), file);
+	fclose (file);
+}
+
+static void
+pid_file_clean (const char *pid_file)
+{
+	struct stat info;
+
+	if (lstat (pid_file, &info) != 0) 
+		return;
+	if (! S_ISREG(info.st_mode))
+		return;
+	if (info.st_uid != getuid())
+		return;
+	if (info.st_size > (int) sizeof("65535\r\n"))
+		return;
+
+	unlink (pid_file);
+}
+
+static ret_t
+process_wait (pid_t pid)
+{
+	pid_t re;
+	int   exitcode = 0;
+
+	while (true) {
+		re = waitpid (pid, &exitcode, 0);
+		if (re > 0)
+			break;
+		else if (errno == EINTR) 
+			if (graceful_restart)
+				break;
+			else
+				continue;
+		else 
+			return ret_error;
+	}
+
+	if (WIFEXITED(exitcode)) {
+		int re = WEXITSTATUS(exitcode);
+
+		/* Child terminated normally */ 
+		PRINT_MSG ("Server PID=%d exited re=%d\n", pid, re);
+		if (re != 0) 
+			return ret_error;
+	} 
+	else if (WIFSIGNALED(exitcode)) {
+		/* Child process terminated by a signal */
+		PRINT_MSG ("Server PID=%d received a signal=%d\n", pid, WTERMSIG(exitcode));
+	}
+
 	return ret_ok;
 }
 
-static void
-print_help (void)
+static void 
+signals_handler (int sig, siginfo_t *si, void *context) 
 {
-	printf (APP_NAME "\n"
-		"Usage: cherokee [options]\n\n"
-		"  -h,  --help                   Print this help\n"
-		"  -V,  --version                Print version and exit\n"
-		"  -t,  --test                   Just test configuration file\n"
-		"  -d,  --detach                 Detach from the console\n"
-		"  -C,  --config=PATH            Configuration file\n"
-		"  -p,  --port=NUM               TCP port number\n"
-		"  -r,  --documentroot=PATH      Server directory content\n"
-		"  -i,  --print-server-info      Print server technical information\n\n"
-		"Report bugs to " PACKAGE_BUGREPORT "\n");
+	int exitcode;
+
+	UNUSED(si);
+	UNUSED(context);
+
+	switch (sig) {
+	case SIGUSR1:
+		/* Restart: the tough way */
+		kill (pid, SIGINT);
+		process_wait (pid);
+		break;
+
+	case SIGHUP:
+		/* Graceful restart */
+		graceful_restart = true;
+		kill (pid, SIGHUP);
+		break;
+
+	case SIGTERM:
+		/* Kill child and exit */
+		kill (pid, SIGTERM);
+		process_wait (pid);
+		pid_file_clean (pid_file_path);
+		exit(0);
+
+	case SIGCHLD:
+		/* Child exited */
+		wait (&exitcode);
+		break;
+		
+	default:
+		/* Forward the signal */
+		kill (pid, sig);
+	}
 }
 
+
 static void
-process_parameters (int argc, char **argv)
+set_signals (void)
 {
-	int c;
+	struct sigaction act;
 
-	/* If any of these parameters change, main_guardian may need
-	 * to be updated.
+	/* Signals it handles
 	 */
-	struct option long_options[] = {
-		{"help",              no_argument,       NULL, 'h'},
-		{"version",           no_argument,       NULL, 'V'},
-		{"detach",            no_argument,       NULL, 'd'},
-		{"test",              no_argument,       NULL, 't'},
-		{"print-server-info", no_argument,       NULL, 'i'},
-		{"port",              required_argument, NULL, 'p'},
-		{"documentroot",      required_argument, NULL, 'r'},
-		{"config",            required_argument, NULL, 'C'},
-		{NULL, 0, NULL, 0}
-	};
+	memset(&act, 0, sizeof(act));
 
-	while ((c = getopt_long(argc, argv, "hVdtip:r:C:", long_options, NULL)) != -1) {
-		switch(c) {
-		case 'C':
-			config_file = strdup(optarg);
-			break;
-		case 'd':
-			daemon_mode = true;
-			break;
-		case 'r':
-			document_root = strdup(optarg);
-			break;
-		case 'p':
-			port = atoi(optarg);
-			break;
-		case 't':
-			just_test = true;
-			break;
-		case 'i':
-			print_modules = true;
-			break;
-		case 'V':
-			printf (APP_NAME " " PACKAGE_VERSION "\n" APP_COPY_NOTICE);
-			exit(0);
-		case 'h':
-		case '?':
-		default:
-			print_help();
-			exit(0);
+	act.sa_handler = SIG_IGN;
+	sigaction (SIGPIPE, &act, NULL);
+	
+	/* Signals it handles
+	 */
+	act.sa_sigaction = signals_handler;
+	sigemptyset (&act.sa_mask);
+	act.sa_flags = SA_SIGINFO;
+
+	sigaction (SIGHUP,  &act, NULL);
+	sigaction (SIGTERM, &act, NULL);
+	sigaction (SIGUSR1, &act, NULL);
+	sigaction (SIGCHLD, &act, NULL);
+}
+
+static ret_t
+may_daemonize (int argc, char *argv[])
+{
+	int   i;
+	pid_t pid;
+	int   daemonize = 0;
+
+	/* Look for the '-d' parameter
+	 */
+	for (i=0; i<argc; i++) {
+		if ((strcmp(argv[i], "-d") == 0) ||
+		    (strcmp(argv[i], "--detach") == 0))
+		{
+			daemonize = 1;
+			argv[i]   = "";
 		}
 	}
+
+	if (daemonize) {
+		pid = fork();
+		if (pid != 0) 
+			exit(0);
+		close(0);
+		setsid();
+	}
+
+	return ret_ok;
 }
 
+static pid_t
+process_launch (const char *path, char *argv[])
+{
+	pid_t pid;
+
+	/* Execute the server
+	 */
+	pid = fork();
+	if (pid == 0) {
+		argv[0] = (char *) path;
+		execvp (path, argv);
+		exit (1);
+	}
+	
+	return pid;
+}
+
+static cherokee_boolean_t
+is_single_execution (int argc, char *argv[])
+{
+	int i;
+
+	for (i=0; i<argc; i++) {
+		if (!strcmp (argv[i], "-t") || !strcmp (argv[i], "--test")    ||
+		    !strcmp (argv[i], "-h") || !strcmp (argv[i], "--help")    ||
+		    !strcmp (argv[i], "-V") || !strcmp (argv[i], "--version") ||
+		    !strcmp (argv[i], "-i") || !strcmp (argv[i], "--print-server-info"))
+			return true;
+	}
+
+	return false;
+}
 
 int
-main (int argc, char **argv)
+main (int argc, char *argv[])
 {
-	ret_t ret;
+	ret_t               ret;
+	cherokee_boolean_t  single_time;
+	const char         *config_file_path;
 
-	cherokee_init();
+	set_signals();
+	single_time = is_single_execution (argc, argv);
 
-	ret = cherokee_server_new (&srv);
-	if (ret < ret_ok) return 1;
-	
-	process_parameters (argc, argv);
-	
-	if (print_modules) {
-		cherokee_info_build_print (srv);
-		exit (ret_ok);
+	/* Figure out some stuff
+	 */
+	config_file_path = figure_config_file (argc, argv);
+	pid_file_path    = figure_pid_file_path (config_file_path);
+
+	/* Turn into a daemon
+	 */
+	if (! single_time) {
+		may_daemonize (argc, argv);
+		pid_file_save (pid_file_path, getpid());
 	}
 
-	if (just_test) {
-		ret = test_configuration_file();
-		exit (ret);
+	while (true) {
+		graceful_restart = false;
+
+		pid = process_launch (CHEROKEE_WORKER, argv);
+		if (pid < 0) {
+			PRINT_MSG ("Couldn't launch '%s'\n", CHEROKEE_WORKER);
+			exit (1);
+		}
+
+		ret = process_wait (pid);
+		if (single_time)
+			break;
+
+		usleep ((ret == ret_ok) ? 
+			DELAY_RESTARTING : 
+			DELAY_ERROR);
 	}
 
-	ret = common_server_initialization (srv);
-	if (ret < ret_ok) return 2;
-
-	do {
-		ret = cherokee_server_step (srv);
-	} while (ret == ret_eagain);
-
-	cherokee_server_stop (srv);
-	cherokee_server_free (srv);
-
-	if (config_file)
-		free (config_file);
-
+	pid_file_clean (pid_file_path);
 	return 0;
 }

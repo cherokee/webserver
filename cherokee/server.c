@@ -1866,10 +1866,12 @@ cherokee_server_write_pidfile (cherokee_server_t *srv)
 	if (cherokee_buffer_is_empty (&srv->pidfile))
 		return ret_not_found;
 
+	cherokee_buffer_add_str (&srv->pidfile, ".worker");
+
 	file = fopen (srv->pidfile.buf, "w+");
 	if (file == NULL) {
 		PRINT_ERRNO (errno, "Cannot write PID file '%s': '${errno}'", srv->pidfile.buf);
-		return ret_error;
+		goto error;
 	}
 
 	snprintf (buffer, buffer_size, "%d\n", getpid());
@@ -1877,9 +1879,14 @@ cherokee_server_write_pidfile (cherokee_server_t *srv)
 	fclose (file);
 
 	if (written <= 0)
-		return ret_error;
+		goto error;
 
+	cherokee_buffer_drop_ending (&srv->pidfile, 7);
 	return ret_ok;
+
+error:
+	cherokee_buffer_drop_ending (&srv->pidfile, 7);
+	return ret_error;
 }
 
 

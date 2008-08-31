@@ -1189,16 +1189,16 @@ $(dynamic_balancer_round_robin_lib)
 
 
 #
-# Main binary: Cherokee server
+# Cherokee server worker
 #
-sbin_PROGRAMS = cherokee cherokee-admin
+sbin_PROGRAMS = cherokee-worker cherokee-admin
 
 if !PLATFORM_WIN32
-sbin_PROGRAMS += cherokee-guardian
+sbin_PROGRAMS += cherokee
 endif
 
-cherokee_SOURCES = main.c
-cherokee_LDADD   = \
+cherokee_worker_SOURCES = main_worker.c
+cherokee_worker_LDADD   = \
 $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 libcherokee-base.la \
@@ -1206,16 +1206,16 @@ libcherokee-server.la
 cherokee_LDFLAGS = -export-dynamic
 
 #
-# Cherokee guardians
+# Cherokee
 #
-cherokee_guardian_SOURCES = main_guardian.c
+cherokee_SOURCES = main.c
 
 #
 # Cherokee admin
 #
 cherokee_admin_SOURCES = main_admin.c
-cherokee_admin_LDADD   = $(cherokee_LDADD)
-cherokee_admin_LDFLAGS = $(cherokee_LDFLAGS)
+cherokee_admin_LDADD   = $(cherokee_worker_LDADD)
+cherokee_admin_LDFLAGS = $(cherokee_worker_LDFLAGS)
 
 
 #

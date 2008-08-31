@@ -1,3 +1,12 @@
+2008-08-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/Makefile.am, cherokee/main.c, cherokee/main_guardian.c,
+	cherokee/server.c, constants.h.pre, admin/configured.py.pre,
+	admin/PageMain.py, admin/CherokeeManagement.py: Cherokee-guardian
+	becomes Cherokee, and Cherokee is renamed to Cherokee-worker. The
+	idea behind this change is to use the "guardian" feature by
+	default.
+
 2008-08-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/ModuleAdmin.py, admin/PageEntry.py, admin/server.py,

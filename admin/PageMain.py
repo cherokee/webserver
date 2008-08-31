@@ -68,7 +68,7 @@ class PageMain (PageMenu, FormHelper):
         table += ("Server default path",  WWWROOT)
 
         manager = cherokee_management_get (self._cfg)
-        if manager._pid:
+        if manager.is_alive():
             current_pid = str(manager._pid)
         else:
             current_pid = "Not running"
