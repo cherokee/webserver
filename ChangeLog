@@ -1,3 +1,8 @@
+2008-08-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main_worker.c: Updates the signals. There were not
+	coherent with the signals handled by main.c.
+
 2008-08-31  Taher Shihadeh <taher@unixwars.com>
 
 	* cherokee.1, cherokee-worker.1: changed man pages to accomodate

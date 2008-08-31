@@ -99,8 +99,10 @@ prepare_to_die (int code)
 }
 
 static void
-restart_server (int code)
+graceful_restart (int code)
 {	
+	/* Graceful restart sent by the 'guardian'
+	 */
 	UNUSED(code);
 	printf ("Handling HUP signal..\n");
 	cherokee_server_handle_HUP (srv);
@@ -137,10 +139,10 @@ common_server_initialization (cherokee_server_t *srv)
         signal (SIGPIPE, SIG_IGN);
 #endif
 #ifdef SIGHUP
-        signal (SIGHUP, restart_server);
+        signal (SIGHUP, graceful_restart);
 #endif
-#ifdef SIGUSR1
-        signal (SIGUSR1, reopen_log_files);
+#ifdef SIGUSR2
+        signal (SIGUSR2, reopen_log_files);
 #endif
 #ifdef SIGSEGV
         signal (SIGSEGV, panic_handler);
@@ -150,6 +152,9 @@ common_server_initialization (cherokee_server_t *srv)
 #endif
 #ifdef SIGTERM
         signal (SIGTERM, prepare_to_die);
+#endif
+#ifdef SIGINT
+        signal (SIGINT, prepare_to_die);
 #endif
 
 	if (document_root != NULL) {
