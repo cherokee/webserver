@@ -1,5 +1,10 @@
 2008-08-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee.1, cherokee-worker.1, Makefile.am: Updates the manual
+	pages. Now cherokee.1 shows the information and cherokee-worker.1
+	is only a note. Additionally information about the signal handling
+	was added to the cherokee man page.
+
 	* cherokee/main_worker.c: Updates the signals. There were not
 	coherent with the signals handled by main.c.
 

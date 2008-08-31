@@ -12,7 +12,7 @@
 .\" along with this program; see the file COPYING.  If not, write to
 .\" the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH cherokee-worker  1 "August 31, 2008"
+.TH Cherokee-Worker 1 "August 31, 2008"
 .\" Please update the above date whenever this man page is modified.
 .\"
 .\" Some roff macros, for reference:
@@ -26,65 +26,21 @@
 .\" .sp <n>    insert n+1 empty lines
 .\" for manpage-specific macros, see man(7)
 .SH NAME
-cherokee-worker \- Cherokee Web Server
+cherokee-worker \- Cherokee Web Server internal worker
 .SH SYNOPSIS
 .B cherokee-worker [options]
 .SH DESCRIPTION
-\fBcherokee\fP is an extremely fast, flexible and embeddable web server.
+\fBcherokee-worker\fP is an part of Cherokee, an extremely fast,
+flexible and embeddable web server. This executable is meant to be
+invoked only by \&\fIcherokee\fR\|(1). Executing it directly is a
+discouraged practice.
 .\" .PP
 .\" It also...
-.SH OPTIONS
-This command will launch the Cherokee webserver as a stand alone
-instance. It accepts the following parameters:
+.SH DEVELOPMENT
+This binary implements the Cherokee Web Server functionality, although
+it misses a few security features implemented on the main executable:
+\&\fIcherokee\fR\|(1).
 .TP 8
-.B \-h, --help
-Prints a brief help message and terminates execution
-.TP 8
-.B \-V, --version
-Prints Cherokee's version and terminates execution
-.TP 8
-.B \-t, --test
-Perform a sanity check on the configuration file. The server will not run.
-.TP 8
-.B \-d, --detach
-Launches the server as a background process (default behaviour is to
-stay attached to the controlling terminal).
-.TP 8
-.B \-C, --config=PATH
-Specifies an alternative path for the configuration file to use instead
-of the default cherokee.conf
-.TP 8
-.B \-p, --port=PORT
-TCP port number to which the server will listen.
-.TP 8
-.B \-r, --documentroot=PATH
-Launches a server exposing statically the specified directory. When
-launched with \-r, the configuration file is ignored, and the Cherokee
-instance runs with its default values.
-.TP 8
-.B \-i, --print
-Print server technical information.
-.SH BUGS
-.SS Bug reports
-I would appreciate hearing of any problems you have with Cherokee.  I
-would also like to hear from you if you have successfully used Cherokee,
-especially if you are using it for a distribution.
-.PP
-Report bugs to 
-.B http://bugs.cherokee-project.com
-.PP
-There is a mailing list for discussion among Cherokee users and for
-announcements of new and test versions. To join, send a message to
-cherokee-admin@cherokee-project.com with the line:
-.PP
-.B subscribe cherokee
-.PP
-in the body of the message. The submission address is cherokee@cherokee-project.com.
-.SH "SEE ALSO"
-You will probably want to launch Cherokee via its guardian wrapper: lease refer to \&\fIcherokee\fR\|(1)
-.
-Note that in in Debian systems, a startup/shutdown script
-/etc/init.d/cherokee is provided, and will probably be the most
-convenient invocation method.
+Executing it alone could be only useful for debugging purposes.
 .SH AUTHOR
 Alvaro Lopez Ortega <alvaro@alobbs.com>. Manual page maintained by Taher Shihadeh <taher@unixwars.com>
