@@ -95,6 +95,7 @@ link:other.html[Other information]: Miscellaneus.
   - link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.
 ////
   - Community
+  - Signals: Signals supported by Cherokee.
 ////
 
 *********************************
