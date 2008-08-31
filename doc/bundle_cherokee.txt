@@ -3,60 +3,31 @@
 Cherokee Bundle: cherokee
 -------------------------
 
-This is the main Cherokee program. It can be launched in several ways
-as shown in the section link:basics_running_cherokee.txt[Running
-Cherokee]. Unless specified otherwise, `cherokee` will try to run with
-the configuration present in your default
-link:dev_cherokee.conf.html[cherokee.conf] file.
+This command-line tool is a wrapper for the main Cherokee
+executable. It is used as a safety net to invoke `cherokee-worker` and
+to ensure it is always functioning. It also plays an important role in
+the link:other_goodies.html#zero-downtime[zero-downtime] mechanism
+implemented to allow graceful restarts of the server.
 
-This is the full information provided by the manpage:
+This is the full information provided by the manpage.
 **********************************************************************
 *NAME*::
-       `cherokee` - Cherokee Web Server
+       cherokee - Cherokee web server safe invoker
 
 *SYNOPSIS*::
-       `cherokee` [options]
+       cherokee
 
 *DESCRIPTION*::
-       `cherokee` is an extremely fast, flexible and embeddable web server.
 
-*OPTIONS*::
-       This command will launch the Cherokee webserver. It accepts the following options.
-
-       -h, --help;;
-               Prints a brief help message and terminates execution
-
-       -V, --version;;
-               Prints Cherokee’s version and terminates execution
-
-       -t, --test;;
-               Perform a sanity check on the configuration  file.  The  server will not run.
-
-       -d, --detach;;
-               Launches  the server as a background process (default behaviour is to stay attached to the controlling terminal).
-
-       -C, --config=PATH;;
-               Specifies  a  configuration  file  other   than   the   default /etc/cherokee/cherokee.conf
-
-       -p, --port=PORT;;
-               TCP port number to which the server will listen.
-
-       -r, --documentroot=PATH;;
-               Launches  a server exposing statically the specified directory. When launched with -r, the configuration file is  ignored, and the Cherokee instance runs with its default values.
-
-       -i, --print;;
-               Print server technical information.
+Cherokee is an extremely fast, flexible and embeddable web
+server. `cherokee` is the recommended way to invoke
+`cherokee-worker`. It will launch Cherokee with any options specified
+to it via the command line, and monitor it. In case Cherokee ends
+abnormally, it will be immediately re-launched.
++
+This program was previously called cherokee-guardian, but became the
+main binary to invoke Cherokee since release 0.9.
 **********************************************************************
 
-To illustrate the usefulness of such options take the following
-example:
-
-----
-$ cherokee -p 8080 -r `pwd`
-----
-
-This would allow any non-privileged user to statically share the
-contents of the current directory. A great way to share files in a
-local network whenever you are in a hurry. Remember that in Unix
-systems only processes launched by the superuser have privileges to
-be hooked to the lower 1024 ports of the system.
+The accepcted parameters are those of the
+link:bundle_cherokee-worker.html[cherokee-worker] binary.

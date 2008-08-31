@@ -1,3 +1,11 @@
+2008-08-31  Taher Shihadeh <taher@unixwars.com>
+
+	* cherokee.1, cherokee-worker.1: changed man pages to accomodate
+	recent program name changes.
+
+	* doc/basics_running_cherokee.txt, doc/index.txt, doc/bundle.txt,
+	doc/bundle_cherokee.txt: changed docs to reflect the new names.
+
 2008-08-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/Makefile.am, cherokee/main.c, cherokee/main_guardian.c,

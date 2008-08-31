@@ -22,8 +22,8 @@ bundle.html \
 bundle_cherokee.html \
 bundle_cherokee-admin.html \
 bundle_cherokee-config.html \
-bundle_cherokee-guardian.html \
 bundle_cherokee-tweak.html \
+bundle_cherokee-worker.html \
 bundle_spawn-fcgi.html \
 bundle_cget.html \
 config.html \
