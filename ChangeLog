@@ -1,5 +1,8 @@
 2008-09-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/logger_writer.c: Open the logs with perms 0640 rather
+	than 0644. It is not "Others"' business what the server does.
+
 	* cherokee/main.c (figure_pid_file_path): Fixes the functionality,
 	it was not working properly because and incorrect string
 	comparison.
