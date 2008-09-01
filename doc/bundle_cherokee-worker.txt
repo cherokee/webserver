@@ -1,0 +1,47 @@
+== link:index.html[Index] -> link:bundle.html[Cherokee Bundle]
+
+Cherokee Bundle: cherokee-worker
+--------------------------------
+
+This is the main Cherokee program. It can be launched in several ways
+as shown in the section link:basics_running_cherokee.txt[Running
+Cherokee]. Unless specified otherwise, `cherokee-worker` will try to
+run with the configuration present in your default
+link:dev_cherokee.conf.html[cherokee.conf] file.
+
+This is the full information provided by the manpage:
+**********************************************************************
+*NAME*::
+       `cherokee-worker` - Cherokee Web Server internal worker
+
+*SYNOPSIS*::
+       `cherokee-worker` [options]
+
+*DESCRIPTION*::
+       `cherokee-worker`  is a part of Cherokee, an extremely fast, flexible and
+       embeddable web server. This executable is meant to be invoked  only  by
+       `cherokee`. Executing it directly is a discouraged practice.
+
+*DEVELOPMENT*::
+       This  binary implements the Cherokee Web Server functionality, although
+       it misses a few security features implemented on the main executable,
+       `cherokee`.
+       Executing it alone could be only useful for debugging purposes.
+
+**********************************************************************
+
+The accepted parameters are those of the
+link:bundle_cherokee.html[cherokee] binary.
+
+To illustrate the usefulness of such options take the following
+example:
+
+----
+$ cherokee-worker -p 8080 -r `pwd`
+----
+
+This would allow any non-privileged user to statically share the
+contents of the current directory. A great way to share files in a
+local network whenever you are in a hurry. Remember that in Unix
+systems only processes launched by the superuser have privileges to
+be hooked to the lower 1024 ports of the system.
