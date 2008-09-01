@@ -219,11 +219,15 @@ def cherokee_get_server_info ():
 
     if _server_info == None:
         try:
-            f = os.popen ("%s -i" % (CHEROKEE_SRV_PATH))
-            _server_info = f.read()
-            f.close()
+            f = os.popen ("%s -i" % (CHEROKEE_WORKER))
         except:
-            pass
+            print ("ERROR: Couldn't execute '%s -i'"  % (CHEROKEE_WORKER))
+
+        _server_info = f.read()
+
+        try:
+            f.close()
+        except: pass
 
     return _server_info
 
@@ -237,17 +241,7 @@ def cherokee_build_info_has (filter, module):
     if not _built_in_lists.has_key(filter):
         _built_in_lists[filter] = {}
 
-        try:
-            f = os.popen ("%s -i" % (CHEROKEE_SRV_PATH))
-        except:
-            print ("ERROR: Couldn't execute '%s -i'"  % (CHEROKEE_SRV_PATH))
-            return
-
-        cont = f.read()
-
-        try:
-            f.close()
-        except: pass
+        cont = cherokee_get_server_info()
 
         try:
             filter_string = " %s: " % (filter)
