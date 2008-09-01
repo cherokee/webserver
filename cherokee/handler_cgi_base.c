@@ -532,24 +532,17 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	if (unlikely (ret != ret_ok)) return ret;
 
 	/* SCRIPT_NAME:
-	 * RFC 3875: "URI path identifying the CGI script".
-	 *
-	 * For a CGI, it is the request without the PATHINFO, if any
-	 *
-	 * For a SCGI and FCGI, it is the request minus the pathinfo,
-	 * which is request until the second slash character beginning
-	 * at webdir length.
-	 * 
+	 * It is the request without the pathinfo if it exists
 	 */
 	cherokee_buffer_clean (&tmp);
 
 	if (! cgi_props->check_file) {
-		/* SCGI or FastCGI
-		 */
-		cherokee_buffer_add (&tmp,
-				     conn->request.buf,
-				     conn->request.len - conn->pathinfo.len);
+		/* SCGI or FastCGI */
 
+		if (conn->web_directory.len > 1) {
+			cherokee_buffer_add_buffer (&tmp, &conn->web_directory);
+		}
+		
 		cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, tmp.buf, tmp.len);
 
 	} else {
@@ -594,8 +587,6 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 	cint_t                             req_len;
 	cint_t                             local_len;
 	struct stat                        st;
-	cuint_t                            len          = 0;
-	cuint_t                            slashes      = 0;
 	cint_t                             pathinfo_len = 0;
 	cherokee_connection_t             *conn         = HANDLER_CONN(cgi);
 	cherokee_handler_cgi_base_props_t *props        = HANDLER_CGI_BASE_PROPS(cgi);
@@ -623,43 +614,21 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 	}
 
 	/* No file checking: mainly for FastCGI and SCGI
-	 * Examples:
-	 *
-	 * Webdir:         /demo/subdirectory
-	 * Request:        http://localhost/demo/subdirectory/
-	 * SCRIPT_NAME':   /demo/subdirectory/
-	 * PATH_INFO:      <empty>
-	 * 
-	 * Webdir:         /
-	 * Request         http://localhost/another/large/one/foo
-	 * SCRIPT_NAME:    /another
-	 * PATH_INFO:      /large/one/foo
-	 *
-	 * Webdir:         /
-	 * Request:        http://localhost/
-	 * SCRIPT_NAME:    /
-	 * PATH_INFO:      <empty>
 	 */
 	if ((! props->check_file) &&
-	    (! cherokee_buffer_is_empty (&conn->web_directory))) 
+	    (! cherokee_buffer_is_empty(&conn->web_directory))) 
 	{
-		if (conn->web_directory.len > 1) {
-			len += conn->web_directory.len;
+		if (conn->request.len == 1) {
+			cherokee_buffer_add_str (&conn->pathinfo, "/");
+
+		} else if (conn->web_directory.len == 1) {
+			cherokee_buffer_add_buffer (&conn->pathinfo, &conn->request);
+						    
+		} else {
+			cherokee_buffer_add (&conn->pathinfo,
+					     conn->request.buf + conn->web_directory.len,
+					     conn->request.len - conn->web_directory.len);
 		}
-
-		while (len < conn->request.len) {
-			if (conn->request.buf[len] == '/') {
-				if (slashes == 1) 
-					break;
-				slashes = 1;
-			}
-			len ++;
-		}
-
-		cherokee_buffer_add (&conn->pathinfo, 
-				     conn->request.buf + len,
-				     conn->request.len - len);
-
 		return ret_ok;
 	}
 
