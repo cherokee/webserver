@@ -1,5 +1,9 @@
 2008-09-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/virtual_server.c, cherokee/server.c: The log opening
+	order has changed. Now it creates the log files as the web server
+	user (instead of root, in case it was launched as super-user).
+
 	* cherokee/logger_writer.c: Open the logs with perms 0640 rather
 	than 0644. It is not "Others"' business what the server does.
 

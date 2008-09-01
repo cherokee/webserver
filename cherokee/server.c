@@ -808,6 +808,25 @@ initialize_server_threads (cherokee_server_t *srv)
 	return ret_ok;
 }
 
+static ret_t
+initialize_loggers (cherokee_server_t *srv)
+{	
+	ret_t              ret;
+	cherokee_list_t   *i;
+	cherokee_logger_t *logger;
+
+	list_for_each (i, &srv->vservers) {
+		logger = VSERVER(i)->logger;
+		if (logger == NULL)
+			continue;
+
+		ret = cherokee_logger_init (logger);
+		if (ret != ret_ok)
+			return ret;
+	}
+
+	return ret_ok;
+}
 
 static ret_t
 vservers_check_tls (cherokee_server_t *srv)
@@ -928,9 +947,10 @@ init_server_strings (cherokee_server_t *srv)
 ret_t
 cherokee_server_initialize (cherokee_server_t *srv) 
 {   
-	int            re;
-	ret_t          ret;
-	struct passwd *ent;
+	int                 re;
+	ret_t               ret;
+	struct passwd      *ent;
+	cherokee_boolean_t  loggers_done = false;
 
 	/* Build the server string
 	 */
@@ -1024,6 +1044,14 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	/* Chroot
 	 */
 	if (! cherokee_buffer_is_empty (&srv->chroot)) {
+		/* Open the logs */
+		ret = initialize_loggers (srv);
+		if (unlikely(ret < ret_ok))
+			return ret;
+
+		loggers_done = true;
+
+		/* Jail the process */
 		re = chroot (srv->chroot.buf);
 		srv->chrooted = (re == 0);
 		if (srv->chrooted == 0) {
@@ -1045,6 +1073,14 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	if (re < 0) {
 		PRINT_ERRNO_S (errno, "Couldn't chdir(\"/\"): '${errno}'");
 		return ret_error;
+	}
+
+	/* Initialize loggers
+	 */
+	if (! loggers_done) {
+		ret = initialize_loggers (srv);
+		if (unlikely(ret < ret_ok))
+			return ret;
 	}
 
 	/* Create the threads

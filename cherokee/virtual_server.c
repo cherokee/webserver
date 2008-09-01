@@ -897,12 +897,6 @@ add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 	if (ret != ret_ok)
 		return ret;
 
-	/* Logger initialization
-	 */
-	ret = cherokee_logger_init (vserver->logger);
-	if (ret != ret_ok)
-		return ret;
-
 	return ret_ok;
 }
 
