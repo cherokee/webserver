@@ -80,9 +80,7 @@ figure_pid_file_path (const char *config)
 			fclose(f);
 			p = line + 18;
 			while (*p) {
-				if ((*p == '\r') ||
-				    (*p == '\n'))
-				{
+				if ((*p == '\r') || (*p == '\n')) {
 					*p = '\0';
 					break;
 				}
