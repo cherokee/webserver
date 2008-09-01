@@ -1,5 +1,9 @@
 2008-09-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c (figure_pid_file_path): Fixes the functionality,
+	it was not working properly because and incorrect string
+	comparison.
+
 	* cherokee/main_worker.c, cherokee/handler_cgi_base.c,
 	cherokee/thread.c, cherokee/server-protected.h, cherokee/server.c:
 	Some signal management work.

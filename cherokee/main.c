@@ -64,6 +64,7 @@ static char *
 figure_pid_file_path (const char *config)
 {
 	FILE *f;
+	char *p;
 	char *line;
 	char  tmp[512];
 
@@ -74,9 +75,19 @@ figure_pid_file_path (const char *config)
 	while (! feof(f)) {
 		line = fgets (tmp, sizeof(tmp), f);
 		if ((line != NULL) &&
-		    (! strcmp (line, "server!pid_file = ")))
+		    (! strncmp (line, "server!pid_file = ", 18)))
 		{
 			fclose(f);
+			p = line + 18;
+			while (*p) {
+				if ((*p == '\r') ||
+				    (*p == '\n'))
+				{
+					*p = '\0';
+					break;
+				}
+				p += 1;
+			}
 			return strdup(line + 18);
 		}
 	}
