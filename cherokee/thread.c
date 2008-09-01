@@ -115,11 +115,9 @@ cherokee_thread_unlock (cherokee_thread_t *thd)
 ret_t 
 cherokee_thread_wait_end (cherokee_thread_t *thd)
 {
-#ifdef HAVE_PTHREAD
 	/* Wait until the thread exits
 	 */
-	pthread_join (thd->thread, NULL);
-#endif
+	CHEROKEE_THREAD_JOIN (thd->thread);
 	return ret_ok;	
 }
 
@@ -1466,6 +1464,10 @@ should_accept_more (cherokee_thread_t *thd, int re)
 	 */
 	if (unlikely (thd->conns_num >= thd->conns_max))
 		return 0;
+
+	if (unlikely ((THREAD_SRV(thd)->wanna_reinit) ||
+		      (THREAD_SRV(thd)->wanna_exit)))
+		return 0;
 #if 0
 	if (unlikely (cherokee_fdpoll_is_full(thd->fdpoll))) {
 		return 0;
@@ -1516,6 +1518,11 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 		goto out;
 	}
 #endif
+
+	/* Graceful restart
+	 */
+	if (srv->wanna_reinit)
+		goto out;
 
 	/* If thread has pending connections, it should do a 
 	 * faster 'watch' (whenever possible).
@@ -1866,6 +1873,26 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 		goto out;
 	}
 #endif
+
+	/* Server wants to exit, and the thread has nothing to do
+	 */
+	if (unlikely (srv->wanna_exit)) {
+		thd->exit = true;
+		return ret_eof;
+	}
+
+	if (unlikely (srv->wanna_reinit))
+	{
+		if ((thd->active_list_num == 0) && 
+		    (thd->polling_list_num == 0))
+		{
+			thd->exit = true;
+			return ret_eof;
+		}
+		
+		cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
+		goto out;
+	}
 
 	/* If thread has pending connections, it should do a 
 	 * faster 'watch' (whenever possible)

@@ -62,9 +62,12 @@ struct cherokee_server {
 	 */
 	time_t                     start_time;
 	cherokee_buffer_t          panic_action;
+
+	/* Restarts
+	 */
 	cherokee_boolean_t         wanna_exit;
 	cherokee_boolean_t         wanna_reinit;
-	
+
 	/* Virtual servers
 	 */
 	cherokee_list_t            vservers;

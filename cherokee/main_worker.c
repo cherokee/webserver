@@ -26,6 +26,8 @@
 
 #include <signal.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include "init.h"
 #include "server.h"
@@ -84,37 +86,47 @@ static cuint_t             port          = 80;
 static ret_t common_server_initialization (cherokee_server_t *srv);
 
 
-static void
-panic_handler (int code)
+static void 
+signals_handler (int sig, siginfo_t *si, void *context) 
 {
-	UNUSED(code);
-	cherokee_server_handle_panic (srv);
+	int exitcode;
+
+	UNUSED(si);
+	UNUSED(context);
+
+	switch (sig) {
+	case SIGHUP:
+		printf ("Handling Graceful Restart..\n");
+		cherokee_server_handle_HUP (srv);
+		break;
+
+	case SIGUSR2:
+		printf ("Reopening log files..\n");
+		cherokee_server_log_reopen (srv);
+		break;
+
+	case SIGINT:
+	case SIGTERM:
+		printf ("Server is exiting..\n");
+		cherokee_server_handle_TERM (srv);
+		break;
+
+	case SIGCHLD:
+		wait (&exitcode);
+		break;
+
+	case SIGSEGV:
+#ifdef SIGBUS
+	case SIGBUS:
+#endif
+		cherokee_server_handle_panic (srv);
+		break;
+
+	default:
+		PRINT_ERROR ("Unknown signal: %d\n", sig);
+	}
 }
 
-static void
-prepare_to_die (int code)
-{
-	UNUSED(code);
-	cherokee_server_handle_TERM (srv);
-}
-
-static void
-graceful_restart (int code)
-{	
-	/* Graceful restart sent by the 'guardian'
-	 */
-	UNUSED(code);
-	printf ("Handling HUP signal..\n");
-	cherokee_server_handle_HUP (srv);
-}
-
-static void
-reopen_log_files (int code)
-{	
-	UNUSED(code);
-	printf ("Reopeing log files..\n");
-	cherokee_server_log_reopen (srv);
-}
 
 static ret_t
 test_configuration_file (void)
@@ -133,28 +145,26 @@ test_configuration_file (void)
 static ret_t
 common_server_initialization (cherokee_server_t *srv)
 {
-	ret_t ret;
+	ret_t            ret;
+	struct sigaction act;
 
-#ifdef SIGPIPE
-        signal (SIGPIPE, SIG_IGN);
-#endif
-#ifdef SIGHUP
-        signal (SIGHUP, graceful_restart);
-#endif
-#ifdef SIGUSR2
-        signal (SIGUSR2, reopen_log_files);
-#endif
-#ifdef SIGSEGV
-        signal (SIGSEGV, panic_handler);
-#endif
+	/* Signals it handles
+	 */
+	memset(&act, 0, sizeof(act));
+
+	/* SIGPIPE */
+	act.sa_handler = SIG_IGN;
+	sigaction (SIGPIPE, &act, NULL);
+
+	/* Signal Handler */
+	act.sa_sigaction = signals_handler;
+	sigaction (SIGHUP,  &act, NULL);
+	sigaction (SIGUSR2, &act, NULL);
+	sigaction (SIGSEGV, &act, NULL);
+	sigaction (SIGTERM, &act, NULL);
+	sigaction (SIGINT,  &act, NULL);
 #ifdef SIGBUS
-        signal (SIGBUS, panic_handler);
-#endif
-#ifdef SIGTERM
-        signal (SIGTERM, prepare_to_die);
-#endif
-#ifdef SIGINT
-        signal (SIGINT, prepare_to_die);
+	sigaction (SIGBUS,  &act, NULL);
 #endif
 
 	if (document_root != NULL) {

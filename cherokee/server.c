@@ -120,7 +120,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	n->wanna_exit      = false;
 	n->wanna_reinit    = false;
-	
+
 	/* Server config
 	 */
 	n->port            = 80;
@@ -1073,7 +1073,7 @@ stop_threads (cherokee_server_t *srv)
 	}
 
 	list_for_each (i, &srv->thread_list) {
-		CHEROKEE_THREAD_JOIN (THREAD(i)->thread);
+		cherokee_thread_wait_end (THREAD(i));
 	}
 }
 
@@ -1101,10 +1101,6 @@ cherokee_server_stop (cherokee_server_t *srv)
 	if (srv == NULL)
 		return ret_ok;
 
-	/* Stop all the threads (may be slow)
-	 */
-	stop_threads (srv);
-
 	/* Close all connections
 	 */
 	close_all_connections (srv);
@@ -1112,6 +1108,10 @@ cherokee_server_stop (cherokee_server_t *srv)
 	/* Flush logs
 	 */
 	flush_logs (srv);
+
+	/* Stop all the threads (may be slow)
+	 */
+	stop_threads (srv);
 
 	return ret_ok;
 }
@@ -1148,6 +1148,12 @@ cherokee_server_unlock_threads (cherokee_server_t *srv)
 ret_t
 cherokee_server_step (cherokee_server_t *srv)
 {
+	/* Wanna exit ?
+	 */
+	if (unlikely (srv->wanna_exit)) {
+		return ret_eof;
+	}
+
 	/* Get the server time.
 	 */
 	cherokee_bogotime_update ();
@@ -1174,29 +1180,17 @@ cherokee_server_step (cherokee_server_t *srv)
 		srv->wanna_exit = true;
 #endif
 
-	/* Wanna reinit ?
+	/* Gracefull restart:
+	 * The main thread waits for the rest
 	 */
-	if (unlikely (srv->wanna_reinit)) {
-		cherokee_list_t    *i;
-		cherokee_boolean_t  empty = true;
+	if (unlikely ((srv->wanna_reinit) &&
+		      (srv->main_thread->conns_num == 0)))
+	{
+		cherokee_list_t *i;
 
 		list_for_each (i, &srv->thread_list) {
-			if (THREAD(i)->conns_num != 0) {
-				empty = false;
-				break;
-			}
+			cherokee_thread_wait_end (THREAD(i));
 		}
-		
-		if (empty)
-			empty = (srv->main_thread->conns_num == 0);
-
-		if (empty)
-			return ret_eof;
-	}
-	
-	/* Wanna exit ?
-	 */
-	if (unlikely (srv->wanna_exit)) {
 		return ret_eof;
 	}
 
@@ -1712,9 +1706,9 @@ cherokee_server_get_total_traffic (cherokee_server_t *srv, size_t *rx, size_t *t
 ret_t 
 cherokee_server_handle_HUP (cherokee_server_t *srv)
 {
-	srv->wanna_reinit    = true;
-	srv->keepalive       = false;
-	srv->keepalive_max   = 0;
+	srv->wanna_reinit     = true;
+	srv->keepalive        = false;
+	srv->keepalive_max    = 0;
 
 	cherokee_socket_close (&srv->socket);
 	cherokee_socket_close (&srv->socket_tls);

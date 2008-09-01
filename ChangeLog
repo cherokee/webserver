@@ -1,3 +1,9 @@
+2008-09-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main_worker.c, cherokee/handler_cgi_base.c,
+	cherokee/thread.c, cherokee/server-protected.h, cherokee/server.c:
+	Some signal management work.
+
 2008-08-31  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee.1, cherokee-worker.1, Makefile.am: Updates the manual
