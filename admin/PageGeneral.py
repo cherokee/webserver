@@ -51,7 +51,7 @@ class PageGeneral (PageMenu, FormHelper):
         txt += "<h2>Networking</h2>"
         table = TableProps()
         self.AddPropEntry (table, 'Port',     'server!port',     NOTE_PORT)
-        self.AddPropEntry (table, 'Port TLS', 'server!tls_port', NOTE_PORT_TLS)
+        self.AddPropEntry (table, 'Port TLS', 'server!port_tls', NOTE_PORT_TLS)
         self.AddPropCheck (table, 'IPv6',     'server!ipv6', True, NOTE_IPV6)
         self.AddPropEntry (table, 'Listen',   'server!listen',   NOTE_LISTEN)
         txt += self.Indent(table)

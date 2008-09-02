@@ -1,3 +1,9 @@
+2008-09-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* admin/PageGeneral.py (PageGeneral._render_content): Fixes de TLS
+	port configuration key. Reported by César Fernández Gago
+	<cesar@pk2.org>
+
 2008-09-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/virtual_server.c, cherokee/server.c: The log opening
