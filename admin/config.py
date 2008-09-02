@@ -263,6 +263,7 @@ class Config:
             # Sort rules: reverse
             if ((len(a) > 3) and 
                 (a[0] == b[0] == 'vserver') and
+                (a[1] == b[1]) and
                 (a[2] == b[2] == 'rule')):
                 return cmp (int(b[3]), int(a[3]))
 
