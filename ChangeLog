@@ -1,5 +1,10 @@
 2008-09-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/server.py, admin/main.template.html, admin/Page.py,
+	admin/main.help.html, admin/PageStatus.py, admin/PageMain.py,
+	admin/static/css/cherokee.css, admin/Makefile.am: Adds a new
+	"Status" menu entry in Cherokee admin.
+
 	* cherokee/main.c (process_launch): Report whenever the Cherokee
 	worker could not be spawned.
 

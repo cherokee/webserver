@@ -36,6 +36,7 @@ PAGE_MENU_LAYOUT = """
 
 PAGE_MENU_MENU = """
 <ul id="nav">
+<li id="status"><a href="/">Status</a></li>
 <li id="general"><a href="/general">General</a></li>
 <li id="vserver"><a href="/vserver">Virtual Servers</a></li>
 <li id="encoder"><a href="/encoder">Encoding</a></li>

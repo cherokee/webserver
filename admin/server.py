@@ -15,7 +15,7 @@ import socket
 from config import *
 from configured import *
 from Post import *
-from PageMain import *
+from PageStatus import *
 from PageGeneral import *
 from PageIcon import *
 from PageMime import *
@@ -123,7 +123,7 @@ class Handler(pyscgi.SCGIHandler):
         elif uri.startswith('/ajax/update'):
             page = PageAjaxUpdate (cfg)
         elif uri == '/':
-            page = PageMain(cfg)
+            page = PageStatus(cfg)
         else:
             body = "/"
 

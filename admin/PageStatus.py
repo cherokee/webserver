@@ -35,14 +35,14 @@ SERVER_NOT_RUNNING = """
 </div>
 """
 
-class PageMain (PageMenu, FormHelper):
+class PageStatus (PageMenu, FormHelper):
     def __init__ (self, cfg=None):
-        PageMenu.__init__ (self, 'main', cfg)
-        FormHelper.__init__ (self, 'main', cfg)
+        PageMenu.__init__ (self, 'status', cfg)
+        FormHelper.__init__ (self, 'status', cfg)
 
     def _op_render (self):
         self.AddMacroContent ('title', 'Welcome to Cherokee Admin')
-        self.AddMacroContent ('content', self.Read('main.template'))
+        self.AddMacroContent ('content', self.Read('status.template'))
 
         manager = cherokee_management_get (self._cfg)
         if manager.is_alive():

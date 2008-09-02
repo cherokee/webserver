@@ -29,7 +29,7 @@ PageAdvanced.py \
 PageEntry.py \
 PageGeneral.py \
 PageIcon.py \
-PageMain.py \
+PageStatus.py \
 PageMime.py \
 PageVServer.py \
 PageVServers.py \
@@ -83,8 +83,8 @@ advanced.help.html \
 entry.help.html \
 general.help.html \
 icon.help.html \
-main.help.html \
-main.template.html \
+status.help.html \
+status.template.html \
 mime.help.html \
 vserver.help.html \
 vservers.help.html \

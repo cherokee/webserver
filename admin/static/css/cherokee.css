@@ -64,6 +64,7 @@ body {
     background: transparent url(../images/menu-highlight.png) left top no-repeat;
 }
 
+#body-status #status,
 #body-general #general,
 #body-vserver #vserver,
 #body-encoder #encoder,
