@@ -1,5 +1,10 @@
 2008-09-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/source_interpreter.c (cherokee_source_interpreter_spawn):
+	Ignores SIGCHLD trying to get rid as soon as possible of the zombi
+	processes that are generated randomly when the server spawns
+	php-cgi processes.
+
 	* admin/config.py (Config.serialize.sorter): Fixed sorting
 	function.  It is just a configuration file aesthetical fix.
 
