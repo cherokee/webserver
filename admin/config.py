@@ -265,7 +265,9 @@ class Config:
                 (a[0] == b[0] == 'vserver') and
                 (a[1] == b[1]) and
                 (a[2] == b[2] == 'rule')):
-                return cmp (int(b[3]), int(a[3]))
+                re = cmp (int(b[3]), int(a[3]))
+                if re != 0:
+                    return re
 
             return cmp(x,y)
 
