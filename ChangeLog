@@ -1,5 +1,8 @@
 2008-09-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c (process_launch): Report whenever the Cherokee
+	worker could not be spawned.
+
 	* admin/PageGeneral.py (PageGeneral._render_content): Fixes de TLS
 	port configuration key. Reported by César Fernández Gago
 	<cesar@pk2.org>

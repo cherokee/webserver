@@ -267,6 +267,8 @@ process_launch (const char *path, char *argv[])
 	if (pid == 0) {
 		argv[0] = (char *) path;
 		execvp (path, argv);
+
+		printf ("ERROR: Could not execute %s\n", path);
 		exit (1);
 	}
 	
