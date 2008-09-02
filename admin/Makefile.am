@@ -40,6 +40,7 @@ Table.py \
 Theme.py \
 RuleList.py \
 Module.py \
+ModuleHandler.py \
 ModuleFile.py \
 ModuleDirlist.py \
 ModuleCommon.py \
