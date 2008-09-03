@@ -962,19 +962,17 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 		cherokee_buffer_add_str      (outbuf, "Content-Length: ");
 		cherokee_buffer_add_ullong10 (outbuf, (cullong_t) cgi->content_length);
 		cherokee_buffer_add_str      (outbuf, CRLF);		
+
 	}
 
-	/* At this point, cgi->content_length has already got a value
-	 * if the response contained a Content-Length header
+	/* Chunked encoding
 	 */
-	cgi->chunked = ((! cgi->content_length_set) &&
-			(cgi->content_length > 0) &&
+	cgi->chunked = ((cgi->content_length_set == false) &&
 			(HANDLER_CGI_BASE_PROPS(cgi)->allow_chunked) &&
 			(conn->header.version == http_version_11));
 	
-	TRACE (ENTRIES, "Chunked: !len_set=%d, len=%d, allowed=%d, version=%d => %d\n",
-	       (! cgi->content_length_set),
-	       cgi->content_length,
+	TRACE (ENTRIES, "Chunked: (not len set)=%d, allowed=%d, version=%d => %d\n",
+	       (cgi->content_length_set == false),
 	       (HANDLER_CGI_BASE_PROPS(cgi)->allow_chunked),
 	       (conn->header.version == http_version_11),
 	       cgi->chunked);

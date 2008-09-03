@@ -1,5 +1,10 @@
 2008-09-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_add_headers):
+	Fixes the chunked encoding support. It was not being used unless
+	the applicating sent the Content-Length in which case a Keep-Alive
+	reply was easier and faster to perform. Reported by Cesar Fernandez.
+
 	* qa/172-Chunked-CGI.py, qa/Makefile.am: Adds a new QA to cover
 	Chunked encoded responses from CGIs.
 
