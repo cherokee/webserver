@@ -1,5 +1,8 @@
 2008-09-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/172-Chunked-CGI.py, qa/Makefile.am: Adds a new QA to cover
+	Chunked encoded responses from CGIs.
+
 	* qa/138-ChangeUser-cgi.py (Test.Precondition): It does not need
 	PHP.
 

@@ -175,7 +175,8 @@ run-tests.py \
 168-Deflate-Encoding.py \
 169-Pipermail.py \
 170-Error-ContentLength.py \
-171-SCGI-Keepalive.py
+171-SCGI-Keepalive.py \
+172-Chunked-CGI.py
 
 test:
 	./run-tests.py
