@@ -226,7 +226,8 @@ add_uptime_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 static void
 add_data_sent_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
-	size_t            rx, tx;
+	size_t            rx  = 0;
+	size_t            tx  = 0;
 	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
 	cherokee_server_get_total_traffic (srv, &rx, &tx);

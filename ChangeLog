@@ -1,5 +1,8 @@
 2008-09-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_server_info.c (add_data_sent_row): Fixes a
+	memory initialization issue.
+
 	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_add_headers):
 	Fixes the chunked encoding support. It was not being used unless
 	the applicating sent the Content-Length in which case a Keep-Alive
