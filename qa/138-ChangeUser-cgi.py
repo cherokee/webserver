@@ -40,4 +40,4 @@ class Test (TestBase):
         if os.geteuid() != 0:
             return False
 
-        return os.path.exists (look_for_php())
+        return True

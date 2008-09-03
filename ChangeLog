@@ -1,3 +1,8 @@
+2008-09-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* qa/138-ChangeUser-cgi.py (Test.Precondition): It does not need
+	PHP.
+
 2008-09-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/source_interpreter.c (cherokee_source_interpreter_spawn):
