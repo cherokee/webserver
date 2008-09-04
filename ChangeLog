@@ -1,5 +1,8 @@
 2008-09-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/CherokeeManagement.py: Updated the 'last option'
+	configuration snippet to the current format.
+
 	* cherokee/connection-protected.h, cherokee/handler_cgi_base.c,
 	cherokee/handler_cgi_base.h, cherokee/connection.c: Fixes a
 	chunked encoding issue while speeds it up. Now Chunked encoded
