@@ -414,6 +414,11 @@ out:
 	conn->mmaped       = NULL;
 	conn->mmaped_len   = 0;
 
+	/* It does not matter whether the previous handler wanted to
+	 * use Chunked encoding.
+	 */
+	conn->chunked_encoding = false;
+
 	return ret_ok;
 }
 
