@@ -1,3 +1,10 @@
+2008-09-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection-protected.h, cherokee/handler_cgi_base.c,
+	cherokee/handler_cgi_base.h, cherokee/connection.c: Fixes a
+	chunked encoding issue while speeds it up. Now Chunked encoded
+	connections are faster than with the first implementation.
+
 2008-09-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_server_info.c (add_data_sent_row): Fixes a

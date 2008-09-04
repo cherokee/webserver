@@ -168,6 +168,7 @@ struct cherokee_connection {
 	/* Post info
 	 */
 	cherokee_post_t               post;
+
 	uint32_t                      keepalive;
 	time_t                        timeout;
 
@@ -186,9 +187,16 @@ struct cherokee_connection {
 
 	int                           regex_ovector[OVECTOR_LEN];
 	int                           regex_ovecsize;
-
+	
+	/* Content Expiration
+	 */
 	cherokee_expiration_t         expiration;
 	time_t                        expiration_time;
+
+	/* Chunked encoding
+	 */
+	cherokee_boolean_t            chunked_encoding;
+	cherokee_buffer_t             chunked_len;
 };
 
 #define CONN_SRV(c)    (SRV(CONN(c)->server))
