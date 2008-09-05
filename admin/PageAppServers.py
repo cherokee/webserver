@@ -33,8 +33,13 @@ class PageAppServers (PageMenu, FormHelper):
                 return self._apply_new_source (uri, post)
             else:
                 source = post.pop('source_num')
+                
+                if (post.get_val ('new_env_name') and 
+                    post.get_val ('new_env_value')):
+                    self._apply_add_new_env_var(post, source)
+
                 self.ApplyChanges ([], post)
-                return self._op_render (source)
+                return "/%s/%s" % (self._id, source)
         
         tmp = uri.split('/')
         if len(tmp) >= 2:
@@ -49,6 +54,12 @@ class PageAppServers (PageMenu, FormHelper):
         self.AddMacroContent ('title', 'Application Servers')
         self.AddMacroContent ('content', content)
         return Page.Render(self)
+
+    def _apply_add_new_env_var (self, post, source):
+        name  = post.pop ('new_env_name')
+        value = post.pop ('new_env_value')
+
+        self._cfg['source!%s!env!%s' % (source, name)] = value
 
     def _apply_new_source (self, uri, post):
         nick  = post.pop ('tmp!new_source_nick')
@@ -70,20 +81,64 @@ class PageAppServers (PageMenu, FormHelper):
 
         return '/%s/%d' % (self._id, prio)
 
+    def _render_source_details_env (self, s):
+        txt = ''
+        
+        envs = self._cfg.keys('source!%s!env'%(s))
+        if envs:
+            tmp = '<h3>Environment variables</h3>'
+            table = Table(3, title_left=1, style='width="90%%"')
+            for env in envs:
+                pre = 'source!%s!env!%s'%(s,env)
+                val = self.InstanceEntry(pre, 'text', size=25) 
+                js = "post_del_key('/ajax/update', '%s');"%(pre)
+                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)                
+                table += (env, val, link_del)
+
+            tmp += self.Indent(table)
+            tmp += self.HiddenInput ('source_num', s)
+            fo = Form ("/%s"%(self._id), add_submit=False, auto=True)
+            txt += fo.Render(tmp)
+
+        tmp = '<h3>Add new Environment variable</h3>'
+        name  = self.InstanceEntry('new_env_name',  'text', size=25) 
+        value = self.InstanceEntry('new_env_value', 'text', size=25) 
+
+        table = Table(3, 1, style='width="90%%"')
+        table += ('Variable', 'Value', '')
+        table += (name, value, SUBMIT_ADD)
+
+        tmp += self.Indent (table)
+        tmp += self.HiddenInput ('source_num', s)
+        fo = Form ("/%s"%(self._id), add_submit=False, auto=False)
+
+        txt += fo.Render(tmp)
+        return txt
+
     def _render_source_details (self, s):
         txt = ''
         nick = self._cfg.get_val('source!%s!nick'%(s))
         tipe = self._cfg.get_val('source!%s!type'%(s))
 
+        # Properties
         table = TableProps()
         self.AddPropEntry   (table, 'Nick',       'source!%s!nick'%(s), NOTE_NICK)
         self.AddPropOptions_Reload (table, 'Type','source!%s!type'%(s), SOURCE_TYPES, NOTE_TYPE)
         self.AddPropEntry   (table, 'Connection', 'source!%s!host'%(s), NOTE_HOST)
-        if (tipe == 'interpreter'):
+        if tipe == 'interpreter':
             self.AddPropEntry (table, 'Interpreter', 'source!%s!interpreter'%(s), NOTE_INTERPRETER)
 
-        txt += self.HiddenInput ('source_num', s)
-        txt += self.Indent(table)
+        tmp  = self.HiddenInput ('source_num', s)
+        tmp += str(table)
+        
+        fo = Form ("/%s"%(self._id), add_submit=False, auto=True)
+        txt = fo.Render(tmp)
+
+        # Environment variables
+        if tipe == 'interpreter':
+            tmp = self._render_source_details_env (s)
+            txt += self.Indent(tmp)
+
         return txt
 
     def _render_add_new (self):
@@ -129,11 +184,9 @@ class PageAppServers (PageMenu, FormHelper):
             # Details
             #
             nick = self._cfg.get_val('source!%s!nick'%(source))
-            tmp = "<h2>Details: '%s'</h2>" % (nick)
-            tmp += self._render_source_details (source)
+            txt += "<h2>Details: '%s'</h2>" % (nick)
+            txt += self._render_source_details (source)
 
-            fo1 = Form ("/%s"%(self._id), add_submit=False, auto=True)
-            txt += fo1.Render(tmp)
         else:
             # Add new
             #
