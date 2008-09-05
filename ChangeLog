@@ -1,5 +1,23 @@
 2008-09-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/balancer., cherokee/balancer.h, cherokee/source.h,
+	cherokee/main_admin.c, cherokee/balancer_round_robin.c,
+	cherokee/balancer_round_robin.h, cherokee/server-protected.h,
+	cherokee/connection.c, cherokee/server.c, cherokee.conf.sample.,
+	admin/config.py, admin/server.py, admin/PageAppServers.py,
+	admin/consts.py, admin/ModuleBalancer.py, qa/127-SCGI-Post.py,
+	qa/conf.py, qa/153-SCGI-vars-root.py, qa/140-SCGI-EmptyVars.py,
+	qa/run-tests.py, qa/help.py, qa/172-Chunked-CGI.py,
+	qa/126-SCGI.py, qa/151-SCGI-vars.py, qa/util.py,
+	qa/152-SCGI-vars2.py, qa/171-SCGI-Keepalive.py,
+	qa/141-FastCGI-EmptyVars.py, qa/142-SCGI-ExtraVars.py: This
+	jumbo-patch modifies the way in which the balancers used to work.
+	From now on balancers (and therefore the FastCGI and SCGI support)
+	will use the new concept to 'Application Servers'. Be careful,
+	this change does change the configuration file format, although it
+	makes much easier to configure the same application server across
+	different virtual servers. The most common case: PHP.
+
 	* admin/PageAdvanced.py, admin/PageGeneral.py: The keepalive
 	option has been moved to the advanced page. A new option to enable
 	or disable Chunked encoding has been added as well.

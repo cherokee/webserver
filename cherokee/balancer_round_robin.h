@@ -40,7 +40,6 @@ typedef struct {
 
 
 ret_t cherokee_balancer_round_robin_new       (cherokee_balancer_t **balancer);
-ret_t cherokee_balancer_round_robin_configure (cherokee_balancer_t  *balancer, cherokee_config_node_t *conf);
 ret_t cherokee_balancer_round_robin_free      (cherokee_balancer_round_robin_t *balancer);
 
 #endif /* CHEROKEE_BALANCER_ROUND_ROBIN_H */

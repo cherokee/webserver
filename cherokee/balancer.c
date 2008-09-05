@@ -41,6 +41,7 @@ cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info
 	/* Virtual methods
 	 */
 	balancer->dispatch     = NULL;
+	balancer->configure    = NULL;
 	
 	/* Sources
 	 */
@@ -74,61 +75,35 @@ cherokee_balancer_mrproper (cherokee_balancer_t *balancer)
 
 
 ret_t 
-cherokee_balancer_configure (cherokee_balancer_t *balancer, cherokee_config_node_t *conf)
+cherokee_balancer_configure_base (cherokee_balancer_t    *balancer, 
+				  cherokee_server_t      *srv,
+				  cherokee_config_node_t *conf)
 {
-	ret_t               ret;
-	cherokee_list_t    *i;
-	cherokee_buffer_t  *buf;
-	cherokee_boolean_t  interpreter = false;
-	cherokee_boolean_t  host        = false;
+	ret_t                   ret;
+	cherokee_list_t        *i;
+	cherokee_source_t      *src;
+	cherokee_config_node_t *subconf  = NULL;
+	cherokee_config_node_t *subconf2 = NULL;
 
 	/* Look for the type of the source objects
 	 */
-	ret = cherokee_config_node_read (conf, "type", &buf);
+	ret = cherokee_config_node_get (conf, "source", &subconf);
 	if (ret != ret_ok) {
-		PRINT_ERROR_S ("ERROR: Balancer: An entry 'type' is needed\n");
-		return ret;
-	}
-	
-	if (equal_buf_str (buf, "interpreter")) {
-		interpreter = true;
-	} else if (equal_buf_str (buf, "host")) {
-		host = true;
-	} else {
-		PRINT_ERROR ("ERROR: Balancer: Unknown type '%s'\n", buf->buf);
+		PRINT_ERROR_S ("ERROR: Balancer: An entry 'source' is needed\n");
 		return ret_error;
 	}
-	
-	/* Add the source objects
-	 */
-	cherokee_config_node_foreach (i, conf) {
-		cherokee_source_t      *src     = NULL;
-		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
-		if (equal_buf_str (&subconf->key, "type"))
-			continue;
+	cherokee_config_node_foreach (i, subconf) {
+		subconf2 = CONFIG_NODE(i);
 
-		if (interpreter) {
-			cherokee_source_interpreter_t *src2;
-
-			ret = cherokee_source_interpreter_new (&src2);
-			if (ret != ret_ok) return ret;
-			
-			ret = cherokee_source_interpreter_configure (src2, subconf);
-			if (ret != ret_ok) return ret;
-
-			src = SOURCE(src2);
-
-		} else if (host) {
-			ret = cherokee_source_new (&src);
-			if (ret != ret_ok) return ret;
-			
-			ret = cherokee_source_configure (src, subconf);
-			if (ret != ret_ok) return ret;
+		ret = cherokee_avl_get (&srv->sources, &subconf2->val, (void **)&src);
+		if (ret != ret_ok) {
+			PRINT_ERROR ("Could not find source '%s'\n", subconf2->val.buf);
+			return ret_error;
 		}
-		
+
 		cherokee_balancer_add_source (balancer, src);
-	}	
+	}
 
 	return ret_ok;
 }
@@ -216,9 +191,10 @@ cherokee_balancer_instance (cherokee_buffer_t       *name,
 			    cherokee_server_t       *srv, 
 			    cherokee_balancer_t    **balancer)
 {
-	ret_t                   ret;
-	balancer_new_func_t     new_func;
-	cherokee_plugin_info_t *info      = NULL;
+	ret_t                      ret;
+	balancer_new_func_t        new_func;
+	balancer_configure_func_t  config_func;
+	cherokee_plugin_info_t    *info = NULL;
 	
 	if (cherokee_buffer_is_empty (name)) {
 		PRINT_ERROR_S ("Balancer defined without a value\n");
@@ -232,7 +208,9 @@ cherokee_balancer_instance (cherokee_buffer_t       *name,
 	ret = new_func (balancer);
 	if (ret != ret_ok) return ret;
 
-	ret = cherokee_balancer_configure (*balancer, conf);
+
+	config_func = (balancer_configure_func_t) info->configure;
+	ret = config_func (*balancer, srv, conf);
 	if (ret != ret_ok) return ret;
 
 	return ret_ok;

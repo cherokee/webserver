@@ -158,6 +158,13 @@ def get_free_port():
     return __free_port
 
 
+__next_source = 0
+def get_next_source():
+    global __next_source
+    __next_source += 1
+    return __next_source
+
+
 #
 # Plug-in checking
 #

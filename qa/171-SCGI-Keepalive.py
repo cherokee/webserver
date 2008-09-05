@@ -1,9 +1,10 @@
 import os
 from base import *
 
-DIR   = "/SCGI_Keepalive1"
-PORT  = get_free_port()
-MAGIC = "It is a kind of magic.. :-)"
+DIR    = "/SCGI_Keepalive1"
+MAGIC  = "It is a kind of magic.. :-)"
+PORT   = get_free_port()
+PYTHON = look_for_python()
 
 SCRIPT = """
 from pyscgi import *
@@ -18,15 +19,19 @@ class TestHandler (SCGIHandler):
 SCGIServer(TestHandler, port=%d).serve_forever()
 """ % (len(MAGIC), MAGIC, PORT)
 
+source = get_next_source()
+
 CONF = """
 vserver!1!rule!1710!match = directory
-vserver!1!rule!1710!match!directory = %s
+vserver!1!rule!1710!match!directory = %(DIR)s
 vserver!1!rule!1710!handler = scgi
 vserver!1!rule!1710!handler!check_file = 0
 vserver!1!rule!1710!handler!balancer = round_robin
-vserver!1!rule!1710!handler!balancer!type = interpreter
-vserver!1!rule!1710!handler!balancer!1!host = localhost:%d
-vserver!1!rule!1710!handler!balancer!1!interpreter = %s %s
+vserver!1!rule!1710!handler!balancer!source!1 = %(source)d
+
+source!%(source)d!type = interpreter
+source!%(source)d!host = localhost:%(PORT)d
+source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 """
 
 class Test (TestBase):
@@ -49,4 +54,7 @@ class Test (TestBase):
         if not os.path.exists (pyscgi):
             self.CopyFile ('pyscgi.py', pyscgi)
 
-        self.conf = CONF % (DIR, PORT, look_for_python(), scgi_file)
+
+        vars = globals()
+        vars['scgi_file'] = scgi_file
+        self.conf = CONF % (vars)

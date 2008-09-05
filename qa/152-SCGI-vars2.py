@@ -2,9 +2,11 @@ import os
 from base import *
 
 DIR      = "/SCGI6"
+FILE     = "virtual_file"
 PATHINFO = "/dir1/dir2/dir3/looongfile.ext"
-REQUEST  = "%s%s"%(DIR, PATHINFO)
+REQUEST  = "%s/%s%s"%(DIR, FILE, PATHINFO)
 PORT     = get_free_port()
+PYTHON   = look_for_python()
 
 SCRIPT = """
 from pyscgi import *
@@ -20,20 +22,24 @@ class TestHandler (SCGIHandler):
 SCGIServer(TestHandler, port=%d).serve_forever()
 """ % (PORT)
 
+source = get_next_source()
+
 CONF = """
 vserver!1!rule!1520!match = directory
-vserver!1!rule!1520!match!directory = <dir>
+vserver!1!rule!1520!match!directory = %(DIR)s
 vserver!1!rule!1520!handler = scgi
 vserver!1!rule!1520!handler!check_file = 0
 vserver!1!rule!1520!handler!balancer = round_robin
-vserver!1!rule!1520!handler!balancer!type = interpreter
-vserver!1!rule!1520!handler!balancer!1!host = localhost:%d
-vserver!1!rule!1520!handler!balancer!1!interpreter = %s %s
+vserver!1!rule!1520!handler!balancer!source!1 = %(source)d
+
+source!%(source)d!type = interpreter
+source!%(source)d!host = localhost:%(PORT)d
+source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 """
 
 EXPECTED = [
     'PATH_INFO: "%s"' %(PATHINFO),
-    'SCRIPT_NAME: "%s"' % (DIR)
+    'SCRIPT_NAME: "%s/%s"' % (DIR, FILE)
 ]
 
 class Test (TestBase):
@@ -53,5 +59,6 @@ class Test (TestBase):
         if not os.path.exists (pyscgi):
             self.CopyFile ('pyscgi.py', pyscgi)
 
-        self.conf = CONF % (PORT, look_for_python(), scgi_file)
-        self.conf = self.conf.replace ('<dir>', DIR)
+        vars = globals()
+        vars['scgi_file'] = scgi_file
+        self.conf = CONF % (vars)

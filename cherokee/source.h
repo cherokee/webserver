@@ -43,8 +43,6 @@ typedef enum {
 } cherokee_source_type_t;
 
 typedef struct {
-	cherokee_list_t        list;
-	
 	cherokee_source_type_t type;
 	cherokee_buffer_t      original;
 	cherokee_buffer_t      unix_socket;

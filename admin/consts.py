@@ -53,7 +53,7 @@ BALANCERS = [
     ('round_robin', "Round Robin")
 ]
 
-BALANCER_TYPES = [
+SOURCE_TYPES = [
     ('interpreter', 'Local interpreter'),
     ('host',        'Remote host')
 ]

@@ -40,11 +40,13 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 
 ret_t 
-cherokee_balancer_round_robin_configure (cherokee_balancer_t *balancer, cherokee_config_node_t *conf)
+cherokee_balancer_round_robin_configure (cherokee_balancer_t    *balancer, 
+					 cherokee_server_t      *srv, 
+					 cherokee_config_node_t *conf)
 {
 	ret_t ret;
 
-	ret = cherokee_balancer_configure (BAL(balancer), conf);
+	ret = cherokee_balancer_configure_base (BAL(balancer), srv, conf);
 	if (ret != ret_ok) return ret;
 
 	return ret_ok;
@@ -60,8 +62,9 @@ cherokee_balancer_round_robin_new (cherokee_balancer_t **bal)
 	 */
 	cherokee_balancer_init_base (BAL(n), PLUGIN_INFO_PTR(round_robin));
 
-	MODULE(n)->free  = (module_func_free_t) cherokee_balancer_round_robin_free;
-	BAL(n)->dispatch = (balancer_dispatch_func_t) dispatch;
+	MODULE(n)->free   = (module_func_free_t) cherokee_balancer_round_robin_free;
+	BAL(n)->configure = (balancer_configure_func_t) cherokee_balancer_round_robin_configure;
+	BAL(n)->dispatch  = (balancer_dispatch_func_t) dispatch;
 
 	/* Init properties
 	 */

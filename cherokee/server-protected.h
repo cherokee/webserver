@@ -118,6 +118,7 @@ struct cherokee_server {
 
 	cherokee_boolean_t         keepalive;
 	cuint_t                    keepalive_max;
+	cherokee_boolean_t         chunked_encoding;
 
 	/* Networking config
 	 */
@@ -154,6 +155,7 @@ struct cherokee_server {
 	cherokee_mime_t           *mime;
 	cherokee_icons_t          *icons;
 	cherokee_iocache_t        *iocache;
+	cherokee_avl_t             sources;
 
 	/* Time related
 	 */

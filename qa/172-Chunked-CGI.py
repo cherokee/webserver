@@ -1,5 +1,3 @@
-import os
-import pwd
 from base import *
 
 DIR            = "chunked_cgi_1"

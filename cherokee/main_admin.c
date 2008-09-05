@@ -104,14 +104,18 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf, "vserver!1!nick = default\n");
 	cherokee_buffer_add_va  (&buf, "vserver!1!document_root = %s\n", document_root);
 
-	cherokee_buffer_add_va  (&buf, 
-				 RULE_PRE "1!match = default\n"
-				 RULE_PRE "1!handler = scgi\n"
-				 RULE_PRE "1!handler!balancer = round_robin\n"
-				 RULE_PRE "1!handler!balancer!type = interpreter\n"
-				 RULE_PRE "1!handler!balancer!local1!host = localhost:%d\n"
-				 RULE_PRE "1!handler!balancer!local1!interpreter = %s/server.py %d %s\n", 
+	cherokee_buffer_add_va  (&buf,
+				 "source!1!nick = app-logic\n"
+				 "source!1!type = interpreter\n"
+				 "source!1!host = localhost:%d\n"
+				 "source!1!interpreter = %s/server.py %d %s\n",
 				 scgi_port, document_root, scgi_port, config_file);
+
+	cherokee_buffer_add_str  (&buf, 
+				  RULE_PRE "1!match = default\n"
+				  RULE_PRE "1!handler = scgi\n"
+				  RULE_PRE "1!handler!balancer = round_robin\n"
+				  RULE_PRE "1!handler!balancer!source!1 = 1\n");
 
 	cherokee_buffer_add_str (&buf, 
 				 RULE_PRE "2!match = directory\n"

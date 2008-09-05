@@ -5,7 +5,6 @@ Usage: %s [parameters] [tests]
   -h            Print this help
   -c            Do NOT clean temporal files
   -k            Do NOT kill the server after the tests
-  -f            Do NOT use FastCGI by default
   -q            Quiet mode
   -s            Use SSL
   -x            Run under Strace/Dtruss

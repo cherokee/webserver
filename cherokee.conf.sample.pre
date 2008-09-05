@@ -59,10 +59,15 @@ vserver!1!rule!99999!match = extensions
 vserver!1!rule!99999!match!extensions = php
 vserver!1!rule!99999!handler = fcgi
 vserver!1!rule!99999!handler!balancer = round_robin
-vserver!1!rule!99999!handler!balancer!type = interpreter
-vserver!1!rule!99999!handler!balancer!local1!host = localhost:1234
-vserver!1!rule!99999!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
-vserver!1!rule!99999!handler!balancer!local1!interpreter = %phpcgi% -b 1234
+vserver!1!rule!99999!handler!balancer!source!1 = 1
+
+# Sources 
+#
+source!1!nick = php
+source!1!type = interpreter
+source!1!host = /tmp/cherokee-php.sock
+source!1!env!PHP_FCGI_CHILDREN = 5
+source!1!interpreter = %phpcgi% -b /tmp/cherokee-php.sock
 
 # Icons
 #

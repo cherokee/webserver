@@ -87,6 +87,7 @@
 #include "config_reader.h"
 #include "init.h"
 #include "bogotime.h"
+#include "source_interpreter.h"
 
 #define ENTRIES "core,server"
 
@@ -109,41 +110,42 @@ cherokee_server_new  (cherokee_server_t **srv)
 	cherokee_socket_init (&n->socket);
 	cherokee_socket_init (&n->socket_tls);
 
-	n->ipv6            = true;
-	n->fdpoll_method   = cherokee_poll_UNSET;
+	n->ipv6             = true;
+	n->fdpoll_method    = cherokee_poll_UNSET;
 
 	/* Mime types
 	 */
-	n->mime            = NULL;
+	n->mime             = NULL;
 
 	/* Exit related
 	 */
-	n->wanna_exit      = false;
-	n->wanna_reinit    = false;
+	n->wanna_exit       = false;
+	n->wanna_reinit     = false;
 
 	/* Server config
 	 */
-	n->port            = 80;
-	n->port_tls        = 443;
-	n->tls_enabled     = false;
+	n->port             = 80;
+	n->port_tls         = 443;
+	n->tls_enabled      = false;
 
-	n->fdwatch_msecs   = 1000;
+	n->fdwatch_msecs    = 1000;
 
-	n->start_time      = time(NULL);
+	n->start_time       = time(NULL);
 
-	n->keepalive       = true;
-	n->keepalive_max   = MAX_KEEPALIVE;
+	n->keepalive        = true;
+	n->keepalive_max    = MAX_KEEPALIVE;
+	n->chunked_encoding = true;
 
-	n->thread_num      = -1;
-	n->thread_policy   = -1;
+	n->thread_num       = -1;
+	n->thread_policy    = -1;
 
-	n->chrooted        = false;
-	n->user_orig       = getuid();
-	n->user            = n->user_orig;
-	n->group_orig      = getgid();
-	n->group           = n->group_orig;
+	n->chrooted         = false;
+	n->user_orig        = getuid();
+	n->user             = n->user_orig;
+	n->group_orig       = getgid();
+	n->group            = n->group_orig;
 
-	n->timeout         = 5;
+	n->timeout          = 5;
 
 	n->fdlimit_custom      = -1;
 	n->fdlimit_available   = -1;
@@ -229,6 +231,10 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	cherokee_config_node_init (&n->config);
 	
+	/* Information sources: SCGI, FCGI
+	 */
+	cherokee_avl_init (&n->sources);
+
 	/* Return the object
 	 */
 	*srv = n;
@@ -344,6 +350,9 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_buffer_mrproper (&srv->chroot);
 	cherokee_buffer_mrproper (&srv->pidfile);
 	cherokee_buffer_mrproper (&srv->panic_action);
+
+	//
+	// TODO: Free srv->sources
 
 	/* Module loader: It must be the last action to be performed
 	 * because it will close all the opened modules.
@@ -1280,6 +1289,58 @@ error:
 	return ret;
 }
 
+static ret_t 
+add_source (cherokee_config_node_t *conf, void *data)
+{
+	ret_t                          ret;
+	cuint_t                        prio;
+	cherokee_buffer_t             *buf;
+	cherokee_source_interpreter_t *src2;
+	cherokee_source_t             *src = NULL;
+	cherokee_server_t             *srv = SRV(data);
+
+	/* Sanity check
+	 */
+	prio = atoi (conf->key.buf);
+	if (prio <= 0) {
+		PRINT_ERROR ("Invalid Source entry '%s'\n", conf->key.buf);
+		return ret_error;
+	}
+
+	TRACE (ENTRIES, "Adding Source prio=%d\n", prio);
+
+	/* Look for the type of the source objects
+	 */
+	ret = cherokee_config_node_read (conf, "type", &buf);
+	if (ret != ret_ok) {
+		PRINT_ERROR_S ("ERROR: Source: An entry 'type' is needed\n");
+		return ret;
+	}
+	
+	if (equal_buf_str (buf, "interpreter")) {
+		ret = cherokee_source_interpreter_new (&src2);
+		if (ret != ret_ok) return ret;
+		
+		ret = cherokee_source_interpreter_configure (src2, conf);
+		if (ret != ret_ok) return ret;
+		
+		src = SOURCE(src2);
+
+	} else if (equal_buf_str (buf, "host")) {
+		ret = cherokee_source_new (&src);
+		if (ret != ret_ok) return ret;
+		
+		ret = cherokee_source_configure (src, conf);
+		if (ret != ret_ok) return ret;
+
+	} else {
+		PRINT_ERROR ("ERROR: Source: Unknown type '%s'\n", buf->buf);
+		return ret_error;
+	}
+
+	cherokee_avl_add (&srv->sources, &conf->key, src);
+	return ret_ok;
+}
 
 static ret_t 
 add_vserver (cherokee_config_node_t *conf, void *data)
@@ -1390,6 +1451,9 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "keepalive_max_requests")) {
 		srv->keepalive_max = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "chunked_encoding")) {
+		srv->chunked_encoding = !!atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "panic_action")) {
 		cherokee_buffer_clean (&srv->panic_action);
@@ -1556,6 +1620,15 @@ configure_server (cherokee_server_t *srv)
 		if (ret != ret_ok) return ret;
 		
 		ret = cherokee_mime_configure (srv->mime, subconf);
+		if (ret != ret_ok) return ret;
+	}
+
+	/* Sources
+	 */
+	TRACE (ENTRIES, "Configuring %s\n", "sources");
+	ret = cherokee_config_node_get (&srv->config, "source", &subconf);
+	if (ret == ret_ok) {
+		ret = cherokee_config_node_while (subconf, add_source, srv);
 		if (ret != ret_ok) return ret;
 	}
 

@@ -2,7 +2,7 @@ PORT     = 1978
 PORT_TLS = 1979
 HOST     = "localhost"
 
-CHEROKEE_PATH     = "../cherokee/cherokee"
+CHEROKEE_PATH     = "../cherokee/cherokee-worker"
 CHEROKEE_MODS     = "../cherokee/.libs/"
 CHEROKEE_DEPS     = "../cherokee/"
 CHEROKEE_PANIC    = "../cherokee/cherokee-panic"

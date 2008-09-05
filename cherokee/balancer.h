@@ -36,18 +36,20 @@
 
 CHEROKEE_BEGIN_DECLS
 
-typedef ret_t (* balancer_dispatch_func_t) (void *balancer, cherokee_connection_t *conn, cherokee_source_t **src);
+typedef ret_t (* balancer_dispatch_func_t)  (void *balancer, cherokee_connection_t *conn, cherokee_source_t **src);
+typedef ret_t (* balancer_configure_func_t) (void *balancer, cherokee_server_t *srv, cherokee_config_node_t *conf);
 
 typedef struct {
-	cherokee_module_t        module;
+	cherokee_module_t         module;
 
 	/* Properties */
-	cherokee_source_t      **sources;
-	cuint_t                  sources_len;
-	cuint_t                  sources_size;
+	cherokee_source_t       **sources;
+	cuint_t                   sources_len;
+	cuint_t                   sources_size;
 
 	/* Virtual methods */
-	balancer_dispatch_func_t dispatch;
+	balancer_configure_func_t configure;
+	balancer_dispatch_func_t  dispatch;
 
 } cherokee_balancer_t;
 
@@ -63,6 +65,7 @@ typedef ret_t (* balancer_free_func_t) (cherokee_balancer_t  *balancer);
 #define BALANCER_CONF_PROTOTYPE(name)                              \
 	ret_t cherokee_balancer_ ## name ## _configure (           \
 		cherokee_balancer_t    *,                          \
+		cherokee_server_t      *,			   \
 		cherokee_config_node_t *)
 
 #define PLUGIN_INFO_BALANCER_EASY_INIT(name)                       \
@@ -79,9 +82,9 @@ typedef ret_t (* balancer_free_func_t) (cherokee_balancer_t  *balancer);
 
 /* Balancer methods
  */
-ret_t cherokee_balancer_init_base  (cherokee_balancer_t *balancer, cherokee_plugin_info_t *info);
-ret_t cherokee_balancer_mrproper   (cherokee_balancer_t *balancer);
-ret_t cherokee_balancer_configure  (cherokee_balancer_t *balancer, cherokee_config_node_t *conf);
+ret_t cherokee_balancer_init_base      (cherokee_balancer_t *balancer, cherokee_plugin_info_t *info);
+ret_t cherokee_balancer_configure_base (cherokee_balancer_t *balancer, cherokee_server_t *srv, cherokee_config_node_t *conf);
+ret_t cherokee_balancer_mrproper       (cherokee_balancer_t *balancer);
 
 /* Public methods
  */

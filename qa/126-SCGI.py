@@ -1,9 +1,10 @@
 import os
 from base import *
 
-DIR   = "/SCGI1/"
-MAGIC = "Cherokee and SCGI rocks!"
-PORT  = get_free_port()
+DIR    = "/SCGI1/"
+MAGIC  = "Cherokee and SCGI rocks!"
+PORT   = get_free_port()
+PYTHON = look_for_python()
 
 SCRIPT = """
 from pyscgi import *
@@ -16,14 +17,18 @@ class TestHandler (SCGIHandler):
 SCGIServerFork(TestHandler, port=%d).serve_forever()
 """ % (MAGIC, PORT)
 
+source = get_next_source()
+
 CONF = """
 vserver!1!rule!1260!match = directory
-vserver!1!rule!1260!match!directory = <dir>
+vserver!1!rule!1260!match!directory = %(DIR)s
 vserver!1!rule!1260!handler = scgi
 vserver!1!rule!1260!handler!balancer = round_robin
-vserver!1!rule!1260!handler!balancer!type = interpreter
-vserver!1!rule!1260!handler!balancer!local_scgi1!host = localhost:%d
-vserver!1!rule!1260!handler!balancer!local_scgi1!interpreter = %s %s
+vserver!1!rule!1260!handler!balancer!source!1 = %(source)d
+
+source!%(source)d!type = interpreter
+source!%(source)d!host = localhost:%(PORT)d
+source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 """
 
 class Test (TestBase):
@@ -43,5 +48,6 @@ class Test (TestBase):
         if not os.path.exists (pyscgi):
             self.CopyFile ('pyscgi.py', pyscgi)
 
-        self.conf = CONF % (PORT, look_for_python(), scgi_file)
-        self.conf = self.conf.replace ('<dir>', DIR)
+        vars = globals()
+        vars['scgi_file'] = scgi_file
+        self.conf = CONF % (vars)

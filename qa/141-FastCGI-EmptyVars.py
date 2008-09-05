@@ -1,9 +1,10 @@
 import os
 from base import *
 
-DIR   = "/FCGI-EmptyVars/"
-MAGIC = "Cherokee and FastCGI rocks!"
-PORT  = get_free_port()
+DIR    = "/FCGI-EmptyVars/"
+MAGIC  = "Cherokee and FastCGI rocks!"
+PORT   = get_free_port()
+PYTHON = look_for_python()
 
 SCRIPT = """
 from fcgi import *
@@ -19,14 +20,18 @@ def app (environ, start_response):
 WSGIServer(app, bindAddress=("localhost",%d)).run()
 """ % (PORT)
 
+source = get_next_source()
+
 CONF = """
 vserver!1!rule!1410!match = directory
-vserver!1!rule!1410!match!directory = <dir>
+vserver!1!rule!1410!match!directory = %(DIR)s
 vserver!1!rule!1410!handler = fcgi
 vserver!1!rule!1410!handler!balancer = round_robin
-vserver!1!rule!1410!handler!balancer!type = interpreter
-vserver!1!rule!1410!handler!balancer!1!host = localhost:%d
-vserver!1!rule!1410!handler!balancer!1!interpreter = %s %s
+vserver!1!rule!1410!handler!balancer!source!1 = %(source)d
+
+source!%(source)d!type = interpreter
+source!%(source)d!host = localhost:%(PORT)d
+source!%(source)d!interpreter = %(PYTHON)s %(fcgi_file)s
 """
 
 
@@ -47,5 +52,6 @@ class Test (TestBase):
         if not os.path.exists (fcgi):
             self.CopyFile ('fcgi.py', fcgi)
 
-        self.conf = CONF % (PORT, look_for_python(), fcgi_file)
-        self.conf = self.conf.replace ('<dir>', DIR)
+        vars = globals()
+        vars['fcgi_file'] = fcgi_file
+        self.conf = CONF % (vars)

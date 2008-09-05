@@ -38,7 +38,6 @@ strace    = False
 port      = None
 method    = None
 nobody    = False
-fcgi      = True
 log       = False
 help      = False
 memproc   = False
@@ -76,7 +75,6 @@ if len(files) == 0:
 for p in param:
     if   p     == '-c': clean     = False
     elif p     == '-k': kill      = False
-    elif p     == '-f': fcgi      = False    
     elif p     == '-q': quiet     = True
     elif p     == '-s': ssl       = True
     elif p     == '-x': strace    = True
@@ -116,9 +114,12 @@ if thds > 1 and pause > 1:
     sys.exit(1)
 
 # Check the interpreters
+php_interpreter    = look_for_php()
+python_interpreter = look_for_python()
+
 print "Interpreters"
-print_key('PHP',    look_for_php())
-print_key('Python', look_for_python())
+print_key('PHP',    php_interpreter)
+print_key('Python', python_interpreter)
 print
 
 # Set the panic script
@@ -128,51 +129,44 @@ if panic[0] != '/':
     panic = os.path.normpath (os.path.join (os.getcwd(), CHEROKEE_PANIC))
 
 # Configuration file base
+next_source = get_next_source()
+
 CONF_BASE = """
 #
 # Cherokee QA tests
 #
-server!port = %d 
-server!port_tls = %d
+server!port = %(PORT)d
+server!port_tls = %(PORT_TLS)d
 server!keepalive = 1 
 server!listen = 127.0.0.1
-server!panic_action = %s
+server!panic_action = %(panic)s
 server!encoder!gzip!allow = txt
 server!encoder!deflate!allow = txt
-server!pid_file = %s
-server!module_dir = %s
-server!module_deps = %s
+server!pid_file = %(pid)s
+server!module_dir = %(CHEROKEE_MODS)s
+server!module_deps = %(CHEROKEE_DEPS)s
 server!fdlimit = 8192
 
 vserver!1!nick = default
-vserver!1!document_root = %s
+vserver!1!document_root = %(www)s
 vserver!1!directory_index = test_index.html,test_index.php,/super_test_index.php
 vserver!1!rule!1!match = default
 vserver!1!rule!1!handler = common
-""" % (PORT, PORT_TLS, panic, pid, CHEROKEE_MODS, CHEROKEE_DEPS, www)
 
-PHP_FCGI = """\
+source!%(next_source)d!type = interpreter
+source!%(next_source)d!host = localhost:%(PHP_FCGI_PORT)d
+source!%(next_source)d!env!PHP_FCGI_CHILDREN = 5
+source!%(next_source)d!interpreter = %(php_interpreter)s -b %(PHP_FCGI_PORT)d
+""" % (locals())
+
+php_ext = """\
 10000!match = extensions
 10000!match!extensions = php
 10000!match!final = 0
 10000!handler = fcgi
 10000!handler!balancer = round_robin
-10000!handler!balancer!type = interpreter
-10000!handler!balancer!local1!host = localhost:%d
-10000!handler!balancer!local1!env!PHP_FCGI_CHILDREN = 5
-10000!handler!balancer!local1!interpreter = %s -b %d""" % (PHP_FCGI_PORT, look_for_php(), PHP_FCGI_PORT)
-
-PHP_CGI = """\
-10000!match = extensions
-10000!match!extensions = php
-10000!match!final = 0
-10000!handler = phpcgi
-10000!handler!interpreter = %s""" % (look_for_php())
-
-if fcgi:
-    php_ext = PHP_FCGI
-else:
-    php_ext = PHP_CGI
+10000!handler!balancer!source!1 = %(next_source)d\
+""" % (locals())
 
 for php in php_ext.split("\n"):
     CONF_BASE += "vserver!1!rule!%s\n" % (php)
