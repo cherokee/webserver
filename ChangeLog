@@ -1,5 +1,8 @@
 2008-09-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/Page.py, admin/static/css/cherokee.css: Adds a new menu
+	entry to access the Application Server section.
+
 	* cherokee/balancer., cherokee/balancer.h, cherokee/source.h,
 	cherokee/main_admin.c, cherokee/balancer_round_robin.c,
 	cherokee/balancer_round_robin.h, cherokee/server-protected.h,
