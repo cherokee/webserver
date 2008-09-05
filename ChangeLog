@@ -1,3 +1,11 @@
+2008-09-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/connection-protected.h, cherokee/handler_cgi_base.c,
+	cherokee/handler_cgi_base.h, cherokee/handler.h, cherokee/util.h,
+	cherokee/util.c, cherokee/connection.c: Reimplements the Chunked
+	encoding support.  Now it is system-wide and does less memory
+	moves/allocations.
+
 2008-09-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/CherokeeManagement.py: Updated the 'last option'

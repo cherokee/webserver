@@ -121,6 +121,12 @@ ret_t cherokee_sys_fdlimit_set (cuint_t  limit);
 ret_t cherokee_get_shell       (const char **shell, const char **binary);
 void  cherokee_print_wrapped   (cherokee_buffer_t *buffer);
 
+ret_t cherokee_iovec_skip_sent (struct iovec orig[], uint16_t  orig_len,
+				struct iovec dest[], uint16_t *dest_len,
+				size_t sent);
+
+int   cherokee_iovec_was_sent  (struct iovec orig[], uint16_t orig_len, size_t sent);
+
 /* Debug
  */
 void  cherokee_trace           (const char *entry, const char *file, int line, const char *func, const char *fmt, ...);

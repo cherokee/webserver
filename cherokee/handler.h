@@ -48,11 +48,10 @@ typedef enum {
 	hsupport_nothing       = 0,
 	hsupport_length        = 1,         /* Knows the length. Eg: for keep-alive    */
 	hsupport_maybe_length  = 1 << 1,    /* It might include content-length         */
-	hsupport_chunked       = 1 << 2,    /* Support Chunked transfer encoding       */
-	hsupport_range         = 1 << 3,    /* Can handle "Range: bytes=" requests     */
-	hsupport_error         = 1 << 4,    /* It is an error handler                  */
-	hsupport_full_headers  = 1 << 5,    /* Handler adds the full header stack      */
-	hsupport_skip_headers  = 1 << 6     /* The server shouldn't add any headers    */
+	hsupport_range         = 1 << 2,    /* Can handle "Range: bytes=" requests     */
+	hsupport_error         = 1 << 3,    /* It is an error handler                  */
+	hsupport_full_headers  = 1 << 4,    /* Handler adds the full header stack      */
+	hsupport_skip_headers  = 1 << 5     /* The server shouldn't add any headers    */
 } cherokee_handler_support_t;
 
 

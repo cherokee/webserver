@@ -1424,3 +1424,55 @@ cherokee_mkdir_p (cherokee_buffer_t *path)
 	
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_iovec_skip_sent (struct iovec *orig, uint16_t  orig_len,
+			  struct iovec *dest, uint16_t *dest_len,
+			  size_t sent)
+{
+	int    i;
+ 	int    j      = 0;
+	size_t total  = 0;
+	int    add    = 0;
+
+	for (i=0; i<orig_len; i++) {
+		if (sent >= total + orig[i].iov_len) {
+			/* Already sent */
+			total += orig[i].iov_len;
+
+		} else if (add) {
+			/* Add the whole thing */
+			dest[j].iov_len  = orig[i].iov_len;
+			dest[j].iov_base = orig[i].iov_base;
+			j++;
+
+		} else {
+			/* Add only a piece */
+			dest[j].iov_len  = orig[i].iov_len  - (sent - total);
+			dest[j].iov_base = orig[i].iov_base + (sent - total);
+			j++;
+			add = 1;
+		}
+	}
+
+	*dest_len = j;
+	return ret_ok;
+}
+
+
+int
+cherokee_iovec_was_sent (struct iovec *orig, uint16_t orig_len, size_t sent)
+{
+	int    i;
+	size_t total =0;
+
+	for (i=0; i<orig_len; i++) {
+		total += orig[i].iov_len;
+		if (total > sent) {
+			return 0;
+		}
+	}
+	
+	return 1;
+}

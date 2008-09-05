@@ -197,6 +197,9 @@ struct cherokee_connection {
 	 */
 	cherokee_boolean_t            chunked_encoding;
 	cherokee_buffer_t             chunked_len;
+	size_t                        chunked_sent;
+	struct iovec                  chunks[3];
+	uint16_t                      chunksn;
 };
 
 #define CONN_SRV(c)    (SRV(CONN(c)->server))

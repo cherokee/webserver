@@ -34,7 +34,6 @@
 #include "handler_file.h"
 
 #define ENTRIES "cgibase"
-#define LAST_CHUNK "0" CRLF CRLF
 
 #define set_env(cgi,key,val,len) \
 	set_env_pair (cgi, key, sizeof(key)-1, val, len)
@@ -177,7 +176,6 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 	props->is_error_handler = false;
 	props->change_user      = false;
 	props->check_file       = true;
-	props->allow_chunked    = true;
 	props->allow_xsendfile  = false;
 	props->pass_req_headers = false;
 
@@ -210,9 +208,6 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 
 		} else if (equal_buf_str (&subconf->key, "check_file")) {
 			props->check_file = !! atoi(subconf->val.buf);
-
-		} else if (equal_buf_str (&subconf->key, "allow_chunked")) {
-			props->allow_chunked = !! atoi(subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "xsendfile")) {
 			props->allow_xsendfile = !! atoi(subconf->val.buf);
@@ -964,21 +959,6 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 
 	}
 
-	/* Chunked encoding
-	 */
-	conn->chunked_encoding = (
-		(conn->keepalive > 0) &&
-		(cgi->content_length_set == false) &&
-		(conn->header.version == http_version_11) &&
-		(HANDLER_CGI_BASE_PROPS(cgi)->allow_chunked));
-	
-	TRACE (ENTRIES, "Chunked: Keepalive: %d, len not set=%d, version ok=%d, allowed=%d => %d\n",
-	       (conn->keepalive > 0),
-	       (cgi->content_length_set == false),
-	       (conn->header.version == http_version_11),
-	       (HANDLER_CGI_BASE_PROPS(cgi)->allow_chunked),
-	       conn->chunked_encoding);
-
 	return ret_ok;
 }
 
@@ -987,9 +967,8 @@ ret_t
 cherokee_handler_cgi_base_step (cherokee_handler_cgi_base_t *cgi, 
 				cherokee_buffer_t           *outbuf)
 {
-	ret_t                  ret;
-	cherokee_buffer_t     *inbuf = &cgi->data; 
-	cherokee_connection_t *conn  = HANDLER_CONN(cgi);
+	ret_t              ret;
+	cherokee_buffer_t *inbuf = &cgi->data; 
 
 	/* Is it replying a "X-Sendfile" request?
 	 */
@@ -1003,22 +982,10 @@ cherokee_handler_cgi_base_step (cherokee_handler_cgi_base_t *cgi,
 	if (! cherokee_buffer_is_empty (&cgi->data)) {
 		TRACE (ENTRIES, "sending stored data: %d bytes\n", cgi->data.len);
 
-		if (conn->chunked_encoding) {
-			/* Build the chunk-hader:
-			 * len(str(hex(4294967295))+"\r\n\0") = 13
-			 */
-			cherokee_buffer_ensure_size (&conn->chunked_len, 13);
-			cherokee_buffer_add_ulong16 (&conn->chunked_len, cgi->data.len);
-			cherokee_buffer_add_str (&conn->chunked_len, CRLF);
-		}
-
 		cherokee_buffer_add_buffer (outbuf, &cgi->data);
 		cherokee_buffer_clean (&cgi->data);
 
 		if (cgi->got_eof) {
-			if (conn->chunked_encoding) {
-				cherokee_buffer_add_str (outbuf, LAST_CHUNK);
-			}
 			return ret_eof_have_data;
 		}
 
@@ -1030,21 +997,8 @@ cherokee_handler_cgi_base_step (cherokee_handler_cgi_base_t *cgi,
 	ret = cgi->read_from_cgi (cgi, inbuf);
 
 	if (inbuf->len > 0) {
-		cherokee_buffer_add_buffer (outbuf, inbuf);			
+		cherokee_buffer_add_buffer (outbuf, inbuf);	
 		cherokee_buffer_clean (inbuf);
-
-		if (conn->chunked_encoding) {
-			cherokee_buffer_ensure_size (&conn->chunked_len, 13);
-			cherokee_buffer_add_ulong16 (&conn->chunked_len, outbuf->len);
-			cherokee_buffer_add_str (&conn->chunked_len, CRLF);
-		}
-	}
-
-	if ((conn->chunked_encoding) &&
-	    ((ret == ret_eof) || (ret == ret_eof_have_data)))
-	{
-		cherokee_buffer_add_str (outbuf, LAST_CHUNK);
-		return ret_eof_have_data;
 	}
 
 	return ret;
