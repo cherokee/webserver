@@ -15,7 +15,6 @@ PRODUCT_TOKENS = [
 ]
 
 DATA_VALIDATION = [
-    ("server!keepalive", validations.is_boolean),
     ("server!ipv6",      validations.is_boolean),
     ("server!port.*",    validations.is_tcp_port),
     ("server!listen",    validations.is_ip),
@@ -27,7 +26,6 @@ NOTE_PORT_TLS  = 'Defines the port that the server will listen to for secure con
 NOTE_IPV6      = 'Set to enable the IPv6 support. The OS must support IPv6 for this to work.'
 NOTE_LISTEN    = 'IP address of the interface to bind. It is usually empty.'
 NOTE_TIMEOUT   = 'Time interval until the server closes inactive connections.'
-NOTE_KEEPALIVE = 'Enables the server-wide keep-alive support. It increases the performance. It is usually set on.'
 NOTE_TOKENS    = 'This option allows to choose how the server identifies itself.'
 NOTE_USER      = 'Changes the effective user. User names and IDs are accepted.'
 NOTE_GROUP     = 'Changes the effective group. Group names and IDs are accepted.'
@@ -59,7 +57,6 @@ class PageGeneral (PageMenu, FormHelper):
         txt += "<h2>Basic Behavior</h2>"
         table = TableProps()
         self.AddPropEntry (table,  'Timeout (<i>secs</i>)', 'server!timeout',  NOTE_TIMEOUT)
-        self.AddPropCheck (table,  'Keep Alive',            'server!keepalive', True, NOTE_KEEPALIVE)
         self.AddPropOptions(table, 'Server Tokens',         'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
         txt += self.Indent(table)
 
@@ -74,5 +71,5 @@ class PageGeneral (PageMenu, FormHelper):
         return form.Render(txt,DEFAULT_SUBMIT_VALUE)
 	
     def _op_apply_changes (self, uri, post):
-        self.ApplyChanges (['server!ipv6', 'server!keepalive'], post, 
-                           validation = DATA_VALIDATION)
+        self.ApplyChanges (['server!ipv6'], post, validation = DATA_VALIDATION)
+                           

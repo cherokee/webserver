@@ -1,5 +1,9 @@
 2008-09-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageAdvanced.py, admin/PageGeneral.py: The keepalive
+	option has been moved to the advanced page. A new option to enable
+	or disable Chunked encoding has been added as well.
+
 	* cherokee/connection-protected.h, cherokee/handler_cgi_base.c,
 	cherokee/handler_cgi_base.h, cherokee/handler.h, cherokee/util.h,
 	cherokee/util.c, cherokee/connection.c: Reimplements the Chunked
