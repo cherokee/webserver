@@ -638,7 +638,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 		    ((HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length)) &&
 		     (! strcasestr (conn->header_buffer.buf, "Content-Length: "))))
 		{
-			conn->chunked_encoding = (srv->allow_chunked &&
+			conn->chunked_encoding = ((CONN_SRV(conn)->chunked_encoding) &&
 						  (conn->header.version == http_version_11));
 
 			if (! conn->chunked_encoding)
