@@ -1,3 +1,10 @@
+2008-09-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/main.c (check_worker_version): Checks whether Cherokee
+	and Cherokee-worker were compiled from the same version. The have
+	been a few problem due to broken installation that mixed binaries
+	from different versions.
+
 2008-09-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/Page.py, admin/static/css/cherokee.css: Adds a new menu

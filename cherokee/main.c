@@ -46,6 +46,56 @@ pid_t               pid;
 char               *pid_file_path;
 cherokee_boolean_t  graceful_restart; 
 
+
+static ret_t
+check_worker_version (const char *this_exec)
+{
+	FILE *f;
+	char  tmp[256];
+	char *line, *p;
+	int   re;
+
+	f = popen (CHEROKEE_WORKER" -i", "r");
+	if (f == NULL) {
+		PRINT_MSG ("Cannot execute '%s -i'\n", CHEROKEE_WORKER);
+		goto error;
+	}
+	
+	while (! feof(f)) {
+		/* Skip line until it found the version entry
+		 */
+		line = fgets (tmp, sizeof(tmp), f);
+		line = strcasestr (line, "Version: ");
+		if (line == NULL) 
+			continue;
+
+		/* Compare both version strings
+		 */
+		line += 9;
+		re = strncmp (line, PACKAGE_VERSION, strlen(PACKAGE_VERSION)); 
+		if (re == 0) {
+			pclose(f);
+			return ret_ok;
+		}
+
+		/* Remove the new line character and report the error	
+		 */
+		p = line;
+		while (*p++ != '\n');
+		*p = '\0';
+		
+		PRINT_MSG_S ("ERROR: Broken installation detected\n");
+		PRINT_MSG   ("  Cherokee        (%s) %s\n", this_exec, PACKAGE_VERSION);
+		PRINT_MSG   ("  Cherokee-worker (%s) %s\n", CHEROKEE_WORKER, line);
+		goto error;
+	}
+
+	PRINT_MSG ("Could not find the version string: '%s -i'\n", CHEROKEE_WORKER);
+error:
+	pclose(f);
+	return ret_error;
+}
+
 static const char *
 figure_config_file (int argc, char **argv)
 {
@@ -297,6 +347,12 @@ main (int argc, char *argv[])
 	ret_t               ret;
 	cherokee_boolean_t  single_time;
 	const char         *config_file_path;
+	
+	/* Sanity check
+	 */
+	ret = check_worker_version (argv[0]);
+	if (ret != ret_ok)
+		exit(1);
 
 	set_signals();
 	single_time = is_single_execution (argc, argv);
