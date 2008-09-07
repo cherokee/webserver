@@ -18,6 +18,7 @@ class Test (TestBase):
         self.name = "NN"
 
         self.request           = "GET /Xesano HTTP/1.1\r\n" + \
+                                 "Connection: Close\r\n" + \
                                  "Host: %s\r\n" %(HOST)
         self.expected_error    = 302
         self.forbidden_content = CONTENT

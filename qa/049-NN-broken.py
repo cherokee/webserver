@@ -16,6 +16,7 @@ class Test (TestBase):
         self.name = "Broken NN"
 
         self.request        = "GET /missing HTTP/1.1\r\n" + \
+                              "Connection: Close\r\n" + \
                               "Host: %s\r\n" % (HOST)
         self.expected_error = 404
 

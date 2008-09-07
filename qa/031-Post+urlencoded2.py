@@ -16,6 +16,7 @@ class Test (TestBase):
         self.request        = "POST /post3/test.php HTTP/1.1\r\n" +\
                               "Host: localhost\r\n" +\
                               "Content-type: application/x-www-form-urlencoded\r\n" +\
+                              "Connection: Close\r\n" + \
                               "Content-length: 8\r\n"
         self.post           = "12345678"
 

@@ -1,5 +1,20 @@
 2008-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/007-Missing-Host.py , qa/020-VirtualHost.py ,
+	qa/021-VirtualHost2.py , qa/022-NoHost.py , qa/023-Host.py ,
+	qa/024-Host+Port.py , qa/026-Host-Broken-Dot.py ,
+	qa/031-Post+urlencoded2.py , qa/042-Pipelining.py ,
+	qa/043-Pipelining2.py , qa/044-Home.py , qa/048-NN.py ,
+	qa/049-NN-broken.py , qa/094-URL-request.py , qa/105-If-Range.py ,
+	qa/106-If-Range2.py , qa/116-RequestTiny.py ,
+	qa/117-DomainToDir.py , qa/121-NoUserDir.py , qa/122-Methods.py ,
+	qa/124-DomainToDir2.py , qa/125-domain-redir1.py ,
+	qa/135-RedirParams.py , qa/139-domain-wildcards1.py,
+	qa/153-SCGI-vars-root.py, qa/160-RuleNot1.py, qa/161-RuleNot2.py,
+	qa/166-xsendfile1.py, qa/171-SCGI-Keepalive.py,
+	qa/172-Chunked-CGI.py, qa/173-Chunked-SCGI.py: QA tests using
+	HTTP/1.1 must send the "Connection: Close" header.
+
 	* qa/172-Chunked-CGI.py: This QA was failing because of an
 	unexpected new line character at the end of the output.
 

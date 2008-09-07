@@ -21,7 +21,8 @@ class Test (TestBase):
         self.name = "UserDir request without UserDir"
 
         self.request           = "GET /~%s/%s HTTP/1.1\r\n" % (USERNAME, FILENAME) +\
-                                 "Host: %s\r\n" % (SERVER)
+                                 "Host: %s\r\n" % (SERVER)                         +\
+                                 "Connection: Close\r\n"
 
         self.expected_error    = 200
         self.expected_content  = MAGIC

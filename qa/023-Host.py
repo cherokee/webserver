@@ -7,5 +7,6 @@ class Test (TestBase):
 
         self.expected_error = 200
         self.request        = "GET / HTTP/1.1\r\n" +\
+                              "Connection: Close\r\n" + \
                               "Host: www.cherokee-project.com\r\n"
 

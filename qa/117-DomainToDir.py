@@ -20,8 +20,9 @@ class Test (TestBase):
         TestBase.__init__ (self)
         self.name = "Domain to subdir"
 
-        self.request           = "GET /%s HTTP/1.1\r\n" %(PATH) +\
-                                 "Host: %s\r\n" %(HOST)
+        self.request           = "GET /%s HTTP/1.1\r\n" %(PATH) + \
+                                 "Host: %s\r\n" %(HOST)         + \
+                                 "Connection: Close\r\n"
         self.expected_error    = 301
         self.expected_content  = URL+PATH
 

@@ -30,7 +30,9 @@ class Test (TestBase):
         self.name = "Rule not: match"
 
         self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \
-                                 "Host: %s\r\n" % (VSERVER)
+                                 "Host: %s\r\n" % (VSERVER)          + \
+                                 "Connection: Close\r\n"
+
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.forbidden_content = ["/bin/sh", "echo"]

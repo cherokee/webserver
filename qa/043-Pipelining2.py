@@ -14,7 +14,7 @@ class Test (TestBase):
                                 "\r\n"                            +\
                                 "GET /pipe2/ HTTP/1.1\r\n"        +\
                                 "Host: localhost\r\n"             +\
-                                "Connection: Keep-alive\r\n"
+                                "Connection: Close\r\n"
 
         self.expected_error   = 200
         self.expected_content = [ MAGIC %("one"),

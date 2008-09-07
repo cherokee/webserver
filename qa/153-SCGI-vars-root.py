@@ -50,7 +50,9 @@ class Test (TestBase):
         self.name = "SCGI VII: root: PATH_INFO & SCRIPT_NAME"
 
         self.request           = "GET %s HTTP/1.1\r\n" %(REQUEST) +\
-                                 "Host: scgi6\r\n"
+                                 "Host: scgi6\r\n"                +\
+                                 "Connection: Close\r\n"
+
         self.expected_error    = 200
         self.expected_content  = EXPECTED
         self.forbidden_content = ['pyscgi', 'SCGIServer', 'write']

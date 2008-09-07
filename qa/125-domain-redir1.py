@@ -27,7 +27,9 @@ class Test (TestBase):
         self.name = "Domain to Domain I"
 
         self.request           = "GET %s HTTP/1.1\r\n" %(PATH) +\
-                                 "Host: %s\r\n" %(DOMAIN)
+                                 "Host: %s\r\n" %(DOMAIN)      +\
+                                 "Connection: Close\r\n"
+
         self.expected_error    = 301
         self.expected_content  = "http://www.%s%s" % (DOMAIN, PATH)
 

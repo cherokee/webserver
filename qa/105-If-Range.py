@@ -60,5 +60,6 @@ class Test (TestBase):
         
         self.request          = "GET /if_range1/file HTTP/1.1\r\n"  + \
                                 "Host: localhost\r\n"               + \
-                                "If-Range: %s\r\n" % (times)   + \
+                                "Connection: Close\r\n"             + \
+                                "If-Range: %s\r\n" % (times)        + \
                                 "Range: bytes=%d-\r\n" % (len(DOCUMENTATION)) 

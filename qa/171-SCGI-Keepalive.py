@@ -39,10 +39,12 @@ class Test (TestBase):
         TestBase.__init__ (self)
         self.name = "SCGI Keepalive"
 
-        self.request           = "GET %s/ HTTP/1.1\r\n" %(DIR) + \
-                                 "Host: localhost\r\n" + \
-                                 "Connection: Keep-Alive\r\n\r\n" + \
-                                 "OPTIONS %s/ HTTP/1.0\r\n" % (DIR)
+        self.request           = "GET %s/ HTTP/1.1\r\n" %(DIR)      + \
+                                 "Host: localhost\r\n"              + \
+                                 "Connection: Keep-Alive\r\n\r\n"   + \
+                                 "OPTIONS %s/ HTTP/1.0\r\n" % (DIR) +\
+                                 "Connection: Close\r\n"
+
         self.expected_error    = 200
         self.expected_content  = [MAGIC, "Connection: Keep-Alive"]
         self.forbidden_content = ['pyscgi', 'SCGIServer', 'write']

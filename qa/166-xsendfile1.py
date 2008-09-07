@@ -26,7 +26,9 @@ class Test (TestBase):
         self.name = "X-Sendfile: CGI"
 
         self.request           = "GET /%s/%s HTTP/1.1\r\n" % (DIR, FILE) + \
-                                 "Host: default\r\n"
+                                 "Host: default\r\n"                     + \
+                                 "Connection: Close\r\n"
+
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.forbidden_content = ["/bin/sh", "echo", DISCART]

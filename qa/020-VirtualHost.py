@@ -15,6 +15,7 @@ class Test (TestBase):
         TestBase.__init__ (self)
         self.name = "Virtual Host"
         self.request          = "GET /file HTTP/1.1\r\n" +\
+                                "Connection: Close\r\n" + \
                                 "Host: cherokee.test\r\n"
         self.expected_error   = 200
         self.expected_content = MAGIC

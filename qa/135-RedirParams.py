@@ -29,7 +29,8 @@ class Test (TestBase):
         TestBase.__init__ (self)
         self.name             = "Hidden redir with params"
         self.request          = "GET /%s?%s HTTP/1.1\r\n" % (REQUEST, PARAMS) + \
-                                "Host: %s\r\n" % (SERVER)
+                                "Host: %s\r\n" % (SERVER)                     + \
+                                "Connection: Close\r\n"
         self.expected_error   = 301
         self.expected_content = "Location: /index.php?q=%s&%s" % (REQUEST, PARAMS)
 

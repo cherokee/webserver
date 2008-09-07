@@ -17,6 +17,7 @@ class Test (TestBase):
         self.name = "Invalid home"
 
         self.request          = "GET /~missing/file HTTP/1.1\r\n" + \
+                                "Connection: Close\r\n" + \
                                 "Host: missing.host1\r\n"
         self.conf             = CONF
         self.expected_error   = 404

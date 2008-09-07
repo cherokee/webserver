@@ -41,7 +41,9 @@ class Test (TestBase):
         self.name = "Chunked encoding: scgi"
 
         self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \
-                                 "Host: localhost\r\n"
+                                 "Host: localhost\r\n"               + \
+                                 "Connection: Close\r\n"
+
         self.expected_error    = 200
         self.expected_content  = ["Transfer-Encoding: chunked",
                                   CHUNKED_BEGIN, MAGIC, CHUNKED_FINISH]

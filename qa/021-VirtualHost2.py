@@ -16,6 +16,7 @@ class Test (TestBase):
         TestBase.__init__ (self)
         self.name             = "Virtual Host II"
         self.request          = "GET /file HTTP/1.1\r\n" +\
+                                "Connection: Close\r\n" + \
                                 "Host: second.domain\r\n"
 
         self.expected_error   = 200

@@ -25,7 +25,8 @@ class Test (TestBase):
         self.name = "Domain wildcards 1"
 
         self.request           = "GET /%s HTTP/1.1\r\n" % (FILENAME) +\
-                                 "Host: whatever.%s\r\n" % (DOMAIN)
+                                 "Host: whatever.%s\r\n" % (DOMAIN)  +\
+                                 "Connection: Close\r\n"
 
         self.expected_error    = 200
         self.expected_content  = MAGIC2

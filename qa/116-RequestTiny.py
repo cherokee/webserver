@@ -23,8 +23,9 @@ class Test (TestBase):
         TestBase.__init__ (self)
         self.name = "Request tiny"
 
-        self.request           = "GET / HTTP/1.1\r\n" +\
-                                 "Host: %s\r\n" %(HOST)
+        self.request           = "GET / HTTP/1.1\r\n"   + \
+                                 "Host: %s\r\n" %(HOST) + \
+                                 "Connection: Close\r\n"
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.forbidden_content = ["<?php", "index.php"]

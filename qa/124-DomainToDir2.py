@@ -26,7 +26,9 @@ class Test (TestBase):
         self.name = "Domain to subdir II"
 
         self.request           = "GET %s/%s HTTP/1.1\r\n" %(DIR, PATH) +\
-                                 "Host: %s\r\n" %(DOMAIN)
+                                 "Host: %s\r\n" %(DOMAIN)              +\
+                                 "Connection: Close\r\n"
+
         self.expected_error    = 301
         self.expected_content  = URL+PATH
 
