@@ -1871,17 +1871,13 @@ cherokee_connection_set_keepalive (cherokee_connection_t *conn)
 
 	/* Check whether server allows keep-alive
 	 */
-	if (srv->keepalive == false) {
-		conn->keepalive = 0;
-		return;
-	}
+	if (srv->keepalive == false)
+		goto denied;
 
 	/* Check the Max concurrent Keep-Alive limit on this thread
 	 */
-	if (thread->conns_num >= thread->conns_keepalive_max) {
-		conn->keepalive = 0;
-		return;
-	}
+	if (thread->conns_num >= thread->conns_keepalive_max)
+		goto denied;
 
 	/* Set Keep-alive according with the 'Connection' header
 	 * HTTP 1.1 uses Keep-Alive by default: rfc2616 sec8.1.2
@@ -1889,25 +1885,33 @@ cherokee_connection_set_keepalive (cherokee_connection_t *conn)
 	ret = cherokee_header_get_known (&conn->header, header_connection, &ptr, &ptr_len);
 	if (ret == ret_ok) {
 		if (conn->header.version == http_version_11) {
-			if (strncasecmp (ptr, "Close", 5) != 0) {
-				if (conn->keepalive == 0)
-					conn->keepalive = CONN_SRV(conn)->keepalive_max;
-			} else 
-				conn->keepalive = 0;
+			if (strncasecmp (ptr, "Close", 5) != 0)
+				goto granted;
+			else 
+				goto denied;
 
 		} else {
-			if (strncasecmp (ptr, "Keep-Alive", 10) == 0) { 
-				if (conn->keepalive == 0)
-					conn->keepalive = CONN_SRV(conn)->keepalive_max;
-			} else
-				conn->keepalive = 0;
+			if (strncasecmp (ptr, "Keep-Alive", 10) == 0)
+				goto granted;
+			else
+				goto denied;
 		}
 		return;
 	} 
 
-	/* When in doubt, disable keep-alive
-	 */
+	if (conn->header.version == http_version_11)
+		goto granted;
+
+denied:
+	TRACE (ENTRIES, "Keep-alive %s\n", "denied");
 	conn->keepalive = 0;
+	return;
+
+granted:
+	if (conn->keepalive == 0)
+		conn->keepalive = CONN_SRV(conn)->keepalive_max;
+
+	TRACE (ENTRIES, "Keep-alive %d\n", conn->keepalive);
 }
 
 
