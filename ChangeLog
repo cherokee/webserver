@@ -1,5 +1,9 @@
 2008-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* contrib/08to09.py, contrib/Makefile.am: Added a new
+	configuration file converter. It reads Cherokee 0.8.x files and
+	translates them to the new Cherokee 0.9 format.
+
 	* qa/007-Missing-Host.py , qa/020-VirtualHost.py ,
 	qa/021-VirtualHost2.py , qa/022-NoHost.py , qa/023-Host.py ,
 	qa/024-Host+Port.py , qa/026-Host-Broken-Dot.py ,
