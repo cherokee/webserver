@@ -760,7 +760,7 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
 }
 
 
-#ifdef HAVE_GNUTLS
+#if defined(HAVE_GNUTLS) && defined (HAVE_PTHREAD)
 # ifdef GCRY_THREAD_OPTION_PTHREAD_IMPL
 GCRY_THREAD_OPTION_PTHREAD_IMPL;
 # endif
@@ -775,12 +775,14 @@ cherokee_tls_init (void)
 #ifdef HAVE_GNUTLS
 	int rc;
 
-# ifdef GCRY_THREAD_OPTION_PTHREAD_IMPL
+# ifdef HAVE_PTHREAD
+#  ifdef GCRY_THREAD_OPTION_PTHREAD_IMPL
 	/* Although the GnuTLS library is thread safe by design, some
 	 * parts of the crypto backend, such as the random generator,
 	 * are not; hence, it needs to initialize some semaphores.
 	 */
 	gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread); 
+#  endif
 # endif
 
 	/* Try to speed up random number generation. On Linux, it

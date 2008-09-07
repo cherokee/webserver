@@ -1,3 +1,7 @@
+2008-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/util.c: Fixes a problem compiling without pthread.
+
 2008-09-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/main.c (check_worker_version): Checks whether Cherokee
