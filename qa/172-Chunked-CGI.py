@@ -2,6 +2,8 @@ from base import *
 
 DIR            = "chunked_cgi_1"
 MAGIC          = letters_random (300)
+
+CHUNKED_BEGIN  = hex(len(MAGIC))[2:] + '\r\n'
 CHUNKED_FINISH = "0\r\n\r\n"
 
 CONF = """
@@ -26,7 +28,8 @@ class Test (TestBase):
         self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \
                                  "Host: localhost\r\n"
         self.expected_error    = 200
-        self.expected_content  = [MAGIC, "Transfer-Encoding: chunked", CHUNKED_FINISH]
+        self.expected_content  = ["Transfer-Encoding: chunked", 
+                                  CHUNKED_BEGIN, MAGIC, CHUNKED_FINISH]
         self.conf              = CONF
 
     def Prepare (self, www):

@@ -54,7 +54,6 @@ class Test (TestBase):
         if not os.path.exists (pyscgi):
             self.CopyFile ('pyscgi.py', pyscgi)
 
-
         vars = globals()
         vars['scgi_file'] = scgi_file
         self.conf = CONF % (vars)

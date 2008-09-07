@@ -1,5 +1,8 @@
 2008-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/173-Chunked-SCGI.py, qa/Makefile.am: Adds a new QA test to
+	check whether SCGI works with chunked encoding.
+
 	* cherokee/thread.c: Fixes keep-alive timeout. It was not closing
 	the connection at the right time when it was compiled without
 	pthread support.
