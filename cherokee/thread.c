@@ -50,7 +50,7 @@ static ret_t reactive_conn_from_polling  (cherokee_thread_t *thd, cherokee_conne
 
 
 static void
-update_bogo_now (cherokee_thread_t *thd)
+thread_update_bogo_now (cherokee_thread_t *thd)
 {
 	/* Has it changed?
 	 */
@@ -89,7 +89,7 @@ thread_routine (void *data)
 
 	/* Update bogonow before start working
 	 */
-	update_bogo_now (thread);
+	thread_update_bogo_now (thread);
 
 	/* Step, step, step, ..
 	 */
@@ -1541,7 +1541,7 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	if (re <= 0)
 		goto out;
 
-	update_bogo_now (thd);
+	thread_update_bogo_now (thd);
 
 	/* If the thread is full of connections, it should not
 	 * get new connections.
@@ -1567,6 +1567,8 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	}
 
 out:
+	thread_update_bogo_now (thd);
+
 	/* Process polling connections
 	 */
 	process_polling_connections (thd);
@@ -1595,7 +1597,7 @@ step_MULTI_THREAD_block (cherokee_thread_t *thd, int socket, pthread_mutex_t *mu
 	}
 
 	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-	update_bogo_now (thd);
+	thread_update_bogo_now (thd);
 
 	/* Accept a new connection
 	 */
@@ -1644,7 +1646,7 @@ step_MULTI_THREAD_nonblock (cherokee_thread_t *thd, int socket, pthread_mutex_t 
 	}
 
 	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-	update_bogo_now (thd);
+	thread_update_bogo_now (thd);
 
 	/* It should either accept o discard a connection
 	 */
@@ -1710,7 +1712,7 @@ step_MULTI_THREAD_TLS_nonblock (cherokee_thread_t *thd, int fdwatch_msecs,
 	/* Inspect the fds. It may sleep if nothing happens
 	 */
 	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-	update_bogo_now (thd);
+	thread_update_bogo_now (thd);
 		
 	/* accept o discard a connections
 	 */
@@ -1815,7 +1817,7 @@ step_MULTI_THREAD_TLS_block (cherokee_thread_t *thd, int fdwatch_msecs,
 	/* Inspect the fds and get new connections
 	 */
 	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-	update_bogo_now (thd);
+	thread_update_bogo_now (thd);
 		
 	/* Accept / Discard connection
 	 */
@@ -1944,7 +1946,7 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 	}
 	
 out:
-	update_bogo_now (thd);
+	thread_update_bogo_now (thd);
 
 	/* Adquire the ownership of the thread
 	 */

@@ -1,5 +1,9 @@
 2008-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/thread.c: Fixes keep-alive timeout. It was not closing
+	the connection at the right time when it was compiled without
+	pthread support.
+
 	* cherokee/connection.c (cherokee_connection_set_keepalive): When
 	using HTTP/1.1 Cherokee should use keep-alive by default.
 	Regression reported by Rui Lopes <rgl@ruilopes.com>.
