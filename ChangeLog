@@ -1,5 +1,9 @@
 2008-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c (cherokee_connection_set_keepalive): When
+	using HTTP/1.1 Cherokee should use keep-alive by default.
+	Regression reported by Rui Lopes <rgl@ruilopes.com>.
+
 	* cherokee/util.c: Fixes a problem compiling without pthread.
 
 2008-09-06  Alvaro Lopez Ortega  <alvaro@alobbs.com>

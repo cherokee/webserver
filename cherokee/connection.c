@@ -1884,15 +1884,23 @@ cherokee_connection_set_keepalive (cherokee_connection_t *conn)
 	}
 
 	/* Set Keep-alive according with the 'Connection' header
+	 * HTTP 1.1 uses Keep-Alive by default: rfc2616 sec8.1.2
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_connection, &ptr, &ptr_len);
 	if (ret == ret_ok) {
-		if (strncasecmp (ptr, "Keep-Alive", 10) == 0) { 
-			if (conn->keepalive == 0) {
-				conn->keepalive = CONN_SRV(conn)->keepalive_max;
-			}
+		if (conn->header.version == http_version_11) {
+			if (strncasecmp (ptr, "Close", 5) != 0) {
+				if (conn->keepalive == 0)
+					conn->keepalive = CONN_SRV(conn)->keepalive_max;
+			} else 
+				conn->keepalive = 0;
+
 		} else {
-			conn->keepalive = 0;
+			if (strncasecmp (ptr, "Keep-Alive", 10) == 0) { 
+				if (conn->keepalive == 0)
+					conn->keepalive = CONN_SRV(conn)->keepalive_max;
+			} else
+				conn->keepalive = 0;
 		}
 		return;
 	} 
