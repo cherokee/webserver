@@ -35,8 +35,8 @@ source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 """
 
 EXPECTED = [
-    'PATH_INFO: ""',
-    'SCRIPT_NAME: "%s/"' % (DIR)
+    'PATH_INFO: "/"',
+    'SCRIPT_NAME: "%s"' % (DIR)
 ]
 
 class Test (TestBase):

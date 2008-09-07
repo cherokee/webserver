@@ -2,9 +2,9 @@ import os
 from base import *
 
 DIR      = "/SCGI6"
-FILE     = "virtual_file"
 PATHINFO = "/dir1/dir2/dir3/looongfile.ext"
-REQUEST  = "%s/%s%s"%(DIR, FILE, PATHINFO)
+REQUEST  = DIR + PATHINFO
+
 PORT     = get_free_port()
 PYTHON   = look_for_python()
 
@@ -39,7 +39,7 @@ source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 
 EXPECTED = [
     'PATH_INFO: "%s"' %(PATHINFO),
-    'SCRIPT_NAME: "%s/%s"' % (DIR, FILE)
+    'SCRIPT_NAME: "%s"' % (DIR)
 ]
 
 class Test (TestBase):

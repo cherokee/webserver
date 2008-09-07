@@ -1,11 +1,12 @@
 import os
 from base import *
 
+DIR      = "/Dir153"
+PATHINFO = "/dir1/dir2/file.ext"
+REQUEST  = DIR + PATHINFO
+
 PORT     = get_free_port()
 PYTHON   = look_for_python()
-FILE     = "/FakeFile"
-PATHINFO = "/dir1/dir2/file.ext"
-REQUEST  = FILE + PATHINFO
 
 SCRIPT = """
 from pyscgi import *
@@ -29,7 +30,6 @@ vserver!1530!document_root = /fake
 
 vserver!1530!rule!10!match = default
 vserver!1530!rule!10!handler = scgi
-vserver!1530!rule!10!handler = scgi
 vserver!1530!rule!10!handler!check_file = 0
 vserver!1530!rule!10!handler!balancer = round_robin
 vserver!1530!rule!10!handler!balancer!source!1 = %(source)d
@@ -40,8 +40,8 @@ source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 """
 
 EXPECTED = [
-    'PATH_INFO: "%s"' % (PATHINFO),
-    'SCRIPT_NAME: "%s"' % (FILE) 
+    'PATH_INFO: "%s"' % (DIR + PATHINFO),
+    'SCRIPT_NAME: ""' 
 ]
 
 class Test (TestBase):

@@ -42,7 +42,8 @@ class Test (TestBase):
 
         self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \
                                  "Host: localhost\r\n"               + \
-                                 "Connection: Close\r\n"
+                                 "Connection: Keep-Alive\r\n\r\n"    + \
+                                 "OPTIONS / HTTP/1.0\r\n"
 
         self.expected_error    = 200
         self.expected_content  = ["Transfer-Encoding: chunked",
