@@ -1,5 +1,8 @@
 2008-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* qa/172-Chunked-CGI.py: This QA was failing because of an
+	unexpected new line character at the end of the output.
+
 	* qa/173-Chunked-SCGI.py, qa/Makefile.am: Adds a new QA test to
 	check whether SCGI works with chunked encoding.
 

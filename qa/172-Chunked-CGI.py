@@ -17,7 +17,7 @@ CGI_CODE = """#!/bin/sh
 
 echo "Content-Type: text/plain"
 echo 
-echo "%s"
+echo -n "%s"
 """ % (MAGIC)
 
 class Test (TestBase):
