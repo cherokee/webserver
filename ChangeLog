@@ -1,5 +1,10 @@
 2008-09-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/source_interpreter.c (cherokee_source_interpreter_spawn):
+	Closes stdout and stderr. These fds should not be opened; the
+	system buffers might fill up while the interpreter prints debug
+	and it would stop working because of that.
+
 	* cherokee/connection.c, cherokee/connection-protected.h,
 	cherokee/util.c: Improves the Chunked encoding performance.
 

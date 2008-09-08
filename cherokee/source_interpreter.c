@@ -227,8 +227,17 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 #endif
 
 #ifdef SIGCHLD
+		/* It does not want to wait for its child
+		 */
 		signal (SIGCHLD, SIG_IGN);
 #endif
+		
+		/* Doesn't care about it's output either.  It can fill
+		 * out the system buffers and free the interpreter.
+		 */
+		close (STDOUT_FILENO);
+		close (STDERR_FILENO);
+
 		argv[2] = (char *)tmp.buf;
 
 		re = execve ("/bin/sh", argv, envp);
