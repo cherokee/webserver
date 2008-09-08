@@ -16,7 +16,7 @@ def save_result (content, file):
     tmp = content.split('\n')
     tmp.sort()
 
-    cont  = "# Converted by 07to08.py \n"
+    cont  = "# Converted by 08to09.py \n"
     cont += '\n'.join(tmp)
 
     f = open(file, "w+")
