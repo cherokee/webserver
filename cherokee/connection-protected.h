@@ -196,6 +196,7 @@ struct cherokee_connection {
 	/* Chunked encoding
 	 */
 	cherokee_boolean_t            chunked_encoding;
+	cherokee_boolean_t            chunked_last_package;
 	cherokee_buffer_t             chunked_len;
 	size_t                        chunked_sent;
 	struct iovec                  chunks[3];

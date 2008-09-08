@@ -147,8 +147,9 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	memset (n->regex_ovector, OVECTOR_LEN * sizeof(int), 0);
 	n->regex_ovecsize = 0;
 
-	n->chunked_encoding = false;
-	n->chunked_sent     = 0;
+	n->chunked_encoding     = false;
+	n->chunked_sent         = 0;
+	n->chunked_last_package = false;
 	cherokee_buffer_init (&n->chunked_len);
 
 	*conn = n;
@@ -258,6 +259,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->expiration_time      = 0;
 	conn->chunked_encoding     = false;
 	conn->chunked_sent         = 0;
+	conn->chunked_last_package = false;
 
 	memset (conn->regex_ovector, OVECTOR_LEN * sizeof(int), 0);
 	conn->regex_ovecsize = 0;
@@ -878,8 +880,14 @@ cherokee_connection_send (cherokee_connection_t *conn)
 		tmp[0].iov_len  = conn->chunked_len.len;
 		tmp[1].iov_base = conn->buffer.buf;
 		tmp[1].iov_len  = conn->buffer.len;
-		tmp[2].iov_base = CRLF;
-		tmp[2].iov_len  = 2;
+
+		if (conn->chunked_last_package) {
+			tmp[2].iov_base = CRLF "0" CRLF CRLF;
+			tmp[2].iov_len  = 7;
+		} else {
+			tmp[2].iov_base = CRLF;
+			tmp[2].iov_len  = 2;
+		}
 
 		cherokee_iovec_skip_sent (tmp, 3, 
 					  conn->chunks, &conn->chunksn,
@@ -907,7 +915,8 @@ cherokee_connection_send (cherokee_connection_t *conn)
 		/* Clean the information buffer only when everything
 		 * has been sent.
 		 */
-		if (cherokee_iovec_was_sent (tmp, 3, conn->chunked_sent)) {
+		ret = cherokee_iovec_was_sent (tmp, 3, conn->chunked_sent);
+		if (ret == ret_ok) {
 			cherokee_buffer_clean (&conn->chunked_len);
 			cherokee_buffer_clean (&conn->buffer);
 			ret = ret_ok;
@@ -1066,28 +1075,32 @@ cherokee_connection_step (cherokee_connection_t *conn)
 	/* Chunked encoding header
 	 */
 	if (conn->chunked_encoding) {
-		/* In case it is the last package, turn the chunked
-		 * encoding off and send the final mark.
+		/* On EOF: Turn off chunked and send the trailer
 		 */
-		if ((step_ret == ret_eof) ||
-		    (step_ret == ret_eof_have_data))
-		{
-			cherokee_buffer_add_str (&conn->buffer, "0" CRLF CRLF);
+		if (step_ret == ret_eof) {
 			conn->chunked_encoding = false;
+			cherokee_buffer_add_str (&conn->buffer, "0" CRLF CRLF);
 
-			step_ret = ret_eof_have_data;
-
-		} else {
-			/* Build the Chunked package header: 
-			 * len(str(hex(4294967295))+"\r\n\0") = 13
-			 */
-			cherokee_buffer_clean       (&conn->chunked_len);
-			cherokee_buffer_ensure_size (&conn->chunked_len, 13);
-			cherokee_buffer_add_ulong16 (&conn->chunked_len, conn->buffer.len);
-			cherokee_buffer_add_str     (&conn->chunked_len, CRLF);
-
-			conn->chunked_sent = 0;
+			return ret_eof_have_data;
 		}
+		
+		/* On last package: point cherokee_connection_send
+		 * about it.  It will add the trailer.
+		 */
+		if (step_ret == ret_eof_have_data)
+		{
+			conn->chunked_last_package = true;
+		}
+
+		/* Build the Chunked package header: 
+		 * len(str(hex(4294967295))+"\r\n\0") = 13
+		 */
+		cherokee_buffer_clean       (&conn->chunked_len);
+		cherokee_buffer_ensure_size (&conn->chunked_len, 13);
+		cherokee_buffer_add_ulong16 (&conn->chunked_len, conn->buffer.len);
+		cherokee_buffer_add_str     (&conn->chunked_len, CRLF);
+		
+		conn->chunked_sent = 0;
 	}
 	
 	return step_ret;

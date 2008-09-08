@@ -1,5 +1,8 @@
 2008-09-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c, cherokee/connection-protected.h,
+	cherokee/util.c: Improves the Chunked encoding performance.
+
 	* cherokee/handler_dirlist.c, cherokee/handler_dirlist.h: Adds a
 	new state to ensure that when the list has been generated, it will
 	return eof even it is called more than once.
