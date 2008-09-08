@@ -1,3 +1,9 @@
+2008-09-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_dirlist.c, cherokee/handler_dirlist.h: Adds a
+	new state to ensure that when the list has been generated, it will
+	return eof even it is called more than once.
+
 2008-09-07  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* contrib/08to09.py, contrib/Makefile.am: Added a new

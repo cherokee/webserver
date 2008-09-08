@@ -49,7 +49,8 @@ typedef enum {
 	dirlist_phase_add_header,
 	dirlist_phase_add_parent_dir,
 	dirlist_phase_add_entries,
-	dirlist_phase_add_footer
+	dirlist_phase_add_footer,
+	dirlist_phase_finished
 } cherokee_dirlist_phase_t;
 
 

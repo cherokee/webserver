@@ -1048,10 +1048,15 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 		 */
 		ret = render_header_footer_vbles (dhdl, buffer, &props->footer);
 		if (unlikely (ret != ret_ok)) return ret;
+
+		dhdl->phase = dirlist_phase_finished;
+		return ret_eof_have_data;
+		
+	case dirlist_phase_finished:
 		break;
 	}
 
-	return ret_eof_have_data;
+	return ret_eof;
 }
 
 
