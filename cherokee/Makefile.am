@@ -527,6 +527,30 @@ endif
 
 
 #
+# Handler DB Slayer
+#
+handler_dbslayer = \
+dwriter.c \
+dwriter.h \
+handler_dbslayer.h \
+handler_dbslayer.c
+
+libplugin_dbslayer_la_LDFLAGS = $(module_ldflags) $(MYSQL_LDFLAGS)
+libplugin_dbslayer_la_SOURCES = $(handler_dbslayer)
+libplugin_dbslayer_la_CFLAGS  = $(MYSQL_CFLAGS)
+
+if HAVE_MYSQL
+if STATIC_HANDLER_DBSLAYER
+static_handler_dbslayer_src   = $(handler_dbslayer)
+static_handler_dbslayer_lib   = $(MYSQL_LDFLAGS)
+static_handler_dbslayer_flags = $(MYSQL_CFLAGS)
+else
+dynamic_handler_dbslayer_lib = libplugin_dbslayer.la
+endif
+endif
+
+
+#
 # Handler custom_error
 #
 handler_custom_error = \
@@ -822,7 +846,8 @@ libcherokee-base.la
 libcherokee_server_la_LDFLAGS = $(common_ldflags) $(library_soname)
 libcherokee_server_la_CFLAGS = \
 $(static_validator_htpasswd_flags) \
-$(static_validator_mysql_flags)
+$(static_validator_mysql_flags) \
+$(static_handler_dbslayer_flags)
 
 libcherokee_server_la_LIBADD = \
 $(TLS_LIBS) \
@@ -834,6 +859,7 @@ $(static_rule_geoip_lib)  \
 $(static_validator_htpasswd_lib) \
 $(static_validator_mysql_lib) \
 $(static_handler_proxy_lib) \
+$(static_handler_dbslayer_lib) \
 libcherokee-base.la
 
 libcherokee_config_la_LDFLAGS = $(common_ldflags) $(library_soname)
@@ -1019,6 +1045,7 @@ $(static_handler_proxy_src) \
 $(static_handler_mirror_src) \
 $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
+$(static_handler_dbslayer_src) \
 \
 $(static_logger_w3c_src) \
 $(static_logger_ncsa_src) \
@@ -1174,6 +1201,7 @@ $(dynamic_handler_custom_error_lib) \
 $(dynamic_handler_error_redir_lib) \
 $(dynamic_handler_error_nn_lib) \
 $(dynamic_handler_common_lib) \
+$(dynamic_handler_dbslayer_lib) \
 $(dynamic_encoder_gzip_lib) \
 $(dynamic_encoder_deflate_lib) \
 $(dynamic_logger_ncsa_lib) \
@@ -1273,6 +1301,7 @@ $(win32_src) \
 $(getopt_src) \
 $(bin_SCRIPTS) \
 $(validator_mysql) \
+$(handler_dbslayer) \
 $(cherokeedeps_DATA) \
 $(cherokeedata_DATA) \
 $(WINDOWS_PORT_FILES) \

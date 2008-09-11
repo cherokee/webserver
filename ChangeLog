@@ -1,3 +1,10 @@
+2008-09-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_dbslayer.h, cherokee/handler_dbslater.c,
+	cherokee/dwriter.c, cherokee/dwrite.h, configure.in,
+	cherokee/Makefile.am: Adds our brand new data base
+	bridge/serializer/balancer.
+
 2008-09-08  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/source_interpreter.c (cherokee_source_interpreter_spawn):
