@@ -9,7 +9,8 @@ from ModuleBalancer import NOTE_BALANCER
 LANG_OPTIONS = [
     ('json',   'JSON'),
     ('python', 'Python'),
-    ('php',    'PHP')
+    ('php',    'PHP'),
+    ('ruby',   'Ruby')
 ]
 
 NOTE_LANG = "Language from which the information will be consumed"

@@ -490,14 +490,15 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 			cherokee_buffer_add_buffer (&props->db, &subconf->val);
 
 		} else  if (equal_buf_str (&subconf->key, "lang")) {
+
 			if (equal_buf_str (&subconf->val, "json")) {
 				props->lang = dwriter_json;
-
 			} else if (equal_buf_str (&subconf->val, "python")) {
 				props->lang = dwriter_python;
-
 			} else if (equal_buf_str (&subconf->val, "php")) {
 				props->lang = dwriter_php;
+			} else if (equal_buf_str (&subconf->val, "ruby")) {
+				props->lang = dwriter_ruby;
 
 			} else {
 				PRINT_ERROR ("ERROR: DBSlayer: unrecognize language '%s'\n",

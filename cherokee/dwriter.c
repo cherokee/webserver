@@ -37,7 +37,8 @@
 			if (w->pretty)					\
 				cherokee_buffer_add_str(OUT, "\n");	\
 		} else if (CS == dwriter_dict_val) {			\
-			if (w->lang == dwriter_php)			\
+			if ((w->lang == dwriter_php) ||			\
+			    (w->lang == dwriter_ruby))			\
 				cherokee_buffer_add_str (OUT, "=>");	\
 			else						\
 				cherokee_buffer_add_str (OUT, ":");	\
@@ -198,6 +199,9 @@ cherokee_dwriter_null (cherokee_dwriter_t *w)
 	case dwriter_php:
 		cherokee_buffer_add_str (OUT, "NULL");
 		break;
+	case dwriter_ruby:
+		cherokee_buffer_add_str (OUT, "nil");
+		break;
 	default:
 		SHOULDNT_HAPPEN;
 	}
@@ -215,6 +219,7 @@ cherokee_dwriter_bool (cherokee_dwriter_t *w, cherokee_boolean_t b)
 
 	switch (w->lang) {
 	case dwriter_json:
+	case dwriter_ruby:
 		cherokee_buffer_add_str (OUT, b ? "true" : "false");
 		break;
 	case dwriter_python:
@@ -244,6 +249,7 @@ cherokee_dwriter_dict_open (cherokee_dwriter_t *w)
 	switch (w->lang) {
 	case dwriter_json:
 	case dwriter_python:
+	case dwriter_ruby:
 		cherokee_buffer_add_str (OUT, "{");
 		break;
 	case dwriter_php:
@@ -275,6 +281,7 @@ cherokee_dwriter_dict_close (cherokee_dwriter_t *w)
 	switch (w->lang) {
 	case dwriter_json:
 	case dwriter_python:
+	case dwriter_ruby:
 		cherokee_buffer_add_str (OUT, "}");
 		break;
 	case dwriter_php:
@@ -301,6 +308,7 @@ cherokee_dwriter_list_open (cherokee_dwriter_t *w)
 	switch (w->lang) {
 	case dwriter_json:
 	case dwriter_python:
+	case dwriter_ruby:
 		cherokee_buffer_add_str (OUT, "[");
 		break;
 	case dwriter_php:
@@ -332,6 +340,7 @@ cherokee_dwriter_list_close (cherokee_dwriter_t *w)
 	switch (w->lang) {
 	case dwriter_json:
 	case dwriter_python:
+	case dwriter_ruby:
 		cherokee_buffer_add_str (OUT, "]");
 		break;
 	case dwriter_php:
