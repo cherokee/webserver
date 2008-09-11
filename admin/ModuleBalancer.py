@@ -68,7 +68,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
 
     def _op_apply_changes (self, uri, post):
         new_balancer_node = post.pop('new_balancer_node')
-        if (new_balancer_node):
+        if new_balancer_node:
             tmp = [int(x) for x in self._cfg.keys('%s!source'%(self._prefix))]
             tmp.sort()
 
@@ -76,5 +76,5 @@ class ModuleBalancerGeneric (Module, FormHelper):
                 new_source = str(tmp[-1]+1)
             else:
                 new_source = 1
+
             self._cfg['%s!source!%s'%(self._prefix, new_source)] = new_balancer_node
-            

@@ -1,5 +1,8 @@
 2008-09-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleDbslayer.py (ModuleDbslayer._op_apply_changes): Add
+	the cherokee-admin module for the new DBSlayer handler.
+
 	* cherokee/handler_dbslayer.h, cherokee/handler_dbslater.c,
 	cherokee/dwriter.c, cherokee/dwrite.h, configure.in,
 	cherokee/Makefile.am: Adds our brand new data base

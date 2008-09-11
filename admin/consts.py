@@ -1,16 +1,17 @@
 HANDLERS = [
-    ('',            'None'),
-    ('common',      'List & Send'),
-    ('file',        'Static content'),
-    ('dirlist',     'Only listing'),
-    ('redir',       'Redirection'),
-    ('cgi',         'CGI'),
-    ('fcgi',        'FastCGI'),
-    ('scgi',        'SCGI'),
-    ('server_info', 'Server Info'),
-    ('custom_error','HTTP error'),
-    ('mirror',      'Generic balancer'),
-    ('admin',       'Remote Administration')
+    ('',             'None'),
+    ('common',       'List & Send'),
+    ('file',         'Static content'),
+    ('dirlist',      'Only listing'),
+    ('redir',        'Redirection'),
+    ('cgi',          'CGI'),
+    ('fcgi',         'FastCGI'),
+    ('scgi',         'SCGI'),
+    ('server_info',  'Server Info'),
+    ('dbslayer',     'Data Base bridge'),
+    ('mirror',       'Generic balancer'),
+    ('custom_error', 'HTTP error'),
+    ('admin',        'Remote Administration')
 ]
 
 ERROR_HANDLERS = [
