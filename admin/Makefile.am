@@ -36,6 +36,7 @@ PageVServers.py \
 PageEncoders.py \
 PageError.py \
 PageFeedback.py \
+PageAppServers.py \
 Table.py \
 Theme.py \
 RuleList.py \
