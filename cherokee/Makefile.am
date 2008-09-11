@@ -1087,8 +1087,6 @@ virtual_server.h \
 virtual_server.c \
 encoder.h \
 encoder.c \
-encoder_table.h \
-encoder_table.c \
 logger.h \
 logger.c \
 logger_writer.h \

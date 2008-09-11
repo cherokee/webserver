@@ -58,7 +58,6 @@
 #include "handler.h"
 #include "encoder.h"
 #include "iocache.h"
-#include "encoder_table.h"
 #include "post.h"
 #include "header-protected.h"
 #include "regex.h"
@@ -234,6 +233,7 @@ ret_t cherokee_connection_recv                   (cherokee_connection_t *conn, c
 /* Internal
  */
 ret_t cherokee_connection_create_handler         (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
+ret_t cherokee_connection_create_encoder         (cherokee_connection_t *conn, cherokee_avl_t *encoders, cherokee_avl_t *accept_enc);
 ret_t cherokee_connection_setup_error_handler    (cherokee_connection_t *conn);
 ret_t cherokee_connection_check_authentication   (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
 ret_t cherokee_connection_check_ip_validation    (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
@@ -251,7 +251,7 @@ ret_t cherokee_connection_step                   (cherokee_connection_t *conn);
  */
 ret_t cherokee_connection_build_header           (cherokee_connection_t *conn);
 ret_t cherokee_connection_get_request            (cherokee_connection_t *conn);
-ret_t cherokee_connection_parse_header           (cherokee_connection_t *conn, cherokee_encoder_table_t *encoders);
+ret_t cherokee_connection_parse_range            (cherokee_connection_t *conn);
 int   cherokee_connection_is_userdir             (cherokee_connection_t *conn);
 ret_t cherokee_connection_build_local_directory  (cherokee_connection_t *conn, cherokee_virtual_server_t *vsrv, cherokee_config_entry_t *entry);
 ret_t cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, cherokee_virtual_server_t *vsrv, cherokee_config_entry_t *entry);

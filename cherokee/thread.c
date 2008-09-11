@@ -956,10 +956,19 @@ process_active_connections (cherokee_thread_t *thd)
 				conn->phase = phase_init;
 				continue;
 			}
+			
+			/* Instance a encoded if needed
+			 */
+			ret = cherokee_connection_create_encoder (conn, &srv->encoders, entry.encoders);
+			if (unlikely (ret != ret_ok)) {
+				cherokee_connection_setup_error_handler (conn);
+				conn->phase = phase_init;
+				continue;
+			}
 
 			/* Parse the rest of headers
 			 */
-			ret = cherokee_connection_parse_header (conn, &srv->encoders);
+			ret = cherokee_connection_parse_range (conn);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				conn->phase = phase_init;

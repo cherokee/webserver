@@ -11,6 +11,7 @@ CONF = """
 vserver!1!rule!1680!match = directory
 vserver!1!rule!1680!match!directory = /deflate1
 vserver!1!rule!1680!handler = file
+vserver!1!rule!1680!encoder!1 = deflate
 """
 
 

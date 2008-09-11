@@ -1,5 +1,15 @@
 2008-09-11  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/virtual_server.c, cherokee/encoder_table.c,
+	cherokee/encoder_table.h, cherokee/Makefile.am,
+	cherokee/connection-protected.h, cherokee/config_entry.c,
+	cherokee/config_entry.h, cherokee/thread.c,
+	cherokee/server-protected.h, cherokee/connection.c,
+	cherokee/server.c, qa/089-gzip-encoding.py, qa/run-tests.py,
+	qa/168-Deflate-Encoding.py: Encoders are now a configuration
+	entry (directories, regexs, extensions, etc) property rather than
+	a global server one.
+
 	* admin/ModuleDbslayer.py (ModuleDbslayer._op_apply_changes): Add
 	the cherokee-admin module for the new DBSlayer handler.
 

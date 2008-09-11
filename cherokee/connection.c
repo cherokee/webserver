@@ -70,7 +70,6 @@
 #include "handler_error.h"
 #include "buffer.h"
 #include "config_entry.h"
-#include "encoder_table.h"
 #include "server-protected.h"
 #include "access.h"
 #include "virtual_server.h"
@@ -1154,15 +1153,16 @@ get_host (cherokee_connection_t *conn,
 
 
 static ret_t
-get_encoding (cherokee_connection_t    *conn,
-	      char                     *ptr,
-	      cherokee_encoder_table_t *encoders) 
+get_encoding (cherokee_connection_t *conn,
+	      char                  *ptr,
+	      cherokee_avl_t        *encoders,
+	      cherokee_avl_t        *encoders_accepted)
 {
+	ret_t ret;
 	char tmp;
 	char *i1, *i2;
 	char *end;
-	char *ext;
-	ret_t ret;
+	encoder_func_new_t new_func = NULL;
 
 	/* ptr = Header at the "Accept-Encoding" position 
 	 */
@@ -1170,37 +1170,33 @@ get_encoding (cherokee_connection_t    *conn,
 	if (end == NULL) {
 		return ret_error;
 	}
-
-	/* Look for the request extension
-	 */
-	ext = strrchr (conn->request.buf, '.');
-	if (ext == NULL) {
-		return ret_ok;
-	}
-
 	*end = '\0'; /* (1) */
 
 	i1 = ptr;
-
 	do {
-		while (*i1 == ' ') i1++;
+		while (*i1 == ' ') 
+			i1++;
 
 		i2 = strchr (i1, ',');
-		if (!i2) i2 = strchr (i1, ';');
-		if (!i2) i2 = end;
+		if (!i2) 
+			i2 = strchr (i1, ';');
+		if (!i2) 
+			i2 = end;
 
 		tmp = *i2;    /* (2) */
 		*i2 = '\0';
-		cherokee_encoder_table_new_encoder (encoders, i1, ext+1, &conn->encoder);
-		*i2 = tmp;    /* (2') */
-
-		if (conn->encoder != NULL) {
-			/* Init the encoder related objects
-			 */
-			ret = cherokee_encoder_init (conn->encoder, conn);
-			if (ret < ret_ok) {
+		ret = cherokee_avl_get_ptr (encoders_accepted, i1, (void **)&new_func);
+		*i2 = tmp;    /* (2') */		
+		
+		if ((ret == ret_ok) && (new_func)) {
+			ret = new_func ((void **)&conn->encoder);
+			if (unlikely (ret != ret_ok))
 				goto error;
-			}
+
+			ret = cherokee_encoder_init (conn->encoder, conn);
+			if (unlikely (ret != ret_ok))
+				goto error;
+
 			cherokee_buffer_clean (&conn->encoder_buffer);
 			break;
 		}
@@ -1929,7 +1925,7 @@ granted:
 
 
 ret_t
-cherokee_connection_parse_header (cherokee_connection_t *conn, cherokee_encoder_table_t *encoders)
+cherokee_connection_parse_range (cherokee_connection_t *conn)
 {
 	ret_t    ret;
 	char    *ptr;
@@ -1950,16 +1946,34 @@ cherokee_connection_parse_header (cherokee_connection_t *conn, cherokee_encoder_
 		}
 	}
 
-	/* Look for "Accept-Encoding:"
+	return ret_ok;
+}
+
+ret_t
+cherokee_connection_create_encoder (cherokee_connection_t *conn,
+				    cherokee_avl_t        *encoders,
+				    cherokee_avl_t        *encoders_accepted)
+{
+	ret_t    ret;
+	char    *ptr;
+	cuint_t  ptr_len;
+
+	/* No encoders are accepted
+	 */
+	if ((encoders_accepted == NULL) ||
+	    (encoders_accepted->root == NULL))
+		return ret_ok;
+
+	/* Process the "Accept-Encoding" header
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_accept_encoding, &ptr, &ptr_len);
 	if (ret == ret_ok) {
-		ret = get_encoding (conn, ptr, encoders);
+		ret = get_encoding (conn, ptr, encoders, encoders_accepted);
 		if (ret < ret_ok) {
 			return ret;
 		}
 	}
-
+	
 	return ret_ok;
 }
 

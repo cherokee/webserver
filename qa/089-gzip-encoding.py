@@ -11,6 +11,7 @@ CONF = """
 vserver!1!rule!890!match = directory
 vserver!1!rule!890!match!directory = /gzip1
 vserver!1!rule!890!handler = file
+vserver!1!rule!890!encoder!1 = gzip
 """
 
 

@@ -584,9 +584,11 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
 	cherokee_buffer_t         *tmp;
+	cherokee_list_t           *i;
 	cherokee_plugin_info_t    *info    = NULL;
 	cherokee_virtual_server_t *vserver = ((void **)data)[0];
 	cherokee_config_entry_t   *entry   = ((void **)data)[1];
+	cherokee_server_t         *srv     = VSERVER_SRV(vserver);
 
 	if (equal_buf_str (&conf->key, "allow_from")) {
 		ret = cherokee_config_node_read_list (conf, NULL, add_access, entry);
@@ -609,20 +611,36 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "handler")) {
 		tmp = &conf->val;
 
-		ret = cherokee_plugin_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
+		ret = cherokee_plugin_loader_get (&srv->loader, tmp->buf, &info);
 		if (ret != ret_ok)
 			return ret;
 
 		if (info->configure) {
 			handler_func_configure_t configure = info->configure;
 
-			ret = configure (conf, vserver->server_ref, &entry->handler_properties);
+			ret = configure (conf, srv, &entry->handler_properties);
 			if (ret != ret_ok)
 				return ret;
 		}
 
 		TRACE(ENTRIES, "Handler: %s\n", tmp->buf);
 		cherokee_config_entry_set_handler (entry, PLUGIN_INFO_HANDLER(info));
+
+	} else if (equal_buf_str (&conf->key, "encoder")) {
+		cherokee_config_node_foreach (i, conf) {
+			tmp = &CONFIG_NODE(i)->val;
+
+			ret = cherokee_plugin_loader_get (&srv->loader, tmp->buf, &info);
+			if (ret != ret_ok) return ret;
+
+			ret = cherokee_avl_get (&srv->encoders, tmp, NULL);
+			if (ret != ret_ok) {
+				cherokee_avl_add (&srv->encoders, tmp, info);
+			}
+
+			cherokee_config_entry_add_encoder (entry, tmp, info);
+			TRACE(ENTRIES, "Encoder: %s\n", tmp->buf);
+		}
 
 	} else if (equal_buf_str (&conf->key, "auth")) {
 		cherokee_plugin_info_validator_t *vinfo;
@@ -631,7 +649,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		 */
 		tmp = &conf->val;
 
-		ret = cherokee_plugin_loader_get (&SRV(vserver->server_ref)->loader, tmp->buf, &info);
+		ret = cherokee_plugin_loader_get (&srv->loader, tmp->buf, &info);
 		if (ret != ret_ok)
 			return ret;
 
@@ -640,7 +658,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		if (info->configure) {
 			validator_func_configure_t configure = info->configure;
 
-			ret = configure (conf, vserver->server_ref, &entry->validator_properties);
+			ret = configure (conf, srv, &entry->validator_properties);
 			if (ret != ret_ok) return ret;
 		}
 

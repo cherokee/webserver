@@ -70,6 +70,11 @@ typedef struct {
 	 */
 	cherokee_expiration_t       expiration;
 	time_t                      expiration_time;
+
+	/* Encoding
+	 */
+	cherokee_avl_t             *encoders;
+
 } cherokee_config_entry_t; 
 
 #define CONF_ENTRY(x) ((cherokee_config_entry_t *)(x))
@@ -80,7 +85,8 @@ ret_t cherokee_config_entry_free     (cherokee_config_entry_t  *entry);
 ret_t cherokee_config_entry_init     (cherokee_config_entry_t  *entry);
 ret_t cherokee_config_entry_mrproper (cherokee_config_entry_t  *entry);
 
-ret_t cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_plugin_info_handler_t *modinfo); 
+ret_t cherokee_config_entry_add_encoder (cherokee_config_entry_t *entry, cherokee_buffer_t *name, cherokee_plugin_info_t *plugin_info);
+ret_t cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_plugin_info_handler_t *plugin_info); 
 ret_t cherokee_config_entry_complete    (cherokee_config_entry_t *entry, cherokee_config_entry_t *source);
 
 ret_t cherokee_config_entry_print       (cherokee_config_entry_t *entry);

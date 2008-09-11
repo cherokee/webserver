@@ -45,7 +45,6 @@
 #include "list.h"
 #include "fdpoll.h"
 #include "virtual_server.h"
-#include "encoder_table.h"
 #include "thread.h"
 #include "plugin_loader.h"
 #include "icons.h"
@@ -82,7 +81,7 @@ struct cherokee_server {
 	/* Modules
 	 */
 	cherokee_plugin_loader_t   loader;
-	cherokee_encoder_table_t   encoders;
+	cherokee_avl_t             encoders;
 
 	/* Tables: iocache, nonces, etc
 	 */

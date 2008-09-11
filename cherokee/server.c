@@ -201,7 +201,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 		
 	/* Encoders 
 	 */
-	cherokee_encoder_table_init (&n->encoders);
+	cherokee_avl_init (&n->encoders);
 
 	/* Server string
 	 */
@@ -326,7 +326,7 @@ cherokee_server_free (cherokee_server_t *srv)
 
 	/* Attached objects
 	 */
-	cherokee_encoder_table_mrproper (&srv->encoders);
+	cherokee_avl_mrproper (&srv->encoders, NULL);
 
 	cherokee_mime_free (srv->mime);
 	cherokee_icons_free (srv->icons);
@@ -1246,50 +1246,6 @@ cherokee_server_step (cherokee_server_t *srv)
 
 
 static ret_t 
-add_encoder (cherokee_config_node_t *node, void *data)
-{
-	ret_t                           ret;
-	cherokee_encoder_table_entry_t *enc      = NULL;
-	cherokee_matching_list_t       *matching = NULL;
-	cherokee_plugin_info_t         *info     = NULL;
- 	cherokee_server_t              *srv      = SRV(data);
-
-	TRACE(ENTRIES, "Encoder: %s\n", node->key.buf);
-
-	/* Set the matching list
-	 */
-	ret = cherokee_matching_list_new (&matching);
-	if (ret != ret_ok) goto error;
-
-	ret = cherokee_matching_list_configure (matching, node);
-	if (ret != ret_ok) goto error;	
-
-	/* Load the module library and set the info
-	 */
-	ret = cherokee_plugin_loader_get (&srv->loader, node->key.buf, &info);
-	if (ret != ret_ok) goto error;
-
-	ret = cherokee_encoder_table_entry_new (&enc);
-	if (ret != ret_ok) goto error;
-
-	ret = cherokee_encoder_table_entry_get_info (enc, info);
-	if (ret != ret_ok) goto error;
-
-	cherokee_encoder_entry_set_matching_list (enc, matching);
- 
-	/* Set in the encoders table
-	 */
-	ret = cherokee_encoder_table_set (&srv->encoders, &node->key, enc);
-	if (ret != ret_ok) goto error;
-
-	return ret_ok;
-
-error:
-	TRACE(ENTRIES, "Could not add '%s' encoder\n", node->key.buf);
-	return ret;
-}
-
-static ret_t 
 add_source (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                          ret;
@@ -1549,10 +1505,6 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 			return ret_error;
 		}		
 		srv->group = grp->gr_gid;
-
-	} else if (equal_buf_str (&conf->key, "encoder")) {
-		ret = cherokee_config_node_while (conf, add_encoder, srv);
-		if (ret != ret_ok) return ret;
 
 	} else if (equal_buf_str (&conf->key, "module_dir") ||
 		   equal_buf_str (&conf->key, "module_deps")) {

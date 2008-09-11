@@ -28,6 +28,7 @@
 #include "access.h"
 #include "http.h"
 #include "util.h"
+#include "encoder.h"
 
 #define ENTRIES "config,rules"
 
@@ -36,7 +37,7 @@ typedef enum {
 	table_handler,
 	table_validator
 } prop_table_types_t;
-
+	
 
 /* Implements _new() and _free() 
  */
@@ -64,6 +65,8 @@ cherokee_config_entry_init (cherokee_config_entry_t *entry)
 
 	entry->expiration           = cherokee_expiration_none;
 	entry->expiration_time      = 0;
+
+	entry->encoders             = NULL;
 
 	return ret_ok;
 }
@@ -101,13 +104,32 @@ cherokee_config_entry_mrproper (cherokee_config_entry_t *entry)
 		cherokee_avl_free (entry->users, free);
 		entry->users = NULL;
 	}
+	
+	if (entry->encoders) {
+		cherokee_avl_mrproper (entry->encoders, NULL);
+		entry->encoders = NULL;
+	}
 
+	return ret_ok;
+}
+
+ret_t
+cherokee_config_entry_add_encoder (cherokee_config_entry_t *entry, 
+				   cherokee_buffer_t       *name,
+				   cherokee_plugin_info_t  *plugin_info)
+{
+	if (entry->encoders == NULL) {
+		cherokee_avl_new (&entry->encoders);
+	}
+
+	cherokee_avl_add (entry->encoders, name, (void*)plugin_info->instance);
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_config_entry_set_handler (cherokee_config_entry_t *entry, cherokee_plugin_info_handler_t *plugin_info)
+cherokee_config_entry_set_handler (cherokee_config_entry_t        *entry,
+				   cherokee_plugin_info_handler_t *plugin_info)
 {
 	return_if_fail (plugin_info != NULL, ret_error);
 
@@ -169,6 +191,9 @@ cherokee_config_entry_complete (cherokee_config_entry_t *entry, cherokee_config_
 		entry->expiration_time = source->expiration_time;
 	}
 
+	if (! entry->encoders)
+		entry->encoders = source->encoders;
+
 	return ret_ok;
 }
 
@@ -188,6 +213,7 @@ cherokee_config_entry_print (cherokee_config_entry_t *entry)
 	printf ("users:                     %p\n", entry->users);
 	printf ("expiration type:           %d\n", entry->expiration);
 	printf ("expiration_time            %lu\n", entry->expiration_time);
+	printf ("encoders_accepted          %p\n", entry->encoders);
 
 	return ret_ok;
 }
