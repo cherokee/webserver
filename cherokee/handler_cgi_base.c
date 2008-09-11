@@ -526,20 +526,26 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	if (unlikely (ret != ret_ok)) return ret;
 
 	/* SCRIPT_NAME:
-	 * It is the request without the pathinfo if it exists
 	 */
-	cherokee_buffer_clean (&tmp);
-
 	if (! cgi_props->check_file) {
-		/* SCGI or FastCGI */
-
+		/* SCGI or FastCGI:
+		 *
+		 * - If the SCGI is handling / it is ''
+		 * - Otherwise, it is the web_directory.
+		 */
 		if (conn->web_directory.len > 1) {
-			cherokee_buffer_add_buffer (&tmp, &conn->web_directory);
+			cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, 
+					   conn->web_directory.buf, conn->web_directory.len);
+		} else {
+			cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, "", 0);
 		}
-		
-		cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, tmp.buf, tmp.len);
 
 	} else {
+		/* CGI:
+		 *
+		 * It is the request without the pathinfo if it exists
+		 */
+		cherokee_buffer_clean (&tmp);
 		if (cherokee_buffer_is_empty (&cgi_props->script_alias)) {
 			if (cgi->param.len > 0) {
 				name = &cgi->param;      /* phpcgi */
@@ -608,21 +614,21 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 	}
 
 	/* No file checking: mainly for FastCGI and SCGI
+	 *
+	 * - If it's handling /, all the req. is path info
+	 * - Otherwise, it is everything after conn->web_directory
 	 */
-	if ((! props->check_file) &&
-	    (! cherokee_buffer_is_empty(&conn->web_directory))) 
+	if (! props->check_file) 
 	{
-		if (conn->request.len == 1) {
-			cherokee_buffer_add_str (&conn->pathinfo, "/");
-
-		} else if (conn->web_directory.len == 1) {
+		if (conn->web_directory.len == 1) {
 			cherokee_buffer_add_buffer (&conn->pathinfo, &conn->request);
-						    
+
 		} else {
 			cherokee_buffer_add (&conn->pathinfo,
 					     conn->request.buf + conn->web_directory.len,
 					     conn->request.len - conn->web_directory.len);
 		}
+
 		return ret_ok;
 	}
 
