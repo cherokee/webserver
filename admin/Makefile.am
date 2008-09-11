@@ -91,7 +91,8 @@ mime.help.html \
 vserver.help.html \
 vservers.help.html \
 encoder.help.html \
-feedback.help.html
+feedback.help.html \
+appserver.help.html
 
 
 EXTRA_DIST = \
