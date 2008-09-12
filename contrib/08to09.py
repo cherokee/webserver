@@ -48,6 +48,7 @@ def convert (fin, fout):
     n   = 1
     cin = Config(fin)
 
+    # Rewrite the 'source' entries
     for v in cin.keys('vserver'):
         for r in cin.keys('vserver!%s!rule'%(v)):
             balancer = cin.get_val ('vserver!%s!rule!%s!handler!balancer'%(v,r))
@@ -83,6 +84,9 @@ def convert (fin, fout):
 
                 h = get_highest_balancer_source(cin,v,r)
                 cin['vserver!%s!rule!%s!handler!balancer!source!%d' %(v,r,h) ] = str(sourcen)
+
+    # Remove old server encoders
+    del (cin['server!encoder'])
 
     save_result (str(cin), fout)
                 

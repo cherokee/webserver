@@ -1,5 +1,9 @@
 2008-09-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* contrib/08to09.py (convert): Updated to remove the old
+	server!encoder entries. There is no way to convert the old
+	entries, so removing them looks like the right thing to do.
+
 	* cherokee/virtual_server.c, cherokee.conf.sample.pre,
 	admin/PageEntry.py, admin/server.py, admin/Page.py,
 	admin/encoder.help.html, admin/PageEncoders.py,
