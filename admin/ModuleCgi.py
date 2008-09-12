@@ -52,7 +52,7 @@ class ModuleCgiBase (ModuleHandler):
         if self.fixed_check_file == None:
             checkboxes += ['check_file']
         else:
-            self._cfg['%s!check_file'] = self.fixed_check_file
+            self._cfg['%s!check_file'%(self._prefix)] = self.fixed_check_file
 
         self.ApplyChangesPrefix (self._prefix, checkboxes, post)
 
