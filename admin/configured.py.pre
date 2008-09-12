@@ -3,6 +3,7 @@ from os.path import join
 PREFIX     = "%prefix%"
 LIBDIR     = "%libdir%"
 DATADIR    = "%datadir%"
+DOCDIR     = "%docdir%"
 WWWROOT    = "%wwwroot%"
 SYSCONFDIR = "%sysconfdir%"
 LOCALSTATE = "%localstatedir%"

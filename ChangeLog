@@ -1,5 +1,9 @@
 2008-09-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main_admin.c, constants.h.pre, admin/configured.py.pre,
+	admin/Makefile.am, Makefile.am: Exports a new /help web directory
+	from cherokee-admin. It points to the installed documentation.
+
 	* cherokee/Makefile.am, cherokee/matching_list.c,
 	cherokee/matching_list.h: The matching list class is no longer
 	needed. Removed.

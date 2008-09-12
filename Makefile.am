@@ -26,9 +26,9 @@ cherokeeconfdir = $(sysconfdir)/cherokee
 cherokeeadmindir = $(datadir)/cherokee/admin
 
 .h.pre.h: 
-	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%libdir%|${libdir}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%libdir%|${libdir}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
 .sample.pre.sample:
-	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%prefix%|${prefix}|g; s|%libdir%|${libdir}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%libdir%|${libdir}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
 
 
 CONSTANTS_PRE = \

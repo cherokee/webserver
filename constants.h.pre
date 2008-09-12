@@ -7,6 +7,7 @@
 # define CHEROKEE_PLUGINDIR   "%libdir%/cherokee"
 # define CHEROKEE_DEPSDIR     "%datadir%/cherokee/deps"
 # define CHEROKEE_DATADIR     "%datadir%/cherokee"
+# define CHEROKEE_DOCDIR      "%docdir%"
 
 # define CHEROKEE_VAR_RUN     "%localstatedir%/run"
 # define CHEROKEE_CONFDIR     "%sysconfdir%/cherokee"

@@ -141,6 +141,13 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "5!handler!iocache = 0\n"
 				 RULE_PRE "5!document_root = %s\n", CHEROKEE_ICONSDIR);
 
+	cherokee_buffer_add_va  (&buf, 
+				 RULE_PRE "6!match = directory\n"
+				 RULE_PRE "6!match!directory = /help\n"
+				 RULE_PRE "6!handler = file\n"
+				 RULE_PRE "6!handler!iocache = 0\n"
+				 RULE_PRE "6!document_root = %s\n", CHEROKEE_DOCDIR);
+
 	ret = cherokee_server_read_config_string (srv, &buf);
 	if (ret != ret_ok) return ret;
 
