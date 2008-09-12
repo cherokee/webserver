@@ -955,8 +955,6 @@ mime.h \
 mime-protected.h \
 mime.c \
 mime_entry.c \
-matching_list.h \
-matching_list.c \
 iocache.h \
 iocache.c \
 md5.h \
