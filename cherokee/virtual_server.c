@@ -628,7 +628,12 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "encoder")) {
 		cherokee_config_node_foreach (i, conf) {
-			tmp = &CONFIG_NODE(i)->val;
+			/* Skip the entry if it isn't enabled 
+			 */
+			if (! atoi(CONFIG_NODE(i)->val.buf))
+				continue;
+
+			tmp = &CONFIG_NODE(i)->key;
 
 			ret = cherokee_plugin_loader_get (&srv->loader, tmp->buf, &info);
 			if (ret != ret_ok) return ret;

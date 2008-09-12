@@ -21,7 +21,6 @@ from PageIcon import *
 from PageMime import *
 from PageVServer import *
 from PageVServers import *
-from PageEncoders import *
 from PageEntry import *
 from PageAdvanced import *
 from PageFeedback import *
@@ -75,8 +74,6 @@ class Handler(pyscgi.SCGIHandler):
         # Check the URL        
         if uri.startswith('/general'):
             page = PageGeneral(cfg)
-        elif uri.startswith('/encoder'):
-            page = PageEncoders(cfg)
         elif uri.startswith('/icon'):
             page = PageIcon(cfg)
         elif uri.startswith('/mime'):

@@ -14,7 +14,6 @@ server!timeout = 5
 server!keepalive = 1
 server!keepalive_max_requests = 500
 server!server_tokens = full
-server!encoder!gzip!allow = html,htm,txt,css,js
 server!panic_action = %prefix%/bin/cherokee-panic
 server!pid_file = %localstatedir%/run/cherokee.pid
 

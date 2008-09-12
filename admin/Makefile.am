@@ -33,7 +33,6 @@ PageStatus.py \
 PageMime.py \
 PageVServer.py \
 PageVServers.py \
-PageEncoders.py \
 PageError.py \
 PageFeedback.py \
 PageAppServers.py \
@@ -90,7 +89,6 @@ status.template.html \
 mime.help.html \
 vserver.help.html \
 vservers.help.html \
-encoder.help.html \
 feedback.help.html \
 appserver.help.html
 

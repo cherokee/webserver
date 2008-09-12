@@ -86,8 +86,13 @@ class PageEntry (PageMenu, FormHelper):
         pre = "%s!auth" % (self._conf_prefix)
         self.ApplyChanges_OptionModule (pre, uri, post)
 
+        # Check boxes
+        checks = ["%s!only_secure"%(self._conf_prefix)]
+        for e,e_name in modules_available(ENCODERS):
+            checks.append ('%s!encoder!%s' % (self._conf_prefix, e))
+
         # Apply changes
-        self.ApplyChanges (["%s!only_secure"%(self._conf_prefix)], post, DATA_VALIDATION)
+        self.ApplyChanges (checks, post, DATA_VALIDATION)
 
     def _op_default (self, uri):
         # Render page
@@ -133,6 +138,9 @@ class PageEntry (PageMenu, FormHelper):
             tabs += [('Handler', str(table) + e)]
         else:
             tabs += [('Handler', str(table))]
+
+        # Encoding
+        tabs += [('Encoding', self._render_encoding())]
 
         # Expiration
         tabs += [('Expiration', self._render_expiration())]
@@ -199,3 +207,15 @@ class PageEntry (PageMenu, FormHelper):
         txt += e
         return txt
 
+    def _render_encoding (self):
+        txt = ''
+        pre = "%s!encoder"%(self._conf_prefix)
+
+        txt += "<h2>Information Encoders</h2>"
+        table = TableProps()
+        for e,e_name in modules_available(ENCODERS):
+            note = "Use the %s encoder whenever the client requests it." % (e_name)
+            self.AddPropCheck (table, "Allow %s"%(e_name), "%s!%s"%(pre,e), False, note)
+
+        txt += self.Indent(table)
+        return txt

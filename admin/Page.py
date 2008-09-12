@@ -40,7 +40,6 @@ PAGE_MENU_MENU = """
 <li id="general"><a href="/general">General</a></li>
 <li id="vserver"><a href="/vserver">Virtual Servers</a></li>
 <li id="appserver"><a href="/appserver">Application Servers</a></li>
-<li id="encoder"><a href="/encoder">Encoding</a></li>
 <li id="icon"><a href="/icons">Icons</a></li>
 <li id="mime"><a href="/mime">Mime Types</a></li>
 <li id="advanced"><a href="/advanced">Advanced</a></li>
