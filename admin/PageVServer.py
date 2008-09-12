@@ -42,9 +42,16 @@ NOTE_WRT_EXEC        = 'Path to the executable that will be invoked on each log 
 NO_HANDLER   = "<i>No</i>"
 NO_VALIDATOR = "<i>No</i>"
 
+HELPS = [
+    ('config_virtual_servers', "Virtual Servers"),
+    ('modules_loggers',        "Loggers"),
+    ('cookbook_ssl',           "SSL cookbook")
+]
+
+
 class PageVServer (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, 'vserver', cfg)
+        PageMenu.__init__ (self, 'vserver', cfg, HELPS)
         FormHelper.__init__ (self, 'vserver', cfg)
 
         self._priorities         = None

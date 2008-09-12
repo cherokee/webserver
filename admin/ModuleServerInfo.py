@@ -10,6 +10,10 @@ options = [
     ('connection_details', "Server Information + Connections")
 ]
 
+HELPS = [
+    ('modules_handlers_server_info', "Server Information")
+]
+
 class ModuleServerInfo (ModuleHandler):
     PROPERTIES = []
 

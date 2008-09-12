@@ -9,6 +9,10 @@ NOTE_CHECK_FILE    = 'Check whether the file is in place.'
 NOTE_PASS_REQ      = 'Pass all the headers to the CGI as they were received by the web server.'
 NOTE_XSENDFILE     = 'Allow the use of the non-standard X-Sendfile header.'
 
+HELPS = [
+    ('modules_handlers_cgi', "CGIs")
+]
+
 class ModuleCgiBase (ModuleHandler):
     PROPERTIES = [
         'script_alias',

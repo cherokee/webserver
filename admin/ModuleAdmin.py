@@ -1,6 +1,10 @@
 from Form import *
 from ModuleHandler import *
 
+HELPS = [
+    ('modules_handlers_admin', "Remote Administration")
+]
+
 class ModuleAdmin (ModuleHandler):
     PROPERTIES = []
 

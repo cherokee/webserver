@@ -4,6 +4,10 @@ from ModuleHandler import *
 
 NOTE_IO_CACHE = 'Enables an internal I/O cache that improves performance.'
 
+HELPS = [
+    ('modules_handlers_file', "Static Content")
+]
+
 class ModuleFile (ModuleHandler):
     PROPERTIES = [
         'iocache'

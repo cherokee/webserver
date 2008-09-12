@@ -16,6 +16,10 @@ a custom number of parameters and rules that have to be applied to one or
 more domains.</p>
 """
 
+HELPS = [
+    ('config_virtual_servers', "Virtual Servers")
+]
+
 def domain_cmp (d1, d2):
     d1s = d1.split('.')
     d2s = d2.split('.')
@@ -34,7 +38,7 @@ def domain_cmp (d1, d2):
 
 class PageVServers (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, 'vservers', cfg)
+        PageMenu.__init__ (self, 'vservers', cfg, HELPS)
         FormHelper.__init__ (self, 'vservers', cfg)
 
         self._normailze_vservers()

@@ -1,5 +1,20 @@
 2008-09-12  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* ModuleAdmin.py, PageEntry.py, Theme.py, ModuleRedir.py, Page.py,
+	ModuleDirlist.py, Module.py, ModuleFile.py, ModuleServerInfo.py,
+	ModuleCustomError.py, ModuleScgi.py, ModuleCgi.py,
+	ModuleDbslayer.py, PageVServers.py, PageStatus.py,
+	ModuleCommon.py, PageGeneral.py, ModuleFcgi.py, PageVServer.py,
+	ModuleMirror.py: First steps to rework the whole help subsystem.
+	From now on, Cherokee-admin will use the main documentation rather
+	than the short texts it has been using until now.
+
+	* admin/advanced.help.html, admin/feedback.help.html,
+	admin/mime.help.html, admin/vservers.help.html,
+	admin/appserver.help.html, admin/general.help.html,
+	admin/status.help.html, admin/entry.help.html,
+	admin/icon.help.html, admin/vserver.help.html: Removed.
+
 	* cherokee/main_admin.c, constants.h.pre, admin/configured.py.pre,
 	admin/Makefile.am, Makefile.am: Exports a new /help web directory
 	from cherokee-admin. It points to the installed documentation.

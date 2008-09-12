@@ -24,9 +24,13 @@ DATA_VALIDATION = [
     ("vserver!.*?!rule!(\d+)!allow_from",     validations.is_ip_or_netmask_list)
 ]
 
+HELPS = [
+    ('config_virtual_servers_rule', "Behavior rules")
+]
+
 class PageEntry (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, 'entry', cfg)
+        PageMenu.__init__ (self, 'entry', cfg, HELPS)
         FormHelper.__init__ (self, 'entry', cfg)
         self._priorities = None
         self._is_userdir = False
@@ -138,6 +142,8 @@ class PageEntry (PageMenu, FormHelper):
             tabs += [('Handler', str(table) + e)]
         else:
             tabs += [('Handler', str(table))]
+
+        self.AddHelps (module_get_help (self._cfg.get_val('%s!handler'%(pre))))
 
         # Encoding
         tabs += [('Encoding', self._render_encoding())]

@@ -26,6 +26,14 @@ def module_obj_factory_detailed (mod_type, name, cfg, prefix, submit_url, **kwar
 
     return mod_obj
 
+def module_get_help (name):
+    if not name:
+        return []
+    mod_name = reduce (lambda x,y: x+y, map(lambda x: x.capitalize(), name.split('_')))
+    mod = __import__("Module%s" % (mod_name))
+    return getattr (mod, "HELPS", [])
+
+
 def module_obj_factory (name, cfg, prefix, submit_url, **kwargs):
     return module_obj_factory_detailed ("Module", name, cfg, prefix, submit_url, **kwargs)
 

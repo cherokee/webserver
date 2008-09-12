@@ -7,6 +7,10 @@ from consts import *
 from ModuleCgi import *
 from ModuleBalancer import NOTE_BALANCER
 
+HELPS = [
+    ('modules_handlers_fcgi', "FastCGI")
+]
+
 class ModuleFcgi (ModuleCgiBase):
     PROPERTIES = ModuleCgiBase.PROPERTIES + [
         'balancer'

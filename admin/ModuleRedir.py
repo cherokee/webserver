@@ -7,6 +7,11 @@ NOTE_SHOW         = "Defines whether the redirection will be seen by the client.
 NOTE_REGEX        = "Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc.perl.org/perlre.html\">Reference</a>."
 NOTE_SUBSTITUTION = "Target address. It can use Regular Expression substitution sub-strings."
 
+HELPS = [
+    ('modules_handlers_redir',              "Redirections"),
+    ('http://perldoc.perl.org/perlre.html', "Regular Expressions")
+]
+
 class ModuleRedir (ModuleHandler):
     PROPERTIES = [
         "rewrite"

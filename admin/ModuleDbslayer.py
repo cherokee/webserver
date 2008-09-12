@@ -18,6 +18,10 @@ NOTE_USER     = "User to access the database."
 NOTE_PASSWORD = "Password for the user accessing the database."
 NOTE_DB       = "Optionally specifies a data base to connect to."
 
+HELPS = [
+    ('modules_handlers_dbslayer', "MySQL balancing")
+]
+
 class ModuleDbslayer (ModuleHandler):
     PROPERTIES = [
         'balancer'

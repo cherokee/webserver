@@ -31,10 +31,12 @@ NOTE_USER      = 'Changes the effective user. User names and IDs are accepted.'
 NOTE_GROUP     = 'Changes the effective group. Group names and IDs are accepted.'
 NOTE_CHROOT    = 'Jail the server inside the directory. Don\'t use it as the only security measure.'
 
+HELPS = [('config_general',    "General Configuration"),
+         ('config_quickstart', "Configuration Quickstart")]
 
 class PageGeneral (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, 'general', cfg)
+        PageMenu.__init__ (self, 'general', cfg, HELPS)
         FormHelper.__init__ (self, 'general', cfg)
 
     def _op_render (self):

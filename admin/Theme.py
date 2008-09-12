@@ -10,9 +10,6 @@ class Theme:
     # Public Methods
     #
     def BuildTemplate (self, keys, id):
-        if 'help' not in keys.keys():
-            keys['help'] = self._read_file ("%s.help.html"%(id))
-
         render = self._template
         while '%(' in render:
             for replacement in re.findall (r'\%\((\w+)\)s', render):

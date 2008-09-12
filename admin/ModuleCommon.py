@@ -7,6 +7,10 @@ from ModuleDirlist import *
 
 NOTE_PATHINFO = "Allow extra tailing paths"
 
+HELPS = [
+    ('modules_handlers_common', "List & Send")
+]
+
 class ModuleCommon (ModuleHandler):
     PROPERTIES = ModuleFile.PROPERTIES + ModuleDirlist.PROPERTIES + [
         'allow_pathinfo'

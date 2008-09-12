@@ -5,6 +5,10 @@ from validations import *
 from consts import *
 from ModuleBalancer import *
 
+HELPS = [
+    ('modules_handlers_mirror', "TCP balancer")
+]
+
 class ModuleMirror (ModuleHandler):
     PROPERTIES = [
         'balancer'

@@ -5,6 +5,10 @@ from consts import *
 
 NOTE_ERRORS = 'HTTP Error that you be used to reply the request.'
 
+HELPS = [
+    ('modules_handlers_custom_error', "HTTP Custom Error")
+]
+
 class ModuleCustomError (ModuleHandler):
     PROPERTIES = []
 

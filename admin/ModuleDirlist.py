@@ -17,6 +17,10 @@ NOTE_THEME        = "Choose the listing theme."
 NOTE_ICON_DIR     = "Web directory where the icon files are located. Default: <i>/icons</i>."
 NOTE_NOTICE_FILES = "List of notice files to be inserted."
 
+HELPS = [
+    ('modules_handlers_dirlist', "Only listing")
+]
+
 class ModuleDirlist (ModuleHandler):
     PROPERTIES = [
         'size', 'date',
