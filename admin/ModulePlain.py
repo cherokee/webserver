@@ -3,12 +3,16 @@ import validations
 from Table import *
 from ModuleAuth import *
 
+NOTE_PASSWD = "Full path to the plain text password file."
+
 DATA_VALIDATION = [
     ('vserver!.*?!(directory|extensions|request)!.*?!passwdfile', 
      (validations.is_local_file_exists, 'cfg'))
 ]
 
-NOTE_PASSWD = "Full path to the plain text password file."
+HELPS = [
+    ('modules_validators_plain', "Plain text")
+]
 
 class ModulePlain (ModuleAuthBase):
     PROPERTIES = ModuleAuthBase.PROPERTIES + [

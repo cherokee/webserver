@@ -1,5 +1,10 @@
 from ModuleAuth import *
 
+
+HELPS = [
+    ('modules_validators_pam', "PAM")
+]
+
 class ModulePam (ModuleAuthBase):
     PROPERTIES = ModuleAuthBase.PROPERTIES
 

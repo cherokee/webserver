@@ -11,6 +11,10 @@ NOTE_SQL    = 'SQL command to execute. ${user} is replaced with the user name.'
 NOTE_MD5    = 'Active to use MD5 passwords.'
 
 
+HELPS = [
+    ('modules_validators_mysql', "MySQL")
+]
+
 class ModuleMysql (ModuleAuthBase):
     PROPERTIES = ModuleAuthBase.PROPERTIES + [
         'host', 'port', 'unix_socket',

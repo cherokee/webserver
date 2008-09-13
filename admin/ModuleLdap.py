@@ -10,6 +10,10 @@ NOTE_FILTER      = 'Object filter. It can be empty.'
 NOTE_USE_TLS     = 'Enable to use secure connections between the web and LDAP servers.'
 NOTE_CA_FILE     = 'CA File for the TLS connections.'
 
+HELPS = [
+    ('modules_validators_ldap', "LDAP")
+]
+
 class ModuleLdap (ModuleAuthBase):
     PROPERTIES = ModuleAuthBase.PROPERTIES + [
         'server', 'port',

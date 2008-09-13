@@ -199,6 +199,8 @@ class PageEntry (PageMenu, FormHelper):
     def _render_security (self):
         pre = self._conf_prefix
 
+        self.AddHelp (('cookbook_authentication', 'Authentication'))
+
         txt   = "<h2>Access Restrictions</h2>"
         table = TableProps()
         self.AddPropCheck (table, 'Only https', '%s!only_secure'%(pre), False, NOTE_HTTPS_ONLY)
@@ -211,15 +213,23 @@ class PageEntry (PageMenu, FormHelper):
                                         modules_available(VALIDATORS), NOTE_VALIDATOR)
         txt += self.Indent (table)
         txt += e
+
+        self.AddHelps (module_get_help (self._cfg.get_val('%s!auth'%(pre))))
+
         return txt
 
     def _render_encoding (self):
         txt = ''
         pre = "%s!encoder"%(self._conf_prefix)
+        encoders = modules_available(ENCODERS)
+
+        for e in encoders:
+            self.AddHelp (('modules_encoders_%s'%(e[0]),
+                           '%s encoder' % (e[1])))
 
         txt += "<h2>Information Encoders</h2>"
         table = TableProps()
-        for e,e_name in modules_available(ENCODERS):
+        for e,e_name in encoders:
             note = "Use the %s encoder whenever the client requests it." % (e_name)
             self.AddPropCheck (table, "Allow %s"%(e_name), "%s!%s"%(pre,e), False, note)
 
