@@ -6,9 +6,11 @@ from Table import *
 from Entry import *
 from configured import *
 
+HELPS = [('config_icons', "Icons")]
+
 class PageIcon (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, 'icon', cfg)
+        PageMenu.__init__ (self, 'icon', cfg, HELPS)
         FormHelper.__init__ (self, 'icon', cfg)
 
     def _op_render (self):

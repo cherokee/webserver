@@ -10,9 +10,11 @@ DATA_VALIDATION = [
     ("server!mime_files", validations.is_path_list),
 ]
 
+HELPS = [('config_mime_types', "MIME types")]
+
 class PageMime (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, 'mime', cfg)
+        PageMenu.__init__ (self, 'mime', cfg, HELPS)
         FormHelper.__init__ (self, 'mime', cfg)
 
     def _op_render (self):

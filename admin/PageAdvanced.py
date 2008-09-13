@@ -40,9 +40,11 @@ NOTE_KEEPALIVE    = 'Enables the server-wide keep-alive support. It increases th
 NOTE_KEEPALIVE_RS = 'Maximum number of HTTP requests that can be served by each keepalive connection.'
 NOTE_CHUNKED      = 'Allows the server to use Chunked encoding to try to keep Keep-Alive enabled.'
 
+HELPS = [('config_advanced', "Advanced")]
+
 class PageAdvanced (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        PageMenu.__init__ (self, 'advanced', cfg)
+        PageMenu.__init__ (self, 'advanced', cfg, HELPS)
         FormHelper.__init__ (self, 'advanced', cfg)
 
     def _op_render (self):
