@@ -79,19 +79,7 @@ default.template.html \
 error_not_writable.template.html \
 error_not_found.template.html \
 error_icons_dir_missing.template.html \
-error_couldnt_launch.template.html \
-advanced.help.html \
-entry.help.html \
-general.help.html \
-icon.help.html \
-status.help.html \
-status.template.html \
-mime.help.html \
-vserver.help.html \
-vservers.help.html \
-feedback.help.html \
-appserver.help.html
-
+error_couldnt_launch.template.html
 
 EXTRA_DIST = \
 $(PY_PRE) \
