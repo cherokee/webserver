@@ -1,6 +1,8 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
+if INSTALL_ADMIN
 SUBDIRS = static
+endif
 
 SUFFIXES = .py.pre .py
 
@@ -10,15 +12,25 @@ SUFFIXES = .py.pre .py
 PY_PRE = \
 configured.py.pre
 
+
+if INSTALL_ADMIN
+gen_data = $(PY_PRE:.py.pre=.py)
+endif
+
 generateddir = "$(datadir)/cherokee/admin"
-generated_DATA = \
-$(PY_PRE:.py.pre=.py)
+generated_DATA = $(gen_data)
+
+
+if INSTALL_ADMIN
+admin_scripts = server.py
+endif
 
 adminpydir = "$(datadir)/cherokee/admin"
-adminpy_SCRIPTS = \
-server.py 
+adminpy_SCRIPTS = $(admin_scripts)
 
-adminpy_DATA = \
+
+if INSTALL_ADMIN
+admin_data = \
 consts.py \
 Entry.py \
 Form.py \
@@ -72,20 +84,28 @@ pyscgi.py \
 validations.py \
 CherokeeManagement.py \
 flags.py
+endif
 
-adminhelpdir = "$(datadir)/cherokee/admin"
-adminhelp_DATA = \
+adminpy_DATA = $(admin_data)
+
+
+if INSTALL_ADMIN
+template_data = \
 default.template.html \
 error_not_writable.template.html \
 error_not_found.template.html \
 error_icons_dir_missing.template.html \
 error_couldnt_launch.template.html
+endif
+
+adminhelpdir = "$(datadir)/cherokee/admin"
+adminhelp_DATA = $(template_data)
 
 EXTRA_DIST = \
 $(PY_PRE) \
-$(adminpy_DATA) \
-$(adminpy_SCRIPTS) \
-$(adminhelp_DATA)
+$(admin_data) \
+$(admin_scripts) \
+$(template_data)
 
 CLEANFILES = \
 $(generated_DATA)

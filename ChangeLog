@@ -1,3 +1,8 @@
+2008-09-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* configure.in, admin/Makefile.am: Adds a new --disable-admin
+	option. It stops cherokee-admin from installing.
+
 2008-09-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageAdvanced.py, admin/PageMime.py, admin/PageIcon.py:
