@@ -79,6 +79,7 @@ ModuleRequest.py \
 ModuleDirectory.py \
 ModuleExtensions.py \
 ModuleGeoip.py \
+ModuleHeader.py \
 config.py \
 pyscgi.py \
 validations.py \
