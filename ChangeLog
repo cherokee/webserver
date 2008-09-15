@@ -1,5 +1,11 @@
 2008-09-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/server.py, admin/Page.py, admin/PageAppServers.py,
+	admin/static/css/cherokee.css, admin/PageInfoSource.py:
+	"Application server" has been renamed to "Information Source".  As
+	long as this list contains pointers to application servers and
+	data bases it is a better naming.
+
 	* admin/ModuleCgi.py, admin/ModuleScgi.py, admin/ModuleFcgi.py:
 	The 'check file' option is still useful when the handler manages
 	an extension. (A few days ago I removed them completelly from the

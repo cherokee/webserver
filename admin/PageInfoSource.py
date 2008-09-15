@@ -5,11 +5,11 @@ from Table import *
 from Entry import *
 from Form import *
 
-NOTE_SOURCE      = 'The source can be either a local interpreter or a remote host acting as an application server.'
-NOTE_NICK        = 'Application Server nick. It will be referenced by this name in the rest of the server.'
+NOTE_SOURCE      = 'The source can be either a local interpreter or a remote host acting as an information source.'
+NOTE_NICK        = 'Source nick. It will be referenced by this name in the rest of the server.'
 NOTE_TYPE        = 'It allows to choose whether it runs the local host or a remote server.'
-NOTE_HOST        = 'Where the application server can be contacted. The host:port pair, or the Unix socket path.'
-NOTE_INTERPRETER = 'Command to spawn a new application server in case it were not running.'
+NOTE_HOST        = 'Where the information source can be accessed. The host:port pair, or the Unix socket path.'
+NOTE_INTERPRETER = 'Command to spawn a new source in case it were not accessible.'
 
 
 TABLE_JS = """
@@ -21,11 +21,11 @@ TABLE_JS = """
 </script>
 """
 
-class PageAppServers (PageMenu, FormHelper):
+class PageInfoSource (PageMenu, FormHelper):
     def __init__ (self, cfg):
-        FormHelper.__init__ (self, 'appserver', cfg)
-        PageMenu.__init__ (self, 'appserver', cfg)
-        self.submit_url = '/appserver/'
+        FormHelper.__init__ (self, 'source', cfg)
+        PageMenu.__init__ (self, 'source', cfg)
+        self.submit_url = '/source/'
 
     def _op_handler (self, uri, post):
         if post.get_val('is_submit'):
@@ -51,7 +51,7 @@ class PageAppServers (PageMenu, FormHelper):
 
     def _op_render (self, source=None):
         content = self._render_content (source)
-        self.AddMacroContent ('title', 'Application Servers')
+        self.AddMacroContent ('title', 'Information Sources')
         self.AddMacroContent ('content', content)
         return Page.Render(self)
 
@@ -122,8 +122,8 @@ class PageAppServers (PageMenu, FormHelper):
 
         # Properties
         table = TableProps()
-        self.AddPropEntry   (table, 'Nick',       'source!%s!nick'%(s), NOTE_NICK)
         self.AddPropOptions_Reload (table, 'Type','source!%s!type'%(s), SOURCE_TYPES, NOTE_TYPE)
+        self.AddPropEntry   (table, 'Nick',       'source!%s!nick'%(s), NOTE_NICK)
         self.AddPropEntry   (table, 'Connection', 'source!%s!host'%(s), NOTE_HOST)
         if tipe == 'interpreter':
             self.AddPropEntry (table, 'Interpreter', 'source!%s!interpreter'%(s), NOTE_INTERPRETER)
@@ -146,8 +146,8 @@ class PageAppServers (PageMenu, FormHelper):
         tipe = self._cfg.get_val('tmp!new_source_type')
 
         table = TableProps()
-        self.AddPropEntry          (table, 'Nick',       'tmp!new_source_nick', NOTE_NICK)
         self.AddPropOptions_Reload (table, 'Type',       'tmp!new_source_type', SOURCE_TYPES, NOTE_TYPE)
+        self.AddPropEntry          (table, 'Nick',       'tmp!new_source_nick', NOTE_NICK)
         self.AddPropEntry          (table, 'Connection', 'tmp!new_source_host', NOTE_HOST)
         if tipe == 'interpreter' or not tipe:
             self.AddPropEntry (table, 'Interpreter', 'tmp!new_source_interpreter', NOTE_INTERPRETER)
@@ -157,12 +157,12 @@ class PageAppServers (PageMenu, FormHelper):
 
 
     def _render_content (self, source):
-        txt = "<h1>Application Servers Settings</h1>"
+        txt = "<h1>Information Sources Settings</h1>"
 
         # List
         #
         if self._cfg.keys('source'):
-            txt += "<h2>Configured Application Servers</h2>"
+            txt += "<h2>Known sources</h2>"
 
             table  = '<table width="90%%" id="sources" class="rulestable">'
             table += '<tr><th>Nick</th><th>Type</th><th>Connection</th></tr>'
@@ -185,7 +185,7 @@ class PageAppServers (PageMenu, FormHelper):
             #
             nick = self._cfg.get_val('source!%s!nick'%(source))
             txt += "<h2>Details: '%s'</h2>" % (nick)
-            txt += self._render_source_details (source)
+            txt += self.Indent(self._render_source_details (source))
 
         else:
             # Add new

@@ -26,7 +26,7 @@ from PageAdvanced import *
 from PageFeedback import *
 from PageError import *
 from PageAjaxUpdate import *
-from PageAppServers import *
+from PageInfoSource import *
 from CherokeeManagement import *
 
 # Constants
@@ -91,8 +91,8 @@ class Handler(pyscgi.SCGIHandler):
                 page = PageEntry(cfg)
             else:
                 page = PageVServer(cfg)
-        elif uri.startswith('/appserver'):
-            page = PageAppServers(cfg)
+        elif uri.startswith('/source'):
+            page = PageInfoSource(cfg)
         elif uri.startswith('/apply'):
             self.handle_post()
             post = Post(self.post)
