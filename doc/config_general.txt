@@ -41,13 +41,6 @@ Sets the number of seconds that Cherokee will wait before closing the
 connection.
 
 
-KeepAlive
-^^^^^^^^^
-Enables the global keep-alive support for the client requests. It
-increases the client performance by reusing a connection for more than
-one request. It should most probably be turned on.
-
-
 Server Tokens
 ^^^^^^^^^^^^^
 

@@ -107,28 +107,6 @@ other                     , By default in Linux
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Server Encoders
-~~~~~~~~~~~~~~~
-
-The ``server!encoder`` configuration branch allows to configure encode
-plug-ins. Each entry accepts a number of options:
-
-[grid="rows"]
-`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameter                 , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-type                      , Set the matching policy: deny_allow or allow_deny
-allow                     , List of extensions to encode
-deny                      , List of extensions that shouldn't be encoded
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Example::
-+
-----
-   server!encoder!gzip!allow = html,htm
-   server!encoder!gzip!deny  = jpg,png,gz
-----
-
 Virtual Server
 ~~~~~~~~~~~~~~
 
@@ -250,6 +228,26 @@ Eg: Default rule for the 'default' virtual server:
       vserver!1!rule!1!handler!iocache = 0
 ----
 +
+The ``!encoder`` configuration entry allows to configure encoding
+plug-ins. Each entry applies to a specific rule.
+
+[grid="rows"]
+`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameter                 , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+deflate                   , deflate encoder. 0|1 to define disabled|enabled.
+gzip                      , gzip encoder. 0|1 to define disabled|enabled.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Example::
++
+----
+   vserver!1!rule!100!encoder!deflate = 1
+   vserver!1!rule!100!encoder!gzip = 1
+   vserver!1!rule!100!match = extensions
+   vserver!1!rule!100!match!extensions = html
+----
++
 The following parameters are concatenated with any of the previous
 kinds of entry:
 
@@ -327,8 +325,7 @@ Here are a few examples about how this notation works:
 +
 ----
     vserver!1!nick = default
-    vserver!1!rule!directory!/!handler = common
-    vserver!1!rule!directory!/!priority = 1
+    vserver!1!rule!10!directory!/!handler = common
 ----
 
 - The \*.example.com and \*.examples.org domains are restricted to be
@@ -339,9 +336,9 @@ Here are a few examples about how this notation works:
     vserver!5!nick = example
     vserver!5!domains!1 = *.example.com
     vserver!5!domains!2 = *.example.org
-    vserver!5!rule!directory!/!handler = fcgi
-    vserver!5!rule!directory!/!priority = 1
-    vserver!5!rule!directory!/!allow_from = 127.0.0.1,::1
+    vserver!5!rule!10!directory!/!handler = fcgi
+    vserver!5!rule!10!directory!/!priority = 1
+    vserver!5!rule!10!directory!/!allow_from = 127.0.0.1,::1
 ----
 
 - Rules can be defined that return custom errors using the
@@ -358,12 +355,11 @@ Here are a few examples about how this notation works:
 +
 ----
     vserver!1!nick = default
-    vserver!1!rule!extensions!iso,ISO!handler = file
-    vserver!1!rule!extensions!iso,ISO!priority = 1
-    vserver!1!rule!extensions!iso,ISO!auth = htdigest
-    vserver!1!rule!extensions!iso,ISO!auth!realm = My secret isos
-    vserver!1!rule!extensions!iso,ISO!auth!methods = digest
-    vserver!1!rule!extensions!iso,ISO!auth!passwdfile = /var/passwd/isos.htdigest
+    vserver!1!rule!100!extensions!iso,ISO!handler = file
+    vserver!1!rule!100!extensions!iso,ISO!auth = htdigest
+    vserver!1!rule!100!extensions!iso,ISO!auth!realm = My secret isos
+    vserver!1!rule!100!extensions!iso,ISO!auth!methods = digest
+    vserver!1!rule!100!extensions!iso,ISO!auth!passwdfile = /var/passwd/isos.htdigest
 ----
 
 - Authenticated directory with `htpasswd` validator:
@@ -440,7 +436,7 @@ information will be written. It can be either:
 **Logger writer Type**                  , **Description**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 file                                    , Write a file
-syslog                                  , Use the system logging mechanism
+ syslog                                  , Use the system logging mechanism
 stderr                                  , Use the standard output
 exec                                    , Execute a program with each line
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -460,6 +456,60 @@ Examples:
     vserver!1!logger!access!filename = /var/log/cherokee.access.log
     vserver!1!logger!error!type = file
     vserver!1!logger!error!filename = /var/log/cherokee.error.log
+----
+
+
+Information sources
+~~~~~~~~~~~~~~~~~~~
+
+They follow the format: ``source ! {source number} ! {key}``
+
+[grid="rows"]
+```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Key**         , **Type**, **Description**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+nick            , String  , Alias to identify the source
+env             , String  , Variable to be set in the environment
+host            , String  , host:port or path to unix socket
+interpreter     , String  , command to launch the service if any
+type            , Type    , `host` | `interpreter`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Examples:
+
+- PHP configured for FastCGI through Unix socket
++
+----
+source!1!env!PHP_FCGI_CHILDREN = 5
+source!1!host = /tmp/cherokee-php.sock
+source!1!interpreter = /usr/bin/php-cgi -b /tmp/cherokee-php.sock
+source!1!nick = php
+source!1!type = interpreter
+----
+
+- Or via `host:port` as remote host:
++
+----
+source!1!host = localhost:1234
+source!1!interpreter = /usr/bin/php-cgi -b /tmp/cherokee-php.sock
+source!1!type = host
+----
+
+Balancers
+~~~~~~~~~
+The balancers must define the information sources to be used. For the
+ones defined in the examples above, using round robin from within the
+FastCGI handler, the following example would apply.
+
+Example:
++
+----
+vserver!10!rule!600!handler = fcgi
+vserver!10!rule!600!handler!balancer = round_robin
+vserver!10!rule!600!handler!balancer!source!1 = 1
+vserver!10!rule!600!match = extensions
+vserver!10!rule!600!match!extensions = php
+vserver!10!rule!600!match!final = 1
 ----
 
 Inclusion of Configuration

@@ -1,4 +1,10 @@
 2008-09-15  Taher Shihadeh  <taher@unixwars.com>
+	* doc/config_advanced.txt, doc/modules_encoders_gzip.txt,
+	doc/config_general.txt, doc/index.txt, doc/dev_cherokee.conf.txt,
+	doc/config_virtual_servers_rule.txt, doc/modules_encoders.txt:
+	Changes until r1949 reflected.
+
+2008-09-15  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/PageStatus.py, admin/ModuleBalancer.py,
 	admin/PageInfoSource.py: minimal fixes + help updates.

@@ -14,6 +14,19 @@ start tweaking things here.
 
 image::media/images/admin_advanced.png[Cherokee Admin interface]
 
+Connections managment
+~~~~~~~~~~~~~~~~~~~~~
+* KeepAlive:
+  Enables the global keep-alive support for the client requests. It
+  increases the client performance by reusing a connection for more
+  than one request. It should most probably be turned on.
+
+* Max keepalive reqs:
+  Upper limit to be managed by each keepalive connection.
+
+* Chunked encoding:
+  Enabled by default to try to keep enabled Keep-Alive.
+
 System tweaking
 ~~~~~~~~~~~~~~~
 * Thread Number:

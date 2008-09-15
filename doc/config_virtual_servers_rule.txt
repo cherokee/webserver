@@ -15,11 +15,31 @@ This menu offers the following tabs:
    an independent section of the documentation to explain things named
    link:config_virtual_servers_hanlder.html[Handler Options].
 
+ . Encoding: to manage the compression of the contents to be sent.
+
  . Expiration: to manage the configuration of *HTTP Cache headers*
    used to identify cacheable content.
 
  . Security: in this section one can configure *Access Restrictions*
    and *Authentication*.
+
+Encoding
+~~~~~~~~
+The content sent by Cherokee can be encoded or not.
+This tab is used to configure, on a per-rule basis,  what
+link:modules_encoders.htm[encoders], if any, are to be applied.
+
+You can set up the encoding method to use, and it shall be applied to
+whatever content is handled by the parent rule.
+
+image::media/images/admin_encoding.png[Available encoders]
+
+Whenever you set up a virtual server, a rule is created where
+link:modules_encoders_gzip.html[gzip] is enabled by default for the
+following file types: `html`, `htm`, `txt`, `css` and `js`.
+
+You are encouraged to use this. Hardware is cheap. Bandwidth is not.
+
 
 Expiration
 ~~~~~~~~~~

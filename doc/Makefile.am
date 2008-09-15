@@ -31,7 +31,6 @@ config_quickstart.html \
 config_general.html \
 config_virtual_servers.html \
 config_virtual_servers_rule.html \
-config_encoding.html \
 config_icons.html \
 config_mime_types.html \
 config_advanced.html \
@@ -91,8 +90,6 @@ docmediaimages_DATA = \
 media/images/admin_advanced.png \
 media/images/admin_behaviour.png \
 media/images/admin_dirlist_cherokee.png \
-media/images/admin_encoding_gzip.png \
-media/images/admin_encoding.png \
 media/images/admin_general.png \
 media/images/admin_info_sources.png \
 media/images/admin_handler_admin.png \
