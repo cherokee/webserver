@@ -21,10 +21,14 @@ TABLE_JS = """
 </script>
 """
 
+HELPS = [
+    ('config_info_sources', "Info Sources")
+]
+
 class PageInfoSource (PageMenu, FormHelper):
     def __init__ (self, cfg):
         FormHelper.__init__ (self, 'source', cfg)
-        PageMenu.__init__ (self, 'source', cfg)
+        PageMenu.__init__ (self, 'source', cfg, HELPS)
         self.submit_url = '/source/'
 
     def _op_handler (self, uri, post):

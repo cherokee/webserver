@@ -42,8 +42,7 @@ Examples
 ~~~~~~~~
 
 This is a pretty common example. It defines a directory called `cgi`
-which points to a path out of the Sever root directory where the
+that points to a path out of the Sever root directory where the
 CGI programs are located.
 
 image::media/images/admin_handler_cgi.png[CGI]
-

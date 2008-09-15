@@ -11,9 +11,9 @@ reduced overhead. It is basically the same thing as CGI but *much
 faster*.
 
 This module accepts all the general
-link:modules_handlers_cgi.html[CGI] parameters. Aside, it needs a
-balancer to be configured. It is the piece of configuration that
-points the handler where to find the FastCGI servers.
+link:modules_handlers_cgi.html[CGI] parameters. It needs a balancer to
+be configured besides that. It is the piece of configuration that
+points to the handler where to find the FastCGI servers.
 
 For most of the cases there will be only one FastCGI server though. In
 that scenario the way to go would be to configure the handler to use a
@@ -25,23 +25,15 @@ Parameters
 ~~~~~~~~~~
 
 To set up the general gateway options, read about the common
-parameters shared with the link:modules_handlers_cgi.html[CGI] handler.
+parameters shared with the link:modules_handlers_cgi.html[Common CGI
+options] handler. All of them apply with the exception of `Check
+file`, which will only be present if the manager is handling an
+extension.
 
-To set up the balancing options read the
+To set up the FastCGI specifics, read the
 link:modules_balancers.html[Balancers] section for general information
 and the link:modules_balancers_round_robin.html[Round robin] section
-for specifics.
-
-
-Unix Sockets
-~~~~~~~~~~~~
-
-Note that the FastCGI and SCGI handlers can directly use Unix
-sockets. You only have to specify a full path to the socket instead of
-the `host:port`.
-
-For instance an entry such as something like `/var/tmp/socket-tmp.1`
-should get everything to simply work it that was the correct path.
+for more details.
 
 
 Examples
@@ -50,6 +42,8 @@ Refer to the link:cookbook.html[Cookbook] if you want specific
 examples on how to configure this
 handler. The recipe about link:cookbook_php.html[setting up PHP] is a
 good starting point.
+
+image::media/images/admin_handler_fastcgi1.png[FastCGI]
 
 
 Note for developers

@@ -1,3 +1,19 @@
+2008-09-15  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/PageStatus.py, admin/ModuleBalancer.py,
+	admin/PageInfoSource.py: minimal fixes + help updates.
+
+	* doc/media/images/admin_handler_fastcgi1.png,
+	doc/media/images/admin_handler_cgi.png,
+	doc/media/images/admin_handler_fastcgi2.png,
+	doc/media/images/admin_info_sources.png: screenshots needed a
+	refresh.
+
+	* doc/config.txt, doc/modules_handlers_cgi.txt,
+	doc/cookbook_php.txt, doc/modules_handlers_fcgi.txt,
+	doc/modules_balancers.txt, doc/config_info_sources.txt,
+	doc/config_status.txt: changes were not reflected since r1915.
+
 2008-09-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/server.py, admin/Page.py, admin/PageAppServers.py,

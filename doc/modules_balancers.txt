@@ -23,29 +23,11 @@ These handlers can be chosen within the
 `Handler` tab of the link:config_virtual_servers_rule.html[Rule
 Options] section.
 
-When a specific balancing strategy is selected, there are two possible
-settings as *information sources*:
-
-. *Remote*: Cherokee will simply dispatch the request to the specified
-  host. As many hosts as needed can be added, and Cherokee will simply
-  apply the balancing strategy among them. If for any reason the
-  requests made to these hosts could not be performed, the processes
-  would simply fail.
-
-. *Local*: As before, many hosts can be specified (despite the name,
-  the selection is not limited to the localhost). This works the same
-  way as the previous option. But in this case, if a request cannot be
-  responded then instead of failing directly a specified command would
-  be launched before reconnecting to try again. Te most common use of
-  this would be launching the service that should handle the request,
-  but it is a flexible mechanism that in theory could allow you to
-  reroute the information to allo you to serve SSH sessions via your
-  webserver or any other neat tricks you can think about.
-
-Note that because of Cherokee's flexibility and modularity, sometimes
-and deppending of the situation one or the other setting might not
-make much sense. In such ocasions `cherokee-admin` will simply hide
-whatever options do not apply.
+Every balancing strategy is used to manage one or more
+link_config_info_sources.html[information sources], so at least one
+has to be added to the pool managed by the balancer. To do this,
+simply choose among the available sources in the `Assign Info
+Sources`.
 
 This is the list of currently supported balancing strategies:
 

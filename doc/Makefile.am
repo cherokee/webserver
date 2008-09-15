@@ -35,6 +35,8 @@ config_encoding.html \
 config_icons.html \
 config_mime_types.html \
 config_advanced.html \
+config_info_sources.html \
+config_status.html \
 cookbook.html \
 cookbook_managing_logs.html \
 cookbook_optimizations.html \
@@ -92,6 +94,7 @@ media/images/admin_dirlist_cherokee.png \
 media/images/admin_encoding_gzip.png \
 media/images/admin_encoding.png \
 media/images/admin_general.png \
+media/images/admin_info_sources.png \
 media/images/admin_handler_admin.png \
 media/images/admin_handler_cgi.png \
 media/images/admin_handler_custom_error.png \

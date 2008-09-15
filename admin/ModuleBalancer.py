@@ -5,8 +5,8 @@ from Module import *
 from consts import *
 
 NOTE_BALANCER      = 'Allow to select how the connections will be dispatched.'
-NO_GENERAL_SOURCES = 'There is none Application Servers configured. Please proceed to configure an <a href="/appserver">Application Server</a>.'
-NO_SOURCE_WARNING  = 'A load balancer must be confired to use a bare minimum of a single data source. Please, proceed to add at least an one.'
+NO_GENERAL_SOURCES = 'There are no Information Sources configured. Please proceed to configure an <a href="/source">Info Source</a>.'
+NO_SOURCE_WARNING  = 'A load balancer must be configured to use a bare minimum of a single data source. Please, proceed to add at least one.'
 
 class ModuleBalancerGeneric (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url, name):
@@ -52,7 +52,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
         txt += '<h2>Assign Info Sources</h2>'
         if not general_left:
             txt += 'It is already balancing among all the configured ' + \
-                   '<a href="/appserver">information sources</a>.'
+                   '<a href="/source">information sources</a>.'
         else:
             options = [('', 'Choose..')]
             for s in general_left:
@@ -61,9 +61,9 @@ class ModuleBalancerGeneric (Module, FormHelper):
 
             table = TableProps()
             self.AddPropOptions (table, "Application Server",
-                                 "new_balancer_node", options, "lalalala")
+                                 "new_balancer_node", options, "")
             txt += str(table)
-                                     
+
         return txt
 
     def _op_apply_changes (self, uri, post):

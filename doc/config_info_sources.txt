@@ -1,0 +1,59 @@
+== link:index.html[Index] -> link:config.html[Configuration]
+
+Information Sources
+-------------------
+
+Every information source to be used by the web server is configured
+only once in this section. After that, any virtual server will be able
+to use as many as desired without having to set up the same thing over
+and over again for every one of the virtual servers.
+
+There are two possible settings as *information sources*:
+
+. *Remote*: Cherokee will simply dispatch the request to the specified
+  host. As many hosts as needed can be added, and Cherokee will simply
+  apply the balancing strategy to which the information source is
+  asinged among them. If for any reason the requests made to these
+  hosts could not be performed, the processes would simply fail.
+
+. *Local*: As before, many hosts can be specified (despite the name,
+  the selection is not limited to the localhost). This works the same
+  way as the previous option. But in this case, if a request cannot be
+  responded then instead of failing directly a specified command would
+  be launched before reconnecting to try again. The most common use of
+  this would be launching the service that should handle the request,
+  but it is a flexible mechanism that in theory could allow you to
+  reroute the information to allow you to serve SSH sessions via your
+  webserver or any other neat tricks you can think of.
+
+
+Note that because of Cherokee's flexibility and modularity, sometimes
+and deppending of the situation one or the other setting might not
+make much sense. In such ocasions `cherokee-admin` will simply hide
+whatever options do not apply.
+
+image::media/images/admin_info_sources.png[Info Sources]
+
+Unix Sockets
+~~~~~~~~~~~~
+
+Note that information sources can be adressed by host:port or directly
+through Unix sockets. You only have to specify a full path to the
+socket instead of the `host:port`.
+
+For instance an entry such as `/var/tmp/socket-tmp.1` should get
+everything to simply work it that was the correct path.
+
+
+Further insight
+~~~~~~~~~~~~~~~
+
+This is the list of currently supported balancing strategies:
+
+* link:modules_balancers_round_robin.html[Round Robin]
+
+And these are the handlers that use balancing:
+
+* link:modules_handlers_fcgi.html[FastCGI]
+* link:modules_handlers_scgi.html[SCGI]
+* link:modules_handlers_mirror.html[Generic balancer]

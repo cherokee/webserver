@@ -35,9 +35,13 @@ SERVER_NOT_RUNNING = """
 </div>
 """
 
+HELPS = [
+    ('config_status', "Status")
+]
+
 class PageStatus (PageMenu, FormHelper):
     def __init__ (self, cfg=None):
-        PageMenu.__init__ (self, 'status', cfg, [])
+        PageMenu.__init__ (self, 'status', cfg, HELPS)
         FormHelper.__init__ (self, 'status', cfg)
 
     def _op_render (self):

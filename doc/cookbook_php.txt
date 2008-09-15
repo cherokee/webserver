@@ -34,7 +34,6 @@ unset, PHP will take the default value (500), after which it will be
 restarted. It is generally a good idea to let PHP be restarted to free
 up resources and possible memory leaks.
 
-
 Note that only FastCGI-enabled binaries of PHP will work with the
 FastCGI handler. Many prepackaged versions already enable this by
 default. If yours does not, you will need to build a suitable
