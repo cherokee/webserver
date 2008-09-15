@@ -47,7 +47,7 @@ PageVServer.py \
 PageVServers.py \
 PageError.py \
 PageFeedback.py \
-PageAppServers.py \
+PageInfoSource.py \
 Table.py \
 Theme.py \
 RuleList.py \
