@@ -1,5 +1,11 @@
 2008-09-15  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/ModuleCgi.py, admin/ModuleScgi.py, admin/ModuleFcgi.py:
+	The 'check file' option is still useful when the handler manages
+	an extension. (A few days ago I removed them completelly from the
+	FastCGI and SCGI configuration pages). Now it is displayed only
+	hidden when a directory is being configured.
+
 	* cherokee/server.c (set_server_fd_socket_opts): TCP_DEFER_ACCEPT
 	should be set in the TCP level rather than in the SOCKET level.
 	Additionally, it ought not to check whether it success, it's fine

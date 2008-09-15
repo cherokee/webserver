@@ -19,10 +19,11 @@ class ModuleScgi (ModuleCgiBase):
     def __init__ (self, cfg, prefix, submit):
         ModuleCgiBase.__init__ (self, cfg, prefix, 'scgi', submit)
 
-        self.fixed_check_file   = "0"
         self.show_script_alias  = False
         self.show_change_uid    = False
         self.show_document_root = False
+
+        self._util__set_fixed_check_file()
 
     def _op_render (self):
         txt = ModuleCgiBase._op_render (self)
