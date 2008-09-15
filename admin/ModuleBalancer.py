@@ -34,7 +34,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
         if not balancer_sources:
             txt += self.Dialog(NO_SOURCE_WARNING, type_='warning')
         else:
-            txt += '<h2>Application servers</h2>'
+            txt += '<h2>Info Sources</h2>'
             table = Table(3,1, style='width="100%"')
             table += ('Nick', 'Host', '')
             for sb in balancer_sources:
@@ -49,10 +49,10 @@ class ModuleBalancerGeneric (Module, FormHelper):
                 table += (nick, host, link_del)
             txt += str(table)
 
-        txt += '<h2>Assign Aplication Servers</h2>'
+        txt += '<h2>Assign Info Sources</h2>'
         if not general_left:
             txt += 'It is already balancing among all the configured ' + \
-                   '<a href="/appserver">application servers</a>.'
+                   '<a href="/appserver">information sources</a>.'
         else:
             options = [('', 'Choose..')]
             for s in general_left:
