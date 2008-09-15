@@ -482,8 +482,7 @@ set_server_fd_socket_opts (int socket)
 	 */
 #ifdef TCP_DEFER_ACCEPT
 	on = 5;
-	re = setsockopt (socket, SOL_SOCKET, TCP_DEFER_ACCEPT, &on, sizeof(on));
-	if (re != 0) return ret_error;
+	setsockopt (socket, SOL_TCP, TCP_DEFER_ACCEPT, &on, sizeof(on));
 #endif
 
 	/* TODO:
