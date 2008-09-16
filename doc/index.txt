@@ -1,4 +1,4 @@
-== link:index.html[Index]: Cherokee 0.8 documentation
+== link:index.html[Index]: Cherokee 0.9 documentation
 
 *********************************
 link:basics.html[Getting started]: Cherokee basics
@@ -69,6 +69,7 @@ link:modules.html[Modules]: Information about the standard modules.
     - link:modules_handlers_fcgi.html[FastCGI]: Fast Common Gateway Interface.
     - link:modules_handlers_scgi.html[SCGI]: Simple Common Gateway Interface.
     - link:modules_handlers_server_info.html[Server Info]: Provide info about Cherokee.
+    - link:modules_handlers_dbslayer.html[Data Base bridge]: MySQL over HTTP bridge.
     - link:modules_handlers_mirror.html[Generic balancer]: Load balancing module.
     - link:modules_handlers_admin.html[Remote Administration]: Cherokee administration handler.
   . link:modules_validators.html[Validators]: Authentication mechanisms.

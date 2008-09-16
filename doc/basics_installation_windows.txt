@@ -8,7 +8,7 @@ link:http://www.cherokee-project.com/download/windows[Windows
 download] section of the Cherokee Project website.
 
 WARNING: The Windows build is currently broken. It will be fixed as
-soon as possible.  A Windows binary release will be available too.
+soon as possible. A Windows binary release will be available too.
 
 Quickstart
 ~~~~~~~~~~
@@ -140,6 +140,7 @@ Parameter,             Description
 `--disable-tls`      , Disable TLS/SSL support
 `--enable-tls=`      , gnutls|openssl
 `--enable-trace`     , Allows debugging options
+`--disable-admin`    , Stops cherokee-admin from installing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Autostart

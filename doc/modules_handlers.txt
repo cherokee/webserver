@@ -22,6 +22,7 @@ This is the list of standard handlers provided by Cherokee:
 * link:modules_handlers_scgi.html[scgi] - **SCGI Server Support**.
 * link:modules_handlers_server_info.html[Server Info] - **Server
   Info**.
+* link:modules_handlers_dbslayer.html[Data Base bridge]: MySQL over HTTP bridge.
 * link:modules_handlers_mirror.html[Generic balancer] - **Generic
   balancer**.
 * link:modules_handlers_admin.html[Remote Administration] - **Remote

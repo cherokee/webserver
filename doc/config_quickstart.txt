@@ -70,10 +70,9 @@ administration tool, so you will need system administrator rights.
 
 ----
 # cherokee-admin
-Cherokee Web Server 0.8.0 (Aug  6 2008): Listening on port 9090, TLS disabled,
-IPv6 disabled, using epoll, 1024 fds system limit, max. 507 connections,
-single thread, 1016 fds
-Server 0.8.0 running.. PID=19611
+Cherokee Web Server 0.9.0 (Sep 16 2008): Listening on port 9090, TLS disabled,
+IPv6 disabled, using epoll, 1024 fds system limit, max. 505 connections,
+single thread
 ----
 
 Now you can access the administration interface simply by opening your

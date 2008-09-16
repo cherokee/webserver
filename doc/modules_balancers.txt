@@ -24,7 +24,7 @@ These handlers can be chosen within the
 Options] section.
 
 Every balancing strategy is used to manage one or more
-link_config_info_sources.html[information sources], so at least one
+link:config_info_sources.html[information sources], so at least one
 has to be added to the pool managed by the balancer. To do this,
 simply choose among the available sources in the `Assign Info
 Sources`.

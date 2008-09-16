@@ -6,7 +6,7 @@
     - link:modules_encoders_gzip.html[gzip]: `gzip` compression.
     - link:modules_encoders_deflate.html[deflate]: `deflate` compression.
   . link:modules_handlers.html[Handlers]: Connection handling modules.
-    - link:modules_handlers_file.html[Static Content]: Send files..
+    - link:modules_handlers_file.html[Static Content]: Send files.
     - link:modules_handlers_dirlist.html[Only listing]: List directories.
     - link:modules_handlers_common.html[List & Send]: List directories and send files.
     - link:modules_handlers_redir.html[Redirection]: URL forwards and rewrites.
@@ -14,6 +14,7 @@
     - link:modules_handlers_fcgi.html[FastCGI]: Fast Common Gateway Interface.
     - link:modules_handlers_scgi.html[SCGI]: Simple Common Gateway Interface.
     - link:modules_handlers_server_info.html[Server Info]: Provide info about Cherokee.
+    - link:modules_handlers_dbslayer.html[Data Base bridge]: MySQL over HTTP bridge.
     - link:modules_handlers_mirror.html[Generic balancer]: Load balancing module.
     - link:modules_handlers_admin.html[Remote Administration]: Cherokee administration handler.
   . link:modules_loggers.html[Loggers]: Logging mechanisms.

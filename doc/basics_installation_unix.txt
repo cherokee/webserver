@@ -58,6 +58,7 @@ Parameter,             Description
 `--disable-tls`      , Disable TLS/SSL support
 `--enable-tls=`      , gnutls|openssl
 `--enable-trace`     , Allows debugging options
+`--disable-admin`    , Skips cherokee-admin installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Autostart

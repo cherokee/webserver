@@ -1,4 +1,20 @@
+2008-09-16  Taher Shihadeh  <taher@unixwars.com>
+
+	* doc/media/images/admin_advanced1.png,
+	doc/media/images/admin_advanced2.png,
+	doc/media/images/admin_handler_dbslayer.png added.
+
+	* doc/basics_installation.txtdoc/config_advanced.txt,
+	doc/basics_installation_windows.txt, doc/modules_balancers.txt,
+	doc/dev_debug.txt, doc/modules_handlers.txt,
+	doc/basics_why_cherokee.txt, doc/config_general.txt,
+	doc/index.txt, doc/config_quickstart.txt,
+	doc/cookbook_optimizations.txt, doc/dev_cherokee.conf.txt,
+	doc/modules.txt, doc/basics_installation_svn.txt,
+	doc/basics_installation_unix.txt: documentation is up to date once more.
+
 2008-09-15  Taher Shihadeh  <taher@unixwars.com>
+
 	* doc/config_advanced.txt, doc/modules_encoders_gzip.txt,
 	doc/config_general.txt, doc/index.txt, doc/dev_cherokee.conf.txt,
 	doc/config_virtual_servers_rule.txt, doc/modules_encoders.txt:
@@ -106,7 +122,7 @@
 	* admin/ModuleDbslayer.py (ModuleDbslayer._op_apply_changes): Add
 	the cherokee-admin module for the new DBSlayer handler.
 
-	* cherokee/handler_dbslayer.h, cherokee/handler_dbslater.c,
+	* cherokee/handler_dbslayer.h, cherokee/handler_dbslayer.c,
 	cherokee/dwriter.c, cherokee/dwrite.h, configure.in,
 	cherokee/Makefile.am: Adds our brand new data base
 	bridge/serializer/balancer.

@@ -33,17 +33,23 @@ And then you'll be able to execute gdb, cgdb, gdbtui..
 ----
 +
 This will let you trace the behavior with a human-readable output.
++
+Note that by enabling tracing you will be making Cherokee a lot
+slower. Keep this in mind when deploying in production environments.
++
 Now, when you are going to launch the web server, just add the
 CHEROKEE_TRACE variable, with the desired options:
 +
 ****
 cherokee# CHEROKEE_TRACE="common" cherokee
 
-Cherokee Web Server 0.8.0 (July 21 2008): Listening on port 80, TLS disabled
+Cherokee Web Server 0.9.0 (Sep 16 2008): Listening on port 80, TLS disabled,
 
-IPv6 enabled, using epoll, 1024 fds system limit, max. 507 connections
+IPv6 enabled, using epoll, 1024 fds system limit, max. 505 connections, 10
 
-5 threads, 206 fds per thread, standard scheduling policyhandler_common.c:0143 (                     stat_file): /var/www//images/powered_by_cherokee.png, use_iocache=0 re=0
+threads, 50 connections per thread, standard scheduling policy
+
+handler_common.c:0143 (                     stat_file): /var/www//images/powered_by_cherokee.png, use_iocache=0 re=0
 
 handler_common.c:0190 (   cherokee_handler_common_new): request: '/images/powered_by_cherokee.png', local: '/var/www//images/powered_by_cherokee.png', exists 1
 

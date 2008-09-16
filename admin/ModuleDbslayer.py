@@ -13,10 +13,10 @@ LANG_OPTIONS = [
     ('ruby',   'Ruby')
 ]
 
-NOTE_LANG = "Language from which the information will be consumed"
+NOTE_LANG = "Language from which the information will be consumed."
 NOTE_USER     = "User to access the database."
 NOTE_PASSWORD = "Password for the user accessing the database."
-NOTE_DB       = "Optionally specifies a data base to connect to."
+NOTE_DB       = "Optionally specifies a database to connect to."
 
 HELPS = [
     ('modules_handlers_dbslayer', "MySQL balancing")
@@ -63,6 +63,6 @@ class ModuleDbslayer (ModuleHandler):
             name = cfg.value
             props = module_obj_factory (name, self._cfg, pre, self.submit_url)
             props._op_apply_changes (uri, post)
-        
+
         # And apply the rest
         self.ApplyChangesPrefix (self._prefix, [], post)

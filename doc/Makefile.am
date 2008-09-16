@@ -53,6 +53,7 @@ modules_encoders_gzip.html \
 modules_encoders_deflate.html \
 modules_handlers.html \
 modules_handlers_file.html \
+modules_handlers_dbslayer.html \
 modules_handlers_dirlist.html \
 modules_handlers_custom_error.html \
 modules_handlers_common.html \
@@ -87,7 +88,8 @@ media/css/cherokee_doc.css
 
 docmediaimagesdir = $(docdir)/media/images/
 docmediaimages_DATA = \
-media/images/admin_advanced.png \
+media/images/admin_advanced1.png \
+media/images/admin_advanced2.png \
 media/images/admin_behaviour.png \
 media/images/admin_dirlist_cherokee.png \
 media/images/admin_general.png \
@@ -102,6 +104,7 @@ media/images/admin_handler_fastcgi2.png \
 media/images/admin_handler_file.png \
 media/images/admin_handler_onlylisting_ex.png \
 media/images/admin_handler_onlylisting.png \
+media/images/admin_handler_dbslayer.png \
 media/images/admin_icons1.png \
 media/images/admin_icons2.png \
 media/images/admin_icons3.png \
