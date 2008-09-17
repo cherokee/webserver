@@ -26,4 +26,4 @@ There are several ways you can run Cherokee:
   and launch Cherokee. This is probably where you want to start if you
   have just installed the web server. Launch the
   link:bundle_cherokee_admin.html[`cherokee-admin`] process and follow the
-  link:config_walkthrough.html[Walktrhough] section of the documentation.
+  link:config_quickstart.html[Quickstart] section of the documentation.
