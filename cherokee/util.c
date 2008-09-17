@@ -1436,14 +1436,13 @@ cherokee_iovec_skip_sent (struct iovec *orig, uint16_t  orig_len,
 	int    i;
  	int    j      = 0;
 	size_t total  = 0;
-	int    add    = 0;
 
 	for (i=0; i<orig_len; i++) {
 		if (sent >= total + orig[i].iov_len) {
 			/* Already sent */
 			total += orig[i].iov_len;
 
-		} else if (add) {
+		} else if (j > 0) {
 			/* Add the whole thing */
 			dest[j].iov_len  = orig[i].iov_len;
 			dest[j].iov_base = orig[i].iov_base;
@@ -1454,7 +1453,6 @@ cherokee_iovec_skip_sent (struct iovec *orig, uint16_t  orig_len,
 			dest[j].iov_len  = orig[i].iov_len  - (sent - total);
 			dest[j].iov_base = orig[i].iov_base + (sent - total);
 			j++;
-			add = 1;
 		}
 	}
 
@@ -1471,7 +1469,7 @@ cherokee_iovec_was_sent (struct iovec *orig, uint16_t orig_len, size_t sent)
 
 	for (i=0; i<orig_len; i++) {
 		total += orig[i].iov_len;
-		if (total >= sent) {
+		if (total > sent) {
 			return ret_eagain;
 		}
 	}
