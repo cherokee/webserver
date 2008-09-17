@@ -1,0 +1,37 @@
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_handlers.html[Handlers]
+
+Handler: Data Base bridge
+-------------------------
+
+This handler offers a lightweight database abstraction layer that
+will provide all the benefits of connection pooling. This in turn
+offer scalable advantages for high-load websites.
+
+The original implementation of
+link:http://code.nytimes.com/projects/dbslayer/[DBSlayer] was a MySQL to
+JSON over HTTP bridge that only supported GET requests. This handler
+outperforms any other implementation by far, works with POST requests and
+besides JSON the handler can also process Python, Ruby and PHP.
+
+image::media/images/admin_handler_dbslayer.png[DBSlayer]
+
+It also makes use of a link:modules_balancers.html[balancing strategy]
+to manage at least one link:config_info_sources.html[information
+source]: the MySQL server being bridged.
+
+Parameters
+^^^^^^^^^^
+
+[grid="rows"]
+``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameter                 , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+__user__                  , The MySQL user to authenticate as.
+__password__              , The MySQL user password to use.
+__db__                    , Optional. A MySQL database name.
+__lang__                  , Language from which the information will \
+                            be consumed: json | python | ruby | php
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Note that for this module to be correctly compiled, the MySQL database
+development files are required.

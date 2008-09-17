@@ -114,7 +114,6 @@ link:dev.html[Development info]
 ////////////////////////////////////////////////////
 Remaingin tasks:
 ----------------
-* <3> How to setup authenticated resources <cookbook_authentication.txt>
 * <5> How to manage logs  (make specific mention of usage of
       Cherokee-Tweak and log backers).
 * <6> How to manage security (SSL/TLS, certs, etc) <cookbook_ssl.txt>
