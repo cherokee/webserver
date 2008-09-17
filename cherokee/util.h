@@ -125,7 +125,7 @@ ret_t cherokee_iovec_skip_sent (struct iovec orig[], uint16_t  orig_len,
 				struct iovec dest[], uint16_t *dest_len,
 				size_t sent);
 
-int   cherokee_iovec_was_sent  (struct iovec orig[], uint16_t orig_len, size_t sent);
+ret_t cherokee_iovec_was_sent  (struct iovec orig[], uint16_t orig_len, size_t sent);
 
 /* Debug
  */

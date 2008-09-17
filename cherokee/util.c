@@ -1463,7 +1463,7 @@ cherokee_iovec_skip_sent (struct iovec *orig, uint16_t  orig_len,
 }
 
 
-int
+ret_t
 cherokee_iovec_was_sent (struct iovec *orig, uint16_t orig_len, size_t sent)
 {
 	int    i;
@@ -1472,9 +1472,9 @@ cherokee_iovec_was_sent (struct iovec *orig, uint16_t orig_len, size_t sent)
 	for (i=0; i<orig_len; i++) {
 		total += orig[i].iov_len;
 		if (total >= sent) {
-			return 0;
+			return ret_eagain;
 		}
 	}
 	
-	return 1;
+	return ret_ok;
 }
