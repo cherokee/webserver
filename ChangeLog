@@ -1,3 +1,8 @@
+2008-09-17  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/Module.py: fixed minibug that duplicated empty entry in
+	Handler list for PageEntry form.
+
 2008-09-16  Taher Shihadeh  <taher@unixwars.com>
 
 	* doc/media/images/admin_advanced1.png,
