@@ -1,5 +1,10 @@
 2008-09-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/macros.h, cherokee/main_worker.c, cherokee/main.c:
+	Fixes a infite loop when a wrong parameter was supplied to
+	cherokee (cherokee was relaunching the server worker with the same
+	wrong parameter).
+
 	* cherokee.conf.sample.pre: Cherokee is handling Keep-Alive way
 	much better nowadays. It's my believe that 15 seconds is a
 	reasonable timeout value for the upcoming version.

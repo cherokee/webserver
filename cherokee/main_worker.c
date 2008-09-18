@@ -237,7 +237,7 @@ print_help (void)
 		"Report bugs to " PACKAGE_BUGREPORT "\n");
 }
 
-static void
+static ret_t
 process_parameters (int argc, char **argv)
 {
 	int c;
@@ -279,14 +279,15 @@ process_parameters (int argc, char **argv)
 			break;
 		case 'V':
 			printf (APP_NAME " " PACKAGE_VERSION "\n" APP_COPY_NOTICE);
-			exit(0);
+			return ret_eof;
 		case 'h':
 		case '?':
 		default:
 			print_help();
-			exit(0);
+			return ret_eof;
 		}
 	}
+	return ret_ok;
 }
 
 
@@ -300,16 +301,20 @@ main (int argc, char **argv)
 	ret = cherokee_server_new (&srv);
 	if (ret < ret_ok) return 1;
 	
-	process_parameters (argc, argv);
-	
+	ret = process_parameters (argc, argv);
+	if (ret != ret_ok) 
+		exit (EXIT_OK_ONCE);
+
 	if (print_modules) {
 		cherokee_info_build_print (srv);
-		exit (ret_ok);
+		exit (EXIT_OK_ONCE);
 	}
 
 	if (just_test) {
 		ret = test_configuration_file();
-		exit (ret);
+		if (ret != ret_ok) 
+			exit(EXIT_ERROR);
+		exit (EXIT_OK_ONCE);
 	}
 
 	ret = common_server_initialization (srv);
@@ -325,5 +330,5 @@ main (int argc, char **argv)
 	if (config_file)
 		free (config_file);
 
-	return 0;
+	return EXIT_OK;
 }

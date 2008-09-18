@@ -193,12 +193,15 @@ process_wait (pid_t pid)
 				break;
 			else
 				continue;
-		else 
+		else
 			return ret_error;
 	}
 
 	if (WIFEXITED(exitcode)) {
 		int re = WEXITSTATUS(exitcode);
+
+		if (re == EXIT_OK_ONCE)
+			exit (EXIT_OK_ONCE);
 
 		/* Child terminated normally */ 
 		PRINT_MSG ("Server PID=%d exited re=%d\n", pid, re);
@@ -216,8 +219,6 @@ process_wait (pid_t pid)
 static void 
 signals_handler (int sig, siginfo_t *si, void *context) 
 {
-	int exitcode;
-
 	UNUSED(si);
 	UNUSED(context);
 
@@ -243,7 +244,7 @@ signals_handler (int sig, siginfo_t *si, void *context)
 
 	case SIGCHLD:
 		/* Child exited */
-		wait (&exitcode);
+		process_wait (pid);
 		break;
 		
 	default:
