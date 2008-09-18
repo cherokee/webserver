@@ -78,6 +78,7 @@ modules_validators_plain.html \
 other.html \
 other_faq.html \
 other_goodies.html \
+other_signals.html \
 dev.html \
 dev_debug.html \
 dev_cherokee.conf.html

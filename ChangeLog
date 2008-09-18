@@ -1,3 +1,8 @@
+2008-09-18  Taher Shihadeh  <taher@unixwars.com>
+
+        * doc/index.txt, doc/other_signals.txt, doc/other_faq.txt,
+        doc/other_goodies.txt: documentation updates.
+
 2008-09-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/macros.h, cherokee/main_worker.c, cherokee/main.c:
@@ -8,7 +13,7 @@
 	* cherokee.conf.sample.pre: Cherokee is handling Keep-Alive way
 	much better nowadays. It's my believe that 15 seconds is a
 	reasonable timeout value for the upcoming version.
-	
+
 2008-09-17  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Module.py: fixed minibug that duplicated empty entry in

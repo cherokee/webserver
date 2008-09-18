@@ -99,3 +99,13 @@ give it further consideration.
 Give Cherokee (SCGI|FastCGI) a try with your WSGI application.  We
 believe that besides fixing both the architectural and security flaws
 you will improve performance.
+
+=== I need to make an administration script: What signals are
+supported by Cherokee?
+
+The list is documented in the link:other_signals.html[Signals] entry.
+
+=== Is there a clean way of switching Cherokee to Maintenance mode?
+
+Check the link:cookbook.html[Cookbook], there is a
+link:cookbook_maintenance.html[recipe on the subject].

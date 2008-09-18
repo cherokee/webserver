@@ -117,3 +117,18 @@ restarted. Since the host info can be put in the SSL handshake, things
 will simply work as long as there is a web browser with SNI support at
 the other side. Currently every modern web browser supports this, and
 Cherokee has TLS SNI support for both the GNUTLS and OpenSSL backends.
+
+[[dbslayer]]
+Database load balancing
+~~~~~~~~~~~~~~~~~~~~~~~
+Ever heard of the *DB Access Layer*, AKA
+link:http://code.nytimes.com/projects/dbslayer/[DBSlayer]?
+
+In case you haven't, DBSlayer is a database abstraction and pooling
+layer designed to be simple to use (it's a DB abstraction layer for
+the web age built on top of HTTP and JSON).
+
+Well, Cherokee ships our very own
+link:modules_handlers_dbslayer.html[DBSlayer] handler that provides
+the fastest implementation in existence. It also provides several
+interesting enhancements.
