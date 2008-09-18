@@ -37,14 +37,14 @@ class PageInfoSource (PageMenu, FormHelper):
                 return self._apply_new_source (uri, post)
             else:
                 source = post.pop('source_num')
-                
-                if (post.get_val ('new_env_name') and 
+
+                if (post.get_val ('new_env_name') and
                     post.get_val ('new_env_value')):
                     self._apply_add_new_env_var(post, source)
 
                 self.ApplyChanges ([], post)
                 return "/%s/%s" % (self._id, source)
-        
+
         tmp = uri.split('/')
         if len(tmp) >= 2:
             source = tmp[1]
@@ -67,7 +67,7 @@ class PageInfoSource (PageMenu, FormHelper):
 
     def _apply_new_source (self, uri, post):
         nick  = post.pop ('tmp!new_source_nick')
-        tipe  = post.pop ('tmp!new_source_type')
+        type  = post.pop ('tmp!new_source_type')
         host  = post.pop ('tmp!new_source_host')
         inter = post.pop ('tmp!new_source_interpreter')
 
@@ -79,7 +79,7 @@ class PageInfoSource (PageMenu, FormHelper):
             prio = 1
 
         self._cfg['source!%d!nick'%(prio)]        = nick
-        self._cfg['source!%d!type'%(prio)]        = tipe
+        self._cfg['source!%d!type'%(prio)]        = type
         self._cfg['source!%d!host'%(prio)]        = host
         self._cfg['source!%d!interpreter'%(prio)] = inter
 
@@ -87,16 +87,16 @@ class PageInfoSource (PageMenu, FormHelper):
 
     def _render_source_details_env (self, s):
         txt = ''
-        
+
         envs = self._cfg.keys('source!%s!env'%(s))
         if envs:
             tmp = '<h3>Environment variables</h3>'
             table = Table(3, title_left=1, style='width="90%%"')
             for env in envs:
                 pre = 'source!%s!env!%s'%(s,env)
-                val = self.InstanceEntry(pre, 'text', size=25) 
+                val = self.InstanceEntry(pre, 'text', size=25)
                 js = "post_del_key('/ajax/update', '%s');"%(pre)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)                
+                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (env, val, link_del)
 
             tmp += self.Indent(table)
@@ -105,8 +105,8 @@ class PageInfoSource (PageMenu, FormHelper):
             txt += fo.Render(tmp)
 
         tmp = '<h3>Add new Environment variable</h3>'
-        name  = self.InstanceEntry('new_env_name',  'text', size=25) 
-        value = self.InstanceEntry('new_env_value', 'text', size=25) 
+        name  = self.InstanceEntry('new_env_name',  'text', size=25)
+        value = self.InstanceEntry('new_env_value', 'text', size=25)
 
         table = Table(3, 1, style='width="90%%"')
         table += ('Variable', 'Value', '')
@@ -122,24 +122,24 @@ class PageInfoSource (PageMenu, FormHelper):
     def _render_source_details (self, s):
         txt = ''
         nick = self._cfg.get_val('source!%s!nick'%(s))
-        tipe = self._cfg.get_val('source!%s!type'%(s))
+        type = self._cfg.get_val('source!%s!type'%(s))
 
         # Properties
         table = TableProps()
         self.AddPropOptions_Reload (table, 'Type','source!%s!type'%(s), SOURCE_TYPES, NOTE_TYPE)
-        self.AddPropEntry   (table, 'Nick',       'source!%s!nick'%(s), NOTE_NICK)
-        self.AddPropEntry   (table, 'Connection', 'source!%s!host'%(s), NOTE_HOST)
-        if tipe == 'interpreter':
+        self.AddPropEntry   (table, 'Nick',       'source!%s!nick'%(s), NOTE_NICK,req=True)
+        self.AddPropEntry   (table, 'Connection', 'source!%s!host'%(s), NOTE_HOST,req=True)
+        if type == 'interpreter':
             self.AddPropEntry (table, 'Interpreter', 'source!%s!interpreter'%(s), NOTE_INTERPRETER)
 
         tmp  = self.HiddenInput ('source_num', s)
         tmp += str(table)
-        
+
         fo = Form ("/%s"%(self._id), add_submit=False, auto=True)
         txt = fo.Render(tmp)
 
         # Environment variables
-        if tipe == 'interpreter':
+        if type == 'interpreter':
             tmp = self._render_source_details_env (s)
             txt += self.Indent(tmp)
 
@@ -147,13 +147,13 @@ class PageInfoSource (PageMenu, FormHelper):
 
     def _render_add_new (self):
         txt  = ''
-        tipe = self._cfg.get_val('tmp!new_source_type')
+        type = self._cfg.get_val('tmp!new_source_type')
 
         table = TableProps()
         self.AddPropOptions_Reload (table, 'Type',       'tmp!new_source_type', SOURCE_TYPES, NOTE_TYPE)
-        self.AddPropEntry          (table, 'Nick',       'tmp!new_source_nick', NOTE_NICK)
-        self.AddPropEntry          (table, 'Connection', 'tmp!new_source_host', NOTE_HOST)
-        if tipe == 'interpreter' or not tipe:
+        self.AddPropEntry          (table, 'Nick',       'tmp!new_source_nick', NOTE_NICK, req=True)
+        self.AddPropEntry          (table, 'Connection', 'tmp!new_source_host', NOTE_HOST,req=True)
+        if type == 'interpreter' or not type:
             self.AddPropEntry (table, 'Interpreter', 'tmp!new_source_interpreter', NOTE_INTERPRETER)
 
         txt += self.Indent(table)
@@ -173,12 +173,12 @@ class PageInfoSource (PageMenu, FormHelper):
             for s in self._cfg.keys('source'):
                 nick = self._cfg.get_val('source!%s!nick'%(s))
                 host = self._cfg.get_val('source!%s!host'%(s))
-                tipe = self._cfg.get_val('source!%s!type'%(s))
+                type = self._cfg.get_val('source!%s!type'%(s))
 
                 js = "post_del_key('/ajax/update', 'source!%s');"%(s)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
 
-                table += '<tr><td><a href="/%s/%s">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (self._id, s, nick, tipe, host, link_del)
+                table += '<tr><td><a href="/%s/%s">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (self._id, s, nick, type, host, link_del)
             table += '<tr><td colspan="4" align="center"><br/><a href="/%s">Add new</a></td></tr>' % (self._id)
             table += '</table>'
             txt += self.Indent(table)
@@ -196,8 +196,8 @@ class PageInfoSource (PageMenu, FormHelper):
             #
             tmp = "<h2>Add a new</h2>"
             tmp += self._render_add_new()
-        
-            fo1 = Form ("/%s"%(self._id), auto=False)
+
+            fo1 = Form ("/%s"%(self._id), add_submit=False) ##add_submit=True,autsubmit=False
             txt += fo1.Render(tmp)
 
         return txt

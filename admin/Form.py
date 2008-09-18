@@ -19,7 +19,7 @@ $(document).ready(function(event) {
     $("#auto input").each(function() {
       this.form.submit()
     });
-  });
+  }).validate();
 });
 </script>
 """
@@ -29,6 +29,7 @@ AUTOFORM_TEMPLATE = FORM_TEMPLATE.replace('<form','<form id="auto"') + AUTO_SUBM
 SUBMIT_BUTTON = """
 <input type="submit" %(submit_props)s />
 """
+
 DEFAULT_SUBMIT_VALUE= 'value="Submit"'
 
 class WebComponent:
@@ -54,7 +55,7 @@ class WebComponent:
         is_submit = post.get_val('is_submit')
 
         # Check the URL
-        parts = uri.split('/')[2:]        
+        parts = uri.split('/')[2:]
         if parts:
             ruri = '/' + '/'.join(parts)
         else:
@@ -78,7 +79,7 @@ class Form:
                 'content':      content,
                 'action':       self._action,
                 'method':       self._method}
-                
+
         if self._add_submit:
             keys['submit'] = SUBMIT_BUTTON
 
@@ -103,22 +104,22 @@ class FormHelper (WebComponent):
 
         self.errors      = {}
         self.submit_url  = None
-        
+
     def set_submit_url (self, url):
         self.submit_url = url
 
     def Indent (self, content):
         return '<div class="indented">%s</div>' %(content)
-        
+
     def Dialog (self, txt, type_='information'):
         return '<div class="dialog-%s">%s</div>' % (type_, txt)
 
     def HiddenInput (self, key, value):
         return '<input type="hidden" value="%s" id="%s" name="%s" />' % (value, key, key)
 
-    def InstanceEntry (self, cfg_key, tipe, **kwargs):
+    def InstanceEntry (self, cfg_key, type, **kwargs):
         # Instance an Entry
-        entry = Entry (cfg_key, tipe, self._cfg, **kwargs)
+        entry = Entry (cfg_key, type, self._cfg, **kwargs)
         txt = str(entry)
 
         # Check whether there is a related error
@@ -156,10 +157,10 @@ class FormHelper (WebComponent):
           open_tab = get_cookie('open_tab');
           if (open_tab) {
             settings['active'] = parseInt(open_tab);
-          } 
+          }
 
           jQuery("#tab_%s").Accordion(settings).change(
-            function (event, newHeader, oldHeader) { 
+            function (event, newHeader, oldHeader) {
               if (! newHeader) return;
               document.cookie = "open_tab=" + newHeader.attr("num");
           });
@@ -237,24 +238,24 @@ class FormHelper (WebComponent):
         js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, auto_wrap_id)
         kwargs['onChange'] = js
         name = self.AddPropOptions (table, title, cfg_key, options, comment, **kwargs)
-        
+
         # If there was no cfg value, pick the first
         if not name:
             name = options[0][0]
-        
+
         # Render active option
         if name:
             try:
                 # Inherit the errors, if any
                 kwargs['errors'] = self.errors
-                props_widget = module_obj_factory (name, self._cfg, cfg_key, 
+                props_widget = module_obj_factory (name, self._cfg, cfg_key,
                                                    self.submit_url, **kwargs)
                 render = props_widget._op_render()
             except IOError:
                 render = "Couldn't load the properties module: %s" % (name)
         else:
             render = ''
-        
+
         return render
 
     def AddTableOptions_Reload (self, table, title, cfg_key, options, **kwargs):
@@ -265,30 +266,30 @@ class FormHelper (WebComponent):
         auto_wrap_id = self._get_auto_wrap_id()
         js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, auto_wrap_id)
         name = self.AddTableOptions (table, title, cfg_key, options, onChange=js)
-        
+
         # If there was no cfg value, pick the first
         if not name:
             name = options[0][0]
-        
+
         # Render active option
         if name:
             try:
                 # Inherit the errors, if any
                 kwargs['errors'] = self.errors
-                props_widget = module_obj_factory (name, self._cfg, cfg_key, 
+                props_widget = module_obj_factory (name, self._cfg, cfg_key,
                                                    self.submit_url, **kwargs)
                 render = props_widget._op_render()
             except IOError:
                 render = "Couldn't load the properties module: %s" % (name)
         else:
             render = ''
-        
+
         return render
 
     def InstanceCheckbox (self, cfg_key, default=None, quiet=False):
         try:
             tmp = self._cfg[cfg_key].value.lower()
-            if tmp in ["on", "1", "true"]: 
+            if tmp in ["on", "1", "true"]:
                 value = '1'
             else:
                 value = '0'
@@ -306,7 +307,7 @@ class FormHelper (WebComponent):
                 entry = Entry (cfg_key, 'checkbox', quiet=quiet)
             else:
                 entry = Entry (cfg_key, 'checkbox', quiet=quiet)
-                
+
         return entry
 
     def AddTableCheckbox (self, table, title, cfg_key, default=None):
@@ -319,13 +320,13 @@ class FormHelper (WebComponent):
 
     def _error_add (self, key, wrong_val, msg):
         self.errors[key] = (msg, str(wrong_val))
-        
+
     def has_errors (self):
         return len(self.errors) > 0
 
     # Applying changes
     #
-    
+
     def Validate_NotEmpty (self, post, cfg_key, error_msg):
         try:
             cfg_val = self._cfg[cfg_key].value
@@ -335,7 +336,7 @@ class FormHelper (WebComponent):
         if not cfg_val and \
            not post.get_val(cfg_key):
             self._error_add (cfg_key, '', error_msg)
-    
+
     def ValidateChange_SingleKey (self, key, post, validation):
         for regex, tmp in validation:
             pass_cfg = False
@@ -386,7 +387,7 @@ class FormHelper (WebComponent):
         # Validate changes
         if validation:
             self._ValidateChanges (post, validation)
-        
+
         # Apply checkboxes
         for key in checkboxes:
             self.ApplyCheckbox (post, key)
@@ -403,7 +404,7 @@ class FormHelper (WebComponent):
                 if not value:
                     del (self._cfg[confkey])
                 else:
-                    self._cfg[confkey] = value        
+                    self._cfg[confkey] = value
 
     def ApplyChangesDirectly (self, post):
         for confkey in post:
@@ -417,8 +418,8 @@ class FormHelper (WebComponent):
             if not value:
                 del (self._cfg[confkey])
             else:
-                self._cfg[confkey] = value        
-        
+                self._cfg[confkey] = value
+
     def ApplyChangesPrefix (self, prefix, checkboxes, post, validation=None):
         checkboxes_pre = ["%s!%s"%(prefix, x) for x in checkboxes]
         return self.ApplyChanges (checkboxes_pre, post, validation)

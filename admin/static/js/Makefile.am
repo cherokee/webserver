@@ -5,7 +5,8 @@ jquery.easing.js \
 jquery.accordion.js \
 jquery-1.2.3.min.js \
 jquery.dimensions.js \
-jquery.tablednd.js
+jquery.tablednd.js \
+jquery.validate.js
 
 adminstaticdir = "$(datadir)/cherokee/admin/static/js"
 adminstatic_DATA = \

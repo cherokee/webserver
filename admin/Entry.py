@@ -11,6 +11,11 @@ class Entry:
         if not 'size' in kwargs:
             self._kwargs['size'] = 40
 
+        #Entries with req=True will be required by jQuery Form Validations
+        if 'req' in kwargs and kwargs['req']==True:
+            self._kwargs['class']='required'
+            del kwargs['req']
+
     def _init_value (self, cfg):
         try:
             value = cfg[self._name].value

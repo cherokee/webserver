@@ -130,7 +130,7 @@ function post_add_entry_key (url, entry_name, cfg_key)
 }
 
 
-function get_cookie (key) 
+function get_cookie (key)
 {
   var i = document.cookie.indexOf (key+'=');
   if (i < 0) return;

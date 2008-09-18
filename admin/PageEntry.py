@@ -41,14 +41,14 @@ class PageEntry (PageMenu, FormHelper):
     def _parse_uri (self, uri):
         assert (len(uri) > 1)
         assert ("rule" in uri)
-        
+
         # Parse the URL
         temp = uri.split('/')
         self._is_userdir = (temp[2] == 'userdir')
 
         if self._is_userdir:
             self._host        = temp[1]
-            self._prio        = temp[4]        
+            self._prio        = temp[4]
             self._priorities  = RuleList (self._cfg, 'vserver!%s!user_dir!rule'%(self._host))
             self._entry       = self._priorities[int(self._prio)]
             url = '/vserver/%s/userdir/rule/%s' % (self._host, self._prio)
@@ -156,7 +156,7 @@ class PageEntry (PageMenu, FormHelper):
 
         txt  = '<h1>%s</h1>' % (self._get_title (html=True))
         txt += self.InstanceTab (tabs)
-        form = Form (self.submit_url, auto=False)
+        form = Form (self.submit_url, add_submit=False) ##add_submit=True,autsubmit=False
         return form.Render(txt)
 
     def _get_handler_properties (self):
