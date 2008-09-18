@@ -152,7 +152,7 @@ class PageInfoSource (PageMenu, FormHelper):
         table = TableProps()
         self.AddPropOptions_Reload (table, 'Type',       'tmp!new_source_type', SOURCE_TYPES, NOTE_TYPE)
         self.AddPropEntry          (table, 'Nick',       'tmp!new_source_nick', NOTE_NICK, req=True)
-        self.AddPropEntry          (table, 'Connection', 'tmp!new_source_host', NOTE_HOST,req=True)
+        self.AddPropEntry          (table, 'Connection', 'tmp!new_source_host', NOTE_HOST, req=True)
         if type == 'interpreter' or not type:
             self.AddPropEntry (table, 'Interpreter', 'tmp!new_source_interpreter', NOTE_INTERPRETER)
 
@@ -197,7 +197,7 @@ class PageInfoSource (PageMenu, FormHelper):
             tmp = "<h2>Add a new</h2>"
             tmp += self._render_add_new()
 
-            fo1 = Form ("/%s"%(self._id), add_submit=False) ##add_submit=True,autsubmit=False
+            fo1 = Form ("/%s"%(self._id), auto=False)
             txt += fo1.Render(tmp)
 
         return txt
