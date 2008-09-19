@@ -1,0 +1,70 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Maintenance
+---------------------
+
+This recipe will show how to seamlessly switch the webserver to
+maintenance mode. By that it is understood that no existing
+connections should be interrupted, but new connections should be
+notified of the situation. This could be done serving some generic
+static content.
+
+All this is easily achieved by Cherokee thanks to its
+link:other_goodies.html#zero-downtime[Zero Downtime] mechanism.
+
+The steps are fairly simple:
+
+- Create a new virtual host, a copycat, that can handle the same
+  domain(s) as the ones managed by the host to be put offline.
++
+image::media/images/cookbook_maintenance_copy.png[Copycat]
+
+- Dont forget to set up the domains handled by the virtual host.
++
+image::media/images/cookbook_maintenance_domain.png[Domain]
+
+- Also remember setting up whatever response you will be requiring (a
+  custom error, some static content, and so on). We will be setting up
+  the link:modules_handlers_custom_error.html[HTTP error] handler to
+  give a `503: Service unavailable' message.
++
+image::media/images/cookbook_maintenance_error.png[HTTP Error]
++
+
+- After setting up this way our sole rule, it should look like this:
++
+image::media/images/cookbook_maintenance_rule.png[Rule]
+
+- Make sure the copycat is positioned above the original virtual host,
+  effectively having a higher priority for it. By default the new
+  virtual hosts are positioned on top of the rest. Just make sure you
+  don't inadvertedly change the relative priorities.
++
+image::media/images/cookbook_maintenance_result.png[Final result]
+
+- Make a *graceful restart*.
+
+By doing this, the existing connections to the original virtual host
+will be preserverd and will eventually end upon completion. At the
+same time, new requests will be delivered to its copycat and will be
+handled according to its specified behavior. If you don't want this
+behavior you can always make a *hard restart*, effectively shutting
+down every existing connection.
+
+By now you are almost done. Now you can make whatever changes were
+needed to the original host without affecting the incoming
+connections.
+
+Remember to reverse the process once you are done. You'll only have to
+delete the copycat or position it below the real virtual host.
+
+
+////
+Essential additions for this recipe to be useful:
+
+1. Show a static file instead of the 503 Error.
+
+2. Adding a new internal domain match to the original vhost to allow the
+   administrators and staff to view their changes reflected (while the
+   site is still in maintenance).
+////
