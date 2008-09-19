@@ -2,3 +2,4 @@
 
   - link:other_faq.html[FAQ]: List of Frequently Asked Questions.
   - link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.
+  - link:other_signals.html[Signals]: Signals supported by Cherokee.

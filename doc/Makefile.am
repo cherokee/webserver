@@ -45,6 +45,7 @@ cookbook_php.html \
 cookbook_ror.html \
 cookbook_authentication.html \
 cookbook_ssl.html \
+cookbook_maintenance.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -127,6 +128,11 @@ media/images/cookbook_ror_common.png \
 media/images/cookbook_ror_fcgi.png \
 media/images/cookbook_mysql_rule.png \
 media/images/cookbook_mysql_validator.png \
+media/images/cookbook_maintenance_copy.png \
+media/images/cookbook_maintenance_domain.png \
+media/images/cookbook_maintenance_error.png \
+media/images/cookbook_maintenance_result.png \
+media/images/cookbook_maintenance_rule.png \
 media/images/tracelor.png
 
 EXTRA_DIST = \
