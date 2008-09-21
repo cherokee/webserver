@@ -115,12 +115,20 @@ class PageVServers (PageMenu, FormHelper):
         sorted_vservers.sort(reverse=True)
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr NoDrag="1" NoDrop="1"><th>Nickname</th><th>Document Root</th><th>Logging</th><th></th></tr>'
+        txt += '<tr NoDrag="1" NoDrop="1"><th>Nickname</th><th>Root</th><th>Domains</th><th>Logging</th><th></th></tr>'
 
         for prio in sorted_vservers:
             nick          = self._cfg.get_val('vserver!%s!nick'%(prio))
             document_root = self._cfg.get_val('vserver!%s!document_root'%(prio), '')
             logger_val    = self._cfg.get_val('vserver!%s!logger'%(prio))
+            domains       = self._cfg.keys('vserver!%s!domain'%(prio))
+
+            if not domains:
+                doms = 1
+            else:
+                doms = len(domains)
+                if not nick in domains:
+                    doms += 1
 
             link = '<a href="/vserver/%s">%s</a>' % (prio, nick)
             if nick == 'default':
@@ -139,8 +147,8 @@ class PageVServers (PageMenu, FormHelper):
             else:
                 link_del = ''
 
-            txt += '<tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (
-                prio, prio, extra, link, document_root, logging, link_del)
+            txt += '<tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%d</td><td>%s</td><td>%s</td></tr>' % (
+                prio, prio, extra, link, document_root, doms, logging, link_del)
 
         txt += '</table>'
         txt += '''
