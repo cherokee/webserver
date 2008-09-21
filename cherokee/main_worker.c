@@ -169,7 +169,8 @@ common_server_initialization (cherokee_server_t *srv)
 #endif
 
 	if (document_root != NULL) {
-		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+		cherokee_buffer_t tmp   = CHEROKEE_BUF_INIT;
+		cherokee_buffer_t droot = CHEROKEE_BUF_INIT;
 
 		/* Sanity check
 		 */
@@ -180,15 +181,20 @@ common_server_initialization (cherokee_server_t *srv)
 
 		/* Build the configuration string
 		 */
+		cherokee_buffer_add (&droot, document_root, strlen(document_root));
+		cherokee_path_arg_eval (&droot);
+
 		cherokee_buffer_add_va (&tmp, 
 					"server!port = %d\n"
 					"vserver!1!document_root = %s\n"
-					BASIC_CONFIG, port, document_root);
+					BASIC_CONFIG, port, droot.buf);
 
 		/* Apply it
 		 */
 		ret = cherokee_server_read_config_string (srv, &tmp);
+
 		cherokee_buffer_mrproper (&tmp);
+		cherokee_buffer_mrproper (&droot);
 
 		if (ret != ret_ok) {
 			PRINT_MSG ("Couldn't start serving directory %s\n", document_root);

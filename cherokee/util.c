@@ -948,7 +948,7 @@ cherokee_syslog (int priority, cherokee_buffer_t *buf)
 
 
 ret_t 
-cherokee_short_path (cherokee_buffer_t *path)
+cherokee_path_short (cherokee_buffer_t *path)
 {
 	char *p   = path->buf;
 	char *end = path->buf + path->len;
@@ -1010,6 +1010,28 @@ cherokee_short_path (cherokee_buffer_t *path)
 		end = path->buf + path->len;
 		p -= (len - (dots_end - p));
 	}
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_path_arg_eval (cherokee_buffer_t *path)
+{
+	ret_t  ret;
+	char  *d;
+	char   tmp[512];
+
+	if (path->buf[0] != '/') {
+		d = getcwd (tmp, sizeof(tmp));
+
+		cherokee_buffer_prepend (path, "/", 1);		
+		cherokee_buffer_prepend (path, d, strlen(d));		
+	}
+
+	ret = cherokee_path_short (path);
+	if (ret != ret_ok)
+		return ret_error;
 
 	return ret_ok;
 }

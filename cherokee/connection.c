@@ -1601,7 +1601,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	/* Short the path. It transforms the request:
 	 * /dir1/dir2/../file in /dir1/file
 	 */
-	cherokee_short_path (&conn->request);
+	cherokee_path_short (&conn->request);
 
 	/* Look for "//" 
 	 */
