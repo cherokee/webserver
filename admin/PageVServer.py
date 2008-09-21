@@ -39,8 +39,8 @@ NOTE_ACCESSES_ERRORS = 'Back-end used to store the log accesses and errors.'
 NOTE_WRT_FILE        = 'Full path to the file where the information will be saved.'
 NOTE_WRT_EXEC        = 'Path to the executable that will be invoked on each log entry.'
 
-NO_HANDLER   = "<i>No</i>"
-NO_VALIDATOR = "<i>No</i>"
+TXT_NO  = "<i>No</i>"
+TXT_YES = "<i>Yes</i>"
 
 HELPS = [
     ('config_virtual_servers', "Virtual Servers"),
@@ -278,7 +278,7 @@ class PageVServer (PageMenu, FormHelper):
         self._rule_table += 1
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th><th>Auth</th><th>Enc</th><th>Final</th></tr>'
+        txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th><th>Auth</th><th>Enc</th><th>Exp</th><th>Final</th></tr>'
 
         # Rule list
         for prio in priorities:
@@ -307,20 +307,23 @@ class PageVServer (PageMenu, FormHelper):
             if conf.get_val('handler'):
                 handler_name = self._get_handler_name (conf['handler'].value)
             else:
-                handler_name = NO_VALIDATOR
+                handler_name = TXT_NO
 
             if conf.get_val('auth'):
                 auth_name = self._get_auth_name (conf['auth'].value)
             else:
-                auth_name = NO_VALIDATOR
+                auth_name = TXT_NO
 
+            expiration = [TXT_NO, TXT_YES]['expiration' in conf.keys()]
+
+            encoders = TXT_NO
             if 'encoder' in conf.keys():
-                encoders = "yes"
-            else:
-                encoders = "no"
+                for k in conf['encoder'].keys():
+                    if int(conf.get_val('encoder!%s'%(k))):
+                        encoders = TXT_YES
 
-            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
-                prio, pre, prio, extra, link, name_type, handler_name, auth_name, encoders, final, link_del)
+            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
+                prio, pre, prio, extra, link, name_type, handler_name, auth_name, encoders, expiration, final, link_del)
 
         txt += '</table>\n'
         txt += '''
