@@ -278,7 +278,7 @@ class PageVServer (PageMenu, FormHelper):
         self._rule_table += 1
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th><th>Auth</th><th>Final</th></tr>'
+        txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th><th>Auth</th><th>Enc</th><th>Final</th></tr>'
 
         # Rule list
         for prio in priorities:
@@ -314,8 +314,13 @@ class PageVServer (PageMenu, FormHelper):
             else:
                 auth_name = NO_VALIDATOR
 
-            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
-                prio, pre, prio, extra, link, name_type, handler_name, auth_name, final, link_del)
+            if 'encoder' in conf.keys():
+                encoders = "yes"
+            else:
+                encoders = "no"
+
+            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
+                prio, pre, prio, extra, link, name_type, handler_name, auth_name, encoders, final, link_del)
 
         txt += '</table>\n'
         txt += '''
