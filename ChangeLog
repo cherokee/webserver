@@ -1,3 +1,9 @@
+2008-09-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.c (cherokee_socket_connect): Fixes an issues
+	spawaing the PHP interpreter. It was failing when it used a Unix
+	socket as entry point for accepting FastCGI connections.
+
 2008-09-22  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Makefile.am: ModuleCustomError was not being installed.

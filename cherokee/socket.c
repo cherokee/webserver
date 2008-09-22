@@ -1781,6 +1781,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		case EISCONN:
 			break;
 		case EINVAL:
+		case ENOENT:
 		case ECONNREFUSED:
 		case EADDRNOTAVAIL:
 			return ret_deny;
