@@ -19,8 +19,8 @@ echo "Content-Type: text/plain"
 echo 
 
 # echo adds a new line at the end, -n from bash
-python -c "import sys; sys.stdout.write('%s')"
-""" % (MAGIC)
+%s -c "import sys; sys.stdout.write('%s')"
+""" % (look_for_python(), MAGIC)
 
 class Test (TestBase):
     def __init__ (self):
