@@ -8,3 +8,4 @@
   . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
   . link:cookbook_authentication.html[Authentication]: How to set up authenticated resources.
   . link:cookbook_maintenance.html[Maintenance]: Seamlessly switching to maintenance mode.
+  . link:cookbook_redirs.html[Redirections]: Common redirection examples

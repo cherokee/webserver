@@ -1,3 +1,10 @@
+2008-09-22  Taher Shihadeh  <taher@unixwars.com>
+
+	* doc/cookbook_redirs.txt, doc/cookbook_maintenance.txt,
+	media/images/cookbook_redir*,
+	doc/media/images/cookbook_maintenance*, doc/cookbook_redirs.txt,
+	doc/other_community.txt: some new sections were suggested.
+
 2008-09-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/server.c (cherokee_server_step): It was taking the

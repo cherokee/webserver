@@ -46,6 +46,7 @@ cookbook_ror.html \
 cookbook_authentication.html \
 cookbook_ssl.html \
 cookbook_maintenance.html \
+cookbook_redirs.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -80,6 +81,7 @@ other.html \
 other_faq.html \
 other_goodies.html \
 other_signals.html \
+other_community.html \
 dev.html \
 dev_debug.html \
 dev_cherokee.conf.html
@@ -133,6 +135,9 @@ media/images/cookbook_maintenance_domain.png \
 media/images/cookbook_maintenance_error.png \
 media/images/cookbook_maintenance_result.png \
 media/images/cookbook_maintenance_rule.png \
+media/images/cookbook_redir_behavior.png \
+media/images/cookbook_redir_domains.png \
+media/images/cookbook_redir_handler.png \
 media/images/tracelor.png
 
 EXTRA_DIST = \

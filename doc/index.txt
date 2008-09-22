@@ -51,6 +51,7 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks.
   . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
   . link:cookbook_authentication.html[Authentication]: How to set up authenticated resources.
   . link:cookbook_maintenance.html[Maintenance]: Seamlessly switching to maintenance mode.
+  . link:cookbook_redirs.html[Redirections]: Common redirection examples
 ////
   . link:cookbook_embedding_cherokee.html[Embedding Cherokee]
   . link:cookbook_managing_logs.html[Managing logs]
@@ -97,9 +98,7 @@ link:other.html[Other information]: Miscellaneus.
   - link:other_faq.html[FAQ]: List of Frequently Asked Questions.
   - link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.
   - link:other_signals.html[Signals]: Signals supported by Cherokee.
-////
-  - Community
-////
+  - link:other_community.html[Community]: More information sources.
 
 *********************************
 link:dev.html[Development info]

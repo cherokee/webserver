@@ -1,0 +1,40 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Redirections
+----------------------
+
+Every now and then a redirection example is requested in the
+link:other_community.html[mailing list]. This recipe is meant to be a
+central archive of such examples. Remember there are some more generic
+examples both in the link:config_quickstart.html[quickstart] and in
+the link:modules_handlers_redir.html[redirection] handler sections.
+
+Redirecting www.example.net to example.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometimes a site will have several domains or subdomains pointing to
+the same official name. For whatever reasons (site statistics, for
+instance), having many subdomains redirected to a unique subdomain
+might be desireable. This can be accomplished farily easily. The
+general recipe consists in defining a virtual host with the sole
+purpose of redirecting petitions to the official subdomain. In our
+example, this could manage __*.example.net__ and the __.com__ and
+__.org__ variations.
+
+image::media/images/cookbook_redir_domains.png[Managed domains]
+
+The official name name would then be managed by another virtual host
+(just for __example.net__). The `redir` virtual host will have a
+`Default` managed by the `Redirection` handler.
+
+image::media/images/cookbook_redir_behavior.png[Unique rule]
+
+This in turn would define an *external redirection* with a *Regular
+Expression* like __^/(.*)$__ and the apropriate *Substitution*:
+http://example.net/$1
+
+image::media/images/cookbook_redir_handler.png[Handler configuration]
+
+Keep in mind the redirection has to be external in order for Cherokee
+to rewrite the the URL. If it wasn't, the redirection would be applied
+but no change would be displayed to the users while browsing the site.

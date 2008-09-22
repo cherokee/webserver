@@ -1,5 +1,8 @@
 == link:index.html[Index] -> link:other.html[Other information]
 
+Other: Signals
+--------------
+
 link:bundle_cherokee-admin.html[Cherokee-Admin] is all you need to
 interact with Cherokee. However, should you want to tap directly into
 the underlying communication mechanism you would need to send the
