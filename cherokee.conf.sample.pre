@@ -68,6 +68,7 @@ source!1!nick = php
 source!1!type = interpreter
 source!1!host = /tmp/cherokee-php.sock
 source!1!env!PHP_FCGI_CHILDREN = 5
+source!1!env!PHP_FCGI_MAX_REQUESTS = 2000
 source!1!interpreter = %phpcgi% -b /tmp/cherokee-php.sock
 
 # Icons

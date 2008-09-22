@@ -230,12 +230,6 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 		close (STDERR_FILENO);
 #endif
 
-#ifdef SIGCHLD
-		/* It does not want to wait for its child
-		 */
-		signal (SIGCHLD, SIG_IGN);
-#endif
-		
 		/* Doesn't care about it's output either.  It can fill
 		 * out the system buffers and free the interpreter.
 		 */
@@ -244,8 +238,13 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 			close (STDERR_FILENO);
 		}
 
-		argv[2] = (char *)tmp.buf;
+#ifdef SIGCHLD
+		/* Programs suck as PHP need the SIGCHLD 
+		 */
+		signal (SIGCHLD, SIG_DFL);
+#endif
 
+		argv[2] = (char *)tmp.buf;
 		re = execve ("/bin/sh", argv, envp);
 		if (re < 0) {
 			PRINT_ERROR ("ERROR: Could spawn %s\n", tmp.buf);
