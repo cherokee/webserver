@@ -1108,21 +1108,6 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 
 static void
-stop_threads (cherokee_server_t *srv)
-{
-	cherokee_list_t *i;
-
-	list_for_each (i, &srv->thread_list) {
-		THREAD(i)->exit = true;
-	}
-
-	list_for_each (i, &srv->thread_list) {
-		cherokee_thread_wait_end (THREAD(i));
-	}
-}
-
-
-static void
 flush_logs (cherokee_server_t *srv)
 {
 	cherokee_list_t   *i;
@@ -1145,6 +1130,8 @@ cherokee_server_stop (cherokee_server_t *srv)
 	if (srv == NULL)
 		return ret_ok;
 
+	srv->wanna_exit = true;
+
 	/* Close all connections
 	 */
 	close_all_connections (srv);
@@ -1152,10 +1139,6 @@ cherokee_server_stop (cherokee_server_t *srv)
 	/* Flush logs
 	 */
 	flush_logs (srv);
-
-	/* Stop all the threads (may be slow)
-	 */
-	stop_threads (srv);
 
 	return ret_ok;
 }
