@@ -17,7 +17,9 @@ CGI_CODE = """#!/bin/sh
 
 echo "Content-Type: text/plain"
 echo 
-echo -n "%s"
+
+# echo adds a new line at the end, -n from bash
+python -c "import sys; sys.stdout.write('%s')"
 """ % (MAGIC)
 
 class Test (TestBase):
