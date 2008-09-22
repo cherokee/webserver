@@ -81,6 +81,7 @@ ModuleDirectory.py \
 ModuleExtensions.py \
 ModuleGeoip.py \
 ModuleHeader.py \
+ModuleCustomError.py \
 config.py \
 pyscgi.py \
 validations.py \
