@@ -17,6 +17,10 @@ Shows brief usage information
 .B  \-V, --version
 Show version and exit
 .TP 8
+.B  \-x, --debug
+Print the backend errors to the terminal where it is executing. If
+omited, this debug information is lost.
+.TP 8
 .B  \-b, --bind[=IP]
 By default \fIcherokee-admin\fP binds only to 127.0.0.1 (localhost), which
 means you can only connect to it from the same system. With this parameter
@@ -36,7 +40,7 @@ Specifies an alternative port. By default, 9090.
 This program is a part of the Cherokee web server, \&\fIcherokee\fR\|(1)
 .SH AUTHOR
 This manual page was written by Gunnar Wolf <gwolf@debian.org>, for
-the Debian GNU/linux system (but may be used by others). Updated by
+the Debian GNU/linux system (but may be used by others). Maintainted by
 Taher Shihadeh <taher@unixwars.com>
 .PP
 Cherokee itself was written by Álvaro López Ortega

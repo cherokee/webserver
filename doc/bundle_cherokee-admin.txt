@@ -83,6 +83,11 @@ This is the full information provided by the manpage.
        -V, --version;;
                Show version and exit
 
+       -x, --debug;;
+
+               Print the backend errors to the terminal where it is executing.
+               If omited, this debug information is lost.
+
        -b, --bind[=IP];;
                By  default `cherokee-admin` binds only to 127.0.0.1 (localhost),
                which means you can only connect to it from  the  same  system.
