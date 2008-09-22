@@ -1,5 +1,12 @@
 2008-09-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/source_interpreter.c, cherokee/source_interpreter.h,
+	cherokee/main_admin.c: Adds a 'debug' mode to cherokee-admin.  It
+	helps to debug the administration back-end. If cherokee-admin is
+	executed with the -x parameter, it will print the backend errors
+	in the terminal when it was executed from, otherwise those errors
+	and debug information would be lost.
+
 	* cherokee/main.c (figure_worker_path): Now Cherokee uses the
 	cherokee-worker next to it (instead of the executable located at
 	the default system path).

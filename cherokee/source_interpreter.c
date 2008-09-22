@@ -48,6 +48,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 
 	n->custom_env     = NULL;
 	n->custom_env_len = 0;
+	n->debug          = false;
 
 	SOURCE(n)->type   = source_interpreter;
 	SOURCE(n)->free   = (cherokee_func_free_t)interpreter_free;
@@ -106,6 +107,9 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 		if (equal_buf_str (&child->key, "interpreter")) {
 			/* TODO: fix win32 path */
 			cherokee_buffer_add_buffer (&src->interpreter, &child->val);
+
+		} else if (equal_buf_str (&child->key, "debug")) {
+			src->debug = !! atoi (child->val.buf);
 
 		} else if (equal_buf_str (&child->key, "env")) {			
 			cherokee_config_node_foreach (j, child) {
@@ -235,8 +239,10 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 		/* Doesn't care about it's output either.  It can fill
 		 * out the system buffers and free the interpreter.
 		 */
-		close (STDOUT_FILENO);
-		close (STDERR_FILENO);
+		if (! src->debug) {
+			close (STDOUT_FILENO);
+			close (STDERR_FILENO);
+		}
 
 		argv[2] = (char *)tmp.buf;
 

@@ -37,6 +37,7 @@ typedef struct {
 	cherokee_buffer_t   interpreter;
 	char              **custom_env;
 	cuint_t             custom_env_len;
+	cherokee_boolean_t  debug;
 } cherokee_source_interpreter_t;
 
 #define SOURCE_INT(s)  ((cherokee_source_interpreter_t *)(s))

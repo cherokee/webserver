@@ -51,6 +51,7 @@ static int   port          = DEFAULT_PORT;
 static char *document_root = DEFAULT_DOCUMENTROOT;
 static char *config_file   = DEFAULT_CONFIG_FILE;
 static char *bind_to       = DEFAULT_BIND;
+static int   debug         = 0;
 
 static ret_t
 find_empty_port (int starting, int *port)
@@ -111,6 +112,9 @@ config_server (cherokee_server_t *srv)
 				 "source!1!interpreter = %s/server.py %d %s\n",
 				 scgi_port, document_root, scgi_port, config_file);
 
+	if (debug)
+		cherokee_buffer_add_str  (&buf, "source!1!debug = 1\n");
+
 	cherokee_buffer_add_str  (&buf, 
 				  RULE_PRE "1!match = default\n"
 				  RULE_PRE "1!handler = scgi\n"
@@ -162,6 +166,7 @@ print_help (void)
 		"Usage: cherokee-admin [options]\n\n"
 		"  -h,  --help                   Print this help\n"
 		"  -V,  --version                Print version and exit\n"
+		"  -x,  --debug                  Enables debug\n"
 		"  -b,  --bind[=IP]              Bind net iface; no arg means all\n"
 		"  -d,  --appdir=DIR             Application directory\n"
 		"  -p,  --port=NUM               TCP port\n"
@@ -177,6 +182,7 @@ process_parameters (int argc, char **argv)
 	struct option long_options[] = {
 		{"help",    no_argument,       NULL, 'h'},
 		{"version", no_argument,       NULL, 'V'},
+		{"debug",   no_argument,       NULL, 'x'},
 		{"bind",    optional_argument, NULL, 'b'},
 		{"appdir",  required_argument, NULL, 'd'},
 		{"port",    required_argument, NULL, 'p'},
@@ -184,7 +190,7 @@ process_parameters (int argc, char **argv)
 		{NULL, 0, NULL, 0}
 	};
 
-	while ((c = getopt_long(argc, argv, "hVb::d:p:C:", long_options, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "hVxb::d:p:C:", long_options, NULL)) != -1) {
 		switch(c) {
 		case 'b':
 			if (optarg)
@@ -200,6 +206,9 @@ process_parameters (int argc, char **argv)
 			break;
 		case 'C':
 			config_file = strdup(optarg);
+			break;
+		case 'x':
+			debug = 1;
 			break;
 		case 'V':
 			printf (APP_NAME " " PACKAGE_VERSION "\n" APP_COPY_NOTICE);
