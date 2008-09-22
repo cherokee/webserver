@@ -50,9 +50,14 @@ char               *cherokee_worker;
 static void
 figure_worker_path (const char *arg0)
 {
-	char  *d;
-	char   tmp[512];
-	int    len;
+	pid_t       me;
+	char        tmp[512];
+	int         len, re, i;
+	const char *d;
+	char       *unix_paths[] = {"/proc/%d/exe",        /* Linux   */
+				    "/proc/%d/path/a.out", /* Solaris */
+				    "/proc/%d/file",       /* BSD     */
+				    NULL};
 
 	/* Invoked with the fullpath */
 	if (arg0[0] == '/') {
@@ -64,11 +69,39 @@ figure_worker_path (const char *arg0)
 	}
 
 	/* Partial path work around */
-	d = getcwd (tmp, sizeof(tmp));
-	len = strlen(arg0) + strlen(d) + sizeof("-worker") + 1;
-	cherokee_worker = malloc (len);
+	d = arg0;
+	while (*d && *d != '/') d++;
+		
+	if ((arg0[0] == '.') || (*d == '/')) {
+		d = getcwd (tmp, sizeof(tmp));
+		len = strlen(arg0) + strlen(d) + sizeof("-worker") + 1;
+		cherokee_worker = malloc (len);
 
-	snprintf (cherokee_worker, len, "%s/%s-worker", d, arg0);
+		snprintf (cherokee_worker, len, "%s/%s-worker", d, arg0);
+		return;
+	}
+
+	/* Deal with unixes
+	 */
+	me = getpid();
+
+	for (i=0; unix_paths[i]; i++) {
+		char link[512];
+
+		snprintf (tmp, sizeof(tmp), unix_paths[i], me);
+		re = readlink (tmp, link, sizeof(link));
+		if (re > 0) {
+			len = strlen(link) + sizeof("-worker") + 1;
+			cherokee_worker = malloc (len);
+			snprintf (cherokee_worker, len, "%s-worker", link);
+			return;
+		}
+	}
+
+	/* The very last option, use the default path
+	 */
+	cherokee_worker = malloc (sizeof(CHEROKEE_WORKER));
+	snprintf (cherokee_worker, sizeof(CHEROKEE_WORKER), CHEROKEE_WORKER);
 }
 
 static ret_t
