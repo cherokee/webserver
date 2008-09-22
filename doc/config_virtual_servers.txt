@@ -112,7 +112,7 @@ Domain names
 This section allows to define the list of domains that the virtual
 server implements.
 
-It can accepted either FQDN (Fully Qualified Domain Names) or wild
+It can accept either FQDN (Fully Qualified Domain Names) or wild
 card entries.
 
 For instance::
@@ -121,6 +121,21 @@ For instance::
           example.com
         *.example.org
 ----
+
+Note that you should probably keep in mind the way this list is
+interpreted in order to avoid future problems. Whenever Cherokee
+recieves a request for a specific domain, it evaluates the `Domain
+list` of every defined virtual host in the order defined by the
+priorities of such hosts. When it finds a match, it stops the
+evaluation and starts matching the specific rules from that virtual
+host to send the apropriate response.
+
+If no domain name matches the request, Cherokee re-evaluates the list
+of virtual hosts trying to match the request against the `Nicknames`,
+also using the priorities defined by the virtual host order.
+
+Only after failing both with the domain names and the nicknames will
+Cherokee issue the failure.
 
 Behavior
 ~~~~~~~~

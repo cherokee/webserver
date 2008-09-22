@@ -12,6 +12,17 @@ static content.
 All this is easily achieved by Cherokee thanks to its
 link:other_goodies.html#zero-downtime[Zero Downtime] mechanism.
 
+We will be showing a couple of use cases. The first one is mostly to
+illustrate the general process and will be set to serve a custom HTTP
+Error. It is very simple and straightforward, but is also pretty
+useless in a production environment. The second use case will be more
+advanced. It will be useful to serve a static maintenance message to
+the public while the administrator will retain the ability to see the
+actual changes.
+
+Basic Example
+~~~~~~~~~~~~~
+
 The steps are fairly simple:
 
 - Create a new virtual host, a copycat, that can handle the same
@@ -58,13 +69,69 @@ connections.
 Remember to reverse the process once you are done. You'll only have to
 delete the copycat or position it below the real virtual host.
 
+Advanced Example: Static message
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-////
-Essential additions for this recipe to be useful:
+- The first two steps are the same: create a copycat, and make it handle
+the same domains.
 
-1. Show a static file instead of the 503 Error.
+- Our virtual host will have only two rules. The first one will match
+  against a maintenance directory that will be managed by the "List &
+  Send" handler. Enabling IO/Cache and Encoding will be a plus here
+  since the contents are static by definition. You should probably
+  configure the `Directory indexes` in the `Basics` tab of the virtual
+  host for the `List & Send` handler to work properly. The second one
+  will be the the `Default` rule that will be redirecting every
+  request to the first rule as an internal redirection.
++
+image::media/images/cookbook_maintenance_advanced_rules.png[Rules]
 
-2. Adding a new internal domain match to the original vhost to allow the
-   administrators and staff to view their changes reflected (while the
-   site is still in maintenance).
-////
+- The `Default` rule should be set to redirect more or less like this:
++
+image::media/images/cookbook_maintenance_advanced_redir.png[Default]
+
+This set up will result in every request being redirected to the
+maintenance directory.
+
+Advanced Example: Staff review
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By now you can switch the server to and from maintenace mode.
+The next essential feature needed is to allow specific users to be
+able to access the original site, not the maintenance version, so that
+the can view the changes reflected as soon as they work on something.
+
+The tweaking here has to take place in the original vhost. The steps
+are also fairly simple.
+
+- In this example we will be adding a new
+imaginary domain to the list of domains managed by the virtual
+host. This domain should be accessible from our intranet only.
++
+image::media/images/cookbook_maintenance_advanced_domains.png[Domains]
++
+[NOTE]
+As mentioned in the link:config_virtual_servers.html[Virtual Servers]
+section, you should keep in mind the way the domain lists are
+interpreted. Whenever Cherokee recieves a request for a specific
+domain, it evaluates the `Domain list` of every defined virtual host
+in the order defined by the priorities of such hosts. If no domain
+name matches the request, Cherokee re-evaluates the list of virtual
+hosts as before, trying to match the request against the `Nicknames`.
+Only after failing both with the domain names and the nicknames will
+Cherokee issue the failure.
+
+- And we will add this domain to our /etc/hosts file as an alias for
+  the real server.
++
+----
+10.0.0.118	intranet_example
+----
++
+In this case we are using the IP address asigned to the server in our
+intranet, and this will grant access from our computer to the original
+site whether the copycat is present or not.
++
+You might want to reflect such configuration in a private DNS in case
+you need more flexibility, restrict access to specific IP ranges and
+similar security measures, but the principles are the same.

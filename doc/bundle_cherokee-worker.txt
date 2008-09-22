@@ -40,8 +40,14 @@ example:
 $ cherokee-worker -p 8080 -r `pwd`
 ----
 
+Since both absolute and relative paths are accepted, it is equivalent to:
+
+----
+$ cherokee-worker -p 8080 -r .
+----
+
 This would allow any non-privileged user to statically share the
-contents of the current directory. A great way to share files in a
+contents of the current directory. It's a great way to share files in a
 local network whenever you are in a hurry. Remember that in Unix
 systems only processes launched by the superuser have privileges to
 be hooked to the lower 1024 ports of the system.

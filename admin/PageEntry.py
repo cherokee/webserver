@@ -156,7 +156,7 @@ class PageEntry (PageMenu, FormHelper):
 
         txt  = '<h1>%s</h1>' % (self._get_title (html=True))
         txt += self.InstanceTab (tabs)
-        form = Form (self.submit_url, add_submit=False) ##add_submit=True,autsubmit=False
+        form = Form (self.submit_url, auto=False) ##add_submit=True,auto=False
         return form.Render(txt)
 
     def _get_handler_properties (self):
@@ -209,7 +209,7 @@ class PageEntry (PageMenu, FormHelper):
 
         txt += "<h2>Authentication</h2>"
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, 'Validation Mechanism', '%s!auth'%(pre), 
+        e = self.AddPropOptions_Reload (table, 'Validation Mechanism', '%s!auth'%(pre),
                                         modules_available(VALIDATORS), NOTE_VALIDATOR)
         txt += self.Indent (table)
         txt += e
