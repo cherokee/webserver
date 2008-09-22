@@ -45,7 +45,31 @@
 pid_t               pid;
 char               *pid_file_path;
 cherokee_boolean_t  graceful_restart; 
+char               *cherokee_worker;
 
+static void
+figure_worker_path (const char *arg0)
+{
+	char  *d;
+	char   tmp[512];
+	int    len;
+
+	/* Invoked with the fullpath */
+	if (arg0[0] == '/') {
+		len = strlen(arg0) + sizeof("-worker") + 1;
+		cherokee_worker = malloc (len);
+
+		snprintf (cherokee_worker, len, "%s-worker", arg0);
+		return;
+	}
+
+	/* Partial path work around */
+	d = getcwd (tmp, sizeof(tmp));
+	len = strlen(arg0) + strlen(d) + sizeof("-worker") + 1;
+	cherokee_worker = malloc (len);
+
+	snprintf (cherokee_worker, len, "%s/%s-worker", d, arg0);
+}
 
 static ret_t
 check_worker_version (const char *this_exec)
@@ -55,9 +79,10 @@ check_worker_version (const char *this_exec)
 	char *line, *p;
 	int   re;
 
-	f = popen (CHEROKEE_WORKER" -i", "r");
+	snprintf (tmp, sizeof(tmp), "%s -i", cherokee_worker);
+	f = popen (tmp, "r");
 	if (f == NULL) {
-		PRINT_MSG ("Cannot execute '%s -i'\n", CHEROKEE_WORKER);
+		PRINT_MSG ("Cannot execute '%s'\n", tmp);
 		goto error;
 	}
 	
@@ -86,11 +111,11 @@ check_worker_version (const char *this_exec)
 		
 		PRINT_MSG_S ("ERROR: Broken installation detected\n");
 		PRINT_MSG   ("  Cherokee        (%s) %s\n", this_exec, PACKAGE_VERSION);
-		PRINT_MSG   ("  Cherokee-worker (%s) %s\n", CHEROKEE_WORKER, line);
+		PRINT_MSG   ("  Cherokee-worker (%s) %s\n", cherokee_worker, line);
 		goto error;
 	}
 
-	PRINT_MSG ("Could not find the version string: '%s -i'\n", CHEROKEE_WORKER);
+	PRINT_MSG ("Could not find the version string: '%s -i'\n", cherokee_worker);
 error:
 	pclose(f);
 	return ret_error;
@@ -348,7 +373,11 @@ main (int argc, char *argv[])
 	ret_t               ret;
 	cherokee_boolean_t  single_time;
 	const char         *config_file_path;
-	
+
+	/* Find the worker exec
+	 */
+	figure_worker_path (argv[0]);
+
 	/* Sanity check
 	 */
 	ret = check_worker_version (argv[0]);
@@ -373,9 +402,9 @@ main (int argc, char *argv[])
 	while (true) {
 		graceful_restart = false;
 
-		pid = process_launch (CHEROKEE_WORKER, argv);
+		pid = process_launch (cherokee_worker, argv);
 		if (pid < 0) {
-			PRINT_MSG ("Couldn't launch '%s'\n", CHEROKEE_WORKER);
+			PRINT_MSG ("Couldn't launch '%s'\n", cherokee_worker);
 			exit (1);
 		}
 
