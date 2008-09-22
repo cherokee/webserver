@@ -51,11 +51,13 @@ vserver!1!rule!4!handler = cgi
 
 vserver!1!rule!5!match = directory
 vserver!1!rule!5!match!directory = /about
+vserver!1!rule!5!encoder!gzip = 1
 vserver!1!rule!5!handler = server_info
 vserver!1!rule!5!handler!type = just_about
 
 vserver!1!rule!99999!match = extensions
 vserver!1!rule!99999!match!extensions = php
+vserver!1!rule!99999!encoder!gzip = 1
 vserver!1!rule!99999!handler = fcgi
 vserver!1!rule!99999!handler!balancer = round_robin
 vserver!1!rule!99999!handler!balancer!source!1 = 1
