@@ -25,7 +25,7 @@ class ModuleServerInfo (ModuleHandler):
         txt  = "<h2>Privacy settings</h2>"
 
         table = TableProps()
-        self.AddPropOptions (table, "Show Information", 
+        self.AddPropOptions_Reload (table, "Show Information",
                              "%s!type" % (self._prefix),
                              options, NOTE_INFORMATION)
         txt += self.Indent(table)

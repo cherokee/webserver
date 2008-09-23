@@ -15,11 +15,12 @@ FORM_TEMPLATE = """
 AUTO_SUBMIT_JS = """
 <script type="text/javascript">
 $(document).ready(function(event) {
-  $("#auto").change(function(event) {
-    $("#auto input").each(function() {
+  $("#auto").validate();
+  $("#auto input").change(function(event) {
+      if ($("#auto").valid()==false)
+        return false;
       this.form.submit()
-    });
-  }).validate();
+  });
 });
 </script>
 """

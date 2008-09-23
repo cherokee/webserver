@@ -15,7 +15,7 @@ NOTE_INTERPRETER = 'Command to spawn a new source in case it were not accessible
 TABLE_JS = """
 <script type="text/javascript">
      $(document).ready(function() {
-        $("#sources tr:even').addClass('alt')"); 
+        $("#sources tr:even').addClass('alt')");
         $("table.rulestable tr:odd").addClass("odd");
      });
 </script>
@@ -130,7 +130,7 @@ class PageInfoSource (PageMenu, FormHelper):
         self.AddPropEntry   (table, 'Nick',       'source!%s!nick'%(s), NOTE_NICK,req=True)
         self.AddPropEntry   (table, 'Connection', 'source!%s!host'%(s), NOTE_HOST,req=True)
         if type == 'interpreter':
-            self.AddPropEntry (table, 'Interpreter', 'source!%s!interpreter'%(s), NOTE_INTERPRETER)
+            self.AddPropEntry (table, 'Interpreter', 'source!%s!interpreter'%(s), NOTE_INTERPRETER, req=True)
 
         tmp  = self.HiddenInput ('source_num', s)
         tmp += str(table)
@@ -154,7 +154,7 @@ class PageInfoSource (PageMenu, FormHelper):
         self.AddPropEntry          (table, 'Nick',       'tmp!new_source_nick', NOTE_NICK, req=True)
         self.AddPropEntry          (table, 'Connection', 'tmp!new_source_host', NOTE_HOST, req=True)
         if type == 'interpreter' or not type:
-            self.AddPropEntry (table, 'Interpreter', 'tmp!new_source_interpreter', NOTE_INTERPRETER)
+            self.AddPropEntry (table, 'Interpreter', 'tmp!new_source_interpreter', NOTE_INTERPRETER, req=True)
 
         txt += self.Indent(table)
         return txt
@@ -197,7 +197,7 @@ class PageInfoSource (PageMenu, FormHelper):
             tmp = "<h2>Add a new</h2>"
             tmp += self._render_add_new()
 
-            fo1 = Form ("/%s"%(self._id), auto=False)
+            fo1 = Form ("/%s"%(self._id), add_submit=False)
             txt += fo1.Render(tmp)
 
         return txt
