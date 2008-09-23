@@ -8,17 +8,19 @@ The default configuration (the one created by `cherokee-admin` from
 scratch when there is no `cherokee.conf` present) already supports
 PHP.
 
-This example shows a typical usage of FastCGI. It connects to a
-FastCGI server located in localhost in port 1234. If no server is
-running, the webserver will run the FastCGI server by issuing the command
-defined as the *Interpreter* sub-parameter:
+This example shows a typical usage of FastCGI. It only uses one
+link:config_info_sources.html[information source] nicknamed `php` in
+this case. This connects to a FastCGI server located in localhost in
+port 1234. If no server is running, the webserver will run the FastCGI
+server by issuing the command defined as the *Interpreter*
+sub-parameter:
 
 image::media/images/admin_handler_fastcgi1.png[Fastcgi]
 
 This other example shows a typical usage of multiple FastCGI
 servers. It connects to FastCGI servers in several locations. If no
 server is running in the local computer, the webserver will run the
-FastCGI server by issuing the specified command. Note that for remote
+FastCGI server by issuing the specified command. Note that for *remote*
 FastCGI servers, you are responsible of running the FastCGI services
 there manually:
 

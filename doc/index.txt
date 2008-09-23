@@ -108,7 +108,7 @@ link:dev.html[Development info]
   . link:dev_cherokee.conf.html[cherokee.conf]: Internal configuration specs.
 ////
   . link:dev_api.html[API introduction]
-  . link:dev_examples.html[Examples]
+  . link:dev_examples.html[Examples]: Development examples
 ////
 
 ////////////////////////////////////////////////////

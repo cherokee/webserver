@@ -125,7 +125,7 @@ media/images/admin_vserver_loggers.png \
 media/images/admin_vserver.png \
 media/images/admin_vserver_vserver.png \
 media/images/cookbook_django_common.png \
-media/images/cookbook_django_scgi.png \
+media/images/cookbook_django_infosources.png \
 media/images/cookbook_ror_common.png \
 media/images/cookbook_ror_fcgi.png \
 media/images/cookbook_mysql_rule.png \

@@ -26,7 +26,6 @@ There are two possible settings as *information sources*:
   reroute the information to allow you to serve SSH sessions via your
   webserver or any other neat tricks you can think of.
 
-
 Note that because of Cherokee's flexibility and modularity, sometimes
 and deppending of the situation one or the other setting might not
 make much sense. In such ocasions `cherokee-admin` will simply hide
@@ -57,3 +56,4 @@ And these are the handlers that use balancing:
 * link:modules_handlers_fcgi.html[FastCGI]
 * link:modules_handlers_scgi.html[SCGI]
 * link:modules_handlers_mirror.html[Generic balancer]
+* link:modules_handlers_dbslayer.html[Data Base bridge]

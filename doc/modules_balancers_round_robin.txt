@@ -6,17 +6,6 @@ Balancer: Round Robin
 If multiple server entries are defined, the requests will be round-robinly
 served by each of them.
 
-The configurable parameters will vary depending on what has been
-selected as information host. If it is set to *remote*, only a host
-address will be required. If that is not the case then configurable
-parameters will be:
-
-* Host: Either a local or remote host and port.
-
-* Interpreter: Defines the command line of the interpreter for this
-  server. If you are using FastCGI or SCGI and are launching the
-  services manually, this entry is not needed.
-
-* Environment variables: When running in local host, you can set up
-  environment variables to be used by whatever is serving your
-  load-balanced requests.
+The only thing needed to configure this balancer is a list of
+link:config_info_sources.html[information sources]. At least one must
+be selected in order for this to work.

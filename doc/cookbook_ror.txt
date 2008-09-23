@@ -79,12 +79,16 @@ image::media/images/cookbook_ror_common.png[Common CGI options]
 
 .FastCGI specific
 Under `FastCGI specific` make sure to add the hosts providing the
-service. Note that you will have to manually launch the `spawner` if
-you use a `Remote host` as `Information source` instead of a `Local
-interpreter`.
+service. Do this by adding one or more
+link:config_info_sources.html[Information Sources].
+
+Note that, in the definition of the informaction source, you will have
+to manually launch the `spawner` if you use a `Remote host` as
+`Information source` instead of a `Local interpreter`.
 
 You will simply have to add as many sources as desired, for instance
-our example uses the default values to set up ports 8000 through 8002:
+our example uses the default values to set up ports 8000 through
+8002. These sources will be nicknamed *ror0*, *ror1* and *ror2*.
 
 [grid="rows"]
 `~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,5 +101,8 @@ localhost:8002 , `/home/foo/example/script/process/spawner fastcgi`
 
 If any of those ports was not reachable, the `interpreter` command
 would be launched and the fallen one would be reinstantiated.
+
+Here is a snapshot to show the creation of *ror0*. The rest are
+similar using the port variation detailed above.
 
 image::media/images/cookbook_ror_fcgi.png[FastCGI specifics]

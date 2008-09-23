@@ -32,8 +32,8 @@ extension.
 
 To set up the FastCGI specifics, read the
 link:modules_balancers.html[Balancers] section for general information
-and the link:modules_balancers_round_robin.html[Round robin] section
-for more details.
+and the link:config_info_sources.html[information sources] section for
+more details.
 
 
 Examples

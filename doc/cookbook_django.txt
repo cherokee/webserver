@@ -25,7 +25,6 @@ You will need Flup because it implements the standard interface
 between Python Web applications and Web servers, so you will be using
 it to run your web application either as FastCGI or SCGI.
 
-
 Once you are done with that, you must deploy your Django project:
 
 ----
@@ -53,15 +52,15 @@ handler instead you would only have to omit the last parameter and
 FastCGI would be used by default. The configuration of the handler is
 exactly the same for SCGI and FastCGI.
 
-Once you have created the new rule for your `/var/www/example
-directory`, choose the desired handler and use the following
+Once you have created the new rule for your `/var/www/example`
+directory, choose the desired handler and use the following
 configuration.
 
 .Common CGI options
 Under `Common CGI options` make sure to check the `Error handler` box and
 uncheck `Check file`. This is to prevent possible errors with the
 `INFO_PATH` generation that can happen when an application, in this
-case 'Rails', manages the whole subtree. This is mentioned in the
+case 'Django', manages the whole subtree. This is mentioned in the
 link:modules_handlers_cgi.html[Common CGI] section of the
 documentation.
 
@@ -69,12 +68,17 @@ image::media/images/cookbook_django_common.png[Common CGI options]
 
 .SCGI specific
 Under `SCGI specific` make sure to add the hosts providing the
-service. Note that you will have to manually launch the `spawner` if
+service. This is done by adding one or more information sources.
+
+image::media/images/media/images/cookbook_django_infosources.png[Info Sources]
+
+Note that you will have to manually launch the `spawner` if
 you use a `Remote host` as `Information source` instead of a `Local
 interpreter`.
 
-You will simply have to add as many sources as desired, for instance
-our example uses the port 3033.
+You will simply have to add as many sources as needed, for instance
+our example uses one nicknamed `django1`, created as *local
+interpreter* with these parameters on port 3033.
 
 [grid="rows"]
 `~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,5 +90,3 @@ localhost:3033 , `/var/www/example/manage.py runfcgi method=threaded ` \
 
 You can set up as many hosts as desired and Cherokee will balance the
 load among them.
-
-image::media/images/cookbook_django_scgi.png[SCGI specifics]
