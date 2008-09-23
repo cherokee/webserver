@@ -1,3 +1,10 @@
+2008-09-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/handler_dbslayer.c, cherokee/dwriter.c,
+	cherokee/dwriter.h: Fixes a couple of problems. Now it uses a
+	different Mime type for each language. Besides, it escapes the
+	strings so the client interpreter can parse (evaluate) the result.
+
 2008-09-23  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/PageEntry.py, admin/ModuleRedir.py,
@@ -5,8 +12,6 @@
 	addressed usability issues
 	http://code.google.com/p/cherokee/issues/detail?id=111 and
 	http://code.google.com/p/cherokee/issues/detail?id=125
-
-2008-09-23  Taher Shihadeh  <taher@unixwars.com>
 
 	* doc/cookbook_*, doc/modules_*: Addressed issue #126:
 	http://code.google.com/p/cherokee/issues/detail?id=126

@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "handler_dbslayer.h"
 #include "connection-protected.h"
-
+#include "thread.h"
 
 #define add_cstr_str(w,key,val,len)					\
 	do {								\
@@ -33,8 +33,8 @@
 		cherokee_dwriter_string (w, val, len);			\
 	} while (false)
 
-#define add_cstr_int(w,key,val)					 \
-	do {							 \
+#define add_cstr_int(w,key,val)					  \
+	do {							  \
 		cherokee_dwriter_string  (w, key, sizeof(key)-1); \
 		cherokee_dwriter_integer (w, val);		  \
 	} while (false)
@@ -48,7 +48,7 @@ connect_to_database (cherokee_handler_dbslayer_t *hdl)
 {
 	MYSQL                             *conn;
 	cherokee_handler_dbslayer_props_t *props = HANDLER_DBSLAYER_PROPS(hdl);
-	
+
 	conn = mysql_real_connect (hdl->conn,
 				   hdl->src_ref->host.buf,
 				   props->user.buf,
@@ -97,51 +97,6 @@ cherokee_client_headers (cherokee_handler_dbslayer_t *hdl)
 	}
 }
 
-ret_t
-cherokee_handler_dbslayer_init (cherokee_handler_dbslayer_t *hdl)
-{
-	ret_t                              ret;
-	cherokee_connection_t             *conn  = HANDLER_CONN(hdl);
-	cherokee_handler_dbslayer_props_t *props = HANDLER_DBSLAYER_PROPS(hdl);
-
-	/* Check client headers
-	 */
-	cherokee_client_headers (hdl);
-
-	/* Get a reference to the target host
-	 */
-	if (hdl->src_ref == NULL) {
-		ret = cherokee_balancer_dispatch (props->balancer, conn, &hdl->src_ref);
-		if (ret != ret_ok)
-			return ret;
-	}
-	
-	/* Connect to the MySQL server
-	 */
-	ret = connect_to_database(hdl);
-	if (unlikely (ret != ret_ok))
-		return ret;
-	
-	/* Send query
-	 */
-	ret = send_query(hdl);
-	if (unlikely (ret != ret_ok)) {
-		conn->error_code = http_bad_gateway;
-		return ret_error;
-	}
-
-	return ret_ok;
-}
-
-
-static ret_t
-dbslayer_add_headers (cherokee_handler_dbslayer_t *hdl, 
-		      cherokee_buffer_t           *buffer)
-{
-	cherokee_buffer_add_str (buffer, "Content-Type: application/json" CRLF);
-	return ret_ok;
-}
-	
 
 static ret_t
 handle_error (cherokee_handler_dbslayer_t *hdl)
@@ -170,6 +125,68 @@ handle_error (cherokee_handler_dbslayer_t *hdl)
 	cherokee_dwriter_dict_close (&hdl->writer);
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_handler_dbslayer_init (cherokee_handler_dbslayer_t *hdl)
+{
+	ret_t                              ret;
+	cherokee_connection_t             *conn  = HANDLER_CONN(hdl);
+	cherokee_handler_dbslayer_props_t *props = HANDLER_DBSLAYER_PROPS(hdl);
+
+	/* Check client headers
+	 */
+	cherokee_client_headers (hdl);
+
+	/* Get a reference to the target host
+	 */
+	if (hdl->src_ref == NULL) {
+		ret = cherokee_balancer_dispatch (props->balancer, conn, &hdl->src_ref);
+		if (ret != ret_ok)
+			return ret;
+	}
+	
+	/* Connect to the MySQL server
+	 */
+	ret = connect_to_database(hdl);
+	if (unlikely (ret != ret_ok))
+		return ret;
+	
+	/* Send query: 
+	 * Do not check whether it failed, ::step() will do
+	 * it and send an error message if needed.
+	 */
+	send_query(hdl);
+
+	return ret_ok;
+}
+
+
+static ret_t
+dbslayer_add_headers (cherokee_handler_dbslayer_t *hdl, 
+		      cherokee_buffer_t           *buffer)
+{
+	switch (HANDLER_DBSLAYER_PROPS(hdl)->lang) {
+	case dwriter_json:
+		cherokee_buffer_add_str (buffer, "Content-Type: application/json" CRLF);
+		break;
+	case dwriter_python:
+		cherokee_buffer_add_str (buffer, "Content-Type: application/x-python" CRLF);
+		break;
+	case dwriter_php:
+		cherokee_buffer_add_str (buffer, "Content-Type: application/x-php" CRLF);
+		break;
+	case dwriter_ruby:
+		cherokee_buffer_add_str (buffer, "Content-Type: application/x-ruby" CRLF);
+		break;
+	default:
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+	
 
 static ret_t
 render_empty_result (cherokee_handler_dbslayer_t *hdl)
@@ -420,7 +437,7 @@ cherokee_handler_dbslayer_new (cherokee_handler_t     **hdl,
 		return ret_nomem;
 
 	/* Data writer */
-	cherokee_dwriter_init (&n->writer);
+	cherokee_dwriter_init (&n->writer, &CONN_THREAD(cnt)->tmp_buf1);
 	n->writer.lang = PROP_DBSLAYER(props)->lang;
 
 	*hdl = HANDLER(n);
@@ -478,11 +495,11 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 			if (ret != ret_ok) return ret;
 
 		} else  if (equal_buf_str (&subconf->key, "user")) {
-			cherokee_buffer_clean (&props->db);
+			cherokee_buffer_clean (&props->user);
 			cherokee_buffer_add_buffer (&props->user, &subconf->val);
 
 		} else  if (equal_buf_str (&subconf->key, "password")) {
-			cherokee_buffer_clean (&props->db);
+			cherokee_buffer_clean (&props->password);
 			cherokee_buffer_add_buffer (&props->password, &subconf->val);
 
 		} else  if (equal_buf_str (&subconf->key, "db")) {

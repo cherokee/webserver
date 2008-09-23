@@ -99,12 +99,14 @@
 
 
 ret_t 
-cherokee_dwriter_init (cherokee_dwriter_t *writer)
+cherokee_dwriter_init (cherokee_dwriter_t *writer,
+		       cherokee_buffer_t  *tmp)
 {
 	writer->buf    = NULL;
 	writer->pretty = false;
 	writer->depth  = 0;
 	writer->lang   = dwriter_json;
+	writer->tmp    = tmp;
 
 	writer->state[writer->depth] = dwriter_start;
 	return ret_ok;
@@ -121,6 +123,61 @@ cherokee_dwriter_set_buffer (cherokee_dwriter_t *writer,
 			     cherokee_buffer_t  *output)
 {
 	writer->buf = output;	
+	return ret_ok;
+}
+
+static ret_t
+escape_string (cherokee_buffer_t *buffer, 
+	       char              *s,
+	       cuint_t            len)
+{
+	char    c;
+	cuint_t i, j;
+
+	cherokee_buffer_ensure_size (buffer, len*2);
+
+	for (i=0,j=0; i<len; i++) {
+		c = s[i];
+		switch (c) {
+		case '\n':
+			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = 'n';
+			break;
+		case '\r':
+			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = 'r';
+			break;
+		case '\t':
+			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = 't';
+			break;
+		case '\b':
+			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = 'b';
+			break;
+		case '\f':
+			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = 'f';
+			break;
+		case '\\':
+			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '\\';
+			break;
+		case '/':
+			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '/';
+			break;
+		case '"':
+			buffer->buf[j++] = '\\'; 
+			buffer->buf[j++] = '"';
+			break;
+		default:
+			buffer->buf[j++] = c;			
+		}
+	}
+
+	buffer->buf[j] = '\0';
+	buffer->len    = j;
 	return ret_ok;
 }
 
@@ -175,7 +232,10 @@ cherokee_dwriter_string (cherokee_dwriter_t *w, char *s, int len)
 	ADD_SEP; ADD_WHITE;
 
 	cherokee_buffer_add_str (OUT, "\"");
-	cherokee_buffer_add (OUT, s, len);
+
+	escape_string (w->tmp, s, len);
+	cherokee_buffer_add (OUT, w->tmp->buf, w->tmp->len);
+
 	cherokee_buffer_add_str (OUT, "\"");
 
 	ADD_END; ADD_NEW_LINE;

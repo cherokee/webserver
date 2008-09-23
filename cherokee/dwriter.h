@@ -60,14 +60,15 @@ typedef struct {
 	cherokee_boolean_t        pretty;
 	cherokee_dwriter_state_t  state[DWRITER_STACK_LEN];	
 	cherokee_dwriter_lang_t   lang;
+	cherokee_buffer_t        *tmp;
 } cherokee_dwriter_t;
 
 #define cherokee_dwriter_cstring(w,s) cherokee_dwriter_string(w, s, sizeof(s)-1)
 
 
-ret_t cherokee_dwriter_init       (cherokee_dwriter_t *writer);
+ret_t cherokee_dwriter_init       (cherokee_dwriter_t *writer, cherokee_buffer_t *tmp);
 ret_t cherokee_dwriter_mrproper   (cherokee_dwriter_t *writer);
-ret_t cherokee_dwriter_set_buffer (cherokee_dwriter_t *writer, cherokee_buffer_t  *output);
+ret_t cherokee_dwriter_set_buffer (cherokee_dwriter_t *writer, cherokee_buffer_t *output);
 
 ret_t cherokee_dwriter_integer    (cherokee_dwriter_t *w, unsigned long l);
 ret_t cherokee_dwriter_double     (cherokee_dwriter_t *w, double d);
