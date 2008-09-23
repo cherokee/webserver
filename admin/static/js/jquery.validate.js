@@ -1,4 +1,9 @@
 /*
+ * File redistributed by the Cherokee-Project making use of its
+ * MIT License. Original license text follows.
+ */
+
+/*
  * jQuery validation plug-in 1.4
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/

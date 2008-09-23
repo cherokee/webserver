@@ -76,6 +76,9 @@ MENU_SAVE_IS_ALIVE = """
   </div>
 """
 
+DIALOG_W=725
+DIALOG_H=500
+
 class Page (WebComponent):
     def __init__ (self, id, cfg=None, helps=[]):
         WebComponent.__init__ (self, id, cfg)
@@ -118,7 +121,8 @@ class Page (WebComponent):
             if hfile.startswith("http://"):
                 txt += '<li><a href="%s" target="_help">%s</a></li>' % (hfile, comment)
             else:
-                txt += '<li><a href="/help/%s.html" target="_help">%s</a></li>' % (hfile, comment)
+                params=(hfile, DIALOG_H, DIALOG_W, comment+' help', comment)
+                txt += '<li><a href="/help/%s.html?KeepThis=true&TB_iframe=true&height=%s&width=%s" class="thickbox" title="%s">%s</a></li>' % params
         txt += '</ul>'
         return txt
 

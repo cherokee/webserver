@@ -1,3 +1,8 @@
+/*
+ * File redistributed by the Cherokee-Project making use of its
+ * MIT License. Original license text follows.
+ */
+
 /**
  * TableDnD plug-in for JQuery, allows you to drag and drop table rows
  * You can set up various options to control how the system will work

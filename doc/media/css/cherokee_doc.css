@@ -1,3 +1,8 @@
+body {
+ font-family: helvetica, arial, sans-serif;
+ font-size: small;
+}
+
 /* Debug borders */
 p, li, dt, dd, div, pre, h1, h2, h3, h4, h5, h6 {
 /*

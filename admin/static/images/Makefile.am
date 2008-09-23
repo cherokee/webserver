@@ -23,7 +23,9 @@ dialog-error.png \
 collapsed.gif \
 expanded.gif \
 bin.png \
-favicon.ico
+favicon.ico \
+macFFBgHack.png \
+loadingAnimation.gif
 
 EXTRA_DIST = \
 $(adminstatic_DATA)

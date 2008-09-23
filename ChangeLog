@@ -1,3 +1,8 @@
+2008-09-23  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/Page.py, admin/static/js/thickbox.js: added another jQuery
+	plugin to finish remaking the help system.
+
 2008-09-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_dbslayer.c, cherokee/dwriter.c,

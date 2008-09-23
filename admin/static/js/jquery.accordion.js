@@ -1,4 +1,9 @@
 /*
+ * File redistributed by the Cherokee-Project making use of its
+ * MIT License. Original license text follows.
+ */
+
+/*
  * Accordion 1.5 - jQuery menu widget
  *
  * Copyright (c) 2007 Jörn Zaefferer, Frank Marcia
