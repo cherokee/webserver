@@ -8,7 +8,7 @@ HANDLERS = [
     ('fcgi',         'FastCGI'),
     ('scgi',         'SCGI'),
     ('server_info',  'Server Info'),
-    ('dbslayer',     'Data Base bridge'),
+    ('dbslayer',     'MySQL bridge'),
     ('mirror',       'Generic balancer'),
     ('custom_error', 'HTTP error'),
     ('admin',        'Remote Administration')
