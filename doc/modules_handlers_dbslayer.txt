@@ -1,7 +1,7 @@
 == link:index.html[Index] -> link:modules.html[Modules] -> link:modules_handlers.html[Handlers]
 
-Handler: Data Base bridge
--------------------------
+Handler: MySQL bridge
+---------------------
 
 This handler offers a lightweight database abstraction layer that
 will provide all the benefits of connection pooling. This in turn
