@@ -91,7 +91,9 @@ figure_worker_path (const char *arg0)
 		snprintf (tmp, sizeof(tmp), unix_paths[i], me);
 		re = readlink (tmp, link, sizeof(link));
 		if (re > 0) {
-			len = strlen(link) + sizeof("-worker") + 1;
+			link[re] = '\0';
+			len = re + sizeof("-worker") + 1;
+
 			cherokee_worker = malloc (len);
 			snprintf (cherokee_worker, len, "%s-worker", link);
 			return;
