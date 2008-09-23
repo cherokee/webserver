@@ -8,9 +8,10 @@ To generate SSL keys you will have to follow these steps detailed below.
 Locate CA.pl or CA.sh
 ~~~~~~~~~~~~~~~~~~~~~
 
-In Debian GNU/Linux those are located in /usr/lib/ssl/misc/
+* On Debian or Ubuntu those are usually located under /usr/lib/ssl/misc/
+* On MacOS X, you will find them in /System/Library/OpenSSL/misc/
 
-``find / -iname CA.pl -print`` might help.
+In any other case ``find / -iname CA.pl -print`` will help you to locate it.
 
 Create a new CA
 ~~~~~~~~~~~~~~~
