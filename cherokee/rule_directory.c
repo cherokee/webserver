@@ -52,6 +52,16 @@ match (cherokee_rule_directory_t *rule, cherokee_connection_t *conn)
 		return ret_not_found;
 	}
 
+	/* Does not match: same begining, but a longer name
+	 */
+	if ((conn->request.len > rule->directory.len) &&
+	    (conn->request.buf[rule->directory.len] != '/'))
+	{
+		TRACE(ENTRIES, "Match directory: rule=%s req=%s: (str) ret_not_found\n",
+		      rule->directory.buf, conn->request.buf);
+		return ret_not_found;
+	}
+
 	/* Copy the web directory property
 	 */
 	cherokee_buffer_add_buffer (&conn->web_directory, &rule->directory);

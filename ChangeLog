@@ -1,3 +1,10 @@
+2008-09-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/rule_directory.c (match): Fixes a problem with the
+	directory rule. Requests starting as a directory entry were
+	matched with it, even if there were targeting another file.  If
+	fixes bug: http://code.google.com/p/cherokee/issues/detail?id=68
+
 2008-09-22  Taher Shihadeh  <taher@unixwars.com>
 
 	* doc/cookbook_redirs.txt, doc/cookbook_maintenance.txt,
