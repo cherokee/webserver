@@ -1,5 +1,11 @@
 2008-09-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_dbslayer.c (send_query): From now on, the MySQL
+	balancer gets the SQL query from the requested URL. Previously, it
+	was using POST to get the query (it just looked much cleaner).
+	However, the replies could not be cached by a proxy cache, and
+	that's a big enough problem for changinf it.
+
 	* contrib/cherokee: Updated to the new signal scheme. By Antonio
 	Perez <aperez@skarcha.com>
 

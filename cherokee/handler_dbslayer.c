@@ -40,7 +40,7 @@
 	} while (false)
 
 
-PLUGIN_INFO_HANDLER_EASIEST_INIT (dbslayer, http_post);
+PLUGIN_INFO_HANDLER_EASIEST_INIT (dbslayer, http_get);
 
 
 static ret_t
@@ -69,8 +69,20 @@ send_query (cherokee_handler_dbslayer_t *hdl)
 {
 	int                    re;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	cherokee_buffer_t     *tmp  = &HANDLER_THREAD(hdl)->tmp_buf1;
 
-	re = mysql_query (hdl->conn, conn->post.info.buf);
+	/* Extract the SQL query
+	 */
+	cherokee_buffer_clean (tmp);
+	cherokee_buffer_add   (tmp, 
+			       conn->request.buf + conn->web_directory.len,
+			       conn->request.len - conn->web_directory.len);
+
+	cherokee_buffer_unescape_uri (tmp);
+
+	/* Send the query
+	 */
+	re = mysql_query (hdl->conn, tmp->buf);
 	if (re != 0)
 		return ret_error;
 
