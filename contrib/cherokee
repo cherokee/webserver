@@ -18,37 +18,36 @@ test -f $DAEMON || exit 0
 case "$1" in
   start)
     echo -n "Starting cherokee web server: $NAME"
-    start-stop-daemon --start --pidfile $PIDFILE -b --exec $DAEMON
+    start-stop-daemon --start -b --exec $DAEMON
     ;;
 
   stop)
     echo -n "Stopping cherokee web server: $NAME"
-    start-stop-daemon --stop --pidfile $PIDFILE --oknodo --exec $DAEMON
+    start-stop-daemon --stop --pidfile $PIDFILE --oknodo --signal TERM --exec $DAEMON --retry 30
     ;;
 
   reload)
     echo -n "Reloading $NAME configuration"
-    start-stop-daemon --stop --pidfile $PIDFILE --signal USR1 --exec $DAEMON
+    start-stop-daemon --stop --pidfile $PIDFILE --signal HUP
     ;;
 
-  reload-modules)
-    echo -n "Reloading $NAME modules"
-    start-stop-daemon --stop --pidfile $PIDFILE --oknodo --retry 30
-    start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON
+  rotate-logs)
+    echo -n "Rotating logs"
+    start-stop-daemon --stop --pidfile $PIDFILE --signal USR2
     ;;
 
   restart)
-    $0 reload-modules
-    exit $?
+    echo -n "Restarting the server closing all the opened connections"
+    start-stop-daemon --stop --pidfile $PIDFILE --signal USR1
     ;;
 
-  force-reload)
-    $0 reload-modules
-    exit $?
+  force-restart)
+    $0 stop
+    $0 start
     ;;
 
   *)
-    echo "Usage: /etc/init.d/$NAME {start|stop|reload|reload-modules|force-reload|restart}"
+    echo "Usage: /etc/init.d/$NAME {start|stop|reload|rotate-logs|restart|force-restart}"
     exit 1
     ;;
 esac
