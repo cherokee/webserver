@@ -279,6 +279,7 @@ a.button:active span {
   width: 540px;
   height: 400px;
   overflow: auto;
+  _font-size: x-small;
 }
 
 .tableprop {
@@ -323,3 +324,52 @@ table tr th {
 table.rulestable tr.odd td {
   background-color:#F4F7FB;
 }
+
+/**************************/
+/* PageVServers.py styles */
+/**************************/
+#new_vserver_name,
+#vserver_clone_src {
+  width: 150px;
+}
+
+#new_vserver_droot,
+#vserver_clone_trg {
+  width: 340px;
+}
+
+/**************************/
+/* PageIcons.py styles    */
+/**************************/
+#tab_icon div input[type="text"] {
+  width: 280px;
+}
+
+#file_new_file,
+#suffix_new_file {
+  width: 180px;
+}
+
+/**************************/
+/* PageMime.py styles */
+/**************************/
+#mimetable input[size="20"] {
+  width: 100px;
+}
+
+#mimetable input[size="6"] {
+  width: 40px;
+}
+
+#new_maxage {
+  width: 60px;
+}
+
+#new_mime {
+  width: 180px;
+}
+
+#new_extensions {
+  width: 280px;
+}
+

@@ -1,3 +1,8 @@
+2008-09-24  Taher Shihadeh  <taher@unixwars.com>
+
+	* static/css/cherokee.css: addresses isue
+	http://code.google.com/p/cherokee/issues/detail?id=85
+
 2008-09-23  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Page.py, admin/static/js/thickbox.js: added another jQuery
