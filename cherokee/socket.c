@@ -1868,9 +1868,29 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket, cherokee_buffer_t *h
 		PRINT_ERROR ("ERROR: OpenSSL: Unable to create a new SSL context: %s\n", error);
 		return ret_error;
 	}
+	
+	/* CA verifications
+	 */
+	re = cherokee_buffer_is_empty (&socket->vserver_ref->ca_cert);
+	if (! re) {
+		re = SSL_CTX_load_verify_locations (socket->ssl_ctx, 
+						    socket->vserver_ref->ca_cert.buf, NULL);
+		if (! re) {
+			OPENSSL_LAST_ERROR(error);
+			PRINT_ERROR ("ERROR: OpenSSL: '%s': %s\n", 
+				     socket->vserver_ref->ca_cert.buf, error);
+			return ret_error;
+		}
 
-	SSL_CTX_set_default_verify_paths (socket->ssl_ctx);
-	SSL_CTX_load_verify_locations (socket->ssl_ctx, NULL, NULL);
+		re = SSL_CTX_set_default_verify_paths (socket->ssl_ctx);
+		if (! re) {
+			OPENSSL_LAST_ERROR(error);
+			PRINT_ERROR ("ERROR: OpenSSL: cannot set certificate "
+				     "verification paths: %s\n", error);
+			return ret_error;
+		}
+	}
+
 
 	SSL_CTX_set_verify (socket->ssl_ctx, SSL_VERIFY_NONE, NULL);
 	SSL_CTX_set_mode (socket->ssl_ctx, SSL_MODE_ENABLE_PARTIAL_WRITE);

@@ -1,5 +1,8 @@
 2008-09-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/socket.c (cherokee_socket_init_client_tls): CA checks
+	clean up.
+
 	* cherokee/server.c (init_vservers_tls): It a virtual server
 	cannot initialize its SSL engine, it should be handled like an
 	error.
