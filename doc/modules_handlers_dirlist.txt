@@ -59,4 +59,5 @@ This configuration
 image::media/images/admin_handler_onlylisting.png[Only listing configuration]
 
 will return something like
+
 image::media/images/admin_handler_onlylisting_ex.png[Only listing example]

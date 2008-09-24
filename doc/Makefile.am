@@ -135,6 +135,9 @@ media/images/cookbook_maintenance_domain.png \
 media/images/cookbook_maintenance_error.png \
 media/images/cookbook_maintenance_result.png \
 media/images/cookbook_maintenance_rule.png \
+media/images/cookbook_maintenance_advanced_rules.png \
+media/images/cookbook_maintenance_advanced_redir.png \
+media/images/cookbook_maintenance_advanced_domains.png \
 media/images/cookbook_redir_behavior.png \
 media/images/cookbook_redir_domains.png \
 media/images/cookbook_redir_handler.png \

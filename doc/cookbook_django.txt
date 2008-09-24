@@ -70,7 +70,7 @@ image::media/images/cookbook_django_common.png[Common CGI options]
 Under `SCGI specific` make sure to add the hosts providing the
 service. This is done by adding one or more information sources.
 
-image::media/images/media/images/cookbook_django_infosources.png[Info Sources]
+image::media/images/cookbook_django_infosources.png[Info Sources]
 
 Note that you will have to manually launch the `spawner` if
 you use a `Remote host` as `Information source` instead of a `Local
