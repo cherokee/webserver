@@ -335,6 +335,7 @@ set_signals (void)
 	sigaction (SIGHUP,  &act, NULL);
 	sigaction (SIGTERM, &act, NULL);
 	sigaction (SIGUSR1, &act, NULL);
+	sigaction (SIGUSR2, &act, NULL);
 	sigaction (SIGCHLD, &act, NULL);
 }
 

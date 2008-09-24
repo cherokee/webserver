@@ -1,5 +1,7 @@
 2008-09-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main.c (set_signals): SIGUSR2 management was missing.
+
 	* cherokee/handler_dbslayer.c (send_query): From now on, the MySQL
 	balancer gets the SQL query from the requested URL. Previously, it
 	was using POST to get the query (it just looked much cleaner).
