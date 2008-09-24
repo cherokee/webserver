@@ -101,6 +101,7 @@ typedef enum {
 	http_length_required          = 411,
  	http_request_entity_too_large = 413,
 	http_request_uri_too_long     = 414,
+	http_unsupported_media_type   = 415,
 	http_range_not_satisfiable    = 416,
 	http_upgrade_required         = 426,
 	http_internal_error           = 500,
@@ -129,6 +130,7 @@ typedef enum {
 #define http_length_required_string          "411 Length Required"
 #define http_request_entity_too_large_string "413 Request Entity too large"
 #define http_request_uri_too_long_string     "414 Request-URI too long"
+#define http_unsupported_media_type_string   "415 Unsupported Media Type"
 #define http_range_not_satisfiable_string    "416 Requested range not satisfiable"
 #define http_upgrade_required_string         "426 Upgrade Required"
 #define http_internal_error_string           "500 Internal Server Error"

@@ -358,10 +358,9 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 	/* Unknown request type
 	 */
-	TRACE(ENTRIES, "Returns conn->error_code: %s\n", "http_internal_error");
-	conn->error_code = http_internal_error;
+	TRACE(ENTRIES, "Returns conn->error_code: %s\n", "http_unsupported_media_type");
 
-	SHOULDNT_HAPPEN;
+	conn->error_code = http_unsupported_media_type;
 	return ret_error;
 }
 

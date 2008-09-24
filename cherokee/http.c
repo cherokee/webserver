@@ -119,6 +119,7 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_method_not_allowed:       *str = http_method_not_allowed_string; break;
 	case http_length_required:          *str = http_length_required_string; break;
 	case http_request_entity_too_large: *str = http_request_entity_too_large_string; break;
+	case http_unsupported_media_type:   *str = http_unsupported_media_type_string; break;
 	case http_request_uri_too_long:     *str = http_request_uri_too_long_string; break;
 	case http_range_not_satisfiable:    *str = http_range_not_satisfiable_string; break;
 	case http_upgrade_required:         *str = http_upgrade_required_string; break;
@@ -179,6 +180,7 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (length_required);
 		entry_code (request_entity_too_large);
 		entry_code (request_uri_too_long);
+		entry_code (unsupported_media_type);
 		entry_code (range_not_satisfiable);
 		entry_code (upgrade_required);
 

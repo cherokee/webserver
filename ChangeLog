@@ -1,5 +1,9 @@
 2008-09-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_common.c (cherokee_handler_common_new): Reply
+	the the right HTTP error (415 Unsupported Media Type) when trying
+	to server a special file (not a file, nor a directory).
+
 	* cherokee/main.c (set_signals): SIGUSR2 management was missing.
 
 	* cherokee/handler_dbslayer.c (send_query): From now on, the MySQL
