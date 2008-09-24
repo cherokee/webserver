@@ -877,6 +877,7 @@ init_vservers_tls (cherokee_server_t *srv)
 		if (ret < ret_ok) {
 			PRINT_ERROR ("Can not initialize TLS for `%s' virtual host\n", 
 				     cherokee_buffer_is_empty(&vserver->name) ? "unknown" : vserver->name.buf);
+			return ret_error;
 		}
 	}
 #else

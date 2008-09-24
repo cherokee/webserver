@@ -1,5 +1,9 @@
 2008-09-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (init_vservers_tls): It a virtual server
+	cannot initialize its SSL engine, it should be handled like an
+	error.
+
 	* cherokee/handler_common.c (cherokee_handler_common_new): Reply
 	the the right HTTP error (415 Unsupported Media Type) when trying
 	to server a special file (not a file, nor a directory).
