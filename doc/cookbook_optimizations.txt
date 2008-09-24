@@ -84,7 +84,7 @@ General::
   connections.
 +
 * *Keep alive*: This setting dramatically affects the speed at which
-  repeated connections are server to the same client. This is
+  repeated connections are served to the same client. This is
   especially noticeable when an asyncrhonous application is used. The
   trade off is that, since connections are kept open more time, less
   connections remain available for other clients in any given
@@ -109,3 +109,11 @@ Advanced::
   higher this limit is, the more connections Cherokee will be able to
   handle. By default Cherokee does not touch this value and it uses
   the one specified by your system.
+
+Debug: Disable TRACE
+~~~~~~~~~~~~~~~~~~~~
+When compiled with debugging support, Cherokee's performance is
+heavily penalized. Being able to trace the state of the web server at
+a very low level is quite useful when you have to fine tune your
+infrastructure, but once it is done you should disable this feature.
+A production environment deserves only the finest tuned binaries.

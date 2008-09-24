@@ -8,10 +8,10 @@ will provide all the benefits of connection pooling. This in turn
 offer scalable advantages for high-load websites.
 
 The original implementation of
-link:http://code.nytimes.com/projects/dbslayer/[DBSlayer] was a MySQL to
-JSON over HTTP bridge that only supported GET requests. This handler
-outperforms any other implementation by far, works with POST requests and
-besides JSON the handler can also process Python, Ruby and PHP.
+link:http://code.nytimes.com/projects/dbslayer/[DBSlayer] was a MySQL
+to JSON over HTTP bridge. This handler outperforms any other
+implementation by far, and besides JSON the handler can also process
+Python, Ruby and PHP.
 
 image::media/images/admin_handler_dbslayer.png[DBSlayer]
 
