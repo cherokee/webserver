@@ -408,6 +408,12 @@ initialize_tls_session (cherokee_socket_t         *socket,
 	 */
 	socket->vserver_ref = vserver;
 
+	/* Check whether the virtual server supports SSL
+	 */
+	if (vserver->context == NULL) {
+		return ret_not_found;
+	}
+
 	/* New session
 	 */
 	socket->session = SSL_new (vserver->context);
@@ -460,7 +466,8 @@ cherokee_socket_init_tls (cherokee_socket_t *socket, cherokee_virtual_server_t *
 
 	if (socket->initialized == false) {
 		ret = initialize_tls_session (socket, vserver);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok) 
+			return ret_error;
 
 		socket->initialized = true;
 	}

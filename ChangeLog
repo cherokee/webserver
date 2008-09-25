@@ -1,3 +1,9 @@
+2008-09-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.c (cherokee_socket_init_tls): Checks whether a
+	virtual server supports SSL before trying to accessing its
+	certificates.
+
 2008-09-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/socket.c (cherokee_socket_init_client_tls): CA checks
