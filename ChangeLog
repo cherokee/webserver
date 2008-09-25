@@ -1,5 +1,9 @@
 2008-09-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/source_interpreter.h,
+	cherokee/source_interpreter.c (cherokee_source_interpreter_spawn):
+	Do not allow the source to be spawned in pararell.
+
 	* cherokee/main_worker.c (common_server_initialization): Instead
 	of ignoring SIGCHLD, let's wait for our child. It sounds slightly
 	more polite.

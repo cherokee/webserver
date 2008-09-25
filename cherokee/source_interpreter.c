@@ -52,6 +52,8 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 
 	SOURCE(n)->type   = source_interpreter;
 	SOURCE(n)->free   = (cherokee_func_free_t)interpreter_free;
+	
+	CHEROKEE_MUTEX_INIT (&n->launching, NULL);
 
 	*src = n;
 	return ret_ok;
@@ -84,6 +86,8 @@ interpreter_free (void *ptr)
 
 	if (src->custom_env)
 		free_custon_env (src);
+
+	CHEROKEE_MUTEX_DESTROY (&src->launching);
 }
 
 
@@ -200,6 +204,10 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 	if (cherokee_buffer_is_empty (&src->interpreter)) 
 		return ret_not_found;
 
+	/* Launching lock
+	 */
+	CHEROKEE_MUTEX_LOCK(&src->launching);
+
 	/* Maybe set a custom enviroment variable set 
 	 */
 	envp = (src->custom_env) ? src->custom_env : empty_envp;
@@ -261,10 +269,12 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 		
 	}
 
+	CHEROKEE_MUTEX_UNLOCK (&src->launching);
 	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 
 error:
+	CHEROKEE_MUTEX_UNLOCK (&src->launching);
 	cherokee_buffer_mrproper (&tmp);
 	return ret_error;
 }

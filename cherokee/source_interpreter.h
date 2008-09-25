@@ -38,6 +38,8 @@ typedef struct {
 	char              **custom_env;
 	cuint_t             custom_env_len;
 	cherokee_boolean_t  debug;
+
+	CHEROKEE_MUTEX_T   (launching);
 } cherokee_source_interpreter_t;
 
 #define SOURCE_INT(s)  ((cherokee_source_interpreter_t *)(s))
