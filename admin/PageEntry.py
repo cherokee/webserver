@@ -54,7 +54,7 @@ class PageEntry (PageMenu, FormHelper):
             url = '/vserver/%s/userdir/rule/%s' % (self._host, self._prio)
         else:
             self._host        = temp[1]
-            self._prio        = temp[3]        
+            self._prio        = temp[3]
             self._priorities  = RuleList (self._cfg, 'vserver!%s!rule'%(self._host))
             self._entry       = self._priorities[int(self._prio)]
             url = '/vserver/%s/rule/%s' % (self._host, self._prio)
@@ -65,7 +65,7 @@ class PageEntry (PageMenu, FormHelper):
     def _op_handler (self, uri, post):
         # Parse the URI
         self._parse_uri (uri)
-        
+
         # Entry not found
         if not self._entry:
             return "/vserver/%s" % (self._host)
@@ -80,7 +80,7 @@ class PageEntry (PageMenu, FormHelper):
             self._op_apply_changes (uri, post)
 
         return self._op_default (uri)
-    
+
     def _op_apply_changes (self, uri, post):
         # Handler properties
         pre = "%s!handler" % (self._conf_prefix)

@@ -26,7 +26,7 @@ function get_by_id_and_class (id, klass)
 
 function make_visible (DivID, visible)
 {
-    if(document.layers) {	   
+    if(document.layers) {
 	  get_by_id(DivID).visibility = visible ? "show" : "hide";
     } else {
        get_by_id(DivID).style.visibility = visible ? "visible" : "hidden";
@@ -141,4 +141,19 @@ function get_cookie (key)
   if (e < 0) e = document.cookie.length;
 
   return unescape (document.cookie.substring (i, e));
+}
+
+
+/* Returns true either if every 'required' class field is set, or none of them is */
+function check_all_or_none ()
+{
+	var none=true;
+	var valid=true;
+	$('.required').each(function(i, o){
+		if (o.value.length > 0)
+		      none=false;
+	        else  valid=false;
+	});
+	if (none || valid)  return true;
+	return false;
 }
