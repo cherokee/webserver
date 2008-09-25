@@ -844,13 +844,15 @@ vservers_check_tls (cherokee_server_t *srv)
 
 	list_for_each (i, &srv->vservers) {
 		ret = cherokee_virtual_server_has_tls (VSERVER(i));
-		if (ret == ret_ok) {
-			TRACE (ENTRIES, "Virtual Server %s: TLS enabled\n", VSERVER(i)->name.buf);
-			return ret_ok;
+		if (ret != ret_ok) {
+			TRACE (ENTRIES, "Virtual Server %s: TLS disabled\n", VSERVER(i)->name.buf);
+			return ret_not_found;
 		}
+
+		TRACE (ENTRIES, "Virtual Server %s: TLS enabled\n", VSERVER(i)->name.buf);
 	}
 
-	return ret_not_found;
+	return ret_ok;
 }
 
 
@@ -1007,7 +1009,8 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	 */
 	if (! cherokee_socket_is_connected (&srv->socket)) {
 		ret = initialize_server_socket (srv, &srv->socket, srv->port);
-		if (unlikely(ret != ret_ok)) return ret;
+		if (unlikely(ret != ret_ok)) 
+			return ret;
 	}
 
 	/* Init the SSL/TLS support
@@ -1016,7 +1019,8 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 	if (srv->tls_enabled) {
 		ret = init_vservers_tls (srv);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok) 
+			return ret;
 	}
 
 	/* Verify the thread number and force it within sane limits.

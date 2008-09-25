@@ -1,5 +1,8 @@
 2008-09-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (cherokee_server_initialize): Fixes a problem
+	with SSL/TLS initialization.
+
 	* cherokee/source_interpreter.h,
 	cherokee/source_interpreter.c (cherokee_source_interpreter_spawn):
 	Do not allow the source to be spawned in pararell.
