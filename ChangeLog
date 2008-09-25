@@ -1,5 +1,9 @@
 2008-09-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/main_worker.c (common_server_initialization): Instead
+	of ignoring SIGCHLD, let's wait for our child. It sounds slightly
+	more polite.
+
 	* cherokee/socket.c (cherokee_socket_init_tls): Checks whether a
 	virtual server supports SSL before trying to accessing its
 	certificates.

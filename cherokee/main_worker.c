@@ -155,7 +155,6 @@ common_server_initialization (cherokee_server_t *srv)
 	/* SIGPIPE */
 	act.sa_handler = SIG_IGN;
 	sigaction (SIGPIPE, &act, NULL);
-	sigaction (SIGCHLD, &act, NULL);
 
 	/* Signal Handler */
 	act.sa_sigaction = signals_handler;
@@ -164,6 +163,7 @@ common_server_initialization (cherokee_server_t *srv)
 	sigaction (SIGSEGV, &act, NULL);
 	sigaction (SIGTERM, &act, NULL);
 	sigaction (SIGINT,  &act, NULL);
+	sigaction (SIGCHLD, &act, NULL);
 #ifdef SIGBUS
 	sigaction (SIGBUS,  &act, NULL);
 #endif
