@@ -55,4 +55,6 @@ several tools and libraries.
   need TLS libraries. Cherokee supports two different SSL/TLS
   libraries: OpenSSL and GNUTLS. You need to have the development
   files of one of these in order to build a package that suits your
-  needs.
+  needs. Additionally, if you are going to use GNUTLS, you will need
+  link:http://pkg-config.freedesktop.org/wiki/[pkg-config] to
+  correctly detect it during the `configure` stage.

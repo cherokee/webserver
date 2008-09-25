@@ -19,9 +19,9 @@ Quickstart
 . Configure the package for your system:
 +
 -----------------------------------------
-./configure --localstatedir=/var 
-            --prefix=/usr 
-            --sysconfdir=/etc 
+./configure --localstatedir=/var     \
+            --prefix=/usr            \
+            --sysconfdir=/etc        \
             --with-wwwroot=/var/www
 -----------------------------------------
 
