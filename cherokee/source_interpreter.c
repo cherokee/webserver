@@ -53,7 +53,8 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	SOURCE(n)->type   = source_interpreter;
 	SOURCE(n)->free   = (cherokee_func_free_t)interpreter_free;
 	
-	CHEROKEE_MUTEX_INIT (&n->launching, NULL);
+	CHEROKEE_MUTEX_INIT (&n->launching_mutex, NULL);
+	n->launching = false;
 
 	*src = n;
 	return ret_ok;
@@ -87,7 +88,7 @@ interpreter_free (void *ptr)
 	if (src->custom_env)
 		free_custon_env (src);
 
-	CHEROKEE_MUTEX_DESTROY (&src->launching);
+	CHEROKEE_MUTEX_DESTROY (&src->launching_mutex);
 }
 
 
@@ -204,10 +205,6 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 	if (cherokee_buffer_is_empty (&src->interpreter)) 
 		return ret_not_found;
 
-	/* Launching lock
-	 */
-	CHEROKEE_MUTEX_LOCK(&src->launching);
-
 	/* Maybe set a custom enviroment variable set 
 	 */
 	envp = (src->custom_env) ? src->custom_env : empty_envp;
@@ -269,12 +266,10 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 		
 	}
 
-	CHEROKEE_MUTEX_UNLOCK (&src->launching);
 	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 
 error:
-	CHEROKEE_MUTEX_UNLOCK (&src->launching);
 	cherokee_buffer_mrproper (&tmp);
 	return ret_error;
 }
@@ -293,6 +288,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
  	ret = cherokee_source_connect (SOURCE(src), socket); 
 	switch (ret) {
 	case ret_ok:
+		TRACE (ENTRIES, "Connected successfully fd=%d\n", socket->socket);
 		goto out;
 	case ret_deny:
 		break;
@@ -303,11 +299,15 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 							   FDPOLL_MODE_WRITE, 
 							   false);
 		if (ret != ret_ok) {
-			return ret_deny;
+			ret = ret_deny;
+			goto out;
 		}
+
+		/* Leave the mutex locked */
 		return ret_eagain;
 	case ret_error:
-		return ret_error;
+		ret = ret_error;
+		goto out;
 	default:
 		break;
 	}
@@ -315,7 +315,11 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	/* In case it did not success, launch a interpreter
 	 */
 	if (*spawned == 0) {
-		/* Launch a new interpreter */
+		/* Launch a new interpreter 
+		 */
+		CHEROKEE_MUTEX_LOCK(&src->launching_mutex);
+		src->launching = true;
+
 		ret = cherokee_source_interpreter_spawn (src);
 		if (ret != ret_ok) {
 			if (src->interpreter.buf)
@@ -323,7 +327,9 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 				       src->interpreter.buf);
 			else
 				TRACE (ENTRIES, "No interpreter to be spawned %s", "\n");
-			return ret_error;
+
+			ret = ret_error;
+			goto out;
 		}
 
 		*spawned = cherokee_bogonow_now;
@@ -334,12 +340,19 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	} else if (cherokee_bogonow_now > *spawned + 3) {	
 		TRACE (ENTRIES, "Giving up; spawned 3 secs ago: %s\n",
 		       src->interpreter.buf);
-		return ret_error;
+
+		ret = ret_error;
+		goto out;
 	}
 
-	return ret_eagain;	
+	/* Leave the mutex locked */
+	return ret_eagain;
 
 out:
-	TRACE (ENTRIES, "Connected successfully fd=%d\n", socket->socket);
-	return ret_ok;
+	if (src->launching) {
+		CHEROKEE_MUTEX_UNLOCK (&src->launching_mutex);
+		src->launching = false;
+	}
+
+	return ret;
 }
