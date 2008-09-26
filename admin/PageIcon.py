@@ -145,18 +145,22 @@ class PageIcon (PageMenu, FormHelper):
 
         # Special icons
         #
-        table = Table(3)
+        table = Table(3, 1)
         icons = self._cfg['icons']
 
         op_def, im_def = self._get_options_icons('icons!default')
         op_dir, im_dir = self._get_options_icons('icons!directory')
         op_par, im_par = self._get_options_icons('icons!parent_directory')
 
+        table += ('', 'Icon', 'File')
         table += (im_def, 'Default',      op_def)
         table += (im_dir, 'Directory',    op_dir)
         table += (im_par, 'Go to Parent', op_par)
 
-        tabs += [('Special Icons', str(table))]
+        tmp  = "<h3>Special Entries</h3>"
+        tmp += self.Indent(table)
+
+        tabs += [('Special Icons', tmp)]
         
         # Files
         #
