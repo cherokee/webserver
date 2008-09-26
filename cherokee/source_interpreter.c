@@ -243,12 +243,6 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 			close (STDERR_FILENO);
 		}
 
-#ifdef SIGCHLD
-		/* Programs suck as PHP need the SIGCHLD 
-		 */
-		signal (SIGCHLD, SIG_DFL);
-#endif
-
 		argv[2] = (char *)tmp.buf;
 		re = execve ("/bin/sh", argv, envp);
 		if (re < 0) {
@@ -315,9 +309,14 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	/* In case it did not success, launch a interpreter
 	 */
 	if (*spawned == 0) {
+		int unlocked;
+
 		/* Launch a new interpreter 
 		 */
-		CHEROKEE_MUTEX_LOCK(&src->launching_mutex);
+		unlocked = CHEROKEE_MUTEX_TRY_LOCK(&src->launching_mutex);
+		if (unlocked)
+			return ret_eagain;
+
 		src->launching = true;
 
 		ret = cherokee_source_interpreter_spawn (src);
