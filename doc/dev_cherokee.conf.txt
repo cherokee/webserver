@@ -501,7 +501,7 @@ The balancers must define the information sources to be used. For the
 ones defined in the examples above, using round robin from within the
 FastCGI handler, the following example would apply.
 
-Example:
+Example::
 +
 ----
 vserver!10!rule!600!handler = fcgi
