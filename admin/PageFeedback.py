@@ -75,7 +75,7 @@ class PageFeedback (PageMenu, FormHelper):
         headers = {"Content-type": "application/x-www-form-urlencoded",
                    "Accept":       "text/plain"}
 
-        conn = httplib.HTTPConnection("www.cherokee-project.org")
+        conn = httplib.HTTPConnection("www.cherokee-project.com")
         conn.request("POST", CHEROKEE_FEEDBACK_URL, params, headers)
         response = conn.getresponse()
         try:
