@@ -351,7 +351,7 @@ table.rulestable tr.odd td {
 }
 
 /**************************/
-/* PageMime.py styles */
+/* PageMime.py styles     */
 /**************************/
 #mimetable input[size="20"] {
   width: 100px;
@@ -371,4 +371,15 @@ table.rulestable tr.odd td {
 
 #new_extensions {
   width: 280px;
+}
+
+/**************************/
+/* PageInfoSource.py styl */
+/**************************/
+
+#body-source #new_env_name {
+  width: 210px;
+}
+
+#body-source #new_env_value {
 }
