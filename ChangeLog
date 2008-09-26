@@ -1,5 +1,8 @@
 2008-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageAdvanced.py: Fixes an issue setting the max keep-alive
+	time. Two validations rules were interfering with each other.
+
 	* admin/ModuleBalancer.py (ModuleBalancerGeneric._op_render): Adds
 	a link to the source configuration page.
 

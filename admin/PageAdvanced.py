@@ -15,8 +15,8 @@ DATA_VALIDATION = [
     ('server!listen_queue',           validations.is_positive_int),
     ('server!max_connection_reuse',   validations.is_positive_int),
     ('server!log_flush_elapse',       validations.is_positive_int),
-    ("server!keepalive",              validations.is_boolean),
-    ('server!keepalive_max_requests', validations.is_positive_int)
+    ('server!keepalive_max_requests', validations.is_positive_int),
+    ("server!keepalive$",             validations.is_boolean)
 ]
 
 WARNING = """
