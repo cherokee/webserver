@@ -87,11 +87,10 @@ class PageInfoSource (PageMenu, FormHelper):
 
     def _render_source_details_env (self, s):
         txt = ''
-
         envs = self._cfg.keys('source!%s!env'%(s))
         if envs:
-            tmp = '<h3>Environment variables</h3>'
-            table = Table(3, title_left=1, style='width="90%%"')
+            txt += '<h3>Environment variables</h3>'
+            table = Table(3, title_left=1, style='width="90%"')
             for env in envs:
                 pre = 'source!%s!env!%s'%(s,env)
                 val = self.InstanceEntry(pre, 'text', size=25)
@@ -99,12 +98,13 @@ class PageInfoSource (PageMenu, FormHelper):
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (env, val, link_del)
 
-            tmp += self.Indent(table)
-            tmp += self.HiddenInput ('source_num', s)
-            fo = Form ("/%s"%(self._id), add_submit=False, auto=True)
-            txt += fo.Render(tmp)
+            txt += self.Indent(table)
+            txt += self.HiddenInput ('source_num', s)
 
-        tmp = '<h3>Add new Environment variable</h3>'
+        fo = Form ("/%s"%(self._id), add_submit=False, auto=True)
+        render=fo.Render(txt)
+
+        txt = '<h3>Add new Environment variable</h3>'
         name  = self.InstanceEntry('new_env_name',  'text', size=25)
         value = self.InstanceEntry('new_env_value', 'text', size=25)
 
@@ -112,12 +112,12 @@ class PageInfoSource (PageMenu, FormHelper):
         table += ('Variable', 'Value', '')
         table += (name, value, SUBMIT_ADD)
 
-        tmp += self.Indent (table)
-        tmp += self.HiddenInput ('source_num', s)
+        txt += self.Indent (table)
+        txt += self.HiddenInput ('source_num', s)
         fo = Form ("/%s"%(self._id), add_submit=False, auto=False)
 
-        txt += fo.Render(tmp)
-        return txt
+        render += fo.Render(txt)
+        return render
 
     def _render_source_details (self, s):
         txt = ''

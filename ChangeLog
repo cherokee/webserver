@@ -1,3 +1,8 @@
+2008-09-26  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/static/js/common.js, admin/Form.py,
+	admin/PageInfoSource.py: fixed a missing case related to issue 131.
+
 2008-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/balancer.c (cherokee_balancer_mrproper): This should

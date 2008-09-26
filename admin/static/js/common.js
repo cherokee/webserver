@@ -144,16 +144,17 @@ function get_cookie (key)
 }
 
 
-/* Returns true either if every 'required' class field is set, or none of them is */
-function check_all_or_none ()
+/* Returns true either if every field of
+   class=klass is set, or none of them is
+*/
+function check_all_or_none (klass)
 {
 	var none=true;
 	var valid=true;
-	$('.required').each(function(i, o){
+	$('.'+klass).each(function(i, o){
 		if (o.value.length > 0)
 		      none=false;
 	        else  valid=false;
 	});
-	if (none || valid)  return true;
-	return false;
+	return (none || valid);
 }

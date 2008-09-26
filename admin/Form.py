@@ -15,15 +15,15 @@ FORM_TEMPLATE = """
 AUTO_SUBMIT_JS = """
 <script type="text/javascript">
 $(document).ready(function(event) {
-  $("#auto input").change(function(event) {
-  if (check_all_or_none())
+  $(".auto input").change(function(event) {
+  if (check_all_or_none('required'))
       this.form.submit()
   });
 });
 </script>
 """
 
-AUTOFORM_TEMPLATE = FORM_TEMPLATE.replace('<form','<form id="auto"') + AUTO_SUBMIT_JS
+AUTOFORM_TEMPLATE = FORM_TEMPLATE.replace('<form','<form class="auto"') + AUTO_SUBMIT_JS
 
 SUBMIT_BUTTON = """
 <input type="submit" %(submit_props)s />
