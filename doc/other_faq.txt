@@ -100,8 +100,7 @@ Give Cherokee (SCGI|FastCGI) a try with your WSGI application.  We
 believe that besides fixing both the architectural and security flaws
 you will improve performance.
 
-=== I need to make an administration script: What signals are
-supported by Cherokee?
+=== I need to make an administration script: What signals are supported by Cherokee?
 
 The list is documented in the link:other_signals.html[Signals] entry.
 
