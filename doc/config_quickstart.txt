@@ -16,6 +16,9 @@ specific documentation entries.
 
 Overview
 ~~~~~~~~
+* link:config_status.html[Status]:
+  This gives a quick view of the server status.
+
 * link:config_general.html[General]:
   There are a number of entries that specify the most significant
   configuration options such as the port - or ports - that the server
@@ -29,10 +32,9 @@ Overview
   completely independent configuration: paths, behavior, logging
   facilities, etc.
 
-* link:config_encoding.html[Encoding]:
-  The encoders allow to transform whatever information the server is
-  sending as a response of a request, no matter what handler is
-  generating it.
+* link:config_info_sources.html[Info Sources]:
+  Define the resources that will be providing information. For
+  instance, PHP.
 
 * link:config_icons.html[Icons]:
   Associate icon images with one or more file extensions. Used to
@@ -56,7 +58,7 @@ used to serve any typical PHP-driven dynamic website.
 If you have a specific need, you should check out the recipes present in
 the 'Cookbook' section of the documentation. Among other subjects, you
 can find information about
-link:cookbook_optimizing_cherokee.html[Cherokee optimizations],
+link:cookbook_optimizations.html[Cherokee optimizations],
 setting up efficient link:cookbook_authentication.html[Authentication]
 mechanisms, or configuring several popular application frameworks.
 

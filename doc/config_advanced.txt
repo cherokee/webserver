@@ -9,7 +9,7 @@ what you are doing. For most cases the default parameters will work
 just fine.
 
 You should at least read the chapter
-link:cookbook_optimizing_cherokee.html[Optimizing Cherokee] before you
+link:cookbook_optimizations.html[Optimizing Cherokee] before you
 start tweaking things here.
 
 image::media/images/admin_advanced1.png[Cherokee Admin interface]

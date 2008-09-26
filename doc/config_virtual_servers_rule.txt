@@ -11,9 +11,9 @@ This menu offers the following tabs:
    link:config_virtual_servers.html[Virtual servers] section.
 
  . Handler: It allows to fine tune the behavior of any of the
-   available handlers. Since so many options are available, there is
-   an independent section of the documentation to explain things named
-   link:config_virtual_servers_hanlder.html[Handler Options].
+   available handlers. Since so many options are available, refer to
+   the complete list of link:modules_handlers.html[handlers] shipped
+   with Cherokee.
 
  . Encoding: to manage the compression of the contents to be sent.
 
@@ -27,18 +27,16 @@ Encoding
 ~~~~~~~~
 The content sent by Cherokee can be encoded or not.
 This tab is used to configure, on a per-rule basis,  what
-link:modules_encoders.htm[encoders], if any, are to be applied.
+link:modules_encoders.html[encoders], if any, are to be applied.
 
 You can set up the encoding method to use, and it shall be applied to
 whatever content is handled by the parent rule.
 
-image::media/images/admin_encoding.png[Available encoders]
-
-Whenever you set up a virtual server, a rule is created where
+Whenever you set up a virtual server, creating a rule where
 link:modules_encoders_gzip.html[gzip] is enabled by default for the
-following file types: `html`, `htm`, `txt`, `css` and `js`.
-
-You are encouraged to use this. Hardware is cheap. Bandwidth is not.
+following file types: `html`, `htm`, `txt`, `css` and `js` is a good
+idea. You are encouraged to use this. Hardware is cheap. Bandwidth is
+not.
 
 
 Expiration

@@ -37,7 +37,7 @@ make
 make install
 -----------------------------------------
 
-. Start link:admin.html[cherokee-admin]
+. Start link:bundle_cherokee-admin.html[cherokee-admin]
 
 Advanced parameters
 ~~~~~~~~~~~~~~~~~~~
