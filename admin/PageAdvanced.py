@@ -16,7 +16,8 @@ DATA_VALIDATION = [
     ('server!max_connection_reuse',   validations.is_positive_int),
     ('server!log_flush_elapse',       validations.is_positive_int),
     ('server!keepalive_max_requests', validations.is_positive_int),
-    ("server!keepalive$",             validations.is_boolean)
+    ("server!keepalive$",             validations.is_boolean),
+    ("server!thread_number",          validations.is_positive_int)
 ]
 
 WARNING = """
@@ -46,6 +47,7 @@ class PageAdvanced (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'advanced', cfg, HELPS)
         FormHelper.__init__ (self, 'advanced', cfg)
+        self.set_submit_url ("/%s/"%(self._id))
 
     def _op_render (self):
         content = self._render_content()
@@ -73,13 +75,13 @@ class PageAdvanced (PageMenu, FormHelper):
         txt += "<h2>System tweaking</h2>"
         table = TableProps()
         self.AddPropEntry    (table, 'Thread Number',    'server!thread_number', NOTE_THREAD_NUM)
-        self.AddPropOptions  (table, 'Thread Policy',    'server!thread_policy', THREAD_POLICY, NOTE_THREAD)
+        self.AddPropOptions_Reload (table, 'Thread Policy', 'server!thread_policy', THREAD_POLICY, NOTE_THREAD)
         self.AddPropEntry    (table, 'File descriptors', 'server!fdlimit', NOTE_FD_NUM)
         txt += self.Indent(table)
 
         txt += "<h2>Server tweaking</h2>"
         table = TableProps()
-        self.AddPropOptions  (table, 'Polling Method',    'server!poll_method',  polling_methods, NOTE_POLLING)
+        self.AddPropOptions_Reload (table, 'Polling Method', 'server!poll_method',  polling_methods, NOTE_POLLING)
         self.AddPropEntry    (table, 'Sendfile min size', 'server!sendfile_min', NOTE_SENDFILE_MIN)
         self.AddPropEntry    (table, 'Sendfile max size', 'server!sendfile_max', NOTE_SENDFILE_MAX)
         self.AddPropEntry    (table, 'Panic action',      'server!panic_action', NOTE_PANIC_ACTION)

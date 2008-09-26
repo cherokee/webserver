@@ -1,5 +1,7 @@
 2008-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageAdvanced.py: Adds a missing text entry validation.
+
 	* admin/PageIcon.py (PageIcon._render_icon_list): Tiny style
 	change.  Now the 'special icons' tab looks like the rest.
 
