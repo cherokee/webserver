@@ -1,5 +1,7 @@
 2008-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* Cherokee 0.9.0 released
+
 	* admin/PageAdvanced.py: Adds a missing text entry validation.
 
 	* admin/PageIcon.py (PageIcon._render_icon_list): Tiny style
