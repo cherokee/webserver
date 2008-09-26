@@ -347,7 +347,6 @@ main (int argc, char **argv)
 
 	do {
 		ret = cherokee_server_step (srv);
-		CHEROKEE_CRASH;
 	} while (ret == ret_eagain);
 
 	cherokee_server_stop (srv);
