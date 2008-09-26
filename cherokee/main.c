@@ -253,6 +253,8 @@ process_wait (pid_t pid)
 				break;
 			else
 				continue;
+		else if (errno == ECHILD) 
+			return ret_ok;
 		else
 			return ret_error;
 	}

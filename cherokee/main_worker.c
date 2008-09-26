@@ -96,6 +96,8 @@ wait_process (pid_t pid)
 		re = waitpid (pid, &exitcode, 0);
 		if (re > 0)
 			break;
+		else if (errno == ECHILD) 
+			break;
 		else if (errno == EINTR) 
 			continue;
 		else {
@@ -345,6 +347,7 @@ main (int argc, char **argv)
 
 	do {
 		ret = cherokee_server_step (srv);
+		CHEROKEE_CRASH;
 	} while (ret == ret_eagain);
 
 	cherokee_server_stop (srv);
