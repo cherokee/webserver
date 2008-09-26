@@ -1,5 +1,8 @@
 2008-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/balancer.c (cherokee_balancer_mrproper): This should
+	fix bug: http://code.google.com/p/cherokee/issues/detail?id=129
+
 	* cherokee/main_worker.c (wait_process): Improves the SIGCHLD
 	signal management.
 
