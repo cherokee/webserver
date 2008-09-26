@@ -110,7 +110,6 @@ wait_process (pid_t pid)
 static void 
 signals_handler (int sig, siginfo_t *si, void *context) 
 {
-	UNUSED(si);
 	UNUSED(context);
 
 	switch (sig) {
@@ -177,6 +176,8 @@ common_server_initialization (cherokee_server_t *srv)
 
 	/* Signal Handler */
 	act.sa_sigaction = signals_handler;
+	act.sa_flags     = SA_SIGINFO;
+
 	sigaction (SIGHUP,  &act, NULL);
 	sigaction (SIGUSR2, &act, NULL);
 	sigaction (SIGSEGV, &act, NULL);
