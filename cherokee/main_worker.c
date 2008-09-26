@@ -86,11 +86,28 @@ static cuint_t             port          = 80;
 static ret_t common_server_initialization (cherokee_server_t *srv);
 
 
+static void
+wait_process (pid_t pid)
+{
+	int re;
+	int exitcode;
+
+	while (true) {
+		re = waitpid (pid, &exitcode, 0);
+		if (re > 0)
+			break;
+		else if (errno == EINTR) 
+			continue;
+		else {
+			PRINT_ERRNO (errno, "ERROR: waitting PID %d: ${ERROR}\n", pid);
+			return;
+		}
+	}
+}
+
 static void 
 signals_handler (int sig, siginfo_t *si, void *context) 
 {
-	int exitcode;
-
 	UNUSED(si);
 	UNUSED(context);
 
@@ -112,7 +129,7 @@ signals_handler (int sig, siginfo_t *si, void *context)
 		break;
 
 	case SIGCHLD:
-		wait (&exitcode);
+		wait_process (si->si_pid);
 		break;
 
 	case SIGSEGV:
