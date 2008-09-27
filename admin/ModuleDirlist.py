@@ -45,7 +45,7 @@ class ModuleDirlist (ModuleHandler):
         txt += '<h2>Theming</h2>'
         table  = TableProps()
         themes = self._get_theme_list()
-        self.AddPropOptions (table, 'Theme',        "%s!theme" % (self._prefix), themes, NOTE_THEME)
+        self.AddPropOptions_Reload (table, 'Theme', "%s!theme" % (self._prefix), themes, NOTE_THEME)
         self.AddPropEntry   (table, 'Icons dir',    "%s!icon_dir" % (self._prefix), NOTE_ICON_DIR)
         self.AddPropEntry   (table, 'Notice files', "%s!notice_files" % (self._prefix), NOTE_NOTICE_FILES)
         txt += self.Indent(table)

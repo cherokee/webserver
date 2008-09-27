@@ -10,8 +10,8 @@ NO_SOURCE_WARNING  = 'A load balancer must be configured to use at least one dat
 
 class ModuleBalancerGeneric (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url, name):
-        FormHelper.__init__ (self, name, cfg)
         Module.__init__ (self, name, cfg, prefix, submit_url)
+        FormHelper.__init__ (self, name, cfg)
 
     def _op_render (self):
         txt = ''
@@ -61,8 +61,8 @@ class ModuleBalancerGeneric (Module, FormHelper):
                 options.append((s,nick))
 
             table = TableProps()
-            self.AddPropOptions (table, "Application Server",
-                                 "new_balancer_node", options, "")
+            self.AddPropOptions_Reload (table, "Application Server",
+                                        "new_balancer_node", options, "")
             txt += str(table)
 
         return txt

@@ -38,6 +38,7 @@ class PageGeneral (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'general', cfg, HELPS)
         FormHelper.__init__ (self, 'general', cfg)
+        self.set_submit_url ("/%s/"%(self._id))
 
     def _op_render (self):
         content = self._render_content()
@@ -59,7 +60,7 @@ class PageGeneral (PageMenu, FormHelper):
         txt += "<h2>Basic Behavior</h2>"
         table = TableProps()
         self.AddPropEntry (table,  'Timeout (<i>secs</i>)', 'server!timeout',  NOTE_TIMEOUT)
-        self.AddPropOptions(table, 'Server Tokens',         'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
+        self.AddPropOptions_Reload (table, 'Server Tokens',  'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
         txt += self.Indent(table)
 
         txt += "<h2>Server Permissions</h2>"

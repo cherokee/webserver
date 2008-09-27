@@ -20,15 +20,15 @@ class ModuleHeader (Module, FormHelper):
     validation = [('tmp!new_rule!match', validations.is_regex)]
 
     def __init__ (self, cfg, prefix, submit_url):
-        Module.__init__ (self, 'header', cfg, prefix, submit_url)
         FormHelper.__init__ (self, 'header', cfg)
+        Module.__init__ (self, 'header', cfg, prefix, submit_url)
 
     def _op_render (self):
         table = TableProps()
         if self._prefix.startswith('tmp!'):
-            self.AddPropOptions (table, 'Header', '%s!value'%(self._prefix), HEADERS, NOTE_HEADER)
+            self.AddPropOptions_Reload (table, 'Header', '%s!value'%(self._prefix), HEADERS, NOTE_HEADER)
         else:
-            self.AddPropOptions (table, 'Header', '%s!header'%(self._prefix), HEADERS, NOTE_HEADER)
+            self.AddPropOptions_Reload (table, 'Header', '%s!header'%(self._prefix), HEADERS, NOTE_HEADER)
         self.AddPropEntry   (table, 'Regular Expression', '%s!match'%(self._prefix), NOTE_MATCH)
         return str(table)
         

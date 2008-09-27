@@ -21,8 +21,8 @@ class ModuleAuthBase (Module, FormHelper):
     ]
 
     def __init__ (self, cfg, prefix, name, submit):
-        Module.__init__ (self, name, cfg, prefix, submit)
         FormHelper.__init__ (self, name, cfg)
+        Module.__init__ (self, name, cfg, prefix, submit)
 
     def _op_render (self):
         txt = ''
@@ -34,7 +34,7 @@ class ModuleAuthBase (Module, FormHelper):
             methods = filter (lambda x,m=method: x[0] == method, VALIDATOR_METHODS)
 
         table = TableProps()
-        self.AddPropOptions (table, "Methods", "%s!methods"%(self._prefix), methods, NOTE_METHODS)
+        self.AddPropOptions_Reload (table, "Methods", "%s!methods"%(self._prefix), methods, NOTE_METHODS)
         self.AddPropEntry   (table, "Realm",   "%s!realm"  %(self._prefix), NOTE_REALM)
         self.AddPropEntry   (table, "Users",   "%s!users"  %(self._prefix), NOTE_USERS)
 
