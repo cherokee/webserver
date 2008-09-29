@@ -1,5 +1,8 @@
 2008-09-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/logger_writer.c (cherokee_logger_writer_open): Open the
+	log with the O_NOFOLLOW option (security enhancenment).
+
 	* cherokee/macros.h, cherokee/connection-protected.h,
 	cherokee/connection.c, qa/174-Respins-Limit.py, qa/Makefile.am:
 	Adds a protection against internal respin infinite loops. By

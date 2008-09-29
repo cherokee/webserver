@@ -356,6 +356,13 @@
 # error Unknown size of size_t 
 #endif
 
+#ifndef O_NOFOLLOW
+# define O_NOFOLLOW 0
+#endif
+
+#ifndef O_LARGEFILE
+# define O_LARGEFILE 0
+#endif
 
 #ifdef O_NOATIME
 # define CHE_O_READ O_RDONLY | O_BINARY | O_NOATIME
