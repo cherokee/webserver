@@ -213,7 +213,6 @@ ret_t
 cherokee_logger_writer_open (cherokee_logger_writer_t *writer)
 {
 	ret_t ret;
-	int   opt;
 
 	switch (writer->type) {
 	case cherokee_logger_writer_syslog:
