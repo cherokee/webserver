@@ -1,5 +1,8 @@
 2008-09-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/thread.c, cherokee/server.c: Fixes an error while
+	freeing the memory on exit.
+
 	* cherokee/logger_writer.c (cherokee_logger_writer_open): Open the
 	log with the O_NOFOLLOW option (security enhancenment).
 

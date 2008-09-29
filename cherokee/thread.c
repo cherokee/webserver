@@ -2042,18 +2042,6 @@ cherokee_thread_connection_num (cherokee_thread_t *thd)
 
 
 ret_t 
-cherokee_thread_close_all_connections (cherokee_thread_t *thd)
-{
-	cherokee_list_t *i, *tmp;
-	list_for_each_safe (i, tmp, &thd->active_list) {
-		purge_closed_connection (thd, CONN(i));
-	}
-
-	return ret_ok;
-}
-
-
-ret_t 
 cherokee_thread_close_polling_connections (cherokee_thread_t *thd, int fd, cuint_t *num)
 {
 	cuint_t                n = 0;

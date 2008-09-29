@@ -243,19 +243,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 
 static void
-close_all_connections (cherokee_server_t *srv)
-{
-	cherokee_list_t *i;
-
-	cherokee_thread_close_all_connections (srv->main_thread);
-	
-	list_for_each (i, &srv->thread_list) {
-		cherokee_thread_close_all_connections (THREAD(i));
-	}
-}
-
-
-static void
 free_virtual_servers (cherokee_server_t *srv)
 {
 	cherokee_list_t *i, *j;
@@ -1140,11 +1127,9 @@ cherokee_server_stop (cherokee_server_t *srv)
 	if (srv == NULL)
 		return ret_ok;
 
-	srv->wanna_exit = true;
-
-	/* Close all connections
+	/* Point it that want to exit
 	 */
-	close_all_connections (srv);
+	srv->wanna_exit = true;
 
 	/* Flush logs
 	 */
