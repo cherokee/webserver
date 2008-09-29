@@ -41,7 +41,7 @@ typedef struct {
 } cherokee_iocache_t;
 
 typedef struct {
-	/* Inherirance */
+	/* Inheritance */
 	cherokee_cache_entry_t base;
 
 	/* Information to cache */

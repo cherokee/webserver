@@ -97,8 +97,10 @@ struct cherokee_cache_entry {
 	cherokee_list_t              listed;
 	cherokee_buffer_t            key;
 	cherokee_cache_list_t        in_list;
-	cint_t                       ref_count;
 
+	cint_t                       ref_count;
+	void                        *mutex;
+	
 	/* Callbacks */
 	cherokee_cache_entry_clean_t clean_cb;
 	cherokee_cache_entry_fetch_t fetch_cb;
@@ -112,7 +114,9 @@ struct cherokee_cache_entry {
 
 /* Cache Entries
  */
-ret_t cherokee_cache_entry_init  (cherokee_cache_entry_t  *entry, cherokee_buffer_t *key);
+ret_t cherokee_cache_entry_init  (cherokee_cache_entry_t  *entry, 
+				  cherokee_buffer_t       *key,
+				  void                    *mutex);
 ret_t cherokee_cache_entry_unref (cherokee_cache_entry_t **entry);
 
 /* Cache Objects

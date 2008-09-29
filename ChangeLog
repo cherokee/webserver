@@ -1,5 +1,9 @@
 2008-09-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/cache.c, cherokee/cache.h, cherokee/handler_file.c,
+	cherokee/iocache.c, cherokee/iocache.h: Takes care of a potential
+	concurrency issue that could ended up leading the server to crash.
+
 	* cherokee/thread.c, cherokee/server.c: Fixes an error while
 	freeing the memory on exit.
 

@@ -66,6 +66,7 @@ typedef struct {
 	time_t                   stat_expiration;
 	time_t                   mmap_expiration;
 	CHEROKEE_MUTEX_T        (updating);
+	CHEROKEE_MUTEX_T        (parent_lock);
 } cherokee_iocache_entry_extension_t;
 
 #define PUBL(o) ((cherokee_iocache_entry_t *)(o))
@@ -121,9 +122,13 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 	UNUSED(cache);
 	UNUSED(param);
 
+	CHEROKEE_MUTEX_INIT (&PRIV(n)->updating, NULL);
+	CHEROKEE_MUTEX_INIT (&PRIV(n)->parent_lock, NULL);
+
 	/* Init its parent class
 	 */
-	cherokee_cache_entry_init (CACHE_ENTRY(n), key);
+	cherokee_cache_entry_init (CACHE_ENTRY(n), key, 
+				   &PRIV(n)->parent_lock);
 
 	/* Set the virtual methods
 	 */
@@ -138,8 +143,6 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 	PRIV(n)->mmap_expiration = 0;
 	PUBL(n)->mmaped          = NULL;
 	PUBL(n)->mmaped_len      = 0;
-
-	CHEROKEE_MUTEX_INIT (&PRIV(n)->updating, NULL);
 
 	/* Return the new object
 	 */

@@ -351,6 +351,7 @@ stat_local_directory (cherokee_handler_file_t   *fhdl,
 			conn->error_code = http_not_found;
 			break;
 		default:
+			RET_UNKNOWN(ret);
 			conn->error_code = http_internal_error;
 		}
 		

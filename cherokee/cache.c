@@ -72,10 +72,12 @@ struct cherokee_cache_priv {
  */
 ret_t 
 cherokee_cache_entry_init (cherokee_cache_entry_t *entry, 
-			   cherokee_buffer_t      *key)
+			   cherokee_buffer_t      *key,
+                           void                   *mutex)
 {
 	entry->in_list   = cache_no_list;
 	entry->ref_count = 1;
+	entry->mutex     = mutex;
 
 	INIT_LIST_HEAD(&entry->listed);
 
@@ -122,7 +124,10 @@ entry_parent_free (cherokee_cache_entry_t *entry)
 static ret_t
 entry_ref (cherokee_cache_entry_t *entry)
 {
+	CHEROKEE_MUTEX_LOCK (entry->mutex);
 	entry->ref_count++;
+	CHEROKEE_MUTEX_UNLOCK (entry->mutex);
+
 	return ret_ok;
 }
 
@@ -134,12 +139,15 @@ cherokee_cache_entry_unref (cherokee_cache_entry_t **entry)
 	if (*entry == NULL)
 		return ret_ok;
 
+	CHEROKEE_MUTEX_LOCK ((*entry)->mutex);
 	(*entry)->ref_count--;
 
 	/* The entry is still being used
 	 */
-	if ((*entry)->ref_count > 0)
+	if ((*entry)->ref_count > 0) {
+		CHEROKEE_MUTEX_UNLOCK ((*entry)->mutex);
 		goto out;
+	}
 	
 	/* Free it
 	 */
@@ -387,8 +395,11 @@ cherokee_cache_get (cherokee_cache_t        *cache,
 	/* Miss: Instance new entry and add it to T1
 	 */
 	cache->new_cb (cache, key, cache->new_cb_param, ret_entry);
-	if (*ret_entry == NULL)
+	if (*ret_entry == NULL) {
+		SHOULDNT_HAPPEN;
+		CHEROKEE_MUTEX_UNLOCK (&cache->priv->mutex);
 		return ret_error;
+	}
 
 	/* Add new
 	 */
