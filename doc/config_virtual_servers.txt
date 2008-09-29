@@ -278,6 +278,26 @@ Each of the mentioned handlers can be fine-tuned through that
 menu. Refer to each handler's documentation if you are interested in
 the available settings.
 
+[NOTE]
+It is quite easy to fully specify a virtual server's behavior having
+just some notions of Cherokee's way of working. However, there might
+be some corner cases where Cherokee will behave in a manner that could
+not seem obvious at first. Every doubt can be easily cleared by simple
+understanding in full detail the way a rule is applied. For instance
+lets suppose there is an `Extension` type rule configured to handle
+PHP files. If a request is made for
+`http://example.com/index.php/what/ever`, this rule *WOULD NOT* be
+applied at first because the request doesn't end with the appropriate
+extension: it has some adittional path information. However, if there
+is a `Default` rule configured that is managed by the `List and Send`
+handler, things would work. This is because the `Default` rule would
+catch any unmatched requests, and the `List and Send` handler would
+notice the PATHINFO part of the request. It would then split the
+request in two parts, separating the PHP file from the appended
+information, and would then evaluate once more the list of rules. This
+time the request would end in `.php` and thus it would match the
+`Extension` rule meant to handle PHP files.
+
 
 Personal Webs
 ~~~~~~~~~~~~~
