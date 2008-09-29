@@ -1,5 +1,3 @@
-import random
-import string
 from base import *
 from util import *
 
