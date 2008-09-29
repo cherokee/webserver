@@ -99,6 +99,7 @@
 #define LOGGER_MIN_BUFSIZE            0
 #define DEFAULT_LOGGER_MAX_BUFSIZE    32768
 #define LOGGER_MAX_BUFSIZE            (4 * 1024 * 1024)
+#define RESPINS_MAX                   16
 
 #define FD_NUM_SPARE                  10	/* range:  8 - 20 */          
 #define FD_NUM_MIN_SYSTEM             20	/* range: 16 - 64 */

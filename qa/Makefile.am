@@ -177,7 +177,8 @@ run-tests.py \
 170-Error-ContentLength.py \
 171-SCGI-Keepalive.py \
 172-Chunked-CGI.py \
-173-Chunked-SCGI.py
+173-Chunked-SCGI.py \
+174-Respins-Limit.py
 
 test:
 	./run-tests.py

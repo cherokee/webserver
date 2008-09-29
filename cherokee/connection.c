@@ -120,6 +120,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->polling_mode         = FDPOLL_MODE_NONE;
 	n->expiration           = cherokee_expiration_none;
 	n->expiration_time      = 0;
+	n->respins              = 0;
 
 	cherokee_buffer_init (&n->buffer);
 	cherokee_buffer_init (&n->header_buffer);
@@ -259,6 +260,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->chunked_encoding     = false;
 	conn->chunked_sent         = 0;
 	conn->chunked_last_package = false;
+	conn->respins              = 0;
 
 	memset (conn->regex_ovector, OVECTOR_LEN * sizeof(int), 0);
 	conn->regex_ovecsize = 0;
@@ -2110,6 +2112,13 @@ cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
 {
 	TRACE(ENTRIES, "Clean for respin: conn=%p\n", conn);
 
+	conn->respins += 1;
+	if (conn->respins > RESPINS_MAX) {
+		PRINT_ERROR ("Internal redirection limit (%d) excedeeded\n", RESPINS_MAX);
+		conn->error_code = http_internal_error;
+		return ret_error;
+	}
+
 	if (cherokee_connection_use_webdir(conn)) {
 		cherokee_buffer_prepend_buf (&conn->request, &conn->web_directory);
 		cherokee_buffer_clean (&conn->local_directory);
@@ -2205,6 +2214,7 @@ cherokee_connection_print (cherokee_connection_t *conn)
 	print_cbuf ("   Query string", query_string);
 	print_cbuf ("           Host", host);
 	print_cbuf ("       Redirect", redirect);
+	print_cint ("   Redirect num", respins);
 	print_cint ("      Keepalive", keepalive);
 	print_str  ("          Phase", phase);
 	print_cint ("    Range start", range_start);

@@ -28,6 +28,9 @@ from PageError import *
 from PageAjaxUpdate import *
 from PageInfoSource import *
 from CherokeeManagement import *
+try:
+    from PageWizard import *
+except: pass
 
 # Constants
 #
@@ -82,6 +85,8 @@ class Handler(pyscgi.SCGIHandler):
             page = PageAdvanced(cfg)
         elif uri.startswith('/feedback'):
             page = PageFeedback(cfg)
+        elif uri.startswith('/wizard'):
+            page = PageWizard(cfg)
         elif uri == '/vserver' or \
              uri == '/vserver/' or \
              uri == '/vserver/ajax_update':

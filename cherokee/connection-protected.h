@@ -145,7 +145,6 @@ struct cherokee_connection {
 
 	cherokee_buffer_t             host;
 	cherokee_buffer_t             effective_directory;
-	cherokee_buffer_t             redirect;
 	cherokee_buffer_t             request_original;
 
 	/* Authentication
@@ -168,6 +167,8 @@ struct cherokee_connection {
 	 */
 	cherokee_post_t               post;
 
+	/* Net connection
+	 */
 	uint32_t                      keepalive;
 	time_t                        timeout;
 
@@ -200,6 +201,11 @@ struct cherokee_connection {
 	size_t                        chunked_sent;
 	struct iovec                  chunks[3];
 	uint16_t                      chunksn;
+
+	/* Redirections
+	 */
+	cherokee_buffer_t             redirect;
+	cuint_t                       respins;
 };
 
 #define CONN_SRV(c)    (SRV(CONN(c)->server))
