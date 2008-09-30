@@ -1,3 +1,11 @@
+2008-09-30  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/ModuleGeoip.py, admin/ModuleDefault.py,
+	admin/ModuleErrorNn.py, admin/ModuleRequest.py,
+	admin/ModuleExtensions.py, admin/ModuleBalancer.py,
+	admin/ModuleDirectory.py, admin/ModuleErrorRedir.py: fixes and
+	prevents regressions on Option selection entries.
+
 2008-09-29  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/cache.c, cherokee/cache.h, cherokee/handler_file.c,

@@ -10,8 +10,8 @@ NO_SOURCE_WARNING  = 'A load balancer must be configured to use at least one dat
 
 class ModuleBalancerGeneric (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url, name):
-        Module.__init__ (self, name, cfg, prefix, submit_url)
         FormHelper.__init__ (self, name, cfg)
+        Module.__init__ (self, name, cfg, prefix, submit_url)
 
     def _op_render (self):
         txt = ''

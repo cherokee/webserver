@@ -9,8 +9,8 @@ class ModuleExtensions (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
 
     def __init__ (self, cfg, prefix, submit_url):
-        Module.__init__ (self, 'extensions', cfg, prefix, submit_url)
         FormHelper.__init__ (self, 'extensions', cfg)
+        Module.__init__ (self, 'extensions', cfg, prefix, submit_url)
 
     def _op_render (self):
         table = TableProps()

@@ -9,8 +9,8 @@ class ModuleRequest (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_regex)]
 
     def __init__ (self, cfg, prefix, submit_url):
-        Module.__init__ (self, 'request', cfg, prefix, submit_url)
         FormHelper.__init__ (self, 'request', cfg)
+        Module.__init__ (self, 'request', cfg, prefix, submit_url)
 
     def _op_render (self):
         table = TableProps()

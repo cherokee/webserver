@@ -9,8 +9,8 @@ class ModuleDirectory (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_dir_formated)]
 
     def __init__ (self, cfg, prefix, submit_url):
-        Module.__init__ (self, 'directory', cfg, prefix, submit_url)
         FormHelper.__init__ (self, 'directory', cfg)
+        Module.__init__ (self, 'directory', cfg, prefix, submit_url)
 
     def _op_render (self):
         table = TableProps()
