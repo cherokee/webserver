@@ -16,7 +16,7 @@ Python, Ruby and PHP.
 image::media/images/admin_handler_dbslayer.png[DBSlayer]
 
 It also makes use of a link:modules_balancers.html[balancing strategy]
-to manage at least one link:config_info_sources.html[information
+to manage *at least one* link:config_info_sources.html[information
 source]: the MySQL server being bridged.
 
 Parameters
@@ -35,3 +35,13 @@ __lang__                  , Language from which the information will \
 
 Note that for this module to be correctly compiled, the MySQL database
 development files are required.
+
+As stated above, the MySQL bridge handler is merely an abstraction
+layer. An excellent one at that, but that is all. No more, no less.
+This means you can perform regular operations on your database, but
+you cannot expect magic to happen. For instance, when you perform an
+INSERT, the Cherokee DB balancer will return a tuple indicating
+whether it succeeded or not, the number of rows affected, a rollback
+flag, etc. It will not, however, replicate the operation among each
+one of you MySQL servers. These arrangements must be made
+independently using MySQL's specific mechanisms.
