@@ -61,10 +61,12 @@ typedef enum {
 
 /* I/O cache
  */
-ret_t cherokee_iocache_init          (cherokee_iocache_t  *iocache);
-ret_t cherokee_iocache_get_default   (cherokee_iocache_t **iocache);
-ret_t cherokee_iocache_mrproper      (cherokee_iocache_t  *iocache);
-ret_t cherokee_iocache_free_default  (void);
+ret_t cherokee_iocache_init            (cherokee_iocache_t  *iocache);
+ret_t cherokee_iocache_get_default     (cherokee_iocache_t **iocache);
+ret_t cherokee_iocache_mrproper        (cherokee_iocache_t  *iocache);
+ret_t cherokee_iocache_free_default    (void);
+
+ret_t cherokee_iocache_get_mmaped_size (cherokee_iocache_t  *iocache, size_t *total);
 
 /* I/O cache entry
  */

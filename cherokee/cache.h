@@ -39,15 +39,17 @@ typedef struct cherokee_cache_priv  cherokee_cache_priv_t;
 typedef struct cherokee_cache_entry cherokee_cache_entry_t;
 
 /* Callback prototypes */
-typedef ret_t (* cherokee_cache_new_func_t) (struct cherokee_cache        *cache,
-					     cherokee_buffer_t            *key,
-					     void                         *param,
-					     struct cherokee_cache_entry **ret);
+typedef ret_t (* cherokee_cache_new_func_t)  (struct cherokee_cache        *cache,
+					      cherokee_buffer_t            *key,
+					      void                         *param,
+					      struct cherokee_cache_entry **ret);
+
+typedef ret_t (* cherokee_cache_get_stats_t) (struct cherokee_cache        *cache,
+					      cherokee_buffer_t            *key);
 
 typedef ret_t (* cherokee_cache_entry_clean_t) (struct cherokee_cache_entry *entry);
 typedef ret_t (* cherokee_cache_entry_fetch_t) (struct cherokee_cache_entry *entry);
 typedef ret_t (* cherokee_cache_entry_free_t)  (struct cherokee_cache_entry *entry);
-
 
 /* Enums */
 typedef enum {
@@ -66,14 +68,14 @@ struct cherokee_cache {
 	/* LRU (Least Recently Used)   */
 	cherokee_list_t _t1; 
 	cherokee_list_t _b1;
-	cuint_t         len_t1;
-	cuint_t         len_b1;
+	cint_t          len_t1;
+	cint_t          len_b1;
 
 	/* LFU (Least Frequently Used) */
 	cherokee_list_t _t2;
 	cherokee_list_t _b2;
-	cuint_t         len_t2;
-	cuint_t         len_b2;
+	cint_t          len_t2;
+	cint_t          len_b2;
 
 	/* Stats */
 	cuint_t         count;
@@ -82,11 +84,12 @@ struct cherokee_cache {
 
 	/* Configuration */
 	cuint_t         max_size;
-	cuint_t         target_t1;
+	cint_t          target_t1;
 
 	/* Callbacks */
 	cherokee_cache_new_func_t  new_cb;
 	void                      *new_cb_param;
+	cherokee_cache_get_stats_t stats_cb;
 
 	/* Private properties */
 	cherokee_cache_priv_t     *priv;

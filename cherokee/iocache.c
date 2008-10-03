@@ -72,6 +72,9 @@ typedef struct {
 #define PUBL(o) ((cherokee_iocache_entry_t *)(o))
 #define PRIV(o) ((cherokee_iocache_entry_extension_t *)(o))
 
+static ret_t fetch_info_cb (cherokee_cache_entry_t *entry);
+
+
 
 /* Global I/O cache object
  */
@@ -86,6 +89,8 @@ clean_info_cb (cherokee_cache_entry_t *entry)
 	TRACE (ENTRIES, "Cleaning cached info: '%s': %s\n", 
 	       entry->key.buf, ioentry->mmaped ? "mmap": "no mmap");
 
+	/* Free the mmaped info
+	 */
 	if (ioentry->mmaped) {
 		munmap (ioentry->mmaped, ioentry->mmaped_len);
 
@@ -93,13 +98,10 @@ clean_info_cb (cherokee_cache_entry_t *entry)
 		ioentry->mmaped_len = 0;
 	}
 
-	return ret_ok;
-}
+	/* Mark it as expired
+	 */
+	PRIV(entry)->mmap_expiration = 0;
 
-static ret_t
-fetch_info_cb (cherokee_cache_entry_t *entry)
-{
-	UNUSED(entry);
 	return ret_ok;
 }
 
@@ -107,6 +109,21 @@ static ret_t
 free_cb (cherokee_cache_entry_t *entry)
 {
 	UNUSED(entry);
+	return ret_ok;
+}
+
+static ret_t
+get_stats_cb (cherokee_cache_t  *cache, 
+	      cherokee_buffer_t *info)
+{
+	size_t total = 0;
+
+	cherokee_iocache_get_mmaped_size (IOCACHE(cache), &total);
+
+	cherokee_buffer_add_str (info, "IOcache mappped: ");
+	cherokee_buffer_add_fsize (info, total);
+	cherokee_buffer_add_str (info, "\n");
+
 	return ret_ok;
 }
 
@@ -165,6 +182,7 @@ cherokee_iocache_init (cherokee_iocache_t *iocache)
 	 */
 	CACHE(iocache)->new_cb       = iocache_entry_new_cb;
 	CACHE(iocache)->new_cb_param = NULL;
+	CACHE(iocache)->stats_cb     = get_stats_cb;
 
 	return ret_ok;
 }
@@ -347,9 +365,29 @@ ioentry_update_mmap (cherokee_iocache_entry_t *entry,
 	PUBL(entry)->mmaped_len      = entry->state.st_size;
 	PRIV(entry)->mmap_expiration = cherokee_bogonow_now + LASTING_MMAP;
 
+	if ((fd == NULL) && (fd_local != -1))
+		close (fd_local);
+
 	return ret_ok;
 error:
+	if ((fd == NULL) && (fd_local != -1))
+		close (fd_local);
+
 	return ret;
+}
+
+
+static ret_t
+fetch_info_cb (cherokee_cache_entry_t *entry)
+{
+	ret_t ret;
+
+	ret = ioentry_update_mmap (IOCACHE_ENTRY(entry), NULL);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	return ret_ok;
 }
 
 
@@ -512,3 +550,21 @@ cherokee_iocache_autoget (cherokee_iocache_t        *iocache,
 	return iocache_get (iocache, file, info, NULL, ret_io);
 }
 
+
+ret_t
+cherokee_iocache_get_mmaped_size (cherokee_iocache_t *cache, size_t *total)
+{
+	cuint_t          n;
+	cherokee_list_t *i;
+	cherokee_list_t *lists[4] = {&CACHE(cache)->_t1, &CACHE(cache)->_t2};
+
+	*total = 0;
+
+	for (n=0; n<2; n++) {
+		list_for_each (i, lists[n]) {
+			*total += IOCACHE_ENTRY(i)->mmaped_len;
+		}
+	}
+
+	return ret_ok;
+}

@@ -1,5 +1,9 @@
 2008-10-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/cache.h, cherokee/cache.c: Fixes the cache.  There were
+	a couple of bugs in the implementation that was leading the server
+	to random crashes.  The internal cache indexes work as expected.
+
 	* cherokee/buffer.h, cherokee/buffer.c: Functions
 	cherokee_buffer_add_chunked(),
 	cherokee_buffer_add_buffer_chunked() and
