@@ -383,9 +383,11 @@ static void
 build_cache_table_content (cherokee_buffer_t *buf)
 {
 	ret_t               ret;
-	cherokee_iocache_t *iocache = NULL;
 	char                tmp[8];
 	float               percent;
+	size_t              mmaped  = 0;
+	cherokee_iocache_t *iocache = NULL;
+	cherokee_buffer_t   tmp_buf = CHEROKEE_BUF_INIT;
 
 	ret = cherokee_iocache_get_default (&iocache);
 	if ((ret != ret_ok) || (iocache == NULL)) {
@@ -395,6 +397,7 @@ build_cache_table_content (cherokee_buffer_t *buf)
 
 	table_add_row_int (buf, "Fetches", iocache->cache.count);
 
+	/* Total hits */
 	if (iocache->cache.count == 0)
 		percent = 0;
 	else
@@ -402,12 +405,20 @@ build_cache_table_content (cherokee_buffer_t *buf)
 	snprintf (tmp, sizeof(tmp), "%.2f%%", percent);
 	table_add_row_str (buf, "Total Hits", tmp);
 
+	/* Total misses  */
 	if (iocache->cache.count == 0)
 		percent = 0;
 	else
 		percent = (iocache->cache.count_miss * 100.0) / iocache->cache.count;
 	snprintf (tmp, sizeof(tmp), "%.2f%%", percent);
 	table_add_row_str (buf, "Total Misses", tmp);
+
+	/* Total Mmaped */
+	cherokee_iocache_get_mmaped_size (iocache, &mmaped);
+	cherokee_buffer_add_fsize (&tmp_buf, mmaped);
+	table_add_row_buf (buf, "Total mmaped", &tmp_buf);
+
+	cherokee_buffer_mrproper (&tmp_buf);
 }
 
 static void

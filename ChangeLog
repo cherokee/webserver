@@ -1,5 +1,8 @@
 2008-10-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_server_info.c (build_cache_table_content): Adds
+	a new row to show the total amount to memory mmaped by the IOcache
+
 	* cherokee/cache.h, cherokee/cache.c: Fixes the cache.  There were
 	a couple of bugs in the implementation that was leading the server
 	to random crashes.  The internal cache indexes work as expected.
