@@ -1,3 +1,11 @@
+2008-10-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/buffer.h, cherokee/buffer.c: Functions
+	cherokee_buffer_add_chunked(),
+	cherokee_buffer_add_buffer_chunked() and
+	cherokee_buffer_convert_to_chunked() have been removed. They are
+	no longer needed.
+
 2008-09-30  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/ModuleGeoip.py, admin/ModuleDefault.py,
