@@ -17,7 +17,8 @@ DATA_VALIDATION = [
     ('server!log_flush_elapse',       validations.is_positive_int),
     ('server!keepalive_max_requests', validations.is_positive_int),
     ("server!keepalive$",             validations.is_boolean),
-    ("server!thread_number",          validations.is_positive_int)
+    ("server!thread_number",          validations.is_positive_int),
+    ("server!use_iocache",            validations.is_boolean)
 ]
 
 WARNING = """
@@ -40,6 +41,7 @@ NOTE_FLUSH_TIME   = 'Sets the number of seconds between log consolidations (flus
 NOTE_KEEPALIVE    = 'Enables the server-wide keep-alive support. It increases the performance. It is usually set on.'
 NOTE_KEEPALIVE_RS = 'Maximum number of HTTP requests that can be served by each keepalive connection.'
 NOTE_CHUNKED      = 'Allows the server to use Chunked encoding to try to keep Keep-Alive enabled.'
+NOTE_IOCACHE      = 'Enable the server wide use of the I/O caching layer.'
 
 HELPS = [('config_advanced', "Advanced")]
 
@@ -70,6 +72,7 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddPropCheck    (table, 'Keep Alive',         'server!keepalive', True, NOTE_KEEPALIVE)        
         self.AddPropEntry    (table, 'Max keepalive reqs', 'server!keepalive_max_requests', NOTE_KEEPALIVE_RS)
         self.AddPropCheck    (table, 'Chunked Encoding',   'server!chunked_encoding', True, NOTE_CHUNKED)        
+        self.AddPropCheck    (table, 'I/O cache',          'server!use_iocache', True, NOTE_IOCACHE)        
         txt += self.Indent(table)
 
         txt += "<h2>System tweaking</h2>"

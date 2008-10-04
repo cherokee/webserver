@@ -1,5 +1,9 @@
 2008-10-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* admin/PageAdvanced.py: Adds the cherokee-admin support for the
+	last change. It includes a new checkbox to toggle the
+	"server!use_iocache" configuration entry.
+
 	* cherokee/handler_server_info.c, cherokee/handler_common.c,
 	cherokee/server-protected.h, cherokee/iocache.c,
 	cherokee/iocache.h, cherokee/server.c: Adds a new
