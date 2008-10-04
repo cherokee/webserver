@@ -152,7 +152,7 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 	CACHE_ENTRY(n)->clean_cb = clean_info_cb;
 	CACHE_ENTRY(n)->fetch_cb = fetch_info_cb;
 	CACHE_ENTRY(n)->free_cb  = free_cb;
-	
+
 	/* Init its properties
 	 */
 	PRIV(n)->stat_status     = ret_ok;
@@ -160,6 +160,7 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 	PRIV(n)->mmap_expiration = 0;
 	PUBL(n)->mmaped          = NULL;
 	PUBL(n)->mmaped_len      = 0;
+	PUBL(n)->info            = 0;
 
 	/* Return the new object
 	 */
@@ -273,12 +274,15 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 	}
 
 	ret = ret_ok;
+	BIT_SET (PUBL(entry)->info, iocache_stat);
+
 	TRACE (ENTRIES, "Updated stat: %s\n", CACHE_ENTRY(entry)->key.buf);
 
 out:
 	PRIV(entry)->stat_expiration = cherokee_bogonow_now + LASTING_STAT;
 	PRIV(entry)->stat_status     = ret;
 
+	BIT_UNSET (PUBL(entry)->info, iocache_stat);
 	return ret;
 }
 
@@ -368,11 +372,14 @@ ioentry_update_mmap (cherokee_iocache_entry_t *entry,
 	if ((fd == NULL) && (fd_local != -1))
 		close (fd_local);
 
+	BIT_SET (PUBL(entry)->info, iocache_mmap);
 	return ret_ok;
+
 error:
 	if ((fd == NULL) && (fd_local != -1))
 		close (fd_local);
 
+	BIT_UNSET (PUBL(entry)->info, iocache_mmap);
 	return ret;
 }
 
@@ -382,12 +389,22 @@ fetch_info_cb (cherokee_cache_entry_t *entry)
 {
 	ret_t ret;
 
-	ret = ioentry_update_mmap (IOCACHE_ENTRY(entry), NULL);
-	if (unlikely (ret != ret_ok)) {
+	ret = cherokee_iocache_entry_update (IOCACHE_ENTRY(entry),
+					     (iocache_stat | iocache_mmap));
+	switch (ret) {
+	case ret_ok:
+	case ret_error:
+		return ret;
+	case ret_deny:
+	case ret_no_sys:
+		return ret_ok;
+	default:
+		RET_UNKNOWN(ret);
 		return ret_error;
 	}
 
-	return ret_ok;
+	SHOULDNT_HAPPEN;
+	return ret_error;
 }
 
 
@@ -416,24 +433,18 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 	 */
 	if (info & iocache_stat) {
 		ret = ioentry_update_stat (entry);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
 			goto out;
+		}
 	}
 
 	if (info & iocache_mmap) {
-		/* Ensure that it can be mapped
-		 */
-		if (unlikely (! fd)) {
-			SHOULDNT_HAPPEN;
-			ret = ret_error;
-			goto out;
-		}
-
 		/* Update mmap
 		 */
 		ret = ioentry_update_stat (entry);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
 			goto out;
+		}
 
 		/* Check the size before mapping it
 		 */
@@ -447,8 +458,9 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 		/* Go ahead
 		 */
 		ret = ioentry_update_mmap (entry, fd);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
 			goto out;
+		}
 	}
 
 	ret = ret_ok;
@@ -485,8 +497,9 @@ iocache_get (cherokee_iocache_t        *iocache,
 	switch (ret) {
 	case ret_ok:
 	case ret_ok_and_sent:
+	case ret_no_sys:
 		*ret_io = IOCACHE_ENTRY(entry);
-		break;
+		break;		
 	default:
 		return ret_error;
 	}
@@ -500,11 +513,17 @@ iocache_get (cherokee_iocache_t        *iocache,
 
 	/* The entry couldn't been updated, but we have the last stat status                                                                                                                                                                
          */
-	if ((ret == ret_ok_and_sent) &&
-            (info == iocache_stat))
+	if ((info == iocache_stat) &&
+	    ((*ret_io)->info & iocache_stat))
         {
                 return PRIV(*ret_io)->stat_status;
         }
+
+	if ((info & iocache_mmap) &&
+	    ((*ret_io)->info & iocache_mmap))
+        {
+		return ret_no_sys;
+	}
 
 	return ret;
 }

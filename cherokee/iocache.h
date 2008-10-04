@@ -37,18 +37,8 @@
 #define IOCACHE_MIN_FILE_SIZE      1
 
 typedef struct {
-	cherokee_cache_t       cache;
+	cherokee_cache_t        cache;
 } cherokee_iocache_t;
-
-typedef struct {
-	/* Inheritance */
-	cherokee_cache_entry_t base;
-
-	/* Information to cache */
-	struct stat            state;
-	void                  *mmaped;
-	size_t                 mmaped_len;
-} cherokee_iocache_entry_t;
 
 typedef enum {
 	iocache_nothing = 0,
@@ -56,8 +46,20 @@ typedef enum {
 	iocache_mmap    = 1 << 1
 } cherokee_iocache_info_t;
 
+typedef struct {
+	/* Inheritance */
+	cherokee_cache_entry_t  base;
+	cherokee_iocache_info_t info;
+
+	/* Information to cache */
+	struct stat             state;
+	void                   *mmaped;
+	size_t                  mmaped_len;
+} cherokee_iocache_entry_t;
+
 #define IOCACHE(x)       ((cherokee_iocache_t *)(x))
 #define IOCACHE_ENTRY(x) ((cherokee_iocache_entry_t *)(x))
+
 
 /* I/O cache
  */

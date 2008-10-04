@@ -1,3 +1,8 @@
+2008-10-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/cache.c, cherokee/iocache.c, cherokee/iocache.h: Fixes
+	one more bug in the cache implementation. (sigh!)
+
 2008-10-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_server_info.c (build_cache_table_content): Adds

@@ -308,8 +308,17 @@ update_ghost_b1 (cherokee_cache_t       *cache,
 	/* Re-fetch the information
 	 */
 	ret = entry_parent_info_fetch (entry);
-	if (ret != ret_ok)
+	switch (ret) {
+	case ret_ok:
+	case ret_deny:
+		break;
+	case ret_error:
+	case ret_no_sys:
 		return ret;
+	default:
+		RET_UNKNOWN(ret);
+		return ret_error;
+	}
 
 	/* Move 'entry' to the top of T2, and place it in the cache
 	 */
@@ -334,8 +343,17 @@ update_ghost_b2 (cherokee_cache_t       *cache,
 	/* Re-fetch the information
 	 */
 	ret = entry_parent_info_fetch (entry);
-	if (ret != ret_ok)
+	switch (ret) {
+	case ret_ok:
+	case ret_deny:
+		break;
+	case ret_error:
+	case ret_no_sys:
 		return ret;
+	default:
+		RET_UNKNOWN(ret);
+		return ret_error;
+	}
 
 	/* Move 'entry' to the top of T2, and place it in the cache
 	 */
@@ -368,16 +386,26 @@ update_cache (cherokee_cache_t       *cache,
 		/* Ghost 'Recently' hit
 		 */
 		ret = update_ghost_b1 (cache, entry);
-		if (unlikely (ret != ret_ok)) 
+		switch (ret) {
+		case ret_ok:
+		case ret_no_sys:
+			return ret;
+		default:
 			return ret_error;
+		}
 		break;
 
 	case cache_b2:
 		/* Ghost 'Frequently' hit
 		 */
 		ret = update_ghost_b2 (cache, entry);
-		if (unlikely (ret != ret_ok)) 
+		switch (ret) {
+		case ret_ok:
+		case ret_no_sys:
+			return ret;
+		default:
 			return ret_error;
+		}
 		break;
 
 	default:
