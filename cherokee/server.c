@@ -160,7 +160,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	n->icons           = NULL;
 	n->regexs          = NULL;
-	n->iocache         = NULL;
 
 	cherokee_buffer_init (&n->listen_to);
 	cherokee_buffer_init (&n->chroot);
@@ -178,8 +177,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* IO Cache cache
 	 */
-	cherokee_iocache_get_default (&n->iocache);
-	return_if_fail (n->iocache != NULL, ret_nomem);	
+	n->iocache         = NULL;
+	n->use_iocache     = true;
 
 	/* Regexs
 	 */
@@ -318,7 +317,9 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_mime_free (srv->mime);
 	cherokee_icons_free (srv->icons);
 	cherokee_regex_table_free (srv->regexs);
-	cherokee_iocache_free_default ();
+
+	if (srv->iocache)
+		cherokee_iocache_free (srv->iocache);
 
 	cherokee_nonce_table_free (srv->nonces);
 
@@ -961,6 +962,14 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	if (ret != ret_ok)
 		return ret;
 
+	/* Instance the server's I/O cache
+	 */
+	if (srv->use_iocache) {
+		ret = cherokee_iocache_new (&srv->iocache);
+		if (ret != ret_ok)
+			return ret;
+	}
+
 	/* Set the FD number limit
 	 */
 	if (srv->fdlimit_custom != -1) {
@@ -1387,6 +1396,9 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "chunked_encoding")) {
 		srv->chunked_encoding = !!atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "use_iocache")) {
+		srv->use_iocache = !!atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "panic_action")) {
 		cherokee_buffer_clean (&srv->panic_action);

@@ -83,7 +83,7 @@ struct cherokee_server {
 	cherokee_plugin_loader_t   loader;
 	cherokee_avl_t             encoders;
 
-	/* Tables: iocache, nonces, etc
+	/* Tables: nonces, etc
 	 */
 	cherokee_regex_table_t    *regexs;
 	cherokee_nonce_table_t    *nonces;
@@ -149,11 +149,15 @@ struct cherokee_server {
 	cherokee_buffer_t          chroot;
 	cherokee_boolean_t         chrooted;
 
+	/* I/O cache
+	 */
+	cherokee_iocache_t        *iocache;
+	cherokee_boolean_t         use_iocache;
+
 	/* Other objects
 	 */
 	cherokee_mime_t           *mime;
 	cherokee_icons_t          *icons;
-	cherokee_iocache_t        *iocache;
 	cherokee_avl_t             sources;
 
 	/* Time related

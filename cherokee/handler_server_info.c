@@ -380,17 +380,15 @@ build_icons_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 
 
 static void
-build_cache_table_content (cherokee_buffer_t *buf)
+build_cache_table_content (cherokee_buffer_t  *buf,
+			   cherokee_iocache_t *iocache)
 {
-	ret_t               ret;
-	char                tmp[8];
-	float               percent;
-	size_t              mmaped  = 0;
-	cherokee_iocache_t *iocache = NULL;
-	cherokee_buffer_t   tmp_buf = CHEROKEE_BUF_INIT;
+	char              tmp[8];
+	float             percent;
+	size_t            mmaped  = 0;
+	cherokee_buffer_t tmp_buf = CHEROKEE_BUF_INIT;
 
-	ret = cherokee_iocache_get_default (&iocache);
-	if ((ret != ret_ok) || (iocache == NULL)) {
+	if (iocache == NULL) {
 		table_add_row_str (buf, "Caching", "disabled");
 		return;
 	}
@@ -520,7 +518,7 @@ server_info_build_page (cherokee_handler_server_info_t *hdl)
 		/* Caching information
 		 */
 		cherokee_buffer_clean (&table);
-		build_cache_table_content (&table);
+		build_cache_table_content (&table, srv->iocache);
 		server_info_add_table (buf, "File Caching", "iocache", &table);
 	}
 

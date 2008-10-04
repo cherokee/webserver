@@ -63,12 +63,11 @@ typedef struct {
 
 /* I/O cache
  */
-ret_t cherokee_iocache_init            (cherokee_iocache_t  *iocache);
-ret_t cherokee_iocache_get_default     (cherokee_iocache_t **iocache);
-ret_t cherokee_iocache_mrproper        (cherokee_iocache_t  *iocache);
-ret_t cherokee_iocache_free_default    (void);
+ret_t cherokee_iocache_new             (cherokee_iocache_t **iocache);
+ret_t cherokee_iocache_free            (cherokee_iocache_t  *iocache);
 
-ret_t cherokee_iocache_get_mmaped_size (cherokee_iocache_t  *iocache, size_t *total);
+ret_t cherokee_iocache_init            (cherokee_iocache_t  *iocache);
+ret_t cherokee_iocache_mrproper        (cherokee_iocache_t  *iocache);
 
 /* I/O cache entry
  */
@@ -91,5 +90,8 @@ ret_t cherokee_iocache_autoget_fd    (cherokee_iocache_t        *iocache,
 				      cherokee_iocache_info_t    info,
 				      int                       *fd, 
 				      cherokee_iocache_entry_t **ret_io);
+
+/* Misc */
+ret_t cherokee_iocache_get_mmaped_size (cherokee_iocache_t  *iocache, size_t *total);
 
 #endif /* CHEROKEE_IOCACHE_H */

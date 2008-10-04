@@ -188,8 +188,8 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	 */
 	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
 	
-	if (use_iocache)
-		cherokee_iocache_get_default (&iocache);
+     	if (use_iocache)		
+		iocache = CONN_SRV(conn)->iocache;
 
 	ret = stat_file (use_iocache, iocache, &nocache_info, &conn->local_directory, &io_entry, &info);
 	exists = (ret == ret_ok);

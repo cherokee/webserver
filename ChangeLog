@@ -1,5 +1,11 @@
 2008-10-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/handler_server_info.c, cherokee/handler_common.c,
+	cherokee/server-protected.h, cherokee/iocache.c,
+	cherokee/iocache.h, cherokee/server.c: Adds a new
+	"server!use_iocache" configuration key to allow to enable or
+	disable the use of I/O cache server wide.
+
 	* cherokee/cache.c, cherokee/iocache.c, cherokee/iocache.h: Fixes
 	one more bug in the cache implementation. (sigh!)
 

@@ -74,12 +74,9 @@ typedef struct {
 
 static ret_t fetch_info_cb (cherokee_cache_entry_t *entry);
 
+CHEROKEE_ADD_FUNC_NEW (iocache);
+CHEROKEE_ADD_FUNC_FREE (iocache);
 
-
-/* Global I/O cache object
- */
-
-static cherokee_iocache_t *global_io = NULL;
 
 static ret_t
 clean_info_cb (cherokee_cache_entry_t *entry)
@@ -192,41 +189,6 @@ ret_t
 cherokee_iocache_mrproper (cherokee_iocache_t *iocache)
 {
 	return cherokee_cache_mrproper (CACHE(iocache));
-}
-
-ret_t 
-cherokee_iocache_get_default (cherokee_iocache_t **iocache)
-{
-	ret_t ret;
-	
-	if (global_io == NULL) {
-		CHEROKEE_NEW_STRUCT (n, iocache);
-
-		ret = cherokee_iocache_init (n);
-		if (ret != ret_ok) 
-			return ret;
-
-		global_io = n;
-	}
-	
-	*iocache = global_io;
-	return ret_ok;
-}
-
-ret_t 
-cherokee_iocache_free_default (void)
-{
-	ret_t ret;
-
-	if (global_io == NULL)
-		return ret_ok;
-
-	ret = cherokee_iocache_mrproper (global_io);
-	if (ret != ret_ok)
-		return ret;
-
-	free (global_io);
-	return ret_ok;
 }
 
 
