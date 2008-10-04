@@ -511,7 +511,7 @@ iocache_get (cherokee_iocache_t        *iocache,
 	else
 		ret = cherokee_iocache_entry_update (*ret_io, info);		
 
-	/* The entry couldn't been updated, but we have the last stat status                                                                                                                                                                
+	/* Check whether cache page was updated
          */
 	if ((info == iocache_stat) &&
 	    ((*ret_io)->info & iocache_stat))
