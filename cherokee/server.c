@@ -411,10 +411,13 @@ cherokee_server_set_min_latency (cherokee_server_t *srv, int msecs)
 static ret_t
 set_server_fd_socket_opts (int socket)
 {
-	ret_t         ret;
-	int           re;
-	int           on;
-        struct linger ling = {0, 0};
+	ret_t                    ret;
+	int                      re;
+	int                      on;
+        struct linger            ling = {0, 0};
+#ifdef SO_ACCEPTFILTER
+        struct accept_filter_arg afa;
+#endif
 
 	/* Set 'close-on-exec'
 	 */
@@ -472,11 +475,18 @@ set_server_fd_socket_opts (int socket)
 	on = 5;
 	setsockopt (socket, SOL_TCP, TCP_DEFER_ACCEPT, &on, sizeof(on));
 #endif
-
-	/* TODO:
-	 * It could be good to add support for the FreeBSD accept filters:
+	
+	/* SO_ACCEPTFILTER:
+	 * FreeBSD accept filter for HTTP:
+	 *
 	 * http://www.freebsd.org/cgi/man.cgi?query=accf_http
 	 */
+#ifdef SO_ACCEPTFILTER
+	memset (&afa, 0, sizeof(afa));
+	strcpy (afa.af_name, "httpready");
+
+	setsockopt (socket, SOL_SOCKET, SO_ACCEPTFILTER, &afa, sizeof(afa));
+#endif
 
 	return ret_ok;
 }

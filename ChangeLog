@@ -1,5 +1,8 @@
 2008-10-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/server.c (set_server_fd_socket_opts): Uses
+	SO_ACCEPTFILTER in case it's available.
+
 	* cherokee/socket.c: Do not suppose that TCP_CORK and TCP_NOPUSH
 	are equivalent; and apply TCP_CORK only if the system supports it.
 
