@@ -349,8 +349,21 @@ error:
 static ret_t
 fetch_info_cb (cherokee_cache_entry_t *entry)
 {
-	return cherokee_iocache_entry_update (IOCACHE_ENTRY(entry),
-					      (iocache_stat | iocache_mmap));
+	ret_t ret;
+
+	ret = cherokee_iocache_entry_update (IOCACHE_ENTRY(entry),
+					     (iocache_stat | iocache_mmap));
+	switch(ret) {
+	case ret_ok:
+	case ret_not_found:
+	case ret_ok_and_sent:
+		return ret_ok;
+	default:
+		return ret;
+	}
+
+	SHOULDNT_HAPPEN;
+	return ret_error;
 }
 
 
