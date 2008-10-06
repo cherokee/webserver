@@ -1,3 +1,11 @@
+2008-10-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
+
+	* cherokee/socket.c: Do not suppose that TCP_CORK and TCP_NOPUSH
+	are equivalent; and apply TCP_CORK only if the system supports it.
+
+	* cherokee/socket.c (cherokee_socket_set_block_timeout,
+	cherokee_socket_flush): It ought to retry on EINTR.
+
 2008-10-04  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* admin/PageAdvanced.py: Adds the cherokee-admin support for the
