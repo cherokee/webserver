@@ -1,5 +1,8 @@
 2008-10-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/connection.c (cherokee_connection_set_cork): Better
+	error management.
+	
 	* cherokee/server.c (set_server_fd_socket_opts): Uses
 	SO_ACCEPTFILTER in case it's available.
 

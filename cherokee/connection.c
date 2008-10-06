@@ -820,9 +820,15 @@ cherokee_connection_reading_check (cherokee_connection_t *conn)
 
 
 ret_t 
-cherokee_connection_set_cork (cherokee_connection_t *conn, cherokee_boolean_t enable)
+cherokee_connection_set_cork (cherokee_connection_t *conn, 
+			      cherokee_boolean_t     enable)
 {
-	cherokee_socket_set_cork (&conn->socket, enable);
+	ret_t ret;
+
+	ret = cherokee_socket_set_cork (&conn->socket, enable);
+	if (unlikely (ret != ret_ok)) {
+		return ret;
+	}
 
 	if (enable)
 		BIT_SET (conn->options, conn_op_tcp_cork);
