@@ -99,11 +99,15 @@ Of course, once we're done we will have to apply our changes and
 launch the server. The configuration changes must be submitted to the
 server, be it automatically if possible or by using the appropriate form
 submitting buttons. But no change is reflected in the configuration
-file until you `Apply` the changes. You can be sure of not damaging
+file until you `Save` the changes. You can be sure of not damaging
 anything while playing around with `cherokee-admin`. At least not
-until you `Apply` the changes. Note that, if the Cherokee server is
-running, the applied modifications will also affect the instance being
-executed.
+until you `Save` the changes. Note that, if the Cherokee server is
+running, the applied modifications will only affect the instance being
+executed if either `Graceful restart` or `Hard restart` are selected.
+No restart simply modifies the configuration file, but doesn't affect
+the currently running instance. A `graceful restart` will preserve the
+old set up for any prior connections, while a `hard restart` will
+kill every connection and instantly apply the changes.
 
 This is what the `General` tab looks like:
 

@@ -75,7 +75,9 @@ Handler specific::
  efficient and assures that a file will be immediately served while it
  remains cached. The usage of IO cache is absolutely recommended in
  all cases except when the contents of the files are changed
- frequently.
+ frequently. Note that the global _IO Cache_ setting from the
+ _Advanced_ section (see bellow) must be enabled for each individual
+ handler's setting to be taken into account.
 
 General::
 +
@@ -109,6 +111,13 @@ Advanced::
   higher this limit is, the more connections Cherokee will be able to
   handle. By default Cherokee does not touch this value and it uses
   the one specified by your system.
++
+* *IO Cache*: This setting allows to enable or diasable server-wide
+  the content caching. If disabled, the _IO Cache_ settings of the
+  static content handlers will also be diabled, no matter what
+  behavior is desired in their specific configuration. This global
+  setting is essential if you are trying to debug a cache-related
+  bug in your server's configuration.
 
 Debug: Disable TRACE
 ~~~~~~~~~~~~~~~~~~~~
