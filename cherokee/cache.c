@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "cache.h"
+#include "util.h"
 
 /* Take care (DEFAULT_MAX_SIZE % 4) must = 0 
  */
@@ -106,6 +107,9 @@ entry_parent_info_clean (cherokee_cache_entry_t *entry)
 {
 	if (entry->clean_cb == NULL)
 		return ret_error;
+
+	TRACE(ENTRIES, "Evincing: '%s'\n", entry->key.buf);
+
 	return entry->clean_cb (entry);
 }
 
@@ -373,18 +377,24 @@ update_cache (cherokee_cache_t       *cache,
 	case cache_t1:
 		/* LRU (Least Recently Used) cache hit
 		 */
+		TRACE(ENTRIES, "T1 hit: '%s'\n", entry->key.buf);
+
 		cache_list_swap (t1, t2, entry);
 		break;
 
 	case cache_t2:
 		/* LFU (Least Frequently Used)
 		 */
+		TRACE(ENTRIES, "T2 hit: '%s'\n", entry->key.buf);
+
 		cache_list_make_first (t2, entry);
 		break;
 
 	case cache_b1:
 		/* Ghost 'Recently' hit
 		 */
+		TRACE(ENTRIES, "B1 ghost hit: '%s'\n", entry->key.buf);
+
 		ret = update_ghost_b1 (cache, entry);
 		switch (ret) {
 		case ret_ok:
@@ -398,6 +408,8 @@ update_cache (cherokee_cache_t       *cache,
 	case cache_b2:
 		/* Ghost 'Frequently' hit
 		 */
+		TRACE(ENTRIES, "B2 ghost hit: '%s'\n", entry->key.buf);
+
 		ret = update_ghost_b2 (cache, entry);
 		switch (ret) {
 		case ret_ok:
@@ -426,12 +438,12 @@ cherokee_cache_get (cherokee_cache_t        *cache,
 	CHEROKEE_MUTEX_LOCK (&cache->priv->mutex);
 	cache->count += 1;
 
-#if 0
+#ifdef TRACE_ENABLED
 	if (cache->count % 100 == 0) {
 		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
 		cherokee_cache_get_stats (cache, &tmp);
-		printf ("%s\n", tmp.buf);
+		TRACE(ENTRIES, "Cache stats:\n%s", tmp.buf);
 		cherokee_buffer_mrproper (&tmp);
 	}
 #endif
@@ -463,6 +475,8 @@ cherokee_cache_get (cherokee_cache_t        *cache,
 		CHEROKEE_MUTEX_UNLOCK (&cache->priv->mutex);
 		return ret_error;
 	}
+
+	TRACE(ENTRIES, "Miss (adding): '%s'\n", key->buf);
 
 	cache_list_add (t1, *ret_entry);
 	cherokee_avl_add (&cache->map, key, *ret_entry);

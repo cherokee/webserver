@@ -1,5 +1,8 @@
 2008-10-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
+	* cherokee/cache.c: Add a few TRACE points within the cache policy
+	code.
+
 	* cherokee/connection.c (cherokee_connection_set_cork): Better
 	error management.
 	
