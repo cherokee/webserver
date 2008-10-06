@@ -315,9 +315,11 @@ update_ghost_b1 (cherokee_cache_t       *cache,
 	switch (ret) {
 	case ret_ok:
 	case ret_deny:
+	case ret_ok_and_sent:
 		break;
 	case ret_error:
 	case ret_no_sys:
+	case ret_not_found:
 		return ret;
 	default:
 		RET_UNKNOWN(ret);
