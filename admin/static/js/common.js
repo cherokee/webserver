@@ -174,6 +174,10 @@ function protectChanges()
     setConfirmUnload(false);
   });
 
+  $('img').click(function() {
+    setConfirmUnload(false);
+  });
+
   $('select').change(function() {
     setConfirmUnload(false);
   });
