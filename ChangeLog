@@ -2,7 +2,7 @@
 
 	* admin/Form.py, admin/Page.py, admin/static/js/common.js:
 	usability enhancement suggested by Gunnar Wolf <gwolf@gwolf.org>
-	implemented. Related to the previously tought to be fixed
+	is implemented. Related to the previously thought to be fixed
 	http://code.google.com/p/cherokee/issues/detail?id=111.
 
 2008-10-07  Alvaro Lopez Ortega  <alvaro@octality.com>
