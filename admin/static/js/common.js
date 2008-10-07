@@ -173,9 +173,15 @@ function protectChanges()
   $('a').click(function() {
     setConfirmUnload(false);
   });
+
+  $('select').change(function() {
+    setConfirmUnload(false);
+  });
+
   $('form').submit(function() {
     setConfirmUnload(false);
   });
+
   $('form').bind("change submit", function() {
     document.cookie = "changed=true";
   });
