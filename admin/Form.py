@@ -14,12 +14,7 @@ FORM_TEMPLATE = """
 
 AUTO_SUBMIT_JS = """
 <script type="text/javascript">
-$(document).ready(function(event) {
-  $(".auto input").change(function(event) {
-  if (check_all_or_none('required'))
-      this.form.submit()
-  });
-});
+  $(document).ready(autosubmit);
 </script>
 """
 

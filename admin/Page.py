@@ -64,6 +64,9 @@ PAGE_MENU_MENU = """
  </div>
 </form>
 
+<script type="text/javascript">
+  $(document).ready(protectChanges);
+</script>
 """
 
 MENU_SAVE_IS_ALIVE = """

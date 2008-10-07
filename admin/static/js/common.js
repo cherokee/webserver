@@ -143,18 +143,58 @@ function get_cookie (key)
   return unescape (document.cookie.substring (i, e));
 }
 
+/* Auto submission of some forms */
+function autosubmit(event) {
+  $(".auto input").change(function(event) {
+  if (check_all_or_none('required'))
+      setConfirmUnload(false);
+      this.form.submit()
+  });
+}
 
 /* Returns true either if every field of
    class=klass is set, or none of them is
 */
 function check_all_or_none (klass)
 {
-	var none=true;
-	var valid=true;
-	$('.'+klass).each(function(i, o){
-		if (o.value.length > 0)
-		      none=false;
-	        else  valid=false;
-	});
-	return (none || valid);
+  var none=true;
+  var valid=true;
+  $('.'+klass).each(function(i, o){
+    if (o.value.length > 0)
+      none=false;
+    else  valid=false;
+  });
+  return (none || valid);
+}
+
+/* Prevent accidentally navigating away */
+function protectChanges()
+{
+  $('a').click(function() {
+    setConfirmUnload(false);
+  });
+  $('form').submit(function() {
+    setConfirmUnload(false);
+  });
+  $('form').bind("change submit", function() {
+    document.cookie = "changed=true";
+  });
+
+  changed = get_cookie('changed');
+  if (changed) {
+    setConfirmUnload(true);
+  }
+}
+
+function setConfirmUnload(on)
+{
+  window.onbeforeunload = (on) ? unloadMessage : null;
+}
+
+function unloadMessage()
+{
+  return 'You have modified the settings. The changes will NOT be applied '+
+         'unless you SAVE them. The modifications will remain unapplied while '+
+         'Cherokee-Admin is still running. If you navigate away keep in mind '+
+         'you NEED to save your data or else it will be lost!';
 }

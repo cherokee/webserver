@@ -1,6 +1,13 @@
+2008-10-07  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/Form.py, admin/Page.py, admin/static/js/common.js:
+	usability enhancement suggested by Gunnar Wolf <gwolf@gwolf.org>
+	implemented. Related to the previously tought to be fixed
+	http://code.google.com/p/cherokee/issues/detail?id=111.
+
 2008-10-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
-	* qa/Makefile.am (EXTRA_DIST): help.py has missing from the file
+	* qa/Makefile.am (EXTRA_DIST): help.py was missing from the file
 	distribution list. Reported by Eric Drechsel <ericdrex@gmail.com>
 
 2008-10-05  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -10,7 +17,7 @@
 
 	* cherokee/connection.c (cherokee_connection_set_cork): Better
 	error management.
-	
+
 	* cherokee/server.c (set_server_fd_socket_opts): Uses
 	SO_ACCEPTFILTER in case it's available.
 

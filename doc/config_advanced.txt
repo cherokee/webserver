@@ -27,6 +27,10 @@ Connections managment
 * Chunked encoding:
   Enabled by default to try to keep enabled Keep-Alive.
 
+* I/O cache:
+  Enabled by default. This is a system-wide setting required if you
+  wish to enable caching in any of your virtual hosts.
+
 System tweaking
 ~~~~~~~~~~~~~~~
 * Thread Number:
