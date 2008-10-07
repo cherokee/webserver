@@ -2,6 +2,7 @@ EXTRA_DIST = \
 conf.py \
 base.py \
 util.py \
+help.py \
 pyscgi.py \
 fcgi.py \
 run-tests.py \
