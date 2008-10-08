@@ -1,3 +1,9 @@
+2008-10-08  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/validator_htdigest.c (extract_user_entry): Fixes an
+	error processing htdigest files. Reported by Eric Drechsel
+	<ericdrex@gmail.com>.
+
 2008-10-07  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Form.py, admin/Page.py, admin/static/js/common.js:

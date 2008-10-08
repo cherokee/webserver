@@ -119,13 +119,13 @@ extract_user_entry (cherokee_buffer_t *file, char *user_, char **user, char **re
 	char *end      = file->buf + file->len;
 	char *pos      = file->buf;
 	int   user_len = strlen (user_);
-		
+
 	while (pos < end) {
 		char *eol;
 		
 		/* Limit the line
 		 */
-		eol = strchr (pos, '\n');
+		eol = strchr (pos, CHR_LF);
 		if (eol != NULL) 
 			*eol = '\0';
 		
@@ -152,9 +152,13 @@ extract_user_entry (cherokee_buffer_t *file, char *user_, char **user, char **re
 			return ret_ok;
 		}
 
-		/* Look for the next line
+		/* Look for the next line, or exit
 		 */
+		if (eol == NULL)
+			break;
+
 		pos = eol;
+		*eol = CHR_LF;
 		while ((*pos == CHR_CR) || (*pos == CHR_LF)) pos++;
 	}
 
