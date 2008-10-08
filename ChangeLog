@@ -1,5 +1,10 @@
 2008-10-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/175-RedirectUrl.py, qa/176-Digest-htdigest-2.py,
+	qa/Makefile.am: Adds a couple of new QA tests. 175 check infinite
+	redirections, and 176 ensure that bug#146 is fixed:
+	http://code.google.com/p/cherokee/issues/detail?id=146
+	
 	* cherokee/validator_htdigest.c (extract_user_entry): Fixes an
 	error processing htdigest files. Reported by Eric Drechsel
 	<ericdrex@gmail.com>.
