@@ -62,7 +62,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 
 
 static void
-free_custon_env (void *ptr)
+free_custom_env (void *ptr)
 {
 	cuint_t                        i;
 	cherokee_source_interpreter_t *src = ptr;
@@ -86,7 +86,7 @@ interpreter_free (void *ptr)
 	cherokee_buffer_mrproper (&src->interpreter);
 
 	if (src->custom_env)
-		free_custon_env (src);
+		free_custom_env (src);
 
 	CHEROKEE_MUTEX_DESTROY (&src->launching_mutex);
 }
