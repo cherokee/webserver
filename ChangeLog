@@ -1,3 +1,9 @@
+2008-10-11  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/logger.c (cherokee_logger_free): Frees the ->priv
+	property. (It was not a memory leak because loggers are never
+	freed, actually). Patch by Stefan de Konink <stefan@konink.de>
+
 2008-10-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* qa/175-RedirectUrl.py, qa/176-Digest-htdigest-2.py,

@@ -79,8 +79,11 @@ cherokee_logger_free (cherokee_logger_t *logger)
 	}
 
 	ret = MODULE(logger)->free (logger);
-	free (logger);
 
+	if (logger->priv)
+		free (logger->priv);
+
+	free (logger);
 	return ret_ok;
 }
 
