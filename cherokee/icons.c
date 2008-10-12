@@ -158,7 +158,11 @@ cherokee_icons_add_file (cherokee_icons_t *icons, cherokee_buffer_t *icon, chero
 	if (unlikely (ret != ret_ok))
 		return ret;
 
-	return cherokee_avl_add (&icons->files, file, tmp);
+	ret = cherokee_avl_add (&icons->files, file, tmp);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
+	return ret_ok;
 }
 
 
@@ -172,7 +176,10 @@ cherokee_icons_add_suffix (cherokee_icons_t *icons, cherokee_buffer_t *icon, che
 	if (unlikely (ret != ret_ok))
 		return ret;
 
-	cherokee_avl_add (&icons->suffixes, suffix, tmp);
+	ret = cherokee_avl_add (&icons->suffixes, suffix, tmp);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
 	return ret_ok;
 }
 
