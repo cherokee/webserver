@@ -159,8 +159,10 @@ cherokee_icons_add_file (cherokee_icons_t *icons, cherokee_buffer_t *icon, chero
 		return ret;
 
 	ret = cherokee_avl_add (&icons->files, file, tmp);
-	if (unlikely (ret != ret_ok))
+	if (unlikely (ret != ret_ok)) {
+		cherokee_buffer_free (tmp);
 		return ret;
+	}
 
 	return ret_ok;
 }
