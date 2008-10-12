@@ -1,5 +1,8 @@
 2008-10-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/balancer.c (cherokee_balancer_mrproper): Fixes a small
+	memory leak on clean up (it wasn't a leak per-se).
+
 	* cherokee/init.c (cherokee_mrproper): Added new function to clean
 	up the global cherokee_init() initialization.
 

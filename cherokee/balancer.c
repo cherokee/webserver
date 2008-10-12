@@ -56,8 +56,14 @@ cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info
 ret_t 
 cherokee_balancer_mrproper (cherokee_balancer_t *balancer)
 {
-	/* There is nothing to free here
+	/* Free the local sources array: The source objects will be
+	 * freed from srv->sources.
 	 */
+	if (balancer->sources != NULL) {
+		free (balancer->sources);
+		balancer->sources = NULL;
+	}
+
 	return ret_ok;
 }
 
@@ -162,7 +168,8 @@ cherokee_balancer_free (cherokee_balancer_t *bal)
 	/* Call the virtual method implementation
 	 */
 	ret = MODULE(bal)->free (bal); 
-	if (unlikely (ret < ret_ok)) return ret;
+	if (unlikely (ret < ret_ok)) 
+		return ret;
 	
 	/* Free the rest
 	 */
