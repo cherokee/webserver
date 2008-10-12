@@ -177,8 +177,10 @@ cherokee_icons_add_suffix (cherokee_icons_t *icons, cherokee_buffer_t *icon, che
 		return ret;
 
 	ret = cherokee_avl_add (&icons->suffixes, suffix, tmp);
-	if (unlikely (ret != ret_ok))
+	if (unlikely (ret != ret_ok)) {
+		cherokee_buffer_free (tmp);
 		return ret;
+	}
 
 	return ret_ok;
 }

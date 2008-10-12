@@ -1,5 +1,8 @@
 2008-10-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/icons.c (cherokee_icons_add_suffix): Better memory
+	management on error. Patch by Stefan de Konink <stefan@konink.de>.
+
 	* cherokee/config_entry.c (cherokee_config_entry_mrproper): There
 	was a AVL tree structure that wasn't being freed. Patch by Stefan
 	de Konink <stefan@konink.de>.
