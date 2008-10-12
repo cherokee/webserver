@@ -339,8 +339,7 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_buffer_mrproper (&srv->pidfile);
 	cherokee_buffer_mrproper (&srv->panic_action);
 
-	//
-	// TODO: Free srv->sources
+	cherokee_avl_free (&srv->sources, (cherokee_func_free_t)cherokee_source_free);
 
 	/* Module loader: It must be the last action to be performed
 	 * because it will close all the opened modules.
