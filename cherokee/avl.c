@@ -283,7 +283,7 @@ node_balance (cherokee_avl_node_t *node)
 
 
 
-static void
+static ret_t
 node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 {
 	short                re;                 
@@ -297,9 +297,9 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 
 	/* If the tree is empty..
 	 */
-	if (tree->root == NULL) {
+	if (unlikely (tree->root == NULL)) {
 		tree->root = child;
-		return;
+		return ret_error;
 	}
 
 	/* Insert the node
@@ -337,7 +337,7 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 
 		} else {
 			node_free (child);
-			return;
+			return ret_error;
 		}
 	}
 
@@ -369,6 +369,8 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 		
 		node = parent;
 	}
+
+	return ret_ok;
 }
 
 
@@ -384,11 +386,15 @@ cherokee_avl_add (cherokee_avl_t *avl, cherokee_buffer_t *key, void *value)
 	/* Create the new AVL node
 	 */
 	ret = node_new (&n, key, value);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok)) 
+		return ret;
 
 	/* Add th node to the tree
 	 */
-	node_add (avl, n);
+	ret = node_add (avl, n);
+	if (unlikely (ret != ret_ok)) 
+		return ret;
+
 	return ret_ok;
 }
 
