@@ -299,7 +299,7 @@ node_add (cherokee_avl_t *tree, cherokee_avl_node_t *child)
 	 */
 	if (unlikely (tree->root == NULL)) {
 		tree->root = child;
-		return ret_error;
+		return ret_ok;
 	}
 
 	/* Insert the node
