@@ -356,5 +356,6 @@ main (int argc, char **argv)
 	if (config_file)
 		free (config_file);
 
+	cherokee_mrproper();
 	return EXIT_OK;
 }

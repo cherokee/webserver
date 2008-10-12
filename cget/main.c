@@ -432,32 +432,38 @@ main (int argc, char **argv)
 		/* Build the url buffer
 		 */
 		ret = cherokee_buffer_add_va (&url, "%s", argv[val]);
-		if (ret != ret_ok) return EXIT_ERROR;
+		if (ret != ret_ok)
+			exit (EXIT_ERROR);
 
 		/* Create the downloader object..
 		 */
 		ret = cherokee_downloader_new (&downloader);
-		if (ret != ret_ok) return EXIT_ERROR;
+		if (ret != ret_ok)
+			exit (EXIT_ERROR);
 
 		ret = cherokee_downloader_init(downloader);
-		if (ret != ret_ok) return EXIT_ERROR;
+		if (ret != ret_ok)
+			exit (EXIT_ERROR);
 
 		if (! cherokee_buffer_is_empty (&proxy)) {
 			ret = cherokee_downloader_set_proxy (downloader, &proxy, proxy_port);
-			if (ret != ret_ok) return EXIT_ERROR;
+			if (ret != ret_ok)
+				exit (EXIT_ERROR);
 		}
 
 		ret = cherokee_downloader_set_url (downloader, &url);
-		if (ret != ret_ok) return EXIT_ERROR;
+		if (ret != ret_ok)
+			exit (EXIT_ERROR);
 
 		ret = cherokee_downloader_connect (downloader);
-		if (ret != ret_ok) return EXIT_ERROR;
+		if (ret != ret_ok)
+			exit (EXIT_ERROR);
 
 		/* Download it!
 		 */
 		ret = do_download (downloader);
 		if ((ret != ret_ok) && (ret != ret_eof)) {
-			return EXIT_ERROR;
+			exit (EXIT_ERROR);
 		}
 
 		/* Free the objects..
@@ -469,7 +475,9 @@ main (int argc, char **argv)
 	/* Close the output file
 	 */
 	re = close (output_fd);
-	if (re != 0) return EXIT_ERROR;
+	if (re != 0) 
+		exit (EXIT_ERROR);
 
+	cherokee_mrproper();
 	return EXIT_OK;
 }

@@ -80,3 +80,10 @@ cherokee_init (void)
 	_cherokee_init = true;
 	return ret_ok;
 }
+
+ret_t
+cherokee_mrproper (void)
+{
+	cherokee_bogotime_free();
+	return ret_ok;
+}

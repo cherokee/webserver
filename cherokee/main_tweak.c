@@ -452,5 +452,6 @@ main (int argc, char *argv[])
 		exit (EXIT_ERROR);		
 	}
 
+	cherokee_mrproper();
 	return EXIT_OK;
 }

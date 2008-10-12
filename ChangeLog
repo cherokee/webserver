@@ -1,5 +1,8 @@
 2008-10-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/init.c (cherokee_mrproper): Added new function to clean
+	up the global cherokee_init() initialization.
+
 	* cherokee/icons.c (cherokee_icons_add_suffix): Better memory
 	management on error. Patch by Stefan de Konink <stefan@konink.de>.
 

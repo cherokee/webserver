@@ -240,13 +240,16 @@ main (int argc, char **argv)
 	process_parameters (argc, argv);
 
 	ret = cherokee_server_new (&srv);
-	if (ret != ret_ok) return 1;
+	if (ret != ret_ok) 
+		exit (EXIT_ERROR);
 
 	ret = config_server (srv);
-	if (ret != ret_ok) return 2;
+	if (ret != ret_ok)
+		exit (EXIT_ERROR);
 
 	ret = cherokee_server_initialize (srv);
-	if (ret != ret_ok) return 3;
+	if (ret != ret_ok)
+		exit (EXIT_ERROR);
 
 	for (;;) {
 		cherokee_server_step (srv);
@@ -255,5 +258,6 @@ main (int argc, char **argv)
 	cherokee_server_stop (srv);
 	cherokee_server_free (srv);
 
-	return 0;
+	cherokee_mrproper();
+	return EXIT_OK;
 }
