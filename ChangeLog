@@ -1,5 +1,9 @@
 2008-10-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/config_entry.c (cherokee_config_entry_mrproper): There
+	was a AVL tree structure that wasn't being freed. Patch by Stefan
+	de Konink <stefan@konink.de>.
+
 	* cherokee/avl.c (cherokee_avl_add): Better error handling. Patch
 	by Stefan de Konink <stefan@konink.de>.
 
