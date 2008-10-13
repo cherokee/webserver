@@ -1,5 +1,9 @@
 2008-10-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main.c (signals_handler): Fixes graceful restart.  It
+	was generating zombi processes. Patch by Antonio Perez
+	<aperez@skarcha.com>
+
 	* admin/CherokeeManagement.py (CherokeeManagement.save): Fixes a
 	bug while saving the configuration without restarting the server.
 	Patch by Antonio Perez <aperez@skarcha.com>.

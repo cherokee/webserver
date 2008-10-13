@@ -295,6 +295,7 @@ signals_handler (int sig, siginfo_t *si, void *context)
 		/* Graceful restart */
 		graceful_restart = true;
 		kill (pid, SIGHUP);
+		process_wait (pid);
 		break;
 
 	case SIGTERM:
