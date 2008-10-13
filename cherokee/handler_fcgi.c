@@ -465,12 +465,6 @@ build_header (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *buffer)
 	cuint_t                  last_header_offset;
 	cherokee_connection_t   *conn                = HANDLER_CONN(hdl);
 
-	/* Take care here, if the connection is reinjected, it
-	 * shouldn't parse the arguments again.
-	 */
-	if (conn->arguments == NULL)
-		cherokee_connection_parse_args (conn);
-
 	cherokee_buffer_clean (buffer);
 
 	/* FCGI_BEGIN_REQUEST

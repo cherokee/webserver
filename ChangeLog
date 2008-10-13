@@ -1,5 +1,12 @@
 2008-10-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_init),
+	cherokee/handler_fcgi.c (build_header),
+	cherokee/handler_fastcgi.c (build_header): Neither of these
+	functions needed to call cherokee_connection_parse_args(). This
+	change is slightly speeding up response elapses. A million thanks
+	to Antonio Perez <aperez@skarcha.com> for hunting this nasty bug.
+
 	* cherokee/cache.c, cherokee/cache.h: Fixes a cache issue.
 
 	* cherokee.conf.sample.pre: Removed a few duped entries.

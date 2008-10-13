@@ -58,13 +58,6 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 	 */
 	HANDLER(cgi)->support = hsupport_maybe_length;
 
-	/* Process the request_string, and build the arguments table..
-	 * We'll need it later
-	 */
-	ret = cherokee_connection_parse_args (conn);
-	if (unlikely(ret < ret_ok))
-		return ret;
-
 	/* Init to default values
 	 */
 	cgi->init_phase          = hcgi_phase_build_headers;
