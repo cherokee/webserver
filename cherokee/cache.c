@@ -96,9 +96,11 @@ static ret_t
 entry_free (cherokee_cache_entry_t *entry)
 {
 	entry->in_list = cache_no_list;
-	cherokee_buffer_mrproper (&entry->key);
-	free (entry);
 
+	CHEROKEE_MUTEX_DESTROY (entry->mutex);
+	cherokee_buffer_mrproper (&entry->key);
+
+	free (entry);
 	return ret_ok;
 }
 
@@ -108,8 +110,10 @@ entry_parent_info_clean (cherokee_cache_entry_t *entry)
 	if (entry->clean_cb == NULL)
 		return ret_error;
 
-	TRACE(ENTRIES, "Evincing: '%s'\n", entry->key.buf);
+	if (entry->ref_count > 0)
+		return ret_ok;
 
+	TRACE(ENTRIES, "Evincing: '%s'\n", entry->key.buf);
 	return entry->clean_cb (entry);
 }
 
@@ -152,9 +156,22 @@ cherokee_cache_entry_unref (cherokee_cache_entry_t **entry)
 
 	/* The entry is still being used
 	 */
-	if ((*entry)->ref_count > 0) {
+	if ((*entry)->ref_count > 1) {
 		CHEROKEE_MUTEX_UNLOCK ((*entry)->mutex);
-		goto out;
+		return ret_ok;
+	}
+
+	/* Refereed only by the cache
+	 */
+	if ((*entry)->ref_count == 1) {
+		if ((*entry)->in_list == cache_b1 ||
+		    (*entry)->in_list == cache_b2)
+		{
+			entry_parent_info_clean (*entry);
+		}
+
+		CHEROKEE_MUTEX_UNLOCK ((*entry)->mutex);
+		return ret_ok;
 	}
 	
 	/* Free it
@@ -163,7 +180,6 @@ cherokee_cache_entry_unref (cherokee_cache_entry_t **entry)
 	entry_parent_free (*entry);
 	entry_free (*entry);
 
-out:
 	*entry = NULL;
 	return ret_ok;
 }
@@ -239,12 +255,16 @@ replace (cherokee_cache_t       *cache,
 	     (cache->len_t1 == p  && (x && x->in_list == cache_b2))))
 	{
 		cache_list_del_lru (t1, tmp);
-		cache_list_add (b1, tmp);
-		entry_parent_info_clean (tmp);
+		if (tmp) {
+			cache_list_add (b1, tmp);
+			entry_parent_info_clean (tmp);
+		}
 	} else {
 		cache_list_del_lru (t2, tmp);
-		cache_list_add (b2, tmp);		
-		entry_parent_info_clean (tmp);
+		if (tmp) {
+			cache_list_add (b2, tmp);		
+			entry_parent_info_clean (tmp);
+		}
 	}
 
 	return ret_ok;
@@ -261,9 +281,8 @@ on_new_added (cherokee_cache_t *cache)
 
 	cache->count_miss += 1;
 
-	/* Free some room for the new obj that is about to be added.
+	/* Free some room for the new obj that is about to be added to T1
 	 */
-
 	if (len_l1 >= c) {
 		if (cache->len_t1 < c) {
 			/* Remove LRU from B1 */
@@ -283,10 +302,8 @@ on_new_added (cherokee_cache_t *cache)
 		if (total_len >= (2 * c)) {
 			/* The cache is full: Remove from B2 */
 			cache_list_del_lru (b2, tmp);
-			if (tmp) {
-				cherokee_avl_del (&cache->map, &tmp->key, NULL);
-				cherokee_cache_entry_unref (&tmp);
-			}
+			cherokee_avl_del (&cache->map, &tmp->key, NULL);
+			cherokee_cache_entry_unref (&tmp);
 		}
 		replace (cache, NULL);
 	}
@@ -395,7 +412,8 @@ update_cache (cherokee_cache_t       *cache,
 	case cache_b1:
 		/* Ghost 'Recently' hit
 		 */
-		TRACE(ENTRIES, "B1 ghost hit: '%s'\n", entry->key.buf);
+		TRACE(ENTRIES, "B1 ghost hit: '%s' (refs=%d)\n", 
+		      entry->key.buf, entry->ref_count);
 
 		ret = update_ghost_b1 (cache, entry);
 		switch (ret) {
@@ -410,7 +428,8 @@ update_cache (cherokee_cache_t       *cache,
 	case cache_b2:
 		/* Ghost 'Frequently' hit
 		 */
-		TRACE(ENTRIES, "B2 ghost hit: '%s'\n", entry->key.buf);
+		TRACE(ENTRIES, "B2 ghost hit: '%s' (refs=%d)\n", 
+		      entry->key.buf, entry->ref_count);
 
 		ret = update_ghost_b2 (cache, entry);
 		switch (ret) {

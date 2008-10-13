@@ -77,14 +77,14 @@ struct cherokee_cache {
 	cint_t          len_t2;
 	cint_t          len_b2;
 
+	/* Configuration */
+	cint_t          max_size;
+	cint_t          target_t1;
+
 	/* Stats */
 	cuint_t         count;
 	cuint_t         count_hit;
 	cuint_t         count_miss;
-
-	/* Configuration */
-	cuint_t         max_size;
-	cint_t          target_t1;
 
 	/* Callbacks */
 	cherokee_cache_new_func_t  new_cb;
