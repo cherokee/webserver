@@ -57,7 +57,7 @@ class CherokeeManagement:
     def save (self, restart=None):
         self._cfg.save()
 
-        if not restart:
+        if not restart or restart.lower() == 'no':
             return
         if restart.lower() == 'graceful':
             self._restart (graceful=True)
