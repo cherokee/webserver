@@ -1,5 +1,8 @@
 2008-10-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/util.c (cherokee_parse_query_string): Covers a corner
+	case. Patch by Antonio Perez <aperez@skarcha.com>.
+
 	* cherokee/main.c (main): It should not clean up the PID file if
 	cherokee is executed in "single time" mode. Patch by Antonio Perez
 	<aperez@skarcha.com>.
