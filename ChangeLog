@@ -1,5 +1,9 @@
 2008-10-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main.c (main): It should not clean up the PID file if
+	cherokee is executed in "single time" mode. Patch by Antonio Perez
+	<aperez@skarcha.com>.
+
 	* cherokee/handler_cgi_base.c (cherokee_handler_cgi_base_init),
 	cherokee/handler_fcgi.c (build_header),
 	cherokee/handler_fastcgi.c (build_header): Neither of these
