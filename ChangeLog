@@ -1,5 +1,9 @@
 2008-10-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/cache.c (cherokee_cache_entry_unref): Clean references
+	in a better way. IOcache clients shouldn't keep pointers to
+	unref'ed iocache objects.
+
 	* cherokee/main.c (signals_handler): Fixes graceful restart.  It
 	was generating zombi processes. Patch by Antonio Perez
 	<aperez@skarcha.com>

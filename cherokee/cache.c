@@ -158,7 +158,7 @@ cherokee_cache_entry_unref (cherokee_cache_entry_t **entry)
 	 */
 	if ((*entry)->ref_count > 1) {
 		CHEROKEE_MUTEX_UNLOCK ((*entry)->mutex);
-		return ret_ok;
+		goto ok;
 	}
 
 	/* Refereed only by the cache
@@ -171,7 +171,7 @@ cherokee_cache_entry_unref (cherokee_cache_entry_t **entry)
 		}
 
 		CHEROKEE_MUTEX_UNLOCK ((*entry)->mutex);
-		return ret_ok;
+		goto ok;
 	}
 	
 	/* Free it
@@ -180,6 +180,7 @@ cherokee_cache_entry_unref (cherokee_cache_entry_t **entry)
 	entry_parent_free (*entry);
 	entry_free (*entry);
 
+ok:
 	*entry = NULL;
 	return ret_ok;
 }
