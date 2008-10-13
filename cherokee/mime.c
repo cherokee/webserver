@@ -190,8 +190,18 @@ cherokee_mime_configure (cherokee_mime_t *mime, cherokee_config_node_t *config)
 
 
 ret_t 
-cherokee_mime_get_by_suffix (cherokee_mime_t *mime, char *suffix, cherokee_mime_entry_t **entry)
+cherokee_mime_get_by_suffix (cherokee_mime_t        *mime, 
+			     char                   *suffix,
+			     cherokee_mime_entry_t **entry)
 {
-	return cherokee_avl_get_ptr (&mime->ext_table, suffix, (void **)entry);
+	ret_t ret;
+
+	ret = cherokee_avl_get_ptr (&mime->ext_table, suffix, (void **)entry);
+	if (ret != ret_ok) {
+		PRINT_MSG("Error adding MIME suffix '%s'\n", suffix);
+		return ret_error;
+	}
+
+	return ret_ok;
 }
 

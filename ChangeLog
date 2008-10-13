@@ -1,3 +1,8 @@
+2008-10-13  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/mime.c (cherokee_mime_get_by_suffix),
+	cherokee/icons.c (add_suffix): Better error management.
+
 2008-10-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/balancer.c (cherokee_balancer_mrproper): Fixes a small

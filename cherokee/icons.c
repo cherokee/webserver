@@ -276,6 +276,7 @@ add_file (char *file, void *data)
 static ret_t 
 add_suffix (char *file, void *data)
 {
+	ret_t              ret;
 	cherokee_buffer_t  file_buf;
 	cherokee_icons_t  *icons = ((void **)data)[0];
 	cherokee_buffer_t *key   = ((void **)data)[1];
@@ -283,7 +284,14 @@ add_suffix (char *file, void *data)
 	TRACE(ENTRIES, "Adding suffix icon '%s' -> '%s'\n", key->buf, file);
 	
 	cherokee_buffer_fake (&file_buf, file, strlen(file));
-	return cherokee_icons_add_suffix (icons, key, &file_buf);
+
+	ret = cherokee_icons_add_suffix (icons, key, &file_buf);
+	if (ret != ret_ok) {
+		PRINT_ERROR ("Couldn't assign suffix '%s' to file '%s'\n", file, key->buf);
+		return ret_error;
+	}
+
+	return ret_ok;
 }
 
 
