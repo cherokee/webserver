@@ -194,14 +194,6 @@ cherokee_mime_get_by_suffix (cherokee_mime_t        *mime,
 			     char                   *suffix,
 			     cherokee_mime_entry_t **entry)
 {
-	ret_t ret;
-
-	ret = cherokee_avl_get_ptr (&mime->ext_table, suffix, (void **)entry);
-	if (ret != ret_ok) {
-		PRINT_MSG("Error adding MIME suffix '%s'\n", suffix);
-		return ret_error;
-	}
-
-	return ret_ok;
+	return cherokee_avl_get_ptr (&mime->ext_table, suffix, (void **)entry);
 }
 
