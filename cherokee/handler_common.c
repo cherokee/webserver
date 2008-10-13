@@ -46,7 +46,7 @@
 #include "connection.h"
 
 #define ENTRIES "handler,common"
-#define DEFAULT_ALLOW_PATHINFO true
+#define DEFAULT_ALLOW_PATHINFO false
 
 ret_t
 cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)

@@ -1,5 +1,10 @@
 2008-10-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_common.c (DEFAULT_ALLOW_PATHINFO): It should
+	not allow pathinfo by default. Patch by Antonio Perez
+	<aperez@skarcha.com>.  This patch fixes bug #149:
+	http://code.google.com/p/cherokee/issues/detail?id=149
+
 	* cherokee/util.c (cherokee_parse_query_string): Covers a corner
 	case. Patch by Antonio Perez <aperez@skarcha.com>.
 
