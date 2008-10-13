@@ -1,5 +1,7 @@
 2008-10-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee.conf.sample.pre: Removed a few duped entries.
+
 	* cherokee/mime.c (cherokee_mime_get_by_suffix),
 	cherokee/icons.c (add_suffix): Better error management.
 
