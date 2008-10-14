@@ -2120,7 +2120,7 @@ cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
 
 	conn->respins += 1;
 	if (conn->respins > RESPINS_MAX) {
-		PRINT_ERROR ("Internal redirection limit (%d) excedeeded\n", RESPINS_MAX);
+		TRACE(ENTRIES, "Internal redirection limit (%d) excedeeded\n", RESPINS_MAX);
 		conn->error_code = http_internal_error;
 		return ret_error;
 	}
