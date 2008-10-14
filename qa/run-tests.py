@@ -337,9 +337,11 @@ def mainloop_iterator(objs, main_thread=True):
         for obj in objs:
             go_ahead = obj.Precondition()
 
-            if go_ahead and main_thread and \
-               (pause > 0 or obj.file.startswith(bpause)):
-                do_pause()
+            if go_ahead and main_thread:
+                if pause > 0:
+                    do_pause()
+                elif bpause and obj.file.startswith(bpause):
+                    do_pause()
 
             if not quiet:
                 if ssl: print "SSL:",
