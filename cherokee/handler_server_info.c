@@ -393,7 +393,8 @@ build_cache_table_content (cherokee_buffer_t  *buf,
 		return;
 	}
 
-	table_add_row_int (buf, "Fetches", iocache->cache.count);
+	table_add_row_int (buf, "Max Size", iocache->cache.max_size);
+	table_add_row_int (buf, "Fetches",  iocache->cache.count);
 
 	/* Total hits */
 	if (iocache->cache.count == 0)

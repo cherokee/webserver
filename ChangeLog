@@ -1,5 +1,8 @@
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_server_info.c (build_cache_table_content): Adds
+	a new row showing the max. cache size.
+
 	* qa/qa/175-RedirectUrl.py, qa/Makefile.am (EXTRA_DIST): Removes
 	the QA test number 175. It was duped.
 
