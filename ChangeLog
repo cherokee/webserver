@@ -1,5 +1,8 @@
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/server.c (cherokee_server_step): Do not mess with the
+	threads at this point. They will be freed in server::free().
+
 	* admin/PageAdvanced.py: The page content has been splited among
 	different tabs. There is a new entry for "I/O cache", so now its
 	configuration is also covered from the administration interface.

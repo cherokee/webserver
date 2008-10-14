@@ -1217,11 +1217,6 @@ cherokee_server_step (cherokee_server_t *srv)
 	if (unlikely ((srv->wanna_reinit) &&
 		      (srv->main_thread->conns_num == 0)))
 	{
-		cherokee_list_t *i;
-
-		list_for_each (i, &srv->thread_list) {
-			cherokee_thread_wait_end (THREAD(i));
-		}
 		return ret_eof;
 	}
 

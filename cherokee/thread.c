@@ -93,7 +93,7 @@ thread_routine (void *data)
 
 	/* Step, step, step, ..
 	 */
-	while (thread->exit == false) {
+	while (likely (thread->exit == false)) {
 		cherokee_thread_step_MULTI_THREAD (thread, false);
 	}
 
