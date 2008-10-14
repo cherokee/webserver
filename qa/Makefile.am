@@ -180,8 +180,7 @@ run-tests.py \
 172-Chunked-CGI.py \
 173-Chunked-SCGI.py \
 174-Respins-Limit.py \
-175-RedirectUrl.py \
-176-Digest-htdigest-2.py
+175-Digest-htdigest-2.py
 
 test:
 	./run-tests.py
