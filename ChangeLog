@@ -1,5 +1,8 @@
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_server_info.c (build_cache_table_content): Adds
+	more information about the state of the IO-cache.
+
 	* cherokee/cache.h cherokee/cache.c cherokee/handler_file.c
 	cherokee/server-protected.h cherokee/iocache.h cherokee/iocache.c
 	cherokee/server.c: IO-cache gets its own configuration entry:

@@ -393,27 +393,46 @@ build_cache_table_content (cherokee_buffer_t  *buf,
 		return;
 	}
 
-	table_add_row_int (buf, "Max Size", iocache->cache.max_size);
-	table_add_row_int (buf, "Fetches",  iocache->cache.count);
+	cherokee_buffer_add_fsize (&tmp_buf, iocache->max_file_size);
+	table_add_row_buf (buf, "File Max size", &tmp_buf);
+
+	cherokee_buffer_clean (&tmp_buf);
+	cherokee_buffer_add_fsize (&tmp_buf, iocache->min_file_size);
+	table_add_row_buf (buf, "File Min size", &tmp_buf);
+
+	cherokee_buffer_clean (&tmp_buf);
+	cherokee_buffer_add_va (&tmp_buf, "%d secs", iocache->lasting_mmap);
+	table_add_row_buf (buf, "Lasting: Mmap", &tmp_buf);
+
+	cherokee_buffer_clean (&tmp_buf);
+	cherokee_buffer_add_va (&tmp_buf, "%d secs", iocache->lasting_stat);
+	table_add_row_buf (buf, "Lasting: Stat", &tmp_buf);
+
+	cherokee_buffer_clean (&tmp_buf);
+	cherokee_buffer_add_va (&tmp_buf, "%d pages", CACHE(iocache)->max_size);
+	table_add_row_buf (buf, "Max Cache size", &tmp_buf);
+
+	table_add_row_int (buf, "Fetches",        CACHE(iocache)->count);
 
 	/* Total hits */
-	if (iocache->cache.count == 0)
+	if (CACHE(iocache)->count == 0)
 		percent = 0;
 	else
-		percent = (iocache->cache.count_hit * 100.0) / iocache->cache.count;
+		percent = (CACHE(iocache)->count_hit * 100.0) / CACHE(iocache)->count;
 	snprintf (tmp, sizeof(tmp), "%.2f%%", percent);
 	table_add_row_str (buf, "Total Hits", tmp);
 
 	/* Total misses  */
-	if (iocache->cache.count == 0)
+	if (CACHE(iocache)->count == 0)
 		percent = 0;
 	else
-		percent = (iocache->cache.count_miss * 100.0) / iocache->cache.count;
+		percent = (CACHE(iocache)->count_miss * 100.0) / CACHE(iocache)->count;
 	snprintf (tmp, sizeof(tmp), "%.2f%%", percent);
 	table_add_row_str (buf, "Total Misses", tmp);
 
 	/* Total Mmaped */
 	cherokee_iocache_get_mmaped_size (iocache, &mmaped);
+	cherokee_buffer_clean (&tmp_buf);
 	cherokee_buffer_add_fsize (&tmp_buf, mmaped);
 	table_add_row_buf (buf, "Total mmaped", &tmp_buf);
 
