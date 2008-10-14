@@ -13,13 +13,13 @@ ACCOUNTS=(
          )
           
 CONF = """
-vserver!1!rule!1760!match = directory
-vserver!1!rule!1760!match!directory = %s
-vserver!1!rule!1760!match!final = 0
-vserver!1!rule!1760!auth = htdigest
-vserver!1!rule!1760!auth!methods = digest
-vserver!1!rule!1760!auth!realm = %s
-vserver!1!rule!1760!auth!passwdfile = %s
+vserver!1!rule!1750!match = directory
+vserver!1!rule!1750!match!directory = %s
+vserver!1!rule!1750!match!final = 0
+vserver!1!rule!1750!auth = htdigest
+vserver!1!rule!1750!auth!methods = digest
+vserver!1!rule!1750!auth!realm = %s
+vserver!1!rule!1750!auth!passwdfile = %s
 """
 
 class Test (TestBase):
