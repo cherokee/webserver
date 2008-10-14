@@ -16,6 +16,7 @@ CONF = """
 vserver!1!rule!670!match = directory
 vserver!1!rule!670!match!directory = /pathinfo
 vserver!1!rule!670!handler = common
+vserver!1!rule!670!handler!allow_pathinfo = 1
 """
 
 class Test (TestBase):

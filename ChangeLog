@@ -1,3 +1,7 @@
+2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* qa/067-PathInfo.py: This test needs pathinfo processing.
+
 2008-10-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/cache.c (cherokee_cache_entry_unref): Clean references
