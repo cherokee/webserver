@@ -1,5 +1,9 @@
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageAdvanced.py: The page content has been splited among
+	different tabs. There is a new entry for "I/O cache", so now its
+	configuration is also covered from the administration interface.
+
 	* cherokee/handler_server_info.c (build_cache_table_content): Adds
 	more information about the state of the IO-cache.
 

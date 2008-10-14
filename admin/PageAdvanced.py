@@ -18,7 +18,12 @@ DATA_VALIDATION = [
     ('server!keepalive_max_requests', validations.is_positive_int),
     ("server!keepalive$",             validations.is_boolean),
     ("server!thread_number",          validations.is_positive_int),
-    ("server!use_iocache",            validations.is_boolean)
+    ("server!iocache!enabled",        validations.is_boolean),
+    ("server!iocache!max_size",       validations.is_positive_int),
+    ("server!iocache!min_file_size",  validations.is_positive_int),
+    ("server!iocache!max_file_size",  validations.is_positive_int),
+    ("server!iocache!lasting_stat",   validations.is_positive_int),
+    ("server!iocache!lasting_mmap",   validations.is_positive_int)
 ]
 
 WARNING = """
@@ -41,7 +46,14 @@ NOTE_FLUSH_TIME   = 'Sets the number of seconds between log consolidations (flus
 NOTE_KEEPALIVE    = 'Enables the server-wide keep-alive support. It increases the performance. It is usually set on.'
 NOTE_KEEPALIVE_RS = 'Maximum number of HTTP requests that can be served by each keepalive connection.'
 NOTE_CHUNKED      = 'Allows the server to use Chunked encoding to try to keep Keep-Alive enabled.'
-NOTE_IOCACHE      = 'Enable the server wide use of the I/O caching layer.'
+NOTE_IO_ENABLED   = 'Active or deactive the I/O cache globally.'
+NOTE_IO_SIZE      = 'Number of pages that the cache should handle.'
+NOTE_IO_MIN_SIZE  = 'Files under this size will not be cached.'
+NOTE_IO_MAX_SIZE  = 'Files over this size will not be cached.'
+NOTE_IO_LAST_STAT = 'How long the file information should last cached without refreshing it.'
+NOTE_IO_LAST_MMAP = 'How long the file content should last cached.'
+
+#NOTE_IOCACHE      = 'Enable the server wide use of the I/O caching layer.'
 
 HELPS = [('config_advanced', "Advanced")]
 
@@ -57,51 +69,66 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddMacroContent ('content', content)
         return Page.Render(self)
 
-    def _render_content (self):
+    def _render_performance (self):
         polling_methods = []
         for name, desc in POLL_METHODS:
             if ((not name) or \
                 cherokee_has_polling_method (name)):
                 polling_methods.append((name, desc))
 
+        table = TableProps()
+        self.AddPropCheck (table, 'Keep Alive',         'server!keepalive',        True, NOTE_KEEPALIVE)
+        self.AddPropEntry (table, 'Max keepalive reqs', 'server!keepalive_max_requests', NOTE_KEEPALIVE_RS)
+        self.AddPropCheck (table, 'Chunked Encoding',   'server!chunked_encoding', True, NOTE_CHUNKED)
+        self.AddPropOptions_Reload (table, 'Polling Method', 'server!poll_method',  polling_methods, NOTE_POLLING)
+        self.AddPropEntry (table, 'Sendfile min size',  'server!sendfile_min', NOTE_SENDFILE_MIN)
+        self.AddPropEntry (table, 'Sendfile max size',  'server!sendfile_max', NOTE_SENDFILE_MAX)
+        return self.Indent(table)
+
+    def _render_resources (self):
+        table = TableProps()
+        self.AddPropEntry (table, 'Thread Number',          'server!thread_number',        NOTE_THREAD_NUM)
+        self.AddPropOptions_Reload (table, 'Thread Policy', 'server!thread_policy', THREAD_POLICY, NOTE_THREAD)
+        self.AddPropEntry (table, 'File descriptors',       'server!fdlimit',              NOTE_FD_NUM)
+        self.AddPropEntry (table, 'Listening queue length', 'server!listen_queue',         NOTE_LISTEN_Q)
+        self.AddPropEntry (table, 'Reuse connections',      'server!max_connection_reuse', NOTE_REUSE_CONNS)
+        self.AddPropEntry (table, 'Log flush time',         'server!log_flush_elapse',     NOTE_FLUSH_TIME)
+        return self.Indent(table)
+
+    def _render_iocache (self):
+        table = TableProps()
+        self.AddPropCheck (table, 'Enabled',       'server!iocache!enabled', True, NOTE_IO_ENABLED)
+        self.AddPropEntry (table, 'Max pages',     'server!iocache!max_size',      NOTE_IO_SIZE)
+        self.AddPropEntry (table, 'File Min Size', 'server!iocache!min_file_size', NOTE_IO_MIN_SIZE)
+        self.AddPropEntry (table, 'File Max Size', 'server!iocache!max_file_size', NOTE_IO_MAX_SIZE)
+        self.AddPropEntry (table, 'Lasting: stat', 'server!iocache!lasting_stat',  NOTE_IO_LAST_STAT)
+        self.AddPropEntry (table, 'Lasting: mmap', 'server!iocache!lasting_mmap',  NOTE_IO_LAST_MMAP)
+        return self.Indent(table)
+
+    def _render_special_files (self):
+        table = TableProps()
+        self.AddPropEntry (table, 'Panic action', 'server!panic_action', NOTE_PANIC_ACTION)
+        self.AddPropEntry (table, 'PID file',     'server!pid_file',     NOTE_PID_FILE)
+        return self.Indent(table)
+
+    def _render_content (self):
+        tabs  = []
+        tabs += [('Connections',   self._render_performance())]
+        tabs += [('Resources',     self._render_resources())]
+        tabs += [('I/O cache',     self._render_iocache())]
+        tabs += [('Special Files', self._render_special_files())]
+
         txt = "<h1>Advanced configuration</h1>"
         txt += self.Dialog(WARNING, 'warning')
-
-        txt += "<h2>Connections management</h2>"
-        table = TableProps()
-        self.AddPropCheck    (table, 'Keep Alive',         'server!keepalive', True, NOTE_KEEPALIVE)        
-        self.AddPropEntry    (table, 'Max keepalive reqs', 'server!keepalive_max_requests', NOTE_KEEPALIVE_RS)
-        self.AddPropCheck    (table, 'Chunked Encoding',   'server!chunked_encoding', True, NOTE_CHUNKED)        
-        self.AddPropCheck    (table, 'I/O cache',          'server!use_iocache', True, NOTE_IOCACHE)        
-        txt += self.Indent(table)
-
-        txt += "<h2>System tweaking</h2>"
-        table = TableProps()
-        self.AddPropEntry    (table, 'Thread Number',    'server!thread_number', NOTE_THREAD_NUM)
-        self.AddPropOptions_Reload (table, 'Thread Policy', 'server!thread_policy', THREAD_POLICY, NOTE_THREAD)
-        self.AddPropEntry    (table, 'File descriptors', 'server!fdlimit', NOTE_FD_NUM)
-        txt += self.Indent(table)
-
-        txt += "<h2>Server tweaking</h2>"
-        table = TableProps()
-        self.AddPropOptions_Reload (table, 'Polling Method', 'server!poll_method',  polling_methods, NOTE_POLLING)
-        self.AddPropEntry    (table, 'Sendfile min size', 'server!sendfile_min', NOTE_SENDFILE_MIN)
-        self.AddPropEntry    (table, 'Sendfile max size', 'server!sendfile_max', NOTE_SENDFILE_MAX)
-        self.AddPropEntry    (table, 'Panic action',      'server!panic_action', NOTE_PANIC_ACTION)
-        self.AddPropEntry    (table, 'PID file',          'server!pid_file',     NOTE_PID_FILE)
-        txt += self.Indent(table)
-
-        txt += "<h2>Server behavior</h2>"
-        table = TableProps()
-        self.AddPropEntry    (table, 'Listening queue length', 'server!listen_queue',           NOTE_LISTEN_Q)
-        self.AddPropEntry    (table, 'Reuse connections',      'server!max_connection_reuse',   NOTE_REUSE_CONNS)
-        self.AddPropEntry    (table, 'Log flush time',         'server!log_flush_elapse',       NOTE_FLUSH_TIME)
-        txt += self.Indent(table)
+        txt += self.InstanceTab (tabs)
 
         form = Form ("/%s" % (self._id), add_submit=False)
-        return form.Render(txt,DEFAULT_SUBMIT_VALUE)
+        return form.Render(txt, DEFAULT_SUBMIT_VALUE)
+
 
     def _op_apply_changes (self, uri, post):
-        self.ApplyChanges (['server!keepalive', 'server!chunked_encoding'], 
+        self.ApplyChanges (['server!keepalive', 
+                            'server!chunked_encoding', 
+                            'server!iocache!enabled'], 
                            post, validation = DATA_VALIDATION)
 
