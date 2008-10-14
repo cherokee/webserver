@@ -1,5 +1,8 @@
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_common.c (cherokee_handler_common_new): Fixes a
+	crash when I/O-cache is disabled.
+
 	* cherokee/server.c (cherokee_server_step): Do not mess with the
 	threads at this point. They will be freed in server::free().
 

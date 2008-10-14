@@ -185,6 +185,8 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		use_iocache = PROP_COMMON(props)->props_file->use_cache;
 	}
 
+	use_iocache &= (CONN_SRV(cnt)->iocache != NULL);
+
 	/* Check the request
 	 */
 	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
