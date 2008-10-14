@@ -218,13 +218,14 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 	re = cherokee_stat (CACHE_ENTRY(entry)->key.buf, &entry->state);
 	if (re < 0) {
 		TRACE(ENTRIES, "Couldn't update stat: %s: errno=%d\n", 
-		      CACHE_ENTRY(entry)->key.buf, re);
+		      CACHE_ENTRY(entry)->key.buf, errno);
 
 		switch (errno) {
 		case EACCES:
 			ret = ret_deny;
 			break;
 		case ENOENT:
+		case ENOTDIR:
 			ret = ret_not_found;
 			break;
 		default:

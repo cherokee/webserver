@@ -152,6 +152,7 @@ without:
 	
 	switch (errno) {
 	case ENOENT: 
+	case ENOTDIR:
 		return ret_not_found;
 	case EACCES: 
 		return ret_deny;

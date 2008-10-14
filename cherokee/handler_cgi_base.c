@@ -48,8 +48,6 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 				cherokee_handler_cgi_base_add_env_pair_t  add_env_pair,
 				cherokee_handler_cgi_base_read_from_cgi_t read_from_cgi)
 {
-	ret_t ret;
-
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base (HANDLER(cgi), conn, props, info);
