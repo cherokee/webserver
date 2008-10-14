@@ -1,5 +1,8 @@
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/176-Digest-htdigest-2.py: Fixes the test. It was using an
+	invalid priority number.
+
 	* qa/run-tests.py, qa/help.py, qa/*-*.py: Added a new -D
 	parameter. It stops right before executing a certain QA test.  All
 	the QA tests needed a small fix in order to be able to access its
