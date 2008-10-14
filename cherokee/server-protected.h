@@ -152,7 +152,6 @@ struct cherokee_server {
 	/* I/O cache
 	 */
 	cherokee_iocache_t        *iocache;
-	cherokee_boolean_t         use_iocache;
 
 	/* Other objects
 	 */

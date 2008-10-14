@@ -432,9 +432,9 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 		  (conn->encoder == NULL) &&
 		  (HDL_FILE_PROP(fhdl)->use_cache) &&
 		  (conn->socket.is_tls == non_TLS) &&
-		  (fhdl->info->st_size <= IOCACHE_MAX_FILE_SIZE) &&
-		  (http_method_with_body (conn->header.method)));
-	
+		  (http_method_with_body (conn->header.method)) &&
+		  (fhdl->info->st_size <= srv->iocache->max_file_size) &&
+		  (fhdl->info->st_size >= srv->iocache->min_file_size));
 
 	TRACE(ENTRIES, "Using iocache %d\n", use_io);
 

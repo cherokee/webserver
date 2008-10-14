@@ -46,8 +46,11 @@
 
 #define ENTRIES "iocache"
 
-#define LASTING_MMAP  300  /* 5 mins */
-#define LASTING_STAT  300  /* 5 mins */
+#define LASTING_MMAP     5 * 60  /* secs */
+#define LASTING_STAT     5 * 60  /* secs */
+#define MAX_FILE_SIZE    80000   /* bytes */
+#define MIN_FILE_SIZE    1       /* bytes */
+
 
 #ifndef O_BINARY
 # define O_BINARY 0
@@ -141,7 +144,7 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 
 	/* Init its parent class
 	 */
-	cherokee_cache_entry_init (CACHE_ENTRY(n), key, 
+	cherokee_cache_entry_init (CACHE_ENTRY(n), key, cache,
 				   &PRIV(n)->parent_lock);
 
 	/* Set the virtual methods
@@ -165,6 +168,40 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 	return ret_ok;
 }
 
+
+ret_t
+cherokee_iocache_configure (cherokee_iocache_t     *iocache,
+			    cherokee_config_node_t *conf)
+{
+	ret_t            ret;
+	cherokee_list_t *i;
+
+	/* Configure parent class
+	 */
+	ret = cherokee_cache_configure (CACHE(iocache), conf);
+	if (ret != ret_ok)
+		return ret;
+
+	/* Configure it own properties
+	 */
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+		
+		if (equal_buf_str (&subconf->key, "max_file_size")) {
+			iocache->max_file_size = atoi(subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "min_file_size")) {
+			iocache->min_file_size = atoi(subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "lasting_stat")) {
+			iocache->lasting_stat = atoi(subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "lasting_mmap")) {
+			iocache->lasting_mmap = atoi(subconf->val.buf);
+		}
+	}
+
+	return ret_ok;
+}
+
 ret_t 
 cherokee_iocache_init (cherokee_iocache_t *iocache)
 {
@@ -181,6 +218,11 @@ cherokee_iocache_init (cherokee_iocache_t *iocache)
 	CACHE(iocache)->new_cb       = iocache_entry_new_cb;
 	CACHE(iocache)->new_cb_param = NULL;
 	CACHE(iocache)->stats_cb     = get_stats_cb;
+
+	iocache->max_file_size = MAX_FILE_SIZE;
+	iocache->min_file_size = MIN_FILE_SIZE;
+	iocache->lasting_stat  = LASTING_STAT;
+	iocache->lasting_mmap  = LASTING_MMAP;
 
 	return ret_ok;
 }
@@ -204,8 +246,9 @@ cherokee_iocache_entry_unref (cherokee_iocache_entry_t **entry)
 static ret_t
 ioentry_update_stat (cherokee_iocache_entry_t *entry)
 {
-	int   re;
-	ret_t ret;
+	int                 re;
+	ret_t               ret;
+	cherokee_iocache_t *iocache = IOCACHE(CACHE_ENTRY(entry)->cache);
 
 	if (PRIV(entry)->stat_expiration >= cherokee_bogonow_now) {
 		TRACE (ENTRIES, "Update stat: %s: updated - skipped\n", 
@@ -242,7 +285,7 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 	TRACE (ENTRIES, "Updated stat: %s\n", CACHE_ENTRY(entry)->key.buf);
 
 out:
-	PRIV(entry)->stat_expiration = cherokee_bogonow_now + LASTING_STAT;
+	PRIV(entry)->stat_expiration = cherokee_bogonow_now + iocache->lasting_stat;
 	PRIV(entry)->stat_status     = ret;
 
 	BIT_UNSET (PUBL(entry)->info, iocache_stat);
@@ -256,6 +299,7 @@ ioentry_update_mmap (cherokee_iocache_entry_t *entry,
 	ret_t              ret;
 	int                fd_local = -1;
 	cherokee_buffer_t *filename = &CACHE_ENTRY(entry)->key;
+	cherokee_iocache_t *iocache = IOCACHE(CACHE_ENTRY(entry)->cache);
 
 	/* Short path
 	 */
@@ -330,7 +374,7 @@ ioentry_update_mmap (cherokee_iocache_entry_t *entry,
 	TRACE(ENTRIES, "Updated mmap: %s\n", filename->buf);
 
 	PUBL(entry)->mmaped_len      = entry->state.st_size;
-	PRIV(entry)->mmap_expiration = cherokee_bogonow_now + LASTING_MMAP;
+	PRIV(entry)->mmap_expiration = cherokee_bogonow_now + iocache->lasting_mmap;
 
 	if ((fd == NULL) && (fd_local != -1))
 		close (fd_local);
@@ -373,7 +417,8 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 				  cherokee_iocache_info_t    info,
 				  int                       *fd)
 {
-	ret_t ret;
+	ret_t               ret;
+	cherokee_iocache_t *iocache = IOCACHE(CACHE_ENTRY(entry)->cache);
 
 	/* Cannot update the entry when someone uses it.
 	 * At this point the object has 2 references: 
@@ -408,8 +453,8 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 
 		/* Check the size before mapping it
 		 */
-		if ((entry->state.st_size < IOCACHE_MIN_FILE_SIZE) ||
-		    (entry->state.st_size > IOCACHE_MAX_FILE_SIZE))
+		if ((entry->state.st_size < iocache->min_file_size) ||
+		    (entry->state.st_size > iocache->max_file_size))
 		{
 			ret = ret_no_sys;
 			goto out;

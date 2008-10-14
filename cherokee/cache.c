@@ -26,8 +26,6 @@
 #include "cache.h"
 #include "util.h"
 
-/* Take care (DEFAULT_MAX_SIZE % 4) must = 0 
- */
 #define ENTRIES          "cache"
 #define DEFAULT_MAX_SIZE 12 * 4 
 
@@ -78,10 +76,13 @@ struct cherokee_cache_priv {
 ret_t 
 cherokee_cache_entry_init (cherokee_cache_entry_t *entry, 
 			   cherokee_buffer_t      *key,
+			   cherokee_cache_t       *cache,
                            void                   *mutex)
 {
 	entry->in_list   = cache_no_list;
 	entry->ref_count = 1;
+
+	entry->cache     = cache;
 	entry->mutex     = mutex;
 
 	INIT_LIST_HEAD(&entry->listed);
@@ -188,6 +189,28 @@ ok:
 
 /* Cache
  */
+
+ret_t
+cherokee_cache_configure (cherokee_cache_t       *cache,
+			  cherokee_config_node_t *conf)
+{
+	cherokee_list_t *i;
+
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+		
+		if (equal_buf_str (&subconf->key, "max_size")) {
+			cache->max_size = atoi(subconf->val.buf);
+		}
+	}
+
+	/* max_size must be divisible by 4
+	 */
+	while (cache->max_size % 4 != 0)
+		cache->max_size++;
+
+	return ret_ok;
+}
 
 ret_t
 cherokee_cache_init (cherokee_cache_t *cache)

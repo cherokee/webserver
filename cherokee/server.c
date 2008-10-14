@@ -177,8 +177,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* IO Cache cache
 	 */
-	n->iocache         = NULL;
-	n->use_iocache     = true;
+	n->iocache = NULL;
 
 	/* Regexs
 	 */
@@ -971,14 +970,6 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	if (ret != ret_ok)
 		return ret;
 
-	/* Instance the server's I/O cache
-	 */
-	if (srv->use_iocache) {
-		ret = cherokee_iocache_new (&srv->iocache);
-		if (ret != ret_ok)
-			return ret;
-	}
-
 	/* Set the FD number limit
 	 */
 	if (srv->fdlimit_custom != -1) {
@@ -1358,6 +1349,28 @@ vservers_check_sanity (cherokee_server_t *srv)
 }
 
 static ret_t 
+configure_iocache (cherokee_server_t *srv, cherokee_config_node_t *conf)
+{
+	ret_t              ret;
+	cherokee_boolean_t enabled = true;
+
+	cherokee_config_node_read_bool (conf, "enabled", &enabled);
+	if (enabled) {
+		/* Instance the cache object
+		 */
+		ret = cherokee_iocache_new (&srv->iocache);
+		if (ret != ret_ok)
+			return ret;
+
+		ret = cherokee_iocache_configure (srv->iocache, conf);
+		if (ret != ret_ok)
+			return ret;
+	}
+
+	return ret_ok;
+}
+
+static ret_t 
 configure_server_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t              ret;
@@ -1406,9 +1419,6 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "chunked_encoding")) {
 		srv->chunked_encoding = !!atoi (conf->val.buf);
 
-	} else if (equal_buf_str (&conf->key, "use_iocache")) {
-		srv->use_iocache = !!atoi (conf->val.buf);
-
 	} else if (equal_buf_str (&conf->key, "panic_action")) {
 		cherokee_buffer_clean (&srv->panic_action);
 		cherokee_buffer_add_buffer (&srv->panic_action, &conf->val);
@@ -1424,6 +1434,11 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "listen")) {
 		cherokee_buffer_clean (&srv->listen_to);
 		cherokee_buffer_add_buffer (&srv->listen_to, &conf->val);
+
+	} else if (equal_buf_str (&conf->key, "iocache")) {
+		ret = configure_iocache (srv, conf);
+		if (ret != ret_ok) 
+			return ret;
 
 	} else if (equal_buf_str (&conf->key, "poll_method")) {
 		char    *str          = conf->val.buf;

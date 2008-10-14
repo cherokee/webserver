@@ -1,5 +1,10 @@
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/cache.h cherokee/cache.c cherokee/handler_file.c
+	cherokee/server-protected.h cherokee/iocache.h cherokee/iocache.c
+	cherokee/server.c: IO-cache gets its own configuration entry:
+	server!iocache, so fro now on, it can be tuned.
+
 	* admin/config.py (Config._parse): Better error reporting.
 
 	* cherokee/handler_server_info.c (build_cache_table_content): Adds

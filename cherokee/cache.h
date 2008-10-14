@@ -32,6 +32,7 @@
 #include <cherokee/common.h>
 #include <cherokee/list.h>
 #include <cherokee/avl.h>
+#include <cherokee/config_node.h>
 
 /* Forward declaration */
 typedef struct cherokee_cache       cherokee_cache_t;
@@ -103,6 +104,7 @@ struct cherokee_cache_entry {
 
 	cint_t                       ref_count;
 	void                        *mutex;
+	cherokee_cache_t            *cache;
 	
 	/* Callbacks */
 	cherokee_cache_entry_clean_t clean_cb;
@@ -119,6 +121,7 @@ struct cherokee_cache_entry {
  */
 ret_t cherokee_cache_entry_init  (cherokee_cache_entry_t  *entry, 
 				  cherokee_buffer_t       *key,
+				  cherokee_cache_t        *cache,
 				  void                    *mutex);
 ret_t cherokee_cache_entry_unref (cherokee_cache_entry_t **entry);
 
@@ -130,7 +133,9 @@ ret_t cherokee_cache_clean     (cherokee_cache_t *cache);
 
 /* Cache Functionality
  */
-ret_t cherokee_cache_clean_up  (cherokee_cache_t        *cache);
+ret_t cherokee_cache_configure (cherokee_cache_t        *cache, 
+				cherokee_config_node_t  *conf);
+
 ret_t cherokee_cache_get       (cherokee_cache_t        *cache, 
 				cherokee_buffer_t       *key, 
 				cherokee_cache_entry_t **entry);
