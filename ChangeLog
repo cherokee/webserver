@@ -1,5 +1,7 @@
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/config.py (Config._parse): Better error reporting.
+
 	* cherokee/handler_server_info.c (build_cache_table_content): Adds
 	a new row showing the max. cache size.
 

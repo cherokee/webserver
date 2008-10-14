@@ -172,7 +172,12 @@ class Config:
             if len(line) < 5: continue
             if line[0] == '#': continue
 
-            path, value = line.split (" = ")
+            try:
+                path, value = line.split (" = ")
+            except:
+                print "ERROR: Couldn't unpack '%s'"%(line)
+                raise
+
             node = self._create_path (path)
             node.value = value
             
