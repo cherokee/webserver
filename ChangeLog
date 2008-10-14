@@ -1,5 +1,9 @@
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/config_entry.h, cherokee/iocache.c: Fixes compilation
+	without pthreads, and therefore it fixes bug #137:
+	http://code.google.com/p/cherokee/issues/detail?id=137
+
 	* cherokee/handler_common.c (cherokee_handler_common_new): Fixes a
 	crash when I/O-cache is disabled.
 

@@ -29,6 +29,10 @@
 #ifndef CHEROKEE_CONFIG_ENTRY_H
 #define CHEROKEE_CONFIG_ENTRY_H
 
+#include "common.h"
+
+#include <time.h>
+
 #include "avl.h"
 #include "handler.h"
 #include "http.h"

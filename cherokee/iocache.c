@@ -144,8 +144,11 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 
 	/* Init its parent class
 	 */
-	cherokee_cache_entry_init (CACHE_ENTRY(n), key, cache,
-				   &PRIV(n)->parent_lock);
+#ifdef HAVE_PTHREAD
+	cherokee_cache_entry_init (CACHE_ENTRY(n), key, cache, &PRIV(n)->parent_lock);
+#else
+	cherokee_cache_entry_init (CACHE_ENTRY(n), key, cache, NULL);
+#endif
 
 	/* Set the virtual methods
 	 */
