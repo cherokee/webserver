@@ -23,7 +23,7 @@ vserver!1251!rule!10!handler = file
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Domain to Domain I"
 
         self.request           = "GET %s HTTP/1.1\r\n" %(PATH) +\

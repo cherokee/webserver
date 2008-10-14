@@ -11,7 +11,7 @@ vserver!1!rule!680!handler!interpreter = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "PathInfo, phpcgi"
 
         self.request           = "GET /pathinfo2/deep/deep/test.php%s HTTP/1.0\r\n" %(PATH_INFO)

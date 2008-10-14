@@ -17,7 +17,7 @@ vserver!1!rule!1680!encoder!deflate = 1
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Deflate encoding 10k"
 
         self.request           = "GET /deflate1/file.txt HTTP/1.0\r\n" +\

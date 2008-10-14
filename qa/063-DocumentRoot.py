@@ -12,7 +12,7 @@ vserver!1!rule!630!document_root = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "DocumentRoot, common"
         self.request          = "GET /droot/file HTTP/1.0\r\n"
         self.expected_error   = 200

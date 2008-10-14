@@ -9,7 +9,7 @@ vserver!1!rule!350!handler!interpreter = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "PHP simple, phpcgi"
         self.request          = "GET /php1/simple.php HTTP/1.0\r\n"
         self.conf             = CONF % (look_for_php())

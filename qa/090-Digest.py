@@ -14,7 +14,7 @@ vserver!1!rule!900!auth!passwdfile = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Digest - Plain: Authorization required"
 
         self.request          = "GET /digest1/file HTTP/1.0\r\n"

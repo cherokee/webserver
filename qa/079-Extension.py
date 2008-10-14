@@ -16,7 +16,7 @@ vserver!1!rule!791!handler!interpreter = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name              = "Custom extensions"
         self.request           = "GET /extension1/test.xyz HTTP/1.0\r\n" 
         self.expected_error    = 200

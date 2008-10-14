@@ -12,7 +12,7 @@ vserver!0660!rule!1!handler = common
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Directory indexer, /index, vbles"
 
         self.request           = "GET /inside/ HTTP/1.0\r\n" +\

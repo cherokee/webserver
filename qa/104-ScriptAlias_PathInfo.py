@@ -12,7 +12,7 @@ vserver!1!rule!1040!handler!script_alias = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "CGI: ScriptAlias with PathInfo"
 
         self.request          = "GET /alias_and_pathinfo%s HTTP/1.0\r\n" % (PATH_INFO)

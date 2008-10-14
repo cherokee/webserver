@@ -10,7 +10,7 @@ vserver!1!rule!1020!handler = cgi
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "CGI: QUERY_STRING"
 
         self.request          = "GET /querystring/exec.cgi?%s HTTP/1.0\r\n" % (PARAMS)

@@ -5,7 +5,7 @@ MAGIC2 = " ..the PHP index file"
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Directory indexer, PHP"
 
         self.request           = "GET /directoryindex2/ HTTP/1.0\r\n"

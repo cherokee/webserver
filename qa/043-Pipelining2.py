@@ -5,7 +5,7 @@ MAGIC2 = "Magic dirname"
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Pipelining, file and list"
 
         self.request          = "GET /pipe2/file1 HTTP/1.1\r\n"   +\

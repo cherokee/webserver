@@ -10,7 +10,7 @@ vserver!1!rule!330!handler = dirlist
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Directory index, dirlist"
 
         self.request          = "GET /index1/ HTTP/1.0\r\n"

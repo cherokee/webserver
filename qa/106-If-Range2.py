@@ -21,7 +21,7 @@ vserver!1!rule!1060!handler = file
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "If-Range header, 206 error"
 
         self.conf              = CONF

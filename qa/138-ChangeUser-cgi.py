@@ -21,7 +21,7 @@ echo "I'm `whoami`"
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "ChangeUser: cgi"
 
         self.request           = "GET /change_user2/test HTTP/1.0\r\n"

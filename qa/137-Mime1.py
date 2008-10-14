@@ -13,7 +13,7 @@ mime!x-world/x-vrml!extensions = vrm vrml wrl
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Mime type I"
 
         self.request          = "GET /mime1/file.%s HTTP/1.0\r\n" % (EXTENSION)

@@ -42,7 +42,7 @@ vserver!1!rule!1120!handler!error_handler = 1
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "CGI error message"
 
         self.request           = "GET /cgi_error_403_1/exec.cgi HTTP/1.0\r\n"

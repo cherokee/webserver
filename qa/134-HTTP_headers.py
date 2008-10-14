@@ -18,7 +18,7 @@ HEADER_VAL="Cherokee_supports_If-None-Match"
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "PHP: HTTP headers"
         self.request          = "GET /http_headers1/test.php HTTP/1.0\r\n" + \
                                 "User-Agent: %s\r\n"        % (USER_AGENT) + \

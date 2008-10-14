@@ -15,7 +15,7 @@ vserver!1!rule!1140!handler!notice_files = noexits1.txt,header.txt,noexits2.txt
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "dirlist w/ multiple HeaderFile"
 
         self.request           = "GET /header_file2/ HTTP/1.0\r\n"

@@ -46,7 +46,7 @@ EXPECTED = [
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "SCGI VII: root: PATH_INFO & SCRIPT_NAME"
 
         self.request           = "GET %s HTTP/1.1\r\n" %(REQUEST) +\

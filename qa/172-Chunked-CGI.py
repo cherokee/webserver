@@ -24,7 +24,7 @@ echo
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Chunked encoding: cgi"
 
         self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \

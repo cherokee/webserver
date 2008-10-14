@@ -4,7 +4,7 @@ MAGIC = "This is the file number %s."
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Pipelining"
 
         self.request          = "GET /pipe1/file1 HTTP/1.1\r\n"   +\

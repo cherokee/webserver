@@ -28,6 +28,7 @@ num       = 1
 thds      = 1
 pause     = 0
 tpause    = 0.0
+bpause    = None
 srv_thds  = None
 ssl       = False
 clean     = True
@@ -90,6 +91,7 @@ for p in param:
     elif p[:2] == '-T': srv_thds  = int(p[2:])    
     elif p[:2] == '-j': tpause    = float(p[2:])
     elif p[:2] == '-d': pause     = p[2:]
+    elif p[:2] == '-D': bpause    = p[2:]
     elif p[:2] == '-m': method    = p[2:]
     elif p[:2] == '-e': server    = p[2:]
     elif p[:2] == '-v': valgrind  = p[2:]
@@ -329,18 +331,14 @@ def mainloop_iterator(objs, main_thread=True):
     for n in range(num):
         # Randomize files
         if randomize:
-            for n in range(len(objs))*2:
-                o = random.randint(0,len(objs)-1)
-                t = random.randint(0,len(objs)-1)
-                tmp = objs[t]
-                objs[t] = objs[o]
-                objs[o] = tmp
+            random.shuffle(objs)
 
         # Iterate
         for obj in objs:
             go_ahead = obj.Precondition()
 
-            if go_ahead and pause > 0 and main_thread:
+            if go_ahead and main_thread and \
+               (pause > 0 or obj.file.startswith(bpause)):
                 do_pause()
 
             if not quiet:

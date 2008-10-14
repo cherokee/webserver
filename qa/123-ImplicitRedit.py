@@ -11,7 +11,7 @@ vserver!1!rule!1230!document_root = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Implicit Redir"
 
         self.request           = "GET /implicit_redir1 HTTP/1.0\r\n"

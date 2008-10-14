@@ -10,7 +10,7 @@ vserver!1!rule!500!handler = common
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Head doesn't include body"
 
         self.request           = "HEAD /head-body/test HTTP/1.0\r\n"

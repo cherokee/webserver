@@ -14,7 +14,7 @@ vserver!1!rule!1490!handler!allow_pathinfo = 1
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Handler common: PathInfo"
 
         self.request           = "GET /%s/file/path/info HTTP/1.0\r\n" % (DIR)

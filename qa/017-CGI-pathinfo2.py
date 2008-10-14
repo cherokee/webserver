@@ -10,7 +10,7 @@ vserver!1!rule!170!handler = cgi
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "CGI with pathinfo II"
 
         self.request          = "GET /cgi-bin3/inside/test/test_parameter HTTP/1.0\r\n"

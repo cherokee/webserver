@@ -20,7 +20,7 @@ echo "%s"
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Rule header: match I"
 
         self.request           = "GET /%s/test HTTP/1.0\r\n" % (DIR) + \

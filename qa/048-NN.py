@@ -14,7 +14,7 @@ vserver!480!error_handler = error_nn
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "NN"
 
         self.request           = "GET /Xesano HTTP/1.1\r\n" + \

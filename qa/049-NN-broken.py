@@ -12,7 +12,7 @@ vserver!490!error_handler = error_nn
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Broken NN"
 
         self.request        = "GET /missing HTTP/1.1\r\n" + \

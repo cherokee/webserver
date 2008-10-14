@@ -16,7 +16,7 @@ vserver!1!rule!880!handler!env!%s = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "CGI env variables"
 
         self.request           = "GET /cgienvs/cgi.cgi HTTP/1.0\r\n"

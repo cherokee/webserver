@@ -13,7 +13,7 @@ vserver!1!rule!1030!document_root = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "CGI: ScriptName with PathInfo"
 
         self.request          = "GET %s/exec.cgi/%s HTTP/1.0\r\n" % (VIRTUAL_DIR, PATHINFO)

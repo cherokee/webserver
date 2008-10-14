@@ -11,7 +11,7 @@ vserver!1!rule!830!handler!rewrite!1!substring = /redirparam/file.php?arg1=$1&ar
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "Redir Param"
         self.request          = "GET /redirparam/123/cosa HTTP/1.0\r\n"
         self.expected_error   = 200

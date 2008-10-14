@@ -11,7 +11,7 @@ mime!%s!max-age = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Mime type II: max-age"
 
         self.request          = "GET /mime2/file.%s HTTP/1.0\r\n" % (EXTENSION)

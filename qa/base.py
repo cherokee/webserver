@@ -30,7 +30,8 @@ def importfile(path):
     return module
 
 class TestBase:
-    def __init__ (self):
+    def __init__ (self, file):
+        self.file                    = file    # 001-basic.py
         self.name                    = None    # Test 01: Basic functionality
         self.conf                    = None    # Directory /test { .. }
         self.request                 = ""      # GET / HTTP/1.0

@@ -22,7 +22,7 @@ vserver!1!rule!1152!handler!rewrite!1!substring = /respin1-cgi/file?param=$1
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Redirection to PHP"
 
         self.request           = "GET /respin1/%s/ HTTP/1.0\r\n" % (MAGIC)

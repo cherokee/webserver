@@ -26,7 +26,7 @@ vserver!1350!rule!20!handler!rewrite!2!substring = /index.php?q=$1&$2
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "Hidden redir with params"
         self.request          = "GET /%s?%s HTTP/1.1\r\n" % (REQUEST, PARAMS) + \
                                 "Host: %s\r\n" % (SERVER)                     + \

@@ -15,7 +15,7 @@ vserver!1!rule!1130!handler!notice_files = header
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "dirlist w/ HeaderFile"
 
         self.request           = "GET /header_file1/file/ HTTP/1.0\r\n"

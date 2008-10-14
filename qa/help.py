@@ -20,6 +20,7 @@ Usage: %s [parameters] [tests]
   -j<FLOAT>     Delay between tests (secs)
 
   -d<NUM>       Number of pauses
+  -D<NUM>       Pause before executing test NUM
   -e<PATH>      Path to the binary of the server
   -m<STRING>    HTTP method name for the requests
   -v<STRING>    Run under Valgrind, string=['', 'hel', 'cac', 'cal']

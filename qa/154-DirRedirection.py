@@ -13,7 +13,7 @@ vserver!1!rule!1540!document_root = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name              = "common-dirlist: redir to add final /"
         self.request           = "GET /%s HTTP/1.0\r\n" % (REQ)
         self.expected_error    = 301

@@ -9,7 +9,7 @@ vserver!1!rule!290!handler!interpreter = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Post request without length"
 
         self.conf           = CONF % (look_for_php())

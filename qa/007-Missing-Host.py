@@ -2,7 +2,7 @@ from base import *
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Missing Host"
 
         self.expected_error = 400

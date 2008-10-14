@@ -20,7 +20,7 @@ vserver!1!rule!990!auth!passwdfile = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
 
         auth = base64.encodestring ("%s:%s" % (USER, PASSWD))[:-1]
 

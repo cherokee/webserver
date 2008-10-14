@@ -13,7 +13,7 @@ vserver!1!rule!1700!handler!error_handler = 0
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "CGI error_handler: Content-Length"
 
         self.request           = "GET /%s/exec.cgi HTTP/1.0\r\n" % (DIR)

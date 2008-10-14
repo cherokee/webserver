@@ -16,7 +16,7 @@ vserver!0940!rule!10!handler = file
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "URL request I"
         self.request          = "GET http://request1host/urlrequest1/dir/file HTTP/1.1\r\n" + \
                                 "Connection: Close\r\n"

@@ -3,7 +3,7 @@ from base import *
 
 class TestEntry (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.expected_error = 405
 
 CONF = """        

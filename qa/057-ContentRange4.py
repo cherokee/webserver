@@ -9,7 +9,7 @@ OFFSET = 15
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Content Range 100k, end"
 
         self.request           = "GET /Range100k2 HTTP/1.0\r\n" +\

@@ -8,7 +8,7 @@ LENGTH = 100*1024
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "100k random"
 
         self.request          = "GET /100k HTTP/1.0\r\n"

@@ -21,7 +21,7 @@ vserver!1!rule!670!handler!allow_pathinfo = 1
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "PathInfo, common"
 
         self.request           = "GET /pathinfo/test.php%s HTTP/1.0\r\n" %(PATH_INFO)

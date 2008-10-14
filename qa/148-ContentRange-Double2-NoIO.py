@@ -18,7 +18,7 @@ vserver!1!rule!1480!handler!iocache = 0
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Content Range 100k no-iocache, both"
 
         self.request           = "GET /%s/Range100kBoth HTTP/1.0\r\n" % (DIR) +\

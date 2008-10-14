@@ -26,7 +26,7 @@ echo "%s"
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Rule not: not match"
 
         self.request           = "GET /%s/test HTTP/1.1\r\n" % (DIR) + \

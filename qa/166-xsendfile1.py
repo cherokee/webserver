@@ -22,7 +22,7 @@ echo "%s"
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "X-Sendfile: CGI"
 
         self.request           = "GET /%s/%s HTTP/1.1\r\n" % (DIR, FILE) + \

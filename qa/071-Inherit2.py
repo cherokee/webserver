@@ -18,7 +18,7 @@ vserver!1!rule!711!handler = file
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "Inherit dir config not reverse"
         self.request          = "GET /inherit2/dir1/test HTTP/1.0\r\n"
         self.expected_error   = 200

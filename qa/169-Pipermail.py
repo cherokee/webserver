@@ -14,7 +14,7 @@ vserver!1!rule!1690!document_root = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Directory indexer, DocumentRoot"
 
         self.request          = "GET /%s/%s/ HTTP/1.0\r\n" % (DIR_WEB, DIR_INSIDE)

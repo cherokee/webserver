@@ -8,7 +8,7 @@ POST_LENGTH = (100*1024)+33
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Big POST, ~100k"
 
         self.request          = "POST /Post100k.php HTTP/1.0\r\n" +\

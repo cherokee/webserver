@@ -4,7 +4,7 @@ MAGIC = "This_is_the_magic_key"
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "PHP post"
         self.request          = "POST /php3/post.php HTTP/1.0\r\n" +\
                                 "Content-type: application/x-www-form-urlencoded\r\n" +\

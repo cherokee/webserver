@@ -11,7 +11,7 @@ vserver!1!rule!1280!handler = common
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Common: Valid methods, Post"
 
         self.request           = "POST /%s/?arg=1 HTTP/1.0\r\n" %(DIR) +\

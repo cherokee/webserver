@@ -22,7 +22,7 @@ vserver!1240!rule!10!handler!rewrite!1!substring = %s$1
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Domain to subdir II"
 
         self.request           = "GET %s/%s HTTP/1.1\r\n" %(DIR, PATH) +\

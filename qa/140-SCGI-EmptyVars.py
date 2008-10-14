@@ -36,7 +36,7 @@ source!%(source)d!interpreter = %(PYTHON)s %(scgi_file)s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "SCGI III: Variables"
 
         self.request           = "GET %s HTTP/1.0\r\n" %(DIR) 

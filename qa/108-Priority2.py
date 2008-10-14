@@ -15,7 +15,7 @@ vserver!1!rule!1081!handler = cgi
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Priorities: Dir and then Ext"
 
         self.request           = "GET /prio2/sub/exec.prio2 HTTP/1.0\r\n"

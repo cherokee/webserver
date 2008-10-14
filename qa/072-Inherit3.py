@@ -16,7 +16,7 @@ vserver!1!rule!721!handler = file
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name              = "Inherit config: deeper fist"
         self.request           = "GET /inherit3/dir1/dir2/dir3/deeper.php HTTP/1.0\r\n"
         self.expected_error    = 200

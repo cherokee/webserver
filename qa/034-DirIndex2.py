@@ -10,7 +10,7 @@ vserver!1!rule!340!handler = common
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Directory index, common"
 
         self.request          = "GET /index2/ HTTP/1.0\r\n"

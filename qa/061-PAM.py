@@ -17,7 +17,7 @@ vserver!1!rule!610!auth!realm = Test PAM
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "Auth PAM"
 
         # Build the authentication string

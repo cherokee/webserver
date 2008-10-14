@@ -12,7 +12,7 @@ vserver!1!rule!770!allow_from = 123.123.0.0/16,0102::/16
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name              = "Allow from invalid range"
         self.request           = "GET /allow_range3/file HTTP/1.0\r\n"
         self.expected_error    = 403

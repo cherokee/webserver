@@ -17,7 +17,7 @@ vserver!0450!user_dir!rule!1!handler = common
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Valid home"
 
         self.conf             = CONF % (PUBLIC_HTML)

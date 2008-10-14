@@ -4,7 +4,7 @@ HEADER_VAL="Cherokee_supports_If-None-Match"
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "PHP: If-None-Match header"
         self.request          = "GET /if_none_match1/test.php HTTP/1.0\r\n" + \
                                 "If-None-Match: %s\r\n" % (HEADER_VAL)

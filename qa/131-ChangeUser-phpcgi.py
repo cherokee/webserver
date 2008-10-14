@@ -15,7 +15,7 @@ vserver!1!rule!1310!handler!interpreter = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "ChangeUser: phpcgi"
 
         self.request           = "GET /change_user1/test.php HTTP/1.0\r\n"

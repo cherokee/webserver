@@ -2,7 +2,7 @@ from base import *
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "PHP Location header"
 
         self.request           = "GET /phplocation/redir.php HTTP/1.0\r\n"

@@ -16,7 +16,7 @@ vserver!1!rule!400!auth!passwdfile = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name             = "Auth basic II"
         self.request          = "GET /auth2/ HTTP/1.0\r\n" + \
                                 "Authorization: Basic %s\r\n" % (encodestring ("%s:%s"%(LOGIN,PASSWD))[:-1])

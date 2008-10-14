@@ -11,7 +11,7 @@ OFFSET2 = 40
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Content Range 100, both"
 
         self.request           = "GET /Range100Both HTTP/1.0\r\n" +\

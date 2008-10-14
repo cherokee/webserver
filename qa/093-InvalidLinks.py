@@ -14,7 +14,7 @@ vserver!1!rule!930!handler = dirlist
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Broken links"
 
         self.request           = "GET /brokenlinks1/ HTTP/1.0\r\n"

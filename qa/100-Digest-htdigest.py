@@ -19,7 +19,7 @@ vserver!1!rule!1000!auth!passwdfile = %s
 
 class Test (TestBase):
     def __init__ (self):
-        TestBase.__init__ (self)
+        TestBase.__init__ (self, __file__)
         self.name = "Digest - htdigest: Valid user/passwd"
  
         self.expected_error   = 200
@@ -28,7 +28,7 @@ class Test (TestBase):
     def JustBefore (self, www):
         # It will read a validad nonce value just before each test
         #
-        nested = TestBase()
+        nested = TestBase(__file__)
         nested.request = "GET /%s/file HTTP/1.0\r\n" % (DIR)
         nested.Run(PORT, 0)
 
