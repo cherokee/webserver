@@ -1,5 +1,7 @@
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/113-HeaderFile.py: It needed the allow_pathinfo flag.
+
 	* qa/176-Digest-htdigest-2.py: Fixes the test. It was using an
 	invalid priority number.
 
