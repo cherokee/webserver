@@ -28,8 +28,8 @@ DATA_VALIDATION = [
 
 WARNING = """
 <p><b>WARNING</b>: This section contains advanced configuration
-parameters. It is recommended to not change anything unless you
-really know what you are doing.</p>
+parameters. Changing things is not recommended unless you really
+know what you are doing.</p>
 """
 
 NOTE_THREAD       = 'Defines which thread policy the OS should apply to the server.'
@@ -46,7 +46,7 @@ NOTE_FLUSH_TIME   = 'Sets the number of seconds between log consolidations (flus
 NOTE_KEEPALIVE    = 'Enables the server-wide keep-alive support. It increases the performance. It is usually set on.'
 NOTE_KEEPALIVE_RS = 'Maximum number of HTTP requests that can be served by each keepalive connection.'
 NOTE_CHUNKED      = 'Allows the server to use Chunked encoding to try to keep Keep-Alive enabled.'
-NOTE_IO_ENABLED   = 'Active or deactive the I/O cache globally.'
+NOTE_IO_ENABLED   = 'Activate or deactivate the I/O cache globally.'
 NOTE_IO_SIZE      = 'Number of pages that the cache should handle.'
 NOTE_IO_MIN_SIZE  = 'Files under this size will not be cached.'
 NOTE_IO_MAX_SIZE  = 'Files over this size will not be cached.'
