@@ -8,31 +8,44 @@ parameters. You should not attempt to do so unless you really know
 what you are doing. For most cases the default parameters will work
 just fine.
 
+image::media/images/admin_advanced0.png[Cherokee Admin interface]
+
 You should at least read the chapter
 link:cookbook_optimizations.html[Optimizing Cherokee] before you
 start tweaking things here.
 
-image::media/images/admin_advanced1.png[Cherokee Admin interface]
-
-Connections managment
-~~~~~~~~~~~~~~~~~~~~~
+Connections
+~~~~~~~~~~~
 * KeepAlive:
   Enables the global keep-alive support for the client requests. It
   increases the client performance by reusing a connection for more
   than one request. It should most probably be turned on.
 
 * Max keepalive reqs:
-  Upper limit to be managed by each keepalive connection.
+  This limits the number of HTTP requests that can be served by each
+  keepalive connection. Keepalive connections improve performance, but
+  surpasing certain amount of requests per each connection is an
+  indicator that something out of the ordinary is happening. This
+  prevents the appearence of any problems related to these situations.
 
 * Chunked encoding:
   Enabled by default to try to keep enabled Keep-Alive.
 
-* I/O cache:
-  Enabled by default. This is a system-wide setting required if you
-  wish to enable caching in any of your virtual hosts.
+* Polling Method:
+  This affects the internal file descriptor polling method among the
+  ones supported by the OS. The full list of options is `epoll()`, `poll()`
+  and `select()`. If you don't know what this is or how this affects
+  performance, just choose `Automatic`. This will choose the most
+  efficient one among the present at any given time.
 
-System tweaking
-~~~~~~~~~~~~~~~
+* Sendfile min/max size:
+  These allow to configure the range of file sizes that can be sent
+  with `sendfile()`. Default: [32768 Bytes - 2 GB].
+
+image::media/images/admin_advanced1.png[Cherokee Admin interface]
+
+Resources
+~~~~~~~~~
 * Thread Number:
   Adjust the number of threads for Cherokee to work with. Increasing
   this will allow for better parallelization at the cost of system
@@ -49,37 +62,6 @@ System tweaking
   should handle. The default value is what `ulimit -n` reports. An
   increase in this value improves performance under very high server load.
 
-image::media/images/admin_advanced2.png[Cherokee Admin interface]
-
-Server tweaking
-~~~~~~~~~~~~~~~
-* Polling Method:
-  This affects the internal file descriptor polling method among the
-  ones supported by the OS. The full list of options is `epoll()`, `poll()`
-  and `select()`. If you don't know what this is or how this affects
-  performance, just choose `Automatic`. This will choose the most
-  efficient one among the present at any given time.
-
-* Sendfile min/max size:
-  These allow to configure the range of file sizes that can be sent
-  with `sendfile()`. Default: [32768 Bytes - 2 GB].
-
-* Panic action:
-  This specifies the program that will be called in case the server
-  fails. It defaults to `cherokee-panic`, which is provided with
-  Cherokee. This in turn performs the actions specified in the
-  `CHEROKEE_PANIC_OUTPUT` environment variable. If none is set, it will
-  attempt to send an email to the system administrator with a
-  backtrace of what happened. As a last resort, if no mailer is
-  available in the system, it will simply try to show this information
-  on screen if possible.
-
-* PID file:
-  If specified, a PID file will be created in that path. This is
-  useful to trace what is going on with Cherokee.
-
-Server behavior
-~~~~~~~~~~~~~~~
 * Listening queue length: This specifies the size of the incoming
   connection queue. It is the effective buffer of connections that
   will be served even if there are no connection slots available at
@@ -98,10 +80,46 @@ Server behavior
 * Log flush time:
   Time interval in seconds to wait between log updates. Defaults to 10 seconds.
 
-* Max keepalive reqs:
-  This limits the number of HTTP requests that can be served by each
-  keepalive connection. Keepalive connections improve performance, but
-  surpasing certain amount of requests per each connection is an
-  indicator that something out of the ordinary is happening. This
-  prevents the appearence of any problems related to these situations.
+image::media/images/admin_advanced2.png[Cherokee Admin interface]
 
+I/O cache
+~~~~~~~~~
+* Setting:
+  Enabled by default. This is a system-wide setting required if you
+  wish to enable caching in any of your virtual hosts. Useful for debugging.
+
+* Max pages:
+  This specifies the maximum number of pages that are handled by the cache.
+
+* File Min Size:
+  Specifies the smallest filesize limit to be cached.
+
+* File Max Size:
+  Specifies the biggest filesize limit to be cached.
+
+* Lasting _stat_:
+  Specifies the duration of the file information in the cache without
+  refreshing.
+
+* Lasting _mmap_:
+  Specifies how long the file contents last cached.
+
+image::media/images/admin_advanced3.png[Cherokee Admin interface]
+
+Special Files
+~~~~~~~~~~~~~
+* Panic action:
+  This specifies the program that will be called in case the server
+  fails. It defaults to `cherokee-panic`, which is provided with
+  Cherokee. This in turn performs the actions specified in the
+  `CHEROKEE_PANIC_OUTPUT` environment variable. If none is set, it will
+  attempt to send an email to the system administrator with a
+  backtrace of what happened. As a last resort, if no mailer is
+  available in the system, it will simply try to show this information
+  on screen if possible.
+
+* PID file:
+  If specified, a PID file will be created in that path. This is
+  useful to trace what is going on with Cherokee.
+
+image::media/images/admin_advanced4.png[Cherokee Admin interface]
