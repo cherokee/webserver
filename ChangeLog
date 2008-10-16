@@ -1,3 +1,8 @@
+2008-10-16  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/static/js/common.js: Fixes an auto-submit error. Patch by
+	Antonio Perez <aperez@skarcha.com>.
+
 2008-10-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/config_entry.h, cherokee/iocache.c: Fixes compilation

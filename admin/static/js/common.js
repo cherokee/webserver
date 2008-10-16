@@ -146,9 +146,10 @@ function get_cookie (key)
 /* Auto submission of some forms */
 function autosubmit(event) {
   $(".auto input").change(function(event) {
-  if (check_all_or_none('required'))
-      setConfirmUnload(false);
-      this.form.submit()
+	 if (check_all_or_none('required')) {
+		setConfirmUnload(false);
+		this.form.submit();
+	 }
   });
 }
 
