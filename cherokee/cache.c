@@ -27,7 +27,7 @@
 #include "util.h"
 
 #define ENTRIES          "cache"
-#define DEFAULT_MAX_SIZE 12 * 4 
+#define DEFAULT_MAX_SIZE 100 * 4 
 
 struct cherokee_cache_priv {
 #ifdef HAVE_PTHREAD

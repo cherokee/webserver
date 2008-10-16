@@ -113,10 +113,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->ipv6             = true;
 	n->fdpoll_method    = cherokee_poll_UNSET;
 
-	/* Mime types
-	 */
-	n->mime             = NULL;
-
 	/* Exit related
 	 */
 	n->wanna_exit       = false;
@@ -128,6 +124,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->port_tls         = 443;
 	n->tls_enabled      = false;
 
+	n->timeout          = 5;
 	n->fdwatch_msecs    = 1000;
 
 	n->start_time       = time(NULL);
@@ -145,21 +142,20 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->group_orig       = getgid();
 	n->group            = n->group_orig;
 
-	n->timeout          = 5;
+	n->fdlimit_custom    = -1;
+	n->fdlimit_available = -1;
 
-	n->fdlimit_custom      = -1;
-	n->fdlimit_available   = -1;
+	n->conns_max        =  0;
+	n->conns_reuse_max  = -1;
+	n->conns_num_bogo   =  0;
 
-	n->conns_max           =  0;
-	n->conns_reuse_max     = -1;
-	n->conns_num_bogo      =  0;
+	n->listen_queue     = 1024;
+	n->sendfile.min     = SENDFILE_MIN_SIZE;
+	n->sendfile.max     = SENDFILE_MAX_SIZE;
 
-	n->listen_queue    = 1024;
-	n->sendfile.min    = 32768;
-	n->sendfile.max    = 2147483647;
-
-	n->icons           = NULL;
-	n->regexs          = NULL;
+	n->mime             = NULL;
+	n->icons            = NULL;
+	n->regexs           = NULL;
 
 	cherokee_buffer_init (&n->listen_to);
 	cherokee_buffer_init (&n->chroot);
