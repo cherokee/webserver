@@ -46,10 +46,10 @@
 
 #define ENTRIES "iocache"
 
-#define LASTING_MMAP     5 * 60  /* secs */
-#define LASTING_STAT     5 * 60  /* secs */
-#define MAX_FILE_SIZE    80000   /* bytes */
-#define MIN_FILE_SIZE    1       /* bytes */
+#define LASTING_MMAP     (5 * 60)            /* secs */
+#define LASTING_STAT     (5 * 60)            /* secs */
+#define MIN_FILE_SIZE    1                   /* bytes */
+#define MAX_FILE_SIZE    SENDFILE_MIN_SIZE   /* bytes */
 
 
 #ifndef O_BINARY

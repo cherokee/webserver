@@ -1,5 +1,8 @@
 2008-10-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/macros.h, cherokee/iocache.c: Set better values for the
+	IOcache and sendfile limits.
+
 	* admin/static/js/common.js: Fixes an auto-submit error. Patch by
 	Antonio Perez <aperez@skarcha.com>.
 
