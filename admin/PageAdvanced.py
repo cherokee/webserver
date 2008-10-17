@@ -18,7 +18,7 @@ DATA_VALIDATION = [
     ('server!keepalive_max_requests', validations.is_positive_int),
     ("server!keepalive$",             validations.is_boolean),
     ("server!thread_number",          validations.is_positive_int),
-    ("server!iocache!enabled",        validations.is_boolean),
+    ("server!iocache",                validations.is_boolean),
     ("server!iocache!max_size",       validations.is_positive_int),
     ("server!iocache!min_file_size",  validations.is_positive_int),
     ("server!iocache!max_file_size",  validations.is_positive_int),
@@ -97,7 +97,7 @@ class PageAdvanced (PageMenu, FormHelper):
 
     def _render_iocache (self):
         table = TableProps()
-        self.AddPropCheck (table, 'Enabled',       'server!iocache!enabled', True, NOTE_IO_ENABLED)
+        self.AddPropCheck (table, 'Enabled',       'server!iocache', True,         NOTE_IO_ENABLED)
         self.AddPropEntry (table, 'Max pages',     'server!iocache!max_size',      NOTE_IO_SIZE)
         self.AddPropEntry (table, 'File Min Size', 'server!iocache!min_file_size', NOTE_IO_MIN_SIZE)
         self.AddPropEntry (table, 'File Max Size', 'server!iocache!max_file_size', NOTE_IO_MAX_SIZE)
@@ -129,6 +129,6 @@ class PageAdvanced (PageMenu, FormHelper):
     def _op_apply_changes (self, uri, post):
         self.ApplyChanges (['server!keepalive', 
                             'server!chunked_encoding', 
-                            'server!iocache!enabled'], 
+                            'server!iocache'], 
                            post, validation = DATA_VALIDATION)
 

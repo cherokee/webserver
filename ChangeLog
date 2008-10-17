@@ -1,5 +1,8 @@
 2008-10-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageAdvanced.py: Updates the advange page to reflect the
+	latest IO-cache configuration change.
+
 	* cherokee/server.c: Works out IO-cache configuration.
 
 2008-10-16  Alvaro Lopez Ortega  <alvaro@octality.com>
