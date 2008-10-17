@@ -1,5 +1,10 @@
 2008-10-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/thread.c (maybe_purge_closed_connection): I suppose
+	that there is no need of flushing if the connection did not use
+	tcp_cork. This is an experimental change, I might have to revert
+	it. Let's see.
+
 	* cherokee/server.c (configure_server): IO-cache must be instanced
 	even if there are no "server!" keys in the configuration file.
 

@@ -493,7 +493,8 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 
 	/* Flush any buffered data
 	 */
-	cherokee_socket_flush (&conn->socket);
+	if (conn->options & conn_op_tcp_cork)
+		cherokee_socket_flush (&conn->socket);
 
 	/* Update the timeout value
 	 */
