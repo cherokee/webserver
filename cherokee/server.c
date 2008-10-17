@@ -1531,22 +1531,6 @@ configure_server (cherokee_server_t *srv)
 		 */
 		ret = cherokee_config_node_while (subconf, configure_server_property, srv);
 		if (ret != ret_ok) return ret;
-
-		/* IO-cache
-		 */
-		TRACE (ENTRIES, "Configuring %s\n", "iocache");
-		if (srv->iocache_enabled) {
-			ret = cherokee_iocache_new (&srv->iocache);
-			if (ret != ret_ok)
-				return ret;
-
-			ret = cherokee_config_node_get (subconf, "iocache", &subconf2);
-			if (ret == ret_ok) {
-				ret = cherokee_iocache_configure (srv->iocache, subconf2);
-				if (ret != ret_ok)
-					return ret;
-			}
-		}
 	}
 
 	/* Icons
@@ -1580,6 +1564,22 @@ configure_server (cherokee_server_t *srv)
 	if (ret == ret_ok) {
 		ret = cherokee_config_node_while (subconf, add_source, srv);
 		if (ret != ret_ok) return ret;
+	}
+
+	/* IO-cache
+	 */
+	TRACE (ENTRIES, "Configuring %s\n", "iocache");
+	if (srv->iocache_enabled) {
+		ret = cherokee_iocache_new (&srv->iocache);
+		if (ret != ret_ok)
+			return ret;
+
+		ret = cherokee_config_node_get (&srv->config, "server!iocache", &subconf);
+		if (ret == ret_ok) {
+			ret = cherokee_iocache_configure (srv->iocache, subconf);
+			if (ret != ret_ok)
+				return ret;
+		}
 	}
 
 	/* Load the virtual servers

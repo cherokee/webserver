@@ -1,5 +1,8 @@
 2008-10-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/server.c (configure_server): IO-cache must be instanced
+	even if there are no "server!" keys in the configuration file.
+
 	* admin/PageAdvanced.py: Updates the advange page to reflect the
 	latest IO-cache configuration change.
 
