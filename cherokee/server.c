@@ -173,7 +173,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* IO Cache cache
 	 */
-	n->iocache = NULL;
+	n->iocache         = NULL;
+	n->iocache_enabled = true;
 
 	/* Regexs
 	 */
@@ -1339,27 +1340,6 @@ vservers_check_sanity (cherokee_server_t *srv)
 	return ret_ok;
 }
 
-static ret_t 
-configure_iocache (cherokee_server_t *srv, cherokee_config_node_t *conf)
-{
-	ret_t              ret;
-	cherokee_boolean_t enabled = true;
-
-	cherokee_config_node_read_bool (conf, "enabled", &enabled);
-	if (enabled) {
-		/* Instance the cache object
-		 */
-		ret = cherokee_iocache_new (&srv->iocache);
-		if (ret != ret_ok)
-			return ret;
-
-		ret = cherokee_iocache_configure (srv->iocache, conf);
-		if (ret != ret_ok)
-			return ret;
-	}
-
-	return ret_ok;
-}
 
 static ret_t 
 configure_server_property (cherokee_config_node_t *conf, void *data)
@@ -1410,6 +1390,9 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "chunked_encoding")) {
 		srv->chunked_encoding = !!atoi (conf->val.buf);
 
+	} else if (equal_buf_str (&conf->key, "iocache")) {
+		srv->iocache_enabled = !!atoi (conf->val.buf);
+
 	} else if (equal_buf_str (&conf->key, "panic_action")) {
 		cherokee_buffer_clean (&srv->panic_action);
 		cherokee_buffer_add_buffer (&srv->panic_action, &conf->val);
@@ -1425,11 +1408,6 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "listen")) {
 		cherokee_buffer_clean (&srv->listen_to);
 		cherokee_buffer_add_buffer (&srv->listen_to, &conf->val);
-
-	} else if (equal_buf_str (&conf->key, "iocache")) {
-		ret = configure_iocache (srv, conf);
-		if (ret != ret_ok) 
-			return ret;
 
 	} else if (equal_buf_str (&conf->key, "poll_method")) {
 		char    *str          = conf->val.buf;
@@ -1549,10 +1527,26 @@ configure_server (cherokee_server_t *srv)
 			if (ret != ret_ok) return ret;
 		}
 
-		/* Rest of the properties
+		/* Server properties
 		 */
 		ret = cherokee_config_node_while (subconf, configure_server_property, srv);
 		if (ret != ret_ok) return ret;
+
+		/* IO-cache
+		 */
+		TRACE (ENTRIES, "Configuring %s\n", "iocache");
+		if (srv->iocache_enabled) {
+			ret = cherokee_iocache_new (&srv->iocache);
+			if (ret != ret_ok)
+				return ret;
+
+			ret = cherokee_config_node_get (subconf, "iocache", &subconf2);
+			if (ret == ret_ok) {
+				ret = cherokee_iocache_configure (srv->iocache, subconf2);
+				if (ret != ret_ok)
+					return ret;
+			}
+		}
 	}
 
 	/* Icons

@@ -1,3 +1,7 @@
+2008-10-17  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/server.c: Works out IO-cache configuration.
+
 2008-10-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/macros.h, cherokee/iocache.c: Set better values for the
