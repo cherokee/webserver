@@ -14,6 +14,19 @@ class ModuleBalancerGeneric (Module, FormHelper):
         Module.__init__ (self, name, cfg, prefix, submit_url)
 
     def _op_render (self):
+        new_balancer_node = self._cfg.get_val("tmp!new_balancer_node")
+        if new_balancer_node:
+            tmp = [int(x) for x in self._cfg.keys('%s!source'%(self._prefix))]
+            tmp.sort()
+
+            if tmp:
+                new_source = str(tmp[-1]+1)
+            else:
+                new_source = 1
+
+            self._cfg['%s!source!%s'%(self._prefix, new_source)] = new_balancer_node
+            del (self._cfg['tmp!new_balancer_node'])
+
         txt = ''
         general_sources  = self._cfg.keys('source')
         balancer_sources = self._cfg.keys('%s!source'%(self._prefix))
@@ -62,20 +75,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
 
             table = TableProps()
             self.AddPropOptions_Reload (table, "Application Server",
-                                        "new_balancer_node", options, "")
+                                        "tmp!new_balancer_node", options, "")
             txt += str(table)
 
         return txt
-
-    def _op_apply_changes (self, uri, post):
-        new_balancer_node = post.pop('new_balancer_node')
-        if new_balancer_node:
-            tmp = [int(x) for x in self._cfg.keys('%s!source'%(self._prefix))]
-            tmp.sort()
-
-            if tmp:
-                new_source = str(tmp[-1]+1)
-            else:
-                new_source = 1
-
-            self._cfg['%s!source!%s'%(self._prefix, new_source)] = new_balancer_node
