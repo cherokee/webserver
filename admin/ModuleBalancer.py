@@ -5,8 +5,8 @@ from Module import *
 from consts import *
 
 NOTE_BALANCER      = 'Allow to select how the connections will be dispatched.'
-NO_GENERAL_SOURCES = 'There are no Information Sources configured. Please proceed to configure an <a href="/source">Info Source</a>.'
-NO_SOURCE_WARNING  = 'A load balancer must be configured to use at least one data source.'
+NO_GENERAL_SOURCES = 'There are no Information Sources configured. Please proceed to configure an <a href="/source">Information Source</a>.'
+NO_SOURCE_WARNING  = 'A load balancer must be configured to use at least one information source.'
 
 class ModuleBalancerGeneric (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url, name):
@@ -34,7 +34,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
         if not balancer_sources:
             txt += self.Dialog(NO_SOURCE_WARNING, type_='warning')
         else:
-            txt += '<h2>Info Sources</h2>'
+            txt += '<h2>Information Sources</h2>'
             table = Table(3,1, style='width="100%"')
             table += ('Nick', 'Host', '')
             for sb in balancer_sources:
@@ -50,7 +50,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
                 table += (link, host, link_del)
             txt += str(table)
 
-        txt += '<h2>Assign Info Sources</h2>'
+        txt += '<h2>Assign Information Sources</h2>'
         if not general_left:
             txt += 'It is already balancing among all the configured ' + \
                    '<a href="/source">information sources</a>.'

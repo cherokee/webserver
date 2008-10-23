@@ -31,7 +31,7 @@ and deppending of the situation one or the other setting might not
 make much sense. In such ocasions `cherokee-admin` will simply hide
 whatever options do not apply.
 
-image::media/images/admin_info_sources.png[Info Sources]
+image::media/images/admin_info_sources.png[Information Sources]
 
 Unix Sockets
 ~~~~~~~~~~~~

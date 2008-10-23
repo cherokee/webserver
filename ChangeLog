@@ -1,3 +1,11 @@
+2008-10-23  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/Page.py, admin/ModuleBalancer.py, admin/PageInfoSource.py,
+	doc/config.txt, doc/config_info_sources.txt,
+	doc/cookbook_django.txt, doc/index.txt, doc/config_quickstart.txt:
+	unify naming conventions to address issue
+	http://code.google.com/p/cherokee/issues/detail?id=152.
+
 2008-10-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/thread.c (maybe_purge_closed_connection): I suppose
@@ -141,7 +149,7 @@
 	qa/Makefile.am: Adds a couple of new QA tests. 175 check infinite
 	redirections, and 176 ensure that bug#146 is fixed:
 	http://code.google.com/p/cherokee/issues/detail?id=146
-	
+
 	* cherokee/validator_htdigest.c (extract_user_entry): Fixes an
 	error processing htdigest files. Reported by Eric Drechsel
 	<ericdrex@gmail.com>.

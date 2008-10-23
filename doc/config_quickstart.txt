@@ -32,7 +32,7 @@ Overview
   completely independent configuration: paths, behavior, logging
   facilities, etc.
 
-* link:config_info_sources.html[Info Sources]:
+* link:config_info_sources.html[Information Sources]:
   Define the resources that will be providing information. For
   instance, PHP.
 

@@ -22,7 +22,7 @@ TABLE_JS = """
 """
 
 HELPS = [
-    ('config_info_sources', "Info Sources")
+    ('config_info_sources', "Information Sources")
 ]
 
 class PageInfoSource (PageMenu, FormHelper):
