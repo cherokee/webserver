@@ -693,7 +693,7 @@
 	worker could not be spawned.
 
 	* admin/PageGeneral.py (PageGeneral._render_content): Fixes de TLS
-	port configuration key. Reported by Cï¿½sar Fernï¿½ndez Gago
+	port configuration key. Reported by César Fernández Gago
 	<cesar@pk2.org>
 
 2008-09-01  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -6099,7 +6099,7 @@
 	* cherokee_replace.c, Makefile.am (.sample.pre.sample):
 	cherokee_replace is obsolete. Now we simply use sed to replace a
 	few string in the example configuration file.  Fixes #124. Patch
-	by Diego "Flameeyes" Pettenï¿½ <flameeyes@gentoo.org>.
+	by Diego "Flameeyes" Pettenò <flameeyes@gentoo.org>.
 
 	* cherokee/access.c (cherokee_access_add_domain): Updated to fit
 	the latest resolv cache changes.
@@ -8295,7 +8295,7 @@
 
 	* autogen.sh (LIBTOOL, LIBTOOLIZE): Define two variables for the
 	name of these utilities.  MacOS X has a different name for it.
-	Patch by Sï¿½bastien Arnaud <arnaudsjr@mac.com>
+	Patch by Sébastien Arnaud <arnaudsjr@mac.com>
 
 2005-10-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -8885,7 +8885,7 @@
 	59-ContentRange-Double2.py: Fixed to fit with the previous patch.
 
 	* cherokee/handler_file.c, cherokee/header.c: Changed header
-	"Content-Range" by "Range". Based on a path by Daniel Glï¿½ckner
+	"Content-Range" by "Range". Based on a path by Daniel Glöckner
 	<daniel-gl@gmx.net>
 
 2005-07-24  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -9607,7 +9607,7 @@
 	compilation problem.
 
 	* cherokee/socket.c (cherokee_read): Added support for the
-	ï¿½Connection timed outï¿½ error.
+	«Connection timed out» error.
 
 2005-03-17  Lidia Fernandez Gago  <lidia@alobbs.com>
 
@@ -9924,7 +9924,7 @@
 	patch integration and some little fixes.
 
 
-2005-12-31  Ayose Cazorla Leï¿½n   <setepo@gulic.org>
+2005-12-31  Ayose Cazorla León   <setepo@gulic.org>
 
 	* cherokee/handler_redirc, cherokee/handler_redir.c:
 	Added PCRE library support
@@ -9942,7 +9942,7 @@
 	* configure.in: Clean up to use AC_HELP_STRING
 
 
-2004-12-26  Ayose Cazorla Leï¿½n   <setepo@gulic.org>
+2004-12-26  Ayose Cazorla León   <setepo@gulic.org>
 
 	* cherokee/handler_cgi.c, cherokee/handler_error.c,
 	cherokee/handler_file.c: Bug fixes.
@@ -10075,7 +10075,7 @@
 2004-11-02  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* src/connection.c (cherokee_connection_get_request): It returns
-	411 ï¿½Length requiredï¿½ error on POST without length.
+	411 «Length required» error on POST without length.
 
 
 2004-10-30  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -10115,8 +10115,8 @@
 	icon.
 	
 	* src/http.h, src/connection.h, src/connection.c, src/thread.h,
-	src/thread.c: Implemented RFC2817: ï¿½Upgrading to TLS Within
-	HTTP/1.1ï¿½ :-)
+	src/thread.c: Implemented RFC2817: «Upgrading to TLS Within
+	HTTP/1.1» :-)
 
 
 2004-10-13  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -10185,7 +10185,7 @@
 	property: only_secure.
 
 	* src/read_config_grammar.y: Added 'directory_option' to implement
-	the ï¿½Only secure accessï¿½ feature.
+	the «Only secure access» feature.
 
 	* src/read_config_scanner.l: Added T_ONLY_SECURE token
 
@@ -10221,8 +10221,8 @@
 
 2004-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
-	* icons/iso.png, icons.conf.sample, icons/Makefile.am: Added ï¿½ISO
-	Imageï¿½ icon.
+	* icons/iso.png, icons.conf.sample, icons/Makefile.am: Added «ISO
+	Image» icon.
 
 	* src/handler_cgi.c (_set_envs_cgi): index() -> strchr()
 
@@ -10391,13 +10391,13 @@
 2004-08-22  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* configure.in: Added check for gethostbyname, gethostbyname_r
-	functions. (Arequipa ~ Perï¿½)
+	functions. (Arequipa ~ Perú)
 
 
 2004-08-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* src/socket.c (cherokee_socket_set_client): Added new method.
-	(XII CONEIS, Lima ~ Perï¿½)
+	(XII CONEIS, Lima ~ Perú)
 
 
 2004-08-10  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -11189,7 +11189,7 @@
 	code clean ups around it.
 
 
-2004-04-11  Ayose Cazorla Leï¿½n   <setepo@gulic.org>
+2004-04-11  Ayose Cazorla León   <setepo@gulic.org>
 
 	* src/handler_cgi.c: Partial fix for the zombies CGIs
 
@@ -11570,7 +11570,7 @@
 	one keepalive connection.  Now it does MAX_KEEPALIVE.
 
 	* src/common.h: Fixed inclusion of stdint.h
-	It didn't compile in Solaris 9.  Fixed by Ivï¿½n Chavero.
+	It didn't compile in Solaris 9.  Fixed by Iván Chavero.
 
 
 2004-03-03  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -11819,7 +11819,7 @@
 	* src/common.h: Added CHEROKEE_RWLOCK_* macros.
 
 	
-2004-01-08  Ayose Cazorla Leï¿½n   <setepo@gulic.org>
+2004-01-08  Ayose Cazorla León   <setepo@gulic.org>
 
 	* src/handler_cgi.c:  Fixed <defunct> processes.
 
@@ -12246,7 +12246,7 @@
 	connection.
 
 
-2003-11-24  Ayose Cazorla Leï¿½n   <setepo@gulic.org>
+2003-11-24  Ayose Cazorla León   <setepo@gulic.org>
 
 	* src/connection.c,http.h: Added http_moved_temporarily
 
@@ -12282,7 +12282,7 @@
 	* src/header.c (cherokee_header_parse): Improved header parsing.
 
 
-2003-11-23  Ayose Cazorla Leï¿½n   <setepo@gulic.org>
+2003-11-23  Ayose Cazorla León   <setepo@gulic.org>
 
 	* src/handler_cgi.c: Use the cherokee_header API for set 
 	 SERVER_NAME a HTTP_COOKIE vars
@@ -12930,7 +12930,7 @@
 	* src/plugin_table.c (cherokee_plugin_table_get): Little bugfix
 
 
-2003-07-20  Ayose Cazorla Leï¿½n  <setepo@gulic.org>
+2003-07-20  Ayose Cazorla León  <setepo@gulic.org>
 
 	* cherokee.conf.sample.in: Directory entry for cgi-bin
 
