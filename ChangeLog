@@ -1,3 +1,7 @@
+2008-10-25  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/ModuleFcgi.py: Bug #153 was not completely fixed in r2206
+
 2008-10-23  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/ModuleBalancer.py: Fixes auto-submit error assigning
