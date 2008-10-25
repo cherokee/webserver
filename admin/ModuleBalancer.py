@@ -79,3 +79,6 @@ class ModuleBalancerGeneric (Module, FormHelper):
             txt += str(table)
 
         return txt
+
+    def _op_apply_changes (self, uri, post):
+        return
