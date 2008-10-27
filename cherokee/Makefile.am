@@ -780,6 +780,23 @@ endif
 
 
 #
+# Validator authlist
+#
+validator_authlist = \
+validator_authlist.c \
+validator_authlist.h
+
+libplugin_authlist_la_LDFLAGS = $(module_ldflags) 
+libplugin_authlist_la_SOURCES = $(validator_authlist)
+
+if STATIC_VALIDATOR_AUTHLIST
+static_validator_authlist_src = $(validator_authlist)
+else
+dynamic_validator_authlist_lib = libplugin_authlist.la
+endif
+
+
+#
 # Validator mysql
 #
 validator_mysql = \
@@ -1057,6 +1074,7 @@ $(static_validator_ldap_src) \
 $(static_validator_plain_src) \
 $(static_validator_htdigest_src) \
 $(static_validator_htpasswd_src) \
+$(static_validator_authlist_src) \
 $(static_validator_mysql_src) \
 \
 $(static_balancer_round_robin_src) \
@@ -1208,6 +1226,7 @@ $(dynamic_validator_ldap_lib) \
 $(dynamic_validator_plain_lib) \
 $(dynamic_validator_htdigest_lib) \
 $(dynamic_validator_htpasswd_lib) \
+$(dynamic_validator_authlist_lib) \
 $(dynamic_validator_mysql_lib) \
 $(dynamic_balancer_round_robin_lib) 
 
