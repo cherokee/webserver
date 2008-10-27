@@ -1,3 +1,13 @@
+2008-10-26  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/main_admin.c: Implements a new security mechanism for
+	Cherokee-admin. From now on, it will require authentication to
+	access the administration interface.
+
+	* cherokee/validator_authlist.c, cherokee/validator_authlist.h,
+	configure.in, cherokee/Makefile.am: A new validator has been
+	added. It implements a fixed list of authorized users.
+
 2008-10-27  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/server.py, admin/PageInfoSource.py: cleanup following

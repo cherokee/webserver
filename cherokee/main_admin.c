@@ -41,6 +41,8 @@
 	"This is free software; see the source for copying conditions.  There is NO\n" \
 	"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
+#define ALPHA_NUM            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+#define PASSWORD_LEN         16
 #define DEFAULT_PORT         9090
 #define DEFAULT_DOCUMENTROOT CHEROKEE_DATADIR "/admin"
 #define DEFAULT_CONFIG_FILE  CHEROKEE_CONFDIR "/cherokee.conf"
@@ -84,11 +86,36 @@ find_empty_port (int starting, int *port)
 }
 
 static ret_t
+generate_admin_password (cherokee_buffer_t *buf)
+{
+	cuint_t i;
+	cuint_t n;
+
+	srand(getpid()*time(NULL));
+
+	for (i=0; i<PASSWORD_LEN; i++) {
+		n = rand()%(sizeof(ALPHA_NUM)-1);
+		cherokee_buffer_add_char (buf, ALPHA_NUM[n]);
+	}
+
+	return ret_ok;
+}
+
+static ret_t
 config_server (cherokee_server_t *srv) 
 {
 	ret_t             ret;
 	int               scgi_port = 4000;
 	cherokee_buffer_t buf       = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t password  = CHEROKEE_BUF_INIT;
+
+	ret = generate_admin_password (&password);
+	if (ret != ret_ok) 
+		return ret;
+
+	printf ("\nLogin:\n"
+		"  User:              admin\n"
+		"  One-time Password: %s\n\n", password.buf);
 
 	ret = find_empty_port (scgi_port, &scgi_port);
 	if (ret != ret_ok) 
@@ -120,6 +147,15 @@ config_server (cherokee_server_t *srv)
 				  RULE_PRE "1!handler = scgi\n"
 				  RULE_PRE "1!handler!balancer = round_robin\n"
 				  RULE_PRE "1!handler!balancer!source!1 = 1\n");
+
+	if (!cherokee_buffer_is_empty (&password))
+		cherokee_buffer_add_va (&buf,
+					RULE_PRE "1!auth = authlist\n"
+					RULE_PRE "1!auth!methods = digest\n"
+					RULE_PRE "1!auth!realm = Cherokee-admin\n"
+					RULE_PRE "1!auth!list!1!user = admin\n"
+					RULE_PRE "1!auth!list!1!password = %s\n",
+					password.buf);
 
 	cherokee_buffer_add_str (&buf, 
 				 RULE_PRE "2!match = directory\n"
@@ -153,8 +189,12 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "6!document_root = %s\n", CHEROKEE_DOCDIR);
 
 	ret = cherokee_server_read_config_string (srv, &buf);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) {
+		PRINT_ERROR_S ("Could not initialize the server\n");
+		return ret;
+	}
 
+	cherokee_buffer_mrproper (&password);
 	cherokee_buffer_mrproper (&buf);
 	return ret_ok;
 }

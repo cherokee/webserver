@@ -36,7 +36,9 @@
 
 
 ret_t 
-cherokee_validator_init_base (cherokee_validator_t *validator, cherokee_validator_props_t *props, cherokee_plugin_info_validator_t *info)
+cherokee_validator_init_base (cherokee_validator_t             *validator, 
+			      cherokee_validator_props_t       *props,
+			      cherokee_plugin_info_validator_t *info)
 {
 	cherokee_module_init_base (MODULE(validator), MODULE_PROPS(props), PLUGIN_INFO(info));
 
@@ -105,7 +107,9 @@ cherokee_validator_check (cherokee_validator_t *validator, void *conn)
 
 
 ret_t 
-cherokee_validator_add_headers (cherokee_validator_t *validator, void *conn, cherokee_buffer_t *buf)
+cherokee_validator_add_headers (cherokee_validator_t *validator,
+				void                 *conn,
+				cherokee_buffer_t    *buf)
 {
 	if (validator->add_headers == NULL) {
 		return ret_error;
@@ -151,7 +155,8 @@ error:
 
 
 ret_t 
-cherokee_validator_parse_digest (cherokee_validator_t *validator, char *str, cuint_t str_len)
+cherokee_validator_parse_digest (cherokee_validator_t *validator,
+				 char *str, cuint_t str_len)
 {
 	cuint_t             len;
 	char               *end;
