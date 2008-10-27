@@ -123,3 +123,10 @@ Special Files
   useful to trace what is going on with Cherokee.
 
 image::media/images/admin_advanced4.png[Cherokee Admin interface]
+
+
+
+
+////
+Add new screenshot with the 'nonce' option updated.
+////
