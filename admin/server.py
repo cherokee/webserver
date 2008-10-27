@@ -48,13 +48,13 @@ class Handler(pyscgi.SCGIHandler):
 
     def handle_request (self):
         global cfg
-        
+
         page    = None
         headers = ""
         body    = ""
         status  = "200 OK"
         uri     = self.env['REQUEST_URI']
-        
+
         # Ensure that the configuration file is writable
         if not cfg.has_tree():
             if not uri.startswith('/create_config'):
@@ -74,7 +74,7 @@ class Handler(pyscgi.SCGIHandler):
                 self.send ('Status: 200 OK\r\n\r\n' + body)
                 return
 
-        # Check the URL        
+        # Check the URL
         if uri.startswith('/general'):
             page = PageGeneral(cfg)
         elif uri.startswith('/icon'):
@@ -101,8 +101,8 @@ class Handler(pyscgi.SCGIHandler):
         elif uri.startswith('/apply'):
             self.handle_post()
             post = Post(self.post)
- 
-            manager = cherokee_management_get (cfg)            
+
+            manager = cherokee_management_get (cfg)
             manager.save (restart = post.get_val('restart'))
             cherokee_management_reset()
             body = "/"
@@ -162,7 +162,7 @@ def main():
         print "Incorrect parameters: PORT CONFIG_FILE"
         raise SystemExit
 
-    # Try to avoid zombie processes 
+    # Try to avoid zombie processes
     if hasattr(signal, "SIGCHLD"):
         signal.signal(signal.SIGCHLD, signal.SIG_IGN)
 
@@ -177,7 +177,7 @@ def main():
     # Read configuration file
     global cfg
     cfg = Config(cfg_file)
-    
+
     print ("Server %s running.. PID=%d Port=%d" % (VERSION, os.getpid(), scgi_port))
 
     # Iterate until the user exists

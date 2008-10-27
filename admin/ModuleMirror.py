@@ -44,7 +44,7 @@ class ModuleMirror (ModuleHandler):
             name = cfg.value
             props = module_obj_factory (name, self._cfg, pre, self.submit_url)
             props._op_apply_changes (uri, post)
-        
+
         # And apply the rest
         self.ApplyChangesPrefix (self._prefix, [], post)
 

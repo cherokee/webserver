@@ -99,7 +99,7 @@ class PageVServer (PageMenu, FormHelper):
             if post.get_val('update_prio'):
                 cfg_key = post.get_val('update_prefix')
                 rules = RuleList(self._cfg, cfg_key)
-                
+
                 changes = []
                 for tmp in post['update_prio']:
                     changes.append(tmp.split(','))
@@ -129,7 +129,7 @@ class PageVServer (PageMenu, FormHelper):
         rules = RuleList(self._cfg, cfg_prefix)
         priority = rules.get_highest_priority() + 100
         pre = '%s!%d' % (cfg_prefix, priority)
-        
+
         # Read the properties
         filtered_post = {}
         for p in post:
@@ -156,7 +156,7 @@ class PageVServer (PageMenu, FormHelper):
         self._ValidateChanges (post, validation)
         if self.has_errors():
             return
-        
+
         # Apply the changes to the configuration tree
         self._cfg['%s!match'%(pre)] = _type
         rule_module.apply_cfg (filtered_post)
@@ -177,7 +177,7 @@ class PageVServer (PageMenu, FormHelper):
         pre = "vserver!%s" % (host)
         cfg = self._cfg[pre]
         name = self._cfg.get_val ('vserver!%s!nick'%(host))
-        
+
         tabs = []
         txt = "<h1>Virtual Server: %s</h1>" % (name)
 
@@ -192,7 +192,7 @@ class PageVServer (PageMenu, FormHelper):
         # Domains
         tmp = self._render_hosts(host)
         tabs += [('Domain names', tmp)]
-        
+
         # Behavior
         pre = 'vserver!%s!rule' %(host)
         tmp = self._render_rules_generic (cfg_key    = pre, 

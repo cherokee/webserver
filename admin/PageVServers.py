@@ -63,7 +63,7 @@ class PageVServers (PageMenu, FormHelper):
             if self.has_errors():
                 return self._op_render()
             return "/vserver"
-                
+
         elif uri.endswith('/ajax_update'):
             if post.get_val('update_prio'):
                 tmp = post.get_val('prios').split(',')
@@ -77,12 +77,12 @@ class PageVServers (PageMenu, FormHelper):
     def _normailze_vservers (self):
         vservers = [int(x) for x in self._cfg['vserver'].keys()]
         vservers.sort ()
-        
+
         # Rename all the virtual servers
         for vserver in self._cfg['vserver'].keys():
             self._cfg.rename('vserver!%s'%(vserver),
                              'vserver!OLD_%d'%(int(vserver)))
-        
+
         # Add them again
         for i in range(len(vservers)):
             prio = (i+1) * 10
@@ -104,7 +104,7 @@ class PageVServers (PageMenu, FormHelper):
                               'vserver!%d'%(n))
             n += 10
 
-    def _render_vserver_list (self):        
+    def _render_vserver_list (self):
         txt = "<h1>Virtual Servers</h1>"
         txt += self.Dialog (COMMENT)
 

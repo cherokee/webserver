@@ -70,7 +70,7 @@ class ConfigNode (object):
             obj = self[key]
             if not obj:
                 self._create_path(key)
-        
+
         if isinstance (val, ConfigNode):
             if '!' in key:
                 parts = key.split('!')
@@ -116,7 +116,7 @@ class ConfigNode (object):
                 new_path = "%s!%s" % (path, name)
             else:
                 new_path = name
-                
+
             content += node.serialize (new_path)
         return content
 
@@ -128,7 +128,7 @@ class ConfigNode (object):
         else:
             cfg = self._child[key]
 
-        cfg.value = val        
+        cfg.value = val
 
     def has_child (self):
         return len(self._child) > 0
@@ -162,7 +162,7 @@ class Config:
             node = tmp
         return node
 
-    def _parse (self, config_string):        
+    def _parse (self, config_string):
         for line in config_string.split('\n'):
             node = self.root
 
@@ -180,7 +180,7 @@ class Config:
 
             node = self._create_path (path)
             node.value = value
-            
+
     def __str__ (self):
         return self.root.serialize()
 
@@ -194,7 +194,7 @@ class Config:
             return True
         copied = copy.deepcopy (self[path_old])
         self.set_sub_node (path_new, copied)
-    
+
     def rename (self, path_old, path_new):
         error = self.clone (path_old, path_new)
         if not error:
@@ -219,7 +219,7 @@ class Config:
         tmp = self[path]
         if not tmp:
             tmp = self._create_path (path)
-            
+
         tmp.value = val
 
     def _get_parent_node (self, path):

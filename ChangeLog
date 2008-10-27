@@ -1,3 +1,8 @@
+2008-10-27  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/server.py, admin/PageInfoSource.py: cleanup following
+	http://code.google.com/p/cherokee/issues/detail?id=144
+
 2008-10-25  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/ModuleFcgi.py: Bug #153 was not completely fixed in r2206

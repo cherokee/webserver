@@ -10,6 +10,7 @@ NOTE_NICK        = 'Source nick. It will be referenced by this name in the rest 
 NOTE_TYPE        = 'It allows to choose whether it runs the local host or a remote server.'
 NOTE_HOST        = 'Where the information source can be accessed. The host:port pair, or the Unix socket path.'
 NOTE_INTERPRETER = 'Command to spawn a new source in case it were not accessible.'
+NOTE_USAGE       = 'Sources currently in use. Beware: exhausting the information sources used in a rule will render it inoperable and Cherokee will fail to start.'
 
 
 TABLE_JS = """
@@ -32,6 +33,16 @@ class PageInfoSource (PageMenu, FormHelper):
         self.submit_url = '/source/'
 
     def _op_handler (self, uri, post):
+        if uri.endswith('/ajax_update'):
+            used_sources = self._get_used_sources()
+            for src in post:
+                self._cfg.pop(src)
+                src = src.split('!')[1]
+                if not used_sources.has_key(src):
+                    continue
+                for r in used_sources[src]:
+                    self._cfg.pop(r)
+
         if post.get_val('is_submit'):
             if post.get_val('tmp!new_source_nick'):
                 return self._apply_new_source (uri, post)
@@ -94,7 +105,7 @@ class PageInfoSource (PageMenu, FormHelper):
             for env in envs:
                 pre = 'source!%s!env!%s'%(s,env)
                 val = self.InstanceEntry(pre, 'text', size=25)
-                js = "post_del_key('/ajax/update', '%s');"%(pre)
+                js = "post_del_key('/source/ajax/update', '%s');"%(pre)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (env, val, link_del)
 
@@ -175,7 +186,7 @@ class PageInfoSource (PageMenu, FormHelper):
                 host = self._cfg.get_val('source!%s!host'%(s))
                 type = self._cfg.get_val('source!%s!type'%(s))
 
-                js = "post_del_key('/ajax/update', 'source!%s');"%(s)
+                js = "post_del_key('/source/ajax_update', 'source!%s');"%(s)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
 
                 table += '<tr><td><a href="/%s/%s">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (self._id, s, nick, type, host, link_del)
@@ -200,4 +211,55 @@ class PageInfoSource (PageMenu, FormHelper):
             fo1 = Form ("/%s"%(self._id), add_submit=False)
             txt += fo1.Render(tmp)
 
+        # List info about source usage
+        #
+        if self._cfg.keys('source'):
+            txt += "<h2>Source usage</h2>"
+            txt += self.Dialog (NOTE_USAGE)
+            txt += self._render_source_usage ()
+
         return txt
+
+
+    def _render_source_usage (self):
+        """List the usage of each information source"""
+        used_sources = self._get_used_sources()
+        table  = '<table width="90%" id="usage" class="rulestable">'
+        table += '<tr><th>Nick</th><th>Virtual server</th><th>Rule</th></tr>'
+        for src in used_sources:
+            for entry in used_sources[src]:
+                nick = self._cfg.get_val('source!%s!nick'%(src))
+                serv_id   = entry.split('!')[1]
+                serv = self._cfg.get_val('vserver!%s!nick'%(serv_id))
+                rule = 'vserver!%s!rule!%s'%(serv_id,entry.split('!')[3])
+
+                # Try to get the rule name
+                _type = self._cfg.get_val('%s!match'%(rule))
+                rule_module = module_obj_factory (_type, self._cfg, rule, self.submit_url)
+                rule_name = rule_module.get_name()
+                rule_url = rule.replace('!','/')
+
+                nick_td = '<td><a href="/%s/%s">%s</td>'%(self._id, src, nick)
+                serv_td = '<td><a href="/vserver/%s">%s</a></td>'%(id, serv)
+                rule_td = '<td><a href="/%s">%s</a></td>'%(rule_url, rule_name)
+                table += '<tr>%s%s%s</tr>'%(nick_td, serv_td, rule_td)
+
+        table += '</table>'
+
+        txt  = ''
+        txt += self.Indent(table)
+        txt += TABLE_JS
+
+        return txt
+
+    def _get_used_sources (self):
+        """List of every rule using any info source"""
+        used_sources = {}
+        target ='!balancer!source!'
+        for entry in self._cfg.serialize().split():
+            if target in entry:
+                source =  self._cfg.get_val(entry)
+                if not used_sources.has_key(source):
+                    used_sources[source] = []
+                used_sources[source].append(entry)
+        return used_sources

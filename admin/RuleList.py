@@ -34,7 +34,7 @@ class RuleList:
         tmp = self._cfg[self._cfg_pre]
         if tmp:
             keys = [int(x) for x in tmp.keys()]
-            keys.sort (reverse=True) 
+            keys.sort (reverse=True)
             for k in keys:
                 yield str(k)
 
