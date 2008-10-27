@@ -215,6 +215,13 @@ image::media/images/admin_rule_regex.png[Regex]
 And voilà! A request of the form http://example.net/rss2 would be
 redirected to http://example.net/feed
 +
+Any rule type can be used with the redirection handler: Directory,
+Extensions, Regular Expression, etc. In this case the fact that the
+rule type is "Regular Expression" affects only slightly. Refer to the
+appropiate section of the documentation,
+link:modules_handlers_redir.html[Redirection Handler], for more
+details.
++
 Note that the `Type` of the *Redirection* is `External`. This means
 the server will instruct the requesting web client to fetch the
 redirected URL, which means the client will always know what the

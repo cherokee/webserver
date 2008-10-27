@@ -53,6 +53,27 @@ In case you do need to redirect a resource to another virtual host
 and/or domain, you will have to use an explicit redirection using the
 `external` keyword.
 
+The influence of the rule type
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Any rule type can be used with the redirection handler: Directory,
+Extensions, Regular Expression, etc. Only the case where the type is
+*Regular Expression* will require some more extra information.
+Because of Cherokee's design, modularity and inheritance is heavily
+used throughout the code base. This one is a special case because the
+regex entry of the redirection handler can be empty whenever the
+matching rule used is a regular expression (because it is inherited by
+it).
+
+The logic behind this is that you can set up a regular expression to
+match the rule, but once you're in the redirection handler you could
+or could not be needing another matching to be performed. If not, the
+original one (the one from the rule) will be enough. If you do, you
+can specify a completely different expression to be matched. For
+instance, you could match the rule taking just the beginning part of
+the request as meaningful, and once you are into the handler you might
+want to consider just the end of it before making the substitution.
+
 
 Examples
 ~~~~~~~~
