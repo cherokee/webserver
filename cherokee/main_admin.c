@@ -54,6 +54,7 @@ static char *document_root = DEFAULT_DOCUMENTROOT;
 static char *config_file   = DEFAULT_CONFIG_FILE;
 static char *bind_to       = DEFAULT_BIND;
 static int   debug         = 0;
+static int   unsecure      = 0;
 
 static ret_t
 find_empty_port (int starting, int *port)
@@ -109,13 +110,15 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_t buf       = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t password  = CHEROKEE_BUF_INIT;
 
-	ret = generate_admin_password (&password);
-	if (ret != ret_ok) 
-		return ret;
+	if (unsecure == 0) {
+		ret = generate_admin_password (&password);
+		if (ret != ret_ok) 
+			return ret;
 
-	printf ("\nLogin:\n"
-		"  User:              admin\n"
-		"  One-time Password: %s\n\n", password.buf);
+		printf ("\nLogin:\n"
+			"  User:              admin\n"
+			"  One-time Password: %s\n\n", password.buf);
+	}
 
 	ret = find_empty_port (scgi_port, &scgi_port);
 	if (ret != ret_ok) 
@@ -148,7 +151,9 @@ config_server (cherokee_server_t *srv)
 				  RULE_PRE "1!handler!balancer = round_robin\n"
 				  RULE_PRE "1!handler!balancer!source!1 = 1\n");
 
-	if (!cherokee_buffer_is_empty (&password))
+	if ((unsecure == 0) && 
+	    (!cherokee_buffer_is_empty (&password)))
+	{
 		cherokee_buffer_add_va (&buf,
 					RULE_PRE "1!auth = authlist\n"
 					RULE_PRE "1!auth!methods = digest\n"
@@ -156,6 +161,7 @@ config_server (cherokee_server_t *srv)
 					RULE_PRE "1!auth!list!1!user = admin\n"
 					RULE_PRE "1!auth!list!1!password = %s\n",
 					password.buf);
+	}
 
 	cherokee_buffer_add_str (&buf, 
 				 RULE_PRE "2!match = directory\n"
@@ -207,6 +213,7 @@ print_help (void)
 		"  -h,  --help                   Print this help\n"
 		"  -V,  --version                Print version and exit\n"
 		"  -x,  --debug                  Enables debug\n"
+		"  -u,  --unsecure               Turn off the authentication\n"
 		"  -b,  --bind[=IP]              Bind net iface; no arg means all\n"
 		"  -d,  --appdir=DIR             Application directory\n"
 		"  -p,  --port=NUM               TCP port\n"
@@ -220,17 +227,18 @@ process_parameters (int argc, char **argv)
 	int c;
 
 	struct option long_options[] = {
-		{"help",    no_argument,       NULL, 'h'},
-		{"version", no_argument,       NULL, 'V'},
-		{"debug",   no_argument,       NULL, 'x'},
-		{"bind",    optional_argument, NULL, 'b'},
-		{"appdir",  required_argument, NULL, 'd'},
-		{"port",    required_argument, NULL, 'p'},
-		{"target",  required_argument, NULL, 'C'},
+		{"help",     no_argument,       NULL, 'h'},
+		{"version",  no_argument,       NULL, 'V'},
+		{"debug",    no_argument,       NULL, 'x'},
+		{"unsecure", no_argument,       NULL, 'u'},
+		{"bind",     optional_argument, NULL, 'b'},
+		{"appdir",   required_argument, NULL, 'd'},
+		{"port",     required_argument, NULL, 'p'},
+		{"target",   required_argument, NULL, 'C'},
 		{NULL, 0, NULL, 0}
 	};
 
-	while ((c = getopt_long(argc, argv, "hVxb::d:p:C:", long_options, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "hVxub::d:p:C:", long_options, NULL)) != -1) {
 		switch(c) {
 		case 'b':
 			if (optarg)
@@ -249,6 +257,9 @@ process_parameters (int argc, char **argv)
 			break;
 		case 'x':
 			debug = 1;
+			break;
+		case 'u':
+			unsecure = 1;
 			break;
 		case 'V':
 			printf (APP_NAME " " PACKAGE_VERSION "\n" APP_COPY_NOTICE);

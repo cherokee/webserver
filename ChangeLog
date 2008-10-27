@@ -1,5 +1,10 @@
 2008-10-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main_admin.c: Adds a new parameter -u
+	(or --unsecure).  It allows the execute cherokee-admin without
+	requiring the user to authenticate. This is a developers feature,
+	regular users are not supposed to use it.
+
 	* cherokee/macros.h, cherokee/nonce.c, cherokee/nonce.h,
 	cherokee/server-protected.h, cherokee/connection.c,
 	cherokee/server.c: Fixes nonce handling.
