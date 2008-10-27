@@ -1,4 +1,11 @@
+2008-10-25  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/handler_cgi_base.c, cherokee/handler_common.c,
+	cherokee/connection.c: REQUEST_URI cgi environment variable now
+	contains the correct value.
+
 2008-10-27  Taher Shihadeh  <taher@unixwars.com>
+
 	* admin/ModuleBalancer.py, admin/ModuleFcgi.py: fixes bug that
 	prevented balancers to be correctly configured when auto-submits
 	weren't triggered.

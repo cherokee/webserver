@@ -191,7 +191,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 	 */
 	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
 	
-     	if (use_iocache)		
+	if (use_iocache)
 		iocache = CONN_SRV(conn)->iocache;
 
 	ret = stat_file (use_iocache, iocache, &nocache_info, &conn->local_directory, &io_entry, &info);
@@ -232,6 +232,10 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		
 		/* Copy the PathInfo and clean the request 
 		 */
+		if (cherokee_buffer_is_empty (&conn->request_original)) {
+			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		}
+
 		cherokee_buffer_add (&conn->pathinfo, pathinfo, pathinfo_len);
 		cherokee_buffer_drop_ending (&conn->request, pathinfo_len);
 
@@ -312,11 +316,12 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				/* Build the new request before respin
 				 */
 				cherokee_buffer_clean (&conn->local_directory);
-				cherokee_buffer_clean (&conn->request_original);
-				cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+				if (cherokee_buffer_is_empty (&conn->request_original)) {
+					cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+				}
 
 				cherokee_buffer_clean (&conn->request);
-				cherokee_buffer_add (&conn->request, index, index_len);				
+				cherokee_buffer_add (&conn->request, index, index_len);
 
 				TRACE (ENTRIES, "top level index matched %s\n", index);
 
@@ -343,11 +348,16 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 			 */
 			if ((!exists) || (is_dir)) 
 				continue;
-			
+
 			/* Add the index file to the request and clean up
 			 */
 			cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
-			cherokee_buffer_add (&conn->request, index, index_len); 
+
+			if (cherokee_buffer_is_empty (&conn->request_original)) {
+				cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+			}
+
+			cherokee_buffer_add (&conn->request, index, index_len);
 
 			TRACE_CONN(conn);
 			return ret_eagain;

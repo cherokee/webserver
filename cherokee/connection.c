@@ -2221,19 +2221,20 @@ cherokee_connection_print (cherokee_connection_t *conn)
 #define print_add(str)	                           			\
 	cherokee_buffer_add_str (buf, str)
 
-	print_cbuf ("        Request", request);
-	print_cbuf ("  Web Directory", web_directory);
-	print_cbuf ("Local Directory", local_directory);
-	print_cbuf ("       Pathinfo", pathinfo);
-	print_cbuf ("       User Dir", userdir);
-	print_cbuf ("   Query string", query_string);
-	print_cbuf ("           Host", host);
-	print_cbuf ("       Redirect", redirect);
-	print_cint ("   Redirect num", respins);
-	print_cint ("      Keepalive", keepalive);
-	print_str  ("          Phase", phase);
-	print_cint ("    Range start", range_start);
-	print_cint ("      Range end", range_end);
+	print_cbuf ("         Request", request);
+	print_cbuf ("Request Original", request_original);
+	print_cbuf ("   Web Directory", web_directory);
+	print_cbuf (" Local Directory", local_directory);
+	print_cbuf ("        Pathinfo", pathinfo);
+	print_cbuf ("        User Dir", userdir);
+	print_cbuf ("    Query string", query_string);
+	print_cbuf ("            Host", host);
+	print_cbuf ("        Redirect", redirect);
+	print_cint ("    Redirect num", respins);
+	print_cint ("       Keepalive", keepalive);
+	print_str  ("           Phase", phase);
+	print_cint ("     Range start", range_start);
+	print_cint ("       Range end", range_end);
 
 	/* Options bit fields
 	 */
