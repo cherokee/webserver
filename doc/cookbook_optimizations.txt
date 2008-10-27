@@ -16,7 +16,7 @@ into your specific Cherokee build. This can be done by:
 ----
 $ cherokee -i
 Compilation
- Version: 0.9.0
+ Version: 0.10.0
 
 [...]
 
@@ -57,9 +57,9 @@ performance. Some of the things to keep in mind are mentioned here.
 Encoding::
 As it is explained in the link:modules_encoders.html[Encoders']
 documentation, compressing the information to be sent makes a lot of
-sense for specific file types. Not that much processing power is used
-to compress a text file, for instance, and hardware is cheaper than
-bandwidth, so you should encode files whenever it makes sense.
+sense for specific file types. It's Not that much processing power is
+used to compress a text file, for instance, and hardware is cheaper
+than bandwidth, so you should encode files whenever it makes sense.
 
 Handler specific::
 * *CGI, SCGI, FastCGI*: link:other_goodies.html#x-sendfile[X-Sendfile]

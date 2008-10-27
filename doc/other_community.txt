@@ -8,7 +8,7 @@ the link:http://www.cherokee-project.com/doc[Cherokee Project] site.
 
 If you cannot find what you are looking for in there, you can allways
 go to the official mailing lists. Post your questions there. Usually
-the people hangin around will be happy to help.
+the people hanging around will be happy to help.
 Keep in mind that, as a sign of politeness towards the rest of the
 readers, you should first check if the solution to your
 problem is present in the archives. This will prevent duplicated
@@ -19,3 +19,9 @@ These are the lists currently in existence:
 - link:http://lists.octality.com/listinfo/cherokee[General list]
 - link:http://lists.octality.com/listinfo/cherokee-dev[Development list]
 - link:http://lists.octality.com/listinfo/cherokee-commits[SVN Reports]
+
+
+More resources:
+~~~~~~~~~~~~~~~
+* How to cross-compile Cherokee for Elphel cameras:
+  http://wiki.elphel.com/index.php?title=Cherokee

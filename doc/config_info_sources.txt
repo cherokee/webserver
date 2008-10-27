@@ -33,6 +33,22 @@ whatever options do not apply.
 
 image::media/images/admin_info_sources.png[Information Sources]
 
+[WARNING]
+The information about source usage allows you to see which information
+sources are currently in use in whatever rule configured along your
+list of virtual servers. This is intended as a tool to let you know
+whether you can or cannot safely remove an information source from
+your list. When you do so, the source is also removed from the rule.
+For instance, if your PHP rule was balancing among two information
+sources, by deleting one of the sources in this section you would also
+be deleting it in the corresponding rule entry. Now the PHP rule would
+balance only with one information source. This is perfectly safe. The
+problem arises whenever you want to compeltely exhaust the list of
+sources being balanced. Since every balancer (a generic
+balancer or a FastCGI balancer, for example) needs at least one
+information source, the rule would be broken and Cherokee would fail
+to start.
+
 Unix Sockets
 ~~~~~~~~~~~~
 
@@ -41,7 +57,7 @@ through Unix sockets. You only have to specify a full path to the
 socket instead of the `host:port`.
 
 For instance an entry such as `/var/tmp/socket-tmp.1` should get
-everything to simply work it that was the correct path.
+everything to simply work if that was a correct path.
 
 
 Further insight

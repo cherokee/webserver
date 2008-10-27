@@ -1,4 +1,16 @@
-2008-10-26  Alvaro Lopez Ortega  <alvaro@octality.com>
+2008-10-27  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/server.py, admin/PageInfoSource.py: cleanup following
+	http://code.google.com/p/cherokee/issues/detail?id=144
+
+	* doc/dev_debug.txt, doc/other_community.txt,
+	doc/basics_why_cherokee.txt, doc/config_general.txt,
+	doc/index.txt, doc/config_quickstart.txt,
+	doc/cookbook_optimizations.txt, doc/dev_cherokee.conf.txt,
+	doc/config_info_sources.txt: some doc changes for the upcoming
+	0.10
+
+2008-10-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/main_admin.c: Implements a new security mechanism for
 	Cherokee-admin. From now on, it will require authentication to

@@ -72,7 +72,7 @@ administration tool, so you will need system administrator rights.
 
 ----
 # cherokee-admin
-Cherokee Web Server 0.9.0 (Sep 16 2008): Listening on port 9090, TLS disabled,
+Cherokee Web Server 0.10.0 (Oct 27 2008): Listening on port 9090, TLS disabled,
 IPv6 disabled, using epoll, 1024 fds system limit, max. 505 connections,
 single thread
 ----

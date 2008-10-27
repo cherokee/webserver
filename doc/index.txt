@@ -1,4 +1,4 @@
-== link:index.html[Index]: Cherokee 0.9 documentation
+== link:index.html[Index]: Cherokee 0.10 documentation
 
 *********************************
 link:basics.html[Getting started]: Cherokee basics
