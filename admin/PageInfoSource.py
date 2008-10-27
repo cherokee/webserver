@@ -105,7 +105,7 @@ class PageInfoSource (PageMenu, FormHelper):
             for env in envs:
                 pre = 'source!%s!env!%s'%(s,env)
                 val = self.InstanceEntry(pre, 'text', size=25)
-                js = "post_del_key('/source/ajax/update', '%s');"%(pre)
+                js = "post_del_key('/ajax/update', '%s');"%(pre)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (env, val, link_del)
 
