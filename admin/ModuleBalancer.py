@@ -26,6 +26,8 @@ class ModuleBalancerGeneric (Module, FormHelper):
 
             self._cfg['%s!source!%s'%(self._prefix, new_source)] = new_balancer_node
             del (self._cfg['tmp!new_balancer_node'])
+            if not self._cfg.get_val(self._prefix):
+                self._cfg[self._prefix] = BALANCERS[0][0]
 
         txt = ''
         general_sources  = self._cfg.keys('source')

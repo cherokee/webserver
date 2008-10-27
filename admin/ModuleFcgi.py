@@ -33,10 +33,8 @@ class ModuleFcgi (ModuleCgiBase):
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
         assert (self.submit_url)
-        options = [('', 'Choose...')]
-        options.extend(BALANCERS)
-        e = self.AddPropOptions_Reload (table, "Balancer", prefix, 
-                                        modules_available(options), NOTE_BALANCER)
+        e = self.AddPropOptions_Reload (table, "Balancer", prefix,
+                                        modules_available(BALANCERS), NOTE_BALANCER)
         txt += self.Indent (str(table) + e)
         return txt
 
@@ -53,6 +51,6 @@ class ModuleFcgi (ModuleCgiBase):
             name = cfg.value
             props = module_obj_factory (name, self._cfg, pre, self.submit_url)
             props._op_apply_changes (uri, post)
-        
+
         # And CGI changes
         return ModuleCgiBase._op_apply_changes (self, uri, post)

@@ -156,7 +156,7 @@ class PageEntry (PageMenu, FormHelper):
 
         txt  = '<h1>%s</h1>' % (self._get_title (html=True))
         txt += self.InstanceTab (tabs)
-        form = Form (self.submit_url, add_submit=False) ##add_submit=True,auto=False
+        form = Form (self.submit_url, add_submit=False)
         return form.Render(txt)
 
     def _get_handler_properties (self):

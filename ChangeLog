@@ -1,3 +1,11 @@
+2008-10-27  Taher Shihadeh  <taher@unixwars.com>
+	* admin/ModuleBalancer.py, admin/ModuleFcgi.py: fixes bug that
+	prevented balancers to be correctly configured when auto-submits
+	weren't triggered.
+
+	* doc/bundle_cherokee-admin.txt, cherokee-admin.1: documents the
+	new feature.
+
 2008-10-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/main_admin.c: Adds a new parameter -u
