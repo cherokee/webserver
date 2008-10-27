@@ -88,10 +88,13 @@ struct cherokee_server {
 	cherokee_regex_table_t    *regexs;
 	cherokee_nonce_table_t    *nonces;
 
-	/* Logging
+	/* Programmed tasks
 	 */
 	int                        log_flush_elapse;
 	time_t                     log_flush_next;
+
+	int                        nonces_cleanup_elapse;
+	time_t                     nonces_cleanup_next;
 
 	/* Main socket
 	 */

@@ -1,3 +1,9 @@
+2008-10-27  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/macros.h, cherokee/nonce.c, cherokee/nonce.h,
+	cherokee/server-protected.h, cherokee/connection.c,
+	cherokee/server.c: Fixes nonce handling.
+
 2008-10-27  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/server.py, admin/PageInfoSource.py: cleanup following

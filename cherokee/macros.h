@@ -99,9 +99,12 @@
 #define LOGGER_MIN_BUFSIZE            0
 #define DEFAULT_LOGGER_MAX_BUFSIZE    32768
 #define LOGGER_MAX_BUFSIZE            (4 * 1024 * 1024)
+#define LOGGER_FLUSH_ELAPSE           10
 #define RESPINS_MAX                   16
 #define SENDFILE_MIN_SIZE             (128 * 1024)   /* 128Kb */
 #define SENDFILE_MAX_SIZE             ((2 << 30) -1) /*   2Gb */
+#define NONCE_CLEANUP_ELAPSE          60
+#define NONCE_EXPIRATION              60
 
 #define FD_NUM_SPARE                  10	/* range:  8 - 20 */          
 #define FD_NUM_MIN_SYSTEM             20	/* range: 16 - 64 */

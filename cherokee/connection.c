@@ -431,6 +431,8 @@ out:
 static void
 build_response_header_authentication (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 {
+	ret_t ret;
+
 	/* Basic Authenticatiom
 	 * Eg: WWW-Authenticate: Basic realm=""
 	 */
@@ -454,14 +456,27 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 		cherokee_buffer_add_buffer (buffer, conn->realm_ref);
 		cherokee_buffer_add_str (buffer, "\", ");
 
-		/* Nonce
+		/* Nonce:
+		 * "nonce=\"%s\", "
 		 */
-		cherokee_nonce_table_generate (CONN_SRV(conn)->nonces, conn, new_nonce);
-		/* "nonce=\"%s\", "
-		 */
-		cherokee_buffer_add_str    (buffer, "nonce=\"");
-		cherokee_buffer_add_buffer (buffer, new_nonce);
-		cherokee_buffer_add_str    (buffer, "\", ");
+		ret = ret_not_found;
+
+		if ((conn->validator != NULL) &&
+		    (! cherokee_buffer_is_empty (&conn->validator->nonce)))
+		{
+			ret = cherokee_nonce_table_check (CONN_SRV(conn)->nonces,
+							  &conn->validator->nonce);
+		}
+
+		cherokee_buffer_add_str (buffer, "nonce=\"");			
+		if (ret != ret_ok) {
+			cherokee_nonce_table_generate (CONN_SRV(conn)->nonces, conn, new_nonce);
+			cherokee_buffer_add_buffer (buffer, new_nonce);
+		} else {
+			cherokee_buffer_add_buffer (buffer, &conn->validator->nonce);
+		}
+		cherokee_buffer_add_str (buffer, "\", ");
+
 				
 		/* Quality of protection: auth, auth-int, auth-conf
 		 * Algorithm: MD5
@@ -1292,12 +1307,6 @@ get_authorization (cherokee_connection_t *conn,
 		 */
 		if (cherokee_buffer_is_empty(&validator->nonce))
 			return ret_error;
-
-		/* If it returns ret_ok, it means that the nonce was on the table,
-		 * and it removed it successfuly, otherwhise ret_not_found is returned.
-		 */
-		ret = cherokee_nonce_table_remove (CONN_SRV(conn)->nonces, &validator->nonce);
-		if (ret != ret_ok) return ret;
 		
 		break;
 

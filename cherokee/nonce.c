@@ -31,8 +31,41 @@
 
 struct cherokee_nonce_table {
 	cherokee_avl_t    table;
+	cherokee_list_t   list;
 	CHEROKEE_MUTEX_T (access);
 };
+
+typedef struct {
+	cherokee_list_t   listed;
+	cherokee_buffer_t nonce;
+	time_t            accessed;
+} entry_t;
+
+
+static entry_t *
+entry_new (void)
+{
+	entry_t *entry;
+
+	entry = (entry_t *) malloc(sizeof(entry_t));
+	if (unlikely (entry == NULL))
+		return NULL;
+
+	entry->accessed = cherokee_bogonow_now;
+	INIT_LIST_HEAD (&entry->listed);
+	cherokee_buffer_init (&entry->nonce);
+
+	return entry;
+}
+
+static void
+entry_free (cherokee_nonce_table_t *nonces,
+	    entry_t                *entry)
+{
+	cherokee_list_del (&entry->listed);
+	cherokee_avl_del (&nonces->table, &entry->nonce, NULL);
+	free (entry);
+}
 
 
 ret_t 
@@ -42,6 +75,7 @@ cherokee_nonce_table_new (cherokee_nonce_table_t **nonces)
 
 	cherokee_avl_init (&n->table);
 	CHEROKEE_MUTEX_INIT (&n->access, NULL);
+	INIT_LIST_HEAD (&n->list);
 
 	*nonces = n;
 	return ret_ok;
@@ -51,23 +85,30 @@ cherokee_nonce_table_new (cherokee_nonce_table_t **nonces)
 ret_t 
 cherokee_nonce_table_free (cherokee_nonce_table_t *nonces)
 {
+	cherokee_list_t *i, *j;
+
+	list_for_each_safe (i, j, &nonces->list) {
+		entry_free (nonces, (entry_t *)i);
+	}
+
+	cherokee_avl_mrproper (&nonces->table, NULL);
 	CHEROKEE_MUTEX_DESTROY (&nonces->access);
-	cherokee_avl_free (&nonces->table, free);
 
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_nonce_table_remove (cherokee_nonce_table_t *nonces, cherokee_buffer_t *nonce)
+cherokee_nonce_table_remove (cherokee_nonce_table_t *nonces,
+			     cherokee_buffer_t      *nonce)
 {
-	ret_t  ret;
-	void  *non = NULL;
+	ret_t    ret;
+	entry_t *entry = NULL;
 
 	CHEROKEE_MUTEX_LOCK (&nonces->access);
-	ret = cherokee_avl_get (&nonces->table, nonce, &non);
+	ret = cherokee_avl_get (&nonces->table, nonce, (void **)&entry);
 	if (ret == ret_ok) {
-		cherokee_avl_del (&nonces->table, nonce, NULL);
+		entry_free (nonces, entry);
 	}
 	CHEROKEE_MUTEX_UNLOCK (&nonces->access);
 
@@ -77,24 +118,34 @@ cherokee_nonce_table_remove (cherokee_nonce_table_t *nonces, cherokee_buffer_t *
 
 
 ret_t 
-cherokee_nonce_table_check (cherokee_nonce_table_t *nonces, cherokee_buffer_t *nonce)
+cherokee_nonce_table_check (cherokee_nonce_table_t *nonces,
+			    cherokee_buffer_t      *nonce)
 {
-	ret_t  ret;
-	void  *non = NULL;
-
+	ret_t    ret;
+	entry_t *entry = NULL;
+	
+	if (cherokee_buffer_is_empty (nonce))
+		return ret_not_found;
+	
 	CHEROKEE_MUTEX_LOCK (&nonces->access);
-	ret = cherokee_avl_get (&nonces->table, nonce, &non);
+	ret = cherokee_avl_get (&nonces->table, nonce, (void **)&entry);
 	CHEROKEE_MUTEX_UNLOCK (&nonces->access);
 
-	if (ret != ret_ok) return ret_not_found;
+	if ((ret != ret_ok) || (entry == NULL))
+		return ret_not_found;
 
+	entry->accessed = cherokee_bogonow_now;
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces, cherokee_connection_t *conn, cherokee_buffer_t *nonce)
+cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces,
+			       cherokee_connection_t  *conn,
+			       cherokee_buffer_t      *nonce)
 {
+	entry_t *entry;
+
 	/* Generate nonce string
 	 */
 	cherokee_buffer_clean (nonce);
@@ -108,8 +159,15 @@ cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces, cherokee_connecti
 
 	/* Copy the nonce and add to the table
 	 */
+	entry = entry_new();
+	if (unlikely (entry == NULL))
+		return ret_nomem;
+
+	cherokee_buffer_add_buffer (&entry->nonce, nonce);
+	
 	CHEROKEE_MUTEX_LOCK (&nonces->access);
-	cherokee_avl_add (&nonces->table, nonce, NULL);
+	cherokee_avl_add (&nonces->table, nonce, entry);
+	cherokee_list_add (&entry->listed, &nonces->list);
 	CHEROKEE_MUTEX_UNLOCK (&nonces->access);
 
 	/* Return
@@ -117,3 +175,21 @@ cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces, cherokee_connecti
 	return ret_ok;
 }
 
+
+ret_t
+cherokee_nonce_table_cleanup (cherokee_nonce_table_t *nonces)
+{
+	cherokee_list_t *i, *j;
+	entry_t         *entry;
+
+	CHEROKEE_MUTEX_LOCK (&nonces->access);
+	list_for_each_safe (i, j, &nonces->list) {
+		entry = (entry_t *)i;
+		if (entry->accessed + NONCE_EXPIRATION < cherokee_bogonow_now) {
+			entry_free (nonces, entry);
+		}
+	}
+	CHEROKEE_MUTEX_UNLOCK (&nonces->access);
+
+	return ret_ok;
+}
