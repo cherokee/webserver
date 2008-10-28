@@ -45,3 +45,7 @@ whether it succeeded or not, the number of rows affected, a rollback
 flag, etc. It will not, however, replicate the operation among each
 one of you MySQL servers. These arrangements must be made
 independently using MySQL's specific mechanisms.
+
+Further information about this hanlder can be found in the
+link:cookbook.html[cookbook], specifically in the recipe about
+link:cookbook_dbslayer.html[setting up the MySQL balancing].

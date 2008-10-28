@@ -1,3 +1,8 @@
+2008-10-28  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/ModuleRedir.py: fixes bug that prevented having an empty
+	Regular Expression.
+
 2008-10-28  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/Form.py: Heights of the tabs autofit to contents. Fixes

@@ -86,7 +86,8 @@ other_signals.html \
 other_community.html \
 dev.html \
 dev_debug.html \
-dev_cherokee.conf.html
+dev_cherokee.conf.html \
+dev_issues.html
 
 docmediacssdir = $(docdir)/media/css/
 docmediacss_DATA = \

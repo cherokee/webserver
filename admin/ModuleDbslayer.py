@@ -19,7 +19,8 @@ NOTE_PASSWORD = "Password for the user accessing the database."
 NOTE_DB       = "Optionally specifies a database to connect to."
 
 HELPS = [
-    ('modules_handlers_dbslayer', "MySQL balancing")
+    ('modules_handlers_dbslayer', "MySQL balancing"),
+    ('cookbook_dbslayer', "DB balancig recipe")
 ]
 
 class ModuleDbslayer (ModuleHandler):

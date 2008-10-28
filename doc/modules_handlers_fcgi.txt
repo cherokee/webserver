@@ -44,20 +44,3 @@ handler. The recipe about link:cookbook_php.html[setting up PHP] is a
 good starting point.
 
 image::media/images/admin_handler_fastcgi1.png[FastCGI]
-
-
-Note for developers
-~~~~~~~~~~~~~~~~~~~
-
-There a are two handlers currently  implementing the FastCGI protocol:
-"fcgi" and "fastcgi".
-
-The "fastcgi" module also implements the FastCGI protocol. It is a
-more complete implementation than "fcgi" although it is also more
-complex. Actually, fcgi became the standard choice because the PHP
-interpreter kind of buggy when it has to demultiplex multiple
-requests from the same socket.
-
-The "fastcgi" handler will eventually become the default option
-because it is faster and more standard-compliant. However, at the
-moment "fcgi" is a better option.
