@@ -37,3 +37,10 @@ To download simply use your Subversion client:
 ---------------------------------------------------------------------------
 svn co svn://svn.cherokee-project.com/cherokee/trunk cherokee
 ---------------------------------------------------------------------------
+
+You can also download a package with the latest SVN contents:
+
+---------------------------------------------------------------------------
+wget http://www.cherokee-project.com/download/trunk/cherokee-latest-svn.tar.gz \
+-O - | gzip -dc - | tar xfv -
+---------------------------------------------------------------------------
