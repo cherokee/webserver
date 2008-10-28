@@ -47,6 +47,8 @@ cookbook_authentication.html \
 cookbook_ssl.html \
 cookbook_maintenance.html \
 cookbook_redirs.html \
+cookbook_embedding_cherokee.html \
+cookbook_dbslayer.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -144,6 +146,10 @@ media/images/cookbook_maintenance_advanced_domains.png \
 media/images/cookbook_redir_behavior.png \
 media/images/cookbook_redir_domains.png \
 media/images/cookbook_redir_handler.png \
+media/images/cookbook_dbslayer1.png \
+media/images/cookbook_dbslayer2.png \
+media/images/cookbook_dbslayer3.png \
+media/images/cookbook_dbslayer4.png \
 media/images/tracelor.png
 
 EXTRA_DIST = \

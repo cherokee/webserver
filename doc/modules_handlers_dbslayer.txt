@@ -5,7 +5,7 @@ Handler: MySQL bridge
 
 This handler offers a lightweight database abstraction layer that
 will provide all the benefits of connection pooling. This in turn
-offer scalable advantages for high-load websites.
+offers scalable advantages for high-load websites.
 
 The original implementation of
 link:http://code.nytimes.com/projects/dbslayer/[DBSlayer] was a MySQL

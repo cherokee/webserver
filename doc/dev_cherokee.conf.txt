@@ -65,7 +65,8 @@ server!sendfile_max,              Number         , Maximum file size of using se
 server!max_connection_reuse,      Number         , How many connections to reuse
 server!ipv6,                      Bool           , Whether to use IPv6
 server!timeout,                   Number         , Connections timeout
-server!log_flush_elapse,          Number         , Time between log flushes
+server!log_flush_lapse,           Number         , Time between log flushes
+server!nonces_cleanup_lapse,      Number         , Time between Nonces clean ups
 server!keepalive,                 Bool           , Allow keepalive connections
 server!keepalive_max_requests,    Number         , How many keepalive reqs per connection
 server!unix_socket,               Path           , Listen to a Unix socket

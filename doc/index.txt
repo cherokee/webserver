@@ -51,9 +51,10 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks.
   . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
   . link:cookbook_authentication.html[Authentication]: How to set up authenticated resources.
   . link:cookbook_maintenance.html[Maintenance]: Seamlessly switching to maintenance mode.
-  . link:cookbook_redirs.html[Redirections]: Common redirection examples
+  . link:cookbook_redirs.html[Redirections]: Common redirection examples.
+  . link:cookbook_embedding_cherokee.html[Embedding Cherokee]: Cherokee on embedded devices.
+  . link:cookbook_dbslayer.html[DBSlayer]: How to set up DBSlayer MySQL balancing.
 ////
-  . link:cookbook_embedding_cherokee.html[Embedding Cherokee]
   . link:cookbook_managing_logs.html[Managing logs]
 ////
 
@@ -120,5 +121,5 @@ Remaingin tasks:
 * <7> Development documentation
 * <8> Reference table of functionalities to be achieved (and hopefully
       a full setup example).
-* <9> Cherokee on exotic devices
+* <9> Cherokee on exotic devices: <cookbook_embedding_cherokee.txt>
 ////////////////////////////////////////////////////

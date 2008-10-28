@@ -1,0 +1,191 @@
+= link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: How to set up DBSlayer MySQL balancing
+------------------------------------------------
+
+Introduction:
+~~~~~~~~~~~~~
+
+This recipe is meant to help in the task of setting up and
+understanding DBSlayer. This is a handler used to balance the load
+among several MySQL databases acting as a convenient front end that
+simultaneously offers great scalability advantages. Refer to the
+link:modules_handlers_dbslayer.html[MySQL Bridge handler]
+documentation for the basic information about this subject.
+
+After reading this document you should be able to properly configure
+and understand this handler. It acts as a proxy for the backend MySQL
+server. This proxy can then be queried via JSON over HTTP, and the
+responses can be given in either one of the following supported
+consuming languages: JSON, Ruby, PHP and Python.
+
+Independence:
+~~~~~~~~~~~~~
+
+It is generally a good idea to separate the database balancer from
+your production web server, both for efficiency and security reasons.
+The DBSlayer handler can be configured to run under a directory in
+your current web server, but concentrating the work load on the same
+box is not recommended. Setting up an independent Cherokee server on
+another box or port using only the dbslayer handler in its Default
+rule is a good idea. This will allow having your database balancer
+fully isolated, which is by far much more secure and easy to montior
+and manage.
+
+Keep in mind that each DBSlayer handler can manage a single database
+(or a set of replicated slaves to balance among). Thus you will have
+to set up multiple rules in Cherokee, or even multiple instances in
+diferent ports, in case you need to use several databases.
+
+The handler can be used to perform both read and write operations,
+although the balancing part only makes sense for SELECT
+operations. When performing INSERT operations, keep in mind that DB
+synchronization must be managed elsewhere. Wwhen you perform an
+INSERT, the Cherokee DB balancer will return a tuple indicating
+whether it succeeded or not, the number of rows affected, a rollback
+flag, etc. It will not, however, replicate the operation among each
+one of you MySQL servers. These arrangements must be made
+independently using mechanisms suitable for the task.
+
+Remember that balancing database operations is a powerful scalling
+advantage, but requires some precautions. You must assume the system
+is stateless. It is not much of a limitation, and it enables the
+handler to do connection pooling and database access
+dispatching. MySQL is mostly stateless for the bulk of your queries
+(SELECT / UPDATE / INSERT / DELETE, etc.), but some commands are meant
+to affect future commands in the session or may only affect the server
+currently recieving the command in the balancing scheme. Most notably,
+these are setting global or session variables, configuring database
+access privileges and modifiying the table structure on a master
+without replication.
+
+Also, due to the balancing scheme in place, you should be very careful
+when locking tables or performing transactions. In these cases you
+*MUST* perform all the related operations contained within a single
+query, either using semicolon separators or within a stored
+procedure. Never dispatch them as separate queries, since your
+databases will rapidly become unstable.
+
+Security:
+~~~~~~~~~
+
+As for security concerns, you must keep in mind that the hanlder is
+designed for internal secure networks. If you have concerns about
+exposing your database to the public you will have to properly secure
+your internal network by using firewalling, binding the running
+Cherokee instance to a particular interface, tunellizing your
+connections and so forth.
+
+We strongly recommend never exposing the MySQL bridge to the outside
+world. It is also encouraged to forbid the account used by the handler
+to access the MySQL database from executing dangerous operations like
+dropping tables or deleting rows. Ideally, the account would only be
+allowed to run selects and/or some stored procedures. This is totally
+unrelated to Cherokee and the Database Bridge handler. Using the
+mechanisms provided by MySQL to enforce the integrity of the database
+makes sense.
+
+Modularity:
+~~~~~~~~~~~
+
+The  MySQL bridge does not work alone. It is an integral part of the
+Cherokee web server infrastructure and, like any Cherokee module, it
+can make use of the rest of the features provided by the web server.
+
+Thus, you can use the normal loggers to log database access, you can
+encode the contents served to save bandwidth, you can configure the
+bridge to use any balancing mechanism provided by Cherokee, etc.
+
+This handler effectively proxies the connections to the databases, and
+thus Keep-Alive should always remain enabled in the Cherokee instance
+running the MySQL bridge. Persistence will be correctly handled, and
+the performance will be optimal.
+
+
+Configuration:
+~~~~~~~~~~~~~~
+
+We will configure a simple setup and show a very basic usage example
+so that you can go on from there.
+This example will define an independent virtual server called
+_slayer_ in the same machine that will be running Cherokee, but keep
+in mind what was said above about isolating the boxes and the security
+measures that you should take into account when migrating to a
+production environment.
+
+First, we define the virtual server called 'slayer'. Since we will
+only be using it for database balancing, we can safely point it to an
+empty `Document Root`, in this case `/var/www/fake`.
+
+image::media/images/cookbook_dbslayer1.png[MySQL Bridge, step 1]
+
+The next step will be setting up the sources of the MySQL information.
+This means we will have to configure as many MySQL hosts as we
+like. In this case we will be providing just one, configured in the
+same host. You would normally include all the replicated database
+hosts available in your cluster.
+
+Refer to the link:config_info_sources.html[information sources]
+section for details on how to do this. In this case, the MySQL server
+is running in localhost:3306, so that is what we will use.
+
+image::media/images/cookbook_dbslayer2.png[MySQL Bridge, step 2]
+
+Next is removing every possible rule and configuring the default one
+to use the MySQL bridge handler.
+
+image::media/images/cookbook_dbslayer3.png[MySQL Bridge, step 3]
+
+To do so, simply click on the rule in the `Behavior` tab and proceed
+to the `Handler` section, where you can adjust the following settings.
+
+image::media/images/cookbook_dbslayer4.png[MySQL Bridge, step 4]
+
+After adding the inforation sources to be balanced, and setting up the
+information required to access an existing database, only the matter
+of selecting a language will remain.
+
+In this example we will be using Python because that is what the
+testing script will be written in. If your favorite language of choice
+is not available you can simply select JSON, which is widely supported
+in most programming languages. Using Python in this case will simply
+allow us to directly evaluate the results offered by the database,
+creating a native object that can be managed more confortably.
+
+And these were all the steps required. The following script is
+provided to show how you can use the database balancing. It is as
+simple as it gets.
+
+Example Python script:
+~~~~~~~~~~~~~~~~~~~~~~
+
+--------------------------------------
+#!/usr/bin/env python
+import urllib
+
+sql="select * from my_table;"
+query = urllib.quote(sql)
+
+print 'Original:', sql
+print 'Encoded:',  query
+
+url      = 'http://slayer/%s'%(query)
+response = urllib.urlopen(url)
+
+print 'RESPONSE:', response
+print 'URL     :', response.geturl()
+
+headers = response.info()
+print 'DATE    :', headers['date']
+print 'HEADERS :'
+print '---------'
+print headers
+
+data = response.read()
+print 'LENGTH  :', len(data)
+print 'DATA    :'
+print '---------'
+
+obj  = eval(data)
+print obj['RESULT'].keys()
+--------------------------------------

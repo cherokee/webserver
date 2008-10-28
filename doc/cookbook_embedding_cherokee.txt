@@ -1,0 +1,23 @@
+= link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Cherokee on embedded devices
+--------------------------------------
+
+[elphel]
+Elphel Cameras:
+~~~~~~~~~~~~~~~
+These are network cameras that can provide high-resolution at high
+frame video rates, and the embedded software and FPGA bitstream are
+stored in the camera flash memory and can be updated. The embedded
+software and FPGA hardware algorithms are Free Software, and the
+devices can be configured to run Cherokee.
+
+For information on how to do this, refer to the
+link:http://wiki.elphel.com/index.php?title=Cherokee[Elphel Project
+Wiki].
+
+//////
+TO DO:
+Talk about uCherokee.
+Recolect information about more devices, such as the NSLU2.
+//////

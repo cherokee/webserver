@@ -132,3 +132,13 @@ Well, Cherokee ships our very own
 link:modules_handlers_dbslayer.html[DBSlayer] handler that provides
 the fastest implementation in existence. It also provides several
 interesting enhancements.
+
+The usage of this balancing mechanism is a blessing when you wish to
+scale connection growth against the database layer without replicating
+your databases to every web server. It is also useful when you have
+problems like local connections overwhelming a local slave, local
+slave database failures, or replication failures.
+
+This feature delivers connection pooling, database abstraction to
+enable easier migrations and administration, load balancing and
+automatic failover.

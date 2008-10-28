@@ -78,13 +78,18 @@ Resources
   load for any other moment.
 
 * Log flush time:
-  Time interval in seconds to wait between log updates. Defaults to 10 seconds.
+  Time interval in seconds to wait between log updates. Defaults to 10
+  seconds.
+
+* Nonces clean up time:
+  Time interval in seconds between Nonce cache clean ups. Defaults to
+  60 seconds.
 
 image::media/images/admin_advanced2.png[Cherokee Admin interface]
 
 I/O cache
 ~~~~~~~~~
-* Setting:
+* Status:
   Enabled by default. This is a system-wide setting required if you
   wish to enable caching in any of your virtual hosts. Useful for debugging.
 
