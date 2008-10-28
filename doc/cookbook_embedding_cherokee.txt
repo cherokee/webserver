@@ -1,4 +1,4 @@
-= link:index.html[Index] -> link:cookbook.html[Cookbook]
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
 
 Cookbook: Cherokee on embedded devices
 --------------------------------------
