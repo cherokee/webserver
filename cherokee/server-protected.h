@@ -90,10 +90,10 @@ struct cherokee_server {
 
 	/* Programmed tasks
 	 */
-	int                        log_flush_elapse;
+	int                        log_flush_lapse;
 	time_t                     log_flush_next;
 
-	int                        nonces_cleanup_elapse;
+	int                        nonces_cleanup_lapse;
 	time_t                     nonces_cleanup_next;
 
 	/* Main socket

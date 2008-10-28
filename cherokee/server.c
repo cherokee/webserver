@@ -209,10 +209,10 @@ cherokee_server_new  (cherokee_server_t **srv)
 	/* Programmed tasks
 	 */
 	n->log_flush_next        = 0;
-	n->log_flush_elapse      = LOGGER_FLUSH_ELAPSE;
+	n->log_flush_lapse      = LOGGER_FLUSH_LAPSE;
 
 	n->nonces_cleanup_next   = 0;
-	n->nonces_cleanup_elapse = NONCE_CLEANUP_ELAPSE;
+	n->nonces_cleanup_lapse = NONCE_CLEANUP_LAPSE;
 
 	/* TLS
 	 */
@@ -1203,12 +1203,12 @@ cherokee_server_step (cherokee_server_t *srv)
 	 */
 	if (srv->log_flush_next < cherokee_bogonow_now) {
 		flush_logs (srv);
-		srv->log_flush_next = cherokee_bogonow_now + srv->log_flush_elapse;
+		srv->log_flush_next = cherokee_bogonow_now + srv->log_flush_lapse;
 	}
 	
 	if (srv->nonces_cleanup_next < cherokee_bogonow_now) {
 		cherokee_nonce_table_cleanup (srv->nonces);
-		srv->nonces_cleanup_next = cherokee_bogonow_now + srv->nonces_cleanup_elapse;
+		srv->nonces_cleanup_next = cherokee_bogonow_now + srv->nonces_cleanup_lapse;
 	}
 
 #ifdef _WIN32
@@ -1386,11 +1386,11 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "timeout")) {
 		srv->timeout = atoi (conf->val.buf);
 
-	} else if (equal_buf_str (&conf->key, "log_flush_elapse")) {
-		srv->log_flush_elapse = atoi (conf->val.buf);
+	} else if (equal_buf_str (&conf->key, "log_flush_lapse")) {
+		srv->log_flush_lapse = atoi (conf->val.buf);
 
-	} else if (equal_buf_str (&conf->key, "nonces_cleanup_elapse")) {
-		srv->nonces_cleanup_elapse = atoi (conf->val.buf);
+	} else if (equal_buf_str (&conf->key, "nonces_cleanup_lapse")) {
+		srv->nonces_cleanup_lapse = atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "keepalive")) {
 		srv->keepalive = !!atoi (conf->val.buf);

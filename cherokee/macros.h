@@ -87,7 +87,7 @@
 #define DEFAULT_RECV_SIZE             2048
 #define DEFAULT_READ_SIZE             8192
 #define MAX_HEADER_LEN                4096
-#define MAX_HEADER_CRLF               8 
+#define MAX_HEADER_CRLF               8
 #define MAX_KEEPALIVE                 500
 #define MAX_NEW_CONNECTIONS_PER_STEP  50
 #define DEFAULT_CONN_REUSE            20
@@ -99,14 +99,14 @@
 #define LOGGER_MIN_BUFSIZE            0
 #define DEFAULT_LOGGER_MAX_BUFSIZE    32768
 #define LOGGER_MAX_BUFSIZE            (4 * 1024 * 1024)
-#define LOGGER_FLUSH_ELAPSE           10
+#define LOGGER_FLUSH_LAPSE            10
 #define RESPINS_MAX                   16
 #define SENDFILE_MIN_SIZE             (128 * 1024)   /* 128Kb */
 #define SENDFILE_MAX_SIZE             ((2 << 30) -1) /*   2Gb */
-#define NONCE_CLEANUP_ELAPSE          60
+#define NONCE_CLEANUP_LAPSE           60
 #define NONCE_EXPIRATION              60
 
-#define FD_NUM_SPARE                  10	/* range:  8 - 20 */          
+#define FD_NUM_SPARE                  10	/* range:  8 - 20 */
 #define FD_NUM_MIN_SYSTEM             20	/* range: 16 - 64 */
 #define FD_NUM_MIN_AVAILABLE           8	/* range:  8 ... 65000 */
 #define FD_NUM_MIN_PER_THREAD          8	/* range:  8 ... 65000 */
@@ -115,7 +115,7 @@
 #define EXIT_ERROR                     1
 #define EXIT_OK_ONCE                   2
 
-#if (FD_NUM_MIN_SYSTEM < 16) 
+#if (FD_NUM_MIN_SYSTEM < 16)
 # error FD_NUM_MIN_SYSTEM too low, < 16
 #endif
 #if (FD_NUM_SPARE < 8)

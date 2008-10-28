@@ -14,7 +14,7 @@ DATA_VALIDATION = [
     ('server!panic_action',          (validations.is_local_file_exists, 'cfg')),
     ('server!listen_queue',           validations.is_positive_int),
     ('server!max_connection_reuse',   validations.is_positive_int),
-    ('server!log_flush_elapse',       validations.is_positive_int),
+    ('server!log_flush_lapse',       validations.is_positive_int),
     ('server!keepalive_max_requests', validations.is_positive_int),
     ("server!keepalive$",             validations.is_boolean),
     ("server!thread_number",          validations.is_positive_int),
@@ -43,7 +43,7 @@ NOTE_PID_FILE     = 'Path of the PID file. If empty, the file will not be create
 NOTE_LISTEN_Q     = 'Max. length of the incoming connection queue.'
 NOTE_REUSE_CONNS  = 'Set the number of how many internal connections can be held for reuse by each thread. Default 20.'
 NOTE_FLUSH_TIME   = 'Sets the number of seconds between log consolidations (flushes). Default: 10 seconds.'
-NOTE_NONCES_TIME  = 'Time elapse (in seconds) between Nonce cache clean ups.'
+NOTE_NONCES_TIME  = 'Time lapse (in seconds) between Nonce cache clean ups.'
 NOTE_KEEPALIVE    = 'Enables the server-wide keep-alive support. It increases the performance. It is usually set on.'
 NOTE_KEEPALIVE_RS = 'Maximum number of HTTP requests that can be served by each keepalive connection.'
 NOTE_CHUNKED      = 'Allows the server to use Chunked encoding to try to keep Keep-Alive enabled.'
@@ -91,13 +91,13 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddPropEntry (table, 'File descriptors',       'server!fdlimit',              NOTE_FD_NUM)
         self.AddPropEntry (table, 'Listening queue length', 'server!listen_queue',         NOTE_LISTEN_Q)
         self.AddPropEntry (table, 'Reuse connections',      'server!max_connection_reuse', NOTE_REUSE_CONNS)
-        self.AddPropEntry (table, 'Log flush time',         'server!log_flush_elapse',     NOTE_FLUSH_TIME)
-        self.AddPropEntry (table, 'Nonces clean up time',   'server!nonces_cleanup_elapse',NOTE_NONCES_TIME)
+        self.AddPropEntry (table, 'Log flush time',         'server!log_flush_lapse',     NOTE_FLUSH_TIME)
+        self.AddPropEntry (table, 'Nonces clean up time',   'server!nonces_cleanup_lapse',NOTE_NONCES_TIME)
         return self.Indent(table)
 
     def _render_iocache (self):
         table = TableProps()
-        self.AddPropCheck (table, 'Enabled',       'server!iocache', True,         NOTE_IO_ENABLED)
+        self.AddPropCheck (table, 'Status',        'server!iocache', True,         NOTE_IO_ENABLED)
         self.AddPropEntry (table, 'Max pages',     'server!iocache!max_size',      NOTE_IO_SIZE)
         self.AddPropEntry (table, 'File Min Size', 'server!iocache!min_file_size', NOTE_IO_MIN_SIZE)
         self.AddPropEntry (table, 'File Max Size', 'server!iocache!max_file_size', NOTE_IO_MAX_SIZE)

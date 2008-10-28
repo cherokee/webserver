@@ -189,7 +189,7 @@ table_add_row_int (cherokee_buffer_t *buf, char *name, int value)
 static void
 add_uptime_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 {
-	unsigned int elapse = cherokee_bogonow_now - srv->start_time;
+	unsigned int lapse = cherokee_bogonow_now - srv->start_time;
 	unsigned int days;
 	unsigned int hours;
 	unsigned int mins;
@@ -197,26 +197,26 @@ add_uptime_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	cherokee_buffer_t *tmp;
 	cherokee_buffer_new (&tmp);
 
-	days = elapse / (60*60*24);
-	elapse %= (60*60*24);
+	days = lapse / (60*60*24);
+	lapse %= (60*60*24);
 
-	hours = elapse / (60*60);
-	elapse %= (60*60);
+	hours = lapse / (60*60);
+	lapse %= (60*60);
 
-	mins = elapse / 60;
-	elapse %= 60;
+	mins = lapse / 60;
+	lapse %= 60;
 
 	if (days > 0) {
 		cherokee_buffer_add_va (tmp, "%d Day%s, %d Hour%s, %d Minute%s, %d Seconds", 
-					days, days>1?"s":"", hours, hours>1?"s":"", mins, mins>1?"s":"", elapse);
+					days, days>1?"s":"", hours, hours>1?"s":"", mins, mins>1?"s":"", lapse);
 	} else if (hours > 0) {
 		cherokee_buffer_add_va (tmp, "%d Hour%s, %d Minute%s, %d Seconds", 
-					hours, hours>1?"s":"", mins, mins>1?"s":"", elapse);
+					hours, hours>1?"s":"", mins, mins>1?"s":"", lapse);
 	} else if (mins > 0) {
 		cherokee_buffer_add_va (tmp, "%d Minute%s, %d Seconds", 
-					mins, mins>1?"s":"", elapse);
+					mins, mins>1?"s":"", lapse);
 	} else {
-		cherokee_buffer_add_va (tmp, "%d Seconds", elapse);
+		cherokee_buffer_add_va (tmp, "%d Seconds", lapse);
 	}
 
 	table_add_row_str (buf, "Uptime", tmp->buf);
