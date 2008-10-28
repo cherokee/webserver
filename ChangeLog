@@ -15,6 +15,10 @@
 
 2008-10-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageAdvanced.py: Adds a new entry for the "Nonce cache
+	clean up elalse time". It allows to define the elapse between
+	nonce cache clean ups.
+
 	* cherokee/main_admin.c: Adds a new parameter -u
 	(or --unsecure).  It allows the execute cherokee-admin without
 	requiring the user to authenticate. This is a developers feature,

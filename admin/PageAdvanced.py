@@ -43,6 +43,7 @@ NOTE_PID_FILE     = 'Path of the PID file. If empty, the file will not be create
 NOTE_LISTEN_Q     = 'Max. length of the incoming connection queue.'
 NOTE_REUSE_CONNS  = 'Set the number of how many internal connections can be held for reuse by each thread. Default 20.'
 NOTE_FLUSH_TIME   = 'Sets the number of seconds between log consolidations (flushes). Default: 10 seconds.'
+NOTE_NONCES_TIME  = 'Time elapse (in seconds) between Nonce cache clean ups.'
 NOTE_KEEPALIVE    = 'Enables the server-wide keep-alive support. It increases the performance. It is usually set on.'
 NOTE_KEEPALIVE_RS = 'Maximum number of HTTP requests that can be served by each keepalive connection.'
 NOTE_CHUNKED      = 'Allows the server to use Chunked encoding to try to keep Keep-Alive enabled.'
@@ -52,8 +53,6 @@ NOTE_IO_MIN_SIZE  = 'Files under this size will not be cached.'
 NOTE_IO_MAX_SIZE  = 'Files over this size will not be cached.'
 NOTE_IO_LAST_STAT = 'How long the file information should last cached without refreshing it.'
 NOTE_IO_LAST_MMAP = 'How long the file content should last cached.'
-
-#NOTE_IOCACHE      = 'Enable the server wide use of the I/O caching layer.'
 
 HELPS = [('config_advanced', "Advanced")]
 
@@ -93,6 +92,7 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddPropEntry (table, 'Listening queue length', 'server!listen_queue',         NOTE_LISTEN_Q)
         self.AddPropEntry (table, 'Reuse connections',      'server!max_connection_reuse', NOTE_REUSE_CONNS)
         self.AddPropEntry (table, 'Log flush time',         'server!log_flush_elapse',     NOTE_FLUSH_TIME)
+        self.AddPropEntry (table, 'Nonces clean up time',   'server!nonces_cleanup_elapse',NOTE_NONCES_TIME)
         return self.Indent(table)
 
     def _render_iocache (self):
