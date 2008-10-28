@@ -143,7 +143,6 @@ class FormHelper (WebComponent):
         txt += '''
         <script type="text/javascript">
           var settings = {
-             autoheight: true,
              alwaysOpen: true,
              animated:   false
           };
