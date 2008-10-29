@@ -56,15 +56,15 @@ Access Restrictions
 * Only https::
   This configuration entry determines that the directory will be
   served by the secure server (*https*) only.
-  If you access directory /admin or any sub-directory, throught
+  If you access directory /admin -or any sub-directory- throught a
   non-secure connection Cherokee will report a *426 Upgrade Required
   error*.
 
 * Allow From::
-  This parameter lets you set up rules form allow access to the
-  directory contents to some IP or IP ranges. The remote client IP
-  will be checked with all the provided list and only if the IP
-  matches with some of the rules the access will be allowed.
+  This parameter lets you set up wich IP or IP ranges will be allowed
+  to access the directory contents . The remote client IP will be
+  checked with all the provided list and only if the IP matches with
+  some of the rules the access will be allowed.
 
   This field accepts a comma separated list of *Host names*, *IP
   addresses* or *IP ranges*. In the last two cases, both IPv4 and IPv6

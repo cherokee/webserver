@@ -146,7 +146,7 @@ presented, containig several fields of information:
 
   . *Target*: web target of the rule, be it a path, a file type, etc.
 
-  . *Type*: Rule type. The will be explained in the following
+  . *Type*: Rule type. These will be explained in the following
     paragraphs.
 
   . *Handler*: The handler that manages the requests that match this
@@ -199,6 +199,10 @@ rule types:
       usage of proxies on the user side will render this resolution
       mechanism inaccurate. An initial country must be added to the
       rule, and more selections can be added in further steps.
+
+  * **File Exists**: This type of rule will only be applied if a
+      certain file (or a file among a list of provided file names) is
+      present.
 
 It is very important to know that these rules are prioritized. The
 higher its priority is, the sooner they are checked. You could

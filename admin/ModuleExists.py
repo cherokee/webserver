@@ -3,7 +3,7 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_EXISTS = "File list to which -if present- content the configuration will be applied."
+NOTE_EXISTS = "Comma separated list of files to be checked. If one exists, the rule will be applied."
 
 class ModuleExists (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
@@ -19,7 +19,7 @@ class ModuleExists (Module, FormHelper):
         else:
             self.AddPropEntry (table, 'Files', '%s!exists'%(self._prefix), NOTE_EXISTS)
         return str(table)
-        
+
     def _op_apply_changes (self, uri, post):
         self.ApplyChangesPrefix (self._prefix, None, post)
 
