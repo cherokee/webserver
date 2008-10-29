@@ -1,3 +1,8 @@
+2008-10-29  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* contrib/09to010.py, contrib/Makefile.am: Added new configuration
+	file converter: Cherokee 0.9.x to Cherokee 0.10.x.
+
 2008-10-28  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/ModuleRedir.py: fixes bug that prevented having an empty
