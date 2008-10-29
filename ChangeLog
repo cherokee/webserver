@@ -1,5 +1,9 @@
 2008-10-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleAuthlist.py, admin/consts.py: A new Cherokee admin
+	module has been added to reflect the functionality of the new
+	AuthList validator.
+
 	* contrib/09to010.py, contrib/Makefile.am: Added new configuration
 	file converter: Cherokee 0.9.x to Cherokee 0.10.x.
 

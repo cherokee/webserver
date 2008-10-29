@@ -27,7 +27,8 @@ VALIDATORS = [
     ('htdigest', 'Htdigest file'),
     ('ldap',     'LDAP server'),
     ('mysql',    'MySQL server'),
-    ('pam',      'PAM')
+    ('pam',      'PAM'),
+    ('authlist', 'Fixed list')
 ]
 
 VALIDATOR_METHODS = [
