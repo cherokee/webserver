@@ -72,6 +72,11 @@ administration tool, so you will need system administrator rights.
 
 ----
 # cherokee-admin
+
+Login:
+  User:              admin
+  One-time Password: 72O3GRxZfTrE2zHx
+
 Cherokee Web Server 0.10.0 (Oct 27 2008): Listening on port 9090, TLS disabled,
 IPv6 disabled, using epoll, 1024 fds system limit, max. 505 connections,
 single thread
@@ -79,6 +84,10 @@ single thread
 
 Now you can access the administration interface simply by opening your
 web browser and visiting link:http://localhost:9090[http://localhost:9090]
+
+The User and One-time Password will be required initially. This is to
+prevent other users of the local host from being able to configure the
+server unless they have access to the password.
 
 If your user doesn't have enough privileges you will be notified. Also
 if no configuration file exists you will be prompted to create one
