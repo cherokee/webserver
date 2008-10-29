@@ -99,7 +99,7 @@ ERROR_CODES = [
     ('501', '501 Not Implemented'),
     ('502', '502 Bad gateway'),
     ('503', '503 Service Unavailable'),
-    ('504', '504 Gatewat Timeout'),
+    ('504', '504 Gateway Timeout'),
     ('505', '505 HTTP Version Not Supported')
 ]
 

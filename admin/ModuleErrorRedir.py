@@ -19,7 +19,7 @@ class ModuleErrorRedir (Module, FormHelper):
 
     def _op_render (self):
         txt = ''
-        
+
         # Render error list
         errors = self._cfg[self._prefix]
         if errors and errors.has_child():
