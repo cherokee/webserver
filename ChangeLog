@@ -1,5 +1,11 @@
 2008-10-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_common.c: Converted to use the new
+	cherokee_io_stat() function.
+
+	* cherokee/util.c (cherokee_io_stat), cherokee/util.h: Adds a new
+	commodity function.
+
 	* cherokee/cherokee.h, cherokee/iocache.h, cherokee/Makefile.am:
 	Adds the I/O-cache API to the public interface.
 

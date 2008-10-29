@@ -1500,3 +1500,62 @@ cherokee_iovec_was_sent (struct iovec *orig, uint16_t orig_len, size_t sent)
 	
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_io_stat (cherokee_iocache_t        *iocache, 
+		  cherokee_buffer_t         *path, 
+		  cherokee_boolean_t         useit, 
+		  struct stat               *nocache_info, 
+		  cherokee_iocache_entry_t **io_entry,
+		  struct stat              **info)
+{
+	ret_t ret;
+	int   re  = -1;
+
+	/* I/O cache
+	 */
+	if (useit) {
+		ret = cherokee_iocache_autoget (iocache, path, iocache_stat, io_entry);
+		TRACE (ENTRIES, "%s, use_iocache=1 ret=%d\n", path->buf, ret);
+
+		switch (ret) {
+		case ret_ok:
+		case ret_ok_and_sent:
+			*info = &(*io_entry)->state;
+			return ret_ok;
+
+		case ret_no_sys:
+			goto without;
+
+		case ret_deny:
+		case ret_not_found:
+			return ret;
+		default:
+			return ret_error;
+		}
+	}
+
+	/* Without cache
+	 */
+without:
+	re = cherokee_stat (path->buf, nocache_info);
+	TRACE (ENTRIES, "%s, use_iocache=0 re=%d\n", path->buf, re);
+
+	if (re >= 0) {
+		*info = nocache_info;
+		return ret_ok;
+	}
+	
+	switch (errno) {
+	case ENOENT: 
+	case ENOTDIR:
+		return ret_not_found;
+	case EACCES: 
+		return ret_deny;
+	default:
+		return ret_error;
+	}
+
+	return ret_error;
+}

@@ -55,6 +55,7 @@
 #include <errno.h>
 
 #include <cherokee/buffer.h>
+#include <cherokee/iocache.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -108,6 +109,13 @@ ret_t cherokee_getpwnam      (const char *name, struct passwd *pwbuf, char *buf,
 ret_t cherokee_getgrnam      (const char *name, struct group *pwbuf, char *buf, size_t buflen);
 ret_t cherokee_mkstemp       (cherokee_buffer_t *buffer, int *fd);
 ret_t cherokee_mkdir_p       (cherokee_buffer_t *path);
+
+ret_t cherokee_io_stat       (cherokee_iocache_t        *iocache, 
+			      cherokee_buffer_t         *path, 
+			      cherokee_boolean_t         useit, 
+			      struct stat               *info_space, 
+			      cherokee_iocache_entry_t **io_entry,
+			      struct stat              **info);
 
 /* File descriptors
  */
