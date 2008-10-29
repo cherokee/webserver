@@ -183,7 +183,10 @@ run-tests.py \
 175-Digest-htdigest-2.py \
 176-AuthLista1.py \
 177-AuthLista2.py \
-178-AuthLista3.py
+178-AuthLista3.py \
+179-RuleExists.py \
+180-RuleExists2.py \
+181-RuleExists3.py
 
 test:
 	./run-tests.py

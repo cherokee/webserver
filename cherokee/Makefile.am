@@ -167,6 +167,23 @@ endif
 
 
 #
+# Rule exists
+#
+rule_exists = \
+rule_exists.c \
+rule_exists.h
+
+libplugin_exists_la_LDFLAGS = $(module_ldflags)  
+libplugin_exists_la_SOURCES = $(rule_exists)
+
+if STATIC_RULE_EXISTS
+static_rule_exists_src = $(rule_exists)
+else
+dynamic_rule_exists_lib = libplugin_exists.la
+endif
+
+
+#
 # Rule geoip
 #
 if HAVE_GEOIP
@@ -1039,6 +1056,7 @@ $(static_rule_directory_src) \
 $(static_rule_extensions_src) \
 $(static_rule_request_src) \
 $(static_rule_header_src) \
+$(static_rule_exists_src) \
 $(static_rule_geoip_src) \
 $(static_rule_not_src) \
 $(static_rule_and_src) \
@@ -1196,6 +1214,7 @@ $(dynamic_rule_directory_lib) \
 $(dynamic_rule_extensions_lib) \
 $(dynamic_rule_request_lib) \
 $(dynamic_rule_header_lib) \
+$(dynamic_rule_exists_lib) \
 $(dynamic_rule_geoip_lib) \
 $(dynamic_rule_not_lib) \
 $(dynamic_rule_and_lib) \

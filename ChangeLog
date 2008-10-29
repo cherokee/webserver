@@ -1,5 +1,13 @@
 2008-10-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/rule_exists.h, cherokee/rule_exists.c, configure.in,
+	cherokee/Makefile.am: A new rule for checking whether a file
+	exists or not has been adeed.
+
+	* qa/179-RuleExists.py, qa/180-RuleExists2.py,
+	qa/181-RuleExists3.py, qa/Makefile.am (EXTRA_DIST): Added three
+	new QA tests to check the Exists rule.
+
 	* qa/176-AuthLista1.py, qa/177-AuthLista2.py,
 	qa/178-AuthLista3.py: Added three new QA tests that test the new
 	AuthList validator.

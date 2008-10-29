@@ -1515,7 +1515,9 @@ cherokee_io_stat (cherokee_iocache_t        *iocache,
 
 	/* I/O cache
 	 */
-	if (useit) {
+	if ((useit) &&
+	    (iocache != NULL))
+	{
 		ret = cherokee_iocache_autoget (iocache, path, iocache_stat, io_entry);
 		TRACE (ENTRIES, "%s, use_iocache=1 ret=%d\n", path->buf, ret);
 
