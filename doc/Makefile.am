@@ -79,6 +79,7 @@ modules_validators_ldap.html \
 modules_validators_mysql.html \
 modules_validators_pam.html \
 modules_validators_plain.html \
+modules_validators_authlist.html \
 other.html \
 other_faq.html \
 other_goodies.html \

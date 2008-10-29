@@ -1,0 +1,24 @@
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_validators.html[Validators]
+
+Validator: Fixed list
+~~~~~~~~~~~~~~~~~~~~~
+
+The `Fixed list` validator, also known as `Authlist`, uses fixed
+authentication lists of user-password pairs. As many pairs as needed
+can be provided.
+
+Parameters
+^^^^^^^^^^
+
+[grid="rows"]
+`~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameter        , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+__user__         , Required. The location of the user/pass file.
+__password__     , Required. The location of the user/pass file.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Compatibility
+^^^^^^^^^^^^^
+
+This validator is compatible with both **basic** and **digest** schemes.

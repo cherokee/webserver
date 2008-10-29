@@ -101,38 +101,55 @@ thus Keep-Alive should always remain enabled in the Cherokee instance
 running the MySQL bridge. Persistence will be correctly handled, and
 the performance will be optimal.
 
+Replication:
+~~~~~~~~~~~~
+
+Odds are you want to use a M-M set-up, although that's entirely
+related to your database architecture and is something you'll have to
+study carefully.
+
+Remember what was said before: The MySQL bridge handler will not
+manage the replication among each one of you MySQL servers. These
+arrangements must be made independently using mechanisms suitable for
+the task.
+
 
 Configuration:
 ~~~~~~~~~~~~~~
 
 We will configure a simple setup and show a very basic usage example
-so that you can go on from there.
-This example will define an independent virtual server called
-_slayer_ in the same machine that will be running Cherokee, but keep
-in mind what was said above about isolating the boxes and the security
+so that you can go on from there.  This example will use a dedicated
+box running the Cherokee server with the MySQL bridge handler, and
+will be balancing the load among a couple of independent MySQL servers
+that are replicating the database in a master-master scheme. You could
+use only one machine to do all the tasks, run the database and
+Cherokee managing web pages and the MySQL bridge, but keep in mind
+what was said above about isolating the boxes and the security
 measures that you should take into account when migrating to a
-production environment.
+production environment. Isolation is generally a good idea.
 
-First, we define the virtual server called 'slayer'. Since we will
-only be using it for database balancing, we can safely point it to an
-empty `Document Root`, in this case `/var/www/fake`.
+First, we edit the `default` virtual server. Since we will only be
+using it for database balancing, we can safely point it to an empty
+`Document Root`, in this case `/var/www/fake`.
 
 image::media/images/cookbook_dbslayer1.png[MySQL Bridge, step 1]
 
 The next step will be setting up the sources of the MySQL information.
-This means we will have to configure as many MySQL hosts as we
-like. In this case we will be providing just one, configured in the
-same host. You would normally include all the replicated database
-hosts available in your cluster.
+This means we will have to configure as many MySQL hosts as we like,
+and the handler will balance the load among them.  In this case we
+will be providing a couple of hosts, each one located in our secure
+intranet.
 
 Refer to the link:config_info_sources.html[information sources]
-section for details on how to do this. In this case, the MySQL server
-is running in localhost:3306, so that is what we will use.
+section for details on how to do this. In this case, the MySQL servers
+are running in on port 3306 of the hosts 10.0.0.100 and 10.0.0.101, so
+that is what we will use.
 
 image::media/images/cookbook_dbslayer2.png[MySQL Bridge, step 2]
 
 Next is removing every possible rule and configuring the default one
-to use the MySQL bridge handler.
+to use the MySQL bridge handler. This is not required, but obeys the
+recommendations stated above.
 
 image::media/images/cookbook_dbslayer3.png[MySQL Bridge, step 3]
 
@@ -152,12 +169,15 @@ in most programming languages. Using Python in this case will simply
 allow us to directly evaluate the results offered by the database,
 creating a native object that can be managed more comfortably.
 
-And these were all the steps required. The following script is
-provided to show how you can use the database balancing. It is as
-simple as it gets.
+And these were all the steps required. You are ready to go!
 
 Example Python script:
 ~~~~~~~~~~~~~~~~~~~~~~
+
+The following script is provided to show how you can use the database
+balancing. It is as simple as it gets. You will only have to change
+the server name and prepare a database accessible with the parameters
+detailed above (database name, user parameters and so on).
 
 --------------------------------------
 #!/usr/bin/env python
@@ -169,7 +189,7 @@ query = urllib.quote(sql)
 print 'Original:', sql
 print 'Encoded:',  query
 
-url      = 'http://slayer/%s'%(query)
+url      = 'http://cherokee_server/%s'%(query)
 response = urllib.urlopen(url)
 
 print 'RESPONSE:', response

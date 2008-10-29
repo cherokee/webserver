@@ -10,7 +10,8 @@
 2008-10-28  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/ModuleRedir.py: fixes bug that prevented having an empty
-	Regular Expression.
+	Regular Expression (which should be
+	allowed). http://code.google.com/p/cherokee/issues/detail?id=168
 
 2008-10-28  Antonio Perez  <aperez@skarcha.com>
 

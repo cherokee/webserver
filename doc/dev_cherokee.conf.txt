@@ -319,6 +319,16 @@ auth!tls     , Bool    , Indicates TLS based integrity
 auth!ca_file , String  , Cert file. Must be provided if TLS is enabled.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.authlist
+[grid="rows"]
+`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Key**             , **Type** , **Description**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+auth                , String   , name of the validator module: authlist
+auth!list!#!password, String   , Password for entry number #
+auth!list!#!user,     String   , User for entry number #
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Here are a few examples about how this notation works:
 
 - The default virtual server uses the "common" handler as default

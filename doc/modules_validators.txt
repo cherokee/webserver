@@ -45,6 +45,7 @@ This is the list of validator modules provided by Cherokee:
 * link:modules_validators_mysql.html[MySQL]
 * link:modules_validators_pam.html[PAM]
 * link:modules_validators_plain.html[Plain]
+* link:modules_validators_authlist.html[Fixed list]
 
 When you set up an authentication mechanism you must remember this:
 define a rule, configure its *security* section, adjust the priority
