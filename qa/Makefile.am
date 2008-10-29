@@ -180,7 +180,10 @@ run-tests.py \
 172-Chunked-CGI.py \
 173-Chunked-SCGI.py \
 174-Respins-Limit.py \
-175-Digest-htdigest-2.py
+175-Digest-htdigest-2.py \
+176-AuthLista1.py \
+177-AuthLista2.py \
+178-AuthLista3.py
 
 test:
 	./run-tests.py

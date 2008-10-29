@@ -1,5 +1,9 @@
 2008-10-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/176-AuthLista1.py, qa/177-AuthLista2.py,
+	qa/178-AuthLista3.py: Added three new QA tests that test the new
+	AuthList validator.
+
 	* cherokee/handler_common.c: Converted to use the new
 	cherokee_io_stat() function.
 
