@@ -4,7 +4,7 @@ Cherokee Bundle: cherokee-worker
 --------------------------------
 
 This is the main Cherokee program. It can be launched in several ways
-as shown in the section link:basics_running_cherokee.txt[Running
+as shown in the section link:basics_running_cherokee.html[Running
 Cherokee]. Unless specified otherwise, `cherokee-worker` will try to
 run with the configuration present in your default
 link:dev_cherokee.conf.html[cherokee.conf] file.
