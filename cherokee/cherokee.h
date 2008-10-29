@@ -47,6 +47,7 @@
 #include <cherokee/avl.h>
 #include <cherokee/trace.h>
 #include <cherokee/cache.h>
+#include <cherokee/iocache.h>
 
 /* Server library
  */

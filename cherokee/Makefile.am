@@ -1162,6 +1162,7 @@ post.h \
 trace.h \
 avl.h \
 cache.h \
+iocache.h \
 \
 config_node.h \
 config_entry.h \

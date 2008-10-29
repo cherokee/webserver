@@ -1,5 +1,8 @@
 2008-10-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/cherokee.h, cherokee/iocache.h, cherokee/Makefile.am:
+	Adds the I/O-cache API to the public interface.
+
 	* 0.10.0 released
 
 	* admin/ModuleAuthlist.py, admin/consts.py: A new Cherokee admin
