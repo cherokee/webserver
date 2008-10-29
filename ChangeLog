@@ -1,5 +1,8 @@
 2008-10-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/consts.py, admin/ModuleExists.py, admin/Makefile.am: Adds
+	support for the new rule type: "If file exists".
+
 	* cherokee/rule_exists.h, cherokee/rule_exists.c, configure.in,
 	cherokee/Makefile.am: A new rule for checking whether a file
 	exists or not has been adeed.
