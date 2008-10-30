@@ -14,9 +14,12 @@ Parameters
 `~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Parameter        , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-__user__         , Required. The location of the user/pass file.
-__password__     , Required. The location of the user/pass file.
+__user__         , Required. Username.
+__password__     , Required. Password.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The parameters can be repeated, but must be provided in user-password
+pairs.
 
 Compatibility
 ^^^^^^^^^^^^^

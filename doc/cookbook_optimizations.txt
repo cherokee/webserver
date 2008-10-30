@@ -114,7 +114,7 @@ Advanced::
 +
 * *IO Cache*: This setting allows to enable or diasable server-wide
   the content caching. If disabled, the _IO Cache_ settings of the
-  static content handlers will also be diabled, no matter what
+  static content handlers will also be disabled, no matter what
   behavior is desired in their specific configuration. This global
   setting is essential if you are trying to debug a cache-related
   bug in your server's configuration.
