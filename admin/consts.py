@@ -108,7 +108,7 @@ RULES = [
     ('extensions', 'Extensions'),
     ('request',    'Regular Expression'),
     ('header',     'Header'),
-    ('exists',     'File exits'),
+    ('exists',     'File exists'),
     ('geoip',      'GeoIP')
 ]
 

@@ -58,3 +58,7 @@ tbody td
 .date {
 	font-family: "mono", "Courier New", "Courier";
 }
+
+.size {
+    text-align: right;
+}

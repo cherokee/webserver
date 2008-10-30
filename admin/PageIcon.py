@@ -74,7 +74,7 @@ class PageIcon (PageMenu, FormHelper):
         # Check selected
         if not selected:
             selected = self._cfg.get_val(cfg_key)
-            
+
         # Build the options
         if selected:
             options = EntryOptions (cfg_key, file_options, 
@@ -100,14 +100,14 @@ class PageIcon (PageMenu, FormHelper):
         remote_file = os.path.join ('/icons_local', icon_name)
         return '<div id="image_%s"><img src="%s" /></div>' % (cfg_key, remote_file)
 
-    def _render_icon_list (self):        
+    def _render_icon_list (self):
         # Include its JavaScript file
         #
         txt  = '<script src="/static/js/icons.js" type="text/javascript"></script>'
         txt += "<h1>Icons configuration</h1>"
 
         tabs = []
-        
+
         # Suffixes
         #
         icons = self._cfg['icons!suffix']
@@ -132,7 +132,7 @@ class PageIcon (PageMenu, FormHelper):
 
         # New suffix
         fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False, auto=False)
-        op1, im1 = self._get_options_icons ('suffix_new_file', 
+        op1, im1 = self._get_options_icons ('suffix_new_file',
                                             self._filter_icons_in_suffixes)
         en2 = self.InstanceEntry('suffix_new_exts', 'text')
         ta1 = Table (4,1)
@@ -161,7 +161,7 @@ class PageIcon (PageMenu, FormHelper):
         tmp += self.Indent(table)
 
         tabs += [('Special Icons', tmp)]
-        
+
         # Files
         #
         icons = self._cfg['icons!file']
