@@ -67,6 +67,7 @@ ModuleDbslayer.py \
 ModuleErrorNn.py \
 ModuleErrorRedir.py \
 ModuleAuth.py \
+ModuleAuthlist.py \
 ModuleAdmin.py \
 ModuleHtdigest.py \
 ModuleLdap.py \

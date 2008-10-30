@@ -1,3 +1,9 @@
+2008-10-29  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/Makefile.am: we missed installing a file for the new
+	Authlist handler. Credit to Antonio Perez <aperez@skarcha.com>.
+	http://code.google.com/p/cherokee/issues/detail?id=176
+
 2008-10-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/consts.py, admin/ModuleExists.py, admin/Makefile.am: Adds
