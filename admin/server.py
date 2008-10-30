@@ -98,6 +98,21 @@ class Handler(pyscgi.SCGIHandler):
                 page = PageVServer(cfg)
         elif uri.startswith('/source'):
             page = PageInfoSource(cfg)
+        elif uri.startswith('/apply_ajax'):
+            self.handle_post()
+            post = Post(self.post)
+            post_restart = post.get_val('restart')
+
+            manager = cherokee_management_get (cfg)
+            manager.save (restart = post_restart)
+            cherokee_management_reset()
+
+            body = "Configuration saved."
+            if post_restart == 'graceful':
+                body += ' Server gracefuly restarted.'
+            elif post_restart == 'hard':
+                body += ' Server hard restarted.'
+
         elif uri.startswith('/apply'):
             self.handle_post()
             post = Post(self.post)

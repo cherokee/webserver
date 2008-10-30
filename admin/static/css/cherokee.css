@@ -43,6 +43,18 @@ body {
     padding: 1.5em 1em;
 }
 
+#save_changes_msg {
+	display: none;
+	padding: 15px 10px;
+	margin: 0px 0px 5px;
+	background-color: #ffc7c7;
+	color: #000;
+	border-top: 1px solid #b00;
+	border-bottom: 1px solid #b00;
+	font-weight: bold;
+	text-align: center;
+}
+
 #nav {
 }
 

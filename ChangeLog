@@ -1,4 +1,10 @@
-2008-10-29  Taher Shihadeh  <taher@unixwars.com>
+2008-10-30  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/server.py, admin/Page.py, admin/static/css/cherokee.css,
+	admin/static/js/common.js: Config changes now use AJAX.
+	http://code.google.com/p/cherokee/issues/detail?id=162
+
+2008-10-30  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Makefile.am: we missed installing a file for the new
 	Authlist handler. Credit to Antonio Perez <aperez@skarcha.com>.

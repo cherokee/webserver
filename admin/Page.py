@@ -11,6 +11,7 @@ PAGE_BASIC_LAYOUT = """
 	   <div id="version">Version: %(version)s</div>
         </div>
         <div id="workarea"><div id="workarea-inner">
+          <div id="save_changes_msg"></div>
         %(content)s
         </div></div>
     </div>
@@ -25,6 +26,7 @@ PAGE_MENU_LAYOUT = """
             %(menu)s
         </div>
         <div id="workarea"><div id="workarea-inner">
+          <div id="save_changes_msg"></div>
         %(content)s
         </div></div>
     </div>
@@ -60,7 +62,7 @@ PAGE_MENU_MENU = """
  %(menu_save_dropdown)s
 
  <div style="float: center; padding-top: 4px;">
-  <a class="button" href="#" onclick="this.blur(); $('#form-apply').submit(); return false;"><span>Save</span></a>
+  <a class="button" href="#" onclick="javascript: save_config()"><span>Save</span></a>
  </div>
 </form>
 
@@ -71,7 +73,7 @@ PAGE_MENU_MENU = """
 
 MENU_SAVE_IS_ALIVE = """
   <div style="padding-top: 2px;">
-    <select name="restart">
+    <select name="restart" id="restart">
       <option value="graceful">Graceful restart</option>
       <option value="hard">Hard restart</option>
       <option value="no">Do not restart</option>

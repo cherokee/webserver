@@ -94,6 +94,19 @@ function options_changed (url, options_id, parent_id)
 	   );
 }
 
+function save_config()
+{
+	var post = "restart=" + $("#restart").val();
+
+	jQuery.post("/apply_ajax", post,
+		function (data, textStatus) {
+			$("#save_changes_msg").html(data);
+			$("#save_changes_msg").fadeIn("slow");
+			setTimeout('$("#save_changes_msg").fadeOut("slow")', 5000);
+		}
+	);
+}
+
 function toggle_help()
 {
     if ($("#help-contents").is(":hidden")) {
