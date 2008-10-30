@@ -23,14 +23,14 @@ __.org__ variations.
 
 image::media/images/cookbook_redir_domains.png[Managed domains]
 
-The official name name would then be managed by another virtual host
+The official name would then be managed by another virtual host
 (just for __example.net__). The `redir` virtual host will have a
 `Default` managed by the `Redirection` handler.
 
 image::media/images/cookbook_redir_behavior.png[Unique rule]
 
-This in turn would define an *external redirection* with a *Regular
-Expression* like __^/(.*)$__ and the apropriate *Substitution*:
+This in turn would define an _external redirection_ with a _Regular
+Expression_ like __^/(.*)$__ and the apropriate _Substitution_:
 http://example.net/$1
 
 image::media/images/cookbook_redir_handler.png[Handler configuration]
