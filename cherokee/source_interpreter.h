@@ -38,6 +38,7 @@ typedef struct {
 	char              **custom_env;
 	cuint_t             custom_env_len;
 	cherokee_boolean_t  debug;
+	pid_t               pid;
 
 	CHEROKEE_MUTEX_T   (launching_mutex);
 	cherokee_boolean_t  launching;

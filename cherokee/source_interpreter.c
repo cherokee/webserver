@@ -31,6 +31,7 @@
 
 #include <sys/types.h>
 #include <unistd.h>
+#include <signal.h>
 
 
 #define ENTRIES "source,src,interpreter"
@@ -49,6 +50,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	n->custom_env     = NULL;
 	n->custom_env_len = 0;
 	n->debug          = false;
+	n->pid            = 0;
 
 	SOURCE(n)->type   = source_interpreter;
 	SOURCE(n)->free   = (cherokee_func_free_t)interpreter_free;
@@ -84,6 +86,10 @@ interpreter_free (void *ptr)
 	 * cherokee_source_t.
 	 */
 	cherokee_buffer_mrproper (&src->interpreter);
+
+	if (src->pid > 0) {
+		kill (src->pid, SIGTERM);
+	}
 
 	if (src->custom_env)
 		free_custom_env (src);
@@ -205,6 +211,13 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 	if (cherokee_buffer_is_empty (&src->interpreter)) 
 		return ret_not_found;
 
+	/* If there is a previous instance running, kill it
+	 */
+	if (src->pid > 0) {
+		kill (src->pid, SIGTERM);
+		src->pid = 0;
+	}
+
 	/* Maybe set a custom enviroment variable set 
 	 */
 	envp = (src->custom_env) ? src->custom_env : empty_envp;
@@ -255,6 +268,8 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 		goto error;
 		
 	default:
+		src->pid = child;
+
 		sleep (1);
 		break;
 		

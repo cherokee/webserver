@@ -1,3 +1,11 @@
+2008-10-31  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/source_interpreter.c: From now on, Cherokee will kill
+	all the sources that are lauched during its life time. Original
+	patch by Stefan de Konink <stefan@konink.de> (thanks! Great
+	job). I have also added a new check to ensure that, in case a
+	interpreter is re-launched, the old source is killed as well.
+
 2008-10-31  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/PageInfoSource.py: The last source in a rule cannot be
