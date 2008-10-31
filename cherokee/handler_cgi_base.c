@@ -385,6 +385,10 @@ cherokee_handler_cgi_base_build_basic_env (
 	}
 	set_env (cgi, "REQUEST_URI", tmp->buf, tmp->len);
 
+	/* Set SCRIPT_URL
+	 */
+	set_env (cgi, "SCRIPT_URL", conn->request.buf, conn->request.len);
+
 	/* Set HTTPS
 	 */
 	if (conn->socket.is_tls) 
