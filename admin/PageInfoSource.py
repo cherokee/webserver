@@ -10,7 +10,7 @@ NOTE_NICK        = 'Source nick. It will be referenced by this name in the rest 
 NOTE_TYPE        = 'It allows to choose whether it runs the local host or a remote server.'
 NOTE_HOST        = 'Where the information source can be accessed. The host:port pair, or the Unix socket path.'
 NOTE_INTERPRETER = 'Command to spawn a new source in case it were not accessible.'
-NOTE_USAGE       = 'Sources currently in use. Beware: if a source is the last one in any rul, it cannot be deleted until the rule has been manually edited.'
+NOTE_USAGE       = 'Sources currently in use. Note that the last source of any rule cannot be deleted until the rule has been manually edited.'
 
 
 TABLE_JS = """
