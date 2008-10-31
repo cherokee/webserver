@@ -26,10 +26,9 @@
 #define CHEROKEE_SOURCE_INTERPRETER_H
 
 #include "source.h"
-
+#include <unistd.h>
 
 CHEROKEE_BEGIN_DECLS
-
 
 typedef struct {
 	cherokee_source_t   source;
@@ -37,8 +36,10 @@ typedef struct {
 	cherokee_buffer_t   interpreter;
 	char              **custom_env;
 	cuint_t             custom_env_len;
+
 	cherokee_boolean_t  debug;
 	pid_t               pid;
+	uid_t               change_user;
 
 	CHEROKEE_MUTEX_T   (launching_mutex);
 	cherokee_boolean_t  launching;

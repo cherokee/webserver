@@ -51,6 +51,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	n->custom_env_len = 0;
 	n->debug          = false;
 	n->pid            = 0;
+	n->change_user    = 0;
 
 	SOURCE(n)->type   = source_interpreter;
 	SOURCE(n)->free   = (cherokee_func_free_t)interpreter_free;
@@ -121,6 +122,19 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 
 		} else if (equal_buf_str (&child->key, "debug")) {
 			src->debug = !! atoi (child->val.buf);
+
+		} else if (equal_buf_str (&child->key, "change_user")) {
+			struct passwd pwd;
+			char          tmp[1024];
+
+			ret = cherokee_getpwnam (child->val.buf, &pwd, tmp, sizeof(tmp));
+			if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
+				PRINT_MSG ("ERROR: User '%s' not found in the system\n",
+					   child->val.buf);
+				return ret_error;
+			}
+
+			src->change_user = pwd.pw_uid;
 
 		} else if (equal_buf_str (&child->key, "env")) {			
 			cherokee_config_node_foreach (j, child) {
@@ -247,6 +261,12 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 		close (STDOUT_FILENO);
 		close (STDERR_FILENO);
 #endif
+
+		/* Change user if requested
+		 */
+		if (src->change_user > 0) {
+			setuid (src->change_user);
+		}
 
 		/* Doesn't care about it's output either.  It can fill
 		 * out the system buffers and free the interpreter.
