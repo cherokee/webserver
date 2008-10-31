@@ -1,5 +1,9 @@
 2008-10-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/macros.h (SENDFILE_MAX_SIZE): Fixes a 'integer overflow
+	in expression' compilation warning. Fixes bug #185:
+	http://code.google.com/p/cherokee/issues/detail?id=185
+
 	* cherokee/source_interpreter.c: From now on, Cherokee will kill
 	all the sources that are lauched during its life time. Original
 	patch by Stefan de Konink <stefan@konink.de> (thanks! Great

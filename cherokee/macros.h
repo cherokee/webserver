@@ -102,7 +102,7 @@
 #define LOGGER_FLUSH_LAPSE            10
 #define RESPINS_MAX                   16
 #define SENDFILE_MIN_SIZE             (128 * 1024)   /* 128Kb */
-#define SENDFILE_MAX_SIZE             ((2 << 30) -1) /*   2Gb */
+#define SENDFILE_MAX_SIZE             2147483647     /* 2Gb -1*/
 #define NONCE_CLEANUP_LAPSE           60
 #define NONCE_EXPIRATION              60
 
