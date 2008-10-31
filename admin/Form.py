@@ -182,7 +182,7 @@ class FormHelper (WebComponent):
         extra = ""
         for karg in kwargs:
             extra += '%s="%s" '%(karg, kwargs[karg])
-        return '<img src="/static/images/%s" alt="%s" %s/>' % (name, alt, extra)
+        return '<img src="/static/images/%s" alt="%s" title="%s" %s/>' % (name, alt, alt, extra)
 
     def _get_auto_wrap_id (self):
         return "options_wrap_%d" % (FormHelper.options_wrap_num)

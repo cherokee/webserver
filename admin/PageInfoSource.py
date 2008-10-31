@@ -191,7 +191,7 @@ class PageInfoSource (PageMenu, FormHelper):
 
                 if s in protect:
                     msg = "Deletion forbidden. Check source usage."
-                    link = self.InstanceImage ("forbidden.png", msg, border="0", title=msg)
+                    link = self.InstanceImage ("forbidden.png", msg, border="0")
                 else:
                     js = "post_del_key('/source/ajax_update', 'source!%s');"%(s)
                     link = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
