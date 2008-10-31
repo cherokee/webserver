@@ -142,6 +142,8 @@ struct cherokee_server {
 	cherokee_buffer_t          server_string_w_port;
 	cherokee_buffer_t          server_string_w_port_tls;
 
+	cherokee_buffer_t          server_address;
+
 	/* User/group and chroot
 	 */
 	uid_t                      user;

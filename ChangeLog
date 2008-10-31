@@ -1,5 +1,11 @@
 2008-10-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/server.c, cherokee/server-protected.h,
+	cherokee/handler_cgi_base.c: Adds support for the "SERVER_ADDR"
+	variable. Original patch by Patch by Stefan de Konink
+	<stefan@konink.de>; I've reworked it in order to make it more
+	efficient.
+
 	* cherokee/source_interpreter.h, cherokee/source_interpreter.c:
 	Adds support for changing the user right before spawning the new
 	source.  Patch by Stefan de Konink <stefan@konink.de>.

@@ -391,11 +391,17 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	/* Set HTTPS
 	 */
-	if (conn->socket.is_tls) 
+	if (conn->socket.is_tls)
 		set_env (cgi, "HTTPS", "on", 2);
 	else 
 		set_env (cgi, "HTTPS", "off", 3);
 
+	/* Set SERVER_ADDR
+	 */
+	set_env (cgi, "SERVER_ADDR", 
+		 HANDLER_SRV(cgi)->server_address.buf,
+		 HANDLER_SRV(cgi)->server_address.len);
+	
 	/* HTTP variables
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_accept, &p, &p_len);

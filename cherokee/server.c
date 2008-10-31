@@ -206,6 +206,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 	cherokee_buffer_init (&n->server_string_w_port);
 	cherokee_buffer_init (&n->server_string_w_port_tls);
 
+	cherokee_buffer_init (&n->server_address);
+
 	/* Programmed tasks
 	 */
 	n->log_flush_next        = 0;
@@ -332,6 +334,7 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_buffer_mrproper (&srv->server_string_ext);
 	cherokee_buffer_mrproper (&srv->server_string_w_port);
 	cherokee_buffer_mrproper (&srv->server_string_w_port_tls);
+	cherokee_buffer_mrproper (&srv->server_address);
 
 	cherokee_buffer_mrproper (&srv->listen_to);
 	cherokee_buffer_mrproper (&srv->chroot);
@@ -626,7 +629,9 @@ print_banner (cherokee_server_t *srv)
 
 
 static ret_t
-initialize_server_socket (cherokee_server_t *srv, cherokee_socket_t *socket, unsigned short port)
+initialize_server_socket (cherokee_server_t *srv,
+			  cherokee_socket_t *socket,
+			  unsigned short     port)
 {
 	ret_t ret;
 
@@ -963,6 +968,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	ret_t               ret;
 	struct passwd      *ent;
 	cherokee_boolean_t  loggers_done = false;
+	char                server_ip[CHE_INET_ADDRSTRLEN+1];
 
 	/* Build the server string
 	 */
@@ -1008,6 +1014,11 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		if (unlikely(ret != ret_ok)) 
 			return ret;
 	}
+
+	/* Build the server address string
+	 */
+	cherokee_socket_ntop (&srv->socket, server_ip, sizeof(server_ip)-1);
+	cherokee_buffer_add (&srv->server_address, server_ip, strlen(server_ip));
 
 	/* Init the SSL/TLS support
 	 */
@@ -1401,9 +1412,6 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "chunked_encoding")) {
 		srv->chunked_encoding = !!atoi (conf->val.buf);
 
-	} else if (equal_buf_str (&conf->key, "iocache")) {
-		srv->iocache_enabled = !!atoi (conf->val.buf);
-
 	} else if (equal_buf_str (&conf->key, "panic_action")) {
 		cherokee_buffer_clean (&srv->panic_action);
 		cherokee_buffer_add_buffer (&srv->panic_action, &conf->val);
@@ -1502,7 +1510,8 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		srv->group = grp->gr_gid;
 
 	} else if (equal_buf_str (&conf->key, "module_dir") ||
-		   equal_buf_str (&conf->key, "module_deps")) {
+		   equal_buf_str (&conf->key, "module_deps") ||
+		   equal_buf_str (&conf->key, "iocache")) {
 		/* Ignore it: Previously handled 
 		 */
 
