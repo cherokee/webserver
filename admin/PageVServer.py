@@ -31,6 +31,7 @@ NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
 NOTE_ADD_DOMAIN      = 'Adds a new domain name. Wildcards are allowed in the domain name.'
 NOTE_DOCUMENT_ROOT   = 'Virtual Server root directory.'
 NOTE_DIRECTORY_INDEX = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
+NOTE_KEEPALIVE       = 'Whether this virtual server is allow to use Keep-alive (Default: yes)'
 NOTE_DISABLE_LOG     = 'The Logging is currently enabled.'
 NOTE_LOGGERS         = 'Logging format. Apache compatible is highly recommended here.'
 NOTE_ACCESSES        = 'Back-end used to store the log accesses.'
@@ -187,6 +188,7 @@ class PageVServer (PageMenu, FormHelper):
             self.AddPropEntry (table, 'Virtual Server nickname', '%s!nick'%(pre), NOTE_NICKNAME)
         self.AddPropEntry (table, 'Document Root',     '%s!document_root'%(pre),   NOTE_DOCUMENT_ROOT)
         self.AddPropEntry (table, 'Directory Indexes', '%s!directory_index'%(pre), NOTE_DIRECTORY_INDEX)
+        self.AddPropCheck (table, 'Directory Indexes', '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
         tabs += [('Basics', str(table))]
 
         # Domains
@@ -508,7 +510,7 @@ class PageVServer (PageMenu, FormHelper):
         self.ApplyChanges_OptionModule ('%s!error_handler'%(pre), uri, post)
 
         # Look for the checkboxes
-        checkboxes = []
+        checkboxes = ['%s!keepalive'%(pre)]
         tmp = self._cfg['%s!rule'%(pre)]
         if tmp and tmp.has_child():
             for p in tmp:

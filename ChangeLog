@@ -1,5 +1,10 @@
 2008-10-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageVServer.py (PageVServer._op_apply_changes): Reflects
+	the lates change in the administration interface. It adds a new
+	checkbox to allow whether a virtual server should keep connections
+	alive between requests.
+
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,
 	cherokee/connection.c: Added a new option to enable/disable
 	keep-alive per virtual server. By default it's enabled.  It
