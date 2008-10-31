@@ -109,9 +109,9 @@ class Handler(pyscgi.SCGIHandler):
 
             body = "Configuration saved."
             if post_restart == 'graceful':
-                body += ' Server gracefuly restarted.'
+                body += ' Graceful restart performed.'
             elif post_restart == 'hard':
-                body += ' Server hard restarted.'
+                body += ' Hard restart performed.'
 
         elif uri.startswith('/apply'):
             self.handle_post()
