@@ -4,6 +4,10 @@
 	deleted now to prevent appearence of broken rules. Addresses
 	http://code.google.com/p/cherokee/issues/detail?id=144
 
+	* admin/PageIcon.py: There was a problem updating the existing
+	lists of extensions. It was issue 184:
+	http://code.google.com/p/cherokee/issues/detail?id=184
+
 	2008-10-30  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/server.py, admin/Page.py, admin/static/css/cherokee.css,

@@ -108,7 +108,7 @@ class PageIcon (PageMenu, FormHelper):
 
         tabs = []
 
-        # Suffixes
+        # Extensions
         #
         icons = self._cfg['icons!suffix']
 
@@ -128,7 +128,9 @@ class PageIcon (PageMenu, FormHelper):
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (im, icon, entry, link_del)
 
-            tmp += self.Indent(table)
+            fo0 =  Form ('/icons/update', add_submit=False)
+            tmp = fo0.Render(self.Indent(table))
+
 
         # New suffix
         fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False, auto=False)
