@@ -79,6 +79,15 @@ Basics
 ~~~~~~
 
 --
+- *Virtual Server nickname*
+
+The name that will be used to identify the virtual server.
+
+- *Document Root*
+
+Path to use as root directory for the virtual server.
+
+
 - *Directory Indexes*
 
 The DirectoryIndex directive sets the list of resources to look for
@@ -103,6 +112,15 @@ a slash. For example, /cgi-bin/index.pl. In that case, it will use it
 as the object accessible under that public address of the same virtual
 server, so it will take care about the possible configuration of the
 /cgi-bin/ directory and/or the pl extension.
+
+
+- *Keep-alive*
+
+This flag is enabled by default. It is used to enable or disable
+Keep-alive connections on a per-virtual-server basis. Keeping
+persisting connections has dramatic effects both in speed, but very
+high traffic loads can suffer because less connections are available
+for any given moment.
 
 --
 

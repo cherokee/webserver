@@ -31,7 +31,7 @@ NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
 NOTE_ADD_DOMAIN      = 'Adds a new domain name. Wildcards are allowed in the domain name.'
 NOTE_DOCUMENT_ROOT   = 'Virtual Server root directory.'
 NOTE_DIRECTORY_INDEX = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
-NOTE_KEEPALIVE       = 'Whether this virtual server is allow to use Keep-alive (Default: yes)'
+NOTE_KEEPALIVE       = 'Whether this virtual server is allowed to use Keep-alive (Default: yes)'
 NOTE_DISABLE_LOG     = 'The Logging is currently enabled.'
 NOTE_LOGGERS         = 'Logging format. Apache compatible is highly recommended here.'
 NOTE_ACCESSES        = 'Back-end used to store the log accesses.'
@@ -64,7 +64,7 @@ class PageVServer (PageMenu, FormHelper):
 
         host = uri.split('/')[1]
         self.set_submit_url ('/vserver/%s'%(host))
-        self.submit_ajax_url = "/vserver/%s/ajax_update"%(host) 
+        self.submit_ajax_url = "/vserver/%s/ajax_update"%(host)
 
         # Check whether host exists
         cfg = self._cfg['vserver!%s'%(host)]
@@ -73,7 +73,7 @@ class PageVServer (PageMenu, FormHelper):
         if not cfg.has_child():
             return '/vserver/'
 
-        default_render = False 
+        default_render = False
         if post.get_val('is_submit'):
             if post.get_val('tmp!new_rule!value'):
                 re = self._op_add_new_entry (post       = post,
@@ -188,7 +188,7 @@ class PageVServer (PageMenu, FormHelper):
             self.AddPropEntry (table, 'Virtual Server nickname', '%s!nick'%(pre), NOTE_NICKNAME)
         self.AddPropEntry (table, 'Document Root',     '%s!document_root'%(pre),   NOTE_DOCUMENT_ROOT)
         self.AddPropEntry (table, 'Directory Indexes', '%s!directory_index'%(pre), NOTE_DIRECTORY_INDEX)
-        self.AddPropCheck (table, 'Directory Indexes', '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
+        self.AddPropCheck (table, 'Keep-alive', '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
         tabs += [('Basics', str(table))]
 
         # Domains
