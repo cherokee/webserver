@@ -4,7 +4,7 @@ from Module import *
 import validations
 
 NOTE_EXISTS  = "Comma separated list of files to be checked. If one exists, the rule will be applied."
-NOTE_IOCACHE = "Whether or not it should use the I/O cache layer."
+NOTE_IOCACHE = "Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise."
 
 class ModuleExists (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]

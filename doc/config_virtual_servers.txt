@@ -224,7 +224,11 @@ rule types:
 
   * **File Exists**: This type of rule will only be applied if a
       certain file (or a file among a list of provided file names) is
-      present.
+      present. An I/O cache specific setting for the rule can be
+      configured in the `Rule` tab. If enabled, it will speed up the
+      file detection during the rule evaluation. This improves
+      performance but is not recommended when the directory contents
+      change dynamically.
 
 It is very important to know that these rules are prioritized. The
 higher its priority is, the sooner they are checked. You could
