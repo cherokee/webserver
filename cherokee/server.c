@@ -207,6 +207,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 	cherokee_buffer_init (&n->server_string_w_port_tls);
 
 	cherokee_buffer_init (&n->server_address);
+	cherokee_buffer_init (&n->server_port);
+	cherokee_buffer_init (&n->server_port_tls);
 
 	/* Programmed tasks
 	 */
@@ -334,7 +336,10 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_buffer_mrproper (&srv->server_string_ext);
 	cherokee_buffer_mrproper (&srv->server_string_w_port);
 	cherokee_buffer_mrproper (&srv->server_string_w_port_tls);
+
 	cherokee_buffer_mrproper (&srv->server_address);
+	cherokee_buffer_mrproper (&srv->server_port);
+	cherokee_buffer_mrproper (&srv->server_port_tls);
 
 	cherokee_buffer_mrproper (&srv->listen_to);
 	cherokee_buffer_mrproper (&srv->chroot);
@@ -1019,6 +1024,9 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	 */
 	cherokee_socket_ntop (&srv->socket, server_ip, sizeof(server_ip)-1);
 	cherokee_buffer_add (&srv->server_address, server_ip, strlen(server_ip));
+
+	cherokee_buffer_add_va (&srv->server_port, "%d", srv->port);
+	cherokee_buffer_add_va (&srv->server_port_tls, "%d", srv->port_tls);
 
 	/* Init the SSL/TLS support
 	 */

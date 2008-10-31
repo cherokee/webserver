@@ -389,12 +389,19 @@ cherokee_handler_cgi_base_build_basic_env (
 	 */
 	set_env (cgi, "SCRIPT_URL", conn->request.buf, conn->request.len);
 
-	/* Set HTTPS
+	/* Set HTTPS and SERVER_PORT
 	 */
-	if (conn->socket.is_tls)
+	if (conn->socket.is_tls) {
 		set_env (cgi, "HTTPS", "on", 2);
-	else 
+		set_env (cgi, "SERVER_PORT", 
+			 HANDLER_SRV(cgi)->server_port_tls.buf,
+			 HANDLER_SRV(cgi)->server_port_tls.len);
+	} else  {
 		set_env (cgi, "HTTPS", "off", 3);
+		set_env (cgi, "SERVER_PORT", 
+			 HANDLER_SRV(cgi)->server_port.buf,
+			 HANDLER_SRV(cgi)->server_port.len);
+	}
 
 	/* Set SERVER_ADDR
 	 */
