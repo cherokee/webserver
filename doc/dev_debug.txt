@@ -3,6 +3,17 @@
 Development: Debugging Cherokee
 -------------------------------
 
+cherokee-admin
+~~~~~~~~~~~~~~
+
+Cherokee Admin is written in Python. While making changes, you can use
+the `-x` or `--debug` parameter to see the Python back traces in the
+active console.
+
+
+cherokee
+~~~~~~~~
+
 If you need to debug the behavior of the web server (or an
 application), there are some helpful tools available for you.
 
