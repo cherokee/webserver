@@ -1,5 +1,9 @@
 2008-10-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageEntry.py, admin/ModuleExists.py: Adds a check button
+	select whether or not the rule should use I/O cache for the
+	evaluation.
+
 	* admin/PageVServer.py (PageVServer._op_apply_changes): Reflects
 	the latest change in the administration interface. It adds a new
 	checkbox to allow whether a virtual server should keep connections

@@ -95,6 +95,11 @@ class PageEntry (PageMenu, FormHelper):
         for e,e_name in modules_available(ENCODERS):
             checks.append ('%s!encoder!%s' % (self._conf_prefix, e))
 
+        _type       = self._cfg.get_val('%s!match'%(self._conf_prefix))        
+        rule_module = module_obj_factory (_type, self._cfg, self._conf_prefix, self.submit_url)
+        if 'checks' in dir(rule_module):
+            checks += rule_module.checks
+
         # Apply changes
         self.ApplyChanges (checks, post, DATA_VALIDATION)
 

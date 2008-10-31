@@ -3,7 +3,8 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_EXISTS = "Comma separated list of files to be checked. If one exists, the rule will be applied."
+NOTE_EXISTS  = "Comma separated list of files to be checked. If one exists, the rule will be applied."
+NOTE_IOCACHE = "Whether or not it should use the I/O cache layer."
 
 class ModuleExists (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
@@ -12,12 +13,16 @@ class ModuleExists (Module, FormHelper):
         FormHelper.__init__ (self, 'exists', cfg)
         Module.__init__ (self, 'exists', cfg, prefix, submit_url)
 
+        # Special case: there is a check in the rule
+        self.checks = ['%s!match!exists!iocache'%(self._prefix)]
+
     def _op_render (self):
         table = TableProps()
         if self._prefix.startswith('tmp!'):
             self.AddPropEntry (table, 'Files', '%s!value'%(self._prefix), NOTE_EXISTS)
         else:
-            self.AddPropEntry (table, 'Files', '%s!exists'%(self._prefix), NOTE_EXISTS)
+            self.AddPropEntry (table, 'Files',         '%s!exists'%(self._prefix), NOTE_EXISTS)
+            self.AddPropCheck (table, 'Use I/O cache', '%s!exists!iocache'%(self._prefix), False, NOTE_IOCACHE)
         return str(table)
 
     def _op_apply_changes (self, uri, post):
