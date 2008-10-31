@@ -1,5 +1,11 @@
 2008-10-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/connection.c: Added a new option to enable/disable
+	keep-alive per virtual server. By default it's enabled.  It
+	implement the RFE #181:
+	http://code.google.com/p/cherokee/issues/detail?id=181
+
 	* cherokee/handler_cgi_base.c
 	(cherokee_handler_cgi_base_build_basic_env): Adds support for
 	SCRIPT_URL. It contains the request *after* the internal

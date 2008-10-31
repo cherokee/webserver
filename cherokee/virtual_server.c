@@ -53,6 +53,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->logger          = NULL;
 	n->logger_props    = NULL;
 	n->priority        = 0;
+	n->keepalive       = true;
 
 	/* Virtual entries
 	 */
@@ -999,6 +1000,9 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "nick")) {
 		cherokee_buffer_clean (&vserver->name);
 		cherokee_buffer_add_buffer (&vserver->name, &conf->val);
+
+	} else if (equal_buf_str (&conf->key, "keepalive")) {
+		vserver->keepalive = !!atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "user_dir")) {
 		ret = configure_user_dir (conf, vserver);

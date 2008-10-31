@@ -56,6 +56,7 @@ typedef struct {
 	cuint_t                      priority;        /* Evaluation priority         */
 	cherokee_vserver_names_t     domains;         /* Domains. Eg: www.alobbs.com */
 	cherokee_rule_list_t         rules;           /* Rule list: vserver behavior */
+	cherokee_boolean_t           keepalive;       /* Keep-alive support          */
 
 	cherokee_config_entry_t     *default_handler; /* Default handler             */
 	cherokee_config_entry_t     *error_handler;   /* Default error handler       */

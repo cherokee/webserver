@@ -1905,6 +1905,11 @@ cherokee_connection_set_keepalive (cherokee_connection_t *conn)
 	if (thread->conns_num >= thread->conns_keepalive_max)
 		goto denied;
 
+	/* Does the virtual server support Keep-Alive?
+	 */
+	if (CONN_VSRV(conn)->keepalive == false)
+		goto denied;
+
 	/* Set Keep-alive according with the 'Connection' header
 	 * HTTP 1.1 uses Keep-Alive by default: rfc2616 sec8.1.2
 	 */
