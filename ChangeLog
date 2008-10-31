@@ -1,5 +1,8 @@
 2008-10-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/server.c (configure_server_property): Fixed to use
+	cherokee_getpwnam() instead of getpwnam()
+
 	* admin/PageEntry.py, admin/ModuleExists.py: Adds a check button
 	select whether or not the rule should use I/O cache for the
 	evaluation.

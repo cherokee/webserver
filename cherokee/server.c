@@ -1480,14 +1480,16 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 #endif
 
 	} else if (equal_buf_str (&conf->key, "user")) {
-		struct passwd *pwd;
-	   
-		pwd = (struct passwd *) getpwnam (conf->val.buf);
-		if (pwd == NULL) {
+		struct passwd pwd;
+		char          tmp[1024];
+
+		ret = cherokee_getpwnam (conf->val.buf, &pwd, tmp, sizeof(tmp));
+		if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
 			 PRINT_MSG ("ERROR: User '%s' not found in the system\n", conf->val.buf);
 			 return ret_error;
 		}
-		srv->user = pwd->pw_uid;		
+
+		srv->user = pwd.pw_uid;
 
 	} else if (equal_buf_str (&conf->key, "group")) {
 		struct group *grp;
