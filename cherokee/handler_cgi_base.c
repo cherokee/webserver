@@ -294,6 +294,11 @@ cherokee_handler_cgi_base_build_basic_env (
 	cherokee_socket_ntop (&conn->socket, remote_ip, sizeof(remote_ip)-1);
 	set_env (cgi, "REMOTE_ADDR", remote_ip, strlen(remote_ip));
 
+	re = snprintf (temp, temp_size, "%d", SOCKET_SIN_PORT(&conn->socket));
+	if (re > 0) {
+		set_env (cgi, "REMOTE_PORT", temp, re);
+	}
+
 	/* HTTP_HOST and SERVER_NAME. The difference between them is that
 	 * HTTP_HOST can include the «:PORT» text, and SERVER_NAME only
 	 * the name 
@@ -330,11 +335,6 @@ cherokee_handler_cgi_base_build_basic_env (
 		set_env (cgi, "QUERY_STRING", conn->query_string.buf, conn->query_string.len);
 	else
 		set_env (cgi, "QUERY_STRING", "", 0);
-
-	/* Sever port
-	 */
-	re = snprintf (temp, temp_size, "%d", CONN_SRV(conn)->port);
-	set_env (cgi, "SERVER_PORT", temp, re);
 
 	/* HTTP protocol version
 	 */
