@@ -1,4 +1,10 @@
-2008-10-30  Antonio Perez  <aperez@skarcha.com>
+2008-10-31  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/PageInfoSource.py: The last source in a rule cannot be
+	deleted now to prevent appearence of broken rules. Addresses
+	http://code.google.com/p/cherokee/issues/detail?id=144
+
+	2008-10-30  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/server.py, admin/Page.py, admin/static/css/cherokee.css,
 	admin/static/js/common.js: Config changes now use AJAX.

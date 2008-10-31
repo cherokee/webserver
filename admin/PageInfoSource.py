@@ -10,7 +10,7 @@ NOTE_NICK        = 'Source nick. It will be referenced by this name in the rest 
 NOTE_TYPE        = 'It allows to choose whether it runs the local host or a remote server.'
 NOTE_HOST        = 'Where the information source can be accessed. The host:port pair, or the Unix socket path.'
 NOTE_INTERPRETER = 'Command to spawn a new source in case it were not accessible.'
-NOTE_USAGE       = 'Sources currently in use. Beware: exhausting the information sources used in a rule will render it inoperable and Cherokee will fail to start.'
+NOTE_USAGE       = 'Sources currently in use. Beware: if a source is the last one in any rul, it cannot be deleted until the rule has been manually edited.'
 
 
 TABLE_JS = """
@@ -102,6 +102,7 @@ class PageInfoSource (PageMenu, FormHelper):
         if envs:
             txt += '<h3>Environment variables</h3>'
             table = Table(3, title_left=1, style='width="90%"')
+
             for env in envs:
                 pre = 'source!%s!env!%s'%(s,env)
                 val = self.InstanceEntry(pre, 'text', size=25)
@@ -177,19 +178,25 @@ class PageInfoSource (PageMenu, FormHelper):
         # List
         #
         if self._cfg.keys('source'):
-            txt += "<h2>Known sources</h2>"
+            protect = self._get_protected_list()
 
+            txt += "<h2>Known sources</h2>"
             table  = '<table width="90%%" id="sources" class="rulestable">'
             table += '<tr><th>Nick</th><th>Type</th><th>Connection</th></tr>'
+
             for s in self._cfg.keys('source'):
                 nick = self._cfg.get_val('source!%s!nick'%(s))
                 host = self._cfg.get_val('source!%s!host'%(s))
                 type = self._cfg.get_val('source!%s!type'%(s))
 
-                js = "post_del_key('/source/ajax_update', 'source!%s');"%(s)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                if s in protect:
+                    msg = "Deletion forbidden. Check source usage."
+                    link = self.InstanceImage ("forbidden.png", msg, border="0", title=msg)
+                else:
+                    js = "post_del_key('/source/ajax_update', 'source!%s');"%(s)
+                    link = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
 
-                table += '<tr><td><a href="/%s/%s">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (self._id, s, nick, type, host, link_del)
+                table += '<tr><td><a href="/%s/%s">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (self._id, s, nick, type, host, link)
             table += '<tr><td colspan="4" align="center"><br/><a href="/%s">Add new</a></td></tr>' % (self._id)
             table += '</table>'
             txt += self.Indent(table)
@@ -263,3 +270,20 @@ class PageInfoSource (PageMenu, FormHelper):
                     used_sources[source] = []
                 used_sources[source].append(entry)
         return used_sources
+
+    def _get_protected_list (self):
+        """List of sources to protect against deletion"""
+        rule_sources = {}
+        used_sources = self._get_used_sources()
+        for src in used_sources:
+            for r in used_sources[src]:
+                rule = r.split('!handler!balancer!')[0]
+                if not rule_sources.has_key(rule):
+                    rule_sources[rule] = []
+                rule_sources[rule].append(src)
+
+        protect = []
+        for s in rule_sources:
+            if len(rule_sources[s])==1:
+                protect.append(rule_sources[s][0])
+        return protect
