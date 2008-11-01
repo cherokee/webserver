@@ -10,8 +10,8 @@ NOTE_NICK        = 'Source nick. It will be referenced by this name in the rest 
 NOTE_TYPE        = 'It allows to choose whether it runs the local host or a remote server.'
 NOTE_HOST        = 'Where the information source can be accessed. The host:port pair, or the Unix socket path.'
 NOTE_INTERPRETER = 'Command to spawn a new source in case it were not accessible.'
+NOTE_TIMEOUT     = 'How long should the server wait when spawning an interpreter before giving up (in seconds).'
 NOTE_USAGE       = 'Sources currently in use. Note that the last source of any rule cannot be deleted until the rule has been manually edited.'
-
 
 TABLE_JS = """
 <script type="text/javascript">
@@ -81,6 +81,7 @@ class PageInfoSource (PageMenu, FormHelper):
         type  = post.pop ('tmp!new_source_type')
         host  = post.pop ('tmp!new_source_host')
         inter = post.pop ('tmp!new_source_interpreter')
+        time  = post.pop ('tmp!new_source_timeout')
 
         tmp = [int(x) for x in self._cfg.keys('source')]
         tmp.sort()
@@ -93,6 +94,7 @@ class PageInfoSource (PageMenu, FormHelper):
         self._cfg['source!%d!type'%(prio)]        = type
         self._cfg['source!%d!host'%(prio)]        = host
         self._cfg['source!%d!interpreter'%(prio)] = inter
+        self._cfg['source!%d!timeout'%(prio)]     = time
 
         return '/%s/%d' % (self._id, prio)
 
@@ -142,7 +144,8 @@ class PageInfoSource (PageMenu, FormHelper):
         self.AddPropEntry   (table, 'Nick',       'source!%s!nick'%(s), NOTE_NICK,req=True)
         self.AddPropEntry   (table, 'Connection', 'source!%s!host'%(s), NOTE_HOST,req=True)
         if type == 'interpreter':
-            self.AddPropEntry (table, 'Interpreter', 'source!%s!interpreter'%(s), NOTE_INTERPRETER, req=True)
+            self.AddPropEntry (table, 'Interpreter', 'source!%s!interpreter'%(s),  NOTE_INTERPRETER, req=True)
+            self.AddPropEntry (table, 'Spawning timeout', 'source!%s!timeout'%(s), NOTE_TIMEOUT, req=True)
 
         tmp  = self.HiddenInput ('source_num', s)
         tmp += str(table)
@@ -167,6 +170,7 @@ class PageInfoSource (PageMenu, FormHelper):
         self.AddPropEntry          (table, 'Connection', 'tmp!new_source_host', NOTE_HOST, req=True)
         if type == 'interpreter' or not type:
             self.AddPropEntry (table, 'Interpreter', 'tmp!new_source_interpreter', NOTE_INTERPRETER, req=True)
+            self.AddPropEntry (table, 'Spawning timeout', 'tmp!new_source_timeout', NOTE_TIMEOUT, req=True)
 
         txt += self.Indent(table)
         return txt
