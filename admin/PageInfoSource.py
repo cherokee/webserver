@@ -26,6 +26,10 @@ HELPS = [
     ('config_info_sources', "Information Sources")
 ]
 
+DATA_VALIDATION = [
+    ('tmp!new_source_timeout', validations.is_positive_int)
+]
+
 class PageInfoSource (PageMenu, FormHelper):
     def __init__ (self, cfg):
         FormHelper.__init__ (self, 'source', cfg)
@@ -77,6 +81,10 @@ class PageInfoSource (PageMenu, FormHelper):
         self._cfg['source!%s!env!%s' % (source, name)] = value
 
     def _apply_new_source (self, uri, post):
+        self.ValidateChange_SingleKey ('tmp!new_source_timeout', post, DATA_VALIDATION)
+        if self.has_errors():
+            return self._op_render()
+
         nick  = post.pop ('tmp!new_source_nick')
         type  = post.pop ('tmp!new_source_type')
         host  = post.pop ('tmp!new_source_host')
