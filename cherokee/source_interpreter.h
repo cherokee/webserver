@@ -36,6 +36,7 @@ typedef struct {
 	cherokee_buffer_t   interpreter;
 	char              **custom_env;
 	cuint_t             custom_env_len;
+	cuint_t             timeout;
 
 	cherokee_boolean_t  debug;
 	pid_t               pid;

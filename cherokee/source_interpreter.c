@@ -33,8 +33,9 @@
 #include <unistd.h>
 #include <signal.h>
 
-
 #define ENTRIES "source,src,interpreter"
+#define DEFAULT_TIMEOUT 3
+
 
 static void interpreter_free (void *src);
 
@@ -52,6 +53,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	n->debug          = false;
 	n->pid            = 0;
 	n->change_user    = 0;
+	n->timeout        = DEFAULT_TIMEOUT;
 
 	SOURCE(n)->type   = source_interpreter;
 	SOURCE(n)->free   = (cherokee_func_free_t)interpreter_free;
@@ -122,6 +124,9 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 
 		} else if (equal_buf_str (&child->key, "debug")) {
 			src->debug = !! atoi (child->val.buf);
+
+		} else if (equal_buf_str (&child->key, "timeout")) {
+			src->timeout = atoi (child->val.buf);
 
 		} else if (equal_buf_str (&child->key, "change_user")) {
 			struct passwd pwd;
@@ -371,9 +376,9 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		/* Reset the internal socket */
 		cherokee_socket_close (socket);
 
-	} else if (cherokee_bogonow_now > *spawned + 3) {	
-		TRACE (ENTRIES, "Giving up; spawned 3 secs ago: %s\n",
-		       src->interpreter.buf);
+	} else if (cherokee_bogonow_now > *spawned + src->timeout) {	
+		TRACE (ENTRIES, "Giving up; spawned %d secs ago: %s\n",
+		       src->timeout, src->interpreter.buf);
 
 		ret = ret_error;
 		goto out;

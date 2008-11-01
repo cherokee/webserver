@@ -1,5 +1,9 @@
 2008-11-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/source_interpreter.c, cherokee/source_interpreter.h:
+	Adds a new "timeout" configuration key. The spawning timeout is
+	not longer hardcoded.
+
 	* admin/ModuleBalancer.py (ModuleBalancerGeneric._op_render):
 	Fixes a linking issue. The source names pointed to invalid
 	source pages.
