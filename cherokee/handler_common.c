@@ -47,6 +47,7 @@
 
 #define ENTRIES "handler,common"
 #define DEFAULT_ALLOW_PATHINFO false
+#define DEFAULT_ALLOW_DIRLIST  true
 
 ret_t
 cherokee_handler_common_props_free (cherokee_handler_common_props_t *props)
@@ -81,6 +82,7 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 		n->props_file     = NULL;
 		n->props_dirlist  = NULL;
 		n->allow_pathinfo = DEFAULT_ALLOW_PATHINFO;
+		n->allow_dirlist  = DEFAULT_ALLOW_DIRLIST;
 
 		*_props = MODULE_PROPS(n);
 	}
@@ -91,7 +93,12 @@ cherokee_handler_common_configure (cherokee_config_node_t *conf, cherokee_server
 	 */
 	ret = cherokee_config_node_get (conf, "allow_pathinfo", &subconf);
 	if (ret == ret_ok) {
-		props->allow_pathinfo = atoi(subconf->val.buf);
+		props->allow_pathinfo = !! atoi(subconf->val.buf);
+	}
+
+	ret = cherokee_config_node_get (conf, "allow_dirlist", &subconf);
+	if (ret == ret_ok) {
+		props->allow_dirlist = !! atoi(subconf->val.buf);
 	}
 
 	/* Parse 'file' parameters
@@ -307,7 +314,13 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		/* If the dir hasn't a index file, it uses dirlist
 		 */
 		cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
-		return cherokee_handler_dirlist_new (hdl, cnt, MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
+		if (PROP_COMMON(props)->allow_dirlist) {
+			return cherokee_handler_dirlist_new (hdl, cnt, 
+							     MODULE_PROPS(PROP_COMMON(props)->props_dirlist));
+		}
+		
+		conn->error_code = http_access_denied;
+		return ret_error;
 	}
 
 	/* Unknown request type
