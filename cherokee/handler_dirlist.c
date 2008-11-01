@@ -56,6 +56,7 @@
 struct file_entry {
 	cherokee_list_t  list_node;
 	struct stat      stat;
+	struct stat      rstat;
 	cuint_t          name_len;
 	struct dirent    info;          /* It *must* be the last entry */
 };
@@ -337,6 +338,12 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 			return ret_error;
 		}
 
+#ifdef S_ISLNK
+	        if (S_ISLNK(n->stat.st_mode)) {
+			cherokee_stat (path->buf, &n->rstat);
+		}
+#endif
+
 		/* Clean up and exit
 		 */
 		cherokee_buffer_drop_ending (path, n->name_len);
@@ -564,7 +571,9 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 {
 	DIR                   *dir;
 	file_entry_t          *item;
-	cherokee_connection_t *conn  = HANDLER_CONN(dhdl);
+	cherokee_boolean_t     is_dir;
+	cherokee_boolean_t     is_link = false;
+	cherokee_connection_t *conn    = HANDLER_CONN(dhdl);
 
 	/* Build the local directory path
 	 */
@@ -588,7 +597,15 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 		    (ret == ret_error))
 			continue;
 
-		if (S_ISDIR(item->stat.st_mode)) {
+#ifdef S_ISLNK
+		is_link = S_ISLNK(item->stat.st_mode);
+#endif
+		if (is_link)
+			is_dir = S_ISDIR(item->rstat.st_mode);		
+		else
+			is_dir = S_ISDIR(item->stat.st_mode);
+
+		if (is_dir) {
 			cherokee_list_add (LIST(item), &dhdl->dirs);
 		} else {
 			cherokee_list_add (LIST(item), &dhdl->files);
@@ -785,10 +802,13 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	 */
 	VTMP_INIT_SUBST (thread, vtmp, &props->entry);
 
-	is_dir  = S_ISDIR(file->stat.st_mode);
 #ifdef S_ISLNK
 	is_link = S_ISLNK(file->stat.st_mode);
 #endif
+	if (is_link)
+		is_dir = S_ISDIR(file->rstat.st_mode);		
+	else
+		is_dir = S_ISDIR(file->stat.st_mode);
 
 	/* Check whether it is a symlink that we should skip
 	 */
@@ -850,12 +870,12 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	/* Size
 	 */
 	if (props->show_size) {
-		if (is_dir) {
-			VTMP_SUBSTITUTE_TOKEN ("%size_unit%", NULL);
-			VTMP_SUBSTITUTE_TOKEN ("%size%", "-");
-		} else if (is_link) {
+		if (is_link) {
 			VTMP_SUBSTITUTE_TOKEN ("%size_unit%", NULL);
 			VTMP_SUBSTITUTE_TOKEN ("%size%", "link");
+		} else if (is_dir) {
+			VTMP_SUBSTITUTE_TOKEN ("%size_unit%", NULL);
+			VTMP_SUBSTITUTE_TOKEN ("%size%", "-");
 		} else {
 			char *unit;
 

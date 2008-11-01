@@ -1,5 +1,9 @@
 2008-11-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_dirlist.c: Fixes the symbolic links to
+	directories support. Original patch by Stefan de Konink
+	<stefan@konink.de>; a few additions my me.
+
 	* cherokee/connection.c (cherokee_connection_set_redirect): Fixes
 	a problem with the redirections. Patch by Stefan de Konink
 	<stefan@konink.de>.
