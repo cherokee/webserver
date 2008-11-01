@@ -1006,24 +1006,19 @@ then
 		dnl
 		dnl GNUTLS
 		dnl
-		PKG_CHECK_MODULES(GNUTLS, gnutls >= "1.0.4", [have_gnutls=yes], [have_gnutls=no])
-		if test "$have_gnutls" = "yes"
-		then
-			   TLS_LIBS="$GNUTLS_LIBS"
-			   TLS_CFLAGS="$GNUTLS_CFLAGS"
+		AM_PATH_LIBGNUTLS([1.4.0], [
+		  have_gnutls=yes
 
-			   AC_CHECK_LIB(gcrypt, gcry_control, [TLS_LIBS="$TLS_LIBS -lgcrypt"])
-			   AC_CHECK_LIB(gpg-error, gpg_strerror, [TLS_LIBS="$TLS_LIBS -lgpg-error"])
+	       AC_CHECK_LIB(gcrypt, gcry_control, [TLS_LIBS="$TLS_LIBS -lgcrypt"])
+	       AC_CHECK_LIB(gpg-error, gpg_strerror, [TLS_LIBS="$TLS_LIBS -lgpg-error"])
 
-			   AC_SUBST(TLS_LIBS)
-			   AC_SUBST(TLS_CFLAGS)
+		  AC_SUBST(TLS_LIBS)
+		  AC_SUBST(TLS_CFLAGS)
 
-			   AC_DEFINE(HAVE_TLS, 1, [Have TLS support])
-			   AC_DEFINE(HAVE_GNUTLS, 1, [Have libgnutls])
-			   have_tls="gnutls"
-		else
-			   enable_tls=no
-		fi
+		  AC_DEFINE(HAVE_TLS, 1, [Have TLS support])
+		  AC_DEFINE(HAVE_GNUTLS, 1, [Have libgnutls])
+		  have_tls="gnutls"
+		])
 fi
 
 if test "$check_openssl" = "yes" && test "$have_tls" = "no"
@@ -1043,8 +1038,6 @@ then
 			AC_DEFINE(HAVE_TLS, 1, [Have TLS support])
 			AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
 			have_tls="openssl"
-		else
-			enable_tls=no
 		fi
 fi
 
