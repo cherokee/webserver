@@ -2308,13 +2308,6 @@ cherokee_connection_set_redirect (cherokee_connection_t *conn, cherokee_buffer_t
 		sizeof("https://") + 4;
 	
 	cherokee_buffer_ensure_size (&conn->redirect, len);
-
-	/* In case the connection has a custom Document Root directory,
-	 * it must add the web equivalent directory to the path (web_directory).
-	 */
-	if (cherokee_connection_use_webdir (conn)) {
-		cherokee_buffer_add_buffer (&conn->redirect, &conn->web_directory);
-	}
 		
 	if (! cherokee_buffer_is_empty (&conn->host)) {
 		if (conn->socket.is_tls == TLS)
@@ -2333,6 +2326,13 @@ cherokee_connection_set_redirect (cherokee_connection_t *conn, cherokee_buffer_t
 	if (! cherokee_buffer_is_empty (&conn->userdir)) {
 		cherokee_buffer_add_str (&conn->redirect, "/~");
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->userdir);
+	}
+
+	/* In case the connection has a custom Document Root directory,
+	 * it must add the web equivalent directory to the path (web_directory).
+	 */
+	if (cherokee_connection_use_webdir (conn)) {
+		cherokee_buffer_add_buffer (&conn->redirect, &conn->web_directory);
 	}
 	
 	cherokee_buffer_add_buffer (&conn->redirect, address);
