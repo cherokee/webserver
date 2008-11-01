@@ -1,5 +1,8 @@
 2008-11-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleCommon.py (ModuleCommon._op_render): Reflects the
+	latest change on the configuration interface.
+
 	* cherokee/handler_common.c, cherokee/handler_common.h: Implements
 	a new property to define whether or not the use of dirlist is
 	allow. It implements the RFE #186:

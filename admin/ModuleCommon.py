@@ -6,6 +6,7 @@ from ModuleFile import *
 from ModuleDirlist import *
 
 NOTE_PATHINFO = "Allow extra tailing paths"
+NOTE_DIRLIST  = "Allow to list directory contents"
 
 HELPS = [
     ('modules_handlers_common', "List & Send")
@@ -13,7 +14,7 @@ HELPS = [
 
 class ModuleCommon (ModuleHandler):
     PROPERTIES = ModuleFile.PROPERTIES + ModuleDirlist.PROPERTIES + [
-        'allow_pathinfo'
+        'allow_pathinfo', 'allow_dirlist'
     ]
 
     def __init__ (self, cfg, prefix, submit_url):
@@ -28,6 +29,7 @@ class ModuleCommon (ModuleHandler):
         # Local properties
         table = TableProps()
         self.AddPropCheck (table, 'Allow PathInfo', '%s!allow_pathinfo'%(self._prefix), False, NOTE_PATHINFO)
+        self.AddPropCheck (table, 'Allow Directory Listing', '%s!allow_dirlist'%(self._prefix), True, NOTE_DIRLIST)
 
         txt = '<h2>Parsing</h2>'
         txt += self.Indent(table)
@@ -39,10 +41,12 @@ class ModuleCommon (ModuleHandler):
 
         txt += self._file._op_render()
         txt += self._dirlist._op_render()
+
         return txt
 
     def _op_apply_changes (self, uri, post):
         self.ApplyCheckbox (post, '%s!allow_pathinfo'%(self._prefix))
+        self.ApplyCheckbox (post, '%s!allow_dirlist'%(self._prefix))
 
         # Copy errors from the child modules
         self._copy_errors (self._file,    self)
