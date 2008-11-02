@@ -34,10 +34,23 @@
 
 #define ENTRIES "handler,ssi"
 
-
 /* Plug-in initialization
  */
 PLUGIN_INFO_HANDLER_EASIEST_INIT (ssi, http_get | http_head);
+
+
+typedef enum {
+	op_none,
+	op_include,
+	op_size,
+	op_lastmod
+} operations_t;
+
+typedef enum {
+	path_none,
+	path_file,
+	path_virtual
+} path_type_t;
 
 
 ret_t
@@ -142,10 +155,15 @@ parse (cherokee_handler_ssi_t *hdl,
 {
 	char              *p, *q;
 	char              *begin;
+	int                re;
 	cuint_t            len;
-	cherokee_buffer_t  key  = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  val  = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  pair = CHEROKEE_BUF_INIT;
+	operations_t       op;
+	path_type_t        path;
+	struct stat        info;
+	cherokee_buffer_t  key   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  val   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  pair  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  fpath = CHEROKEE_BUF_INIT;
 
 	q = in->buf;
 
@@ -185,8 +203,32 @@ parse (cherokee_handler_ssi_t *hdl,
 
 		/* Check element
 		 */
+		op = op_none;
+
 		if (strncmp (key.buf, "include", 7) == 0) {
-			cherokee_buffer_move_to_begin (&key, 7);
+			op  = op_include;
+			len = 7;
+		} else if (strncmp (key.buf, "fsize", 5) == 0) {
+			op  = op_size;
+			len = 5;
+		} else if (strncmp (key.buf, "flastmod", 8) == 0) {
+			op  = op_lastmod;
+			len = 8;
+		} else {
+			PRINT_MSG ("Unknown SSI property: '%s'\n", key.buf);
+		}
+
+		/* Deeper parsing
+		 */
+		path = path_none;
+
+		switch (op) {
+		case op_size:
+		case op_include:
+		case op_lastmod:			
+			/* Read a property key
+			 */
+			cherokee_buffer_move_to_begin (&key, len);
 			cherokee_buffer_trim (&key);
 
 			cherokee_buffer_clean (&pair);
@@ -195,44 +237,70 @@ parse (cherokee_handler_ssi_t *hdl,
 			cherokee_buffer_drop_ending (&key, pair.len);
 			cherokee_buffer_trim (&key);
 
+			/* Parse the property
+			 */
 			if (strncmp (pair.buf, "file=", 5) == 0) {
-				cherokee_buffer_clean (&val);
-				get_val (pair.buf + 5, &val);
-			  
-				/* Build the path */
-				cherokee_buffer_add_char   (&hdl->dir, '/');
-				cherokee_buffer_add_buffer (&hdl->dir, &val);
-
-				/* Read the file */
-				TRACE(ENTRIES, "Including file '%s'\n", hdl->dir.buf);
-				cherokee_buffer_read_file (out, hdl->dir.buf);
-
-				/* Clean up */
-				cherokee_buffer_drop_ending (&hdl->dir, val.len+1);
-
+				path = path_file;
+				len  = 5;
 			} else if (strncmp (pair.buf, "virtual=", 8) == 0) {
-				cherokee_buffer_t path = CHEROKEE_BUF_INIT;
-
-				cherokee_buffer_clean (&val);
-				get_val (pair.buf + 8, &val);
-			  
-				/* Build the path */
-				cherokee_buffer_add_buffer (&path, &HANDLER_VSRV(hdl)->root);
-				cherokee_buffer_add_char   (&path, '/');
-				cherokee_buffer_add_buffer (&path, &val);
-
-				/* Read the file */
-				TRACE(ENTRIES, "Including file '%s'\n", hdl->dir.buf);
-				cherokee_buffer_read_file (out, path.buf);
-
-				/* Clean up */
-				cherokee_buffer_mrproper (&path);
-
-			} else {
-				PRINT_MSG ("Unknown SSI include property: '%s'\n", pair.buf);
+				path = path_virtual;
+				len  = 8;
 			}
-		} else {
-			PRINT_MSG ("Unknown SSI tag: '%s'\n", key.buf);
+
+			cherokee_buffer_clean (&val);
+			get_val (pair.buf + len, &val);
+
+			cherokee_buffer_clean (&fpath);
+
+			switch (path) {
+			case path_file:			  
+				cherokee_buffer_add_buffer (&fpath, &hdl->dir);
+				cherokee_buffer_add_char   (&fpath, '/');
+				cherokee_buffer_add_buffer (&fpath, &val);
+				break;
+			case path_virtual:
+				cherokee_buffer_add_buffer (&fpath, &HANDLER_VSRV(hdl)->root);
+				cherokee_buffer_add_char   (&fpath, '/');
+				cherokee_buffer_add_buffer (&fpath, &val);
+				break;
+			default:
+				SHOULDNT_HAPPEN;
+			}
+
+			/* Perform the operation
+			 */
+			switch (op) {
+			case op_include:
+				TRACE(ENTRIES, "Including file '%s'\n", fpath.buf);
+				cherokee_buffer_read_file (out, fpath.buf);				
+				break;
+
+			case op_size:
+				TRACE(ENTRIES, "Including file size '%s'\n", fpath.buf);
+				re = cherokee_stat (fpath.buf, &info);
+				if (re >=0) {
+					cherokee_buffer_add_ullong10 (out, info.st_size);
+				}
+				break;
+
+			case op_lastmod:		
+				TRACE(ENTRIES, "Including file modification date '%s'\n", fpath.buf);
+				re = cherokee_stat (fpath.buf, &info);
+				if (re >= 0) {
+					char tmp[50];
+
+					strftime (tmp, sizeof(tmp), 
+						  "%d-%b-%Y %H:%M",
+						  localtime(&info.st_mtime));
+					cherokee_buffer_add (out, tmp, strlen(tmp));
+				}
+				break;
+			default:
+				SHOULDNT_HAPPEN;
+			}
+
+		default:
+			SHOULDNT_HAPPEN;
 		}
 	}
 
