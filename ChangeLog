@@ -1,3 +1,8 @@
+2008-11-02  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_ssi.h, cherokee/handler_ssi.c, configure.in,
+	cherokee/Makefile.am: Initial import of the upcoming SSI handler.
+
 2008-11-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* configure.in, m4/libgnutls.m4: The GnuTLS detection code has
