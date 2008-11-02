@@ -30,6 +30,7 @@
 #include "util.h"
 #include "server-protected.h"
 #include "connection-protected.h"
+#include "virtual_server.h"
 
 #define ENTRIES "handler,ssi"
 
@@ -159,8 +160,10 @@ parse (cherokee_handler_ssi_t *hdl,
 		/* Find next SSI tag
 		 */
 		p = strstr (q, "<!--#");
-		if (p == NULL)
+		if (p == NULL) {
+			cherokee_buffer_add (out, begin, (in->buf + in->len) - begin);
 			return ret_ok;
+		}
 
 		q = strstr (p + 5, "-->");
 		if (q == NULL)
@@ -206,6 +209,24 @@ parse (cherokee_handler_ssi_t *hdl,
 
 				/* Clean up */
 				cherokee_buffer_drop_ending (&hdl->dir, val.len+1);
+
+			} else if (strncmp (pair.buf, "virtual=", 8) == 0) {
+				cherokee_buffer_t path = CHEROKEE_BUF_INIT;
+
+				cherokee_buffer_clean (&val);
+				get_val (pair.buf + 8, &val);
+			  
+				/* Build the path */
+				cherokee_buffer_add_buffer (&path, &HANDLER_VSRV(hdl)->root);
+				cherokee_buffer_add_char   (&path, '/');
+				cherokee_buffer_add_buffer (&path, &val);
+
+				/* Read the file */
+				TRACE(ENTRIES, "Including file '%s'\n", hdl->dir.buf);
+				cherokee_buffer_read_file (out, path.buf);
+
+				/* Clean up */
+				cherokee_buffer_mrproper (&path);
 
 			} else {
 				PRINT_MSG ("Unknown SSI include property: '%s'\n", pair.buf);

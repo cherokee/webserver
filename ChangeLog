@@ -1,5 +1,8 @@
 2008-11-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_ssi.c (parse): Implements SSI virtual
+	inclusions.
+
 	* cherokee/handler.h (HANDLER_VSRV): Adds a new macro to access
 	a virtual server object from one of its connection handlers.
 
