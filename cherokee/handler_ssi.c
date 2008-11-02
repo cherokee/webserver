@@ -87,19 +87,32 @@ cherokee_handler_ssi_new (cherokee_handler_t     **hdl,
 }
 
 
+static ret_t
+props_free (cherokee_handler_ssi_props_t *props)
+{
+	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
+}
+
 ret_t
 cherokee_handler_ssi_configure (cherokee_config_node_t   *conf,
 				cherokee_server_t        *srv,
 				cherokee_module_props_t **_props)
 {
+	cherokee_handler_ssi_props_t *props;
+
+	UNUSED(srv);
+
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n, handler_ssi_props);
+
+		cherokee_module_props_init_base (MODULE_PROPS(n), 
+						 MODULE_PROPS_FREE(props_free));
+		n->foo = 1;
+		*_props = MODULE_PROPS(n);
+	}
+
+	props = PROP_SSI(*_props);
 	return ret_ok;
-}
-
-
-ret_t
-cherokee_handler_ssi_props_free (cherokee_handler_ssi_props_t *props)
-{
-	return cherokee_handler_props_free_base (HANDLER_PROPS(props));
 }
 
 
