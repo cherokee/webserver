@@ -1,5 +1,8 @@
 2008-11-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleSsi.py, admin/constants.py, admin/Makefile.am: Added
+	the a new module for the SSI handler.
+
 	* cherokee/handler_ssi.c: Implements SSI virtual fsize, and
 	flastmod (with both 'file' and 'virtual' files).
 
