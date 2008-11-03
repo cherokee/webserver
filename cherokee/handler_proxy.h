@@ -37,18 +37,20 @@
 #include "buffer.h"
 #include "connection.h"
 #include "balancer.h"
+#include "downloader_manager.h"
 
 /* Data types
  */
 typedef struct {
 	cherokee_module_props_t    base;
 	cherokee_balancer_t       *balancer;
+	cherokee_downloader_mgr_t  manager;
 } cherokee_handler_proxy_props_t;
 
 typedef struct {
-	cherokee_handler_t       handler;	
-	cherokee_downloader_t    downloader;
-	cherokee_buffer_t        url;
+	cherokee_handler_t         handler;	
+	cherokee_downloader_t     *downloader;
+	cherokee_buffer_t          url;
 } cherokee_handler_proxy_t;
 
 #define PROP_PROXY(x)      ((cherokee_handler_proxy_props_t *)(x))
