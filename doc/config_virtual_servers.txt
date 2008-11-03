@@ -212,6 +212,20 @@ rule types:
       specific domains to allow or deny the delivery of the requested
       information.
 
+  * **File Exists**: This type of rule will only be applied if a
+      certain file (or a file among a list of provided file names) is
+      present. An I/O cache specific setting for the rule can be
+      configured in the `Rule` tab. If enabled, it will speed up the
+      file detection during the rule evaluation. This improves
+      performance but is not recommended when the directory contents
+      change dynamically.
+
+  * **HTTP method**: These rules are applied whenever the selected HTTP
+      method is used. You can configure these to respond to a request
+      of type GET, POST, HEAD, PUT, OPTIONS, DELETE, TRACE, CONNECT,
+      COPY, LOCK, MKCOL, MOVE, NOTIFY, POLL, PROPFIND, PROPPATCH,
+      SEARCH, SUBSCRIBE, UNLOCK or UNSUBSCRIBE.
+
   * **GeoIP**: If GeoIP support is present, this type of rules can be
       added. The GeoIP library has to be present at build time for
       this to happen. If enabled, specific behavior can be offered
@@ -221,14 +235,6 @@ rule types:
       usage of proxies on the user side will render this resolution
       mechanism inaccurate. An initial country must be added to the
       rule, and more selections can be added in further steps.
-
-  * **File Exists**: This type of rule will only be applied if a
-      certain file (or a file among a list of provided file names) is
-      present. An I/O cache specific setting for the rule can be
-      configured in the `Rule` tab. If enabled, it will speed up the
-      file detection during the rule evaluation. This improves
-      performance but is not recommended when the directory contents
-      change dynamically.
 
 It is very important to know that these rules are prioritized. The
 higher its priority is, the sooner they are checked. You could
