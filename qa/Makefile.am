@@ -186,7 +186,9 @@ run-tests.py \
 178-AuthLista3.py \
 179-RuleExists.py \
 180-RuleExists2.py \
-181-RuleExists3.py
+181-RuleExists3.py \
+183-SSI-include-file.py \
+183-SSI-include-virtual.py
 
 test:
 	./run-tests.py
