@@ -484,6 +484,7 @@ env             , String  , Variable to be set in the environment
 host            , String  , host:port or path to unix socket
 interpreter     , String  , command to launch the service if any
 type            , Type    , `host` | `interpreter`
+timeout         , Number  , spawning timeout specified in seconds
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Examples:

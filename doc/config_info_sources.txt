@@ -33,7 +33,7 @@ There are two possible settings as *information sources*:
   neat tricks you can think of. If this field is specified then the
   parameter `Spawning timeout` can also be specified. If this limit is
   exceeded and the interpreter has not yet been launched, Cherokee
-  will give up.
+  will give up. The default value is 3 seconds.
 
 Note that because of Cherokee's flexibility and modularity, sometimes
 and deppending of the situation one or the other setting might not
