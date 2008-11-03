@@ -6,6 +6,9 @@
 
 2008-11-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_ssi.c (cherokee_handler_ssi_add_headers): Fixes
+	a little problem with the SSI MIME type handling.
+
 	* qa/186-SSI-droot.py, qa/Makefile.am: Adds a new QA. It checks
 	whether the document root security feature actually works.
 

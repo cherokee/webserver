@@ -445,6 +445,7 @@ ret_t
 cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 				  cherokee_buffer_t      *buffer)
 {
+	ret_t                  ret;
 	char                  *ext;
 	cherokee_buffer_t     *mime = NULL;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);;
@@ -457,12 +458,14 @@ cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 		if (ext == NULL)
 			return ret_ok;
 
-		cherokee_mime_get_by_suffix (srv->mime, ext+1, &hdl->mime);
-
-		cherokee_mime_entry_get_type (hdl->mime, &mime);
-		cherokee_buffer_add_str    (buffer, "Content-Type: ");
-		cherokee_buffer_add_buffer (buffer, mime);
-		cherokee_buffer_add_str    (buffer, CRLF);
+		ret = cherokee_mime_get_by_suffix (srv->mime, ext+1, &hdl->mime);
+		if (ret == ret_ok) {
+			cherokee_mime_entry_get_type (hdl->mime, &mime);
+		
+			cherokee_buffer_add_str    (buffer, "Content-Type: ");
+			cherokee_buffer_add_buffer (buffer, mime);
+			cherokee_buffer_add_str    (buffer, CRLF);
+		}
 	}
 
 	/* Length
