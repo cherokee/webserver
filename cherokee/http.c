@@ -74,6 +74,59 @@ cherokee_http_method_to_string (cherokee_http_method_t method, const char **str,
 }
 
 
+ret_t
+cherokee_http_string_to_method (cherokee_buffer_t      *string,
+				cherokee_http_method_t *method)
+{
+	if (cherokee_buffer_case_cmp_str (string, "get")) 
+		*method = http_get;
+	else if (cherokee_buffer_case_cmp_str (string, "post")) 
+		*method = http_post;
+	else if (cherokee_buffer_case_cmp_str (string, "head")) 
+		*method = http_head;
+	else if (cherokee_buffer_case_cmp_str (string, "put")) 
+		*method = http_put;
+	else if (cherokee_buffer_case_cmp_str (string, "options")) 
+		*method = http_options;
+	else if (cherokee_buffer_case_cmp_str (string, "delete")) 
+		*method = http_delete;
+	else if (cherokee_buffer_case_cmp_str (string, "trace")) 
+		*method = http_trace;
+	else if (cherokee_buffer_case_cmp_str (string, "connect")) 
+		*method = http_connect;
+	else if (cherokee_buffer_case_cmp_str (string, "copy")) 
+		*method = http_copy;
+	else if (cherokee_buffer_case_cmp_str (string, "lock")) 
+		*method = http_lock;
+	else if (cherokee_buffer_case_cmp_str (string, "mkcol")) 
+		*method = http_mkcol;
+	else if (cherokee_buffer_case_cmp_str (string, "move")) 
+		*method = http_move;
+	else if (cherokee_buffer_case_cmp_str (string, "notify")) 
+		*method = http_notify;
+	else if (cherokee_buffer_case_cmp_str (string, "poll")) 
+		*method = http_poll;
+	else if (cherokee_buffer_case_cmp_str (string, "propfind")) 
+		*method = http_propfind;
+	else if (cherokee_buffer_case_cmp_str (string, "proppatch")) 
+		*method = http_proppatch;
+	else if (cherokee_buffer_case_cmp_str (string, "search")) 
+		*method = http_search;
+	else if (cherokee_buffer_case_cmp_str (string, "subscribe")) 
+		*method = http_subscribe;
+	else if (cherokee_buffer_case_cmp_str (string, "unlock")) 
+		*method = http_unlock;
+	else if (cherokee_buffer_case_cmp_str (string, "unsubscribe")) 
+		*method = http_unsubscribe;
+	else {
+		*method = http_unknown;
+		return ret_not_found;
+	}
+
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_http_version_to_string (cherokee_http_version_t version, const char **str, cuint_t *len)
 {

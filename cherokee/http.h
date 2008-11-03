@@ -163,10 +163,10 @@ typedef enum {
 				  (e != http_switching_protocols))
 
 ret_t cherokee_http_method_to_string  (cherokee_http_method_t  method,  const char **str, cuint_t *str_len);
+ret_t cherokee_http_string_to_method  (cherokee_buffer_t *string, cherokee_http_method_t *method);
 ret_t cherokee_http_version_to_string (cherokee_http_version_t version, const char **str, cuint_t *str_len);
 ret_t cherokee_http_code_to_string    (cherokee_http_t code, const char **str);
 ret_t cherokee_http_code_copy         (cherokee_http_t code, cherokee_buffer_t *buf);
-
 
 CHEROKEE_END_DECLS
 
