@@ -1,5 +1,7 @@
 2008-11-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/rule_exists.c (match): The I/O entry must be unrefed.
+
 	* qa/182-SSI-include-file.py, qa/183-SSI-include-virtual.py,
 	qa/184-SSI-fsize-file.py, qa/185-SSI-fsize-virtual.py,
 	qa/Makefile.am: Adds a few of new QA tests for checkin the SSI

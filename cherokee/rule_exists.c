@@ -157,6 +157,9 @@ match (cherokee_rule_exists_t *rule,
 
 		cherokee_buffer_drop_ending (tmp, entry->file.len);
 
+		if (io_entry)
+			cherokee_iocache_entry_unref (&io_entry);
+
 		if (ret == ret_ok) {
 			TRACE(ENTRIES, "Match exists: '%s'\n", entry->file.buf);
 			return ret_ok;
