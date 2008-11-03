@@ -208,7 +208,7 @@ parse (cherokee_handler_ssi_t *hdl,
 		cherokee_buffer_trim (&key);
 
 		q += 3;
-		TRACE(ENTRIES, "Found key '%s'", key.buf);
+		TRACE(ENTRIES, "Found key '%s'\n", key.buf);
 
 		/* Add the previous chunk
 		 */
@@ -270,11 +270,15 @@ parse (cherokee_handler_ssi_t *hdl,
 				cherokee_buffer_add_buffer (&fpath, &hdl->dir);
 				cherokee_buffer_add_char   (&fpath, '/');
 				cherokee_buffer_add_buffer (&fpath, &val);
+
+				TRACE(ENTRIES, "Path: file '%s'\n", fpath.buf);
 				break;
 			case path_virtual:
 				cherokee_buffer_add_buffer (&fpath, &HANDLER_VSRV(hdl)->root);
 				cherokee_buffer_add_char   (&fpath, '/');
 				cherokee_buffer_add_buffer (&fpath, &val);
+
+				TRACE(ENTRIES, "Path: virtual '%s'\n", fpath.buf);
 				break;
 			default:
 				SHOULDNT_HAPPEN;
@@ -311,11 +315,13 @@ parse (cherokee_handler_ssi_t *hdl,
 			default:
 				SHOULDNT_HAPPEN;
 			}
+			break;
 
 		default:
+			printf ("OP: %d\n", op);
 			SHOULDNT_HAPPEN;
-		}
-	}
+		} /* switch(op) */
+	} /* while */
 
 	return ret_ok;
 }
@@ -371,6 +377,18 @@ cherokee_handler_ssi_init (cherokee_handler_ssi_t *hdl)
 	/* Build the local directory
 	 */
 	cherokee_buffer_add_buffer (&hdl->dir, &conn->local_directory);
+	cherokee_buffer_add_buffer (&hdl->dir, &conn->request);
+
+	while (true) {
+		if (cherokee_buffer_is_empty (&hdl->dir))
+			return ret_error;
+
+		if (cherokee_buffer_is_ending (&hdl->dir, '/'))
+			break;
+
+		cherokee_buffer_drop_ending (&hdl->dir, 1);
+	}
+
 
 	/* Real init function
 	 */
