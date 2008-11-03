@@ -46,3 +46,39 @@ that points to a path out of the Sever root directory where the
 CGI programs are located.
 
 image::media/images/admin_handler_cgi.png[CGI]
+
+//////
+Environment variables
+~~~~~~~~~~~~~~~~~~~~~
+
+When working with CGI and redirections, sometimes it is convenient to
+have some persistent information between the CGI invocations. This is
+the case when an error has to be redirected to a error-handling page.
+
+To ease up accessing such values, some server environment variables are
+set by Cherokee. The complete list of environment variables added
+follows:
+
+This info will be added upon completion of issue 40
+
+* REDIRECT_URL: the URL-path that was not found. For example, if a
+  missing page -`http://example.net/nonexistent.htm`- was requested,
+  this variable would be set to `/nonexistent.html`.
+
+* REDIRECT_STATUS: the HTTP response obtained from the original
+  request. This is `404`.
+
+* REDIRECT_REQUEST_METHOD: the method of the original request, such as
+  GET or POST.
+
+* REDIRECT_ERROR_NOTES: a brief description of what went wrong, for
+  example, "File does not exist: /usr/local/docroot/nonexistent.html".
+
+* SERVER_ADDR: This will typically be `::1` which is a unicast
+  localhost address. This means that the packets sent to this addrress
+  will be looped back on the same virtual interface.
+
+* SERVER_PORT: Port to which the request was performed origianlly.
+
+* REMOTE_PORT: Port to which the request was served.
+//////
