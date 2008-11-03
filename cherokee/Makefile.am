@@ -184,6 +184,23 @@ endif
 
 
 #
+# Rule exists
+#
+rule_method = \
+rule_method.c \
+rule_method.h
+
+libplugin_method_la_LDFLAGS = $(module_ldflags)  
+libplugin_method_la_SOURCES = $(rule_method)
+
+if STATIC_RULE_METHOD
+static_rule_method_src = $(rule_method)
+else
+dynamic_rule_method_lib = libplugin_method.la
+endif
+
+
+#
 # Rule geoip
 #
 if HAVE_GEOIP
@@ -511,11 +528,12 @@ endif
 #
 handler_proxy = \
 handler_proxy.c \
-handler_proxy.h
+handler_proxy.h \
+downloader_manager.h \
+downloader_manager.c
 
 libplugin_proxy_la_LDFLAGS = $(module_ldflags)  
 libplugin_proxy_la_SOURCES = $(handler_proxy)
-libplugin_proxy_la_LIBADD  = libcherokee-client.la
 
 if STATIC_HANDLER_PROXY
 static_handler_proxy_src = $(handler_proxy)
@@ -540,6 +558,23 @@ if STATIC_HANDLER_MIRROR
 static_handler_mirror_src = $(handler_mirror)
 else
 dynamic_handler_mirror_lib = libplugin_mirror.la
+endif
+
+
+#
+# Handler ssi
+#
+handler_ssi = \
+handler_ssi.c \
+handler_ssi.h
+
+libplugin_ssi_la_LDFLAGS = $(module_ldflags)  
+libplugin_ssi_la_SOURCES = $(handler_ssi)
+
+if STATIC_HANDLER_SSI
+static_handler_ssi_src = $(handler_ssi)
+else
+dynamic_handler_ssi_lib = libplugin_ssi.la
 endif
 
 
@@ -1057,6 +1092,7 @@ $(static_rule_extensions_src) \
 $(static_rule_request_src) \
 $(static_rule_header_src) \
 $(static_rule_exists_src) \
+$(static_rule_method_src) \
 $(static_rule_geoip_src) \
 $(static_rule_not_src) \
 $(static_rule_and_src) \
@@ -1076,6 +1112,7 @@ $(static_handler_phpcgi_src) \
 $(static_handler_common_src) \
 $(static_handler_proxy_src) \
 $(static_handler_mirror_src) \
+$(static_handler_ssi_src) \
 $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
 $(static_handler_dbslayer_src) \
@@ -1215,6 +1252,7 @@ $(dynamic_rule_extensions_lib) \
 $(dynamic_rule_request_lib) \
 $(dynamic_rule_header_lib) \
 $(dynamic_rule_exists_lib) \
+$(dynamic_rule_method_lib) \
 $(dynamic_rule_geoip_lib) \
 $(dynamic_rule_not_lib) \
 $(dynamic_rule_and_lib) \
@@ -1231,6 +1269,7 @@ $(dynamic_handler_fastcgi_lib) \
 $(dynamic_handler_redir_lib) \
 $(dynamic_handler_proxy_lib) \
 $(dynamic_handler_mirror_lib) \
+$(dynamic_handler_ssi_lib) \
 $(dynamic_handler_custom_error_lib) \
 $(dynamic_handler_error_redir_lib) \
 $(dynamic_handler_error_nn_lib) \
