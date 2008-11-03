@@ -1,3 +1,8 @@
+2008-11-03  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/ModuleMethod.py: Fixes glitch in the submission of the
+	"HTTP method"-rules that prevented them from being configured.
+
 2008-11-03  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/ModuleCgi.py, admin/static/js/common.js, admin/Entry.py:

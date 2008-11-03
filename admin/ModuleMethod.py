@@ -26,7 +26,7 @@ METHODS = [
     ('unsubscribe', 'UNSUBSCRIBE')
 ]
 
-NOTE_METHOD  = "The HTTP method at should match this rule."
+NOTE_METHOD  = "The HTTP method that should match this rule."
 
 
 class ModuleMethod (Module, FormHelper):
@@ -38,10 +38,14 @@ class ModuleMethod (Module, FormHelper):
 
     def _op_render (self):
         table = TableProps()
+        js = "this.form.submit()"
         if self._prefix.startswith('tmp!'):
-            self.AddPropOptions_Reload (table, 'Method', '%s!value'%(self._prefix), METHODS, NOTE_METHOD)
+            self.AddPropOptions (table, 'Method', '%s!value'%(self._prefix), \
+                                 METHODS, NOTE_METHOD, onChange=js, onBlur=js, onClick=js)
         else:
-            self.AddPropOptions_Reload (table, 'Method', '%s!method'%(self._prefix), METHODS, NOTE_METHOD)
+            self.AddPropOptions (table, 'Method', '%s!method'%(self._prefix), \
+                                 METHODS, NOTE_METHOD, onChange=js)
+
         return str(table)
 
     def _op_apply_changes (self, uri, post):
