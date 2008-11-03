@@ -32,7 +32,7 @@
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
 #include <cherokee/rule.h>
-#include <cherokee/avl.h>
+#include <cherokee/list.h>
 
 CHEROKEE_BEGIN_DECLS
 
