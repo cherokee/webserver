@@ -16,6 +16,7 @@ Cherokee:
 * link:modules_validators_mysql.html[MySQL]
 * link:modules_validators_pam.html[PAM]
 * link:modules_validators_plain.html[Plain]
+* link:modules_validators_authlist.html[Fixed List]
 
 You will also find interesting information in the
 link:modules_validators_plain.html["Validator Modules Overview"] and
@@ -156,6 +157,43 @@ image::media/images/cookbook_mysql_rule.png[MySQL Authenticated rule]
 And any content requested to Cherokee will require prior
 authentication against the database.
 
+
+Another usage example
+~~~~~~~~~~~~~~~~~~~~~
+
+As you can see, getting the hang of how authentication works is pretty
+easy. Let's ilustrate another easy example. How to serve PHP files,
+both from a protected location and an unprotected one?
+
+Let's assume our locations are targets are:
+- /unprotected/*.php
+- /protected/*.php
+
+Well... this would be really easy. You just have to remember that
+rules are evaluated from top to bottom, and the evaluation proceeds
+until a final rule is matched.
+
+This means that we would only have to be careful with the order of our
+rules, and it would be as simple as setting a couple of rules:
+
+- The first one, of type `Directory` applied to the path
+  `/protected`. This would be the top rule, should use one of the
+  authentication mechanisms mentioned above and should not be set as
+  _FINAL_.
+
+- The second one, of type `Extension` would apply to `php` files and
+  should be configured as according to the link:cookbook_php.html[PHP
+  recipe]. This one should be a _FINAL_ rule.
+
+And this would be more than enough. The files from the secure location
+would match the first rule and the authentication would be
+required. In case it was successful, not being a final rule, the
+request would proceed to the second rule. Once there, the regular
+processing of PHP files would take palce. This one is a _FINAL_ rule,
+so the rule evaluation would stop.
+
+In case the PHP files were not being requested from the secured
+directory, just the second rule would apply.
 
 ////
 To be written
