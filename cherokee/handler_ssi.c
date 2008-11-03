@@ -173,10 +173,11 @@ parse (cherokee_handler_ssi_t *hdl,
 	operations_t       op;
 	path_type_t        path;
 	struct stat        info;
-	cherokee_buffer_t  key   = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  val   = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  pair  = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  fpath = CHEROKEE_BUF_INIT;
+	cherokee_boolean_t ignore;
+	cherokee_buffer_t  key     = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  val     = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  pair    = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t  fpath   = CHEROKEE_BUF_INIT;
 
 	q = in->buf;
 
@@ -216,7 +217,8 @@ parse (cherokee_handler_ssi_t *hdl,
 
 		/* Check element
 		 */
-		op = op_none;
+		op     = op_none;
+		ignore = false;
 
 		if (strncmp (key.buf, "include", 7) == 0) {
 			op  = op_include;
@@ -283,42 +285,62 @@ parse (cherokee_handler_ssi_t *hdl,
 			default:
 				SHOULDNT_HAPPEN;
 			}
+			
+			/* Path security check: ensure that the file
+			 * to include is inside the document root.
+			 */
+			if (! cherokee_buffer_is_empty (&fpath)) {
+				cherokee_path_short (&fpath);
+
+				if (fpath.len < HANDLER_VSRV(hdl)->root.len) {
+					ignore = true;
+				
+				}  else {
+					re = strncmp (fpath.buf,
+						      HANDLER_VSRV(hdl)->root.buf,
+						      HANDLER_VSRV(hdl)->root.len);
+					if (re != 0) {
+						ignore = true;
+					}
+				}
+			}
 
 			/* Perform the operation
 			 */
-			switch (op) {
-			case op_include:
-				TRACE(ENTRIES, "Including file '%s'\n", fpath.buf);
-				cherokee_buffer_read_file (out, fpath.buf);				
-				break;
+			if (! ignore) {
+				switch (op) {
+				case op_include:
+					TRACE(ENTRIES, "Including file '%s'\n", fpath.buf);
+					cherokee_buffer_read_file (out, fpath.buf);				
+					break;
 
-			case op_size:
-				TRACE(ENTRIES, "Including file size '%s'\n", fpath.buf);
-				re = cherokee_stat (fpath.buf, &info);
-				if (re >=0) {
-					cherokee_buffer_add_ullong10 (out, info.st_size);
+				case op_size:
+					TRACE(ENTRIES, "Including file size '%s'\n", fpath.buf);
+					re = cherokee_stat (fpath.buf, &info);
+					if (re >=0) {
+						cherokee_buffer_add_ullong10 (out, info.st_size);
+					}
+					break;
+
+				case op_lastmod:	
+					TRACE(ENTRIES, "Including file modification date '%s'\n", fpath.buf);
+					re = cherokee_stat (fpath.buf, &info);
+					if (re >= 0) {
+						char tmp[50];
+
+						strftime (tmp, sizeof(tmp), 
+							  "%d-%b-%Y %H:%M",
+							  localtime(&info.st_mtime));
+						cherokee_buffer_add (out, tmp, strlen(tmp));
+					}
+					break;
+				default:
+					SHOULDNT_HAPPEN;
 				}
-				break;
+			} /* !ignore */
 
-			case op_lastmod:		
-				TRACE(ENTRIES, "Including file modification date '%s'\n", fpath.buf);
-				re = cherokee_stat (fpath.buf, &info);
-				if (re >= 0) {
-					char tmp[50];
-
-					strftime (tmp, sizeof(tmp), 
-						  "%d-%b-%Y %H:%M",
-						  localtime(&info.st_mtime));
-					cherokee_buffer_add (out, tmp, strlen(tmp));
-				}
-				break;
-			default:
-				SHOULDNT_HAPPEN;
-			}
 			break;
-
 		default:
-			printf ("OP: %d\n", op);
 			SHOULDNT_HAPPEN;
 		} /* switch(op) */
 	} /* while */
