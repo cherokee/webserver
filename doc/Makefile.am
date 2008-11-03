@@ -66,6 +66,7 @@ modules_handlers_cgi.html \
 modules_handlers_fcgi.html \
 modules_handlers_scgi.html \
 modules_handlers_server_info.html \
+modules_handlers_ssi.html \
 modules_handlers_mirror.html \
 modules_handlers_admin.html \
 modules_loggers.html \
