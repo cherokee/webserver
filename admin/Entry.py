@@ -17,6 +17,10 @@ class Entry:
             self._kwargs['class']='required'
             del kwargs['req']
 
+        if 'noautosubmit' in kwargs and kwargs['noautosubmit'] == True:
+            self._kwargs['class']='noautosubmit'
+            del kwargs['noautosubmit']
+
     def _init_value (self, cfg):
         try:
             value = cfg[self._name].value

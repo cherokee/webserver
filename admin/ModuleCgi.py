@@ -20,7 +20,8 @@ class ModuleCgiBase (ModuleHandler):
         'error_handler',
         'check_file',
         'pass_req_headers',
-        'xsendfile'
+        'xsendfile',
+        'env'
     ]
 
     def __init__ (self, cfg, prefix, name, submit_url):
@@ -48,9 +49,39 @@ class ModuleCgiBase (ModuleHandler):
         self.AddPropCheck (table, "Allow X-Sendfile",  "%s!xsendfile"    % (self._prefix), False, NOTE_XSENDFILE)
         txt += self.Indent(table)
 
+        txt1 = '<h2>Custom environment variables</h2>'
+        envs = self._cfg.keys('%s!env'%(self._prefix))
+        if envs:
+            table = Table(3, title_left=1, style='width="90%"')
+
+            for env in envs:
+                pre = '%s!env!%s'%(self._prefix,env)
+                val = self.InstanceEntry(pre, 'text', size=25)
+                js = "post_del_key('/ajax/update', '%s');"%(pre)
+                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                table += (env, val, link_del)
+
+            txt1 += self.Indent(table)
+
+        txt1 += '<h3>Add new custom environment variable</h3>';
+        name  = self.InstanceEntry('new_custom_env_name',  'text', size=25, noautosubmit=True)
+        value = self.InstanceEntry('new_custom_env_value', 'text', size=25, noautosubmit=True)
+
+        table = Table(3, 1, style='width="90%"')
+        table += ('Name', 'Value', '')
+        table += (name, value, SUBMIT_ADD)
+        txt1 += self.Indent(table)
+        txt += txt1
+
         return txt
 
     def _op_apply_changes (self, uri, post):
+        new_name = post.pop('new_custom_env_name')
+        new_value = post.pop('new_custom_env_value')
+
+        if new_name and new_value:
+            self._cfg['%s!env!%s'%(self._prefix, new_name)] = new_value
+
         checkboxes = ['error_handler', 'pass_req_headers', 'xsendfile']
 
         if self.fixed_check_file == None:

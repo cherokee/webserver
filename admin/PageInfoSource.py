@@ -130,7 +130,7 @@ class PageInfoSource (PageMenu, FormHelper):
         name  = self.InstanceEntry('new_env_name',  'text', size=25)
         value = self.InstanceEntry('new_env_value', 'text', size=25)
 
-        table = Table(3, 1, style='width="90%%"')
+        table = Table(3, 1, style='width="90%"')
         table += ('Variable', 'Value', '')
         table += (name, value, SUBMIT_ADD)
 
@@ -193,7 +193,7 @@ class PageInfoSource (PageMenu, FormHelper):
             protect = self._get_protected_list()
 
             txt += "<h2>Known sources</h2>"
-            table  = '<table width="90%%" id="sources" class="rulestable">'
+            table  = '<table width="90%" id="sources" class="rulestable">'
             table += '<tr><th>Nick</th><th>Type</th><th>Connection</th></tr>'
 
             for s in self._cfg.keys('source'):
