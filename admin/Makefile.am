@@ -84,6 +84,7 @@ ModuleExtensions.py \
 ModuleGeoip.py \
 ModuleHeader.py \
 ModuleExists.py \
+ModuleMethod.py \
 ModuleCustomError.py \
 config.py \
 pyscgi.py \

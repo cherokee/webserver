@@ -1,5 +1,8 @@
 2008-11-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleMethod.py, admin/consts.py, admin/Makefile.am:
+	Adds a new method to implement the new HTTP method rule.
+
 	* cherokee/rule_method.h, cherokee/rule_method.c, configure.in,
 	cherokee/Makefile.am: Integrates a new rule type. It tries to
 	match the HTTP method.
