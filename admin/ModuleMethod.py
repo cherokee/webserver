@@ -4,7 +4,7 @@ from Module import *
 import validations
 
 METHODS = [
-    ('None',        'Choose'),
+    ('',            'Choose'),
     ('get',         'GET'),
     ('post',        'POST'),
     ('head',        'HEAD'),
@@ -40,14 +40,13 @@ class ModuleMethod (Module, FormHelper):
     def _op_render (self):
         table = TableProps()
 
-        methods = METHODS
         if self._prefix.startswith('tmp!'):
             self.AddPropOptions (table, 'Method', '%s!value'%(self._prefix), \
-                                 methods, NOTE_METHOD)
+                                 METHODS, NOTE_METHOD)
         else:
-            methods.remove(('None', 'Choose'))
+            METHODS.remove(('', 'Choose'))
             self.AddPropOptions (table, 'Method', '%s!method'%(self._prefix), \
-                                 methods, NOTE_METHOD)
+                                 METHODS, NOTE_METHOD)
 
         return str(table)
 
