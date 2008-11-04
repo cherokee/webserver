@@ -6,7 +6,7 @@ Cookbook: Setting up Django
 Django is a fantastic high-level Python Web framework that can run
 nicely with Cherokee and either the
 link:modules_handlers_scgi.html[SCGI] or
-link:modules_handlers_fcgi.html[FastCGI] or handlers.
+link:modules_handlers_fcgi.html[FastCGI] handlers.
 
 To properly set up Cherokee to use Django you will need a working
 Django framework, which is not difficult at all to get ready. The
