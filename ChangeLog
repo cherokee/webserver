@@ -1,3 +1,9 @@
+2008-11-04  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/PageVServer.py: small cleanup. Removed a superfluous
+	option that was repeating functionality, related to
+	http://code.google.com/p/cherokee/issues/detail?id=192
+
 2008-11-03  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/ModuleMethod.py: Fixes glitch in the submission of the

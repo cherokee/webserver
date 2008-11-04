@@ -239,7 +239,7 @@ class PageVServer (PageMenu, FormHelper):
     def _render_error_handler (self, host):
         txt = ''
         pre = 'vserver!%s' % (host)
-        
+
         table = TableProps()
         e = self.AddPropOptions_Reload (table, 'Error Handler',
                                         '%s!error_handler' % (pre), 
@@ -248,7 +248,7 @@ class PageVServer (PageMenu, FormHelper):
         txt += str(table) + self.Indent(e)
 
         return txt
-    
+
     def _render_add_rule (self, prefix):
         # Render
         txt = "<h2>Add new rule</h2>"
@@ -381,18 +381,8 @@ class PageVServer (PageMenu, FormHelper):
 
     def _render_logger (self, host):
         txt   = ""
-
-        # Disable
         pre = 'vserver!%s!logger'%(host)
-        cfg = self._cfg[pre]
         format = self._cfg.get_val(pre)
-        if cfg and cfg.has_child():
-            table = TableProps()
-            js = "post_del_key('%s','%s');" % (self.submit_ajax_url, pre)
-            button = self.InstanceButton ("Disable", onClick=js)
-            self.AddProp (table, 'Status', '', button, NOTE_DISABLE_LOG)
-            txt += str(table)
-        txt += "<hr />"
 
         # Logger
         txt += '<h3>Logging Format</h3>'
