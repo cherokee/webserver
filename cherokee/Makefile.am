@@ -528,9 +528,7 @@ endif
 #
 handler_proxy = \
 handler_proxy.c \
-handler_proxy.h \
-downloader_manager.h \
-downloader_manager.c
+handler_proxy.h
 
 libplugin_proxy_la_LDFLAGS = $(module_ldflags)  
 libplugin_proxy_la_SOURCES = $(handler_proxy)
