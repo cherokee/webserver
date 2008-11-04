@@ -154,11 +154,8 @@ main ()
   fi
   rm -f conf.libgnutlstest
 
-  
-  # Modified by alo:
-  # s/LIBGNUTLS_/TLS_/g
-  AC_SUBST(TLS_CFLAGS)
-  AC_SUBST(TLS_LIBS)
+  AC_SUBST(LIBGNUTLS_TLS_CFLAGS)
+  AC_SUBST(LIBGNUTLS_TLS_LIBS)
 ])
 
 dnl *-*wedit:notab*-*  Please keep this as the last line.

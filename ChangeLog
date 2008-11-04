@@ -1,3 +1,7 @@
+2008-11-04  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* configure.in, m4/libgnutls.m4: Fixes a GNUTLS compilation issue.
+
 2008-11-04  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/PageVServer.py: small cleanup. Removed a superfluous

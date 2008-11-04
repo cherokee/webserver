@@ -1012,6 +1012,8 @@ then
 	       AC_CHECK_LIB(gcrypt, gcry_control, [TLS_LIBS="$TLS_LIBS -lgcrypt"])
 	       AC_CHECK_LIB(gpg-error, gpg_strerror, [TLS_LIBS="$TLS_LIBS -lgpg-error"])
 
+		  TLS_LIBS="$LIBGNUTLS_LIBS $TLS_LIBS"
+		  TLS_CFLAGS="$LIBGNUTLS_CFLAGS $TLS_CFLAGS"
 		  AC_SUBST(TLS_LIBS)
 		  AC_SUBST(TLS_CFLAGS)
 
