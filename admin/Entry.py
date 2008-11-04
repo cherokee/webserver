@@ -13,13 +13,17 @@ class Entry:
 
         # Entries with req=True will be checked against
         # check_all_or_none before autosubmissions
-        if 'req' in kwargs and kwargs['req']==True:
-            self._kwargs['class']='required'
+        str_class = ''
+        if 'req' in kwargs and kwargs['req'] == True:
+            str_class += 'required '
             del kwargs['req']
 
         if 'noautosubmit' in kwargs and kwargs['noautosubmit'] == True:
-            self._kwargs['class']='noautosubmit'
+            str_class += 'noautosubmit '
             del kwargs['noautosubmit']
+
+        if str_class:
+            self._kwargs['class'] = str_class
 
     def _init_value (self, cfg):
         try:
@@ -53,6 +57,10 @@ class EntryOptions:
         self._args     = args
         self._kwargs   = kwargs
         self._selected = None
+
+        if 'noautosubmit' in kwargs and kwargs['noautosubmit'] == True:
+            self._kwargs['class'] = 'noautosubmit '
+            del kwargs['noautosubmit']
 
     def __str__ (self):
         props = 'id="%s" name="%s"' % (self._name, self._name)

@@ -1,3 +1,9 @@
+2008-11-04  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/ModuleRedir.py, admin/static/js/common.js, admin/Entry.py:
+	Now it is possible to modify redirection rules. Fixes Bug #191:
+	http://code.google.com/p/cherokee/issues/detail?id=191
+
 2008-11-04  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* configure.in, m4/libgnutls.m4: Fixes a GNUTLS compilation issue.

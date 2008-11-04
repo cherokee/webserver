@@ -34,10 +34,9 @@ class ModuleRedir (ModuleHandler):
             for rule in cfg:
                 cfg_key_rule = "%s!%s" % (cfg_key, rule)
 
-                js = "this.form.submit()"
-                show, _,_ = self.InstanceOptions ('%s!show'%(cfg_key_rule), REDIR_SHOW, onChange=js)
-                regex     = self._cfg.get_val('%s!regex'    %(cfg_key_rule))
-                substring = self._cfg.get_val('%s!substring'%(cfg_key_rule))
+                show, _,_ = self.InstanceOptions ('%s!show'%(cfg_key_rule), REDIR_SHOW)
+                regex     = self.InstanceEntry('%s!regex' % (cfg_key_rule), 'text', size=25)
+                substring = self.InstanceEntry('%s!substring' % (cfg_key_rule), 'text', size=25)
                 js = "post_del_key('/ajax/update', '%s');" % (cfg_key_rule)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (show, regex, substring, link_del)
@@ -47,12 +46,13 @@ class ModuleRedir (ModuleHandler):
 
         # Add new rule
         table = TableProps()
-        self.AddPropOptions (table, 'Show', "rewrite_new_show", REDIR_SHOW, NOTE_SHOW)
+        self.AddPropOptions (table, 'Show', "rewrite_new_show", REDIR_SHOW, NOTE_SHOW, noautosubmit=True)
         self.AddPropEntry   (table, 'Regular Expression', 'rewrite_new_regex', NOTE_REGEX, noautosubmit=True)
-        self.AddPropEntry   (table, 'Substitution', 'rewrite_new_substring', NOTE_SUBSTITUTION)
+        self.AddPropEntry   (table, 'Substitution', 'rewrite_new_substring', NOTE_SUBSTITUTION, req=True)
 
         txt += "<h2>Add new rule</h2>"
         txt += self.Indent(table)
+
         return txt
 
     def __find_name (self):
