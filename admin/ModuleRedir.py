@@ -48,8 +48,8 @@ class ModuleRedir (ModuleHandler):
         # Add new rule
         table = TableProps()
         self.AddPropOptions (table, 'Show', "rewrite_new_show", REDIR_SHOW, NOTE_SHOW)
-        self.AddPropEntry   (table, 'Regular Expression', 'rewrite_new_regex', NOTE_REGEX)
-        self.AddPropEntry   (table, 'Substitution', 'rewrite_new_substring', NOTE_SUBSTITUTION, req=True)
+        self.AddPropEntry   (table, 'Regular Expression', 'rewrite_new_regex', NOTE_REGEX, noautosubmit=True)
+        self.AddPropEntry   (table, 'Substitution', 'rewrite_new_substring', NOTE_SUBSTITUTION)
 
         txt += "<h2>Add new rule</h2>"
         txt += self.Indent(table)
