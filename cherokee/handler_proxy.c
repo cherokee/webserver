@@ -24,10 +24,246 @@
 
 #include "common-internal.h"
 #include "handler_proxy.h"
+#include "connection-protected.h"
+#include "header-protected.h"
+
+
+#define DEFAULT_BUF_SIZE (8*1024)  /* 8Kb */
 
 /* Plug-in initialization
  */
 PLUGIN_INFO_HANDLER_EASIEST_INIT (proxy, http_all_methods);
+
+
+
+
+static ret_t 
+props_free (cherokee_handler_proxy_props_t *props)
+{
+	cherokee_handler_proxy_hosts_mrproper (&props->hosts);
+	return cherokee_module_props_free_base (MODULE_PROPS(props));
+}
+
+
+ret_t 
+cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
+				  cherokee_server_t        *srv,
+				  cherokee_module_props_t **_props)
+{
+	ret_t                           ret;
+	cherokee_list_t                *i;
+	cherokee_handler_proxy_props_t *props;
+
+	UNUSED(srv);
+
+	/* Instance a new property object
+	 */
+	if (*_props == NULL) {
+		CHEROKEE_NEW_STRUCT (n, handler_proxy_props);
+
+		cherokee_module_props_init_base (MODULE_PROPS(n), 
+						 MODULE_PROPS_FREE(props_free));
+
+		n->balancer = NULL;
+		cherokee_handler_proxy_hosts_init (&n->hosts);
+
+		*_props = MODULE_PROPS(n);
+	}
+
+	props = PROP_PROXY(*_props);
+
+	/* Parse the configuration tree
+	 */
+	cherokee_config_node_foreach (i, conf) {
+		cherokee_config_node_t *subconf = CONFIG_NODE(i);
+
+		if (equal_buf_str (&subconf->key, "balancer")) {
+			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer); 
+			if (ret != ret_ok) 
+				return ret;
+		}
+	}
+
+	/* Final checks
+	 */
+	if (props->balancer == NULL) {
+		PRINT_ERROR_S ("ERROR: Proxy handler needs a balancer\n");
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t
+build_request (cherokee_handler_proxy_t *hdl,
+	       cherokee_buffer_t        *buf)
+{
+	ret_t                  ret;
+	cuint_t                len;
+	const char            *str;
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+
+	/* Method */
+	ret = cherokee_http_method_to_string (conn->header.method, &str, &len);
+	if (ret != ret_ok)
+		goto error;
+
+	cherokee_buffer_add (buf, str, len);
+	cherokee_buffer_add_char (buf, ' ');
+
+	/* The request */
+	ret = cherokee_buffer_add_buffer (buf, &conn->request);
+	if (ret != ret_ok)
+		goto error;
+
+	ret = cherokee_buffer_add_buffer (buf, &conn->pathinfo);
+	if (ret != ret_ok)
+		goto error;
+
+	if (! cherokee_buffer_is_empty (&conn->query_string)) {
+		cherokee_buffer_add_char (buf, '?');
+
+		ret = cherokee_buffer_add_buffer (buf, &conn->query_string);
+		if (ret != ret_ok)
+			goto error;
+	}
+
+	/* HTTP version */
+	ret = cherokee_http_version_to_string (conn->header.version, &str, &len);
+	if (ret != ret_ok)
+		goto error;
+
+	cherokee_buffer_add_char (buf, ' ');
+	cherokee_buffer_add (buf, str, len);
+	cherokee_buffer_add_str (buf, CRLF);
+
+	/* Headers
+	 */
+	// todo
+
+	cherokee_buffer_add_str (buf, CRLF);
+	return ret_ok;
+error:
+	cherokee_buffer_clean (buf);
+	return ret_error;
+}
+
+
+ret_t
+cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
+{
+	ret_t                           ret;
+	cherokee_handler_proxy_poll_t  *poll;
+	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
+	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
+
+	switch (hdl->init_phase) {
+	case proxy_init_get_conn:
+		/* Check with the load balancer
+		 */
+		if (hdl->src_ref == NULL) {
+			ret = cherokee_balancer_dispatch (props->balancer, conn, &hdl->src_ref);
+			if (ret != ret_ok)
+				return ret;
+		}
+	
+		/* Get the connection poll
+		 */	
+		ret = cherokee_handler_proxy_hosts_get (&props->hosts,
+							hdl->src_ref,
+							&poll);
+		if (unlikely (ret != ret_ok))
+			return ret_error;
+
+		/* Get a connection
+		 */
+		ret = cherokee_handler_proxy_poll_get (poll, &hdl->pconn, hdl->src_ref);
+		if (unlikely (ret != ret_ok))
+			return ret_error;
+		
+		hdl->init_phase = proxy_init_build_headers;
+
+	case proxy_init_build_headers:
+		/* Build request
+		 */
+		ret = build_request (hdl, &hdl->request);
+		if (unlikely (ret != ret_ok))
+			return ret;
+
+		hdl->init_phase = proxy_init_connect;
+
+	case proxy_init_connect:
+		/* Connect to the target host
+		 */
+		if (! cherokee_socket_is_connected (&hdl->pconn->socket)) {
+			ret = cherokee_socket_connect (&hdl->pconn->socket);
+			switch (ret) {
+			case ret_ok:
+				break;
+			case ret_deny:
+				conn->error_code = http_bad_gateway;
+				return ret_error;
+			case ret_error:
+			case ret_eagain:
+				return ret;
+			default:
+				RET_UNKNOWN(ret);
+			}
+		}
+
+		hdl->init_phase = proxy_init_send_headers;
+
+	case proxy_init_send_headers:
+		/* Send the request
+		 */
+		ret = cherokee_handler_proxy_conn_send (hdl->pconn, 
+							&hdl->request);
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_error:
+		case ret_eagain:
+			return ret;
+		default:
+			RET_UNKNOWN(ret);
+		}
+
+		hdl->init_phase = proxy_init_send_post;
+
+	case proxy_init_send_post:
+		break;
+	}
+
+	return ret_ok;
+}
+
+ret_t
+cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
+			     cherokee_buffer_t        *buf)
+{
+	ret_t ret;
+	
+	ret = cherokee_handler_proxy_conn_recv (hdl->pconn, buf);
+	switch (ret) {
+	case ret_ok:
+	case ret_error:
+		return ret;
+	default:
+		RET_UNKNOWN(ret);
+	}
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
+				    cherokee_buffer_t        *buf)
+{
+	return ret_ok;
+}
+
 
 
 ret_t
@@ -51,11 +287,19 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 
 	/* Init
 	 */
+	n->pconn      = NULL;
+	n->src_ref    = NULL;
+	n->init_phase = proxy_init_get_conn;
+
+	ret = cherokee_buffer_init (&n->request);
+	if (unlikely(ret != ret_ok)) 
+		return ret;
+
 	ret = cherokee_buffer_init (&n->buffer);
 	if (unlikely(ret != ret_ok)) 
 		return ret;
 
-	ret = cherokee_buffer_ensure_size (&n->buffer, 4*1024);
+	ret = cherokee_buffer_ensure_size (&n->buffer, DEFAULT_BUF_SIZE);
 	if (unlikely(ret != ret_ok)) 
 		return ret;
 
@@ -67,67 +311,12 @@ ret_t
 cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->buffer);
-	return ret_ok;
-}
+	cherokee_buffer_mrproper (&hdl->request);
 
-
-static ret_t 
-props_free (cherokee_handler_proxy_props_t *props)
-{
-	return cherokee_module_props_free_base (MODULE_PROPS(props));
-}
-
-
-ret_t 
-cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
-				  cherokee_server_t        *srv,
-				  cherokee_module_props_t **_props)
-{
-	cherokee_list_t                *i;
-	cherokee_handler_proxy_props_t *props;
-
-	UNUSED(srv);
-
-	if (*_props == NULL) {
-		CHEROKEE_NEW_STRUCT (n, handler_proxy_props);
-
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
-						 MODULE_PROPS_FREE(props_free));
-		n->foo = 0;
-		*_props = MODULE_PROPS(n);
+	if (hdl->pconn) {
+		cherokee_handler_proxy_conn_release (hdl->pconn);
 	}
 
-	props = PROP_PROXY(*_props);
-
-	cherokee_config_node_foreach (i, conf) {
-		cherokee_config_node_t *subconf = CONFIG_NODE(i);
-
-		if (equal_buf_str (&subconf->key, "xxx")) {
-		} 
-	}
-
-	return ret_ok;
-}
-
-
-ret_t
-cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
-{
-	return ret_ok;
-}
-
-ret_t
-cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
-			     cherokee_buffer_t        *buf)
-{
-	return ret_ok;
-}
-
-
-ret_t
-cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
-				    cherokee_buffer_t        *buf)
-{
 	return ret_ok;
 }
 

@@ -30,18 +30,33 @@
 #include "handler.h"
 #include "connection.h"
 #include "plugin_loader.h"
-
+#include "proxy_hosts.h"
+#include "balancer.h"
 
 /* Data types
  */
+
+typedef enum {
+	proxy_init_get_conn,
+	proxy_init_build_headers,
+	proxy_init_connect,
+	proxy_init_send_headers,
+	proxy_init_send_post
+} cherokee_handler_proxy_init_phase_t;
+
 typedef struct {
-	cherokee_module_props_t  base;
-	cuint_t                  foo;
+	cherokee_module_props_t         base;
+	cherokee_balancer_t            *balancer;
+	cherokee_handler_proxy_hosts_t  hosts;
 } cherokee_handler_proxy_props_t;
 
 typedef struct {
-	cherokee_handler_t       handler;
-	cherokee_buffer_t        buffer;	   
+	cherokee_handler_t                   handler;
+	cherokee_buffer_t                    buffer;
+	cherokee_buffer_t                    request;
+	cherokee_source_t                   *src_ref;
+	cherokee_handler_proxy_conn_t       *pconn;
+	cherokee_handler_proxy_init_phase_t  init_phase;
 } cherokee_handler_proxy_t;
 
 #define HDL_PROXY(x)       ((cherokee_handler_proxy_t *)(x))
