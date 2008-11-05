@@ -102,6 +102,9 @@ build_request (cherokee_handler_proxy_t *hdl,
 	ret_t                  ret;
 	cuint_t                len;
 	const char            *str;
+	char                  *begin;
+	char                  *end;
+	char                  *header_end;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
 	/* Method */
@@ -135,12 +138,61 @@ build_request (cherokee_handler_proxy_t *hdl,
 		goto error;
 
 	cherokee_buffer_add_char (buf, ' ');
-	cherokee_buffer_add (buf, str, len);
+	cherokee_buffer_add      (buf, str, len);
+	cherokee_buffer_add_str  (buf, CRLF);
+
+	/* Header: "Host: " */
+	cherokee_buffer_add_str    (buf, "Host: ");
+	cherokee_buffer_add_buffer (buf, &hdl->src_ref->host);
+	if (hdl->src_ref->port != 80) {
+		cherokee_buffer_add_char    (buf, ':');
+		cherokee_buffer_add_ulong10 (buf, hdl->src_ref->port);
+	}
 	cherokee_buffer_add_str (buf, CRLF);
 
 	/* Headers
 	 */
-	// todo
+	str = strchr (conn->incoming_header.buf, CHR_CR);
+	if (str == NULL)
+		goto error;
+
+	while ((*str == CHR_CR) || (*str == CHR_LF))
+		str++;
+	
+	/* Add the client headers  */
+	begin      = (char *)str;
+	header_end = conn->incoming_header.buf + conn->incoming_header.len;
+
+	while ((begin < header_end)) {
+		char chr_end;
+
+		/* Where the line ends */
+		end = cherokee_header_get_next_line (begin);
+		if (end == NULL)
+			break;
+
+		chr_end = *end;
+		*end = '\0';
+
+		/* Check the header entry  */
+		if ((strncmp (begin, "Host:", 5) == 0) ||
+		    (strncmp (begin, "Connection:", 11) == 0) ||
+		    (strncmp (begin, "Transfer-Encoding:", 18) == 0))
+		{
+			goto next;
+		}
+
+		cherokee_buffer_add     (buf, begin, end-begin);
+		cherokee_buffer_add_str (buf, CRLF);
+		
+		/* Prepare next iteration */
+	next:
+		*end = chr_end;
+		while ((*end == CHR_CR) || (*end == CHR_LF))
+			end++;
+		begin = end;		
+	}	
+	
 
 	cherokee_buffer_add_str (buf, CRLF);
 	return ret_ok;
@@ -251,7 +303,6 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	char                    *header_end;
 	cherokee_http_version_t  version;
 	cherokee_connection_t   *conn         = HANDLER_CONN(hdl);
-
 
 	p = buf_in->buf;
 	header_end = buf_in->buf + buf_in->len;
