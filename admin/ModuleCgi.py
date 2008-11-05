@@ -96,7 +96,7 @@ class ModuleCgiBase (ModuleHandler):
         p = '!'.join(self._prefix.split('!')[:-1])
         match = self._cfg.get_val("%s!match"%(p))
         if match.lower() in ['directory', 'default']:
-            self.fixed_check_file = "0"   
+            self.fixed_check_file = "0"
 
 class ModuleCgi (ModuleCgiBase):
     def __init__ (self, cfg, prefix, submit_url):
