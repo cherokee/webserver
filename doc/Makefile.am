@@ -154,6 +154,8 @@ media/images/cookbook_dbslayer1.png \
 media/images/cookbook_dbslayer2.png \
 media/images/cookbook_dbslayer3.png \
 media/images/cookbook_dbslayer4.png \
+media/images/cookbook_mono_demo.png \
+media/images/cookbook_mono_handler.png \
 media/images/tracelor.png
 
 EXTRA_DIST = \

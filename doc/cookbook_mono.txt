@@ -32,7 +32,7 @@ site]. If your flavor is not there, for Linux you can either:
 link:http://ftp.novell.com/pub/mono/archive/1.9.1/linux-installer/2/mono-1.9.1_2-installer.bin[release
 1.9.1] at the time of writing,
 
-* Download and compile the sources, avialable at the
+* Download and compile the sources, available at the
 link:http://ftp.novell.com/pub/mono/sources-stable/[sources page]. The
 fastcgi-server is provided by the
 link:http://ftp.novell.com/pub/mono/sources/xsp/xsp-2.0.tar.bz2[XSP] package.
@@ -93,7 +93,7 @@ production is highly recommended.
     Mono Project since some undesired side effects are obtained, such
     as exposed files and missing features.
 
-  - The second alternative ovecomes this by sending all requests
+  - The second alternative overcomes this by sending all requests
     directly to the FastCGI Mono Server, but it comes at the cost of a
     performance decrease. It is the recommended option.
 
@@ -108,7 +108,7 @@ configuration.
   `Basics` tab. Add `index.aspx,default.aspx` to the list of
   `Directory Indexes`.
 
-. Then, delete every eraseable rule. The only remaining one should be
+. Then, delete every erasable rule. The only remaining one should be
   the `Default` one.
 
 . Edit the rule, go to the `Handler` tab and select the FastCGI
@@ -117,9 +117,60 @@ configuration.
   among them. If you want to take the alternative path of configuring
   Mono through extensions instead of paths, simply define a rule that
   applies to the 11 extensions mentioned above. The handler
-  configuration is completely identical.
+  configuration is completely identical. Either way, make sure the
+  `Check file` option of the handler is enabled. This is very
+  important. If it is not, FastCGI will not work and you will receive
+  an _500 Internal Server Error_.
+
+image::media/images/cookbook_mono_handler.png[FastCGI handler options]
 
 And that is all. Once you upload your ASP.NET application to
 _/var/www_ and launch Cherokee, you should be able to access your
 application by pointing your web browser to, lets say
 `http://example.net/`.
+
+For this recipe, the package asp.net2-examples (provided by Debian and
+Ubuntu thanks to some APT magic) was used. If you were to copy the
+examples to `/var/www` as final step of this tutorial, you should obtain
+something like the following screenshot.
+
+image::media/images/cookbook_mono_demo.png[Mono Demo]
+
+When the package is installed, the examples will be placed in
+`/usr/share/asp.net2-demos`. Copy those to `/var/www` and you are ready
+to make the test.
+
+Alternatively you can avoid copying any files and simply spawn the
+FastCGI Mono Server with the real path of the examples, like this:
+
+----
+fastcgi-mono-server2 --socket=tcp:8080 --address=127.0.0.1 --applications=/:/usr/share/asp.net2-demos
+----
+
+In case you can't find the mentioned examples, you could always copy
+the following program to `/var/www/index.aspx` just to make sure your
+Mono setup is working.
+
+----
+<%@ Page Language="C#" Debug="true" %>
+<html>
+   <body>
+       <h1>Hello World!!!</h1>
+       <%
+          // This block will execute in the Render_Control method
+          Response.Write("Check out the family tree: <br> <br>");
+          Response.Write(this.GetType().ToString());
+          Response.Write(" which derives from: <br> ");
+          Response.Write(this.GetType().BaseType.ToString());
+          Response.Write(" which derives from: <br> ");
+          Response.Write(this.GetType().BaseType.BaseType.ToString());
+          Response.Write(" which derives from: <br> ");
+          Response.Write(
+            this.GetType().BaseType.BaseType.BaseType.ToString());
+          Response.Write(" which derives from: <br> ");
+          Response.Write(
+            this.GetType().BaseType.BaseType.BaseType.BaseType.ToString());
+       %>
+   </body>
+</html>
+----
