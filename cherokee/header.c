@@ -507,37 +507,6 @@ error:
 }
 
 
-static char *
-get_new_line (char *string)
-{
-	char *end1;
-	char *end2 = string;
-
-	/* RFC states that EOL should be made by CRLF only, but some
-	 * old clients (HTTP 0.9 and a few HTTP/1.0 robots) may send
-	 * LF only as EOL, so try to catch that case too (of course CR
-	 * only is ignored); anyway leading spaces after a LF or CRLF
-	 * means that the new line is the continuation of previous
-	 * line (first line excluded).
-	 */
-	do {
-		end1 = end2;
-		end2 = strchr (end1, CHR_LF);
-
-		if (unlikely (end2 == NULL))
-			return NULL;
-
-		end1 = end2;
-		if (likely (end2 != string && *(end1 - 1) == CHR_CR))
-			--end1;
-
-		++end2;
-	} while (*end2 == CHR_SP || *end2 == CHR_HT);
-
-	return end1;
-}
-
-
 ret_t 
 cherokee_header_get_length (cherokee_header_t *hdr, cuint_t *len)
 {
@@ -923,11 +892,11 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 
 		/* Check where the line ends
 		 */
-		end = get_new_line(begin);
+		end = cherokee_header_get_next_line (begin);
 		if (end == NULL)
 			break;
 
-		chr_end = *end;;
+		chr_end = *end;
 		*end    = '\0';
 
 		/* Current line may have embedded CR+SP or CRLF+SP 

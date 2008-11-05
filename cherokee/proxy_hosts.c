@@ -241,8 +241,8 @@ cherokee_handler_proxy_conn_release (cherokee_handler_proxy_conn_t *pconn)
 
 
 ret_t
-cherokee_handler_proxy_conn_send (cherokee_handler_proxy_conn_t  *pconn,
-				  cherokee_buffer_t              *buf)
+cherokee_handler_proxy_conn_send (cherokee_handler_proxy_conn_t *pconn,
+				  cherokee_buffer_t             *buf)
 {
 	ret_t  ret;
 	size_t sent = 0;
@@ -259,8 +259,8 @@ cherokee_handler_proxy_conn_send (cherokee_handler_proxy_conn_t  *pconn,
 }
 
 ret_t
-cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t  *pconn,
-					  cherokee_buffer_t              *body)
+cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
+					  cherokee_buffer_t             *body)
 {
 	ret_t   ret;
 	char   *end;
@@ -291,7 +291,7 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t  *pconn,
 	size = (pconn->header_in_raw.buf + pconn->header_in_raw.len) - (end + 4);
 
 	cherokee_buffer_add (body, end+4, size);
-	cherokee_buffer_drop_ending (&pconn->header_in_raw, (size + 4));
+	cherokee_buffer_drop_ending (&pconn->header_in_raw, size);
 
 	return ret_ok;
 }

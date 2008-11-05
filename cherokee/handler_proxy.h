@@ -32,6 +32,8 @@
 #include "plugin_loader.h"
 #include "proxy_hosts.h"
 #include "balancer.h"
+#include "http.h"
+#include "header-protected.h"
 
 /* Data types
  */

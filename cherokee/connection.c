@@ -544,11 +544,6 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	cherokee_http_code_copy (conn->error_code, buffer);
 	cherokee_buffer_add_str (buffer, CRLF);
 
-	/* Exit now if the handler already added all the headers
-	 */
-	if (HANDLER_SUPPORTS (conn->handler, hsupport_full_headers)) 
-		return;
-
 	/* Add the "Connection:" header
 	 */
 	if (conn->upgrade != http_upgrade_nothing) {
@@ -566,6 +561,11 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	if (conn->chunked_encoding) {
 		cherokee_buffer_add_str (buffer, "Transfer-Encoding: chunked" CRLF);
 	}
+
+	/* Exit now if the handler already added all the headers
+	 */
+	if (HANDLER_SUPPORTS (conn->handler, hsupport_full_headers)) 
+		return;
 
 	/* Date
 	 */

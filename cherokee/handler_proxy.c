@@ -25,7 +25,7 @@
 #include "common-internal.h"
 #include "handler_proxy.h"
 #include "connection-protected.h"
-#include "header-protected.h"
+#include "util.h"
 
 
 #define DEFAULT_BUF_SIZE (8*1024)  /* 8Kb */
@@ -239,6 +239,97 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 }
 
 
+static ret_t
+parse_server_header (cherokee_handler_proxy_t *hdl,
+		     cherokee_buffer_t        *buf_in,
+		     cherokee_buffer_t        *buf_out)
+{
+	int                      re;
+	char                    *p;
+	char                    *begin;
+	char                    *end;
+	char                    *header_end;
+	cherokee_http_version_t  version;
+	cherokee_connection_t   *conn         = HANDLER_CONN(hdl);
+
+
+	p = buf_in->buf;
+	header_end = buf_in->buf + buf_in->len;
+
+	/* Parse the response line (first line)
+	 */
+	re = strncmp (p, "HTTP/", 5);
+	if (re != 0)
+		goto error;
+	p+= 5;
+
+	if (strncmp (p, "1.1", 3) == 0) {
+		version = http_version_11;
+	} else if (strncmp (p, "1.0", 3) == 0) {
+		version = http_version_10;
+	} else if (strncmp (p, "0.9", 3) == 0) {
+		version = http_version_09;
+	} else 
+		goto error;
+	p += 3;
+	if (*p != ' ')
+		goto error;
+
+	p++;
+	if ((p[0] < '0') || (p[0] > '9') ||
+	    (p[1] < '0') || (p[1] > '9') ||
+	    (p[2] < '0') || (p[2] > '9'))
+		goto error;
+
+	re = (int)p[3];
+	p[3] = '\0';
+	conn->error_code = atoi(p);
+	p[3] = (char)re;
+
+	p = strchr (p, CHR_CR);
+	while ((*p == CHR_CR) || (*p == CHR_LF)) 
+		p++;
+
+	/* Parse the headers
+	 */
+	begin = p;
+	while ((begin < header_end)) {
+		char chr_end;
+
+		/* Where the line ends */
+		end = cherokee_header_get_next_line (begin);
+		if (end == NULL)
+			break;
+
+		chr_end = *end;
+		*end = '\0';
+		
+		/* Check the header entry  */
+		if ((strncmp (begin, "Connection:", 11) == 0) ||
+		    (strncmp (begin, "Transfer-Encoding:", 18) == 0))
+		{
+			goto next;
+		}
+
+		cherokee_buffer_add     (buf_out, begin, end-begin);
+		cherokee_buffer_add_str (buf_out, CRLF);
+		
+		/* Prepare next iteration */
+	next:
+		*end = chr_end;
+		while ((*end == CHR_CR) || (*end == CHR_LF))
+			end++;
+		begin = end;		
+	}	
+
+	return ret_ok;
+
+error:
+	conn->error_code = http_version_not_supported;
+	return ret_error;
+}
+
+
 ret_t
 cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 				    cherokee_buffer_t        *buf)
@@ -260,8 +351,12 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 		RET_UNKNOWN(ret);
 	}
 
-	/// hdl->pconn->header_in_raw is ready at this point
-
+	/* Parse the incoming header
+	 */
+	ret = parse_server_header (hdl, &hdl->pconn->header_in_raw, buf);
+	if (ret != ret_ok)
+		return ret;	
+	
 	return ret_ok;
 }
 
@@ -316,13 +411,13 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_proxy_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_proxy_add_headers;
 
-	HANDLER(n)->support = hsupport_nothing;
+	HANDLER(n)->support = hsupport_full_headers | hsupport_error;
 
 	/* Init
 	 */
-	n->pconn      = NULL;
-	n->src_ref    = NULL;
-	n->init_phase = proxy_init_get_conn;
+	n->pconn        = NULL;
+	n->src_ref      = NULL;
+	n->init_phase   = proxy_init_get_conn;
 
 	cherokee_buffer_init (&n->tmp);
 	cherokee_buffer_init (&n->request);
@@ -331,7 +426,7 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 	ret = cherokee_buffer_ensure_size (&n->buffer, DEFAULT_BUF_SIZE);
 	if (unlikely(ret != ret_ok)) 
 		return ret;
-
+	
 	*hdl = HANDLER(n);
 	return ret_ok;
 }
@@ -342,7 +437,7 @@ cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 	cherokee_buffer_mrproper (&hdl->tmp);
 	cherokee_buffer_mrproper (&hdl->buffer);
 	cherokee_buffer_mrproper (&hdl->request);
-
+	
 	if (hdl->pconn) {
 		cherokee_handler_proxy_conn_release (hdl->pconn);
 	}

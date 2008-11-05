@@ -164,6 +164,8 @@ ret_t cherokee_split_arguments    (cherokee_buffer_t *request,
 ret_t cherokee_parse_query_string (cherokee_buffer_t *qstring, 
 				   cherokee_avl_t  *arguments);
 
+char *cherokee_header_get_next_line (char *line);
+
 CHEROKEE_END_DECLS
 
 #endif /* CHEROKEE_UTIL_H */
