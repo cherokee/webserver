@@ -5,6 +5,7 @@
   . link:cookbook_django.html[Setting up Django]: How to run Django apps with Cherokee.
   . link:cookbook_php.html[Setting up PHP]: How to run PHP apps with Cherokee.
   . link:cookbook_ror.html[Setting up RoR]: How to run Ruby on Rails apps with Cherokee.
+  . link:cookbook_mono.html[Setting up ASP.NET]: How to run ASP.NET apps with Mono and Cherokee.
   . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
   . link:cookbook_authentication.html[Authentication]: How to set up authenticated resources.
   . link:cookbook_maintenance.html[Maintenance]: Seamlessly switching to maintenance mode.

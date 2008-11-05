@@ -1,0 +1,125 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up ASP.NET
+----------------------------
+
+To run ASP.NET applications with Cherokee, you will need to install
+link:http://www.mono-project.com/[Mono]. The Mono Project is a UNIX
+version of the Microsoft .NET development platform aimed at enabling
+UNIX developers to build and deploy cross-platform .NET Applications.
+
+You will specifically need to run the _mono-fastcgi-server_, since
+that is the backend needed to set up Cherokee with the FastCGI handler
+to parse and compile aspx code.
+
+You have several options available to obtain this.
+If you are lucky enough, it will already be available in your favorite
+platform.
+
+On Debian Lenny and Sid, and on Ubuntu 8.10+ (Intrepid and Jaunty) you
+can simply leave to APT the trouble of setting up the dependencies by
+typing:
+
+----
+# apt-get install mono-fastcgi-server2
+----
+
+The official supported packages can be found at
+link:http://www.go-mono.com/mono-downloads/download.html[the downlad
+site]. If your flavor is not there, for Linux you can either:
+
+* Download the binary installer, which is the
+link:http://ftp.novell.com/pub/mono/archive/1.9.1/linux-installer/2/mono-1.9.1_2-installer.bin[release
+1.9.1] at the time of writing,
+
+* Download and compile the sources, avialable at the
+link:http://ftp.novell.com/pub/mono/sources-stable/[sources page]. The
+fastcgi-server is provided by the
+link:http://ftp.novell.com/pub/mono/sources/xsp/xsp-2.0.tar.bz2[XSP] package.
+
+You can find all sorts of information about the configuration of Mono
+at the link:http://www.mono-project.com/[Mono Project] web site.
+
+Once you have a FastCGI Mono backend available, we can proceed with
+the recipe.
+
+.Preparations
+
+. Define an link:config_info_sources.html[information source] that
+  spawns the _fastcgi-mono-server_. In our example we will be binding
+  it to the local interface, port 8080, with our application located
+  in `/var/www`, which is our document root. It will be mapped to `/`
+  by the FastCGI Mono Server. To do this, we will create a source
+  called _mono_, and we will set up the interpreter as:
++
+----
+fastcgi-mono-server2 --socket=tcp:8080 --address=127.0.0.1 --applications=/:/var/www
+----
++
+Of course you could also define the parameters through environment
+variables, and simply launch the interpreter as:
++
+----
+fastcgi-mono-server2
+----
++
+Lets assume we wanted to do so and also wished to use it through a
+Unix socket instead of through a host:port combination. You would have
+to define at least the following variables:
++
+----
+MONO_FCGI_APPLICATIONS=/:/var/www
+MONO_FCGI_SOCKET=unix
+MONO_FCGI_FILENAME=/tmp/cherokee-mono.socket
+----
++
+Make sure to set up a relatively high spawning timeout, because it can
+take its time and you don't want Cherokee giving up before the process
+is spawned. A value of 30 seconds should suffice. Obviously this value
+is way too high to serve contents when the FastCGI Mono backend has
+not been spawned. It is only meant to be used a security
+measure. Spawning the process before putting the server into
+production is highly recommended.
+
+. Map your information source to a rule that handles your Mono
+  application. This can be done by setting up the rule for extensions
+  or paths.
+
+  - The first alternative is easily achievable by passing the 11
+    standard extensions to the FastCGI Mono Server, defining a rule
+    that uses the information source we just mentioned and applies to
+    the extensions: `aspx, asmx, ashx, asax, ascx, soap, rem, axd, cs,
+    config, dll`. However, this is not the option recomended by the
+    Mono Project since some undesired side effects are obtained, such
+    as exposed files and missing features.
+
+  - The second alternative ovecomes this by sending all requests
+    directly to the FastCGI Mono Server, but it comes at the cost of a
+    performance decrease. It is the recommended option.
+
+
+So, lets get started. The recipe will configure the FastCGI handler
+using paths, deleting all but the `Default` rule from our Cherokee
+configuration.
+
+.Steps
+
+. First, access your virtual server configuration and go to the
+  `Basics` tab. Add `index.aspx,default.aspx` to the list of
+  `Directory Indexes`.
+
+. Then, delete every eraseable rule. The only remaining one should be
+  the `Default` one.
+
+. Edit the rule, go to the `Handler` tab and select the FastCGI
+  handler. Assign it the _mono_ information source. As always, you can
+  set up as many hosts as desired and Cherokee will balance the load
+  among them. If you want to take the alternative path of configuring
+  Mono through extensions instead of paths, simply define a rule that
+  applies to the 11 extensions mentioned above. The handler
+  configuration is completely identical.
+
+And that is all. Once you upload your ASP.NET application to
+_/var/www_ and launch Cherokee, you should be able to access your
+application by pointing your web browser to, lets say
+`http://example.net/`.

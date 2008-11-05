@@ -49,6 +49,7 @@ cookbook_maintenance.html \
 cookbook_redirs.html \
 cookbook_embedding_cherokee.html \
 cookbook_dbslayer.html \
+cookbook_mono.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
