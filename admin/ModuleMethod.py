@@ -41,12 +41,11 @@ class ModuleMethod (Module, FormHelper):
         table = TableProps()
 
         if self._prefix.startswith('tmp!'):
-            self.AddPropOptions_Reload (table, 'Method', '%s!value'%(self._prefix), \
+            self.AddPropOptions (table, 'Method', '%s!value'%(self._prefix), \
                                  METHODS, NOTE_METHOD)
         else:
-            METHODS.remove(('', 'Choose'))
-            self.AddPropOptions_Reload (table, 'Method', '%s!method'%(self._prefix), \
-                                 METHODS, NOTE_METHOD)
+            self.AddPropOptions (table, 'Method', '%s!method'%(self._prefix), \
+                                 METHODS[1:], NOTE_METHOD)
 
         return str(table)
 
