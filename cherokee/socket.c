@@ -542,7 +542,7 @@ cherokee_socket_close (cherokee_socket_t *socket)
 	/* Close the socket
 	 */
 #ifdef _WIN32
-	re = closesocket (socket->socket);
+	ret = closesocket (socket->socket);
 #else
 	ret = cherokee_fd_close (socket->socket);
 #endif
