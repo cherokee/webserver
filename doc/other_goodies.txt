@@ -118,6 +118,10 @@ will simply work as long as there is a web browser with SNI support at
 the other side. Currently every modern web browser supports this, and
 Cherokee has TLS SNI support for both the GNUTLS and OpenSSL backends.
 
+Note that for SNI to work, client support is required. Web browsers
+known to support it are Mozilla Firefox 2.0+, Opera 8.0+, Internet
+Explorer 7 (Vista, not XP) or later and Google Chrome.
+
 [[dbslayer]]
 Database load balancing
 ~~~~~~~~~~~~~~~~~~~~~~~

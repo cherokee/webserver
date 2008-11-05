@@ -411,4 +411,6 @@ might help to generate SSL link:cookbook_ssl.html[keys]
 Cherokee fully supports the usage of different certificates for each
 virtual server in a given host, be it using SNI as defined in
 link:http://www.rfc-archive.org/getrfc.php?rfc=3546[RFC 3546] or by
-elegantly respinning the secure handshake.
+elegantly respinning the secure handshake. Check the
+link:other_goodies.html#ssl-vhosts[SSL Virtual Hosts] information for
+more details.
