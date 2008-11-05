@@ -230,6 +230,7 @@ class FormHelper (WebComponent):
         auto_wrap_id = self._get_auto_wrap_id()
         js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, auto_wrap_id)
         kwargs['onChange'] = js
+        kwargs['noautosubmit'] = True
         name = self.AddPropOptions (table, title, cfg_key, options, comment, **kwargs)
 
         # If there was no cfg value, pick the first

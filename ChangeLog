@@ -1,3 +1,9 @@
+2008-11-05  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/ModuleMethod.py, admin/Form.py: allow Ajax reloads of
+	option lists. They were compeltely resubmitting the forms on
+	change instead.
+
 2008-11-04  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/ModuleRedir.py, admin/static/js/common.js, admin/Entry.py:
