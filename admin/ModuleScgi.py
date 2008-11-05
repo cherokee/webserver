@@ -21,7 +21,9 @@ class ModuleScgi (ModuleCgiBase):
 
         self.show_script_alias  = False
         self.show_change_uid    = False
-        self.show_document_root = False
+        self.show_document_root = True
+
+        self._util__set_fixed_check_file()
 
     def _op_render (self):
         txt = ModuleCgiBase._op_render (self)
@@ -48,6 +50,6 @@ class ModuleScgi (ModuleCgiBase):
             name = cfg.value
             props = module_obj_factory (name, self._cfg, pre, self.submit_url)
             props._op_apply_changes (uri, post)
-        
+
         # And CGI changes
         return ModuleCgiBase._op_apply_changes (self, uri, post)

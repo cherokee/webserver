@@ -92,11 +92,11 @@ class ModuleCgiBase (ModuleHandler):
         self.ApplyChangesPrefix (self._prefix, checkboxes, post)
 
     def _util__set_fixed_check_file (self):
-        # Show 'check file' when the handler isn't in a directory
+        # No need to show 'check file' when the handler is an extension
         p = '!'.join(self._prefix.split('!')[:-1])
         match = self._cfg.get_val("%s!match"%(p))
-        if match.lower() in ['directory', 'default']:
-            self.fixed_check_file = "0"
+        if match.lower() in ['extensions']:
+            self.fixed_check_file = "1"
 
 class ModuleCgi (ModuleCgiBase):
     def __init__ (self, cfg, prefix, submit_url):

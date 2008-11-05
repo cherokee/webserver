@@ -21,7 +21,9 @@ class ModuleFcgi (ModuleCgiBase):
 
         self.show_script_alias  = False
         self.show_change_uid    = False
-        self.show_document_root = False
+        self.show_document_root = True
+
+        self._util__set_fixed_check_file()
 
     def _op_render (self):
         txt = ModuleCgiBase._op_render (self)
