@@ -212,6 +212,10 @@ cherokee_handler_proxy_conn_new (cherokee_handler_proxy_conn_t **pconn)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_proxy_conn);
 	cherokee_socket_init (&n->socket);
+
+	cherokee_buffer_init (&n->header_in_raw);
+	cherokee_buffer_ensure_size (&n->header_in_raw, 512);
+
 	n->poll_ref = NULL;
 
 	*pconn = n;
@@ -223,6 +227,8 @@ ret_t
 cherokee_handler_proxy_conn_free (cherokee_handler_proxy_conn_t *pconn)
 {
 	cherokee_socket_mrproper (&pconn->socket);
+	cherokee_buffer_mrproper (&pconn->header_in_raw);
+
 	return ret_ok;
 }
 
@@ -252,17 +258,41 @@ cherokee_handler_proxy_conn_send (cherokee_handler_proxy_conn_t  *pconn,
 	return ret_ok;
 }
 
-
 ret_t
-cherokee_handler_proxy_conn_recv (cherokee_handler_proxy_conn_t  *pconn,
-				  cherokee_buffer_t              *buf)
+cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t  *pconn,
+					  cherokee_buffer_t              *body)
 {
-	ret_t  ret;
-	size_t size = 0;
-	
-	ret = cherokee_socket_bufread (&pconn->socket, buf, buf->size-2, &size);
-	if (ret != ret_ok)
+	ret_t   ret;
+	char   *end;
+	size_t  size = 0;
+
+	/* Read */
+	ret = cherokee_socket_bufread (&pconn->socket,
+				       &pconn->header_in_raw,
+				       512, &size);
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_eof:
+	case ret_error:
+	case ret_eagain:
 		return ret;
+	default:
+		RET_UNKNOWN(ret);
+	}
+
+	/* Look for the end of header */
+	end = strnstr (pconn->header_in_raw.buf, CRLF_CRLF, pconn->header_in_raw.len);
+	if (end == NULL) {
+		return ret_eagain;
+	}
+
+	/* Copy the body if there is any */
+	size = (pconn->header_in_raw.buf + pconn->header_in_raw.len) - (end + 4);
+
+	cherokee_buffer_add (body, end+4, size);
+	cherokee_buffer_drop_ending (&pconn->header_in_raw, (size + 4));
 
 	return ret_ok;
 }
+

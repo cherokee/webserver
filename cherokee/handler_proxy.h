@@ -57,6 +57,7 @@ typedef struct {
 	cherokee_source_t                   *src_ref;
 	cherokee_handler_proxy_conn_t       *pconn;
 	cherokee_handler_proxy_init_phase_t  init_phase;
+	cherokee_buffer_t                    tmp;
 } cherokee_handler_proxy_t;
 
 #define HDL_PROXY(x)       ((cherokee_handler_proxy_t *)(x))

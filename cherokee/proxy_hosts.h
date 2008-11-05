@@ -48,6 +48,7 @@ typedef struct {
 	cherokee_list_t                listed;
 	cherokee_socket_t              socket;
 	cherokee_handler_proxy_poll_t *poll_ref;
+	cherokee_buffer_t              header_in_raw;
 } cherokee_handler_proxy_conn_t;
 
 #define PROXY_HOSTS(h) ((cherokee_handler_proxy_hosts_t *)(h))
@@ -74,15 +75,13 @@ ret_t cherokee_handler_proxy_poll_get       (cherokee_handler_proxy_poll_t   *po
 
 /* Conns
  */
-ret_t cherokee_handler_proxy_conn_new       (cherokee_handler_proxy_conn_t **pconn);
-ret_t cherokee_handler_proxy_conn_free      (cherokee_handler_proxy_conn_t  *pconn);
-ret_t cherokee_handler_proxy_conn_release   (cherokee_handler_proxy_conn_t  *pconn);
-
-ret_t cherokee_handler_proxy_conn_send      (cherokee_handler_proxy_conn_t  *pconn,
-					     cherokee_buffer_t              *buf);
-ret_t cherokee_handler_proxy_conn_recv      (cherokee_handler_proxy_conn_t  *pconn,
-					     cherokee_buffer_t              *buf);
-
+ret_t cherokee_handler_proxy_conn_new          (cherokee_handler_proxy_conn_t **pconn);
+ret_t cherokee_handler_proxy_conn_free         (cherokee_handler_proxy_conn_t  *pconn);
+ret_t cherokee_handler_proxy_conn_release      (cherokee_handler_proxy_conn_t  *pconn);
+ret_t cherokee_handler_proxy_conn_send         (cherokee_handler_proxy_conn_t  *pconn,
+					        cherokee_buffer_t              *buf);
+ret_t cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t  *pconn,
+						cherokee_buffer_t              *body);
 
 #endif /* CHEROKEE_HANDLER_PROXY_HOSTS_H */
 

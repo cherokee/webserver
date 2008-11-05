@@ -238,29 +238,62 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	return ret_ok;
 }
 
+
 ret_t
-cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
-			     cherokee_buffer_t        *buf)
+cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
+				    cherokee_buffer_t        *buf)
 {
 	ret_t ret;
 	
-	ret = cherokee_handler_proxy_conn_recv (hdl->pconn, buf);
+	/* Read the client header
+	 */
+	ret = cherokee_handler_proxy_conn_recv_headers (hdl->pconn,
+							&hdl->tmp);
 	switch (ret) {
 	case ret_ok:
+		break;
+	case ret_eof:
 	case ret_error:
+	case ret_eagain:
 		return ret;
 	default:
 		RET_UNKNOWN(ret);
 	}
+
+	/// hdl->pconn->header_in_raw is ready at this point
 
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
-				    cherokee_buffer_t        *buf)
+cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
+			     cherokee_buffer_t        *buf)
 {
+	ret_t  ret;
+	size_t size = 0;
+
+	/* Body read during :add_headers
+	 */
+	if (! cherokee_buffer_is_empty (&hdl->tmp)) {
+		cherokee_buffer_add_buffer (buf, &hdl->tmp);
+		cherokee_buffer_clean (&hdl->tmp);
+		return ret_ok;
+	}
+
+	/* Read from the client
+	 */
+	ret = cherokee_socket_bufread (&hdl->pconn->socket, buf, buf->size - 2, &size);
+	switch (ret) {
+	case ret_ok:
+	case ret_eof:
+	case ret_eagain:
+	case ret_error:
+		return ret;
+	default:
+		RET_UNKNOWN(ret);
+	}
+
 	return ret_ok;
 }
 
@@ -291,13 +324,9 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 	n->src_ref    = NULL;
 	n->init_phase = proxy_init_get_conn;
 
-	ret = cherokee_buffer_init (&n->request);
-	if (unlikely(ret != ret_ok)) 
-		return ret;
-
-	ret = cherokee_buffer_init (&n->buffer);
-	if (unlikely(ret != ret_ok)) 
-		return ret;
+	cherokee_buffer_init (&n->tmp);
+	cherokee_buffer_init (&n->request);
+	cherokee_buffer_init (&n->buffer);
 
 	ret = cherokee_buffer_ensure_size (&n->buffer, DEFAULT_BUF_SIZE);
 	if (unlikely(ret != ret_ok)) 
@@ -310,6 +339,7 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 ret_t
 cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 {
+	cherokee_buffer_mrproper (&hdl->tmp);
 	cherokee_buffer_mrproper (&hdl->buffer);
 	cherokee_buffer_mrproper (&hdl->request);
 
