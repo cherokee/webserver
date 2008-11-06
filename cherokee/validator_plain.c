@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "validator_plain.h"
+#include "thread.h"
 
 #include "connection.h"
 #include "connection-protected.h"
@@ -106,16 +107,27 @@ cherokee_validator_plain_check (cherokee_validator_plain_t *plain,
 	ret_t              ret;
 	const char        *p;
 	const char        *end;
+	cherokee_buffer_t *fpass;
 	cherokee_buffer_t  file  = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t  buser = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t  bpass = CHEROKEE_BUF_INIT;
 
+	/* Sanity check */
 	if (unlikely ((conn->validator == NULL) || 
 	    cherokee_buffer_is_empty(&conn->validator->user))) {
 		return ret_error;
 	}
 
-	ret = cherokee_buffer_read_file (&file, VAL_VFILE_PROP(plain)->password_file.buf);
+	/* Get the full path to the file */
+	ret = cherokee_validator_file_get_full_path (VFILE(plain), conn, &fpass,
+						     &CONN_THREAD(conn)->tmp_buf1);
+	if (ret != ret_ok) {
+		ret = ret_error;
+		goto out;
+	}
+
+	/* Read its contents */
+	ret = cherokee_buffer_read_file (&file, fpass->buf);
 	if (ret != ret_ok) {
 		ret = ret_error;
 		goto out;

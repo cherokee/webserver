@@ -26,7 +26,7 @@
 #include "validator_htdigest.h"
 #include "plugin_loader.h"
 #include "connection-protected.h"
-
+#include "thread.h"
 
 /* Plug-in initialization
  */
@@ -226,10 +226,12 @@ go_out:
 
 
 ret_t 
-cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest, cherokee_connection_t *conn)
+cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest,
+				   cherokee_connection_t         *conn)
 {
-	ret_t             ret;
-	cherokee_buffer_t file = CHEROKEE_BUF_INIT;
+	ret_t              ret;
+	cherokee_buffer_t *fpass;
+	cherokee_buffer_t  file = CHEROKEE_BUF_INIT;
 	
 	/* Ensure that we have all what we need
 	 */
@@ -237,12 +239,18 @@ cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest, cher
 	    cherokee_buffer_is_empty (&conn->validator->user)) 
 		return ret_error;
 
-	if (cherokee_buffer_is_empty (&VAL_VFILE_PROP(htdigest)->password_file))
-		return ret_error;
+	/* Get the full path to the file
+	 */
+	ret = cherokee_validator_file_get_full_path (VFILE(htdigest), conn, &fpass,
+						     &CONN_THREAD(conn)->tmp_buf1);
+	if (ret != ret_ok) {
+		ret = ret_error;
+		goto out;
+	}
 
 	/* Read the whole file
 	 */
-	ret = cherokee_buffer_read_file (&file, VAL_VFILE_PROP(htdigest)->password_file.buf);
+	ret = cherokee_buffer_read_file (&file, fpass->buf);
 	if (ret != ret_ok) {
 		ret = ret_error;
 		goto out;

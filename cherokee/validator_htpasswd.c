@@ -234,50 +234,69 @@ validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 
 
 static ret_t
-request_isnt_passwd_file (cherokee_validator_htpasswd_t *htpasswd, cherokee_connection_t *conn)
+request_isnt_passwd_file (cherokee_validator_htpasswd_t *htpasswd,
+			  cherokee_connection_t         *conn, 
+			  cherokee_buffer_t             *full_path)
 {
-	ret_t              ret;
-	cherokee_buffer_t *pfile;
+	char    *p;
+	cuint_t  re;
+	cuint_t  len;
 
-	pfile = &VAL_VFILE_PROP(htpasswd)->password_file;
+	/* Sanity check */
+	if (cherokee_buffer_is_empty (full_path))
+		return ret_error;
 
-	if (conn->request.len > 0)
-		cherokee_buffer_add (&conn->local_directory, conn->request.buf+1, conn->request.len-1);  /* 1: add    */
+	/* Look for the file name */
+	p = strrchr (full_path->buf, '/');
+	if (p == NULL)
+		return ret_error;
 
-	ret = ret_ok;
+	len = (full_path->buf + full_path->len) - p;
 
-	if (pfile->len == conn->local_directory.len) {
-		ret = (strncmp (pfile->buf, 
-				conn->local_directory.buf, 
-				conn->local_directory.len) == 0) ? ret_error : ret_ok;
-	}
+	/* Check whether the request ends like that */
+	if (conn->request.len < len)
+		return ret_ok;
 
-	if (conn->request.len > 0)
-		cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len-1);              /* 1: remove */
+	re = strncmp (conn->request.buf + (conn->request.len - len), p, len);
+	if (re == 0)
+		return ret_error;
 
-	return ret;
+	return ret_ok;
 }
 
 
 ret_t 
-cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd, cherokee_connection_t *conn)
+cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
+				   cherokee_connection_t         *conn)
 {
-	FILE *f;
-	int   len;
-	char *cryp;
-	int   cryp_len;
-	ret_t ret;
-	ret_t ret_auth;
+	FILE              *f;
+	int                len;
+	char              *cryp;
+	int                cryp_len;
+	ret_t              ret;
+	ret_t              ret_auth;
+	cherokee_buffer_t *fpass;
 	CHEROKEE_TEMP(line, 128);
 
-	/* Sanity check
+	/* Sanity checks
 	 */
-	if ((conn->validator == NULL) || cherokee_buffer_is_empty (&conn->validator->user))
+	if ((conn->validator == NULL) ||
+	    cherokee_buffer_is_empty (&conn->validator->user))
+	{
 		return ret_error;
+	}
+
+	/* Get the full path to the file
+	 */
+	ret = cherokee_validator_file_get_full_path (VFILE(htpasswd), conn, &fpass,
+						     &CONN_THREAD(conn)->tmp_buf1);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
 
 	/* 1.- Check the login/passwd
 	 */	  
-	f = fopen (VAL_VFILE_PROP(htpasswd)->password_file.buf, "r");
+	f = fopen (fpass->buf, "r");
 	if (f == NULL) {
 		return ret_error;
 	}
@@ -351,7 +370,7 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd, cher
 	/* 2.- Security check:
 	 * Is the client trying to download the passwd file?
 	 */
-	ret = request_isnt_passwd_file (htpasswd, conn);	
+	ret = request_isnt_passwd_file (htpasswd, conn, fpass);	
 	if (ret != ret_ok)
 		return ret;
 

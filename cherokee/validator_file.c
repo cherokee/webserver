@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "validator_file.h"
+#include "connection-protected.h"
 
 /* Properties
  */
@@ -68,8 +69,8 @@ cherokee_validator_file_configure (cherokee_config_node_t     *conf,
 	if (ret == ret_ok) {
 		if (equal_buf_str (&subconf->val, "full")) {
 			props->password_path_type = val_path_full;
-		} else if (equal_buf_str (&subconf->val, "home")) {
-			props->password_path_type = val_path_home;
+		} else if (equal_buf_str (&subconf->val, "local_dir")) {
+			props->password_path_type = val_path_local_dir;
 		} else {
 			PRINT_ERROR ("ERROR: Unknown path type '%s'\n", subconf->val.buf);
 			return ret_error;
@@ -105,3 +106,35 @@ cherokee_validator_file_free_base (cherokee_validator_file_t *validator)
 	return cherokee_validator_free_base (VALIDATOR(validator));
 }
 
+
+/* Utilities
+ */
+
+ret_t
+cherokee_validator_file_get_full_path (cherokee_validator_file_t  *validator,
+				       cherokee_connection_t      *conn,
+				       cherokee_buffer_t         **ret_buf,
+				       cherokee_buffer_t          *tmp)
+{
+	cherokee_validator_file_props_t *props = VAL_VFILE_PROP(validator);
+
+	switch (props->password_path_type) {
+	case val_path_full:
+		*ret_buf = &props->password_file;
+		return ret_ok;
+
+	case val_path_local_dir:
+		cherokee_buffer_clean (tmp);
+		cherokee_buffer_add_buffer (tmp, &conn->local_directory);
+		cherokee_buffer_add_char   (tmp, '/');
+		cherokee_buffer_add_buffer (tmp, &props->password_file);
+		
+		*ret_buf = tmp;
+		return ret_ok;
+
+	default:
+		SHOULDNT_HAPPEN;
+	}
+
+	return ret_error;
+}

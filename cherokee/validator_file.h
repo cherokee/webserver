@@ -30,7 +30,7 @@
 
 typedef enum {
 	val_path_full,
-	val_path_home
+	val_path_local_dir
 } cherokee_validator_path_t;
 
 typedef struct {
@@ -68,5 +68,14 @@ ret_t cherokee_validator_file_props_init_base  (cherokee_validator_file_props_t 
 						module_func_props_free_t         free_func);
 
 ret_t cherokee_validator_file_props_free_base  (cherokee_validator_file_props_t *props);
+
+
+/* Utilities
+ */
+
+ret_t cherokee_validator_file_get_full_path    (cherokee_validator_file_t  *validator,
+						cherokee_connection_t      *conn,
+						cherokee_buffer_t         **ret_buf,
+						cherokee_buffer_t          *tmp);
 
 #endif /* CHEROKEE_VALIDATOR_FILE_H */

@@ -1,5 +1,11 @@
 2008-11-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/validator_htpasswd.c, cherokee/validator_plain.c,
+	cherokee/validator_file.c, cherokee/validator_file.h,
+	cherokee/validator_htdigest.c: Adds support for relative paths (in
+	addition to the full paths previously supported) to the file based
+	validators.
+
 	* cherokee/validator_htpasswd.c, cherokee/validator_htpasswd.h,
 	cherokee/Makefile.am, cherokee/validator_plain.c,
 	cherokee/validator_plain.h, cherokee/validator_file.c,
