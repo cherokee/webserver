@@ -62,7 +62,10 @@ uncheck `Check file`. This is to prevent possible errors with the
 `INFO_PATH` generation that can happen when an application, in this
 case 'Django', manages the whole subtree. This is mentioned in the
 link:modules_handlers_cgi.html[Common CGI] section of the
-documentation.
+documentation. It is a good idea to enable the `Error handler`
+checkbox since it will help you determine if an error is associated
+with your Django application or with Cherokee. This, however, is not
+required.
 
 image::media/images/cookbook_django_common.png[Common CGI options]
 
@@ -90,3 +93,10 @@ localhost:3033 , `/var/www/example/manage.py runfcgi method=threaded ` \
 
 You can set up as many hosts as desired and Cherokee will balance the
 load among them.
+
+Once everything is done you can check if Django is really
+working. Simply navigate to the path configured by your rule,
+http://localhost/example for instance, and you should see some notes
+about your recently created project.
+
+image::media/images/cookbook_django.png[Django example]

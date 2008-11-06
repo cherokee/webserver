@@ -73,7 +73,10 @@ uncheck `Check file`. This is to prevent possible errors with the
 `INFO_PATH` generation that can happen when an application, in this
 case 'Rails', manages the whole subtree. This is mentioned in the
 link:modules_handlers_cgi.html[Common CGI] section of the
-documentation.
+documentation. It is a good idea to enable the `Error handler`
+checkbox since it will help you determine if an error is associated
+with your Django application or with Cherokee. This, however, is not
+required.
 
 image::media/images/cookbook_ror_common.png[Common CGI options]
 
@@ -94,9 +97,9 @@ our example uses the default values to set up ports 8000 through
 `~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Host           , Interpreter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-localhost:8000 , `/home/foo/example/script/process/spawner fastcgi`
-localhost:8001 , `/home/foo/example/script/process/spawner fastcgi`
-localhost:8002 , `/home/foo/example/script/process/spawner fastcgi`
+localhost:8000 , `/home/foo/example/script/process/spawner fcgi`
+localhost:8001 , `/home/foo/example/script/process/spawner fcgi`
+localhost:8002 , `/home/foo/example/script/process/spawner fcgi`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If any of those ports was not reachable, the `interpreter` command
@@ -106,3 +109,10 @@ Here is a snapshot to show the creation of *ror0*. The rest are
 similar using the port variation detailed above.
 
 image::media/images/cookbook_ror_fcgi.png[FastCGI specifics]
+
+Once everything is done you can check if Rails  is really
+working. Simply navigate to the path configured by your rule,
+http://localhost/example/ for instance, and you should see some notes
+about your recently created project.
+
+image::media/images/cookbook_ror.png[Rails example]
