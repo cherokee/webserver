@@ -1,3 +1,8 @@
+2008-11-06  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/consts.py, admin/PageVServer.py: re-sets 'file' as the
+	default logging output and fixes another remaining cleanup.
+
 2008-11-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/Makefile.am, cherokee/http.c, cherokee/rule_method.c: A

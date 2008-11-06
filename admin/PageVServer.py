@@ -405,7 +405,7 @@ class PageVServer (PageMenu, FormHelper):
                 writers += str(table)
 
                 all = self._cfg.get_val(cfg_key)
-                if all == 'file':
+                if not all or all == 'file':
                     t1 = TableProps()
                     self.AddPropEntry (t1, 'Filename', '%s!all!filename'%(pre), NOTE_WRT_FILE)
                     writers += str(t1)
@@ -422,7 +422,7 @@ class PageVServer (PageMenu, FormHelper):
                 writers += str(table)
 
                 access = self._cfg.get_val(cfg_key)
-                if access == 'file':
+                if not access or access == 'file':
                     t1 = TableProps()
                     self.AddPropEntry (t1, 'Filename', '%s!access!filename'%(pre), NOTE_WRT_FILE)
                     writers += str(t1)
@@ -440,7 +440,7 @@ class PageVServer (PageMenu, FormHelper):
                 writers += str(table)
 
                 error = self._cfg.get_val(cfg_key)
-                if error == 'file':
+                if not error or error == 'file':
                     t1 = TableProps()
                     self.AddPropEntry (t1, 'Filename', '%s!error!filename'%(pre), NOTE_WRT_FILE)
                     writers += str(t1)
@@ -524,6 +524,13 @@ class PageVServer (PageMenu, FormHelper):
         if not logger:
             del(self._cfg[cfg_key])
             return
+
+        to_be_deleted = []
+        if logger == 'w3c':
+            to_be_deleted.append('%s!access' % cfg_key)
+            to_be_deleted.append('%s!error' % cfg_key)
+        else:
+            to_be_deleted.append('%s!all' % cfg_key)
 
         to_be_deleted = []
         for entry in self._cfg[cfg_key]:
