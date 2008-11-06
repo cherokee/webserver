@@ -405,7 +405,7 @@ class PageVServer (PageMenu, FormHelper):
                 writers += str(table)
 
                 all = self._cfg.get_val(cfg_key)
-                if not all or all == 'file':
+                if all == 'file':
                     t1 = TableProps()
                     self.AddPropEntry (t1, 'Filename', '%s!all!filename'%(pre), NOTE_WRT_FILE)
                     writers += str(t1)
@@ -422,7 +422,7 @@ class PageVServer (PageMenu, FormHelper):
                 writers += str(table)
 
                 access = self._cfg.get_val(cfg_key)
-                if not access or access == 'file':
+                if access == 'file':
                     t1 = TableProps()
                     self.AddPropEntry (t1, 'Filename', '%s!access!filename'%(pre), NOTE_WRT_FILE)
                     writers += str(t1)
@@ -440,7 +440,7 @@ class PageVServer (PageMenu, FormHelper):
                 writers += str(table)
 
                 error = self._cfg.get_val(cfg_key)
-                if not error or error == 'file':
+                if error == 'file':
                     t1 = TableProps()
                     self.AddPropEntry (t1, 'Filename', '%s!error!filename'%(pre), NOTE_WRT_FILE)
                     writers += str(t1)
@@ -507,11 +507,10 @@ class PageVServer (PageMenu, FormHelper):
                 checkboxes.append('%s!rule!%s!match!final'%(pre,p))
 
         # Special case for loggers
-        log = self._cfg['%s!logger'%pre]
-        if log:
-            for child in log:
-                cfg_key = '%s!logger!%s!filename' % (pre,child)
-                self.Validate_NotEmpty (post, cfg_key, "Filenames must be set!")
+        keys = self._cfg.keys('%s!logger'%pre)
+        for key in keys:
+            cfg_key = '%s!logger!%s!filename' % (pre,key)
+            self.Validate_NotEmpty (post, cfg_key, "Filename must be set")
 
         # Apply changes
         self.ApplyChanges (checkboxes, post, DATA_VALIDATION)
