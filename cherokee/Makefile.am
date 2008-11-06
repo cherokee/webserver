@@ -778,7 +778,7 @@ endif
 #
 # Validator htpasswd
 #
-if !STATIC_VALIDATOR_PLAIN
+if !STATIC_VALIDATOR_HTPASSWD
 validator_file_file = validator_file.h validator_file.c
 endif
 
@@ -986,8 +986,7 @@ unix4win32.c \
 win32_misc.h \
 win32_misc.c \
 win32_cservice.h \
-win32_cservice.c \
-win32_cherokeeserv.c
+win32_cservice.c 
 endif
 
 libcherokee_base_la_SOURCES = \

@@ -57,6 +57,8 @@ configure (cherokee_rule_method_t    *rule,
 		return ret;
 	}
 
+	printf ("'%s' -> %d\n", tmp->buf, rule->method);
+
 	return ret_ok;
 }
 
@@ -75,7 +77,8 @@ match (cherokee_rule_method_t *rule,
 		return ret_ok;
 	}
 
-	TRACE(ENTRIES, "Didn't match method: %d\n", rule->method);
+	TRACE(ENTRIES, "Didn't match. Conn method=%d, Rule method=%d\n",
+	      conn->header.method, rule->method);
 	return ret_not_found;
 }
 

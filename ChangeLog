@@ -1,5 +1,8 @@
 2008-11-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/Makefile.am, cherokee/http.c, cherokee/rule_method.c: A
+	couple of fix issues have been fixed.
+
 	* qa/187-Method.py, qa/188-Method2.py, qa/Makefile.am: Adds a
 	couple of new QA tests for checking the Rule 'method'.
 
