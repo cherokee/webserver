@@ -986,7 +986,8 @@ unix4win32.c \
 win32_misc.h \
 win32_misc.c \
 win32_cservice.h \
-win32_cservice.c
+win32_cservice.c \
+win32_cherokeeserv.c
 endif
 
 libcherokee_base_la_SOURCES = \

@@ -1,5 +1,8 @@
 2008-11-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/Makefile.am (win32_src): Adds the win32_cherokeeserv.c
+	file to the Windows compilation stack.
+
 	* cherokee/win32_misc.h, cherokee/win32_misc.c: Believe it or not,
 	Windows does not implemetn strnstr. This patch adds a home-made
 	implementation of the function so the server code can compile.
