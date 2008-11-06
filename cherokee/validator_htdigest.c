@@ -36,16 +36,13 @@ PLUGIN_INFO_VALIDATOR_EASIEST_INIT (htdigest, http_auth_basic | http_auth_digest
 static ret_t 
 props_free (cherokee_validator_htdigest_props_t *props)
 {
-	cherokee_buffer_mrproper (&props->password_file);
-	return cherokee_validator_props_free_base (VALIDATOR_PROPS(props));
+	return cherokee_validator_file_props_free_base (PROP_VFILE(props));
 }
 
 
 ret_t 
 cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
-	ret_t                                ret;
-	cherokee_config_node_t              *subconf;
 	cherokee_validator_htdigest_props_t *props;
 
 	UNUSED(srv);
@@ -53,20 +50,16 @@ cherokee_validator_htdigest_configure (cherokee_config_node_t *conf, cherokee_se
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_htdigest_props);
 
-		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), MODULE_PROPS_FREE(props_free));
-		cherokee_buffer_init (&n->password_file);
-		
+		cherokee_validator_file_props_init_base (PROP_VFILE(n),
+							 MODULE_PROPS_FREE(props_free));
 		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_HTDIGEST(*_props);
 
-	ret = cherokee_config_node_get (conf, "passwdfile", &subconf);
-	if (ret == ret_ok) {
-		cherokee_buffer_add_buffer (&props->password_file, &subconf->val);
-	}
-
-	return ret_ok;
+	/* Call the file based validator configure
+	 */
+	return cherokee_validator_file_configure (conf, srv, _props);
 }
 
 
@@ -77,20 +70,18 @@ cherokee_validator_htdigest_new (cherokee_validator_htdigest_t **htdigest, chero
 
 	/* Init 	
 	 */
-	cherokee_validator_init_base (VALIDATOR(n), VALIDATOR_PROPS(props), PLUGIN_INFO_VALIDATOR_PTR(htdigest));
+	cherokee_validator_file_init_base (VFILE(n),
+					   PROP_VFILE(props),
+					   PLUGIN_INFO_VALIDATOR_PTR(htdigest));
+
 	VALIDATOR(n)->support = http_auth_basic | http_auth_digest;
 
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_htdigest_free;
 	VALIDATOR(n)->check       = (validator_func_check_t)       cherokee_validator_htdigest_check;
 	VALIDATOR(n)->add_headers = (validator_func_add_headers_t) cherokee_validator_htdigest_add_headers;
 
-	/* Checks
+	/* Return obj
 	 */
-	if (cherokee_buffer_is_empty (&VAL_HTDIGEST_PROP(n)->password_file)) {
-		PRINT_MSG_S ("htdigest validator needs a password file\n");
-		return ret_error;
-	}
-
 	*htdigest = n;
 	return ret_ok;
 }
@@ -99,8 +90,7 @@ cherokee_validator_htdigest_new (cherokee_validator_htdigest_t **htdigest, chero
 ret_t 
 cherokee_validator_htdigest_free (cherokee_validator_htdigest_t *htdigest)
 {
-	cherokee_validator_free_base (VALIDATOR(htdigest));
-	return ret_ok;
+	return cherokee_validator_file_free_base (VFILE(htdigest));
 }
 
 
@@ -247,12 +237,12 @@ cherokee_validator_htdigest_check (cherokee_validator_htdigest_t *htdigest, cher
 	    cherokee_buffer_is_empty (&conn->validator->user)) 
 		return ret_error;
 
-	if (cherokee_buffer_is_empty (&VAL_HTDIGEST_PROP(htdigest)->password_file))
+	if (cherokee_buffer_is_empty (&VAL_VFILE_PROP(htdigest)->password_file))
 		return ret_error;
 
 	/* Read the whole file
 	 */
-	ret = cherokee_buffer_read_file (&file, VAL_HTDIGEST_PROP(htdigest)->password_file.buf);
+	ret = cherokee_buffer_read_file (&file, VAL_VFILE_PROP(htdigest)->password_file.buf);
 	if (ret != ret_ok) {
 		ret = ret_error;
 		goto out;

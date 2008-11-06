@@ -25,16 +25,15 @@
 #ifndef CHEROKEE_VALIDATOR_HTPASSWD_H
 #define CHEROKEE_VALIDATOR_HTPASSWD_H
 
-#include "validator.h"
+#include "validator_file.h"
 #include "connection.h"
 
 typedef struct {
-	cherokee_module_props_t  base;
-	cherokee_buffer_t        password_file;
+	cherokee_validator_file_props_t base;
 } cherokee_validator_htpasswd_props_t;
 
 typedef struct {
-	cherokee_validator_t       validator;
+	cherokee_validator_file_t validator;
 } cherokee_validator_htpasswd_t;
 
 #define HTPASSWD(x)          ((cherokee_validator_htpasswd_t *)(x))

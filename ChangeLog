@@ -1,5 +1,13 @@
 2008-11-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/validator_htpasswd.c, cherokee/validator_htpasswd.h,
+	cherokee/Makefile.am, cherokee/validator_plain.c,
+	cherokee/validator_plain.h, cherokee/validator_file.c,
+	cherokee/validator_file.h, cherokee/validator_htdigest.c,
+	cherokee/validator_htdigest.h: Re-factored the file based
+	validators. A new common parent class cherokee_validator_file_t
+	has been added.
+
 	* cherokee/win32_misc.h, cherokee/win32_misc.c: Implements kill()
 	on Windows. Patch by Stefan de Konink <stefan@konink.de>.
 

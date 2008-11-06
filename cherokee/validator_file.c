@@ -1,0 +1,107 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+
+/* Cherokee
+ *
+ * Authors:
+ *      Alvaro Lopez Ortega <alvaro@alobbs.com>
+ *
+ * Copyright (C) 2001-2008 Alvaro Lopez Ortega
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of version 2 of the GNU General Public
+ * License as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+
+#include "common-internal.h"
+#include "validator_file.h"
+
+/* Properties
+ */
+
+ret_t
+cherokee_validator_file_props_init_base (cherokee_validator_file_props_t *props,
+					 module_func_props_free_t         free_func)
+{
+	props->password_path_type = val_path_full;
+	cherokee_buffer_init (&props->password_file);
+
+	return cherokee_validator_props_init_base (VALIDATOR_PROPS(props), free_func);
+}	
+
+ret_t
+cherokee_validator_file_props_free_base (cherokee_validator_file_props_t *props)
+{
+	cherokee_buffer_mrproper (&props->password_file);
+
+	return cherokee_validator_props_free_base (VALIDATOR_PROPS(props));
+}
+
+ret_t
+cherokee_validator_file_configure (cherokee_config_node_t     *conf,
+				   cherokee_server_t          *srv,
+				   cherokee_module_props_t  **_props)
+{
+	ret_t                            ret;
+	cherokee_config_node_t          *subconf;
+	cherokee_validator_file_props_t *props    = PROP_VFILE(*_props);
+
+	/* Password file
+	 */
+	ret = cherokee_config_node_get (conf, "passwdfile", &subconf);
+	if (ret == ret_ok) {
+		cherokee_buffer_add_buffer (&props->password_file, &subconf->val);
+	}
+
+	/* Path type
+	 */
+	ret = cherokee_config_node_get (conf, "passwdfile_path", &subconf);
+	if (ret == ret_ok) {
+		if (equal_buf_str (&subconf->val, "full")) {
+			props->password_path_type = val_path_full;
+		} else if (equal_buf_str (&subconf->val, "home")) {
+			props->password_path_type = val_path_home;
+		} else {
+			PRINT_ERROR ("ERROR: Unknown path type '%s'\n", subconf->val.buf);
+			return ret_error;
+		}
+	}
+
+	/* Final checks
+	 */
+	if (cherokee_buffer_is_empty (&props->password_file)) {
+		PRINT_MSG_S ("File based validators need a password file\n");
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
+/* Validator
+ */
+
+ret_t
+cherokee_validator_file_init_base (cherokee_validator_file_t        *validator,
+				   cherokee_validator_file_props_t  *props,
+				   cherokee_plugin_info_validator_t *info)
+{
+	return cherokee_validator_init_base (VALIDATOR(validator),
+					     VALIDATOR_PROPS(props), info);
+}
+
+ret_t
+cherokee_validator_file_free_base (cherokee_validator_file_t *validator)
+{
+	return cherokee_validator_free_base (VALIDATOR(validator));
+}
+

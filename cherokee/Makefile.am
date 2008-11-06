@@ -778,8 +778,13 @@ endif
 #
 # Validator htpasswd
 #
+if !STATIC_VALIDATOR_PLAIN
+validator_file_file = validator_file.h validator_file.c
+endif
+
 if USE_CRYPT
 validator_htpasswd = \
+$(validator_file_file) \
 validator_htpasswd.c \
 validator_htpasswd.h
 
@@ -800,7 +805,12 @@ endif
 #
 # Validator plain text
 #
+if !STATIC_VALIDATOR_PLAIN
+validator_file_file = validator_file.h validator_file.c
+endif
+
 validator_plain = \
+$(validator_file_file) \
 validator_plain.c \
 validator_plain.h
 
@@ -817,8 +827,13 @@ endif
 #
 # Validator htdigest
 #
-validator_htdigest = \
-validator_htdigest.c \
+if !STATIC_VALIDATOR_HTDIGEST
+validator_file_file = validator_file.h validator_file.c
+endif
+
+validator_htdigest =   \
+$(validator_file_file) \
+validator_htdigest.c   \
 validator_htdigest.h
 
 libplugin_htdigest_la_LDFLAGS = $(module_ldflags) 
@@ -1085,6 +1100,20 @@ if STATIC_HANDLER_SCGI
 	     	 handler_cgi_base.c
 endif
 
+if STATIC_VALIDATOR_PLAIN
+   common_val_file = validator_file.h \
+				 validator_file.c
+endif
+
+if STATIC_VALIDATOR_HTPASSWD
+   common_val_file = validator_file.h \
+				 validator_file.c
+endif
+
+if STATIC_VALIDATOR_HTDIGEST
+   common_val_file = validator_file.h \
+				 validator_file.c
+endif
 
 libcherokee_server_la_SOURCES = \
 $(static_rule_directory_src) \
@@ -1135,6 +1164,7 @@ $(static_validator_mysql_src) \
 $(static_balancer_round_robin_src) \
 \
 $(common_cgi) \
+$(common_val_file) \
 \
 connection.h \
 connection-protected.h \

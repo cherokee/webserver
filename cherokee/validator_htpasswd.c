@@ -47,60 +47,52 @@ PLUGIN_INFO_VALIDATOR_EASIEST_INIT (htpasswd, http_auth_basic);
 static ret_t 
 props_free (cherokee_validator_htpasswd_props_t *props)
 {
-	cherokee_buffer_mrproper (&props->password_file);
-	return cherokee_validator_props_free_base (VALIDATOR_PROPS(props));
+	return cherokee_validator_file_props_free_base (PROP_VFILE(props));
 }
 
 
 ret_t 
-cherokee_validator_htpasswd_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
+cherokee_validator_htpasswd_configure (cherokee_config_node_t   *conf,
+				       cherokee_server_t        *srv,
+				       cherokee_module_props_t **_props)
 {
-	ret_t                                ret;
-	cherokee_config_node_t              *subconf;
 	cherokee_validator_htpasswd_props_t *props;
 
 	UNUSED(srv);
 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_htpasswd_props);
-
-		cherokee_validator_props_init_base (VALIDATOR_PROPS(n), MODULE_PROPS_FREE(props_free));
-		cherokee_buffer_init (&n->password_file);
-
+		cherokee_validator_file_props_init_base (PROP_VFILE(n),
+							 MODULE_PROPS_FREE(props_free));
 		*_props = MODULE_PROPS(n);
 	}
 
 	props = PROP_HTPASSWD(*_props);
 
-	ret = cherokee_config_node_get (conf, "passwdfile", &subconf);
-	if (ret == ret_ok) {
-		cherokee_buffer_add_buffer (&props->password_file, &subconf->val);
-	}
-
-	return ret_ok;
+	/* Call the file based validator configure
+	 */
+	return cherokee_validator_file_configure (conf, srv, _props);
 }
 
 ret_t 
-cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd, cherokee_module_props_t *props)
+cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd,
+				 cherokee_module_props_t        *props)
 {	  
 	CHEROKEE_NEW_STRUCT(n,validator_htpasswd);
 
 	/* Init 	
 	 */
-	cherokee_validator_init_base (VALIDATOR(n), VALIDATOR_PROPS(props), PLUGIN_INFO_VALIDATOR_PTR(htpasswd));
+	cherokee_validator_file_init_base (VFILE(n),
+					   PROP_VFILE(props),
+					   PLUGIN_INFO_VALIDATOR_PTR(htpasswd));
 	VALIDATOR(n)->support = http_auth_basic;
 
 	MODULE(n)->free           = (module_func_free_t)           cherokee_validator_htpasswd_free;
 	VALIDATOR(n)->check       = (validator_func_check_t)       cherokee_validator_htpasswd_check;
 	VALIDATOR(n)->add_headers = (validator_func_add_headers_t) cherokee_validator_htpasswd_add_headers;
 	   
-	/* Checks
+	/* The validator is ready
 	 */
-	if (cherokee_buffer_is_empty (&VAL_HTPASSWD_PROP(n)->password_file)) {
-		PRINT_MSG_S ("htpasswd validator needs a password file\n");
-		return ret_error;
-	}
-
 	*htpasswd = n;
 	return ret_ok;
 }
@@ -109,8 +101,7 @@ cherokee_validator_htpasswd_new (cherokee_validator_htpasswd_t **htpasswd, chero
 ret_t 
 cherokee_validator_htpasswd_free (cherokee_validator_htpasswd_t *htpasswd)
 {
-	cherokee_validator_free_base (VALIDATOR(htpasswd));
-	return ret_ok;
+	return cherokee_validator_file_free_base (VFILE(htpasswd));
 }
 
 
@@ -248,7 +239,7 @@ request_isnt_passwd_file (cherokee_validator_htpasswd_t *htpasswd, cherokee_conn
 	ret_t              ret;
 	cherokee_buffer_t *pfile;
 
-	pfile = &VAL_HTPASSWD_PROP(htpasswd)->password_file;
+	pfile = &VAL_VFILE_PROP(htpasswd)->password_file;
 
 	if (conn->request.len > 0)
 		cherokee_buffer_add (&conn->local_directory, conn->request.buf+1, conn->request.len-1);  /* 1: add    */
@@ -286,7 +277,7 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd, cher
 
 	/* 1.- Check the login/passwd
 	 */	  
-	f = fopen (VAL_HTPASSWD_PROP(htpasswd)->password_file.buf, "r");
+	f = fopen (VAL_VFILE_PROP(htpasswd)->password_file.buf, "r");
 	if (f == NULL) {
 		return ret_error;
 	}
