@@ -1,5 +1,8 @@
 2008-11-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/187-Method.py, qa/188-Method2.py, qa/Makefile.am: Adds a
+	couple of new QA tests for checking the Rule 'method'.
+
 	* cherokee/Makefile.am (win32_src): Adds the win32_cherokeeserv.c
 	file to the Windows compilation stack.
 

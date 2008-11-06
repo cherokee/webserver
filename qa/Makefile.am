@@ -191,7 +191,9 @@ run-tests.py \
 183-SSI-include-virtual.py \
 184-SSI-fsize-file.py \
 185-SSI-fsize-virtual.py \
-186-SSI-droot.py
+186-SSI-droot.py \
+187-Method.py \
+188-Method2.py
 
 test:
 	./run-tests.py
