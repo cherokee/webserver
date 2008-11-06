@@ -1,3 +1,8 @@
+2008-11-06  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/win32_misc.h, cherokee/win32_misc.c: Implements kill()
+	on Windows. Patch by Stefan de Konink <stefan@konink.de>.
+
 2008-11-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/socket.c (cherokee_socket_close): Fixes a Win32

@@ -1119,3 +1119,16 @@ cherokee_win32_mkstemp (cherokee_buffer_t *buffer)
 
 	return fd;
 }
+
+
+int
+kill (pid_t pid, int sig)
+{
+     int    re;
+     HANDLE Proc_handle;
+
+     Proc_handle = OpenProcess (PROCESS_ALL_ACCESS, FALSE, src->pid);
+     re = TerminateProcess (Proc_handle, -1);
+
+     return re;
+}
