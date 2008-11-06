@@ -49,6 +49,7 @@ char         *win_strerror        (int err, char *buf, size_t bufsize);
 struct tm    *localtime_r         (const time_t *time, struct tm *tm);
 unsigned int  sleep               (unsigned int seconds);
 int           kill                (pid_t pid, int sig);
+char         *strnstr             (const char *s1, const char *s2);
 
 int           cherokee_win32_stat (const char *path, struct stat *buf);
 bool          cherokee_win32_shutdown_signaled(time_t bogo_now);

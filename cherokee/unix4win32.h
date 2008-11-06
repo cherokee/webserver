@@ -56,8 +56,7 @@
 #include <sys/stat.h>
 #include <time.h>
 
-/* Don't need unix4win32_errno.h anymore. Only these errors
- * are needed.
+/* sys/errno.h
  */
 #define EWOULDBLOCK   WSAEWOULDBLOCK
 #define EAFNOSUPPORT  WSAEAFNOSUPPORT

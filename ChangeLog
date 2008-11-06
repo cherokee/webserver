@@ -1,3 +1,9 @@
+2008-11-06  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/win32_misc.h, cherokee/win32_misc.c: Believe it or not,
+	Windows does not implemetn strnstr. This patch adds a home-made
+	implementation of the function so the server code can compile.
+
 2008-11-06  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/PageVServer.py: adds new validation. Should fix
