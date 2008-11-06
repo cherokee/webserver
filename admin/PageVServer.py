@@ -506,6 +506,13 @@ class PageVServer (PageMenu, FormHelper):
             for p in tmp:
                 checkboxes.append('%s!rule!%s!match!final'%(pre,p))
 
+        # Special case for loggers
+        log = self._cfg['%s!logger'%pre]
+        if log:
+            for child in log:
+                cfg_key = '%s!logger!%s!filename' % (pre,child)
+                self.Validate_NotEmpty (post, cfg_key, "Filenames must be set!")
+
         # Apply changes
         self.ApplyChanges (checkboxes, post, DATA_VALIDATION)
 
