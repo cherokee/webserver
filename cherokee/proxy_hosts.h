@@ -31,6 +31,12 @@
 #include "source.h"
 #include "socket.h"
 
+typedef enum {
+	pconn_enc_none,
+	pconn_enc_known_size,
+	pconn_enc_chunked
+} cherokee_handler_proxy_enc_t;
+
 typedef struct {
 	/* Connection poll */
 	cherokee_avl_t            hosts;
@@ -48,7 +54,15 @@ typedef struct {
 	cherokee_list_t                listed;
 	cherokee_socket_t              socket;
 	cherokee_handler_proxy_poll_t *poll_ref;
+
+	/* In */
+	cherokee_handler_proxy_enc_t   enc;
 	cherokee_buffer_t              header_in_raw;
+	cherokee_boolean_t             keepalive_in;
+	size_t                         size_in;
+
+	/* Out */
+	size_t                         sent_out;
 } cherokee_handler_proxy_conn_t;
 
 #define PROXY_HOSTS(h) ((cherokee_handler_proxy_hosts_t *)(h))

@@ -216,7 +216,11 @@ cherokee_handler_proxy_conn_new (cherokee_handler_proxy_conn_t **pconn)
 	cherokee_buffer_init (&n->header_in_raw);
 	cherokee_buffer_ensure_size (&n->header_in_raw, 512);
 
-	n->poll_ref = NULL;
+	n->poll_ref      = NULL;
+	n->keepalive_in  = false;
+	n->size_in       = 0;
+	n->sent_out      = 0;
+	n->enc           = pconn_enc_none;
 
 	*pconn = n;
 	return ret_ok;
