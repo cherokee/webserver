@@ -258,7 +258,7 @@ build_server_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	table_add_row_int (buf, "Thread Number ", srv->thread_num);
 	table_add_row_str (buf, "IPv6 ", (srv->ipv6 == 1) ? on : off);
 	table_add_row_str (buf, "TLS support ", (SOCKET_FD(&srv->socket_tls) != -1) ? on : off);
-	table_add_row_int (buf, "TLS port ", SOCKET_FD(&srv->port_tls));
+	table_add_row_int (buf, "TLS port ", srv->port_tls);
 	table_add_row_str (buf, "Chroot ", (srv->chrooted) ? on : off);
 	table_add_row_int (buf, "User ID", getuid());
 	table_add_row_int (buf, "Group ID", getgid());
