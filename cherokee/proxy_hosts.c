@@ -126,32 +126,6 @@ cherokee_handler_proxy_poll_free (cherokee_handler_proxy_poll_t *poll)
 }
 
 
-static ret_t
-init_socket (cherokee_socket_t *socket, 
-	     cherokee_source_t *src)
-{
-	ret_t ret;
-
-	/* Family */
-	ret = cherokee_socket_set_client (socket, AF_INET);
-        if (unlikely(ret != ret_ok)) 
-		return ret_error;
-
-	/* TCP port */
-        SOCKET_SIN_PORT(socket) = htons (src->port);
-
-        /* IP host */
-        ret = cherokee_socket_pton (socket, &src->host);
-        if (ret != ret_ok) {
-                ret = cherokee_socket_gethostbyname (socket, &src->host);
-                if (unlikely(ret != ret_ok))
-			return ret_error;
-        }
-
-	return ret_ok;
-}
-
-
 ret_t
 cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
 				 cherokee_handler_proxy_conn_t **pconn,
@@ -178,7 +152,8 @@ cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
 		if (ret != ret_ok)
 			goto error;
 
-		ret = init_socket (&n->socket, src);
+
+		ret = cherokee_proxy_util_init_socket (&n->socket, src);
 		if (ret != ret_ok)
 			goto error;
 
@@ -199,6 +174,16 @@ static ret_t
 poll_release (cherokee_handler_proxy_poll_t *poll,
 	      cherokee_handler_proxy_conn_t *pconn)
 {
+	/* Clean up
+	 */
+	pconn->enc      = pconn_enc_none;
+	pconn->sent_out = 0;
+	pconn->size_in  = 0;
+
+	cherokee_buffer_clean (&pconn->header_in_raw);
+
+	/* It is available again
+	 */
 	cherokee_list_add (&pconn->listed, &poll->reuse);	
 	return ret_ok;
 }
@@ -240,7 +225,14 @@ cherokee_handler_proxy_conn_free (cherokee_handler_proxy_conn_t *pconn)
 ret_t
 cherokee_handler_proxy_conn_release (cherokee_handler_proxy_conn_t *pconn)
 {
-	return poll_release (pconn->poll_ref, pconn);
+	ret_t                          ret;
+	cherokee_handler_proxy_poll_t *poll = pconn->poll_ref;
+
+	CHEROKEE_MUTEX_LOCK (&poll->mutex);
+	ret = poll_release (poll, pconn);
+	CHEROKEE_MUTEX_UNLOCK (&poll->mutex);
+
+	return ret;
 }
 
 
@@ -255,11 +247,13 @@ cherokee_handler_proxy_conn_send (cherokee_handler_proxy_conn_t *pconn,
 	if (unlikely(ret != ret_ok)) 
 		return ret;
 
-	if (sent > buf->len)
+	if (sent >= buf->len) {
 		cherokee_buffer_clean (buf);
+		return ret_ok;
+	}
 
 	cherokee_buffer_move_to_begin (buf, sent);
-	return ret_ok;
+	return ret_eagain;
 }
 
 ret_t
@@ -270,7 +264,8 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 	char   *end;
 	size_t  size = 0;
 
-	/* Read */
+	/* Read 
+	 */
 	ret = cherokee_socket_bufread (&pconn->socket,
 				       &pconn->header_in_raw,
 				       512, &size);
@@ -285,13 +280,15 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 		RET_UNKNOWN(ret);
 	}
 
-	/* Look for the end of header */
+	/* Look for the end of header
+	 */
 	end = strnstr (pconn->header_in_raw.buf, CRLF_CRLF, pconn->header_in_raw.len);
 	if (end == NULL) {
 		return ret_eagain;
 	}
 
-	/* Copy the body if there is any */
+	/* Copy the body if there is any
+	 */
 	size = (pconn->header_in_raw.buf + pconn->header_in_raw.len) - (end + 4);
 
 	cherokee_buffer_add (body, end+4, size);
@@ -300,3 +297,32 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 	return ret_ok;
 }
 
+
+
+/* Utils
+ */
+
+ret_t
+cherokee_proxy_util_init_socket (cherokee_socket_t *socket, 
+				 cherokee_source_t *src)
+{
+	ret_t ret;
+	
+	/* Family */
+	ret = cherokee_socket_set_client (socket, AF_INET);
+        if (unlikely(ret != ret_ok)) 
+		return ret_error;
+
+	/* TCP port */
+        SOCKET_SIN_PORT(socket) = htons (src->port);
+
+        /* IP host */
+        ret = cherokee_socket_pton (socket, &src->host);
+        if (ret != ret_ok) {
+                ret = cherokee_socket_gethostbyname (socket, &src->host);
+                if (unlikely(ret != ret_ok))
+			return ret_error;
+        }
+
+	return ret_ok;
+}

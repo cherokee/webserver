@@ -97,6 +97,11 @@ ret_t cherokee_handler_proxy_conn_send         (cherokee_handler_proxy_conn_t  *
 ret_t cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t  *pconn,
 						cherokee_buffer_t              *body);
 
+/* Utils
+ */
+ret_t cherokee_proxy_util_init_socket          (cherokee_socket_t *socket, 
+						cherokee_source_t *src);
+
 #endif /* CHEROKEE_HANDLER_PROXY_HOSTS_H */
 
 

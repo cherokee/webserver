@@ -40,10 +40,11 @@
 
 typedef enum {
 	proxy_init_get_conn,
-	proxy_init_build_headers,
 	proxy_init_connect,
+	proxy_init_build_headers,
 	proxy_init_send_headers,
-	proxy_init_send_post
+	proxy_init_send_post,
+	proxy_init_read_header
 } cherokee_handler_proxy_init_phase_t;
 
 typedef struct {
@@ -58,8 +59,10 @@ typedef struct {
 	cherokee_buffer_t                    request;
 	cherokee_source_t                   *src_ref;
 	cherokee_handler_proxy_conn_t       *pconn;
-	cherokee_handler_proxy_init_phase_t  init_phase;
 	cherokee_buffer_t                    tmp;
+	cherokee_boolean_t                   respined;
+
+	cherokee_handler_proxy_init_phase_t  init_phase;
 } cherokee_handler_proxy_t;
 
 #define HDL_PROXY(x)       ((cherokee_handler_proxy_t *)(x))

@@ -203,6 +203,27 @@ error:
 }
 
 
+static ret_t
+do_connect (cherokee_handler_proxy_t *hdl)
+{
+	ret_t ret;
+
+	ret = cherokee_socket_connect (&hdl->pconn->socket);
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_deny:
+	case ret_error:
+	case ret_eagain:
+		return ret;
+	default:
+		RET_UNKNOWN(ret);
+	}
+
+	return ret_ok;
+}
+
+
 ret_t
 cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 {
@@ -235,6 +256,18 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		if (unlikely (ret != ret_ok))
 			return ret_error;
 		
+		hdl->init_phase = proxy_init_connect;
+
+	case proxy_init_connect:
+	reconnect:
+		/* Connect to the target host
+		 */
+		if (! cherokee_socket_is_connected (&hdl->pconn->socket)) {
+			ret = do_connect (hdl);
+			if (ret != ret_ok)
+				return ret;
+		}
+
 		hdl->init_phase = proxy_init_build_headers;
 
 	case proxy_init_build_headers:
@@ -244,34 +277,12 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		if (unlikely (ret != ret_ok))
 			return ret;
 
-		hdl->init_phase = proxy_init_connect;
-
-	case proxy_init_connect:
-		/* Connect to the target host
-		 */
-		if (! cherokee_socket_is_connected (&hdl->pconn->socket)) {
-			ret = cherokee_socket_connect (&hdl->pconn->socket);
-			switch (ret) {
-			case ret_ok:
-				break;
-			case ret_deny:
-				conn->error_code = http_bad_gateway;
-				return ret_error;
-			case ret_error:
-			case ret_eagain:
-				return ret;
-			default:
-				RET_UNKNOWN(ret);
-			}
-		}
-
 		hdl->init_phase = proxy_init_send_headers;
 
 	case proxy_init_send_headers:
 		/* Send the request
 		 */
-		ret = cherokee_handler_proxy_conn_send (hdl->pconn, 
-							&hdl->request);
+		ret = cherokee_handler_proxy_conn_send (hdl->pconn, &hdl->request);
 		switch (ret) {
 		case ret_ok:
 			break;
@@ -285,7 +296,46 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		hdl->init_phase = proxy_init_send_post;
 
 	case proxy_init_send_post:
-		break;
+		// TODO
+		hdl->init_phase = proxy_init_read_header;
+
+	case proxy_init_read_header:
+		/* Read the client header
+		 */
+		ret = cherokee_handler_proxy_conn_recv_headers (hdl->pconn, &hdl->tmp);
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_eagain:
+			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+							     HANDLER_CONN(hdl), 
+							     hdl->pconn->socket.socket,
+							     0, false);
+			return ret_eagain;
+		case ret_eof:
+			/* The socket isn't really connected
+			 */
+			if (hdl->respined)
+				return ret_eof;
+
+			cherokee_socket_close (&hdl->pconn->socket);
+			ret = cherokee_proxy_util_init_socket (&hdl->pconn->socket, 
+							       hdl->src_ref);
+			if (ret != ret_ok)
+				return ret_eof;
+			
+			hdl->init_phase = proxy_init_connect;
+			hdl->respined   = true;
+			goto reconnect;
+		case ret_error:
+			return ret;
+		default:
+			RET_UNKNOWN(ret);
+		}
+		break;		
+
+	default:
+		SHOULDNT_HAPPEN;
 	}
 
 	return ret_ok;
@@ -409,35 +459,16 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 				    cherokee_buffer_t        *buf)
 {
 	ret_t ret;
-	
-	/* Read the client header
-	 */
-	ret = cherokee_handler_proxy_conn_recv_headers (hdl->pconn,
-							&hdl->tmp);
-	switch (ret) {
-	case ret_ok:
-		break;
-	case ret_eagain:
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-						     HANDLER_CONN(hdl), 
-						     hdl->pconn->socket.socket,
-						     0, false);
-		return ret_eagain;
-	case ret_eof:
-	case ret_error:
-		return ret;
-	default:
-		RET_UNKNOWN(ret);
-	}
 
 	/* Parse the incoming header
 	 */
 	ret = parse_server_header (hdl, &hdl->pconn->header_in_raw, buf);
 	if (ret != ret_ok)
-		return ret;	
-	
+		return ret;
+
 	return ret_ok;
 }
+
 
 static ret_t
 check_chunked (cherokee_handler_proxy_t *hdl,
@@ -603,6 +634,8 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 	out:
 		if (copied > 0) {
 			cherokee_buffer_move_to_begin (&hdl->tmp, copied);
+			if (ret == ret_eof)
+				return ret_eof_have_data;
 			return ret_ok;
 		}
 		
@@ -638,9 +671,10 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 
 	/* Init
 	 */
-	n->pconn        = NULL;
-	n->src_ref      = NULL;
-	n->init_phase   = proxy_init_get_conn;
+	n->pconn      = NULL;
+	n->src_ref    = NULL;
+	n->init_phase = proxy_init_get_conn;
+	n->respined   = false;
 
 	cherokee_buffer_init (&n->tmp);
 	cherokee_buffer_init (&n->request);
