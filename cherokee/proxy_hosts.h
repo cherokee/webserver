@@ -48,6 +48,8 @@ typedef struct {
 	CHEROKEE_MUTEX_T (mutex);
 	cherokee_list_t   active;
 	cherokee_list_t   reuse;
+	cuint_t           reuse_len;
+	cuint_t           reuse_max;
 } cherokee_handler_proxy_poll_t;
 
 typedef struct {
@@ -77,15 +79,18 @@ ret_t cherokee_handler_proxy_hosts_mrproper (cherokee_handler_proxy_hosts_t *hos
 
 ret_t cherokee_handler_proxy_hosts_get      (cherokee_handler_proxy_hosts_t  *hosts,
 					     cherokee_source_t               *src,
-					     cherokee_handler_proxy_poll_t  **poll);
+					     cherokee_handler_proxy_poll_t  **poll,
+					     cuint_t                          reuse_max);
 
 /* Polls
  */
-ret_t cherokee_handler_proxy_poll_new       (cherokee_handler_proxy_poll_t  **poll);
+ret_t cherokee_handler_proxy_poll_new       (cherokee_handler_proxy_poll_t  **poll,
+					     cuint_t                          reuse_max);
 ret_t cherokee_handler_proxy_poll_free      (cherokee_handler_proxy_poll_t   *poll);
 ret_t cherokee_handler_proxy_poll_get       (cherokee_handler_proxy_poll_t   *poll,
 					     cherokee_handler_proxy_conn_t  **pconn, 
 					     cherokee_source_t               *src);
+
 
 /* Conns
  */

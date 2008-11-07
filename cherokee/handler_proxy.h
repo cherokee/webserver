@@ -51,6 +51,7 @@ typedef struct {
 	cherokee_module_props_t         base;
 	cherokee_balancer_t            *balancer;
 	cherokee_handler_proxy_hosts_t  hosts;
+	cuint_t                         reuse_max;
 } cherokee_handler_proxy_props_t;
 
 typedef struct {
