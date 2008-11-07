@@ -38,11 +38,12 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (proxy, http_all_methods);
 
 
 
-
 static ret_t 
 props_free (cherokee_handler_proxy_props_t *props)
 {
+	cherokee_avl_mrproper (&props->headers_hide, NULL);
 	cherokee_handler_proxy_hosts_mrproper (&props->hosts);
+
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
@@ -53,7 +54,7 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 				  cherokee_module_props_t **_props)
 {
 	ret_t                           ret;
-	cherokee_list_t                *i;
+	cherokee_list_t                *i, *j;
 	cherokee_handler_proxy_props_t *props;
 
 	UNUSED(srv);
@@ -68,6 +69,9 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 
 		n->balancer  = NULL;
 		n->reuse_max = DEFAULT_REUSE_MAX;
+
+		cherokee_avl_init (&n->headers_hide);
+		cherokee_avl_set_case (&n->headers_hide, false);
 
 		*_props = MODULE_PROPS(n);
 	}
@@ -85,6 +89,12 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 				return ret;
 		} else if (equal_buf_str (&subconf->key, "reuse_max")) {
 			props->reuse_max = atoi (subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "header_hide")) {
+			cherokee_config_node_foreach (j, subconf) {
+				cherokee_avl_add (&props->headers_hide, 
+						  &CONFIG_NODE(j)->val, NULL);
+			}
 		}
 	}
 
@@ -357,13 +367,16 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 		     cherokee_buffer_t        *buf_in,
 		     cherokee_buffer_t        *buf_out)
 {
-	int                      re;
-	char                    *p;
-	char                    *begin;
-	char                    *end;
-	char                    *header_end;
-	cherokee_http_version_t  version;
-	cherokee_connection_t   *conn         = HANDLER_CONN(hdl);
+	int                             re;
+	ret_t                           ret;
+	char                           *p;
+	char                           *begin;
+	char                           *end;
+	char                           *colon;
+	char                           *header_end;
+	cherokee_http_version_t         version;
+	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
+	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
 	p = buf_in->buf;
 	header_end = buf_in->buf + buf_in->len;
@@ -445,6 +458,18 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			hdl->pconn->size_in = strtoll (c, NULL, 10);
 
 			HANDLER(hdl)->support |= hsupport_length;
+
+		} else {
+			colon = strchr (begin, ':');
+			if (unlikely (colon == NULL))
+				return ret_error;
+
+			*colon = '\0';
+			ret = cherokee_avl_get_ptr (&props->headers_hide, begin, NULL);
+			*colon = ':';
+
+			if (ret == ret_ok)
+				goto next;
 		}
 
 		cherokee_buffer_add     (buf_out, begin, end-begin);
