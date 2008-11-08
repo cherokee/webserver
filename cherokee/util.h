@@ -76,8 +76,11 @@ CHEROKEE_BEGIN_DECLS
 # define cherokee_mkdir(path,perm) mkdir(path,perm)
 #endif
 
-/* Some global information
+/* Missing functions
  */
+#ifndef HAVE_STRNSTR
+char *strnstr (const char *s, const char *find, size_t slen);
+#endif
 
 /* System
  */

@@ -1,5 +1,9 @@
 2008-11-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* configure.in, cherokee/util.h, cherokee/util.c,
+	cherokee/win32_misc.h, cherokee/win32_misc.c: Fixes a compilation
+	issue (the strnstr() function is not always available).
+
 	* configure.in: Removes AC_TYPE_SIGNAL call. Patch by Tim Post
 	<echo@echoreply.us>.
 
