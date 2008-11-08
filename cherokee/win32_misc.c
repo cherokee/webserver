@@ -1127,7 +1127,7 @@ kill (pid_t pid, int sig)
      int    re;
      HANDLE Proc_handle;
 
-     Proc_handle = OpenProcess (PROCESS_ALL_ACCESS, FALSE, src->pid);
+     Proc_handle = OpenProcess (PROCESS_ALL_ACCESS, FALSE, pid);
      re = TerminateProcess (Proc_handle, -1);
 
      return re;

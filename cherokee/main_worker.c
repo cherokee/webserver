@@ -27,13 +27,16 @@
 #include <signal.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 
 #include "init.h"
 #include "server.h"
 #include "info.h"
 #include "server-protected.h"
 #include "util.h"
+
+#ifdef HAVE_SYS_WAIT_H
+# include <sys/wait.h>
+#endif
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
