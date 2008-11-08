@@ -3,9 +3,19 @@
 Development: Open issues
 ------------------------
 
-This document mantains a list of currently open issues. It mostly is
-useful to list things of the Cherokee Project that are known to be
-half-baked, and as such are only of interest for developers.
+This section of the documentation comprehends a variety of topics. It
+is mainly intended as a repository of notes, tips, issues and
+documentation concerning parts of Cherokee that are currently under
+development -or are full developed- but are not yet included for
+mainstream usage.
+
+As these features get properly integrated into the Cherokee
+infrastructure, the notes regarding the subject should be moved to
+their specific section of the docmentation.
+
+For now, this document mantains a list of currently open issues. It
+mostly is useful to list things of the Cherokee Project that are known
+to be half-baked, and as such are only of interest for developers.
 
 FastCGI Handler
 ~~~~~~~~~~~~~~~
@@ -28,13 +38,30 @@ Reverse Proxy
 ~~~~~~~~~~~~~
 
 The reverse proxy is currently one of the most demanded features and
-is under heavy development. No code is currently available in the
-public repository.
+is under heavy development.  The Cherokee-admin module is not yet
+written, so you'll have to do what no final user is meant to do. It's
+easy to configure though, so don't worry. Here you have a basic
+configuration example:
+
+-----
+server!port = 1234
+
+vserver!1!nick = default
+vserver!1!document_root = /tmp
+vserver!1!rule!1!match = default
+vserver!1!rule!1!handler = proxy
+vserver!1!rule!1!handler!balancer = round_robin
+vserver!1!rule!1!handler!balancer!source!1 = 1
+
+source!1!type = host
+source!1!host = localhost:9090
+-----
+
 
 Configuration Wizards
 ~~~~~~~~~~~~~~~~~~~~~
 
-Another interesting feature not yet reflected in the repository is a
+Another interesting feature -not yet reflected in the repository- is a
 project aimed at providing configuration wizards as an easy way to
 deploy a set of standard applications. The idea is to select an
 application from the list and let the wizard configure Cherokee to be
@@ -44,3 +71,13 @@ Even though the obtained configuration will most probably not be
 perfect, it will always be a good starting point to play with for
 further tuning.
 
+AND, OR and NOT rule types
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+These rule types are fully implemented, but the feature is not yet
+supported in Cherokee Admin. Some GUI issues remain to be solved, as
+the things achievable by these rules are at the same time very
+powerful and very complex. This is said in the sense that one can
+combine them with so much flexibility that dealing with it from the
+GUI could get really messy.
+ 

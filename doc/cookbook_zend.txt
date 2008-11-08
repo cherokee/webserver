@@ -1,0 +1,83 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up Zend Framework
+-----------------------------------
+
+The link:http://framework.zend.com/[Zend Framework] is a PHP framework
+focused on building more secure, reliable, and modern Web 2.0
+applications & web services.
+
+It is essential that Cherokee supports PHP before starting with this
+recipe. That should not be a problem since it comes preconfigured by
+default. However, you can follow the link:cookbook_php.html[setting up
+PHP] recipe for further hints on fine tuning this feature.
+
+To make sure the recipe works, we'll be using the demo provided by the
+link:http://framework.zend.com/docs/quickstart[Zend Framework
+Quickstart]. At the time of writing, it was
+link:http://framework.zend.com/demos/ZendFrameworkQuickstart-20080915.tar.gz[demo
+20080915].
+
+Uncompress its contents to a directory and set up the `public`
+subdirectory as your web document root. In our example, it will be
+`/var/www/demo/public`.
+
+----
+user@cherokee:/var/www/demo$ ls
+application  data  library  public  scripts
+----
+
+The `library` directory is empty and should contain the Zend Framework
+files. Download it from the
+link:http://framework.zend.com/download[official page] and copy it to
+the appropriate location. Follow the Quickstart for more details on
+setting up the framework. We will concentrate on the Cherokee side.
+
+So now that we have the files in place, we'll just create the needed
+rules for the web server. Specially important will be the rewrite
+rules. From the Zend Framework
+
+*********************************************************************
+
+This set of rewrite rules specify that if the file exists under the
+document root directory, it should simply be served as a static
+resource. Otherwise, the request is for dynamic content and should be
+rewritten to our index.php script. Since all requests for non-static
+content will be rewritten to it, the index.php script serves as the
+entry point to our application.
+
+*********************************************************************
+
+Launch cherokee-admin, and proceed to the
+link:config_virtual_servers.html[Virtual servers] section. Select the
+virtual server that you will be configuring and go to the `Behavior`
+tab to set up the rules.
+
+.Steps
+. You will need to keep the rule for the `php` extension.
+
+. Next, configure a rule with the handler `File Exists` that should be
+  set to a priority lower than that of the `php` rule.  This one
+  should be set to match `*`, and must be handled by the
+  link:modules_handlers_file.html[Static Content] handler.
+
+. And last, modify your `Default` rule by configuring the
+  link:modules_handlers_redir.html[redirection handler], through the
+  `Handler` tab.
++
+`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~
+Type     , Regular Expression, Substitution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Internal , ^.*$              , /index.php
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This will take care of redirecting the requests to Zend whenever they
+do not match static content.
+
+You are done with the configuration!
+You can now access your application. The demo provided by Zend will look like this:
+
+image::media/images/cookbook_zend1.png[Demo]
+
+Of course, you'll have to follow the complete tutorial if you expect
+it to work as intended.
