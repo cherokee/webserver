@@ -179,6 +179,17 @@ void       *win_dlsym   (const void *dll_handle, const char *func_name);
 int         win_dlclose (const void *dll_handle);
 const char *win_dlerror (void);
 
+/* Processes
+ */
+#define waitpid(pid,s,o) _cwait (statusp, pid, WAIT_CHILD)
+#define WAIT_T           int
+#define WTERMSIG(x)      ((x) & 0xff)        /* or: SIGABRT ?? */
+#define WCOREDUMP(x)     0
+#define WEXITSTATUS(x)   (((x) >> 8) & 0xff) /* or: (x) ?? */
+#define WIFSIGNALED(x)   (WTERMSIG (x) != 0) /* or: ((x) == 3) ?? */
+#define WIFEXITED(x)     (WTERMSIG (x) == 0) /* or: ((x) != 3) ?? */
+#define WIFSTOPPED(x)    0
+
 /* Unix mmap() emulation
  */
 #define PROT_READ    0x1            /* page can be read */
