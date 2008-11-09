@@ -28,6 +28,7 @@
 #include "util.h"
 #include "thread.h"
 
+#define ENTRIES "proxy"
 
 #define DEFAULT_BUF_SIZE  (8*1024)  /* 8Kb */
 #define DEFAULT_REUSE_MAX 16
@@ -243,6 +244,39 @@ do_connect (cherokee_handler_proxy_t *hdl)
 	return ret_ok;
 }
 
+static ret_t
+send_post (cherokee_handler_proxy_t *hdl)
+{
+	ret_t                  ret;
+	int                    eagain_fd = -1;
+	int                    mode      =  0;
+	cherokee_connection_t *conn      = HANDLER_CONN(hdl);
+		
+	ret = cherokee_post_walk_to_fd (&conn->post,
+					hdl->pconn->socket.socket,
+					&eagain_fd, &mode);
+
+	TRACE (ENTRIES",post", "Sending POST fd=%d, ret=%d\n", 
+	       hdl->pconn->socket.socket, ret);
+	
+	switch (ret) {
+	case ret_ok:
+		TRACE (ENTRIES",post", "%s\n", "finished");
+		return ret_ok;
+		
+	case ret_eagain:
+		if (eagain_fd != -1) {
+			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+							     conn, eagain_fd, 
+							     mode, false);
+		}
+		return ret_eagain;
+		
+	default:
+		return ret;
+	}	
+}
+
 
 ret_t
 cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
@@ -316,7 +350,10 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		hdl->init_phase = proxy_init_send_post;
 
 	case proxy_init_send_post:
-		// TODO
+		ret = send_post (hdl);
+		if (ret != ret_ok)
+			return ret;
+
 		hdl->init_phase = proxy_init_read_header;
 
 	case proxy_init_read_header:
