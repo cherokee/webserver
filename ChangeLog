@@ -1,3 +1,8 @@
+2008-11-10  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/regex.h: Fixes an issue with regular expressions.
+	Reported by Stefan de Konink <stefan@konink.de>.
+
 2008-11-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* configure.in, cherokee/util.h, cherokee/util.c,

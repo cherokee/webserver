@@ -33,7 +33,8 @@
 
 CHEROKEE_BEGIN_DECLS
 
-#define OVECTOR_LEN 10
+/* Field num x 3: man pcre_exec */
+#define OVECTOR_LEN (10*3)  
 
 typedef struct cherokee_regex_table cherokee_regex_table_t;
 #define REGEX(x) ((cherokee_regex_table_t *)(x))
