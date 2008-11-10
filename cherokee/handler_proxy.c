@@ -367,9 +367,11 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	case proxy_init_build_headers:
 		/* Build request
 		 */
-		ret = build_request (hdl, &hdl->request);
-		if (unlikely (ret != ret_ok))
-			return ret;
+		if (cherokee_buffer_is_empty (&hdl->request)) {
+			ret = build_request (hdl, &hdl->request);
+			if (unlikely (ret != ret_ok))
+				return ret;
+		}
 
 		hdl->init_phase = proxy_init_send_headers;
 
@@ -612,6 +614,7 @@ check_chunked (cherokee_handler_proxy_t *hdl,
 
 	/* Read the length */
 	*size = strtoul (begin, &p, 16);
+	p += 2;
 	*head = p - begin;
 
 	/* Is it complete? */
@@ -620,15 +623,20 @@ check_chunked (cherokee_handler_proxy_t *hdl,
 	}
 
 	if (len < (*head + *size + 2)) {
+		*head = 0;
+		*size = 0;
 		return ret_eagain;
 	}
 
 	/* Check the CRLF at the end 
 	*/
-	if (p[(*size) + 2] != CHR_CR)
+	if ((p[(*size)]     != CHR_CR) ||
+	    (p[(*size) + 1] != CHR_LF))
+	{
+		*head = 0;
+		*size = 0;
 		return ret_error;
-	if (p[(*size) + 3] != CHR_LF)
-		return ret_error;
+	}
 
 	return ret_ok;
 }
@@ -702,49 +710,38 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 		 */
 		char    *p;
 		char    *end;
-		cuint_t  copied = 0;
+		ret_t    ret_read;
+		size_t   head_size;
+		ssize_t  body_size;
+		size_t   copied       = 0;
+		size_t   copied_total = 0;
 
 		/* Read a little bit more
 		 */
-		ret = cherokee_socket_bufread (&hdl->pconn->socket, &hdl->tmp,
-					       DEFAULT_BUF_SIZE, &size);
-		switch (ret) {
-		case ret_ok:
-			break;
-		case ret_eof:
-		case ret_error:
-			return ret;
-		case ret_eagain:
-			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-							     HANDLER_CONN(hdl), 
-							     hdl->pconn->socket.socket,
-							     0, false);
-			return ret_eagain;
-		default:
-			RET_UNKNOWN(ret);
-			return ret_error;
-		}
+		ret_read = cherokee_socket_bufread (&hdl->pconn->socket, &hdl->tmp,
+						    DEFAULT_BUF_SIZE, &size);
 
-		/* De-chunking */
+		/* Process the chunked encoding
+		 */
 		p   = hdl->tmp.buf;
 		end = hdl->tmp.buf + hdl->tmp.len;
 
-		while (true) {
-			size_t  head_size =  0;
-			ssize_t body_size = -1;
-			
+		while (true) {			
 			/* Is it within bounds? */
-			if (p + sizeof("0"CRLF_CRLF) >= end) {
+			if (p + (sizeof("0"CRLF_CRLF)-1) > end) {
 				ret = ret_eagain;
 				goto out;
 			}
 
 			/* Read next chunk */
+			head_size =  0;
+			body_size = -1;
+
 			ret = check_chunked (hdl, p, (end - p), &head_size, &body_size);
 			switch (ret) {
 			case ret_ok:
-				break;
 			case ret_eof:
+				break;
 			case ret_error:
 			case ret_eagain:
 				goto out;
@@ -754,22 +751,45 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			}
 			
 			/* There is a chunk to send */
-			cherokee_buffer_add (buf, (p+head_size), body_size);
+			if (body_size > 0) {
+				cherokee_buffer_add (buf, (p+head_size), body_size);
+			}
 
 			copied = (head_size + body_size + 2);
-			p += copied;
+			
+			copied_total += copied;
+			p            += copied;
+
+			if (ret == ret_eof)
+				break;
 		}
 
 	out:
-		if (copied > 0) {
-			cherokee_buffer_move_to_begin (&hdl->tmp, copied);
+		if (copied_total > 0) {
+			cherokee_buffer_move_to_begin (&hdl->tmp, copied_total);
+		}
+
+		if (buf->len > 0) {
 			if (ret == ret_eof)
 				return ret_eof_have_data;
 			return ret_ok;
 		}
-		
+
+		if ((ret == ret_eof) ||
+		    (ret_read == ret_eof))
+			return ret_eof;
+
+		if (ret_read == ret_eagain) {
+ 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), 
+ 							     HANDLER_CONN(hdl), 
+ 							     hdl->pconn->socket.socket, 
+ 							     0, false); 
+			return ret_eagain;
+		}
+
 		return ret;
-	}
+	} /* chunked */
+
 	default:
 		SHOULDNT_HAPPEN;
 	}

@@ -278,8 +278,9 @@ cherokee_handler_proxy_conn_send (cherokee_handler_proxy_conn_t *pconn,
 	size_t sent = 0;
 
 	ret = cherokee_socket_bufwrite (&pconn->socket, buf, &sent);
-	if (unlikely(ret != ret_ok)) 
+	if (unlikely(ret != ret_ok)) {
 		return ret;
+	}
 
 	if (sent >= buf->len) {
 		cherokee_buffer_clean (buf);
