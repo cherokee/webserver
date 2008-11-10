@@ -70,7 +70,6 @@ source!1!host = localhost:1234
 source!1!env!PHP_FCGI_CHILDREN = 5
 source!1!env!PHP_FCGI_MAX_REQUESTS = 2000
 source!1!interpreter = %phpcgi% -b 1234
-source!1!timeout = 3
 
 # Icons
 #
