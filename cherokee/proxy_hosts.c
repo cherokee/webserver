@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "proxy_hosts.h"
+#include "util.h"
 
 
 static void
@@ -146,7 +147,7 @@ cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
 
 	CHEROKEE_MUTEX_LOCK (&poll->mutex);
 
-	if (! cherokee_list_empty (&poll->reuse)) {
+	if (poll->reuse_len > 0) {
 		/* Reuse a prev connection */
 		poll->reuse_len -= 1;
 
@@ -155,7 +156,6 @@ cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
 		cherokee_list_add (i, &poll->active);
 
 		*pconn = PROXY_CONN(i);
-
 	} else {
 		cherokee_handler_proxy_conn_t *n;
 
@@ -165,12 +165,13 @@ cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
 			goto error;
 
 		ret = cherokee_proxy_util_init_socket (&n->socket, src);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
+			cherokee_handler_proxy_conn_free (n);
 			goto error;
+		}
 
 		cherokee_list_add (&n->listed, &poll->active);
 		n->poll_ref = poll;
-
 		*pconn = n;
 	}	
 
@@ -178,7 +179,7 @@ cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
 	return ret_ok;
 error:
 	CHEROKEE_MUTEX_UNLOCK (&poll->mutex);
-	return ret_ok;
+	return ret_error;
 }
 
 static ret_t
@@ -198,14 +199,20 @@ poll_release (cherokee_handler_proxy_poll_t *poll,
 	/* Clean up
 	 */
 	pconn->enc      = pconn_enc_none;
-	pconn->sent_out = 0;
 	pconn->size_in  = 0;
+	pconn->sent_out = 0;
 
 	cherokee_buffer_clean (&pconn->header_in_raw);
 
+	/* Socket
+	 */
+	if (! pconn->keepalive_in) {
+		cherokee_socket_close (&pconn->socket);
+	}
+
 	/* Store it to be reused */
 	poll->reuse_len += 1;
-	cherokee_list_add_tail (&pconn->listed, &poll->reuse);
+	cherokee_list_add (&pconn->listed, &poll->reuse);
 
 	return ret_ok;
 }
@@ -218,6 +225,9 @@ ret_t
 cherokee_handler_proxy_conn_new (cherokee_handler_proxy_conn_t **pconn)
 {
 	CHEROKEE_NEW_STRUCT (n, handler_proxy_conn);
+
+	/* Socket stuff
+	 */
 	cherokee_socket_init (&n->socket);
 
 	cherokee_buffer_init (&n->header_in_raw);
@@ -237,8 +247,9 @@ cherokee_handler_proxy_conn_new (cherokee_handler_proxy_conn_t **pconn)
 ret_t
 cherokee_handler_proxy_conn_free (cherokee_handler_proxy_conn_t *pconn)
 {
-	cherokee_socket_close (&pconn->socket);
+	cherokee_socket_close    (&pconn->socket);
 	cherokee_socket_mrproper (&pconn->socket);
+
 	cherokee_buffer_mrproper (&pconn->header_in_raw);
 
 	return ret_ok;
@@ -333,8 +344,9 @@ cherokee_proxy_util_init_socket (cherokee_socket_t *socket,
 	
 	/* Family */
 	ret = cherokee_socket_set_client (socket, AF_INET);
-        if (unlikely(ret != ret_ok)) 
+        if (unlikely(ret != ret_ok)) {
 		return ret_error;
+	}
 
 	/* TCP port */
         SOCKET_SIN_PORT(socket) = htons (src->port);
@@ -343,9 +355,15 @@ cherokee_proxy_util_init_socket (cherokee_socket_t *socket,
         ret = cherokee_socket_pton (socket, &src->host);
         if (ret != ret_ok) {
                 ret = cherokee_socket_gethostbyname (socket, &src->host);
-                if (unlikely(ret != ret_ok))
+                if (unlikely(ret != ret_ok)) {
 			return ret_error;
+		}
         }
+
+	/* Set a few properties */
+	cherokee_fd_set_closexec    (socket->socket);
+	cherokee_fd_set_nonblocking (socket->socket, true);
+	cherokee_fd_set_nodelay     (socket->socket, true);
 
 	return ret_ok;
 }

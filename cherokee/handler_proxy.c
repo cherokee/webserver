@@ -239,6 +239,7 @@ do_connect (cherokee_handler_proxy_t *hdl)
 		return ret;
 	default:
 		RET_UNKNOWN(ret);
+		return ret_error;
 	}
 
 	return ret_ok;
@@ -287,6 +288,15 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
 
 	switch (hdl->init_phase) {
+	case proxy_init_start:
+		/* Send the Post if needed
+		 */
+		if (! cherokee_post_is_empty (&conn->post)) {
+			cherokee_post_walk_reset (&conn->post);
+		}
+
+		hdl->init_phase = proxy_init_get_conn;
+
 	case proxy_init_get_conn:
 		/* Check with the load balancer
 		 */
@@ -309,16 +319,46 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		if (unlikely (ret != ret_ok))
 			return ret_error;
 		
+	reconnect:
+		hdl->init_phase = proxy_init_preconnect;
+
+	case proxy_init_preconnect:
+		/* Configure if respined
+		 */
+		if (hdl->respined) {
+			cherokee_socket_clean (&hdl->pconn->socket);
+			cherokee_socket_close (&hdl->pconn->socket);
+		}
+
+		if (! cherokee_socket_configured (&hdl->pconn->socket))
+		{
+			ret = cherokee_proxy_util_init_socket (&hdl->pconn->socket, hdl->src_ref);
+			if (ret != ret_ok) {
+				return ret_eof;
+			}
+		}
+		
 		hdl->init_phase = proxy_init_connect;
 
 	case proxy_init_connect:
-	reconnect:
 		/* Connect to the target host
 		 */
 		if (! cherokee_socket_is_connected (&hdl->pconn->socket)) {
 			ret = do_connect (hdl);
-			if (ret != ret_ok) {
+			switch (ret) {
+			case ret_ok:
+				break;
+			case ret_error:
+			case ret_eagain:
 				return ret;
+			case ret_deny:
+				if (hdl->respined)
+					return ret_error;
+				hdl->respined = true;
+				goto reconnect;
+			default:
+				RET_UNKNOWN(ret);
+				return ret_error;
 			}
 		}
 
@@ -340,19 +380,30 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		switch (ret) {
 		case ret_ok:
 			break;
-		case ret_error:
 		case ret_eagain:
 			return ret;
+		case ret_eof:
+		case ret_error:
+			if (hdl->respined) {
+				return ret_eof;
+			}
+
+			hdl->respined = true;
+			goto reconnect;
 		default:
 			RET_UNKNOWN(ret);
+			return ret_error;
 		}
 
 		hdl->init_phase = proxy_init_send_post;
 
 	case proxy_init_send_post:
-		ret = send_post (hdl);
-		if (ret != ret_ok)
-			return ret;
+		if (! cherokee_post_is_empty (&conn->post)) {
+			ret = send_post (hdl);
+			if (ret != ret_ok) {
+				return ret;
+			}
+		}
 
 		hdl->init_phase = proxy_init_read_header;
 
@@ -370,24 +421,18 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 							     0, false);
 			return ret_eagain;
 		case ret_eof:
+		case ret_error:
 			/* The socket isn't really connected
 			 */
-			if (hdl->respined)
+			if (hdl->respined) {
 				return ret_eof;
+			}
 
-			cherokee_socket_close (&hdl->pconn->socket);
-			ret = cherokee_proxy_util_init_socket (&hdl->pconn->socket, 
-							       hdl->src_ref);
-			if (ret != ret_ok)
-				return ret_eof;
-			
-			hdl->init_phase = proxy_init_connect;
-			hdl->respined   = true;
+			hdl->respined = true;
 			goto reconnect;
-		case ret_error:
-			return ret;
 		default:
 			RET_UNKNOWN(ret);
+			return ret_error;
 		}
 		break;		
 
@@ -604,30 +649,24 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 		/* Remaining from the header
 		 */
 		if (! cherokee_buffer_is_empty (&hdl->tmp)) {
-			cherokee_buffer_add_buffer (buf, &hdl->tmp);
-			
 			hdl->pconn->sent_out += hdl->tmp.len;
+
+			cherokee_buffer_add_buffer (buf, &hdl->tmp);			
 			cherokee_buffer_clean (&hdl->tmp);
 		
 			if ((hdl->pconn->enc == pconn_enc_known_size) &&
 			    (hdl->pconn->sent_out >= hdl->pconn->size_in))
+			{
 				return ret_eof_have_data;
+			}
 
 			return ret_ok;
 		}
 
 		/* Read
 		 */
-		ret = cherokee_socket_bufread (&hdl->pconn->socket, buf, 
+		ret = cherokee_socket_bufread (&hdl->pconn->socket, buf,
 					       DEFAULT_BUF_SIZE, &size);
-		if (size > 0) {
-			hdl->pconn->sent_out += size;
-
-			if ((hdl->pconn->enc == pconn_enc_known_size) &&
-			    (hdl->pconn->sent_out >= hdl->pconn->size_in))
-				return ret_eof_have_data;
-		}
-
 		switch (ret) {
 		case ret_ok:
 			break;
@@ -642,9 +681,20 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			return ret_eagain;
 		default:
 			RET_UNKNOWN(ret);
+			return ret_error;
 		}
 		
-		return ret_ok;
+		if (size > 0) {
+			hdl->pconn->sent_out += size;
+
+			if ((hdl->pconn->enc == pconn_enc_known_size) &&
+			    (hdl->pconn->sent_out >= hdl->pconn->size_in))
+			{
+				return ret_eof_have_data;
+			}
+		}
+
+		return ret_eagain;
 
 	case pconn_enc_chunked: {
 
@@ -672,6 +722,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			return ret_eagain;
 		default:
 			RET_UNKNOWN(ret);
+			return ret_error;
 		}
 
 		/* De-chunking */
@@ -699,6 +750,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 				goto out;
 			default:
 				RET_UNKNOWN(ret);
+				return ret_error;
 			}
 			
 			/* There is a chunk to send */
@@ -750,7 +802,7 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 	 */
 	n->pconn      = NULL;
 	n->src_ref    = NULL;
-	n->init_phase = proxy_init_get_conn;
+	n->init_phase = proxy_init_start;
 	n->respined   = false;
 
 	cherokee_buffer_init (&n->tmp);

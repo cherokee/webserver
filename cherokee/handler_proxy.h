@@ -39,7 +39,9 @@
  */
 
 typedef enum {
+	proxy_init_start,
 	proxy_init_get_conn,
+	proxy_init_preconnect,
 	proxy_init_connect,
 	proxy_init_build_headers,
 	proxy_init_send_headers,
