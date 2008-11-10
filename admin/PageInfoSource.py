@@ -10,7 +10,7 @@ NOTE_NICK        = 'Source nick. It will be referenced by this name in the rest 
 NOTE_TYPE        = 'It allows to choose whether it runs the local host or a remote server.'
 NOTE_HOST        = 'Where the information source can be accessed. The host:port pair, or the Unix socket path.'
 NOTE_INTERPRETER = 'Command to spawn a new source in case it were not accessible.'
-NOTE_TIMEOUT     = 'How long should the server wait when spawning an interpreter before giving up (in seconds).'
+NOTE_TIMEOUT     = 'How long should the server wait when spawning an interpreter before giving up (in seconds). Default: 3.'
 NOTE_USAGE       = 'Sources currently in use. Note that the last source of any rule cannot be deleted until the rule has been manually edited.'
 
 TABLE_JS = """
@@ -178,7 +178,7 @@ class PageInfoSource (PageMenu, FormHelper):
         self.AddPropEntry          (table, 'Connection', 'tmp!new_source_host', NOTE_HOST, req=True)
         if type == 'interpreter' or not type:
             self.AddPropEntry (table, 'Interpreter', 'tmp!new_source_interpreter', NOTE_INTERPRETER, req=True)
-            self.AddPropEntry (table, 'Spawning timeout', 'tmp!new_source_timeout', NOTE_TIMEOUT, req=True)
+            self.AddPropEntry (table, 'Spawning timeout', 'tmp!new_source_timeout', NOTE_TIMEOUT)
 
         txt += self.Indent(table)
         return txt
