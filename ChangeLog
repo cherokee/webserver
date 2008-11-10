@@ -1,5 +1,9 @@
 2008-11-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/189-Redir9.py: Adds a new QA test to ensure that the regular
+	expression management code at handler_redir can match and rewrite
+	at least nine chunks.
+
 	* cherokee/regex.h: Fixes an issue with regular expressions.
 	Reported by Stefan de Konink <stefan@konink.de>.
 

@@ -193,7 +193,8 @@ run-tests.py \
 185-SSI-fsize-virtual.py \
 186-SSI-droot.py \
 187-Method.py \
-188-Method2.py
+188-Method2.py \
+189-Redir9.py
 
 test:
 	./run-tests.py
