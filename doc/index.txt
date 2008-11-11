@@ -114,7 +114,7 @@ link:dev.html[Development info]
 
   . link:dev_debug.html[Debugging]: Resources available to debug Cherokee.
   . link:dev_cherokee.conf.html[cherokee.conf]: Internal configuration specs.
-  . link:dev_issues.html[Open issues]: Current development issues.
+  . link:dev_issues.html[Open issues]: Current development issues (proxy, wizards, extra ruletypes...)
 ////
   . link:dev_api.html[API introduction]
   . link:dev_examples.html[Examples]: Development examples

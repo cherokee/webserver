@@ -40,22 +40,32 @@ Reverse Proxy
 The reverse proxy is currently one of the most demanded features and
 is under heavy development.  The Cherokee-admin module is not yet
 written, so you'll have to do what no final user is meant to do. It's
-easy to configure though, so don't worry. Here you have a basic
-configuration example:
+easy to configure though, so don't worry. It is working nicely, and
+since r2373 it supports URL rewriting.
 
------
+Here you have a basic configuration example:
+
+----
 server!port = 1234
 
+# The proxy configuration
 vserver!1!nick = default
 vserver!1!document_root = /tmp
 vserver!1!rule!1!match = default
 vserver!1!rule!1!handler = proxy
+vserver!1!rule!1!handler!header_hide!1 = server
 vserver!1!rule!1!handler!balancer = round_robin
 vserver!1!rule!1!handler!balancer!source!1 = 1
 
+# URL rewrite
+vserver!1!rule!1!handler!rewrite_request!1!regex = ^/(.+).png$
+vserver!1!rule!1!handler!rewrite_request!1!substring = /$1.jpg
+vserver!1!rule!1!handler!rewrite_request!2!regex = ^/test/(.+)$
+vserver!1!rule!1!handler!rewrite_request!2!substring = /test.php?$1
+
 source!1!type = host
 source!1!host = localhost:9090
------
+----
 
 
 Configuration Wizards
@@ -80,4 +90,3 @@ the things achievable by these rules are at the same time very
 powerful and very complex. This is said in the sense that one can
 combine them with so much flexibility that dealing with it from the
 GUI could get really messy.
- 
