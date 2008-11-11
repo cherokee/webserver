@@ -7,6 +7,7 @@ HANDLERS = [
     ('cgi',          'CGI'),
     ('fcgi',         'FastCGI'),
     ('scgi',         'SCGI'),
+    ('proxy',        'HTTP rerverse proxy'),
     ('ssi',          'Server Side Includes'),
     ('server_info',  'Server Info'),
     ('dbslayer',     'MySQL bridge'),

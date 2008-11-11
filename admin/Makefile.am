@@ -63,6 +63,7 @@ ModuleFcgi.py \
 ModuleScgi.py \
 ModuleBalancer.py \
 ModuleSsi.py \
+ModuleProxy.py \
 ModuleMirror.py \
 ModuleDbslayer.py \
 ModuleErrorNn.py \

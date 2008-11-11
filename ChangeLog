@@ -1,3 +1,8 @@
+2008-11-11  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/ModuleProxy.py, admin/consts.py, admin/Makefile.am: Adds
+	the Cherokee-admi module for the Proxy handler.
+
 2008-11-11  Taher Shihadeh  <taher@unixwars.com>
 
 	* static/js/common.js: fixes superfluous 'going away' warning. It
