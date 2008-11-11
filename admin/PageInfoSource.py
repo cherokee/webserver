@@ -153,7 +153,7 @@ class PageInfoSource (PageMenu, FormHelper):
         self.AddPropEntry   (table, 'Connection', 'source!%s!host'%(s), NOTE_HOST,req=True)
         if type == 'interpreter':
             self.AddPropEntry (table, 'Interpreter', 'source!%s!interpreter'%(s),  NOTE_INTERPRETER, req=True)
-            self.AddPropEntry (table, 'Spawning timeout', 'source!%s!timeout'%(s), NOTE_TIMEOUT, req=True)
+            self.AddPropEntry (table, 'Spawning timeout', 'source!%s!timeout'%(s), NOTE_TIMEOUT)
 
         tmp  = self.HiddenInput ('source_num', s)
         tmp += str(table)
