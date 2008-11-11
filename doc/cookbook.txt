@@ -12,3 +12,5 @@
   . link:cookbook_redirs.html[Redirections]: Common redirection examples.
   . link:cookbook_embedding_cherokee.html[Embedding Cherokee]: Cherokee on embedded devices.
   . link:cookbook_dbslayer.html[DBSlayer]: How to set up DBSlayer MySQL balancing.
+  . link:cookbook_mailman.html[Setting up Mailman]: How to run Mailman on Cherokee.
+  . link:cookbook_joomla.html[Setting up Joomla]: How to run Joomla on Cherokee.

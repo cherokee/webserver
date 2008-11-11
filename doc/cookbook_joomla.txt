@@ -1,0 +1,110 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up Joomla
+---------------------------
+
+Setting up link:http://www.joomla.org/[Joomla] with Cherokee is really
+easy. We will assume that our `Document Root` directory is `/var/www`
+and that we want to install the software on a subdirectory called
+`joomla` of the server we are working on.
+
+You will need PHP support correctly configured in Cherokee, and PHP
+with the MySQL module installed. The default configuration already
+provides a valid PHP configuration for Cherokee if you have php-cgi
+installed, but you can follow the appropriate recipe about
+link:cookbook_php.html[setting up PHP] in case you don't have it
+available for any reason. You will also need an FTP server if the
+Joomla files are owned by a user other than the one running the web
+server.
+
+Under these conditions, you could start Joomla's installation and you
+would already be able to have your site up and running.
+
+However, we can add several refinements. In this recipe we will be
+dedicating a virtual server entirely to Joomla, so either create a new
+one or adjust `default` accodringly. Of course, you can also set it up
+under a directory in an existing virtual server, but we will take the
+first approach for clarity and simplicity. And we will make the
+modifications in our `default` virtual server. This will only affect
+the URLs we'll be accessing to log in to Joomla. First download and
+uncompress the distributed Joomla release into `/var/www/joomla`, and
+set that path as the `Document Root` in your virtual host's `Basics`
+tab.
+
+We will also be making changes in the `Error Handler` tab, selecting
+the `Custom redirections` option and adding an option to send errors
+to Joomla.
+
+[grid="rows"]
+`~~~~~~~~~~~~`~~~~~~~~~~~
+Error        , URL
+~~~~~~~~~~~~~~~~~~~~~~~~~
+403 Forbidden, /index.php
+404 Not Found, /index.php
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Now only the database issue remains. Log in to MySQL:
+
+----------------
+mysql -u root -p
+----------------
+
+And create the database for Joomla. We will be using the name
+'joomla', the user 'joomlauser' and the password 'joomlapassword', but
+you should set up your own.
+
+------------------------------------------------------------------------
+CREATE DATABASE joomla;
+GRANT ALL PRIVILEGES ON joomla.* TO joomlauser@localhost IDENTIFIED BY 'joomlapassword';
+GRANT ALL PRIVILEGES ON joomla.* TO joomlauser@localhost.localdomain IDENTIFIED BY joomla'password';
+FLUSH PRIVILEGES;
+quit;
+------------------------------------------------------------------------
+
+Then point your web browser to `http://localhost/joomla` and follow
+the instructions provided by the Joomla installer.
+
+There is not much else you must do for Cherokee to work with
+Joomla. If you follow the Joomla installer's instructions -providing
+valid database information in most cases will suffice-, you will go
+thorough every step swiftly. Once you are done you will have to
+eliminate the `installation` subdirectory, as Joomla does not allow
+going any further until you do so as a security precaution. It is also
+a good idea to make the `cache` directory world writable.
+
+-----------------------------------
+rm -rf /var/www/joomla/installation
+chmod 777 /var/www/joomla/cache
+-----------------------------------
+
+image::media/images/cookbook_joomla.png[Joomla Demo]
+
+Now to set up Joomla. Visit
+link:http://localhost/administration[http://localhost/administration]
+and log in. Go to the `Global Configuration` option and enable all the
+*SEO Settings*, including the ones for Apache mod_rewrite.
+
+Finally, set up the rewrite rules recommended by Joomla to block out
+the most common type of exploit attempts. To do so, simply create
+`Regular Expression` rules for the following expressions:
+
+---------------------------------
+mosConfig_[a-zA-Z_]{1,21}(=|\%3D)
+base64_encode.*\(.*\)
+(\<|%3C).*script.*(\>|%3E)
+GLOBALS(=|\[|\%[0-9A-Z]{0,2})
+_REQUEST(=|\[|\%[0-9A-Z]{0,2})
+---------------------------------
+
+Each should be managed by a handler that returns an error:
+
+[grid="rows"]
+`~~~~~~~~~`~~~~~~~~~~~~~~
+Handler   , Error
+~~~~~~~~~~~~~~~~~~~~~~~~~
+HTTP error, 403 Forbidden
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+After this you are done! Remember that all these settings are
+refinements not really needed by Joomla to perform its basic
+functions.

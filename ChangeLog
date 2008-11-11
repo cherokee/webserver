@@ -3,7 +3,9 @@
 	* static/js/common.js: fixes superfluous 'going away' warning. It
 	was issue http://code.google.com/p/cherokee/issues/detail?id=215
 
-	2008-11-11  Alvaro Lopez Ortega  <alvaro@octality.com>
+	* doc/*: some more docs.
+
+2008-11-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_proxy.c, cherokee/handler_proxy.h: Adds URL
 	rewriting support (based on regular expressions).

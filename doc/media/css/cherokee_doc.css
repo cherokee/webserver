@@ -80,6 +80,8 @@ strong {
 
 tt {
   color: navy;
+  font-size: 1.2em;
+  _font-weight: bold;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -1,0 +1,148 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up Mailman
+----------------------------
+
+link:http://www.gnu.org/software/mailman/[GNU Mailman] is the
+most spread software for managing mailing-lists.
+
+To install Mailman you will have to actually do several things:
+. Install the software
+. Set up your web server.
+. Set up your mail server.
+
+This recipe is meant to be used as a complement of the official
+link:http://www.gnu.org/software/mailman/mailman-install/[installation
+instructions], not as a replacement, and as such it only covers the
+section specific to Cherokee: the configuration of the web server.
+
+Very little configuration is required by Mailman to work. Simply
+setting up a couple of paths -the location of the Mailman archive and
+the cgi-bin directory path- should be enough. However the same task
+can be performed more elegantly if you set up a subdomain just to run
+the lists. This is the approach we will be taking in the recipe.
+
+Lets assume we want to configure the domain _lists.example.net_.
+
+.Steps:
+
+* Add a new virtual server from within the
+link:config_virtual_servers.html[Virtual servers] tab. No Document
+Root is actually needed, so simply point it to an empty
+directory.
++
+[grid="rows"]
+`~~~~~~~~`~~~~~~~~~~~~~~
+Nickname , Document Root
+~~~~~~~~~~~~~~~~~~~~~~~~
+lists    , /var/www/null
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Set the pattern to be used by the virtual server through its `Domain
+names` tab:
++
+[grid="rows"]
+`~~~~~~~~~~~~~~~~~~~~~~~
+Domain names
+~~~~~~~~~~~~~~~~~~~~~~~~
+lists.example.net
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Lets proceed with the rules. First delete the ones available. As
+always, the `Default` rule is non-erasable. We will be creating some
+rules. Unless otherwise stated, you must assume they are all
+`Final`. Also create them in the specified order, since the order of
+evaluation is relevant to Cherokee and these are the conditions used
+during the tests. Creating them in this order will assign a reversed
+sort, being the last one defined the first one that gets
+evaluated. Leaving the `Use I/O cache` on for the `Static content`
+handlers makes a lot of sense.
+
+. Redefine the behavior of `Default` by selection the handler CGI. And
+make sure to have the following checkboxes enabled: `Error handler`,
+`Check file` and `Pass Request`.
++
+[grid="rows"]
+`~~~~~~~~~~~~~~~~~~~~~~~
+Document Root	
+~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/lib/cgi-bin/mailman/
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+. Add a new rule, of type `Extensions` for the icons. Within the
+`Handler` tab, manage it as `Static content`.
++
+[grid="rows"]
+`~~~~~~~~~`~~~~~~~~~~~~~
+Rule Type , Extensions
+~~~~~~~~~~~~~~~~~~~~~~~~
+Extensions, ico
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+. Add a new rule, of type `Regular Expression` to redirect things to `/listinfo`.
++
+[grid="rows"]
+`~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~
+Rule Type         , Regular Expression
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regular Expression, ^/$
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Within the `Handler` tab, manage it with the `Redirection`
+handler. Specify the rule as follows:
++
+[grid="rows"]
+`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~
+Show     , Regular Expression, Substitution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+External , .*                , /listinfo
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+. Add another rule for static content. This time for the /images
+directory.
++
+[grid="rows"]
+`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~
+Rule Type ,         Web Directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Directory ,         /images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Set the `Static content` handler:
++
+[grid="rows"]
+`~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Handler       , Document Root
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Static content, /usr/share/images/mailman/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+. And finally, add a rule for your Pipermail archive to be managed,
+also as a directory.
++
+[grid="rows"]
+`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~
+Rule Type ,         Web Directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Directory ,         /pipermail
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- It must be managed by the `List & Send` handler.
++
+[grid="rows"]
+`~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Handler     , Document Root
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+List & Send , /var/lib/mailman/archives/public
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is a working example of the above mentioned handler configuration.
+
+image::media/images/cookbook_mailman.png[Mailman configuration]
+
+Once you have followed the rest of the
+link:http://www.gnu.org/software/mailman/mailman-install/[installation
+instructions], you will be able to access your instance of Mailman. If
+you want to see a live example of the above mentioned configuration,
+simply visit the link:http://lists.octality.com/[Cherokee Project
+Mailing Lists].
