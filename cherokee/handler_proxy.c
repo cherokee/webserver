@@ -124,7 +124,11 @@ build_request (cherokee_handler_proxy_t *hdl,
 	char                  *begin;
 	char                  *end;
 	char                  *header_end;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	char                  *XFF         = NULL;
+	cuint_t                XFF_len     = 0;
+	cherokee_boolean_t     XFH         = false;
+	cherokee_connection_t *conn        = HANDLER_CONN(hdl);
+	cherokee_buffer_t     *tmp         = &HANDLER_THREAD(hdl)->tmp_buf1;
 
 	/* Method */
 	ret = cherokee_http_method_to_string (conn->header.method, &str, &len);
@@ -197,11 +201,21 @@ build_request (cherokee_handler_proxy_t *hdl,
 		*end = '\0';
 
 		/* Check the header entry  */
-		if ((strncmp (begin, "Host:", 5) == 0) ||
-		    (strncmp (begin, "Connection:", 11) == 0) ||
-		    (strncmp (begin, "Transfer-Encoding:", 18) == 0))
+		if ((! strncasecmp (begin, "Host:", 5)) ||
+		    (! strncasecmp (begin, "Connection:", 11)) ||
+		    (! strncasecmp (begin, "Transfer-Encoding:", 18)))
 		{
 			goto next;
+		} 
+		else if (! strncasecmp (begin, "X-Forwarded-For:", 16))
+		{
+			XFF     = begin;
+			XFF_len = end - begin;
+			goto next;
+		}
+		else if (! strncasecmp (begin, "X-Forwarded-Host:", 17))
+		{
+			XFH = true;
 		}
 
 		cherokee_buffer_add     (buf, begin, end-begin);
@@ -216,6 +230,28 @@ build_request (cherokee_handler_proxy_t *hdl,
 	}	
 	
 
+	/* X-Forwarded-For */
+	cherokee_buffer_ensure_size (tmp, CHE_INET_ADDRSTRLEN+1);
+	cherokee_socket_ntop (&conn->socket, tmp->buf, tmp->size-1);
+
+	cherokee_buffer_add_str (buf, "X-Forwarded-For: ");
+	if (XFF != NULL) {
+		cherokee_buffer_add     (buf, XFF, XFF_len);
+		cherokee_buffer_add_str (buf, ", ");
+	}
+	cherokee_buffer_add     (buf, tmp->buf, strlen(tmp->buf));
+	cherokee_buffer_add_str (buf, CRLF);
+
+	/* X-Forwarded-Host */
+	if ((XFH == false) && 
+	    (! cherokee_buffer_is_empty (&conn->host)))
+	{
+		cherokee_buffer_add_str    (buf, "X-Forwarded-Host: ");
+		cherokee_buffer_add_buffer (buf, &conn->host);
+		cherokee_buffer_add_str    (buf, CRLF);
+	}
+
+	/* End of Header */
 	cherokee_buffer_add_str (buf, CRLF);
 	return ret_ok;
 error:

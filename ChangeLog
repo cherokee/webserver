@@ -1,3 +1,8 @@
+2008-11-11  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_proxy.c: Adds X-Forwarded-For and
+	X-Forwarded-Host support.
+
 2008-11-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* qa/189-Redir9.py: Adds a new QA test to ensure that the regular
