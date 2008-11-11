@@ -20,6 +20,7 @@ This is the list of standard handlers provided by Cherokee:
 * link:modules_handlers_cgi.html[cgi] - **CGI Execution**.
 * link:modules_handlers_fcgi.html[FCGI] - **FastCGI Server Support**.
 * link:modules_handlers_scgi.html[SCGI] - **SCGI Server Support**.
+* link:modules_handlers_proxy.html[HTTP reverse proxy] - **Surrogate/reverse proxy handler**.
 * link:modules_handlers_ssi.html[Server Side Includes] - **SSI Server Support**.
 * link:modules_handlers_server_info.html[Server Info] - **Server
   Info**.

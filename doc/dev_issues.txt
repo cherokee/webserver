@@ -17,6 +17,7 @@ For now, this document mantains a list of currently open issues. It
 mostly is useful to list things of the Cherokee Project that are known
 to be half-baked, and as such are only of interest for developers.
 
+[fastcgi]
 FastCGI Handler
 ~~~~~~~~~~~~~~~
 
@@ -34,40 +35,16 @@ The "fastcgi" handler will eventually become the default option
 because it is faster and more standard-compliant. However, at the
 moment "fcgi" is a better option.
 
+[reverse_proxy]
 Reverse Proxy
 ~~~~~~~~~~~~~
 
-The reverse proxy is currently one of the most demanded features and
-is under heavy development.  The Cherokee-admin module is not yet
-written, so you'll have to do what no final user is meant to do. It's
-easy to configure though, so don't worry. It is working nicely, and
-since r2373 it supports URL rewriting.
+The reverse proxy has been one of the most demanded features and is
+under heavy development. It is currently released as a standard
+handler, so check out the link:modules_handlers_proxy.html[HTTP
+reverse proxy] handler documentation.
 
-Here you have a basic configuration example:
-
-----
-server!port = 1234
-
-# The proxy configuration
-vserver!1!nick = default
-vserver!1!document_root = /tmp
-vserver!1!rule!1!match = default
-vserver!1!rule!1!handler = proxy
-vserver!1!rule!1!handler!header_hide!1 = server
-vserver!1!rule!1!handler!balancer = round_robin
-vserver!1!rule!1!handler!balancer!source!1 = 1
-
-# URL rewrite
-vserver!1!rule!1!handler!rewrite_request!1!regex = ^/(.+).png$
-vserver!1!rule!1!handler!rewrite_request!1!substring = /$1.jpg
-vserver!1!rule!1!handler!rewrite_request!2!regex = ^/test/(.+)$
-vserver!1!rule!1!handler!rewrite_request!2!substring = /test.php?$1
-
-source!1!type = host
-source!1!host = localhost:9090
-----
-
-
+[wizards]
 Configuration Wizards
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -81,6 +58,7 @@ Even though the obtained configuration will most probably not be
 perfect, it will always be a good starting point to play with for
 further tuning.
 
+[boolean_rules]
 AND, OR and NOT rule types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

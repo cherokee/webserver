@@ -4,7 +4,10 @@ Handler: Redirection
 --------------------
 
 The main idea of a redirection is telling the web client to go to
-another URL when the requested URL matches a rule.
+another URL when the requested URL matches a rule. If you are looking
+for connection forwarding, you should check the
+link:modules_handlers_mirror.html[generic balancer] instead.
+
 
 For example, if you have URLs like::
 +

@@ -72,6 +72,7 @@ modules_handlers_server_info.html \
 modules_handlers_ssi.html \
 modules_handlers_mirror.html \
 modules_handlers_admin.html \
+modules_handlers_proxy.html \
 modules_loggers.html \
 modules_loggers_combined.html \
 modules_loggers_ncsa.html \
@@ -135,6 +136,7 @@ media/images/admin_vserver_errors.png \
 media/images/admin_vserver_loggers.png \
 media/images/admin_vserver.png \
 media/images/admin_vserver_vserver.png \
+media/images/admin_handler_proxy.png \
 media/images/cookbook_django_common.png \
 media/images/cookbook_django_infosources.png \
 media/images/cookbook_ror_common.png \

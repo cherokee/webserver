@@ -542,3 +542,38 @@ or even, it is possible to specify a directory to include all of its files::
 ----
     include = /etc/cherokee/mods-enabled/
 ----
+
+Reverse Proxy
+~~~~~~~~~~~~~
+
+The reverse proxy , like everything in Cherokee, is modular. It is
+configured as any other of the modules that use load balancers.
+
+You need to define a balancing strategy, the information source to be
+used by the balancer and, optionally, any expression matches that you
+might wish to rewrite in the headers before relaying the connection.
+
+This is a basic example:
+
+----
+server!port = 1234
+
+# The proxy configuration
+vserver!1!nick = default
+vserver!1!document_root = /tmp
+vserver!1!rule!1!match = default
+vserver!1!rule!1!handler = proxy
+vserver!1!rule!1!handler!header_hide!1 = server
+vserver!1!rule!1!handler!balancer = round_robin
+vserver!1!rule!1!handler!balancer!source!1 = 1
+
+# URL rewrite
+vserver!1!rule!1!handler!rewrite_request!1!regex = ^/(.+).png$
+vserver!1!rule!1!handler!rewrite_request!1!substring = /$1.jpg
+vserver!1!rule!1!handler!rewrite_request!2!regex = ^/test/(.+)$ /$1.jpg
+vserver!1!rule!1!handler!rewrite_request!2!substring = /test.php?$1
+
+# The information source
+source!1!type = host
+source!1!host = localhost:9090
+----
