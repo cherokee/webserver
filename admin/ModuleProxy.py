@@ -7,7 +7,7 @@ from consts import *
 from ModuleHandler import *
 from ModuleBalancer import NOTE_BALANCER
 
-NOTE_REUSE_MAX = "Maximum number of connection per server that the proxy can try to keep open."
+NOTE_REUSE_MAX = "Maximum number of connection per server that the proxy can try to keep opened."
 
 HELPS = [
     ('modules_handlers_proxy', "Reverse Proxy")
@@ -70,11 +70,11 @@ class ModuleProxy (ModuleHandler):
 
         txt += '<h2>URL Rewriting rules</h2>'
         txt += self.Indent(tmp)
-                
+
         # Balancers
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddPropOptions_Reload (table, "Balancer", prefix, 
+        e = self.AddPropOptions_Reload (table, "Balancer", prefix,
                                         modules_available(BALANCERS), NOTE_BALANCER)
 
         txt += '<h2>Internal Servers</h2>'
