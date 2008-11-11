@@ -1,3 +1,7 @@
+2008-11-11  Taher Shihadeh  <taher@unixwars.com>
+	* admin/ModuleErrorRedir.py: Fixes problem where error handler
+	could not be set.
+
 2008-11-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_proxy.c: Adds X-Forwarded-For and
