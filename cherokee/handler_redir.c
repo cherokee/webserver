@@ -43,53 +43,13 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (redir, http_all_methods);
 
 /* Methods implementation
  */
-static void 
-substitute_groups (cherokee_buffer_t *url, const char *subject, 
-		   cherokee_buffer_t *subs, int ovector[], int stringcount)
-{
-	cint_t              re;
-	char                num;
-	cherokee_boolean_t  dollar;
-	char               *s         = subs->buf;
-	const char         *substring = NULL;
-
-	for (dollar = false; *s != '\0'; s++) {
-		if (! dollar) {
-			if (*s == '$')
-				dollar = true;
-			else 
-				cherokee_buffer_add (url, (const char *)s, 1);
-			continue;
-		}
-
-		num = *s - '0';
-		if (num >= 0 && num <= 9) {
-			re = pcre_get_substring (subject, ovector, stringcount, num, &substring);
-			if ((re < 0) || (substring == NULL)) {
-				dollar = false;
-				continue;
-			}
-			cherokee_buffer_add (url, substring, strlen(substring));
-			pcre_free_substring (substring);
-
-		} else {
-			/* If it is not a number, add both characters 
-			 */
-			cherokee_buffer_add_str (url, "$");
-			cherokee_buffer_add (url, (const char *)s, 1);
-		}
-		
-		dollar = false;
-	}
-}
-
-
 static ret_t
 match_and_substitute (cherokee_handler_redir_t *n) 
 {
 	cherokee_list_t       *i;
 	ret_t                  ret;
 	cherokee_connection_t *conn = HANDLER_CONN(n);
+	cherokee_buffer_t     *tmp  = &HANDLER_THREAD(n)->tmp_buf1;
 	
 	/* Append the query string
 	 */
@@ -161,19 +121,25 @@ match_and_substitute (cherokee_handler_redir_t *n)
 		/* Make a copy of the original request before rewrite it
 		 */
 		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		
+		cherokee_buffer_clean (tmp);
+		cherokee_buffer_add (tmp, subject, subject_len);
 
 		/* Internal redirect
 		 */
 		if (list->hidden == true) {
-			char *args;
 			int   len;
-			char *subject_copy = strdup (subject);
+			char *args;
 
 			cherokee_buffer_clean (&conn->pathinfo);
 			cherokee_buffer_clean (&conn->request);
 
 			cherokee_buffer_ensure_size (&conn->request, conn->request.len + subject_len);
-			substitute_groups (&conn->request, subject_copy, &list->subs, ovector, rc);
+			cherokee_regex_substitute (&list->subs,    /* regex str */
+						   tmp,            /* source    */
+						   &conn->request, /* target    */
+						   ovector, rc);
+
 
 			cherokee_split_arguments (&conn->request, 0, &args, &len);
 
@@ -185,15 +151,17 @@ match_and_substitute (cherokee_handler_redir_t *n)
 
 			TRACE (ENTRIES, "Hidden redirect to: request=\"%s\" query_string=\"%s\"\n", 
 			       conn->request.buf, conn->query_string.buf);
-			
-			free (subject_copy);
+
 			return ret_eagain;
 		}
 		
 		/* External redirect
 		 */
 		cherokee_buffer_ensure_size (&conn->redirect, conn->request.len + subject_len);
-		substitute_groups (&conn->redirect, subject, &list->subs, ovector, rc);
+		cherokee_regex_substitute (&list->subs,     /* regex str */
+					   tmp,             /* source    */
+					   &conn->redirect, /* target    */
+					   ovector, rc);
 
 		TRACE (ENTRIES, "Redirect %s -> %s\n", conn->request_original.buf, conn->redirect.buf);
 
@@ -358,4 +326,3 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 	
 	return ret_ok;
 }
-

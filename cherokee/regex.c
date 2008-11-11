@@ -216,3 +216,54 @@ cherokee_regex_list_mrproper (cherokee_list_t *list)
 
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_regex_substitute (cherokee_buffer_t *regex_str,
+			   cherokee_buffer_t *source,
+			   cherokee_buffer_t *target,
+			   cint_t             ovector[],
+			   cint_t             stringcount)
+{
+	cint_t              re;
+	char               *s;
+	char                num;
+	cherokee_boolean_t  dollar    = false;
+	const char         *substring = NULL;
+
+	for (s = regex_str->buf; *s != '\0'; s++) {
+		if (! dollar) {
+			if (*s == '$')
+				dollar = true;
+			else 
+				cherokee_buffer_add_char (target, *s);
+			continue;
+		}
+
+		num = *s - '0';
+
+		/* Add the characters if it wasn't a number */
+		if ((num < 0) || (num > 9)) {
+			cherokee_buffer_add_str  (target, "$");
+			cherokee_buffer_add_char (target, *s);
+
+			dollar = false;
+			continue;
+		}
+
+		/* Perform the actually substitution */
+		substring = NULL;
+
+		re = pcre_get_substring (source->buf, ovector, stringcount, num, &substring);
+		if ((re < 0) || (substring == NULL)) {
+			dollar = false;
+			continue;
+		}
+
+		cherokee_buffer_add (target, substring, strlen(substring));
+		pcre_free_substring (substring);
+		dollar = false;
+	}
+
+	return ret_ok;
+}

@@ -1,6 +1,10 @@
 2008-11-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
-	* cherokee/handler_redir.c cherokee/regex.h cherokee/regex.h: Some
+	* cherokee/handler_redir.c cherokee/regex.h cherokee/regex.c: More
+	code re-factoring. Adds the new cherokee_regex_substitute()
+	function.
+
+	* cherokee/handler_redir.c cherokee/regex.h cherokee/regex.c: Some
 	code has been re-factorized. Now the regex list class is available
 	outside the redir handler. It will allow the proxy handler to use
 	it as well.

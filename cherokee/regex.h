@@ -69,6 +69,14 @@ ret_t cherokee_regex_list_configure (cherokee_list_t        *list,
 
 ret_t cherokee_regex_list_mrproper  (cherokee_list_t        *list);
 
+/* Utilities
+ */
+ret_t cherokee_regex_substitute (cherokee_buffer_t *regex_str,
+				 cherokee_buffer_t *source,
+				 cherokee_buffer_t *target,
+				 cint_t             ovector[],
+				 cint_t             stringcount);
+
 CHEROKEE_END_DECLS
 
 #endif /* CHEROKEE_REGEX_TABLE_H */
