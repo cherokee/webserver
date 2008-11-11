@@ -1,5 +1,10 @@
 2008-11-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_redir.c cherokee/regex.h cherokee/regex.h: Some
+	code has been re-factorized. Now the regex list class is available
+	outside the redir handler. It will allow the proxy handler to use
+	it as well.
+
 	* cherokee/rule_extensions.c (match): This patch fixes a bizarre
 	issue. If an error is detected during the match, return a 500
 	internal error on error instead of a "200 ok".

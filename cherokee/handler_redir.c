@@ -43,14 +43,6 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (redir, http_all_methods);
 
 /* Methods implementation
  */
-struct cre_list {
-	cherokee_list_t    item;
-	pcre              *re;
-	char               hidden;
-	cherokee_buffer_t  subs;
-};
-
-
 static void 
 substitute_groups (cherokee_buffer_t *url, const char *subject, 
 		   cherokee_buffer_t *subs, int ovector[], int stringcount)
@@ -109,11 +101,11 @@ match_and_substitute (cherokee_handler_redir_t *n)
 	/* Try to match it
 	 */
 	list_for_each (i, &HDL_REDIR_PROPS(n)->regex_list) {
-		cint_t           rc = 0;
-		char            *subject; 
-		cint_t           subject_len;
-		cint_t           ovector[OVECTOR_LEN];
-		struct cre_list *list = (struct cre_list *)i;
+		char                   *subject; 
+		cint_t                  subject_len;
+		cint_t                  ovector[OVECTOR_LEN];
+		cint_t                  rc                    = 0;
+		cherokee_regex_entry_t *list                  = REGEX_ENTRY(i);
 
 		/* The subject usually begins with a slash. Lets imagine a request "/dir/thing". 
 		 * If it matched with a "/dir" directory entry, the subject have to be "/thing", 
@@ -216,60 +208,6 @@ out:
 		cherokee_buffer_drop_ending (&conn->request, conn->query_string.len + 1);
 
 	return ret;
-}
-
-static ret_t
-configure_rewrite (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_handler_redir_props_t *props)
-{
-	ret_t               ret;
-	cint_t              hidden;
-	struct cre_list    *n;
-	cherokee_buffer_t  *substring;
-	pcre               *re         = NULL;
-	cherokee_buffer_t  *regex      = NULL;
-
-	TRACE(ENTRIES, "Converting rewrite rule '%s'\n", conf->key.buf);
-
-	/* Query conf
-	 */
-	cherokee_config_node_read_int (conf, "show", &hidden);
-	hidden = !hidden;
-
-	ret = cherokee_config_node_read (conf, "regex", &regex);
-	if (ret == ret_ok) {
-		ret = cherokee_regex_table_get (srv->regexs, regex->buf, (void **)&re);
-		if (ret != ret_ok)
-			return ret;
-	} 
-
-	ret = cherokee_config_node_read (conf, "substring", &substring);
-	if (ret != ret_ok)
-		return ret;
-
-	/* New RegEx
-	 */
-	n = (struct cre_list*)malloc(sizeof(struct cre_list));
-
-	INIT_LIST_HEAD (&n->item);
-	n->re         = re;
-	n->hidden     = hidden;
-	
-	cherokee_buffer_init (&n->subs);
-	cherokee_buffer_add_buffer (&n->subs, substring);
-
-	/* Add the list
-	 */
-	cherokee_list_add_tail (LIST(n), &props->regex_list);
-
-	return ret_ok;
-}
-
-
-static void
-cre_entry_free (struct cre_list *n) 
-{
-	cherokee_buffer_mrproper (&n->subs);
-	free (n);
 }
 
 
@@ -375,13 +313,8 @@ cherokee_handler_redir_add_headers (cherokee_handler_redir_t *rehdl, cherokee_bu
 static ret_t 
 props_free (cherokee_handler_redir_props_t *props)
 {
-	cherokee_list_t *i, *tmp;
-
 	cherokee_buffer_mrproper (&props->url);
-
-	list_for_each_safe (i, tmp, &props->regex_list) {
-		cre_entry_free ((struct cre_list *)i);
-	}
+	cherokee_regex_list_mrproper (&props->regex_list);
 
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
@@ -391,7 +324,7 @@ ret_t
 cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                           ret;
-	cherokee_list_t                *i, *j;
+	cherokee_list_t                *i;
 	cherokee_handler_redir_props_t *props;
 
 	if (*_props == NULL) {
@@ -416,10 +349,10 @@ cherokee_handler_redir_configure (cherokee_config_node_t *conf, cherokee_server_
 			cherokee_buffer_add_buffer (&props->url, &subconf->val);
 
 		} else if (equal_buf_str (&subconf->key, "rewrite")) {
-			cherokee_config_node_foreach (j, subconf) {
-				ret = configure_rewrite (CONFIG_NODE(j), srv, PROP_REDIR(props));
-				if (ret != ret_ok) return ret;
-			}
+			ret = cherokee_regex_list_configure (&props->regex_list,
+							     subconf, srv->regexs);
+			if (ret != ret_ok)
+				return ret;
 		}
 	}
 	
