@@ -184,6 +184,8 @@ function check_all_or_none (klass)
 /* Prevent accidentally navigating away */
 function protectChanges()
 {
+	//alert(document.location.host.toString());
+
   $('a').click(function() {
     setConfirmUnload(false);
   });
@@ -197,6 +199,10 @@ function protectChanges()
   });
 
   $('form').submit(function() {
+    setConfirmUnload(false);
+  });
+
+  $('.rulestable').bind("mouseup", function() {
     setConfirmUnload(false);
   });
 
@@ -217,8 +223,6 @@ function setConfirmUnload(on)
 
 function unloadMessage()
 {
-  return 'You have modified the settings. The changes will NOT be applied '+
-         'unless you SAVE them. The modifications will remain unapplied while '+
-         'Cherokee-Admin is still running. If you navigate away keep in mind '+
-         'you NEED to save your data or else it will be lost!';
+  return 'Settings were modified but not saved.\n'+
+         'They will be lost if you leave Cherokee-Admin.';
 }
