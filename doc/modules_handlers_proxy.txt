@@ -1,0 +1,41 @@
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_handlers.html[Handlers]
+
+Handler: HTTP reverse proxy
+---------------------------
+
+This handler is one of the most demanded features of Cherokee. It
+dispatches in-bound network traffic to a set of servers, and presents
+a single interface to the requesters. This is particularly useful to
+load balance a cluster of webservers at a much higher network stack
+level than that allowed by the
+link:modules_hanlders_mirror.html[generic balancer].
+
+All connections coming from the Internet addressed to one of the Web
+servers are routed through the proxy, which can either deal with the
+request or pass it (with or without modifications) to the other web
+servers.
+
+The reverse proxy can do several interesting things besides simply
+load balancing. It can rewrite headers, and it can try to establish
+keep-alive connections with every system interfacing with it.
+
+To use it you simply have to specify several parameters. First define
+a series of link:config_info_sources.html[information sources]. Those
+will be the ones handling the requests in the end.
+
+image::media/images/admin_handler_proxy.png[Reverse Proxy]
+
+Then you will have to specify:
+
+* Reuse connections: the maximum number of connetions per server to be
+  kept with Keep-alive. If not specified, the default value of 16 will
+  be taken.
+
+* Regular Expressions: in case you want to rewrite URLs before
+  relaying the requests.
+
+* Balancer: the type of load balancing strategy to be used.
+
+* Information sources: where you will assign the previously defined
+  sources, which are all the servers from our set to be used in the
+  cluster of web servers.
