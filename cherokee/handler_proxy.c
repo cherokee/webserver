@@ -27,6 +27,7 @@
 #include "connection-protected.h"
 #include "util.h"
 #include "thread.h"
+#include "server-protected.h"
 
 #define ENTRIES "proxy"
 
@@ -44,6 +45,7 @@ props_free (cherokee_handler_proxy_props_t *props)
 {
 	cherokee_avl_mrproper (&props->headers_hide, NULL);
 	cherokee_handler_proxy_hosts_mrproper (&props->hosts);
+	cherokee_regex_list_mrproper (&props->request_regexs);
 
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
@@ -71,6 +73,8 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		n->balancer  = NULL;
 		n->reuse_max = DEFAULT_REUSE_MAX;
 
+		INIT_LIST_HEAD (&n->request_regexs);
+
 		cherokee_avl_init (&n->headers_hide);
 		cherokee_avl_set_case (&n->headers_hide, false);
 
@@ -85,7 +89,8 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
 		if (equal_buf_str (&subconf->key, "balancer")) {
-			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer); 
+			ret = cherokee_balancer_instance (&subconf->val, subconf,
+							  srv, &props->balancer); 
 			if (ret != ret_ok) 
 				return ret;
 		} else if (equal_buf_str (&subconf->key, "reuse_max")) {
@@ -96,6 +101,12 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 				cherokee_avl_add (&props->headers_hide, 
 						  &CONFIG_NODE(j)->val, NULL);
 			}
+
+		} else if (equal_buf_str (&subconf->key, "rewrite_request")) {
+			ret = cherokee_regex_list_configure (&props->request_regexs,
+							     subconf, srv->regexs);
+			if (ret != ret_ok)
+				return ret;
 		}
 	}
 
@@ -110,6 +121,65 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		return ret_error;
 	}
 
+	return ret_ok;
+}
+
+
+static ret_t
+add_request (cherokee_handler_proxy_t *hdl,
+	     cherokee_buffer_t        *buf)
+{
+	int                             re;
+	ret_t                           ret;
+	cherokee_list_t                *i;
+	cint_t                          ovector[OVECTOR_LEN];
+	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
+	cherokee_buffer_t              *tmp   = &HANDLER_THREAD(hdl)->tmp_buf1;
+	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
+
+	cherokee_buffer_clean (tmp);
+
+	/* Build the URL
+	 */
+	ret = cherokee_buffer_add_buffer (tmp, &conn->request);
+	if (ret != ret_ok)
+		return ret_error;
+
+	ret = cherokee_buffer_add_buffer (tmp, &conn->pathinfo);
+	if (ret != ret_ok)
+		return ret_error;
+
+	if (! cherokee_buffer_is_empty (&conn->query_string)) {
+		cherokee_buffer_add_char (tmp, '?');
+
+		ret = cherokee_buffer_add_buffer (tmp, &conn->query_string);
+		if (ret != ret_ok)
+			return ret_error;
+	}
+
+	/* Check the regexs
+	 */
+	list_for_each (i, &props->request_regexs) {
+		cherokee_regex_entry_t *regex_entry = REGEX_ENTRY(i);
+
+		re = pcre_exec (regex_entry->re, NULL, 
+				tmp->buf, tmp->len, 0, 0,
+				ovector, OVECTOR_LEN);
+		if (re == 0) {
+			PRINT_ERROR_S("Too many groups in the regex\n");
+		}
+		if (re <= 0) {
+			continue;
+		}
+
+		/* Matched */
+		cherokee_regex_substitute (&regex_entry->subs, tmp, buf, ovector, re);
+		return ret_ok;
+	}
+
+	/* Did not match any regex, use the raw URL
+	 */
+	cherokee_buffer_add_buffer (buf, tmp);
 	return ret_ok;
 }
 
@@ -139,21 +209,9 @@ build_request (cherokee_handler_proxy_t *hdl,
 	cherokee_buffer_add_char (buf, ' ');
 
 	/* The request */
-	ret = cherokee_buffer_add_buffer (buf, &conn->request);
+	ret = add_request (hdl, buf);
 	if (ret != ret_ok)
 		goto error;
-
-	ret = cherokee_buffer_add_buffer (buf, &conn->pathinfo);
-	if (ret != ret_ok)
-		goto error;
-
-	if (! cherokee_buffer_is_empty (&conn->query_string)) {
-		cherokee_buffer_add_char (buf, '?');
-
-		ret = cherokee_buffer_add_buffer (buf, &conn->query_string);
-		if (ret != ret_ok)
-			goto error;
-	}
 
 	/* HTTP version */
 	ret = cherokee_http_version_to_string (conn->header.version, &str, &len);
@@ -876,6 +934,7 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 ret_t
 cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 {
+	
 	cherokee_buffer_mrproper (&hdl->tmp);
 	cherokee_buffer_mrproper (&hdl->buffer);
 	cherokee_buffer_mrproper (&hdl->request);

@@ -1,5 +1,8 @@
 2008-11-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c, cherokee/handler_proxy.h: Adds URL
+	rewriting support (based on regular expressions).
+
 	* cherokee/handler_redir.c cherokee/regex.h cherokee/regex.c: More
 	code re-factoring. Adds the new cherokee_regex_substitute()
 	function.
