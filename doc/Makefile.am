@@ -165,6 +165,15 @@ media/images/cookbook_django.png \
 media/images/cookbook_ror.png \
 media/images/cookbook_mailman.png \
 media/images/cookbook_glassfish.png \
+media/images/cookbook_drupal.png \
+media/images/cookbook_drupal_default1.png \
+media/images/cookbook_drupal_default2.png \
+media/images/cookbook_drupal_default3.png \
+media/images/cookbook_drupal_example1.png \
+media/images/cookbook_drupal_example2.png \
+media/images/cookbook_drupal_example3.png \
+media/images/cookbook_drupal_example4.png \
+media/images/cookbook_drupal_example5.png \
 media/images/tracelor.png
 
 EXTRA_DIST = \

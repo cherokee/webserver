@@ -1,0 +1,156 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up Joomla
+---------------------------
+
+Setting up link:http://drupal.org/[Drupal] with Cherokee is really
+easy. We will assume that our `Document Root` directory is
+`/var/www/drupal` of the server we are working on. This recipe uses
+Drupal 6.6, which is the latest release at the time of writing.
+
+You will need PHP support correctly configured in Cherokee, and PHP
+with the MySQL module installed. The default configuration already
+provides a valid PHP configuration for Cherokee if you have php-cgi
+installed, but you can follow the appropriate recipe about
+link:cookbook_php.html[setting up PHP] in case you don't have it
+available for any reason.
+
+Under these conditions, you could start Drupal's installation and you
+would already be able to have your site up and running.
+
+However, we can add several refinements to Cherokee's setting. Mainly:
+
+. Forward all requests for www.example.net (or whatever domain is resolved
+  to our machine) to example.net
+
+. Set up an appropriate url rewrite configuration for Drupal.
+
+. Serve directly as static content some specific file types, avoiding
+  any other file requests and eliminating this way any security risk
+  related to vulnerable archives.
+
+Setting up Cherokee
+~~~~~~~~~~~~~~~~~~~
+
+Default virtual server
+^^^^^^^^^^^^^^^^^^^^^^
+
+We'll begin by cloning the default virtual server, just to keep the
+default PHP configuration. Create a clone named `example.net`.
+
+image::media/images/cookbook_drupal_defualt1.png
+
+Then, we'll delete every erasable rule in the default virtual server
+since we are going to use it to redirect every petition not matched by
+the example.net virtual server. We will set the remaining one to be
+managed by the `Redirection` handler, like this:
+
+image::media/images/cookbook_drupal_defualt2.png
+
+
+[grid="rows"]
+`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~
+Type     , Regular Expression, Redirection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+External , (.*)$             , http://example.net/$1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+After that, this is how the list of rules for this server should look
+like.
+
+image::media/images/cookbook_drupal_defualt3.png
+
+This clears the first milestone. The remaining three will be
+accomplished by tweaking the `example.net` virtual server.
+
+
+example.net
+^^^^^^^^^^^
+
+Remember to set up the `Document root` to `/var/www/drupal`.
+
+image::media/images/cookbook_drupal_example1.png
+
+Delete all the rules except `php` and `Default`. We're heading right
+to the second milestone now.
+
+image::media/images/cookbook_drupal_example2.png
+
+As previously, we will manage the `Default` rule with the redirection
+handler.
+
+`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~
+Type     , Regular Expression, Redirection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Internal , ^/(.*)$           , /index.php?q=$1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+image::media/images/cookbook_drupal_example3.png
+
+Remember to set up Drupal as custom error handler for the virtual
+server. Do son in the `Error Handler` tab, selecting the `Custom
+redirections` option and sending 404 errors to Drupal.
+
+image::media/images/cookbook_drupal_example4.png
+
+[grid="rows"]
+`~~~~~~~~~~~~`~~~~~~~~~~~
+Error        , URL
+~~~~~~~~~~~~~~~~~~~~~~~~~
+404 Not Found, /index.php
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The third milestone, directly serving static files, is an easy task to
+accomplish.
+
+Just set up an `Extensions`-type rule for the following extensions:
+
+***************************
+jpg,jpeg,gif,css,png,js,ico
+***************************
+
+And manage it with the `Static content` handler.
+
+image::media/images/cookbook_drupal_example5.png
+
+
+Setting up Drupal
+~~~~~~~~~~~~~~~~~
+
+First download and uncompress the distributed Drupal release into
+`/var/www/drupal`, and create a database suitable for the installation.
+
+Log in to MySQL:
+
+----------------
+mysql -u root -p
+----------------
+
+And create the database for Drupal. We will be using the name
+'drupal', the user 'drupaluser' and the password 'drupalpassword', but
+you should set up your own.
+
+------------------------------------------------------------------------
+CREATE DATABASE drupal;
+GRANT ALL PRIVILEGES ON drupal.* TO drupaluser@localhost IDENTIFIED BY 'drupalpassword';
+GRANT ALL PRIVILEGES ON drupal.* TO drupaluser@localhost.localdomain IDENTIFIED BY 'drupalpassword';
+FLUSH PRIVILEGES;
+quit;
+------------------------------------------------------------------------
+
+Then point your web browser to `http://localhost` and follow the
+instructions provided by the installer.
+
+You will need to copy the config file and change the permissions manually to proceed:
+
+----
+cd /var/www/drupal/sites/default
+cp default.settings.php settings.php
+chmod 644 settings.php
+----
+
+And the installation will be almost automatic. Just fill up the
+requested values and you will obtain the following results once your
+are through.
+
+image::media/images/cookbook_drupal.png
