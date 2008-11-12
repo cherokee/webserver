@@ -1,5 +1,8 @@
 2008-11-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleProxy.py: Adds support of the new "Arbitrary header
+	addition" feature.
+
 	* cherokee/handler_proxy.c, cherokee/handler_proxy.h: The proxy
 	can now add arbitrary headers to the relied request.
 

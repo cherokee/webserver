@@ -15,7 +15,7 @@ HELPS = [
 
 class ModuleProxy (ModuleHandler):
     PROPERTIES = [
-        'balancer', 'rewrite_request', 'header_hide'
+        'balancer', 'rewrite_request', 'header_add', 'header_hide'
     ]
 
     def __init__ (self, cfg, prefix, submit):
@@ -29,6 +29,40 @@ class ModuleProxy (ModuleHandler):
         table = TableProps()
         self.AddPropEntry (table, 'Reuse connections', '%s!reuse_max'%(self._prefix), NOTE_REUSE_MAX)
         txt += self.Indent (table)
+
+        # Add headers
+        tmp  = ''
+        keys = self._cfg.keys("%s!header_add"%(self._prefix))
+        if keys:
+            tmp += '<h3>Header addition</h3>'
+
+            table = Table(3,1, style='width="90%"')
+            table += ('Header', 'Value', '')
+
+            for k in keys:
+                pre = '%s!header_add!%s'%(self._prefix, k)
+                val = self.InstanceEntry (pre, 'text', size=40)
+
+                js      = "post_del_key('/ajax/update', '%s');" % (pre)
+                rm_link = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                table += (k, val, rm_link)
+
+            tmp += self.Indent (table)
+
+        tmp += '<h3>Add new header</h3>'
+
+        pre   = "%s!header_add"%(self._prefix)
+        key   = self.InstanceEntry ("tmp!add_header_key", 'text', size=20, req=True)
+        val   = self.InstanceEntry ("tmp!add_header_val", 'text', size=40, req=True)
+        add_b = self.InstanceButton ("Add")
+
+        table  = Table(3,1)
+        table += ('Header', 'Value', '')
+        table += (key, val, add_b)
+        tmp += self.Indent(table)
+
+        txt += '<h2>Header Addition</h2>'
+        txt += self.Indent(tmp)
 
         # URL Rewriting
         tmp  = ''
@@ -121,6 +155,16 @@ class ModuleProxy (ModuleHandler):
         return txt
 
     def _op_apply_changes (self, uri, post):
+        # A new header is being added
+        n_header = post.pop('tmp!add_header_key')
+        n_hvalue = post.pop('tmp!add_header_val')
+
+        del (self._cfg['tmp!add_header_key'])
+        del (self._cfg['tmp!add_header_val'])
+
+        if n_header:
+            self._cfg["%s!header_add!%s"%(self._prefix, n_header)] = n_hvalue
+
         # Apply balancer changes
         pre  = "%s!balancer" % (self._prefix)
 
