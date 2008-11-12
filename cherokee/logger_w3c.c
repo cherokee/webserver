@@ -78,15 +78,17 @@ cherokee_logger_w3c_new  (cherokee_logger_t **logger, cherokee_config_node_t *co
 	 */
 	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(w3c));
 
-	MODULE(n)->init         = (logger_func_init_t) cherokee_logger_w3c_init;
-	MODULE(n)->free         = (logger_func_free_t) cherokee_logger_w3c_free;
-	LOGGER(n)->flush        = (logger_func_flush_t) cherokee_logger_w3c_flush;
-	LOGGER(n)->write_error  = (logger_func_write_error_t) cherokee_logger_w3c_write_error;
-	LOGGER(n)->write_access = (logger_func_write_access_t) cherokee_logger_w3c_write_access;
-	LOGGER(n)->write_string = (logger_func_write_string_t) cherokee_logger_w3c_write_string;
+	MODULE(n)->init           = (logger_func_init_t) cherokee_logger_w3c_init;
+	MODULE(n)->free           = (logger_func_free_t) cherokee_logger_w3c_free;
+	LOGGER(n)->flush          = (logger_func_flush_t) cherokee_logger_w3c_flush;
+	LOGGER(n)->write_error    = (logger_func_write_error_t) cherokee_logger_w3c_write_error;
+	LOGGER(n)->write_access   = (logger_func_write_access_t) cherokee_logger_w3c_write_access;
+	LOGGER(n)->write_string   = (logger_func_write_string_t) cherokee_logger_w3c_write_string;
+	LOGGER(n)->write_error_fd = (logger_func_write_error_fd_t) cherokee_logger_w3c_write_error_fd;
 
 	ret = cherokee_logger_w3c_init_base (n, config);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	/* Return the object
 	 */
@@ -233,6 +235,19 @@ cherokee_logger_w3c_write_error (cherokee_logger_w3c_t *logger, cherokee_connect
 	ret = cherokee_logger_writer_flush (&logger->writer);
 	if (unlikely (ret != ret_ok))
 		return ret;
+
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_logger_w3c_write_error_fd (cherokee_logger_w3c_t *logger, int fd)
+{
+	if ((logger->writer.fd != -1) &&
+	    (logger->writer.fd != fd))
+	{
+		dup2 (logger->writer.fd, fd);
+	}
 
 	return ret_ok;
 }

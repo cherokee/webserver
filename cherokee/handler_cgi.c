@@ -472,6 +472,7 @@ _fd_set_properties (int fd, int add_flags, int remove_flags)
 	return ret_ok;
 }
 
+
 static void 
 manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe_server[2])
 {
@@ -505,6 +506,12 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	dup2 (pipe_cgi[1], STDOUT_FILENO);
 	close (pipe_cgi[1]);
+
+	/* Redirect the stderr
+	 */
+	if (CONN_VSRV(conn)->logger != NULL) {
+		cherokee_logger_write_error_fd (CONN_VSRV(conn)->logger, STDERR_FILENO);
+	}
 
 # if 0
 	/* Set unbuffered

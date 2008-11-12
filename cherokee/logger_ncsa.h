@@ -59,14 +59,15 @@ ret_t cherokee_logger_ncsa_configure (cherokee_config_node_t *conf, cherokee_ser
 
 /* virtual methods implementation
  */
-ret_t cherokee_logger_ncsa_init         (cherokee_logger_ncsa_t *logger);
-ret_t cherokee_logger_ncsa_free         (cherokee_logger_ncsa_t *logger);
+ret_t cherokee_logger_ncsa_init           (cherokee_logger_ncsa_t *logger);
+ret_t cherokee_logger_ncsa_free           (cherokee_logger_ncsa_t *logger);
 
-ret_t cherokee_logger_ncsa_flush        (cherokee_logger_ncsa_t *logger);
-ret_t cherokee_logger_ncsa_reopen       (cherokee_logger_ncsa_t *logger);
+ret_t cherokee_logger_ncsa_flush          (cherokee_logger_ncsa_t *logger);
+ret_t cherokee_logger_ncsa_reopen         (cherokee_logger_ncsa_t *logger);
 
-ret_t cherokee_logger_ncsa_write_access (cherokee_logger_ncsa_t *logger, cherokee_connection_t *conn);
-ret_t cherokee_logger_ncsa_write_error  (cherokee_logger_ncsa_t *logger, cherokee_connection_t *conn);
-ret_t cherokee_logger_ncsa_write_string (cherokee_logger_ncsa_t *logger, const char *string);
+ret_t cherokee_logger_ncsa_write_access   (cherokee_logger_ncsa_t *logger, cherokee_connection_t *conn);
+ret_t cherokee_logger_ncsa_write_error    (cherokee_logger_ncsa_t *logger, cherokee_connection_t *conn);
+ret_t cherokee_logger_ncsa_write_string   (cherokee_logger_ncsa_t *logger, const char *string);
+ret_t cherokee_logger_ncsa_write_error_fd (cherokee_logger_ncsa_t *logger, int fd);
 
 #endif /* CHEROKEE_LOGGER_NCSA_H */

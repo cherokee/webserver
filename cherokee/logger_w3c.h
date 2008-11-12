@@ -55,14 +55,15 @@ ret_t cherokee_logger_w3c_init_base (cherokee_logger_w3c_t *logger, cherokee_con
 
 /* virtual methods implementation
  */
-ret_t cherokee_logger_w3c_init         (cherokee_logger_w3c_t *logger);
-ret_t cherokee_logger_w3c_free         (cherokee_logger_w3c_t *logger);
+ret_t cherokee_logger_w3c_init           (cherokee_logger_w3c_t *logger);
+ret_t cherokee_logger_w3c_free           (cherokee_logger_w3c_t *logger);
 
-ret_t cherokee_logger_w3c_flush        (cherokee_logger_w3c_t *logger);
-ret_t cherokee_logger_w3c_reopen       (cherokee_logger_w3c_t *logger);
+ret_t cherokee_logger_w3c_flush          (cherokee_logger_w3c_t *logger);
+ret_t cherokee_logger_w3c_reopen         (cherokee_logger_w3c_t *logger);
 
-ret_t cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connection_t *conn);
-ret_t cherokee_logger_w3c_write_error  (cherokee_logger_w3c_t *logger, cherokee_connection_t *conn);
-ret_t cherokee_logger_w3c_write_string (cherokee_logger_w3c_t *logger, const char *string);
+ret_t cherokee_logger_w3c_write_access   (cherokee_logger_w3c_t *logger, cherokee_connection_t *conn);
+ret_t cherokee_logger_w3c_write_error    (cherokee_logger_w3c_t *logger, cherokee_connection_t *conn);
+ret_t cherokee_logger_w3c_write_string   (cherokee_logger_w3c_t *logger, const char *string);
+ret_t cherokee_logger_w3c_write_error_fd (cherokee_logger_w3c_t *logger, int fd);
 
 #endif /* CHEROKEE_LOGGER_W3C_H */

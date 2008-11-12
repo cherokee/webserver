@@ -1,5 +1,12 @@
 2008-11-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/logger.c, cherokee/logger.h, cherokee/logger_w3c.c,
+	cherokee/logger_w3c.h, cherokee/logger_ncsa.c,
+	cherokee/logger_ncsa.h, cherokee/handler_cgi.c,
+	cherokee/logger_combined.c: Redirects the stderr output of CGIs to
+	the error log. It fixes the bug #217:
+	http://code.google.com/p/cherokee/issues/detail?id=217
+
 	* admin/ModuleProxy.py: Adds support of the new "Arbitrary header
 	addition" feature.
 

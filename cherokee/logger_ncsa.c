@@ -79,14 +79,15 @@ cherokee_logger_ncsa_new (cherokee_logger_t **logger, cherokee_config_node_t *co
 	 */
 	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(ncsa));
 
-	MODULE(n)->init         = (logger_func_init_t) cherokee_logger_ncsa_init;
-	MODULE(n)->free         = (logger_func_free_t) cherokee_logger_ncsa_free;
+	MODULE(n)->init           = (logger_func_init_t) cherokee_logger_ncsa_init;
+	MODULE(n)->free           = (logger_func_free_t) cherokee_logger_ncsa_free;
 
-	LOGGER(n)->flush        = (logger_func_flush_t) cherokee_logger_ncsa_flush;
-	LOGGER(n)->reopen       = (logger_func_reopen_t) cherokee_logger_ncsa_reopen;
-	LOGGER(n)->write_error  = (logger_func_write_error_t)  cherokee_logger_ncsa_write_error;
-	LOGGER(n)->write_access = (logger_func_write_access_t) cherokee_logger_ncsa_write_access;
-	LOGGER(n)->write_string = (logger_func_write_string_t) cherokee_logger_ncsa_write_string;
+	LOGGER(n)->flush          = (logger_func_flush_t) cherokee_logger_ncsa_flush;
+	LOGGER(n)->reopen         = (logger_func_reopen_t) cherokee_logger_ncsa_reopen;
+	LOGGER(n)->write_error    = (logger_func_write_error_t)  cherokee_logger_ncsa_write_error;
+	LOGGER(n)->write_access   = (logger_func_write_access_t) cherokee_logger_ncsa_write_access;
+	LOGGER(n)->write_string   = (logger_func_write_string_t) cherokee_logger_ncsa_write_string;
+	LOGGER(n)->write_error_fd = (logger_func_write_error_fd_t)  cherokee_logger_ncsa_write_error_fd;
 
 	ret = cherokee_logger_ncsa_init_base (n, config);
 	if (unlikely(ret < ret_ok)) return ret;
@@ -385,6 +386,19 @@ cherokee_logger_ncsa_write_error (cherokee_logger_ncsa_t *logger, cherokee_conne
 	ret = cherokee_logger_writer_flush (&logger->writer_error);
 	if (unlikely (ret != ret_ok))
 		return ret;
+
+	return ret_ok;
+}
+
+
+ret_t 
+cherokee_logger_ncsa_write_error_fd (cherokee_logger_ncsa_t *logger, int fd)
+{
+	if ((logger->writer_error.fd != -1) &&
+	    (logger->writer_error.fd != fd))
+	{
+		dup2 (logger->writer_error.fd, fd);
+	}
 
 	return ret_ok;
 }

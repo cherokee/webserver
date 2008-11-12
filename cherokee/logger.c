@@ -51,9 +51,10 @@ cherokee_logger_init_base (cherokee_logger_t *logger, cherokee_plugin_info_t *in
 
 	/* Pure virtual methods
 	 */
-	logger->priv         = priv;
-	logger->write_access = NULL;
-	logger->write_error  = NULL;
+	logger->priv           = priv;
+	logger->write_access   = NULL;
+	logger->write_error    = NULL;
+	logger->write_error_fd = NULL;
 
 	/* Private
 	 */	
@@ -153,6 +154,22 @@ cherokee_logger_write_error (cherokee_logger_t *logger, void *conn)
 
 	return ret;
 }
+
+
+ret_t
+cherokee_logger_write_error_fd (cherokee_logger_t *logger, int fd)
+{
+	ret_t ret = ret_error;
+
+	if (logger->write_error_fd) {
+		CHEROKEE_MUTEX_LOCK (&PRIV(logger)->mutex);
+		ret = logger->write_error_fd (logger, fd);
+		CHEROKEE_MUTEX_UNLOCK (&PRIV(logger)->mutex);
+	}
+
+	return ret;
+}
+
 
 
 ret_t 
