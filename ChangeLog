@@ -1,3 +1,8 @@
+2008-11-12  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/ModuleProxy.py (ModuleProxy._op_render): Adds "Hidden
+	returned headers" support.
+
 2008-11-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/ModuleProxy.py, admin/consts.py, admin/Makefile.am: Adds

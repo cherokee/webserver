@@ -15,7 +15,7 @@ HELPS = [
 
 class ModuleProxy (ModuleHandler):
     PROPERTIES = [
-        'balancer', 'rewrite_request'
+        'balancer', 'rewrite_request', 'header_hide'
     ]
 
     def __init__ (self, cfg, prefix, submit):
@@ -69,6 +69,45 @@ class ModuleProxy (ModuleHandler):
         tmp += self.Indent(table)
 
         txt += '<h2>URL Rewriting rules</h2>'
+        txt += self.Indent(tmp)
+
+        # Hide headers
+        tmp  = ''
+        keys = self._cfg.keys("%s!header_hide"%(self._prefix))
+        if keys:
+            tmp += '<h3>Hidden headers</h3>'
+
+            table = Table(2,1, style='width="90%"')
+            table += ('Header', '')
+
+            for k in keys:
+                pre = '%s!header_hide!%s'%(self._prefix, k)
+                hdr = self._cfg.get_val (pre)
+
+                js      = "post_del_key('/ajax/update', '%s');" % (pre)
+                rm_link = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                table += (hdr, rm_link)
+
+            tmp += self.Indent (table)
+
+            tmp2 = [int(x) for x in keys]
+            tmp2.sort()
+            next = tmp2[-1]+1
+        else:
+            next = 1
+
+        tmp += '<h3>Hide a header</h3>'
+
+        pre   = "%s!header_hide"%(self._prefix)
+        hdr_e = self.InstanceEntry ("%s!%d"%(pre,next), 'text', size=40)
+        add_b = self.InstanceButton ("Add")
+
+        table  = Table(2,1)
+        table += ('Header', '')
+        table += (hdr_e, add_b)
+        tmp += self.Indent(table)
+
+        txt += '<h2>Hidden returned headers</h2>'
         txt += self.Indent(tmp)
 
         # Balancers
