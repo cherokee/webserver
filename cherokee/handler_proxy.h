@@ -55,6 +55,7 @@ typedef struct {
 	cherokee_handler_proxy_hosts_t  hosts;
 	cuint_t                         reuse_max;
 	cherokee_avl_t                  headers_hide;
+	cherokee_list_t                 headers_add;
 	cherokee_list_t                 request_regexs;
 } cherokee_handler_proxy_props_t;
 

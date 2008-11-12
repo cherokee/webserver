@@ -1,5 +1,8 @@
 2008-11-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c, cherokee/handler_proxy.h: The proxy
+	can now add arbitrary headers to the relied request.
+
 	* admin/ModuleProxy.py (ModuleProxy._op_render): Adds "Hidden
 	returned headers" support.
 

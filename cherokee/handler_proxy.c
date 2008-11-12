@@ -39,13 +39,52 @@
 PLUGIN_INFO_HANDLER_EASIEST_INIT (proxy, http_all_methods);
 
 
+typedef struct {
+	cherokee_list_t   listed;
+	cherokee_buffer_t key;
+	cherokee_buffer_t val;
+} cherokee_header_add_t;
+
+#define HEADER_ADD(h) ((cherokee_header_add_t *)(h))
+
+static ret_t
+header_add_new (cherokee_header_add_t **header)
+{
+	CHEROKEE_NEW_STRUCT(n,header_add);
+
+	INIT_LIST_HEAD(&n->listed);
+	cherokee_buffer_init (&n->key);
+	cherokee_buffer_init (&n->val);
+
+	*header = n;
+	return ret_ok;
+}
+
+static ret_t
+header_add_free (cherokee_header_add_t *header)
+{
+	cherokee_buffer_mrproper (&header->key);
+	cherokee_buffer_mrproper (&header->val);
+
+	free (header);
+	return ret_ok;
+}
+
+
 
 static ret_t 
 props_free (cherokee_handler_proxy_props_t *props)
 {
+	cherokee_list_t *i, *tmp;
+
 	cherokee_avl_mrproper (&props->headers_hide, NULL);
 	cherokee_handler_proxy_hosts_mrproper (&props->hosts);
 	cherokee_regex_list_mrproper (&props->request_regexs);
+
+	list_for_each_safe (i, tmp, &props->headers_add) {
+		cherokee_list_del (i);
+		header_add_free (HEADER_ADD(i));
+	}
 
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
@@ -74,6 +113,7 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		n->reuse_max = DEFAULT_REUSE_MAX;
 
 		INIT_LIST_HEAD (&n->request_regexs);
+		INIT_LIST_HEAD (&n->headers_add);
 
 		cherokee_avl_init (&n->headers_hide);
 		cherokee_avl_set_case (&n->headers_hide, false);
@@ -100,6 +140,19 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 			cherokee_config_node_foreach (j, subconf) {
 				cherokee_avl_add (&props->headers_hide, 
 						  &CONFIG_NODE(j)->val, NULL);
+			}
+
+		} else if (equal_buf_str (&subconf->key, "header_add")) {
+			cherokee_config_node_foreach (j, subconf) {
+				cherokee_header_add_t *header = NULL;
+
+				ret = header_add_new (&header);
+				if (ret != ret_ok)
+					return ret_error;
+
+				cherokee_buffer_add_buffer (&header->key, &CONFIG_NODE(j)->key);
+				cherokee_buffer_add_buffer (&header->val, &CONFIG_NODE(j)->val);
+				cherokee_list_add (&header->listed, &props->headers_add);
 			}
 
 		} else if (equal_buf_str (&subconf->key, "rewrite_request")) {
@@ -188,17 +241,19 @@ static ret_t
 build_request (cherokee_handler_proxy_t *hdl,
 	       cherokee_buffer_t        *buf)
 {
-	ret_t                  ret;
-	cuint_t                len;
-	const char            *str;
-	char                  *begin;
-	char                  *end;
-	char                  *header_end;
-	char                  *XFF         = NULL;
-	cuint_t                XFF_len     = 0;
-	cherokee_boolean_t     XFH         = false;
-	cherokee_connection_t *conn        = HANDLER_CONN(hdl);
-	cherokee_buffer_t     *tmp         = &HANDLER_THREAD(hdl)->tmp_buf1;
+	ret_t                           ret;
+	cuint_t                         len;
+	const char                     *str;
+	char                           *begin;
+	char                           *end;
+	char                           *header_end;
+	cherokee_list_t                *i;
+	char                           *XFF         = NULL;
+	cuint_t                         XFF_len     = 0;
+	cherokee_boolean_t              XFH         = false;
+	cherokee_connection_t          *conn        = HANDLER_CONN(hdl);
+	cherokee_handler_proxy_props_t *props       = HDL_PROXY_PROPS(hdl);
+	cherokee_buffer_t              *tmp         = &HANDLER_THREAD(hdl)->tmp_buf1;
 
 	/* Method */
 	ret = cherokee_http_method_to_string (conn->header.method, &str, &len);
@@ -307,6 +362,14 @@ build_request (cherokee_handler_proxy_t *hdl,
 		cherokee_buffer_add_str    (buf, "X-Forwarded-Host: ");
 		cherokee_buffer_add_buffer (buf, &conn->host);
 		cherokee_buffer_add_str    (buf, CRLF);
+	}
+
+	/* Additional headers */
+	list_for_each (i, &props->headers_add) {
+		cherokee_buffer_add_buffer (buf, &HEADER_ADD(i)->key);
+		cherokee_buffer_add_str    (buf, ": ");
+		cherokee_buffer_add_buffer (buf, &HEADER_ADD(i)->val);
+		cherokee_buffer_add_str    (buf, CRLF);		
 	}
 
 	/* End of Header */
