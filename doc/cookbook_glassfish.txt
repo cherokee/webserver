@@ -1,0 +1,186 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up GlassFish
+------------------------------
+
+Supporting Java with Cherokee is almost trivial using
+link:https://glassfish.dev.java.net[GlassFish], an enterprise class
+Java EE 5 application server.
+
+For this recipe you will need Cherokee's
+link:modules_handlers_proxy.html[HTTP reverse proxy] and a valid
+GlassFish installation, which in turn requires JDK 5 or JDK 6
+installed on your system. The configuration processing depends on Ant
+(1.6.5).
+
+We will be using GlassFish v2 here since GlassFish v3 is still under
+development.
+
+Debian installation
+~~~~~~~~~~~~~~~~~~~
+
+If you are lucky enough to be using a Debian based Linux distribution,
+simply installing the `glassfishv2` package will be enough.
+
+----
+# apt-get install glassfishv2
+----
+
+This will completely deploy the needed infrastructure and launch the
+application server.
+
+Generic installation
+~~~~~~~~~~~~~~~~~~~~
+
+If you are using another OS or Linux distribution, there should be an
+alternative available. You can always download it and follow the
+installation instructions available at the
+link:https://glassfish.dev.java.net/public/downloadsindex.html[official
+site].
+
+The installation process is also simple. For example, for Linux you
+could do the following to retrieve the executable installer and run
+it:
+
+----
+$ wget http://java.net/download/javaee5/v2ur2/promoted/Linux/glassfish-installer-v2ur2-b04-linux.jar
+$ java -Xmx256M -jar glassfish-installer-v2ur2-b04-linux.jar
+----
+
+This will pop up a GUI, guide you through the process and unpack all
+the files for GlassFish into ./glassfish
+
+There you will find the needed GlassFish setup script. The files
+setup.xml and setup-cluster.xml are both used for this. Use the one
+that suits you. The Debian version supports clustering, so we will use
+that to obtain a coherent output for both Debian and Generic
+installations.
+
+Ant is also provided, and should be made executable if you didn't
+already have it installed.
+
+----
+$ chmod a+x glassfish/lib/ant/bin/*
+----
+
+It would be a good time to move the ./glassfish directory to the path
+where you will want it in production.
+
+Now to run the setup:
+
+----
+$ lib/ant/bin/ant -f setup-cluster.xml
+----
+
+Launching Glassfish
+~~~~~~~~~~~~~~~~~~~
+
+To launch the service you will have to start up the GlassFish
+server.
+
+----
+$ ./bin/asadmin start-domain
+----
+
+Or if it is installed system wide:
+
+----
+$ /usr/bin/asadmin start-domain
+----
+
+Don't forget to set up an automatic way of doing this at boot time.
+You should obtain an output similar to this:
+
+----
+Starting Domain domain1, please wait.
+Log redirected to /var/lib/glassfishv2/domains/domain1/logs/server.log.
+Redirecting output to /var/lib/glassfishv2/domains/domain1/logs/server.log
+Domain domain1 started.
+Domain [domain1] is running [Sun Java System Application Server 9.1_01 (build local)] with its configuration and logs at: [/var/lib/glassfishv2/domains].
+Admin Console is available at [http://localhost:4848].
+Use the same port [4848] for "asadmin" commands.
+User web applications are available at these URLs:
+[http://localhost:8080 https://localhost:8181 ].
+Following web-contexts are available:
+[/web1  /__wstx-services ].
+Standard JMX Clients (like JConsole) can connect to JMXServiceURL:
+[service:jmx:rmi:///jndi/rmi://borg:8686/jmxrmi] for domain management purposes.
+Domain listens on at least following ports for connections:
+[8080 8181 4848 3700 3820 3920 8686 ].
+Domain supports application server clusters and other standalone instances.
+----
+
+This means you have GlassFish up and running. Now you can:
+
+* Access the web-based admin page at
+  link:http://localhost:4848[http://localhost:4848], with the used
+  `admin` and password `adminadmin` by default (which you'll be
+  changing right away form the "Application Server" menu). There
+  you'll be making whatever configuration changes you need.
+
+* Use GlassFish as is. It works fine as a standalone server. Just
+  deploy an application and test it.
+
+* Get the real thing: we've come this long for a more sophisticated set
+  up, not just a stanadalone server configuration. We are now going to
+  proxy it through Cherokee. It is as simple as using the Reverse
+  Proxy handler to hit the GlassFish server at port 8080.
+
+Configuring Cherokee
+~~~~~~~~~~~~~~~~~~~~
+
+You can either create a new virtual server with a matching rule (be it
+`default` or anything else) if you are sharing the proxy machine, or
+completely dedicate a machine to the Proxy Handler. This will be our
+choice, since typically you will be wanting to get the best possible
+performance from your proxy server.
+
+Launch Cherokee-Admin on your proxy machine, delete every rule of your
+virtual server of choice, and redefine the `Default` rule to use the
+`HTTP reverse proxy` handler from within the `Handler` tab.
+
+You will need to assign it every information source that you have
+previously defined, which must be the list of Glassfish-enabled
+machines in your cluster.
+
+These information sources are to be defined as external sources, like
+the following examples:
+
+`~~~~~~~~~~~`~~~~~~~~~~~~`~~~~~~~~~~~~~~
+Type        , Nick       , Connection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Remote host , GlassFish1 , 192.168.1.101
+Remote host , GlassFish2 , 192.168.1.102
+Remote host , GlassFish3 , 192.168.1.103
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Refer to the link:modules_handlers_proxy.html[HTTP reverse proxy]
+documentation if you need any further help with this.
+
+Deploy application
+~~~~~~~~~~~~~~~~~~
+
+We will deploy the `quickstart` sample provided by the package using
+the administration interface. You can actually skip the web interface
+and deploy from the command line, which is a lot faster to replicate
+the process among a series of servers. The example is done with one
+server, 192.168.1.101, but you can repeat the process for each one of
+them.
+
+. To do so, open the admin page mentioned above to access the Server
+Admin console.
+
+. Choose Applications -> Web Applications, and insert
+`/usr/share/glassfishv2/samples/quickstart/hello.war` into the field
+`Local packaged file or directory that is accessible from the
+Application Server`.
+
+. After you press `OK`, you will be able to launch it and it will be
+available at, for the case of GlassFish1, the URL
+http://192.168.1.101:8080/hello
+
+image::media/images/cookbook_glassfish.png[GlassFish demo]
+
+And we are done. The same application is now available through your
+proxy. Every request it receives will be dispatched through the list
+of its information sources.

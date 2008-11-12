@@ -52,6 +52,7 @@ cookbook_dbslayer.html \
 cookbook_mono.html \
 cookbook_mailman.html \
 cookbook_joomla.html \
+cookbook_glassfish.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -163,6 +164,7 @@ media/images/cookbook_mono_handler.png \
 media/images/cookbook_django.png \
 media/images/cookbook_ror.png \
 media/images/cookbook_mailman.png \
+media/images/cookbook_glassfish.png \
 media/images/tracelor.png
 
 EXTRA_DIST = \
