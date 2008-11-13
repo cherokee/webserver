@@ -29,10 +29,47 @@ div.verseblock div.content {
 /* Workarounds for IE6's broken and incomplete CSS2. */
 
 div.sidebar-content {
-  background: #ffffee;
-  border: 1px solid silver;
-  padding: 0.5em;
+  _background: #ffffee;
+  _border: 1px solid silver;
+  _padding: 0.5em;
+
+color: #205cab;
+width: 100%;
+margin-bottom: 20px;
+margin-top: 30px;
+margin-left: -20px;
+margin-right: auto;
+border-top-width: 1px;
+border-right-width-value: 1px;
+border-right-width-ltr-source: physical;
+border-right-width-rtl-source: physical;
+border-bottom-width: 1px;
+border-left-width-value: 1px;
+border-left-width-ltr-source: physical;
+border-left-width-rtl-source: physical;
+border-top-style: solid;
+border-right-style-value: solid;
+border-right-style-ltr-source: physical;
+border-right-style-rtl-source: physical;
+border-bottom-style: solid;
+border-left-style-value: solid;
+border-left-style-ltr-source: physical;
+border-left-style-rtl-source: physical;
+border-top-color: #ecede8;
+border-right-color-value: #ecede8;
+border-right-color-ltr-source: physical;
+border-right-color-rtl-source: physical;
+border-bottom-color: #ecede8;
+border-left-color-value: #ecede8;
+border-left-color-ltr-source: physical;
+border-left-color-rtl-source: physical;
+padding-left: 20px;
+padding-top: 10px;
+padding-bottom: 10px;
+font-size: 10pt;
+font-weight: bold;
 }
+
 div.sidebar-title, div.image-title {
   font-family: sans-serif;
   font-weight: bold;
