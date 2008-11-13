@@ -54,9 +54,9 @@ parse_value (cherokee_buffer_t *value, cherokee_avl_t *extensions)
 	return ret_ok;
 }
 
-static ret_t 
-configure (cherokee_rule_extensions_t *rule, 
-	   cherokee_config_node_t     *conf, 
+static ret_t
+configure (cherokee_rule_extensions_t *rule,
+	   cherokee_config_node_t     *conf,
 	   cherokee_virtual_server_t  *vsrv)
 {
 	ret_t              ret;
@@ -66,7 +66,7 @@ configure (cherokee_rule_extensions_t *rule,
 
 	ret = cherokee_config_node_read (conf, "extensions", &tmp);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Rule prio=%d needs an 'extensions' property\n", 
+		PRINT_ERROR ("Rule prio=%d needs an 'extensions' property\n",
 			     RULE(rule)->priority);
 		return ret_error;
 	}
@@ -83,16 +83,25 @@ _free (void *p)
 	return ret_ok;
 }
 
-static ret_t 
+static ret_t
 match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
 {
 	ret_t  ret;
 	char  *dot;
 	void  *foo;
 
-	dot = strrchr (conn->request.buf, '.');
-	if (dot == NULL) return ret_not_found;
+	/* Dot at the end */
+	if (unlikely (cherokee_buffer_is_ending (&conn->request, '.')))
+		return ret_not_found;
 
+	/* Find the extension */
+	dot = strrchr (conn->request.buf, '.');
+
+	/* No extension */
+	if (dot == NULL)
+		return ret_not_found;
+
+	/* Check it out */
 	ret = cherokee_avl_get_ptr (&rule->extensions, dot+1, &foo);
 	switch (ret) {
 	case ret_ok:
@@ -118,7 +127,7 @@ cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule)
 	/* Parent class constructor
 	 */
 	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(extensions));
-	
+
 	/* Virtual methos
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;

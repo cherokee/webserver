@@ -1,3 +1,7 @@
+2008-11-13  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/rule_extensions.c: Better extension checking.
+
 2008-11-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* configure.in: Adds AC_CONFIG_MACRO_DIR(). It should have been
