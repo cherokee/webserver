@@ -31,6 +31,7 @@ m4_define([cherokee_version], m4_format('%s.%s.%s', cherokee_major_version, cher
 dnl Init autoconf and automake
 AC_INIT([cherokee], [cherokee_version], [http://bugs.cherokee-project.com], [cherokee])
 AC_CONFIG_SRCDIR([cherokee/server.c])
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([no-define])
 
 dnl Define version
