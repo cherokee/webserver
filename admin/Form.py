@@ -176,7 +176,7 @@ class FormHelper (WebComponent):
         extra = ""
         for karg in kwargs:
             extra += '%s="%s" '%(karg, kwargs[karg])
-        return '<input type="button" value="%s" %s/>' % (name, extra)
+        return '<input type="submit" value="%s" %s/>' % (name, extra)
 
     def InstanceImage (self, name, alt, **kwargs):
         extra = ""
