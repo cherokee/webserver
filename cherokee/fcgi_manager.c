@@ -165,7 +165,7 @@ reconnect (cherokee_fcgi_manager_t *mgr, cherokee_thread_t *thd, cherokee_boolea
 
 		/* It didn't sucess to connect, so lets spawn a new server
 		 */
-		ret = cherokee_source_interpreter_spawn (src_int);
+		ret = cherokee_source_interpreter_spawn (src_int, NULL);
 		if (ret != ret_ok) {
 			if (src_int->interpreter.buf)
 				TRACE (ENTRIES, "Couldn't spawn: %s\n", src_int->interpreter.buf);

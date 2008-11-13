@@ -192,7 +192,8 @@ cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *e
 
 
 ret_t 
-cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
+cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
+				   cherokee_logger_t             *logger)
 {
 	int                re;
 	char             **envp;
@@ -273,12 +274,16 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src)
 			setuid (src->change_user);
 		}
 
-		/* Doesn't care about it's output either.  It can fill
-		 * out the system buffers and free the interpreter.
+		/* Redirect/Close stderr and stdout
 		 */
 		if (! src->debug) {
-			close (STDOUT_FILENO);
-			close (STDERR_FILENO);
+			if (logger != NULL) {
+				cherokee_logger_write_error_fd (logger, STDOUT_FILENO);
+				cherokee_logger_write_error_fd (logger, STDERR_FILENO);
+			} else {
+				close (STDOUT_FILENO);
+				close (STDERR_FILENO);
+			}			
 		}
 
 		argv[2] = (char *)tmp.buf;
@@ -359,7 +364,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 
 		src->launching = true;
 
-		ret = cherokee_source_interpreter_spawn (src);
+		ret = cherokee_source_interpreter_spawn (src, CONN_VSRV(conn)->logger);
 		if (ret != ret_ok) {
 			if (src->interpreter.buf)
 				TRACE (ENTRIES, "Couldn't spawn: %s\n",

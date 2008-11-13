@@ -1,3 +1,10 @@
+2008-11-13  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/source_interpreter.h, cherokee/source_interpreter.c: :
+	The standard error output of the interpreters is redirected to the
+	error log file now. (It applies to FastCGI and SCGI). It should
+	fix bug http://code.google.com/p/cherokee/issues/detail?id=161
+
 2008-11-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/logger.c, cherokee/logger.h, cherokee/logger_w3c.c,
