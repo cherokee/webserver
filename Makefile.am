@@ -1,8 +1,10 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
 SUBDIRS = m4 www icons themes qa doc . admin contrib cherokee cget windows
-bin_SCRIPTS = cherokee-config
 SUFFIXES = .sample.pre .sample .h.pre .h
+ACLOCAL_AMFLAGS = -I m4
+
+bin_SCRIPTS = cherokee-config
 
 # M4 macro file for inclusion with autoconf
 m4datadir = "$(datadir)/aclocal"

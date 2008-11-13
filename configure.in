@@ -207,7 +207,7 @@ AC_SUBST(VERSION)
 
 dnl Initialize Libtool
 m4_ifdef([LT_INIT],
-  [LT_INIT([dlopen C shared static win32-dll])],
+  [LT_INIT([dlopen shared static win32-dll])],
   [AC_LIBTOOL_DLOPEN
    AC_LIBTOOL_WIN32_DLL
    ])
