@@ -24,7 +24,7 @@ class ModuleAuthlist (ModuleAuthBase):
         txt += "<h2>Fixed authentication list</h2>"
 
         keys = self._cfg.keys('%s!list'%(self._prefix))
-        
+
         if keys:
             txt += "<h3>Authentication list</h3>"
             table = Table(3, 1, style='width="90%"')
@@ -41,11 +41,10 @@ class ModuleAuthlist (ModuleAuthBase):
         txt += "<h3>Add new pair</h3>"
         user_e = self.InstanceEntry ("tmp!new_user", 'text', size=20, req=True)
         pass_e = self.InstanceEntry ("tmp!new_pass", 'text', size=40, req=True)
-        add_b  = self.InstanceButton ("Add")
 
         table = Table (3, 1)
         table += ('User', 'Password', '')
-        table += (user_e, pass_e, add_b)
+        table += (user_e, pass_e, SUBMIT_ADD)
         txt += self.Indent(table)
 
         return txt

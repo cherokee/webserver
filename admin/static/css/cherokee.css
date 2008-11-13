@@ -47,7 +47,7 @@ body {
 	display: none;
 	padding: 15px 10px;
 	margin: 0px 0px 5px;
-	background-color: #ffc7c7;
+	background-color: #e9ffd4; /* #ffc7c7 : red==warning */
 	color: #000;
 	border-top: 1px solid #b00;
 	border-bottom: 1px solid #b00;

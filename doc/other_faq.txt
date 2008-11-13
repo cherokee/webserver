@@ -124,7 +124,7 @@ link:http://www.octality.com/[Octality] if this is your case.
 === And what about the documentation?
 
 The documentation is distributed under a
-link:http://creativecommons.org/licenses/by/3.0/[ Creative Commons
+link:http://creativecommons.org/licenses/by/3.0/[Creative Commons
 Attribution (by)] license, which is the most accommodating in terms of
 what others can do with it. It lets others distribute, remix, tweak,
 and build upon the work, even commercially.
