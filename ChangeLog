@@ -1,3 +1,8 @@
+2008-11-13  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/ModuleProxy.py: fixes a cross-browser bug for the
+	submissions.
+
 2008-11-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/source_interpreter.h, cherokee/source_interpreter.c: :

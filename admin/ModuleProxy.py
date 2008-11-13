@@ -54,11 +54,10 @@ class ModuleProxy (ModuleHandler):
         pre   = "%s!header_add"%(self._prefix)
         key   = self.InstanceEntry ("tmp!add_header_key", 'text', size=20, req=True)
         val   = self.InstanceEntry ("tmp!add_header_val", 'text', size=40, req=True)
-        add_b = self.InstanceButton ("Add")
 
         table  = Table(3,1)
         table += ('Header', 'Value', '')
-        table += (key, val, add_b)
+        table += (key, val, SUBMIT_ADD)
         tmp += self.Indent(table)
 
         txt += '<h2>Header Addition</h2>'
@@ -95,11 +94,10 @@ class ModuleProxy (ModuleHandler):
         pre   = "%s!rewrite_request"%(self._prefix)
         regex = self.InstanceEntry ("%s!%d!regex"%(pre,next),     'text', size=20, req=True)
         subst = self.InstanceEntry ("%s!%d!substring"%(pre,next), 'text', size=40, req=True)
-        add_b = self.InstanceButton ("Add")
 
         table  = Table(3,1)
         table += ('Regular Expression', 'Substitution', '')
-        table += (regex, subst, add_b)
+        table += (regex, subst, SUBMIT_ADD)
         tmp += self.Indent(table)
 
         txt += '<h2>URL Rewriting rules</h2>'
@@ -134,11 +132,10 @@ class ModuleProxy (ModuleHandler):
 
         pre   = "%s!header_hide"%(self._prefix)
         hdr_e = self.InstanceEntry ("%s!%d"%(pre,next), 'text', size=40)
-        add_b = self.InstanceButton ("Add")
 
         table  = Table(2,1)
         table += ('Header', '')
-        table += (hdr_e, add_b)
+        table += (hdr_e, SUBMIT_ADD)
         tmp += self.Indent(table)
 
         txt += '<h2>Hidden returned headers</h2>'
