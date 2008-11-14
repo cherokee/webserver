@@ -90,10 +90,10 @@ server!module_deps,               Path           , Path to the plug-in inter-dep
 Value                     , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Product                   , Cherokee
-Minor                     , Cherokee/0.10
-Minimal                   , Cherokee/0.10.0
-OS                        , Cherokee/0.10.0 (UNIX)
-Full                      , Cherokee/0.10.0 (UNIX) Ext/0.0 Ext2/0.0
+Minor                     , Cherokee/0.11
+Minimal                   , Cherokee/0.11.0
+OS                        , Cherokee/0.11.0 (UNIX)
+Full                      , Cherokee/0.11.0 b2311 (UNIX)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``server!thread_policy`` parameters

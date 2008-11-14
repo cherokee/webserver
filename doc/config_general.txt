@@ -52,10 +52,10 @@ itself.
 Parameters               , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Product                  , Cherokee
-Minor                    , Cherokee/0.10
-Minimal                  , Cherokee/0.10.0
-OS                       , Cherokee/0.10.0 (UNIX)
-Full                     , Cherokee/0.10.0 b2211 (UNIX)
+Minor                    , Cherokee/0.11
+Minimal                  , Cherokee/0.11.0
+OS                       , Cherokee/0.11.0 (UNIX)
+Full                     , Cherokee/0.11.0 b2321 (UNIX)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default, Cherokee will use *Full*.

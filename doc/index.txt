@@ -1,4 +1,4 @@
-== link:index.html[Index]: Cherokee 0.10 documentation
+== Cherokee 0.11 documentation
 
 *********************************
 link:basics.html[Getting started]: Cherokee basics
@@ -15,7 +15,7 @@ link:basics.html[Getting started]: Cherokee basics
  . link:basics_running_cherokee.html[Running Cherokee]: Basic steps to run Cherokee.
 
 *********************************
-link:bundle.html[Cherokee Bundle]: Details about each program bundled with Cherokee.
+link:bundle.html[Cherokee Bundle]: Details about each program bundled with Cherokee
 *********************************
 
  . link:bundle_cherokee.html[cherokee]: Main web server invoker.
@@ -26,7 +26,7 @@ link:bundle.html[Cherokee Bundle]: Details about each program bundled with Chero
  . link:bundle_cget.html[cget]: Web retriever.
 
 *********************************
-link:config.html[Configuration]: Set up process explained.
+link:config.html[Configuration]: Set up process explained
 *********************************
 
   . link:config_quickstart.html[Quickstart]: Overview and walkthrough.
@@ -40,7 +40,7 @@ link:config.html[Configuration]: Set up process explained.
   . link:config_advanced.html[Advanced]: Advanced tweaking. Not for the faint of heart.
 
 *********************************
-link:cookbook.html[Cookbook]: Recipes for specific tasks.
+link:cookbook.html[Cookbook]: Recipes for specific tasks
 *********************************
 
   . link:cookbook_optimizations.html[Optimizing Cherokee]: Recommendations and tweaks.
@@ -65,7 +65,7 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks.
 ////
 
 *********************************
-link:modules.html[Modules]: Information about the standard modules.
+link:modules.html[Modules]: Information about the standard modules
 *********************************
 
   . link:modules_handlers.html[Handlers]: Connection handling modules.
@@ -102,7 +102,7 @@ link:modules.html[Modules]: Information about the standard modules.
     - link:modules_balancers_round_robin.html[Round robin]: Round Robin strategy.
 
 *********************************
-link:other.html[Other information]: Miscellaneus.
+link:other.html[Other information]: Miscellaneus
 *********************************
 
   . link:other_faq.html[FAQ]: List of Frequently Asked Questions.
@@ -111,7 +111,7 @@ link:other.html[Other information]: Miscellaneus.
   . link:other_community.html[Community]: More information sources.
 
 *********************************
-link:dev.html[Development info]
+link:dev.html[Development info]: Things of interest to developers
 *********************************
 
   . link:dev_debug.html[Debugging]: Resources available to debug Cherokee.
@@ -128,7 +128,6 @@ Remaingin tasks:
 * <5> How to manage logs  (make specific mention of usage of
       Cherokee-Tweak and log backers).
 * <6> How to manage security (SSL/TLS, certs, etc) <cookbook_ssl.txt>
-* <7> Development documentation
 * <8> Reference table of functionalities to be achieved (and hopefully
       a full setup example).
 ////////////////////////////////////////////////////
