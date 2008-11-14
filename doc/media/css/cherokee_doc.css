@@ -30,7 +30,7 @@ div.verseblock div.content {
 /* Workarounds for IE6's broken and incomplete CSS2. */
 
 div.sidebar-content {
-  _background: #ffffee;
+  _background: f#fffee;
   border: 1px solid #ecede8;
   padding: 0.5em;
   color: #205cab;
@@ -99,9 +99,6 @@ h1, h2, h3 {
   border-bottom: 1px solid silver;
 }
 
-h2 {
-  _padding-top: 0.5em;
-}
 h3 {
   float: left;
 }
@@ -164,11 +161,12 @@ div#preamble,
 div.imageblock, div.exampleblock, div.verseblock,
 div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
 div.admonitionblock {
-//  margin-left: 10%;
-//  margin-right: 10%;
-//  margin-top: 1.5em;
+/*
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 1.5em;
   margin-bottom: 1.5em;
-
+*/
 }
 
 div.tableblock {
@@ -374,15 +372,8 @@ div.toclevel4 {
   background:#f6f6f6;
 }
 
-/*Navigation bar*/
-#nav_bar {
 
-}
-
-
-
-/* More changes, inspired in cherokee-project.pl */
-
+/* Cherokee 0.11: New looks */
 .sidebar-content .vlist dl dd {
     display: block;
     background-color: #f3f3f3;
@@ -449,4 +440,8 @@ h2 {
     line-height:140%;
     margin:0;
     text-decoration: none;
+}
+
+#main {
+    font-size:10pt;
 }
