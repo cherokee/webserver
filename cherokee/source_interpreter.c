@@ -34,7 +34,7 @@
 #include <signal.h>
 
 #define ENTRIES "source,src,interpreter"
-#define DEFAULT_TIMEOUT 3
+#define DEFAULT_TIMEOUT 10
 
 
 static void interpreter_free (void *src);

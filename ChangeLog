@@ -1,3 +1,11 @@
+2008-11-14  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/source_interpreter.c (DEFAULT_TIMEOUT),
+	cherokee/main_admin.c: The default timeout has been increased to
+	10 seconds; 15 in the case of cherokee-admin. There were times
+	when cherokee-admin returned 503 errorsq because python took more
+	than 3 seconds to be ready.
+
 2008-11-13  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/rule_extensions.c: Better extension checking.
