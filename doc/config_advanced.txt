@@ -31,12 +31,12 @@ Connections
 * Chunked encoding:
   Enabled by default to try to keep enabled Keep-Alive.
 
-* Polling Method:
-  This affects the internal file descriptor polling method among the
-  ones supported by the OS. The full list of options is `epoll()`, `poll()`
-  and `select()`. If you don't know what this is or how this affects
-  performance, just choose `Automatic`. This will choose the most
-  efficient one among the present at any given time.
+* Polling Method: This affects the internal file descriptor polling
+  method among the ones supported by the OS. The full list of options
+  is `epoll()`, `kqueue`, `poll()` and `select()`. If you don't know
+  what this is or how this affects performance, just choose
+  `Automatic`. This will choose the most efficient one among the
+  present at any given time.
 
 * Sendfile min/max size:
   These allow to configure the range of file sizes that can be sent

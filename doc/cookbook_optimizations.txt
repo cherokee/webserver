@@ -37,12 +37,13 @@ build another binary or check if something is wrong with your
 system. Note that not every single capability is present in every
 platform. For instance, `epoll` is a polling method specific to Linux
 platforms, and its abscence from any non-Linux system is perfectly
-normal. It is inherently more efficient than the other methods. On the
-other hand the second best choice is `poll` which is POSIX conformant
-and will only be available on systems that follow the POSIX
-standard. From the list above, the capabilities that have a dramatic
-impact in the speed of Cherokee are the polling methods, the existence
-of sendfile() and the Pthreads support.
+normal. It is inherently more efficient than the other methods
+available on Linux. For BSD based platforms `kqueue` is also a great
+improvement over the most standard `poll`. This is the standard POSIX
+conformant system call, and will only be available on systems that
+follow the POSIX standard. From the list above, the capabilities that
+have a dramatic impact in the speed of Cherokee are the polling
+methods, the existence of sendfile() and the Pthreads support.
 
 
 Tweaks
