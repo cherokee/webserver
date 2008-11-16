@@ -603,13 +603,6 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	 */
 	if (conn->encoder) {
 		cherokee_encoder_add_headers (conn->encoder, buffer);
-		
-		/* Keep-alive is not possible w/o a file cache
-		 */
-		conn->keepalive = 0;
-		if (conn->handler->support & hsupport_length) {
-			conn->handler->support ^= hsupport_length;
-		}
 	}
 
 	/* Unusual methods

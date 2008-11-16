@@ -1,3 +1,9 @@
+2008-11-16  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/connection.c: Keep-alive was been disabled ALWAYS when
+	encoders was used. It should fix bug #143:
+	http://code.google.com/p/cherokee/issues/detail?id=143
+
 2008-11-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/source_interpreter.c (DEFAULT_TIMEOUT),
