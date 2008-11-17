@@ -346,16 +346,6 @@ change_execution_user (cherokee_server_t *srv, struct passwd *ent)
 {
 	int error;
 
-#if 0
-	/* Get user information
-	*/
-	ent = getpwuid (srv->user);
-	if (ent == NULL) {
-		PRINT_ERROR ("Can't get username for UID %d\n", srv->user);
-		return ret_error;
-	}
-#endif
-
 	/* Reset `groups' attributes.
 	 */
 	if (srv->user_orig == 0) {
@@ -1050,7 +1040,14 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	ent = getpwuid (srv->user);
 	if (ent == NULL) {
 		PRINT_ERROR ("Can't get username for UID %d\n", srv->user);
-		return ret_error;
+
+		/* It's fatal if a user/group change was scheduled
+		 */
+		if ((srv->user != srv->user_orig) ||
+		    (srv->group != srv->group_orig))
+		{
+			return ret_error;
+		}
 	}
 
 	/* Chroot
