@@ -54,6 +54,7 @@ _vserver_free (cherokee_cryptor_vserver_libssl_t *cryp_vsrv)
 		cryp_vsrv->context = NULL;
 	}
 
+	free (cryp_vsrv);
 	return ret_ok;
 }
 
@@ -413,6 +414,7 @@ static ret_t
 _socket_free (cherokee_cryptor_socket_libssl_t *cryp_socket)
 {
 	_socket_clean (cryp_socket);
+
 	free (cryp_socket);
 	return ret_ok;
 }
