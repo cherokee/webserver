@@ -57,8 +57,6 @@ configure (cherokee_rule_method_t    *rule,
 		return ret;
 	}
 
-	printf ("'%s' -> %d\n", tmp->buf, rule->method);
-
 	return ret_ok;
 }
 
