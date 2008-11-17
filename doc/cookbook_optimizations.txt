@@ -23,7 +23,6 @@ Compilation
 Support
  IPv6: yes
  OpenSSL: no
- GnuTLS: yes
  Pthreads: yes
  Tracing: yes
  sendfile(): yes

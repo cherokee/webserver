@@ -56,6 +56,7 @@ is run as root or whether to use keep-alive connections.
 **Key**,                          **Type**, **Description**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 server!port,                      Number         , TCP port for HTTP
+server!tls,                       String         , TLS/SSL backend: libssl, ...
 server!port_tls,                  Number         , TCP port for HTTPS
 server!max_fds,                   Number         , Max open file descriptors
 server!listen_queue,              Number         , Length of the listen queue

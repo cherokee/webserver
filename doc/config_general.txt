@@ -14,8 +14,7 @@ Binding:
 When the server is initiated it opens a port and starts listening to
 incoming requests. By default this is port 80 and it will use all the
 network interfaces of the machine, which is usually the desired
-behavior. The *Port TLS* specifies the port to be used for secure
-connections.
+behavior.
 
 
 IPv6 support
@@ -84,3 +83,16 @@ Chroot
 
 Cherokee can be jailed inside a directory. Note that this should not
 be used as the sole security measure.
+
+
+Secure HTTP
+~~~~~~~~~~~
+
+Port TLS
+^^^^^^^^
+The *Port TLS* specifies the port to be used for secure connections.
+
+Back-end
+^^^^^^^^
+Specifies the TLS/SSL backend to be used, if any. The current option
+is OpenSSL.

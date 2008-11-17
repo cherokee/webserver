@@ -1,3 +1,12 @@
+2008-11-17  Taher Shihadeh  <taher@unixwars.com>
+
+	* doc/media/images/admin_general.png,
+	doc/basics_installation_windows.txt, doc/config_general.txt,
+	doc/cookbook_optimizations.txt, doc/dev_cherokee.conf.txt,
+	doc/basics_requirements.txt, doc/basics_installation_unix.txt,
+	doc/other_goodies.txt: documentation adjustments to the new
+	reimplementation of the TSL/SSL support.
+
 2008-11-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/cryptor.c, cherokee/cryptor_libssl.c: Fixes a
@@ -21,7 +30,7 @@
 	cherokee/cryptor_libssl.c, cherokee/cryptor_libssl.h,
 	cherokee/server-protected.h, cherokee/main_tweak.c,
 	cherokee/connection.c, cherokee/server.c, configure.in,
-	qa/run-tests.py: This patch repimplements the TLS/SSL support. It
+	qa/run-tests.py: This patch reimplements the TLS/SSL support. It
 	adds a new plugin type for the crypt related support. It
 	implements the OpenSSL (libssl) backend, and removes any trace of
 	GnuTLS. Based on this plugin type it could be reimplemented,

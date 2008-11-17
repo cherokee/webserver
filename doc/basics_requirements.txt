@@ -52,7 +52,8 @@ several tools and libraries.
   but this has a dramatic impact in scalability.
 
 * If you want to make a build that serves secure content, you will
-  need TLS libraries. Cherokee supports two different SSL/TLS
-  libraries: OpenSSL and GNUTLS. You need to have the development
-  files of one of these in order to build a package that suits your
-  needs.
+  need TLS libraries. Cherokee ships with support for the OpenSSL
+  backend, but the architecture is completly modular and any other
+  backend can be implemented. You need to have the development files
+  of the chosen backend libraries in order to build a package that
+  suits your needs.

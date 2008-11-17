@@ -116,7 +116,7 @@ supported by your SSL/TLS library, the SSL layer does not need to be
 restarted. Since the host info can be put in the SSL handshake, things
 will simply work as long as there is a web browser with SNI support at
 the other side. Currently every modern web browser supports this, and
-Cherokee has TLS SNI support for both the GNUTLS and OpenSSL backends.
+Cherokee has TLS SNI support for the OpenSSL backends.
 
 Note that for SNI to work, client support is required. Web browsers
 known to support it are Mozilla Firefox 2.0+, Opera 8.0+, Internet
