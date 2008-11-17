@@ -40,14 +40,14 @@ Default virtual server
 We'll begin by cloning the default virtual server, just to keep the
 default PHP configuration. Create a clone named `example.net`.
 
-image::media/images/cookbook_drupal_defualt1.png
+image::media/images/cookbook_drupal_defualt1.png[Drupal default]
 
 Then, we'll delete every erasable rule in the default virtual server
 since we are going to use it to redirect every petition not matched by
 the example.net virtual server. We will set the remaining one to be
 managed by the `Redirection` handler, like this:
 
-image::media/images/cookbook_drupal_defualt2.png
+image::media/images/cookbook_drupal_defualt2.png[Drupal default]
 
 
 [grid="rows"]
@@ -60,7 +60,7 @@ External , (.*)$             , http://example.net/$1
 After that, this is how the list of rules for this server should look
 like.
 
-image::media/images/cookbook_drupal_defualt3.png
+image::media/images/cookbook_drupal_defualt3.png[Drupal default]
 
 This clears the first milestone. The remaining three will be
 accomplished by tweaking the `example.net` virtual server.
@@ -71,12 +71,12 @@ example.net
 
 Remember to set up the `Document root` to `/var/www/drupal`.
 
-image::media/images/cookbook_drupal_example1.png
+image::media/images/cookbook_drupal_example1.png[Drupal example]
 
 Delete all the rules except `php` and `Default`. We're heading right
 to the second milestone now.
 
-image::media/images/cookbook_drupal_example2.png
+image::media/images/cookbook_drupal_example2.png[Drupal example]
 
 As previously, we will manage the `Default` rule with the redirection
 handler.
@@ -87,13 +87,13 @@ Type     , Regular Expression, Redirection
 Internal , ^/(.*)$           , /index.php?q=$1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-image::media/images/cookbook_drupal_example3.png
+image::media/images/cookbook_drupal_example3.png[Drupal example]
 
 Remember to set up Drupal as custom error handler for the virtual
 server. Do so in the `Error Handler` tab, selecting the `Custom
 redirections` option and sending 404 errors to Drupal.
 
-image::media/images/cookbook_drupal_example4.png
+image::media/images/cookbook_drupal_example4.png[Drupal example]
 
 [grid="rows"]
 `~~~~~~~~~~~~`~~~~~~~~~~~
@@ -113,7 +113,7 @@ jpg,jpeg,gif,css,png,js,ico
 
 And manage it with the `Static content` handler.
 
-image::media/images/cookbook_drupal_example5.png
+image::media/images/cookbook_drupal_example5.png[Drupal example]
 
 
 Setting up Drupal
@@ -155,7 +155,7 @@ And the installation will be almost automatic. Just fill up the
 requested values and you will obtain the following results once your
 are through.
 
-image::media/images/cookbook_drupal.png
+image::media/images/cookbook_drupal.png[Drupal in action!]
 
 WARNING:
 Using Clean URLs must be disabled at this stage.

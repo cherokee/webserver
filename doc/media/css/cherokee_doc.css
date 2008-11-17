@@ -301,6 +301,7 @@ div.olist2 > ol {
 div.tableblock > table {
   border: 1px solid #527bbd;
 }
+
 thead {
   font-family: sans-serif;
   font-weight: bold;
@@ -445,3 +446,4 @@ h2 {
 #main {
     font-size:10pt;
 }
+

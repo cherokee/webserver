@@ -75,7 +75,7 @@ External , ^(.*)$            , http://example.net/$1
 After that, this is how the list of rules for this server should look
 like.
 
-image::media/images/cookbook_wp_default1.png
+image::media/images/cookbook_wp_default1.png[WP default virtual server]
 
 This clears the first milestone. The remaining ones will be
 accomplished by tweaking the `example.net` virtual server.
@@ -86,7 +86,7 @@ example.net
 
 Remember to set up the `Document root` to `/var/www/wordpress`.
 
-image::media/images/cookbook_wp_example1.png
+image::media/images/cookbook_wp_example1.png[WP example.net]
 
 Delete all the rules except `php` and `Default`. We're heading right
 to the second milestone now.
@@ -100,7 +100,7 @@ Type     , Regular Expression, Redirection
 Internal , ^/(.*)$           , /index.php
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-image::media/images/cookbook_wp_example2.png
+image::media/images/cookbook_wp_example2.png[WP example.net]
 
 After this, most of the redirections will work. We'll set some more
 rules to fine tune the rest of Wordpress' features. Those will be
@@ -132,7 +132,7 @@ Almost any evaluation order of your rules will suffice, as long as the
 one that handles the PHP files is the first one. This is a valid one,
 for instance.
 
-image::media/images/cookbook_wp_example3.png
+image::media/images/cookbook_wp_example3.png[WP example.net]
 
 [setting_up_wordpress]
 Setting up Wordpress
@@ -162,24 +162,24 @@ quit;
 Then point your web browser to `http://localhost` and follow the
 instructions provided by the installer.
 
-image::media/images/cookbook_wp1.png
+image::media/images/cookbook_wp1.png[WP installation]
 
 And the installation will be automatic. Just fill up the
 requested values and you will obtain the following results once your
 are through.
 
-image::media/images/cookbook_wp2.png
+image::media/images/cookbook_wp2.png[WP installation]
 
 With that, you are done installing. Let's log in and make the last
 adjustments.
 
-image::media/images/cookbook_wp3.png
+image::media/images/cookbook_wp3.png[WP admin]
 
 Once we're logged, we can configure the way `permalinks` are
 displayed. Just use the `Settings`->`Permalinks` menu, and adjust the
 way the links are to be rewritten.
 
-image::media/images/cookbook_wp4.png
+image::media/images/cookbook_wp4.png[WP admin]
 
 Remember to set up the plugins that are of interest for you, such as
 the sitemaps generator, in a fashion compatible with what you
@@ -188,4 +188,4 @@ configured in Cherokee.
 And voilà! You have a Wordrpress installation working flawlessly with
 Cherokee.
 
-image::media/images/cookbook_wp5.png
+image::media/images/cookbook_wp5.png[WP in action]
