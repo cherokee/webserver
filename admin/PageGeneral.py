@@ -30,6 +30,7 @@ NOTE_TOKENS    = 'This option allows to choose how the server identifies itself.
 NOTE_USER      = 'Changes the effective user. User names and IDs are accepted.'
 NOTE_GROUP     = 'Changes the effective group. Group names and IDs are accepted.'
 NOTE_CHROOT    = 'Jail the server inside the directory. Don\'t use it as the only security measure.'
+NOTE_TLS       = 'Which, if any, should be the TLS/SSL backend.'
 
 HELPS = [('config_general',    "General Configuration"),
          ('config_quickstart', "Configuration Quickstart")]
@@ -52,7 +53,6 @@ class PageGeneral (PageMenu, FormHelper):
         txt += "<h2>Networking</h2>"
         table = TableProps()
         self.AddPropEntry (table, 'Port',     'server!port',     NOTE_PORT)
-        self.AddPropEntry (table, 'Port TLS', 'server!port_tls', NOTE_PORT_TLS)
         self.AddPropCheck (table, 'IPv6',     'server!ipv6', True, NOTE_IPV6)
         self.AddPropEntry (table, 'Listen',   'server!listen',   NOTE_LISTEN)
         txt += self.Indent(table)
@@ -70,6 +70,13 @@ class PageGeneral (PageMenu, FormHelper):
         self.AddPropEntry (table, 'Chroot', 'server!chroot', NOTE_CHROOT)
         txt += self.Indent(table)
 
+        txt += "<h2>Secure HTTP</h2>"
+        table = TableProps()
+        self.AddPropEntry (table, 'Port TLS', 'server!port_tls', NOTE_PORT_TLS)
+        self.AddPropOptions_Reload (table, 'Back-end', 'server!tls',
+                                    modules_available(CRYPTORS), NOTE_TLS)
+        txt += self.Indent(table)
+        
         form = Form ("/%s" % (self._id), add_submit=False)
         return form.Render(txt,DEFAULT_SUBMIT_VALUE)
 	

@@ -121,3 +121,8 @@ EXPIRATION_TYPE = [
     ('max',      'Do not expire until 2038'),
     ('time',     'Custom value')
 ]
+
+CRYPTORS = [
+    ('',         'No TLS/SSL'),
+    ('libssl',   'OpenSSL / libssl')
+]

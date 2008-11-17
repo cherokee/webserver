@@ -1,5 +1,8 @@
 2008-11-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageGeneral.py, admin/consts.py: Adds a new option for
+	setting the TLS backend.
+
 	* m4/libgnutls.m4, cherokee/virtual_server.c,
 	cherokee/virtual_server.h, cherokee/module.c,
 	cherokee/Makefile.am, cherokee/info.c, cherokee/admin_client.c,
