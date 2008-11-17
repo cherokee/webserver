@@ -137,8 +137,6 @@ Parameter,             Description
 `--disable-readdir_r`, Disable readdir_r usage
 `--disable-ipv6`     , Disable IPv6 support
 `--disable-pam`      , Disable PAM support
-`--disable-tls`      , Disable TLS/SSL support
-`--enable-tls=`      , openssl
 `--enable-trace`     , Allows debugging options
 `--disable-admin`    , Stops cherokee-admin from installing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
