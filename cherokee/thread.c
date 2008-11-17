@@ -657,9 +657,7 @@ process_active_connections (cherokee_thread_t *thd)
 			
 		case phase_tls_handshake:
 			ret = cherokee_socket_init_tls (&conn->socket, CONN_VSRV(conn));
-
 			switch (ret) {
-
 			case ret_eagain:
 				continue;
 				
@@ -1562,13 +1560,11 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 			re = accept_new_connection (thd, S_SOCKET_FD(srv->socket), non_TLS);
 		} while (should_accept_more (thd, re));
 		
-#ifdef HAVE_TLS
 		if (srv->tls_enabled) {
 			do {
 				re = accept_new_connection (thd, S_SOCKET_FD(srv->socket_tls), TLS);
 			} while (should_accept_more (thd, re));
 		}
-#endif
 	} else {
 		thread_full_handler (thd, S_SOCKET_FD(srv->socket));
 		if (srv->tls_enabled) {
@@ -1684,7 +1680,6 @@ out:
 
 }
 
-# ifdef HAVE_TLS
 
 static ret_t
 step_MULTI_THREAD_TLS_nonblock (cherokee_thread_t *thd, int fdwatch_msecs, 
@@ -1866,7 +1861,6 @@ step_MULTI_THREAD_TLS_block (cherokee_thread_t *thd, int fdwatch_msecs,
 	
 	return ret_ok;
 }
-# endif /* HAVE_TLS */
 
 
 ret_t 
@@ -1919,7 +1913,6 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 		thd->pending_read_num = 0;
 	}
 
-#ifdef HAVE_TLS
 	/* Try to get new connections from https
 	 */
 	if (srv->tls_enabled) {
@@ -1939,7 +1932,6 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 		
 		goto out;
 	}
-#endif	
 
 	/* Try to get new connections from http
 	 */

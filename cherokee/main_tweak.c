@@ -99,7 +99,8 @@ client_new (cherokee_admin_client_t **client_ret,
 	    cherokee_fdpoll_t       **fdpoll_ret, 
 	    cherokee_buffer_t        *url,
 	    cherokee_buffer_t        *user,
-	    cherokee_buffer_t        *password)
+	    cherokee_buffer_t        *password,
+	    cherokee_cryptor_t       *cryptor)
 {
 	ret_t                    ret;
 	cuint_t                  fds_num;
@@ -116,11 +117,7 @@ client_new (cherokee_admin_client_t **client_ret,
 	if (ret != ret_ok) 
 		return ret;
 
-	ret = cherokee_tls_init();
-	if (ret != ret_ok) 
-		return ret;
-
-	ret = cherokee_admin_client_prepare (client, fdpoll, url, user, password);
+	ret = cherokee_admin_client_prepare (client, fdpoll, url, user, password, cryptor);
  	if (ret != ret_ok) {
 		PRINT_ERROR_S ("Client prepare failed\n");
 		return ret;
@@ -141,16 +138,17 @@ client_new (cherokee_admin_client_t **client_ret,
 
 
 static ret_t
-do_trace (cherokee_buffer_t *url, 
-	  cherokee_buffer_t *user, 
-	  cherokee_buffer_t *pass, 
-	  cherokee_buffer_t *trace)
+do_trace (cherokee_buffer_t  *url, 
+	  cherokee_buffer_t  *user, 
+	  cherokee_buffer_t  *pass, 
+	  cherokee_buffer_t  *trace,
+	  cherokee_cryptor_t *cryptor)
 {
 	ret_t                    ret;
 	cherokee_admin_client_t *client;
 	cherokee_fdpoll_t       *fdpoll;
 
-	ret = client_new (&client, &fdpoll, url, user, pass);
+	ret = client_new (&client, &fdpoll, url, user, pass, cryptor);
 	if (ret != ret_ok) return ret;
 
 	RUN_CLIENT1 (client, cherokee_admin_client_set_trace, trace);
@@ -228,10 +226,11 @@ error:
 
 
 static ret_t
-do_logrotate (cherokee_buffer_t *url, 
-	      cherokee_buffer_t *user, 
-	      cherokee_buffer_t *pass, 
-	      cherokee_buffer_t *log)
+do_logrotate (cherokee_buffer_t  *url, 
+	      cherokee_buffer_t  *user, 
+	      cherokee_buffer_t  *pass, 
+	      cherokee_buffer_t  *log,
+	      cherokee_cryptor_t *cryptor)
 {
 	int                      re;
 	ret_t                    ret;
@@ -239,7 +238,7 @@ do_logrotate (cherokee_buffer_t *url,
 	cherokee_fdpoll_t       *fdpoll;
 	cherokee_buffer_t        newname = CHEROKEE_BUF_INIT;
 
-	ret = client_new (&client, &fdpoll, url, user, pass);
+	ret = client_new (&client, &fdpoll, url, user, pass, cryptor);
 	if (ret != ret_ok) return ret;
 
 	/* Look for the log name
@@ -293,9 +292,10 @@ print_entry (const char *str, char *format, ...)
 }
 
 static ret_t
-do_print_info (cherokee_buffer_t *url,
-	       cherokee_buffer_t *user, 
-	       cherokee_buffer_t *pass)
+do_print_info (cherokee_buffer_t  *url,
+	       cherokee_buffer_t  *user, 
+	       cherokee_buffer_t  *pass,
+	       cherokee_cryptor_t *cryptor)
 {
 	ret_t                    ret;
 	cherokee_admin_client_t *client;
@@ -306,7 +306,7 @@ do_print_info (cherokee_buffer_t *url,
 	cherokee_buffer_t        buf   = CHEROKEE_BUF_INIT;
 	cherokee_list_t          conns = LIST_HEAD_INIT(conns);
 
-	ret = client_new (&client, &fdpoll, url, user, pass);
+	ret = client_new (&client, &fdpoll, url, user, pass, cryptor);
 	if (ret != ret_ok) return ret;
 
 	RUN_CLIENT1 (client, cherokee_admin_client_ask_port, &port);
@@ -355,17 +355,42 @@ do_print_info (cherokee_buffer_t *url,
 	return ret_ok;
 }
 
+static ret_t
+init_tls (char *plugin, cherokee_cryptor_t **cryptor)
+{
+	ret_t                     ret;
+	cherokee_plugin_loader_t  loader;
+	cryptor_func_new_t        instance;
+	cherokee_plugin_info_t   *info     = NULL;
+	
+	cherokee_plugin_loader_init (&loader);
+	ret = cherokee_plugin_loader_get (&loader, plugin, &info);
+	cherokee_plugin_loader_mrproper (&loader);
+	
+	if ((ret != ret_ok) || (info == NULL))
+		return ret_error;
+
+	instance = (cryptor_func_new_t) info->instance;
+	ret = instance ((void **) cryptor);
+	if (ret != ret_ok)
+		return ret;
+
+	return ret_ok;
+}
+
 
 int 
 main (int argc, char *argv[]) 
 {
-	int                c;
-	cherokee_buffer_t  command  = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  url      = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  trace    = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  log      = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  user     = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  password = CHEROKEE_BUF_INIT;
+	ret_t               ret;
+	int                 c;
+	cherokee_buffer_t   command  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   url      = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   trace    = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   log      = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   user     = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   password = CHEROKEE_BUF_INIT;
+	cherokee_cryptor_t *cryptor  = NULL;
 
 	struct option long_options[] = {
 		{"help",         no_argument,       NULL, 'h'},
@@ -424,6 +449,15 @@ main (int argc, char *argv[])
 		print_usage();
 		exit (EXIT_ERROR);
 	}
+	
+	/* Init crypt engine
+	 */
+	if (! strncmp (url.buf, "https://", 8))
+	{
+		ret = init_tls ("libssl", &cryptor);
+		if (ret != ret_ok)
+			return ret;
+	}
 
 	/* Check the command and perform
 	 */
@@ -433,7 +467,7 @@ main (int argc, char *argv[])
 			print_usage();
 			exit (EXIT_ERROR);
 		}
-		do_trace (&url, &user, &password, &trace);
+		do_trace (&url, &user, &password, &trace, cryptor);
 
 	} else if (cherokee_buffer_cmp_str (&command, "logrotate") == 0) {
 		if (log.len <= 0) {
@@ -441,10 +475,10 @@ main (int argc, char *argv[])
 			print_usage();
 			exit (EXIT_ERROR);
 		}
-		do_logrotate (&url, &user, &password, &log);
+		do_logrotate (&url, &user, &password, &log, cryptor);
 
 	} else if (cherokee_buffer_cmp_str (&command, "info") == 0) {
-		do_print_info (&url, &user, &password);
+		do_print_info (&url, &user, &password, cryptor);
 
 	} else {
 		PRINT_MSG_S ("ERROR: Command not recognized\n\n");

@@ -66,16 +66,6 @@ cherokee_info_build_print (cherokee_server_t *srv)
 #else
 	printf (" IPv6: no\n");
 #endif
-#ifdef HAVE_OPENSSL
-	printf (" OpenSSL: yes\n");
-#else
-	printf (" OpenSSL: no\n");
-#endif
-#ifdef HAVE_GNUTLS
-	printf (" GnuTLS: yes\n");
-#else
-	printf (" GnuTLS: no\n");
-#endif
 #ifdef HAVE_PTHREAD
 	printf (" Pthreads: yes\n");
 #else

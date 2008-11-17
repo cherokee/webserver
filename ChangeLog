@@ -1,3 +1,22 @@
+2008-11-17  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* m4/libgnutls.m4, cherokee/virtual_server.c,
+	cherokee/virtual_server.h, cherokee/module.c,
+	cherokee/Makefile.am, cherokee/info.c, cherokee/admin_client.c,
+	cherokee/admin_client.h, cherokee/cherokee.h, cherokee/socket.c,
+	cherokee/socket.h, cherokee/cryptor.c, cherokee/cryptor.h,
+	cherokee/downloader.c, cherokee/downloader.h, cherokee/plugin.h,
+	cherokee/thread.c, cherokee/util.c, cherokee/util.h,
+	cherokee/cryptor_libssl.c, cherokee/cryptor_libssl.h,
+	cherokee/server-protected.h, cherokee/main_tweak.c,
+	cherokee/connection.c, cherokee/server.c, configure.in,
+	qa/run-tests.py: This patch repimplements the TLS/SSL support. It
+	adds a new plugin type for the crypt related support. It
+	implements the OpenSSL (libssl) backend, and removes any trace of
+	GnuTLS. Based on this plugin type it could be reimplemented,
+	although it isn't part of my short/medium-term plans. This patch
+	also removed the TLS/SSL library dependency form libcherokee-base.
+
 2008-11-17  Taher Shihadeh  <taher@unixwars.com>
 
 	* cherokee/handler_fcgi.c: gets rid of a warning that shouldn't be

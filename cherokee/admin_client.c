@@ -90,7 +90,8 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin,
 			       cherokee_fdpoll_t       *poll,
 			       cherokee_buffer_t       *url,
 			       cherokee_buffer_t       *user,
-			       cherokee_buffer_t       *pass)
+			       cherokee_buffer_t       *pass,
+			       cherokee_cryptor_t      *cryptor)
 {
 	ret_t                  ret;
 	cherokee_downloader_t *downloader = DOWNLOADER(admin->downloader);
@@ -112,18 +113,26 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin,
 	/* Set up the downloader object properties
 	 */
 	ret = cherokee_downloader_async_set_fdpoll (DOWNLOADER_ASYNC(downloader), admin->poll_ref);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 	
 	ret = cherokee_downloader_set_url (downloader, admin->url_ref); 
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	ret = cherokee_downloader_set_keepalive (downloader, true);
-	if (unlikely (ret != ret_ok)) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
+
+	ret = cherokee_downloader_set_cryptor (downloader, cryptor);
+	if (unlikely (ret != ret_ok))
+		return ret;
 
 	/* Set the authentication data
 	 */
 	ret = cherokee_downloader_set_auth (downloader, user, pass);
-	if (unlikely (ret != ret_ok)) return ret;	
+	if (unlikely (ret != ret_ok))
+		return ret;	
 
 	TRACE(ENTRIES, "Exists obj=%p\n", admin);
 	return ret_ok;

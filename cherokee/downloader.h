@@ -34,7 +34,7 @@
 #include <cherokee/buffer.h>
 #include <cherokee/http.h>
 #include <cherokee/post.h>
-
+#include <cherokee/cryptor.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -57,6 +57,7 @@ ret_t cherokee_downloader_set_url         (cherokee_downloader_t *downloader, ch
 ret_t cherokee_downloader_set_keepalive   (cherokee_downloader_t *downloader, cherokee_boolean_t active);
 ret_t cherokee_downloader_set_proxy       (cherokee_downloader_t *downloader, cherokee_buffer_t *proxy, cuint_t port);
 ret_t cherokee_downloader_set_auth        (cherokee_downloader_t *downloader, cherokee_buffer_t *user, cherokee_buffer_t *password);
+ret_t cherokee_downloader_set_cryptor     (cherokee_downloader_t *downloader, cherokee_cryptor_t *cryptor);
 
 ret_t cherokee_downloader_get_reply_code  (cherokee_downloader_t *downloader, cherokee_http_t *code);
 ret_t cherokee_downloader_get_reply_hdr   (cherokee_downloader_t *downloader, cherokee_buffer_t **header);

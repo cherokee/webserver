@@ -48,6 +48,7 @@
 #include <cherokee/trace.h>
 #include <cherokee/cache.h>
 #include <cherokee/iocache.h>
+#include <cherokee/cryptor.h>
 
 /* Server library
  */

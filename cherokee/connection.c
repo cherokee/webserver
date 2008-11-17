@@ -788,7 +788,6 @@ cherokee_connection_recv (cherokee_connection_t *conn, cherokee_buffer_t *buffer
 	size_t cnt_read = 0;
 	
 	ret = cherokee_socket_bufread (&conn->socket, buffer, DEFAULT_RECV_SIZE, &cnt_read);
-
 	switch (ret) {
 	case ret_ok:
 		cherokee_connection_rx_add (conn, cnt_read);

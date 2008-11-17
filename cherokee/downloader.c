@@ -143,7 +143,9 @@ cherokee_downloader_set_keepalive (cherokee_downloader_t *downloader, cherokee_b
 
 
 ret_t 
-cherokee_downloader_set_proxy (cherokee_downloader_t *downloader, cherokee_buffer_t *proxy, cuint_t port)
+cherokee_downloader_set_proxy (cherokee_downloader_t *downloader,
+			       cherokee_buffer_t     *proxy,
+			       cuint_t                port)
 {
 	char *tmp;
 
@@ -174,6 +176,24 @@ cherokee_downloader_set_auth (cherokee_downloader_t *downloader,
 }
 
 
+ret_t
+cherokee_downloader_set_cryptor (cherokee_downloader_t *downloader,
+				 cherokee_cryptor_t    *cryptor)
+{
+	ret_t              ret;
+	cherokee_socket_t *sock = &downloader->socket;
+
+	if (cryptor == NULL)
+		return ret_ok;
+
+	ret = cherokee_cryptor_client_new (cryptor, (cherokee_cryptor_client_t **)&sock->cryptor);
+	if (ret != ret_ok) 
+		return ret;
+
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_downloader_get_reply_code (cherokee_downloader_t *downloader, cherokee_http_t *code)
 {
@@ -183,7 +203,10 @@ cherokee_downloader_get_reply_code (cherokee_downloader_t *downloader, cherokee_
 
 
 static ret_t 
-connect_to (cherokee_downloader_t *downloader, cherokee_buffer_t *host, cuint_t port, int protocol)
+connect_to (cherokee_downloader_t *downloader,
+	    cherokee_buffer_t     *host,
+	    cuint_t                port,
+	    int                    protocol)
 {
 	ret_t              ret;
 	cherokee_socket_t *sock = &downloader->socket;
@@ -220,9 +243,12 @@ connect_to (cherokee_downloader_t *downloader, cherokee_buffer_t *host, cuint_t 
 
 	/* Is this connection TLS?
 	 */
-	if (protocol == https) {
+	if ((protocol == https) &&
+	    (sock->cryptor != NULL))
+	{
 		ret = cherokee_socket_init_client_tls (sock, host);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 	}
 
 	TRACE(ENTRIES, "Exits ok; socket=%p\n", sock);
@@ -418,7 +444,9 @@ downloader_step (cherokee_downloader_t *downloader)
 
 
 ret_t 
-cherokee_downloader_step (cherokee_downloader_t *downloader, cherokee_buffer_t *ext_tmp1, cherokee_buffer_t *ext_tmp2)
+cherokee_downloader_step (cherokee_downloader_t *downloader,
+			  cherokee_buffer_t     *ext_tmp1,
+			  cherokee_buffer_t     *ext_tmp2)
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp1;

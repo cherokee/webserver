@@ -2,7 +2,6 @@
 
 INCLUDES = \
 -I${top_srcdir} \
-$(TLS_CFLAGS) \
 $(PTHREAD_CFLAGS)
 
 #
@@ -886,6 +885,27 @@ endif
 
 
 #
+# Cryptor libssl
+#
+cryptor_libssl = \
+cryptor_libssl.c \
+cryptor_libssl.h
+
+libplugin_libssl_la_LDFLAGS = $(module_ldflags) $(TLS_LIBS)
+libplugin_libssl_la_SOURCES = $(cryptor_libssl)
+libplugin_libssl_la_CFLAGS  = $(TLS_CFLAGS)
+
+if USE_OPENSSL
+if STATIC_CRYPTOR_LIBSSL
+static_cryptor_libssl_src   = $(cryptor_libssl)
+static_cryptor_libssl_lib   = $(TLS_LIBS)
+static_cryptor_libssl_flags = $(TLS_CFLAGS)
+else
+dynamic_cryptor_libssl_lib = libplugin_libssl.la
+endif
+endif
+
+#
 # Balancer Round Robin
 #
 balancer_round_robin = \
@@ -915,14 +935,12 @@ libcherokee-config.la
 # extra cflags at link time can't hurt
 libcherokee_base_la_LDFLAGS = $(common_ldflags) $(library_soname)
 libcherokee_base_la_LIBADD = \
-$(TLS_LIBS) \
 $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 $(external_pcre_lib)
 
 libcherokee_client_la_LDFLAGS = $(common_ldflags) $(library_soname)
 libcherokee_client_la_LIBADD = \
-$(TLS_LIBS) \
 $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 libcherokee-base.la
@@ -931,10 +949,10 @@ libcherokee_server_la_LDFLAGS = $(common_ldflags) $(library_soname)
 libcherokee_server_la_CFLAGS = \
 $(static_validator_htpasswd_flags) \
 $(static_validator_mysql_flags) \
+$(static_cryptor_libssl_flags) \
 $(static_handler_dbslayer_flags)
 
 libcherokee_server_la_LIBADD = \
-$(TLS_LIBS) \
 $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 $(static_validator_pam_lib) \
@@ -944,6 +962,7 @@ $(static_validator_htpasswd_lib) \
 $(static_validator_mysql_lib) \
 $(static_handler_proxy_lib) \
 $(static_handler_dbslayer_lib) \
+$(static_cryptor_libssl_lib) \
 libcherokee-base.la
 
 libcherokee_config_la_LDFLAGS = $(common_ldflags) $(library_soname)
@@ -1030,6 +1049,8 @@ version.h \
 version.c \
 buffer.h \
 buffer.c \
+cryptor.h \
+cryptor.c \
 socket.h \
 socket.c \
 fdpoll.h \
@@ -1161,6 +1182,8 @@ $(static_validator_htpasswd_src) \
 $(static_validator_authlist_src) \
 $(static_validator_mysql_src) \
 \
+$(static_cryptor_libssl_src) \
+\
 $(static_balancer_round_robin_src) \
 \
 $(common_cgi) \
@@ -1248,6 +1271,7 @@ trace.h \
 avl.h \
 cache.h \
 iocache.h \
+cryptor.h \
 \
 config_node.h \
 config_entry.h \
@@ -1317,6 +1341,7 @@ $(dynamic_validator_htdigest_lib) \
 $(dynamic_validator_htpasswd_lib) \
 $(dynamic_validator_authlist_lib) \
 $(dynamic_validator_mysql_lib) \
+$(dynamic_cryptor_libssl_lib) \
 $(dynamic_balancer_round_robin_lib) 
 
 

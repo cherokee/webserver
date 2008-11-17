@@ -64,11 +64,6 @@
 # include <sys/wait.h>
 #endif
 
-#ifdef HAVE_GNUTLS
-# include <gnutls/gnutls.h>	
-# include <gcrypt.h>
-#endif
-
 #include <signal.h>
 #include <dirent.h>
 #include <unistd.h>
@@ -123,7 +118,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->port             = 80;
 	n->port_tls         = 443;
 	n->tls_enabled      = false;
-
+	n->cryptor          = NULL;
+	
 	n->timeout          = 5;
 	n->fdwatch_msecs    = 1000;
 
@@ -166,9 +162,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* Accepting mutexes
 	 */
-#ifdef HAVE_TLS
 	CHEROKEE_MUTEX_INIT (&n->accept_tls_mutex, NULL);
-#endif
 	CHEROKEE_MUTEX_INIT (&n->accept_mutex, NULL);
 
 	/* IO Cache cache
@@ -217,13 +211,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	n->nonces_cleanup_next   = 0;
 	n->nonces_cleanup_lapse = NONCE_CLEANUP_LAPSE;
-
-	/* TLS
-	 */
-	ret = cherokee_tls_init();
-	if (ret < ret_ok) {
-		return ret;
-	}
 
 	/* PID
 	 */
@@ -276,9 +263,7 @@ destroy_all_threads (cherokee_server_t *srv)
 	list_for_each_safe (i, tmp, &srv->thread_list) {
 		THREAD(i)->exit = true;
 		CHEROKEE_MUTEX_UNLOCK (&srv->accept_mutex);
-#ifdef HAVE_TLS
 		CHEROKEE_MUTEX_UNLOCK (&srv->accept_tls_mutex);
-#endif
 	}
 
 	/* Destroy the thread object
@@ -305,12 +290,10 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_socket_close (&srv->socket);
 	cherokee_socket_mrproper (&srv->socket);
 
-#ifdef HAVE_TLS
 	cherokee_socket_close (&srv->socket_tls);
 	cherokee_socket_mrproper (&srv->socket_tls);
 
 	CHEROKEE_MUTEX_DESTROY (&srv->accept_tls_mutex);
-#endif
 	CHEROKEE_MUTEX_DESTROY (&srv->accept_mutex);
 
 	/* Attached objects
@@ -573,11 +556,8 @@ print_banner (cherokee_server_t *srv)
 	/* TLS / SSL
 	 */
 	if (srv->tls_enabled) {
-#ifdef HAVE_GNUTLS
-		cherokee_buffer_add_str (&n, ", with TLS support via GNUTLS");
-#elif HAVE_OPENSSL
-		cherokee_buffer_add_str (&n, ", with TLS support via OpenSSL");
-#endif
+		cherokee_module_get_name (MODULE(srv->cryptor), (const char **)&method);
+		cherokee_buffer_add_va (&n, ", with TLS support via %s", method);
 	} else {
 		cherokee_buffer_add_str (&n, ", TLS disabled");
 	}
@@ -842,30 +822,33 @@ initialize_loggers (cherokee_server_t *srv)
 	return ret_ok;
 }
 
-static ret_t
+static int
 vservers_check_tls (cherokee_server_t *srv)
 {
 	ret_t            ret;
 	cherokee_list_t *i;
+	cuint_t          num = 0;
+
+	if (srv->cryptor == NULL)
+		return 0;
 
 	list_for_each (i, &srv->vservers) {
 		ret = cherokee_virtual_server_has_tls (VSERVER(i));
-		if (ret != ret_ok) {
-			TRACE (ENTRIES, "Virtual Server %s: TLS disabled\n", VSERVER(i)->name.buf);
-			return ret_not_found;
+		if (ret == ret_ok) {
+			TRACE (ENTRIES, "Virtual Server %s: TLS enabled\n", VSERVER(i)->name.buf);		
+			return 1;
 		}
-
-		TRACE (ENTRIES, "Virtual Server %s: TLS enabled\n", VSERVER(i)->name.buf);
+		num += 1;
 	}
 
-	return ret_ok;
+	TRACE (ENTRIES, "None of the %d virtual servers use TLS\n", num);
+	return 0;
 }
 
 
 static ret_t
 init_vservers_tls (cherokee_server_t *srv)
 {
-#ifdef HAVE_TLS
 	ret_t               ret;
 	cherokee_list_t    *i;
 	cherokee_boolean_t  error = false;
@@ -892,10 +875,6 @@ init_vservers_tls (cherokee_server_t *srv)
 
 	if (error)
 		return ret_error;
-
-#else
-	UNUSED (srv);
-#endif
 
 	return ret_ok;	
 }
@@ -1030,7 +1009,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 	/* Init the SSL/TLS support
 	 */
-	srv->tls_enabled = (vservers_check_tls (srv) == ret_ok);
+	srv->tls_enabled = vservers_check_tls(srv);
 
 	if (srv->tls_enabled) {
 		ret = init_vservers_tls (srv);
@@ -1516,6 +1495,23 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 			return ret_error;
 		}		
 		srv->group = grp->gr_gid;
+
+	} else if (equal_buf_str (&conf->key, "tls")) {
+		cryptor_func_new_t      instance;
+		cherokee_plugin_info_t *info      = NULL;
+
+		ret = cherokee_plugin_loader_get (&srv->loader, conf->val.buf, &info);
+		if ((ret != ret_ok) || (info == NULL))
+			return ret;
+
+		instance = (cryptor_func_new_t) info->instance;
+		ret = instance ((void **) &srv->cryptor);
+		if (ret != ret_ok)
+			return ret;
+
+		ret = cherokee_cryptor_configure (srv->cryptor, conf, srv);
+		if (ret != ret_ok)
+			return ret;
 
 	} else if (equal_buf_str (&conf->key, "module_dir") ||
 		   equal_buf_str (&conf->key, "module_deps") ||

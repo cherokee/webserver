@@ -82,10 +82,6 @@ CHEROKEE_BEGIN_DECLS
 char *strnstr (const char *s, const char *find, size_t slen);
 #endif
 
-/* System
- */
-ret_t cherokee_tls_init (void);
-
 /* String management functions
  */
 char   *cherokee_strerror_r         (int err, char *buf, size_t bufsize);

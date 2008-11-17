@@ -970,78 +970,21 @@ AM_CONDITIONAL(USE_CRYPT, test "x$use_crypt x$use_crypt_r" != "xno xno")
 
 
 dnl
-dnl SSL and TLS
+dnl OpenSSL
 dnl
-AC_ARG_ENABLE([tls], 
-[AC_HELP_STRING([--disable-tls],[Disable TLS/SSL support])
-AC_HELP_STRING([--enable-tls=[gnutls|openssl]])],
-		    enable_tls="$enableval", enable_tls="undef")
+AC_CHECK_LIB(crypto, BN_init)
 
-case "$enable_tls" in
-	no)
-		check_gnutls=no
-		check_openssl=no
-		;;
-	undef|yes)
-		check_gnutls=yes
-		check_openssl=yes
-		;;
-	gnu*)
-		check_gnutls=yes
-		check_openssl=no
-		;;
-	open*)
-		check_gnutls=no
-		check_openssl=yes
-		;;	
-	*)
-		AC_MSG_ERROR([Incorrect TLS library])
-		;;
-esac
-
-have_tls="no"
-
-if test "$check_gnutls" = "yes"  && test "$have_tls" = "no"
+AC_CHECK_HEADERS([openssl/engine.h])
+AC_CHECK_LIB(ssl, SSL_accept, [have_openssl=yes], [have_openssl=no])
+if test "$have_openssl" = "yes"
 then
-		dnl
-		dnl GNUTLS
-		dnl
-		AM_PATH_LIBGNUTLS([1.4.0], [
-		  have_gnutls=yes
-
-	       AC_CHECK_LIB(gcrypt, gcry_control, [TLS_LIBS="$TLS_LIBS -lgcrypt"])
-	       AC_CHECK_LIB(gpg-error, gpg_strerror, [TLS_LIBS="$TLS_LIBS -lgpg-error"])
-
-		  TLS_LIBS="$LIBGNUTLS_LIBS $TLS_LIBS"
-		  TLS_CFLAGS="$LIBGNUTLS_CFLAGS $TLS_CFLAGS"
-		  AC_SUBST(TLS_LIBS)
-		  AC_SUBST(TLS_CFLAGS)
-
-		  AC_DEFINE(HAVE_TLS, 1, [Have TLS support])
-		  AC_DEFINE(HAVE_GNUTLS, 1, [Have libgnutls])
-		  have_tls="gnutls"
-		])
+	   TLS_LIBS="-lssl"
+	   AC_SUBST(TLS_LIBS)
+	   AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
 fi
 
-if test "$check_openssl" = "yes" && test "$have_tls" = "no"
-then
-		dnl
-		dnl OpenSSL
-		dnl
-		AC_CHECK_LIB(crypto, BN_init)
+AM_CONDITIONAL(USE_OPENSSL, test "x$have_openssl" = "xyes")
 
-		AC_CHECK_HEADERS([openssl/engine.h])
-		AC_CHECK_LIB(ssl, SSL_accept, [have_openssl=yes], [have_openssl=no])
-		if test "$have_openssl" = "yes"
-		then
-			TLS_LIBS="-lssl"
-			AC_SUBST(TLS_LIBS)
-
-			AC_DEFINE(HAVE_TLS, 1, [Have TLS support])
-			AC_DEFINE(HAVE_OPENSSL, 1, [Have OpenSSL library])
-			have_tls="openssl"
-		fi
-fi
 
 dnl
 dnl LDAP
@@ -1197,7 +1140,7 @@ AC_ARG_ENABLE(static-module,
 	   AC_HELP_STRING([--enable-static-module=MODULE][]),
 	   [use_static_module="$use_static_module $enableval "],[])
 
-modules="error_redir error_nn server_info file admin dirlist fcgi fastcgi scgi redir common cgi phpcgi proxy mirror ssi custom_error dbslayer gzip deflate ncsa combined w3c pam ldap mysql htpasswd plain htdigest authlist round_robin directory extensions request header exists method geoip not and or"
+modules="error_redir error_nn server_info file admin dirlist fcgi fastcgi scgi redir common cgi phpcgi proxy mirror ssi custom_error dbslayer gzip deflate ncsa combined w3c pam ldap mysql htpasswd plain htdigest authlist round_robin directory extensions request header exists method geoip libssl not and or"
 
 # Remove modules that will not be compiles
 #
@@ -1280,6 +1223,7 @@ AM_CONDITIONAL(STATIC_VALIDATOR_PLAIN,        grep plain          $conf_h >/dev/
 AM_CONDITIONAL(STATIC_VALIDATOR_HTDIGEST,     grep htdigest       $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_VALIDATOR_AUTHLIST,     grep authlist       $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_BALANCER_ROUND_ROBIN,   grep round_robin    $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_CRYPTOR_LIBSSL,         grep libssl         $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_DIRECTORY,         grep directory      $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_EXTENSIONS,        grep extensions     $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_REQUEST,           grep request        $conf_h >/dev/null)
@@ -1349,7 +1293,7 @@ for m in $methods; do
 	i=`expr $i + 1`
 done
 echo "Threading support     $have_pthread"
-echo "TLS support           $have_tls"
+echo "OpenSSL support       $have_openssl"
 echo "PCRE library          $have_pcre"
 echo "Compatible PAM        $have_pam"
 echo "LDAP                  $have_ldap"

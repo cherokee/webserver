@@ -176,6 +176,7 @@ if method:
 
 if ssl:
     CONF_BASE += """
+server!tls = libssl
 vserver!1!ssl_certificate_file = %s
 vserver!1!ssl_certificate_key_file = %s
 vserver!1!ssl_ca_list_file = %s

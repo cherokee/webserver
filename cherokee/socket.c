@@ -94,6 +94,7 @@ extern int32_t sendfile (int out_fd, int in_fd, int32_t *offset, uint32_t count)
 
 #include "util.h"
 #include "buffer.h"
+#include "server-protected.h"
 #include "virtual_server.h"
 
 
@@ -114,21 +115,10 @@ cherokee_socket_init (cherokee_socket_t *socket)
 	memset (&socket->client_addr, 0, sizeof(cherokee_sockaddr_t));
 	socket->client_addr_len = -1;
 
-	socket->socket          = -1;
-	socket->status          = socket_closed;
-	socket->is_tls          = non_TLS;
-
-#ifdef HAVE_TLS
-	socket->initialized     = false;
-	socket->vserver_ref     = NULL;
-#endif
-
-#if   defined (HAVE_GNUTLS)
-	socket->session         = NULL;
-#elif defined (HAVE_OPENSSL)
-	socket->session         = NULL;
-	socket->ssl_ctx         = NULL;
-#endif
+	socket->socket  = -1;
+	socket->status  = socket_closed;
+	socket->is_tls  = non_TLS;
+	socket->cryptor = NULL;
 
 	return ret_ok;
 }
@@ -137,24 +127,10 @@ cherokee_socket_init (cherokee_socket_t *socket)
 ret_t
 cherokee_socket_mrproper (cherokee_socket_t *socket)
 {
-#if   defined (HAVE_GNUTLS)
-	if (socket->session != NULL) {
-		gnutls_deinit (socket->session);
-		socket->session = NULL;
+	if (socket->cryptor != NULL) {
+		cherokee_cryptor_socket_free (socket->cryptor);
+		socket->cryptor = NULL;
 	}
-#elif defined (HAVE_OPENSSL)
-	if (socket->session != NULL) {
-		SSL_free (socket->session);
-		socket->session = NULL;
-	}
-
-	if (socket->ssl_ctx != NULL) {
-		SSL_CTX_free (socket->ssl_ctx);
-		socket->ssl_ctx = NULL;
-	}
-#else
-	UNUSED (socket);
-#endif
 
 	return ret_ok;
 }
@@ -171,343 +147,33 @@ cherokee_socket_clean (cherokee_socket_t *socket)
 	 */
 	socket->client_addr_len = -1;
 	memset (&socket->client_addr, 0, sizeof(cherokee_sockaddr_t));
-
-#ifdef HAVE_TLS
-	socket->initialized = false;
-	socket->vserver_ref = NULL;
-#endif
-
-#if   defined (HAVE_GNUTLS)
-	if (socket->session != NULL) {
-		gnutls_deinit (socket->session);
-		socket->session = NULL;
+	
+	if (socket->cryptor) {
+		cherokee_cryptor_socket_clean (socket->cryptor);
 	}
-#elif defined (HAVE_OPENSSL)
-	if (socket->session != NULL) {
-		SSL_free (socket->session);
-		socket->session = NULL;
-	}
-
-	if (socket->ssl_ctx != NULL) {
-		SSL_CTX_free (socket->ssl_ctx);
-		socket->ssl_ctx = NULL;
-	}
-#endif
 
 	return ret_ok;
 }
-
-
-#ifdef HAVE_GNUTLS
-
-static const gnutls_datum err_datum = { NULL, 0 };
-
-static gnutls_datum
-db_retrieve (void *ptr, gnutls_datum key)
-{
-	ret_t                      ret;
-	cherokee_avl_r_t          *cache;
-	cherokee_virtual_server_t *vserver;
-	gnutls_datum               session;
-	cherokee_buffer_t          faked;
-	cherokee_buffer_t          strkey  = CHEROKEE_BUF_INIT;
-	cherokee_socket_t         *socket  = SOCKET(ptr);
-	
-	/* Sanity check
-	 */
-	vserver = socket->vserver_ref;
-	if (unlikely (vserver == NULL)) {
-		PRINT_ERROR_S ("No virtual server reference\n");
-		return err_datum;
-	}
-
-	cache = &vserver->session_cache;
-
-	/* Build the key string
-	 */
-	cherokee_buffer_fake (&faked, (char *)key.data, key.size);
-	ret = cherokee_buffer_encode_hex (&faked, &strkey);
-	if (ret != ret_ok) {
-		cherokee_buffer_mrproper (&strkey);
-		return err_datum;
-	}
-
-	/* Get (and remove) the object from the session cache
-	 */
-	ret = cherokee_avl_r_get (cache, &strkey, (void **)&session);
-	if (ret == ret_ok) {
-		TRACE (ENTRIES",ssl", "fd=%d key=%s - found=%p\n", socket->socket, strkey.buf, session);
-		cherokee_buffer_mrproper (&strkey);
-		return session;
-	}
-
-	/* Failure
-	 */
-	TRACE (ENTRIES",ssl", "fd=%d key=%s - error=%d\n", socket->socket, strkey.buf, ret);
-	cherokee_buffer_mrproper (&strkey);
-	return err_datum; 
-}
-
-static int
-db_remove (void *ptr, gnutls_datum key)
-{
-	ret_t                      ret;
-	cherokee_avl_r_t          *cache;
-	cherokee_virtual_server_t *vserver;
-	cherokee_buffer_t          faked;
-	cherokee_buffer_t          strkey  = CHEROKEE_BUF_INIT;
-	gnutls_datum              *n      = NULL;
-	cherokee_socket_t         *socket = SOCKET(ptr);
-
-	/* Sanity check
-	 */
-	vserver = socket->vserver_ref;
-	if (unlikely (vserver == NULL)) {
-		PRINT_ERROR_S ("No virtual server reference\n");
-		return 1;
-	}
-
-	cache = &vserver->session_cache;
-
-	/* Build the key string
-	 */
-	cherokee_buffer_fake (&faked, (char *)key.data, key.size);
-	ret = cherokee_buffer_encode_hex (&faked, &strkey);
-	if (ret != ret_ok) {
-		cherokee_buffer_mrproper (&strkey);
-		return -1;
-	}
-
-	/* Remove the entry
-	 */
-	ret = cherokee_avl_r_del (cache, &strkey, (void **)&n);
-	if ((ret == ret_ok) && (n != NULL)) {
-		TRACE (ENTRIES",ssl", "fd=%d key=%s - found=%p ret=%d\n", socket->socket, strkey.buf, n, ret);
-		cherokee_buffer_mrproper (&strkey);
-		gnutls_free (n->data);
-		gnutls_free (n);
-		return 0;
-	}
-
-	TRACE (ENTRIES",ssl", "fd=%d key=%s - exiting ret=%d\n", socket->socket, strkey.buf, ret);
-	cherokee_buffer_mrproper (&strkey);
-	return -1;
-}
-
-static int
-db_store (void *ptr, gnutls_datum key, gnutls_datum data)
-{
-	ret_t                      ret;
-	cherokee_avl_r_t          *cache;
-	cherokee_virtual_server_t *vserver;
-	cherokee_buffer_t          faked;
-	cherokee_buffer_t          strkey = CHEROKEE_BUF_INIT;
-	cherokee_socket_t         *socket = SOCKET(ptr);
-
-	/* Remove the entry
-	 */
-	vserver = socket->vserver_ref;
-	if (vserver == NULL) {
-		PRINT_ERROR_S ("No virtual server reference\n");
-		return 1;
-	}
-
-	cache = &vserver->session_cache;
-
-	/* Build the key string
-	 */
-	cherokee_buffer_fake (&faked, (char *)key.data, key.size);
-	ret = cherokee_buffer_encode_hex (&faked, &strkey);
-	if (ret != ret_ok) {
-		cherokee_buffer_mrproper (&strkey);
-		return -1;
-	}
-
-	/* Add the copy to the table
-	 */
-	ret = cherokee_avl_r_add (cache, &strkey, &data);
-
-	TRACE (ENTRIES",ssl", "fd=%d key=%s - added=%p ret=%d\n", socket->socket, strkey.buf, &data, ret);
-	cherokee_buffer_mrproper (&strkey);
-	return (ret == ret_ok) ? 0 : -1;
-}
-
-#endif /* HAVE_GNUTLS */
-
-
-
-#ifdef HAVE_TLS
-
-static ret_t
-initialize_tls_session (cherokee_socket_t         *socket, 
-			cherokee_virtual_server_t *vserver)
-{
-# if defined(HAVE_GNUTLS)
-	int re;
-	
-	/* Set the virtual server object reference
-	 */
-	socket->vserver_ref = vserver;
-
-	/* Init the TLS session
-	 */
-        re = gnutls_init (&socket->session, GNUTLS_SERVER);
-	if (unlikely (re != GNUTLS_E_SUCCESS))
-		return ret_error;
-
-	gnutls_session_set_ptr (socket->session, socket);
-
-	/* Set the socket file descriptor
-	 */
-  	gnutls_transport_set_ptr (socket->session, (gnutls_transport_ptr)socket->socket);
-
-	/* Load the credentials
-	 */
-	gnutls_set_default_priority (socket->session);   
-
-	{
-		static const int kx_priority[] = { GNUTLS_KX_RSA, 
-						   GNUTLS_KX_DHE_DSS, 
-						   GNUTLS_KX_DHE_RSA, 
-						   GNUTLS_KX_ANON_DH, 0 };
-
-		gnutls_kx_set_priority (socket->session, kx_priority);
-	}
-
-	/* Set the virtual host credentials
-	 */
- 	gnutls_credentials_set (socket->session, GNUTLS_CRD_ANON, vserver->credentials);
- 	gnutls_credentials_set (socket->session, GNUTLS_CRD_CERTIFICATE, vserver->credentials);
-	
-	/* Set the number of bits, for use in an Diffie Hellman key
-	 * exchange: minimum size of the prime that will be used for
-	 * the handshake.
-	 */
-	gnutls_dh_set_prime_bits (socket->session, 1024);
-
-	/* Set the session DB management functions
-	 */
-	gnutls_db_set_retrieve_function (socket->session, db_retrieve);
-	gnutls_db_set_remove_function   (socket->session, db_remove);
-	gnutls_db_set_store_function    (socket->session, db_store);
-	gnutls_db_set_ptr               (socket->session, socket);
-
-	/* Request client certificate if any.
-	 */
-	gnutls_certificate_server_set_request (socket->session, GNUTLS_CERT_REQUEST);
-	gnutls_handshake_set_private_extensions (socket->session, 1);
-
-# elif defined (HAVE_OPENSSL)
-	int re;
-
-	/* Set the virtual server object reference
-	 */
-	socket->vserver_ref = vserver;
-
-	/* Check whether the virtual server supports SSL
-	 */
-	if (vserver->context == NULL) {
-		return ret_not_found;
-	}
-
-	/* New session
-	 */
-	socket->session = SSL_new (vserver->context);
-	if (socket->session == NULL) {
-		char *error;
-
-		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Unable to create a new SSL "
-			     "connection from the SSL context: %s\n", error);
-		return ret_error;
-	}
-	
-	/* Set the socket file descriptor
-	 */
-	re = SSL_set_fd (socket->session, socket->socket);
-	if (re != 1) {
-		char *error;
-
-		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Can not set fd(%d): %s\n", 
-			     socket->socket, error);
-		return ret_error;
-	}
-
-#ifndef OPENSSL_NO_TLSEXT 
-	SSL_set_app_data (socket->session, socket);
-#endif
-
-	/* Set the SSL context cache
-	 */
-	re = SSL_CTX_set_session_id_context (vserver->context, (const unsigned char *)"SSL", 3);
-	if (re != 1) {
-		PRINT_ERROR_S("ERROR: OpenSSL: Unable to set SSL session-id context\n");
-	}
-# endif
-	return ret_ok;
-}
-
-#endif /* HAVE_TLS */
 
 
 ret_t 
-cherokee_socket_init_tls (cherokee_socket_t *socket, cherokee_virtual_server_t *vserver)
+cherokee_socket_init_tls (cherokee_socket_t         *socket,
+			  cherokee_virtual_server_t *vserver)
 {
-#ifdef HAVE_TLS
-	int   re;
-	ret_t ret;
-	
+	ret_t              ret;
+	cherokee_server_t *srv = VSERVER_SRV(vserver);
+
+	if (socket->cryptor == NULL) {
+		ret = cherokee_cryptor_socket_new (srv->cryptor, &socket->cryptor);
+		if (ret != ret_ok)
+			return ret;
+	}
+
+	ret = cherokee_cryptor_socket_init_tls (socket->cryptor, socket, vserver);
+	if (ret != ret_ok)
+		return ret;
+
 	socket->is_tls = TLS;
-
-	if (socket->initialized == false) {
-		ret = initialize_tls_session (socket, vserver);
-		if (ret != ret_ok) 
-			return ret_error;
-
-		socket->initialized = true;
-	}
-
-# if   defined (HAVE_GNUTLS)
-
-	re = gnutls_handshake (socket->session);
-
-	switch (re) {
-#if (GNUTLS_E_INTERRUPTED != GNUTLS_E_AGAIN)
-	case GNUTLS_E_INTERRUPTED:
-#endif
-	case GNUTLS_E_AGAIN:
-		return ret_eagain;
-	}
-
-	if (re < 0) {
-		PRINT_ERROR ("ERROR: Init GNUTLS: Handshake has failed: %s\n", gnutls_strerror(re));
-		return ret_error;
-	}
-
-# elif defined (HAVE_OPENSSL)
-
-	re = SSL_accept (socket->session);
-
-	if (re <= 0) {
-		char *error;
-
-		switch (SSL_get_error(socket->session, re)) {
-		case SSL_ERROR_WANT_READ:
-		case SSL_ERROR_WANT_WRITE:
-		case SSL_ERROR_WANT_CONNECT:
-			return ret_eagain;
-		default: 
-			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR ("ERROR: Init OpenSSL: %s\n", error);
-			return ret_error;
-		}
-	}
-# endif
-#else
-	UNUSED (socket);
-	UNUSED (vserver);
-#endif	/* HAVE_TLS */
 	return ret_ok;
 }
 
@@ -525,19 +191,11 @@ cherokee_socket_close (cherokee_socket_t *socket)
 
 	/* SSL/TLS shutdown
 	 */
-#ifdef HAVE_TLS
-	if (socket->is_tls == TLS && socket->session != NULL) {
-# ifdef HAVE_GNUTLS
-		gnutls_bye (socket->session, GNUTLS_SHUT_WR);
-		gnutls_deinit (socket->session);
-		socket->session = NULL;
-
-# elif defined(HAVE_OPENSSL)
-		SSL_shutdown (socket->session);
-
-# endif
+	if ((socket->is_tls == TLS) &&
+	    (socket->cryptor != NULL))
+	{
+		cherokee_cryptor_socket_close (socket->cryptor);
 	}
-#endif
 	
 	/* Close the socket
 	 */
@@ -947,8 +605,12 @@ cherokee_socket_listen (cherokee_socket_t *socket, int backlog)
  *          NULL pointers lead to a crash.
  */
 ret_t 
-cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, size_t *pcnt_written)
+cherokee_socket_write (cherokee_socket_t *socket,
+		       const char        *buf,
+		       int                buf_len,
+		       size_t            *pcnt_written)
 {
+	ret_t   ret;
 	ssize_t len;
 
 	*pcnt_written = 0;
@@ -958,9 +620,7 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
 	 */
 	return_if_fail (buf != NULL && buf_len > 0, ret_error);
 
-#ifdef HAVE_TLS
 	if (likely (socket->is_tls != TLS)) {
-#endif
 		len = send (SOCKET_FD(socket), buf, buf_len, 0);
 		if (likely (len > 0) ) {
 			/* Return n. of bytes sent.
@@ -998,88 +658,27 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
 			}
 
 			PRINT_ERRNO (err, "write(%d, ..): '${errno}'", SOCKET_FD(socket));
-			return ret_error;
 		}
-
-#ifdef HAVE_TLS
-	}
-
-	/* TLS connection.
-	 */
-#if  defined (HAVE_GNUTLS)
-	len = gnutls_record_send (socket->session, buf, buf_len);
-	if (likely (len > 0) ) {
-		/* Return info
-		 */
-		*pcnt_written = len;
-		return ret_ok;
-	}
-
-	if (len == 0) {
-		/* Very strange, socket is ready but nothing has been written,
-		 * retry later.
-		 */
-		return ret_eagain;
-	}
-
-	{	/* len < 0 */
-		switch (len) {
-			case GNUTLS_E_PUSH_ERROR:
-			case GNUTLS_E_INVALID_SESSION: 
-				socket->status = socket_closed;
-				return ret_eof;
-#if (GNUTLS_E_INTERRUPTED != GNUTLS_E_AGAIN)
-			case GNUTLS_E_INTERRUPTED:
-#endif
-			case GNUTLS_E_AGAIN:           
-				return ret_eagain;
-		}
-
-		PRINT_ERROR ("ERROR: GNUTLS: gnutls_record_send(%d, ..) -> err=%d '%s'\n", 
-			SOCKET_FD(socket), (int)len, gnutls_strerror(len));
 		return ret_error;
-	}
 
-#elif defined (HAVE_OPENSSL)
-
-	len = SSL_write (socket->session, buf, buf_len);
-
-	if (likely (len > 0) ) {
-		/* Return info
-		 */
-		*pcnt_written = len;
-		return ret_ok;
-	}
-
-	if (len == 0) {
-		/* maybe socket was closed by client, no write was performed
-		 */
-		int re = SSL_get_error (socket->session, len);
-		if (re == SSL_ERROR_ZERO_RETURN)
+	} else if (socket->cryptor != NULL) {
+		ret = cherokee_cryptor_socket_write (socket->cryptor,
+						     (char *)buf, buf_len, pcnt_written);
+		switch (ret) {
+		case ret_ok:
+		case ret_error:
+		case ret_eagain:
+			return ret;
+		case ret_eof:
 			socket->status = socket_closed;
-		return ret_eof;
-	}
-
-	{	/* len < 0 */
-		int re = SSL_get_error (socket->session, len);
-		switch (re) {
-			case SSL_ERROR_WANT_READ:
-			case SSL_ERROR_WANT_WRITE:
-				return ret_eagain;
-			case SSL_ERROR_SSL:
-				return ret_error;
+			return ret_eof;
+		default:
+			RET_UNKNOWN(ret);
+			return ret;
 		}
-
-		PRINT_ERROR ("ERROR: SSL_write (%d, ..) -> err=%d '%s'\n", 
-			     SOCKET_FD(socket), (int)len, ERR_error_string(re, NULL));
-		return ret_error;
 	}
-#else
+
 	return ret_error;
-#endif
-
-#endif	/* HAVE_TLS */
-
 }
 
 
@@ -1087,8 +686,12 @@ cherokee_socket_write (cherokee_socket_t *socket, const char *buf, int buf_len, 
  *          NULL pointers lead to a crash.
  */
 ret_t
-cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t *pcnt_read)
+cherokee_socket_read (cherokee_socket_t *socket,
+		      char              *buf,
+		      int                buf_size,
+		      size_t            *pcnt_read)
 {
+	ret_t   ret;
 	ssize_t len;
 
 	*pcnt_read = 0;
@@ -1101,9 +704,7 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 	if (unlikely (socket->status == socket_closed))
 		return ret_eof;
 
-#ifdef HAVE_TLS
 	if (likely (socket->is_tls != TLS)) {
-#endif
 		/* Plain read
 		 */
 		len = recv (SOCKET_FD(socket), buf, buf_size, 0);
@@ -1144,99 +745,27 @@ cherokee_socket_read (cherokee_socket_t *socket, char *buf, int buf_size, size_t
 			}
 
 			PRINT_ERRNO (err, "read(%d, ..): '${errno}'", SOCKET_FD(socket));
-			return ret_error;
 		}
+		return ret_error;
 
-#ifdef HAVE_TLS
-	}
-
-	/* socket->is_tls == TLS
-	 */
-#if   defined (HAVE_GNUTLS)
-
-	len = gnutls_record_recv (socket->session, buf, buf_size);
-
-	if (likely (len > 0)) {
- 		*pcnt_read = len;
-		if (gnutls_record_check_pending (socket->session) > 0)
-			return ret_eagain;
-		return ret_ok;
-	}
-
-	if (len == 0) {
-		socket->status = socket_closed;
-		return ret_eof;
-	}
-
-	{	/* len < 0 */
-		switch (len) {
-		case GNUTLS_E_PUSH_ERROR:
-		case GNUTLS_E_INVALID_SESSION:
-		case GNUTLS_E_UNEXPECTED_PACKET_LENGTH:
+	} else if (socket->cryptor != NULL) {
+		ret = cherokee_cryptor_socket_read (socket->cryptor,
+						    buf, buf_size, pcnt_read);
+		switch (ret) {
+		case ret_ok:
+		case ret_error:
+		case ret_eagain:
+			return ret;
+		case ret_eof:
 			socket->status = socket_closed;
 			return ret_eof;
-#if (GNUTLS_E_INTERRUPTED != GNUTLS_E_AGAIN)
-		case GNUTLS_E_INTERRUPTED:              
-#endif
-		case GNUTLS_E_AGAIN:
-			return ret_eagain;
+		default:
+			RET_UNKNOWN(ret);
+			return ret;
 		}
-
-		PRINT_ERROR ("ERROR: GNUTLS: gnutls_record_recv(%d, ..) -> err=%d '%s'\n", 
-			SOCKET_FD(socket), (int)len, gnutls_strerror(len));
-		return ret_error;
 	}
 
-#elif defined (HAVE_OPENSSL)
-	len = SSL_read (socket->session, buf, buf_size);
-	if (likely (len > 0)) {
-		*pcnt_read = len;
-		if (SSL_pending (socket->session))
-			return ret_eagain;
-		return ret_ok;
-	}
-
-	if (len == 0) {
-		socket->status = socket_closed;
-		return ret_eof;
-	}
-
-	{	/* len < 0 */
-		int re;
-		int error = errno;
-
-		re = SSL_get_error (socket->session, len);
-		switch (re) {
-		case SSL_ERROR_WANT_READ:   
-		case SSL_ERROR_WANT_WRITE:   
-			return ret_eagain;
-		case SSL_ERROR_ZERO_RETURN: 
-			socket->status = socket_closed;
-			return ret_eof;
-		case SSL_ERROR_SSL:         
-			return ret_error;
-		case SSL_ERROR_SYSCALL:
-			switch (error) {
-			case EPIPE:
-			case ECONNRESET:
-				socket->status = socket_closed;
-				return ret_eof;
-			default:
-				PRINT_ERRNO (error, "SSL_read: unknown errno: ${errno}\n");
-			}
-			return ret_error;
-		}
-
-		PRINT_ERROR ("ERROR: OpenSSL: SSL_read (%d, ..) -> err=%d '%s'\n", 
-			     SOCKET_FD(socket), (int)len, ERR_error_string(re, NULL));
-		return ret_error;
-	}
-#else
 	return ret_error;
-#endif
-
-#endif	/* HAVE_TLS */
-
 }
 
 
@@ -1250,13 +779,11 @@ cherokee_socket_pending_read (cherokee_socket_t *socket)
 		      (socket->status != socket_writing)))
 		return 0;
 
-#ifdef HAVE_TLS
-# ifdef HAVE_GNUTLS
-	return (gnutls_record_check_pending (socket->session) > 0);
-# elif defined (HAVE_OPENSSL)
-	return (SSL_pending (socket->session) > 0);
-# endif
-#endif
+	if (socket->cryptor != NULL) {
+		return cherokee_cryptor_socket_pending (socket->cryptor);
+	}
+
+	SHOULDNT_HAPPEN;
 	return 0;
 }
 
@@ -1290,6 +817,11 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 			uint16_t            vector_len,
 			size_t             *pcnt_written)
 {
+	int    re;
+	int    i;
+	ret_t  ret;
+	size_t cnt;
+
 	*pcnt_written = 0;
 
 	/* There must be something to send, otherwise behaviour is undefined
@@ -1297,11 +829,8 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 	 */
 	return_if_fail (vector != NULL && vector_len > 0, ret_error);
 
-#ifdef HAVE_TLS
 	if (likely (socket->is_tls != TLS))
-#endif
 	{
-		int re = 0;
 #ifdef _WIN32
 		int i;
 		size_t total;
@@ -1383,49 +912,38 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 			}
 
 			PRINT_ERRNO (err, "writev(%d, ..): '${errno}'", SOCKET_FD(socket));
-			return ret_error;
 		}
-	}
+		return ret_error;
 
-#ifdef HAVE_TLS
-#if defined (HAVE_GNUTLS) || defined (HAVE_OPENSSL)
+	} 
 
 	/* TLS connection: Here we don't worry about sparing a few CPU
 	 * cycles, so we reuse the single send case for TLS.
 	 */
-	{
-		int      i;
-		ret_t  ret;
-		size_t cnt;
+	for (i = 0; i < vector_len; i++) {
+		if ((vector[i].iov_len == 0) ||
+		    (vector[i].iov_base == NULL))
+			continue;
 		
-		for (i = 0; i < vector_len; i++) {
-
-			if (vector[i].iov_base == NULL || vector[i].iov_len == 0)
-				continue;
-			
-			cnt = 0;
-			ret = cherokee_socket_write (socket, vector[i].iov_base, vector[i].iov_len, &cnt);
-			*pcnt_written += cnt;
-
-			if (ret == ret_ok && cnt == vector[i].iov_len)
-				continue;
-
-			/* else != ret_ok || cnt != vector[i].iov_len
-			 */
-			if (*pcnt_written != 0)
-				return ret_ok;
-
-			/* Nothing has been written, return error code.
-			 */
-			return ret;
-		}
-
-		return ret_ok;
+		cnt = 0;
+		ret = cherokee_socket_write (socket, vector[i].iov_base, vector[i].iov_len, &cnt);
+		*pcnt_written += cnt;
+		
+		if ((ret == ret_ok) &&
+		    (cnt == vector[i].iov_len))
+			continue;
+		
+		/* else != ret_ok || cnt != vector[i].iov_len
+		 */
+		if (*pcnt_written != 0)
+			return ret_ok;
+		
+		/* Nothing has been written, return error code.
+		 */
+		return ret;
 	}
-#endif
-#endif	/* HAVE_TLS */
 
-	return ret_error;
+	return ret_ok;
 }
 
 
@@ -1816,138 +1334,24 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 
 
 ret_t 
-cherokee_socket_init_client_tls (cherokee_socket_t *socket, cherokee_buffer_t *host)
+cherokee_socket_init_client_tls (cherokee_socket_t *socket,
+				 cherokee_buffer_t *host)
 {
-#ifdef HAVE_TLS
-	int re;
+	ret_t ret;
 
-# if defined (HAVE_GNUTLS)
-	const int                       kx_priority[] = {GNUTLS_KX_ANON_DH, 0};
-	gnutls_anon_client_credentials  anoncred;
+	if (unlikely (socket->cryptor == NULL)) {
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
 
-	socket->is_tls = TLS;	
-
-	/* Acredentials
-	 */
-	gnutls_anon_allocate_client_credentials(&anoncred);
-
-	/* Init session
-	 */
-	re = gnutls_init (&socket->session, GNUTLS_CLIENT);
-	if (unlikely (re != GNUTLS_E_SUCCESS)) return ret_error;
-
-	
-	/* Settings
-	 */
-	gnutls_set_default_priority(socket->session);
-	gnutls_kx_set_priority (socket->session, kx_priority);
-
-	gnutls_credentials_set (socket->session, GNUTLS_CRD_ANON, anoncred);
-	gnutls_transport_set_ptr (socket->session, (gnutls_transport_ptr)socket->socket);
-
-	do {
-		re = gnutls_handshake (socket->session);
-		if (re < 0) {
-			switch (re) {
-#if (GNUTLS_E_INTERRUPTED != GNUTLS_E_AGAIN)
-			case GNUTLS_E_INTERRUPTED:
-#endif
-			case GNUTLS_E_AGAIN:
-				break;
-			default:
-				return ret_error;
-			}
-		}
-	} while ((re == GNUTLS_E_AGAIN) ||
-		 (re == GNUTLS_E_INTERRUPTED));
-
-	UNUSED (host);
-
-# elif defined (HAVE_OPENSSL)
-	char *error;
+	ret = cherokee_cryptor_client_init (CRYPTOR_CLIENT(socket->cryptor), host, socket);
+	if (ret != ret_ok)
+		return ret;
 
 	socket->is_tls = TLS;
-
-	/* New context
-	 */
-	socket->ssl_ctx = SSL_CTX_new (SSLv23_client_method());
-	if (socket->ssl_ctx == NULL) {
-		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Unable to create a new SSL context: %s\n", error);
-		return ret_error;
-	}
-	
-	/* CA verifications
-	 */
-	re = cherokee_buffer_is_empty (&socket->vserver_ref->ca_cert);
-	if (! re) {
-		re = SSL_CTX_load_verify_locations (socket->ssl_ctx, 
-						    socket->vserver_ref->ca_cert.buf, NULL);
-		if (! re) {
-			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR ("ERROR: OpenSSL: '%s': %s\n", 
-				     socket->vserver_ref->ca_cert.buf, error);
-			return ret_error;
-		}
-
-		re = SSL_CTX_set_default_verify_paths (socket->ssl_ctx);
-		if (! re) {
-			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR ("ERROR: OpenSSL: cannot set certificate "
-				     "verification paths: %s\n", error);
-			return ret_error;
-		}
-	}
-
-
-	SSL_CTX_set_verify (socket->ssl_ctx, SSL_VERIFY_NONE, NULL);
-	SSL_CTX_set_mode (socket->ssl_ctx, SSL_MODE_ENABLE_PARTIAL_WRITE);
-
-	/* New session
-	 */
-	socket->session = SSL_new (socket->ssl_ctx);
-	if (socket->session == NULL) {
-		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Unable to create a new SSL connection "
-			     "from the SSL context: %s\n", error);
-		return ret_error;
-	}
-
-	/* Set the socket file descriptor
-	 */
-	re = SSL_set_fd (socket->session, socket->socket);
-	if (re != 1) {
-		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Can not set fd(%d): %s\n", socket->socket, error);
-		return ret_error;
-	}
-
-	SSL_set_connect_state (socket->session); 
-
-#ifndef OPENSSL_NO_TLSEXT 
-	re = SSL_set_tlsext_host_name (socket->session, host->buf);
-	if (re <= 0) {
-		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Could set SNI server name: %s\n", error);
-		return ret_error;
-	}
-#endif
-
-	re = SSL_connect (socket->session);
-	if (re <= 0) {
-		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Can not connect: %s\n", error);
-		return ret_error;
-	}
-
-# endif
-#else 
-	UNUSED (host);
-	UNUSED (socket);
-#endif
 	return ret_ok;
 }
-
+		
 
 ret_t
 cherokee_socket_has_block_timeout (cherokee_socket_t *socket)

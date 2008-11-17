@@ -30,7 +30,6 @@
 
 #include "common-internal.h"
 
-
 #include <sys/types.h>
 
 #ifdef HAVE_SYS_TIME_H
@@ -54,18 +53,10 @@
 # include <arpa/inet.h>
 #endif
 
-#if defined(HAVE_GNUTLS)
-# include <gnutls/gnutls.h>
-#elif defined(HAVE_OPENSSL)
-# include <openssl/lhash.h>
-# include <openssl/ssl.h>
-# include <openssl/err.h>
-# include <openssl/rand.h>
-#endif
-
 #include "buffer.h"
 #include "virtual_server.h"
 #include "fdpoll.h"
+#include "cryptor.h"
 
 #ifdef INET6_ADDRSTRLEN
 # define CHE_INET_ADDRSTRLEN INET6_ADDRSTRLEN
@@ -85,12 +76,6 @@
 #define SUN_LEN(sa)						\
 	(strlen((sa)->sun_path) +				\
 	 (size_t)(((struct sockaddr_un*)0)->sun_path))
-#endif
-
-#ifndef OPENSSL_NO_TLSEXT
-# ifndef SSL_CTRL_SET_TLSEXT_HOSTNAME
-#  define OPENSSL_NO_TLSEXT
-# endif
 #endif
 
 
@@ -137,18 +122,7 @@ typedef struct {
 	socklen_t                  client_addr_len;
 	cherokee_socket_status_t   status;
 	cherokee_socket_type_t     is_tls;
-
-#ifdef HAVE_TLS
-	cherokee_boolean_t         initialized;
-	cherokee_virtual_server_t *vserver_ref;
-#endif
-#ifdef HAVE_GNUTLS	
-	gnutls_session             session;
-#endif
-#ifdef HAVE_OPENSSL
-	SSL                       *session;
-	SSL_CTX                   *ssl_ctx;  /* Only client socket */
-#endif
+	cherokee_cryptor_socket_t *cryptor;
 } cherokee_socket_t;
 
 
@@ -173,14 +147,6 @@ typedef struct {
 #define SOCKET_ADDRESS_IPv4(s) (SOCKET_ADDR_IPv4(s)->sin_addr.s_addr)
 #define SOCKET_ADDRESS_IPv6(s) (SOCKET_ADDR_IPv6(s)->sin6_addr.s6_addr)
 
-
-#ifdef HAVE_OPENSSL
-# define OPENSSL_LAST_ERROR(error)  do { int n;                                \
-		                         error = "unknown";                    \
-                                         while ((n = ERR_get_error()))         \
-                                            error = ERR_error_string(n, NULL); \
-                                    } while (0)
-#endif
 
 #define cherokee_socket_configured(c)    (SOCKET_FD(c) >= 0)
 #define cherokee_socket_is_connected(c)  (cherokee_socket_configured(c) && \

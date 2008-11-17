@@ -74,20 +74,6 @@
 # include <syslog.h>
 #endif
 
-
-#if defined(HAVE_GNUTLS)
-# include <gcrypt.h>
-# include <gnutls/gnutls.h>
-#elif defined(HAVE_OPENSSL)
-# include <openssl/lhash.h>
-# include <openssl/ssl.h>
-# include <openssl/err.h>
-# include <openssl/rand.h>
-#if HAVE_OPENSSL_ENGINE_H
-# include <openssl/engine.h>
-#endif
-#endif
-
 #define ENTRIES "util"
 
 const char *cherokee_version    = PACKAGE_VERSION;
@@ -757,79 +743,6 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
 	SHOULDNT_HAPPEN;
 	return ret_error;
 #endif
-}
-
-
-#if defined(HAVE_GNUTLS) && defined (HAVE_PTHREAD)
-# ifdef GCRY_THREAD_OPTION_PTHREAD_IMPL
-GCRY_THREAD_OPTION_PTHREAD_IMPL;
-# endif
-#endif
-
-ret_t
-cherokee_tls_init (void)
-{
-#if HAVE_OPENSSL_ENGINE_H
-	ENGINE *e;
-#endif
-#ifdef HAVE_GNUTLS
-	int rc;
-
-# ifdef HAVE_PTHREAD
-#  ifdef GCRY_THREAD_OPTION_PTHREAD_IMPL
-	/* Although the GnuTLS library is thread safe by design, some
-	 * parts of the crypto backend, such as the random generator,
-	 * are not; hence, it needs to initialize some semaphores.
-	 */
-	gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread); 
-#  endif
-# endif
-
-	/* Try to speed up random number generation. On Linux, it
-	 * takes ages for GNUTLS to get the random numbers it needs.
-	 */
-	gcry_control (GCRYCTL_ENABLE_QUICK_RANDOM, 0);
- 
-	/* Gnutls library-width initialization
-	 */
-	rc = gnutls_global_init();
-	if (rc < 0) {
-		PRINT_ERROR_S ("Global GNUTLS state initialisation failed.\n");
-		return ret_error;
-	}
-#endif
-
-#ifdef HAVE_OPENSSL
-# if HAVE_OPENSSL_ENGINE_H
-#  if OPENSSL_VERSION_NUMBER >= 0x00907000L
-	ENGINE_load_builtin_engines();
-#  endif
-	e = ENGINE_by_id("pkcs11");
-	if (e != NULL) {
-		if(!ENGINE_init(e)) {
-			ENGINE_free(e);
-			PRINT_ERROR_S ("could not init pkcs11 engine");
-			return ret_error;
-		}
-		
-		if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
-			ENGINE_free(e);
-			PRINT_ERROR_S ("could not set all defaults");
-			return ret_error;
-		}
-		
-		ENGINE_finish(e);
-		ENGINE_free(e);
-	}
-# endif
-
-	SSL_load_error_strings();
-	SSL_library_init();
-	
-	SSLeay_add_all_algorithms ();
-	SSLeay_add_ssl_algorithms ();
-#endif
-	return ret_ok;
 }
 
 
