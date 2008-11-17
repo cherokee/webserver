@@ -27,7 +27,9 @@
 #include "virtual_server.h"
 #include "socket.h"
 #include "util.h"
+#include "server-protected.h"
 
+#define ENTRIES "crypto,ssl"
 
 static ret_t
 _free (cherokee_cryptor_libssl_t *cryp)
@@ -102,8 +104,8 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 
 	/* Set the new SSL context
 	 */
-	ctx = SSL_set_SSL_CTX (ssl, vsrv->cryptor->context);
-	if (ctx != vsrv->cryptor->context) {
+	ctx = SSL_set_SSL_CTX (ssl, CRYPTOR_VSRV_SSL(vsrv->cryptor)->context);
+	if (ctx != CRYPTOR_VSRV_SSL(vsrv->cryptor)->context) {
 		PRINT_ERROR ("Could change the SSL context: servername='%s'\n", servername);
 	}
 
@@ -510,7 +512,7 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 	if ((host != NULL) &&
 	    (! cherokee_buffer_is_empty (host)))
 	{
-		re = SSL_set_tlsext_host_name (socket->session, host->buf);
+		re = SSL_set_tlsext_host_name (cryp->session, host->buf);
 		if (re <= 0) {
 			OPENSSL_LAST_ERROR(error);
 			PRINT_ERROR ("ERROR: OpenSSL: Could set SNI server name: %s\n", error);
