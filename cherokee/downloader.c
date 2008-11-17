@@ -496,7 +496,8 @@ cherokee_downloader_step (cherokee_downloader_t *downloader,
 		TRACE(ENTRIES, "Phase %s\n", "send_headers");
 
 		ret = downloader_send_buffer (downloader, &downloader->request_header);
-		if (unlikely(ret != ret_ok)) return ret;
+		if (unlikely(ret != ret_ok))
+			return ret;
 
 		BIT_SET (downloader->status, downloader_status_headers_sent);
 		downloader->phase = downloader_phase_send_post;
@@ -505,10 +506,9 @@ cherokee_downloader_step (cherokee_downloader_t *downloader,
 		TRACE(ENTRIES, "Phase %s\n", "send_post");
 
 		if (downloader->post != NULL) {
-			ret = cherokee_post_walk_to_fd (downloader->post, downloader->socket.socket, NULL, NULL);
-/*			ret = send_post (downloader); */
-/* 			ret = downloader_send_buffer (downloader, downloader->post_ref); */
-			if (unlikely(ret != ret_ok)) return ret;
+			ret = cherokee_post_walk_to_socket (downloader->post, &downloader->socket);
+			if (unlikely(ret != ret_ok))
+				return ret;
 		}
 
 		BIT_SET (downloader->status, downloader_status_post_sent);
@@ -519,7 +519,8 @@ cherokee_downloader_step (cherokee_downloader_t *downloader,
 		TRACE(ENTRIES, "Phase %s\n", "read_headers");
 
 		ret = downloader_header_read (downloader, tmp1, tmp2);
-		if (unlikely(ret != ret_ok)) return ret;
+		if (unlikely(ret != ret_ok))
+			return ret;
 
 		/* We have the header parsed, continue..
 		 */

@@ -1,5 +1,9 @@
 2008-11-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/downloader.c, cherokee/post.c, cherokee/post.h,
+	cherokee/main_tweak.c: Fixes a problem with Cherokee-tweak, the
+	new TLS/SSL layer and the POST mechanism.
+
 	* admin/PageGeneral.py, admin/consts.py: Adds a new option for
 	setting the TLS backend.
 

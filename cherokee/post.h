@@ -27,6 +27,7 @@
 
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
+#include <cherokee/socket.h>
 #include <unistd.h>
 
 
@@ -54,22 +55,23 @@ typedef struct {
 #define POST_BUF(x)  (&POST(x)->info)
 
 
-ret_t cherokee_post_init          (cherokee_post_t *post);
-ret_t cherokee_post_mrproper      (cherokee_post_t *post);
+ret_t cherokee_post_init           (cherokee_post_t *post);
+ret_t cherokee_post_mrproper       (cherokee_post_t *post);
 
-int   cherokee_post_is_empty      (cherokee_post_t *post);
-int   cherokee_post_got_all       (cherokee_post_t *post);
+int   cherokee_post_is_empty       (cherokee_post_t *post);
+int   cherokee_post_got_all        (cherokee_post_t *post);
 
-ret_t cherokee_post_set_len       (cherokee_post_t *post, off_t  len);
-ret_t cherokee_post_get_len       (cherokee_post_t *post, off_t *len);
+ret_t cherokee_post_set_len        (cherokee_post_t *post, off_t  len);
+ret_t cherokee_post_get_len        (cherokee_post_t *post, off_t *len);
 
-ret_t cherokee_post_append        (cherokee_post_t *post, char *str, size_t len);
-ret_t cherokee_post_commit_buf    (cherokee_post_t *post, size_t len);
+ret_t cherokee_post_append         (cherokee_post_t *post, char *str, size_t len);
+ret_t cherokee_post_commit_buf     (cherokee_post_t *post, size_t len);
 
-ret_t cherokee_post_walk_reset    (cherokee_post_t *post);
-ret_t cherokee_post_walk_finished (cherokee_post_t *post);
-ret_t cherokee_post_walk_read     (cherokee_post_t *post, cherokee_buffer_t *buf, cuint_t len);
-ret_t cherokee_post_walk_to_fd    (cherokee_post_t *post, int fd, int *eagain_fd, int *mode);
+ret_t cherokee_post_walk_reset     (cherokee_post_t *post);
+ret_t cherokee_post_walk_finished  (cherokee_post_t *post);
+ret_t cherokee_post_walk_read      (cherokee_post_t *post, cherokee_buffer_t *buf, cuint_t len);
+ret_t cherokee_post_walk_to_fd     (cherokee_post_t *post, int fd, int *eagain_fd, int *mode);
+ret_t cherokee_post_walk_to_socket (cherokee_post_t *post, cherokee_socket_t *socket);
 
 CHEROKEE_END_DECLS
 

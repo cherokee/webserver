@@ -203,10 +203,36 @@ cherokee_post_walk_finished (cherokee_post_t *post)
 	return ret;
 }
 
+static ret_t
+post_read_file_step (cherokee_post_t *post)
+{
+	int r;
+
+	cherokee_buffer_ensure_size (&post->info, DEFAULT_READ_SIZE+1);
+	
+	/* Read from the temp file is needed
+	 */
+	if (!cherokee_buffer_is_empty (&post->info))
+		return ret_ok;
+
+	r = read (post->tmp_file_fd, post->info.buf, DEFAULT_READ_SIZE);
+	if (r == 0) {
+		/* EOF */
+		return ret_ok;
+	} else if (r < 0) {
+		/* Couldn't read */
+		return ret_error;
+	}
+	
+	post->info.len    = r;
+	post->info.buf[r] = '\0';
+	return ret_ok;
+}
 
 ret_t 
 cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mode)
 {
+	ret_t   ret;
 	ssize_t r;
 
 	/* Sanity check
@@ -234,23 +260,9 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 		return cherokee_post_walk_finished (post);
 
 	case post_in_tmp_file:
-		cherokee_buffer_ensure_size (&post->info, DEFAULT_READ_SIZE+1);
-
-		/* Read from the temp file is needed
-		 */
-		if (cherokee_buffer_is_empty (&post->info)) {
-			r = read (post->tmp_file_fd, post->info.buf, DEFAULT_READ_SIZE);
-			if (r == 0) {
-				/* EOF */
-				return ret_ok;
-			} else if (r < 0) {
-				/* Couldn't read */
-				return ret_error;
-			}
-
-			post->info.len    = r;
-			post->info.buf[r] = '\0';
-		}
+		ret = post_read_file_step (post);
+		if (ret != ret_ok)
+			return ret;
 
 		/* Write it to the fd
 		 */
@@ -277,6 +289,48 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 		return ret_error;
 	}
 
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_post_walk_to_socket (cherokee_post_t *post, cherokee_socket_t *socket)
+{
+	ret_t  ret;
+	size_t written = 0;
+
+	switch (post->type) {
+	case post_in_memory:
+		ret = cherokee_socket_write (socket, 
+					     post->info.buf + post->walk_offset,
+					     post->info.len - post->walk_offset,
+					     &written);
+
+		if (written > 0){
+			TRACE(ENTRIES, "wrote %d bytes from memory\n", written);
+			post->walk_offset += written;
+			return cherokee_post_walk_finished (post);
+		}
+		return ret;
+
+	case post_in_tmp_file:
+		ret = post_read_file_step (post);
+		if (ret != ret_ok)
+			return ret;
+
+		ret = cherokee_socket_write (socket, post->info.buf, post->info.len, &written);
+		if (written > 0) {
+			cherokee_buffer_move_to_begin (&post->info, written);
+			post->walk_offset += written;
+			return cherokee_post_walk_finished (post);
+		}
+		return ret;
+
+	default:
+		SHOULDNT_HAPPEN;
+		return ret_error;
+	}
+	
 	return ret_ok;
 }
 

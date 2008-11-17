@@ -32,6 +32,7 @@
 # include "getopt/getopt.h"
 #endif
 
+#include <signal.h>
 #include <cherokee/cherokee.h>
 
 /* Notices 
@@ -409,6 +410,12 @@ main (int argc, char *argv[])
 	cherokee_init();
 	TRACE(ENTRIES, "Starts %d args\n", argc-1);
 
+#ifdef SIGPIPE
+        signal (SIGPIPE, SIG_IGN);
+#endif
+#ifdef SIGCHLD
+        signal (SIGCHLD, SIG_IGN);
+#endif
 	/* Parse the parameters
 	 */
 	while ((c = getopt_long(argc, argv, "hVc:a:u:p:l:t:", long_options, NULL)) != -1) {
