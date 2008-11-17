@@ -1037,15 +1037,12 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 	/* Get the passwd file entry before chroot
 	 */
-	ent = getpwuid (srv->user);
-	if (ent == NULL) {
-		PRINT_ERROR ("Can't get username for UID %d\n", srv->user);
-
-		/* It's fatal if a user/group change was scheduled
-		 */
-		if ((srv->user != srv->user_orig) ||
-		    (srv->group != srv->group_orig))
-		{
+	if ((srv->user != srv->user_orig) ||
+	    (srv->group != srv->group_orig))
+	{
+		ent = getpwuid (srv->user);
+		if (ent == NULL) {
+			PRINT_ERROR ("Can't get username for UID %d\n", srv->user);
 			return ret_error;
 		}
 	}
@@ -1071,9 +1068,13 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 	/* Change the user
 	 */
-	ret = change_execution_user (srv, ent);
-	if (ret != ret_ok) {
-		return ret;
+	if ((srv->user != srv->user_orig) ||
+	    (srv->group != srv->group_orig))
+	{
+		ret = change_execution_user (srv, ent);
+		if (ret != ret_ok) {
+			return ret;
+		}
 	}
 
 	/* Change current directory
