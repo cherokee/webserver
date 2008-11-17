@@ -1160,6 +1160,9 @@ fi
 if test "$use_crypt" != "yes"; then
 	modules=`echo $modules | sed s/htpasswd//`
 fi
+if test "$have_openssl" != "yes"; then
+	modules=`echo $modules | sed s/libssl//`
+fi
 
 add_calls=""
 init_calls=""
