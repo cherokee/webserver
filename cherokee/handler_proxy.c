@@ -210,6 +210,8 @@ add_request (cherokee_handler_proxy_t *hdl,
 			return ret_error;
 	}
 
+	TRACE(ENTRIES, "Client request: '%s'\n", tmp->buf);
+
 	/* Check the regexs
 	 */
 	list_for_each (i, &props->request_regexs) {
@@ -229,6 +231,8 @@ add_request (cherokee_handler_proxy_t *hdl,
 		cherokee_regex_substitute (&regex_entry->subs, tmp, buf, ovector, re);
 		return ret_ok;
 	}
+
+	TRACE(ENTRIES, "Rebuilt request: '%s'\n", tmp->buf);
 
 	/* Did not match any regex, use the raw URL
 	 */
@@ -316,6 +320,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 		/* Check the header entry  */
 		if ((! strncasecmp (begin, "Host:", 5)) ||
 		    (! strncasecmp (begin, "Connection:", 11)) ||
+		    (! strncasecmp (begin, "Keep-Alive:", 11)) ||
 		    (! strncasecmp (begin, "Transfer-Encoding:", 18)))
 		{
 			goto next;
