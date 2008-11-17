@@ -1049,6 +1049,8 @@ version.h \
 version.c \
 buffer.h \
 buffer.c \
+module.h \
+module.c \
 cryptor.h \
 cryptor.c \
 socket.h \
@@ -1218,8 +1220,6 @@ logger_writer.c \
 thread.h \
 thread.c \
 plugin.h \
-module.h \
-module.c \
 validator.h \
 validator.c \
 plugin_loader.h \
@@ -1271,12 +1271,12 @@ trace.h \
 avl.h \
 cache.h \
 iocache.h \
+module.h \
 cryptor.h \
 \
 config_node.h \
 config_entry.h \
 server.h \
-module.h \
 logger.h \
 handler.h \
 encoder.h \

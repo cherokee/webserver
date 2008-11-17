@@ -48,13 +48,13 @@
 #include <cherokee/trace.h>
 #include <cherokee/cache.h>
 #include <cherokee/iocache.h>
+#include <cherokee/module.h>
 #include <cherokee/cryptor.h>
 
 /* Server library
  */
 #include <cherokee/config_node.h>
 #include <cherokee/server.h>
-#include <cherokee/module.h>
 #include <cherokee/logger.h>
 #include <cherokee/handler.h>
 #include <cherokee/encoder.h>
