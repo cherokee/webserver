@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
 
-Cookbook: Setting up Joomla
+Cookbook: Setting up Drupal
 ---------------------------
 
 Setting up link:http://drupal.org/[Drupal] with Cherokee is really
@@ -13,7 +13,7 @@ with the MySQL module installed. The default configuration already
 provides a valid PHP configuration for Cherokee if you have php-cgi
 installed, but you can follow the appropriate recipe about
 link:cookbook_php.html[setting up PHP] in case you don't have it
-available for any reason.
+available for some reason.
 
 Under these conditions, you could start Drupal's installation and you
 would already be able to have your site up and running.
@@ -23,7 +23,9 @@ However, we can add several refinements to Cherokee's setting. Mainly:
 . Forward all requests for www.example.net (or whatever domain is resolved
   to our machine) to example.net
 
-. Set up an appropriate url rewrite configuration for Drupal.
+. Set up an appropriate url rewrite configuration for
+  Drupal. *WARNING: There is currently an open bug that prevents
+  this. This is not yet working, but will be soon.*
 
 . Serve directly as static content some specific file types, avoiding
   any other file requests and eliminating this way any security risk
@@ -88,7 +90,7 @@ Internal , ^/(.*)$           , /index.php?q=$1
 image::media/images/cookbook_drupal_example3.png
 
 Remember to set up Drupal as custom error handler for the virtual
-server. Do son in the `Error Handler` tab, selecting the `Custom
+server. Do so in the `Error Handler` tab, selecting the `Custom
 redirections` option and sending 404 errors to Drupal.
 
 image::media/images/cookbook_drupal_example4.png
@@ -154,3 +156,8 @@ requested values and you will obtain the following results once your
 are through.
 
 image::media/images/cookbook_drupal.png
+
+WARNING:
+Using Clean URLs must be disabled at this stage.
+A bug has to be fixed before such an installation works.
+Until then the URL rewrites indicated above do not work.

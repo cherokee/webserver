@@ -50,6 +50,8 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks
   . link:cookbook_ror.html[Setting up RoR]: How to run Ruby on Rails apps with Cherokee.
   . link:cookbook_mono.html[Setting up ASP.NET]: How to run ASP.NET apps with Mono and Cherokee.
   . link:cookbook_glassfish.html[Setting up GlassFish]: How to run Java apps with Cherokee.
+  . link:cookbook_zend.html[Setting up Zend]: How to run Zend apps with Cherokee.
+  . link:cookbook_kumbia.html[Setting up Kumbia]: How to run Kumbia apps with Cherokee.
   . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
   . link:cookbook_authentication.html[Authentication]: How to set up authenticated resources.
   . link:cookbook_maintenance.html[Maintenance]: Seamlessly switching to maintenance mode.
@@ -58,9 +60,9 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks
   . link:cookbook_dbslayer.html[DBSlayer]: How to set up DBSlayer MySQL balancing.
   . link:cookbook_mailman.html[Setting up Mailman]: How to run Mailman on Cherokee.
   . link:cookbook_joomla.html[Setting up Joomla]: How to run Joomla on Cherokee.
+  . link:cookbook_drupal.html[Setting up Drupal]: How to run Drupal on Cherokee.
+  . link:cookbook_wordpress.html[Setting up Wordpress]: How to run Wordpress on Cherokee.
 ////
-  . link:cookbook_zend.html[Setting up Zend]: How to run Zend apps with Cherokee.
-  . link:cookbook_kumbia.html[Setting up Kumbia]: How to run Kumbia apps with Cherokee.
   . link:cookbook_managing_logs.html[Managing logs]
 ////
 
@@ -130,4 +132,6 @@ Remaingin tasks:
 * <6> How to manage security (SSL/TLS, certs, etc) <cookbook_ssl.txt>
 * <8> Reference table of functionalities to be achieved (and hopefully
       a full setup example).
+*     Recheck the Drupal recipe when the bug is fixed (and the important
+      FastCGI variables are set).
 ////////////////////////////////////////////////////

@@ -1,3 +1,8 @@
+2008-11-17  Taher Shihadeh  <taher@unixwars.com>
+
+	* doc/*: bunch of new screenshots, and some more recipes and
+	fixes.
+
 2008-11-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/server.c (cherokee_server_initialize): getpwuid() fail
