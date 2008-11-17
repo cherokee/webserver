@@ -1,3 +1,8 @@
+2008-11-17  Taher Shihadeh  <taher@unixwars.com>
+
+	* cherokee/handler_fcgi.c: gets rid of a warning that shouldn't be
+	there.
+
 2008-11-16  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/connection.c: Keep-alive was been disabled ALWAYS when

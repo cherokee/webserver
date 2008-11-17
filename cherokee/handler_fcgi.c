@@ -68,7 +68,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	cuint_t  type;
 	cuint_t  id;
 	cuint_t  padding;
-		
+
 	/* Is there enough information?
 	 */
 	if (inbuf->len < sizeof(FCGI_Header))
@@ -117,12 +117,15 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 
 		if (CONN_VSRV(conn)->logger != NULL) {
 			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-			
+
 			cherokee_buffer_add (&tmp, data, len);
 			cherokee_logger_write_string (CONN_VSRV(conn)->logger, "%s", tmp.buf);
-			PRINT_ERROR ("%s\n", tmp.buf);
 			cherokee_buffer_mrproper (&tmp);
 		}
+		else if (SOURCE_INT(hdl->src_ref)->debug) {
+			PRINT_MSG ("%.*s\n", len, data);
+		}
+
 		break;
 
 	case FCGI_STDOUT:
@@ -147,7 +150,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	}
 
 	cherokee_buffer_move_to_begin (inbuf, len + FCGI_HEADER_LEN + padding);
-/*	printf ("- FCGI quedan %d\n", inbuf->len); */
+/*	printf ("- FCGI left %d\n", inbuf->len); */
 	return ret_eagain;
 }
 
