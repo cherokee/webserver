@@ -74,7 +74,8 @@ cherokee_connection_info_free (cherokee_connection_info_t *info)
 
 
 ret_t 
-cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_connection_t *conn)
+cherokee_connection_info_fill_up (cherokee_connection_info_t *info,
+				  cherokee_connection_t      *conn)
 {
 	ret_t                        ret;
 	const char                  *handler_name = NULL;
@@ -224,7 +225,9 @@ cherokee_connection_info_fill_up (cherokee_connection_info_t *info, cherokee_con
 
 
 ret_t 
-cherokee_connection_info_list_thread (cherokee_list_t *list, void *_thread, cherokee_handler_t *self_handler)
+cherokee_connection_info_list_thread (cherokee_list_t    *list,
+				      void               *_thread,
+				      cherokee_handler_t *self_handler)
 {
 	ret_t               ret;
 	cherokee_list_t    *i;
@@ -278,7 +281,9 @@ cherokee_connection_info_list_thread (cherokee_list_t *list, void *_thread, cher
 
 
 ret_t 
-cherokee_connection_info_list_server (cherokee_list_t *list, cherokee_server_t *server, cherokee_handler_t *self)
+cherokee_connection_info_list_server (cherokee_list_t    *list,
+				      cherokee_server_t  *server,
+				      cherokee_handler_t *self)
 {
 	cherokee_list_t *i;
 

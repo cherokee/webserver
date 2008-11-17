@@ -622,10 +622,6 @@ endif
 #
 # Handler admin
 #
-config_common = \
-connection_info.h \
-connection_info.c
-
 handler_admin = \
 handler_admin.c \
 handler_admin.h \
@@ -637,7 +633,7 @@ libplugin_admin_la_SOURCES = $(handler_admin)
 libplugin_admin_la_LIBADD  = libcherokee-config.la libcherokee-client.la  
 
 if STATIC_HANDLER_ADMIN
-static_handler_admin_src = $(handler_admin) $(config_common)
+static_handler_admin_src = $(handler_admin)
 else
 dynamic_handler_admin_lib = libplugin_admin.la
 endif
@@ -1238,13 +1234,13 @@ source.c \
 source_interpreter.h \
 source_interpreter.c \
 info.h \
-info.c
+info.c \
+connection_info.h \
+connection_info.c
 
 libcherokee_config_la_SOURCES = \
-$(config_common) \
 admin_client.h \
 admin_client.c 
-
 
 #
 # Header files
