@@ -34,11 +34,12 @@ tab to set up the rules.
 .Steps
 . You will need to keep the rule for the `php` extension.
 
+////
 . Next, configure a rule with the handler `File Exists` that should be
   set to a priority lower than that of the `php` rule.  This one
   should be set to match `*`, and must be handled by the
   link:modules_handlers_file.html[Static Content] handler.
-
+////
 . And last, modify your `Default` rule by configuring the
   link:modules_handlers_redir.html[redirection handler], through the
   `Handler` tab.
@@ -49,8 +50,7 @@ Type     , Regular Expression, Substitution
 Internal , ^(.*)$              , /index.php?url=$1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This will take care of redirecting the requests to Kumbia whenever
-they do not match static content.
+This will take care of redirecting the requests to Kumbia.
 
 You are done with the configuration! You can now access your
 application.

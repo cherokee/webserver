@@ -56,10 +56,12 @@ tab to set up the rules.
 .Steps
 . You will need to keep the rule for the `php` extension.
 
+////
 . Next, configure a rule with the handler `File Exists` that should be
   set to a priority lower than that of the `php` rule.  This one
   should be set to match `*`, and must be handled by the
   link:modules_handlers_file.html[Static Content] handler.
+////
 
 . And last, modify your `Default` rule by configuring the
   link:modules_handlers_redir.html[redirection handler], through the
@@ -71,11 +73,10 @@ Type     , Regular Expression, Substitution
 Internal , ^.*$              , /index.php
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This will take care of redirecting the requests to Zend whenever they
-do not match static content.
+This will take care of redirecting the requests to Zend.
 
-You are done with the configuration!
-You can now access your application. The demo provided by Zend will look like this:
+You are done with the configuration! You can now access your
+application. The demo provided by Zend will look like this:
 
 image::media/images/cookbook_zend1.png[Demo]
 
