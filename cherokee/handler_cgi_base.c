@@ -373,6 +373,11 @@ cherokee_handler_cgi_base_build_basic_env (
 		cherokee_header_copy_request_w_args (&conn->header, tmp);
 	} 
 	else {
+		if (! cherokee_buffer_is_empty (&conn->userdir)) {
+			cherokee_buffer_add_str    (tmp, "/~");
+			cherokee_buffer_add_buffer (tmp, &conn->userdir);
+		}
+
 		if (! cherokee_buffer_is_empty (&conn->request_original))
 			cherokee_buffer_add_buffer (tmp, &conn->request_original);
 		else
@@ -387,7 +392,15 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	/* Set SCRIPT_URL
 	 */
-	set_env (cgi, "SCRIPT_URL", conn->request.buf, conn->request.len);
+	if (! cherokee_buffer_is_empty (&conn->userdir)) {
+		cherokee_buffer_clean      (tmp);
+		cherokee_buffer_add_str    (tmp, "/~");
+		cherokee_buffer_add_buffer (tmp, &conn->userdir);
+		cherokee_buffer_add_buffer (tmp, &conn->request);
+		set_env (cgi, "SCRIPT_URL", tmp->buf, tmp->len);
+	} else {
+		set_env (cgi, "SCRIPT_URL", conn->request.buf, conn->request.len);
+	}
 
 	/* Set HTTPS and SERVER_PORT
 	 */
