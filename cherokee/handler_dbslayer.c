@@ -530,7 +530,7 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 				props->lang = dwriter_ruby;
 
 			} else {
-				PRINT_ERROR ("ERROR: DBSlayer: unrecognize language '%s'\n",
+				PRINT_ERROR ("ERROR: DBSlayer: unrecognized language '%s'\n",
 					     subconf->val.buf);
 				return ret_error;
 			}
