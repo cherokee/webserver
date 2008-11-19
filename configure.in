@@ -1027,9 +1027,10 @@ AM_CONDITIONAL(HAVE_LDAP, test $have_ldap = "yes")
 
 
 dnl
-dnl Check for MySQL 4.0.0 support
+dnl Check for MySQL: Execution of a string containing multiple
+dnl statements was introduced in the MySQL release 5.0.0
 dnl
-AX_LIB_MYSQL(4.0.0)
+AX_LIB_MYSQL(5.0.0)
 
 dnl
 dnl GeoIP library

@@ -56,7 +56,7 @@ connect_to_database (cherokee_handler_dbslayer_t *hdl)
 				   props->db.buf,
 				   hdl->src_ref->port,
 				   hdl->src_ref->unix_socket.buf,
-				   0);
+				   CLIENT_MULTI_STATEMENTS | CLIENT_MULTI_RESULTS);
 	if (conn == NULL) {
 		return ret_error;
 	}
@@ -399,11 +399,16 @@ dbslayer_step (cherokee_handler_dbslayer_t *hdl,
 		}
 		
 		mysql_free_result(result);
+		result = NULL;
 
 		re = mysql_next_result (hdl->conn);
-		if (re != 0)
-			break;
-	} while (true);
+		if (re == -1) {
+			/* No more*/
+		} else if (re > 0) {
+			/* Error */
+		}
+		/* There are more */
+	} while (re == 0);
 
 	return ret_eof_have_data;
 }

@@ -1,3 +1,11 @@
+2008-11-19  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_dbslayer.c: Fixes the Multi-Statement query
+	support.
+
+	* configure.in: MySQL 5.0.0 is required for the dbslayer handler
+	(MySQL 4.0 does not support some required API).
+
 2008-11-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_cgi_base.c: Fixes REQUEST_URI and SCRIPT_URL.
