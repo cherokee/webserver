@@ -57,6 +57,7 @@ cookbook_wordpress.html \
 cookbook_drupal.html \
 cookbook_zend.html \
 cookbook_kumbia.html \
+cookbook_nagios.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -187,6 +188,10 @@ media/images/cookbook_wp_default1.png \
 media/images/cookbook_wp_example1.png \
 media/images/cookbook_wp_example2.png \
 media/images/cookbook_wp_example3.png \
+media/images/cookbook_nagios1.png \
+media/images/cookbook_nagios2.png \
+media/images/cookbook_nagios3.png \
+media/images/cookbook_nagios4.png \
 media/images/tracelor.png
 
 EXTRA_DIST = \

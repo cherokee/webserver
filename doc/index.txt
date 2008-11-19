@@ -137,33 +137,26 @@ Suggested recipes:
 ------------------
 Nagios:		http://www.nagios.org/
 Symfony:	http://www.symfony-project.org/
-SquirrelMail: 	http://www.squirrelmail.org/
+phpBB
 Cake PHP: 	http://www.cakephp.org/
 Piwik:		http://piwik.org/
-? vBulletin + vBSEO: http://www.vbseo.com/
-? vBulletin + eAccelerator: 
-
-
-
- 	   	 
-  	
+vBulletin + vBSEO: http://www.vbseo.com/
+vBulletin + eAccelerator: 
+Moodle
+Subversion
+Tracks
+SquirrelMail: 	http://www.squirrelmail.org/
 Roller
-Liferay
+Liferay 
 DokuWiki
 MediaWiki
-phpBB
 Mantis
 Opina
 KnowledgeTree
 Redmine
 Trac
 Alfresco
-Moodle
-Subversion
-Tracks
 JasperServer
 eZPublish
 SugarCRM
-	  
-
 ////////////////////////////////////////////////////
