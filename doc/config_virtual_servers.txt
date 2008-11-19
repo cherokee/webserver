@@ -414,3 +414,19 @@ link:http://www.rfc-archive.org/getrfc.php?rfc=3546[RFC 3546] or by
 elegantly respinning the secure handshake. Check the
 link:other_goodies.html#ssl-vhosts[SSL Virtual Hosts] information for
 more details.
+
+If you want HTTPS to work, you must remember this:
+
+. Providing the PEM-encoded files is mandatory for both `Certificate`
+  and `Certificate key` fields. Providing the `CA List` is optional.
+
+. If you have several virtual servers, the `Security` section must be
+  configured for every one of them. At the moment you cannot have some
+  with HTTPS and some without. This makes sense, since by enabling the
+  feature in any one of them you are opening the HTTPS port in your
+  host, and receiving HTTPS requests for a virtual server that does
+  not provide the service would not be handled in a coherente
+  manner. None of the alternatives is very elegant in design: falling
+  back to HTTP, issuing an error that is likely to restart the HTTPS
+  hanshake, etc. This behavior, however, might change in the future
+  depending on the popularity of any proposed mechanisms.

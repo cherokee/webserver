@@ -130,8 +130,40 @@ Remaingin tasks:
 * <5> How to manage logs  (make specific mention of usage of
       Cherokee-Tweak and log backers).
 * <6> How to manage security (SSL/TLS, certs, etc) <cookbook_ssl.txt>
-* <8> Reference table of functionalities to be achieved (and hopefully
-      a full setup example).
-*     Recheck the Drupal recipe when the bug is fixed (and the important
-      FastCGI variables are set).
+*     Recheck the Drupal recipe when the bug is fixed (and the relevant
+      variables are passed to FastCGI).
+
+Suggested recipes:
+------------------
+Nagios:		http://www.nagios.org/
+Symfony:	http://www.symfony-project.org/
+SquirrelMail: 	http://www.squirrelmail.org/
+Cake PHP: 	http://www.cakephp.org/
+Piwik:		http://piwik.org/
+? vBulletin + vBSEO: http://www.vbseo.com/
+? vBulletin + eAccelerator: 
+
+
+
+ 	   	 
+  	
+Roller
+Liferay
+DokuWiki
+MediaWiki
+phpBB
+Mantis
+Opina
+KnowledgeTree
+Redmine
+Trac
+Alfresco
+Moodle
+Subversion
+Tracks
+JasperServer
+eZPublish
+SugarCRM
+	  
+
 ////////////////////////////////////////////////////

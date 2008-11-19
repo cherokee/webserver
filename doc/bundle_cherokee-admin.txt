@@ -21,7 +21,10 @@ cherokee-admin
 
 You will obtain an output similar to the following one, which provides
 the information needed to be able to access the configuration
-interface.
+interface. This information is generated randomly each time the
+program is launche, and it can be very useful in case you need to to
+give temporary access to a remote administrator in the confidence that
+no future accesses will be possible.
 
 ----
 Login:

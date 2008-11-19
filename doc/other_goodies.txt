@@ -9,11 +9,14 @@ difference in real-world production environments.
 [[cherokee-admin]]
 Cherokee-Admin
 ~~~~~~~~~~~~~~
-Cherokee bundles a one of a kind UI to set up every available feature
+Cherokee bundles a one of a kind GUI to set up every available feature
 without the need of editing any configuration files by hand. It is a
-modern and easy to manage application that allows to set up the server
-with speed and ease. The interface is thoroughly documented trhoughout
-Cherokee's documentation.
+modern and easy to manage web application that allows to set up the
+server with speed and ease. The interface is thoroughly documented
+throughout Cherokee's documentation. Several security measures prevent
+non authorized personnel from accessing the application, and one-time
+passwords are generated each time the program is launched. This can be
+used to give temporary access to a remote administrator.
 
 [[cherokee-tweak]]
 Cherokee-Tweak

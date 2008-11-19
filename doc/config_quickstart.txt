@@ -87,7 +87,8 @@ web browser and visiting link:http://localhost:9090[http://localhost:9090]
 
 The User and One-time Password will be required initially. This is to
 prevent other users of the local host from being able to configure the
-server unless they have access to the password.
+server unless they have access to the password. This is also very
+useful to allow temporary access to a remote administrator.
 
 If your user doesn't have enough privileges you will be notified. Also
 if no configuration file exists you will be prompted to create one
