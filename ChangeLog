@@ -1,5 +1,10 @@
 2008-11-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/util.h, cherokee/main.c: Exports the strcasestr()
+	prototype in case it isn't supported by the system. This patch
+	should fix a Solaris compilation issue:
+	http://code.google.com/p/cherokee/issues/detail?id=139
+
 	* cherokee/handler_dbslayer.c (dbslayer_step): Multi-Statement
 	queries need to be enclosed within a list object. Bis.
 

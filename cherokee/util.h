@@ -81,6 +81,9 @@ CHEROKEE_BEGIN_DECLS
 #ifndef HAVE_STRNSTR
 char *strnstr (const char *s, const char *find, size_t slen);
 #endif
+#ifndef HAVE_STRCASESTR
+char *strcasestr (register char *s, register char *find);
+#endif
 
 /* String management functions
  */

@@ -125,7 +125,7 @@ check_worker_version (const char *this_exec)
 		/* Skip line until it found the version entry
 		 */
 		line = fgets (tmp, sizeof(tmp), f);
-		line = strcasestr (line, "Version: ");
+		line = strstr (line, "Version: ");
 		if (line == NULL) 
 			continue;
 
