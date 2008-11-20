@@ -230,4 +230,7 @@ def is_url_or_path (value):
 
     raise ValueError, 'Not a URL, nor a path'
 
-
+def is_dev_null_or_local_dir_exists (value, cfg):
+    if value == '/dev/null':
+        return value
+    return is_local_dir_exists (value, cfg)

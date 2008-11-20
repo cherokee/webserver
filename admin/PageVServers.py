@@ -7,7 +7,7 @@ from Entry import *
 
 DATA_VALIDATION = [
     ("new_vserver_name",   validations.is_safe_id),
-    ("new_vserver_droot", (validations.is_local_dir_exists, 'cfg')),
+    ("new_vserver_droot", (validations.is_dev_null_or_local_dir_exists, 'cfg')),
 ]
 
 COMMENT = """

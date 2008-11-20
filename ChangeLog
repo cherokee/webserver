@@ -3,6 +3,10 @@
 	* cherokee/handler_dbslayer.c (dbslayer_step): Spurious warning
 	removed from proccessing of Multi-Statement queries.
 
+	* admin/PageEntry.py, admin/PageVServers.py, admin/PageVServer.py,
+	admin/validations.py: allows /dev/null as path. No need for
+	/var/www/fake from now on.
+
 2008-11-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_dbslayer.c (dbslayer_step): Multi-Statement
