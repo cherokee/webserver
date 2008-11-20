@@ -1,3 +1,8 @@
+2008-11-20  Taher Shihadeh  <taher@unixwars.com>
+
+	* cherokee/handler_dbslayer.c (dbslayer_step): Spurious warning
+	removed from proccessing of Multi-Statement queries.
+
 2008-11-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_dbslayer.c (dbslayer_step): Multi-Statement

@@ -405,17 +405,6 @@ dbslayer_step (cherokee_handler_dbslayer_t *hdl,
 		result = NULL;
 
 		re = mysql_next_result (hdl->conn);
-		if (re == -1) {
-			/* No more*/
-			break;
-		} else if (re > 0) {
-			/* Error */
-			PRINT_ERROR ("ERROR: MySQL next result returned: %d\n", re);
-			break;
-		}
-
-		/* There are more results..
-		 */
 	} while (re == 0);
 
 	/* Close results list */
