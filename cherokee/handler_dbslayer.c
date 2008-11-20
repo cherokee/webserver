@@ -386,6 +386,9 @@ dbslayer_step (cherokee_handler_dbslayer_t *hdl,
 
 	cherokee_dwriter_set_buffer (&hdl->writer, buffer);
 
+	/* Open the result list */
+	cherokee_dwriter_list_open (&hdl->writer);
+
 	do {
 		result = mysql_store_result (hdl->conn);
 		if (mysql_errno (hdl->conn)) {
@@ -404,11 +407,19 @@ dbslayer_step (cherokee_handler_dbslayer_t *hdl,
 		re = mysql_next_result (hdl->conn);
 		if (re == -1) {
 			/* No more*/
+			break;
 		} else if (re > 0) {
 			/* Error */
+			PRINT_ERROR ("ERROR: MySQL next result returned: %d\n", re);
+			break;
 		}
-		/* There are more */
+
+		/* There are more results..
+		 */
 	} while (re == 0);
+
+	/* Close results list */
+	cherokee_dwriter_list_close (&hdl->writer);
 
 	return ret_eof_have_data;
 }
