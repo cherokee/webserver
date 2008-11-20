@@ -135,13 +135,11 @@ Remaingin tasks:
 
 Suggested recipes:
 ------------------
-Nagios:		http://www.nagios.org/
 Symfony:	http://www.symfony-project.org/
 phpBB
 Cake PHP: 	http://www.cakephp.org/
 Piwik:		http://piwik.org/
-vBulletin + vBSEO: http://www.vbseo.com/
-vBulletin + eAccelerator: 
+ vBSEO: 	http://www.vbseo.com/
 Moodle
 Subversion
 Tracks

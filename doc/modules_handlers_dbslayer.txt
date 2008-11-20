@@ -50,6 +50,18 @@ Since the handler can manage multiple SQL requests in the same
 instruction, a list of responses is delivered containing as many as
 commands were issued.
 
+Warning: When performing multiple operations in a single call to the
+handler, you need to keep one *very important* thing in mind.  Because
+of MySQL's design, when an error is returned no other statements are
+executed. Check MySQL's mysql_next_result() function for more details
+about this limitation. This is not just limited to transactions. This
+means you should make atomic calls to the handler if you want to
+determine precisely what SQL commands where performed. A multiple
+operation can be executed with no further issue, but if one of the
+group fails the rest will not be run. You will receive at least one
+error among the results, which is probably all what you need in case
+you were in the middle of a transaction or that sort of situation.
+
 Further information about this hanlder can be found in the
 link:cookbook.html[cookbook] section, specifically in the recipe about
 link:cookbook_dbslayer.html[setting up the MySQL balancing].
