@@ -82,7 +82,7 @@ send_query (cherokee_handler_dbslayer_t *hdl)
 
 	/* Send the query
 	 */
-	re = mysql_query (hdl->conn, tmp->buf);
+	re = mysql_real_query (hdl->conn, tmp->buf, tmp->len);
 	if (re != 0)
 		return ret_error;
 
@@ -389,25 +389,13 @@ dbslayer_step (cherokee_handler_dbslayer_t *hdl,
 	/* Open the result list */
 	cherokee_dwriter_list_open (&hdl->writer);
 
-	while (mysql_more_results (hdl->conn)) 
-	{
-		re = mysql_next_result (hdl->conn);
-
-		if (re == -1) {
-			/* No more*/
-			break;
-		} else if (re > 0) {
-			/* MySQL doc: "If mysql_next_result() returns
-			 * an error, no other statements are executed
-			 * and there are no more results to fetch."
-			 */
-			handle_error (hdl);
-			break;
-		}
-
+	/* Iterate through the results
+	 */
+	do {
 		result = mysql_store_result (hdl->conn);
 		if (result == NULL) {
-			/* - Statement didn't return a result set. Eg: Insert
+			/* ERROR:
+			 * - Statement didn't return a result set. Eg: Insert
 			 * - Reading of the result set failed
 			 */
 			if (mysql_errno (hdl->conn)) {
@@ -419,9 +407,13 @@ dbslayer_step (cherokee_handler_dbslayer_t *hdl,
 		else {
 			render_result (hdl, result);
 			mysql_free_result (result);
-			result = NULL;
 		}
-	}
+		
+		re = mysql_next_result (hdl->conn);
+		if (re > 0) {
+			handle_error (hdl);
+		}
+	} while (re == 0);
 
 	/* Close results list */
 	cherokee_dwriter_list_close (&hdl->writer);
