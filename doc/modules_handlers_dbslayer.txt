@@ -46,6 +46,10 @@ flag, etc. It will not, however, replicate the operation among each
 one of you MySQL servers. These arrangements must be made
 independently using MySQL's specific mechanisms.
 
+Since the handler can manage multiple SQL requests in the same
+instruction, a list of responses is delivered containing as many as
+commands were issued.
+
 Further information about this hanlder can be found in the
-link:cookbook.html[cookbook], specifically in the recipe about
+link:cookbook.html[cookbook] section, specifically in the recipe about
 link:cookbook_dbslayer.html[setting up the MySQL balancing].

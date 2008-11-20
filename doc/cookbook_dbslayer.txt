@@ -14,10 +14,14 @@ link:modules_handlers_dbslayer.html[MySQL Bridge handler]
 documentation for the basic information about this subject.
 
 After reading this document you should be able to properly configure
-and understand this handler. It acts as a proxy for the back end MySQL
-server. This proxy can then be queried via JSON over HTTP, and the
-responses can be given in either one of the following supported
-consuming languages: JSON, Ruby, PHP and Python.
+and understand this handler. It acts as a proxy for a back end MySQL
+server (or cluster of server). This proxy can then be queried via JSON
+over HTTP, and the responses can be given in either one of the
+following supported consuming languages: JSON, Ruby, PHP and Python,
+which makes processing the database results almost trivial.
+
+As more than one SQL request can be issued at once -a transaction, for
+instance-, the responses are returned as a list of results.
 
 Independence:
 ~~~~~~~~~~~~~
@@ -183,13 +187,13 @@ detailed above (database name, user parameters and so on).
 #!/usr/bin/env python
 import urllib
 
-sql="select * from my_table;"
+sql="SELECT * FROM my_table;"
 query = urllib.quote(sql)
 
 print 'Original:', sql
 print 'Encoded:',  query
 
-url      = 'http://cherokee_server/%s'%(query)
+url      = 'http://localhost/%s'%(query)
 response = urllib.urlopen(url)
 
 print 'RESPONSE:', response
@@ -207,5 +211,27 @@ print 'DATA    :'
 print '---------'
 
 obj  = eval(data)
-print obj['RESULT'].keys()
+print obj
+--------------------------------------
+
+Example PHP script:
+~~~~~~~~~~~~~~~~~~~
+
+This is a simple fetch using cURL:
+
+--------------------------------------
+<?php
+  $query = "SELECT * FROM my_table;";
+  $host  = "http://localhost";
+  $url   = $host ."/". rawurlencode($query);
+
+  $curl = curl_init();
+  curl_setopt ($curl, CURLOPT_URL, $url);
+  curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+  $result = curl_exec ($curl);
+  curl_close ($curl);
+
+  $obj = eval($result);
+  var_dump($obj);
+?>
 --------------------------------------

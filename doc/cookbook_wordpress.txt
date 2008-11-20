@@ -185,7 +185,7 @@ Remember to set up the plugins that are of interest for you, such as
 the sitemaps generator, in a fashion compatible with what you
 configured in Cherokee.
 
-And voilà! You have a Wordrpress installation working flawlessly with
+And voilà! You have a Wordpress installation working flawlessly with
 Cherokee.
 
 image::media/images/cookbook_wp5.png[WP in action]
