@@ -389,23 +389,39 @@ dbslayer_step (cherokee_handler_dbslayer_t *hdl,
 	/* Open the result list */
 	cherokee_dwriter_list_open (&hdl->writer);
 
-	do {
-		result = mysql_store_result (hdl->conn);
-		if (mysql_errno (hdl->conn)) {
+	while (mysql_more_results (hdl->conn)) 
+	{
+		re = mysql_next_result (hdl->conn);
+
+		if (re == -1) {
+			/* No more*/
+			break;
+		} else if (re > 0) {
+			/* MySQL doc: "If mysql_next_result() returns
+			 * an error, no other statements are executed
+			 * and there are no more results to fetch."
+			 */
 			handle_error (hdl);
-		} else {
-			if (result == NULL) {
-				render_empty_result (hdl);
+			break;
+		}
+
+		result = mysql_store_result (hdl->conn);
+		if (result == NULL) {
+			/* - Statement didn't return a result set. Eg: Insert
+			 * - Reading of the result set failed
+			 */
+			if (mysql_errno (hdl->conn)) {
+				handle_error (hdl);
 			} else {
-				render_result (hdl, result);
+				render_empty_result (hdl);
 			}
 		}
-		
-		mysql_free_result(result);
-		result = NULL;
-
-		re = mysql_next_result (hdl->conn);
-	} while (re == 0);
+		else {
+			render_result (hdl, result);
+			mysql_free_result (result);
+			result = NULL;
+		}
+	}
 
 	/* Close results list */
 	cherokee_dwriter_list_close (&hdl->writer);
@@ -446,7 +462,8 @@ cherokee_handler_dbslayer_new (cherokee_handler_t     **hdl,
 	
 	/* Properties
 	 */
-	n->src_ref = NULL;
+	n->src_ref  = NULL;
+	n->rollback = false;
 
 	/* MySQL */
 	n->conn = mysql_init (NULL);
