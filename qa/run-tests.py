@@ -149,12 +149,12 @@ if not proxy:
     listen         = '127.0.0.1'
     proxy_cfg_file = None
 else:
-    tmp = proxy.split(':')
-    if len(tmp) == 2:
-        client_host, client_port = tmp
+    pieces = proxy.split(':')
+    if len(pieces) == 2:
+        client_host, client_port = pieces
         public_ip = figure_public_ip()
     else:
-        client_host, client_port, public_ip = tmp
+        client_host, client_port, public_ip = pieces
 
     listen = ''
 

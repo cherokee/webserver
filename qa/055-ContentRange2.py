@@ -1,4 +1,3 @@
-import random
 import string
 from base import *
 from util import *
@@ -17,12 +16,12 @@ class Test (TestBase):
         self.expected_error    = 206
 
     def Prepare (self, www):
-        random  = letters_random (LENGTH)
-        self.WriteFile (www, "Range100k", 0444, random)
+        tmp = letters_random (LENGTH)
+        self.WriteFile (www, "Range100k", 0444, tmp)
 
-        tmpfile = self.WriteTemp (random[OFFSET:])
+        tmpfile = self.WriteTemp (tmp[OFFSET:])
 
         self.expected_content  = ["file:"+tmpfile, "Content-Length: %d" % (LENGTH-OFFSET)]
-        self.forbidden_content = random[:OFFSET]
+        self.forbidden_content = tmp[:OFFSET]
 
 
