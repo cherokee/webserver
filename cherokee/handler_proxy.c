@@ -283,11 +283,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 
 	/* Add header: "Host: " */
 	cherokee_buffer_add_str    (buf, "Host: ");
-	cherokee_buffer_add_buffer (buf, &hdl->src_ref->host);
-	if (hdl->src_ref->port != 80) {
-		cherokee_buffer_add_char    (buf, ':');
-		cherokee_buffer_add_ulong10 (buf, hdl->src_ref->port);
-	}
+	cherokee_buffer_add_buffer (buf, &conn->host);
 	cherokee_buffer_add_str (buf, CRLF);
 
 	/* Add header: "Connection: " */

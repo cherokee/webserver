@@ -1,5 +1,8 @@
 2008-11-21  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (build_request): Fixes the Host
+	header. It was sending a wrong header in the request.
+
 	* qa/run-tests.py, qa/util.py, qa/base.py, qa/help.py,
 	qa/091-Digest2.py, qa/092-Digest3.py, qa/100-Digest-htdigest.py,
 	qa/122-Methods.py, qa/130-Digest-EmptyPasswd.py,
