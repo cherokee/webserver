@@ -306,8 +306,29 @@ connection_reuse_or_free (cherokee_thread_t *thread, cherokee_connection_t *conn
 
 
 static void
+set_linger (cherokee_thread_t *thd, cherokee_connection_t *conn)	    
+{
+	int           re;
+	struct linger linger;
+
+	linger.l_onoff  = 1;
+	linger.l_linger = 0;
+
+	re = setsockopt (S_SOCKET_FD(conn->socket), SOL_SOCKET, SO_LINGER,
+			 (const void *) &linger, sizeof(struct linger));
+	if (re == -1) {
+		PRINT_ERRNO (errno, "WARNING: Couldn't set SO_LINGER on fd=%d: ${errno}",
+			     S_SOCKET_FD(conn->socket));
+	}
+}
+
+static void
 purge_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
+	/* FIN_WAIT2 work-around
+	 */
+	set_linger (thread, conn);
+
 	/* Try last read, if previous read/write returned eof, then no
 	 * problem, otherwise it may avoid a nasty connection reset.
 	 */
@@ -502,25 +523,6 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 }
 
 
-static void
-prepare_timeout_connection (cherokee_thread_t     *thd,
-			    cherokee_connection_t *conn)
-{
-	int           re;
-	struct linger linger;
-
-	linger.l_onoff  = 1;
-	linger.l_linger = 0;
-
-	re = setsockopt (S_SOCKET_FD(conn->socket), SOL_SOCKET, SO_LINGER,
-			 (const void *) &linger, sizeof(struct linger));
-	if (re == -1) {
-		PRINT_ERRNO (errno, "WARNING: Couldn't set SO_LINGER on fd=%d: ${errno}",
-			     S_SOCKET_FD(conn->socket));
-	}
-}
-
-
 static ret_t 
 process_polling_connections (cherokee_thread_t *thd)
 {
@@ -537,7 +539,6 @@ process_polling_connections (cherokee_thread_t *thd)
 			TRACE (ENTRIES",polling", "conn %p(fd=%d): Time out\n", 
 			       conn, SOCKET_FD(&conn->socket));
 
-			prepare_timeout_connection (thd, conn);
 			purge_closed_polling_connection (thd, conn);
 			continue;
 		}
@@ -601,7 +602,6 @@ process_active_connections (cherokee_thread_t *thd)
 			TRACE (ENTRIES, "thread (%p) processing conn (%p): Time out\n", thd, conn);
 
 			conns_freed++;
-			prepare_timeout_connection (thd, conn);
 			purge_closed_connection (thd, conn);
 			continue;
 		}
