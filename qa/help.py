@@ -24,6 +24,7 @@ Usage: %s [parameters] [tests]
   -e<PATH>      Path to the binary of the server
   -m<STRING>    HTTP method name for the requests
   -v<STRING>    Run under Valgrind, string=['', 'hel', 'cac', 'cal']
+  -P<STRING>    Proxy address: host:ip[:public_ip]
 
 Report bugs to alvaro@gnu.org
 """

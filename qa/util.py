@@ -1,4 +1,4 @@
-import os, sys, time, random, fcntl
+import os, sys, time, random, fcntl, socket
 
 from conf import *
 
@@ -231,3 +231,29 @@ def print_sec (content):
     fcntl.flock (sys.stdout, fcntl.LOCK_EX)
     print content
     fcntl.flock (sys.stdout, fcntl.LOCK_UN)
+
+def ip_is_private(ip):
+    return (ip.startswith("10.") or \
+            ip.startswith("172.16.") or \
+            ip.startswith("192.168."))
+
+def figure_public_ip():
+    def ip_cmp(x,y):
+        # Public vs Private
+        if ip_is_private(x) and (not ip_is_private(y)):
+            return  1
+        elif ip_is_private(y) and (not ip_is_private(x)):
+            return -1 
+        
+        # Private
+        elif x.startswith('10.') and y.startswith('192.'):
+            return -1
+        elif x.startswith('192.') and y.startswith('10.'):
+            return  1
+
+        # Default
+        return cmp(x,y)
+        
+    ips = socket.gethostbyname_ex (socket.gethostname())[2]
+    ips.sort(ip_cmp)
+    return ips[0]
