@@ -1,5 +1,8 @@
 2008-11-21  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleExists.py, cherokee/rule_exists.h,
+	cherokee/rule_exists.c: Adds a new flag to match any file.
+
 	* cherokee/thread.c: Tries to fix a FIN_WAIT2 state related issue.
 
 	* cherokee/handler_proxy.c (build_request): Fixes the Host

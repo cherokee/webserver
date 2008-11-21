@@ -82,7 +82,8 @@ configure (cherokee_rule_exists_t    *rule,
 
 	UNUSED(vsrv);
 
-	cherokee_config_node_read_bool (conf, "iocache", &rule->use_iocache);
+	cherokee_config_node_read_bool (conf, "iocache",   &rule->use_iocache);
+	cherokee_config_node_read_bool (conf, "match_any", &rule->match_any);
 
 	ret = cherokee_config_node_read (conf, "exists", &tmp);
 	if (ret != ret_ok) {
@@ -110,23 +111,57 @@ _free (void *p)
 	return ret_ok;
 }
 
+static ret_t
+match_file (cherokee_rule_exists_t *rule,
+	    cherokee_connection_t  *conn,
+	    cherokee_buffer_t      *fullpath)
+{
+	ret_t                     ret;
+	struct stat               nocache_info;
+	struct stat              *info;
+	cherokee_iocache_entry_t *io_entry = NULL;
+	cherokee_server_t        *srv      = CONN_SRV(conn);
+
+	ret = cherokee_io_stat (srv->iocache, 
+				fullpath, 
+				rule->use_iocache,
+				&nocache_info,
+				&io_entry,
+				&info);
+
+	if (io_entry)
+		cherokee_iocache_entry_unref (&io_entry);
+
+	if (ret == ret_ok) {
+		TRACE(ENTRIES, "Match exists: '%s'\n", fullpath->buf);
+		return ret_ok;
+	}
+	
+	TRACE(ENTRIES, "Rule exists: did not match '%s'\n", fullpath->buf);
+	return ret_not_found;
+}
+
 static ret_t 
 match (cherokee_rule_exists_t *rule,
        cherokee_connection_t  *conn)
 {
-	int                       re;
-	ret_t                     ret;
-	cherokee_list_t          *i;
-	struct stat               nocache_info;
-	struct stat              *info;
-	cherokee_server_t        *srv      = CONN_SRV(conn);
-	cherokee_iocache_entry_t *io_entry = NULL;
-	cherokee_buffer_t        *tmp      = THREAD_TMP_BUF1(CONN_THREAD(conn));
+	int                re;
+	ret_t              ret;
+	cherokee_list_t   *i;
+	cherokee_buffer_t *tmp  = THREAD_TMP_BUF1(CONN_THREAD(conn));
 	
-	cherokee_buffer_clean (tmp);
+	/* Path base */
+	cherokee_buffer_clean      (tmp);
 	cherokee_buffer_add_buffer (tmp, &CONN_VSRV(conn)->root);
 	cherokee_buffer_add_str    (tmp, "/");
 
+	/* Always match */
+	if (rule->match_any) {
+		cherokee_buffer_add_buffer (tmp, &conn->request);
+		return match_file (rule, conn, tmp);
+	}
+
+	/* Check the list of files */
 	list_for_each (i, &rule->files) {
 		entry_t *entry = (entry_t *)i;
 
@@ -148,24 +183,11 @@ match (cherokee_rule_exists_t *rule,
 		 */
 		cherokee_buffer_add_buffer (tmp, &entry->file);
 
-		ret = cherokee_io_stat (srv->iocache, 
-					tmp, 
-					rule->use_iocache,
-					&nocache_info,
-					&io_entry,
-					&info);
+		ret = match_file (rule, conn, tmp);
+		if (ret == ret_ok)
+			return ret_ok;
 
 		cherokee_buffer_drop_ending (tmp, entry->file.len);
-
-		if (io_entry)
-			cherokee_iocache_entry_unref (&io_entry);
-
-		if (ret == ret_ok) {
-			TRACE(ENTRIES, "Match exists: '%s'\n", entry->file.buf);
-			return ret_ok;
-		}
-
-		TRACE(ENTRIES, "Rule exists: did not match '%s'\n", entry->file.buf);
 	}
 	
 	return ret_not_found;
@@ -190,6 +212,7 @@ cherokee_rule_exists_new (cherokee_rule_exists_t **rule)
 	 */
 	INIT_LIST_HEAD (&n->files);
 	n->use_iocache = false;
+	n->match_any   = false;
 
 	*rule = n;
  	return ret_ok;
