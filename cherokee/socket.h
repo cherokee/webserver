@@ -127,7 +127,7 @@ typedef struct {
 
 
 #define S_SOCKET(s)            ((cherokee_socket_t)(s))
-#define S_SOCKET_FD(s)         (s.socket)
+#define S_SOCKET_FD(s)         ((s).socket)
 
 #define SOCKET(s)              ((cherokee_socket_t *)(s))
 #define SOCKET_FD(s)           (SOCKET(s)->socket)
