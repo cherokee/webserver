@@ -1,3 +1,8 @@
+2008-11-21  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* qa/run-tests.py: Read conf_local.py rather than conf.py whenever
+	it's present.
+
 2008-11-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/util.h, cherokee/main.c: Exports the strcasestr()

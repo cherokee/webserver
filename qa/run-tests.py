@@ -20,8 +20,14 @@ import random
 import tempfile
 
 from base import *
-from conf import *
 from help import *
+
+try:
+    # Try to load a local configuration
+    from conf_local import *
+except ImportError:
+    # Use default settings
+    from conf import *
 
 # Configuration parameters
 num       = 1
