@@ -197,6 +197,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 {
 	int                re;
 	char             **envp;
+	struct linger      linger;
 	char              *argv[]       = {"sh", "-c", NULL, NULL};
 	int                child        = -1;
 	char              *empty_envp[] = {NULL};
@@ -218,6 +219,13 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 	
 	re = 1;
 	setsockopt (s, SOL_SOCKET, SO_REUSEADDR, &re, sizeof(re));
+
+	re = 1;
+	setsockopt (s, SOL_SOCKET, SO_KEEPALIVE, &re, sizeof(re));
+
+	linger.l_onoff  = 1;
+	linger.l_linger = 0;
+	setsockopt (s, SOL_SOCKET, SO_LINGER, &linger, sizeof(&linger));
 
 	re = bind (s, (struct sockaddr *) &addr, sizeof(cherokee_sockaddr_t));
 	if (re == -1) return ret_error;

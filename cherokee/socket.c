@@ -371,9 +371,11 @@ cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockad
 ret_t
 cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *sa)
 {
-	ret_t     ret;
-	socklen_t len;
-	int       new_socket;
+	int           re;
+	ret_t         ret;
+	socklen_t     len;
+	int           new_socket;
+	struct linger linger;
 
 	/* Get the new connection
 	 */
@@ -405,6 +407,24 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 			return ret_error;
 		}
 		/* NOTREACHED */
+	}
+
+	/* Deal with the FIN_WAIT2 state
+	 */
+	re = 1;
+	re = setsockopt (new_socket, SOL_SOCKET, SO_KEEPALIVE, &re, sizeof(re));
+	if (re == -1) {
+		PRINT_ERRNO (errno, "WARNING: Couldn't set SO_KEEPALIVE on fd=%d: ${errno}",
+			     new_socket);
+	}	
+
+	linger.l_onoff  = 1;
+	linger.l_linger = 0;
+
+	re = setsockopt (new_socket, SOL_SOCKET, SO_LINGER, &linger, sizeof(linger));
+	if (re == -1) {
+		PRINT_ERRNO (errno, "WARNING: Couldn't set SO_LINGER on fd=%d: ${errno}",
+			     new_socket);
 	}
 
 	/* Close-on-exec: Child processes won't inherit this fd
