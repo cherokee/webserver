@@ -174,7 +174,7 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 	pid_t pid; 
 
 	if (pipe (to_log_fds)) { 
-		PRINT_ERRNO (errno, "Pipe error: '${errno}'");
+		PRINT_ERRNO_S (errno, "Pipe error: '${errno}'");
 		return ret_error;
 	}
 
@@ -195,7 +195,7 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 		SHOULDNT_HAPPEN;
 
 	case -1:
-		PRINT_ERRNO (errno, "Fork failed: '${errno}'");
+		PRINT_ERRNO_S (errno, "Fork failed: '${errno}'");
 		break;
 
 	default:

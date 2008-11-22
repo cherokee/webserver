@@ -1,3 +1,10 @@
+2008-11-22  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/logger_writer.c, cherokee/socket.c,
+	cherokee/cryptor_libssl.c, cherokee/server.c: Fixes a number of
+	PRINT_ERROR calls. The patch fixes Cherokee, so it can be compiled
+	with Sun CC again. Patch by Michal Pryc <Michal.Pryc@Sun.COM>.
+
 2008-11-21  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/ModuleExists.py, cherokee/rule_exists.h,

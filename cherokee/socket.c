@@ -437,7 +437,7 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 	 */
 	ret = cherokee_fd_set_nodelay (new_socket, true);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Could not disable Nagle's algorithm.\n");
+		PRINT_ERROR_S ("Could not disable Nagle's algorithm.\n");
 		return ret_error;
 	}
 
@@ -445,7 +445,7 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 	 */
 	ret = cherokee_fd_set_nonblocking (new_socket, true);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Could not set non-blocking.\n");
+		PRINT_ERROR_S ("Could not set non-blocking.\n");
 		return ret_error;
 	}
 

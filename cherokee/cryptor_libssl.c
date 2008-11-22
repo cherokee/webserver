@@ -383,7 +383,7 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 		case ECONNRESET:
 			return ret_eof;
 		default:
-			PRINT_ERRNO (error, "SSL_read: unknown errno: ${errno}\n");
+			PRINT_ERRNO_S (error, "SSL_read: unknown errno: ${errno}\n");
 		}
 		return ret_error;
 	}

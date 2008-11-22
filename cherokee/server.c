@@ -1329,7 +1329,7 @@ vservers_check_sanity (cherokee_server_t *srv)
 	 */
 	cherokee_list_get_len (&srv->vservers, &len);
 	if (len == 0) {
-		PRINT_ERROR ("No virtual hosts have been added.\n");
+		PRINT_ERROR_S ("No virtual hosts have been added.\n");
 		return ret_error;
 	}
 
@@ -1337,7 +1337,7 @@ vservers_check_sanity (cherokee_server_t *srv)
 	 */
 	vsrv = VSERVER(srv->vservers.prev);
 	if (! equal_buf_str (&vsrv->name, "default")) {
-		PRINT_ERROR ("Lowest priority virtual server must be 'default'.\n");
+		PRINT_ERROR_S ("Lowest priority virtual server must be 'default'.\n");
 		return ret_error;
 	}
 
