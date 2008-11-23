@@ -67,9 +67,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 	if (! cherokee_buffer_is_empty (&post->tmp_file)) {
 		re = unlink (post->tmp_file.buf);
 		if (unlikely (re != 0)) {
-			char buferr[ERROR_MAX_BUFSIZE];
-			PRINT_MSG ("Couldn't remove temporal post file '%s'\n", 
-				   cherokee_strerror_r(errno, buferr, sizeof(buferr)));
+			PRINT_ERRNO (errno, "Couldn't remove %s: %s\n", post->tmp_file.buf);
 		}
 
 		cherokee_buffer_mrproper (&post->tmp_file);
@@ -172,6 +170,7 @@ cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 ret_t 
 cherokee_post_walk_reset (cherokee_post_t *post)
 {
+	printf ("reset: total %d\n", post->info.len);
 	post->walk_offset = 0;
 
 	if (post->tmp_file_fd != -1) {
