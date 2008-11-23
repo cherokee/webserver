@@ -170,7 +170,6 @@ cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 ret_t 
 cherokee_post_walk_reset (cherokee_post_t *post)
 {
-	printf ("reset: total %d\n", post->info.len);
 	post->walk_offset = 0;
 
 	if (post->tmp_file_fd != -1) {
