@@ -1,5 +1,8 @@
 2008-11-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (do_connect): Improves the connection
+	event handling. It's slightly more efficient now.
+
 	* cherokee/socket.c, cherokee/socket.h: Removes a few functions
 	that was not needed any longer.
 

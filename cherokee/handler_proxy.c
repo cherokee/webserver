@@ -393,8 +393,16 @@ do_connect (cherokee_handler_proxy_t *hdl)
 		break;
 	case ret_deny:
 	case ret_error:
-	case ret_eagain:
 		return ret;
+	case ret_eagain:
+		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+							   HANDLER_CONN(hdl), 
+							   hdl->pconn->socket.socket,
+							   FDPOLL_MODE_WRITE, false);
+		if (ret != ret_ok) {
+			return ret_deny;
+		}
+		return ret_eagain;
 	default:
 		RET_UNKNOWN(ret);
 		return ret_error;
