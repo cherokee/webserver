@@ -1,3 +1,8 @@
+2008-11-23  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/socket.c, cherokee/socket.h: Removes a few functions
+	that was not needed any longer.
+
 2008-11-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/logger_writer.c, cherokee/socket.c,

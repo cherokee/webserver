@@ -1373,67 +1373,6 @@ cherokee_socket_init_client_tls (cherokee_socket_t *socket,
 }
 		
 
-ret_t
-cherokee_socket_has_block_timeout (cherokee_socket_t *socket)
-{
-	UNUSED (socket);
-
-#if defined(SO_RCVTIMEO) && !defined(HAVE_BROKEN_SO_RCVTIMEO)
-	return ret_ok;
-#else
-	return ret_not_found;
-#endif
-}
-
- 
-ret_t 
-cherokee_socket_set_block_timeout (cherokee_socket_t *socket, cuint_t timeout)
-{
-	int            re;
-	cuint_t        block;
-	struct timeval tv;
-
-	if (socket->socket < 0) {
-		return ret_error;
-	}
-
-#if defined(SO_RCVTIMEO) && !defined(HAVE_BROKEN_SO_RCVTIMEO)
-	/* Set the socket to blocking
-	 */
-	block = 0;
-		
-#ifdef _WIN32
-	re = ioctlsocket (socket->socket, FIONBIO, &block);	
-	if (re == SOCKET_ERROR) {
-#else	
-	re = ioctl (socket->socket, FIONBIO, &block);	
-	if (re < 0) {
-#endif
-		PRINT_ERROR ("ioctl (%d, FIONBIO, &%d) = %d\n", socket->socket, block, re);
-		return ret_error;
-	}
-
-	/* Set the send / receive timeouts
-	 */
-	tv.tv_sec  = timeout / 1000;
-	tv.tv_usec = timeout % 1000;
-	
-	re = setsockopt (socket->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
-	if (re < 0) {
-		int err = errno;
-
-		PRINT_ERRNO (err, "Couldn't set SO_RCVTIMEO, fd=%d, timeout=%d: '${errno}'", 
-			     SOCKET_FD(socket), timeout);
-		return ret_error;
-	}
-#else
-	return ret_no_sys;
-#endif
-	
-	return ret_ok;		      
-}
-
-
 ret_t       
 cherokee_socket_set_status (cherokee_socket_t *socket, cherokee_socket_status_t status)
 {
