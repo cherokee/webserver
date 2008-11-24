@@ -1,5 +1,8 @@
 2008-11-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (build_request): Use the source IP
+	address as Host: header if the client didn't send it.
+
 	* cherokee/handler_proxy.c (cherokee_handler_proxy_init): Resend
 	POST information whenever the internal connection has to be
 	respined.
