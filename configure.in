@@ -112,6 +112,9 @@ AC_MSG_CHECKING([host platform characteristics])
 	*-*-hpux*)
           libdl="-ldl"
           ;;
+	*-*-aix*)
+          libdl="-ldl"
+	     ;;
      *-*-irix6*)
           AC_DEFINE(IRIX, 1, [It is SGI Irix])
           setenv_is_threadsafe="yes"
@@ -953,7 +956,9 @@ if test "$use_crypt_r" = "yes"; then
    AC_MSG_CHECKING([crypt_r style])
    crypt_r_style=none
 
-   AC_TRY_COMPILE([#include <crypt.h>],
+   # pthread.h is needed on AIX
+   AC_TRY_COMPILE([#include <pthread.h>
+                   #include <crypt.h>],
    			   [CRYPTD buffer;],
 			   crypt_r_style=cryptd)
 
