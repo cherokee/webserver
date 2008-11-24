@@ -397,6 +397,9 @@ def mainloop_iterator(objs, main_thread=True):
         for obj in objs:
             go_ahead = obj.Precondition()
 
+            if proxy and not obj.proxy_suitable:
+                go_ahead = False
+
             if go_ahead and main_thread:
                 if pause > 0:
                     do_pause()

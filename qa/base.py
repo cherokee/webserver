@@ -35,6 +35,7 @@ class TestBase:
         self.name                    = None    # Test 01: Basic functionality
         self.conf                    = None    # Directory /test { .. }
         self.request                 = ""      # GET / HTTP/1.0
+        self.proxy_suitable          = True
         self.post                    = None
         self.expected_error          = None
         self.expected_content        = None

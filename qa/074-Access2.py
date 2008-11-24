@@ -17,6 +17,7 @@ class Test (TestBase):
         self.expected_error    = 200
         self.expected_content  = MAGIC
         self.conf              = CONF
+        self.proxy_suitable    = False
 
     def Prepare (self, www):
         self.Mkdir (www, "allow2")

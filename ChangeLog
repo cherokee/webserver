@@ -1,5 +1,13 @@
 2008-11-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/run-tests.py, qa/base.py,, qa/076-AccessRange2.py,
+	qa/075-AccessRange.py, qa/074-Access2.py: There are QA tests not
+	suitable of being run through a proxy.
+
+	* configure.in, cherokee/validator_htpasswd.c: Rework the
+	crypt_r() detection. The final target is to fix the compilation on
+	AIX.
+
 	* cherokee/handler_proxy.c (build_request): Use the source IP
 	address as Host: header if the client didn't send it.
 
