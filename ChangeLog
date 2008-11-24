@@ -1,5 +1,8 @@
 2008-11-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/macros.h, cherokee/common-internal.h: fcntl.h related
+	macros has been moved from macros.h to common-internal.h.
+
 	* qa/run-tests.py, qa/base.py,, qa/076-AccessRange2.py,
 	qa/075-AccessRange.py, qa/074-Access2.py: There are QA tests not
 	suitable of being run through a proxy.
