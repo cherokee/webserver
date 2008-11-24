@@ -218,7 +218,10 @@ rule types:
       configured in the `Rule` tab. If enabled, it will speed up the
       file detection during the rule evaluation. This improves
       performance but is not recommended when the directory contents
-      change dynamically.
+      change dynamically. This type of rule can also be used to match
+      any file. For example, it can be configured to serve static
+      files and fall through to another rule if the HTTP request is
+      for a resource of dynamic nature.
 
   * **HTTP method**: These rules are applied whenever the selected HTTP
       method is used. You can configure these to respond to a request

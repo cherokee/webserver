@@ -24,8 +24,7 @@ However, we can add several refinements to Cherokee's setting. Mainly:
   to our machine) to example.net
 
 . Set up an appropriate url rewrite configuration for
-  Drupal. *WARNING: There is currently an open bug that prevents
-  this. This is not yet working, but will be soon.*
+  Drupal.
 
 . Serve directly as static content some specific file types, avoiding
   any other file requests and eliminating this way any security risk
@@ -115,6 +114,13 @@ And manage it with the `Static content` handler.
 
 image::media/images/cookbook_drupal_example5.png[Drupal example]
 
+If you would prefer a more thorough approach, you can simply set a
+`File Exists`-type rule with the same handler. Just make sure the
+`Match any file` checkbox is checked, and that the rule is located
+after the PHP rule. Otherwise you will end up statically serving them
+instead of processing them via PHP.
+Note that this apporach is the one that behaves more like the one
+suggested by the .htaccess files provided with Drupal.
 
 Setting up Drupal
 ~~~~~~~~~~~~~~~~~
@@ -156,8 +162,3 @@ requested values and you will obtain the following results once your
 are through.
 
 image::media/images/cookbook_drupal.png[Drupal in action!]
-
-WARNING:
-Using Clean URLs must be disabled at this stage.
-A bug has to be fixed before such an installation works.
-Until then the URL rewrites indicated above do not work.
