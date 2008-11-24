@@ -596,6 +596,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				return ret_eof;
 			}
 
+			cherokee_post_walk_reset (&conn->post);
 			hdl->respined = true;
 			goto reconnect;
 		default:
