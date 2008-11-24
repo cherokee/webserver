@@ -231,7 +231,13 @@ This is a simple fetch using cURL:
   $result = curl_exec ($curl);
   curl_close ($curl);
 
-  $obj = eval($result);
+  eval("\$obj = $result;");
   var_dump($obj);
 ?>
 --------------------------------------
+
+Please note the variable must be set in the evaluation string, and
+that a semicolon is needed in order for the string to be correctly
+converted. This behavior -not adding the semicolon in the generated
+string automatically- is a design decision taken to make the
+underlying infrastructure more flexible.
