@@ -139,7 +139,11 @@ check_crypt (char *passwd, char *salt, const char *compared)
 #else
 # ifdef HAVE_CRYPT_R
 	char              *tmp;
+#  ifdef CRYPT_R_STRUCT_CRYPT_DATA
 	struct crypt_data  data;
+#  elif CRYPT_R_CRYPTD
+	CRYPTD             data;
+#  endif
 
 	memset (&data, 0, sizeof(data));
 	tmp = crypt_r (passwd, salt, &data);

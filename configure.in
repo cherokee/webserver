@@ -947,23 +947,44 @@ dnl
 dnl crypt_r and pthread 
 dnl
 if test "$use_crypt_r" = "yes"; then
-	dnl
-	dnl struct crypt_data
-	dnl
-	oldcflags="$CFLAGS"
-	CFLAGS="$CFLAGS -D_GNU_SOURCE"
+   dnl
+   dnl crypt_r style
+   dnl 
+   AC_MSG_CHECKING([crypt_r style])
+   crypt_r_style=none
 
-	AC_MSG_CHECKING([for struct crypt_data])
-	AC_TRY_COMPILE([#include <crypt.h>], 
-				[struct crypt_data data;]
-			    ,
-				AC_MSG_RESULT([-D_GNU_SOURCE])
-				CRYPT_CFLAGS="-D_GNU_SOURCE"
-				AC_SUBST(CRYPT_CFLAGS)
-			    ,
-				AC_MSG_ERROR([struct crypt_data is not known]))
+   AC_TRY_COMPILE([#include <crypt.h>],
+   			   [CRYPTD buffer;],
+			   crypt_r_style=cryptd)
 
-	CFLAGS="$oldcflags"
+   if test "$crypt_r_style" = "none"; then
+      AC_TRY_COMPILE([#include <crypt.h>],
+				 [struct crypt_data buffer;],
+				 crypt_r_style=struct_crypt_data)
+   fi
+
+   if test "$crypt_r_style" = "none"; then
+      AC_TRY_COMPILE([#define _GNU_SOURCE
+	 			  #include <crypt.h>],
+				 [struct crypt_data buffer;],
+				 [crypt_r_style=struct_crypt_data
+			       CRYPT_CFLAGS="-D_GNU_SOURCE"
+				  AC_SUBST(CRYPT_CFLAGS)])
+   fi   			      
+   
+   AC_MSG_RESULT([$crypt_r_style])
+
+   if test "$crypt_r_style" = "cryptd"; then
+     AC_DEFINE(CRYPT_R_CRYPTD, 1, [Define if crypt_r has uses CRYPTD])   
+   fi
+
+   if test "$crypt_r_style" = "struct_crypt_data"; then
+     AC_DEFINE(CRYPT_R_STRUCT_CRYPT_DATA, 1, [Define if crypt_r uses struct crypt_data])
+   fi
+
+   if test "$crypt_r_style" = "none"; then
+     AC_MSG_ERROR([Unable to detect data struct is used by crypt_r])
+   fi
 fi
 
 AM_CONDITIONAL(USE_CRYPT, test "x$use_crypt x$use_crypt_r" != "xno xno")
