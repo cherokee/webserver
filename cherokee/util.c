@@ -1529,3 +1529,46 @@ strnstr (const char *s, const char *find, size_t slen)
 	return ((char *)s);
 }
 #endif
+
+
+ret_t
+cherokee_find_header_end (cherokee_buffer_t  *buf,
+			  char              **end,
+			  cuint_t            *sep_len)
+{
+	char *p;
+	char *fin;
+	char *begin;
+	int   len;
+
+	if (cherokee_buffer_is_empty (buf))
+		return ret_not_found;
+
+	p   = buf->buf;
+	fin = buf->buf + buf->len;
+
+	while (p < fin) {
+		if ((*p == CHR_CR) || (*p == CHR_LF)) {
+			len   = 0;
+			begin = p;
+			while ((*p == CHR_CR) || (*p == CHR_LF)) {
+				if (*p == CHR_LF) {
+					len += 1;
+					if (len == 2) {
+						*end     = begin;
+						*sep_len = (p - begin) + 1;
+						return ret_ok;
+					}
+				} else if (*p == CHR_CR) {
+					;
+				} else {
+					break;
+				}
+				p += 1;
+			}
+		}
+		p += 1;
+	}
+
+	return ret_not_found;
+}

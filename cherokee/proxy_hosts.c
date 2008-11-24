@@ -295,9 +295,10 @@ ret_t
 cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 					  cherokee_buffer_t             *body)
 {
-	ret_t   ret;
-	char   *end;
-	size_t  size = 0;
+	ret_t    ret;
+	char    *end;
+	cuint_t  sep_len;
+	size_t   size     = 0;
 
 	/* Read 
 	 */
@@ -317,16 +318,15 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 
 	/* Look for the end of header
 	 */
-	end = strnstr (pconn->header_in_raw.buf, CRLF_CRLF, pconn->header_in_raw.len);
-	if (end == NULL) {
+	ret = cherokee_find_header_end (&pconn->header_in_raw, &end, &sep_len);
+	if (ret != ret_ok)
 		return ret_eagain;
-	}
 
 	/* Copy the body if there is any
 	 */
-	size = (pconn->header_in_raw.buf + pconn->header_in_raw.len) - (end + 4);
+	size = (pconn->header_in_raw.buf + pconn->header_in_raw.len) - (end + sep_len);
 
-	cherokee_buffer_add (body, end+4, size);
+	cherokee_buffer_add (body, end+sep_len, size);
 	cherokee_buffer_drop_ending (&pconn->header_in_raw, size);
 
 	return ret_ok;

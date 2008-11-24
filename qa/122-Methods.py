@@ -16,8 +16,10 @@ class Test (TestCollection):
     def __init__ (self):
         TestCollection.__init__ (self)
 
-        self.name = "HTTP Methods"
-        self.conf = CONF
+        self.name           = "HTTP Methods"
+        self.conf           = CONF
+        self.proxy_suitable = True
+
 
     def Prepare (self, www):
 

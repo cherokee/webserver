@@ -365,9 +365,10 @@ class TestCollection:
         if (test.name == None) or len(test.name) == 0:
             test.name = self.name + ", Part %d" % (self.num)
 
-        test.tmp      = self.tmp
-        test.nobody   = self.nobody 
-        test.php_conf = self.php_conf
+        test.tmp            = self.tmp
+        test.nobody         = self.nobody 
+        test.php_conf       = self.php_conf
+        test.proxy_suitable = self.proxy_suitable
 
         self.tests.append (test)
         return test
@@ -413,9 +414,3 @@ class TestCollection:
 
     def __str__ (self):
         return str(self.current_test)
-
-
-    
-
-    
-    

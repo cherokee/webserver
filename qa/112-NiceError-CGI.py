@@ -52,7 +52,7 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "cgi_error_403_1")
-        f = self.WriteFile (d, "exec.cgi", 0555,
+        f = self.WriteFile (d, "exec.cgi", 0555, 
                             """#!/bin/sh
 
                             echo "Content-type: text/html"
@@ -60,5 +60,5 @@ class Test (TestBase):
                             echo ""
                             cat << EOF
                             %s
-                            EOF
-                            """ % (ERROR, ERROR_MSG))
+EOF
+""" % (ERROR, ERROR_MSG))

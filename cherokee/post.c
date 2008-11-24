@@ -267,8 +267,12 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 		r = write (fd, post->info.buf, post->info.len);
 		if (r < 0) {
 			if (errno == EAGAIN) {
-				if (eagain_fd) *eagain_fd = fd;
-				if (mode)      *mode      = 1;
+				if (eagain_fd) {
+					*eagain_fd = fd;
+				}
+				if (mode) {
+					*mode = 1;
+				}
 				return ret_eagain;
 			}
 
