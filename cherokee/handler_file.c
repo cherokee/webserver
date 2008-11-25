@@ -291,7 +291,7 @@ open_local_directory (cherokee_handler_file_t *fhdl, cherokee_buffer_t *local_fi
 
 	/* Open it
 	 */
-	fhdl->fd = open (local_file->buf, CHE_O_READ);
+	fhdl->fd = open (local_file->buf, O_RDONLY | O_BINARY);
 	if (fhdl->fd > 0)
 		return ret_ok;
 

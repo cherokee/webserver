@@ -938,9 +938,11 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 
 	/* Open the file
 	 */
-	f = open (filename, CHE_O_READ);
-	if (f < 0)
+	f = open (filename, O_RDONLY | O_BINARY);
+	if (f < 0) {
+		PRINT_ERRNO(errno, "Couldn't open '%s': ${errno}\n", filename);
 		return ret_error;
+	}
 
 	/* Read the content
 	 */

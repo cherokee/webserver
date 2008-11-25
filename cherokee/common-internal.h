@@ -61,6 +61,10 @@
 # include <fcntl.h>
 #endif
 
+#ifdef HAVE_SYS_FCNTL_H
+# include <sys/fcntl.h>
+#endif
+
 #ifdef HAVE_DLFCN_H
 # include <dlfcn.h>
 #endif
@@ -193,12 +197,6 @@ char *strcasestr(char *s, char *find);
 
 #ifndef O_LARGEFILE
 # define O_LARGEFILE 0
-#endif
-
-#ifdef O_NOATIME
-# define CHE_O_READ O_RDONLY | O_BINARY | O_NOATIME
-#else
-# define CHE_O_READ O_RDONLY | O_BINARY
 #endif
 
 #endif /* CHEROKEE_COMMON_INTERNAL_H */
