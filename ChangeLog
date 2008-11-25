@@ -1,3 +1,7 @@
+2008-11-25  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/Makefile.MingW.in: Removed.
+
 2008-11-25  Taher Shihadeh  <taher@unixwars.com>
 	* doc/*: added anchors throughout the documentation to ease
 	navigation.

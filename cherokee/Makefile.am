@@ -1413,8 +1413,6 @@ CLEANFILES = \
 config.h
 
 WINDOWS_PORT_FILES = \
-Makefile.MingW \
-Makefile.MingW.in \
 unix4win32.h \
 unix4win32.c \
 win32_misc.h \

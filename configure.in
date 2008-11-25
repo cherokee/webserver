@@ -1273,7 +1273,6 @@ cherokee-config
 cherokee.pc
 cherokee.spec
 cherokee/Makefile 
-cherokee/Makefile.MingW 
 contrib/Makefile 
 icons/Makefile
 m4/Makefile 
