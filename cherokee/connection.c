@@ -616,8 +616,9 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 ret_t 
 cherokee_connection_build_header (cherokee_connection_t *conn)
 {
-	ret_t ret;
-
+	ret_t              ret;
+	cherokee_boolean_t try_chunked = false;
+	
 	/* If the handler requires not to add headers, exit.
 	 */
 	if (HANDLER_SUPPORTS (conn->handler, hsupport_skip_headers)) 
@@ -644,11 +645,18 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	 */
 	if ((conn->keepalive != 0) &&
 	    (http_method_with_body (conn->error_code)))	
-	{
-		if ((! HANDLER_SUPPORTS (conn->handler, hsupport_length)) ||
-		    ((HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length)) &&
-		     (! strcasestr (conn->header_buffer.buf, "Content-Length: "))))
-		{
+	{		
+		if (HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length)) {
+			if (! strcasestr (conn->header_buffer.buf, "Content-Length: ")) {
+				try_chunked = true;
+			}
+		} else if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
+			try_chunked = true;
+		} 		
+
+		if (try_chunked) {
+			/* Turn chunked encoding on, if possible
+			 */
 			conn->chunked_encoding = ((CONN_SRV(conn)->chunked_encoding) &&
 						  (conn->header.version == http_version_11));
 

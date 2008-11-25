@@ -16,7 +16,7 @@ from pyscgi import *
 class TestHandler (SCGIHandler):
     def handle_request (self):
         self.handle_post()
-        self.output.write('Content-Length: %d\\r\\n')
+        # self.output.write('Content-Length: %d\\r\\n')
         self.output.write('Content-Type: text/plain\\r\\n\\r\\n')
         self.output.write('%s')
 

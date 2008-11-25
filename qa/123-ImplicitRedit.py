@@ -16,7 +16,7 @@ class Test (TestBase):
 
         self.request           = "GET /implicit_redir1 HTTP/1.0\r\n"
         self.expected_error    = 301
-        self.expected_content  = "Location: /implicit_redir1/"
+        self.expected_content  = ["Location: ", "/implicit_redir1/\r\n"]
 
     def Prepare (self, www):
         d  = self.Mkdir (www, "implicit_redir1_DIR")

@@ -315,7 +315,7 @@ cherokee_handler_cgi_base_build_basic_env (
 		}
 	}
 
-	/* Content-Type and Content-Length (if available) 
+	/* Content-Type
 	 */
 	cherokee_buffer_clean (tmp);
 	ret = cherokee_header_copy_unknown (&conn->header, "Content-Type", 12, tmp);

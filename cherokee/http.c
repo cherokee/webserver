@@ -44,7 +44,7 @@ cherokee_http_method_to_string (cherokee_http_method_t method, const char **str,
 		entry (http_post, "POST");
 		entry (http_head, "HEAD");
 		entry (http_put, "PUT");
-		entry (http_options, "PUT");
+		entry (http_options, "OPTIONS");
 		entry (http_delete, "DELETE");
 		entry (http_trace, "TRACE");
 		entry (http_connect, "CONNECT");

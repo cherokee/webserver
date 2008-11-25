@@ -17,7 +17,7 @@ class Test (TestBase):
         self.name              = "common-dirlist: redir to add final /"
         self.request           = "GET /%s HTTP/1.0\r\n" % (REQ)
         self.expected_error    = 301
-        self.expected_content  = "Location: /%s/" % (REQ)
+        self.expected_content  = ["Location: ", "/%s/\r\n" % (REQ)]
 
     def Prepare (self, www):
         dr = self.Mkdir (www, DIR)

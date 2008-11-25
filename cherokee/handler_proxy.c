@@ -250,6 +250,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 	const char                     *str;
 	char                           *begin;
 	char                           *end;
+	cuint_t                         header_len;
 	char                           *header_end;
 	cherokee_list_t                *i;
 	char                           *ptr;
@@ -313,6 +314,13 @@ build_request (cherokee_handler_proxy_t *hdl,
 	{
 		cherokee_buffer_add_str (buf, "Connection: Keep-Alive" CRLF);
 		hdl->pconn->keepalive_in = true;
+		
+		ret = cherokee_header_get_known (&conn->header, header_keepalive, &ptr, &ptr_len);
+		if (ret == ret_ok) {
+			cherokee_buffer_add_str (buf, "Keep-Alive: ");
+			cherokee_buffer_add     (buf, ptr, ptr_len);
+			cherokee_buffer_add_str (buf, CRLF);
+		}
 	} else {
 		cherokee_buffer_add_str (buf, "Connection: Close" CRLF);
 		hdl->pconn->keepalive_in = false;
@@ -328,8 +336,10 @@ build_request (cherokee_handler_proxy_t *hdl,
 		str++;
 	
 	/* Add the client headers  */
+	cherokee_header_get_length (&conn->header, &header_len);
+
 	begin      = (char *)str;
-	header_end = conn->incoming_header.buf + conn->incoming_header.len;
+	header_end = conn->incoming_header.buf + (header_len - 2);
 
 	while ((begin < header_end)) {
 		char chr_end;
@@ -462,11 +472,14 @@ send_post (cherokee_handler_proxy_t *hdl)
 		return ret_ok;
 		
 	case ret_eagain:
-/* 		if (eagain_fd != -1) { */
-/* 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), */
-/* 							     conn, eagain_fd,  */
-/* 							     mode, false); */
-/* 		} */
+		if (eagain_fd != -1) {
+			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+								   conn, eagain_fd,
+								   mode, false);
+			if (ret != ret_ok) {
+				return ret_eof;
+			}
+		}
 		return ret_eagain;
 		
 	default:

@@ -1,5 +1,13 @@
 2008-11-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/http.c, cherokee/handler_cgi_base.c,
+	cherokee/handler_proxy.c, cherokee/connection.c: A few small (but
+	quite visible) bugs have been fixed.
+
+	* qa/154-DirRedirection., qa/155-DirRedirection2.py,
+	qa/123-ImplicitRedit.py, qa/173-Chunked-SCGI.py: These QA tests
+	have been slightly adapted so they can be run thru a proxy.
+
 	* cherokee/Makefile.MingW.in: Removed.
 
 2008-11-25  Taher Shihadeh  <taher@unixwars.com>
