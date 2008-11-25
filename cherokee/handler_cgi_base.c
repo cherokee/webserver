@@ -900,7 +900,7 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 	ret_t                  ret;
 	int                    len;
 	char                  *content;
-	int                    end_len;
+	cuint_t                end_len;
 	cherokee_buffer_t     *inbuf    = &cgi->data; 
 	cherokee_connection_t *conn     = HANDLER_CONN(cgi);
 
@@ -924,16 +924,9 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 
 	/* Look the end of headers
 	 */
-	content = strstr (inbuf->buf, CRLF_CRLF);
-	if (content != NULL) {
-		end_len = 4;
-	} else {
-		content = strstr (inbuf->buf, LF_LF);
-		end_len = 2;
-	}
-	
-	if (content == NULL) {
-		return (cgi->got_eof) ? ret_eof : ret_eagain;
+	ret = cherokee_find_header_end (inbuf, &content, &end_len);
+	if (ret != ret_ok) {
+		return (cgi->got_eof) ? ret_eof : ret_eagain;		
 	}
 
 	/* Copy the header
