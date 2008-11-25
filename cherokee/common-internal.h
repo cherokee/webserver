@@ -199,4 +199,8 @@ char *strcasestr(char *s, char *find);
 # define O_LARGEFILE 0
 #endif
 
+#ifndef S_ISLNK
+# define S_ISLNK(i) (0)
+#endif
+
 #endif /* CHEROKEE_COMMON_INTERNAL_H */

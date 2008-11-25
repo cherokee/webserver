@@ -1,5 +1,8 @@
 2008-11-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_dirlist.c, cherokee/common-internal.h: S_ISLNK
+	clean up.
+
 	* cherokee/handler_cgi_base.c, cherokee/header.c,
 	cherokee/header.h: A couple of missing (reverse proxy related)
 	headers have been added.

@@ -338,11 +338,9 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 			return ret_error;
 		}
 
-#ifdef S_ISLNK
 	        if (S_ISLNK(n->stat.st_mode)) {
 			cherokee_stat (path->buf, &n->rstat);
 		}
-#endif
 
 		/* Clean up and exit
 		 */
@@ -571,8 +569,8 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 {
 	DIR                   *dir;
 	file_entry_t          *item;
-	cherokee_boolean_t     is_dir;
-	cherokee_boolean_t     is_link = false;
+	int                    is_dir;
+	int                    is_link;
 	cherokee_connection_t *conn    = HANDLER_CONN(dhdl);
 
 	/* Build the local directory path
@@ -597,13 +595,12 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 		    (ret == ret_error))
 			continue;
 
-#ifdef S_ISLNK
 		is_link = S_ISLNK(item->stat.st_mode);
-#endif
-		if (is_link)
+		if (is_link) {
 			is_dir = S_ISDIR(item->rstat.st_mode);		
-		else
+		} else {
 			is_dir = S_ISDIR(item->stat.st_mode);
+		}
 
 		if (is_dir) {
 			cherokee_list_add (LIST(item), &dhdl->dirs);
@@ -787,8 +784,8 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	ret_t                             ret;
 	cherokee_buffer_t                *vtmp[2];
 	cuint_t                           name_len;
-	cherokee_boolean_t                is_dir;
-	cherokee_boolean_t                is_link  = false;
+	int                               is_dir;
+	int                               is_link;
 	char                             *alt      = NULL;
 	cherokee_buffer_t                *icon     = NULL;
 	char                             *name     = (char *) &file->info.d_name;
@@ -802,13 +799,12 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	 */
 	VTMP_INIT_SUBST (thread, vtmp, &props->entry);
 
-#ifdef S_ISLNK
 	is_link = S_ISLNK(file->stat.st_mode);
-#endif
-	if (is_link)
+	if (is_link) {
 		is_dir = S_ISDIR(file->rstat.st_mode);		
-	else
+	} else {
 		is_dir = S_ISDIR(file->stat.st_mode);
+	}
 
 	/* Check whether it is a symlink that we should skip
 	 */
