@@ -16,6 +16,7 @@ installed on your system. The configuration processing depends on Ant
 We will be using GlassFish v2 here since GlassFish v3 is still under
 development.
 
+[[debian]]
 Debian installation
 ~~~~~~~~~~~~~~~~~~~
 
@@ -29,6 +30,7 @@ simply installing the `glassfishv2` package will be enough.
 This will completely deploy the needed infrastructure and launch the
 application server.
 
+[[generic]]
 Generic installation
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -72,6 +74,7 @@ Now to run the setup:
 $ lib/ant/bin/ant -f setup-cluster.xml
 ----
 
+[[glassfish]]
 Launching Glassfish
 ~~~~~~~~~~~~~~~~~~~
 
@@ -126,6 +129,7 @@ This means you have GlassFish up and running. Now you can:
   proxy it through Cherokee. It is as simple as using the Reverse
   Proxy handler to hit the GlassFish server at port 8080.
 
+[[cherokee]]
 Configuring Cherokee
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -157,6 +161,7 @@ Remote host , GlassFish3 , 192.168.1.103
 Refer to the link:modules_handlers_proxy.html[HTTP reverse proxy]
 documentation if you need any further help with this.
 
+[[deployment]]
 Deploy application
 ~~~~~~~~~~~~~~~~~~
 

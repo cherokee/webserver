@@ -62,6 +62,7 @@ shows a "Forbidden" icon instead of a trash bin.  To eliminate such
 sources you will have to manually fix the rule by either setting up
 alternative information sources or by completely eliminating the rule.
 
+[[unix_sockets]]
 Unix Sockets
 ~~~~~~~~~~~~
 
@@ -73,6 +74,7 @@ For instance an entry such as `/var/tmp/socket-tmp.1` should get
 everything to simply work if that was a correct path.
 
 
+[[further_insight]]
 Further insight
 ~~~~~~~~~~~~~~~
 

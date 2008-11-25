@@ -10,6 +10,7 @@ download] section of the Cherokee Project website.
 WARNING: The Windows build is currently broken. It will be fixed as
 soon as possible. A Windows binary release will be available too.
 
+[[quickstart]]
 Quickstart
 ~~~~~~~~~~
 The installation process requires little explanation, as it is simply
@@ -22,6 +23,7 @@ However, if you want to try out the latest development release or
 simply want to compile from source, you will need to setup a proper
 building environment.
 
+[[environment]]
 Configuring the building the environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Cherokee for Windows runs in fully native mode, but the environment
@@ -98,6 +100,7 @@ fi
       msys.bat.
 
 
+[[building]]
 Building
 ~~~~~~~~
 . link:basics_download.html[Download] a fresh copy of Cherokee
@@ -121,6 +124,7 @@ make
 make install
 -----------------------------------------
 
+[[advanced]]
 Advanced parameters
 ~~~~~~~~~~~~~~~~~~~
 
@@ -141,6 +145,7 @@ Parameter,             Description
 `--disable-admin`    , Stops cherokee-admin from installing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+[[autostart]]
 Autostart
 ~~~~~~~~~
 To be written

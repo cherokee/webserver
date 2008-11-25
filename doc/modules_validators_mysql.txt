@@ -5,6 +5,7 @@ Validator: Mysql
 
 The MySQL validator allows you to authenticate a user against a MySQL database.
 
+[[parameters]]
 Parameters
 ^^^^^^^^^^
 
@@ -35,6 +36,7 @@ against it.  Take a look at the following example:
 The query must return one row with one column as the password.  The name of the
 column does not matter.
 
+[[compatibility]]
 Compatibility
 ^^^^^^^^^^^^^
 This validator is compatible with both **basic** and **digest** schemes.

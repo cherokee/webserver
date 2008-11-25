@@ -3,6 +3,7 @@
 Cookbook: How to cross compile Cherokee
 ---------------------------------------
 
+[[linux2win32]]
 Cherokee-Win32 from Linux
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -66,7 +67,7 @@ $ make
 ----
 
 
-
+[[osx2win32]]
 Cherokee-Win32 from OS X
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

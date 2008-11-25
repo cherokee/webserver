@@ -17,7 +17,7 @@ For now, this document mantains a list of currently open issues. It
 mostly is useful to list things of the Cherokee Project that are known
 to be half-baked, and as such are only of interest for developers.
 
-[fastcgi]
+[[fastcgi]]
 FastCGI Handler
 ~~~~~~~~~~~~~~~
 
@@ -35,7 +35,7 @@ The "fastcgi" handler will eventually become the default option
 because it is faster and more standard-compliant. However, at the
 moment "fcgi" is a better option.
 
-[reverse_proxy]
+[[reverse_proxy]]
 Reverse Proxy
 ~~~~~~~~~~~~~
 
@@ -44,7 +44,7 @@ under heavy development. It is currently released as a standard
 handler, so check out the link:modules_handlers_proxy.html[HTTP
 reverse proxy] handler documentation.
 
-[wizards]
+[[wizards]]
 Configuration Wizards
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -58,7 +58,7 @@ Even though the obtained configuration will most probably not be
 perfect, it will always be a good starting point to play with for
 further tuning.
 
-[boolean_rules]
+[[boolean_rules]]
 AND, OR and NOT rule types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

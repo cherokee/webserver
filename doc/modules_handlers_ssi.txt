@@ -33,6 +33,7 @@ In any of the above cases, the specified data is inserted into the
 HTML page at the location of the token.
 
 
+[[examples]]
 Examples
 ~~~~~~~~
 

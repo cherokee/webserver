@@ -6,16 +6,19 @@ Validator: PAM
 The pam validator uses the *Pluggable Authentication Module* to validate the
 username/password combination.
 
+[[parameters]]
 Parameters
 ^^^^^^^^^^
 
 Users: You can restrict to some local system users
 
+[[compatibility]]
 Compatibility
 ^^^^^^^^^^^^^
 
 This validator is compatible with the **basic** scheme.
 
+[[example]]
 Example
 ^^^^^^^
 

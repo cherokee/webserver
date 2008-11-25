@@ -5,6 +5,7 @@ Handler: CGI
 
 The cgi handler executes CGI programs.
 
+[[parameters]]
 Parameters
 ~~~~~~~~~~
 
@@ -38,6 +39,7 @@ virtual server tree, as it is a common source of problems. You can
 look at a practical example about PATH_INFO in the
 link:modules_handlers_common.html[File & Send] handler documentation.
 
+[[examples]]
 Examples
 ~~~~~~~~
 

@@ -30,6 +30,7 @@ However, we can add several refinements to Cherokee's setting. Mainly:
   any other file requests and eliminating this way any security risk
   related to vulnerable archives.
 
+[[cherokee]]
 Setting up Cherokee
 ~~~~~~~~~~~~~~~~~~~
 
@@ -122,6 +123,8 @@ instead of processing them via PHP.
 Note that this apporach is the one that behaves more like the one
 suggested by the .htaccess files provided with Drupal.
 
+
+[[drupal]]
 Setting up Drupal
 ~~~~~~~~~~~~~~~~~
 

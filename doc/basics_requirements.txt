@@ -3,6 +3,7 @@
 Requirements
 ------------
 
+[[hw]]
 Hardware
 ~~~~~~~~
 Cherokee is very light, completely modular and it can be tailored to
@@ -14,7 +15,7 @@ In terms of processing power, it has been known to work with as
 little as 133Mhz ARM processors. It could very well work on something
 smaller, but we haven't really had the chance to try it out.
 
-
+[[sw]]
 Software
 ~~~~~~~~
 Cherokee has no dependencies besides a standard libc. Everything else

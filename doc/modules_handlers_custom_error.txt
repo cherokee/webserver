@@ -8,6 +8,7 @@ generate errors when certain rules are matched. For instance it can be
 used to deny access to specific files, such as those containing
 passwords.
 
+[[parameters]]
 Parameters
 ~~~~~~~~~~
 [grid="rows"]

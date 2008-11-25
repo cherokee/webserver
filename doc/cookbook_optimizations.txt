@@ -7,6 +7,7 @@ Cherokee's default parameters are suitable for most cases. However,
 there are a number of things that can be tweaked in order to improve
 the behavior of Cherokee under special circumstances.
 
+[[compiled]]
 Compiled capabilities
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -45,6 +46,7 @@ have a dramatic impact in the speed of Cherokee are the polling
 methods, the existence of sendfile() and the Pthreads support.
 
 
+[[tweaks]]
 Tweaks
 ~~~~~~
 
@@ -119,6 +121,7 @@ Advanced::
   setting is essential if you are trying to debug a cache-related
   bug in your server's configuration.
 
+[[trace]]
 Debug: Disable TRACE
 ~~~~~~~~~~~~~~~~~~~~
 When compiled with debugging support, Cherokee's performance is

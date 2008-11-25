@@ -16,6 +16,7 @@ server at svn.cherokee-project.com.
 To download the SVN repository you will need a special piece of
 software called an SVN client.
 
+[[checkout]]
 Checking out the sources
 ~~~~~~~~~~~~~~~~~~~~~~~~
 To list the available modules, type:
@@ -30,6 +31,7 @@ To check out the sources for the first time from the repository, use this comman
 svn co svn://svn.cherokee-project.com/cherokee/trunk cherokee
 ----
 
+[[update]]
 Updating the sources
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -40,6 +42,7 @@ svn up cherokee
 ----
 
 
+[[compile]]
 Compiling and installing
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

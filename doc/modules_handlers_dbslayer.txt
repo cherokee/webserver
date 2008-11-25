@@ -19,6 +19,7 @@ It also makes use of a link:modules_balancers.html[balancing strategy]
 to manage *at least one* link:config_info_sources.html[information
 source]: the MySQL server being bridged.
 
+[[parameters]]
 Parameters
 ^^^^^^^^^^
 

@@ -11,6 +11,7 @@ link:modules_handlers_dirlist.html[Listing Only] handler in order to
 list its contents. And, in case a file is request, it will use the
 link:modules_handlers_file.html[File Sending] handler.
 
+[[parameters]]
 Parameters
 ~~~~~~~~~~
 [grid="rows"]
@@ -38,6 +39,7 @@ This example shows the practical effect of **pathinfo**::
     HTTP/1.1 404 Not Found
 ----
 
+[[examples]]
 Examples
 ~~~~~~~~
 

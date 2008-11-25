@@ -6,6 +6,7 @@ Handler: Static Content
 The **file** handler serves files from its document root.  No more, no
 less.
 
+[[parameters]]
 Parameters
 ~~~~~~~~~~
 [grid="rows"]
@@ -23,6 +24,7 @@ parameter.
 It is a good idea to disable to I/O cache if the content of the
 directory changes often.
 
+[[examples]]
 Examples
 ~~~~~~~~
 Lets imagine your virtual server DocumentRoot points to /var/www.

@@ -8,6 +8,7 @@ within the requested directory, but **does not allow you to download
 its contents**. Refer to link:modules_handlers_common.html[List &
 Send] for the opposite behaviour.
 
+[[listing]]
 Parameters: Listing
 ~~~~~~~~~~~~~~~~~~~
 [grid="rows"]
@@ -26,6 +27,7 @@ Parameters       , Type    , Description
 ``symlinks``     , boolean , Optional. Display symbolic links. Default ``Enabled``.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+[[theming]]
 Parameters: Theming
 ~~~~~~~~~~~~~~~~~~~
 [grid="rows"]
@@ -51,6 +53,7 @@ It is also possible to create a new one::
 Simply create a new directory in the above mentioned path containing
 the listed files and  you'll be able to select it in `cherokee-admin`.
 
+[[examples]]
 Examples
 ~~~~~~~~
 

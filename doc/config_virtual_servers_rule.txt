@@ -23,6 +23,7 @@ This menu offers the following tabs:
  . Security: in this section one can configure *Access Restrictions*
    and *Authentication*.
 
+[[encoding]]
 Encoding
 ~~~~~~~~
 The content sent by Cherokee can be encoded or not.
@@ -39,6 +40,7 @@ idea. You are encouraged to use this. Hardware is cheap. Bandwidth is
 not.
 
 
+[[expiration]]
 Expiration
 ~~~~~~~~~~
 HTTP/1.1 defines caching methods in HTTP. Cherokee-Admin can
@@ -50,6 +52,7 @@ on the values you have configured. The available options are:
  . 2038: Maximum date value representable in POSIX time.
  . Custom Value: set a value by hand.
 
+[[restrictions]]
 Access Restrictions
 ~~~~~~~~~~~~~~~~~~~
 
@@ -71,6 +74,7 @@ Access Restrictions
   addresses are valid entries.
 
 
+[[examples]]
 Examples
 ^^^^^^^^
 
@@ -102,6 +106,7 @@ addresses and networks if you want
 
 
 
+[[authentication]]
 Authentication
 ~~~~~~~~~~~~~~
 

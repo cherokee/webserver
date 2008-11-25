@@ -3,6 +3,7 @@
 Development: Debugging Cherokee
 -------------------------------
 
+[[cherokee-admin]]
 cherokee-admin
 ~~~~~~~~~~~~~~
 
@@ -11,6 +12,7 @@ the `-x` or `--debug` parameter to see the Python back traces in the
 active console.
 
 
+[[cherokee]]
 cherokee
 ~~~~~~~~
 

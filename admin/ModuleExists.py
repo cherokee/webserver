@@ -5,7 +5,7 @@ import validations
 
 NOTE_EXISTS  = "Comma separated list of files to be checked. If one exists, the rule will be applied."
 NOTE_IOCACHE = "Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise."
-NOTE_ANY     = "Match any request if the file exits."
+NOTE_ANY     = "Match the request if any file exits."
 
 class ModuleExists (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]

@@ -21,6 +21,7 @@ link:modules_balancers_round_robin.html[Round Robin] balancer and configure
 a single host or interpreter (it has no performance penalty).
 
 
+[[parameters]]
 Parameters
 ~~~~~~~~~~
 
@@ -36,6 +37,7 @@ and the link:config_info_sources.html[information sources] section for
 more details.
 
 
+[[examples]]
 Examples
 ~~~~~~~~
 Refer to the link:cookbook.html[Cookbook] if you want specific

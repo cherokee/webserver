@@ -7,6 +7,7 @@ The `Fixed list` validator, also known as `Authlist`, uses fixed
 authentication lists of user-password pairs. As many pairs as needed
 can be provided.
 
+[[parameters]]
 Parameters
 ^^^^^^^^^^
 
@@ -21,6 +22,7 @@ __password__     , Required. Password.
 The parameters can be repeated, but must be provided in user-password
 pairs.
 
+[[compatibility]]
 Compatibility
 ^^^^^^^^^^^^^
 

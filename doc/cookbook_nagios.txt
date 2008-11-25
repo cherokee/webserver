@@ -12,6 +12,7 @@ intended for an Apache audience.
 After following the quickstart instructions, getting Nagios it to work
 with Cherokee is really simple.
 
+[[trivial]]
 Trivial set up: Cherokee as proxy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -70,6 +71,7 @@ Now, whenever a request to 10.0.0.10 contains the `nagios3` substring,
 it will be proxied to 10.0.0.11.
 
 
+[[advanced]]
 Advanced set up: Cherokee as host
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

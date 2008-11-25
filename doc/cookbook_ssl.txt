@@ -5,6 +5,7 @@ Cookbook: SSL, TLS and certificates
 
 To generate SSL keys you will have to follow these steps detailed below.
 
+[[locate]]
 Locate CA.pl or CA.sh
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -13,6 +14,7 @@ Locate CA.pl or CA.sh
 
 In any other case ``find / -iname CA.pl -print`` will help you to locate it.
 
+[[create]]
 Create a new CA
 ~~~~~~~~~~~~~~~
 ----
@@ -42,6 +44,7 @@ Create a new CA
      Email Address []:alvaro@alobbs.com
 ----
 
+[[generate]]
 Generate a certificate request
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ----
@@ -75,6 +78,7 @@ Generate a certificate request
      Request (and private key) is in newreq.pem
 ----
 
+[[sign]]
 Sign the certificate request
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ----
@@ -115,6 +119,7 @@ Sign the certificate request
   Signed certificate is in newcert.pem
 ----
 
+[[self_sign]]
 Self signed certificates
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

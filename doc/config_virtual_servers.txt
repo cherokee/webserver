@@ -75,6 +75,7 @@ image::media/images/admin_vserver_vserver.png[Virtual server overview]
 
 A detailed explanation of every tab follows.
 
+[[basics]]
 Basics
 ~~~~~~
 
@@ -124,6 +125,7 @@ for any given moment.
 
 --
 
+[[domain_names]]
 Domain names
 ~~~~~~~~~~~~
 
@@ -155,6 +157,7 @@ also using the priorities defined by the virtual host order.
 Only after failing both with the domain names and the nicknames will
 Cherokee issue the failure.
 
+[[behavior]]
 Behavior
 ~~~~~~~~
 
@@ -337,7 +340,7 @@ information, and would then evaluate once more the list of rules. This
 time the request would end in `.php` and thus it would match the
 `Extension` rule meant to handle PHP files.
 
-
+[[personal_webs]]
 Personal Webs
 ~~~~~~~~~~~~~
 
@@ -348,6 +351,7 @@ publish the content of ~/foo at the relative URL /~bar
 This option is disabled if the 'Directory name' field is empty.
 
 
+[[error_handler]]
 Error Handler
 ~~~~~~~~~~~~~
 
@@ -370,6 +374,7 @@ will be sent. The only exception to this is when nothing at all is at
 Cherokee's disposal, in which case a standard http error is sent.
 
 
+[[logging]]
 Logging
 ~~~~~~~
 
@@ -404,6 +409,7 @@ Logging using the W3C log format.
 --
 
 
+[[security]]
 Security
 ~~~~~~~~
 

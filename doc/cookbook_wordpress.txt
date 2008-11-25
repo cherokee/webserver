@@ -48,6 +48,7 @@ reconfiguration of Cherokee whatsoever, you can skip right to the
 secction link:cookbook_wordpress.html#setting_up_wordpress[Setting up
 Wordpress].
 
+[[cherokee]]
 Setting up Cherokee
 ~~~~~~~~~~~~~~~~~~~
 
@@ -134,7 +135,7 @@ for instance.
 
 image::media/images/cookbook_wp_example3.png[WP example.net]
 
-[setting_up_wordpress]
+[[wordpress]]
 Setting up Wordpress
 ~~~~~~~~~~~~~~~~~~~~
 

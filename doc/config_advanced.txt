@@ -14,6 +14,7 @@ You should at least read the chapter
 link:cookbook_optimizations.html[Optimizing Cherokee] before you
 start tweaking things here.
 
+[[connections]]
 Connections
 ~~~~~~~~~~~
 * KeepAlive:
@@ -45,6 +46,7 @@ Connections
 
 image::media/images/admin_advanced1.png[Cherokee Admin interface]
 
+[[resources]]
 Resources
 ~~~~~~~~~
 * Thread Number:
@@ -88,6 +90,7 @@ Resources
 
 image::media/images/admin_advanced2.png[Cherokee Admin interface]
 
+[[io_cache]]
 I/O cache
 ~~~~~~~~~
 * Status:
@@ -112,6 +115,7 @@ I/O cache
 
 image::media/images/admin_advanced3.png[Cherokee Admin interface]
 
+[[special_files]]
 Special Files
 ~~~~~~~~~~~~~
 * Panic action:
@@ -129,10 +133,3 @@ Special Files
   useful to trace what is going on with Cherokee.
 
 image::media/images/admin_advanced4.png[Cherokee Admin interface]
-
-
-
-
-////
-Add new screenshot with the 'nonce' option updated.
-////

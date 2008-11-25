@@ -40,7 +40,7 @@ The details to set up the `htdigest` and `htpasswd` are exactly the
 same as for `plain` validation. The only difference is the tools used
 to create the passwords' file.
 
-
+[[htdigest]]
 === htdigest
 
 To use this handler you will need a file created by the `htdigest`
@@ -68,6 +68,7 @@ $ cat pass
 testuser:secret:f24f76261bcd65780b33edde00855897
 -----
 
+[[htpasswd]]
 === htpasswd
 
 For this handle, the tool `htpasswd` is needed to create the
@@ -103,6 +104,7 @@ plain validation, htdigest, htpasswd and whatever file based system
 you cross paths with.
 
 
+[[mysql]]
 === MySQL
 
 Lets set up a simple server requiring authentication against a MySQL
@@ -158,6 +160,7 @@ And any content requested to Cherokee will require prior
 authentication against the database.
 
 
+[[example]]
 Another usage example
 ~~~~~~~~~~~~~~~~~~~~~
 

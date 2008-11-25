@@ -6,6 +6,7 @@ Validator: LDAP
 The LDAP validator allows you to authenticate a user using the
 Lightweight Directory Access Protocol v3.
 
+[[parameters]]
 Parameters
 ^^^^^^^^^^
 
@@ -29,6 +30,7 @@ __ca_file__     ,       Optional. It's the CA filename. Must be provided  \
                         if TLS is enabled.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+[[compatibility]]
 Compatibility
 ^^^^^^^^^^^^^
 

@@ -23,6 +23,6 @@ These are the lists currently in existence:
 
 More resources:
 ~~~~~~~~~~~~~~~
-[elphel]
+[[elphel]]
 * How to cross-compile Cherokee for Elphel cameras:
   http://wiki.elphel.com/index.php?title=Cherokee

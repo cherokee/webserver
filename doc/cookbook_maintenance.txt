@@ -20,6 +20,7 @@ advanced. It will be useful to serve a static maintenance message to
 the public while the administrator will retain the ability to see the
 actual changes.
 
+[[basic]]
 Basic Example
 ~~~~~~~~~~~~~
 
@@ -69,6 +70,7 @@ connections.
 Remember to reverse the process once you are done. You'll only have to
 delete the copycat or position it below the real virtual host.
 
+[[advanced1]]
 Advanced Example: Static message
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -93,6 +95,7 @@ image::media/images/cookbook_maintenance_advanced_redir.png[Default]
 This set up will result in every request being redirected to the
 maintenance directory.
 
+[[advanced2]]
 Advanced Example: Staff review
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

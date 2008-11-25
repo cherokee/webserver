@@ -3,6 +3,7 @@
 Development: cherokee.conf
 --------------------------
 
+[[introduction]]
 Introduction
 ~~~~~~~~~~~~
 
@@ -44,6 +45,7 @@ should know about.
 The following blocks will summarize the configuration keys that the
 current Cherokee release handles:
 
+[[server]]
 Server
 ~~~~~~
 
@@ -109,6 +111,7 @@ other                     , By default in Linux
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+[[virtual_server]]
 Virtual Server
 ~~~~~~~~~~~~~~
 
@@ -330,6 +333,7 @@ auth!list!#!password, String   , Password for entry number #
 auth!list!#!user,     String   , User for entry number #
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+[[examples]]
 Here are a few examples about how this notation works:
 
 - The default virtual server uses the "common" handler as default
@@ -424,6 +428,7 @@ vserver!10!rule!500!match!final = 0
 vserver!10!rule!500!only_secure = 0
 ----
 
+[[logs]]
 Logs
 ~~~~
 
@@ -471,6 +476,7 @@ Examples:
 ----
 
 
+[[information_sources]]
 Information sources
 ~~~~~~~~~~~~~~~~~~~
 
@@ -508,6 +514,7 @@ source!1!interpreter = /usr/bin/php-cgi -b /tmp/cherokee-php.sock
 source!1!type = host
 ----
 
+[[balancers]]
 Balancers
 ~~~~~~~~~
 The balancers must define the information sources to be used. For the
@@ -525,6 +532,7 @@ vserver!10!rule!600!match!extensions = php
 vserver!10!rule!600!match!final = 1
 ----
 
+[[inclusion]]
 Inclusion of Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -544,6 +552,7 @@ or even, it is possible to specify a directory to include all of its files::
     include = /etc/cherokee/mods-enabled/
 ----
 
+[[reverse_proxy]]
 Reverse Proxy
 ~~~~~~~~~~~~~
 

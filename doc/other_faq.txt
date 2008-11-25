@@ -6,6 +6,7 @@ Other: Frequently Asked Questions
 Here is a list of the most frequently asked questions. Please refer to
 the appropiate section of the documentation for more details.
 
+[[faq01]]
 === How to compile it
 
 ----
@@ -13,10 +14,12 @@ the appropiate section of the documentation for more details.
 make
 ----
 
+[[faq02]]
 === How to create dynamic modules
 
 It's the default way.
 
+[[faq03]]
 === How to configure the module xyz to be linked statically
 
 ----
@@ -25,6 +28,7 @@ It's the default way.
   --enable-static-module=xyz
 ----
 
+[[faq04]]
 === How to build everything statically
 
 ----
@@ -33,6 +37,7 @@ It's the default way.
   --enable-static-module=all
 ----
 
+[[faq05]]
 === How to create a self signed certificate for TLS
 
 ----
@@ -41,6 +46,7 @@ openssl req -days 1000 -new -x509 -nodes    \
   -keyout /etc/cherokee/ssl/cherokee.pem
 ----
 
+[[faq06]]
 === How to access cherokee-admin from a remote machine
 
 cherokee-admin binds only to local loopback by default. There are some
@@ -65,6 +71,7 @@ After that you can access the remote interface through
   configure it there and then copy the generated cherokee.conf file to
   the device running the cherokee instance you wanted to set up.
 
+[[faq07]]
 === How to manually write configuration files without cherokee-admin
 
 The configuration file is a plain text file and its syntax is well
@@ -74,6 +81,7 @@ configuration is not the recommended method, but the format will
 always be kept updated to facilitate scripting tasks, working with
 embedded devices and other similar situations.
 
+[[faq08]]
 === Does Cherokee speak WSGI natively like `mod_wsgi` does?
 
 In short: no. We believe that we should not implement anything like
@@ -100,15 +108,18 @@ Give Cherokee (SCGI|FastCGI) a try with your WSGI application.  We
 believe that besides fixing both the architectural and security flaws
 you will improve performance.
 
+[[faq09]]
 === I need to make an administration script: What signals are supported by Cherokee?
 
 The list is documented in the link:other_signals.html[Signals] entry.
 
+[[faq10]]
 === Is there a clean way of switching Cherokee to Maintenance mode?
 
 Check the link:cookbook.html[Cookbook], there is a
 link:cookbook_maintenance.html[recipe on the subject].
 
+[[faq11]]
 === What licensing is used by the Cherokee web server?
 
 Cherokee is licensed under the GNU General Public License, version 2,
@@ -121,6 +132,7 @@ If for whatever reason this license does not suit your needs, other
 licensing schemes can be negotiated on a particular basis. Contact
 link:http://www.octality.com/[Octality] if this is your case.
 
+[[faq12]]
 === And what about the documentation?
 
 The documentation is distributed under a
