@@ -1010,6 +1010,14 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 			} else
 				goto unknown;
 			break;
+		case 'X':
+			if (header_equals ("X-Forwarded-For", header_x_forwarded_for, begin, header_len)) {
+				ret = add_known_header (hdr, header_x_forwarded_for, val_offs, val_len);
+			} else if (header_equals ("X-Forwarded-Host", header_x_forwarded_host, begin, header_len)) {
+				ret = add_known_header (hdr, header_x_forwarded_host, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
 		default:
 		unknown:
 			/* Add a unknown header

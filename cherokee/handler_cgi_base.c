@@ -494,6 +494,16 @@ cherokee_handler_cgi_base_build_basic_env (
 		set_env (cgi, "HTTP_USER_AGENT", p, p_len);
 	}
 
+	ret = cherokee_header_get_known (&conn->header, header_x_forwarded_for, &p, &p_len);
+	if (ret == ret_ok) {
+		set_env (cgi, "HTTP_X_FORWARDED_FOR", p, p_len);
+	}
+
+	ret = cherokee_header_get_known (&conn->header, header_x_forwarded_host, &p, &p_len);
+	if (ret == ret_ok) {
+		set_env (cgi, "HTTP_X_FORWARDED_HOST", p, p_len);
+	}
+
 	/* TODO: Fill the others CGI environment variables
 	 * 
 	 * http://hoohoo.ncsa.uiuc.edu/cgi/env.html

@@ -58,6 +58,8 @@ typedef enum {
 	header_referer,
 	header_upgrade,
 	header_user_agent,
+	header_x_forwarded_for,
+	header_x_forwarded_host,
 	HEADER_LENGTH
 } cherokee_common_header_t;
 

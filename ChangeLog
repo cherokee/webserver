@@ -1,5 +1,9 @@
 2008-11-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_cgi_base.c, cherokee/header.c,
+	cherokee/header.h: A couple of missing (reverse proxy related)
+	headers have been added.
+
 	* cherokee/http.c, cherokee/handler_cgi_base.c,
 	cherokee/handler_proxy.c, cherokee/connection.c: A few small (but
 	quite visible) bugs have been fixed.
