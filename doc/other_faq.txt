@@ -140,3 +140,12 @@ link:http://creativecommons.org/licenses/by/3.0/[Creative Commons
 Attribution (by)] license, which is the most accommodating in terms of
 what others can do with it. It lets others distribute, remix, tweak,
 and build upon the work, even commercially.
+
+
+[[faq13]]
+=== Can encoders be set for specfic file types?
+
+Yes. Since content encoding is set on a per-rule basis, simply add a
+rule at the beginning of the virtual server that matches the specific
+file extensions and has the encoding enabled. Set the rule to be
+non-final. That should do the trick.
