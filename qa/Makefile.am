@@ -194,7 +194,8 @@ run-tests.py \
 186-SSI-droot.py \
 187-Method.py \
 188-Method2.py \
-189-Redir9.py
+189-Redir9.py \
+190-RuleExists4.py
 
 test:
 	./run-tests.py
