@@ -1986,6 +1986,15 @@ cherokee_connection_create_encoder (cherokee_connection_t *conn,
 	    (encoders_accepted->root == NULL))
 		return ret_ok;
 
+	/* Keepalive (Content-Length) connections cannot use encoders.
+	 * The transferred information length would change.
+	 */
+	if ((conn->keepalive) &&
+	    (! conn->chunked_encoding))
+	{
+		return ret_ok;
+	}
+
 	/* Process the "Accept-Encoding" header
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_accept_encoding, &ptr, &ptr_len);
