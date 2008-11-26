@@ -1,3 +1,8 @@
+2008-11-26  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/PageVServer.py: fix by Skarcha for issue 239
+	http://code.google.com/p/cherokee/issues/detail?id=239
+	
 2008-11-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_dirlist.c, cherokee/common-internal.h: S_ISLNK
@@ -18,6 +23,7 @@
 	* cherokee/Makefile.MingW.in: Removed.
 
 2008-11-25  Taher Shihadeh  <taher@unixwars.com>
+
 	* doc/*: added anchors throughout the documentation to ease
 	navigation.
 

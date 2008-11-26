@@ -343,7 +343,7 @@ class PageVServer (PageMenu, FormHelper):
                               }
                               jQuery.post ('%(url)s', post,
                                   function (data, textStatus) {
-                                      window.location.reload();
+                                      window.location = window.location;
                                   }
                               );
                           }
