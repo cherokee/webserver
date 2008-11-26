@@ -84,15 +84,21 @@ configure (cherokee_rule_exists_t    *rule,
 
 	cherokee_config_node_read_bool (conf, "iocache",   &rule->use_iocache);
 	cherokee_config_node_read_bool (conf, "match_any", &rule->match_any);
+	
+	if (rule->match_any == false) {
+		ret = cherokee_config_node_read (conf, "exists", &tmp);
+		if (ret != ret_ok) {
+			PRINT_ERROR ("Rule prio=%d needs an 'exists' property\n", 
+				     RULE(rule)->priority);
+			return ret_error;
+		}
 
-	ret = cherokee_config_node_read (conf, "exists", &tmp);
-	if (ret != ret_ok) {
-		PRINT_ERROR ("Rule prio=%d needs an 'exists' property\n", 
-			     RULE(rule)->priority);
-		return ret_error;
+		ret = parse_value (tmp, &rule->files);
+		if (ret != ret_ok)
+			return ret;
 	}
-
-	return parse_value (tmp, &rule->files);
+	
+	return ret_ok;
 }
 
 static ret_t
@@ -157,6 +163,8 @@ match (cherokee_rule_exists_t *rule,
 
 	/* Always match */
 	if (rule->match_any) {
+		TRACE(ENTRIES, "Gonna match any file: '%s'\n", tmp->buf);
+
 		cherokee_buffer_add_buffer (tmp, &conn->request);
 		return match_file (rule, conn, tmp);
 	}

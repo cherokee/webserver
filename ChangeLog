@@ -1,3 +1,8 @@
+2008-11-26  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/rule_exists.c: The !exists property shouldn't be
+	required when !match_any is set.
+
 2008-11-26  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/PageVServer.py: fix by Skarcha for issue 239
