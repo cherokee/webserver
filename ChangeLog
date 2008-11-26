@@ -1,5 +1,8 @@
 2008-11-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleExists.py: The !iocache and !match_any properties
+	were being misplaced.
+
 	* qa/112-NiceError-CGI.py, qa/187-Method.py, qa/188-Method2.py,
 	qa/170-Error-ContentLength.py, qa/180-RuleExists2.py,
 	qa/179-RuleExists.py, qa/181-RuleExists3.py: The sh based CGIs

@@ -15,18 +15,18 @@ class ModuleExists (Module, FormHelper):
         Module.__init__ (self, 'exists', cfg, prefix, submit_url)
 
         # Special case: there is a check in the rule
-        self.checks = ['%s!match!exists!iocache'%(self._prefix),
-                       '%s!match!exists!match_any'%(self._prefix)]
+        self.checks = ['%s!match!iocache'%(self._prefix),
+                       '%s!match!match_any'%(self._prefix)]
 
     def _op_render (self):
         table = TableProps()
         if self._prefix.startswith('tmp!'):
             self.AddPropEntry (table, 'Files / Nick', '%s!value'%(self._prefix), NOTE_EXISTS)
         else:
-            self.AddPropCheck (table, 'Match any file', '%s!exists!match_any'%(self._prefix), False, NOTE_ANY)
-            if not int(self._cfg.get_val ('%s!exists!match_any'%(self._prefix), '0')):
+            self.AddPropCheck (table, 'Match any file', '%s!match_any'%(self._prefix), False, NOTE_ANY)
+            if not int(self._cfg.get_val ('%s!match_any'%(self._prefix), '0')):
                 self.AddPropEntry (table, 'Files', '%s!exists'%(self._prefix), NOTE_EXISTS)
-            self.AddPropCheck (table, 'Use I/O cache', '%s!exists!iocache'%(self._prefix), False, NOTE_IOCACHE)
+            self.AddPropCheck (table, 'Use I/O cache', '%s!iocache'%(self._prefix), False, NOTE_IOCACHE)
         return str(table)
 
     def _op_apply_changes (self, uri, post):
