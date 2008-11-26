@@ -3,7 +3,7 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_EXISTS  = "Comma separated list of files to be checked. If one exists, the rule will be applied."
+NOTE_EXISTS  = "Comma separated list of files. Rule applies if one exists. Use as nickname if you will match every file."
 NOTE_IOCACHE = "Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise."
 NOTE_ANY     = "Match the request if any file exits."
 
@@ -21,7 +21,7 @@ class ModuleExists (Module, FormHelper):
     def _op_render (self):
         table = TableProps()
         if self._prefix.startswith('tmp!'):
-            self.AddPropEntry (table, 'Files', '%s!value'%(self._prefix), NOTE_EXISTS)
+            self.AddPropEntry (table, 'Files / Nick', '%s!value'%(self._prefix), NOTE_EXISTS)
         else:
             self.AddPropCheck (table, 'Match any file', '%s!exists!match_any'%(self._prefix), False, NOTE_ANY)
             if not int(self._cfg.get_val ('%s!exists!match_any'%(self._prefix), '0')):
