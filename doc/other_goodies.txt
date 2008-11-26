@@ -61,7 +61,6 @@ header, a similar feature offered by other web servers.
 This is to allow the migration of applications supporting it whithout
 having to make major code rewrites.
 
-
 [[zero-downtime]]
 Zero Downtime Updates
 ~~~~~~~~~~~~~~~~~~~~~
@@ -149,3 +148,13 @@ slave database failures, or replication failures.
 This feature delivers connection pooling, database abstraction to
 enable easier migrations and administration, load balancing and
 automatic failover.
+
+[[reverse_proxy]]
+Reverse Proxy
+~~~~~~~~~~~~~
+Yes, that too! Cherokee also provides a state of the art
+link:modules_handlers_proxy.html[HTTP reverse proxy] module. Check the
+documentation for more details and give it a try. 
+
+And if that is not enough, you can always take a look at the rest of
+the link:modules.html[modules] bundled with Cherokee.
