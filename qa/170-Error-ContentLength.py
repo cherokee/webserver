@@ -11,6 +11,16 @@ vserver!1!rule!1700!handler = cgi
 vserver!1!rule!1700!handler!error_handler = 0
 """ % (DIR)
 
+CGI_BASE = """#!/bin/sh
+echo "Content-type: text/html"
+echo "Content-Length: %d"
+echo "Status: %s"
+echo ""
+cat << EOF
+%s
+EOF
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
@@ -23,14 +33,5 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
-        f = self.WriteFile (d, "exec.cgi", 0555,
-                            """#!/bin/sh
-
-                            echo "Content-type: text/html"
-                            echo "Content-Length: %d"
-                            echo "Status: %s"
-                            echo ""
-                            cat << EOF
-                            %s
-                            EOF
-                            """ % (len(ERROR_MSG), ERROR, ERROR_MSG))
+        f = self.WriteFile (d, "exec.cgi", 0555, 
+                            CGI_BASE % (len(ERROR_MSG), ERROR, ERROR_MSG))

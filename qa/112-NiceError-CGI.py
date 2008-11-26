@@ -40,6 +40,15 @@ vserver!1!rule!1120!handler = cgi
 vserver!1!rule!1120!handler!error_handler = 1
 """
 
+CGI_BASE = """#!/bin/sh
+echo "Content-type: text/html"
+echo "Status: %s"
+echo ""
+cat << EOF
+%s
+EOF
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
@@ -52,13 +61,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         d = self.Mkdir (www, "cgi_error_403_1")
-        f = self.WriteFile (d, "exec.cgi", 0555, 
-                            """#!/bin/sh
-
-                            echo "Content-type: text/html"
-                            echo "Status: %s"
-                            echo ""
-                            cat << EOF
-                            %s
-EOF
-""" % (ERROR, ERROR_MSG))
+        f = self.WriteFile (d, "exec.cgi", 0555, CGI_BASE % (ERROR, ERROR_MSG))

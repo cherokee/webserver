@@ -17,6 +17,14 @@ vserver!1!rule!1801!match!final = 1
 vserver!1!rule!1801!handler = cgi
 """ % (FILE1, FILE2)
 
+CGI_BASE = """#!/bin/sh
+echo "Content-type: text/html"
+echo ""
+cat << EOF
+%s
+EOF
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
@@ -28,12 +36,5 @@ class Test (TestBase):
 
     def Prepare (self, www):
         self.WriteFile (www, FILE1, 0555, FORBIDDEN)
-        self.WriteFile (www, FILE2, 0555,
-                        """#!/bin/sh
-                            echo "Content-type: text/html"
-                            echo ""
-                            cat << EOF
-                            %s
-                            EOF
-                            """ % (MAGIC))
+        self.WriteFile (www, FILE2, 0555, CGI_BASE % (MAGIC))
 

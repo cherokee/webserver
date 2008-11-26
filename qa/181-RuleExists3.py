@@ -17,6 +17,14 @@ vserver!1!rule!1811!match!final = 1
 vserver!1!rule!1811!handler = cgi
 """ % (FILE, DIR)
 
+CGI_BASE = """#!/bin/sh
+echo "Content-type: text/html"
+echo ""
+cat << EOF
+%s
+EOF
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
@@ -30,12 +38,5 @@ class Test (TestBase):
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)
         self.WriteFile (d, MAGIC)
-        self.WriteFile (www, FILE, 0555,
-                        """#!/bin/sh
-                            echo "Content-type: text/html"
-                            echo ""
-                            cat << EOF
-                            %s
-                            EOF
-                            """ % (FORBIDDEN))
+        self.WriteFile (www, FILE, 0555, CGI_BASE % (FORBIDDEN))
 
