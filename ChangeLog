@@ -1,5 +1,8 @@
 2008-11-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleExists.py (ModuleExists.get_name): Fixes a execution
+	problem when the !match_any key wasn't present in the configuration.
+
 	* cherokee/connection.c (cherokee_connection_create_encoder):
 	Keepalive connections with Content-Length header should go
 	through a encoder.

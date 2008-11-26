@@ -40,7 +40,7 @@ class ModuleExists (Module, FormHelper):
         self._cfg['%s!match!exists'%(self._prefix)] = exts
 
     def get_name (self):
-        if int(self._cfg.get_val ('%s!match!match_any'%(self._prefix))):
+        if int(self._cfg.get_val ('%s!match!match_any'%(self._prefix), 0)):
             return "Any file"
         return self._cfg.get_val ('%s!match!exists'%(self._prefix))
 
