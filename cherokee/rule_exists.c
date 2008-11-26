@@ -163,9 +163,9 @@ match (cherokee_rule_exists_t *rule,
 
 	/* Always match */
 	if (rule->match_any) {
+		cherokee_buffer_add_buffer (tmp, &conn->request);
 		TRACE(ENTRIES, "Gonna match any file: '%s'\n", tmp->buf);
 
-		cherokee_buffer_add_buffer (tmp, &conn->request);
 		return match_file (rule, conn, tmp);
 	}
 

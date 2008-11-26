@@ -5,8 +5,9 @@
 	qa/179-RuleExists.py, qa/181-RuleExists3.py: The sh based CGIs
 	code should not be indented.
 
-	* qa/190-RuleExists4.py: Adds a new QA test. It tests whether or
-	not the rule exists' !match_any flag works.
+	* qa/190-RuleExists4.py, qa/191-RuleExists5.py: Adds a couple of
+	new QA test. They test whether or not the rule exists' !match_any
+	flag works.
 
 	* cherokee/rule_exists.c: The !exists property shouldn't be
 	required when !match_any is set.

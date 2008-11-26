@@ -195,7 +195,8 @@ run-tests.py \
 187-Method.py \
 188-Method2.py \
 189-Redir9.py \
-190-RuleExists4.py
+190-RuleExists4.py \
+191-RuleExists5.py
 
 test:
 	./run-tests.py
