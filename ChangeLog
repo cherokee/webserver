@@ -1,3 +1,8 @@
+2008-11-27  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/buffer.h: Fixes the 'Long-File-Support' in dirlist and
+	server_info handlers.
+
 2008-11-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/ModuleExists.py (ModuleExists.get_name): Fixes a execution
