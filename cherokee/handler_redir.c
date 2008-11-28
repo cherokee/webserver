@@ -133,6 +133,7 @@ match_and_substitute (cherokee_handler_redir_t *n)
 
 			cherokee_buffer_clean (&conn->pathinfo);
 			cherokee_buffer_clean (&conn->request);
+			cherokee_buffer_clean (&conn->local_directory);
 
 			cherokee_buffer_ensure_size (&conn->request, conn->request.len + subject_len);
 			cherokee_regex_substitute (&list->subs,    /* regex str */
