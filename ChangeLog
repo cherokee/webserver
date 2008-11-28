@@ -1,3 +1,10 @@
+2008-11-28  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_dirlist.c, themes/firefox3/footer.html,
+	themes/firefox3/entry.html, themes/firefox3/header.html: Fixes a
+	couple of UTF-8 related issues. Patch by: Emil Renner Berthing
+	<esmil@mailme.dk>
+
 2008-11-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/buffer.h: Fixes the 'Long-File-Support' in dirlist and
