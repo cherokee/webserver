@@ -1,3 +1,9 @@
+2008-11-28  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* qa/192-RedirDocumentRoot.py, qa/Makefile.am: Added a new QA test
+	to ensure that the bug #241 is fixed.  Original version submitted
+	by Antonio Perez.
+
 2008-11-28  Antonio Perez  <aperez@skarcha.com>
 	* cherokee/handler_redir.c: document_root was ignored on
 	internal redirections. Fixes bug #241:
