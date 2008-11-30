@@ -18,7 +18,7 @@ DATA_VALIDATION = [
     ('server!keepalive_max_requests', validations.is_positive_int),
     ("server!keepalive$",             validations.is_boolean),
     ("server!thread_number",          validations.is_positive_int),
-    ("server!iocache",                validations.is_boolean),
+    ("server!iocache$",                validations.is_boolean),
     ("server!iocache!max_size",       validations.is_positive_int),
     ("server!iocache!min_file_size",  validations.is_positive_int),
     ("server!iocache!max_file_size",  validations.is_positive_int),

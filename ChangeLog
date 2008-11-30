@@ -1,3 +1,8 @@
+2008-11-30  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/PageAdvanced.py: Advanced->I/O Cache changes didn't work.
+	http://code.google.com/p/cherokee/issues/detail?id=242
+
 2008-11-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* qa/193-PHP-documentroot.py: Adds a new QA test. It checks
@@ -19,7 +24,8 @@
 	by Antonio Perez.
 
 2008-11-28  Antonio Perez  <aperez@skarcha.com>
-	* cherokee/handler_redir.c: document_root was ignored on
+
+* cherokee/handler_redir.c: document_root was ignored on
 	internal redirections. Fixes bug #241:
 	http://code.google.com/p/cherokee/issues/detail?id=241
 
