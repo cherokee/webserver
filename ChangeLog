@@ -1,3 +1,13 @@
+2008-11-30  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/cryptor_libssl.c, cherokee/cryptor_libssl.h: Adds a
+	license exemption for OpenSSL. In case the cryptor-libssl plug-in
+	is linked with OpenSSL a license exemption is needed because the
+	GPL (Cherokee) and X11 (OpenSSL) licenses incompatibility. It is
+	important to note that these are only two source files where this
+	exemption applies. Thus, the cryptor_libssl plugin in the only
+	plug-in where the license exemption applies.
+
 2008-11-28  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* qa/192-RedirDocumentRoot.py, qa/Makefile.am: Added a new QA test
