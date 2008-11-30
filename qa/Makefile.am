@@ -197,7 +197,8 @@ run-tests.py \
 189-Redir9.py \
 190-RuleExists4.py \
 191-RuleExists5.py \
-192-RedirDocumentRoot.py
+192-RedirDocumentRoot.py \
+193-PHP-documentroot.py
 
 test:
 	./run-tests.py

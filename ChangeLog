@@ -1,5 +1,9 @@
 2008-11-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/193-PHP-documentroot.py: Adds a new QA test. It checks
+	whether an PHP application directory can be mapped in a web
+	directory by setting a custom document_root.
+
 	* cherokee/cryptor_libssl.c, cherokee/cryptor_libssl.h: Adds a
 	license exemption for OpenSSL. In case the cryptor-libssl plug-in
 	is linked with OpenSSL a license exemption is needed because the
