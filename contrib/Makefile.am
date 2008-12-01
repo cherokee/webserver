@@ -13,4 +13,13 @@ bin2buffer.py \
 07to08.py \
 08to09.py \
 09to010.py \
-tracelor.py
+tracelor.py \
+make-cert.sh
+
+CLEANFILES = \
+server.pem \
+rand.dat \
+cakey.key \
+cakey.csr \
+cakey.pem
+

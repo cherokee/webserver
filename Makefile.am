@@ -52,12 +52,7 @@ config.h.win32
 
 CLEANFILES = \
 $(CONFS) \
-$(CONSTANTS) \
-server.pem \
-rand.dat \
-cakey.key \
-cakey.csr \
-cakey.pem
+$(CONSTANTS)
 
 DISTCLEANFILES = \
 cherokee.pc
@@ -129,23 +124,3 @@ uninstall-local: uninstall-local-config
 
 test:
 	$(MAKE) -C qa test
-
-
-# SSL Certificate Generation:
-# It isn't user by default.
-#
-cert: server.pem
-
-cakey.key:
-	$(RM) -f rand.dat
-	dd if=/dev/random of=rand.dat bs=1024 count=1
-	openssl genrsa -out cakey.key -rand rand.dat 2048
-
-cakey.csr: cakey.key
-	openssl req -new -key cakey.key -out cakey.csr
-
-cakey.pem: cakey.key cakey.csr
-	openssl x509 -req -days 1780 -set_serial 1 -in cakey.csr -signkey cakey.key -out $@
-
-server.pem: cakey.key cakey.pem
-	cat cakey.key cakey.pem > server.pem
