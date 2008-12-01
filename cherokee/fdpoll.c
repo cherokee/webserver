@@ -258,7 +258,7 @@ cherokee_fdpoll_str_to_method (char *str, cherokee_poll_type_t *poll_type)
 }
 
 
-ret_t
+int
 cherokee_fdpoll_is_empty (cherokee_fdpoll_t *fdp)
 {
 	return (fdp->npollfds <= 0);

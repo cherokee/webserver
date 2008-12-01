@@ -1,5 +1,8 @@
 2008-12-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/fdpoll.c: Fixes the cherokee_fdpoll_is_empty() function
+	prototype.
+
 	* Makefile.am: Added a new cert (make cert) target. It isn't used
 	by default, but it is quite handy for generating SSL/TLS certs by
 	hand.
