@@ -10,8 +10,23 @@ offers scalable advantages for high-load websites.
 The original implementation of
 link:http://code.nytimes.com/projects/dbslayer/[DBSlayer] was a MySQL
 to JSON over HTTP bridge. This handler outperforms any other
-implementation by far, and besides JSON the handler can also process
-Python, Ruby and PHP.
+implementation by far,  and many more advantages are derived of using
+the MySQL bridge, including:
+
+
+. Possibility of being proxied: imagine caching your database queries
+with any standard mechanism currentñy in place.
+
+. Chunked encoding: make your database connections persistent between
+the bridge and the database server. Experience a huge performance
+boost independently of your application's design.
+
+. Possibility of applying any of the encoding modules provoded by
+Cherokee: deliver your database results in gzipped format and save
+bandwidth.
+
+. More languages available: besides JSON, the handler can also return
+the information to be used directly by Python, Ruby and PHP.
 
 image::media/images/admin_handler_dbslayer.png[DBSlayer]
 

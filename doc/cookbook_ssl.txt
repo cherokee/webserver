@@ -75,9 +75,7 @@ First some terminology:
   can verify the signature and obtain your RSA public key, which can
   be used to send messages which only you can decrypt.
 
-
-.Does the startup between a non-SSL-aware and an SSL-aware web server
-differ?
+.Does the startup between a non-SSL and an SSL-aware web server differ?
 
 Yes. Although in essence it is exactly the same, if you have a
 passphrase on your SSL private key file, a startup dialog will asks
@@ -85,6 +83,24 @@ you to enter it. This can be problematic if the web server needs to be
 started automatically. In this case, the link:#passphrase[passphrase]
 can be removed from your private key at the cost of erasing a security
 layer, wich brings additional security risks.
+
+.Does Cherokee offer any help for Certificate Generation?
+
+Yes. A script is provided to assit you with Certificate Generation.
+
+Just locate the `contrib` subdirectory and type:
+
+----
+make-cert.sh
+----
+
+And follow the instructions. It will generate the required files, but
+you will have to install them manually.
+
+It has been tested and has worked fine every time, but if you don't find
+the script or it doesn't work for you can always follow the rest of
+the procedure described in this recipe to manually generate the
+certificates.
 
 
 [[locate]]
