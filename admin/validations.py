@@ -86,11 +86,11 @@ def is_ipv6 (value):
         raise ValueError, 'Malformed IPv6'
     return value
     
-def is_local_dir_exists (value, cfg):
+def is_local_dir_exists (value, cfg, nochroot=False):
     value = is_path (value)
 
     chroot = cfg.get_val('server!chroot')
-    if chroot:
+    if chroot and not nochroot:
         path = os.path.normpath (chroot + os.path.sep + value)
     else:
         path = value
@@ -103,11 +103,11 @@ def is_local_dir_exists (value, cfg):
 
     return value
 
-def is_local_file_exists (value, cfg):
+def is_local_file_exists (value, cfg, nochroot=False):
     value = is_path (value)
 
     chroot = cfg.get_val('server!chroot')
-    if chroot:
+    if chroot and not nochroot:
         path = os.path.normpath (chroot + os.path.sep + value)
     else:
         path = value
@@ -120,11 +120,11 @@ def is_local_file_exists (value, cfg):
 
     return value
 
-def parent_is_dir (value, cfg):
+def parent_is_dir (value, cfg, nochroot=False):
     value = is_path (value)
 
     dirname, filename = os.path.split(value)
-    is_local_dir_exists (dirname, cfg)
+    is_local_dir_exists (dirname, cfg, nochroot)
 
     return value
 
@@ -230,7 +230,7 @@ def is_url_or_path (value):
 
     raise ValueError, 'Not a URL, nor a path'
 
-def is_dev_null_or_local_dir_exists (value, cfg):
+def is_dev_null_or_local_dir_exists (value, cfg, nochroot=False):
     if value == '/dev/null':
         return value
-    return is_local_dir_exists (value, cfg)
+    return is_local_dir_exists (value, cfg, nochroot)

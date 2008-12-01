@@ -338,6 +338,7 @@ class FormHelper (WebComponent):
     def ValidateChange_SingleKey (self, key, post, validation):
         for regex, tmp in validation:
             pass_cfg = False
+            nochroot = False
 
             if type(tmp) == types.FunctionType:
                 validation_func = tmp
@@ -347,6 +348,8 @@ class FormHelper (WebComponent):
                 for k in tmp[1:]:
                     if k == 'cfg':
                         pass_cfg = True
+                    elif k == 'nochroot':
+                        nochroot = True
                     else:
                         print "UNKNOWN validation option:", k
 
@@ -357,7 +360,7 @@ class FormHelper (WebComponent):
                     continue
                 try:
                     if pass_cfg:
-                        tmp = validation_func (value, self._cfg)
+                        tmp = validation_func (value, self._cfg, nochroot)
                     else:
                         tmp = validation_func (value)
                     post[key] = [tmp]

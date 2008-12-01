@@ -13,7 +13,7 @@ DATA_VALIDATION = [
     ("vserver!.*?!ssl_certificate_file",      (validations.is_local_file_exists, 'cfg')),
     ("vserver!.*?!ssl_certificate_key_file",  (validations.is_local_file_exists, 'cfg')),
     ("vserver!.*?!ssl_ca_list_file",          (validations.is_local_file_exists, 'cfg')),
-    ("vserver!.*?!logger!.*?!filename",       (validations.parent_is_dir, 'cfg')),
+    ("vserver!.*?!logger!.*?!filename",       (validations.parent_is_dir, 'cfg', 'nochroot')),
     ("vserver!.*?!logger!.*?!command",        (validations.is_local_file_exists, 'cfg')),
 ]
 

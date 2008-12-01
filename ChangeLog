@@ -1,5 +1,9 @@
 2008-12-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageVServer.py, admin/Form.py, admin/validations.py: Log
+	files are opened before the server is jailed. Cherokee-admin was
+	not taking at into account; this patch fixes the issue.
+
 	* admin/Form.py: Changes the tab title color whenever and error
 	message if found in its content. This will help to ease of problem
 	hidden problems (as in the bug report #254):
