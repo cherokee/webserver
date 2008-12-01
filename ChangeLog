@@ -1,3 +1,10 @@
+2008-12-01  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/Form.py: Changes the tab title color whenever and error
+	message if found in its content. This will help to ease of problem
+	hidden problems (as in the bug report #254):
+	http://code.google.com/p/cherokee/issues/detail?id=254
+
 2008-11-30  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageAdvanced.py: Advanced->I/O Cache changes didn't work.

@@ -134,7 +134,11 @@ class FormHelper (WebComponent):
         txt = '<dl class="tab" id="tab_%s">' % (self._id)
         num = 0
         for title, content in entries:
-            txt += '<dt num="%d">%s</dt>\n' % (num, title)
+            error_inside = 'class="error"' in content
+            if error_inside:
+                txt += '<dt num="%d"><div class="error">%s</div></dt>\n' % (num, title)
+            else:
+                txt += '<dt num="%d">%s</dt>\n' % (num, title)
             txt += '<dd>%s</dd>\n' % (content)
             num += 1
         txt += '</dl>'
