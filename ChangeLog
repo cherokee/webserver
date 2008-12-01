@@ -1,5 +1,9 @@
 2008-12-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/common-internal.h: Includes sys/machine.h in case it is
+	available. It helps to fix AIX compilation. Patch by Antonio Perez
+	<aperez@skarcha.com>.
+
 	* cherokee/cryptor.c (cherokee_cryptor_socket_pending): Fixes this
 	function prototype (and implementation due to the fix).
 
