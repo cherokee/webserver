@@ -1,5 +1,9 @@
 2008-12-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* Makefile.am: Added a new cert (make cert) target. It isn't used
+	by default, but it is quite handy for generating SSL/TLS certs by
+	hand.
+
 	* admin/PageVServer.py, admin/Form.py, admin/validations.py: Log
 	files are opened before the server is jailed. Cherokee-admin was
 	not taking at into account; this patch fixes the issue.
