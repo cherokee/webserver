@@ -15,7 +15,7 @@ the MySQL bridge, including:
 
 
 . Possibility of being proxied: imagine caching your database queries
-with any standard mechanism currentñy in place.
+with any standard mechanism currently in place.
 
 . Chunked encoding: make your database connections persistent between
 the bridge and the database server. Experience a huge performance
