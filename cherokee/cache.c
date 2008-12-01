@@ -262,7 +262,7 @@ cherokee_cache_mrproper (cherokee_cache_t *cache)
 		cache->priv = NULL;
 	}
 	
-	// TODO
+	/* TODO */
 	return ret_ok;
 }
 

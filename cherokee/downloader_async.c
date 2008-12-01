@@ -139,7 +139,7 @@ cherokee_downloader_async_step (cherokee_downloader_async_t *adownloader)
 		return ret_error;
 	case 0:
  		TRACE(ENTRIES, "fd=%d rw=%d, not ready\n", fd, rw); 
-//		return ret_eagain;
+/*		return ret_eagain; */
 	}
 
 	/* If there's something to do, go for it..

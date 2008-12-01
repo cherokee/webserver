@@ -98,7 +98,7 @@ cherokee_handler_fastcgi_configure (cherokee_config_node_t *conf, cherokee_serve
 			cherokee_config_node_foreach (j, conf) {
 				cherokee_config_node_t *subconf2 = CONFIG_NODE(j);
 
-				// TODO : implement this
+				/* TODO : implement this */
 				subconf2 = subconf2;
 			}
 			

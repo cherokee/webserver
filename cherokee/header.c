@@ -41,7 +41,9 @@
 #include <ctype.h>
 
 
-// #define HEADER_INTERNAL_DEBUG
+#if 0
+# define HEADER_INTERNAL_DEBUG
+#endif
 
 #ifdef HEADER_INTERNAL_DEBUG
 # define HEADER_INTERNAL_CHECK(h)       	                                                   \

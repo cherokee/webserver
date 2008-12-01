@@ -132,7 +132,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 		vserver->logger = NULL;
 	}
 	if (vserver->logger_props != NULL) {
-		cherokee_avl_free (vserver->logger_props, NULL); // FIXIT
+		cherokee_avl_free (vserver->logger_props, NULL); /* FIXIT */
 		vserver->logger_props = NULL;
 	}
 
@@ -595,9 +595,9 @@ configure_rules (cherokee_config_node_t    *config,
 		 cherokee_rule_list_t      *rule_list)
 {
 	ret_t                   ret;
-	cherokee_list_t        *i; //, *j;
+	cherokee_list_t        *i; 
 	cherokee_config_node_t *subconf;
-//	cherokee_boolean_t      did_default = false;
+/*	cherokee_boolean_t      did_default = false; */
 
 	cherokee_config_node_foreach (i, config) {
 		subconf = CONFIG_NODE(i);
@@ -610,7 +610,7 @@ configure_rules (cherokee_config_node_t    *config,
 	 */
 	cherokee_rule_list_sort (rule_list);
 
-// TODO:
+/* TODO: */
 /* 	if (! did_default) { */
 /* 		PRINT_ERROR ("ERROR: vserver '%s': A default rule is needed\n", vserver->name.buf); */
 /* 		return ret_error; */
