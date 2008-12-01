@@ -1,5 +1,8 @@
 2008-12-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/cryptor.c (cherokee_cryptor_socket_pending): Fixes this
+	function prototype (and implementation due to the fix).
+
 	* cherokee/fdpoll.c: Fixes the cherokee_fdpoll_is_empty() function
 	prototype.
 

@@ -214,11 +214,13 @@ cherokee_cryptor_socket_write (cherokee_cryptor_socket_t *cryp,
 	return cryp->write (cryp, buf, len, re_len);
 }
 
-ret_t
+int
 cherokee_cryptor_socket_pending (cherokee_cryptor_socket_t *cryp)
 {
-	if (unlikely (cryp->pending == NULL))
-		return ret_error;
+	if (unlikely (cryp->pending == NULL)) {
+		SHOULDNT_HAPPEN;
+		return 0;
+	}
 
 	return cryp->pending (cryp);
 }
