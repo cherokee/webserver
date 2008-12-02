@@ -1,3 +1,11 @@
+2008-12-02  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* themes/plain/footer.html, themes/plain/entry.html,
+	themes/plain/Makefile.am, themes/plain/theme.css,
+	themes/plain/header.html, themes/Makefile.am, configure.in: A new
+	dirlist theme has been added. It uses fixed fonts, and has a
+	really clean and simple look.
+
 2008-12-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/common-internal.h: Includes sys/machine.h in case it is

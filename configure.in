@@ -1281,6 +1281,7 @@ doc/Makefile
 themes/Makefile 
 themes/default/Makefile 
 themes/firefox3/Makefile 
+themes/plain/Makefile 
 windows/Makefile
 windows/cherokee.nsi
 www/Makefile 

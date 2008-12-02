@@ -1,3 +1,3 @@
 ## Cherokee: themes/Makefile.am  -*- makefile -*-
 
-SUBDIRS = default firefox3
+SUBDIRS = default firefox3 plain
