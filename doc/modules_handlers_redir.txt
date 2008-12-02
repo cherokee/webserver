@@ -89,9 +89,9 @@ This example will perform internal redirections:
 `~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Regular Expression   , Substitution
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-__"/(d+)$"__         , http://example.com/inst/photogallery/viewphoto?photoid=$1
-__"/(\d+)/cmts"__    , http://example.com/viewcomments?photoid=$1
-__"/(\d+)/delete"__  , http://example.com/inst/photogallery/admin?photoid=$1&method=delete
+__/(\d+)$__          , http://example.com/inst/photogallery/viewphoto?photoid=$1
+__/(\d+)/cmts__      , http://example.com/viewcomments?photoid=$1
+__/(\d+)/delete__    , http://example.com/inst/photogallery/admin?photoid=$1&method=delete
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Which would translate into the following redirections for the listed
