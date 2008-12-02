@@ -1,5 +1,8 @@
 2008-12-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/static/css/cherokee.css: The border of the "saved" message
+	box should be green. The previous red border didn't look nice.
+
 	* cherokee.conf.sample.pre: It's safe again to use a Unix socket
 	for the Cherokee-PHP communication.
 

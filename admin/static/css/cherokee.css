@@ -49,8 +49,8 @@ body {
 	margin: 0px 0px 5px;
 	background-color: #e9ffd4; /* #ffc7c7 : red==warning */
 	color: #000;
-	border-top: 1px solid #b00;
-	border-bottom: 1px solid #b00;
+	border-top: 1px solid #0b0;
+	border-bottom: 1px solid #0b0;
 	font-weight: bold;
 	text-align: center;
 }
