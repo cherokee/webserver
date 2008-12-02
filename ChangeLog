@@ -1,5 +1,8 @@
 2008-12-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee.conf.sample.pre: It's safe again to use a Unix socket
+	for the Cherokee-PHP communication.
+
 	* themes/plain/footer.html, themes/plain/entry.html,
 	themes/plain/Makefile.am, themes/plain/theme.css,
 	themes/plain/header.html, themes/Makefile.am, configure.in: A new
