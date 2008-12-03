@@ -266,7 +266,12 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { text-align:center; padding-left: 0; //margin-left:100px; }
-div.imageblock img { border: 1px solid silver; }
+div.imageblock img { 
+  border: 1px solid silver; 
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 span.image img { border-style: none; }
 
 dl {

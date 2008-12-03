@@ -100,3 +100,30 @@ http://localhost/example for instance, and you should see some notes
 about your recently created project.
 
 image::media/images/cookbook_django.png[Django example]
+
+*********************************************************************
+Should you wish to deploy your Django application directly instead of
+through `manage.py` this could be easily achieved. Just remember to
+daemonize the script used to launch the interpreter in the relevant
+`information source`.
+
+This is done adding the appropriate parameter to the `runfastcgi`
+method of `django.core.servers.fastcgi` in your script.
+
+.Using a unix socket:
+----
+from django.core.servers.fastcgi import runfastcgi
+
+runfastcgi(method="threaded", daemonize="true", maxrequests=5, 
+           protocol="scgi", socket="/tmp/cherokee-django.socket",
+           pidfile="/tmp/cherokee-django.pid")
+----
+
+.Using a host:port configuration:
+----
+from django.core.servers.fastcgi import runfastcgi
+
+runfastcgi(method="threaded", daemonize="true", maxrequests=5, 
+           protocol="scgi", host="127.0.0.1", port=3033)
+----
+*********************************************************************
