@@ -227,6 +227,10 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 
 	/* Check whether the virtual server supports SSL
 	 */
+	if (vserver->cryptor == NULL) {
+		return ret_not_found;
+	}
+
 	if (vsrv_crytor->context == NULL) {
 		return ret_not_found;
 	}
@@ -283,8 +287,9 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 	 */
 	if (CRYPTOR_SOCKET(cryp)->initialized == false) {
 		ret = socket_initialize (cryp, sock, vsrv);
-		if (ret != ret_ok) 
+		if (ret != ret_ok) {
 			return ret_error;
+		}
 
 		CRYPTOR_SOCKET(cryp)->initialized = true;
 	}
@@ -292,7 +297,6 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 	/* TLS Handshake
 	 */
 	re = SSL_accept (cryp->session);
-
 	if (re <= 0) {
 		char *error;
 
@@ -449,6 +453,11 @@ _socket_new (cherokee_cryptor_libssl_t         *cryp,
 	if (unlikely (ret != ret_ok))
 		return ret;
 
+	/* Socket properties */
+	n->session = NULL;
+	n->ssl_ctx = NULL;
+
+	/* Virtual methods */
 	CRYPTOR_SOCKET(n)->free     = (cryptor_socket_func_free_t) _socket_free;
 	CRYPTOR_SOCKET(n)->clean    = (cryptor_socket_func_clean_t) _socket_clean;
 	CRYPTOR_SOCKET(n)->init_tls = (cryptor_socket_func_init_tls_t) _socket_init_tls;

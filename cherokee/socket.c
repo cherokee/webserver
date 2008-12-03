@@ -148,8 +148,9 @@ cherokee_socket_clean (cherokee_socket_t *socket)
 	socket->client_addr_len = -1;
 	memset (&socket->client_addr, 0, sizeof(cherokee_sockaddr_t));
 	
-	if (socket->cryptor) {
+	if (socket->cryptor != NULL) {
 		cherokee_cryptor_socket_clean (socket->cryptor);
+		socket->cryptor = NULL;
 	}
 
 	return ret_ok;
@@ -170,8 +171,9 @@ cherokee_socket_init_tls (cherokee_socket_t         *socket,
 	}
 
 	ret = cherokee_cryptor_socket_init_tls (socket->cryptor, socket, vserver);
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
 		return ret;
+	}
 
 	socket->is_tls = TLS;
 	return ret_ok;

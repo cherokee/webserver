@@ -812,27 +812,31 @@ initialize_loggers (cherokee_server_t *srv)
 	return ret_ok;
 }
 
-static int
+static ret_t
 vservers_check_tls (cherokee_server_t *srv)
 {
 	ret_t            ret;
 	cherokee_list_t *i;
 	cuint_t          num = 0;
 
-	if (srv->cryptor == NULL)
-		return 0;
-
 	list_for_each (i, &srv->vservers) {
 		ret = cherokee_virtual_server_has_tls (VSERVER(i));
 		if (ret == ret_ok) {
+			if (srv->cryptor == NULL) {
+				PRINT_MSG ("ERROR: Virtual Server '%s' is configured to use SSL/TLS\n"
+					   "       but no Crypto engine has been activated server-wide.\n",
+					   VSERVER(i)->name.buf);
+				return ret_error;
+			}
+
 			TRACE (ENTRIES, "Virtual Server %s: TLS enabled\n", VSERVER(i)->name.buf);		
-			return 1;
+			return ret_ok;
 		}
 		num += 1;
 	}
 
 	TRACE (ENTRIES, "None of the %d virtual servers use TLS\n", num);
-	return 0;
+	return ret_not_found;
 }
 
 
@@ -841,6 +845,7 @@ init_vservers_tls (cherokee_server_t *srv)
 {
 	ret_t               ret;
 	cherokee_list_t    *i;
+	cuint_t             ok    = 0;
 	cherokee_boolean_t  error = false;
 
 	/* Initialize the server TLS socket
@@ -860,11 +865,25 @@ init_vservers_tls (cherokee_server_t *srv)
 			PRINT_ERROR ("Can not initialize TLS for `%s' virtual host\n", 
 				     cherokee_buffer_is_empty(&vserver->name) ? "unknown" : vserver->name.buf);
 			error = true;
+
+		} else if (ret == ret_ok) {
+			ok += 1;
 		}
 	}
 
 	if (error)
 		return ret_error;
+
+	/* Ensure 'default' supports TLS/SSL
+	 */
+	if ((ok > 0) &&
+	    (VSERVER(srv->vservers.prev)->cryptor == NULL))
+	{
+		PRINT_MSG_S ("ERROR: TLS/SSL support must be set up in the 'default' Virtual\n"
+			     "       Server. Its certificate will we used by the server in case\n"
+			     "       TLS SNI information is not provided by the client.\n");
+		return ret_error;
+	}
 
 	return ret_ok;	
 }
@@ -999,7 +1018,20 @@ cherokee_server_initialize (cherokee_server_t *srv)
 
 	/* Init the SSL/TLS support
 	 */
-	srv->tls_enabled = vservers_check_tls(srv);
+	ret = vservers_check_tls(srv);
+	switch (ret) {
+	case ret_ok:
+		srv->tls_enabled = true;
+		break;
+	case ret_not_found:
+		srv->tls_enabled = false;
+		break;		
+	case ret_error:
+		return ret_error;
+	default:
+		RET_UNKNOWN(ret);
+		return ret_error;
+	}
 
 	if (srv->tls_enabled) {
 		ret = init_vservers_tls (srv);
