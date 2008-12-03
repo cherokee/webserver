@@ -56,7 +56,7 @@ you should set up your own.
 ------------------------------------------------------------------------
 CREATE DATABASE joomla;
 GRANT ALL PRIVILEGES ON joomla.* TO joomlauser@localhost IDENTIFIED BY 'joomlapassword';
-GRANT ALL PRIVILEGES ON joomla.* TO joomlauser@localhost.localdomain IDENTIFIED BY joomla'password';
+GRANT ALL PRIVILEGES ON joomla.* TO joomlauser@localhost.localdomain IDENTIFIED BY 'joomlapassword';
 FLUSH PRIVILEGES;
 quit;
 ------------------------------------------------------------------------
