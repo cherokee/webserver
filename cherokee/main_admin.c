@@ -28,8 +28,10 @@
 #include "server.h"
 #include "socket.h"
 
-#ifdef HAVE_GETOPT_H
+#ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
+#else 
+# include "getopt/getopt.h"
 #endif
 
 #define APP_NAME        \

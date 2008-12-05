@@ -1,3 +1,7 @@
+2008-12-05  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/main_admin.c: Fixes getopt.h inclusion issue (on AIX).
+
 2008-12-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/socket.c, cherokee/cryptor_libssl.c, cherokee/server.c:
