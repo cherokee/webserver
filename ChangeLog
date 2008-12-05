@@ -1,5 +1,7 @@
 2008-12-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/mime_types.txt, cherokee/Makefile.am: Removed.
+
 	* configure.in, doc/Makefile.am: Tries to deal with a autoconf +
 	automake issue related to the document installation.
 

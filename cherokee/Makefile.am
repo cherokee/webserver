@@ -23,9 +23,6 @@ fcgi.deps \
 fastcgi.deps \
 cgi.deps
 
-cherokeedatadir = "$(datadir)/cherokee"
-cherokeedata_DATA = mime_types.txt
-
 #
 # External sources
 #
@@ -1427,7 +1424,6 @@ $(bin_SCRIPTS) \
 $(validator_mysql) \
 $(handler_dbslayer) \
 $(cherokeedeps_DATA) \
-$(cherokeedata_DATA) \
 $(WINDOWS_PORT_FILES) \
 loader.autoconf.h \
 loader.autoconf.inc
