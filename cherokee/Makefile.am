@@ -1352,12 +1352,12 @@ sbin_PROGRAMS += cherokee
 endif
 
 cherokee_worker_SOURCES = main_worker.c
+cherokee_worker_LDFLAGS = -export-dynamic
 cherokee_worker_LDADD   = \
 $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 libcherokee-base.la \
 libcherokee-server.la
-cherokee_LDFLAGS = -export-dynamic
 
 #
 # Cherokee
