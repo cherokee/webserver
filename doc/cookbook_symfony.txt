@@ -33,7 +33,7 @@ mkdir ~/demo
 cd ~/demo
 symfony generate:project demo
 symfony generate:app demo
-symfony generate:module demo
+symfony generate:module demo demo
 ----
 
 The above commands will create a symfony project called `demo` inside the
