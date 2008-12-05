@@ -109,6 +109,7 @@ h3 + * {
 div.sectionbody {
   font-family: serif;
   margin-left: 0;
+  text-align:justify;
 }
 
 hr {
