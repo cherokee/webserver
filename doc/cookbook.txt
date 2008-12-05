@@ -14,6 +14,7 @@
   . link:cookbook_php.html[Setting up PHP]: How to run PHP apps with Cherokee.
   . link:cookbook_ror.html[Setting up RoR]: How to run Ruby on Rails apps with Cherokee.
   . link:cookbook_kumbia.html[Setting up Kumbia]: How to run Kumbia apps with Cherokee.
+  . link:cookbook_symfony.html[Setting up Symfony]: How to run Symfony apps with Cherokee.
   . link:cookbook_zend.html[Setting up Zend]: How to run Zend apps with Cherokee.
   . link:cookbook_drupal.html[Setting up Drupal]: How to run Drupal on Cherokee.
   . link:cookbook_joomla.html[Setting up Joomla]: How to run Joomla on Cherokee.
