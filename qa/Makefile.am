@@ -198,7 +198,8 @@ run-tests.py \
 190-RuleExists4.py \
 191-RuleExists5.py \
 192-RedirDocumentRoot.py \
-193-PHP-documentroot.py
+193-PHP-documentroot.py \
+194-PHP-zero-len-post.py
 
 test:
 	./run-tests.py
