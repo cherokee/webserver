@@ -47,7 +47,9 @@ rules.
 Launch cherokee-admin, and proceed to the
 link:config_virtual_servers.html[Virtual servers] section. Select or create
 the virtual server that you will be configuring and go to the `Behavior`
-tab to set up the rules.
+tab to set up the rules.  Remember that the document root for this
+virtual server should be the `web` folder in your demo project.
+
 
 .Steps
 . You will need to keep the rule for the `php` extension. If this rule
