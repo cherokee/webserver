@@ -248,6 +248,18 @@ strcasestr (register char *s, register char *find)
 #endif
 
 
+#ifndef HAVE_MALLOC
+void *
+rpl_malloc (size_t n)
+{
+	if (unlikely (n == 0))
+		n = 1;
+
+	return malloc (n);
+}
+#endif
+
+
 /* Appends src to string dst of size siz (unlike strncat, siz is the
  * full size of dst, not space left).  At most siz-1 characters
  * will be copied.  Always NUL terminates (unless siz <= strlen(dst)).

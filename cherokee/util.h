@@ -84,6 +84,10 @@ char *strnstr (const char *s, const char *find, size_t slen);
 #ifndef HAVE_STRCASESTR
 char *strcasestr (register char *s, register char *find);
 #endif
+#ifndef HAVE_MALLOC
+void *rpl_malloc (size_t n);
+#endif
+
 
 /* String management functions
  */

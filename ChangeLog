@@ -6,6 +6,11 @@
 	
 2008-12-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/util.h, cherokee/util.c (rpl_malloc): Deals with the
+	autoconf's AC_FUNC_MALLOC macro. It adds a rpl_malloc() function
+	that re-implements malloc() on broken systems (AFAIK, it's used on
+	Windows, AIX): http://wiki.buici.com/wiki/Autoconf_and_RPL_MALLOC
+
 	* cherokee/Makefile.am: Fixes a compilation issue (on AIX). Patch
 	by Antonio Perez <aperez@skarcha.com>.
 
