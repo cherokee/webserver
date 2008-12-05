@@ -103,12 +103,15 @@ Common Name (CN) provided by the certificate. Since virtual hosts are in
 use, the CN of the first available certificate may or may not match
 the one specified in the early stages of TLS negotiation.
 
+////
 However, nothing is forever.. and that applies to SSL/TLS connections
 as well. Cherokee elegantly respins the SSL layer once it knows the
 virtual server, and the magic occurs: SSL supporting several
 certificates on the same IP address and port.
+////
 
-Besides this there is a cleaner, more standard aproach called
+Cherokee supports the clean and standard method of dealing with this
+issue called
 link:http://en.wikipedia.org/wiki/Server_Name_Indication[Server Name
 Indication] (SNI) that sends the name of the virtual host during the
 TLS negotiation.
