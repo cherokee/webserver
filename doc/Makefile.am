@@ -58,6 +58,7 @@ cookbook_drupal.html \
 cookbook_zend.html \
 cookbook_kumbia.html \
 cookbook_nagios.html \
+cookbook_symfony.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -192,6 +193,7 @@ media/images/cookbook_nagios1.png \
 media/images/cookbook_nagios2.png \
 media/images/cookbook_nagios3.png \
 media/images/cookbook_nagios4.png \
+media/images/cookbook_symfony.png \
 media/images/tracelor.png
 
 EXTRA_DIST = \
