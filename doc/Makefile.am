@@ -5,7 +5,6 @@ SUFFIXES = .txt .html
 .txt.html:
 	$(ASCIIDOC) -o $@ $(top_srcdir)/doc/$< 
 
-docdir = $(datadir)/doc/cherokee
 doc_DATA = \
 index.html \
 basics.html \

@@ -1,3 +1,8 @@
+2008-12-05  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* configure.in, doc/Makefile.am: Tries to deal with a autoconf +
+	automake issue related to the document installation.
+
 2008-12-05  Taher Shihadeh  <taher@octality.com>
 
 	* doc/cookbook_symfony.txt, doc/media/images/cookbook_symfony.png: 
