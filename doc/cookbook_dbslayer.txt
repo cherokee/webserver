@@ -76,7 +76,7 @@ databases will rapidly become unstable.
 Security:
 ~~~~~~~~~
 
-As for security concerns, you must keep in mind that the hanlder is
+As for security concerns, you must keep in mind that the handler is
 designed for internal secure networks. If you have concerns about
 exposing your database to the public you will have to properly secure
 your internal network by using firewalling, binding the running
