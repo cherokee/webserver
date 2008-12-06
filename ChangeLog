@@ -1,3 +1,8 @@
+2008-12-06  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/cryptor_libssl.c, admin/PageVServer.py: Fixes SSL CA
+	file support. It also adds a few SSL context options.
+
 2008-12-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/mime_types.txt, cherokee/Makefile.am: Removed.

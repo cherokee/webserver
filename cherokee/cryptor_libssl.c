@@ -162,10 +162,43 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		return ret_error;
 	}
 
+	/* Set OpenSSL context options
+	 */
+
+	/* Client-side options */
+	SSL_CTX_set_options (n->context, SSL_OP_MICROSOFT_SESS_ID_BUG);
+	SSL_CTX_set_options (n->context, SSL_OP_NETSCAPE_CHALLENGE_BUG);
+	SSL_CTX_set_options (n->context, SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG);
+
+	/* Server-side options */
+	SSL_CTX_set_options (n->context, SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG);
+	SSL_CTX_set_options (n->context, SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER);
+	SSL_CTX_set_options (n->context, SSL_OP_MSIE_SSLV2_RSA_PADDING);
+	SSL_CTX_set_options (n->context, SSL_OP_SSLEAY_080_CLIENT_DH_BUG);
+	SSL_CTX_set_options (n->context, SSL_OP_TLS_D5_BUG);
+	SSL_CTX_set_options (n->context, SSL_OP_TLS_BLOCK_PADDING_BUG);
+	SSL_CTX_set_options (n->context, SSL_OP_SINGLE_DH_USE);
+
+#ifdef SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS
+	SSL_CTX_set_options (n->context, SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS);
+#endif
+
+	/* Trusted CA certificates
+	 */
+	if (! cherokee_buffer_is_empty (&vsrv->ca_cert)) {
+		rc = SSL_CTX_load_verify_locations (n->context, vsrv->ca_cert.buf, NULL);
+		if (rc != 1) {
+			OPENSSL_LAST_ERROR(error);
+			PRINT_ERROR("ERROR: OpenSSL: Can't read trusted CA list '%s': %s\n", 
+				    vsrv->server_key.buf, error);
+			return ret_error;
+		}
+	}
+
 	/* Certificate
 	 */
-	rc = SSL_CTX_use_certificate_file (n->context, vsrv->server_cert.buf, SSL_FILETYPE_PEM);
-	if (rc < 0) {
+	rc = SSL_CTX_use_certificate_chain_file (n->context, vsrv->server_cert.buf);
+	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR("ERROR: OpenSSL: Can not use certificate file '%s':  %s\n", 
 			    vsrv->server_cert.buf, error);
@@ -175,7 +208,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	/* Private key
 	 */
 	rc = SSL_CTX_use_PrivateKey_file (n->context, vsrv->server_key.buf, SSL_FILETYPE_PEM);
-	if (rc < 0) {
+	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR("ERROR: OpenSSL: Can not use private key file '%s': %s\n", 
 			    vsrv->server_key.buf, error);
@@ -194,14 +227,14 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	/* Enable SNI
 	 */
 	rc = SSL_CTX_set_tlsext_servername_callback (n->context, openssl_sni_servername_cb);
-	if (rc < 0) {
+	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR ("Could activate TLS SNI for '%s': %s\n", vsrv->name.buf, error);
 		return ret_error;
 	}
 
 	rc = SSL_CTX_set_tlsext_servername_arg (n->context, VSERVER_SRV(vsrv));
-	if (rc < 0) {
+	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR ("Could activate TLS SNI for '%s': %s\n", vsrv->name.buf, error);
 		return ret_error;
