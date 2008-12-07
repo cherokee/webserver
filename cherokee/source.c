@@ -224,3 +224,21 @@ cherokee_source_configure (cherokee_source_t *src, cherokee_config_node_t *conf)
 
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_source_copy_name (cherokee_source_t *src,
+			   cherokee_buffer_t *buf)
+{
+	if (! cherokee_buffer_is_empty (&src->unix_socket)) {
+		cherokee_buffer_add_buffer (buf, &src->unix_socket);
+		return ret_ok;
+	}
+
+	cherokee_buffer_add_buffer  (buf, &src->host);
+	cherokee_buffer_add_char    (buf, ':');
+	cherokee_buffer_add_ulong10 (buf, src->port);
+
+	return ret_ok;
+}
+

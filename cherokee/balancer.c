@@ -28,8 +28,34 @@
 #include "server-protected.h"
 #include "source_interpreter.h"
 
-#define DEFAULT_SOURCES_ALLOCATION 5
+/* Balancer Entry
+ */
 
+static ret_t
+entry_new (cherokee_balancer_entry_t **entry)
+{
+	CHEROKEE_NEW_STRUCT (n, balancer_entry);
+
+	INIT_LIST_HEAD (&n->listed);
+
+	n->source         = NULL;
+	n->disabled       = false;
+	n->disabled_until = 0;
+
+	*entry = n;
+	return ret_ok;
+}
+
+static ret_t
+entry_free (cherokee_balancer_entry_t *entry)
+{
+	free (entry);
+	return ret_ok;
+}
+
+
+/* Balancer
+ */
 
 ret_t 
 cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info_t *info)
@@ -42,12 +68,12 @@ cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info
 	 */
 	balancer->dispatch     = NULL;
 	balancer->configure    = NULL;
+	balancer->report_fail  = NULL;
 	
-	/* Sources
+	/* Properties
 	 */
-	balancer->sources_len  = 0;
-	balancer->sources_size = 0;
-	balancer->sources      = NULL;
+	INIT_LIST_HEAD (&balancer->entries);
+	balancer->entries_len  = 0;
 
 	return ret_ok;
 }
@@ -56,13 +82,38 @@ cherokee_balancer_init_base (cherokee_balancer_t *balancer, cherokee_plugin_info
 ret_t 
 cherokee_balancer_mrproper (cherokee_balancer_t *balancer)
 {
-	/* Free the local sources array: The source objects will be
-	 * freed from srv->sources.
-	 */
-	if (balancer->sources != NULL) {
-		free (balancer->sources);
-		balancer->sources = NULL;
+	cherokee_list_t *i, *tmp;
+
+	list_for_each_safe (i, tmp, &balancer->entries) {
+		/* It doesn't free the sources. They are rather freed
+		 * from srv->sources.
+		 */
+		cherokee_list_del (i);
+		entry_free (BAL_ENTRY(i));
 	}
+
+	return ret_ok;
+}
+
+
+static ret_t 
+add_source (cherokee_balancer_t *balancer, cherokee_source_t *source)
+{
+	ret_t                      ret;
+	cherokee_balancer_entry_t *entry;
+
+	/* Instance a new balancer entry
+	 */
+	ret = entry_new (&entry);
+	if (ret != ret_ok)
+		return ret;
+
+	entry->source = source;
+
+	/* Add it to the list
+	 */
+	cherokee_list_add_tail (&entry->listed, &balancer->entries);
+	balancer->entries_len += 1;
 
 	return ret_ok;
 }
@@ -96,60 +147,34 @@ cherokee_balancer_configure_base (cherokee_balancer_t    *balancer,
 			return ret_error;
 		}
 
-		cherokee_balancer_add_source (balancer, src);
+		add_source (balancer, src);
 	}
-
-	return ret_ok;
-}
-
-
-static ret_t
-alloc_more_sources (cherokee_balancer_t *balancer)
-{
-	size_t size;
-
-	if (balancer->sources == NULL) {
-		size = DEFAULT_SOURCES_ALLOCATION * sizeof(cherokee_source_t *);
-		balancer->sources = (cherokee_source_t **) malloc (size);
-	} else {
-		size = (balancer->sources_size + DEFAULT_SOURCES_ALLOCATION ) * sizeof(cherokee_source_t *);
-		balancer->sources = (cherokee_source_t **) realloc (balancer->sources, size);
-	}
-	
-	if (balancer->sources == NULL) 
-		return ret_nomem;
-	
-	memset (balancer->sources + balancer->sources_len, 0, DEFAULT_SOURCES_ALLOCATION);
-
-	balancer->sources_size += DEFAULT_SOURCES_ALLOCATION;
-	return ret_ok;
-}
-
-
-ret_t 
-cherokee_balancer_add_source (cherokee_balancer_t *balancer, cherokee_source_t *source)
-{
-	ret_t ret;
-	
-	if (balancer->sources_len >= balancer->sources_size) {
-		ret = alloc_more_sources (balancer);
-		if (ret != ret_ok) return ret;
-	}
-
-	balancer->sources[balancer->sources_len] = source;
-	balancer->sources_len++;
 
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_balancer_dispatch (cherokee_balancer_t *balancer, cherokee_connection_t *conn, cherokee_source_t **source)
+cherokee_balancer_dispatch (cherokee_balancer_t    *balancer,
+			    cherokee_connection_t  *conn,
+			    cherokee_source_t     **source)
 {
-	if (balancer->dispatch == NULL)
+	if (unlikely (balancer->dispatch == NULL))
 		return ret_error;
 
 	return balancer->dispatch (balancer, conn, source);
+}
+
+
+ret_t
+cherokee_balancer_report_fail (cherokee_balancer_t   *balancer,
+			       cherokee_connection_t *conn,
+			       cherokee_source_t     *source)
+{
+	if (unlikely (balancer->report_fail == NULL))
+		return ret_error;
+
+	return balancer->report_fail (balancer, conn, source);
 }
 
 

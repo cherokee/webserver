@@ -32,14 +32,14 @@
 typedef struct {
 	cherokee_balancer_t  balancer;
 
-	cuint_t              last_one;	
+	cherokee_list_t     *last_one;	
 	CHEROKEE_MUTEX_T    (last_one_mutex);
 } cherokee_balancer_round_robin_t;
 
-#define BAL_RR(x)       ((cherokee_balancer_round_robin_t *)(x))
+#define BAL_RR(x) ((cherokee_balancer_round_robin_t *)(x))
 
 
-ret_t cherokee_balancer_round_robin_new       (cherokee_balancer_t **balancer);
-ret_t cherokee_balancer_round_robin_free      (cherokee_balancer_round_robin_t *balancer);
+ret_t cherokee_balancer_round_robin_new  (cherokee_balancer_t **balancer);
+ret_t cherokee_balancer_round_robin_free (cherokee_balancer_round_robin_t *balancer);
 
 #endif /* CHEROKEE_BALANCER_ROUND_ROBIN_H */

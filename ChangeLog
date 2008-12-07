@@ -1,3 +1,11 @@
+2008-12-07  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/balancer.c, cherokee/balancer.h, cherokee/source.c,
+	cherokee/source.h, cherokee/balancer_round_robin.c,
+	cherokee/balancer_round_robin.h, cherokee/handler_proxy.c:
+	Balancer behavior has been greatly improved. From now on, when a
+	source isn't working it's put off-line for a period of time.
+
 2008-12-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/cryptor_libssl.c, admin/PageVServer.py: Fixes SSL CA

@@ -34,27 +34,37 @@
 #include <cherokee/connection.h>
 #include <cherokee/source.h>
 
+#define BAL_DISABLE_TIMEOUT 5*60
+
 CHEROKEE_BEGIN_DECLS
 
-typedef ret_t (* balancer_dispatch_func_t)  (void *balancer, cherokee_connection_t *conn, cherokee_source_t **src);
-typedef ret_t (* balancer_configure_func_t) (void *balancer, cherokee_server_t *srv, cherokee_config_node_t *conf);
+typedef ret_t (* balancer_dispatch_func_t)    (void *balancer, cherokee_connection_t *conn, cherokee_source_t **src);
+typedef ret_t (* balancer_report_fail_func_t) (void *balancer, cherokee_connection_t *conn, cherokee_source_t  *src);
+typedef ret_t (* balancer_configure_func_t)   (void *balancer, cherokee_server_t *srv, cherokee_config_node_t *conf);
 
 typedef struct {
-	cherokee_module_t         module;
+	cherokee_module_t           module;
 
 	/* Properties */
-	cherokee_source_t       **sources;
-	cuint_t                   sources_len;
-	cuint_t                   sources_size;
+	cherokee_list_t             entries;
+	cuint_t                     entries_len;
 
 	/* Virtual methods */
-	balancer_configure_func_t configure;
-	balancer_dispatch_func_t  dispatch;
-
+	balancer_configure_func_t   configure;
+	balancer_dispatch_func_t    dispatch;
+	balancer_report_fail_func_t report_fail; 
 } cherokee_balancer_t;
 
-#define BAL(b)  ((cherokee_balancer_t *)(b))
+typedef struct {
+	cherokee_list_t             listed;
+	cherokee_source_t          *source;
+	cherokee_boolean_t          disabled;
+	time_t                      disabled_until;
+} cherokee_balancer_entry_t;
 
+
+#define BAL(b)       ((cherokee_balancer_t *)(b))
+#define BAL_ENTRY(e) ((cherokee_balancer_entry_t *)(e))
 
 typedef ret_t (* balancer_new_func_t)  (cherokee_balancer_t **balancer);
 typedef ret_t (* balancer_free_func_t) (cherokee_balancer_t  *balancer);
@@ -85,15 +95,17 @@ typedef ret_t (* balancer_free_func_t) (cherokee_balancer_t  *balancer);
 ret_t cherokee_balancer_init_base      (cherokee_balancer_t *balancer, cherokee_plugin_info_t *info);
 ret_t cherokee_balancer_configure_base (cherokee_balancer_t *balancer, cherokee_server_t *srv, cherokee_config_node_t *conf);
 ret_t cherokee_balancer_mrproper       (cherokee_balancer_t *balancer);
-
-/* Public methods
- */
-ret_t cherokee_balancer_add_source (cherokee_balancer_t *balancer, cherokee_source_t *source);
+ret_t cherokee_balancer_free           (cherokee_balancer_t *balancer);
 
 /* Virtual methods
  */
-ret_t cherokee_balancer_dispatch   (cherokee_balancer_t *balancer, cherokee_connection_t *conn, cherokee_source_t **source);
-ret_t cherokee_balancer_free       (cherokee_balancer_t *balancer);
+ret_t cherokee_balancer_dispatch    (cherokee_balancer_t    *balancer,
+				     cherokee_connection_t  *conn,
+				     cherokee_source_t     **source);
+
+ret_t cherokee_balancer_report_fail (cherokee_balancer_t    *balancer,
+				     cherokee_connection_t  *conn,
+				     cherokee_source_t      *source);
 
 /* Commodity 
  */

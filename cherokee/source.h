@@ -66,6 +66,9 @@ ret_t cherokee_source_connect_polling (cherokee_source_t     *src,
 				       cherokee_socket_t     *socket,
 				       cherokee_connection_t *conn);
 
+ret_t cherokee_source_copy_name       (cherokee_source_t     *src,
+				       cherokee_buffer_t     *buf);
+
 CHEROKEE_END_DECLS
 
 #endif /* CHEROKEE_SOURCE_H */

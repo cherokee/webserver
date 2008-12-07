@@ -514,7 +514,9 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		if (hdl->src_ref == NULL) {
 			ret = cherokee_balancer_dispatch (props->balancer, conn, &hdl->src_ref);
 			if (ret != ret_ok) {
-				return ret;
+				BIT_UNSET (HANDLER(hdl)->support, hsupport_error);
+				conn->error_code = http_service_unavailable;
+				return ret_error;
 			}
 		}
 	
@@ -569,6 +571,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				return ret;
 			case ret_deny:
 				if (hdl->respined) {
+					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 					return ret_error;
 				}
 				hdl->respined = true;
@@ -607,6 +610,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		case ret_eof:
 		case ret_error:
 			if (hdl->respined) {
+				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 				return ret_eof;
 			}
 
@@ -659,6 +663,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			/* The socket isn't really connected
 			 */
 			if (hdl->respined) {
+				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 				return ret_eof;
 			}
 
