@@ -415,7 +415,9 @@ Security
 
 The virtual server must be configured with the path to the certificate
 before using secure connections (https). There is a document which
-might help to generate SSL link:cookbook_ssl.html[keys]
+might help to generate SSL link:cookbook_ssl.html[keys] and that
+should provide tips and information on how to configure SSL, TLS and
+certificates.
 
 Cherokee fully supports the usage of different certificates for each
 virtual server in a given host by it using SNI as defined in
@@ -430,7 +432,9 @@ more details.
 If you want HTTPS to work, you must remember this:
 
 . Providing the PEM-encoded files is mandatory for both `Certificate`
-  and `Certificate key` fields. Providing the `CA List` is optional.
+  and `Certificate key` fields. Providing the `CA List` is
+  optional. The trusted CA certificates file should be a single file
+  with all the certificates concatenated.
 
 . If you have several virtual servers, the `Security` section must be
   configured for every one of them. At the moment you cannot have some
