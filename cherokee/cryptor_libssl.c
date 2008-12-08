@@ -66,8 +66,6 @@ _configure (cherokee_cryptor_t     *cryp,
 static ret_t
 _vserver_free (cherokee_cryptor_vserver_libssl_t *cryp_vsrv)
 {
-	cherokee_avl_r_mrproper (&cryp_vsrv->session_cache, NULL);
-
 	if (cryp_vsrv->context != NULL) {
 		SSL_CTX_free (cryp_vsrv->context);
 		cryp_vsrv->context = NULL;
@@ -155,12 +153,6 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		return ret;
 
 	CRYPTOR_VSRV(n)->free = (cryptor_vsrv_func_free_t) _vserver_free;
-
-	/* Properties
-	 */
-	ret = cherokee_avl_r_init (&n->session_cache);
-	if (ret != ret_ok)
-		return ret;
 
 	/* Init the OpenSSL context
 	 */

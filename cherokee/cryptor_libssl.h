@@ -71,7 +71,6 @@ typedef struct {
 
 typedef struct {
 	cherokee_cryptor_vserver_t  base;
-	cherokee_avl_r_t            session_cache;
 	SSL_CTX                    *context;
 } cherokee_cryptor_vserver_libssl_t;
 
