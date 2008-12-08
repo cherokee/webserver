@@ -1,3 +1,10 @@
+2008-12-08  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/balancer_round_robin.c (reactivate_entry): In case all
+	the sources are off-line, it's smarter to try to connect with one
+	instead of waiting the off-line timeout. It it's luckly the source
+	will be up and running. If not, it doesn't harm much.
+
 2008-12-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/balancer.c, cherokee/balancer.h, cherokee/source.c,

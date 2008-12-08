@@ -63,6 +63,20 @@ cherokee_balancer_round_robin_configure (cherokee_balancer_t    *balancer,
 }
 
 static ret_t
+reactivate_entry (cherokee_balancer_entry_t *entry)
+{
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+
+	entry->disabled = false;
+
+	cherokee_source_copy_name (entry->source, &tmp);
+	PRINT_MSG ("NOTICE: Taking source='%s' back on-line\n", tmp.buf);
+	cherokee_buffer_mrproper (&tmp);
+
+	return ret_ok;
+}
+
+static ret_t
 dispatch (cherokee_balancer_round_robin_t *balancer, 
 	  cherokee_connection_t           *conn, 
 	  cherokee_source_t              **src)
@@ -70,7 +84,6 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 	cherokee_balancer_entry_t *entry;
 	cuint_t                    tries  = 0;
 	cherokee_balancer_t       *gbal   = BAL(balancer);
-	cherokee_buffer_t          tmp    = CHEROKEE_BUF_INIT;
 
 	UNUSED(conn);
 	CHEROKEE_MUTEX_LOCK (&balancer->last_one_mutex);
@@ -89,12 +102,7 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 		if (cherokee_bogonow_now >= entry->disabled_until) {
 			/* Let's give this source another chance */
-			entry->disabled = false;
-
-			cherokee_source_copy_name (entry->source, &tmp);
-			PRINT_MSG ("NOTICE: Taking source='%s' back on-line\n", tmp.buf);
-			cherokee_buffer_mrproper (&tmp);
-
+			reactivate_entry (entry);
 			break;
 		}
 
@@ -102,8 +110,9 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 		/* Count how many it's checked so far */
 		if (tries > gbal->entries_len) {
-			PRINT_MSG_S ("ERROR: No sources available\n");
-			goto error;
+			PRINT_MSG_S ("ERROR: Sources exhausted: re-enabling one.\n");
+			reactivate_entry (entry);
+			break;
 		}
 	} while (true);
 
@@ -112,10 +121,6 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 	CHEROKEE_MUTEX_UNLOCK (&balancer->last_one_mutex);
 	return ret_ok;
-
-error:
-	CHEROKEE_MUTEX_UNLOCK (&balancer->last_one_mutex);
-	return ret_error;
 }
 
 
