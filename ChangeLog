@@ -1,5 +1,9 @@
 2008-12-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee.conf.sample.pre: The new "Ogg Media Types" have been
+	added: http://www.ietf.org/rfc/rfc5334.txt. It implements RFE:
+	http://code.google.com/p/cherokee/issues/detail?id=262
+
 	* cherokee/handler_mirror.c, cherokee/handler_fcgi.c,
 	cherokee/handler_scgi.c: Integrates the FastCGI, SCGI and TCP
 	balancer with the latest cherokee_balancer_t modifications.
