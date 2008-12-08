@@ -69,7 +69,8 @@ typedef struct {
 
 	cherokee_buffer_t            server_cert;
 	cherokee_buffer_t            server_key;
-	cherokee_buffer_t            ca_cert;
+	cherokee_buffer_t            certs_ca;
+	cherokee_buffer_t            certs_client;
 	cherokee_cryptor_vserver_t  *cryptor;
 
 } cherokee_virtual_server_t;

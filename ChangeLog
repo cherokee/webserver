@@ -1,5 +1,9 @@
 2008-12-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/cryptor_libssl.c, admin/PageVServer.py: Adds TLS/SSL
+	client certificate checking.
+
 	* cherokee.conf.sample.pre: The new "Ogg Media Types" have been
 	added: http://www.ietf.org/rfc/rfc5334.txt. It implements RFE:
 	http://code.google.com/p/cherokee/issues/detail?id=262

@@ -13,6 +13,7 @@ DATA_VALIDATION = [
     ("vserver!.*?!ssl_certificate_file",      (validations.is_local_file_exists, 'cfg')),
     ("vserver!.*?!ssl_certificate_key_file",  (validations.is_local_file_exists, 'cfg')),
     ("vserver!.*?!ssl_ca_list_file",          (validations.is_local_file_exists, 'cfg')),
+    ("vserver!.*?!ssl_client_list_file",      (validations.is_local_file_exists, 'cfg')),
     ("vserver!.*?!logger!.*?!filename",       (validations.parent_is_dir, 'cfg', 'nochroot')),
     ("vserver!.*?!logger!.*?!command",        (validations.is_local_file_exists, 'cfg')),
 ]
@@ -25,6 +26,7 @@ NOTE_NICKNAME        = 'Nickname for the virtual server.'
 NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server.'
 NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server.'
 NOTE_CA_LIST         = 'Optional: File containing the trusted CA certificates.'
+NOTE_CLIENT_LIST     = 'Optional: File with certificates CA in PEM format, utilized for checking the client certificates.'
 NOTE_ERROR_HANDLER   = 'Allows the selection of how to generate the error responses.'
 NOTE_PERSONAL_WEB    = 'Directory inside the user home directory to use as root web directory. Disabled if empty.'
 NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
@@ -223,18 +225,29 @@ class PageVServer (PageMenu, FormHelper):
         tabs += [('Logging', tmp)]
 
         # Security
+        tmp = self._render_ssl(host)
+        tabs += [('Security', tmp)]
+
+        txt += self.InstanceTab (tabs)
+        form = Form (self.submit_url, add_submit=False)
+        return form.Render(txt)
+
+    def _render_ssl (self, host):
         pre = 'vserver!%s' % (host)
 
+        txt = '<h2>Required SSL/TLS values</h2>'
         table = TableProps()
         self.AddPropEntry (table, 'Certificate',     '%s!ssl_certificate_file' % (pre),     NOTE_CERT)
         self.AddPropEntry (table, 'Certificate key', '%s!ssl_certificate_key_file' % (pre), NOTE_CERT_KEY)
+        txt += self.Indent(table)
+
+        txt += '<h2>Advanced options</h2>'
+        table = TableProps()
         self.AddPropEntry (table, 'CA List',         '%s!ssl_ca_list_file' % (pre),         NOTE_CA_LIST)
-        tabs += [('Security', str(table))]
+        self.AddPropEntry (table, 'Client Certs',    '%s!ssl_client_list_file' % (pre),     NOTE_CLIENT_LIST)
+        txt += self.Indent(table)
 
-        txt += self.InstanceTab (tabs)
-
-        form = Form (self.submit_url, add_submit=False)
-        return form.Render(txt)
+        return txt
 
     def _render_error_handler (self, host):
         txt = ''
