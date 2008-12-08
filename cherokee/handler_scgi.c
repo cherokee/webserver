@@ -270,8 +270,11 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 	/* Try to connect
 	 */
 	if (hdl->src_ref->type == source_host) {
-		ret = cherokee_source_connect_polling (hdl->src_ref, 
-						       &hdl->socket, conn);		
+		ret = cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, conn);
+		if ((ret == ret_deny) || (ret == ret_error))
+		{
+			cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+		}
 	} else {
 		ret = cherokee_source_interpreter_connect_polling (SOURCE_INT(hdl->src_ref),
 								   &hdl->socket, conn, 

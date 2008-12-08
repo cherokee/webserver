@@ -1,5 +1,9 @@
 2008-12-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_mirror.c, cherokee/handler_fcgi.c,
+	cherokee/handler_scgi.c: Integrates the FastCGI, SCGI and TCP
+	balancer with the latest cherokee_balancer_t modifications.
+
 	* cherokee/balancer_round_robin.c (reactivate_entry): In case all
 	the sources are off-line, it's smarter to try to connect with one
 	instead of waiting the off-line timeout. It it's luckly the source

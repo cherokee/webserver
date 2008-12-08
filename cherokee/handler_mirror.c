@@ -157,7 +157,13 @@ connect_to_server (cherokee_handler_mirror_t *hdl)
 
 	/* Try to connect
 	 */
-	return cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, conn);
+	ret = cherokee_source_connect_polling (hdl->src_ref, &hdl->socket, conn);
+	if ((ret == ret_deny) || (ret == ret_error))
+	{
+		cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+	}
+
+	return ret;
 }
 
 
