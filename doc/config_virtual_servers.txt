@@ -423,18 +423,22 @@ Cherokee fully supports the usage of different certificates for each
 virtual server in a given host by it using SNI as defined in
 link:http://www.rfc-archive.org/getrfc.php?rfc=3546[RFC 3546].
 
-//// 
+////
 or by elegantly respinning the secure handshake. Check the
 link:other_goodies.html#ssl-vhosts[SSL Virtual Hosts] information for
 more details.
 ////
 
+image::media/images/admin_vserver_security.png[Certificates]
+
 If you want HTTPS to work, you must remember this:
 
 . Providing the PEM-encoded files is mandatory for both `Certificate`
-  and `Certificate key` fields. Providing the `CA List` is
-  optional. The trusted CA certificates file should be a single file
-  with all the certificates concatenated.
+  and `Certificate key` fields. Providing the `CA List` and the
+  `Client Certs` is optional. The trusted CA certificates file should
+  be a single file with all the certificates concatenated. The `Client
+  Certs`, also PEM-encoded, is used to check the client certificates.
+
 
 . If you have several virtual servers, the `Security` section must be
   configured for every one of them. At the moment you cannot have some

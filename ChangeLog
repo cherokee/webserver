@@ -1,3 +1,8 @@
+2008-12-09  Taher Shihadeh  <taher@octality.com>
+
+	* doc/config_virtual_servers.txt,
+	doc/media/images/admin_vserver_security.png: syncs with r2574.
+
 2008-12-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,
@@ -42,7 +47,7 @@
 	* doc/cookbook_symfony.txt, doc/media/images/cookbook_symfony.png: 
 	Recipe for the Symfony PHP Framework contributed by Fanen Ahua
 	<afanen01@gmail.com>.
-	
+
 2008-12-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/util.h, cherokee/util.c (rpl_malloc): Deals with the
