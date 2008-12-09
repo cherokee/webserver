@@ -549,14 +549,14 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 	}
 	
 	/* CA verifications
-	re = cherokee_buffer_is_empty (&cryp->vserver_ref->ca_cert);
+	re = cherokee_buffer_is_empty (&cryp->vserver_ref->certs_ca);
 	if (! re) {
 		re = SSL_CTX_load_verify_locations (socket->ssl_ctx, 
-						    socket->vserver_ref->ca_cert.buf, NULL);
+						    socket->vserver_ref->certs_ca.buf, NULL);
 		if (! re) {
 			OPENSSL_LAST_ERROR(error);
 			PRINT_ERROR ("ERROR: OpenSSL: '%s': %s\n", 
-				     socket->vserver_ref->ca_cert.buf, error);
+				     socket->vserver_ref->certs_ca.buf, error);
 			return ret_error;
 		}
 
