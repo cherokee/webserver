@@ -37,8 +37,11 @@
 
 /* NOTE:
  *
- * To call _dbslayer_map() and override the mysql_* builtin functions,
- * you need to provide phpize (php5-dev) and: `pecl install apd`.
+ * To override the mysql_* builtin functions, you need to provide
+ * phpize (php5-dev) and: `pecl install apd`.
+ *
+ * If you do not, you can still use the wrapper initializing it with a
+ * FALSE value as optional second parameter: cherokee_init($host, FALSE)
  *
  * runkit_function_redefine could be another approach. Remains to be seen.
  *
@@ -46,14 +49,14 @@
 
 define("DEFAULT_ERRNO", 3000);
 define("DEFAULT_ERROR", "DBSlayer: undefined MySQL error");
-define("SERVER_INFO", 	"Cherokee DBSlayer MySQL bridge");
-define("CLIENT_INFO", 	"DBSlayer MySQL Wrapper v1.0");
-define("DEFAULT_LINK",	"DBSLAYER_LINK");
+define("SERVER_INFO",   "Cherokee DBSlayer MySQL bridge");
+define("CLIENT_INFO",   "DBSlayer MySQL Wrapper v1.0");
+define("DEFAULT_LINK",  "DBSLAYER_LINK");
 define("DEFAULT_HOST",  "http://localhost:8888");
 
 $_dbslayer = NULL;
 
-function cherokee_init ($host)
+function cherokee_init ($host, $map = TRUE)
 {
 	global $_dbslayer;
 
@@ -68,14 +71,16 @@ function cherokee_init ($host)
 	       'db_link' => DEFAULT_LINK,
 	       'db_name' => NULL,
 	       'encoding'=> ini_get('mysql.character_set'),
-	       'curl'	 => $curl,
+	       'curl'    => $curl,
 	       'success' => NULL,
-	       'errno'	 => NULL,
-	       'error'	 => NULL,
+	       'errno'   => NULL,
+	       'error'   => NULL,
 	       'insert_id'=> 0,
 	       'affected_rows'=> 0);
 
-	return _dbslayer_map();
+	if ($map == TRUE)
+	   return _dbslayer_map();
+	return TRUE;
 }
 
 /* Debug */
