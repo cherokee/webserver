@@ -194,7 +194,10 @@ media/images/cookbook_nagios2.png \
 media/images/cookbook_nagios3.png \
 media/images/cookbook_nagios4.png \
 media/images/cookbook_symfony.png \
+media/images/proxy_phase1.png \
+media/images/proxy_phase2.png \
 media/images/tracelor.png
+
 
 EXTRA_DIST = \
 $(doc_DATA) \

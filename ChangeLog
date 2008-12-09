@@ -1,3 +1,11 @@
+2008-12-09  Taher Shihadeh  <taher@octality.com>
+
+	* dbslayer/mysql_wrap.php: minor change to the init funtion.
+
+	* doc/modules_handlers_proxy.txt, doc/cookbook_dbslayer.txt,
+	doc/media/images/proxy_phase1.png,
+	doc/media/images/proxy_phase2.png: updated some docs.
+
 2008-12-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* dbslayer/mysql_wrap.php, configure.in, dbslayer/Makefile.am,

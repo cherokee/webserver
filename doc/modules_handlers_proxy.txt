@@ -17,11 +17,32 @@ servers.
 
 The reverse proxy can do several interesting things besides simply
 load balancing. It can rewrite headers, and it can try to establish
-keep-alive connections with every system interfacing with it.
+keep-alive connections with every system interfacing with it. That is,
+it doesn't matter if all the clients requesting contents from our
+publicly available Reverse Proxy do not support this feature: the
+Keep-Alive connections can still be kept within the local pool,
+greatly improving performance.
 
-To use it you simply have to specify several parameters. First define
-a series of link:config_info_sources.html[information sources]. Those
-will be the ones handling the requests in the end.
+The task of the reverse proxy can be summarized in the following
+steps.
+
+* Phase 1: The proxy receives a request, adds the necessary HTTP
+  headers and rewrites the existing ones according to the specified
+  rules. It then dispatches the request to one of the machines in the
+  pool of specified `information sources`.
+
+image::media/images/proxy_phase1.png[Phase 1]
+
+* Phase 2: Once the server that has received the request sends back the
+  response, the reverse proxy deletes the unnecesary return HTTP
+  headers and sends the response  back to the requesting client.
+
+image::media/images/proxy_phase2.png[Phase 2]
+
+To use the HTTP reverse proxy handler you simply have to specify
+several parameters. First define a series of
+link:config_info_sources.html[information sources]. Those will be the
+ones handling the requests in the end.
 
 image::media/images/admin_handler_proxy.png[Reverse Proxy]
 

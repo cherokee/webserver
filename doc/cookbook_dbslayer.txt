@@ -249,3 +249,65 @@ that a semicolon is needed in order for the string to be correctly
 converted. This behavior -not adding the semicolon in the generated
 string automatically- is a design decision taken to make the
 underlying infrastructure more flexible.
+
+
+MySQL Wrapper for PHP
+---------------------
+
+To facilitate the use of the MySQL Database Bridge, the PHP-MySQL API
+has been replicated in a wrapper that can be found under
+`dbslayer/mysql_wrap.php` in Cherokee's source tree. It should provide
+an easy to use method of benefiting from the advantages offered by
+Cherokee without having to modify your applications.
+
+You can use it in any of two ways:
+
+. By directly overriding every `mysql_*` function call.
+. By prepending `cherokee_` to every `mysql_*` function.
+
+This is controlled when you run the initialization function. By
+default it tries to override the built-in MySQL functions. If you
+cannot provide a suitable environment or it simply fails, try passing
+a `FALSE` value as the optional second parameter.
+
+The requirements for the wrapper are basically the
+link:http://es.php.net/manual/en/book.curl.php[cURL library].
+
+To override the built-in function, you need to have
+link:http://es.php.net/manual/en/book.apd.php[APD] installed.
+
+If you don not, it is as simple as providing the `phpize` program
+(bundled with package `php5-dev` on Debian based Linux distribution)
+and issuing:
+
+----------------
+pecl install apd
+----------------
+
+To use the wrapper you simply have to include the file in your code
+and initialize it with the appropriate host:port of a running Cherokee
+MySQL Bridge instance.
+
+------------------------------
+<?php
+
+$host="http://localhost:8888";
+cherokee_init($host);
+
+/* Add a second parameter if you don't want to override the built-in functions.
+
+cherokee_init($host, FALSE);
+
+*/
+
+?>
+------------------------------
+
+From there on the built-in functions should be extended to support
+Cherokee Bridged MySQL resources as well as the regular MySQL ones.
+
+If you don't care about mixing regular MySQL resources and Bridged
+ones, as will be the case in most ocasions, you could even skip the
+manual initialization and simply modify the `cherokee_mysql_connect()`
+and `cherokee_mysql_pconnect()` functions to do the task for you on
+invocation.
