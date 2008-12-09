@@ -1,3 +1,10 @@
+2008-12-09  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* dbslayer/mysql_wrap.php, configure.in, dbslayer/Makefile.am,
+	Makefile.am: Pushes the PHP dbslayer wrapper upstream. It is
+	reimplements the PHP-MySQL API so PHP applications can use
+	DBSlayer without modifications. Kudos to Taher for this hack.
+
 2008-12-09  Taher Shihadeh  <taher@octality.com>
 
 	* doc/config_virtual_servers.txt,

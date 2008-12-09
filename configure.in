@@ -1285,6 +1285,7 @@ themes/plain/Makefile
 windows/Makefile
 windows/cherokee.nsi
 www/Makefile 
+dbslayer/Makefile
 admin/Makefile
 admin/static/Makefile
 admin/static/js/Makefile
