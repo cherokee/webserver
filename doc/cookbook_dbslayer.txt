@@ -271,10 +271,10 @@ cannot provide a suitable environment or it simply fails, try passing
 a `FALSE` value as the optional second parameter.
 
 The requirements for the wrapper are basically the
-link:http://es.php.net/manual/en/book.curl.php[cURL library].
+link:http://php.net/manual/en/book.curl.php[cURL library].
 
 To override the built-in function, you need to have
-link:http://es.php.net/manual/en/book.apd.php[APD] installed.
+link:http://php.net/manual/en/book.apd.php[APD] installed.
 
 If you don not, it is as simple as providing the `phpize` program
 (bundled with package `php5-dev` on Debian based Linux distribution)
