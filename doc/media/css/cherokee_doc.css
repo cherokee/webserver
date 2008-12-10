@@ -43,6 +43,10 @@ div.sidebar-title, div.image-title {
   margin-bottom: 0.5em;
 }
 
+div.sectionbody div.imageblock div.image-title {
+  text-align: center;
+}
+
 div.listingblock div.content {
   border: 1px solid silver;
   background: #f4f4f4;

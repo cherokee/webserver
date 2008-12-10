@@ -43,10 +43,25 @@ This example shows the practical effect of **pathinfo**::
 Examples
 ~~~~~~~~
 
-This configuration
+Here is a basic example.
 
+.Configuration
 image::media/images/admin_handler_dirlist.png[Dirlist configuration]
 
-will return something like
-
+.Actual output
 image::media/images/admin_handler_dirlist_ex.png[Dirlist example]
+
+[[indexes]]
+Indexes
+~~~~~~~
+This is the behavior inherited from the
+link:modules_handlers_dirlist.html[dirlist/Only listing] handler.
+
+Simply enable the desired file attributes to be shown under `Listing`,
+and choose the HTML template to use (`default` -with the Cherokee logo-,
+`plain` -a fixed width theme- and `firefox3`).
+
+You can also include a `Notice file` to show its contents on top of
+every automatically generated list.
+
+Of course, the lists are sortable by any of the displayed attributes.

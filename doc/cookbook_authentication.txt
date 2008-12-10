@@ -43,7 +43,7 @@ to create the passwords' file.
 [[htdigest]]
 === htdigest
 
-To use this handler you will need a file created by the `htdigest`
+To use this validator you will need a file created by the `htdigest`
 command. It is a tool to manage user files for digest (and basic)
 authentication.
 
@@ -71,7 +71,7 @@ testuser:secret:f24f76261bcd65780b33edde00855897
 [[htpasswd]]
 === htpasswd
 
-For this handle, the tool `htpasswd` is needed to create the
+For this validator, the tool `htpasswd` is needed to create the
 files. The basic usage information is this:
 
 *****
@@ -116,7 +116,7 @@ it to use MySQL as authentication mechanism. Filling up just the
 essential fields will be enough. Realm, database name, user, password
 and an SQL query that must return one row with one column as password.
 
-image::media/images/cookbook_mysql_validator.png[MySQL handler set up]
+image::media/images/cookbook_mysql_validator.png[MySQL validator set up]
 
 In this case, we have used:
 
@@ -198,9 +198,21 @@ so the rule evaluation would stop.
 In case the PHP files were not being requested from the secured
 directory, just the second rule would apply.
 
-////
-To be written
-More details for ldap, with screenshots.
-////
+
+[[fixed_list]]
+=== Fixed list
+
+For this validator you will only need to add user-password pairs. As
+always, the `realm` field is mandatory.
+
+image::media/images/admin_validators_authlist.png[Fixed List]
 
 
+[[ldap]]
+=== LDAP
+
+Here is a basic example of the LDAP validator in action. It assumes
+you have a working LDAP service running at your localhost, and it uses
+no TLS of CA files.
+
+image::media/images/admin_validators_ldap.png
