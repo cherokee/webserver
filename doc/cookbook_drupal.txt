@@ -40,14 +40,14 @@ Default virtual server
 We'll begin by cloning the default virtual server, just to keep the
 default PHP configuration. Create a clone named `example.net`.
 
-image::media/images/cookbook_drupal_defualt1.png[Drupal default]
+image::media/images/cookbook_drupal_default1.png[Drupal default]
 
 Then, we'll delete every erasable rule in the default virtual server
 since we are going to use it to redirect every petition not matched by
 the example.net virtual server. We will set the remaining one to be
 managed by the `Redirection` handler, like this:
 
-image::media/images/cookbook_drupal_defualt2.png[Drupal default]
+image::media/images/cookbook_drupal_default2.png[Drupal default]
 
 
 [grid="rows"]
@@ -60,7 +60,7 @@ External , (.*)$             , http://example.net/$1
 After that, this is how the list of rules for this server should look
 like.
 
-image::media/images/cookbook_drupal_defualt3.png[Drupal default]
+image::media/images/cookbook_drupal_default3.png[Drupal default]
 
 This clears the first milestone. The remaining three will be
 accomplished by tweaking the `example.net` virtual server.

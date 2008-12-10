@@ -311,7 +311,7 @@ function cherokee_is_resource ($link)
 }
 
 
-/* mysql_affected_rows — Get number of affected rows in previous MySQL operation */
+/* mysql_affected_rows - Get number of affected rows in previous MySQL operation */
 function cherokee_mysql_affected_rows ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -322,7 +322,7 @@ function cherokee_mysql_affected_rows ($link = NULL)
 }
 
 
-/* mysql_client_encoding — Returns the name of the character set */
+/* mysql_client_encoding - Returns the name of the character set */
 function cherokee_mysql_client_encoding ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -336,7 +336,7 @@ function cherokee_mysql_client_encoding ($link = NULL)
 }
 
 
-/* mysql_close — Close MySQL connection */
+/* mysql_close - Close MySQL connection */
 function cherokee_mysql_close ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -347,7 +347,7 @@ function cherokee_mysql_close ($link = NULL)
 }
 
 
-/* mysql_connect — Open a connection to a MySQL Server */
+/* mysql_connect - Open a connection to a MySQL Server */
 function cherokee_mysql_connect ($host = NULL, $user = NULL,
 	     		   	 $pass = NULL, $new_link = false, 
 			   	 $client_flags = 0)
@@ -362,7 +362,7 @@ function cherokee_mysql_connect ($host = NULL, $user = NULL,
 }
 
 
-/* mysql_create_db — Create a MySQL database */
+/* mysql_create_db - Create a MySQL database */
 function cherokee_mysql_create_db ($database_name, $link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -375,7 +375,7 @@ function cherokee_mysql_create_db ($database_name, $link = NULL)
 }
 
 
-/* mysql_data_seek — Move internal result pointer */
+/* mysql_data_seek - Move internal result pointer */
 function cherokee_mysql_data_seek  (&$result, $row_number)
 {
 	if (!_is_result($result))
@@ -389,7 +389,7 @@ function cherokee_mysql_data_seek  (&$result, $row_number)
 }
 
 
-/* mysql_db_query — Send a MySQL query (and select a database). Deprecated */
+/* mysql_db_query - Send a MySQL query (and select a database). Deprecated */
 function cherokee_mysql_db_query ($database, $query, $link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -401,7 +401,7 @@ function cherokee_mysql_db_query ($database, $query, $link = NULL)
 }
 
 
-/* mysql_db_name — Get result data */
+/* mysql_db_name - Get result data */
 /* Deprecated alias: mysql_dbname */
 function cherokee_mysql_db_name ($result, $row, $field = NULL)
 {
@@ -418,7 +418,7 @@ function cherokee_mysql_db_name ($result, $row, $field = NULL)
 }
 
 
-/* mysql_drop_db — Drop (delete) a MySQL database */
+/* mysql_drop_db - Drop (delete) a MySQL database */
 /* Deprecated alias: mysql_dropdb */
 function cherokee_mysql_drop_db ($database_name, $link = NULL)
 {
@@ -432,7 +432,7 @@ function cherokee_mysql_drop_db ($database_name, $link = NULL)
 }
 
 
-/* mysql_errno — Returns the numerical value of the error message from previous MySQL operation */
+/* mysql_errno - Returns the numerical value of the error message from previous MySQL operation */
 function cherokee_mysql_errno ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -443,7 +443,7 @@ function cherokee_mysql_errno ($link = NULL)
 }	
 
 
-/* mysql_error — Returns the text of the error message from previous MySQL operation */
+/* mysql_error - Returns the text of the error message from previous MySQL operation */
 function cherokee_mysql_error ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -454,7 +454,7 @@ function cherokee_mysql_error ($link = NULL)
 }
 
 
-/* mysql_fetch_array — Fetch a result row as an associative array, a numeric array, or both */
+/* mysql_fetch_array - Fetch a result row as an associative array, a numeric array, or both */
 function cherokee_mysql_fetch_array  (&$result, $result_type = MYSQL_BOTH)
 {
 	if (!_is_result($result))
@@ -493,14 +493,14 @@ function cherokee_mysql_fetch_array  (&$result, $result_type = MYSQL_BOTH)
 }
 
 
-/* mysql_fetch_assoc — Fetch a result row as an associative array */
+/* mysql_fetch_assoc - Fetch a result row as an associative array */
 function cherokee_mysql_fetch_assoc (&$result)
 {
 	return cherokee_mysql_fetch_array(&$result, MYSQL_ASSOC);
 }
 
 
-/* PARTIAL: mysql_fetch_field — Get column information from a result and return as an object */
+/* PARTIAL: mysql_fetch_field - Get column information from a result and return as an object */
 function cherokee_mysql_fetch_field (&$result, $field_offset = -1)
 {
 	if (!_is_result($result)) {
@@ -563,7 +563,7 @@ function cherokee_mysql_fetch_field (&$result, $field_offset = -1)
 }
 
 
-/* mysql_fetch_lengths — Get the length of each output in a result */
+/* mysql_fetch_lengths - Get the length of each output in a result */
 function cherokee_mysql_fetch_lengths ($result)
 {
 	if (!_is_result($result))
@@ -584,7 +584,7 @@ function cherokee_mysql_fetch_lengths ($result)
 }
 
 
-/* mysql_fetch_object — Fetch a result row as an object */
+/* mysql_fetch_object - Fetch a result row as an object */
 function cherokee_mysql_fetch_object (&$result, $class_name = 'stdClass', $params = NULL)
 {
 	if (!_is_result($result)) {
@@ -605,14 +605,14 @@ function cherokee_mysql_fetch_object (&$result, $class_name = 'stdClass', $param
 }
 
 
-/* mysql_fetch_row — Get a result row as an enumerated array */
+/* mysql_fetch_row - Get a result row as an enumerated array */
 function cherokee_mysql_fetch_row (&$result)
 {
 	return cherokee_mysql_fetch_array(&$result, MYSQL_NUM);
 }
 
 
-/* PARTIAL: mysql_field_flags — Get the flags associated with the specified field in a result */
+/* PARTIAL: mysql_field_flags - Get the flags associated with the specified field in a result */
 /* Deprecated alias: mysql_fieldflags */
 function cherokee_mysql_field_flags ($result, $field_offset)
 {
@@ -632,11 +632,11 @@ function cherokee_mysql_field_flags ($result, $field_offset)
 }
 
 
-/* UNIMPLEMENTED: mysql_field_len — Returns the length of the specified field */
+/* UNIMPLEMENTED: mysql_field_len - Returns the length of the specified field */
 function cherokee_mysql_field_len ($result, $field_offset) {}
 
 
-/* mysql_field_name — Get the name of the specified field in a result */
+/* mysql_field_name - Get the name of the specified field in a result */
 /* Deprecated alias: mysql_fieldname */
 function cherokee_mysql_field_name ($result, $field_offset) {
 	if (!_is_result($result)) {
@@ -654,7 +654,7 @@ function cherokee_mysql_field_name ($result, $field_offset) {
 }
 
 
-/* mysql_field_seek — Set result pointer to a specified field offset */
+/* mysql_field_seek - Set result pointer to a specified field offset */
 function cherokee_mysql_field_seek (&$result, $field_offset)
 {
 	if (!_is_result($result)) {
@@ -674,11 +674,11 @@ function cherokee_mysql_field_seek (&$result, $field_offset)
 }
 
 
-/* UNIMPLEMENTED: mysql_field_table — Get name of the table the specified field is in */
+/* UNIMPLEMENTED: mysql_field_table - Get name of the table the specified field is in */
 function cherokee_mysql_field_table ($result, $field_offset) {}
 
 
-/* mysql_field_type — Get the type of the specified field in a result */
+/* mysql_field_type - Get the type of the specified field in a result */
 function cherokee_mysql_field_type ($result, $field_offset) 
 {
 	if (!_is_result($result)) {
@@ -697,7 +697,7 @@ function cherokee_mysql_field_type ($result, $field_offset)
 }
 
 
-/* mysql_free_result — Free result memory */
+/* mysql_free_result - Free result memory */
 function cherokee_mysql_free_result (&$result)
 {
 	if (!_is_result($result))
@@ -706,7 +706,7 @@ function cherokee_mysql_free_result (&$result)
 }
 
 
-/* mysql_get_client_info — Get MySQL client info */
+/* mysql_get_client_info - Get MySQL client info */
 function cherokee_mysql_get_client_info ()
 {
 	$info = _mysql_get_client_info();
@@ -714,7 +714,7 @@ function cherokee_mysql_get_client_info ()
 }
 
 
-/* mysql_get_host_info — Get MySQL host info */
+/* mysql_get_host_info - Get MySQL host info */
 function cherokee_mysql_get_host_info ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -726,7 +726,7 @@ function cherokee_mysql_get_host_info ($link = NULL)
 }
 
 
-/* mysql_get_proto_info — Get MySQL protocol info */
+/* mysql_get_proto_info - Get MySQL protocol info */
 function cherokee_mysql_get_proto_info ($link = NULL)
 {
 	if (_dbslayer($link))
@@ -735,7 +735,7 @@ function cherokee_mysql_get_proto_info ($link = NULL)
 }
 
 
-/* mysql_get_server_info — Get MySQL server info */
+/* mysql_get_server_info - Get MySQL server info */
 function cherokee_mysql_get_server_info ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -746,7 +746,7 @@ function cherokee_mysql_get_server_info ($link = NULL)
 }
 
 
-/* UNIMPLEMENTED: mysql_info — Get information about the most recent query */
+/* UNIMPLEMENTED: mysql_info - Get information about the most recent query */
 function cherokee_mysql_info ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -755,7 +755,7 @@ function cherokee_mysql_info ($link = NULL)
 }
 
 
-/* mysql_insert_id — Get the ID generated from the previous INSERT operation */
+/* mysql_insert_id - Get the ID generated from the previous INSERT operation */
 function cherokee_mysql_insert_id ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -768,7 +768,7 @@ function cherokee_mysql_insert_id ($link = NULL)
 }
 
 
-/* mysql_list_dbs — List databases available on a MySQL server */
+/* mysql_list_dbs - List databases available on a MySQL server */
 /* Deprecated alias: mysql_listdbs */
 function cherokee_mysql_list_dbs ($link = NULL)
 {
@@ -785,7 +785,7 @@ function cherokee_mysql_list_dbs ($link = NULL)
 }
 
 
-/* mysql_list_fields — List MySQL table fields */
+/* mysql_list_fields - List MySQL table fields */
 /* Deprecated alias: mysql_listfields */
 function cherokee_mysql_list_fields ($database, $table_name, $link = NULL)
 {
@@ -804,7 +804,7 @@ function cherokee_mysql_list_fields ($database, $table_name, $link = NULL)
 }
 
 
-/* mysql_list_processes — List MySQL processes */
+/* mysql_list_processes - List MySQL processes */
 function cherokee_mysql_list_processes ($link = NULL) {
 	if (!_dbslayer($link)) {
 	   return _call('_mysql_list_fields', $database_name, $table_name, $link);
@@ -823,7 +823,7 @@ function cherokee_mysql_list_processes ($link = NULL) {
 }
 
 
-/* mysql_list_tables — List tables in a MySQL database */
+/* mysql_list_tables - List tables in a MySQL database */
 function cherokee_mysql_list_tables  ($database, $link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -839,7 +839,7 @@ function cherokee_mysql_list_tables  ($database, $link = NULL)
 }
 
 
-/* mysql_num_fields — Get number of fields in result */
+/* mysql_num_fields - Get number of fields in result */
 function cherokee_mysql_num_fields ($result)
 {
 	if (!_is_result($result))
@@ -852,7 +852,7 @@ function cherokee_mysql_num_fields ($result)
 }
 
 
-/* mysql_num_rows — Get number of rows in result */
+/* mysql_num_rows - Get number of rows in result */
 function cherokee_mysql_num_rows ($result)
 {
 	if (!_is_result($result))
@@ -863,7 +863,7 @@ function cherokee_mysql_num_rows ($result)
 }
 
 
-/* mysql_ping — Ping a server connection  */
+/* mysql_ping - Ping a server connection  */
 function cherokee_mysql_ping ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -878,7 +878,7 @@ function cherokee_mysql_ping ($link = NULL)
 }
 
 
-/* mysql_pconnect — Open a persistent connection to a MySQL server */
+/* mysql_pconnect - Open a persistent connection to a MySQL server */
 function &cherokee_mysql_pconnect ($host = NULL, $user = NULL,
 			     $pass = NULL, $client_flags = 0)
 {
@@ -899,7 +899,7 @@ function &cherokee_mysql_pconnect ($host = NULL, $user = NULL,
 }
 
 
-/* mysql_query — Send a MySQL query */
+/* mysql_query - Send a MySQL query */
 function cherokee_mysql_query ($query, $link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -973,7 +973,7 @@ function cherokee_mysql_query ($query, $link = NULL)
 }
 
 
-/* mysql_real_escape_string — Escapes characters for use in a SQL statement */
+/* mysql_real_escape_string - Escapes characters for use in a SQL statement */
 /* Prepend backslashes to the : \x00, \n, \r, \, ', " and \x1a.             */
 function cherokee_mysql_real_escape_string ($unescaped_string, $link = NULL)
 {
@@ -984,7 +984,7 @@ function cherokee_mysql_real_escape_string ($unescaped_string, $link = NULL)
 }
 
 
-/* mysql_result — Get result data. Fields can be numbers or
+/* mysql_result - Get result data. Fields can be numbers or
  * names. table.name notation not yet supported 
  */
 function cherokee_mysql_result (&$result, $row, $field = 0)
@@ -1012,7 +1012,7 @@ function cherokee_mysql_result (&$result, $row, $field = 0)
 }
 
 
-/* mysql_select_db — Select a MySQL database */
+/* mysql_select_db - Select a MySQL database */
 function cherokee_mysql_select_db ($database_name, $link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -1027,7 +1027,7 @@ function cherokee_mysql_select_db ($database_name, $link = NULL)
 }
 
 
-/* mysql_set_charset — Sets the client character set */
+/* mysql_set_charset - Sets the client character set */
 function cherokee_mysql_set_charset ($charset , $link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -1050,7 +1050,7 @@ function cherokee_mysql_set_charset ($charset , $link = NULL)
 }
 
 
-/* mysql_stat — Get current system status */
+/* mysql_stat - Get current system status */
 function cherokee_mysql_stat ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -1081,7 +1081,7 @@ function cherokee_mysql_stat ($link = NULL)
 }
 
 
-/* mysql_tablename — Get table name of field */
+/* mysql_tablename - Get table name of field */
 function cherokee_mysql_tablename ($result, $i)
 {
 	if (!_dbslayer($link)) {
@@ -1101,7 +1101,7 @@ function cherokee_mysql_tablename ($result, $i)
 }
 
 
-/* UNIMPLEMENTED: mysql_thread_id — Return the current thread ID */
+/* UNIMPLEMENTED: mysql_thread_id - Return the current thread ID */
 function cherokee_mysql_thread_id ($link = NULL)
 {
 	if (!_dbslayer($link)) {
@@ -1112,7 +1112,7 @@ function cherokee_mysql_thread_id ($link = NULL)
 }
 
 
-/* mysql_unbuffered_query — Send an SQL query to MySQL, without fetching and buffering the result rows */
+/* mysql_unbuffered_query - Send an SQL query to MySQL, without fetching and buffering the result rows */
 function cherokee_mysql_unbuffered_query ($query, $link = NULL)
 {
 	if (!_dbslayer($link)) {
