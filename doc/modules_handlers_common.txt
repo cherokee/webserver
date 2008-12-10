@@ -31,11 +31,11 @@ This example shows the practical effect of **pathinfo**::
 +
 ----
     $ echo "This is a test" > /tmp/1/2/test
-    $ curl http://localhost:9999/1/2/test
+    $ curl http://localhost/1/2/test
     This is a test
-    $ curl http://localhost:9999/1/2/test/this/is/pathinfo
+    $ curl http://localhost/1/2/test/this/is/pathinfo
     This is a test
-    $ curl http://localhost:9999/1/2/test.no -D - | grep HTTP
+    $ curl -D - http://localhost/1/2/test.no | grep HTTP
     HTTP/1.1 404 Not Found
 ----
 
