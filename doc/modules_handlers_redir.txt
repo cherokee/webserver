@@ -4,12 +4,16 @@ Handler: Redirection
 --------------------
 
 The main idea of a redirection is telling the web client to go to
-another URL when the requested URL matches a rule. If you are looking
-for connection forwarding, you should check the
-link:modules_handlers_mirror.html[generic balancer] instead.
+another URL when the requested URL matches a rule. It could happen
+that this is not precisely what you are looking for. Check the
+link:modules_handlers_mirror.html[generic balancer] for layer 4
+connection forwarding instead, or if you are looking for more complex
+layer 7 operations take a look at the
+link:modules_handlers_proxy.html[reverse proxy] handler. However, for
+URL redirections this handler is the place to go. A very common
+scenario would be rewriting URLS.
 
-
-For example, if you have URLs like::
+Lets suppose you have URLs like::
 +
 ----
     http://example.com/inst/photogallery/viewphoto?photoid=1235
@@ -43,7 +47,11 @@ the substitution.
     will redirect the connection to the new resource.
 
 * *Regular Expression* and *Substitution* are the matching request and
-   the intended target of such petition.
+   the intended target of such petition. Getting into details of
+   regular expressions is out of the scope of this document. Besides,
+   there are many link:http://perldoc.perl.org/perlre.html[Perl
+   regular expressions] references.
+
 
 [[vhosts]]
 Virtual hosts and redirections

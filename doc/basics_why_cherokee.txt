@@ -3,13 +3,16 @@
 Why Cherokee?
 -------------
 
-Welcome to the Cherokee 0.11 documentation. Cherokee is
+Welcome to the Cherokee 0.11 documentation. Cherokee is a
 high-performance web server. It is very fast, flexible and easy to
-configure. It offers support for the widespread technologies nowadays:
-FastCGI, SCGI, PHP, CGI, X-Sendfile, TLS and SSL encrypted
-connections, Virtual hosts, Authentication, on the fly encoding, Load
-balancing, Apache compatible log files, zero downtime updates and much
-more.
+configure. In fact, it is the fastest web server there is. Check out
+the link:http://www.cherokee-project.com/benchmarks.html[benchmarks]
+and see for yourself. It offers support for the widespread
+technologies nowadays:
+FastCGI, SCGI, PHP, CGI, SSI, TLS and SSL encrypted connections,
+Virtual hosts, Authentication, on the fly encoding, Load Balancing,
+Apache compatible log files, Data Base Balancer, downtime-free updates
+and upgrades, Reverse HTTP Proxy , and much more.
 
 It is highly efficient, extremely lightweight and provides rock solid
 stability. Among its many features there is one that deserves special

@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:basics.html[Getting started] -> link:basics_installation.html[Installation]
 
-Installatoin from SVN
+Installation from SVN
 ---------------------
 
 The latest, bleeding edge Cherokee release can always be retrieved via
@@ -59,7 +59,7 @@ To generate the missing files simply run this command:
 ./autogen.sh
 ----
 
-As optional parameters, you can specify any option you want relayed
+As optional parameters, you can specify any option you want passed
 to `./configure`. This way you can avoid issuing another command for
 the configuration.
 

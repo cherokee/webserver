@@ -41,7 +41,7 @@ Notes
 ^^^^^
 The server address can be specified as an IP address or a hostname.
 
-The DN, also known as search base, identifies the part of the
-directory three you want to manage.
+Base DN, also known as search base, identifies the part of the
+directory tree you want to manage.
 
-The connection DN is the user name
+Bind DN is the user name.

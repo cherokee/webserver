@@ -25,7 +25,7 @@ whole chain of conversions.
 
 Note that some of the available prepackaged versions of Cherokee
 are set to offer the possibillity of automatically running these scripts
-to upgrade the configuration if files from a prior release is detected
+to upgrade the configuration if files from a prior release are detected
 in the system.
 
 Every effort is made to bulletproof the upgrade scripts. If any of
