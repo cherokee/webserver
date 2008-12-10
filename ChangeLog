@@ -1,3 +1,9 @@
+2008-12-10  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/cryptor_libssl.c: Fixes problem where OpenSSL expected
+	to read a CA cert appended to the server cert. Bug #264:
+	http://code.google.com/p/cherokee/issues/detail?id=264
+
 2008-12-09  Taher Shihadeh  <taher@octality.com>
 
 	* dbslayer/mysql_wrap.php: minor change to the init funtion.

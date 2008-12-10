@@ -197,7 +197,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 
 	/* Certificate
 	 */
-	rc = SSL_CTX_use_certificate_chain_file (n->context, vsrv->server_cert.buf);
+	rc = SSL_CTX_use_certificate_file (n->context, vsrv->server_cert.buf, SSL_FILETYPE_PEM);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR("ERROR: OpenSSL: Can not use certificate file '%s':  %s\n", 
