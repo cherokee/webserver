@@ -13,7 +13,6 @@ to JSON over HTTP bridge. This handler outperforms any other
 implementation by far,  and many more advantages are derived of using
 the MySQL bridge, including:
 
-
 . Possibility of being proxied: imagine caching your database queries
 with any standard mechanism currently in place.
 

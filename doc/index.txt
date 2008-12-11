@@ -133,26 +133,24 @@ Remaingin tasks:
 
 Suggested recipes:
 ------------------
+Trac:		http://trac.edgewall.org/
+SugarCRM:	http://www.sugarcrm.com/
 phpBB:		http://www.phpbb.com
+
 Cake PHP: 	http://www.cakephp.org/
 Piwik:		http://piwik.org/
 vBSEO:		http://www.vbseo.com/
-Moodle:		http://moodle.org/
 Subversion:	http://subversion.tigris.org/
 Tracks:		http://www.rousette.org.uk/projects/
 SquirrelMail: 	http://www.squirrelmail.org/
 Roller:		http://www.rollerweblogger.org/
-Liferay:	http://www.liferay.com/web/guest/home
 DokuWiki:	http://wiki.splitbrain.org/wiki:dokuwiki
 MediaWiki:	http://www.mediawiki.org/wiki/MediaWiki
 Mantis:		http://www.mantisbt.org/
 Opina:		http://trac.ebabel.info/projects/opina
 KnowledgeTree:	http://www.knowledgetree.com/
 Redmine:	http://www.redmine.org/
-Trac:		http://trac.edgewall.org/
-Alfresco:	http://www.alfresco.com/
 JasperServer:	http://jasperforge.org/sf/projects/jasperserver
 eZPublish:	http://ez.no/
-SugarCRM:	http://www.sugarcrm.com/
 Jaws Project:	http://www.jaws-project.com/
 ////////////////////////////////////////////////////

@@ -58,6 +58,9 @@ cookbook_zend.html \
 cookbook_kumbia.html \
 cookbook_nagios.html \
 cookbook_symfony.html \
+cookbook_moodle.html \
+cookbook_alfresco.html \
+cookbook_liferay.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -196,10 +199,21 @@ media/images/cookbook_nagios2.png \
 media/images/cookbook_nagios3.png \
 media/images/cookbook_nagios4.png \
 media/images/cookbook_symfony.png \
+media/images/cookbook_moodle_db.png \
+media/images/cookbook_moodle_document_root.png \
+media/images/cookbook_moodle_modules.png \
+media/images/cookbook_moodle_paths.png \
+media/images/cookbook_moodle.png \
+media/images/cookbook_alfresco_alfresco.png \
+media/images/cookbook_alfresco_assistant.png \
+media/images/cookbook_alfresco_install.png \
+media/images/cookbook_alfresco_path.png \
+media/images/cookbook_alfresco_share.png \
+media/images/cookbook_alfresco_soffice.png \
+media/images/cookbook_liferay.png \
 media/images/proxy_phase1.png \
 media/images/proxy_phase2.png \
 media/images/tracelor.png
-
 
 EXTRA_DIST = \
 $(doc_DATA) \

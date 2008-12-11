@@ -1,0 +1,111 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up Moodle
+---------------------------
+
+Running link:http://moodle.org/[Moodle] on Cherokee is easy to
+do. Since Moodle has relatively high requirementes (1GB RAM is
+recommended), it is actually a very good idea to run a high
+performance web server and see how things simply start flying.
+
+The only software requirements are a web server, MySQL and PHP with
+several extensions. You can see the complete list of
+link:http://docs.moodle.org/en/Installing_Moodle#Software[software
+requirements] at Moodle's site. Don't worry about this point. The
+installer will detail exactly what are the missing modules, soy you
+can install whatever you need during that part of the process.
+
+You will need PHP support correctly configured in Cherokee. The
+default configuration already provides a valid PHP configuration for
+Cherokee if you have php-cgi installed, but you can follow the
+appropriate recipe about link:cookbook_php.html[setting up PHP] in
+case you don't have it available for some reason.
+
+Of course, you will need to download Moodle from the
+link:http://download.moodle.org/[download site].
+
+We will be using
+link:http://download.moodle.org/download.php/stable19/moodle-weekly-19.tgz[moodle-weekly-19],
+which was the recommended option at the time of writing.
+
+Uncompress it to `/var/www/moodle` and remember changing ownership to
+that of the user under which Cherokee will be running.
+
+
+[[cherokee]]
+Setting up Cherokee
+~~~~~~~~~~~~~~~~~~~
+
+There are no special settings on Cherokee's part besides having a
+working PHP configuration.
+
+Simply set the `Document root` to `/var/www/moodle` and you are ready
+to go. This is done within the `Basics` tab of the chosen `Virtual
+Server`.
+
+image::media/images/cookbook_moodle_document_root.png[Moodle settings]
+
+[[moodle]]
+Setting up Moodle
+~~~~~~~~~~~~~~~~~
+
+First download and uncompress the distributed Moodle release into
+`/var/www/moodle`, and create a database suitable for the installation.
+
+Log in to MySQL:
+
+----------------
+mysql -u root -p
+----------------
+
+And create the database for Moodle. We will be using the name
+'moodle', the user 'moodleuser' and the password 'moodlepassword', but
+you should set up your own.
+
+------------------------------------------------------------------------
+CREATE DATABASE moodle DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+GRANT ALL PRIVILEGES ON moodle.* TO moodleuser@localhost IDENTIFIED BY 'moodlepassword';
+GRANT ALL PRIVILEGES ON moodle.* TO moodleuser@localhost.localdomain IDENTIFIED BY 'moodlepassword';
+FLUSH PRIVILEGES;
+quit;
+------------------------------------------------------------------------
+
+You will also have to create a directory for Moodle to save data in
+it. It must be outside the web document tree.
+
+-------------------------------------
+mkdir /var/www/moodledata
+chmod 0770 moodledata
+chown www-data:www-data moodledata
+-------------------------------------
+
+Then point your web browser to `http://localhost` and follow the
+instructions provided by the installer. You will only need to provide
+the above mentioned database information and very little else.
+
+.Installation paths
+image::media/images/cookbook_moodle_paths.png[Moodle paths]
+
+.Database settings
+image::media/images/cookbook_moodle_db.png[Database settings]
+
+As mentioned before, checks will be performed to see if the needed PHP
+modules are available. Make sure to have the ones you'll be needing.
+
+.PHP requirements
+image::media/images/cookbook_moodle_modules.png[PHP modules]
+
+This will get you through the whole installation process in around 20
+little extra steps give or take. Just click on `continue` and you
+should be fine. It will populate your database and get you through the
+whole installation process.
+
+.Moodle in action
+image::media/images/cookbook_moodle.png[Moodle in action!]
+
+Once you are done, don't forget to set up your
+link:http://docs.moodle.org/en/Cron[cron tasks] and configure the
+link:http://docs.moodle.org/en/Backup_settings[backup settings]. You
+can find all the information to create new courses and everything else
+there is to know in link:http://docs.moodle.org/[Moodle's
+documentation].

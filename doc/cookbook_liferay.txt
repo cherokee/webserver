@@ -1,0 +1,104 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up Liferay
+----------------------------
+
+For this recipe we will be using
+link:http://www.liferay.com/web/guest/downloads/portal[Liferay Portal
+5.1.2 Standard Edition].
+
+You can use the standard package which is shipped with Tomcat as
+application server, or simply download one of the others. There is a
+link:http://downloads.sourceforge.net/lportal/liferay-portal-glassfish-linux-5.1.1.jar[Glassfish
+version] availabe. We will be using the former method, but you could
+choose the latter and just deploy the application in your favorite
+application server. If you chose the Glassfish release, you could
+refer to the link:cookbook_glassfish.html[Glassfish] recipe and the
+rest of this document would be of no more concern to you.
+
+Before we proceed with the installation on Linux, you will need to
+make sure to have JDK 1.5 or later installed.
+
+We will be installing the package and then setting up Cherokee as a
+reverse proxy to access this Enterprse Portal.
+
+[[liferay]]
+Phase one: Liferay
+~~~~~~~~~~~~~~~~~~
+
+This part is trivial. As the
+link:http://www.liferay.com/web/guest/community/wiki/-/wiki/Main/Quick+Installation+Instructions[Quick
+installation notes] say, you just have to uncompress the package and
+launch the startup script.
+
+So, uncompress to `/opt/liferay`, launch `/opt/liferay/bin/startup.sh`
+and you are done with this part.
+
+It could give an error because it can't find the Java environment.
+
+Simply set the environment variable and try again.
+
+----
+export JAVA_HOME=/usr/lib/jvm/java-6-sun
+/opt/liferay/bin/startup.sh
+----
+
+This path is set to the symbolic link present in `/usr/lib/jvm`. Yours
+could vary, so take a look there. As stated before, you do need Java
+1.5 or higher.
+
+Once you have launched it, you can already acces the application
+server directly at link:http://localhost:8080[http://localhost:8080]
+
+.Initial access information
+
+`~~~~~~~`~~~~~~~~~~~~~~~~~
+Field   , Value
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+user    , test@liferay.com
+password, test
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Accessing Liferay
+image::media/images/cookbook_liferay.png[Liferay]
+
+
+[[Cherokee]]
+Phase two: Cherokee
+~~~~~~~~~~~~~~~~~~~
+
+Now to set up Cherokee as reverse proxy. You can either create a new
+virtual server with a matching rule (be it `default` or anything else)
+if you are sharing the proxy machine, or dedicate another machine
+to the Proxy Handler. This will be our choice, since typically you
+will be wanting to get the best possible performance, the Java
+application server is heavy by definition, and you could be using the
+proxy machine also to serve other contents. We are only going to set
+Cherokee's HTTP reverse proxy handler to hit the server running
+Lifreay at port 8080.
+
+Launch Cherokee-Admin on your proxy machine, create a rule that
+matches the desired path on your web server hierarchy -`/liferay` for
+instance- in your virtual server of choice, and define the `HTTP
+reverse proxy` handler from within the `Handler` tab.
+
+You will need to assign it an information source you define for the
+server running Liferay. We will assume the IP is `192.168.1.100` in
+your firewalled local network, and your reverse proxy is accessible as
+`http://example.com/`
+
+This information source is to be defined as external sources, like
+the following example:
+
+`~~~~~~~~~~~`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~
+Type        , Nick       , Connection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Remote host , liferay    , 192.168.1.100:8080
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Refer to the link:modules_handlers_proxy.html[HTTP reverse proxy]
+documentation if you need any further help with this.
+
+Once you launch Cherokee and access `http://example.com/liferay`, you
+should be presented with the login screen from before, since you will
+be receiving whatever is at `http://192.168.1.100:8080/`.

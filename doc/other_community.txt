@@ -24,5 +24,13 @@ These are the lists currently in existence:
 More resources:
 ~~~~~~~~~~~~~~~
 [[elphel]]
-* How to cross-compile Cherokee for Elphel cameras:
-  http://wiki.elphel.com/index.php?title=Cherokee
+* How to cross-compile
+  link:http://wiki.elphel.com/index.php?title=Cherokee[Cherokee for
+  Elphel] network cameras.
+
+[[munin]]
+
+* link:http://www.mobygeek.net/blog/2008/12/07/munin-cherokee-plugin/[Munin
+  Plugin] for plotting the web server.
+
+

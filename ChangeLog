@@ -1,3 +1,9 @@
+2008-12-11  Taher Shihadeh  <taher@unixwars.com>
+	* doc/cookbook_moodle.txt, doc/cookbook_liferay.txt,
+	doc/cookbook_alfresco.txt, doc/modules_handlers_dbslayer.txt,
+	doc/other_community.txt,
+	doc/media/images/cookbook_(moodle|alfresco|liferay).*: some additions.
+
 2008-12-10  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/cryptor_libssl.c: Fixes problem where OpenSSL expected
