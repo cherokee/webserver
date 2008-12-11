@@ -6,9 +6,7 @@ Validator: Mysql
 The MySQL validator allows you to authenticate a user against a MySQL database.
 
 [[parameters]]
-Parameters
-^^^^^^^^^^
-
+.Parameters
 [grid="rows"]
 ``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Parameter                 , Description
@@ -28,8 +26,10 @@ __use_md5_passwd__        , Optional. The passwords in the database table  \
                             are hashed with MD5.  Default: __0__.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ``query`` parameter is given an argument ``${user}`` so you can query
-against it.  Take a look at the following example:
+The `query` parameter is given an argument `$\{user}` so you can query
+against it.
+
+.Sample query
 ----
     SELECT password FROM auth_users WHERE username = '${user}'
 ----

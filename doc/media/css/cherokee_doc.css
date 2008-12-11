@@ -175,11 +175,13 @@ div.admonitionblock {
 }
 
 div.tableblock {
-margin-left: 10%;
-margin-right: 10%;
+_margin-left: 10%;
+_margin-right: 10%;
+_display: table/table-cell;
+margin-left:auto; margin-right:auto;
 margin-top: 1.5em;
 margin-bottom: 1.5em;
-
+text-align: center;
 }
 
 div.admonitionblock {
@@ -310,6 +312,11 @@ div.olist2 > ol {
 
 div.tableblock > table {
   border: 1px solid #527bbd;
+  width:100%;
+  width: 569px;
+  text-align:center;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 thead {
