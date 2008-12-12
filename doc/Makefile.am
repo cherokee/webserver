@@ -61,6 +61,7 @@ cookbook_symfony.html \
 cookbook_moodle.html \
 cookbook_alfresco.html \
 cookbook_liferay.html \
+cookbook_sugarcrm.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -211,6 +212,10 @@ media/images/cookbook_alfresco_path.png \
 media/images/cookbook_alfresco_share.png \
 media/images/cookbook_alfresco_soffice.png \
 media/images/cookbook_liferay.png \
+media/images/cookbook_sugarcrm_install0.png \
+media/images/cookbook_sugarcrm_install1.png \
+media/images/cookbook_sugarcrm_running0.png \
+media/images/cookbook_sugarcrm_running1.png \
 media/images/proxy_phase1.png \
 media/images/proxy_phase2.png \
 media/images/tracelor.png

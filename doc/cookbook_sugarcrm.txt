@@ -1,0 +1,131 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up SugarCRM
+-----------------------------
+
+For this recipe we will be using
+link:http://www.sugarforge.org/frs/download.php/4870/SugarCE-5.1.0c.zip
+Sugar Community Edition 5.1.0c], which was the latest freely
+distributable edition available at the
+link:http://www.sugarcrm.com/crm/download/sugar-suite.html[download
+site] when this was written.
+
+The `Full installation package` will be enough. No need to use the
+bulky complete stacks. We just need PHP support correctly configured
+in Cherokee, and PHP with the MySQL module installed. The default
+configuration already provides a valid PHP configuration for Cherokee
+if you have php-cgi installed, but you can follow the appropriate
+recipe about link:cookbook_php.html[setting up PHP] in case you don't
+have it available for any reason.
+
+
+[[cherokee]]
+Adjusting Cherokee
+~~~~~~~~~~~~~~~~~~
+
+First, we Create the directory you that will be used when installing
+SugarCRM.
+
+.Create installation path
+----
+# mkdir /var/www/sugar
+----
+
+Then launch Cherokee-Admin on your system, and set the created path as
+`Document web root` of your `default` virtual server. This is done
+through the `Basics` tab of the mentioned virtual server.
+
+The only other thing to do with Cherokee is recreate the SugarCRM
+restrictions coded in the `.htaccess` file. Those are mere
+redirections put in place to avoid users from accessing certain
+files. If it is not yet populated, it will after the installation. You
+should check it out to account for cases not covered in the following
+rules.
+
+We will have to create several rules in our virtual server to cover
+the whole list of banned files. This list is loosely based on the one
+provided by `.htaccess`.
+
+`~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~
+Type     , Regular Expression             , Substitution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Internal , ^/(.\*\.log.*|not_imported_.*txt) , /log_file_restricted.html
+External , emailmandelivery.php           , /index.php
+External , ^/.\*/.*\.php                   , /index.php
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Of course you can also add as many rewriting rules as you wish to
+beautify your URLs, but those will have to be analyzed on an
+individual base.
+
+[[installation]]
+Package installation
+~~~~~~~~~~~~~~~~~~~~
+
+Uncompress SugarCRM to your web document root and rename the directory
+to whatever you like. We will choose `/var/www/sugar` as installation
+directory for this recipe.
+
+Then remember setting up file permissions. Some files and directories
+need to be writable by the user that runs Cherokee. Those are:
+
+*  cache
+*  custom
+*  data
+*  modules
+*  config.php
+
+By simply accessing the configured virtual host, the installer will
+start. Since we have modified our `default` virtualhost, we can access
+visiting `http://localhost`.
+
+.Commencing installation
+image::media/images/cookbook_sugarcrm_install0.png[Installation]
+
+You'll need to Accept the license agreement before you can go on, and
+once you've done this the installer will run the compatibility checks.
+
+Select `Typicall` installation, choose the MySQL database, fill in
+the required data and if everything went smoothly, the installer
+should create the database and go through with the whole process.
+
+Here is where you will see which requirements are not met. Most
+probably you will have to make some minor adjustments.
+
+In this case we had to modify some values in the `php.ini` file to
+provide higher memory limits and allow bigger files to be
+uploaded. Remember that it is likely you will have several of those in
+your system, each one for its own PHP: the CGI version, the CLI,
+etc. Cherokee uses PHP through FastCGI, so edit that one with your
+favorite editor.
+
+.Editing with Emacs
+----
+# emacs /etc/php5/cgi/php.ini
+----
+
+.Required adjustments in this case
+****
+memory_limit = 40M
+upload_max_filesize = 8M
+****
+
+To see the changes reflected in the installer you would have to
+respawn the php instances. Simply kill them and Cherokee will do the
+rest.
+
+If something is still not supported, it will prompt you so you can
+change it before you proceed.
+
+.Warnings
+image::media/images/cookbook_sugarcrm_install1.png[Installation warnings]
+
+For this example we will not be needing `IMAP`, so we will disregard the
+warning. After proceeding with the process we should be presented with
+the login page.
+
+.Login
+image::media/images/cookbook_sugarcrm_running0.png[Login]
+
+.Working
+image::media/images/cookbook_sugarcrm_running1.png[Working]

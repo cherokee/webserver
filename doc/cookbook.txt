@@ -3,20 +3,25 @@
   . link:cookbook_authentication.html[Authentication]: How to set up authenticated resources.
   . link:cookbook_cross_compilation.html[Cross compilation]: How to cross compile Cherokee.
   . link:cookbook_dbslayer.html[DBSlayer]: How to set up DBSlayer MySQL balancing.
-  . link:cookbook_maintenance.html[Maintenance]: Seamlessly switching to maintenance mode.
-  . link:cookbook_redirs.html[Redirections]: Common redirection examples.
   . link:cookbook_embedding_cherokee.html[Embedding Cherokee]: Cherokee on embedded devices.
+  . link:cookbook_maintenance.html[Maintenance]: Seamlessly switching to maintenance mode.
   . link:cookbook_optimizations.html[Optimizing Cherokee]: Recommendations and tweaks.
+  . link:cookbook_redirs.html[Redirections]: Common redirection examples.
   . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
-  . link:cookbook_mono.html[Setting up ASP.NET]: How to run ASP.NET apps with Mono and Cherokee.
-  . link:cookbook_django.html[Setting up Django]: How to run Django apps with Cherokee.
-  . link:cookbook_glassfish.html[Setting up GlassFish]: How to run Java apps with Cherokee.
-  . link:cookbook_php.html[Setting up PHP]: How to run PHP apps with Cherokee.
-  . link:cookbook_ror.html[Setting up RoR]: How to run Ruby on Rails apps with Cherokee.
-  . link:cookbook_kumbia.html[Setting up Kumbia]: How to run Kumbia apps with Cherokee.
-  . link:cookbook_symfony.html[Setting up Symfony]: How to run Symfony apps with Cherokee.
-  . link:cookbook_zend.html[Setting up Zend]: How to run Zend apps with Cherokee.
-  . link:cookbook_drupal.html[Setting up Drupal]: How to run Drupal on Cherokee.
-  . link:cookbook_joomla.html[Setting up Joomla]: How to run Joomla on Cherokee.
-  . link:cookbook_mailman.html[Setting up Mailman]: How to run Mailman on Cherokee.
-  . link:cookbook_wordpress.html[Setting up Wordpress]: How to run Wordpress on Cherokee.
+  . link:cookbook_alfresco.html[Alfresco]: How to run Alfresco on Cherokee.
+  . link:cookbook_mono.html[ASP.NET]: How to run ASP.NET apps with Mono and Cherokee.
+  . link:cookbook_django.html[Django]: How to run Django apps with Cherokee.
+  . link:cookbook_drupal.html[Drupal]: How to run Drupal on Cherokee.
+  . link:cookbook_glassfish.html[GlassFish]: How to run Java apps with Cherokee.
+  . link:cookbook_joomla.html[Joomla]: How to run Joomla on Cherokee.
+  . link:cookbook_kumbia.html[Kumbia]: How to run Kumbia apps with Cherokee.
+  . link:cookbook_liferay.html[Liferay]: How to run Liferay on Cherokee.
+  . link:cookbook_mailman.html[Mailman]: How to run Mailman on Cherokee.
+  . link:cookbook_moodle.html[Moodle]: How to run Moodle on Cherokee.
+  . link:cookbook_nagios.html[Nagios]: How to run Nagios with Cheroke.
+  . link:cookbook_php.html[PHP]: How to run PHP apps with Cherokee.
+  . link:cookbook_ror.html[Ruby on Rails]: How to run Ruby on Rails apps with Cherokee.
+  . link:cookbook_sugarcrm.html[SugarCRM]: How to run SugarCRM on Cherokee.
+  . link:cookbook_symfony.html[Symfony]: How to run Symfony apps with Cherokee.
+  . link:cookbook_wordpress.html[Wordpress]: How to run Wordpress on Cherokee.
+  . link:cookbook_zend.html[Zend]: How to run Zend apps with Cherokee.

@@ -17,12 +17,11 @@ application.
 
 This assumes that you already have symfony installed and configured.
 You can find information about installation here:
-link:http://www.symfony-project.org/installation/[Symfony Installation].
-At the time of writing, symfony stable version is 1.2.
+link:http://www.symfony-project.org/installation/[Symfony
+Installation]. At the time of writing, symfony stable version is 1.2.
 
-Now that you have symfony installed, we shall create a 
-symfony application in the folder `~/demo`
-
+Now that you have symfony installed, we shall create a symfony
+application in the folder `~/demo`
 
 Open a terminal, and execute the following commands (note that if
 symfony is not in your $PATH, you need to prefix 'symfony' with the
@@ -36,19 +35,20 @@ symfony generate:app demo
 symfony generate:module demo demo
 ----
 
-The above commands will create a symfony project called `demo` inside the
-demo folder we just created. Next, it will create an application called 
-`demo` as well, and then create a module, also called `demo`.
+The above commands will create a symfony project called `demo` inside
+the demo folder we just created. Next, it will create an application
+called `demo` as well, and then create a module, also called `demo`.
 
 So now that we have the files in place, we'll just create the needed
 rules for the web server. Specially important will be the rewrite
-rules. 
+rules.
 
 Launch cherokee-admin, and proceed to the
-link:config_virtual_servers.html[Virtual servers] section. Select or create
-the virtual server that you will be configuring and go to the `Behavior`
-tab to set up the rules.  Remember that the document root for this
-virtual server should be the `web` folder in your demo project.
+link:config_virtual_servers.html[Virtual servers] section. Select or
+create the virtual server that you will be configuring and go to the
+`Behavior` tab to set up the rules.  Remember that the document root
+for this virtual server should be the `web` folder in your demo
+project.
 
 
 .Steps
@@ -93,9 +93,10 @@ Note that the document root for the /sf directory depends on your
 installation. The value given above corresponds to a pear installation
 of symfony on an Ubuntu 8.10 (Intrepid Ibex) system.
 
-You may need to edit your "hosts" file to include the domain name
-you call the virtual server. Your symfony application should then 
-be accessible. You can find more information about setting up symfony
+You may need to edit your "hosts" file to include the domain name you
+call the virtual server. Your symfony application should then be
+accessible. You can find more information about setting up symfony
 applications in the symfony manual.
 
+.Running application
 image::media/images/cookbook_symfony.png[Symfony Application]
