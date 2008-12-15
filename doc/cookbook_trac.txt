@@ -1,0 +1,107 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up Trac
+-------------------------
+
+This recipe will install link:http://trac.edgewall.org[Trac]: an
+integrated SCM and Project Management solution that gets along very
+well with Cherokee.
+
+It is written in Python and can work with Cherokee either using HTTP
+or SCGI protocols. The recipe will address the second scenario because
+it is slighlty more complex. Should you wish to run it via HTTP,
+Cherokee would only have to relay the requests to Trac acting as an
+link:modules_handlers_proxy.html[HTTP reverse proxy] and no other
+configuration would be needed on that end.
+
+Trac
+~~~~
+The software requirements are Python-2.5, easy_install and
+SQlite-3.3.4 or above.
+
+On Debian based Linux distributions, just a couple of commands issued
+as `root` would suffice to provide the requirements and install Trac.
+
+.Quick install
+----
+apt-get install python-genshi python-setuptools python-pysqlite2
+easy_install Trac
+----
+
+The next thing would be defining a project environment:
+
+.Project creation
+----
+$ trac-admin /path/to/project initenv
+----
+
+Of course, the path should be changed to whatever suits your
+needs. You will be prompted for more details.
+
+If you want to configure authentication or simply need more details,
+refer to the link:http://trac.edgewall.org/wiki/TracInstall[Trac
+installation instructions] on the official site.
+
+Cherokee
+~~~~~~~~
+The configuration on Cherokee's side is quite simple. You will only
+need to know that you can spawn Trac as an SCGI process.
+
+.Command to launch Trac
+-------
+/usr/bin/tracd --single-env --daemonize --protocol=scgi /
+--hostname=localhost --port=4433 /path/to/project
+-------
+
+You can either start it manually, or better yet, automatically by
+letting Cherokee spawn the server whenever it is down.
+The process is fairly simple.
+
+First we will set up an link:config_info_sources.html[information
+source] with a local interpreter.
+
+.Trac information source
+image::media/images/cookbook_trac_info.png[Information source]
+
+.Information sources
+`~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Host           , Interpreter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+localhost:4433 , /usr/bin/tracd --single-env --daemonize --protocol=scgi \
+                 --hostname=localhost --port=4433 /path/to/project/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the port was not reachable, the `interpreter` command would be
+launched and the process would be reinstantiated.  Note that, in the
+definition of the information source, you will have to manually launch
+the `spawner` if you use a `Remote host` as `Information source`
+instead of a `Local interpreter`.
+
+After doing this, we will just have to create a new rule managed by
+the SCGI handler to access Trac. It can be created in a new virtual
+server, `trac.example.net` for instance, or as a `Directory` rule for
+a specific path such as `/trac`.
+
+.Rules
+image::media/images/cookbook_trac_rules.png[Rules]
+
+As you can see, we are opting for the first approach and will only
+need two rules. The `default` will use the `SCGI handler` as detailed
+above, associated to the previously created information source.
+
+.SCGI handler
+image::media/images/cookbook_trac_scgi.png[SCGI handler]
+
+The second one will be there to serve the few static files needed to
+correctly display the Trac interface. Just create it as `Directory`
+type rule for `/chrome/common` and set it to the `Static files`
+handler and with a `Document root` that points to the appropriate
+files: `/usr/share/trac/htdocs/`
+
+.Static files
+image::media/images/cookbook_trac_static.png[Static files]
+
+By now, your Trac installation should be up and running. Try it out!
+
+.Complete Trac installation
+image::media/images/cookbook_trac.png[Trac]

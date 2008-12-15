@@ -141,11 +141,26 @@ Attribution (by)] license, which is the most accommodating in terms of
 what others can do with it. It lets others distribute, remix, tweak,
 and build upon the work, even commercially.
 
-
 [[faq13]]
+=== How can I contribute contents to the documentation?
+
+The documentation is written and maintained using
+link:http://www.methods.co.nz/asciidoc/[AsciiDoc], a text document
+format for writing short documents, articles, books and UNIX man pages
+that can be easily translated to HTML and DocBook markups. It is
+really easy to get the hang of it, so if you want to contribute,
+please take a look at the
+link:http://powerman.name/doc/asciidoc[AsciiDoc Cheatsheet] and start
+editing the documentation sources right ahead. They are distributed
+with the source code and are located under `./doc` of the source tree.
+If you don't have SVN access, simply mail your contributions to
+link:mailto:feedback@cherokee-project.com[feedback@cherokee-project.com].
+
+[[faq14]]
 === Can encoders be set for specfic file types?
 
 Yes. Since content encoding is set on a per-rule basis, simply add a
 rule at the beginning of the virtual server that matches the specific
 file extensions and has the encoding enabled. Set the rule to be
 non-final. That should do the trick.
+

@@ -1,3 +1,6 @@
+2008-12-15  Taher Shihadeh  <taher@unixwars.com>
+	* doc/cookbook_trac.txt: documentation for Trac.
+
 2008-12-11  Taher Shihadeh  <taher@unixwars.com>
 	* doc/cookbook_moodle.txt, doc/cookbook_liferay.txt,
 	doc/cookbook_alfresco.txt, doc/modules_handlers_dbslayer.txt,

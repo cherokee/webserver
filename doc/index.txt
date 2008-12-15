@@ -66,6 +66,7 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks
   . link:cookbook_ror.html[Ruby on Rails]: How to run Ruby on Rails apps with Cherokee.
   . link:cookbook_sugarcrm.html[SugarCRM]: How to run SugarCRM on Cherokee.
   . link:cookbook_symfony.html[Symfony]: How to run Symfony apps with Cherokee.
+  . link:cookbook_trac.html[Trac]: How to run Trac on Cherokee.
   . link:cookbook_wordpress.html[Wordpress]: How to run Wordpress on Cherokee.
   . link:cookbook_zend.html[Zend]: How to run Zend apps with Cherokee.
 ////
@@ -140,7 +141,6 @@ Remaingin tasks:
 
 Suggested recipes:
 ------------------
-Trac:		http://trac.edgewall.org/
 phpBB:		http://www.phpbb.com
 
 Cake PHP: 	http://www.cakephp.org/

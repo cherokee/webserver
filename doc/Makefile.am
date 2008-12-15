@@ -62,6 +62,7 @@ cookbook_moodle.html \
 cookbook_alfresco.html \
 cookbook_liferay.html \
 cookbook_sugarcrm.html \
+cookbook_trac.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -216,6 +217,11 @@ media/images/cookbook_sugarcrm_install0.png \
 media/images/cookbook_sugarcrm_install1.png \
 media/images/cookbook_sugarcrm_running0.png \
 media/images/cookbook_sugarcrm_running1.png \
+media/images/cookbook_trac.png \
+media/images/cookbook_trac_info.png \
+media/images/cookbook_trac_rules.png \
+media/images/cookbook_trac_scgi.png \
+media/images/cookbook_trac_static.png \
 media/images/proxy_phase1.png \
 media/images/proxy_phase2.png \
 media/images/tracelor.png
