@@ -1,3 +1,6 @@
+2008-12-16  Taher Shihadeh  <taher@unixwars.com>
+	* cherokee/cherokee-tweak.c: fixes incorrect parameter help.
+
 2008-12-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/socket.c (cherokee_socket_ntop): Convert IPv4 mapped

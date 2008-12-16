@@ -71,7 +71,7 @@ static void
 print_help (void)
 {
 	printf (APP_NAME "\n"
-		"Usage: cherokee-tweak -c command -u url [options]\n\n"
+		"Usage: cherokee-tweak -c command -a url [options]\n\n"
 		"  -h,  --help                   Print this help\n"
 		"  -V,  --version                Print version and exit\n\n"
 		" Required:\n"
@@ -91,13 +91,13 @@ static void
 print_usage (void)
 {
 	printf (APP_NAME "\n"
-		"Usage: cherokee-tweak -c command -u url [options]\n\n"
+		"Usage: cherokee-tweak -c command -a url [options]\n\n"
 		"Try `cherokee-tweak --help' for more options.\n");
 }
 
 static ret_t
-client_new (cherokee_admin_client_t **client_ret, 
-	    cherokee_fdpoll_t       **fdpoll_ret, 
+client_new (cherokee_admin_client_t **client_ret,
+	    cherokee_fdpoll_t       **fdpoll_ret,
 	    cherokee_buffer_t        *url,
 	    cherokee_buffer_t        *user,
 	    cherokee_buffer_t        *password,
@@ -111,11 +111,11 @@ client_new (cherokee_admin_client_t **client_ret,
 	cherokee_sys_fdlimit_get (&fds_num);
 
 	ret = cherokee_fdpoll_best_new (&fdpoll, fds_num, fds_num);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
-	   
+
 	ret = cherokee_admin_client_new (&client);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		return ret;
 
 	ret = cherokee_admin_client_prepare (client, fdpoll, url, user, password, cryptor);
@@ -456,7 +456,7 @@ main (int argc, char *argv[])
 		print_usage();
 		exit (EXIT_ERROR);
 	}
-	
+
 	/* Init crypt engine
 	 */
 	if (! strncmp (url.buf, "https://", 8))
@@ -478,7 +478,7 @@ main (int argc, char *argv[])
 
 	} else if (cherokee_buffer_cmp_str (&command, "logrotate") == 0) {
 		if (log.len <= 0) {
-			PRINT_MSG_S ("ERROR: Logrotate needs -u and -l options\n\n");
+			PRINT_MSG_S ("ERROR: Logrotate needs -a and -l options\n\n");
 			print_usage();
 			exit (EXIT_ERROR);
 		}
@@ -490,7 +490,7 @@ main (int argc, char *argv[])
 	} else {
 		PRINT_MSG_S ("ERROR: Command not recognized\n\n");
 		print_help();
-		exit (EXIT_ERROR);		
+		exit (EXIT_ERROR);
 	}
 
 	cherokee_mrproper();
