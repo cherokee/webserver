@@ -1,3 +1,9 @@
+2008-12-16  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/socket.c (cherokee_socket_ntop): Convert IPv4 mapped
+	IPs (over IPv6) to IPv4 before using them. For instance, in the
+	log files.
+
 2008-12-15  Taher Shihadeh  <taher@unixwars.com>
 	* doc/cookbook_trac.txt: documentation for Trac.
 
