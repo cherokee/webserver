@@ -20,6 +20,7 @@
   . link:cookbook_moodle.html[Moodle]: How to run Moodle on Cherokee.
   . link:cookbook_nagios.html[Nagios]: How to run Nagios with Cheroke.
   . link:cookbook_php.html[PHP]: How to run PHP apps with Cherokee.
+  . link:cookbook_phpbb.html[phpBB]: How to run phpBB on Cherokee.
   . link:cookbook_ror.html[Ruby on Rails]: How to run Ruby on Rails apps with Cherokee.
   . link:cookbook_sugarcrm.html[SugarCRM]: How to run SugarCRM on Cherokee.
   . link:cookbook_symfony.html[Symfony]: How to run Symfony apps with Cherokee.

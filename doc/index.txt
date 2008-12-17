@@ -63,6 +63,7 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks
   . link:cookbook_moodle.html[Moodle]: How to run Moodle on Cherokee.
   . link:cookbook_nagios.html[Nagios]: How to run Nagios with Cheroke.
   . link:cookbook_php.html[PHP]: How to run PHP apps with Cherokee.
+  . link:cookbook_phpbb.html[phpBB]: How to run phpBB on Cherokee.
   . link:cookbook_ror.html[Ruby on Rails]: How to run Ruby on Rails apps with Cherokee.
   . link:cookbook_sugarcrm.html[SugarCRM]: How to run SugarCRM on Cherokee.
   . link:cookbook_symfony.html[Symfony]: How to run Symfony apps with Cherokee.
@@ -100,9 +101,9 @@ link:modules.html[Modules]: Information about the standard modules
     - link:modules_validators_mysql.html[MySQL]: Database mechanism.
     - link:modules_validators_pam.html[PAM]: Pluggable Authentication Module mechanism.
     - link:modules_validators_authlist.html[Fixed list]: Fixed authentication list.
-  . link:modules_encoders.html[Encoders]: Compression and filters.
-    - link:modules_encoders_gzip.html[gzip]: `gzip` compression.
-    - link:modules_encoders_deflate.html[deflate]: `deflate` compression.
+  . link:modules_encoders.html[Encoders]: Compression and filtering.
+    - link:modules_encoders_gzip.html[gzip]: compress using gzip algorithm.
+    - link:modules_encoders_deflate.html[deflate]: compress using deflate algorithm.
   . link:modules_loggers.html[Loggers]: Logging mechanisms.
     - link:modules_loggers_combined.html[Combined]: Combined Log Format.
     - link:modules_loggers_ncsa.html[Common (NCSA)]: Common Log Format.

@@ -63,6 +63,7 @@ cookbook_alfresco.html \
 cookbook_liferay.html \
 cookbook_sugarcrm.html \
 cookbook_trac.html \
+cookbook_phpbb.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -222,6 +223,18 @@ media/images/cookbook_trac_info.png \
 media/images/cookbook_trac_rules.png \
 media/images/cookbook_trac_scgi.png \
 media/images/cookbook_trac_static.png \
+media/images/cookbook_phpbb_1_intro.png \
+media/images/cookbook_phpbb_2_req.png \
+media/images/cookbook_phpbb_3_db.png \
+media/images/cookbook_phpbb_4_admin.png \
+media/images/cookbook_phpbb_5_config.png \
+media/images/cookbook_phpbb_6_advanced.png \
+media/images/cookbook_phpbb_7_create.png \
+media/images/cookbook_phpbb_8_final.png \
+media/images/cookbook_phpbb_adm.png \
+media/images/cookbook_phpbb_adm_warning.png \
+media/images/cookbook_phpbb_rules.png \
+media/images/cookbook_phpbb_running.png \
 media/images/proxy_phase1.png \
 media/images/proxy_phase2.png \
 media/images/tracelor.png

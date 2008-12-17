@@ -50,9 +50,15 @@ provided by `.htaccess`.
 Type     , Regular Expression             , Substitution
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Internal , ^/(.\*\.log.*|not_imported_.*txt) , /log_file_restricted.html
-External , emailmandelivery.php           , /index.php
+External , emailmandelivery.php            , /index.php
 External , ^/.\*/.*\.php                   , /index.php
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+These need to be created as `Regular Expression` type rules matching
+the expressions of the list. The rules must be managed by the
+`Redirection` handler, and you will need to specify only the type and
+substitution to perform. The regular expression is inherited, so no
+need to re-type it.
 
 Of course you can also add as many rewriting rules as you wish to
 beautify your URLs, but those will have to be analyzed on an

@@ -2,9 +2,9 @@
 
   . link:modules_balancers.html[Balancers]: Load balancing strategies.
     - link:modules_balancers_round_robin.html[Round robin]: Round Robin strategy.
-  . link:modules_encoders.html[Encoders]: Compression and filters.
-    - link:modules_encoders_gzip.html[gzip]: `gzip` compression.
-    - link:modules_encoders_deflate.html[deflate]: `deflate` compression.
+  . link:modules_encoders.html[Encoders]: Compression and filtering.
+    - link:modules_encoders_gzip.html[gzip]: compress using gzip algorithm.
+    - link:modules_encoders_deflate.html[deflate]: compress using deflate algorithm.
   . link:modules_handlers.html[Handlers]: Connection handling modules.
     - link:modules_handlers_file.html[Static Content]: Send files.
     - link:modules_handlers_dirlist.html[Only listing]: List directories.
