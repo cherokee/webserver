@@ -1,3 +1,8 @@
+2008-12-17  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/main.c, cherokee/server.c: This patch should fix the
+	graceful restart functionality.
+
 2008-12-16  Taher Shihadeh  <taher@unixwars.com>
 	* cherokee/cherokee-tweak.c: fixes incorrect parameter help.
 

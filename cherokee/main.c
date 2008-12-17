@@ -281,7 +281,6 @@ process_wait (pid_t pid)
 static void 
 signals_handler (int sig, siginfo_t *si, void *context) 
 {
-	UNUSED(si);
 	UNUSED(context);
 
 	switch (sig) {
@@ -295,7 +294,6 @@ signals_handler (int sig, siginfo_t *si, void *context)
 		/* Graceful restart */
 		graceful_restart = true;
 		kill (pid, SIGHUP);
-		process_wait (pid);
 		break;
 
 	case SIGTERM:
@@ -307,7 +305,7 @@ signals_handler (int sig, siginfo_t *si, void *context)
 
 	case SIGCHLD:
 		/* Child exited */
-		process_wait (pid);
+		process_wait (si->si_pid);
 		break;
 		
 	default:

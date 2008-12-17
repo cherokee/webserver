@@ -1245,12 +1245,21 @@ cherokee_server_step (cherokee_server_t *srv)
 #endif
 
 	/* Gracefull restart:
-	 * The main thread waits for the rest
 	 */
-	if (unlikely ((srv->wanna_reinit) &&
-		      (srv->main_thread->conns_num == 0)))
-	{
-		return ret_eof;
+	if (unlikely (srv->wanna_reinit)) {
+		cherokee_list_t    *i;
+		cherokee_boolean_t  empty = true;
+
+		list_for_each (i, &srv->thread_list) {
+			if (THREAD(i)->conns_num != 0) {
+				empty = false;
+				break;
+			}
+		}
+		
+		if (empty) {
+			return ret_eof;
+		}
 	}
 
 	/* Should not be reached.
