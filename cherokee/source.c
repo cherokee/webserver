@@ -68,6 +68,24 @@ cherokee_source_mrproper (cherokee_source_t *src)
 }
 
 
+static int
+is_ipv6 (cherokee_buffer_t *ip)
+{
+	int i;
+	int colons = 0;
+
+	for (i=0; i<ip->len; i++) {
+		if (ip->buf[i] == ':') {
+			colons += 1;
+			if (colons == 2)
+				return 1;
+		}
+	}
+
+	return 0;
+}
+
+
 ret_t 
 cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 {
@@ -109,8 +127,14 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 
 	/* INET socket
 	 */
-	ret = cherokee_socket_set_client (sock, AF_INET);
-	if (ret != ret_ok) return ret;
+	if (is_ipv6 (&src->host)) {
+		ret = cherokee_socket_set_client (sock, AF_INET6);
+	} else {
+		ret = cherokee_socket_set_client (sock, AF_INET);
+	}
+
+	if (ret != ret_ok)
+		return ret;
 	
 	/* Query the host */
 	ret = cherokee_resolv_cache_get_host (resolv, src->host.buf, sock);

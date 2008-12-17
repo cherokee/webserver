@@ -1,5 +1,10 @@
 2008-12-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/source.c (cherokee_source_connect): Fixes bug #269:
+	http://code.google.com/p/cherokee/issues/detail?id=269
+	Cherokee didn't check the type of the IP when connecting to a data
+	source. Now, AF_UNIX, AF_INET6 and AF_INET are supported.
+
 	* cherokee/main.c, cherokee/server.c: This patch should fix the
 	graceful restart functionality.
 
