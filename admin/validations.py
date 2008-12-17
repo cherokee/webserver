@@ -192,8 +192,12 @@ def is_ip_or_netmask (value):
     if len(parts) != 2:
         raise ValueError, 'Malformed entry (netmask)'
 
-    ip = is_ip (parts[0])
-    nm = is_netmask (parts[1])
+    if ':' in value:
+        ip = is_ipv6 (parts[0])
+        nm = is_netmask_ipv6 (parts[1])
+    else:
+        ip = is_ipv4 (parts[0])
+        nm = is_netmask_ipv4 (parts[1])
 
     return "%s/%s" % (ip, nm)
 
