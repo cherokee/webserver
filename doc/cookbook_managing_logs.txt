@@ -74,7 +74,7 @@ cherokee-tweak
 To actually rotate the logs, you must use `logrotate` as command
 parameter.
 
-Provided the user running Cherokee has sufficient file permissions,
+Provided the user running cherokee-tweak has sufficient permissions,
 the rotation will be effective. Just provide the required parameters:
 
 . command, which is `logrotate`
