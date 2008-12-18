@@ -221,7 +221,7 @@ cherokee_cache_init (cherokee_cache_t *cache)
 	if (cache->priv == NULL)
 		return ret_nomem;
 
-	CHEROKEE_MUTEX_INIT (&cache->priv->mutex, NULL);
+	CHEROKEE_MUTEX_INIT (&cache->priv->mutex, CHEROKEE_MUTEX_FAST);
 	CHEROKEE_MUTEX_LOCK (&cache->priv->mutex);
 
 	/* Public

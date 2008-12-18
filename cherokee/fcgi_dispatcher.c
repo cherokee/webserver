@@ -44,7 +44,7 @@ cherokee_fcgi_dispatcher_new (cherokee_fcgi_dispatcher_t **fcgi,
 	/* Init fcgi manager slots
 	 */
 	INIT_LIST_HEAD(&n->queue);
-	CHEROKEE_MUTEX_INIT(&n->lock, NULL);
+	CHEROKEE_MUTEX_INIT(&n->lock, CHEROKEE_MUTEX_FAST);
 
 	n->manager_num = mgr_num;
 	n->thread      = thd;

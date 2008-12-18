@@ -139,8 +139,8 @@ iocache_entry_new_cb (cherokee_cache_t        *cache,
 	UNUSED(cache);
 	UNUSED(param);
 
-	CHEROKEE_MUTEX_INIT (&PRIV(n)->updating, NULL);
-	CHEROKEE_MUTEX_INIT (&PRIV(n)->parent_lock, NULL);
+	CHEROKEE_MUTEX_INIT (&PRIV(n)->updating, CHEROKEE_MUTEX_FAST);
+	CHEROKEE_MUTEX_INIT (&PRIV(n)->parent_lock, CHEROKEE_MUTEX_FAST);
 
 	/* Init its parent class
 	 */

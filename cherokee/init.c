@@ -30,10 +30,14 @@
 #include "util.h"
 #include "bogotime.h"
 
+#ifdef HAVE_PTHREAD_H
+# include "threading.h"
+#endif
 
 cuint_t cherokee_cacheline_size;
 cint_t  cherokee_cpu_number;
 cuint_t cherokee_fdlimit;
+
 
 static cherokee_boolean_t _cherokee_init = false;
 
@@ -57,6 +61,11 @@ cherokee_init (void)
 	 */
 	cherokee_bogotime_init();
 
+	/* Init threading stuff
+	 */
+#ifdef HAVE_PTHREAD_H
+	cherokee_threading_init();
+#endif
 	/* Get the CPU number
 	 */
 	dcc_ncpus (&cherokee_cpu_number);
@@ -85,5 +94,7 @@ ret_t
 cherokee_mrproper (void)
 {
 	cherokee_bogotime_free();
+	cherokee_threading_free();
+
 	return ret_ok;
 }

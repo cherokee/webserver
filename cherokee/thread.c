@@ -202,7 +202,7 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	/* The thread must adquire this mutex before 
 	 * process its connections
 	 */
-	CHEROKEE_MUTEX_INIT (&n->ownership, NULL);
+	CHEROKEE_MUTEX_INIT (&n->ownership, CHEROKEE_MUTEX_FAST);
 	
 	/* Do some related work..
 	 */

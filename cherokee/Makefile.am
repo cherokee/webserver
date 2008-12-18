@@ -1016,6 +1016,8 @@ $(win32_src) \
 cherokee.h \
 init.h \
 init.c \
+threading.h \
+threading.c \
 avl.h \
 avl.c \
 avl_r.h \

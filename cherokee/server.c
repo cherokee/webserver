@@ -162,8 +162,8 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	/* Accepting mutexes
 	 */
-	CHEROKEE_MUTEX_INIT (&n->accept_tls_mutex, NULL);
-	CHEROKEE_MUTEX_INIT (&n->accept_mutex, NULL);
+	CHEROKEE_MUTEX_INIT (&n->accept_mutex, CHEROKEE_MUTEX_FAST);
+	CHEROKEE_MUTEX_INIT (&n->accept_tls_mutex, CHEROKEE_MUTEX_FAST);
 
 	/* IO Cache cache
 	 */

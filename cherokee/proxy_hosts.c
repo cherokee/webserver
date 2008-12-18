@@ -37,7 +37,7 @@ poll_free (void *p)
 ret_t
 cherokee_handler_proxy_hosts_init (cherokee_handler_proxy_hosts_t *hosts)
 {
- 	CHEROKEE_MUTEX_INIT (&hosts->hosts_mutex, NULL);
+ 	CHEROKEE_MUTEX_INIT (&hosts->hosts_mutex, CHEROKEE_MUTEX_FAST);
 	cherokee_avl_init (&hosts->hosts);
 	cherokee_buffer_init (&hosts->tmp);
 
@@ -114,7 +114,7 @@ cherokee_handler_proxy_poll_new (cherokee_handler_proxy_poll_t **poll,
 
 	INIT_LIST_HEAD (&n->active);
 	INIT_LIST_HEAD (&n->reuse);
-	CHEROKEE_MUTEX_INIT (&n->mutex, NULL);
+	CHEROKEE_MUTEX_INIT (&n->mutex, CHEROKEE_MUTEX_FAST);
 
 	*poll = n;
 	return ret_ok;

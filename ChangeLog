@@ -1,5 +1,11 @@
 2008-12-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/Makefile.am, cherokee/proxy_hosts.c, cherokee/cache.c,
+	cherokee/init.c, cherokee/threading.c, cherokee/threading.h,
+	cherokee/common-internal.h, cherokee/thread.c,
+	cherokee/fcgi_dispatcher.c, cherokee/iocache.c, cherokee/server.c:
+	Adds PTHREAD_ADAPTIVE_MUTEX_INITIALIZER_NP support.
+
 	* admin/PageInfoSource.py: Fixes a administration interface
 	issue. The Information Sources was failing when a source was being
 	used inside a User Directory rule.
@@ -19,6 +25,7 @@
 	graceful restart functionality.
 
 2008-12-16  Taher Shihadeh  <taher@unixwars.com>
+
 	* cherokee/cherokee-tweak.c: fixes incorrect parameter help.
 
 2008-12-16  Alvaro Lopez Ortega  <alvaro@octality.com>
