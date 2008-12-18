@@ -1,3 +1,9 @@
+2008-12-18 Taher Shihadeh  <taher@unixwars.com>
+	* doc/cookbook_phpbb.txt, doc/cookbook_phpmyadmin.txt,
+	doc/media/images/*: more docs and recompressed the whole image
+	gallery to save some more package-space. Sorry for the big
+	commit guys!
+
 2008-12-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/Makefile.am, cherokee/proxy_hosts.c, cherokee/cache.c,

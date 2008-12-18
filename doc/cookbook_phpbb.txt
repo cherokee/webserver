@@ -1,0 +1,219 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Setting up phpBB
+--------------------------
+
+You will need PHP support correctly configured in Cherokee, and PHP
+with the MySQL module installed. The default configuration already
+provides a valid PHP configuration for Cherokee if you have `php-cgi`
+installed, but you can follow the appropriate recipe about
+link:cookbook_php.html[setting up PHP] in case you don't have it
+available for some reason.
+
+Under these conditions, you could start the installation and you
+would already be able to have your site up and running.
+
+
+Installation
+~~~~~~~~~~~~
+
+link:http://www.phpbb.com[phpBB] can be installed quite
+easily. Download the link:http://www.phpbb.com/downloads/[latest
+package], decompress it and point your browser to the corresponding
+URL.
+
+In this example, we will be installing everything under
+`/var/www/phpBB3` and will set that as `document root` in
+cherokee-admin for our server, which will be hosting contents for the
+domain `example.net`. You can modify this going to `Virtual servers`
+-> `default` -> `Basics` -> `Document Root`. You can delete all the
+unnecesary rules of your default out-of-the-box configuration.
+
+image::media/images/cookbook_phpbb_rules.png[phpBB basic rules]
+
+This is all you need to do with Cherokee, for now.
+
+If you intend to use the same domain, insert the appropriate entry in
+your `/etc/hosts` or equivalent file.
+
+.Entry for your /etc/hosts
+----
+127.0.0.1       localhost example.net
+----
+
+First download the
+link:http://www.phpbb.com/downloads/olympus.php[phpBB3] package and
+proceed decompressing it to the desired path.
+
+Second, create the database for the installation. Log in to MySQL with
+your administration user and password:
+
+----------------
+mysql -u root -p
+----------------
+
+And create the database. We will be using the name
+'phpbb', the user 'phpbbuser' and the password 'phpbbpassword', but
+you should set up your own.
+
+------------------------------------------------------------------------
+CREATE DATABASE phpbb;
+GRANT ALL PRIVILEGES ON phpbb.* TO phpbbuser@localhost IDENTIFIED BY 'phpbbpassword';
+GRANT ALL PRIVILEGES ON phpbb.* TO phpbbuser@localhost.localdomain IDENTIFIED BY 'phpbbpassword';
+FLUSH PRIVILEGES;
+quit;
+------------------------------------------------------------------------
+
+Then point your web browser to `http://example.net` and follow all the
+steps. Basically you will have to provide the database information and
+troubleshoot any possible warning, but the process is fairly straight
+forward.
+
+.Introduction
+image::media/images/cookbook_phpbb_1_intro.png["phpBB step1"]
+
+.Requirements
+image::media/images/cookbook_phpbb_2_req.png["phpBB step2"]
+
+.Database settings
+image::media/images/cookbook_phpbb_3_db.png["phpBB step3"]
+
+.Administrator details
+image::media/images/cookbook_phpbb_4_admin.png["phpBB step4"]
+
+.Configuration file
+image::media/images/cookbook_phpbb_5_config.png["phpBB step5"}
+
+.Advanced settings
+image::media/images/cookbook_phpbb_6_advanced.png["phpBB step6"]
+
+.Create database tables
+image::media/images/cookbook_phpbb_7_create.png["phpBB step7"]
+
+.Final stage
+image::media/images/cookbook_phpbb_8_final.png["phpBB step8"]
+
+Once you are done you will be redirected to the `Administration
+control panel`. If not, you should have a link at the bottom of the
+page.  You need to eliminate the `/var/www/phpBB3/install`
+subdirectory or you will not be allowed to go any further.
+
+.Warning
+image::media/images/cookbook_phpbb_adm_warning.png[phpBB]
+
+It is just a security precaution. Once you have done this, you can
+proceed.
+
+.After deletion
+image::media/images/cookbook_phpbb_adm.png[phpBB]
+
+The basic installation is done. You can see the software running just
+by accessing link:http://example.net/[http://example.net/]
+
+.phpBB running
+image::media/images/cookbook_phpbb_running.png[phpBB]
+
+
+URL rewrites
+~~~~~~~~~~~~
+
+To beautify your URLs you will need to write some redirection rules
+and apply some patches. This feature seems to not be supported in
+phpBB, so you will have to download phpBB's `mod_rewrite` module and
+apply the patch. There are several alternative patches available from
+diferent sources. Since you will need to modify by hand some code,
+your best alternative is probably sticking to some pre-modded version.
+
+One such version is link:http://www.phpbb-seo.com/[phpBB SEO]. Make
+sure the release you are using matches that of your installed phpBB.
+
+After applying the fixes, mostly overwriting the files with the ones
+provided, you will have to generate an .htaccess file. It will not
+work for Cherokee, but it will give you the rewrite-directives that
+need to be translated.
+
+These need to be created as `Regular Expression` type rules that match
+our translated directives. The rules must be `Final` and managed by
+the `Redirection` handler. Within the handler you will need to specify
+only the type -`Internal` - and substitution to perform. The regular
+expression is inherited, so no need to re-type it.
+
+Just one precaution must be taken before you start playing around with
+rewriting rules. Despite these, you will probably want to ensure that
+existing files, directories or symbolic links are
+used instead of matching (and re-directing) them with rewrite rules.
+To do this you will have to create one `File exists`-type rule that
+matches any file and that is both `Final` and managed by the `list &
+send` or `static` handlers.
+
+Once you start creating new rules, just make sure to keep the PHP -non
+final- one at the top of the list and that the next one is your static
+file managing rule.
+
+This is a set of rewrites that is known to have worked with phpBB3 and
+`phpBB-SEO simple`. Please use them as an orientation, since they
+could very well fail with the specific `phpBB mod_rewrite` patch you
+are using.
+
+.Basic forum access
+[grid="all"]
+`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regular Expression	, +++^/[a-z0-9_-]*-f([0-9]+)/?(p([0-9]+)\.html)?$+++
+Substitution		, +++/viewforum.php?f=$1&start=$3+++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Topics with virtual folder
+[grid="all"]
+`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regular Expression	, +++^/[a-z0-9_-]*-f([0-9]+)/[a-z0-9_-]*-t([0-9]+)(-([0-9]+))?\.html$+++
+Substitution		, +++/viewtopic.php?f=$1&t=$2&start=$4+++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Global announces with virtual folder
+[grid="all"]
+`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regular Expression	, +++^/announces/[a-z0-9_-]*-t([0-9]+)(-([0-9]+))?\.html$+++
+Substitution		, +++/viewtopic.php?t=$1&start=$3+++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Topic without forum ID & DELIM
+[grid="all"]
+`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regular Expression	, +++^/[a-z0-9_-]*/?[a-z0-9_-]*-t([0-9]+)(-([0-9]+))?\.html$+++
+Substitution		, +++/viewtopic.php?t=$1&start=$3+++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Profiles
+[grid="all"]
+`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regular Expression	, +++^/m([0-9]+)\.html$+++
+Substitution		, +++/memberlist.php?mode=viewprofile&u=$1+++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.User messages
+[grid="all"]
+`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regular Expression	, +++^/messages([0-9]+)(-([0-9]+))?\.html$+++
+Substitution		, +++/search.php?author_id=$1&sr=posts&start=$3+++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Groups
+[grid="all"]
+`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regular Expression	, +++^/g([0-9]+)(-([0-9]+))?\.html$+++
+Substitution		, +++/memberlist.php?mode=group&g=$1&start=$3+++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Post
+[grid="all"]
+`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regular Expression	, +++^/p([0-9]+)\.html$+++
+Substitution		, +++/viewtopic.php?p=$1+++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.The team
+[grid="all"]
+`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regular Expression	, +++^/the-team\.html$ /memberlist.php?mode=leaders+++
+Substitution		, +++^/[a-z0-9_-]+/?(p([0-9]+)\.html)?$ /viewforum.php?start=$2+++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -64,6 +64,7 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks
   . link:cookbook_nagios.html[Nagios]: How to run Nagios with Cheroke.
   . link:cookbook_php.html[PHP]: How to run PHP apps with Cherokee.
   . link:cookbook_phpbb.html[phpBB]: How to run phpBB on Cherokee.
+  . link:cookbook_phpmyadmin.html[phpMyAdmin]: How to run phpMyAdmin on Cherokee.
   . link:cookbook_ror.html[Ruby on Rails]: How to run Ruby on Rails apps with Cherokee.
   . link:cookbook_sugarcrm.html[SugarCRM]: How to run SugarCRM on Cherokee.
   . link:cookbook_symfony.html[Symfony]: How to run Symfony apps with Cherokee.
@@ -137,13 +138,10 @@ Remaingin tasks:
 ----------------
 * <5> How to manage logs  (make specific mention of usage of
       Cherokee-Tweak and log backers).
-* < > Mention something about Asciidoc in the documentation and
-      checking out the sources for someone to contribute doc changes.
 
 Suggested recipes:
 ------------------
-phpBB:		http://www.phpbb.com
-
+phpMyAdmin:	http://www.phpmyadmin.net
 Cake PHP: 	http://www.cakephp.org/
 Piwik:		http://piwik.org/
 vBSEO:		http://www.vbseo.com/
