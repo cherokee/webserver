@@ -77,7 +77,7 @@ print_help (void)
 		" Required:\n"
 		"  -c,  --command=STRING         Command: logrotate, trace, info\n"
 		"  -a,  --url=URL                URL to the admin interface\n\n"
-		" Secutiry:\n"
+		" Security:\n"
 		"  -u,  --user=STRING            User name\n"
 		"  -p,  --password=STRING        Password\n\n"
 		" Logrotate:\n"

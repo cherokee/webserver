@@ -1,8 +1,14 @@
 2008-12-18 Taher Shihadeh  <taher@unixwars.com>
+
 	* doc/cookbook_phpbb.txt, doc/cookbook_phpmyadmin.txt,
 	doc/media/images/*: more docs and recompressed the whole image
 	gallery to save some more package-space. Sorry for the big
 	commit guys!
+
+	* doc/cookbook_managing_logs.txt,
+	doc/media/images/cookbook_managin_logs*: and more.
+
+	* cherokee/main_tweak.c, cherokee-tweak.1: fixed misspleings.
 
 2008-12-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 

@@ -65,6 +65,7 @@ cookbook_sugarcrm.html \
 cookbook_trac.html \
 cookbook_phpbb.html \
 cookbook_phpmyadmin.html \
+cookbook_managing_logs.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_round_robin.html \
@@ -238,6 +239,9 @@ media/images/cookbook_phpbb_rules.png \
 media/images/cookbook_phpbb_running.png \
 media/images/cookbook_phpmyadmin.png \
 media/images/cookbook_phpmyadmin_denied.png \
+media/images/cookbook_managin_logs_security.png \
+media/images/cookbook_managin_logs_rules.png \
+media/images/cookbook_managin_logs_handler.png \
 media/images/proxy_phase1.png \
 media/images/proxy_phase2.png \
 media/images/tracelor.png

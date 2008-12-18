@@ -3,4 +3,98 @@
 Cookbook: Managing logs
 -----------------------
 
-To be written
+Cherokee strictly follows a
+link:other_goodies.html#zero-downtime[downtime-free] policy. This also
+applies to the process of log rotation. No need to interrupt any
+active connections just to do this.
+
+This operation involves using
+link:bundle_cherokee-tweak.html[cherokee-tweak] and the
+link:modules_handlers_admin.html[remote administration] handler.
+
+Logging is an operation performed on a per-virtual-server basis, so
+rotation must also be done this way. For simplicity's sake we'll make
+an example with just the default virtual server present, but the
+process is exactly the same for more. Independently of the number,
+just one rule is needed as entry point for the handler.
+
+Under the hood, the process is simple:
+
+- Set Cherokee to backup mode, which will start logging to an internal buffer.
+
+- Locally rotate the logs: this operation is not performed by the web server.
+
+- Restore Cherokee to production mode, dumping the logs in the buffer
+  to the new file and continuing with business as usual.
+
+You must be very careful when setting up cherokee-admin. Security
+should be of concern, since unauthorized access could in theory keep
+the server in backup mode until it runs out of auxiliary buffer space.
+
+cherokee-admin
+~~~~~~~~~~~~~~
+First, the remote administration handler must be configured, so we
+will have to create a rule for that (`Virtual Servers` -> `default` ->
+`Behavior` -> `Add new rule`). We will use a directory-type
+rule.
+
+[grid="all"]
+``~
+Rule Type, Web Directory
+~~~~~~~~~~~~~~~~~~~~~~~~
+Directory, /admin
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Handler
+image::media/images/cookbook_managin_logs_handler.png[Handler]
+
+This handler will allow performing administration tasks, so public
+access is not an option. You can leave free access, but you should
+not. Don't forget to fill in the `Security` tab of
+the rule to specify a validation method. Using `Digest` mechanism and
+restricting to only allow HTTPS connections  is also strongly advised.
+
+In this example, we will use the simplest of all, the `Fixed list`
+validation mechanism and will define the user `admin` identified by
+the password `adminpass`. Of course you can use any other method
+available.
+
+.Security options
+image::media/images/cookbook_managin_logs_security.png[Security]
+
+.Possible list of rules
+image::media/images/cookbook_managin_logs_rules.png[Rules]
+
+Remember to save the changes through a graceful restart, since the main
+purpose of this recipe is not loosing any logging information and
+keeping the server online.
+
+cherokee-tweak
+~~~~~~~~~~~~~~
+To actually rotate the logs, you must use `logrotate` as command
+parameter.
+
+Provided the user running Cherokee has sufficient file permissions,
+the rotation will be effective. Just provide the required parameters:
+
+. command, which is `logrotate`
+
+. url, the administration URL
+
+. log, the log file to be rotated
+
+. user and password, since the administration interface has restricted
+  access.
+
+
+.cherokee-tweak parameters
+-----
+$ cherokee-tweak -c logrotate -a http://example.net/admin/ -u admin -p adminpass -l /var/log/cherokee.access
+-----
+
+.Command output
+-----
+Setting backup mode.. OK
+Log file '/var/log/cherokee.access' moved to '/var/log/cherokee.access.1' successfully
+Restoring production mode.. OK
+-----

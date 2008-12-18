@@ -5,6 +5,7 @@
   . link:cookbook_dbslayer.html[DBSlayer]: How to set up DBSlayer MySQL balancing.
   . link:cookbook_embedding_cherokee.html[Embedding Cherokee]: Cherokee on embedded devices.
   . link:cookbook_maintenance.html[Maintenance]: Seamlessly switching to maintenance mode.
+  . link:cookbook_managing_logs.html[Managing logs]: Seamless log rotation.
   . link:cookbook_optimizations.html[Optimizing Cherokee]: Recommendations and tweaks.
   . link:cookbook_redirs.html[Redirections]: Common redirection examples.
   . link:cookbook_ssl.html[SSL/TLS, certs]: Secure connection tips.
