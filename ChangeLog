@@ -12,6 +12,9 @@
 
 2008-12-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/nonce.c (cherokee_nonce_table_free): Fixes a memory
+	leak (72 bytes in total) on server quit.
+
 	* cherokee/Makefile.am, cherokee/proxy_hosts.c, cherokee/cache.c,
 	cherokee/init.c, cherokee/threading.c, cherokee/threading.h,
 	cherokee/common-internal.h, cherokee/thread.c,
