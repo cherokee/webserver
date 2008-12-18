@@ -247,20 +247,37 @@ class PageInfoSource (PageMenu, FormHelper):
         table += '<tr><th>Nick</th><th>Virtual server</th><th>Rule</th></tr>'
         for src in used_sources:
             for entry in used_sources[src]:
+                is_user_dir = False
+
+                tmp = entry.split('!')
+                if tmp[2] == 'user_dir':
+                    is_user_dir = True
+                    serv_id = tmp[1]
+                    rule_id = tmp[4]
+                    rule = 'vserver!%s!user_dir!rule!%s'%(serv_id, rule_id)
+                    rule_url = '/vserver/%s/userdir/rule/%s'%(serv_id, rule_id)
+                else:
+                    serv_id = tmp[1]
+                    rule_id = tmp[3]
+                    rule = 'vserver!%s!rule!%s'%(serv_id, rule_id)
+                    rule_url = '/vserver/%s/rule/%s'%(serv_id, rule_id)
+
                 nick = self._cfg.get_val('source!%s!nick'%(src))
-                serv_id   = entry.split('!')[1]
                 serv = self._cfg.get_val('vserver!%s!nick'%(serv_id))
-                rule = 'vserver!%s!rule!%s'%(serv_id,entry.split('!')[3])
 
                 # Try to get the rule name
                 _type = self._cfg.get_val('%s!match'%(rule))
                 rule_module = module_obj_factory (_type, self._cfg, rule, self.submit_url)
                 rule_name = rule_module.get_name()
-                rule_url = rule.replace('!','/')
 
                 nick_td = '<td><a href="/%s/%s">%s</td>'%(self._id, src, nick)
                 serv_td = '<td><a href="/vserver/%s">%s</a></td>'%(id, serv)
-                rule_td = '<td><a href="/%s">%s</a></td>'%(rule_url, rule_name)
+
+                if is_user_dir:                    
+                    rule_td = '<td><a href="%s">User Dir: %s</a></td>'%(rule_url, rule_name)
+                else:
+                    rule_td = '<td><a href="%s">%s</a></td>'%(rule_url, rule_name)
+
                 table += '<tr>%s%s%s</tr>'%(nick_td, serv_td, rule_td)
 
         table += '</table>'
