@@ -48,8 +48,6 @@ class Entry:
 
         return "<input %s />"%(props) + suffix + error
 
-        comment = self.AddToggleSpan (cfg_key, comment)
-
     def AddToggleSpan (self, text):
         js = "get_by_id('%s').checked = (!get_by_id('%s').checked);"%(self._name, self._name)
         text = '<span onClick="%s">%s</span>' % (js, text)
