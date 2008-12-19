@@ -38,7 +38,7 @@ class Entry:
             if "quiet" in self._kwargs and self._kwargs["quiet"]:
                 del(self._kwargs["quiet"])
             else:
-                suffix = " Enabled"
+                suffix = self.AddToggleSpan(" Enabled")
 
         error = '<div id="error_%s"></div>' % (self._name)
         props = 'id="%s" name="%s" type="%s"' % (self._name, self._name, self._type)
@@ -48,6 +48,12 @@ class Entry:
 
         return "<input %s />"%(props) + suffix + error
 
+        comment = self.AddToggleSpan (cfg_key, comment)
+
+    def AddToggleSpan (self, text):
+        js = "get_by_id('%s').checked = (!get_by_id('%s').checked);"%(self._name, self._name)
+        text = '<span onClick="%s">%s</span>' % (js, text)
+        return text
 
 
 class EntryOptions:
