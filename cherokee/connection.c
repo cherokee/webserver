@@ -810,6 +810,12 @@ cherokee_connection_recv (cherokee_connection_t *conn, cherokee_buffer_t *buffer
 		if (cherokee_socket_pending_read (&conn->socket)) {
 			CONN_THREAD(conn)->pending_read_num += 1;
 		}
+
+		if (cnt_read > 0) {
+			cherokee_connection_rx_add (conn, cnt_read);
+			*len = cnt_read;
+			return ret_ok;
+		}
 		return ret_eagain;
 
 	default:
