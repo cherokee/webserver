@@ -1,3 +1,7 @@
+2008-12-22 Taher Shihadeh  <taher@unixwars.com>
+
+	* doc/config_virtual_servers.txt: typos
+
 2008-12-19 Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Entry.py: toggle checkboxes by clicking on the

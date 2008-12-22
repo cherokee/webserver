@@ -163,7 +163,7 @@ Behavior
 
 This sections allows to define a set of rules to define how the server
 should handle the different requests. A summary of the existing rules is
-presented, containig several fields of information:
+presented, containing several fields of information:
 
   . *Target*: web target of the rule, be it a path, a file type, etc.
 
@@ -448,5 +448,5 @@ If you want HTTPS to work, you must remember this:
   not provide the service would not be handled in a coherente
   manner. None of the alternatives is very elegant in design: falling
   back to HTTP, issuing an error that is likely to restart the HTTPS
-  hanshake, etc. This behavior, however, might change in the future
+  handshake, etc. This behavior, however, might change in the future
   depending on the popularity of any proposed mechanisms.
