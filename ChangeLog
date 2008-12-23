@@ -1,3 +1,9 @@
+2008-12-23  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/admin_client.c (internal_step): Rough fix for:
+	http://code.google.com/p/cherokee/issues/detail?id=283
+	There is more work to do in order to fix cherokee-tweak.
+
 2008-12-23  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/connection-protected.h, cherokee/thread.c,
