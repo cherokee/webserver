@@ -957,7 +957,11 @@ process_active_connections (cherokee_thread_t *thd)
 				conn->phase = phase_init;
 				continue;
 			}
-			
+
+			/* Turn chunked encoding on, if possible
+			*/
+			cherokee_connection_set_chunked_encoding (conn);
+
 			/* Instance a encoded if needed
 			 */
 			ret = cherokee_connection_create_encoder (conn, &srv->encoders, entry.encoders);

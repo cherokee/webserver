@@ -1,3 +1,11 @@
+2008-12-23  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/connection-protected.h, cherokee/thread.c,
+	cherokee/handler_file.c, cherokee/connection.c:
+	Fixes a problem with the use of encoders and enable their use
+	with handlers that supports content-length.
+	Bug: http://code.google.com/p/cherokee/issues/detail?id=284
+
 2008-12-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_server_info.c (build_modules_table_content):
