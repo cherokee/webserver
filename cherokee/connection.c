@@ -646,28 +646,9 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	if ((conn->keepalive != 0) &&
 	    (http_method_with_body (conn->error_code)))	
 	{
-		if (conn->encoder) {
+		if (! cherokee_connection_should_include_length(conn)) {
 			if (! conn->chunked_encoding) {
 				conn->keepalive = 0;
-			}
-			else {
-				if ((HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length)) ||
-				    (HANDLER_SUPPORTS (conn->handler, hsupport_length))) 
-				{
-					char *f, *i;
-	
-					i = strcasestr(conn->header_buffer.buf, "Content-Length: ");
-					if (i != NULL) {
-						f = i;
-						while (*f != CHR_LF) {
-							f++;
-						}
-	
-						cherokee_buffer_remove_chunk (&conn->header_buffer, 
-									      i - conn->header_buffer.buf, 
-									      f - conn->header_buffer.buf);
-					}
-				}
 			}
 		}
 		else {
@@ -1011,6 +992,15 @@ out:
 	return ret;
 }
 
+cherokee_boolean_t
+cherokee_connection_should_include_length(cherokee_connection_t *conn)
+{
+	if (conn->encoder) {
+		return false;
+	}
+
+	return true;
+}
 
 ret_t 
 cherokee_connection_shutdown_wr (cherokee_connection_t *conn)

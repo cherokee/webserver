@@ -239,28 +239,30 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	if (!http_code_with_body (conn->error_code))
 		return ret_ok;
 
-	if (conn->error_code == http_range_not_satisfiable) {
-		/* The handler that attended the request has put the content 
-		 * length in conn->range_end in order to allow it to send the
-		 * right length to the client.
-		 *
-		 * "Content-Range: bytes *" "/" FMT_OFFSET CRLF
-		 */
-		cherokee_buffer_add_str     (buffer, "Content-Range: bytes */");
-		cherokee_buffer_add_ullong10(buffer, (cullong_t)conn->range_end);
+	if (cherokee_connection_should_include_length(conn)) {
+
+		if (conn->error_code == http_range_not_satisfiable) {
+			/* The handler that attended the request has put the content 
+			* length in conn->range_end in order to allow it to send the
+			* right length to the client.
+			*
+			* "Content-Range: bytes *" "/" FMT_OFFSET CRLF
+			*/
+			cherokee_buffer_add_str     (buffer, "Content-Range: bytes */");
+			cherokee_buffer_add_ullong10(buffer, (cullong_t)conn->range_end);
+			cherokee_buffer_add_str     (buffer, CRLF);
+		}
+
+		cherokee_buffer_add_str     (buffer, "Content-Length: ");
+		cherokee_buffer_add_ulong10 (buffer, (culong_t) hdl->content.len);
 		cherokee_buffer_add_str     (buffer, CRLF);
 	}
 
 	/* Usual headers
 	 */
 	cherokee_buffer_add_str     (buffer, "Content-Type: text/html"CRLF);
-
-	cherokee_buffer_add_str     (buffer, "Content-Length: ");
-	cherokee_buffer_add_ulong10 (buffer, (culong_t) hdl->content.len);
-	cherokee_buffer_add_str     (buffer, CRLF);
-
 	cherokee_buffer_add_str     (buffer, "Cache-Control: no-cache"CRLF);
-	cherokee_buffer_add_str     (buffer, "Pragma: no-cache"CRLF);		
+	cherokee_buffer_add_str     (buffer, "Pragma: no-cache"CRLF);
 
 	return ret_ok;
 }

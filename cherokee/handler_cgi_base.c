@@ -796,13 +796,18 @@ xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buff
 
 	/* Add Content-Length
 	 */
-	cherokee_buffer_add_str (buffer, "Content-Length: ");
-	if (cached) {
-		cherokee_buffer_add_ullong10 (buffer, (cullong_t) cached->state.st_size);
-	} else {
-		cherokee_buffer_add_ullong10 (buffer, (cullong_t) l_stat.st_size);
+	if (cherokee_connection_should_include_length(conn)) {
+		cherokee_buffer_add_str (buffer, "Content-Length: ");
+
+		if (cached) {
+			cherokee_buffer_add_ullong10 (buffer, (cullong_t) cached->state.st_size);
+		} else {
+			cherokee_buffer_add_ullong10 (buffer, (cullong_t) l_stat.st_size);
+		}
+
+		cherokee_buffer_add_str (buffer, CRLF);
 	}
-	cherokee_buffer_add_str (buffer, CRLF);
+
 	ret = ret_ok;
 
 out:
@@ -986,11 +991,12 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 
 	/* Content-Length response header
 	 */
-	if (cgi->content_length_set) {
+	if ((cherokee_connection_should_include_length(conn)) &&
+	    (cgi->content_length_set))
+	{
 		cherokee_buffer_add_str      (outbuf, "Content-Length: ");
 		cherokee_buffer_add_ullong10 (outbuf, (cullong_t) cgi->content_length);
-		cherokee_buffer_add_str      (outbuf, CRLF);		
-
+		cherokee_buffer_add_str      (outbuf, CRLF);
 	}
 
 	return ret_ok;

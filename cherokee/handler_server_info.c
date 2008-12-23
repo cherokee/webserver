@@ -656,7 +656,11 @@ cherokee_handler_server_info_step (cherokee_handler_server_info_t *hdl, cherokee
 ret_t 
 cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *buffer)
 {
-	cherokee_buffer_add_va (buffer, "Content-Length: %d"CRLF, hdl->buffer.len);
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+
+	if (cherokee_connection_should_include_length(conn)) {
+		cherokee_buffer_add_va (buffer, "Content-Length: %d"CRLF, hdl->buffer.len);
+	}
 
 	switch (hdl->action) {
 	case send_logo:

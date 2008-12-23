@@ -664,13 +664,14 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 		return ret_ok;
 	}
 
-	/* We stat()'ed the file in the handler constructor
-	 */
-	content_length = conn->range_end - conn->range_start;		
-	if (unlikely (content_length < 0))
-		content_length = 0;
 
-	if (conn->encoder == NULL) {
+	if (cherokee_connection_should_include_length(conn)) {
+		/* We stat()'ed the file in the handler constructor
+		*/
+		content_length = conn->range_end - conn->range_start;
+		if (unlikely (content_length < 0))
+			content_length = 0;
+
 		if (conn->error_code == http_partial_content) {
 			/*
 			 * "Content-Range: bytes " FMT_OFFSET "-" FMT_OFFSET

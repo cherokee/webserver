@@ -783,6 +783,10 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			hdl->pconn->enc     = pconn_enc_known_size;
 			hdl->pconn->size_in = strtoll (c, NULL, 10);
 
+			if (! cherokee_connection_should_include_length(conn)) {
+				goto next;
+			}
+
 			HANDLER(hdl)->support |= hsupport_length;
 
 		} else {

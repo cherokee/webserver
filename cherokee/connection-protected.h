@@ -247,6 +247,7 @@ ret_t cherokee_connection_check_only_secure      (cherokee_connection_t *conn, c
 ret_t cherokee_connection_check_http_method      (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
 void  cherokee_connection_set_keepalive          (cherokee_connection_t *conn);
 void  cherokee_connection_set_chunked_encoding   (cherokee_connection_t *conn);
+cherokee_boolean_t cherokee_connection_should_include_length(cherokee_connection_t *conn);
 
 /* Iteration
  */

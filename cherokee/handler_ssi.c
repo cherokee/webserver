@@ -470,9 +470,11 @@ cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 
 	/* Length
 	 */
-	cherokee_buffer_add_str     (buffer, "Content-Length: ");
-	cherokee_buffer_add_ullong10(buffer, (cullong_t) hdl->render.len);
-	cherokee_buffer_add_str     (buffer, CRLF);
+	if (cherokee_connection_should_include_length(conn)) {
+		cherokee_buffer_add_str     (buffer, "Content-Length: ");
+		cherokee_buffer_add_ullong10(buffer, (cullong_t) hdl->render.len);
+		cherokee_buffer_add_str     (buffer, CRLF);
+	}
 
 	return ret_ok;
 }
