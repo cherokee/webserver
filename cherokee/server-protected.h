@@ -116,7 +116,6 @@ struct cherokee_server {
 	 */
 	cuint_t                    conns_max;
 	cint_t                     conns_reuse_max;
-	cuint_t                    conns_num_bogo;
 
 	cherokee_boolean_t         keepalive;
 	cuint_t                    keepalive_max;

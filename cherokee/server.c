@@ -143,7 +143,6 @@ cherokee_server_new  (cherokee_server_t **srv)
 
 	n->conns_max        =  0;
 	n->conns_reuse_max  = -1;
-	n->conns_num_bogo   =  0;
 
 	n->listen_queue     = 1024;
 	n->sendfile.min     = SENDFILE_MIN_SIZE;
@@ -663,8 +662,7 @@ initialize_server_threads (cherokee_server_t *srv)
 
 	/* Reset max. conns value
 	 */
-	srv->conns_max      = 0;
-	srv->conns_num_bogo = 0;
+	srv->conns_max = 0;
 
 	/* Set fd upper limit for threads.
 	 */
@@ -1176,13 +1174,6 @@ cherokee_server_stop (cherokee_server_t *srv)
 }
 
 
-static void
-update_bogo_conns_num (cherokee_server_t *srv)
-{
-	cherokee_server_get_conns_num (srv, &srv->conns_num_bogo);
-}
-
-
 ret_t
 cherokee_server_unlock_threads (cherokee_server_t *srv)
 {
@@ -1215,8 +1206,7 @@ cherokee_server_step (cherokee_server_t *srv)
 
 	/* Get the server time.
 	 */
-	cherokee_bogotime_update ();
-	update_bogo_conns_num (srv);
+	cherokee_bogotime_update();
 
 	/* Execute thread step.
 	 */
