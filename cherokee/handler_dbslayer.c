@@ -68,15 +68,24 @@ static ret_t
 send_query (cherokee_handler_dbslayer_t *hdl)
 {
 	int                    re;
+	cuint_t                len;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 	cherokee_buffer_t     *tmp  = &HANDLER_THREAD(hdl)->tmp_buf1;
 
 	/* Extract the SQL query
 	 */
+	if ((cherokee_buffer_is_empty (&conn->web_directory)) ||
+	    (cherokee_buffer_is_ending (&conn->web_directory, '/')))
+	{
+		len = conn->web_directory.len;
+	} else {
+		len = conn->web_directory.len + 1;
+	}
+
 	cherokee_buffer_clean (tmp);
 	cherokee_buffer_add   (tmp, 
-			       conn->request.buf + conn->web_directory.len,
-			       conn->request.len - conn->web_directory.len);
+			       conn->request.buf + len,
+			       conn->request.len - len);
 
 	cherokee_buffer_unescape_uri (tmp);
 

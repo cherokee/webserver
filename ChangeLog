@@ -1,3 +1,8 @@
+2008-12-25  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_dbslayer.c (send_query): Fixes a parsing
+	problem: http://code.google.com/p/cherokee/issues/detail?id=292
+
 2008-12-25  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/handler_admin.c, cherokee/handler_ssi.c,
