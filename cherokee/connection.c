@@ -2166,7 +2166,6 @@ cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
 	} 
 
 	cherokee_buffer_clean (&conn->web_directory);
-	conn->chunked_encoding = false;
 
 	TRACE_CONN(conn);
 	return ret_ok;

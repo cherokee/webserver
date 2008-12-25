@@ -11,6 +11,9 @@
 	cherokee/handler_file.c, cherokee/handler_error.c,
 	cherokee/connection.c: Enhancement to the fix for bug #284.
 
+	* cherokee/connection.c, cherokee/thread.c: Encoder should be
+	created after handler creation.
+
 2008-12-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/server.c, cherokee/server-protected.h: Cleans up some
