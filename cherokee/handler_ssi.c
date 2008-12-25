@@ -70,8 +70,8 @@ cherokee_handler_ssi_new (cherokee_handler_t     **hdl,
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_ssi_add_headers;
 
 	/* Supported features
-	 */
-	HANDLER(n)->support     = hsupport_length;
+	*/
+	HANDLER(n)->support     = hsupport_nothing;
 
 	/* Init
 	 */
@@ -471,6 +471,8 @@ cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 	/* Length
 	 */
 	if (cherokee_connection_should_include_length(conn)) {
+		HANDLER(hdl)->support = hsupport_length;
+
 		cherokee_buffer_add_str     (buffer, "Content-Length: ");
 		cherokee_buffer_add_ullong10(buffer, (cullong_t) hdl->render.len);
 		cherokee_buffer_add_str     (buffer, CRLF);

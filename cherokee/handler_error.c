@@ -52,11 +52,14 @@ cherokee_handler_error_new (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_error);
-	   
+
 	/* Init the base class object
 	 */
 	cherokee_handler_init_base (HANDLER(n), cnt, HANDLER_PROPS(props), PLUGIN_INFO_HANDLER_PTR(error));
-	HANDLER(n)->support = hsupport_error | hsupport_length;
+
+	/* Supported features
+	*/
+	HANDLER(n)->support = hsupport_error;
 
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_error_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_error_free;
@@ -240,6 +243,8 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 		return ret_ok;
 
 	if (cherokee_connection_should_include_length(conn)) {
+
+		HANDLER(hdl)->support |= hsupport_length;
 
 		if (conn->error_code == http_range_not_satisfiable) {
 			/* The handler that attended the request has put the content 

@@ -943,6 +943,19 @@ process_active_connections (cherokee_thread_t *thd)
 			 */
 			cherokee_connection_set_keepalive (conn);
 
+			/* Turn chunked encoding on, if possible
+			*/
+			cherokee_connection_set_chunked_encoding (conn);
+
+			/* Instance an encoder if needed
+			*/
+			ret = cherokee_connection_create_encoder (conn, &srv->encoders, entry.encoders);
+			if (unlikely (ret != ret_ok)) {
+				cherokee_connection_setup_error_handler (conn);
+				conn->phase = phase_init;
+				continue;
+			}
+
 			/* Create the handler
 			 */
 			ret = cherokee_connection_create_handler (conn, &entry);
@@ -953,19 +966,6 @@ process_active_connections (cherokee_thread_t *thd)
 				cherokee_connection_clean_for_respin (conn);
 				continue;
 			default:
-				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
-				continue;
-			}
-
-			/* Turn chunked encoding on, if possible
-			*/
-			cherokee_connection_set_chunked_encoding (conn);
-
-			/* Instance a encoded if needed
-			 */
-			ret = cherokee_connection_create_encoder (conn, &srv->encoders, entry.encoders);
-			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				conn->phase = phase_init;
 				continue;

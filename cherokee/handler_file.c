@@ -111,7 +111,7 @@ cherokee_handler_file_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 
 	/* Supported features
 	 */
-	HANDLER(n)->support     = hsupport_length | hsupport_range;
+	HANDLER(n)->support     = hsupport_range;
 
 	/* Init
 	 */
@@ -666,6 +666,9 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 
 	if (cherokee_connection_should_include_length(conn)) {
+
+		HANDLER(fhdl)->support |= hsupport_length;
+
 		/* We stat()'ed the file in the handler constructor
 		*/
 		content_length = conn->range_end - conn->range_start;
@@ -692,7 +695,6 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 		cherokee_buffer_add_str     (buffer, "Content-Length: ");
 		cherokee_buffer_add_ullong10(buffer, (cullong_t) content_length);
 		cherokee_buffer_add_str     (buffer, CRLF);
-
 	}
 
 	return ret_ok;

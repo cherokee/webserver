@@ -52,15 +52,10 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 	 */
 	cherokee_handler_init_base (HANDLER(cgi), conn, props, info);
 
-	/* Supported features
-	 */
-	HANDLER(cgi)->support = hsupport_maybe_length;
-
 	/* Init to default values
 	 */
 	cgi->init_phase          = hcgi_phase_build_headers;
 	cgi->content_length      = 0;
-	cgi->content_length_set  = false;
 	cgi->got_eof             = false;
 	cgi->file_handler        = NULL;
 
@@ -80,7 +75,10 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 	/* Read the properties
 	 */
 	if (HANDLER_CGI_BASE_PROPS(cgi)->is_error_handler) {
-		HANDLER(cgi)->support |= hsupport_error;		
+		HANDLER(cgi)->support = hsupport_error;
+	}
+	else {
+		HANDLER(cgi)->support = hsupport_nothing;
 	}
 	
 	return ret_ok;
@@ -797,6 +795,8 @@ xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buff
 	/* Add Content-Length
 	 */
 	if (cherokee_connection_should_include_length(conn)) {
+		HANDLER(cgi)->support |= hsupport_length;
+
 		cherokee_buffer_add_str (buffer, "Content-Length: ");
 
 		if (cached) {
@@ -874,12 +874,16 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 		}
 
 		else if (strncasecmp ("Content-Length: ", begin, 16) == 0) {
-			char saved = *end;
 
-			*end = '\0';
-			cgi->content_length = strtoll (begin+16, (char **)NULL, 10);
-			cgi->content_length_set = true;
-			*end = saved;
+			if (cherokee_connection_should_include_length(conn)) {
+				char saved = *end;
+
+				*end = '\0';
+				cgi->content_length = strtoll (begin+16, (char **)NULL, 10);
+				*end = saved;
+
+				HANDLER(cgi)->support |= hsupport_length;
+			}
 
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
 			end2 = begin;
@@ -991,8 +995,7 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 
 	/* Content-Length response header
 	 */
-	if ((cherokee_connection_should_include_length(conn)) &&
-	    (cgi->content_length_set))
+	if (HANDLER_SUPPORTS (cgi, hsupport_length))
 	{
 		cherokee_buffer_add_str      (outbuf, "Content-Length: ");
 		cherokee_buffer_add_ullong10 (outbuf, (cullong_t) cgi->content_length);

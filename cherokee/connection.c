@@ -617,7 +617,6 @@ ret_t
 cherokee_connection_build_header (cherokee_connection_t *conn)
 {
 	ret_t              ret;
-	cherokee_boolean_t try_chunked = false;
 
 	/* If the handler requires not to add headers, exit.
 	 */
@@ -646,29 +645,13 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	if ((conn->keepalive != 0) &&
 	    (http_method_with_body (conn->error_code)))	
 	{
-		if (! cherokee_connection_should_include_length(conn)) {
+		if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
 			if (! conn->chunked_encoding) {
 				conn->keepalive = 0;
 			}
 		}
 		else {
-			if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
-				try_chunked = true;
-			}
-			else if (HANDLER_SUPPORTS (conn->handler, hsupport_maybe_length)) {
-				if (! strcasestr(conn->header_buffer.buf, "Content-Length: ")) {
-					try_chunked = true;
-				}
-			}
-
-			if (try_chunked) {
-				if (! conn->chunked_encoding) {
-					conn->keepalive = 0;
-				}
-			}
-			else {
-				conn->chunked_encoding = false;
-			}
+			conn->chunked_encoding = false;
 		}
 	}
 
@@ -2171,7 +2154,7 @@ cherokee_connection_clean_for_respin (cherokee_connection_t *conn)
 
 	conn->respins += 1;
 	if (conn->respins > RESPINS_MAX) {
-		TRACE(ENTRIES, "Internal redirection limit (%d) excedeeded\n", RESPINS_MAX);
+		TRACE(ENTRIES, "Internal redirection limit (%d) exceeded\n", RESPINS_MAX);
 		conn->error_code = http_internal_error;
 		return ret_error;
 	}

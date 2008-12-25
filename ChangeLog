@@ -1,3 +1,11 @@
+2008-12-25  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/handler_admin.c, cherokee/handler_ssi.c,
+	cherokee/handler_server_info.c, cherokee/handler_cgi_base.c,
+	cherokee/handler_cgi_base.h, cherokee/thread.c,
+	cherokee/handler_file.c, cherokee/handler_error.c,
+	cherokee/connection.c: Enhancement to the fix for bug #284.
+
 2008-12-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/server.c, cherokee/server-protected.h: Cleans up some
