@@ -44,11 +44,6 @@ typedef enum {
 	thread_async
 } cherokee_thread_type_t;
 
-typedef enum {
-	thread_tls_normal,
-	thread_normal_tls
-} cherokee_thread_pref_t;
-
 
 typedef struct {
 	cherokee_list_t         base;
@@ -61,7 +56,6 @@ typedef struct {
 
 	cherokee_fdpoll_t      *fdpoll;
 	cherokee_thread_type_t  thread_type;
-	cherokee_thread_pref_t  thread_pref;
 
 	time_t                  bogo_now;
 	struct tm               bogo_now_tmgmt;
@@ -72,6 +66,7 @@ typedef struct {
 	cherokee_buffer_t       tmp_buf2;
 	
 	void                   *server;
+	cherokee_bind_t        *last_bind;
 	cherokee_boolean_t      exit;
 
 	cuint_t                 conns_num;           /* open connections */

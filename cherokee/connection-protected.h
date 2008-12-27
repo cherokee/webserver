@@ -61,6 +61,7 @@
 #include "post.h"
 #include "header-protected.h"
 #include "regex.h"
+#include "bind.h"
 
 typedef enum {
 	phase_nothing,
@@ -97,6 +98,7 @@ struct cherokee_connection {
 	void                         *server;
 	void                         *vserver;
 	void                         *thread;
+	cherokee_bind_t              *bind;
 
 	/* ID
 	 */
@@ -213,6 +215,7 @@ struct cherokee_connection {
 #define CONN_SOCK(c)   (SOCKET(CONN(c)->socket))
 #define CONN_VSRV(c)   (VSERVER(CONN(c)->vserver))
 #define CONN_THREAD(c) (THREAD(CONN(c)->thread))
+#define CONN_BIND(c)   (BIND(CONN(c)->bind))
 
 #define TRACE_CONN(c)  TRACE("conn", "%s", cherokee_connection_print(c));
 

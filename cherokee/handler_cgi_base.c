@@ -253,15 +253,16 @@ add_win32_systemroot_env (cherokee_handler_cgi_base_t              *cgi,
 
 ret_t 
 cherokee_handler_cgi_base_build_basic_env (
-			cherokee_handler_cgi_base_t              *cgi, 
-			cherokee_handler_cgi_base_add_env_pair_t  set_env_pair,
-			cherokee_connection_t                    *conn,
-			cherokee_buffer_t                        *tmp)
+	cherokee_handler_cgi_base_t              *cgi, 
+	cherokee_handler_cgi_base_add_env_pair_t  set_env_pair,
+	cherokee_connection_t                    *conn,
+	cherokee_buffer_t                        *tmp)
 {
-	int      re;
-	ret_t    ret;
-	char    *p;
-	cuint_t  p_len;
+	int              re;
+	ret_t            ret;
+	char            *p;
+	cuint_t          p_len;
+	cherokee_bind_t *bind = CONN_BIND(HANDLER_CONN(cgi));
 
 	char remote_ip[CHE_INET_ADDRSTRLEN+1];
 	CHEROKEE_TEMP(temp, 32);
@@ -269,8 +270,8 @@ cherokee_handler_cgi_base_build_basic_env (
 	/* Set the basic variables
 	 */
 	set_env (cgi, "SERVER_SOFTWARE",
-		 HANDLER_SRV(cgi)->server_string.buf, 
-		 HANDLER_SRV(cgi)->server_string.len); 
+		 bind->server_string.buf,
+		 bind->server_string.len);
 
 	set_env (cgi, "SERVER_NAME",       "Cherokee", 8);
 	set_env (cgi, "SERVER_SIGNATURE",  "<address>Cherokee web server</address>", 38);
@@ -404,21 +405,19 @@ cherokee_handler_cgi_base_build_basic_env (
 	 */
 	if (conn->socket.is_tls) {
 		set_env (cgi, "HTTPS", "on", 2);
-		set_env (cgi, "SERVER_PORT", 
-			 HANDLER_SRV(cgi)->server_port_tls.buf,
-			 HANDLER_SRV(cgi)->server_port_tls.len);
 	} else  {
 		set_env (cgi, "HTTPS", "off", 3);
-		set_env (cgi, "SERVER_PORT", 
-			 HANDLER_SRV(cgi)->server_port.buf,
-			 HANDLER_SRV(cgi)->server_port.len);
 	}
+
+	set_env (cgi, "SERVER_PORT", 
+		 bind->server_port.buf,
+		 bind->server_port.len);
 
 	/* Set SERVER_ADDR
 	 */
-	set_env (cgi, "SERVER_ADDR", 
-		 HANDLER_SRV(cgi)->server_address.buf,
-		 HANDLER_SRV(cgi)->server_address.len);
+	set_env (cgi, "SERVER_ADDR",
+		 bind->server_address.buf,
+		 bind->server_address.len);
 	
 	/* HTTP variables
 	 */

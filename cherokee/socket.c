@@ -334,7 +334,7 @@ cherokee_socket_pton (cherokee_socket_t *socket, cherokee_buffer_t *host)
 
 
 ret_t 
-cherokee_socket_accept (cherokee_socket_t *socket, int server_socket)
+cherokee_socket_accept (cherokee_socket_t *socket, cherokee_socket_t *server_socket)
 {
 	ret_t               ret;
 	int                 fd;
@@ -386,7 +386,7 @@ cherokee_socket_set_sockaddr (cherokee_socket_t *socket, int fd, cherokee_sockad
 
 
 ret_t
-cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *sa)
+cherokee_socket_accept_fd (cherokee_socket_t *server_socket, int *new_fd, cherokee_sockaddr_t *sa)
 {
 	int           re;
 	ret_t         ret;
@@ -398,7 +398,7 @@ cherokee_socket_accept_fd (int server_socket, int *new_fd, cherokee_sockaddr_t *
 	 */
 	len = sizeof (cherokee_sockaddr_t);
 
-	new_socket = accept (server_socket, &sa->sa, &len);
+	new_socket = accept (server_socket->socket, &sa->sa, &len);
 	if (new_socket < 0) {
 		int err = SOCK_ERRNO();
 		/* Caller has to retry the call on ret_deny.

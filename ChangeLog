@@ -1,3 +1,25 @@
+2008-12-27  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/main_worker.c, cherokee/Makefile.am ,
+	cherokee/socket.c, cherokee/connection-protected.h ,
+	cherokee/socket.h, cherokee/handler_server_info.c ,
+	cherokee/handler_cgi_base.c, cherokee/handler_dirlist.c ,
+	cherokee/handler_dirlist.h, cherokee/main_admin.c ,
+	cherokee/thread.c, cherokee/thread.h, cherokee/handler_error.c ,
+	cherokee/server-protected.h, cherokee/admin_server.c ,
+	cherokee/connection.c, cherokee/server.c, cherokee/bind.c ,
+	cherokee/bind.h, performance.conf.sample.pre ,
+	cherokee.conf.sample.pre, configure.in, contrib/Makefile.am ,
+	contrib/011to098.py, qa/run-tests.py: This patch rework the server
+	core. Now the server can listen as many ports/binds as
+	needed (instead of one for http and another for https). This is a
+	really disruptive change: the configuration file has changed - a
+	conversion script has been included.  As far as my tests have
+	concluded, there is no negative performance impact, but it is
+	something we should investigate further. Beware: The
+	administration interface still needs to be updated to the new
+	format.
+
 2008-12-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_dbslayer.c (send_query): Fixes a parsing

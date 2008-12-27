@@ -146,6 +146,7 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	n->exit                = false;
 	n->server              = server;
 	n->thread_type         = type;
+	n->last_bind           = NULL;
 
 	n->conns_num           = 0;
 	n->conns_max           = conns_max;
@@ -1298,7 +1299,8 @@ cherokee_thread_free (cherokee_thread_t *thd)
 }
 
 static void
-thread_full_handler (cherokee_thread_t *thd, int srv_socket)
+thread_full_handler (cherokee_thread_t *thd, 
+		     cherokee_bind_t   *bind)
 {
 	ret_t                ret;
 	cherokee_list_t     *i;
@@ -1310,7 +1312,7 @@ thread_full_handler (cherokee_thread_t *thd, int srv_socket)
 
 	/* Short path: nothing to accept
 	 */
-	if (cherokee_fdpoll_check (thd->fdpoll, srv_socket, FDPOLL_MODE_READ) <= 0) {
+	if (cherokee_fdpoll_check (thd->fdpoll, S_SOCKET_FD(bind->socket), FDPOLL_MODE_READ) <= 0) {
 		return;
 	}
 
@@ -1335,7 +1337,7 @@ thread_full_handler (cherokee_thread_t *thd, int srv_socket)
 	/* Accept a connection
 	 */
 	do {
-		ret = cherokee_socket_accept (&sock, srv_socket);
+		ret = cherokee_socket_accept (&sock, &bind->socket);
 	} while (ret == ret_deny);
 
 	if (ret != ret_ok)
@@ -1381,9 +1383,12 @@ out:
 	cherokee_socket_mrproper (&sock);
 }
 
-static int
-accept_new_connection (cherokee_thread_t *thd, int srv_socket, cherokee_socket_type_t tls)
+
+static ret_t
+accept_new_connection (cherokee_thread_t *thd,
+		       cherokee_bind_t   *bind)
 {
+	int                    re;
 	ret_t                  ret;
 	int                    new_fd;
 	cherokee_sockaddr_t    new_sa;
@@ -1391,18 +1396,19 @@ accept_new_connection (cherokee_thread_t *thd, int srv_socket, cherokee_socket_t
 
 	/* Check whether there are connections waiting
 	 */
-	if (cherokee_fdpoll_check (thd->fdpoll, srv_socket, FDPOLL_MODE_READ) <= 0) {
-		return 0;
+	re = cherokee_fdpoll_check (thd->fdpoll, S_SOCKET_FD(bind->socket), FDPOLL_MODE_READ);
+	if (re <= 0) {
+		return ret_deny;
 	}
 
 	/* Try to get a new connection
 	 */
 	do {
-		ret = cherokee_socket_accept_fd (srv_socket, &new_fd, &new_sa);
+		ret = cherokee_socket_accept_fd (&bind->socket, &new_fd, &new_sa);
 	} while (ret == ret_deny);
 
 	if (ret != ret_ok)
-		return 0;
+		return ret_deny;
 
 	/* We got the new socket, now set it up in a new connection object
 	 */
@@ -1410,7 +1416,7 @@ accept_new_connection (cherokee_thread_t *thd, int srv_socket, cherokee_socket_t
 	if (unlikely(ret < ret_ok)) {
 		PRINT_ERROR_S ("ERROR: Trying to get a new connection object\n");
 		cherokee_fd_close (new_fd);
-		return 0;
+		return ret_deny;
 	}
 
 	/* We got a new_conn object, on error we can goto error.
@@ -1430,9 +1436,13 @@ accept_new_connection (cherokee_thread_t *thd, int srv_socket, cherokee_socket_t
 
 	/* TLS support, set initial connection phase.
 	 */
-	if (tls == TLS) {
+	if (bind->socket.is_tls == TLS) {
 		new_conn->phase = phase_tls_handshake;
 	}
+
+	/* Set the reference to the port
+	 */
+	new_conn->bind = bind;
 
 	/* Lets add the new connection
 	 */
@@ -1448,15 +1458,16 @@ accept_new_connection (cherokee_thread_t *thd, int srv_socket, cherokee_socket_t
 
 	TRACE (ENTRIES, "new conn %p, fd %d\n", new_conn, new_fd);
 
-	return 1;
+	return ret_ok;
 
 error:
-	TRACE (ENTRIES, "error accepting connection fd %d from fd %d\n", new_fd, srv_socket);
+	TRACE (ENTRIES, "error accepting connection fd %d from port %d\n", 
+	       new_fd, bind->port);
 
 	/* Close new socket and reset its socket fd to default value.
 	 */
 	cherokee_fd_close (new_fd);
-	SOCKET_FD(&new_conn->socket) = -1;
+	S_SOCKET_FD(new_conn->socket) = -1;
 
 	/* Don't waste / reuse this new_conn object.
 	 */
@@ -1465,53 +1476,53 @@ error:
 	/* Release the thread ownership
 	 */
 	CHEROKEE_MUTEX_UNLOCK (&thd->ownership);
-	return 0;
+	return ret_deny;
 }
 
 
-static int
-should_accept_more (cherokee_thread_t *thd, int re)
+static ret_t
+should_accept_more (cherokee_thread_t *thd, ret_t prev_ret)
 {
 	const uint32_t recalculate_steps = 10;
 
 	/* If it is full, do not accept more!
 	 */
 	if (unlikely (thd->conns_num >= thd->conns_max))
-		return 0;
+		return ret_deny;
 
 	if (unlikely ((THREAD_SRV(thd)->wanna_reinit) ||
 		      (THREAD_SRV(thd)->wanna_exit)))
-		return 0;
+		return ret_deny;
 #if 0
 	if (unlikely (cherokee_fdpoll_is_full(thd->fdpoll))) {
-		return 0;
+		return ret_deny;
 	}
 #endif
 
 	/* Got new connection
 	 */
-	if (re > 0) {
+	if (prev_ret == ret_ok) {
 		thd->accept.continuous++;
 
 		if (thd->accept.recalculate <= 0) {
 			thd->accept.continuous_max = thd->accept.continuous;
-			return 1;
+			return ret_ok;
 		}
 
 		if (thd->accept.continuous > thd->accept.continuous_max) {
 			thd->accept.continuous_max = thd->accept.continuous;
 			thd->accept.recalculate--;
-			return 0;
+			return ret_deny;
 		}
 
-		return 1;
+		return ret_ok;
 	}
 
 	/* Failed to get a new connection
 	 */
 	thd->accept.continuous  = 0;
 	thd->accept.recalculate = recalculate_steps;
-	return 0;
+	return ret_deny;
 }
 
 
@@ -1519,7 +1530,9 @@ ret_t
 cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 {
 	int                re;
+	ret_t              ret;
 	cherokee_boolean_t accepting;
+	cherokee_list_t   *i;
 	cherokee_server_t *srv           = THREAD_SRV(thd);
 	int                fdwatch_msecs = srv->fdwatch_msecs;
 
@@ -1557,25 +1570,19 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 
 	thread_update_bogo_now (thd);
 
-	/* If the thread is full of connections, it should not
-	 * get new connections.
+	/* Accept new connections, if possible
 	 */
 	accepting = (thd->conns_num < thd->conns_max);
-	if (accepting) {
+
+	list_for_each (i, &srv->listeners) {
+		if (! accepting) {
+			thread_full_handler (thd, BIND(i));
+			continue;
+		}
+
 		do {
-			re = accept_new_connection (thd, S_SOCKET_FD(srv->socket), non_TLS);
-		} while (should_accept_more (thd, re));
-		
-		if (srv->tls_enabled) {
-			do {
-				re = accept_new_connection (thd, S_SOCKET_FD(srv->socket_tls), TLS);
-			} while (should_accept_more (thd, re));
-		}
-	} else {
-		thread_full_handler (thd, S_SOCKET_FD(srv->socket));
-		if (srv->tls_enabled) {
-			thread_full_handler (thd, S_SOCKET_FD(srv->socket_tls));
-		}
+			ret = accept_new_connection (thd, BIND(i));
+		} while (should_accept_more (thd, ret) == ret_ok);
 	}
 
 out:
@@ -1593,65 +1600,34 @@ out:
 
 #ifdef HAVE_PTHREAD
 
-static ret_t
-step_MULTI_THREAD_block (cherokee_thread_t *thd, int socket, pthread_mutex_t *mutex, int fdwatch_msecs)
+static void
+watch_accept_MULTI_THREAD (cherokee_thread_t  *thd,
+			   cherokee_boolean_t  block,
+			   int                 fdwatch_msecs)
 {
-	int                re;
-	ret_t              ret;
-	cherokee_boolean_t accepting;
+	ret_t            ret;
+	int              unlocked;
+	cherokee_bind_t *bind;
 
-	CHEROKEE_MUTEX_LOCK (mutex);
-	
-	ret = cherokee_fdpoll_add (thd->fdpoll, socket, FDPOLL_MODE_READ);
-	if (unlikely (ret < ret_ok)) {
-		CHEROKEE_MUTEX_UNLOCK (mutex);
-		return ret_error;
-	}
-
-	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-	thread_update_bogo_now (thd);
-
-	/* Accept a new connection
+	/* Select a port
 	 */
-	accepting = (thd->conns_num < thd->conns_max);
-	if (accepting) {
-		do {
-			re = accept_new_connection (thd, socket, non_TLS);
-		} while (should_accept_more (thd, re));
+	cherokee_server_get_next_bind (THREAD_SRV(thd), thd->last_bind, &bind);
+
+	/* Lock
+	 */
+	if (block) {
+		CHEROKEE_MUTEX_LOCK (&bind->lock);
 	} else {
-		thread_full_handler (thd, socket);
+		unlocked = CHEROKEE_MUTEX_TRY_LOCK (&bind->lock);
+		if (unlocked) {
+			cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
+			return;
+		}
 	}
 
-	/* Release the socket
+	/* At this stage, it is locked
 	 */
-	ret = cherokee_fdpoll_del (thd->fdpoll, socket);
-	if (ret != ret_ok)
-		SHOULDNT_HAPPEN;
-
-	CHEROKEE_MUTEX_UNLOCK (mutex);	
-	return ret_ok;
-}
-
-
-static ret_t
-step_MULTI_THREAD_nonblock (cherokee_thread_t *thd, int socket, pthread_mutex_t *mutex, int fdwatch_msecs)
-{
-	ret_t              ret;
-	int                re;
-	cherokee_boolean_t accepting;
-	int                unlocked  = 1;
-
-	/* Try to lock. Not success: wait for an event to happen
-	 */
-	unlocked = CHEROKEE_MUTEX_TRY_LOCK (mutex);
-	if (unlocked) {
-		cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-		return ret_ok;
-	}
-
-	/* Now it owns the socket
-	 */
-	ret = cherokee_fdpoll_add (thd->fdpoll, socket, FDPOLL_MODE_READ);
+	ret = cherokee_fdpoll_add (thd->fdpoll, S_SOCKET_FD(bind->socket), FDPOLL_MODE_READ);
 	if (unlikely (ret < ret_ok)) {
 		ret = ret_error;
 		goto out;
@@ -1660,231 +1636,56 @@ step_MULTI_THREAD_nonblock (cherokee_thread_t *thd, int socket, pthread_mutex_t 
 	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
 	thread_update_bogo_now (thd);
 
-	/* It should either accept o discard a connection
+	/* Accept new connection
 	 */
-	accepting = (thd->conns_num < thd->conns_max);
-	if (accepting) {
-		do {
-			re = accept_new_connection (thd, socket, non_TLS);
-		} while (should_accept_more (thd, re));
-
+	if (unlikely (thd->conns_num >= thd->conns_max)) {
+		thread_full_handler (thd, bind);
 	} else {
-		thread_full_handler (thd, socket);
+		do {
+			ret = accept_new_connection (thd, bind);
+		} while (should_accept_more(thd, ret) == ret_ok);
 	}
 
 	/* Release the server socket
 	 */
-	ret = cherokee_fdpoll_del (thd->fdpoll, socket);
+	ret = cherokee_fdpoll_del (thd->fdpoll, S_SOCKET_FD(bind->socket));
 	if (ret != ret_ok)
 		SHOULDNT_HAPPEN;
 
-	ret = ret_ok;
-
 out:
-	CHEROKEE_MUTEX_UNLOCK (mutex);
-	return ret;
-
+	/* Unlock
+	 */
+	CHEROKEE_MUTEX_UNLOCK (&bind->lock);
+	thd->last_bind = bind;	
 }
-
-
-static ret_t
-step_MULTI_THREAD_TLS_nonblock (cherokee_thread_t *thd, int fdwatch_msecs, 
-				int socket,     pthread_mutex_t *mutex, 
-				int socket_tls, pthread_mutex_t *mutex_tls)
-{
-	ret_t              ret;
-	int                re;
-	cherokee_boolean_t accepting;
-	int                unlocked     = 1;
-	int                unlocked_tls = 1;
-
-	/* Try to lock both mutexes
-	 */
-	unlocked = CHEROKEE_MUTEX_TRY_LOCK (mutex);
-	if (! unlocked) {
-		ret = cherokee_fdpoll_add (thd->fdpoll, socket, FDPOLL_MODE_READ);
-		if (unlikely (ret < ret_ok)) {
-			ret = ret_error;
-			goto out;
-		}
-	}
-	
-	/* Try to lock the TLS mutex
-	 */
-	unlocked_tls = CHEROKEE_MUTEX_TRY_LOCK (mutex_tls);
-	if (!unlocked_tls) {
-		ret = cherokee_fdpoll_add (thd->fdpoll, socket_tls, FDPOLL_MODE_READ);
-		if (unlikely (ret < ret_ok)) {
-			ret = ret_error;
-			goto out;
-		}
-	}
-
-	/* Inspect the fds. It may sleep if nothing happens
-	 */
-	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-	thread_update_bogo_now (thd);
-		
-	/* accept o discard a connections
-	 */
-	accepting = (thd->conns_num < thd->conns_max);
-	if (accepting) {
-		if (!unlocked) {
-			do {
-				re = accept_new_connection (thd, socket, non_TLS);
-			} while (should_accept_more (thd, re));
-		
-			ret = cherokee_fdpoll_del (thd->fdpoll, socket);
-			if (ret != ret_ok)
-				SHOULDNT_HAPPEN;
-		}
-	
-		if (!unlocked_tls) {
-			do {
-				re = accept_new_connection (thd, socket_tls, TLS);
-			} while (should_accept_more (thd, re));
-			
-			ret = cherokee_fdpoll_del (thd->fdpoll, socket_tls);
-			if (ret != ret_ok)
-				SHOULDNT_HAPPEN;
-		}
-
-	} else {
-		if (!unlocked)
-			thread_full_handler (thd, socket);
-
-		if (!unlocked_tls) 
-			thread_full_handler (thd, socket_tls);
-	}
-	
-	ret = ret_ok;
-
-out:
-	if (!unlocked)
-		CHEROKEE_MUTEX_UNLOCK (mutex);
-	if (!unlocked_tls)
-		CHEROKEE_MUTEX_UNLOCK (mutex_tls);
-
-	return ret;
-}
-
-static ret_t
-step_MULTI_THREAD_TLS_block (cherokee_thread_t *thd, int fdwatch_msecs, 
-			     int socket,     pthread_mutex_t *mutex, 
-			     int socket_tls, pthread_mutex_t *mutex_tls)
-{
-	int                     re;
-	ret_t                   ret;
-	int                     socket1;
-	int                     socket2;
-	pthread_mutex_t        *mutex1;
-	pthread_mutex_t        *mutex2;
-	cherokee_socket_type_t  type1;
-	cherokee_socket_type_t  type2;
-	cherokee_boolean_t      accepting;
-
-	if (thd->thread_pref == thread_tls_normal) {
-		socket1 = socket;
-		mutex1  = mutex;
-		type1   = non_TLS;
-
-		socket2 = socket_tls;
-		mutex2  = mutex_tls;
-		type2   = TLS;
-	} else {
-		socket1 = socket_tls;
-		mutex1  = mutex_tls;
-		type1   = TLS;
-
-		socket2 = socket;
-		mutex2  = mutex;
-		type2   = non_TLS;
-	}
-
-	/* Lock the main mutex
-	 */
-	CHEROKEE_MUTEX_LOCK (mutex1);
-
-	ret = cherokee_fdpoll_add (thd->fdpoll, socket1, FDPOLL_MODE_READ);
-	if (ret < ret_ok) {
-		CHEROKEE_MUTEX_UNLOCK (mutex1);
-		return ret_error;
-	}
-
-	/* Try to lock the optional groups
-	 */
-#if 0
-	unlock2 = CHEROKEE_MUTEX_TRY_LOCK (mutex2);
-	if (!unlock2) {
-		ret = cherokee_fdpoll_add (thd->fdpoll, socket2, FDPOLL_MODE_READ);
-		if (ret < ret_ok) {
-			CHEROKEE_MUTEX_UNLOCK (mutex1);
-			CHEROKEE_MUTEX_UNLOCK (mutex2);
-			return ret_error;
-		}
-	}
-#endif
-
-	/* Inspect the fds and get new connections
-	 */
-	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-	thread_update_bogo_now (thd);
-		
-	/* Accept / Discard connection
-	 */
-	accepting = (thd->conns_num < thd->conns_max);
-	if (accepting) {
-		do {
-			re = accept_new_connection (thd, socket1, type1);
-		} while (should_accept_more (thd, re));
-	} else {
-		thread_full_handler (thd, socket1);		
-	}
-
-	/* Unlock the mail lock
-	 */
-	ret = cherokee_fdpoll_del (thd->fdpoll, socket1);
-	if (ret != ret_ok)
-		SHOULDNT_HAPPEN;
-
-	CHEROKEE_MUTEX_UNLOCK (mutex1);
-
-	/* Maybe work with the optional socket
-	 */
-#if 0
-	if (!unlock2) {
-		do {
-			re = accept_new_connection (thd, socket2, type2);
-		} while (should_accept_more (thd, re));
-		
-		ret = cherokee_fdpoll_del (thd->fdpoll, socket2);
-		if (ret != ret_ok)
-			SHOULDNT_HAPPEN;
-
-		CHEROKEE_MUTEX_UNLOCK (mutex2);
-	}
-#endif
-	
-	return ret_ok;
-}
-
 
 ret_t 
-cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t dont_block)
+cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
+				   cherokee_boolean_t  dont_block)
 {
 	ret_t              ret;
+	cherokee_boolean_t can_block;
+	cherokee_boolean_t time_updated;
 	cherokee_server_t *srv           = THREAD_SRV(thd);
 	int                fdwatch_msecs = srv->fdwatch_msecs;
 
 	/* Try to update bogo_now
 	 */
-	cherokee_bogotime_try_update();
+	ret = cherokee_bogotime_try_update();
+	time_updated = (ret == ret_ok);
 
-#if 0
-	if (unlikely (cherokee_fdpoll_is_full (thd->fdpoll))) {
-		goto out;
+	/* If thread has pending connections, it should do a 
+	 * faster 'watch' (whenever possible)
+	 */
+	if (thd->pending_conns_num > 0) {
+		fdwatch_msecs          = 0;
+		thd->pending_conns_num = 0;
 	}
-#endif
+
+	if (thd->pending_read_num > 0) {
+		fdwatch_msecs         = 0;
+		thd->pending_read_num = 0;
+	}
 
 	/* Server wants to exit, and the thread has nothing to do
 	 */
@@ -1906,55 +1707,27 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t *thd, cherokee_boolean_t do
 		goto out;
 	}
 
-	/* If thread has pending connections, it should do a 
-	 * faster 'watch' (whenever possible)
-	 */
-	if (thd->pending_conns_num > 0) {
-		fdwatch_msecs          = 0;
-		thd->pending_conns_num = 0;
-	}
-
-	if (thd->pending_read_num > 0) {
-		fdwatch_msecs         = 0;
-		thd->pending_read_num = 0;
-	}
-
-	/* Try to get new connections from https
-	 */
-	if (srv->tls_enabled) {
-		if ((!dont_block) &&
-		    (thd->exit == false) &&
-		    (thd->active_list_num == 0) &&
-		    (thd->polling_list_num == 0))
-		{
-			step_MULTI_THREAD_TLS_block (thd, fdwatch_msecs, 
-			    S_SOCKET_FD(srv->socket),     &THREAD_SRV(thd)->accept_mutex, 	
-			    S_SOCKET_FD(srv->socket_tls), &THREAD_SRV(thd)->accept_tls_mutex);
-		} else {
-			step_MULTI_THREAD_TLS_nonblock (thd, fdwatch_msecs, 
-			    S_SOCKET_FD(srv->socket),     &THREAD_SRV(thd)->accept_mutex, 	
-			    S_SOCKET_FD(srv->socket_tls), &THREAD_SRV(thd)->accept_tls_mutex);
-		}
-		
+# if 0
+	if (unlikely (cherokee_fdpoll_is_full (thd->fdpoll))) {
 		goto out;
 	}
+# endif
 
-	/* Try to get new connections from http
+	/* Watch fds, and accept new connections
 	 */
-	if ((!dont_block) &&
-	    (thd->exit == false) &&
-	    (thd->active_list_num == 0) && 
-	    (thd->polling_list_num == 0))
-	{
-		step_MULTI_THREAD_block (thd, S_SOCKET_FD(srv->socket), 
-					 &THREAD_SRV(thd)->accept_mutex, fdwatch_msecs);
-	} else {
-		step_MULTI_THREAD_nonblock (thd, S_SOCKET_FD(srv->socket),
-					    &THREAD_SRV(thd)->accept_mutex, fdwatch_msecs);
-	}
+	can_block = ((dont_block == false) &&
+		     (thd->exit == false) &&
+		     (thd->active_list_num == 0) && 
+		     (thd->polling_list_num == 0));
+
+	watch_accept_MULTI_THREAD (thd, can_block, fdwatch_msecs);
 	
 out:
-	thread_update_bogo_now (thd);
+	if ((can_block) ||
+	    (time_updated == false))
+	{
+		thread_update_bogo_now (thd);
+	}
 
 	/* Adquire the ownership of the thread
 	 */
@@ -1971,7 +1744,6 @@ out:
 	/* Release the thread
 	 */
 	CHEROKEE_MUTEX_UNLOCK (&thd->ownership);
-
 	return ret;
 }
 

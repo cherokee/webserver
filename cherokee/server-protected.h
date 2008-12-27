@@ -99,11 +99,6 @@ struct cherokee_server {
 
 	/* Main socket
 	 */
-	cherokee_socket_t          socket;
-	cherokee_socket_t          socket_tls;
-
-	CHEROKEE_MUTEX_T          (accept_mutex);
-	CHEROKEE_MUTEX_T          (accept_tls_mutex);
 	cherokee_cryptor_t        *cryptor;
 
 	/* System related
@@ -124,26 +119,15 @@ struct cherokee_server {
 	/* Networking config
 	 */
 	cherokee_boolean_t         ipv6;
-	cherokee_buffer_t          listen_to;
 	int                        fdwatch_msecs;
 	int                        listen_queue;
 
-	unsigned short             port;
-	unsigned short             port_tls;
+	cherokee_list_t            listeners;
 	cherokee_boolean_t         tls_enabled;
 
 	/* Server name
 	 */
 	cherokee_server_token_t    server_token;
-
-	cherokee_buffer_t          server_string;
-	cherokee_buffer_t          server_string_ext;
-	cherokee_buffer_t          server_string_w_port;
-	cherokee_buffer_t          server_string_w_port_tls;
-
-	cherokee_buffer_t          server_address;
-	cherokee_buffer_t          server_port;
-	cherokee_buffer_t          server_port_tls;
 
 	/* User/group and chroot
 	 */
@@ -188,5 +172,6 @@ struct cherokee_server {
 
 ret_t cherokee_server_del_connection (cherokee_server_t *srv, char *begin);
 ret_t cherokee_server_get_vserver    (cherokee_server_t *srv, cherokee_buffer_t *name, cherokee_virtual_server_t **vsrv);
+ret_t cherokee_server_get_next_bind  (cherokee_server_t *srv, cherokee_bind_t *bind, cherokee_bind_t **next);
 
 #endif /* CHEROKEE_SERVER_PROTECTED_H */

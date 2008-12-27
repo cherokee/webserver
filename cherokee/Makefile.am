@@ -1203,6 +1203,8 @@ config_entry.c \
 server-protected.h \
 server.h \
 server.c \
+bind.h \
+bind.c \
 virtual_server_names.h \
 virtual_server_names.c \
 virtual_server.h \

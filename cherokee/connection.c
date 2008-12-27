@@ -576,7 +576,7 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 	/* Add the Server header
 	 */
 	cherokee_buffer_add_str (buffer, "Server: ");
-	cherokee_buffer_add_buffer (buffer, &CONN_SRV(conn)->server_string);
+	cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string);
 	cherokee_buffer_add_str (buffer, CRLF);
 
 	/* Authentication
@@ -2335,10 +2335,10 @@ cherokee_connection_set_redirect (cherokee_connection_t *conn, cherokee_buffer_t
 			cherokee_buffer_add_str (&conn->redirect, "http://");
 		
 		cherokee_buffer_add_buffer (&conn->redirect, &conn->host);
-		
-		if (CONN_SRV(conn)->port != 80) {
+
+		if (CONN_BIND(conn)->port != 80) {
 			cherokee_buffer_add_str (&conn->redirect, ":");
-			cherokee_buffer_add_long10 (&conn->redirect, CONN_SRV(conn)->port);
+			cherokee_buffer_add_long10 (&conn->redirect, CONN_BIND(conn)->port);
 		}
 	}
 	

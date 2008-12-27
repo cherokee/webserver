@@ -8,7 +8,7 @@
 
 # Server
 #
-server!port = 80
+server!bind!1!port = 80
 server!timeout = 20
 server!keepalive = 1
 server!keepalive_max_requests = 1000

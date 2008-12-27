@@ -180,12 +180,7 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 	/* Add page footer
 	 */
 	cherokee_buffer_add_str (buffer, CRLF "<p><hr>" CRLF);
-
-	if (conn->socket.is_tls == non_TLS)
-		cherokee_buffer_add_buffer (buffer, &CONN_SRV(conn)->server_string_w_port);
-	else 
-		cherokee_buffer_add_buffer (buffer, &CONN_SRV(conn)->server_string_w_port_tls);
-
+	cherokee_buffer_add_buffer (buffer, &CONN_BIND(conn)->server_string_w_port);
 	cherokee_buffer_add_str (buffer, CRLF "</body>" CRLF "</html>" CRLF);
 
 	return ret_ok;

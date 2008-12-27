@@ -389,7 +389,6 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	 */
 	n->dir_ptr          = NULL;
 	n->file_ptr         = NULL;
-	n->software_str_ref = NULL;
 	n->longest_filename = 0;
 
 	/* Check if icons can be used
@@ -694,36 +693,31 @@ read_notice_file (cherokee_handler_dirlist_t *dhdl)
 ret_t
 cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 {
-	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
-	cherokee_server_t     *srv  = HANDLER_SRV(dhdl);
+	ret_t ret;
 
 	/* The request must end with a slash..
 	 */
 	ret = check_request_finish_with_slash (dhdl);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 	
 	if (! cherokee_list_empty (&HDL_DIRLIST_PROP(dhdl)->notice_files)) {
 		ret = read_notice_file (dhdl);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok)
+			return ret;
 	}
 
 	/* Build de local request
 	 */
 	ret = build_file_list (dhdl);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 	
 	/* Build public dir string
 	 */
 	ret = build_public_path (dhdl, &dhdl->public_dir);
-	if (unlikely (ret != ret_ok)) return ret;
-	
-	/* Server software string
-	 */
-	if (conn->socket.is_tls == non_TLS)
-		dhdl->software_str_ref = &srv->server_string_w_port;
-	else
-		dhdl->software_str_ref = &srv->server_string_w_port_tls;
+	if (unlikely (ret != ret_ok))
+		return ret;
 
  	return ret_ok;
 }
@@ -970,9 +964,10 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 static ret_t
 render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, cherokee_buffer_t *buf_pattern)
 {
-	cherokee_buffer_t  *vtmp[2];
-	cherokee_thread_t  *thread   = HANDLER_THREAD(dhdl);
-	size_t              idx_tmp  = 0; 
+	cherokee_buffer_t *vtmp[2];
+	cherokee_thread_t *thread   = HANDLER_THREAD(dhdl);
+	size_t             idx_tmp  = 0; 
+	cherokee_bind_t   *bind     = CONN_BIND(HANDLER_CONN(dhdl));
 
 	/* Initialize temporary substitution buffers
 	 */
@@ -984,7 +979,7 @@ render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t 
 
 	/* Server software
 	 */
-	VTMP_SUBSTITUTE_TOKEN ("%server_software%", dhdl->software_str_ref->buf);
+	VTMP_SUBSTITUTE_TOKEN ("%server_software%", bind->server_string_w_port.buf);
 
 	/* Notice
 	 */

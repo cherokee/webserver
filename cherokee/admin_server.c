@@ -36,11 +36,33 @@
 ret_t 
 cherokee_admin_server_reply_get_port (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
+	cherokee_list_t   *i;
+	cuint_t            n   = 0;
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
 
 	UNUSED(question);
 
-	cherokee_buffer_add_va (reply, "server.port is %d\n", srv->port);
+	list_for_each (i, &srv->listeners) {
+		if (! BIND_IS_TLS(i))
+			n += 1;
+	}
+
+	cherokee_buffer_add_str (reply, "server.port is ");
+	list_for_each (i, &srv->listeners) {
+		if (! BIND_IS_TLS(i)) {
+			n -= 1;
+			if (! cherokee_buffer_is_empty (&BIND(i)->ip)) {
+				cherokee_buffer_add_buffer (reply, &BIND(i)->ip);
+				cherokee_buffer_add_char (reply, ':');
+			}
+			cherokee_buffer_add_ulong10 (reply, BIND(i)->port);
+			if (n > 0) {
+				cherokee_buffer_add_char (reply, ',');
+			}
+		}
+	}
+	cherokee_buffer_add_char (reply, '\n');
+
 	return ret_ok;
 }
 
@@ -63,11 +85,33 @@ cherokee_admin_server_reply_set_port (cherokee_handler_admin_t *ahdl, cherokee_b
 ret_t 
 cherokee_admin_server_reply_get_port_tls (cherokee_handler_admin_t *ahdl, cherokee_buffer_t *question, cherokee_buffer_t *reply)
 {
+	cherokee_list_t   *i;
+	cuint_t            n   = 0;
 	cherokee_server_t *srv = HANDLER_SRV(ahdl);
 
 	UNUSED(question);
 
-	cherokee_buffer_add_va (reply, "server.port_tls is %d\n", srv->port_tls);
+	list_for_each (i, &srv->listeners) {
+		if (BIND_IS_TLS(i))
+			n += 1;
+	}
+
+	cherokee_buffer_add_str (reply, "server.port_tls is ");
+	list_for_each (i, &srv->listeners) {
+		if (BIND_IS_TLS(i)) {
+			n -= 1;
+			if (! cherokee_buffer_is_empty (&BIND(i)->ip)) {
+				cherokee_buffer_add_buffer (reply, &BIND(i)->ip);
+				cherokee_buffer_add_char (reply, ':');
+			}
+			cherokee_buffer_add_ulong10 (reply, BIND(i)->port);
+			if (n > 0) {
+				cherokee_buffer_add_char (reply, ',');
+			}
+		}
+	}
+	cherokee_buffer_add_char (reply, '\n');
+
 	return ret_ok;
 }
 

@@ -208,7 +208,7 @@ common_server_initialization (cherokee_server_t *srv)
 		cherokee_path_arg_eval (&droot);
 
 		cherokee_buffer_add_va (&tmp, 
-					"server!port = %d\n"
+					"server!bind!1!port = %d\n"
 					"vserver!1!document_root = %s\n"
 					BASIC_CONFIG, port, droot.buf);
 
