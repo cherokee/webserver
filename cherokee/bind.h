@@ -33,38 +33,43 @@
 #include "version.h"
 
 typedef struct {
-	cherokee_list_t         listed;
+	cherokee_list_t    listed;
 	
 	/* Listener */
-	CHEROKEE_MUTEX_T       (lock);
-	cherokee_socket_t       socket;
+	cherokee_socket_t  socket;
 	
 	/* Information */
-	cherokee_buffer_t       ip;
-	int                     port;	   
+	cherokee_buffer_t  ip;
+	int                port;	   
 
 	/* Strings */
-	cherokee_buffer_t       server_string;
-	cherokee_buffer_t       server_string_ext;
-	cherokee_buffer_t       server_string_w_port;
+	cherokee_buffer_t  server_string;
+	cherokee_buffer_t  server_string_ext;
+	cherokee_buffer_t  server_string_w_port;
 
-	cherokee_buffer_t       server_address;
-	cherokee_buffer_t       server_port;
+	cherokee_buffer_t  server_address;
+	cherokee_buffer_t  server_port;
+	
+	/* Accepting */
+	cuint_t            accept_continuous;
+	cuint_t            accept_continuous_max;
+	cuint_t            accept_recalculate;
 } cherokee_bind_t;
 
 #define BIND(b)        ((cherokee_bind_t *)(b))
 #define BIND_IS_TLS(b) (BIND(b)->socket.is_tls == TLS)
+
 
 ret_t cherokee_bind_new  (cherokee_bind_t **listener);
 ret_t cherokee_bind_free (cherokee_bind_t  *listener);
 
 ret_t cherokee_bind_configure   (cherokee_bind_t *listener, cherokee_config_node_t *config);
 ret_t cherokee_bind_set_default (cherokee_bind_t *listener);
+ret_t cherokee_bind_accept_more (cherokee_bind_t *listener, ret_t prev_ret);
 
 ret_t cherokee_bind_init_port   (cherokee_bind_t         *listener, 
 				 cuint_t                  listen_queue,
 				 cherokee_boolean_t       ipv6,
 				 cherokee_server_token_t  token);
-
 
 #endif /* CHEROKEE_BIND_H */

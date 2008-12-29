@@ -146,7 +146,6 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	n->exit                = false;
 	n->server              = server;
 	n->thread_type         = type;
-	n->last_bind           = NULL;
 
 	n->conns_num           = 0;
 	n->conns_max           = conns_max;
@@ -193,12 +192,6 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	cherokee_buffer_init (&n->tmp_buf2);
 	cherokee_buffer_ensure_size (&n->tmp_buf1, 4096);	
 	cherokee_buffer_ensure_size (&n->tmp_buf2, 4096);	
-
-	/* Accepting information
-	 */
-	n->accept.recalculate    = 0;
-	n->accept.continuous     = 0;
-	n->accept.continuous_max = 0;
 
 	/* The thread must adquire this mutex before 
 	 * process its connections
@@ -1481,10 +1474,10 @@ error:
 
 
 static ret_t
-should_accept_more (cherokee_thread_t *thd, ret_t prev_ret)
+should_accept_more (cherokee_thread_t *thd,
+		    cherokee_bind_t   *bind, 
+		    ret_t              prev_ret)
 {
-	const uint32_t recalculate_steps = 10;
-
 	/* If it is full, do not accept more!
 	 */
 	if (unlikely (thd->conns_num >= thd->conns_max))
@@ -1499,30 +1492,7 @@ should_accept_more (cherokee_thread_t *thd, ret_t prev_ret)
 	}
 #endif
 
-	/* Got new connection
-	 */
-	if (prev_ret == ret_ok) {
-		thd->accept.continuous++;
-
-		if (thd->accept.recalculate <= 0) {
-			thd->accept.continuous_max = thd->accept.continuous;
-			return ret_ok;
-		}
-
-		if (thd->accept.continuous > thd->accept.continuous_max) {
-			thd->accept.continuous_max = thd->accept.continuous;
-			thd->accept.recalculate--;
-			return ret_deny;
-		}
-
-		return ret_ok;
-	}
-
-	/* Failed to get a new connection
-	 */
-	thd->accept.continuous  = 0;
-	thd->accept.recalculate = recalculate_steps;
-	return ret_deny;
+	return cherokee_bind_accept_more (bind, prev_ret);
 }
 
 
@@ -1582,7 +1552,7 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 
 		do {
 			ret = accept_new_connection (thd, BIND(i));
-		} while (should_accept_more (thd, ret) == ret_ok);
+		} while (should_accept_more (thd, BIND(i), ret) == ret_ok);
 	}
 
 out:
@@ -1605,59 +1575,70 @@ watch_accept_MULTI_THREAD (cherokee_thread_t  *thd,
 			   cherokee_boolean_t  block,
 			   int                 fdwatch_msecs)
 {
-	ret_t            ret;
-	int              unlocked;
-	cherokee_bind_t *bind;
-
-	/* Select a port
-	 */
-	cherokee_server_get_next_bind (THREAD_SRV(thd), thd->last_bind, &bind);
+	ret_t              ret;
+	int                unlocked;
+	cherokee_bind_t   *bind;
+	cherokee_list_t   *i;
+ 	cherokee_server_t *srv        = THREAD_SRV(thd);
 
 	/* Lock
 	 */
 	if (block) {
-		CHEROKEE_MUTEX_LOCK (&bind->lock);
+		CHEROKEE_MUTEX_LOCK (&srv->listeners_mutex);
 	} else {
-		unlocked = CHEROKEE_MUTEX_TRY_LOCK (&bind->lock);
+		unlocked = CHEROKEE_MUTEX_TRY_LOCK (&srv->listeners_mutex);
 		if (unlocked) {
 			cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
 			return;
 		}
 	}
 
-	/* At this stage, it is locked
+	/* Locked; Add port file descriptors
 	 */
-	ret = cherokee_fdpoll_add (thd->fdpoll, S_SOCKET_FD(bind->socket), FDPOLL_MODE_READ);
-	if (unlikely (ret < ret_ok)) {
-		ret = ret_error;
-		goto out;
+	list_for_each (i, &srv->listeners) {
+		ret = cherokee_fdpoll_add (thd->fdpoll,
+					   S_SOCKET_FD(BIND(i)->socket),
+					   FDPOLL_MODE_READ);
+		if (unlikely (ret < ret_ok)) {
+			ret = ret_error;
+			goto out;
+		}
 	}
-
+	
+	/* Check file descriptors
+	 */
 	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
 	thread_update_bogo_now (thd);
 
-	/* Accept new connection
+	/* Accept new connections
 	 */
-	if (unlikely (thd->conns_num >= thd->conns_max)) {
-		thread_full_handler (thd, bind);
-	} else {
-		do {
-			ret = accept_new_connection (thd, bind);
-		} while (should_accept_more(thd, ret) == ret_ok);
+	list_for_each (i, &srv->listeners) {
+		bind = BIND(i);
+
+		if (unlikely (thd->conns_num >= thd->conns_max)) {
+			thread_full_handler (thd, bind);
+		} else {
+			do {
+				ret = accept_new_connection (thd, bind);
+			} while (should_accept_more (thd, bind, ret) == ret_ok);
+		}
 	}
 
-	/* Release the server socket
+	/* Release the port file descriptors 
 	 */
-	ret = cherokee_fdpoll_del (thd->fdpoll, S_SOCKET_FD(bind->socket));
-	if (ret != ret_ok)
-		SHOULDNT_HAPPEN;
+	list_for_each (i, &srv->listeners) {
+		ret = cherokee_fdpoll_del (thd->fdpoll, S_SOCKET_FD(BIND(i)->socket));
+		if (ret != ret_ok) {
+			SHOULDNT_HAPPEN;
+		}
+	}
 
 out:
 	/* Unlock
 	 */
-	CHEROKEE_MUTEX_UNLOCK (&bind->lock);
-	thd->last_bind = bind;	
+	CHEROKEE_MUTEX_UNLOCK (&srv->listeners_mutex);
 }
+
 
 ret_t 
 cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,

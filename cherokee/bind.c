@@ -32,9 +32,8 @@ cherokee_bind_new (cherokee_bind_t **listener)
 	CHEROKEE_NEW_STRUCT(n,bind);
 
 	INIT_LIST_HEAD (&n->listed);
-	CHEROKEE_MUTEX_INIT (&n->lock, CHEROKEE_MUTEX_FAST);
-	cherokee_buffer_init (&n->ip);
 
+	cherokee_buffer_init (&n->ip);
 	cherokee_socket_init (&n->socket);
 	n->port = 0;
 
@@ -44,6 +43,10 @@ cherokee_bind_new (cherokee_bind_t **listener)
 	cherokee_buffer_init (&n->server_address);
 	cherokee_buffer_init (&n->server_port);
 
+	n->accept_continuous     = 0;
+	n->accept_continuous_max = 0;
+	n->accept_recalculate    = 0;
+
 	*listener = n;
 	return ret_ok;
 }
@@ -52,8 +55,6 @@ cherokee_bind_new (cherokee_bind_t **listener)
 ret_t
 cherokee_bind_free (cherokee_bind_t *listener)
 {
-	CHEROKEE_MUTEX_DESTROY (&listener->lock);
-
 	cherokee_socket_close (&listener->socket);
 	cherokee_socket_mrproper (&listener->socket);
 
@@ -82,7 +83,6 @@ build_strings (cherokee_bind_t         *listener,
 	cherokee_buffer_clean (&listener->server_string_w_port);
 	ret = cherokee_version_add_w_port (&listener->server_string_w_port,
 					   token, listener->port);
-					   
 	if (ret != ret_ok)
 		return ret;
 
@@ -305,4 +305,39 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 		return ret;
 
 	return ret_ok;
+}
+
+
+ret_t
+cherokee_bind_accept_more (cherokee_bind_t *listener,
+			   ret_t            prev_ret)
+{
+	/* Failed to accept
+	 */
+	if (prev_ret != ret_ok) {
+		listener->accept_continuous = 0;
+
+		if (listener->accept_recalculate)
+			listener->accept_recalculate -= 1;
+		else
+			listener->accept_recalculate  = 10;
+
+		return ret_deny;
+	}
+
+	/* Did accept a connection
+	 */
+	listener->accept_continuous++;
+
+	if (listener->accept_recalculate <= 0) {
+		listener->accept_continuous_max = listener->accept_continuous;
+		return ret_ok;
+	}
+
+	if (listener->accept_continuous < listener->accept_continuous_max) {
+		return ret_ok;
+	}
+
+	listener->accept_continuous = 0;
+	return ret_deny;
 }

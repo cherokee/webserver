@@ -1,5 +1,10 @@
 2008-12-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/server-protected.h, cherokee/bind.c, cherokee/bind.h,
+	cherokee/thread.h, cherokee/server.c, cherokee/thread.c: This
+	patch tries to address a performance regression introducced on Dec
+	27th.
+
 	* cherokee/iocache.c: Tries to fix a I/O-cache bug.  This patch is
 	based on Antonio's original fix:
 	http://code.google.com/p/cherokee/issues/detail?id=294

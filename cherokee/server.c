@@ -172,8 +172,10 @@ cherokee_server_new  (cherokee_server_t **srv)
 	/* Virtual servers list
 	 */
 	INIT_LIST_HEAD (&n->vservers);
+
 	INIT_LIST_HEAD (&n->listeners);
-		
+	CHEROKEE_MUTEX_INIT (&n->listeners_mutex, CHEROKEE_MUTEX_FAST);
+	
 	/* Encoders 
 	 */
 	cherokee_avl_init (&n->encoders);
@@ -233,9 +235,7 @@ destroy_all_threads (cherokee_server_t *srv)
 
 	/* Unlock bind objects
 	 */
-	list_for_each (i, &srv->listeners) {
-		CHEROKEE_MUTEX_UNLOCK (&BIND(i)->lock);		
-	}
+	CHEROKEE_MUTEX_UNLOCK (&srv->listeners_mutex);		
 
 	/* Destroy the thread object
 	 */
@@ -264,6 +264,8 @@ cherokee_server_free (cherokee_server_t *srv)
 		cherokee_list_del(i);
 		cherokee_bind_free (BIND(i));
 	}
+
+	CHEROKEE_MUTEX_DESTROY (&srv->listeners_mutex);
 
 	/* Attached objects
 	 */
@@ -458,14 +460,13 @@ print_banner (cherokee_server_t *srv)
 static ret_t
 initialize_server_threads (cherokee_server_t *srv)
 {	
-	ret_t            ret;
-	cint_t           i;
-	size_t           listen_fds;
-	cuint_t          fds_per_thread;
-	cuint_t          conns_per_thread;
-	cuint_t          keepalive_per_thread;
-	cuint_t          conns_keepalive_max;
-	cherokee_bind_t *bind;
+	ret_t   ret;
+	cint_t  i;
+	size_t  listen_fds;
+	cuint_t fds_per_thread;
+	cuint_t conns_per_thread;
+	cuint_t keepalive_per_thread;
+	cuint_t conns_keepalive_max;
 
 	/* Reset max. conns value
 	 */
@@ -558,8 +559,6 @@ initialize_server_threads (cherokee_server_t *srv)
 		return ret;
 	}
 
-	srv->main_thread->last_bind = BIND(srv->listeners.next);
-
 	/* If Cherokee is compiled in single thread mode, it has to
 	 * add the server socket to the fdpoll of the sync thread
 	 */
@@ -579,8 +578,6 @@ initialize_server_threads (cherokee_server_t *srv)
 	 * then it may need to launch other threads.
 	 */
 #ifdef HAVE_PTHREAD
-	bind = srv->main_thread->last_bind;
-
 	for (i = 0; i < srv->thread_num - 1; i++) {
 		cherokee_thread_t *thread;
 
@@ -596,11 +593,6 @@ initialize_server_threads (cherokee_server_t *srv)
 			PRINT_ERROR("cherokee_thread_new() failed %d\n", ret);
 			return ret;
 		}
-		
-		/* Next port
-		 */
-		thread->last_bind = bind;
-		cherokee_server_get_next_bind (srv, thread->last_bind, &bind);
 
 		/* Add it to the thread list
 		 */

@@ -66,7 +66,6 @@ typedef struct {
 	cherokee_buffer_t       tmp_buf2;
 	
 	void                   *server;
-	cherokee_bind_t        *last_bind;
 	cherokee_boolean_t      exit;
 
 	cuint_t                 conns_num;           /* open connections */
@@ -83,12 +82,6 @@ typedef struct {
 	int                     pending_conns_num;   /* Waiting pipelining connections */
 	int                     pending_read_num;    /* Conns with SSL deping read */
 	
-	struct {
-		uint32_t        continuous;
-		uint32_t        continuous_max;
-		uint32_t        recalculate;		
-	} accept;
-
 	cherokee_avl_t         *fastcgi_servers;
 	cherokee_func_free_t    fastcgi_free_func;
 

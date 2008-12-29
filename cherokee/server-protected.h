@@ -121,9 +121,10 @@ struct cherokee_server {
 	cherokee_boolean_t         ipv6;
 	int                        fdwatch_msecs;
 	int                        listen_queue;
+	cherokee_boolean_t         tls_enabled;
 
 	cherokee_list_t            listeners;
-	cherokee_boolean_t         tls_enabled;
+	CHEROKEE_MUTEX_T          (listeners_mutex);
 
 	/* Server name
 	 */
