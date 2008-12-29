@@ -283,15 +283,13 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 	}
 
 	ret = ret_ok;
-	BIT_SET (PUBL(entry)->info, iocache_stat);
-
 	TRACE (ENTRIES, "Updated stat: %s\n", CACHE_ENTRY(entry)->key.buf);
 
 out:
 	PRIV(entry)->stat_expiration = cherokee_bogonow_now + iocache->lasting_stat;
 	PRIV(entry)->stat_status     = ret;
 
-	BIT_UNSET (PUBL(entry)->info, iocache_stat);
+	BIT_SET (PUBL(entry)->info, iocache_stat);
 	return ret;
 }
 
@@ -422,6 +420,15 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 {
 	ret_t               ret;
 	cherokee_iocache_t *iocache = IOCACHE(CACHE_ENTRY(entry)->cache);
+	
+	/* Return:
+	 * ret_ok          - ok, updated	
+	 * ret_ok_and_sent - ok, couldn't update though
+	 *
+	 * ret_ok_error    - something bad happened
+	 * ret_deny        - couldn't access file
+	 * ret_not_found   - file not found 
+	 */
 
 	/* Cannot update the entry when someone uses it.
 	 * At this point the object has 2 references: 
@@ -431,6 +438,13 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 		TRACE(ENTRIES, "Cannot update '%s', refs=%d\n",
 		      CACHE_ENTRY(entry)->key.buf,
 		      CACHE_ENTRY(entry)->ref_count);
+
+		/* Relay on the cached information
+		 */
+		if (entry->info & iocache_stat)
+		{
+			return PRIV(entry)->stat_status;
+		}
 
 		return ret_ok_and_sent;
 	}
@@ -514,26 +528,11 @@ iocache_get (cherokee_iocache_t        *iocache,
 
 	/* Update the cached info
 	 */
-	if (fd)
-		ret = cherokee_iocache_entry_update_fd (*ret_io, info, fd);
-	else
-		ret = cherokee_iocache_entry_update (*ret_io, info);		
-
-	/* Check whether cache page was updated
-         */
-	if ((info == iocache_stat) &&
-	    ((*ret_io)->info & iocache_stat))
-        {
-                return PRIV(*ret_io)->stat_status;
-        }
-
-	if ((info & iocache_mmap) &&
-	    ((*ret_io)->info & iocache_mmap))
-        {
-		return ret_no_sys;
+	if (fd) {
+		return cherokee_iocache_entry_update_fd (*ret_io, info, fd);
 	}
-
-	return ret;
+	
+	return cherokee_iocache_entry_update (*ret_io, info);		
 }
 
 ret_t

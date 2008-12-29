@@ -1,3 +1,9 @@
+2008-12-29  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/iocache.c: Tries to fix a I/O-cache bug.  This patch is
+	based on Antonio's original fix:
+	http://code.google.com/p/cherokee/issues/detail?id=294
+
 2008-12-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/main_worker.c, cherokee/Makefile.am ,
