@@ -425,7 +425,7 @@ cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
 	 * ret_ok          - ok, updated	
 	 * ret_ok_and_sent - ok, couldn't update though
 	 *
-	 * ret_ok_error    - something bad happened
+	 * ret_error       - something bad happened
 	 * ret_deny        - couldn't access file
 	 * ret_not_found   - file not found 
 	 */
