@@ -118,7 +118,10 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 		/* Check for 'all'
 		 */
 		p = strstr (trace_modules->buf, "all");
-		if (p) do_log = true;
+		if (p) {
+			do_log = true;
+			break;
+		}
 
 		/* Check the type
 		 */

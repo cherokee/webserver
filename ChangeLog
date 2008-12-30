@@ -1,3 +1,7 @@
+2008-12-30  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/trace.c: Adds a shorter path for CHEROKEE_TRACE=all.
+
 2008-12-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/server-protected.h, cherokee/bind.c, cherokee/bind.h,
