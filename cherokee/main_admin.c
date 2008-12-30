@@ -132,7 +132,7 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_str (&buf, "server!max_connection_reuse = 0\n");
 
 	if (bind_to)
-		cherokee_buffer_add_va (&buf, "server!listen = %s\n", bind_to);
+		cherokee_buffer_add_va (&buf, "server!bind!1!interface = %s\n", bind_to);
 
 	cherokee_buffer_add_str (&buf, "vserver!1!nick = default\n");
 	cherokee_buffer_add_va  (&buf, "vserver!1!document_root = %s\n", document_root);
