@@ -353,8 +353,10 @@ cherokee_server_set_min_latency (cherokee_server_t *srv, int msecs)
 static ret_t
 print_banner (cherokee_server_t *srv)
 {
+	ret_t              ret;
 	char              *method;
 	cherokee_list_t   *i;
+	cherokee_buffer_t *buf;
 	size_t             b   = 0;
 	size_t             len = 0;
 	cherokee_buffer_t  n   = CHEROKEE_BUF_INIT;
@@ -378,9 +380,11 @@ print_banner (cherokee_server_t *srv)
 		b += 1;
 		if (! cherokee_buffer_is_empty(&bind->ip)) {
 			cherokee_buffer_add_buffer (&n, &bind->ip);
-			cherokee_buffer_add_char (&n, ':');
+		} else {
+			cherokee_buffer_add_str (&n, "ALL");
 		}
 
+		cherokee_buffer_add_char (&n, ':');
 		cherokee_buffer_add_ulong10 (&n, bind->port);
 		
 		if (bind->socket.is_tls == TLS) {
@@ -425,6 +429,12 @@ print_banner (cherokee_server_t *srv)
 	cherokee_buffer_add_va (&n, ", %d fds system limit, max. %d connections", 
 				cherokee_fdlimit, srv->conns_max);
 
+	/* I/O-cache
+	 */
+	if (srv->iocache) {
+		cherokee_buffer_add_str (&n, ", caching I/O");
+	}
+
 	/* Threading stuff
 	 */
 	if (srv->thread_num <= 1) {
@@ -446,6 +456,15 @@ print_banner (cherokee_server_t *srv)
 			cherokee_buffer_add_str (&n, ", standard scheduling policy");
 			break;
 		}
+	}
+
+	/* Trace
+	 */
+	ret = cherokee_trace_get_trace (&buf);
+	if ((ret == ret_ok) &&
+	    (! cherokee_buffer_is_empty (buf)))
+	{
+		cherokee_buffer_add_va (&n, ", tracing '%s'", buf->buf);
 	}
 
 	/* Print it!
@@ -1409,6 +1428,8 @@ configure_server (cherokee_server_t *srv)
 	/* IO-cache
 	 */
 	TRACE (ENTRIES, "Configuring %s\n", "iocache");
+	cherokee_config_node_read_bool (&srv->config, "server!iocache", &srv->iocache_enabled);
+
 	if (srv->iocache_enabled) {
 		ret = cherokee_iocache_new (&srv->iocache);
 		if (ret != ret_ok)
