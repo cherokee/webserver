@@ -50,6 +50,13 @@ struct cherokee_cache_priv {
 		cache->len_ ## list -= 1;			\
 	} while (false)
 
+#define cache_list_get_lru(list,ret_entry)				\
+	do {								\
+		if (! cherokee_list_empty (&cache->_## list)) {		\
+			ret_entry = CACHE_ENTRY((cache->_## list).prev);\
+		}							\
+	} while (false)
+
 #define cache_list_del_lru(list,ret_entry)				\
 	do {								\
 		if (! cherokee_list_empty (&cache->_## list)) {		\
@@ -80,7 +87,7 @@ cherokee_cache_entry_init (cherokee_cache_entry_t *entry,
                            void                   *mutex)
 {
 	entry->in_list   = cache_no_list;
-	entry->ref_count = 1;
+	entry->ref_count = 0;
 
 	entry->cache     = cache;
 	entry->mutex     = mutex;
@@ -96,9 +103,13 @@ cherokee_cache_entry_init (cherokee_cache_entry_t *entry,
 static ret_t
 entry_free (cherokee_cache_entry_t *entry)
 {
-	entry->in_list = cache_no_list;
+	/* Call free virtual method
+	 */
+	entry->free_cb (entry);
 
-	CHEROKEE_MUTEX_DESTROY (entry->mutex);
+	/* Clean itself
+	 */
+	entry->in_list = cache_no_list;
 	cherokee_buffer_mrproper (&entry->key);
 
 	free (entry);
@@ -108,82 +119,130 @@ entry_free (cherokee_cache_entry_t *entry)
 static ret_t
 entry_parent_info_clean (cherokee_cache_entry_t *entry)
 {
-	if (entry->clean_cb == NULL)
-		return ret_error;
+	/* entry->mutex       is LOCKED
+	 */
+	ret_t ret;
 
 	if (entry->ref_count > 0)
 		return ret_ok;
 
-	TRACE(ENTRIES, "Evincing: '%s'\n", entry->key.buf);
-	return entry->clean_cb (entry);
+	ret = entry->clean_cb (entry);
+
+	TRACE(ENTRIES, "Evincing: '%s' ret=%d\n", entry->key.buf, ret);
+	return ret;
 }
 
 static ret_t
 entry_parent_info_fetch (cherokee_cache_entry_t *entry)
 {
+	/* cache->priv->mutex is LOCKED
+	 * entry->mutex       is LOCKED
+	 */
 	if (entry->fetch_cb == NULL)
 		return ret_error;
+
 	return entry->fetch_cb (entry);
 }
 
-static ret_t
-entry_parent_free (cherokee_cache_entry_t *entry)
-{
-	if (entry->free_cb == NULL)
-		return ret_error;
-	return entry->free_cb (entry);
-}
-
-static ret_t
+static void
 entry_ref (cherokee_cache_entry_t *entry)
 {
-	CHEROKEE_MUTEX_LOCK (entry->mutex);
+	/* cache->priv->mutex is LOCKED
+	 * entry->mutex       is LOCKED
+	 */
 	entry->ref_count++;
-	CHEROKEE_MUTEX_UNLOCK (entry->mutex);
+}
+
+
+static ret_t
+entry_unref_guts (cherokee_cache_entry_t **entry_p,
+		  cherokee_boolean_t       lock_object)
+{
+	cherokee_cache_t       *cache;
+	cherokee_cache_entry_t *entry;
+
+	/* Sanity check
+	 */
+	if (*entry_p == NULL)
+		return ret_ok;
+
+	entry = (*entry_p);
+
+	/* Lock the cache entry object
+	 */
+	if (lock_object) {
+		CHEROKEE_MUTEX_LOCK (entry->mutex);
+	}
+
+	entry->ref_count--;
+
+	/* The entry is still being used
+	 */
+	if (entry->ref_count > 0) {
+		if (lock_object) {
+			CHEROKEE_MUTEX_UNLOCK (entry->mutex);
+		}			
+
+		*entry_p = NULL;
+		return ret_eagain;
+	}
+	
+	/* Clean cache references
+	 */
+	cache = (*entry_p)->cache;	
+
+	/* Is it in the AVL? */
+	cherokee_avl_del (&cache->map, &entry->key, NULL);
+
+	/* Is it listed? */
+	switch (entry->in_list) {
+	case cache_t1:
+		cache_list_del (t1, entry);
+		break;
+	case cache_t2:
+		cache_list_del (t2, entry);
+		break;
+	case cache_b1:
+		cache_list_del (b1, entry);
+		break;
+	case cache_b2:
+		cache_list_del (b2, entry);
+		break;
+	default:
+		break;
+	}
+
+	/* Clean parent class information
+	 */
+	entry_parent_info_clean (entry);
+
+	if (lock_object) {
+		CHEROKEE_MUTEX_UNLOCK (entry->mutex);
+	}
+
+	entry_free (entry);
+	*entry_p = NULL;
 
 	return ret_ok;
 }
+
 
 ret_t
 cherokee_cache_entry_unref (cherokee_cache_entry_t **entry)
 {
-	/* Sanity check
-	 */
+	ret_t             ret;
+	cherokee_cache_t *cache;
+	
 	if (*entry == NULL)
 		return ret_ok;
 
-	CHEROKEE_MUTEX_LOCK ((*entry)->mutex);
-	(*entry)->ref_count--;
+	cache = (*entry)->cache;
 
-	/* The entry is still being used
-	 */
-	if ((*entry)->ref_count > 1) {
-		CHEROKEE_MUTEX_UNLOCK ((*entry)->mutex);
-		goto ok;
-	}
-
-	/* Refereed only by the cache
-	 */
-	if ((*entry)->ref_count == 1) {
-		if ((*entry)->in_list == cache_b1 ||
-		    (*entry)->in_list == cache_b2)
-		{
-			entry_parent_info_clean (*entry);
-		}
-
-		CHEROKEE_MUTEX_UNLOCK ((*entry)->mutex);
-		goto ok;
-	}
+	CHEROKEE_MUTEX_LOCK (&cache->priv->mutex);
+	ret = entry_unref_guts (entry, true);
+	CHEROKEE_MUTEX_UNLOCK (&cache->priv->mutex);
 	
-	/* Free it
-	 */
-	entry_parent_info_clean (*entry);
-	entry_parent_free (*entry);
-	entry_free (*entry);
-
-ok:
-	*entry = NULL;
-	return ret_ok;
+	return ret;
 }
 
 
@@ -271,6 +330,9 @@ static ret_t
 replace (cherokee_cache_t       *cache,
 	 cherokee_cache_entry_t *x)
 {
+	/* cache->priv->mutex is LOCKED
+	 * x->mutex           is LOCKED
+	 */
 	cuint_t                 p   = cache->target_t1;
 	cherokee_cache_entry_t *tmp = NULL;
 
@@ -278,16 +340,24 @@ replace (cherokee_cache_t       *cache,
 	    ((cache->len_t1  > p) ||
 	     (cache->len_t1 == p  && (x && x->in_list == cache_b2))))
 	{
-		cache_list_del_lru (t1, tmp);
+		cache_list_get_lru (t1, tmp);
+
 		if (tmp) {
-			cache_list_add (b1, tmp);
+			CHEROKEE_MUTEX_LOCK (tmp->mutex);
+			cache_list_del (t1, tmp);
 			entry_parent_info_clean (tmp);
+			cache_list_add (b1, tmp);			
+			CHEROKEE_MUTEX_UNLOCK (tmp->mutex);
 		}
 	} else {
-		cache_list_del_lru (t2, tmp);
+		cache_list_get_lru (t2, tmp);
+
 		if (tmp) {
-			cache_list_add (b2, tmp);		
+			CHEROKEE_MUTEX_LOCK (tmp->mutex);
+			cache_list_del (t2, tmp);
 			entry_parent_info_clean (tmp);
+			cache_list_add (b2, tmp);			
+			CHEROKEE_MUTEX_UNLOCK (tmp->mutex);
 		}
 	}
 
@@ -297,6 +367,8 @@ replace (cherokee_cache_t       *cache,
 static ret_t
 on_new_added (cherokee_cache_t *cache)
 {
+	/* cache->priv->mutex is LOCKED */
+
 	cuint_t                 c         = cache->max_size;
 	cuint_t                 len_l1    = cache->len_t1 + cache->len_b1;
 	cuint_t                 len_l2    = cache->len_t2 + cache->len_b2;
@@ -310,24 +382,24 @@ on_new_added (cherokee_cache_t *cache)
 	if (len_l1 >= c) {
 		if (cache->len_t1 < c) {
 			/* Remove LRU from B1 */
-			cache_list_del_lru (b1, tmp);
-			cherokee_avl_del (&cache->map, &tmp->key, NULL);
-			cherokee_cache_entry_unref (&tmp);
+			cache_list_get_lru (b1, tmp);
+			cache_list_del (b1, tmp);
+			entry_unref_guts (&tmp, true);
 
 			replace (cache, NULL);
 		} else {
 			/* Evict T1  */
-			cache_list_del_lru (t1, tmp);
-			cherokee_avl_del (&cache->map, &tmp->key, NULL);
-			cherokee_cache_entry_unref (&tmp);
+			cache_list_get_lru (t1, tmp);
+			cache_list_del (t1, tmp);
+			entry_unref_guts (&tmp, true);
 		}
 
 	} else if ((len_l1 < c) && (total_len >= c)) {
 		if (total_len >= (2 * c)) {
 			/* The cache is full: Remove from B2 */
-			cache_list_del_lru (b2, tmp);
-			cherokee_avl_del (&cache->map, &tmp->key, NULL);
-			cherokee_cache_entry_unref (&tmp);
+			cache_list_get_lru (b2, tmp);
+			cache_list_del (b2, tmp);
+			entry_unref_guts (&tmp, true);
 		}
 		replace (cache, NULL);
 	}
@@ -339,6 +411,9 @@ static ret_t
 update_ghost_b1 (cherokee_cache_t       *cache,
 		 cherokee_cache_entry_t *entry)
 {
+	/* cache->priv->mutex is LOCKED
+	 * entry->mutex       is LOCKED
+	 */
 	ret_t ret;
 
 	/* B1 hit: favour recency
@@ -377,6 +452,9 @@ static ret_t
 update_ghost_b2 (cherokee_cache_t       *cache,
 		 cherokee_cache_entry_t *entry)
 {
+	/* cache->priv->mutex is LOCKED
+	 * entry->mutex       is LOCKED
+	 */
 	ret_t ret;
 
 	/* Adapt the target size
@@ -412,6 +490,9 @@ static ret_t
 update_cache (cherokee_cache_t       *cache,
 	      cherokee_cache_entry_t *entry)
 {
+	/* cache->priv->mutex is LOCKED
+	 * entry->mutex       is LOCKED
+	 */
 	ret_t ret;
 
 	cache->count_hit += 1;
@@ -498,10 +579,27 @@ cherokee_cache_get (cherokee_cache_t        *cache,
 	ret = cherokee_avl_get (&cache->map, key, (void **)ret_entry);
 	switch (ret) {
 	case ret_ok:
+		CHEROKEE_MUTEX_LOCK ((*ret_entry)->mutex);
+
+		/* Lingering object: evinced, but already in the AVL
+		 */
+		if ((*ret_entry)->in_list == cache_no_list) {
+			TRACE(ENTRIES, "Found in AVL, not listed: '%s'\n", key->buf);
+			entry_ref (*ret_entry);
+			goto add_list;
+		}
+
+		/* It's in the cache; update it
+		 */
 		ret = update_cache (cache, *ret_entry);
+		entry_ref (*ret_entry);
+
+		CHEROKEE_MUTEX_UNLOCK ((*ret_entry)->mutex);
 		goto out;
+
 	case ret_not_found:
 		break;
+
 	default:
 		SHOULDNT_HAPPEN;
 		ret = ret_error;
@@ -512,7 +610,7 @@ cherokee_cache_get (cherokee_cache_t        *cache,
 	 */
 	on_new_added (cache);
 
-	/* Instance new page and add it to T1
+	/* Instance new page and add it to the AVL
 	 */
 	cache->new_cb (cache, key, cache->new_cb_param, ret_entry);
 	if (*ret_entry == NULL) {
@@ -522,13 +620,20 @@ cherokee_cache_get (cherokee_cache_t        *cache,
 	}
 
 	TRACE(ENTRIES, "Miss (adding): '%s'\n", key->buf);
+	CHEROKEE_MUTEX_LOCK ((*ret_entry)->mutex);
 
-	cache_list_add (t1, *ret_entry);
 	cherokee_avl_add (&cache->map, key, *ret_entry);
+	entry_ref (*ret_entry); /* cache */
 
+	/* Add the new object to T1
+	 */
+add_list:
+	cache_list_add (t1, *ret_entry);
+	entry_ref (*ret_entry); /* client */
+
+	CHEROKEE_MUTEX_UNLOCK ((*ret_entry)->mutex);
 	ret = ret_ok;
 out:
-	entry_ref (*ret_entry);
 	CHEROKEE_MUTEX_UNLOCK (&cache->priv->mutex);
 	return ret;
 }

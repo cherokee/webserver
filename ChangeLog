@@ -1,5 +1,10 @@
 2009-01-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/cache.c, cherokee/handler_cgi_base.c,
+	cherokee/iocache.h: cherokee/handler_file.c, cherokee/util.c,
+	cherokee/iocache.c: This patch addresses a concurrency problem
+	that was making the I/O cache to fail on high loads.
+
 	* cherokee/handler_redir.c, cherokee/fcgi_manager.c,
 	cherokee/rule_list.c, cherokee/handler_redir.h,
 	cherokee/fcgi_manager.h, cherokee/rule_list.h,

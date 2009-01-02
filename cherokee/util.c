@@ -1450,7 +1450,7 @@ cherokee_io_stat (cherokee_iocache_t        *iocache,
 		case ret_ok:
 		case ret_ok_and_sent:
 			*info = &(*io_entry)->state;
-			return ret_ok;
+			return (*io_entry)->state_ret;
 
 		case ret_no_sys:
 			goto without;

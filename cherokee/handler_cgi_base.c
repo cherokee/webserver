@@ -771,6 +771,7 @@ xsendfile_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buff
 	switch (ret) {
 	case ret_ok:
 	case ret_ok_and_sent:
+		ret = cached->state_ret;
 		break;
 	case ret_deny:
 		conn->error_code = http_access_denied;

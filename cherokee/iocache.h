@@ -61,6 +61,7 @@ typedef struct {
 
 	/* Information to cache */
 	struct stat             state;
+	ret_t                   state_ret;
 	void                   *mmaped;
 	size_t                  mmaped_len;
 } cherokee_iocache_entry_t;
@@ -82,27 +83,22 @@ ret_t cherokee_iocache_configure       (cherokee_iocache_t     *iocache,
 
 /* I/O cache entry
  */
-ret_t cherokee_iocache_entry_update_fd (cherokee_iocache_entry_t  *entry,
-					cherokee_iocache_info_t    info,
-					int                       *fd);
-ret_t cherokee_iocache_entry_update    (cherokee_iocache_entry_t  *entry,
-				        cherokee_iocache_info_t    info);
-
 ret_t cherokee_iocache_entry_unref     (cherokee_iocache_entry_t **entry);
 
-/* Autoget: Get or Update */
-ret_t cherokee_iocache_autoget       (cherokee_iocache_t        *iocache,
-				      cherokee_buffer_t         *file,
-				      cherokee_iocache_info_t    info,
-				      cherokee_iocache_entry_t **ret_io);
+/* Autoget: Get or Update
+ */
+ret_t cherokee_iocache_autoget         (cherokee_iocache_t        *iocache,
+					cherokee_buffer_t         *file,
+					cherokee_iocache_info_t    info,
+					cherokee_iocache_entry_t **ret_io);
 
-ret_t cherokee_iocache_autoget_fd    (cherokee_iocache_t        *iocache,
-				      cherokee_buffer_t         *file,
-				      cherokee_iocache_info_t    info,
-				      int                       *fd, 
-				      cherokee_iocache_entry_t **ret_io);
+ret_t cherokee_iocache_autoget_fd      (cherokee_iocache_t        *iocache,
+					cherokee_buffer_t         *file,
+					cherokee_iocache_info_t    info,
+					int                       *fd, 
+					cherokee_iocache_entry_t **ret_io);
 
 /* Misc */
-ret_t cherokee_iocache_get_mmaped_size (cherokee_iocache_t  *iocache, size_t *total);
+ret_t cherokee_iocache_get_mmaped_size (cherokee_iocache_t *iocache, size_t *total);
 
 #endif /* CHEROKEE_IOCACHE_H */
