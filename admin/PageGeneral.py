@@ -21,8 +21,7 @@ DATA_VALIDATION = [
     ("server!chroot",   (validations.is_local_dir_exists, 'cfg')),
 ]
 
-NOTE_PORT      = 'Defines the port that the server will listen to'
-NOTE_PORT_TLS  = 'Defines the port that the server will listen to for secure connections'
+NOTE_ADD_PORT  = 'Defines a port that the server will listen to'
 NOTE_IPV6      = 'Set to enable the IPv6 support. The OS must support IPv6 for this to work.'
 NOTE_LISTEN    = 'IP address of the interface to bind. It is usually empty.'
 NOTE_TIMEOUT   = 'Time interval until the server closes inactive connections.'
@@ -50,36 +49,80 @@ class PageGeneral (PageMenu, FormHelper):
     def _render_content (self):
         txt = "<h1>General Settings</h1>"
 
-        txt += "<h2>Networking</h2>"
-        table = TableProps()
-        self.AddPropEntry (table, 'Port',     'server!port',     NOTE_PORT)
-        self.AddPropCheck (table, 'IPv6',     'server!ipv6', True, NOTE_IPV6)
-        self.AddPropEntry (table, 'Listen',   'server!listen',   NOTE_LISTEN)
-        txt += self.Indent(table)
+        tabs  = []
+        tabs += [('Network',            self._render_network())]
+        tabs += [('Ports to listen',    self._render_ports())]
+        tabs += [('Server Permissions', self._render_permissions())]
 
-        txt += "<h2>Basic Behavior</h2>"
+        txt += self.InstanceTab (tabs)
+        form = Form ("/%s" % (self._id), add_submit=False)
+        return form.Render(txt, DEFAULT_SUBMIT_VALUE)
+
+    def _render_basic_behavior (self):
+        txt = "<h2>Basic Behavior</h2>"
         table = TableProps()
         self.AddPropEntry (table,  'Timeout (<i>secs</i>)', 'server!timeout',  NOTE_TIMEOUT)
         self.AddPropOptions_Reload (table, 'Server Tokens',  'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
         txt += self.Indent(table)
+        return txt
 
-        txt += "<h2>Server Permissions</h2>"
+    def _render_permissions (self):
         table = TableProps()
         self.AddPropEntry (table, 'User',  'server!user',    NOTE_USER)
         self.AddPropEntry (table, 'Group', 'server!group',   NOTE_GROUP)
         self.AddPropEntry (table, 'Chroot', 'server!chroot', NOTE_CHROOT)
+        return self.Indent(table)
+
+    def _render_network (self):
+        txt = "<h3>Support</h3>"
+        table = TableProps()
+        self.AddPropCheck (table, 'IPv6',     'server!ipv6', True, NOTE_IPV6)
+        self.AddPropOptions_Reload (table, 'SSL/TLS back-end','server!tls',modules_available(CRYPTORS), NOTE_TLS)
         txt += self.Indent(table)
 
-        txt += "<h2>Secure HTTP</h2>"
+        txt += "<h3>Network behavior</h3>"
         table = TableProps()
-        self.AddPropEntry (table, 'Port TLS', 'server!port_tls', NOTE_PORT_TLS)
-        self.AddPropOptions_Reload (table, 'Back-end', 'server!tls',
-                                    modules_available(CRYPTORS), NOTE_TLS)
+        self.AddPropEntry (table,  'Timeout (<i>secs</i>)', 'server!timeout',  NOTE_TIMEOUT)
+        self.AddPropOptions_Reload (table, 'Server Tokens',   'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
         txt += self.Indent(table)
-        
-        form = Form ("/%s" % (self._id), add_submit=False)
-        return form.Render(txt,DEFAULT_SUBMIT_VALUE)
+        return txt
 	
     def _op_apply_changes (self, uri, post):
         self.ApplyChanges (['server!ipv6'], post, validation = DATA_VALIDATION)
                            
+    def _render_ports (self):
+        txt = ''
+
+        # Is it empty?
+        binds = [int(x) for x in self._cfg.keys('server!bind')]
+        binds.sort()
+        if not binds:
+            self._cfg['server!bind!1!port'] = '80'
+            next = '2'
+        else:
+            next = str(binds[-1] + 1)
+
+        # List ports
+        table = Table(4, 1, style='width="90%"')
+        table += ('Port', 'Bind to', 'TLS', '')
+        for k in self._cfg.keys('server!bind'):
+            pre = 'server!bind!%s'%(k)
+
+            port   = self.InstanceEntry ("%s!port"%(pre), 'text', size=25)
+            listen = self.InstanceEntry ("%s!interface"%(pre), 'text', size=25)
+            tls    = self.InstanceCheckbox ('%s!tls'%(pre), False, quiet=True)
+
+            js = "post_del_key('/ajax/update', '%s');"%(pre)
+            link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                
+            table += (port, listen, tls, link_del)
+        txt += str(table)
+        
+        # Add new port
+        pre    = 'server!bind!%s!port'%(next)
+        table = TableProps()
+        self.AddPropEntry (table,  'Add new port', pre,  NOTE_ADD_PORT)
+
+        txt += "<br />"
+        txt += str(table)
+        return self.Indent(txt)

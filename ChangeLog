@@ -1,5 +1,7 @@
 2009-01-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageGeneral.py: Implements the new port management.
+
 	* cherokee/cache.c, cherokee/handler_cgi_base.c,
 	cherokee/iocache.h: cherokee/handler_file.c, cherokee/util.c,
 	cherokee/iocache.c: This patch addresses a concurrency problem
