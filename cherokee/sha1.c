@@ -296,3 +296,4 @@ sha_final (SHA_INFO *sha_info, unsigned char digest[20])
 	sha_transform_and_copy(digest, sha_info);
 }
 
+

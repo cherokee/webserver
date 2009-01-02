@@ -108,3 +108,4 @@ crc32_partial_sz (crc_t crc_in, char *buf, int size)
 
 	return ~crc;
 }
+

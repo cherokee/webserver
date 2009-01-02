@@ -12,3 +12,4 @@ crc_t crc32_partial_sz (crc_t crc_in, char *buf, int size);
 */
 
 #endif
+

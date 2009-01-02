@@ -19,3 +19,4 @@
 char *md5_crypt (const char *pass, const char *salt, const char *magic, char passwd[MD5CRYPT_PASSWD_LEN]);
 
 #endif /* CHEROKEE_MD5CRYPT_H */
+
