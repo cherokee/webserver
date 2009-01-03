@@ -27,6 +27,10 @@
 
 #include "common.h"
 
+/* The 'classic' API is used */
+#ifndef LDAP_DEPRECATED
+# define LDAP_DEPRECATED 1
+#endif
 #include "ldap.h"
 
 #include "validator.h"
