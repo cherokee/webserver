@@ -171,7 +171,7 @@ cherokee_balancer_round_robin_new (cherokee_balancer_t **bal)
 	/* Init properties
 	 */
 	n->last_one = NULL;
-	CHEROKEE_MUTEX_INIT (&n->last_one_mutex, NULL);
+	CHEROKEE_MUTEX_INIT (&n->last_one_mutex, CHEROKEE_MUTEX_FAST);
 
 	/* Return obj
 	 */

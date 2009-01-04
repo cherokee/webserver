@@ -78,6 +78,7 @@ ModuleHtpasswd.py \
 ModuleMysql.py \
 ModulePam.py \
 ModuleRoundRobin.py \
+ModuleIpHash.py \
 ModuleDefault.py \
 ModuleRequest.py \
 ModuleDirectory.py \

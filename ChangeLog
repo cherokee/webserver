@@ -1,3 +1,13 @@
+2009-01-04  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/Makefile.am, cherokee/balancer_round_robin.c,
+	cherokee/balancer_ip_hash.c, cherokee/balancer_ip_hash.h,
+	configure.in, admin/consts.py, admin/Makefile.am,
+	admin/ModuleIpHash.py: Adds a new load balancer. It implements a
+	new balancing strategy by which load is balanced among the
+	back-end server based on the client IP. All the request comming
+	from the same IP will be delivered to the same back-end server.
+
 2009-01-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/validator_ldap.h: Fixes an ia64 and amd64 compilation

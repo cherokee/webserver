@@ -917,6 +917,23 @@ endif
 
 
 
+#
+# Balancer IP Hash
+#
+balancer_ip_hash = \
+balancer_ip_hash.c \
+balancer_ip_hash.h
+
+libplugin_ip_hash_la_LDFLAGS = $(module_ldflags) 
+libplugin_ip_hash_la_SOURCES = $(balancer_ip_hash)
+
+if STATIC_BALANCER_IP_HASH
+static_balancer_ip_hash_src = $(balancer_ip_hash)
+else
+dynamic_balancer_ip_hash_lib = libplugin_ip_hash.la
+endif
+
+
 lib_LTLIBRARIES = \
 libcherokee-base.la \
 libcherokee-client.la \
@@ -1183,6 +1200,7 @@ $(static_validator_mysql_src) \
 $(static_cryptor_libssl_src) \
 \
 $(static_balancer_round_robin_src) \
+$(static_balancer_ip_hash_src) \
 \
 $(common_cgi) \
 $(common_val_file) \
@@ -1340,7 +1358,8 @@ $(dynamic_validator_htpasswd_lib) \
 $(dynamic_validator_authlist_lib) \
 $(dynamic_validator_mysql_lib) \
 $(dynamic_cryptor_libssl_lib) \
-$(dynamic_balancer_round_robin_lib) 
+$(dynamic_balancer_round_robin_lib) \
+$(dynamic_balancer_ip_hash_lib) 
 
 
 #

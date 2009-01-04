@@ -54,7 +54,8 @@ LOGGER_WRITERS = [
 ]
 
 BALANCERS = [
-    ('round_robin', "Round Robin")
+    ('round_robin', "Round Robin"),
+    ('ip_hash',     "IP Hash")
 ]
 
 SOURCE_TYPES = [
