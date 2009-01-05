@@ -1355,10 +1355,13 @@ cherokee_connection_build_local_directory (cherokee_connection_t *conn, cherokee
 		 * on petition: http://server/thing/cherokee	
 		 * should read: /usr/share/this/rocks/cherokee	
 		 */
-		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		if (cherokee_buffer_is_empty(&conn->request_original)) {
+			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		}
 
-		if (conn->web_directory.len > 1)
+		if (conn->web_directory.len > 1) {
 			cherokee_buffer_move_to_begin (&conn->request, conn->web_directory.len);
+		}
 
 		if ((conn->request.len >= 2) && (strncmp(conn->request.buf, "//", 2) == 0)) {
 			cherokee_buffer_move_to_begin (&conn->request, 1);
@@ -1390,8 +1393,13 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, 
 
 		cherokee_buffer_add_buffer (&conn->local_directory, entry->document_root);
 
-		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
-		cherokee_buffer_move_to_begin (&conn->request, conn->web_directory.len);
+		if (cherokee_buffer_is_empty(&conn->request_original)) {
+			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		}
+
+		if (conn->web_directory.len > 1) {
+			cherokee_buffer_move_to_begin (&conn->request, conn->web_directory.len);
+		}
 
 		if ((conn->request.len >= 2) && (strncmp(conn->request.buf, "//", 2) == 0)) {
 			cherokee_buffer_move_to_begin (&conn->request, 1);

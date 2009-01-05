@@ -628,9 +628,6 @@ configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *v
 	 */
 	cherokee_buffer_add_buffer (&vserver->userdir, &config->val);
 
-	if (cherokee_buffer_end_char (&vserver->userdir) != '/')
-		cherokee_buffer_add_str (&vserver->userdir, "/");
-
 	/* Configure the rest of the entries
 	 */
  	ret = cherokee_config_node_get (config, "rule", &subconf); 

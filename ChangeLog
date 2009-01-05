@@ -1,3 +1,9 @@
+2009-01-05  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/virtual_server.c, cherokee/connection.c: A "/" at the
+	end of userdir is not needed, and request_original should be
+	changed only if empty.
+
 2009-01-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/dwriter.c (cherokee_dwriter_bool): Fixes a bug. Boolean
