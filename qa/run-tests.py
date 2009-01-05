@@ -195,10 +195,11 @@ CONF_BASE = """
 # Cherokee QA tests
 #
 server!bind!1!port = %(PORT)d
+server!bind!1!interface = %(listen)s
 server!bind!2!port = %(PORT_TLS)d
 server!bind!2!tls = 1
+server!bind!2!interface = %(listen)s
 server!keepalive = 1 
-server!listen = %(listen)s
 server!panic_action = %(panic)s
 server!pid_file = %(pid)s
 server!module_dir = %(CHEROKEE_MODS)s
