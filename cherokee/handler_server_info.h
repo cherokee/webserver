@@ -30,6 +30,7 @@
 #include "handler.h"
 #include "connection.h"
 #include "plugin_loader.h"
+#include "dwriter.h"
 
 
 /* Data types
@@ -43,10 +44,12 @@ typedef struct {
 typedef struct {
 	cherokee_handler_t       handler;
 	cherokee_buffer_t        buffer;
+	cherokee_dwriter_t       writer;
 
 	enum {
-		send_page,
-		send_logo
+		send_html,
+		send_info,
+		send_logo,
 	} action;
 	   
 } cherokee_handler_server_info_t;

@@ -25,6 +25,7 @@
 #include "common-internal.h"
 #include "handler_server_info.h"
 #include "bogotime.h"
+#include "dwriter.h"
 
 #ifdef HAVE_SYS_UTSNAME_H
 # include <sys/utsname.h>
@@ -69,7 +70,7 @@
 "<table border=\"0\" cellpadding=\"3\" width=\"600\">"                                              CRLF\
 "  <tr class=\"h\"><td>"                                                                            CRLF\
 "    <a href=\"http://www.cherokee-project.com/\">"                                                 CRLF\
-"      <img border=\"0\" src=\"?logo\" alt=\"Cherokee Logo\" /></a>"                                CRLF\
+"      <img border=\"0\" src=\"{request}/logo.gif\" alt=\"Cherokee Logo\" /></a>"                                CRLF\
 "    <h1 class=\"p\">{cherokee_name}</h1>"                                                          CRLF\
 "  </td></tr>"                                                                                      CRLF\
 "</table><br />"
@@ -159,72 +160,49 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 
 
 static void
-server_info_add_table (cherokee_buffer_t *buf, char *name, char *a_name, cherokee_buffer_t *content)
+add_uptime (cherokee_dwriter_t *writer,
+	    cherokee_server_t  *srv)
 {
-	cherokee_buffer_add_va (buf, "<h2><a name=\"%s\">%s</a></h2>", a_name, name);
-	cherokee_buffer_add_str (buf, "<table border=\"0\" cellpadding=\"3\" width=\"600\">");
-	cherokee_buffer_add_buffer (buf, content);
-	cherokee_buffer_add_str (buf, "</table><br />");
-}
-
-static void
-table_add_row_str (cherokee_buffer_t *buf, const char *name, const char *value)
-{
-	cherokee_buffer_add_va (buf, "<tr><td class=\"e\">%s</td><td class=\"v\">%s</td></tr>"CRLF, name, value);
-}
-
-static void
-table_add_row_buf (cherokee_buffer_t *buf, const char *name, cherokee_buffer_t *value)
-{
-	char *cvalue = (value->len > 0) ? value->buf : "";
-	table_add_row_str (buf, name, cvalue);
-}
-
-static void
-table_add_row_int (cherokee_buffer_t *buf, char *name, int value)
-{
-	cherokee_buffer_add_va (buf, "<tr><td class=\"e\">%s</td><td class=\"v\">%d</td></tr>"CRLF, name, value);
-}
-
-static void
-add_uptime_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
-{
-	unsigned int lapse = cherokee_bogonow_now - srv->start_time;
-	unsigned int days;
-	unsigned int hours;
-	unsigned int mins;
-
-	cherokee_buffer_t *tmp;
-	cherokee_buffer_new (&tmp);
+	cuint_t           days;
+	cuint_t           hours;
+	cuint_t           mins;
+	cherokee_buffer_t tmp   = CHEROKEE_BUF_INIT;
+	cuint_t           lapse = cherokee_bogonow_now - srv->start_time;
 
 	days = lapse / (60*60*24);
 	lapse %= (60*60*24);
-
 	hours = lapse / (60*60);
 	lapse %= (60*60);
-
 	mins = lapse / 60;
 	lapse %= 60;
 
 	if (days > 0) {
-		cherokee_buffer_add_va (tmp, "%d Day%s, %d Hour%s, %d Minute%s, %d Seconds", 
+		cherokee_buffer_add_va (&tmp, "%d Day%s, %d Hour%s, %d Minute%s, %d Seconds", 
 					days, days>1?"s":"", hours, hours>1?"s":"", mins, mins>1?"s":"", lapse);
 	} else if (hours > 0) {
-		cherokee_buffer_add_va (tmp, "%d Hour%s, %d Minute%s, %d Seconds", 
+		cherokee_buffer_add_va (&tmp, "%d Hour%s, %d Minute%s, %d Seconds", 
 					hours, hours>1?"s":"", mins, mins>1?"s":"", lapse);
 	} else if (mins > 0) {
-		cherokee_buffer_add_va (tmp, "%d Minute%s, %d Seconds", 
+		cherokee_buffer_add_va (&tmp, "%d Minute%s, %d Seconds", 
 					mins, mins>1?"s":"", lapse);
 	} else {
-		cherokee_buffer_add_va (tmp, "%d Seconds", lapse);
+		cherokee_buffer_add_va (&tmp, "%d Seconds", lapse);
 	}
 
-	table_add_row_str (buf, "Uptime", tmp->buf);
-	cherokee_buffer_free (tmp);
+	cherokee_dwriter_dict_open (writer);
+	cherokee_dwriter_cstring (writer, "seconds");
+	cherokee_dwriter_integer (writer, lapse);	
+	cherokee_dwriter_cstring (writer, "formatted");
+	cherokee_dwriter_bstring (writer, &tmp);
+	cherokee_dwriter_dict_close (writer);
+
+	cherokee_buffer_mrproper (&tmp);
 }
 
+
 static void
-add_data_sent_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
+add_traffic (cherokee_dwriter_t *writer,
+	     cherokee_server_t  *srv)
 {
 	size_t            rx  = 0;
 	size_t            tx  = 0;
@@ -232,52 +210,66 @@ add_data_sent_row (cherokee_buffer_t *buf, cherokee_server_t *srv)
 
 	cherokee_server_get_total_traffic (srv, &rx, &tx);
 
+	cherokee_dwriter_dict_open (writer);
+	cherokee_dwriter_cstring (writer, "tx");
+	cherokee_dwriter_integer (writer, tx);
+	cherokee_dwriter_cstring (writer, "rx");
+	cherokee_dwriter_integer (writer, rx);
+
+	cherokee_buffer_clean (&tmp);
 	cherokee_buffer_add_fsize (&tmp, tx);
-	table_add_row_buf (buf, "Data sent", &tmp);
+	cherokee_dwriter_cstring (writer, "tx_formatted");
+	cherokee_dwriter_bstring (writer, &tmp);
 
 	cherokee_buffer_clean (&tmp);
 	cherokee_buffer_add_fsize (&tmp, rx);
-	table_add_row_buf (buf, "Data received", &tmp);
+	cherokee_dwriter_cstring (writer, "rx_formatted");
+	cherokee_dwriter_bstring (writer, &tmp);
 
+	cherokee_dwriter_dict_close (writer);
 	cherokee_buffer_mrproper (&tmp);
 }
 
-static void
-build_general_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
-{
-	add_uptime_row (buf, srv);
-	add_data_sent_row (buf, srv);
-}
 
 static void
-build_server_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
+add_config (cherokee_dwriter_t *writer,
+	    cherokee_server_t  *srv)
 {
-	const char *on  = "On";
-	const char *off = "Off";
+	cherokee_dwriter_dict_open (writer);
 
-	table_add_row_int (buf, "Thread Number ", srv->thread_num);
-	table_add_row_str (buf, "IPv6 ", (srv->ipv6 == 1) ? on : off);
-	table_add_row_str (buf, "TLS enabled ", (srv->tls_enabled) ? on : off);
-	table_add_row_str (buf, "Chroot ", (srv->chrooted) ? on : off);
-	table_add_row_int (buf, "User ID", getuid());
-	table_add_row_int (buf, "Group ID", getgid());
+	cherokee_dwriter_cstring (writer, "threads");
+	cherokee_dwriter_integer (writer, srv->thread_num);
+	cherokee_dwriter_cstring (writer, "ipv6");
+	cherokee_dwriter_bool    (writer, srv->ipv6);
+	cherokee_dwriter_cstring (writer, "tls");
+	cherokee_dwriter_bool    (writer, srv->tls_enabled);
+	cherokee_dwriter_cstring (writer, "chroot");
+	cherokee_dwriter_bool    (writer, srv->chrooted);
+	cherokee_dwriter_cstring (writer, "UID");
+	cherokee_dwriter_integer (writer, getuid());
+	cherokee_dwriter_cstring (writer, "GID");
+	cherokee_dwriter_integer (writer, getgid());
 
 #ifdef HAVE_SYS_UTSNAME
 	{
-		int rc;
+		int            rc;
 		struct utsname buf;
 
 		rc = uname ((struct utsname *)&buf);
 		if (rc >= 0) {
-			table_add_row_str (buf, "Operating system", buf.sysname);
+			cherokee_dwriter_cstring (writer, "OS");
+			cherokee_dwriter_string  (writer, buf.sysname, strlen(buf.sysname));
 		}
 	}
 #endif
 
+	cherokee_dwriter_dict_close (writer);
 }
 
+
 static void
-build_connections_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
+add_connections (cherokee_dwriter_t *writer,
+		 cherokee_server_t  *srv)
 {
 	cuint_t conns_num = 0;
 	cuint_t active    = 0;
@@ -287,22 +279,28 @@ build_connections_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	cherokee_server_get_active_conns (srv, &active);
 	cherokee_server_get_reusable_conns (srv, &reusable);
 
-	table_add_row_int (buf, "Open connections", conns_num);
-	table_add_row_int (buf, "Active connections", active);
-	table_add_row_int (buf, "Reusable connections", reusable);
+	cherokee_dwriter_dict_open (writer);
+	cherokee_dwriter_cstring (writer, "number");
+	cherokee_dwriter_integer (writer, conns_num);
+	cherokee_dwriter_cstring (writer, "active");
+	cherokee_dwriter_integer (writer, active);
+	cherokee_dwriter_cstring (writer, "reusable");
+	cherokee_dwriter_integer (writer, reusable);
+	cherokee_dwriter_dict_close (writer);
 }
 
+
 static int
-build_modules_table_content_while (cherokee_buffer_t *key, void *value, void *params[])
+modules_while (cherokee_buffer_t *key, void *value, void *params[])
 {
-	int *loggers    = (int *) params[2];
-	int *handlers   = (int *) params[3];
-	int *encoders   = (int *) params[4];
-	int *validators = (int *) params[5];
-	int *generic    = (int *) params[6];
-	int *balancer   = (int *) params[7];
-	int *rules      = (int *) params[8];
-	int *cryptors   = (int *) params[9];
+	int *loggers    = (int *) params[0];
+	int *handlers   = (int *) params[1];
+	int *encoders   = (int *) params[2];
+	int *validators = (int *) params[3];
+	int *generic    = (int *) params[4];
+	int *balancer   = (int *) params[5];
+	int *rules      = (int *) params[6];
+	int *cryptors   = (int *) params[7];
 
 	cherokee_plugin_loader_entry_t *entry = value;
 	cherokee_plugin_info_t         *mod   = entry->info;
@@ -333,7 +331,8 @@ build_modules_table_content_while (cherokee_buffer_t *key, void *value, void *pa
 }
 
 static void
-build_modules_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
+add_modules (cherokee_dwriter_t *writer,
+	     cherokee_server_t  *srv)
 {
 	cuint_t  loggers    = 0;
 	cuint_t  handlers   = 0;
@@ -343,237 +342,284 @@ build_modules_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
 	cuint_t  balancers  = 0;
 	cuint_t  rules      = 0;
 	cuint_t  cryptors   = 0;
-	void    *params[]   = {buf, srv, &loggers, &handlers, &encoders, &validators, &generic, &balancers, &rules, &cryptors};
+	void    *params[]   = {&loggers, &handlers, &encoders, &validators,
+			       &generic, &balancers, &rules, &cryptors};
 
 	cherokee_avl_while (&srv->loader.table, 
-			    (cherokee_avl_while_func_t) build_modules_table_content_while, 
+			    (cherokee_avl_while_func_t) modules_while, 
 			    params, NULL, NULL);
 
-	table_add_row_int (buf, "Loggers", loggers);
-	table_add_row_int (buf, "Handlers", handlers);
-	table_add_row_int (buf, "Encoders",  encoders);
-	table_add_row_int (buf, "Validators", validators);
-	table_add_row_int (buf, "Balancers", balancers);
-	table_add_row_int (buf, "Rules", rules);
-	table_add_row_int (buf, "Cryptors", cryptors);
-	table_add_row_int (buf, "Generic", generic);
+	cherokee_dwriter_dict_open (writer);
+	cherokee_dwriter_cstring (writer, "loggers");
+	cherokee_dwriter_integer (writer, loggers);
+	cherokee_dwriter_cstring (writer, "handlers");
+	cherokee_dwriter_integer (writer, handlers);
+	cherokee_dwriter_cstring (writer, "encoders");
+	cherokee_dwriter_integer (writer, encoders);
+	cherokee_dwriter_cstring (writer, "validators");
+	cherokee_dwriter_integer (writer, validators);
+	cherokee_dwriter_cstring (writer, "generic");
+	cherokee_dwriter_integer (writer, generic);
+	cherokee_dwriter_cstring (writer, "balancers");
+	cherokee_dwriter_integer (writer, balancers);
+	cherokee_dwriter_cstring (writer, "rules");
+	cherokee_dwriter_integer (writer, rules);
+	cherokee_dwriter_cstring (writer, "cryptors");
+	cherokee_dwriter_integer (writer, cryptors);
+	cherokee_dwriter_dict_close (writer);
 }
 
+
 static ret_t
-server_info_build_logo (cherokee_handler_server_info_t *hdl)
+server_info_build_logo (cherokee_handler_server_info_t *hdl,
+			cherokee_buffer_t              *buffer)
 {
 	ret_t ret;
-	cherokee_buffer_t *buffer;
-
-	buffer = &hdl->buffer;
-
 #include "logo.inc"
-
 	return ret_ok;
 }
 
-static void
-build_icons_table_content (cherokee_buffer_t *buf, cherokee_server_t *srv)
+static ret_t
+server_info_build_html (cherokee_handler_server_info_t *hdl,
+			cherokee_buffer_t              *buffer)
 {
-	if (! srv->icons)
-		return;
+	cherokee_buffer_t ver = CHEROKEE_BUF_INIT;
 
-	table_add_row_buf (buf, "Default icon", &srv->icons->default_icon);
-	table_add_row_buf (buf, "Directory icon", &srv->icons->directory_icon);
-	table_add_row_buf (buf, "Parent directory icon", &srv->icons->parentdir_icon);
+	cherokee_buffer_add_str (buffer, PAGE_HEADER);
+
+	cherokee_version_add (&ver, HANDLER_SRV(hdl)->server_token);
+	cherokee_buffer_replace_string (buffer, "{cherokee_name}", 15, ver.buf, ver.len);	
+	cherokee_buffer_mrproper (&ver);
+
+	cherokee_buffer_replace_string (buffer, "{request}", 9,
+					HANDLER_CONN(hdl)->request.buf,	
+					HANDLER_CONN(hdl)->request.len);
+
+	cherokee_buffer_add_str (buffer, PAGE_FOOT);
+	return ret_ok;
 }
 
 
 static void
-build_cache_table_content (cherokee_buffer_t  *buf,
-			   cherokee_iocache_t *iocache)
+add_icons (cherokee_dwriter_t *writer,
+	   cherokee_server_t  *srv)
 {
-	char              tmp[8];
-	float             percent;
-	size_t            mmaped  = 0;
-	cherokee_buffer_t tmp_buf = CHEROKEE_BUF_INIT;
-
-	if (iocache == NULL) {
-		table_add_row_str (buf, "Caching", "disabled");
+	if (srv->icons == NULL) {
+		cherokee_dwriter_null (writer);
 		return;
 	}
 
-	cherokee_buffer_add_fsize (&tmp_buf, iocache->max_file_size);
-	table_add_row_buf (buf, "File Max size", &tmp_buf);
+	cherokee_dwriter_dict_open (writer);
+	cherokee_dwriter_cstring (writer, "default");
+	cherokee_dwriter_bstring (writer, &srv->icons->default_icon);
+	cherokee_dwriter_cstring (writer, "directory");
+	cherokee_dwriter_bstring (writer, &srv->icons->directory_icon);
+	cherokee_dwriter_cstring (writer, "parent");
+	cherokee_dwriter_bstring (writer, &srv->icons->parentdir_icon);
+	cherokee_dwriter_dict_close (writer);	
+}
 
+
+static void
+add_iocache (cherokee_dwriter_t *writer,
+	     cherokee_server_t  *srv)
+{
+	float               percent;
+	size_t              mmaped  = 0;
+	cherokee_buffer_t   tmp_buf = CHEROKEE_BUF_INIT;
+	cherokee_iocache_t *iocache = srv->iocache;
+
+	if (iocache == NULL) {
+		cherokee_dwriter_null (writer);
+		return;
+	}
+	
+	cherokee_dwriter_dict_open (writer);
+
+	/* General parameters */
+	cherokee_dwriter_cstring (writer, "file_size_max");
+	cherokee_dwriter_integer (writer, iocache->max_file_size);
+	cherokee_dwriter_cstring (writer, "file_size_min");
+	cherokee_dwriter_integer (writer, iocache->min_file_size);
+
+	cherokee_buffer_add_fsize (&tmp_buf, iocache->max_file_size);
+	cherokee_dwriter_cstring (writer, "file_size_max_formated");
+	cherokee_dwriter_bstring (writer, &tmp_buf);
+	
 	cherokee_buffer_clean (&tmp_buf);
 	cherokee_buffer_add_fsize (&tmp_buf, iocache->min_file_size);
-	table_add_row_buf (buf, "File Min size", &tmp_buf);
+	cherokee_dwriter_cstring (writer, "file_size_min_formated");
+	cherokee_dwriter_bstring (writer, &tmp_buf);
 
-	cherokee_buffer_clean (&tmp_buf);
-	cherokee_buffer_add_va (&tmp_buf, "%d secs", iocache->lasting_mmap);
-	table_add_row_buf (buf, "Lasting: Mmap", &tmp_buf);
+	cherokee_dwriter_cstring (writer, "lasting_mmap");
+	cherokee_dwriter_integer (writer, iocache->lasting_mmap);
 
-	cherokee_buffer_clean (&tmp_buf);
-	cherokee_buffer_add_va (&tmp_buf, "%d secs", iocache->lasting_stat);
-	table_add_row_buf (buf, "Lasting: Stat", &tmp_buf);
+	cherokee_dwriter_cstring (writer, "lasting_stat");
+	cherokee_dwriter_integer (writer, iocache->lasting_stat);
 
-	cherokee_buffer_clean (&tmp_buf);
-	cherokee_buffer_add_va (&tmp_buf, "%d pages", CACHE(iocache)->max_size);
-	table_add_row_buf (buf, "Max Cache size", &tmp_buf);
+	cherokee_dwriter_cstring (writer, "size_max");
+	cherokee_dwriter_integer (writer, CACHE(iocache)->max_size);
 
-	table_add_row_int (buf, "Fetches",        CACHE(iocache)->count);
+	cherokee_dwriter_cstring (writer, "fetches");
+	cherokee_dwriter_integer (writer, CACHE(iocache)->count);
 
-	/* Total hits */
+	/* Fetches */
 	if (CACHE(iocache)->count == 0)
 		percent = 0;
 	else
 		percent = (CACHE(iocache)->count_hit * 100.0) / CACHE(iocache)->count;
-	snprintf (tmp, sizeof(tmp), "%.2f%%", percent);
-	table_add_row_str (buf, "Total Hits", tmp);
-
-	/* Total misses  */
+	cherokee_dwriter_cstring (writer, "hits");
+	cherokee_dwriter_double  (writer, percent);
+	
+	/* Misses */
 	if (CACHE(iocache)->count == 0)
 		percent = 0;
 	else
 		percent = (CACHE(iocache)->count_miss * 100.0) / CACHE(iocache)->count;
-	snprintf (tmp, sizeof(tmp), "%.2f%%", percent);
-	table_add_row_str (buf, "Total Misses", tmp);
+	cherokee_dwriter_cstring (writer, "misses");
+	cherokee_dwriter_double  (writer, percent);
 
 	/* Total Mmaped */
 	cherokee_iocache_get_mmaped_size (iocache, &mmaped);
+	cherokee_dwriter_cstring (writer, "mmaped");
+	cherokee_dwriter_integer (writer, mmaped);
+
 	cherokee_buffer_clean (&tmp_buf);
 	cherokee_buffer_add_fsize (&tmp_buf, mmaped);
-	table_add_row_buf (buf, "Total mmaped", &tmp_buf);
+	cherokee_dwriter_cstring (writer, "mmaped_formated");
+	cherokee_dwriter_bstring (writer, &tmp_buf);
 
+	cherokee_dwriter_dict_close (writer);
 	cherokee_buffer_mrproper (&tmp_buf);
 }
 
+
 static void
-build_connection_details_content (cherokee_buffer_t *buf, cherokee_list_t *infos) 
+add_detailed_connections (cherokee_dwriter_t *writer,
+			  cherokee_list_t    *infos)
 {
 	cherokee_list_t   *i, *j;
 	cherokee_buffer_t tmp    = CHEROKEE_BUF_INIT;
 
+	cherokee_dwriter_list_open (writer);
+
 	list_for_each_safe (i, j, infos) {
 		cherokee_connection_info_t *info = CONN_INFO(i);
 
-		table_add_row_buf (buf, "ID",            &info->id);
-		table_add_row_buf (buf, "Remote IP",     &info->ip);
-		table_add_row_buf (buf, "Phase",         &info->phase);
-		table_add_row_buf (buf, "Request",       &info->request);
-		table_add_row_buf (buf, "Handler",       &info->handler);
-		
-		cherokee_buffer_clean (&tmp);
-		cherokee_buffer_add_fsize (&tmp, strtoll(info->rx.buf, (char**)NULL, 10));
-		table_add_row_buf (buf, "Info sent", &tmp);
+		cherokee_dwriter_dict_open (writer);
+		cherokee_dwriter_cstring (writer, "id");
+		cherokee_dwriter_bstring (writer, &info->id);
+		cherokee_dwriter_cstring (writer, "ip_remote");
+		cherokee_dwriter_bstring (writer, &info->ip);
+		cherokee_dwriter_cstring (writer, "phase");
+		cherokee_dwriter_bstring (writer, &info->phase);
+		cherokee_dwriter_cstring (writer, "request");
+		cherokee_dwriter_bstring (writer, &info->request);
+		cherokee_dwriter_cstring (writer, "handler");
+		cherokee_dwriter_bstring (writer, &info->handler);
+		cherokee_dwriter_cstring (writer, "percentage");
+		cherokee_dwriter_number  (writer, info->percent.buf, info->percent.len);
+
+		cherokee_dwriter_cstring (writer, "tx");
+		cherokee_dwriter_number  (writer, info->tx.buf, info->tx.len);
+		cherokee_dwriter_cstring (writer, "rx");
+		cherokee_dwriter_number  (writer, info->rx.buf, info->rx.len);
 
 		cherokee_buffer_clean (&tmp);
 		cherokee_buffer_add_fsize (&tmp, strtoll(info->tx.buf, (char**)NULL, 10));
-		table_add_row_buf (buf, "Info received", &tmp);
+		cherokee_dwriter_cstring (writer, "tx_formatted");
+		cherokee_dwriter_bstring (writer, &tmp);
+
+		cherokee_buffer_clean (&tmp);
+		cherokee_buffer_add_fsize (&tmp, strtoll(info->rx.buf, (char**)NULL, 10));
+		cherokee_dwriter_cstring (writer, "rx_formatted");
+		cherokee_dwriter_bstring (writer, &tmp);
 
 		if (! cherokee_buffer_is_empty (&info->total_size)) {
 			cherokee_buffer_clean (&tmp);
 			cherokee_buffer_add_fsize (&tmp, strtoll(info->total_size.buf, (char**)NULL, 10));
-			table_add_row_buf (buf, "Total Size", &tmp);
+			cherokee_dwriter_cstring (writer, "size");
+			cherokee_dwriter_bstring (writer, &tmp);
 		}
 
-		if (! cherokee_buffer_is_empty (&info->percent)) {
-			cherokee_buffer_add_str (&info->percent, "%");
-			table_add_row_buf (buf, "Percentage", &info->percent);
-		}
+		if (! cherokee_buffer_is_empty (&info->icon)) {
+			cherokee_dwriter_cstring (writer, "icon");
+			cherokee_dwriter_bstring (writer, &info->icon);
+		}		
 
-		if (! cherokee_buffer_is_empty (&info->icon))
-			table_add_row_buf (buf, "Icon", &info->icon);
-
-		table_add_row_str (buf, "", "");
+		cherokee_dwriter_dict_close (writer);
 		cherokee_connection_info_free (info);
 	}
 
+	cherokee_dwriter_list_close (writer);
 	cherokee_buffer_mrproper (&tmp);
 }
 
 
 static void
-server_info_build_page (cherokee_handler_server_info_t *hdl)
+server_info_build_info (cherokee_handler_server_info_t *hdl,
+			cherokee_buffer_t              *buffer)
 {
-	ret_t              ret;
-	cherokee_server_t *srv;
-	cherokee_buffer_t *buf;
-	cherokee_buffer_t  table = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t  ver   = CHEROKEE_BUF_INIT;
+	ret_t               ret;
+	cherokee_dwriter_t *writer = &hdl->writer;
+	cherokee_server_t  *srv    = HANDLER_SRV(hdl);
+	cherokee_buffer_t   table  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t   ver    = CHEROKEE_BUF_INIT;
 
-	/* Init
-	 */
-	buf = &hdl->buffer;
-	srv = HANDLER_SRV(hdl);
-	   
-	/* Add the page begining
+	cherokee_dwriter_dict_open (writer);
+
+	/* Version
 	 */
 	cherokee_version_add (&ver, HANDLER_SRV(hdl)->server_token);
-	cherokee_buffer_add_str (buf, PAGE_HEADER);
-	cherokee_buffer_replace_string (buf, "{cherokee_name}", 15, ver.buf, ver.len);
+	cherokee_dwriter_cstring (writer, "version");
+	cherokee_dwriter_bstring (writer, &ver);
+	cherokee_buffer_mrproper (&ver);
 
+	/* Show only 'About..'?
+	 */
 	if (! HDL_SRV_INFO_PROPS(hdl)->just_about) {
+		cherokee_dwriter_cstring (writer, "traffic");
+		add_traffic (writer, srv);
 
-		/* General table
-		 */
-		build_general_table_content (&table, srv);
-		server_info_add_table (buf, "General Information", "general", &table);
+		cherokee_dwriter_cstring (writer, "uptime");
+		add_uptime (writer, srv);
+		
+		cherokee_dwriter_cstring (writer, "config");
+		add_config (writer, srv);
 
-		/* Server table
-		 */
-		cherokee_buffer_clean (&table);
-		build_server_table_content (&table, srv);
-		server_info_add_table (buf, "Server Core", "server_core", &table);
+		cherokee_dwriter_cstring (writer, "connections");
+		add_connections (writer, srv);
 
-		/* Connections table
-		 */
-		cherokee_buffer_clean (&table);
-		build_connections_table_content (&table, srv);
-		server_info_add_table (buf, "Current connections", "connections", &table);
-
-		/* Modules table
-		 */
-		cherokee_buffer_clean (&table);
-		build_modules_table_content (&table, srv);
-		server_info_add_table (buf, "Loaded Modules", "modules", &table);
-
-		/* Icons
-		 */
-		cherokee_buffer_clean (&table);
-		build_icons_table_content (&table, srv);
-		server_info_add_table (buf, "Icons", "icons", &table);
-
-		/* Caching information
-		 */
-		cherokee_buffer_clean (&table);
-		build_cache_table_content (&table, srv->iocache);
-		server_info_add_table (buf, "File Caching", "iocache", &table);
+		cherokee_dwriter_cstring (writer, "modules");
+		add_modules (writer, srv);
+		
+		cherokee_dwriter_cstring (writer, "icons");
+		add_icons (writer, srv);
+		
+		cherokee_dwriter_cstring (writer, "iocache");
+		add_iocache (writer, srv);
 	}
 
-	/* Print all the current connections details
-	 */
 	if  (HDL_SRV_INFO_PROPS(hdl)->connection_details) {
-		cherokee_list_t infos;
-	       
+		cherokee_list_t infos;	       
 		INIT_LIST_HEAD (&infos);
 
 		ret = cherokee_connection_info_list_server (&infos, HANDLER_SRV(hdl), HANDLER(hdl));
 		if (ret == ret_ok) {				
-			cherokee_buffer_clean (&table);
-			build_connection_details_content (&table, &infos);
-			server_info_add_table (buf, "Current connections details", "connection_details", &table);			
+			cherokee_dwriter_cstring (writer, "connections");
+			add_detailed_connections (writer, &infos);
 		}
+
 	}
 
-
-	/* Add the page ending
-	 */
-	cherokee_buffer_mrproper (&table);
-	cherokee_buffer_add_str (buf, PAGE_FOOT);
-
-	cherokee_buffer_mrproper (&ver);
+	cherokee_dwriter_dict_close (writer);
 }
 
 
 ret_t
-cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt, cherokee_module_props_t *props)
+cherokee_handler_server_info_new  (cherokee_handler_t      **hdl,
+				   cherokee_connection_t    *cnt,
+				   cherokee_module_props_t  *props)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, handler_server_info);
@@ -589,7 +635,7 @@ cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection
 
 	/* Supported features
 	 */
-	HANDLER(n)->support     = hsupport_range;
+	HANDLER(n)->support = hsupport_nothing;
 
 	/* Init
 	 */
@@ -601,6 +647,13 @@ cherokee_handler_server_info_new  (cherokee_handler_t **hdl, cherokee_connection
 	if (unlikely(ret != ret_ok)) 
 		return ret;
 
+	ret = cherokee_dwriter_init (&n->writer, &CONN_THREAD(cnt)->tmp_buf1);
+	if (unlikely(ret != ret_ok)) 
+		return ret;
+
+	n->writer.pretty = true;
+	cherokee_dwriter_set_buffer (&n->writer, &n->buffer);
+
 	*hdl = HANDLER(n);
 	return ret_ok;
 }
@@ -610,6 +663,7 @@ ret_t
 cherokee_handler_server_info_free (cherokee_handler_server_info_t *hdl)
 {
 	cherokee_buffer_mrproper (&hdl->buffer);
+	cherokee_dwriter_mrproper (&hdl->writer);
 	return ret_ok;
 }
 
@@ -617,45 +671,52 @@ cherokee_handler_server_info_free (cherokee_handler_server_info_t *hdl)
 ret_t 
 cherokee_handler_server_info_init (cherokee_handler_server_info_t *hdl)
 {
-	ret_t   ret;
-	void   *param;
-	cint_t  web_interface = 1;
+	ret_t ret;
 
-	cherokee_connection_parse_args (HANDLER_CONN(hdl));
+	if (strstr (HANDLER_CONN(hdl)->request.buf, "/logo.gif")) {
+		server_info_build_logo (hdl, &hdl->buffer);
+		hdl->action = send_logo;		
 
-	ret = cherokee_avl_get_ptr (HANDLER_CONN(hdl)->arguments, "logo", &param);
-	if (ret == ret_ok) {
-		
-		/* Build the logo
-		 */
-		server_info_build_logo (hdl);
-		hdl->action = send_logo;
-		
-		return ret_ok;
+	} else if (strstr (HANDLER_CONN(hdl)->request.buf, "/info")) {
+		if (strstr (HANDLER_CONN(hdl)->request.buf, "/js")) {
+			hdl->writer.lang = dwriter_json;
+		} else if (strstr (HANDLER_CONN(hdl)->request.buf, "/py")) {
+			hdl->writer.lang = dwriter_python;
+		} else if (strstr (HANDLER_CONN(hdl)->request.buf, "/php")) {
+			hdl->writer.lang = dwriter_php;
+		} else if (strstr (HANDLER_CONN(hdl)->request.buf, "/ruby")) {
+			hdl->writer.lang = dwriter_ruby;
+		}
+
+		hdl->action = send_info;
+		server_info_build_info (hdl, &hdl->buffer);
+
+	} else {
+		hdl->action = send_html;
+		server_info_build_html (hdl, &hdl->buffer);
 	}
-	
-	/* Build the page
-	 */
-	if (web_interface) {
-		server_info_build_page (hdl);
-	}
 
-	hdl->action = send_page;
-	
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_handler_server_info_step (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *buffer)
+cherokee_handler_server_info_step (cherokee_handler_server_info_t *hdl,
+				   cherokee_buffer_t              *buffer)
 {
-	cherokee_buffer_add_buffer (buffer, &hdl->buffer);
+	ret_t ret;
+
+	ret = cherokee_buffer_add_buffer (buffer, &hdl->buffer);
+	if (unlikely (ret != ret_ok))
+		return ret_error;
+
 	return ret_eof_have_data;
 }
 
 
 ret_t 
-cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl, cherokee_buffer_t *buffer)
+cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
+					  cherokee_buffer_t              *buffer)
 {
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
@@ -668,7 +729,25 @@ cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl, c
 	case send_logo:
 		cherokee_buffer_add_str (buffer, "Content-Type: image/gif"CRLF);
 		break;
-	case send_page:
+	case send_info:
+		switch (hdl->writer.lang) {
+		case dwriter_json:
+			cherokee_buffer_add_str (buffer, "Content-Type: application/json" CRLF);
+			break;
+		case dwriter_python:
+			cherokee_buffer_add_str (buffer, "Content-Type: application/x-python" CRLF);
+			break;
+		case dwriter_php:
+			cherokee_buffer_add_str (buffer, "Content-Type: application/x-php" CRLF);
+			break;
+		case dwriter_ruby:
+			cherokee_buffer_add_str (buffer, "Content-Type: application/x-ruby" CRLF);
+			break;
+		default:
+			SHOULDNT_HAPPEN;
+		}
+		break;
+	case send_html:
 	default:
 		cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);
 		break;

@@ -1,3 +1,9 @@
+2009-01-05  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_server_info.c, cherokee/handler_server_info.h:
+	The Server Info handler has been rewritten. Now it uses the
+	cherokee_dwriter_t class, so raw data can be obtained from it.
+
 2009-01-05  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/virtual_server.c, cherokee/connection.c: A "/" at the
