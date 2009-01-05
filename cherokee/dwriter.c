@@ -115,6 +115,7 @@ cherokee_dwriter_init (cherokee_dwriter_t *writer,
 ret_t
 cherokee_dwriter_mrproper (cherokee_dwriter_t *writer)
 {
+	UNUSED (writer);
 	return ret_ok;
 }
 
@@ -280,13 +281,22 @@ cherokee_dwriter_bool (cherokee_dwriter_t *w, cherokee_boolean_t b)
 	switch (w->lang) {
 	case dwriter_json:
 	case dwriter_ruby:
-		cherokee_buffer_add_str (OUT, b ? "true" : "false");
+		if (b)
+			cherokee_buffer_add_str (OUT, "true");
+		else
+			cherokee_buffer_add_str (OUT, "false");
 		break;
 	case dwriter_python:
-		cherokee_buffer_add_str (OUT, b ? "True" : "False");
+		if (b)
+			cherokee_buffer_add_str (OUT, "True");
+		else 
+			cherokee_buffer_add_str (OUT, "False");
 		break;
 	case dwriter_php:
-		cherokee_buffer_add_str (OUT, b ? "TRUE" : "FALSE");
+		if (b) 
+			cherokee_buffer_add_str (OUT, "TRUE");
+		else
+			cherokee_buffer_add_str (OUT, "FALSE");
 		break;
 	default:
 		SHOULDNT_HAPPEN;

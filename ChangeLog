@@ -1,3 +1,8 @@
+2009-01-05  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/dwriter.c (cherokee_dwriter_bool): Fixes a bug. Boolean
+	values were not printed right.
+
 2009-01-04  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/Makefile.am, cherokee/balancer_round_robin.c,
