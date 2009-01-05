@@ -64,7 +64,7 @@ typedef struct {
 } cherokee_dwriter_t;
 
 #define cherokee_dwriter_cstring(w,s) cherokee_dwriter_string(w, s, sizeof(s)-1)
-
+#define cherokee_dwriter_bstring(w,b) cherokee_dwriter_string(w, (b)->buf, (b)->len)
 
 ret_t cherokee_dwriter_init       (cherokee_dwriter_t *writer, cherokee_buffer_t *tmp);
 ret_t cherokee_dwriter_mrproper   (cherokee_dwriter_t *writer);
