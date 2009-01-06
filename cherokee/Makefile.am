@@ -272,6 +272,8 @@ endif
 # Handler server_info
 #
 handler_server_info = \
+dwriter.c \
+dwriter.h \
 handler_server_info.c \
 handler_server_info.h \
 logo.inc 

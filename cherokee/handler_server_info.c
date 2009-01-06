@@ -25,7 +25,6 @@
 #include "common-internal.h"
 #include "handler_server_info.h"
 #include "bogotime.h"
-#include "dwriter.h"
 
 #ifdef HAVE_SYS_UTSNAME_H
 # include <sys/utsname.h>
