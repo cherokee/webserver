@@ -1,3 +1,9 @@
+2009-01-07  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/PageInfoSource.py: Links to virtual servers were wrong.
+	Fixes bug: http://code.google.com/p/cherokee/issues/detail?id=305
+	Patch by Stefan de Konink <stefan@konink.de>.
+
 2009-01-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_server_info.c, cherokee/handler_server_info.h:

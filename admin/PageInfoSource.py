@@ -271,7 +271,7 @@ class PageInfoSource (PageMenu, FormHelper):
                 rule_name = rule_module.get_name()
 
                 nick_td = '<td><a href="/%s/%s">%s</td>'%(self._id, src, nick)
-                serv_td = '<td><a href="/vserver/%s">%s</a></td>'%(id, serv)
+                serv_td = '<td><a href="/vserver/%s">%s</a></td>'%(serv_id, serv)
 
                 if is_user_dir:                    
                     rule_td = '<td><a href="%s">User Dir: %s</a></td>'%(rule_url, rule_name)
