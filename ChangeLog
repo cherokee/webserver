@@ -1,3 +1,8 @@
+2009-01-07  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/Makefile.am (libcherokee_server_la_SOURCES):
+	cherokee_dwriter_t is now part of libcherokee-server.
+
 2009-01-07  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageInfoSource.py: Links to virtual servers were wrong.

@@ -272,8 +272,6 @@ endif
 # Handler server_info
 #
 handler_server_info = \
-dwriter.c \
-dwriter.h \
 handler_server_info.c \
 handler_server_info.h \
 logo.inc 
@@ -580,8 +578,6 @@ endif
 # Handler DB Slayer
 #
 handler_dbslayer = \
-dwriter.c \
-dwriter.h \
 handler_dbslayer.h \
 handler_dbslayer.c
 
@@ -1257,7 +1253,9 @@ source_interpreter.c \
 info.h \
 info.c \
 connection_info.h \
-connection_info.c
+connection_info.c \
+dwriter.h \
+dwriter.c
 
 libcherokee_config_la_SOURCES = \
 admin_client.h \
