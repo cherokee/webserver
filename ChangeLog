@@ -1,3 +1,9 @@
+2009-01-08  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/status.template.html: Adds a link to the "Proud Cherokee
+	Users" program:
+	http://www.cherokee-project.com/cherokee-domain-list.html
+
 2009-01-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/Makefile.am (libcherokee_server_la_SOURCES):
