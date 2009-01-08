@@ -1,5 +1,8 @@
 2009-01-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/zlib/defutil.h (bi_reverse, bi_windup, bi_flush):
+	Removes three duplicated function prototypes.
+
 	* admin/status.template.html: Adds a link to the "Proud Cherokee
 	Users" program:
 	http://www.cherokee-project.com/cherokee-domain-list.html

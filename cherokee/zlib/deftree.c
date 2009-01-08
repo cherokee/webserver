@@ -150,9 +150,6 @@ static void send_all_trees (deflate_state *s, int lcodes, int dcodes,
 static void compress_block (deflate_state *s, ct_data *ltree,
                            ct_data *dtree);
 static void set_data_type  (deflate_state *s);
-static unsigned bi_reverse (unsigned value, int length);
-static void bi_windup      (deflate_state *s);
-static void bi_flush       (deflate_state *s);
 static void copy_block     (deflate_state *s, char *buf, unsigned len,
                            int header);
 
