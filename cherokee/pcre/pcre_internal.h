@@ -45,6 +45,9 @@ functions whose names all begin with "_pcre_". */
 #ifndef PCRE_INTERNAL_H
 #define PCRE_INTERNAL_H
 
+/* Cherokee internals */
+#include "common-internal.h"
+
 /* Define DEBUG to get debugging output on stdout. */
 
 #if 0

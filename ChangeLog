@@ -1,5 +1,8 @@
 2009-01-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/pcre/pcre_compile.c, cherokee/pcre/pcre_internal.h:
+	Fixes a couple of compilation warnings on the PCRE library.
+
 	* cherokee/zlib/defutil.h (bi_reverse, bi_windup, bi_flush):
 	Removes three duplicated function prototypes.
 

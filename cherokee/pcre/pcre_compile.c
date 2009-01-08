@@ -1351,6 +1351,8 @@ for (;;)
       if (code[-1] >= 0xc0) code += _pcre_utf8_table4[code[-1] & 0x3f];
       break;
       }
+#else
+    UNUSED(utf8);
 #endif
     }
   }
@@ -1444,6 +1446,8 @@ for (;;)
       if (code[-1] >= 0xc0) code += _pcre_utf8_table4[code[-1] & 0x3f];
       break;
       }
+#else
+    UNUSED(utf8);
 #endif
     }
   }
@@ -1929,6 +1933,11 @@ check_auto_possessive(int op_code, int item, BOOL utf8, uschar *utf8_char,
   const uschar *ptr, int options, compile_data *cd)
 {
 int next;
+
+#ifndef SUPPORT_UTF8
+UNUSED (utf8);
+UNUSED (utf8_char);
+#endif
 
 /* Skip whitespace and comments in extended mode */
 
