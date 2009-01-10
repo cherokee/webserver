@@ -2099,14 +2099,7 @@ cherokee_connection_log_or_delay (cherokee_connection_t *conn)
 
 	/* Log it
 	 */
-	if (http_type_400(conn->error_code) ||
-	    http_type_500(conn->error_code)) {
-		ret = cherokee_logger_write_error (conn->logger_ref, conn);
-	} else {
-		ret = cherokee_logger_write_access (conn->logger_ref, conn);
-	}
-
-	return ret;
+	return cherokee_logger_write_access (conn->logger_ref, conn);
 }
 
 
@@ -2126,11 +2119,7 @@ cherokee_connection_log_delayed (cherokee_connection_t *conn)
 	 */
 	BIT_UNSET (conn->options, conn_op_log_at_end);
 
-	ret = cherokee_logger_write_access (conn->logger_ref, conn);
-	if (unlikely (ret != ret_ok))
-		return ret;
-
-	return ret_ok;
+	return cherokee_logger_write_access (conn->logger_ref, conn);
 }
 
 

@@ -2,18 +2,14 @@
 
 	* cherokee/zlib/deflate.c: Fixes a compilation warning.
 
-2009-01-09  Jonathan Hernandez  <ion@suavizado.com>
-
-        * admin/*: Redesign of Cherokee Admin UI to fit 960px wide, Fixes
-	  bug: http://code.google.com/p/cherokee/issues/detail?id=272
-	  Change accordion ui to tabs Move help links to header Update
-	  jquery to 1.2.6 and UI widgets.
-
 2009-01-10  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/handler_error.c (build_hardcoded_response_page):
 	404 Not Found page was returning the final target on redirections
 	instead the original request.
+
+	* cherokee/connection.c (cherokee_connection_log_or_delay):
+	Every request must be logged in access log.
 
 2009-01-09  Jonathan Hernandez  <ion@suavizado.com>
 
