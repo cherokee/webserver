@@ -1,3 +1,10 @@
+2009-01-09  Jonathan Hernandez  <ion@suavizado.com>
+
+	* admin/*: Redesign of Cherokee Admin UI to fit 960px wide,
+	Fixes bug: http://code.google.com/p/cherokee/issues/detail?id=272
+	Change accordion ui to tabs Move help links to header
+	Update jquery to 1.2.6 and UI widgets.
+
 2009-01-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/pcre/pcre_compile.c, cherokee/pcre/pcre_internal.h:
