@@ -1,3 +1,9 @@
+2009-01-10  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/handler_error.c (build_hardcoded_response_page):
+	404 Not Found page was returning the final target on redirections
+	instead the original request.
+
 2009-01-09  Jonathan Hernandez  <ion@suavizado.com>
 
 	* admin/*: Redesign of Cherokee Admin UI to fit 960px wide,

@@ -114,7 +114,13 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 	switch (conn->error_code) {
 	case http_not_found:
 		cherokee_buffer_add_str (buffer, "The requested URL ");
-		if (! cherokee_buffer_is_empty (&conn->request)) {
+		if (! cherokee_buffer_is_empty (&conn->request_original)) {
+			if (cherokee_connection_use_webdir (conn)) {
+				cherokee_buffer_add_buffer (buffer, &conn->web_directory);
+			}
+			cherokee_buffer_add_escape_html (buffer, &conn->request_original);
+		}
+		else if (! cherokee_buffer_is_empty (&conn->request)) {
 			if (cherokee_connection_use_webdir (conn)) {
 				cherokee_buffer_add_buffer (buffer, &conn->web_directory);
 			}
