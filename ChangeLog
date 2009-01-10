@@ -1,3 +1,7 @@
+2009-01-10  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/zlib/deflate.c: Fixes a compilation warning.
+
 2009-01-09  Jonathan Hernandez  <ion@suavizado.com>
 
         * admin/*: Redesign of Cherokee Admin UI to fit 960px wide, Fixes
