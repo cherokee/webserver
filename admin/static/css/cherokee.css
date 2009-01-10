@@ -1,9 +1,23 @@
+html {
+    background-color: #cfd9e8;
+    height:100%;
+} 
+
 body {
-    background: #fff url(../images/background.png) left top repeat-x;
+    min-width: 960px;
     font-family: helvetica, arial, sans-serif;
     font-size: small;
     text-align: center;
+    background-color: #cfd9e8;
+    height:100%;
 }
+
+html>body #container {
+    height:100%;
+}
+
+a { color: #2d5e9a; }
+a:hover { color: #164987; }
 
 .clearfix:after {
     content: ".";
@@ -21,26 +35,50 @@ body {
 /* End hide from IE-mac */
 
 #container {
-    width: 770px;
+    background: #cfd9e8 url(../images/background.png) center top repeat-y;
+    width: 960px;
+    min-width: 960px;
     margin: 0 auto;
+    text-align: center;
+}
+
+#header {
+    width: 960px;
+    background: transparent url(../images/top-bar.png) left top no-repeat;
+    height: 48px;
     text-align: left;
+}
+
+#footer {
+    background: #cfd9e8 url(../images/background.png) center bottom repeat-y;
+    margin: 0 auto;
+    width: 960px;
+    font-size: 80%;
+    color: #aaa;
+    text-align: right;
+} 
+
+#footer-inner {
+    text-align: right;
+    padding: 16px;
 }
 
 #bar {
     float: left;
-    width:179px;
+    width:200px;
+    text-align: left;
 }
 
 #workarea {
     float: right;
-    margin-top: 10px;
-    background: transparent url(../images/workarea.png) left top no-repeat;
-    width: 591px;
+    width: 760px;
     min-height: 550px;
+    text-align: left;
+    height:100%;
 }
 
 #workarea-inner {
-    padding: 1.5em 1em;
+    padding: 16px;
 }
 
 #save_changes_msg {
@@ -60,13 +98,15 @@ body {
 
 #nav li {
     font-size: 12px;
-    height: 27px;
-    min-height: 27px;
+    height: 32px;
+    min-height: 32px;
+    background: transparent url(../images/menu-sep.png) left bottom no-repeat;
 }
 
 #nav li a {
+    height: 32px;
     padding-left: 16px;
-    padding-top: 7px;
+    padding-top: 8px;
     display: block;
     color: #204a87;
     text-decoration: none;
@@ -86,16 +126,23 @@ body {
 #body-advanced #advanced
 {
     background: transparent url(../images/menu-active.png) left top no-repeat;
+    font-weight: bold;
 }
 
 #logo {
-    text-align: center;
+    height: 48px;
+    padding-left: 16px;
+    z-index: 100;
+    position: absolute;
 }
 
 #version {
     font-size: 80%;
-    color: #3465a4;
-    text-align: center;
+    color: #4475b4;
+    padding-left: 8px; 
+    position: absolute;
+    padding-left: 174px;
+    top: 27px;
 }
 
 
@@ -137,16 +184,77 @@ table td label {
 .error {
     color: #CC0000;
 }
+
+/** CHANGES **/
+#changes_div {
+    padding: 16px;
+}
+
+
 /** HELP **/
 #help-area {
 
 }
 
 #help {
-    float: right;
-    padding: 1em;
+    z-index: 100;
+    position: absolute;
+    width: 744px;
+    margin-left: 200px;
+    top: 26px;
     font-size: 85%;
+    color: #fff;
 }
+
+#help ul {
+   float: right;
+   z-index: 100;
+}
+
+
+#help li.htop {
+    text-align: right;
+    height: 22px;
+}
+
+#help li.htop span {
+    color: #fff;
+    text-decoration: none;
+    height: 32px;
+    padding: 8px;
+}
+
+#help ul:hover li.htop span {
+    background-color: #4475b4;
+   padding: 8px;
+}
+
+#help li.hitem {
+   width: 11em;
+   color: #204a87;
+   background-color: #e9eef4;
+   border-collapse: collapse;
+   border: 1px solid #a9c0dc;
+   border-top: 1px solid #fff;
+   padding: 8px;
+   display: none;
+}
+
+#help ul:hover li.hitem {
+   display: block;
+}
+
+  
+#help li.hitem:hover {
+   background-color: #e2e9f1;
+}
+
+#help li.hitem a {
+   display: block;
+   color: #204a87;
+   text-decoration: none;
+}
+
 
 #help-contents {
     background: #f3f7fc url(../images/help.png) 4px 4px no-repeat;
@@ -216,28 +324,107 @@ table td label {
     color: #000;
 }
 
-.tab dt {
-    background:#CCCCCC url(../images/collapsed.gif) no-repeat scroll 0px 4px;
-    color: #204a87;
-    font-weight: normal;
-    font-size: 120%;
-    letter-spacing: -1px;
-    text-indent:14px;
-    margin: 0.4em 0;
+/* TABS */
+.ui-tabs-hide { display: none; }
+
+.ui-tabs-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 4px;
 }
 
-.tab dt.selected {
-    background-image: url(../images/expanded.gif);
+.ui-tabs-nav:after { 
+    display: block;
+    clear: both;
+    content: " ";
 }
 
-
-.tab dt:hover {
-    background:#efefef url(../images/collapsed.gif) no-repeat scroll 0px 4px;
+.ui-tabs-nav li {
+    float: left;
+    margin: 0 0 0 2px;
+    min-width: 84px; /* be nice to Opera */
 }
 
-.tab dt.selected:hover {
-    background:#efefef url(../images/expanded.gif) no-repeat scroll 0px 4px;
+.ui-tabs-nav a, .ui-tabs-nav a span {
+    display: block;
+    padding: 0 10px;
+    background: url(../images/tab.png) no-repeat;
 }
+.ui-tabs-nav a {
+    position: relative;
+    top: 1px;
+    z-index: 5;
+    padding-left: 0;
+    color: #27537a;
+    color: #7695bc;
+    line-height: 1.2;
+    font-size: 90%;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap; /* required in IE 6 */    
+    font-weight: bold;
+}
+.ui-tabs-nav .ui-tabs-selected a {
+    color: #000;
+}
+.ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active {
+    background-position: 100% -150px;
+    outline: 0; /* prevent dotted border in Firefox */
+}
+.ui-tabs-nav a, .ui-tabs-nav .tabs-disabled a:hover, .ui-tabs-nav .tabs-disabled a:focus, .ui-tabs-nav .tabs-disabled a:active {
+    background-position: 100% -100px;
+}
+.ui-tabs-nav a span {
+    width: 64px; /* IE 6 treats width as min-width */
+    min-width: 64px;
+    height: 18px; /* IE 6 treats height as min-height */
+    min-height: 18px;
+    padding-top: 6px;
+    padding-right: 0;
+}
+*>.ui-tabs-nav a span { /* hide from IE 6 */
+    width: auto;
+    height: auto;
+}
+.ui-tabs-nav .ui-tabs-selected a span {
+    padding-top: 6px;
+    padding-bottom: 1px;
+    /*border-bottom: 1px solid #fff;*/
+}
+.ui-tabs-nav .ui-tabs-selected a span, .ui-tabs-nav a:hover span, .ui-tabs-nav a:focus span, .ui-tabs-nav a:active span {
+    background-position: 0 -50px;
+}
+.ui-tabs-nav a span, .ui-tabs-nav .tabs-disabled a:hover span, .ui-tabs-nav .tabs-disabled a:focus span, .ui-tabs-nav .tabs-disabled a:active span {
+    background-position: 0 0;
+}
+.ui-tabs-nav .ui-tabs-selected a:link, .ui-tabs-nav .ui-tabs-selected a:visited, .ui-tabs-nav .tabs-disabled a:link, .ui-tabs-nav .tabs-disabled a:visited { /* @ Opera, use pseudo classes otherwise it confuses cursor... */
+    cursor: text;
+}
+.ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active { /* @ Opera, we need to be explicit again here now... */
+    cursor: pointer;
+}
+.ui-tabs-nav .tabs-disabled {
+    opacity: .4;
+}
+.ui-tabs-panel {
+    border-top: 1px solid #bacce2;
+    padding: 16px;
+    background: #fff; 
+}
+
+.ui-tabs-panel a { 
+   font-weight: normal;
+   color: #2d5e9a; 
+   background: transparent;
+}
+.ui-tabs-panel a:hover { color: #164987;; }
+
+.tabs-loading em {
+    padding: 0 0 0 20px;
+    background: url(../images/loadingAnimation.gif) no-repeat 0 50%;
+}
+
+/* BUTTON */
 
 a.button {
     background: transparent url('../images/button-right.png') no-repeat scroll top right;
@@ -316,7 +503,7 @@ a.button:active span {
 }
 
 .tableprop_block hr {
-  background: #DCF;
+  background: #bacce2;
   border: none;
   margin-top: 5px;
   margin-bottom: 5px;

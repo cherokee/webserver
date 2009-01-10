@@ -11,8 +11,11 @@ adminstatic_DATA = \
 $(DARKGLASS_ICONS) \
 background.png \
 cherokee-logo-bar.png \
+top-bar.png \
+menu-sep.png \
 menu-active.png \
 menu-highlight.png \
+tab.png \
 workarea.png \
 help.png \
 button-left.png \

@@ -131,35 +131,32 @@ class FormHelper (WebComponent):
 
     def InstanceTab (self, entries):
         # HTML
-        txt = '<dl class="tab" id="tab_%s">' % (self._id)
+        txt = '<div class="tab" id="tab_%s">\n' % (self._id)
         num = 0
+        tabsheader = '<ul class="ui-tabs-nav">\n'
+        tabscontent = ''
         for title, content in entries:
             error_inside = 'class="error"' in content
             if error_inside:
-                txt += '<dt num="%d"><div class="error">%s</div></dt>\n' % (num, title)
+                tabsheader += '<li><a href="#tabs_%s-%d"><span class="error">%s</span></a></li>\n' % (self._id, num, title)
             else:
-                txt += '<dt num="%d">%s</dt>\n' % (num, title)
-            txt += '<dd>%s</dd>\n' % (content)
+                tabsheader += '<li><a href="#tabs_%s-%d"><span>%s</span></a></li>\n' % (self._id, num, title)
+            tabscontent += '<div id="tabs_%s-%d" class="ui-tabs-panel">\n%s\n</div>\n' % (self._id, num, content)
             num += 1
-        txt += '</dl>'
+        tabsheader += '</ul>\n'
+        txt += tabsheader
+        txt += tabscontent
+        txt += '</div>\n'
 
         # Javascript
         txt += '''
         <script type="text/javascript">
           var settings = {
-             alwaysOpen: true,
-             animated:   false
+             cookie: { expires: 1 }
           };
 
-          open_tab = get_cookie('open_tab');
-          if (open_tab) {
-            settings['active'] = parseInt(open_tab);
-          }
-
-          jQuery("#tab_%s").Accordion(settings).change(
-            function (event, newHeader, oldHeader) {
-              if (! newHeader) return;
-              document.cookie = "open_tab=" + newHeader.attr("num");
+          $(function() {
+              $("#tab_%s").tabs(settings);
           });
         </script>
         ''' % (self._id)

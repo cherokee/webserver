@@ -5,38 +5,51 @@ from configured import *
 from CherokeeManagement import *
         
 PAGE_BASIC_LAYOUT = """
-    <div id="container">
-        <div id="bar">
+    <div id="container" class="clearfix">
+	<div id="header">
 	   <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
 	   <div id="version">Version: %(version)s</div>
+           %(help_block)s
+	</div>
+        <div id="bar">
         </div>
         <div id="workarea"><div id="workarea-inner">
           <div id="save_changes_msg"></div>
         %(content)s
         </div></div>
+    	<div class="clearfix"></div>
     </div>
+    <div id="footer">
     <div class="clearfix"></div>
-"""
+    <div id="footer-inner">
+    </div></div>"""
 
 PAGE_MENU_LAYOUT = """
-    <div id="container">
-        <div id="bar">
+    <div id="container" class="clearfix">
+	<div id="header">
 	   <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
 	   <div id="version">Version: %(version)s</div>
+           %(help_block)s
+	</div>
+        <div id="bar">
             %(menu)s
         </div>
         <div id="workarea"><div id="workarea-inner">
           <div id="save_changes_msg"></div>
         %(content)s
         </div></div>
+    	<div class="clearfix"></div>
     </div>
+    <div id="footer">
     <div class="clearfix"></div>
-"""
+    <div id="footer-inner">
+    </div>
+    </div>"""
 
 PAGE_MENU_HELP_BLOCK = """
-<h2>Help</h2>
+<div id="help">
 %(help)s
-<br />
+</div>
 """
 
 PAGE_MENU_MENU = """
@@ -51,8 +64,7 @@ PAGE_MENU_MENU = """
 </ul>
 <br />
 
-%(help_block)s
-
+<div id="changes_div">
 <h2>Save Changes</h2>
 <div style="padding-top: 2px;">
  <p>%(menu_save_desc)s</p>
@@ -65,6 +77,7 @@ PAGE_MENU_MENU = """
   <a class="button" href="javascript: save_config();"><span>Save</span></a>
  </div>
 </form>
+</div>
 
 <script type="text/javascript">
   $(document).ready(protectChanges);
@@ -120,14 +133,14 @@ class Page (WebComponent):
     def _render_help (self):
         if not self.helps:
             return ''
-
         txt = '<ul>'
+        txt += '<li class="htop"><span>Help</span></li>'
         for hfile,comment in self.helps:
             if hfile.startswith("http://"):
                 txt += '<li><a href="%s" target="_help">%s</a></li>' % (hfile, comment)
             else:
                 params=(hfile, DIALOG_H, DIALOG_W, comment)
-                txt += '<li><a href="/help/%s.html?KeepThis=true&TB_iframe=true&height=%s&width=%s" class="thickbox">%s</a></li>' % params
+                txt += '<li class="hitem"><a href="/help/%s.html?KeepThis=true&TB_iframe=true&height=%s&width=%s" class="thickbox">%s</a></li>' % params
         txt += '</ul>'
         return txt
 
