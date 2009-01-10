@@ -2073,7 +2073,6 @@ cherokee_connection_open_request (cherokee_connection_t *conn)
 ret_t
 cherokee_connection_log_or_delay (cherokee_connection_t *conn)
 {
-	ret_t              ret;
 	cherokee_boolean_t at_end;
 
 	/* Check whether it should log at end or not..
@@ -2106,8 +2105,6 @@ cherokee_connection_log_or_delay (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_log_delayed (cherokee_connection_t *conn)
 {
-	ret_t ret;
-
 	/* Check whether if needs to log now of not
 	 */
 	if (conn->logger_ref == NULL)
