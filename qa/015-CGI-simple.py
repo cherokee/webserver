@@ -7,6 +7,12 @@ vserver!1!rule!150!match!directory = /cgi-bin1
 vserver!1!rule!150!handler = cgi
 """
 
+CGI_BASE = """#!/bin/sh
+echo "Content-Type: text/plain"
+echo
+echo "%s"
+""" % (MAGIC)
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
@@ -19,10 +25,4 @@ class Test (TestBase):
 
     def Prepare (self, www):
         self.Mkdir (www, "cgi-bin1")
-        self.WriteFile (www, "cgi-bin1/test", 0755,
-                        """#!/bin/sh
-
-                        echo "Content-Type: text/plain"
-                        echo
-                        echo "%s"
-                        """ % (MAGIC))
+        self.WriteFile (www, "cgi-bin1/test", 0755, CGI_BASE)

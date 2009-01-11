@@ -1,3 +1,9 @@
+2009-01-11  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* qa/015-CGI-simple.py, qa/017-CGI-pathinfo2.py,
+	qa/016-CGI-pathinfo.py, qa/018-CGI-pathinfo3.py: Reformats CGI
+	code.
+
 2009-01-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/zlib/deflate.c: Fixes a compilation warning.
