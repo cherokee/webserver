@@ -1,5 +1,8 @@
 2009-01-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/195-ServerAddr.py, qa/Makefile.am: Tests wether the
+	SEVER_ADDR is actually containing the right value.
+
 	* qa/015-CGI-simple.py, qa/017-CGI-pathinfo2.py,
 	qa/016-CGI-pathinfo.py, qa/018-CGI-pathinfo3.py: Reformats CGI
 	code.
