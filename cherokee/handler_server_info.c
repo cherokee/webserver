@@ -69,11 +69,16 @@
 "<table border=\"0\" cellpadding=\"3\" width=\"600\">"                                              CRLF\
 "  <tr class=\"h\"><td>"                                                                            CRLF\
 "    <a href=\"http://www.cherokee-project.com/\">"                                                 CRLF\
-"      <img border=\"0\" src=\"{request}/logo.gif\" alt=\"Cherokee Logo\" /></a>"                   CRLF \
+"      <img border=\"0\" src=\"{request}/logo.gif\" alt=\"Cherokee Logo\" /></a>"                   CRLF\
 "    <h1 class=\"p\">{cherokee_name}</h1>"                                                          CRLF\
 "  </td></tr>"                                                                                      CRLF\
-"</table><br />" \
-"<div id=\"information\"></div>"
+"</table><br />"							                            CRLF\
+"<div id=\"information\"></div>"                                                                    CRLF\
+"<p>The same information can also be fetched properly encoded to be consumed from: "                CRLF\
+"<a href=\"{request}/info/py\">Python</a>, "                                                        CRLF\
+"<a href=\"{request}/info/ruby\">Ruby</a>, "                                                        CRLF\
+"<a href=\"{request}/info/js\">JavaScript</a> and "                                                 CRLF\
+"<a href=\"{request}/info/php\">PHP</a>."
 
 #define AJAX_JS	\
 "<script type=\"text/javascript\">" CRLF \
