@@ -263,6 +263,7 @@ cherokee_handler_cgi_base_build_basic_env (
 	char            *p;
 	cuint_t          p_len;
 	cherokee_bind_t *bind = CONN_BIND(HANDLER_CONN(cgi));
+	char             ip_str[CHE_INET_ADDRSTRLEN+1];
 
 	char remote_ip[CHE_INET_ADDRSTRLEN+1];
 	CHEROKEE_TEMP(temp, 32);
@@ -415,9 +416,14 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	/* Set SERVER_ADDR
 	 */
-	set_env (cgi, "SERVER_ADDR",
-		 bind->server_address.buf,
-		 bind->server_address.len);
+	if (cherokee_buffer_is_empty (&bind->ip)) {	
+		cherokee_socket_ntop (&conn->socket, ip_str, sizeof(ip_str)-1);
+		set_env (cgi, "SERVER_ADDR", ip_str, strlen(ip_str));
+	} else {
+		set_env (cgi, "SERVER_ADDR",
+			 bind->server_address.buf,
+			 bind->server_address.len);
+	}
 	
 	/* HTTP variables
 	 */

@@ -1,5 +1,9 @@
 2009-01-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_cgi_base.c: Fixes the SERVER_ADDR variable
+	generation. It also fixes its relative QA test in order to work
+	with boht IPv6 and IPv4.
+
 	* qa/base.py: Adds a new type of checking: expected_one_of_these.
 	It allows QA tests to require the match of at least one of the
 	strings of the list.
