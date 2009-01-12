@@ -1,5 +1,12 @@
 2009-01-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_server_info.c (server_info_build_info): Now it
+	requests the server information with Ajax. The server_info handler
+	will reply to thar request as well, and will send a JSON encoded
+	reply.  This (javascript) code reads it and renders the tables for
+	the page. This is the very first implementation, this stuff must
+	be improved before the next release (at least tables are shown).
+
 	* cherokee/handler_cgi_base.c: Fixes the SERVER_ADDR variable
 	generation. It also fixes its relative QA test in order to work
 	with boht IPv6 and IPv4.

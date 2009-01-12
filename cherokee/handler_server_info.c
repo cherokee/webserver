@@ -69,10 +69,113 @@
 "<table border=\"0\" cellpadding=\"3\" width=\"600\">"                                              CRLF\
 "  <tr class=\"h\"><td>"                                                                            CRLF\
 "    <a href=\"http://www.cherokee-project.com/\">"                                                 CRLF\
-"      <img border=\"0\" src=\"{request}/logo.gif\" alt=\"Cherokee Logo\" /></a>"                                CRLF\
+"      <img border=\"0\" src=\"{request}/logo.gif\" alt=\"Cherokee Logo\" /></a>"                   CRLF \
 "    <h1 class=\"p\">{cherokee_name}</h1>"                                                          CRLF\
 "  </td></tr>"                                                                                      CRLF\
-"</table><br />"
+"</table><br />" \
+"<div id=\"information\"></div>"
+
+#define AJAX_JS	\
+"<script type=\"text/javascript\">" CRLF \
+"function ajaxObject (url) {" CRLF \
+"   var that = this;" CRLF \
+"   var updating = false;" CRLF \
+"   this.callback = function(txt) {}" CRLF \
+"" CRLF \
+"   this.update = function(passData) {" CRLF \
+"      if (updating == true)" CRLF \
+"		    return false;" CRLF \
+"      updating = true;" CRLF \
+"" CRLF \
+"      var AJAX = null;" CRLF \
+"      if (window.XMLHttpRequest) {" CRLF \
+"         AJAX = new XMLHttpRequest();" CRLF \
+"      } else {" CRLF \
+"         AJAX = new ActiveXObject(\"Microsoft.XMLHTTP\");" CRLF \
+"      }" CRLF \
+"      if (AJAX == null) {" CRLF \
+"         alert (\"Your browser does not support AJAX.\");" CRLF \
+"         return false" CRLF \
+"      } else {" CRLF \
+"         AJAX.onreadystatechange = function() {" CRLF \
+"            if (AJAX.readyState == 4 || AJAX.readyState == \"complete\") {" CRLF \
+"               delete AJAX;" CRLF \
+"               updating = false;" CRLF \
+"               that.callback(AJAX.responseText);" CRLF \
+"            }" CRLF \
+"         }" CRLF \
+"" CRLF \
+"         AJAX.open (\"GET\", url, true);" CRLF \
+"         AJAX.send (null);" CRLF \
+"         return true;" CRLF \
+"      }" CRLF \
+"   }" CRLF \
+"} /* END: ajaxObject */" CRLF \
+"</script>" CRLF \
+"" CRLF \
+"<script type=\"text/javascript\">" CRLF \
+"    tmp = new ajaxObject ('http://localhost:1234/about/info/js');" CRLF \
+"    tmp.callback = function(txt) {" CRLF \
+"       var info = null;" CRLF \
+"       var re   = '';" CRLF \
+"" CRLF \
+"       eval('info = ' + txt);" CRLF \
+"    " CRLF \
+"       re += '<h2>General Information</h2><table>';" CRLF \
+"       re += '<tr><td>Inbound</td><td>'+  info['traffic']['rx_formatted'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Outbound</td><td>'+ info['traffic']['tx_formatted'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Uptime</td><td>'+   info['uptime']['formatted']     +'</td></tr>';" CRLF \
+"       re += '</table>';" CRLF \
+"" CRLF \
+"       re += '<h2>Configuration</h2><table>';" CRLF \
+"       re += '<tr><td>Thread number</td><td>'+    info['config']['threads'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>IPv6</td><td>'+             info['config']['ipv6']    +'</td></tr>';" CRLF \
+"       re += '<tr><td>SSL/TLS</td><td>'+          info['config']['tls']     +'</td></tr>';" CRLF \
+"       re += '<tr><td>Chroot jail</td><td>'+      info['config']['chroot']  +'</td></tr>';" CRLF \
+"       re += '<tr><td>UID</td><td>'+              info['config']['UID']     +'</td></tr>';" CRLF \
+"       re += '<tr><td>GID</td><td>'+              info['config']['GID']     +'</td></tr>';" CRLF \
+"       re += '<tr><td>Operating System</td><td>'+ info['config']['OS']      +'</td></tr>';" CRLF \
+"       re += '</table>';" CRLF \
+"" CRLF \
+"       re += '<h2>Current Connections</h2><table>';" CRLF \
+"       re += '<tr><td>Number</td><td>'+        info['connections']['number']   +'</td></tr>';" CRLF \
+"       re += '<tr><td>Active</td><td>'+        info['connections']['active']   +'</td></tr>';" CRLF \
+"       re += '<tr><td>Reusable</td><td>'+      info['connections']['reusable'] +'</td></tr>';" CRLF \
+"       re += '</table>';" CRLF \
+"" CRLF \
+"       re += '<h2>Modules</h2><table>';" CRLF \
+"       re += '<tr><td>Loggers</td><td>'+    info['modules']['loggers']    +'</td></tr>';" CRLF \
+"       re += '<tr><td>Handlers</td><td>'+   info['modules']['handlers']   +'</td></tr>';" CRLF \
+"       re += '<tr><td>Encoders</td><td>'+   info['modules']['encoders']   +'</td></tr>';" CRLF \
+"       re += '<tr><td>Validators</td><td>'+ info['modules']['validators'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Generic</td><td>'+    info['modules']['generic']    +'</td></tr>';" CRLF \
+"       re += '<tr><td>Balancers</td><td>'+  info['modules']['balancers']  +'</td></tr>';" CRLF \
+"       re += '<tr><td>Rules</td><td>'+      info['modules']['rules']      +'</td></tr>';" CRLF \
+"       re += '<tr><td>Cryptors</td><td>'+   info['modules']['cryptors']   +'</td></tr>';" CRLF \
+"       re += '</table>';" CRLF \
+"" CRLF \
+"       re += '<h2>Icons</h2><table>';" CRLF \
+"       re += '<tr><td>Default</td><td>'+    info['icons']['default']   +'</td></tr>';" CRLF \
+"       re += '<tr><td>Directory</td><td>'+  info['icons']['directory'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Parent</td><td>'+     info['icons']['parent']    +'</td></tr>';" CRLF \
+"       re += '</table>';" CRLF \
+"" CRLF \
+"       re += '<h2>I/O cache</h2><table>';" CRLF \
+"       re += '<tr><td>File Size: Max</td><td>'+            info['iocache']['file_size_max_formatted'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>File Size: Min</td><td>'+            info['iocache']['file_size_min_formatted'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Lasting: File information</td><td>'+ info['iocache']['lasting_stat'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Lasting: File mapping</td><td>'+     info['iocache']['lasting_mmap'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Cache Max Size</td><td>'+            info['iocache']['size_max'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Fetches</td><td>'+                   info['iocache']['fetches'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Hits</td><td>'+                      info['iocache']['hits'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Misses</td><td>'+                    info['iocache']['misses'] +'</td></tr>';" CRLF \
+"       re += '<tr><td>Total Mapped</td><td>'+              info['iocache']['mmapped_formatted'] +'</td></tr>';" CRLF \
+"       re += '</table>';" CRLF \
+"" CRLF \
+"       document.getElementById(\"information\").innerHTML = re;" CRLF \
+"    }" CRLF \
+"    tmp.update();" CRLF \
+"</script>"
 
 #define AUTHOR                                                                                          \
 "<a href=\"http://www.alobbs.com/\">Alvaro Lopez Ortega</a> &lt;alvaro@alobbs.com&gt;"
@@ -385,6 +488,7 @@ server_info_build_html (cherokee_handler_server_info_t *hdl,
 	cherokee_buffer_t ver = CHEROKEE_BUF_INIT;
 
 	cherokee_buffer_add_str (buffer, PAGE_HEADER);
+	cherokee_buffer_add_str (buffer, AJAX_JS);
 
 	cherokee_version_add (&ver, HANDLER_SRV(hdl)->server_token);
 	cherokee_buffer_replace_string (buffer, "{cherokee_name}", 15, ver.buf, ver.len);	
@@ -442,12 +546,12 @@ add_iocache (cherokee_dwriter_t *writer,
 	cherokee_dwriter_integer (writer, iocache->min_file_size);
 
 	cherokee_buffer_add_fsize (&tmp_buf, iocache->max_file_size);
-	cherokee_dwriter_cstring (writer, "file_size_max_formated");
+	cherokee_dwriter_cstring (writer, "file_size_max_formatted");
 	cherokee_dwriter_bstring (writer, &tmp_buf);
 	
 	cherokee_buffer_clean (&tmp_buf);
 	cherokee_buffer_add_fsize (&tmp_buf, iocache->min_file_size);
-	cherokee_dwriter_cstring (writer, "file_size_min_formated");
+	cherokee_dwriter_cstring (writer, "file_size_min_formatted");
 	cherokee_dwriter_bstring (writer, &tmp_buf);
 
 	cherokee_dwriter_cstring (writer, "lasting_mmap");
@@ -485,7 +589,7 @@ add_iocache (cherokee_dwriter_t *writer,
 
 	cherokee_buffer_clean (&tmp_buf);
 	cherokee_buffer_add_fsize (&tmp_buf, mmaped);
-	cherokee_dwriter_cstring (writer, "mmaped_formated");
+	cherokee_dwriter_cstring (writer, "mmaped_formatted");
 	cherokee_dwriter_bstring (writer, &tmp_buf);
 
 	cherokee_dwriter_dict_close (writer);
@@ -517,7 +621,12 @@ add_detailed_connections (cherokee_dwriter_t *writer,
 		cherokee_dwriter_cstring (writer, "handler");
 		cherokee_dwriter_bstring (writer, &info->handler);
 		cherokee_dwriter_cstring (writer, "percentage");
-		cherokee_dwriter_number  (writer, info->percent.buf, info->percent.len);
+		if (!cherokee_buffer_is_empty (&info->percent)) {
+			cherokee_dwriter_number  (writer,
+						  info->percent.buf, info->percent.len);
+		} else {
+			cherokee_dwriter_null (writer);
+		}
 
 		cherokee_dwriter_cstring (writer, "tx");
 		cherokee_dwriter_number  (writer, info->tx.buf, info->tx.len);
@@ -556,8 +665,7 @@ add_detailed_connections (cherokee_dwriter_t *writer,
 
 
 static void
-server_info_build_info (cherokee_handler_server_info_t *hdl,
-			cherokee_buffer_t              *buffer)
+server_info_build_info (cherokee_handler_server_info_t *hdl)
 {
 	ret_t               ret;
 	cherokee_dwriter_t *writer = &hdl->writer;
@@ -605,7 +713,7 @@ server_info_build_info (cherokee_handler_server_info_t *hdl,
 
 		ret = cherokee_connection_info_list_server (&infos, HANDLER_SRV(hdl), HANDLER(hdl));
 		if (ret == ret_ok) {				
-			cherokee_dwriter_cstring (writer, "connections");
+			cherokee_dwriter_cstring (writer, "detailed_connections");
 			add_detailed_connections (writer, &infos);
 		}
 
@@ -670,8 +778,6 @@ cherokee_handler_server_info_free (cherokee_handler_server_info_t *hdl)
 ret_t 
 cherokee_handler_server_info_init (cherokee_handler_server_info_t *hdl)
 {
-	ret_t ret;
-
 	if (strstr (HANDLER_CONN(hdl)->request.buf, "/logo.gif")) {
 		server_info_build_logo (hdl, &hdl->buffer);
 		hdl->action = send_logo;		
@@ -688,7 +794,7 @@ cherokee_handler_server_info_init (cherokee_handler_server_info_t *hdl)
 		}
 
 		hdl->action = send_info;
-		server_info_build_info (hdl, &hdl->buffer);
+		server_info_build_info (hdl);
 
 	} else {
 		hdl->action = send_html;
