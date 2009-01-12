@@ -40,6 +40,7 @@ class TestBase:
         self.expected_error          = None
         self.expected_content        = None
         self.expected_content_length = None
+        self.expected_one_of_these   = None
         self.forbidden_content       = None
         self._initialize()
         
@@ -144,6 +145,12 @@ class TestBase:
             if not item in self.reply:
                 return -1
 
+    def _check_result_expected_one_of_these (self, items):
+        for item in items:
+            r = self._check_result_expected_item (item)
+            if r != -1: return r
+        return -1
+
     def _check_result_forbidden_item (self, item):
         if item.startswith("file:"):
             f = open (item[5:])
@@ -173,6 +180,10 @@ class TestBase:
                     if r == -1: return -1
             else:
                 raise Exception("Syntax error")
+
+        if self.expected_one_of_these != None:
+            r = self._check_result_expected_one_of_these (self.expected_one_of_these)
+            if r == -1: return -1
 
         if self.forbidden_content != None:
             if type(self.forbidden_content) == types.StringType:
@@ -248,6 +259,9 @@ class TestBase:
 
         if self.expected_content is not None:
             src += "\tExpected = Content: %s\n" % (self.expected_content)
+
+        if self.expected_one_of_these is not None:
+            src += "\tExpected = one: %s\n" % (str(self.expected_one_of_these))
 
         if self.forbidden_content is not None:
             src += "\tForbidden= Content: %s\n" % (self.forbidden_content)

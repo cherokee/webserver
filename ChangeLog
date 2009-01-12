@@ -1,3 +1,9 @@
+2009-01-12  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* qa/base.py: Adds a new type of checking: expected_one_of_these.
+	It allows QA tests to require the match of at least one of the
+	strings of the list.
+
 2009-01-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* qa/195-ServerAddr.py, qa/Makefile.am: Tests wether the
