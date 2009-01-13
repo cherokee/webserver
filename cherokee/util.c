@@ -1593,7 +1593,17 @@ cherokee_ntop (int family, struct sockaddr *addr, char *dst, size_t cnt)
 	const char *str = NULL;
 	errno = EAFNOSUPPORT;
 
-#ifdef HAVE_IPV6
+	/* Only old systems without inet_ntop() function
+	 */
+#ifndef HAVE_INET_NTOP
+	{
+		str = inet_ntoa (((struct sockaddr_in *)addr)->sin_addr);
+		memcpy(dst, str, strlen(str));
+
+		return ret_ok;
+	}
+#else
+# ifdef HAVE_IPV6
 	if (family == AF_INET6) {
 		struct in6_addr *addr6 = &(((struct sockaddr_in6 *)addr)->sin6_addr);
 
@@ -1613,7 +1623,7 @@ cherokee_ntop (int family, struct sockaddr *addr, char *dst, size_t cnt)
 			}
 		}
 	} else
-#endif
+# endif
 	{
 		struct in_addr *addr4 = &((struct sockaddr_in *)addr)->sin_addr;
 		
@@ -1622,6 +1632,7 @@ cherokee_ntop (int family, struct sockaddr *addr, char *dst, size_t cnt)
 			goto error;
 		}
 	}
+#endif
 
 	return ret_ok;
 

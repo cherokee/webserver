@@ -244,20 +244,9 @@ cherokee_socket_ntop (cherokee_socket_t *socket, char *dst, size_t cnt)
 		return ret_error;
 	}
 
-	/* Only old systems without inet_ntop() function
-	 */
-#ifndef HAVE_INET_NTOP
-	{
-		struct sockaddr_in *addr = (struct sockaddr_in *) &SOCKET_ADDR(socket);
-		
-		str = inet_ntoa (addr->sin_addr);
-		memcpy(dst, str, strlen(str));
-
-		return ret_ok;
-	}
-#endif
-
-	return cherokee_ntop (SOCKET_AF(socket), &SOCKET_ADDR(socket), dst, cnt);
+	return cherokee_ntop (SOCKET_AF(socket),
+			      (struct sockaddr *) &SOCKET_ADDR(socket),
+			      dst, cnt);
 }
 
 

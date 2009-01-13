@@ -1,5 +1,8 @@
 2009-01-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/util.c (cherokee_ntop): The inet_ntoa() implementation
+	has been moved to cherokee_ntop().
+
 	* cherokee/util.h, cherokee/util.c, cherokee/handler_cgi_base.c,
 	cherokee/socket.h, cherokee/socket.c: Fixes a ntop issue:
 	http://code.google.com/p/cherokee/issues/detail?id=309
