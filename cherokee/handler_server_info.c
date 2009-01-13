@@ -119,7 +119,7 @@
 "</script>" CRLF \
 "" CRLF \
 "<script type=\"text/javascript\">" CRLF \
-"    tmp = new ajaxObject ('http://localhost:1234/about/info/js');" CRLF \
+"    tmp = new ajaxObject ('{request}/info/js');" CRLF \
 "    tmp.callback = function(txt) {" CRLF \
 "       var info = null;" CRLF \
 "       var re   = '';" CRLF \
