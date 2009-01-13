@@ -240,11 +240,7 @@ cherokee_socket_shutdown (cherokee_socket_t *socket, int how)
 ret_t
 cherokee_socket_ntop (cherokee_socket_t *socket, char *dst, size_t cnt)
 {
-	const char *str = NULL;
-
-	errno = EAFNOSUPPORT;
-
-	if (SOCKET_FD(socket) < 0) {
+	if (unlikely (SOCKET_FD(socket) < 0)) {
 		return ret_error;
 	}
 
@@ -261,42 +257,7 @@ cherokee_socket_ntop (cherokee_socket_t *socket, char *dst, size_t cnt)
 	}
 #endif
 
-
-#ifdef HAVE_IPV6
-	if (SOCKET_AF(socket) == AF_INET6) {
-		if (IN6_IS_ADDR_V4MAPPED (&SOCKET_ADDR_IPv6(socket)->sin6_addr) ||
-		    IN6_IS_ADDR_V4COMPAT (&SOCKET_ADDR_IPv6(socket)->sin6_addr))
-		{
-			const void *p = &((struct in6_addr *)
-					  &SOCKET_ADDR_IPv6(socket)->sin6_addr)->s6_addr[12];
-
-			str = inet_ntop (AF_INET, p, dst, cnt);
-			if (str == NULL) {
-				return ret_error;
-			}
-			return ret_ok;
-
-		} else {
-			struct sockaddr_in6 *addr = ((struct sockaddr_in6 *)
-						     &SOCKET_ADDR(socket));
-
-			str = (char *) inet_ntop (AF_INET6, &addr->sin6_addr, dst, cnt);
-			if (str == NULL) {
-				return ret_error;
-			}
-		}
-	} else
-#endif
-	{
-		struct sockaddr_in *addr = (struct sockaddr_in *) &SOCKET_ADDR(socket);
-		
-		str = inet_ntop (AF_INET, &addr->sin_addr, dst, cnt);
-		if (str == NULL) {
-			return ret_error;
-		}
-	}
-
-	return ret_ok;
+	return cherokee_ntop (SOCKET_AF(socket), &SOCKET_ADDR(socket), dst, cnt);
 }
 
 

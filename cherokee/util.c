@@ -950,7 +950,7 @@ cherokee_path_arg_eval (cherokee_buffer_t *path)
 	if (path->buf[0] != '/') {
 		d = getcwd (tmp, sizeof(tmp));
 
-		cherokee_buffer_prepend (path, "/", 1);		
+		cherokee_buffer_prepend (path, (char *)"/", 1);		
 		cherokee_buffer_prepend (path, d, strlen(d));		
 	}
 
@@ -1272,10 +1272,10 @@ cherokee_get_shell (const char **shell, const char **binary)
 
 
 void
-cherokee_print_errno (int error, char *format, ...) 
+cherokee_print_errno (int error, const char *format, ...) 
 {
 	va_list           ap;
-	char             *errstr;
+	const char       *errstr;
 	char              err_tmp[ERROR_MAX_BUFSIZE];
 	cherokee_buffer_t buffer = CHEROKEE_BUF_INIT;
 
@@ -1288,7 +1288,8 @@ cherokee_print_errno (int error, char *format, ...)
 	cherokee_buffer_add_va_list (&buffer, format, ap);
 	va_end (ap);
 
-	cherokee_buffer_replace_string (&buffer, "${errno}", 8, errstr, strlen(errstr));
+	cherokee_buffer_replace_string (&buffer, (char *)"${errno}", 8,
+					(char *) errstr, strlen(errstr));
 	PRINT_MSG_S (buffer.buf);
 
 	cherokee_buffer_mrproper (&buffer);
@@ -1400,7 +1401,7 @@ cherokee_iovec_skip_sent (struct iovec *orig, uint16_t  orig_len,
 		} else {
 			/* Add only a piece */
 			dest[j].iov_len  = orig[i].iov_len  - (sent - total);
-			dest[j].iov_base = orig[i].iov_base + (sent - total);
+			dest[j].iov_base = ((char *)orig[i].iov_base) + (sent - total);
 			j++;
 		}
 	}
@@ -1583,4 +1584,48 @@ cherokee_find_header_end (cherokee_buffer_t  *buf,
 	}
 
 	return ret_not_found;
+}
+
+
+ret_t
+cherokee_ntop (int family, struct sockaddr *addr, char *dst, size_t cnt)
+{
+	const char *str = NULL;
+	errno = EAFNOSUPPORT;
+
+#ifdef HAVE_IPV6
+	if (family == AF_INET6) {
+		struct in6_addr *addr6 = &(((struct sockaddr_in6 *)addr)->sin6_addr);
+
+		if (IN6_IS_ADDR_V4MAPPED (addr6) ||
+		    IN6_IS_ADDR_V4COMPAT (addr6))
+		{
+			const void *p = &(addr6)->s6_addr[12];
+
+			str = inet_ntop (AF_INET, p, dst, cnt);
+			if (str == NULL) {
+				goto error;
+			}
+		} else {
+			str = (char *) inet_ntop (AF_INET6, addr6, dst, cnt);
+			if (str == NULL) {
+				goto error;
+			}
+		}
+	} else
+#endif
+	{
+		struct in_addr *addr4 = &((struct sockaddr_in *)addr)->sin_addr;
+		
+		str = inet_ntop (AF_INET, addr4, dst, cnt);
+		if (str == NULL) {
+			goto error;
+		}
+	}
+
+	return ret_ok;
+
+error:
+	dst[0] = '\0';
+	return ret_error;
 }

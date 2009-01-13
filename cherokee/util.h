@@ -118,6 +118,7 @@ ret_t cherokee_getpwnam      (const char *name, struct passwd *pwbuf, char *buf,
 ret_t cherokee_getgrnam      (const char *name, struct group *pwbuf, char *buf, size_t buflen);
 ret_t cherokee_mkstemp       (cherokee_buffer_t *buffer, int *fd);
 ret_t cherokee_mkdir_p       (cherokee_buffer_t *path);
+ret_t cherokee_ntop          (int family, struct sockaddr *addr, char *dst, size_t cnt);
 
 ret_t cherokee_io_stat       (cherokee_iocache_t        *iocache, 
 			      cherokee_buffer_t         *path, 
@@ -150,7 +151,7 @@ ret_t cherokee_iovec_was_sent  (struct iovec orig[], uint16_t orig_len, size_t s
 /* Debug
  */
 void  cherokee_trace           (const char *entry, const char *file, int line, const char *func, const char *fmt, ...);
-void  cherokee_print_errno     (int error, char *format, ...);
+void  cherokee_print_errno     (int error, const char *format, ...);
 
 /* Path management
  */
