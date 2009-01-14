@@ -1,3 +1,7 @@
+2009-01-14  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/handler_server_info.c: Page refresh using Ajax.
+
 2009-01-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/util.c (cherokee_ntop): The inet_ntoa() implementation

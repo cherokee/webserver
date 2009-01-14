@@ -42,7 +42,6 @@
 #define PAGE_HEADER                                                                                     \
 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">" CRLF\
 "<html><header>"                                                                                    CRLF\
-"<meta  HTTP-EQUIV=\"refresh\" CONTENT=\"30\"><meta http-equiv=Cache-Control content=no-cache>"     CRLF\
 "<style type=\"text/css\"><!--"                                                                     CRLF\
 "body {background-color: #ffffff; color: #000000;}"                                                 CRLF\
 "body, td, th, h1, h2 {font-family: sans-serif;}"                                                   CRLF\
@@ -110,6 +109,8 @@
 "            }" CRLF \
 "         }" CRLF \
 "" CRLF \
+"         var date = new Date();" CRLF \
+"         var timestamp = date.getTime();" CRLF \
 "         AJAX.open (\"GET\", url, true);" CRLF \
 "         AJAX.send (null);" CRLF \
 "         return true;" CRLF \
@@ -119,6 +120,22 @@
 "</script>" CRLF \
 "" CRLF \
 "<script type=\"text/javascript\">" CRLF \
+"" CRLF \
+"function section_start (title)" CRLF \
+"{" CRLF \
+"    return ('<h2>' + title + '</h2><table>');" CRLF \
+"}" CRLF \
+"" CRLF \
+"function section_row (param, value)" CRLF \
+"{" CRLF \
+"    return ('<tr><td>' + param + '</td><td>' + value + '</td></tr>');" CRLF \
+"}" CRLF \
+"" CRLF \
+"function section_end ()" CRLF \
+"{" CRLF \
+"    return ('</table>');" CRLF \
+"}" CRLF \
+"" CRLF \
 "    tmp = new ajaxObject ('{request}/info/js');" CRLF \
 "    tmp.callback = function(txt) {" CRLF \
 "       var info = null;" CRLF \
@@ -126,60 +143,62 @@
 "" CRLF \
 "       eval('info = ' + txt);" CRLF \
 "    " CRLF \
-"       re += '<h2>General Information</h2><table>';" CRLF \
-"       re += '<tr><td>Inbound</td><td>'+  info['traffic']['rx_formatted'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Outbound</td><td>'+ info['traffic']['tx_formatted'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Uptime</td><td>'+   info['uptime']['formatted']     +'</td></tr>';" CRLF \
-"       re += '</table>';" CRLF \
+"       re += section_start('General Information');" CRLF \
+"       re += section_row('Inbound', info['traffic']['rx_formatted']);" CRLF \
+"       re += section_row('Outbound', info['traffic']['tx_formatted']);" CRLF \
+"       re += section_row('Uptime', info['uptime']['formatted']);" CRLF \
+"       re += section_end();" CRLF \
 "" CRLF \
-"       re += '<h2>Configuration</h2><table>';" CRLF \
-"       re += '<tr><td>Thread number</td><td>'+    info['config']['threads'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>IPv6</td><td>'+             info['config']['ipv6']    +'</td></tr>';" CRLF \
-"       re += '<tr><td>SSL/TLS</td><td>'+          info['config']['tls']     +'</td></tr>';" CRLF \
-"       re += '<tr><td>Chroot jail</td><td>'+      info['config']['chroot']  +'</td></tr>';" CRLF \
-"       re += '<tr><td>UID</td><td>'+              info['config']['UID']     +'</td></tr>';" CRLF \
-"       re += '<tr><td>GID</td><td>'+              info['config']['GID']     +'</td></tr>';" CRLF \
-"       re += '<tr><td>Operating System</td><td>'+ info['config']['OS']      +'</td></tr>';" CRLF \
-"       re += '</table>';" CRLF \
+"       re += section_start('Configuration');" CRLF \
+"       re += section_row('Thread number', info['config']['threads']);" CRLF \
+"       re += section_row('IPv6', info['config']['ipv6']);" CRLF \
+"       re += section_row('SSL/TLS', info['config']['tls']);" CRLF \
+"       re += section_row('Chroot jail', info['config']['chroot']);" CRLF \
+"       re += section_row('UID', info['config']['UID']);" CRLF \
+"       re += section_row('GID', info['config']['GID']);" CRLF \
+"       re += section_row('Operating System', info['config']['OS']);" CRLF \
+"       re += section_end();" CRLF \
 "" CRLF \
-"       re += '<h2>Current Connections</h2><table>';" CRLF \
-"       re += '<tr><td>Number</td><td>'+        info['connections']['number']   +'</td></tr>';" CRLF \
-"       re += '<tr><td>Active</td><td>'+        info['connections']['active']   +'</td></tr>';" CRLF \
-"       re += '<tr><td>Reusable</td><td>'+      info['connections']['reusable'] +'</td></tr>';" CRLF \
-"       re += '</table>';" CRLF \
+"       re += section_start('Current Connections');" CRLF \
+"       re += section_row('Number', info['connections']['number']);" CRLF \
+"       re += section_row('Active', info['connections']['active']);" CRLF \
+"       re += section_row('Reusable', info['connections']['reusable']);" CRLF \
+"       re += section_end();" CRLF \
 "" CRLF \
-"       re += '<h2>Modules</h2><table>';" CRLF \
-"       re += '<tr><td>Loggers</td><td>'+    info['modules']['loggers']    +'</td></tr>';" CRLF \
-"       re += '<tr><td>Handlers</td><td>'+   info['modules']['handlers']   +'</td></tr>';" CRLF \
-"       re += '<tr><td>Encoders</td><td>'+   info['modules']['encoders']   +'</td></tr>';" CRLF \
-"       re += '<tr><td>Validators</td><td>'+ info['modules']['validators'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Generic</td><td>'+    info['modules']['generic']    +'</td></tr>';" CRLF \
-"       re += '<tr><td>Balancers</td><td>'+  info['modules']['balancers']  +'</td></tr>';" CRLF \
-"       re += '<tr><td>Rules</td><td>'+      info['modules']['rules']      +'</td></tr>';" CRLF \
-"       re += '<tr><td>Cryptors</td><td>'+   info['modules']['cryptors']   +'</td></tr>';" CRLF \
-"       re += '</table>';" CRLF \
+"       re += section_start('Modules');" CRLF \
+"       re += section_row('Loggers', info['modules']['loggers']);" CRLF \
+"       re += section_row('Handlers', info['modules']['handlers']);" CRLF \
+"       re += section_row('Encoders', info['modules']['encoders']);" CRLF \
+"       re += section_row('Validators', info['modules']['validators']);" CRLF \
+"       re += section_row('Generic', info['modules']['generic']);" CRLF \
+"       re += section_row('Balancers', info['modules']['balancers']);" CRLF \
+"       re += section_row('Rules', info['modules']['rules']);" CRLF \
+"       re += section_row('Cryptors', info['modules']['cryptors']);" CRLF \
+"       re += section_end();" CRLF \
 "" CRLF \
-"       re += '<h2>Icons</h2><table>';" CRLF \
-"       re += '<tr><td>Default</td><td>'+    info['icons']['default']   +'</td></tr>';" CRLF \
-"       re += '<tr><td>Directory</td><td>'+  info['icons']['directory'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Parent</td><td>'+     info['icons']['parent']    +'</td></tr>';" CRLF \
-"       re += '</table>';" CRLF \
+"       re += section_start('Icons');" CRLF \
+"       re += section_row('Default', info['icons']['default']);" CRLF \
+"       re += section_row('Directory', info['icons']['directory']);" CRLF \
+"       re += section_row('Parent', info['icons']['parent']);" CRLF \
+"       re += section_end();" CRLF \
 "" CRLF \
-"       re += '<h2>I/O cache</h2><table>';" CRLF \
-"       re += '<tr><td>File Size: Max</td><td>'+            info['iocache']['file_size_max_formatted'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>File Size: Min</td><td>'+            info['iocache']['file_size_min_formatted'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Lasting: File information</td><td>'+ info['iocache']['lasting_stat'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Lasting: File mapping</td><td>'+     info['iocache']['lasting_mmap'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Cache Max Size</td><td>'+            info['iocache']['size_max'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Fetches</td><td>'+                   info['iocache']['fetches'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Hits</td><td>'+                      info['iocache']['hits'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Misses</td><td>'+                    info['iocache']['misses'] +'</td></tr>';" CRLF \
-"       re += '<tr><td>Total Mapped</td><td>'+              info['iocache']['mmapped_formatted'] +'</td></tr>';" CRLF \
-"       re += '</table>';" CRLF \
+"       re += section_start('I/O cache');" CRLF \
+"       re += section_row('File Size: Max', info['iocache']['file_size_max_formatted']);" CRLF \
+"       re += section_row('File Size: Min', info['iocache']['file_size_min_formatted']);" CRLF \
+"       re += section_row('Lasting: File information', info['iocache']['lasting_stat']);" CRLF \
+"       re += section_row('Lasting: File mapping', info['iocache']['lasting_mmap']);" CRLF \
+"       re += section_row('Cache Max Size', info['iocache']['size_max']);" CRLF \
+"       re += section_row('Fetches', info['iocache']['fetches']);" CRLF \
+"       re += section_row('Hits', info['iocache']['hits']);" CRLF \
+"       re += section_row('Misses', info['iocache']['misses']);" CRLF \
+"       re += section_row('Total Mapped', info['iocache']['mmapped_formatted']);" CRLF \
+"       re += section_end();" CRLF \
 "" CRLF \
 "       document.getElementById(\"information\").innerHTML = re;" CRLF \
 "    }" CRLF \
+"" CRLF \
 "    tmp.update();" CRLF \
+"    setInterval('tmp.update()', 30000);" CRLF \
 "</script>"
 
 #define AUTHOR                                                                                          \
@@ -840,6 +859,8 @@ cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
 		cherokee_buffer_add_str (buffer, "Content-Type: image/gif"CRLF);
 		break;
 	case send_info:
+		conn->expiration = cherokee_expiration_epoch;
+
 		switch (hdl->writer.lang) {
 		case dwriter_json:
 			cherokee_buffer_add_str (buffer, "Content-Type: application/json" CRLF);
