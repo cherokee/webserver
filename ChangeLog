@@ -1,3 +1,27 @@
+2009-01-14  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/fdpoll.c, cherokee/fdpoll.h,
+	cherokee/encoder_deflate.c, cherokee/main_worker.c,
+	cherokee/handler_ssi.c, cherokee/validator_htpasswd.c,
+	cherokee/header.c, cherokee/header.h, cherokee/encoder_gzip.c,
+	cherokee/handler_custom_error., cherokee/source_interpreter.c,
+	cherokee/rule_method.c, cherokee/admin_client.c,
+	cherokee/validator_mysql.c, cherokee/cache.c, cherokee/dwriter.c,
+	cherokee/dwriter.h, cherokee/socket.c, cherokee/logger_w3c.c,
+	cherokee/handler_server_info.c, cherokee/plugin_loader.c,
+	cherokee/plugin_loader.h, cherokee/handler_cgi_base.c,
+	cherokee/handler_cgi_base.h, cherokee/handler_dirlist.c,
+	cherokee/source.c, cherokee/validator_file.c,
+	cherokee/main_admin.c, cherokee/buffer.c, cherokee/handler_file.c,
+	cherokee/buffer.h, cherokee/main.c, cherokee/handler_fcgi.c,
+	cherokee/util.c, cherokee/handler_fastcgi.c, cherokee/util.h,
+	cherokee/cryptor_libssl.c, cherokee/handler_scgi.c,
+	cherokee/logger_ncsa.c, cherokee/post.c, cherokee/handler_error.c,
+	cherokee/post.h, cherokee/handler_cgi.c, cherokee/handler_cgi.h,
+	cherokee/main_tweak.c, cherokee/connection.c,
+	cherokee/connection.h, cherokee/server.c, cherokee/server.h: Fixes
+	a whole bunch of compilation issues.
+
 2009-01-14  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/handler_server_info.c: Page refresh using Ajax.

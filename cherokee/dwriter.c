@@ -129,7 +129,7 @@ cherokee_dwriter_set_buffer (cherokee_dwriter_t *writer,
 
 static ret_t
 escape_string (cherokee_buffer_t *buffer, 
-	       char              *s,
+	       const char        *s,
 	       cuint_t            len)
 {
 	char    c;
@@ -215,7 +215,7 @@ cherokee_dwriter_double (cherokee_dwriter_t *w, double d)
 }
 
 ret_t
-cherokee_dwriter_number (cherokee_dwriter_t *w, char *s, int len)
+cherokee_dwriter_number (cherokee_dwriter_t *w, const char *s, int len)
 {
 	ENSURE_VALID_STATE; ENSURE_NOT_KEY;
 	ADD_SEP; ADD_WHITE;
@@ -227,7 +227,7 @@ cherokee_dwriter_number (cherokee_dwriter_t *w, char *s, int len)
 }
 
 ret_t
-cherokee_dwriter_string (cherokee_dwriter_t *w, char *s, int len)
+cherokee_dwriter_string (cherokee_dwriter_t *w, const char *s, int len)
 {
 	ENSURE_VALID_STATE;
 	ADD_SEP; ADD_WHITE;

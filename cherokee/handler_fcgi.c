@@ -45,8 +45,8 @@
 
 
 static void set_env_pair (cherokee_handler_cgi_base_t *cgi_base, 
-			  char *key, int key_len, 
-			  char *val, int val_len);
+			  const char *key, int key_len, 
+			  const char *val, int val_len);
 
 /* Plug-in initialization
  */
@@ -348,8 +348,8 @@ fcgi_build_request_body (FCGI_BeginRequestRecord *request)
 
 static void 
 set_env_pair (cherokee_handler_cgi_base_t *cgi_base, 
-	      char *key, int key_len, 
-	      char *val, int val_len)
+	      const char *key, int key_len, 
+	      const char *val, int val_len)
 {
 	int                       len;
 	FCGI_BeginRequestRecord   request;

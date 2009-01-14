@@ -109,8 +109,6 @@
 "            }" CRLF \
 "         }" CRLF \
 "" CRLF \
-"         var date = new Date();" CRLF \
-"         var timestamp = date.getTime();" CRLF \
 "         AJAX.open (\"GET\", url, true);" CRLF \
 "         AJAX.send (null);" CRLF \
 "         return true;" CRLF \
@@ -501,6 +499,8 @@ server_info_build_logo (cherokee_handler_server_info_t *hdl,
 			cherokee_buffer_t              *buffer)
 {
 	ret_t ret;
+	UNUSED(hdl);
+
 #include "logo.inc"
 	return ret_ok;
 }
@@ -694,7 +694,6 @@ server_info_build_info (cherokee_handler_server_info_t *hdl)
 	ret_t               ret;
 	cherokee_dwriter_t *writer = &hdl->writer;
 	cherokee_server_t  *srv    = HANDLER_SRV(hdl);
-	cherokee_buffer_t   table  = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t   ver    = CHEROKEE_BUF_INIT;
 
 	cherokee_dwriter_dict_open (writer);

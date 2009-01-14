@@ -517,7 +517,9 @@ cherokee_header_get_length (cherokee_header_t *hdr, cuint_t *len)
 
 
 ret_t 
-cherokee_header_get_unknown (cherokee_header_t *hdr, char *name, int name_len, char **header, cuint_t *header_len)
+cherokee_header_get_unknown (cherokee_header_t *hdr, 
+			     const char        *name,   cuint_t name_len,
+			     char             **header, cuint_t *header_len)
 {
 	int i;
 
@@ -539,7 +541,10 @@ cherokee_header_get_unknown (cherokee_header_t *hdr, char *name, int name_len, c
 
 
 ret_t
-cherokee_header_copy_unknown (cherokee_header_t *hdr, char *name, int name_len, cherokee_buffer_t *buf)
+cherokee_header_copy_unknown (cherokee_header_t *hdr,
+			      const char        *name,
+			      cuint_t            name_len,
+			      cherokee_buffer_t *buf)
 {
 	ret_t    ret;
 	char    *info;

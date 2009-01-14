@@ -63,6 +63,7 @@ configure (cherokee_rule_method_t    *rule,
 static ret_t
 _free (void *p)
 {
+	UNUSED(p);
 	return ret_ok;
 }
 

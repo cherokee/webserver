@@ -50,13 +50,13 @@
 #define DEFAULT_CONFIG_FILE  CHEROKEE_CONFDIR "/cherokee.conf"
 #define DEFAULT_BIND         "127.0.0.1"
 #define RULE_PRE             "vserver!1!rule!"
- 
-static int   port          = DEFAULT_PORT;
-static char *document_root = DEFAULT_DOCUMENTROOT;
-static char *config_file   = DEFAULT_CONFIG_FILE;
-static char *bind_to       = DEFAULT_BIND;
-static int   debug         = 0;
-static int   unsecure      = 0;
+
+static int         port          = DEFAULT_PORT;
+static const char *document_root = DEFAULT_DOCUMENTROOT;
+static const char *config_file   = DEFAULT_CONFIG_FILE;
+static const char *bind_to       = DEFAULT_BIND;
+static int         debug         = 0;
+static int         unsecure      = 0;
 
 static ret_t
 find_empty_port (int starting, int *port)

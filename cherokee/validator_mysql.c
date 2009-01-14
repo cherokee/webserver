@@ -58,6 +58,8 @@ cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_serve
 {
 	cherokee_list_t			 *i;
 	cherokee_validator_mysql_props_t *props;
+
+	UNUSED(srv);
 	
 	if(*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, validator_mysql_props);
@@ -324,8 +326,14 @@ error:
 
 
 ret_t 
-cherokee_validator_mysql_add_headers (cherokee_validator_mysql_t *mysql, cherokee_connection_t *conn, cherokee_buffer_t *buf)
+cherokee_validator_mysql_add_headers (cherokee_validator_mysql_t *mysql,
+				      cherokee_connection_t      *conn, 
+				      cherokee_buffer_t          *buf)
 {
+	UNUSED (mysql);
+	UNUSED (conn);
+	UNUSED (buf);
+
 	return ret_ok;
 }
 

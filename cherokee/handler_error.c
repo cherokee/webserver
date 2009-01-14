@@ -179,6 +179,10 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 			"using https://");
 		break;
 
+	case http_unset:
+		SHOULDNT_HAPPEN;
+		break;
+
 	default:
 		break;
 	}

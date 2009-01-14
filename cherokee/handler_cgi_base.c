@@ -421,10 +421,16 @@ cherokee_handler_cgi_base_build_basic_env (
 		char                ip_str[CHE_INET_ADDRSTRLEN+1];
 
 		my_address_len = sizeof(my_address);
-		getsockname (SOCKET_FD(&conn->socket), &my_address, &my_address_len);
-		cherokee_ntop (my_address.sa_in.sin_family, &my_address,
+		getsockname (SOCKET_FD(&conn->socket), 
+			     (struct sockaddr *)&my_address,
+			     &my_address_len);
+
+		cherokee_ntop (my_address.sa_in.sin_family,
+			       (struct sockaddr *) &my_address,
 			       ip_str, sizeof(ip_str)-1);
-		set_env (cgi, "SERVER_ADDR", ip_str, strlen(ip_str));
+
+		set_env (cgi, "SERVER_ADDR",
+			 ip_str, strlen(ip_str));
 	} else {
 		set_env (cgi, "SERVER_ADDR",
 			 bind->server_address.buf,
@@ -538,11 +544,11 @@ foreach_header_add_unknown_variable (cherokee_buffer_t *header, cherokee_buffer_
 ret_t 
 cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee_connection_t *conn)
 {
-	ret_t                               ret;
-	cherokee_list_t                    *i;
-	cherokee_buffer_t                  *name;
-	cuint_t                             len      = 0;
-	char                               *p        = "";
+	ret_t                              ret;
+	cherokee_list_t                   *i;
+	cherokee_buffer_t                 *name;
+	cuint_t                            len       = 0;
+	const char                        *p         = "";
 	cherokee_buffer_t                  tmp       = CHEROKEE_BUF_INIT;
 	cherokee_handler_cgi_base_props_t *cgi_props = HANDLER_CGI_BASE_PROPS(cgi); 
 

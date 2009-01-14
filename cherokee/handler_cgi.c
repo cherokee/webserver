@@ -290,8 +290,8 @@ cherokee_handler_cgi_configure (cherokee_config_node_t *conf, cherokee_server_t 
 
 void
 cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
-				   char *name,    int name_len,
-				   char *content, int content_len)
+				   const char *name,    int name_len,
+				   const char *content, int content_len)
 {
 	cherokee_handler_cgi_t *cgi = HDL_CGI(cgi_base);
 

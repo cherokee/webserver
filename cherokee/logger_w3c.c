@@ -62,8 +62,11 @@ PLUGIN_INFO_LOGGER_EASIEST_INIT (w3c);
 
 /* Some constants
  */
-static char *month[]   = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-			  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", NULL};
+static const char *month[] = {
+	"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+	NULL
+};
 
 #define IN_ADDR(c) ((struct in_addr) (c).sin_addr)
 

@@ -522,7 +522,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 		 */
 		conn->io_entry_ref = io_entry;
 
-		conn->mmaped     = io_entry->mmaped + conn->range_start;
+		conn->mmaped     = ((char *)io_entry->mmaped) + conn->range_start;
 		conn->mmaped_len = io_entry->mmaped_len -
 			(conn->range_start +
 			 (io_entry->mmaped_len - conn->range_end));

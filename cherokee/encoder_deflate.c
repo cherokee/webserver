@@ -91,7 +91,7 @@ cherokee_encoder_deflate_add_headers (cherokee_encoder_deflate_t *encoder,
 }
 
 
-static char *
+static const char *
 get_deflate_error_string (int err)
 {
 	switch (err) {

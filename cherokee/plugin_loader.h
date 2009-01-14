@@ -57,13 +57,13 @@ ret_t cherokee_plugin_loader_mrproper       (cherokee_plugin_loader_t *loader);
 
 ret_t cherokee_plugin_loader_set_directory  (cherokee_plugin_loader_t *loader, cherokee_buffer_t *dir);
 ret_t cherokee_plugin_loader_set_deps_dir   (cherokee_plugin_loader_t *loader, cherokee_buffer_t *dir);
-ret_t cherokee_plugin_loader_load           (cherokee_plugin_loader_t *loader, char *modname);
-ret_t cherokee_plugin_loader_load_no_global (cherokee_plugin_loader_t *loader, char *modname);
-ret_t cherokee_plugin_loader_unload         (cherokee_plugin_loader_t *loader, char *modname);
+ret_t cherokee_plugin_loader_load           (cherokee_plugin_loader_t *loader, const char *modname);
+ret_t cherokee_plugin_loader_load_no_global (cherokee_plugin_loader_t *loader, const char *modname);
+ret_t cherokee_plugin_loader_unload         (cherokee_plugin_loader_t *loader, const char *modname);
 
-ret_t cherokee_plugin_loader_get            (cherokee_plugin_loader_t *loader, char *modname, cherokee_plugin_info_t **info);
-ret_t cherokee_plugin_loader_get_info       (cherokee_plugin_loader_t *loader, char *modname, cherokee_plugin_info_t **info);
-ret_t cherokee_plugin_loader_get_sym        (cherokee_plugin_loader_t *loader, char *modname, char *name, void **sym);
+ret_t cherokee_plugin_loader_get            (cherokee_plugin_loader_t *loader, const char *modname, cherokee_plugin_info_t **info);
+ret_t cherokee_plugin_loader_get_info       (cherokee_plugin_loader_t *loader, const char *modname, cherokee_plugin_info_t **info);
+ret_t cherokee_plugin_loader_get_sym        (cherokee_plugin_loader_t *loader, const char *modname, const char *name, void **sym);
 
 ret_t cherokee_plugin_loader_get_mods_info  (cherokee_plugin_loader_t *loader, cherokee_buffer_t *builtin);
 

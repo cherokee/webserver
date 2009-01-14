@@ -130,7 +130,7 @@ cherokee_encoder_gzip_add_headers (cherokee_encoder_gzip_t *encoder,
 }
 
 
-static char *
+static const char *
 get_gzip_error_string (int err)
 {
 	switch (err) {

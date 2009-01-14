@@ -45,6 +45,8 @@ cherokee_handler_custom_error_configure (cherokee_config_node_t   *conf,
 	cherokee_config_node_t                *subconf;
 	cherokee_handler_custom_error_props_t *props;
 	
+	UNUSED(srv);
+
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_custom_error_props);
 		
@@ -80,6 +82,8 @@ cherokee_handler_custom_error_new  (cherokee_handler_t     **hdl,
 				    void                    *cnt,
 				    cherokee_module_props_t *props)
 {
+	UNUSED(hdl);
+
 	CONN(cnt)->error_code = PROP_CUSTOM_ERROR(props)->error_code;
 	return ret_error;
 }

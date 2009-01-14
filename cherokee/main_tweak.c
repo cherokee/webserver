@@ -275,7 +275,7 @@ do_logrotate (cherokee_buffer_t  *url,
 }
 
 static void
-print_entry (const char *str, char *format, ...)
+print_entry (const char *str, const char *format, ...)
 {
 	cuint_t i;
 	va_list ap;
@@ -357,7 +357,7 @@ do_print_info (cherokee_buffer_t  *url,
 }
 
 static ret_t
-init_tls (char *plugin, cherokee_cryptor_t **cryptor)
+init_tls (const char *plugin, cherokee_cryptor_t **cryptor)
 {
 	ret_t                     ret;
 	cherokee_plugin_loader_t  loader;

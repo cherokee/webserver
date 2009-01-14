@@ -197,7 +197,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 {
 	int                re;
 	char             **envp;
-	char              *argv[]       = {"sh", "-c", NULL, NULL};
+	const char        *argv[]       = {"sh", "-c", NULL, NULL};
 	int                child        = -1;
 	char              *empty_envp[] = {NULL};
 	cherokee_buffer_t  tmp          = CHEROKEE_BUF_INIT;
@@ -295,7 +295,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 		}
 
 		argv[2] = (char *)tmp.buf;
-		re = execve ("/bin/sh", argv, envp);
+		re = execve ("/bin/sh", (char **)argv, envp);
 		if (re < 0) {
 			PRINT_ERROR ("ERROR: Could spawn %s\n", tmp.buf);
 			exit (1);

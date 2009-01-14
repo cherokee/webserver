@@ -144,8 +144,8 @@ fcgi_build_request_body (FCGI_BeginRequestRecord *request)
 
 static void 
 set_env_pair (cherokee_handler_cgi_base_t *cgi_base, 
-	      char *key, int key_len, 
-	      char *val, int val_len)
+	      const char *key, int key_len, 
+	      const char *val, int val_len)
 {
 	int                         len;
 	FCGI_BeginRequestRecord     request;
@@ -587,7 +587,7 @@ send_post (cherokee_handler_fastcgi_t *hdl, cherokee_buffer_t *buf)
 }
 
 
-ret_t
+static ret_t
 init_respin (cherokee_handler_fastcgi_t *hdl)
 {
 	ret_t ret;

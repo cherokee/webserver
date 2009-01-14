@@ -71,7 +71,7 @@ PLUGIN_INFO_HANDLER_EASIEST_INIT (dirlist, http_get);
 /* Methods implementation
  */
 static ret_t
-load_theme_load_file (cherokee_buffer_t *theme_path, char *file, cherokee_buffer_t *output)
+load_theme_load_file (cherokee_buffer_t *theme_path, const char *file, cherokee_buffer_t *output)
 {
 	cherokee_buffer_t path = CHEROKEE_BUF_INIT;
 
@@ -87,7 +87,7 @@ load_theme_load_file (cherokee_buffer_t *theme_path, char *file, cherokee_buffer
 
 
 static ret_t
-parse_if (cherokee_buffer_t *buf, char *if_entry, size_t len_entry, cherokee_boolean_t show)
+parse_if (cherokee_buffer_t *buf, const char *if_entry, size_t len_entry, cherokee_boolean_t show)
 {
 	char              *begin;
 	char              *end;
@@ -182,7 +182,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 	ret_t                             ret;
 	cherokee_list_t                  *i;
 	cherokee_handler_dirlist_props_t *props;
-	char                             *theme      = NULL;
+	const char                       *theme      = NULL;
 	cherokee_buffer_t                 theme_path = CHEROKEE_BUF_INIT;
 
 	UNUSED(srv);
@@ -276,7 +276,7 @@ is_header_file (cherokee_handler_dirlist_t *dhdl, char *filename)
 }
 
 
-ret_t
+static ret_t
 generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer_t *path, file_entry_t **ret_entry)
 {
 	int            re;
@@ -732,10 +732,11 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
  *       (flip/flop algorithm).
  */
 static ret_t
-substitute_vbuf_token (
-		cherokee_buffer_t **vbuf, size_t *pidx_buf,
-		char *token, int token_len,
-		char *replacement)
+substitute_vbuf_token (cherokee_buffer_t **vbuf,
+		       size_t             *pidx_buf,
+		       const char         *token,
+		       int                 token_len,
+		       const char         *replacement)
 {
 	ret_t ret;
 
@@ -747,9 +748,10 @@ substitute_vbuf_token (
 	 * of vbuf[] and in this case we can increment the index position.
 	 * NOTE: *pidx_buf ^= 1 is faster than *pidx_buf = (*pidx_buf + 1) % 2
 	 */
-	ret = cherokee_buffer_substitute_string (
-			vbuf[*pidx_buf], vbuf[*pidx_buf ^ 1],
-			token, token_len, replacement, strlen(replacement));
+	ret = cherokee_buffer_substitute_string (vbuf[*pidx_buf],
+						 vbuf[*pidx_buf ^ 1],
+						 (char *)token, token_len,
+						 (char *)replacement, strlen(replacement));
 	if (ret == ret_ok)
 		*pidx_buf ^= 1;
 
@@ -780,9 +782,9 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	cuint_t                           name_len;
 	int                               is_dir;
 	int                               is_link;
-	char                             *alt      = NULL;
+	const char                       *alt      = NULL;
 	cherokee_buffer_t                *icon     = NULL;
-	char                             *name     = (char *) &file->info.d_name;
+	const char                       *name     = (char *) &file->info.d_name;
 	cherokee_icons_t                 *icons    = HANDLER_SRV(dhdl)->icons;
 	cherokee_buffer_t                *tmp      = &dhdl->header;
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
@@ -886,7 +888,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	 */
 	if (props->show_user) {
 		struct passwd *user;
-		char          *name;
+		const char    *name;
 		
 		user = getpwuid (file->stat.st_uid);
 		name = (char *) (user->pw_name) ? user->pw_name : "unknown";
@@ -898,7 +900,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	 */
 	if (props->show_group) {
 		struct group *user;
-		char         *group;
+		const char   *group;
 		
 		user = getgrgid (file->stat.st_gid);
 		group = (char *) (user->gr_name) ? user->gr_name : "unknown";

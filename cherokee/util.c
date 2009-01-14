@@ -528,7 +528,7 @@ cherokee_split_arguments (cherokee_buffer_t *request,
 
 
 int
-cherokee_estimate_va_length (char *fmt, va_list ap)
+cherokee_estimate_va_length (const char *fmt, va_list ap)
 {
 	char               *p;
 	cuchar_t            ch;

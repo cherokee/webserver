@@ -152,8 +152,8 @@ signals_handler (int sig, siginfo_t *si, void *context)
 static ret_t
 test_configuration_file (void)
 {
-	ret_t  ret;
-	char  *config;
+	ret_t       ret;
+	const char *config;
 
 	config = (config_file) ? config_file : DEFAULT_CONFIG_FILE;
 	ret = cherokee_server_read_config_file (srv, config);
@@ -225,7 +225,7 @@ common_server_initialization (cherokee_server_t *srv)
 		}
 
 	} else {
-		char *config;
+		const char *config;
 		
 		/* Read the configuration file
 		 */

@@ -333,7 +333,7 @@ replace (cherokee_cache_t       *cache,
 	/* cache->priv->mutex is LOCKED
 	 * x->mutex           is LOCKED
 	 */
-	cuint_t                 p   = cache->target_t1;
+	cint_t                  p   = cache->target_t1;
 	cherokee_cache_entry_t *tmp = NULL;
 
 	if ((cache->len_t1 >= 1) &&

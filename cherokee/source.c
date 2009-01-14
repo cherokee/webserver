@@ -71,8 +71,8 @@ cherokee_source_mrproper (cherokee_source_t *src)
 static int
 is_ipv6 (cherokee_buffer_t *ip)
 {
-	int i;
-	int colons = 0;
+	cuint_t i;
+	cuint_t colons = 0;
 
 	for (i=0; i<ip->len; i++) {
 		if (ip->buf[i] == ':') {

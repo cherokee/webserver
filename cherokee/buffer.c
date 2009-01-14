@@ -474,7 +474,7 @@ cherokee_buffer_add_ullong16 (cherokee_buffer_t *buf, cullong_t ulNum)
 
 
 ret_t 
-cherokee_buffer_add_va_fixed (cherokee_buffer_t *buf, char *format, ...)
+cherokee_buffer_add_va_fixed (cherokee_buffer_t *buf, const char *format, ...)
 {
 	int len;
 	int size = buf->size - buf->len;	/* final '\0' is always available */
@@ -506,7 +506,7 @@ cherokee_buffer_add_va_fixed (cherokee_buffer_t *buf, char *format, ...)
 
 
 ret_t 
-cherokee_buffer_add_va_list (cherokee_buffer_t *buf, char *format, va_list args)
+cherokee_buffer_add_va_list (cherokee_buffer_t *buf, const char *format, va_list args)
 {
 	int len;
 	int estimation;
@@ -574,7 +574,7 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, char *format, va_list args)
 
 
 ret_t 
-cherokee_buffer_add_va (cherokee_buffer_t *buf, char *format, ...)
+cherokee_buffer_add_va (cherokee_buffer_t *buf, const char *format, ...)
 {
 	ret_t   ret;
 	va_list ap;
@@ -886,7 +886,7 @@ cherokee_buffer_case_cmp (cherokee_buffer_t *buf, char *txt, cuint_t txt_len)
 
 
 size_t
-cherokee_buffer_cnt_spn (cherokee_buffer_t *buf, cuint_t offset, char *str) 
+cherokee_buffer_cnt_spn (cherokee_buffer_t *buf, cuint_t offset, const char *str) 
 {
 	if (unlikely ((buf->buf == NULL) || (buf->len <= offset)))
 		return 0;
@@ -896,7 +896,7 @@ cherokee_buffer_cnt_spn (cherokee_buffer_t *buf, cuint_t offset, char *str)
 
 
 size_t 
-cherokee_buffer_cnt_cspn (cherokee_buffer_t *buf, cuint_t offset, char *str) 
+cherokee_buffer_cnt_cspn (cherokee_buffer_t *buf, cuint_t offset, const char *str) 
 {
 	if (unlikely ((buf->buf == NULL) || (buf->len <= offset)))
 		return 0;
@@ -1610,8 +1610,8 @@ cherokee_buffer_end_char (cherokee_buffer_t *buf)
 
 ret_t 
 cherokee_buffer_replace_string (cherokee_buffer_t *buf, 
-				char *substring,   int substring_length, 
-				char *replacement, int replacement_length)
+				const char *substring,   int substring_length, 
+				const char *replacement, int replacement_length)
 {
 	int         remaining_length;
 	int         result_length;

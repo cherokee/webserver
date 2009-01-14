@@ -56,6 +56,8 @@ cherokee_validator_file_configure (cherokee_config_node_t     *conf,
 	cherokee_config_node_t          *subconf;
 	cherokee_validator_file_props_t *props    = PROP_VFILE(*_props);
 
+	UNUSED (srv);
+
 	/* Password file
 	 */
 	ret = cherokee_config_node_get (conf, "passwdfile", &subconf);

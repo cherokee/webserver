@@ -51,6 +51,7 @@
 static ret_t
 _free (cherokee_cryptor_libssl_t *cryp)
 {
+	UNUSED(cryp);
 	return ret_ok;
 }
 
@@ -60,6 +61,10 @@ _configure (cherokee_cryptor_t     *cryp,
 	    cherokee_config_node_t *conf,
 	    cherokee_server_t      *srv)
 {
+	UNUSED(cryp);
+	UNUSED(conf);
+	UNUSED(srv);
+
 	return ret_ok;
 }
 
@@ -86,6 +91,8 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	SSL_CTX                   *ctx;
 	cherokee_server_t         *srv       = SRV(arg);
 	cherokee_virtual_server_t *vsrv      = NULL;
+
+	UNUSED(ad);
 
 	/* Get the pointer to the socket 
 	 */
@@ -132,6 +139,9 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 static int
 openssl_verify_peer (int ok, X509_STORE_CTX *x509_store)
 {
+	UNUSED(ok);
+	UNUSED(x509_store);
+
 	return 1;
 }
 
@@ -141,10 +151,12 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	      cherokee_virtual_server_t   *vsrv,
 	      cherokee_cryptor_vserver_t **cryp_vsrv)
 {
-	ret_t  ret;
-	int    rc;
-	char  *error;
+	ret_t       ret;
+	int         rc;
+	const char *error;
 	CHEROKEE_NEW_STRUCT (n, cryptor_vserver_libssl);
+
+	UNUSED(cryp);
 	
 	/* Init
 	 */
@@ -241,7 +253,6 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	}
 #endif /* OPENSSL_NO_TLSEXT */
 
-	
 	if (! cherokee_buffer_is_empty (&vsrv->certs_client)) {
 		STACK_OF(X509_NAME) *X509_clients;
 
@@ -280,6 +291,7 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 		   cherokee_virtual_server_t        *vserver)
 {
 	int                                re;
+	const char                        *error;
 	cherokee_cryptor_vserver_libssl_t *vsrv_crytor = CRYPTOR_VSRV_SSL(vserver->cryptor);
 
 	/* Set the virtual server object reference
@@ -300,8 +312,6 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	 */
 	cryp->session = SSL_new (vsrv_crytor->context);
 	if (cryp->session == NULL) {
-		char *error;
-
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR ("ERROR: OpenSSL: Unable to create a new SSL "
 			     "connection from the SSL context: %s\n", error);
@@ -312,8 +322,6 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	 */
 	re = SSL_set_fd (cryp->session, socket->socket);
 	if (re != 1) {
-		char *error;
-
 		OPENSSL_LAST_ERROR(error);
 		PRINT_ERROR ("ERROR: OpenSSL: Can not set fd(%d): %s\n", 
 			     socket->socket, error);
@@ -359,7 +367,7 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 	 */
 	re = SSL_accept (cryp->session);
 	if (re <= 0) {
-		char *error;
+		const char *error;
 
 		switch (SSL_get_error (cryp->session, re)) {
 		case SSL_ERROR_WANT_READ:
@@ -510,6 +518,8 @@ _socket_new (cherokee_cryptor_libssl_t         *cryp,
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, cryptor_socket_libssl);
 	
+	UNUSED(cryp);
+
 	ret = cherokee_cryptor_socket_init_base (CRYPTOR_SOCKET(n));
 	if (unlikely (ret != ret_ok))
 		return ret;
@@ -536,8 +546,8 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 		  cherokee_buffer_t                *host,
 		  cherokee_socket_t                *socket)
 {
-	int   re;
-	char *error;
+	int         re;
+	const char *error;
 
 	/* New context
 	 */
@@ -641,6 +651,8 @@ _client_new (cherokee_cryptor_t         *cryp,
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, cryptor_client_libssl);
+
+	UNUSED(cryp);
 
 	ret = cherokee_cryptor_socket_init_base (CRYPTOR_SOCKET(n));
 	if (unlikely (ret != ret_ok))

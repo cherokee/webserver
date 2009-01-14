@@ -69,7 +69,7 @@ ret_t cherokee_server_log_reopen         (cherokee_server_t *srv);
  */
 ret_t cherokee_server_handle_HUP   (cherokee_server_t *srv);
 ret_t cherokee_server_handle_TERM  (cherokee_server_t *srv);
-ret_t cherokee_server_handle_panic (cherokee_server_t *srv);
+void  cherokee_server_handle_panic (cherokee_server_t *srv);
 
 
 CHEROKEE_END_DECLS

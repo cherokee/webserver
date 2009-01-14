@@ -101,6 +101,7 @@ cherokee_handler_ssi_configure (cherokee_config_node_t   *conf,
 	cherokee_handler_ssi_props_t *props;
 
 	UNUSED(srv);
+	UNUSED(conf);
 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_ssi_props);
@@ -448,8 +449,8 @@ cherokee_handler_ssi_add_headers (cherokee_handler_ssi_t *hdl,
 	ret_t                  ret;
 	char                  *ext;
 	cherokee_buffer_t     *mime = NULL;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);;
 	cherokee_server_t     *srv  = HANDLER_SRV(hdl);
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);;
 
 	/* MIME type
 	 */

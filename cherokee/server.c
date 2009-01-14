@@ -354,7 +354,7 @@ static ret_t
 print_banner (cherokee_server_t *srv)
 {
 	ret_t              ret;
-	char              *method;
+	const char        *method;
 	cherokee_list_t   *i;
 	cherokee_buffer_t *buf;
 	size_t             b   = 0;
@@ -1666,7 +1666,7 @@ cherokee_server_handle_TERM (cherokee_server_t *srv)
 }
 
 
-ret_t
+void
 cherokee_server_handle_panic (cherokee_server_t *srv)
 {
 	int               re;

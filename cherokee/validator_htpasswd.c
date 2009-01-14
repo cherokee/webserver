@@ -126,7 +126,7 @@ crypt_r_emu (const char *key, const char *salt, const char *compared)
 #endif
 
 
-ret_t
+static ret_t
 check_crypt (char *passwd, char *salt, const char *compared)
 {
 	ret_t ret;
@@ -245,6 +245,8 @@ request_isnt_passwd_file (cherokee_validator_htpasswd_t *htpasswd,
 	char    *p;
 	cuint_t  re;
 	cuint_t  len;
+
+	UNUSED(htpasswd);
 
 	/* Sanity check */
 	if (cherokee_buffer_is_empty (full_path))

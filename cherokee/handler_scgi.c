@@ -107,8 +107,8 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 
 static void 
 add_env_pair (cherokee_handler_cgi_base_t *cgi_base, 
-	      char *key, int key_len, 
-	      char *val, int val_len)
+	      const char *key, int key_len, 
+	      const char *val, int val_len)
 {
 	static char              zero = '\0';
 	cherokee_handler_scgi_t *scgi = HDL_SCGI(cgi_base);

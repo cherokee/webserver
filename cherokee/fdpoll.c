@@ -42,7 +42,7 @@ cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, cuint_t *sys_fd_limit, 
 	 */
 	switch (type) {
 	case cherokee_poll_epoll:
-#if HAVE_EPOLL	
+#ifdef HAVE_EPOLL	
 		return fdpoll_epoll_get_fdlimits (sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
@@ -56,7 +56,7 @@ cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, cuint_t *sys_fd_limit, 
 #endif	
 
 	case cherokee_poll_port:
-#if HAVE_PORT
+#ifdef HAVE_PORT
 		return fdpoll_port_get_fdlimits(sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
@@ -70,7 +70,7 @@ cherokee_fdpoll_get_fdlimits (cherokee_poll_type_t type, cuint_t *sys_fd_limit, 
 #endif	
 
 	case cherokee_poll_win32:
-#if HAVE_WIN32_SELECT
+#ifdef HAVE_WIN32_SELECT
 		return fdpoll_win32_get_fdlimits (sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
@@ -100,7 +100,7 @@ cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys
 
 	switch (type) {
 	case cherokee_poll_epoll:
-#if HAVE_EPOLL	
+#ifdef HAVE_EPOLL	
 		return fdpoll_epoll_new (fdp, sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
@@ -114,7 +114,7 @@ cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys
 #endif	
 
 	case cherokee_poll_port:
-#if HAVE_PORT
+#ifdef HAVE_PORT
 		return fdpoll_port_new (fdp, sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
@@ -128,7 +128,7 @@ cherokee_fdpoll_new (cherokee_fdpoll_t **fdp, cherokee_poll_type_t type, int sys
 #endif	
 
 	case cherokee_poll_win32:
-#if HAVE_WIN32_SELECT
+#ifdef HAVE_WIN32_SELECT
 		return fdpoll_win32_new (fdp, sys_fd_limit, fd_limit);
 #else			
 		return ret_no_sys;
@@ -186,7 +186,7 @@ cherokee_fdpoll_get_method (cherokee_fdpoll_t *fdp, cherokee_poll_type_t *type)
 
 
 ret_t 
-cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, char **str)
+cherokee_fdpoll_get_method_str (cherokee_fdpoll_t *fdp, const char **str)
 {
 	switch (fdp->type) {
 	case cherokee_poll_epoll:

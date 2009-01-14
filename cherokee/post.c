@@ -124,7 +124,7 @@ cherokee_post_get_len (cherokee_post_t *post, off_t *len)
 
 
 ret_t 
-cherokee_post_append (cherokee_post_t *post, char *str, size_t len)
+cherokee_post_append (cherokee_post_t *post, const char *str, size_t len)
 {
 	TRACE(ENTRIES, "appends=%d bytes\n", len);
 

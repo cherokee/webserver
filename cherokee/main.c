@@ -54,7 +54,7 @@ figure_worker_path (const char *arg0)
 	char        tmp[512];
 	int         len, re, i;
 	const char *d;
-	char       *unix_paths[] = {"/proc/%d/exe",        /* Linux   */
+	const char *unix_paths[] = {"/proc/%d/exe",        /* Linux   */
 				    "/proc/%d/path/a.out", /* Solaris */
 				    "/proc/%d/file",       /* BSD     */
 				    NULL};
@@ -354,7 +354,7 @@ may_daemonize (int argc, char *argv[])
 		    (strcmp(argv[i], "--detach") == 0))
 		{
 			daemonize = 1;
-			argv[i]   = "";
+			argv[i]   = (char *)"";
 		}
 	}
 

@@ -987,6 +987,8 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 			  off_t   *offset, 
 			  ssize_t *sent)
 {
+	int                       re;
+	off_t                     _sent  = size;
 	static cherokee_boolean_t no_sys = false;
 
 	/* Exit if there is no sendfile() function in the system
@@ -998,7 +1000,7 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
  	 * needed in some systems (i.e. *BSD) because value 0 may have
  	 * special meanings or trigger occasional hidden bugs.
  	 */
-	if (size == 0)
+	if (unlikely (size == 0))
 		return ret_ok;
 
 	/* Limit size of data that has to be sent.
@@ -1058,8 +1060,6 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	}
 
 #elif DARWIN_SENDFILE_API
-	int   re;
-	off_t _sent = size;
 
 	/* MacOS X: BSD-like System Call
 	 *

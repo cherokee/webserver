@@ -53,8 +53,8 @@
 typedef struct cherokee_handler_cgi_base cherokee_handler_cgi_base_t;
 
 typedef void  (* cherokee_handler_cgi_base_add_env_pair_t)  (cherokee_handler_cgi_base_t *cgi,
-							     char *name,    int name_len,
-							     char *content, int content_len);
+							     const char *name,    int name_len,
+							     const char *content, int content_len);
 
 typedef ret_t (* cherokee_handler_cgi_base_read_from_cgi_t) (cherokee_handler_cgi_base_t *cgi, 
 							     cherokee_buffer_t *buffer);

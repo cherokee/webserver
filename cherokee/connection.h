@@ -43,7 +43,10 @@ typedef struct cherokee_connection cherokee_connection_t;
  */
 ret_t  cherokee_connection_set_cork      (cherokee_connection_t *conn, cherokee_boolean_t enable);
 ret_t  cherokee_connection_parse_args    (cherokee_connection_t *conn);
-char  *cherokee_connection_get_phase_str (cherokee_connection_t *conn);
+
+/* Handy functions
+ */
+const char *cherokee_connection_get_phase_str (cherokee_connection_t *conn);
 
 CHEROKEE_END_DECLS
 

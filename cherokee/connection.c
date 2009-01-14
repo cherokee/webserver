@@ -2279,7 +2279,7 @@ cherokee_connection_print (cherokee_connection_t *conn)
 #endif
 
 #ifdef TRACE_ENABLED
-char *
+const char *
 cherokee_connection_get_phase_str (cherokee_connection_t *conn)
 {
 	switch (conn->phase) {
