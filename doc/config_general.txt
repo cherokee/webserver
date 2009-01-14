@@ -3,19 +3,11 @@
 General Configuration
 ---------------------
 
-image::media/images/admin_general.png[General]
-
-
 [[networking]]
 Networking
 ~~~~~~~~~~
 
-Binding:
-^^^^^^^
-When the server is initiated it opens a port and starts listening to
-incoming requests. By default this is port 80 and it will use all the
-network interfaces of the machine, which is usually the desired
-behavior.
+image::media/images/admin_general_networking.png[General]
 
 
 IPv6 support
@@ -26,15 +18,11 @@ compiled with IPv6 support (--with-ipv6), this configuration entry
 will be fully functional, otherwise it will be ignored.
 
 
-Listen
-^^^^^^
-This specifies the IP of the network interface to use. It can be left
-empty.
+TLS/SSL Back-end
+^^^^^^^^^^^^^^^^
+Specifies the TLS/SSL backend to be used, if any. The current option
+is OpenSSL.
 
-
-[[basic_behavior]]
-Basic Behavior
-~~~~~~~~~~~~~~
 
 Timeout
 ^^^^^^^
@@ -53,19 +41,34 @@ itself.
 Parameters               , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Product                  , Cherokee
-Minor                    , Cherokee/0.11
-Minimal                  , Cherokee/0.11.0
-OS                       , Cherokee/0.11.0 (UNIX)
-Full                     , Cherokee/0.11.0 b2321 (UNIX)
+Minor                    , Cherokee/0.98
+Minimal                  , Cherokee/0.98.0
+OS                       , Cherokee/0.98.0 (UNIX)
+Full                     , Cherokee/0.98.0 b2321 (UNIX)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default, Cherokee will use *Full*.
 
 
+[[ports_to_listen]]
+Ports to listen
+~~~~~~~~~~~~~~~
+
+image::media/images/admin_general_ports.png[Ports to listen]
+
+This section allows to configure the port that the server will listen
+to.
+
+Each binding entry can be configured to listen to a network
+interface. In case the text entry is empty, the server will accept
+connection from the port on any interface.
+
 
 [[server_permissions]]
 Server Permissions
 ~~~~~~~~~~~~~~~~~~
+
+image::media/images/admin_general_permissions.png[Server Permissions]
 
 User & Group
 ^^^^^^^^^^^^
@@ -86,17 +89,3 @@ Chroot
 
 Cherokee can be jailed inside a directory. Note that this should not
 be used as the sole security measure.
-
-
-[[secure_http]]
-Secure HTTP
-~~~~~~~~~~~
-
-Port TLS
-^^^^^^^^
-The *Port TLS* specifies the port to be used for secure connections.
-
-Back-end
-^^^^^^^^
-Specifies the TLS/SSL backend to be used, if any. The current option
-is OpenSSL.

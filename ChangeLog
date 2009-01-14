@@ -1,5 +1,12 @@
 2009-01-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/media/images/admin_general.png,
+	doc/media/images/admin_general_networking.png,
+	doc/media/images/admin_general_permissions.png,
+	doc/media/images/admin_general_ports.png, doc/config_general.txt:
+	Updated the 'General' configuration page. It reflects the last
+	changes about port binding.
+
 	* cherokee/fdpoll.c, cherokee/fdpoll.h,
 	cherokee/encoder_deflate.c, cherokee/main_worker.c,
 	cherokee/handler_ssi.c, cherokee/validator_htpasswd.c,
