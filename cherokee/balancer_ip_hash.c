@@ -133,7 +133,7 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 	  cherokee_source_t           **src)
 {
 	cherokee_balancer_entry_t *entry;
-	cuint_t                    n;
+	cint_t                     n;
 	cuint_t                    ip_len;
 	char                      *ip;
 	cherokee_list_t           *i;
@@ -167,6 +167,9 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 	if (unlikely (balancer->n_active == 0)) {
 		PRINT_MSG_S ("ERROR: Sources exhausted: re-enabling one.\n");
 		reactivate_entry (balancer, BAL_ENTRY(balancer->last_one));
+
+		balancer->last_one = list_next_circular (&BAL(balancer)->entries,
+							 balancer->last_one);
 	}
 
 	n = (hash % balancer->n_active);

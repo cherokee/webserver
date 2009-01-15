@@ -61,6 +61,8 @@ typedef struct list_entry cherokee_list_entry_t;
 #define list_entry(ptr, type, member) \
 	((type *)((char *)(ptr)-(unsigned long)(&((type *)0)->member)))
 
+#define list_next_circular(list,item) \
+	(((item)->next == (list)) ? (list)->next : (item)->next)
 
 static inline int 
 cherokee_list_empty (cherokee_list_t *list)

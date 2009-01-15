@@ -1,5 +1,9 @@
 2009-01-15  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/balancer_ip_hash.c (dispatch): Fixes a problem with the
+	IP Hash balancer. The reactivation mechanism (triggered on
+	exhaustion) was not working properly.
+
 	* cherokee/connection.c (cherokee_connection_build_header),
 	cherokee/http.h: Reimplements the previous patch. 1xx, 204 and 304
 	don't have a body, and therefore should not use chunked encoding.
