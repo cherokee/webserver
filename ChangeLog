@@ -1,3 +1,10 @@
+2009-01-15  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_error.c (cherokee_handler_error_add_headers),
+	cherokee/handler_file.c (cherokee_handler_file_add_headers): Fixes
+	a problem with 304 "Not modified" responses and Keep-Alive
+	connections.
+
 2009-01-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* doc/media/images/admin_general.png,

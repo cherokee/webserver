@@ -244,8 +244,12 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	 * 304 responses should only include the
 	 * Last-Modified, ETag, Expires and Cache-Control headers.
 	 */
-	if (!http_code_with_body (conn->error_code))
+	if (!http_code_with_body (conn->error_code)) {
+		HANDLER(hdl)->support |= hsupport_length;
+
+		cherokee_buffer_add_str (buffer, "Content-Length: 0" CRLF);
 		return ret_ok;
+	}
 
 	if (cherokee_connection_should_include_length(conn)) {
 
@@ -270,9 +274,9 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 
 	/* Usual headers
 	 */
-	cherokee_buffer_add_str     (buffer, "Content-Type: text/html"CRLF);
-	cherokee_buffer_add_str     (buffer, "Cache-Control: no-cache"CRLF);
-	cherokee_buffer_add_str     (buffer, "Pragma: no-cache"CRLF);
+	cherokee_buffer_add_str (buffer, "Content-Type: text/html"CRLF);
+	cherokee_buffer_add_str (buffer, "Cache-Control: no-cache"CRLF);
+	cherokee_buffer_add_str (buffer, "Pragma: no-cache"CRLF);
 
 	return ret_ok;
 }
