@@ -642,15 +642,16 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	 * the length or use chunked encoding. Otherwise, Keep-Alive
 	 * has to be turned off.
 	 */
-	if ((conn->keepalive != 0) &&
-	    (http_method_with_body (conn->error_code)))	
-	{
-		if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
+	if (conn->keepalive != 0) {
+		if (! http_method_with_body (conn->error_code)) {
+			conn->chunked_encoding = false;
+
+		} else if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
 			if (! conn->chunked_encoding) {
 				conn->keepalive = 0;
 			}
-		}
-		else {
+
+		} else {
 			conn->chunked_encoding = false;
 		}
 	}
@@ -976,7 +977,7 @@ out:
 }
 
 cherokee_boolean_t
-cherokee_connection_should_include_length(cherokee_connection_t *conn)
+cherokee_connection_should_include_length (cherokee_connection_t *conn)
 {
 	if (conn->encoder) {
 		return false;
@@ -1962,7 +1963,7 @@ void
 cherokee_connection_set_chunked_encoding (cherokee_connection_t *conn)
 {
 	conn->chunked_encoding = ((CONN_SRV(conn)->chunked_encoding) &&
-			(conn->header.version == http_version_11));
+				  (conn->header.version == http_version_11));
 }
 
 ret_t

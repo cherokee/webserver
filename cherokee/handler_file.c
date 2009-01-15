@@ -658,11 +658,9 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 	if (fhdl->not_modified) {
 		/* The handler will manage this special reply
 		 */
-		HANDLER(fhdl)->support |= (hsupport_error | hsupport_length);
+		HANDLER(fhdl)->support |= hsupport_error;
 
-		cherokee_buffer_add_str (buffer, "Content-Length: 0" CRLF);
 		conn->error_code = http_not_modified;
-
 		return ret_ok;
 	}
 

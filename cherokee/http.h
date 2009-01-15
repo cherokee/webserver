@@ -140,17 +140,21 @@ typedef enum {
 #define http_gateway_timeout_string          "504 Gateway Timeout"
 #define http_version_not_supported_string    "505 HTTP Version Not Supported"
 
+#define http_type_100_max 102
 #define http_type_200_max 206
-#define http_type_300_max 307
-#define http_type_400_max 417
+#define http_type_300_max 304
+#define http_type_400_max 426
 #define http_type_500_max 505
 
+#define http_type_100(c)  ((c >= 100) && (c <= http_type_100_max))
 #define http_type_200(c)  ((c >= 200) && (c <= http_type_200_max))
 #define http_type_300(c)  ((c >= 300) && (c <= http_type_300_max))
 #define http_type_400(c)  ((c >= 400) && (c <= http_type_400_max))
 #define http_type_500(c)  ((c >= 500) && (c <= http_type_500_max))
 
-#define http_method_with_body(m)  ((m != http_head) && (m != http_options))
+#define http_method_with_body(m)  ((m != http_head) &&	\
+				   (m != http_options))
+
 #define http_method_with_input(m) ((m == http_post)     || \
 				   (m == http_put)      || \
 				   (m == http_mkcol)    || \
@@ -158,8 +162,10 @@ typedef enum {
 				   (m == http_propfind) || \
 				   (m == http_proppatch))
 
-#define http_code_with_body(e)   ((e != http_continue)            && \
+#define http_code_with_body(e)   ((! http_type_100(e))            && \
+				  (e != http_continue)            && \
 				  (e != http_not_modified)        && \
+				  (e != http_no_content_string)   && \
 				  (e != http_switching_protocols))
 
 ret_t cherokee_http_method_to_string  (cherokee_http_method_t  method,  const char **str, cuint_t *str_len);

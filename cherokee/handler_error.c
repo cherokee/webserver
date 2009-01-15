@@ -245,9 +245,6 @@ cherokee_handler_error_add_headers (cherokee_handler_error_t *hdl, cherokee_buff
 	 * Last-Modified, ETag, Expires and Cache-Control headers.
 	 */
 	if (!http_code_with_body (conn->error_code)) {
-		HANDLER(hdl)->support |= hsupport_length;
-
-		cherokee_buffer_add_str (buffer, "Content-Length: 0" CRLF);
 		return ret_ok;
 	}
 
