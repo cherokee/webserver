@@ -1,4 +1,4 @@
-2009-01-15  Antonio Perez  <aperez@skarcha.com>
+2009-01-15  Jonathan Hernandez  <ion@suavizado.com>
 
 	* cherokee/handler_server_info.c: Enhacements to CSS, 
         Use Javascript DOM to generate the info page instead innerHTML. 
