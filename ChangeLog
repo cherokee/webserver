@@ -1,5 +1,9 @@
 2009-01-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageStatus.py, admin/static/images/web_proud.jpg,
+	admin/static/images/Makefile.am, admin/status.template.html: Adds
+	a new image linking to our "Proud Cherokee Users" program.
+
 	* doc/modules_balancers.txt, doc/modules_balancers_ip_hash.txt,
 	doc/Makefile.am: Adds some basic documentation about the IP Hash
 	load balancer.

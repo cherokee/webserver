@@ -29,7 +29,8 @@ bin.png \
 favicon.ico \
 macFFBgHack.png \
 loadingAnimation.gif \
-forbidden.png
+forbidden.png \
+web_proud.jpg
 
 EXTRA_DIST = \
 $(adminstatic_DATA)
