@@ -1,5 +1,9 @@
 2009-01-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/connection.c (cherokee_connection_build_header),
+	cherokee/http.h: Rework the 304 issue. It was adding the chunked
+	connection header in replies with no body.
+
 	* cherokee/server.c (cherokee_server_read_config_file),
 	cherokee/server.h: Fixes a trivial compilation warning.
 

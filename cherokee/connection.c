@@ -638,15 +638,20 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 		}
 	}
 
-	/* If the connection is using Kee-Alive, it must either know
+	/* Replies with no body cannot use chunked encoding
+	 */
+	if ((! http_code_with_body (conn->error_code)) ||
+	    (! http_method_with_body (conn->header.method)))
+	{
+		conn->chunked_encoding = false;
+	}
+
+	/* If the connection is using Keep-Alive, it must either know
 	 * the length or use chunked encoding. Otherwise, Keep-Alive
 	 * has to be turned off.
 	 */
 	if (conn->keepalive != 0) {
-		if (! http_method_with_body (conn->error_code)) {
-			conn->chunked_encoding = false;
-
-		} else if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
+		if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
 			if (! conn->chunked_encoding) {
 				conn->keepalive = 0;
 			}
