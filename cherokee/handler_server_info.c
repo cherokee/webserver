@@ -151,7 +151,7 @@
 "  icons: {"                                                                                        CRLF\
 "    title: 'Icons',"                                                                               CRLF\
 "    items: {"                                                                                      CRLF\
-"      'default': 'Default',"                                                                         CRLF\
+"      'default': 'Default',"                                                                       CRLF\
 "      directory: 'Directory',"                                                                     CRLF\
 "      parent: 'Parent'"                                                                            CRLF\
 "    }"                                                                                             CRLF\
@@ -171,7 +171,7 @@
 "    }"                                                                                             CRLF\
 "  }"                                                                                               CRLF\
 "}"                                                                                                 CRLF\
-"tmp = new ajaxObject ('/about/info/js');"                                                          CRLF\
+"tmp = new ajaxObject ('{request}/info/js');"                                                       CRLF\
 "tmp.callback = function(txt) {"                                                                    CRLF\
 "  var data = null;"                                                                                CRLF\
 "  var div = document.getElementById('information');"                                               CRLF\

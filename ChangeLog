@@ -1,5 +1,8 @@
 2009-01-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_server_info.c (AJAX_JS): Removes a hard-coded
+	path.
+
 	* admin/PageStatus.py, admin/static/images/web_proud.jpg,
 	admin/static/images/Makefile.am, admin/status.template.html: Adds
 	a new image linking to our "Proud Cherokee Users" program.
