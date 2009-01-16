@@ -1,5 +1,10 @@
 2009-01-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_server_info.c, cherokee/logo.inc: The embedded
+	Cherokee of the server_info handler have been updated. It is a PNG
+	now (instead of a GIF file). Even though it's slightly bigger, it
+	alpha channel improves the L&F quite a lot.
+
 	* contrib/bin2buffer.py: Call cherokee_buffer_ensure_size() in
 	order to avoid memory reallocations.
 

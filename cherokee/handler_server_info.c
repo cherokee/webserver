@@ -865,7 +865,7 @@ cherokee_handler_server_info_add_headers (cherokee_handler_server_info_t *hdl,
 
 	switch (hdl->action) {
 	case send_logo:
-		cherokee_buffer_add_str (buffer, "Content-Type: image/gif"CRLF);
+		cherokee_buffer_add_str (buffer, "Content-Type: image/png"CRLF);
 		break;
 	case send_info:
 		conn->expiration = cherokee_expiration_epoch;
