@@ -1,5 +1,8 @@
 2009-01-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* contrib/bin2buffer.py: Call cherokee_buffer_ensure_size() in
+	order to avoid memory reallocations.
+
 	* cherokee/connection.c (cherokee_connection_build_header),
 	cherokee/http.h: Rework the 304 issue. It was adding the chunked
 	connection header in replies with no body.
