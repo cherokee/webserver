@@ -151,7 +151,7 @@
 "  icons: {"                                                                                        CRLF\
 "    title: 'Icons',"                                                                               CRLF\
 "    items: {"                                                                                      CRLF\
-"      default: 'Default',"                                                                         CRLF\
+"      'default': 'Default',"                                                                         CRLF\
 "      directory: 'Directory',"                                                                     CRLF\
 "      parent: 'Parent'"                                                                            CRLF\
 "    }"                                                                                             CRLF\
