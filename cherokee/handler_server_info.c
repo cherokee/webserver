@@ -230,7 +230,7 @@
 
 #define PAGE_FOOT                                                                                   CRLF\
 "<h2>Cherokee License</h2>"                                                                         CRLF\
-"<div id=\"license\"" LICENSE "</div>"                                                              CRLF\
+"<div id=\"license\">" LICENSE "</div>"                                                             CRLF\
 "</div></div></body></html>"
 
 
