@@ -1501,7 +1501,7 @@ cherokee_server_read_config_string (cherokee_server_t *srv, cherokee_buffer_t *s
 
 
 ret_t 
-cherokee_server_read_config_file (cherokee_server_t *srv, char *fullpath)
+cherokee_server_read_config_file (cherokee_server_t *srv, const char *fullpath)
 {
 	ret_t             ret;
 	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;

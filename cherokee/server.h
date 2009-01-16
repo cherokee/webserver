@@ -50,7 +50,7 @@ ret_t cherokee_server_stop               (cherokee_server_t *srv);
 void  cherokee_server_set_min_latency    (cherokee_server_t *srv, int msecs);
 ret_t cherokee_server_unlock_threads     (cherokee_server_t *srv);
 
-ret_t cherokee_server_read_config_file   (cherokee_server_t *srv, char *filename);
+ret_t cherokee_server_read_config_file   (cherokee_server_t *srv, const char *filename);
 ret_t cherokee_server_read_config_string (cherokee_server_t *srv, cherokee_buffer_t *string);
 
 ret_t cherokee_server_daemonize          (cherokee_server_t *srv);
