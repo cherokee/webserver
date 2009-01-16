@@ -1,3 +1,8 @@
+2009-01-15  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/handler_server_info.c: Enhacements to CSS, 
+        Use Javascript DOM to generate the info page instead innerHTML. 
+
 2009-01-15  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/balancer_ip_hash.c (dispatch): Fixes a problem with the

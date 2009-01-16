@@ -41,163 +41,176 @@
 
 #define PAGE_HEADER                                                                                     \
 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">" CRLF\
-"<html><header>"                                                                                    CRLF\
-"<style type=\"text/css\"><!--"                                                                     CRLF\
-"body {background-color: #ffffff; color: #000000;}"                                                 CRLF\
-"body, td, th, h1, h2 {font-family: sans-serif;}"                                                   CRLF\
-"pre {margin: 0px; font-family: monospace;}"                                                        CRLF\
-"a:link {color: #000099; text-decoration: none; background-color: #ffffff;}"                        CRLF\
-"a:hover {text-decoration: underline;}"                                                             CRLF\
-"table {border-collapse: collapse;}"                                                                CRLF\
-".center {text-align: center;}"                                                                     CRLF\
-".center table { margin-left: auto; margin-right: auto; text-align: left;}"                         CRLF\
-".center th { text-align: center !important; }"                                                     CRLF\
-"td, th { border: 1px solid #000000; font-size: 75%; vertical-align: baseline;}"                    CRLF\
-"h1 {font-size: 150%;}"                                                                             CRLF\
-"h2 {font-size: 125%;}"                                                                             CRLF\
-".p {text-align: left;}"                                                                            CRLF\
-".e {background-color: #ccccff; font-weight: bold; color: #000000;}"                                CRLF\
-".h {background-color: #9999cc; font-weight: bold; color: #000000;}"                                CRLF\
-".v {background-color: #cccccc; color: #000000;}"                                                   CRLF\
-"i {color: #666666; background-color: #cccccc;}"                                                    CRLF\
-"img {float: right; border: 0px;}"                                                                  CRLF\
-"hr {width: 600px; background-color: #cccccc; border: 0px; height: 1px; color: #000000;}"           CRLF\
-"//--></style>"                                                                                     CRLF\
-"<title>Cherokee Web Server Info</title></header>"                                                  CRLF\
-"<body><div class=\"center\">"                                                                      CRLF\
-"<table border=\"0\" cellpadding=\"3\" width=\"600\">"                                              CRLF\
-"  <tr class=\"h\"><td>"                                                                            CRLF\
-"    <a href=\"http://www.cherokee-project.com/\">"                                                 CRLF\
-"      <img border=\"0\" src=\"{request}/logo.gif\" alt=\"Cherokee Logo\" /></a>"                   CRLF\
-"    <h1 class=\"p\">{cherokee_name}</h1>"                                                          CRLF\
-"  </td></tr>"                                                                                      CRLF\
-"</table><br />"							                            CRLF\
+"<html><head>"                                                                                      CRLF\
+"<title>Cherokee Web Server Info</title>"                                                           CRLF\
+"<style type=\"text/css\">"                                                                         CRLF\
+"body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,p,th,td { margin:0;padding:0; }"             CRLF\
+"table { border-collapse:collapse;border-spacing:0; }"                                              CRLF\
+"img { border:0; }"                                                                                 CRLF\
+"html { background-color: #cfd9e8; }"                                                               CRLF\
+"body { min-width: 640px; font-family: helvetica, arial, sans-serif; font-size: small; "            CRLF\
+"       text-align: center; background-color: #cfd9e8; }"                                           CRLF\
+"a { color: #2d5e9a; }"                                                                             CRLF\
+"a:hover { color: #164987; }"                                                                       CRLF\
+"#container { background: #fff url({request}/logo.gif) 32px 16px no-repeat; "                       CRLF\
+"              border: 1px solid #bacce2; width: 640px; min-width: 640px; "                         CRLF\
+"              margin: 32px auto; text-align: left; }"                                              CRLF\
+"#container-inner { padding: 32px 32px 32px 128px; }"                                               CRLF\
+"h1 { color: #c00; font-weight: normal; font-size: 200%; margin-bottom: 0.5em; }"                   CRLF\
+"h2 { color: #204a87; font-weight: bold; border-bottom: 2px solid #204a87; font-size: 120%; }"      CRLF\
+"dl { margin-bottom: 24px; }"                                                                       CRLF\
+"dt { width: 232px; float: left; clear: left; margin: 0; padding: 2px; height: 20px; "              CRLF\
+"     text-align: right; border-bottom: 1px solid #bacce2; }"                                       CRLF\
+"dt:after { content: \":\"; }"                                                                      CRLF\
+"dd { width: 232px; margin: 0 0 0 232px; padding: 2px 8px; height: 20px; "                          CRLF\
+"      border-bottom: 1px solid #bacce2; color: #555; }"                                            CRLF\
+"#otherways { padding: 8px; border: 1px solid #bacce2; "                                            CRLF\
+"             background-color: #eff6ff; margin-bottom: 24px; }"                                    CRLF\
+"#license { padding: 16px; margin-bottom: 24px; }"                                                  CRLF\
+"#license p { margin-bottom: 1em; }"                                                                CRLF\
+"</style>"                                                                                          CRLF\
+"<title>Cherokee Web Server Info</title></head>"                                                    CRLF\
+"<body><div id=\"container\"><div id=\"container-inner\">"                                          CRLF\
+"<h1>{cherokee_name}</h1>"                                                                          CRLF\
 "<div id=\"information\"></div>"                                                                    CRLF\
+"<div id=\"otherways\">"                                                                            CRLF\
 "<p>The same information can also be fetched properly encoded to be consumed from: "                CRLF\
 "<a href=\"{request}/info/py\">Python</a>, "                                                        CRLF\
 "<a href=\"{request}/info/ruby\">Ruby</a>, "                                                        CRLF\
 "<a href=\"{request}/info/js\">JavaScript</a> and "                                                 CRLF\
-"<a href=\"{request}/info/php\">PHP</a>."
+"<a href=\"{request}/info/php\">PHP</a>.</div>"
 
 #define AJAX_JS	\
-"<script type=\"text/javascript\">" CRLF \
-"function ajaxObject (url) {" CRLF \
-"   var that = this;" CRLF \
-"   var updating = false;" CRLF \
-"   this.callback = function(txt) {}" CRLF \
-"" CRLF \
-"   this.update = function(passData) {" CRLF \
-"      if (updating == true)" CRLF \
-"		    return false;" CRLF \
-"      updating = true;" CRLF \
-"" CRLF \
-"      var AJAX = null;" CRLF \
-"      if (window.XMLHttpRequest) {" CRLF \
-"         AJAX = new XMLHttpRequest();" CRLF \
-"      } else {" CRLF \
-"         AJAX = new ActiveXObject(\"Microsoft.XMLHTTP\");" CRLF \
-"      }" CRLF \
-"      if (AJAX == null) {" CRLF \
-"         alert (\"Your browser does not support AJAX.\");" CRLF \
-"         return false" CRLF \
-"      } else {" CRLF \
-"         AJAX.onreadystatechange = function() {" CRLF \
-"            if (AJAX.readyState == 4 || AJAX.readyState == \"complete\") {" CRLF \
-"               delete AJAX;" CRLF \
-"               updating = false;" CRLF \
-"               that.callback(AJAX.responseText);" CRLF \
-"            }" CRLF \
-"         }" CRLF \
-"" CRLF \
-"         AJAX.open (\"GET\", url, true);" CRLF \
-"         AJAX.send (null);" CRLF \
-"         return true;" CRLF \
-"      }" CRLF \
-"   }" CRLF \
-"} /* END: ajaxObject */" CRLF \
-"</script>" CRLF \
-"" CRLF \
-"<script type=\"text/javascript\">" CRLF \
-"" CRLF \
-"function section_start (title)" CRLF \
-"{" CRLF \
-"    return ('<h2>' + title + '</h2><table>');" CRLF \
-"}" CRLF \
-"" CRLF \
-"function section_row (param, value)" CRLF \
-"{" CRLF \
-"    return ('<tr><td>' + param + '</td><td>' + value + '</td></tr>');" CRLF \
-"}" CRLF \
-"" CRLF \
-"function section_end ()" CRLF \
-"{" CRLF \
-"    return ('</table>');" CRLF \
-"}" CRLF \
-"" CRLF \
-"    tmp = new ajaxObject ('{request}/info/js');" CRLF \
-"    tmp.callback = function(txt) {" CRLF \
-"       var info = null;" CRLF \
-"       var re   = '';" CRLF \
-"" CRLF \
-"       eval('info = ' + txt);" CRLF \
-"    " CRLF \
-"       re += section_start('General Information');" CRLF \
-"       re += section_row('Inbound', info['traffic']['rx_formatted']);" CRLF \
-"       re += section_row('Outbound', info['traffic']['tx_formatted']);" CRLF \
-"       re += section_row('Uptime', info['uptime']['formatted']);" CRLF \
-"       re += section_end();" CRLF \
-"" CRLF \
-"       re += section_start('Configuration');" CRLF \
-"       re += section_row('Thread number', info['config']['threads']);" CRLF \
-"       re += section_row('IPv6', info['config']['ipv6']);" CRLF \
-"       re += section_row('SSL/TLS', info['config']['tls']);" CRLF \
-"       re += section_row('Chroot jail', info['config']['chroot']);" CRLF \
-"       re += section_row('UID', info['config']['UID']);" CRLF \
-"       re += section_row('GID', info['config']['GID']);" CRLF \
-"       re += section_row('Operating System', info['config']['OS']);" CRLF \
-"       re += section_end();" CRLF \
-"" CRLF \
-"       re += section_start('Current Connections');" CRLF \
-"       re += section_row('Number', info['connections']['number']);" CRLF \
-"       re += section_row('Active', info['connections']['active']);" CRLF \
-"       re += section_row('Reusable', info['connections']['reusable']);" CRLF \
-"       re += section_end();" CRLF \
-"" CRLF \
-"       re += section_start('Modules');" CRLF \
-"       re += section_row('Loggers', info['modules']['loggers']);" CRLF \
-"       re += section_row('Handlers', info['modules']['handlers']);" CRLF \
-"       re += section_row('Encoders', info['modules']['encoders']);" CRLF \
-"       re += section_row('Validators', info['modules']['validators']);" CRLF \
-"       re += section_row('Generic', info['modules']['generic']);" CRLF \
-"       re += section_row('Balancers', info['modules']['balancers']);" CRLF \
-"       re += section_row('Rules', info['modules']['rules']);" CRLF \
-"       re += section_row('Cryptors', info['modules']['cryptors']);" CRLF \
-"       re += section_end();" CRLF \
-"" CRLF \
-"       re += section_start('Icons');" CRLF \
-"       re += section_row('Default', info['icons']['default']);" CRLF \
-"       re += section_row('Directory', info['icons']['directory']);" CRLF \
-"       re += section_row('Parent', info['icons']['parent']);" CRLF \
-"       re += section_end();" CRLF \
-"" CRLF \
-"       re += section_start('I/O cache');" CRLF \
-"       re += section_row('File Size: Max', info['iocache']['file_size_max_formatted']);" CRLF \
-"       re += section_row('File Size: Min', info['iocache']['file_size_min_formatted']);" CRLF \
-"       re += section_row('Lasting: File information', info['iocache']['lasting_stat']);" CRLF \
-"       re += section_row('Lasting: File mapping', info['iocache']['lasting_mmap']);" CRLF \
-"       re += section_row('Cache Max Size', info['iocache']['size_max']);" CRLF \
-"       re += section_row('Fetches', info['iocache']['fetches']);" CRLF \
-"       re += section_row('Hits', info['iocache']['hits']);" CRLF \
-"       re += section_row('Misses', info['iocache']['misses']);" CRLF \
-"       re += section_row('Total Mapped', info['iocache']['mmapped_formatted']);" CRLF \
-"       re += section_end();" CRLF \
-"" CRLF \
-"       document.getElementById(\"information\").innerHTML = re;" CRLF \
-"    }" CRLF \
-"" CRLF \
-"    tmp.update();" CRLF \
-"    setInterval('tmp.update()', 30000);" CRLF \
-"</script>"
+"<script type=\"text/javascript\">"                                                                 CRLF\
+"function ajaxObject (url) {"                                                                       CRLF\
+"   var that = this;"                                                                               CRLF\
+"   var updating = false;"                                                                          CRLF\
+"   this.callback = function(txt) {}"                                                               CRLF\
+"   this.update = function(passData) {"                                                             CRLF\
+"      if (updating == true)"                                                                       CRLF\
+"		    return false;"                                                                  CRLF\
+"      updating = true;"                                                                            CRLF\
+"      var AJAX = null;"                                                                            CRLF\
+"      if (window.XMLHttpRequest) {"                                                                CRLF\
+"         AJAX = new XMLHttpRequest();"                                                             CRLF\
+"      } else {"                                                                                    CRLF\
+"         AJAX = new ActiveXObject('Microsoft.XMLHTTP');"                                           CRLF\
+"      }"                                                                                           CRLF\
+"      if (AJAX == null) {"                                                                         CRLF\
+"         alert ('Your browser does not support AJAX.');"                                           CRLF\
+"         return false"                                                                             CRLF\
+"      } else {"                                                                                    CRLF\
+"         AJAX.onreadystatechange = function() {"                                                   CRLF\
+"            if (AJAX.readyState == 4 || AJAX.readyState == 'complete') {"                          CRLF\
+"               delete AJAX;"                                                                       CRLF\
+"               updating = false;"                                                                  CRLF\
+"               that.callback(AJAX.responseText);"                                                  CRLF\
+"            }"                                                                                     CRLF\
+"         }"                                                                                        CRLF\
+""                                                                                                  CRLF\
+"         AJAX.open ('GET', url, true);"                                                            CRLF\
+"         AJAX.send (null);"                                                                        CRLF\
+"         return true;"                                                                             CRLF\
+"      }"                                                                                           CRLF\
+"   }"                                                                                              CRLF\
+"} /* END: ajaxObject */"                                                                           CRLF\
+"var info = {"                                                                                      CRLF\
+"  config: {"                                                                                       CRLF\
+"    title: 'Configuration',"                                                                       CRLF\
+"    items: { "                                                                                     CRLF\
+"      threads: 'Thread number',"                                                                   CRLF\
+"      ipv6: 'IPv6',"                                                                               CRLF\
+"      tls: 'SSL/TLS',"                                                                             CRLF\
+"      chroot: 'Chroot jail',"                                                                      CRLF\
+"      UID: 'UID',"                                                                                 CRLF\
+"      GID: 'GID',"                                                                                 CRLF\
+"      OS: 'Operating System'"                                                                      CRLF\
+"    }"                                                                                             CRLF\
+"  },"                                                                                              CRLF\
+"  connections: {"                                                                                  CRLF\
+"    title: 'Current Connections',"                                                                 CRLF\
+"    items: {"                                                                                      CRLF\
+"      number: 'Number',"                                                                           CRLF\
+"      active: 'Active', "                                                                          CRLF\
+"      reusable: 'Reusable'"                                                                        CRLF\
+"    }"                                                                                             CRLF\
+"  },"                                                                                              CRLF\
+"  modules: {"                                                                                      CRLF\
+"    title: 'Modules',"                                                                             CRLF\
+"    items: {"                                                                                      CRLF\
+"      loggers: 'Loggers',"                                                                         CRLF\
+"      handlers: 'Handlers',"                                                                       CRLF\
+"      encoders: 'Encoders',"                                                                       CRLF\
+"      validators: 'Validators',"                                                                   CRLF\
+"      generic: 'Generic', "                                                                        CRLF\
+"      balancers: 'Balancers', "                                                                    CRLF\
+"      rules: 'Rules',"                                                                             CRLF\
+"      cryptors: 'Cryptors'"                                                                        CRLF\
+"    }"                                                                                             CRLF\
+"  },"                                                                                              CRLF\
+"  icons: {"                                                                                        CRLF\
+"    title: 'Icons',"                                                                               CRLF\
+"    items: {"                                                                                      CRLF\
+"      default: 'Default',"                                                                         CRLF\
+"      directory: 'Directory',"                                                                     CRLF\
+"      parent: 'Parent'"                                                                            CRLF\
+"    }"                                                                                             CRLF\
+"  },"                                                                                              CRLF\
+"  iocache: {"                                                                                      CRLF\
+"    title: 'I/O cache',"                                                                           CRLF\
+"    items: {"                                                                                      CRLF\
+"      file_size_max_formatted: 'File Size: Max',"                                                  CRLF\
+"      file_size_min_formatted: 'File Size: Min',"                                                  CRLF\
+"      lasting_stat: 'Lasting: File information',"                                                  CRLF\
+"      lasting_mmap: 'Lasting: File mapping', "                                                     CRLF\
+"      size_max: 'Cache Max Size',"                                                                 CRLF\
+"      fetches: 'Fetches',"                                                                         CRLF\
+"      hits: 'Hits',"                                                                               CRLF\
+"      misses: 'Misses', "                                                                          CRLF\
+"      mmapped_formatted: 'Total Mapped' "                                                          CRLF\
+"    }"                                                                                             CRLF\
+"  }"                                                                                               CRLF\
+"}"                                                                                                 CRLF\
+"tmp = new ajaxObject ('/about/info/js');"                                                          CRLF\
+"tmp.callback = function(txt) {"                                                                    CRLF\
+"  var data = null;"                                                                                CRLF\
+"  var div = document.getElementById('information');"                                               CRLF\
+"  eval('data = ' + txt);"                                                                          CRLF\
+"  for (var section in info) {"                                                                     CRLF\
+"    if (data[section] === undefined) continue;"                                                    CRLF\
+"    if (!document.getElementById(section)) {"                                                      CRLF\
+"      h2 = document.createElement('h2');"                                                          CRLF\
+"      h2.setAttribute('id', section);"                                                             CRLF\
+"      h2.appendChild(document.createTextNode(info[section]['title']));"                            CRLF\
+"      div.appendChild(h2);"                                                                        CRLF\
+"    }"                                                                                             CRLF\
+"    if (!(dl = document.getElementById('dl_' + section))) {"                                       CRLF\
+"      dl = document.createElement('dl');"                                                          CRLF\
+"      dl.setAttribute('id', 'dl_' + section);"                                                     CRLF\
+"      div.appendChild(dl);"                                                                        CRLF\
+"    } "                                                                                            CRLF\
+"    for (var item in info[section]['items']) {"                                                    CRLF\
+"      if (data[section][item] === undefined) continue;"                                            CRLF\
+"      if (!document.getElementById('dt_' + section + '_' + item)) { "                              CRLF\
+"        dt = document.createElement('dt'); "                                                       CRLF\
+"        dt.setAttribute('id', 'dt_' + section + '_' + item);"                                      CRLF\
+"        dt.appendChild(document.createTextNode(info[section]['items'][item]));"                    CRLF\
+"        dl.appendChild(dt);"                                                                       CRLF\
+"      }"                                                                                           CRLF\
+"      if (dd = document.getElementById('dd_' + section + '_' + item)) { "                          CRLF\
+"        dd.innerHTML = data[section][item];"                                                       CRLF\
+"      } else {"                                                                                    CRLF\
+"        dd = document.createElement('dd'); "                                                       CRLF\
+"        dd.setAttribute('id', 'dd_' + section + '_' + item);"                                      CRLF\
+"        dd.appendChild(document.createTextNode(data[section][item]));"                             CRLF\
+"        dl.appendChild(dd);"                                                                       CRLF\
+"      }"                                                                                           CRLF\
+"    }"                                                                                             CRLF\
+"  }"                                                                                               CRLF\
+"}"                                                                                                 CRLF\
+"tmp.update(); "                                                                                    CRLF\
+"setInterval('tmp.update()', 30000);"                                                               CRLF\
+"</script>"                
 
 #define AUTHOR                                                                                          \
 "<a href=\"http://www.alobbs.com/\">Alvaro Lopez Ortega</a> &lt;alvaro@alobbs.com&gt;"
@@ -217,11 +230,8 @@
 
 #define PAGE_FOOT                                                                                   CRLF\
 "<h2>Cherokee License</h2>"                                                                         CRLF\
-"<table border=\"0\" cellpadding=\"3\" width=\"600\">"                                              CRLF\
-"<tr class=\"v\"><td>" LICENSE                                                                      CRLF\
-"</td></tr>"                                                                                        CRLF\
-"</table><br />"                                                                                    CRLF\
-"</div></body></html>"
+"<div id=\"license\"" LICENSE "</div>"                                                              CRLF\
+"</div></div></body></html>"
 
 
 /* Plug-in initialization
