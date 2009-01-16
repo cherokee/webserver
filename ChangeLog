@@ -1,3 +1,10 @@
+2009-01-16  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/connection-protected.h, cherokee/util.h, configure.in:
+	Fixes a compilation problem on OpenBSD current:
+	http://code.google.com/p/cherokee/issues/detail?id=316
+	Thanks to bradla8@yahoo.com for the patch.
+
 2009-01-15  Jonathan Hernandez  <ion@suavizado.com>
 
 	* cherokee/handler_server_info.c: Enhacements to CSS, 

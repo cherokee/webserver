@@ -49,6 +49,10 @@
 # include <arpa/inet.h>
 #endif
 
+#ifdef HAVE_SYS_UIO_H
+# include <sys/uio.h>
+#endif
+
 #include "http.h"
 #include "list.h"
 #include "avl.h"

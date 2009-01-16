@@ -43,11 +43,15 @@
 #endif 
 
 #ifdef HAVE_PWD_H
-#include <pwd.h>
+# include <pwd.h>
 #endif
 
 #ifdef HAVE_GRP_H
-#include <grp.h>
+# include <grp.h>
+#endif
+
+#ifdef HAVE_SYS_UIO_H
+# include <sys/uio.h>
 #endif
 
 #include <time.h>
