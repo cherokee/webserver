@@ -1,5 +1,9 @@
 2009-01-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/modules_balancers.txt, doc/modules_balancers_ip_hash.txt,
+	doc/Makefile.am: Adds some basic documentation about the IP Hash
+	load balancer.
+	
 	* cherokee/handler_server_info.c (AJAX_JS): Fixes a Javascript
 	parsing error. 'default' is a reserved work, so it cannot be used
 	as a dict index without quotes.

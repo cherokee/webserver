@@ -68,6 +68,7 @@ cookbook_phpmyadmin.html \
 cookbook_managing_logs.html \
 modules.html \
 modules_balancers.html \
+modules_balancers_ip_hash.html \
 modules_balancers_round_robin.html \
 modules_encoders.html \
 modules_encoders_gzip.html \

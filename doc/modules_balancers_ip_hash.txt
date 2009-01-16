@@ -1,0 +1,18 @@
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_balancers.html[Balancers]
+
+Balancer: IP Hash
+-----------------
+
+The IP Hash load balancer modules distributes the incoming requests
+among the upstreams based on the IP address of the client. This method
+guarantees that the client request will always be transferred to the
+same server.
+
+In case one of the back-end servers were detected as inoperative, it
+would be disabled for a period of time. After this safety time, it
+would be reactivated. Meanwhile, the requests that would have normally
+targeted the off-lined server would be delivered to another one.
+
+The only thing needed to configure this balancer is a list of
+link:config_info_sources.html[information sources]. At least one must
+be selected in order for this to work.
