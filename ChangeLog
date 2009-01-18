@@ -1,3 +1,9 @@
+2009-01-18  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/PageMime.py, admin/static/css/cherokee.css,
+	admin/validations.py: Rework the MIME page. Now it fits better in
+	the new layout. Value validation has been foxed as well.
+
 2009-01-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_server_info.c (AJAX_JS): Removes a hard-coded

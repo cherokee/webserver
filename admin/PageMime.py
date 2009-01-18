@@ -7,10 +7,15 @@ from Entry import *
 from Form import *
 
 DATA_VALIDATION = [
-    ("server!mime_files", validations.is_path_list),
+    ("mime!.*!extensions", validations.is_extension_list),
+    ("mime!.*!max\-age",   validations.is_number)
 ]
 
 HELPS = [('config_mime_types', "MIME types")]
+
+NOTE_NEW_MIME       = 'New MIME type to be added.'
+NOTE_NEW_EXTENSIONS = 'Comma separated list of file extensions associated with the MIME type.'
+NOTE_NEW_MAXAGE     = 'Maximum time that this sort of content can be cached (in seconds).'
 
 class PageMime (PageMenu, FormHelper):
     def __init__ (self, cfg):
@@ -26,9 +31,9 @@ class PageMime (PageMenu, FormHelper):
         return Page.Render(self)
 
     def _op_apply_changes (self, uri, post):
-        if post.get_val('new_mime') and \
-          (post.get_val('new_extensions') or
-           post.get_val('new_maxage')):
+        if post.get_val('tmp!new_mime') and \
+          (post.get_val('tmp!new_extensions') or
+           post.get_val('tmp!new_maxage')):
             self._add_new_mime (post)
             if self.has_errors():
                 return self._op_render()
@@ -37,9 +42,9 @@ class PageMime (PageMenu, FormHelper):
         return "/%s" % (self._id)
 
     def _add_new_mime (self, post):
-        mime = post.pop('new_mime')
-        exts = post.pop('new_extensions')
-        mage = post.pop('new_maxage')
+        mime = post.pop('tmp!new_mime')
+        exts = post.pop('tmp!new_extensions')
+        mage = post.pop('tmp!new_maxage')
 
         if mage:
             self._cfg['mime!%s!max-age'%(mime)] = mage
@@ -47,19 +52,24 @@ class PageMime (PageMenu, FormHelper):
             self._cfg['mime!%s!extensions'%(mime)] = exts
 
     def _render_content (self):
+        render = '<h1>MIME types</h1>'
 
-        content  = self._render_mime_list()
+        content = self._render_mime_list()
         form = Form ('/%s' % (self._id), add_submit=False)
-        render=form.Render (content, DEFAULT_SUBMIT_VALUE)
+        tmp = form.Render (content, DEFAULT_SUBMIT_VALUE)
+        render += self.Indent(tmp)
+
+        render += '<h2>Add new MIME</h2>\n'
 
         content = self._render_add_mime()
         form = Form ('/%s' % (self._id), add_submit=True, auto=False)
-        render+=form.Render (content, DEFAULT_SUBMIT_VALUE)
+        tmp = form.Render (content, DEFAULT_SUBMIT_VALUE)
+        render += self.Indent(tmp)
 
         return render
 
     def _render_mime_list (self):
-        txt = '<h1>MIME types</h1>'
+        txt = ''
         cfg = self._cfg['mime']
         if cfg:
             table = Table(4, 1)
@@ -68,24 +78,30 @@ class PageMime (PageMenu, FormHelper):
             keys.sort()
             for mime in keys:
                 cfg_key = 'mime!%s'%(mime)
-                e1 = self.InstanceEntry('%s!extensions'%(cfg_key), 'text', size=20)
-                e2 = self.InstanceEntry('%s!max-age'%(cfg_key), 'text', size=6, maxlength=6)
+                e1 = self.InstanceEntry('%s!extensions'%(cfg_key), 'text', size=35)
+                e2 = self.InstanceEntry('%s!max-age'%(cfg_key),    'text', size=6, maxlength=6)
                 js = "post_del_key('/ajax/update', '%s');" % (quote(cfg_key))
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (mime, e1, e2, link_del)
             txt += '<div id="mimetable">%s</div>'%(str(table))
-            txt += '<hr />'
+            txt += '<p><hr /></p>'
         return txt
 
     def _render_add_mime (self):
-        txt = '<h2>Add new MIME</h2>\n'
-        e1 = self.InstanceEntry('new_mime',       'text', size=25)
-        e2 = self.InstanceEntry('new_extensions', 'text', size=35)
-        e3 = self.InstanceEntry('new_maxage',     'text', size=6, maxlength=6)
+        table = TableProps()
 
-        table = Table(3,1)
+        self.AddPropEntry (table, 'Mime Type',  'tmp!new_mime',       NOTE_NEW_MIME)
+        self.AddPropEntry (table, 'Extensions', 'tmp!new_extensions', NOTE_NEW_EXTENSIONS)
+        self.AddPropEntry (table, 'Max Age',    'tmp!new_maxage',     NOTE_NEW_MAXAGE, maxlength=6)
+
+        return str(table)
+
+        e1 = self.InstanceEntry('tmp!new_mime',       'text', size=35)
+        e2 = self.InstanceEntry('tmp!new_extensions', 'text', size=35)
+        e3 = self.InstanceEntry('tmp!new_maxage',     'text', size=6, maxlength=6)
+
+        table = Table(3,1, style='width="100%"')
         table += ('Mime Type', 'Extensions', 'Max Age')
         table += (e1, e2, e3)
 
-        txt += str(table)
-        return txt
+        return str(table)
