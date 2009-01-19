@@ -46,7 +46,7 @@ Directory, /admin
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Handler
-image::media/images/cookbook_managin_logs_handler.png[Handler]
+image::media/images/cookbook_managing_logs_handler.png[Handler]
 
 This handler will allow performing administration tasks, so public
 access is not an option. You can leave free access, but you should
@@ -60,10 +60,10 @@ the password `adminpass`. Of course you can use any other method
 available.
 
 .Security options
-image::media/images/cookbook_managin_logs_security.png[Security]
+image::media/images/cookbook_managing_logs_security.png[Security]
 
 .Possible list of rules
-image::media/images/cookbook_managin_logs_rules.png[Rules]
+image::media/images/cookbook_managing_logs_rules.png[Rules]
 
 Remember to save the changes through a graceful restart, since the main
 purpose of this recipe is not loosing any logging information and

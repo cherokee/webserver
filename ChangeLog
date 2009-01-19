@@ -35,7 +35,32 @@
 	doc/media/images/cookbook_drupal_example2.png
 	doc/media/images/cookbook_drupal_example4.png,
 	doc/media/images/cookbook_drupal_rules.png,
-	doc/media/images/cookbook_drupal_default2.png: Updated screenshots.
+	doc/media/images/cookbook_drupal_default2.png: Updated
+	screenshots.
+
+	* doc/media/images/cookbook_ror_common.png,
+	doc/media/images/cookbook_maintenance_advanced_domains.png,
+	doc/media/images/cookbook_redir_behavior.png,
+	doc/media/images/cookbook_mysql_validator.png,
+	doc/media/images/cookbook_wp_example1.png,
+	doc/media/images/cookbook_wp_example3.png,
+	doc/media/images/cookbook_maintenance_error.png,
+	doc/media/images/cookbook_maintenance_advanced_redir.png,
+	doc/media/images/cookbook_managing_logs_security.png,
+	doc/media/images/cookbook_maintenance_advanced_rules.png,
+	doc/media/images/cookbook_trac_rules.png,
+	doc/media/images/cookbook_mono_handler.png,
+	doc/media/images/cookbook_wp_default1.png,
+	doc/media/images/cookbook_moodle_document_root.png,
+	doc/media/images/cookbook_mailman.png,
+	doc/media/images/cookbook_managing_logs_rules.png,
+	doc/media/images/cookbook_redir_handler.png,
+	doc/media/images/cookbook_wp_example2.png,
+	doc/media/images/cookbook_trac_scgi.png,
+	doc/media/images/cookbook_managing_logs_handler.png,
+	doc/media/images/cookbook_mysql_rule.png,
+	doc/media/images/cookbook_trac_static.png,
+	doc/cookbook_managing_logs.txt: Updated screenshots.
 
 2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
