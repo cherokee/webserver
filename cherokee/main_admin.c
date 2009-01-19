@@ -197,6 +197,14 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "6!handler!iocache = 0\n"
 				 RULE_PRE "6!document_root = %s\n", CHEROKEE_DOCDIR);
 
+	cherokee_buffer_add_str (&buf,
+				 "mime!text/javascript!extensions = js\n"
+				 "mime!text/css!extensions = css\n"
+				 "mime!image/png!extensions = png\n"
+				 "mime!image/jpeg!extensions = jpeg,jpg\n"
+				 "mime!image/svg+xml!extensions = svg,svgz\n"
+				 "mime!image/gif!extensions = gif\n");
+
 	ret = cherokee_server_read_config_string (srv, &buf);
 	if (ret != ret_ok) {
 		PRINT_ERROR_S ("Could not initialize the server\n");

@@ -1,5 +1,9 @@
 2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main_admin.c (config_server): Adds a few basic MIME
+	types. Cherokee-admin should have been returning content-type
+	information.
+
 	* cherokee/handler_file.c (cherokee_handler_file_custom_init):
 	Improved to support MIME types associated with complex extensions.
 	Eg, "css.default" (used in Gallery).
