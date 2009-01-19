@@ -1,5 +1,10 @@
 2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/config_icons.txt, doc/media/images/admin_icons2.png,
+	doc/media/images/admin_icons1.png,
+	doc/media/images/admin_icons3.png: Reflects the last change in the
+	documentation. Screenshots were outdated.
+
 	* admin/static/css/cherokee.css, admin/PageIcon.py: Updates the
 	Icons page to the new page width (1024px).
 
