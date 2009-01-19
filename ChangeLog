@@ -1,5 +1,8 @@
 2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/196-Mime3.py, qa/Makefile.am: Adds a new QA to cover
+	changeset: http://svn.cherokee-project.com/changeset/2721
+
 	* doc/config_icons.txt, doc/media/images/admin_icons2.png,
 	doc/media/images/admin_icons1.png,
 	doc/media/images/admin_icons3.png: Reflects the last change in the

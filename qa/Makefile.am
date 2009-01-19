@@ -200,7 +200,8 @@ run-tests.py \
 192-RedirDocumentRoot.py \
 193-PHP-documentroot.py \
 194-PHP-zero-len-post.py \
-195-ServerAddr.py
+195-ServerAddr.py \
+196-Mime3.py
 
 test:
 	./run-tests.py
