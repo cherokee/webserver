@@ -1,3 +1,29 @@
+2009-01-19 Taher Shihadeh  <taher@unixwars.com>
+
+	* doc/media/images/admin_handler_fastcgi2.png,
+	doc/media/images/admin_launch.png,
+	doc/media/images/admin_vserver_loggers.png,
+	doc/media/images/admin_vserver_errors.png,
+	doc/media/images/admin_handler_onlylisting.png,
+	doc/media/images/admin_validators_authlist.png,
+	doc/media/images/cookbook_django_common.png,
+	doc/media/images/cookbook_dbslayer4.png,
+	doc/media/images/admin_validators_ldap.png,
+	doc/media/images/admin_handler_proxy.png,
+	doc/media/images/admin_validators_plain.png,
+	doc/media/images/admin_rule_regex.png,
+	doc/media/images/admin_general_ports.png,
+	doc/media/images/admin_handler_file.png,
+	doc/media/images/admin_notrunning.png,
+	doc/media/images/cookbook_dbslayer3.png,
+	doc/media/images/admin_index.png,
+	doc/media/images/admin_vserver_security.png,
+	doc/media/images/admin_info_sources.png,
+	doc/media/images/cookbook_django_infosources.png,
+	doc/media/images/admin_validators_pam.png,
+	doc/media/images/admin_vserver_vserver.png: Screenshots were
+	outdated.
+
 2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/PageGeneral.py, admin/validations.py: Fixes port entries
@@ -5,20 +31,20 @@
 
 2009-01-19 Taher Shihadeh  <taher@unixwars.com>
 
-        * doc/media/images/admin_handler_dbslayer.png,
-        doc/media/images/admin_handler_dirlist.png,
-        doc/media/images/README.txt, doc/media/images/admin_advanced2.png,
-        doc/media/images/admin_advanced4.png,
-        doc/media/images/cookbook_drupal_rules1.png,
-        doc/media/images/admin_behaviour.png,
-        doc/media/images/admin_handler_fastcgi1.png,
-        doc/media/images/admin_handler_admin.png,
-        doc/media/images/admin_advanced1.png,
-        doc/media/images/admin_advanced3.png,
-        doc/media/images/admin_handler_cgi.png,
-        doc/media/images/cookbook_drupal_rules2.png,
-        doc/media/images/admin_handler_custom_error.png: Screenshots were
-        outdated.
+	* doc/media/images/admin_handler_dbslayer.png,
+	doc/media/images/admin_handler_dirlist.png,
+	doc/media/images/README.txt, doc/media/images/admin_advanced2.png,
+	doc/media/images/admin_advanced4.png,
+	doc/media/images/cookbook_drupal_rules1.png,
+	doc/media/images/admin_behaviour.png,
+	doc/media/images/admin_handler_fastcgi1.png,
+	doc/media/images/admin_handler_admin.png,
+	doc/media/images/admin_advanced1.png,
+	doc/media/images/admin_advanced3.png,
+	doc/media/images/admin_handler_cgi.png,
+	doc/media/images/cookbook_drupal_rules2.png,
+	doc/media/images/admin_handler_custom_error.png: Screenshots were
+	outdated.
 
 2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
