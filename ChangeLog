@@ -1,3 +1,20 @@
+2009-01-19 Taher Shihadeh  <taher@unixwars.com>
+
+        * doc/media/images/admin_handler_dbslayer.png,
+        doc/media/images/admin_handler_dirlist.png,
+        doc/media/images/README.txt, doc/media/images/admin_advanced2.png,
+        doc/media/images/admin_advanced4.png,
+        doc/media/images/cookbook_drupal_rules1.png,
+        doc/media/images/admin_behaviour.png,
+        doc/media/images/admin_handler_fastcgi1.png,
+        doc/media/images/admin_handler_admin.png,
+        doc/media/images/admin_advanced1.png,
+        doc/media/images/admin_advanced3.png,
+        doc/media/images/admin_handler_cgi.png,
+        doc/media/images/cookbook_drupal_rules2.png,
+        doc/media/images/admin_handler_custom_error.png: Screenshots were
+        outdated.
+
 2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* qa/196-Mime3.py, qa/Makefile.am: Adds a new QA to cover
