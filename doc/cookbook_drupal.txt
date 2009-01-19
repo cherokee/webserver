@@ -18,17 +18,22 @@ available for some reason.
 Under these conditions, you could start Drupal's installation and you
 would already be able to have your site up and running.
 
-However, we can add several refinements to Cherokee's setting. Mainly:
+However, we can add several refinements to Cherokee's
+settings. Mainly:
 
-. Forward all requests for www.example.net (or whatever domain is resolved
-  to our machine) to example.net
+. Forward all requests for www.example.net (or whatever domain is
+  resolved to our machine) to example.net
 
-. Set up an appropriate url rewrite configuration for
-  Drupal.
+. Set up an appropriate url rewriting configuration for Drupal.
 
-. Serve directly as static content some specific file types, avoiding
-  any other file requests and eliminating this way any security risk
-  related to vulnerable archives.
+. Serve directly the static content speeding avoiding the
+  dynamic-processing bottle-neck.
+
+. Use the regex from Drupal's .htaccess for denying access to certain
+  paths.
+
+With this we should be able to do everything Drupal's supposed to do,
+and it should work with Imagecache's dynamic thumbnail generation.
 
 [[cherokee]]
 Setting up Cherokee
@@ -69,12 +74,14 @@ accomplished by tweaking the `example.net` virtual server.
 example.net
 ^^^^^^^^^^^
 
+First step
+++++++++++
+
 Remember to set up the `Document root` to `/var/www/drupal`.
 
 image::media/images/cookbook_drupal_example1.png[Drupal example]
 
-Delete all the rules except `php` and `Default`. We're heading right
-to the second milestone now.
+Delete all the rules except `php` and `Default`.
 
 image::media/images/cookbook_drupal_example2.png[Drupal example]
 
@@ -84,10 +91,13 @@ handler.
 `~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~
 Type     , Regular Expression, Redirection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Internal , ^/(.*)$           , /index.php?q=$1
+Internal , ^(.*)$           , /index.php?q=$1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 image::media/images/cookbook_drupal_example3.png[Drupal example]
+
+Second step
++++++++++++
 
 Remember to set up Drupal as custom error handler for the virtual
 server. Do so in the `Error Handler` tab, selecting the `Custom
@@ -102,27 +112,75 @@ Error        , URL
 404 Not Found, /index.php
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The third milestone, directly serving static files, is an easy task to
-accomplish.
+Third step
+++++++++++
 
-Just set up an `Extensions`-type rule for the following extensions:
+Next, we need to address the clean URLs matter. To do so, create
+another redirection rule.
 
-***************************
-jpg,jpeg,gif,css,png,js,ico
-***************************
+`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~
+Type     , Regular Expression, Redirection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Internal ,  ^/(.*)\?(.*)$    , /index.php?q=$1&$2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-And manage it with the `Static content` handler.
+Fourth step
++++++++++++
 
-image::media/images/cookbook_drupal_example5.png[Drupal example]
+After this we will go straight to another milestone: directly serving
+static files, which is an easy task to accomplish.
 
-If you would prefer a more thorough approach, you can simply set a
-`File Exists`-type rule with the same handler. Just make sure the
-`Match any file` checkbox is checked, and that the rule is located
-after the PHP rule. Otherwise you will end up statically serving them
-instead of processing them via PHP.
-Note that this apporach is the one that behaves more like the one
-suggested by the .htaccess files provided with Drupal.
+Just set up an `File Exists`-type rule. Check the `Match any`
+checkbox, and manage it with the `Static file` handler. Remember to
+activate the `IO Cache` option and to specify whatever expiration
+period you see fit for these files. If you ever edit the configuration
+just remember that this rule should be located after the PHP
+rule. Otherwise you will end up statically serving them instead of
+processing them via PHP. In fact it is a good idea to keep your rules
+for dynamic contents in a high position on your list of rules.
 
+Fifth step
+++++++++++
+
+Now to block bad paths, as specified by the htaccess file provided
+with Drupal. For this we will use an internal `Regular
+expression`-type rule matching the following expression:
+
+----
+\.(engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(\.php)?|xtmpl)(\?.*)?$|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template)$
+----
+
+Handle this with the `HTTP error` handler:
+
+[grid="rows"]
+`~~~~~~~~~~~~
+Error
+~~~~~~~~~~~~~
+403 Forbidden
+~~~~~~~~~~~~~
+
+Sixth step
+++++++++++
+
+The last thing to do on Cherokee's side is to specify a sixth rule
+that fixes an issue with how requests for the root are managed having
+the `File exists` handler in place. Simply define yet another
+redirection rule for this regular expression:
+
+`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~
+Type     , Regular Expression, Redirection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Internal ,  ^/$              , /index.php
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+All done. After this you should have six rules in your list. This
+configuration does work. Reorder your rules accordingly if you seem to
+have any trouble.
+
+.List of rules
+image::media/images/cookbook_drupal_rules.png[Drupal rules]
+
+Now, to install Drupal!
 
 [[drupal]]
 Setting up Drupal
@@ -165,3 +223,96 @@ requested values and you will obtain the following results once your
 are through.
 
 image::media/images/cookbook_drupal.png[Drupal in action!]
+
+
+/////////////////////////////
+#Config snippet from ericdrex
+
+
+vserver!60!directory_index = index.php,index.html
+vserver!60!document_root = /var/www/drupal
+vserver!60!domain!1 = my.drupal.site.com
+vserver!60!error_handler = error_redir
+vserver!60!error_handler!404 = /index.php
+vserver!60!keepalive = 1
+vserver!60!logger = combined
+vserver!60!logger!access!buffsize = 16384
+vserver!60!logger!access!filename = /var/log/cherokee/drupal.access
+vserver!60!logger!access!type = file
+vserver!60!logger!error!filename = /var/log/cherokee/drupal.error
+vserver!60!logger!error!type = file
+vserver!60!nick = drupal
+
+# works around a bug in file exists rule below by catching request for the root.
+vserver!60!rule!600!encoder!deflate = 0
+vserver!60!rule!600!encoder!gzip = 0
+vserver!60!rule!600!handler = redir
+vserver!60!rule!600!handler!rewrite!1!show = 0
+vserver!60!rule!600!handler!rewrite!1!substring = /index.php
+vserver!60!rule!600!match = request
+vserver!60!rule!600!match!final = 1
+vserver!60!rule!600!match!request = ^/$
+vserver!60!rule!600!only_secure = 0
+
+# php
+vserver!60!rule!500!encoder!deflate = 1
+vserver!60!rule!500!encoder!gzip = 1
+vserver!60!rule!500!handler = fcgi
+vserver!60!rule!500!handler!balancer = round_robin
+vserver!60!rule!500!handler!balancer!source!1 = 1
+vserver!60!rule!500!handler!check_file = 1
+vserver!60!rule!500!handler!error_handler = 1
+vserver!60!rule!500!handler!pass_req_headers = 1
+vserver!60!rule!500!handler!xsendfile = 1
+vserver!60!rule!500!match = extensions
+vserver!60!rule!500!match!extensions = php
+vserver!60!rule!500!match!final = 1
+vserver!60!rule!500!only_secure = 0
+
+# block bad paths, including with ?something appended (tricky!)
+vserver!60!rule!400!encoder!deflate = 1
+vserver!60!rule!400!encoder!gzip = 1
+vserver!60!rule!400!handler = custom_error
+vserver!60!rule!400!handler!error = 403
+vserver!60!rule!400!match = request
+vserver!60!rule!400!match!directory = /
+vserver!60!rule!400!match!extensions = module,inc
+vserver!60!rule!400!match!final = 1
+vserver!60!rule!400!match!request = \.(engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(\.php)?|xtmpl)(\?.*)?$|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template)$
+vserver!60!rule!400!only_secure = 0
+
+# clean urls rewrite for request with ?post=params
+vserver!60!rule!300!encoder!deflate = 1
+vserver!60!rule!300!encoder!gzip = 1
+vserver!60!rule!300!expiration = time
+vserver!60!rule!300!expiration!time = 1w
+vserver!60!rule!300!handler = file
+vserver!60!rule!300!handler!iocache = 1
+vserver!60!rule!300!match = exists
+vserver!60!rule!300!match!exists = a
+vserver!60!rule!300!match!final = 1
+vserver!60!rule!300!match!iocache = 1
+vserver!60!rule!300!match!match_any = 1
+vserver!60!rule!300!only_secure = 0
+vserver!60!rule!200!encoder!deflate = 0
+vserver!60!rule!200!encoder!gzip = 0
+vserver!60!rule!200!handler = redir
+vserver!60!rule!200!handler!rewrite!1!show = 0
+vserver!60!rule!200!handler!rewrite!1!substring = /index.php?q=$1&$2
+vserver!60!rule!200!match = request
+vserver!60!rule!200!match!final = 1
+vserver!60!rule!200!match!request = ^/(.*)\?(.*)$
+vserver!60!rule!200!only_secure = 0
+
+# same for requests with no POST params
+vserver!60!rule!100!encoder!deflate = 0
+vserver!60!rule!100!encoder!gzip = 0
+vserver!60!rule!100!handler = redir
+vserver!60!rule!100!handler!rewrite!1!regex = ^(.*)$
+vserver!60!rule!100!handler!rewrite!1!show = 0
+vserver!60!rule!100!handler!rewrite!1!substring = /index.php?q=$1
+vserver!60!rule!100!match = default
+vserver!60!rule!100!match!final = 1
+vserver!60!rule!100!only_secure = 0
+
+/////////////////////////////

@@ -192,7 +192,7 @@ media/images/cookbook_drupal_example1.png \
 media/images/cookbook_drupal_example2.png \
 media/images/cookbook_drupal_example3.png \
 media/images/cookbook_drupal_example4.png \
-media/images/cookbook_drupal_example5.png \
+media/images/cookbook_drupal_rules.png \
 media/images/cookbook_wp1.png \
 media/images/cookbook_wp2.png \
 media/images/cookbook_wp3.png \

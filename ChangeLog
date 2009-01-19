@@ -24,6 +24,19 @@
 	doc/media/images/admin_vserver_vserver.png: Screenshots were
 	outdated.
 
+	* doc/cookbook_drupal.txt: improved recipe. Thanks to Eric
+	Drechsel <ericdrex@gmail.com>.
+
+	* doc/media/images/cookbook_drupal_example1.png,
+	doc/media/images/cookbook_drupal_example3.png,
+	doc/media/images/cookbook_drupal_example5.png,
+	doc/media/images/cookbook_drupal_default3.png
+	doc/media/images/cookbook_drupal_rules1.png,
+	doc/media/images/cookbook_drupal_example2.png
+	doc/media/images/cookbook_drupal_example4.png,
+	doc/media/images/cookbook_drupal_rules.png,
+	doc/media/images/cookbook_drupal_default2.png: Updated screenshots.
+
 2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/PageGeneral.py, admin/validations.py: Fixes port entries
