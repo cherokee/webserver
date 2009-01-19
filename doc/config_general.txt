@@ -4,8 +4,8 @@ General Configuration
 ---------------------
 
 [[networking]]
-Networking
-~~~~~~~~~~
+Network
+~~~~~~~
 
 image::media/images/admin_general_networking.png[General]
 
@@ -18,7 +18,7 @@ compiled with IPv6 support (--with-ipv6), this configuration entry
 will be fully functional, otherwise it will be ignored.
 
 
-TLS/SSL Back-end
+SSL/TLS Back-end
 ^^^^^^^^^^^^^^^^
 Specifies the TLS/SSL backend to be used, if any. The current option
 is OpenSSL.
@@ -56,13 +56,13 @@ Ports to listen
 
 image::media/images/admin_general_ports.png[Ports to listen]
 
-This section allows to configure the port that the server will listen
-to.
+This section allows to configure the ports that the server will be
+listening to. You can add several different ports, and configure
+whether they will be used for HTTP or HTTPS.
 
 Each binding entry can be configured to listen to a network
 interface. In case the text entry is empty, the server will accept
 connection from the port on any interface.
-
 
 [[server_permissions]]
 Server Permissions

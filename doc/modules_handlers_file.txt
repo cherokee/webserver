@@ -31,5 +31,7 @@ Lets imagine your virtual server DocumentRoot points to /var/www.
 
 image::media/images/admin_handler_file.png[Handler file]
 
-This configuration will make Cherokee to serve each file inside
-/var/www_static/images as files.
+This is a simple example that will make Cherokee able of serving each
+CSS file under /var/www or any subdirectory with the IO/cache setting
+enabled. This would only not apply if a `final` rule with higher
+priority specified otherwise.

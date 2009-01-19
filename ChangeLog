@@ -1,3 +1,12 @@
+2009-01-19 Taher Shihadeh  <taher@unixwars.com>
+
+	* doc/dev_debug.txt, doc/basics_why_cherokee.txt,
+	doc/config_general.txt, doc/index.txt, doc/config_quickstart.txt,
+	doc/modules_handlers_file.txt, doc/cookbook_optimizations.txt,
+	doc/bundle_cherokee-admin.txt, doc/dev_cherokee.conf.txt,
+	doc/modules.txt, doc/modules_balancers_ip_hash.txt: documentation
+	updates for the upcomming 0.98
+
 2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/main_admin.c (config_server): Adds a few basic MIME
@@ -26,7 +35,7 @@
 	* doc/modules_balancers.txt, doc/modules_balancers_ip_hash.txt,
 	doc/Makefile.am: Adds some basic documentation about the IP Hash
 	load balancer.
-	
+
 	* cherokee/handler_server_info.c (AJAX_JS): Fixes a Javascript
 	parsing error. 'default' is a reserved work, so it cannot be used
 	as a dict index without quotes.
@@ -53,8 +62,8 @@
 
 2009-01-15  Jonathan Hernandez  <ion@suavizado.com>
 
-	* cherokee/handler_server_info.c: Enhacements to CSS, 
-        Use Javascript DOM to generate the info page instead innerHTML. 
+	* cherokee/handler_server_info.c: Enhacements to CSS, Use
+	Javascript DOM to generate the info page instead innerHTML.
 
 2009-01-15  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -214,7 +223,7 @@
 	configure.in, admin/consts.py, admin/Makefile.am,
 	admin/ModuleIpHash.py: Adds a new load balancer. It implements a
 	new balancing strategy by which load is balanced among the
-	back-end server based on the client IP. All the request comming
+	back-end server based on the client IP. All the request coming
 	from the same IP will be delivered to the same back-end server.
 
 2009-01-03  Alvaro Lopez Ortega  <alvaro@octality.com>
@@ -353,7 +362,7 @@
 
 	* cherokee/server.c: Print more information as part of the banner:
 	The bound ports, tracing, and I/O cache support are now included.
-	
+
 	* cherokee/trace.c: Adds a shorter path for CHEROKEE_TRACE=all.
 
 2008-12-29  Alvaro Lopez Ortega  <alvaro@octality.com>

@@ -17,13 +17,12 @@ into your specific Cherokee build. This can be done by:
 ----
 $ cherokee -i
 Compilation
- Version: 0.11.0
+ Version: 0.98.0
 
 [...]
 
 Support
  IPv6: yes
- OpenSSL: no
  Pthreads: yes
  Tracing: yes
  sendfile(): yes

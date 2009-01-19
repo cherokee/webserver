@@ -3,7 +3,7 @@
 Balancer: IP Hash
 -----------------
 
-The IP Hash load balancer modules distributes the incoming requests
+The IP Hash load balancer module distributes the incoming requests
 among the upstreams based on the IP address of the client. This method
 guarantees that the client request will always be transferred to the
 same server.

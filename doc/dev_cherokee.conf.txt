@@ -31,7 +31,7 @@ contain values.
 Let's see a basic example::
 +
 ----
-    server!port = 80
+    server!bind!1!port = 80
     server!keepalive = 1
 ----
 
@@ -57,9 +57,9 @@ is run as root or whether to use keep-alive connections.
 ```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Key**,                          **Type**, **Description**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-server!port,                      Number         , TCP port for HTTP
-server!tls,                       String         , TLS/SSL backend: libssl
-server!port_tls,                  Number         , TCP port for HTTPS
+server!bind!#!port,               Number         , Listen to a TCP port. '#' is a secuential \
+                                                   number since many ports can be listened at once.
+server!bind!#!tls,                Bool           , on|off: whether the listened port '#' is for HTTPS.
 server!max_fds,                   Number         , Max open file descriptors
 server!listen_queue,              Number         , Length of the listen queue
 server!thread_number,             Number         , Number of threads
@@ -93,10 +93,10 @@ server!module_deps,               Path           , Path to the plug-in inter-dep
 Value                     , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Product                   , Cherokee
-Minor                     , Cherokee/0.11
-Minimal                   , Cherokee/0.11.0
-OS                        , Cherokee/0.11.0 (UNIX)
-Full                      , Cherokee/0.11.0 b2311 (UNIX)
+Minor                     , Cherokee/0.98
+Minimal                   , Cherokee/0.98.0
+OS                        , Cherokee/0.98.0 (UNIX)
+Full                      , Cherokee/0.98.0 b2721 (UNIX)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``server!thread_policy`` parameters
@@ -566,7 +566,7 @@ might wish to rewrite in the headers before relaying the connection.
 This is a basic example:
 
 ----
-server!port = 1234
+server!bind!1!port = 1234
 
 # The proxy configuration
 vserver!1!nick = default
