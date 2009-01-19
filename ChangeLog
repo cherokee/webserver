@@ -1,3 +1,9 @@
+2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_file.c (cherokee_handler_file_custom_init):
+	Improved to support MIME types associated with complex extensions.
+	Eg, "css.default" (used in Gallery).
+
 2009-01-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/PageMime.py, admin/static/css/cherokee.css,

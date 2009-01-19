@@ -414,9 +414,14 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 	/* Look for the mime type
 	 */
 	if (srv->mime != NULL) {
-		ext = strrchr (conn->request.buf, '.');
-		if (ext != NULL) {
-			cherokee_mime_get_by_suffix (srv->mime, ext+1, &fhdl->mime);
+		ext = (conn->request.buf + conn->request.len) - 1;
+		while (ext > conn->request.buf) {
+			if (*ext == '.') {
+				ret = cherokee_mime_get_by_suffix (srv->mime, ext+1, &fhdl->mime);
+				if (ret == ret_ok)
+					break;
+			}
+			ext--;
 		}
 	}
 
