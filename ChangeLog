@@ -1,3 +1,8 @@
+2009-01-19  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/static/css/cherokee.css, admin/PageIcon.py: Updates the
+	Icons page to the new page width (1024px).
+
 2009-01-19 Taher Shihadeh  <taher@unixwars.com>
 
 	* doc/dev_debug.txt, doc/basics_why_cherokee.txt,

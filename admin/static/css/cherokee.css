@@ -542,7 +542,7 @@ table.rulestable tr.odd td {
 /* PageIcons.py styles    */
 /**************************/
 #tab_icon div input[type="text"] {
-  width: 280px;
+  width: 400px;
 }
 
 #file_new_file,
