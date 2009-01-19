@@ -15,10 +15,11 @@ PRODUCT_TOKENS = [
 ]
 
 DATA_VALIDATION = [
-    ("server!ipv6",      validations.is_boolean),
-    ("server!port.*",    validations.is_tcp_port),
-    ("server!listen",    validations.is_ip),
-    ("server!chroot",   (validations.is_local_dir_exists, 'cfg')),
+    ("server!ipv6",              validations.is_boolean),
+    ("server!bind!.*!port",      validations.is_tcp_port),
+    ("server!bind!.*!interface", validations.is_ip),
+    ("server!bind!.*!tls",       validations.is_boolean),
+    ("server!chroot",           (validations.is_local_dir_exists, 'cfg')),
 ]
 
 NOTE_ADD_PORT  = 'Defines a port that the server will listen to'
@@ -62,14 +63,14 @@ class PageGeneral (PageMenu, FormHelper):
         txt = "<h2>Basic Behavior</h2>"
         table = TableProps()
         self.AddPropEntry (table,  'Timeout (<i>secs</i>)', 'server!timeout',  NOTE_TIMEOUT)
-        self.AddPropOptions_Reload (table, 'Server Tokens',  'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
+        self.AddPropOptions_Reload (table, 'Server Tokens', 'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
         txt += self.Indent(table)
         return txt
 
     def _render_permissions (self):
         table = TableProps()
-        self.AddPropEntry (table, 'User',  'server!user',    NOTE_USER)
-        self.AddPropEntry (table, 'Group', 'server!group',   NOTE_GROUP)
+        self.AddPropEntry (table, 'User',   'server!user',   NOTE_USER)
+        self.AddPropEntry (table, 'Group',  'server!group',  NOTE_GROUP)
         self.AddPropEntry (table, 'Chroot', 'server!chroot', NOTE_CHROOT)
         return self.Indent(table)
 
@@ -82,8 +83,8 @@ class PageGeneral (PageMenu, FormHelper):
 
         txt += "<h3>Network behavior</h3>"
         table = TableProps()
-        self.AddPropEntry (table,  'Timeout (<i>secs</i>)', 'server!timeout',  NOTE_TIMEOUT)
-        self.AddPropOptions_Reload (table, 'Server Tokens',   'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
+        self.AddPropEntry (table,  'Timeout (<i>secs</i>)', 'server!timeout',       NOTE_TIMEOUT)
+        self.AddPropOptions_Reload (table, 'Server Tokens', 'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
         txt += self.Indent(table)
         return txt
 	
@@ -108,15 +109,17 @@ class PageGeneral (PageMenu, FormHelper):
         for k in self._cfg.keys('server!bind'):
             pre = 'server!bind!%s'%(k)
 
-            port   = self.InstanceEntry ("%s!port"%(pre), 'text', size=25)
-            listen = self.InstanceEntry ("%s!interface"%(pre), 'text', size=25)
+            port   = self.InstanceEntry ("%s!port"%(pre),      'text', size=8)
+            listen = self.InstanceEntry ("%s!interface"%(pre), 'text', size=45)
             tls    = self.InstanceCheckbox ('%s!tls'%(pre), False, quiet=True)
 
             js = "post_del_key('/ajax/update', '%s');"%(pre)
             link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 
             table += (port, listen, tls, link_del)
-        txt += str(table)
+
+        txt = "<h3>Listenig to ports</h3>"
+        txt += self.Indent(table)
         
         # Add new port
         pre    = 'server!bind!%s!port'%(next)
@@ -125,4 +128,4 @@ class PageGeneral (PageMenu, FormHelper):
 
         txt += "<br />"
         txt += str(table)
-        return self.Indent(txt)
+        return txt

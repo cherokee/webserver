@@ -217,6 +217,13 @@ def is_ip_or_netmask (value):
 
     return "%s/%s" % (ip, nm)
 
+def is_ip_list (value):
+    re = []
+    for entry in value.split(','):
+        e = entry.strip()
+        re.append(is_ip(e))
+    return ','.join(re)
+
 def is_ip_or_netmask_list (value):
     re = []
     for entry in value.split(','):
