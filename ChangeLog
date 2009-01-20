@@ -1,3 +1,8 @@
+2009-01-20  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/PageStatus.py, admin/status.template.html: Adds
+	a (cheesy?) notice thanking beta testers.
+
 2009-01-19 Taher Shihadeh  <taher@unixwars.com>
 
 	* doc/media/images/admin_handler_fastcgi2.png,

@@ -35,6 +35,12 @@ SERVER_NOT_RUNNING = """
 </div>
 """
 
+BETA_TESTER_NOTICE = "<h3>Beta testing</h3>" +\
+                     "<p>Individuals like yourself who download and test the "  + \
+                     "latest developer snapshots of Cherokee Web Server help us " + \
+                     "to create the highest quality product.</p>" + \
+                     "<p>For that, we thank you.</p>"
+
 HELPS = [
     ('config_status', "Status")
 ]
@@ -47,6 +53,12 @@ class PageStatus (PageMenu, FormHelper):
     def _op_render (self):
         self.AddMacroContent ('title', 'Welcome to Cherokee Admin')
         self.AddMacroContent ('content', self.Read('status.template'))
+
+        if 'b' in VERSION:
+            notice = self.Dialog(BETA_TESTER_NOTICE)
+            self.AddMacroContent ('beta_tester', notice)
+        else:
+            self.AddMacroContent ('beta_tester', '')
 
         manager = cherokee_management_get (self._cfg)
         if manager.is_alive():
