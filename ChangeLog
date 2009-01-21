@@ -11,6 +11,9 @@
 	doc/media/images/cookbook_managing_logs_handler.png: last outdated
 	screenshots.
 
+	* admin/Form.py: fixes problem with non-persistent tabs, issue
+	http://code.google.com/p/cherokee/issues/detail?id=311
+
 2009-01-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/PageStatus.py, admin/status.template.html: Adds

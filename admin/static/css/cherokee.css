@@ -1,7 +1,7 @@
 html {
     background-color: #cfd9e8;
     height:100%;
-} 
+}
 
 body {
     min-width: 960px;
@@ -56,7 +56,7 @@ a:hover { color: #164987; }
     font-size: 80%;
     color: #aaa;
     text-align: right;
-} 
+}
 
 #footer-inner {
     text-align: right;
@@ -333,7 +333,7 @@ table td label {
     padding: 0 0 0 4px;
 }
 
-.ui-tabs-nav:after { 
+.ui-tabs-nav:after {
     display: block;
     clear: both;
     content: " ";
@@ -361,7 +361,7 @@ table td label {
     font-size: 90%;
     text-align: center;
     text-decoration: none;
-    white-space: nowrap; /* required in IE 6 */    
+    white-space: nowrap; /* required in IE 6 */
     font-weight: bold;
 }
 .ui-tabs-nav .ui-tabs-selected a {
@@ -474,6 +474,7 @@ a.button:active span {
 .rulestable {
   width: 100%;
 }
+
 
 #mimetable {
   width: 680px;

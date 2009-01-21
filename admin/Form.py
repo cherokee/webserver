@@ -151,15 +151,18 @@ class FormHelper (WebComponent):
         # Javascript
         txt += '''
         <script type="text/javascript">
-          var settings = {
-             cookie: { expires: 1 }
-          };
-
           $(function() {
-              $("#tab_%s").tabs(settings);
+              $("#tab_%s").tabs().bind('tabsselect', function(event, ui) {
+                  document.cookie = "open_tab=" + ui.index;
+              });
+
+              open_tab = get_cookie('open_tab');
+              if (open_tab) {
+                  $("#tab_%s").tabs("select", open_tab);
+              }
           });
         </script>
-        ''' % (self._id)
+        ''' % (self._id, self._id)
         return txt
 
     def AddTableEntry (self, table, title, cfg_key, extra_cols=None):
