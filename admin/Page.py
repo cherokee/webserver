@@ -5,7 +5,7 @@ from configured import *
 from CherokeeManagement import *
         
 PAGE_BASIC_LAYOUT = """
-    <div id="container" class="clearfix">
+    <div id="container">
 	<div id="header">
 	   <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
 	   <div id="version">Version: %(version)s</div>
@@ -17,15 +17,13 @@ PAGE_BASIC_LAYOUT = """
           <div id="save_changes_msg"></div>
         %(content)s
         </div></div>
-    	<div class="clearfix"></div>
     </div>
     <div id="footer">
-    <div class="clearfix"></div>
     <div id="footer-inner">
     </div></div>"""
 
 PAGE_MENU_LAYOUT = """
-    <div id="container" class="clearfix">
+    <div id="container">
 	<div id="header">
 	   <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
 	   <div id="version">Version: %(version)s</div>
@@ -38,10 +36,8 @@ PAGE_MENU_LAYOUT = """
           <div id="save_changes_msg"></div>
         %(content)s
         </div></div>
-    	<div class="clearfix"></div>
     </div>
     <div id="footer">
-    <div class="clearfix"></div>
     <div id="footer-inner">
     </div>
     </div>"""

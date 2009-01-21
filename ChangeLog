@@ -1,3 +1,8 @@
+2009-01-21  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/Page.py, admin/static/css/cherokee.css: Fixes a CSS
+	problem: http://code.google.com/p/cherokee/issues/detail?id=324
+
 2009-01-21 Taher Shihadeh  <taher@unixwars.com>
 	* doc/media/images/cookbook_phpbb_rules.png,
 	doc/media/images/cookbook_maintenance_domain.png,

@@ -13,7 +13,7 @@ body {
 }
 
 html>body #container {
-    height:100%;
+    overflow: auto;
 }
 
 a { color: #2d5e9a; }
