@@ -1,3 +1,16 @@
+2009-01-21 Taher Shihadeh  <taher@unixwars.com>
+	* doc/media/images/cookbook_phpbb_rules.png,
+	doc/media/images/cookbook_maintenance_domain.png,
+	doc/media/images/cookbook_managing_logs_security.png,
+	doc/media/images/cookbook_nagios1.png,
+	doc/media/images/cookbook_nagios3.png,
+	doc/media/images/cookbook_maintenance_rule.png,
+	doc/media/images/cookbook_phpmyadmin_denied.png,
+	doc/media/images/cookbook_redir_domains.png,
+	doc/media/images/cookbook_nagios2.png,
+	doc/media/images/cookbook_managing_logs_handler.png: last outdated
+	screenshots.
+
 2009-01-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/PageStatus.py, admin/status.template.html: Adds
