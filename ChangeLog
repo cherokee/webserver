@@ -1,5 +1,9 @@
 2009-01-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/197-SOAPAction.py: Adds a new QA test in order to reproduce
+	(and protect again future regressions) for the bug #325:
+	http://code.google.com/p/cherokee/issues/detail?id=325
+
 	* cherokee/init.h, cherokee/init.c, cherokee/post.c: Removes a
 	"/tmp" directory hardcoded path. From now on a global
 	cherokee_tmp_dir buffer is available with the temporal directory
