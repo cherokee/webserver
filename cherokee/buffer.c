@@ -636,7 +636,7 @@ cherokee_buffer_add_char_n (cherokee_buffer_t *buf, char c, int num)
 
 
 ret_t
-cherokee_buffer_prepend (cherokee_buffer_t *buf, char *txt, size_t size)
+cherokee_buffer_prepend (cherokee_buffer_t *buf, const char *txt, size_t size)
 {
 	int free = buf->size - buf->len;
 

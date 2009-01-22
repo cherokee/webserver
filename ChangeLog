@@ -1,5 +1,8 @@
 2009-01-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/buffer.c (cherokee_buffer_prepend), cherokee/buffer.h:
+	Fixes a trivial compilation warning.
+
 	* qa/197-SOAPAction.py: Adds a new QA test in order to reproduce
 	(and protect again future regressions) for the bug #325:
 	http://code.google.com/p/cherokee/issues/detail?id=325
