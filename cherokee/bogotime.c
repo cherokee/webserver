@@ -157,7 +157,7 @@ cherokee_bogotime_try_update (void)
 	ret_t ret;
 	int   unlocked;
 
-	unlocked = CHEROKEE_RWLOCK_TRYREADER (&lock);
+	unlocked = CHEROKEE_RWLOCK_TRYWRITER (&lock);
 	if (unlocked) 
 		return ret_not_found;
 

@@ -1,5 +1,11 @@
 2009-01-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/bogotime.c (cherokee_bogotime_try_update): Replaces a
+	call to CHEROKEE_RWLOCK_TRYREADER() by CHEROKEE_RWLOCK_TRYWRITER()
+	It must have been a copy&paste issue, actually. Thanks a million
+	to Shi Yao <shiyao@gmail.com> for discovering the problem (and
+	sending a great report/analysis about it). Kudos to Shi!!
+
 	* cherokee/handler_cgi_base.c: Fixes the client headers forwarding
 	(HTTP_* headers). From now on, the forwarding mechanism is enabled
 	by default.
