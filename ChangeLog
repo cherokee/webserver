@@ -1,3 +1,8 @@
+2009-01-22 Taher Shihadeh  <taher@unixwars.com>
+
+	* doc/media/images/admin_handler_cgi.png,
+	doc/modules_handlers_cgi.txt: Reflect the previous change.
+
 2009-01-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/bogotime.c (cherokee_bogotime_try_update): Replaces a
@@ -9,7 +14,7 @@
 	* cherokee/handler_cgi_base.c: Fixes the client headers forwarding
 	(HTTP_* headers). From now on, the forwarding mechanism is enabled
 	by default.
-	
+
 	* admin/ModuleCgi.py: Reflect the previous change: client headers
 	forwarding is enabled by default.
 
@@ -36,7 +41,7 @@
 	try to read the TMPDIR environment variable (or TEMP on Windows).
 	Finally, if it failed as well, a hardcoded "/tmp" value would be
 	used.
-	
+
 2009-01-21 Taher Shihadeh  <taher@unixwars.com>
 
 	* doc/modules_handlers_cgi.txt: added example as requested in
