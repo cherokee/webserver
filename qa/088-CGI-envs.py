@@ -14,6 +14,13 @@ vserver!1!rule!880!handler!env!%s = %s
 vserver!1!rule!880!handler!env!%s = %s
 """
 
+CGI_BASE = """#!/bin/sh
+echo "Content-Type: text/plain"
+echo
+echo "Env1 %s = $%s"
+echo "Env2 %s = $%s"
+"""
+
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
@@ -28,10 +35,4 @@ class Test (TestBase):
     def Prepare (self, www):
         self.Mkdir (www, "cgienvs")
         self.WriteFile (www, "cgienvs/cgi.cgi", 0555,
-                        """#!/bin/sh
-
-                        echo "Content-Type: text/plain"
-                        echo
-                        echo "Env1 %s = $%s"
-                        echo "Env2 %s = $%s"
-                        """ % (ENV1_NAME, ENV1_NAME, ENV2_NAME, ENV2_NAME))
+                        CGI_BASE % (ENV1_NAME, ENV1_NAME, ENV2_NAME, ENV2_NAME))
