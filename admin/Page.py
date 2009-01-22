@@ -17,10 +17,7 @@ PAGE_BASIC_LAYOUT = """
           <div id="save_changes_msg"></div>
         %(content)s
         </div></div>
-    </div>
-    <div id="footer">
-    <div id="footer-inner">
-    </div></div>"""
+    </div>"""
 
 PAGE_MENU_LAYOUT = """
     <div id="container">
@@ -36,10 +33,6 @@ PAGE_MENU_LAYOUT = """
           <div id="save_changes_msg"></div>
         %(content)s
         </div></div>
-    </div>
-    <div id="footer">
-    <div id="footer-inner">
-    </div>
     </div>"""
 
 PAGE_MENU_HELP_BLOCK = """

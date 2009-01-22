@@ -14,6 +14,7 @@ body {
 
 html>body #container {
     overflow: auto;
+    min-height: 100%;
 }
 
 a { color: #2d5e9a; }
