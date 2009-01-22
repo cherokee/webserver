@@ -30,6 +30,7 @@
 #define CHEROKEE_INIT_H
 
 #include <cherokee/common.h>
+#include <cherokee/buffer.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -40,9 +41,10 @@ ret_t cherokee_mrproper (void);
 
 /* Globals
  */
-extern cuint_t cherokee_cacheline_size;
-extern cint_t  cherokee_cpu_number;
-extern cuint_t cherokee_fdlimit;
+extern cuint_t           cherokee_cacheline_size;
+extern cint_t            cherokee_cpu_number;
+extern cuint_t           cherokee_fdlimit;
+extern cherokee_buffer_t cherokee_tmp_dir;
 
 CHEROKEE_END_DECLS
 

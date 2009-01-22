@@ -1640,3 +1640,35 @@ error:
 	dst[0] = '\0';
 	return ret_error;
 }
+
+
+ret_t
+cherokee_tmp_dir_copy (cherokee_buffer_t *buffer)
+{
+	char *p;
+
+	/* Read a custom Cherokee variable
+	 */
+	p = getenv("CHEROKEE_TMPDIR");
+	if (p != NULL) {
+		cherokee_buffer_add (buffer, p, strlen(p));
+		return ret_ok;
+	} 
+
+	/* Read the system variable
+	 */
+#ifdef _WIN32
+	p = getenv("TEMP");
+#else
+	p = getenv("TMPDIR");
+#endif
+	if (p != NULL) {
+		cherokee_buffer_add (buffer, p, strlen(p));
+		return ret_ok;
+	}
+
+	/* Since everything has failed, let's go for /tmp
+	 */
+	cherokee_buffer_add_str (buffer, "/tmp");
+	return ret_ok;
+}

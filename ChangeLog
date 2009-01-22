@@ -1,3 +1,18 @@
+2009-01-22  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/init.h, cherokee/init.c, cherokee/post.c: Removes a
+	"/tmp" directory hardcoded path. From now on a global
+	cherokee_tmp_dir buffer is available with the temporal directory
+	path.
+
+	* cherokee/util.c (cherokee_tmp_dir_copy): A new utility function
+	has been added. It figures the temporal directory that Cherokee
+	ought to use. The first choice is the directory pointed by the
+	CHEROKEE_TMPDIR environment variable. In case it were empty it'd
+	try to read the TMPDIR environment variable (or TEMP on Windows).
+	Finally, if it failed as well, a hardcoded "/tmp" value would be
+	used.
+	
 2009-01-21 Taher Shihadeh  <taher@unixwars.com>
 
 	* doc/modules_handlers_cgi.txt: added example as requested in

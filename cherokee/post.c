@@ -25,6 +25,7 @@
 #include "common-internal.h"
 #include "post.h"
 #include "util.h"
+#include "init.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -90,7 +91,8 @@ cherokee_post_set_len (cherokee_post_t *post, off_t len)
 	TRACE(ENTRIES, "len=%d type=%d\n", len, post->type);
 
 	if (post->type == post_in_tmp_file) {
-		cherokee_buffer_add_str (&post->tmp_file, "/tmp/cherokee_post_XXXXXX");
+		cherokee_buffer_add_buffer (&post->tmp_file, &cherokee_tmp_dir);
+		cherokee_buffer_add_str    (&post->tmp_file, "/cherokee_post_XXXXXX");
 
 		/* Generate a unique name
 		 */
