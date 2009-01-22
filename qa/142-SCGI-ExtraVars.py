@@ -1,5 +1,6 @@
 import os
 from base import *
+from util import *
 
 DIR    = "/SCGI4/"
 PORT   = get_free_port()
@@ -49,7 +50,8 @@ class Test (TestBase):
                                  "%s: %s\r\n" % (HDR1, VAL1)  + \
                                  "%s: %s\r\n" % (HDR2, VAL2)
         self.expected_error    = 200
-        self.expected_content  = ['%s: %s'%(HDR1, VAL1), '%s: %s'%(HDR2, VAL2)]
+        self.expected_content  = ['%s: %s'%(get_forwarded_http_header(HDR1), VAL1),
+                                  '%s: %s'%(get_forwarded_http_header(HDR2), VAL2)]
         self.forbidden_content = ['pyscgi', 'SCGIServer', 'write']
 
     def Prepare (self, www):

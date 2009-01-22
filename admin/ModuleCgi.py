@@ -6,7 +6,7 @@ NOTE_SCRIPT_ALIAS  = 'Path to an executable that will be run with the CGI as par
 NOTE_CHANGE_USER   = 'Execute the CGI under its owner user ID.'
 NOTE_ERROR_HANDLER = 'Send errors exactly as they are generated.'
 NOTE_CHECK_FILE    = 'Check whether the file is in place.'
-NOTE_PASS_REQ      = 'Pass all the headers to the CGI as they were received by the web server.'
+NOTE_PASS_REQ      = 'Forward all the client headers to the CGI encoded as HTTP_*. headers.'
 NOTE_XSENDFILE     = 'Allow the use of the non-standard X-Sendfile header.'
 
 HELPS = [
@@ -45,8 +45,8 @@ class ModuleCgiBase (ModuleHandler):
         if self.fixed_check_file == None:
             self.AddPropCheck (table, "Check file",    "%s!check_file"   % (self._prefix), True,  NOTE_CHECK_FILE)
 
-        self.AddPropCheck (table, "Pass Request",      "%s!pass_req_headers" % (self._prefix), False, NOTE_PASS_REQ)
-        self.AddPropCheck (table, "Allow X-Sendfile",  "%s!xsendfile"    % (self._prefix), False, NOTE_XSENDFILE)
+        self.AddPropCheck (table, "Pass Request Headers", "%s!pass_req_headers" % (self._prefix), True,  NOTE_PASS_REQ)
+        self.AddPropCheck (table, "Allow X-Sendfile",     "%s!xsendfile" % (self._prefix),        False, NOTE_XSENDFILE)
         txt += self.Indent(table)
 
         txt1 = '<h2>Custom environment variables</h2>'

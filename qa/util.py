@@ -257,3 +257,7 @@ def figure_public_ip():
     ips = socket.gethostbyname_ex (socket.gethostname())[2]
     ips.sort(ip_cmp)
     return ips[0]
+
+
+def get_forwarded_http_header (header):
+    return 'HTTP_' + header.upper().replace('-','_')

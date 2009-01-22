@@ -1,5 +1,16 @@
 2009-01-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_cgi_base.c: Fixes the client headers forwarding
+	(HTTP_* headers). From now on, the forwarding mechanism is enabled
+	by default.
+	
+	* admin/ModuleCgi.py: Reflect the previous change: client headers
+	forwarding is enabled by default.
+
+	* qa/142-SCGI-ExtraVars.py, qa/util.py: This small change fixes a
+	wrong postcondition. The test was expecting a raw headers instead
+	of the HTTP_*-encoded header.
+
 	* cherokee/buffer.c (cherokee_buffer_prepend), cherokee/buffer.h:
 	Fixes a trivial compilation warning.
 

@@ -166,7 +166,7 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 	props->change_user      = false;
 	props->check_file       = true;
 	props->allow_xsendfile  = false;
-	props->pass_req_headers = false;
+	props->pass_req_headers = true;
 
 	/* Parse the configuration tree
 	 */
@@ -530,10 +530,30 @@ cherokee_handler_cgi_base_build_basic_env (
 
 
 static ret_t
-foreach_header_add_unknown_variable (cherokee_buffer_t *header, cherokee_buffer_t *content, void *data)
+foreach_header_add_unknown_variable (cherokee_buffer_t *header,
+				     cherokee_buffer_t *content,
+				     void              *data)
 {
+	cuint_t                      i;
 	cherokee_handler_cgi_base_t *cgi = HDL_CGI_BASE(data);
-	
+
+	/* Transfor 'Headers' to HTTP_HEADERS
+	 * NOTE: header is a copy, it can be modified
+	 */
+	for (i=0; i<header->len; i++) {
+		if ((header->buf[i] >= 'a') &&
+		    (header->buf[i] <= 'z'))
+		{
+			header->buf[i] -= ('a' - 'A');
+		} else if (header->buf[i] == '-') {
+			header->buf[i] = '_';
+		}
+	}
+
+	cherokee_buffer_prepend_str (header, "HTTP_");
+
+	/* Add it to the *CGI environment
+	 */
 	cgi->add_env_pair (cgi, 
 			   header->buf, header->len, 
 			   content->buf, content->len);
