@@ -134,7 +134,7 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 {
 	cherokee_balancer_entry_t *entry;
 	cint_t                     n;
-	cuint_t                    ip_len;
+	cint_t                     ip_len;
 	char                      *ip;
 	cherokee_list_t           *i;
 	culong_t                   hash   = 0;
@@ -146,12 +146,12 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 	 */
 #ifdef HAVE_IPV6
 	if (SOCKET_AF(socket) == AF_INET6) {
-		ip     = (char *)SOCKET_ADDRESS_IPv6(socket);
+		ip     = (char *)&SOCKET_ADDRESS_IPv6(socket);
 		ip_len = 16;
 	} else 
 #endif
 	{
-		ip     = (char *)SOCKET_ADDRESS_IPv4(socket);
+		ip     = (char *)&SOCKET_ADDRESS_IPv4(socket);
 		ip_len = 4;
 	}
 
