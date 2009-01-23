@@ -1,7 +1,7 @@
 == link:index.html[Index] -> link:other.html[Other information]
 
-Other: Community
-----------------
+Mailing Lists
+~~~~~~~~~~~~~
 
 The documentation for the latest stable release is always available at
 the link:http://www.cherokee-project.com/doc[Cherokee Project] site.
@@ -21,15 +21,39 @@ These are the lists currently in existence:
 - link:http://lists.octality.com/listinfo/cherokee-commits[SVN Reports]
 
 
+Bug Tracker
+~~~~~~~~~~~
+
+Your feedback is very important to us. That is why we encourage you to
+log bug reports and Request for Enhancements in our
+link:http://bugs.cherokee-project.com[bug tracker] whenever you find
+something that, in your opinion, is suitable for improvement.
+
+
+Third party resources
+~~~~~~~~~~~~~~~~~~~~~
+
+Besides the Cherokee Project mailing lists, there are some other third
+party resources that may be of your interest.
+
+[[ohloh]]
+* link:http://www.ohloh.net/p/cherokee[Cherokee at Ohloh]: metrics and
+  analysis on the Cherokee project.
+
+[[IRC]]
+* IRC Channel: link:irc://irc.freenode.net/cherokee[#cherokee] on
+  freenode.net
+
+
 More resources:
 ~~~~~~~~~~~~~~~
+
 [[elphel]]
 * How to cross-compile
   link:http://wiki.elphel.com/index.php?title=Cherokee[Cherokee for
   Elphel] network cameras.
 
 [[munin]]
-
 * link:http://www.mobygeek.net/blog/2008/12/07/munin-cherokee-plugin/[Munin
   Plugin] for plotting the web server.
 

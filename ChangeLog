@@ -1,5 +1,8 @@
 2009-01-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/other_community.txt: Adds links to the bug tracker, the IRC
+	channel, and Ohloh project page.
+
 	* cherokee/cryptor_libssl.c (_socket_init_tls): Do not report so
 	many errors when a SSL connection cannot be accepted.
 
