@@ -153,11 +153,13 @@ class FormHelper (WebComponent):
         <script type="text/javascript">
           $(function() {
               $("#tab_%s").tabs().bind('tabsselect', function(event, ui) {
-                  document.cookie = "open_tab=" + ui.index;
+                  document.cookie = "open_tab="  + ui.index;
+                  document.cookie = "rule_path=" + location.pathname;
               });
 
-              open_tab = get_cookie('open_tab');
-              if (open_tab) {
+              open_tab  = get_cookie('open_tab');
+              rule_path = get_cookie('rule_path');
+              if (open_tab && rule_path==location.pathname) {
                   $("#tab_%s").tabs("select", open_tab);
               }
           });

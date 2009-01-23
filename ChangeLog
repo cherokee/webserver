@@ -1,3 +1,7 @@
+2009-01-23 Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/Form.py: polish the non-persistent tabs fix if issue 311.
+
 2009-01-23  Stefan de Konink  <stefan@konink.de>
 
 	* cherokee/balancer_ip_hash.c: Fixes a memory management issue.
