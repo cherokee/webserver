@@ -1,3 +1,8 @@
+2009-01-23  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/cryptor_libssl.c (_socket_init_tls): Do not report so
+	many errors when a SSL connection cannot be accepted.
+
 2009-01-23 Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Form.py: polish the non-persistent tabs fix if issue 311.

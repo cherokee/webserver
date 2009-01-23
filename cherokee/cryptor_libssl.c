@@ -367,13 +367,19 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 	 */
 	re = SSL_accept (cryp->session);
 	if (re <= 0) {
+		int         err;
 		const char *error;
 
-		switch (SSL_get_error (cryp->session, re)) {
+		err = SSL_get_error (cryp->session, re);
+		switch (err) {
 		case SSL_ERROR_WANT_READ:
 		case SSL_ERROR_WANT_WRITE:
 		case SSL_ERROR_WANT_CONNECT:
 			return ret_eagain;
+		case SSL_ERROR_SSL:
+		case SSL_ERROR_SYSCALL:
+		case SSL_ERROR_ZERO_RETURN:
+			return ret_error;
 		default: 
 			OPENSSL_LAST_ERROR(error);
 			PRINT_ERROR ("ERROR: Init OpenSSL: %s\n", error);
