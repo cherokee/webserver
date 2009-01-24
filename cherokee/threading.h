@@ -26,27 +26,34 @@
 #define CHEROKEE_THREADING_H
 
 #include "common.h"
-#include <pthread.h>
 
-#ifdef PTHREAD_ADAPTIVE_MUTEX_INITIALIZER_NP
+/* Global if */
+#ifdef HAVE_PTHREAD_H
+
+# include <pthread.h>
+
+# ifdef PTHREAD_ADAPTIVE_MUTEX_INITIALIZER_NP
 extern pthread_mutexattr_t cherokee_mutexattr_fast;
-#endif
+# endif
 
-#ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
+# ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
 extern pthread_mutexattr_t cherokee_mutexattr_errorcheck;
-#endif
+# endif
 
-#ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
-# define CHEROKEE_MUTEX_ERRORCHECK (&cherokee_mutexattr_errorcheck)
-#else
-# define CHEROKEE_MUTEX_ERRORCHECK NULL
-#endif
+# ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
+#  define CHEROKEE_MUTEX_ERRORCHECK (&cherokee_mutexattr_errorcheck)
+# else
+#  define CHEROKEE_MUTEX_ERRORCHECK NULL
+# endif
 
-#ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
-# define CHEROKEE_MUTEX_FAST (&cherokee_mutexattr_fast)
-#else
-# define CHEROKEE_MUTEX_FAST NULL
-#endif
+# ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
+#  define CHEROKEE_MUTEX_FAST (&cherokee_mutexattr_fast)
+# else
+#  define CHEROKEE_MUTEX_FAST NULL
+# endif
+
+/* Global if */
+#endif	
 
 ret_t cherokee_threading_init (void);
 ret_t cherokee_threading_free (void);

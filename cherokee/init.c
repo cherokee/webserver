@@ -29,10 +29,7 @@
 #include "ncpus.h"
 #include "util.h"
 #include "bogotime.h"
-
-#ifdef HAVE_PTHREAD_H
-# include "threading.h"
-#endif
+#include "threading.h"
 
 cuint_t           cherokee_cacheline_size;
 cint_t            cherokee_cpu_number;
@@ -63,9 +60,8 @@ cherokee_init (void)
 
 	/* Init threading stuff
 	 */
-#ifdef HAVE_PTHREAD_H
 	cherokee_threading_init();
-#endif
+
 	/* Get the CPU number
 	 */
 	dcc_ncpus (&cherokee_cpu_number);

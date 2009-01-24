@@ -1,3 +1,9 @@
+2009-01-24  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/init.c, cherokee/threading.c, cherokee/threading.h:
+	Fixes compilation without pthreads. Bug #334:
+	http://code.google.com/p/cherokee/issues/detail?id=334
+
 2009-01-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* Cherokee 0.98.0 released.
