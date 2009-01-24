@@ -28,7 +28,7 @@
 #include "common.h"
 
 /* Global if */
-#ifdef HAVE_PTHREAD_H
+#ifdef HAVE_PTHREAD
 
 # include <pthread.h>
 

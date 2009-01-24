@@ -1,5 +1,8 @@
 2009-01-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/threading.c, cherokee/threading.h: Replaces
+	HAVE_PTHREAD_H by HAVE_PTHREAD. Fix by swanson@ukfsn.org.
+
 	* qa/080-Extension2., qa/029-Post+Without-lenght.py,
 	qa/072-Inherit3.py, qa/102-QueryString.py, qa/035-PHP-simple.py,
 	qa/138-ChangeUser-cgi.py, qa/131-ChangeUser-phpcgi.py,
