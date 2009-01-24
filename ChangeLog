@@ -1,5 +1,12 @@
 2009-01-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/080-Extension2., qa/029-Post+Without-lenght.py,
+	qa/072-Inherit3.py, qa/102-QueryString.py, qa/035-PHP-simple.py,
+	qa/138-ChangeUser-cgi.py, qa/131-ChangeUser-phpcgi.py,
+	qa/079-Extension.py, qa/068-PathInfo2.py, qa/115-Respin.py:
+	Removes phpcgi references. Even though the module is still being
+	shipped, it's been deprecated for quite some time now.
+
 	* cherokee/rule_extensions.c (match): Fixes PathInfo handling when
 	matching an extension rule.
 

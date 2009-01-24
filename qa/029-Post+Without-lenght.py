@@ -1,21 +1,14 @@
 from base import *
 
-CONF = """
-vserver!1!rule!290!match = directory
-vserver!1!rule!290!match!directory = /post1
-vserver!1!rule!290!handler = phpcgi
-vserver!1!rule!290!handler!interpreter = %s
-"""
+DIR = "post1"
 
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
-        self.name = "Post request without length"
-
-        self.conf           = CONF % (look_for_php())
-        self.request        = "POST /post1/test.php HTTP/1.0\r\n"
+        self.name           = "Post request without length"
+        self.request        = "POST /%s/test.php HTTP/1.0\r\n" % (DIR)
         self.expected_error = 411
 
     def Prepare (self, www):
-        d = self.Mkdir (www, "post1")
+        d = self.Mkdir (www, DIR)
         self.WriteFile (d, "test.php", 0444, "<?php echo $_POST; ?>")

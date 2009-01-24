@@ -136,7 +136,6 @@ run-tests.py \
 128-ValidMethod-common.py \
 129-Basic-EmptyPasswd.py \
 130-Digest-EmptyPasswd.py \
-131-ChangeUser-phpcgi.py \
 132-file-ContentType.py \
 133-If-None-Match.py \
 134-HTTP_headers.py \
