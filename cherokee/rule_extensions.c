@@ -88,6 +88,7 @@ match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
 {
 	ret_t  ret;
 	char  *dot;
+	char  *slash;
 	void  *foo;
 
 	/* Dot at the end */
@@ -101,14 +102,25 @@ match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
 	if (dot == NULL)
 		return ret_not_found;
 
+	/* Does it have pathinfo?
+	 */
+	slash = strchr (dot+1, '/');
+	if (slash != NULL) {
+		*slash = '\0';
+	}
+
 	/* Check it out */
 	ret = cherokee_avl_get_ptr (&rule->extensions, dot+1, &foo);
 	switch (ret) {
 	case ret_ok:
 		TRACE(ENTRIES, "Match extension: '%s'\n", dot+1);
+		if (slash != NULL)
+			*slash = '/';
 		return ret_ok;
 	case ret_not_found:
 		TRACE(ENTRIES, "Rule extension: did not match '%s'\n", dot+1);
+		if (slash != NULL)
+			*slash = '/';
 		return ret_not_found;
 	default:
 		conn->error_code = http_internal_error;

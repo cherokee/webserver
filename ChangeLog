@@ -1,5 +1,8 @@
 2009-01-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/rule_extensions.c (match): Fixes PathInfo handling when
+	matching an extension rule.
+
 	* cherokee/init.c, cherokee/threading.c, cherokee/threading.h:
 	Fixes compilation without pthreads. Bug #334:
 	http://code.google.com/p/cherokee/issues/detail?id=334
