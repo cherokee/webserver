@@ -872,8 +872,8 @@
 
 2008-11-28  Antonio Perez  <aperez@skarcha.com>
 
-* cherokee/handler_redir.c: document_root was ignored on
-	internal redirections. Fixes bug #241:
+	* cherokee/handler_redir.c: document_root was ignored on internal
+	redirections. Fixes bug #241:
 	http://code.google.com/p/cherokee/issues/detail?id=241
 
 2008-11-28  Alvaro Lopez Ortega  <alvaro@octality.com>
