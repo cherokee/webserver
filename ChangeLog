@@ -1,5 +1,8 @@
 2009-01-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* contrib/011to098.py (convert): server!listen entries weren't
+	handled: http://code.google.com/p/cherokee/issues/detail?id=335
+
 	* cherokee/threading.c, cherokee/threading.h: Replaces
 	HAVE_PTHREAD_H by HAVE_PTHREAD. Fix by swanson@ukfsn.org.
 

@@ -21,6 +21,9 @@ def convert (fin, fout):
     # Replace 'server!port'
     lines = map (lambda x: x.replace('server!port', 'server!bind!1!port'), lines)
 
+    # Remove 'server!listen'
+    lines = filter (lambda x: not x.startswith('server!listen'), lines)
+
     # Write it down
     f = open (fout, 'w+')
     f.write ('\n'.join(lines))
