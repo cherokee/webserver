@@ -1,5 +1,7 @@
 2009-01-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageGeneral.py (PageGeneral._render_content): Fixes style.
+
 	* admin/Page.py: Removes a space. It was causing the Javascript
 	execution to fail in some browsers. Patch by marcos.devera.
 	http://code.google.com/p/cherokee/issues/detail?id=336

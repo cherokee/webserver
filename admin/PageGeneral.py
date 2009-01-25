@@ -59,20 +59,14 @@ class PageGeneral (PageMenu, FormHelper):
         form = Form ("/%s" % (self._id), add_submit=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
 
-    def _render_basic_behavior (self):
-        txt = "<h2>Basic Behavior</h2>"
-        table = TableProps()
-        self.AddPropEntry (table,  'Timeout (<i>secs</i>)', 'server!timeout',  NOTE_TIMEOUT)
-        self.AddPropOptions_Reload (table, 'Server Tokens', 'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
-        txt += self.Indent(table)
-        return txt
-
     def _render_permissions (self):
+        txt = "<h3>Execution Permissions</h3>"
         table = TableProps()
         self.AddPropEntry (table, 'User',   'server!user',   NOTE_USER)
         self.AddPropEntry (table, 'Group',  'server!group',  NOTE_GROUP)
         self.AddPropEntry (table, 'Chroot', 'server!chroot', NOTE_CHROOT)
-        return self.Indent(table)
+        txt += self.Indent(table)
+        return txt
 
     def _render_network (self):
         txt = "<h3>Support</h3>"
