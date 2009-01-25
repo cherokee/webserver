@@ -1,3 +1,9 @@
+2009-01-25  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/Page.py: Removes a space. It was causing the Javascript
+	execution to fail in some browsers. Patch by marcos.devera.
+	http://code.google.com/p/cherokee/issues/detail?id=336
+	
 2009-01-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* contrib/011to098.py (convert): server!listen entries weren't

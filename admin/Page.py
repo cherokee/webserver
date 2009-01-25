@@ -63,7 +63,7 @@ PAGE_MENU_MENU = """
  %(menu_save_dropdown)s
 
  <div style="float: center; padding-top: 4px;">
-  <a class="button" href="javascript: save_config();"><span>Save</span></a>
+  <a class="button" href="javascript:save_config();"><span>Save</span></a>
  </div>
 </form>
 </div>
