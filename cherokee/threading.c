@@ -26,10 +26,8 @@
 #include "threading.h"
 
 #ifdef HAVE_PTHREAD
-# ifdef PTHREAD_ADAPTIVE_MUTEX_INITIALIZER_NP
+# if defined(HAVE_PTHREAD_MUTEXATTR_SETTYPE) || defined(HAVE_PTHREAD_MUTEXATTR_SETKIND_NP)
 pthread_mutexattr_t cherokee_mutexattr_fast;
-# endif
-# ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
 pthread_mutexattr_t cherokee_mutexattr_errorcheck;
 # endif
 #endif
@@ -38,16 +36,21 @@ ret_t
 cherokee_threading_init (void)
 {
 #ifdef HAVE_PTHREAD
-# ifdef PTHREAD_ADAPTIVE_MUTEX_INITIALIZER_NP
+# if defined(HAVE_PTHREAD_MUTEXATTR_SETTYPE)
+	pthread_mutexattr_init (&cherokee_mutexattr_fast);
+	pthread_mutexattr_settype (&cherokee_mutexattr_fast,
+	                           PTHREAD_MUTEX_NORMAL);
+	pthread_mutexattr_init (&cherokee_mutexattr_errorcheck);
+	pthread_mutexattr_settype (&cherokee_mutexattr_errorcheck,
+	                           PTHREAD_MUTEX_ERRORCHECK);
+
+# elif defined(HAVE_PTHREAD_MUTEXATTR_SETKIND_NP)
 	pthread_mutexattr_init (&cherokee_mutexattr_fast);
 	pthread_mutexattr_setkind_np (&cherokee_mutexattr_fast,
-				      PTHREAD_MUTEX_ADAPTIVE_NP);
-# endif
-
-# ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
+	                              PTHREAD_MUTEX_ADAPTIVE_NP);
 	pthread_mutexattr_init (&cherokee_mutexattr_errorcheck);
 	pthread_mutexattr_setkind_np (&cherokee_mutexattr_errorcheck,
-				      PTHREAD_MUTEX_ERRORCHECK_NP);
+	                              PTHREAD_MUTEX_ERRORCHECK_NP);
 # endif
 #endif
 
@@ -59,11 +62,8 @@ ret_t
 cherokee_threading_free (void)
 {
 #ifdef HAVE_PTHREAD
-# ifdef PTHREAD_ADAPTIVE_MUTEX_INITIALIZER_NP
+# if defined(HAVE_PTHREAD_MUTEXATTR_SETTYPE) || defined(HAVE_PTHREAD_MUTEXATTR_SETKIND_NP)
 	pthread_mutexattr_destroy (&cherokee_mutexattr_fast);
-# endif
-
-# ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
 	pthread_mutexattr_destroy (&cherokee_mutexattr_errorcheck);
 # endif
 #endif

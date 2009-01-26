@@ -569,6 +569,13 @@ then
 	     AC_DEFINE(HAVE_PTHREAD_SETSCHEDPOLICY, 1, [Pthread support pthread_attr_setschedpolicy])
 	fi
 
+	save_LIBS="$LIBS"
+	LIBS="$LIBS $PTHREAD_LIBS"
+
+	AC_CHECK_FUNCS(pthread_mutexattr_settype pthread_mutexattr_setkind_np)
+
+	LIBS="$save_LIBS"
+
 	CFLAGS="$oldcflags"
 fi
 

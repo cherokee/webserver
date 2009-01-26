@@ -10,6 +10,10 @@
 	* admin/server.py, admin/Page.py: Removed ancient "apply changes"
 	code.
 
+	* configure.in, cherokee/threading.c, cherokee/threading.h:
+	pthread_mutexattr_setkind_np is deprecated, so we will use
+	pthread_mutexattr_settype when available.
+
 2009-01-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/bogotime.c, cherokee/bogotime.h: Added global variable

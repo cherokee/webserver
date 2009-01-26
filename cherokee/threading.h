@@ -32,24 +32,17 @@
 
 # include <pthread.h>
 
-# ifdef PTHREAD_ADAPTIVE_MUTEX_INITIALIZER_NP
+# if defined(HAVE_PTHREAD_MUTEXATTR_SETTYPE) || defined(HAVE_PTHREAD_MUTEXATTR_SETKIND_NP)
 extern pthread_mutexattr_t cherokee_mutexattr_fast;
-# endif
-
-# ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
 extern pthread_mutexattr_t cherokee_mutexattr_errorcheck;
 # endif
 
-# ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
+# if defined(HAVE_PTHREAD_MUTEXATTR_SETTYPE) || defined(HAVE_PTHREAD_MUTEXATTR_SETKIND_NP)
+#  define CHEROKEE_MUTEX_FAST (&cherokee_mutexattr_fast)
 #  define CHEROKEE_MUTEX_ERRORCHECK (&cherokee_mutexattr_errorcheck)
 # else
-#  define CHEROKEE_MUTEX_ERRORCHECK NULL
-# endif
-
-# ifdef PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP
-#  define CHEROKEE_MUTEX_FAST (&cherokee_mutexattr_fast)
-# else
 #  define CHEROKEE_MUTEX_FAST NULL
+#  define CHEROKEE_MUTEX_ERRORCHECK NULL
 # endif
 
 /* Global if */
