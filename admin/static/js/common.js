@@ -78,20 +78,18 @@ function options_active_prop (options_id, props_prefix)
 }
 
 
-function options_changed (url, options_id, parent_id)
+function options_changed (url, obj)
 {
-	   var thisform = $("#"+parent_id).children("#"+options_id)[0];
-	   var options  = thisform.options;
-	   var selected = options[options.selectedIndex].value;
+	var selected = jQuery(obj).val();
 
-	   /* POST the new value and reload */
-	   var post = options_id + "=" + selected;
+	/* POST the new value and reload */
+	var post = obj.name + "=" + selected;
 
-	   jQuery.post (url, post,
-              function (data, textStatus) {
-   			   window.location = window.location;
-              }
-	   );
+	jQuery.post (url, post,
+		function (data, textStatus) {
+			window.location = window.location;
+		}
+	);
 }
 
 function save_config()

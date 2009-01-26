@@ -91,7 +91,6 @@ class Form:
 
 
 class FormHelper (WebComponent):
-    options_wrap_num = 1
 
     def __init__ (self, id, cfg):
         WebComponent.__init__ (self, id, cfg)
@@ -190,9 +189,6 @@ class FormHelper (WebComponent):
             extra += '%s="%s" '%(karg, kwargs[karg])
         return '<img src="/static/images/%s" alt="%s" title="%s" %s/>' % (name, alt, alt, extra)
 
-    def _get_auto_wrap_id (self):
-        return "options_wrap_%d" % (FormHelper.options_wrap_num)
-
     def InstanceOptions (self, cfg_key, options, *args, **kwargs):
         value = self._cfg.get_val (cfg_key)
         if value != None:
@@ -200,15 +196,10 @@ class FormHelper (WebComponent):
         else:
             ops = EntryOptions (cfg_key, options, *args, **kwargs)
 
-        # Auto wrap
-        auto_wrap_id = self._get_auto_wrap_id()
-        FormHelper.options_wrap_num += 1
-
-        ops = '<div id="%s" name="%s">%s</div>'%(auto_wrap_id, auto_wrap_id, ops)
-        return (ops, value, auto_wrap_id)
+        return (ops, value)
 
     def AddTableOptions (self, table, title, cfg_key, options, *args, **kwargs):
-        entry, value, wrap = self.InstanceOptions (cfg_key, options, *args, **kwargs)
+        entry, value = self.InstanceOptions (cfg_key, options, *args, **kwargs)
 
         label = self.Label(title, cfg_key)
         table += (label, entry)
@@ -216,15 +207,13 @@ class FormHelper (WebComponent):
         return value
 
     def AddTableOptions_Ajax (self, table, title, cfg_key, options, *args, **kwargs):
-        wrap_id = self._get_auto_wrap_id()
-        js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, wrap_id)
+        js = "options_changed('/ajax/update', this);"
         kwargs['onChange'] = js
 
         return self.AddTableOptions (table, title, cfg_key, options, *args, **kwargs)
 
     def AddPropOptions_Ajax (self, table, title, cfg_key, options, comment, *args, **kwargs):
-        wrap_id = self._get_auto_wrap_id()
-        js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, wrap_id)
+        js = "options_changed('/ajax/update', this);"
         kwargs['onChange'] = js
 
         return self.AddPropOptions (table, title, cfg_key, options, comment, *args, **kwargs)
@@ -233,8 +222,7 @@ class FormHelper (WebComponent):
         assert (self.submit_url)
 
         # The Table entry itself
-        auto_wrap_id = self._get_auto_wrap_id()
-        js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, auto_wrap_id)
+        js = "options_changed('/ajax/update', this);"
         kwargs['onChange'] = js
         kwargs['noautosubmit'] = True
         name = self.AddPropOptions (table, title, cfg_key, options, comment, **kwargs)
@@ -263,8 +251,7 @@ class FormHelper (WebComponent):
         print "DEPRECATED: AddTableOptions_Reload"
 
         # The Table entry itself
-        auto_wrap_id = self._get_auto_wrap_id()
-        js = "options_changed('/ajax/update','%s','%s');" % (cfg_key, auto_wrap_id)
+        js = "options_changed('/ajax/update', this);"
         name = self.AddTableOptions (table, title, cfg_key, options, onChange=js)
 
         # If there was no cfg value, pick the first
@@ -465,7 +452,7 @@ class FormHelper (WebComponent):
         self.AddProp (table, title, cfg_key, entry, comment)
 
     def AddPropOptions (self, table, title, cfg_key, options, comment=None, **kwargs):
-        entry, v, w = self.InstanceOptions (cfg_key, options, **kwargs)
+        entry, v = self.InstanceOptions (cfg_key, options, **kwargs)
         self.AddProp (table, title, cfg_key, entry, comment)
         return v
 

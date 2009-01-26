@@ -3,6 +3,10 @@
 	* cherokee/handler_server_info.c: Fixes wrong behaviour when
 	request starts with "/info".
 
+	* admin/static/js/common.js, admin/Form.py, admin/ModuleRedir.py:
+	Removed unneeded <div> elements and better use of jQuery in
+	"options_change" JS function.
+
 2009-01-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/bogotime.c, cherokee/bogotime.h: Added global variable

@@ -34,7 +34,7 @@ class ModuleRedir (ModuleHandler):
             for rule in cfg:
                 cfg_key_rule = "%s!%s" % (cfg_key, rule)
 
-                show, _,_ = self.InstanceOptions ('%s!show'%(cfg_key_rule), REDIR_SHOW)
+                show, _ = self.InstanceOptions ('%s!show'%(cfg_key_rule), REDIR_SHOW)
                 regex     = self.InstanceEntry('%s!regex' % (cfg_key_rule), 'text', size=25)
                 substring = self.InstanceEntry('%s!substring' % (cfg_key_rule), 'text', size=25)
                 js = "post_del_key('/ajax/update', '%s');" % (cfg_key_rule)
