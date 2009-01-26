@@ -1,3 +1,8 @@
+2009-01-26  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/bogotime.c, cherokee/bogotime.h: Added global variable
+	cherokee_bogonow_msec to track time in miliseconds.
+
 2009-01-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/PageGeneral.py (PageGeneral._render_content): Fixes style.

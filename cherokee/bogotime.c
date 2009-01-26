@@ -31,14 +31,18 @@
  */
 
 /* Thread safe */
-time_t            cherokee_bogonow_now;
-int               cherokee_bogonow_tzloc_sign;
-cuint_t           cherokee_bogonow_tzloc_offset;
+volatile cherokee_msec_t cherokee_bogonow_msec;
+volatile time_t          cherokee_bogonow_now;
+struct timeval           cherokee_bogonow_tv;
+
+int                      cherokee_bogonow_tzloc_sign;
+cuint_t                  cherokee_bogonow_tzloc_offset;
+
 
 /* Thread unsafe */
-struct tm         cherokee_bogonow_tmloc;
-struct tm         cherokee_bogonow_tmgmt;
-cherokee_buffer_t cherokee_bogonow_strgmt;
+struct tm                cherokee_bogonow_tmloc;
+struct tm                cherokee_bogonow_tmgmt;
+cherokee_buffer_t        cherokee_bogonow_strgmt;
 
 /* Global
  */
@@ -99,24 +103,29 @@ cherokee_bogotime_free (void)
 static ret_t
 update_guts (void)
 {
-	time_t  newtime;
-	size_t  szlen = 0;
-	char    bufstr[DTM_SIZE_GMTTM_STR + 2];
+	int    re;
+	size_t szlen = 0;
+	char   bufstr[DTM_SIZE_GMTTM_STR + 2];
 
 	/* Read the time
 	 */
-	newtime = time (NULL);
-	if (cherokee_bogonow_now >= newtime) 
+	re = gettimeofday (&cherokee_bogonow_tv, NULL);
+	if (unlikely (re != 0))
+		return ret_error;
+
+	if (cherokee_bogonow_now >= cherokee_bogonow_tv.tv_sec)
 		return ret_ok;
 
 	/* Update internal variables
 	 */
-	cherokee_bogonow_now = newtime;
+	cherokee_bogonow_now  = cherokee_bogonow_tv.tv_sec;
+	cherokee_bogonow_msec = ((cherokee_bogonow_tv.tv_sec * 1000) + 
+				 (cherokee_bogonow_tv.tv_usec));
 
 	/* Convert time to both GMT and local time struct
 	 */
-	cherokee_gmtime    (&newtime, &cherokee_bogonow_tmgmt);
-	cherokee_localtime (&newtime, &cherokee_bogonow_tmloc);
+	cherokee_gmtime    ((const time_t *)&cherokee_bogonow_now, &cherokee_bogonow_tmgmt);
+	cherokee_localtime ((const time_t *)&cherokee_bogonow_now, &cherokee_bogonow_tmloc);
 
 #ifdef HAVE_STRUCT_TM_GMTOFF
 	cherokee_bogonow_tzloc_sign   = cherokee_bogonow_tmloc.tm_gmtoff < 0 ? '-' : '+';

@@ -35,18 +35,23 @@
 
 #include <cherokee/buffer.h>
 
+typedef unsigned int cherokee_msec_t;
+
 /* Global bogonow variables
  */
 
 /* Thread safe */
-extern time_t             cherokee_bogonow_now;
-extern int                cherokee_bogonow_tzloc_sign;
-extern cuint_t            cherokee_bogonow_tzloc_offset;
+extern struct timeval           cherokee_bogonow_tv;
+extern volatile cherokee_msec_t cherokee_bogonow_msec;
+extern volatile time_t          cherokee_bogonow_now;
+
+extern int                      cherokee_bogonow_tzloc_sign;
+extern cuint_t                  cherokee_bogonow_tzloc_offset;
 
 /* Thread unsafe */
-extern struct tm          cherokee_bogonow_tmloc;
-extern struct tm          cherokee_bogonow_tmgmt;
-extern cherokee_buffer_t  cherokee_bogonow_strgmt;
+extern struct tm                cherokee_bogonow_tmloc;
+extern struct tm                cherokee_bogonow_tmgmt;
+extern cherokee_buffer_t        cherokee_bogonow_strgmt;
 
 /* Functions
  */
