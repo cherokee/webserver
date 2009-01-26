@@ -59,13 +59,11 @@ PAGE_MENU_MENU = """
  <p>%(menu_save_desc)s</p>
 </div>
 
-<form id="form-apply" action="/apply" method="post">
  %(menu_save_dropdown)s
 
  <div style="float: center; padding-top: 4px;">
   <a class="button" href="javascript:save_config();"><span>Save</span></a>
  </div>
-</form>
 </div>
 
 <script type="text/javascript">

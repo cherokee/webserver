@@ -113,14 +113,6 @@ class Handler(pyscgi.SCGIHandler):
             elif post_restart == 'hard':
                 body += ' Hard restart performed.'
 
-        elif uri.startswith('/apply'):
-            self.handle_post()
-            post = Post(self.post)
-
-            manager = cherokee_management_get (cfg)
-            manager.save (restart = post.get_val('restart'))
-            cherokee_management_reset()
-            body = "/"
         elif uri.startswith('/launch'):
             manager = cherokee_management_get (cfg)
             error = manager.launch()

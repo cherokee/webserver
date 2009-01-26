@@ -7,6 +7,9 @@
 	Removed unneeded <div> elements and better use of jQuery in
 	"options_change" JS function.
 
+	* admin/server.py, admin/Page.py: Removed ancient "apply changes"
+	code.
+
 2009-01-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/bogotime.c, cherokee/bogotime.h: Added global variable
