@@ -815,7 +815,7 @@ cherokee_handler_server_info_init (cherokee_handler_server_info_t *hdl)
 		server_info_build_logo (hdl, &hdl->buffer);
 		hdl->action = send_logo;		
 
-	} else if (strstr (HANDLER_CONN(hdl)->request.buf, "/info")) {
+	} else if (strstr (HANDLER_CONN(hdl)->request.buf + 1, "/info")) {
 		if (strstr (HANDLER_CONN(hdl)->request.buf, "/js")) {
 			hdl->writer.lang = dwriter_json;
 		} else if (strstr (HANDLER_CONN(hdl)->request.buf, "/py")) {
