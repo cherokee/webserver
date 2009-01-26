@@ -20,21 +20,6 @@ html>body #container {
 a { color: #2d5e9a; }
 a:hover { color: #164987; }
 
-.clearfix:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
-
-.clearfix {display: inline-block;}
-
-/* Hides from IE-mac \*/
-* html .clearfix {height: 1%;}
-.clearfix {display: block;}
-/* End hide from IE-mac */
-
 #container {
     background: #cfd9e8 url(../images/background.png) center top repeat-y;
     width: 960px;
@@ -303,6 +288,7 @@ table td label {
     border-bottom: 1px solid #edd400;
     padding: 1em 1em 1em 80px;
     margin: 1em 0;
+    overflow: auto;
 }
 /** ONLINE **/
 .dialog-online {
@@ -311,6 +297,7 @@ table td label {
     border-bottom: 1px solid #73d216;
     padding: 1em 1em 1em 80px;
     margin: 1em 0;
+    overflow: auto;
 }
 
 .dialog-information h2,

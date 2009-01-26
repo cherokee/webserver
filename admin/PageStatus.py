@@ -16,7 +16,6 @@ SERVER_RUNNING = """
    </div>
   </p>
  </form>
- <div class="clearfix"></div>
 </div>
 """
 
@@ -31,7 +30,6 @@ SERVER_NOT_RUNNING = """
    </div>
   </p>
  </form>
- <div class="clearfix"></div>
 </div>
 """
 
