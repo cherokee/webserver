@@ -717,12 +717,20 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 	if (fhdl->using_sendfile) {
 		ret_t   ret;
 		ssize_t sent;
-		
-		ret = cherokee_socket_sendfile (&conn->socket,                     /* cherokee_socket_t *socket */
-						fhdl->fd,                          /* int                fd     */
-						conn->range_end - fhdl->offset,    /* size_t             size   */
-						&fhdl->offset,                     /* off_t             *offset */
-						&sent);                            /* ssize_t           *sent   */
+		off_t   to_send;
+
+		to_send = conn->range_end - fhdl->offset;
+		if ((conn->limit_bps > 0) &&
+		    (conn->limit_bps < to_send))
+		{
+			to_send = conn->limit_bps;
+		}
+
+		ret = cherokee_socket_sendfile (&conn->socket,    /* cherokee_socket_t *socket */
+						fhdl->fd,         /* int                fd     */
+						to_send,          /* size_t             size   */
+						&fhdl->offset,    /* off_t             *offset */
+						&sent);           /* ssize_t           *sent   */
 
 		/* cherokee_handler_file_init() activated the TCP_CORK
 		 * flags. Then the response header was sent. Now, the

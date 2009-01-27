@@ -79,6 +79,9 @@ typedef struct {
 	 */
 	cherokee_avl_t             *encoders;
 
+	/* Traffic shaping
+	 */
+	cuint_t                     limit_bps;
 } cherokee_config_entry_t; 
 
 #define CONF_ENTRY(x) ((cherokee_config_entry_t *)(x))

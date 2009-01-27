@@ -41,6 +41,7 @@
 #include "util.h"
 #include "fcgi_manager.h"
 #include "bogotime.h"
+#include "limiter.h"
 
 
 #define DEBUG_BUFFER(b)  fprintf(stderr, "%s:%d len=%d crc=%d\n", __FILE__, __LINE__, b->len, cherokee_buffer_crc32(b))
@@ -192,6 +193,10 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	cherokee_buffer_init (&n->tmp_buf2);
 	cherokee_buffer_ensure_size (&n->tmp_buf1, 4096);	
 	cherokee_buffer_ensure_size (&n->tmp_buf2, 4096);	
+
+	/* Traffic shaping
+	 */
+	cherokee_limiter_init (&n->limiter);
 
 	/* The thread must adquire this mutex before 
 	 * process its connections
@@ -588,6 +593,14 @@ process_active_connections (cherokee_thread_t *thd)
 			cherokee_connection_update_vhost_traffic (conn);
 		}
 
+		/* Traffic shaping limiter
+		 */
+		if (conn->limit_blocked_until > 0) {
+			cherokee_thread_retire_active_connection (thd, conn);
+			cherokee_limiter_add_conn (&thd->limiter, conn);
+			continue;
+		}
+
 		/* Process the connection?
 		 * 2.- Inspect the file descriptor if it's not shutdown
 		 *     and it's not reading header or there is no more buffered data.
@@ -937,6 +950,10 @@ process_active_connections (cherokee_thread_t *thd)
 			 */
 			cherokee_connection_set_keepalive (conn);
 
+			/* Traffic Shaping
+			 */
+			cherokee_connection_set_rate (conn, &entry);
+
 			/* Create the handler
 			 */
 			ret = cherokee_connection_create_handler (conn, &entry);
@@ -1277,6 +1294,8 @@ cherokee_thread_free (cherokee_thread_t *thd)
 		cherokee_connection_free (CONN(i));
 	}
 
+	cherokee_limiter_mrproper (&thd->limiter);
+
 	/* FastCGI
 	 */
 	if (thd->fastcgi_servers != NULL) {
@@ -1521,6 +1540,10 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	if (srv->wanna_reinit)
 		goto out;
 
+	/* May have to reactive connections
+	 */
+	cherokee_limiter_reactive (&thd->limiter, thd);
+
 	/* If thread has pending connections, it should do a 
 	 * faster 'watch' (whenever possible).
 	 */
@@ -1534,6 +1557,13 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 		thd->pending_read_num = 0;
 	}
 
+	/* Reactive sleeping connections
+	 */
+	fdwatch_msecs = cherokee_limiter_get_time_limit (&thd->limiter,
+							 fdwatch_msecs);
+
+	/* Inspect the file descriptors
+	 */
 	re = cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
 	if (re <= 0)
 		goto out;
@@ -1655,6 +1685,10 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 	ret = cherokee_bogotime_try_update();
 	time_updated = (ret == ret_ok);
 
+	/* May have to reactive connections
+	 */
+	cherokee_limiter_reactive (&thd->limiter, thd);
+
 	/* If thread has pending connections, it should do a 
 	 * faster 'watch' (whenever possible)
 	 */
@@ -1667,6 +1701,11 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 		fdwatch_msecs         = 0;
 		thd->pending_read_num = 0;
 	}
+
+	/* Reactive sleeping connections
+	 */
+	fdwatch_msecs = cherokee_limiter_get_time_limit (&thd->limiter,
+							 fdwatch_msecs);
 
 	/* Server wants to exit, and the thread has nothing to do
 	 */
@@ -1699,7 +1738,8 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 	can_block = ((dont_block == false) &&
 		     (thd->exit == false) &&
 		     (thd->active_list_num == 0) && 
-		     (thd->polling_list_num == 0));
+		     (thd->polling_list_num == 0) &&
+		     (thd->limiter.conns_num == 0));
 
 	watch_accept_MULTI_THREAD (thd, can_block, fdwatch_msecs);
 	
@@ -1927,7 +1967,6 @@ cherokee_thread_retire_active_connection (cherokee_thread_t *thd, cherokee_conne
 		SHOULDNT_HAPPEN;
 
 	del_connection (thd, conn);
-
 	return ret_ok;
 }
 

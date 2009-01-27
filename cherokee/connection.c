@@ -121,6 +121,9 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->expiration           = cherokee_expiration_none;
 	n->expiration_time      = 0;
 	n->respins              = 0;
+	n->limit_rate           = false;
+	n->limit_bps            = 0;
+	n->limit_blocked_until  = 0;
 
 	cherokee_buffer_init (&n->buffer);
 	cherokee_buffer_init (&n->header_buffer);
@@ -261,6 +264,9 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->chunked_sent         = 0;
 	conn->chunked_last_package = false;
 	conn->respins              = 0;
+	conn->limit_rate           = false;
+	conn->limit_bps            = 0;
+	conn->limit_blocked_until  = 0;
 
 	memset (conn->regex_ovector, OVECTOR_LEN * sizeof(int), 0);
 	conn->regex_ovecsize = 0;
@@ -780,8 +786,22 @@ cherokee_connection_rx_add (cherokee_connection_t *conn, ssize_t rx)
 void
 cherokee_connection_tx_add (cherokee_connection_t *conn, ssize_t tx)
 {
+	cuint_t            to_sleep;
+	cherokee_thread_t *thread    = CONN_THREAD(conn);
+	
+	/* Count it
+	 */
 	conn->tx += tx;
 	conn->tx_partial += tx;
+
+	/* Traffic shaping
+	 */
+	if (conn->limit_rate) {
+		to_sleep = (tx * 1000) / conn->limit_bps;
+		
+		/* It's meant to sleep for a while */
+		conn->limit_blocked_until = cherokee_bogonow_msec + to_sleep;
+	}
 }
 
 
@@ -892,7 +912,8 @@ ret_t
 cherokee_connection_send (cherokee_connection_t *conn)
 {
 	ret_t  ret;
-	size_t sent = 0;
+	size_t to_send; 
+	size_t sent     = 0;
 
 	/* Use writev to send the chunk-begin mark
 	 */
@@ -900,11 +921,20 @@ cherokee_connection_send (cherokee_connection_t *conn)
 	{
 		struct iovec tmp[3];
 
+		/* Build the data vector */
 		tmp[0].iov_base = conn->chunked_len.buf;
 		tmp[0].iov_len  = conn->chunked_len.len;
 		tmp[1].iov_base = conn->buffer.buf;
 		tmp[1].iov_len  = conn->buffer.len;
 
+		/* Traffic shaping */
+		if ((conn->limit_bps > 0) &&
+		    (conn->limit_bps < conn->buffer.len))
+		{
+			tmp[1].iov_len = conn->limit_bps;
+		}
+
+		/* Trailer */
 		if (conn->chunked_last_package) {
 			tmp[2].iov_base = CRLF "0" CRLF CRLF;
 			tmp[2].iov_len  = 7;
@@ -953,8 +983,16 @@ cherokee_connection_send (cherokee_connection_t *conn)
 
 	/* Send the buffer content
 	 */
-	ret = cherokee_socket_bufwrite (&conn->socket, &conn->buffer, &sent);
-	if (unlikely(ret != ret_ok)) return ret;
+	to_send = conn->buffer.len;
+	if ((conn->limit_bps > 0) &&
+	    (conn->limit_bps < to_send))
+	{
+		to_send = conn->limit_bps;
+	}
+
+	ret = cherokee_socket_write (&conn->socket, conn->buffer.buf, to_send, &sent);
+	if (unlikely(ret != ret_ok))
+		return ret;
 
 	/* Drop out the sent info
 	 */
@@ -1963,6 +2001,21 @@ granted:
 
 	TRACE (ENTRIES, "Keep-alive %d\n", conn->keepalive);
 }
+
+
+ret_t
+cherokee_connection_set_rate (cherokee_connection_t   *conn,
+			      cherokee_config_entry_t *entry)
+{
+	if (entry->limit_bps <= 0)
+		return ret_ok;
+
+	conn->limit_rate = true;
+	conn->limit_bps  = entry->limit_bps;
+
+	return ret_ok;
+}
+
 
 void
 cherokee_connection_set_chunked_encoding (cherokee_connection_t *conn)

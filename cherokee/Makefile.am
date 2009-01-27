@@ -1255,7 +1255,9 @@ info.c \
 connection_info.h \
 connection_info.c \
 dwriter.h \
-dwriter.c
+dwriter.c \
+limiter.h \
+limiter.c
 
 libcherokee_config_la_SOURCES = \
 admin_client.h \

@@ -1,5 +1,12 @@
 2009-01-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/virtual_server.c, cherokee/connection-protected.h,
+	cherokee/limiter.c, cherokee/limiter.h, cherokee/config_entry.c,
+	cherokee/config_entry.h, cherokee/thread.c, cherokee/connection.c,
+	cherokee/thread.h, cherokee/handler_file.c, cherokee/Makefile.am:
+	Adds Traffic Shaping functionality. It implements the most basic
+	functionality (per connection limit).
+
 	* admin/PageGeneral.py (PageGeneral._render_ports): Typo
 	fixed.  Thanks Genesis (#cherokee, freenode).
 

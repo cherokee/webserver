@@ -37,6 +37,7 @@
 #include "connection-protected.h"
 #include "fdpoll.h"
 #include "avl.h"
+#include "limiter.h"
 
 
 typedef enum {
@@ -78,6 +79,7 @@ typedef struct {
 	cherokee_list_t         polling_list;
 	cherokee_list_t         reuse_list;
 	int                     reuse_list_num;      /* reusable connections objs */
+	cherokee_limiter_t      limiter;             /* Traffic shaping */
 
 	int                     pending_conns_num;   /* Waiting pipelining connections */
 	int                     pending_read_num;    /* Conns with SSL deping read */

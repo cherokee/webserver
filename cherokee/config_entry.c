@@ -67,6 +67,7 @@ cherokee_config_entry_init (cherokee_config_entry_t *entry)
 	entry->expiration_time      = 0;
 
 	entry->encoders             = NULL;
+	entry->limit_bps            = 0;
 
 	return ret_ok;
 }
@@ -194,6 +195,9 @@ cherokee_config_entry_complete (cherokee_config_entry_t *entry, cherokee_config_
 	if (! entry->encoders)
 		entry->encoders = source->encoders;
 
+	if (! entry->limit_bps)
+		entry->limit_bps = source->limit_bps;
+
 	return ret_ok;
 }
 
@@ -204,7 +208,7 @@ cherokee_config_entry_print (cherokee_config_entry_t *entry)
 	printf ("document_root:             %s\n", entry->document_root ? entry->document_root->buf : "");
 	printf ("only_secure:               %d\n", entry->only_secure);
 	printf ("access:                    %p\n", entry->access);
-	printf ("handler_new                %p\n", entry->handler_new_func);
+	printf ("handler_new:               %p\n", entry->handler_new_func);
 	printf ("http_methods:              0x%x\n", entry->handler_methods);
 	printf ("handler_properties:        %p\n", entry->handler_properties);
 	printf ("validator_new:             %p\n", entry->validator_new_func);
@@ -212,8 +216,9 @@ cherokee_config_entry_print (cherokee_config_entry_t *entry)
 	printf ("auth_realm:                %s\n", entry->auth_realm ? entry->auth_realm->buf : "");
 	printf ("users:                     %p\n", entry->users);
 	printf ("expiration type:           %d\n", entry->expiration);
-	printf ("expiration_time            %lu\n", entry->expiration_time);
-	printf ("encoders_accepted          %p\n", entry->encoders);
+	printf ("expiration_time:           %lu\n", entry->expiration_time);
+	printf ("encoders_accepted:         %p\n", entry->encoders);
+	printf ("limit bps:                 %d\n", entry->limit_bps);
 
 	return ret_ok;
 }

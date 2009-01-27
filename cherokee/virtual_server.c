@@ -370,6 +370,9 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 			entry->expiration_time = cherokee_eval_formated_time (tmp);
 		}
 
+	} else if (equal_buf_str (&conf->key, "rate")) {
+		entry->limit_bps = atoi(conf->val.buf);
+		
 	} else if (equal_buf_str (&conf->key, "match")) {
 		/* Ignore: Previously handled 
 		 */
