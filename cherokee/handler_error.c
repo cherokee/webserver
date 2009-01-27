@@ -156,9 +156,9 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 
 	case http_moved_permanently:
 	case http_moved_temporarily:
-		cherokee_buffer_add_str    (buffer, "The document has moved <a href=\"");
-		cherokee_buffer_add_buffer (buffer, &conn->redirect);
-		cherokee_buffer_add_str    (buffer, "\">here</a>.");
+		cherokee_buffer_add_str         (buffer, "The document has moved <a href=\"");
+		cherokee_buffer_add_escape_html (buffer, &conn->redirect);
+		cherokee_buffer_add_str         (buffer, "\">here</a>.");
 		break;
 
 	case http_unauthorized:

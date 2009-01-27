@@ -1,5 +1,8 @@
 2009-01-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_error.c (build_hardcoded_response_page): It
+	should escape redirecting URLs when repoting a "move".
+
 	* cherokee/socket.c (cherokee_socket_sendfile): Fixes a FreeBSD
 	compilation issue. Reported by Jessica Laurie H.
 
