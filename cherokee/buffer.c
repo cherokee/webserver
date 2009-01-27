@@ -527,7 +527,7 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, const char *format, va_list
 	/* Ensure enough size for buffer.
 	 */
 	ret = cherokee_buffer_ensure_size (buf, buf->len + estimation + 2);
-	if (ret != ret_ok) {
+	if (unlikely (ret != ret_ok)) {
 		PRINT_ERROR ("  -> '%s', esti=%d ensure_size=%d failed !\n", format, estimation, buf->len + estimation + 2);
 		return ret;
 	}
@@ -1211,16 +1211,16 @@ cherokee_buffer_add_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)
 				continue;
 		}
 	}
-
+ 
 	/* Verify there are no embedded '\0'.
 	 */
-	if ( (cuint_t)(p1 - src->buf) != src->len)
+	if (unlikely ((cuint_t)(p1 - src->buf) != src->len))
 		return ret_error;
 
 	/* Ensure there is proper buffer size.
 	 */
 	ret = cherokee_buffer_ensure_addlen (buf, src->len + extra + 1);
-	if (ret != ret_ok)
+	if (unlikely (ret != ret_ok))
 		return ret;
 
 	/* Escape and copy data to destination buffer.
