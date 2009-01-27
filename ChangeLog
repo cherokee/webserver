@@ -1,5 +1,8 @@
 2009-01-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/bogotime.c (update_guts): Fixes a silly mistake:
+	usecs != msecs.
+
 	* cherokee/handler_error.c (build_hardcoded_response_page): It
 	should escape redirecting URLs when repoting a "move".
 

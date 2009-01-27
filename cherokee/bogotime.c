@@ -113,14 +113,14 @@ update_guts (void)
 	if (unlikely (re != 0))
 		return ret_error;
 
-	if (cherokee_bogonow_now >= cherokee_bogonow_tv.tv_sec)
-		return ret_ok;
-
 	/* Update internal variables
 	 */
 	cherokee_bogonow_now  = cherokee_bogonow_tv.tv_sec;
 	cherokee_bogonow_msec = ((cherokee_bogonow_tv.tv_sec * 1000) + 
-				 (cherokee_bogonow_tv.tv_usec));
+				 (cherokee_bogonow_tv.tv_usec) / 1000);
+
+	if (cherokee_bogonow_now >= cherokee_bogonow_tv.tv_sec)
+		return ret_ok;
 
 	/* Convert time to both GMT and local time struct
 	 */
