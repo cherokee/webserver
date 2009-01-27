@@ -1123,7 +1123,6 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	}
 
 #elif FREEBSD_SENDFILE_API
-	int            re;
 	struct sf_hdtr hdr;
 	struct iovec   hdtrl;
 

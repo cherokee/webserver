@@ -1,3 +1,8 @@
+2009-01-27  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/socket.c (cherokee_socket_sendfile): Fixes a FreeBSD
+	compilation issue. Reported by Jessica Laurie H.
+
 2009-01-26  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/handler_server_info.c: Fixes wrong behaviour when
