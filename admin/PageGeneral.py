@@ -112,7 +112,7 @@ class PageGeneral (PageMenu, FormHelper):
                 
             table += (port, listen, tls, link_del)
 
-        txt = "<h3>Listenig to ports</h3>"
+        txt = "<h3>Listening to ports</h3>"
         txt += self.Indent(table)
         
         # Add new port

@@ -1,5 +1,8 @@
 2009-01-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageGeneral.py (PageGeneral._render_ports): Typo
+	fixed.  Thanks Genesis (#cherokee, freenode).
+
 	* cherokee/bogotime.c (update_guts): Fixes a silly mistake:
 	usecs != msecs.
 
