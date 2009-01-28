@@ -27,6 +27,9 @@ HELPS = [
 ]
 
 DATA_VALIDATION = [
+    ('source!.*!host',         validations.is_information_source),
+    ('source!.*!timeout',      validations.is_positive_int),
+    ('tmp!new_source_host',    validations.is_information_source),
     ('tmp!new_source_timeout', validations.is_positive_int)
 ]
 
@@ -57,7 +60,7 @@ class PageInfoSource (PageMenu, FormHelper):
                     post.get_val ('new_env_value')):
                     self._apply_add_new_env_var(post, source)
 
-                self.ApplyChanges ([], post)
+                self.ApplyChanges ([], post, validation = DATA_VALIDATION)
                 return "/%s/%s" % (self._id, source)
 
         tmp = uri.split('/')
@@ -82,6 +85,7 @@ class PageInfoSource (PageMenu, FormHelper):
 
     def _apply_new_source (self, uri, post):
         self.ValidateChange_SingleKey ('tmp!new_source_timeout', post, DATA_VALIDATION)
+        self.ValidateChange_SingleKey ('tmp!new_source_host',    post, DATA_VALIDATION)
         if self.has_errors():
             return self._op_render()
 

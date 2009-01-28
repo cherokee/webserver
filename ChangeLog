@@ -1,5 +1,10 @@
 2009-01-28  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageInfoSource.py, admin/validations.py: Adds a couple of
+	new validation checks.  The information sources cannot include the
+	protocol, nor further details (such as paths). For intance,
+	"http://host:port/dir" should be read as "host:port".
+
 	* admin/PageVServer.py, admin/ModuleErrorRedir.py: Fixes look &
 	feel. Some of the tabs did not follow the common style.
 

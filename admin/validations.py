@@ -261,3 +261,12 @@ def is_dev_null_or_local_dir_exists (value, cfg, nochroot=False):
     if value == '/dev/null':
         return value
     return is_local_dir_exists (value, cfg, nochroot)
+
+def is_information_source (value):
+    if "://" in value:
+        value = value.split("://")[1]
+
+    if '/' in value:
+        return value.split('/')[0]
+
+    return value
