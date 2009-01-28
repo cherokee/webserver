@@ -185,13 +185,8 @@ class PageVServer (PageMenu, FormHelper):
         txt = "<h1>Virtual Server: %s</h1>" % (name)
 
         # Basics
-        table = TableProps()
-        if host != "default":
-            self.AddPropEntry (table, 'Virtual Server nickname', '%s!nick'%(pre), NOTE_NICKNAME)
-        self.AddPropEntry (table, 'Document Root',     '%s!document_root'%(pre),   NOTE_DOCUMENT_ROOT)
-        self.AddPropEntry (table, 'Directory Indexes', '%s!directory_index'%(pre), NOTE_DIRECTORY_INDEX)
-        self.AddPropCheck (table, 'Keep-alive', '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
-        tabs += [('Basics', str(table))]
+        tmp = self._render_basics(host)
+        tabs += [('Basics', tmp)]
 
         # Domains
         tmp = self._render_hosts(host)
@@ -208,7 +203,7 @@ class PageVServer (PageMenu, FormHelper):
         # Personal Webs
         tmp  = self._render_personal_webs (host)
         if self._cfg.get_val('vserver!%s!user_dir'%(host)):
-            tmp += "<p><hr /></p>"
+            tmp += "<br/><hr />"
             pre = 'vserver!%s!user_dir!rule'%(host)
             tmp += self._render_rules_generic (cfg_key    = pre, 
                                                url_prefix = '/vserver/%s/userdir'%(host),
@@ -235,13 +230,13 @@ class PageVServer (PageMenu, FormHelper):
     def _render_ssl (self, host):
         pre = 'vserver!%s' % (host)
 
-        txt = '<h2>Required SSL/TLS values</h2>'
+        txt = '<h3>Required SSL/TLS values</h3>'
         table = TableProps()
         self.AddPropEntry (table, 'Certificate',     '%s!ssl_certificate_file' % (pre),     NOTE_CERT)
         self.AddPropEntry (table, 'Certificate key', '%s!ssl_certificate_key_file' % (pre), NOTE_CERT_KEY)
         txt += self.Indent(table)
 
-        txt += '<h2>Advanced options</h2>'
+        txt += '<h3>Advanced options</h3>'
         table = TableProps()
         self.AddPropEntry (table, 'CA List',         '%s!ssl_ca_list_file' % (pre),         NOTE_CA_LIST)
         self.AddPropEntry (table, 'Client Certs',    '%s!ssl_client_list_file' % (pre),     NOTE_CLIENT_LIST)
@@ -250,16 +245,15 @@ class PageVServer (PageMenu, FormHelper):
         return txt
 
     def _render_error_handler (self, host):
-        txt = ''
         pre = 'vserver!%s' % (host)
 
+        txt = '<h3>Error Handling hook</h3>'
         table = TableProps()
         e = self.AddPropOptions_Reload (table, 'Error Handler',
                                         '%s!error_handler' % (pre), 
                                         modules_available(ERROR_HANDLERS), 
                                         NOTE_ERROR_HANDLER)
-        txt += str(table) + self.Indent(e)
-
+        txt += self.Indent(table) + e
         return txt
 
     def _render_add_rule (self, prefix):
@@ -378,7 +372,7 @@ class PageVServer (PageMenu, FormHelper):
         return txt
 
     def _render_personal_webs (self, host):
-        txt = ''
+        txt = '<h3>/~user directories</h3>'
 
         table = TableProps()
         cfg_key = 'vserver!%s!user_dir'%(host)
@@ -388,7 +382,30 @@ class PageVServer (PageMenu, FormHelper):
             self.AddProp (table, 'Status', '', button, NOTE_DISABLE_PW)
 
         self.AddPropEntry (table, 'Directory name', cfg_key, NOTE_PERSONAL_WEB)
-        txt += str(table)
+        txt += self.Indent(table)
+
+        return txt
+
+    def _render_basics (self, host):
+        pre = "vserver!%s" % (host)
+
+        txt = ''
+        if host != "default":
+            txt += '<h3>Server ID</h3>'
+            table = TableProps()
+            self.AddPropEntry (table, 'Virtual Server nickname', '%s!nick'%(pre), NOTE_NICKNAME)
+            txt += self.Indent(table)
+
+        txt += '<h3>Paths</h3>'
+        table = TableProps()
+        self.AddPropEntry (table, 'Document Root',     '%s!document_root'%(pre),   NOTE_DOCUMENT_ROOT)
+        self.AddPropEntry (table, 'Directory Indexes', '%s!directory_index'%(pre), NOTE_DIRECTORY_INDEX)
+        txt += self.Indent(table)
+
+        txt += '<h3>Network</h3>'
+        table = TableProps()
+        self.AddPropCheck (table, 'Keep-alive', '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
+        txt += self.Indent(table)
 
         return txt
 
@@ -468,9 +485,10 @@ class PageVServer (PageMenu, FormHelper):
         return txt
 
     def _render_hosts (self, host):
+        txt  = ""
+
         cfg_domains = self._cfg["vserver!%s!domain"%(host)]
 
-        txt       = ""
         available = "1"
 
         if cfg_domains and \
@@ -486,9 +504,10 @@ class PageVServer (PageMenu, FormHelper):
                 js = "post_del_key('%s','%s');" % (self.submit_ajax_url, cfg_key)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (en, link_del)
-
-            txt += str(table)
-            txt += "<hr />"
+                
+            txt += "<h3>Accepted domains</h3>"
+            txt += self.Indent(table)
+            txt += "<br />"
 
         # Look for firs available
         i = 1
@@ -499,10 +518,12 @@ class PageVServer (PageMenu, FormHelper):
             i += 1
 
         # Add new domain
+        txt += "<h3>Add new domains</h3>"
+
         table = TableProps()
         cfg_key = "vserver!%s!domain!%s" % (host, available)
-        self.AddPropEntry (table, 'Add new domain name', cfg_key, NOTE_ADD_DOMAIN)
-        txt += str(table)
+        self.AddPropEntry (table, 'New Domain Name', cfg_key, NOTE_ADD_DOMAIN)
+        txt += self.Indent(table)
 
         return txt
 

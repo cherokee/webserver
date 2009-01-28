@@ -41,7 +41,7 @@ class ModuleErrorRedir (Module, FormHelper):
         entry = self.InstanceEntry('new_error_url', 'text', size=30)
         table += (options, entry, SUBMIT_ADD)
 
-        txt += str(table)
+        txt += self.Indent(table)
         return txt
 
     def _op_apply_changes (self, uri, post):
