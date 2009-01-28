@@ -17,6 +17,15 @@ NOTE_NEW_MIME       = 'New MIME type to be added.'
 NOTE_NEW_EXTENSIONS = 'Comma separated list of file extensions associated with the MIME type.'
 NOTE_NEW_MAXAGE     = 'Maximum time that this sort of content can be cached (in seconds).'
 
+TABLE_JS = """
+<script type="text/javascript">
+     $(document).ready(function() {
+        $("#mimes tr:even').addClass('alt')");
+        $("table.rulestable tr:odd").addClass("odd");
+     });
+</script>
+"""
+
 class PageMime (PageMenu, FormHelper):
     def __init__ (self, cfg):
         PageMenu.__init__ (self, 'mime', cfg, HELPS)
@@ -72,7 +81,7 @@ class PageMime (PageMenu, FormHelper):
         txt = ''
         cfg = self._cfg['mime']
         if cfg:
-            table = Table(4, 1)
+            table = Table(4, 1, style='id="mimes" class="rulestable"')
             table += ('Mime type', 'Extensions', 'MaxAge<br/>(<i>secs</i>)')
             keys = cfg.keys()
             keys.sort()
@@ -84,7 +93,8 @@ class PageMime (PageMenu, FormHelper):
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (mime, e1, e2, link_del)
             txt += '<div id="mimetable">%s</div>'%(str(table))
-            txt += '<p><hr /></p>'
+            txt += TABLE_JS
+            txt += '<p><br /></p>'
         return txt
 
     def _render_add_mime (self):

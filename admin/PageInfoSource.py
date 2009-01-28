@@ -185,7 +185,11 @@ class PageInfoSource (PageMenu, FormHelper):
 
 
     def _render_content (self, source):
-        txt = "<h1>Information Sources Settings</h1>"
+        if source:
+            nick = self._cfg.get_val('source!%s!nick'%(source))
+            txt = "<h1>Information Sources Settings: %s</h1>" % (nick)
+        else:
+            txt = "<h1>Information Sources Settings</h1>"
 
         # List
         #
@@ -234,7 +238,7 @@ class PageInfoSource (PageMenu, FormHelper):
         #
         if self._cfg.keys('source'):
             txt += "<h2>Source usage</h2>"
-            txt += self.Dialog (NOTE_USAGE)
+            txt += self.Indent(self.Dialog (NOTE_USAGE))
             txt += self._render_source_usage ()
 
         return txt

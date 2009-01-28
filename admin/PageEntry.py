@@ -183,9 +183,14 @@ class PageEntry (PageMenu, FormHelper):
             return self.Dialog (DEFAULT_RULE_WARNING, 'important-information')
 
         # Change the rule type
+        txt = ""
+
         table = TableProps()
         e = self.AddPropOptions_Reload (table, "Rule Type", pre, RULES, "")
-        return str(table) + e
+
+        txt += "<h2>Matching Rule</h2>"
+        txt += self.Indent(str(table) + e)
+        return txt
 
     def _render_expiration (self):
         txt = ''
@@ -198,7 +203,8 @@ class PageEntry (PageMenu, FormHelper):
         if exp == 'time':
             self.AddPropEntry (table, 'Time to expire', '%s!time'%(pre), NOTE_EXPIRATION_TIME)
 
-        txt += str(table)
+        txt += "<h2>Content Expiration</h2>"
+        txt += self.Indent(table)
         return txt
 
     def _render_security (self):

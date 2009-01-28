@@ -60,7 +60,7 @@ class PageGeneral (PageMenu, FormHelper):
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
 
     def _render_permissions (self):
-        txt = "<h3>Execution Permissions</h3>"
+        txt = "<h2>Execution Permissions</h2>"
         table = TableProps()
         self.AddPropEntry (table, 'User',   'server!user',   NOTE_USER)
         self.AddPropEntry (table, 'Group',  'server!group',  NOTE_GROUP)
@@ -69,13 +69,13 @@ class PageGeneral (PageMenu, FormHelper):
         return txt
 
     def _render_network (self):
-        txt = "<h3>Support</h3>"
+        txt = "<h2>Support</h2>"
         table = TableProps()
         self.AddPropCheck (table, 'IPv6',     'server!ipv6', True, NOTE_IPV6)
         self.AddPropOptions_Reload (table, 'SSL/TLS back-end','server!tls',modules_available(CRYPTORS), NOTE_TLS)
         txt += self.Indent(table)
 
-        txt += "<h3>Network behavior</h3>"
+        txt += "<h2>Network behavior</h2>"
         table = TableProps()
         self.AddPropEntry (table,  'Timeout (<i>secs</i>)', 'server!timeout',       NOTE_TIMEOUT)
         self.AddPropOptions_Reload (table, 'Server Tokens', 'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
@@ -112,7 +112,7 @@ class PageGeneral (PageMenu, FormHelper):
                 
             table += (port, listen, tls, link_del)
 
-        txt = "<h3>Listening to ports</h3>"
+        txt = "<h2>Listening to ports</h2>"
         txt += self.Indent(table)
         
         # Add new port

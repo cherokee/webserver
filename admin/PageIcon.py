@@ -114,10 +114,10 @@ class PageIcon (PageMenu, FormHelper):
 
         tmp = ''
         if icons and icons.has_child():
-            tmp += "<h3>Extension list</h3>"
+            tmp += '<h2>Extension list</h2>'
 
             table = Table(4, 1, style='width="100%"')
-            table += ('', 'File', 'Extensions', '')
+            table += ('', 'Icon File', 'Extensions', '')
 
             for icon in icons:
                 cfg_key  = 'icons!suffix!%s' % (icon)
@@ -129,7 +129,7 @@ class PageIcon (PageMenu, FormHelper):
                 table += (im, icon, entry, link_del)
 
             fo0 = Form ('/icons/update', add_submit=False)
-            tmp = fo0.Render(str(table))
+            tmp += fo0.Render(self.Indent(table))
 
         # New suffix
         fo1 = Form ("/%s/add_suffix" % (self._id), add_submit=False, auto=False)
@@ -140,7 +140,7 @@ class PageIcon (PageMenu, FormHelper):
         ta1 += ('', 'Icon', 'Extensions', '')
         ta1 += (im1, op1, en2, SUBMIT_ADD)
         tmp += "<h2>Add new extension</h2>"
-        tmp += fo1.Render(str(ta1))
+        tmp += fo1.Render(self.Indent(ta1))
 
         tabs += [('Extensions', tmp)]
 
@@ -148,7 +148,7 @@ class PageIcon (PageMenu, FormHelper):
         #
         icons = self._cfg['icons!file']
 
-        tmp = ''
+        tmp = "<h2>File Matches</h2>"
         if icons and icons.has_child():
             table = Table(4, 1, style='width="100%"')
             table += ('', 'Match', 'File')
@@ -161,7 +161,7 @@ class PageIcon (PageMenu, FormHelper):
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (im, match, op, link_del)
 
-            tmp += str(table)
+            tmp += self.Indent(table)
 
         # New file
         fo1 = Form ("/%s/add_file" % (self._id), add_submit=False, auto=False)
@@ -171,7 +171,7 @@ class PageIcon (PageMenu, FormHelper):
         ta1 += ('', 'File', 'Icon', '')
         ta1 += (im1, en1, op1, SUBMIT_ADD)
         tmp += "<h2>Add new file match</h2>"
-        tmp += fo1.Render(str(ta1))
+        tmp += fo1.Render(self.Indent(ta1))
 
         tabs += [('Files', tmp)]
 
@@ -189,7 +189,8 @@ class PageIcon (PageMenu, FormHelper):
         table += (im_dir, 'Directory',    op_dir)
         table += (im_par, 'Go to Parent', op_par)
 
-        tmp = self.Indent(table)
+        tmp  = "<h2>Special Icons</h2>"
+        tmp += self.Indent(table)
 
         tabs += [('Special Icons', tmp)]
 
