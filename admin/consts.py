@@ -127,3 +127,9 @@ CRYPTORS = [
     ('',         'No TLS/SSL'),
     ('libssl',   'OpenSSL / libssl')
 ]
+
+CLIENT_CERTS = [
+    ('',         'Skip'),
+    ('accept',   'Accept'),
+    ('required', 'Require')
+]

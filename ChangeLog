@@ -1,3 +1,9 @@
+2009-01-28  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/cryptor_libssl.c, admin/consts.py, admin/PageVServer.py:
+	Better support for TLS/SSL client certificates.
+
 2009-01-28  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/PageInfoSource.py, admin/validations.py: Adds a couple of

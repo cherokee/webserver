@@ -131,6 +131,18 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 		PRINT_ERROR ("Could change the SSL context: servername='%s'\n", servername);
 	}
 
+	/* SSL_set_SSL_CTX() only change certificates. We need to
+	 * changes more options by hand.
+	 */
+	SSL_set_options(ssl, SSL_CTX_get_options(ssl->ctx));
+	
+	if ((SSL_get_verify_mode(ssl) == SSL_VERIFY_NONE) ||
+	    (SSL_num_renegotiations(ssl) == 0)) {
+
+		SSL_set_verify(ssl, SSL_CTX_get_verify_mode(ssl->ctx),
+		               SSL_CTX_get_verify_callback(ssl->ctx));
+	}
+
 	return SSL_TLSEXT_ERR_OK; 
 }
 #endif
@@ -153,6 +165,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 {
 	ret_t       ret;
 	int         rc;
+	int         verify_mode = SSL_VERIFY_NONE;
 	const char *error;
 	CHEROKEE_NEW_STRUCT (n, cryptor_vserver_libssl);
 
@@ -195,18 +208,6 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	SSL_CTX_set_options (n->context, SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS);
 #endif
 
-	/* Trusted CA certificates
-	 */
-	if (! cherokee_buffer_is_empty (&vsrv->certs_ca)) {
-		rc = SSL_CTX_load_verify_locations (n->context, vsrv->certs_ca.buf, NULL);
-		if (rc != 1) {
-			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR("ERROR: OpenSSL: Can't read trusted CA list '%s': %s\n", 
-				    vsrv->server_key.buf, error);
-			return ret_error;
-		}
-	}
-
 	/* Certificate
 	 */
 	rc = SSL_CTX_use_certificate_file (n->context, vsrv->server_cert.buf, SSL_FILETYPE_PEM);
@@ -235,6 +236,45 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		return ret_error;
 	}
 
+	if (! cherokee_buffer_is_empty (&vsrv->req_client_certs)) {
+		STACK_OF(X509_NAME) *X509_clients;
+
+		verify_mode = SSL_VERIFY_PEER|SSL_VERIFY_CLIENT_ONCE;
+		if (cherokee_buffer_cmp_str (&vsrv->req_client_certs, "required") == 0) {
+			verify_mode |= SSL_VERIFY_FAIL_IF_NO_PEER_CERT;
+		}
+
+		/* Trusted CA certificates
+		*/
+		if (! cherokee_buffer_is_empty (&vsrv->certs_ca)) {
+			rc = SSL_CTX_load_verify_locations (n->context, vsrv->certs_ca.buf, NULL);
+			if (rc != 1) {
+				OPENSSL_LAST_ERROR(error);
+				PRINT_ERROR("ERROR: OpenSSL: Can't read trusted CA list '%s': %s\n", 
+				            vsrv->certs_ca.buf, error);
+				return ret_error;
+			}
+
+			X509_clients = SSL_load_client_CA_file (vsrv->certs_ca.buf);
+			if (X509_clients == NULL) {
+				OPENSSL_LAST_ERROR(error);
+				PRINT_ERROR ("SSL_load_client_CA_file '%s': %s\n",
+				             vsrv->certs_ca.buf, error);
+				return ret_error;
+			}
+
+			ERR_clear_error();
+
+			SSL_CTX_set_client_CA_list (n->context, X509_clients);
+			TRACE (ENTRIES, "Setting client CA list: %s on '%s'\n", vsrv->certs_ca.buf, vsrv->name.buf);
+		} else {
+			verify_mode = SSL_VERIFY_NONE;
+		}
+	}
+
+	SSL_CTX_set_verify (n->context, verify_mode, NULL);
+	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
+
 #ifndef OPENSSL_NO_TLSEXT
 	/* Enable SNI
 	 */
@@ -253,34 +293,8 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	}
 #endif /* OPENSSL_NO_TLSEXT */
 
-	if (! cherokee_buffer_is_empty (&vsrv->certs_client)) {
-		STACK_OF(X509_NAME) *X509_clients;
-
-		SSL_CTX_set_verify (n->context, SSL_VERIFY_PEER, openssl_verify_peer);
-		/* SSL_CTX_set_verify_depth (n->context, vsrv->certs_client_depth); */
-		
-		rc = SSL_CTX_load_verify_locations (n->context, vsrv->certs_client.buf, NULL);
-		if (rc != 1) {
-			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR ("Client certs checking '%s': %s\n", 
-				     vsrv->certs_client.buf, error);
-			return ret_error;
-		}
-		
-		X509_clients = SSL_load_client_CA_file (vsrv->certs_client.buf);
-		if (X509_clients == NULL) {
-			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR ("SSL_load_client_CA_file '%s': %s\n", 
-				     vsrv->certs_client.buf, error);
-			return ret_error;			
-		}
-		
-		ERR_clear_error();
-
-		SSL_CTX_set_client_CA_list (n->context, X509_clients);
-	}
-
 	*cryp_vsrv = CRYPTOR_VSRV(n);
+
 	return ret_ok;
 }
 

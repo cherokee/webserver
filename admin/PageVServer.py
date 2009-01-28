@@ -13,7 +13,7 @@ DATA_VALIDATION = [
     ("vserver!.*?!ssl_certificate_file",      (validations.is_local_file_exists, 'cfg')),
     ("vserver!.*?!ssl_certificate_key_file",  (validations.is_local_file_exists, 'cfg')),
     ("vserver!.*?!ssl_ca_list_file",          (validations.is_local_file_exists, 'cfg')),
-    ("vserver!.*?!ssl_client_list_file",      (validations.is_local_file_exists, 'cfg')),
+    ("vserver!.*?!ssl_verify_depth",          (validations.is_positive_int)),
     ("vserver!.*?!logger!.*?!filename",       (validations.parent_is_dir, 'cfg', 'nochroot')),
     ("vserver!.*?!logger!.*?!command",        (validations.is_local_file_exists, 'cfg')),
 ]
@@ -25,8 +25,9 @@ RULE_LIST_NOTE = """
 NOTE_NICKNAME        = 'Nickname for the virtual server.'
 NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server.'
 NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server.'
-NOTE_CA_LIST         = 'Optional: File containing the trusted CA certificates.'
-NOTE_CLIENT_LIST     = 'Optional: File with certificates CA in PEM format, utilized for checking the client certificates.'
+NOTE_CA_LIST         = 'Optional: File containing the trusted CA certificates, utilized for checking the client certificates.'
+NOTE_CLIENT_CERTS    = 'Optional: Skip, Accept or Require client certificates.'
+NOTE_VERIFY_DEPTH    = 'Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)'
 NOTE_ERROR_HANDLER   = 'Allows the selection of how to generate the error responses.'
 NOTE_PERSONAL_WEB    = 'Directory inside the user home directory to use as root web directory. Disabled if empty.'
 NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
@@ -238,8 +239,19 @@ class PageVServer (PageMenu, FormHelper):
 
         txt += '<h2>Advanced options</h2>'
         table = TableProps()
-        self.AddPropEntry (table, 'CA List',         '%s!ssl_ca_list_file' % (pre),         NOTE_CA_LIST)
-        self.AddPropEntry (table, 'Client Certs',    '%s!ssl_client_list_file' % (pre),     NOTE_CLIENT_LIST)
+        self.AddPropOptions_Ajax (table, 'Client Certs. Request',
+                                         '%s!ssl_client_certs' % (pre),
+                                         CLIENT_CERTS, 
+                                         NOTE_CLIENT_CERTS)
+
+        req_cc = self._cfg.get_val('%s!ssl_client_certs' % (pre))
+        if req_cc:
+            self.AddPropEntry (table, 'CA List',     '%s!ssl_ca_list_file' % (pre),        NOTE_CA_LIST)
+
+            calist = self._cfg.get_val('%s!ssl_ca_list_file' % (pre))
+            if calist:
+                self.AddPropEntry (table, 'Verify Depth',  '%s!ssl_verify_depth' % (pre),  NOTE_VERIFY_DEPTH, size=4)
+
         txt += self.Indent(table)
 
         return txt

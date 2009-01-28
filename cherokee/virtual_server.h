@@ -67,10 +67,11 @@ typedef struct {
 		CHEROKEE_MUTEX_T    (rx_mutex);
 	} data;
 
+	cuint_t                      verify_depth;
 	cherokee_buffer_t            server_cert;
 	cherokee_buffer_t            server_key;
 	cherokee_buffer_t            certs_ca;
-	cherokee_buffer_t            certs_client;
+	cherokee_buffer_t            req_client_certs;
 	cherokee_cryptor_vserver_t  *cryptor;
 
 } cherokee_virtual_server_t;
