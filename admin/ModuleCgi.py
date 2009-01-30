@@ -3,7 +3,7 @@ from ModuleHandler import *
 from validations import *
 
 NOTE_SCRIPT_ALIAS  = 'Path to an executable that will be run with the CGI as parameter.'
-NOTE_CHANGE_USER   = 'Execute the CGI under its owner user ID.'
+NOTE_CHANGE_USER   = 'Execute the CGI under its file owner user ID.'
 NOTE_ERROR_HANDLER = 'Send errors exactly as they are generated.'
 NOTE_CHECK_FILE    = 'Check whether the file is in place.'
 NOTE_PASS_REQ      = 'Forward all the client headers to the CGI encoded as HTTP_*. headers.'
@@ -38,7 +38,7 @@ class ModuleCgiBase (ModuleHandler):
         if self.show_script_alias:
             self.AddPropEntry (table, "Script Alias",  "%s!script_alias" % (self._prefix), NOTE_SCRIPT_ALIAS)
         if self.show_change_uid:
-            self.AddPropEntry (table, "Change to UID", "%s!change_user"  % (self._prefix), NOTE_CHANGE_USER)
+            self.AddPropCheck (table, "Change UID", "%s!change_user"%(self._prefix), False, NOTE_CHANGE_USER)
 
         self.AddPropCheck (table, "Error handler",     "%s!error_handler"% (self._prefix), False, NOTE_ERROR_HANDLER)
 
@@ -82,7 +82,7 @@ class ModuleCgiBase (ModuleHandler):
         if new_name and new_value:
             self._cfg['%s!env!%s'%(self._prefix, new_name)] = new_value
 
-        checkboxes = ['error_handler', 'pass_req_headers', 'xsendfile']
+        checkboxes = ['error_handler', 'pass_req_headers', 'xsendfile', 'change_user']
 
         if self.fixed_check_file == None:
             checkboxes += ['check_file']
