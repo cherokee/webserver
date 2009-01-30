@@ -1,3 +1,8 @@
+2009-01-30  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/connection.c (build_response_header_expiration): Fixes
+	a typo. http://code.google.com/p/cherokee/issues/detail?id=351
+
 2009-01-28  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,

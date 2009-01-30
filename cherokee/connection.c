@@ -518,7 +518,7 @@ build_response_header_expiration (cherokee_connection_t *conn, cherokee_buffer_t
 		cherokee_buffer_add (buffer, bufstr, szlen);
 		cherokee_buffer_add_str (buffer, CRLF);
 
-		cherokee_buffer_add_str (buffer, "Cache-Contro: max-age=");
+		cherokee_buffer_add_str (buffer, "Cache-Control: max-age=");
 		cherokee_buffer_add_long10 (buffer, conn->expiration_time);
 		cherokee_buffer_add_str (buffer, CRLF);
 		break;
