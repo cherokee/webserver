@@ -899,11 +899,31 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 			status[3] = '\0';
 		
 			code = atoi (status);
-			if (code <= 0) {
+			if (code < 100) {
 				conn->error_code = http_internal_error;
 				return ret_error;
 			}
 
+			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
+			end2 = begin;
+
+			conn->error_code = code;			
+			continue;
+		}
+
+		else if (strncasecmp ("HTTP/", begin, 5) == 0) {
+			int  code;
+			char status[4];
+
+			memcpy (status, begin+9, 3);
+			status[3] = '\0';
+
+			code = atoi (status);
+			if (code < 100) {
+				conn->error_code = http_internal_error;
+				return ret_error;
+			}
+		
 			cherokee_buffer_remove_chunk (buffer, begin - buffer->buf, end2 - begin);
 			end2 = begin;
 
