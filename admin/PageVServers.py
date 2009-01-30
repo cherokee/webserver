@@ -111,8 +111,11 @@ class PageVServers (PageMenu, FormHelper):
         vservers = self._cfg['vserver']
         table_name = 'vserver_sortable_table'
 
+        def sort_vservers(x,y):
+            return cmp(int(x), int(y))
+
         sorted_vservers = self._cfg['vserver'].keys()
-        sorted_vservers.sort(reverse=True)
+        sorted_vservers.sort(sort_vservers, reverse=True)
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
         txt += '<tr NoDrag="1" NoDrop="1"><th>Nickname</th><th>Root</th><th>Domains</th><th>Logging</th><th></th></tr>'
