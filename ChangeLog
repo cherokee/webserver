@@ -1,5 +1,8 @@
 2009-01-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/Makefile.am, qa/198-HTTPresponse.py: Adds a new QA test bug:
+	http://code.google.com/p/cherokee/issues/detail?id=344
+
 	* admin/PageVServers.py: Fixes a Virtual Server reordering issue:
 	http://code.google.com/p/cherokee/issues/detail?id=352
 

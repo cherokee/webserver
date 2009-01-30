@@ -201,7 +201,8 @@ run-tests.py \
 194-PHP-zero-len-post.py \
 195-ServerAddr.py \
 196-Mime3.py \
-197-SOAPAction.py
+197-SOAPAction.py \
+198-HTTPresponse.py
 
 test:
 	./run-tests.py
