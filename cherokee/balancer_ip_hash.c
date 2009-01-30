@@ -132,11 +132,11 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 	  cherokee_connection_t        *conn, 
 	  cherokee_source_t           **src)
 {
-	cherokee_balancer_entry_t *entry;
 	cint_t                     n;
 	cint_t                     ip_len;
 	char                      *ip;
 	cherokee_list_t           *i;
+	cherokee_balancer_entry_t *entry  = NULL;
 	culong_t                   hash   = 0;
 	cherokee_socket_t         *socket = &conn->socket;
 	
@@ -195,10 +195,17 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 	}
 	
 	/* Found */ 
-	*src = entry->source;
+	if (unlikely (entry == NULL))
+		goto error;
 
+	*src = entry->source;
 	CHEROKEE_MUTEX_UNLOCK (&balancer->last_one_mutex);
 	return ret_ok;
+
+error:
+	*src = NULL;
+	CHEROKEE_MUTEX_UNLOCK (&balancer->last_one_mutex);
+	return ret_error;
 }
 
 

@@ -1,5 +1,10 @@
 2009-01-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/balancer_ip_hash.c (dispatch): Adds a check to ensure
+	that the server will not segment fault even if no sources have
+	been defined (~ misconfiguration). Thanks to Stefan for pointing
+	the issue: http://code.google.com/p/cherokee/issues/detail?id=348
+
 	* admin/ModuleCgi.py: CGI's change_user property is a boolean
 	value (rather than a integer representing a specific UID).
 
