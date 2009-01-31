@@ -1,3 +1,8 @@
+2009-01-31  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/PageEntry.py, admin/validations.py: Adds a new "Traffic
+	Shaping" tab. Rules can define outgoing traffic limits.
+
 2009-01-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_cgi_base.c (parse_header): Fixes bug #344.

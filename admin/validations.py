@@ -7,6 +7,12 @@ def is_number (value):
     except:
         raise ValueError, 'Malformed number'
 
+def is_number_gt_0 (value):
+    value = is_number(value)
+    if int(value) <= 0:
+        raise ValueError, 'Must be greater than zero'
+    return value
+
 def is_boolean (value):
     if value.lower() in ['on', '1', 'true']:
         return '1'

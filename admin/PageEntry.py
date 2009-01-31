@@ -16,12 +16,14 @@ NOTE_HTTPS_ONLY      = 'Enable to allow access to the resource only by https.'
 NOTE_ALLOW_FROM      = 'List of IPs and subnets allowed to access the resource.'
 NOTE_VALIDATOR       = 'Which, if any, will be the authentication method.'
 NOTE_EXPIRATION      = 'Points how long the files should be cached'
+NOTE_RATE            = "Set an outbound traffic limit. It must be specified in Bytes per second."
 NOTE_EXPIRATION_TIME = "How long from the object can be cached.<br />" + \
                        "The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 2d."
 
 DATA_VALIDATION = [
     ("vserver!.*?!rule!(\d+)!document_root", (validations.is_dev_null_or_local_dir_exists, 'cfg')),
-    ("vserver!.*?!rule!(\d+)!allow_from",     validations.is_ip_or_netmask_list)
+    ("vserver!.*?!rule!(\d+)!allow_from",     validations.is_ip_or_netmask_list),
+    ("vserver!.*?!rule!(\d+)!rate",           validations.is_number_gt_0)
 ]
 
 HELPS = [
@@ -159,6 +161,9 @@ class PageEntry (PageMenu, FormHelper):
         # Security
         tabs += [('Security', self._render_security())]
 
+        # Trafic Shaping
+        tabs += [('Traffic Shaping', self._render_traffic_shaping())]
+
         txt  = '<h1>%s</h1>' % (self._get_title (html=True))
         txt += self.InstanceTab (tabs)
         form = Form (self.submit_url, add_submit=False)
@@ -191,6 +196,17 @@ class PageEntry (PageMenu, FormHelper):
         txt += "<h2>Matching Rule</h2>"
         txt += self.Indent(str(table) + e)
         return txt
+
+    def _render_traffic_shaping (self):
+        txt = ''
+
+        table = TableProps()
+        self.AddPropEntry (table, 'Limit traffic to', '%s!rate'%(self._conf_prefix), NOTE_RATE)
+
+        txt += "<h2>Traffic Shaping</h2>"
+        txt += self.Indent(table)
+        return txt
+
 
     def _render_expiration (self):
         txt = ''
