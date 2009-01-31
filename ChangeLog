@@ -1,5 +1,8 @@
 2009-01-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageEntry.py (PageEntry._render_rule): Don't show the
+	modules that are not available.
+
 	* admin/PageEntry.py, admin/validations.py: Adds a new "Traffic
 	Shaping" tab. Rules can define outgoing traffic limits.
 

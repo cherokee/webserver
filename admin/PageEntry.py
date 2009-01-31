@@ -191,7 +191,7 @@ class PageEntry (PageMenu, FormHelper):
         txt = ""
 
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, "Rule Type", pre, RULES, "")
+        e = self.AddPropOptions_Reload (table, "Rule Type", pre, modules_available(RULES), "")
 
         txt += "<h2>Matching Rule</h2>"
         txt += self.Indent(str(table) + e)
