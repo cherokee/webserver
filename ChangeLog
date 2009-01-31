@@ -1,5 +1,8 @@
 2009-01-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/admin/flags.py: Fixes a GeoIP module issue. The list was
+	not being built properly because of trailing comma character.
+
 	* admin/PageEntry.py (PageEntry._render_rule): Don't show the
 	modules that are not available.
 

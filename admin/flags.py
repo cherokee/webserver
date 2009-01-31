@@ -265,7 +265,13 @@ function flags_add_to_key (options_id, cfg_key, cfg_key_value, url)
     var thisselect = get_by_id_and_class (options_id, 'select');
     var options    = thisselect.options;
     var selected   = options[options.selectedIndex].value;
-    var value      = cfg_key_value + "," + selected;
+
+    if (cfg_key_value == "") {
+       var value   = selected;
+    } else {
+       var value   = cfg_key_value + "," + selected;
+    }
+
     var post       = cfg_key + "=" + value;
 
     /* Do not add the country if it's already in the list
@@ -275,7 +281,7 @@ function flags_add_to_key (options_id, cfg_key, cfg_key_value, url)
 
     jQuery.post (url, post, 
        function (data, textStatus) {
-           window.location.reload();
+           window.location = window.location;
        }
     );
 }
@@ -297,7 +303,7 @@ class OptionFlags:
         return '\t<option %svalue="%s">%s - %s</option>\n' % (style, code, code, name)
 
     def __str__ (self):
-        props = 'id="%s" name="%s"' % (self._name, self._name)
+        props = 'id="%s" name="%s" class="noautosubmit"' % (self._name, self._name)
 
         for prop in self._kwargs:
             props += ' %s="%s"' % (prop, self._kwargs[prop])
