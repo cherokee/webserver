@@ -147,7 +147,7 @@ with Drupal. For this we will use an internal `Regular
 expression`-type rule matching the following expression:
 
 ----
-\.(engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(\.php)?|xtmpl)(\?.*)?$|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template)$
+(\.(engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(\.php)?|xtmpl)|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template))(\?.*)?$
 ----
 
 Handle this with the `HTTP error` handler:
