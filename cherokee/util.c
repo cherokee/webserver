@@ -1672,3 +1672,55 @@ cherokee_tmp_dir_copy (cherokee_buffer_t *buffer)
 	cherokee_buffer_add_str (buffer, "/tmp");
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_parse_host (cherokee_buffer_t  *buf,
+		     cherokee_buffer_t  *host,
+		     cuint_t            *port)
+{
+	char *p;
+	char *colon;
+
+
+	colon = strchr (buf->buf, ':');
+	if (colon == NULL) {
+		/* Host
+		 */
+		cherokee_buffer_add_buffer (host, buf);
+		return ret_ok;	
+	}
+	
+	p = strchr (colon+1, ':');
+	if (p == NULL) {
+		/* Host:port
+		 */
+		*port = atoi (colon+1);
+		cherokee_buffer_add (host, buf->buf, colon - buf->buf);
+		return ret_ok;
+	}
+
+#ifdef HAVE_IPV6
+	if (buf->buf[0] != '[') {
+		/* IPv6
+		 */
+		cherokee_buffer_add_buffer (host, buf);
+		return ret_ok;	
+	}
+
+	/* [IPv6]:port
+	 */
+	colon = strrchr(buf->buf, ']');
+	if (unlikely (colon == NULL))
+		return ret_error;
+	if (unlikely (colon[1] != ':'))
+		return ret_error;
+
+	colon += 1;
+	*port = atoi(colon+1);
+	cherokee_buffer_add (host, buf->buf+1, (colon-1)-(buf->buf+1));
+	return ret_ok;
+#endif
+	
+	return ret_error;
+}

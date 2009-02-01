@@ -1,5 +1,12 @@
 2009-02-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/source.c (set_host): The function has been rewrittem to
+	use cherokee_parse_host().
+
+	* cherokee/util.h, cherokee/util.c (cherokee_parse_host): New
+	function. It parses host references. The following formats are
+	supported: 127.0.0.1, 127.0.0.1:80, localhost, ::1, [::1]:80.
+
 	* cherokee/cryptor_libssl.c (_socket_write): Improve error
 	reporting on failed writes. Fixes bug #317:
 	http://code.google.com/p/cherokee/issues/detail?id=317

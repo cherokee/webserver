@@ -192,7 +192,7 @@ cherokee_source_connect_polling (cherokee_source_t     *src,
 static ret_t
 set_host (cherokee_source_t *src, cherokee_buffer_t *host)
 {
-	char *p;
+	ret_t ret;
 
 	if (cherokee_buffer_is_empty (host))
 		return ret_error;
@@ -212,18 +212,9 @@ set_host (cherokee_source_t *src, cherokee_buffer_t *host)
 	
 	/* Host name
 	 */
-	p = strchr (host->buf, ':');
-	if (p == NULL) {
-		cherokee_buffer_add_buffer (&src->host, host);
-		return ret_ok;
-	} 
-	
-	/* Host name + port
-	 */
-	*p = '\0';
-	src->port = atoi (p+1);
-	cherokee_buffer_add (&src->host, host->buf, p - host->buf);
-	*p = ':';
+	ret = cherokee_parse_host (host, &src->host, &src->port);
+	if (unlikely (ret != ret_ok))
+		return ret_error;
 	
 	return ret_ok;
 }

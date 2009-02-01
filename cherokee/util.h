@@ -103,9 +103,14 @@ size_t  cherokee_strlcat            (char *dst, const char *src, size_t siz);
 int     cherokee_estimate_va_length (const char *format, va_list ap);
 long    cherokee_eval_formated_time (cherokee_buffer_t *buf);  
 ret_t   cherokee_fix_dirpath        (cherokee_buffer_t *buf);
+
 ret_t   cherokee_find_header_end    (cherokee_buffer_t  *buf,
 				     char              **end,
 				     cuint_t            *sep_len);
+
+ret_t   cherokee_parse_host         (cherokee_buffer_t  *buf,
+				     cherokee_buffer_t  *host,
+				     cuint_t            *port);
 
 /* Time management functions
  */
