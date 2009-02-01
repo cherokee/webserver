@@ -1,3 +1,10 @@
+2009-02-01  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/cryptor_libssl.c (_socket_write): Improve error
+	reporting on failed writes. Fixes bug #317:
+	http://code.google.com/p/cherokee/issues/detail?id=317
+	Patch by Stefan de Konink <stefan@konink.de>
+
 2009-01-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/admin/flags.py: Fixes a GeoIP module issue. The list was

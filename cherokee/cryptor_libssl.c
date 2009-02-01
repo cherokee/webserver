@@ -419,6 +419,7 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 {
 	int     re;
 	ssize_t len;
+	int     error;
 
 	len = SSL_write (cryp->session, buf, buf_len);
 	if (likely (len > 0) ) {
@@ -438,11 +439,27 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 	}
 
 	/* len < 0 */
+	error = errno;
+
 	re = SSL_get_error (cryp->session, len);
 	switch (re) {
 	case SSL_ERROR_WANT_READ:
 	case SSL_ERROR_WANT_WRITE:
 		return ret_eagain;
+
+	case SSL_ERROR_SYSCALL:
+		switch (error) {
+#ifdef ENOTCONN
+		case ENOTCONN:
+#endif
+		case EPIPE:
+		case ECONNRESET:
+			return ret_eof;
+		default:
+			PRINT_ERRNO_S (error, "SSL_write: unknown errno: ${errno}\n");
+		}
+		return ret_error;		
+		
 	case SSL_ERROR_SSL:
 		return ret_error;
 	}
