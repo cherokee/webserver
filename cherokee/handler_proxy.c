@@ -846,6 +846,8 @@ check_chunked (cherokee_handler_proxy_t *hdl,
 {
 	char *p = begin;
 
+	UNUSED(hdl);
+
 	/* Iterate through the number */
 	while (((*p >= '0') && (*p <= '9')) ||
 	       ((*p >= 'a') && (*p <= 'f')) ||

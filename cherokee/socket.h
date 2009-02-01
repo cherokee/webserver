@@ -138,6 +138,7 @@ typedef struct {
 
 #define SOCKET_SIN_PORT(s)     (SOCKET(s)->client_addr.sa_in.sin_port)
 #define SOCKET_SIN_ADDR(s)     (SOCKET(s)->client_addr.sa_in.sin_addr)
+#define SOCKET_SIN6_ADDR(s)    (SOCKET(s)->client_addr.sa_in6.sin6_addr)
 
 #define SOCKET_SUN_PATH(s)     (SOCKET(s)->client_addr.sa_un.sun_path)
 

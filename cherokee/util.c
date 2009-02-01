@@ -1724,3 +1724,21 @@ cherokee_parse_host (cherokee_buffer_t  *buf,
 	
 	return ret_error;
 }
+
+
+int
+cherokee_string_is_ipv6 (cherokee_buffer_t *ip)
+{
+	cuint_t i;
+	cuint_t colons = 0;
+	
+	for (i=0; i<ip->len; i++) {
+		if (ip->buf[i] == ':') {
+			colons += 1;
+			if (colons == 2)
+				return 1;
+		}
+	}
+
+	return 0;
+}

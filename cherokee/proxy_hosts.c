@@ -344,10 +344,14 @@ cherokee_proxy_util_init_socket (cherokee_socket_t *socket,
 	ret_t ret;
 	
 	/* Family */
-	ret = cherokee_socket_set_client (socket, AF_INET);
-        if (unlikely(ret != ret_ok)) {
-		return ret_error;
+	if (cherokee_string_is_ipv6 (&src->host)) {
+		ret = cherokee_socket_set_client (socket, AF_INET6);
+	} else {
+		ret = cherokee_socket_set_client (socket, AF_INET);
 	}
+
+        if (unlikely(ret != ret_ok))
+		return ret_error;
 
 	/* TCP port */
         SOCKET_SIN_PORT(socket) = htons (src->port);

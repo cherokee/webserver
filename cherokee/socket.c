@@ -267,7 +267,7 @@ cherokee_socket_pton (cherokee_socket_t *socket, cherokee_buffer_t *host)
 		break;
 #ifdef HAVE_IPV6
 	case AF_INET6:
-		re = inet_pton (AF_INET6, host->buf, &SOCKET_SIN_ADDR(socket));
+		re = inet_pton (AF_INET6, host->buf, &SOCKET_SIN6_ADDR(socket));
 		if (re <= 0) return ret_error;
 		break;
 #endif

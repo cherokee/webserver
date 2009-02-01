@@ -1,5 +1,18 @@
 2009-02-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/socket.c: Fixes bug #353. This patch is based on the
+	excelent work of Stefan de Konink <stefan@konink.de>:
+	http://code.google.com/p/cherokee/issues/detail?id=353
+
+	* cherokee/socket.h (SOCKET_SIN6_ADDR): New macro.
+
+	* cherokee/source.c (cherokee_source_connect): Adapted it to use
+	the new cherokee_string_is_ipv6() function.
+
+	* cherokee/util.h, cherokee/util.c (cherokee_string_is_ipv6):
+	Added a new function. It detects whether or not a host string
+	contains a IPv6 address.
+
 	* cherokee/source.c (set_host): The function has been rewrittem to
 	use cherokee_parse_host().
 
