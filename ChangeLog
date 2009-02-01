@@ -1,5 +1,8 @@
 2009-02-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (cherokee_handler_proxy_add_headers):
+	Fixes an (unlikely) segment fault.
+
 	* cherokee/socket.c: Fixes bug #353. This patch is based on the
 	excelent work of Stefan de Konink <stefan@konink.de>:
 	http://code.google.com/p/cherokee/issues/detail?id=353

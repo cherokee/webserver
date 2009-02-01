@@ -827,6 +827,9 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 {
 	ret_t ret;
 
+	if (unlikely (hdl->pconn == NULL))
+		return ret_error;
+
 	/* Parse the incoming header
 	 */
 	ret = parse_server_header (hdl, &hdl->pconn->header_in_raw, buf);
