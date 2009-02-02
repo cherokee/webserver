@@ -2309,9 +2309,15 @@ cherokee_connection_print (cherokee_connection_t *conn)
 	print_cbuf ("        Redirect", redirect);
 	print_cint ("    Redirect num", respins);
 	print_cint ("       Keepalive", keepalive);
+	print_cint ("Chunked-Encoding", chunked_encoding);
 	print_str  ("           Phase", phase);
 	print_cint ("     Range start", range_start);
 	print_cint ("       Range end", range_end);
+	print_cint ("            Rate", limit_rate);
+	if (conn->limit_rate) {
+		print_cint ("        Rate BPS", limit_rate);
+	}
+	
 
 	/* Options bit fields
 	 */

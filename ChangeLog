@@ -1,3 +1,8 @@
+2009-02-02  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/connection.c (cherokee_connection_print): Adds a couple
+	of new entries to the connection tracing function.
+
 2009-02-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_proxy.c (cherokee_handler_proxy_add_headers):
