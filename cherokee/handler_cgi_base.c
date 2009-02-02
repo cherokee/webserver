@@ -74,11 +74,10 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 
 	/* Read the properties
 	 */
+	HANDLER(cgi)->support = hsupport_nothing;
+
 	if (HANDLER_CGI_BASE_PROPS(cgi)->is_error_handler) {
-		HANDLER(cgi)->support = hsupport_error;
-	}
-	else {
-		HANDLER(cgi)->support = hsupport_nothing;
+		HANDLER(cgi)->support |= hsupport_error;
 	}
 	
 	return ret_ok;
