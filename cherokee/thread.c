@@ -502,6 +502,44 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 }
 
 
+static void
+send_hardcoded_error (cherokee_socket_t *sock,
+		      const char        *error,
+		      cherokee_buffer_t *tmp)
+{
+	ret_t              ret;
+	size_t             write;
+	cherokee_boolean_t done  = false;
+
+	cherokee_buffer_clean (tmp);
+	cherokee_buffer_add_va (
+		tmp,
+		"HTTP/1.0 %s" CRLF_CRLF					\
+		"<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">" CRLF \
+		"<html><head><title>%s</title></head>" CRLF		\
+		"<body><h1>%s</h1></body></html>",
+		error, error, error);
+
+	do {
+		write = 0;
+
+		ret = cherokee_socket_bufwrite (sock, tmp, &write);
+		switch (ret) {
+		case ret_ok:
+			if (write > 0) {
+				cherokee_buffer_move_to_begin (tmp, write);
+			}
+		default:
+			done = true;
+		}
+		
+		if (cherokee_buffer_is_empty (tmp))
+			done = true;
+	} while (!done);
+
+}
+
+
 static ret_t 
 process_polling_connections (cherokee_thread_t *thd)
 {
@@ -517,6 +555,12 @@ process_polling_connections (cherokee_thread_t *thd)
 		if (conn->timeout < thd->bogo_now) {
 			TRACE (ENTRIES",polling", "conn %p(fd=%d): Time out\n", 
 			       conn, SOCKET_FD(&conn->socket));
+
+			if (conn->phase <= phase_add_headers) {
+				send_hardcoded_error (&conn->socket,
+						      http_gateway_timeout_string,
+						      THREAD_TMP_BUF1(thd));
+			}
 
 			purge_closed_polling_connection (thd, conn);
 			continue;
@@ -1310,17 +1354,16 @@ cherokee_thread_free (cherokee_thread_t *thd)
 	return ret_ok;
 }
 
+
 static void
 thread_full_handler (cherokee_thread_t *thd, 
 		     cherokee_bind_t   *bind)
 {
-	ret_t                ret;
-	cherokee_list_t     *i;
-	cherokee_socket_t    sock;
-	size_t               read  = 0;
-	cherokee_boolean_t   done  = false;
-	cherokee_server_t   *srv   = THREAD_SRV(thd);
-	cherokee_buffer_t   *tmp   = THREAD_TMP_BUF1(thd);
+	ret_t              ret;
+	cherokee_list_t   *i;
+	cherokee_socket_t  sock;
+	cherokee_server_t *srv   = THREAD_SRV(thd);
+	cherokee_buffer_t *tmp   = THREAD_TMP_BUF1(thd);
 
 	/* Short path: nothing to accept
 	 */
@@ -1365,30 +1408,7 @@ thread_full_handler (cherokee_thread_t *thd,
 	
 	/* Write the error response
 	 */
-	cherokee_buffer_clean (tmp);
-	cherokee_buffer_add_str (
-		tmp,
-		"HTTP/1.0 " http_service_unavailable_string CRLF_CRLF	    \
-		"<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">" CRLF \
-		"<html><head><title>" http_service_unavailable_string	    \
-		"</title></head><body><h1>" http_service_unavailable_string \
-		"</h1><p>Server run out of resources.</p></body></html>");
-	do {
-		read = 0;
-
-		ret = cherokee_socket_bufwrite (&sock, tmp, &read);
-		switch (ret) {
-		case ret_ok:
-			if (read > 0) {
-				cherokee_buffer_move_to_begin (tmp, read);
-			}
-		default:
-			done = true;
-		}
-		
-		if (cherokee_buffer_is_empty (tmp))
-			done = true;
-	} while (!done);
+	send_hardcoded_error (&sock, http_service_unavailable_string, tmp);
 
 out:
 	cherokee_socket_close (&sock);

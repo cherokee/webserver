@@ -1,5 +1,10 @@
 2009-02-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/thread.c (send_hardcoded_error): Improve error
+	reporting. Now, when a connection is waiting for I/O and it times
+	out, the user will receive an error. Previously the connection was
+	just closed and the client got nothing in reply to its request.
+
 	* cherokee.conf.sample.pre: The local PHP 'information source' is
 	now named 'PHP Local' instead of 'php'.
 
