@@ -65,7 +65,7 @@ vserver!1!rule!99999!handler!balancer!source!1 = 1
 
 # Sources 
 #
-source!1!nick = php
+source!1!nick = PHP Local
 source!1!type = interpreter
 source!1!host = /tmp/cherokee-php.socket
 source!1!env!PHP_FCGI_CHILDREN = 5

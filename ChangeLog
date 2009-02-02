@@ -1,5 +1,8 @@
 2009-02-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee.conf.sample.pre: The local PHP 'information source' is
+	now named 'PHP Local' instead of 'php'.
+
 	* cherokee/connection.c (cherokee_connection_print): Adds a couple
 	of new entries to the connection tracing function.
 
