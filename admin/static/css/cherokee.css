@@ -144,7 +144,6 @@ h2 {
     font-weight: normal;
     font-size: 120%;
     letter-spacing: -1px;
-    margin-top: 20px;
 }
 
 h3 {
@@ -447,6 +446,8 @@ a.button:active span {
 
 .indented {
     margin-left: 20px;
+    margin-top: 8px;
+    margin-bottom: 16px;
 }
 
 .help_p {
@@ -459,10 +460,18 @@ a.button:active span {
   font-weight: bold;
 }
 
-.rulestable {
-  width: 100%;
+table tr {
+  vertical-align: top;
 }
 
+table tr th {
+  font-weight: bold;
+}
+
+.rulestable {
+  width: 100%;
+  margin: 8px 0 16px 0;
+}
 
 #mimetable {
   width: 680px;
@@ -491,8 +500,12 @@ a.button:active span {
   font-weight: bold;
 }
 
+.tableprop_block {
+  margin-bottom: 16px;
+}
+
 .tableprop_block hr {
-  background: #bacce2;
+  background: #d4e1f1;
   border: none;
   margin-top: 5px;
   margin-bottom: 5px;
@@ -501,17 +514,10 @@ a.button:active span {
   text-align: left;
 }
 
-table tr {
-  vertical-align: top;
-}
-
-table tr th {
-  font-weight: bold;
-}
 
 /* Alternate row color in rule list */
 table.rulestable tr.odd td {
-  background-color:#F4F7FB;
+  background-color: #f3fbfb;
 }
 
 /**************************/

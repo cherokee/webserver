@@ -196,7 +196,7 @@ class PageVServers (PageMenu, FormHelper):
         table += (en1, en2, SUBMIT_ADD)
 
         txt += "<h2>Add new Virtual Server</h2>"
-        txt += fo1.Render(str(table))
+        txt += self.Indent(fo1.Render(str(table)))
 
         # Clone Virtual Server
         table = Table(3,1, header_style='width="250px"')
@@ -213,7 +213,7 @@ class PageVServers (PageMenu, FormHelper):
         table += (op1[0], en1, SUBMIT_CLONE)
 
         txt += "<h2>Clone Virtual Server</h2>"
-        txt += fo1.Render(str(table))
+        txt += self.Indent(fo1.Render(str(table)))
 
         return txt
 
