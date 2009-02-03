@@ -154,7 +154,7 @@ static ret_t
 table_add_new_entry (cherokee_resolv_cache_t *resolv, const char *domain, cherokee_resolv_cache_entry_t **entry)
 {
 	ret_t                          ret;
-	cherokee_resolv_cache_entry_t *n;
+	cherokee_resolv_cache_entry_t *n    = NULL;
 
 	/* Instance the entry
 	 */

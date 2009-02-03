@@ -1695,8 +1695,8 @@ cherokee_thread_step_MULTI_THREAD (cherokee_thread_t  *thd,
 				   cherokee_boolean_t  dont_block)
 {
 	ret_t              ret;
-	cherokee_boolean_t can_block;
 	cherokee_boolean_t time_updated;
+	cherokee_boolean_t can_block     = false;
 	cherokee_server_t *srv           = THREAD_SRV(thd);
 	int                fdwatch_msecs = srv->fdwatch_msecs;
 

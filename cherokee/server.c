@@ -749,8 +749,8 @@ cherokee_server_initialize (cherokee_server_t *srv)
 {   
 	int                 re;
 	ret_t               ret;
-	struct passwd      *ent;
 	cherokee_list_t    *i;
+	struct passwd      *ent          = NULL;
 	cherokee_boolean_t  loggers_done = false;
 
 	/* Build the server string

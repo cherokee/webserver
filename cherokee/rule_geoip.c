@@ -51,7 +51,7 @@ geoip_get (void)
 	
 	/* Return the global if it's ready
 	 */
-	if (likely (_geoip)) {
+	if (likely (_geoip != NULL)) {
 		_geoip_refs += 1;
 		return _geoip;
 	}

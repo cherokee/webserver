@@ -234,11 +234,11 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 		return ret_error;
 	}
 
-	if (unlikely (strcasestr (conn->validator->user.buf, " or ")))
+	if (unlikely (strcasestr (conn->validator->user.buf, " or ") != NULL))
 		return ret_error;
 
 	re = cherokee_buffer_cnt_cspn (&conn->validator->user, 0, "'\";");
-	if (re != conn->validator->user.len)
+	if (unlikely (re != conn->validator->user.len))
 		return ret_error;
 
 	/* Build query

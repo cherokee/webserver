@@ -350,8 +350,8 @@ error:
 ret_t 
 cherokee_validator_digest_check (cherokee_validator_t *validator, cherokee_buffer_t *passwd, cherokee_connection_t *conn)
 {
-	int               re;
 	ret_t             ret;
+	int               re   = -1;
 	cherokee_buffer_t a1   = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t buf  = CHEROKEE_BUF_INIT;
 

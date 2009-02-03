@@ -1,5 +1,10 @@
 2009-02-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/resolv_cache.c, cherokee/validator.c,
+	cherokee/rule_geoip.c, cherokee/validator_mysql.c,
+	cherokee/thread.c, cherokee/server.c: Fixes a number of variable
+	initialization issues. Patch by Marcus Rueckert <darix@opensu.se>.
+
 	* cherokee/main_admin.c (config_server): Spawning Timeout
 	increased up to 25 seconds. There were times when I got "Gateway
 	Timeout" because of it. It seems that the cherokee-admin Python
