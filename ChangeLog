@@ -1,5 +1,10 @@
 2009-02-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main_admin.c (config_server): Spawning Timeout
+	increased up to 25 seconds. There were times when I got "Gateway
+	Timeout" because of it. It seems that the cherokee-admin Python
+	back-end isn't that light these days.
+
 	* configure.in: Try to deal with a PHP bug that the PHP folks
 	don't seem to be willing to fix:
 	http://bugs.gentoo.org/250627

@@ -140,7 +140,7 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_add_va  (&buf,
 				 "source!1!nick = app-logic\n"
 				 "source!1!type = interpreter\n"
-				 "source!1!timeout = 15\n"
+				 "source!1!timeout = 25\n"
 				 "source!1!host = localhost:%d\n"
 				 "source!1!interpreter = %s/server.py %d %s\n",
 				 scgi_port, document_root, scgi_port, config_file);
