@@ -1,3 +1,10 @@
+2009-02-03  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* configure.in: Try to deal with a PHP bug that the PHP folks
+	don't seem to be willing to fix:
+	http://bugs.gentoo.org/250627
+	http://bugs.gentoo.org/216346
+
 2009-02-02  Jonathan Hernandez  <ion@suavizado.com>
 
         * admin/static/css/cherokee.css: Remove margin from H2 tag and add 
