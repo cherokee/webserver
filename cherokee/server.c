@@ -787,6 +787,29 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		return ret_error;
 	}
 
+	/* Init the SSL/TLS support
+	*/
+	ret = vservers_check_tls(srv);
+	switch (ret) {
+		case ret_ok:
+			srv->tls_enabled = true;
+			break;
+		case ret_not_found:
+			srv->tls_enabled = false;
+			break;		
+		case ret_error:
+			return ret_error;
+		default:
+			RET_UNKNOWN(ret);
+			return ret_error;
+	}
+
+	if (srv->tls_enabled) {
+		ret = init_vservers_tls (srv);
+		if (ret != ret_ok) 
+			return ret;
+	}
+
 	/* Initialize the incoming sockets
 	 */
 	list_for_each (i, &srv->listeners) {
@@ -795,29 +818,6 @@ cherokee_server_initialize (cherokee_server_t *srv)
 					       srv->ipv6,
 					       srv->server_token);
 		if (ret != ret_ok)
-			return ret;
-	}
-
-	/* Init the SSL/TLS support
-	 */
-	ret = vservers_check_tls(srv);
-	switch (ret) {
-	case ret_ok:
-		srv->tls_enabled = true;
-		break;
-	case ret_not_found:
-		srv->tls_enabled = false;
-		break;		
-	case ret_error:
-		return ret_error;
-	default:
-		RET_UNKNOWN(ret);
-		return ret_error;
-	}
-
-	if (srv->tls_enabled) {
-		ret = init_vservers_tls (srv);
-		if (ret != ret_ok) 
 			return ret;
 	}
 
@@ -1177,6 +1177,14 @@ configure_bind (cherokee_server_t      *srv,
 		ret = cherokee_bind_configure (listener, CONFIG_NODE(i));
 		if (ret != ret_ok)
 			return ret;
+
+		if ((! srv->tls_enabled) &&
+		    (listener->socket.is_tls))
+		{
+			PRINT_MSG ("WARNING: Ignoring TLS port %d\n", listener->port);
+			cherokee_bind_free (listener);
+			continue;
+		}
 
 		cherokee_list_add_tail (&listener->listed, &srv->listeners);
 	}

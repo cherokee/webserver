@@ -1,3 +1,8 @@
+2009-02-04  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/server.c: Cherokee should not listen for TLS/SSL
+	connections if global TLS/SSL is not enabled.
+
 2009-02-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/resolv_cache.c, cherokee/validator.c,
@@ -17,11 +22,10 @@
 
 2009-02-02  Jonathan Hernandez  <ion@suavizado.com>
 
-        * admin/static/css/cherokee.css: Remove margin from H2 tag and add 
-        that margin to tableprop_block, rulestable and indent.
+	* admin/static/css/cherokee.css: Remove margin from H2 tag and add 
+	that margin to tableprop_block, rulestable and indent.
 
-        * admin/PageVServers.py: Indent Add New and Clone Virtual Server
-
+	* admin/PageVServers.py: Indent Add New and Clone Virtual Server
 
 2009-02-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
