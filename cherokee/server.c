@@ -823,6 +823,13 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		}
 	}
 
+	/* Ensure there is at least one listener
+	*/
+	if (cherokee_list_empty (&srv->listeners)) {
+		PRINT_MSG_S("ERROR: No listening on any port\n");
+		return ret_error;
+	}
+
 	/* Initialize the incoming sockets
 	 */
 	list_for_each (i, &srv->listeners) {

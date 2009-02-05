@@ -1,3 +1,8 @@
+2009-02-05  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/server.c: Ensure there is at least one port to
+	listen to.
+
 2009-02-04  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/server.c: Cherokee should not listen for TLS/SSL
