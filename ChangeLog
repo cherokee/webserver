@@ -3,6 +3,8 @@
 	* cherokee/server.c: Ensure there is at least one port to
 	listen to.
 
+	* admin/PageGeneral.py: TLS checkboxes could not be unchecked.
+
 2009-02-04  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/server.c: Cherokee should not listen for TLS/SSL

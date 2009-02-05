@@ -81,10 +81,13 @@ class PageGeneral (PageMenu, FormHelper):
         self.AddPropOptions_Reload (table, 'Server Tokens', 'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
         txt += self.Indent(table)
         return txt
-	
+
     def _op_apply_changes (self, uri, post):
-        self.ApplyChanges (['server!ipv6'], post, validation = DATA_VALIDATION)
-                           
+        checkboxes = ['server!ipv6']
+        # TLS checkboxes
+        checkboxes += ['server!bind!%s!tls' % (cb) for cb in self._cfg.keys('server!bind')]
+        self.ApplyChanges (checkboxes, post, validation = DATA_VALIDATION)
+
     def _render_ports (self):
         txt = ''
 
