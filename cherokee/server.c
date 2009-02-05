@@ -749,7 +749,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 {   
 	int                 re;
 	ret_t               ret;
-	cherokee_list_t    *i;
+	cherokee_list_t    *i, *tmp;
 	struct passwd      *ent          = NULL;
 	cherokee_boolean_t  loggers_done = false;
 
@@ -805,9 +805,22 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	}
 
 	if (srv->tls_enabled) {
+		/* Init TLS
+		 */
 		ret = init_vservers_tls (srv);
 		if (ret != ret_ok) 
 			return ret;
+	} else {
+		/* Ensure no TLS ports are bound
+		 */
+		list_for_each_safe (i, tmp, &srv->listeners) {
+			if (! BIND_IS_TLS(i))
+				continue;
+			
+			PRINT_MSG ("WARNING: Ignoring TLS port %d\n", BIND(i)->port);
+			cherokee_list_del (i);
+			cherokee_bind_free (BIND(i));
+		}
 	}
 
 	/* Initialize the incoming sockets
@@ -1177,14 +1190,6 @@ configure_bind (cherokee_server_t      *srv,
 		ret = cherokee_bind_configure (listener, CONFIG_NODE(i));
 		if (ret != ret_ok)
 			return ret;
-
-		if ((! srv->tls_enabled) &&
-		    (listener->socket.is_tls))
-		{
-			PRINT_MSG ("WARNING: Ignoring TLS port %d\n", listener->port);
-			cherokee_bind_free (listener);
-			continue;
-		}
 
 		cherokee_list_add_tail (&listener->listed, &srv->listeners);
 	}
