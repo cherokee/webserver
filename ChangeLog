@@ -1,3 +1,8 @@
+2009-02-06  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* doc/cookbook_django.txt: Fixes a couple of issues reported by
+	Stephane Raimbault <stephane.raimbault@gmail.com>.
+
 2009-02-05  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/server.c: Ensure there is at least one port to

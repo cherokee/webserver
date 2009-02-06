@@ -180,7 +180,7 @@ serving whatever content is requested directly, simply change the
 *`example`*::
 For now this virtual server is an exact copy of the untouched
 `default` virtual server. Create some new directories
-'/var/wwww/example' and '/var/wwww/example/auth', and configure the
+'/var/www/example' and '/var/www/example/auth', and configure the
 first one as default document root path.
 +
 Next, setup `example.net` and `example.com` in the `Domain names` tab.
