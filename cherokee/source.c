@@ -89,17 +89,17 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	 */
 	if (! cherokee_buffer_is_empty (&src->unix_socket)) {
 		ret = cherokee_socket_set_client (sock, AF_UNIX);
-		if (ret != ret_ok) 
+		if (unlikely (ret != ret_ok))
 			return ret;
 
 		/* Copy the unix socket path */
 		ret = cherokee_socket_gethostbyname (sock, &src->unix_socket);
-		if (ret != ret_ok)
+		if (unlikely (ret != ret_ok))
 			return ret;
 
 		/* Set non-blocking */
 		ret = cherokee_fd_set_nonblocking (sock->socket, true);
-		if (ret != ret_ok) {
+		if (unlikely (ret != ret_ok)) {
 			PRINT_ERRNO (errno, "Failed to set nonblocking (fd=%d): ${errno}\n",
 				     sock->socket);
 		}
@@ -115,18 +115,19 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		ret = cherokee_socket_set_client (sock, AF_INET);
 	}
 
-	if (ret != ret_ok)
+	if (unlikely (ret != ret_ok))
 		return ret;
 	
 	/* Query the host */
 	ret = cherokee_resolv_cache_get_host (resolv, src->host.buf, sock);
-	if (ret != ret_ok) return ret;
+	if (unlikely (ret != ret_ok))
+		return ret;
 	
 	SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
 
 	/* Set non-blocking */
 	ret = cherokee_fd_set_nonblocking (sock->socket, true);
-	if (ret != ret_ok) {
+	if (unlikely (ret != ret_ok)) {
 		PRINT_ERRNO (errno, "Failed to set nonblocking (fd=%d): ${errno}\n",
 			     sock->socket);
 	}
