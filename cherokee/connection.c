@@ -786,9 +786,8 @@ cherokee_connection_rx_add (cherokee_connection_t *conn, ssize_t rx)
 void
 cherokee_connection_tx_add (cherokee_connection_t *conn, ssize_t tx)
 {
-	cuint_t            to_sleep;
-	cherokee_thread_t *thread    = CONN_THREAD(conn);
-	
+	cuint_t to_sleep;
+
 	/* Count it
 	 */
 	conn->tx += tx;
