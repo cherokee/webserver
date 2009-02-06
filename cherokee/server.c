@@ -278,6 +278,9 @@ cherokee_server_free (cherokee_server_t *srv)
 	if (srv->iocache)
 		cherokee_iocache_free (srv->iocache);
 
+	if (srv->cryptor)
+		cherokee_cryptor_free (srv->cryptor);
+
 	cherokee_nonce_table_free (srv->nonces);
 
 	/* Virtual servers

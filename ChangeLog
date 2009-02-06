@@ -1,5 +1,8 @@
 2009-02-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/server.c (cherokee_server_free): Frees the cryptor
+	object on server::free(). Patch by Stefan de Konink.
+
 	* cherokee/cryptor.c (cherokee_cryptor_free_base): Frees the
 	cryptor structure.
 
