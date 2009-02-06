@@ -50,7 +50,7 @@
 #include "common.h"
 #include "human_strcmp.h"
 
-#define ICON_WEB_DIR_DEFAULT "/icons/"
+#define ICON_WEB_DIR_DEFAULT "/icons"
 
 
 struct file_entry {
@@ -830,6 +830,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	if (icon) {
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_add_buffer (tmp, &props->icon_web_dir);
+		cherokee_buffer_add_char (tmp, '/');
 		cherokee_buffer_add_buffer (tmp, icon);
 		VTMP_SUBSTITUTE_TOKEN ("%icon%", tmp->buf);
 	} else {
@@ -938,6 +939,7 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 	if (icon) {
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_add_buffer (tmp, &props->icon_web_dir);
+		cherokee_buffer_add_char (tmp, '/');
 		cherokee_buffer_add_buffer (tmp, icon);
 		VTMP_SUBSTITUTE_TOKEN ("%icon%", tmp->buf);
 	} else {

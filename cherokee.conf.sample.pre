@@ -38,16 +38,16 @@ vserver!1!rule!1!handler!iocache = 0
 vserver!1!rule!2!match = directory
 vserver!1!rule!2!match!directory = /icons
 vserver!1!rule!2!handler = file
-vserver!1!rule!2!document_root = %prefix%/share/cherokee/icons/
+vserver!1!rule!2!document_root = %prefix%/share/cherokee/icons
 
 vserver!1!rule!3!match = directory
 vserver!1!rule!3!match!directory = /cherokee_themes
-vserver!1!rule!3!document_root = %prefix%/share/cherokee/themes/
+vserver!1!rule!3!document_root = %prefix%/share/cherokee/themes
 vserver!1!rule!3!handler = file
 
 vserver!1!rule!4!match = directory
 vserver!1!rule!4!match!directory = /cgi-bin
-vserver!1!rule!4!document_root = %prefix%/lib/cgi-bin/
+vserver!1!rule!4!document_root = %prefix%/lib/cgi-bin
 vserver!1!rule!4!handler = cgi
 
 vserver!1!rule!5!match = directory
