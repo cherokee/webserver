@@ -124,7 +124,7 @@ typedef struct {
  */
 ret_t cherokee_cryptor_init_base   (cherokee_cryptor_t          *cryp,
 				    cherokee_plugin_info_t      *info);
-
+ret_t cherokee_cryptor_free_base   (cherokee_cryptor_t          *cryp);
 ret_t cherokee_cryptor_free        (cherokee_cryptor_t          *cryp);
 
 ret_t cherokee_cryptor_configure   (cherokee_cryptor_t          *cryp,

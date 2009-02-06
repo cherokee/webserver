@@ -48,10 +48,11 @@
 
 #define ENTRIES "crypto,ssl"
 
+
 static ret_t
 _free (cherokee_cryptor_libssl_t *cryp)
 {
-	UNUSED(cryp);
+	cherokee_cryptor_free_base (CRYPTOR(cryp));
 	return ret_ok;
 }
 

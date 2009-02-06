@@ -45,6 +45,14 @@ cherokee_cryptor_init_base (cherokee_cryptor_t      *cryp,
 
 
 ret_t
+cherokee_cryptor_free_base (cherokee_cryptor_t *cryp)
+{
+	free (cryp);
+	return ret_ok;
+}
+
+
+ret_t
 cherokee_cryptor_free (cherokee_cryptor_t *cryp)
 {
 	if (MODULE(cryp)->free == NULL) 

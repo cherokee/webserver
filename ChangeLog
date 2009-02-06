@@ -1,5 +1,8 @@
 2009-02-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/cryptor.c (cherokee_cryptor_free_base): Frees the
+	cryptor structure.
+
 	* cherokee/cache.c (cherokee_cache_mrproper): Frees the cached
 	pages on exit. Patch by Stefan de Konink <stefan@konink.de>:
 	http://code.google.com/p/cherokee/issues/detail?id=354
