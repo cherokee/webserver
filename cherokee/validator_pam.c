@@ -41,14 +41,21 @@ PLUGIN_INFO_VALIDATOR_EASIEST_INIT (pam, http_auth_basic);
 
 
 ret_t
-cherokee_validator_pam_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props)
+cherokee_validator_pam_configure (cherokee_config_node_t   *conf,
+				  cherokee_server_t        *srv,
+				  cherokee_module_props_t **props)
 {
+	UNUSED(conf);
+	UNUSED(srv);
+	UNUSED(props);
+
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_validator_pam_new (cherokee_validator_pam_t **pam, cherokee_module_props_t *props)
+cherokee_validator_pam_new (cherokee_validator_pam_t **pam,
+			    cherokee_module_props_t  *props)
 {
 	CHEROKEE_NEW_STRUCT(n,validator_pam);
 
@@ -137,13 +144,16 @@ auth_pam_talker (int                        num_msg,
 
 
 ret_t 
-cherokee_validator_pam_check (cherokee_validator_pam_t  *pam, cherokee_connection_t *conn)
+cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
+			      cherokee_connection_t    *conn)
 {
 	int                  ret;
 	static pam_handle_t *pamhandle = NULL;
 	struct pam_conv      pamconv   = {&auth_pam_talker, conn};
 
 	extern int _pam_dispatch (pam_handle_t *, int, int);
+
+	UNUSED(pam);
 
 	/* Start the PAM query
 	 */
@@ -226,8 +236,14 @@ unauthorized:
 
 
 ret_t 
-cherokee_validator_pam_add_headers (cherokee_validator_pam_t  *pam, cherokee_connection_t *conn, cherokee_buffer_t *buf)
+cherokee_validator_pam_add_headers (cherokee_validator_pam_t *pam,
+				    cherokee_connection_t    *conn,
+				    cherokee_buffer_t        *buf)
 {
+	UNUSED(pam);
+	UNUSED(conn);
+	UNUSED(buf);
+
 	return ret_ok;
 }
 

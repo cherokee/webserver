@@ -1,5 +1,8 @@
 2009-02-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/validator_pam.c: Fixes a few minor compilation
+	issues. Patch by Stefan de Konink <stefan@konink.de>.
+
 	* cherokee/source.c (cherokee_source_connect): Adds likelihood.
 
 	* cherokee/server.c (cherokee_server_free): Frees the cryptor
