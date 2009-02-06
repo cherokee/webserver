@@ -1,5 +1,9 @@
 2009-02-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/thread.c, cherokee/connection.h,
+	cherokee/connection.c (cherokee_connection_create_encoder): Fixes
+	a compilation issue.
+
 	* cherokee/validator_pam.c: Fixes a few minor compilation
 	issues. Patch by Stefan de Konink <stefan@konink.de>.
 

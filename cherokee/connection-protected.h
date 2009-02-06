@@ -253,7 +253,7 @@ ret_t cherokee_connection_recv                   (cherokee_connection_t *conn, c
 /* Internal
  */
 ret_t cherokee_connection_create_handler         (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
-ret_t cherokee_connection_create_encoder         (cherokee_connection_t *conn, cherokee_avl_t *encoders, cherokee_avl_t *accept_enc);
+ret_t cherokee_connection_create_encoder         (cherokee_connection_t *conn, cherokee_avl_t *accept_enc);
 ret_t cherokee_connection_setup_error_handler    (cherokee_connection_t *conn);
 ret_t cherokee_connection_check_authentication   (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
 ret_t cherokee_connection_check_ip_validation    (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);

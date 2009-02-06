@@ -1226,7 +1226,6 @@ get_host (cherokee_connection_t *conn,
 static ret_t
 get_encoding (cherokee_connection_t *conn,
 	      char                  *ptr,
-	      cherokee_avl_t        *encoders,
 	      cherokee_avl_t        *encoders_accepted)
 {
 	ret_t ret;
@@ -2050,7 +2049,6 @@ cherokee_connection_parse_range (cherokee_connection_t *conn)
 
 ret_t
 cherokee_connection_create_encoder (cherokee_connection_t *conn,
-				    cherokee_avl_t        *encoders,
 				    cherokee_avl_t        *encoders_accepted)
 {
 	ret_t    ret;
@@ -2076,7 +2074,7 @@ cherokee_connection_create_encoder (cherokee_connection_t *conn,
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_accept_encoding, &ptr, &ptr_len);
 	if (ret == ret_ok) {
-		ret = get_encoding (conn, ptr, encoders, encoders_accepted);
+		ret = get_encoding (conn, ptr, encoders_accepted);
 		if (ret < ret_ok) {
 			return ret;
 		}

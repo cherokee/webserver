@@ -1019,7 +1019,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Instance an encoder if needed
 			*/
-			ret = cherokee_connection_create_encoder (conn, &srv->encoders, entry.encoders);
+			ret = cherokee_connection_create_encoder (conn, entry.encoders);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
 				conn->phase = phase_init;
