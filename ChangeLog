@@ -1,8 +1,8 @@
 2009-02-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee.conf.sample.pre, cherokee/handler_dirlist.c: Fixes an
-	internal path issue. Antonio and Stefan!
-	http://code.google.com/p/cherokee/issues/detail?id=342 Thanks
+	internal path issue. Thanks Antonio and Stefan!
+	http://code.google.com/p/cherokee/issues/detail?id=342 
 
 	* cherokee/thread.c, cherokee/connection.h,
 	cherokee/connection.c (cherokee_connection_create_encoder): Fixes
