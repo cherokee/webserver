@@ -1,5 +1,9 @@
 2009-02-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/cache.c (cherokee_cache_mrproper): Frees the cached
+	pages on exit. Patch by Stefan de Konink <stefan@konink.de>:
+	http://code.google.com/p/cherokee/issues/detail?id=354
+
 	* doc/cookbook_django.txt: Fixes a couple of issues reported by
 	Stephane Raimbault <stephane.raimbault@gmail.com>.
 

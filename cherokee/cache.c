@@ -100,7 +100,7 @@ cherokee_cache_entry_init (cherokee_cache_entry_t *entry,
 	return ret_ok;
 }
 
-static ret_t
+static void
 entry_free (cherokee_cache_entry_t *entry)
 {
 	/* Call free virtual method
@@ -113,7 +113,6 @@ entry_free (cherokee_cache_entry_t *entry)
 	cherokee_buffer_mrproper (&entry->key);
 
 	free (entry);
-	return ret_ok;
 }
 
 static ret_t
@@ -321,7 +320,7 @@ cherokee_cache_mrproper (cherokee_cache_t *cache)
 		cache->priv = NULL;
 	}
 	
-	/* TODO */
+	cherokee_avl_mrproper (&cache->map, (cherokee_func_free_t)entry_free);
 	return ret_ok;
 }
 
