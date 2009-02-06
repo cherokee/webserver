@@ -149,16 +149,6 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 #endif
 
 
-static int
-openssl_verify_peer (int ok, X509_STORE_CTX *x509_store)
-{
-	UNUSED(ok);
-	UNUSED(x509_store);
-
-	return 1;
-}
-
-
 static ret_t
 _vserver_new (cherokee_cryptor_t          *cryp,
 	      cherokee_virtual_server_t   *vsrv,
