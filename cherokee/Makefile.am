@@ -575,6 +575,27 @@ endif
 
 
 #
+# Handler streaming
+#
+handler_streaming = \
+handler_streaming.c \
+handler_streaming.h
+
+libplugin_streaming_la_LDFLAGS = $(module_ldflags)  
+libplugin_streaming_la_SOURCES = $(handler_streaming)
+libplugin_streaming_la_LIBADD  = $(FFMPEG_LIBS)
+libplugin_streaming_la_CFLAGS  = $(FFMPEG_CFLAGS)
+
+if STATIC_HANDLER_STREAMING
+static_handler_streaming_src   = $(handler_streaming)
+static_handler_streaming_lib   = $(FFMPEG_LIBS)
+static_handler_streaming_flags = $(FFMPEG_CFLAGS)
+else
+dynamic_handler_streaming_lib = libplugin_streaming.la
+endif
+
+
+#
 # Handler DB Slayer
 #
 handler_dbslayer = \
@@ -959,18 +980,20 @@ libcherokee_server_la_CFLAGS = \
 $(static_validator_htpasswd_flags) \
 $(static_validator_mysql_flags) \
 $(static_cryptor_libssl_flags) \
-$(static_handler_dbslayer_flags)
+$(static_handler_dbslayer_flags) \
+$(static_handler_streaming_flags)
 
 libcherokee_server_la_LIBADD = \
 $(PTHREAD_LIBS) \
 $(PTHREAD_CFLAGS) \
 $(static_validator_pam_lib) \
-$(static_validator_ldap_lib)  \
-$(static_rule_geoip_lib)  \
+$(static_validator_ldap_lib) \
+$(static_rule_geoip_lib) \
 $(static_validator_htpasswd_lib) \
 $(static_validator_mysql_lib) \
 $(static_handler_proxy_lib) \
 $(static_handler_dbslayer_lib) \
+$(static_handler_streaming_lib) \
 $(static_cryptor_libssl_lib) \
 libcherokee-base.la
 
@@ -1176,6 +1199,7 @@ $(static_handler_common_src) \
 $(static_handler_proxy_src) \
 $(static_handler_mirror_src) \
 $(static_handler_ssi_src) \
+$(static_handler_streaming_src) \
 $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
 $(static_handler_dbslayer_src) \
@@ -1342,6 +1366,7 @@ $(dynamic_handler_redir_lib) \
 $(dynamic_handler_proxy_lib) \
 $(dynamic_handler_mirror_lib) \
 $(dynamic_handler_ssi_lib) \
+$(dynamic_handler_streaming_lib) \
 $(dynamic_handler_custom_error_lib) \
 $(dynamic_handler_error_redir_lib) \
 $(dynamic_handler_error_nn_lib) \
@@ -1376,8 +1401,7 @@ endif
 cherokee_worker_SOURCES = main_worker.c
 cherokee_worker_LDFLAGS = -export-dynamic
 cherokee_worker_LDADD   = \
-$(PTHREAD_LIBS) \
-$(PTHREAD_CFLAGS) \
+$(libcherokee_server_la_LIBADD) \
 libcherokee-base.la \
 libcherokee-server.la
 
@@ -1401,8 +1425,7 @@ bin_PROGRAMS = cherokee-tweak
 
 cherokee_tweak_SOURCES = main_tweak.c
 cherokee_tweak_LDADD = \
-$(PTHREAD_LIBS) \
-$(PTHREAD_CFLAGS) \
+$(libcherokee_server_la_LIBADD) \
 libcherokee-base.la \
 libcherokee-client.la \
 libcherokee-server.la \

@@ -1,3 +1,11 @@
+2009-02-07  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/Makefile.am, cherokee/handler_streaming.c,
+	cherokee/handler_streaming.h, cherokee/connection.c,
+	cherokee.conf.sample.pre, configure.in, admin/ModuleStreaming.py,
+	admin/consts.py, admin/Makefile.am: Adds a new Audio/Video
+	streaming handler. It is working, but not finished yet.
+
 2009-02-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/cryptor_libssl.c (openssl_verify_peer): Removing

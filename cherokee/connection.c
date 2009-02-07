@@ -2096,12 +2096,14 @@ cherokee_connection_parse_args (cherokee_connection_t *conn)
 	/* Build a new table 
 	 */
 	ret = cherokee_avl_new (&conn->arguments);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	/* Parse the header
 	 */
 	ret = cherokee_parse_query_string (&conn->query_string, conn->arguments);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok))
+		return ret;
 
 	return ret_ok;
 }

@@ -66,6 +66,7 @@ ModuleSsi.py \
 ModuleProxy.py \
 ModuleMirror.py \
 ModuleDbslayer.py \
+ModuleStreaming.py \
 ModuleErrorNn.py \
 ModuleErrorRedir.py \
 ModuleAuth.py \
