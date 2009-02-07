@@ -3,7 +3,7 @@ from Table import *
 from ModuleHandler import *
 
 NOTE_RATE        = 'Figure the bit rate of the media file, and limit the bandwidth to it.'
-NOTE_RATE_FACTOR = 'Factor to increases the bandwidth limit. Default: 0.01.'
+NOTE_RATE_FACTOR = 'Factor to increases the bandwidth limit. Default: 0.1'
 NOTE_RATE_BOOST  = 'Number of seconds to stream before setting the bandwidth limit. Default: 5.'
 
 HELPS = [

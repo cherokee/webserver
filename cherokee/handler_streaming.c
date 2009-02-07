@@ -71,7 +71,7 @@ cherokee_handler_streaming_configure (cherokee_config_node_t   *conf,
 
 		n->props_file       = NULL;
 		n->auto_rate        = true;
-		n->auto_rate_factor = 0.01;
+		n->auto_rate_factor = 0.1;
 		n->auto_rate_boost  = 5;
 		
 		*_props = MODULE_PROPS(n);
@@ -85,13 +85,13 @@ cherokee_handler_streaming_configure (cherokee_config_node_t   *conf,
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 		
 		if (equal_buf_str (&subconf->key, "rate")) {
-			props->auto_rate = !! atoi(subconf->key.buf);
+			props->auto_rate = !! atoi(subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "rate_factor")) {
-			props->auto_rate_factor = strtof (subconf->key.buf, NULL);
+			props->auto_rate_factor = strtof (subconf->val.buf, NULL);
 
 		} else if (equal_buf_str (&subconf->key, "rate_boost")) {
-			props->auto_rate_boost = atoi (subconf->key.buf);
+			props->auto_rate_boost = atoi (subconf->val.buf);
 		}
 	}
 
@@ -144,6 +144,7 @@ cherokee_handler_streaming_new (cherokee_handler_t      **hdl,
 	/* Init props
 	 */
 	n->start         = -1;
+	n->start_flv     = false;
 	n->auto_rate_bps = -1;
 
 	/* Return the object
@@ -157,22 +158,27 @@ static ret_t
 parse_start (cherokee_handler_streaming_t *hdl,
 	     const char                   *value)
 {
-	char *end = NULL;
+	char                  *end  = NULL;
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
 	hdl->start = strtol (value, &end, 10);
 	if (*end != '\0') {
-		return ret_error;
+		goto error;
 	}
 
 	if (hdl->start < 0) {
-		return ret_error;
+		goto error;
 	}
 
 	if (hdl->start > hdl->handler_file->info->st_size) {
-		return ret_error;
+		goto error;
 	}
 
 	return ret_ok;
+
+error:
+	conn->error_code = http_range_not_satisfiable;
+	return ret_error;
 }
 
 
@@ -225,6 +231,7 @@ set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 	/* bits/s to bytes/s
 	 */
 	rate = ic_ptr->bit_rate / 8;
+
 	if (rate > 0) {
 		hdl->auto_rate_bps = rate + (rate * props->auto_rate_factor);
 
@@ -292,6 +299,8 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 			ret = parse_start (hdl, (const char *)value);
 			if (ret != ret_ok)
 				return ret_error;
+
+			conn->range_start = hdl->start;
 		}
 	}
 
@@ -308,9 +317,10 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 	}
 	
 	if (mime != NULL) {
-		if (cherokee_buffer_cmp_str (mime, "video/x-flv")) {
-			/* TODO
-			 */
+		if ((hdl->start != -1) &&
+		    (cherokee_buffer_cmp_str (mime, "video/x-flv") == 0))
+		{
+			hdl->start_flv = true;
 		}
 	}
 
@@ -341,6 +351,14 @@ cherokee_handler_streaming_step (cherokee_handler_streaming_t *hdl,
 {
 	cherokee_connection_t              *conn  = HANDLER_CONN(hdl);
 	cherokee_handler_streaming_props_t *props = HDL_STREAMING_PROP(hdl);
+
+	/* FLV's "start" parameter
+	 */
+	if (hdl->start_flv) {
+		cherokee_buffer_add_str (buffer, "FLV\x1\x1\0\0\0\x9\0\0\0\x9");
+		hdl->start_flv = false;
+		return ret_ok;
+	}
 
 	/* Check the initial boost
 	 */
