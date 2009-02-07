@@ -185,6 +185,28 @@ error:
 #ifdef USE_FFMPEG
 
 static ret_t
+set_rate (cherokee_handler_streaming_t *hdl,
+	  cherokee_connection_t        *conn,
+	  long                          rate)
+{
+	cherokee_handler_streaming_props_t *props = HDL_STREAMING_PROP(hdl);
+
+	if (rate <= 0) 
+		return ret_ok;
+
+	/* This will be the real limit
+	 */
+	hdl->auto_rate_bps = rate + (rate * props->auto_rate_factor);
+
+	/* Special 'initial boosting' limit
+	 */
+	conn->limit_bps = props->auto_rate_boost * hdl->auto_rate_bps;
+	conn->limit_rate = true;
+
+	return ret_ok;
+}
+
+static ret_t
 set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 		    cherokee_buffer_t            *local_file)
 {
@@ -204,12 +226,7 @@ set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 			return ret_ok;
 
 		rate = POINTER_TO_INT(tmp);
-		hdl->auto_rate_bps = rate + (rate * props->auto_rate_factor);
-
-		conn->limit_bps = props->auto_rate_boost * hdl->auto_rate_bps;
-		conn->limit_rate = true;
-
-		return ret_ok;
+		return set_rate (hdl, conn, rate);
 	}
 
 	/* Open the media stream
@@ -231,19 +248,11 @@ set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 	/* bits/s to bytes/s
 	 */
 	rate = ic_ptr->bit_rate / 8;
-
-	if (rate > 0) {
-		hdl->auto_rate_bps = rate + (rate * props->auto_rate_factor);
-
-		conn->limit_bps = props->auto_rate_boost * hdl->auto_rate_bps;
-		conn->limit_rate = true;
-	}
+	ret = set_rate (hdl, conn, rate);
 
 	cherokee_avl_add (&_streaming_cache,
 			  local_file,
 			  INT_TO_POINTER(rate));
-
-	ret = ret_ok;
 
 out:
 	/* Clean up
