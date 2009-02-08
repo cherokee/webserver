@@ -1,3 +1,7 @@
+2009-02-08  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_streaming.c: Fixes ?start support.
+
 2009-02-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/Makefile.am, cherokee/handler_streaming.c,

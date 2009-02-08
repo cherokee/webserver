@@ -34,6 +34,10 @@
 # include <libavformat/avformat.h>
 #endif
 
+#define ENTRIES    "streaming"
+#define FLV_HEADER "FLV\x1\x1\0\0\0\x9\0\0\0\x9"
+
+
 /* Global 'stream rate' cache
  */
 static cherokee_avl_t _streaming_cache;
@@ -158,22 +162,25 @@ static ret_t
 parse_start (cherokee_handler_streaming_t *hdl,
 	     const char                   *value)
 {
-	char                  *end  = NULL;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	long                   start;
+	char                  *end    = NULL;
+	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
 
-	hdl->start = strtol (value, &end, 10);
+	start = strtol (value, &end, 10);
 	if (*end != '\0') {
 		goto error;
 	}
 
-	if (hdl->start < 0) {
+	if (start < 0) {
 		goto error;
 	}
 
-	if (hdl->start > hdl->handler_file->info->st_size) {
+	if (start > hdl->handler_file->info->st_size) {
 		goto error;
 	}
 
+	TRACE(ENTRIES, "Starting point: %d\n", start);
+	hdl->start = start;
 	return ret_ok;
 
 error:
@@ -210,13 +217,12 @@ static ret_t
 set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 		    cherokee_buffer_t            *local_file)
 {
-	int                                 re;
-	ret_t                               ret;
-	long                                rate;
-	void                               *tmp    = NULL;
-	AVFormatContext                    *ic_ptr = NULL;
-	cherokee_connection_t              *conn   = HANDLER_CONN(hdl);
-	cherokee_handler_streaming_props_t *props  = HDL_STREAMING_PROP(hdl);
+	int                    re;
+	ret_t                  ret;
+	long                   rate;
+	void                  *tmp    = NULL;
+	AVFormatContext       *ic_ptr = NULL;
+	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
 
 	/* Check the cache
 	 */
@@ -248,6 +254,8 @@ set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 	/* bits/s to bytes/s
 	 */
 	rate = ic_ptr->bit_rate / 8;
+	TRACE(ENTRIES, "Rate: %d bps (%d bytes/s)\n", ic_ptr->bit_rate, rate);
+
 	ret = set_rate (hdl, conn, rate);
 
 	cherokee_avl_add (&_streaming_cache,
@@ -269,10 +277,10 @@ out:
 static ret_t
 set_auto_rate (cherokee_handler_streaming_t *hdl)
 {
+#ifdef USE_FFMPEG
 	ret_t                  ret;
 	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
-#ifdef USE_FFMPEG
 	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
 	ret = set_auto_rate_guts (hdl, &conn->local_directory);
 	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
@@ -305,11 +313,15 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 	if (ret == ret_ok) {
 		ret = cherokee_avl_get_ptr (conn->arguments, "start", &value);
 		if (ret == ret_ok) {
+			/* Set the starting point
+			 */
 			ret = parse_start (hdl, (const char *)value);
 			if (ret != ret_ok)
 				return ret_error;
 
-			conn->range_start = hdl->start;
+			ret = cherokee_handler_file_seek (hdl->handler_file, hdl->start);
+			if (unlikely (ret != ret_ok))
+				return ret_error;
 		}
 	}
 
@@ -326,7 +338,7 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 	}
 	
 	if (mime != NULL) {
-		if ((hdl->start != -1) &&
+		if ((hdl->start > 0) &&
 		    (cherokee_buffer_cmp_str (mime, "video/x-flv") == 0))
 		{
 			hdl->start_flv = true;
@@ -364,7 +376,7 @@ cherokee_handler_streaming_step (cherokee_handler_streaming_t *hdl,
 	/* FLV's "start" parameter
 	 */
 	if (hdl->start_flv) {
-		cherokee_buffer_add_str (buffer, "FLV\x1\x1\0\0\0\x9\0\0\0\x9");
+		cherokee_buffer_add_str (buffer, FLV_HEADER);
 		hdl->start_flv = false;
 		return ret_ok;
 	}
