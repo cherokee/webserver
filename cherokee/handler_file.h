@@ -84,5 +84,6 @@ ret_t cherokee_handler_file_add_headers (cherokee_handler_file_t *hdl, cherokee_
 /* Extre methods
  */
 ret_t cherokee_handler_file_custom_init (cherokee_handler_file_t *hdl, cherokee_buffer_t *local_file);
+ret_t cherokee_handler_file_seek        (cherokee_handler_file_t *hdl, off_t start);
 					
 #endif /* CHEROKEE_HANDLER_FILE_H */

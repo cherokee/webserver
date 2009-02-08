@@ -797,3 +797,14 @@ exit_sendfile:
 	return ret_ok;
 }
 
+ret_t
+cherokee_handler_file_seek (cherokee_handler_file_t *hdl, 
+			    off_t                    start)
+{
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+	
+	conn->range_start = start;
+	hdl->offset       = start;
+
+	return ret_ok;
+}
