@@ -46,8 +46,9 @@ typedef struct {
 	cherokee_handler_t             handler;
 	cherokee_handler_file_t       *handler_file;
 	cint_t                         auto_rate_bps;
-	long                           start;
+	off_t                          start;
 	cherokee_boolean_t             start_flv;
+	off_t                          boost_until;
 } cherokee_handler_streaming_t;
 
 

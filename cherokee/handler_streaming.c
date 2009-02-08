@@ -46,7 +46,6 @@ static cherokee_avl_t _streaming_cache;
 PLUGIN_INFO_HANDLER_EASY_INIT (streaming, http_all_methods);
 
 
-
 ret_t
 cherokee_handler_streaming_props_free (cherokee_handler_streaming_props_t *props)
 {
@@ -150,6 +149,7 @@ cherokee_handler_streaming_new (cherokee_handler_t      **hdl,
 	n->start         = -1;
 	n->start_flv     = false;
 	n->auto_rate_bps = -1;
+	n->boost_until   = 0;
 
 	/* Return the object
 	 */
@@ -210,6 +210,16 @@ set_rate (cherokee_handler_streaming_t *hdl,
 	conn->limit_bps = props->auto_rate_boost * hdl->auto_rate_bps;
 	conn->limit_rate = true;
 
+	/* How long the initial boost last..
+	 */
+	if (hdl->start > 0) {
+		hdl->boost_until = hdl->start + conn->limit_bps;
+	} else {
+		hdl->boost_until = conn->limit_bps;
+	}
+
+	TRACE(ENTRIES, "Limiting rate (initial boost): %d bytes, until=%d\n", 
+	      conn->limit_bps, hdl->boost_until);
 	return ret_ok;
 }
 
@@ -220,6 +230,7 @@ set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 	int                    re;
 	ret_t                  ret;
 	long                   rate;
+	long                   secs;
 	void                  *tmp    = NULL;
 	AVFormatContext       *ic_ptr = NULL;
 	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
@@ -228,10 +239,11 @@ set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 	 */
 	ret = cherokee_avl_get (&_streaming_cache, local_file, &tmp);
 	if (ret == ret_ok) {
+		rate = POINTER_TO_INT(tmp);
+
 		if (rate <= 0)
 			return ret_ok;
 
-		rate = POINTER_TO_INT(tmp);
 		return set_rate (hdl, conn, rate);
 	}
 
@@ -253,8 +265,21 @@ set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 
 	/* bits/s to bytes/s
 	 */
-	rate = ic_ptr->bit_rate / 8;
+	rate = (ic_ptr->bit_rate / 8);
+	secs = (ic_ptr->duration / AV_TIME_BASE);
+
+	TRACE(ENTRIES, "Duration: %d seconds\n", ic_ptr->duration / AV_TIME_BASE);
 	TRACE(ENTRIES, "Rate: %d bps (%d bytes/s)\n", ic_ptr->bit_rate, rate);
+
+	if (likely (secs > 0)) {
+		long tmp;
+
+		tmp = (ic_ptr->file_size / secs);
+		if (tmp > rate) {
+			rate = tmp;
+			TRACE(ENTRIES, "New rate: %d bytes/s\n", rate);
+		}
+	}
 
 	ret = set_rate (hdl, conn, rate);
 
@@ -370,8 +395,7 @@ ret_t
 cherokee_handler_streaming_step (cherokee_handler_streaming_t *hdl,
 				 cherokee_buffer_t            *buffer)
 {
-	cherokee_connection_t              *conn  = HANDLER_CONN(hdl);
-	cherokee_handler_streaming_props_t *props = HDL_STREAMING_PROP(hdl);
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
 	/* FLV's "start" parameter
 	 */
@@ -383,13 +407,13 @@ cherokee_handler_streaming_step (cherokee_handler_streaming_t *hdl,
 
 	/* Check the initial boost
 	 */
-	if (conn->limit_bps > hdl->auto_rate_bps) {
-		if ((hdl->handler_file->offset - conn->range_start) > 
-		    (props->auto_rate_boost * hdl->auto_rate_bps))
-		{
-			conn->limit_bps  = hdl->auto_rate_bps;
-			conn->limit_rate = true;
-		}
+	if ((conn->limit_bps > hdl->auto_rate_bps) &&
+	    (hdl->handler_file->offset > hdl->boost_until))
+	{
+		conn->limit_bps  = hdl->auto_rate_bps;
+		conn->limit_rate = true;
+		
+		TRACE(ENTRIES, "Limiting rate: %d bytes/s\n", conn->limit_bps);
 	}
 
 	/* Call the real step
