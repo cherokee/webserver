@@ -1,5 +1,11 @@
 2009-02-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/connection.c
+	(cherokee_connection_set_chunked_encoding): Fixes a encoding bug.
+	Chunked-Encoding was something being missused. This issue caused
+	QuickTime/7.6 to drop the connection while reading a data stream
+	from the server.
+
 	* www/favicon.ico, www/Makefile.am (cherokeewwwimages_DATA): Adds
 	a favicon.ico file to the default www directory.
 

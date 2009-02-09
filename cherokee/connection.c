@@ -2018,7 +2018,13 @@ cherokee_connection_set_rate (cherokee_connection_t   *conn,
 void
 cherokee_connection_set_chunked_encoding (cherokee_connection_t *conn)
 {
+	/* Conditions to activate Chunked-Encodiog:
+	 *  - The server configuration allows to use it
+	 *  - It's a keep-alive connection
+	 *  - It's a HTTP/1.1 connection
+	 */
 	conn->chunked_encoding = ((CONN_SRV(conn)->chunked_encoding) &&
+				  (conn->keepalive > 0) &&
 				  (conn->header.version == http_version_11));
 }
 
