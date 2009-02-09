@@ -657,7 +657,8 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	 * has to be turned off.
 	 */
 	if (conn->keepalive != 0) {
-		if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
+		if ((! http_type_300 (conn->error_code)) &&
+		    (! HANDLER_SUPPORTS (conn->handler, hsupport_length))) {
 			if (! conn->chunked_encoding) {
 				conn->keepalive = 0;
 			}

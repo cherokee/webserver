@@ -1,5 +1,8 @@
 2009-02-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/connection.c (cherokee_connection_build_header): Fixes
+	keep-alive so 3xx replies can let the connection open.
+
 	* cherokee/connection.c
 	(cherokee_connection_set_chunked_encoding): Fixes a encoding bug.
 	Chunked-Encoding was something being missused. This issue caused
