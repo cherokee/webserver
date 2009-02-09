@@ -10,9 +10,9 @@ from CherokeeManagement import *
 
 DATA_VALIDATION = [
     ("vserver!.*?!document_root",             (validations.is_dev_null_or_local_dir_exists, 'cfg')),
-    ("vserver!.*?!ssl_certificate_file",      (validations.is_local_file_exists, 'cfg')),
-    ("vserver!.*?!ssl_certificate_key_file",  (validations.is_local_file_exists, 'cfg')),
-    ("vserver!.*?!ssl_ca_list_file",          (validations.is_local_file_exists, 'cfg')),
+    ("vserver!.*?!ssl_certificate_file",      (validations.is_local_file_exists, 'cfg', 'nochroot')),
+    ("vserver!.*?!ssl_certificate_key_file",  (validations.is_local_file_exists, 'cfg', 'nochroot')),
+    ("vserver!.*?!ssl_ca_list_file",          (validations.is_local_file_exists, 'cfg', 'nochroot')),
     ("vserver!.*?!ssl_verify_depth",          (validations.is_positive_int)),
     ("vserver!.*?!logger!.*?!filename",       (validations.parent_is_dir, 'cfg', 'nochroot')),
     ("vserver!.*?!logger!.*?!command",        (validations.is_local_file_exists, 'cfg')),
@@ -23,9 +23,9 @@ RULE_LIST_NOTE = """
 """
 
 NOTE_NICKNAME        = 'Nickname for the virtual server.'
-NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server.'
-NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server.'
-NOTE_CA_LIST         = 'Optional: File containing the trusted CA certificates, utilized for checking the client certificates.'
+NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server (Full path to the file)'
+NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server (Full path to the file)'
+NOTE_CA_LIST         = 'Optional: File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)'
 NOTE_CLIENT_CERTS    = 'Optional: Skip, Accept or Require client certificates.'
 NOTE_VERIFY_DEPTH    = 'Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)'
 NOTE_ERROR_HANDLER   = 'Allows the selection of how to generate the error responses.'

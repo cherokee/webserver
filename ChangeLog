@@ -1,3 +1,8 @@
+2009-02-09  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/PageVServer.py: Paths to certificate files are full paths
+	now.
+
 2009-02-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/connection.c (cherokee_connection_build_header): Fixes
