@@ -1,5 +1,8 @@
 2009-02-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* www/favicon.ico, www/Makefile.am (cherokeewwwimages_DATA): Adds
+	a favicon.ico file to the default www directory.
+
 	* cherokee/streaming.deps, cherokee/Makefile.am:  Adds the
 	streaming plug-in inter-handler dependencies file.
 

@@ -4,6 +4,7 @@ cherokeewwwdir = "@WWW_ROOT@"
 
 cherokeewwwimagesdir = "@WWW_ROOT@/images"
 cherokeewwwimages_DATA = \
+favicon.ico \
 default-bg.png \
 cherokee-logo.png \
 powered_by_cherokee.png
