@@ -1,3 +1,8 @@
+2009-02-09  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/streaming.deps, cherokee/Makefile.am:  Adds the
+	streaming plug-in inter-handler dependencies file.
+
 2009-02-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_streaming.c: Fixes ?start support.

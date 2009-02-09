@@ -21,7 +21,8 @@ phpcgi.deps \
 scgi.deps \
 fcgi.deps \
 fastcgi.deps \
-cgi.deps
+cgi.deps \
+streaming.deps
 
 #
 # External sources
@@ -581,7 +582,7 @@ handler_streaming = \
 handler_streaming.c \
 handler_streaming.h
 
-libplugin_streaming_la_LDFLAGS = $(module_ldflags)  
+libplugin_streaming_la_LDFLAGS = $(module_ldflags)
 libplugin_streaming_la_SOURCES = $(handler_streaming)
 libplugin_streaming_la_LIBADD  = $(FFMPEG_LIBS)
 libplugin_streaming_la_CFLAGS  = $(FFMPEG_CFLAGS)
