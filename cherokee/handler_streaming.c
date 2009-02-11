@@ -30,10 +30,6 @@
 #include "avl.h"
 #include "util.h"
 
-#ifdef USE_FFMPEG
-# include <libavformat/avformat.h>
-#endif
-
 #define ENTRIES    "streaming"
 #define FLV_HEADER "FLV\x1\x1\0\0\0\x9\0\0\0\x9"
 
@@ -111,6 +107,12 @@ cherokee_handler_streaming_free (cherokee_handler_streaming_t *hdl)
 		cherokee_handler_file_free (hdl->handler_file);
 	}
 
+	if (hdl->avformat != NULL) {
+		av_close_input_file (hdl->avformat);
+	}
+
+	cherokee_buffer_mrproper (&hdl->local_file);
+
 	return ret_ok;
 }
 
@@ -146,8 +148,12 @@ cherokee_handler_streaming_new (cherokee_handler_t      **hdl,
 
 	/* Init props
 	 */
+	cherokee_buffer_init (&n->local_file);
+
+	n->avformat      = NULL;
 	n->start         = -1;
 	n->start_flv     = false;
+	n->start_time    = -1;
 	n->auto_rate_bps = -1;
 	n->boost_until   = 0;
 
@@ -159,8 +165,82 @@ cherokee_handler_streaming_new (cherokee_handler_t      **hdl,
 
 
 static ret_t
-parse_start (cherokee_handler_streaming_t *hdl,
-	     const char                   *value)
+seek_mp4 (cherokee_handler_streaming_t *hdl)
+{
+	int      re;
+	ret_t    ret;
+	long     timestamp; 
+	AVPacket pkt;
+
+	/* Calculate timestamp
+	 */
+	timestamp = hdl->start_time * AV_TIME_BASE;
+
+	if (hdl->avformat->start_time != AV_NOPTS_VALUE) {
+		timestamp += hdl->avformat->start_time;
+	}
+
+	/* Seek
+	 */
+	re = av_seek_frame (hdl->avformat,         /* AVFormatContext  */
+			    -1,                    /* Stream index     */
+			    timestamp,             /* target timestamp */
+			    AVSEEK_FLAG_BACKWARD); /* flags            */
+	if (re < 0) {
+		PRINT_MSG ("WARNING: Couldn't seek: %d\n", re);
+		return ret_error;
+	}
+
+	/* Read Frame
+	 */
+	av_init_packet (&pkt);
+	av_read_frame (hdl->avformat, &pkt);
+	hdl->start = pkt.pos;
+	av_free_packet (&pkt);
+
+	/* Seek at the beginning of the frame
+	 */
+	TRACE(ENTRIES, "Seeking: %d\n", hdl->start);
+
+	ret = cherokee_handler_file_seek (hdl->handler_file, hdl->start);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t
+parse_time_start (cherokee_handler_streaming_t *hdl,
+		  const char                   *value)
+{
+	float                  start;
+	char                  *end    = NULL;
+	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
+
+	start = strtof (value, &end);
+	if (*end != '\0') {
+		goto error;
+	}
+
+	if (start < 0) {
+		goto error;
+	}
+
+	TRACE(ENTRIES, "Starting time: %f\n", start);
+	hdl->start_time = start;
+	return ret_ok;
+
+error:
+	conn->error_code = http_range_not_satisfiable;
+	return ret_error;
+}
+
+
+static ret_t
+parse_offset_start (cherokee_handler_streaming_t *hdl,
+		    const char                   *value)
 {
 	long                   start;
 	char                  *end    = NULL;
@@ -223,21 +303,51 @@ set_rate (cherokee_handler_streaming_t *hdl,
 	return ret_ok;
 }
 
+
 static ret_t
-set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
-		    cherokee_buffer_t            *local_file)
+open_media_file (cherokee_handler_streaming_t *hdl)
 {
-	int                    re;
+	int re;
+
+	if (hdl->avformat != NULL)
+		return ret_ok;
+
+	/* Open the media stream
+	 */
+	re = av_open_input_file (&hdl->avformat, hdl->local_file.buf, NULL, 0, NULL);
+	if (re != 0) {
+		goto error;
+	}
+
+	/* Read the info
+	 */
+	re = av_find_stream_info (hdl->avformat);
+	if (re < 0) {
+		goto error;
+	}
+
+	return ret_ok;
+error:
+	if (hdl->avformat != NULL) {
+		av_close_input_file (hdl->avformat);
+	}
+
+	return ret_error;
+}
+
+
+static ret_t
+set_auto_rate (cherokee_handler_streaming_t *hdl)
+{
 	ret_t                  ret;
 	long                   rate;
 	long                   secs;
 	void                  *tmp    = NULL;
-	AVFormatContext       *ic_ptr = NULL;
 	cherokee_connection_t *conn   = HANDLER_CONN(hdl);
 
 	/* Check the cache
 	 */
-	ret = cherokee_avl_get (&_streaming_cache, local_file, &tmp);
+	ret = cherokee_avl_get (&_streaming_cache, &hdl->local_file, &tmp);
 	if (ret == ret_ok) {
 		rate = POINTER_TO_INT(tmp);
 
@@ -249,32 +359,23 @@ set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 
 	/* Open the media stream
 	 */
-	re = av_open_input_file (&ic_ptr, local_file->buf, NULL, 0, NULL);
-	if (re != 0) {
-		ret = ret_error;
-		goto out;
-	}
-
-	/* Read the info
-	 */
-	re = av_find_stream_info (ic_ptr);
-	if (re < 0) {
-		ret = ret_error;
-		goto out;
+	ret = open_media_file (hdl);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
 	}
 
 	/* bits/s to bytes/s
 	 */
-	rate = (ic_ptr->bit_rate / 8);
-	secs = (ic_ptr->duration / AV_TIME_BASE);
+	rate = (hdl->avformat->bit_rate / 8);
+	secs = (hdl->avformat->duration / AV_TIME_BASE);
 
-	TRACE(ENTRIES, "Duration: %d seconds\n", ic_ptr->duration / AV_TIME_BASE);
-	TRACE(ENTRIES, "Rate: %d bps (%d bytes/s)\n", ic_ptr->bit_rate, rate);
+	TRACE(ENTRIES, "Duration: %d seconds\n", hdl->avformat->duration / AV_TIME_BASE);
+	TRACE(ENTRIES, "Rate: %d bps (%d bytes/s)\n", hdl->avformat->bit_rate, rate);
 
 	if (likely (secs > 0)) {
 		long tmp;
 
-		tmp = (ic_ptr->file_size / secs);
+		tmp = (hdl->avformat->file_size / secs);
 		if (tmp > rate) {
 			rate = tmp;
 			TRACE(ENTRIES, "New rate: %d bytes/s\n", rate);
@@ -284,37 +385,12 @@ set_auto_rate_guts (cherokee_handler_streaming_t *hdl,
 	ret = set_rate (hdl, conn, rate);
 
 	cherokee_avl_add (&_streaming_cache,
-			  local_file,
+			  &hdl->local_file,
 			  INT_TO_POINTER(rate));
 
-out:
-	/* Clean up
-	 */
-	if (ic_ptr) {
-		av_close_input_file (ic_ptr);
-	}
-
 	return ret;
 }
 #endif
-
-
-static ret_t
-set_auto_rate (cherokee_handler_streaming_t *hdl)
-{
-#ifdef USE_FFMPEG
-	ret_t                  ret;
-	cherokee_connection_t *conn = HANDLER_CONN(hdl);
-
-	cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);
-	ret = set_auto_rate_guts (hdl, &conn->local_directory);
-	cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len);
-
-	return ret;
-#else
-	return ret_ok;
-#endif
-}
 
 
 ret_t
@@ -322,15 +398,36 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 {
 	ret_t                               ret;
 	void                               *value;
-	cherokee_buffer_t                  *mime  = NULL;
-	cherokee_connection_t              *conn  = HANDLER_CONN(hdl);
-	cherokee_handler_streaming_props_t *props = HDL_STREAMING_PROP(hdl);
+	cherokee_boolean_t                  is_flv = false;
+	cherokee_boolean_t                  is_mp4 = false;
+	cherokee_buffer_t                  *mime   = NULL;
+	cherokee_connection_t              *conn   = HANDLER_CONN(hdl);
+	cherokee_handler_streaming_props_t *props  = HDL_STREAMING_PROP(hdl);
+
+	/* Local File
+	 */
+	cherokee_buffer_add_buffer (&hdl->local_file, &conn->local_directory);
+	cherokee_buffer_add_buffer (&hdl->local_file, &conn->request);
 
 	/* Init sub-handler
 	 */
 	ret = cherokee_handler_file_init (hdl->handler_file);
 	if (unlikely (ret != ret_ok))
 		return ret;
+
+	/* Media type detection
+	 */
+	if (hdl->handler_file->mime) {
+		cherokee_mime_entry_get_type (hdl->handler_file->mime, &mime);
+	}
+	
+	if (mime != NULL) {
+		if (cherokee_buffer_cmp_str (mime, "video/x-flv") == 0) {
+			is_flv = true;
+		} else if (cherokee_buffer_cmp_str (mime, "video/mp4") == 0) {
+			is_mp4 = true;
+		}
+	}
 
 	/* Parse arguments
 	 */
@@ -340,34 +437,44 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 		if (ret == ret_ok) {
 			/* Set the starting point
 			 */
-			ret = parse_start (hdl, (const char *)value);
-			if (ret != ret_ok)
-				return ret_error;
+			if (is_flv) {
+				ret = parse_offset_start (hdl, (const char *)value);
+				if (ret != ret_ok)
+					return ret_error;
 
-			ret = cherokee_handler_file_seek (hdl->handler_file, hdl->start);
-			if (unlikely (ret != ret_ok))
-				return ret_error;
+			} else if (is_mp4) {
+				ret = parse_time_start (hdl, (const char *)value);
+				if (ret != ret_ok)
+					return ret_error;
+			}
+		}
+	}	
+	
+	/* Seeking
+	 */
+	if ((is_flv) && (hdl->start > 0)) {
+		ret = cherokee_handler_file_seek (hdl->handler_file, hdl->start);
+		if (unlikely (ret != ret_ok)) {
+			return ret_error;
+		}
+		hdl->start_flv = true;
+
+	} else if ((is_mp4) && (hdl->start_time > 0)) {
+		ret = open_media_file (hdl);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
+
+		ret = seek_mp4 (hdl);
+		if (unlikely (ret != ret_ok)) {
+			return ret_error;
 		}
 	}
 
-	/* Set the Rate
+	/* Set the Bitrate limit
 	 */
 	if (props->auto_rate) {
 		set_auto_rate (hdl);
-	}
-
-	/* Check the media type
-	 */
-	if (hdl->handler_file->mime) {
-		cherokee_mime_entry_get_type (hdl->handler_file->mime, &mime);
-	}
-	
-	if (mime != NULL) {
-		if ((hdl->start > 0) &&
-		    (cherokee_buffer_cmp_str (mime, "video/x-flv") == 0))
-		{
-			hdl->start_flv = true;
-		}
 	}
 
 	return ret_ok;

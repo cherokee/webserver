@@ -1,3 +1,8 @@
+2009-02-11  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_streaming.h, cherokee/handler_streaming.c: Some
+	work towards implementing h264 seeking.
+
 2009-02-09  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageVServer.py: Paths to certificate files are full paths
