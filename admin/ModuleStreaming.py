@@ -1,6 +1,8 @@
 from Form import *
 from Table import *
+
 from ModuleHandler import *
+from ModuleFile import *
 
 NOTE_RATE        = 'Figure the bit rate of the media file, and limit the bandwidth to it.'
 NOTE_RATE_FACTOR = 'Factor to increases the bandwidth limit. Default: 0.1'
@@ -11,16 +13,19 @@ HELPS = [
 ]
 
 class ModuleStreaming (ModuleHandler):
-    PROPERTIES = [
+    PROPERTIES = ModuleFile.PROPERTIES + [
         'rate'
     ]
 
     def __init__ (self, cfg, prefix, submit_url):
         ModuleHandler.__init__ (self, 'streaming', cfg, prefix, submit_url)
 
+        self._file = ModuleFile (cfg, prefix, submit_url)
+
     def _op_render (self):
         txt = ''
 
+        # Streaming
         table = TableProps()
         self.AddPropCheck (table, "Auto Rate",      "%s!rate" % (self._prefix), True,  NOTE_RATE)
         if int(self._cfg.get_val ('%s!rate'%(self._prefix), "1")):
@@ -29,8 +34,23 @@ class ModuleStreaming (ModuleHandler):
 
         txt += '<h2>Audio/Video Streaming</h2>'
         txt += self.Indent(table)
+
+        # Copy errors to the modules, 
+        # they may need to print them
+        self._copy_errors (self, self._file)
+
+        txt += self._file._op_render()
         return txt
 
     def _op_apply_changes (self, uri, post):
         self.ApplyChangesPrefix (self._prefix, ['rate'], post)
 
+        # Copy errors from the child modules
+        self._copy_errors (self._file,    self)
+
+        # Apply the changes
+        self._file._op_apply_changes (uri, post)
+
+    def _copy_errors (self, _from, _to):
+        for e in _from.errors:
+            _to.errors[e] = _from.errors[e]

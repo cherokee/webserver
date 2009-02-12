@@ -1,3 +1,9 @@
+2009-02-12  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/ModuleStreaming.py (ModuleStreaming): Since the Streaming
+	module depends on the file handler, it has to show the "Static
+	Content" properties as well.
+
 2009-02-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_streaming.h, cherokee/handler_streaming.c: Some
