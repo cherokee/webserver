@@ -1,3 +1,9 @@
+2009-02-14  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/cryptor_libssl.c, cherokee/virtual_server.c,
+	cherokee/virtual_server.h, admin/PageVServer.py: Adds support for
+	chained SSL certificates.
+
 2009-02-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/ModuleStreaming.py (ModuleStreaming): Since the Streaming

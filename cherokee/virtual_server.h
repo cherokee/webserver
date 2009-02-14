@@ -69,6 +69,7 @@ typedef struct {
 
 	cuint_t                      verify_depth;
 	cherokee_buffer_t            server_cert;
+	cherokee_buffer_t            server_cert_chain;
 	cherokee_buffer_t            server_key;
 	cherokee_buffer_t            certs_ca;
 	cherokee_buffer_t            req_client_certs;

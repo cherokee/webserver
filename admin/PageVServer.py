@@ -11,6 +11,7 @@ from CherokeeManagement import *
 DATA_VALIDATION = [
     ("vserver!.*?!document_root",             (validations.is_dev_null_or_local_dir_exists, 'cfg')),
     ("vserver!.*?!ssl_certificate_file",      (validations.is_local_file_exists, 'cfg', 'nochroot')),
+    ("vserver!.*?!ssl_certificate_chain_file",(validations.is_local_file_exists, 'cfg', 'nochroot')),
     ("vserver!.*?!ssl_certificate_key_file",  (validations.is_local_file_exists, 'cfg', 'nochroot')),
     ("vserver!.*?!ssl_ca_list_file",          (validations.is_local_file_exists, 'cfg', 'nochroot')),
     ("vserver!.*?!ssl_verify_depth",          (validations.is_positive_int)),
@@ -24,6 +25,7 @@ RULE_LIST_NOTE = """
 
 NOTE_NICKNAME        = 'Nickname for the virtual server.'
 NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server (Full path to the file)'
+NOTE_CERT_CHAIN      = 'Optional: PEM-encoded Certificate Chain file for the server (Full path to the file)'
 NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server (Full path to the file)'
 NOTE_CA_LIST         = 'Optional: File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)'
 NOTE_CLIENT_CERTS    = 'Optional: Skip, Accept or Require client certificates.'
@@ -233,8 +235,9 @@ class PageVServer (PageMenu, FormHelper):
 
         txt = '<h2>Required SSL/TLS values</h2>'
         table = TableProps()
-        self.AddPropEntry (table, 'Certificate',     '%s!ssl_certificate_file' % (pre),     NOTE_CERT)
-        self.AddPropEntry (table, 'Certificate key', '%s!ssl_certificate_key_file' % (pre), NOTE_CERT_KEY)
+        self.AddPropEntry (table, 'Certificate',      '%s!ssl_certificate_file' % (pre),       NOTE_CERT)
+        self.AddPropEntry (table, 'Certificate Chain','%s!ssl_certificate_chain_file' % (pre), NOTE_CERT_CHAIN)
+        self.AddPropEntry (table, 'Certificate key',  '%s!ssl_certificate_key_file' % (pre),   NOTE_CERT_KEY)
         txt += self.Indent(table)
 
         txt += '<h2>Advanced options</h2>'
