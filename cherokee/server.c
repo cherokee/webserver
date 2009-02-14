@@ -1477,12 +1477,14 @@ configure_server (cherokee_server_t *srv)
 
 	cherokee_list_sort (&srv->vservers, vserver_cmp);
 
-	/* Sanity checks
+	/* Sanity check: virtual servers
 	 */
 	ret = vservers_check_sanity (srv);
 	if (ret != ret_ok)
 		return ret;
 
+	/* Sanity check: Port Binds
+	 */
 	if (cherokee_list_empty (&srv->listeners)) {
 		cherokee_bind_t *listener;
 

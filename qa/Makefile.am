@@ -202,7 +202,8 @@ run-tests.py \
 195-ServerAddr.py \
 196-Mime3.py \
 197-SOAPAction.py \
-198-HTTPresponse.py
+198-HTTPresponse.py \
+199-ErrorRedir.py
 
 test:
 	./run-tests.py

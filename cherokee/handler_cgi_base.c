@@ -435,7 +435,15 @@ cherokee_handler_cgi_base_build_basic_env (
 			 bind->server_address.buf,
 			 bind->server_address.len);
 	}
-	
+
+	/* Internal error redirection
+	 */
+	if (! cherokee_buffer_is_empty (&conn->error_internal_url)) {
+		set_env (cgi, "REDIRECT_URL", 
+			 conn->error_internal_url.buf,
+			 conn->error_internal_url.len);
+	}
+
 	/* HTTP variables
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_accept, &p, &p_len);

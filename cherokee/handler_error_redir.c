@@ -30,12 +30,15 @@
 #include "connection.h"
 #include "plugin_loader.h"
 #include "connection-protected.h"
+#include "util.h"
 
+#define ENTRIES "handler,error_handler,redir"
 
 typedef struct {
-	cherokee_list_t   entry;
-	cuint_t           error;
-	cherokee_buffer_t url;
+	cherokee_list_t    entry;
+	cuint_t            error;
+	cherokee_buffer_t  url;
+	cherokee_boolean_t show;
 } error_entry_t;
 
 
@@ -57,6 +60,7 @@ props_free (cherokee_handler_error_redir_props_t *props)
 ret_t 
 cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
+	ret_t                                 ret;
 	cherokee_list_t                      *i;
 	cherokee_handler_error_redir_props_t *props;
 
@@ -78,6 +82,8 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 		error_entry_t          *entry;
 		cherokee_config_node_t *subconf = CONFIG_NODE(i);
 
+		/* Check the error number
+		 */
 		error = atoi (subconf->key.buf);
 		if (!http_type_300 (error) &&
 		    !http_type_400 (error) &&
@@ -86,15 +92,33 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 			continue;
 		}
 
+		/* New object
+		 */
 		entry = (error_entry_t *) malloc (sizeof(error_entry_t));
 		if (entry == NULL)
 			return ret_nomem;
 
-		INIT_LIST_HEAD (&entry->entry);
 		entry->error = error;
-		cherokee_buffer_init (&entry->url);
-		cherokee_buffer_add_buffer (&entry->url, &subconf->val);
+		entry->show  = false;
 
+		INIT_LIST_HEAD (&entry->entry);
+		cherokee_buffer_init (&entry->url);
+		
+		/* Read child values
+		 */
+		ret = cherokee_config_node_copy (subconf, "url", &entry->url);
+		if (ret != ret_ok) {
+			PRINT_ERROR ("Redir Error %d: An 'url' property is required\n", error);
+			return ret_error;
+		}
+
+		cherokee_config_node_read_bool (subconf, "show", &entry->show);
+
+		TRACE(ENTRIES, "Error %d redir to '%s', show=%d\n",
+		      entry->error, entry->url.buf, entry->show);
+
+		/* Add it to the list
+		 */
 		cherokee_list_add (&entry->entry, &props->errors);
 	}
 
@@ -102,8 +126,45 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 }
 
 
+static ret_t 
+do_redir_external (cherokee_handler_t     **hdl,
+		   cherokee_connection_t   *conn,
+		   cherokee_module_props_t *props,
+		   error_entry_t           *entry)
+{
+	cherokee_buffer_clean (&conn->redirect);
+	cherokee_buffer_add_buffer (&conn->redirect, &entry->url); 
+		
+	conn->error_code = http_moved_permanently; 
+	return cherokee_handler_redir_new (hdl, conn, props);
+}
+
+static ret_t 
+do_redir_internal (cherokee_connection_t *conn,
+		   error_entry_t         *entry)
+{
+	/* REDIRECT_URL
+	 */
+	cherokee_buffer_clean (&conn->error_internal_url);
+	cherokee_buffer_add_buffer (&conn->error_internal_url, &conn->request);
+
+	/* Clean up the connection
+	 */
+	cherokee_buffer_clean (&conn->pathinfo);
+	cherokee_buffer_clean (&conn->request);
+	cherokee_buffer_clean (&conn->local_directory);
+
+	/* Set the new request
+	 */
+	cherokee_buffer_add_buffer (&conn->request, &entry->url); 
+
+	return ret_eagain;
+}
+
 ret_t 
-cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_t *conn, cherokee_module_props_t *props)
+cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
+				  cherokee_connection_t   *conn,
+				  cherokee_module_props_t *props)
 {
 	cherokee_list_t *i;
 
@@ -113,11 +174,11 @@ cherokee_handler_error_redir_new (cherokee_handler_t **hdl, cherokee_connection_
 		if (entry->error != conn->error_code)
 			continue;
 
-		cherokee_buffer_clean (&conn->redirect);
-		cherokee_buffer_add_buffer (&conn->redirect, &entry->url); 
-		
-		conn->error_code = http_moved_permanently; 
-		return cherokee_handler_redir_new (hdl, conn, props);
+		if (entry->show) {
+			return do_redir_external (hdl, conn, props, entry);
+		} else {
+			return do_redir_internal (conn, entry);
+		}
 	}
 	
 	return ret_error;

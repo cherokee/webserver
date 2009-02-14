@@ -16,6 +16,7 @@ PRODUCT_TOKENS = [
 
 DATA_VALIDATION = [
     ("server!ipv6",              validations.is_boolean),
+    ("server!timeout",           validations.is_number),
     ("server!bind!.*!port",      validations.is_tcp_port),
     ("server!bind!.*!interface", validations.is_ip),
     ("server!bind!.*!tls",       validations.is_boolean),

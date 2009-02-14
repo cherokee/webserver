@@ -1,3 +1,19 @@
+2009-02-14  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/source_interpreter.c: A new sanity check has been added
+	so an error is raised if a configured interpreter is not found.
+
+	* admin/PageGeneral.py: Adds a data validation entry:
+	server!timeout was not being validated.
+
+	* cherokee/connection-protected.h, cherokee/connection.c,
+	cherokee/handler_error_redir.c, cherokee/handler_cgi_base.c,
+	cherokee/thread.c: Adds internal redirection capabilities to
+	error_dir handler.
+
+	* qa/199-ErrorRedir.py, qa/Makefile.am: New QA test. It checks
+	that the REDIRECT_URL variabl is set right.
+
 2009-02-14  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/cryptor_libssl.c, cherokee/virtual_server.c,

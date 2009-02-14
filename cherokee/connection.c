@@ -139,6 +139,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	cherokee_buffer_init (&n->redirect);
 	cherokee_buffer_init (&n->host);
 	cherokee_buffer_init (&n->self_trace);
+	cherokee_buffer_init (&n->error_internal_url);
 
 	cherokee_buffer_init (&n->query_string);
 	cherokee_buffer_init (&n->request_original);
@@ -196,6 +197,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	cherokee_buffer_mrproper (&conn->host);
 	cherokee_buffer_mrproper (&conn->self_trace);
 	cherokee_buffer_mrproper (&conn->chunked_len);
+	cherokee_buffer_mrproper (&conn->error_internal_url);
 
 	if (conn->validator != NULL) {
 		cherokee_validator_free (conn->validator);
@@ -302,6 +304,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	cherokee_buffer_clean (&conn->query_string);
 	cherokee_buffer_clean (&conn->self_trace);
 	cherokee_buffer_clean (&conn->chunked_len);
+	cherokee_buffer_clean (&conn->error_internal_url);
 	
 	if (conn->validator != NULL) {
 		cherokee_validator_free (conn->validator);
@@ -389,13 +392,21 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 	 */
 	if ((entry != NULL) && (entry->handler_new_func != NULL)) {
 		ret = entry->handler_new_func ((void **) &conn->handler, conn, entry->handler_properties);
-		if (ret == ret_ok) 
+		switch (ret) {
+		case ret_ok:
 			goto out;
+		case ret_eagain:
+			goto clean;
+		default:
+			break;
+		}
 	} 
 
 	/* If something was wrong, try with the default error handler
 	 */
 	ret = cherokee_handler_error_new (&conn->handler, conn, NULL);
+	if (unlikely (ret != ret_ok))
+		return ret_error;
 
 out:
 #ifdef TRACE_ENABLED
@@ -415,6 +426,9 @@ out:
 		conn->keepalive = 0;
 	}
 
+	ret = ret_ok;
+
+clean:
 	/* Nothing should be mmaped any longer
 	 */
 	if (conn->io_entry_ref != NULL) {
@@ -430,7 +444,7 @@ out:
 	 */
 	conn->chunked_encoding = false;
 
-	return ret_ok;
+	return ret;
 }
 
 

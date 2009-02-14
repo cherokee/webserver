@@ -1088,21 +1088,29 @@ process_active_connections (cherokee_thread_t *thd)
 					/* Try to setup an error handler
 					 */
 					ret = cherokee_connection_setup_error_handler (conn);
-					if (ret != ret_ok) {
-					
-						/* It could not change the handler to an error
-						 * managing handler, so it is a critical error.
+					switch (ret) {
+					case ret_ok:
+						/* At this point, two different things might happen:
+						 * - It has got a common handler like handler_redir
+						 * - It has got an error handler like handler_error
+						 */
+						conn->phase = phase_init;
+						break;
+
+					case ret_eagain:
+						/* It's an internal error redirection
+						 */
+						conn->error_code = http_ok;
+						conn->phase = phase_setup_connection;
+						break;
+
+					default:
+						/* Critical error: It couldn't instance the handler
 						 */					
 						conns_freed++;
 						close_active_connection (thd, conn);
 						continue;
 					}
-
-					/* At this point, two different things might happen:
-					 * - It has got a common handler like handler_redir
-					 * - It has got an error handler like handler_error
-					 */
-					conn->phase = phase_init;
 					break;
 				}
 			}

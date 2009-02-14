@@ -104,14 +104,17 @@ interpreter_free (void *ptr)
 ret_t 
 cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, cherokee_config_node_t *conf)
 {
+	int                     re;
 	ret_t                   ret;
 	cherokee_list_t        *i, *j;
 	cherokee_config_node_t *child;
+	struct stat             inter;
 
 	/* Configure the base class
 	 */
 	ret = cherokee_source_configure (SOURCE(src), conf);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok)
+		return ret;
 
 	/* Interpreter parameters
 	 */
@@ -119,7 +122,6 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 		child = CONFIG_NODE(i);
 
 		if (equal_buf_str (&child->key, "interpreter")) {
-			/* TODO: fix win32 path */
 			cherokee_buffer_add_buffer (&src->interpreter, &child->val);
 
 		} else if (equal_buf_str (&child->key, "debug")) {
@@ -149,6 +151,19 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 				if (ret != ret_ok) return ret;
 			}
 		}	
+	}
+
+	/* Sanity check
+	 */
+	if (cherokee_buffer_is_empty (&src->interpreter)) {
+		PRINT_ERROR_S ("ERROR: 'Source interpreter' with no interpreter\n");
+		return ret_error;
+	}
+
+	re = cherokee_stat (src->interpreter.buf, &inter);
+	if (re < 0) {
+		PRINT_ERROR ("ERROR: Could find interpreter '%s'\n", src->interpreter.buf);
+		return ret_error;
 	}
 
 	return ret_ok;
