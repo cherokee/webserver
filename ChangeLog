@@ -1,3 +1,8 @@
+2009-02-15  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/handler_streaming.c, cherokee/handler_streaming.h:
+	Fixes compilation issue when libavformat is not present.
+
 2009-02-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/source_interpreter.c: A new sanity check has been added

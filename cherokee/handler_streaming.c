@@ -107,9 +107,11 @@ cherokee_handler_streaming_free (cherokee_handler_streaming_t *hdl)
 		cherokee_handler_file_free (hdl->handler_file);
 	}
 
+#ifdef USE_FFMPEG
 	if (hdl->avformat != NULL) {
 		av_close_input_file (hdl->avformat);
 	}
+#endif
 
 	cherokee_buffer_mrproper (&hdl->local_file);
 
@@ -150,7 +152,9 @@ cherokee_handler_streaming_new (cherokee_handler_t      **hdl,
 	 */
 	cherokee_buffer_init (&n->local_file);
 
+#ifdef USE_FFMPEG
 	n->avformat      = NULL;
+#endif
 	n->start         = -1;
 	n->start_flv     = false;
 	n->start_time    = -1;
@@ -162,54 +166,6 @@ cherokee_handler_streaming_new (cherokee_handler_t      **hdl,
 	*hdl = HANDLER(n);
 	return ret_ok;
 }
-
-
-static ret_t
-seek_mp4 (cherokee_handler_streaming_t *hdl)
-{
-	int      re;
-	ret_t    ret;
-	long     timestamp; 
-	AVPacket pkt;
-
-	/* Calculate timestamp
-	 */
-	timestamp = hdl->start_time * AV_TIME_BASE;
-
-	if (hdl->avformat->start_time != AV_NOPTS_VALUE) {
-		timestamp += hdl->avformat->start_time;
-	}
-
-	/* Seek
-	 */
-	re = av_seek_frame (hdl->avformat,         /* AVFormatContext  */
-			    -1,                    /* Stream index     */
-			    timestamp,             /* target timestamp */
-			    AVSEEK_FLAG_BACKWARD); /* flags            */
-	if (re < 0) {
-		PRINT_MSG ("WARNING: Couldn't seek: %d\n", re);
-		return ret_error;
-	}
-
-	/* Read Frame
-	 */
-	av_init_packet (&pkt);
-	av_read_frame (hdl->avformat, &pkt);
-	hdl->start = pkt.pos;
-	av_free_packet (&pkt);
-
-	/* Seek at the beginning of the frame
-	 */
-	TRACE(ENTRIES, "Seeking: %d\n", hdl->start);
-
-	ret = cherokee_handler_file_seek (hdl->handler_file, hdl->start);
-	if (unlikely (ret != ret_ok)) {
-		return ret_error;
-	}
-
-	return ret_ok;
-}
-
 
 static ret_t
 parse_time_start (cherokee_handler_streaming_t *hdl,
@@ -270,6 +226,52 @@ error:
 
 
 #ifdef USE_FFMPEG
+
+static ret_t
+seek_mp4 (cherokee_handler_streaming_t *hdl)
+{
+	int      re;
+	ret_t    ret;
+	long     timestamp; 
+	AVPacket pkt;
+
+	/* Calculate timestamp
+	*/
+	timestamp = hdl->start_time * AV_TIME_BASE;
+
+	if (hdl->avformat->start_time != AV_NOPTS_VALUE) {
+		timestamp += hdl->avformat->start_time;
+	}
+
+	/* Seek
+	*/
+	re = av_seek_frame (hdl->avformat,         /* AVFormatContext  */
+	                    -1,                    /* Stream index     */
+	                    timestamp,             /* target timestamp */
+	                    AVSEEK_FLAG_BACKWARD); /* flags            */
+	if (re < 0) {
+		PRINT_MSG ("WARNING: Couldn't seek: %d\n", re);
+		return ret_error;
+	}
+
+	/* Read Frame
+	*/
+	av_init_packet (&pkt);
+	av_read_frame (hdl->avformat, &pkt);
+	hdl->start = pkt.pos;
+	av_free_packet (&pkt);
+
+	/* Seek at the beginning of the frame
+	*/
+	TRACE(ENTRIES, "Seeking: %d\n", hdl->start);
+
+	ret = cherokee_handler_file_seek (hdl->handler_file, hdl->start);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
 
 static ret_t
 set_rate (cherokee_handler_streaming_t *hdl,
@@ -389,6 +391,24 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 			  INT_TO_POINTER(rate));
 
 	return ret;
+}
+#else
+static ret_t
+seek_mp4 (cherokee_handler_streaming_t *hdl)
+{
+	return ret_error;
+}
+
+static ret_t
+open_media_file (cherokee_handler_streaming_t *hdl)
+{
+	return ret_error;
+}
+
+static ret_t
+set_auto_rate (cherokee_handler_streaming_t *hdl)
+{
+	return ret_ok;
 }
 #endif
 

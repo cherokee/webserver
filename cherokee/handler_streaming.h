@@ -50,7 +50,9 @@ typedef struct {
 	cherokee_handler_t             handler;
 	cherokee_handler_file_t       *handler_file;
 	cherokee_buffer_t              local_file;
+#ifdef USE_FFMPEG
 	AVFormatContext               *avformat;
+#endif
 	cint_t                         auto_rate_bps;
 	off_t                          start;
 	cherokee_boolean_t             start_flv;
