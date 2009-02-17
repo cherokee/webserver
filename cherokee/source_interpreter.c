@@ -160,11 +160,8 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 		return ret_error;
 	}
 
-	re = cherokee_stat (src->interpreter.buf, &inter);
-	if (re < 0) {
-		PRINT_ERROR ("ERROR: Could find interpreter '%s'\n", src->interpreter.buf);
-		return ret_error;
-	}
+	/* TODO: Check if interpreter exists
+	 */
 
 	return ret_ok;
 }

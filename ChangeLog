@@ -1,3 +1,8 @@
+2009-02-17  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/source_interpreter.c: We need a better check for
+	interpreter.
+
 2009-02-15  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/handler_streaming.c, cherokee/handler_streaming.h:
