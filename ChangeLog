@@ -3,6 +3,9 @@
 	* cherokee/source_interpreter.c: We need a better check for
 	interpreter.
 
+	* cherokee/cryptor_libssl.c (_vserver_new): SSL options setting
+	simplification.
+
 2009-02-15  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/handler_streaming.c, cherokee/handler_streaming.h:

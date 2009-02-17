@@ -178,21 +178,12 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		return ret_error;
 	}
 
-	/* Set OpenSSL context options
+	/* Work around all known bugs
 	 */
+	SSL_CTX_set_options (n->context, SSL_OP_ALL);
 
-	/* Client-side options */
-	SSL_CTX_set_options (n->context, SSL_OP_MICROSOFT_SESS_ID_BUG);
-	SSL_CTX_set_options (n->context, SSL_OP_NETSCAPE_CHALLENGE_BUG);
-	SSL_CTX_set_options (n->context, SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG);
-
-	/* Server-side options */
-	SSL_CTX_set_options (n->context, SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG);
-	SSL_CTX_set_options (n->context, SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER);
-	SSL_CTX_set_options (n->context, SSL_OP_MSIE_SSLV2_RSA_PADDING);
-	SSL_CTX_set_options (n->context, SSL_OP_SSLEAY_080_CLIENT_DH_BUG);
-	SSL_CTX_set_options (n->context, SSL_OP_TLS_D5_BUG);
-	SSL_CTX_set_options (n->context, SSL_OP_TLS_BLOCK_PADDING_BUG);
+	/* Set other OpenSSL context options
+	 */
 	SSL_CTX_set_options (n->context, SSL_OP_SINGLE_DH_USE);
 
 #ifdef SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS
@@ -202,7 +193,12 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	/* Certificate
 	 */
 	if (! cherokee_buffer_is_empty (&vsrv->server_cert_chain)) {
+
+#if (OPENSSL_VERSION_NUMBER < 0x0090808fL)
+		/* OpenSSL < 0.9.8h
+		 */
 		ERR_clear_error();
+#endif
 		rc = SSL_CTX_use_certificate_chain_file (n->context, vsrv->server_cert_chain.buf);
 		if (rc != 1) {
 			OPENSSL_LAST_ERROR(error);
