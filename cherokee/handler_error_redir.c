@@ -143,10 +143,15 @@ static ret_t
 do_redir_internal (cherokee_connection_t *conn,
 		   error_entry_t         *entry)
 {
-	/* REDIRECT_URL
+	/* Set REDIRECT_URL
 	 */
 	cherokee_buffer_clean (&conn->error_internal_url);
 	cherokee_buffer_add_buffer (&conn->error_internal_url, &conn->request);
+
+	/* Set REDIRECT_QUERY_STRING
+	 */
+	cherokee_buffer_clean (&conn->error_internal_qs);
+	cherokee_buffer_add_buffer (&conn->error_internal_qs, &conn->query_string);
 
 	/* Clean up the connection
 	 */

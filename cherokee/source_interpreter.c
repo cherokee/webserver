@@ -100,15 +100,76 @@ interpreter_free (void *ptr)
 	CHEROKEE_MUTEX_DESTROY (&src->launching_mutex);
 }
 
+static char *
+find_next_stop (char *p)
+{
+	char *s;
+	char *w;
+
+	s = strchr (p, '/');
+	w = strchr (p, ' ');
+
+	if ((s == NULL) && (w == NULL))
+		return NULL;
+
+	if (w == NULL)
+		return s;
+	if (s == NULL)
+		return w;
+
+	return (w > s) ? s : w;
+}
+
+static ret_t
+check_interpreter (cherokee_source_interpreter_t *src)
+{
+	int          re;
+	struct stat  inter;
+	char        *p;
+	char         tmp;
+	const char  *end    = src->interpreter.buf + src->interpreter.len;
+
+	p = find_next_stop (src->interpreter.buf + 1);
+	if (p == NULL)
+		return ret_error;
+
+	while (p <= end) {
+		/* Set a temporal end */
+		tmp = *p;
+		*p  = '\0';
+
+		/* Does the file exist? */
+		re = cherokee_stat (src->interpreter.buf, &inter);
+		if ((re == 0) &&
+		    (! S_ISDIR(inter.st_mode))) 
+		{
+			*p = tmp;
+			return ret_ok;
+		}
+		
+		*p = tmp;
+
+		/* Exit if already reached the end */		
+		if (p >= end)
+			break;
+
+		/* Find the next position */
+		p = find_next_stop (p+1);
+		if (p == NULL)
+			p = (char *)end;
+	}
+
+	PRINT_ERROR ("ERROR: Could find interpreter '%s'\n", src->interpreter.buf);
+	return ret_error;
+}
+
 
 ret_t 
 cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, cherokee_config_node_t *conf)
 {
-	int                     re;
 	ret_t                   ret;
 	cherokee_list_t        *i, *j;
 	cherokee_config_node_t *child;
-	struct stat             inter;
 
 	/* Configure the base class
 	 */
@@ -160,8 +221,9 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 		return ret_error;
 	}
 
-	/* TODO: Check if interpreter exists
-	 */
+	ret = check_interpreter (src);
+	if (ret != ret_ok)
+		return ret_error;
 
 	return ret_ok;
 }

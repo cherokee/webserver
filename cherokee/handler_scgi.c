@@ -39,7 +39,7 @@
 
 /* Plug-in initialization
  */
-CGI_LIB_INIT (scgi, http_get | http_post | http_head);
+CGI_LIB_INIT (scgi, http_all_methods);
 
 /* Methods implementation
  */

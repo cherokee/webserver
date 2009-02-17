@@ -130,6 +130,7 @@ struct cherokee_connection {
 	cherokee_connection_phase_t   phase;
 	cherokee_http_t               error_code;
 	cherokee_buffer_t             error_internal_url;
+	cherokee_buffer_t             error_internal_qs;
 
 	/* Headers
 	 */

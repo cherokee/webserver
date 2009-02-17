@@ -436,12 +436,17 @@ cherokee_handler_cgi_base_build_basic_env (
 			 bind->server_address.len);
 	}
 
-	/* Internal error redirection
+	/* Internal error redirection:
+	 * It is okay if the QS is empty.
 	 */
 	if (! cherokee_buffer_is_empty (&conn->error_internal_url)) {
 		set_env (cgi, "REDIRECT_URL", 
 			 conn->error_internal_url.buf,
 			 conn->error_internal_url.len);
+
+		set_env (cgi, "REDIRECT_QUERY_STRING", 
+			 conn->error_internal_qs.buf,
+			 conn->error_internal_qs.len);
 	}
 
 	/* HTTP variables

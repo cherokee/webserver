@@ -139,7 +139,9 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	cherokee_buffer_init (&n->redirect);
 	cherokee_buffer_init (&n->host);
 	cherokee_buffer_init (&n->self_trace);
+
 	cherokee_buffer_init (&n->error_internal_url);
+	cherokee_buffer_init (&n->error_internal_qs);
 
 	cherokee_buffer_init (&n->query_string);
 	cherokee_buffer_init (&n->request_original);
@@ -197,7 +199,9 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	cherokee_buffer_mrproper (&conn->host);
 	cherokee_buffer_mrproper (&conn->self_trace);
 	cherokee_buffer_mrproper (&conn->chunked_len);
+
 	cherokee_buffer_mrproper (&conn->error_internal_url);
+	cherokee_buffer_mrproper (&conn->error_internal_qs);
 
 	if (conn->validator != NULL) {
 		cherokee_validator_free (conn->validator);
@@ -304,7 +308,9 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	cherokee_buffer_clean (&conn->query_string);
 	cherokee_buffer_clean (&conn->self_trace);
 	cherokee_buffer_clean (&conn->chunked_len);
+
 	cherokee_buffer_clean (&conn->error_internal_url);
+	cherokee_buffer_clean (&conn->error_internal_qs);
 	
 	if (conn->validator != NULL) {
 		cherokee_validator_free (conn->validator);

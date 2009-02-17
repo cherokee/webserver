@@ -39,8 +39,6 @@ class TestBase:
         self.post                    = None
         self.expected_error          = None
         self.expected_content        = None
-        self.expected_content_length = None
-        self.expected_one_of_these   = None
         self.forbidden_content       = None
         self._initialize()
         
@@ -145,12 +143,6 @@ class TestBase:
             if not item in self.reply:
                 return -1
 
-    def _check_result_expected_one_of_these (self, items):
-        for item in items:
-            r = self._check_result_expected_item (item)
-            if r != -1: return r
-        return -1
-
     def _check_result_forbidden_item (self, item):
         if item.startswith("file:"):
             f = open (item[5:])
@@ -166,38 +158,35 @@ class TestBase:
         if self.reply_err != self.expected_error:
             return -1
 
-        if self.expected_content_length != None:
-            if len(self.reply) != self.expected_content_length:
-                return -1
-
         if self.expected_content != None:
             if type(self.expected_content) == types.StringType:
                 r = self._check_result_expected_item (self.expected_content)
-                if r == -1: return -1
+                if r == -1: 
+                    return -1
             elif type(self.expected_content) == types.ListType:
                 for entry in self.expected_content:
                     r = self._check_result_expected_item (entry)
-                    if r == -1: return -1
+                    if r == -1: 
+                        return -1
             else:
                 raise Exception("Syntax error")
-
-        if self.expected_one_of_these != None:
-            r = self._check_result_expected_one_of_these (self.expected_one_of_these)
-            if r == -1: return -1
 
         if self.forbidden_content != None:
             if type(self.forbidden_content) == types.StringType:
                 r = self._check_result_forbidden_item (self.forbidden_content)
-                if r == -1: return -1
+                if r == -1:
+                    return -1
             elif type(self.forbidden_content) == types.ListType:
                 for entry in self.forbidden_content:
                     r = self._check_result_forbidden_item (entry)
-                    if r == -1: return -1
+                    if r == -1: 
+                        return -1
             else:
                 raise Exception("Syntax error")
 
         r = self.CustomTest()
-        if r == -1: return -1
+        if r == -1: 
+            return -1
 	                   
         return 0
 
@@ -254,14 +243,8 @@ class TestBase:
         else:
             src += "\tExpected = Code: UNSET!\n"
 
-        if self.expected_content_length is not None:
-            src += "\tExpected = Content length: %d\n" % (self.expected_content_length)
-
         if self.expected_content is not None:
             src += "\tExpected = Content: %s\n" % (self.expected_content)
-
-        if self.expected_one_of_these is not None:
-            src += "\tExpected = one: %s\n" % (str(self.expected_one_of_these))
 
         if self.forbidden_content is not None:
             src += "\tForbidden= Content: %s\n" % (self.forbidden_content)

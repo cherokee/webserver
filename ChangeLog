@@ -1,3 +1,24 @@
+2009-02-17  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_scgi.c, cherokee/handler_fcgi.c: These handlers
+	used to accept only the GET, POST and HEAD methods. REST services
+	are supposed to support more methods, so it's been a problem for
+	some people. I'm removing the check, and all methods will be
+	accepted from now on. Thanks to Jacob Wright <jacwright@gmail.com>
+	for reporting the problem. It fixes bug #364:
+	http://code.google.com/p/cherokee/issues/detail?id=364
+
+	* cherokee/connection-protected.h, cherokee/handler_error_redir.c,
+	cherokee/handler_cgi_base.c, cherokee/connection.c: Adds
+	REDIRECT_QUERY_STRING support.
+
+	* qa/195-ServerAddr.py (Test.CustomTest): Replaces the
+	'expected_one_of_these' property by a CustomTest method. It's a
+	much cleaner solution.
+
+	* qa/base.py: Removes the ancient and no longer used
+	'expected_content_length' and 'expected_one_of_these' properties.
+
 2009-02-17  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/source_interpreter.c: We need a better check for
