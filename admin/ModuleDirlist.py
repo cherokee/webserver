@@ -6,16 +6,16 @@ from Table import *
 from ModuleHandler import *
 from configured import *
 
-DATA_VALIDATION = [
-    ('^vserver!.+?!.+?!.+?!handler!icon_dir',     validations.is_path),
-    ('^vserver!.+?!.+?!.+?!handler!notice_files', validations.is_path_list),
-]
-
 DEFAULT_THEME = "default"
 
 NOTE_THEME        = "Choose the listing theme."
 NOTE_ICON_DIR     = "Web directory where the icon files are located. Default: <i>/icons</i>."
 NOTE_NOTICE_FILES = "List of notice files to be inserted."
+
+DATA_VALIDATION = [
+    ('vserver!.+?!rule!.+?!handler!icon_dir',     validations.is_path),
+    ('vserver!.+?!rule!.+?!handler!notice_files', validations.is_path_list),
+]
 
 HELPS = [
     ('modules_handlers_dirlist', "Only listing")
@@ -46,8 +46,8 @@ class ModuleDirlist (ModuleHandler):
         table  = TableProps()
         themes = self._get_theme_list()
         self.AddPropOptions_Reload (table, 'Theme', "%s!theme" % (self._prefix), themes, NOTE_THEME)
-        self.AddPropEntry   (table, 'Icons dir',    "%s!icon_dir" % (self._prefix), NOTE_ICON_DIR)
-        self.AddPropEntry   (table, 'Notice files', "%s!notice_files" % (self._prefix), NOTE_NOTICE_FILES)
+        self.AddPropEntry (table, 'Icons dir',    "%s!icon_dir" % (self._prefix), NOTE_ICON_DIR)
+        self.AddPropEntry (table, 'Notice files', "%s!notice_files" % (self._prefix), NOTE_NOTICE_FILES)
         txt += self.Indent(table)
 
         return txt

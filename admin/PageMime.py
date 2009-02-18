@@ -8,7 +8,9 @@ from Form import *
 
 DATA_VALIDATION = [
     ("mime!.*!extensions", validations.is_extension_list),
-    ("mime!.*!max\-age",   validations.is_number)
+    ("mime!.*!max\-age",   validations.is_number),
+    ("tmp!new_extensions", validations.is_extension_list),
+    ("tmp!new_maxage",     validations.is_number)
 ]
 
 HELPS = [('config_mime_types', "MIME types")]
@@ -51,6 +53,11 @@ class PageMime (PageMenu, FormHelper):
         return "/%s" % (self._id)
 
     def _add_new_mime (self, post):
+        # Validate entries
+        self._ValidateChanges (post, DATA_VALIDATION)
+        if self.has_errors():
+            return
+        
         mime = post.pop('tmp!new_mime')
         exts = post.pop('tmp!new_extensions')
         mage = post.pop('tmp!new_maxage')

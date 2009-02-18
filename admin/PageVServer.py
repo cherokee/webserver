@@ -9,6 +9,7 @@ from RuleList import *
 from CherokeeManagement import *
 
 DATA_VALIDATION = [
+    ("vserver!.*?!user_dir",                   validations.is_safe_id),
     ("vserver!.*?!document_root",             (validations.is_dev_null_or_local_dir_exists, 'cfg')),
     ("vserver!.*?!ssl_certificate_file",      (validations.is_local_file_exists, 'cfg', 'nochroot')),
     ("vserver!.*?!ssl_certificate_chain_file",(validations.is_local_file_exists, 'cfg', 'nochroot')),

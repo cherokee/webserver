@@ -48,13 +48,13 @@ class ModuleCommon (ModuleHandler):
         self.ApplyCheckbox (post, '%s!allow_pathinfo'%(self._prefix))
         self.ApplyCheckbox (post, '%s!allow_dirlist'%(self._prefix))
 
-        # Copy errors from the child modules
-        self._copy_errors (self._file,    self)
-        self._copy_errors (self._dirlist, self)
-
         # Apply the changes
         self._file._op_apply_changes (uri, post)
         self._dirlist._op_apply_changes (uri, post)
+
+        # Copy errors from the child modules
+        self._copy_errors (self._file,    self)
+        self._copy_errors (self._dirlist, self)
 
     def _copy_errors (self, _from, _to):
         for e in _from.errors:

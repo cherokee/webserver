@@ -21,9 +21,10 @@ NOTE_EXPIRATION_TIME = "How long from the object can be cached.<br />" + \
                        "The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 2d."
 
 DATA_VALIDATION = [
-    ("vserver!.*?!rule!(\d+)!document_root", (validations.is_dev_null_or_local_dir_exists, 'cfg')),
-    ("vserver!.*?!rule!(\d+)!allow_from",     validations.is_ip_or_netmask_list),
-    ("vserver!.*?!rule!(\d+)!rate",           validations.is_number_gt_0)
+    ("vserver!.*?!rule!(\d+)!document_root",  (validations.is_dev_null_or_local_dir_exists, 'cfg')),
+    ("vserver!.*?!rule!(\d+)!allow_from",      validations.is_ip_or_netmask_list),
+    ("vserver!.*?!rule!(\d+)!rate",            validations.is_number_gt_0),
+    ("vserver!.*?!rule!(\d+)!expiration!time", validations.is_time) 
 ]
 
 HELPS = [

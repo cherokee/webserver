@@ -1,3 +1,5 @@
+import validations 
+
 from Form import *
 from Table import *
 
@@ -7,6 +9,11 @@ from ModuleFile import *
 NOTE_RATE        = 'Figure the bit rate of the media file, and limit the bandwidth to it.'
 NOTE_RATE_FACTOR = 'Factor to increases the bandwidth limit. Default: 0.1'
 NOTE_RATE_BOOST  = 'Number of seconds to stream before setting the bandwidth limit. Default: 5.'
+
+DATA_VALIDATION = [
+    ('vserver!.+?!rule!.+?!handler!rate_factor', validations.is_float),
+    ('vserver!.+?!rule!.+?!handler!rate_boost',  validations.is_number_gt_0),
+]
 
 HELPS = [
     ('modules_handlers_streaming', "Audio/Video Streaming")
@@ -43,13 +50,13 @@ class ModuleStreaming (ModuleHandler):
         return txt
 
     def _op_apply_changes (self, uri, post):
-        self.ApplyChangesPrefix (self._prefix, ['rate'], post)
-
-        # Copy errors from the child modules
-        self._copy_errors (self._file,    self)
+        self.ApplyChangesPrefix (self._prefix, ['rate'], post, DATA_VALIDATION)
 
         # Apply the changes
         self._file._op_apply_changes (uri, post)
+
+        # Copy errors from the child modules
+        self._copy_errors (self._file, self)
 
     def _copy_errors (self, _from, _to):
         for e in _from.errors:

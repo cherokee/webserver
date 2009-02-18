@@ -7,6 +7,12 @@ def is_number (value):
     except:
         raise ValueError, 'Malformed number'
 
+def is_float (value):
+    try:
+        return str(float(value))
+    except:
+        raise ValueError, 'Malformed float number'
+
 def is_number_gt_0 (value):
     value = is_number(value)
     if int(value) <= 0:
@@ -276,3 +282,17 @@ def is_information_source (value):
         return value.split('/')[0]
 
     return value
+
+def is_time (value):
+    # The m, h, d and w suffixes are allowed for minutes, hours, days,
+    # and weeks. Eg: 2d.
+    for c in value:
+        if c not in ".0123456789mhdw":
+            raise ValueError, 'Time value contain invalid values'
+    for c in ".mhdw":
+        if value.count(c) > 1:
+            raise ValueError, 'Malformed time'
+    
+    return value
+
+    

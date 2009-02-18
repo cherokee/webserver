@@ -1,6 +1,7 @@
+import validations 
+
 from Table import *
 from ModuleHandler import *
-from validations import *
 
 NOTE_SCRIPT_ALIAS  = 'Path to an executable that will be run with the CGI as parameter.'
 NOTE_CHANGE_USER   = 'Execute the CGI under its file owner user ID.'
@@ -8,6 +9,10 @@ NOTE_ERROR_HANDLER = 'Send errors exactly as they are generated.'
 NOTE_CHECK_FILE    = 'Check whether the file is in place.'
 NOTE_PASS_REQ      = 'Forward all the client headers to the CGI encoded as HTTP_*. headers.'
 NOTE_XSENDFILE     = 'Allow the use of the non-standard X-Sendfile header.'
+
+DATA_VALIDATION = [
+    ('vserver!.+?!rule!.+?!handler!script_alias', validations.is_path),
+]
 
 HELPS = [
     ('modules_handlers_cgi', "CGIs")
@@ -89,7 +94,7 @@ class ModuleCgiBase (ModuleHandler):
         else:
             self._cfg['%s!check_file'%(self._prefix)] = self.fixed_check_file
 
-        self.ApplyChangesPrefix (self._prefix, checkboxes, post)
+        self.ApplyChangesPrefix (self._prefix, checkboxes, post, DATA_VALIDATION)
 
     def _util__set_fixed_check_file (self):
         # No need to show 'check file' when the handler is an extension

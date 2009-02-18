@@ -6,8 +6,7 @@ from ModuleAuth import *
 NOTE_PASSWD = "Full path to the Htpasswd formated password file."
 
 DATA_VALIDATION = [
-    ('vserver!.*?!(directory|extensions|request)!.*?!passwdfile', 
-     (validations.is_local_file_exists, 'cfg'))
+    ('vserver!.*?!rule!.*?!auth!passwdfile', (validations.is_local_file_exists, 'cfg'))
 ]
 
 HELPS = [

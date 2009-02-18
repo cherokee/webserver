@@ -1,3 +1,13 @@
+2009-02-18  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/ModuleDirlist.py, admin/PageAdvanced.py,
+	admin/ModuleCgi.py, admin/PageVServers.py, admin/ModuleCommon.py,
+	admin/ModuleStreaming.py, admin/ModuleBalancer.py,
+	admin/PageMime.py, admin/PageVServer.py, admin/validations.py,
+	admin/ModuleDirlist.py, admin/ModuleHtdigest.py,
+	admin/ModuleHtpasswd.py, admin/PageEntry.py: Adds a new entry
+	validations that were missing.
+
 2009-02-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/source_interpreter.c: Adds support for interpreters

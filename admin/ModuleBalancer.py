@@ -65,6 +65,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
                 table += (link, host, link_del)
             txt += str(table)
 
+        txt += '<br/>\n'
         txt += '<h2>Assign Information Sources</h2>'
         if not general_left:
             txt += 'It is already balancing among all the configured ' + \

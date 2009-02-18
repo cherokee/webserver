@@ -8,6 +8,7 @@ from Entry import *
 DATA_VALIDATION = [
     ("new_vserver_name",   validations.is_safe_id),
     ("new_vserver_droot", (validations.is_dev_null_or_local_dir_exists, 'cfg')),
+    ("vserver_clone_trg",  validations.is_safe_id),
 ]
 
 COMMENT = """
@@ -232,6 +233,11 @@ class PageVServers (PageMenu, FormHelper):
         return str(n+10)
 
     def _op_clone_vserver (self, post):
+        # Validate entries
+        self._ValidateChanges (post, DATA_VALIDATION)
+        if self.has_errors():
+            return
+
         # Fetch data
         prio_source = post.pop('vserver_clone_src')
         nick_target = post.pop('vserver_clone_trg')
