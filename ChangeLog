@@ -1,5 +1,8 @@
 2009-02-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/source_interpreter.c: Adds support for interpreters
+	executed by using the PATH environment varieble.
+
 	* cherokee/handler_scgi.c, cherokee/handler_fcgi.c: These handlers
 	used to accept only the GET, POST and HEAD methods. REST services
 	are supposed to support more methods, so it's been a problem for

@@ -121,15 +121,15 @@ find_next_stop (char *p)
 }
 
 static ret_t
-check_interpreter (cherokee_source_interpreter_t *src)
+check_interpreter_full (cherokee_buffer_t *fullpath)
 {
 	int          re;
 	struct stat  inter;
 	char        *p;
 	char         tmp;
-	const char  *end    = src->interpreter.buf + src->interpreter.len;
+	const char  *end    = fullpath->buf + fullpath->len;
 
-	p = find_next_stop (src->interpreter.buf + 1);
+	p = find_next_stop (fullpath->buf + 1);
 	if (p == NULL)
 		return ret_error;
 
@@ -139,7 +139,7 @@ check_interpreter (cherokee_source_interpreter_t *src)
 		*p  = '\0';
 
 		/* Does the file exist? */
-		re = cherokee_stat (src->interpreter.buf, &inter);
+		re = cherokee_stat (fullpath->buf, &inter);
 		if ((re == 0) &&
 		    (! S_ISDIR(inter.st_mode))) 
 		{
@@ -159,10 +159,69 @@ check_interpreter (cherokee_source_interpreter_t *src)
 			p = (char *)end;
 	}
 
-	PRINT_ERROR ("ERROR: Could find interpreter '%s'\n", src->interpreter.buf);
 	return ret_error;
 }
 
+
+static ret_t
+check_interpreter_path (cherokee_buffer_t *partial_path)
+{
+	ret_t              ret;
+	char              *p;
+	char              *colon;
+	char              *path;
+	cherokee_buffer_t  fullpath = CHEROKEE_BUF_INIT;
+
+	path = strdup (getenv("PATH"));
+	if (path == NULL)
+		return ret_error;
+
+	p = path;
+	do {
+		colon = strchr(p, ':');
+		if (colon != NULL)
+			*colon = '\0';
+
+		cherokee_buffer_clean      (&fullpath);
+		cherokee_buffer_add        (&fullpath, p, strlen(p));
+		cherokee_buffer_add_char   (&fullpath, '/');
+		cherokee_buffer_add_buffer (&fullpath, partial_path);
+
+		ret = check_interpreter_full (&fullpath);
+		if (ret == ret_ok)
+			goto done;
+
+		if (colon == NULL)
+			break;
+
+		p = colon + 1;
+	} while (true);
+
+	ret = ret_not_found;
+
+done:
+	cherokee_buffer_mrproper (&fullpath);
+	free (path);
+
+	return ret;
+}
+
+static ret_t
+check_interpreter (cherokee_source_interpreter_t *src)
+{
+	ret_t ret;
+
+	if (src->interpreter.buf[0] == '/') {
+		ret = check_interpreter_full (&src->interpreter);
+		if (ret == ret_ok) 
+			return ret_ok;
+
+		PRINT_ERROR ("ERROR: Could find interpreter '%s'\n", src->interpreter.buf);
+		return ret_error;
+	}
+	
+	return check_interpreter_path (&src->interpreter);
+}
 
 ret_t 
 cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, cherokee_config_node_t *conf)
