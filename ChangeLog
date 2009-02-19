@@ -1,3 +1,9 @@
+2009-02-19  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/cryptor_libssl.c, admin/PageVServer.py: SSL Certificate
+	and chained SSL Certificate entries are merged.
+
 2009-02-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* spawn-fcgi.1, contrib/spawn-fcgi.c, contrib/Makefile.am,

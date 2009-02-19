@@ -192,28 +192,17 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 
 	/* Certificate
 	 */
-	if (! cherokee_buffer_is_empty (&vsrv->server_cert_chain)) {
-
 #if (OPENSSL_VERSION_NUMBER < 0x0090808fL)
-		/* OpenSSL < 0.9.8h
-		 */
-		ERR_clear_error();
+	/* OpenSSL < 0.9.8h
+	 */
+	ERR_clear_error();
 #endif
-		rc = SSL_CTX_use_certificate_chain_file (n->context, vsrv->server_cert_chain.buf);
-		if (rc != 1) {
-			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR("ERROR: OpenSSL: Can not use certificate chain file '%s':  %s\n", 
-				    vsrv->server_cert_chain.buf, error);
-			return ret_error;
-		}
-	} else {
-		rc = SSL_CTX_use_certificate_file (n->context, vsrv->server_cert.buf, SSL_FILETYPE_PEM);
-		if (rc != 1) {
-			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR("ERROR: OpenSSL: Can not use certificate file '%s':  %s\n", 
-				    vsrv->server_cert.buf, error);
-			return ret_error;
-		}
+	rc = SSL_CTX_use_certificate_chain_file (n->context, vsrv->server_cert.buf);
+	if (rc != 1) {
+		OPENSSL_LAST_ERROR(error);
+		PRINT_ERROR("ERROR: OpenSSL: Can not use certificate file '%s':  %s\n", 
+			    vsrv->server_cert.buf, error);
+		return ret_error;
 	}
 
 	/* Private key

@@ -77,7 +77,6 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	 */
 	n->verify_depth    = 1;
 	cherokee_buffer_init (&n->server_cert);
-	cherokee_buffer_init (&n->server_cert_chain);
 	cherokee_buffer_init (&n->server_key);
 	cherokee_buffer_init (&n->certs_ca);
 	cherokee_buffer_init (&n->req_client_certs);
@@ -107,7 +106,6 @@ ret_t
 cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 {
 	cherokee_buffer_mrproper (&vserver->server_cert);
-	cherokee_buffer_mrproper (&vserver->server_cert_chain);
 	cherokee_buffer_mrproper (&vserver->server_key);
 	cherokee_buffer_mrproper (&vserver->certs_ca);
 	cherokee_buffer_mrproper (&vserver->req_client_certs);
@@ -162,8 +160,6 @@ cherokee_virtual_server_has_tls (cherokee_virtual_server_t *vserver)
 {
 	if (! cherokee_buffer_is_empty (&vserver->server_cert))
 		return ret_ok;
-	if (! cherokee_buffer_is_empty (&vserver->server_cert_chain))
-		return ret_ok;
 	if (! cherokee_buffer_is_empty (&vserver->server_key))
 		return ret_ok;
 
@@ -180,15 +176,13 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 	/* Check if all of them are empty
 	 */
 	if (cherokee_buffer_is_empty (&vsrv->server_cert) &&
-	    cherokee_buffer_is_empty (&vsrv->server_cert_chain) &&
 	    cherokee_buffer_is_empty (&vsrv->server_key))
 		return ret_not_found;
 
 	/* Check if key or certificate are empty
 	 */
-	if (cherokee_buffer_is_empty (&vsrv->server_key) ||
-	    (cherokee_buffer_is_empty (&vsrv->server_cert) &&
-	     cherokee_buffer_is_empty (&vsrv->server_cert_chain)))
+	if (cherokee_buffer_is_empty (&vsrv->server_cert) ||
+	    cherokee_buffer_is_empty (&vsrv->server_key))
 		return ret_error;
 	
 	/* Instance virtual server's cryptor
@@ -708,10 +702,6 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "ssl_certificate_file")) {
 		cherokee_buffer_init (&vserver->server_cert);
 		cherokee_buffer_add_buffer (&vserver->server_cert, &conf->val);
-
-	} else if (equal_buf_str (&conf->key, "ssl_certificate_chain_file")) {
-		cherokee_buffer_init (&vserver->server_cert_chain);
-		cherokee_buffer_add_buffer (&vserver->server_cert_chain, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "ssl_certificate_key_file")) {
 		cherokee_buffer_init (&vserver->server_key);
