@@ -1,3 +1,9 @@
+2009-02-19  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* spawn-fcgi.1, contrib/spawn-fcgi.c, contrib/Makefile.am,
+	Makefile.am: spawn-fcgi is an independent project now. There is no
+	need to ship it with Cherokee any longer.
+
 2009-02-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/ModuleDirlist.py, admin/PageAdvanced.py,

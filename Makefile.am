@@ -14,7 +14,6 @@ m4data_DATA = cherokee.m4
 man_MANS =           \
 cherokee.1           \
 cherokee-config.1    \
-spawn-fcgi.1         \
 cherokee-tweak.1     \
 cherokee-admin.1     \
 cherokee-worker.1
