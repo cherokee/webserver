@@ -207,26 +207,31 @@ figure_pid_file_path (const char *config)
 static void
 pid_file_save (const char *pid_file, int pid)
 {
-	FILE *file;
+	size_t  written;
+	FILE   *file;
 	char  tmp[10];
 
 	file = fopen (pid_file, "w+");
 	if (file == NULL) {
-		PRINT_MSG ("Cannot write PID file '%s'\n", pid_file);
+		PRINT_MSG ("Cannot create PID file '%s'\n", pid_file);
 		return;
 	}
 
 	snprintf (tmp, sizeof(tmp), "%d\n", pid);
-	fwrite (tmp, 1, strlen(tmp), file);
+	written = fwrite (tmp, 1, strlen(tmp), file);
 	fclose (file);
+
+	if (written <= 0) {
+		PRINT_MSG ("Cannot write PID file '%s'\n", pid_file);
+	}
 }
 
 static void
-pid_file_clean (const char *pid_file)
+remove_pid_file (const char *file)
 {
 	struct stat info;
 
-	if (lstat (pid_file, &info) != 0) 
+	if (lstat (file, &info) != 0)
 		return;
 	if (! S_ISREG(info.st_mode))
 		return;
@@ -235,7 +240,32 @@ pid_file_clean (const char *pid_file)
 	if (info.st_size > (int) sizeof("65535\r\n"))
 		return;
 
-	unlink (pid_file);
+	unlink (file);
+}
+
+static void
+pid_file_clean (const char *pid_file)
+{
+	char    *pid_file_worker;
+	cuint_t  len;
+
+	/* Clean main choerkee pid file
+	 */
+	remove_pid_file (pid_file);
+
+	/* Clean also "worker" pid file
+	 */
+	len = strlen(pid_file);
+	pid_file_worker = (char *) malloc (len + 8);
+	if (unlikely (pid_file_worker == NULL))
+		return;
+	
+	memcpy (pid_file_worker, pid_file, len);
+	memcpy (pid_file_worker + len, ".worker\0", 8);
+	
+	remove_pid_file (pid_file_worker);
+
+	free (pid_file_worker);
 }
 
 static ret_t
@@ -296,6 +326,7 @@ signals_handler (int sig, siginfo_t *si, void *context)
 		kill (pid, SIGHUP);
 		break;
 
+	case SIGINT:
 	case SIGTERM:
 		/* Kill child and exit */
 		kill (pid, SIGTERM);
@@ -334,6 +365,7 @@ set_signals (void)
 	act.sa_flags = SA_SIGINFO;
 
 	sigaction (SIGHUP,  &act, NULL);
+	sigaction (SIGINT,  &act, NULL);
 	sigaction (SIGTERM, &act, NULL);
 	sigaction (SIGUSR1, &act, NULL);
 	sigaction (SIGUSR2, &act, NULL);

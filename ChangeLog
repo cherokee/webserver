@@ -7,6 +7,9 @@
 	cherokee/http.h: Adds support for http 410 (gone) status code.
 	RFE: http://code.google.com/p/cherokee/issues/detail?id=370
 
+	* cherokee/main.c: Removes cherokee-worker pid file, and SIGINT
+	is supported now.
+
 2009-02-19  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,
