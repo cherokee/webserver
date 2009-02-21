@@ -1,3 +1,8 @@
+2009-02-21  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/server.py, admin/CherokeeManagement.py: Send TERM signal
+	instead QUIT signal to stop cherokee server from admin.
+
 2009-02-19  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,

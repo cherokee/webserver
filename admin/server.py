@@ -116,7 +116,6 @@ class Handler(pyscgi.SCGIHandler):
         elif uri.startswith('/launch'):
             manager = cherokee_management_get (cfg)
             error = manager.launch()
-            cherokee_management_reset()
             if error:
                 page = PageError (cfg, PageError.COULDNT_LAUNCH, error=error)
             else:

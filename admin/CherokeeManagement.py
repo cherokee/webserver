@@ -9,6 +9,8 @@ from consts import *
 from configured import *
 
 DEFAULT_DELAY = 2
+WAIT_SERVER_STOP = 10
+
 DEFAULT_PID_LOCATIONS = [
     '/var/run/cherokee.pid',
     os.path.join (PREFIX, 'var/run/cherokee.pid')
@@ -22,9 +24,8 @@ vserver!1!rule!1!match = default
 vserver!1!rule!1!handler = common
 """ % (DEFAULT_PID_LOCATIONS[0])
 
-
 # Cherokee Management 'factory':
-# 
+#
 
 cherokee_management = None
 
@@ -50,6 +51,7 @@ class CherokeeManagement:
     def __init__ (self, cfg):
         self._cfg = cfg
         self._pid = self._get_pid (worker=False)
+        self._is_child = False
 
     # Public
     #
@@ -102,21 +104,22 @@ class CherokeeManagement:
                 break
 
         self._pid = p.pid
+        self._is_child = True
         time.sleep (DEFAULT_DELAY)
         return None
-        
+
     def stop (self):
         # Stop Cherokee Guardian
         self.__stop_process (self._pid)
         self._pid = None
-        
+        self._is_child = False
+
         # Get the PID
         pid = self._get_pid (worker=True)
         if not pid: return
 
-        # Stop Cherokee
+        # Stop Cherokee Worker
         self.__stop_process (pid)
-        time.sleep (DEFAULT_DELAY)
 
     def create_config (self, file):
         if os.path.exists (file):
@@ -143,7 +146,7 @@ class CherokeeManagement:
         if not pid_file:
             pid_file = os.path.join (CHEROKEE_VAR_RUN, "cherokee.pid")
         if worker:
-            pid_file += ".worker"            
+            pid_file += ".worker"
         return pid_file
 
     def _get_pid (self, worker=False):
@@ -177,15 +180,25 @@ class CherokeeManagement:
         return pid
 
     def __stop_process (self, pid):
-        if not pid: 
+        if not pid:
             return
 
-        try: os.kill (pid, signal.SIGQUIT)
-        except: pass
+        try:
+            os.kill (pid, signal.SIGTERM)
+            self.__wait_process (pid)
+        except:
+            pass
 
-        try: os.waitpid (pid, 0)
-        except: pass
 
+    def __wait_process (self, pid):
+        if self._is_child:
+            try: os.waitpid (pid, 0)
+            except: pass
+        else:
+            retries = 0
+            while is_PID_alive (pid) and (retries < WAIT_SERVER_STOP):
+                time.sleep (1)
+                retries += 1
 
 def is_PID_alive (pid):
     if sys.platform.startswith('linux') or \
