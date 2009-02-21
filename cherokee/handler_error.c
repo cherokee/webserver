@@ -113,6 +113,7 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 	 */
 	switch (conn->error_code) {
 	case http_not_found:
+	case http_gone:
 		cherokee_buffer_add_str (buffer, "The requested URL ");
 		if (! cherokee_buffer_is_empty (&conn->request_original)) {
 			cherokee_buffer_add_escape_html (buffer, &conn->request_original);
@@ -123,7 +124,13 @@ build_hardcoded_response_page (cherokee_connection_t *conn, cherokee_buffer_t *b
 			}
 			cherokee_buffer_add_escape_html (buffer, &conn->request);
 		}
-		cherokee_buffer_add_str (buffer, " was not found on this server.");
+		
+		if (conn->error_code == http_not_found) {
+			cherokee_buffer_add_str (buffer, " was not found on this server.");
+		} else {
+			cherokee_buffer_add_str (buffer,
+				" is no longer available on this server and there is no forwarding address.");
+		}
 		break;
 
 	case http_bad_request:

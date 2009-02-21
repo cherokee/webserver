@@ -170,6 +170,7 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_access_denied:            *str = http_access_denied_string; break;
 	case http_not_found:                *str = http_not_found_string; break;
 	case http_method_not_allowed:       *str = http_method_not_allowed_string; break;
+	case http_gone:                     *str = http_gone_string; break;
 	case http_length_required:          *str = http_length_required_string; break;
 	case http_request_entity_too_large: *str = http_request_entity_too_large_string; break;
 	case http_unsupported_media_type:   *str = http_unsupported_media_type_string; break;
@@ -231,6 +232,7 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (not_found);
 		entry_code (method_not_allowed);
 		entry_code (length_required);
+		entry_code (gone);
 		entry_code (request_entity_too_large);
 		entry_code (request_uri_too_long);
 		entry_code (unsupported_media_type);

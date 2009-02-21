@@ -96,6 +96,7 @@ ERROR_CODES = [
     ('403', '403 Forbidden'),
     ('404', '404 Not Found'),
     ('405', '405 Method Not Allowed'),
+    ('410', '410 Gone'),
     ('413', '413 Request Entity too large'),
     ('414', '414 Request-URI too long'),
     ('416', '416 Requested range not satisfiable'),

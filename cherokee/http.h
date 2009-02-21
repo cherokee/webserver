@@ -98,6 +98,7 @@ typedef enum {
 	http_access_denied            = 403,
 	http_not_found                = 404,
 	http_method_not_allowed       = 405,
+	http_gone                     = 410,
 	http_length_required          = 411,
  	http_request_entity_too_large = 413,
 	http_request_uri_too_long     = 414,
@@ -127,6 +128,7 @@ typedef enum {
 #define http_access_denied_string            "403 Forbidden"
 #define http_not_found_string                "404 Not Found"
 #define http_method_not_allowed_string       "405 Method Not Allowed"
+#define http_gone_string                     "410 Gone"
 #define http_length_required_string          "411 Length Required"
 #define http_request_entity_too_large_string "413 Request Entity too large"
 #define http_request_uri_too_long_string     "414 Request-URI too long"
