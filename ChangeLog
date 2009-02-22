@@ -1,5 +1,8 @@
 2009-02-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/connection.c (cherokee_connection_setup_error_handler):
+	Clean the connection before it's (internally) redirected.
+
 	* cherokee/thread.c, cherokee/connection.c: Fixes the internal
 	error redirections. It also adds a new security check in order to
 	ensure that connections will not get into a loop while hanlding an

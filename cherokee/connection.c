@@ -427,9 +427,14 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 		case ret_eagain:
 			/* It's an internal error redirection
 			 */
-			conn->phase = phase_setup_connection;
-			conn->error_code = http_ok;
+ 			cherokee_buffer_clean (&conn->pathinfo);
+ 			cherokee_buffer_clean (&conn->query_steing);
+			cherokee_buffer_clean (&conn->web_directory);
+			cherokee_buffer_clean (&conn->local_directory);
 
+			conn->error_code = http_ok;
+			conn->phase = phase_setup_connection;
+			
 			TRACE(ENTRIES, "Error handler not set. Re-evaluating. Phase is 'setup_connection', respins=%d  now.\n", conn->respins);
 			goto clean;
 
