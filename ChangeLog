@@ -1,5 +1,8 @@
 2009-02-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/balancer_round_robin.h, cherokee/balancer_ip_hash.c,
+	cherokee/balancer_round_robin.c: A few concurency focused fixes.
+
 	* qa/200-ErrorRedir2.py, qa/Makefile.am: Adds a new QA test. It
 	checks whether internal redirections handle REDIRECT_QUERY_STRING,
 	and PATH_INFO right when a custom document_root is set for the

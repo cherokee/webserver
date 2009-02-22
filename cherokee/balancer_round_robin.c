@@ -65,10 +65,19 @@ cherokee_balancer_round_robin_configure (cherokee_balancer_t    *balancer,
 static ret_t
 reactivate_entry (cherokee_balancer_entry_t *entry)
 {
+	/* balancer->mutex is LOCKED
+	 */
 	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+
+	/* Disable
+	 */
+	if (entry->disabled == false)
+		return ret_ok;
 
 	entry->disabled = false;
 
+	/* Notify
+	 */
 	cherokee_source_copy_name (entry->source, &tmp);
 	PRINT_MSG ("NOTICE: Taking source='%s' back on-line\n", tmp.buf);
 	cherokee_buffer_mrproper (&tmp);
@@ -86,7 +95,7 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 	cherokee_balancer_t       *gbal   = BAL(balancer);
 
 	UNUSED(conn);
-	CHEROKEE_MUTEX_LOCK (&balancer->last_one_mutex);
+	CHEROKEE_MUTEX_LOCK (&balancer->mutex);
 
 	/* Pick the next entry */
 	do {
@@ -119,7 +128,7 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 	/* Found */ 
 	*src = entry->source;
 
-	CHEROKEE_MUTEX_UNLOCK (&balancer->last_one_mutex);
+	CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);
 	return ret_ok;
 }
 
@@ -129,28 +138,48 @@ report_fail (cherokee_balancer_round_robin_t *balancer,
 	     cherokee_connection_t           *conn, 
 	     cherokee_source_t               *src)
 {
+	ret_t                      ret;
 	cherokee_list_t           *i;
 	cherokee_balancer_entry_t *entry;
 	cherokee_buffer_t          tmp    = CHEROKEE_BUF_INIT;
 
 	UNUSED(conn);
+	CHEROKEE_MUTEX_LOCK (&balancer->mutex);
 
 	list_for_each (i, &BAL(balancer)->entries) {
 		entry = BAL_ENTRY(i);
-		if (entry->source == src) {
-			entry->disabled       = true;
-			entry->disabled_until = cherokee_bogonow_now + BAL_DISABLE_TIMEOUT;
 
-			cherokee_source_copy_name (entry->source, &tmp);
-			PRINT_MSG ("NOTICE: Taking source='%s' off-line\n", tmp.buf);
-			cherokee_buffer_mrproper (&tmp);
+		/* Find the right source
+		 */
+		if (entry->source != src)
+			continue;
 
-			return ret_ok;
+		if (entry->disabled) {
+			ret = ret_ok;
+			goto out;
 		}
+
+		/* Disable the source
+		 */
+		entry->disabled       = true;
+		entry->disabled_until = cherokee_bogonow_now + BAL_DISABLE_TIMEOUT;
+
+		/* Notify what has happened
+		 */
+		cherokee_source_copy_name (entry->source, &tmp);
+		PRINT_MSG ("NOTICE: Taking source='%s' off-line\n", tmp.buf);
+		cherokee_buffer_mrproper (&tmp);
+		
+		CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);
+		return ret_ok;
 	}
 
 	SHOULDNT_HAPPEN;
-	return ret_error;
+	ret = ret_error;
+
+out:
+	CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);
+	return ret;
 }
 
 
@@ -171,7 +200,7 @@ cherokee_balancer_round_robin_new (cherokee_balancer_t **bal)
 	/* Init properties
 	 */
 	n->last_one = NULL;
-	CHEROKEE_MUTEX_INIT (&n->last_one_mutex, CHEROKEE_MUTEX_FAST);
+	CHEROKEE_MUTEX_INIT (&n->mutex, CHEROKEE_MUTEX_FAST);
 
 	/* Return obj
 	 */
@@ -183,6 +212,6 @@ cherokee_balancer_round_robin_new (cherokee_balancer_t **bal)
 ret_t      
 cherokee_balancer_round_robin_free (cherokee_balancer_round_robin_t *balancer)
 {
-	CHEROKEE_MUTEX_DESTROY (&balancer->last_one_mutex);
+	CHEROKEE_MUTEX_DESTROY (&balancer->mutex);
 	return ret_ok;
 }

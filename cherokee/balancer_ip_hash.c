@@ -80,23 +80,25 @@ static ret_t
 reactivate_entry (cherokee_balancer_ip_hash_t *balancer,
 		  cherokee_balancer_entry_t   *entry)
 {
+	/* balancer->mutex is LOCKED
+	 */
 	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
-	CHEROKEE_MUTEX_LOCK (&balancer->mutex);
-
+	/* Disable
+	 */
 	if (entry->disabled == false)
-		goto out;
+		return ret_ok;
 
 	balancer->n_active += 1;
 	entry->disabled = false;
 
+	/* Notify
+	 */
 	cherokee_source_copy_name (entry->source, &tmp);
 	PRINT_MSG ("NOTICE: Taking source='%s' back on-line: %d active\n",
 		   tmp.buf, balancer->n_active);
 	cherokee_buffer_mrproper (&tmp);
 
-out:
-	CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);
 	return ret_ok;
 }
 
@@ -131,6 +133,7 @@ report_fail (cherokee_balancer_ip_hash_t *balancer,
 		/* Disable the source
 		 */
 		balancer->n_active -= 1;
+
 		entry->disabled       = true;
 		entry->disabled_until = cherokee_bogonow_now + BAL_DISABLE_TIMEOUT;
 
