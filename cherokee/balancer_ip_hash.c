@@ -106,6 +106,7 @@ report_fail (cherokee_balancer_ip_hash_t *balancer,
 	     cherokee_connection_t       *conn, 
 	     cherokee_source_t           *src)
 {
+	ret_t                      ret;
 	cherokee_list_t           *i;
 	cherokee_balancer_entry_t *entry;
 	cherokee_buffer_t          tmp    = CHEROKEE_BUF_INIT;
@@ -119,11 +120,13 @@ report_fail (cherokee_balancer_ip_hash_t *balancer,
 
 		/* Find the right source
 		 */
-		if (entry->disabled)
-			continue;
-
 		if (entry->source != src)
 			continue;
+
+		if (entry->disabled) {
+			ret = ret_ok;
+			goto out;
+		}
 
 		/* Disable the source
 		 */
@@ -142,10 +145,12 @@ report_fail (cherokee_balancer_ip_hash_t *balancer,
 		return ret_ok;
 	}
 
-	CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);
-
+	ret = ret_error;
 	SHOULDNT_HAPPEN;
-	return ret_error;
+
+out:
+	CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);
+	return ret;
 }
 
 
