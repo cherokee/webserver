@@ -1,5 +1,9 @@
 2009-02-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/balancer_ip_hash.c, cherokee/balancer_ip_hash.h: Try to
+	address what seems to be a concurrency issue:
+	http://code.google.com/p/cherokee/issues/detail?id=371
+	
 	* cherokee/connection.c (cherokee_connection_setup_error_handler):
 	Clean the connection before it's (internally) redirected.
 

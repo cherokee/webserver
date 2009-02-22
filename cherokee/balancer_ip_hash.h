@@ -34,7 +34,7 @@ typedef struct {
 	
 	cuint_t              n_active;
 	cherokee_list_t     *last_one;	
-	CHEROKEE_MUTEX_T    (last_one_mutex);
+	CHEROKEE_MUTEX_T    (mutex);
 } cherokee_balancer_ip_hash_t;
 
 #define BAL_IP_HASH(x) ((cherokee_balancer_ip_hash_t *)(x))
