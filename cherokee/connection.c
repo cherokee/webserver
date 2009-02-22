@@ -428,7 +428,7 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 			/* It's an internal error redirection
 			 */
  			cherokee_buffer_clean (&conn->pathinfo);
- 			cherokee_buffer_clean (&conn->query_steing);
+ 			cherokee_buffer_clean (&conn->query_string);
 			cherokee_buffer_clean (&conn->web_directory);
 			cherokee_buffer_clean (&conn->local_directory);
 
