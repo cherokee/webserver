@@ -27,8 +27,8 @@ HELPS = [
 ]
 
 DATA_VALIDATION = [
-    ('source!.*!host',         validations.is_information_source),
-    ('source!.*!timeout',      validations.is_positive_int),
+    ('source!.+?!host',        validations.is_information_source),
+    ('source!.+?!timeout',     validations.is_positive_int),
     ('tmp!new_source_host',    validations.is_information_source),
     ('tmp!new_source_timeout', validations.is_positive_int)
 ]
@@ -149,7 +149,7 @@ class PageInfoSource (PageMenu, FormHelper):
         txt = ''
         nick = self._cfg.get_val('source!%s!nick'%(s))
         type = self._cfg.get_val('source!%s!type'%(s))
-
+        
         # Properties
         table = TableProps()
         self.AddPropOptions_Reload (table, 'Type','source!%s!type'%(s), SOURCE_TYPES, NOTE_TYPE)

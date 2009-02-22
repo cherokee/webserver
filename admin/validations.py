@@ -275,9 +275,15 @@ def is_dev_null_or_local_dir_exists (value, cfg, nochroot=False):
     return is_local_dir_exists (value, cfg, nochroot)
 
 def is_information_source (value):
+    # /unix/path
+    if value[0] == '/':
+        return value
+
+    # http://host/path -> host/path
     if "://" in value:
         value = value.split("://")[1]
 
+    # host/path -> host
     if '/' in value:
         return value.split('/')[0]
 

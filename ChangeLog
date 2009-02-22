@@ -1,5 +1,8 @@
 2009-02-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/validations.py (is_information_source): Fixes an issue
+	with the Unix Socket validation.
+
 	* contrib/cherokee, contrib/Makefile.am, contrib/cherokee.pre:
 	Tries to make the cherokee init.d script a little more flexible.
 
