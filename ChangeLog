@@ -1,5 +1,8 @@
 2009-02-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* contrib/cherokee, contrib/Makefile.am, contrib/cherokee.pre:
+	Tries to make the cherokee init.d script a little more flexible.
+
 	* admin/ModuleErrorRedir.py: Updates the error management
 	interface. There were changes on the server code that have not
 	been implemented in cherokee-admin yet. It fixes bug #368:
