@@ -383,9 +383,17 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 	cherokee_virtual_server_t  *vsrv;
 	cherokee_config_entry_t    *entry;	
 
+	/* NOTE ABOUT THIS FUNCTION: It ought to be call only from
+	 * cherokee/thread.c. Right after calling the function it must
+	 * call continue (becase conn->error_code might have changed).
+	 */
+
 	srv   = CONN_SRV(conn);
 	vsrv  = CONN_VSRV(conn);
 	entry = vsrv->error_handler;
+
+	TRACE(ENTRIES, "Setting up error handler: %d (respins=%d)\n",
+	      conn->error_code, conn->respins);
 
 	/* It has a common handler. It has to be freed.
 	 */
@@ -394,25 +402,51 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 		conn->handler = NULL;
 	}
 
+	/* Loop detection: Set the default error handler and exit.
+	 */
+	conn->respins += 1;
+	if (conn->respins > RESPINS_MAX) {
+		goto safe;
+	}
+
 	/* Create a new error handler
 	 */
 	if ((entry != NULL) && (entry->handler_new_func != NULL)) {
 		ret = entry->handler_new_func ((void **) &conn->handler, conn, entry->handler_properties);
 		switch (ret) {
 		case ret_ok:
+			/* At this point, two different things might happen:
+			 * - It has got a common handler like handler_redir
+			 * - It has got an error handler like handler_error
+			 */
+			conn->phase = phase_init;
+
+			TRACE(ENTRIES, "Error handler set. Phase is '%s' now.\n", "init");
 			goto out;
+
 		case ret_eagain:
+			/* It's an internal error redirection
+			 */
+			conn->phase = phase_setup_connection;
+			conn->error_code = http_ok;
+
+			TRACE(ENTRIES, "Error handler not set. Re-evaluating. Phase is 'setup_connection', respins=%d  now.\n", conn->respins);
 			goto clean;
+
 		default:
 			break;
 		}
 	} 
 
+safe:
 	/* If something was wrong, try with the default error handler
 	 */
 	ret = cherokee_handler_error_new (&conn->handler, conn, NULL);
 	if (unlikely (ret != ret_ok))
 		return ret_error;
+
+	TRACE(ENTRIES, "Default Error handler set. Phase is '%s' now.\n", "init");
+	conn->phase = phase_init;
 
 out:
 #ifdef TRACE_ENABLED

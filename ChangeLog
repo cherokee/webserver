@@ -1,5 +1,10 @@
 2009-02-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/thread.c, cherokee/connection.c: Fixes the internal
+	error redirections. It also adds a new security check in order to
+	ensure that connections will not get into a loop while hanlding an
+	internal error redirection.
+
 	* admin/validations.py (is_information_source): Fixes an issue
 	with the Unix Socket validation.
 

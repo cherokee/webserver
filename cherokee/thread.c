@@ -881,7 +881,6 @@ process_active_connections (cherokee_thread_t *thd)
 			default:
 				cherokee_connection_setup_error_handler (conn);
 				conn_set_mode (thd, conn, socket_writing);
-				conn->phase = phase_init;
 				continue;
 			}
 
@@ -922,7 +921,6 @@ process_active_connections (cherokee_thread_t *thd)
 			    http_type_500(conn->error_code)) 
 			{
 				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
 				continue;
 			}
 
@@ -943,7 +941,6 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_rule_list_match (rules, conn, &entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
 				continue;
 			}
 
@@ -959,7 +956,6 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_check_http_method (conn, &entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
 				continue;
 			}			
 
@@ -968,7 +964,6 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_check_only_secure (conn, &entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
 				continue;
 			}			
 
@@ -977,7 +972,6 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_check_ip_validation (conn, &entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
 				continue;
 			}
 
@@ -986,7 +980,6 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_check_authentication (conn, &entry);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
 				continue;
 			}
 			
@@ -1009,7 +1002,6 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			default:
 				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
 				continue;
 			}
 
@@ -1022,7 +1014,6 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_create_encoder (conn, entry.encoders);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
 				continue;
 			}
 
@@ -1031,7 +1022,6 @@ process_active_connections (cherokee_thread_t *thd)
 			ret = cherokee_connection_parse_range (conn);
 			if (unlikely (ret != ret_ok)) {
 				cherokee_connection_setup_error_handler (conn);
-				conn->phase = phase_init;
 				continue;
 			}
 
@@ -1088,30 +1078,15 @@ process_active_connections (cherokee_thread_t *thd)
 					/* Try to setup an error handler
 					 */
 					ret = cherokee_connection_setup_error_handler (conn);
-					switch (ret) {
-					case ret_ok:
-						/* At this point, two different things might happen:
-						 * - It has got a common handler like handler_redir
-						 * - It has got an error handler like handler_error
-						 */
-						conn->phase = phase_init;
-						break;
-
-					case ret_eagain:
-						/* It's an internal error redirection
-						 */
-						conn->error_code = http_ok;
-						conn->phase = phase_setup_connection;
-						break;
-
-					default:
+					if ((ret != ret_ok) &&
+					    (ret != ret_eagain))
+					{
 						/* Critical error: It couldn't instance the handler
 						 */					
 						conns_freed++;
 						close_active_connection (thd, conn);
-						continue;
 					}
-					break;
+					continue;
 				}
 			}
 			
@@ -1128,9 +1103,8 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			case ret_eof:
 			case ret_error:
-				cherokee_connection_setup_error_handler (conn);
 				conn->error_code = http_internal_error;
-				conn->phase = phase_init;
+				cherokee_connection_setup_error_handler (conn);
 				continue;
 			default:
 				RET_UNKNOWN(ret);
