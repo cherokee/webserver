@@ -250,7 +250,7 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 		} else if (equal_buf_str (&child->key, "timeout")) {
 			src->timeout = atoi (child->val.buf);
 
-		} else if (equal_buf_str (&child->key, "change_user")) {
+		} else if (equal_buf_str (&child->key, "user")) {
 			struct passwd pwd;
 			char          tmp[1024];
 

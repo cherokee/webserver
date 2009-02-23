@@ -1,3 +1,8 @@
+2009-02-23  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/source_interpreter.c, admin/PageInfoSource.py: Adds a
+	new field to allow to spawn interpreters under a different UID.
+
 2009-02-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/balancer_round_robin.h, cherokee/balancer_ip_hash.c,
