@@ -1,3 +1,9 @@
+2009-02-24  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/source_interpreter.c
+	(cherokee_source_interpreter_configure): It was not printing any
+	error message when the server could not find an interpreter.
+
 2009-02-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/source_interpreter.c, admin/PageInfoSource.py: Adds a

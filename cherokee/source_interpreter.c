@@ -281,8 +281,10 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 	}
 
 	ret = check_interpreter (src);
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
+		PRINT_ERROR ("ERROR: Couldn't find interpreter '%s'\n", src->interpreter.buf);
 		return ret_error;
+	}
 
 	return ret_ok;
 }
