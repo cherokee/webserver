@@ -209,11 +209,14 @@ pid_file_save (const char *pid_file, int pid)
 {
 	size_t  written;
 	FILE   *file;
-	char  tmp[10];
+	char    tmp[10];
 
 	file = fopen (pid_file, "w+");
 	if (file == NULL) {
-		PRINT_MSG ("Cannot create PID file '%s'\n", pid_file);
+		/* Do not report any error if the PID file cannot be
+		 * created. It wouldn't allow cherokee-admin to start
+		 * Cherokee. The worker would complain later anyway..
+		 */
 		return;
 	}
 

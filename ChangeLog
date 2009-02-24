@@ -1,5 +1,16 @@
 2009-02-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main.c (pid_file_save): Removes a PRINT_MSG entry. It
+	was printing an error whenever the PID file couldn't be created.
+	The problem is that cherokee/main.c tries to write the PID file
+	even if the configuration file doesn't require it to do so.  The
+	real problem was showing up when cherokee-admin interpreterd the
+	printed line as a fatal error, and therefore the server was not
+	properly launched. The best solution seems to be to stop printing
+	the error message when cherokee/main.c cannot create the PID file.
+	In case the file had to be created and it failed, cherokee-worker
+	would print it later on anyway.
+
 	* cherokee/source_interpreter.c
 	(cherokee_source_interpreter_configure): It was not printing any
 	error message when the server could not find an interpreter.
