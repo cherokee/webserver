@@ -9,8 +9,6 @@
 # Server
 #
 server!bind!1!port = 80
-server!bind!2!port = 443
-server!bind!2!tls = 1
 server!timeout = 15
 server!keepalive = 1
 server!keepalive_max_requests = 500

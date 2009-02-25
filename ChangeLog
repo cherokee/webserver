@@ -1,3 +1,8 @@
+2009-02-25  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee.conf.sample.pre: Removes the 443 port. As long as TLS
+	is not enabled by default, it should not define it.
+
 2009-02-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/main.c (pid_file_save): Removes a PRINT_MSG entry. It
