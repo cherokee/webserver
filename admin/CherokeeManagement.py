@@ -8,8 +8,10 @@ from subprocess import *
 from consts import *
 from configured import *
 
-DEFAULT_DELAY = 2
+DEFAULT_DELAY    = 2
 WAIT_SERVER_STOP = 10
+DEFAULT_PATH     = ['/usr/local/sbin', '/usr/local/bin',
+                    '/usr/sbin', '/usr/bin', '/sbin', '/bin']
 
 DEFAULT_PID_LOCATIONS = [
     '/var/run/cherokee.pid',
@@ -75,8 +77,13 @@ class CherokeeManagement:
         def daemonize():
             os.setsid() 
 
+        # Ensure the a minimum path is set
+        environ = os.environ.copy()
+        if not "PATH" in environ:
+            environ["PATH"] = ':'.join(DEFAULT_PATH)
+
         p = Popen ([CHEROKEE_SERVER, '-C', self._cfg.file], 
-                   stdout=PIPE, stderr=PIPE, 
+                   stdout=PIPE, stderr=PIPE, env=environ,
                    preexec_fn=daemonize, close_fds=True)
 
         stdout_f,  stderr_f  = (p.stdout, p.stderr)

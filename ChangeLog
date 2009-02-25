@@ -1,5 +1,10 @@
 2009-02-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/CherokeeManagement.py (launch.daemonize): For some reason
+	(that I haven't still quite figured out) there are some cases when
+	the PATH environment variable is not defined. I suppose this is a
+	Linux grsecurity related bug.
+
 	* cherokee/source_interpreter.c (check_interpreter_path): Check
 	whether the PATH environment variable is empty.
 
