@@ -253,3 +253,7 @@ EXTRA_DIST = \
 $(doc_DATA) \
 $(docmediacss_DATA) \
 $(docmediaimages_DATA)
+
+
+serve:
+	../cherokee/cherokee -r .
