@@ -1,5 +1,8 @@
 2009-02-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/cookbook_ssl.txt: Adds a short note about how to enable the
+	SSL support. By default it's disabled after installing the server.
+
 	* cherokee.conf.sample.pre: Removes the 443 port. As long as TLS
 	is not enabled by default, it should not define it.
 

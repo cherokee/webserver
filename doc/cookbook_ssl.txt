@@ -26,6 +26,25 @@ where any HTTPS compliant browser will look by default. You can change
 that by specifying another port in the URL. For example,
 https://example.com:8080/ would look for an HTTPS server on port 8080.
 
+.How to enable the SSL support?
+
+SSL support is not enabled by default. You will have to perform three
+straightforward actions is order to enable it:
+
+  . The first step is to enable a TLS/SSL engine. The option is
+    located in the link:config_general.html[General] configuration
+    setting. Cherokee is shipped with an libssl plug-in.
+
+  . Once the engine is configured, a new
+    link:config_general.html#ports_to_listen[binding port] must be
+    configured.  By default, HTTPS uses the port 443. Remember to add
+    this port, and to check the TLS toggle button.
+
+  . The last step would be to assign SSL certificates to the virtual
+    servers. The configuration is found inside each
+    link:config_virtual_servers.html#security[virtual server]
+    configuration, under the Security tab.
+
 .How to manually test HTTP/HTTPS?
 
 HTTP can easily be tested like this:
