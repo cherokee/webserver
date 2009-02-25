@@ -172,7 +172,11 @@ check_interpreter_path (cherokee_buffer_t *partial_path)
 	char              *path;
 	cherokee_buffer_t  fullpath = CHEROKEE_BUF_INIT;
 
-	path = strdup (getenv("PATH"));
+	p = getenv("PATH");
+	if (p == NULL)
+		return ret_error;
+
+	path = strdup (p);
 	if (path == NULL)
 		return ret_error;
 
