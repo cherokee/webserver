@@ -1,5 +1,9 @@
 2009-02-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/media/images/admin_vserver_errors.png: The error
+	configuration interface changed slightly. This commit updates the
+	screenshot.
+
 	* doc/cookbook_ssl.txt: Adds a short note about how to enable the
 	SSL support. By default it's disabled after installing the server.
 
