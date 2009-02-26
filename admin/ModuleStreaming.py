@@ -7,7 +7,7 @@ from ModuleHandler import *
 from ModuleFile import *
 
 NOTE_RATE        = 'Figure the bit rate of the media file, and limit the bandwidth to it.'
-NOTE_RATE_FACTOR = 'Factor to increases the bandwidth limit. Default: 0.1'
+NOTE_RATE_FACTOR = 'Factor by which the bandwidth limit will be increased. Default: 0.1'
 NOTE_RATE_BOOST  = 'Number of seconds to stream before setting the bandwidth limit. Default: 5.'
 
 DATA_VALIDATION = [
@@ -36,7 +36,7 @@ class ModuleStreaming (ModuleHandler):
         table = TableProps()
         self.AddPropCheck (table, "Auto Rate",      "%s!rate" % (self._prefix), True,  NOTE_RATE)
         if int(self._cfg.get_val ('%s!rate'%(self._prefix), "1")):
-            self.AddPropEntry (table, "Multity Factor", "%s!rate_factor" % (self._prefix), NOTE_RATE_FACTOR)
+            self.AddPropEntry (table, "Speedup Factor", "%s!rate_factor" % (self._prefix), NOTE_RATE_FACTOR)
             self.AddPropEntry (table, "Initial Boost",  "%s!rate_boost" % (self._prefix),  NOTE_RATE_BOOST)
 
         txt += '<h2>Audio/Video Streaming</h2>'

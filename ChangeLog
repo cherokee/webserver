@@ -1,5 +1,11 @@
 2009-02-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/Makefile.am, doc/modules_handlers_streaming.txt,
+	doc/index.txt: Adds a missing manual page. The new Audio/Video
+	streaming handler was not being covered by the documentation.
+
+	* admin/ModuleStreaming.py: Fixes a typo.
+
 	* admin/ModuleFcgi.py, admin/ModuleScgi.py, admin/ModuleCgi.py: By
 	some reason, the 'Check file' option was not being showed when an
 	Extension was configured. This patch reverts it. Now it's always
