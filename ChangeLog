@@ -1,5 +1,7 @@
 2009-02-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* 0.99.1 released
+
 	* contrib/Makefile.am, contrib/098to099.py: Adds a tiny script to
 	convert configuration file from 0.98 to 0.99. There is only one
 	little change in the format. There will be many users who won't
