@@ -23,8 +23,6 @@ class ModuleScgi (ModuleCgiBase):
         self.show_change_uid    = False
         self.show_document_root = True
 
-        self._util__set_fixed_check_file()
-
     def _op_render (self):
         txt = ModuleCgiBase._op_render (self)
 

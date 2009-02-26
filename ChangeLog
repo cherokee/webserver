@@ -1,3 +1,10 @@
+2009-02-26  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/ModuleFcgi.py, admin/ModuleScgi.py, admin/ModuleCgi.py: By
+	some reason, the 'Check file' option was not being showed when an
+	Extension was configured. This patch reverts it. Now it's always
+	shown.
+
 2009-02-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.0 released

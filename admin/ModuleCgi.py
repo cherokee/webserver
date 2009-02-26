@@ -32,7 +32,6 @@ class ModuleCgiBase (ModuleHandler):
     def __init__ (self, cfg, prefix, name, submit_url):
         ModuleHandler.__init__ (self, name, cfg, prefix, submit_url)
 
-        self.fixed_check_file  = None
         self.show_script_alias = True
         self.show_change_uid   = True
 
@@ -47,9 +46,7 @@ class ModuleCgiBase (ModuleHandler):
 
         self.AddPropCheck (table, "Error handler",     "%s!error_handler"% (self._prefix), False, NOTE_ERROR_HANDLER)
 
-        if self.fixed_check_file == None:
-            self.AddPropCheck (table, "Check file",    "%s!check_file"   % (self._prefix), True,  NOTE_CHECK_FILE)
-
+        self.AddPropCheck (table, "Check file",           "%s!check_file"   % (self._prefix), True,  NOTE_CHECK_FILE)
         self.AddPropCheck (table, "Pass Request Headers", "%s!pass_req_headers" % (self._prefix), True,  NOTE_PASS_REQ)
         self.AddPropCheck (table, "Allow X-Sendfile",     "%s!xsendfile" % (self._prefix),        False, NOTE_XSENDFILE)
         txt += self.Indent(table)
@@ -87,21 +84,10 @@ class ModuleCgiBase (ModuleHandler):
         if new_name and new_value:
             self._cfg['%s!env!%s'%(self._prefix, new_name)] = new_value
 
-        checkboxes = ['error_handler', 'pass_req_headers', 'xsendfile', 'change_user']
-
-        if self.fixed_check_file == None:
-            checkboxes += ['check_file']
-        else:
-            self._cfg['%s!check_file'%(self._prefix)] = self.fixed_check_file
+        checkboxes = ['error_handler', 'pass_req_headers', 'xsendfile',
+                      'change_user', 'check_file']
 
         self.ApplyChangesPrefix (self._prefix, checkboxes, post, DATA_VALIDATION)
-
-    def _util__set_fixed_check_file (self):
-        # No need to show 'check file' when the handler is an extension
-        p = '!'.join(self._prefix.split('!')[:-1])
-        match = self._cfg.get_val("%s!match"%(p))
-        if match.lower() in ['extensions']:
-            self.fixed_check_file = "1"
 
 class ModuleCgi (ModuleCgiBase):
     def __init__ (self, cfg, prefix, submit_url):
