@@ -1,5 +1,10 @@
 2009-02-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* contrib/Makefile.am, contrib/098to099.py: Adds a tiny script to
+	convert configuration file from 0.98 to 0.99. There is only one
+	little change in the format. There will be many users who won't
+	need to use the script for the update.
+
 	* doc/Makefile.am, doc/modules_handlers_streaming.txt,
 	doc/index.txt: Adds a missing manual page. The new Audio/Video
 	streaming handler was not being covered by the documentation.
