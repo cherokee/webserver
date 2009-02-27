@@ -36,6 +36,7 @@ cherokee_bind_new (cherokee_bind_t **listener)
 	cherokee_buffer_init (&n->ip);
 	cherokee_socket_init (&n->socket);
 	n->port = 0;
+	n->id   = 0;
 
 	cherokee_buffer_init (&n->server_string);
 	cherokee_buffer_init (&n->server_string_ext);
@@ -115,6 +116,8 @@ cherokee_bind_configure (cherokee_bind_t        *listener,
 	ret_t              ret;
 	cherokee_boolean_t tls;
 	cherokee_buffer_t *buf;
+
+	listener->id = atoi(conf->key.buf);
 
 	ret = cherokee_config_node_read (conf, "interface", &buf);
 	if (ret == ret_ok) {

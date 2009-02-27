@@ -34,6 +34,7 @@
 
 typedef struct {
 	cherokee_list_t    listed;
+	int                id;
 	
 	/* Listener */
 	cherokee_socket_t  socket;

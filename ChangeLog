@@ -1,3 +1,11 @@
+2009-02-27  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/Makefile.am, cherokee/rule_bind.c,
+	cherokee/rule_bind.h, cherokee/bind.c, cherokee/bind.h,
+	configure.in, admin/ModuleBind.py, admin/consts.py,
+	admin/Makefile.am: Adds a new rule plug-in. It matches the server
+	TCP port from which the connection was accepted.
+
 2009-02-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.1 released

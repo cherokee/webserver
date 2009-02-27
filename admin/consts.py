@@ -113,8 +113,9 @@ RULES = [
     ('extensions', 'Extensions'),
     ('request',    'Regular Expression'),
     ('header',     'Header'),
-    ('exists',     'File exists'),
-    ('method',     'HTTP method'),
+    ('exists',     'File Exists'),
+    ('method',     'HTTP Method'),
+    ('bind',       'Incoming Port'),
     ('geoip',      'GeoIP')
 ]
 

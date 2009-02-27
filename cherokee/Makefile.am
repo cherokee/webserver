@@ -181,7 +181,24 @@ endif
 
 
 #
-# Rule exists
+# Rule bind
+#
+rule_bind = \
+rule_bind.c \
+rule_bind.h
+
+libplugin_bind_la_LDFLAGS = $(module_ldflags)  
+libplugin_bind_la_SOURCES = $(rule_bind)
+
+if STATIC_RULE_BIND
+static_rule_bind_src = $(rule_bind)
+else
+dynamic_rule_bind_lib = libplugin_bind.la
+endif
+
+
+#
+# Rule method
 #
 rule_method = \
 rule_method.c \
@@ -1179,6 +1196,7 @@ $(static_rule_extensions_src) \
 $(static_rule_request_src) \
 $(static_rule_header_src) \
 $(static_rule_exists_src) \
+$(static_rule_bind_src) \
 $(static_rule_method_src) \
 $(static_rule_geoip_src) \
 $(static_rule_not_src) \
@@ -1349,6 +1367,7 @@ $(dynamic_rule_extensions_lib) \
 $(dynamic_rule_request_lib) \
 $(dynamic_rule_header_lib) \
 $(dynamic_rule_exists_lib) \
+$(dynamic_rule_bind_lib) \
 $(dynamic_rule_method_lib) \
 $(dynamic_rule_geoip_lib) \
 $(dynamic_rule_not_lib) \
