@@ -34,14 +34,22 @@ class Entry:
 
     def __str__ (self):
         suffix = ""
+        disabled = ""
+
         if self._type == "checkbox":
             if "quiet" in self._kwargs and self._kwargs["quiet"]:
                 del(self._kwargs["quiet"])
             else:
                 suffix = self.AddToggleSpan(" Enabled")
 
+        if "disabled" in self._kwargs:
+            if self._kwargs["disabled"] == True:
+                disabled = " disabled"
+
+            del (self._kwargs["disabled"])
+
         error = '<div id="error_%s"></div>' % (self._name)
-        props = 'id="%s" name="%s" type="%s"' % (self._name, self._name, self._type)
+        props = 'id="%s" name="%s" type="%s"%s' % (self._name, self._name, self._type, disabled)
 
         for prop in self._kwargs:
             props += ' %s="%s"' % (prop, self._kwargs[prop])

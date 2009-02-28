@@ -101,15 +101,20 @@ class PageGeneral (PageMenu, FormHelper):
         else:
             next = str(binds[-1] + 1)
 
+        has_tls = self._cfg.get_val('server!tls')
+        if not has_tls:
+            self._uncheck_tls_ports()
+
         # List ports
         table = Table(4, 1, style='width="90%"')
         table += ('Port', 'Bind to', 'TLS', '')
+
         for k in self._cfg.keys('server!bind'):
             pre = 'server!bind!%s'%(k)
 
             port   = self.InstanceEntry ("%s!port"%(pre),      'text', size=8)
             listen = self.InstanceEntry ("%s!interface"%(pre), 'text', size=45)
-            tls    = self.InstanceCheckbox ('%s!tls'%(pre), False, quiet=True)
+            tls    = self.InstanceCheckbox ('%s!tls'%(pre), False, quiet=True, disabled=not has_tls)
 
             js = "post_del_key('/ajax/update', '%s');"%(pre)
             link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
@@ -127,3 +132,7 @@ class PageGeneral (PageMenu, FormHelper):
         txt += "<br />"
         txt += str(table)
         return txt
+
+    def _uncheck_tls_ports (self):
+        for bind in self._cfg.keys('server!bind'):
+            self._cfg['server!bind!%s!tls' % (bind)] = '0'

@@ -1,3 +1,9 @@
+2009-02-28  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/PageGeneral.py, admin/Entry.py, admin/Form.py:
+	If there is no SSL/TLS backend configured, then TLS checkboxes
+	should be disabled.
+
 2009-02-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/Makefile.am, cherokee/rule_bind.c,
