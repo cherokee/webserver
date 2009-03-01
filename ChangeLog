@@ -1,3 +1,8 @@
+2009-03-01  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/validations.py: Fixes a typo. Bug #381:
+	http://code.google.com/p/cherokee/issues/detail?id=381
+
 2009-02-28  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageGeneral.py, admin/Entry.py, admin/Form.py:
