@@ -82,14 +82,15 @@ configure (cherokee_rule_bind_t      *rule,
 		}
 
 		list_for_each (bind_obj, &srv->listeners){
-			if (BIND(bind_obj)->id == bind_n) {
-				TRACE(ENTRIES, "Adding rule bind: %d\n", bind_n);
+			if (BIND(bind_obj)->id != bind_n)
+				continue;
 
-				ret = cherokee_list_add_tail_content (&rule->binds, bind_obj);
-				if (ret != ret_ok)
-					return ret_error;
-				break;
-			}
+			TRACE(ENTRIES, "Adding rule bind: %d\n", bind_n);
+			
+			ret = cherokee_list_add_tail_content (&rule->binds, bind_obj);
+			if (ret != ret_ok)
+				return ret_error;
+			break;
 		}
 		
 	}
