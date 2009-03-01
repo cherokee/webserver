@@ -477,6 +477,11 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		TRACE (ENTRIES, "Connected successfully fd=%d\n", socket->socket);
 		goto out;
 	case ret_deny:
+		/* The connection has been refused:
+		 * Close the socket and try again.
+		 */
+		TRACE (ENTRIES, "Connection refused (closing fd=%d)\n", socket->socket);
+		cherokee_socket_close (socket);
 		break;
 	case ret_eagain:
 		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),

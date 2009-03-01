@@ -1,3 +1,11 @@
+2009-03-01  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/source_interpreter.c
+	(cherokee_source_interpreter_connect_polling): Fixes a problem
+	connecting to some information sources. If the source started up
+	slowly, it was returning a 304 error instead of waiting for it to
+	be ready. This patch tries to fix bug #374.
+	
 2009-03-01  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/validations.py: Fixes a typo. Bug #381:
