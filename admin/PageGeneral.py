@@ -102,8 +102,6 @@ class PageGeneral (PageMenu, FormHelper):
             next = str(binds[-1] + 1)
 
         has_tls = self._cfg.get_val('server!tls')
-        if not has_tls:
-            self._uncheck_tls_ports()
 
         # List ports
         table = Table(4, 1, style='width="90%"')
@@ -132,7 +130,3 @@ class PageGeneral (PageMenu, FormHelper):
         txt += "<br />"
         txt += str(table)
         return txt
-
-    def _uncheck_tls_ports (self):
-        for bind in self._cfg.keys('server!bind'):
-            self._cfg['server!bind!%s!tls' % (bind)] = '0'
