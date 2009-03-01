@@ -124,7 +124,7 @@ def is_local_dir_exists (value, cfg, nochroot=False):
         path = value
 
     if not os.path.exists(path):
-        raise ValueError, 'Path does not exists'
+        raise ValueError, 'Path does not exist'
 
     if not os.path.isdir(path):
         raise ValueError, 'Path is not a directory'
@@ -141,7 +141,7 @@ def is_local_file_exists (value, cfg, nochroot=False):
         path = value
 
     if not os.path.exists(path):
-        raise ValueError, 'Path does not exists'
+        raise ValueError, 'Path does not exist'
 
     if not os.path.isfile(path):
         raise ValueError, 'Path is not a regular file'
