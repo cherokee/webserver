@@ -11,6 +11,9 @@ vserver!1!rule!1150!handler = common
 vserver!1!rule!1151!match = directory
 vserver!1!rule!1151!match!directory = /respin1-cgi
 vserver!1!rule!1151!handler = cgi
+# CGIs based on PHP need this if php was compiled 
+# with the 'force-cgi-redirect' enabled.
+vserver!1!rule!1151!handler!env!REDIRECT_STATUS = 200
 
 vserver!1!rule!1152!match = request
 vserver!1!rule!1152!match!request = /respin1/.+/

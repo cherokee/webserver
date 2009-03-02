@@ -1,5 +1,9 @@
 2009-03-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/115-Respin.py: This test was not working if PHP was compiled
+	with the 'force-cgi-redirect'. This patch fixes the proble. By
+	Antonio Perez <aperez@skarcha.com>.
+
 	* qa/131-PHP-zero-len-post+Redir.py: Tries to reproduce:
 	http://code.google.com/p/cherokee/issues/detail?id=260
 
