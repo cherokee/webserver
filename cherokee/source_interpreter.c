@@ -88,11 +88,12 @@ interpreter_free (void *ptr)
 	/* Only frees its stuff, the rest will be freed by
 	 * cherokee_source_t.
 	 */
-	cherokee_buffer_mrproper (&src->interpreter);
-
 	if (src->pid > 0) {
+		TRACE(ENTRIES, "Killing %s, pid=%d\n", src->interpreter.buf, src->pid);
 		kill (src->pid, SIGTERM);
 	}
+
+	cherokee_buffer_mrproper (&src->interpreter);
 
 	if (src->custom_env)
 		free_custom_env (src);

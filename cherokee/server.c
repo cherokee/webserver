@@ -221,42 +221,31 @@ destroy_thread (cherokee_thread_t *thread)
 }
 
 
-static ret_t
-destroy_all_threads (cherokee_server_t *srv)
-{
-	cherokee_list_t *i, *tmp;
-
-	/* Set the exit flag, and try to ensure the threads are not
-	 * locked on a semaphore
-	 */
-	list_for_each_safe (i, tmp, &srv->thread_list) {
-		THREAD(i)->exit = true;
-	}
-
-	/* Unlock bind objects
-	 */
-	CHEROKEE_MUTEX_UNLOCK (&srv->listeners_mutex);		
-
-	/* Destroy the thread object
-	 */
-	list_for_each_safe (i, tmp, &srv->thread_list) {
-		destroy_thread (THREAD(i));
-	}
-
-	/* Main thread
-	 */
-	return cherokee_thread_free (srv->main_thread);
-}
-
-
 ret_t
 cherokee_server_free (cherokee_server_t *srv)
 {
 	cherokee_list_t *i, *j;
 
+	/* Flag the threads: server is exiting
+	 */
+	list_for_each (i, &srv->thread_list) {
+		THREAD(i)->exit = true;
+		CHEROKEE_MUTEX_UNLOCK (&srv->listeners_mutex);		
+	}
+
+	/* Kill the child processes
+	 */
+	cherokee_avl_mrproper (&srv->sources, (cherokee_func_free_t)cherokee_source_free);
+
 	/* Threads
 	 */
-	destroy_all_threads (srv);
+	list_for_each_safe (i, j, &srv->thread_list) {
+		TRACE(ENTRIES, "Destroying thread %p\n", i);
+		destroy_thread (THREAD(i));
+	}
+
+	TRACE(ENTRIES, "Destroying main_thread %p\n", srv->main_thread);
+	cherokee_thread_free (srv->main_thread);
 
 	/* File descriptors
 	 */
@@ -295,14 +284,14 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_buffer_mrproper (&srv->pidfile);
 	cherokee_buffer_mrproper (&srv->panic_action);
 
-	cherokee_avl_mrproper (&srv->sources, (cherokee_func_free_t)cherokee_source_free);
-
 	/* Module loader: It must be the last action to be performed
 	 * because it will close all the opened modules.
 	 */
 	cherokee_plugin_loader_mrproper (&srv->loader);
 
+	TRACE(ENTRIES, "The server %p has been freed\n", srv);
 	free (srv);	
+
 	return ret_ok;
 }
 
