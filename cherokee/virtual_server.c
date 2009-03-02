@@ -55,6 +55,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->priority        = 0;
 	n->keepalive       = true;
 	n->cryptor         = NULL;
+	n->post_max_len    = -1;
 
 	/* Virtual entries
 	 */
@@ -695,6 +696,9 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "directory_index")) {
 		cherokee_config_node_read_list (conf, NULL, add_directory_index, vserver);
+
+	} else if (equal_buf_str (&conf->key, "post_max_len")) {
+		vserver->post_max_len = atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "ssl_verify_depth")) {
 		vserver->verify_depth = !!atoi (conf->val.buf);

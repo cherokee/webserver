@@ -1,3 +1,12 @@
+2009-03-02  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/connection.c, admin/PageVServer.py, qa/201-PostLimit.py,
+	qa/Makefile.am: Adds a new maximum POST size limit. It can be
+	defined per virtual host. The patch implements both the server and
+	administration interface. Fixes bug #379.
+	Patch by Samuel Cormier-Iijima <sciyoshi@gmail.com>
+
 2009-03-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/source_interpreter.c

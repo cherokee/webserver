@@ -15,6 +15,7 @@ DATA_VALIDATION = [
     ("vserver!.*?!ssl_certificate_key_file",  (validations.is_local_file_exists, 'cfg', 'nochroot')),
     ("vserver!.*?!ssl_ca_list_file",          (validations.is_local_file_exists, 'cfg', 'nochroot')),
     ("vserver!.*?!ssl_verify_depth",          (validations.is_positive_int)),
+    ("vserver!.*?!max_upload_size",           (validations.is_positive_int)),
     ("vserver!.*?!logger!.*?!filename",       (validations.parent_is_dir, 'cfg', 'nochroot')),
     ("vserver!.*?!logger!.*?!command",        (validations.is_local_file_exists, 'cfg')),
 ]
@@ -35,6 +36,7 @@ NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
 NOTE_ADD_DOMAIN      = 'Adds a new domain name. Wildcards are allowed in the domain name.'
 NOTE_DOCUMENT_ROOT   = 'Virtual Server root directory.'
 NOTE_DIRECTORY_INDEX = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
+NOTE_MAX_UPLOAD_SIZE = 'The maximum size, in bytes, for POST uploads. (Default: unlimited)'
 NOTE_KEEPALIVE       = 'Whether this virtual server is allowed to use Keep-alive (Default: yes)'
 NOTE_DISABLE_LOG     = 'The Logging is currently enabled.'
 NOTE_LOGGERS         = 'Logging format. Apache compatible is highly recommended here.'
@@ -417,7 +419,8 @@ class PageVServer (PageMenu, FormHelper):
 
         txt += '<h2>Network</h2>'
         table = TableProps()
-        self.AddPropCheck (table, 'Keep-alive', '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
+        self.AddPropCheck (table, 'Keep-alive',      '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
+        self.AddPropEntry (table, 'Max Upload Size', '%s!post_max_len' % (pre),  NOTE_MAX_UPLOAD_SIZE)
         txt += self.Indent(table)
 
         return txt

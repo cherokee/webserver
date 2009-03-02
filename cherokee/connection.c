@@ -1616,6 +1616,8 @@ post_init (cherokee_connection_t *conn)
 	memcpy (buf, info, info_len);
 	buf[info_len] = '\0';
 
+	/* Check: Post length > 0
+	 */
 	post_len = (off_t) atol(buf);
 	if (post_len < 0) {
 		conn->error_code = http_bad_request;
@@ -1677,10 +1679,10 @@ parse_userdir (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_get_request (cherokee_connection_t *conn)
 {
-	ret_t    ret;
-	cherokee_http_t error_code = http_bad_request;
-	char    *host, *upgrade, *cnt;
-	cuint_t  host_len, upgrade_len, cnt_len;
+	ret_t            ret;
+	cherokee_http_t  error_code = http_bad_request;
+	char            *host, *upgrade, *cnt;
+	cuint_t          host_len, upgrade_len, cnt_len;
 
 	/* Header parsing
 	 */
@@ -1693,14 +1695,19 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	if (http_method_with_input (conn->header.method)) {
 		uint32_t header_len;
 		uint32_t post_len;
-
+		
+		/* Init the post info
+		 */
 		ret = post_init (conn);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
 
+		/* Split header and post
+		 */
 		ret = cherokee_header_get_length (&conn->header, &header_len);
-		if (unlikely(ret != ret_ok)) return ret;
+		if (unlikely(ret != ret_ok))
+			return ret;
 
 		post_len = conn->incoming_header.len - header_len;
 
@@ -1711,10 +1718,12 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	/* Copy the request and query string
 	 */
 	ret = cherokee_header_copy_request (&conn->header, &conn->request);
-	if (unlikely (ret < ret_ok)) goto error;
+	if (unlikely (ret < ret_ok))
+		goto error;
 
 	ret = cherokee_header_copy_query_string (&conn->header, &conn->query_string);
-	if (unlikely (ret < ret_ok)) goto error;	
+	if (unlikely (ret < ret_ok))
+		goto error;	
 
 	/* Look for starting '/' in the request
 	 */
@@ -1774,7 +1783,8 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	/* Userdir requests
 	 */
 	if ((!cherokee_buffer_is_empty (&CONN_VSRV(conn)->userdir)) && 
-	    cherokee_connection_is_userdir (conn)) {
+	    (cherokee_connection_is_userdir (conn)))
+	{
 		ret = parse_userdir (conn);
 		if (ret != ret_ok) return ret;
 	}
@@ -1803,6 +1813,15 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 				}
 			}
 		}
+	}
+
+	/* Check Upload limit
+	 */
+	if ((CONN_VSRV(conn)->post_max_len > 0) && 
+	    (conn->post.size > CONN_VSRV(conn)->post_max_len))
+	{
+		conn->error_code = http_request_entity_too_large;
+		return ret_error;
 	}
 
 	conn->error_code = http_ok;

@@ -204,7 +204,8 @@ run-tests.py \
 197-SOAPAction.py \
 198-HTTPresponse.py \
 199-ErrorRedir.py \
-200-ErrorRedir2.py
+200-ErrorRedir2.py \
+201-PostLimit.py
 
 test:
 	./run-tests.py
