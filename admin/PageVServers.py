@@ -189,7 +189,7 @@ class PageVServers (PageMenu, FormHelper):
                       'url' :   '/vserver/ajax_update'}
 
         # Add new Virtual Server
-        table = Table(3,1)
+        table = Table(3, 1, header_style='width="200px"')
         table += ('Nickname', 'Document Root')
         fo1 = Form ("/vserver", add_submit=False, auto=False)
         en1 = self.InstanceEntry ("new_vserver_name",  "text", size=20)
@@ -200,7 +200,7 @@ class PageVServers (PageMenu, FormHelper):
         txt += self.Indent(fo1.Render(str(table)))
 
         # Clone Virtual Server
-        table = Table(3,1, header_style='width="250px"')
+        table = Table(3, 1, header_style='width="200px"')
         table += ('Virtual Server', 'Clone as..')
         fo1 = Form ("/vserver", add_submit=False, auto=False)
 

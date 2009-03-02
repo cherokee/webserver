@@ -1,3 +1,7 @@
+2009-03-02  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/PageVServers.py: Cosmetic change; editboxes alignment.
+
 2009-03-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* qa/115-Respin.py: This test was not working if PHP was compiled
