@@ -1,5 +1,10 @@
 2009-03-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/131-PHP-zero-len-post+Redir.py: Tries to reproduce:
+	http://code.google.com/p/cherokee/issues/detail?id=260
+
+	* 0.99.2 released
+
 	* cherokee/source_interpreter.c, cherokee/server.c: Information
 	sources launched by Cherokee will be killed when the server exits.
 	It ought to leave the system as it fount it. This patch fixes:
