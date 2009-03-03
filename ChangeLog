@@ -1,3 +1,8 @@
+2009-03-03  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/PageVServer.py: Fixes #383 (thanks Samuel!)
+	http://code.google.com/p/cherokee/issues/detail?id=383
+
 2009-03-02  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageVServers.py: Cosmetic change; editboxes alignment.

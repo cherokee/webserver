@@ -11,11 +11,11 @@ from CherokeeManagement import *
 DATA_VALIDATION = [
     ("vserver!.*?!user_dir",                   validations.is_safe_id),
     ("vserver!.*?!document_root",             (validations.is_dev_null_or_local_dir_exists, 'cfg')),
+    ("vserver!.*?!post_max_len",              (validations.is_positive_int)),
     ("vserver!.*?!ssl_certificate_file",      (validations.is_local_file_exists, 'cfg', 'nochroot')),
     ("vserver!.*?!ssl_certificate_key_file",  (validations.is_local_file_exists, 'cfg', 'nochroot')),
     ("vserver!.*?!ssl_ca_list_file",          (validations.is_local_file_exists, 'cfg', 'nochroot')),
     ("vserver!.*?!ssl_verify_depth",          (validations.is_positive_int)),
-    ("vserver!.*?!max_upload_size",           (validations.is_positive_int)),
     ("vserver!.*?!logger!.*?!filename",       (validations.parent_is_dir, 'cfg', 'nochroot')),
     ("vserver!.*?!logger!.*?!command",        (validations.is_local_file_exists, 'cfg')),
 ]
