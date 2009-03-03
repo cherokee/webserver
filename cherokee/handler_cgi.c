@@ -211,18 +211,34 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 		cgi->pipeOutput = -1;
 	}
 
-#ifndef _WIN32
-        /* Maybe kill the CGI
+        /* Kill the CGI
 	 */
+#ifndef _WIN32
 	if (cgi->pid > 0) {
-		pid_t pid;
+		pid_t   pid;
+		cuint_t tries = 3;
 
-		do {
-			pid = waitpid (cgi->pid, NULL, WNOHANG);
-		} while ((pid == 1) && (errno == EINTR));
-
-		if (pid <= 0) {
+		while (true) {
+			do {
+				pid = waitpid (cgi->pid, NULL, WNOHANG);
+			} while ((pid == 1) && (errno == EINTR));
+			
+			if (pid > 0) {
+				/* Ok */
+				break;
+			} else if (errno == ECHILD) {
+				/* Already death */
+				break;
+			}
+			
+			/* Failed */
 			kill (cgi->pid, SIGTERM);
+
+			tries -= 1;
+			if (tries < 0) {
+				PRINT_ERROR ("Could not kill PID %d\n", cgi->pid);
+				break;
+			}
 		}
 	}
 #else
@@ -236,6 +252,8 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 	}
 #endif
 
+        /* Free the environment variables
+	 */
 #ifdef _WIN32
 	cherokee_buffer_mrproper (&cgi->envp);
 #else

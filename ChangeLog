@@ -1,5 +1,8 @@
 2009-03-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_cgi.c (cherokee_handler_cgi_free): Tries
+	(little harder) to kill the CGI child process.
+
 	* admin/PageVServer.py: Fixes #383 (thanks Samuel!)
 	http://code.google.com/p/cherokee/issues/detail?id=383
 
