@@ -1,3 +1,9 @@
+2009-03-05  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/rule_extensions.c: Fixes a problem with directory
+	names that ends with a dot. Bug #384:
+	http://code.google.com/p/cherokee/issues/detail?id=384
+
 2009-03-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_cgi.c (cherokee_handler_cgi_free): Tries

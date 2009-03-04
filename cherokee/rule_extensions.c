@@ -106,6 +106,9 @@ match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
 	 */
 	slash = strchr (dot+1, '/');
 	if (slash != NULL) {
+		if (unlikely (slash[1] == '\0')) {
+			return ret_not_found;
+		}
 		*slash = '\0';
 	}
 
