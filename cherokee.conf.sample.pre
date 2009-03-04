@@ -229,7 +229,6 @@ mime!application/x-redhat-package-manager!extensions = rpm
 mime!application/x-sh!extensions = sh
 mime!application/x-shar!extensions = shar
 mime!application/x-shockwave-flash!extensions = swf,swfl
-mime!application/x-stuffit!extensions = sit
 mime!application/x-stuffit!extensions = sit,sea
 mime!application/x-sv4cpio!extensions = sv4cpio
 mime!application/x-sv4crc!extensions = sv4crc
