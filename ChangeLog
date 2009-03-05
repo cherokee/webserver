@@ -1,3 +1,10 @@
+2009-03-05  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_cgi.c (manage_child_cgi_process): Fixes a CGI
+	problem. There were ocassions where the server cloud freeze
+	because of a concurrenty issue. Fixes bug #385:
+	http://code.google.com/p/cherokee/issues/detail?id=385
+
 2009-03-05  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/rule_extensions.c: Fixes a problem with directory
