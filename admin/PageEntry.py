@@ -100,7 +100,7 @@ class PageEntry (PageMenu, FormHelper):
             checks.append ('%s!encoder!%s' % (self._conf_prefix, e))
 
         pre = '%s!match'%(self._conf_prefix)
-        rule = Rule (self._cfg, pre, self.submit_url)
+        rule = Rule (self._cfg, pre, self.submit_url, 0)
         checks += rule.get_checks()
 
         # Apply changes
@@ -125,7 +125,7 @@ class PageEntry (PageMenu, FormHelper):
 
         # Load the rule plugin
         pre = "%s!match"%(self._conf_prefix)
-        rule = Rule (self._cfg, pre, self.submit_url)
+        rule = Rule (self._cfg, pre, self.submit_url, 0)
 
         txt += rule.get_title()
         return txt
@@ -185,7 +185,7 @@ class PageEntry (PageMenu, FormHelper):
     def _render_rule (self):
         txt  = "<h2>Matching Rule</h2>"
         pre  = "%s!match"%(self._conf_prefix)
-        rule = Rule (self._cfg, pre, self.submit_url)
+        rule = Rule (self._cfg, pre, self.submit_url, 0)
         txt += rule._op_render()
 
         return txt

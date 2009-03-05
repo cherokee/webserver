@@ -313,7 +313,7 @@ class PageVServer (PageMenu, FormHelper):
             pre   = '%s!%s!match' % (cfg_key, prio)
 
             # Try to load the rule plugin
-            rule = Rule(self._cfg, pre, self.submit_url)
+            rule = Rule(self._cfg, pre, self.submit_url, 0)
             name      = rule.get_name()
             name_type = rule.get_type_name()
 

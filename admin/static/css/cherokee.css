@@ -534,6 +534,64 @@ table.rulestable tr.odd td {
 }
 
 /**************************/
+/* PageVServer.py styles */
+/**************************/
+
+.rule_group {
+	padding: 10px 8px;
+}
+
+.rule_group_1 {
+	margin-top: 15px;
+}
+
+.rule_group_1, .rule_group_3, .rule_group_5, .rule_group_7, .rule_group_9 {
+	background-color: #ddd;
+	border: #aaa 1px solid;
+}
+
+.rule_group_2, .rule_group_4, .rule_group_6, .rule_group_8, .rule_group_10 {
+	background-color: #eee;
+	border: #aaa 1px solid;
+}
+
+.rule_not {
+	margin: 0;
+	padding: 0;
+}
+
+.rule_not_title {
+	color: white;
+	background-color: #c97983;
+	font-size: 14pt;
+	font-weight: bold;
+	text-align: center;
+}
+
+.rule_box {
+	background-color: #fff;
+	border: #aaa 1px solid;
+}
+
+.rule_content {
+	margin: 5px;
+}
+
+.rule_toolbar {
+	background-color: #f3fbfb;
+	padding: 0;
+	text-align: right;
+	border-top: #8eadbc 1px solid;
+}
+
+.rule_operation {
+	font-size: 14pt;
+	font-weight: bold;
+	text-align: center;
+	margin: 10px 0px;
+}
+
+/**************************/
 /* PageIcons.py styles    */
 /**************************/
 #tab_icon div input[type="text"] {

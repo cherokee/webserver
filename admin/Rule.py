@@ -8,9 +8,10 @@ from consts import *
 import validations
 
 class Rule (Module, FormHelper):
-    def __init__ (self, cfg, prefix, submit_url):
+    def __init__ (self, cfg, prefix, submit_url, depth):
         FormHelper.__init__ (self, 'rule', cfg)
         Module.__init__ (self, 'rule', cfg, prefix, submit_url)
+        self.depth = depth
 
     def get_checks (self):
         matcher = self._cfg.get_val(self._prefix)
@@ -32,12 +33,12 @@ class Rule (Module, FormHelper):
             return "Unknown"
 
         if matcher == 'not':
-            r = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url)
+            r = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.depth+1)
             return "Not (%s)"%(r.get_title())
         elif matcher in ['or', 'and']:
             op = ['AND', 'OR'][matcher == 'or']
-            r1 = Rule(self._cfg, '%s!left'%(self._prefix), self.submit_url)
-            r2 = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url)
+            r1 = Rule(self._cfg, '%s!left'%(self._prefix), self.submit_url, self.depth+1)
+            r2 = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.depth+1)
             return "(%s) %s (%s)"%(r1.get_title(), op, r2.get_title())
 
         rule_module = module_obj_factory (matcher, self._cfg, self._prefix, self.submit_url)
@@ -64,30 +65,31 @@ class Rule (Module, FormHelper):
 
         matcher = self._cfg.get_val(pre)
         if matcher == "not":
-            rule = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url)
+            rule = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url, self.depth+1)
             rule_txt = rule._op_render()
             txt = """
-            <table border="1" width="100%%">
-             <tr><td>NOT*</td><td></td></tr>
-             <tr><td></td><td>%(rule_txt)s</td></tr>
-            </table>
+            <div class="rule_not">
+              <div class="rule_not_title">NOT</div>
+              %(rule_txt)s
+            </div>
             """ % (locals())
             return txt
 
         elif matcher in ["or", "and"]:
             op = ["AND", "OR"][matcher == "or"]
             
-            rule1 = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url)
+            depth = self.depth + 1
+            rule1 = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url, depth)
             rule1_txt = rule1._op_render()
-            rule2 = Rule (self._cfg, "%s!left"%(self._prefix), self.submit_url)
+            rule2 = Rule (self._cfg, "%s!left"%(self._prefix), self.submit_url, depth)
             rule2_txt = rule2._op_render()
 
             txt = """
-            <table border="1" width="100%%">
-             <tr><td></td><td>%(rule1_txt)s</td></tr>
-             <tr><td>%(op)s</td><td></td></tr>
-             <tr><td></td><td>%(rule2_txt)s</td></tr>
-            </table>
+            <div class="rule_group rule_group_%(depth)s">
+              %(rule1_txt)s
+              <div class="rule_operation">%(op)s</div>
+              %(rule2_txt)s
+            </div>
             """ % (locals())
             return txt
 
@@ -106,11 +108,10 @@ class Rule (Module, FormHelper):
         _del = '<input type="button" value="Remove" onClick="" />'
 
         txt += """
-        <table border="1" width="100%%">
-          <tr><td>%(_not)s</td><td></td><td></td></tr>
-          <tr><td></td><td>%(rule)s</td><td>%(_del)s</td></tr>
-          <tr><td></td><td align="right">%(_and)s , %(_or)s</td><td></td></tr>
-        </table>""" % (locals())
+        <div class="rule_box">
+          <div class="rule_content">%(rule)s</div>
+          <div class="rule_toolbar">%(_not)s%(_and)s%(_or)s%(_del)s</div>
+        </div>""" % (locals())
 
         return txt
 
