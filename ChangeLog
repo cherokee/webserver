@@ -1,5 +1,7 @@
 2009-03-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* 0.99.3 released
+
 	* cherokee/handler_cgi.c (manage_child_cgi_process): Fixes a CGI
 	problem. There were ocassions where the server cloud freeze
 	because of a concurrenty issue. Fixes bug #385:
