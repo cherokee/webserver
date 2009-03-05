@@ -50,6 +50,7 @@ PageFeedback.py \
 PageInfoSource.py \
 Table.py \
 Theme.py \
+Rule.py \
 RuleList.py \
 Module.py \
 ModuleHandler.py \
