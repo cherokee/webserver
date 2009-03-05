@@ -28,10 +28,10 @@ class ModuleExtensions (Module, FormHelper):
             print "ERROR, a 'value' entry is needed!"
 
         exts = values['value']
-        self._cfg['%s!match!extensions'%(self._prefix)] = exts
+        self._cfg['%s!extensions'%(self._prefix)] = exts
 
     def get_name (self):
-        return self._cfg.get_val ('%s!match!extensions'%(self._prefix))
+        return self._cfg.get_val ('%s!extensions'%(self._prefix))
 
     def get_type_name (self):
         return self._id.capitalize()

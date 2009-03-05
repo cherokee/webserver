@@ -224,3 +224,41 @@ function unloadMessage()
   return 'Settings were modified but not saved.\n'+
          'They will be lost if you leave Cherokee-Admin.';
 }
+
+
+
+/* RULES
+ */
+
+function rule_do_not (prefix)
+{
+    post = 'prefix='+prefix;
+    jQuery.post("/rule/not", post,
+		function (data, textStatus) {
+		    setConfirmUnload(false);
+		    window.location = window.location;
+		}
+    );
+}
+
+function rule_do_and (prefix)
+{
+    post = 'prefix='+prefix;
+    jQuery.post("/rule/and", post,
+		function (data, textStatus) {
+		    setConfirmUnload(false);
+		    window.location = window.location;
+		}
+    );
+}
+
+function rule_do_or (prefix)
+{
+    post = 'prefix='+prefix;
+    jQuery.post("/rule/or", post,
+		function (data, textStatus) {
+		    setConfirmUnload(false);
+		    window.location = window.location;
+		}
+    );
+}

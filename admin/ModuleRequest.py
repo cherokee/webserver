@@ -28,10 +28,10 @@ class ModuleRequest (Module, FormHelper):
             print "ERROR, a 'value' entry is needed!"
 
         exts = values['value']
-        self._cfg['%s!match!request'%(self._prefix)] = exts
+        self._cfg['%s!request'%(self._prefix)] = exts
 
     def get_name (self):
-        return self._cfg.get_val ('%s!match!request'%(self._prefix))
+        return self._cfg.get_val ('%s!request'%(self._prefix))
 
     def get_type_name (self):
         return 'Regular Expression'

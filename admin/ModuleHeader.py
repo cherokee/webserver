@@ -29,24 +29,24 @@ class ModuleHeader (Module, FormHelper):
             self.AddPropOptions_Reload (table, 'Header', '%s!value'%(self._prefix), HEADERS, NOTE_HEADER)
         else:
             self.AddPropOptions_Reload (table, 'Header', '%s!header'%(self._prefix), HEADERS, NOTE_HEADER)
-        self.AddPropEntry   (table, 'Regular Expression', '%s!match'%(self._prefix), NOTE_MATCH)
+        self.AddPropEntry   (table, 'Regular Expression', self._prefix, NOTE_MATCH)
         return str(table)
         
     def apply_cfg (self, values):
         if values.has_key('value'):
             header = values['value']
-            self._cfg['%s!match!header'%(self._prefix)] = header
+            self._cfg['%s!header'%(self._prefix)] = header
 
         if values.has_key('match'):
             match = values['match']
-            self._cfg['%s!match!match'%(self._prefix)] = match
+            self._cfg['%s!match'%(self._prefix)] = match
 
     def get_name (self):
-        header = self._cfg.get_val ('%s!match!header'%(self._prefix))
+        header = self._cfg.get_val ('%s!header'%(self._prefix))
         if not header:
             return ''
 
-        tmp  = self._cfg.get_val ('%s!match!match'%(self._prefix), '')
+        tmp  = self._cfg.get_val ('%s!match'%(self._prefix), '')
         if len(tmp) > LENGHT_LIMIT:
             return "%s (%s..)" % (header, tmp[:5])
 

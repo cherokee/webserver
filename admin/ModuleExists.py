@@ -15,8 +15,8 @@ class ModuleExists (Module, FormHelper):
         Module.__init__ (self, 'exists', cfg, prefix, submit_url)
 
         # Special case: there is a check in the rule
-        self.checks = ['%s!match!iocache'%(self._prefix),
-                       '%s!match!match_any'%(self._prefix)]
+        self.checks = ['%s!iocache'%(self._prefix),
+                       '%s!match_any'%(self._prefix)]
 
     def _op_render (self):
         table = TableProps()
@@ -37,12 +37,12 @@ class ModuleExists (Module, FormHelper):
             print "ERROR, a 'value' entry is needed!"
 
         exts = values['value']
-        self._cfg['%s!match!exists'%(self._prefix)] = exts
+        self._cfg['%s!exists'%(self._prefix)] = exts
 
     def get_name (self):
-        if int(self._cfg.get_val ('%s!match!match_any'%(self._prefix), 0)):
+        if int(self._cfg.get_val ('%s!match_any'%(self._prefix), 0)):
             return "Any file"
-        return self._cfg.get_val ('%s!match!exists'%(self._prefix))
+        return self._cfg.get_val ('%s!exists'%(self._prefix))
 
     def get_type_name (self):
         return "File Exists"

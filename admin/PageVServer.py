@@ -5,6 +5,7 @@ from Form import *
 from Table import *
 from Entry import *
 from consts import *
+from Rule import *
 from RuleList import *
 from CherokeeManagement import *
 
@@ -309,12 +310,12 @@ class PageVServer (PageMenu, FormHelper):
             conf = priorities[prio]
 
             _type = conf.get_val('match')
-            pre   = '%s!%s' % (cfg_key, prio)
+            pre   = '%s!%s!match' % (cfg_key, prio)
 
             # Try to load the rule plugin
-            rule_module = module_obj_factory (_type, self._cfg, pre, self.submit_url)
-            name        = rule_module.get_name()
-            name_type   = rule_module.get_type_name()
+            rule = Rule(self._cfg, pre, self.submit_url)
+            name      = rule.get_name()
+            name_type = rule.get_type_name()
 
             if _type != 'default':
                 link     = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, name)

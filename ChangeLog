@@ -1,5 +1,14 @@
 2009-03-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageEntry.py, admin/server.py, admin/ModuleGeoip.py,
+	admin/Rule.py, admin/ModuleBind.py, admin/ModuleRequest.py,
+	admin/PageVServer.py, admin/ModuleExtensions.py,
+	admin/ModuleHeader.py, admin/static/js/common.js,
+	admin/ModuleExists.py,admin/ModuleDirectory.py,
+	admin/ModuleMethod.py: Implements complex rules in Cherokee-admin.
+	This is the initial version, the GUI still needs quite a lot of
+	work.
+
 	* 0.99.3 released
 
 	* cherokee/handler_cgi.c (manage_child_cgi_process): Fixes a CGI

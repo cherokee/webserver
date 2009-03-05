@@ -23,10 +23,10 @@ class ModuleDirectory (Module, FormHelper):
     def apply_cfg (self, values):
         if values.has_key('value'):
             dir_name = values['value']
-            self._cfg['%s!match!directory'%(self._prefix)] = dir_name
+            self._cfg['%s!directory'%(self._prefix)] = dir_name
 
     def get_name (self):
-        return self._cfg.get_val ('%s!match!directory'%(self._prefix))
+        return self._cfg.get_val ('%s!directory'%(self._prefix))
 
     def get_type_name (self):
         return self._id.capitalize()

@@ -61,12 +61,12 @@ class ModuleGeoip (Module, FormHelper):
         if not values.has_key('value'):
             print "ERROR, a 'value' entry is needed!"
 
-        cfg_key  = '%s!match!countries'%(self._prefix)
+        cfg_key  = '%s!countries'%(self._prefix)
         contries = values['value']
         self._cfg[cfg_key] = contries
 
     def get_name (self):
-        return self._cfg.get_val ('%s!match!countries'%(self._prefix))
+        return self._cfg.get_val ('%s!countries'%(self._prefix))
 
     def get_type_name (self):
         return self._id.capitalize()

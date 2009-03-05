@@ -133,6 +133,8 @@ class Handler(pyscgi.SCGIHandler):
             body = "/"
         elif uri.startswith('/ajax/update'):
             page = PageAjaxUpdate (cfg)
+        elif uri.startswith('/rule'):
+            page = RuleOp(cfg)
         elif uri == '/':
             page = PageStatus(cfg)
         else:

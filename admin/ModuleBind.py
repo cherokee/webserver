@@ -98,15 +98,15 @@ class ModuleBind (Module, FormHelper):
         if not values.has_key('value'):
             print "ERROR, a 'value' entry is needed!"
 
-        cfg_key = '%s!match!bind!1'%(self._prefix)
+        cfg_key = '%s!bind!1'%(self._prefix)
         bind    = values['value']
 
         self._cfg[cfg_key] = bind
 
     def get_name (self):
         tmp = []
-        for b in self._cfg.keys('%s!match!bind'%(self._prefix)):
-            real_n = self._cfg.get_val('%s!match!bind!%s'%(self._prefix, b))
+        for b in self._cfg.keys('%s!bind'%(self._prefix)):
+            real_n = self._cfg.get_val('%s!bind!%s'%(self._prefix, b))
             port = self._cfg.get_val('server!bind!%s!port'%(real_n))
             tls  = self._cfg.get_val('server!bind!%s!tls'%(real_n), False)
             tmp.append((port, bool(int(tls))))

@@ -57,10 +57,10 @@ class ModuleMethod (Module, FormHelper):
             print "ERROR, a 'value' entry is needed!"
 
         exts = values['value']
-        self._cfg['%s!match!method'%(self._prefix)] = exts
+        self._cfg['%s!method'%(self._prefix)] = exts
 
     def get_name (self):
-        return self._cfg.get_val ('%s!match!method'%(self._prefix))
+        return self._cfg.get_val ('%s!method'%(self._prefix))
 
     def get_type_name (self):
         return "HTTP method"

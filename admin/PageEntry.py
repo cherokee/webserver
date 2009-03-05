@@ -7,6 +7,7 @@ from Entry import *
 from RuleList import *
 from Module import *
 from consts import *
+from Rule import *
 
 DEFAULT_RULE_WARNING = 'The default match ought not to be changed.'
 
@@ -98,10 +99,9 @@ class PageEntry (PageMenu, FormHelper):
         for e,e_name in modules_available(ENCODERS):
             checks.append ('%s!encoder!%s' % (self._conf_prefix, e))
 
-        _type       = self._cfg.get_val('%s!match'%(self._conf_prefix))        
-        rule_module = module_obj_factory (_type, self._cfg, self._conf_prefix, self.submit_url)
-        if 'checks' in dir(rule_module):
-            checks += rule_module.checks
+        pre = '%s!match'%(self._conf_prefix)
+        rule = Rule (self._cfg, pre, self.submit_url)
+        checks += rule.get_checks()
 
         # Apply changes
         self.ApplyChanges (checks, post, DATA_VALIDATION)
@@ -124,10 +124,10 @@ class PageEntry (PageMenu, FormHelper):
             txt = '%s - ' % (nick)
 
         # Load the rule plugin
-        _type = self._entry.get_val('match')
-        rule_module = module_obj_factory (_type, self._cfg, self._conf_prefix, self.submit_url)
+        pre = "%s!match"%(self._conf_prefix)
+        rule = Rule (self._cfg, pre, self.submit_url)
 
-        txt += "%s: %s" % (rule_module.get_type_name(), rule_module.get_name())
+        txt += rule.get_title()
         return txt
 
     def _render_guts (self):
@@ -183,19 +183,11 @@ class PageEntry (PageMenu, FormHelper):
         return props
 
     def _render_rule (self):
-        pre = "%s!match"%(self._conf_prefix)
+        txt  = "<h2>Matching Rule</h2>"
+        pre  = "%s!match"%(self._conf_prefix)
+        rule = Rule (self._cfg, pre, self.submit_url)
+        txt += rule._op_render()
 
-        if self._cfg.get_val(pre) == 'default':
-            return self.Dialog (DEFAULT_RULE_WARNING, 'important-information')
-
-        # Change the rule type
-        txt = ""
-
-        table = TableProps()
-        e = self.AddPropOptions_Reload (table, "Rule Type", pre, modules_available(RULES), "")
-
-        txt += "<h2>Matching Rule</h2>"
-        txt += self.Indent(str(table) + e)
         return txt
 
     def _render_traffic_shaping (self):
