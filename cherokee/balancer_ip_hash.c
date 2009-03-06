@@ -218,11 +218,11 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 			continue;
 		}
 
-		n--;
-		if (n <= 0)
+		if (n == 0)
 			break;
+		n--;
 	}
-	
+
 	/* Found */ 
 	if (unlikely (entry == NULL))
 		goto error;

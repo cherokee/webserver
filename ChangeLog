@@ -1,3 +1,9 @@
+2009-03-06  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/balancer_ip_hash.c (dispatch): The last information
+	source was not being used by the IP-Hash load balancer. Fixes:
+	http://code.google.com/p/cherokee/issues/detail?id=387
+
 2009-03-06  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageEntry.py, admin/Rule.py, admin/PageVServer.py,
