@@ -56,6 +56,7 @@ HELPS = [
     ('cookbook_ssl',           "SSL cookbook")
 ]
 
+RULE_NAME_LEN_LIMIT = 35
 
 class PageVServer (PageMenu, FormHelper):
     def __init__ (self, cfg):
@@ -316,6 +317,10 @@ class PageVServer (PageMenu, FormHelper):
             rule = Rule(self._cfg, pre, self.submit_url, 0)
             name      = rule.get_name()
             name_type = rule.get_type_name()
+
+            # Ensure the name is too long
+            if len(name) > RULE_NAME_LEN_LIMIT:
+                name = "%s<b>...</b>" % (name[:RULE_NAME_LEN_LIMIT])
 
             if _type != 'default':
                 link     = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, name)

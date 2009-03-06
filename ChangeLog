@@ -1,5 +1,9 @@
 2009-03-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageVServer.py (PageVServer._render_rules_generic): Adds a
+	new rule name limit, so even if there is some long entry, the
+	virtual server rule list still looks fine.
+
 	* cherokee/balancer_ip_hash.c (dispatch): The last information
 	source was not being used by the IP-Hash load balancer. Fixes:
 	http://code.google.com/p/cherokee/issues/detail?id=387
