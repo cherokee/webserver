@@ -538,7 +538,12 @@ table.rulestable tr.odd td {
 /**************************/
 
 .rule_group {
+     border-radius: 10px;
+     -moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+
 	padding: 10px 8px;
+	border: #aaa 1px solid;
 }
 
 .rule_group_1 {
@@ -546,26 +551,23 @@ table.rulestable tr.odd td {
 }
 
 .rule_group_1, .rule_group_3, .rule_group_5, .rule_group_7, .rule_group_9 {
-	background-color: #ddd;
+	background-color: #EFF4F7;
 	border: #aaa 1px solid;
 }
 
 .rule_group_2, .rule_group_4, .rule_group_6, .rule_group_8, .rule_group_10 {
-	background-color: #eee;
+	background-color: #FBF7DA;
 	border: #aaa 1px solid;
 }
 
 .rule_not {
-	margin: 0;
-	padding: 0;
+	background-color: #CC0000;
 }
 
 .rule_not_title {
 	color: white;
-	background-color: #c97983;
-	font-size: 14pt;
-	font-weight: bold;
-	text-align: center;
+	font-size: 10pt;
+	text-align: left;
 }
 
 .rule_box {
@@ -575,18 +577,16 @@ table.rulestable tr.odd td {
 
 .rule_content {
 	margin: 5px;
+     border-bottom-style: none;
 }
 
 .rule_toolbar {
-	background-color: #f3fbfb;
 	padding: 0;
 	text-align: right;
-	border-top: #8eadbc 1px solid;
 }
 
 .rule_operation {
-	font-size: 14pt;
-	font-weight: bold;
+	font-size: 10pt;
 	text-align: center;
 	margin: 10px 0px;
 }

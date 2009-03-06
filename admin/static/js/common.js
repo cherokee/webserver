@@ -262,3 +262,14 @@ function rule_do_or (prefix)
 		}
     );
 }
+
+function rule_delete (prefix)
+{
+    post = 'prefix='+prefix;
+    jQuery.post("/rule/del", post,
+		function (data, textStatus) {
+		    setConfirmUnload(false);
+		    window.location = window.location;
+		}
+    );
+}

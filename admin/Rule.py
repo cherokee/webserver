@@ -7,8 +7,10 @@ from Module import *
 from consts import *
 import validations
 
+DEFAULT_RULE_WARNING = 'The default match ought not to be changed.'
+
 class Rule (Module, FormHelper):
-    def __init__ (self, cfg, prefix, submit_url, depth):
+    def __init__ (self, cfg, prefix, submit_url, depth=0):
         FormHelper.__init__ (self, 'rule', cfg)
         Module.__init__ (self, 'rule', cfg, prefix, submit_url)
         self.depth = depth
@@ -59,6 +61,13 @@ class Rule (Module, FormHelper):
         rule_module = module_obj_factory (matcher, self._cfg, self._prefix, self.submit_url)
         return rule_module.get_type_name()
 
+    def _get_ops (self, pre):
+        _not = '<input type="button" value="Not" onClick="return rule_do_not(\'%s\');" />' % (pre)
+        _and = '<input type="button" value="And" onClick="return rule_do_and(\'%s\');" />' % (pre)
+        _or  = '<input type="button" value="Or" onClick="return rule_do_or(\'%s\');" />' % (pre)
+        _del = '<input type="button" value="Remove" onClick="return rule_delete(\'%s\');" />' %(pre)
+        return (_not,_and,_or,_del)
+
     def _op_render (self):
         txt = ""
         pre = self._prefix
@@ -67,10 +76,14 @@ class Rule (Module, FormHelper):
         if matcher == "not":
             rule = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url, self.depth+1)
             rule_txt = rule._op_render()
+
+            _not, _and, _or, _del = self._get_ops(pre)
+
             txt = """
-            <div class="rule_not">
+            <div class="rule_group rule_not">
               <div class="rule_not_title">NOT</div>
               %(rule_txt)s
+              <div class="rule_toolbar">%(_and)s %(_or)s %(_del)s</div>
             </div>
             """ % (locals())
             return txt
@@ -79,16 +92,24 @@ class Rule (Module, FormHelper):
             op = ["AND", "OR"][matcher == "or"]
             
             depth = self.depth + 1
-            rule1 = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url, depth)
+            rule1 = Rule (self._cfg, "%s!left"%(self._prefix), self.submit_url, depth)
             rule1_txt = rule1._op_render()
-            rule2 = Rule (self._cfg, "%s!left"%(self._prefix), self.submit_url, depth)
+            rule2 = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url, depth)
             rule2_txt = rule2._op_render()
+
+            _not, _and, _or, _del = self._get_ops(pre)
+
+            prev = '!'.join(pre.split('!')[:-1])
+            prev_rule = self._cfg.get_val(prev)
+            if prev_rule == "not":
+                _not = ''
 
             txt = """
             <div class="rule_group rule_group_%(depth)s">
               %(rule1_txt)s
               <div class="rule_operation">%(op)s</div>
               %(rule2_txt)s
+              <div class="rule_toolbar">%(_not)s %(_del)s</div>
             </div>
             """ % (locals())
             return txt
@@ -101,16 +122,24 @@ class Rule (Module, FormHelper):
         e = self.AddPropOptions_Reload (table, "Rule Type", pre, modules_available(RULES), "")
         rule = self.Indent(str(table) + e)
 
-        # Not
-        _not = '<input type="button" value="Not" onClick="return rule_do_not(\'%s\');" />' % (pre)
-        _and = '<input type="button" value="And" onClick="return rule_do_and(\'%s\');" />' % (pre)
-        _or  = '<input type="button" value="Or" onClick="return rule_do_or(\'%s\');" />' % (pre)
-        _del = '<input type="button" value="Remove" onClick="" />'
+        # Operations
+        _not, _and, _or, _del = self._get_ops(pre)
+
+        # Allow to remove rules only if they are inside an AND or OR.
+        prev = '!'.join(pre.split('!')[:-1])
+        prev_rule = self._cfg.get_val(prev)
+        if not prev_rule in ['and', 'or']:
+            _del = ''
+            _not = ''
+
+        # Do not show any operation is rules isn't set
+        if not self._cfg.get_val(pre):
+            _not = _and = _or = _del = ''
 
         txt += """
-        <div class="rule_box">
+        <div class="rule_box rule_group">
           <div class="rule_content">%(rule)s</div>
-          <div class="rule_toolbar">%(_not)s%(_and)s%(_or)s%(_del)s</div>
+          <div class="rule_toolbar">%(_not)s %(_and)s %(_or)s %(_del)s</div>
         </div>""" % (locals())
 
         return txt
@@ -142,14 +171,29 @@ class RuleOp (PageMenu, FormHelper):
         prefix = post['prefix'][0]
 
         if uri == "/not":
-            self.__move (prefix, "%s!right"%(prefix))
-            self._cfg[prefix] = "not"
+            if self._cfg.get_val(prefix) == "not":
+                # not(not(rule)) == rule
+                self.__move ("%s!right"%(prefix), prefix)
+            else:
+                self.__move (prefix, "%s!right"%(prefix))
+                self._cfg[prefix] = "not"
+
         elif uri == '/and':
-            self.__move (prefix, "%s!right"%(prefix))
+            self.__move (prefix, "%s!left"%(prefix))
             self._cfg[prefix] = "and"
         elif uri == '/or':
-            self.__move (prefix, "%s!right"%(prefix))
+            self.__move (prefix, "%s!left"%(prefix))
             self._cfg[prefix] = "or"
+
+        elif uri == "/del":
+            rule = self._cfg.get_val(prefix)
+            if rule == "not":
+                self.__move ("%s!right"%(prefix), prefix)
+            elif rule in ['and', 'or']:
+                self.__move ("%s!left"%(prefix), prefix)
+            else:
+                del(self._cfg[prefix])
+            
         else:
             print "ERROR: Unknown uri '%s'"%(uri)
 
