@@ -25,7 +25,6 @@ class ModuleHeader (Module, FormHelper):
 
     def _op_render (self):
         table = TableProps()
-        print "self._prefix", self._prefix
         if self._prefix.startswith('tmp!'):
             self.AddPropOptions_Reload (table, 'Header', '%s!value'%(self._prefix), HEADERS, NOTE_HEADER)
         else:
@@ -34,15 +33,12 @@ class ModuleHeader (Module, FormHelper):
         return str(table)
         
     def apply_cfg (self, values):
-        print "VALUE", values
         if values.has_key('value'):
             header = values['value']
-            print "H", '%s!header'%(self._prefix), header
             self._cfg['%s!header'%(self._prefix)] = header
 
         if values.has_key('match'):
             match = values['match']
-            print "M", '%s!match'%(self._prefix), match
             self._cfg['%s!match'%(self._prefix)] = match
 
     def get_name (self):
