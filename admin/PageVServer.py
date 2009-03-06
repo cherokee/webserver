@@ -155,7 +155,7 @@ class PageVServer (PageMenu, FormHelper):
         # The 'add_new_entry' checking function depends on 
         # the whether 'add_new_type' is a directory, an extension
         # or a regular extension
-        rule_module = module_obj_factory (_type, self._cfg, pre, self.submit_url)
+        rule_module = module_obj_factory (_type, self._cfg, "%s!match"%(pre), self.submit_url)
 
         # Validate
         validation = DATA_VALIDATION[:]

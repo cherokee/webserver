@@ -114,8 +114,13 @@ class Rule (Module, FormHelper):
             """ % (locals())
             return txt
 
+        # Special Case: Default rule
         if self._cfg.get_val(pre) == 'default':
             return self.Dialog (DEFAULT_RULE_WARNING, 'important-information')
+
+        # The rule hasn't been set
+        if not self._cfg.get_val(pre):
+            self._cfg[pre] = 'directory'
 
         # Rule
         table = TableProps()
@@ -130,11 +135,8 @@ class Rule (Module, FormHelper):
         prev_rule = self._cfg.get_val(prev)
         if not prev_rule in ['and', 'or']:
             _del = ''
-            _not = ''
-
-        # Do not show any operation is rules isn't set
-        if not self._cfg.get_val(pre):
-            _not = _and = _or = _del = ''
+            if "!match" in prev:
+                _not = ''
 
         txt += """
         <div class="rule_box rule_group">
