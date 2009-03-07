@@ -22,7 +22,8 @@ scgi.deps \
 fcgi.deps \
 fastcgi.deps \
 cgi.deps \
-streaming.deps
+streaming.deps \
+secdownload.deps
 
 #
 # External sources
@@ -589,6 +590,23 @@ if STATIC_HANDLER_SSI
 static_handler_ssi_src = $(handler_ssi)
 else
 dynamic_handler_ssi_lib = libplugin_ssi.la
+endif
+
+
+#
+# Handler secdownload
+#
+handler_secdownload = \
+handler_secdownload.c \
+handler_secdownload.h
+
+libplugin_secdownload_la_LDFLAGS = $(module_ldflags)  
+libplugin_secdownload_la_SOURCES = $(handler_secdownload)
+
+if STATIC_HANDLER_SECDOWNLOAD
+static_handler_secdownload_src = $(handler_secdownload)
+else
+dynamic_handler_secdownload_lib = libplugin_secdownload.la
 endif
 
 
@@ -1218,6 +1236,7 @@ $(static_handler_common_src) \
 $(static_handler_proxy_src) \
 $(static_handler_mirror_src) \
 $(static_handler_ssi_src) \
+$(static_handler_secdownload_src) \
 $(static_handler_streaming_src) \
 $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
@@ -1386,6 +1405,7 @@ $(dynamic_handler_redir_lib) \
 $(dynamic_handler_proxy_lib) \
 $(dynamic_handler_mirror_lib) \
 $(dynamic_handler_ssi_lib) \
+$(dynamic_handler_secdownload_lib) \
 $(dynamic_handler_streaming_lib) \
 $(dynamic_handler_custom_error_lib) \
 $(dynamic_handler_error_redir_lib) \

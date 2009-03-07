@@ -1,5 +1,12 @@
 2009-03-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/Makefile.am, cherokee/handler_secdownload.c,
+	cherokee/handler_secdownload.h, qa/204-secdownload2.py,
+	qa/Makefile.am, qa/205-secdownload3.py, qa/203-secdownload1.py,
+	secdownload.deps, configure.in: Implements a new 'Secure Download'
+	handler and adds a few new QA tests to test it out:
+	http://code.google.com/p/cherokee/issues/detail?id=386
+
 	* cherokee/util.c, cherokee/util.h, cherokee/buffer.c: Relocates
 	the hex_char to int array. It's global now.
 

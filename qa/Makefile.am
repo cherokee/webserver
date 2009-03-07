@@ -207,7 +207,11 @@ run-tests.py \
 199-ErrorRedir.py \
 200-ErrorRedir2.py \
 201-PostLimit.py \
-202-xsendfile2.py
+202-xsendfile2.py \
+203-secdownload1.py \
+204-secdownload2.py \
+205-secdownload3.py
+
 
 test:
 	./run-tests.py
