@@ -324,7 +324,7 @@ class PageVServer (PageMenu, FormHelper):
 
             if _type != 'default':
                 link     = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, name)
-                js       = "post_del_key('%s', '%s');" % (self.submit_ajax_url, pre)
+                js       = "post_del_key('%s', '%s');" % (self.submit_ajax_url, "%s!%s"%(cfg_key, prio))
                 final    = self.InstanceCheckbox ('%s!match!final'%(pre), True, quiet=True)
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 extra    = ''
