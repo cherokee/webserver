@@ -206,7 +206,8 @@ run-tests.py \
 198-HTTPresponse.py \
 199-ErrorRedir.py \
 200-ErrorRedir2.py \
-201-PostLimit.py
+201-PostLimit.py \
+202-xsendfile2.py
 
 test:
 	./run-tests.py

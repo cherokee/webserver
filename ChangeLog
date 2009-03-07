@@ -1,3 +1,13 @@
+2009-03-07  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_cgi_base.c: Improves the X-Sendfile support, so
+	a much more set of headers are sent when a {Fast,S,}CGI replies
+	with a X-Sendfile header entry.
+
+	* qa/202-xsendfile2.py, qa/Makefile.am (EXTRA_DIST): Adds a new QA
+	test to check whether the right headers are sent when X-Sendfile
+	has been used in a {Fast,S,}CGI response.
+
 2009-03-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/PageVServer.py (PageVServer._render_rules_generic): Adds a
