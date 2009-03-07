@@ -1,5 +1,8 @@
 2009-03-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/util.c, cherokee/util.h, cherokee/buffer.c: Relocates
+	the hex_char to int array. It's global now.
+
 	* admin/PageVServer.py (PageVServer._render_rules_generic): Fixes
 	rule deletion. This's a regression introduced before the 0.99.3
 	release.

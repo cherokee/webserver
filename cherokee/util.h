@@ -92,6 +92,7 @@ char *strcasestr (register char *s, register char *find);
 void *rpl_malloc (size_t n);
 #endif
 
+extern const char hex2dec_tab[256];
 
 /* String management functions
  */
