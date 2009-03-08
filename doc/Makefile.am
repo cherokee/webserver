@@ -89,6 +89,7 @@ modules_handlers_streaming.html \
 modules_handlers_mirror.html \
 modules_handlers_admin.html \
 modules_handlers_proxy.html \
+modules_handlers_secdownload.html \
 modules_loggers.html \
 modules_loggers_combined.html \
 modules_loggers_ncsa.html \
@@ -139,6 +140,7 @@ media/images/admin_handler_file.png \
 media/images/admin_handler_onlylisting_ex.png \
 media/images/admin_handler_onlylisting.png \
 media/images/admin_handler_dbslayer.png \
+media/images/admin_handler_secdownload.png \
 media/images/admin_icons1.png \
 media/images/admin_icons2.png \
 media/images/admin_icons3.png \

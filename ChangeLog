@@ -1,5 +1,9 @@
 2009-03-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/media/images/admin_handler_secdownload.png, doc/index.txt,
+	doc/modules_handlers_secdownload.txt, doc/Makefile.am: Adds an
+	documentation entry for the new "Hidden Downloads" handler.
+
 	* doc/media/css/cherokee_doc.css: A few smalls changes to make the
 	documentation to use less fonts (types and sizes).
 
