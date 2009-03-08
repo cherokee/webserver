@@ -79,6 +79,8 @@ cherokee_handler_secdownload_configure (cherokee_config_node_t   *conf,
 		return ret_error;
 	}
 
+	cherokee_config_node_read_int (conf, "timeout", (int*)&props->timeout);
+
 	return ret_ok;
 }
 
