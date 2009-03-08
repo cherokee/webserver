@@ -4,6 +4,7 @@ from Page import *
 from Table import *
 from Entry import *
 from Form import *
+from Rule import *
 
 NOTE_SOURCE      = 'The source can be either a local interpreter or a remote host acting as an information source.'
 NOTE_NICK        = 'Source nick. It will be referenced by this name in the rest of the server.'
@@ -33,6 +34,8 @@ DATA_VALIDATION = [
     ('tmp!new_source_host',    validations.is_information_source),
     ('tmp!new_source_timeout', validations.is_positive_int)
 ]
+
+RULE_NAME_LEN_LIMIT = 35
 
 class PageInfoSource (PageMenu, FormHelper):
     def __init__ (self, cfg):
@@ -279,9 +282,11 @@ class PageInfoSource (PageMenu, FormHelper):
                 serv = self._cfg.get_val('vserver!%s!nick'%(serv_id))
 
                 # Try to get the rule name
-                _type = self._cfg.get_val('%s!match'%(rule))
-                rule_module = module_obj_factory (_type, self._cfg, rule, self.submit_url)
-                rule_name = rule_module.get_name()
+                rule = Rule(self._cfg, '%s!match'%(rule), self.submit_url, 0)
+                rule_name = rule.get_name()
+
+                if len(rule_name) > RULE_NAME_LEN_LIMIT:
+                    rule_name = "%s<b>...</b>" % (rule_name[:RULE_NAME_LEN_LIMIT])
 
                 nick_td = '<td><a href="/%s/%s">%s</td>'%(self._id, src, nick)
                 serv_td = '<td><a href="/vserver/%s">%s</a></td>'%(serv_id, serv)
