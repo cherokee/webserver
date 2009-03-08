@@ -281,11 +281,7 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 			} else if (equal_buf_str (&subconf->val, "connection_details")) {
 				props->connection_details = true;
 
-			} else {
-				PRINT_MSG ("ERROR: Handler server_info: Unknown key value: '%s'\n", 
-					   subconf->val.buf);
-				return ret_error;
-			}
+			} 
 		}
 	}
 

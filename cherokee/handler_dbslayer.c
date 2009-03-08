@@ -527,7 +527,8 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 
 		if (equal_buf_str (&subconf->key, "balancer")) {
 			ret = cherokee_balancer_instance (&subconf->val, subconf, srv, &props->balancer); 
-			if (ret != ret_ok) return ret;
+			if (ret != ret_ok)
+				return ret;
 
 		} else  if (equal_buf_str (&subconf->key, "user")) {
 			cherokee_buffer_clean (&props->user);
@@ -557,10 +558,7 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 					     subconf->val.buf);
 				return ret_error;
 			}
-		} else {
-			PRINT_ERROR_S ("ERROR: DBSlayer handler needs a balancer\n");
-			return ret_error;
-		}
+		} 
 	}
 
 	/* Final checks

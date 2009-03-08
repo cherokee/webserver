@@ -1,5 +1,9 @@
 2009-03-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_mirror.c, cherokee/handler_server_info.c,
+	cherokee/handler_dbslayer.c: Be more flexible with unknown config
+	entries: http://code.google.com/p/cherokee/issues/detail?id=392
+
 	* admin/PageInfoSource.py (PageInfoSource._render_source_usage):
 	Fixes bug: http://code.google.com/p/cherokee/issues/detail?id=391
 
