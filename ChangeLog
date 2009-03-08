@@ -1,5 +1,8 @@
 2009-03-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/media/css/cherokee_doc.css: A few smalls changes to make the
+	documentation to use less fonts (types and sizes).
+
 	* admin/ModuleSecdownload.py, admin/consts.py, admin/Makefile.am:
 	Adds a support for the new "Hidden Downloads" plug-in in
 	cherokee-admin.
