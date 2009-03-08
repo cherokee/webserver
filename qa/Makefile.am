@@ -210,7 +210,8 @@ run-tests.py \
 202-xsendfile2.py \
 203-secdownload1.py \
 204-secdownload2.py \
-205-secdownload3.py
+205-secdownload3.py \
+206-AuthType.py
 
 
 test:

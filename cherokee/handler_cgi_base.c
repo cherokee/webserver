@@ -449,6 +449,17 @@ cherokee_handler_cgi_base_build_basic_env (
 			 conn->error_internal_qs.len);
 	}
 
+	/* Authentication
+	 */
+	switch (conn->req_auth_type) {
+	case http_auth_basic:
+		set_env (cgi, "AUTH_TYPE", "BASIC", 5);
+		break;
+	case http_auth_digest:
+		set_env (cgi, "AUTH_TYPE", "DIGEST", 6);
+		break;
+	}
+
 	/* HTTP variables
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_accept, &p, &p_len);

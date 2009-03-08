@@ -1,3 +1,12 @@
+2009-03-08  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* qa/206-AuthType.py: Adds a new QA to test AUTH_TYPE.
+
+	* cherokee/handler_cgi_base.c
+	(cherokee_handler_cgi_base_build_basic_env): Adds support for the
+	AUTH_TYPE {Fast,S,}CGI variable. Thanks to Christian Hudon for
+	reporting: http://code.google.com/p/cherokee/issues/detail?id=390
+
 2009-03-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/Makefile.am, cherokee/handler_secdownload.c,
