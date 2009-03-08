@@ -1,5 +1,9 @@
 2009-03-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleSecdownload.py, admin/consts.py, admin/Makefile.am:
+	Adds a support for the new "Hidden Downloads" plug-in in
+	cherokee-admin.
+
 	* qa/206-AuthType.py: Adds a new QA to test AUTH_TYPE.
 
 	* cherokee/handler_cgi_base.c

@@ -10,6 +10,7 @@ HANDLERS = [
     ('streaming',    'Audio/Video streaming'),
     ('cgi',          'CGI'),
     ('ssi',          'Server Side Includes'),
+    ('secdownload',  'Hidden Downloads'),
     ('server_info',  'Server Info'),
     ('dbslayer',     'MySQL bridge'),
     ('mirror',       'Generic balancer'),

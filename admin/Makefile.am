@@ -64,6 +64,7 @@ ModuleFcgi.py \
 ModuleScgi.py \
 ModuleBalancer.py \
 ModuleSsi.py \
+ModuleSecdownload.py \
 ModuleProxy.py \
 ModuleMirror.py \
 ModuleDbslayer.py \
