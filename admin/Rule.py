@@ -52,7 +52,12 @@ class Rule (Module, FormHelper):
         if matcher in ['not', 'and', 'or']:
             return self.get_title()
         rule_module = module_obj_factory (matcher, self._cfg, self._prefix, self.submit_url)
-        return rule_module.get_name()
+        name = rule_module.get_name()
+
+        if not name:
+            name = "Undefined.."
+
+        return name
 
     def get_type_name (self):
         matcher = self._cfg.get_val(self._prefix)

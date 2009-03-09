@@ -1,3 +1,8 @@
+2009-03-09  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/Rule.py (Rule.get_name): Better handling of broken
+	configurations (unset rules).
+
 2009-03-09  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/static/css/cherokee.css, admin/static/js/common.js,
