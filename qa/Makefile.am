@@ -212,7 +212,8 @@ run-tests.py \
 204-secdownload2.py \
 205-secdownload3.py \
 206-AuthType.py \
-207-RuleExists4.py
+207-RuleExists4.py \
+208-Userdir_Pathinfo.py
 
 
 test:

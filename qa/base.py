@@ -286,7 +286,10 @@ class TestBase:
         if os.path.isfile(fullpath):
             os.unlink (fullpath)
         else:
-            os.removedirs (fullpath)
+            from shutil import rmtree
+            try:
+                rmtree (fullpath)
+            except: pass
             
     def WriteTemp (self, content):
         while True:
@@ -350,6 +353,24 @@ class TestBase:
 
             return final
 
+    def Precondition_UserHome (self, home_subdir="public_html"):
+        try:
+            user = os.getlogin()
+        except OSError:
+            return False
+
+        home = os.path.expanduser("~")
+        if not home:
+            return False
+
+        public_html = os.path.join (home, home_subdir)
+
+        # Look for the public_html directory
+        if not os.path.exists(public_html):
+            return False
+
+        return public_html, user
+        
 
 class TestCollection:
     def __init__ (self):
