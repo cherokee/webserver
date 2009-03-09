@@ -1,3 +1,9 @@
+2009-03-09  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/rule_exists.c (match): The rule should match files even
+	if they are inside directories. This patch fixes:
+	http://lists.octality.com/pipermail/cherokee/2009-March/009905.html
+	
 2009-03-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_mirror.c, cherokee/handler_server_info.c,

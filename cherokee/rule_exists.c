@@ -189,7 +189,7 @@ match (cherokee_rule_exists_t *rule,
 
 		/* Check whether the file exists
 		 */
-		cherokee_buffer_add_buffer (tmp, &entry->file);
+		cherokee_buffer_add_buffer (tmp, &conn->request);
 
 		ret = match_file (rule, conn, tmp);
 		if (ret == ret_ok)
