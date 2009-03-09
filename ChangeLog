@@ -1,7 +1,11 @@
 2009-03-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
-	* qa/208-Userdir_Pathinfo.py: Adds a new QA test to test whether
-	PATH_INFO works inside ~user directories.
+	* qa/209-ScriptAlias_DRoot.py, qa/Makefile.am: Adds a new QA test
+	in order to reprocude the bug report #367:
+	http://code.google.com/p/cherokee/issues/detail?id=367
+
+	* qa/208-Userdir_Pathinfo.py, qa/Makefile.am: Adds a new QA test
+	to test whether PATH_INFO works inside ~user directories.
 
 	* qa/207-RuleExists4.py, qa/Makefile.am: Adds a new QA test to
 	ensure the previous patches does actually fix the issue.
