@@ -46,6 +46,15 @@ Here you have a reference implementation in Python:
     return "/%s/%s/%s" % (hashlib.md5(secret + url + t).hexdigest(), t, url)
 ---------------------------------
 
+The same function written in PHP would be:
+
+---------------------------------
+function secure_download ($prefix, $url, $secret) {
+  $time = sprintf('%08x', time());
+  return "$prefix/".md5($secret.$url.$time)."/$time$url";
+}
+---------------------------------
+
 It is important to notice that the URLs are only valid for a period of
 time. If an URL expires, the server will return an error instead of
 the file content. By default URLs lasts 60 seconds.
@@ -68,7 +77,7 @@ handled by **Hidden Downloads**. We set a shared secret string
 (Abracadabra), and the document root where the real ISO files are
 located (/mnt/isos):
 
-image::/media/images/admin_handler_secdownload.png[Hidden Downloads configuration]
+image::media/images/admin_handler_secdownload.png[Hidden Downloads configuration]
 
 Next step is to write the write the logic that will make the decision
 on what the user access. For instance, check out this example:
