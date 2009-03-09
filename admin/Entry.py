@@ -57,8 +57,8 @@ class Entry:
         return "<input %s />"%(props) + suffix + error
 
     def AddToggleSpan (self, text):
-        js = "get_by_id('%s').checked = (!get_by_id('%s').checked);"%(self._name, self._name)
-        text = '<span onClick="%s">%s</span>' % (js, text)
+        js = "javascript:var obj = get_by_id('%s'); obj.checked = (! obj.checked); do_autosubmit(obj);" % (self._name)
+        text = '<span class="cbtoggletext" onClick="%s">%s</span>' % (js, text)
         return text
 
 

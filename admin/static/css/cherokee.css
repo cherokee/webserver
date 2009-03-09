@@ -411,6 +411,10 @@ table td label {
     background: url(../images/loadingAnimation.gif) no-repeat 0 50%;
 }
 
+.cbtoggletext {
+	cursor: default;
+}
+
 /* BUTTON */
 
 a.button {

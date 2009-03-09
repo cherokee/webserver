@@ -154,13 +154,18 @@ function get_cookie (key)
   return unescape (document.cookie.substring (i, e));
 }
 
+function do_autosubmit(obj)
+{
+	if (check_all_or_none('required')) {
+		setConfirmUnload(false);
+		obj.form.submit();
+	}
+}
+
 /* Auto submission of some forms */
-function autosubmit(event) {
-	$(".auto input:not(.noautosubmit), select:not(.noautosubmit)").change(function(event) {
-		if (check_all_or_none('required')) {
-			setConfirmUnload(false);
-			this.form.submit();
-		}
+function autosubmit() {
+	$(".auto input:not(.noautosubmit), select:not(.noautosubmit)").change(function() {
+		do_autosubmit(this);
 	});
 }
 

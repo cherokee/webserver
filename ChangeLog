@@ -1,3 +1,9 @@
+2009-03-09  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/static/css/cherokee.css, admin/static/js/common.js,
+	admin/Entry.py: Click on a checkbox label auto-submits the form
+	now.
+
 2009-03-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* qa/209-ScriptAlias_DRoot.py, qa/Makefile.am: Adds a new QA test
