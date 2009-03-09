@@ -18,12 +18,6 @@ class Test (TestBase):
         self.expected_error    = 403
         self.forbidden_content = MAGIC
         self.conf              = CONF
-        a = """
-              Directory /allow1/ {
-                 Handler file
-                 Allow from 99.99.99.99
-              }
-              """
 
     def Prepare (self, www):
         self.Mkdir (www, "allow1")

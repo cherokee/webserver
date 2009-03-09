@@ -1,5 +1,8 @@
 2009-03-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/207-RuleExists4.py, qa/Makefile.am: Adds a new QA test to
+	ensure the previous patches does actually fix the issue.
+
 	* cherokee/rule_exists.c (match): The rule should match files even
 	if they are inside directories. This patch fixes:
 	http://lists.octality.com/pipermail/cherokee/2009-March/009905.html
