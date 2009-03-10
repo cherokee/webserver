@@ -1,7 +1,8 @@
 import os.path
 from base import *
 
-PATH_INFO   = "/this_is_the/path_info"
+DIR       = "alias_and_pathinfo"
+PATH_INFO = "/this_is_the/path_info"
 
 CONF = """
 vserver!1!rule!1040!match = directory
@@ -20,11 +21,11 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "CGI: ScriptAlias with PathInfo"
 
-        self.request          = "GET /alias_and_pathinfo%s HTTP/1.0\r\n" % (PATH_INFO)
+        self.request          = "GET /%s%s HTTP/1.0\r\n" % (DIR, PATH_INFO)
         self.expected_error   = 200
         self.expected_content = "PATH_INFO = -%s-" % (PATH_INFO)
 
     def Prepare (self, www):
-        d = self.Mkdir (www, "alias_and_pathinfo")
+        d = self.Mkdir (www, DIR)
         f = self.WriteFile (d, "exec.cgi", 0755, CGI_BASE)
         self.conf = CONF % (f)

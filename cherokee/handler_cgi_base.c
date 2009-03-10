@@ -748,10 +748,15 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 
 		/* Check the path_info even if it uses a  scriptalias. The PATH_INFO 	
 		 * is the rest of the substraction of request - configured directory.
-		 */
-		cherokee_buffer_add (&conn->pathinfo, 
-				     conn->request.buf + conn->web_directory.len, 
-				     conn->request.len - conn->web_directory.len);
+		 */				     
+		if (cherokee_connection_use_webdir (conn)) {
+			cherokee_buffer_add_buffer (&conn->pathinfo, &conn->request);
+		} else {
+			cherokee_buffer_add (&conn->pathinfo,
+					     conn->request.buf + conn->web_directory.len,
+					     conn->request.len - conn->web_directory.len);
+		}
+
 		return ret_ok;
 	}
 
