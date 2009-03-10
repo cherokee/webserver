@@ -1,5 +1,9 @@
 2009-03-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/Makefile.am, cherokee/handler_empty_gif.c,
+	cherokee/handler_empty_gif.h, configure.in, qa/211-EmptyGif.py,
+	qa/Makefile.am: Adds a new "Empty GIF" handler.
+
 	* cherokee/handler_cgi_base.c
 	(cherokee_handler_cgi_base_extract_path): Fixes the PATH_INFO
 	generation when a custom document root is set. This patch fixes:

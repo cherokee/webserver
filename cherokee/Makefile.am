@@ -611,6 +611,23 @@ endif
 
 
 #
+# Handler empty_gif
+#
+handler_empty_gif = \
+handler_empty_gif.c \
+handler_empty_gif.h
+
+libplugin_empty_gif_la_LDFLAGS = $(module_ldflags)  
+libplugin_empty_la_SOURCES = $(handler_empty_gif)
+
+if STATIC_HANDLER_EMPTY_GIF
+static_handler_empty_gif_src = $(handler_empty_gif)
+else
+dynamic_handler_empty_gif_lib = libplugin_empty_gif.la
+endif
+
+
+#
 # Handler streaming
 #
 handler_streaming = \
@@ -1237,6 +1254,7 @@ $(static_handler_proxy_src) \
 $(static_handler_mirror_src) \
 $(static_handler_ssi_src) \
 $(static_handler_secdownload_src) \
+$(static_handler_empty_gif_src) \
 $(static_handler_streaming_src) \
 $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
@@ -1406,6 +1424,7 @@ $(dynamic_handler_proxy_lib) \
 $(dynamic_handler_mirror_lib) \
 $(dynamic_handler_ssi_lib) \
 $(dynamic_handler_secdownload_lib) \
+$(dynamic_handler_empty_gif_lib) \
 $(dynamic_handler_streaming_lib) \
 $(dynamic_handler_custom_error_lib) \
 $(dynamic_handler_error_redir_lib) \

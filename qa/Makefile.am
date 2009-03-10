@@ -214,7 +214,8 @@ run-tests.py \
 206-AuthType.py \
 207-RuleExists4.py \
 208-Userdir_Pathinfo.py \
-209-ScriptAlias_DRoot.py
+209-ScriptAlias_DRoot.py \
+211-EmptyGif.py
 
 
 test:
