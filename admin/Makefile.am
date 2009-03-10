@@ -65,6 +65,7 @@ ModuleScgi.py \
 ModuleBalancer.py \
 ModuleSsi.py \
 ModuleSecdownload.py \
+ModuleEmptyGif.py \
 ModuleProxy.py \
 ModuleMirror.py \
 ModuleDbslayer.py \

@@ -1,5 +1,8 @@
 2009-03-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleEmptyGif.py, admin/consts.py, admin/Makefile.am:
+	Adds the cherokee-admin module for the new Empty GIF handler.
+	
 	* cherokee/Makefile.am, cherokee/handler_empty_gif.c,
 	cherokee/handler_empty_gif.h, configure.in, qa/211-EmptyGif.py,
 	qa/Makefile.am: Adds a new "Empty GIF" handler.
