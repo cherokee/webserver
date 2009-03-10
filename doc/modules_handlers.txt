@@ -13,19 +13,19 @@ Cherokee's internal architecture.
 
 This is the list of standard handlers provided by Cherokee:
 
-* link:modules_handlers_common.html[common] - **List & Send**.
-* link:modules_handlers_file.html[Static Content] - **Static Content**.
-* link:modules_handlers_dirlist.html[dirlist] - **Only listing**.
-* link:modules_handlers_redir.html[redir] - **Redirection**.
-* link:modules_handlers_cgi.html[cgi] - **CGI Execution**.
-* link:modules_handlers_fcgi.html[FCGI] - **FastCGI Server Support**.
-* link:modules_handlers_scgi.html[SCGI] - **SCGI Server Support**.
-* link:modules_handlers_proxy.html[HTTP reverse proxy] - **Surrogate/reverse proxy handler**.
-* link:modules_handlers_ssi.html[Server Side Includes] - **SSI Server Support**.
-* link:modules_handlers_server_info.html[Server Info] - **Server
-  Info**.
+* link:modules_handlers_file.html[Static Content]: Send files.
+* link:modules_handlers_dirlist.html[Only listing]: List directories.
+* link:modules_handlers_common.html[List & Send]: List directories and send files.
+* link:modules_handlers_custom_error.html[HTTP error]: Generate custom HTTP errors.
+* link:modules_handlers_redir.html[Redirection]: URL forwards and rewrites.
+* link:modules_handlers_cgi.html[CGI]: Common Gateway Interface.
+* link:modules_handlers_fcgi.html[FastCGI]: Fast Common Gateway Interface.
+* link:modules_handlers_scgi.html[SCGI]: Simple Common Gateway Interface.
+* link:modules_handlers_proxy.html[HTTP reverse proxy]: Surrogate/reverse proxy handler.
+* link:modules_handlers_ssi.html[Server Side Includes]:  SSI Server Support.
+* link:modules_handlers_streaming.html[Audio/Video Streaming]: Media streamer.
+* link:modules_handlers_secdownload.html[Hidden Downloads]: Secure, Time expiring downloads.
+* link:modules_handlers_server_info.html[Server Info]: Provide info about Cherokee.
 * link:modules_handlers_dbslayer.html[MySQL bridge]: MySQL over HTTP bridge.
-* link:modules_handlers_mirror.html[Generic balancer] - **Generic
-  balancer**.
-* link:modules_handlers_admin.html[Remote Administration] - **Remote
-  Administration**.
+* link:modules_handlers_mirror.html[Generic balancer]: Load balancing module.
+* link:modules_handlers_admin.html[Remote Administration]: Cherokee administration handler.

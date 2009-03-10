@@ -38,7 +38,7 @@ The `Check file` flag affects how PATH_INFO is generated. You should
 disable this when you have an application that is running the whole
 virtual server tree, as it is a common source of problems. You can
 look at a practical example about PATH_INFO in the
-link:modules_handlers_common.html[File & Send] handler documentation.
+link:modules_handlers_common.html[List & Send] handler documentation.
 
 [[examples]]
 Examples
@@ -56,7 +56,7 @@ requests to be managed by a specific script.
 
 A real life example could be running
 link:http://trac.edgewall.org[Trac] as a CGI script. In that case you
-would want to map a URL to the trac.cgi script.
+would want to map an URL to the trac.cgi script.
 
 For this you only need to set up the Script Alias option. Assuming you
 are using a `Directory`-type rule for the path `/trac` managed by the

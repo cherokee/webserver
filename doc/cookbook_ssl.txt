@@ -87,7 +87,7 @@ First some terminology:
 
 . CSR, or Certificate Signing Request: a digital file containing your
   public key and your name. It is sent to a Certifying Authority (CA)
-  that will convert sign it to conert it into a real Certificate.
+  that will convert sign it to convert it into a real Certificate.
 
 . Certificate: contains your RSA public key and name, the name of the
   CA, and is digitally signed by the CA. A browser that knows the CA
@@ -101,11 +101,11 @@ passphrase on your SSL private key file, a startup dialog will asks
 you to enter it. This can be problematic if the web server needs to be
 started automatically. In this case, the link:#passphrase[passphrase]
 can be removed from your private key at the cost of erasing a security
-layer, wich brings additional security risks.
+layer, which brings additional security risks.
 
 .Does Cherokee offer any help for Certificate Generation?
 
-Yes. A script is provided to assit you with Certificate Generation.
+Yes. A script is provided to assist you with Certificate Generation.
 
 Just locate the `contrib` subdirectory and type:
 
@@ -170,7 +170,7 @@ Generate a certificate request
      .....................................++++++
      ...++++++
      writing new private key to 'newreq.pem'
-     Enter PEM pass phrase: <anothe phrase>
+     Enter PEM pass phrase: <another phrase>
      Verifying - Enter PEM pass phrase: <repeat it>
      -----
      You are about to be asked to enter information that will be incorporated
@@ -266,7 +266,7 @@ This server.key does not have any passphrase. To add a passphrase to
 the key, you should run the following command, and enter & verify the
 passphrase as requested.
 
----- 
+----
 $ openssl rsa -des3 -in server.key -out server.key.new
 $ mv server.key.new server.key
 ----
@@ -281,8 +281,8 @@ Pass-phrase issues
 
 As noted above, if you have a pass-phrase on your SSL private key file,
 the web-server start up will remain on hold until you enter it. Here
-is the information needed to changeit or even removing it, but bare in
-minda the security implications.
+is the information needed to change it or even remove it, but bare in
+mind the security implications.
 
 .How to change the pass-phrase on a private key file?
 
@@ -307,7 +307,7 @@ of the original file before proceeding.
  $ cp server.key server.key.org
  $ openssl rsa -in server.key.org -out server.key
  $ chmod 400 server.key
----- 
+----
 
 Since the server.key now contains an unencrypted copy of the key, if
 anyone gets it they will be able to impersonate you on the net.

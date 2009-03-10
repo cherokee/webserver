@@ -8,24 +8,24 @@ are supported.
 
 The two main features of this module are:
 
-  . `Automatic Traffic Shaping`: All the media file handled by this
+  . `Automatic Traffic Shaping`: All the media files handled by this
     module will be analyzed, so it figures the media bitrate. Once the
-    module knows it, it will limit the speed to the bitrate, so server
-    bandwidth is not wasted in the case the client stops
-    watching/listening the file before it has finished. This feature
-    also helps the server to handle a higher user concurrency before
-    the bandwidth limit is reached.
+    module knows it, it will limit the speed to that bitrate, so
+    server bandwidth is not wasted in the case the client stops
+    watching or listening to the file before it has finished. This
+    feature also helps the server to handle a higher user concurrency
+    before the bandwidth limit is reached.
 
   . `Seeking support`: There are some web media players that support
     media seeking by using a ?'start'= parameter. So far, this method
-    is supported for FLV files, and it'll be eventually supported for
-    H264 videos as well.
+    is supported for FLV files, and it will be eventually supported
+    for H264 videos as well.
 
 If the 'Automatic Traffic Shaping' is enabled, all the media formats
 will be streamed, independently on whether or not seeking is supported
-for that format.  For instance, even if 'seeking' wouldn't work, any
-MP3, OGG, AVI or Matroska file would be streamed according to its
-bitrate.
+for that format.  For instance, even though 'seeking' wouldn't work,
+any MP3, OGG, AVI or Matroska file would be streamed according to
+their bitrate.
 
 
 Parameters: Listing
@@ -35,21 +35,22 @@ Parameters: Listing
 Parameters         , Type    , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ``Auto Rate``      , boolean , Whether to enable the bitrate based bandwidth limit.
-``Speedup Factor`` , float   , Optional. It's the factor by which the bandwidth \
+``Speedup Factor`` , float   , Optional. It is the factor by which the bandwidth \
                                limit would be multiplied. Default: 0.1.
 ``Initial Boost``  , number  , Optional. Seconds of media that should be sent \
                                before setting the bandwidth limit. This allows the \
-						 client to buffer some media. Default: 5 (seconds).
+                               client to buffer some media. Default: 5 (seconds).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Notes on FLV streaming 
+Notes on FLV streaming
 ~~~~~~~~~~~~~~~~~~~~~~
 
 It is important to remember that FLV videos must be indexed. It is
-only possible to seek along the media file if it is has some meta data
+only possible to seek along the media file if it has some meta data
 tags. Without these tags, seeking just would not work.
 
 There are tools like link:http://inlet-media.de/flvtool2[FLVTool2],
 link:http://www.buraks.com/flvmdi/[FLVMDI] or
-link:http://yamdi.sourceforge.net/[Yamdi] that insert them.
+link:http://yamdi.sourceforge.net/[Yamdi] that can be used to insert
+these tags.

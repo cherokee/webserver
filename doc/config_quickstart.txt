@@ -7,8 +7,8 @@ This section briefly describes the whole administration web interface
 provided by link:bundle_cherokee-admin.html[cherokee-admin]. This is
 the only recommended way of configuring Cherokee. If you are looking
 for development information, you should refer to the appropriate
-section, especially link:dev_cherokee.conf.html[cherokee.conf] file
-specification.
+section, especially the link:dev_cherokee.conf.html[cherokee.conf]
+file specification.
 
 We will first show a quick overview of the available options, followed
 by a simple walkthrough. You can learn more about the options in their
@@ -230,7 +230,7 @@ redirected to http://example.net/feed
 Any rule type can be used with the redirection handler: Directory,
 Extensions, Regular Expression, etc. In this case the fact that the
 rule type is "Regular Expression" affects only slightly. Refer to the
-appropiate section of the documentation,
+appropriate section of the documentation,
 link:modules_handlers_redir.html[Redirection Handler], for more
 details.
 +

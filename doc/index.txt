@@ -87,8 +87,8 @@ link:modules.html[Modules]: Information about the standard modules
     - link:modules_handlers_fcgi.html[FastCGI]: Fast Common Gateway Interface.
     - link:modules_handlers_scgi.html[SCGI]: Simple Common Gateway Interface.
     - link:modules_handlers_proxy.html[HTTP reverse proxy]: Surrogate/reverse proxy handler.
-    - link:modules_handlers_ssi.html[Server Side Includes] - SSI Server Support.
-    - link:modules_handlers_streaming.html[Audio/Video Streaming] - Media streamer.
+    - link:modules_handlers_ssi.html[Server Side Includes]: SSI Server Support.
+    - link:modules_handlers_streaming.html[Audio/Video Streaming]: Media streamer.
     - link:modules_handlers_secdownload.html[Hidden Downloads]: Secure, Time expiring downloads.
     - link:modules_handlers_server_info.html[Server Info]: Provide info about Cherokee.
     - link:modules_handlers_dbslayer.html[MySQL bridge]: MySQL over HTTP bridge.
@@ -138,7 +138,6 @@ link:dev.html[Development info]: Things of interest to developers
 
 Suggested recipes:
 ------------------
-phpMyAdmin:	http://www.phpmyadmin.net
 Cake PHP: 	http://www.cakephp.org/
 Piwik:		http://piwik.org/
 vBSEO:		http://www.vbseo.com/

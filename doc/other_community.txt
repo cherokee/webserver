@@ -27,7 +27,7 @@ Bug Tracker
 Your feedback is very important to us. That is why we encourage you to
 log bug reports and Request for Enhancements in our
 link:http://bugs.cherokee-project.com[bug tracker] whenever you find
-something that, in your opinion, is suitable for improvement.
+something that you think is suitable for improvement.
 
 
 Third party resources

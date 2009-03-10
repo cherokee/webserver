@@ -1,8 +1,19 @@
+2009-03-10  Taher Shihadeh <taher@unixwars.com>
+
+	* doc/modules_handlers_streaming.txt,
+	doc/modules_handlers_cgi.txt,
+	doc/modules_handlers_secdownload.txt, doc/other_community.txt,
+	doc/cookbook_ssl.txt, doc/modules_handlers.txt, doc/index.txt,
+	doc/config_quickstart.txt, doc/modules.txt,
+	doc/media/images/admin_vserver_errors.png,
+	doc/media/images/admin_handler_secdownload.png: documentation
+	cleanup.
+
 2009-03-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/ModuleEmptyGif.py, admin/consts.py, admin/Makefile.am:
 	Adds the cherokee-admin module for the new Empty GIF handler.
-	
+
 	* cherokee/Makefile.am, cherokee/handler_empty_gif.c,
 	cherokee/handler_empty_gif.h, configure.in, qa/211-EmptyGif.py,
 	qa/Makefile.am: Adds a new "Empty GIF" handler.
@@ -38,7 +49,7 @@
 	* cherokee/rule_exists.c (match): The rule should match files even
 	if they are inside directories. This patch fixes:
 	http://lists.octality.com/pipermail/cherokee/2009-March/009905.html
-	
+
 2009-03-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_mirror.c, cherokee/handler_server_info.c,
