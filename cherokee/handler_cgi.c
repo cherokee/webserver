@@ -215,8 +215,8 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 	 */
 #ifndef _WIN32
 	if (cgi->pid > 0) {
-		pid_t   pid;
-		cuint_t tries = 3;
+		pid_t  pid;
+		cint_t tries = 2;
 
 		while (true) {
 			do {
@@ -234,11 +234,9 @@ cherokee_handler_cgi_free (cherokee_handler_cgi_t *cgi)
 			/* Failed */
 			kill (cgi->pid, SIGTERM);
 
-			tries -= 1;
-			if (tries < 0) {
-				PRINT_ERROR ("Could not kill PID %d\n", cgi->pid);
+			tries--;
+			if (tries < 0)
 				break;
-			}
 		}
 	}
 #else
@@ -372,7 +370,9 @@ add_environment (cherokee_handler_cgi_t *cgi, cherokee_connection_t *conn)
 		return ret_error;
 
 	set_env (cgi_base, "SCRIPT_FILENAME",
-		 cgi_base->executable.buf, cgi_base->executable.len);
+		 cgi_base->executable.buf,
+		 cgi_base->executable.len);
+
 	return ret_ok;
 }
 
