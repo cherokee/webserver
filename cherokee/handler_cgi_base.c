@@ -626,6 +626,11 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 		 * - If the SCGI is handling / it is ''
 		 * - Otherwise, it is the web_directory.
 		 */
+		if (! cherokee_buffer_is_empty (&conn->userdir)) {
+			cherokee_buffer_add_str    (&tmp, "/~");
+			cherokee_buffer_add_buffer (&tmp, &conn->userdir);
+		}
+
 		if (conn->web_directory.len > 1) {
 			cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, 
 					   conn->web_directory.buf, conn->web_directory.len);
@@ -653,7 +658,12 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 				len = name->len;
 			}
 		}
-	
+
+		if (! cherokee_buffer_is_empty (&conn->userdir)) {
+			cherokee_buffer_add_str    (&tmp, "/~");
+			cherokee_buffer_add_buffer (&tmp, &conn->userdir);
+		}
+
 		if (conn->web_directory.len > 1) {
 			cherokee_buffer_add_buffer (&tmp, &conn->web_directory);
 		}

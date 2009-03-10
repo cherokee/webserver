@@ -23,7 +23,7 @@ vserver!2100!user_dir!rule!1!handler = file
 CGI_BASE = """#!/bin/sh
 echo "Content-type: text/html"
 echo ""
-echo "SCRIPT_NAME: -$SCRIPT_NAME-"
+echo "SCRIPT_NAME: -${SCRIPT_NAME}-"
 """
 
 class Test (TestBase):

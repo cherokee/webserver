@@ -418,7 +418,10 @@ add_extra_fcgi_env (cherokee_handler_fcgi_t *hdl, cuint_t *last_header_offset)
 	 */
 	*last_header_offset = hdl->write_buffer.len;
 
-	set_env (cgi_base, "SCRIPT_FILENAME", cgi_base->executable.buf, cgi_base->executable.len);
+	set_env (cgi_base, "SCRIPT_FILENAME",
+		 cgi_base->executable.buf,
+		 cgi_base->executable.len);
+
 	TRACE (ENTRIES, "SCRIPT_FILENAME '%s'\n", cgi_base->executable.buf);
 
 	cherokee_buffer_mrproper (&buffer);
