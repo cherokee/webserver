@@ -56,13 +56,13 @@ CHEROKEE_TRACE variable, with the desired options:
 ****
 cherokee# CHEROKEE_TRACE="common" cherokee
 
-Cherokee Web Server 0.98.0 (Jan 19 2009): Listening on ports ALL:80,
+Cherokee Web Server 0.99.3b2955 (Mar 10 2009): Listening on port ALL:80, TLS
 
-ALL:443(TLS), TLS disabled, IPv6 enabled, using epoll, 1024 fds system
+disabled, IPv6 enabled, using epoll, 1024 fds system limit, max. 505
 
-limit, max. 505 connections, caching I/O, 10 threads, 50 connections per
+connections, caching I/O, 10 threads, 50 connections per thread, standard
 
-thread, standard scheduling policy, tracing 'common'
+scheduling policy
 
 handler_common.c:0143 (                     stat_file): /var/www//images/powered_by_cherokee.png, use_iocache=0 re=0
 

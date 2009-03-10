@@ -17,7 +17,7 @@ into your specific Cherokee build. This can be done by:
 ----
 $ cherokee -i
 Compilation
- Version: 0.98.0
+ Version: 0.99.3
 
 [...]
 

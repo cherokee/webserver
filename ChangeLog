@@ -9,6 +9,12 @@
 	doc/media/images/admin_handler_secdownload.png: documentation
 	cleanup.
 
+	* doc/dev_debug.txt, doc/basics_why_cherokee.txt,
+	doc/config_general.txt, doc/index.txt, doc/config_quickstart.txt,
+	doc/cookbook_optimizations.txt, doc/bundle_cherokee-admin.txt,
+	doc/dev_cherokee.conf.txt:  syncing with current release. Almost
+	there now.
+
 2009-03-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/ModuleEmptyGif.py, admin/consts.py, admin/Makefile.am:

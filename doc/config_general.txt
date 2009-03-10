@@ -42,9 +42,9 @@ Parameters               , Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Product                  , Cherokee
 Minor                    , Cherokee/0.98
-Minimal                  , Cherokee/0.98.0
-OS                       , Cherokee/0.98.0 (UNIX)
-Full                     , Cherokee/0.98.0 b2321 (UNIX)
+Minimal                  , Cherokee/0.98.3
+OS                       , Cherokee/0.98.3 (UNIX)
+Full                     , Cherokee/0.98.3 b2955 (UNIX)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default, Cherokee will use *Full*.

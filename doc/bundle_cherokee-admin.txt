@@ -31,9 +31,10 @@ Login:
   User:              admin
   One-time Password: F4c7cyogxhTGbp1r
 
-Cherokee Web Server 0.98.0b2721 (Jan 19 2009): Listening on port 127.0.0.1:9090,
-TLS disabled, IPv6 disabled, using epoll, 1024 fds system limit, max. 505
-connections, caching I/O, single thread
+Cherokee Web Server 0.99.3b2955 (Mar 10 2009): Listening on port ALL:80, TLS
+disabled, IPv6 enabled, using epoll, 1024 fds system limit, max. 505
+connections, caching I/O, 10 threads, 50 connections per thread, standard
+scheduling policy
 ----
 
 Then redirect your web browser to 127.0.0.1:9090, which is the default

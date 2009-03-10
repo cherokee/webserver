@@ -1,4 +1,4 @@
-== Cherokee 0.98 documentation
+== Cherokee 0.99 documentation
 
 *********************************
 link:basics.html[Getting started]: Cherokee basics
