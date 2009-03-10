@@ -62,36 +62,6 @@ cherokee_handler_empty_gif_new (cherokee_handler_t     **hdl,
 	return ret_ok;
 }
 
-
-ret_t
-cherokee_handler_empty_gif_configure (cherokee_config_node_t   *conf,
-				      cherokee_server_t        *srv,
-				      cherokee_module_props_t **_props)
-{
-	UNUSED(conf);
-	UNUSED(srv);
-	UNUSED(_props);
-	
-	return ret_ok;
-}
-
-
-ret_t
-cherokee_handler_empty_gif_init (cherokee_handler_empty_gif_t *hdl)
-{
-	UNUSED(hdl);
-	return ret_ok;
-}
-
-
-ret_t
-cherokee_handler_empty_gif_free (cherokee_handler_empty_gif_t *hdl)
-{
-	UNUSED(hdl);
-	return ret_ok;
-}
-
-
 ret_t
 cherokee_handler_empty_gif_step (cherokee_handler_empty_gif_t *hdl,
 				 cherokee_buffer_t            *buffer)
@@ -101,7 +71,6 @@ cherokee_handler_empty_gif_step (cherokee_handler_empty_gif_t *hdl,
 	cherokee_buffer_add_str (buffer, HARDCODED_GIF);
 	return ret_eof_have_data;
 }
-
 
 ret_t
 cherokee_handler_empty_gif_add_headers (cherokee_handler_empty_gif_t *hdl, 
@@ -117,3 +86,31 @@ cherokee_handler_empty_gif_add_headers (cherokee_handler_empty_gif_t *hdl,
 	
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_handler_empty_gif_configure (cherokee_config_node_t   *conf,
+				      cherokee_server_t        *srv,
+				      cherokee_module_props_t **_props)
+{
+	UNUSED(conf);
+	UNUSED(srv);
+	UNUSED(_props);
+	
+	return ret_ok;
+}
+
+ret_t
+cherokee_handler_empty_gif_init (cherokee_handler_empty_gif_t *hdl)
+{
+	UNUSED(hdl);
+	return ret_ok;
+}
+
+ret_t
+cherokee_handler_empty_gif_free (cherokee_handler_empty_gif_t *hdl)
+{
+	UNUSED(hdl);
+	return ret_ok;
+}
+
