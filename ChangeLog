@@ -1,5 +1,8 @@
 2009-03-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_server_info.c: "Uptime" was not being showed in
+	the HTML render.
+
 	* cherokee/handler_cgi.c (cherokee_handler_cgi_free): Fixes an
 	integer overflow.
 

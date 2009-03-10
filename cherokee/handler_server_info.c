@@ -115,6 +115,20 @@
 "   }"                                                                                              CRLF\
 "} /* END: ajaxObject */"                                                                           CRLF\
 "var info = {"                                                                                      CRLF\
+"  uptime: {"                                                                                       CRLF\
+"    title: 'Uptime',"                                                                              CRLF\
+"    items: {"                                                                                      CRLF\
+"      formatted: 'Uptime'"                                                                         CRLF\
+"    }"                                                                                             CRLF\
+"  },"                                                                                              CRLF\
+"  connections: {"                                                                                  CRLF\
+"    title: 'Current Connections',"                                                                 CRLF\
+"    items: {"                                                                                      CRLF\
+"      number: 'Number',"                                                                           CRLF\
+"      active: 'Active', "                                                                          CRLF\
+"      reusable: 'Reusable'"                                                                        CRLF\
+"    }"                                                                                             CRLF\
+"  },"                                                                                              CRLF\
 "  config: {"                                                                                       CRLF\
 "    title: 'Configuration',"                                                                       CRLF\
 "    items: { "                                                                                     CRLF\
@@ -125,14 +139,6 @@
 "      UID: 'UID',"                                                                                 CRLF\
 "      GID: 'GID',"                                                                                 CRLF\
 "      OS: 'Operating System'"                                                                      CRLF\
-"    }"                                                                                             CRLF\
-"  },"                                                                                              CRLF\
-"  connections: {"                                                                                  CRLF\
-"    title: 'Current Connections',"                                                                 CRLF\
-"    items: {"                                                                                      CRLF\
-"      number: 'Number',"                                                                           CRLF\
-"      active: 'Active', "                                                                          CRLF\
-"      reusable: 'Reusable'"                                                                        CRLF\
 "    }"                                                                                             CRLF\
 "  },"                                                                                              CRLF\
 "  modules: {"                                                                                      CRLF\
