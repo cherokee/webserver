@@ -368,7 +368,10 @@ cherokee_config_node_read_list (cherokee_config_node_t           *conf,
 static ret_t
 convert_to_list_step (char *entry, void *data)
 {
-	return cherokee_list_add_tail_content (LIST(data), strdup(entry));
+	CHEROKEE_NEW(buf, buffer);
+
+	cherokee_buffer_add (buf, entry, strlen(entry));
+	return cherokee_list_add_tail_content (LIST(data), buf);
 }
 
 
