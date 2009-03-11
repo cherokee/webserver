@@ -1,5 +1,8 @@
 2009-03-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleDirlist.py: Implements the new "Hidden files"
+	feature in cherokee-admin.
+
 	* cherokee/handler_dirlist.h, cherokee/handler_dirlist.c:
 	Implements a new "Hidden files" feature. It allows to hidde
 	certain files of being listed by the server.

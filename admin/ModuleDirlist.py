@@ -11,10 +11,12 @@ DEFAULT_THEME = "default"
 NOTE_THEME        = "Choose the listing theme."
 NOTE_ICON_DIR     = "Web directory where the icon files are located. Default: <i>/icons</i>."
 NOTE_NOTICE_FILES = "List of notice files to be inserted."
+NOTE_HIDDEN_FILES = "List of files that should not be listed."
 
 DATA_VALIDATION = [
     ('vserver!.+?!rule!.+?!handler!icon_dir',     validations.is_path),
     ('vserver!.+?!rule!.+?!handler!notice_files', validations.is_path_list),
+    ('vserver!.+?!rule!.+?!handler!hidden_files', validations.is_list)
 ]
 
 HELPS = [
@@ -48,6 +50,7 @@ class ModuleDirlist (ModuleHandler):
         self.AddPropOptions_Reload (table, 'Theme', "%s!theme" % (self._prefix), themes, NOTE_THEME)
         self.AddPropEntry (table, 'Icons dir',    "%s!icon_dir" % (self._prefix), NOTE_ICON_DIR)
         self.AddPropEntry (table, 'Notice files', "%s!notice_files" % (self._prefix), NOTE_NOTICE_FILES)
+        self.AddPropEntry (table, 'Hidden files', "%s!hidden_files" % (self._prefix), NOTE_HIDDEN_FILES)
         txt += self.Indent(table)
 
         return txt

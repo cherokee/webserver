@@ -45,6 +45,12 @@ def is_path (value):
         return value
     raise ValueError, 'Malformed path'
 
+def is_list (value):
+    tmp = [x.strip() for x in value.split(',')]
+    if not tmp:
+        return ''
+    return ','.join(tmp)
+
 def is_dir_formated (value):
     is_path (value)
 
