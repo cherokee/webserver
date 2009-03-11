@@ -1,5 +1,8 @@
 2009-03-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/post.c, cherokee/header.c: Adds a couple of new TRACE
+	entries.  They help to debug the incoming header, and post info.
+
 	* admin/ModuleDirlist.py: Implements the new "Hidden files"
 	feature in cherokee-admin.
 

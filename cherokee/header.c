@@ -39,6 +39,7 @@
 
 #include <ctype.h>
 
+#define ENTRIES "header"
 
 #if 0
 # define HEADER_INTERNAL_DEBUG
@@ -851,6 +852,8 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 	 */
 	chr_header_end = *header_end;
 	*header_end = '\0';
+
+	TRACE(ENTRIES, "Incoming header:\n%s", buffer->buf);
 
 	/* Parse the special first line
 	 */

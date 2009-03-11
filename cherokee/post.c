@@ -71,6 +71,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 			PRINT_ERRNO (errno, "Couldn't remove %s: %s\n", post->tmp_file.buf);
 		}
 
+		TRACE(ENTRIES, "Removing '%s'\n", post->tmp_file.buf);
 		cherokee_buffer_mrproper (&post->tmp_file);
 	}
 
@@ -88,8 +89,6 @@ cherokee_post_set_len (cherokee_post_t *post, off_t len)
 	post->type = (len > POST_SIZE_TO_DISK) ? post_in_tmp_file : post_in_memory;
 	post->size = len;
 
-	TRACE(ENTRIES, "len=%d type=%d\n", len, post->type);
-
 	if (post->type == post_in_tmp_file) {
 		cherokee_buffer_add_buffer (&post->tmp_file, &cherokee_tmp_dir);
 		cherokee_buffer_add_str    (&post->tmp_file, "/cherokee_post_XXXXXX");
@@ -97,9 +96,13 @@ cherokee_post_set_len (cherokee_post_t *post, off_t len)
 		/* Generate a unique name
 		 */
 		ret = cherokee_mkstemp (&post->tmp_file, &post->tmp_file_fd);
-		if (unlikely (ret != ret_ok)) return ret;
+		if (unlikely (ret != ret_ok))
+			return ret;
+
+		TRACE(ENTRIES, "Setting len=%d, to file='%s'\n", len, post->tmp_file.buf);
 	}
 
+	TRACE(ENTRIES, "Setting len=%d, to memory\n", len);
 	return ret_ok;
 }
 
