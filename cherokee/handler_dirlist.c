@@ -164,7 +164,8 @@ load_theme (cherokee_buffer_t *theme_path, cherokee_handler_dirlist_props_t *pro
 ret_t 
 cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 {
-	cherokee_list_content_free (&props->notice_files, free);
+	cherokee_list_content_free (&props->notice_files, cherokee_buffer_free);
+	cherokee_list_content_free (&props->hidden_files, cherokee_buffer_free);
 
 	cherokee_buffer_mrproper (&props->header);
 	cherokee_buffer_mrproper (&props->footer);
@@ -209,6 +210,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 		cherokee_buffer_add_str (&n->icon_web_dir, ICON_WEB_DIR_DEFAULT);
 
 		INIT_LIST_HEAD (&n->notice_files);
+		INIT_LIST_HEAD (&n->hidden_files);
 		
 		*_props = MODULE_PROPS(n);
 	}
@@ -240,7 +242,13 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 
 		} else if (equal_buf_str (&subconf->key, "notice_files")) {
 			ret = cherokee_config_node_convert_list (subconf, NULL, &props->notice_files);
-			if (unlikely (ret != ret_ok)) return ret;
+			if (unlikely (ret != ret_ok))
+				return ret;
+
+		} else if (equal_buf_str (&subconf->key, "hidden_files")) {
+			ret = cherokee_config_node_convert_list (subconf, NULL, &props->hidden_files);
+			if (unlikely (ret != ret_ok))
+				return ret;
 		}
 	}
 
@@ -263,13 +271,16 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 
 
 static cherokee_boolean_t
-is_header_file (cherokee_handler_dirlist_t *dhdl, char *filename)
+is_file_in_list (cherokee_list_t *list, char *filename, cuint_t len)
 {
 	cherokee_list_t *i;
 
-	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) {
-		if (strcmp (filename, LIST_ITEM_INFO(i)) == 0)
+	list_for_each (i, list) {
+		cherokee_buffer_t *notice = BUF(LIST_ITEM_INFO(i));
+
+		if (cherokee_buffer_cmp (notice, filename, len) == 0) {
 			return true;
+		}
 	}
 
 	return false;
@@ -315,7 +326,9 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 		if ((name[0] == '.') ||
 		    (name[0] == '#') ||
 		    (name[n->name_len-1] == '~') ||
-		    is_header_file (dhdl, name)) {
+		    is_file_in_list (&HDL_DIRLIST_PROP(dhdl)->notice_files, name, n->name_len) ||
+		    is_file_in_list (&HDL_DIRLIST_PROP(dhdl)->hidden_files, name, n->name_len))
+		{
 			continue;
 		}
 		
@@ -666,20 +679,18 @@ read_notice_file (cherokee_handler_dirlist_t *dhdl)
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
 	list_for_each (i, &HDL_DIRLIST_PROP(dhdl)->notice_files) {
-		cuint_t  filename_len;
-		char    *filename = LIST_ITEM_INFO(i);
+		cherokee_buffer_t *filename = BUF(LIST_ITEM_INFO(i));
 
-		filename_len = strlen(filename);
 		cherokee_buffer_clean (&dhdl->header);
 	        
-		if (filename[0] != '/') {
+		if (filename->buf[0] != '/') {
 			cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);                     /* do   */
-			cherokee_buffer_add (&conn->local_directory, filename, filename_len);
+			cherokee_buffer_add_buffer (&conn->local_directory, filename);
 			
 			ret = cherokee_buffer_read_file (&dhdl->header, conn->local_directory.buf);
-			cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len + filename_len); /* undo */
+			cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len + filename->len); /* undo */
 		} else {
-			ret = cherokee_buffer_read_file (&dhdl->header, filename);
+			ret = cherokee_buffer_read_file (&dhdl->header, filename->buf);
 		}
 
 		if (ret == ret_ok)

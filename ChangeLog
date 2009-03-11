@@ -1,5 +1,12 @@
 2009-03-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_dirlist.h, cherokee/handler_dirlist.c:
+	Implements a new "Hidden files" feature. It allows to hidde
+	certain files of being listed by the server.
+
+	* qa/212-DirList-Hidden.py, qa/Makefile.am: Tests the new "Hidden
+	Files" feature of the dirlist handler.
+
 	* cherokee/config_node.c (cherokee_config_node_convert_list):
 	Converted to use cherokee_buffer_t instead of char *.
 

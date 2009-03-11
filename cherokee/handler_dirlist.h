@@ -58,6 +58,7 @@ typedef struct {
 	cherokee_module_props_t  props;
 
 	cherokee_list_t          notice_files;
+	cherokee_list_t          hidden_files;
 
 	/* Visible properties
 	 */

@@ -216,7 +216,8 @@ run-tests.py \
 208-Userdir_Pathinfo.py \
 209-ScriptAlias_DRoot.py \
 210-Userdir_ScriptName.py \
-211-EmptyGif.py
+211-EmptyGif.py \
+212-DirList-Hidden.py
 
 
 test:
