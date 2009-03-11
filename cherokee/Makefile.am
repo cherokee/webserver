@@ -618,7 +618,7 @@ handler_empty_gif.c \
 handler_empty_gif.h
 
 libplugin_empty_gif_la_LDFLAGS = $(module_ldflags)  
-libplugin_empty_la_SOURCES = $(handler_empty_gif)
+libplugin_empty_gif_la_SOURCES = $(handler_empty_gif)
 
 if STATIC_HANDLER_EMPTY_GIF
 static_handler_empty_gif_src = $(handler_empty_gif)
