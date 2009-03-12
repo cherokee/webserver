@@ -17,7 +17,7 @@ application.
 
 This assumes that you already have symfony installed and configured.
 You can find information about installation here:
-link:http://www.symfony-project.org/installation/[Symfony
+link:http://www.symfony-project.org/installation[Symfony
 Installation]. At the time of writing, symfony stable version is 1.2.
 
 Now that you have symfony installed, we shall create a symfony
@@ -80,6 +80,18 @@ Internal , ^.*$              , /index.php
   the name of the symfony application you are setting up. In this
   example, our application name is "demo" so this controller will be
   called "demo_dev.php".
+
+. A slight adition must be added to fix an issue with how requests for
+  the root are managed when there is a rule with the `File exists`
+  handler in place. If this is not put in place, you will recieve 403
+  errors. Simply define yet another redirection rule for this regular
+  expression:
++
+`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~
+Type     , Regular Expression, Redirection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Internal ,  ^/$              , /index.php
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 . Finally, you need to set up a rule for the "/sf" directory.
 +
