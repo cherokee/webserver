@@ -664,7 +664,7 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 			cherokee_buffer_add_buffer (&tmp, &conn->userdir);
 		}
 
-		if (conn->web_directory.len > 1) {
+		if (cherokee_connection_use_webdir(conn)) {
 			cherokee_buffer_add_buffer (&tmp, &conn->web_directory);
 		}
 

@@ -1,3 +1,8 @@
+2009-03-12  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_cgi_base.c: Fixes the SCRIPT_NAME generation
+	when a CGI is inside a user directory (/~user).
+
 2009-03-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/post.c, cherokee/header.c: Adds a couple of new TRACE
