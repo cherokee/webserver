@@ -1,4 +1,4 @@
-import os, sys, time, random, fcntl, socket
+import os, sys, time, random, fcntl, socket, math
 
 from conf import *
 
@@ -261,3 +261,21 @@ def figure_public_ip():
 
 def get_forwarded_http_header (header):
     return 'HTTP_' + header.upper().replace('-','_')
+
+def chunk_encode (txt, size=None, pieces=None):
+    out = ''
+
+    if not pieces:
+        pieces = random.randint (1, 10)
+    if not size:
+        size = int (math.ceil (len(txt)/float(pieces)))
+
+    for n in range(pieces):
+        sub = txt[(n*size):(n+1)*size]
+        out += hex(len(sub))[2:]
+        out += '\r\n'
+        out += sub
+        out += '\r\n'
+
+    out += '0\r\n'
+    return out

@@ -1,5 +1,11 @@
 2009-03-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/header.c, cherokee/header.h, cherokee/handler_fcgi.c,
+	cherokee/post.c, cherokee/post.h, cherokee/handler_cgi.c,
+	cherokee/connection.c, admin/pyscgi.py, qa/213-Post-Chunked1.py,
+	qa/Makefile.am, qa/util.py, qa/214-Post-Chunked2.py: Implements
+	"Transfer-Encoding: chunked" POSTs.
+	
 	* cherokee/handler_cgi_base.c: Fixes the SCRIPT_NAME generation
 	when a CGI is inside a user directory (/~user).
 

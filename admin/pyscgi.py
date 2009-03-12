@@ -84,8 +84,8 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
             c = self.__safe_read(1)
             if c == ':':
                 break
-            elif not c:
-                raise IOError, 'Malformed netstring'
+            elif len(c) == 0:
+                raise IOError, 'Empty Length. Closed?'
             size += c
         return long(size)
 

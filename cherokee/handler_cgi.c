@@ -347,12 +347,13 @@ cherokee_handler_cgi_add_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 }
 
 static ret_t
-add_environment (cherokee_handler_cgi_t *cgi, cherokee_connection_t *conn)
+add_environment (cherokee_handler_cgi_t *cgi,
+		 cherokee_connection_t  *conn)
 {
 	ret_t                        ret;
-	char                        *length;
-	cuint_t                      length_len;
+	off_t                        post_len;
 	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(cgi);
+	cherokee_buffer_t           *tmp      = THREAD_TMP_BUF2(CONN_THREAD(conn));
 
 	ret = cherokee_handler_cgi_base_build_envp (HDL_CGI_BASE(cgi), conn);
 	if (unlikely (ret != ret_ok))
@@ -360,9 +361,13 @@ add_environment (cherokee_handler_cgi_t *cgi, cherokee_connection_t *conn)
 
 	/* CONTENT_LENGTH
 	 */
-	ret = cherokee_header_get_known (&conn->header, header_content_length, &length, &length_len);
-	if (ret == ret_ok)
-		set_env (cgi_base, "CONTENT_LENGTH", length, length_len);
+	if (http_method_with_input (conn->header.method)) {
+		cherokee_post_get_len (&conn->post, &post_len);
+
+		cherokee_buffer_clean (tmp);
+		cherokee_buffer_add_ullong10 (tmp, post_len);
+		set_env (cgi_base, "CONTENT_LENGTH", tmp->buf, tmp->len);
+	}
 
 	/* SCRIPT_FILENAME
 	 */

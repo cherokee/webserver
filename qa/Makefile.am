@@ -217,7 +217,9 @@ run-tests.py \
 209-ScriptAlias_DRoot.py \
 210-Userdir_ScriptName.py \
 211-EmptyGif.py \
-212-DirList-Hidden.py
+212-DirList-Hidden.py \
+213-Post-Chunked1.py \
+214-Post-Chunked2.py
 
 
 test:

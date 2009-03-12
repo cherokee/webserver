@@ -391,16 +391,19 @@ set_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 static ret_t
 add_extra_fcgi_env (cherokee_handler_fcgi_t *hdl, cuint_t *last_header_offset)
 {
-	ret_t                        ret;
+	off_t                        post_len = 0;
 	cherokee_handler_cgi_base_t *cgi_base = HDL_CGI_BASE(hdl);
 	cherokee_buffer_t            buffer   = CHEROKEE_BUF_INIT;
 	cherokee_connection_t       *conn     = HANDLER_CONN(hdl);
 
 	/* CONTENT_LENGTH
 	 */
-	ret = cherokee_header_copy_known (&conn->header, header_content_length, &buffer);
-	if (ret == ret_ok)
+	if (http_method_with_input (conn->header.method)) {
+		cherokee_post_get_len (&conn->post, &post_len);
+
+		cherokee_buffer_add_ullong10 (&buffer, post_len);
 		set_env (cgi_base, "CONTENT_LENGTH", buffer.buf, buffer.len);
+	}
 
 	/* Add PATH_TRANSLATED only it there is pathinfo
 	 */

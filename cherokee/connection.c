@@ -1598,17 +1598,37 @@ post_init (cherokee_connection_t *conn)
 	cuint_t  info_len = 0;
 	CHEROKEE_TEMP(buf, 64);
 
-	/* Get the header "Content-Length" content
+	/* RFC 2616:
+	 *
+	 * If a message is received with both a Transfer-Encoding
+	 * header field and a Content-Length header field, the latter
+	 * MUST be ignored.
+	 */
+	
+	/* Check "Transfer-Encoding"
+	 */
+	ret = cherokee_header_get_known (&conn->header, header_transfer_encoding, &info, &info_len);
+	if (ret == ret_ok) {
+		if (strncasecmp (info, "chunked", MIN(info_len, 7)) == 0) {
+			cherokee_post_set_encoding (&conn->post, post_enc_chunked);
+			return ret_ok;
+		}
+	}
+
+	/* Check "Content-Length"
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_content_length, &info, &info_len);
-	if (ret != ret_ok) {
+	if (unlikely (ret != ret_ok)) {
 		conn->error_code = http_length_required;
 		return ret_error;
 	}
 
 	/* Parse the POST length
 	 */
-	if ((info_len == 0) || (info_len >= buf_size) || (info == NULL)) {
+	if (unlikely ((info == NULL)  ||
+		      (info_len == 0) ||
+		      (info_len >= buf_size)))
+	{
 		conn->error_code = http_bad_request;
 		return ret_error;
 	}
@@ -1616,10 +1636,10 @@ post_init (cherokee_connection_t *conn)
 	memcpy (buf, info, info_len);
 	buf[info_len] = '\0';
 
-	/* Check: Post length > 0
+	/* Check: Post length >= 0
 	 */
-	post_len = (off_t) atol(buf);
-	if (post_len < 0) {
+	post_len = (off_t) atoll(buf);
+	if (unlikely (post_len < 0)) {
 		conn->error_code = http_bad_request;
 		return ret_error;
 	}

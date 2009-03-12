@@ -56,6 +56,7 @@ typedef enum {
 	header_location,
 	header_range,
 	header_referer,
+	header_transfer_encoding,
 	header_upgrade,
 	header_user_agent,
 	header_x_forwarded_for,

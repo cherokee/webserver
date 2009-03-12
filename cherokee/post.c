@@ -37,11 +37,16 @@
 ret_t 
 cherokee_post_init (cherokee_post_t *post)
 {
-	post->type        = post_undefined;
-	post->size        = 0;
-	post->received    = 0;
-	post->tmp_file_fd = -1;
-	post->walk_offset = 0;
+	post->type              = post_undefined;
+	post->encoding          = post_enc_regular;
+
+	post->size              = 0;
+	post->received          = 0;
+	post->tmp_file_fd       = -1;
+	post->walk_offset       = 0;
+
+	post->chunked_last      = false;
+	post->chunked_processed = 0;
 	
 	cherokee_buffer_init (&post->info);
 	cherokee_buffer_init (&post->tmp_file);
@@ -55,10 +60,16 @@ cherokee_post_mrproper (cherokee_post_t *post)
 {
 	int re;
 
-	post->type        = post_undefined;
-	post->size        = 0;
-	post->received    = 0;
-	post->walk_offset = 0;
+	post->type              = post_undefined;
+	post->encoding          = post_enc_regular;
+
+	post->size              = 0;
+	post->received          = 0;
+	post->walk_offset       = 0;
+
+	post->chunked_last      = false;
+	post->chunked_processed = 0;
+
 	
 	if (post->tmp_file_fd != -1) {
 		close (post->tmp_file_fd);
@@ -107,6 +118,19 @@ cherokee_post_set_len (cherokee_post_t *post, off_t len)
 }
 
 
+ret_t
+cherokee_post_set_encoding (cherokee_post_t          *post,
+			    cherokee_post_encoding_t  enc)
+{
+	TRACE(ENTRIES, "Setting encoding: %s\n",
+	      (enc == post_enc_regular) ? "regular" : "chunked");
+
+	post->type     = post_in_memory;
+	post->encoding = enc;
+	return ret_ok;
+}
+
+
 int
 cherokee_post_is_empty (cherokee_post_t *post)
 {
@@ -117,7 +141,15 @@ cherokee_post_is_empty (cherokee_post_t *post)
 int
 cherokee_post_got_all (cherokee_post_t *post)
 {
-	return (post->received >= post->size);
+	switch(post->encoding) {
+	case post_enc_regular:
+		return (post->received >= post->size);
+	case post_enc_chunked:
+		return post->chunked_last;
+	}
+
+	SHOULDNT_HAPPEN;
+	return 0;
 }
 
 ret_t 
@@ -139,14 +171,141 @@ cherokee_post_append (cherokee_post_t *post, const char *str, size_t len)
 }
 
 
+static ret_t
+process_chunk (cherokee_post_t *post, 
+	       off_t            start_at,
+	       off_t           *processed)
+{
+	char  *begin;
+	char  *p;
+	char  *end;
+	off_t  content_size;
+
+	begin = post->info.buf + start_at;
+	p     = begin;
+
+	TRACE (ENTRIES, "Post info buffer len=%d, starting at="FMT_OFFSET"\n",
+	       post->info.len, start_at);
+
+	while (true) {
+		end = post->info.buf + post->info.len;
+
+		/* Iterate through the number */
+		while ((p < end) &&
+		       (((*p >= '0') && (*p <= '9')) ||
+			((*p >= 'a') && (*p <= 'f')) ||
+			((*p >= 'A') && (*p <= 'F'))))
+			p++;
+
+		if (unlikely (p+2 > end))
+			return ret_ok;
+
+		/* Check the CRLF after the length */
+		if (p[0] != CHR_CR)
+			return ret_error;
+		if (p[1] != CHR_LF)
+			return ret_error;
+
+		/* Read the length */
+		content_size = (off_t) strtoul (begin, &p, 16);
+		p += 2;
+		
+		if (unlikely (content_size < 0))
+			return ret_error;
+		
+		/* Check if there's enough info */
+		if (content_size == 0)
+			post->chunked_last = true;
+
+		else if (p + content_size + 2 > end) {
+			TRACE (ENTRIES, "Unfinished chunk(len="FMT_OFFSET"), has=%d, processed="FMT_OFFSET"\n",
+			       content_size, (int)(end-p), *processed);
+			return ret_ok;
+		}
+
+		TRACE (ENTRIES, "Processing chunk len=%d\n", content_size);
+
+		/* Remove the prefix */
+		cherokee_buffer_remove_chunk (&post->info, begin - post->info.buf, p-begin);
+
+		if (post->chunked_last) {
+			TRACE(ENTRIES, "Last chunk: %s\n", "exiting");
+			break;
+		} else {
+			/* Clean the trailing CRLF */
+			p = post->info.buf + start_at + content_size;
+			cherokee_buffer_remove_chunk (&post->info, p - post->info.buf, 2);
+		}
+
+		/* Next iteration */
+		begin = p;
+		*processed = (*processed + content_size);
+	}
+
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 {
+	ret_t   ret;
 	ssize_t written;
+	off_t   processed = 0;
 
-	if (size <= 0)
+	if (unlikely (size <= 0))
 		return ret_ok;
 
+	/* Chunked post
+	 */
+	if (post->encoding == post_enc_chunked) {
+		/* Process the chunks */
+		ret = process_chunk (post, post->chunked_processed, &processed);
+		if (unlikely (ret != ret_ok)) {
+			return ret_error;
+		}
+
+		if (processed <= 0) {
+			return ret_ok;
+		}
+		
+		/* Store the processed info */
+		switch (post->type) {
+		case post_undefined:
+			SHOULDNT_HAPPEN;
+			return ret_error;
+
+		case post_in_memory:
+			post->received          += processed;
+			post->chunked_processed += processed;
+			break;
+
+		case post_in_tmp_file:
+			if (post->tmp_file_fd == -1)
+				return ret_error;
+			
+			written = write (post->tmp_file_fd, post->info.buf, processed);
+			if (unlikely (written < 0))
+				return ret_error;
+						 
+			cherokee_buffer_move_to_begin (&post->info, (cuint_t)written);
+
+			post->chunked_processed -= written;
+			post->received          += written;
+
+			break;
+		}
+
+		if (post->chunked_last) {
+			TRACE(ENTRIES, "Got it all: len=%d\n", post->received);
+			post->size = post->received;
+		}
+
+		return ret_ok;
+	}
+
+	/* Plain Post
+	 */
 	switch (post->type) {
 	case post_undefined:
 		return ret_error;
@@ -156,11 +315,12 @@ cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 		return ret_ok;
 
 	case post_in_tmp_file:
-		if (post->tmp_file_fd == -1)
+		if (unlikely (post->tmp_file_fd == -1))
 			return ret_error;
 
 		written = write (post->tmp_file_fd, post->info.buf, post->info.len); 
-		if (written < 0) return ret_error;
+		if (unlikely (written < 0))
+			return ret_error;
 
 		cherokee_buffer_move_to_begin (&post->info, (cuint_t)written);
 		post->received += written;
@@ -168,6 +328,7 @@ cherokee_post_commit_buf (cherokee_post_t *post, size_t size)
 		return ret_ok;
 	}
 
+	SHOULDNT_HAPPEN;
 	return ret_error;
 }
 
