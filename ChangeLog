@@ -1,5 +1,9 @@
 2009-03-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c: Some of the connection that were
+	closed are now kept alive. This ought to increase the overall
+	proxy performance.
+	
 	* cherokee/handler_proxy.c, cherokee/handler_proxy.h: Tries to
 	address: http://code.google.com/p/cherokee/issues/detail?id=261
 	There were time when the reverse proxy returned 500 errors by no

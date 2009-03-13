@@ -619,6 +619,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		case ret_error:
 			if (hdl->respined) {
 				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+				hdl->pconn->keepalive_in = false;
 				return ret_eof;
 			}
 
@@ -658,6 +659,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		ret = cherokee_handler_proxy_conn_recv_headers (hdl->pconn, &hdl->tmp);
 		switch (ret) {
 		case ret_ok:
+			/* Got the header */
 			break;
 		case ret_eagain:
 			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
@@ -674,6 +676,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			 */
 			if (hdl->respined) {
 				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+				hdl->pconn->keepalive_in = false;
 				return ret_eof;
 			}
 
@@ -849,6 +852,13 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 		return ret;
 	}
 
+	/* If the reply has no body, let's mark it
+	 */
+	if (! http_code_with_body (HANDLER_CONN(hdl)->error_code)) {
+		hdl->got_all = true;
+		TRACE(ENTRIES, "Reply is %d, it hasn't body. Marking as '%s'\n", "got_all");
+	}
+
 	return ret_ok;
 }
 
@@ -972,7 +982,6 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 		return ret_eagain;
 
 	case pconn_enc_chunked: {
-
 		/* Chunked encoded reply
 		 */
 		char    *p;
@@ -1121,7 +1130,7 @@ cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 		if (! hdl->got_all) {
 			hdl->pconn->keepalive_in = false;
 			TRACE (ENTRIES, "Did not get all, turning keepalive %s\n", "off");
-		}
+		} 
 
 		cherokee_handler_proxy_conn_release (hdl->pconn);
 	}
