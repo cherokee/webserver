@@ -518,6 +518,11 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				conn->error_code = http_service_unavailable;
 				return ret_error;
 			}
+
+			/* Sanity check */
+			if (unlikely (hdl->src_ref->port == -1)) {
+				hdl->src_ref->port = 80;
+			}
 		}
 	
 		/* Get the connection poll

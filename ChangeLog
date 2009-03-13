@@ -1,3 +1,9 @@
+2009-03-13  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_proxy.c (cherokee_handler_proxy_init): Adds a
+	new snaity check. If an information source used from the reverse
+	proxy has no port, the port 80 will be assigned by default.
+
 2009-03-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/header.c, cherokee/header.h, cherokee/handler_fcgi.c,
