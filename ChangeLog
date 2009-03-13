@@ -1,5 +1,8 @@
 2009-03-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/215-Post-Chunked3.py, qa/Makefile.am: Added a new QA test.
+	It tests empty chunked encoded POSTs.
+
 	* cherokee/handler_proxy.c: Some of the connection that were
 	closed are now kept alive. This ought to increase the overall
 	proxy performance.

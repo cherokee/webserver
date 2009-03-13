@@ -219,7 +219,8 @@ run-tests.py \
 211-EmptyGif.py \
 212-DirList-Hidden.py \
 213-Post-Chunked1.py \
-214-Post-Chunked2.py
+214-Post-Chunked2.py \
+215-Post-Chunked3.py
 
 
 test:
