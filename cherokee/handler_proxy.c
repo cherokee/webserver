@@ -195,19 +195,22 @@ add_request (cherokee_handler_proxy_t *hdl,
 	/* Build the URL
 	 */
 	ret = cherokee_buffer_add_buffer (tmp, &conn->request);
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
 		return ret_error;
+	}
 
 	ret = cherokee_buffer_add_buffer (tmp, &conn->pathinfo);
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
 		return ret_error;
+	}
 
 	if (! cherokee_buffer_is_empty (&conn->query_string)) {
 		cherokee_buffer_add_char (tmp, '?');
 
 		ret = cherokee_buffer_add_buffer (tmp, &conn->query_string);
-		if (ret != ret_ok)
+		if (ret != ret_ok) {
 			return ret_error;
+		}
 	}
 
 	TRACE(ENTRIES, "Client request: '%s'\n", tmp->buf);
@@ -636,6 +639,8 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			case ret_ok:
 				break;
 			case ret_error:
+				hdl->pconn->keepalive_in = false;
+				return ret;
 			case ret_eagain:
 				return ret;
 			default:
@@ -796,8 +801,9 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 		} else {
 			colon = strchr (begin, ':');
-			if (unlikely (colon == NULL))
+			if (unlikely (colon == NULL)) {
 				return ret_error;
+			}
 
 			*colon = '\0';
 			ret = cherokee_avl_get_ptr (&props->headers_hide, begin, NULL);
@@ -832,14 +838,16 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 {
 	ret_t ret;
 
-	if (unlikely (hdl->pconn == NULL))
+	if (unlikely (hdl->pconn == NULL)) {
 		return ret_error;
+	}
 
 	/* Parse the incoming header
 	 */
 	ret = parse_server_header (hdl, &hdl->pconn->header_in_raw, buf);
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
 		return ret;
+	}
 
 	return ret_ok;
 }
@@ -921,6 +929,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			if ((hdl->pconn->enc == pconn_enc_known_size) &&
 			    (hdl->pconn->sent_out >= hdl->pconn->size_in))
 			{
+				hdl->got_all = true;
 				return ret_eof_have_data;
 			}
 
@@ -936,6 +945,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			break;
 		case ret_eof:
 		case ret_error:
+			hdl->pconn->keepalive_in = false;
 			return ret;
 		case ret_eagain:
 			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
@@ -954,6 +964,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			if ((hdl->pconn->enc == pconn_enc_known_size) &&
 			    (hdl->pconn->sent_out >= hdl->pconn->size_in))
 			{
+				hdl->got_all = true;
 				return ret_eof_have_data;
 			}
 		}
@@ -1026,14 +1037,19 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 		}
 
 		if (buf->len > 0) {
-			if (ret == ret_eof)
+			if (ret == ret_eof) {
+				hdl->got_all = true;
 				return ret_eof_have_data;
+			}
 			return ret_ok;
 		}
 
 		if ((ret == ret_eof) ||
 		    (ret_read == ret_eof))
+		{
+			hdl->pconn->keepalive_in = false;
 			return ret_eof;
+		}
 
 		if (ret_read == ret_eagain) {
  			cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl), 
@@ -1080,6 +1096,7 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 	n->src_ref    = NULL;
 	n->init_phase = proxy_init_start;
 	n->respined   = false;
+	n->got_all    = false;
 
 	cherokee_buffer_init (&n->tmp);
 	cherokee_buffer_init (&n->request);
@@ -1099,8 +1116,13 @@ cherokee_handler_proxy_free (cherokee_handler_proxy_t *hdl)
 	cherokee_buffer_mrproper (&hdl->tmp);
 	cherokee_buffer_mrproper (&hdl->buffer);
 	cherokee_buffer_mrproper (&hdl->request);
-	
+
 	if (hdl->pconn != NULL) {
+		if (! hdl->got_all) {
+			hdl->pconn->keepalive_in = false;
+			TRACE (ENTRIES, "Did not get all, turning keepalive %s\n", "off");
+		}
+
 		cherokee_handler_proxy_conn_release (hdl->pconn);
 	}
 

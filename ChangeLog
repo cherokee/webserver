@@ -1,5 +1,10 @@
 2009-03-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c, cherokee/handler_proxy.h: Tries to
+	address: http://code.google.com/p/cherokee/issues/detail?id=261
+	There were time when the reverse proxy returned 500 errors by no
+	reason.
+
 	* cherokee/handler_proxy.c (cherokee_handler_proxy_init): Adds a
 	new snaity check. If an information source used from the reverse
 	proxy has no port, the port 80 will be assigned by default.
