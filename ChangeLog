@@ -1,5 +1,8 @@
 2009-03-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/post.c, cherokee/connection.c: Adds a couple of new
+	TRACE entries.
+	
 	* cherokee/handler_proxy.c (cherokee_handler_proxy_step): Fixes a
 	bug in the reverse proxy.  When a backend server was sending a
 	HTTP/1.0 reply without Content-Lenght, and the server client was

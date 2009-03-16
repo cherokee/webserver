@@ -401,8 +401,9 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 
 	/* Sanity check
 	 */
-	if (fd < 0) 
+	if (fd < 0) {
 		return ret_error;
+	}
 
 	/* Send a chunk..
 	 */
@@ -442,11 +443,13 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 				return ret_eagain;
 			}
 
+			TRACE(ENTRIES, "errno %d\n", errno);
 			return ret_error;	
 		} 
 		else if (r == 0)
 			return ret_eagain;
 
+		TRACE(ENTRIES, "wrote %d bytes from memory\n", r);
 		cherokee_buffer_move_to_begin (&post->info, r);
 
 		post->walk_offset += r;

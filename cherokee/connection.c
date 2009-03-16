@@ -736,6 +736,7 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 	cherokee_buffer_add_buffer (&conn->buffer, &conn->header_buffer);
 	cherokee_buffer_add_str (&conn->buffer, CRLF);
 
+	TRACE(ENTRIES, "Replying:\n%s", conn->buffer.buf);
 	return ret_ok;
 }
 
