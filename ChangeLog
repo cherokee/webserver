@@ -1,5 +1,7 @@
 2009-03-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* 0.99.4 released
+
 	* qa/215-Post-Chunked3.py, qa/Makefile.am: Added a new QA test.
 	It tests empty chunked encoded POSTs.
 
