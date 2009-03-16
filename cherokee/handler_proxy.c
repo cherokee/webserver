@@ -827,6 +827,10 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 		begin = end;		
 	}	
 
+	TRACE(ENTRIES, "IN - Encoding: %s\n", (hdl->pconn->enc == pconn_enc_chunked) ? "chunked":"plain");
+	TRACE(ENTRIES, "IN - Keepalive: %d\n", hdl->pconn->keepalive_in);
+	TRACE(ENTRIES, "IN - Size: %llu\n", (hdl->pconn->enc == pconn_enc_known_size) ? hdl->pconn->size_in : (off_t)0);
+
 	return ret_ok;
 
 error:
@@ -977,6 +981,8 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 				hdl->got_all = true;
 				return ret_eof_have_data;
 			}
+
+			return ret_ok;
 		}
 
 		return ret_eagain;

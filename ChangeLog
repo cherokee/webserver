@@ -1,3 +1,11 @@
+2009-03-16  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_proxy.c (cherokee_handler_proxy_step): Fixes a
+	bug in the reverse proxy.  When a backend server was sending a
+	HTTP/1.0 reply without Content-Lenght, and the server client was
+	using HTTP/1.1 with Keepalive, the server was screwing the
+	re-encoding.
+
 2009-03-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.4 released
