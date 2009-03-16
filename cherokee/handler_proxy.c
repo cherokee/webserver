@@ -580,6 +580,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			case ret_deny:
 				if (hdl->respined) {
 					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+					conn->error_code = http_bad_gateway;
 					return ret_error;
 				}
 				hdl->respined = true;
@@ -604,7 +605,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		}
 
 		hdl->init_phase = proxy_init_send_headers;
-		TRACE(ENTRIES, "Entering phase '%s'\n", "send headers");
+		TRACE(ENTRIES, "Entering phase 'send headers'\n%s", hdl->request.buf);
 
 	case proxy_init_send_headers:
 		/* Send the request
@@ -727,12 +728,17 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 	if (strncmp (p, "1.1", 3) == 0) {
 		version = http_version_11;
+
 	} else if (strncmp (p, "1.0", 3) == 0) {
-		version = http_version_10;
+		version                  = http_version_10;
+		hdl->pconn->keepalive_in = false;
+
 	} else if (strncmp (p, "0.9", 3) == 0) {
-		version = http_version_09;
+		version                  = http_version_09;
+		hdl->pconn->keepalive_in = false;
 	} else 
 		goto error;
+
 	p += 3;
 	if (*p != ' ')
 		goto error;
@@ -786,7 +792,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			} else {
 				hdl->pconn->keepalive_in = false;
 			}
-			
+
 			goto next;
 
 		} else  if (strncmp (begin, "Content-Length:", 15) == 0) {
@@ -827,9 +833,21 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 		begin = end;		
 	}	
 
-	TRACE(ENTRIES, "IN - Encoding: %s\n", (hdl->pconn->enc == pconn_enc_chunked) ? "chunked":"plain");
-	TRACE(ENTRIES, "IN - Keepalive: %d\n", hdl->pconn->keepalive_in);
-	TRACE(ENTRIES, "IN - Size: %llu\n", (hdl->pconn->enc == pconn_enc_known_size) ? hdl->pconn->size_in : (off_t)0);
+	/* Special case: Client uses Keepalive, the back-end sent a
+	 * no-body reply with no Content-Length.
+	 */
+	if ((conn->keepalive) &&
+	    (hdl->pconn->enc != pconn_enc_known_size) &&
+	    (! http_code_with_body (HANDLER_CONN(hdl)->error_code)))
+	{
+		cherokee_buffer_add_str (buf_out, "Content-Length: 0"CRLF);
+	}   
+
+	TRACE(ENTRIES, " IN - Header:\n%s",     buf_in->buf);
+	TRACE(ENTRIES, " IN - Keepalive: %d\n", hdl->pconn->keepalive_in);
+	TRACE(ENTRIES, " IN - Encoding: %s\n", (hdl->pconn->enc == pconn_enc_chunked) ? "chunked":"plain");
+	TRACE(ENTRIES, " IN - Size: %llu\n",   (hdl->pconn->enc == pconn_enc_known_size) ? hdl->pconn->size_in : (off_t)0);
+	TRACE(ENTRIES, "OUT - Header:\n%s",     buf_out->buf);
 
 	return ret_ok;
 
@@ -860,7 +878,9 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 	 */
 	if (! http_code_with_body (HANDLER_CONN(hdl)->error_code)) {
 		hdl->got_all = true;
-		TRACE(ENTRIES, "Reply is %d, it hasn't body. Marking as '%s'\n", "got_all");
+
+		TRACE(ENTRIES, "Reply is %d, it has no body. Marking as 'got all'.\n",
+		      HANDLER_CONN(hdl)->error_code);
 	}
 
 	return ret_ok;

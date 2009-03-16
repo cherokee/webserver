@@ -1,5 +1,9 @@
 2009-03-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/http.h, cherokee/handler_proxy.c: Tries to fix a
+	problem sending POST requests to a Django back-end server:
+	http://code.google.com/p/cherokee/issues/detail?id=261
+
 	* cherokee/post.c, cherokee/connection.c: Adds a couple of new
 	TRACE entries.
 	

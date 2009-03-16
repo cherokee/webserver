@@ -164,11 +164,11 @@ typedef enum {
 				   (m == http_propfind) || \
 				   (m == http_proppatch))
 
-#define http_code_with_body(e)    ((! http_type_100(e))             && \
-				   ((e) != http_continue)           && \
-				   ((e) != http_not_modified)       && \
-				   ((e) != http_no_content)         && \
-				   ((e) != http_switching_protocols))
+#define http_code_with_body(e)    ((! http_type_100(e))                      && \
+				   ((e) != http_no_content)        /* 204 */ && \
+				   ((e) != http_moved_permanently) /* 301 */ && \
+				   ((e) != http_moved_temporarily) /* 302 */ && \
+				   ((e) != http_not_modified))     /* 304 */
 
 ret_t cherokee_http_method_to_string  (cherokee_http_method_t  method,  const char **str, cuint_t *str_len);
 ret_t cherokee_http_string_to_method  (cherokee_buffer_t *string, cherokee_http_method_t *method);
