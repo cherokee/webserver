@@ -60,6 +60,7 @@ vserver!1!rule!99999!encoder!gzip = 1
 vserver!1!rule!99999!handler = fcgi
 vserver!1!rule!99999!handler!balancer = round_robin
 vserver!1!rule!99999!handler!balancer!source!1 = 1
+vserver!1!rule!99999!handler!error_handler = 1
 
 # Sources 
 #

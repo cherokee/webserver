@@ -1,5 +1,9 @@
 2009-03-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee.conf.sample.pre: The default PHP set up should have the
+	'Error Handler' bit. Otherwise, applications such as Wordpress
+	won't work by default.
+
 	* cherokee/http.h (http_code_with_body): Fixed it. It was not
 	working according with RFC 2616: Section 4.3.
 
