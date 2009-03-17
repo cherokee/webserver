@@ -1,5 +1,9 @@
 2009-03-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/bind.c (cherokee_bind_configure): Fixed compilation
+	with Sun CC. Patch by Alfred Peng <Alfred.Peng@Sun.COM>. Thanks!
+	http://code.google.com/p/cherokee/issues/detail?id=402
+
 	* cherokee/handler_proxy.c, cherokee/handler_proxy.h,
 	admin/ModuleProxy.py: Makes the reverse proxy configuration much
 	more consistent. Now the operations with headers/URLs are the same

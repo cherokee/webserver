@@ -127,7 +127,7 @@ cherokee_bind_configure (cherokee_bind_t        *listener,
 
 	ret = cherokee_config_node_read_int (conf, "port", &listener->port);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("ERROR: A port entry is need.");
+		PRINT_ERROR_S ("ERROR: A port entry is need.");
 		return ret_error;
 	}
 
