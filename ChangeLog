@@ -1,5 +1,8 @@
 2009-03-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/connection.c (cherokee_connection_build_header):
+	Reverts r2858.
+
 	* cherokee.conf.sample.pre: The default PHP set up should have the
 	'Error Handler' bit. Otherwise, applications such as Wordpress
 	won't work by default.
