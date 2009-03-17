@@ -1,5 +1,8 @@
 2009-03-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageVServer.py: Fixes the final flag management. It seems
+	that we introducced a regression a few days ago.
+
 	* cherokee/bind.c (cherokee_bind_configure): Fixed compilation
 	with Sun CC. Patch by Alfred Peng <Alfred.Peng@Sun.COM>. Thanks!
 	http://code.google.com/p/cherokee/issues/detail?id=402
