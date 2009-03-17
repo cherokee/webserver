@@ -54,9 +54,16 @@ typedef struct {
 	cherokee_balancer_t            *balancer;
 	cherokee_handler_proxy_hosts_t  hosts;
 	cuint_t                         reuse_max;
-	cherokee_avl_t                  headers_hide;
-	cherokee_list_t                 headers_add;
-	cherokee_list_t                 request_regexs;
+	
+	/* Request processing */
+	cherokee_avl_t                  in_headers_hide;
+	cherokee_list_t                 in_headers_add;
+	cherokee_list_t                 in_request_regexs;
+
+	/* Reply processing */
+	cherokee_avl_t                  out_headers_hide;
+	cherokee_list_t                 out_headers_add;
+	cherokee_list_t                 out_request_regexs;
 } cherokee_handler_proxy_props_t;
 
 typedef struct {

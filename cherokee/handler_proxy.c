@@ -77,11 +77,20 @@ props_free (cherokee_handler_proxy_props_t *props)
 {
 	cherokee_list_t *i, *tmp;
 
-	cherokee_avl_mrproper (&props->headers_hide, NULL);
 	cherokee_handler_proxy_hosts_mrproper (&props->hosts);
-	cherokee_regex_list_mrproper (&props->request_regexs);
 
-	list_for_each_safe (i, tmp, &props->headers_add) {
+	cherokee_avl_mrproper (&props->in_headers_hide, NULL);
+	cherokee_avl_mrproper (&props->out_headers_hide, NULL);
+
+	cherokee_regex_list_mrproper (&props->in_request_regexs);
+	cherokee_regex_list_mrproper (&props->out_request_regexs);
+
+	list_for_each_safe (i, tmp, &props->in_headers_add) {
+		cherokee_list_del (i);
+		header_add_free (HEADER_ADD(i));
+	}
+
+	list_for_each_safe (i, tmp, &props->out_headers_add) {
 		cherokee_list_del (i);
 		header_add_free (HEADER_ADD(i));
 	}
@@ -112,11 +121,17 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		n->balancer  = NULL;
 		n->reuse_max = DEFAULT_REUSE_MAX;
 
-		INIT_LIST_HEAD (&n->request_regexs);
-		INIT_LIST_HEAD (&n->headers_add);
+		INIT_LIST_HEAD (&n->in_request_regexs);
+		INIT_LIST_HEAD (&n->in_headers_add);
 
-		cherokee_avl_init (&n->headers_hide);
-		cherokee_avl_set_case (&n->headers_hide, false);
+		INIT_LIST_HEAD (&n->out_headers_add);
+		INIT_LIST_HEAD (&n->out_request_regexs);
+
+		cherokee_avl_init (&n->in_headers_hide);
+		cherokee_avl_set_case (&n->in_headers_hide, false);
+
+		cherokee_avl_init (&n->out_headers_hide);
+		cherokee_avl_set_case (&n->out_headers_hide, false);
 
 		*_props = MODULE_PROPS(n);
 	}
@@ -136,13 +151,20 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		} else if (equal_buf_str (&subconf->key, "reuse_max")) {
 			props->reuse_max = atoi (subconf->val.buf);
 
-		} else if (equal_buf_str (&subconf->key, "header_hide")) {
+		} else if (equal_buf_str (&subconf->key, "in_header_hide")) {
 			cherokee_config_node_foreach (j, subconf) {
-				cherokee_avl_add (&props->headers_hide, 
+				cherokee_avl_add (&props->in_headers_hide, 
 						  &CONFIG_NODE(j)->val, NULL);
 			}
 
-		} else if (equal_buf_str (&subconf->key, "header_add")) {
+		} else if (equal_buf_str (&subconf->key, "out_header_hide")) {
+			cherokee_config_node_foreach (j, subconf) {
+				cherokee_avl_add (&props->out_headers_hide, 
+						  &CONFIG_NODE(j)->val, NULL);
+			}
+
+		} else if (equal_buf_str (&subconf->key, "in_header_add") ||
+			   equal_buf_str (&subconf->key, "out_header_add")) {
 			cherokee_config_node_foreach (j, subconf) {
 				cherokee_header_add_t *header = NULL;
 
@@ -152,11 +174,23 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 
 				cherokee_buffer_add_buffer (&header->key, &CONFIG_NODE(j)->key);
 				cherokee_buffer_add_buffer (&header->val, &CONFIG_NODE(j)->val);
-				cherokee_list_add (&header->listed, &props->headers_add);
+
+				if (equal_buf_str (&subconf->key, "in_header_add"))
+					cherokee_list_add (&header->listed,
+							   &props->in_headers_add);
+				else
+					cherokee_list_add (&header->listed,
+							   &props->out_headers_add);
 			}
 
-		} else if (equal_buf_str (&subconf->key, "rewrite_request")) {
-			ret = cherokee_regex_list_configure (&props->request_regexs,
+		} else if (equal_buf_str (&subconf->key, "in_rewrite_request")) {
+			ret = cherokee_regex_list_configure (&props->in_request_regexs,
+							     subconf, srv->regexs);
+			if (ret != ret_ok)
+				return ret;
+
+		} else if (equal_buf_str (&subconf->key, "out_rewrite_request")) {
+			ret = cherokee_regex_list_configure (&props->out_request_regexs,
 							     subconf, srv->regexs);
 			if (ret != ret_ok)
 				return ret;
@@ -178,14 +212,43 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 }
 
 
+static int
+replace_againt_regex_list (cherokee_buffer_t *in_buf,
+			   cherokee_buffer_t *out_buf,
+			   cherokee_list_t   *regexs)
+{
+	int                     re;
+	cherokee_list_t        *i;
+	cherokee_regex_entry_t *regex_entry;
+	cint_t                  ovector[OVECTOR_LEN];
+
+	list_for_each (i, regexs) {
+		regex_entry = REGEX_ENTRY(i);
+		
+		re = pcre_exec (regex_entry->re, NULL, 
+				in_buf->buf, in_buf->len, 0, 0,
+				ovector, OVECTOR_LEN);
+		if (re == 0) {
+			PRINT_ERROR_S("Too many groups in the regex\n");
+		}
+		if (re <= 0) {
+			continue;
+		}
+
+		/* Matched */
+		cherokee_regex_substitute (&regex_entry->subs, in_buf, out_buf, ovector, re);
+		return 1;
+	}
+
+	return 0;
+}
+
+
 static ret_t
 add_request (cherokee_handler_proxy_t *hdl,
 	     cherokee_buffer_t        *buf)
 {
-	int                             re;
 	ret_t                           ret;
-	cherokee_list_t                *i;
-	cint_t                          ovector[OVECTOR_LEN];
 	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
 	cherokee_buffer_t              *tmp   = &HANDLER_THREAD(hdl)->tmp_buf1;
 	cherokee_handler_proxy_props_t *props = HDL_PROXY_PROPS(hdl);
@@ -217,23 +280,7 @@ add_request (cherokee_handler_proxy_t *hdl,
 
 	/* Check the regexs
 	 */
-	list_for_each (i, &props->request_regexs) {
-		cherokee_regex_entry_t *regex_entry = REGEX_ENTRY(i);
-
-		re = pcre_exec (regex_entry->re, NULL, 
-				tmp->buf, tmp->len, 0, 0,
-				ovector, OVECTOR_LEN);
-		if (re == 0) {
-			PRINT_ERROR_S("Too many groups in the regex\n");
-		}
-		if (re <= 0) {
-			continue;
-		}
-
-		/* Matched */
-		cherokee_regex_substitute (&regex_entry->subs, tmp, buf, ovector, re);
-		return ret_ok;
-	}
+	replace_againt_regex_list (tmp, buf, &props->in_request_regexs);
 
 	TRACE(ENTRIES, "Rebuilt request: '%s'\n", tmp->buf);
 
@@ -241,6 +288,49 @@ add_request (cherokee_handler_proxy_t *hdl,
 	 */
 	cherokee_buffer_add_buffer (buf, tmp);
 	return ret_ok;
+}
+
+static void
+add_header (cherokee_buffer_t *buf,
+	    cherokee_buffer_t *key,
+	    cherokee_buffer_t *val)
+{
+	char *p;
+	char *end;
+
+	/* Remove the old header, if existed.
+	 */
+	p = buf->buf;
+	do {
+		p = strstr (p, key->buf);
+		if (p == NULL) 
+			break;
+
+		if (p[key->len] != ':') {
+			p += key->len;
+			continue;
+		}
+
+		end = strchr (p + key->len, CHR_CR);
+		if (end) {
+			if (end[1] == CHR_LF)
+				end += 1;
+		} else {
+			end = strchr (p + key->len, CHR_LF);
+		}
+		if (unlikely (end == NULL))
+			return;
+		
+		cherokee_buffer_remove_chunk (buf, p-buf->buf, end-p);
+		break;
+	} while (p);
+
+	/* Add the new header
+	 */
+	cherokee_buffer_add_buffer (buf, key);
+	cherokee_buffer_add_str    (buf, ": ");
+	cherokee_buffer_add_buffer (buf, val);
+	cherokee_buffer_add_str    (buf, CRLF);
 }
 
 
@@ -252,6 +342,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 	cuint_t                         len;
 	const char                     *str;
 	char                           *begin;
+	char                           *colon;
 	char                           *end;
 	cuint_t                         header_len;
 	char                           *header_end;
@@ -373,6 +464,19 @@ build_request (cherokee_handler_proxy_t *hdl,
 		{
 			XFH = true;
 		}
+		else {
+			colon = strchr (begin, ':');
+			if (unlikely (colon == NULL)) {
+				return ret_error;
+			}
+
+			*colon = '\0';
+			ret = cherokee_avl_get_ptr (&props->in_headers_hide, begin, NULL);
+			*colon = ':';
+			
+			if (ret == ret_ok)
+				goto next;
+		}
 
 		cherokee_buffer_add     (buf, begin, end-begin);
 		cherokee_buffer_add_str (buf, CRLF);
@@ -408,11 +512,8 @@ build_request (cherokee_handler_proxy_t *hdl,
 	}
 
 	/* Additional headers */
-	list_for_each (i, &props->headers_add) {
-		cherokee_buffer_add_buffer (buf, &HEADER_ADD(i)->key);
-		cherokee_buffer_add_str    (buf, ": ");
-		cherokee_buffer_add_buffer (buf, &HEADER_ADD(i)->val);
-		cherokee_buffer_add_str    (buf, CRLF);		
+	list_for_each (i, &props->in_headers_add) {
+		add_header (buf, &HEADER_ADD(i)->key, &HEADER_ADD(i)->val);
 	}
 
 	/* End of Header */
@@ -711,6 +812,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	char                           *end;
 	char                           *colon;
 	char                           *header_end;
+	cherokee_list_t                *i;
 	cherokee_http_version_t         version;
 	cherokee_connection_t          *conn         = HANDLER_CONN(hdl);
 	cherokee_handler_proxy_props_t *props        = HDL_PROXY_PROPS(hdl);
@@ -808,6 +910,21 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 			HANDLER(hdl)->support |= hsupport_length;
 
+		} else  if (strncmp (begin, "Location:", 9) == 0) {
+			cherokee_buffer_t *tmp1 = &HANDLER_THREAD(hdl)->tmp_buf1;
+			cherokee_buffer_t *tmp2 = &HANDLER_THREAD(hdl)->tmp_buf2;
+	
+			cherokee_buffer_clean (tmp2);
+			cherokee_buffer_clean (tmp1);
+			cherokee_buffer_add   (tmp1, begin+10, end-(begin+10));
+
+			re = replace_againt_regex_list (tmp1, tmp2, &props->out_request_regexs);
+			if (re) {
+				cherokee_buffer_add_str    (buf_out, "Location: ");
+				cherokee_buffer_add_buffer (buf_out, tmp2);
+				cherokee_buffer_add_str    (buf_out, CRLF);
+				goto next;
+			}
 		} else {
 			colon = strchr (begin, ':');
 			if (unlikely (colon == NULL)) {
@@ -815,7 +932,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			}
 
 			*colon = '\0';
-			ret = cherokee_avl_get_ptr (&props->headers_hide, begin, NULL);
+			ret = cherokee_avl_get_ptr (&props->out_headers_hide, begin, NULL);
 			*colon = ':';
 
 			if (ret == ret_ok)
@@ -832,6 +949,11 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			end++;
 		begin = end;		
 	}	
+
+	/* Additional headers */
+	list_for_each (i, &props->out_headers_add) {
+		add_header (buf_out, &HEADER_ADD(i)->key, &HEADER_ADD(i)->val);
+	}
 
 	/* Special case: Client uses Keepalive, the back-end sent a
 	 * no-body reply with no Content-Length.

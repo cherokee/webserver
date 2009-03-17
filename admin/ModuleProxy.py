@@ -15,7 +15,10 @@ HELPS = [
 
 class ModuleProxy (ModuleHandler):
     PROPERTIES = [
-        'balancer', 'rewrite_request', 'header_add', 'header_hide'
+        'balancer',
+        'in_header_add',      'out_header_add',
+        'in_header_hide',     'out_header_hide',
+        'in_rewrite_request', 'out_rewrite_request'
     ]
 
     def __init__ (self, cfg, prefix, submit):
@@ -23,24 +26,72 @@ class ModuleProxy (ModuleHandler):
         self.show_document_root = False
 
     def _op_render (self):
-        txt = '<h2>Reverse Proxy specific</h2>'
+        txt = ''
 
-        # Properties
+        txt += '<h2>Reverse Proxy Settings</h2>'
+        txt += self.Indent (self._render_general())
+
+        txt += '<h2>Request</h2>'
+        txt += self.Indent (self._render_request())
+        txt += '<h2>Reply</h2>'
+        txt += self.Indent (self._render_reply())
+
+        # Balancers
+        table = TableProps()
+        prefix = "%s!balancer" % (self._prefix)
+        e = self.AddPropOptions_Reload (table, "Balancer", prefix,
+                                        modules_available(BALANCERS), NOTE_BALANCER)
+
+        txt += '<h2>Back-end Servers</h2>'
+        txt += self.Indent(str(table) + e)
+
+        return txt
+
+    def _render_general (self):
         table = TableProps()
         self.AddPropEntry (table, 'Reuse connections', '%s!reuse_max'%(self._prefix), NOTE_REUSE_MAX)
-        txt += self.Indent (table)
+        return str(table)
 
-        # Add headers
-        tmp  = ''
-        keys = self._cfg.keys("%s!header_add"%(self._prefix))
+    def _render_request (self):
+        txt  = ''
+        txt += self._render_generic_url_rewrite ("in_rewrite_request",
+                                                 "URL Rewriting")
+
+        txt += self._render_generic_header_list ("in_header_add",
+                                                 "tmp!in_header_add", 
+                                                 "Header Addition",
+                                                 "Add New Header")
+
+        txt += self._render_generic_header_removal ("in_header_hide",
+                                                    "Hide Headers",
+                                                    "Hide Header")
+        return txt
+
+    def _render_reply (self):
+        txt  = ''
+        txt += self._render_generic_url_rewrite ("out_rewrite_request",
+                                                 "URL Rewriting")
+
+        txt += self._render_generic_header_list ("out_header_add",
+                                                 "tmp!out_header_add", 
+                                                 "Header addition",
+                                                 "Add New Header")
+
+        txt += self._render_generic_header_removal ("out_header_hide",
+                                                    "Hide Headers",
+                                                    "Hide Header")
+        return txt
+
+
+    def _render_generic_header_list (self, key, tmp_key, h3_title, title_new):
+        tmp  = '<h3>%s</h3>' % (h3_title)
+        keys = self._cfg.keys("%s!%s"%(self._prefix, key))
         if keys:
-            tmp += '<h3>Header addition</h3>'
-
             table = Table(3,1, style='width="90%"')
             table += ('Header', 'Value', '')
 
             for k in keys:
-                pre = '%s!header_add!%s'%(self._prefix, k)
+                pre = '%s!%s!%s'%(self._prefix, key, k)
                 val = self.InstanceEntry (pre, 'text', size=40)
 
                 js      = "post_del_key('/ajax/update', '%s');" % (pre)
@@ -49,31 +100,56 @@ class ModuleProxy (ModuleHandler):
 
             tmp += self.Indent (table)
 
-        tmp += '<h3>Add new header</h3>'
-
-        pre   = "%s!header_add"%(self._prefix)
-        key   = self.InstanceEntry ("tmp!add_header_key", 'text', size=20, req=True)
-        val   = self.InstanceEntry ("tmp!add_header_val", 'text', size=40, req=True)
+        pre   = "%s!%s"%(self._prefix, key)
+        key   = self.InstanceEntry ("%s_key"%(tmp_key), 'text', size=20, req=True)
+        val   = self.InstanceEntry ("%s_val"%(tmp_key), 'text', size=40, req=True)
 
         table  = Table(3,1)
-        table += ('Header', 'Value', '')
+        table += (title_new, 'Value', '')
         table += (key, val, SUBMIT_ADD)
         tmp += self.Indent(table)
+        return tmp
 
-        txt += '<h2>Header Addition</h2>'
-        txt += self.Indent(tmp)
-
-        # URL Rewriting
-        tmp  = ''
-        keys = self._cfg.keys("%s!rewrite_request"%(self._prefix))
+    def _render_generic_header_removal (self, key, h3_title, title_new):
+        tmp  = '<h3>%s</h3>' % (h3_title)
+        keys = self._cfg.keys("%s!%s"%(self._prefix, key))
         if keys:
-            tmp += '<h3>URL Rewriting rules</h3>'
+            table = Table(2,1, style='width="90%"')
+            table += ('Header', '')
 
+            for k in keys:
+                pre = '%s!%s!%s'%(self._prefix, key, k)
+                hdr = self._cfg.get_val (pre)
+
+                js      = "post_del_key('/ajax/update', '%s');" % (pre)
+                rm_link = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                table += (hdr, rm_link)
+            tmp += self.Indent (table)
+
+            tmp2 = [int(x) for x in keys]
+            tmp2.sort()
+            next = tmp2[-1]+1
+        else:
+            next = 1
+
+        pre   = "%s!%s"%(self._prefix, key)
+        hdr_e = self.InstanceEntry ("%s!%d"%(pre,next), 'text', size=40)
+
+        table  = Table(2,1)
+        table += (title_new, '')
+        table += (hdr_e, SUBMIT_ADD)
+        tmp += self.Indent(table)
+        return tmp
+
+    def _render_generic_url_rewrite (self, key, title):
+        tmp = '<h3>%s</h3>'%(title)
+        keys = self._cfg.keys("%s!%s"%(self._prefix, key))
+        if keys:
             table = Table(3,1, style='width="90%"')
             table += ('Regular Expression', 'Substitution', '')
 
             for k in keys:
-                pre = '%s!rewrite_request!%s'%(self._prefix, k)
+                pre = '%s!%s!%s'%(self._prefix, key, k)
                 regex = self._cfg.get_val ('%s!regex'%(pre))
                 subst = self._cfg.get_val ('%s!substring'%(pre))
 
@@ -89,78 +165,27 @@ class ModuleProxy (ModuleHandler):
         else:
             next = 1
 
-        tmp += '<h3>Add new URL Rewrite rules</h3>'
-
-        pre   = "%s!rewrite_request"%(self._prefix)
+        pre   = "%s!%s"%(self._prefix, key)
         regex = self.InstanceEntry ("%s!%d!regex"%(pre,next),     'text', size=20, req=True)
         subst = self.InstanceEntry ("%s!%d!substring"%(pre,next), 'text', size=40, req=True)
 
         table  = Table(3,1)
-        table += ('Regular Expression', 'Substitution', '')
+        table += ('Add RegEx', 'Substitution', '')
         table += (regex, subst, SUBMIT_ADD)
         tmp += self.Indent(table)
-
-        txt += '<h2>URL Rewriting rules</h2>'
-        txt += self.Indent(tmp)
-
-        # Hide headers
-        tmp  = ''
-        keys = self._cfg.keys("%s!header_hide"%(self._prefix))
-        if keys:
-            tmp += '<h3>Hidden headers</h3>'
-
-            table = Table(2,1, style='width="90%"')
-            table += ('Header', '')
-
-            for k in keys:
-                pre = '%s!header_hide!%s'%(self._prefix, k)
-                hdr = self._cfg.get_val (pre)
-
-                js      = "post_del_key('/ajax/update', '%s');" % (pre)
-                rm_link = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
-                table += (hdr, rm_link)
-
-            tmp += self.Indent (table)
-
-            tmp2 = [int(x) for x in keys]
-            tmp2.sort()
-            next = tmp2[-1]+1
-        else:
-            next = 1
-
-        tmp += '<h3>Hide a header</h3>'
-
-        pre   = "%s!header_hide"%(self._prefix)
-        hdr_e = self.InstanceEntry ("%s!%d"%(pre,next), 'text', size=40)
-
-        table  = Table(2,1)
-        table += ('Header', '')
-        table += (hdr_e, SUBMIT_ADD)
-        tmp += self.Indent(table)
-
-        txt += '<h2>Hidden returned headers</h2>'
-        txt += self.Indent(tmp)
-
-        # Balancers
-        table = TableProps()
-        prefix = "%s!balancer" % (self._prefix)
-        e = self.AddPropOptions_Reload (table, "Balancer", prefix,
-                                        modules_available(BALANCERS), NOTE_BALANCER)
-
-        txt += '<h2>Internal Servers</h2>'
-        txt += self.Indent(str(table) + e)
-        return txt
+        return tmp
 
     def _op_apply_changes (self, uri, post):
-        # A new header is being added
-        n_header = post.pop('tmp!add_header_key')
-        n_hvalue = post.pop('tmp!add_header_val')
+        for t in ['in', 'out']:
+            # A new header is being added
+            n_header = post.pop('tmp!%s_header_add_key'%(t))
+            n_hvalue = post.pop('tmp!%s_header_add_val'%(t))
 
-        del (self._cfg['tmp!add_header_key'])
-        del (self._cfg['tmp!add_header_val'])
+            del (self._cfg['tmp!%s_header_add_key'%(t)])
+            del (self._cfg['tmp!%s_header_add_val'%(t)])
 
-        if n_header:
-            self._cfg["%s!header_add!%s"%(self._prefix, n_header)] = n_hvalue
+            if n_header:
+                self._cfg["%s!%s_header_add!%s"%(self._prefix, t, n_header)] = n_hvalue
 
         # Apply balancer changes
         pre  = "%s!balancer" % (self._prefix)

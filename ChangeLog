@@ -1,3 +1,14 @@
+2009-03-17  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_proxy.c, cherokee/handler_proxy.h,
+	admin/ModuleProxy.py: Makes the reverse proxy configuration much
+	more consistent. Now the operations with headers/URLs are the same
+	for the Request (to the back-end server) and for the Response. It
+	also implements "Location:" header parsing (bug #263):
+	http://code.google.com/p/cherokee/issues/detail?id=263 
+	IMPORTANT: The configuration keys have changed! People will most
+	probably have to add the reverse proxy rules again.
+	
 2009-03-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/http.h, cherokee/handler_proxy.c: Tries to fix a
