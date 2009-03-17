@@ -1,5 +1,8 @@
 2009-03-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/http.h (http_code_with_body): Fixed it. It was not
+	working according with RFC 2616: Section 4.3.
+
 	* admin/PageVServer.py: Fixes the final flag management. It seems
 	that we introducced a regression a few days ago.
 
