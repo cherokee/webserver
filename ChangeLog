@@ -1,3 +1,7 @@
+2009-03-18  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* 0.99.5 released
+
 2009-03-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/connection.c (cherokee_connection_build_header):
