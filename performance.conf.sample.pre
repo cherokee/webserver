@@ -9,7 +9,7 @@
 # Server
 #
 server!bind!1!port = 80
-server!timeout = 20
+server!timeout = 5
 server!keepalive = 1
 server!keepalive_max_requests = 1000
 server!server_tokens = full
@@ -19,6 +19,7 @@ server!pid_file = %localstatedir%/run/cherokee.pid
 # Default virtual server
 #
 vserver!1!nick = default
+vserver!1!collect_statistics = 0
 vserver!1!document_root = %wwwroot%
 vserver!1!rule!1!match = default
 vserver!1!rule!1!handler = file

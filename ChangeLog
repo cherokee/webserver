@@ -1,5 +1,14 @@
 2009-03-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/virtual_server.h: Added the "collect_statistics"
+	configuration key, so it can be defined whether or not a virtual
+	server should collected traffic statistics.
+
+	* admin/PageVServer.py (PageVServer._op_apply_changes): Updates it
+	to support the new "collect_statistics" key.
+
+	* performance.conf.sample.pre: Don't collect statistics.
+
 	* 0.99.5 released
 
 2009-03-17  Alvaro Lopez Ortega  <alvaro@octality.com>

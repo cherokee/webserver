@@ -66,6 +66,7 @@ typedef struct {
 		off_t                rx;
 		CHEROKEE_MUTEX_T    (tx_mutex);
 		CHEROKEE_MUTEX_T    (rx_mutex);
+		cherokee_boolean_t   enabled;
 	} data;
 
 	cuint_t                      verify_depth;

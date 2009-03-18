@@ -631,7 +631,8 @@ process_active_connections (cherokee_thread_t *thd)
 
 		/* Maybe update traffic counters
 		 */
-		if ((conn->traffic_next < thd->bogo_now) &&
+		if ((CONN_VSRV(vserver)->data.enabled) &&
+		    (conn->traffic_next < thd->bogo_now) &&
 		    ((conn->rx != 0) || (conn->tx != 0)))
 		{
 			cherokee_connection_update_vhost_traffic (conn);

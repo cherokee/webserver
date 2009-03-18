@@ -69,6 +69,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 
 	/* Data transference 
 	 */
+	n->data.enabled    = true;
 	n->data.rx         = 0;
 	n->data.tx         = 0;
 	CHEROKEE_MUTEX_INIT(&n->data.rx_mutex, NULL);
@@ -699,6 +700,9 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "post_max_len")) {
 		vserver->post_max_len = atoi (conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "collect_statistics")) {
+		vserver->data.enabled = !! atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "ssl_verify_depth")) {
 		vserver->verify_depth = !!atoi (conf->val.buf);

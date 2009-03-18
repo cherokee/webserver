@@ -39,6 +39,7 @@ NOTE_DOCUMENT_ROOT   = 'Virtual Server root directory.'
 NOTE_DIRECTORY_INDEX = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
 NOTE_MAX_UPLOAD_SIZE = 'The maximum size, in bytes, for POST uploads. (Default: unlimited)'
 NOTE_KEEPALIVE       = 'Whether this virtual server is allowed to use Keep-alive (Default: yes)'
+NOTE_COLLECT         = 'Specifies if Traffic Statistics should be collected for the virtual server (Default: yes)'
 NOTE_DISABLE_LOG     = 'The Logging is currently enabled.'
 NOTE_LOGGERS         = 'Logging format. Apache compatible is highly recommended here.'
 NOTE_ACCESSES        = 'Back-end used to store the log accesses.'
@@ -425,8 +426,9 @@ class PageVServer (PageMenu, FormHelper):
 
         txt += '<h2>Network</h2>'
         table = TableProps()
-        self.AddPropCheck (table, 'Keep-alive',      '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
-        self.AddPropEntry (table, 'Max Upload Size', '%s!post_max_len' % (pre),  NOTE_MAX_UPLOAD_SIZE)
+        self.AddPropCheck (table, 'Keep-alive',         '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
+        self.AddPropEntry (table, 'Max Upload Size',    '%s!post_max_len' % (pre),  NOTE_MAX_UPLOAD_SIZE)
+        self.AddPropCheck (table, 'Traffic Statistics', '%s!collect_statistics'%(pre), True, NOTE_COLLECT)
         txt += self.Indent(table)
 
         return txt
@@ -556,7 +558,7 @@ class PageVServer (PageMenu, FormHelper):
         self.ApplyChanges_OptionModule ('%s!error_handler'%(pre), uri, post)
 
         # Look for the checkboxes
-        checkboxes = ['%s!keepalive'%(pre)]
+        checkboxes = ['%s!keepalive'%(pre), '%s!collect_statistics'%(pre)]
         tmp = self._cfg['%s!rule'%(pre)]
         if tmp and tmp.has_child():
             for p in tmp:
