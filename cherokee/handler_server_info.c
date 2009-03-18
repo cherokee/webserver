@@ -340,10 +340,13 @@ static void
 add_traffic (cherokee_dwriter_t *writer,
 	     cherokee_server_t  *srv)
 {
+	cherokee_list_t  *i;
 	size_t            rx  = 0;
 	size_t            tx  = 0;
 	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
+	/* Global statistics
+	 */
 	cherokee_server_get_total_traffic (srv, &rx, &tx);
 
 	cherokee_dwriter_dict_open (writer);
@@ -362,7 +365,32 @@ add_traffic (cherokee_dwriter_t *writer,
 	cherokee_dwriter_cstring (writer, "rx_formatted");
 	cherokee_dwriter_bstring (writer, &tmp);
 
+	/* Per Virtual Server
+	 */
+	cherokee_dwriter_cstring (writer, "vservers");
+	cherokee_dwriter_dict_open (writer);
+
+	list_for_each (i, &srv->vservers) {
+		cherokee_virtual_server_t *vsrv = VSERVER(i);
+
+		cherokee_dwriter_bstring (writer, &vsrv->name);
+		if (vsrv->data.enabled) {
+			cherokee_dwriter_dict_open (writer);
+			cherokee_dwriter_cstring (writer, "rx");
+			cherokee_dwriter_integer (writer, vsrv->data.rx);
+			cherokee_dwriter_cstring (writer, "tx");
+			cherokee_dwriter_integer (writer, vsrv->data.tx);
+			cherokee_dwriter_dict_close (writer);
+		} else {
+			cherokee_dwriter_null (writer);
+		}
+	}
+
 	cherokee_dwriter_dict_close (writer);
+	cherokee_dwriter_dict_close (writer);
+
+	/* Clean up
+	 */
 	cherokee_buffer_mrproper (&tmp);
 }
 
@@ -719,29 +747,32 @@ server_info_build_info (cherokee_handler_server_info_t *hdl)
 
 	/* Show only 'About..'?
 	 */
-	if (! HDL_SRV_INFO_PROPS(hdl)->just_about) {
-		cherokee_dwriter_cstring (writer, "traffic");
-		add_traffic (writer, srv);
+	if (HDL_SRV_INFO_PROPS(hdl)->just_about)
+		goto out;
 
-		cherokee_dwriter_cstring (writer, "uptime");
-		add_uptime (writer, srv);
-		
-		cherokee_dwriter_cstring (writer, "config");
-		add_config (writer, srv);
+	cherokee_dwriter_cstring (writer, "traffic");
+	add_traffic (writer, srv);
 
-		cherokee_dwriter_cstring (writer, "connections");
-		add_connections (writer, srv);
+	cherokee_dwriter_cstring (writer, "uptime");
+	add_uptime (writer, srv);
+	
+	cherokee_dwriter_cstring (writer, "config");
+	add_config (writer, srv);
+	
+	cherokee_dwriter_cstring (writer, "connections");
+	add_connections (writer, srv);
+	
+	cherokee_dwriter_cstring (writer, "modules");
+	add_modules (writer, srv);
+	
+	cherokee_dwriter_cstring (writer, "icons");
+	add_icons (writer, srv);
+	
+	cherokee_dwriter_cstring (writer, "iocache");
+	add_iocache (writer, srv);
 
-		cherokee_dwriter_cstring (writer, "modules");
-		add_modules (writer, srv);
-		
-		cherokee_dwriter_cstring (writer, "icons");
-		add_icons (writer, srv);
-		
-		cherokee_dwriter_cstring (writer, "iocache");
-		add_iocache (writer, srv);
-	}
-
+	/* Connection details
+	 */
 	if  (HDL_SRV_INFO_PROPS(hdl)->connection_details) {
 		cherokee_list_t infos;	       
 		INIT_LIST_HEAD (&infos);
@@ -754,6 +785,7 @@ server_info_build_info (cherokee_handler_server_info_t *hdl)
 
 	}
 
+out:
 	cherokee_dwriter_dict_close (writer);
 }
 

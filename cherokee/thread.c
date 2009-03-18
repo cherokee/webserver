@@ -631,7 +631,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 		/* Maybe update traffic counters
 		 */
-		if ((CONN_VSRV(vserver)->data.enabled) &&
+		if ((CONN_VSRV(conn)->data.enabled) &&
 		    (conn->traffic_next < thd->bogo_now) &&
 		    ((conn->rx != 0) || (conn->tx != 0)))
 		{

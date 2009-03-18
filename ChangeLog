@@ -1,5 +1,8 @@
 2009-03-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_server_info.c (add_traffic): Adds per virtual
+	server traffic information.
+
 	* cherokee/virtual_server.h: Added the "collect_statistics"
 	configuration key, so it can be defined whether or not a virtual
 	server should collected traffic statistics.
