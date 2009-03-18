@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:modules.html[Modules] -> link:modules_encoders.html[Encoders]
 
-Enconder: Gzip
+Encoder: Gzip
 --------------
 
 This is a compression encoder. It is used to reduce the outgoing

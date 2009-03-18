@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:modules.html[Modules]
 
-Modules: Enconders
+Modules: Encoders
 ------------------
 
 Encoders are Cherokee modules that can be used as filters. The most

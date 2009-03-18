@@ -1,6 +1,6 @@
 == link:index.html[Index] -> link:modules.html[Modules] -> link:modules_encoders.html[Encoders]
 
-Enconder: deflate
+Encoder: deflate
 -----------------
 
 This compression encoder is similar to the
