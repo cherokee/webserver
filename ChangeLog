@@ -1,3 +1,8 @@
+2009-03-20  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/Makefile.am, cherokee/cherokee.h, cherokee/template.c,
+	cherokee/template.h: Adds a very light template system.
+
 2009-03-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_server_info.c (add_traffic): Adds per virtual

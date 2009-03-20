@@ -1136,6 +1136,8 @@ version.h \
 version.c \
 buffer.h \
 buffer.c \
+template.h \
+template.c \
 module.h \
 module.c \
 cryptor.h \
@@ -1356,6 +1358,7 @@ init.h \
 util.h \
 version.h \
 buffer.h\
+template.h\
 fdpoll.h \
 http.h \
 list.h \
