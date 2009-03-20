@@ -1253,7 +1253,10 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 {
 	int r;
 
-	TRACE (ENTRIES, "connect type=%d\n", SOCKET_AF(sock));
+	TRACE (ENTRIES, "connect type=%s\n", 
+	       SOCKET_AF(sock) == AF_INET  ? "AF_INET"  :
+	       SOCKET_AF(sock) == AF_INET6 ? "AF_INET6" : 
+	       SOCKET_AF(sock) == AF_UNIX  ? "AF_UNIX"  : "Unknown");
 
 	switch (SOCKET_AF(sock)) {
 	case AF_INET:
@@ -1283,9 +1286,8 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 	if (r < 0) {
 		int err = SOCK_ERRNO();
 		
-		TRACE (ENTRIES",connect", "connect error type=%d errno='%s'\n", 
-		       SOCKET_AF(sock), strerror(err));
-		
+		TRACE (ENTRIES",connect", "connect error=%d '%s'\n", err, strerror(err));
+
 		switch (err) {
 		case EISCONN:
 			break;
@@ -1310,7 +1312,7 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 		}
 	}
 
-	TRACE (ENTRIES",connect", "successful connect (type=%d)\n", SOCKET_AF(sock));
+	TRACE (ENTRIES",connect", "succeed %s", "\n");
 
 	sock->status = socket_reading;
 	return ret_ok;
