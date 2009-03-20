@@ -761,7 +761,13 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		ret = cherokee_handler_proxy_conn_recv_headers (hdl->pconn, &hdl->tmp);
 		switch (ret) {
 		case ret_ok:
-			/* Got the header */
+			/* Turn Error Handling on. From this point the
+			 * handler object supports error handling.
+			 */
+			HANDLER(hdl)->support |= hsupport_error;
+			
+			/* Got the header.
+			 */
 			break;
 		case ret_eagain:
 			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
@@ -1245,7 +1251,7 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_proxy_step;
 	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_proxy_add_headers;
 
-	HANDLER(n)->support = hsupport_full_headers | hsupport_error;
+	HANDLER(n)->support = hsupport_full_headers;
 
 	/* Init
 	 */

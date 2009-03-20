@@ -1,5 +1,8 @@
 2009-03-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (cherokee_handler_proxy_init): Fixes
+	the reverse proxy error reporting.
+
 	* cherokee/Makefile.am, cherokee/cherokee.h, cherokee/template.c,
 	cherokee/template.h: Adds a very light template system.
 
