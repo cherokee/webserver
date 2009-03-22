@@ -157,7 +157,29 @@ Reverse Proxy
 ~~~~~~~~~~~~~
 Yes, that too! Cherokee also provides a state of the art
 link:modules_handlers_proxy.html[HTTP reverse proxy] module. Check the
-documentation for more details and give it a try. 
+documentation for more details and give it a try.
 
 And if that is not enough, you can always take a look at the rest of
 the link:modules.html[modules] bundled with Cherokee.
+
+[[streaming]]
+Audio and video streaming
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Both audio and video streaming are supported, intelligently handling
+the available bandwidth to maximize service. Are you planning on being
+the next Youtube? Take a look at the
+link:modules_handlers_streaming.html[Streaming handler].
+
+[[secure_downloads]]
+Secure donwloads
+~~~~~~~~~~~~~~~~
+A pretty nifty feature that has been having great acceptance is
+Cherokee's capability of generating temporal URLs to serve hidden
+file. The link:modules_handlers_secdownload.html[Hidden Downloads]
+handler is exactly what you need if, for instance, you plan on serving
+lots of files and want to be protected against automatic download
+scripts. Of course that is not the sole use of this. Cherokee only
+implements the security. From there on, the sky is the limit.
+
+
+

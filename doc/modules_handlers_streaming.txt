@@ -62,7 +62,7 @@ H264 files must be written in a special way so the server can stream
 them. If a H264 file is ready for progressive streaming, Flash 9 (and
 higher) will be able to play it while it's being downloaded.
 
-From a technical point of view, the server needs the H624 file to have
+From a technical point of view, the server needs the H264 file to have
 its moov atoms (or boxes) in front of the data. The `qt-faststart.c`
 program - shipped with FFMpeg - rewrites H264 files so their atoms are
 placed in the required order.
