@@ -21,19 +21,17 @@ BUTTON = """
 
 CONFIG_TABLE = """
 <div align="center">
-  <table border="0">
+  <table id="table_new_file">
   <tr><th>Regular</th><th>Static Content</th><th>Server Development</th></tr>
   <tr>
    <td>
      Regular configuration: PHP, Apache logs, MIME types, icons, etc.
-     %s
    </td><td>
      Optized to send static content.
-     %s
    </td><td>
      No standard port, No log files, No PID file, etc.
-     %s
    </td>
+  <tr><td>%s</td><td>%s</td><td>%s</td></tr>
   </tr></table>
 </div>
 """ % (BUTTON %("/create_config/regular"),

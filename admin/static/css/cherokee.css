@@ -640,3 +640,10 @@ table.rulestable tr.odd td {
 
 #body-source #new_env_value {
 }
+
+/**************************/
+/* PageNewConfig.py styl */
+/**************************/
+table#table_new_file td {
+	width: 220px;
+}
