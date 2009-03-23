@@ -1,7 +1,6 @@
 from Page import *
 
 class PageError (Page):
-    CONFIG_NOT_FOUND    = 'not_found'
     CONFIG_NOT_WRITABLE = 'not_writable'
     ICONS_DIR_MISSING   = 'icons_dir_missing'
     COULDNT_LAUNCH      = 'couldnt_launch'
@@ -31,7 +30,6 @@ class PageError (Page):
 
 
 ERRORS_TITLE = {
-    PageError.CONFIG_NOT_FOUND :    'Configuration file not found',
     PageError.CONFIG_NOT_WRITABLE : 'Configuration file cannot be modified',
     PageError.ICONS_DIR_MISSING:    'Icons directory is missing',
     PageError.COULDNT_LAUNCH:       'Could not launch the server'

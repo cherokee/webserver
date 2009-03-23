@@ -1,5 +1,17 @@
 2009-03-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/server.py, admin/PageNewConfig.py, admin/PageError.py,
+	admin/error_not_found.template.html, admin/PageGeneral.py,
+	admin/CherokeeManagement.py, Makefile.am: When cherokee-admin was
+	launched and the configuration file didn't exist, it used to allow
+	to create a new one based on "cherokee.conf.sample". Now it gives
+	three options: "Regular", "Performance", and "Development". The
+	first one uses the previous cherokee.conf.sample file; the second
+	choice uses a static content focused configuration file; and
+	finally, the last option deploys a Cherokee-hacker focused
+	configuration file (it launches the server in a high-port, doesn't
+	create PID file, and does not log anything).
+
 	* cherokee/socket.c (cherokee_socket_sendfile): Address a
 	potention problem when calling sendfile().
 

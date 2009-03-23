@@ -44,7 +44,7 @@ class PageGeneral (PageMenu, FormHelper):
 
     def _op_render (self):
         content = self._render_content()
-        self.AddMacroContent ('title', 'General configuration')
+        self.AddMacroContent ('title', 'General Configuration')
         self.AddMacroContent ('content', content)
         return Page.Render(self)
 

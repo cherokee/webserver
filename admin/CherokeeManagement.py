@@ -128,7 +128,7 @@ class CherokeeManagement:
         # Stop Cherokee Worker
         self.__stop_process (pid)
 
-    def create_config (self, file):
+    def create_config (self, file, template_file):
         if os.path.exists (file):
             return
 
@@ -136,7 +136,7 @@ class CherokeeManagement:
         if not os.path.exists (dirname):
             os.mkdir (dirname)
 
-        conf_sample = os.path.join(CHEROKEE_ADMINDIR, "cherokee.conf.sample")
+        conf_sample = os.path.join(CHEROKEE_ADMINDIR, template_file)
         if os.path.exists (conf_sample):
             content = open(conf_sample, 'r').read()
         else:

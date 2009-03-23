@@ -25,6 +25,7 @@ from PageEntry import *
 from PageAdvanced import *
 from PageFeedback import *
 from PageError import *
+from PageNewConfig import *
 from PageAjaxUpdate import *
 from PageInfoSource import *
 from CherokeeManagement import *
@@ -58,7 +59,7 @@ class Handler(pyscgi.SCGIHandler):
         # Ensure that the configuration file is writable
         if not cfg.has_tree():
             if not uri.startswith('/create_config'):
-                page = PageError (cfg, PageError.CONFIG_NOT_FOUND)
+                page = PageNewConfig (cfg)
         elif not cfg.is_writable():
             page = PageError (cfg, PageError.CONFIG_NOT_WRITABLE)
         elif not os.path.isdir(CHEROKEE_ICONSDIR):
@@ -126,11 +127,9 @@ class Handler(pyscgi.SCGIHandler):
             cherokee_management_reset()
             body = "/"
         elif uri.startswith('/create_config'):
-            manager = cherokee_management_get (cfg)
-            manager.create_config (cfg.file)
-            cherokee_management_reset()
+            tmp = PageNewConfig (cfg)
+            body = tmp.HandleRequest(uri, Post(''))
             cfg = Config (cfg.file)
-            body = "/"
         elif uri.startswith('/ajax/update'):
             page = PageAjaxUpdate (cfg)
         elif uri.startswith('/rule'):
