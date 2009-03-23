@@ -108,7 +108,6 @@ template_data = \
 default.template.html \
 status.template.html \
 error_not_writable.template.html \
-error_not_found.template.html \
 error_icons_dir_missing.template.html \
 error_couldnt_launch.template.html
 endif
