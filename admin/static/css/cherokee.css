@@ -644,6 +644,11 @@ table.rulestable tr.odd td {
 /**************************/
 /* PageNewConfig.py styl */
 /**************************/
+
+table#table_new_file {
+     margin-top: 10px;
+}
+
 table#table_new_file td {
 	width: 220px;
 }

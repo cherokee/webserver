@@ -77,8 +77,10 @@ class PageNewConfig (Page, FormHelper):
         return Page.Render(self)
 
     def _render_content (self):
-        txt = "<h1>New Configuration File</h1>"
+        txt = "<h1>Configuration File Not Found</h1>"
         txt += self.Dialog(WARNING_NOT_FOUND, type_='warning')
+
+        txt += "<h2>Create a new configuration file</h2>"
         txt += CONFIG_TABLE
         return txt
 
