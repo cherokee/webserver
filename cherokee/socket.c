@@ -1029,15 +1029,14 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	 * ssize_t 
 	 * sendfile64 (int out_fd, int in_fd, off64_t *offset, size_t *count);
 	 */
-	do {
-		*sent = sendfile (SOCKET_FD(socket),     /* int     out_fd */
-		                  fd,                    /* int     in_fd  */
-		                  offset,                /* off_t  *offset */
-		                  size);                 /* size_t  count  */
-	} while ((*sent == -1) && (errno == EINTR));
+	*sent = sendfile (SOCKET_FD(socket),     /* int     out_fd */
+			  fd,                    /* int     in_fd  */
+			  offset,                /* off_t  *offset */
+			  size);                 /* size_t  count  */
 		
 	if (*sent < 0) {
 		switch (errno) {
+		case EINTR:
 		case EAGAIN:
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
 		case EWOULDBLOCK:
@@ -1057,6 +1056,10 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 		}
 
 		return ret_error;
+
+	} else if (*send == 0) {
+		/* It isn't an error, but it wrote nothing */
+		return ret_error;
 	}
 
 #elif DARWIN_SENDFILE_API
@@ -1067,17 +1070,16 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	 * sendfile (int fd, int s, off_t offset, off_t *len,
 	 *           struct sf_hdtr *hdtr, int flags);
 	 */	
-	do {
-		re = sendfile (fd,                        /* int             fd     */
-			       SOCKET_FD(socket),         /* int             s      */
-			       *offset,                   /* off_t           offset */
-			       &_sent,                    /* off_t          *len    */
-			       NULL,                      /* struct sf_hdtr *hdtr   */
-			       0);                        /* int             flags  */
-	}  while (re == -1 && errno == EINTR);
+	re = sendfile (fd,                        /* int             fd     */
+		       SOCKET_FD(socket),         /* int             s      */
+		       *offset,                   /* off_t           offset */
+		       &_sent,                    /* off_t          *len    */
+		       NULL,                      /* struct sf_hdtr *hdtr   */
+		       0);                        /* int             flags  */
 
 	if (re == -1) {
 		switch (errno) {
+		case EINTR:
 		case EAGAIN:
 			/* It might have sent some information
 			 */
@@ -1090,6 +1092,10 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 		default:
 			return ret_error;
 		}
+
+	} else if (_sent == 0) {
+		/* It isn't an error, but it wrote nothing */
+		return ret_error;
 	}
 
 	*sent = _sent;
@@ -1097,15 +1103,14 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 
 #elif SOLARIS_SENDFILE_API
 
-	do {
-		*sent = sendfile (SOCKET_FD(socket),     /* int   out_fd */
-				  fd,                    /* int    in_fd */
-				  offset,                /* off_t   *off */
-				  size);                 /* size_t   len */
-	} while ((*sent == -1) && (errno == EINTR));
+	*sent = sendfile (SOCKET_FD(socket),     /* int   out_fd */
+			  fd,                    /* int    in_fd */
+			  offset,                /* off_t   *off */
+			  size);                 /* size_t   len */
 
 	if (*sent < 0) {
 		switch (errno) {
+		case EINTR:
 		case EAGAIN:
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
 		case EWOULDBLOCK:
@@ -1119,6 +1124,10 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 		case EAFNOSUPPORT:
 			return ret_no_sys;
 		}
+		return ret_error;
+
+	} else if (*send == 0) {
+		/* It isn't an error, but it wrote nothing */
 		return ret_error;
 	}
 
@@ -1142,19 +1151,17 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	 * sendfile (int fd, int s, off_t offset, size_t nbytes,
 	 *           struct sf_hdtr *hdtr, off_t *sbytes, int flags);
 	 */	
-	do {
-		re = sendfile (fd,                        /* int             fd     */
-			       SOCKET_FD(socket),         /* int             s      */
-			       *offset,                   /* off_t           offset */
-			       size,                      /* size_t          nbytes */
-			       &hdr,                      /* struct sf_hdtr *hdtr   */
-			       sent,                      /* off_t          *sbytes */ 
-			       0);                        /* int             flags  */
-
-	}  while (re == -1 && errno == EINTR);
+	re = sendfile (fd,                        /* int             fd     */
+		       SOCKET_FD(socket),         /* int             s      */
+		       *offset,                   /* off_t           offset */
+		       size,                      /* size_t          nbytes */
+		       &hdr,                      /* struct sf_hdtr *hdtr   */
+		       sent,                      /* off_t          *sbytes */ 
+		       0);                        /* int             flags  */
 
 	if (re == -1) {
 		switch (errno) {
+		case EINTR:
 		case EAGAIN:
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
 		case EWOULDBLOCK:
@@ -1171,7 +1178,12 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 		default:
 			return ret_error;
 		}
+
+	} else if (*sent == 0) {
+		/* It isn't an error, but it wrote nothing */
+		return ret_error;
 	}
+
 	*offset = *offset + *sent;
 
 #elif HPUX_SENDFILE_API
@@ -1186,17 +1198,15 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 	 * bytes written (which may be less than requested) not -1.
 	 * nwritten includes the header data sent.
 	 */
-	do {
- 		*sent = sendfile (SOCKET_FD(socket),     /* socket          */
- 		                  fd,                    /* fd to send      */
- 		                  *offset,               /* where to start  */
- 		                  size,                  /* bytes to send   */
- 		                  NULL,                  /* Headers/footers */
- 		                  0);                    /* flags           */
-	} while ((*sent == -1) && (errno == EINTR));
-
+	*sent = sendfile (SOCKET_FD(socket),     /* socket          */
+			  fd,                    /* fd to send      */
+			  *offset,               /* where to start  */
+			  size,                  /* bytes to send   */
+			  NULL,                  /* Headers/footers */
+			  0);                    /* flags           */
 	if (*sent < 0) {
 		switch (errno) {
+		case EINTR:
 		case EAGAIN:
 #if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
 		case EWOULDBLOCK:
@@ -1207,7 +1217,12 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 			return ret_no_sys;
 		}
 		return ret_error;
+
+	} else if (*send == 0) {
+		/* It isn't an error, but it wrote nothing */
+		return ret_error;
 	}
+
 	*offset = *offset + *sent;
 
 #else
