@@ -1,3 +1,8 @@
+2009-03-24  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/logger_custom.h, cherokee/logger_custom.c: Adds a new
+	customizable logger.
+
 2009-03-24  Taher Shihadeh <taher@unixwars.com>
 
 	* admin/Makefile.am: PageNewConfig.py was not being installed. Issue
