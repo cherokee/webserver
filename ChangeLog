@@ -1,3 +1,9 @@
+2009-03-24  Taher Shihadeh <taher@unixwars.com>
+
+	* admin/Makefile.am: PageNewConfig.py was not being installed. Issue
+	http://code.google.com/p/cherokee/issues/detail?id=411 detected by
+	Stefan.
+
 2009-03-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/server.py, admin/PageNewConfig.py, admin/PageError.py,

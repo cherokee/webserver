@@ -43,6 +43,7 @@ PageGeneral.py \
 PageIcon.py \
 PageStatus.py \
 PageMime.py \
+PageNewConfig.py \
 PageVServer.py \
 PageVServers.py \
 PageError.py \
