@@ -1,5 +1,8 @@
 2009-03-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (send_post): It had to write the POST
+	to a socket rather than to a file descriptor.
+
 	* cherokee/logger_custom.h, cherokee/logger_custom.c: Adds a new
 	customizable logger.
 

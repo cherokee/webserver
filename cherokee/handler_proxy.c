@@ -559,35 +559,34 @@ static ret_t
 send_post (cherokee_handler_proxy_t *hdl)
 {
 	ret_t                  ret;
-	int                    eagain_fd = -1;
-	int                    mode      =  0;
-	cherokee_connection_t *conn      = HANDLER_CONN(hdl);
-		
-	ret = cherokee_post_walk_to_fd (&conn->post,
-					hdl->pconn->socket.socket,
-					&eagain_fd, &mode);
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
+
+	ret = cherokee_post_walk_to_socket (&conn->post, &hdl->pconn->socket);
 
 	TRACE (ENTRIES",post", "Sending POST fd=%d, ret=%d\n", 
 	       hdl->pconn->socket.socket, ret);
-	
+
 	switch (ret) {
 	case ret_ok:
 		TRACE (ENTRIES",post", "%s\n", "finished");
 		return ret_ok;
-		
+
+	case ret_eof:
+	case ret_error:
+		return ret;
+
 	case ret_eagain:
-		if (eagain_fd != -1) {
-			ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
-								   conn, eagain_fd,
-								   mode, false);
-			if (ret != ret_ok) {
-				return ret_eof;
-			}
+		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(hdl),
+							   conn, hdl->pconn->socket.socket,
+							   FDPOLL_MODE_WRITE, false);
+		if (ret != ret_ok) {
+			return ret_eof;
 		}
 		return ret_eagain;
 		
 	default:
-		return ret;
+		RET_UNKNOWN(ret);
+		return ret_error;
 	}	
 }
 

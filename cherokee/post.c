@@ -412,10 +412,12 @@ cherokee_post_walk_to_fd (cherokee_post_t *post, int fd, int *eagain_fd, int *mo
 		r = write (fd, post->info.buf + post->walk_offset,
 			   post->info.len - post->walk_offset);
 		if (r < 0) {
-			if (errno == EAGAIN)
+			int err = errno;
+
+			if (err == EAGAIN)
 				return ret_eagain;
 
-			TRACE(ENTRIES, "errno %d\n", errno);
+			TRACE(ENTRIES, "errno %d: %s\n", err, strerror(err));
 			return  ret_error; 			
 		}
 
