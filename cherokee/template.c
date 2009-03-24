@@ -133,6 +133,32 @@ cherokee_template_new_token (cherokee_template_t        *tem,
 
 
 ret_t
+cherokee_template_set_token  (cherokee_template_t        *tem,
+			      const char                 *name,
+			      cherokee_tem_repl_func_t    func,
+			      void                       *param,
+			      cherokee_template_token_t **token)
+{	
+	ret_t                      ret;
+	cherokee_template_token_t *n;
+
+	ret = cherokee_template_new_token (tem, &n);
+	if (unlikely (ret != ret_ok))
+		return ret;
+
+	cherokee_buffer_add (&n->key, name, strlen(name));
+	n->func  = func;
+	n->param = param;
+	
+	if (token) {
+		*token = n;
+	}
+
+	return ret_ok;
+}
+
+
+ret_t
 cherokee_template_parse (cherokee_template_t *tem,
 			 cherokee_buffer_t   *incoming)
 {
@@ -232,7 +258,8 @@ out:
 
 ret_t
 cherokee_template_render (cherokee_template_t *tem,
-			  cherokee_buffer_t   *output)
+			  cherokee_buffer_t   *output,
+			  void                *param)
 {
 	ret_t                            ret;
 	cherokee_list_t                 *i;
@@ -252,7 +279,7 @@ cherokee_template_render (cherokee_template_t *tem,
 
 		/* Add the token
 		 */
-		ret = repl->token->func (tem, repl->token, output);
+		ret = repl->token->func (tem, repl->token, output, param);
 		if (unlikely (ret != ret_ok))
 			return ret;
 

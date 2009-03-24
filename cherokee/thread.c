@@ -1521,7 +1521,6 @@ should_accept_more (cherokee_thread_t *thd,
 ret_t 
 cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 {
-	int                re;
 	ret_t              ret;
 	cherokee_boolean_t accepting;
 	cherokee_list_t   *i;
@@ -1567,10 +1566,7 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 
 	/* Inspect the file descriptors
 	 */
-	re = cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
-	if (re <= 0)
-		goto out;
-
+	cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
 	thread_update_bogo_now (thd);
 
 	/* Accept new connections, if possible
