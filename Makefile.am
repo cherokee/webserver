@@ -120,6 +120,8 @@ uninstall-local: uninstall-local-config
 		echo "rm -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample"; \
 		$(RM) -f $(DESTDIR)$(cherokeeconfdir)/cherokee.conf.perf_sample; \
 	fi
+	$(RM) -f $(DESTDIR)$(cherokeeadmindir)/cherokee.conf.sample
+	$(RM) -f $(DESTDIR)$(cherokeeadmindir)/performance.conf.sample
 
 test:
 	$(MAKE) -C qa test
