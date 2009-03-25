@@ -1,5 +1,7 @@
 2009-03-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* 0.99.6 released
+
 	* cherokee/handler_proxy.c (parse_server_header): It was not
 	dealing with "Content-Encoding" responses properly. This patch
 	fixes: http://code.google.com/p/cherokee/issues/detail?id=403
