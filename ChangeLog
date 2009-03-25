@@ -1,5 +1,9 @@
 2009-03-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/connection.c (cherokee_connection_setup_error_handler):
+	3xx and 4xx error can be kept alive. Connections have to be closed
+	only for 5xx responses.
+
 	* 0.99.6 released
 
 	* cherokee/handler_proxy.c (parse_server_header): It was not

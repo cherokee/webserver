@@ -463,10 +463,10 @@ out:
 	}
 #endif
 
-	/* Only 3xx errors can keep the connection alive
+	/* RFC-2616 8.1.1: 5xx errors can't be kept alive
 	 */
-	if ((! (http_type_300 (conn->error_code))) ||
-	    (! (HANDLER_SUPPORTS (conn->handler, hsupport_length))))
+	if (http_type_500 (conn->error_code) ||
+	    (! HANDLER_SUPPORTS (conn->handler, hsupport_length)))
 	{
 		conn->keepalive = 0;
 	}
