@@ -463,11 +463,20 @@ out:
 	}
 #endif
 
-	/* RFC-2616 8.1.1: 5xx errors can't be kept alive
+	/* Let's keep alive 3xx, 404, and 410 responses.
 	 */
-	if (http_type_500 (conn->error_code) ||
-	    (! HANDLER_SUPPORTS (conn->handler, hsupport_length)))
-	{
+	if (http_type_500 (conn->error_code)) {
+		conn->keepalive = 0;
+		
+	} else if (http_type_400 (conn->error_code) &&
+		   ((conn->error_code != http_not_found) && /* 404 */
+		    (conn->error_code != http_gone))) {     /* 410 */
+		conn->keepalive = 0;
+	}
+
+	/* Ensure that the error handler supports Content-Length:
+	 */
+	if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
 		conn->keepalive = 0;
 	}
 
