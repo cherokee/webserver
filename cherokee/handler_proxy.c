@@ -819,6 +819,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	char                           *header_end;
 	cherokee_list_t                *i;
 	cherokee_http_version_t         version;
+	cherokee_boolean_t              encoded      = false;
 	cherokee_connection_t          *conn         = HANDLER_CONN(hdl);
 	cherokee_handler_proxy_props_t *props        = HDL_PROXY_PROPS(hdl);
 
@@ -930,6 +931,15 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 				cherokee_buffer_add_str    (buf_out, CRLF);
 				goto next;
 			}
+
+		} else if (strncmp (begin, "Content-Encoding:", 17) == 0) {
+			encoded = true;
+
+			if (conn->encoder != NULL) {
+				cherokee_encoder_free (conn->encoder);
+				conn->encoder = NULL;
+			}
+
 		} else {
 			colon = strchr (begin, ':');
 			if (unlikely (colon == NULL)) {
@@ -958,6 +968,14 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	/* Additional headers */
 	list_for_each (i, &props->out_headers_add) {
 		add_header (buf_out, &HEADER_ADD(i)->key, &HEADER_ADD(i)->val);
+	}
+
+	/* Deal with Content-Encoding: If the response is no encoded,
+	 * and the handler is configured to encode, it has to add the
+	 * encoder headers at this point.
+	 */
+	if ((! encoded) && (conn->encoder)) {
+		cherokee_encoder_add_headers (conn->encoder, buf_out);		
 	}
 
 	/* Special case: Client uses Keepalive, the back-end sent a
