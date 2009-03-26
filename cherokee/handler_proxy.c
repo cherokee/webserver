@@ -257,7 +257,7 @@ add_request (cherokee_handler_proxy_t *hdl,
 
 	/* Build the URL
 	 */
-	ret = cherokee_buffer_add_buffer (tmp, &conn->request);
+	ret = cherokee_buffer_escape_uri (tmp, &conn->request);
 	if (ret != ret_ok) {
 		return ret_error;
 	}

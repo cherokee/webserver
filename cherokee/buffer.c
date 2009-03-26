@@ -1146,6 +1146,60 @@ cherokee_buffer_unescape_uri (cherokee_buffer_t *buffer)
 	return ret_ok;
 }
 
+ret_t
+cherokee_buffer_escape_uri (cherokee_buffer_t *buffer, cherokee_buffer_t *src)
+{
+	cuint_t  i;
+	char    *s, *t;
+	cuint_t  n_escape = 0;
+
+	/* Each *bit* position of the array represents whether the
+	 * character is escaped.
+	 */
+	static uint32_t is_char_escaped[] = {
+		0xffffffff, 0x80000029, 0x00000000, 0x80000000,
+		0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	};
+
+	if (unlikely (src->buf == NULL))
+		return ret_error;
+
+	/* Count how many characters it'll have to escape
+	 */
+	for (i=0, s=src->buf; i<src->len; i++, s++) {
+		if (is_char_escaped[*s >> 5] & (1 << (*s & 0x1f))) {
+			n_escape++;
+		}
+	}
+
+	/* Get the memory
+	 */
+	cherokee_buffer_ensure_addlen (buffer, src->len + (n_escape * 2));
+
+	/* Convert it
+	 */
+	s = src->buf;
+	t = buffer->buf + buffer->len;
+
+	for (i=0; i<src->len; i++) {
+		if (is_char_escaped[*s >> 5] & (1 << (*s & 0x1f))) {
+			*t++ = '%';
+			*t++ = TO_HEX(*s >> 4);
+			*t++ = TO_HEX(*s & 0xf);
+			s++;
+		} else {
+			*t++ = *s++;
+		}
+	}
+
+	/* ..and the final touch
+	 */
+	*t = '\0';
+	buffer->len += src->len + (n_escape * 2);
+
+	return ret_ok;
+}
+
 
 ret_t 
 cherokee_buffer_add_escape_html (cherokee_buffer_t *buf, cherokee_buffer_t *src)

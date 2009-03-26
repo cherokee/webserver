@@ -1,5 +1,11 @@
 2009-03-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (add_request): Fixes a re-encoding
+	issue. URLs containing non-alpha-numeric characters were not being
+	handled propertly by the handler.
+
+	* cherokee/buffer.c (cherokee_buffer_escape_uri): New method.
+
 	* qa/216-NameSpace.py: New QA test. It requests a file with a
 	couple of space characters on the name.
 

@@ -117,6 +117,7 @@ ret_t cherokee_buffer_encode_sha1_base64 (cherokee_buffer_t  *buf, cherokee_buff
 ret_t cherokee_buffer_encode_hex         (cherokee_buffer_t  *buf, cherokee_buffer_t *encoded);
 ret_t cherokee_buffer_decode_hex         (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_unescape_uri       (cherokee_buffer_t  *buf);
+ret_t cherokee_buffer_escape_uri         (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
 ret_t cherokee_buffer_add_escape_html    (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
 ret_t cherokee_buffer_escape_html        (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
 ret_t cherokee_buffer_add_comma_marks    (cherokee_buffer_t  *buf);
