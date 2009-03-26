@@ -221,7 +221,8 @@ run-tests.py \
 213-Post-Chunked1.py \
 214-Post-Chunked2.py \
 215-Post-Chunked3.py \
-216-NameSpace.py
+216-NameSpace.py \
+217-DoubleEncode.py
 
 
 test:

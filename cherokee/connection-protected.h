@@ -91,6 +91,7 @@ typedef enum {
 #define conn_op_tcp_cork      (1 << 2)
 #define conn_op_document_root (1 << 3)
 #define conn_op_was_polling   (1 << 4)
+#define conn_op_cant_encoder  (1 << 5)
 
 typedef cuint_t cherokee_connection_options_t;
 
@@ -138,6 +139,7 @@ struct cherokee_connection {
 
 	/* Encoders
 	 */
+	encoder_func_new_t            encoder_new_func;
 	cherokee_encoder_t           *encoder;
 	cherokee_buffer_t             encoder_buffer;
 
@@ -264,7 +266,8 @@ ret_t cherokee_connection_check_http_method      (cherokee_connection_t *conn, c
 ret_t cherokee_connection_set_rate               (cherokee_connection_t *conn, cherokee_config_entry_t *config_entry);
 void  cherokee_connection_set_keepalive          (cherokee_connection_t *conn);
 void  cherokee_connection_set_chunked_encoding   (cherokee_connection_t *conn);
-cherokee_boolean_t cherokee_connection_should_include_length(cherokee_connection_t *conn);
+int   cherokee_connection_should_include_length  (cherokee_connection_t *conn);
+ret_t cherokee_connection_instance_encoder       (cherokee_connection_t *conn);
 
 /* Iteration
  */

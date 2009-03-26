@@ -97,6 +97,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->options              = conn_op_log_at_end;
 	n->handler              = NULL; 
 	n->encoder              = NULL;
+	n->encoder_new_func     = NULL;
 	n->logger_ref           = NULL;
 	n->keepalive            = 0;
 	n->range_start          = 0;
@@ -286,6 +287,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		cherokee_encoder_free (conn->encoder);
 		conn->encoder = NULL;
 	}
+	conn->encoder_new_func = NULL;
 
 	if (conn->polling_fd != -1) {
 		close (conn->polling_fd);
@@ -734,6 +736,13 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 		}
 	}
 
+	/* handler::add_headers() might have activated the
+	 * conn_op_cant_encoder bit. If so, a encoder cannot be used
+	 */
+	if (conn->encoder_new_func) {
+		cherokee_connection_instance_encoder (conn);
+	}
+
 	/* Add the server headers	
 	 */
 	build_response_header (conn, &conn->buffer);
@@ -1086,7 +1095,7 @@ out:
 	return ret;
 }
 
-cherokee_boolean_t
+int
 cherokee_connection_should_include_length (cherokee_connection_t *conn)
 {
 	if (conn->encoder) {
@@ -1095,6 +1104,28 @@ cherokee_connection_should_include_length (cherokee_connection_t *conn)
 
 	return true;
 }
+
+
+ret_t
+cherokee_connection_instance_encoder (cherokee_connection_t *conn)
+{
+	ret_t ret;
+
+	if (conn->options & conn_op_cant_encoder)
+		return ret_deny;
+
+	ret = conn->encoder_new_func ((void **)&conn->encoder);
+	if (unlikely (ret != ret_ok))
+		return ret_error;
+		
+	ret = cherokee_encoder_init (conn->encoder, conn);
+	if (unlikely (ret != ret_ok))
+		return ret_error;
+	
+	cherokee_buffer_clean (&conn->encoder_buffer);
+	return ret_ok;
+}
+
 
 ret_t 
 cherokee_connection_shutdown_wr (cherokee_connection_t *conn)
@@ -1300,7 +1331,6 @@ get_encoding (cherokee_connection_t *conn,
 	char tmp;
 	char *i1, *i2;
 	char *end;
-	encoder_func_new_t new_func = NULL;
 
 	/* ptr = Header at the "Accept-Encoding" position 
 	 */
@@ -1323,19 +1353,13 @@ get_encoding (cherokee_connection_t *conn,
 
 		tmp = *i2;    /* (2) */
 		*i2 = '\0';
-		ret = cherokee_avl_get_ptr (encoders_accepted, i1, (void **)&new_func);
+		ret = cherokee_avl_get_ptr (encoders_accepted, i1,
+					    (void **) &conn->encoder_new_func);
 		*i2 = tmp;    /* (2') */		
 		
-		if ((ret == ret_ok) && (new_func)) {
-			ret = new_func ((void **)&conn->encoder);
-			if (unlikely (ret != ret_ok))
-				goto error;
-
-			ret = cherokee_encoder_init (conn->encoder, conn);
-			if (unlikely (ret != ret_ok))
-				goto error;
-
-			cherokee_buffer_clean (&conn->encoder_buffer);
+		if ((ret == ret_ok) && 
+		    (conn->encoder_new_func != NULL))
+		{
 			break;
 		}
 

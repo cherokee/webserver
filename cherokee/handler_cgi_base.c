@@ -971,6 +971,10 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 			end2 = begin;
 		} 
 
+		else if (strncasecmp ("Content-Encoding: ", begin, 18) == 0) {
+			BIT_SET (conn->options, conn_op_cant_encoder);
+		}
+
 		else if ((HANDLER_CGI_BASE_PROPS(cgi)->allow_xsendfile) &&
 			 ((strncasecmp ("X-Sendfile: ", begin, 12) == 0) ||
 			  (strncasecmp ("X-Accel-Redirect: ", begin, 18) == 0))) 

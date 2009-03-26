@@ -434,7 +434,7 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 	/* Is this file cached in the io cache?
 	 */
 	use_io = ((srv->iocache != NULL) &&
-		  (conn->encoder == NULL) &&
+		  (conn->encoder_new_func == NULL) &&
 		  (HDL_FILE_PROP(fhdl)->use_cache) &&
 		  (conn->socket.is_tls == non_TLS) &&
 		  (http_method_with_body (conn->header.method)) &&

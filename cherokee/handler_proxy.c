@@ -819,7 +819,6 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	char                           *header_end;
 	cherokee_list_t                *i;
 	cherokee_http_version_t         version;
-	cherokee_boolean_t              encoded      = false;
 	cherokee_connection_t          *conn         = HANDLER_CONN(hdl);
 	cherokee_handler_proxy_props_t *props        = HDL_PROXY_PROPS(hdl);
 
@@ -933,12 +932,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			}
 
 		} else if (strncmp (begin, "Content-Encoding:", 17) == 0) {
-			encoded = true;
-
-			if (conn->encoder != NULL) {
-				cherokee_encoder_free (conn->encoder);
-				conn->encoder = NULL;
-			}
+			BIT_SET (conn->options, conn_op_cant_encoder);
 
 		} else {
 			colon = strchr (begin, ':');
@@ -974,8 +968,11 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	 * and the handler is configured to encode, it has to add the
 	 * encoder headers at this point.
 	 */
-	if ((! encoded) && (conn->encoder)) {
-		cherokee_encoder_add_headers (conn->encoder, buf_out);		
+	if (conn->encoder_new_func) {
+		ret = cherokee_connection_instance_encoder (conn);
+		if (ret == ret_ok) {
+			cherokee_encoder_add_headers (conn->encoder, buf_out);
+		}
 	}
 
 	/* Special case: Client uses Keepalive, the back-end sent a

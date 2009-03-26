@@ -1,5 +1,13 @@
 2009-03-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/connection-protected.h, cherokee/handler_cgi_base.c,
+	cherokee/handler_file.c, cherokee/handler_proxy.c,
+	cherokee/connection.c, qa/217-DoubleEncode.py, qa/Makefile.am:
+	Much better detection of encoded outputs form {Fast,S,}CGIs. For
+	instane, now the PHP rule can have GZip encoding enable, at the
+	same time that some PHP-based programs already return compressed
+	content.
+
 	* cherokee/handler_proxy.c (add_request): The pathinfo must be
 	encoded as well.
 
