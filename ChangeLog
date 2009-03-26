@@ -1,3 +1,8 @@
+2009-03-26  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* qa/216-NameSpace.py: New QA test. It requests a file with a
+	couple of space characters on the name.
+
 2009-03-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/connection.c (cherokee_connection_setup_error_handler):
