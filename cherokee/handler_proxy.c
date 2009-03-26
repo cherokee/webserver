@@ -262,7 +262,7 @@ add_request (cherokee_handler_proxy_t *hdl,
 		return ret_error;
 	}
 
-	ret = cherokee_buffer_add_buffer (tmp, &conn->pathinfo);
+	ret = cherokee_buffer_escape_uri (tmp, &conn->pathinfo);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
