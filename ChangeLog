@@ -1,5 +1,10 @@
 2009-03-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_cgi.c: For some reason, CGIs don't work under
+	valgrind. It also reports Cherokee trying to read fd -1. It seems
+	to be because pipe() doesn't success. This patch does a couple of
+	additional checks.
+
 	* cherokee.conf.sample.pre: Adds a new application/vnd.pkg5.info
 	mime type.
 

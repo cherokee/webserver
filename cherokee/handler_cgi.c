@@ -82,6 +82,11 @@ read_from_cgi (cherokee_handler_cgi_base_t *cgi_base, cherokee_buffer_t *buffer)
  	size_t                  read_ = 0;
 	cherokee_handler_cgi_t *cgi   = HDL_CGI(cgi_base);
 
+	/* Sanity check: pipe() accessed
+	 */
+	if (unlikely (cgi->pipeInput < 0))
+		return ret_eof;
+
 	/* Read the data from the pipe:
 	 */
 	ret = cherokee_buffer_read_from_fd (buffer, cgi->pipeInput, 4096, &read_);
@@ -523,10 +528,16 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 		
 	/* Change stdin and out
 	 */
-	dup2 (pipe_server[0], STDIN_FILENO);
+	re  = dup2 (pipe_server[0], STDIN_FILENO);
 	close (pipe_server[0]);
 
-	dup2 (pipe_cgi[1], STDOUT_FILENO);
+	if (unlikely (re != 0)) {
+		printf ("Status: 500" CRLF_CRLF);
+		printf ("X-Debug: file=%s line=%d" CRLF_CRLF, __FILE__, __LINE__);
+		exit(1);
+	}
+
+	re |= dup2 (pipe_cgi[1], STDOUT_FILENO);
 	close (pipe_cgi[1]);
 
 	/* Redirect the stderr
@@ -573,6 +584,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 
 	if (re < 0) {
 		printf ("Status: 500" CRLF_CRLF);
+		printf ("X-Debug: file=%s line=%d" CRLF_CRLF, __FILE__, __LINE__);
 		exit(1);
 	}
 
@@ -636,6 +648,8 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 			break;
 		default:
 			printf ("Status: 500" CRLF_CRLF);
+			printf ("X-Debug: file=%s line=%d cmd=%s: %s" CRLF_CRLF,
+				__FILE__, __LINE__, absolute_path, strerror(err));
 		}
 
 		/* Don't use the logging system (concurrency issues)
