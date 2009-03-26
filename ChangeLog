@@ -1,5 +1,8 @@
 2009-03-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee.conf.sample.pre: Adds a new application/vnd.pkg5.info
+	mime type.
+
 	* cherokee/handler_proxy.c (add_request): Fixes a re-encoding
 	issue. URLs containing non-alpha-numeric characters were not being
 	handled propertly by the handler.
