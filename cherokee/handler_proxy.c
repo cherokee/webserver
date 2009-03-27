@@ -252,6 +252,7 @@ static ret_t
 add_request (cherokee_handler_proxy_t *hdl,
 	     cherokee_buffer_t        *buf)
 {
+	int                             re;
 	ret_t                           ret;
 	cherokee_connection_t          *conn  = HANDLER_CONN(hdl);
 	cherokee_buffer_t              *tmp   = &HANDLER_THREAD(hdl)->tmp_buf1;
@@ -286,13 +287,14 @@ add_request (cherokee_handler_proxy_t *hdl,
 
 	/* Check the regexs
 	 */
-	replace_againt_regex_list (tmp, buf, &props->in_request_regexs);
+	re = replace_againt_regex_list (tmp, buf, &props->in_request_regexs);
+	if (re == 0) {
+		/* Did not match any regex, use the raw URL
+		 */
+		cherokee_buffer_add_buffer (buf, tmp);
+	}
 
 	TRACE(ENTRIES, "Rebuilt request: '%s'\n", tmp->buf);
-
-	/* Did not match any regex, use the raw URL
-	 */
-	cherokee_buffer_add_buffer (buf, tmp);
 	return ret_ok;
 }
 

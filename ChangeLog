@@ -1,5 +1,8 @@
 2009-03-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (add_request): Fixes a regex issue:
+	http://code.google.com/p/cherokee/issues/detail?id=410
+
 	* cherokee/handler_streaming.c (set_auto_rate): Adds a missing
 	check: http://code.google.com/p/cherokee/issues/detail?id=415
 
