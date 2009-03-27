@@ -59,6 +59,7 @@ typedef struct {
 	cherokee_avl_t                  in_headers_hide;
 	cherokee_list_t                 in_headers_add;
 	cherokee_list_t                 in_request_regexs;
+	cherokee_boolean_t              in_allow_keepalive;
 
 	/* Reply processing */
 	cherokee_avl_t                  out_headers_hide;

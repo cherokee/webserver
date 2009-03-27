@@ -1,5 +1,14 @@
 2009-03-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c, cherokee/handler_proxy.h,
+	admin/ModuleProxy.py: This patch adds a new configuration option
+	to the reverse proxy. It allows to point Cherokee whether or not
+	it can use keep-alive connections with the internal back-end
+	servers. I've seen that some servers (Cherrypy WSGI) keep timeout
+	sockets open and punches 408 errors to them when a request is
+	sent. That's obviously wrong. The problem can be worked around by
+	disabling keep-alive, although it will have a performance impact.
+
 	* cherokee/handler_proxy.c (build_request): X-Forwarded-Host
 	should include the port if it isn't standard.
 

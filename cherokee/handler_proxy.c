@@ -118,8 +118,9 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		cherokee_module_props_init_base (MODULE_PROPS(n), 
 						 MODULE_PROPS_FREE(props_free));
 
-		n->balancer  = NULL;
-		n->reuse_max = DEFAULT_REUSE_MAX;
+		n->balancer           = NULL;
+		n->reuse_max          = DEFAULT_REUSE_MAX;
+		n->in_allow_keepalive = true;
 
 		INIT_LIST_HEAD (&n->in_request_regexs);
 		INIT_LIST_HEAD (&n->in_headers_add);
@@ -150,6 +151,9 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 				return ret;
 		} else if (equal_buf_str (&subconf->key, "reuse_max")) {
 			props->reuse_max = atoi (subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "in_allow_keepalive")) {
+			props->in_allow_keepalive = !! atoi (subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "in_header_hide")) {
 			cherokee_config_node_foreach (j, subconf) {
@@ -405,8 +409,9 @@ build_request (cherokee_handler_proxy_t *hdl,
 		}
 	}
 
-	if ((is_keepalive) ||
-	    ((conn->header.version == http_version_11) && (! is_close)))
+	if ((props->in_allow_keepalive) &&
+	    ((is_keepalive) ||
+	     ((conn->header.version == http_version_11) && (! is_close))))
 	{
 		cherokee_buffer_add_str (buf, "Connection: Keep-Alive" CRLF);
 		hdl->pconn->keepalive_in = true;
