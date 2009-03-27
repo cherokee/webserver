@@ -510,6 +510,14 @@ build_request (cherokee_handler_proxy_t *hdl,
 	{
 		cherokee_buffer_add_str    (buf, "X-Forwarded-Host: ");
 		cherokee_buffer_add_buffer (buf, &conn->host);
+
+		if (((! conn->socket.is_tls) && (conn->bind->port != 80)) ||
+		    ((  conn->socket.is_tls) && (conn->bind->port != 443)))
+		{
+			cherokee_buffer_add_char    (buf, ':');
+			cherokee_buffer_add_ulong10 (buf, conn->bind->port);
+		}
+
 		cherokee_buffer_add_str    (buf, CRLF);
 	}
 

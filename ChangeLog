@@ -1,5 +1,8 @@
 2009-03-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (build_request): X-Forwarded-Host
+	should include the port if it isn't standard.
+
 	* cherokee/http.c, cherokee/http.h: Adds error code 408.
 
 	* cherokee/handler_proxy.c, cherokee/connection.c: Fixes a
