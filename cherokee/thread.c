@@ -1380,6 +1380,8 @@ thread_full_handler (cherokee_thread_t *thd,
 
 	if (ret != ret_ok)
 		goto out;
+
+	PRINT_ERROR_S ("WARNING: Run out of file descriptors!!\n");
 	
 	/* Read the request
 	 */
