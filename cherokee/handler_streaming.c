@@ -366,6 +366,12 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 		return ret_error;
 	}
 
+	/* Sanity Check
+	 */
+	if ((rate < 0) || (secs < 0)) {
+		return ret_error;
+	}
+
 	/* bits/s to bytes/s
 	 */
 	rate = (hdl->avformat->bit_rate / 8);

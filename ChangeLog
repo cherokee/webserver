@@ -1,5 +1,8 @@
 2009-03-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_streaming.c (set_auto_rate): Adds a missing
+	check: http://code.google.com/p/cherokee/issues/detail?id=415
+
 	* cherokee/handler_proxy.c, cherokee/handler_proxy.h,
 	admin/ModuleProxy.py: This patch adds a new configuration option
 	to the reverse proxy. It allows to point Cherokee whether or not
