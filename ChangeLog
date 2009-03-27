@@ -1,3 +1,9 @@
+2009-03-27  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/PageNewConfig.py (PageNewConfig._tweak_config_for_dev):
+	Adds a second default Information Source. It does not hurt and
+	it's kind of handy.
+
 2009-03-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/connection-protected.h, cherokee/handler_cgi_base.c,
