@@ -1,5 +1,7 @@
 2009-03-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* 0.99.7 released
+
 	* cherokee/handler_proxy.c (add_request): Fixes a regex issue:
 	http://code.google.com/p/cherokee/issues/detail?id=410
 
