@@ -262,9 +262,11 @@ add_request (cherokee_handler_proxy_t *hdl,
 		return ret_error;
 	}
 
-	ret = cherokee_buffer_escape_uri (tmp, &conn->pathinfo);
-	if (ret != ret_ok) {
-		return ret_error;
+	if (! cherokee_buffer_is_empty (&conn->pathinfo)) {
+		ret = cherokee_buffer_escape_uri (tmp, &conn->pathinfo);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
 	}
 
 	if (! cherokee_buffer_is_empty (&conn->query_string)) {

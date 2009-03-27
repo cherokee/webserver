@@ -1,5 +1,8 @@
 2009-03-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c, cherokee/connection.c: Fixes a
+	regression that was introduced yesterday. 
+
 	* admin/PageNewConfig.py (PageNewConfig._tweak_config_for_dev):
 	Adds a second default Information Source. It does not hurt and
 	it's kind of handy.

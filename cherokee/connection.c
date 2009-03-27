@@ -1371,10 +1371,6 @@ get_encoding (cherokee_connection_t *conn,
 
 	*end = CHR_CR; /* (1') */
 	return ret_ok;
-
-error:
-	*end = CHR_CR; /* (1') */
-	return ret_error;
 }
 
 
