@@ -129,7 +129,12 @@ class Handler(pyscgi.SCGIHandler):
         elif uri.startswith('/create_config'):
             tmp = PageNewConfig (cfg)
             body = tmp.HandleRequest(uri, Post(''))
-            cfg = Config (cfg.file)
+            if body:
+                cfg = Config (cfg.file)
+            else:
+                tmp = PageError (cfg, PageError.CONFIG_NOT_WRITABLE)
+                body = tmp._op_render()
+
         elif uri.startswith('/ajax/update'):
             page = PageAjaxUpdate (cfg)
         elif uri.startswith('/rule'):

@@ -1,3 +1,9 @@
+2009-03-28  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/server.py, admin/PageNewConfig.py,
+	admin/CherokeeManagement.py: Shows an error if configuration file
+	could not be created.
+
 2009-03-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.7 released

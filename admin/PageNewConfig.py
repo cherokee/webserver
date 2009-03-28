@@ -47,17 +47,20 @@ class PageNewConfig (Page, FormHelper):
     def _op_handler (self, uri, post):
         if uri == "/regular":
             manager = cherokee_management_get (self._cfg)
-            manager.create_config (self._cfg.file, "cherokee.conf.sample")
+            if not manager.create_config (self._cfg.file, "cherokee.conf.sample"):
+                return None
             cherokee_management_reset()
             return "/"
         elif uri == "/performance":
             manager = cherokee_management_get (self._cfg)
-            manager.create_config (self._cfg.file, "performance.conf.sample")
+            if not manager.create_config (self._cfg.file, "performance.conf.sample"):
+                return None
             cherokee_management_reset()
             return "/"
         elif uri == "/development":
             manager = cherokee_management_get (self._cfg)
-            manager.create_config (self._cfg.file, "cherokee.conf.sample")
+            if not manager.create_config (self._cfg.file, "cherokee.conf.sample"):
+                return None
             cherokee_management_reset()
             self._tweak_config_for_dev()
             return "/"
