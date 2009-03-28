@@ -61,8 +61,8 @@ class PageNewConfig (Page, FormHelper):
             manager = cherokee_management_get (self._cfg)
             if not manager.create_config (self._cfg.file, "cherokee.conf.sample"):
                 return None
-            cherokee_management_reset()
             self._tweak_config_for_dev()
+            cherokee_management_reset()
             return "/"
         else:
             return self._op_render()
