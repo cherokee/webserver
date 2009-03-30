@@ -1,5 +1,11 @@
 2009-03-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/rule_extensions.c, qa/220-Pathinfo-Slash.py,
+	qa/Makefile.am: If a slash character is appended after a file,
+	the extension matching rule must recognize it and set the slash
+	as PATH_INFO. It also adds a new QA test to ensure the server
+	suffers the same regression again.
+
 	* cherokee/rule_extensions.c, qa/219-Ext-Dot-Pathinfo.py,
 	qa/Makefile.am: Fixes a problem on the extensions rule matching
 	module. It was not working properly when a request contained dot

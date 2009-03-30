@@ -114,9 +114,6 @@ match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
 		/* Find a slash after the dot */
 		while (p < end) {
 			if (*p == '/') {
-				if (p[1] == '\0') {
-					return ret_not_found;
-				}
 				slash = p;
 				*p = '\0';
 				break;

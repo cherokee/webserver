@@ -224,7 +224,8 @@ run-tests.py \
 216-NameSpace.py \
 217-DoubleEncode.py \
 218-DrupalRedirect.py \
-219-Ext-Dot-Pathinfo.py
+219-Ext-Dot-Pathinfo.py \
+220-Pathinfo-Slash.py
 
 
 test:
