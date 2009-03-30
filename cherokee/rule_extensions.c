@@ -89,50 +89,77 @@ match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
 	ret_t  ret;
 	char  *dot;
 	char  *slash;
+	char  *end;
+	char  *p;
 	void  *foo;
+	char  *dot_prev = NULL;
 
 	/* Dot at the end */
 	if (unlikely (cherokee_buffer_is_ending (&conn->request, '.')))
 		return ret_not_found;
 
-	/* Find the extension */
-	dot = strrchr (conn->request.buf, '.');
+	end = conn->request.buf + conn->request.len;
+	p   = end - 1;
 
-	/* No extension */
-	if (dot == NULL)
-		return ret_not_found;
-
-	/* Does it have pathinfo?
-	 */
-	slash = strchr (dot+1, '/');
-	if (slash != NULL) {
-		if (unlikely (slash[1] == '\0')) {
-			return ret_not_found;
+	/* For each '.' */
+	while (p > conn->request.buf) {
+		if (*p != '.') {
+			p--;
+			continue;
 		}
-		*slash = '\0';
+
+		dot   = p;
+		slash = NULL;
+
+		/* Find a slash after the dot */
+		while (p < end) {
+			if (*p == '/') {
+				if (p[1] == '\0') {
+					return ret_not_found;
+				}
+				slash = p;
+				*p = '\0';
+				break;
+			}
+
+			p++;
+
+			if ((dot_prev != NULL) && (p >= dot_prev)) {
+				break;
+			}
+		}
+
+		/* Check it out */
+		ret = cherokee_avl_get_ptr (&rule->extensions, dot+1, &foo);
+		switch (ret) {
+		case ret_ok:
+			TRACE(ENTRIES, "Match extension: '%s'\n", dot+1);
+ 			if (slash != NULL) {
+				*slash = '/';
+			}
+			return ret_ok;
+		case ret_not_found:
+			TRACE(ENTRIES, "Rule extension: did not match '%s'\n", dot+1);
+			break;
+		default:
+			conn->error_code = http_internal_error;
+			return ret_error;
+		}
+
+		/* Revert pathinfo match char
+		 */
+		if (slash != NULL) {
+			*slash = '/';
+		}
+
+		dot_prev = dot;
+		p = dot - 1;
 	}
 
-	/* Check it out */
-	ret = cherokee_avl_get_ptr (&rule->extensions, dot+1, &foo);
-	switch (ret) {
-	case ret_ok:
-		TRACE(ENTRIES, "Match extension: '%s'\n", dot+1);
-		if (slash != NULL)
-			*slash = '/';
-		return ret_ok;
-	case ret_not_found:
-		TRACE(ENTRIES, "Rule extension: did not match '%s'\n", dot+1);
-		if (slash != NULL)
-			*slash = '/';
-		return ret_not_found;
-	default:
-		conn->error_code = http_internal_error;
-		return ret_error;
-	}
-
-	SHOULDNT_HAPPEN;
-	return ret_error;
+	TRACE(ENTRIES, "Rule extension: nothing more to test '%s'\n", conn->request.buf);
+	return ret_not_found;
 }
+
 
 ret_t
 cherokee_rule_extensions_new (cherokee_rule_extensions_t **rule)

@@ -1,5 +1,11 @@
 2009-03-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/rule_extensions.c, qa/219-Ext-Dot-Pathinfo.py,
+	qa/Makefile.am: Fixes a problem on the extensions rule matching
+	module. It was not working properly when a request contained dot
+	characters on its PathInfo section. It also adds a new QA test
+	(#219) to cover this case.
+
 	* cherokee/handler_cgi_base.c, qa/218-DrupalRedirect.py,
 	qa/Makefile.am: There was a problem running Drupal with 'clean
 	url's. This patch fixes the issue. Basically, the *cgi class was

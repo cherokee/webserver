@@ -223,7 +223,8 @@ run-tests.py \
 215-Post-Chunked3.py \
 216-NameSpace.py \
 217-DoubleEncode.py \
-218-DrupalRedirect.py
+218-DrupalRedirect.py \
+219-Ext-Dot-Pathinfo.py
 
 
 test:
