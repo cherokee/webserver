@@ -16,9 +16,6 @@ vserver!1250!rule!10!handler!rewrite!1!substring = http://www.<domain>/$1
 vserver!1251!nick = www.<domain>
 vserver!1251!document_root = %s
 vserver!1251!domain!1 = www.<domain>
-
-vserver!1251!rule!10!match = default
-vserver!1251!rule!10!handler = file
 """
 
 class Test (TestBase):
