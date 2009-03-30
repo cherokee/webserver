@@ -1,3 +1,8 @@
+2009-03-30  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/ModuleHeader.py, cherokee/rule_header.c (match): Adds a
+	new "Cookie" option to the Header matching rule.
+
 2009-03-28  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/server.py, admin/PageNewConfig.py,

@@ -13,7 +13,8 @@ HEADERS = [
     ('Accept-Charset',  'Accept-Charset'),
     ('Accept-Language', 'Accept-Language'),
     ('Referer',         'Referer'),
-    ('User-Agent',      'User-Agent')
+    ('User-Agent',      'User-Agent'),
+    ('Cookie',          'Cookie')
 ]
 
 class ModuleHeader (Module, FormHelper):
