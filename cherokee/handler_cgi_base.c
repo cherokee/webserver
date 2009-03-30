@@ -376,14 +376,15 @@ cherokee_handler_cgi_base_build_basic_env (
 			cherokee_buffer_add_buffer (tmp, &conn->userdir);
 		}
 
-		if (! cherokee_buffer_is_empty (&conn->request_original))
+		if (! cherokee_buffer_is_empty (&conn->request_original)) {
 			cherokee_buffer_add_buffer (tmp, &conn->request_original);
-		else
+		} else {
 			cherokee_buffer_add_buffer (tmp, &conn->request);
 
-		if (! cherokee_buffer_is_empty (&conn->query_string)) {
-			cherokee_buffer_add_char (tmp, '?');
-			cherokee_buffer_add_buffer (tmp, &conn->query_string);
+			if (! cherokee_buffer_is_empty (&conn->query_string)) {
+				cherokee_buffer_add_char (tmp, '?');
+				cherokee_buffer_add_buffer (tmp, &conn->query_string);
+			}
 		}
 	}
 	set_env (cgi, "REQUEST_URI", tmp->buf, tmp->len);
@@ -452,6 +453,8 @@ cherokee_handler_cgi_base_build_basic_env (
 	/* Authentication
 	 */
 	switch (conn->req_auth_type) {
+	case http_auth_nothing:
+		break;
 	case http_auth_basic:
 		set_env (cgi, "AUTH_TYPE", "BASIC", 5);
 		break;

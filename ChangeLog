@@ -1,5 +1,12 @@
 2009-03-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_cgi_base.c, qa/218-DrupalRedirect.py,
+	qa/Makefile.am: There was a problem running Drupal with 'clean
+	url's. This patch fixes the issue. Basically, the *cgi class was
+	setting the REQUEST_URI value to the original URL plus the new
+	[already rewritten] query_string. The new QA #218 checks the
+	scenario (using a CGI instead of a php file).
+
 	* admin/ModuleHeader.py, cherokee/rule_header.c (match): Adds a
 	new "Cookie" option to the Header matching rule.
 
