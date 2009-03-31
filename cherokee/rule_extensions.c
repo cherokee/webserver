@@ -94,16 +94,22 @@ match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
 	void  *foo;
 	char  *dot_prev = NULL;
 
-	/* Dot at the end */
-	if (unlikely (cherokee_buffer_is_ending (&conn->request, '.')))
-		return ret_not_found;
-
 	end = conn->request.buf + conn->request.len;
 	p   = end - 1;
 
 	/* For each '.' */
 	while (p > conn->request.buf) {
 		if (*p != '.') {
+			p--;
+			continue;
+		}
+
+		if (p[1] == '\0') {
+			p--;
+			continue;
+		}
+
+		if (p[1] == '/') {
 			p--;
 			continue;
 		}
