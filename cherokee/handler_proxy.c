@@ -839,7 +839,6 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	cherokee_connection_t          *conn         = HANDLER_CONN(hdl);
 	cherokee_handler_proxy_props_t *props        = HDL_PROXY_PROPS(hdl);
 
-
 	p = buf_in->buf;
 	header_end = buf_in->buf + buf_in->len;
 
@@ -917,6 +916,9 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 				hdl->pconn->keepalive_in = false;
 			}
 
+			goto next;
+
+		} else  if (strncmp (begin, "Keep-Alive:", 11) == 0) {
 			goto next;
 
 		} else  if (strncmp (begin, "Content-Length:", 15) == 0) {

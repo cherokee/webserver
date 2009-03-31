@@ -1,5 +1,9 @@
 2009-03-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (parse_server_header): Remove the
+	keep-alive header. It will be added later on if case it is
+	replying a keep-alive connection.
+
 	* cherokee/connection.c: Fixes a huge regression. The server was
 	including a Content-Length header even if an encoder (gzip or
 	deflate) was being aplied to the content.
