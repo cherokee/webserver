@@ -1,5 +1,7 @@
 2009-03-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* 0.99.8 released
+
 	* cherokee/connection.c (cherokee_connection_instance_encoder):
 	Fixes a memory leak when using the Reverse HTTP proxy in
 	conjunction with an encoder.
