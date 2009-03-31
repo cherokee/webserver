@@ -1,5 +1,9 @@
 2009-03-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/connection.c (cherokee_connection_instance_encoder):
+	Fixes a memory leak when using the Reverse HTTP proxy in
+	conjunction with an encoder.
+
 	* cherokee/handler_proxy.c (parse_server_header): Remove the
 	keep-alive header. It will be added later on if case it is
 	replying a keep-alive connection.

@@ -736,10 +736,13 @@ cherokee_connection_build_header (cherokee_connection_t *conn)
 		}
 	}
 
-	/* handler::add_headers() might have activated the
-	 * conn_op_cant_encoder bit. If so, a encoder cannot be used
+	/* Instance an encoder if needed. Special-case: the proxy
+	 * handler might have instanced a encoded at this stage.
 	 */
-	if (conn->encoder_new_func) {
+	if ((conn->encoder == NULL) &&
+	    (conn->encoder_new_func))
+	{
+		/* Internally checks conn_op_cant_encoder */
 		cherokee_connection_instance_encoder (conn);
 	}
 
@@ -1114,9 +1117,16 @@ cherokee_connection_instance_encoder (cherokee_connection_t *conn)
 {
 	ret_t ret;
 
+	/* Ensure that the content can be encoded
+	 */
 	if (conn->options & conn_op_cant_encoder)
 		return ret_deny;
 
+	if (! http_type_200 (conn->error_code))
+		return ret_deny;
+
+	/* Instance and initialize the encoder
+	 */
 	ret = conn->encoder_new_func ((void **)&conn->encoder);
 	if (unlikely (ret != ret_ok))
 		goto error;
