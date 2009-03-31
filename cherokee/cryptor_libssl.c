@@ -190,6 +190,18 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	SSL_CTX_set_options (n->context, SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS);
 #endif
 
+	/* Set cipher list that vserver will accept.
+	 */
+	if (! cherokee_buffer_is_empty (&vsrv->ciphers)) {
+		rc = SSL_CTX_set_cipher_list (n->context, vsrv->ciphers.buf);
+		if (rc != 1) {
+			OPENSSL_LAST_ERROR(error);
+			PRINT_ERROR("ERROR: OpenSSL: Can not set cipher list '%s': %s\n",
+			            vsrv->ciphers.buf, error);
+			return ret_error;
+		}
+	}
+
 	/* Certificate
 	 */
 #if (OPENSSL_VERSION_NUMBER < 0x0090808fL)

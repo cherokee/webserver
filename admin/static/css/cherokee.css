@@ -500,6 +500,13 @@ table tr th {
   margin-right: 20px;
 }
 
+.comment a {
+	display: inline;
+	font-size: 100%;
+	top: 0;
+	padding: 0;
+}
+
 .tableprop .title {
   font-weight: bold;
 }

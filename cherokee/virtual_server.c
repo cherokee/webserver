@@ -82,6 +82,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	cherokee_buffer_init (&n->server_key);
 	cherokee_buffer_init (&n->certs_ca);
 	cherokee_buffer_init (&n->req_client_certs);
+	cherokee_buffer_init (&n->ciphers);
 
 	ret = cherokee_buffer_init (&n->root);
 	if (unlikely(ret < ret_ok))
@@ -111,6 +112,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	cherokee_buffer_mrproper (&vserver->server_key);
 	cherokee_buffer_mrproper (&vserver->certs_ca);
 	cherokee_buffer_mrproper (&vserver->req_client_certs);
+	cherokee_buffer_mrproper (&vserver->ciphers);
 
 	if (vserver->error_handler != NULL) {
 		cherokee_config_entry_free (vserver->error_handler);
@@ -708,20 +710,19 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		vserver->verify_depth = !!atoi (conf->val.buf);
 
 	} else if (equal_buf_str (&conf->key, "ssl_certificate_file")) {
-		cherokee_buffer_init (&vserver->server_cert);
 		cherokee_buffer_add_buffer (&vserver->server_cert, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "ssl_certificate_key_file")) {
-		cherokee_buffer_init (&vserver->server_key);
 		cherokee_buffer_add_buffer (&vserver->server_key, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "ssl_ca_list_file")) {
-		cherokee_buffer_init (&vserver->certs_ca);
 		cherokee_buffer_add_buffer (&vserver->certs_ca, &conf->val);
 
 	} else if (equal_buf_str (&conf->key, "ssl_client_certs")) {
-		cherokee_buffer_init (&vserver->req_client_certs);
 		cherokee_buffer_add_buffer (&vserver->req_client_certs, &conf->val);
+
+	} else if (equal_buf_str (&conf->key, "ssl_ciphers")) {
+		cherokee_buffer_add_buffer (&vserver->ciphers, &conf->val);
 
 	} else {
 		PRINT_MSG ("ERROR: Virtual Server: Unknown key '%s'\n", conf->key.buf);

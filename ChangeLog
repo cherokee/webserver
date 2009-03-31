@@ -24,6 +24,10 @@
 	DOCUMENT_ROOT environment variables.
 	http://lists.octality.com/pipermail/cherokee/2009-March/009998.html
 
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/cryptor_libssl.c, admin/PageVServer.py,
+	admin/static/css/cherokee.css: Adds SSL/TLS custom cipher list.
+
 2009-03-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/rule_extensions.c, qa/220-Pathinfo-Slash.py,

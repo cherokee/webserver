@@ -29,6 +29,7 @@ NOTE_NICKNAME        = 'Nickname for the virtual server.'
 NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server (Full path to the file)'
 NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server (Full path to the file)'
 NOTE_CA_LIST         = 'Optional: File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)'
+NOTE_CIPHERS         = 'Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: all ciphers supported by the OpenSSL version used).'
 NOTE_CLIENT_CERTS    = 'Optional: Skip, Accept or Require client certificates.'
 NOTE_VERIFY_DEPTH    = 'Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)'
 NOTE_ERROR_HANDLER   = 'Allows the selection of how to generate the error responses.'
@@ -245,6 +246,7 @@ class PageVServer (PageMenu, FormHelper):
 
         txt += '<h2>Advanced options</h2>'
         table = TableProps()
+        self.AddPropEntry (table, 'Ciphers', '%s!ssl_ciphers' % (pre), NOTE_CIPHERS)
         self.AddPropOptions_Ajax (table, 'Client Certs. Request',
                                          '%s!ssl_client_certs' % (pre),
                                          CLIENT_CERTS, 
