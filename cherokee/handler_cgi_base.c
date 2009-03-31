@@ -826,11 +826,8 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 					pathinfo_len = end - p;
 					cherokee_buffer_drop_ending (&conn->local_directory, pathinfo_len);
 				} 
-
-/* 				if (p <= begin) { */
-/* 					conn->error_code = http_not_found; */
-/* 					goto bye; */
-/* 				} */
+			} else {
+				pathinfo_len = conn->pathinfo.len;
 			}
 		} 
 		else {

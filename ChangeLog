@@ -3,6 +3,11 @@
 	* cherokee/rule_extensions.c: A dot at the end of the url or
 	followed by a slash, is not an extension.
 
+	* cherokee/handler_cgi_base.c: Fixes a path_info related bug
+	that was causing wrong values in SCRIPT_NAME, PHP_SELF and
+	DOCUMENT_ROOT environment variables.
+	http://lists.octality.com/pipermail/cherokee/2009-March/009998.html
+
 2009-03-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/rule_extensions.c, qa/220-Pathinfo-Slash.py,
