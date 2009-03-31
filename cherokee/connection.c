@@ -1098,6 +1098,9 @@ out:
 int
 cherokee_connection_should_include_length (cherokee_connection_t *conn)
 {
+	if (conn->encoder_new_func) {
+		return false;
+	}
 	if (conn->encoder) {
 		return false;
 	}
@@ -1116,14 +1119,21 @@ cherokee_connection_instance_encoder (cherokee_connection_t *conn)
 
 	ret = conn->encoder_new_func ((void **)&conn->encoder);
 	if (unlikely (ret != ret_ok))
-		return ret_error;
+		goto error;
 		
 	ret = cherokee_encoder_init (conn->encoder, conn);
 	if (unlikely (ret != ret_ok))
-		return ret_error;
+		goto error;
 	
 	cherokee_buffer_clean (&conn->encoder_buffer);
 	return ret_ok;
+
+error:
+	if (conn->encoder) {
+		cherokee_encoder_free (conn->encoder);
+		conn->encoder = NULL;
+	}
+	return ret_error;
 }
 
 

@@ -1,3 +1,9 @@
+2009-03-31  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/connection.c: Fixes a huge regression. The server was
+	including a Content-Length header even if an encoder (gzip or
+	deflate) was being aplied to the content.
+
 2009-03-31  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/rule_extensions.c: A dot at the end of the url or
