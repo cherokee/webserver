@@ -253,6 +253,10 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 	cherokee_buffer_add        (buf, method, method_len);
 	cherokee_buffer_add_char   (buf, ' ');
 	cherokee_buffer_add_buffer (buf, request);
+	if (! cherokee_buffer_is_empty (&cnt->query_string)) {
+		cherokee_buffer_add_char   (buf, '?');
+		cherokee_buffer_add_buffer (buf, &cnt->query_string);
+	}
 	cherokee_buffer_add_char   (buf, ' ');
 	cherokee_buffer_add        (buf, version, version_len);
 	cherokee_buffer_add_str    (buf, "\" ");

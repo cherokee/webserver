@@ -1,5 +1,8 @@
 2009-04-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/logger_ncsa.c (build_log_string): The query_string was
+	not being included in the logger. Patch by bozzaj.
+
 	* cherokee/logger_ncsa.c (build_log_string): Negative Timezones
 	were incorrectly printed in the log files. Patch by bozzaj.
 
