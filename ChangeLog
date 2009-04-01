@@ -1,5 +1,8 @@
 2009-04-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/logger_ncsa.c (build_log_string): Negative Timezones
+	were incorrectly printed in the log files. Patch by bozzaj.
+
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,
 	cherokee/logger_writer.c, cherokee/logger_writer.h,
 	cherokee/logger.h, cherokee/logger_w3c.c, cherokee/logger_w3c.h,

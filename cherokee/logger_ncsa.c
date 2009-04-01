@@ -210,9 +210,8 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 				pnow_tm->tm_min, 
 				pnow_tm->tm_sec,
 				(logger->tz < 0) ? '-' : '+', 
-				(int) (logger->tz / 60), 
-				(int) (logger->tz % 60)
-				);
+				(int) (abs(logger->tz) / 60), 
+				(int) (abs(logger->tz) % 60));
 	}
 
 	memset (ipaddr, 0, sizeof(ipaddr));
