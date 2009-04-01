@@ -312,21 +312,35 @@ ret_t
 cherokee_logger_writer_get_buf (cherokee_logger_writer_t *writer, cherokee_buffer_t **buf)
 {
 	*buf = &writer->buffer;
+	CHEROKEE_MUTEX_LOCK (&writer->mutex);
+
+	return ret_ok;
+}
+
+ret_t
+cherokee_logger_writer_release_buf (cherokee_logger_writer_t *writer)
+{
+	CHEROKEE_MUTEX_UNLOCK (&writer->mutex);
 	return ret_ok;
 }
 
 
 ret_t 
-cherokee_logger_writer_flush (cherokee_logger_writer_t *writer)
+cherokee_logger_writer_flush (cherokee_logger_writer_t *writer, 
+			      cherokee_boolean_t        locked)
 {
+	int   re;
 	ret_t ret = ret_ok;
 
 	/* The internal buffer might be empty
 	 */
-	if (cherokee_buffer_is_empty (&writer->buffer))
+	if (cherokee_buffer_is_empty (&writer->buffer)) {
 		return ret_ok;
+	}
 
-	CHEROKEE_MUTEX_LOCK (&writer->mutex);
+	if (!locked) {
+		CHEROKEE_MUTEX_LOCK (&writer->mutex);
+	}
 
 	/* If not, do the proper thing
 	 */
@@ -334,9 +348,11 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer)
 	case cherokee_logger_writer_stderr:
 		/* In this case we ignore errors.
 		 */
-		if (fwrite (writer->buffer.buf, 1, writer->buffer.len, stderr)
-			!= (size_t) writer->buffer.len)
+		re = fwrite (writer->buffer.buf, 1, writer->buffer.len, stderr); 
+		if (re != (size_t) writer->buffer.len) {
 			ret = ret_error;
+		}
+
 		/* Cleanup the log buffer even if there is an error,
 		 * because it's safer to go on anyway.
 		 */
@@ -392,7 +408,9 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer)
 	}
 
 out:
-	CHEROKEE_MUTEX_UNLOCK (&writer->mutex);
+	if (! locked) {
+		CHEROKEE_MUTEX_UNLOCK (&writer->mutex);
+	}
 	return ret;
 }
 

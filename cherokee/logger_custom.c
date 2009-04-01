@@ -489,7 +489,7 @@ cherokee_logger_custom_free (cherokee_logger_custom_t *logger)
 ret_t
 cherokee_logger_custom_flush (cherokee_logger_custom_t *logger)
 {
-	return cherokee_logger_writer_flush (logger->writer_access);
+	return cherokee_logger_writer_flush (logger->writer_access, false);
 }
 
 ret_t
@@ -528,28 +528,33 @@ cherokee_logger_custom_write_access (cherokee_logger_custom_t *logger,
 	
 	/* Get the buffer
 	 */
-	ret = cherokee_logger_writer_get_buf (logger->writer_access, &log);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	cherokee_logger_writer_get_buf (logger->writer_access, &log);
 
 	/* Render the template
 	 */
 	ret = cherokee_template_render (&logger->template_conn, log, conn);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	if (unlikely (ret != ret_ok)) {
+		goto error;
+	}
 
 	cherokee_buffer_add_char (log, '\n');
 
 	/* Flush buffer if full
 	 */  
 	if (log->len < logger->writer_access->max_bufsize)
-		return ret_ok;
+		goto ok;
 
-	ret = cherokee_logger_writer_flush (logger->writer_access);
+	ret = cherokee_logger_writer_flush (logger->writer_access, true);
 	if (unlikely (ret != ret_ok))
-		return ret;
+		goto error;
 
+ok:
+	cherokee_logger_writer_release_buf (logger->writer_access);
 	return ret_ok;
+
+error:
+	cherokee_logger_writer_release_buf (logger->writer_access);
+	return ret_error;
 }
 
 ret_t
@@ -561,25 +566,30 @@ cherokee_logger_custom_write_error (cherokee_logger_custom_t *logger,
 
 	/* Get the buffer
 	 */
-	ret = cherokee_logger_writer_get_buf (logger->writer_error, &log);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	cherokee_logger_writer_get_buf (logger->writer_error, &log);
 
 	/* Render the template
 	 */
 	ret = cherokee_template_render (&logger->template_error, log, conn);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	if (unlikely (ret != ret_ok)) {
+		goto error;
+	}
 
 	cherokee_buffer_add_char (log, '\n');
 
 	/* It's an error. Flush it!
 	 */
-	ret = cherokee_logger_writer_flush (logger->writer_error);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	ret = cherokee_logger_writer_flush (logger->writer_error, true);
+	if (unlikely (ret != ret_ok)) {
+		goto error;
+	}
 
+	cherokee_logger_writer_release_buf (logger->writer_error);
 	return ret_ok;
+
+error:
+	cherokee_logger_writer_release_buf (logger->writer_error);
+	return ret_error;
 }
 
 ret_t
@@ -589,22 +599,31 @@ cherokee_logger_custom_write_string (cherokee_logger_custom_t *logger,
 	ret_t              ret;
 	cherokee_buffer_t *log;
 
-	ret = cherokee_logger_writer_get_buf (logger->writer_access, &log);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	/* Get the buffer
+	 */
+	cherokee_logger_writer_get_buf (logger->writer_access, &log);
 
 	ret = cherokee_buffer_add (log, string, strlen(string));
- 	if (unlikely (ret != ret_ok))
-		return ret;
+ 	if (unlikely (ret != ret_ok)) {
+		goto error;
+	}
 
 	/* Flush buffer if full
 	 */  
-  	if (log->len < logger->writer_access->max_bufsize)
-		return ret_ok;
+  	if (log->len < logger->writer_access->max_bufsize) {
+		goto ok;
+	}
 
-	ret = cherokee_logger_writer_flush (logger->writer_access);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	ret = cherokee_logger_writer_flush (logger->writer_access, true);
+	if (unlikely (ret != ret_ok)) {
+		goto error;
+	}
 
+ok:
+	cherokee_logger_writer_release_buf (logger->writer_access);
 	return ret_ok;
+
+error:
+	cherokee_logger_writer_release_buf (logger->writer_access);
+	return ret_error;
 }

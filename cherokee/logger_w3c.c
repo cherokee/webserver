@@ -162,7 +162,7 @@ cherokee_logger_w3c_reopen (cherokee_logger_w3c_t *logger)
 ret_t
 cherokee_logger_w3c_flush (cherokee_logger_w3c_t *logger)
 {
-	return cherokee_logger_writer_flush (logger->writer);
+	return cherokee_logger_writer_flush (logger->writer, false);
 }
 
 
@@ -177,9 +177,7 @@ cherokee_logger_w3c_write_error (cherokee_logger_w3c_t *logger, cherokee_connect
 
 	/* Get the logger writer buffer
 	 */
-	ret = cherokee_logger_writer_get_buf (logger->writer, &log);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	cherokee_logger_writer_get_buf (logger->writer, &log);
 
 	/* Read the bogonow value from the server
 	 */
@@ -231,11 +229,18 @@ cherokee_logger_w3c_write_error (cherokee_logger_w3c_t *logger, cherokee_connect
 
 	/* Error are not buffered
 	 */  	
-	ret = cherokee_logger_writer_flush (logger->writer);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	ret = cherokee_logger_writer_flush (logger->writer, true);
+	if (unlikely (ret != ret_ok)) {
+		goto error;
+	}
 
+ok:
+	cherokee_logger_writer_release_buf (logger->writer);
 	return ret_ok;
+
+error:
+	cherokee_logger_writer_release_buf (logger->writer);
+	return ret_error;
 }
 
 
@@ -258,22 +263,33 @@ cherokee_logger_w3c_write_string (cherokee_logger_w3c_t *logger, const char *str
 	ret_t              ret;
 	cherokee_buffer_t *log;
 
-	ret = cherokee_logger_writer_get_buf (logger->writer, &log);
-	if (unlikely (ret != ret_ok)) return ret;
+	/* Get the buffer
+	 */
+	cherokee_logger_writer_get_buf (logger->writer, &log);
 
 	ret = cherokee_buffer_add (log, string, strlen(string));
- 	if (unlikely (ret != ret_ok)) return ret;
+ 	if (unlikely (ret != ret_ok)) { 
+		goto error;
+	}
   
 	/* Flush buffer if full
 	 */  
-  	if (log->len < logger->writer->max_bufsize)
-		return ret_ok;
+  	if (log->len < logger->writer->max_bufsize) {
+		goto ok;
+	}
 
-	ret = cherokee_logger_writer_flush (logger->writer);
-	if (unlikely (ret != ret_ok))
-		return ret;
+	ret = cherokee_logger_writer_flush (logger->writer, true);
+	if (unlikely (ret != ret_ok)) {
+		goto error;
+	}
 
+ok:
+	cherokee_logger_writer_release_buf (logger->writer);
 	return ret_ok;
+
+error:
+	cherokee_logger_writer_release_buf (logger->writer);
+	return ret_error;
 }
 
 
@@ -288,8 +304,7 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 
 	/* Get the logger writer buffer
 	 */
-	ret = cherokee_logger_writer_get_buf (logger->writer, &log);
-	if (unlikely (ret != ret_ok)) return ret;
+	cherokee_logger_writer_get_buf (logger->writer, &log);
 
 	/* Read the bogonow value from the server
 	 */
@@ -338,6 +353,7 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 	cherokee_buffer_add_buffer (log, request);
 	cherokee_buffer_add_char   (log, '\n');
 
+	cherokee_logger_writer_release_buf (logger->writer);
 	return ret_ok;
 }
 
