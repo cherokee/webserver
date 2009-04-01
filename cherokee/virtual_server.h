@@ -53,7 +53,6 @@ typedef struct {
 	cherokee_config_entry_t     *error_handler;   /* Default error handler       */
 
 	cherokee_logger_t           *logger;          /* Logger object               */
-	cherokee_avl_t              *logger_props;    /* Logger properties table     */
 
 	cherokee_buffer_t            userdir;         /* Eg: public_html             */
 	cherokee_rule_list_t         userdir_rules;   /* User dir behavior           */

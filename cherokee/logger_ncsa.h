@@ -30,7 +30,7 @@
 #include "connection.h"
 #include "logger.h"
 #include "logger_writer.h"
-
+#include "virtual_server.h"
 
 typedef struct {
 	cherokee_logger_t logger;
@@ -44,13 +44,13 @@ typedef struct {
 	cherokee_buffer_t  referer;
 	cherokee_buffer_t  useragent;
 
-	cherokee_logger_writer_t writer_access;
-	cherokee_logger_writer_t writer_error;
+	cherokee_logger_writer_t *writer_access;
+	cherokee_logger_writer_t *writer_error;
 } cherokee_logger_ncsa_t;
 
 
-ret_t cherokee_logger_ncsa_new       (cherokee_logger_t     **logger, cherokee_config_node_t *config);
-ret_t cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t *logger, cherokee_config_node_t *config);
+ret_t cherokee_logger_ncsa_new       (cherokee_logger_t     **logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
+ret_t cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t *logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
 ret_t cherokee_logger_ncsa_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **props);
 
 /* virtual methods implementation

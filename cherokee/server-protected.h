@@ -55,7 +55,7 @@
 #include "config_node.h"
 #include "version.h"
 #include "cryptor.h"
-
+#include "logger_writer.h"
 
 struct cherokee_server {
 	/* Exit related
@@ -91,6 +91,9 @@ struct cherokee_server {
 
 	/* Programmed tasks
 	 */
+	cherokee_list_t            logger_writers;
+	cherokee_avl_t             logger_writers_index;
+
 	int                        log_flush_lapse;
 	time_t                     log_flush_next;
 
@@ -174,5 +177,6 @@ struct cherokee_server {
 ret_t cherokee_server_del_connection (cherokee_server_t *srv, char *begin);
 ret_t cherokee_server_get_vserver    (cherokee_server_t *srv, cherokee_buffer_t *name, cherokee_virtual_server_t **vsrv);
 ret_t cherokee_server_get_next_bind  (cherokee_server_t *srv, cherokee_bind_t *bind, cherokee_bind_t **next);
+ret_t cherokee_server_get_log_writer (cherokee_server_t *srv, cherokee_config_node_t *config, cherokee_logger_writer_t **writer);
 
 #endif /* CHEROKEE_SERVER_PROTECTED_H */

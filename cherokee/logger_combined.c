@@ -33,7 +33,9 @@ PLUGIN_INFO_LOGGER_EASIEST_INIT(combined);
 
 
 ret_t
-cherokee_logger_combined_new (cherokee_logger_t **logger, cherokee_config_node_t *config)
+cherokee_logger_combined_new (cherokee_logger_t         **logger,
+			      cherokee_virtual_server_t  *vsrv,
+			      cherokee_config_node_t     *config)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT(n, logger_combined);
@@ -53,7 +55,7 @@ cherokee_logger_combined_new (cherokee_logger_t **logger, cherokee_config_node_t
 
 	/* Init the base class: NCSA
 	 */
-	ret = cherokee_logger_ncsa_init_base (n, config);
+	ret = cherokee_logger_ncsa_init_base (n, vsrv, config);
 	if (unlikely(ret < ret_ok)) return ret;
 
 	/* Active the "Combined" bit

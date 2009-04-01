@@ -184,11 +184,16 @@ cherokee_server_new  (cherokee_server_t **srv)
 	 */
 	n->server_token = cherokee_version_full;
 
-	/* Programmed tasks
+	/* Logs
 	 */
+	cherokee_avl_init (&n->logger_writers_index);
+	INIT_LIST_HEAD (&n->logger_writers);
+
 	n->log_flush_next        = 0;
 	n->log_flush_lapse      = LOGGER_FLUSH_LAPSE;
-
+	
+	/* Programmed tasks
+	 */
 	n->nonces_cleanup_next   = 0;
 	n->nonces_cleanup_lapse = NONCE_CLEANUP_LAPSE;
 
@@ -271,6 +276,14 @@ cherokee_server_free (cherokee_server_t *srv)
 		cherokee_cryptor_free (srv->cryptor);
 
 	cherokee_nonce_table_free (srv->nonces);
+
+	/* Logs
+	 */
+	list_for_each_safe (i, j, &srv->logger_writers) {
+		cherokee_logger_writer_free (LOGGER_WRITER(i));
+	}
+
+	cherokee_avl_mrproper (&srv->logger_writers_index, NULL);
 
 	/* Virtual servers
 	 */
@@ -1892,4 +1905,55 @@ cherokee_server_get_next_bind (cherokee_server_t  *srv,
 	}
 
 	return ret_ok;
+}
+
+
+ret_t
+cherokee_server_get_log_writer (cherokee_server_t         *srv,
+				cherokee_config_node_t    *config,
+				cherokee_logger_writer_t **writer)
+{
+	ret_t              ret;
+	cherokee_buffer_t  tmp  = CHEROKEE_BUF_INIT;
+
+	/* Build the index name
+	 */
+	ret = cherokee_logger_writer_get_id (config, &tmp);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	/* Check the writers tree
+	 */
+	ret = cherokee_avl_get (&srv->logger_writers_index, &tmp, (void **)writer);
+	if ((ret == ret_ok) && (*writer != NULL)) {
+		TRACE(ENTRIES",log", "Reusing logger: '%s'\n", tmp.buf);
+		return ret_ok;
+	}
+
+	/* Create a new writer object
+	 */
+	ret = cherokee_logger_writer_new (writer);
+	if (ret != ret_ok) {
+		goto error;
+	}
+
+	ret = cherokee_logger_writer_configure (*writer, config);
+	if (ret != ret_ok) {
+		goto error;
+	}
+
+	/* Add it to the index
+	 */
+	ret = cherokee_avl_add (&srv->logger_writers_index, &tmp, *writer);
+	if (ret != ret_ok) {
+		goto error;
+	}
+		
+	TRACE(ENTRIES",log", "Instanced a new logger: '%s'\n", tmp.buf);
+	return ret_ok;
+
+error:
+	cherokee_buffer_mrproper (&tmp);
+	return ret_error;
 }

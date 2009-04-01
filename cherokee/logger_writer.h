@@ -45,20 +45,24 @@ typedef enum {
 } cherokee_logger_writer_types_t;
 
 typedef struct {
+	cherokee_list_t                listed;
 	cherokee_logger_writer_types_t type;
-
-	int                            fd;         /* file and pipe   */
-	size_t                         max_bufsize;/* max. size of buffer */
+	
+	int                            fd;
+	size_t                         max_bufsize;
 	cherokee_buffer_t              buffer;
 
-	cherokee_buffer_t              filename;  /* file            */
-	cherokee_buffer_t              command;   /* pipe            */
+	cherokee_buffer_t              filename;
+	cherokee_buffer_t              command;
 
+	CHEROKEE_MUTEX_T              (mutex);
 } cherokee_logger_writer_t;
 
+#define LOGGER_WRITER(x) ((cherokee_logger_writer_t *)(x))
 
-ret_t cherokee_logger_writer_init      (cherokee_logger_writer_t *writer);
-ret_t cherokee_logger_writer_mrproper  (cherokee_logger_writer_t *writer);
+ret_t cherokee_logger_writer_new       (cherokee_logger_writer_t **writer);
+ret_t cherokee_logger_writer_free      (cherokee_logger_writer_t  *writer);
+
 ret_t cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherokee_config_node_t *conf);
 
 ret_t cherokee_logger_writer_open      (cherokee_logger_writer_t *writer);
@@ -66,6 +70,9 @@ ret_t cherokee_logger_writer_reopen    (cherokee_logger_writer_t *writer);
 
 ret_t cherokee_logger_writer_get_buf   (cherokee_logger_writer_t *writer, cherokee_buffer_t **buf);
 ret_t cherokee_logger_writer_flush     (cherokee_logger_writer_t *writer);
+
+/* Extra */
+ret_t cherokee_logger_writer_get_id    (cherokee_config_node_t   *conf, cherokee_buffer_t *id);
 
 CHEROKEE_END_DECLS
 

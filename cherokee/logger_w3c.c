@@ -32,10 +32,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#ifdef HAVE_SYSLOG_H
-# include <syslog.h>
-#endif
-
 #ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>
 #else 
@@ -72,7 +68,9 @@ static const char *month[] = {
 
 
 ret_t
-cherokee_logger_w3c_new  (cherokee_logger_t **logger, cherokee_config_node_t *config)
+cherokee_logger_w3c_new (cherokee_logger_t         **logger,
+			 cherokee_virtual_server_t  *vsrv,
+			 cherokee_config_node_t     *config)
 {
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, logger_w3c);
@@ -89,7 +87,7 @@ cherokee_logger_w3c_new  (cherokee_logger_t **logger, cherokee_config_node_t *co
 	LOGGER(n)->write_string   = (logger_func_write_string_t) cherokee_logger_w3c_write_string;
 	LOGGER(n)->write_error_fd = (logger_func_write_error_fd_t) cherokee_logger_w3c_write_error_fd;
 
-	ret = cherokee_logger_w3c_init_base (n, config);
+	ret = cherokee_logger_w3c_init_base (n, vsrv, config);
 	if (unlikely(ret < ret_ok))
 		return ret;
 
@@ -101,7 +99,9 @@ cherokee_logger_w3c_new  (cherokee_logger_t **logger, cherokee_config_node_t *co
 
 
 ret_t 
-cherokee_logger_w3c_init_base (cherokee_logger_w3c_t *logger, cherokee_config_node_t *config)
+cherokee_logger_w3c_init_base (cherokee_logger_w3c_t     *logger,
+			       cherokee_virtual_server_t *vsrv,
+			       cherokee_config_node_t    *config)
 {
 	ret_t                   ret;
 	cherokee_config_node_t *subconf;
@@ -118,15 +118,12 @@ cherokee_logger_w3c_init_base (cherokee_logger_w3c_t *logger, cherokee_config_no
 
 	/* Init the logger writers
 	 */
-	ret = cherokee_logger_writer_init (&logger->writer);
-	if (ret != ret_ok) return ret;
-
-	/* Configure them
-	 */
 	ret = cherokee_config_node_get (config, "all", &subconf);
 	if (ret == ret_ok) {
-		ret = cherokee_logger_writer_configure (&logger->writer, subconf);
-		if (ret != ret_ok) return ret;
+		ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &logger->writer);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
 	}
 
 	return ret_ok;
@@ -140,7 +137,7 @@ cherokee_logger_w3c_init (cherokee_logger_w3c_t *logger)
 
 	/* Open the log writer.
 	 */
-	ret = cherokee_logger_writer_open (&logger->writer);
+	ret = cherokee_logger_writer_open (logger->writer);
 	if (ret != ret_ok) return ret;
 
 	return ret_ok;
@@ -151,7 +148,6 @@ ret_t
 cherokee_logger_w3c_free (cherokee_logger_w3c_t *logger)
 {
 	cherokee_buffer_mrproper (&logger->now_buf);
-	cherokee_logger_writer_mrproper (&logger->writer);
 	return ret_ok;
 }
 
@@ -159,14 +155,14 @@ cherokee_logger_w3c_free (cherokee_logger_w3c_t *logger)
 ret_t 
 cherokee_logger_w3c_reopen (cherokee_logger_w3c_t *logger)
 {
-	return cherokee_logger_writer_reopen (&logger->writer);
+	return cherokee_logger_writer_reopen (logger->writer);
 }
 
 
 ret_t
 cherokee_logger_w3c_flush (cherokee_logger_w3c_t *logger)
 {
-	return cherokee_logger_writer_flush (&logger->writer);
+	return cherokee_logger_writer_flush (logger->writer);
 }
 
 
@@ -181,7 +177,7 @@ cherokee_logger_w3c_write_error (cherokee_logger_w3c_t *logger, cherokee_connect
 
 	/* Get the logger writer buffer
 	 */
-	ret = cherokee_logger_writer_get_buf (&logger->writer, &log);
+	ret = cherokee_logger_writer_get_buf (logger->writer, &log);
 	if (unlikely (ret != ret_ok))
 		return ret;
 
@@ -235,7 +231,7 @@ cherokee_logger_w3c_write_error (cherokee_logger_w3c_t *logger, cherokee_connect
 
 	/* Error are not buffered
 	 */  	
-	ret = cherokee_logger_writer_flush (&logger->writer);
+	ret = cherokee_logger_writer_flush (logger->writer);
 	if (unlikely (ret != ret_ok))
 		return ret;
 
@@ -246,10 +242,10 @@ cherokee_logger_w3c_write_error (cherokee_logger_w3c_t *logger, cherokee_connect
 ret_t
 cherokee_logger_w3c_write_error_fd (cherokee_logger_w3c_t *logger, int fd)
 {
-	if ((logger->writer.fd != -1) &&
-	    (logger->writer.fd != fd))
+	if ((logger->writer->fd != -1) &&
+	    (logger->writer->fd != fd))
 	{
-		dup2 (logger->writer.fd, fd);
+		dup2 (logger->writer->fd, fd);
 	}
 
 	return ret_ok;
@@ -262,7 +258,7 @@ cherokee_logger_w3c_write_string (cherokee_logger_w3c_t *logger, const char *str
 	ret_t              ret;
 	cherokee_buffer_t *log;
 
-	ret = cherokee_logger_writer_get_buf (&logger->writer, &log);
+	ret = cherokee_logger_writer_get_buf (logger->writer, &log);
 	if (unlikely (ret != ret_ok)) return ret;
 
 	ret = cherokee_buffer_add (log, string, strlen(string));
@@ -270,10 +266,10 @@ cherokee_logger_w3c_write_string (cherokee_logger_w3c_t *logger, const char *str
   
 	/* Flush buffer if full
 	 */  
-  	if (log->len < logger->writer.max_bufsize)
+  	if (log->len < logger->writer->max_bufsize)
 		return ret_ok;
 
-	ret = cherokee_logger_writer_flush (&logger->writer);
+	ret = cherokee_logger_writer_flush (logger->writer);
 	if (unlikely (ret != ret_ok))
 		return ret;
 
@@ -292,7 +288,7 @@ cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connec
 
 	/* Get the logger writer buffer
 	 */
-	ret = cherokee_logger_writer_get_buf (&logger->writer, &log);
+	ret = cherokee_logger_writer_get_buf (logger->writer, &log);
 	if (unlikely (ret != ret_ok)) return ret;
 
 	/* Read the bogonow value from the server

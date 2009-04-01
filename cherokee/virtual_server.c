@@ -51,7 +51,6 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->default_handler = NULL;
 	n->error_handler   = NULL;
 	n->logger          = NULL;
-	n->logger_props    = NULL;
 	n->priority        = 0;
 	n->keepalive       = true;
 	n->cryptor         = NULL;
@@ -133,16 +132,6 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	cherokee_vserver_names_mrproper (&vserver->domains);
 
 	cherokee_buffer_mrproper (&vserver->root);
-
-	if (vserver->logger != NULL) {
-		cherokee_logger_free (vserver->logger);
-		vserver->logger = NULL;
-	}
-	if (vserver->logger_props != NULL) {
-		cherokee_avl_free (vserver->logger_props, NULL); /* FIXIT */
-		vserver->logger_props = NULL;
-	}
-
 	cherokee_buffer_mrproper (&vserver->userdir);
 
 	/* Destroy the virtual_entries
@@ -570,25 +559,25 @@ add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 	logger_func_new_t       func_new;
 	cherokee_plugin_info_t *info      = NULL;
 	cherokee_server_t      *srv       = SRV(vserver->server_ref);
-
+	
 	if (cherokee_buffer_is_empty (&config->val)) {
 		PRINT_ERROR_S ("ERROR: A logger must be specified\n");
 		return ret_error;
 	}
 
+	/* Instance a new logger
+	 */
 	ret = cherokee_plugin_loader_get (&srv->loader, config->val.buf, &info);
 	if (ret < ret_ok) {
 		PRINT_MSG ("ERROR: Couldn't load logger module '%s'\n", config->val.buf);
 		return ret_error;
 	}
 
-	/* Instance a new logger
-	 */
 	func_new = (logger_func_new_t) info->instance;
 	if (func_new == NULL)
 		return ret_error;
 
-	ret = func_new ((void **) &vserver->logger, config);
+	ret = func_new ((void **) &vserver->logger, vserver, config);
 	if (ret != ret_ok)
 		return ret;
 

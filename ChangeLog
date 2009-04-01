@@ -1,5 +1,15 @@
 2009-04-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/logger_writer.c, cherokee/logger_writer.h,
+	cherokee/logger.h, cherokee/logger_w3c.c, cherokee/logger_w3c.h,
+	cherokee/logger_ncsa.c, cherokee/logger_ncsa.h,
+	cherokee/server-protected.h, cherokee/server.c,
+	cherokee/logger_custom.c, cherokee/logger_custom.h,
+	cherokee/logger_combined.c, cherokee/logger_combined.h: Logger
+	writers are now shared among all the loggers (one per virtual
+	server). It saves fds on set ups with multiple vservers.
+
 	* doc/bundle_cherokee-tweak.txt: Fixes a typo. Thanks Tako
 	Schotanus for reporting.
 

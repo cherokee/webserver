@@ -29,6 +29,6 @@
 
 typedef cherokee_logger_ncsa_t cherokee_logger_combined_t;
 
-ret_t cherokee_logger_combined_new (cherokee_logger_t **logger, cherokee_config_node_t *config);
+ret_t cherokee_logger_combined_new (cherokee_logger_t **logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
 
 #endif /* CHEROKEE_LOGGER_COMBINED_H */
