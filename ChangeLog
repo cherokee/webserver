@@ -1,3 +1,8 @@
+2009-04-01  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* doc/bundle_cherokee-tweak.txt: Fixes a typo. Thanks Tako
+	Schotanus for reporting.
+
 2009-03-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.8 released

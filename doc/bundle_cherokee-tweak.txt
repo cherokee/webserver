@@ -57,7 +57,7 @@ This is the full information provided by the manpage.
                found.  This target must be  defined  previously  in  cherokee-
                admin, enabling a "Remote Administration" type handler (Virtual
                Servers->Behaviour->Add new  rule,  and  then  Handler->"Remote
-               Administration").  The  deffinition of a security mechanisim is
+               Administration").  The  definition of a security mechanisim is
                highly encouraged.
 
        -l, --log=PATH;;
@@ -78,7 +78,7 @@ in 'Behaviour' and using the 'Add new rule' option.
 
 image::media/images/admin_handler_admin.png[Setting up an admin interface]
 
-Please note that while you are at it, the deffinition of a security
+Please note that while you are at it, the definition of a security
 (through the 'Security' tab) is highly encouraged. Although you have
 the choice to, you should never use 'None' as security mechanisim
 since this would leave your system exposed to third parties using
