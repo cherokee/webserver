@@ -1,5 +1,8 @@
 2009-04-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c (build_request): X-Real-IP is processed
+	in the proxy request. Thanks Denis Kot for pointing the mistake.
+
 	* cherokee/connection-protected.h, cherokee/handler_proxy.c,
 	cherokee/logger_custom.c, cherokee/logger_ncsa.c,
 	cherokee/connection.c: Adds X-Real-IP to the Reverse HTTP proxy,
