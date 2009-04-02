@@ -1,3 +1,9 @@
+2009-04-02  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_file.c (cherokee_handler_file_custom_init):
+	Fixes a encoder handling problem where a encoder wasn't taken into
+	account when it was actually going to be used.
+
 2009-04-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/logger_ncsa.c (build_log_string): The query_string was

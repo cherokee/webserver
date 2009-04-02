@@ -549,9 +549,10 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 #ifdef WITH_SENDFILE
 	fhdl->using_sendfile = ((conn->mmaped == NULL) &&
 				(conn->encoder == NULL) &&
+				(conn->encoder_new_func == NULL) &&
+				(conn->socket.is_tls == non_TLS) &&
 				(fhdl->info->st_size >= srv->sendfile.min) && 
-				(fhdl->info->st_size <  srv->sendfile.max) &&
-				(conn->socket.is_tls == non_TLS));
+				(fhdl->info->st_size <  srv->sendfile.max));
 
 	if (fhdl->using_sendfile) {
 		cherokee_connection_set_cork (conn, true);
