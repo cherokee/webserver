@@ -51,7 +51,16 @@ add_ip_remote (cherokee_template_t       *template,
 
 	UNUSED (template);
 	UNUSED (token);
-	
+
+	/* It has a X-Real-IP
+	 */
+	if (! cherokee_buffer_is_empty (&conn->logger_real_ip)) {
+		cherokee_buffer_add_buffer (output, &conn->logger_real_ip);
+		return ret_ok;
+	}
+
+	/* Render the IP string
+	 */
 	prev_len = output->len;
 
 	cherokee_buffer_ensure_addlen (output, CHE_INET_ADDRSTRLEN);

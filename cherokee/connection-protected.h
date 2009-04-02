@@ -116,9 +116,10 @@ struct cherokee_connection {
 	cherokee_socket_t             socket;
 	cherokee_http_upgrade_t       upgrade;
 	cherokee_connection_options_t options;
+	cherokee_handler_t           *handler;
 
 	cherokee_logger_t            *logger_ref;
-	cherokee_handler_t           *handler;
+	cherokee_buffer_t             logger_real_ip;
 
 	/* Buffers
 	 */

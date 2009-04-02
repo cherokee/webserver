@@ -1,5 +1,10 @@
 2009-04-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/connection-protected.h, cherokee/handler_proxy.c,
+	cherokee/logger_custom.c, cherokee/logger_ncsa.c,
+	cherokee/connection.c: Adds X-Real-IP to the Reverse HTTP proxy,
+	ans the NCSA, Combined and Custom loggers.
+
 	* cherokee/util.c (cherokee_get_timezone_ref): Implements timezone
 	reading in FreeBSD. Patch based on bozzaj's patch (thanks!):
 	http://code.google.com/p/cherokee/issues/detail?id=424

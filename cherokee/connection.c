@@ -130,6 +130,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	cherokee_buffer_init (&n->header_buffer);
 	cherokee_buffer_init (&n->incoming_header);
 	cherokee_buffer_init (&n->encoder_buffer);
+	cherokee_buffer_init (&n->logger_real_ip);
 
 	cherokee_buffer_init (&n->local_directory);
 	cherokee_buffer_init (&n->web_directory);
@@ -184,6 +185,7 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	
 	cherokee_buffer_mrproper (&conn->request);
 	cherokee_buffer_mrproper (&conn->request_original);
+	cherokee_buffer_mrproper (&conn->logger_real_ip);
 
 	cherokee_buffer_mrproper (&conn->pathinfo);
 	cherokee_buffer_mrproper (&conn->buffer);
@@ -299,6 +301,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 
 	cherokee_buffer_clean (&conn->request);
 	cherokee_buffer_clean (&conn->request_original);
+	cherokee_buffer_clean (&conn->logger_real_ip);
 
 	cherokee_buffer_clean (&conn->pathinfo);
 	cherokee_buffer_clean (&conn->local_directory);

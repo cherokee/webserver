@@ -896,7 +896,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 		*end = '\0';
 		
 		/* Check the header entry  */
-		if (strncmp (begin, "Transfer-Encoding:", 18) == 0) {
+		if (strncasecmp (begin, "Transfer-Encoding:", 18) == 0) {
 			char *c = begin + 18;
 			while (*c == ' ') c++;
 
@@ -906,7 +906,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 			goto next;
 
-		} else  if (strncmp (begin, "Connection:", 11) == 0) {
+		} else  if (strncasecmp (begin, "Connection:", 11) == 0) {
 			char *c = begin + 11;
 			while (*c == ' ') c++;
 
@@ -918,10 +918,10 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 			goto next;
 
-		} else  if (strncmp (begin, "Keep-Alive:", 11) == 0) {
+		} else  if (strncasecmp (begin, "Keep-Alive:", 11) == 0) {
 			goto next;
 
-		} else  if (strncmp (begin, "Content-Length:", 15) == 0) {
+		} else  if (strncasecmp (begin, "Content-Length:", 15) == 0) {
 			char *c = begin + 15;
 			while (*c == ' ') c++;
 
@@ -934,7 +934,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 
 			HANDLER(hdl)->support |= hsupport_length;
 
-		} else  if (strncmp (begin, "Location:", 9) == 0) {
+		} else  if (strncasecmp (begin, "Location:", 9) == 0) {
 			cherokee_buffer_t *tmp1 = &HANDLER_THREAD(hdl)->tmp_buf1;
 			cherokee_buffer_t *tmp2 = &HANDLER_THREAD(hdl)->tmp_buf2;
 	
@@ -950,8 +950,15 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 				goto next;
 			}
 
-		} else if (strncmp (begin, "Content-Encoding:", 17) == 0) {
+		} else if (strncasecmp (begin, "Content-Encoding:", 17) == 0) {
 			BIT_SET (conn->options, conn_op_cant_encoder);
+
+		} else if (strncasecmp (begin, "X-Real-IP:", 10) == 0) {
+			char *c = begin + 15;
+			while (*c == ' ') c++;
+			
+			cherokee_buffer_add (&conn->logger_real_ip, c, end-c);
+			goto next;
 
 		} else {
 			colon = strchr (begin, ':');

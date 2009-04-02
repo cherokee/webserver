@@ -214,9 +214,6 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 				(int) (abs(logger->tz) % 60));
 	}
 
-	memset (ipaddr, 0, sizeof(ipaddr));
-	cherokee_socket_ntop (&cnt->socket, ipaddr, sizeof(ipaddr)-1);
-
 	/* Look for the user
 	 */
 	if (cnt->validator && !cherokee_buffer_is_empty (&cnt->validator->user)) {
@@ -244,9 +241,17 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 	 * "%s - %s [%02d/%s/%d:%02d:%02d:%02d %c%02d%02d] \"%s %s %s\" %d "
 	 * FMT_OFFSET
 	 */
-	cherokee_buffer_add        (buf, ipaddr, strlen(ipaddr));
-	cherokee_buffer_add_str    (buf, " - ");
-	cherokee_buffer_add        (buf, username, username_len);
+	if (cherokee_buffer_is_empty (&cnt->logger_real_ip)) {
+		memset (ipaddr, 0, sizeof(ipaddr));
+		cherokee_socket_ntop (&cnt->socket, ipaddr, sizeof(ipaddr)-1);
+		cherokee_buffer_add (buf, ipaddr, strlen(ipaddr));
+	} else {
+		cherokee_buffer_add_buffer (buf, &cnt->logger_real_ip);
+	}
+
+	cherokee_buffer_add_str (buf, " - ");
+	cherokee_buffer_add     (buf, username, username_len);
+
 	/* " [date time] "
 	 */
 	cherokee_buffer_add_buffer (buf, &logger->now_dtm);
