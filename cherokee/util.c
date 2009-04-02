@@ -989,8 +989,21 @@ cherokee_get_timezone_ref (void)
 #ifdef HAVE_INT_TIMEZONE
 	return &timezone;
 #else
+# ifdef HAVE_STRUCT_TM_GMTOFF
+	struct tm   tm;
+	time_t      timestamp;
+	static long tz         = 43201; /* 12h+1s: out of range */
+
+	if (unlikely (tz == 43201)) {
+		timestamp = time(NULL);
+		cherokee_localtime (&timestamp, &tm);
+		tz = -tm.tm_gmtoff;
+	}
+	return &tz;
+# else
 	static long _faked_timezone = 0;
 	return &_faked_timezone;
+# endif
 #endif
 }
 

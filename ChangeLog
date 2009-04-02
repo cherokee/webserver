@@ -1,5 +1,9 @@
 2009-04-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/util.c (cherokee_get_timezone_ref): Implements timezone
+	reading in FreeBSD. Patch based on bozzaj's patch (thanks!):
+	http://code.google.com/p/cherokee/issues/detail?id=424
+
 	* cherokee/handler_file.c (cherokee_handler_file_custom_init):
 	Fixes a encoder handling problem where a encoder wasn't taken into
 	account when it was actually going to be used.
