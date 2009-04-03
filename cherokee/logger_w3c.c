@@ -77,7 +77,7 @@ cherokee_logger_w3c_new (cherokee_logger_t         **logger,
 	
 	/* Init the base class object
 	 */
-	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(w3c));
+	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(w3c), config);
 
 	MODULE(n)->init           = (logger_func_init_t) cherokee_logger_w3c_init;
 	MODULE(n)->free           = (logger_func_free_t) cherokee_logger_w3c_free;

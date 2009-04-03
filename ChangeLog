@@ -1,3 +1,13 @@
+2009-04-03  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/header.c, cherokee/header.h, cherokee/logger.c,
+	cherokee/logger_w3c.c, admin/Form.py, cherokee/logger.h,
+	cherokee/handler_proxy.c, cherokee/logger_combined.c,
+	cherokee/logger_custom.c, admin/PageVServer.py,
+	cherokee/logger_ncsa.c: Rework the X-Real-IP. Now it's supported
+	globally (at logger level), so Cherokee can act as consumer of
+	X-Real-IP headers, and it can also generate them from the proxy.
+
 2009-04-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.9 released

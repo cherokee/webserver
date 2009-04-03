@@ -1030,6 +1030,8 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 				ret = add_known_header (hdr, header_x_forwarded_for, val_offs, val_len);
 			} else if (header_equals ("X-Forwarded-Host", header_x_forwarded_host, begin, header_len)) {
 				ret = add_known_header (hdr, header_x_forwarded_host, val_offs, val_len);
+			} else if (header_equals ("X-Real-IP", header_x_real_ip, begin, header_len)) {
+				ret = add_known_header (hdr, header_x_real_ip, val_offs, val_len);
 			} else
 				goto unknown;
 			break;

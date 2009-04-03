@@ -476,15 +476,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 		}
 		else if (! strncasecmp (begin, "X-Real-IP:", 10))
 		{
-			char *c = begin + 10;
-			while (*c == ' ') c++;
-
-			if (cherokee_buffer_is_empty (&conn->logger_real_ip)) {
-				cherokee_buffer_add (&conn->logger_real_ip, c, end-c);
-			}
-
 			x_real_ip = true;
-			goto next;
 		}
 		else {
 			colon = strchr (begin, ':');

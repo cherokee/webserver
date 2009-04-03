@@ -392,7 +392,8 @@ class FormHelper (WebComponent):
             if not confkey in checkboxes:
                 value = post[confkey][0]
                 if not value:
-                    del (self._cfg[confkey])
+                    if not self._cfg.keys(confkey):
+                        del (self._cfg[confkey])
                 else:
                     self._cfg[confkey] = value
 

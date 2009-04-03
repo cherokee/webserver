@@ -19,35 +19,39 @@ DATA_VALIDATION = [
     ("vserver!.*?!ssl_verify_depth",          (validations.is_positive_int)),
     ("vserver!.*?!logger!.*?!filename",       (validations.parent_is_dir, 'cfg', 'nochroot')),
     ("vserver!.*?!logger!.*?!command",        (validations.is_local_file_exists, 'cfg')),
+    ("vserver!.*?!logger!x_real_ip_access$",   validations.is_ip_or_netmask_list),
 ]
 
 RULE_LIST_NOTE = """
 <p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.</p>
 """
 
-NOTE_NICKNAME        = 'Nickname for the virtual server.'
-NOTE_CERT            = 'This directive points to the PEM-encoded Certificate file for the server (Full path to the file)'
-NOTE_CERT_KEY        = 'PEM-encoded Private Key file for the server (Full path to the file)'
-NOTE_CA_LIST         = 'Optional: File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)'
-NOTE_CIPHERS         = 'Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: all ciphers supported by the OpenSSL version used).'
-NOTE_CLIENT_CERTS    = 'Optional: Skip, Accept or Require client certificates.'
-NOTE_VERIFY_DEPTH    = 'Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)'
-NOTE_ERROR_HANDLER   = 'Allows the selection of how to generate the error responses.'
-NOTE_PERSONAL_WEB    = 'Directory inside the user home directory to use as root web directory. Disabled if empty.'
-NOTE_DISABLE_PW      = 'The personal web support is currently turned on.'
-NOTE_ADD_DOMAIN      = 'Adds a new domain name. Wildcards are allowed in the domain name.'
-NOTE_DOCUMENT_ROOT   = 'Virtual Server root directory.'
-NOTE_DIRECTORY_INDEX = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
-NOTE_MAX_UPLOAD_SIZE = 'The maximum size, in bytes, for POST uploads. (Default: unlimited)'
-NOTE_KEEPALIVE       = 'Whether this virtual server is allowed to use Keep-alive (Default: yes)'
-NOTE_COLLECT         = 'Specifies if Traffic Statistics should be collected for the virtual server (Default: yes)'
-NOTE_DISABLE_LOG     = 'The Logging is currently enabled.'
-NOTE_LOGGERS         = 'Logging format. Apache compatible is highly recommended here.'
-NOTE_ACCESSES        = 'Back-end used to store the log accesses.'
-NOTE_ERRORS          = 'Back-end used to store the log errors.'
-NOTE_ACCESSES_ERRORS = 'Back-end used to store the log accesses and errors.'
-NOTE_WRT_FILE        = 'Full path to the file where the information will be saved.'
-NOTE_WRT_EXEC        = 'Path to the executable that will be invoked on each log entry.'
+NOTE_NICKNAME         = 'Nickname for the virtual server.'
+NOTE_CERT             = 'This directive points to the PEM-encoded Certificate file for the server (Full path to the file)'
+NOTE_CERT_KEY         = 'PEM-encoded Private Key file for the server (Full path to the file)'
+NOTE_CA_LIST          = 'Optional: File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)'
+NOTE_CIPHERS          = 'Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: all ciphers supported by the OpenSSL version used).'
+NOTE_CLIENT_CERTS     = 'Optional: Skip, Accept or Require client certificates.'
+NOTE_VERIFY_DEPTH     = 'Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)'
+NOTE_ERROR_HANDLER    = 'Allows the selection of how to generate the error responses.'
+NOTE_PERSONAL_WEB     = 'Directory inside the user home directory to use as root web directory. Disabled if empty.'
+NOTE_DISABLE_PW       = 'The personal web support is currently turned on.'
+NOTE_ADD_DOMAIN       = 'Adds a new domain name. Wildcards are allowed in the domain name.'
+NOTE_DOCUMENT_ROOT    = 'Virtual Server root directory.'
+NOTE_DIRECTORY_INDEX  = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
+NOTE_MAX_UPLOAD_SIZE  = 'The maximum size, in bytes, for POST uploads. (Default: unlimited)'
+NOTE_KEEPALIVE        = 'Whether this virtual server is allowed to use Keep-alive (Default: yes)'
+NOTE_COLLECT          = 'Specifies if Traffic Statistics should be collected for the virtual server (Default: yes)'
+NOTE_DISABLE_LOG      = 'The Logging is currently enabled.'
+NOTE_LOGGERS          = 'Logging format. Apache compatible is highly recommended here.'
+NOTE_ACCESSES         = 'Back-end used to store the log accesses.'
+NOTE_ERRORS           = 'Back-end used to store the log errors.'
+NOTE_ACCESSES_ERRORS  = 'Back-end used to store the log accesses and errors.'
+NOTE_WRT_FILE         = 'Full path to the file where the information will be saved.'
+NOTE_WRT_EXEC         = 'Path to the executable that will be invoked on each log entry.'
+NOTE_X_REAL_IP        = 'Whether the logger should read and use the X-Real-IP header (send by reverse proxy front-ends).'
+NOTE_X_REAL_IP_ALL    = 'Accept all the X-Real-IP headers. It\'s dangerous: turn it on only if you are centain of what you are doing.'
+NOTE_X_REAL_IP_ACCESS = 'List of IP addresses and subnets that are allowed to send X-Real-IP headers (usually your proxy servers).'
 
 TXT_NO  = "<i>No</i>"
 TXT_YES = "<i>Yes</i>"
@@ -448,7 +452,6 @@ class PageVServer (PageMenu, FormHelper):
         txt += self.Indent(str(table))
 
         # Writers
-
         if format:
             writers = ''
 
@@ -508,6 +511,20 @@ class PageVServer (PageMenu, FormHelper):
             txt += '<h2>Writers</h2>'
             txt += self.Indent(writers)
 
+        txt += '<h2>Options</h2>'
+
+        x_real_ip     = int(self._cfg.get_val('%s!x_real_ip_enabled'%(pre), "0"))
+        x_real_ip_all = int(self._cfg.get_val('%s!x_real_ip_access_all'%(pre), "0"))
+
+        table = TableProps()
+        self.AddPropCheck (table, 'Accept X-Real-IP', '%s!x_real_ip_enabled'%(pre), False, NOTE_X_REAL_IP)
+        if x_real_ip:
+            self.AddPropCheck (table, 'Accept all X-Real-IPs', '%s!x_real_ip_access_all'%(pre), False, NOTE_X_REAL_IP_ALL)
+            if not x_real_ip_all:
+                self.AddPropEntry (table, 'X-Real-IP Hosts', '%s!x_real_ip_access'%(pre), NOTE_X_REAL_IP_ACCESS)
+
+        txt += self.Indent(str(table))
+
         return txt
 
     def _render_hosts (self, host):
@@ -560,7 +577,11 @@ class PageVServer (PageMenu, FormHelper):
         self.ApplyChanges_OptionModule ('%s!error_handler'%(pre), uri, post)
 
         # Look for the checkboxes
-        checkboxes = ['%s!keepalive'%(pre), '%s!collect_statistics'%(pre)]
+        checkboxes = ['%s!keepalive'%(pre),
+                      '%s!collect_statistics'%(pre),
+                      '%s!logger!x_real_ip_enabled'%(pre),
+                      '%s!logger!x_real_ip_access_all'%(pre)]
+
         tmp = self._cfg['%s!rule'%(pre)]
         if tmp and tmp.has_child():
             for p in tmp:
@@ -582,7 +603,9 @@ class PageVServer (PageMenu, FormHelper):
         cfg_key = "vserver!%s!logger" % (host)
         logger = self._cfg.get_val (cfg_key)
         if not logger:
-            del(self._cfg[cfg_key])
+            del(self._cfg['%s!access'%(cfg_key)])
+            del(self._cfg['%s!error'%(cfg_key)])
+            del(self._cfg['%s!all'%(cfg_key)])
             return
 
         to_be_deleted = []
@@ -592,7 +615,6 @@ class PageVServer (PageMenu, FormHelper):
         else:
             to_be_deleted.append('%s!all' % cfg_key)
 
-        to_be_deleted = []
         for entry in self._cfg[cfg_key]:
             if logger == "stderr" or \
                logger == "syslog":

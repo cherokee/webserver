@@ -80,7 +80,9 @@ typedef struct {
 
 /* Logger methods
  */
-ret_t cherokee_logger_init_base       (cherokee_logger_t *logger, cherokee_plugin_info_t *info);
+ret_t cherokee_logger_init_base       (cherokee_logger_t      *logger,
+				       cherokee_plugin_info_t *info,
+				       cherokee_config_node_t *config);
 
 /* Logger virtual methods
  */
@@ -97,7 +99,6 @@ ret_t cherokee_logger_write_error_fd  (cherokee_logger_t *logger, int fd);
 
 ret_t cherokee_logger_set_backup_mode (cherokee_logger_t *logger, cherokee_boolean_t active);
 ret_t cherokee_logger_get_backup_mode (cherokee_logger_t *logger, cherokee_boolean_t *active);
-
 
 CHEROKEE_END_DECLS
 
