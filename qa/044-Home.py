@@ -5,7 +5,8 @@ vserver!0440!nick = missing.host1
 vserver!0440!document_root = /faked
 
 vserver!0440!user_dir = public_html
-vserver!0440!domain!1 = missing.host1
+vserver!0440!match = wildcard
+vserver!0440!match!domain!1 = missing.host1
 
 vserver!0440!user_dir!rule!1!match = default
 vserver!0440!user_dir!rule!1!handler = common

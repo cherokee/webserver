@@ -1,5 +1,18 @@
 2009-04-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/Makefile.am, cherokee/vrule.c, cherokee/vrule.h,
+	cherokee/vrule_wildcard.c, cherokee/vrule_wildcard.h,
+	cherokee/plugin.h, cherokee/virtual_server_names.c,
+	cherokee/virtual_server_names.h, cherokee/server.c, configure.in,
+	qa/125-domain-redir1.py, qa/020-VirtualHost.py, qa/045-Home2.py,
+	qa/044-Home.py, qa/021-VirtualHost2.py, qa/121-NoUserDir.py,
+	qa/094-URL-request.py, qa/139-domain-wildcards1.py: This patch
+	introduces a new plug-in type 'virtual server rule'. It's similar
+	to the behavior rules, but they are used to match virtual servers.
+	This infrastructure will be used as base to build a more powerful
+	'Enhanced Virtual-Hosting' mechanism.
+
 	* cherokee/rule.c: Clean up.
 
 	* cherokee/header.c, cherokee/header.h, cherokee/logger.c,

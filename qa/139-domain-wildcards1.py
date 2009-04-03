@@ -14,7 +14,9 @@ vserver!1390!rule!1!handler = file
 
 vserver!1391!nick = rest_<domain>
 vserver!1391!document_root = %s
-vserver!1391!domain!1 = *.<domain>
+vserver!1391!match = wildcard
+vserver!1391!match!domain!1 = *.<domain>
+
 vserver!1391!rule!1!match = default
 vserver!1391!rule!1!handler = file
 """

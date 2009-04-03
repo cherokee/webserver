@@ -25,36 +25,24 @@
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
-     
-#ifndef CHEROKEE_VSERVER_LIST_H
-#define CHEROKEE_VSERVER_LIST_H
+
+#ifndef CHEROKEE_VRULE_WILDCARD_H
+#define CHEROKEE_VRULE_WILDCARD_H
 
 #include <cherokee/common.h>
-#include <cherokee/list.h>
-#include <cherokee/buffer.h>
+#include <cherokee/vrule.h>
 
+CHEROKEE_BEGIN_DECLS
 
-/* Virtual server names
- */
-typedef cherokee_list_t cherokee_vserver_names_t;
-
-ret_t cherokee_vserver_names_mrproper (cherokee_vserver_names_t *list);
-ret_t cherokee_vserver_names_add_name (cherokee_vserver_names_t *list, cherokee_buffer_t *name);
-ret_t cherokee_vserver_names_find     (cherokee_vserver_names_t *list, cherokee_buffer_t *name);
-
-
-/* Virtual server entry
- */
 typedef struct {
-	cherokee_list_t     node;
-	cherokee_buffer_t   name;
-	cherokee_boolean_t  is_wildcard;
-} cherokee_vserver_name_entry_t;
+	cherokee_vrule_t  rule;
+	cherokee_list_t   entries;
+} cherokee_vrule_wildcard_t;
 
-#define VSERVER_NAME(v) ((cherokee_vserver_name_entry_t *)(v))
+#define VRULE_WILDCARD(x) ((cherokee_vrule_wildcard_t *)(x))
 
-ret_t cherokee_vserver_name_entry_new   (cherokee_vserver_name_entry_t **entry, cherokee_buffer_t *name);
-ret_t cherokee_vserver_name_entry_match (cherokee_vserver_name_entry_t  *entry, cherokee_buffer_t *name);
-ret_t cherokee_vserver_name_entry_free  (cherokee_vserver_name_entry_t  *entry);
+ret_t cherokee_vrule_wildcard_new (cherokee_vrule_t **vrule);
 
-#endif /* CHEROKEE_VSERVER_LIST_H */
+CHEROKEE_END_DECLS
+
+#endif /* CHEROKEE_VRULE_WILDCARD_H */

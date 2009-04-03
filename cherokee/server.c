@@ -1849,23 +1849,27 @@ error:
 	return ret_error;
 }
 
-
 ret_t 
-cherokee_server_get_vserver (cherokee_server_t *srv, cherokee_buffer_t *name, cherokee_virtual_server_t **vsrv)
+cherokee_server_get_vserver (cherokee_server_t          *srv,
+			     cherokee_buffer_t          *name,
+			     cherokee_virtual_server_t **vsrv)
 {
-	cint_t                     re;
+	int                        re;
 	ret_t                      ret;
 	cherokee_list_t           *i;
 	cherokee_virtual_server_t *vserver;
 
-	/* Check the domain names 
+	/* Evaluate the vrules
 	 */
 	list_for_each (i, &srv->vservers) {
 		vserver = VSERVER(i);
 
-		ret = cherokee_vserver_names_find (&vserver->domains, name);
+		if (! vserver->matching)
+			continue;
+		
+		ret = cherokee_vrule_match (vserver->matching, name);
 		if (ret == ret_ok) {
-			TRACE (ENTRIES, "Virtual server '%s' matched domain '%s'\n", vserver->name.buf, name->buf);
+			TRACE (ENTRIES, "Virtual server '%s' matched vrule\n", vserver->name.buf);
 			*vsrv = vserver;
 			return ret_ok;
 		}

@@ -5,7 +5,8 @@ MAGIC = "Cherokee is pure magic"
 CONF = """
 vserver!0940!nick = request1host
 vserver!0940!document_root = %s
-vserver!0940!domain!1 = request1host
+vserver!0940!match = wildcard
+vserver!0940!match!domain!1 = request1host
 
 vserver!0940!rule!1!match = default
 vserver!0940!rule!1!handler = server_info

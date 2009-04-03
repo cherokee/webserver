@@ -288,6 +288,23 @@ endif
 
 
 #
+# VRule wildcard
+#
+vrule_wildcard = \
+vrule_wildcard.c \
+vrule_wildcard.h
+
+libplugin_wildcard_la_LDFLAGS = $(module_ldflags)  
+libplugin_wildcard_la_SOURCES = $(vrule_wildcard)
+
+if STATIC_VRULE_WILDCARD
+static_vrule_wildcard_src = $(vrule_wildcard)
+else
+dynamic_vrule_wildcard_lib = libplugin_wildcard.la
+endif
+
+
+#
 # Handler server_info
 #
 handler_server_info = \
@@ -1257,6 +1274,8 @@ $(static_rule_not_src) \
 $(static_rule_and_src) \
 $(static_rule_or_src) \
 \
+$(static_vrule_wildcard_src) \
+\
 $(static_handler_file_src) \
 $(static_handler_admin_src) \
 $(static_handler_dirlist_src) \
@@ -1314,6 +1333,8 @@ rule_list.h \
 rule_list.c \
 rule_default.h \
 rule_default.c \
+vrule.h \
+vrule.c \
 config_entry.h \
 config_entry.c \
 server-protected.h \
@@ -1321,8 +1342,6 @@ server.h \
 server.c \
 bind.h \
 bind.c \
-virtual_server_names.h \
-virtual_server_names.c \
 virtual_server.h \
 virtual_server.c \
 encoder.h \
@@ -1431,6 +1450,7 @@ $(dynamic_rule_geoip_lib) \
 $(dynamic_rule_not_lib) \
 $(dynamic_rule_and_lib) \
 $(dynamic_rule_or_lib) \
+$(dynamic_vrule_wildcard_lib) \
 $(dynamic_handler_file_lib) \
 $(dynamic_handler_cgi_lib) \
 $(dynamic_handler_phpcgi_lib) \

@@ -91,8 +91,6 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	if (unlikely(ret < ret_ok))
 		return ret;
 
-	INIT_LIST_HEAD (&n->domains);
-
 	ret = cherokee_buffer_init (&n->userdir);
 	if (unlikely(ret < ret_ok))
 		return ret;
@@ -129,8 +127,6 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	}
 
 	cherokee_buffer_mrproper (&vserver->name);
-	cherokee_vserver_names_mrproper (&vserver->domains);
-
 	cherokee_buffer_mrproper (&vserver->root);
 	cherokee_buffer_mrproper (&vserver->userdir);
 
@@ -537,14 +533,37 @@ failed:
 }
 
 
-static ret_t 
-add_domain (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
+static ret_t
+configure_match (cherokee_config_node_t    *config, 
+		 cherokee_virtual_server_t *vserver)
 {
-	ret_t ret;
+	ret_t                   ret;
+	vrule_func_new_t        func_new;
+	cherokee_plugin_info_t *info      = NULL;
+	cherokee_server_t      *srv       = SRV(vserver->server_ref);
 
-	TRACE (ENTRIES, "Adding vserver '%s' domain name '%s'\n", vserver->name.buf, config->val.buf);
+	if (cherokee_buffer_is_empty (&config->val)) {
+		PRINT_ERROR_S ("ERROR: A virtual server 'match' must be specified\n");
+		return ret_error;
+	}
 
-	ret = cherokee_vserver_names_add_name (&vserver->domains, &config->val);
+	/* Instance a new virtual server match obj
+	 */
+	ret = cherokee_plugin_loader_get (&srv->loader, config->val.buf, &info);
+	if (ret < ret_ok) {
+		PRINT_MSG ("ERROR: Couldn't load vrule module '%s'\n", config->val.buf);
+		return ret_error;
+	}
+
+	func_new = (vrule_func_new_t) info->instance;
+	if (func_new == NULL)
+		return ret_error;
+
+	ret = func_new ((void **) &vserver->matching);
+	if (ret != ret_ok)
+		return ret;
+
+	ret = cherokee_vrule_configure (vserver->matching, config, vserver);
 	if (ret != ret_ok)
 		return ret;
 
@@ -642,7 +661,6 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
 	cherokee_buffer_t         *tmp;
-	cherokee_list_t           *i;
 	cherokee_virtual_server_t *vserver = VSERVER(data);
 
 	if (equal_buf_str (&conf->key, "document_root")) {
@@ -653,6 +671,11 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_clean (&vserver->root);
 		cherokee_buffer_add_buffer (&vserver->root, tmp);
 		cherokee_fix_dirpath (&vserver->root);
+
+	} else if (equal_buf_str (&conf->key, "match")) {
+		ret = configure_match (conf, vserver);
+		if (ret != ret_ok)
+			return ret;
 
 	} else if (equal_buf_str (&conf->key, "nick")) {
 		cherokee_buffer_clean (&vserver->name);
@@ -670,12 +693,6 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		ret = configure_rules (conf, vserver, &vserver->rules);
 		if (ret != ret_ok) return ret;
 
-	} else if (equal_buf_str (&conf->key, "domain")) {
-		cherokee_config_node_foreach (i, conf) {
-			ret = add_domain (CONFIG_NODE(i), vserver);
-			if (ret != ret_ok)
-				return ret;		
-		}
 	} else if (equal_buf_str (&conf->key, "error_handler")) {
 		ret = add_error_handler (conf, vserver);
 		if (ret != ret_ok)

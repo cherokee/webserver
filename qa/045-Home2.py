@@ -9,7 +9,8 @@ vserver!0450!nick = testhost1
 vserver!0450!document_root = /faked
 
 vserver!0450!user_dir = %s
-vserver!0450!domain!1 = testhost1
+vserver!0450!match = wildcard
+vserver!0450!match!domain!1 = testhost1
 
 vserver!0450!user_dir!rule!1!match = default
 vserver!0450!user_dir!rule!1!handler = common

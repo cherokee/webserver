@@ -5,8 +5,9 @@ MAGIC = "Second virtual Host test magic string"
 CONF = """
 vserver!0210!nick = first.domain
 vserver!0210!document_root = %s
-vserver!0210!domain!1 = first.domain
-vserver!0210!domain!2 = second.domain
+vserver!0210!match = wildcard
+vserver!0210!match!domain!1 = first.domain
+vserver!0210!match!domain!2 = second.domain
 vserver!0210!rule!1!match = default
 vserver!0210!rule!1!handler = common
 """

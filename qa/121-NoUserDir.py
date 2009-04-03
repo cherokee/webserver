@@ -8,7 +8,9 @@ FILENAME  = "file"
 CONF = """
 vserver!1210!nick = %s
 vserver!1210!document_root = %s
-vserver!1210!domain!1 = <domain>
+
+vserver!1210!match = wildcard
+vserver!1210!match!domain!1 = <domain>
 
 vserver!1210!rule!10!match = default
 vserver!1210!rule!10!handler = common
