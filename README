@@ -91,6 +91,10 @@ FAQ
   ----------------------------
    ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --enable-beta --enable-trace
 
+  Development
+  -----------
+   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --with-mysql=no --with-ffmpeg=no --with-ldap=no --enable-beta --enable-trace
+
   How to cross compile the Win32 version
   --------------------------------------
    From Linux: http://alobbs.com/news/1201
