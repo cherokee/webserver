@@ -1,5 +1,7 @@
 2009-04-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* 0.99.9 released
+
 	* cherokee/handler_proxy.c (build_request): X-Real-IP is processed
 	in the proxy request. Thanks Denis Kot for pointing the mistake.
 
