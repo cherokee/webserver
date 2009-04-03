@@ -305,6 +305,23 @@ endif
 
 
 #
+# VRule rehost
+#
+vrule_rehost = \
+vrule_rehost.c \
+vrule_rehost.h
+
+libplugin_rehost_la_LDFLAGS = $(module_ldflags)
+libplugin_rehost_la_SOURCES = $(vrule_rehost)
+
+if STATIC_VRULE_REHOST
+static_vrule_rehost_src = $(vrule_rehost)
+else
+dynamic_vrule_rehost_lib = libplugin_rehost.la
+endif
+
+
+#
 # Handler server_info
 #
 handler_server_info = \
@@ -1275,6 +1292,7 @@ $(static_rule_and_src) \
 $(static_rule_or_src) \
 \
 $(static_vrule_wildcard_src) \
+$(static_vrule_rehost_src) \
 \
 $(static_handler_file_src) \
 $(static_handler_admin_src) \
@@ -1451,6 +1469,7 @@ $(dynamic_rule_not_lib) \
 $(dynamic_rule_and_lib) \
 $(dynamic_rule_or_lib) \
 $(dynamic_vrule_wildcard_lib) \
+$(dynamic_vrule_rehost_lib) \
 $(dynamic_handler_file_lib) \
 $(dynamic_handler_cgi_lib) \
 $(dynamic_handler_phpcgi_lib) \

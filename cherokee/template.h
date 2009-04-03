@@ -52,7 +52,7 @@ typedef struct {
 
 #define TEMPLATE(x)       ((cherokee_template_t *)(x))
 #define TEMPLATE_TOKEN(x) ((cherokee_template_token_t *)(x))
-
+#define TEMPLATE_FUNC(x)  ((cherokee_tem_repl_func_t)(x))
 
 /* Template
  */

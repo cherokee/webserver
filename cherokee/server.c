@@ -1851,7 +1851,8 @@ error:
 
 ret_t 
 cherokee_server_get_vserver (cherokee_server_t          *srv,
-			     cherokee_buffer_t          *name,
+			     cherokee_buffer_t          *host,
+			     cherokee_connection_t      *conn,
 			     cherokee_virtual_server_t **vsrv)
 {
 	int                        re;
@@ -1867,7 +1868,7 @@ cherokee_server_get_vserver (cherokee_server_t          *srv,
 		if (! vserver->matching)
 			continue;
 		
-		ret = cherokee_vrule_match (vserver->matching, name);
+		ret = cherokee_vrule_match (vserver->matching, host, conn);
 		if (ret == ret_ok) {
 			TRACE (ENTRIES, "Virtual server '%s' matched vrule\n", vserver->name.buf);
 			*vsrv = vserver;
@@ -1880,7 +1881,7 @@ cherokee_server_get_vserver (cherokee_server_t          *srv,
 	list_for_each (i, &srv->vservers) {
 		vserver = VSERVER(i);
 
-		re = cherokee_buffer_cmp_buf (name, &vserver->name);
+		re = cherokee_buffer_cmp_buf (host, &vserver->name);
 		if (re == 0) {
 			TRACE (ENTRIES, "Virtual server '%s' matched by its nick\n", vserver->name.buf);
 			*vsrv = vserver;

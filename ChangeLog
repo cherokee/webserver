@@ -1,5 +1,13 @@
 2009-04-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/Makefile.am, cherokee/vrule.c, cherokee/vrule.h,
+	cherokee/vrule_rehost.c, cherokee/vrule_rehost.h,
+	cherokee/vrule_wildcard.c, cherokee/template.h,
+	cherokee/server-protected.h, cherokee/connection.c,
+	cherokee/server.c, configure.in, qa/Makefile.am,
+	qa/221-ReHost1.py: Adds a new "Host:" matcher based on regular
+	expressions. It also adds a new QA test for it.
+
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,
 	cherokee/Makefile.am, cherokee/vrule.c, cherokee/vrule.h,
 	cherokee/vrule_wildcard.c, cherokee/vrule_wildcard.h,
