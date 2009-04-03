@@ -1,5 +1,7 @@
 2009-04-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/rule.c: Clean up.
+
 	* cherokee/header.c, cherokee/header.h, cherokee/logger.c,
 	cherokee/logger_w3c.c, admin/Form.py, cherokee/logger.h,
 	cherokee/handler_proxy.c, cherokee/logger_combined.c,

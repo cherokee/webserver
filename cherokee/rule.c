@@ -48,21 +48,15 @@ cherokee_rule_init_base (cherokee_rule_t *rule, cherokee_plugin_info_t *info)
 ret_t 
 cherokee_rule_free (cherokee_rule_t *rule)
 {
-	/* Sanity checks
-	 */
-	return_if_fail (rule != NULL, ret_error);
-
 	/* Free the Config Entry property
 	 */
 	cherokee_config_entry_mrproper (&rule->config);
 
 	/* Call the virtual method
 	 */
-	if (MODULE(rule)->free == NULL) {
-		return ret_error;
+	if (MODULE(rule)->free) {
+		MODULE(rule)->free (rule); 
 	}
-	
-	MODULE(rule)->free (rule); 
 
 	/* Free the rule
 	 */
@@ -96,13 +90,8 @@ cherokee_rule_configure (cherokee_rule_t *rule, cherokee_config_node_t *conf, vo
 {
 	ret_t ret;
 
-	/* Sanity checks
-	 */	
-	return_if_fail (rule != NULL, ret_error);
-
-	if (rule->configure == NULL) {
-		return ret_error;
-	}
+	return_if_fail (rule, ret_error);
+	return_if_fail (rule->configure, ret_error);
 
 	ret = configure_base (rule, conf);
 	if (ret != ret_ok) return ret;
@@ -116,13 +105,8 @@ cherokee_rule_configure (cherokee_rule_t *rule, cherokee_config_node_t *conf, vo
 ret_t 
 cherokee_rule_match (cherokee_rule_t *rule, void *cnt)
 {
-	/* Sanity checks
-	 */	
-	return_if_fail (rule != NULL, ret_error);
-
-	if (rule->match == NULL) {
-		return ret_error;
-	}
+	return_if_fail (rule, ret_error);
+	return_if_fail (rule->match, ret_error);
 
 	/* Call the real method
 	 */
