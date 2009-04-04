@@ -151,7 +151,8 @@
 "      generic: 'Generic', "                                                                        CRLF\
 "      balancers: 'Balancers', "                                                                    CRLF\
 "      rules: 'Rules',"                                                                             CRLF\
-"      cryptors: 'Cryptors'"                                                                        CRLF\
+"      cryptors: 'Cryptors',"                                                                       CRLF\
+"      vrules: 'VRules'"                                                                            CRLF\
 "    }"                                                                                             CRLF\
 "  },"                                                                                              CRLF\
 "  icons: {"                                                                                        CRLF\
@@ -280,14 +281,17 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 
 		if (equal_buf_str (&subconf->key, "type")) {
 			if (equal_buf_str (&subconf->val, "normal")) {
-				
+
 			} else if (equal_buf_str (&subconf->val, "just_about")) {
 				props->just_about = true;
 				
 			} else if (equal_buf_str (&subconf->val, "connection_details")) {
 				props->connection_details = true;
 
-			} 
+			} else {
+				PRINT_ERROR("Unknown ServerInfo type: '%s'\n", subconf->val.buf);
+				return ret_error;
+			}
 		}
 	}
 
@@ -465,6 +469,7 @@ modules_while (cherokee_buffer_t *key, void *value, void *params[])
 	int *balancer   = (int *) params[5];
 	int *rules      = (int *) params[6];
 	int *cryptors   = (int *) params[7];
+	int *vrules     = (int *) params[8];
 
 	cherokee_plugin_loader_entry_t *entry = value;
 	cherokee_plugin_info_t         *mod   = entry->info;
@@ -487,6 +492,8 @@ modules_while (cherokee_buffer_t *key, void *value, void *params[])
 		*rules += 1;
 	} else if (mod->type & cherokee_cryptor) {
 		*cryptors += 1;
+	} else if (mod->type & cherokee_vrule) {
+		*vrules += 1;
 	} else {
 		PRINT_ERROR("Unknown module type (%d)\n", mod->type);
 	}
@@ -506,8 +513,9 @@ add_modules (cherokee_dwriter_t *writer,
 	cuint_t  balancers  = 0;
 	cuint_t  rules      = 0;
 	cuint_t  cryptors   = 0;
+	cuint_t  vrules     = 0;
 	void    *params[]   = {&loggers, &handlers, &encoders, &validators,
-			       &generic, &balancers, &rules, &cryptors};
+			       &generic, &balancers, &rules, &cryptors, &vrules};
 
 	cherokee_avl_while (&srv->loader.table, 
 			    (cherokee_avl_while_func_t) modules_while, 
@@ -530,6 +538,8 @@ add_modules (cherokee_dwriter_t *writer,
 	cherokee_dwriter_integer (writer, rules);
 	cherokee_dwriter_cstring (writer, "cryptors");
 	cherokee_dwriter_integer (writer, cryptors);
+	cherokee_dwriter_cstring (writer, "vrules");
+	cherokee_dwriter_integer (writer, vrules);
 	cherokee_dwriter_dict_close (writer);
 }
 

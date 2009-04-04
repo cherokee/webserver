@@ -1,5 +1,8 @@
 2009-04-04  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_server_info.c: Adds support for vrules
+	[matching rules for virtual servers].
+
 	* admin/ModuleWildcard.py, admin/consts.py, admin/ModuleRehost.py,
 	admin/Makefile.am: Adds support for the 'Rehost' vrule in
 	cherokee-admin.
