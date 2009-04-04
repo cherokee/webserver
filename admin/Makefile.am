@@ -94,6 +94,7 @@ ModuleExists.py \
 ModuleMethod.py \
 ModuleBind.py \
 ModuleCustomError.py \
+ModuleWildcard.py \
 config.py \
 pyscgi.py \
 validations.py \

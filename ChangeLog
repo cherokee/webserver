@@ -1,5 +1,9 @@
 2009-04-04  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleWildcard.py, admin/consts.py, admin/PageVServer.py,
+	admin/Makefile.am: The new 'wildcard' virtual host match plug-in
+	is now supported by cherokee-admin.
+
 	* contrib/0999to09910.py: New configuration file converter.
 	Cherokee 0.99.9 to Cherokee 0.99.10.
 

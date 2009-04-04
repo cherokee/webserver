@@ -121,6 +121,10 @@ RULES = [
     ('geoip',      'GeoIP')
 ]
 
+VRULES = [
+    ('wildcard',   'Wildcards')
+]
+
 EXPIRATION_TYPE = [
     ('',         'Not set'),
     ('epoch',    'Already expired on 1970'),

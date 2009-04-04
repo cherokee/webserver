@@ -202,7 +202,7 @@ class PageVServer (PageMenu, FormHelper):
 
         # Domains
         tmp = self._render_hosts(host)
-        tabs += [('Domain names', tmp)]
+        tabs += [('Host Match', tmp)]
 
         # Behavior
         pre = 'vserver!%s!rule' %(host)
@@ -528,6 +528,18 @@ class PageVServer (PageMenu, FormHelper):
         return txt
 
     def _render_hosts (self, host):
+        pre = "vserver!%s" % (host)
+
+        txt = '<h2>Host names</h2>'
+        table = TableProps()
+        e = self.AddPropOptions_Reload (table, 'Matching method',
+                                        '%s!match' % (pre), 
+                                        modules_available(VRULES), 
+                                        NOTE_ERROR_HANDLER)
+        txt += self.Indent(table) + e
+        return txt
+
+    def _render_hosts_OLD (self, host):
         txt  = ""
 
         cfg_domains = self._cfg["vserver!%s!domain"%(host)]
