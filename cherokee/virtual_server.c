@@ -579,9 +579,10 @@ add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 	cherokee_plugin_info_t *info      = NULL;
 	cherokee_server_t      *srv       = SRV(vserver->server_ref);
 	
+	/* Ensure there is a logger to instance..
+	 */
 	if (cherokee_buffer_is_empty (&config->val)) {
-		PRINT_ERROR_S ("ERROR: A logger must be specified\n");
-		return ret_error;
+		return ret_ok;
 	}
 
 	/* Instance a new logger

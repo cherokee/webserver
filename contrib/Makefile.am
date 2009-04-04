@@ -13,6 +13,7 @@ bin2buffer.py \
 09to010.py \
 011to098.py \
 098to099.py \
+0999to09910.py \
 tracelor.py \
 make-cert.sh
 
