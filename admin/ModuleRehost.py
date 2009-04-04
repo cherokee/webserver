@@ -3,16 +3,16 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_WILDCARD = "Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example.com"
+NOTE_REHOST = "Regular Expression against which the hosts be Host name will be compared."
 
-class ModuleWildcard (Module, FormHelper):
+class ModuleRehost (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url):
-        FormHelper.__init__ (self, 'wildcard', cfg)
-        Module.__init__ (self, 'wildcard', cfg, prefix, submit_url)
+        FormHelper.__init__ (self, 'rehost', cfg)
+        Module.__init__ (self, 'rehost', cfg, prefix, submit_url)
 
     def _op_render (self):
         txt = ''
-        pre = '%s!domain'%(self._prefix)
+        pre = '%s!regex'%(self._prefix)
         cfg_domains = self._cfg[pre]
 
         available = "1"
@@ -20,7 +20,7 @@ class ModuleWildcard (Module, FormHelper):
         if cfg_domains and \
            cfg_domains.has_child():
             table = Table(2,1)
-            table += ('Domain pattern', '')
+            table += ('Regular Expressions', '')
 
             # Build list
             for i in cfg_domains:
@@ -31,7 +31,7 @@ class ModuleWildcard (Module, FormHelper):
                 link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
                 table += (en, link_del)
                 
-            txt += "<h2>Accepted domains</h2>"
+            txt += "<h2>Regular Expressions</h2>"
             txt += self.Indent(table)
             txt += "<br />"
 
@@ -44,7 +44,7 @@ class ModuleWildcard (Module, FormHelper):
             i += 1
 
         table = TableProps()
-        self.AddPropEntry (table, 'New host name', '%s!%s'%(pre, available), NOTE_WILDCARD)
+        self.AddPropEntry (table, 'New Regular Expression', '%s!%s'%(pre, available), NOTE_REHOST)
         txt += "<h3>Add new</h3>"
         txt += self.Indent(table)
 

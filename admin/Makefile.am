@@ -95,6 +95,7 @@ ModuleMethod.py \
 ModuleBind.py \
 ModuleCustomError.py \
 ModuleWildcard.py \
+ModuleRehost.py \
 config.py \
 pyscgi.py \
 validations.py \

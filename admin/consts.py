@@ -122,7 +122,8 @@ RULES = [
 ]
 
 VRULES = [
-    ('wildcard',   'Wildcards')
+    ('wildcard',   'Wildcards'),
+    ('rehost',     'Regular Expressions')
 ]
 
 EXPIRATION_TYPE = [
