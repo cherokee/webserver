@@ -1,5 +1,8 @@
 2009-04-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleWildcard.py, admin/ModuleRehost.py: Warn the user if
+	the list ('domain' or 'regex') is empty.
+
 	* admin/ModuleEvhost.py, admin/consts.py, admin/PageVServer.py,
 	admin/Makefile.am: Adds "Enhanced Virtual Hosting" support to
 	cherokee-admin.
