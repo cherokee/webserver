@@ -3,7 +3,7 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_REHOST = "The document root will be built dynamically. The following variables are accepted:<br/>" +\
+NOTE_REHOST = "The Document Root directory will be built dynamically. The following variables are accepted:<br/>" +\
     "${domain}, ${tld}, ${domain_no_tld}, ${subdomain1}, ${subdomain2}."
 
 class ModuleEvhost (Module, FormHelper):

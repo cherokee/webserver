@@ -52,6 +52,7 @@ NOTE_WRT_EXEC         = 'Path to the executable that will be invoked on each log
 NOTE_X_REAL_IP        = 'Whether the logger should read and use the X-Real-IP header (send by reverse proxy front-ends).'
 NOTE_X_REAL_IP_ALL    = 'Accept all the X-Real-IP headers. It\'s dangerous: turn it on only if you are centain of what you are doing.'
 NOTE_X_REAL_IP_ACCESS = 'List of IP addresses and subnets that are allowed to send X-Real-IP headers (usually your proxy servers).'
+NOTE_EVHOST           = 'How to support the "Advanced Virtual Hosting" mechanism. (Default: off)'
 
 TXT_NO  = "<i>No</i>"
 TXT_YES = "<i>Yes</i>"
@@ -440,7 +441,7 @@ class PageVServer (PageMenu, FormHelper):
         txt += '<h2>Advanced Virtual Hosting</h2>'
         table = TableProps()
         e = self.AddPropOptions_Reload (table, 'Method', '%s!evhost'%(pre),
-                                        modules_available(EVHOSTS), NOTE_ERRORS)
+                                        modules_available(EVHOSTS), NOTE_EVHOST)
         txt += self.Indent(table) + e
 
         return txt
