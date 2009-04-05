@@ -122,8 +122,8 @@ typedef struct {
  */
 #define PLUGIN_INFO_EASY_INIT(type,name)                            \
 	PLUGIN_INFO_INIT(name, type,                                \
-		(void *)cherokee_ ## type ## _ ## name ## _new,     \
-		(void *)cherokee_ ## type ## _ ## name ## _configure)
+		(void *)type ## _ ## name ## _new,     \
+		(void *)type ## _ ## name ## _configure)
 
 
 /* Plugin initialization function

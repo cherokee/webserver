@@ -31,6 +31,7 @@
 #include "access.h"
 #include "handler_error.h"
 #include "rule_default.h"
+#include "gen_evhost.h"
 
 #include <errno.h>
 
@@ -55,6 +56,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->keepalive       = true;
 	n->cryptor         = NULL;
 	n->post_max_len    = -1;
+	n->evhost          = NULL;
 
 	/* Virtual entries
 	 */
@@ -124,6 +126,10 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	if (vserver->cryptor != NULL) {
 		cherokee_cryptor_vserver_free (vserver->cryptor);
 		vserver->cryptor = NULL;
+	}
+
+	if (vserver->evhost != NULL) {
+		MODULE(vserver->evhost)->free (vserver->evhost);
 	}
 
 	cherokee_buffer_mrproper (&vserver->name);
@@ -572,6 +578,52 @@ configure_match (cherokee_config_node_t    *config,
 
 
 static ret_t 
+add_evhost (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
+{
+	ret_t                   ret;
+	evhost_func_new_t       func_new;	
+	evhost_func_configure_t func_config;
+	cherokee_plugin_info_t *info         = NULL;
+	cherokee_server_t      *srv          = SRV(vserver->server_ref);
+
+	/* Ensure there is a logger to instance..
+	 */
+	if (cherokee_buffer_is_empty (&config->val)) {
+		return ret_ok;
+	}
+
+	/* Load the plug-in
+	 */
+	ret = cherokee_plugin_loader_get (&srv->loader, config->val.buf, &info);
+	if (ret < ret_ok) {
+		PRINT_MSG ("ERROR: Couldn't load evhost module '%s'\n", config->val.buf);
+		return ret_error;
+	}
+
+	func_new = (evhost_func_new_t) info->instance;
+	if (func_new == NULL)
+		return ret_error;
+
+	func_config = (evhost_func_configure_t) info->configure;
+	if (func_config == NULL)
+		return ret_error;
+
+	/* Instance the evhost object
+	 */
+	ret = func_new ((void **) &vserver->evhost, vserver);
+	if (ret != ret_ok)
+		return ret;
+
+	/* Configure it
+	 */
+	ret = func_config (vserver->evhost, config);
+	if (ret != ret_ok)
+		return ret_error;
+	
+	return ret_ok;
+}
+
+static ret_t 
 add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 {
 	ret_t                   ret;
@@ -698,6 +750,11 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		ret = add_error_handler (conf, vserver);
 		if (ret != ret_ok)
 			return ret;
+
+	} else if (equal_buf_str (&conf->key, "evhost")) {
+		ret = add_evhost (conf, vserver);
+		if (ret != ret_ok)
+			return ret_error;
 
 	} else if (equal_buf_str (&conf->key, "logger")) {
 		ret = add_logger (conf, vserver);

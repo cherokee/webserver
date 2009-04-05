@@ -322,6 +322,23 @@ endif
 
 
 #
+# Gen wildcard
+#
+gen_evhost = \
+gen_evhost.c \
+gen_evhost.h
+
+libplugin_evhost_la_LDFLAGS = $(module_ldflags)  
+libplugin_evhost_la_SOURCES = $(gen_evhost)
+
+if STATIC_GEN_EVHOST
+static_gen_evhost_src = $(gen_evhost)
+else
+dynamic_gen_evhost_lib = libplugin_evhost.la
+endif
+
+
+#
 # Handler server_info
 #
 handler_server_info = \
@@ -1294,6 +1311,8 @@ $(static_rule_or_src) \
 $(static_vrule_wildcard_src) \
 $(static_vrule_rehost_src) \
 \
+$(static_gen_evhost_src) \
+\
 $(static_handler_file_src) \
 $(static_handler_admin_src) \
 $(static_handler_dirlist_src) \
@@ -1470,6 +1489,7 @@ $(dynamic_rule_and_lib) \
 $(dynamic_rule_or_lib) \
 $(dynamic_vrule_wildcard_lib) \
 $(dynamic_vrule_rehost_lib) \
+$(dynamic_gen_evhost_lib) \
 $(dynamic_handler_file_lib) \
 $(dynamic_handler_cgi_lib) \
 $(dynamic_handler_phpcgi_lib) \

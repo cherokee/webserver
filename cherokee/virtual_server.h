@@ -37,6 +37,7 @@
 #include "rule_list.h"
 #include "cryptor.h"
 #include "vrule.h"
+#include "gen_evhost.h"
 
 typedef struct {
 	cherokee_list_t              list_node;
@@ -60,6 +61,7 @@ typedef struct {
 
 	cherokee_buffer_t            root;            /* Document root. Eg: /var/www */
 	cherokee_list_t              index_list;      /* Eg: index.html, index.php   */
+	void                        *evhost;
 
 	struct {                                      /* Number of bytes {up,down}loaded */
 		off_t                tx;

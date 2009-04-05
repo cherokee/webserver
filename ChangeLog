@@ -1,5 +1,13 @@
 2009-04-04  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/virtual_server.c, cherokee/virtual_server.h,
+	cherokee/Makefile.am, cherokee/gen_evhost.c, cherokee/plugin.h,
+	cherokee/gen_evhost.h, cherokee/connection.c, configure.in: Adds a
+	new "Enhanced Virtual Hosting" plug-in. It allows to define
+	generic virtual servers that can handle many different hosts.
+	Document root directories are dynamically generated (based on the
+	domain name).
+
 	* cherokee/handler_server_info.c: Adds support for vrules
 	[matching rules for virtual servers].
 
