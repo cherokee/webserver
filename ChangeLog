@@ -1,5 +1,8 @@
 2009-04-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* contrib/0999to09910.py (convert): Fix. Do not convert host that
+	have no 'domain' entries (usually 'default').
+
 	* admin/ModuleWildcard.py, admin/ModuleRehost.py: Warn the user if
 	the list ('domain' or 'regex') is empty.
 

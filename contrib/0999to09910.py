@@ -27,7 +27,10 @@ def convert (fin, fout):
     cin = Config(fin)
 
     for v in cin.keys('vserver'):
-        for d in cin.keys('vserver!%s!domain'%(v)):
+        domains = cin.keys('vserver!%s!domain'%(v))
+        if not domains:
+            continue
+        for d in domains:
             key = 'vserver!%s!domain!%s'%(v,d)
             dom = cin.get_val(key)
             del (cin[key])
