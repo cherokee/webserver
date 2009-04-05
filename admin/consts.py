@@ -138,6 +138,11 @@ CRYPTORS = [
     ('libssl',   'OpenSSL / libssl')
 ]
 
+EVHOSTS = [
+    ('',         'Off'),
+    ('evhost',   'Enhanced Virtual Hosting')
+]
+
 CLIENT_CERTS = [
     ('',         'Skip'),
     ('accept',   'Accept'),

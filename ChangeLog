@@ -1,3 +1,9 @@
+2009-04-05  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/ModuleEvhost.py, admin/consts.py, admin/PageVServer.py,
+	admin/Makefile.am: Adds "Enhanced Virtual Hosting" support to
+	cherokee-admin.
+
 2009-04-04  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,

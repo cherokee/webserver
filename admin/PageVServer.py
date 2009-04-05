@@ -437,6 +437,12 @@ class PageVServer (PageMenu, FormHelper):
         self.AddPropCheck (table, 'Traffic Statistics', '%s!collect_statistics'%(pre), True, NOTE_COLLECT)
         txt += self.Indent(table)
 
+        txt += '<h2>Advanced Virtual Hosting</h2>'
+        table = TableProps()
+        e = self.AddPropOptions_Reload (table, 'Method', '%s!evhost'%(pre),
+                                        modules_available(EVHOSTS), NOTE_ERRORS)
+        txt += self.Indent(table) + e
+
         return txt
 
     def _render_logger (self, host):
