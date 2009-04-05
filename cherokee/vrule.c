@@ -24,7 +24,6 @@
 
 #include "common-internal.h"
 #include "vrule.h"
-#include "connection.h"
 #include "virtual_server.h"
 #include "util.h"
 
@@ -89,14 +88,13 @@ cherokee_vrule_configure (cherokee_vrule_t       *vrule,
 
 ret_t 
 cherokee_vrule_match (cherokee_vrule_t  *vrule,
-		      cherokee_buffer_t *buffer,
-		      void              *conn)
+		      cherokee_buffer_t *buffer)
 {
 	return_if_fail (vrule, ret_error);
 	return_if_fail (vrule->match, ret_error);
 
 	/* Call the real method
 	 */
-	return vrule->match (vrule, buffer, conn);
+	return vrule->match (vrule, buffer);
 }
 

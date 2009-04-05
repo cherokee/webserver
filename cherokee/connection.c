@@ -1863,7 +1863,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		
 		/* Set the virtual server reference
 		 */
-		ret = cherokee_server_get_vserver (CONN_SRV(conn), &conn->host, conn,
+		ret = cherokee_server_get_vserver (CONN_SRV(conn), &conn->host,
 						   (cherokee_virtual_server_t **)&conn->vserver);
 		if (unlikely (ret != ret_ok)) {
 			PRINT_ERROR ("Couldn't get virtual server: '%s'\n", conn->host.buf);

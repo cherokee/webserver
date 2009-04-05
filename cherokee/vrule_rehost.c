@@ -25,8 +25,6 @@
 #include "common-internal.h"
 #include "vrule_rehost.h"
 #include "plugin_loader.h"
-#include "connection.h"
-#include "connection-protected.h"
 #include "server-protected.h"
 #include "match.h"
 #include "regex.h"
@@ -39,13 +37,10 @@ PLUGIN_INFO_VRULE_EASIEST_INIT(rehost);
 
 static ret_t 
 match (cherokee_vrule_rehost_t *vrule,
-       cherokee_buffer_t       *host,
-       cherokee_connection_t   *conn)
+       cherokee_buffer_t       *host)
 {
 	int              re;
 	cherokee_list_t *i;
-
-	UNUSED(conn);
 	
 	list_for_each (i, &vrule->pcre_list) {
 		pcre *regex = LIST_ITEM_INFO(i);
