@@ -595,6 +595,9 @@ class PageVServer (PageMenu, FormHelper):
         # Error handler
         self.ApplyChanges_OptionModule ('%s!error_handler'%(pre), uri, post)
 
+        # EVHost
+        self.ApplyChanges_OptionModule ('%s!evhost'%(pre), uri, post)
+
         # Look for the checkboxes
         checkboxes = ['%s!keepalive'%(pre),
                       '%s!collect_statistics'%(pre),

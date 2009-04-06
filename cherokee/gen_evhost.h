@@ -48,6 +48,7 @@ typedef struct {
 
 	/* Properties */
 	cherokee_template_t tpl_document_root;
+	cherokee_boolean_t  check_document_root;
 
 	/* Methods */
 	evhost_func_droot_t func_document_root;

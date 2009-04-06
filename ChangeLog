@@ -1,3 +1,11 @@
+2009-04-06  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/gen_evhost.c, admin/PageVServer.py,
+	  cherokee/gen_evhost.h, admin/ModuleEvhost.py: Adds a new
+	  'check_document_root' flag to the EVHost plug-in. If turned on,
+	  it will check whether the dynamically generated document root
+	  exist. If not, it will use the regular document root instead.
+
 2009-04-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* contrib/0999to09910.py (convert): Fix. Do not convert host that

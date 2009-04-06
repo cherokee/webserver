@@ -3,10 +3,19 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_REHOST = "The Document Root directory will be built dynamically. The following variables are accepted:<br/>" +\
-    "${domain}, ${tld}, ${domain_no_tld}, ${subdomain1}, ${subdomain2}."
+NOTE_CHECK_DROOT = "Check the dynamically generated Document Root, and use the general Document Root if it doesn't exist."
+NOTE_REHOST      = "The Document Root directory will be built dynamically. The following variables are accepted:<br/>" +\
+                   "${domain}, ${tld}, ${domain_no_tld}, ${subdomain1}, ${subdomain2}."
+
+DATA_VALIDATION = [
+]
 
 class ModuleEvhost (Module, FormHelper):
+    PROPERTIES = [
+        'tpl_document_root',
+        'check_document_root'
+    ]
+
     def __init__ (self, cfg, prefix, submit_url):
         FormHelper.__init__ (self, 'evhost', cfg)
         Module.__init__ (self, 'evhost', cfg, prefix, submit_url)
@@ -15,7 +24,12 @@ class ModuleEvhost (Module, FormHelper):
         txt = ''
 
         table = TableProps()
-        self.AddPropEntry (table, 'Dynamic Document Root', '%s!tpl_document_root'%(self._prefix), NOTE_REHOST)
+        self.AddPropEntry (table, "Dynamic Document Root", '%s!tpl_document_root'%(self._prefix), NOTE_REHOST)
+        self.AddPropCheck (table, "Check Document Root",   '%s!check_document_root' %(self._prefix), True,  NOTE_CHECK_DROOT)
         txt += self.Indent(table)
 
         return txt
+
+    def _op_apply_changes (self, uri, post):
+        checkboxes = ['check_document_root']
+        self.ApplyChangesPrefix (self._prefix, checkboxes, post, DATA_VALIDATION)

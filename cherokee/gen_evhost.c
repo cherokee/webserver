@@ -26,6 +26,10 @@
 #include "gen_evhost.h"
 #include "plugin_loader.h"
 #include "connection-protected.h"
+#include "server-protected.h"
+#include "util.h"
+
+#define ENTRIES "evhost"
 
 PLUGIN_INFO_EASY_INIT (cherokee_generic, evhost);
 PLUGIN_EMPTY_INIT_FUNCTION(evhost);
@@ -41,17 +45,63 @@ _free (cherokee_generic_evhost_t *evhost)
 }
 
 static ret_t
+_check_document_root (cherokee_connection_t *conn)
+		      
+{
+	ret_t                     ret;
+	struct stat               stat_mem;
+	struct stat              *info;
+	cherokee_iocache_entry_t *io_entry = NULL;
+
+	ret = cherokee_io_stat (CONN_SRV(conn)->iocache,
+				&conn->local_directory,
+				(CONN_SRV(conn)->iocache != NULL),
+				&stat_mem, &io_entry, &info);
+
+	if (ret != ret_ok) {
+		ret = ret_not_found;
+		goto out;
+	}
+
+	if (! S_ISDIR(info->st_mode)) {
+		ret = ret_not_found;
+		goto out;
+	}
+	
+	ret = ret_ok;
+
+out:
+	if (io_entry) {
+		cherokee_iocache_entry_unref (&io_entry);
+	}
+	return ret;
+}
+
+static ret_t
 _render_document_root (cherokee_generic_evhost_t *evhost,
 		       cherokee_connection_t     *conn)
 {
 	ret_t ret;
 
+	/* Render the document root
+	 */
 	ret = cherokee_template_render (&evhost->tpl_document_root,
 					&conn->local_directory, conn);
-	if (unlikely (ret != ret_ok)) {
+	if (unlikely (ret != ret_ok))
 		return ret_error;
+
+	if (! evhost->check_document_root)
+		return ret_ok;
+
+	/* Check the Document Root
+	 */
+	ret = _check_document_root (conn);
+	if (ret != ret_ok) {
+		TRACE(ENTRIES, "Dynamic Document Root '%s' doesn't exist\n", conn->local_directory.buf);
+		return ret_not_found;
 	}
 
+	TRACE(ENTRIES, "Dynamic Document Root '%s' exists\n", conn->local_directory.buf);
 	return ret_ok;
 }
 
@@ -61,6 +111,9 @@ cherokee_generic_evhost_configure (cherokee_generic_evhost_t *evhost,
 {
 	ret_t              ret;
 	cherokee_buffer_t *tmp;
+
+	cherokee_config_node_read_bool (config, "check_document_root",
+					&evhost->check_document_root);
 
 	ret = cherokee_config_node_read (config, "tpl_document_root", &tmp);
 	if (ret != ret_ok) {
@@ -243,8 +296,9 @@ cherokee_generic_evhost_new (cherokee_generic_evhost_t **evhost)
 	 */
 	cherokee_module_init_base (MODULE(n), NULL, PLUGIN_INFO_PTR(evhost));
 
-	MODULE(n)->free       = (module_func_free_t) _free;
-	n->func_document_root = (evhost_func_droot_t) _render_document_root;
+	MODULE(n)->free        = (module_func_free_t) _free;
+	n->func_document_root  = (evhost_func_droot_t) _render_document_root;
+	n->check_document_root = true;
 
 	/* Properties
 	 */
