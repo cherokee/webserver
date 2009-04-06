@@ -1949,6 +1949,8 @@ cherokee_server_get_log_writer (cherokee_server_t         *srv,
 
 	/* Add it to the index
 	 */
+	cherokee_list_add (&(*writer)->listed, &srv->logger_writers);
+
 	ret = cherokee_avl_add (&srv->logger_writers_index, &tmp, *writer);
 	if (ret != ret_ok) {
 		goto error;

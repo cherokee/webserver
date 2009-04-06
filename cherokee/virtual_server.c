@@ -138,6 +138,11 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 		MODULE(vserver->evhost)->free (vserver->evhost);
 	}
 
+	if (vserver->logger != NULL) {
+		cherokee_logger_free (vserver->logger);
+		vserver->logger = NULL;
+	}
+
 	cherokee_buffer_mrproper (&vserver->name);
 	cherokee_buffer_mrproper (&vserver->root);
 	cherokee_buffer_mrproper (&vserver->userdir);
