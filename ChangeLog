@@ -1,5 +1,8 @@
 2009-04-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/virtual_server.c: Fixes a wrong memory initialization
+	issue introduced a couple of days ago.
+
 	* cherokee/gen_evhost.c, admin/PageVServer.py,
 	cherokee/gen_evhost.h, admin/ModuleEvhost.py: Adds a new
 	'check_document_root' flag to the EVHost plug-in. If turned on, it

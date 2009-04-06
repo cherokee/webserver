@@ -57,6 +57,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->cryptor         = NULL;
 	n->post_max_len    = -1;
 	n->evhost          = NULL;
+	n->matching        = NULL;
 
 	/* Virtual entries
 	 */
@@ -126,6 +127,11 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	if (vserver->cryptor != NULL) {
 		cherokee_cryptor_vserver_free (vserver->cryptor);
 		vserver->cryptor = NULL;
+	}
+
+	if (vserver->matching != NULL) {
+		cherokee_vrule_free (vserver->matching);
+		vserver->matching = NULL;
 	}
 
 	if (vserver->evhost != NULL) {
