@@ -1924,7 +1924,7 @@ cherokee_server_get_log_writer (cherokee_server_t         *srv,
 	 */
 	ret = cherokee_logger_writer_get_id (config, &tmp);
 	if (ret != ret_ok) {
-		return ret_error;
+		goto error;
 	}
 
 	/* Check the writers tree
@@ -1932,7 +1932,7 @@ cherokee_server_get_log_writer (cherokee_server_t         *srv,
 	ret = cherokee_avl_get (&srv->logger_writers_index, &tmp, (void **)writer);
 	if ((ret == ret_ok) && (*writer != NULL)) {
 		TRACE(ENTRIES",log", "Reusing logger: '%s'\n", tmp.buf);
-		return ret_ok;
+		goto ok;
 	}
 
 	/* Create a new writer object
@@ -1954,7 +1954,10 @@ cherokee_server_get_log_writer (cherokee_server_t         *srv,
 		goto error;
 	}
 		
+ok:
 	TRACE(ENTRIES",log", "Instanced a new logger: '%s'\n", tmp.buf);
+
+	cherokee_buffer_mrproper (&tmp);
 	return ret_ok;
 
 error:

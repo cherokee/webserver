@@ -73,7 +73,7 @@ ret_t cherokee_logger_writer_get_buf     (cherokee_logger_writer_t *writer, cher
 ret_t cherokee_logger_writer_release_buf (cherokee_logger_writer_t *writer);
 
 /* Extra */
-ret_t cherokee_logger_writer_get_id    (cherokee_config_node_t   *conf, cherokee_buffer_t *id);
+ret_t cherokee_logger_writer_get_id    (cherokee_config_node_t *conf, cherokee_buffer_t *id);
 
 CHEROKEE_END_DECLS
 
