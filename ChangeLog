@@ -1,10 +1,10 @@
 2009-04-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/gen_evhost.c, admin/PageVServer.py,
-	  cherokee/gen_evhost.h, admin/ModuleEvhost.py: Adds a new
-	  'check_document_root' flag to the EVHost plug-in. If turned on,
-	  it will check whether the dynamically generated document root
-	  exist. If not, it will use the regular document root instead.
+	cherokee/gen_evhost.h, admin/ModuleEvhost.py: Adds a new
+	'check_document_root' flag to the EVHost plug-in. If turned on, it
+	will check whether the dynamically generated document root
+	exist. If not, it will use the regular document root instead.
 
 2009-04-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -317,7 +317,7 @@
 	working according with RFC 2616: Section 4.3.
 
 	* admin/PageVServer.py: Fixes the final flag management. It seems
-	that we introducced a regression a few days ago.
+	that we introduced a regression a few days ago.
 
 	* cherokee/bind.c (cherokee_bind_configure): Fixed compilation
 	with Sun CC. Patch by Alfred Peng <Alfred.Peng@Sun.COM>. Thanks!
@@ -1660,7 +1660,7 @@
 
 	* cherokee/server-protected.h, cherokee/bind.c, cherokee/bind.h,
 	cherokee/thread.h, cherokee/server.c, cherokee/thread.c: This
-	patch tries to address a performance regression introducced on Dec
+	patch tries to address a performance regression introduced on Dec
 	27th.
 
 	* cherokee/iocache.c: Tries to fix a I/O-cache bug.  This patch is
@@ -3562,7 +3562,7 @@
 2008-08-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/thread.c: Fixes an issue of redirections replies over
-	Keepalive connections. This regression was introducced right
+	Keepalive connections. This regression was introduced right
 	before releasing 0.8.0.
 
 	* cherokee/handler_dirlist.c: Adds a final slash whenever the list
@@ -4268,7 +4268,7 @@
 
 	* cherokee/handler_error.c (build_hardcoded_response_page): This
 	handled has to take conn->web_directory into account. This patch
-	fixes a regression that I introducced a few days ago when I was
+	fixes a regression that I introduced a few days ago when I was
 	cleaning up the web_directory mess.
 
 	* cherokee/handler_error.c (cherokee_handler_error_add_headers):
@@ -11803,7 +11803,7 @@
 	Rodrigo Fernandez Vizarra: <Rodrigo.Fernandez-Vizarra@Sun.COM>
 
 	* cherokee/handler_dirlist.c (new_file_entry): Fixed. There was a
-	logic problem introducced on 0.4.22.
+	logic problem introduced on 0.4.22.
 
 2005-05-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -12361,7 +12361,7 @@
 2005-02-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/handler_cgi.c: Fixed silly bug.  Now POST requests are
-	working again.  This problem was introducced in the execl() to
+	working again.  This problem was introduced in the execl() to
 	execve() code conversion.
 
 2005-02-18  Alvaro Lopez Ortega  <alvaro@alobbs.com>
