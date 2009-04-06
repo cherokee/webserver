@@ -226,7 +226,10 @@ run-tests.py \
 218-DrupalRedirect.py \
 219-Ext-Dot-Pathinfo.py \
 220-Pathinfo-Slash.py \
-221-ReHost1.py
+221-ReHost1.py \
+222-EVHost1.py \
+223-EVHost2.py \
+224-EVHost3.py 
 
 
 test:

@@ -1,5 +1,8 @@
 2009-04-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* qa/222-EVHost1.py, qa/223-EVHost2.py, qa/224-EVHost3.py,
+	qa/Makefile.am: Three new QA tests for testing the EVHost support.
+
 	* cherokee/virtual_server.c: Fixes a wrong memory initialization
 	issue introduced a couple of days ago.
 
