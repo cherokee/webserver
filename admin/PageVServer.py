@@ -202,8 +202,9 @@ class PageVServer (PageMenu, FormHelper):
         tabs += [('Basics', tmp)]
 
         # Domains
-        tmp = self._render_hosts(host)
-        tabs += [('Host Match', tmp)]
+        if name != 'default':
+            tmp = self._render_hosts(host)
+            tabs += [('Host Match', tmp)]
 
         # Behavior
         pre = 'vserver!%s!rule' %(host)
