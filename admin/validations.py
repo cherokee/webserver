@@ -166,7 +166,7 @@ def is_safe_id (value):
     for v in value:
         if v not in string.letters + string.digits and \
            v not in "_-.":
-           raise ValueError, 'Invalid character '+v
+           raise ValueError, 'Invalid char. Accepts: letters, digits, _, - and .'
     return value
 
 def is_safe_id_list (value):
