@@ -975,6 +975,12 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 			} else
 				goto unknown;
 			break;
+		case 'E':
+			if (header_equals ("Expect", header_expect, begin, header_len)) {
+				ret = add_known_header (hdr, header_expect, val_offs, val_len);
+			} else
+				goto unknown;
+			break;
 		case 'H':
 			if (header_equals ("Host", header_host, begin, header_len)) {
 				ret = add_known_header (hdr, header_host, val_offs, val_len);

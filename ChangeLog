@@ -1,3 +1,9 @@
+2009-04-07  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/header.c, cherokee/header.h, cherokee/handler_proxy.c,
+	cherokee/connection.c: Adds some sort support for POST requests
+	with "Expect: 100-Continue" header.
+
 2009-04-07  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageVServer.py: 'Host Match' tab should not be available

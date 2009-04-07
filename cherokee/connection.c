@@ -1666,6 +1666,25 @@ get_range (cherokee_connection_t *conn, char *ptr, int ptr_len)
 
 
 static ret_t
+send_100continue (cherokee_connection_t *conn)
+{
+	ret_t       ret;
+	const char *reply   = "HTTP/1.1 100 Continue" CRLF CRLF; /* 25 chars */
+	size_t      written = 0;
+
+	ret = cherokee_socket_write (&conn->socket, reply, 25, &written);
+	if ((ret == ret_ok) && (written == 25)) {
+		TRACE(ENTRIES, "Sent a '100 Continue' response.\n");
+		return ret_ok;
+	}
+
+	TRACE(ENTRIES, "Could not send a '100 Continue' response. Error=500.\n");
+	conn->error_code = http_internal_error;
+	return ret_error;
+}
+
+
+static ret_t
 post_init (cherokee_connection_t *conn)
 {
 	ret_t    ret;
@@ -1723,6 +1742,17 @@ post_init (cherokee_connection_t *conn)
 	/* Set the length
 	 */
 	cherokee_post_set_len (&conn->post, post_len);
+
+	/* Check "Expect: 100-continue" header
+	 */
+	ret = cherokee_header_get_known (&conn->header, header_expect, &info, &info_len);
+	if (ret == ret_ok) {
+		ret = send_100continue(conn);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
+	}
+
 	return ret_ok;
 }
 

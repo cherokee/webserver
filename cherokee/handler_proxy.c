@@ -458,6 +458,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 
 		/* Check the header entry  */
 		if ((! strncasecmp (begin, "Host:", 5)) ||
+		    (! strncasecmp (begin, "Expect:", 7)) ||
 		    (! strncasecmp (begin, "Connection:", 11)) ||
 		    (! strncasecmp (begin, "Keep-Alive:", 11)) ||
 		    (! strncasecmp (begin, "Transfer-Encoding:", 18)))
@@ -893,6 +894,14 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	while ((*p == CHR_CR) || (*p == CHR_LF)) 
 		p++;
 
+	/* Skip 100 Continue headers - pseudo responses to the
+	 * "Expect: 100-Continue" client header.
+	 */
+	if (conn->error_code == http_continue) {
+		cherokee_buffer_move_to_begin (buf_in, header_end - buf_in->buf);
+		return ret_eagain;
+	}
+
 	/* Parse the headers
 	 */
 	begin = p;
@@ -1034,7 +1043,8 @@ ret_t
 cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 				    cherokee_buffer_t        *buf)
 {
-	ret_t ret;
+	ret_t                  ret;
+	cherokee_connection_t *conn = HANDLER_CONN(hdl);
 
 	if (unlikely (hdl->pconn == NULL)) {
 		return ret_error;
@@ -1043,8 +1053,15 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 	/* Parse the incoming header
 	 */
 	ret = parse_server_header (hdl, &hdl->pconn->header_in_raw, buf);
-	if (ret != ret_ok) {
-		return ret;
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_eagain:
+		hdl->init_phase = proxy_init_read_header;
+		conn->phase     = phase_init;
+		return ret_eagain;
+	default:
+		return ret_error;
 	}
 
 	/* If the reply has no body, let's mark it
