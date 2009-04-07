@@ -46,7 +46,8 @@ LOGGERS = [
     ('',           'None'),
     ('combined',   'Apache compatible'),
     ('w3c',        'W3C'),
-    ('ncsa',       'NCSA')
+    ('ncsa',       'NCSA'),
+    ('custom',     'Custom')
 ]
 
 LOGGER_WRITERS = [

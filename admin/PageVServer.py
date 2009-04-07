@@ -22,6 +22,8 @@ DATA_VALIDATION = [
     ("vserver!.*?!logger!x_real_ip_access$",   validations.is_ip_or_netmask_list),
 ]
 
+DEFAULT_LOGGER_TEMPLATE = '${ip_remote} - ${user_remote} ${now} ${request_original} ${status}'
+
 RULE_LIST_NOTE = """
 <p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.</p>
 """
@@ -53,6 +55,7 @@ NOTE_X_REAL_IP        = 'Whether the logger should read and use the X-Real-IP he
 NOTE_X_REAL_IP_ALL    = 'Accept all the X-Real-IP headers. It\'s dangerous: turn it on only if you are centain of what you are doing.'
 NOTE_X_REAL_IP_ACCESS = 'List of IP addresses and subnets that are allowed to send X-Real-IP headers (usually your proxy servers).'
 NOTE_EVHOST           = 'How to support the "Advanced Virtual Hosting" mechanism. (Default: off)'
+NOTE_LOGGER_TEMPLATE     = 'The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}'
 
 TXT_NO  = "<i>No</i>"
 TXT_YES = "<i>Yes</i>"
@@ -498,6 +501,11 @@ class PageVServer (PageMenu, FormHelper):
                     self.AddPropEntry (t1, 'Command', '%s!access!command'%(pre), NOTE_WRT_EXEC)
                     writers += str(t1)
 
+                if format == 'custom':
+                    t2 = TableProps()
+                    self._add_logger_template(t2, pre, 'access')
+                    writers += str(t2)
+
                 writers += "<hr />"
 
                 # Error
@@ -515,6 +523,11 @@ class PageVServer (PageMenu, FormHelper):
                     t1 = TableProps()
                     self.AddPropEntry (t1, 'Command', '%s!error!command'%(pre), NOTE_WRT_EXEC)
                     writers += str(t1)
+
+                if format == 'custom':
+                    t2 = TableProps()
+                    self._add_logger_template(t2, pre, 'error')
+                    writers += str(t2)
 
             txt += '<h2>Writers</h2>'
             txt += self.Indent(writers)
@@ -652,3 +665,10 @@ class PageVServer (PageMenu, FormHelper):
         for entry in to_be_deleted:
             key = "%s!%s" % (cfg_key, entry)
             del(self._cfg[key])
+
+    def _add_logger_template (self, table, prefix, target):
+        cfg_key = '%s!%s_template' % (prefix, target)
+        value = self._cfg.get_val(cfg_key)
+        if not value:
+            self._cfg[cfg_key] = DEFAULT_LOGGER_TEMPLATE
+        self.AddPropEntry (table, 'Template: ', cfg_key, NOTE_LOGGER_TEMPLATE)

@@ -16,6 +16,9 @@
 	* admin/Rule.py: Fixes a bug with checkboxes in complex rules.
 	http://code.google.com/p/cherokee/issues/detail?id=405
 
+	* admin/consts.py, admin/PageVServer.py: Adds initial custom logs
+	support to Cherokee-Admin.
+
 2009-04-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/server.c (cherokee_server_get_log_writer): Fixes a tiny
