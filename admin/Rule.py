@@ -17,14 +17,17 @@ class Rule (Module, FormHelper):
 
     def get_checks (self):
         matcher = self._cfg.get_val(self._prefix)
-        if matcher in ['not', 'and', 'or']:
-            return []
-        if not matcher:
-            return []
-
-        rule_module = module_obj_factory (matcher, self._cfg, self._prefix, self.submit_url)
-        if 'checks' in dir(rule_module):
-            return rule_module.checks
+        if matcher == 'not':
+            r = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.depth+1)
+            return r.get_checks()
+        elif matcher in ['or', 'and']:
+            r1 = Rule(self._cfg, '%s!left'%(self._prefix), self.submit_url, self.depth+1)
+            r2 = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.depth+1)
+            return r1.get_checks() + r2.get_checks()
+        else:
+            rule_module = module_obj_factory (matcher, self._cfg, self._prefix, self.submit_url)
+            if 'checks' in dir(rule_module):
+                return rule_module.checks
         return []
 
     def get_title (self):
