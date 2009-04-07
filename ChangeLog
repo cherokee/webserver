@@ -1,5 +1,25 @@
 2009-04-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/media/images/admin_general.png,
+	doc/media/images/admin_vserver_loggers.png,
+	doc/media/images/admin_general_networking.png,
+	doc/media/images/admin_advanced2.png,
+	doc/media/images/admin_advanced4.png,
+	doc/media/images/admin_general_permissions.png,
+	doc/media/images/admin_behaviour.png,
+	doc/media/images/admin_vserver.png,
+	doc/media/images/admin_rule_regex.png,
+	doc/media/images/admin_general_ports.png,
+	doc/media/images/admin_advanced1.png,
+	doc/media/images/admin_advanced3.png,
+	doc/media/images/admin_notrunning.png,
+	doc/media/images/admin_vserver_security.png,
+	doc/media/images/admin_noconfig.png,
+	doc/media/images/admin_vserver_vserver.png,
+	doc/config_info_sources.txt, doc/basics_upgrade.txt,
+	doc/Makefile.am: Documentation requires some attention. Some
+	images have been updated. More commits to come.
+
 	* cherokee/main_admin.c: Added a couple of printf()s to report the
 	URL where cherokee-admin interface is accessible.
 

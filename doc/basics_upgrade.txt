@@ -17,7 +17,8 @@ The usage is quite simple, and works the same way for all the
 scripts:
 
 ----
-    contrib/07to08.py /path/cherokee.conf.07 /path/cherokee.conf.08
+    cp /etc/cherokee/cherokee.conf /etc/cherokee/cherokee.conf-0.99.9
+    contrib/0999to09910.py /etc/cherokee/cherokee.conf-0.99.9 /etc/cherokee/cherokee.conf
 ----
 
 If you need to upgrade from a really old release, simply apply the

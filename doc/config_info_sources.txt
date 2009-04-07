@@ -81,9 +81,11 @@ Further insight
 This is the list of currently supported balancing strategies:
 
 * link:modules_balancers_round_robin.html[Round Robin]
+* link:modules_balancers_ip_hash.html[IP Hash]
 
 And these are the handlers that use balancing:
 
+* link:modules_handlers_proxy.html[Reverse HTTP proxy]
 * link:modules_handlers_fcgi.html[FastCGI]
 * link:modules_handlers_scgi.html[SCGI]
 * link:modules_handlers_mirror.html[Generic balancer]
