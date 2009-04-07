@@ -1,5 +1,8 @@
 2009-04-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main_admin.c: Added a couple of printf()s to report the
+	URL where cherokee-admin interface is accessible.
+
 	* cherokee/header.c, cherokee/header.h, cherokee/handler_proxy.c,
 	cherokee/connection.c: Adds some sort support for POST requests
 	with "Expect: 100-Continue" header.

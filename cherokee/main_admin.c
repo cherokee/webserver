@@ -63,16 +63,16 @@ find_empty_port (int starting, int *port)
 {
 	ret_t             ret;
 	cherokee_socket_t s;
-	int               p    = starting;
-	cherokee_buffer_t bind = CHEROKEE_BUF_INIT;
+	int               p     = starting;
+	cherokee_buffer_t bind_ = CHEROKEE_BUF_INIT;
 
-	cherokee_buffer_add_str (&bind, "127.0.0.1");
+	cherokee_buffer_add_str (&bind_, "127.0.0.1");
 
 	cherokee_socket_init (&s);
 	cherokee_socket_set_client (&s, AF_INET);
 
 	while (true) {
-		ret = cherokee_socket_bind (&s, p, &bind);
+		ret = cherokee_socket_bind (&s, p, &bind_);
 		if (ret == ret_ok) 
 			break;
 
@@ -80,9 +80,10 @@ find_empty_port (int starting, int *port)
 			return ret_error;
 	}
 
-	cherokee_socket_close(&s);
-	cherokee_socket_mrproper(&s);
-	cherokee_buffer_mrproper(&bind);
+	cherokee_socket_close (&s);
+
+	cherokee_socket_mrproper (&s);
+	cherokee_buffer_mrproper (&bind_);
 
 	*port = p;
 	return ret_ok;
@@ -112,16 +113,26 @@ config_server (cherokee_server_t *srv)
 	cherokee_buffer_t buf       = CHEROKEE_BUF_INIT;
 	cherokee_buffer_t password  = CHEROKEE_BUF_INIT;
 
+	/* Print some information
+	 */
+	printf ("\n");
+
 	if (unsecure == 0) {
 		ret = generate_admin_password (&password);
 		if (ret != ret_ok) 
 			return ret;
 
-		printf ("\nLogin:\n"
+		printf ("Login:\n"
 			"  User:              admin\n"
-			"  One-time Password: %s\n\n", password.buf);
+			"  One-time Password: %s\n", password.buf);
 	}
 
+	printf ("\nWeb Interface:\n"
+		"  URL:               http://%s:9090/\n\n",
+		(bind_to) ? bind_to : "localhost");
+
+	/* Configure the embedded server
+	 */
 	ret = find_empty_port (scgi_port, &scgi_port);
 	if (ret != ret_ok) 
 		return ret;
