@@ -124,10 +124,10 @@ config_server (cherokee_server_t *srv)
 
 		printf ("Login:\n"
 			"  User:              admin\n"
-			"  One-time Password: %s\n", password.buf);
+			"  One-time Password: %s\n\n", password.buf);
 	}
 
-	printf ("\nWeb Interface:\n"
+	printf ("Web Interface:\n"
 		"  URL:               http://%s:9090/\n\n",
 		(bind_to) ? bind_to : "localhost");
 
