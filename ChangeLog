@@ -1,5 +1,7 @@
 2009-04-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/http.h, cherokee/http.c: Adds 406 Not acceptable.
+
 	* cherokee/proxy_hosts.c, cherokee/handler_cgi_base.c,
 	cherokee/util.c: Adds a check to ensure that the incoming header
 	isn't larger than MAX_HEADER_LEN.
