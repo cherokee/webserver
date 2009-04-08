@@ -1024,7 +1024,12 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 	/* Look the end of headers
 	 */
 	ret = cherokee_find_header_end (inbuf, &content, &end_len);
-	if (ret != ret_ok) {
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_error:
+		return ret_error;
+	default:
 		return (cgi->got_eof) ? ret_eof : ret_eagain;		
 	}
 

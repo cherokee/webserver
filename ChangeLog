@@ -1,5 +1,9 @@
 2009-04-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/proxy_hosts.c, cherokee/handler_cgi_base.c,
+	cherokee/util.c: Adds a check to ensure that the incoming header
+	isn't larger than MAX_HEADER_LEN.
+
 	* cherokee/handler_proxy.c, cherokee/handler_proxy.h,
 	admin/ModuleProxy.py: Adds a new option to preserve the original
 	"Host:" header when the reverse proxy forwards a request.

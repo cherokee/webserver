@@ -1592,15 +1592,21 @@ cherokee_find_header_end (cherokee_buffer_t  *buf,
 	char *p;
 	char *fin;
 	char *begin;
+	char *limit;
 	int   len;
 
 	if (cherokee_buffer_is_empty (buf))
 		return ret_not_found;
 
-	p   = buf->buf;
-	fin = buf->buf + buf->len;
+	p     = buf->buf;
+	fin   = buf->buf + buf->len;
+	limit = buf->buf + MAX_HEADER_LEN;
 
 	while (p < fin) {
+		if (unlikely (p > limit)) {
+			return ret_error;
+		}
+
 		if ((*p == CHR_CR) || (*p == CHR_LF)) {
 			len   = 0;
 			begin = p;

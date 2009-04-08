@@ -319,8 +319,14 @@ cherokee_handler_proxy_conn_recv_headers (cherokee_handler_proxy_conn_t *pconn,
 	/* Look for the end of header
 	 */
 	ret = cherokee_find_header_end (&pconn->header_in_raw, &end, &sep_len);
-	if (ret != ret_ok)
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_not_found:
 		return ret_eagain;
+	default:
+		return ret_error;
+	}
 
 	/* Copy the body if there is any
 	 */
