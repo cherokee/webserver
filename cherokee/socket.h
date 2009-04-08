@@ -164,6 +164,7 @@ ret_t cherokee_socket_accept            (cherokee_socket_t *socket, cherokee_soc
 ret_t cherokee_socket_accept_fd         (cherokee_socket_t *socket, int *new_fd, cherokee_sockaddr_t *sa);
 int   cherokee_socket_pending_read      (cherokee_socket_t *socket);
 ret_t cherokee_socket_flush             (cherokee_socket_t *socket);
+ret_t cherokee_socket_test_read         (cherokee_socket_t *socket);
 
 ret_t cherokee_socket_set_client        (cherokee_socket_t *socket, unsigned short int type);
 ret_t cherokee_socket_bind              (cherokee_socket_t *socket, int port, cherokee_buffer_t *listen_to);

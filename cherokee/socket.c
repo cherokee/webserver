@@ -792,6 +792,43 @@ cherokee_socket_flush (cherokee_socket_t *socket)
 }
 
 
+ret_t
+cherokee_socket_test_read (cherokee_socket_t *socket)
+{
+	int  re;
+	char tmp;
+
+	if (socket->socket != -1)
+		goto eof;
+
+	re = recv (socket->socket, &tmp, 1, MSG_PEEK);
+	if (re == 0) {
+		goto eof;
+	} else if (re == -1) {
+		if ((errno == EINTR)  ||
+		    (errno == EAGAIN) ||
+		    (errno == EWOULDBLOCK))
+		{
+			goto eagain;
+		}
+		goto error;
+	}
+	
+	TRACE(ENTRIES, "read test: %s\n", "OK");
+	return ret_ok;
+
+eagain:
+	TRACE(ENTRIES, "read test: %s\n", "EAGAIN");
+	return ret_eagain;
+eof:
+	TRACE(ENTRIES, "read test: %s\n", "EOF");
+	return ret_eof;
+error:
+	TRACE(ENTRIES, "read test: %s\n", "ERROR");
+	return ret_eof;
+}
+
+
 /* WARNING: all parameters MUST be valid,
  *          NULL pointers lead to a crash.
  */

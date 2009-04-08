@@ -1,5 +1,7 @@
 2009-04-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/socket.c (cherokee_socket_test_read): New method.
+
 	* cherokee/http.h, cherokee/http.c: Adds 406 Not acceptable.
 
 	* cherokee/proxy_hosts.c, cherokee/handler_cgi_base.c,
