@@ -121,6 +121,7 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		n->balancer           = NULL;
 		n->reuse_max          = DEFAULT_REUSE_MAX;
 		n->in_allow_keepalive = true;
+		n->in_preserve_host   = false;
 
 		INIT_LIST_HEAD (&n->in_request_regexs);
 		INIT_LIST_HEAD (&n->in_headers_add);
@@ -154,6 +155,9 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 
 		} else if (equal_buf_str (&subconf->key, "in_allow_keepalive")) {
 			props->in_allow_keepalive = !! atoi (subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "in_preserve_host")) {
+			props->in_preserve_host = !! atoi (subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "in_header_hide")) {
 			cherokee_config_node_foreach (j, subconf) {
@@ -294,7 +298,6 @@ add_request (cherokee_handler_proxy_t *hdl,
 		cherokee_buffer_add_buffer (buf, tmp);
 	}
 
-	TRACE(ENTRIES, "Rebuilt request: '%s'\n", tmp->buf);
 	return ret_ok;
 }
 
@@ -391,9 +394,13 @@ build_request (cherokee_handler_proxy_t *hdl,
 
 	/* Add header: "Host: " */
 	cherokee_buffer_add_str (buf, "Host: ");
-	if (! cherokee_buffer_is_empty (&conn->host)) {
+	
+	if ((props->in_preserve_host) &&
+	    (! cherokee_buffer_is_empty (&conn->host)))
+	{
 		cherokee_buffer_add_buffer (buf, &conn->host);
-	} else {
+	}
+	else {
 		cherokee_buffer_add_buffer (buf, &hdl->src_ref->host);
 		if (hdl->src_ref->port != 80) { 
 			cherokee_buffer_add_char    (buf, ':'); 

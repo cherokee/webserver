@@ -1,5 +1,9 @@
 2009-04-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_proxy.c, cherokee/handler_proxy.h,
+	admin/ModuleProxy.py: Adds a new option to preserve the original
+	"Host:" header when the reverse proxy forwards a request.
+
 	* cherokee/logger_w3c.c, cherokee/bogotime.c, cherokee/bogotime.h,
 	cherokee/util.c, cherokee/util.h, cherokee/logger_ncsa.c: Some
 	updates regarding the time management routines. Some unused stuff
@@ -7,7 +11,6 @@
 
 	* cherokee/logger_custom.c: Implements a couple of variable
 	replacement that were unimplemented yet.
-
 
 2009-04-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 

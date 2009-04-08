@@ -60,6 +60,7 @@ typedef struct {
 	cherokee_list_t                 in_headers_add;
 	cherokee_list_t                 in_request_regexs;
 	cherokee_boolean_t              in_allow_keepalive;
+	cherokee_boolean_t              in_preserve_host;
 
 	/* Reply processing */
 	cherokee_avl_t                  out_headers_hide;

@@ -9,6 +9,7 @@ from ModuleBalancer import NOTE_BALANCER
 
 NOTE_REUSE_MAX       = "Maximum number of connection per server that the proxy can try to keep opened."
 NOTE_ALLOW_KEEPALIVE = "Allow the server to use Keep-alive connections with the back-end servers."
+NOTE_PRESERVE_HOST   = "Preserve the original \"Host:\" header sent by the client. (Default No)"
 
 HELPS = [
     ('modules_handlers_proxy', "Reverse Proxy")
@@ -16,7 +17,9 @@ HELPS = [
 
 class ModuleProxy (ModuleHandler):
     PROPERTIES = [
-        'balancer', 'in_allow_keepalive',
+        'balancer', 
+        'in_allow_keepalive',
+        'in_preserve_host',
         'in_header_add',      'out_header_add',
         'in_header_hide',     'out_header_hide',
         'in_rewrite_request', 'out_rewrite_request'
@@ -50,8 +53,9 @@ class ModuleProxy (ModuleHandler):
 
     def _render_general (self):
         table = TableProps()
-        self.AddPropEntry (table, 'Reuse connections', '%s!reuse_max'%(self._prefix), NOTE_REUSE_MAX)
-        self.AddPropCheck (table, 'Allow Keepalive',   '%s!in_allow_keepalive'%(self._prefix), True, NOTE_ALLOW_KEEPALIVE)
+        self.AddPropEntry (table, 'Reuse connections',    '%s!reuse_max'%(self._prefix), NOTE_REUSE_MAX)
+        self.AddPropCheck (table, 'Allow Keepalive',      '%s!in_allow_keepalive'%(self._prefix), True, NOTE_ALLOW_KEEPALIVE)
+        self.AddPropCheck (table, 'Preserve Host header', '%s!in_preserve_host'%(self._prefix), False, NOTE_PRESERVE_HOST)
         return str(table)
 
     def _render_request (self):
@@ -203,4 +207,5 @@ class ModuleProxy (ModuleHandler):
             props._op_apply_changes (uri, post)
 
         # And CGI changes
-        self.ApplyChangesPrefix (self._prefix, ['in_allow_keepalive'], post)
+        self.ApplyChangesPrefix (self._prefix, 
+                                 ['in_allow_keepalive', 'in_preserve_host'], post)
