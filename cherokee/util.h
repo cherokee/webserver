@@ -92,7 +92,10 @@ char *strcasestr (register char *s, register char *find);
 void *rpl_malloc (size_t n);
 #endif
 
+/* Constants
+ */
 extern const char hex2dec_tab[256];
+extern const char *month[13];
 
 /* String management functions
  */

@@ -56,15 +56,6 @@
 PLUGIN_INFO_LOGGER_EASIEST_INIT (ncsa);
 
 
-/* Some constants
- */
-static const char *month[] = {
-	"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec", 
-	NULL
-};
-
-
 ret_t
 cherokee_logger_ncsa_new (cherokee_logger_t         **logger,
 			  cherokee_virtual_server_t  *vsrv,

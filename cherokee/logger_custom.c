@@ -38,6 +38,12 @@
  */
 PLUGIN_INFO_LOGGER_EASIEST_INIT (custom);
 
+
+/* Global stuff
+ */
+static cherokee_buffer_t now;
+
+
 /* The macros
  */
 static ret_t
@@ -227,12 +233,9 @@ add_now (cherokee_template_t       *template,
 {
 	UNUSED (template);
 	UNUSED (token);
+	UNUSED (param);
 
-	output = output;
-	param  = param;
-
-	// Time when accepted
-	return ret_ok;
+	return cherokee_buffer_add_buffer (output, &now);
 }
 
 static ret_t
@@ -243,12 +246,9 @@ add_time_secs (cherokee_template_t       *template,
 {
 	UNUSED (template);
 	UNUSED (token);
-
-	output = output;
-	param  = param;
-
-	// Elapse
-	return ret_ok;
+	UNUSED (param);
+	
+	return cherokee_buffer_add_long10 (output, cherokee_bogonow_now);
 }
 
 static ret_t
@@ -257,14 +257,7 @@ add_time_nsecs (cherokee_template_t       *template,
 		cherokee_buffer_t         *output,
 		void                      *param)
 {
-	UNUSED (template);
-	UNUSED (token);
-
-	output = output;
-	param  = param;
-
-	// Elapse
-	return ret_ok;
+	return cherokee_buffer_add_ullong10 (output, cherokee_bogonow_msec);
 }
 
 static ret_t
@@ -413,12 +406,33 @@ _init_template (cherokee_logger_custom_t *logger,
 }
 
 
+static void 
+bogotime_callback (void) 
+{
+	struct tm *pnow_tm = &cherokee_bogonow_tmloc;
+	
+	cherokee_buffer_clean  (&now);
+	cherokee_buffer_add_va (&now,
+				"%02d/%s/%d:%02d:%02d:%02d %c%02d%02d",
+				pnow_tm->tm_mday,
+				month[pnow_tm->tm_mon],
+				1900 + pnow_tm->tm_year,
+				pnow_tm->tm_hour,
+				pnow_tm->tm_min,
+				pnow_tm->tm_sec,
+				(cherokee_bogonow_tzloc < 0) ? '-' : '+',
+				(int) (abs(cherokee_bogonow_tzloc) / 60),
+				(int) (abs(cherokee_bogonow_tzloc) % 60));
+}
+
+
 ret_t
 cherokee_logger_custom_new (cherokee_logger_t         **logger,
 			    cherokee_virtual_server_t  *vsrv,
 			    cherokee_config_node_t     *config)
 {
 	ret_t                   ret;
+	static int              callback_init = 0;
 	cherokee_config_node_t *subconf;
 	CHEROKEE_NEW_STRUCT (n, logger_custom);
 
@@ -463,6 +477,13 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 	ret = _init_template (n, &n->template_error, config, "error_template");
 	if (ret != ret_ok)
 		return ret;
+
+	/* Callback init
+	 */
+	if (callback_init == 0) {
+		cherokee_buffer_init (&now);
+		cherokee_bogotime_add_callback (bogotime_callback);
+	}
 
 	/* Return the object
 	 */

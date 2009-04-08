@@ -35,7 +35,8 @@
 
 #include <cherokee/buffer.h>
 
-typedef unsigned int cherokee_msec_t;
+typedef unsigned long long cherokee_msec_t;
+typedef void (*bogotime_callback_t) (void);
 
 /* Global bogonow variables
  */
@@ -44,9 +45,7 @@ typedef unsigned int cherokee_msec_t;
 extern struct timeval           cherokee_bogonow_tv;
 extern volatile cherokee_msec_t cherokee_bogonow_msec;
 extern volatile time_t          cherokee_bogonow_now;
-
-extern int                      cherokee_bogonow_tzloc_sign;
-extern cuint_t                  cherokee_bogonow_tzloc_offset;
+extern long                     cherokee_bogonow_tzloc;
 
 /* Thread unsafe */
 extern struct tm                cherokee_bogonow_tmloc;
@@ -55,14 +54,17 @@ extern cherokee_buffer_t        cherokee_bogonow_strgmt;
 
 /* Functions
  */
-ret_t cherokee_bogotime_init       (void);
-ret_t cherokee_bogotime_free       (void);
+ret_t cherokee_bogotime_init         (void);
+ret_t cherokee_bogotime_free         (void);
 
-ret_t cherokee_bogotime_update     (void);
-ret_t cherokee_bogotime_try_update (void);
+ret_t cherokee_bogotime_update       (void);
+ret_t cherokee_bogotime_try_update   (void);
 
 /* Multi-threading */
-void  cherokee_bogotime_lock_read  (void);
-void  cherokee_bogotime_release    (void);
+void  cherokee_bogotime_lock_read    (void);
+void  cherokee_bogotime_release      (void);
+
+/* Callbacks */
+ret_t cherokee_bogotime_add_callback (bogotime_callback_t func);
 
 #endif /* CHEROKEE_BOGOTIME_H */

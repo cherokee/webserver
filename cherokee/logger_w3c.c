@@ -56,16 +56,7 @@ PLUGIN_INFO_LOGGER_EASIEST_INIT (w3c);
  * - http://www.w3.org/TR/WD-logfile
  */
 
-/* Some constants
- */
-static const char *month[] = {
-	"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-	NULL
-};
-
 #define IN_ADDR(c) ((struct in_addr) (c).sin_addr)
-
 
 ret_t
 cherokee_logger_w3c_new (cherokee_logger_t         **logger,

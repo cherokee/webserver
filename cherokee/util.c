@@ -98,6 +98,12 @@ const char hex2dec_tab[256] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   /* F0-FF */
 };
 
+const char *month[13] = {
+	"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec", 
+	NULL
+};
+
 
 /* Given an error number (errno) it returns an error string.
  * Parameters "buf" and "bufsize" are passed by caller
@@ -986,10 +992,7 @@ cherokee_path_arg_eval (cherokee_buffer_t *path)
 long * 
 cherokee_get_timezone_ref (void)
 {
-#ifdef HAVE_INT_TIMEZONE
-	return &timezone;
-#else
-# ifdef HAVE_STRUCT_TM_GMTOFF
+#ifdef HAVE_STRUCT_TM_GMTOFF
 	struct tm   tm;
 	time_t      timestamp;
 	static long tz         = 43201; /* 12h+1s: out of range */
@@ -1000,6 +1003,9 @@ cherokee_get_timezone_ref (void)
 		tz = -tm.tm_gmtoff;
 	}
 	return &tz;
+#else
+# ifdef HAVE_INT_TIMEZONE
+	return &timezone;
 # else
 	static long _faked_timezone = 0;
 	return &_faked_timezone;
