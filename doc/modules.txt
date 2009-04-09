@@ -30,6 +30,7 @@
     - link:modules_encoders_deflate.html[deflate]: compress using deflate algorithm.
   . link:modules_loggers.html[Loggers]: Logging mechanisms.
     - link:modules_loggers_combined.html[Combined]: Combined Log Format.
+    - link:modules_loggers_custom.html[Custom]: Customizable Format.
     - link:modules_loggers_ncsa.html[Common (NCSA)]: Common Log Format.
     - link:modules_loggers_w3c.html[w3c]: W3C Log Format.
   . link:modules_balancers.html[Balancers]: Load balancing strategies.

@@ -22,5 +22,6 @@ solely determined by the logger chosen. Cherokee currently supports
 the following loggers:
 
 * link:modules_loggers_combined.html[Combined]: Apache compatible. *Recommended*.
+* link:modules_loggers_custom.html[Custom]: Customizable format.
 * link:modules_loggers_ncsa.html[NCSA]: NCSA style.
 * link:modules_loggers_w3c.html[W3C]: W3C standard.

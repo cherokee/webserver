@@ -94,6 +94,7 @@ modules_loggers.html \
 modules_loggers_combined.html \
 modules_loggers_ncsa.html \
 modules_loggers_w3c.html \
+modules_loggers_custom.html \
 modules_validators.html \
 modules_validators_htdigest.html \
 modules_validators_htpasswd.html \

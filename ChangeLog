@@ -1,5 +1,9 @@
 2009-04-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/modules_loggers_custom.txt, doc/modules_loggers.txt,
+	doc/modules.txt, doc/Makefile.am: Adds some basic 'Custom logger'
+	documentation.
+
 	* cherokee/handler_proxy.c (cherokee_handler_proxy_init): Improve
 	error management on the initialization phase.
 
