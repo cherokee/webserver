@@ -1,5 +1,8 @@
 2009-04-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/bogotime.c (update_guts): Fixes a regression and I
+	introducced yesterday.
+
 	* cherokee/connection.c (cherokee_connection_instance_encoder):
 	Encoders should not be used for replies without body.
 

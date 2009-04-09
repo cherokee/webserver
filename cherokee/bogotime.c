@@ -149,6 +149,7 @@ update_guts (void)
 	len = cherokee_dtm_gmttm2str (cherokee_bogonow_strgmt.buf,
 				      cherokee_bogonow_strgmt.size,
 				      &cherokee_bogonow_tmgmt);
+	cherokee_bogonow_strgmt.len = len;
 	cherokee_bogonow_strgmt.buf[len] = '\0';
 
 	/* Callbacks
