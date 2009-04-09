@@ -670,6 +670,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		ret = cherokee_handler_proxy_hosts_get (&props->hosts, hdl->src_ref,
 							&poll, props->reuse_max);
 		if (unlikely (ret != ret_ok)) {
+			conn->error_code = http_service_unavailable;
 			return ret_error;
 		}
 
@@ -677,6 +678,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		 */
 		ret = cherokee_handler_proxy_poll_get (poll, &hdl->pconn, hdl->src_ref);
 		if (unlikely (ret != ret_ok)) {
+			conn->error_code = http_service_unavailable;
 			return ret_error;
 		}
 		
@@ -696,7 +698,9 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		{
 			ret = cherokee_proxy_util_init_socket (&hdl->pconn->socket, hdl->src_ref);
 			if (ret != ret_ok) {
-				return ret_eof;
+				hdl->pconn->keepalive_in = false;
+				conn->error_code = http_bad_gateway;
+				return ret_error;
 			}
 		}
 		
@@ -712,17 +716,23 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			case ret_ok:
 				break;
 			case ret_error:
+				conn->error_code = http_bad_gateway;
+				hdl->pconn->keepalive_in = false;
+				return ret_error;
 			case ret_eagain:
-				return ret;
+				return ret_eagain;
 			case ret_deny:
 				if (hdl->respined) {
 					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 					conn->error_code = http_bad_gateway;
+					hdl->pconn->keepalive_in = false;
 					return ret_error;
 				}
 				hdl->respined = true;
 				goto reconnect;
 			default:
+				hdl->pconn->keepalive_in = false;
+				conn->error_code = http_bad_gateway;
 				RET_UNKNOWN(ret);
 				return ret_error;
 			}
@@ -737,7 +747,9 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		if (cherokee_buffer_is_empty (&hdl->request)) {
 			ret = build_request (hdl, &hdl->request);
 			if (unlikely (ret != ret_ok)) {
-				return ret;
+				conn->error_code = http_bad_gateway;
+				hdl->pconn->keepalive_in = false;
+				return ret_error;
 			}
 		}
 
@@ -752,18 +764,21 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		case ret_ok:
 			break;
 		case ret_eagain:
-			return ret;
+			return ret_eagain;
 		case ret_eof:
 		case ret_error:
 			if (hdl->respined) {
 				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+				conn->error_code = http_bad_gateway;
 				hdl->pconn->keepalive_in = false;
-				return ret_eof;
+				return ret_error;
 			}
 
 			hdl->respined = true;
 			goto reconnect;
 		default:
+			hdl->pconn->keepalive_in = false;
+			conn->error_code = http_bad_gateway;
 			RET_UNKNOWN(ret);
 			return ret_error;
 		}
@@ -777,12 +792,15 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			switch (ret) {
 			case ret_ok:
 				break;
+			case ret_eagain:
+				return ret_eagain;
 			case ret_error:
 				hdl->pconn->keepalive_in = false;
-				return ret;
-			case ret_eagain:
-				return ret;
+				conn->error_code = http_bad_gateway;
+				return ret_error;
 			default:
+				hdl->pconn->keepalive_in = false;
+				conn->error_code = http_bad_gateway;
 				RET_UNKNOWN(ret);
 				return ret_error;
 			}
@@ -811,7 +829,9 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 								   hdl->pconn->socket.socket,
 								   FDPOLL_MODE_READ, false);
 			if (ret != ret_ok) {
-				return ret_eof;
+				hdl->pconn->keepalive_in = false;
+				conn->error_code = http_bad_gateway;
+				return ret_error;
 			}
 			return ret_eagain;
 		case ret_eof:
@@ -821,13 +841,16 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			if (hdl->respined) {
 				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 				hdl->pconn->keepalive_in = false;
-				return ret_eof;
+				conn->error_code = http_bad_gateway;
+				return ret_error;
 			}
 
 			cherokee_post_walk_reset (&conn->post);
 			hdl->respined = true;
 			goto reconnect;
 		default:
+			hdl->pconn->keepalive_in = false;
+			conn->error_code = http_bad_gateway;
 			RET_UNKNOWN(ret);
 			return ret_error;
 		}

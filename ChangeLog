@@ -1,3 +1,8 @@
+2009-04-09  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_proxy.c (cherokee_handler_proxy_init): Improve
+	error management on the initialization phase.
+
 2009-04-08  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/socket.c (cherokee_socket_test_read): New method.
