@@ -1,5 +1,8 @@
 2009-04-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/connection.c (cherokee_connection_instance_encoder):
+	Encoders should not be used for replies without body.
+
 	* doc/modules_loggers_custom.txt, doc/modules_loggers.txt,
 	doc/modules.txt, doc/Makefile.am: Adds some basic 'Custom logger'
 	documentation.

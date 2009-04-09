@@ -1125,6 +1125,10 @@ cherokee_connection_instance_encoder (cherokee_connection_t *conn)
 	if (conn->options & conn_op_cant_encoder)
 		return ret_deny;
 
+	if ((! http_code_with_body (conn->error_code)) ||
+	    (! http_method_with_body (conn->header.method)))
+		return ret_deny;
+
 	if (! http_type_200 (conn->error_code))
 		return ret_deny;
 
