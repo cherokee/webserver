@@ -685,8 +685,10 @@ cherokee_socket_read (cherokee_socket_t *socket,
 	 */
 	return_if_fail (buf != NULL && buf_size > 0, ret_error);
 
-	if (unlikely (socket->status == socket_closed))
+	if (unlikely (socket->status == socket_closed)) {
+		TRACE(ENTRIES, "Reading a closed socket: fd=%d\n", SOCKET_FD(socket));
 		return ret_eof;
+	}
 
 	if (likely (socket->is_tls != TLS)) {
 		/* Plain read

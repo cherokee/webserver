@@ -151,7 +151,7 @@ cherokee_handler_proxy_poll_get (cherokee_handler_proxy_poll_t  *poll,
 		/* Reuse a prev connection */
 		poll->reuse_len -= 1;
 
-		i = poll->reuse.next;
+		i = poll->reuse.prev;
 		cherokee_list_del (i);
 		cherokee_list_add (i, &poll->active);
 
@@ -210,9 +210,10 @@ poll_release (cherokee_handler_proxy_poll_t *poll,
 
 	/* Clean up
 	 */
-	pconn->enc      = pconn_enc_none;
-	pconn->size_in  = 0;
-	pconn->sent_out = 0;
+	pconn->keepalive_in = false;
+	pconn->size_in      = 0;
+	pconn->sent_out     = 0;
+	pconn->enc          = pconn_enc_none;
 
 	cherokee_buffer_clean (&pconn->header_in_raw);
 
