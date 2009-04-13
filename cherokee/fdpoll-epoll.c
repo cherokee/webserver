@@ -74,8 +74,7 @@ _free (cherokee_fdpoll_epoll_t *fdp)
 
 	/* Caller has to set this pointer to NULL.
 	 */
-	free (fdp);        
-
+	free (fdp);
 	return ret_ok;
 }
 
@@ -87,7 +86,7 @@ _add (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 
 	/* Check the fd limit
 	 */
-	if (cherokee_fdpoll_is_full (FDPOLL(fdp))) {
+	if (unlikely (cherokee_fdpoll_is_full (FDPOLL(fdp)))) {
 		PRINT_ERROR_S("epoll_add: fdpoll is full !\n");
 		return ret_error;
 	}
@@ -130,7 +129,7 @@ _del (cherokee_fdpoll_epoll_t *fdp, int fd)
 
 	/* Check the fd limit
 	 */
-	if (cherokee_fdpoll_is_empty (FDPOLL(fdp))) {
+	if (unlikely (cherokee_fdpoll_is_empty (FDPOLL(fdp)))) {
 		SHOULDNT_HAPPEN;
 		return ret_error;
 	}

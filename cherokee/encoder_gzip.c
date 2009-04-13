@@ -258,7 +258,7 @@ do_encode (cherokee_encoder_gzip_t *encoder,
 			cherokee_buffer_add (out, buf, sizeof(buf) - z->avail_out);			
 			break;
 		default:
-			PRINT_ERROR("Error in deflate(): err=%s avail=%d\n", 
+			PRINT_ERROR("Error in deflate(): err='%s' avail=%d\n", 
 				    get_gzip_error_string(err), 
 				    z->avail_in);
 			

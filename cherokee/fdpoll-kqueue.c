@@ -57,15 +57,14 @@
 
 
 typedef struct {
-	struct cherokee_fdpoll poll;
+	struct cherokee_fdpoll  poll;
 
-	int                    kqueue;
+	int                     kqueue;
 	struct kevent          *changelist;
 	int                    *fdevents;
 	int                    *fdinterest;
-	size_t                 nchanges;
+	size_t                  nchanges;
 } cherokee_fdpoll_kqueue_t;
-
 
 
 static ret_t 
@@ -75,17 +74,17 @@ _free (cherokee_fdpoll_kqueue_t *fdp)
 		return ret_ok;
 
 	if (fdp->kqueue >= 0)
-		close( fdp->kqueue );
+		close (fdp->kqueue);
 
 	/* ANSI C required, so that free() can handle NULL pointers
 	 */
-	free( fdp->changelist );
-	free( fdp->fdevents );
-	free( fdp->fdinterest );
+	free (fdp->changelist);
+	free (fdp->fdevents);
+	free (fdp->fdinterest);
 
 	/* Caller has to set this pointer to NULL.
 	 */
-	free( fdp );
+	free (fdp);
 	return ret_ok;
 }
 
@@ -93,11 +92,11 @@ _free (cherokee_fdpoll_kqueue_t *fdp)
 static ret_t
 _add_change(cherokee_fdpoll_kqueue_t *fdp, int fd, int rw, int change )
 {
-	int index;
+	int            index;
 	struct kevent *event;
 
 	index = fdp->nchanges;
-	if (index >= FDPOLL(fdp)->nfiles) {
+	if (unlikely (index >= FDPOLL(fdp)->nfiles)) {
 		PRINT_ERROR_S("kqueue_add: fdpoll is full !\n");
 		return ret_error;
 	}
@@ -114,7 +113,8 @@ _add_change(cherokee_fdpoll_kqueue_t *fdp, int fd, int rw, int change )
 	default:
 		SHOULDNT_HAPPEN;
         }
-	event->flags = change;
+
+	event->flags  = change;
 	event->fflags = 0;
 
 	fdp->fdinterest[fd] = rw;
@@ -129,8 +129,8 @@ _add (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 {
 	int re;
 
-	re = _add_change( fdp, fd, rw, EV_ADD);
-	if ( re == ret_ok) {
+	re = _add_change (fdp, fd, rw, EV_ADD);
+	if (re == ret_ok) {
 		FDPOLL(fdp)->npollfds++;
 	}
 
@@ -143,8 +143,8 @@ _del (cherokee_fdpoll_kqueue_t *fdp, int fd)
 {
 	int re;
  
-	re = _add_change( fdp, fd, fdp->fdinterest[fd], EV_DELETE);
-	if ( re == ret_ok) {
+	re = _add_change (fdp, fd, fdp->fdinterest[fd], EV_DELETE);
+	if (re == ret_ok) {
 		FDPOLL(fdp)->npollfds--;
 	}
 
@@ -159,7 +159,6 @@ _watch (cherokee_fdpoll_kqueue_t *fdp, int timeout_msecs)
 	int              i;
 	int              n_events;
 
-
 	timeout.tv_sec  = timeout_msecs/1000L;
 	timeout.tv_nsec = ( timeout_msecs % 1000L ) * 1000000L;
 
@@ -173,13 +172,15 @@ _watch (cherokee_fdpoll_kqueue_t *fdp, int timeout_msecs)
 			  FDPOLL(fdp)->nfiles,
 			  &timeout);
 	fdp->nchanges=0;
-	if ( n_events < 0 ) {
+	if (unlikely (n_events < 0)) {
 		PRINT_ERRNO (errno, "kevent: '${errno}'");
 		return 0;
-	} else if ( n_events > 0 ) {
-		memset(fdp->fdevents, 0, FDPOLL(fdp)->system_nfiles*sizeof(int));
-		for ( i = 0; i < n_events; ++i ) {
-			if ( fdp->changelist[i].filter == EVFILT_READ ) {
+
+	} else if (n_events > 0) {
+		memset (fdp->fdevents, 0, FDPOLL(fdp)->system_nfiles*sizeof(int));
+
+		for (i = 0; i < n_events; ++i) {
+			if (fdp->changelist[i].filter == EVFILT_READ) {
 				fdp->fdevents[fdp->changelist[i].ident] = KQUEUE_READ_EVENT;
 			} else if (fdp->changelist[i].filter == EVFILT_WRITE) {
 				fdp->fdevents[fdp->changelist[i].ident] = KQUEUE_WRITE_EVENT;
@@ -200,8 +201,9 @@ _check (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 
 	/* Sanity check: is it a wrong fd?
 	 */
-	if ( fd < 0 )
+	if (unlikely (fd < 0)) {
 		return -1;
+	}
 
 	events = fdp->fdevents[fd];
 
@@ -237,15 +239,19 @@ _set_mode (cherokee_fdpoll_kqueue_t *fdp, int fd, int rw)
 	 * disable any active event on the fd as we are
 	 * no longer interested on it.
 	 */
-	if ( rw == FDPOLL_MODE_WRITE &&
-	    fdp->fdinterest[fd] == FDPOLL_MODE_READ ) {
-		return _add_change(fdp, fd, FDPOLL_MODE_READ, EV_DELETE);
-	}
-	if ( rw == FDPOLL_MODE_READ && fdp->fdinterest[fd] == FDPOLL_MODE_WRITE ) {
-		return _add_change(fdp, fd, FDPOLL_MODE_WRITE, EV_DELETE);
+	if ((rw == FDPOLL_MODE_WRITE) &&
+	    (fdp->fdinterest[fd] == FDPOLL_MODE_READ))
+	{
+		return _add_change (fdp, fd, FDPOLL_MODE_READ, EV_DELETE);
 	}
 
-	return _add_change( fdp, fd, rw, EV_ADD );
+	if ((rw == FDPOLL_MODE_READ) &&
+	    (fdp->fdinterest[fd] == FDPOLL_MODE_WRITE))
+	{
+		return _add_change (fdp, fd, FDPOLL_MODE_WRITE, EV_DELETE);
+	}
+
+	return _add_change (fdp, fd, rw, EV_ADD);
 }
 
 
@@ -253,7 +259,7 @@ ret_t
 fdpoll_kqueue_get_fdlimits (cuint_t *system_fd_limit, cuint_t *fd_limit)
 {
 	*system_fd_limit = 0;
-	*fd_limit = 0;
+	*fd_limit        = 0;
 
 	return ret_ok;
 }
@@ -293,12 +299,13 @@ fdpoll_kqueue_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 	n->fdinterest      = (int *) calloc (nfd->system_nfiles, sizeof(int));
 
 	if (n->fdevents == NULL || n->changelist == NULL || n->fdinterest == NULL) {
-		_free( n );
+		_free (n);
 		return ret_nomem;
 	}
 
-	if ( (n->kqueue = kqueue()) == -1 ) {
-		_free( n );
+	n->kqueue = kqueue();
+	if (n->kqueue == -1) {
+		_free (n);
 		return ret_error;
 	}
 
