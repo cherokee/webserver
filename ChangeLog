@@ -1,3 +1,8 @@
+2009-04-10  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/proxy_hosts.c (poll_release): Implements a better reuse
+	policy.
+
 2009-04-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/bogotime.c (update_guts): Fixes a regression and I
