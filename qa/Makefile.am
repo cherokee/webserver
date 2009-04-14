@@ -230,7 +230,8 @@ run-tests.py \
 222-EVHost1.py \
 223-EVHost2.py \
 224-EVHost3.py \
-225-PathTranslated.py
+225-PathTranslated.py \
+226-PathInfo-Default.py
 
 
 test:
