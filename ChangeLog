@@ -1,5 +1,9 @@
 2009-04-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_cgi_base.c, qa/225-PathTranslated.py,
+	qa/Makefile.am: Adds PATH_TRANSLATED support to {Fast,S,}CGI. It
+	also adds a new QA test.
+
 	* admin/PageVServer.py (PageVServer._render_hosts): Makes the
 	Virtual Server page slightly more consistent. It wasn't showing
 	the "Domain Matching" tab in the 'default' virtual host, and that

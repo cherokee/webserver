@@ -677,6 +677,20 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 		cgi->add_env_pair (cgi, "SCRIPT_NAME", 11, tmp.buf, tmp.len);
 	}
 
+	/* Set PATH_TRANSLATED; only if PATH_INFO is set
+	 */
+	if (! cherokee_buffer_is_empty (&conn->pathinfo)) {
+		if (! cgi_props->check_file) {
+			cgi->add_env_pair (cgi, "PATH_TRANSLATED", 15,
+					   conn->local_directory.buf,
+					   conn->local_directory.len);
+		} else {
+			cgi->add_env_pair (cgi, "PATH_TRANSLATED", 15,
+					   cgi->executable.buf,
+					   cgi->executable.len);
+		}
+	}
+
 	/* SCRIPT_FILENAME
 	 * It depends on the type of CGI (CGI, SCGI o FastCGI):
 	 *    http://php.net/reserved.variables
