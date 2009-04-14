@@ -1,3 +1,10 @@
+2009-04-14  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/PageVServer.py (PageVServer._render_hosts): Makes the
+	Virtual Server page slightly more consistent. It wasn't showing
+	the "Domain Matching" tab in the 'default' virtual host, and that
+	has proved to be confusing for some users.
+
 2009-04-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.10 released

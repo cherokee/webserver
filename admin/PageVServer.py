@@ -28,6 +28,10 @@ RULE_LIST_NOTE = """
 <p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.</p>
 """
 
+DEFAULT_HOST_NOTE = """
+<p>The 'default' virtual server matches all the domain names.</p>
+"""
+
 NOTE_NICKNAME         = 'Nickname for the virtual server.'
 NOTE_CERT             = 'This directive points to the PEM-encoded Certificate file for the server (Full path to the file)'
 NOTE_CERT_KEY         = 'PEM-encoded Private Key file for the server (Full path to the file)'
@@ -205,9 +209,8 @@ class PageVServer (PageMenu, FormHelper):
         tabs += [('Basics', tmp)]
 
         # Domains
-        if name != 'default':
-            tmp = self._render_hosts(host)
-            tabs += [('Host Match', tmp)]
+        tmp = self._render_hosts(host, name)
+        tabs += [('Host Match', tmp)]
 
         # Behavior
         pre = 'vserver!%s!rule' %(host)
@@ -548,59 +551,20 @@ class PageVServer (PageMenu, FormHelper):
 
         return txt
 
-    def _render_hosts (self, host):
+    def _render_hosts (self, host, name):
         pre = "vserver!%s" % (host)
-
         txt = '<h2>Host names</h2>'
+
+        if name == 'default':
+            txt += self.Dialog(DEFAULT_HOST_NOTE)
+            return txt
+
         table = TableProps()
         e = self.AddPropOptions_Reload (table, 'Matching method',
                                         '%s!match' % (pre), 
                                         modules_available(VRULES), 
                                         NOTE_ERROR_HANDLER)
         txt += self.Indent(table) + e
-        return txt
-
-    def _render_hosts_OLD (self, host):
-        txt  = ""
-
-        cfg_domains = self._cfg["vserver!%s!domain"%(host)]
-
-        available = "1"
-
-        if cfg_domains and \
-           cfg_domains.has_child():
-            table = Table(2,1)
-            table += ('Domain pattern', '')
-
-            # Build list
-            for i in cfg_domains:
-                domain = cfg_domains[i].value
-                cfg_key = "vserver!%s!domain!%s" % (host, i)
-                en = self.InstanceEntry (cfg_key, 'text')
-                js = "post_del_key('%s','%s');" % (self.submit_ajax_url, cfg_key)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
-                table += (en, link_del)
-                
-            txt += "<h2>Accepted domains</h2>"
-            txt += self.Indent(table)
-            txt += "<br />"
-
-        # Look for firs available
-        i = 1
-        while cfg_domains:
-            if not cfg_domains[str(i)]:
-                available = str(i)
-                break
-            i += 1
-
-        # Add new domain
-        txt += "<h2>Add new domains</h2>"
-
-        table = TableProps()
-        cfg_key = "vserver!%s!domain!%s" % (host, available)
-        self.AddPropEntry (table, 'New Domain Name', cfg_key, NOTE_ADD_DOMAIN)
-        txt += self.Indent(table)
-
         return txt
 
     def _op_apply_changes (self, host, uri, post):
