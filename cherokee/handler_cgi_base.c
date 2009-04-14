@@ -654,7 +654,7 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 				name = &cgi->executable; /* cgi */
 			}
 			if (conn->local_directory.len > 0){
-				p = name->buf + conn->local_directory.len - 1;
+				p = name->buf + conn->local_directory.len;
 				len = (name->buf + name->len) - p;
 			} else {
 				p = name->buf;
@@ -680,15 +680,15 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	/* Set PATH_TRANSLATED; only if PATH_INFO is set
 	 */
 	if (! cherokee_buffer_is_empty (&conn->pathinfo)) {
-		if (! cgi_props->check_file) {
-			cgi->add_env_pair (cgi, "PATH_TRANSLATED", 15,
-					   conn->local_directory.buf,
-					   conn->local_directory.len);
-		} else {
-			cgi->add_env_pair (cgi, "PATH_TRANSLATED", 15,
-					   cgi->executable.buf,
-					   cgi->executable.len);
-		}
+		cherokee_buffer_add_buffer (&conn->local_directory, 
+					    &conn->pathinfo);
+
+		cgi->add_env_pair (cgi, "PATH_TRANSLATED", 15,
+				   conn->local_directory.buf,
+				   conn->local_directory.len);
+
+		cherokee_buffer_drop_ending (&conn->local_directory, 
+					     conn->pathinfo.len);
 	}
 
 	/* SCRIPT_FILENAME
@@ -881,7 +881,7 @@ cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherok
 bye:
 	/* Clean up the mess
 	 */
-	cherokee_buffer_drop_ending (&conn->local_directory, (req_len - pathinfo_len) - 1);
+	cherokee_buffer_drop_ending (&conn->local_directory, (req_len - pathinfo_len));
 	return ret;
 }
 
