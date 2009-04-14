@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
-"POT-Creation-Date: 2009-04-14 17:17+CEST\n"
-"PO-Revision-Date: 2009-04-14 00:57+0200\n"
+"POT-Creation-Date: 2009-04-14 21:27+CEST\n"
+"PO-Revision-Date: 2009-04-14 21:41+0200\n"
 "Last-Translator: Antonio Pérez Jiménez <aperez@skarcha.com>\n"
 "Language-Team: Spanish <>\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,6 @@ msgid "Methods"
 msgstr "Métodos"
 
 #: ModuleAuth.py:38
-#, fuzzy
 msgid "Realm"
 msgstr "Realm"
 
@@ -122,7 +121,7 @@ msgstr ""
 "Un balanceador de carga debe ser configurado para usar al menos un origen de "
 "datos."
 
-#: ModuleBalancer.py:52 Page.py:77 PageInfoSource.py:31 PageInfoSource.py:83
+#: ModuleBalancer.py:52 Page.py:171 PageInfoSource.py:31 PageInfoSource.py:83
 msgid "Information Sources"
 msgstr "Orígenes de datos"
 
@@ -180,11 +179,11 @@ msgstr "Escuchar en"
 msgid "TLS"
 msgstr "TLS"
 
-#: ModuleBind.py:54 PageVServer.py:65
+#: ModuleBind.py:54
 msgid "No"
 msgstr "No"
 
-#: ModuleBind.py:54 PageVServer.py:66
+#: ModuleBind.py:54
 msgid "Yes"
 msgstr "Sí"
 
@@ -502,7 +501,6 @@ msgstr ""
 "directorio cambia a menudo. Activar en caso contrario."
 
 #: ModuleExists.py:8
-#, fuzzy
 msgid "Match the request if any file exists."
 msgstr "Coincide con la solicitud si algún fichero existe."
 
@@ -1051,73 +1049,73 @@ msgstr "Patrón de dominio"
 msgid "New host name"
 msgstr "Nuevo nombre de servidor"
 
-#: Page.py:23 Page.py:39
+#: Page.py:116
 msgid "Version:"
 msgstr "Versión:"
-
-#: Page.py:77
-msgid "General"
-msgstr "General"
-
-#: Page.py:77 PageAdvanced.py:100 PageStatus.py:44 PageVServer.py:419
-msgid "Status"
-msgstr "Estado"
-
-#: Page.py:77 PageVServer.py:69 PageVServers.py:24
-msgid "Virtual Servers"
-msgstr "Servidores virtuales"
-
-#: Page.py:78
-msgid "Mime Types"
-msgstr "Tipos MIME"
-
-#: Page.py:78
-msgid "Save"
-msgstr "Guardar"
-
-#: Page.py:78
-msgid "Save Changes"
-msgstr "Guardar cambios"
-
-#: Page.py:78 PageAdvanced.py:57
-msgid "Advanced"
-msgstr "Avanzado"
-
-#: Page.py:78 PageIcon.py:12
-msgid "Icons"
-msgstr "Iconos"
-
-#: Page.py:88
-msgid "Do not restart"
-msgstr "No reiniciar"
-
-#: Page.py:88
-msgid "Graceful restart"
-msgstr "Reinicio suave"
-
-#: Page.py:88
-msgid "Hard restart"
-msgstr "Reinicio forzado"
-
-#: Page.py:103
-msgid "Available languages"
-msgstr "Lenguajes disponibles"
-
-#: Page.py:103
-msgid "Change"
-msgstr "Cambiar"
 
 #: Page.py:145
 msgid "Help"
 msgstr "Ayuda"
 
-#: Page.py:171
+#: Page.py:168 PageAdvanced.py:100 PageStatus.py:44 PageVServer.py:419
+msgid "Status"
+msgstr "Estado"
+
+#: Page.py:169
+msgid "General"
+msgstr "General"
+
+#: Page.py:170 PageVServer.py:69 PageVServers.py:24
+msgid "Virtual Servers"
+msgstr "Servidores virtuales"
+
+#: Page.py:172 PageIcon.py:12
+msgid "Icons"
+msgstr "Iconos"
+
+#: Page.py:173
+msgid "Mime Types"
+msgstr "Tipos MIME"
+
+#: Page.py:174 PageAdvanced.py:57
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: Page.py:175
+msgid "Save Changes"
+msgstr "Guardar cambios"
+
+#: Page.py:176
+msgid "Save"
+msgstr "Guardar"
+
+#: Page.py:180
+msgid "Graceful restart"
+msgstr "Reinicio suave"
+
+#: Page.py:181
+msgid "Hard restart"
+msgstr "Reinicio forzado"
+
+#: Page.py:182
+msgid "Do not restart"
+msgstr "No reiniciar"
+
+#: Page.py:185
 msgid "Commit to disk and apply changes to the running server"
 msgstr "Guardar en disco y aplicar los cambios al servidor actual"
 
-#: Page.py:174
+#: Page.py:188
 msgid "Commit all the changes permanently"
 msgstr "Guardar todos los cambios permanentemente"
+
+#: Page.py:191
+msgid "Available languages"
+msgstr "Lenguajes disponibles"
+
+#: Page.py:192
+msgid "Change"
+msgstr "Cambiar"
 
 #: PageAdvanced.py:33
 msgid ""
@@ -1446,12 +1444,10 @@ msgid "Validation Mechanism"
 msgstr "Mecanismo de validación"
 
 #: PageEntry.py:252
-#, fuzzy
 msgid "Information Encoders"
 msgstr "Codificador de información"
 
 #: PageEntry.py:255
-#, fuzzy
 msgid "Use the %s encoder whenever the client requests it."
 msgstr "Usar el codificador %s si el cliente lo solicita."
 
@@ -1521,22 +1517,18 @@ msgid "Default"
 msgstr "Defecto"
 
 #: PageGeneral.py:13
-#, fuzzy
 msgid "Product only"
 msgstr "Sólo el producto"
 
 #: PageGeneral.py:14
-#, fuzzy
 msgid "Product + Minor version"
 msgstr "Producto + Versión menor"
 
 #: PageGeneral.py:15
-#, fuzzy
 msgid "Product + Minimal version"
 msgstr "Producto + Versión mínima"
 
 #: PageGeneral.py:16
-#, fuzzy
 msgid "Product + Platform"
 msgstr "Producto + Plataforma"
 
@@ -1584,7 +1576,6 @@ msgstr ""
 "de seguridad."
 
 #: PageGeneral.py:37
-#, fuzzy
 msgid "Which, if any, should be the TLS/SSL backend."
 msgstr "Si lo hay, cuál debe ser el motor de TLS/SSL."
 
@@ -1629,7 +1620,6 @@ msgid "Support"
 msgstr "Soporte"
 
 #: PageGeneral.py:79
-#, fuzzy
 msgid "SSL/TLS back-end"
 msgstr "Motor SSL/TLS"
 
@@ -1638,7 +1628,6 @@ msgid "Network behavior"
 msgstr "Comportamiento de red"
 
 #: PageGeneral.py:84
-#, fuzzy
 msgid "Timeout (<i>secs</i>)"
 msgstr "Tiempo de espera (<i>segs.</i>)"
 
@@ -1715,7 +1704,6 @@ msgid "Special Icons"
 msgstr "Iconos especiales"
 
 #: PageInfoSource.py:12
-#, fuzzy
 msgid ""
 "The source can be either a local interpreter or a remote host acting as an "
 "information source."
@@ -1730,7 +1718,6 @@ msgstr ""
 "Nombre del origen. Se le conocerá por este nombre en el resto del servidor."
 
 #: PageInfoSource.py:14
-#, fuzzy
 msgid "It allows to choose whether it runs the local host or a remote server."
 msgstr ""
 "Permite seleccionar si accede al servidor local o a un servidor remoto."
@@ -1758,7 +1745,6 @@ msgstr ""
 "conectar con él (en segundos). Defecto: 3."
 
 #: PageInfoSource.py:18
-#, fuzzy
 msgid ""
 "Sources currently in use. Note that the last source of any rule cannot be "
 "deleted until the rule has been manually edited."
@@ -1796,7 +1782,6 @@ msgid "Interpreter"
 msgstr "Intérprete"
 
 #: PageInfoSource.py:169 PageInfoSource.py:195
-#, fuzzy
 msgid "Spawning timeout"
 msgstr "Tiempo de espera de lanzamiento"
 
@@ -1813,7 +1798,6 @@ msgid "Known sources"
 msgstr "Orígenes de datos conocidos"
 
 #: PageInfoSource.py:226
-#, fuzzy
 msgid "Deletion forbidden. Check source usage."
 msgstr "No se puede borrar. Compruebe si se está usando."
 
@@ -1901,7 +1885,6 @@ msgid "Regular configuration: PHP, Apache logs, MIME types, icons, etc."
 msgstr "Configuración normal: PHP, logs tipo Apache, tipos MIME, iconos, etc."
 
 #: PageNewConfig.py:41
-#, fuzzy
 msgid "Optimized to send static content."
 msgstr "Optimizado para enviar contenido estático."
 
@@ -1922,7 +1905,6 @@ msgid "Create a new configuration file"
 msgstr "Crear un nuevo fichero de configuración"
 
 #: PageStatus.py:23
-#, fuzzy
 msgid "Server is running."
 msgstr "Servidor ejecutándose."
 
@@ -1939,7 +1921,6 @@ msgid "Launch"
 msgstr "Lanzar"
 
 #: PageStatus.py:37
-#, fuzzy
 msgid "Server is not running."
 msgstr "El servidor no está ejecutándose."
 
@@ -1948,7 +1929,6 @@ msgid "Beta testing"
 msgstr ""
 
 #: PageStatus.py:40
-#, fuzzy
 msgid ""
 "Individuals like yourself who download and test the latest developer "
 "snapshots of Cherokee Web Server help us to create the highest quality "
@@ -1959,7 +1939,6 @@ msgstr ""
 "alta calidad."
 
 #: PageStatus.py:41
-#, fuzzy
 msgid "For that, we thank you."
 msgstr "Por eso, se lo agradecemos."
 
@@ -1980,7 +1959,6 @@ msgid "WWW Root"
 msgstr ""
 
 #: PageStatus.py:89
-#, fuzzy
 msgid "Not running"
 msgstr "No ejecutándose"
 
@@ -2006,10 +1984,11 @@ msgstr "Fichero de configuración"
 
 #: PageVServer.py:30
 msgid ""
-"Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder."
+"<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to "
+"reorder.</p>"
 msgstr ""
-"Las reglas se evalúan de <b>arriba a abajo</b>. Arrastre y suéltelas para "
-"reordenarlas."
+"<p>Las reglas se evalúan de <b>arriba a abajo</b>. Arrastre y suéltelas para "
+"reordenarlas.</p> "
 
 #: PageVServer.py:32
 msgid ""
@@ -2018,7 +1997,6 @@ msgid ""
 msgstr ""
 
 #: PageVServer.py:36
-#, fuzzy
 msgid "Nickname for the virtual server."
 msgstr "Nombre para el servidor virtual."
 
@@ -2045,7 +2023,6 @@ msgstr ""
 "para verificar los certificados de los clientes (Ruta completa al fichero)"
 
 #: PageVServer.py:40
-#, fuzzy
 msgid ""
 "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
@@ -2072,7 +2049,6 @@ msgid "Allows the selection of how to generate the error responses."
 msgstr "Permite seleccionar cómo generar las repuestas de error."
 
 #: PageVServer.py:44
-#, fuzzy
 msgid ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
@@ -2095,7 +2071,6 @@ msgid "Virtual Server root directory."
 msgstr "Directorio raíz del servidor virtual."
 
 #: PageVServer.py:48
-#, fuzzy
 msgid ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
@@ -2120,7 +2095,6 @@ msgstr ""
 "servidor virtual (Defecto: sí)"
 
 #: PageVServer.py:52
-#, fuzzy
 msgid "The Logging is currently enabled."
 msgstr "Los logs está activos."
 
@@ -2146,7 +2120,6 @@ msgid "Full path to the file where the information will be saved."
 msgstr "Ruta completa al fichero donde se guardará la información."
 
 #: PageVServer.py:58
-#, fuzzy
 msgid "Path to the executable that will be invoked on each log entry."
 msgstr "Ruta al ejecutable al que se llamará por cada entra del log."
 
@@ -2175,7 +2148,6 @@ msgstr ""
 "X-Real-IP (normalmente sus servidores proxy)."
 
 #: PageVServer.py:62
-#, fuzzy
 msgid ""
 "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
 msgstr ""
@@ -2183,8 +2155,24 @@ msgstr ""
 "desactivado)"
 
 #: PageVServer.py:63
-msgid "The following variables are accepted:"
-msgstr "Se aceptan las siguientes variables:"
+msgid ""
+"The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
+"${protocol}, ${transport}, ${port_server}, ${query_string}, "
+"${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
+"${user_remote}, ${request}, ${request_original}, ${vserver_name}"
+msgstr ""
+"Se aceptan las siguentes variables: <br/>${ip_remote}, ${ip_local}, "
+"${protocol}, ${transport}, ${port_server}, ${query_string}, "
+"${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
+"${user_remote}, ${request}, ${request_original}, ${vserver_name}"
+
+#: PageVServer.py:65
+msgid "<i>No</i>"
+msgstr ""
+
+#: PageVServer.py:66
+msgid "<i>Yes</i>"
+msgstr ""
 
 #: PageVServer.py:70
 msgid "Loggers"
@@ -2203,7 +2191,6 @@ msgid "Basics"
 msgstr "Básica"
 
 #: PageVServer.py:222
-#, fuzzy
 msgid "Behavior"
 msgstr "Comportamiento"
 
@@ -2268,7 +2255,6 @@ msgid "Enc"
 msgstr ""
 
 #: PageVServer.py:323
-#, fuzzy
 msgid "Exp"
 msgstr "Cad"
 
@@ -2277,7 +2263,6 @@ msgid "Final"
 msgstr "Final"
 
 #: PageVServer.py:323
-#, fuzzy
 msgid "Target"
 msgstr "Objetivo"
 
@@ -2306,7 +2291,6 @@ msgid "Paths"
 msgstr "Rutas"
 
 #: PageVServer.py:439
-#, fuzzy
 msgid "Directory Indexes"
 msgstr "Índices de directorio"
 
@@ -2323,7 +2307,6 @@ msgid "Traffic Statistics"
 msgstr "Estadísticas de Tráfico"
 
 #: PageVServer.py:449
-#, fuzzy
 msgid "Advanced Virtual Hosting"
 msgstr "Hospedaje Virtual Avanzado"
 
@@ -2416,7 +2399,6 @@ msgid "Root"
 msgstr "Raíz"
 
 #: PageVServers.py:126 PageVServers.py:197
-#, fuzzy
 msgid "Nickname"
 msgstr "Nombre"
 
@@ -2529,7 +2511,6 @@ msgid "HTTP reverse proxy"
 msgstr "Proxy inverso HTTP"
 
 #: consts.py:18
-#, fuzzy
 msgid "Audio/Video streaming"
 msgstr "Flujo de Audio/Video"
 
@@ -2546,7 +2527,6 @@ msgid "Server Info"
 msgstr "Info. del servidor"
 
 #: consts.py:23
-#, fuzzy
 msgid "MySQL bridge"
 msgstr "Puente MySQL"
 
@@ -2687,7 +2667,6 @@ msgid "Wildcards"
 msgstr "Comodines"
 
 #: consts.py:139
-#, fuzzy
 msgid "Not set"
 msgstr "Sin configurar"
 
@@ -2731,39 +2710,35 @@ msgstr "Aceptar"
 msgid "Require"
 msgstr "Requerir"
 
-#: server.py:118
+#: server.py:117
 msgid "Configuration saved."
 msgstr "Configuración guardada."
 
-#: server.py:120
-#, fuzzy
+#: server.py:119
 msgid " Graceful restart performed."
 msgstr " Reinicio suave realizado."
 
-#: server.py:122
+#: server.py:121
 msgid " Hard restart performed."
 msgstr " Realizado el reinicio forzado."
 
-#: server.py:205
+#: server.py:207
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Parámetros incorrectos: PORT CONFIG_FILE"
 
-#: server.py:224
+#: server.py:226
 msgid "Server %s running.. PID=%d Port=%d"
 msgstr "Servidor %s ejecutándose.. PID=%s Puerto=%d"
 
-#: server.py:231
-#, fuzzy
+#: server.py:233
 msgid "Server exiting.."
 msgstr "Servidor saliendo.."
 
 #: validations.py:8
-#, fuzzy
 msgid "Malformed number"
 msgstr "Número malformado"
 
 #: validations.py:14
-#, fuzzy
 msgid "Malformed float number"
 msgstr "Número flotante malformado"
 
@@ -2780,7 +2755,6 @@ msgid "Out of the range (1 to 65535)"
 msgstr "Fuera de rango (1 a 65535)"
 
 #: validations.py:46
-#, fuzzy
 msgid "Malformed path"
 msgstr "Ruta malformada"
 
@@ -2793,12 +2767,10 @@ msgid "Malformed IPv4"
 msgstr "IPv4 malformada"
 
 #: validations.py:110
-#, fuzzy
 msgid "Malformed IPv4 entry"
 msgstr "Parte de IPv4 malformada"
 
 #: validations.py:112
-#, fuzzy
 msgid "IPv4 entry out of range"
 msgstr "Parte IPv4 fuera de rango"
 
@@ -2849,6 +2821,9 @@ msgstr "Valor de tiempo contiene valores no válidos"
 #: validations.py:306
 msgid "Malformed time"
 msgstr "Tiempo malformado"
+
+#~ msgid "The following variables are accepted:"
+#~ msgstr "Se aceptan las siguientes variables:"
 
 #~ msgid "Add new domains"
 #~ msgstr "Añadir nuevos dominios"

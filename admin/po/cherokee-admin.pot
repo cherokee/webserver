@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-04-14 17:17+CEST\n"
+"POT-Creation-Date: 2009-04-14 21:27+CEST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,7 +112,7 @@ msgstr ""
 msgid "A load balancer must be configured to use at least one information source."
 msgstr ""
 
-#: ModuleBalancer.py:52 Page.py:77 PageInfoSource.py:31 PageInfoSource.py:83
+#: ModuleBalancer.py:52 Page.py:171 PageInfoSource.py:31 PageInfoSource.py:83
 msgid "Information Sources"
 msgstr ""
 
@@ -170,11 +170,11 @@ msgstr ""
 msgid "TLS"
 msgstr ""
 
-#: ModuleBind.py:54 PageVServer.py:65
+#: ModuleBind.py:54
 msgid "No"
 msgstr ""
 
-#: ModuleBind.py:54 PageVServer.py:66
+#: ModuleBind.py:54
 msgid "Yes"
 msgstr ""
 
@@ -992,72 +992,72 @@ msgstr ""
 msgid "New host name"
 msgstr ""
 
-#: Page.py:23 Page.py:39
+#: Page.py:116
 msgid "Version:"
-msgstr ""
-
-#: Page.py:77
-msgid "General"
-msgstr ""
-
-#: Page.py:77 PageAdvanced.py:100 PageStatus.py:44 PageVServer.py:419
-msgid "Status"
-msgstr ""
-
-#: Page.py:77 PageVServer.py:69 PageVServers.py:24
-msgid "Virtual Servers"
-msgstr ""
-
-#: Page.py:78
-msgid "Mime Types"
-msgstr ""
-
-#: Page.py:78
-msgid "Save"
-msgstr ""
-
-#: Page.py:78
-msgid "Save Changes"
-msgstr ""
-
-#: Page.py:78 PageAdvanced.py:57
-msgid "Advanced"
-msgstr ""
-
-#: Page.py:78 PageIcon.py:12
-msgid "Icons"
-msgstr ""
-
-#: Page.py:88
-msgid "Do not restart"
-msgstr ""
-
-#: Page.py:88
-msgid "Graceful restart"
-msgstr ""
-
-#: Page.py:88
-msgid "Hard restart"
-msgstr ""
-
-#: Page.py:103
-msgid "Available languages"
-msgstr ""
-
-#: Page.py:103
-msgid "Change"
 msgstr ""
 
 #: Page.py:145
 msgid "Help"
 msgstr ""
 
-#: Page.py:171
+#: Page.py:168 PageAdvanced.py:100 PageStatus.py:44 PageVServer.py:419
+msgid "Status"
+msgstr ""
+
+#: Page.py:169
+msgid "General"
+msgstr ""
+
+#: Page.py:170 PageVServer.py:69 PageVServers.py:24
+msgid "Virtual Servers"
+msgstr ""
+
+#: Page.py:172 PageIcon.py:12
+msgid "Icons"
+msgstr ""
+
+#: Page.py:173
+msgid "Mime Types"
+msgstr ""
+
+#: Page.py:174 PageAdvanced.py:57
+msgid "Advanced"
+msgstr ""
+
+#: Page.py:175
+msgid "Save Changes"
+msgstr ""
+
+#: Page.py:176
+msgid "Save"
+msgstr ""
+
+#: Page.py:180
+msgid "Graceful restart"
+msgstr ""
+
+#: Page.py:181
+msgid "Hard restart"
+msgstr ""
+
+#: Page.py:182
+msgid "Do not restart"
+msgstr ""
+
+#: Page.py:185
 msgid "Commit to disk and apply changes to the running server"
 msgstr ""
 
-#: Page.py:174
+#: Page.py:188
 msgid "Commit all the changes permanently"
+msgstr ""
+
+#: Page.py:191
+msgid "Available languages"
+msgstr ""
+
+#: Page.py:192
+msgid "Change"
 msgstr ""
 
 #: PageAdvanced.py:33
@@ -1839,7 +1839,7 @@ msgid "Configuration File"
 msgstr ""
 
 #: PageVServer.py:30
-msgid "Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder."
+msgid "<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.</p>"
 msgstr ""
 
 #: PageVServer.py:32
@@ -1957,7 +1957,15 @@ msgid "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)
 msgstr ""
 
 #: PageVServer.py:63
-msgid "The following variables are accepted:"
+msgid "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}"
+msgstr ""
+
+#: PageVServer.py:65
+msgid "<i>No</i>"
+msgstr ""
+
+#: PageVServer.py:66
+msgid "<i>Yes</i>"
 msgstr ""
 
 #: PageVServer.py:70
@@ -2492,27 +2500,27 @@ msgstr ""
 msgid "Require"
 msgstr ""
 
-#: server.py:118
+#: server.py:117
 msgid "Configuration saved."
 msgstr ""
 
-#: server.py:120
+#: server.py:119
 msgid " Graceful restart performed."
 msgstr ""
 
-#: server.py:122
+#: server.py:121
 msgid " Hard restart performed."
 msgstr ""
 
-#: server.py:205
+#: server.py:207
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr ""
 
-#: server.py:224
+#: server.py:226
 msgid "Server %s running.. PID=%d Port=%d"
 msgstr ""
 
-#: server.py:231
+#: server.py:233
 msgid "Server exiting.."
 msgstr ""
 

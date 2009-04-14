@@ -27,7 +27,7 @@ DATA_VALIDATION = [
 
 DEFAULT_LOGGER_TEMPLATE = '${ip_remote} - ${user_remote} ${now} ${request_original} ${status}'
 
-RULE_LIST_NOTE = "<p>%s</p>" % (N_('Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.'))
+RULE_LIST_NOTE = N_("<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.</p>")
 
 DEFAULT_HOST_NOTE = N_("""
 <p>The 'default' virtual server matches all the domain names.</p>
@@ -60,10 +60,10 @@ NOTE_X_REAL_IP        = N_('Whether the logger should read and use the X-Real-IP
 NOTE_X_REAL_IP_ALL    = N_('Accept all the X-Real-IP headers. It\'s dangerous: turn it on only if you are centain of what you are doing.')
 NOTE_X_REAL_IP_ACCESS = N_('List of IP addresses and subnets that are allowed to send X-Real-IP headers (usually your proxy servers).')
 NOTE_EVHOST           = N_('How to support the "Advanced Virtual Hosting" mechanism. (Default: off)')
-NOTE_LOGGER_TEMPLATE     = '%s <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}' % (N_('The following variables are accepted:'))
+NOTE_LOGGER_TEMPLATE  = N_('The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}')
 
-TXT_NO  = "<i>%s</i>" % (N_('No'))
-TXT_YES = "<i>%s</i>" % (N_('Yes'))
+TXT_NO  = N_("<i>No</i>")
+TXT_YES = N_("<i>Yes</i>")
 
 HELPS = [
     ('config_virtual_servers', N_("Virtual Servers")),
@@ -294,7 +294,7 @@ class PageVServer (PageMenu, FormHelper):
         txt = "<h2>%s</h2>" % (_('Add new rule'))
         table = TableProps()
         e = self.AddPropOptions_Reload (table, _("Rule Type"), prefix, 
-                                        modules_available(RULES), "")
+                                        modules_available(RULES), " ")
         txt += self.Indent (str(table) + e)
         return txt
 

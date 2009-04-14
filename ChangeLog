@@ -35,6 +35,11 @@
 	admin/PageIcon.py, admin/ModuleErrorRedir.py: Adds
 	internationalization (i18n) to cherokee-admin.
 
+	* admin/server.py, admin/Page.py, admin/po/cherokee-admin-en.po,
+	admin/po/cherokee-admin.pot, admin/po/cherokee-admin-es.po,
+	admin/PageVServer.py, admin/Form.py, admin/status.template.html:
+	More i18n related changes.
+
 2009-04-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_cgi_base.c, qa/225-PathTranslated.py,

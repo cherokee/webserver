@@ -9,7 +9,6 @@ import pyscgi
 import thread
 import signal
 import socket
-import locale
 import gettext
 
 # Application modules
