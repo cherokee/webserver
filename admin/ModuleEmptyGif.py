@@ -3,7 +3,7 @@ from Table import *
 from ModuleHandler import *
 
 HELPS = [
-    ('modules_handlers_empty_gif', "1x1 Empty GIF")
+    ('modules_handlers_empty_gif', _("1x1 Empty GIF"))
 ]
 
 class ModuleEmptyGif (ModuleHandler):

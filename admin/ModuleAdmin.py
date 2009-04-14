@@ -2,7 +2,7 @@ from Form import *
 from ModuleHandler import *
 
 HELPS = [
-    ('modules_handlers_admin', "Remote Administration")
+    ('modules_handlers_admin', _("Remote Administration"))
 ]
 
 class ModuleAdmin (ModuleHandler):

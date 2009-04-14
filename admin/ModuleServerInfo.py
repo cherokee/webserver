@@ -2,16 +2,16 @@ from Form import *
 from Table import *
 from ModuleHandler import *
 
-NOTE_INFORMATION = 'Which information should be shown.'
+NOTE_INFORMATION = _('Which information should be shown.')
 
 options = [
-    ('normal',             "Server Information"),
-    ('just_about',         "Only version information"),
-    ('connection_details', "Server Information + Connections")
+    ('normal',             _("Server Information")),
+    ('just_about',         _("Only version information")),
+    ('connection_details', _("Server Information + Connections"))
 ]
 
 HELPS = [
-    ('modules_handlers_server_info', "Server Information")
+    ('modules_handlers_server_info', _("Server Information"))
 ]
 
 class ModuleServerInfo (ModuleHandler):
@@ -22,10 +22,10 @@ class ModuleServerInfo (ModuleHandler):
         self.show_document_root = False
 
     def _op_render (self):
-        txt  = "<h2>Privacy settings</h2>"
+        txt  = "<h2>%s</h2>" % (_('Privacy settings'))
 
         table = TableProps()
-        self.AddPropOptions_Reload (table, "Show Information",
+        self.AddPropOptions_Reload (table, _("Show Information"),
                              "%s!type" % (self._prefix),
                              options, NOTE_INFORMATION)
         txt += self.Indent(table)

@@ -11,9 +11,9 @@ class Theme:
     #
     def BuildTemplate (self, keys, id):
         render = self._template
-        while '%(' in render:
-            for replacement in re.findall (r'\%\((\w+)\)s', render):
-                macro = '%('+replacement+')s'
+        while '{{' in render:
+            for replacement in re.findall (r'{{(\w+)}}', render):
+                macro = '{{'+replacement+'}}'
                 render = render.replace (macro, keys[replacement])
 
         return render

@@ -3,83 +3,104 @@ from Theme import *
 from Entry import *
 from configured import *
 from CherokeeManagement import *
-        
+
+# For gettext
+N_ = lambda x: x
+
 PAGE_BASIC_LAYOUT = """
     <div id="container">
 	<div id="header">
 	   <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
-	   <div id="version">Version: %(version)s</div>
-           %(help_block)s
+	   <div id="version">%s {{version}}</div>
+           {{help_block}}
 	</div>
         <div id="bar">
         </div>
         <div id="workarea"><div id="workarea-inner">
           <div id="save_changes_msg"></div>
-        %(content)s
+        {{content}}
         </div></div>
-    </div>"""
+    </div>""" % (N_('Version:'))
 
 PAGE_MENU_LAYOUT = """
     <div id="container">
 	<div id="header">
 	   <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
-	   <div id="version">Version: %(version)s</div>
-           %(help_block)s
+	   <div id="version">%s {{version}}</div>
+           {{help_block}}
 	</div>
         <div id="bar">
-            %(menu)s
+            {{menu}}
         </div>
         <div id="workarea"><div id="workarea-inner">
           <div id="save_changes_msg"></div>
-        %(content)s
+        {{content}}
         </div></div>
-    </div>"""
+    </div>""" % (N_('Version:'))
 
 PAGE_MENU_HELP_BLOCK = """
 <div id="help">
-%(help)s
+{{help}}
 </div>
 """
 
 PAGE_MENU_MENU = """
 <ul id="nav">
-<li id="status"><a href="/">Status</a></li>
-<li id="general"><a href="/general">General</a></li>
-<li id="vserver"><a href="/vserver">Virtual Servers</a></li>
-<li id="source"><a href="/source">Information Sources</a></li>
-<li id="icon"><a href="/icons">Icons</a></li>
-<li id="mime"><a href="/mime">Mime Types</a></li>
-<li id="advanced"><a href="/advanced">Advanced</a></li>
+<li id="status"><a href="/">%s</a></li>
+<li id="general"><a href="/general">%s</a></li>
+<li id="vserver"><a href="/vserver">%s</a></li>
+<li id="source"><a href="/source">%s</a></li>
+<li id="icon"><a href="/icons">%s</a></li>
+<li id="mime"><a href="/mime">%s</a></li>
+<li id="advanced"><a href="/advanced">%s</a></li>
 </ul>
 <br />
 
 <div id="changes_div">
-<h2>Save Changes</h2>
+<h2>%s</h2>
 <div style="padding-top: 2px;">
- <p>%(menu_save_desc)s</p>
+ <p>{{menu_save_desc}}</p>
 </div>
 
- %(menu_save_dropdown)s
+ {{menu_save_dropdown}}
 
  <div style="float: center; padding-top: 4px;">
-  <a class="button" href="javascript:save_config();"><span>Save</span></a>
+  <a class="button" href="javascript:save_config();"><span>%s</span></a>
  </div>
 </div>
+
+ {{menu_available_languages}}
 
 <script type="text/javascript">
   $(document).ready(protectChanges);
 </script>
-"""
+""" % (N_('Status'), N_('General'), N_('Virtual Servers'), N_('Information Sources'),
+       N_('Icons'), N_('Mime Types'), N_('Advanced'), N_('Save Changes'), N_('Save'))
 
 MENU_SAVE_IS_ALIVE = """
   <div style="padding-top: 2px;">
     <select name="restart" id="restart">
-      <option value="graceful">Graceful restart</option>
-      <option value="hard">Hard restart</option>
-      <option value="no">Do not restart</option>
+      <option value="graceful">%s</option>
+      <option value="hard">%s</option>
+      <option value="no">%s</option>
     </select>
   </div>
-"""
+""" % (N_('Graceful restart'), N_('Hard restart'), N_('Do not restart'))
+
+MENU_LANGUAGES = """
+<div id="change_language">
+  <h2>%s</h2>
+  <div style="margin-top: 6px">
+  <form name="flanguages" id="flanguages" method="post" action="/change_language">
+    {{languages_select}}
+
+    <div style="float: center; padding-top: 8px;">
+        <a class="button" href="javascript:f = get_by_id('flanguages'); f.submit();"><span>%s</span></a>
+    </div>
+  </form>
+  </div>
+</div>
+""" % (N_('Available languages'), N_('Change'))
 
 DIALOG_W=725
 DIALOG_H=500
@@ -121,7 +142,7 @@ class Page (WebComponent):
         if not self.helps:
             return ''
         txt = '<ul>'
-        txt += '<li class="htop"><span>Help</span></li>'
+        txt += '<li class="htop"><span>%s</span></li>' % (_('Help'))
         for hfile,comment in self.helps:
             if hfile.startswith("http://"):
                 txt += '<li><a href="%s" target="_help">%s</a></li>' % (hfile, comment)
@@ -147,10 +168,17 @@ class PageMenu (Page):
         manager = cherokee_management_get (cfg)
         if manager.is_alive():
             self.AddMacroContent ('menu_save_dropdown', MENU_SAVE_IS_ALIVE)
-            self.AddMacroContent ('menu_save_desc', 'Commit to disk and apply changes to the running server')
+            self.AddMacroContent ('menu_save_desc', _('Commit to disk and apply changes to the running server'))
         else:
             self.AddMacroContent ('menu_save_dropdown', '')
-            self.AddMacroContent ('menu_save_desc', 'Commit all the changes permanently')
+            self.AddMacroContent ('menu_save_desc', _('Commit all the changes permanently'))
+
+        if len(AVAILABLE_LANGUAGES) > 1:
+            self.AddMacroContent ('menu_available_languages', MENU_LANGUAGES)
+            selbox = EntryOptions ('language', AVAILABLE_LANGUAGES)
+            self.AddMacroContent ('languages_select', str(selbox))
+        else:
+            self.AddMacroContent ('menu_available_languages', '')
 
         self.AddMacroContent ('body', PAGE_MENU_LAYOUT)
         self.AddMacroContent ('menu', PAGE_MENU_MENU)

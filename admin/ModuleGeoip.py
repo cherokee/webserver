@@ -6,10 +6,10 @@ from flags import *
 import validations
 
 ISO3166_URL      = "http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm"
-NOTE_NEW_COUNTRY = "Add the initial country. It's possible to add more later on."
-NOTE_ADD_COUNTRY = "Pick an additional country to add to the country list."
-NOTE_COUNTRIES   = "List of countries from the client IPs. It must use the " + \
-    "<a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation." % (ISO3166_URL)
+NOTE_NEW_COUNTRY = _("Add the initial country. It's possible to add more later on.")
+NOTE_ADD_COUNTRY = _("Pick an additional country to add to the country list.")
+NOTE_COUNTRIES   = _("""List of countries from the client IPs. It must use the
+<a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation.""") % (ISO3166_URL)
 
 class ModuleGeoip (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
@@ -24,7 +24,7 @@ class ModuleGeoip (Module, FormHelper):
         button = '<input type="submit" value="Add" />'
 
         table = TableProps()
-        self.AddProp (table, 'Country', cfg_key, str(flags) + button, NOTE_NEW_COUNTRY)
+        self.AddProp (table, _('Country'), cfg_key, str(flags) + button, NOTE_NEW_COUNTRY)
         return str(table)
 
     def _render_modify_entry (self):
@@ -33,33 +33,33 @@ class ModuleGeoip (Module, FormHelper):
 
         # Text entry
         table = TableProps()
-        self.AddPropEntry (table, 'Countries', cfg_key, NOTE_COUNTRIES)
+        self.AddPropEntry (table, _('Countries'), cfg_key, NOTE_COUNTRIES)
 
         # Flags
         cfg_key_fake = 'tmp!add_county'
         flags = OptionFlags (cfg_key_fake)
-        
+
         # Button
         button = '<input type="button" value="Add" onClick="flags_add_to_key(\'%s\',\'%s\',\'%s\',\'%s\');"/>' % (
                  cfg_key_fake, cfg_key, key_val, '/ajax/update')
 
         content = ADD_FLAGS_TO_KEY_JS + str(flags) + button
-        self.AddProp (table, 'Add Country', "", content, NOTE_ADD_COUNTRY)
+        self.AddProp (table, _('Add Country'), "", content, NOTE_ADD_COUNTRY)
 
         return str(table)
-    
+
     def _op_render (self):
         if self._prefix.startswith('tmp!'):
             return self._render_new_entry()
 
         return self._render_modify_entry()
-        
+
     def _op_apply_changes (self, uri, post):
         self.ApplyChangesPrefix (self._prefix, None, post)
 
     def apply_cfg (self, values):
         if not values.has_key('value'):
-            print "ERROR, a 'value' entry is needed!"
+            print _("ERROR, a 'value' entry is needed!")
 
         cfg_key  = '%s!countries'%(self._prefix)
         contries = values['value']

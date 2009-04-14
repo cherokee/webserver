@@ -1,14 +1,14 @@
-import validations 
+import validations
 
 from Table import *
 from ModuleHandler import *
 
-NOTE_SCRIPT_ALIAS  = 'Path to an executable that will be run with the CGI as parameter.'
-NOTE_CHANGE_USER   = 'Execute the CGI under its file owner user ID.'
-NOTE_ERROR_HANDLER = 'Send errors exactly as they are generated.'
-NOTE_CHECK_FILE    = 'Check whether the file is in place.'
-NOTE_PASS_REQ      = 'Forward all the client headers to the CGI encoded as HTTP_*. headers.'
-NOTE_XSENDFILE     = 'Allow the use of the non-standard X-Sendfile header.'
+NOTE_SCRIPT_ALIAS  = _('Path to an executable that will be run with the CGI as parameter.')
+NOTE_CHANGE_USER   = _('Execute the CGI under its file owner user ID.')
+NOTE_ERROR_HANDLER = _('Send errors exactly as they are generated.')
+NOTE_CHECK_FILE    = _('Check whether the file is in place.')
+NOTE_PASS_REQ      = _('Forward all the client headers to the CGI encoded as HTTP_*. headers.')
+NOTE_XSENDFILE     = _('Allow the use of the non-standard X-Sendfile header.')
 
 DATA_VALIDATION = [
     ('vserver!.+?!rule!.+?!handler!script_alias', validations.is_path),
@@ -36,22 +36,22 @@ class ModuleCgiBase (ModuleHandler):
         self.show_change_uid   = True
 
     def _op_render (self):
-        txt   = "<h2>Common CGI options</h2>"
+        txt   = "<h2>%s</h2>" % (_('Common CGI options'))
 
         table = TableProps()
         if self.show_script_alias:
-            self.AddPropEntry (table, "Script Alias",  "%s!script_alias" % (self._prefix), NOTE_SCRIPT_ALIAS)
+            self.AddPropEntry (table, _("Script Alias"),  "%s!script_alias" % (self._prefix), NOTE_SCRIPT_ALIAS)
         if self.show_change_uid:
-            self.AddPropCheck (table, "Change UID", "%s!change_user"%(self._prefix), False, NOTE_CHANGE_USER)
+            self.AddPropCheck (table, _("Change UID"), "%s!change_user"%(self._prefix), False, NOTE_CHANGE_USER)
 
-        self.AddPropCheck (table, "Error handler",     "%s!error_handler"% (self._prefix), False, NOTE_ERROR_HANDLER)
+        self.AddPropCheck (table, _("Error handler"),     "%s!error_handler"% (self._prefix), False, NOTE_ERROR_HANDLER)
 
-        self.AddPropCheck (table, "Check file",           "%s!check_file"   % (self._prefix), True,  NOTE_CHECK_FILE)
-        self.AddPropCheck (table, "Pass Request Headers", "%s!pass_req_headers" % (self._prefix), True,  NOTE_PASS_REQ)
-        self.AddPropCheck (table, "Allow X-Sendfile",     "%s!xsendfile" % (self._prefix),        False, NOTE_XSENDFILE)
+        self.AddPropCheck (table, _("Check file"),           "%s!check_file"   % (self._prefix), True,  NOTE_CHECK_FILE)
+        self.AddPropCheck (table, _("Pass Request Headers"), "%s!pass_req_headers" % (self._prefix), True,  NOTE_PASS_REQ)
+        self.AddPropCheck (table, _("Allow X-Sendfile"),     "%s!xsendfile" % (self._prefix),        False, NOTE_XSENDFILE)
         txt += self.Indent(table)
 
-        txt1 = '<h2>Custom environment variables</h2>'
+        txt1 = '<h2>%s</h2>' % (_('Custom environment variables'))
         envs = self._cfg.keys('%s!env'%(self._prefix))
         if envs:
             table = Table(3, title_left=1, style='width="90%"')
@@ -60,17 +60,17 @@ class ModuleCgiBase (ModuleHandler):
                 pre = '%s!env!%s'%(self._prefix,env)
                 val = self.InstanceEntry(pre, 'text', size=25)
                 js = "post_del_key('/ajax/update', '%s');"%(pre)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (env, val, link_del)
 
             txt1 += self.Indent(table)
 
-        txt1 += '<h3>Add new custom environment variable</h3>';
+        txt1 += '<h3>%s</h3>' % (_('Add new custom environment variable'));
         name  = self.InstanceEntry('new_custom_env_name',  'text', size=25, noautosubmit=True)
         value = self.InstanceEntry('new_custom_env_value', 'text', size=25, noautosubmit=True)
 
         table = Table(3, 1, style='width="90%"')
-        table += ('Name', 'Value', '')
+        table += (_('Name'), _('Value'), '')
         table += (name, value, SUBMIT_ADD)
         txt1 += self.Indent(table)
         txt += txt1

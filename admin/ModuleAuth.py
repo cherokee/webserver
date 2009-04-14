@@ -9,9 +9,9 @@ DATA_VALIDATION = [
     ('vserver!.*?!rule!.*?!auth!users', validations.is_safe_id_list)
 ]
 
-NOTE_METHODS = 'Allowed HTTP Authentication methods.'
-NOTE_REALM   = 'Name associated with the protected resource.'
-NOTE_USERS   = 'User filter. List of allowed users.'
+NOTE_METHODS = _('Allowed HTTP Authentication methods.')
+NOTE_REALM   = _('Name associated with the protected resource.')
+NOTE_USERS   = _('User filter. List of allowed users.')
 
 class ModuleAuthBase (Module, FormHelper):
     PROPERTIES = [
@@ -34,18 +34,18 @@ class ModuleAuthBase (Module, FormHelper):
             methods = filter (lambda x,m=method: x[0] == method, VALIDATOR_METHODS)
 
         table = TableProps()
-        self.AddPropOptions_Reload (table, "Methods", "%s!methods"%(self._prefix), methods, NOTE_METHODS)
-        self.AddPropEntry (table, "Realm", "%s!realm" %(self._prefix), NOTE_REALM)
-        self.AddPropEntry (table, "Users", "%s!users" %(self._prefix), NOTE_USERS)
+        self.AddPropOptions_Reload (table, _("Methods"), "%s!methods"%(self._prefix), methods, NOTE_METHODS)
+        self.AddPropEntry (table, _("Realm"), "%s!realm" %(self._prefix), NOTE_REALM)
+        self.AddPropEntry (table, _("Users"), "%s!users" %(self._prefix), NOTE_USERS)
 
-        txt += "<h2>Authentication Details</h2>"
+        txt += "<h2>%s</h2>" % (_('Authentication Details'))
         txt += self.Indent(table)
         return txt
 
     def _op_apply_changes (self, uri, post):
         # Check Realm
         pre = '%s!realm' % (self._prefix)
-        self.Validate_NotEmpty (post, pre, 'Realm can not be empty')
+        self.Validate_NotEmpty (post, pre, _('Realm can not be empty'))
 
         # Auto-methods
         if len(self.METHODS) <= 1:

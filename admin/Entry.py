@@ -40,7 +40,7 @@ class Entry:
             if "quiet" in self._kwargs and self._kwargs["quiet"]:
                 del(self._kwargs["quiet"])
             else:
-                suffix = self.AddToggleSpan(" Enabled")
+                suffix = self.AddToggleSpan(_(" Enabled"))
 
         if "disabled" in self._kwargs:
             if self._kwargs["disabled"] == True:
@@ -87,9 +87,9 @@ class EntryOptions:
         for option in self._opts:
             name, label = option
             if self._selected == name:
-                txt += '\t<option value="%s" selected>%s</option>\n' % (name, label)
+                txt += '\t<option value="%s" selected>%s</option>\n' % (name, _(label))
             else:
-                txt += '\t<option value="%s">%s</option>\n' % (name, label)
+                txt += '\t<option value="%s">%s</option>\n' % (name, _(label))
 
         txt += '</select>\n'
 

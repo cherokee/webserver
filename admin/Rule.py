@@ -7,7 +7,10 @@ from Module import *
 from consts import *
 import validations
 
-DEFAULT_RULE_WARNING = 'The default match ought not to be changed.'
+# For gettext
+N_ = lambda x: x
+
+DEFAULT_RULE_WARNING = N_('The default match ought not to be changed.')
 
 class Rule (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url, depth=0):
@@ -35,13 +38,13 @@ class Rule (Module, FormHelper):
 
         matcher = self._cfg.get_val(self._prefix)
         if not matcher:
-            return "Unknown"
+            return _("Unknown")
 
         if matcher == 'not':
             r = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.depth+1)
-            return "Not (%s)"%(r.get_title())
+            return "%s (%s)" % (_('Not'), r.get_title())
         elif matcher in ['or', 'and']:
-            op = ['AND', 'OR'][matcher == 'or']
+            op = [_('AND'), _('OR')][matcher == 'or']
             r1 = Rule(self._cfg, '%s!left'%(self._prefix), self.submit_url, self.depth+1)
             r2 = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.depth+1)
             return "(%s) %s (%s)"%(r1.get_title(), op, r2.get_title())
@@ -58,22 +61,22 @@ class Rule (Module, FormHelper):
         name = rule_module.get_name()
 
         if not name:
-            name = "Undefined.."
+            name = _("Undefined..")
 
         return name
 
     def get_type_name (self):
         matcher = self._cfg.get_val(self._prefix)
         if matcher in ['not', 'and', 'or']:
-            return "Complex"
+            return _("Complex")
         rule_module = module_obj_factory (matcher, self._cfg, self._prefix, self.submit_url)
         return rule_module.get_type_name()
 
     def _get_ops (self, pre):
-        _not = '<input type="button" value="Not" onClick="return rule_do_not(\'%s\');" />' % (pre)
-        _and = '<input type="button" value="And" onClick="return rule_do_and(\'%s\');" />' % (pre)
-        _or  = '<input type="button" value="Or" onClick="return rule_do_or(\'%s\');" />' % (pre)
-        _del = '<input type="button" value="Remove" onClick="return rule_delete(\'%s\');" />' %(pre)
+        _not = '<input type="button" value="%s" onClick="return rule_do_not(\'%s\');" />' % (_('Not'), pre)
+        _and = '<input type="button" value="%s" onClick="return rule_do_and(\'%s\');" />' % (_('And'), pre)
+        _or  = '<input type="button" value="%s" onClick="return rule_do_or(\'%s\');" />' % (_('Or'), pre)
+        _del = '<input type="button" value="%s" onClick="return rule_delete(\'%s\');" />' %(_('Remove'), pre)
         return (_not,_and,_or,_del)
 
     def _op_render (self):
@@ -89,16 +92,16 @@ class Rule (Module, FormHelper):
 
             txt = """
             <div class="rule_group rule_not">
-              <div class="rule_not_title">NOT</div>
+              <div class="rule_not_title">%s</div>
               %(rule_txt)s
               <div class="rule_toolbar">%(_and)s %(_or)s %(_del)s</div>
             </div>
-            """ % (locals())
+            """ % (_('NOT'), locals())
             return txt
 
         elif matcher in ["or", "and"]:
-            op = ["AND", "OR"][matcher == "or"]
-            
+            op = [_("AND"), _("OR")][matcher == "or"]
+
             depth = self.depth + 1
             rule1 = Rule (self._cfg, "%s!left"%(self._prefix), self.submit_url, depth)
             rule1_txt = rule1._op_render()
@@ -132,7 +135,7 @@ class Rule (Module, FormHelper):
 
         # Rule
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, "Rule Type", pre, modules_available(RULES), "")
+        e = self.AddPropOptions_Reload (table, _("Rule Type"), pre, modules_available(RULES), "")
         rule = self.Indent(str(table) + e)
 
         # Operations
@@ -203,8 +206,8 @@ class RuleOp (PageMenu, FormHelper):
                 self.__move ("%s!left"%(prefix), prefix)
             else:
                 del(self._cfg[prefix])
-            
+
         else:
-            print "ERROR: Unknown uri '%s'"%(uri)
+            print "%s '%s'" % (_('ERROR: Unknown uri'), uri)
 
         return "ok"

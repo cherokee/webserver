@@ -7,12 +7,12 @@ from consts import *
 from ModuleHandler import *
 from ModuleBalancer import NOTE_BALANCER
 
-NOTE_REUSE_MAX       = "Maximum number of connection per server that the proxy can try to keep opened."
-NOTE_ALLOW_KEEPALIVE = "Allow the server to use Keep-alive connections with the back-end servers."
-NOTE_PRESERVE_HOST   = "Preserve the original \"Host:\" header sent by the client. (Default No)"
+NOTE_REUSE_MAX       = _("Maximum number of connection per server that the proxy can try to keep opened.")
+NOTE_ALLOW_KEEPALIVE = _("Allow the server to use Keep-alive connections with the back-end servers.")
+NOTE_PRESERVE_HOST   = _("Preserve the original \"Host:\" header sent by the client. (Default No)")
 
 HELPS = [
-    ('modules_handlers_proxy', "Reverse Proxy")
+    ('modules_handlers_proxy', _("Reverse Proxy"))
 ]
 
 class ModuleProxy (ModuleHandler):
@@ -32,60 +32,60 @@ class ModuleProxy (ModuleHandler):
     def _op_render (self):
         txt = ''
 
-        txt += '<h2>Reverse Proxy Settings</h2>'
+        txt += '<h2>%s</h2>' % (_('Reverse Proxy Settings'))
         txt += self.Indent (self._render_general())
 
-        txt += '<h2>Request</h2>'
+        txt += '<h2>%s</h2>' % (_('Request'))
         txt += self.Indent (self._render_request())
-        txt += '<h2>Reply</h2>'
+        txt += '<h2>%s</h2>' % (_('Request'))
         txt += self.Indent (self._render_reply())
 
         # Balancers
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddPropOptions_Reload (table, "Balancer", prefix,
+        e = self.AddPropOptions_Reload (table, _("Balancer"), prefix,
                                         modules_available(BALANCERS), NOTE_BALANCER)
 
-        txt += '<h2>Back-end Servers</h2>'
+        txt += '<h2>%s</h2>' % (_('Back-end Servers'))
         txt += self.Indent(str(table) + e)
 
         return txt
 
     def _render_general (self):
         table = TableProps()
-        self.AddPropEntry (table, 'Reuse connections',    '%s!reuse_max'%(self._prefix), NOTE_REUSE_MAX)
-        self.AddPropCheck (table, 'Allow Keepalive',      '%s!in_allow_keepalive'%(self._prefix), True, NOTE_ALLOW_KEEPALIVE)
-        self.AddPropCheck (table, 'Preserve Host header', '%s!in_preserve_host'%(self._prefix), False, NOTE_PRESERVE_HOST)
+        self.AddPropEntry (table, _('Reuse connections'),    '%s!reuse_max'%(self._prefix), NOTE_REUSE_MAX)
+        self.AddPropCheck (table, _('Allow Keepalive'),      '%s!in_allow_keepalive'%(self._prefix), True, NOTE_ALLOW_KEEPALIVE)
+        self.AddPropCheck (table, _('Preserve Host header'), '%s!in_preserve_host'%(self._prefix), False, NOTE_PRESERVE_HOST)
         return str(table)
 
     def _render_request (self):
         txt  = ''
         txt += self._render_generic_url_rewrite ("in_rewrite_request",
-                                                 "URL Rewriting")
+                                                 _("URL Rewriting"))
 
         txt += self._render_generic_header_list ("in_header_add",
                                                  "tmp!in_header_add", 
-                                                 "Header Addition",
-                                                 "Add New Header")
+                                                 _("Header Addition"),
+                                                 _("Add New Header"))
 
         txt += self._render_generic_header_removal ("in_header_hide",
-                                                    "Hide Headers",
-                                                    "Hide Header")
+                                                    _("Hide Headers"),
+                                                    _("Hide Header"))
         return txt
 
     def _render_reply (self):
         txt  = ''
         txt += self._render_generic_url_rewrite ("out_rewrite_request",
-                                                 "URL Rewriting")
+                                                 _("URL Rewriting"))
 
         txt += self._render_generic_header_list ("out_header_add",
                                                  "tmp!out_header_add", 
-                                                 "Header addition",
-                                                 "Add New Header")
+                                                 _("Header addition"),
+                                                 _("Add New Header"))
 
         txt += self._render_generic_header_removal ("out_header_hide",
-                                                    "Hide Headers",
-                                                    "Hide Header")
+                                                    _("Hide Headers"),
+                                                    _("Hide Header"))
         return txt
 
 
@@ -94,14 +94,14 @@ class ModuleProxy (ModuleHandler):
         keys = self._cfg.keys("%s!%s"%(self._prefix, key))
         if keys:
             table = Table(3,1, style='width="90%"')
-            table += ('Header', 'Value', '')
+            table += (_('Header'), _('Value'), '')
 
             for k in keys:
                 pre = '%s!%s!%s'%(self._prefix, key, k)
                 val = self.InstanceEntry (pre, 'text', size=40)
 
                 js      = "post_del_key('/ajax/update', '%s');" % (pre)
-                rm_link = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                rm_link = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (k, val, rm_link)
 
             tmp += self.Indent (table)
@@ -111,7 +111,7 @@ class ModuleProxy (ModuleHandler):
         val   = self.InstanceEntry ("%s_val"%(tmp_key), 'text', size=40, req=True)
 
         table  = Table(3,1)
-        table += (title_new, 'Value', '')
+        table += (title_new, _('Value'), '')
         table += (key, val, SUBMIT_ADD)
         tmp += self.Indent(table)
         return tmp
@@ -121,14 +121,14 @@ class ModuleProxy (ModuleHandler):
         keys = self._cfg.keys("%s!%s"%(self._prefix, key))
         if keys:
             table = Table(2,1, style='width="90%"')
-            table += ('Header', '')
+            table += (_('Header'), '')
 
             for k in keys:
                 pre = '%s!%s!%s'%(self._prefix, key, k)
                 hdr = self._cfg.get_val (pre)
 
                 js      = "post_del_key('/ajax/update', '%s');" % (pre)
-                rm_link = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                rm_link = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (hdr, rm_link)
             tmp += self.Indent (table)
 
@@ -152,7 +152,7 @@ class ModuleProxy (ModuleHandler):
         keys = self._cfg.keys("%s!%s"%(self._prefix, key))
         if keys:
             table = Table(3,1, style='width="90%"')
-            table += ('Regular Expression', 'Substitution', '')
+            table += (_('Regular Expression'), _('Substitution'), '')
 
             for k in keys:
                 pre = '%s!%s!%s'%(self._prefix, key, k)
@@ -160,7 +160,7 @@ class ModuleProxy (ModuleHandler):
                 subst = self._cfg.get_val ('%s!substring'%(pre))
 
                 js      = "post_del_key('/ajax/update', '%s');" % (pre)
-                rm_link = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                rm_link = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (regex, subst, rm_link)
 
             tmp += self.Indent (table)
@@ -176,7 +176,7 @@ class ModuleProxy (ModuleHandler):
         subst = self.InstanceEntry ("%s!%d!substring"%(pre,next), 'text', size=40, req=True)
 
         table  = Table(3,1)
-        table += ('Add RegEx', 'Substitution', '')
+        table += (_('Add RegEx'), _('Substitution'), '')
         table += (regex, subst, SUBMIT_ADD)
         tmp += self.Indent(table)
         return tmp

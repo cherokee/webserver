@@ -9,15 +9,19 @@ from Module import *
 from consts import *
 from Rule import *
 
-NOTE_DOCUMENT_ROOT   = 'Allows to specify an alternative document root path.'
-NOTE_HANDLER         = 'How the connection will be handled.'
-NOTE_HTTPS_ONLY      = 'Enable to allow access to the resource only by https.'
-NOTE_ALLOW_FROM      = 'List of IPs and subnets allowed to access the resource.'
-NOTE_VALIDATOR       = 'Which, if any, will be the authentication method.'
-NOTE_EXPIRATION      = 'Points how long the files should be cached'
-NOTE_RATE            = "Set an outbound traffic limit. It must be specified in Bytes per second."
-NOTE_EXPIRATION_TIME = "How long from the object can be cached.<br />" + \
-                       "The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 2d."
+# For gettext
+N_ = lambda x: x
+
+NOTE_DOCUMENT_ROOT   = N_('Allows to specify an alternative document root path.')
+NOTE_HANDLER         = N_('How the connection will be handled.')
+NOTE_HTTPS_ONLY      = N_('Enable to allow access to the resource only by https.')
+NOTE_ALLOW_FROM      = N_('List of IPs and subnets allowed to access the resource.')
+NOTE_VALIDATOR       = N_('Which, if any, will be the authentication method.')
+NOTE_EXPIRATION      = N_('Points how long the files should be cached')
+NOTE_RATE            = N_("Set an outbound traffic limit. It must be specified in Bytes per second.")
+NOTE_EXPIRATION_TIME = N_("""How long from the object can be cached.<br />
+The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 2d.
+""")
 
 DATA_VALIDATION = [
     ("vserver!.*?!rule!(\d+)!document_root",  (validations.is_dev_null_or_local_dir_exists, 'cfg')),
@@ -27,7 +31,7 @@ DATA_VALIDATION = [
 ]
 
 HELPS = [
-    ('config_virtual_servers_rule', "Behavior rules")
+    ('config_virtual_servers_rule', N_("Behavior rules"))
 ]
 
 class PageEntry (PageMenu, FormHelper):
@@ -133,35 +137,35 @@ class PageEntry (PageMenu, FormHelper):
         tabs = []
 
         # Rule Properties
-        tabs += [('Rule', self._render_rule())]
+        tabs += [(_('Rule'), self._render_rule())]
 
         # Handler
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, 'Handler', '%s!handler'%(pre),
+        e = self.AddPropOptions_Reload (table, _('Handler'), '%s!handler'%(pre),
                                         modules_available(HANDLERS), NOTE_HANDLER)
 
         props = self._get_handler_properties()
         if props and props.show_document_root:
-            self.AddPropEntry (table, 'Document Root', '%s!document_root'%(pre), NOTE_DOCUMENT_ROOT)
+            self.AddPropEntry (table, _('Document Root'), '%s!document_root'%(pre), NOTE_DOCUMENT_ROOT)
 
         if e:
-            tabs += [('Handler', str(table) + e)]
+            tabs += [(_('Handler'), str(table) + e)]
         else:
-            tabs += [('Handler', str(table))]
+            tabs += [(_('Handler'), str(table))]
 
         self.AddHelps (module_get_help (self._cfg.get_val('%s!handler'%(pre))))
 
         # Encoding
-        tabs += [('Encoding', self._render_encoding())]
+        tabs += [(_('Encoding'), self._render_encoding())]
 
         # Expiration
-        tabs += [('Expiration', self._render_expiration())]
+        tabs += [(_('Expiration'), self._render_expiration())]
 
         # Security
-        tabs += [('Security', self._render_security())]
+        tabs += [(_('Security'), self._render_security())]
 
         # Trafic Shaping
-        tabs += [('Traffic Shaping', self._render_traffic_shaping())]
+        tabs += [(_('Traffic Shaping'), self._render_traffic_shaping())]
 
         txt  = '<h1>%s</h1>' % (self._get_title (html=True))
         txt += self.InstanceTab (tabs)
@@ -181,7 +185,7 @@ class PageEntry (PageMenu, FormHelper):
         return props
 
     def _render_rule (self):
-        txt  = "<h2>Matching Rule</h2>"
+        txt  = "<h2>%s</h2>" % (_('Matching Rule'))
         pre  = "%s!match"%(self._conf_prefix)
         rule = Rule (self._cfg, pre, self.submit_url, 0)
         txt += rule._op_render()
@@ -192,9 +196,9 @@ class PageEntry (PageMenu, FormHelper):
         txt = ''
 
         table = TableProps()
-        self.AddPropEntry (table, 'Limit traffic to', '%s!rate'%(self._conf_prefix), NOTE_RATE)
+        self.AddPropEntry (table, _('Limit traffic to'), '%s!rate'%(self._conf_prefix), NOTE_RATE)
 
-        txt += "<h2>Traffic Shaping</h2>"
+        txt += "<h2>%s</h2>" % (_('Traffic Shaping'))
         txt += self.Indent(table)
         return txt
 
@@ -204,30 +208,30 @@ class PageEntry (PageMenu, FormHelper):
         pre = "%s!expiration"%(self._conf_prefix)
 
         table = TableProps()
-        self.AddPropOptions_Ajax (table, "Expiration", pre, EXPIRATION_TYPE, NOTE_EXPIRATION)
+        self.AddPropOptions_Ajax (table, _("Expiration"), pre, EXPIRATION_TYPE, NOTE_EXPIRATION)
 
         exp = self._cfg.get_val(pre)
         if exp == 'time':
-            self.AddPropEntry (table, 'Time to expire', '%s!time'%(pre), NOTE_EXPIRATION_TIME)
+            self.AddPropEntry (table, _('Time to expire'), '%s!time'%(pre), NOTE_EXPIRATION_TIME)
 
-        txt += "<h2>Content Expiration</h2>"
+        txt += "<h2>%s</h2>" % (_('Content Expiration'))
         txt += self.Indent(table)
         return txt
 
     def _render_security (self):
         pre = self._conf_prefix
 
-        self.AddHelp (('cookbook_authentication', 'Authentication'))
+        self.AddHelp (('cookbook_authentication', _('Authentication')))
 
-        txt   = "<h2>Access Restrictions</h2>"
+        txt   = "<h2>%s</h2>" % (_('Access Restrictions'))
         table = TableProps()
-        self.AddPropCheck (table, 'Only https', '%s!only_secure'%(pre), False, NOTE_HTTPS_ONLY)
-        self.AddPropEntry (table, 'Allow From',  '%s!allow_from' %(pre), NOTE_ALLOW_FROM)
+        self.AddPropCheck (table, _('Only https'), '%s!only_secure'%(pre), False, NOTE_HTTPS_ONLY)
+        self.AddPropEntry (table, _('Allow From'),  '%s!allow_from' %(pre), NOTE_ALLOW_FROM)
         txt += self.Indent(table)
 
-        txt += "<h2>Authentication</h2>"
+        txt += "<h2>%s</h2>" % (_('Authentication'))
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, 'Validation Mechanism', '%s!auth'%(pre),
+        e = self.AddPropOptions_Reload (table, _('Validation Mechanism'), '%s!auth'%(pre),
                                         modules_available(VALIDATORS), NOTE_VALIDATOR)
         txt += self.Indent (table)
         txt += e
@@ -243,13 +247,14 @@ class PageEntry (PageMenu, FormHelper):
 
         for e in encoders:
             self.AddHelp (('modules_encoders_%s'%(e[0]),
-                           '%s encoder' % (e[1])))
+                           '%s encoder' % (_(e[1]))))
 
-        txt += "<h2>Information Encoders</h2>"
+        txt += "<h2>%s</h2>" % (_('Information Encoders'))
         table = TableProps()
         for e,e_name in encoders:
-            note = "Use the %s encoder whenever the client requests it." % (e_name)
-            self.AddPropCheck (table, "Allow %s"%(e_name), "%s!%s"%(pre,e), False, note)
+            note = _("Use the %s encoder whenever the client requests it.")
+            note = note % (_(e_name))
+            self.AddPropCheck (table, _("Allow ") + (_(e_name)), "%s!%s"%(pre,e), False, note)
 
         txt += self.Indent(table)
         return txt

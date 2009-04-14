@@ -2,7 +2,7 @@ from Form import *
 from ModuleHandler import *
 
 HELPS = [
-    ('modules_handlers_ssi', "Server Side Includes")
+    ('modules_handlers_ssi', _("Server Side Includes"))
 ]
 
 class ModuleSsi (ModuleHandler):

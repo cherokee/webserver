@@ -95,7 +95,7 @@ class CherokeeManagement:
 
             if e:
                 self._pid = None
-                return "Could access file descriptors: " + str(e)
+                return _("Could not access file descriptors: ") + str(e)
 
             if stdout_fd in r:
                 stdout += stdout_f.read(1)
@@ -249,7 +249,8 @@ def cherokee_get_server_info ():
         try:
             f = os.popen ("%s -i" % (CHEROKEE_WORKER))
         except:
-            print ("ERROR: Couldn't execute '%s -i'"  % (CHEROKEE_WORKER))
+            msg = _("ERROR: Couldn't execute '%s -i'")
+            print msg % (CHEROKEE_WORKER)
 
         _server_info = f.read()
 

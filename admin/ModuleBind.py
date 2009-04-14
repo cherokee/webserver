@@ -19,12 +19,12 @@ class ModuleBind (Module, FormHelper):
         inte = self._cfg.get_val ("server!bind!%s!interface"%(num))
 
         if inte:
-            return (num, "Port %s (%s)"%(inte, port))
-        return (num, "Port %s"%(port))
+            return (num, _("Port") + " %s (%s)"%(inte, port))
+        return (num, _("Port") + " %s"%(port))
 
     def _render_new_entry (self):
         # Build the port list
-        ports = [('', "Choose")]
+        ports = [('', _("Choose"))]
         for b in self._cfg.keys("server!bind"):
             tmp = self._build_option_bind_num (b)
             ports.append(tmp)
@@ -33,7 +33,7 @@ class ModuleBind (Module, FormHelper):
         cfg_key = '%s!value'%(self._prefix)
 
         table = TableProps()
-        self.AddPropOptions (table, 'Incoming Port', cfg_key, ports, NOTE_BIND)
+        self.AddPropOptions (table, _('Incoming Port'), cfg_key, ports, NOTE_BIND)
         return str(table)
 
     def _render_modify_entry (self):
@@ -43,17 +43,17 @@ class ModuleBind (Module, FormHelper):
         # Lits ports
         tmp = self._cfg.keys(cfg_key)
         if tmp:
-            txt += '<h3>Selected Ports</h3>'
+            txt += '<h3>%s</h3>' % (_('Selected Ports'))
             table = Table(4, 1, style='width="100%"')
-            table += ('Port', 'Bind to', 'TLS', '')
+            table += (_('Port'), _('Bind to'), _('TLS'), '')
             for b in tmp:
                 server_bind = self._cfg.get_val('%s!%s'%(cfg_key, b))
                 port = self._cfg.get_val ("server!bind!%s!port"%(server_bind))
                 bind = self._cfg.get_val ("server!bind!%s!interface"%(server_bind), '')
                 tls_ = self._cfg.get_val ("server!bind!%s!tls"%(server_bind), False)
-                tls  = ["No", "Yes"][int(tls_)]
+                tls  = [_("No"), _("Yes")][int(tls_)]
                 js = "post_del_key('/ajax/update', '%s!%s');"%(cfg_key, b)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (port, bind, tls, link_del)
             txt += self.Indent(table)
 
@@ -74,14 +74,14 @@ class ModuleBind (Module, FormHelper):
             next = '1'
 
         if left:
-            txt += "<h3>Assign new port</h3>"
-            ports = [('', "Choose")]
+            txt += "<h3>%s</h3>" % (_('Assign new port'))
+            ports = [('', _("Choose"))]
             for b in left:
                 tmp = self._build_option_bind_num (b)
                 ports.append (tmp)
 
             table = TableProps()
-            self.AddPropOptions (table, 'Incoming Port', '%s!%s'%(cfg_key,next), ports, NOTE_BIND)
+            self.AddPropOptions (table, _('Incoming Port'), '%s!%s'%(cfg_key,next), ports, NOTE_BIND)
             txt += self.Indent(table)
 
         return txt
@@ -96,7 +96,7 @@ class ModuleBind (Module, FormHelper):
 
     def apply_cfg (self, values):
         if not values.has_key('value'):
-            print "ERROR, a 'value' entry is needed!"
+            print _("ERROR, a 'value' entry is needed!")
 
         cfg_key = '%s!bind!1'%(self._prefix)
         bind    = values['value']

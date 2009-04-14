@@ -5,20 +5,23 @@ from Form import *
 from Table import *
 from Entry import *
 
+# For gettext
+N_ = lambda x: x
+
 DATA_VALIDATION = [
     ("new_vserver_name",   validations.is_safe_id),
     ("new_vserver_droot", (validations.is_dev_null_or_local_dir_exists, 'cfg')),
     ("vserver_clone_trg",  validations.is_safe_id),
 ]
 
-COMMENT = """
+COMMENT = N_("""
 <p>'Virtual Server' is an abstraction mechanism that allows to define
 a custom number of parameters and rules that have to be applied to one or
 more domains.</p>
-"""
+""")
 
 HELPS = [
-    ('config_virtual_servers', "Virtual Servers")
+    ('config_virtual_servers', N_("Virtual Servers"))
 ]
 
 def domain_cmp (d1, d2):
@@ -47,7 +50,7 @@ class PageVServers (PageMenu, FormHelper):
     def _op_render (self):
         content = self._render_vserver_list()
 
-        self.AddMacroContent ('title', 'Virtual Servers configuration')
+        self.AddMacroContent ('title', _('Virtual Servers configuration'))
         self.AddMacroContent ('content', content)
 
         return Page.Render(self)
@@ -119,7 +122,8 @@ class PageVServers (PageMenu, FormHelper):
         sorted_vservers.sort(sort_vservers, reverse=True)
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr NoDrag="1" NoDrop="1"><th>Nickname</th><th>Root</th><th>Domains</th><th>Logging</th><th></th></tr>'
+        txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
+            (_('Nickname'), _('Root'), _('Domains'), _('Logging'))
 
         for prio in sorted_vservers:
             nick          = self._cfg.get_val('vserver!%s!nick'%(prio))
@@ -147,7 +151,7 @@ class PageVServers (PageMenu, FormHelper):
 
             if nick != "default":
                 js = "post_del_key('/ajax/update', 'vserver!%s');"%(prio)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
             else:
                 link_del = ''
 
@@ -190,18 +194,18 @@ class PageVServers (PageMenu, FormHelper):
 
         # Add new Virtual Server
         table = Table(3, 1, header_style='width="200px"')
-        table += ('Nickname', 'Document Root')
+        table += (_('Nickname'), _('Document Root'))
         fo1 = Form ("/vserver", add_submit=False, auto=False)
         en1 = self.InstanceEntry ("new_vserver_name",  "text", size=20)
         en2 = self.InstanceEntry ("new_vserver_droot", "text", size=40)
         table += (en1, en2, SUBMIT_ADD)
 
-        txt += "<h2>Add new Virtual Server</h2>"
+        txt += "<h2>%s</h2>" % (_('Add new Virtual Server'))
         txt += self.Indent(fo1.Render(str(table)))
 
         # Clone Virtual Server
         table = Table(3, 1, header_style='width="200px"')
-        table += ('Virtual Server', 'Clone as..')
+        table += (_('Virtual Server'), _('Clone as..'))
         fo1 = Form ("/vserver", add_submit=False, auto=False)
 
         clonable = []
@@ -213,7 +217,7 @@ class PageVServers (PageMenu, FormHelper):
         en1 = self.InstanceEntry   ("vserver_clone_trg", "text", size=40)
         table += (op1[0], en1, SUBMIT_CLONE)
 
-        txt += "<h2>Clone Virtual Server</h2>"
+        txt += "<h2>%s</h2>" % (_('Clone Virtual Server'))
         txt += self.Indent(fo1.Render(str(table)))
 
         return txt
@@ -245,7 +249,7 @@ class PageVServers (PageMenu, FormHelper):
 
         # Check the field has been filled out
         if not nick_target:
-            self._error_add ('vserver_clone_trg', '', 'Cannot be empty')
+            self._error_add ('vserver_clone_trg', '', _('Cannot be empty'))
             return
 
         # Clone it
@@ -259,7 +263,7 @@ class PageVServers (PageMenu, FormHelper):
         # Ensure that no entry in empty
         for key in ['new_vserver_name', 'new_vserver_droot']:
             if not post.get_val(key):
-                self._error_add (key, '', 'Cannot be empty')
+                self._error_add (key, '', _('Cannot be empty'))
 
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():

@@ -3,8 +3,8 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_WILDCARD = "Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example.com"
-WARNING_EMPTY = "At least one wildcard string must be defined."
+NOTE_WILDCARD = _("Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example.com")
+WARNING_EMPTY = _("At least one wildcard string must be defined.")
 
 class ModuleWildcard (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url):
@@ -18,11 +18,11 @@ class ModuleWildcard (Module, FormHelper):
 
         available = "1"
 
-        txt += "<h2>Accepted domains</h2>"
+        txt += "<h2>%s</h2>" % (_('Accepted domains'))
         if cfg_domains and \
            cfg_domains.has_child():
             table = Table(2,1)
-            table += ('Domain pattern', '')
+            table += (_('Domain pattern'), '')
 
             # Build list
             for i in cfg_domains:
@@ -30,7 +30,7 @@ class ModuleWildcard (Module, FormHelper):
                 cfg_key = "%s!%s" % (pre, i)
                 en = self.InstanceEntry (cfg_key, 'text')
                 js = "post_del_key('/ajax/update','%s');" % (cfg_key)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (en, link_del)
                 
             txt += self.Indent(table)
@@ -47,8 +47,8 @@ class ModuleWildcard (Module, FormHelper):
             i += 1
 
         table = TableProps()
-        self.AddPropEntry (table, 'New host name', '%s!%s'%(pre, available), NOTE_WILDCARD)
-        txt += "<h3>Add new</h3>"
+        self.AddPropEntry (table, _('New host name'), '%s!%s'%(pre, available), NOTE_WILDCARD)
+        txt += "<h3>%s</h3>" % (_('Add new'))
         txt += self.Indent(table)
 
         return txt

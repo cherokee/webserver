@@ -5,10 +5,7 @@ from ModuleBalancer import *
 
 from consts import *
 
-RR_COMMENT = """
-The <i>Round Robin</i> balancer can either access remote servers or
-launch local application servers and connect to them.
-"""
+RR_COMMENT = _('The <i>Round Robin</i> balancer can either access remote servers or\nlaunch local application servers and connect to them.')
 
 class ModuleRoundRobin (ModuleBalancerGeneric):
     def __init__ (self, cfg, prefix, submit_url):
@@ -21,4 +18,3 @@ class ModuleRoundRobin (ModuleBalancerGeneric):
     def _op_apply_changes (self, uri, post):
         txt = ModuleBalancerGeneric._op_apply_changes (self, uri, post)
         return txt
-        

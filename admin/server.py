@@ -9,6 +9,8 @@ import pyscgi
 import thread
 import signal
 import socket
+import locale
+import gettext
 
 # Application modules
 #
@@ -40,6 +42,8 @@ MODIFIED_CHECK_ELAPSE = 1
 # Globals
 #
 cfg = None
+SELECTED_LANGUAGE = False
+CHEROKEE_ADMIN_LOCALE_DIR = ''
 
 # Request handler
 #
@@ -55,6 +59,9 @@ class Handler(pyscgi.SCGIHandler):
         body    = ""
         status  = "200 OK"
         uri     = self.env['REQUEST_URI']
+
+        if not SELECTED_LANGUAGE:
+            select_language (self.env['HTTP_ACCEPT_LANGUAGE'])
 
         # Ensure that the configuration file is writable
         if not cfg.has_tree():
@@ -108,11 +115,19 @@ class Handler(pyscgi.SCGIHandler):
             manager.save (restart = post_restart)
             cherokee_management_reset()
 
-            body = "Configuration saved."
+            body = _('Configuration saved.')
             if post_restart == 'graceful':
-                body += ' Graceful restart performed.'
+                body += _(' Graceful restart performed.')
             elif post_restart == 'hard':
-                body += ' Hard restart performed.'
+                body += _(' Hard restart performed.')
+
+        elif uri.startswith('/change_language'):
+            self.handle_post()
+            post = Post(self.post)
+            post_lang = post.get_val('language')
+
+            select_language(post_lang)
+            body = '/'
 
         elif uri.startswith('/launch'):
             manager = cherokee_management_get (cfg)
@@ -163,15 +178,34 @@ class Handler(pyscgi.SCGIHandler):
         return self.send (content)
 
 
+def select_language (langs):
+    global SELECTED_LANGUAGE
+
+    if langs:
+        languages = [l for s in langs.split(',') for l in s.split(';') if not '=' in l]
+        try:
+            gettext.translation("cherokee-admin", CHEROKEE_ADMIN_LOCALE_DIR, languages).install()
+        except:
+            pass
+
+        SELECTED_LANGUAGE = True
+
+
 # Server
 #
 def main():
+
+    # Gettext initialization
+    global CHEROKEE_ADMIN_LOCALE_DIR
+    CHEROKEE_ADMIN_LOCALE_DIR = join (CHEROKEE_ADMINDIR, "locale")
+    gettext.install('cherokee-admin', CHEROKEE_ADMIN_LOCALE_DIR, unicode=True)
+
     # Read the arguments
     try:
         scgi_port = int(sys.argv[1])
         cfg_file  = sys.argv[2]
     except:
-        print "Incorrect parameters: PORT CONFIG_FILE"
+        print _("Incorrect parameters: PORT CONFIG_FILE")
         raise SystemExit
 
     # Try to avoid zombie processes
@@ -190,14 +224,14 @@ def main():
     global cfg
     cfg = Config(cfg_file)
 
-    print ("Server %s running.. PID=%d Port=%d" % (VERSION, os.getpid(), scgi_port))
+    print _("Server %s running.. PID=%d Port=%d") % (VERSION, os.getpid(), scgi_port)
 
     # Iterate until the user exists
     try:
         while True:
             srv.handle_request()
     except KeyboardInterrupt:
-        print "\rServer exiting.."
+        print "\r", _("Server exiting..")
 
     srv.server_close()
 

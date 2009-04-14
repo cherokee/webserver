@@ -4,7 +4,7 @@ from Module import *
 import validations
 
 METHODS = [
-    ('',            'Choose'),
+    ('',            _('Choose')),
     ('get',         'GET'),
     ('post',        'POST'),
     ('head',        'HEAD'),
@@ -27,7 +27,7 @@ METHODS = [
     ('unsubscribe', 'UNSUBSCRIBE')
 ]
 
-NOTE_METHOD  = "The HTTP method that should match this rule."
+NOTE_METHOD  = _("The HTTP method that should match this rule.")
 
 
 class ModuleMethod (Module, FormHelper):
@@ -41,10 +41,10 @@ class ModuleMethod (Module, FormHelper):
         table = TableProps()
 
         if self._prefix.startswith('tmp!'):
-            self.AddPropOptions (table, 'Method', '%s!value'%(self._prefix), \
+            self.AddPropOptions (table, _('Method'), '%s!value'%(self._prefix), \
                                  METHODS, NOTE_METHOD)
         else:
-            self.AddPropOptions (table, 'Method', '%s!method'%(self._prefix), \
+            self.AddPropOptions (table, _('Method'), '%s!method'%(self._prefix), \
                                  METHODS[1:], NOTE_METHOD)
 
         return str(table)
@@ -54,7 +54,7 @@ class ModuleMethod (Module, FormHelper):
 
     def apply_cfg (self, values):
         if not values.has_key('value'):
-            print "ERROR, a 'value' entry is needed!"
+            print _("ERROR, a 'value' entry is needed!")
 
         exts = values['value']
         self._cfg['%s!method'%(self._prefix)] = exts

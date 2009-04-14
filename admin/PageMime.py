@@ -6,6 +6,9 @@ from Table import *
 from Entry import *
 from Form import *
 
+# For gettext
+N_ = lambda x: x
+
 DATA_VALIDATION = [
     ("mime!.*!extensions", validations.is_extension_list),
     ("mime!.*!max\-age",   validations.is_number),
@@ -13,11 +16,11 @@ DATA_VALIDATION = [
     ("tmp!new_maxage",     validations.is_number)
 ]
 
-HELPS = [('config_mime_types', "MIME types")]
+HELPS = [('config_mime_types', N_("MIME types"))]
 
-NOTE_NEW_MIME       = 'New MIME type to be added.'
-NOTE_NEW_EXTENSIONS = 'Comma separated list of file extensions associated with the MIME type.'
-NOTE_NEW_MAXAGE     = 'Maximum time that this sort of content can be cached (in seconds).'
+NOTE_NEW_MIME       = N_('New MIME type to be added.')
+NOTE_NEW_EXTENSIONS = N_('Comma separated list of file extensions associated with the MIME type.')
+NOTE_NEW_MAXAGE     = N_('Maximum time that this sort of content can be cached (in seconds).')
 
 TABLE_JS = """
 <script type="text/javascript">
@@ -36,7 +39,7 @@ class PageMime (PageMenu, FormHelper):
     def _op_render (self):
         content = self._render_content()
 
-        self.AddMacroContent ('title', 'Mime types configuration')
+        self.AddMacroContent ('title', _('Mime types configuration'))
         self.AddMacroContent ('content', content)
 
         return Page.Render(self)
@@ -57,7 +60,7 @@ class PageMime (PageMenu, FormHelper):
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
-        
+
         mime = post.pop('tmp!new_mime')
         exts = post.pop('tmp!new_extensions')
         mage = post.pop('tmp!new_maxage')
@@ -68,14 +71,14 @@ class PageMime (PageMenu, FormHelper):
             self._cfg['mime!%s!extensions'%(mime)] = exts
 
     def _render_content (self):
-        render = '<h1>MIME types</h1>'
+        render = '<h1>%s</h1>' % (_('MIME types'))
 
         content = self._render_mime_list()
         form = Form ('/%s' % (self._id), add_submit=False)
         tmp = form.Render (content, DEFAULT_SUBMIT_VALUE)
         render += self.Indent(tmp)
 
-        render += '<h2>Add new MIME</h2>\n'
+        render += '<h2>%s</h2>\n' % (_('Add new MIME'))
 
         content = self._render_add_mime()
         form = Form ('/%s' % (self._id), add_submit=True, auto=False)
@@ -89,7 +92,7 @@ class PageMime (PageMenu, FormHelper):
         cfg = self._cfg['mime']
         if cfg:
             table = Table(4, 1, style='id="mimes" class="rulestable"')
-            table += ('Mime type', 'Extensions', 'MaxAge<br/>(<i>secs</i>)')
+            table += (_('Mime type'), _('Extensions'), _('MaxAge<br/>(<i>secs</i>)'))
             keys = cfg.keys()
             keys.sort()
             for mime in keys:
@@ -97,7 +100,7 @@ class PageMime (PageMenu, FormHelper):
                 e1 = self.InstanceEntry('%s!extensions'%(cfg_key), 'text', size=35)
                 e2 = self.InstanceEntry('%s!max-age'%(cfg_key),    'text', size=6, maxlength=6)
                 js = "post_del_key('/ajax/update', '%s');" % (quote(cfg_key))
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (mime, e1, e2, link_del)
             txt += '<div id="mimetable">%s</div>'%(str(table))
             txt += TABLE_JS
@@ -107,9 +110,9 @@ class PageMime (PageMenu, FormHelper):
     def _render_add_mime (self):
         table = TableProps()
 
-        self.AddPropEntry (table, 'Mime Type',  'tmp!new_mime',       NOTE_NEW_MIME)
-        self.AddPropEntry (table, 'Extensions', 'tmp!new_extensions', NOTE_NEW_EXTENSIONS)
-        self.AddPropEntry (table, 'Max Age',    'tmp!new_maxage',     NOTE_NEW_MAXAGE, maxlength=6)
+        self.AddPropEntry (table, _('Mime Type'),  'tmp!new_mime',       NOTE_NEW_MIME)
+        self.AddPropEntry (table, _('Extensions'), 'tmp!new_extensions', NOTE_NEW_EXTENSIONS)
+        self.AddPropEntry (table, _('Max Age'),    'tmp!new_maxage',     NOTE_NEW_MAXAGE, maxlength=6)
 
         return str(table)
 
@@ -118,7 +121,7 @@ class PageMime (PageMenu, FormHelper):
         e3 = self.InstanceEntry('tmp!new_maxage',     'text', size=6, maxlength=6)
 
         table = Table(3,1, style='width="100%"')
-        table += ('Mime Type', 'Extensions', 'Max Age')
+        table += (_('Mime Type'), _('Extensions'), _('Max Age'))
         table += (e1, e2, e3)
 
         return str(table)

@@ -10,8 +10,8 @@ DATA_VALIDATION = [
 ]
 
 REDIRECTION_TYPE = [
-    ('0', 'Internal'),
-    ('1', 'External')
+    ('0', _('Internal')),
+    ('1', _('External'))
 ]
 
 TABLE_JS = """
@@ -36,21 +36,21 @@ class ModuleErrorRedir (Module, FormHelper):
         # Render error list
         errors = self._cfg[self._prefix]
         if errors and errors.has_child():
-            txt += '<h3>Configured error codes</h3>'
+            txt += '<h3>%s</h3>' % (_('Configured error codes'))
             table = Table(4,1, style='width="90%" id="errors" class="rulestable"')
-            table += ('Error', 'Redirection', 'Type', '')
+            table += (_('Error'), _('Redirection'), _('Type'), '')
             for error in errors:
                 js = "post_del_key('/ajax/update', '%s!%s');" % (self._prefix, error)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 show, v = self.InstanceOptions ("%s!%s!show" % (self._prefix, error), REDIRECTION_TYPE)
                 table += (error, self._cfg.get_val('%s!%s!url'%(self._prefix,error)), show, link_del)
             txt += self.Indent(table)
             txt += TABLE_JS
 
         # New error
-        txt += '<h3>Add error codes</h3>'
+        txt += '<h3>%s</h3>' % (_('Add error codes'))
         table = Table(4,1, style='width="90%"')
-        table += ('Error', 'Redirection', 'Type', '')
+        table += (_('Error'), _('Redirection'), _('Type'), '')
 
         options = EntryOptions ('new_error_code', ERROR_CODES, noautosubmit=True)
         entry   = self.InstanceEntry('new_error_url', 'text', size=30, noautosubmit=True)

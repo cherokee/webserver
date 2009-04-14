@@ -6,7 +6,7 @@ from ModuleAuth import *
 DATA_VALIDATION = []
 
 HELPS = [
-    ('modules_validators_authlist', "Fixed list")
+    ('modules_validators_authlist', _("Fixed list"))
 ]
 
 class ModuleAuthlist (ModuleAuthBase):
@@ -21,29 +21,29 @@ class ModuleAuthlist (ModuleAuthBase):
 
     def _op_render (self):
         txt  = ModuleAuthBase._op_render (self)
-        txt += "<h2>Fixed authentication list</h2>"
+        txt += "<h2>%s</h2>" % (_('Fixed authentication list'))
 
         keys = self._cfg.keys('%s!list'%(self._prefix))
 
         if keys:
-            txt += "<h3>Authentication list</h3>"
+            txt += "<h3>%s</h3>" % (_('Authentication list'))
             table = Table(3, 1, style='width="90%"')
-            table += ('User', 'Password', '')
+            table += (_('User'), _('Password'), '')
             for c in keys:
                 pre     = '%s!list!%s'%(self._prefix, c)
                 user    = self._cfg.get_val('%s!user'     %(pre))
                 passwd  = self._cfg.get_val('%s!password' %(pre))
                 js      = "post_del_key('/ajax/update', '%s');" % (pre)
-                rm_link = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                rm_link = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (user, passwd, rm_link)
             txt += self.Indent(table)
 
-        txt += "<h3>Add new pair</h3>"
+        txt += "<h3>%s</h3>" % (_('Add new pair'))
         user_e = self.InstanceEntry ("tmp!new_user", 'text', size=20, req=True)
         pass_e = self.InstanceEntry ("tmp!new_pass", 'text', size=40, req=True)
 
         table = Table (3, 1)
-        table += ('User', 'Password', '')
+        table += (_('User'), _('Password'), '')
         table += (user_e, pass_e, SUBMIT_ADD)
         txt += self.Indent(table)
 

@@ -6,35 +6,41 @@ from Entry import *
 from Form import *
 from config import *
 
+# For gettext
+N_ = lambda x: x
+
 HELPS = [('index', "Index")]
 
-WARNING_NOT_FOUND = "<b>The configuration not found</b>.<br />You can create a new " + \
-                    "configuration file and proceed to customize the web server."
+WARNING_NOT_FOUND = N_("<b>The configuration is not found</b>.<br />You can create a new configuration file and proceed to customize the web server.")
 
 BUTTON = """
    <p style="text-align: center;">
     <a class="button" href="%s">
-      <span>Create</span>
+      <span>%s</span>
     </a>
    </p>
-"""
+""" % ('%s', N_('Create'))
 
 CONFIG_TABLE = """
 <div align="center">
   <table id="table_new_file">
-  <tr><th>Regular</th><th>Static Content</th><th>Server Development</th></tr>
+  <tr><th>%s</th><th>%s</th><th>%s</th></tr>
   <tr>
    <td>
-     Regular configuration: PHP, Apache logs, MIME types, icons, etc.
+     %s
    </td><td>
-     Optized to send static content.
+     %s
    </td><td>
-     No standard port, No log files, No PID file, etc.
+     %s
    </td>
   <tr><td>%s</td><td>%s</td><td>%s</td></tr>
   </tr></table>
 </div>
-""" % (BUTTON %("/create_config/regular"),
+""" % (N_('Regular'), N_('Static Content'), N_('Server Development'),
+       N_('Regular configuration: PHP, Apache logs, MIME types, icons, etc.'),
+       N_('Optimized to send static content.'),
+       N_('No standard port, No log files, No PID file, etc.'),
+       BUTTON %("/create_config/regular"),
        BUTTON %("/create_config/performance"),
        BUTTON %("/create_config/development"))
 
@@ -73,17 +79,17 @@ class PageNewConfig (Page, FormHelper):
         self.AddMacroContent ('menu', '')
         self.AddMacroContent ('help', '')
         self.AddMacroContent ('body', PAGE_BASIC_LAYOUT)
-        self.AddMacroContent ('title', 'New Configuration File')
+        self.AddMacroContent ('title', _('New Configuration File'))
         self.AddMacroContent ('content', content)
         self.AddMacroContent ('cherokee_conf', self._cfg.file)
         self.AddMacroContent ('icons_dir', CHEROKEE_ICONSDIR)
         return Page.Render(self)
 
     def _render_content (self):
-        txt = "<h1>Configuration File Not Found</h1>"
+        txt = "<h1>%s</h1>" % (_('Configuration File Not Found'))
         txt += self.Dialog(WARNING_NOT_FOUND, type_='warning')
 
-        txt += "<h2>Create a new configuration file</h2>"
+        txt += "<h2>%s</h2>" % (_('Create a new configuration file'))
         txt += CONFIG_TABLE
         return txt
 

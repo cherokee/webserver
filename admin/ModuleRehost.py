@@ -3,8 +3,8 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_REHOST   = "Regular Expression against which the hosts be Host name will be compared."
-WARNING_EMPTY = "At least one Regular Expression string must be defined."
+NOTE_REHOST   = _("Regular Expression against which the hosts be Host name will be compared.")
+WARNING_EMPTY = _("At least one Regular Expression string must be defined.")
 
 class ModuleRehost (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url):
@@ -18,11 +18,11 @@ class ModuleRehost (Module, FormHelper):
 
         available = "1"
 
-        txt += "<h2>Regular Expressions</h2>"
+        txt += "<h2>%s</h2>" % (_('Regular Expressions'))
         if cfg_domains and \
            cfg_domains.has_child():
             table = Table(2,1)
-            table += ('Regular Expressions', '')
+            table += (_('Regular Expressions'), '')
 
             # Build list
             for i in cfg_domains:
@@ -30,9 +30,9 @@ class ModuleRehost (Module, FormHelper):
                 cfg_key = "%s!%s" % (pre, i)
                 en = self.InstanceEntry (cfg_key, 'text')
                 js = "post_del_key('/ajax/update','%s');" % (cfg_key)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (en, link_del)
-                
+
             txt += self.Indent(table)
             txt += "<br />"
         else:
@@ -47,8 +47,8 @@ class ModuleRehost (Module, FormHelper):
             i += 1
 
         table = TableProps()
-        self.AddPropEntry (table, 'New Regular Expression', '%s!%s'%(pre, available), NOTE_REHOST)
-        txt += "<h3>Add new</h3>"
+        self.AddPropEntry (table, _('New Regular Expression'), '%s!%s'%(pre, available), NOTE_REHOST)
+        txt += "<h3>%s</h3>" % (_('Add new'))
         txt += self.Indent(table)
 
         return txt

@@ -1,86 +1,94 @@
+# For gettext
+N_ = lambda x: x
+
+AVAILABLE_LANGUAGES = [
+    ('en',           N_('English')),
+    ('es',           N_('Spanish'))
+]
+
 HANDLERS = [
-    ('',             'None'),
-    ('common',       'List & Send'),
-    ('file',         'Static content'),
-    ('dirlist',      'Only listing'),
-    ('redir',        'Redirection'),
-    ('fcgi',         'FastCGI'),
-    ('scgi',         'SCGI'),
-    ('proxy',        'HTTP reverse proxy'),
-    ('streaming',    'Audio/Video streaming'),
-    ('cgi',          'CGI'),
-    ('ssi',          'Server Side Includes'),
-    ('secdownload',  'Hidden Downloads'),
-    ('server_info',  'Server Info'),
-    ('dbslayer',     'MySQL bridge'),
-    ('mirror',       'Generic balancer'),
-    ('custom_error', 'HTTP error'),
-    ('admin',        'Remote Administration'),
-    ('empty_gif',    '1x1 Transparent GIF')
+    ('',             N_('None')),
+    ('common',       N_('List & Send')),
+    ('file',         N_('Static content')),
+    ('dirlist',      N_('Only listing')),
+    ('redir',        N_('Redirection')),
+    ('fcgi',         N_('FastCGI')),
+    ('scgi',         N_('SCGI')),
+    ('proxy',        N_('HTTP reverse proxy')),
+    ('streaming',    N_('Audio/Video streaming')),
+    ('cgi',          N_('CGI')),
+    ('ssi',          N_('Server Side Includes')),
+    ('secdownload',  N_('Hidden Downloads')),
+    ('server_info',  N_('Server Info')),
+    ('dbslayer',     N_('MySQL bridge')),
+    ('mirror',       N_('Generic balancer')),
+    ('custom_error', N_('HTTP error')),
+    ('admin',        N_('Remote Administration')),
+    ('empty_gif',    N_('1x1 Transparent GIF'))
 ]
 
 ERROR_HANDLERS = [
-    ('',            'Default errors'),
-    ('error_redir', 'Custom redirections'),
-    ('error_nn',    'Closest match')
+    ('',            N_('Default errors')),
+    ('error_redir', N_('Custom redirections')),
+    ('error_nn',    N_('Closest match'))
 ]
 
 VALIDATORS = [
-    ('',         'None'),
-    ('plain',    'Plain text file'),
-    ('htpasswd', 'Htpasswd file'),
-    ('htdigest', 'Htdigest file'),
-    ('ldap',     'LDAP server'),
-    ('mysql',    'MySQL server'),
-    ('pam',      'PAM'),
-    ('authlist', 'Fixed list')
+    ('',         N_('None')),
+    ('plain',    N_('Plain text file')),
+    ('htpasswd', N_('Htpasswd file')),
+    ('htdigest', N_('Htdigest file')),
+    ('ldap',     N_('LDAP server')),
+    ('mysql',    N_('MySQL server')),
+    ('pam',      N_('PAM')),
+    ('authlist', N_('Fixed list'))
 ]
 
 VALIDATOR_METHODS = [
-    ('basic',        'Basic'),
-    ('digest',       'Digest'),
-    ('basic,digest', 'Basic or Digest')
+    ('basic',        N_('Basic')),
+    ('digest',       N_('Digest')),
+    ('basic,digest', N_('Basic or Digest'))
 ]
 
 LOGGERS = [
-    ('',           'None'),
-    ('combined',   'Apache compatible'),
-    ('w3c',        'W3C'),
-    ('ncsa',       'NCSA'),
-    ('custom',     'Custom')
+    ('',           N_('None')),
+    ('combined',   N_('Apache compatible')),
+    ('w3c',        N_('W3C')),
+    ('ncsa',       N_('NCSA')),
+    ('custom',     N_('Custom'))
 ]
 
 LOGGER_WRITERS = [
-    ('file',     'File'),
-    ('syslog',   'System logger'),
-    ('stderr',   'Standard Error'),
-    ('exec',     'Execute program')
+    ('file',     N_('File')),
+    ('syslog',   N_('System logger')),
+    ('stderr',   N_('Standard Error')),
+    ('exec',     N_('Execute program'))
 ]
 
 BALANCERS = [
-    ('round_robin', "Round Robin"),
-    ('ip_hash',     "IP Hash")
+    ('round_robin', N_("Round Robin")),
+    ('ip_hash',     N_("IP Hash"))
 ]
 
 SOURCE_TYPES = [
-    ('interpreter', 'Local interpreter'),
-    ('host',        'Remote host')
+    ('interpreter', N_('Local interpreter')),
+    ('host',        N_('Remote host'))
 ]
 
 ENCODERS = [
-    ('gzip',     'GZip'),
-    ('deflate',  'Deflate')
+    ('gzip',     N_('GZip')),
+    ('deflate',  N_('Deflate'))
 ]
 
 THREAD_POLICY = [
-    ('',      'Default'),
-    ('fifo',  'FIFO'),
-    ('rr',    'Round-robin'),
-    ('other', 'Dynamic')
+    ('',      N_('Default')),
+    ('fifo',  N_('FIFO')),
+    ('rr',    N_('Round-robin')),
+    ('other', N_('Dynamic'))
 ]
 
 POLL_METHODS = [
-    ('',       'Automatic'),
+    ('',       N_('Automatic')),
     ('epoll',  'epoll() - Linux >= 2.6'),
     ('kqueue', 'kqueue() - BSD, OS X'),
     ('ports',  'Solaris ports - >= 10'),
@@ -90,8 +98,8 @@ POLL_METHODS = [
 ]
 
 REDIR_SHOW = [
-    ('1', 'External'),
-    ('0', 'Internal')
+    ('1', N_('External')),
+    ('0', N_('Internal'))
 ]
 
 ERROR_CODES = [
@@ -112,40 +120,40 @@ ERROR_CODES = [
 ]
 
 RULES = [
-    ('directory',  'Directory'),
-    ('extensions', 'Extensions'),
-    ('request',    'Regular Expression'),
-    ('header',     'Header'),
-    ('exists',     'File Exists'),
-    ('method',     'HTTP Method'),
-    ('bind',       'Incoming Port'),
-    ('geoip',      'GeoIP')
+    ('directory',  N_('Directory')),
+    ('extensions', N_('Extensions')),
+    ('request',    N_('Regular Expression')),
+    ('header',     N_('Header')),
+    ('exists',     N_('File Exists')),
+    ('method',     N_('HTTP Method')),
+    ('bind',       N_('Incoming Port')),
+    ('geoip',      N_('GeoIP'))
 ]
 
 VRULES = [
-    ('wildcard',   'Wildcards'),
-    ('rehost',     'Regular Expressions')
+    ('wildcard',   N_('Wildcards')),
+    ('rehost',     N_('Regular Expressions'))
 ]
 
 EXPIRATION_TYPE = [
-    ('',         'Not set'),
-    ('epoch',    'Already expired on 1970'),
-    ('max',      'Do not expire until 2038'),
-    ('time',     'Custom value')
+    ('',         N_('Not set')),
+    ('epoch',    N_('Already expired on 1970')),
+    ('max',      N_('Do not expire until 2038')),
+    ('time',     N_('Custom value'))
 ]
 
 CRYPTORS = [
-    ('',         'No TLS/SSL'),
-    ('libssl',   'OpenSSL / libssl')
+    ('',         N_('No TLS/SSL')),
+    ('libssl',   N_('OpenSSL / libssl'))
 ]
 
 EVHOSTS = [
-    ('',         'Off'),
-    ('evhost',   'Enhanced Virtual Hosting')
+    ('',         N_('Off')),
+    ('evhost',   N_('Enhanced Virtual Hosting'))
 ]
 
 CLIENT_CERTS = [
-    ('',         'Skip'),
-    ('accept',   'Accept'),
-    ('required', 'Require')
+    ('',         N_('Skip')),
+    ('accept',   N_('Accept')),
+    ('required', N_('Require'))
 ]

@@ -3,13 +3,13 @@ from Table import *
 from ModuleHandler import *
 from consts import *
 
-NOTE_SHOW         = "Defines whether the redirection will be seen by the client."
-NOTE_REGEX        = "Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc.perl.org/perlre.html\">Reference</a>."
-NOTE_SUBSTITUTION = "Target address. It can use Regular Expression substitution sub-strings."
+NOTE_SHOW         = _("Defines whether the redirection will be seen by the client.")
+NOTE_REGEX        = _('Regular expression. Check out the <a target="_blank" href="http://perldoc.perl.org/perlre.html">Reference</a>.')
+NOTE_SUBSTITUTION = _("Target address. It can use Regular Expression substitution sub-strings.")
 
 HELPS = [
-    ('modules_handlers_redir',              "Redirections"),
-    ('http://perldoc.perl.org/perlre.html', "Regular Expressions")
+    ('modules_handlers_redir',              _("Redirections")),
+    ('http://perldoc.perl.org/perlre.html', _("Regular Expressions"))
 ]
 
 class ModuleRedir (ModuleHandler):
@@ -29,28 +29,28 @@ class ModuleRedir (ModuleHandler):
         # Current rules
         if cfg and cfg.has_child():
             table = Table (4,1)
-            table += ('Type', 'Regular Expression', 'Substitution', '')
+            table += (_('Type'), _('Regular Expression'), _('Substitution'), '')
 
             for rule in cfg:
                 cfg_key_rule = "%s!%s" % (cfg_key, rule)
 
-                show, _ = self.InstanceOptions ('%s!show'%(cfg_key_rule), REDIR_SHOW)
-                regex     = self.InstanceEntry('%s!regex' % (cfg_key_rule), 'text', size=25)
-                substring = self.InstanceEntry('%s!substring' % (cfg_key_rule), 'text', size=25)
+                show, trash = self.InstanceOptions ('%s!show'%(cfg_key_rule), REDIR_SHOW)
+                regex       = self.InstanceEntry('%s!regex' % (cfg_key_rule), 'text', size=25)
+                substring   = self.InstanceEntry('%s!substring' % (cfg_key_rule), 'text', size=25)
                 js = "post_del_key('/ajax/update', '%s');" % (cfg_key_rule)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (show, regex, substring, link_del)
 
-            txt += "<h3>Rule list</h3>"
+            txt += "<h3>%s</h3>" % (_('Rule list'))
             txt += self.Indent(table)
 
         # Add new rule
         table = TableProps()
-        self.AddPropOptions (table, 'Show', "rewrite_new_show", REDIR_SHOW, NOTE_SHOW, noautosubmit=True)
-        self.AddPropEntry   (table, 'Regular Expression', 'rewrite_new_regex', NOTE_REGEX, noautosubmit=True)
-        self.AddPropEntry   (table, 'Substitution', 'rewrite_new_substring', NOTE_SUBSTITUTION, req=True)
+        self.AddPropOptions (table, _('Show'), "rewrite_new_show", REDIR_SHOW, NOTE_SHOW, noautosubmit=True)
+        self.AddPropEntry   (table, _('Regular Expression'), 'rewrite_new_regex', NOTE_REGEX, noautosubmit=True)
+        self.AddPropEntry   (table, _('Substitution'), 'rewrite_new_substring', NOTE_SUBSTITUTION, req=True)
 
-        txt += "<h2>Add new rule</h2>"
+        txt += "<h2>%s</h2>" % (_('Add new rule'))
         txt += self.Indent(table)
 
         return txt

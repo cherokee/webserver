@@ -1,0 +1,2606 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-04-14 17:17+CEST\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: CherokeeManagement.py:98
+msgid "Could not access file descriptors: "
+msgstr ""
+
+#: CherokeeManagement.py:252
+msgid "ERROR: Couldn't execute '%s -i'"
+msgstr ""
+
+#: Entry.py:43
+msgid " Enabled"
+msgstr ""
+
+#: Form.py:30
+msgid "Submit"
+msgstr ""
+
+#: ModuleAdmin.py:5 consts.py:26
+msgid "Remote Administration"
+msgstr ""
+
+#: ModuleAuth.py:12
+msgid "Allowed HTTP Authentication methods."
+msgstr ""
+
+#: ModuleAuth.py:13
+msgid "Name associated with the protected resource."
+msgstr ""
+
+#: ModuleAuth.py:14
+msgid "User filter. List of allowed users."
+msgstr ""
+
+#: ModuleAuth.py:37
+msgid "Methods"
+msgstr ""
+
+#: ModuleAuth.py:38
+msgid "Realm"
+msgstr ""
+
+#: ModuleAuth.py:39
+msgid "Users"
+msgstr ""
+
+#: ModuleAuth.py:41
+msgid "Authentication Details"
+msgstr ""
+
+#: ModuleAuth.py:48
+msgid "Realm can not be empty"
+msgstr ""
+
+#: ModuleAuthlist.py:9 consts.py:44
+msgid "Fixed list"
+msgstr ""
+
+#: ModuleAuthlist.py:24
+msgid "Fixed authentication list"
+msgstr ""
+
+#: ModuleAuthlist.py:29
+msgid "Authentication list"
+msgstr ""
+
+#: ModuleAuthlist.py:31 ModuleAuthlist.py:46
+msgid "Password"
+msgstr ""
+
+#: ModuleAuthlist.py:31 ModuleAuthlist.py:46 PageGeneral.py:69
+msgid "User"
+msgstr ""
+
+#: ModuleAuthlist.py:37 ModuleBalancer.py:63 ModuleBind.py:56 ModuleCgi.py:63
+#: ModuleErrorRedir.py:44 ModuleProxy.py:104 ModuleProxy.py:131
+#: ModuleProxy.py:163 ModuleRedir.py:41 ModuleRehost.py:33
+#: ModuleWildcard.py:33 PageGeneral.py:121 PageIcon.py:131 PageIcon.py:164
+#: PageInfoSource.py:133 PageInfoSource.py:230 PageMime.py:103
+#: PageVServer.py:345 PageVServers.py:154
+msgid "Delete"
+msgstr ""
+
+#: ModuleAuthlist.py:41
+msgid "Add new pair"
+msgstr ""
+
+#: ModuleBalancer.py:7
+msgid "Allow to select how the connections will be dispatched."
+msgstr ""
+
+#: ModuleBalancer.py:8
+msgid "There are no Information Sources configured. Please proceed to configure an <a href=\"/source\">Information Source</a>."
+msgstr ""
+
+#: ModuleBalancer.py:9
+msgid "A load balancer must be configured to use at least one information source."
+msgstr ""
+
+#: ModuleBalancer.py:52 Page.py:77 PageInfoSource.py:31 PageInfoSource.py:83
+msgid "Information Sources"
+msgstr ""
+
+#: ModuleBalancer.py:54 ModuleMysql.py:34
+msgid "Host"
+msgstr ""
+
+#: ModuleBalancer.py:54 PageInfoSource.py:165 PageInfoSource.py:191
+#: PageInfoSource.py:218 PageInfoSource.py:269
+msgid "Nick"
+msgstr ""
+
+#: ModuleBalancer.py:69
+msgid "Assign Information Sources"
+msgstr ""
+
+#: ModuleBalancer.py:71
+msgid "It is already balancing among all the configured "
+msgstr ""
+
+#: ModuleBalancer.py:72
+msgid "information sources"
+msgstr ""
+
+#: ModuleBalancer.py:74
+msgid "Choose.."
+msgstr ""
+
+#: ModuleBalancer.py:80
+msgid "Application Server"
+msgstr ""
+
+#: ModuleBind.py:22 ModuleBind.py:23 ModuleBind.py:48 ModuleLdap.py:33
+#: ModuleMysql.py:35 PageGeneral.py:111
+msgid "Port"
+msgstr ""
+
+#: ModuleBind.py:27 ModuleBind.py:78 ModuleMethod.py:7
+msgid "Choose"
+msgstr ""
+
+#: ModuleBind.py:36 ModuleBind.py:84 consts.py:129
+msgid "Incoming Port"
+msgstr ""
+
+#: ModuleBind.py:46
+msgid "Selected Ports"
+msgstr ""
+
+#: ModuleBind.py:48 PageGeneral.py:111
+msgid "Bind to"
+msgstr ""
+
+#: ModuleBind.py:48 PageGeneral.py:111
+msgid "TLS"
+msgstr ""
+
+#: ModuleBind.py:54 PageVServer.py:65
+msgid "No"
+msgstr ""
+
+#: ModuleBind.py:54 PageVServer.py:66
+msgid "Yes"
+msgstr ""
+
+#: ModuleBind.py:77
+msgid "Assign new port"
+msgstr ""
+
+#: ModuleBind.py:99 ModuleExists.py:37 ModuleExtensions.py:28
+#: ModuleGeoip.py:62 ModuleMethod.py:57 ModuleRequest.py:28
+msgid "ERROR, a 'value' entry is needed!"
+msgstr ""
+
+#: ModuleCgi.py:6
+msgid "Path to an executable that will be run with the CGI as parameter."
+msgstr ""
+
+#: ModuleCgi.py:7
+msgid "Execute the CGI under its file owner user ID."
+msgstr ""
+
+#: ModuleCgi.py:8
+msgid "Send errors exactly as they are generated."
+msgstr ""
+
+#: ModuleCgi.py:9
+msgid "Check whether the file is in place."
+msgstr ""
+
+#: ModuleCgi.py:10
+msgid "Forward all the client headers to the CGI encoded as HTTP_*. headers."
+msgstr ""
+
+#: ModuleCgi.py:11
+msgid "Allow the use of the non-standard X-Sendfile header."
+msgstr ""
+
+#: ModuleCgi.py:39
+msgid "Common CGI options"
+msgstr ""
+
+#: ModuleCgi.py:43
+msgid "Script Alias"
+msgstr ""
+
+#: ModuleCgi.py:45
+msgid "Change UID"
+msgstr ""
+
+#: ModuleCgi.py:47 PageVServer.py:237
+msgid "Error handler"
+msgstr ""
+
+#: ModuleCgi.py:49
+msgid "Check file"
+msgstr ""
+
+#: ModuleCgi.py:50
+msgid "Pass Request Headers"
+msgstr ""
+
+#: ModuleCgi.py:51
+msgid "Allow X-Sendfile"
+msgstr ""
+
+#: ModuleCgi.py:54
+msgid "Custom environment variables"
+msgstr ""
+
+#: ModuleCgi.py:68
+msgid "Add new custom environment variable"
+msgstr ""
+
+#: ModuleCgi.py:73 ModuleProxy.py:97 ModuleProxy.py:114 PageInfoSource.py:147
+msgid "Value"
+msgstr ""
+
+#: ModuleCgi.py:73 PageFeedback.py:54
+msgid "Name"
+msgstr ""
+
+#: ModuleCommon.py:8
+msgid "Allow extra tailing paths"
+msgstr ""
+
+#: ModuleCommon.py:9
+msgid "Allow to list directory contents"
+msgstr ""
+
+#: ModuleCommon.py:12 consts.py:11
+msgid "List & Send"
+msgstr ""
+
+#: ModuleCommon.py:31
+msgid "Allow PathInfo"
+msgstr ""
+
+#: ModuleCommon.py:32
+msgid "Allow Directory Listing"
+msgstr ""
+
+#: ModuleCommon.py:34
+msgid "Parsing"
+msgstr ""
+
+#: ModuleCustomError.py:6
+msgid "HTTP Error that you be used to reply the request."
+msgstr ""
+
+#: ModuleCustomError.py:9
+msgid "HTTP Custom Error"
+msgstr ""
+
+#: ModuleCustomError.py:21
+msgid "HTTP Error"
+msgstr ""
+
+#: ModuleDbslayer.py:16
+msgid "Language from which the information will be consumed."
+msgstr ""
+
+#: ModuleDbslayer.py:17
+msgid "User to access the database."
+msgstr ""
+
+#: ModuleDbslayer.py:18
+msgid "Password for the user accessing the database."
+msgstr ""
+
+#: ModuleDbslayer.py:19
+msgid "Optionally specifies a database to connect to."
+msgstr ""
+
+#: ModuleDbslayer.py:22
+msgid "MySQL balancing"
+msgstr ""
+
+#: ModuleDbslayer.py:23
+msgid "DB balancig recipe"
+msgstr ""
+
+#: ModuleDbslayer.py:38
+msgid "Serialization"
+msgstr ""
+
+#: ModuleDbslayer.py:40
+msgid "Language"
+msgstr ""
+
+#: ModuleDbslayer.py:41 ModuleMysql.py:37 ModuleMysql.py:49
+msgid "DB User"
+msgstr ""
+
+#: ModuleDbslayer.py:42 ModuleMysql.py:38
+msgid "DB Password"
+msgstr ""
+
+#: ModuleDbslayer.py:43
+msgid "Data Base"
+msgstr ""
+
+#: ModuleDbslayer.py:46
+msgid "Data base balancing"
+msgstr ""
+
+#: ModuleDbslayer.py:49 ModuleFcgi.py:34 ModuleMirror.py:25 ModuleProxy.py:46
+#: ModuleScgi.py:33
+msgid "Balancer"
+msgstr ""
+
+#: ModuleDirectory.py:6
+msgid "Public Web Directory to which content the configuration will be applied."
+msgstr ""
+
+#: ModuleDirectory.py:18 ModuleDirectory.py:20
+msgid "Web Directory"
+msgstr ""
+
+#: ModuleDirlist.py:11
+msgid "Choose the listing theme."
+msgstr ""
+
+#: ModuleDirlist.py:12
+msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
+msgstr ""
+
+#: ModuleDirlist.py:13
+msgid "List of notice files to be inserted."
+msgstr ""
+
+#: ModuleDirlist.py:14
+msgid "List of files that should not be listed."
+msgstr ""
+
+#: ModuleDirlist.py:23 consts.py:13
+msgid "Only listing"
+msgstr ""
+
+#: ModuleDirlist.py:38
+msgid "Listing"
+msgstr ""
+
+#: ModuleDirlist.py:40
+msgid "Show Size"
+msgstr ""
+
+#: ModuleDirlist.py:41
+msgid "Show Date"
+msgstr ""
+
+#: ModuleDirlist.py:42
+msgid "Show User"
+msgstr ""
+
+#: ModuleDirlist.py:43
+msgid "Show Group"
+msgstr ""
+
+#: ModuleDirlist.py:44
+msgid "Allow symbolic links"
+msgstr ""
+
+#: ModuleDirlist.py:47
+msgid "Theming"
+msgstr ""
+
+#: ModuleDirlist.py:50
+msgid "Theme"
+msgstr ""
+
+#: ModuleDirlist.py:51
+msgid "Icons dir"
+msgstr ""
+
+#: ModuleDirlist.py:52
+msgid "Notice files"
+msgstr ""
+
+#: ModuleDirlist.py:53
+msgid "Hidden files"
+msgstr ""
+
+#: ModuleEmptyGif.py:6
+msgid "1x1 Empty GIF"
+msgstr ""
+
+#: ModuleErrorRedir.py:13 consts.py:102
+msgid "Internal"
+msgstr ""
+
+#: ModuleErrorRedir.py:14 consts.py:101
+msgid "External"
+msgstr ""
+
+#: ModuleErrorRedir.py:39
+msgid "Configured error codes"
+msgstr ""
+
+#: ModuleErrorRedir.py:41 ModuleErrorRedir.py:53
+msgid "Error"
+msgstr ""
+
+#: ModuleErrorRedir.py:41 ModuleErrorRedir.py:53 ModuleRedir.py:32
+#: PageInfoSource.py:164 PageInfoSource.py:190 PageInfoSource.py:218
+#: PageVServer.py:323
+msgid "Type"
+msgstr ""
+
+#: ModuleErrorRedir.py:41 ModuleErrorRedir.py:53 consts.py:14
+msgid "Redirection"
+msgstr ""
+
+#: ModuleErrorRedir.py:51
+msgid "Add error codes"
+msgstr ""
+
+#: ModuleEvhost.py:6
+msgid "Check the dynamically generated Document Root, and use the general Document Root if it doesn't exist."
+msgstr ""
+
+#: ModuleEvhost.py:7
+msgid "The Document Root directory will be built dynamically. The following variables are accepted:<br/>"
+msgstr ""
+
+#: ModuleEvhost.py:27
+msgid "Dynamic Document Root"
+msgstr ""
+
+#: ModuleEvhost.py:28
+msgid "Check Document Root"
+msgstr ""
+
+#: ModuleExists.py:6
+msgid "Comma separated list of files. Rule applies if one exists."
+msgstr ""
+
+#: ModuleExists.py:7
+msgid "Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise."
+msgstr ""
+
+#: ModuleExists.py:8
+msgid "Match the request if any file exists."
+msgstr ""
+
+#: ModuleExists.py:24 ModuleExists.py:28 PageIcon.py:179
+msgid "Files"
+msgstr ""
+
+#: ModuleExists.py:26
+msgid "Match any file"
+msgstr ""
+
+#: ModuleExists.py:29 ModuleFile.py:23
+msgid "Use I/O cache"
+msgstr ""
+
+#: ModuleExists.py:44
+msgid "Any file"
+msgstr ""
+
+#: ModuleExists.py:48 consts.py:127
+msgid "File Exists"
+msgstr ""
+
+#: ModuleExtensions.py:6
+msgid "File extension list to which content the configuration will be applied."
+msgstr ""
+
+#: ModuleExtensions.py:18 ModuleExtensions.py:20 PageIcon.py:123
+#: PageIcon.py:143 PageIcon.py:148 PageMime.py:95 PageMime.py:114
+#: PageMime.py:124 consts.py:124
+msgid "Extensions"
+msgstr ""
+
+#: ModuleFcgi.py:29
+msgid "FastCGI specific"
+msgstr ""
+
+#: ModuleFile.py:5
+msgid "Enables an internal I/O cache that improves performance."
+msgstr ""
+
+#: ModuleFile.py:8 PageNewConfig.py:39
+msgid "Static Content"
+msgstr ""
+
+#: ModuleFile.py:25
+msgid "File Sending"
+msgstr ""
+
+#: ModuleGeoip.py:9
+msgid "Add the initial country. It's possible to add more later on."
+msgstr ""
+
+#: ModuleGeoip.py:10
+msgid "Pick an additional country to add to the country list."
+msgstr ""
+
+#: ModuleGeoip.py:11
+msgid ""
+"List of countries from the client IPs. It must use the\n"
+"<a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation."
+msgstr ""
+
+#: ModuleGeoip.py:27
+msgid "Country"
+msgstr ""
+
+#: ModuleGeoip.py:36
+msgid "Countries"
+msgstr ""
+
+#: ModuleGeoip.py:47
+msgid "Add Country"
+msgstr ""
+
+#: ModuleHeader.py:6
+msgid "Header against which the regular expression will be evaluated."
+msgstr ""
+
+#: ModuleHeader.py:7
+msgid "Regular expression."
+msgstr ""
+
+#: ModuleHeader.py:30 ModuleHeader.py:32 ModuleProxy.py:97 ModuleProxy.py:124
+#: consts.py:126
+msgid "Header"
+msgstr ""
+
+#: ModuleHeader.py:33 ModuleProxy.py:155 ModuleRedir.py:32 ModuleRedir.py:50
+#: ModuleRequest.py:18 ModuleRequest.py:20 ModuleRequest.py:37 consts.py:125
+msgid "Regular Expression"
+msgstr ""
+
+#: ModuleHtdigest.py:6
+msgid "Full path to the Htdigest formated password file."
+msgstr ""
+
+#: ModuleHtdigest.py:30 ModuleHtpasswd.py:30 ModulePlain.py:30
+msgid "Password File"
+msgstr ""
+
+#: ModuleHtdigest.py:32 ModuleHtpasswd.py:32 consts.py:39
+msgid "Htpasswd file"
+msgstr ""
+
+#: ModuleHtdigest.py:38 ModuleHtpasswd.py:38 ModulePlain.py:38
+msgid "Password file can not be empty"
+msgstr ""
+
+#: ModuleHtpasswd.py:6
+msgid "Full path to the Htpasswd formated password file."
+msgstr ""
+
+#: ModuleIpHash.py:8
+msgid ""
+"The <i>IP Hash</i> balancer distributes connections between upstreams\n"
+"based on the IP-address of the client."
+msgstr ""
+
+#: ModuleLdap.py:4
+msgid "LDAP server IP address."
+msgstr ""
+
+#: ModuleLdap.py:5
+msgid "LDAP server port to connect to. Defaults to 389"
+msgstr ""
+
+#: ModuleLdap.py:6
+msgid "Domain sent during the LDAP authentication operation. Optional."
+msgstr ""
+
+#: ModuleLdap.py:7
+msgid "Password to authenticate in the LDAP server."
+msgstr ""
+
+#: ModuleLdap.py:8
+msgid "Base domain for the web server authentications."
+msgstr ""
+
+#: ModuleLdap.py:9
+msgid "Object filter. It can be empty."
+msgstr ""
+
+#: ModuleLdap.py:10
+msgid "Enable to use secure connections between the web and LDAP servers."
+msgstr ""
+
+#: ModuleLdap.py:11
+msgid "CA File for the TLS connections."
+msgstr ""
+
+#: ModuleLdap.py:14
+msgid "LDAP"
+msgstr ""
+
+#: ModuleLdap.py:32 ModuleLdap.py:48 PageStatus.py:93
+msgid "Server"
+msgstr ""
+
+#: ModuleLdap.py:34
+msgid "Bind Domain"
+msgstr ""
+
+#: ModuleLdap.py:35
+msgid "Bind Password"
+msgstr ""
+
+#: ModuleLdap.py:36 ModuleLdap.py:49
+msgid "Base Domain"
+msgstr ""
+
+#: ModuleLdap.py:37
+msgid "Filter"
+msgstr ""
+
+#: ModuleLdap.py:38
+msgid "Use TLS"
+msgstr ""
+
+#: ModuleLdap.py:39
+msgid "CA File"
+msgstr ""
+
+#: ModuleLdap.py:42
+msgid "LDAP connection"
+msgstr ""
+
+#: ModuleMethod.py:30
+msgid "The HTTP method that should match this rule."
+msgstr ""
+
+#: ModuleMethod.py:44 ModuleMethod.py:47 PageVServer.py:451
+msgid "Method"
+msgstr ""
+
+#: ModuleMirror.py:9
+msgid "TCP balancer"
+msgstr ""
+
+#: ModuleMirror.py:30
+msgid "Load balancing options"
+msgstr ""
+
+#: ModuleMysql.py:4
+msgid "MySQL server IP address."
+msgstr ""
+
+#: ModuleMysql.py:5
+msgid "Server port to connect to."
+msgstr ""
+
+#: ModuleMysql.py:6
+msgid "Full path of Unix socket to communicate with the data base."
+msgstr ""
+
+#: ModuleMysql.py:7
+msgid "User name for connecting to the database."
+msgstr ""
+
+#: ModuleMysql.py:8
+msgid "Password for connecting to the database."
+msgstr ""
+
+#: ModuleMysql.py:9
+msgid "Database name containing the user/password pair list."
+msgstr ""
+
+#: ModuleMysql.py:10
+msgid "SQL command to execute. ${user} is replaced with the user name."
+msgstr ""
+
+#: ModuleMysql.py:11
+msgid "Active to use MD5 passwords."
+msgstr ""
+
+#: ModuleMysql.py:36
+msgid "Unix Socket"
+msgstr ""
+
+#: ModuleMysql.py:39 ModuleMysql.py:51
+msgid "Database"
+msgstr ""
+
+#: ModuleMysql.py:40
+msgid "SQL Query"
+msgstr ""
+
+#: ModuleMysql.py:41
+msgid "Use MD5 Passwords"
+msgstr ""
+
+#: ModuleMysql.py:43
+msgid "MySQL connection"
+msgstr ""
+
+#: ModuleMysql.py:50
+msgid "SQL query"
+msgstr ""
+
+#: ModuleMysql.py:53
+msgid " can not be empty"
+msgstr ""
+
+#: ModulePlain.py:6
+msgid "Full path to the plain text password file."
+msgstr ""
+
+#: ModulePlain.py:13
+msgid "Plain text"
+msgstr ""
+
+#: ModulePlain.py:32
+msgid "Plain password file"
+msgstr ""
+
+#: ModuleProxy.py:10
+msgid "Maximum number of connection per server that the proxy can try to keep opened."
+msgstr ""
+
+#: ModuleProxy.py:11
+msgid "Allow the server to use Keep-alive connections with the back-end servers."
+msgstr ""
+
+#: ModuleProxy.py:12
+msgid "Preserve the original \"Host:\" header sent by the client. (Default No)"
+msgstr ""
+
+#: ModuleProxy.py:15
+msgid "Reverse Proxy"
+msgstr ""
+
+#: ModuleProxy.py:35
+msgid "Reverse Proxy Settings"
+msgstr ""
+
+#: ModuleProxy.py:38 ModuleProxy.py:40
+msgid "Request"
+msgstr ""
+
+#: ModuleProxy.py:49
+msgid "Back-end Servers"
+msgstr ""
+
+#: ModuleProxy.py:56 PageAdvanced.py:93
+msgid "Reuse connections"
+msgstr ""
+
+#: ModuleProxy.py:57
+msgid "Allow Keepalive"
+msgstr ""
+
+#: ModuleProxy.py:58
+msgid "Preserve Host header"
+msgstr ""
+
+#: ModuleProxy.py:64 ModuleProxy.py:79
+msgid "URL Rewriting"
+msgstr ""
+
+#: ModuleProxy.py:68
+msgid "Header Addition"
+msgstr ""
+
+#: ModuleProxy.py:69 ModuleProxy.py:84
+msgid "Add New Header"
+msgstr ""
+
+#: ModuleProxy.py:72 ModuleProxy.py:87
+msgid "Hide Headers"
+msgstr ""
+
+#: ModuleProxy.py:73 ModuleProxy.py:88
+msgid "Hide Header"
+msgstr ""
+
+#: ModuleProxy.py:83
+msgid "Header addition"
+msgstr ""
+
+#: ModuleProxy.py:155 ModuleProxy.py:179 ModuleRedir.py:32 ModuleRedir.py:51
+msgid "Substitution"
+msgstr ""
+
+#: ModuleProxy.py:179
+msgid "Add RegEx"
+msgstr ""
+
+#: ModuleRedir.py:6
+msgid "Defines whether the redirection will be seen by the client."
+msgstr ""
+
+#: ModuleRedir.py:7
+msgid "Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc.perl.org/perlre.html\">Reference</a>."
+msgstr ""
+
+#: ModuleRedir.py:8
+msgid "Target address. It can use Regular Expression substitution sub-strings."
+msgstr ""
+
+#: ModuleRedir.py:11
+msgid "Redirections"
+msgstr ""
+
+#: ModuleRedir.py:12 ModuleRehost.py:21 ModuleRehost.py:25 consts.py:135
+msgid "Regular Expressions"
+msgstr ""
+
+#: ModuleRedir.py:44
+msgid "Rule list"
+msgstr ""
+
+#: ModuleRedir.py:49
+msgid "Show"
+msgstr ""
+
+#: ModuleRedir.py:53 PageVServer.py:294
+msgid "Add new rule"
+msgstr ""
+
+#: ModuleRehost.py:6
+msgid "Regular Expression against which the hosts be Host name will be compared."
+msgstr ""
+
+#: ModuleRehost.py:7
+msgid "At least one Regular Expression string must be defined."
+msgstr ""
+
+#: ModuleRehost.py:50
+msgid "New Regular Expression"
+msgstr ""
+
+#: ModuleRehost.py:51 ModuleWildcard.py:51 PageInfoSource.py:233
+msgid "Add new"
+msgstr ""
+
+#: ModuleRequest.py:6
+msgid "Regular expression against which the request will be executed."
+msgstr ""
+
+#: ModuleRoundRobin.py:8
+msgid ""
+"The <i>Round Robin</i> balancer can either access remote servers or\n"
+"launch local application servers and connect to them."
+msgstr ""
+
+#: ModuleScgi.py:29
+msgid "SCGI specific"
+msgstr ""
+
+#: ModuleSecdownload.py:9
+msgid "Hidden Download"
+msgstr ""
+
+#: ModuleSecdownload.py:17
+msgid "Shared secret between the server and the script."
+msgstr ""
+
+#: ModuleSecdownload.py:18
+msgid "How long the download will last accessible - in seconds. Default: 60."
+msgstr ""
+
+#: ModuleSecdownload.py:35
+msgid "Secret"
+msgstr ""
+
+#: ModuleSecdownload.py:36
+msgid "Timeout"
+msgstr ""
+
+#: ModuleSecdownload.py:38
+msgid "Covering parameters"
+msgstr ""
+
+#: ModuleSecdownload.py:50
+msgid "A shared-secret must be defined"
+msgstr ""
+
+#: ModuleSecdownload.py:54
+msgid "It can't be empty"
+msgstr ""
+
+#: ModuleServerInfo.py:5
+msgid "Which information should be shown."
+msgstr ""
+
+#: ModuleServerInfo.py:8 ModuleServerInfo.py:14
+msgid "Server Information"
+msgstr ""
+
+#: ModuleServerInfo.py:9
+msgid "Only version information"
+msgstr ""
+
+#: ModuleServerInfo.py:10
+msgid "Server Information + Connections"
+msgstr ""
+
+#: ModuleServerInfo.py:25
+msgid "Privacy settings"
+msgstr ""
+
+#: ModuleServerInfo.py:28
+msgid "Show Information"
+msgstr ""
+
+#: ModuleSsi.py:5 consts.py:20
+msgid "Server Side Includes"
+msgstr ""
+
+#: ModuleStreaming.py:9
+msgid "Figure the bit rate of the media file, and limit the bandwidth to it."
+msgstr ""
+
+#: ModuleStreaming.py:10
+msgid "Factor by which the bandwidth limit will be increased. Default: 0.1"
+msgstr ""
+
+#: ModuleStreaming.py:11
+msgid "Number of seconds to stream before setting the bandwidth limit. Default: 5."
+msgstr ""
+
+#: ModuleStreaming.py:19 ModuleStreaming.py:42
+msgid "Audio/Video Streaming"
+msgstr ""
+
+#: ModuleStreaming.py:37
+msgid "Auto Rate"
+msgstr ""
+
+#: ModuleStreaming.py:39
+msgid "Speedup Factor"
+msgstr ""
+
+#: ModuleStreaming.py:40
+msgid "Initial Boost"
+msgstr ""
+
+#: ModuleWildcard.py:6
+msgid "Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example.com"
+msgstr ""
+
+#: ModuleWildcard.py:7
+msgid "At least one wildcard string must be defined."
+msgstr ""
+
+#: ModuleWildcard.py:21
+msgid "Accepted domains"
+msgstr ""
+
+#: ModuleWildcard.py:25
+msgid "Domain pattern"
+msgstr ""
+
+#: ModuleWildcard.py:50
+msgid "New host name"
+msgstr ""
+
+#: Page.py:23 Page.py:39
+msgid "Version:"
+msgstr ""
+
+#: Page.py:77
+msgid "General"
+msgstr ""
+
+#: Page.py:77 PageAdvanced.py:100 PageStatus.py:44 PageVServer.py:419
+msgid "Status"
+msgstr ""
+
+#: Page.py:77 PageVServer.py:69 PageVServers.py:24
+msgid "Virtual Servers"
+msgstr ""
+
+#: Page.py:78
+msgid "Mime Types"
+msgstr ""
+
+#: Page.py:78
+msgid "Save"
+msgstr ""
+
+#: Page.py:78
+msgid "Save Changes"
+msgstr ""
+
+#: Page.py:78 PageAdvanced.py:57
+msgid "Advanced"
+msgstr ""
+
+#: Page.py:78 PageIcon.py:12
+msgid "Icons"
+msgstr ""
+
+#: Page.py:88
+msgid "Do not restart"
+msgstr ""
+
+#: Page.py:88
+msgid "Graceful restart"
+msgstr ""
+
+#: Page.py:88
+msgid "Hard restart"
+msgstr ""
+
+#: Page.py:103
+msgid "Available languages"
+msgstr ""
+
+#: Page.py:103
+msgid "Change"
+msgstr ""
+
+#: Page.py:145
+msgid "Help"
+msgstr ""
+
+#: Page.py:171
+msgid "Commit to disk and apply changes to the running server"
+msgstr ""
+
+#: Page.py:174
+msgid "Commit all the changes permanently"
+msgstr ""
+
+#: PageAdvanced.py:33
+msgid "<p><b>WARNING</b>: This section contains advanced configuration parameters. Changing things is not recommended unless you really know what you are doing.</p>"
+msgstr ""
+
+#: PageAdvanced.py:35
+msgid "Defines which thread policy the OS should apply to the server."
+msgstr ""
+
+#: PageAdvanced.py:36
+msgid "If empty, Cherokee will calculate a default number."
+msgstr ""
+
+#: PageAdvanced.py:37
+msgid "It defines how many file descriptors the server should handle. Default is the number showed by ulimit -n"
+msgstr ""
+
+#: PageAdvanced.py:38
+msgid "Allows to choose the internal file descriptor polling method."
+msgstr ""
+
+#: PageAdvanced.py:39
+msgid "Minimum size of a file to use sendfile(). Default: 32768 Bytes."
+msgstr ""
+
+#: PageAdvanced.py:40
+msgid "Maximum size of a file to use sendfile(). Default: 2 GB."
+msgstr ""
+
+#: PageAdvanced.py:41
+msgid "Name a program that will be called if, by some reason, the server fails. Default: <em>cherokee-panic</em>."
+msgstr ""
+
+#: PageAdvanced.py:42
+msgid "Path of the PID file. If empty, the file will not be created."
+msgstr ""
+
+#: PageAdvanced.py:43
+msgid "Max. length of the incoming connection queue."
+msgstr ""
+
+#: PageAdvanced.py:44
+msgid "Set the number of how many internal connections can be held for reuse by each thread. Default 20."
+msgstr ""
+
+#: PageAdvanced.py:45
+msgid "Sets the number of seconds between log consolidations (flushes). Default: 10 seconds."
+msgstr ""
+
+#: PageAdvanced.py:46
+msgid "Time lapse (in seconds) between Nonce cache clean ups."
+msgstr ""
+
+#: PageAdvanced.py:47
+msgid "Enables the server-wide keep-alive support. It increases the performance. It is usually set on."
+msgstr ""
+
+#: PageAdvanced.py:48
+msgid "Maximum number of HTTP requests that can be served by each keepalive connection."
+msgstr ""
+
+#: PageAdvanced.py:49
+msgid "Allows the server to use Chunked encoding to try to keep Keep-Alive enabled."
+msgstr ""
+
+#: PageAdvanced.py:50
+msgid "Activate or deactivate the I/O cache globally."
+msgstr ""
+
+#: PageAdvanced.py:51
+msgid "Number of pages that the cache should handle."
+msgstr ""
+
+#: PageAdvanced.py:52
+msgid "Files under this size will not be cached."
+msgstr ""
+
+#: PageAdvanced.py:53
+msgid "Files over this size will not be cached."
+msgstr ""
+
+#: PageAdvanced.py:54
+msgid "How long the file information should last cached without refreshing it."
+msgstr ""
+
+#: PageAdvanced.py:55
+msgid "How long the file content should last cached."
+msgstr ""
+
+#: PageAdvanced.py:67 PageAdvanced.py:121
+msgid "Advanced configuration"
+msgstr ""
+
+#: PageAdvanced.py:79
+msgid "Keep Alive"
+msgstr ""
+
+#: PageAdvanced.py:80
+msgid "Max keepalive reqs"
+msgstr ""
+
+#: PageAdvanced.py:81
+msgid "Chunked Encoding"
+msgstr ""
+
+#: PageAdvanced.py:82
+msgid "Polling Method"
+msgstr ""
+
+#: PageAdvanced.py:83
+msgid "Sendfile min size"
+msgstr ""
+
+#: PageAdvanced.py:84
+msgid "Sendfile max size"
+msgstr ""
+
+#: PageAdvanced.py:89
+msgid "Thread Number"
+msgstr ""
+
+#: PageAdvanced.py:90
+msgid "Thread Policy"
+msgstr ""
+
+#: PageAdvanced.py:91
+msgid "File descriptors"
+msgstr ""
+
+#: PageAdvanced.py:92
+msgid "Listening queue length"
+msgstr ""
+
+#: PageAdvanced.py:94
+msgid "Log flush time"
+msgstr ""
+
+#: PageAdvanced.py:95
+msgid "Nonces clean up time"
+msgstr ""
+
+#: PageAdvanced.py:101
+msgid "Max pages"
+msgstr ""
+
+#: PageAdvanced.py:102
+msgid "File Min Size"
+msgstr ""
+
+#: PageAdvanced.py:103
+msgid "File Max Size"
+msgstr ""
+
+#: PageAdvanced.py:104
+msgid "Lasting: stat"
+msgstr ""
+
+#: PageAdvanced.py:105
+msgid "Lasting: mmap"
+msgstr ""
+
+#: PageAdvanced.py:110
+msgid "Panic action"
+msgstr ""
+
+#: PageAdvanced.py:111 PageStatus.py:91
+msgid "PID file"
+msgstr ""
+
+#: PageAdvanced.py:116
+msgid "Connections"
+msgstr ""
+
+#: PageAdvanced.py:117
+msgid "Resources"
+msgstr ""
+
+#: PageAdvanced.py:118
+msgid "I/O cache"
+msgstr ""
+
+#: PageAdvanced.py:119
+msgid "Special Files"
+msgstr ""
+
+#: PageEntry.py:15
+msgid "Allows to specify an alternative document root path."
+msgstr ""
+
+#: PageEntry.py:16
+msgid "How the connection will be handled."
+msgstr ""
+
+#: PageEntry.py:17
+msgid "Enable to allow access to the resource only by https."
+msgstr ""
+
+#: PageEntry.py:18
+msgid "List of IPs and subnets allowed to access the resource."
+msgstr ""
+
+#: PageEntry.py:19
+msgid "Which, if any, will be the authentication method."
+msgstr ""
+
+#: PageEntry.py:20
+msgid "Points how long the files should be cached"
+msgstr ""
+
+#: PageEntry.py:21
+msgid "Set an outbound traffic limit. It must be specified in Bytes per second."
+msgstr ""
+
+#: PageEntry.py:22
+msgid ""
+"How long from the object can be cached.<br />\n"
+"The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 2d.\n"
+msgstr ""
+
+#: PageEntry.py:34
+msgid "Behavior rules"
+msgstr ""
+
+#: PageEntry.py:140 PageInfoSource.py:269
+msgid "Rule"
+msgstr ""
+
+#: PageEntry.py:144 PageEntry.py:152 PageEntry.py:154 PageVServer.py:323
+msgid "Handler"
+msgstr ""
+
+#: PageEntry.py:149 PageVServer.py:438 PageVServers.py:197
+msgid "Document Root"
+msgstr ""
+
+#: PageEntry.py:159
+msgid "Encoding"
+msgstr ""
+
+#: PageEntry.py:162 PageEntry.py:211
+msgid "Expiration"
+msgstr ""
+
+#: PageEntry.py:165 PageVServer.py:245
+msgid "Security"
+msgstr ""
+
+#: PageEntry.py:168 PageEntry.py:201
+msgid "Traffic Shaping"
+msgstr ""
+
+#: PageEntry.py:188
+msgid "Matching Rule"
+msgstr ""
+
+#: PageEntry.py:199
+msgid "Limit traffic to"
+msgstr ""
+
+#: PageEntry.py:215
+msgid "Time to expire"
+msgstr ""
+
+#: PageEntry.py:217
+msgid "Content Expiration"
+msgstr ""
+
+#: PageEntry.py:224 PageEntry.py:232
+msgid "Authentication"
+msgstr ""
+
+#: PageEntry.py:226
+msgid "Access Restrictions"
+msgstr ""
+
+#: PageEntry.py:228
+msgid "Only https"
+msgstr ""
+
+#: PageEntry.py:229
+msgid "Allow From"
+msgstr ""
+
+#: PageEntry.py:234
+msgid "Validation Mechanism"
+msgstr ""
+
+#: PageEntry.py:252
+msgid "Information Encoders"
+msgstr ""
+
+#: PageEntry.py:255
+msgid "Use the %s encoder whenever the client requests it."
+msgstr ""
+
+#: PageEntry.py:257
+msgid "Allow "
+msgstr ""
+
+#: PageError.py:36
+msgid "Configuration file cannot be modified"
+msgstr ""
+
+#: PageError.py:37
+msgid "Icons directory is missing"
+msgstr ""
+
+#: PageError.py:38
+msgid "Could not launch the server"
+msgstr ""
+
+#: PageFeedback.py:10
+msgid "A working connection to the Internet is required for this form to work."
+msgstr ""
+
+#: PageFeedback.py:34
+msgid "Report sent"
+msgstr ""
+
+#: PageFeedback.py:35
+msgid "Thank you a million for your feedback. We do appreciate your help."
+msgstr ""
+
+#: PageFeedback.py:36
+msgid "Report"
+msgstr ""
+
+#: PageFeedback.py:45 PageFeedback.py:50
+msgid "Feedback"
+msgstr ""
+
+#: PageFeedback.py:55
+msgid "EMail"
+msgstr ""
+
+#: PageFeedback.py:56
+msgid "Include configuration"
+msgstr ""
+
+#: PageFeedback.py:59
+msgid "Message:"
+msgstr ""
+
+#: PageFeedback.py:77
+msgid "Error reading response from the server"
+msgstr ""
+
+#: PageFeedback.py:86
+msgid "Not included"
+msgstr ""
+
+#: PageFeedback.py:110
+msgid "Feedback: Thank you"
+msgstr ""
+
+#: PageGeneral.py:12 PageIcon.py:191 PageVServer.py:348 consts.py:84
+msgid "Default"
+msgstr ""
+
+#: PageGeneral.py:13
+msgid "Product only"
+msgstr ""
+
+#: PageGeneral.py:14
+msgid "Product + Minor version"
+msgstr ""
+
+#: PageGeneral.py:15
+msgid "Product + Minimal version"
+msgstr ""
+
+#: PageGeneral.py:16
+msgid "Product + Platform"
+msgstr ""
+
+#: PageGeneral.py:17
+msgid "Full Server string"
+msgstr ""
+
+#: PageGeneral.py:29
+msgid "Defines a port that the server will listen to"
+msgstr ""
+
+#: PageGeneral.py:30
+msgid "Set to enable the IPv6 support. The OS must support IPv6 for this to work."
+msgstr ""
+
+#: PageGeneral.py:31
+msgid "IP address of the interface to bind. It is usually empty."
+msgstr ""
+
+#: PageGeneral.py:32
+msgid "Time interval until the server closes inactive connections."
+msgstr ""
+
+#: PageGeneral.py:33
+msgid "This option allows to choose how the server identifies itself."
+msgstr ""
+
+#: PageGeneral.py:34
+msgid "Changes the effective user. User names and IDs are accepted."
+msgstr ""
+
+#: PageGeneral.py:35
+msgid "Changes the effective group. Group names and IDs are accepted."
+msgstr ""
+
+#: PageGeneral.py:36
+msgid "Jail the server inside the directory. Don't use it as the only security measure."
+msgstr ""
+
+#: PageGeneral.py:37
+msgid "Which, if any, should be the TLS/SSL backend."
+msgstr ""
+
+#: PageGeneral.py:39 PageGeneral.py:50
+msgid "General Configuration"
+msgstr ""
+
+#: PageGeneral.py:40
+msgid "Configuration Quickstart"
+msgstr ""
+
+#: PageGeneral.py:55
+msgid "General Settings"
+msgstr ""
+
+#: PageGeneral.py:58 PageVServer.py:442
+msgid "Network"
+msgstr ""
+
+#: PageGeneral.py:59
+msgid "Ports to listen"
+msgstr ""
+
+#: PageGeneral.py:60
+msgid "Server Permissions"
+msgstr ""
+
+#: PageGeneral.py:67
+msgid "Execution Permissions"
+msgstr ""
+
+#: PageGeneral.py:70
+msgid "Group"
+msgstr ""
+
+#: PageGeneral.py:71
+msgid "Chroot"
+msgstr ""
+
+#: PageGeneral.py:76
+msgid "Support"
+msgstr ""
+
+#: PageGeneral.py:79
+msgid "SSL/TLS back-end"
+msgstr ""
+
+#: PageGeneral.py:82
+msgid "Network behavior"
+msgstr ""
+
+#: PageGeneral.py:84
+msgid "Timeout (<i>secs</i>)"
+msgstr ""
+
+#: PageGeneral.py:85
+msgid "Server Tokens"
+msgstr ""
+
+#: PageGeneral.py:125
+msgid "Listening to ports"
+msgstr ""
+
+#: PageGeneral.py:131
+msgid "Add new port"
+msgstr ""
+
+#: PageIcon.py:22
+msgid "Icon configuration"
+msgstr ""
+
+#: PageIcon.py:37
+msgid "Unknown method"
+msgstr ""
+
+#: PageIcon.py:62 consts.py:10 consts.py:37 consts.py:54
+msgid "None"
+msgstr ""
+
+#: PageIcon.py:110
+msgid "Icons configuration"
+msgstr ""
+
+#: PageIcon.py:120
+msgid "Extension list"
+msgstr ""
+
+#: PageIcon.py:123
+msgid "Icon File"
+msgstr ""
+
+#: PageIcon.py:143 PageIcon.py:174 PageIcon.py:190
+msgid "Icon"
+msgstr ""
+
+#: PageIcon.py:145
+msgid "Add new extension"
+msgstr ""
+
+#: PageIcon.py:154
+msgid "File Matches"
+msgstr ""
+
+#: PageIcon.py:157
+msgid "Match"
+msgstr ""
+
+#: PageIcon.py:157 PageIcon.py:174 PageIcon.py:190 consts.py:62
+msgid "File"
+msgstr ""
+
+#: PageIcon.py:176
+msgid "Add new file match"
+msgstr ""
+
+#: PageIcon.py:192 consts.py:123
+msgid "Directory"
+msgstr ""
+
+#: PageIcon.py:193
+msgid "Go to Parent"
+msgstr ""
+
+#: PageIcon.py:195 PageIcon.py:198
+msgid "Special Icons"
+msgstr ""
+
+#: PageInfoSource.py:12
+msgid "The source can be either a local interpreter or a remote host acting as an information source."
+msgstr ""
+
+#: PageInfoSource.py:13
+msgid "Source nick. It will be referenced by this name in the rest of the server."
+msgstr ""
+
+#: PageInfoSource.py:14
+msgid "It allows to choose whether it runs the local host or a remote server."
+msgstr ""
+
+#: PageInfoSource.py:15
+msgid "Where the information source can be accessed. The host:port pair, or the Unix socket path."
+msgstr ""
+
+#: PageInfoSource.py:16
+msgid "Command to spawn a new source in case it were not accessible."
+msgstr ""
+
+#: PageInfoSource.py:17
+msgid "How long should the server wait when spawning an interpreter before giving up (in seconds). Default: 3."
+msgstr ""
+
+#: PageInfoSource.py:18
+msgid "Sources currently in use. Note that the last source of any rule cannot be deleted until the rule has been manually edited."
+msgstr ""
+
+#: PageInfoSource.py:19
+msgid "Execute the interpreter under a different user. The server needs enough privileges to switch the user (usually root)."
+msgstr ""
+
+#: PageInfoSource.py:126
+msgid "Environment variables"
+msgstr ""
+
+#: PageInfoSource.py:142
+msgid "Add new Environment variable"
+msgstr ""
+
+#: PageInfoSource.py:147
+msgid "Variable"
+msgstr ""
+
+#: PageInfoSource.py:166 PageInfoSource.py:192 PageInfoSource.py:218
+msgid "Connection"
+msgstr ""
+
+#: PageInfoSource.py:168 PageInfoSource.py:194
+msgid "Interpreter"
+msgstr ""
+
+#: PageInfoSource.py:169 PageInfoSource.py:195
+msgid "Spawning timeout"
+msgstr ""
+
+#: PageInfoSource.py:170 PageInfoSource.py:196
+msgid "Execute as User"
+msgstr ""
+
+#: PageInfoSource.py:203
+msgid "Information Sources Settings"
+msgstr ""
+
+#: PageInfoSource.py:215
+msgid "Known sources"
+msgstr ""
+
+#: PageInfoSource.py:226
+msgid "Deletion forbidden. Check source usage."
+msgstr ""
+
+#: PageInfoSource.py:242
+msgid "Details:"
+msgstr ""
+
+#: PageInfoSource.py:248
+msgid "Add a new"
+msgstr ""
+
+#: PageInfoSource.py:257
+msgid "Source usage"
+msgstr ""
+
+#: PageInfoSource.py:269
+msgid "Virtual server"
+msgstr ""
+
+#: PageMime.py:19 PageMime.py:74
+msgid "MIME types"
+msgstr ""
+
+#: PageMime.py:21
+msgid "New MIME type to be added."
+msgstr ""
+
+#: PageMime.py:22
+msgid "Comma separated list of file extensions associated with the MIME type."
+msgstr ""
+
+#: PageMime.py:23
+msgid "Maximum time that this sort of content can be cached (in seconds)."
+msgstr ""
+
+#: PageMime.py:42
+msgid "Mime types configuration"
+msgstr ""
+
+#: PageMime.py:81
+msgid "Add new MIME"
+msgstr ""
+
+#: PageMime.py:95
+msgid "MaxAge<br/>(<i>secs</i>)"
+msgstr ""
+
+#: PageMime.py:95
+msgid "Mime type"
+msgstr ""
+
+#: PageMime.py:113 PageMime.py:124
+msgid "Mime Type"
+msgstr ""
+
+#: PageMime.py:115 PageMime.py:124
+msgid "Max Age"
+msgstr ""
+
+#: PageNewConfig.py:14
+msgid "<b>The configuration is not found</b>.<br />You can create a new configuration file and proceed to customize the web server."
+msgstr ""
+
+#: PageNewConfig.py:22
+msgid "Create"
+msgstr ""
+
+#: PageNewConfig.py:39
+msgid "Regular"
+msgstr ""
+
+#: PageNewConfig.py:39
+msgid "Server Development"
+msgstr ""
+
+#: PageNewConfig.py:40
+msgid "Regular configuration: PHP, Apache logs, MIME types, icons, etc."
+msgstr ""
+
+#: PageNewConfig.py:41
+msgid "Optimized to send static content."
+msgstr ""
+
+#: PageNewConfig.py:42
+msgid "No standard port, No log files, No PID file, etc."
+msgstr ""
+
+#: PageNewConfig.py:82
+msgid "New Configuration File"
+msgstr ""
+
+#: PageNewConfig.py:89
+msgid "Configuration File Not Found"
+msgstr ""
+
+#: PageNewConfig.py:92
+msgid "Create a new configuration file"
+msgstr ""
+
+#: PageStatus.py:23
+msgid "Server is running."
+msgstr ""
+
+#: PageStatus.py:23
+msgid "Stop"
+msgstr ""
+
+#: PageStatus.py:23 PageStatus.py:37
+msgid "Server status"
+msgstr ""
+
+#: PageStatus.py:37
+msgid "Launch"
+msgstr ""
+
+#: PageStatus.py:37
+msgid "Server is not running."
+msgstr ""
+
+#: PageStatus.py:39
+msgid "Beta testing"
+msgstr ""
+
+#: PageStatus.py:40
+msgid "Individuals like yourself who download and test the latest developer snapshots of Cherokee Web Server help us to create the highest quality product."
+msgstr ""
+
+#: PageStatus.py:41
+msgid "For that, we thank you."
+msgstr ""
+
+#: PageStatus.py:53
+msgid "Welcome to Cherokee Admin"
+msgstr ""
+
+#: PageStatus.py:81
+msgid "Version"
+msgstr ""
+
+#: PageStatus.py:82
+msgid "Prefix"
+msgstr ""
+
+#: PageStatus.py:83
+msgid "WWW Root"
+msgstr ""
+
+#: PageStatus.py:89
+msgid "Not running"
+msgstr ""
+
+#: PageStatus.py:103
+msgid "Path"
+msgstr ""
+
+#: PageStatus.py:104
+msgid "Modified"
+msgstr ""
+
+#: PageStatus.py:106
+msgid "Configuration file"
+msgstr ""
+
+#: PageStatus.py:106
+msgid "Not Found"
+msgstr ""
+
+#: PageStatus.py:108
+msgid "Configuration File"
+msgstr ""
+
+#: PageVServer.py:30
+msgid "Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder."
+msgstr ""
+
+#: PageVServer.py:32
+msgid ""
+"\n"
+"<p>The 'default' virtual server matches all the domain names.</p>\n"
+msgstr ""
+
+#: PageVServer.py:36
+msgid "Nickname for the virtual server."
+msgstr ""
+
+#: PageVServer.py:37
+msgid "This directive points to the PEM-encoded Certificate file for the server (Full path to the file)"
+msgstr ""
+
+#: PageVServer.py:38
+msgid "PEM-encoded Private Key file for the server (Full path to the file)"
+msgstr ""
+
+#: PageVServer.py:39
+msgid "Optional: File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)"
+msgstr ""
+
+#: PageVServer.py:40
+msgid "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all ciphers supported by the OpenSSL version used)."
+msgstr ""
+
+#: PageVServer.py:41
+msgid "Optional: Skip, Accept or Require client certificates."
+msgstr ""
+
+#: PageVServer.py:42
+msgid "Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)"
+msgstr ""
+
+#: PageVServer.py:43
+msgid "Allows the selection of how to generate the error responses."
+msgstr ""
+
+#: PageVServer.py:44
+msgid "Directory inside the user home directory to use as root web directory. Disabled if empty."
+msgstr ""
+
+#: PageVServer.py:45
+msgid "The personal web support is currently turned on."
+msgstr ""
+
+#: PageVServer.py:46
+msgid "Adds a new domain name. Wildcards are allowed in the domain name."
+msgstr ""
+
+#: PageVServer.py:47
+msgid "Virtual Server root directory."
+msgstr ""
+
+#: PageVServer.py:48
+msgid "List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>."
+msgstr ""
+
+#: PageVServer.py:49
+msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
+msgstr ""
+
+#: PageVServer.py:50
+msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
+msgstr ""
+
+#: PageVServer.py:51
+msgid "Specifies if Traffic Statistics should be collected for the virtual server (Default: yes)"
+msgstr ""
+
+#: PageVServer.py:52
+msgid "The Logging is currently enabled."
+msgstr ""
+
+#: PageVServer.py:53
+msgid "Logging format. Apache compatible is highly recommended here."
+msgstr ""
+
+#: PageVServer.py:54
+msgid "Back-end used to store the log accesses."
+msgstr ""
+
+#: PageVServer.py:55
+msgid "Back-end used to store the log errors."
+msgstr ""
+
+#: PageVServer.py:56
+msgid "Back-end used to store the log accesses and errors."
+msgstr ""
+
+#: PageVServer.py:57
+msgid "Full path to the file where the information will be saved."
+msgstr ""
+
+#: PageVServer.py:58
+msgid "Path to the executable that will be invoked on each log entry."
+msgstr ""
+
+#: PageVServer.py:59
+msgid "Whether the logger should read and use the X-Real-IP header (send by reverse proxy front-ends)."
+msgstr ""
+
+#: PageVServer.py:60
+msgid "Accept all the X-Real-IP headers. It's dangerous: turn it on only if you are centain of what you are doing."
+msgstr ""
+
+#: PageVServer.py:61
+msgid "List of IP addresses and subnets that are allowed to send X-Real-IP headers (usually your proxy servers)."
+msgstr ""
+
+#: PageVServer.py:62
+msgid "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
+msgstr ""
+
+#: PageVServer.py:63
+msgid "The following variables are accepted:"
+msgstr ""
+
+#: PageVServer.py:70
+msgid "Loggers"
+msgstr ""
+
+#: PageVServer.py:71
+msgid "SSL cookbook"
+msgstr ""
+
+#: PageVServer.py:195 PageVServer.py:206 PageVServers.py:208
+msgid "Virtual Server"
+msgstr ""
+
+#: PageVServer.py:210
+msgid "Basics"
+msgstr ""
+
+#: PageVServer.py:222
+msgid "Behavior"
+msgstr ""
+
+#: PageVServer.py:233
+msgid "Personal Webs"
+msgstr ""
+
+#: PageVServer.py:241 PageVServers.py:126
+msgid "Logging"
+msgstr ""
+
+#: PageVServer.py:254
+msgid "Required SSL/TLS values"
+msgstr ""
+
+#: PageVServer.py:256
+msgid "Certificate"
+msgstr ""
+
+#: PageVServer.py:257
+msgid "Certificate key"
+msgstr ""
+
+#: PageVServer.py:260
+msgid "Advanced options"
+msgstr ""
+
+#: PageVServer.py:262
+msgid "Ciphers"
+msgstr ""
+
+#: PageVServer.py:263
+msgid "Client Certs. Request"
+msgstr ""
+
+#: PageVServer.py:270
+msgid "CA List"
+msgstr ""
+
+#: PageVServer.py:274
+msgid "Verify Depth"
+msgstr ""
+
+#: PageVServer.py:283
+msgid "Error Handling hook"
+msgstr ""
+
+#: PageVServer.py:285
+msgid "Error Handler"
+msgstr ""
+
+#: PageVServer.py:296 Rule.py:138
+msgid "Rule Type"
+msgstr ""
+
+#: PageVServer.py:323
+msgid "Auth"
+msgstr ""
+
+#: PageVServer.py:323
+msgid "Enc"
+msgstr ""
+
+#: PageVServer.py:323
+msgid "Exp"
+msgstr ""
+
+#: PageVServer.py:323
+msgid "Final"
+msgstr ""
+
+#: PageVServer.py:323
+msgid "Target"
+msgstr ""
+
+#: PageVServer.py:412
+msgid "/~user directories"
+msgstr ""
+
+#: PageVServer.py:418
+msgid "Disable"
+msgstr ""
+
+#: PageVServer.py:421
+msgid "Directory name"
+msgstr ""
+
+#: PageVServer.py:431
+msgid "Server ID"
+msgstr ""
+
+#: PageVServer.py:433
+msgid "Virtual Server nickname"
+msgstr ""
+
+#: PageVServer.py:436
+msgid "Paths"
+msgstr ""
+
+#: PageVServer.py:439
+msgid "Directory Indexes"
+msgstr ""
+
+#: PageVServer.py:444
+msgid "Keep-alive"
+msgstr ""
+
+#: PageVServer.py:445
+msgid "Max Upload Size"
+msgstr ""
+
+#: PageVServer.py:446
+msgid "Traffic Statistics"
+msgstr ""
+
+#: PageVServer.py:449
+msgid "Advanced Virtual Hosting"
+msgstr ""
+
+#: PageVServer.py:463
+msgid "Logging Format"
+msgstr ""
+
+#: PageVServer.py:465
+msgid "Format"
+msgstr ""
+
+#: PageVServer.py:477
+msgid "Accesses and Errors"
+msgstr ""
+
+#: PageVServer.py:484 PageVServer.py:501 PageVServer.py:524
+msgid "Filename"
+msgstr ""
+
+#: PageVServer.py:488 PageVServer.py:505 PageVServer.py:528
+msgid "Command"
+msgstr ""
+
+#: PageVServer.py:495
+msgid "Accesses"
+msgstr ""
+
+#: PageVServer.py:518
+msgid "Errors"
+msgstr ""
+
+#: PageVServer.py:536
+msgid "Writers"
+msgstr ""
+
+#: PageVServer.py:539
+msgid "Options"
+msgstr ""
+
+#: PageVServer.py:545
+msgid "Accept X-Real-IP"
+msgstr ""
+
+#: PageVServer.py:547
+msgid "Accept all X-Real-IPs"
+msgstr ""
+
+#: PageVServer.py:549
+msgid "X-Real-IP Hosts"
+msgstr ""
+
+#: PageVServer.py:557
+msgid "Host names"
+msgstr ""
+
+#: PageVServer.py:564
+msgid "Matching method"
+msgstr ""
+
+#: PageVServer.py:595
+msgid "Filename must be set"
+msgstr ""
+
+#: PageVServer.py:639
+msgid "Template: "
+msgstr ""
+
+#: PageVServers.py:17
+msgid ""
+"\n"
+"<p>'Virtual Server' is an abstraction mechanism that allows to define\n"
+"a custom number of parameters and rules that have to be applied to one or\n"
+"more domains.</p>\n"
+msgstr ""
+
+#: PageVServers.py:53
+msgid "Virtual Servers configuration"
+msgstr ""
+
+#: PageVServers.py:126
+msgid "Domains"
+msgstr ""
+
+#: PageVServers.py:126
+msgid "Root"
+msgstr ""
+
+#: PageVServers.py:126 PageVServers.py:197
+msgid "Nickname"
+msgstr ""
+
+#: PageVServers.py:203
+msgid "Add new Virtual Server"
+msgstr ""
+
+#: PageVServers.py:208
+msgid "Clone as.."
+msgstr ""
+
+#: PageVServers.py:220
+msgid "Clone Virtual Server"
+msgstr ""
+
+#: PageVServers.py:252 PageVServers.py:266 validations.py:254
+msgid "Cannot be empty"
+msgstr ""
+
+#: Rule.py:13
+msgid "The default match ought not to be changed."
+msgstr ""
+
+#: Rule.py:41
+msgid "Unknown"
+msgstr ""
+
+#: Rule.py:45 Rule.py:76
+msgid "Not"
+msgstr ""
+
+#: Rule.py:47 Rule.py:103
+msgid "AND"
+msgstr ""
+
+#: Rule.py:47 Rule.py:103
+msgid "OR"
+msgstr ""
+
+#: Rule.py:64
+msgid "Undefined.."
+msgstr ""
+
+#: Rule.py:71
+msgid "Complex"
+msgstr ""
+
+#: Rule.py:77
+msgid "And"
+msgstr ""
+
+#: Rule.py:78
+msgid "Or"
+msgstr ""
+
+#: Rule.py:79
+msgid "Remove"
+msgstr ""
+
+#: Rule.py:99
+msgid "NOT"
+msgstr ""
+
+#: Rule.py:211
+msgid "ERROR: Unknown uri"
+msgstr ""
+
+#: Table.py:5
+msgid "Add"
+msgstr ""
+
+#: Table.py:6
+msgid "Del"
+msgstr ""
+
+#: Table.py:7
+msgid "Clone"
+msgstr ""
+
+#: config.py:178
+msgid "ERROR: Couldn't unpack '%s'"
+msgstr ""
+
+#: config.py:293
+msgid "Could not copy configuration to "
+msgstr ""
+
+#: consts.py:5
+msgid "English"
+msgstr ""
+
+#: consts.py:6
+msgid "Spanish"
+msgstr ""
+
+#: consts.py:12
+msgid "Static content"
+msgstr ""
+
+#: consts.py:15
+msgid "FastCGI"
+msgstr ""
+
+#: consts.py:16
+msgid "SCGI"
+msgstr ""
+
+#: consts.py:17
+msgid "HTTP reverse proxy"
+msgstr ""
+
+#: consts.py:18
+msgid "Audio/Video streaming"
+msgstr ""
+
+#: consts.py:19
+msgid "CGI"
+msgstr ""
+
+#: consts.py:21
+msgid "Hidden Downloads"
+msgstr ""
+
+#: consts.py:22
+msgid "Server Info"
+msgstr ""
+
+#: consts.py:23
+msgid "MySQL bridge"
+msgstr ""
+
+#: consts.py:24
+msgid "Generic balancer"
+msgstr ""
+
+#: consts.py:25
+msgid "HTTP error"
+msgstr ""
+
+#: consts.py:27
+msgid "1x1 Transparent GIF"
+msgstr ""
+
+#: consts.py:31
+msgid "Default errors"
+msgstr ""
+
+#: consts.py:32
+msgid "Custom redirections"
+msgstr ""
+
+#: consts.py:33
+msgid "Closest match"
+msgstr ""
+
+#: consts.py:38
+msgid "Plain text file"
+msgstr ""
+
+#: consts.py:40
+msgid "Htdigest file"
+msgstr ""
+
+#: consts.py:41
+msgid "LDAP server"
+msgstr ""
+
+#: consts.py:42
+msgid "MySQL server"
+msgstr ""
+
+#: consts.py:43
+msgid "PAM"
+msgstr ""
+
+#: consts.py:48
+msgid "Basic"
+msgstr ""
+
+#: consts.py:49
+msgid "Digest"
+msgstr ""
+
+#: consts.py:50
+msgid "Basic or Digest"
+msgstr ""
+
+#: consts.py:55
+msgid "Apache compatible"
+msgstr ""
+
+#: consts.py:56
+msgid "W3C"
+msgstr ""
+
+#: consts.py:57
+msgid "NCSA"
+msgstr ""
+
+#: consts.py:58
+msgid "Custom"
+msgstr ""
+
+#: consts.py:63
+msgid "System logger"
+msgstr ""
+
+#: consts.py:64
+msgid "Standard Error"
+msgstr ""
+
+#: consts.py:65
+msgid "Execute program"
+msgstr ""
+
+#: consts.py:69
+msgid "Round Robin"
+msgstr ""
+
+#: consts.py:70
+msgid "IP Hash"
+msgstr ""
+
+#: consts.py:74
+msgid "Local interpreter"
+msgstr ""
+
+#: consts.py:75
+msgid "Remote host"
+msgstr ""
+
+#: consts.py:79
+msgid "GZip"
+msgstr ""
+
+#: consts.py:80
+msgid "Deflate"
+msgstr ""
+
+#: consts.py:85
+msgid "FIFO"
+msgstr ""
+
+#: consts.py:86
+msgid "Round-robin"
+msgstr ""
+
+#: consts.py:87
+msgid "Dynamic"
+msgstr ""
+
+#: consts.py:91
+msgid "Automatic"
+msgstr ""
+
+#: consts.py:128
+msgid "HTTP Method"
+msgstr ""
+
+#: consts.py:130
+msgid "GeoIP"
+msgstr ""
+
+#: consts.py:134
+msgid "Wildcards"
+msgstr ""
+
+#: consts.py:139
+msgid "Not set"
+msgstr ""
+
+#: consts.py:140
+msgid "Already expired on 1970"
+msgstr ""
+
+#: consts.py:141
+msgid "Do not expire until 2038"
+msgstr ""
+
+#: consts.py:142
+msgid "Custom value"
+msgstr ""
+
+#: consts.py:146
+msgid "No TLS/SSL"
+msgstr ""
+
+#: consts.py:147
+msgid "OpenSSL / libssl"
+msgstr ""
+
+#: consts.py:151
+msgid "Off"
+msgstr ""
+
+#: consts.py:152
+msgid "Enhanced Virtual Hosting"
+msgstr ""
+
+#: consts.py:156
+msgid "Skip"
+msgstr ""
+
+#: consts.py:157
+msgid "Accept"
+msgstr ""
+
+#: consts.py:158
+msgid "Require"
+msgstr ""
+
+#: server.py:118
+msgid "Configuration saved."
+msgstr ""
+
+#: server.py:120
+msgid " Graceful restart performed."
+msgstr ""
+
+#: server.py:122
+msgid " Hard restart performed."
+msgstr ""
+
+#: server.py:205
+msgid "Incorrect parameters: PORT CONFIG_FILE"
+msgstr ""
+
+#: server.py:224
+msgid "Server %s running.. PID=%d Port=%d"
+msgstr ""
+
+#: server.py:231
+msgid "Server exiting.."
+msgstr ""
+
+#: validations.py:8
+msgid "Malformed number"
+msgstr ""
+
+#: validations.py:14
+msgid "Malformed float number"
+msgstr ""
+
+#: validations.py:19
+msgid "Must be greater than zero"
+msgstr ""
+
+#: validations.py:31
+msgid "Port must be a number"
+msgstr ""
+
+#: validations.py:33
+msgid "Out of the range (1 to 65535)"
+msgstr ""
+
+#: validations.py:46
+msgid "Malformed path"
+msgstr ""
+
+#: validations.py:89
+msgid "It cannot be negative"
+msgstr ""
+
+#: validations.py:105
+msgid "Malformed IPv4"
+msgstr ""
+
+#: validations.py:110
+msgid "Malformed IPv4 entry"
+msgstr ""
+
+#: validations.py:112
+msgid "IPv4 entry out of range"
+msgstr ""
+
+#: validations.py:120
+msgid "Malformed IPv6"
+msgstr ""
+
+#: validations.py:133 validations.py:150
+msgid "Path does not exist"
+msgstr ""
+
+#: validations.py:136
+msgid "Path is not a directory"
+msgstr ""
+
+#: validations.py:153
+msgid "Path is not a regular file"
+msgstr ""
+
+#: validations.py:169
+msgid "Invalid char. Accepts: letters, digits, _, - and ."
+msgstr ""
+
+#: validations.py:192
+msgid "Neither a number or an IPv4"
+msgstr ""
+
+#: validations.py:203
+msgid "Invalid mask"
+msgstr ""
+
+#: validations.py:227
+msgid "Malformed entry (netmask)"
+msgstr ""
+
+#: validations.py:258
+msgid "Forced failure"
+msgstr ""
+
+#: validations.py:266
+msgid "http:// missing"
+msgstr ""
+
+#: validations.py:303
+msgid "Time value contain invalid values"
+msgstr ""
+
+#: validations.py:306
+msgid "Malformed time"
+msgstr ""
+

@@ -5,10 +5,7 @@ from ModuleBalancer import *
 
 from consts import *
 
-RR_COMMENT = """
-The <i>IP Hash</i> balancer distributes connections between upstreams
-based on the IP-address of the client.
-"""
+RR_COMMENT = _("The <i>IP Hash</i> balancer distributes connections between upstreams\nbased on the IP-address of the client.")
 
 class ModuleIpHash (ModuleBalancerGeneric):
     def __init__ (self, cfg, prefix, submit_url):
@@ -21,4 +18,4 @@ class ModuleIpHash (ModuleBalancerGeneric):
     def _op_apply_changes (self, uri, post):
         txt = ModuleBalancerGeneric._op_apply_changes (self, uri, post)
         return txt
-        
+

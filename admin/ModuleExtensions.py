@@ -3,7 +3,7 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_EXTENSIONS = "File extension list to which content the configuration will be applied."
+NOTE_EXTENSIONS = _("File extension list to which content the configuration will be applied.")
 
 class ModuleExtensions (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
@@ -15,17 +15,17 @@ class ModuleExtensions (Module, FormHelper):
     def _op_render (self):
         table = TableProps()
         if self._prefix.startswith('tmp!'):
-            self.AddPropEntry (table, 'Extensions', '%s!value'%(self._prefix), NOTE_EXTENSIONS)
+            self.AddPropEntry (table, _('Extensions'), '%s!value'%(self._prefix), NOTE_EXTENSIONS)
         else:
-            self.AddPropEntry (table, 'Extensions', '%s!extensions'%(self._prefix), NOTE_EXTENSIONS)
+            self.AddPropEntry (table, _('Extensions'), '%s!extensions'%(self._prefix), NOTE_EXTENSIONS)
         return str(table)
-        
+
     def _op_apply_changes (self, uri, post):
         self.ApplyChangesPrefix (self._prefix, None, post)
 
     def apply_cfg (self, values):
         if not values.has_key('value'):
-            print "ERROR, a 'value' entry is needed!"
+            print _("ERROR, a 'value' entry is needed!")
 
         exts = values['value']
         self._cfg['%s!extensions'%(self._prefix)] = exts

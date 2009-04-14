@@ -3,10 +3,10 @@ from Table import *
 from ModuleHandler import *
 from consts import *
 
-NOTE_ERRORS = 'HTTP Error that you be used to reply the request.'
+NOTE_ERRORS = _('HTTP Error that you be used to reply the request.')
 
 HELPS = [
-    ('modules_handlers_custom_error', "HTTP Custom Error")
+    ('modules_handlers_custom_error', _("HTTP Custom Error"))
 ]
 
 class ModuleCustomError (ModuleHandler):
@@ -18,7 +18,7 @@ class ModuleCustomError (ModuleHandler):
 
     def _op_render (self):
         table = TableProps()
-        self.AddPropOptions_Reload (table, "HTTP Error", "%s!error" % (self._prefix), ERROR_CODES, NOTE_ERRORS)
+        self.AddPropOptions_Reload (table, _("HTTP Error"), "%s!error" % (self._prefix), ERROR_CODES, NOTE_ERRORS)
         return str(table)
 
     def _op_apply_changes (self, uri, post):

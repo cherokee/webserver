@@ -4,10 +4,13 @@ import types
 from Entry import *
 from Module import *
 
+# For gettext
+N_ = lambda x: x
+
 FORM_TEMPLATE = """
-<form action="%(action)s" method="%(method)s">
-  %(content)s
-  %(submit)s
+<form action="{{action}}" method="{{method}}">
+  {{content}}
+  {{submit}}
   <input type="hidden" name="is_submit" value="1" />
 </form>
 """
@@ -21,10 +24,10 @@ AUTO_SUBMIT_JS = """
 AUTOFORM_TEMPLATE = FORM_TEMPLATE.replace('<form','<form class="auto"') + AUTO_SUBMIT_JS
 
 SUBMIT_BUTTON = """
-<input type="submit" %(submit_props)s />
+<input type="submit" {{submit_props}} />
 """
 
-DEFAULT_SUBMIT_VALUE= 'value="Submit"'
+DEFAULT_SUBMIT_VALUE = 'value="%s"' % (N_('Submit'))
 
 class WebComponent:
     def __init__ (self, id, cfg):
@@ -82,9 +85,9 @@ class Form:
         else:
             render = FORM_TEMPLATE
 
-        while '%(' in render:
-            for replacement in re.findall (r'\%\((\w+)\)s', render):
-                macro = '%('+replacement+')s'
+        while '{{' in render:
+            for replacement in re.findall (r'{{(\w+)}}', render):
+                macro = '{{'+replacement+'}}'
                 render = render.replace (macro, keys[replacement])
 
         return render
@@ -105,7 +108,7 @@ class FormHelper (WebComponent):
         return '<div class="indented">%s</div>' %(content)
 
     def Dialog (self, txt, type_='information'):
-        return '<div class="dialog-%s">%s</div>' % (type_, txt)
+        return '<div class="dialog-%s">%s</div>' % (type_, _(txt))
 
     def HiddenInput (self, key, value):
         return '<input type="hidden" value="%s" id="%s" name="%s" />' % (value, key, key)
@@ -479,4 +482,3 @@ class TableProps:
 
         txt = "<hr />".join(tmp)
         return '<div class="tableprop_block">%s</div>' % (txt)
-                        

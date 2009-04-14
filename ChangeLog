@@ -1,3 +1,40 @@
+2009-04-14  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/ModuleEmptyGif.py, admin/ModuleAdmin.py,
+	admin/PageEntry.py, admin/ModuleWildcard.py,
+	admin/error_icons_dir_missing.template.html, admin/Theme.py,
+	admin/config.py, admin/server.py, admin/ModuleAuth.py,
+	admin/ModuleGeoip.py, admin/ModuleRedir.py, admin/Page.py,
+	admin/PageNewConfig.py, admin/ModuleDirlist.py,
+	admin/ModuleHtdigest.py, admin/ModuleFile.py,
+	admin/PageError.py, admin/ModuleLdap.py,
+	admin/ModuleServerInfo.py, admin/ModuleCustomError.py,
+	admin/ModuleScgi.py, admin/error_couldnt_launch.template.html,
+	admin/PageAdvanced.py, admin/Rule.py, admin/ModuleCgi.py,
+	admin/ModulePlain.py, admin/ModuleDbslayer.py,
+	admin/PageVServers.py, admin/ModuleEvhost.py,
+	admin/PageStatus.py, admin/ModuleBind.py, admin/ModuleProxy.py,
+	admin/ModuleRoundRobin.py,
+	admin/error_not_writable.template.html, admin/ModuleHeader.py,
+	admin/ModuleCommon.py, admin/ModuleRequest.py,
+	admin/ModuleStreaming.py, admin/ModuleSsi.py,
+	admin/ModuleExtensions.py, admin/ModuleSecdownload.py,
+	admin/consts.py, admin/default.template.html,
+	admin/PageGeneral.py, admin/ModuleRehost.py,
+	admin/ModuleBalancer.py, admin/ModuleFcgi.py, admin/PageMime.py,
+	admin/ModuleExists.py, admin/ModuleMethod.py,
+	admin/po/cherokee-admin-en.po, admin/po/cherokee-admin.pot,
+	admin/po/cherokee-admin-es.po, admin/Table.py,
+	admin/PageVServer.py, admin/static/css/cherokee.css,
+	admin/Entry.py, admin/ModuleAuthlist.py, admin/Form.py,
+	admin/ModuleHtpasswd.py, admin/PageInfoSource.py,
+	admin/status.template.html, admin/ModuleDirectory.py,
+	admin/ModuleMysql.py, admin/validations.py,
+	admin/ModuleMirror.py, admin/PageFeedback.py,
+	admin/CherokeeManagement.py, admin/ModuleIpHash.py,
+	admin/PageIcon.py, admin/ModuleErrorRedir.py: Adds
+	internationalization (i18n) to cherokee-admin.
+
 2009-04-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_cgi_base.c, qa/225-PathTranslated.py,

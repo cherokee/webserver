@@ -26,11 +26,11 @@ class ModuleScgi (ModuleCgiBase):
     def _op_render (self):
         txt = ModuleCgiBase._op_render (self)
 
-        txt += '<h2>SCGI specific</h2>'
+        txt += '<h2>%s</h2>' % (_('SCGI specific'))
 
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddPropOptions_Reload (table, "Balancer", prefix, 
+        e = self.AddPropOptions_Reload (table, _("Balancer"), prefix, 
                                         modules_available(BALANCERS), NOTE_BALANCER)
         txt += self.Indent(str(table) + e)
         return txt

@@ -175,7 +175,8 @@ class Config:
             try:
                 path, value = line.split (" = ")
             except:
-                print "ERROR: Couldn't unpack '%s'"%(line)
+                msg = _("ERROR: Couldn't unpack '%s'")
+                print msg % (line)
                 raise
 
             node = self._create_path (path)
@@ -289,7 +290,7 @@ class Config:
             t.close()
             s.close()
         except:
-            print ("Could copy configuration to " + self.file+'.backup')
+            print _("Could not copy configuration to ") + self.file + '.backup'
 
         # Write the new one
         cfg = self.serialize()

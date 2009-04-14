@@ -26,12 +26,12 @@ class ModuleFcgi (ModuleCgiBase):
     def _op_render (self):
         txt = ModuleCgiBase._op_render (self)
 
-        txt += '<h2>FastCGI specific</h2>'
+        txt += '<h2>%s</h2>' % (_('FastCGI specific'))
 
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
         assert (self.submit_url)
-        e = self.AddPropOptions_Reload (table, "Balancer", prefix,
+        e = self.AddPropOptions_Reload (table, _("Balancer"), prefix,
                                         modules_available(BALANCERS), NOTE_BALANCER)
         txt += self.Indent (str(table) + e)
         return txt

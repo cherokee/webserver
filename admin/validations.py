@@ -5,18 +5,18 @@ def is_number (value):
     try:
         return str(int(value))
     except:
-        raise ValueError, 'Malformed number'
+        raise ValueError, _('Malformed number')
 
 def is_float (value):
     try:
         return str(float(value))
     except:
-        raise ValueError, 'Malformed float number'
+        raise ValueError, _('Malformed float number')
 
 def is_number_gt_0 (value):
     value = is_number(value)
     if int(value) <= 0:
-        raise ValueError, 'Must be greater than zero'
+        raise ValueError, _('Must be greater than zero')
     return value
 
 def is_boolean (value):
@@ -28,9 +28,9 @@ def is_tcp_port (value):
     try:
         tmp = int(value)
     except:
-        raise ValueError, 'Port must be a number'
+        raise ValueError, _('Port must be a number')
     if tmp < 0 or tmp > 0xFFFF:
-        raise ValueError, 'Out of the range (1 to 65535)'
+        raise ValueError, _('Out of the range (1 to 65535)')
     return value
 
 def is_extension (value):
@@ -43,7 +43,7 @@ def is_path (value):
         return value
     if value[1:3] == ":\\":
         return value
-    raise ValueError, 'Malformed path'
+    raise ValueError, _('Malformed path')
 
 def is_list (value):
     tmp = [x.strip() for x in value.split(',')]
@@ -86,7 +86,7 @@ def is_path_list (value):
 def is_positive_int (value):
     tmp = int(value)
     if tmp < 0:
-        raise ValueError, 'It cannot be negative'
+        raise ValueError, _('It cannot be negative')
     return value
 
 def is_ip (value):
@@ -102,14 +102,14 @@ def is_netmask (value):
 def is_ipv4 (value):
     parts = value.split('.')
     if len(parts) != 4:
-        raise ValueError, 'Malformed IPv4'
+        raise ValueError, _('Malformed IPv4')
     for byte in parts:
         try:
             v = int(byte)
         except:
-            raise ValueError, 'Malformed IPv4 entry'
+            raise ValueError, _('Malformed IPv4 entry')
         if v < 0 or v > 255:
-            raise ValueError, 'IPv4 entry out of range'
+            raise ValueError, _('IPv4 entry out of range')
     return value
 
 def is_ipv6 (value):
@@ -117,7 +117,7 @@ def is_ipv6 (value):
     try: 
         tmp = inet_pton(AF_INET6, value)
     except:
-        raise ValueError, 'Malformed IPv6'
+        raise ValueError, _('Malformed IPv6')
     return value
     
 def is_local_dir_exists (value, cfg, nochroot=False):
@@ -130,10 +130,10 @@ def is_local_dir_exists (value, cfg, nochroot=False):
         path = value
 
     if not os.path.exists(path):
-        raise ValueError, 'Path does not exist'
+        raise ValueError, _('Path does not exist')
 
     if not os.path.isdir(path):
-        raise ValueError, 'Path is not a directory'
+        raise ValueError, _('Path is not a directory')
 
     return value
 
@@ -147,10 +147,10 @@ def is_local_file_exists (value, cfg, nochroot=False):
         path = value
 
     if not os.path.exists(path):
-        raise ValueError, 'Path does not exist'
+        raise ValueError, _('Path does not exist')
 
     if not os.path.isfile(path):
-        raise ValueError, 'Path is not a regular file'
+        raise ValueError, _('Path is not a regular file')
 
     return value
 
@@ -166,7 +166,7 @@ def is_safe_id (value):
     for v in value:
         if v not in string.letters + string.digits and \
            v not in "_-.":
-           raise ValueError, 'Invalid char. Accepts: letters, digits, _, - and .'
+           raise ValueError, _('Invalid char. Accepts: letters, digits, _, - and .')
     return value
 
 def is_safe_id_list (value):
@@ -189,21 +189,21 @@ def is_netmask_ipv4 (value):
         pass
 
     if not "." in value:
-        raise ValueError, 'Neither a number or an IPv4'
+        raise ValueError, _('Neither a number or an IPv4')
 
     is_ipv4 (value)
 
     bin = ''
     for part in value.split("."):
         bin += int2bin(int(part), 8)
-        
+
     zeros_began = False
     for d in bin:
         if d == '1' and zeros_began:
-            raise ValueError, 'Invalid mask'
+            raise ValueError, _('Invalid mask')
         if d == '0' and not zeros_began:
             zeros_began = True
-                
+
     return value
 
 def is_netmask_ipv6 (value):
@@ -224,7 +224,7 @@ def is_ip_or_netmask (value):
 
     parts = value.split('/')
     if len(parts) != 2:
-        raise ValueError, 'Malformed entry (netmask)'
+        raise ValueError, _('Malformed entry (netmask)')
 
     if ':' in value:
         ip = is_ipv6 (parts[0])
@@ -251,11 +251,11 @@ def is_ip_or_netmask_list (value):
 
 def is_not_empty (value):
     if len(value) <= 0:
-        raise ValueError, 'Cannot be empty'
+        raise ValueError, _('Cannot be empty')
     return value
 
 def debug_fail (value):
-    raise ValueError, 'Forced failure'
+    raise ValueError, _('Forced failure')
 
 def is_regex (value):
     # Can a regular expression be checked?
@@ -263,7 +263,7 @@ def is_regex (value):
 
 def is_http_url (value):
     if not value.startswith('http://'):
-        raise ValueError, 'http:// missing'
+        raise ValueError, _('http:// missing')
     return value
 
 def is_url_or_path (value):
@@ -300,11 +300,10 @@ def is_time (value):
     # and weeks. Eg: 2d.
     for c in value:
         if c not in ".0123456789mhdw":
-            raise ValueError, 'Time value contain invalid values'
+            raise ValueError, _('Time value contain invalid values')
     for c in ".mhdw":
         if value.count(c) > 1:
-            raise ValueError, 'Malformed time'
-    
+            raise ValueError, _('Malformed time')
+
     return value
 
-    

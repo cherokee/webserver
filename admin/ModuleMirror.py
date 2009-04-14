@@ -6,7 +6,7 @@ from consts import *
 from ModuleBalancer import *
 
 HELPS = [
-    ('modules_handlers_mirror', "TCP balancer")
+    ('modules_handlers_mirror', _("TCP balancer"))
 ]
 
 class ModuleMirror (ModuleHandler):
@@ -22,12 +22,12 @@ class ModuleMirror (ModuleHandler):
         prefix = "%s!balancer" % (self._prefix)
 
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, "Balancer", prefix,
+        e = self.AddPropOptions_Reload (table, _("Balancer"), prefix,
                                         modules_available(BALANCERS), NOTE_BALANCER,
                                         default_type='host',
                                         allow_type_change=False)
 
-        txt  = "<h2>Load balancing options</h2>"
+        txt  = "<h2>%s</h2>" % (_('Load balancing options'))
         txt += self.Indent (str(table) + e)
         return txt
 

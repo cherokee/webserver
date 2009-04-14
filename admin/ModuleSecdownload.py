@@ -6,7 +6,7 @@ from ModuleHandler import *
 from ModuleFile import *
 
 HELPS = [
-    ('modules_handlers_secdownload', "Hidden Download")
+    ('modules_handlers_secdownload', _("Hidden Download"))
 ]
 
 DATA_VALIDATION = [
@@ -14,8 +14,8 @@ DATA_VALIDATION = [
     ('vserver!.+?!rule!.+?!handler!timeout', validations.is_number_gt_0),
 ]
 
-NOTE_SECRET  = "Shared secret between the server and the script."
-NOTE_TIMEOUT = "How long the download will last accessible - in seconds. Default: 60."
+NOTE_SECRET  = _("Shared secret between the server and the script.")
+NOTE_TIMEOUT = _("How long the download will last accessible - in seconds. Default: 60.")
 
 
 class ModuleSecdownload (ModuleHandler):
@@ -32,10 +32,10 @@ class ModuleSecdownload (ModuleHandler):
 
         # Local properties
         table = TableProps()
-        self.AddPropEntry (table, 'Secret',  "%s!secret"  % (self._prefix), NOTE_SECRET)
-        self.AddPropEntry (table, 'Timeout', "%s!timeout" % (self._prefix), NOTE_TIMEOUT)
+        self.AddPropEntry (table, _('Secret'),  "%s!secret"  % (self._prefix), NOTE_SECRET)
+        self.AddPropEntry (table, _('Timeout'), "%s!timeout" % (self._prefix), NOTE_TIMEOUT)
 
-        txt = '<h2>Covering parameters</h2>'
+        txt = '<h2>%s</h2>' % (_('Covering parameters'))
         txt += self.Indent(table)
 
         # Copy errors to the modules, 
@@ -47,11 +47,11 @@ class ModuleSecdownload (ModuleHandler):
 
     def _op_apply_changes (self, uri, post):
         # Secret
-        self.Validate_NotEmpty (post, '%s!secret'%(self._prefix), "A shared-secret must be defined")
+        self.Validate_NotEmpty (post, '%s!secret'%(self._prefix), _("A shared-secret must be defined"))
 
         # Special case: DocumentRoot
         pre = '!'.join(self._prefix.split('!')[:-1])
-        self.Validate_NotEmpty (post, '%s!document_root'%(pre), "It can't be empty")
+        self.Validate_NotEmpty (post, '%s!document_root'%(pre), _("It can't be empty"))
 
         # Apply the changes
         self._file._op_apply_changes (uri, post)

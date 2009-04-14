@@ -9,6 +9,9 @@ from Rule import *
 from RuleList import *
 from CherokeeManagement import *
 
+# For gettext
+N_ = lambda x: x
+
 DATA_VALIDATION = [
     ("vserver!.*?!user_dir",                   validations.is_safe_id),
     ("vserver!.*?!document_root",             (validations.is_dev_null_or_local_dir_exists, 'cfg')),
@@ -24,50 +27,48 @@ DATA_VALIDATION = [
 
 DEFAULT_LOGGER_TEMPLATE = '${ip_remote} - ${user_remote} ${now} ${request_original} ${status}'
 
-RULE_LIST_NOTE = """
-<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.</p>
-"""
+RULE_LIST_NOTE = "<p>%s</p>" % (N_('Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.'))
 
-DEFAULT_HOST_NOTE = """
+DEFAULT_HOST_NOTE = N_("""
 <p>The 'default' virtual server matches all the domain names.</p>
-"""
+""")
 
-NOTE_NICKNAME         = 'Nickname for the virtual server.'
-NOTE_CERT             = 'This directive points to the PEM-encoded Certificate file for the server (Full path to the file)'
-NOTE_CERT_KEY         = 'PEM-encoded Private Key file for the server (Full path to the file)'
-NOTE_CA_LIST          = 'Optional: File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)'
-NOTE_CIPHERS          = 'Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: all ciphers supported by the OpenSSL version used).'
-NOTE_CLIENT_CERTS     = 'Optional: Skip, Accept or Require client certificates.'
-NOTE_VERIFY_DEPTH     = 'Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)'
-NOTE_ERROR_HANDLER    = 'Allows the selection of how to generate the error responses.'
-NOTE_PERSONAL_WEB     = 'Directory inside the user home directory to use as root web directory. Disabled if empty.'
-NOTE_DISABLE_PW       = 'The personal web support is currently turned on.'
-NOTE_ADD_DOMAIN       = 'Adds a new domain name. Wildcards are allowed in the domain name.'
-NOTE_DOCUMENT_ROOT    = 'Virtual Server root directory.'
-NOTE_DIRECTORY_INDEX  = 'List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.'
-NOTE_MAX_UPLOAD_SIZE  = 'The maximum size, in bytes, for POST uploads. (Default: unlimited)'
-NOTE_KEEPALIVE        = 'Whether this virtual server is allowed to use Keep-alive (Default: yes)'
-NOTE_COLLECT          = 'Specifies if Traffic Statistics should be collected for the virtual server (Default: yes)'
-NOTE_DISABLE_LOG      = 'The Logging is currently enabled.'
-NOTE_LOGGERS          = 'Logging format. Apache compatible is highly recommended here.'
-NOTE_ACCESSES         = 'Back-end used to store the log accesses.'
-NOTE_ERRORS           = 'Back-end used to store the log errors.'
-NOTE_ACCESSES_ERRORS  = 'Back-end used to store the log accesses and errors.'
-NOTE_WRT_FILE         = 'Full path to the file where the information will be saved.'
-NOTE_WRT_EXEC         = 'Path to the executable that will be invoked on each log entry.'
-NOTE_X_REAL_IP        = 'Whether the logger should read and use the X-Real-IP header (send by reverse proxy front-ends).'
-NOTE_X_REAL_IP_ALL    = 'Accept all the X-Real-IP headers. It\'s dangerous: turn it on only if you are centain of what you are doing.'
-NOTE_X_REAL_IP_ACCESS = 'List of IP addresses and subnets that are allowed to send X-Real-IP headers (usually your proxy servers).'
-NOTE_EVHOST           = 'How to support the "Advanced Virtual Hosting" mechanism. (Default: off)'
-NOTE_LOGGER_TEMPLATE     = 'The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}'
+NOTE_NICKNAME         = N_('Nickname for the virtual server.')
+NOTE_CERT             = N_('This directive points to the PEM-encoded Certificate file for the server (Full path to the file)')
+NOTE_CERT_KEY         = N_('PEM-encoded Private Key file for the server (Full path to the file)')
+NOTE_CA_LIST          = N_('Optional: File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)')
+NOTE_CIPHERS          = N_('Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: all ciphers supported by the OpenSSL version used).')
+NOTE_CLIENT_CERTS     = N_('Optional: Skip, Accept or Require client certificates.')
+NOTE_VERIFY_DEPTH     = N_('Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)')
+NOTE_ERROR_HANDLER    = N_('Allows the selection of how to generate the error responses.')
+NOTE_PERSONAL_WEB     = N_('Directory inside the user home directory to use as root web directory. Disabled if empty.')
+NOTE_DISABLE_PW       = N_('The personal web support is currently turned on.')
+NOTE_ADD_DOMAIN       = N_('Adds a new domain name. Wildcards are allowed in the domain name.')
+NOTE_DOCUMENT_ROOT    = N_('Virtual Server root directory.')
+NOTE_DIRECTORY_INDEX  = N_('List of name files that will be used as directory index. Eg: <em>index.html,index.php</em>.')
+NOTE_MAX_UPLOAD_SIZE  = N_('The maximum size, in bytes, for POST uploads. (Default: unlimited)')
+NOTE_KEEPALIVE        = N_('Whether this virtual server is allowed to use Keep-alive (Default: yes)')
+NOTE_COLLECT          = N_('Specifies if Traffic Statistics should be collected for the virtual server (Default: yes)')
+NOTE_DISABLE_LOG      = N_('The Logging is currently enabled.')
+NOTE_LOGGERS          = N_('Logging format. Apache compatible is highly recommended here.')
+NOTE_ACCESSES         = N_('Back-end used to store the log accesses.')
+NOTE_ERRORS           = N_('Back-end used to store the log errors.')
+NOTE_ACCESSES_ERRORS  = N_('Back-end used to store the log accesses and errors.')
+NOTE_WRT_FILE         = N_('Full path to the file where the information will be saved.')
+NOTE_WRT_EXEC         = N_('Path to the executable that will be invoked on each log entry.')
+NOTE_X_REAL_IP        = N_('Whether the logger should read and use the X-Real-IP header (send by reverse proxy front-ends).')
+NOTE_X_REAL_IP_ALL    = N_('Accept all the X-Real-IP headers. It\'s dangerous: turn it on only if you are centain of what you are doing.')
+NOTE_X_REAL_IP_ACCESS = N_('List of IP addresses and subnets that are allowed to send X-Real-IP headers (usually your proxy servers).')
+NOTE_EVHOST           = N_('How to support the "Advanced Virtual Hosting" mechanism. (Default: off)')
+NOTE_LOGGER_TEMPLATE     = '%s <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}' % (N_('The following variables are accepted:'))
 
-TXT_NO  = "<i>No</i>"
-TXT_YES = "<i>Yes</i>"
+TXT_NO  = "<i>%s</i>" % (N_('No'))
+TXT_YES = "<i>%s</i>" % (N_('Yes'))
 
 HELPS = [
-    ('config_virtual_servers', "Virtual Servers"),
-    ('modules_loggers',        "Loggers"),
-    ('cookbook_ssl',           "SSL cookbook")
+    ('config_virtual_servers', N_("Virtual Servers")),
+    ('modules_loggers',        N_("Loggers")),
+    ('cookbook_ssl',           N_("SSL cookbook"))
 ]
 
 RULE_NAME_LEN_LIMIT = 35
@@ -191,7 +192,7 @@ class PageVServer (PageMenu, FormHelper):
         content = self._render_vserver_guts (host)
         nick = self._cfg.get_val ('vserver!%s!nick'%(host))
 
-        self.AddMacroContent ('title', 'Virtual Server: %s' %(nick))
+        self.AddMacroContent ('title', '%s: %s' %(_('Virtual Server'), nick))
         self.AddMacroContent ('content', content)
 
         return Page.Render(self)
@@ -202,11 +203,11 @@ class PageVServer (PageMenu, FormHelper):
         name = self._cfg.get_val ('vserver!%s!nick'%(host))
 
         tabs = []
-        txt = "<h1>Virtual Server: %s</h1>" % (name)
+        txt = "<h1>%s: %s</h1>" % (_('Virtual Server'), name)
 
         # Basics
         tmp = self._render_basics(host)
-        tabs += [('Basics', tmp)]
+        tabs += [(_('Basics'), tmp)]
 
         # Domains
         tmp = self._render_hosts(host, name)
@@ -218,7 +219,7 @@ class PageVServer (PageMenu, FormHelper):
                                           url_prefix = '/vserver/%s'%(host),
                                           priorities = self._priorities)
         tmp += self._render_add_rule ("tmp!new_rule")
-        tabs += [('Behavior', tmp)]
+        tabs += [(_('Behavior'), tmp)]
 
         # Personal Webs
         tmp  = self._render_personal_webs (host)
@@ -229,19 +230,19 @@ class PageVServer (PageMenu, FormHelper):
                                                url_prefix = '/vserver/%s/userdir'%(host),
                                                priorities = self._priorities_userdir)
             tmp += self._render_add_rule ("tmp!new_rule!user_dir")
-        tabs += [('Personal Webs', tmp)]
+        tabs += [(_('Personal Webs'), tmp)]
 
         # Error handlers
         tmp = self._render_error_handler(host)
-        tabs += [('Error handler', tmp)]        
+        tabs += [(_('Error handler'), tmp)]
 
         # Logging
         tmp = self._render_logger(host)
-        tabs += [('Logging', tmp)]
+        tabs += [(_('Logging'), tmp)]
 
         # Security
         tmp = self._render_ssl(host)
-        tabs += [('Security', tmp)]
+        tabs += [(_('Security'), tmp)]
 
         txt += self.InstanceTab (tabs)
         form = Form (self.submit_url, add_submit=False)
@@ -250,27 +251,27 @@ class PageVServer (PageMenu, FormHelper):
     def _render_ssl (self, host):
         pre = 'vserver!%s' % (host)
 
-        txt = '<h2>Required SSL/TLS values</h2>'
+        txt = '<h2>%s</h2>' % (_('Required SSL/TLS values'))
         table = TableProps()
-        self.AddPropEntry (table, 'Certificate',      '%s!ssl_certificate_file' % (pre),       NOTE_CERT)
-        self.AddPropEntry (table, 'Certificate key',  '%s!ssl_certificate_key_file' % (pre),   NOTE_CERT_KEY)
+        self.AddPropEntry (table, _('Certificate'),      '%s!ssl_certificate_file' % (pre),       NOTE_CERT)
+        self.AddPropEntry (table, _('Certificate key'),  '%s!ssl_certificate_key_file' % (pre),   NOTE_CERT_KEY)
         txt += self.Indent(table)
 
-        txt += '<h2>Advanced options</h2>'
+        txt += '<h2>%s</h2>' % (_('Advanced options'))
         table = TableProps()
-        self.AddPropEntry (table, 'Ciphers', '%s!ssl_ciphers' % (pre), NOTE_CIPHERS)
-        self.AddPropOptions_Ajax (table, 'Client Certs. Request',
+        self.AddPropEntry (table, _('Ciphers'), '%s!ssl_ciphers' % (pre), NOTE_CIPHERS)
+        self.AddPropOptions_Ajax (table, _('Client Certs. Request'),
                                          '%s!ssl_client_certs' % (pre),
                                          CLIENT_CERTS, 
                                          NOTE_CLIENT_CERTS)
 
         req_cc = self._cfg.get_val('%s!ssl_client_certs' % (pre))
         if req_cc:
-            self.AddPropEntry (table, 'CA List',     '%s!ssl_ca_list_file' % (pre),        NOTE_CA_LIST)
+            self.AddPropEntry (table, _('CA List'),     '%s!ssl_ca_list_file' % (pre),        NOTE_CA_LIST)
 
             calist = self._cfg.get_val('%s!ssl_ca_list_file' % (pre))
             if calist:
-                self.AddPropEntry (table, 'Verify Depth',  '%s!ssl_verify_depth' % (pre),  NOTE_VERIFY_DEPTH, size=4)
+                self.AddPropEntry (table, _('Verify Depth'),  '%s!ssl_verify_depth' % (pre),  NOTE_VERIFY_DEPTH, size=4)
 
         txt += self.Indent(table)
 
@@ -279,9 +280,9 @@ class PageVServer (PageMenu, FormHelper):
     def _render_error_handler (self, host):
         pre = 'vserver!%s' % (host)
 
-        txt = '<h2>Error Handling hook</h2>'
+        txt = '<h2>%s</h2>' % (_('Error Handling hook'))
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, 'Error Handler',
+        e = self.AddPropOptions_Reload (table, _('Error Handler'),
                                         '%s!error_handler' % (pre), 
                                         modules_available(ERROR_HANDLERS), 
                                         NOTE_ERROR_HANDLER)
@@ -290,9 +291,9 @@ class PageVServer (PageMenu, FormHelper):
 
     def _render_add_rule (self, prefix):
         # Render
-        txt = "<h2>Add new rule</h2>"
+        txt = "<h2>%s</h2>" % (_('Add new rule'))
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, "Rule Type", prefix, 
+        e = self.AddPropOptions_Reload (table, _("Rule Type"), prefix, 
                                         modules_available(RULES), "")
         txt += self.Indent (str(table) + e)
         return txt
@@ -300,12 +301,12 @@ class PageVServer (PageMenu, FormHelper):
     def _get_handler_name (self, mod_name):
         for h in HANDLERS:
             if h[0] == mod_name:
-                return h[1]
+                return _(h[1])
 
     def _get_auth_name (self, mod_name):
         for h in VALIDATORS:
             if h[0] == mod_name:
-                return h[1]
+                return _(h[1])
 
     def _render_rules_generic (self, cfg_key, url_prefix, priorities):
         txt = ''
@@ -319,7 +320,7 @@ class PageVServer (PageMenu, FormHelper):
         self._rule_table += 1
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr NoDrag="1" NoDrop="1"><th>Target</th><th>Type</th><th>Handler</th><th>Auth</th><th>Enc</th><th>Exp</th><th>Final</th></tr>'
+        txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
 
         # Rule list
         for prio in priorities:
@@ -341,10 +342,10 @@ class PageVServer (PageMenu, FormHelper):
                 link     = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, name)
                 js       = "post_del_key('%s', '%s');" % (self.submit_ajax_url, "%s!%s"%(cfg_key, prio))
                 final    = self.InstanceCheckbox ('%s!final'%(pre), True, quiet=True)
-                link_del = self.InstanceImage ("bin.png", "Delete", border="0", onClick=js)
+                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 extra    = ''
             else:
-                link     = '<a href="%s/rule/%s">Default</a>' % (url_prefix, prio)
+                link     = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, _('Default'))
                 extra    = ' NoDrag="1" NoDrop="1"'
                 final    = self.HiddenInput ('%s!final'%(pre), "1")
                 link_del = ''
@@ -408,16 +409,16 @@ class PageVServer (PageMenu, FormHelper):
         return txt
 
     def _render_personal_webs (self, host):
-        txt = '<h2>/~user directories</h2>'
+        txt = '<h2>%s</h2>' % (_('/~user directories'))
 
         table = TableProps()
         cfg_key = 'vserver!%s!user_dir'%(host)
         if self._cfg.get_val(cfg_key):
             js = "post_del_key('%s','%s');" % (self.submit_ajax_url, cfg_key)
-            button = self.InstanceButton ("Disable", onClick=js)
-            self.AddProp (table, 'Status', '', button, NOTE_DISABLE_PW)
+            button = self.InstanceButton (_("Disable"), onClick=js)
+            self.AddProp (table, _('Status'), '', button, NOTE_DISABLE_PW)
 
-        self.AddPropEntry (table, 'Directory name', cfg_key, NOTE_PERSONAL_WEB)
+        self.AddPropEntry (table, _('Directory name'), cfg_key, NOTE_PERSONAL_WEB)
         txt += self.Indent(table)
 
         return txt
@@ -427,27 +428,27 @@ class PageVServer (PageMenu, FormHelper):
 
         txt = ''
         if host != "default":
-            txt += '<h2>Server ID</h2>'
+            txt += '<h2>%s</h2>' % (_('Server ID'))
             table = TableProps()
-            self.AddPropEntry (table, 'Virtual Server nickname', '%s!nick'%(pre), NOTE_NICKNAME)
+            self.AddPropEntry (table, _('Virtual Server nickname'), '%s!nick'%(pre), NOTE_NICKNAME)
             txt += self.Indent(table)
 
-        txt += '<h2>Paths</h2>'
+        txt += '<h2>%s</h2>' % (_('Paths'))
         table = TableProps()
-        self.AddPropEntry (table, 'Document Root',     '%s!document_root'%(pre),   NOTE_DOCUMENT_ROOT)
-        self.AddPropEntry (table, 'Directory Indexes', '%s!directory_index'%(pre), NOTE_DIRECTORY_INDEX)
+        self.AddPropEntry (table, _('Document Root'),     '%s!document_root'%(pre),   NOTE_DOCUMENT_ROOT)
+        self.AddPropEntry (table, _('Directory Indexes'), '%s!directory_index'%(pre), NOTE_DIRECTORY_INDEX)
         txt += self.Indent(table)
 
-        txt += '<h2>Network</h2>'
+        txt += '<h2>%s</h2>' % (_('Network'))
         table = TableProps()
-        self.AddPropCheck (table, 'Keep-alive',         '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
-        self.AddPropEntry (table, 'Max Upload Size',    '%s!post_max_len' % (pre),  NOTE_MAX_UPLOAD_SIZE)
-        self.AddPropCheck (table, 'Traffic Statistics', '%s!collect_statistics'%(pre), True, NOTE_COLLECT)
+        self.AddPropCheck (table, _('Keep-alive'),         '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
+        self.AddPropEntry (table, _('Max Upload Size'),    '%s!post_max_len' % (pre),  NOTE_MAX_UPLOAD_SIZE)
+        self.AddPropCheck (table, _('Traffic Statistics'), '%s!collect_statistics'%(pre), True, NOTE_COLLECT)
         txt += self.Indent(table)
 
-        txt += '<h2>Advanced Virtual Hosting</h2>'
+        txt += '<h2>%s</h2>' % (_('Advanced Virtual Hosting'))
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, 'Method', '%s!evhost'%(pre),
+        e = self.AddPropOptions_Reload (table, _('Method'), '%s!evhost'%(pre),
                                         modules_available(EVHOSTS), NOTE_EVHOST)
         txt += self.Indent(table) + e
 
@@ -459,9 +460,9 @@ class PageVServer (PageMenu, FormHelper):
         format = self._cfg.get_val(pre)
 
         # Logger
-        txt += '<h2>Logging Format</h2>'
+        txt += '<h2>%s</h2>' % (_('Logging Format'))
         table = TableProps()
-        self.AddPropOptions_Ajax (table, 'Format', pre, 
+        self.AddPropOptions_Ajax (table, _('Format'), pre, 
                                   modules_available(LOGGERS), NOTE_LOGGERS)
         txt += self.Indent(str(table))
 
@@ -473,35 +474,35 @@ class PageVServer (PageMenu, FormHelper):
             if format == 'w3c':
                 cfg_key = "%s!all!type"%(pre)
                 table = TableProps()
-                self.AddPropOptions_Ajax (table, 'Accesses and Errors', cfg_key, 
+                self.AddPropOptions_Ajax (table, _('Accesses and Errors'), cfg_key, 
                                           LOGGER_WRITERS, NOTE_ACCESSES_ERRORS)
                 writers += str(table)
 
                 all = self._cfg.get_val(cfg_key)
                 if not all or all == 'file':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, 'Filename', '%s!all!filename'%(pre), NOTE_WRT_FILE)
+                    self.AddPropEntry (t1, _('Filename'), '%s!all!filename'%(pre), NOTE_WRT_FILE)
                     writers += str(t1)
                 elif all == 'exec':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, 'Command', '%s!all!command'%(pre), NOTE_WRT_EXEC)
+                    self.AddPropEntry (t1, _('Command'), '%s!all!command'%(pre), NOTE_WRT_EXEC)
                     writers += str(t1)
 
             else:
                 # Accesses
                 cfg_key = "%s!access!type"%(pre)
                 table = TableProps()
-                self.AddPropOptions_Ajax (table, 'Accesses', cfg_key, LOGGER_WRITERS, NOTE_ACCESSES)
+                self.AddPropOptions_Ajax (table, _('Accesses'), cfg_key, LOGGER_WRITERS, NOTE_ACCESSES)
                 writers += str(table)
 
                 access = self._cfg.get_val(cfg_key)
                 if not access or access == 'file':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, 'Filename', '%s!access!filename'%(pre), NOTE_WRT_FILE)
+                    self.AddPropEntry (t1, _('Filename'), '%s!access!filename'%(pre), NOTE_WRT_FILE)
                     writers += str(t1)
                 elif access == 'exec':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, 'Command', '%s!access!command'%(pre), NOTE_WRT_EXEC)
+                    self.AddPropEntry (t1, _('Command'), '%s!access!command'%(pre), NOTE_WRT_EXEC)
                     writers += str(t1)
 
                 if format == 'custom':
@@ -514,17 +515,17 @@ class PageVServer (PageMenu, FormHelper):
                 # Error
                 cfg_key = "%s!error!type"%(pre)
                 table = TableProps()
-                self.AddPropOptions_Ajax (table, 'Errors', cfg_key, LOGGER_WRITERS, NOTE_ERRORS)
+                self.AddPropOptions_Ajax (table, _('Errors'), cfg_key, LOGGER_WRITERS, NOTE_ERRORS)
                 writers += str(table)
 
                 error = self._cfg.get_val(cfg_key)
                 if not error or error == 'file':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, 'Filename', '%s!error!filename'%(pre), NOTE_WRT_FILE)
+                    self.AddPropEntry (t1, _('Filename'), '%s!error!filename'%(pre), NOTE_WRT_FILE)
                     writers += str(t1)
                 elif error == 'exec':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, 'Command', '%s!error!command'%(pre), NOTE_WRT_EXEC)
+                    self.AddPropEntry (t1, _('Command'), '%s!error!command'%(pre), NOTE_WRT_EXEC)
                     writers += str(t1)
 
                 if format == 'custom':
@@ -532,20 +533,20 @@ class PageVServer (PageMenu, FormHelper):
                     self._add_logger_template(t2, pre, 'error')
                     writers += str(t2)
 
-            txt += '<h2>Writers</h2>'
+            txt += '<h2>%s</h2>' % (_('Writers'))
             txt += self.Indent(writers)
 
-        txt += '<h2>Options</h2>'
+        txt += '<h2>%s</h2>' % (_('Options'))
 
         x_real_ip     = int(self._cfg.get_val('%s!x_real_ip_enabled'%(pre), "0"))
         x_real_ip_all = int(self._cfg.get_val('%s!x_real_ip_access_all'%(pre), "0"))
 
         table = TableProps()
-        self.AddPropCheck (table, 'Accept X-Real-IP', '%s!x_real_ip_enabled'%(pre), False, NOTE_X_REAL_IP)
+        self.AddPropCheck (table, _('Accept X-Real-IP'), '%s!x_real_ip_enabled'%(pre), False, NOTE_X_REAL_IP)
         if x_real_ip:
-            self.AddPropCheck (table, 'Accept all X-Real-IPs', '%s!x_real_ip_access_all'%(pre), False, NOTE_X_REAL_IP_ALL)
+            self.AddPropCheck (table, _('Accept all X-Real-IPs'), '%s!x_real_ip_access_all'%(pre), False, NOTE_X_REAL_IP_ALL)
             if not x_real_ip_all:
-                self.AddPropEntry (table, 'X-Real-IP Hosts', '%s!x_real_ip_access'%(pre), NOTE_X_REAL_IP_ACCESS)
+                self.AddPropEntry (table, _('X-Real-IP Hosts'), '%s!x_real_ip_access'%(pre), NOTE_X_REAL_IP_ACCESS)
 
         txt += self.Indent(str(table))
 
@@ -553,14 +554,14 @@ class PageVServer (PageMenu, FormHelper):
 
     def _render_hosts (self, host, name):
         pre = "vserver!%s" % (host)
-        txt = '<h2>Host names</h2>'
+        txt = '<h2>%s</h2>' % (_('Host names'))
 
         if name == 'default':
             txt += self.Dialog(DEFAULT_HOST_NOTE)
             return txt
 
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, 'Matching method',
+        e = self.AddPropOptions_Reload (table, _('Matching method'),
                                         '%s!match' % (pre), 
                                         modules_available(VRULES), 
                                         NOTE_ERROR_HANDLER)
@@ -591,7 +592,7 @@ class PageVServer (PageMenu, FormHelper):
         keys = self._cfg.keys('%s!logger'%pre)
         for key in keys:
             cfg_key = '%s!logger!%s!filename' % (pre,key)
-            self.Validate_NotEmpty (post, cfg_key, "Filename must be set")
+            self.Validate_NotEmpty (post, cfg_key, _("Filename must be set"))
 
         # Apply changes
         self.ApplyChanges (checkboxes, post, DATA_VALIDATION)
@@ -635,4 +636,4 @@ class PageVServer (PageMenu, FormHelper):
         value = self._cfg.get_val(cfg_key)
         if not value:
             self._cfg[cfg_key] = DEFAULT_LOGGER_TEMPLATE
-        self.AddPropEntry (table, 'Template: ', cfg_key, NOTE_LOGGER_TEMPLATE)
+        self.AddPropEntry (table, _('Template: '), cfg_key, NOTE_LOGGER_TEMPLATE)

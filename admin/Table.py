@@ -1,7 +1,10 @@
+# For gettext
+N_ = lambda x: x
+
 SUBMIT_GENERIC = '<input type="submit" value="%s" />'
-SUBMIT_ADD   = SUBMIT_GENERIC % ('Add')
-SUBMIT_DEL   = SUBMIT_GENERIC % ('Del')
-SUBMIT_CLONE = SUBMIT_GENERIC % ('Clone')
+SUBMIT_ADD   = SUBMIT_GENERIC % (N_('Add'))
+SUBMIT_DEL   = SUBMIT_GENERIC % (N_('Del'))
+SUBMIT_CLONE = SUBMIT_GENERIC % (N_('Clone'))
 
 class Table:
     def __init__ (self, cols, title_top=0, title_left=0, style='', header_style=''):

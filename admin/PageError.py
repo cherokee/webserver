@@ -29,8 +29,11 @@ class PageError (Page):
         return '/'
 
 
+# For gettext
+N_ = lambda x: x
+
 ERRORS_TITLE = {
-    PageError.CONFIG_NOT_WRITABLE : 'Configuration file cannot be modified',
-    PageError.ICONS_DIR_MISSING:    'Icons directory is missing',
-    PageError.COULDNT_LAUNCH:       'Could not launch the server'
+    PageError.CONFIG_NOT_WRITABLE : N_('Configuration file cannot be modified'),
+    PageError.ICONS_DIR_MISSING:    N_('Icons directory is missing'),
+    PageError.COULDNT_LAUNCH:       N_('Could not launch the server')
 }

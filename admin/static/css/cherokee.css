@@ -175,6 +175,14 @@ table td label {
     padding: 16px;
 }
 
+#change_language {
+	clear: both;
+	padding: 16px;
+}
+
+#language {
+	width: 100%;
+}
 
 /** HELP **/
 #help-area {
