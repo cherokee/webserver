@@ -1,3 +1,7 @@
+2009-04-13  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* 0.99.10 released
+
 2009-04-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/proxy_hosts.c (poll_release): Implements a better reuse
