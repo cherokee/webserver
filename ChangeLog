@@ -1,3 +1,8 @@
+2009-04-15  Taher Shihadeh  <taher@unixwars.com>
+
+	* admin/Rule.py: fixes issue
+	http://code.google.com/p/cherokee/issues/detail?id=440
+
 2009-04-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* qa/226-PathInfo-Default.py: Adds a new QA to test:

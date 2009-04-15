@@ -90,13 +90,14 @@ class Rule (Module, FormHelper):
 
             _not, _and, _or, _del = self._get_ops(pre)
 
+            NOT = _('NOT')
             txt = """
             <div class="rule_group rule_not">
-              <div class="rule_not_title">%s</div>
+              <div class="rule_not_title">%(NOT)s</div>
               %(rule_txt)s
               <div class="rule_toolbar">%(_and)s %(_or)s %(_del)s</div>
             </div>
-            """ % (_('NOT'), locals())
+            """ % (locals())
             return txt
 
         elif matcher in ["or", "and"]:
