@@ -144,8 +144,8 @@ cherokee_validator_authlist_configure (cherokee_config_node_t   *conf,
 	 */
 	ret = cherokee_config_node_get (conf, "list", &subconf);
 	if (ret != ret_ok) {
-		PRINT_ERROR_S ("ERROR: A 'users' property is required\n");
-		return ret_error;
+		PRINT_MSG_S ("WARNING: Empty authlist: Access will be denied.\n");
+		goto out;
 	}
 
 	cherokee_config_node_foreach (i, subconf) {
@@ -154,6 +154,7 @@ cherokee_validator_authlist_configure (cherokee_config_node_t   *conf,
 			return ret;
 	}
 
+out:
 	return ret_ok;
 }
 

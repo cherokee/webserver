@@ -1,3 +1,9 @@
+2009-04-15  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/validator_authlist.c, admin/ModuleAuthlist.py: Fixes
+	bug http://code.google.com/p/cherokee/issues/detail?id=433 . An
+	empty authlist validator is no longer a fatal error.
+
 2009-04-15  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Rule.py: fixes issue

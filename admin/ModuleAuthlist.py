@@ -2,6 +2,7 @@ import validations
 from Table import *
 from ModuleAuth import *
 
+NOTE_EMPTY = "At least one user/password pair should be configured."
 
 DATA_VALIDATION = []
 
@@ -24,7 +25,6 @@ class ModuleAuthlist (ModuleAuthBase):
         txt += "<h2>%s</h2>" % (_('Fixed authentication list'))
 
         keys = self._cfg.keys('%s!list'%(self._prefix))
-
         if keys:
             txt += "<h3>%s</h3>" % (_('Authentication list'))
             table = Table(3, 1, style='width="90%"')
@@ -37,6 +37,8 @@ class ModuleAuthlist (ModuleAuthBase):
                 rm_link = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
                 table += (user, passwd, rm_link)
             txt += self.Indent(table)
+        else:
+            txt += self.Indent(self.Dialog(NOTE_EMPTY))
 
         txt += "<h3>%s</h3>" % (_('Add new pair'))
         user_e = self.InstanceEntry ("tmp!new_user", 'text', size=20, req=True)
