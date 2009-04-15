@@ -176,8 +176,12 @@ table td label {
 }
 
 #change_language {
-	clear: both;
-	padding: 16px;
+	float: right;
+	width: 120px;
+}
+
+.label_lang {
+	color: #204a87;
 }
 
 #language {

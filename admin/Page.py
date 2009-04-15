@@ -84,12 +84,6 @@ MENU_SAVE_IS_ALIVE = """
   </div>
 """
 
-MENU_LANGUAGES = """
-  <form method="post" action="/change_language">
-   <table><tr><td>{{languages_select}}</td><td><a class="button" href="javascript:f = get_by_id('flanguages'); f.submit();"><span>{{_button_change}}</span></a></td></tr></table>
-  </form>
-"""
-
 DIALOG_W=725
 DIALOG_H=500
 
