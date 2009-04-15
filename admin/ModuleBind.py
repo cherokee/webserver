@@ -5,7 +5,7 @@ from flags import *
 
 import validations
 
-NOTE_BIND = ""
+NOTE_BIND = " "
 
 class ModuleBind (Module, FormHelper):
     validation = []

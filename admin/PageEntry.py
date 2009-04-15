@@ -254,7 +254,7 @@ class PageEntry (PageMenu, FormHelper):
         for e,e_name in encoders:
             note = _("Use the %s encoder whenever the client requests it.")
             note = note % (_(e_name))
-            self.AddPropCheck (table, _("Allow ") + (_(e_name)), "%s!%s"%(pre,e), False, note)
+            self.AddPropCheck (table, _("Allow") + " " + (_(e_name)), "%s!%s"%(pre,e), False, note)
 
         txt += self.Indent(table)
         return txt

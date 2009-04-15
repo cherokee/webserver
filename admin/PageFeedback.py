@@ -13,27 +13,32 @@ CHEROKEE_FEEDBACK_URL = "/cgi-bin/feedback"
 
 REPORT_TEMPLATE = """
 =====================================================
-Name:  {{name}} <{{email}}>
-Date:  {{date}}
+Name:  %(name)s <%(email)s>
+Date:  %(date)s
 =====================================================
 
 Message
 -------
-{{body}}
+%(body)s
 
 Server Information
 ------------------
-{{server}}
+%(server)s
 
 Configuration
 -------------
-{{conf}}
+%(conf)s
 """
 
-THANKS_TEXT = "<h1>%s</h1>\n<p>%s</p>\n\n{{reply}}\n\n<h2>%s</h2><pre>{{report}}</pre>" % \
-       (N_('Report sent'),
-        N_('Thank you a million for your feedback. We do appreciate your help.'),
-        N_('Report'))
+THANKS_TEXT = """
+<h1>%(_treport)s</h1>
+<p>%(_thanks)s</p>
+
+%(reply)s
+
+<h2>%(_lreport)s</h2>
+<pre>%(report)s</pre>
+"""
 
 class PageFeedback (PageMenu, FormHelper):
     def __init__ (self, cfg):
@@ -103,6 +108,9 @@ class PageFeedback (PageMenu, FormHelper):
 
     def _op_render_thanks (self, text, reply):
         params = {
+            '_treport': _('Report sent'),
+            '_thanks':  _('Thank you a million for your feedback. We do appreciate your help.'),
+            '_lreport': _('Report'),
             'report': text,
             'reply':  self.Indent(reply)
         }

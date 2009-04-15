@@ -101,7 +101,6 @@ class PageStatus (PageMenu, FormHelper):
         # Translation
         if len(AVAILABLE_LANGUAGES) > 1:
             self.AddMacroContent ('_llanguages',    _('Language:'))
-            self.AddMacroContent ('_button_change', _('Change'))
             self.AddMacroContent ('translation', MENU_LANGUAGES)
             options = [('', _('Choose'))] + AVAILABLE_LANGUAGES
             js = "javascript:$('#flanguages').submit()"

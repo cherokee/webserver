@@ -7,6 +7,10 @@
 
 	* admin/PageStatus.py: Removes Change Language button.
 
+	* admin/PageEntry.py, admin/Rule.py, admin/PageStatus.py,
+	admin/ModuleBind.py, admin/PageFeedback.py: Fixes feedback page
+	and other minor issues.
+
 2009-04-15  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/Page.py, admin/PageStatus.py, admin/status.template.html:
