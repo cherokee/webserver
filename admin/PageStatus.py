@@ -41,10 +41,6 @@ MENU_LANGUAGES = """
   <div class="label_lang">{{_llanguages}}</div>
   <form name="flanguages" id="flanguages" method="post" action="/change_language">
     {{languages_select}}
-
-    <div style="float: center; padding-top: 8px;">
-        <a class="button" style="float: right" href="javascript:$('#flanguages').submit();"><span>{{_button_change}}</span></a>
-    </div>
   </form>
 </div>
 """
@@ -107,7 +103,9 @@ class PageStatus (PageMenu, FormHelper):
             self.AddMacroContent ('_llanguages',    _('Language:'))
             self.AddMacroContent ('_button_change', _('Change'))
             self.AddMacroContent ('translation', MENU_LANGUAGES)
-            selbox = EntryOptions ('language', AVAILABLE_LANGUAGES)
+            options = [('', _('Choose'))] + AVAILABLE_LANGUAGES
+            js = "javascript:$('#flanguages').submit()"
+            selbox = EntryOptions ('language', options, onChange=js)
             self.AddMacroContent ('languages_select', str(selbox))
         else:
             self.AddMacroContent ('translation', '')

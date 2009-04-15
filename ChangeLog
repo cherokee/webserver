@@ -5,6 +5,8 @@
 	template, and the language drop-down menu was moved to the upper
 	right corner of Status page.
 
+	* admin/PageStatus.py: Removes Change Language button.
+
 2009-04-15  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/Page.py, admin/PageStatus.py, admin/status.template.html:
