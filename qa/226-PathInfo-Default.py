@@ -1,7 +1,7 @@
 from base import *
 
 HOST      = "test226"
-PATH_INFO = "/param1/param2/param3"
+PATH_INFO = "/this/is/pathinfo"
 PORT      = get_free_port()
 PYTHON    = look_for_python()
 
@@ -11,7 +11,7 @@ from pyscgi import *
 class TestHandler (SCGIHandler):
     def handle_request (self):
         self.output.write('Content-Type: text/plain\\r\\n\\r\\n')
-        self.output.write('PathInfo is: >'+self.env['PATH_INFO']+'<\\n')
+        self.output.write('PathInfo is: >'+ self.env['PATH_INFO'] +'<\\n')
         
 SCGIServerFork(TestHandler, port=%d).serve_forever()
 """ % (PORT)
@@ -24,6 +24,7 @@ vserver!226!document_root = /dev/null
 
 vserver!226!rule!1!match = default
 vserver!226!rule!1!handler = scgi
+vserver!226!rule!1!handler!check_file = 0
 vserver!226!rule!1!handler!balancer = round_robin
 vserver!226!rule!1!handler!balancer!source!1 = %(source)d
 
