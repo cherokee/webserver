@@ -1,5 +1,10 @@
 2009-04-15  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Page.py, admin/PageStatus.py, admin/status.template.html:
+	The language drop-down menu isn't something that the user has to
+	access frequently. Thus, I've moved it away from the sidebar. The
+	CSS style has still to be fixed for this new location though.
+
 	* cherokee/validator_authlist.c, admin/ModuleAuthlist.py: Fixes
 	bug http://code.google.com/p/cherokee/issues/detail?id=433 . An
 	empty authlist validator is no longer a fatal error.

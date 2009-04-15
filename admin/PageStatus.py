@@ -68,6 +68,16 @@ class PageStatus (PageMenu, FormHelper):
         extra_info = self._render_extra_info()
         self.AddMacroContent ('extra_info', extra_info)
 
+        # Translation
+        if len(AVAILABLE_LANGUAGES) > 1:
+            self.AddMacroContent ('_avail_lang',    _('Available languages'))
+            self.AddMacroContent ('_button_change', _('Change'))
+            self.AddMacroContent ('translation', MENU_LANGUAGES)
+            selbox = EntryOptions ('language', AVAILABLE_LANGUAGES)
+            self.AddMacroContent ('languages_select', str(selbox))
+        else:
+            self.AddMacroContent ('translation', '')
+
         return Page.Render(self)
 
     def _op_handler (self, uri, post):

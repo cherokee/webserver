@@ -69,8 +69,6 @@ PAGE_MENU_MENU = """
  </div>
 </div>
 
- {{menu_available_languages}}
-
 <script type="text/javascript">
   $(document).ready(protectChanges);
 </script>
@@ -87,18 +85,9 @@ MENU_SAVE_IS_ALIVE = """
 """
 
 MENU_LANGUAGES = """
-<div id="change_language">
-  <h2>{{_avail_lang}}</h2>
-  <div style="margin-top: 6px">
-  <form name="flanguages" id="flanguages" method="post" action="/change_language">
-    {{languages_select}}
-
-    <div style="float: center; padding-top: 8px;">
-        <a class="button" href="javascript:f = get_by_id('flanguages'); f.submit();"><span>{{_button_change}}</span></a>
-    </div>
+  <form method="post" action="/change_language">
+   <table><tr><td>{{languages_select}}</td><td><a class="button" href="javascript:f = get_by_id('flanguages'); f.submit();"><span>{{_button_change}}</span></a></td></tr></table>
   </form>
-  </div>
-</div>
 """
 
 DIALOG_W=725
@@ -186,15 +175,6 @@ class PageMenu (Page):
         else:
             self.AddMacroContent ('menu_save_dropdown', '')
             self.AddMacroContent ('menu_save_desc', _('Commit all the changes permanently'))
-
-        if len(AVAILABLE_LANGUAGES) > 1:
-            self.AddMacroContent ('_avail_lang',    _('Available languages'))
-            self.AddMacroContent ('_button_change', _('Change'))
-            self.AddMacroContent ('menu_available_languages', MENU_LANGUAGES)
-            selbox = EntryOptions ('language', AVAILABLE_LANGUAGES)
-            self.AddMacroContent ('languages_select', str(selbox))
-        else:
-            self.AddMacroContent ('menu_available_languages', '')
 
         self.AddMacroContent ('body', PAGE_MENU_LAYOUT)
         self.AddMacroContent ('menu', PAGE_MENU_MENU)
