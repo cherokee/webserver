@@ -1,9 +1,12 @@
 from base import *
 
-HOST      = "test226"
-PATH_INFO = "/this/is/pathinfo"
-PORT      = get_free_port()
-PYTHON    = look_for_python()
+HOST        = "test226"
+
+PATH_INFO   = "/this/is/pathinfo"
+SCRIPT_NAME = ""
+
+PORT        = get_free_port()
+PYTHON      = look_for_python()
 
 SCRIPT = """
 from pyscgi import *
@@ -11,8 +14,9 @@ from pyscgi import *
 class TestHandler (SCGIHandler):
     def handle_request (self):
         self.output.write('Content-Type: text/plain\\r\\n\\r\\n')
-        self.output.write('PathInfo is: >'+ self.env['PATH_INFO'] +'<\\n')
-        
+        self.output.write('PathInfo is: >'  + self.env['PATH_INFO']   +'<\\n')
+        self.output.write('ScriptName is: >'+ self.env['SCRIPT_NAME'] +'<\\n')
+
 SCGIServerFork(TestHandler, port=%d).serve_forever()
 """ % (PORT)
 
@@ -23,6 +27,8 @@ vserver!226!nick = %(HOST)s
 vserver!226!document_root = /dev/null
 
 vserver!226!rule!1!match = default
+# vserver!226!rule!1!match = directory
+# vserver!226!rule!1!match!directory = /
 vserver!226!rule!1!handler = scgi
 vserver!226!rule!1!handler!check_file = 0
 vserver!226!rule!1!handler!balancer = round_robin
@@ -41,7 +47,8 @@ class Test (TestBase):
                                 "Host: %s\r\n"%(HOST) + \
                                 "Connection: Close\r\n"
         self.expected_error   = 200
-        self.expected_content = "PathInfo is: >%s<"%(PATH_INFO)
+        self.expected_content = ["PathInfo is: >%s<"%(PATH_INFO),
+                                 "ScriptName is: >%s<"%(SCRIPT_NAME)]
 
     def Prepare (self, www):
         scgi_file = self.WriteFile (www, "test226.scgi", 0444, SCRIPT)
