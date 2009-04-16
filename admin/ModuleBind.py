@@ -1,7 +1,6 @@
 from Form import *
 from Table import *
 from Module import *
-from flags import *
 
 import validations
 

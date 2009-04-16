@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-04-14 21:27+CEST\n"
+"POT-Creation-Date: 2009-04-16 18:49+CEST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,11 +67,11 @@ msgstr ""
 msgid "Realm can not be empty"
 msgstr ""
 
-#: ModuleAuthlist.py:9 consts.py:44
+#: ModuleAuthlist.py:10 consts.py:44
 msgid "Fixed list"
 msgstr ""
 
-#: ModuleAuthlist.py:24
+#: ModuleAuthlist.py:25
 msgid "Fixed authentication list"
 msgstr ""
 
@@ -79,11 +79,11 @@ msgstr ""
 msgid "Authentication list"
 msgstr ""
 
-#: ModuleAuthlist.py:31 ModuleAuthlist.py:46
+#: ModuleAuthlist.py:31 ModuleAuthlist.py:48
 msgid "Password"
 msgstr ""
 
-#: ModuleAuthlist.py:31 ModuleAuthlist.py:46 PageGeneral.py:69
+#: ModuleAuthlist.py:31 ModuleAuthlist.py:48 PageGeneral.py:69
 msgid "User"
 msgstr ""
 
@@ -96,7 +96,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ModuleAuthlist.py:41
+#: ModuleAuthlist.py:43
 msgid "Add new pair"
 msgstr ""
 
@@ -112,7 +112,7 @@ msgstr ""
 msgid "A load balancer must be configured to use at least one information source."
 msgstr ""
 
-#: ModuleBalancer.py:52 Page.py:171 PageInfoSource.py:31 PageInfoSource.py:83
+#: ModuleBalancer.py:52 Page.py:154 PageInfoSource.py:31 PageInfoSource.py:83
 msgid "Information Sources"
 msgstr ""
 
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Port"
 msgstr ""
 
-#: ModuleBind.py:27 ModuleBind.py:78 ModuleMethod.py:7
+#: ModuleBind.py:27 ModuleBind.py:78 ModuleMethod.py:7 PageStatus.py:105
 msgid "Choose"
 msgstr ""
 
@@ -251,7 +251,7 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: ModuleCgi.py:73 PageFeedback.py:54
+#: ModuleCgi.py:73 PageFeedback.py:59
 msgid "Name"
 msgstr ""
 
@@ -538,6 +538,10 @@ msgid ""
 "<a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation."
 msgstr ""
 
+#: ModuleGeoip.py:24 ModuleGeoip.py:44 Table.py:5
+msgid "Add"
+msgstr ""
+
 #: ModuleGeoip.py:27
 msgid "Country"
 msgstr ""
@@ -630,7 +634,7 @@ msgstr ""
 msgid "LDAP"
 msgstr ""
 
-#: ModuleLdap.py:32 ModuleLdap.py:48 PageStatus.py:93
+#: ModuleLdap.py:32 ModuleLdap.py:48 PageStatus.py:140
 msgid "Server"
 msgstr ""
 
@@ -992,72 +996,64 @@ msgstr ""
 msgid "New host name"
 msgstr ""
 
-#: Page.py:116
+#: Page.py:99
 msgid "Version:"
 msgstr ""
 
-#: Page.py:145
+#: Page.py:128
 msgid "Help"
 msgstr ""
 
-#: Page.py:168 PageAdvanced.py:100 PageStatus.py:44 PageVServer.py:419
+#: Page.py:151 PageAdvanced.py:100 PageStatus.py:67 PageVServer.py:419
 msgid "Status"
 msgstr ""
 
-#: Page.py:169
+#: Page.py:152
 msgid "General"
 msgstr ""
 
-#: Page.py:170 PageVServer.py:69 PageVServers.py:24
+#: Page.py:153 PageVServer.py:69 PageVServers.py:24
 msgid "Virtual Servers"
 msgstr ""
 
-#: Page.py:172 PageIcon.py:12
+#: Page.py:155 PageIcon.py:12
 msgid "Icons"
 msgstr ""
 
-#: Page.py:173
+#: Page.py:156
 msgid "Mime Types"
 msgstr ""
 
-#: Page.py:174 PageAdvanced.py:57
+#: Page.py:157 PageAdvanced.py:57
 msgid "Advanced"
 msgstr ""
 
-#: Page.py:175
+#: Page.py:158
 msgid "Save Changes"
 msgstr ""
 
-#: Page.py:176
+#: Page.py:159
 msgid "Save"
 msgstr ""
 
-#: Page.py:180
+#: Page.py:163
 msgid "Graceful restart"
 msgstr ""
 
-#: Page.py:181
+#: Page.py:164
 msgid "Hard restart"
 msgstr ""
 
-#: Page.py:182
+#: Page.py:165
 msgid "Do not restart"
 msgstr ""
 
-#: Page.py:185
+#: Page.py:168
 msgid "Commit to disk and apply changes to the running server"
 msgstr ""
 
-#: Page.py:188
+#: Page.py:171
 msgid "Commit all the changes permanently"
-msgstr ""
-
-#: Page.py:191
-msgid "Available languages"
-msgstr ""
-
-#: Page.py:192
-msgid "Change"
 msgstr ""
 
 #: PageAdvanced.py:33
@@ -1224,7 +1220,7 @@ msgstr ""
 msgid "Panic action"
 msgstr ""
 
-#: PageAdvanced.py:111 PageStatus.py:91
+#: PageAdvanced.py:111 PageStatus.py:138
 msgid "PID file"
 msgstr ""
 
@@ -1355,7 +1351,7 @@ msgid "Use the %s encoder whenever the client requests it."
 msgstr ""
 
 #: PageEntry.py:257
-msgid "Allow "
+msgid "Allow"
 msgstr ""
 
 #: PageError.py:36
@@ -1374,43 +1370,43 @@ msgstr ""
 msgid "A working connection to the Internet is required for this form to work."
 msgstr ""
 
-#: PageFeedback.py:34
-msgid "Report sent"
-msgstr ""
-
-#: PageFeedback.py:35
-msgid "Thank you a million for your feedback. We do appreciate your help."
-msgstr ""
-
-#: PageFeedback.py:36
-msgid "Report"
-msgstr ""
-
-#: PageFeedback.py:45 PageFeedback.py:50
+#: PageFeedback.py:50 PageFeedback.py:55 PageStatus.py:112
 msgid "Feedback"
 msgstr ""
 
-#: PageFeedback.py:55
+#: PageFeedback.py:60
 msgid "EMail"
 msgstr ""
 
-#: PageFeedback.py:56
+#: PageFeedback.py:61
 msgid "Include configuration"
 msgstr ""
 
-#: PageFeedback.py:59
+#: PageFeedback.py:64
 msgid "Message:"
 msgstr ""
 
-#: PageFeedback.py:77
+#: PageFeedback.py:82
 msgid "Error reading response from the server"
 msgstr ""
 
-#: PageFeedback.py:86
+#: PageFeedback.py:91
 msgid "Not included"
 msgstr ""
 
-#: PageFeedback.py:110
+#: PageFeedback.py:111
+msgid "Report sent"
+msgstr ""
+
+#: PageFeedback.py:112
+msgid "Thank you a million for your feedback. We do appreciate your help."
+msgstr ""
+
+#: PageFeedback.py:113
+msgid "Report"
+msgstr ""
+
+#: PageFeedback.py:118
 msgid "Feedback: Thank you"
 msgstr ""
 
@@ -1766,75 +1762,103 @@ msgstr ""
 msgid "Create a new configuration file"
 msgstr ""
 
-#: PageStatus.py:23
-msgid "Server is running."
+#: PageStatus.py:48
+msgid ""
+"\n"
+"<h3>Beta testing</h3>\n"
+"<p>Individuals like yourself who download and test the latest developer snapshots of Cherokee Web Server help us to create the highest quality product.</p>\n"
+"<p>For that, we thank you.</p>\n"
 msgstr ""
 
-#: PageStatus.py:23
-msgid "Stop"
+#: PageStatus.py:54
+msgid ""
+"\n"
+"If you wanted to let us know something about Cherokee: what you\n"
+"like the most or what you would improve, please do not hesitate to\n"
+"<a href=\"/feedback\">drop us a line</a>.\n"
 msgstr ""
 
-#: PageStatus.py:23 PageStatus.py:37
-msgid "Server status"
+#: PageStatus.py:60
+msgid ""
+"\n"
+"We would love to know that you are using Cherokee. Submit your domain\n"
+"name and  it will be <a href=\"http://www.cherokee-project.com/cherokee-domain-list.html\">\n"
+"listed on the Cherokee Project web site</a>.)\n"
 msgstr ""
 
-#: PageStatus.py:37
-msgid "Launch"
-msgstr ""
-
-#: PageStatus.py:37
-msgid "Server is not running."
-msgstr ""
-
-#: PageStatus.py:39
-msgid "Beta testing"
-msgstr ""
-
-#: PageStatus.py:40
-msgid "Individuals like yourself who download and test the latest developer snapshots of Cherokee Web Server help us to create the highest quality product."
-msgstr ""
-
-#: PageStatus.py:41
-msgid "For that, we thank you."
-msgstr ""
-
-#: PageStatus.py:53
+#: PageStatus.py:76
 msgid "Welcome to Cherokee Admin"
 msgstr ""
 
-#: PageStatus.py:81
-msgid "Version"
+#: PageStatus.py:77
+msgid "This interface will assist in configuring the Cherokee Web Server."
 msgstr ""
 
-#: PageStatus.py:82
-msgid "Prefix"
-msgstr ""
-
-#: PageStatus.py:83
-msgid "WWW Root"
+#: PageStatus.py:87
+msgid "Server status"
 msgstr ""
 
 #: PageStatus.py:89
-msgid "Not running"
+msgid "Server is running."
+msgstr ""
+
+#: PageStatus.py:90
+msgid "Stop"
+msgstr ""
+
+#: PageStatus.py:93
+msgid "Server is not running."
+msgstr ""
+
+#: PageStatus.py:94
+msgid "Launch"
+msgstr ""
+
+#: PageStatus.py:98
+msgid "Information"
 msgstr ""
 
 #: PageStatus.py:103
+msgid "Language:"
+msgstr ""
+
+#: PageStatus.py:115
+msgid "Proud Cherokee Users"
+msgstr ""
+
+#: PageStatus.py:128
+msgid "Version"
+msgstr ""
+
+#: PageStatus.py:129
+msgid "Prefix"
+msgstr ""
+
+#: PageStatus.py:130
+msgid "WWW Root"
+msgstr ""
+
+#: PageStatus.py:136
+msgid "Not running"
+msgstr ""
+
+#: PageStatus.py:150
 msgid "Path"
 msgstr ""
 
-#: PageStatus.py:104
+#: PageStatus.py:151
 msgid "Modified"
 msgstr ""
 
-#: PageStatus.py:106
+#: PageStatus.py:153
 msgid "Configuration file"
 msgstr ""
 
-#: PageStatus.py:106
+#: PageStatus.py:153
 msgid "Not Found"
 msgstr ""
 
-#: PageStatus.py:108
+#: PageStatus.py:155
 msgid "Configuration File"
 msgstr ""
 
@@ -2036,7 +2060,7 @@ msgstr ""
 msgid "Error Handler"
 msgstr ""
 
-#: PageVServer.py:296 Rule.py:138
+#: PageVServer.py:296 Rule.py:139
 msgid "Rule Type"
 msgstr ""
 
@@ -2220,11 +2244,11 @@ msgstr ""
 msgid "Not"
 msgstr ""
 
-#: Rule.py:47 Rule.py:103
+#: Rule.py:47 Rule.py:104
 msgid "AND"
 msgstr ""
 
-#: Rule.py:47 Rule.py:103
+#: Rule.py:47 Rule.py:104
 msgid "OR"
 msgstr ""
 
@@ -2248,16 +2272,12 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: Rule.py:99
+#: Rule.py:93
 msgid "NOT"
 msgstr ""
 
-#: Rule.py:211
+#: Rule.py:212
 msgid "ERROR: Unknown uri"
-msgstr ""
-
-#: Table.py:5
-msgid "Add"
 msgstr ""
 
 #: Table.py:6

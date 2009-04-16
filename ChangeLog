@@ -1,3 +1,10 @@
+2009-04-16  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/ModuleGeoip.py, admin/ModuleBind.py,
+	admin/po/cherokee-admin-en.po, admin/po/cherokee-admin.pot,
+	admin/po/cherokee-admin-es.po: More i18n changes and
+	translation files updates.
+
 2009-04-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/bind.c (cherokee_bind_init_port): Clarifies the error

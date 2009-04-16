@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
-"POT-Creation-Date: 2009-04-14 21:27+CEST\n"
-"PO-Revision-Date: 2009-04-14 21:41+0200\n"
+"POT-Creation-Date: 2009-04-16 18:49+CEST\n"
+"PO-Revision-Date: 2009-04-16 17:22+0200\n"
 "Last-Translator: Antonio Pérez Jiménez <aperez@skarcha.com>\n"
 "Language-Team: Spanish <>\n"
 "MIME-Version: 1.0\n"
@@ -69,11 +69,11 @@ msgstr "Detalles de autenticación"
 msgid "Realm can not be empty"
 msgstr "Realm no puede estar vacío"
 
-#: ModuleAuthlist.py:9 consts.py:44
+#: ModuleAuthlist.py:10 consts.py:44
 msgid "Fixed list"
 msgstr "Lista fija"
 
-#: ModuleAuthlist.py:24
+#: ModuleAuthlist.py:25
 msgid "Fixed authentication list"
 msgstr "Lista de autenticación fija"
 
@@ -81,11 +81,11 @@ msgstr "Lista de autenticación fija"
 msgid "Authentication list"
 msgstr "Lista de autenticación"
 
-#: ModuleAuthlist.py:31 ModuleAuthlist.py:46
+#: ModuleAuthlist.py:31 ModuleAuthlist.py:48
 msgid "Password"
 msgstr "Contraseña"
 
-#: ModuleAuthlist.py:31 ModuleAuthlist.py:46 PageGeneral.py:69
+#: ModuleAuthlist.py:31 ModuleAuthlist.py:48 PageGeneral.py:69
 msgid "User"
 msgstr "Usuario"
 
@@ -98,7 +98,7 @@ msgstr "Usuario"
 msgid "Delete"
 msgstr "Borrar"
 
-#: ModuleAuthlist.py:41
+#: ModuleAuthlist.py:43
 msgid "Add new pair"
 msgstr "Añadir nuevo par"
 
@@ -121,7 +121,7 @@ msgstr ""
 "Un balanceador de carga debe ser configurado para usar al menos un origen de "
 "datos."
 
-#: ModuleBalancer.py:52 Page.py:171 PageInfoSource.py:31 PageInfoSource.py:83
+#: ModuleBalancer.py:52 Page.py:154 PageInfoSource.py:31 PageInfoSource.py:83
 msgid "Information Sources"
 msgstr "Orígenes de datos"
 
@@ -159,7 +159,7 @@ msgstr "Servidor de aplicación"
 msgid "Port"
 msgstr "Puerto"
 
-#: ModuleBind.py:27 ModuleBind.py:78 ModuleMethod.py:7
+#: ModuleBind.py:27 ModuleBind.py:78 ModuleMethod.py:7 PageStatus.py:105
 msgid "Choose"
 msgstr "Elija"
 
@@ -236,7 +236,7 @@ msgstr "Cambiar UID"
 
 #: ModuleCgi.py:47 PageVServer.py:237
 msgid "Error handler"
-msgstr "Manejador de errores"
+msgstr "Control de errores"
 
 #: ModuleCgi.py:49
 msgid "Check file"
@@ -262,7 +262,7 @@ msgstr "Añadir nueva variable de entorno personalizada"
 msgid "Value"
 msgstr "Valor"
 
-#: ModuleCgi.py:73 PageFeedback.py:54
+#: ModuleCgi.py:73 PageFeedback.py:59
 msgid "Name"
 msgstr "Nombre"
 
@@ -468,24 +468,24 @@ msgid ""
 "Check the dynamically generated Document Root, and use the general Document "
 "Root if it doesn't exist."
 msgstr ""
-"Comprobar el Document Root generado dinámicamente, y usar el Document Root "
-"general si éste no existe."
+"Comprobar el directorio raíz de documentos generado dinámicamente, y usar el "
+"directorio raíz de documentos general si éste no existe."
 
 #: ModuleEvhost.py:7
 msgid ""
 "The Document Root directory will be built dynamically. The following "
 "variables are accepted:<br/>"
 msgstr ""
-"El directorio Document Root se generará automáticamente. Se aceptan las "
+"El directorio raíz de documentos se generará automáticamente. Se aceptan las "
 "siguientes variables:<br/>"
 
 #: ModuleEvhost.py:27
 msgid "Dynamic Document Root"
-msgstr "Document Root dinámico"
+msgstr "Raíz de documentos dinámico"
 
 #: ModuleEvhost.py:28
 msgid "Check Document Root"
-msgstr "Comprobar Document Root"
+msgstr "Comprobar raíz de documentos"
 
 #: ModuleExists.py:6
 msgid "Comma separated list of files. Rule applies if one exists."
@@ -566,6 +566,10 @@ msgid ""
 msgstr ""
 "Lista de países de las IPs de los clientes. Debe usar la\n"
 "notación de países<a target=\"_blank\" href=\"%s\">ISO 3166</a>."
+
+#: ModuleGeoip.py:24 ModuleGeoip.py:44 Table.py:5
+msgid "Add"
+msgstr "Añadir"
 
 #: ModuleGeoip.py:27
 msgid "Country"
@@ -659,7 +663,7 @@ msgstr "Fichero de CA para las conexiones TLS."
 msgid "LDAP"
 msgstr "LDAP"
 
-#: ModuleLdap.py:32 ModuleLdap.py:48 PageStatus.py:93
+#: ModuleLdap.py:32 ModuleLdap.py:48 PageStatus.py:140
 msgid "Server"
 msgstr "Servidor"
 
@@ -1049,73 +1053,65 @@ msgstr "Patrón de dominio"
 msgid "New host name"
 msgstr "Nuevo nombre de servidor"
 
-#: Page.py:116
+#: Page.py:99
 msgid "Version:"
 msgstr "Versión:"
 
-#: Page.py:145
+#: Page.py:128
 msgid "Help"
 msgstr "Ayuda"
 
-#: Page.py:168 PageAdvanced.py:100 PageStatus.py:44 PageVServer.py:419
+#: Page.py:151 PageAdvanced.py:100 PageStatus.py:67 PageVServer.py:419
 msgid "Status"
 msgstr "Estado"
 
-#: Page.py:169
+#: Page.py:152
 msgid "General"
 msgstr "General"
 
-#: Page.py:170 PageVServer.py:69 PageVServers.py:24
+#: Page.py:153 PageVServer.py:69 PageVServers.py:24
 msgid "Virtual Servers"
 msgstr "Servidores virtuales"
 
-#: Page.py:172 PageIcon.py:12
+#: Page.py:155 PageIcon.py:12
 msgid "Icons"
 msgstr "Iconos"
 
-#: Page.py:173
+#: Page.py:156
 msgid "Mime Types"
 msgstr "Tipos MIME"
 
-#: Page.py:174 PageAdvanced.py:57
+#: Page.py:157 PageAdvanced.py:57
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: Page.py:175
+#: Page.py:158
 msgid "Save Changes"
 msgstr "Guardar cambios"
 
-#: Page.py:176
+#: Page.py:159
 msgid "Save"
 msgstr "Guardar"
 
-#: Page.py:180
+#: Page.py:163
 msgid "Graceful restart"
 msgstr "Reinicio suave"
 
-#: Page.py:181
+#: Page.py:164
 msgid "Hard restart"
 msgstr "Reinicio forzado"
 
-#: Page.py:182
+#: Page.py:165
 msgid "Do not restart"
 msgstr "No reiniciar"
 
-#: Page.py:185
+#: Page.py:168
 msgid "Commit to disk and apply changes to the running server"
 msgstr "Guardar en disco y aplicar los cambios al servidor actual"
 
-#: Page.py:188
+#: Page.py:171
 msgid "Commit all the changes permanently"
 msgstr "Guardar todos los cambios permanentemente"
-
-#: Page.py:191
-msgid "Available languages"
-msgstr "Lenguajes disponibles"
-
-#: Page.py:192
-msgid "Change"
-msgstr "Cambiar"
 
 #: PageAdvanced.py:33
 msgid ""
@@ -1315,7 +1311,7 @@ msgstr ""
 msgid "Panic action"
 msgstr "Acción del pánico"
 
-#: PageAdvanced.py:111 PageStatus.py:91
+#: PageAdvanced.py:111 PageStatus.py:138
 msgid "PID file"
 msgstr "Fichero PID"
 
@@ -1337,7 +1333,7 @@ msgstr "Ficheros especiales"
 
 #: PageEntry.py:15
 msgid "Allows to specify an alternative document root path."
-msgstr "Permite especificar la ruta de un document root alternativo."
+msgstr "Permite especificar la ruta de una raíz de doucmentos alternativa."
 
 #: PageEntry.py:16
 msgid "How the connection will be handled."
@@ -1389,7 +1385,7 @@ msgstr "Gestor"
 
 #: PageEntry.py:149 PageVServer.py:438 PageVServers.py:197
 msgid "Document Root"
-msgstr ""
+msgstr "Raíz de documentos"
 
 #: PageEntry.py:159
 msgid "Encoding"
@@ -1452,7 +1448,7 @@ msgid "Use the %s encoder whenever the client requests it."
 msgstr "Usar el codificador %s si el cliente lo solicita."
 
 #: PageEntry.py:257
-msgid "Allow "
+msgid "Allow"
 msgstr "Permitir"
 
 #: PageError.py:36
@@ -1472,43 +1468,43 @@ msgid "A working connection to the Internet is required for this form to work."
 msgstr ""
 "Se necesita una conexión a Internet que funcione para enviar este formulario."
 
-#: PageFeedback.py:34
-msgid "Report sent"
-msgstr "Informe enviado"
-
-#: PageFeedback.py:35
-msgid "Thank you a million for your feedback. We do appreciate your help."
-msgstr "Muchísimas gracias por tus comentarios. Agradecemos tu ayuda."
-
-#: PageFeedback.py:36
-msgid "Report"
-msgstr "Informe"
-
-#: PageFeedback.py:45 PageFeedback.py:50
+#: PageFeedback.py:50 PageFeedback.py:55 PageStatus.py:112
 msgid "Feedback"
 msgstr "Comentarios"
 
-#: PageFeedback.py:55
+#: PageFeedback.py:60
 msgid "EMail"
 msgstr "Correo electrónico"
 
-#: PageFeedback.py:56
+#: PageFeedback.py:61
 msgid "Include configuration"
 msgstr "Incluir configuración"
 
-#: PageFeedback.py:59
+#: PageFeedback.py:64
 msgid "Message:"
 msgstr "Mensaje:"
 
-#: PageFeedback.py:77
+#: PageFeedback.py:82
 msgid "Error reading response from the server"
 msgstr "Error leyendo la respuesta del servidor"
 
-#: PageFeedback.py:86
+#: PageFeedback.py:91
 msgid "Not included"
 msgstr "No incluida"
 
-#: PageFeedback.py:110
+#: PageFeedback.py:111
+msgid "Report sent"
+msgstr "Informe enviado"
+
+#: PageFeedback.py:112
+msgid "Thank you a million for your feedback. We do appreciate your help."
+msgstr "Muchísimas gracias por tus comentarios. Agradecemos tu ayuda."
+
+#: PageFeedback.py:113
+msgid "Report"
+msgstr "Informe"
+
+#: PageFeedback.py:118
 msgid "Feedback: Thank you"
 msgstr "Comentarios: Muchas gracias"
 
@@ -1904,81 +1900,121 @@ msgstr "No se encuentra fichero de configuración"
 msgid "Create a new configuration file"
 msgstr "Crear un nuevo fichero de configuración"
 
-#: PageStatus.py:23
-msgid "Server is running."
-msgstr "Servidor ejecutándose."
-
-#: PageStatus.py:23
-msgid "Stop"
-msgstr "Parar"
-
-#: PageStatus.py:23 PageStatus.py:37
-msgid "Server status"
-msgstr "Estado del servidor"
-
-#: PageStatus.py:37
-msgid "Launch"
-msgstr "Lanzar"
-
-#: PageStatus.py:37
-msgid "Server is not running."
-msgstr "El servidor no está ejecutándose."
-
-#: PageStatus.py:39
-msgid "Beta testing"
-msgstr ""
-
-#: PageStatus.py:40
+#: PageStatus.py:48
 msgid ""
-"Individuals like yourself who download and test the latest developer "
+"\n"
+"<h3>Beta testing</h3>\n"
+"<p>Individuals like yourself who download and test the latest developer "
 "snapshots of Cherokee Web Server help us to create the highest quality "
-"product."
+"product.</p>\n"
+"<p>For that, we thank you.</p>\n"
 msgstr ""
-"Usuarios como usted, que descargan y prueban las últimas versiones de "
+"\n"
+"<h3>Pruebas de Betas</h3>\n"
+"<p>Usuarios como usted, que descargan y prueban las últimas versiones de "
 "desarrollo del servidor web Cherokee, nos ayudan a crear el producto de más "
-"alta calidad."
+"alta calidad.</p>\n"
+"<p>Por ello, muchas gracias.</p>\n"
 
-#: PageStatus.py:41
-msgid "For that, we thank you."
-msgstr "Por eso, se lo agradecemos."
+#: PageStatus.py:54
+msgid ""
+"\n"
+"If you wanted to let us know something about Cherokee: what you\n"
+"like the most or what you would improve, please do not hesitate to\n"
+"<a href=\"/feedback\">drop us a line</a>.\n"
+msgstr ""
+"\n"
+"Si quiere decirnos algo sobre Cherokee: lo que más le gusta\n"
+"o lo que mejoraría, por favor, no dude en\n"
+"<a href=\"/feedback\">contactar con nosotros</a>.\n"
 
-#: PageStatus.py:53
+#: PageStatus.py:60
+msgid ""
+"\n"
+"We would love to know that you are using Cherokee. Submit your domain\n"
+"name and  it will be <a href=\"http://www.cherokee-project.com/cherokee-"
+"domain-list.html\">\n"
+"listed on the Cherokee Project web site</a>.)\n"
+msgstr ""
+"\n"
+"Nos encantaría saber que está usando Cherokee. Envíe su nombre\n"
+"de dominio y aparecerá en la <a href=\"http://www.cherokee-project.com/"
+"cherokee-domain-list.html\">\n"
+"lista de la página del Proyecto Cherokee</a>.)\n"
+
+#: PageStatus.py:76
 msgid "Welcome to Cherokee Admin"
 msgstr "Bienvenido a Cherokee-Admin"
 
-#: PageStatus.py:81
+#: PageStatus.py:77
+msgid "This interface will assist in configuring the Cherokee Web Server."
+msgstr "Esta interfaz le ayudará a configurar el servidor web Cherokee."
+
+#: PageStatus.py:87
+msgid "Server status"
+msgstr "Estado del servidor"
+
+#: PageStatus.py:89
+msgid "Server is running."
+msgstr "Servidor ejecutándose."
+
+#: PageStatus.py:90
+msgid "Stop"
+msgstr "Parar"
+
+#: PageStatus.py:93
+msgid "Server is not running."
+msgstr "El servidor no está ejecutándose."
+
+#: PageStatus.py:94
+msgid "Launch"
+msgstr "Lanzar"
+
+#: PageStatus.py:98
+msgid "Information"
+msgstr "Información"
+
+#: PageStatus.py:103
+msgid "Language:"
+msgstr "Lenguaje:"
+
+#: PageStatus.py:115
+msgid "Proud Cherokee Users"
+msgstr "Usuarios orgullosos de Cherokee"
+
+#: PageStatus.py:128
 msgid "Version"
 msgstr "Versión"
 
-#: PageStatus.py:82
+#: PageStatus.py:129
 msgid "Prefix"
 msgstr "Prefijo"
 
-#: PageStatus.py:83
+#: PageStatus.py:130
 msgid "WWW Root"
-msgstr ""
+msgstr "Raíz WWW"
 
-#: PageStatus.py:89
+#: PageStatus.py:136
 msgid "Not running"
 msgstr "No ejecutándose"
 
-#: PageStatus.py:103
+#: PageStatus.py:150
 msgid "Path"
 msgstr "Ruta"
 
-#: PageStatus.py:104
+#: PageStatus.py:151
 msgid "Modified"
 msgstr "Modificado"
 
-#: PageStatus.py:106
+#: PageStatus.py:153
 msgid "Configuration file"
 msgstr "Fichero de configuración"
 
-#: PageStatus.py:106
+#: PageStatus.py:153
 msgid "Not Found"
 msgstr "No encontrado"
 
-#: PageStatus.py:108
+#: PageStatus.py:155
 msgid "Configuration File"
 msgstr "Fichero de configuración"
 
@@ -2168,11 +2204,11 @@ msgstr ""
 
 #: PageVServer.py:65
 msgid "<i>No</i>"
-msgstr ""
+msgstr "<i>No</i>"
 
 #: PageVServer.py:66
 msgid "<i>Yes</i>"
-msgstr ""
+msgstr "<i>Sí</i>"
 
 #: PageVServer.py:70
 msgid "Loggers"
@@ -2240,9 +2276,9 @@ msgstr ""
 
 #: PageVServer.py:285
 msgid "Error Handler"
-msgstr "Manejador de errores"
+msgstr "Control de errores"
 
-#: PageVServer.py:296 Rule.py:138
+#: PageVServer.py:296 Rule.py:139
 msgid "Rule Type"
 msgstr "Tipo de regla"
 
@@ -2430,11 +2466,11 @@ msgstr "Desconocido"
 msgid "Not"
 msgstr "No"
 
-#: Rule.py:47 Rule.py:103
+#: Rule.py:47 Rule.py:104
 msgid "AND"
 msgstr "Y"
 
-#: Rule.py:47 Rule.py:103
+#: Rule.py:47 Rule.py:104
 msgid "OR"
 msgstr "O"
 
@@ -2458,17 +2494,13 @@ msgstr "O"
 msgid "Remove"
 msgstr "Eliminar"
 
-#: Rule.py:99
+#: Rule.py:93
 msgid "NOT"
 msgstr "NO"
 
-#: Rule.py:211
+#: Rule.py:212
 msgid "ERROR: Unknown uri"
 msgstr "ERROR: Uri desconocida"
-
-#: Table.py:5
-msgid "Add"
-msgstr "Añadir"
 
 #: Table.py:6
 msgid "Del"
@@ -2822,11 +2854,3 @@ msgstr "Valor de tiempo contiene valores no válidos"
 msgid "Malformed time"
 msgstr "Tiempo malformado"
 
-#~ msgid "The following variables are accepted:"
-#~ msgstr "Se aceptan las siguientes variables:"
-
-#~ msgid "Add new domains"
-#~ msgstr "Añadir nuevos dominios"
-
-#~ msgid "New Domain Name"
-#~ msgstr "Nuevo nombre de dominio"

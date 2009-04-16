@@ -21,7 +21,7 @@ class ModuleGeoip (Module, FormHelper):
     def _render_new_entry (self):
         cfg_key = '%s!value'%(self._prefix)
         flags = OptionFlags (cfg_key)
-        button = '<input type="submit" value="Add" />'
+        button = '<input type="submit" value="%s" />' % (_('Add'))
 
         table = TableProps()
         self.AddProp (table, _('Country'), cfg_key, str(flags) + button, NOTE_NEW_COUNTRY)
@@ -40,8 +40,8 @@ class ModuleGeoip (Module, FormHelper):
         flags = OptionFlags (cfg_key_fake)
 
         # Button
-        button = '<input type="button" value="Add" onClick="flags_add_to_key(\'%s\',\'%s\',\'%s\',\'%s\');"/>' % (
-                 cfg_key_fake, cfg_key, key_val, '/ajax/update')
+        button = '<input type="button" value="%s" onClick="flags_add_to_key(\'%s\',\'%s\',\'%s\',\'%s\');"/>' % (
+                 _('Add'), cfg_key_fake, cfg_key, key_val, '/ajax/update')
 
         content = ADD_FLAGS_TO_KEY_JS + str(flags) + button
         self.AddProp (table, _('Add Country'), "", content, NOTE_ADD_COUNTRY)
