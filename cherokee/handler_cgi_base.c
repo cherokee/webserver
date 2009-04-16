@@ -161,7 +161,7 @@ cherokee_handler_cgi_base_configure (cherokee_config_node_t *conf, cherokee_serv
 	INIT_LIST_HEAD (&props->system_env);
 	cherokee_buffer_init (&props->script_alias);
 
-	props->is_error_handler = false;
+	props->is_error_handler = true;
 	props->change_user      = false;
 	props->check_file       = true;
 	props->allow_xsendfile  = false;

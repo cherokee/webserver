@@ -44,7 +44,7 @@ class ModuleCgiBase (ModuleHandler):
         if self.show_change_uid:
             self.AddPropCheck (table, _("Change UID"), "%s!change_user"%(self._prefix), False, NOTE_CHANGE_USER)
 
-        self.AddPropCheck (table, _("Error handler"),     "%s!error_handler"% (self._prefix), False, NOTE_ERROR_HANDLER)
+        self.AddPropCheck (table, _("Error handler"),     "%s!error_handler"% (self._prefix), True, NOTE_ERROR_HANDLER)
 
         self.AddPropCheck (table, _("Check file"),           "%s!check_file"   % (self._prefix), True,  NOTE_CHECK_FILE)
         self.AddPropCheck (table, _("Pass Request Headers"), "%s!pass_req_headers" % (self._prefix), True,  NOTE_PASS_REQ)

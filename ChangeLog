@@ -1,3 +1,9 @@
+2009-04-16  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_cgi_base.c, admin/ModuleCgi.py: It will be
+	handier for many people if {Fast,S,}CGIs have the error handler
+	bit set by default.
+
 2009-04-15  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/static/css/cherokee.css, admin/status.template.html,
