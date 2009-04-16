@@ -280,7 +280,7 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 		ret = init_socket (listener, AF_INET);
 
 		if (ret != ret_ok) {
-			PRINT_ERROR ("Can't bind() socket (port=%d, UID=%d, GID=%d)\n", 
+			PRINT_ERROR ("Could not bind() port=%d (UID=%d, GID=%d)\n", 
 				     listener->port, getuid(), getgid());
 			return ret_error;
 		}
