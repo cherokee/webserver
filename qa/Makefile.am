@@ -231,7 +231,9 @@ run-tests.py \
 223-EVHost2.py \
 224-EVHost3.py \
 225-PathTranslated.py \
-226-PathInfo-Default.py
+226-PathInfo-Default.py \
+227-Redir-Paths.py \
+228-Redir-Paths2.py
 
 
 test:

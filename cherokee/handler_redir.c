@@ -141,12 +141,17 @@ match_and_substitute (cherokee_handler_redir_t *n)
 						   ovector, rc);
 
 
+			/* Arguments */
 			cherokee_split_arguments (&conn->request, 0, &args, &len);
-
 			if (len > 0) {
 				cherokee_buffer_clean (&conn->query_string);
 				cherokee_buffer_add (&conn->query_string, args, len);
 				cherokee_buffer_drop_ending (&conn->request, len+1);
+			}
+
+			/* Non-global redirection */
+			if (conn->request.buf[0] != '/') {
+				cherokee_buffer_prepend_str (&conn->request, "/");
 			}
 
 			TRACE (ENTRIES, "Hidden redirect to: request=\"%s\" query_string=\"%s\"\n", 

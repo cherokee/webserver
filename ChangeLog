@@ -1,5 +1,10 @@
 2009-04-16  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_redir.c, qa/228-Redir-Paths2.py,
+	qa/Makefile.am, qa/227-Redir-Paths.py: Fixes bug #432
+	http://code.google.com/p/cherokee/issues/detail?id=432
+	Now hidden redirections can use non-global paths.
+
 	* cherokee/handler_cgi_base.c, admin/ModuleCgi.py: It will be
 	handier for many people if {Fast,S,}CGIs have the error handler
 	bit set by default.
