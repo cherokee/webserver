@@ -1,3 +1,10 @@
+2009-04-17  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/config.py (Config._parse): Fixes bug #444
+	http://code.google.com/p/cherokee/issues/detail?id=444
+	Cherokee-admin had trouble parsing configuration files with
+	embedded SQL queries.
+
 2009-04-16  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/ModuleGeoip.py, admin/ModuleBind.py,

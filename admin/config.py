@@ -173,7 +173,7 @@ class Config:
             if line[0] == '#': continue
 
             try:
-                path, value = line.split (" = ")
+                path, value = line.split (" = ", maxsplit=1)
             except:
                 msg = _("ERROR: Couldn't unpack '%s'")
                 print msg % (line)
