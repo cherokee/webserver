@@ -1,5 +1,7 @@
 2009-04-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* configure.in: Disable NLS support if gettext is not installed.
+
 	* m4/progtest.m4, m4/Makefile.am, m4/nls.m4, m4/po.m4, autogen.sh,
 	po/admin/en.po, po/admin/Rules-quot, po/admin/insert-header.sin,
 	po/admin/es., po/admin/remove-potcdate.sin, po/admin/cherokee.pot,
