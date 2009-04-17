@@ -29,7 +29,7 @@ m4_define([cherokee_micro_version], [11])
 m4_define([cherokee_version], m4_format('%s.%s.%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version))
 
 dnl Init autoconf and automake
-AC_INIT([cherokee], [cherokee_version], [http://bugs.cherokee-project.com], [cherokee])
+AC_INIT([cherokee], [cherokee_version], [http://bugs.cherokee-project.com/], [cherokee])
 AC_CONFIG_SRCDIR([cherokee/server.c])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([no-define])
@@ -220,7 +220,7 @@ AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
-AC_PROG_LIBTOOL
+AM_PROG_LIBTOOL
 
 AC_PATH_PROG(cherokeepath, cherokee)
 
@@ -1021,6 +1021,22 @@ AM_CONDITIONAL(USE_OPENSSL, test "x$have_openssl" = "xyes")
 
 
 dnl
+dnl Native Language Support
+dnl
+AM_PO_SUBDIRS
+
+if test "x$USE_NLS" = "xyes"; then
+   AC_CHECK_PROG(HAVE_MSGFMT, msgfmt,yes,no)
+
+   if test "x$HAVE_MSGFMT" = "xno"; then
+          AC_MSG_ERROR([msgfmt not found. You need to install the 'gettext' package, or pass --enable-nls=no to configure.])
+   fi
+fi
+
+AM_CONDITIONAL(NLS_ENABLED, test "x$USE_NLS" = "xyes")
+AC_CONFIG_FILES([po/admin/Makefile.in])
+
+dnl
 dnl LDAP
 dnl
 AC_ARG_WITH([ldap],
@@ -1356,6 +1372,7 @@ admin/static/js/Makefile
 admin/static/css/Makefile
 admin/static/images/Makefile
 admin/static/images/flags/Makefile
+po/Makefile
 ])
 
 

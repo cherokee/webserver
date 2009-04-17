@@ -42,7 +42,6 @@ MODIFIED_CHECK_ELAPSE = 1
 #
 cfg = None
 SELECTED_LANGUAGE = False
-CHEROKEE_ADMIN_LOCALE_DIR = ''
 
 # Request handler
 #
@@ -183,7 +182,7 @@ def select_language (langs):
     if langs:
         languages = [l for s in langs.split(',') for l in s.split(';') if not '=' in l]
         try:
-            gettext.translation("cherokee-admin", CHEROKEE_ADMIN_LOCALE_DIR, languages).install()
+            gettext.translation('cherokee', LOCALEDIR, languages).install()
         except:
             pass
 
@@ -193,11 +192,8 @@ def select_language (langs):
 # Server
 #
 def main():
-
     # Gettext initialization
-    global CHEROKEE_ADMIN_LOCALE_DIR
-    CHEROKEE_ADMIN_LOCALE_DIR = join (CHEROKEE_ADMINDIR, "locale")
-    gettext.install('cherokee-admin', CHEROKEE_ADMIN_LOCALE_DIR, unicode=True)
+    gettext.install('cherokee')
 
     # Read the arguments
     try:

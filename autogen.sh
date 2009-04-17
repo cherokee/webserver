@@ -87,24 +87,34 @@ if test -z "$ACLOCAL_FLAGS"; then
 	done
 fi
 
-echo "Running $ACLOCAL $ACLOCAL_FLAGS..."
+# Libtool
+if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
+  echo "Running: libtoolize --force --copy..."
+  $LIBTOOLIZE --force --copy
+fi
+
+# Aclocal
+echo "Running: $ACLOCAL $ACLOCAL_FLAGS..."
+rm -f aclocal.m4
 $ACLOCAL $ACLOCAL_FLAGS
 
-# optionally feature autoheader
-($AUTOHEADER --version)  < /dev/null > /dev/null 2>&1 && $AUTOHEADER
+# Autoheader
+if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
+  echo "Running: autoheader..."
+  $AUTOHEADER
+fi
 
-# run libtoolize ...
-echo "Running libtoolize..."
-$LIBTOOLIZE --force
-
-echo "Running automake..."
+# Automake
+echo "Running: automake -a $am_opt..."
 $AUTOMAKE -a $am_opt
-$AUTOHEADER
-echo "Running autoconf..."
-$AUTOCONF
-cd $ORIGDIR
 
-$srcdir/configure --enable-maintainer-mode "$@"
+# Autoconf
+echo "Running: autoconf..."
+$AUTOCONF
+
+# ./configure
+cd $ORIGDIR
+$srcdir/configure "$@"
 
 echo 
 echo "Now type 'make' to compile $PROJECT."

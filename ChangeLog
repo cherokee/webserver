@@ -1,5 +1,19 @@
 2009-04-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* m4/progtest.m4, m4/Makefile.am, m4/nls.m4, m4/po.m4, autogen.sh,
+	po/admin/en.po, po/admin/Rules-quot, po/admin/insert-header.sin,
+	po/admin/es., po/admin/remove-potcdate.sin, po/admin/cherokee.pot,
+	po/admin/Makefile.in.in, po/admin/ChangeLog, po/admin/POTFILES.in,
+	po/admin/quot.sed, po/admin/LINGUAS, po/admin/en@quot.header,
+	po/admin/en@boldquot.header, po/admin/boldquot.sed, README,
+	po/admin/Makevars, po/Makefile.am, configure.in, admin/config.py,
+	admin/server.py, admin/configured.py.pre, Makefile.am,
+	admin/po/cherokee-admin-en.po, admin/po/cherokee-admin.pot,
+	admin/po/cherokee-admin-es.po, admin/Makefile.am: 'Native Language
+	Support' integration.
+
+2009-04-17  Alvaro Lopez Ortega  <alvaro@octality.com>
+
 	* admin/config.py (Config._parse): Fixes bug #444
 	http://code.google.com/p/cherokee/issues/detail?id=444
 	Cherokee-admin had trouble parsing configuration files with
