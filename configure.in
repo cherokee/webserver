@@ -1029,8 +1029,9 @@ if test "x$USE_NLS" = "xyes"; then
    AC_CHECK_PROG(HAVE_MSGFMT, msgfmt,yes,no)
 
    if test "x$HAVE_MSGFMT" = "xno"; then
-          USE_NLS="no"
           AC_MSG_CHECKING([NLS support])
+           USE_NLS="no"
+ 		 AC_SUBST(USE_NLS)
           AC_MSG_RESULT([disabled])
    fi
 fi
