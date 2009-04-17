@@ -1,0 +1,26 @@
+== link:index.html[Index] -> link:config.html[Configuration] -> link:config_virtual_servers.html[Virtual servers]
+
+Advanced Virtual Hosting
+------------------------
+
+Cherokee currently support a mechanism by which a single virtual
+server can handle many different domains. The document root of this
+virtual server is built dynamically, so even if the domains share a
+common configuration they can use a number of different Document Root
+directories.
+
+image::media/images/admin_vserver_evhost.png[Advanced Virtual Hosting]
+
+The following replacement variables are supported. Let's suppose a
+request to the `alo.users.example.com` domain for the examples:
+
+[grid="rows"]
+`~~~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Variable                  , Example                    , Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`$\{domain\}`             , alo.users.example.com      , Full domain name
+`$\{tld\}`                , com                        , Top Level Domain
+`$\{domain_no_tld\}`      , alo.users.example          , Domain without the TLD
+`$\{subdomain1\}`         , users                      , First sub-domain
+`$\{subdomain2\}`         , alo                        , Second sub-domain
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
