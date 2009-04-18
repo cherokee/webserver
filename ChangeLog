@@ -1,3 +1,9 @@
+2009-04-18  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/thread.c: Tries to fix an important bug. Random
+	connections were being closed every now and then. Bug discovered
+	by Stefan de Konink.
+
 2009-04-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* configure.in: Disable NLS support if gettext is not installed.

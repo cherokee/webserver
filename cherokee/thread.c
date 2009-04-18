@@ -498,7 +498,7 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 
 	/* Update the timeout value
 	 */
-	conn->timeout = thread->bogo_now + srv->timeout;	
+	conn->timeout = cherokee_bogonow_now + srv->timeout;	
 }
 
 
@@ -552,7 +552,7 @@ process_polling_connections (cherokee_thread_t *thd)
 
 		/* Has it been too much without any work?
 		 */
-		if (conn->timeout < thd->bogo_now) {
+		if (conn->timeout < cherokee_bogonow_now) {
 			TRACE (ENTRIES",polling", "conn %p(fd=%d): Time out\n", 
 			       conn, SOCKET_FD(&conn->socket));
 
@@ -621,7 +621,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 		/* Has the connection been too much time w/o any work
 		 */
-		if (conn->timeout < thd->bogo_now) {
+		if (conn->timeout < cherokee_bogonow_now) {
 			TRACE (ENTRIES, "thread (%p) processing conn (%p): Time out\n", thd, conn);
 
 			conns_freed++;
@@ -629,11 +629,17 @@ process_active_connections (cherokee_thread_t *thd)
 			continue;
 		}
 
+		/* Update the connection timeout
+		 */
+		if (conn->phase != phase_reading_header) {
+			conn->timeout = cherokee_bogonow_now + srv->timeout;
+		}
+
 		/* Maybe update traffic counters
 		 */
 		if ((CONN_VSRV(conn)->data.enabled) &&
-		    (conn->traffic_next < thd->bogo_now) &&
-		    ((conn->rx != 0) || (conn->tx != 0)))
+		    ((conn->rx != 0) || (conn->tx != 0)) &&
+		    (conn->traffic_next < cherokee_bogonow_now))
 		{
 			cherokee_connection_update_vhost_traffic (conn);
 		}
@@ -673,12 +679,6 @@ process_active_connections (cherokee_thread_t *thd)
 		 */
 		if (conn->options & conn_op_was_polling) {
 			BIT_UNSET (conn->options, conn_op_was_polling);
-		}
-
-		/* Update the connection timeout
-		 */
-		if (conn->phase != phase_reading_header) {
-			conn->timeout = thd->bogo_now + srv->timeout;
 		}
 
 		TRACE (ENTRIES, "conn on phase n=%d: %s\n", 
@@ -1805,7 +1805,7 @@ cherokee_thread_get_new_connection (cherokee_thread_t *thd, cherokee_connection_
 	new_connection->server    = server;
 	new_connection->vserver   = VSERVER(server->vservers.prev); 
 
-	new_connection->timeout   = thd->bogo_now + THREAD_SRV(thd)->timeout;
+	new_connection->timeout   = cherokee_bogonow_now + THREAD_SRV(thd)->timeout;
 
 	*conn = new_connection;
 	return ret_ok;
