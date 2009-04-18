@@ -164,7 +164,6 @@ cherokee_logger_w3c_write_error (cherokee_logger_w3c_t *logger, cherokee_connect
 	cuint_t            method_len = 0;
 	const char        *method;
 	cherokee_buffer_t *log;
-	cherokee_buffer_t *request;
 
 	/* Get the logger writer buffer
 	 */
@@ -208,14 +207,21 @@ cherokee_logger_w3c_write_error (cherokee_logger_w3c_t *logger, cherokee_connect
 
 	/* Build the string
 	 */
-	request = cherokee_buffer_is_empty(&cnt->request_original) ? 
-		&cnt->request : &cnt->request_original;
-
 	cherokee_buffer_add_buffer (log, &logger->now_buf);
 	cherokee_buffer_add_str    (log, "[error] ");
 	cherokee_buffer_add        (log, method, (size_t) method_len);
 	cherokee_buffer_add_char   (log, ' ');
-	cherokee_buffer_add_buffer (log, request);
+
+	if (! cherokee_buffer_is_empty (&cnt->request_original)) {
+		cherokee_buffer_add_buffer (log, &cnt->request_original);
+	} else {
+		cherokee_buffer_add_buffer (log, &cnt->request);
+		if (! cherokee_buffer_is_empty (&cnt->query_string)) {
+			cherokee_buffer_add_char   (log, '?');
+			cherokee_buffer_add_buffer (log, &cnt->query_string);
+		}
+	}
+
 	cherokee_buffer_add_char   (log, '\n');
 
 	/* Error are not buffered

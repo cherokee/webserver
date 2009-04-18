@@ -1,3 +1,10 @@
+2009-04-18  Antonio Perez  <aperez@skarcha.com>
+
+	* cherokee/logger_w3c.c, cherokee/logger_ncsa.c: Query string
+	was being added to original request in NCSA and Apache compatible
+	logs; and was not being included in W3C log format. Thanks to
+	Enric Agut for reporting this bug.
+
 2009-04-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.11 released

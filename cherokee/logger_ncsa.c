@@ -181,7 +181,6 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 	const char        *method;
 	const char        *version;
 	char               ipaddr[CHE_INET_ADDRSTRLEN];
-	cherokee_buffer_t *request;
 
 	/* Read the bogonow value from the thread and
 	 * if time has changed then recreate the date-time string.
@@ -223,10 +222,6 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 	ret = cherokee_http_version_to_string (cnt->header.version, &version, &version_len);
 	if (unlikely(ret < ret_ok)) return ret;
 
-
-	request = cherokee_buffer_is_empty(&cnt->request_original) ? 
-		&cnt->request : &cnt->request_original;
-
 	/* Build the log string
 	 *
 	 * "%s - %s [%02d/%s/%d:%02d:%02d:%02d %c%02d%02d] \"%s %s %s\" %d "
@@ -248,11 +243,17 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 	cherokee_buffer_add_buffer (buf, &logger->now_dtm);
 	cherokee_buffer_add        (buf, method, method_len);
 	cherokee_buffer_add_char   (buf, ' ');
-	cherokee_buffer_add_buffer (buf, request);
-	if (! cherokee_buffer_is_empty (&cnt->query_string)) {
-		cherokee_buffer_add_char   (buf, '?');
-		cherokee_buffer_add_buffer (buf, &cnt->query_string);
+
+	if (! cherokee_buffer_is_empty (&cnt->request_original)) {
+		cherokee_buffer_add_buffer (buf, &cnt->request_original);
+	} else {
+		cherokee_buffer_add_buffer (buf, &cnt->request);
+		if (! cherokee_buffer_is_empty (&cnt->query_string)) {
+			cherokee_buffer_add_char   (buf, '?');
+			cherokee_buffer_add_buffer (buf, &cnt->query_string);
+		}
 	}
+
 	cherokee_buffer_add_char   (buf, ' ');
 	cherokee_buffer_add        (buf, version, version_len);
 	cherokee_buffer_add_str    (buf, "\" ");
