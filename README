@@ -94,6 +94,7 @@ FAQ
   Development
   -----------
    ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --with-mysql=no --with-ffmpeg=no --with-ldap=no --enable-beta --enable-trace --enable-maintainer-mode --enable-compile-warnings
+   make CFLAGS="-ggdb -O1 -fno-inline" -j4
 
   How to cross compile the Win32 version
   --------------------------------------
