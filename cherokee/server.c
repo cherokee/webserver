@@ -1007,6 +1007,8 @@ cherokee_server_unlock_threads (cherokee_server_t *srv)
 ret_t
 cherokee_server_step (cherokee_server_t *srv)
 {
+	ret_t ret;
+
 	/* Wanna exit ?
 	 */
 	if (unlikely (srv->wanna_exit)) {
@@ -1021,11 +1023,13 @@ cherokee_server_step (cherokee_server_t *srv)
 	 */
 #ifdef HAVE_PTHREAD
 	if (srv->thread_num > 1) {
-		cherokee_thread_step_MULTI_THREAD (srv->main_thread, true);
+		ret = cherokee_thread_step_MULTI_THREAD (srv->main_thread, true);
 	} else 
 #endif
-		cherokee_thread_step_SINGLE_THREAD (srv->main_thread);
-		
+	{
+		ret = cherokee_thread_step_SINGLE_THREAD (srv->main_thread);
+	}
+
 	/* Programmed tasks
 	 */
 	if (srv->log_flush_next < cherokee_bogonow_now) {
@@ -1045,20 +1049,16 @@ cherokee_server_step (cherokee_server_t *srv)
 
 	/* Gracefull restart:
 	 */
-	if (unlikely (srv->wanna_reinit)) {
-		cherokee_list_t    *i;
-		cherokee_boolean_t  empty = true;
+	if (unlikely ((ret == ret_eof) &&
+		      (srv->wanna_reinit)))
+	{
+		cherokee_list_t *i;
 
 		list_for_each (i, &srv->thread_list) {
-			if (THREAD(i)->conns_num != 0) {
-				empty = false;
-				break;
-			}
+			cherokee_thread_wait_end (THREAD(i));
 		}
-		
-		if (empty) {
-			return ret_eof;
-		}
+
+		return ret_eof;
 	}
 
 	/* Should not be reached.

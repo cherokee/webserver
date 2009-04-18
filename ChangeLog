@@ -1,5 +1,10 @@
 2009-04-18  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/server.c (cherokee_server_step): Fixes a Graceful
+	Restart issue. The server was hogging the CPU while two or more
+	workers were working at the same time. This bug was also reported
+	by Stefan de Konink.
+
 	* cherokee/thread.c: Tries to fix an important bug. Random
 	connections were being closed every now and then. Bug discovered
 	by Stefan de Konink.
