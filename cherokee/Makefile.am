@@ -1194,6 +1194,7 @@ crc32.c \
 macros.h \
 common.h \
 common-internal.h \
+nullable.h \
 util.h \
 util.c \
 human_strcmp.h \

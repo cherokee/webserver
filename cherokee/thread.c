@@ -911,10 +911,6 @@ process_active_connections (cherokee_thread_t *thd)
 			 */
 			conn_set_mode (thd, conn, socket_writing);
 			
-			/* Set the logger of the connection
-			 */
-			conn->logger_ref = CONN_VSRV(conn)->logger;
-
 			/* Is it already an error response?
 			 */
 			if (http_type_300(conn->error_code) ||
@@ -945,6 +941,14 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			}
 
+			/* Set the logger of the connection
+			 */
+			if (entry.no_log != true) {
+				conn->logger_ref = CONN_VSRV(conn)->logger;
+			}
+
+			/* Local directory
+			 */
 			if (cherokee_buffer_is_empty (&conn->local_directory)) {
 				if (is_userdir)
 					ret = cherokee_connection_build_local_directory_userdir (conn, CONN_VSRV(conn), &entry);

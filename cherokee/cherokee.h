@@ -33,6 +33,7 @@
 #include <cherokee/common.h>
 #include <cherokee/init.h>
 #include <cherokee/util.h>
+#include <cherokee/nullable.h>
 #include <cherokee/version.h>
 #include <cherokee/buffer.h>
 #include <cherokee/template.h>

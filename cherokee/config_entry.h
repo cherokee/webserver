@@ -37,6 +37,7 @@
 #include "handler.h"
 #include "http.h"
 #include "validator.h"
+#include "nullable.h"
 
 #define CHEROKEE_CONFIG_PRIORITY_NONE    0
 #define CHEROKEE_CONFIG_PRIORITY_DEFAULT 1
@@ -53,6 +54,7 @@ typedef struct {
 	 */
 	cherokee_buffer_t          *document_root;
 	cherokee_boolean_t          only_secure;
+	cherokee_null_bool_t        no_log;
 	void                       *access;
 
 	/* Handler

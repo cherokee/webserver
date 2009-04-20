@@ -379,6 +379,11 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "rate")) {
 		entry->limit_bps = atoi(conf->val.buf);
+
+	} else if (equal_buf_str (&conf->key, "no_log")) {
+		if (equal_buf_str (&conf->val, "1")) {
+			entry->no_log = true;
+		}
 		
 	} else if (equal_buf_str (&conf->key, "match")) {
 		/* Ignore: Previously handled 

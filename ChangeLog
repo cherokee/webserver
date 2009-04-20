@@ -1,5 +1,11 @@
 2009-04-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/virtual_server.c, cherokee/Makefile.am,
+	cherokee/cherokee.h, cherokee/config_entry.c,
+	cherokee/config_entry.h, cherokee/nullable.h, cherokee/thread.c:
+	Implements a new 'no_log' property, so rules can specify whether
+	or not they want requests to be logged.
+
 	* cherokee/handler_proxy.c (build_request): Fixes bug #450
 	http://code.google.com/p/cherokee/issues/detail?id=450
 

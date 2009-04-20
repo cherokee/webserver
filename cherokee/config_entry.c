@@ -68,6 +68,7 @@ cherokee_config_entry_init (cherokee_config_entry_t *entry)
 
 	entry->encoders             = NULL;
 	entry->limit_bps            = 0;
+	entry->no_log               = NULLB_NULL;
 
 	return ret_ok;
 }
@@ -198,6 +199,10 @@ cherokee_config_entry_complete (cherokee_config_entry_t *entry, cherokee_config_
 	if (! entry->limit_bps)
 		entry->limit_bps = source->limit_bps;
 
+	if (entry->no_log == NULLB_NULL) {
+		entry->no_log = source->no_log;
+	}
+
 	return ret_ok;
 }
 
@@ -219,6 +224,7 @@ cherokee_config_entry_print (cherokee_config_entry_t *entry)
 	printf ("expiration_time:           %lu\n", entry->expiration_time);
 	printf ("encoders_accepted:         %p\n", entry->encoders);
 	printf ("limit bps:                 %d\n", entry->limit_bps);
+	printf ("no_log:                    %s\n", NULLB_TO_STR(entry->no_log));
 
 	return ret_ok;
 }
