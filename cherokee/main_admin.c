@@ -128,8 +128,8 @@ config_server (cherokee_server_t *srv)
 	}
 
 	printf ("Web Interface:\n"
-		"  URL:               http://%s:9090/\n\n",
-		(bind_to) ? bind_to : "localhost");
+		"  URL:               http://%s:%d/\n\n",
+		(bind_to) ? bind_to : "localhost", port);
 
 	/* Configure the embedded server
 	 */

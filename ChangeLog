@@ -1,3 +1,8 @@
+2009-04-20  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/main_admin.c (config_server): It was not printing the
+	right port when the -p was used.
+
 2009-04-18  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/logger_w3c.c, cherokee/logger_ncsa.c: Query string
