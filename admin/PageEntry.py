@@ -19,6 +19,7 @@ NOTE_ALLOW_FROM      = N_('List of IPs and subnets allowed to access the resourc
 NOTE_VALIDATOR       = N_('Which, if any, will be the authentication method.')
 NOTE_EXPIRATION      = N_('Points how long the files should be cached')
 NOTE_RATE            = N_("Set an outbound traffic limit. It must be specified in Bytes per second.")
+NOTE_NO_LOG          = N_("Do not log requests matching this rule.")
 NOTE_EXPIRATION_TIME = N_("""How long from the object can be cached.<br />
 The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, hours, days, and weeks. Eg: 2d.
 """)
@@ -97,7 +98,8 @@ class PageEntry (PageMenu, FormHelper):
         self.ApplyChanges_OptionModule (pre, uri, post)
 
         # Check boxes
-        checks = ["%s!only_secure"%(self._conf_prefix)]
+        checks = ["%s!only_secure"%(self._conf_prefix),
+                  "%s!no_log"%(self._conf_prefix)]
         for e,e_name in modules_available(ENCODERS):
             checks.append ('%s!encoder!%s' % (self._conf_prefix, e))
 
@@ -219,11 +221,17 @@ class PageEntry (PageMenu, FormHelper):
         return txt
 
     def _render_security (self):
+        txt = ''
         pre = self._conf_prefix
 
         self.AddHelp (('cookbook_authentication', _('Authentication')))
 
-        txt   = "<h2>%s</h2>" % (_('Access Restrictions'))
+        txt  += "<h2>%s</h2>" % (_('Logging'))
+        table = TableProps()
+        self.AddPropCheck (table, _('Skip Logging'), '%s!no_log'%(pre), False, NOTE_NO_LOG)
+        txt += self.Indent(table)
+
+        txt  += "<h2>%s</h2>" % (_('Access Restrictions'))
         table = TableProps()
         self.AddPropCheck (table, _('Only https'), '%s!only_secure'%(pre), False, NOTE_HTTPS_ONLY)
         self.AddPropEntry (table, _('Allow From'),  '%s!allow_from' %(pre), NOTE_ALLOW_FROM)

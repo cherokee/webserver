@@ -1,5 +1,8 @@
 2009-04-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageEntry.py: Reflexs the latest feature in
+	Cherokee-admin.
+
 	* cherokee/virtual_server.c, cherokee/Makefile.am,
 	cherokee/cherokee.h, cherokee/config_entry.c,
 	cherokee/config_entry.h, cherokee/nullable.h, cherokee/thread.c:
