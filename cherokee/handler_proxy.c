@@ -474,7 +474,10 @@ build_request (cherokee_handler_proxy_t *hdl,
 		} 
 		else if (! strncasecmp (begin, "X-Forwarded-For:", 16))
 		{
-			XFF     = begin;
+			XFF = begin + 16;
+			while ((*XFF == ' ') && (XFF < end))
+				XFF++;
+
 			XFF_len = end - begin;
 			goto next;
 		}
