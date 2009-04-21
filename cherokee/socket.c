@@ -190,9 +190,7 @@ cherokee_socket_close (cherokee_socket_t *socket)
 
 	/* SSL/TLS shutdown
 	 */
-	if ((socket->is_tls == TLS) &&
-	    (socket->cryptor != NULL))
-	{
+	if (socket->cryptor != NULL) {
 		cherokee_cryptor_socket_close (socket->cryptor);
 	}
 	

@@ -52,6 +52,14 @@
 static ret_t
 _free (cherokee_cryptor_libssl_t *cryp)
 {
+	/* Free loaded error strings
+	 */
+	ERR_free_strings();
+
+	/* Free all ciphers and digests
+	 */
+	EVP_cleanup();
+
 	cherokee_cryptor_free_base (CRYPTOR(cryp));
 	return ret_ok;
 }
@@ -275,6 +283,18 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	SSL_CTX_set_verify (n->context, verify_mode, NULL);
 	SSL_CTX_set_verify_depth (n->context, vsrv->verify_depth);
 
+	/* Set the SSL context cache
+	 */
+	rc = SSL_CTX_set_session_id_context (n->context, 
+					     vsrv->name.buf, vsrv->name.len);
+	if (rc != 1) {
+		OPENSSL_LAST_ERROR(error);
+		PRINT_ERROR ("Unable to set SSL session-id context for '%s': %s\n",
+			     vsrv->name.buf, error);
+	}
+
+	SSL_CTX_set_mode (n->context, SSL_MODE_ENABLE_PARTIAL_WRITE);
+
 #ifndef OPENSSL_NO_TLSEXT
 	/* Enable SNI
 	 */
@@ -346,14 +366,6 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	SSL_set_app_data (cryp->session, socket);
 #endif
 
-	/* Set the SSL context cache
-	 */
-	re = SSL_CTX_set_session_id_context (vsrv_crytor->context, 
-					     (const unsigned char *)"SSL", 3);
-	if (re != 1) {
-		PRINT_ERROR_S("ERROR: OpenSSL: Unable to set SSL session-id context\n");
-	}
-
 	return ret_ok;
 }
 	
@@ -394,7 +406,7 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 		case SSL_ERROR_SYSCALL:
 		case SSL_ERROR_ZERO_RETURN:
 			return ret_error;
-		default: 
+		default:
 			OPENSSL_LAST_ERROR(error);
 			PRINT_ERROR ("ERROR: Init OpenSSL: %s\n", error);
 			return ret_error;
@@ -449,6 +461,8 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 
 	case SSL_ERROR_SYSCALL:
 		switch (error) {
+		case EAGAIN:
+			return ret_eagain;
 #ifdef ENOTCONN
 		case ENOTCONN:
 #endif
@@ -458,8 +472,8 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 		default:
 			PRINT_ERRNO_S (error, "SSL_write: unknown errno: ${errno}\n");
 		}
-		return ret_error;		
-		
+		return ret_error;
+
 	case SSL_ERROR_SSL:
 		return ret_error;
 	}
@@ -497,15 +511,17 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 	error = errno;
 	re = SSL_get_error (cryp->session, len);
 	switch (re) {
-	case SSL_ERROR_WANT_READ:   
-	case SSL_ERROR_WANT_WRITE:   
+	case SSL_ERROR_WANT_READ:
+	case SSL_ERROR_WANT_WRITE:
 		return ret_eagain;
-	case SSL_ERROR_ZERO_RETURN: 
+	case SSL_ERROR_ZERO_RETURN:
 		return ret_eof;
-	case SSL_ERROR_SSL:         
+	case SSL_ERROR_SSL:
 		return ret_error;
 	case SSL_ERROR_SYSCALL:
 		switch (error) {
+		case EAGAIN:
+			return ret_eagain;
 		case EPIPE:
 		case ECONNRESET:
 			return ret_eof;
@@ -763,6 +779,10 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
 	/* Do not initialize the library twice */
 	PLUGIN_INIT_ONCE_CHECK (libssl);
 
+	SSL_load_error_strings();
+	SSL_library_init();
+	OpenSSL_add_all_algorithms();
+
 # if HAVE_OPENSSL_ENGINE_H
 #  if OPENSSL_VERSION_NUMBER >= 0x00907000L
         ENGINE_load_builtin_engines();
@@ -774,22 +794,16 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
                         PRINT_ERROR_S ("ERROR: Could not init pkcs11 engine");
 			break;
                 }
-                
+
                 if(! ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
                         ENGINE_free (e);
                         PRINT_ERROR_S ("ERROR: Could not set all defaults");
 			break;
                 }
-                
+
                 ENGINE_finish(e);
                 ENGINE_free(e);
 		break;
         }
 #endif
-
-        SSL_load_error_strings();
-        SSL_library_init();
-        
-        SSLeay_add_all_algorithms ();
-        SSLeay_add_ssl_algorithms ();
 }
