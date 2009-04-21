@@ -645,7 +645,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 			cherokee_buffer_add_str    (buffer, CRLF);
 
 			if (conn->header.version < http_version_11) {
-				time_t exp_time = CONN_THREAD(conn)->bogo_now + (time_t)maxage;
+				time_t exp_time = cherokee_bogonow_now + (time_t)maxage;
 
 				/* Expire-Time for HTTP/1.0 connections.
 				 */

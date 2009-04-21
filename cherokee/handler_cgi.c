@@ -441,7 +441,7 @@ cherokee_handler_cgi_init (cherokee_handler_cgi_t *cgi)
 		 * otherwhise the server will drop it for the CGI
 		 * isn't fast enough
 		 */
-		conn->timeout = CONN_THREAD(conn)->bogo_now + CGI_TIMEOUT;
+		conn->timeout = cherokee_bogonow_now + CGI_TIMEOUT;
 		
 		cgi_base->init_phase = hcgi_phase_connect;
 
