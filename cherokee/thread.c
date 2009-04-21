@@ -410,8 +410,9 @@ close_active_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 	/* Delete from file descriptors poll
 	 */
 	ret = cherokee_fdpoll_del (thread->fdpoll, SOCKET_FD(&conn->socket));
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
 		SHOULDNT_HAPPEN;
+	}
 
 	/* Remove from active connections list
 	 */
@@ -424,40 +425,8 @@ close_active_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 
 
 static void
-purge_maybe_lingering (cherokee_thread_t *thread, cherokee_connection_t *conn)
-{
-	ret_t ret;
-
-	if (conn->keepalive <= 0) {
-		conn->phase = phase_lingering;
-		close_active_connection (thread, conn);
-		return;
-	}
-
-	/* Shutdown writing, and try to read some trash
-	 */
-	ret = cherokee_connection_shutdown_wr (conn);
-	switch (ret) {
-	case ret_ok:
-	case ret_eagain:
-		/* Ok, really lingering
-		 */
-		conn->phase = phase_lingering;
-		conn_set_mode (thread, conn, socket_reading);
-		return;
-	default:
-		/* Error: no linger and no last read, just close it
-		 */
-		close_active_connection (thread, conn);
-		return;
-	}	
-}
-
-
-static void
 maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 {
-	ret_t              ret;
 	cherokee_server_t *srv = SRV(thread->server);
 
 	/* Log if it was delayed and update vserver traffic counters
@@ -470,24 +439,9 @@ maybe_purge_closed_connection (cherokee_thread_t *thread, cherokee_connection_t 
 	 * cork before shutdown or before a close).
 	 */
 	if (conn->keepalive <= 0) {
-
-		ret = cherokee_connection_shutdown_wr (conn);
-		switch (ret) {
-		case ret_ok:
-		case ret_eagain:
-			/* Ok, lingering
-			 */
-			conn->phase = phase_lingering;
-			conn_set_mode (thread, conn, socket_reading);
-			return;
-		default:
-			/* Error, no linger and no last read, just
-			 * close the connection.
-			 */
-			close_active_connection (thread, conn);
-			return;
-		}
-	} 	
+		conn->phase = phase_shutdown;
+		return;
+	}
 
 	conn->keepalive--;
 
@@ -636,7 +590,9 @@ process_active_connections (cherokee_thread_t *thd)
 
 		/* Update the connection timeout
 		 */
-		if (conn->phase != phase_reading_header) {
+		if ((conn->phase != phase_reading_header) &&
+		    (conn->phase != phase_lingering))
+		{
 			conn->timeout = cherokee_bogonow_now + srv->timeout;
 		}
 
@@ -703,14 +659,12 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_eof:
 			case ret_error:
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 				
 			default:
 				RET_UNKNOWN(ret);
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 			}
 			conn->phase = phase_tls_handshake;;
 			
@@ -734,14 +688,12 @@ process_active_connections (cherokee_thread_t *thd)
 
 			case ret_error:
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 				
 			default:
 				RET_UNKNOWN(ret);
 				conns_freed++;
-				close_active_connection (thd, conn);
-				break;
+				goto shutdown;
 			}
 			break;
 
@@ -765,8 +717,7 @@ process_active_connections (cherokee_thread_t *thd)
 				 */
 				if (!cherokee_post_got_all (&conn->post)) {
 					conns_freed++;
-					close_active_connection (thd, conn);
-					continue;
+					goto shutdown;
 				}
 
 				cherokee_post_commit_buf (&conn->post, len);
@@ -774,14 +725,12 @@ process_active_connections (cherokee_thread_t *thd)
 
 			case ret_error:
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 				
 			default:
 				RET_UNKNOWN(ret);
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 			}
 			
 			/* Turn the connection in write mode
@@ -806,13 +755,11 @@ process_active_connections (cherokee_thread_t *thd)
 					break;
 				case ret_error:
 					conns_freed++;
-					close_active_connection (thd, conn);
-					continue;
+					goto shutdown;
 				default:
 					RET_UNKNOWN(ret);
 					conns_freed++;
-					close_active_connection (thd, conn);
-					continue;
+					goto shutdown;
 				}
 			}
 
@@ -827,13 +774,11 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_eof:
 			case ret_error:
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 			default:
 				RET_UNKNOWN(ret);
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 			}
 
 			/* Check security after read
@@ -857,13 +802,11 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			case ret_error:
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 			default:
 				RET_UNKNOWN(ret);
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 			}
 
 			/* fall down */
@@ -1069,8 +1012,7 @@ process_active_connections (cherokee_thread_t *thd)
 			 */
 			if (conn->handler == NULL) {
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 			}
 
  			if (http_type_300(conn->error_code) || 
@@ -1081,8 +1023,7 @@ process_active_connections (cherokee_thread_t *thd)
 					ret = cherokee_connection_clean_error_headers (conn);
 					if (unlikely (ret != ret_ok)) {
 						conns_freed++;
-						close_active_connection (thd, conn);
-						continue;
+						goto shutdown;
 					}
 				} else {
 					/* Try to setup an error handler
@@ -1094,7 +1035,7 @@ process_active_connections (cherokee_thread_t *thd)
 						/* Critical error: It couldn't instance the handler
 						 */					
 						conns_freed++;
-						close_active_connection (thd, conn);
+						goto shutdown;
 					}
 					continue;
 				}
@@ -1161,8 +1102,7 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_eof:
 			case ret_error:
 				conns_freed++;
-				close_active_connection (thd, conn);
-				continue;
+				goto shutdown;
 
 			default:
 				RET_UNKNOWN(ret);
@@ -1192,8 +1132,7 @@ process_active_connections (cherokee_thread_t *thd)
 					continue;
 
 				case ret_error:
-					purge_maybe_lingering (thd, conn);
-					continue;
+					goto shutdown;
 
 				default:
 					maybe_purge_closed_connection (thd, conn);
@@ -1221,8 +1160,7 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_error:
 				default:	
 					conns_freed++;
-					close_active_connection (thd, conn);
-					continue;
+					goto shutdown;
 				}
 				break;
 
@@ -1238,8 +1176,7 @@ process_active_connections (cherokee_thread_t *thd)
 				case ret_error:
 				default:
 					conns_freed++;
-					close_active_connection (thd, conn);
-					continue;
+					goto shutdown;
 				}
 				break;
 
@@ -1249,17 +1186,18 @@ process_active_connections (cherokee_thread_t *thd)
 			case ret_eof:
 				maybe_purge_closed_connection (thd, conn);
 				continue;
+
 			case ret_error:
-				purge_maybe_lingering (thd, conn);
-				continue;
+				goto shutdown;
 
 			default:
 				RET_UNKNOWN(ret);
-				purge_maybe_lingering (thd, conn);
+				goto shutdown;
 			}
 			break;
-			
+
 		case phase_shutdown: 
+		shutdown:
 			ret = cherokee_connection_shutdown_wr (conn);
 			switch (ret) {
 			case ret_ok:

@@ -1,3 +1,9 @@
+2009-04-21  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/thread.c: Cleans up the piece of code where connections
+	were being closed. The behaviour changes as well, lingering close
+	is used by default now.
+
 2009-04-21  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/socket.c, cherokee/cryptor_libssl.c: Tries to fix
