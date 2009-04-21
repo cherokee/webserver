@@ -1,5 +1,8 @@
 2009-04-21  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/thread.c, cherokee/thread.h: Do not call pthread_wait
+	twice (it crashes).
+
 	* cherokee/handler_file.c, cherokee/handler_cgi.c,
 	cherokee/connection.c: Use cherokee_bogonow_now instead of the
 	thread local variable - it's proved to be safer.
