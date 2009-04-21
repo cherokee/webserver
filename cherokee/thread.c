@@ -98,7 +98,7 @@ thread_routine (void *data)
 		cherokee_thread_step_MULTI_THREAD (thread, false);
 	}
 
-	thread->endded = true;
+	thread->ended = true;
 	pthread_exit (NULL);
 }
 #endif
@@ -117,7 +117,7 @@ cherokee_thread_unlock (cherokee_thread_t *thd)
 ret_t 
 cherokee_thread_wait_end (cherokee_thread_t *thd)
 {
-	if (thd->endded)
+	if (thd->ended)
 		return ret_ok;
 	
 	/* Wait until the thread exits
@@ -149,7 +149,7 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	INIT_LIST_HEAD (LIST(&n->polling_list));
 
 	n->exit                = false;
-	n->endded              = false;
+	n->ended               = false;
 	n->server              = server;
 	n->thread_type         = type;
 

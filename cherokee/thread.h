@@ -68,7 +68,7 @@ typedef struct {
 	
 	void                   *server;
 	cherokee_boolean_t      exit;
-	cherokee_boolean_t      endded;
+	cherokee_boolean_t      ended;
 
 	cuint_t                 conns_num;           /* open connections */
 	cuint_t                 conns_max;           /* max opened conns */
