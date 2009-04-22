@@ -1061,8 +1061,6 @@ cherokee_server_step (cherokee_server_t *srv)
 		return ret_eof;
 	}
 
-	/* Should not be reached.
-	 */
 	return ret_eagain;
 }
 
