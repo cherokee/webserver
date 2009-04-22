@@ -219,7 +219,9 @@ def main():
     global cfg
     cfg = Config(cfg_file)
 
-    print _("Server %s running.. PID=%d Port=%d") % (VERSION, os.getpid(), scgi_port)
+    version = VERSION
+    pid     = os.getpid()
+    print _("Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)d") % (locals())
 
     # Iterate until the user exists
     try:

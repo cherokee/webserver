@@ -1,3 +1,7 @@
+2009-04-22  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/server.py (main): Fixes a translation problem (warning).
+
 2009-04-22  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/consts.py, admin/PageVServer.py: Fixes a bug, which was
