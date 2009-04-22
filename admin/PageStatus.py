@@ -60,7 +60,7 @@ like the most or what you would improve, please do not hesitate to
 PROUD_USERS_NOTICE = N_("""
 We would love to know that you are using Cherokee. Submit your domain
 name and  it will be <a href="http://www.cherokee-project.com/cherokee-domain-list.html">
-listed on the Cherokee Project web site</a>.)
+listed on the Cherokee Project web site</a>.
 """)
 
 HELPS = [
