@@ -1,3 +1,9 @@
+2009-04-22  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/consts.py, admin/PageVServer.py: Fixes a bug, which was
+	causing that the domain mathing method of a virtual server could
+	be set but not configured.
+
 2009-04-21  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/thread.c: Cleans up the piece of code where connections

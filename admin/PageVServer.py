@@ -61,6 +61,7 @@ NOTE_X_REAL_IP_ALL    = N_('Accept all the X-Real-IP headers. It\'s dangerous: t
 NOTE_X_REAL_IP_ACCESS = N_('List of IP addresses and subnets that are allowed to send X-Real-IP headers (usually your proxy servers).')
 NOTE_EVHOST           = N_('How to support the "Advanced Virtual Hosting" mechanism. (Default: off)')
 NOTE_LOGGER_TEMPLATE  = N_('The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}')
+NOTE_MATCHING_METHOD  = N_('Allows the selection of domain matching method.')
 
 TXT_NO  = N_("<i>No</i>")
 TXT_YES = N_("<i>Yes</i>")
@@ -564,7 +565,7 @@ class PageVServer (PageMenu, FormHelper):
         e = self.AddPropOptions_Reload (table, _('Matching method'),
                                         '%s!match' % (pre), 
                                         modules_available(VRULES), 
-                                        NOTE_ERROR_HANDLER)
+                                        NOTE_MATCHING_METHOD)
         txt += self.Indent(table) + e
         return txt
 
