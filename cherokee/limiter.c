@@ -82,11 +82,16 @@ cherokee_limiter_get_time_limit (cherokee_limiter_t *limiter,
 	cint_t                 time_delta;
 	cherokee_connection_t *conn;
 
-	/* Pick a connection
+	/* Shortcut
 	 */
-	if (limiter->conns_num == 0)
+	if ((fdwatch_msecs == 0) ||
+	    (limiter->conns_num == 0))
+	{
 		return fdwatch_msecs;
+	}
 
+	/* Pick the first connection
+	 */
 	conn = CONN(limiter->conns.next);
 
 	/* Return the delta time of the first connection (the
