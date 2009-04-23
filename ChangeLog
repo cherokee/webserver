@@ -1,3 +1,8 @@
+2009-04-23  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_cgi_base.c (parse_header): Fixes the
+	X-Accel-Redirect support.
+
 2009-04-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/server.py (main): Fixes a translation problem (warning).
