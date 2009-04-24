@@ -285,7 +285,7 @@ msgstr "Permitir mostrar contenido de directorios"
 
 #: admin/ModuleCommon.py:12 admin/consts.py:11
 msgid "List & Send"
-msgstr "Mostrar y Enviar"
+msgstr "Listar y Enviar"
 
 #: admin/ModuleCommon.py:31
 msgid "Allow PathInfo"
