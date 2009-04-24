@@ -452,7 +452,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 	begin      = (char *)str;
 	header_end = conn->incoming_header.buf + (header_len - 2);
 
-	while ((begin < header_end)) {
+	while (begin < header_end) {
 		char chr_end;
 
 		/* Where the line ends */
