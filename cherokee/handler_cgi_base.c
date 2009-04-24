@@ -699,6 +699,7 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 	return ret_ok;
 }
 
+
 static ret_t
 mix_headers (cherokee_buffer_t *target,
 	     cherokee_buffer_t *source)
@@ -707,7 +708,7 @@ mix_headers (cherokee_buffer_t *target,
 	char *begin;
 	char *colon;
 	char *end, *end1, *end2;
-	
+
 	begin = source->buf;
 	while ((begin != NULL) && *begin)
 	{
@@ -733,7 +734,7 @@ mix_headers (cherokee_buffer_t *target,
 			tmp = colon[1];
 			colon[1] = '\0';
 
-			end1 = strcasestr (begin, source->buf);
+			end1 = strcasestr (target->buf, begin);
 			colon[1] = tmp;
 
 			if (end1 == NULL) {
@@ -1017,7 +1018,8 @@ parse_header (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 
 ret_t 
-cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *outbuf)
+cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi,
+				       cherokee_buffer_t           *outbuf)
 {
 	ret_t                  ret;
 	int                    len;
@@ -1101,8 +1103,12 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi, cheroke
 		if (ret != ret_ok)
 			return ret_error;		
 
-		mix_headers (outbuf, &cgi_header);
-		
+		/* Overwrite the handler properties
+		 */
+		HANDLER(cgi)->support  = HANDLER(cgi->file_handler)->support;
+		conn->chunked_encoding = false;
+
+		mix_headers (outbuf, &cgi_header);		
 		return ret_ok;
 	}
 

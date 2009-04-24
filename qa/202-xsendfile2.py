@@ -39,7 +39,7 @@ class Test (TestBase):
         self.expected_content  = ["Content-Length: ", "ETag: ", "Last-Modified: ", MAGIC,
                                   "%s: %s\r\n" %(HDR_NAM1, HDR_VAL1),
                                   "%s: %s\r\n" %(HDR_NAM2, HDR_VAL2)]
-        self.forbidden_content = ["/bin/sh", "echo", DISCART]
+        self.forbidden_content = ["/bin/sh", "echo", DISCART, "chunked"]
         self.conf              = CONF % (DIR)
 
     def Prepare (self, www):

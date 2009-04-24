@@ -380,7 +380,8 @@ without:
 
 
 ret_t 
-cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffer_t *local_file)
+cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
+				   cherokee_buffer_t       *local_file)
 {
 	ret_t                     ret;
 	char                     *ext;
@@ -414,8 +415,8 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl, cherokee_buffe
 	/* Look for the mime type
 	 */
 	if (srv->mime != NULL) {
-		ext = (conn->request.buf + conn->request.len) - 1;
-		while (ext > conn->request.buf) {
+		ext = (local_file->buf + local_file->len) - 1;
+		while (ext > local_file->buf) {
 			if (*ext == '.') {
 				ret = cherokee_mime_get_by_suffix (srv->mime, ext+1, &fhdl->mime);
 				if (ret == ret_ok)

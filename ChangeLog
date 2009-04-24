@@ -1,3 +1,9 @@
+2009-04-24  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_cgi_base.c, cherokee/handler_file.c,
+	qa/202-xsendfile2.py: Fixes a X-Sendfile support issue. It wasn't
+	coming along with keep-alive and chunked connections.
+
 2009-04-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_cgi_base.c (parse_header): Fixes the
