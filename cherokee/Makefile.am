@@ -1187,6 +1187,10 @@ list.h \
 list.c \
 ncpus.h \
 ncpus.c \
+shm.h \
+shm.c \
+spawner.h \
+spawner.c \
 cacheline.h \
 cacheline.c \
 crc32.h \
@@ -1550,6 +1554,7 @@ libcherokee-server.la
 # Cherokee
 #
 cherokee_SOURCES = main.c
+cherokee_LDADD   = $(PTHREAD_LIBS)
 
 #
 # Cherokee admin

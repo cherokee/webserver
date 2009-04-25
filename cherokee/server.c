@@ -26,6 +26,7 @@
 #include "server-protected.h"
 #include "server.h"
 #include "bind.h"
+#include "spawner.h"
 
 #include <fcntl.h>
 #include <sys/types.h>
@@ -241,6 +242,10 @@ cherokee_server_free (cherokee_server_t *srv)
 	/* Kill the child processes
 	 */
 	cherokee_avl_mrproper (&srv->sources, (cherokee_func_free_t)cherokee_source_free);
+
+	/* Spawn mechanism
+	 */
+	cherokee_spawner_free();
 
 	/* Threads
 	 */
@@ -884,6 +889,12 @@ cherokee_server_initialize (cherokee_server_t *srv)
 			PRINT_ERROR ("Can't get username for UID %d\n", srv->user);
 			return ret_error;
 		}
+	}
+
+	/* Spawning mechanism
+	 */
+	if (cherokee_spawn_shared.mem == NULL) {
+		cherokee_spawner_init();
 	}
 
 	/* Chroot

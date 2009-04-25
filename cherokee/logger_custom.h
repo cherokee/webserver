@@ -42,16 +42,18 @@ typedef struct {
 	cherokee_logger_writer_t *writer_error;
 } cherokee_logger_custom_t;
 
-ret_t cherokee_logger_custom_new            (cherokee_logger_t       **logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
-ret_t cherokee_logger_custom_free           (cherokee_logger_custom_t *logger);
-ret_t cherokee_logger_custom_init           (cherokee_logger_custom_t *logger);
+#define LOG_CUSTOM(x) ((cherokee_logger_custom_t *)(x))
 
-ret_t cherokee_logger_custom_flush          (cherokee_logger_custom_t *logger);
-ret_t cherokee_logger_custom_reopen         (cherokee_logger_custom_t *logger);
+ret_t cherokee_logger_custom_new              (cherokee_logger_t       **logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
+ret_t cherokee_logger_custom_free             (cherokee_logger_custom_t *logger);
+ret_t cherokee_logger_custom_init             (cherokee_logger_custom_t *logger);
 
-ret_t cherokee_logger_custom_write_access   (cherokee_logger_custom_t *logger, cherokee_connection_t *conn);
-ret_t cherokee_logger_custom_write_error    (cherokee_logger_custom_t *logger, cherokee_connection_t *conn);
-ret_t cherokee_logger_custom_write_string   (cherokee_logger_custom_t *logger, const char *string);
-ret_t cherokee_logger_custom_write_error_fd (cherokee_logger_custom_t *logger, int fd);
+ret_t cherokee_logger_custom_flush            (cherokee_logger_custom_t *logger);
+ret_t cherokee_logger_custom_reopen           (cherokee_logger_custom_t *logger);
+ret_t cherokee_logger_custom_get_error_writer (cherokee_logger_custom_t *logger, cherokee_logger_writer_t **writer);
+
+ret_t cherokee_logger_custom_write_access     (cherokee_logger_custom_t *logger, cherokee_connection_t *conn);
+ret_t cherokee_logger_custom_write_error      (cherokee_logger_custom_t *logger, cherokee_connection_t *conn);
+ret_t cherokee_logger_custom_write_string     (cherokee_logger_custom_t *logger, const char *string);
 
 #endif /* CHEROKEE_LOGGER_CUSTOM_H */

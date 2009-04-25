@@ -310,6 +310,7 @@ main (int argc, char **argv)
 #endif
 
 	cherokee_init();
+	cherokee_spawner_set_active (false);
 	process_parameters (argc, argv);
 
 	ret = cherokee_server_new (&srv);

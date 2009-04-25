@@ -80,8 +80,10 @@
 
 #if __GNUC_VERSION >= 30000
 # define must_check  __attribute__ ((warn_unused_result))
+# define no_return   __attribute__ ((noreturn))
 #else 
 # define must_check  
+# define no_return
 #endif
 
 #define DEFAULT_RECV_SIZE             2048

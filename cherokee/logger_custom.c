@@ -440,15 +440,15 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 	 */
 	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(custom), config);
 
-	MODULE(n)->init           = (logger_func_init_t) cherokee_logger_custom_init;
-	MODULE(n)->free           = (logger_func_free_t) cherokee_logger_custom_free;
+	MODULE(n)->init             = (logger_func_init_t) cherokee_logger_custom_init;
+	MODULE(n)->free             = (logger_func_free_t) cherokee_logger_custom_free;
 
-	LOGGER(n)->flush          = (logger_func_flush_t) cherokee_logger_custom_flush;
-	LOGGER(n)->reopen         = (logger_func_reopen_t) cherokee_logger_custom_reopen;
-	LOGGER(n)->write_error    = (logger_func_write_error_t) cherokee_logger_custom_write_error;
-	LOGGER(n)->write_access   = (logger_func_write_access_t) cherokee_logger_custom_write_access;
-	LOGGER(n)->write_string   = (logger_func_write_string_t) cherokee_logger_custom_write_string;
-	LOGGER(n)->write_error_fd = (logger_func_write_error_fd_t)  cherokee_logger_custom_write_error_fd;
+	LOGGER(n)->flush            = (logger_func_flush_t) cherokee_logger_custom_flush;
+	LOGGER(n)->reopen           = (logger_func_reopen_t) cherokee_logger_custom_reopen;
+	LOGGER(n)->get_error_writer = (logger_func_get_error_writer_t)  cherokee_logger_custom_get_error_writer;
+	LOGGER(n)->write_error      = (logger_func_write_error_t) cherokee_logger_custom_write_error;
+	LOGGER(n)->write_access     = (logger_func_write_access_t) cherokee_logger_custom_write_access;
+	LOGGER(n)->write_string     = (logger_func_write_string_t) cherokee_logger_custom_write_string;
 
 	/* Init properties
 	 */
@@ -538,14 +538,10 @@ cherokee_logger_custom_reopen (cherokee_logger_custom_t *logger)
 }
 
 ret_t
-cherokee_logger_custom_write_error_fd (cherokee_logger_custom_t *logger, int fd)
+cherokee_logger_custom_get_error_writer (cherokee_logger_custom_t  *logger,
+					 cherokee_logger_writer_t **writer)
 {
-	if ((logger->writer_error->fd != -1) &&
-	    (logger->writer_error->fd != fd))
-	{
-		dup2 (logger->writer_error->fd, fd);
-	}
-
+	*writer = logger->writer_error;
 	return ret_ok;
 }
 

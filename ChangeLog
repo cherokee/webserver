@@ -1,5 +1,19 @@
 2009-04-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/macros.h, cherokee/Makefile.am, cherokee/spawner.c,
+	cherokee/source_interpreter.c, cherokee/logger_combined.c,
+	cherokee/logger.c, cherokee/logger.h, cherokee/spawner.h,
+	cherokee/logger_w3c.c, cherokee/logger_w3c.h, cherokee/init.c,
+	cherokee/shm.c, cherokee/shm.h, cherokee/main_admin.c,
+	cherokee/main.c, cherokee/logger_ncsa.c, cherokee/logger_ncsa.h,
+	cherokee/handler_cgi.c, cherokee/logger_custom.c,
+	cherokee/logger_custom.h, cherokee/logger_combined.h,
+	cherokee/server.c: A new process spawning mechanism has been
+	implemented. It uses the main cherokee process (running as root)
+	to spawn new processes, so their UID can be changed. In this way,
+	cherokee-worker can run as an unprivileged user while interpreter
+	are spawned as another user.
+
 	* cherokee/handler_cgi_base.c, cherokee/handler_file.c,
 	qa/202-xsendfile2.py: Fixes a X-Sendfile support issue. It wasn't
 	coming along with keep-alive and chunked connections.

@@ -22,15 +22,35 @@
  * 02110-1301, USA.
  */ 
 
-#ifndef CHEROKEE_LOGGER_COMBINED_H
-#define CHEROKEE_LOGGER_COMBINED_H
+#if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
+# error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
+#endif
 
-#include "logger_ncsa.h"
+#ifndef CHEROKEE_SPAWNER_H
+#define CHEROKEE_SPAWNER_H
 
-typedef cherokee_logger_ncsa_t cherokee_logger_combined_t;
+#include <cherokee/common.h>
+#include <cherokee/buffer.h>
+#include <cherokee/shm.h>
+#include <cherokee/logger.h>
 
-#define LOG_COMBINED(x) ((cherokee_logger_combined_t *)(x))
+CHEROKEE_BEGIN_DECLS
 
-ret_t cherokee_logger_combined_new (cherokee_logger_t **logger, cherokee_virtual_server_t *vsrv, cherokee_config_node_t *config);
+#define SPAWN_SHARED_LEN  1024
 
-#endif /* CHEROKEE_LOGGER_COMBINED_H */
+extern cherokee_shm_t cherokee_spawn_shared;
+
+ret_t cherokee_spawner_set_active (cherokee_boolean_t active);
+
+ret_t cherokee_spawner_init       (void);
+ret_t cherokee_spawner_free       (void);
+
+ret_t cherokee_spawner_spawn      (cherokee_buffer_t  *binary,
+				   int                 uid,
+				   char              **envp,
+				   cherokee_logger_t  *logger,
+				   pid_t              *pid_ret);
+
+CHEROKEE_END_DECLS
+
+#endif /* CHEROKEE_SPAWNER_H */

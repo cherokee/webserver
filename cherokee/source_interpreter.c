@@ -28,6 +28,8 @@
 #include "connection-protected.h"
 #include "thread.h"
 #include "bogotime.h"
+#include "spawner.h"
+#include "logger_writer.h"
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -51,7 +53,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	n->custom_env     = NULL;
 	n->custom_env_len = 0;
 	n->debug          = false;
-	n->pid            = 0;
+	n->pid            = -1;
 	n->change_user    = 0;
 	n->timeout        = DEFAULT_TIMEOUT;
 
@@ -331,9 +333,41 @@ cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *e
 }
 
 
-ret_t 
-cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
-				   cherokee_logger_t             *logger)
+static ret_t 
+_spawn_shm (cherokee_source_interpreter_t *src,
+	    cherokee_logger_t             *logger)
+{
+	ret_t   ret;
+	char  **envp;
+	char   *empty_envp[] = {NULL};
+
+	/* Sanity check
+	 */
+	if (cherokee_buffer_is_empty (&src->interpreter)) 
+		return ret_not_found;
+
+	/* Maybe set a custom enviroment variable set 
+	 */
+	envp = (src->custom_env) ? src->custom_env : empty_envp;
+
+	/* Invoke the spawn mechanism
+	 */
+	ret = cherokee_spawner_spawn (&src->interpreter,
+				      src->change_user,
+				      envp,
+				      logger,
+				      &src->pid);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t 
+_spawn_local (cherokee_source_interpreter_t *src,
+	      cherokee_logger_t             *logger)
 {
 	int                re;
 	char             **envp;
@@ -341,43 +375,6 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 	int                child        = -1;
 	char              *empty_envp[] = {NULL};
 	cherokee_buffer_t  tmp          = CHEROKEE_BUF_INIT;
-
-#if 0
-	int s;
-	cherokee_sockaddr_t addr;
-	struct linger       linger;
-
-	/* This code is meant to, in some way, signal the FastCGI that
-	 * it is certainly a FastCGI.  The fcgi client will execute
-	 * getpeername (FCGI_LISTENSOCK_FILENO) and, then if it is a
-	 * fcgi, error will have the ENOTCONN value.
-	 */
-	addr.sa_in.sin_addr.s_addr = htonl(INADDR_ANY);
-
-	s = socket (AF_INET, SOCK_STREAM, 0);
-	if (s < 0) return ret_error;
-	
-	re = 1;
-	setsockopt (s, SOL_SOCKET, SO_REUSEADDR, &re, sizeof(re));
-
-	re = 1;
-	setsockopt (s, SOL_SOCKET, SO_KEEPALIVE, &re, sizeof(re));
-
-	linger.l_onoff  = 1;
-	linger.l_linger = 0;
-	setsockopt (s, SOL_SOCKET, SO_LINGER, &linger, sizeof(linger));
-
-	re = bind (s, (struct sockaddr *) &addr, sizeof(cherokee_sockaddr_t));
-	if (re == -1) return ret_error;
-
-	re = listen (s, 1024);
-	if (re == -1) return ret_error;
-#endif
-
-	/* Sanity check
-	 */
-	if (cherokee_buffer_is_empty (&src->interpreter)) 
-		return ret_not_found;
 
 	/* If there is a previous instance running, kill it
 	 */
@@ -401,21 +398,6 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 #endif
 	switch (child) {
 	case 0:
-#if 0 
-		/* More FCGI_LISTENSOCK_FILENO stuff..
-		 */
-		close (STDIN_FILENO);
-
-		if (s != FCGI_LISTENSOCK_FILENO) {
-			close (FCGI_LISTENSOCK_FILENO);
-			dup2 (s, FCGI_LISTENSOCK_FILENO);
-			close (s);
-		}
-		
-		close (STDOUT_FILENO);
-		close (STDERR_FILENO);
-#endif
-
 		/* Change user if requested
 		 */
 		if (src->change_user > 0) {
@@ -425,10 +407,19 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 		/* Redirect/Close stderr and stdout
 		 */
 		if (! src->debug) {
+			cherokee_boolean_t        done   = false;
+			cherokee_logger_writer_t *writer = NULL;
+
 			if (logger != NULL) {
-				cherokee_logger_write_error_fd (logger, STDOUT_FILENO);
-				cherokee_logger_write_error_fd (logger, STDERR_FILENO);
-			} else {
+				cherokee_logger_get_error_writer (logger, &writer);
+				if ((writer) && (writer->fd != -1)) {
+					dup2 (writer->fd, STDOUT_FILENO);
+					dup2 (writer->fd, STDERR_FILENO);		
+					done = true;
+				}
+			} 
+
+			if (! done) {
 				close (STDOUT_FILENO);
 				close (STDERR_FILENO);
 			}			
@@ -459,6 +450,35 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 error:
 	cherokee_buffer_mrproper (&tmp);
 	return ret_error;
+}
+
+
+ret_t 
+cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
+				   cherokee_logger_t             *logger)
+{
+	ret_t ret;
+
+	/* Sanity check
+	 */
+	if (cherokee_buffer_is_empty (&src->interpreter)) 
+		return ret_not_found;
+
+	/* Try to use the spawn mechanism
+	 */
+	ret = _spawn_shm (src, logger);
+	if (ret == ret_ok) {
+		return ret_ok;
+	}
+
+	/* It has failed: do it yourself
+	 */
+	ret = _spawn_local (src, logger);
+	if (ret != ret_ok) {
+		return ret;
+	}
+
+	return ret_ok;
 }
 
 
