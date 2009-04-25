@@ -1,5 +1,8 @@
 2009-04-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageVServer.py (PageVServer._op_apply_changes): Fixes
+	logger disabilitation.
+
 	* cherokee/source_interpreter.c: If no custom UID is defined,
 	spawn new interpreters with the same UID as cherokee-worker.
 
