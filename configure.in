@@ -748,6 +748,10 @@ if test x"$samba_cv_HAVE_OFF64_T" = x"yes"; then
     AC_DEFINE(HAVE_OFF64_T,1,[Whether off64_t is available])
 fi
 
+dnl
+dnl Shared memory and semaphores
+dnl
+AC_SEARCH_LIBS(shm_open, rt)
 
 # From etr_socket_nsl.m4
 ETR_SOCKET_NSL

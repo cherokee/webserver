@@ -1,5 +1,7 @@
 2009-04-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* configure.in: Adds librt detection.
+
 	* admin/PageVServer.py (PageVServer._op_apply_changes): Fixes
 	logger disabilitation.
 
