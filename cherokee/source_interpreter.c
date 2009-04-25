@@ -54,7 +54,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	n->custom_env_len = 0;
 	n->debug          = false;
 	n->pid            = -1;
-	n->change_user    = 0;
+	n->change_user    = -1;
 	n->timeout        = DEFAULT_TIMEOUT;
 
 	SOURCE(n)->type   = source_interpreter;
@@ -350,6 +350,12 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 	 */
 	envp = (src->custom_env) ? src->custom_env : empty_envp;
 
+	/* If a user isn't specified, use the same one..
+	 */
+	if (src->change_user == -1) {
+		src->change_user = getuid();
+	}
+	
 	/* Invoke the spawn mechanism
 	 */
 	ret = cherokee_spawner_spawn (&src->interpreter,

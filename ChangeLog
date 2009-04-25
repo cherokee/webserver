@@ -1,3 +1,8 @@
+2009-04-25  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/source_interpreter.c: If no custom UID is defined,
+	spawn new interpreters with the same UID as cherokee-worker.
+
 2009-04-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/macros.h, cherokee/Makefile.am, cherokee/spawner.c,
