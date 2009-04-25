@@ -1,5 +1,9 @@
 2009-04-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main.c (do_spawn): Fixes a glibc 2.9 compilation
+	problem. Thanks to Jacob Peddicord <jpeddicord@ubuntu.com> for
+	pointing out the issue.
+
 	* configure.in: Adds librt detection.
 
 	* admin/PageVServer.py (PageVServer._op_apply_changes): Fixes

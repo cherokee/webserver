@@ -356,7 +356,7 @@ do_spawn (void)
 		/* Logging */
 		if (log_file) {
 			int fd;
-			fd = open (log_file, O_WRONLY | O_APPEND | O_CREAT);
+			fd = open (log_file, O_WRONLY | O_APPEND | O_CREAT, 0600);
 			if (fd < 0) {
 				PRINT_ERROR ("WARNING: Couldn't open '%s' for writing..\n", log_file);
 			}
