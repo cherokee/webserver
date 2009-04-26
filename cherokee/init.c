@@ -88,10 +88,6 @@ cherokee_init (void)
 	cherokee_buffer_init (&cherokee_tmp_dir);
 	cherokee_tmp_dir_copy (&cherokee_tmp_dir);
 
-	/* Spawn mechanism
-	 */
-	cherokee_shm_init (&cherokee_spawn_shared);
-
 	_cherokee_init = true;
 	return ret_ok;
 }
@@ -103,7 +99,6 @@ cherokee_mrproper (void)
 
 	cherokee_bogotime_free();
 	cherokee_threading_free();
-	cherokee_spawner_free();
 
 	return ret_ok;
 }

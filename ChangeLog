@@ -1,3 +1,7 @@
+2009-04-26  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/Makefile.am, cherokee/init.c: Fixes cget compilation.
+
 2009-04-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/main.c (do_spawn): Fixes a glibc 2.9 compilation

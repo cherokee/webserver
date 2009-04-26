@@ -1189,8 +1189,6 @@ ncpus.h \
 ncpus.c \
 shm.h \
 shm.c \
-spawner.h \
-spawner.c \
 cacheline.h \
 cacheline.c \
 crc32.h \
@@ -1407,6 +1405,8 @@ nonce.h \
 nonce.c \
 balancer.h \
 balancer.c \
+spawner.h \
+spawner.c \
 source.h \
 source.c \
 source_interpreter.h \
