@@ -37,7 +37,7 @@ class ModuleProxy (ModuleHandler):
 
         txt += '<h2>%s</h2>' % (_('Request'))
         txt += self.Indent (self._render_request())
-        txt += '<h2>%s</h2>' % (_('Request'))
+        txt += '<h2>%s</h2>' % (_('Reply'))
         txt += self.Indent (self._render_reply())
 
         # Balancers
