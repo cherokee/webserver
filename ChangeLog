@@ -1,5 +1,7 @@
 2009-04-28  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* 0.99.12 released
+
 	* cherokee/validator_mysql.c: A data base password isn't actually
 	required. Thus, the check for a password has been removed.
 
