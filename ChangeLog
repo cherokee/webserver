@@ -1,3 +1,8 @@
+2009-04-28  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/ModuleMysql.py (ModuleMysql._op_apply_changes): Disables
+	MD5 passwords when using Digest authentication.
+
 2009-04-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/Makefile.am, cherokee/init.c: Fixes cget compilation.

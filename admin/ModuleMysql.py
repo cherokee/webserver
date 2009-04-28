@@ -8,7 +8,7 @@ NOTE_USER   = _('User name for connecting to the database.')
 NOTE_PASSWD = _('Password for connecting to the database.')
 NOTE_DB     = _('Database name containing the user/password pair list.')
 NOTE_SQL    = _('SQL command to execute. ${user} is replaced with the user name.')
-NOTE_MD5    = _('Active to use MD5 passwords.')
+NOTE_MD5    = _('Active to use MD5 passwords. Only suitable for the "Basic" authentication mechanism.')
 
 
 HELPS = [
@@ -30,6 +30,8 @@ class ModuleMysql (ModuleAuthBase):
     def _op_render (self):
         txt  = ModuleAuthBase._op_render (self)
 
+        is_basic = (self._cfg.get_val ("%s!methods"%(self._prefix)) in ["basic", None])
+
         table = TableProps()
         self.AddPropEntry (table, _("Host"), "%s!host"%(self._prefix), NOTE_HOST)
         self.AddPropEntry (table, _("Port"), "%s!port"%(self._prefix), NOTE_PORT)
@@ -38,7 +40,7 @@ class ModuleMysql (ModuleAuthBase):
         self.AddPropEntry (table, _("DB Password"), "%s!passwd"%(self._prefix), NOTE_PASSWD)
         self.AddPropEntry (table, _("Database"), "%s!database"%(self._prefix), NOTE_DB)
         self.AddPropEntry (table, _("SQL Query"), "%s!query"%(self._prefix), NOTE_SQL)
-        self.AddPropCheck (table, _('Use MD5 Passwords'), "%s!use_md5_passwd"%(self._prefix), False, NOTE_MD5)
+        self.AddPropCheck (table, _('Use MD5 Passwords'), "%s!use_md5_passwd"%(self._prefix), False, NOTE_MD5, disabled=not is_basic)
 
         txt += '<h2>%s</h2>' % (_('MySQL connection'))
         txt += self.Indent(table)
@@ -52,7 +54,13 @@ class ModuleMysql (ModuleAuthBase):
             pre = '%s!%s' % (self._prefix, key)
             self.Validate_NotEmpty (post, pre, msg + _(' can not be empty'))
 
-        # Apply TLS
+        # Check MD5
+        md5_pre  = "%s!use_md5_passwd"%(self._prefix)
+        is_basic = (self._cfg.get_val ("%s!methods"%(self._prefix)) == "basic")
+
+        if not is_basic:
+            self._cfg[md5_pre] = '0'
+
         self.ApplyChangesPrefix (self._prefix, ['use_md5_passwd'], post)
         post.pop('use_md5_passwd')
 

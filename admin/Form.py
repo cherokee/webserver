@@ -451,8 +451,8 @@ class FormHelper (WebComponent):
         entry = self.InstanceEntry (cfg_key, 'text', **kwargs)
         self.AddProp (table, title, cfg_key, entry, comment)
 
-    def AddPropCheck (self, table, title, cfg_key, default, comment=None):
-        entry = self.InstanceCheckbox (cfg_key, default)
+    def AddPropCheck (self, table, title, cfg_key, default, comment=None, **kwargs):
+        entry = self.InstanceCheckbox (cfg_key, default, **kwargs)
         self.AddProp (table, title, cfg_key, entry, comment)
 
     def AddPropOptions (self, table, title, cfg_key, options, comment=None, **kwargs):
