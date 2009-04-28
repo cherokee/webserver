@@ -125,16 +125,12 @@ cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_serve
 		PRINT_ERROR_S ("ERROR: MySQL validator: an 'user' entry is needed\n");
 		return ret_error;
 	}
-	if (cherokee_buffer_is_empty (&props->passwd)) {
-		PRINT_ERROR_S ("ERROR: MySQL validator: an 'passwd' entry is needed\n");
-		return ret_error;
-	}
 	if (cherokee_buffer_is_empty (&props->database)) {
-		PRINT_ERROR_S ("ERROR: MySQL validator: an 'database' entry is needed\n");
+		PRINT_ERROR_S ("ERROR: MySQL validator: a 'database' entry is needed\n");
 		return ret_error;
 	}
 	if (cherokee_buffer_is_empty (&props->query)) {
-		PRINT_ERROR_S ("ERROR: MySQL validator: an 'query' entry is needed\n");
+		PRINT_ERROR_S ("ERROR: MySQL validator: a 'query' entry is needed\n");
 		return ret_error;
 	}
 
@@ -238,13 +234,15 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 		return ret_error;
 
 	re = cherokee_buffer_cnt_cspn (&conn->validator->user, 0, "'\";");
-	if (unlikely (re != conn->validator->user.len))
+	if (unlikely (re != (int) conn->validator->user.len))
 		return ret_error;
 
 	/* Build query
 	 */
 	cherokee_buffer_add_buffer (&query, &props->query);
 	cherokee_buffer_replace_string (&query, "${user}", 7, conn->validator->user.buf, conn->validator->user.len);
+
+	TRACE (ENTRIES, "Query: %s\n", query.buf);
 
 	/* Execute query
 	 */
@@ -274,7 +272,8 @@ cherokee_validator_mysql_check (cherokee_validator_mysql_t *mysql, cherokee_conn
 	lengths = mysql_fetch_lengths (result);
 
 	if ((props->use_md5_passwd) || 
-	    (conn->req_auth_type == http_auth_digest)) {
+	    (conn->req_auth_type == http_auth_digest))
+	{
 		cherokee_buffer_add_buffer (&user_passwd, &conn->validator->passwd);
 		cherokee_buffer_encode_md5_digest (&user_passwd);
 	} else {
