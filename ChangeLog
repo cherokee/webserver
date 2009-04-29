@@ -1,3 +1,7 @@
+2009-04-29  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/server.c: Use cherokee_getgrnam() instead of getgrnam().
+
 2009-04-28  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.12 released

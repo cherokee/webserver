@@ -1354,14 +1354,16 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		srv->user = pwd.pw_uid;
 
 	} else if (equal_buf_str (&conf->key, "group")) {
-		struct group *grp;
+		struct group grp;
+		char         tmp[1024];
 		
-		grp = (struct group *) getgrnam (conf->val.buf);
-		if (grp == NULL) {
+		ret = cherokee_getgrnam (conf->val.buf, &grp, tmp, sizeof(tmp));
+		if (ret != ret_ok) {
 			PRINT_MSG ("ERROR: Group '%s' not found in the system\n", conf->val.buf);
 			return ret_error;
 		}		
-		srv->group = grp->gr_gid;
+
+		srv->group = grp.gr_gid;
 
 	} else if (equal_buf_str (&conf->key, "tls")) {
 		cryptor_func_new_t      instance;
