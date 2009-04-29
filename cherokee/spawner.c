@@ -142,7 +142,9 @@ nothing:
 
 ret_t
 cherokee_spawner_spawn (cherokee_buffer_t  *binary,
-			int                 uid,
+			cherokee_buffer_t  *user,
+			uid_t               uid,
+			gid_t               gid,
 			char              **envp,
 			cherokee_logger_t  *logger,
 			pid_t              *pid_ret)
@@ -171,8 +173,13 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 	cherokee_buffer_add_buffer (&tmp, binary);
 	cherokee_buffer_add_char   (&tmp, '\0');
 	
-	/* 2.- UID */
-	cherokee_buffer_add (&tmp, (char *)&uid, sizeof(int));
+	/* 2.- UID & GID */
+	cherokee_buffer_add        (&tmp, (char *)&user->len, sizeof(int));
+	cherokee_buffer_add_buffer (&tmp, user);
+	cherokee_buffer_add_char   (&tmp, '\0');
+
+	cherokee_buffer_add (&tmp, (char *)&uid, sizeof(uid_t));
+	cherokee_buffer_add (&tmp, (char *)&gid, sizeof(gid_t));
 
 	/* 3.- Environment */	
 	for (n=envp; *n; n++) {

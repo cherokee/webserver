@@ -285,12 +285,14 @@ do_spawn (void)
 {
 	int          n;
 	int          size;
-	int          uid;
+	uid_t        uid;
+	gid_t        gid;
 	int          envs;
 	pid_t        child;
 	char        *interpreter;
 	int          log_stderr   = 0;
 	char        *log_file     = NULL;
+	char        *uid_str      = NULL;
 	char       **envp         = NULL;
 	char        *p            = spawn_shared;
 	const char  *argv[]       = {"sh", "-c", NULL, NULL};
@@ -303,9 +305,18 @@ do_spawn (void)
 	interpreter = strdup (p + sizeof(int));
 	p += sizeof(int) + size + 1;
 
-	/* 2.- UID */
-	uid = *((int *)p);
-	p += sizeof(int);
+	/* 2.- UID & GID */
+	size = *((int *)p);
+	if (size > 0) {
+		uid_str = strdup (p + sizeof(int));
+	}
+	p += sizeof(int) + size + 1;
+
+	memcpy (&uid, p, sizeof(uid_t));
+	p += sizeof(uid_t);
+
+	memcpy (&gid, p, sizeof(gid_t));
+	p += sizeof(gid_t);
 
 	/* 3.- Environment */
 	envs = *((int *)p);
@@ -369,11 +380,25 @@ do_spawn (void)
 			close (STDERR_FILENO);
 		}
 
-		/* Change user */
-		if (uid != 0) {
+		/* Change user & group */
+		if (uid_str != NULL) {
+			n = initgroups (uid_str, gid);
+			if (n == -1) {
+				PRINT_ERROR ("WARNING: initgroups failed User=%s, GID=%d\n", uid_str, gid);
+			}
+		}
+
+		if (gid != -1) {
+			n = setgid (gid);
+			if (n != 0) {
+				PRINT_ERROR ("WARNING: Could not set GID=%d\n", gid);
+			}
+		}
+
+		if (uid != -1) {
 			n = setuid (uid);
 			if (n != 0) {
-				PRINT_ERROR ("WARNING: Could set UID=%d\n", uid);
+				PRINT_ERROR ("WARNING: Could not set UID=%d\n", uid);
 			}
 		}
 
@@ -393,7 +418,7 @@ do_spawn (void)
 	default:
 		/* Return the PID */
 		memcpy (p, (char *)&child, sizeof(int));
-		printf ("PID %d: launched '%s' with uid=%d\n", child, interpreter, uid);
+		printf ("PID %d: launched '%s' with uid=%d, gid=%d\n", child, interpreter, uid, gid);
 		break;
 	}
 	

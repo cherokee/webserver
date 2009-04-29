@@ -40,7 +40,10 @@ typedef struct {
 
 	cherokee_boolean_t  debug;
 	pid_t               pid;
+
+	cherokee_buffer_t   change_user_name;
 	uid_t               change_user;
+	gid_t               change_group;
 
 	CHEROKEE_MUTEX_T   (launching_mutex);
 	cherokee_boolean_t  launching;

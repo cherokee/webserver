@@ -1,5 +1,9 @@
 2009-04-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/source_interpreter.c, cherokee/source_interpreter.h,
+	cherokee/spawner.c, cherokee/spawner.h, admin/PageInfoSource.py,
+	cherokee/main.c: Adds group changing capabilities.
+
 	* cherokee/server.c: Use cherokee_getgrnam() instead of getgrnam().
 
 2009-04-28  Alvaro Lopez Ortega  <alvaro@octality.com>

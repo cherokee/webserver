@@ -49,13 +49,15 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 
 	cherokee_source_init (SOURCE(n));
 	cherokee_buffer_init (&n->interpreter);
+	cherokee_buffer_init (&n->change_user_name);
 
 	n->custom_env     = NULL;
 	n->custom_env_len = 0;
 	n->debug          = false;
 	n->pid            = -1;
-	n->change_user    = -1;
 	n->timeout        = DEFAULT_TIMEOUT;
+	n->change_user    = -1;
+	n->change_group   = -1;
 
 	SOURCE(n)->type   = source_interpreter;
 	SOURCE(n)->free   = (cherokee_func_free_t)interpreter_free;
@@ -96,6 +98,7 @@ interpreter_free (void *ptr)
 	}
 
 	cherokee_buffer_mrproper (&src->interpreter);
+	cherokee_buffer_mrproper (&src->change_user_name);
 
 	if (src->custom_env)
 		free_custom_env (src);
@@ -261,6 +264,8 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 			struct passwd pwd;
 			char          tmp[1024];
 
+			cherokee_buffer_add_buffer (&src->change_user_name, &child->val);
+
 			ret = cherokee_getpwnam (child->val.buf, &pwd, tmp, sizeof(tmp));
 			if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
 				PRINT_MSG ("ERROR: User '%s' not found in the system\n",
@@ -269,6 +274,18 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 			}
 
 			src->change_user = pwd.pw_uid;
+
+		} else if (equal_buf_str (&child->key, "group")) {
+			struct group grp;
+			char         tmp[1024];
+		
+			ret = cherokee_getgrnam (child->val.buf, &grp, tmp, sizeof(tmp));
+			if (ret != ret_ok) {
+				PRINT_MSG ("ERROR: Group '%s' not found in the system\n", conf->val.buf);
+				return ret_error;
+			}		
+			
+			src->change_group = grp.gr_gid;
 
 		} else if (equal_buf_str (&child->key, "env")) {			
 			cherokee_config_node_foreach (j, child) {
@@ -359,7 +376,9 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 	/* Invoke the spawn mechanism
 	 */
 	ret = cherokee_spawner_spawn (&src->interpreter,
+				      &src->change_user_name,
 				      src->change_user,
+				      src->change_group,
 				      envp,
 				      logger,
 				      &src->pid);
@@ -406,7 +425,15 @@ _spawn_local (cherokee_source_interpreter_t *src,
 	case 0:
 		/* Change user if requested
 		 */
-		if (src->change_user > 0) {
+		if (! cherokee_buffer_is_empty (&src->change_user_name)) {
+			initgroups (src->change_user_name.buf, src->change_user);
+		}
+
+		if (src->change_group != -1) {
+			setgid (src->change_group);
+		}
+
+		if (src->change_user != -1) {
 			setuid (src->change_user);
 		}
 
