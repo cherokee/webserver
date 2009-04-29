@@ -149,6 +149,7 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 			cherokee_logger_t  *logger,
 			pid_t              *pid_ret)
 {
+	ret_t              ret;
 	char             **n;
 	int               *pid_shm;
 	int                k;
@@ -214,7 +215,10 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 
 	/* Wake up the spawning thread
 	 */
-	cherokee_sem_post (&cherokee_spawn_sem);	
+	ret = cherokee_sem_post (&cherokee_spawn_sem);	
+	if (unlikely (ret != ret_ok)) {
+		PRINT_ERROR ("WARNING: Couldn't unlock spawning semaphore..\n");
+	}
 	
 	/* Wait for the PID
 	 */

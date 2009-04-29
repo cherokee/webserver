@@ -155,9 +155,11 @@ cherokee_sem_mrproper (cherokee_sem_t *sem)
 ret_t
 cherokee_sem_post (cherokee_sem_t *sem)
 {
+	int re;
+
 	if (unlikely (sem->sem == NULL))
 		return ret_error;
 
-	sem_post (sem->sem);
-	return ret_ok;
+	re = sem_post (sem->sem);
+	return (re == 0) ? ret_ok : ret_error;
 }

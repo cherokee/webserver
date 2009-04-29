@@ -36,7 +36,7 @@
 
 CHEROKEE_BEGIN_DECLS
 
-#define SPAWN_SHARED_LEN  1024
+#define SPAWN_SHARED_LEN  4096
 
 extern cherokee_shm_t cherokee_spawn_shared;
 

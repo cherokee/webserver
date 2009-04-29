@@ -30,6 +30,8 @@
 #include <errno.h>
 #include <sys/mman.h>
 #include <semaphore.h>
+#include <sys/types.h>
+#include <grp.h>
 #include <pthread.h>
 #include "server.h"
 #include "spawner.h"
@@ -599,37 +601,17 @@ is_single_execution (int argc, char *argv[])
 	return false;
 }
 
-static void
-spawn_clean_up (void)
-{
-	if (spawn_shared) {
-		munmap (spawn_shared, SPAWN_SHARED_LEN);
-		spawn_shared = NULL;
-	}
-
-	if (spawn_shared_name) {
-		shm_unlink (spawn_shared_name);
-
-		free (spawn_shared_name);
-		spawn_shared_name = NULL;
-	}
-
-	if (spawn_shared_sem) {
-		sem_close  (spawn_shared_sem);
-		sem_unlink (spawn_shared_sem_name);
-
-		free (spawn_shared_sem_name);
-		spawn_shared_sem_name = NULL;
-	}
-}
-
 static void *
 spawn_thread_func (void *param)
 {
+	int re;
+
 	UNUSED (param);
 
 	while (true) {
-		sem_wait (spawn_shared_sem);
+		do {
+			re = sem_wait (spawn_shared_sem);
+		} while (re < 0 && errno == EINTR);
 		do_spawn ();
 	}
 
@@ -642,10 +624,6 @@ spawn_init (void)
 	int re;
 	int fd;
 	int mem_len;
-
-	/* Clean up
-	 */
-	spawn_clean_up();
 
 	/* Names
 	 */
@@ -761,7 +739,6 @@ main (int argc, char *argv[])
 
 	if (! single_time) {
 		pid_file_clean (pid_file_path);
-		spawn_clean_up ();
 	}
 
 	return EXIT_OK;

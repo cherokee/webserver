@@ -1,5 +1,9 @@
 2009-04-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/spawner.c, cherokee/spawner.h, cherokee/shm.c,
+	cherokee/main.c: Fixes a spawner issue. It tries to fix:
+	http://code.google.com/p/cherokee/issues/detail?id=449
+	
 	* cherokee/source_interpreter.c, cherokee/source_interpreter.h,
 	cherokee/spawner.c, cherokee/spawner.h, admin/PageInfoSource.py,
 	cherokee/main.c: Adds group changing capabilities.
