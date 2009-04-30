@@ -275,6 +275,10 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 
 			src->change_user = pwd.pw_uid;
 
+			if (src->change_group == -1) {
+				src->change_group = pwd.pw_gid;
+			}
+
 		} else if (equal_buf_str (&child->key, "group")) {
 			struct group grp;
 			char         tmp[1024];

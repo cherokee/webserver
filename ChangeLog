@@ -1,3 +1,8 @@
+2009-04-30  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/source_interpreter.c: Use the default group whenever a
+	UID is specified but a GID changed is not.
+
 2009-04-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/spawner.c, cherokee/spawner.h, cherokee/shm.c,
