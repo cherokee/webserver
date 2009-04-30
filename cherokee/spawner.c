@@ -47,6 +47,7 @@ cherokee_spawner_set_active (cherokee_boolean_t active)
 ret_t
 cherokee_spawner_init (void)
 {
+#ifdef HAVE_POSIX_SHM
 	ret_t             ret;
 	cherokee_buffer_t name = CHEROKEE_BUF_INIT;
 
@@ -83,17 +84,23 @@ error:
 
 	cherokee_buffer_mrproper (&name);
 	return ret_error;
+#else 
+	return ret_not_found;
+#endif
 }
 
 
 ret_t 
 cherokee_spawner_free (void)
 {
+#ifdef HAVE_POSIX_SHM
 	cherokee_sem_mrproper (&cherokee_spawn_sem);
 	cherokee_shm_mrproper (&cherokee_spawn_shared);
+#endif
 	return ret_ok;
 }
 
+#ifdef HAVE_POSIX_SHM
 static ret_t
 write_logger (cherokee_buffer_t *buf,
 	      cherokee_logger_t *logger)
@@ -138,7 +145,7 @@ nothing:
 	cherokee_buffer_add (buf, (char *)&val, sizeof(int));
 	return ret_ok;	
 }
-
+#endif
 
 ret_t
 cherokee_spawner_spawn (cherokee_buffer_t  *binary,
@@ -149,6 +156,7 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 			cherokee_logger_t  *logger,
 			pid_t              *pid_ret)
 {
+#ifdef HAVE_POSIX_SHM
 	ret_t              ret;
 	char             **n;
 	int               *pid_shm;
@@ -236,5 +244,8 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 	TRACE(ENTRIES, "Successfully launched PID=%d\n", *pid_shm);
 	*pid_ret = *pid_shm;
 	return ret_ok;
+#else
+	return ret_not_found;
+#endif
 }
 

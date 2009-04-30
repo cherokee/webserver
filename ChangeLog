@@ -1,5 +1,10 @@
 2009-04-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/Makefile.am, cherokee/source_interpreter.c,
+	cherokee/spawner.c, cherokee/main.c, configure.in: Fixes the new
+	spawning mechanism so Cherokee can be compiled without POSIX
+	shared memory support. (It seems that uclibc lacks it).
+
 	* cherokee/source_interpreter.c: Use the default group whenever a
 	UID is specified but a GID changed is not.
 

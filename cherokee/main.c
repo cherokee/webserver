@@ -601,6 +601,9 @@ is_single_execution (int argc, char *argv[])
 	return false;
 }
 
+
+#ifdef HAVE_POSIX_SHM
+
 static void *
 spawn_thread_func (void *param)
 {
@@ -677,6 +680,9 @@ spawn_init (void)
 	return ret_ok;
 }
 
+#endif /* HAVE_POSIX_SHM */
+
+
 int
 main (int argc, char *argv[])
 {
@@ -711,6 +717,7 @@ main (int argc, char *argv[])
 
 	/* Launch the spawning thread
 	 */
+#ifdef HAVE_POSIX_SHM
 	if (! single_time) {
 		ret = spawn_init();
 		if (ret != ret_ok) {
@@ -718,6 +725,7 @@ main (int argc, char *argv[])
 			return ret_error;
 		}
 	}
+#endif
 
 	while (true) {
 		graceful_restart = false;

@@ -353,7 +353,7 @@ cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *e
 	return ret_ok;
 }
 
-
+#ifdef HAVE_POSIX_SHM
 static ret_t 
 _spawn_shm (cherokee_source_interpreter_t *src,
 	    cherokee_logger_t             *logger)
@@ -392,6 +392,7 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 
 	return ret_ok;
 }
+#endif
 
 
 static ret_t 
@@ -503,10 +504,12 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 
 	/* Try to use the spawn mechanism
 	 */
+#ifdef HAVE_POSIX_SHM
 	ret = _spawn_shm (src, logger);
 	if (ret == ret_ok) {
 		return ret_ok;
 	}
+#endif
 
 	/* It has failed: do it yourself
 	 */
