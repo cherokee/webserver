@@ -1,5 +1,7 @@
 2009-04-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* 0.99.13 released
+
 	* cherokee/Makefile.am, cherokee/source_interpreter.c,
 	cherokee/spawner.c, cherokee/main.c, configure.in: Fixes the new
 	spawning mechanism so Cherokee can be compiled without POSIX
