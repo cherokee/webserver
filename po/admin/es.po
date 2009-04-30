@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-04-28 12:21+0200\n"
+"POT-Creation-Date: 2009-04-30 17:20+0200\n"
 "PO-Revision-Date: 2009-04-16 17:22+0200\n"
 "Last-Translator: Antonio Pérez Jiménez <aperez@skarcha.com>\n"
 "Language-Team: Spanish <>\n"
@@ -97,7 +97,7 @@ msgstr "Contraseña"
 #: admin/ModuleProxy.py:104 admin/ModuleProxy.py:131 admin/ModuleProxy.py:163
 #: admin/ModuleRedir.py:41 admin/ModuleRehost.py:33 admin/ModuleWildcard.py:33
 #: admin/PageGeneral.py:121 admin/PageIcon.py:131 admin/PageIcon.py:164
-#: admin/PageInfoSource.py:133 admin/PageInfoSource.py:230
+#: admin/PageInfoSource.py:136 admin/PageInfoSource.py:235
 #: admin/PageMime.py:103 admin/PageVServer.py:346 admin/PageVServers.py:154
 msgid "Delete"
 msgstr "Borrar"
@@ -125,14 +125,14 @@ msgstr ""
 "Un balanceador de carga debe ser configurado para usar al menos un origen de "
 "datos."
 
-#: admin/ModuleBalancer.py:52 admin/Page.py:154 admin/PageInfoSource.py:31
-#: admin/PageInfoSource.py:83
+#: admin/ModuleBalancer.py:52 admin/Page.py:154 admin/PageInfoSource.py:32
+#: admin/PageInfoSource.py:84
 msgid "Information Sources"
 msgstr "Orígenes de datos"
 
-#: admin/ModuleBalancer.py:54 admin/PageInfoSource.py:165
-#: admin/PageInfoSource.py:191 admin/PageInfoSource.py:218
-#: admin/PageInfoSource.py:269
+#: admin/ModuleBalancer.py:54 admin/PageInfoSource.py:168
+#: admin/PageInfoSource.py:195 admin/PageInfoSource.py:223
+#: admin/PageInfoSource.py:274
 msgid "Nick"
 msgstr "Nombre"
 
@@ -271,7 +271,7 @@ msgid "Name"
 msgstr "Nombre"
 
 #: admin/ModuleCgi.py:73 admin/ModuleProxy.py:97 admin/ModuleProxy.py:114
-#: admin/PageInfoSource.py:147
+#: admin/PageInfoSource.py:150
 msgid "Value"
 msgstr "Valor"
 
@@ -464,8 +464,8 @@ msgid "Redirection"
 msgstr "Redirección"
 
 #: admin/ModuleErrorRedir.py:41 admin/ModuleErrorRedir.py:53
-#: admin/ModuleRedir.py:32 admin/PageInfoSource.py:164
-#: admin/PageInfoSource.py:190 admin/PageInfoSource.py:218
+#: admin/ModuleRedir.py:32 admin/PageInfoSource.py:167
+#: admin/PageInfoSource.py:194 admin/PageInfoSource.py:223
 #: admin/PageVServer.py:324
 msgid "Type"
 msgstr "Tipo"
@@ -940,7 +940,7 @@ msgid "New Regular Expression"
 msgstr "Nueva expresión regular"
 
 #: admin/ModuleRehost.py:51 admin/ModuleWildcard.py:51
-#: admin/PageInfoSource.py:233
+#: admin/PageInfoSource.py:238
 msgid "Add new"
 msgstr "Añadir nuevo"
 
@@ -1406,7 +1406,7 @@ msgstr ""
 msgid "Behavior rules"
 msgstr "Reglas de funcionamiento"
 
-#: admin/PageEntry.py:142 admin/PageInfoSource.py:269
+#: admin/PageEntry.py:142 admin/PageInfoSource.py:274
 msgid "Rule"
 msgstr "Regla"
 
@@ -1794,67 +1794,82 @@ msgstr ""
 "manualmente."
 
 #: admin/PageInfoSource.py:19
+#, fuzzy
 msgid ""
-"Execute the interpreter under a different user. The server needs enough "
-"privileges to switch the user (usually root)."
+"Execute the interpreter under a different user. Default: Same UID as the "
+"server."
 msgstr ""
 "Ejecutar el intérprete con otro usuario. El servidor tiene que tener los "
 "provilegios suficientes para cambiar de usuario (normalmente root)."
 
-#: admin/PageInfoSource.py:126
+#: admin/PageInfoSource.py:20
+#, fuzzy
+msgid ""
+"Execute the interpreter under a different group. Default: Same GID as the "
+"server."
+msgstr ""
+"Ejecutar el intérprete con otro usuario. El servidor tiene que tener los "
+"provilegios suficientes para cambiar de usuario (normalmente root)."
+
+#: admin/PageInfoSource.py:129
 msgid "Environment variables"
 msgstr "Variables de entorno"
 
-#: admin/PageInfoSource.py:142
+#: admin/PageInfoSource.py:145
 msgid "Add new Environment variable"
 msgstr "Añadir nueva variable de entorno"
 
-#: admin/PageInfoSource.py:147
+#: admin/PageInfoSource.py:150
 msgid "Variable"
 msgstr "Variable"
 
-#: admin/PageInfoSource.py:166 admin/PageInfoSource.py:192
-#: admin/PageInfoSource.py:218
+#: admin/PageInfoSource.py:169 admin/PageInfoSource.py:196
+#: admin/PageInfoSource.py:223
 msgid "Connection"
 msgstr "Conexión"
 
-#: admin/PageInfoSource.py:168 admin/PageInfoSource.py:194
+#: admin/PageInfoSource.py:171 admin/PageInfoSource.py:198
 msgid "Interpreter"
 msgstr "Intérprete"
 
-#: admin/PageInfoSource.py:169 admin/PageInfoSource.py:195
+#: admin/PageInfoSource.py:172 admin/PageInfoSource.py:199
 msgid "Spawning timeout"
 msgstr "Tiempo de espera de lanzamiento"
 
-#: admin/PageInfoSource.py:170 admin/PageInfoSource.py:196
+#: admin/PageInfoSource.py:173 admin/PageInfoSource.py:200
 msgid "Execute as User"
 msgstr "Ejecutar como el usuario"
 
-#: admin/PageInfoSource.py:203
+#: admin/PageInfoSource.py:174 admin/PageInfoSource.py:201
+#, fuzzy
+msgid "Execute as Group"
+msgstr "Ejecutar como el usuario"
+
+#: admin/PageInfoSource.py:208
 msgid "Information Sources Settings"
 msgstr "Ajustes de orígenes de datos"
 
-#: admin/PageInfoSource.py:215
+#: admin/PageInfoSource.py:220
 msgid "Known sources"
 msgstr "Orígenes de datos conocidos"
 
-#: admin/PageInfoSource.py:226
+#: admin/PageInfoSource.py:231
 msgid "Deletion forbidden. Check source usage."
 msgstr "No se puede borrar. Compruebe si se está usando."
 
-#: admin/PageInfoSource.py:242
+#: admin/PageInfoSource.py:247
 msgid "Details:"
 msgstr "Detalles:"
 
-#: admin/PageInfoSource.py:248
+#: admin/PageInfoSource.py:253
 msgid "Add a new"
 msgstr "Añadir nuevo"
 
-#: admin/PageInfoSource.py:257
+#: admin/PageInfoSource.py:262
 msgid "Source usage"
 msgstr "Uso del origen de datos"
 
-#: admin/PageInfoSource.py:269
+#: admin/PageInfoSource.py:274
 msgid "Virtual server"
 msgstr "Servidor virtual"
 
