@@ -1,3 +1,9 @@
+2009-05-04  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/socket.c (cherokee_socket_sendfile): Fixes an important
+	bug. Under certain circunstances, the server load was
+	sky-rocketing because really CPU hogy loops were executed.
+
 2009-04-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.13 released

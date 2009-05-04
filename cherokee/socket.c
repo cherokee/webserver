@@ -1094,7 +1094,7 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 
 		return ret_error;
 
-	} else if (*send == 0) {
+	} else if (*sent == 0) {
 		/* It isn't an error, but it wrote nothing */
 		return ret_error;
 	}
@@ -1163,7 +1163,7 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 		}
 		return ret_error;
 
-	} else if (*send == 0) {
+	} else if (*sent == 0) {
 		/* It isn't an error, but it wrote nothing */
 		return ret_error;
 	}
@@ -1255,7 +1255,7 @@ cherokee_socket_sendfile (cherokee_socket_t *socket,
 		}
 		return ret_error;
 
-	} else if (*send == 0) {
+	} else if (*sent == 0) {
 		/* It isn't an error, but it wrote nothing */
 		return ret_error;
 	}
