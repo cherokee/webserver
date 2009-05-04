@@ -187,7 +187,23 @@ parse_x_real_ip (cherokee_logger_t *logger, cherokee_connection_t *conn)
 	 */
 	ret = cherokee_header_get_known (&conn->header, header_x_real_ip, &val, &len);
 	if (ret != ret_ok) {
-		return ret_ok;
+		char *p;
+
+		/* Look for the X-Forwarded-For header
+		 */
+		ret = cherokee_header_get_known (&conn->header, header_x_forwarded_for, &val, &len);
+		if (ret != ret_ok) {
+			return ret_not_found;
+		}
+
+		p = val;
+		while (*p) {
+			if ((*p == ' ') || (*p == ',')) {
+				len = p - val;
+				break;
+			}
+			p++;
+		}
 	}
 	
 	/* Is the client allowed to use X-Real-IP?
@@ -227,7 +243,9 @@ cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
 	/* Deal with X-Real-IP
 	 */
 	if (logger->priv->x_real_ip_enabled) {
-		parse_x_real_ip (logger, CONN(conn));
+		ret = parse_x_real_ip (logger, CONN(conn));
+		if (unlikely (ret == ret_error))
+			return ret_error;
 	}
 
 	/* Call the virtual method

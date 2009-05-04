@@ -1,5 +1,8 @@
 2009-05-04  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/logger.c (parse_x_real_ip), admin/PageVServer.py: Adds
+	support for the X-Forwarded-For header.
+
 	* cherokee/socket.c (cherokee_socket_sendfile): Fixes an important
 	bug. Under certain circunstances, the server load was
 	sky-rocketing because really CPU hogy loops were executed.

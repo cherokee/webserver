@@ -56,9 +56,9 @@ NOTE_ERRORS           = N_('Back-end used to store the log errors.')
 NOTE_ACCESSES_ERRORS  = N_('Back-end used to store the log accesses and errors.')
 NOTE_WRT_FILE         = N_('Full path to the file where the information will be saved.')
 NOTE_WRT_EXEC         = N_('Path to the executable that will be invoked on each log entry.')
-NOTE_X_REAL_IP        = N_('Whether the logger should read and use the X-Real-IP header (send by reverse proxy front-ends).')
-NOTE_X_REAL_IP_ALL    = N_('Accept all the X-Real-IP headers. It\'s dangerous: turn it on only if you are centain of what you are doing.')
-NOTE_X_REAL_IP_ACCESS = N_('List of IP addresses and subnets that are allowed to send X-Real-IP headers (usually your proxy servers).')
+NOTE_X_REAL_IP        = N_('Whether the logger should read and use the X-Real-IP and X-Forwarded-For headers (send by reverse proxies).')
+NOTE_X_REAL_IP_ALL    = N_('Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on only if you are centain of what you are doing.')
+NOTE_X_REAL_IP_ACCESS = N_('List of IP addresses and subnets that are allowed to send X-Real-IP and X-Forwarded-For headers.')
 NOTE_EVHOST           = N_('How to support the "Advanced Virtual Hosting" mechanism. (Default: off)')
 NOTE_LOGGER_TEMPLATE  = N_('The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}')
 NOTE_MATCHING_METHOD  = N_('Allows the selection of domain matching method.')
@@ -543,11 +543,11 @@ class PageVServer (PageMenu, FormHelper):
         x_real_ip_all = int(self._cfg.get_val('%s!x_real_ip_access_all'%(pre), "0"))
 
         table = TableProps()
-        self.AddPropCheck (table, _('Accept X-Real-IP'), '%s!x_real_ip_enabled'%(pre), False, NOTE_X_REAL_IP)
+        self.AddPropCheck (table, _('Accept Forwarded IPs'), '%s!x_real_ip_enabled'%(pre), False, NOTE_X_REAL_IP)
         if x_real_ip:
-            self.AddPropCheck (table, _('Accept all X-Real-IPs'), '%s!x_real_ip_access_all'%(pre), False, NOTE_X_REAL_IP_ALL)
+            self.AddPropCheck (table, _('Don\'t check origin'), '%s!x_real_ip_access_all'%(pre), False, NOTE_X_REAL_IP_ALL)
             if not x_real_ip_all:
-                self.AddPropEntry (table, _('X-Real-IP Hosts'), '%s!x_real_ip_access'%(pre), NOTE_X_REAL_IP_ACCESS)
+                self.AddPropEntry (table, _('Accept from Hosts'), '%s!x_real_ip_access'%(pre), NOTE_X_REAL_IP_ACCESS)
 
         txt += self.Indent(str(table))
 
