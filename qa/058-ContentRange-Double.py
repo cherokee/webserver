@@ -16,7 +16,8 @@ class Test (TestBase):
         self.request           = "GET /Range100Both HTTP/1.0\r\n" +\
                                  "Range: bytes=%d-%d\r\n" % (OFFSET1, OFFSET2)
         self.expected_error    = 206
-        self.expected_content  = [MAGIC[OFFSET1:OFFSET2], "Content-Length: %d" % (OFFSET2-OFFSET1 + 1)]
+        self.expected_content  = [MAGIC[OFFSET1:OFFSET2+1],
+                                  "Content-Length: %d" % (OFFSET2-OFFSET1 + 1)]
         self.forbidden_content = [MAGIC[:OFFSET1], MAGIC[:OFFSET2]]
 
     def CustomTest (self):

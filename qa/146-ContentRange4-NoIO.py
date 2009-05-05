@@ -32,5 +32,5 @@ class Test (TestBase):
 
         forbidden = self.WriteTemp (srandom[OFFSET:])
 
-        self.expected_content  = [srandom[:OFFSET], "Content-Length: %d" % (OFFSET + 1)]
+        self.expected_content  = [srandom[:OFFSET], "Content-Length: %d" % (OFFSET)]
         self.forbidden_content = "file:" + forbidden

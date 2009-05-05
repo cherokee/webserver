@@ -121,6 +121,7 @@ cherokee_handler_file_new  (cherokee_handler_t **hdl, cherokee_connection_t *cnt
 	n->info           = NULL;
 	n->using_sendfile = false;
 	n->not_modified   = false;
+	n->range_both     = false;
 
 	/* Return the object
 	 */
@@ -498,7 +499,8 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 	/* Range 1: Check the range and file size
 	 */
 	if (unlikely ((conn->range_start > fhdl->info->st_size) ||
-		      (conn->range_end   > fhdl->info->st_size))) {
+		      (conn->range_end   > fhdl->info->st_size)))
+	{
 		conn->range_end  = fhdl->info->st_size;
 		conn->error_code = http_range_not_satisfiable;
 		ret = ret_error;
@@ -507,7 +509,15 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 
 	/* Set the error code
 	 */
-	if (conn->range_start != 0 || conn->range_end != 0) {
+	if ((conn->range_start != 0) &&
+	    (conn->range_end   != 0))
+	{
+		fhdl->range_both = true;
+		conn->error_code = http_partial_content;
+
+	} else if ((conn->range_start != 0) || 
+		   (conn->range_end   != 0))
+	{
 		conn->error_code = http_partial_content;
 	}
 
@@ -515,23 +525,28 @@ cherokee_handler_file_custom_init (cherokee_handler_file_t *fhdl,
 	 */
 	if (conn->range_end == 0) {
 		conn->range_end = fhdl->info->st_size;
-	} else {
-		conn->range_end++;
 	}
 
 	/* Set mmap or file position
 	 */
-	if (use_io &&
+	if ((use_io) &&
 	    (io_entry != NULL) &&
-	    (io_entry->mmaped != NULL)) {
+	    (io_entry->mmaped != NULL)) 
+	{
+		off_t len;
+
 		/* Set the mmap info
 		 */
 		conn->io_entry_ref = io_entry;
 
+		len = conn->range_end - conn->range_start;
+		if ((fhdl->range_both) && (len < io_entry->mmaped_len)) {
+			len += 1;
+		}
+
 		conn->mmaped     = ((char *)io_entry->mmaped) + conn->range_start;
-		conn->mmaped_len = io_entry->mmaped_len -
-			(conn->range_start +
-			 (io_entry->mmaped_len - conn->range_end));
+		conn->mmaped_len = len;
+				     
 	} else {
 		/* Does no longer care about the io_entry
 		 */
@@ -676,11 +691,16 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 
 		HANDLER(fhdl)->support |= hsupport_length;
 
-		/* We stat()'ed the file in the handler constructor
-		*/
+		/* Content Length
+		 */
 		content_length = conn->range_end - conn->range_start;
-		if (unlikely (content_length < 0))
+		if (unlikely (content_length < 0)) {
 			content_length = 0;
+		}
+
+		if (fhdl->range_both) {
+			content_length += 1;
+		}
 
 		if (conn->error_code == http_partial_content) {
 			/*
@@ -690,7 +710,7 @@ cherokee_handler_file_add_headers (cherokee_handler_file_t *fhdl,
 			cherokee_buffer_add_str     (buffer, "Content-Range: bytes ");
 			cherokee_buffer_add_ullong10(buffer, (cullong_t)conn->range_start);
 			cherokee_buffer_add_str     (buffer, "-");
-			cherokee_buffer_add_ullong10(buffer, (cullong_t)(conn->range_end - 1));
+			cherokee_buffer_add_ullong10(buffer, (cullong_t)(conn->range_end));
 			cherokee_buffer_add_str     (buffer, "/");
 			cherokee_buffer_add_ullong10(buffer, (cullong_t)fhdl->info->st_size);
 			cherokee_buffer_add_str     (buffer, CRLF);
@@ -712,7 +732,8 @@ ret_t
 cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *buffer)
 {
 	off_t                  total;
-	int                    size;
+	off_t                  end;
+	size_t                 size;
 	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
 
 #ifdef WITH_SENDFILE
@@ -766,15 +787,26 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 
 exit_sendfile:
 #endif
+	if (fhdl->range_both) {
+		end = conn->range_end + 1;
+	} else {
+		end = conn->range_end;
+	}
 
 	/* Check the amount to read
 	 */
-	if ((fhdl->offset + buffer->size) > conn->range_end) {
-		size = conn->range_end - fhdl->offset + 1;
+	size = buffer->size - 1;
+	if (size > (end - fhdl->offset)) {
+		size = end - fhdl->offset;
 	} else {
 		/* Align read size on a 4 byte limit
 		 */
-		size = (buffer->size & ~3);
+		size &= ~3;
+	}
+
+	/* Check overflow */
+	if (unlikely (size > buffer->size)) {
+		return ret_error;
 	}
 
 	/* Read
@@ -787,12 +819,13 @@ exit_sendfile:
 		return ret_error;
 	default:
 		buffer->len = total;
+		buffer->buf[buffer->len] = '\0';
 		fhdl->offset += total;
 	}	
 
 	/* Maybe it was the last file chunk
 	 */
-	if (fhdl->offset >= HANDLER_CONN(fhdl)->range_end) {
+	if (fhdl->offset >= end) {
 		return ret_eof_have_data;
 	}
 

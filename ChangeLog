@@ -1,3 +1,12 @@
+2009-05-05  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_file.c, cherokee/handler_file.h,
+	qa/146-ContentRange4-NoIO.py, qa/056-ContentRange3.py,
+	qa/145-ContentRange3-NoIO.py, qa/057-ContentRange4.py,
+	qa/058-ContentRange-Double.py: Fixes the 'Range:' management:
+	http://code.google.com/p/cherokee/issues/detail?id=454 Special
+	thanks to Arnaud Cornet for his report and patch.
+
 2009-05-04  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/logger.c (parse_x_real_ip), admin/PageVServer.py: Adds
