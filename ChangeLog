@@ -1,5 +1,7 @@
 2009-05-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* po/admin/es.po: Updates the Spanish translation.
+
 	* admin/PageInfoSource.py: Fixes NOTE_GROUP.
 
 	* cherokee/handler_file.c, cherokee/handler_file.h,
