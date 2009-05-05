@@ -17,7 +17,7 @@ NOTE_INTERPRETER = N_('Command to spawn a new source in case it were not accessi
 NOTE_TIMEOUT     = N_('How long should the server wait when spawning an interpreter before giving up (in seconds). Default: 3.')
 NOTE_USAGE       = N_('Sources currently in use. Note that the last source of any rule cannot be deleted until the rule has been manually edited.')
 NOTE_USER        = N_('Execute the interpreter under a different user. Default: Same UID as the server.')
-NOTE_GROUP       = N_('Execute the interpreter under a different group. Default: Same GID as the server.')
+NOTE_GROUP       = N_('Execute the interpreter under a different group. Default: Default GID of the new process UID.')
 
 TABLE_JS = """
 <script type="text/javascript">
