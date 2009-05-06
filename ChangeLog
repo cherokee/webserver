@@ -1,3 +1,8 @@
+2009-05-05  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/ModuleBalancer.py, admin/ModuleDirlist.py: Fixes an i18n
+	issue related to empty strings.
+
 2009-05-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* po/admin/es.po: Updates the Spanish translation.

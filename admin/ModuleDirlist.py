@@ -37,11 +37,11 @@ class ModuleDirlist (ModuleHandler):
     def _op_render (self):
         txt = '<h2>%s</h2>' % (_('Listing'))
         table = TableProps()
-        self.AddPropCheck (table, _("Show Size"),  "%s!size" %(self._prefix), True,  '')
-        self.AddPropCheck (table, _("Show Date"),  "%s!date" %(self._prefix), True,  '')
-        self.AddPropCheck (table, _("Show User"),  "%s!user" %(self._prefix), False, '')
-        self.AddPropCheck (table, _("Show Group"), "%s!group"%(self._prefix), False, '')
-        self.AddPropCheck (table, _("Allow symbolic links"), "%s!symlinks"%(self._prefix), True, '')
+        self.AddPropCheck (table, _("Show Size"),  "%s!size" %(self._prefix), True,  ' ')
+        self.AddPropCheck (table, _("Show Date"),  "%s!date" %(self._prefix), True,  ' ')
+        self.AddPropCheck (table, _("Show User"),  "%s!user" %(self._prefix), False, ' ')
+        self.AddPropCheck (table, _("Show Group"), "%s!group"%(self._prefix), False, ' ')
+        self.AddPropCheck (table, _("Allow symbolic links"), "%s!symlinks"%(self._prefix), True, ' ')
         txt += self.Indent(table)
 
         txt += '<h2>%s</h2>' % (_('Theming'))
