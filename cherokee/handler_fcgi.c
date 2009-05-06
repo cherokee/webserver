@@ -129,7 +129,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 		break;
 
 	case FCGI_STDOUT:
-/*		printf ("READ:STDOUT eof=%d: %d", CGI_BASE(hdl)->got_eof, len); */
+/*		printf ("READ:STDOUT eof=%d: %d", HDL_CGI_BASE(hdl)->got_eof, len); */
 		cherokee_buffer_add (outbuf, data, len);
 		break;
 
@@ -219,7 +219,9 @@ props_free (cherokee_handler_fcgi_props_t *props)
 
 
 ret_t 
-cherokee_handler_fcgi_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
+cherokee_handler_fcgi_configure (cherokee_config_node_t   *conf, 
+				 cherokee_server_t        *srv,
+				 cherokee_module_props_t **_props)
 {
 	ret_t                          ret;
 	cherokee_list_t               *i;
