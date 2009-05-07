@@ -59,7 +59,12 @@ class Handler(pyscgi.SCGIHandler):
         uri     = self.env['REQUEST_URI']
 
         if not SELECTED_LANGUAGE:
-            select_language (self.env['HTTP_ACCEPT_LANGUAGE'])
+            try:
+                langs = self.env['HTTP_ACCEPT_LANGUAGE']
+            except:
+                langs = None
+
+            select_language (langs)
 
         # Ensure that the configuration file is writable
         if not cfg.has_tree():
@@ -186,7 +191,7 @@ def select_language (langs):
         except:
             pass
 
-        SELECTED_LANGUAGE = True
+    SELECTED_LANGUAGE = True
 
 
 # Server

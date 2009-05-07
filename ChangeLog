@@ -1,4 +1,10 @@
-2009-05-05  Antonio Perez  <aperez@skarcha.com>
+2009-05-07  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/server.py: Cherokee-Admin fails if HTTP_ACCEPT_LANGUAGE
+	is not included in request header. Fixes bug #453:
+	http://code.google.com/p/cherokee/issues/detail?id=453
+
+2009-05-06  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/ModuleBalancer.py, admin/ModuleDirlist.py: Fixes an i18n
 	issue related to empty strings.
