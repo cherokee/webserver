@@ -5,13 +5,16 @@ from Table import *
 from Module import *
 from consts import *
 
+# For gettext
+N_ = lambda x: x
+
 DATA_VALIDATION = [
     ('vserver!.*?!rule!.*?!auth!users', validations.is_safe_id_list)
 ]
 
-NOTE_METHODS = _('Allowed HTTP Authentication methods.')
-NOTE_REALM   = _('Name associated with the protected resource.')
-NOTE_USERS   = _('User filter. List of allowed users.')
+NOTE_METHODS = N_('Allowed HTTP Authentication methods.')
+NOTE_REALM   = N_('Name associated with the protected resource.')
+NOTE_USERS   = N_('User filter. List of allowed users.')
 
 class ModuleAuthBase (Module, FormHelper):
     PROPERTIES = [
@@ -34,9 +37,9 @@ class ModuleAuthBase (Module, FormHelper):
             methods = filter (lambda x,m=method: x[0] == method, VALIDATOR_METHODS)
 
         table = TableProps()
-        self.AddPropOptions_Reload (table, _("Methods"), "%s!methods"%(self._prefix), methods, NOTE_METHODS)
-        self.AddPropEntry (table, _("Realm"), "%s!realm" %(self._prefix), NOTE_REALM)
-        self.AddPropEntry (table, _("Users"), "%s!users" %(self._prefix), NOTE_USERS)
+        self.AddPropOptions_Reload (table, _("Methods"), "%s!methods"%(self._prefix), methods, _(NOTE_METHODS))
+        self.AddPropEntry (table, _("Realm"), "%s!realm" %(self._prefix), _(NOTE_REALM))
+        self.AddPropEntry (table, _("Users"), "%s!users" %(self._prefix), _(NOTE_USERS))
 
         txt += "<h2>%s</h2>" % (_('Authentication Details'))
         txt += self.Indent(table)

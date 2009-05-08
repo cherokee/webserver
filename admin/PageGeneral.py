@@ -66,23 +66,23 @@ class PageGeneral (PageMenu, FormHelper):
     def _render_permissions (self):
         txt = "<h2>%s</h2>" % (_('Execution Permissions'))
         table = TableProps()
-        self.AddPropEntry (table, _('User'),   'server!user',   NOTE_USER)
-        self.AddPropEntry (table, _('Group'),  'server!group',  NOTE_GROUP)
-        self.AddPropEntry (table, _('Chroot'), 'server!chroot', NOTE_CHROOT)
+        self.AddPropEntry (table, _('User'),   'server!user',   _(NOTE_USER))
+        self.AddPropEntry (table, _('Group'),  'server!group',  _(NOTE_GROUP))
+        self.AddPropEntry (table, _('Chroot'), 'server!chroot', _(NOTE_CHROOT))
         txt += self.Indent(table)
         return txt
 
     def _render_network (self):
         txt = "<h2>%s</h2>" % (_('Support'))
         table = TableProps()
-        self.AddPropCheck (table, 'IPv6',     'server!ipv6', True, NOTE_IPV6)
-        self.AddPropOptions_Reload (table, _('SSL/TLS back-end'),'server!tls',modules_available(CRYPTORS), NOTE_TLS)
+        self.AddPropCheck (table, 'IPv6',     'server!ipv6', True, _(NOTE_IPV6))
+        self.AddPropOptions_Reload (table, _('SSL/TLS back-end'),'server!tls',modules_available(CRYPTORS), _(NOTE_TLS))
         txt += self.Indent(table)
 
         txt += "<h2>%s</h2>" % (_('Network behavior'))
         table = TableProps()
-        self.AddPropEntry (table,  _('Timeout (<i>secs</i>)'), 'server!timeout',       NOTE_TIMEOUT)
-        self.AddPropOptions_Reload (table, _('Server Tokens'), 'server!server_tokens', PRODUCT_TOKENS, NOTE_TOKENS)
+        self.AddPropEntry (table,  _('Timeout (<i>secs</i>)'), 'server!timeout',       _(NOTE_TIMEOUT))
+        self.AddPropOptions_Reload (table, _('Server Tokens'), 'server!server_tokens', PRODUCT_TOKENS, _(NOTE_TOKENS))
         txt += self.Indent(table)
         return txt
 
@@ -127,7 +127,7 @@ class PageGeneral (PageMenu, FormHelper):
         # Add new port
         pre    = 'server!bind!%s!port'%(next)
         table = TableProps()
-        self.AddPropEntry (table,  _('Add new port'), pre,  NOTE_ADD_PORT)
+        self.AddPropEntry (table,  _('Add new port'), pre,  _(NOTE_ADD_PORT))
 
         txt += "<br />"
         txt += str(table)

@@ -3,8 +3,11 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_HEADER = _("Header against which the regular expression will be evaluated.")
-NOTE_MATCH  = _("Regular expression.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_HEADER = N_("Header against which the regular expression will be evaluated.")
+NOTE_MATCH  = N_("Regular expression.")
 
 LENGHT_LIMIT = 10
 
@@ -27,10 +30,10 @@ class ModuleHeader (Module, FormHelper):
     def _op_render (self):
         table = TableProps()
         if self._prefix.startswith('tmp!'):
-            self.AddPropOptions_Reload (table, _('Header'), '%s!value'%(self._prefix), HEADERS, NOTE_HEADER)
+            self.AddPropOptions_Reload (table, _('Header'), '%s!value'%(self._prefix), HEADERS, _(NOTE_HEADER))
         else:
-            self.AddPropOptions_Reload (table, _('Header'), '%s!header'%(self._prefix), HEADERS, NOTE_HEADER)
-        self.AddPropEntry (table, _('Regular Expression'), '%s!match'%(self._prefix), NOTE_MATCH)
+            self.AddPropOptions_Reload (table, _('Header'), '%s!header'%(self._prefix), HEADERS, _(NOTE_HEADER))
+        self.AddPropEntry (table, _('Regular Expression'), '%s!match'%(self._prefix), _(NOTE_MATCH))
         return str(table)
         
     def apply_cfg (self, values):

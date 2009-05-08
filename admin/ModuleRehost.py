@@ -3,8 +3,11 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_REHOST   = _("Regular Expression against which the hosts be Host name will be compared.")
-WARNING_EMPTY = _("At least one Regular Expression string must be defined.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_REHOST   = N_("Regular Expression against which the hosts be Host name will be compared.")
+WARNING_EMPTY = N_("At least one Regular Expression string must be defined.")
 
 class ModuleRehost (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url):
@@ -46,7 +49,7 @@ class ModuleRehost (Module, FormHelper):
             i += 1
 
         table = TableProps()
-        self.AddPropEntry (table, _('New Regular Expression'), '%s!%s'%(pre, available), NOTE_REHOST)
+        self.AddPropEntry (table, _('New Regular Expression'), '%s!%s'%(pre, available), _(NOTE_REHOST))
         txt += "<h3>%s</h3>" % (_('Add new'))
         txt += self.Indent(table)
 

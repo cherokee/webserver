@@ -458,7 +458,7 @@ class FormHelper (WebComponent):
 
     def AddProp (self, table, title, cfg_key, entry, comment=None):
         label = self.Label (title, cfg_key);
-        table += (label, entry, _(comment))
+        table += (label, entry, comment)
 
     def AddPropEntry (self, table, title, cfg_key, comment=None, **kwargs):
         entry = self.InstanceEntry (cfg_key, 'text', **kwargs)

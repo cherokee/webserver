@@ -4,6 +4,9 @@ from Module import *
 from validations import *
 from consts import *
 
+# For gettext
+N_ = lambda x: x
+
 from ModuleCgi import *
 from ModuleBalancer import NOTE_BALANCER
 
@@ -31,7 +34,7 @@ class ModuleScgi (ModuleCgiBase):
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
         e = self.AddPropOptions_Reload (table, _("Balancer"), prefix, 
-                                        modules_available(BALANCERS), NOTE_BALANCER)
+                                        modules_available(BALANCERS), _(NOTE_BALANCER))
         txt += self.Indent(str(table) + e)
         return txt
 

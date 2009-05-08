@@ -109,9 +109,9 @@ class PageMime (PageMenu, FormHelper):
     def _render_add_mime (self):
         table = TableProps()
 
-        self.AddPropEntry (table, _('Mime Type'),  'tmp!new_mime',       NOTE_NEW_MIME)
-        self.AddPropEntry (table, _('Extensions'), 'tmp!new_extensions', NOTE_NEW_EXTENSIONS)
-        self.AddPropEntry (table, _('Max Age'),    'tmp!new_maxage',     NOTE_NEW_MAXAGE, maxlength=6)
+        self.AddPropEntry (table, _('Mime Type'),  'tmp!new_mime',       _(NOTE_NEW_MIME))
+        self.AddPropEntry (table, _('Extensions'), 'tmp!new_extensions', _(NOTE_NEW_EXTENSIONS))
+        self.AddPropEntry (table, _('Max Age'),    'tmp!new_maxage',     _(NOTE_NEW_MAXAGE), maxlength=6)
 
         return str(table)
 

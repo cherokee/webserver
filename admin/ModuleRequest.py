@@ -3,7 +3,10 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_REQUEST = _("Regular expression against which the request will be executed.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_REQUEST = N_("Regular expression against which the request will be executed.")
 
 class ModuleRequest (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_regex)]
@@ -15,11 +18,11 @@ class ModuleRequest (Module, FormHelper):
     def _op_render (self):
         table = TableProps()
         if self._prefix.startswith('tmp!'):
-            self.AddPropEntry (table, _('Regular Expression'), '%s!value'%(self._prefix), NOTE_REQUEST)
+            self.AddPropEntry (table, _('Regular Expression'), '%s!value'%(self._prefix), _(NOTE_REQUEST))
         else:
-            self.AddPropEntry (table, _('Regular Expression'), '%s!request'%(self._prefix), NOTE_REQUEST)
+            self.AddPropEntry (table, _('Regular Expression'), '%s!request'%(self._prefix), _(NOTE_REQUEST))
         return str(table)
-        
+
     def _op_apply_changes (self, uri, post):
         self.ApplyChangesPrefix (self._prefix, None, post)
 

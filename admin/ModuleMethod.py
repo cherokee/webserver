@@ -3,8 +3,11 @@ from Table import *
 from Module import *
 import validations
 
+# For gettext
+N_ = lambda x: x
+
 METHODS = [
-    ('',            _('Choose')),
+    ('',            N_('Choose')),
     ('get',         'GET'),
     ('post',        'POST'),
     ('head',        'HEAD'),
@@ -27,7 +30,7 @@ METHODS = [
     ('unsubscribe', 'UNSUBSCRIBE')
 ]
 
-NOTE_METHOD  = _("The HTTP method that should match this rule.")
+NOTE_METHOD  = N_("The HTTP method that should match this rule.")
 
 
 class ModuleMethod (Module, FormHelper):
@@ -42,10 +45,10 @@ class ModuleMethod (Module, FormHelper):
 
         if self._prefix.startswith('tmp!'):
             self.AddPropOptions (table, _('Method'), '%s!value'%(self._prefix), \
-                                 METHODS, NOTE_METHOD)
+                                 METHODS, _(NOTE_METHOD))
         else:
             self.AddPropOptions (table, _('Method'), '%s!method'%(self._prefix), \
-                                 METHODS[1:], NOTE_METHOD)
+                                 METHODS[1:], _(NOTE_METHOD))
 
         return str(table)
 

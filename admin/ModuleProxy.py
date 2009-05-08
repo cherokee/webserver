@@ -4,15 +4,18 @@ from Module import *
 from validations import *
 from consts import *
 
+# For gettext
+N_ = lambda x: x
+
 from ModuleHandler import *
 from ModuleBalancer import NOTE_BALANCER
 
-NOTE_REUSE_MAX       = _("Maximum number of connection per server that the proxy can try to keep opened.")
-NOTE_ALLOW_KEEPALIVE = _("Allow the server to use Keep-alive connections with the back-end servers.")
-NOTE_PRESERVE_HOST   = _("Preserve the original \"Host:\" header sent by the client. (Default No)")
+NOTE_REUSE_MAX       = N_("Maximum number of connection per server that the proxy can try to keep opened.")
+NOTE_ALLOW_KEEPALIVE = N_("Allow the server to use Keep-alive connections with the back-end servers.")
+NOTE_PRESERVE_HOST   = N_("Preserve the original \"Host:\" header sent by the client. (Default No)")
 
 HELPS = [
-    ('modules_handlers_proxy', _("Reverse Proxy"))
+    ('modules_handlers_proxy', N_("Reverse Proxy"))
 ]
 
 class ModuleProxy (ModuleHandler):
@@ -44,7 +47,7 @@ class ModuleProxy (ModuleHandler):
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
         e = self.AddPropOptions_Reload (table, _("Balancer"), prefix,
-                                        modules_available(BALANCERS), NOTE_BALANCER)
+                                        modules_available(BALANCERS), _(NOTE_BALANCER))
 
         txt += '<h2>%s</h2>' % (_('Back-end Servers'))
         txt += self.Indent(str(table) + e)
@@ -53,9 +56,9 @@ class ModuleProxy (ModuleHandler):
 
     def _render_general (self):
         table = TableProps()
-        self.AddPropEntry (table, _('Reuse connections'),    '%s!reuse_max'%(self._prefix), NOTE_REUSE_MAX)
-        self.AddPropCheck (table, _('Allow Keepalive'),      '%s!in_allow_keepalive'%(self._prefix), True, NOTE_ALLOW_KEEPALIVE)
-        self.AddPropCheck (table, _('Preserve Host header'), '%s!in_preserve_host'%(self._prefix), False, NOTE_PRESERVE_HOST)
+        self.AddPropEntry (table, _('Reuse connections'),    '%s!reuse_max'%(self._prefix), _(NOTE_REUSE_MAX))
+        self.AddPropCheck (table, _('Allow Keepalive'),      '%s!in_allow_keepalive'%(self._prefix), True, _(NOTE_ALLOW_KEEPALIVE))
+        self.AddPropCheck (table, _('Preserve Host header'), '%s!in_preserve_host'%(self._prefix), False, _(NOTE_PRESERVE_HOST))
         return str(table)
 
     def _render_request (self):

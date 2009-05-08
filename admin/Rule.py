@@ -136,7 +136,7 @@ class Rule (Module, FormHelper):
 
         # Rule
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, _("Rule Type"), pre, modules_available(RULES), " ")
+        e = self.AddPropOptions_Reload (table, _("Rule Type"), pre, modules_available(RULES), "")
         rule = self.Indent(str(table) + e)
 
         # Operations

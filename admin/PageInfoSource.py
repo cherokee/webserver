@@ -163,14 +163,14 @@ class PageInfoSource (PageMenu, FormHelper):
         
         # Properties
         table = TableProps()
-        self.AddPropOptions_Reload (table, _('Type'),'source!%s!type'%(s), SOURCE_TYPES, NOTE_TYPE)
-        self.AddPropEntry   (table, _('Nick'),       'source!%s!nick'%(s), NOTE_NICK,req=True)
-        self.AddPropEntry   (table, _('Connection'), 'source!%s!host'%(s), NOTE_HOST,req=True)
+        self.AddPropOptions_Reload (table, _('Type'),'source!%s!type'%(s), SOURCE_TYPES, _(NOTE_TYPE))
+        self.AddPropEntry   (table, _('Nick'),       'source!%s!nick'%(s), _(NOTE_NICK), req=True)
+        self.AddPropEntry   (table, _('Connection'), 'source!%s!host'%(s), _(NOTE_HOST), req=True)
         if type == 'interpreter':
-            self.AddPropEntry (table, _('Interpreter'),      'source!%s!interpreter'%(s),  NOTE_INTERPRETER, req=True)
-            self.AddPropEntry (table, _('Spawning timeout'), 'source!%s!timeout'%(s), NOTE_TIMEOUT)
-            self.AddPropEntry (table, _('Execute as User'),  'source!%s!user'%(s), NOTE_USER)
-            self.AddPropEntry (table, _('Execute as Group'), 'source!%s!group'%(s), NOTE_GROUP)
+            self.AddPropEntry (table, _('Interpreter'),      'source!%s!interpreter'%(s),  _(NOTE_INTERPRETER), req=True)
+            self.AddPropEntry (table, _('Spawning timeout'), 'source!%s!timeout'%(s), _(NOTE_TIMEOUT))
+            self.AddPropEntry (table, _('Execute as User'),  'source!%s!user'%(s), _(NOTE_USER))
+            self.AddPropEntry (table, _('Execute as Group'), 'source!%s!group'%(s), _(NOTE_GROUP))
 
         tmp  = self.HiddenInput ('source_num', s)
         tmp += str(table)
@@ -190,14 +190,14 @@ class PageInfoSource (PageMenu, FormHelper):
         type = self._cfg.get_val('tmp!new_source_type')
 
         table = TableProps()
-        self.AddPropOptions_Reload (table, _('Type'),       'tmp!new_source_type', SOURCE_TYPES, NOTE_TYPE)
-        self.AddPropEntry          (table, _('Nick'),       'tmp!new_source_nick', NOTE_NICK, req=True)
-        self.AddPropEntry          (table, _('Connection'), 'tmp!new_source_host', NOTE_HOST, req=True)
+        self.AddPropOptions_Reload (table, _('Type'),       'tmp!new_source_type', SOURCE_TYPES, _(NOTE_TYPE))
+        self.AddPropEntry          (table, _('Nick'),       'tmp!new_source_nick', _(NOTE_NICK), req=True)
+        self.AddPropEntry          (table, _('Connection'), 'tmp!new_source_host', _(NOTE_HOST), req=True)
         if type == 'interpreter' or not type:
-            self.AddPropEntry (table, _('Interpreter'),      'tmp!new_source_interpreter', NOTE_INTERPRETER, req=True)
-            self.AddPropEntry (table, _('Spawning timeout'), 'tmp!new_source_timeout', NOTE_TIMEOUT)
-            self.AddPropEntry (table, _('Execute as User'),  'tmp!new_source_user', NOTE_USER)
-            self.AddPropEntry (table, _('Execute as Group'), 'tmp!new_source_group', NOTE_GROUP)
+            self.AddPropEntry (table, _('Interpreter'),      'tmp!new_source_interpreter', _(NOTE_INTERPRETER), req=True)
+            self.AddPropEntry (table, _('Spawning timeout'), 'tmp!new_source_timeout', _(NOTE_TIMEOUT))
+            self.AddPropEntry (table, _('Execute as User'),  'tmp!new_source_user', _(NOTE_USER))
+            self.AddPropEntry (table, _('Execute as Group'), 'tmp!new_source_group', _(NOTE_GROUP))
 
         txt += self.Indent(table)
         return txt

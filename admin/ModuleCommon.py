@@ -5,11 +5,14 @@ from ModuleHandler import *
 from ModuleFile import *
 from ModuleDirlist import *
 
-NOTE_PATHINFO = _("Allow extra tailing paths")
-NOTE_DIRLIST  = _("Allow to list directory contents")
+# For gettext
+N_ = lambda x: x
+
+NOTE_PATHINFO = N_("Allow extra tailing paths")
+NOTE_DIRLIST  = N_("Allow to list directory contents")
 
 HELPS = [
-    ('modules_handlers_common', _("List & Send"))
+    ('modules_handlers_common', N_("List & Send"))
 ]
 
 class ModuleCommon (ModuleHandler):
@@ -28,8 +31,8 @@ class ModuleCommon (ModuleHandler):
 
         # Local properties
         table = TableProps()
-        self.AddPropCheck (table, _('Allow PathInfo'), '%s!allow_pathinfo'%(self._prefix), False, NOTE_PATHINFO)
-        self.AddPropCheck (table, _('Allow Directory Listing'), '%s!allow_dirlist'%(self._prefix), True, NOTE_DIRLIST)
+        self.AddPropCheck (table, _('Allow PathInfo'), '%s!allow_pathinfo'%(self._prefix), False, _(NOTE_PATHINFO))
+        self.AddPropCheck (table, _('Allow Directory Listing'), '%s!allow_dirlist'%(self._prefix), True, _(NOTE_DIRLIST))
 
         txt = '<h2>%s</h2>' % (_('Parsing'))
         txt += self.Indent(table)

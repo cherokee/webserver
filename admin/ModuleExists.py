@@ -3,9 +3,12 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_EXISTS  = _("Comma separated list of files. Rule applies if one exists.")
-NOTE_IOCACHE = _("Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise.")
-NOTE_ANY     = _("Match the request if any file exists.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_EXISTS  = N_("Comma separated list of files. Rule applies if one exists.")
+NOTE_IOCACHE = N_("Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise.")
+NOTE_ANY     = N_("Match the request if any file exists.")
 
 class ModuleExists (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
@@ -21,12 +24,12 @@ class ModuleExists (Module, FormHelper):
     def _op_render (self):
         table = TableProps()
         if self._prefix.startswith('tmp!'):
-            self.AddPropEntry (table, _('Files'), '%s!value'%(self._prefix), NOTE_EXISTS)
+            self.AddPropEntry (table, _('Files'), '%s!value'%(self._prefix), _(NOTE_EXISTS))
         else:
-            self.AddPropCheck (table, _('Match any file'), '%s!match_any'%(self._prefix), False, NOTE_ANY)
+            self.AddPropCheck (table, _('Match any file'), '%s!match_any'%(self._prefix), False, _(NOTE_ANY))
             if not int(self._cfg.get_val ('%s!match_any'%(self._prefix), '0')):
-                self.AddPropEntry (table, _('Files'), '%s!exists'%(self._prefix), NOTE_EXISTS)
-            self.AddPropCheck (table, _('Use I/O cache'), '%s!iocache'%(self._prefix), False, NOTE_IOCACHE)
+                self.AddPropEntry (table, _('Files'), '%s!exists'%(self._prefix), _(NOTE_EXISTS))
+            self.AddPropCheck (table, _('Use I/O cache'), '%s!iocache'%(self._prefix), False, _(NOTE_IOCACHE))
         return str(table)
 
     def _op_apply_changes (self, uri, post):

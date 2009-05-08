@@ -254,25 +254,25 @@ class PageVServer (PageMenu, FormHelper):
 
         txt = '<h2>%s</h2>' % (_('Required SSL/TLS values'))
         table = TableProps()
-        self.AddPropEntry (table, _('Certificate'),      '%s!ssl_certificate_file' % (pre),       NOTE_CERT)
-        self.AddPropEntry (table, _('Certificate key'),  '%s!ssl_certificate_key_file' % (pre),   NOTE_CERT_KEY)
+        self.AddPropEntry (table, _('Certificate'),      '%s!ssl_certificate_file' % (pre),       _(NOTE_CERT))
+        self.AddPropEntry (table, _('Certificate key'),  '%s!ssl_certificate_key_file' % (pre),   _(NOTE_CERT_KEY))
         txt += self.Indent(table)
 
         txt += '<h2>%s</h2>' % (_('Advanced options'))
         table = TableProps()
-        self.AddPropEntry (table, _('Ciphers'), '%s!ssl_ciphers' % (pre), NOTE_CIPHERS)
+        self.AddPropEntry (table, _('Ciphers'), '%s!ssl_ciphers' % (pre), _(NOTE_CIPHERS))
         self.AddPropOptions_Ajax (table, _('Client Certs. Request'),
                                          '%s!ssl_client_certs' % (pre),
                                          CLIENT_CERTS, 
-                                         NOTE_CLIENT_CERTS)
+                                         _(NOTE_CLIENT_CERTS))
 
         req_cc = self._cfg.get_val('%s!ssl_client_certs' % (pre))
         if req_cc:
-            self.AddPropEntry (table, _('CA List'),     '%s!ssl_ca_list_file' % (pre),        NOTE_CA_LIST)
+            self.AddPropEntry (table, _('CA List'),     '%s!ssl_ca_list_file' % (pre),        _(NOTE_CA_LIST))
 
             calist = self._cfg.get_val('%s!ssl_ca_list_file' % (pre))
             if calist:
-                self.AddPropEntry (table, _('Verify Depth'),  '%s!ssl_verify_depth' % (pre),  NOTE_VERIFY_DEPTH, size=4)
+                self.AddPropEntry (table, _('Verify Depth'),  '%s!ssl_verify_depth' % (pre),  _(NOTE_VERIFY_DEPTH), size=4)
 
         txt += self.Indent(table)
 
@@ -295,7 +295,7 @@ class PageVServer (PageMenu, FormHelper):
         txt = "<h2>%s</h2>" % (_('Add new rule'))
         table = TableProps()
         e = self.AddPropOptions_Reload (table, _("Rule Type"), prefix, 
-                                        modules_available(RULES), " ")
+                                        modules_available(RULES), "")
         txt += self.Indent (str(table) + e)
         return txt
 
@@ -416,9 +416,9 @@ class PageVServer (PageMenu, FormHelper):
         if self._cfg.get_val(cfg_key):
             js = "post_del_key('%s','%s');" % (self.submit_ajax_url, cfg_key)
             button = self.InstanceButton (_("Disable"), onClick=js)
-            self.AddProp (table, _('Status'), '', button, NOTE_DISABLE_PW)
+            self.AddProp (table, _('Status'), '', button, _(NOTE_DISABLE_PW))
 
-        self.AddPropEntry (table, _('Directory name'), cfg_key, NOTE_PERSONAL_WEB)
+        self.AddPropEntry (table, _('Directory name'), cfg_key, _(NOTE_PERSONAL_WEB))
         txt += self.Indent(table)
 
         return txt
@@ -430,26 +430,26 @@ class PageVServer (PageMenu, FormHelper):
         if host != "default":
             txt += '<h2>%s</h2>' % (_('Server ID'))
             table = TableProps()
-            self.AddPropEntry (table, _('Virtual Server nickname'), '%s!nick'%(pre), NOTE_NICKNAME)
+            self.AddPropEntry (table, _('Virtual Server nickname'), '%s!nick'%(pre), _(NOTE_NICKNAME))
             txt += self.Indent(table)
 
         txt += '<h2>%s</h2>' % (_('Paths'))
         table = TableProps()
-        self.AddPropEntry (table, _('Document Root'),     '%s!document_root'%(pre),   NOTE_DOCUMENT_ROOT)
-        self.AddPropEntry (table, _('Directory Indexes'), '%s!directory_index'%(pre), NOTE_DIRECTORY_INDEX)
+        self.AddPropEntry (table, _('Document Root'),     '%s!document_root'%(pre),   _(NOTE_DOCUMENT_ROOT))
+        self.AddPropEntry (table, _('Directory Indexes'), '%s!directory_index'%(pre), _(NOTE_DIRECTORY_INDEX))
         txt += self.Indent(table)
 
         txt += '<h2>%s</h2>' % (_('Network'))
         table = TableProps()
-        self.AddPropCheck (table, _('Keep-alive'),         '%s!keepalive'%(pre), True, NOTE_KEEPALIVE)
-        self.AddPropEntry (table, _('Max Upload Size'),    '%s!post_max_len' % (pre),  NOTE_MAX_UPLOAD_SIZE)
-        self.AddPropCheck (table, _('Traffic Statistics'), '%s!collect_statistics'%(pre), True, NOTE_COLLECT)
+        self.AddPropCheck (table, _('Keep-alive'),         '%s!keepalive'%(pre), True, _(NOTE_KEEPALIVE))
+        self.AddPropEntry (table, _('Max Upload Size'),    '%s!post_max_len' % (pre),  _(NOTE_MAX_UPLOAD_SIZE))
+        self.AddPropCheck (table, _('Traffic Statistics'), '%s!collect_statistics'%(pre), True, _(NOTE_COLLECT))
         txt += self.Indent(table)
 
         txt += '<h2>%s</h2>' % (_('Advanced Virtual Hosting'))
         table = TableProps()
         e = self.AddPropOptions_Reload (table, _('Method'), '%s!evhost'%(pre),
-                                        modules_available(EVHOSTS), NOTE_EVHOST)
+                                        modules_available(EVHOSTS), _(NOTE_EVHOST))
         txt += self.Indent(table) + e
 
         return txt
@@ -463,7 +463,7 @@ class PageVServer (PageMenu, FormHelper):
         txt += '<h2>%s</h2>' % (_('Logging Format'))
         table = TableProps()
         self.AddPropOptions_Ajax (table, _('Format'), pre, 
-                                  modules_available(LOGGERS), NOTE_LOGGERS)
+                                  modules_available(LOGGERS), _(NOTE_LOGGERS))
         txt += self.Indent(str(table))
 
         # Writers
@@ -475,34 +475,34 @@ class PageVServer (PageMenu, FormHelper):
                 cfg_key = "%s!all!type"%(pre)
                 table = TableProps()
                 self.AddPropOptions_Ajax (table, _('Accesses and Errors'), cfg_key, 
-                                          LOGGER_WRITERS, NOTE_ACCESSES_ERRORS)
+                                          LOGGER_WRITERS, _(NOTE_ACCESSES_ERRORS))
                 writers += str(table)
 
                 all = self._cfg.get_val(cfg_key)
                 if not all or all == 'file':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, _('Filename'), '%s!all!filename'%(pre), NOTE_WRT_FILE)
+                    self.AddPropEntry (t1, _('Filename'), '%s!all!filename'%(pre), _(NOTE_WRT_FILE))
                     writers += str(t1)
                 elif all == 'exec':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, _('Command'), '%s!all!command'%(pre), NOTE_WRT_EXEC)
+                    self.AddPropEntry (t1, _('Command'), '%s!all!command'%(pre), _(NOTE_WRT_EXEC))
                     writers += str(t1)
 
             else:
                 # Accesses
                 cfg_key = "%s!access!type"%(pre)
                 table = TableProps()
-                self.AddPropOptions_Ajax (table, _('Accesses'), cfg_key, LOGGER_WRITERS, NOTE_ACCESSES)
+                self.AddPropOptions_Ajax (table, _('Accesses'), cfg_key, LOGGER_WRITERS, _(NOTE_ACCESSES))
                 writers += str(table)
 
                 access = self._cfg.get_val(cfg_key)
                 if not access or access == 'file':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, _('Filename'), '%s!access!filename'%(pre), NOTE_WRT_FILE)
+                    self.AddPropEntry (t1, _('Filename'), '%s!access!filename'%(pre), _(NOTE_WRT_FILE))
                     writers += str(t1)
                 elif access == 'exec':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, _('Command'), '%s!access!command'%(pre), NOTE_WRT_EXEC)
+                    self.AddPropEntry (t1, _('Command'), '%s!access!command'%(pre), _(NOTE_WRT_EXEC))
                     writers += str(t1)
 
                 if format == 'custom':
@@ -515,17 +515,17 @@ class PageVServer (PageMenu, FormHelper):
                 # Error
                 cfg_key = "%s!error!type"%(pre)
                 table = TableProps()
-                self.AddPropOptions_Ajax (table, _('Errors'), cfg_key, LOGGER_WRITERS, NOTE_ERRORS)
+                self.AddPropOptions_Ajax (table, _('Errors'), cfg_key, LOGGER_WRITERS, _(NOTE_ERRORS))
                 writers += str(table)
 
                 error = self._cfg.get_val(cfg_key)
                 if not error or error == 'file':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, _('Filename'), '%s!error!filename'%(pre), NOTE_WRT_FILE)
+                    self.AddPropEntry (t1, _('Filename'), '%s!error!filename'%(pre), _(NOTE_WRT_FILE))
                     writers += str(t1)
                 elif error == 'exec':
                     t1 = TableProps()
-                    self.AddPropEntry (t1, _('Command'), '%s!error!command'%(pre), NOTE_WRT_EXEC)
+                    self.AddPropEntry (t1, _('Command'), '%s!error!command'%(pre), _(NOTE_WRT_EXEC))
                     writers += str(t1)
 
                 if format == 'custom':
@@ -542,11 +542,11 @@ class PageVServer (PageMenu, FormHelper):
         x_real_ip_all = int(self._cfg.get_val('%s!x_real_ip_access_all'%(pre), "0"))
 
         table = TableProps()
-        self.AddPropCheck (table, _('Accept Forwarded IPs'), '%s!x_real_ip_enabled'%(pre), False, NOTE_X_REAL_IP)
+        self.AddPropCheck (table, _('Accept Forwarded IPs'), '%s!x_real_ip_enabled'%(pre), False, _(NOTE_X_REAL_IP))
         if x_real_ip:
-            self.AddPropCheck (table, _('Don\'t check origin'), '%s!x_real_ip_access_all'%(pre), False, NOTE_X_REAL_IP_ALL)
+            self.AddPropCheck (table, _('Don\'t check origin'), '%s!x_real_ip_access_all'%(pre), False, _(NOTE_X_REAL_IP_ALL))
             if not x_real_ip_all:
-                self.AddPropEntry (table, _('Accept from Hosts'), '%s!x_real_ip_access'%(pre), NOTE_X_REAL_IP_ACCESS)
+                self.AddPropEntry (table, _('Accept from Hosts'), '%s!x_real_ip_access'%(pre), _(NOTE_X_REAL_IP_ACCESS))
 
         txt += self.Indent(str(table))
 
@@ -564,7 +564,7 @@ class PageVServer (PageMenu, FormHelper):
         e = self.AddPropOptions_Reload (table, _('Matching method'),
                                         '%s!match' % (pre), 
                                         modules_available(VRULES), 
-                                        NOTE_MATCHING_METHOD)
+                                        _(NOTE_MATCHING_METHOD))
         txt += self.Indent(table) + e
         return txt
 
@@ -639,4 +639,4 @@ class PageVServer (PageMenu, FormHelper):
         value = self._cfg.get_val(cfg_key)
         if not value:
             self._cfg[cfg_key] = DEFAULT_LOGGER_TEMPLATE
-        self.AddPropEntry (table, _('Template: '), cfg_key, NOTE_LOGGER_TEMPLATE)
+        self.AddPropEntry (table, _('Template: '), cfg_key, _(NOTE_LOGGER_TEMPLATE))

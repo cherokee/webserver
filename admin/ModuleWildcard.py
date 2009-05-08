@@ -3,8 +3,11 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_WILDCARD = _("Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example.com")
-WARNING_EMPTY = _("At least one wildcard string must be defined.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_WILDCARD = N_("Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example.com")
+WARNING_EMPTY = N_("At least one wildcard string must be defined.")
 
 class ModuleWildcard (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url):
@@ -46,7 +49,7 @@ class ModuleWildcard (Module, FormHelper):
             i += 1
 
         table = TableProps()
-        self.AddPropEntry (table, _('New host name'), '%s!%s'%(pre, available), NOTE_WILDCARD)
+        self.AddPropEntry (table, _('New host name'), '%s!%s'%(pre, available), _(NOTE_WILDCARD))
         txt += "<h3>%s</h3>" % (_('Add new'))
         txt += self.Indent(table)
 

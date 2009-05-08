@@ -5,10 +5,13 @@ from flags import *
 
 import validations
 
+# For gettext
+N_ = lambda x: x
+
 ISO3166_URL      = "http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm"
-NOTE_NEW_COUNTRY = _("Add the initial country. It's possible to add more later on.")
-NOTE_ADD_COUNTRY = _("Pick an additional country to add to the country list.")
-NOTE_COUNTRIES   = _("""List of countries from the client IPs. It must use the
+NOTE_NEW_COUNTRY = N_("Add the initial country. It's possible to add more later on.")
+NOTE_ADD_COUNTRY = N_("Pick an additional country to add to the country list.")
+NOTE_COUNTRIES   = N_("""List of countries from the client IPs. It must use the
 <a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation.""") % (ISO3166_URL)
 
 class ModuleGeoip (Module, FormHelper):
@@ -24,7 +27,7 @@ class ModuleGeoip (Module, FormHelper):
         button = '<input type="submit" value="%s" />' % (_('Add'))
 
         table = TableProps()
-        self.AddProp (table, _('Country'), cfg_key, str(flags) + button, NOTE_NEW_COUNTRY)
+        self.AddProp (table, _('Country'), cfg_key, str(flags) + button, _(NOTE_NEW_COUNTRY))
         return str(table)
 
     def _render_modify_entry (self):
@@ -33,7 +36,7 @@ class ModuleGeoip (Module, FormHelper):
 
         # Text entry
         table = TableProps()
-        self.AddPropEntry (table, _('Countries'), cfg_key, NOTE_COUNTRIES)
+        self.AddPropEntry (table, _('Countries'), cfg_key, _(NOTE_COUNTRIES))
 
         # Flags
         cfg_key_fake = 'tmp!add_county'
@@ -44,7 +47,7 @@ class ModuleGeoip (Module, FormHelper):
                  _('Add'), cfg_key_fake, cfg_key, key_val, '/ajax/update')
 
         content = ADD_FLAGS_TO_KEY_JS + str(flags) + button
-        self.AddProp (table, _('Add Country'), "", content, NOTE_ADD_COUNTRY)
+        self.AddProp (table, _('Add Country'), "", content, _(NOTE_ADD_COUNTRY))
 
         return str(table)
 

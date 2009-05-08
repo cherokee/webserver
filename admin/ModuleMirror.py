@@ -5,8 +5,11 @@ from validations import *
 from consts import *
 from ModuleBalancer import *
 
+# For gettext
+N_ = lambda x: x
+
 HELPS = [
-    ('modules_handlers_mirror', _("TCP balancer"))
+    ('modules_handlers_mirror', N_("TCP balancer"))
 ]
 
 class ModuleMirror (ModuleHandler):
@@ -23,7 +26,7 @@ class ModuleMirror (ModuleHandler):
 
         table = TableProps()
         e = self.AddPropOptions_Reload (table, _("Balancer"), prefix,
-                                        modules_available(BALANCERS), NOTE_BALANCER,
+                                        modules_available(BALANCERS), _(NOTE_BALANCER),
                                         default_type='host',
                                         allow_type_change=False)
 

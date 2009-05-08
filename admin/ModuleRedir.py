@@ -3,13 +3,16 @@ from Table import *
 from ModuleHandler import *
 from consts import *
 
-NOTE_SHOW         = _("Defines whether the redirection will be seen by the client.")
-NOTE_REGEX        = _('Regular expression. Check out the <a target="_blank" href="http://perldoc.perl.org/perlre.html">Reference</a>.')
-NOTE_SUBSTITUTION = _("Target address. It can use Regular Expression substitution sub-strings.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_SHOW         = N_("Defines whether the redirection will be seen by the client.")
+NOTE_REGEX        = N_('Regular expression. Check out the <a target="_blank" href="http://perldoc.perl.org/perlre.html">Reference</a>.')
+NOTE_SUBSTITUTION = N_("Target address. It can use Regular Expression substitution sub-strings.")
 
 HELPS = [
-    ('modules_handlers_redir',              _("Redirections")),
-    ('http://perldoc.perl.org/perlre.html', _("Regular Expressions"))
+    ('modules_handlers_redir',              N_("Redirections")),
+    ('http://perldoc.perl.org/perlre.html', N_("Regular Expressions"))
 ]
 
 class ModuleRedir (ModuleHandler):
@@ -45,9 +48,9 @@ class ModuleRedir (ModuleHandler):
 
         # Add new rule
         table = TableProps()
-        self.AddPropOptions (table, _('Show'), "rewrite_new_show", REDIR_SHOW, NOTE_SHOW, noautosubmit=True)
-        self.AddPropEntry   (table, _('Regular Expression'), 'rewrite_new_regex', NOTE_REGEX, noautosubmit=True)
-        self.AddPropEntry   (table, _('Substitution'), 'rewrite_new_substring', NOTE_SUBSTITUTION, req=True)
+        self.AddPropOptions (table, _('Show'), "rewrite_new_show", REDIR_SHOW, _(NOTE_SHOW), noautosubmit=True)
+        self.AddPropEntry   (table, _('Regular Expression'), 'rewrite_new_regex', _(NOTE_REGEX), noautosubmit=True)
+        self.AddPropEntry   (table, _('Substitution'), 'rewrite_new_substring', _(NOTE_SUBSTITUTION), req=True)
 
         txt += "<h2>%s</h2>" % (_('Add new rule'))
         txt += self.Indent(table)

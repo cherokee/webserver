@@ -10,6 +10,28 @@
 	deletions now use links to execute javascript code, instead of
 	the onClick event.
 
+	* admin/PageEntry.py, admin/ModuleWildcard.py,
+	admin/ModuleAuth.py, admin/ModuleGeoip.py, admin/ModuleRedir.py,
+	admin/Page.py, admin/ModuleDirlist.py, admin/ModuleHtdigest.py,
+	admin/ModuleFile.py, admin/ModuleLdap.py,
+	admin/ModuleServerInfo.py, admin/ModuleCustomError.py,
+	admin/ModuleScgi.py, admin/PageAdvanced.py, admin/Rule.py,
+	admin/ModuleCgi.py, admin/ModulePlain.py,
+	admin/ModuleDbslayer.py, admin/PageVServers.py,
+	admin/ModuleEvhost.py, admin/ModuleBind.py,
+	admin/ModuleProxy.py, admin/ModuleRequest.py,
+	admin/ModuleCommon.py, admin/ModuleHeader.py,
+	admin/ModuleStreaming.py, admin/ModuleExtensions.py,
+	admin/ModuleSecdownload.py, admin/PageGeneral.py,
+	admin/ModuleRehost.py, admin/ModuleBalancer.py,
+	admin/ModuleFcgi.py, admin/PageMime.py, admin/ModuleExists.py,
+	admin/ModuleMethod.py, admin/PageVServer.py, admin/Form.py,
+	admin/ModuleHtpasswd.py, admin/PageInfoSource.py,
+	admin/ModuleDirectory.py, admin/ModuleMysql.py,
+	admin/ModuleMirror.py: Better string translation support. Fixes
+	problems with empty strings, and fixes a problem with strings
+	that was not translated when the user changes the language.
+
 2009-05-07  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/server.py: Cherokee-Admin fails if HTTP_ACCEPT_LANGUAGE

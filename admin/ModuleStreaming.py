@@ -6,9 +6,12 @@ from Table import *
 from ModuleHandler import *
 from ModuleFile import *
 
-NOTE_RATE        = _('Figure the bit rate of the media file, and limit the bandwidth to it.')
-NOTE_RATE_FACTOR = _('Factor by which the bandwidth limit will be increased. Default: 0.1')
-NOTE_RATE_BOOST  = _('Number of seconds to stream before setting the bandwidth limit. Default: 5.')
+# For gettext
+N_ = lambda x: x
+
+NOTE_RATE        = N_('Figure the bit rate of the media file, and limit the bandwidth to it.')
+NOTE_RATE_FACTOR = N_('Factor by which the bandwidth limit will be increased. Default: 0.1')
+NOTE_RATE_BOOST  = N_('Number of seconds to stream before setting the bandwidth limit. Default: 5.')
 
 DATA_VALIDATION = [
     ('vserver!.+?!rule!.+?!handler!rate_factor', validations.is_float),
@@ -16,7 +19,7 @@ DATA_VALIDATION = [
 ]
 
 HELPS = [
-    ('modules_handlers_streaming', _("Audio/Video Streaming"))
+    ('modules_handlers_streaming', N_("Audio/Video Streaming"))
 ]
 
 class ModuleStreaming (ModuleHandler):
@@ -34,10 +37,10 @@ class ModuleStreaming (ModuleHandler):
 
         # Streaming
         table = TableProps()
-        self.AddPropCheck (table, _("Auto Rate"),       "%s!rate" % (self._prefix), True,  NOTE_RATE)
+        self.AddPropCheck (table, _("Auto Rate"),       "%s!rate" % (self._prefix), True,  _(NOTE_RATE))
         if int(self._cfg.get_val ('%s!rate'%(self._prefix), "1")):
-            self.AddPropEntry (table, _("Speedup Factor"), "%s!rate_factor" % (self._prefix), NOTE_RATE_FACTOR)
-            self.AddPropEntry (table, _("Initial Boost"),  "%s!rate_boost" % (self._prefix),  NOTE_RATE_BOOST)
+            self.AddPropEntry (table, _("Speedup Factor"), "%s!rate_factor" % (self._prefix), _(NOTE_RATE_FACTOR))
+            self.AddPropEntry (table, _("Initial Boost"),  "%s!rate_boost" % (self._prefix),  _(NOTE_RATE_BOOST))
 
         txt += '<h2>%s</h2>' % (_('Audio/Video Streaming'))
         txt += self.Indent(table)

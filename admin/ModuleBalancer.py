@@ -4,9 +4,12 @@ from Module import *
 
 from consts import *
 
-NOTE_BALANCER      = _('Allow to select how the connections will be dispatched.')
-NO_GENERAL_SOURCES = _('There are no Information Sources configured. Please proceed to configure an <a href="/source">Information Source</a>.')
-NO_SOURCE_WARNING  = _('A load balancer must be configured to use at least one information source.')
+# For gettext
+N_ = lambda x: x
+
+NOTE_BALANCER      = N_('Allow to select how the connections will be dispatched.')
+NO_GENERAL_SOURCES = N_('There are no Information Sources configured. Please proceed to configure an <a href="/source">Information Source</a>.')
+NO_SOURCE_WARNING  = N_('A load balancer must be configured to use at least one information source.')
 
 class ModuleBalancerGeneric (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url, name):
@@ -77,7 +80,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
 
             table = TableProps()
             self.AddPropOptions_Reload (table, _("Application Server"),
-                                        "tmp!new_balancer_node", options, " ")
+                                        "tmp!new_balancer_node", options, "")
             txt += str(table)
 
         return txt

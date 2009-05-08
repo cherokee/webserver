@@ -3,7 +3,10 @@ import validations
 from Table import *
 from ModuleAuth import *
 
-NOTE_PASSWD = _("Full path to the plain text password file.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_PASSWD = N_("Full path to the plain text password file.")
 
 DATA_VALIDATION = [
     ('vserver!.*?!rule!.*?!auth!passwdfile', (validations.is_local_file_exists, 'cfg'))
@@ -27,7 +30,7 @@ class ModulePlain (ModuleAuthBase):
         txt  = ModuleAuthBase._op_render (self)
 
         table = TableProps()
-        self.AddPropEntry (table, _("Password File"), "%s!passwdfile"%(self._prefix), NOTE_PASSWD)
+        self.AddPropEntry (table, _("Password File"), "%s!passwdfile"%(self._prefix), _(NOTE_PASSWD))
 
         txt += "<h2>%s</h2>" % (_('Plain password file'))
         txt += self.Indent(table)

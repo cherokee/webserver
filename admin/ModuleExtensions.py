@@ -3,7 +3,10 @@ from Table import *
 from Module import *
 import validations
 
-NOTE_EXTENSIONS = _("File extension list to which content the configuration will be applied.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_EXTENSIONS = N_("File extension list to which content the configuration will be applied.")
 
 class ModuleExtensions (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
@@ -15,9 +18,9 @@ class ModuleExtensions (Module, FormHelper):
     def _op_render (self):
         table = TableProps()
         if self._prefix.startswith('tmp!'):
-            self.AddPropEntry (table, _('Extensions'), '%s!value'%(self._prefix), NOTE_EXTENSIONS)
+            self.AddPropEntry (table, _('Extensions'), '%s!value'%(self._prefix), _(NOTE_EXTENSIONS))
         else:
-            self.AddPropEntry (table, _('Extensions'), '%s!extensions'%(self._prefix), NOTE_EXTENSIONS)
+            self.AddPropEntry (table, _('Extensions'), '%s!extensions'%(self._prefix), _(NOTE_EXTENSIONS))
         return str(table)
 
     def _op_apply_changes (self, uri, post):

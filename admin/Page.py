@@ -128,9 +128,9 @@ class Page (WebComponent):
         txt += '<li class="htop"><span>%s</span></li>' % (_('Help'))
         for hfile,comment in self.helps:
             if hfile.startswith("http://"):
-                txt += '<li><a href="%s" target="_help">%s</a></li>' % (hfile, comment)
+                txt += '<li><a href="%s" target="_help">%s</a></li>' % (hfile, _(comment))
             else:
-                params=(hfile, DIALOG_H, DIALOG_W, comment)
+                params=(hfile, DIALOG_H, DIALOG_W, _(comment))
                 txt += '<li class="hitem"><a href="/help/%s.html?KeepThis=true&TB_iframe=true&height=%s&width=%s" class="thickbox">%s</a></li>' % params
         txt += '</ul>'
         return txt

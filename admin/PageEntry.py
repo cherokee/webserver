@@ -144,11 +144,11 @@ class PageEntry (PageMenu, FormHelper):
         # Handler
         table = TableProps()
         e = self.AddPropOptions_Reload (table, _('Handler'), '%s!handler'%(pre),
-                                        modules_available(HANDLERS), NOTE_HANDLER)
+                                        modules_available(HANDLERS), _(NOTE_HANDLER))
 
         props = self._get_handler_properties()
         if props and props.show_document_root:
-            self.AddPropEntry (table, _('Document Root'), '%s!document_root'%(pre), NOTE_DOCUMENT_ROOT)
+            self.AddPropEntry (table, _('Document Root'), '%s!document_root'%(pre), _(NOTE_DOCUMENT_ROOT))
 
         if e:
             tabs += [(_('Handler'), str(table) + e)]
@@ -198,7 +198,7 @@ class PageEntry (PageMenu, FormHelper):
         txt = ''
 
         table = TableProps()
-        self.AddPropEntry (table, _('Limit traffic to'), '%s!rate'%(self._conf_prefix), NOTE_RATE)
+        self.AddPropEntry (table, _('Limit traffic to'), '%s!rate'%(self._conf_prefix), _(NOTE_RATE))
 
         txt += "<h2>%s</h2>" % (_('Traffic Shaping'))
         txt += self.Indent(table)
@@ -210,11 +210,11 @@ class PageEntry (PageMenu, FormHelper):
         pre = "%s!expiration"%(self._conf_prefix)
 
         table = TableProps()
-        self.AddPropOptions_Ajax (table, _("Expiration"), pre, EXPIRATION_TYPE, NOTE_EXPIRATION)
+        self.AddPropOptions_Ajax (table, _("Expiration"), pre, EXPIRATION_TYPE, _(NOTE_EXPIRATION))
 
         exp = self._cfg.get_val(pre)
         if exp == 'time':
-            self.AddPropEntry (table, _('Time to expire'), '%s!time'%(pre), NOTE_EXPIRATION_TIME)
+            self.AddPropEntry (table, _('Time to expire'), '%s!time'%(pre), _(NOTE_EXPIRATION_TIME))
 
         txt += "<h2>%s</h2>" % (_('Content Expiration'))
         txt += self.Indent(table)
@@ -228,19 +228,19 @@ class PageEntry (PageMenu, FormHelper):
 
         txt  += "<h2>%s</h2>" % (_('Logging'))
         table = TableProps()
-        self.AddPropCheck (table, _('Skip Logging'), '%s!no_log'%(pre), False, NOTE_NO_LOG)
+        self.AddPropCheck (table, _('Skip Logging'), '%s!no_log'%(pre), False, _(NOTE_NO_LOG))
         txt += self.Indent(table)
 
         txt  += "<h2>%s</h2>" % (_('Access Restrictions'))
         table = TableProps()
-        self.AddPropCheck (table, _('Only https'), '%s!only_secure'%(pre), False, NOTE_HTTPS_ONLY)
-        self.AddPropEntry (table, _('Allow From'),  '%s!allow_from' %(pre), NOTE_ALLOW_FROM)
+        self.AddPropCheck (table, _('Only https'), '%s!only_secure'%(pre), False, _(NOTE_HTTPS_ONLY))
+        self.AddPropEntry (table, _('Allow From'),  '%s!allow_from' %(pre), _(NOTE_ALLOW_FROM))
         txt += self.Indent(table)
 
         txt += "<h2>%s</h2>" % (_('Authentication'))
         table = TableProps()
         e = self.AddPropOptions_Reload (table, _('Validation Mechanism'), '%s!auth'%(pre),
-                                        modules_available(VALIDATORS), NOTE_VALIDATOR)
+                                        modules_available(VALIDATORS), _(NOTE_VALIDATOR))
         txt += self.Indent (table)
         txt += e
 
