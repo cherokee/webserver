@@ -99,8 +99,7 @@ class PageMime (PageMenu, FormHelper):
                 cfg_key = 'mime!%s'%(mime)
                 e1 = self.InstanceEntry('%s!extensions'%(cfg_key), 'text', size=35)
                 e2 = self.InstanceEntry('%s!max-age'%(cfg_key),    'text', size=6, maxlength=6)
-                js = "post_del_key('/ajax/update', '%s');" % (quote(cfg_key))
-                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                link_del = self.AddDeleteLink ('/ajax/update', quote(cfg_key))
                 table += (mime, e1, e2, link_del)
             txt += '<div id="mimetable">%s</div>'%(str(table))
             txt += TABLE_JS

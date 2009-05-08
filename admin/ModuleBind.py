@@ -51,8 +51,7 @@ class ModuleBind (Module, FormHelper):
                 bind = self._cfg.get_val ("server!bind!%s!interface"%(server_bind), '')
                 tls_ = self._cfg.get_val ("server!bind!%s!tls"%(server_bind), False)
                 tls  = [_("No"), _("Yes")][int(tls_)]
-                js = "post_del_key('/ajax/update', '%s!%s');"%(cfg_key, b)
-                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                link_del = self.AddDeleteLink ('/ajax/update', '%s!%s'%(cfg_key, b))
                 table += (port, bind, tls, link_del)
             txt += self.Indent(table)
 

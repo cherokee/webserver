@@ -59,8 +59,7 @@ class ModuleCgiBase (ModuleHandler):
             for env in envs:
                 pre = '%s!env!%s'%(self._prefix,env)
                 val = self.InstanceEntry(pre, 'text', size=25)
-                js = "post_del_key('/ajax/update', '%s');"%(pre)
-                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                link_del = self.AddDeleteLink ('/ajax/update', pre)
                 table += (env, val, link_del)
 
             txt1 += self.Indent(table)

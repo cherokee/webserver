@@ -29,10 +29,9 @@ class ModuleWildcard (Module, FormHelper):
                 domain = cfg_domains[i].value
                 cfg_key = "%s!%s" % (pre, i)
                 en = self.InstanceEntry (cfg_key, 'text')
-                js = "post_del_key('/ajax/update','%s');" % (cfg_key)
-                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                link_del = self.AddDeleteLink ('/ajax/update', cfg_key)
                 table += (en, link_del)
-                
+
             txt += self.Indent(table)
             txt += "<br />"
         else:

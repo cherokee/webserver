@@ -1,3 +1,15 @@
+2009-05-08  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/ModuleWildcard.py, admin/ModuleRedir.py,
+	admin/ModuleCgi.py, admin/PageVServers.py, admin/ModuleBind.py,
+	admin/ModuleProxy.py, admin/ModuleRehost.py,
+	admin/PageGeneral.py, admin/ModuleBalancer.py,
+	admin/PageMime.py, admin/PageVServer.py, admin/PageIcon.py,
+	admin/ModuleAuthlist.py, admin/Form.py, admin/PageInfoSource.py,
+	admin/ModuleErrorRedir.py: Usability patch. Images used for
+	deletions now use links to execute javascript code, instead of
+	the onClick event.
+
 2009-05-07  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/server.py: Cherokee-Admin fails if HTTP_ACCEPT_LANGUAGE

@@ -100,8 +100,7 @@ class ModuleProxy (ModuleHandler):
                 pre = '%s!%s!%s'%(self._prefix, key, k)
                 val = self.InstanceEntry (pre, 'text', size=40)
 
-                js      = "post_del_key('/ajax/update', '%s');" % (pre)
-                rm_link = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                rm_link = self.AddDeleteLink ('/ajax/update', pre)
                 table += (k, val, rm_link)
 
             tmp += self.Indent (table)
@@ -127,8 +126,7 @@ class ModuleProxy (ModuleHandler):
                 pre = '%s!%s!%s'%(self._prefix, key, k)
                 hdr = self._cfg.get_val (pre)
 
-                js      = "post_del_key('/ajax/update', '%s');" % (pre)
-                rm_link = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                rm_link = self.AddDeleteLink ('/ajax/update', pre)
                 table += (hdr, rm_link)
             tmp += self.Indent (table)
 
@@ -159,8 +157,7 @@ class ModuleProxy (ModuleHandler):
                 regex = self._cfg.get_val ('%s!regex'%(pre))
                 subst = self._cfg.get_val ('%s!substring'%(pre))
 
-                js      = "post_del_key('/ajax/update', '%s');" % (pre)
-                rm_link = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                rm_link = self.AddDeleteLink ('/ajax/update', pre)
                 table += (regex, subst, rm_link)
 
             tmp += self.Indent (table)

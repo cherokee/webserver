@@ -117,8 +117,7 @@ class PageGeneral (PageMenu, FormHelper):
             listen = self.InstanceEntry ("%s!interface"%(pre), 'text', size=45)
             tls    = self.InstanceCheckbox ('%s!tls'%(pre), False, quiet=True, disabled=not has_tls)
 
-            js = "post_del_key('/ajax/update', '%s');"%(pre)
-            link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+            link_del = self.AddDeleteLink ('/ajax/update', pre)
 
             table += (port, listen, tls, link_del)
 

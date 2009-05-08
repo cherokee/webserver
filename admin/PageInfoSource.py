@@ -132,8 +132,7 @@ class PageInfoSource (PageMenu, FormHelper):
             for env in envs:
                 pre = 'source!%s!env!%s'%(s,env)
                 val = self.InstanceEntry(pre, 'text', size=25)
-                js = "post_del_key('/ajax/update', '%s');"%(pre)
-                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                link_del = self.AddDeleteLink ('/ajax/update', pre)
                 table += (env, val, link_del)
 
             txt += self.Indent(table)
@@ -231,8 +230,7 @@ class PageInfoSource (PageMenu, FormHelper):
                     msg = _("Deletion forbidden. Check source usage.")
                     link = self.InstanceImage ("forbidden.png", msg, border="0")
                 else:
-                    js = "post_del_key('/source/ajax_update', 'source!%s');"%(s)
-                    link = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                    link = self.AddDeleteLink ('/source/ajax_update', 'source!%s'%(s))
 
                 table += '<tr><td><a href="/%s/%s">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (self._id, s, nick, type, host, link)
             table += '<tr><td colspan="4" align="center"><br/><a href="/%s">%s</a></td></tr>' % (self._id, _('Add new'))

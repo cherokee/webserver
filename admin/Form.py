@@ -180,6 +180,12 @@ class FormHelper (WebComponent):
             tup += extra_cols
         table += tup
 
+    def InstanceLink (self, link, content, **kwargs):
+        extra = ""
+        for karg in kwargs:
+            extra += '%s="%s" '%(karg, kwargs[karg])
+        return '<a href="%s" %s>%s</a>' % (link, extra, content)
+
     def InstanceButton (self, name, **kwargs):
         extra = ""
         for karg in kwargs:
@@ -191,6 +197,13 @@ class FormHelper (WebComponent):
         for karg in kwargs:
             extra += '%s="%s" '%(karg, kwargs[karg])
         return '<img src="/static/images/%s" alt="%s" title="%s" %s/>' % (name, alt, alt, extra)
+
+    def InstanceLinkedImage (self, name, alt, link, **kwargs):
+        return self.InstanceLink(link, self.InstanceImage(name, alt, **kwargs))
+
+    def AddDeleteLink (self, url, key):
+        js = "javascript:post_del_key('%s', '%s');" % (url, key)
+        return self.InstanceLinkedImage("bin.png", _("Delete"), js, border="0")
 
     def InstanceOptions (self, cfg_key, options, *args, **kwargs):
         value = self._cfg.get_val (cfg_key)

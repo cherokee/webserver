@@ -127,8 +127,7 @@ class PageIcon (PageMenu, FormHelper):
                 im = self._get_img_from_icon (icon, cfg_key)
 
                 entry = self.InstanceEntry (cfg_key, 'text', size="6")
-                js    = "post_del_key('/icons/update', '%s');" % (cfg_key)
-                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                link_del = self.AddDeleteLink ('/icons/update', cfg_key)
                 table += (im, icon, entry, link_del)
 
             fo0 = Form ('/icons/update', add_submit=False)
@@ -160,8 +159,7 @@ class PageIcon (PageMenu, FormHelper):
                 cfg_key = 'icons!file!%s' % (icon_name)
                 match   = self._cfg.get_val(cfg_key)
                 op, im  = self._get_options_icons (cfg_key, selected=icon_name)
-                js = "post_del_key('/icons/update', '%s');" % (cfg_key)
-                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                link_del = self.AddDeleteLink ('/icons/update', cfg_key)
                 table += (im, match, op, link_del)
 
             tmp += self.Indent(table)

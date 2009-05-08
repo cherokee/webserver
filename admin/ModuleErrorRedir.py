@@ -40,8 +40,7 @@ class ModuleErrorRedir (Module, FormHelper):
             table = Table(4,1, style='width="90%" id="errors" class="rulestable"')
             table += (_('Error'), _('Redirection'), _('Type'), '')
             for error in errors:
-                js = "post_del_key('/ajax/update', '%s!%s');" % (self._prefix, error)
-                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                link_del = self.AddDeleteLink ('/ajax/update', '%s!%s' % (self._prefix, error))
                 show, v = self.InstanceOptions ("%s!%s!show" % (self._prefix, error), REDIRECTION_TYPE)
                 table += (error, self._cfg.get_val('%s!%s!url'%(self._prefix,error)), show, link_del)
             txt += self.Indent(table)

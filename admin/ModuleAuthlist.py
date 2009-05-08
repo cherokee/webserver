@@ -33,8 +33,7 @@ class ModuleAuthlist (ModuleAuthBase):
                 pre     = '%s!list!%s'%(self._prefix, c)
                 user    = self._cfg.get_val('%s!user'     %(pre))
                 passwd  = self._cfg.get_val('%s!password' %(pre))
-                js      = "post_del_key('/ajax/update', '%s');" % (pre)
-                rm_link = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                rm_link = self.AddDeleteLink ('/ajax/update', pre)
                 table += (user, passwd, rm_link)
             txt += self.Indent(table)
         else:

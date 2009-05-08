@@ -59,8 +59,7 @@ class ModuleBalancerGeneric (Module, FormHelper):
                 host  = self._cfg.get_val('source!%s!host'%(sg))
                 link  = '<a href="/source/%s">%s</a>' % (sg, nick)
 
-                js = "post_del_key('/ajax/update', '%s!source!%s');"%(self._prefix, sb)
-                link_del = self.InstanceImage ("bin.png", _("Delete"), border="0", onClick=js)
+                link_del = self.AddDeleteLink ('/ajax/update', '%s!source!%s'%(self._prefix, sb))
 
                 table += (link, host, link_del)
             txt += str(table)
