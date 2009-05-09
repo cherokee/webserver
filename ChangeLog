@@ -43,6 +43,10 @@
 	* admin/ModuleBalancer.py, admin/ModuleDirlist.py: Fixes an i18n
 	issue related to empty strings.
 
+2009-05-06  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* 0.99.14 released
+
 2009-05-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* po/admin/es.po: Updates the Spanish translation.
