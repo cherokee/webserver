@@ -1,3 +1,9 @@
+2009-05-09  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/source_interpreter.c (_spawn_shm): When a custom user
+	is not defined, the new process GID is also inherited from the
+	server process. Thanks to Evangelos Foutras for the feedback!
+
 2009-05-08  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/ModuleWildcard.py, admin/ModuleRedir.py,

@@ -374,7 +374,8 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 	/* If a user isn't specified, use the same one..
 	 */
 	if (src->change_user == -1) {
-		src->change_user = getuid();
+		src->change_user  = getuid();
+		src->change_group = getgid();
 	}
 	
 	/* Invoke the spawn mechanism
