@@ -1,5 +1,8 @@
 2009-05-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/spawner.h: It ought to fix a compilation issue on
+	FreeBSD. Thanks to Jason <superman.jason@gmail.com> for reporting.
+
 	* cherokee/main_admin.c: Fixes a compilation warning:
 	http://lists.octality.com/pipermail/cherokee/2009-May/010246.html
 

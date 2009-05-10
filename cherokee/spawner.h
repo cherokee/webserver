@@ -29,6 +29,14 @@
 #ifndef CHEROKEE_SPAWNER_H
 #define CHEROKEE_SPAWNER_H
 
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+
+#ifdef HAVE_PWD_H
+# include <pwd.h>
+#endif
+
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
 #include <cherokee/shm.h>
