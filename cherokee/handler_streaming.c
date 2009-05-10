@@ -332,6 +332,7 @@ open_media_file (cherokee_handler_streaming_t *hdl)
 error:
 	if (hdl->avformat != NULL) {
 		av_close_input_file (hdl->avformat);
+		hdl->avformat = NULL;
 	}
 
 	return ret_error;
