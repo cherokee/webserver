@@ -27,6 +27,7 @@
 #include "init.h"
 #include "server.h"
 #include "socket.h"
+#include "spawner.h"
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>

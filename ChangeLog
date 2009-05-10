@@ -1,3 +1,8 @@
+2009-05-10  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/main_admin.c: Fixes a compilation warning:
+	http://lists.octality.com/pipermail/cherokee/2009-May/010246.html
+
 2009-05-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/source_interpreter.c (_spawn_shm): When a custom user
