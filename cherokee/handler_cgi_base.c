@@ -456,10 +456,10 @@ cherokee_handler_cgi_base_build_basic_env (
 	case http_auth_nothing:
 		break;
 	case http_auth_basic:
-		set_env (cgi, "AUTH_TYPE", "BASIC", 5);
+		set_env (cgi, "AUTH_TYPE", "Basic", 5);
 		break;
 	case http_auth_digest:
-		set_env (cgi, "AUTH_TYPE", "DIGEST", 6);
+		set_env (cgi, "AUTH_TYPE", "Digest", 6);
 		break;
 	}
 
