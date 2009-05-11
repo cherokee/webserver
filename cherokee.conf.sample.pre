@@ -3,7 +3,10 @@
 ##
 ## Common use
 ##
-## NOTE: This file is NOT meant to be edited by hand.
+## NOTE: This file is NOT meant to be edited by hand. Instead, a
+## convenient configuration interface is available, so the server can
+## be tweaked in a easy and safe way. Run cherokee-admin as root, and
+## then proceed to point your web browser to: http://localhost:9090/
 ##
 
 # Server

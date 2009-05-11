@@ -1,5 +1,8 @@
 2009-05-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee.conf.sample.pre: Rewrites warning about editing the
+	configuration file by hand.
+
 	* cherokee/config_reader.c (cherokee_config_reader_parse_string):
 	Relaxes grammar. The last line of the configuration file is no
 	longer required to finish with a new line. Thanks to Gunnar Wolf
