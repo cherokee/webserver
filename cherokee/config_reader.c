@@ -172,8 +172,9 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 		eol = cherokee_min_str (strchr(begin, '\n'), 
 					strchr(begin, '\r'));
 
-		if (eol == NULL) 
-			break;
+		if (eol == NULL) {
+			eol = eof;
+		}
 
 		/* Check that it's long enough
 		 */
@@ -224,6 +225,9 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 		/* Next loop
 		 */
 		begin = eol + 1;
+		if (begin >= eof) {
+			break;
+		}
 
 		cherokee_buffer_clean (&key);
 		cherokee_buffer_clean (&val);

@@ -1,5 +1,11 @@
 2009-05-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/config_reader.c (cherokee_config_reader_parse_string):
+	Relaxes grammar. The last line of the configuration file is no
+	longer required to finish with a new line. Thanks to Gunnar Wolf
+	for letting us know. It fixes Debian bug: 528160@bugs.debian.org
+	http://lists.octality.com/pipermail/cherokee/2009-May/010290.html
+
 	* cherokee/main.c: Fixes the new spawning mechanism. There were
 	process being left behind when cherokee exited. Fixes bug:
 	http://code.google.com/p/cherokee/issues/detail?id=456
