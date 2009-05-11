@@ -1,7 +1,13 @@
+2009-05-11  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/main.c: Fixes the new spawning mechanism. There were
+	process being left behind when cherokee exited. Fixes bug:
+	http://code.google.com/p/cherokee/issues/detail?id=456
+
 2009-05-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_streaming.c (open_media_file): Fixes a
-	potential doble-free() when serving broken media files.
+	potential double-free() when serving broken media files.
 
 	* cherokee/spawner.h: It ought to fix a compilation issue on
 	FreeBSD. Thanks to Jason <superman.jason@gmail.com> for reporting.
