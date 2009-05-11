@@ -1,5 +1,7 @@
 2009-05-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main.c (do_spawn): Fixes a lingering processes issue.
+	
 	* cherokee.conf.sample.pre: Rewrites warning about editing the
 	configuration file by hand.
 

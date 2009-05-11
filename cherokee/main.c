@@ -304,8 +304,12 @@ do_spawn (void)
 
 	/* 1.- Interpreter */
 	size = *((int *)p);
-	interpreter = strdup (p + sizeof(int));
-	p += sizeof(int) + size + 1;
+	p += sizeof(int);
+
+	interpreter = malloc (sizeof("exec ") + size);
+	memcpy (interpreter, "exec ", 5);
+	memcpy (interpreter + 5, p, size + 1);
+	p += size + 1;
 
 	/* 2.- UID & GID */
 	size = *((int *)p);
@@ -426,6 +430,8 @@ do_spawn (void)
 	
 	/* Clean up
 	 */
+	free (interpreter);
+
 	for (n=0; n<envs; n++) {
 		free (envp[n]);
 	}
