@@ -1,5 +1,9 @@
 2009-05-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/buffer.c (cherokee_buffer_replace_string): It can
+	replace substrings with "" (empty strings). Patch by Arnaud
+	Cornet.
+
 	* cherokee/main.c (do_spawn): Fixes a lingering processes issue.
 	
 	* cherokee.conf.sample.pre: Rewrites warning about editing the

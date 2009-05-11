@@ -1657,11 +1657,25 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 
 	/* Verify formal parameters
 	 * (those which are not tested would raise a segment violation).
+	 * We keep the corner case of a NULL replacement string, since our
+	 * beloved cherokee_buffer_t's might be passed to us, and a
+	 * NULL buf->buf is legit for 0-sized buffers.
 	 */
-	if (buf == NULL || buf->buf == NULL ||
-	    substring == NULL || substring_length < 1 ||
-		replacement == NULL || replacement_length < 0)
+	if (replacement == NULL) {
+		if (unlikely (replacement_length != 0))
+			return ret_deny;
+
+		replacement = "";
+	}
+
+	if ((buf == NULL) ||
+	    (buf->buf == NULL) ||
+	    (substring == NULL) ||
+	    (substring_length < 1) ||
+	    (replacement_length < 0))
+	{
 		return ret_deny;
+	}
 
 	/* Calculate the new size
 	 */
