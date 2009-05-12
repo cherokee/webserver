@@ -1,3 +1,11 @@
+2009-05-12  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_file.c (cherokee_handler_file_step): Fixes
+	range management when the server internally uses sendfile() (and
+	start and end points are specified by the client). Fixes:
+	http://code.google.com/p/cherokee/issues/detail?id=459
+	Thanks to Matt Whiteley for the report.
+
 2009-05-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/buffer.c (cherokee_buffer_replace_string): It can

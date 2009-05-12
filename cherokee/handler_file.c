@@ -736,13 +736,21 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 	size_t                 size;
 	cherokee_connection_t *conn = HANDLER_CONN(fhdl);
 
+	/* End point
+	 */
+	if (fhdl->range_both) {
+		end = conn->range_end + 1;
+	} else {
+		end = conn->range_end;
+	}
+
 #ifdef WITH_SENDFILE
 	if (fhdl->using_sendfile) {
 		ret_t   ret;
 		ssize_t sent;
 		off_t   to_send;
 
-		to_send = conn->range_end - fhdl->offset;
+		to_send = end - fhdl->offset;
 		if ((conn->limit_bps > 0) &&
 		    (conn->limit_bps < to_send))
 		{
@@ -778,7 +786,7 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 		 */
 		cherokee_connection_tx_add (conn, sent);
 
-		if (fhdl->offset >= conn->range_end) {
+		if (fhdl->offset >= end) {
 			return ret_eof;
 		}
 
@@ -787,12 +795,6 @@ cherokee_handler_file_step (cherokee_handler_file_t *fhdl, cherokee_buffer_t *bu
 
 exit_sendfile:
 #endif
-	if (fhdl->range_both) {
-		end = conn->range_end + 1;
-	} else {
-		end = conn->range_end;
-	}
-
 	/* Check the amount to read
 	 */
 	size = buffer->size - 1;
