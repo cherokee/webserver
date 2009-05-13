@@ -282,6 +282,8 @@ pid_file_clean (const char *pid_file)
 	free (pid_file_worker);
 }
 
+#ifdef HAVE_POSIX_SHM
+
 static void
 do_spawn (void)
 {
@@ -439,6 +441,99 @@ do_spawn (void)
 	free (envp);
 }
 
+static void *
+spawn_thread_func (void *param)
+{
+	int re;
+
+	UNUSED (param);
+
+	while (true) {
+		do {
+			re = sem_wait (spawn_shared_sem);
+		} while (re < 0 && errno == EINTR);
+		do_spawn ();
+	}
+
+	return NULL;
+}
+
+static ret_t
+spawn_init (void)
+{
+	int re;
+	int fd;
+	int mem_len;
+
+	/* Names
+	*/
+	mem_len = sizeof("/cherokee-spawner-XXXXXXX");
+	spawn_shared_name = malloc (mem_len);
+	snprintf (spawn_shared_name, mem_len, "/cherokee-spawner-%d", getpid());
+
+	mem_len = sizeof("/cherokee-spawner-XXXXXXX.sem");
+	spawn_shared_sem_name = malloc (mem_len);
+	snprintf (spawn_shared_sem_name, mem_len, "/cherokee-spawner-%d.sem", getpid());
+
+	/* Create the shared memory
+	*/
+	fd = shm_open (spawn_shared_name, O_RDWR | O_EXCL | O_CREAT, 0600);
+	if (fd < 0) {
+		return ret_error;
+	}
+
+	re = ftruncate (fd, SPAWN_SHARED_LEN);
+	if (re < 0) {
+		close (fd);
+		return ret_error;
+	}
+	
+	spawn_shared = mmap (0, SPAWN_SHARED_LEN, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	if (spawn_shared == MAP_FAILED) {
+		close (fd);
+		spawn_shared = NULL;
+		return ret_error;
+	}
+
+	memset (spawn_shared, 0, SPAWN_SHARED_LEN);
+
+	close (fd);
+
+	/* Semaphore
+	*/
+	spawn_shared_sem = sem_open (spawn_shared_sem_name, O_CREAT, S_IRUSR | S_IWUSR, 0);
+	if (spawn_shared_sem == NULL) {
+		return ret_error;
+	}
+
+	/* Thread
+	*/
+	re = pthread_create (&spawn_thread, NULL, spawn_thread_func, NULL);
+	if (re != 0) {
+		PRINT_ERROR_S ("Couldn't spawning thread..\n");
+		return ret_error;
+	}
+	
+	return ret_ok;
+}
+
+static void
+spawn_clean (void)
+{
+	shm_unlink (spawn_shared_name);
+	sem_unlink (spawn_shared_sem_name);
+}
+#endif /* HAVE_POSIX_SHM */
+
+static void
+clean_up (void)
+{
+#ifdef HAVE_POSIX_SHM
+	spawn_clean();
+#endif
+	pid_file_clean (pid_file_path);
+}
+
 static ret_t
 process_wait (pid_t pid)
 {
@@ -504,7 +599,7 @@ signals_handler (int sig, siginfo_t *si, void *context)
 		while ((wait (0) == -1) && (errno == EINTR));
 
 		/* Clean up and exit */
-		pid_file_clean (pid_file_path);
+		clean_up();
 		exit(0);
 
 	case SIGCHLD:
@@ -609,88 +704,6 @@ is_single_execution (int argc, char *argv[])
 	return false;
 }
 
-
-#ifdef HAVE_POSIX_SHM
-
-static void *
-spawn_thread_func (void *param)
-{
-	int re;
-
-	UNUSED (param);
-
-	while (true) {
-		do {
-			re = sem_wait (spawn_shared_sem);
-		} while (re < 0 && errno == EINTR);
-		do_spawn ();
-	}
-
-	return NULL;
-}
-
-static ret_t
-spawn_init (void)
-{
-	int re;
-	int fd;
-	int mem_len;
-
-	/* Names
-	 */
-	mem_len = sizeof("/cherokee-spawner-XXXXXXX");
-	spawn_shared_name = malloc (mem_len);
-	snprintf (spawn_shared_name, mem_len, "/cherokee-spawner-%d", getpid());
-
-	mem_len = sizeof("/cherokee-spawner-XXXXXXX.sem");
-	spawn_shared_sem_name = malloc (mem_len);
-	snprintf (spawn_shared_sem_name, mem_len, "/cherokee-spawner-%d.sem", getpid());
-
-	/* Create the shared memory
-	 */
-	fd = shm_open (spawn_shared_name, O_RDWR | O_EXCL | O_CREAT, 0600);
-	if (fd < 0) {
-		return ret_error;
-	}
-
-	re = ftruncate (fd, SPAWN_SHARED_LEN);
-	if (re < 0) {
-		close (fd);
-		return ret_error;
-	}
-	
-	spawn_shared = mmap (0, SPAWN_SHARED_LEN, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-	if (spawn_shared == MAP_FAILED) {
-		close (fd);
-		spawn_shared = NULL;
-		return ret_error;
-	}
-
-	memset (spawn_shared, 0, SPAWN_SHARED_LEN);
-
-	close (fd);
-
-	/* Semaphore
-	 */
-	spawn_shared_sem = sem_open (spawn_shared_sem_name, O_CREAT, S_IRUSR | S_IWUSR, 0);
-	if (spawn_shared_sem == NULL) {
-		return ret_error;
-	}
-
-	/* Thread
-	 */
-	re = pthread_create (&spawn_thread, NULL, spawn_thread_func, NULL);
-	if (re != 0) {
-		PRINT_ERROR_S ("Couldn't spawning thread..\n");
-		return ret_error;
-	}
-	
-	return ret_ok;
-}
-
-#endif /* HAVE_POSIX_SHM */
-
-
 int
 main (int argc, char *argv[])
 {
@@ -754,7 +767,7 @@ main (int argc, char *argv[])
 	}
 
 	if (! single_time) {
-		pid_file_clean (pid_file_path);
+		clean_up();
 	}
 
 	return EXIT_OK;
