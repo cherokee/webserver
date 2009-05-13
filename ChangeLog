@@ -1,3 +1,9 @@
+2009-05-13  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/rule_header.c, admin/ModuleHeader.py: Adds a new 'Host'
+	property to the header matcher, so target hosts can also be
+	matched from regular rules. Patch by Stefan de Konink.
+
 2009-05-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.15 released

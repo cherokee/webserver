@@ -91,6 +91,8 @@ header_str_to_type (cherokee_buffer_t        *header,
 		*common_header = header_user_agent;
 	} else if (equal_buf_str (header, "Cookie")) {
 		*common_header = header_cookie;
+	} else if (equal_buf_str (header, "Host")) {
+		*common_header = header_host;
 	} else {
 		PRINT_ERROR ("ERROR: Unknown header: '%s'\n", header->buf);
 		return ret_error;
