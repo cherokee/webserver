@@ -3,7 +3,8 @@ N_ = lambda x: x
 
 AVAILABLE_LANGUAGES = [
     ('en',           N_('English')),
-    ('es',           N_('Spanish'))
+    ('es',           N_('Spanish')),
+    ('de',           N_('German'))
 ]
 
 HANDLERS = [

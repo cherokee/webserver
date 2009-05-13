@@ -1,3 +1,8 @@
+2009-05-13  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* de.po: Initial German translation import. By Andreas Sinz
+	<andreas.sinz@aon.at>.
+
 2009-04-17  gettextize  <bug-gnu-gettext@gnu.org>
 
 	* Makefile.in.in: New file, from gettext-0.17.

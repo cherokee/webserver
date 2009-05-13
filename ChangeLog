@@ -1,5 +1,9 @@
 2009-05-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/consts.py: Adds a new language entry for German. The
+	translation isn't finished yet, but the de.po file is already in
+	place.
+
 	* cherokee/rule_header.c, admin/ModuleHeader.py: Adds a new 'Host'
 	property to the header matcher, so target hosts can also be
 	matched from regular rules. Patch by Stefan de Konink.
