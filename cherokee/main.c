@@ -426,7 +426,7 @@ do_spawn (void)
 	default:
 		/* Return the PID */
 		memcpy (p, (char *)&child, sizeof(int));
-		printf ("PID %d: launched '%s' with uid=%d, gid=%d\n", child, interpreter, uid, gid);
+		printf ("PID %d: launched '/bin/sh -c %s' with uid=%d, gid=%d\n", child, interpreter, uid, gid);
 		break;
 	}
 	
