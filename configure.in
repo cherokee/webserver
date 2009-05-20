@@ -755,7 +755,14 @@ AC_CHECK_FUNC(shm_open, have_shm_open=yes)
 
 RT_LIBS=
 if test "$have_shm_open" != "yes"; then
-  AC_CHECK_LIB(rt, shm_open, RT_LIBS="-lrt" have_shm_open=yes)
+  AC_CHECK_LIB(rt, shm_open, [
+  			    RT_LIBS="-lrt"
+			    have_shm_open=yes])
+fi
+if test "$have_shm_open" != "yes"; then
+  AC_CHECK_LIB(rt, shm_open, [
+  			    RT_LIBS="-lposix4"
+			    have_shm_open=yes])
 fi
 AC_SUBST(RT_LIBS)
 

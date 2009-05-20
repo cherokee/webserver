@@ -1,3 +1,8 @@
+2009-05-20  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* configure.in: Check libposix4 for POSIX shm/sem functions.
+	AFAIK, only ancient Solaris version located them there.
+
 2009-05-13  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/main.c: Cleans shared memory stuff on exit.
