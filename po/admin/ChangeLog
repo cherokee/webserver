@@ -1,3 +1,8 @@
+2009-05-21  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* LINGUAS: Initial Dutch translation import. By Stefan de Konink
+	<stefan@konink.de>.
+
 2009-05-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* de.po: Initial German translation import. By Andreas Sinz
