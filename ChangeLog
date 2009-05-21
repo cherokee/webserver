@@ -1,3 +1,8 @@
+2009-05-21  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/main_admin.c: Use Expire headers when serving static
+	content. This should improve Cherokee-Admin performance slightly.
+
 2009-05-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* configure.in: Check libposix4 for POSIX shm/sem functions.

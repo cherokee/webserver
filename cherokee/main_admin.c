@@ -157,8 +157,9 @@ config_server (cherokee_server_t *srv)
 				 "source!1!interpreter = %s/server.py %d %s\n",
 				 scgi_port, document_root, scgi_port, config_file);
 
-	if (debug)
+	if (debug) {
 		cherokee_buffer_add_str  (&buf, "source!1!debug = 1\n");
+	}
 
 	cherokee_buffer_add_str  (&buf, 
 				  RULE_PRE "1!match = default\n"
@@ -189,11 +190,21 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "3!handler = file\n"
 				 RULE_PRE "3!handler!iocache = 0\n");
 
+	if (! debug) {
+		cherokee_buffer_add_str (&buf, RULE_PRE "3!expiration = time\n");
+		cherokee_buffer_add_str (&buf, RULE_PRE "3!expiration!time = 30d\n");
+	}
+
 	cherokee_buffer_add_va  (&buf, 
 				 RULE_PRE "4!match = request\n"
 				 RULE_PRE "4!match!request = ^/favicon.ico$\n"
 				 RULE_PRE "4!document_root = %s/static/images\n"
 				 RULE_PRE "4!handler = file\n", document_root);
+
+	if (! debug) {
+		cherokee_buffer_add_str (&buf, RULE_PRE "4!expiration = time\n");
+		cherokee_buffer_add_str (&buf, RULE_PRE "4!expiration!time = 30d\n");
+	}
 
 	cherokee_buffer_add_va  (&buf, 
 				 RULE_PRE "5!match = directory\n"
@@ -201,6 +212,11 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "5!handler = file\n"
 				 RULE_PRE "5!handler!iocache = 0\n"
 				 RULE_PRE "5!document_root = %s\n", CHEROKEE_ICONSDIR);
+
+	if (! debug) {
+		cherokee_buffer_add_str (&buf, RULE_PRE "5!expiration = time\n");
+		cherokee_buffer_add_str (&buf, RULE_PRE "5!expiration!time = 30d\n");
+	}
 
 	cherokee_buffer_add_va  (&buf, 
 				 RULE_PRE "6!match = directory\n"
