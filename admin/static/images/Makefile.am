@@ -6,9 +6,14 @@ DARKGLASS_ICONS = \
 online.png \
 offline.png
 
+SILK_ICONS = \
+cross.png \
+tick.png
+
 adminstaticdir = "$(datadir)/cherokee/admin/static/images"
 adminstatic_DATA = \
 $(DARKGLASS_ICONS) \
+$(SILK_ICONS) \
 background.png \
 cherokee-logo-bar.png \
 top-bar.png \

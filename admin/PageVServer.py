@@ -63,9 +63,6 @@ NOTE_EVHOST           = N_('How to support the "Advanced Virtual Hosting" mechan
 NOTE_LOGGER_TEMPLATE  = N_('The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}')
 NOTE_MATCHING_METHOD  = N_('Allows the selection of domain matching method.')
 
-TXT_NO  = N_("<i>No</i>")
-TXT_YES = N_("<i>Yes</i>")
-
 HELPS = [
     ('config_virtual_servers', N_("Virtual Servers")),
     ('modules_loggers',        N_("Loggers")),
@@ -320,6 +317,9 @@ class PageVServer (PageMenu, FormHelper):
         table_name = "rules%d" % (self._rule_table)
         self._rule_table += 1
 
+        ENABLED_IMAGE  = self.InstanceImage('tick.png', 'Yes')
+        DISABLED_IMAGE = self.InstanceImage('cross.png', 'No')
+
         txt += '<table id="%s" class="rulestable">' % (table_name)
         txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
 
@@ -353,20 +353,20 @@ class PageVServer (PageMenu, FormHelper):
             if conf.get_val('handler'):
                 handler_name = self._get_handler_name (conf['handler'].value)
             else:
-                handler_name = TXT_NO
+                handler_name = DISABLED_IMAGE
 
             if conf.get_val('auth'):
                 auth_name = self._get_auth_name (conf['auth'].value)
             else:
-                auth_name = TXT_NO
+                auth_name = DISABLED_IMAGE
 
-            expiration = [TXT_NO, TXT_YES]['expiration' in conf.keys()]
+            expiration = [DISABLED_IMAGE, ENABLED_IMAGE]['expiration' in conf.keys()]
 
-            encoders = TXT_NO
+            encoders = DISABLED_IMAGE
             if 'encoder' in conf.keys():
                 for k in conf['encoder'].keys():
                     if int(conf.get_val('encoder!%s'%(k))):
-                        encoders = TXT_YES
+                        encoders = ENABLED_IMAGE
 
             txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
                 prio, pre, prio, extra, link, name_type, handler_name, auth_name, encoders, expiration, final, link_del)
