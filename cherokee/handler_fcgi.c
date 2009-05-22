@@ -358,6 +358,18 @@ set_env_pair (cherokee_handler_cgi_base_t *cgi_base,
 	cherokee_handler_fcgi_t  *hdl = HDL_FCGI(cgi_base);	
 	cherokee_buffer_t        *buf = &hdl->write_buffer;
 
+#ifdef TRACE_ENABLED
+	cherokee_buffer_t        *tmp = &HANDLER_THREAD(cgi_base)->tmp_buf2;
+
+	cherokee_buffer_clean   (tmp);
+	cherokee_buffer_add     (tmp, key, key_len);
+	cherokee_buffer_add_str (tmp, " = \"");
+	cherokee_buffer_add     (tmp, val, val_len);
+	cherokee_buffer_add_str (tmp, "\"\n");
+
+	TRACE (ENTRIES, "%s", tmp->buf);
+#endif
+
 	len  = key_len + val_len;
 	len += key_len > 127 ? 4 : 1;
 	len += val_len > 127 ? 4 : 1;
