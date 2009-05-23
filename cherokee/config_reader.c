@@ -179,8 +179,7 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 		/* Check that it's long enough
 		 */
 		if (eol - begin <= 4) {
-			begin = eol + 1;
-			continue;
+			goto next;
 		}
 		*eol = '\0';
 
@@ -224,6 +223,7 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 
 		/* Next loop
 		 */
+	next:
 		begin = eol + 1;
 		if (begin >= eof) {
 			break;

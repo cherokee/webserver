@@ -1,5 +1,8 @@
 2009-05-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/config_reader.c (cherokee_config_reader_parse_string):
+	Fixes a regression that was introduced a few day ago.
+
 	* README: Misc updates
 
 2009-05-22  Antonio Perez  <aperez@skarcha.com>
