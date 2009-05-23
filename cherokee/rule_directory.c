@@ -64,8 +64,9 @@ match (cherokee_rule_directory_t *rule, cherokee_connection_t *conn)
 
 	/* Copy the web directory property
 	 */
+	cherokee_buffer_clean      (&conn->web_directory);
 	cherokee_buffer_add_buffer (&conn->web_directory, &rule->directory);
-
+	
 	/* If the request is exactly the directory entry, and it
 	 * doesn't end with a slash, it must be redirected. Eg:
 	 *

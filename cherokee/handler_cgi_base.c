@@ -628,6 +628,8 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 		 * - If the SCGI is handling / it is ''
 		 * - Otherwise, it is the web_directory.
 		 */
+		cherokee_buffer_clean (&tmp);
+
 		if (! cherokee_buffer_is_empty (&conn->userdir)) {
 			cherokee_buffer_add_str    (&tmp, "/~");
 			cherokee_buffer_add_buffer (&tmp, &conn->userdir);
