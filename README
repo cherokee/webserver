@@ -3,21 +3,21 @@ Cherokee Web Server
 
 Web site
 --------
-  http://www.cherokee-project.com
+  http://www.cherokee-project.com/
 
 
 License
 -------
-  Currently Cherokee is being released under GPL v2. Read the COPYING
-  file for more information.
-  
+  Cherokee is released under GPL v2. Read the COPYING file for more
+  information.
+
 
 Mailing lists
 -------------
   There are a few mailing list available. Please, do not hesitate to
   subscribe to any on them:
 
-    http://www.cherokee-project.com/cgi-bin/mailman/listinfo/cherokee
+    http://lists.cherokee-project.com/
 
   This is the main mailing list, where questions are sent and general
   discussion takes place.
@@ -25,12 +25,12 @@ Mailing lists
   There are also a few technical mailing list. Developers and package
   maintainers usually subscribe to these mailing list as well:
 
-    http://www.cherokee-project.com/cgi-bin/mailman/listinfo/bugs
-    http://www.cherokee-project.com/cgi-bin/mailman/listinfo/cherokee-commits
+    http://lists.cherokee-project.com/listinfo/cherokee-dev
+    http://lists.cherokee-project.com/listinfo/cherokee-commits
 
   The mailing lists archives are available  at:
 
-    http://www.cherokee-project.com/archives/
+    http://lists.cherokee-project.com/pipermail/cherokee/
 
 
 IRC channel
@@ -54,7 +54,7 @@ Building form the repository
 ----------------------------
   Check out the code from SVN, following the instructions at:
 
-    http://www.cherokee-project.com/svn
+    http://svn.cherokee-project.com/
 
   cd into the source directory and run ./autogen.sh to setup the
   environment (you need the standard autoconf tools to do so).
@@ -93,8 +93,8 @@ FAQ
 
   Development
   -----------
-   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --with-mysql=no --with-ffmpeg=no --with-ldap=no --enable-beta --enable-trace --enable-maintainer-mode --enable-compile-warnings
-   make CFLAGS="-ggdb -O1 -fno-inline" -j4
+   ./autogen.sh --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-static-module=all --enable-static --enable-shared=no --with-mysql=no --with-ffmpeg=no --with-ldap=no --enable-beta --enable-trace --enable-maintainer-mode
+   make CFLAGS="-ggdb -O0" -j4
 
   How to cross compile the Win32 version
   --------------------------------------

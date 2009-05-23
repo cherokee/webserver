@@ -1,3 +1,7 @@
+2009-05-23  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* README: Misc updates
+
 2009-05-22  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageVServer.py, admin/static/images/Makefile.am,
