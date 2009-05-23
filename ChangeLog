@@ -1,5 +1,8 @@
 2009-05-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageVServer.py (PageVServer._render_rules_generic): Adds a
+	new column to represent the Document Root of rules.
+
 	* cherokee/handler_cgi_base.c: Fixes the DOCUMENT_ROOT value.
 
 	* cherokee/main.c (do_spawn): Fixes a memory corruption issue.

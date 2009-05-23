@@ -321,7 +321,7 @@ class PageVServer (PageMenu, FormHelper):
         DISABLED_IMAGE = self.InstanceImage('cross.png', 'No')
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
+        txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
 
         # Rule list
         for prio in priorities:
@@ -360,7 +360,8 @@ class PageVServer (PageMenu, FormHelper):
             else:
                 auth_name = DISABLED_IMAGE
 
-            expiration = [DISABLED_IMAGE, ENABLED_IMAGE]['expiration' in conf.keys()]
+            expiration    = [DISABLED_IMAGE, ENABLED_IMAGE]['expiration' in conf.keys()]
+            document_root = [DISABLED_IMAGE, ENABLED_IMAGE]['document_root' in conf.keys()]
 
             encoders = DISABLED_IMAGE
             if 'encoder' in conf.keys():
@@ -368,8 +369,8 @@ class PageVServer (PageMenu, FormHelper):
                     if int(conf.get_val('encoder!%s'%(k))):
                         encoders = ENABLED_IMAGE
 
-            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
-                prio, pre, prio, extra, link, name_type, handler_name, auth_name, encoders, expiration, final, link_del)
+            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
+                prio, pre, prio, extra, link, name_type, handler_name, document_root, auth_name, encoders, expiration, final, link_del)
 
         txt += '</table>\n'
         txt += '''
