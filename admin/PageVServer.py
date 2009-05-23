@@ -8,6 +8,7 @@ from consts import *
 from Rule import *
 from RuleList import *
 from CherokeeManagement import *
+from Wizard import *
 
 # For gettext
 N_ = lambda x: x
@@ -95,7 +96,11 @@ class PageVServer (PageMenu, FormHelper):
             return '/vserver/'
 
         default_render = False
-        if post.get_val('is_submit'):
+        if '/wizard/' in uri:
+            re = self._op_apply_wizard (host, uri, post)
+            if re: return re
+
+        elif post.get_val('is_submit'):
             if post.get_val('tmp!new_rule!value'):
                 re = self._op_add_new_entry (post       = post,
                                              cfg_prefix = 'vserver!%s!rule' %(host),
@@ -217,6 +222,7 @@ class PageVServer (PageMenu, FormHelper):
                                           url_prefix = '/vserver/%s'%(host),
                                           priorities = self._priorities)
         tmp += self._render_add_rule ("tmp!new_rule")
+        tmp += self._render_wizards (host)
         tabs += [(_('Behavior'), tmp)]
 
         # Personal Webs
@@ -409,6 +415,18 @@ class PageVServer (PageMenu, FormHelper):
                       'prefix': cfg_key}
         return txt
 
+    def _render_wizards (self, host):
+        txt = ''
+        pre = 'vserver!%s'%(host)
+
+        mgr = WizardManager (self._cfg, "Rules", pre)
+        txt += mgr.render ("/vserver/%s"%(host))
+
+        if txt: 
+            txt = _("<h2>Wizards</h2>") + txt
+
+        return txt
+
     def _render_personal_webs (self, host):
         txt = '<h2>%s</h2>' % (_('/~user directories'))
 
@@ -568,6 +586,19 @@ class PageVServer (PageMenu, FormHelper):
                                         _(NOTE_MATCHING_METHOD))
         txt += self.Indent(table) + e
         return txt
+
+    def _op_apply_wizard (self, host, uri, post):
+        tmp  = uri.split('/')
+        name = tmp[3]
+
+        mgr = WizardManager (self._cfg, "Rules", 'vserver!%s'%(host))
+        wizard = mgr.load (name)
+
+        output = wizard.run ("/vserver%s"%(uri), post)
+        if output:
+            return output
+
+        return '/vserver/%s' % (host)
 
     def _op_apply_changes (self, host, uri, post):
         pre = "vserver!%s" % (host)

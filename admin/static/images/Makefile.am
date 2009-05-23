@@ -1,6 +1,6 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-SUBDIRS = flags
+SUBDIRS = flags wizards
 
 DARKGLASS_ICONS = \
 online.png \

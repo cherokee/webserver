@@ -4,6 +4,7 @@ from Page import *
 from Form import *
 from Table import *
 from Entry import *
+from Wizard import *
 
 # For gettext
 N_ = lambda x: x
@@ -56,6 +57,10 @@ class PageVServers (PageMenu, FormHelper):
         return Page.Render(self)
 
     def _op_handler (self, uri, post):
+        if '/wizard/' in uri:
+            re = self._op_apply_wizard (uri, post)
+            if re: return re
+
         if post.get_val('is_submit'):
             if post.get_val('vserver_clone_trg'):
                 tmp = self._op_clone_vserver (post)
@@ -77,6 +82,20 @@ class PageVServers (PageMenu, FormHelper):
                 return "ok"
 
         return self._op_render()
+
+    def _op_apply_wizard (self, uri, post):
+        tmp  = uri.split('/')
+        name = tmp[2]
+        print "name", name
+
+        mgr = WizardManager (self._cfg, "VServer", 'vserver')
+        wizard = mgr.load (name)
+
+        output = wizard.run ("/vserver%s"%(uri), post)
+        if output:
+            return output
+
+        return '/vserver'
 
     def _normailze_vservers (self):
         vservers = [int(x) for x in self._cfg['vserver'].keys()]
@@ -218,6 +237,18 @@ class PageVServers (PageMenu, FormHelper):
 
         txt += "<h2>%s</h2>" % (_('Clone Virtual Server'))
         txt += self.Indent(fo1.Render(str(table)))
+
+        # Wizards
+        txt += self._render_wizards()
+        return txt
+
+    def _render_wizards (self):
+        txt = ''
+        mgr = WizardManager (self._cfg, "VServer", pre='vserver')
+        txt += mgr.render ("/vserver")
+
+        if txt: 
+            txt = _("<h2>Wizards</h2>") + txt
 
         return txt
 

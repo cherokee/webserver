@@ -157,6 +157,7 @@ class PageMenu (Page):
         self.AddMacroContent ('_advanced',     _('Advanced'))
         self.AddMacroContent ('_title_save',   _('Save Changes'))
         self.AddMacroContent ('_button_save',  _('Save'))
+        self.AddMacroContent ('_button_apply', _('Apply'))
 
         manager = cherokee_management_get (cfg)
         if manager.is_alive():

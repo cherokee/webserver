@@ -30,9 +30,6 @@ from PageNewConfig import *
 from PageAjaxUpdate import *
 from PageInfoSource import *
 from CherokeeManagement import *
-try:
-    from PageWizard import *
-except: pass
 
 # Constants
 #
@@ -58,7 +55,8 @@ class Handler(pyscgi.SCGIHandler):
         status  = "200 OK"
         uri     = self.env['REQUEST_URI']
 
-        if not SELECTED_LANGUAGE:
+        if (not SELECTED_LANGUAGE and
+            self.env.has_key('HTTP_ACCEPT_LANGUAGE')):
             try:
                 langs = self.env['HTTP_ACCEPT_LANGUAGE']
             except:
@@ -96,11 +94,10 @@ class Handler(pyscgi.SCGIHandler):
             page = PageAdvanced(cfg)
         elif uri.startswith('/feedback'):
             page = PageFeedback(cfg)
-        elif uri.startswith('/wizard'):
-            page = PageWizard(cfg)
         elif uri == '/vserver' or \
              uri == '/vserver/' or \
-             uri == '/vserver/ajax_update':
+             uri == '/vserver/ajax_update' or\
+             uri.startswith('/vserver/wizard'):
             page = PageVServers(cfg)
         elif uri.startswith('/vserver/'):
             if "/rule/" in uri:

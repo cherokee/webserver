@@ -1395,6 +1395,7 @@ admin/static/js/Makefile
 admin/static/css/Makefile
 admin/static/images/Makefile
 admin/static/images/flags/Makefile
+admin/static/images/wizards/Makefile
 po/Makefile
 ])
 

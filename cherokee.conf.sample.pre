@@ -23,7 +23,7 @@ server!pid_file = %localstatedir%/run/cherokee.pid
 #
 vserver!1!nick = default
 vserver!1!document_root = %wwwroot%
-vserver!1!directory_index = index.php,index.html
+vserver!1!directory_index = index.html
 
 vserver!1!logger = combined
 vserver!1!logger!access!type = file
@@ -56,23 +56,6 @@ vserver!1!rule!5!match!directory = /about
 vserver!1!rule!5!encoder!gzip = 1
 vserver!1!rule!5!handler = server_info
 vserver!1!rule!5!handler!type = just_about
-
-vserver!1!rule!99999!match = extensions
-vserver!1!rule!99999!match!extensions = php
-vserver!1!rule!99999!encoder!gzip = 1
-vserver!1!rule!99999!handler = fcgi
-vserver!1!rule!99999!handler!balancer = round_robin
-vserver!1!rule!99999!handler!balancer!source!1 = 1
-vserver!1!rule!99999!handler!error_handler = 1
-
-# Sources 
-#
-source!1!nick = PHP Local
-source!1!type = interpreter
-source!1!host = /tmp/cherokee-php.socket
-source!1!env!PHP_FCGI_CHILDREN = 5
-source!1!env!PHP_FCGI_MAX_REQUESTS = 2000
-source!1!interpreter = %phpcgi% -b /tmp/cherokee-php.socket
 
 # Icons
 #

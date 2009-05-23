@@ -1,5 +1,14 @@
 2009-05-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee.conf.sample.pre, configure.in, admin/server.py,
+	admin/Wizard_PHP.py, admin/Page.py, admin/Wizard_WordPress.py,
+	admin/PageVServer.py, admin/static/images/wizards/php.jpg,
+	admin/Wizard.py, admin/static/images/wizards/wordpress.jpg,
+	admin/util.py, admin/static/images/wizards/Makefile.am,
+	admin/static/images/Makefile.am, admin/PageVServers.py: Initial
+	support of the Wizard mechanism. Includes two examples: PHP and
+	Wordpress.
+
 	* admin/PageEntry.py: Show the Document Root entry even if a
 	handler has not been selected. There should be possible to define
 	non-final rules with a custom document root.
