@@ -340,9 +340,10 @@ do_spawn (void)
 		p += sizeof(int);
 		
 		e = malloc (size + 1);
-		strncpy (e, p, size);
-		envp[n] = e;
+		memcpy (e, p, size);
+		e[size] = '\0';
 
+		envp[n] = e;
 		p += size + 1;
 	}
 
@@ -476,7 +477,7 @@ spawn_init (void)
 	snprintf (spawn_shared_sem_name, mem_len, "/cherokee-spawner-%d.sem", getpid());
 
 	/* Create the shared memory
-	*/
+	 */
 	fd = shm_open (spawn_shared_name, O_RDWR | O_EXCL | O_CREAT, 0600);
 	if (fd < 0) {
 		return ret_error;

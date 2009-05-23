@@ -1,5 +1,9 @@
 2009-05-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main.c (do_spawn): Fixes a memory corruption issue.
+	http://code.google.com/p/cherokee/issues/detail?id=468
+	Thanks to binbash@b2host.de for the report!
+
 	* cherokee/config_reader.c (cherokee_config_reader_parse_string):
 	Fixes a regression that was introduced a few day ago.
 
