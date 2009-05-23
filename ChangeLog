@@ -1,5 +1,9 @@
 2009-05-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageEntry.py: Show the Document Root entry even if a
+	handler has not been selected. There should be possible to define
+	non-final rules with a custom document root.
+
 	* admin/PageVServer.py (PageVServer._render_rules_generic): Adds a
 	new column to represent the Document Root of rules.
 

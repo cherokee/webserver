@@ -147,7 +147,7 @@ class PageEntry (PageMenu, FormHelper):
                                         modules_available(HANDLERS), _(NOTE_HANDLER))
 
         props = self._get_handler_properties()
-        if props and props.show_document_root:
+        if not props or props.show_document_root:
             self.AddPropEntry (table, _('Document Root'), '%s!document_root'%(pre), _(NOTE_DOCUMENT_ROOT))
 
         if e:
