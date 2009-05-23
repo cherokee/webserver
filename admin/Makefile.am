@@ -103,7 +103,11 @@ config.py \
 pyscgi.py \
 validations.py \
 CherokeeManagement.py \
-flags.py
+flags.py \
+util.py \
+Wizard.py \
+Wizard_PHP.py \
+Wizard_WordPress.py
 endif
 
 adminpy_DATA = $(admin_data)
