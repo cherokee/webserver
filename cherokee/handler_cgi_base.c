@@ -277,12 +277,11 @@ cherokee_handler_cgi_base_build_basic_env (
 	set_env (cgi, "GATEWAY_INTERFACE", "CGI/1.1", 7);
 	set_env (cgi, "PATH",              "/bin:/usr/bin:/sbin:/usr/sbin", 29);
 
-	/* Servers MUST supply this value to scripts. The QUERY_STRING
-	 * value is case-sensitive. If the Script-URI does not include a
-	 * query component, the QUERY_STRING metavariable MUST be defined
-	 * as an empty string ("").
+	/* Document Root of the current Virtual Server
 	 */
-	set_env (cgi, "DOCUMENT_ROOT", conn->local_directory.buf, conn->local_directory.len);
+	set_env (cgi, "DOCUMENT_ROOT", 
+		 CONN_VSRV(conn)->root.buf,
+		 CONN_VSRV(conn)->root.len);
 
 	/* The IP address of the client sending the request to the
 	 * server. This is not necessarily that of the user agent (such
