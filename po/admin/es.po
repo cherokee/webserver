@@ -1,14 +1,17 @@
 # Spanish translations for cherokee package
 # Traducciones al español para el paquete cherokee.
-# Copyright (C) 2009 ORGANIZATION
+# Copyright (C) 2009 Alvaro Lopez Ortega
 #
-# Antonio Pérez Jiménez <aperez@skarcha.com>, 2009.
+# Authors:
+#  Antonio Pérez Jiménez <aperez@skarcha.com>
+#  Alvaro Lopez Ortega <alvaro@alobbs.com>
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
 "POT-Creation-Date: 2009-05-23 20:50+0200\n"
-"PO-Revision-Date: 2009-05-05 12:17+0100\n"
+"PO-Revision-Date: 2009-05-23 22:45+0200\n"
 "Last-Translator: Alvaro Lopez Ortega <alvaro@alobbs.com>\n"
 "Language-Team: Spanish <>\n"
 "MIME-Version: 1.0\n"
@@ -271,7 +274,7 @@ msgstr "Valor"
 
 #: admin/ModuleCommon.py:11
 msgid "Allow extra tailing paths"
-msgstr ""
+msgstr "Permitir sufijos en la ruta"
 
 #: admin/ModuleCommon.py:12
 msgid "Allow to list directory contents"
@@ -636,6 +639,8 @@ msgid ""
 "The <i>IP Hash</i> balancer distributes connections between upstreams\n"
 "based on the IP-address of the client."
 msgstr ""
+"El balanceador <i>IP Hash</p> distribuye las conexiones entre los diferentes\\n\n"
+"servidores basandose en la dirección IP del cliente."
 
 #: admin/ModuleLdap.py:7
 msgid "LDAP server IP address."
@@ -853,7 +858,7 @@ msgstr "Reescritura de URL"
 
 #: admin/ModuleProxy.py:71
 msgid "Header Addition"
-msgstr ""
+msgstr "Añadir cabecera"
 
 #: admin/ModuleProxy.py:72 admin/ModuleProxy.py:87
 msgid "Add New Header"
@@ -869,7 +874,7 @@ msgstr "Ocultar cabecera"
 
 #: admin/ModuleProxy.py:86
 msgid "Header addition"
-msgstr ""
+msgstr "Añadir cabecera"
 
 #: admin/ModuleProxy.py:156 admin/ModuleProxy.py:179 admin/ModuleRedir.py:35
 #: admin/ModuleRedir.py:53
@@ -1114,9 +1119,8 @@ msgid "Save"
 msgstr "Guardar"
 
 #: admin/Page.py:160
-#, fuzzy
 msgid "Apply"
-msgstr "Respuesta"
+msgstr "Aplicar"
 
 #: admin/Page.py:164
 msgid "Graceful restart"
@@ -1327,11 +1331,11 @@ msgstr "Máx. Tam. Fichero"
 
 #: admin/PageAdvanced.py:104
 msgid "Lasting: stat"
-msgstr ""
+msgstr "Duración: stat"
 
 #: admin/PageAdvanced.py:105
 msgid "Lasting: mmap"
-msgstr ""
+msgstr "Duración: mmap"
 
 #: admin/PageAdvanced.py:110
 msgid "Panic action"
@@ -1460,7 +1464,7 @@ msgstr ""
 
 #: admin/PageEntry.py:231
 msgid "Skip Logging"
-msgstr ""
+msgstr "No guardar log"
 
 #: admin/PageEntry.py:234
 msgid "Access Restrictions"
@@ -1585,7 +1589,7 @@ msgstr ""
 
 #: admin/PageGeneral.py:31
 msgid "IP address of the interface to bind. It is usually empty."
-msgstr ""
+msgstr "Dirección IP de la interface a escuchar. Normalmente vacio."
 
 #: admin/PageGeneral.py:32
 msgid "Time interval until the server closes inactive connections."
@@ -1670,7 +1674,7 @@ msgstr "Tiempo de espera (<i>segs.</i>)"
 
 #: admin/PageGeneral.py:85
 msgid "Server Tokens"
-msgstr ""
+msgstr "Identificación del servidor"
 
 #: admin/PageGeneral.py:124
 msgid "Listening to ports"
@@ -1903,7 +1907,7 @@ msgstr "Tipo MIME"
 
 #: admin/PageMime.py:95
 msgid "MaxAge<br/>(<i>secs</i>)"
-msgstr ""
+msgstr "MaxAge<br/>(<i>segs</i>)"
 
 #: admin/PageMime.py:112 admin/PageMime.py:123
 msgid "Mime Type"
@@ -1911,7 +1915,7 @@ msgstr "Tipo MIME"
 
 #: admin/PageMime.py:114 admin/PageMime.py:123
 msgid "Max Age"
-msgstr ""
+msgstr "Max Age"
 
 #: admin/PageNewConfig.py:14
 msgid ""
@@ -2088,7 +2092,7 @@ msgstr ""
 msgid ""
 "\n"
 "<p>The 'default' virtual server matches all the domain names.</p>\n"
-msgstr ""
+msgstr "\n<p>El servidor virtual 'default' acepta todos los nombres de dominio.</p>\n"
 
 #: admin/PageVServer.py:37
 msgid "Nickname for the virtual server."
@@ -2199,11 +2203,11 @@ msgstr ""
 
 #: admin/PageVServer.py:55
 msgid "Back-end used to store the log accesses."
-msgstr ""
+msgstr "Destino de los históricos de accesos"
 
 #: admin/PageVServer.py:56
 msgid "Back-end used to store the log errors."
-msgstr ""
+msgstr "Destino de los históricos de errores"
 
 #: admin/PageVServer.py:57
 msgid "Back-end used to store the log accesses and errors."
@@ -2309,7 +2313,7 @@ msgstr "Opciones avanzadas"
 
 #: admin/PageVServer.py:266
 msgid "Ciphers"
-msgstr ""
+msgstr "Codificadores"
 
 #: admin/PageVServer.py:267
 msgid "Client Certs. Request"
@@ -2361,7 +2365,7 @@ msgstr "Final"
 
 #: admin/PageVServer.py:426 admin/PageVServers.py:251
 msgid "<h2>Wizards</h2>"
-msgstr ""
+msgstr "<h2>Asistentes</h2>"
 
 #: admin/PageVServer.py:431
 msgid "/~user directories"
@@ -2445,11 +2449,11 @@ msgstr "Opciones"
 
 #: admin/PageVServer.py:564
 msgid "Accept Forwarded IPs"
-msgstr ""
+msgstr "Acceptar IPs redireccionadas"
 
 #: admin/PageVServer.py:566
 msgid "Don't check origin"
-msgstr ""
+msgstr "No comprobar origen"
 
 #: admin/PageVServer.py:568
 #, fuzzy
@@ -2503,7 +2507,7 @@ msgstr "Sí"
 
 #: admin/PageVServers.py:169
 msgid "no"
-msgstr ""
+msgstr "no"
 
 #: admin/PageVServers.py:221
 msgid "Add new Virtual Server"
