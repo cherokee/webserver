@@ -144,6 +144,9 @@ class PageVServers (PageMenu, FormHelper):
         txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
             (_('Nickname'), _('Root'), _('Domains'), _('Logging'))
 
+        ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
+        DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
+
         for prio in sorted_vservers:
             nick          = self._cfg.get_val('vserver!%s!nick'%(prio))
             document_root = self._cfg.get_val('vserver!%s!document_root'%(prio), '')
@@ -164,9 +167,9 @@ class PageVServers (PageMenu, FormHelper):
                 extra = ''
 
             if logger_val:
-                logging = _('yes')
+                logging = ENABLED_IMAGE
             else:
-                logging = _('no')
+                logging = DISABLED_IMAGE
 
             if nick != "default":
                 link_del = self.AddDeleteLink ('/ajax/update', 'vserver!%s'%(prio))
