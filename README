@@ -71,7 +71,7 @@ FAQ
    ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
    make
 
-  How to create dinamyc modules
+  How to create dynamic modules
   -----------------------------
    It's the default way.
 
