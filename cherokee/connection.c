@@ -1222,16 +1222,23 @@ cherokee_connection_step (cherokee_connection_t *conn)
 
 	/* Need to 'read' from handler ?
 	 */
-	if (conn->buffer.len > 0)
+	if (conn->buffer.len > 0) {
 		return ret_ok;
+
+	} else if (unlikely (conn->options & conn_op_got_eof)) {
+		return ret_eof;
+	}
 
 	/* Do a step in the handler
 	 */
 	step_ret = cherokee_handler_step (conn->handler, &conn->buffer);
 	switch (step_ret) {
 	case ret_ok:
+		break;
+
 	case ret_eof:
 	case ret_eof_have_data:
+		BIT_SET (conn->options, conn_op_got_eof);
 		break;
 
 	case ret_error:

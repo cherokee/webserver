@@ -92,6 +92,7 @@ typedef enum {
 #define conn_op_document_root (1 << 3)
 #define conn_op_was_polling   (1 << 4)
 #define conn_op_cant_encoder  (1 << 5)
+#define conn_op_got_eof       (1 << 6)
 
 typedef cuint_t cherokee_connection_options_t;
 

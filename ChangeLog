@@ -1,3 +1,10 @@
+2009-05-24  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/connection-protected.h, cherokee/connection.c: Better
+	ret_eof_have_data management. Thanks to Stefan de Konink for his
+	findings and patch proposal. Good stuff!
+	http://code.google.com/p/cherokee/issues/detail?id=474
+
 2009-05-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee.conf.sample.pre, configure.in, admin/server.py,
