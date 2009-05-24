@@ -1,4 +1,6 @@
 import os, imp, sys
+from util import *
+from Page import *
 
 class Wizard:
     def __init__ (self, cfg, pre=None):
@@ -84,3 +86,46 @@ class WizardManager:
         exec(src)
         
         return wizard
+
+
+class WizardPage (PageMenu, FormHelper, Wizard):
+    def __init__ (self, cfg, pre, id, title):
+        Wizard.__init__     (self, cfg, pre)
+        PageMenu.__init__   (self, id, cfg, [])
+        FormHelper.__init__ (self, id, cfg)
+
+        self.title = title
+
+    # Virtual Methods
+    #
+    def _render_content (self):
+        assert (False)
+    def _op_apply (self):
+        assert (False)
+        
+    # Methods
+    #
+    def _op_render (self, url_pre):
+        content = self._render_content (url_pre)
+        self.AddMacroContent ('title', self.title)
+        self.AddMacroContent ('content', content)
+        return Page.Render(self)
+
+    def _run (self, url_pre, post):
+        if post.get_val('is_submit'):
+            re = self._op_apply (post)
+            if self.has_errors():
+                return self._op_render (url_pre)
+        else:
+            return self._op_render (url_pre)
+
+    # Utilities
+    #
+    def _apply_cfg_chunk (self, config_txt):
+        lines = config_txt.split('\n')
+        lines = filter (lambda x: len(x) and x[0] != '#', lines)
+
+        for line in lines:
+            line = line.strip()
+            left, right = line.split (" = ", 2)
+            self._cfg[left] = right

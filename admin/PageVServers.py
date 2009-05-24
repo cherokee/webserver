@@ -86,7 +86,6 @@ class PageVServers (PageMenu, FormHelper):
     def _op_apply_wizard (self, uri, post):
         tmp  = uri.split('/')
         name = tmp[2]
-        print "name", name
 
         mgr = WizardManager (self._cfg, "VServer", 'vserver')
         wizard = mgr.load (name)

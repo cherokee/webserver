@@ -5,6 +5,10 @@
 
 2009-05-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageVServers.py, admin/static/images/wizards/Makefile.am,
+	admin/Wizard.py, admin/static/images/wizards/redirect.jpg,
+	admin/Wizard_Redirect.py: Adds a new Wizard: Host redirection.
+
 	* cherokee/connection-protected.h, cherokee/connection.c: Better
 	ret_eof_have_data management. Thanks to Stefan de Konink for his
 	findings and patch proposal. Good stuff!
