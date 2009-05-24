@@ -1122,6 +1122,15 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi,
 		cherokee_buffer_add_str      (outbuf, CRLF);
 	}
 
+	/* Redirection without custom status
+	 */
+	if ((conn->error_code == http_ok) &&
+	    (! cherokee_buffer_is_empty (&conn->redirect)))
+	{
+		TRACE(ENTRIES, "Redirection without custom status. Setting %d\n", 302);
+		conn->error_code = http_moved_temporarily;
+	}
+
 	return ret_ok;
 }
 

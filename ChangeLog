@@ -1,3 +1,10 @@
+2009-05-24  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/handler_cgi_base.c: It shouldn't reply with a HTTP
+	status code 200 when a redirection ("Location:") header is
+	returned by a {Fast,S,}CGI. It fixes bug report:
+	http://code.google.com/p/cherokee/issues/detail?id=478
+
 2009-05-24  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageVServers.py: Shows logging status using
