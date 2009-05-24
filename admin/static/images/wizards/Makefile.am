@@ -1,6 +1,6 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-wizardsdir = "$(datadir)/cherokee/admin/static/images/flags"
+wizardsdir = "$(datadir)/cherokee/admin/static/images/wizards"
 wizards_DATA = \
 php.jpg \
 wordpress.jpg \
