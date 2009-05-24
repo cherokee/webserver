@@ -323,8 +323,8 @@ class PageVServer (PageMenu, FormHelper):
         table_name = "rules%d" % (self._rule_table)
         self._rule_table += 1
 
-        ENABLED_IMAGE  = self.InstanceImage('tick.png', 'Yes')
-        DISABLED_IMAGE = self.InstanceImage('cross.png', 'No')
+        ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
+        DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
         txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
