@@ -41,6 +41,7 @@ typedef struct {
 	cherokee_list_t    files;
 	cherokee_boolean_t use_iocache;
 	cherokee_boolean_t match_any;
+	cherokee_boolean_t match_only_files;
 } cherokee_rule_exists_t;
 
 #define RULE_EXISTS(x) ((cherokee_rule_exists_t *)(x))

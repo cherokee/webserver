@@ -82,8 +82,9 @@ configure (cherokee_rule_exists_t    *rule,
 
 	UNUSED(vsrv);
 
-	cherokee_config_node_read_bool (conf, "iocache",   &rule->use_iocache);
-	cherokee_config_node_read_bool (conf, "match_any", &rule->match_any);
+	cherokee_config_node_read_bool (conf, "iocache",          &rule->use_iocache);
+	cherokee_config_node_read_bool (conf, "match_any",        &rule->match_any);
+	cherokee_config_node_read_bool (conf, "match_only_files", &rule->match_only_files);
 	
 	if (rule->match_any == false) {
 		ret = cherokee_config_node_read (conf, "exists", &tmp);
@@ -125,6 +126,7 @@ match_file (cherokee_rule_exists_t *rule,
 	ret_t                     ret;
 	struct stat               nocache_info;
 	struct stat              *info;
+	cherokee_boolean_t       *is_file;
 	cherokee_iocache_entry_t *io_entry = NULL;
 	cherokee_server_t        *srv      = CONN_SRV(conn);
 
@@ -135,16 +137,26 @@ match_file (cherokee_rule_exists_t *rule,
 				&io_entry,
 				&info);
 
-	if (io_entry)
-		cherokee_iocache_entry_unref (&io_entry);
-
 	if (ret == ret_ok) {
-		TRACE(ENTRIES, "Match exists: '%s'\n", fullpath->buf);
-		return ret_ok;
+		is_file = S_ISREG(info->st_mode);
 	}
-	
-	TRACE(ENTRIES, "Rule exists: did not match '%s'\n", fullpath->buf);
-	return ret_not_found;
+
+	if (io_entry) {
+		cherokee_iocache_entry_unref (&io_entry);
+	}
+
+	if (ret != ret_ok) {
+		TRACE(ENTRIES, "Rule exists: did not match '%s'\n", fullpath->buf);
+		return ret_not_found;
+	}
+
+	if ((rule->match_only_files) && (! is_file)) {
+		TRACE(ENTRIES, "Rule exists: isn't a regular file '%s'\n", fullpath->buf);
+		return ret_not_found;
+	}
+
+	TRACE(ENTRIES, "Match exists: '%s'\n", fullpath->buf);
+	return ret_ok;
 }
 
 static ret_t 
@@ -219,8 +231,10 @@ cherokee_rule_exists_new (cherokee_rule_exists_t **rule)
 	/* Properties
 	 */
 	INIT_LIST_HEAD (&n->files);
-	n->use_iocache = false;
-	n->match_any   = false;
+
+	n->use_iocache      = false;
+	n->match_any        = false;
+	n->match_only_files = true;
 
 	*rule = n;
  	return ret_ok;
