@@ -16,8 +16,15 @@ class Wizard:
         self.show()
         return self._run(uri, post)
 
-    def error (self, msg):
-        print "ERROR!! %s" % (msg)
+    def report_error (self, msg, desc=''):
+        content  = '<h1>Wizard: %s</h1>' % (self.name)
+        content += '<div class="dialog-error">%s</div>' % (msg)
+        content += '<div class="indented">%s</div>'% (desc)
+
+        page = PageMenu ("wizard_error", self._cfg)
+        page.AddMacroContent ('title', "%s error"%(self.name))
+        page.AddMacroContent ('content', content)
+        return page.Render()
 
 class WizardManager:
     def __init__ (self, cfg, _type, pre):

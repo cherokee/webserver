@@ -5,6 +5,7 @@ from Wizard import *
 class Wizard_Rules_PHP (Wizard):
     UNIX_SOCK     = "/tmp/cherokee-php.socket"
     DEFAULT_PATHS = ['/usr/bin', '/opt/php', '/usr/sfw/bin', '/usr/gnu/bin']
+    DEFAULT_BINS  = ['php-cgi', 'php']
     ICON          = "php.jpg"
     DESC          = "Configures PHP in the current Virtual Server. It will add a new .php extension is not present."
     
@@ -43,12 +44,12 @@ class Wizard_Rules_PHP (Wizard):
 
         # Add a new Source, if needed
         if not self.source:
-            php_path = path_find_binary (['php-cgi', 'php'], 
+            php_path = path_find_binary (self.DEFAULT_BINS,
                                          extra_dirs  = self.DEFAULT_PATHS,
                                          custom_test = test_php_fcgi)
             if not php_path:
-                self.error ("Couldn't find a suitable PHP interpreter.")
-                return
+                desc = "<p>Looked for the binaries: %s.</p>" % (", ".join(self.DEFAULT_BINS))
+                return self.report_error ("Couldn't find a suitable PHP interpreter.", desc)
 
             self.source = cfg_source_get_next (self._cfg)
             self._cfg['%s!nick' % (self.source)]        = 'PHP Interpreter'
@@ -63,7 +64,7 @@ class Wizard_Rules_PHP (Wizard):
         if not self.rule:
             self.rule = cfg_vsrv_rule_get_next (self._cfg, self._pre)
             if not self.rule:
-                self.error ("Couldn't add a new rule.")
+                return self.report_error ("Couldn't add a new rule.")
             
             src_num = self.source.split('!')[-1]
 
