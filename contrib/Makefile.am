@@ -23,6 +23,7 @@ server.pem \
 rand.dat \
 cakey.key \
 cakey.csr \
-cakey.pem
+cakey.pem \
+make-dh_params.sh
 
 all-local: cherokee
