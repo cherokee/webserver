@@ -1024,6 +1024,12 @@ cryptor_libssl = \
 cryptor_libssl.c \
 cryptor_libssl.h
 
+cryptor_libssl_dist = \
+cryptor_libssl_dh_512.c \
+cryptor_libssl_dh_1024.c \
+cryptor_libssl_dh_2048.c \
+cryptor_libssl_dh_4096.c
+
 libplugin_libssl_la_LDFLAGS = $(module_ldflags) $(TLS_LIBS)
 libplugin_libssl_la_SOURCES = $(cryptor_libssl)
 libplugin_libssl_la_CFLAGS  = $(TLS_CFLAGS)
@@ -1627,6 +1633,7 @@ $(validator_mysql) \
 $(handler_dbslayer) \
 $(cherokeedeps_DATA) \
 $(WINDOWS_PORT_FILES) \
+$(cryptor_libssl_dist) \
 loader.autoconf.h \
 loader.autoconf.inc
 

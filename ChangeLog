@@ -1,5 +1,12 @@
 2009-05-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/Makefile.am, cherokee/cryptor_libssl_dh_1024.c,
+	cherokee/cryptor_libssl_dh_512.c, cherokee/cryptor_libssl.c,
+	cherokee/cryptor_libssl_dh_2048.c, admin/PageAdvanced.py,
+	cherokee/cryptor_libssl_dh_4096.c, contrib/make-dh_params.sh: Add
+	support for DH parameters. Patch by Arnaud Cornet. Thanks!!
+	http://code.google.com/p/cherokee/issues/detail?id=457
+
 	* cherokee/rule_exists.c, cherokee/rule_exists.h: Adds a new
 	parameter to allow the rule to select only files, or any sort of
 	directory entries.

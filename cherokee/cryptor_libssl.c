@@ -48,6 +48,15 @@
 
 #define ENTRIES "crypto,ssl"
 
+static DH *dh_param_512  = NULL;
+static DH *dh_param_1024 = NULL;
+static DH *dh_param_2048 = NULL;
+static DH *dh_param_4096 = NULL;
+
+#include "cryptor_libssl_dh_512.c"
+#include "cryptor_libssl_dh_1024.c"
+#include "cryptor_libssl_dh_2048.c"
+#include "cryptor_libssl_dh_4096.c"
 
 static ret_t
 _free (cherokee_cryptor_libssl_t *cryp)
@@ -64,6 +73,56 @@ _free (cherokee_cryptor_libssl_t *cryp)
 	return ret_ok;
 }
 
+static ret_t
+try_read_dh_param(cherokee_config_node_t  *conf,
+		  DH                     **dh,
+		  int                      bitsize)
+{
+	ret_t              ret;
+	cherokee_buffer_t *buf;
+	FILE              *paramfile = NULL;
+	cherokee_buffer_t  confentry = CHEROKEE_BUF_INIT;
+
+	cherokee_buffer_add_va (&confentry, "dh_param%d", bitsize);
+
+	/* Read the configuration parameter
+	 */
+	ret = cherokee_config_node_read (conf, confentry.buf, &buf);
+	if (ret != ret_ok) {
+		ret = ret_ok;
+		goto out;
+	}
+
+	/* Read the file
+	 */
+	paramfile = fopen (buf->buf, "r");
+	if (paramfile == NULL) {
+		TRACE(ENTRIES, "Cannot open file %s\n", buf->buf);
+		ret = ret_file_not_found;
+		goto out;
+	}
+
+	/* Process the content
+	 */
+	*dh = PEM_read_DHparams (paramfile, NULL, NULL, NULL);
+	if (*dh == NULL) {
+		TRACE(ENTRIES, "Failed to load PEM %s\n", buf->buf);
+		ret = ret_error;
+		goto out;
+	}
+
+	ret = ret_ok;
+
+out:
+	/* Clean up
+	 */
+	if (paramfile != NULL) {
+		fclose (paramfile);
+	}
+
+	cherokee_buffer_mrproper (&confentry);
+	return ret;
+}
 
 static ret_t
 _configure (cherokee_cryptor_t     *cryp,
@@ -71,8 +130,26 @@ _configure (cherokee_cryptor_t     *cryp,
 	    cherokee_server_t      *srv)
 {
 	UNUSED(cryp);
-	UNUSED(conf);
 	UNUSED(srv);
+
+	ret_t              ret;
+	cherokee_buffer_t *buf;
+
+	ret = try_read_dh_param (conf, &dh_param_512, 512);
+	if (ret != ret_ok)
+		return ret;
+
+	ret = try_read_dh_param (conf, &dh_param_1024, 1024);
+	if (ret != ret_ok)
+		return ret;
+
+	ret = try_read_dh_param (conf, &dh_param_2048, 2048);
+	if (ret != ret_ok)
+		return ret;
+
+	ret = try_read_dh_param (conf, &dh_param_4096, 4096);
+	if (ret != ret_ok)
+		return ret;
 
 	return ret_ok;
 }
@@ -157,6 +234,25 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 }
 #endif
 
+static DH *
+tmp_dh_cb (SSL *ssl, int export, int keylen)
+{
+	switch (keylen) {
+	case 512:
+		if (dh_param_512) return dh_param_512;
+		return get_dh512();
+	case 1024:
+		if (dh_param_1024) return dh_param_1024;
+		return get_dh1024();
+	case 2048:
+		if (dh_param_2048) return dh_param_2048;
+		return get_dh2048();
+	case 4096:
+		if (dh_param_4096) return dh_param_4096;
+		return get_dh4096();
+	}
+	return NULL;
+}
 
 static ret_t
 _vserver_new (cherokee_cryptor_t          *cryp,
@@ -170,7 +266,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	CHEROKEE_NEW_STRUCT (n, cryptor_vserver_libssl);
 
 	UNUSED(cryp);
-	
+
 	/* Init
 	 */
 	ret = cherokee_cryptor_vserver_init_base (CRYPTOR_VSRV(n));
@@ -186,6 +282,10 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		PRINT_ERROR_S("ERROR: OpenSSL: Couldn't allocate OpenSSL context\n");
 		return ret_error;
 	}
+
+	/* Callback to be used when a DH parameters are required
+	 */
+	SSL_CTX_set_tmp_dh_callback (n->context, tmp_dh_cb);
 
 	/* Work around all known bugs
 	 */

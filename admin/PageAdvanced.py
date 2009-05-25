@@ -27,7 +27,11 @@ DATA_VALIDATION = [
     ("server!iocache!min_file_size",  validations.is_positive_int),
     ("server!iocache!max_file_size",  validations.is_positive_int),
     ("server!iocache!lasting_stat",   validations.is_positive_int),
-    ("server!iocache!lasting_mmap",   validations.is_positive_int)
+    ("server!iocache!lasting_mmap",   validations.is_positive_int),
+    ("server!tls!dh_param512",       (validations.is_local_file_exists, 'cfg')),
+    ("server!tls!dh_param1024",      (validations.is_local_file_exists, 'cfg')),
+    ("server!tls!dh_param2048",      (validations.is_local_file_exists, 'cfg')),
+    ("server!tls!dh_param4096",      (validations.is_local_file_exists, 'cfg'))
 ]
 
 WARNING = N_('<p><b>WARNING</b>: This section contains advanced configuration parameters. Changing things is not recommended unless you really know what you are doing.</p>')
@@ -53,6 +57,10 @@ NOTE_IO_MIN_SIZE  = N_('Files under this size will not be cached.')
 NOTE_IO_MAX_SIZE  = N_('Files over this size will not be cached.')
 NOTE_IO_LAST_STAT = N_('How long the file information should last cached without refreshing it.')
 NOTE_IO_LAST_MMAP = N_('How long the file content should last cached.')
+NOTE_DH512        = N_('Path DH parameters PEM file (512 bits).')
+NOTE_DH1024       = N_('Path DH parameters PEM file (1024 bits).')
+NOTE_DH2048       = N_('Path DH parameters PEM file (2048 bits).')
+NOTE_DH4096       = N_('Path DH parameters PEM file (4096 bits).')
 
 HELPS = [('config_advanced', N_('Advanced'))]
 
@@ -111,12 +119,21 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddPropEntry (table, _('PID file'),     'server!pid_file',     _(NOTE_PID_FILE))
         return self.Indent(table)
 
+    def _render_tls (self):
+	table = TableProps()
+        self.AddPropEntry (table, _('Diffie Hellman parameters (512 bits)'), 'server!tls!dh_param512', _(NOTE_DH512))
+        self.AddPropEntry (table, _('Diffie Hellman parameters (1024 bits)'), 'server!tls!dh_param1024', _(NOTE_DH1024))
+        self.AddPropEntry (table, _('Diffie Hellman parameters (2048 bits)'), 'server!tls!dh_param2048', _(NOTE_DH2048))
+        self.AddPropEntry (table, _('Diffie Hellman parameters (4096 bits)'), 'server!tls!dh_param4096', _(NOTE_DH4096))
+        return self.Indent(table)
+
     def _render_content (self):
         tabs  = []
         tabs += [(_('Connections'),   self._render_performance())]
         tabs += [(_('Resources'),     self._render_resources())]
         tabs += [(_('I/O cache'),     self._render_iocache())]
         tabs += [(_('Special Files'), self._render_special_files())]
+        tabs += [(_('TLS'),           self._render_tls())]
 
         txt = "<h1>%s</h1>" % (_('Advanced configuration'))
         txt += self.Dialog(WARNING, 'warning')
