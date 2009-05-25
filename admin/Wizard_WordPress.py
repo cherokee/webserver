@@ -41,6 +41,7 @@ CONFIG_VSRV = """
 %(pre_rule_1)s!match = exists
 %(pre_rule_1)s!match!iocache = 1
 %(pre_rule_1)s!match!match_any = 1
+%(pre_rule_1)s!match!match_only_files = 1
 %(pre_rule_1)s!handler = file
 %(pre_rule_1)s!handler!iocache = 1
 
