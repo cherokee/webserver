@@ -32,7 +32,7 @@ class Test (TestBase):
                                     encodestring ("%s:%s"%(LOGIN,PASSWD))[:-1])
         self.expected_error    = 200
         self.conf              = CONF
-        self.expected_content  = ['AUTH_TYPE is BASIC']
+        self.expected_content  = ['AUTH_TYPE is Basic']
         self.forbidden_content = ['Forbidden']
 
     def Prepare (self, www):

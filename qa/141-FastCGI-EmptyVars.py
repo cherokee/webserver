@@ -26,6 +26,7 @@ CONF = """
 vserver!1!rule!1410!match = directory
 vserver!1!rule!1410!match!directory = %(DIR)s
 vserver!1!rule!1410!handler = fcgi
+vserver!1!rule!1410!handler!check_file = 0
 vserver!1!rule!1410!handler!balancer = round_robin
 vserver!1!rule!1410!handler!balancer!source!1 = %(source)d
 
