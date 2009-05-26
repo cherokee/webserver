@@ -13,7 +13,7 @@
 	cherokee/cryptor_libssl_dh_2048.c, admin/PageAdvanced.py,
 	cherokee/cryptor_libssl_dh_4096.c, contrib/make-dh_params.sh: Add
 	support for DH parameters. Patch by Arnaud Cornet. Thanks!!
-	http://code.google.com/p/cherokee/issues/detail?id=457
+	http://bugs.cherokee-project.com/457
 
 	* cherokee/rule_exists.c, cherokee/rule_exists.h: Adds a new
 	parameter to allow the rule to select only files, or any sort of
@@ -24,7 +24,7 @@
 	* cherokee/handler_cgi_base.c: It shouldn't reply with a HTTP
 	status code 200 when a redirection ("Location:") header is
 	returned by a {Fast,S,}CGI. It fixes bug report:
-	http://code.google.com/p/cherokee/issues/detail?id=478
+	http://bugs.cherokee-project.com/478
 
 2009-05-24  Antonio Perez  <aperez@skarcha.com>
 
@@ -40,7 +40,7 @@
 	* cherokee/connection-protected.h, cherokee/connection.c: Better
 	ret_eof_have_data management. Thanks to Stefan de Konink for his
 	findings and patch proposal. Good stuff!
-	http://code.google.com/p/cherokee/issues/detail?id=474
+	http://bugs.cherokee-project.com/474
 
 2009-05-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -63,7 +63,7 @@
 	* cherokee/handler_cgi_base.c: Fixes the DOCUMENT_ROOT value.
 
 	* cherokee/main.c (do_spawn): Fixes a memory corruption issue.
-	http://code.google.com/p/cherokee/issues/detail?id=468
+	http://bugs.cherokee-project.com/468
 	Thanks to binbash@b2host.de for the report!
 
 	* cherokee/config_reader.c (cherokee_config_reader_parse_string):
@@ -77,7 +77,7 @@
 	admin/static/images/cross.png, admin/static/images/tick.png:
 	'Yes' and 'No' words in Rule List are substituted by a 'tick'
 	and a 'cross' images. RFE #471:
-	http://code.google.com/p/cherokee/issues/detail?id=471
+	http://bugs.cherokee-project.com/471
 
 2009-05-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -117,7 +117,7 @@
 	* cherokee/handler_file.c (cherokee_handler_file_step): Fixes
 	range management when the server internally uses sendfile() (and
 	start and end points are specified by the client). Fixes:
-	http://code.google.com/p/cherokee/issues/detail?id=459
+	http://bugs.cherokee-project.com/459
 	Thanks to Matt Whiteley for the report.
 
 2009-05-11  Alvaro Lopez Ortega  <alvaro@octality.com>
@@ -139,7 +139,7 @@
 
 	* cherokee/main.c: Fixes the new spawning mechanism. There were
 	process being left behind when cherokee exited. Fixes bug:
-	http://code.google.com/p/cherokee/issues/detail?id=456
+	http://bugs.cherokee-project.com/456
 
 2009-05-10  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -196,7 +196,7 @@
 
 	* admin/server.py: Cherokee-Admin fails if HTTP_ACCEPT_LANGUAGE
 	is not included in request header. Fixes bug #453:
-	http://code.google.com/p/cherokee/issues/detail?id=453
+	http://bugs.cherokee-project.com/453
 
 2009-05-06  Antonio Perez  <aperez@skarcha.com>
 
@@ -217,7 +217,7 @@
 	qa/146-ContentRange4-NoIO.py, qa/056-ContentRange3.py,
 	qa/145-ContentRange3-NoIO.py, qa/057-ContentRange4.py,
 	qa/058-ContentRange-Double.py: Fixes the 'Range:' management:
-	http://code.google.com/p/cherokee/issues/detail?id=454 Special
+	http://bugs.cherokee-project.com/454 Special
 	thanks to Arnaud Cornet for his report and patch.
 
 2009-05-04  Alvaro Lopez Ortega  <alvaro@octality.com>
@@ -245,7 +245,7 @@
 
 	* cherokee/spawner.c, cherokee/spawner.h, cherokee/shm.c,
 	cherokee/main.c: Fixes a spawner issue. It tries to fix:
-	http://code.google.com/p/cherokee/issues/detail?id=449
+	http://bugs.cherokee-project.com/449
 	
 	* cherokee/source_interpreter.c, cherokee/source_interpreter.h,
 	cherokee/spawner.c, cherokee/spawner.h, admin/PageInfoSource.py,
@@ -326,7 +326,7 @@
 
 	* cherokee/socket.c, cherokee/cryptor_libssl.c: Tries to fix
 	some SSL issues. Related to bug:
-	http://code.google.com/p/cherokee/issues/detail?id=413
+	http://bugs.cherokee-project.com/413
 
 2009-04-21  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -352,7 +352,7 @@
 	or not they want requests to be logged.
 
 	* cherokee/handler_proxy.c (build_request): Fixes bug #450
-	http://code.google.com/p/cherokee/issues/detail?id=450
+	http://bugs.cherokee-project.com/450
 
 	* cherokee/main_admin.c (config_server): It was not printing the
 	right port when the -p was used.
@@ -396,7 +396,7 @@
 2009-04-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/config.py (Config._parse): Fixes bug #444
-	http://code.google.com/p/cherokee/issues/detail?id=444
+	http://bugs.cherokee-project.com/444
 	Cherokee-admin had trouble parsing configuration files with
 	embedded SQL queries.
 
@@ -414,7 +414,7 @@
 
 	* cherokee/handler_redir.c, qa/228-Redir-Paths2.py,
 	qa/Makefile.am, qa/227-Redir-Paths.py: Fixes bug #432
-	http://code.google.com/p/cherokee/issues/detail?id=432
+	http://bugs.cherokee-project.com/432
 	Now hidden redirections can use non-global paths.
 
 	* cherokee/handler_cgi_base.c, admin/ModuleCgi.py: It will be
@@ -442,18 +442,18 @@
 	CSS style has still to be fixed for this new location though.
 
 	* cherokee/validator_authlist.c, admin/ModuleAuthlist.py: Fixes
-	bug http://code.google.com/p/cherokee/issues/detail?id=433 . An
+	bug http://bugs.cherokee-project.com/433 . An
 	empty authlist validator is no longer a fatal error.
 
 2009-04-15  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Rule.py: fixes issue
-	http://code.google.com/p/cherokee/issues/detail?id=440
+	http://bugs.cherokee-project.com/440
 
 2009-04-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* qa/226-PathInfo-Default.py: Adds a new QA to test:
-	http://code.google.com/p/cherokee/issues/detail?id=439
+	http://bugs.cherokee-project.com/439
 
 2009-04-14  Antonio Perez  <aperez@skarcha.com>
 
@@ -587,10 +587,10 @@
 
 	* admin/PageVServer.py: 'Host Match' tab should not be available
 	for 'default' Virtual Host. Fixes bug #427:
-	http://code.google.com/p/cherokee/issues/detail?id=427
+	http://bugs.cherokee-project.com/427
 
 	* admin/Rule.py: Fixes a bug with checkboxes in complex rules.
-	http://code.google.com/p/cherokee/issues/detail?id=405
+	http://bugs.cherokee-project.com/405
 
 	* admin/consts.py, admin/PageVServer.py: Adds initial custom logs
 	support to Cherokee-Admin.
@@ -695,7 +695,7 @@
 
 	* cherokee/util.c (cherokee_get_timezone_ref): Implements timezone
 	reading in FreeBSD. Patch based on bozzaj's patch (thanks!):
-	http://code.google.com/p/cherokee/issues/detail?id=424
+	http://bugs.cherokee-project.com/424
 
 	* cherokee/handler_file.c (cherokee_handler_file_custom_init):
 	Fixes a encoder handling problem where a encoder wasn't taken into
@@ -787,10 +787,10 @@
 	* 0.99.7 released
 
 	* cherokee/handler_proxy.c (add_request): Fixes a regex issue:
-	http://code.google.com/p/cherokee/issues/detail?id=410
+	http://bugs.cherokee-project.com/410
 
 	* cherokee/handler_streaming.c (set_auto_rate): Adds a missing
-	check: http://code.google.com/p/cherokee/issues/detail?id=415
+	check: http://bugs.cherokee-project.com/415
 
 	* cherokee/handler_proxy.c, cherokee/handler_proxy.h,
 	admin/ModuleProxy.py: This patch adds a new configuration option
@@ -853,7 +853,7 @@
 
 	* cherokee/handler_proxy.c (parse_server_header): It was not
 	dealing with "Content-Encoding" responses properly. This patch
-	fixes: http://code.google.com/p/cherokee/issues/detail?id=403
+	fixes: http://bugs.cherokee-project.com/403
 
 2009-03-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -866,7 +866,7 @@
 2009-03-24  Taher Shihadeh <taher@unixwars.com>
 
 	* admin/Makefile.am: PageNewConfig.py was not being installed. Issue
-	http://code.google.com/p/cherokee/issues/detail?id=411 detected by
+	http://bugs.cherokee-project.com/411 detected by
 	Stefan.
 
 2009-03-23  Alvaro Lopez Ortega  <alvaro@octality.com>
@@ -927,14 +927,14 @@
 
 	* cherokee/bind.c (cherokee_bind_configure): Fixed compilation
 	with Sun CC. Patch by Alfred Peng <Alfred.Peng@Sun.COM>. Thanks!
-	http://code.google.com/p/cherokee/issues/detail?id=402
+	http://bugs.cherokee-project.com/402
 
 	* cherokee/handler_proxy.c, cherokee/handler_proxy.h,
 	admin/ModuleProxy.py: Makes the reverse proxy configuration much
 	more consistent. Now the operations with headers/URLs are the same
 	for the Request (to the back-end server) and for the Response. It
 	also implements "Location:" header parsing (bug #263):
-	http://code.google.com/p/cherokee/issues/detail?id=263 
+	http://bugs.cherokee-project.com/263 
 	IMPORTANT: The configuration keys have changed! People will most
 	probably have to add the reverse proxy rules again.
 	
@@ -942,7 +942,7 @@
 
 	* cherokee/http.h, cherokee/handler_proxy.c: Tries to fix a
 	problem sending POST requests to a Django back-end server:
-	http://code.google.com/p/cherokee/issues/detail?id=261
+	http://bugs.cherokee-project.com/261
 
 	* cherokee/post.c, cherokee/connection.c: Adds a couple of new
 	TRACE entries.
@@ -965,7 +965,7 @@
 	proxy performance.
 	
 	* cherokee/handler_proxy.c, cherokee/handler_proxy.h: Tries to
-	address: http://code.google.com/p/cherokee/issues/detail?id=261
+	address: http://bugs.cherokee-project.com/261
 	There were time when the reverse proxy returned 500 errors by no
 	reason.
 
@@ -1011,11 +1011,11 @@
 	integer overflow.
 
 	* cherokee/handler_cgi_base.c, qa/210-Userdir_ScriptName.py: Tries
-	to address: http://code.google.com/p/cherokee/issues/detail?id=377
+	to address: http://bugs.cherokee-project.com/377
 
 	* qa/210-Userdir_ScriptName.py, qa/Makefile.am: Adds a new QA test
 	in order to reproduce the bug report #377:
-	http://code.google.com/p/cherokee/issues/detail?id=377
+	http://bugs.cherokee-project.com/377
 
 2009-03-10  Taher Shihadeh <taher@unixwars.com>
 
@@ -1046,7 +1046,7 @@
 	* cherokee/handler_cgi_base.c
 	(cherokee_handler_cgi_base_extract_path): Fixes the PATH_INFO
 	generation when a custom document root is set. This patch fixes:
-	http://code.google.com/p/cherokee/issues/detail?id=367
+	http://bugs.cherokee-project.com/367
 
 2009-03-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -1063,7 +1063,7 @@
 
 	* qa/209-ScriptAlias_DRoot.py, qa/Makefile.am: Adds a new QA test
 	in order to reprocude the bug report #367:
-	http://code.google.com/p/cherokee/issues/detail?id=367
+	http://bugs.cherokee-project.com/367
 
 	* qa/208-Userdir_Pathinfo.py, qa/Makefile.am: Adds a new QA test
 	to test whether PATH_INFO works inside ~user directories.
@@ -1079,10 +1079,10 @@
 
 	* cherokee/handler_mirror.c, cherokee/handler_server_info.c,
 	cherokee/handler_dbslayer.c: Be more flexible with unknown config
-	entries: http://code.google.com/p/cherokee/issues/detail?id=392
+	entries: http://bugs.cherokee-project.com/392
 
 	* admin/PageInfoSource.py (PageInfoSource._render_source_usage):
-	Fixes bug: http://code.google.com/p/cherokee/issues/detail?id=391
+	Fixes bug: http://bugs.cherokee-project.com/391
 
 	* doc/media/images/admin_handler_secdownload.png, doc/index.txt,
 	doc/modules_handlers_secdownload.txt, doc/Makefile.am: Adds an
@@ -1100,7 +1100,7 @@
 	* cherokee/handler_cgi_base.c
 	(cherokee_handler_cgi_base_build_basic_env): Adds support for the
 	AUTH_TYPE {Fast,S,}CGI variable. Thanks to Christian Hudon for
-	reporting: http://code.google.com/p/cherokee/issues/detail?id=390
+	reporting: http://bugs.cherokee-project.com/390
 
 2009-03-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -1109,7 +1109,7 @@
 	qa/Makefile.am, qa/205-secdownload3.py, qa/203-secdownload1.py,
 	secdownload.deps, configure.in: Implements a new 'Secure Download'
 	handler and adds a few new QA tests to test it out:
-	http://code.google.com/p/cherokee/issues/detail?id=386
+	http://bugs.cherokee-project.com/386
 
 	* cherokee/util.c, cherokee/util.h, cherokee/buffer.c: Relocates
 	the hex_char to int array. It's global now.
@@ -1134,7 +1134,7 @@
 
 	* cherokee/balancer_ip_hash.c (dispatch): The last information
 	source was not being used by the IP-Hash load balancer. Fixes:
-	http://code.google.com/p/cherokee/issues/detail?id=387
+	http://bugs.cherokee-project.com/387
 
 2009-03-06  Antonio Perez  <aperez@skarcha.com>
 
@@ -1158,13 +1158,13 @@
 	* cherokee/handler_cgi.c (manage_child_cgi_process): Fixes a CGI
 	problem. There were ocassions where the server cloud freeze
 	because of a concurrenty issue. Fixes bug #385:
-	http://code.google.com/p/cherokee/issues/detail?id=385
+	http://bugs.cherokee-project.com/385
 
 2009-03-05  Antonio Perez  <aperez@skarcha.com>
 
 	* cherokee/rule_extensions.c: Fixes a problem with directory
 	names that ends with a dot. Bug #384:
-	http://code.google.com/p/cherokee/issues/detail?id=384
+	http://bugs.cherokee-project.com/384
 
 2009-03-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -1172,7 +1172,7 @@
 	(little harder) to kill the CGI child process.
 
 	* admin/PageVServer.py: Fixes #383 (thanks Samuel!)
-	http://code.google.com/p/cherokee/issues/detail?id=383
+	http://bugs.cherokee-project.com/383
 
 2009-03-02  Antonio Perez  <aperez@skarcha.com>
 
@@ -1185,14 +1185,14 @@
 	Antonio Perez <aperez@skarcha.com>.
 
 	* qa/131-PHP-zero-len-post+Redir.py: Tries to reproduce:
-	http://code.google.com/p/cherokee/issues/detail?id=260
+	http://bugs.cherokee-project.com/260
 
 	* 0.99.2 released
 
 	* cherokee/source_interpreter.c, cherokee/server.c: Information
 	sources launched by Cherokee will be killed when the server exits.
 	It ought to leave the system as it fount it. This patch fixes:
-	http://code.google.com/p/cherokee/issues/detail?id=303
+	http://bugs.cherokee-project.com/303
 
 	* cherokee/virtual_server.c, cherokee/virtual_server.h,
 	cherokee/connection.c, admin/PageVServer.py, qa/201-PostLimit.py,
@@ -1212,7 +1212,7 @@
 2009-03-01  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/validations.py: Fixes a typo. Bug #381:
-	http://code.google.com/p/cherokee/issues/detail?id=381
+	http://bugs.cherokee-project.com/381
 
 2009-02-28  Antonio Perez  <aperez@skarcha.com>
 
@@ -1304,7 +1304,7 @@
 
 	* cherokee/balancer_ip_hash.c, cherokee/balancer_ip_hash.h: Try to
 	address what seems to be a concurrency issue:
-	http://code.google.com/p/cherokee/issues/detail?id=371
+	http://bugs.cherokee-project.com/371
 	
 	* cherokee/connection.c (cherokee_connection_setup_error_handler):
 	Clean the connection before it's (internally) redirected.
@@ -1323,7 +1323,7 @@
 	* admin/ModuleErrorRedir.py: Updates the error management
 	interface. There were changes on the server code that have not
 	been implemented in cherokee-admin yet. It fixes bug #368:
-	http://code.google.com/p/cherokee/issues/detail?id=368
+	http://bugs.cherokee-project.com/368
 
 2009-02-21  Antonio Perez  <aperez@skarcha.com>
 
@@ -1332,7 +1332,7 @@
 
 	* admin/consts.py, cherokee/handler_error.c, cherokee/http.c,
 	cherokee/http.h: Adds support for http 410 (gone) status code.
-	RFE: http://code.google.com/p/cherokee/issues/detail?id=370
+	RFE: http://bugs.cherokee-project.com/370
 
 	* cherokee/main.c: Removes cherokee-worker pid file, and SIGINT
 	is supported now.
@@ -1370,7 +1370,7 @@
 	some people. I'm removing the check, and all methods will be
 	accepted from now on. Thanks to Jacob Wright <jacwright@gmail.com>
 	for reporting the problem. It fixes bug #364:
-	http://code.google.com/p/cherokee/issues/detail?id=364
+	http://bugs.cherokee-project.com/364
 
 	* cherokee/connection-protected.h, cherokee/handler_error_redir.c,
 	cherokee/handler_cgi_base.c, cherokee/connection.c: Adds
@@ -1470,7 +1470,7 @@
 
 	* cherokee.conf.sample.pre, cherokee/handler_dirlist.c: Fixes an
 	internal path issue. Thanks Antonio and Stefan!
-	http://code.google.com/p/cherokee/issues/detail?id=342 
+	http://bugs.cherokee-project.com/342 
 
 	* cherokee/thread.c, cherokee/connection.h,
 	cherokee/connection.c (cherokee_connection_create_encoder): Fixes
@@ -1489,7 +1489,7 @@
 
 	* cherokee/cache.c (cherokee_cache_mrproper): Frees the cached
 	pages on exit. Patch by Stefan de Konink <stefan@konink.de>:
-	http://code.google.com/p/cherokee/issues/detail?id=354
+	http://bugs.cherokee-project.com/354
 
 	* doc/cookbook_django.txt: Fixes a couple of issues reported by
 	Stephane Raimbault <stephane.raimbault@gmail.com>.
@@ -1550,7 +1550,7 @@
 
 	* cherokee/socket.c: Fixes bug #353. This patch is based on the
 	excelent work of Stefan de Konink <stefan@konink.de>:
-	http://code.google.com/p/cherokee/issues/detail?id=353
+	http://bugs.cherokee-project.com/353
 
 	* cherokee/socket.h (SOCKET_SIN6_ADDR): New macro.
 
@@ -1570,7 +1570,7 @@
 
 	* cherokee/cryptor_libssl.c (_socket_write): Improve error
 	reporting on failed writes. Fixes bug #317:
-	http://code.google.com/p/cherokee/issues/detail?id=317
+	http://bugs.cherokee-project.com/317
 	Patch by Stefan de Konink <stefan@konink.de>
 
 2009-01-31  Alvaro Lopez Ortega  <alvaro@octality.com>
@@ -1588,24 +1588,24 @@
 
 	* cherokee/handler_cgi_base.c (parse_header): Fixes bug #344.
 	CGI-based handlers were not parsing "HTTP/x.y" headers.
-	http://code.google.com/p/cherokee/issues/detail?id=344
+	http://bugs.cherokee-project.com/344
 
 	* qa/Makefile.am, qa/198-HTTPresponse.py: Adds a new QA test bug:
-	http://code.google.com/p/cherokee/issues/detail?id=344
+	http://bugs.cherokee-project.com/344
 
 	* admin/PageVServers.py: Fixes a Virtual Server reordering issue:
-	http://code.google.com/p/cherokee/issues/detail?id=352
+	http://bugs.cherokee-project.com/352
 
 	* cherokee/balancer_ip_hash.c (dispatch): Adds a check to ensure
 	that the server will not segment fault even if no sources have
 	been defined (~ misconfiguration). Thanks to Stefan for pointing
-	the issue: http://code.google.com/p/cherokee/issues/detail?id=348
+	the issue: http://bugs.cherokee-project.com/348
 
 	* admin/ModuleCgi.py: CGI's change_user property is a boolean
 	value (rather than a integer representing a specific UID).
 
 	* cherokee/connection.c (build_response_header_expiration): Fixes
-	a typo. http://code.google.com/p/cherokee/issues/detail?id=351
+	a typo. http://bugs.cherokee-project.com/351
 
 2009-01-28  Antonio Perez  <aperez@skarcha.com>
 
@@ -1671,12 +1671,12 @@
 
 	* admin/Page.py: Removes a space. It was causing the Javascript
 	execution to fail in some browsers. Patch by marcos.devera.
-	http://code.google.com/p/cherokee/issues/detail?id=336
+	http://bugs.cherokee-project.com/336
 	
 2009-01-24  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* contrib/011to098.py (convert): server!listen entries weren't
-	handled: http://code.google.com/p/cherokee/issues/detail?id=335
+	handled: http://bugs.cherokee-project.com/335
 
 	* cherokee/threading.c, cherokee/threading.h: Replaces
 	HAVE_PTHREAD_H by HAVE_PTHREAD. Fix by swanson@ukfsn.org.
@@ -1693,7 +1693,7 @@
 
 	* cherokee/init.c, cherokee/threading.c, cherokee/threading.h:
 	Fixes compilation without pthreads. Bug #334:
-	http://code.google.com/p/cherokee/issues/detail?id=334
+	http://bugs.cherokee-project.com/334
 
 2009-01-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -1712,13 +1712,13 @@
 2009-01-23  Stefan de Konink  <stefan@konink.de>
 
 	* cherokee/balancer_ip_hash.c: Fixes a memory management issue.
-	http://code.google.com/p/cherokee/issues/detail?id=332
+	http://bugs.cherokee-project.com/332
 
 2009-01-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_error.c (build_hardcoded_response_page): Fixes
 	a malformed URL reporting. Bug #318:
-	http://code.google.com/p/cherokee/issues/detail?id=318
+	http://bugs.cherokee-project.com/318
 
 2009-01-22 Taher Shihadeh  <taher@unixwars.com>
 
@@ -1749,7 +1749,7 @@
 
 	* qa/197-SOAPAction.py: Adds a new QA test in order to reproduce
 	(and protect again future regressions) for the bug #325:
-	http://code.google.com/p/cherokee/issues/detail?id=325
+	http://bugs.cherokee-project.com/325
 
 	* cherokee/init.h, cherokee/init.c, cherokee/post.c: Removes a
 	"/tmp" directory hardcoded path. From now on a global
@@ -1772,7 +1772,7 @@
 2009-01-21  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/Page.py, admin/static/css/cherokee.css: Fixes a CSS
-	problem: http://code.google.com/p/cherokee/issues/detail?id=324
+	problem: http://bugs.cherokee-project.com/324
 
 2009-01-21 Taher Shihadeh  <taher@unixwars.com>
 
@@ -1789,7 +1789,7 @@
 	screenshots.
 
 	* admin/Form.py: fixes problem with non-persistent tabs, issue
-	http://code.google.com/p/cherokee/issues/detail?id=311
+	http://bugs.cherokee-project.com/311
 
 2009-01-20  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -1954,7 +1954,7 @@
 
 	* cherokee/connection-protected.h, cherokee/util.h, configure.in:
 	Fixes a compilation problem on OpenBSD current:
-	http://code.google.com/p/cherokee/issues/detail?id=316
+	http://bugs.cherokee-project.com/316
 	Thanks to bradla8@yahoo.com for the patch.
 
 2009-01-15  Jonathan Hernandez  <ion@suavizado.com>
@@ -2019,10 +2019,10 @@
 
 	* cherokee/util.h, cherokee/util.c, cherokee/handler_cgi_base.c,
 	cherokee/socket.h, cherokee/socket.c: Fixes a ntop issue:
-	http://code.google.com/p/cherokee/issues/detail?id=309
+	http://bugs.cherokee-project.com/309
 
 	* cherokee/handler_server_info.c (AJAX_JS): Removes a hardcoded
-	path: http://code.google.com/p/cherokee/issues/detail?id=312
+	path: http://bugs.cherokee-project.com/312
 
 2009-01-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -2069,7 +2069,7 @@
 2009-01-09  Jonathan Hernandez  <ion@suavizado.com>
 
 	* admin/*: Redesign of Cherokee Admin UI to fit 960px wide,
-	Fixes bug: http://code.google.com/p/cherokee/issues/detail?id=272
+	Fixes bug: http://bugs.cherokee-project.com/272
 	Change accordion ui to tabs Move help links to header
 	Update jquery to 1.2.6 and UI widgets.
 
@@ -2093,7 +2093,7 @@
 2009-01-07  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageInfoSource.py: Links to virtual servers were wrong.
-	Fixes bug: http://code.google.com/p/cherokee/issues/detail?id=305
+	Fixes bug: http://bugs.cherokee-project.com/305
 	Patch by Stefan de Konink <stefan@konink.de>.
 
 2009-01-05  Alvaro Lopez Ortega  <alvaro@octality.com>
@@ -2126,7 +2126,7 @@
 2009-01-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/validator_ldap.h: Fixes an ia64 and amd64 compilation
-	issue: http://code.google.com/p/cherokee/issues/detail?id=293
+	issue: http://bugs.cherokee-project.com/293
 	Thanks to Dann Frazier <dannf@debian.org> for the patch.
 
 2009-01-02  Alvaro Lopez Ortega  <alvaro@octality.com>
@@ -2271,7 +2271,7 @@
 
 	* cherokee/iocache.c: Tries to fix a I/O-cache bug.  This patch is
 	based on Antonio's original fix:
-	http://code.google.com/p/cherokee/issues/detail?id=294
+	http://bugs.cherokee-project.com/294
 
 2008-12-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -2298,7 +2298,7 @@
 2008-12-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_dbslayer.c (send_query): Fixes a parsing
-	problem: http://code.google.com/p/cherokee/issues/detail?id=292
+	problem: http://bugs.cherokee-project.com/292
 
 2008-12-25  Antonio Perez  <aperez@skarcha.com>
 
@@ -2317,7 +2317,7 @@
 	unneeded code.
 
 	* cherokee/admin_client.c (internal_step): Rough fix for:
-	http://code.google.com/p/cherokee/issues/detail?id=283
+	http://bugs.cherokee-project.com/283
 	There is more work to do in order to fix cherokee-tweak.
 
 2008-12-23  Antonio Perez  <aperez@skarcha.com>
@@ -2326,20 +2326,20 @@
 	cherokee/handler_file.c, cherokee/connection.c:
 	Fixes a problem with the use of encoders and enable their use
 	with handlers that supports content-length.
-	Bug: http://code.google.com/p/cherokee/issues/detail?id=284
+	Bug: http://bugs.cherokee-project.com/284
 
 2008-12-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_server_info.c (build_modules_table_content):
 	Adds a new table row for the cryptors. It fixes the bug:
-	http://code.google.com/p/cherokee/issues/detail?id=287
+	http://bugs.cherokee-project.com/287
 
 2008-12-22  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/connection.c (cherokee_connection_recv): Fixes a
 	problem with lengthy https POSTS. This patch is based on the
 	previos Stefan's patch: Stefan de Konink <stefan@konink.de>.
-	Fixes: http://code.google.com/p/cherokee/issues/detail?id=282
+	Fixes: http://bugs.cherokee-project.com/282
 
 2008-12-22 Taher Shihadeh  <taher@unixwars.com>
 
@@ -2381,10 +2381,10 @@
 
 	* admin/validations.py (is_ip_or_netmask): Fixes IPv6 addresses
 	validation. Fixes bug #266:
-	http://code.google.com/p/cherokee/issues/detail?id=266
+	http://bugs.cherokee-project.com/266
 
 	* cherokee/source.c (cherokee_source_connect): Fixes bug #269:
-	http://code.google.com/p/cherokee/issues/detail?id=269
+	http://bugs.cherokee-project.com/269
 	Cherokee didn't check the type of the IP when connecting to a data
 	source. Now, AF_UNIX, AF_INET6 and AF_INET are supported.
 
@@ -2414,7 +2414,7 @@
 
 	* cherokee/cryptor_libssl.c: Fixes problem where OpenSSL expected
 	to read a CA cert appended to the server cert. Bug #264:
-	http://code.google.com/p/cherokee/issues/detail?id=264
+	http://bugs.cherokee-project.com/264
 
 2008-12-09  Taher Shihadeh  <taher@octality.com>
 
@@ -2444,7 +2444,7 @@
 
 	* cherokee.conf.sample.pre: The new "Ogg Media Types" have been
 	added: http://www.ietf.org/rfc/rfc5334.txt. It implements RFE:
-	http://code.google.com/p/cherokee/issues/detail?id=262
+	http://bugs.cherokee-project.com/262
 
 	* cherokee/handler_mirror.c, cherokee/handler_fcgi.c,
 	cherokee/handler_scgi.c: Integrates the FastCGI, SCGI and TCP
@@ -2540,12 +2540,12 @@
 	* admin/Form.py: Changes the tab title color whenever and error
 	message if found in its content. This will help to ease of problem
 	hidden problems (as in the bug report #254):
-	http://code.google.com/p/cherokee/issues/detail?id=254
+	http://bugs.cherokee-project.com/254
 
 2008-11-30  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageAdvanced.py: Advanced->I/O Cache changes didn't work.
-	http://code.google.com/p/cherokee/issues/detail?id=242
+	http://bugs.cherokee-project.com/242
 
 2008-11-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -2571,7 +2571,7 @@
 
 	* cherokee/handler_redir.c: document_root was ignored on internal
 	redirections. Fixes bug #241:
-	http://code.google.com/p/cherokee/issues/detail?id=241
+	http://bugs.cherokee-project.com/241
 
 2008-11-28  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -2614,7 +2614,7 @@
 2008-11-26  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/PageVServer.py: fix by Skarcha for issue 239
-	http://code.google.com/p/cherokee/issues/detail?id=239
+	http://bugs.cherokee-project.com/239
 	
 2008-11-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -2704,7 +2704,7 @@
 	* cherokee/util.h, cherokee/main.c: Exports the strcasestr()
 	prototype in case it isn't supported by the system. This patch
 	should fix a Solaris compilation issue:
-	http://code.google.com/p/cherokee/issues/detail?id=139
+	http://bugs.cherokee-project.com/139
 
 	* cherokee/handler_dbslayer.c (dbslayer_step): Multi-Statement
 	queries need to be enclosed within a list object. Bis.
@@ -2735,17 +2735,17 @@
 
 	* cherokee/handler_cgi_base.c: Fixes REQUEST_URI and SCRIPT_URL.
 	They were not correct on the user directory (/~user) requests. It
-	should fix: http://code.google.com/p/cherokee/issues/detail?id=226
+	should fix: http://bugs.cherokee-project.com/226
 
 2008-11-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* configure.in: Fixes a compilation issue (when libssl was not
 	present). Fixes bug #227:
-	http://code.google.com/p/cherokee/issues/detail?id=227
+	http://bugs.cherokee-project.com/227
 
 	* cherokee/Makefile.am: connection_info.{c,h} are now part of
 	lincherokee_server. It fixes bug #228:
-	http://code.google.com/p/cherokee/issues/detail?id=228
+	http://bugs.cherokee-project.com/228
 
 2008-11-17  Taher Shihadeh  <taher@unixwars.com>
 
@@ -2756,7 +2756,7 @@
 
 	* cherokee/server.c (cherokee_server_initialize): getpwuid() fail
 	is only a fatal if a user or group change was scheduled. It should
-	fix bug: http://code.google.com/p/cherokee/issues/detail?id=224
+	fix bug: http://bugs.cherokee-project.com/224
 
 	* cherokee/Makefile.am, cherokee/module.h: module.{h,c} are now
 	part of libcherokee base.
@@ -2809,7 +2809,7 @@
 
 	* cherokee/connection.c: Keep-alive was been disabled ALWAYS when
 	encoders was used. It should fix bug #143:
-	http://code.google.com/p/cherokee/issues/detail?id=143
+	http://bugs.cherokee-project.com/143
 
 2008-11-14  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -2838,7 +2838,7 @@
 	* cherokee/source_interpreter.h, cherokee/source_interpreter.c: :
 	The standard error output of the interpreters is redirected to the
 	error log file now. (It applies to FastCGI and SCGI). It should
-	fix bug http://code.google.com/p/cherokee/issues/detail?id=161
+	fix bug http://bugs.cherokee-project.com/161
 
 2008-11-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -2847,7 +2847,7 @@
 	cherokee/logger_ncsa.h, cherokee/handler_cgi.c,
 	cherokee/logger_combined.c: Redirects the stderr output of CGIs to
 	the error log. It fixes the bug #217:
-	http://code.google.com/p/cherokee/issues/detail?id=217
+	http://bugs.cherokee-project.com/217
 
 	* admin/ModuleProxy.py: Adds support of the new "Arbitrary header
 	addition" feature.
@@ -2866,7 +2866,7 @@
 2008-11-11  Taher Shihadeh  <taher@unixwars.com>
 
 	* static/js/common.js: fixes superfluous 'going away' warning. It
-	was issue http://code.google.com/p/cherokee/issues/detail?id=215
+	was issue http://bugs.cherokee-project.com/215
 
 	* doc/*: some more docs.
 
@@ -2948,7 +2948,7 @@
 2008-11-06  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/PageVServer.py: adds new validation. Should fix
-	http://code.google.com/p/cherokee/issues/detail?id=167
+	http://bugs.cherokee-project.com/167
 
 2008-11-06  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -2992,7 +2992,7 @@
 
 	* admin/ModuleRedir.py, admin/static/js/common.js, admin/Entry.py:
 	Now it is possible to modify redirection rules. Fixes Bug #191:
-	http://code.google.com/p/cherokee/issues/detail?id=191
+	http://bugs.cherokee-project.com/191
 
 	* admin/ModuleMethod.py: Fixes an autosubmit issue adding a
 	HTTP Method Rule.
@@ -3005,7 +3005,7 @@
 
 	* admin/PageVServer.py: small cleanup. Removed a superfluous
 	option that was repeating functionality, related to
-	http://code.google.com/p/cherokee/issues/detail?id=192
+	http://bugs.cherokee-project.com/192
 
 2008-11-03  Taher Shihadeh  <taher@unixwars.com>
 
@@ -3016,7 +3016,7 @@
 
 	* admin/ModuleCgi.py, admin/static/js/common.js, admin/Entry.py:
 	Adds support for Custom Environment Variables. Bug #188:
-	http://code.google.com/p/cherokee/issues/detail?id=188
+	http://bugs.cherokee-project.com/188
 
 2008-11-03  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -3089,7 +3089,7 @@
 2008-11-01  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/ModuleErrorRedir.py: Changed submit button. Fixes
-	bug #190: http://code.google.com/p/cherokee/issues/detail?id=190
+	bug #190: http://bugs.cherokee-project.com/190
 
 2008-11-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -3099,7 +3099,7 @@
 	* cherokee/handler_common.c, cherokee/handler_common.h: Implements
 	a new property to define whether or not the use of dirlist is
 	allow. It implements the RFE #186:
-	http://code.google.com/p/cherokee/issues/detail?id=186
+	http://bugs.cherokee-project.com/186
 
 	* cherokee/handler_dirlist.c: Fixes the symbolic links to
 	directories support. Original patch by Stefan de Konink
@@ -3141,7 +3141,7 @@
 	cherokee/connection.c: Added a new option to enable/disable
 	keep-alive per virtual server. By default it's enabled.  It
 	implement the RFE #181:
-	http://code.google.com/p/cherokee/issues/detail?id=181
+	http://bugs.cherokee-project.com/181
 
 	* cherokee/handler_cgi_base.c
 	(cherokee_handler_cgi_base_build_basic_env): Adds support for
@@ -3151,7 +3151,7 @@
 
 	* cherokee/macros.h (SENDFILE_MAX_SIZE): Fixes a 'integer overflow
 	in expression' compilation warning. Fixes bug #185:
-	http://code.google.com/p/cherokee/issues/detail?id=185
+	http://bugs.cherokee-project.com/185
 
 	* cherokee/source_interpreter.c: From now on, Cherokee will kill
 	all the sources that are lauched during its life time. Original
@@ -3163,23 +3163,23 @@
 
 	* admin/PageInfoSource.py: The last source in a rule cannot be
 	deleted now to prevent appearence of broken rules. Addresses
-	http://code.google.com/p/cherokee/issues/detail?id=144
+	http://bugs.cherokee-project.com/144
 
 	* admin/PageIcon.py: There was a problem updating the existing
 	lists of extensions. It was issue 184:
-	http://code.google.com/p/cherokee/issues/detail?id=184
+	http://bugs.cherokee-project.com/184
 
 2008-10-30  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/server.py, admin/Page.py, admin/static/css/cherokee.css,
 	admin/static/js/common.js: Config changes now use AJAX.
-	http://code.google.com/p/cherokee/issues/detail?id=162
+	http://bugs.cherokee-project.com/162
 
 2008-10-30  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Makefile.am: we missed installing a file for the new
 	Authlist handler. Credit to Antonio Perez <aperez@skarcha.com>.
-	http://code.google.com/p/cherokee/issues/detail?id=176
+	http://bugs.cherokee-project.com/176
 
 2008-10-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -3220,12 +3220,12 @@
 
 	* admin/ModuleRedir.py: fixes bug that prevented having an empty
 	Regular Expression (which should be
-	allowed). http://code.google.com/p/cherokee/issues/detail?id=168
+	allowed). http://bugs.cherokee-project.com/168
 
 2008-10-28  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/Form.py: Heights of the tabs autofit to contents. Fixes
-	Bug #164: http://code.google.com/p/cherokee/issues/detail?id=164
+	Bug #164: http://bugs.cherokee-project.com/164
 
 2008-10-27  Antonio Perez  <aperez@skarcha.com>
 
@@ -3260,7 +3260,7 @@
 2008-10-27  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/server.py, admin/PageInfoSource.py: cleanup following
-	http://code.google.com/p/cherokee/issues/detail?id=144
+	http://bugs.cherokee-project.com/144
 
 	* doc/dev_debug.txt, doc/other_community.txt,
 	doc/basics_why_cherokee.txt, doc/config_general.txt,
@@ -3282,7 +3282,7 @@
 2008-10-27  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/server.py, admin/PageInfoSource.py: cleanup following
-	http://code.google.com/p/cherokee/issues/detail?id=144
+	http://bugs.cherokee-project.com/144
 
 2008-10-25  Antonio Perez  <aperez@skarcha.com>
 
@@ -3292,7 +3292,7 @@
 
 	* admin/ModuleBalancer.py: Fixes auto-submit error assigning
 	Information Sources. Bug #153:
-	http://code.google.com/p/cherokee/issues/detail?id=153
+	http://bugs.cherokee-project.com/153
 
 2008-10-23  Taher Shihadeh  <taher@unixwars.com>
 
@@ -3300,7 +3300,7 @@
 	doc/config.txt, doc/config_info_sources.txt,
 	doc/cookbook_django.txt, doc/index.txt, doc/config_quickstart.txt:
 	unify naming conventions to address issue
-	http://code.google.com/p/cherokee/issues/detail?id=152.
+	http://bugs.cherokee-project.com/152.
 
 2008-10-17  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -3329,7 +3329,7 @@
 
 	* cherokee/config_entry.h, cherokee/iocache.c: Fixes compilation
 	without pthreads, and therefore it fixes bug #137:
-	http://code.google.com/p/cherokee/issues/detail?id=137
+	http://bugs.cherokee-project.com/137
 
 	* cherokee/handler_common.c (cherokee_handler_common_new): Fixes a
 	crash when I/O-cache is disabled.
@@ -3386,7 +3386,7 @@
 	* cherokee/handler_common.c (DEFAULT_ALLOW_PATHINFO): It should
 	not allow pathinfo by default. Patch by Antonio Perez
 	<aperez@skarcha.com>.  This patch fixes bug #149:
-	http://code.google.com/p/cherokee/issues/detail?id=149
+	http://bugs.cherokee-project.com/149
 
 	* cherokee/util.c (cherokee_parse_query_string): Covers a corner
 	case. Patch by Antonio Perez <aperez@skarcha.com>.
@@ -3444,7 +3444,7 @@
 	* qa/175-RedirectUrl.py, qa/176-Digest-htdigest-2.py,
 	qa/Makefile.am: Adds a couple of new QA tests. 175 check infinite
 	redirections, and 176 ensure that bug#146 is fixed:
-	http://code.google.com/p/cherokee/issues/detail?id=146
+	http://bugs.cherokee-project.com/146
 
 	* cherokee/validator_htdigest.c (extract_user_entry): Fixes an
 	error processing htdigest files. Reported by Eric Drechsel
@@ -3455,7 +3455,7 @@
 	* admin/Form.py, admin/Page.py, admin/static/js/common.js:
 	usability enhancement suggested by Gunnar Wolf <gwolf@gwolf.org>
 	is implemented. Related to the previously thought to be fixed
-	http://code.google.com/p/cherokee/issues/detail?id=111.
+	http://bugs.cherokee-project.com/111.
 
 2008-10-07  Alvaro Lopez Ortega  <alvaro@octality.com>
 
@@ -3561,7 +3561,7 @@
 2008-09-26  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/balancer.c (cherokee_balancer_mrproper): This should
-	fix bug: http://code.google.com/p/cherokee/issues/detail?id=129
+	fix bug: http://bugs.cherokee-project.com/129
 
 	* cherokee/main_worker.c (wait_process): Improves the SIGCHLD
 	signal management.
@@ -3575,7 +3575,7 @@
 2008-09-25  Taher Shihadeh  <taher@unixwars.com>
 
 	* admin/Form.py, admin/ModuleRedir.py, admin/static/js/common.js:
-	fixes http://code.google.com/p/cherokee/issues/detail?id=131. PS:
+	fixes http://bugs.cherokee-project.com/131. PS:
 	I hate JavaScript.
 
 2008-09-25  Alvaro Lopez Ortega  <alvaro@alobbs.com>
@@ -3622,7 +3622,7 @@
 2008-09-24  Taher Shihadeh  <taher@unixwars.com>
 
 	* static/css/cherokee.css: addresses isue
-	http://code.google.com/p/cherokee/issues/detail?id=85
+	http://bugs.cherokee-project.com/85
 
 2008-09-23  Taher Shihadeh  <taher@unixwars.com>
 
@@ -3641,18 +3641,18 @@
 	* admin/PageEntry.py, admin/ModuleRedir.py,
 	admin/ModuleServerInfo.py, admin/Form.py, admin/PageInfoSource.py:
 	addressed usability issues
-	http://code.google.com/p/cherokee/issues/detail?id=111 and
-	http://code.google.com/p/cherokee/issues/detail?id=125
+	http://bugs.cherokee-project.com/111 and
+	http://bugs.cherokee-project.com/125
 
 	* doc/cookbook_*, doc/modules_*: Addressed issue #126:
-	http://code.google.com/p/cherokee/issues/detail?id=126
+	http://bugs.cherokee-project.com/126
 
 2008-09-23  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
 	* cherokee/rule_directory.c (match): Fixes a problem with the
 	directory rule. Requests starting as a directory entry were
 	matched with it, even if there were targeting another file.  If
-	fixes bug: http://code.google.com/p/cherokee/issues/detail?id=68
+	fixes bug: http://bugs.cherokee-project.com/68
 
 2008-09-22  Taher Shihadeh  <taher@unixwars.com>
 
@@ -3694,7 +3694,7 @@
 
 	* cherokee/main_worker.c, cherokee/util.c, cherokee/util.h,
 	cherokee/connection.c: Fixes bug #124:
-	http://code.google.com/p/cherokee/issues/detail?id=124
+	http://bugs.cherokee-project.com/124
 	The server accepts relative paths in the -r parameter now.
 
 2008-09-18  Taher Shihadeh  <taher@unixwars.com>
@@ -4143,7 +4143,7 @@
 
 	* cherokee/util.h, cherokee/util.c (cherokee_mkdir_p): Adds a new
 	cheroke_mkdir() and fixes compilation on Windows:
-	http://code.google.com/p/cherokee/issues/detail?id=96
+	http://bugs.cherokee-project.com/96
 
 2008-08-19  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -4214,7 +4214,7 @@
 
 	* admin/PageVServers.py, admin/PageVServer.py,
 	admin/static/css/cherokee.css: addresses UI enhancement proposal
-	at http://code.google.com/p/cherokee/issues/detail?id=86.
+	at http://bugs.cherokee-project.com/86.
 
 2008-08-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -4289,7 +4289,7 @@
 	* cherokee/handler_dirlist.c (check_request_finish_with_slash):
 	Now it sends redirections using the FQDN whenever it is
 	possible (as described in the RFC). Partially fixes:
-	http://code.google.com/p/cherokee/issues/detail?id=39
+	http://bugs.cherokee-project.com/39
 
 	* cherokee/thread.c (cherokee_thread_step_MULTI_THREAD): Fixes a
 	problem with the Keep-Alive timeout.
@@ -4335,7 +4335,7 @@
 
 	* admin/static/js/common.js: Fixes a reloading issue in Firefox. I
 	do hope it does not break any other browser support. Fixes:
-	http://code.google.com/p/cherokee/issues/detail?id=77
+	http://bugs.cherokee-project.com/77
 
 	* cherokee/handler_server_info.c, admin/ModuleServerInfo.py: Both
 	the server info handler and its cherokee-admin module have been
@@ -4349,13 +4349,13 @@
 
 	* admin/ModuleBalancer.py (ModuleBalancerGeneric._op_render): Adds
 	the missing "removing" option to the host entries. Fixes the first
-	part of: http://code.google.com/p/cherokee/issues/detail?id=87.
+	part of: http://bugs.cherokee-project.com/87.
 	It also improves the page layout a little bit.
 
 	* admin/ModuleMirror.py: The "Generic balancer" handler should not
 	show an option to execute an interpreter. It does not make sense
 	for this handler. Fixes the second part of:
-	http://code.google.com/p/cherokee/issues/detail?id=87
+	http://bugs.cherokee-project.com/87
 
 	* cherokee/resolv_cache.c, cherokee/socket.c, cherokee/socket.h,
 	cherokee/source.c: Fixes the Unix socket support of the FastCGI
@@ -4388,7 +4388,7 @@
 	cherokee/connection.c, admin/PageVServer.py: This multipurpose
 	patch clean up the logger writter class, and fixes the W3C support
 	in the administration interface. It fixes:
-	http://code.google.com/p/cherokee/issues/detail?id=89
+	http://bugs.cherokee-project.com/89
 
 	* admin/pyscgi.py, admin/server.py, admin/Page.py,
 	admin/CherokeeManagement.py: Adds a option in the left hand menu
@@ -4396,7 +4396,7 @@
 	new configuration is written.
 
 	* admin/server.py (main): It should only bind to localhost. Fixes
-	http://code.google.com/p/cherokee/issues/detail?id=91
+	http://bugs.cherokee-project.com/91
 
 2008-08-12  Taher Shihadeh <taher@unixwars.com>
 
@@ -4551,7 +4551,7 @@
 
 	* cherokee/config_reader.c (cherokee_config_reader_parse_string):
 	Fixes an issue processing empty keys. Fixes:
-	http://code.google.com/p/cherokee/issues/detail?id=59
+	http://bugs.cherokee-project.com/59
 
 	* admin/PageEntry.py (PageEntry._get_title): Fixes a regression.
 
@@ -4706,7 +4706,7 @@
 
 	* cherokee/Makefile.am: Fixes a compilation issue. Handler CGI
 	should install alright now. Fixes partially bug #61:
-	http://code.google.com/p/cherokee/issues/detail?id=61
+	http://bugs.cherokee-project.com/61
 
 2008-07-29  Taher Shihadeh <taher@unixwars.com>
 
@@ -5224,7 +5224,7 @@
 
 	* cherokee/main.c (common_server_initialization): Added a check to
 	ensure that the TCP port is within the limits. It fixes:
-	http://code.google.com/p/cherokee/issues/detail?id=43
+	http://bugs.cherokee-project.com/43
 
 	* configure.in: Fixes an issue with the license notice. Reported
 	by Tim Post <echo@echoreply.us>.
@@ -6653,7 +6653,7 @@
 	  cherokee/connection.c,
 	  cherokee/logger_ncsa.c, cherokee/logger_w3c.c
 	  - added RFC-1123 date-time format to try to fix issue 24
-	    (http://code.google.com/p/cherokee/issues/detail?id=24);
+	    (http://bugs.cherokee-project.com/24);
 	    now there are two distinct times: local and GMT time,
 	    right now only RFC-1123 date-time string is generated and
 	    stored into bogo_now_strgmt;  should a local time string
@@ -6740,7 +6740,7 @@
 
 	* cherokee/handler_cgi.c (cherokee_handler_cgi_add_env_pair)
 	(manage_child_cgi_process): It tries to fix:
-	http://code.google.com/p/cherokee/issues/detail?id=23
+	http://bugs.cherokee-project.com/23
 
 2007-10-14  Alvaro Lopez Ortega  <alvaro@alobbs.com>
 
@@ -6861,7 +6861,7 @@
 	* cherokee/connection.c (cherokee_connection_build_header): If the
 	handler doesn't support "add headers" method, don't even call the
 	handler method.  It shouldn't add the server headers either.
-	It fixes: http://code.google.com/p/cherokee/issues/detail?id=17
+	It fixes: http://bugs.cherokee-project.com/17
 
 	* cherokee/handler.h (HANDLER_SUPPORTS): Added new macro. There is
 	some clean up around the handler class macros that we need to
