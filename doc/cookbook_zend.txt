@@ -60,7 +60,11 @@ tab to set up the rules.
   set to a priority lower than that of the `php` rule.  This one can
   be set to match whatever files you like, but the important thing is
   to check the `Match any file` checkbox. Let this rule be handled by
-  the link:modules_handlers_file.html[Static Content] handler.
+  the link:modules_handlers_common.html[List & Send] handler. Note that
+  we're not using the link:modules_handlers_file.html[Static Content]
+  handler. This is because it doesn't support indexes, so it wouldn't
+  allow you to browse the website at http://hostname.tld/, but only at
+  http://hostname.tld/index.php.
 
 . And last, modify your `Default` rule by configuring the
   link:modules_handlers_redir.html[redirection handler], through the

@@ -1,5 +1,9 @@
 2009-05-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* doc/cookbook_zend.txt (Cookbook): Clarifies the use of "file"
+	and "common". Patch by Frank Groeneveld; thanks! It fixes:
+	http://svn.cherokee-project.com/482
+
 	* cherokee/handler_cgi_base.c, cherokee/handler_fcgi.c: Better
 	error management. Fixes: http://bugs.cherokee-project.com/469
 
