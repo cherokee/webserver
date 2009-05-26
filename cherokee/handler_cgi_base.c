@@ -74,12 +74,7 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 
 	/* Read the properties
 	 */
-	HANDLER(cgi)->support = hsupport_nothing;
-
-	if (HANDLER_CGI_BASE_PROPS(cgi)->is_error_handler) {
-		HANDLER(cgi)->support |= hsupport_error;
-	}
-	
+	HANDLER(cgi)->support = hsupport_nothing;	
 	return ret_ok;
 }
 
@@ -752,7 +747,8 @@ mix_headers (cherokee_buffer_t *target,
 
 
 ret_t 
-cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi, cherokee_boolean_t check_filename)
+cherokee_handler_cgi_base_extract_path (cherokee_handler_cgi_base_t *cgi,
+					cherokee_boolean_t           check_filename)
 {
 	ret_t                              ret;
 	cint_t                             req_len;
@@ -1071,11 +1067,18 @@ cherokee_handler_cgi_base_add_headers (cherokee_handler_cgi_base_t *cgi,
 	 */
 	cherokee_buffer_move_to_begin (inbuf, len + end_len);
 
+	/* From this moment, it can handle errors
+	 */
+	if (HANDLER_CGI_BASE_PROPS(cgi)->is_error_handler) {
+		HANDLER(cgi)->support |= hsupport_error;
+	}
+
 	/* Parse the header.. it is likely we will have something to do with it.
 	 */
 	ret = parse_header (cgi, outbuf);	
-	if (unlikely (ret != ret_ok))
+	if (unlikely (ret != ret_ok)) {
 		return ret;
+	}
 
 	/* Handle X-Sendfile
 	 */

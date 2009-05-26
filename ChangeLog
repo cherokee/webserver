@@ -1,5 +1,8 @@
 2009-05-26  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_cgi_base.c, cherokee/handler_fcgi.c: Better
+	error management. Fixes: http://bugs.cherokee-project.com/469
+
 	* cherokee/buffer.h (cherokee_buffer_encode_sha1_digest),
 	cherokee/buffer.c: Adds new method.
 
