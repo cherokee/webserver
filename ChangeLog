@@ -1,3 +1,8 @@
+2009-05-26  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/buffer.h (cherokee_buffer_encode_sha1_digest),
+	cherokee/buffer.c: Adds new method.
+
 2009-05-25  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/Makefile.am, cherokee/cryptor_libssl_dh_1024.c,

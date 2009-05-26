@@ -1532,6 +1532,36 @@ cherokee_buffer_encode_sha1 (cherokee_buffer_t *buf, cherokee_buffer_t *encoded)
 }
 
 
+ret_t
+cherokee_buffer_encode_sha1_digest (cherokee_buffer_t *buf)
+{
+	int           i;
+	unsigned char digest[20];
+	SHA_INFO      sha1;
+ 
+	sha_init (&sha1);
+	sha_update (&sha1, (unsigned char*) buf->buf, buf->len);
+	sha_final (&sha1, digest);
+
+	cherokee_buffer_ensure_size (buf, 2 * SHA1_DIGEST_SIZE);
+
+	for (i = 0; i < 20; ++i) {
+		int tmp;
+
+		tmp = ((digest[i] >> 4) & 0xf);
+		buf->buf[i*2] = TO_HEX(tmp);
+
+		tmp = (digest[i] & 0xf);
+		buf->buf[(i*2)+1] = TO_HEX(tmp);
+	}
+
+	buf->buf[2 * SHA1_DIGEST_SIZE] = '\0';
+	buf->len = 2 * SHA1_DIGEST_SIZE;
+
+	return ret_ok;
+}
+
+
 /* Encode sha1 in base64, both source (buf) and destination (encoded)
  * buffers are overwritten, but possibly not reallocated.
  */
