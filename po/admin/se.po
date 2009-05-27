@@ -1,4 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Alvaro Lopez Ortega
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -8,8 +7,8 @@ msgstr ""
 "Project-Id-Version: cherokee-admin 0.99.16\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
 "POT-Creation-Date: 2009-05-26 11:01+0200\n"
-"PO-Revision-Date: 2009-05-27 15:43+0100\n"
-"Last-Translator: fdfs\n"
+"PO-Revision-Date: 2009-05-27 18:42+0100\n"
+"Last-Translator: Andreas Andersson <andreas@cyberdelic.org>\n"
 "Language-Team: Swedish <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,7 +40,7 @@ msgstr "Ta bort"
 #: admin/ModuleAdmin.py:5
 #: admin/consts.py:28
 msgid "Remote Administration"
-msgstr "Fjärr-administration"
+msgstr "Fjärradministration"
 
 #: admin/ModuleAuth.py:15
 msgid "Allowed HTTP Authentication methods."
@@ -53,7 +52,7 @@ msgstr "Namn assoscierat med den skyddade resursen."
 
 #: admin/ModuleAuth.py:17
 msgid "User filter. List of allowed users."
-msgstr "Användar-filter, lista av tillåtna användare."
+msgstr "Användarfilter, lista av tillåtna användare."
 
 #: admin/ModuleAuth.py:40
 msgid "Methods"
@@ -69,7 +68,7 @@ msgstr "Användare"
 
 #: admin/ModuleAuth.py:44
 msgid "Authentication Details"
-msgstr "Autentiserings-detaljer"
+msgstr "Autentiseringsdetaljer"
 
 #: admin/ModuleAuth.py:51
 msgid "Realm can not be empty"
@@ -82,11 +81,11 @@ msgstr "Fast lista"
 
 #: admin/ModuleAuthlist.py:25
 msgid "Fixed authentication list"
-msgstr "Fast autentiserins-lista"
+msgstr "Fast autentiseringslista"
 
 #: admin/ModuleAuthlist.py:29
 msgid "Authentication list"
-msgstr "Autentiserings-lista"
+msgstr "Autentiseringslista"
 
 #: admin/ModuleAuthlist.py:31
 #: admin/ModuleAuthlist.py:47
@@ -101,7 +100,7 @@ msgstr "Lösenord"
 
 #: admin/ModuleAuthlist.py:42
 msgid "Add new pair"
-msgstr "Lägg till nytt  par"
+msgstr "Lägg till nytt par"
 
 #: admin/ModuleBalancer.py:10
 msgid "Allow to select how the connections will be dispatched."
@@ -109,18 +108,18 @@ msgstr "Välj hur nya anslutningar ska behandlas."
 
 #: admin/ModuleBalancer.py:11
 msgid "There are no Information Sources configured. Please proceed to configure an <a href=\"/source\">Information Source</a>."
-msgstr "Det finns inga Informationskällor konfigurerade. Var god att konfigurera en<a href=\"/source\">Informationskälla</a>."
+msgstr "Det finns inga informationskällor konfigurerade. Var god att konfigurera en<a href=\"/source\">Informations-källa</a>."
 
 #: admin/ModuleBalancer.py:12
 msgid "A load balancer must be configured to use at least one information source."
-msgstr "En lastbalanserade måste konfigureras att använda minst en informations-källa."
+msgstr "En lastbalanserare måste konfigureras att använda minst en informations-källa."
 
 #: admin/ModuleBalancer.py:55
 #: admin/Page.py:154
 #: admin/PageInfoSource.py:32
 #: admin/PageInfoSource.py:84
 msgid "Information Sources"
-msgstr "Informations-källor"
+msgstr "Informationskällor"
 
 #: admin/ModuleBalancer.py:57
 #: admin/PageInfoSource.py:167
@@ -137,7 +136,7 @@ msgstr "Värd"
 
 #: admin/ModuleBalancer.py:71
 msgid "Assign Information Sources"
-msgstr "Tilldela informations-källor"
+msgstr "Tilldela informationskällor"
 
 #: admin/ModuleBalancer.py:73
 msgid "It is already balancing among all the configured "
@@ -145,12 +144,12 @@ msgstr "Den balanserar redan mellan alla konfigurerade"
 
 #: admin/ModuleBalancer.py:74
 msgid "information sources"
-msgstr "informations-källor"
+msgstr "informationskällor"
 
 #: admin/ModuleBalancer.py:76
 #: admin/consts.py:136
 msgid "Choose.."
-msgstr "Välj"
+msgstr "Välj.."
 
 #: admin/ModuleBalancer.py:82
 msgid "Application Server"
@@ -220,15 +219,15 @@ msgstr "FEL, ett 'värde' behövs"
 
 #: admin/ModuleCgi.py:9
 msgid "Path to an executable that will be run with the CGI as parameter."
-msgstr "Sökväg till en binär som kör med CGI som en parameter"
+msgstr "Sökväg till en binär som kör med CGI som en parameter."
 
 #: admin/ModuleCgi.py:10
 msgid "Execute the CGI under its file owner user ID."
-msgstr "kör CGI:n med som ägaren av filen."
+msgstr "Kör CGI:n med som ägaren av filen."
 
 #: admin/ModuleCgi.py:11
 msgid "Send errors exactly as they are generated."
-msgstr "Skicka fel exakt som de genereras"
+msgstr "Skicka fel exakt som de genereras."
 
 #: admin/ModuleCgi.py:12
 msgid "Check whether the file is in place."
@@ -240,7 +239,7 @@ msgstr "Vidarebefodra alla klient-huvuden till CGI kodade som HTTP_*-headers."
 
 #: admin/ModuleCgi.py:14
 msgid "Allow the use of the non-standard X-Sendfile header."
-msgstr "Tillåt användandet av det icke-standardiserade X-Sendfile-headern."
+msgstr "Tillåt användandet av den icke-standardiserade X-Sendfile-headern."
 
 #: admin/ModuleCgi.py:42
 msgid "Common CGI options"
@@ -257,7 +256,7 @@ msgstr "Byt UID"
 #: admin/ModuleCgi.py:50
 #: admin/PageVServer.py:241
 msgid "Error handler"
-msgstr "Fel-hanterare"
+msgstr "Felhanterare"
 
 #: admin/ModuleCgi.py:52
 msgid "Check file"
@@ -297,7 +296,7 @@ msgstr "Tillåt extra avslutande snedstreck."
 
 #: admin/ModuleCommon.py:12
 msgid "Allow to list directory contents"
-msgstr "Tillåt att visa katalog-innehållet"
+msgstr "Tillåt att visa kataloginnehållet"
 
 #: admin/ModuleCommon.py:15
 #: admin/consts.py:13
@@ -310,7 +309,7 @@ msgstr "Tillåt PathInfo"
 
 #: admin/ModuleCommon.py:35
 msgid "Allow Directory Listing"
-msgstr "Tillåt katalog-listning"
+msgstr "Tillåt kataloglistning"
 
 #: admin/ModuleCommon.py:37
 msgid "Parsing"
@@ -334,7 +333,7 @@ msgstr "Vilket språk som informationen kommer att konsumeras med."
 
 #: admin/ModuleDbslayer.py:20
 msgid "User to access the database."
-msgstr "Användare för att komma åt databasen"
+msgstr "Användare för att komma åt databasen."
 
 #: admin/ModuleDbslayer.py:21
 msgid "Password for the user accessing the database."
@@ -350,7 +349,7 @@ msgstr "MySQL-balansering"
 
 #: admin/ModuleDbslayer.py:26
 msgid "DB balancig recipe"
-msgstr "DB-balanserings-recept"
+msgstr "DB-balanseringsrecept"
 
 #: admin/ModuleDbslayer.py:41
 msgid "Serialization"
@@ -394,7 +393,7 @@ msgstr "Publik webkatalog som konfigurationen ska appliceras på."
 #: admin/ModuleDirectory.py:21
 #: admin/ModuleDirectory.py:23
 msgid "Web Directory"
-msgstr "Web-katalog"
+msgstr "Webkatalog"
 
 #: admin/ModuleDirlist.py:14
 msgid "Choose the listing theme."
@@ -402,11 +401,11 @@ msgstr "Välj tema för listor."
 
 #: admin/ModuleDirlist.py:15
 msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
-msgstr "Web-katalog där ikonerna finns.  Förvalt värde: <i>/icons</i>."
+msgstr "Webkatalog där ikonerna finns.  Förvalt värde: <i>/icons</i>."
 
 #: admin/ModuleDirlist.py:16
 msgid "List of notice files to be inserted."
-msgstr "Lista av meddelande-filer som ska infogas."
+msgstr "Lista av meddelandefiler som ska infogas."
 
 #: admin/ModuleDirlist.py:17
 msgid "List of files that should not be listed."
@@ -502,19 +501,19 @@ msgstr "Typ"
 
 #: admin/ModuleErrorRedir.py:50
 msgid "Add error codes"
-msgstr "Lägg till fel-koder"
+msgstr "Lägg till felkoder"
 
 #: admin/ModuleEvhost.py:9
 msgid "Check the dynamically generated Document Root, and use the general Document Root if it doesn't exist."
-msgstr "Kolla den dynamiskt genererade dokumentrooten, och använd den vanliga dokumentrooten om den inte existerar."
+msgstr "Kolla den dynamiskt genererade dokumentroten, och använd den vanliga dokumentroten om den inte existerar."
 
 #: admin/ModuleEvhost.py:10
 msgid "The Document Root directory will be built dynamically. The following variables are accepted:<br/>"
-msgstr "Dokumentrooten byggs dynamiskt. Följande variabler accepteras:<br />"
+msgstr "Dokument-roten byggs dynamiskt. Följande variabler accepteras:<br />"
 
 #: admin/ModuleEvhost.py:30
 msgid "Dynamic Document Root"
-msgstr "Dynamiskt dokumentroot"
+msgstr "Dynamisk dokument-rot"
 
 #: admin/ModuleEvhost.py:31
 msgid "Check Document Root"
@@ -558,7 +557,7 @@ msgstr "Fil finns"
 
 #: admin/ModuleExtensions.py:9
 msgid "File extension list to which content the configuration will be applied."
-msgstr "Lista på fil-ändelser som innehållet konfiguration används till."
+msgstr "Lista på filändelser som innehållet konfiguration används till."
 
 #: admin/ModuleExtensions.py:21
 #: admin/ModuleExtensions.py:23
@@ -578,24 +577,24 @@ msgstr "FastCGI-specifikt"
 
 #: admin/ModuleFile.py:8
 msgid "Enables an internal I/O cache that improves performance."
-msgstr "Aktiverat en intern I/O-cache som förbättrar prestandan."
+msgstr "Aktiverar en intern I/O-cache som förbättrar prestandan."
 
 #: admin/ModuleFile.py:11
 #: admin/PageNewConfig.py:39
 msgid "Static Content"
-msgstr "Statiskt innehåöö"
+msgstr "Statiskt innehåll"
 
 #: admin/ModuleFile.py:28
 msgid "File Sending"
-msgstr "Statiskt innehåll"
+msgstr ""
 
 #: admin/ModuleGeoip.py:12
 msgid "Add the initial country. It's possible to add more later on."
-msgstr "Lägg till usprungligt land. Det är möjligt att lägga till fler senare."
+msgstr "Lägg till ursprungligt land. Det är möjligt att lägga till fler senare."
 
 #: admin/ModuleGeoip.py:13
 msgid "Pick an additional country to add to the country list."
-msgstr "Lägg till ett extra land att addera till listan av länder"
+msgstr "Lägg till ett extra land till listan av länder."
 
 #: admin/ModuleGeoip.py:14
 #, python-format
@@ -624,7 +623,7 @@ msgstr "Lägg till land"
 
 #: admin/ModuleHeader.py:9
 msgid "Header against which the regular expression will be evaluated."
-msgstr "Header som regular expression-strängen jämförs mot"
+msgstr "Header som strängen med det reguljära uttrycket jämförs emot."
 
 #: admin/ModuleHeader.py:10
 msgid "Regular expression."
@@ -796,7 +795,7 @@ msgstr "Databasnamn innehållandes tabeller med användarnamn och lösenord."
 
 #: admin/ModuleMysql.py:13
 msgid "SQL command to execute. ${user} is replaced with the user name."
-msgstr "SQL-kommando att exekvera. ${user} byts ut till användarnamnet."
+msgstr "SQL-kommando att köra. ${user} byts ut till användarnamnet."
 
 #: admin/ModuleMysql.py:14
 msgid "Active to use MD5 passwords. Only suitable for the \"Basic\" authentication mechanism."
@@ -849,7 +848,7 @@ msgstr "Maximalt antal anslutningar per server som proxyn kan försöka hålla v
 
 #: admin/ModuleProxy.py:14
 msgid "Allow the server to use Keep-alive connections with the back-end servers."
-msgstr "Tillåt servern att använda Keep-alive-anslutningar med back-end-servrar."
+msgstr "Tillåt servern att använda Keep-alive-anslutningar mot back-end-servrar."
 
 #: admin/ModuleProxy.py:15
 msgid "Preserve the original \"Host:\" header sent by the client. (Default No)"
@@ -937,7 +936,7 @@ msgstr "Regular expression. Läs perls RegEx-<a target=\"_blank\" href=\"http://
 
 #: admin/ModuleRedir.py:11
 msgid "Target address. It can use Regular Expression substitution sub-strings."
-msgstr "Mål-adress. Kan användas med sub-strängar i regular expression substitut."
+msgstr "Måladress. Kan användas med sub-strängar i regular expression substitut."
 
 #: admin/ModuleRedir.py:14
 msgid "Redirections"
@@ -952,7 +951,7 @@ msgstr "Reguljära uttryck"
 
 #: admin/ModuleRedir.py:46
 msgid "Rule list"
-msgstr "Regel-lista"
+msgstr "Regellista"
 
 #: admin/ModuleRedir.py:51
 msgid "Show"
@@ -965,7 +964,7 @@ msgstr "Lägg till ny regel"
 
 #: admin/ModuleRehost.py:9
 msgid "Regular Expression against which the hosts be Host name will be compared."
-msgstr "Reguljärt uttryck som värdnamnet  jämförs mot."
+msgstr "Reguljärt uttryck som värdnamnet jämförs emot."
 
 #: admin/ModuleRehost.py:10
 msgid "At least one Regular Expression string must be defined."
@@ -1034,19 +1033,19 @@ msgstr "Vilken information som ska visas."
 #: admin/ModuleServerInfo.py:11
 #: admin/ModuleServerInfo.py:17
 msgid "Server Information"
-msgstr "Server-information"
+msgstr "Serverinformation"
 
 #: admin/ModuleServerInfo.py:12
 msgid "Only version information"
-msgstr "Bara versions-information"
+msgstr "Bara versionsinformation"
 
 #: admin/ModuleServerInfo.py:13
 msgid "Server Information + Connections"
-msgstr "Server-information + anslutningar"
+msgstr "Serverinformation + anslutningar"
 
 #: admin/ModuleServerInfo.py:28
 msgid "Privacy settings"
-msgstr "Sekretess-inställningar"
+msgstr "Sekretessinställningar"
 
 #: admin/ModuleServerInfo.py:31
 msgid "Show Information"
@@ -1059,7 +1058,7 @@ msgstr "Server Side Includes"
 
 #: admin/ModuleStreaming.py:12
 msgid "Figure the bit rate of the media file, and limit the bandwidth to it."
-msgstr "Sätt bandbredds-begränsning efter bitrate i media-filen."
+msgstr "Sätt bandbreddsbegränsning efter bitrate i media-filen."
 
 #: admin/ModuleStreaming.py:13
 msgid "Factor by which the bandwidth limit will be increased. Default: 0.1"
@@ -1067,12 +1066,12 @@ msgstr "Faktor som bandbredden ska höjas med.  Förvalt värde: 0.1"
 
 #: admin/ModuleStreaming.py:14
 msgid "Number of seconds to stream before setting the bandwidth limit. Default: 5."
-msgstr "Antal sekunder att strömma innan bandbredds-begränsningen aktiveras.  Förvalt värde: 5."
+msgstr "Antal sekunder att strömma innan bandbreddsbegränsningen aktiveras.  Förvalt värde: 5."
 
 #: admin/ModuleStreaming.py:22
 #: admin/ModuleStreaming.py:45
 msgid "Audio/Video Streaming"
-msgstr "Ljud/Video-strömning"
+msgstr "Ljud-/Video-strömning"
 
 #: admin/ModuleStreaming.py:40
 msgid "Auto Rate"
@@ -1179,11 +1178,11 @@ msgstr "Skriv alla ändringar permanent."
 
 #: admin/PageAdvanced.py:37
 msgid "<p><b>WARNING</b>: This section contains advanced configuration parameters. Changing things is not recommended unless you really know what you are doing.</p>"
-msgstr "<p><b>WARNING</b>: Denna del innehåller avancerade konfigurations-parametrar. Ändringar uppmuntras inte om du inte vet vad du gör..</p>"
+msgstr "<p><b>WARNING</b>: Denna del innehåller avancerade konfigurationsparametrar. Ändringar uppmuntras inte om du inte vet vad du gör..</p>"
 
 #: admin/PageAdvanced.py:39
 msgid "Defines which thread policy the OS should apply to the server."
-msgstr "Anger vilken trådnings-policy som operativsystem ska köra mot servern."
+msgstr "Anger vilken trådningspolicy som operativsystem ska köra mot servern."
 
 #: admin/PageAdvanced.py:40
 msgid "If empty, Cherokee will calculate a default number."
@@ -1195,7 +1194,7 @@ msgstr "Anger hur många file descriptors servern ska använda.  Förvalt värde
 
 #: admin/PageAdvanced.py:42
 msgid "Allows to choose the internal file descriptor polling method."
-msgstr "Tillåter val av intern pollnings-metod för file descriptor."
+msgstr "Tillåter val av intern pollningsmetod för file descriptor."
 
 #: admin/PageAdvanced.py:43
 msgid "Minimum size of a file to use sendfile(). Default: 32768 Bytes."
@@ -1223,7 +1222,7 @@ msgstr "Ange antal interna anslutningar som kan kvarhållas för återanvändnin
 
 #: admin/PageAdvanced.py:49
 msgid "Sets the number of seconds between log consolidations (flushes). Default: 10 seconds."
-msgstr "Anger antalet sekunder mellan log-konsolidationer (rensningar).   Förvalt värde: 10"
+msgstr "Anger antalet sekunder mellan logkonsolidationer (rensningar).   Förvalt värde: 10"
 
 #: admin/PageAdvanced.py:50
 msgid "Time lapse (in seconds) between Nonce cache clean ups."
@@ -1259,11 +1258,11 @@ msgstr "Filer med större filstorlek än denna kommer inte att bli cachade."
 
 #: admin/PageAdvanced.py:58
 msgid "How long the file information should last cached without refreshing it."
-msgstr "Hur länge fil-informationen ska cachas innan man uppdaterar den."
+msgstr "Hur länge filinformationen ska cachas innan man uppdaterar den."
 
 #: admin/PageAdvanced.py:59
 msgid "How long the file content should last cached."
-msgstr "Hur länge fil-innehållet ska cachas."
+msgstr "Hur länge filinnehållet ska cachas."
 
 #: admin/PageAdvanced.py:60
 msgid "Path DH parameters PEM file (512 bits)."
@@ -1300,7 +1299,7 @@ msgstr "Chunked Encoding"
 
 #: admin/PageAdvanced.py:90
 msgid "Polling Method"
-msgstr "Pollnings-metod"
+msgstr "Pollningsmetod"
 
 #: admin/PageAdvanced.py:91
 msgid "Sendfile min size"
@@ -1316,7 +1315,7 @@ msgstr "Trådantal"
 
 #: admin/PageAdvanced.py:98
 msgid "Thread Policy"
-msgstr "Trådnings-policy"
+msgstr "Trådningspolicy"
 
 #: admin/PageAdvanced.py:99
 msgid "File descriptors"
@@ -1328,7 +1327,7 @@ msgstr "Längd på kö för väntande anslutningar"
 
 #: admin/PageAdvanced.py:102
 msgid "Log flush time"
-msgstr "Logga rensnings-tid"
+msgstr "Logga rensningstid"
 
 #: admin/PageAdvanced.py:103
 msgid "Nonces clean up time"
@@ -1340,11 +1339,11 @@ msgstr ""
 
 #: admin/PageAdvanced.py:110
 msgid "File Min Size"
-msgstr "Minimal fil-storlek"
+msgstr "Minimal filstorlek"
 
 #: admin/PageAdvanced.py:111
 msgid "File Max Size"
-msgstr "Maximal  fil-storlek"
+msgstr "Maximal  filstorlek"
 
 #: admin/PageAdvanced.py:112
 msgid "Lasting: stat"
@@ -1421,7 +1420,7 @@ msgstr "Pekar på hur länge filerna ska cachas."
 
 #: admin/PageEntry.py:21
 msgid "Set an outbound traffic limit. It must be specified in Bytes per second."
-msgstr "Sätt en utgående trafik-begränsning. Måste anges i bytes per sekund."
+msgstr "Sätt en utgående trafikbegränsning. Måste anges i bytes per sekund."
 
 #: admin/PageEntry.py:22
 msgid "Do not log requests matching this rule."
@@ -1509,7 +1508,7 @@ msgstr "Hoppa över loggning"
 
 #: admin/PageEntry.py:234
 msgid "Access Restrictions"
-msgstr "Åtkomst-restriktioner"
+msgstr "Åtkomstrestriktioner"
 
 #: admin/PageEntry.py:236
 msgid "Only https"
@@ -1525,7 +1524,7 @@ msgstr "Mekanism för validering"
 
 #: admin/PageEntry.py:260
 msgid "Information Encoders"
-msgstr "Informations-kodare"
+msgstr "Informationskodare"
 
 #: admin/PageEntry.py:263
 #, python-format
@@ -1538,11 +1537,11 @@ msgstr "Tillåt"
 
 #: admin/PageError.py:36
 msgid "Configuration file cannot be modified"
-msgstr "Konfigurations-filen kan inte ändras"
+msgstr "Konfigurationsfilen kan inte ändras"
 
 #: admin/PageError.py:37
 msgid "Icons directory is missing"
-msgstr "Ikon-katalogen fattas"
+msgstr "Ikonatalogen fattas"
 
 #: admin/PageError.py:38
 msgid "Could not launch the server"
@@ -1643,11 +1642,11 @@ msgstr "Denna inställning anger av hur server identifierar sig."
 
 #: admin/PageGeneral.py:34
 msgid "Changes the effective user. User names and IDs are accepted."
-msgstr "Ändrar den användaren som Cherokee körs som. Användarnamn och -id är tillåtna"
+msgstr "Ändrar den användaren som Cherokee körs som. Användarnamn och -id är tillåtna."
 
 #: admin/PageGeneral.py:35
 msgid "Changes the effective group. Group names and IDs are accepted."
-msgstr "Ändrar den gruppen körs som. Användarnamn och -id ärtillåtna"
+msgstr "Ändrar den gruppen körs som. Användarnamn och -id är tillåtna."
 
 #: admin/PageGeneral.py:36
 msgid "Jail the server inside the directory. Don't use it as the only security measure."
@@ -1713,7 +1712,7 @@ msgstr "Timeout  (<i>sekunder</i>)"
 
 #: admin/PageGeneral.py:85
 msgid "Server Tokens"
-msgstr "Server-identifiering"
+msgstr "Serveridentifiering"
 
 #: admin/PageGeneral.py:124
 msgid "Listening to ports"
@@ -1725,7 +1724,7 @@ msgstr "Lägg till ny port"
 
 #: admin/PageIcon.py:22
 msgid "Icon configuration"
-msgstr "Ikon-konfiguration"
+msgstr "Ikonkonfiguration"
 
 #: admin/PageIcon.py:37
 msgid "Unknown method"
@@ -1740,15 +1739,15 @@ msgstr "Ingen"
 
 #: admin/PageIcon.py:110
 msgid "Icons configuration"
-msgstr "Ikon-konfiguration"
+msgstr "Ikonkonfiguration"
 
 #: admin/PageIcon.py:120
 msgid "Extension list"
-msgstr "Filtyps-lista"
+msgstr "Filtypslista"
 
 #: admin/PageIcon.py:123
 msgid "Icon File"
-msgstr "Ikon-fil"
+msgstr "Ikonfil"
 
 #: admin/PageIcon.py:142
 #: admin/PageIcon.py:172
@@ -1758,11 +1757,11 @@ msgstr "Ikon"
 
 #: admin/PageIcon.py:144
 msgid "Add new extension"
-msgstr "Lägg till ny fil-typ"
+msgstr "Lägg till ny filtyp"
 
 #: admin/PageIcon.py:153
 msgid "File Matches"
-msgstr "Fil-matchningar"
+msgstr "Filmatchningar"
 
 #: admin/PageIcon.py:156
 msgid "Match"
@@ -1777,7 +1776,7 @@ msgstr "Fil"
 
 #: admin/PageIcon.py:174
 msgid "Add new file match"
-msgstr "Lägg till ny fil-matchning."
+msgstr "Lägg till ny filmatchning."
 
 #: admin/PageIcon.py:190
 #: admin/consts.py:125
@@ -1795,7 +1794,7 @@ msgstr "Speciella ikoner"
 
 #: admin/PageInfoSource.py:12
 msgid "The source can be either a local interpreter or a remote host acting as an information source."
-msgstr "Källan är antingen en lokal tolk eller en fjärr-värd som agerar som en informations-källa."
+msgstr "Källan är antingen en lokal tolk eller en fjärr-värd som agerar som en informationskälla."
 
 #: admin/PageInfoSource.py:13
 msgid "Source nick. It will be referenced by this name in the rest of the server."
@@ -1803,11 +1802,11 @@ msgstr "Källnamn. Detta namn kommer att refereras av resten av servern."
 
 #: admin/PageInfoSource.py:14
 msgid "It allows to choose whether it runs the local host or a remote server."
-msgstr "Välj mellan att köra på den lokala värden eller fjärr-servern."
+msgstr "Välj mellan att köra på den lokala värden eller fjärrservern."
 
 #: admin/PageInfoSource.py:15
 msgid "Where the information source can be accessed. The host:port pair, or the Unix socket path."
-msgstr "Vart informations-källan kan kommas åt. Värd:port eller sökväg till UNIX-socketen."
+msgstr "Vart informationskällan kan kommas åt. Värd:port eller sökväg till UNIX-socketen."
 
 #: admin/PageInfoSource.py:16
 msgid "Command to spawn a new source in case it were not accessible."
@@ -1869,7 +1868,7 @@ msgstr "Kör som grupp"
 
 #: admin/PageInfoSource.py:207
 msgid "Information Sources Settings"
-msgstr "Inställningar för informations-källor"
+msgstr "Inställningar för informationskällor"
 
 #: admin/PageInfoSource.py:219
 msgid "Known sources"
@@ -1952,7 +1951,7 @@ msgstr "Reguljär"
 
 #: admin/PageNewConfig.py:39
 msgid "Server Development"
-msgstr "Server-utveckling"
+msgstr "Serverutveckling"
 
 #: admin/PageNewConfig.py:40
 msgid "Regular configuration: PHP, Apache logs, MIME types, icons, etc."
@@ -1964,15 +1963,15 @@ msgstr "Optimerad att skicka  statiskt innehåll."
 
 #: admin/PageNewConfig.py:42
 msgid "No standard port, No log files, No PID file, etc."
-msgstr "Ingen standard-port. Inga  log-filer. Inga PID-filer, etc."
+msgstr "Ingen standardport. Inga  logfiler. Inga PID-filer, etc."
 
 #: admin/PageNewConfig.py:82
 msgid "New Configuration File"
-msgstr "Ny konfigurations-fil"
+msgstr "Ny konfigurationsfil"
 
 #: admin/PageNewConfig.py:89
 msgid "Configuration File Not Found"
-msgstr "Konfigurations-fil hittades inte."
+msgstr "Konfigurationsfilen hittades inte."
 
 #: admin/PageNewConfig.py:92
 msgid "Create a new configuration file"
@@ -1988,7 +1987,7 @@ msgstr ""
 "\n"
 "<h3>Beta-testande</h3>\n"
 "<p>Privatpersoner som du själv som laddade ner och testade  den senaste revisionen i repositorier hjälper oss att skapa en produkt med högsta kvalitet.</p>\n"
-"<p>För det tackar vi dig</p>\n"
+"<p>För det tackar vi dig.</p>\n"
 
 #: admin/PageStatus.py:54
 msgid ""
@@ -2010,7 +2009,7 @@ msgid ""
 "listed on the Cherokee Project web site</a>.\n"
 msgstr ""
 "\n"
-"Vi vill väldigt gärna veta om ni använder Cherokee. Skicka in ditt domän-namn\n"
+"Vi vill väldigt gärna veta om ni använder Cherokee. Skicka in ditt domännamn\n"
 "och det kommer att finnas med i en<a href=\"http://www.cherokee-project.com/cherokee-domain-list.html\">\n"
 "lista på Cherokee</a>'s hemsida.\n"
 
@@ -2024,7 +2023,7 @@ msgstr "Detta gränssnitt hjälper till att att konfigurera Cherokee Web Server.
 
 #: admin/PageStatus.py:87
 msgid "Server status"
-msgstr "Server-status"
+msgstr "Serverstatus"
 
 #: admin/PageStatus.py:89
 msgid "Server is running."
@@ -2080,7 +2079,7 @@ msgstr "Modifierad"
 
 #: admin/PageStatus.py:153
 msgid "Configuration file"
-msgstr "Konfigurations-fil"
+msgstr "Konfigurationsfil"
 
 #: admin/PageStatus.py:153
 msgid "Not Found"
@@ -2088,7 +2087,7 @@ msgstr "Hittades inte"
 
 #: admin/PageStatus.py:155
 msgid "Configuration File"
-msgstr "Konfigurations-fil"
+msgstr "Konfigurationsfil"
 
 #: admin/PageVServer.py:31
 msgid "<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to reorder.</p>"
@@ -2100,7 +2099,7 @@ msgid ""
 "<p>The 'default' virtual server matches all the domain names.</p>\n"
 msgstr ""
 "\n"
-"<p>Den virtuella servern som konfigureras vid installation matchar alla  domän-namn.</p>\n"
+"<p>Den virtuella servern som konfigureras vid installation matchar alla  domännamn.</p>\n"
 
 #: admin/PageVServer.py:37
 msgid "Nickname for the virtual server."
@@ -2108,15 +2107,15 @@ msgstr "Namn för den virtuella servern."
 
 #: admin/PageVServer.py:38
 msgid "This directive points to the PEM-encoded Certificate file for the server (Full path to the file)"
-msgstr "Detta direktiv pekar till den PEM-kodade certifikats-filen för servern (Hela sökvägen till filen)."
+msgstr "Detta direktiv pekar till den PEM-kodade certifikatfilen för servern (Hela sökvägen till filen)."
 
 #: admin/PageVServer.py:39
 msgid "PEM-encoded Private Key file for the server (Full path to the file)"
-msgstr "PEM-kodad privat nyckel-fil för servern (Hela sökvägen till filen)"
+msgstr "PEM-kodad privat nyckelfil för servern (Hela sökvägen till filen)"
 
 #: admin/PageVServer.py:40
 msgid "Optional: File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)"
-msgstr "Valbart: Fil som innehåller det betrodda  CA-certifikatet.  Används för att kolla klient-certifikat. (Hela sökvägen till filen)"
+msgstr "Valbart: Fil som innehåller det betrodda  CA-certifikatet.  Används för att kolla klientcertifikat. (Hela sökvägen till filen)"
 
 #: admin/PageVServer.py:41
 msgid "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all ciphers supported by the OpenSSL version used)."
@@ -2124,7 +2123,7 @@ msgstr "Chiffer som TLS/SSL tillåts att använda. <a target=\"_blank\" href=\"h
 
 #: admin/PageVServer.py:42
 msgid "Optional: Skip, Accept or Require client certificates."
-msgstr "Valbart: Använd inte, acceptera eller kräv klient-certifikat."
+msgstr "Valbart: Använd inte, acceptera eller kräv klientcertifikat."
 
 #: admin/PageVServer.py:43
 msgid "Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)"
@@ -2136,7 +2135,7 @@ msgstr "Låter dig att välja hur felmeddelanden ska återges."
 
 #: admin/PageVServer.py:45
 msgid "Directory inside the user home directory to use as root web directory. Disabled if empty."
-msgstr "Katalog att använda som rot-katalog inuti användarens hem-katalog. Används ej om fältet är tomt."
+msgstr "Katalog att använda som rotkatalog inuti användarens hemkatalog. Används ej om fältet är tomt."
 
 #: admin/PageVServer.py:46
 msgid "The personal web support is currently turned on."
@@ -2254,7 +2253,7 @@ msgstr "Certifikat"
 
 #: admin/PageVServer.py:261
 msgid "Certificate key"
-msgstr "Certifikat-nyckel"
+msgstr "Certifikatnyckel"
 
 #: admin/PageVServer.py:264
 msgid "Advanced options"
@@ -2287,7 +2286,7 @@ msgstr "Felhanterare"
 #: admin/PageVServer.py:300
 #: admin/Rule.py:139
 msgid "Rule Type"
-msgstr "Regel-typ"
+msgstr "Regeltyp"
 
 #: admin/PageVServer.py:330
 msgid "Target"
@@ -2345,7 +2344,7 @@ msgstr "Sökvägar"
 
 #: admin/PageVServer.py:458
 msgid "Directory Indexes"
-msgstr "Katalog-index"
+msgstr "Katalogindex"
 
 #: admin/PageVServer.py:463
 msgid "Keep-alive"
@@ -2357,7 +2356,7 @@ msgstr "Max Uppladdnings-storlek"
 
 #: admin/PageVServer.py:465
 msgid "Traffic Statistics"
-msgstr "Trafik-statistik"
+msgstr "Trafikstatistik"
 
 #: admin/PageVServer.py:468
 msgid "Advanced Virtual Hosting"
@@ -2365,7 +2364,7 @@ msgstr "Avancerad Virtual Hosting"
 
 #: admin/PageVServer.py:482
 msgid "Logging Format"
-msgstr "Loggnings-format"
+msgstr "Loggningsformat"
 
 #: admin/PageVServer.py:484
 msgid "Format"
@@ -2439,7 +2438,7 @@ msgid ""
 "more domains.</p>\n"
 msgstr ""
 "\n"
-"<p>'Virtuell Server' är en abstraktions-mekanisk som möjliggör att\n"
+"<p>'Virtuell Server' är en abstraktionsmekanismsom möjliggör att\n"
 "definera ett eget antal parametrar och regler som tillämpas på \n"
 " en eller flera domäner.</p>\n"
 
@@ -2588,7 +2587,7 @@ msgstr "Gömda nedladdningar"
 
 #: admin/consts.py:24
 msgid "Server Info"
-msgstr "Server-info"
+msgstr "Serverinfo"
 
 #: admin/consts.py:25
 msgid "MySQL bridge"
@@ -2620,7 +2619,7 @@ msgstr "Närmast träff"
 
 #: admin/consts.py:40
 msgid "Plain text file"
-msgstr "Vanlig text-fil"
+msgstr "Vanlig textfil"
 
 #: admin/consts.py:42
 msgid "Htdigest file"
@@ -2672,7 +2671,7 @@ msgstr "Systemloggare"
 
 #: admin/consts.py:66
 msgid "Standard Error"
-msgstr "Standard-fel"
+msgstr "Standardfel"
 
 #: admin/consts.py:67
 msgid "Execute program"
@@ -2692,7 +2691,7 @@ msgstr "Lokal tolk"
 
 #: admin/consts.py:77
 msgid "Remote host"
-msgstr "Fjärr-värd"
+msgstr "Fjärrvärd"
 
 #: admin/consts.py:81
 msgid "GZip"
