@@ -4,7 +4,8 @@ wizardsdir = "$(datadir)/cherokee/admin/static/images/wizards"
 wizards_DATA = \
 php.jpg \
 wordpress.jpg \
-redirect.jpg
+redirect.jpg \
+django.png
 
 EXTRA_DIST = \
 $(wizards_DATA)

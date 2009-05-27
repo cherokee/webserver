@@ -107,7 +107,8 @@ flags.py \
 util.py \
 Wizard.py \
 Wizard_PHP.py \
-Wizard_WordPress.py
+Wizard_WordPress.py \
+Wizard_Django.py \
 endif
 
 adminpy_DATA = $(admin_data)

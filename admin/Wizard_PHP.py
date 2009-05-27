@@ -51,7 +51,7 @@ class Wizard_Rules_PHP (Wizard):
                 desc = "<p>Looked for the binaries: %s.</p>" % (", ".join(self.DEFAULT_BINS))
                 return self.report_error ("Couldn't find a suitable PHP interpreter.", desc)
 
-            self.source = cfg_source_get_next (self._cfg)
+            _,self.source = cfg_source_get_next (self._cfg)
             self._cfg['%s!nick' % (self.source)]        = 'PHP Interpreter'
             self._cfg['%s!type' % (self.source)]        = 'interpreter'
             self._cfg['%s!interpreter' % (self.source)] = '%s -b %s' % (php_path, self.UNIX_SOCK)

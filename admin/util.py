@@ -1,4 +1,5 @@
 import os
+import sys
 
 #
 # Virtual Server
@@ -37,10 +38,10 @@ def cfg_vsrv_rule_find_extension (cfg, pre, extension):
 def cfg_source_get_next (cfg):
     tmp = [int(x) for x in cfg.keys("source")]
     if not tmp:
-        return "source!1"
+        return (1, "source!1")
     tmp.sort()
-    next = str(tmp[-1] + 10)
-    return "source!%s" % (next)
+    next = tmp[-1] + 10
+    return (next, "source!%d" % (next))
 
 def cfg_source_find_interpreter (cfg, 
                                  in_interpreter = None,
@@ -91,3 +92,25 @@ def path_find_binary (executable, extra_dirs=[], custom_test=None):
 
 
 
+#
+# OS
+#
+def os_get_document_root():
+    if sys.platform == 'darwin':
+        return "/Library/WebServer/Documents"
+    elif sys.platform == 'linux2':
+        if os.path.exists ("/etc/redhat-release"):
+            return '/var/www'
+        elif os.path.exists ("/etc/fedora-release"):
+            return '/var/www'
+        elif os.path.exists ("/etc/SuSE-release"):
+            return '/srv/www/htdocs'
+        elif os.path.exists ("/etc/debian_version"):
+            return '/var/www'
+        elif os.path.exists ("/etc/gentoo-release"):
+            return '/var/www'
+        elif os.path.exists ("/etc/slackware-version"):
+            return '/var/www'
+        return '/var/www'
+
+    return ''

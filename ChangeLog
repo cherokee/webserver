@@ -1,5 +1,10 @@
 2009-05-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Wizard_PHP.py, admin/util.py, admin/Wizard_Django.py,
+	admin/static/images/wizards/Makefile.am, admin/Makefile.am,
+	admin/static/images/wizards/django.png: Adds a new Wizard for
+	Django at virtual server level.
+
 	* cherokee/spawner.c (cherokee_spawner_spawn): Fixes compilation
 	on OpenSolaris. Thanks Alexander von Gluck <kallisti5@unixzen.com>
 	for reporting (and for writing a spec file for Cherokee!).
