@@ -1,3 +1,8 @@
+2009-05-27  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* se.po, LINGUAS: New translation Swedish. Translated by Andreas
+	Anddersson <andreas@cyberdelic.org; thanks!
+
 2009-05-23  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* es.po: Updated. Translates a few missing strings.
