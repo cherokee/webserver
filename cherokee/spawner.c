@@ -225,7 +225,7 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 	 */
 	ret = cherokee_sem_post (&cherokee_spawn_sem);	
 	if (unlikely (ret != ret_ok)) {
-		PRINT_ERROR ("WARNING: Couldn't unlock spawning semaphore..\n");
+		PRINT_ERROR_S ("WARNING: Couldn't unlock spawning semaphore..\n");
 	}
 	
 	/* Wait for the PID
