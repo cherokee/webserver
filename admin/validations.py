@@ -307,3 +307,10 @@ def is_time (value):
 
     return value
 
+def is_new_host (value, cfg, nochroot):
+    for h in cfg.keys('vserver'):
+        if value == cfg.get_val('vserver!%s!nick'%(h)):
+            raise ValueError, _('Virtual host nick is already being used.')
+    return value
+
+            

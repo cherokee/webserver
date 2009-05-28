@@ -1,10 +1,15 @@
+import validations
+
 from config import *
 from util import *
 from Page import *
 from Wizard import *
 
-NOTE_DJANGO_DIR = "Local path to the Django based project."
-NOTE_NEW_HOST   = "Name of the new domain that will be created."
+NOTE_DJANGO_DIR = _("Local path to the Django based project.")
+NOTE_NEW_HOST   = _("Name of the new domain that will be created.")
+
+ERROR_NO_DJANGO = _("It does not look like a Django based project directory.")
+ERROR_NO_DROOT  = _("The document root directory does not exist.")
 
 CONFIG_VSRV = """
 %(vsrv_pre)s!nick = %(new_host)s
@@ -27,6 +32,19 @@ source!%(src_num)d!interpreter = python %(django_dir)s/manage.py runfcgi protoco
 %(vsrv_pre)s!rule!1!handler!balancer = round_robin
 %(vsrv_pre)s!rule!1!handler!balancer!source!1 = %(src_num)d
 """
+
+def is_django_dir (path, cfg, nochroot):
+    path = validations.is_local_dir_exists (path, cfg, nochroot)
+    manage = os.path.join (path, "manage.py")
+    if not os.path.exists (manage):
+        raise ValueError, _("Directory doesn't look like a Django based project.")
+    return path
+
+DATA_VALIDATION = [
+    ("tmp!wizard_django!django_dir",    (is_django_dir, 'cfg')),
+    ("tmp!wizard_django!new_host",      (validations.is_new_host, 'cfg')),
+    ("tmp!wizard_django!document_root", (validations.is_local_dir_exists, 'cfg'))
+]
 
 class Wizard_VServer_Django (WizardPage):
     ICON = "django.png"
@@ -59,13 +77,15 @@ class Wizard_VServer_Django (WizardPage):
         return txt
 
     def _op_apply (self, post):
+        # Validation
+        self._ValidateChanges (post, DATA_VALIDATION)
+        if self.has_errors():
+            return
+
         # Incoming info
         django_dir    = post.pop('tmp!wizard_django!django_dir')
         new_host      = post.pop('tmp!wizard_django!new_host')
         document_root = post.pop('tmp!wizard_django!document_root')
-
-        if not new_host or not django_dir or not document_root:
-            return 
 
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
