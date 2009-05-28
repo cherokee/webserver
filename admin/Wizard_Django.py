@@ -23,6 +23,8 @@ source!%(src_num)d!interpreter = python %(django_dir)s/manage.py runfcgi protoco
 %(vsrv_pre)s!rule!10!match = directory
 %(vsrv_pre)s!rule!10!match!directory = /media
 %(vsrv_pre)s!rule!10!handler = file
+%(vsrv_pre)s!rule!10!expiration = time
+%(vsrv_pre)s!rule!10!expiration!time = 7d
 
 %(vsrv_pre)s!rule!1!match = default
 %(vsrv_pre)s!rule!1!encoder!gzip = 1
