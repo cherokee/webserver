@@ -139,7 +139,7 @@ class PageVServers (PageMenu, FormHelper):
         sorted_vservers = self._cfg['vserver'].keys()
         sorted_vservers.sort(sort_vservers, reverse=True)
 
-        txt += '<table id="%s" class="rulestable">' % (table_name)
+        txt += '<div class="rulesdiv"><table id="%s" class="rulestable">' % (table_name)
         txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
             (_('Nickname'), _('Root'), _('Domains'), _('Logging'))
 
@@ -179,6 +179,8 @@ class PageVServers (PageMenu, FormHelper):
                 prio, prio, extra, link, document_root, doms, logging, link_del)
 
         txt += '</table>'
+
+
         txt += '''
                       <script type="text/javascript">
                       $(document).ready(function() {
@@ -202,7 +204,22 @@ class PageVServers (PageMenu, FormHelper):
 
                       $(document).ready(function(){
                         $("table.rulestable tr:odd").addClass("odd");
+
+                        $("#newsection").hide();
+                        $("#clonesection").hide();
+                        $("#wizardsection").hide();
+                        $("#newsection_b").click(function() { openSection($("#newsection"))});
+                        $("#clonesection_b").click(function() { openSection($("#clonesection"))});
+                        $("#wizardsection_b").click(function() { openSection($("#wizardsection"))});
                       });
+
+                      function openSection(el) 
+                      {
+                          $("#newsection").hide();
+                          $("#clonesection").hide();
+                          $("#wizardsection").hide();
+                          el.show();
+                      }
 
                       $(document).mouseup(function(){
                         $("table.rulestable tr:even").removeClass("odd");
@@ -213,6 +230,7 @@ class PageVServers (PageMenu, FormHelper):
                       'url' :   '/vserver/ajax_update'}
 
         # Add new Virtual Server
+        txt += '<div class="rulessection" id="newsection">'
         table = Table(3, 1, header_style='width="200px"')
         table += (_('Nickname'), _('Document Root'))
         fo1 = Form ("/vserver", add_submit=False, auto=False)
@@ -222,8 +240,10 @@ class PageVServers (PageMenu, FormHelper):
 
         txt += "<h2>%s</h2>" % (_('Add new Virtual Server'))
         txt += self.Indent(fo1.Render(str(table)))
+        txt += '</div>'
 
         # Clone Virtual Server
+        txt += '<div class="rulessection" id="clonesection">'
         table = Table(3, 1, header_style='width="200px"')
         table += (_('Virtual Server'), _('Clone as..'))
         fo1 = Form ("/vserver", add_submit=False, auto=False)
@@ -239,9 +259,18 @@ class PageVServers (PageMenu, FormHelper):
 
         txt += "<h2>%s</h2>" % (_('Clone Virtual Server'))
         txt += self.Indent(fo1.Render(str(table)))
+        txt += '</div>'
 
         # Wizards
+        txt += '<div class="rulessection" id="wizardsection">'
         txt += self._render_wizards()
+        txt += '</div>'
+
+        txt += '<div class="rulesbutton"><a id="newsection_b">%s</a></div>' % (_('Add new Virtual Server'))
+        txt += '<div class="rulesbutton"><a id="clonesection_b">%s</a></div>' % (_('Clone Virtual Server'))
+        txt += '<div class="rulesbutton"><a id="wizardsection_b">%s</a></div>' % (_('Wizards'))
+        txt += '</div>'
+        
         return txt
 
     def _render_wizards (self):

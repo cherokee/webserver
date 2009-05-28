@@ -4,7 +4,7 @@ from Wizard import *
 
 class Wizard_Rules_PHP (Wizard):
     UNIX_SOCK     = "/tmp/cherokee-php.socket"
-    DEFAULT_PATHS = ['/usr/bin', '/opt/php', '/usr/sfw/bin', '/usr/gnu/bin']
+    DEFAULT_PATHS = ['/usr/bin', '/opt/php', '/usr/sfw/bin', '/usr/gnu/bin', '/opt/local/bin']
     DEFAULT_BINS  = ['php-cgi', 'php']
     ICON          = "php.jpg"
     DESC          = "Configures PHP in the current Virtual Server. It will add a new .php extension is not present."

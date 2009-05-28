@@ -326,8 +326,8 @@ class PageVServer (PageMenu, FormHelper):
         ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
         DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
 
-        txt += '<table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
+        txt += '<div class="rulesdiv"><table id="%s" class="rulestable">' % (table_name)
+        txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
 
         # Rule list
         for prio in priorities:
@@ -378,7 +378,7 @@ class PageVServer (PageMenu, FormHelper):
             txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
                 prio, pre, prio, extra, link, name_type, handler_name, document_root, auth_name, encoders, expiration, final, link_del)
 
-        txt += '</table>\n'
+        txt += '</table></div>\n'
         txt += '''
                       <script type="text/javascript">
                       $(document).ready(function() {
