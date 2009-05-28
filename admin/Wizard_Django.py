@@ -11,14 +11,16 @@ NOTE_NEW_HOST   = _("Name of the new domain that will be created.")
 ERROR_NO_DJANGO = _("It does not look like a Django based project directory.")
 ERROR_NO_DROOT  = _("The document root directory does not exist.")
 
-CONFIG_VSRV = """
-%(vsrv_pre)s!nick = %(new_host)s
-%(vsrv_pre)s!document_root = %(document_root)s
-
+SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = Django %(src_num)d
 source!%(src_num)d!host = /tmp/cherokee-source%(src_num)d.sock
 source!%(src_num)d!interpreter = python %(django_dir)s/manage.py runfcgi protocol=scgi socket=/tmp/cherokee-source%(src_num)d.sock 
+"""
+
+CONFIG_VSRV = SOURCE + """
+%(vsrv_pre)s!nick = %(new_host)s
+%(vsrv_pre)s!document_root = %(document_root)s
 
 %(vsrv_pre)s!rule!10!match = directory
 %(vsrv_pre)s!rule!10!match!directory = /media
@@ -33,6 +35,17 @@ source!%(src_num)d!interpreter = python %(django_dir)s/manage.py runfcgi protoco
 %(vsrv_pre)s!rule!1!handler!check_file = 0
 %(vsrv_pre)s!rule!1!handler!balancer = round_robin
 %(vsrv_pre)s!rule!1!handler!balancer!source!1 = %(src_num)d
+"""
+
+CONFIG_RULES = SOURCE + """
+%(rule_pre)s!match = directory
+%(rule_pre)s!match!directory = %(webdir)s
+%(rule_pre)s!encoder!gzip = 1
+%(rule_pre)s!handler = scgi
+%(rule_pre)s!handler!error_handler = 1
+%(rule_pre)s!handler!check_file = 0
+%(rule_pre)s!handler!balancer = round_robin
+%(rule_pre)s!handler!balancer!source!1 = %(src_num)d
 """
 
 def is_django_dir (path, cfg, nochroot):
@@ -91,9 +104,57 @@ class Wizard_VServer_Django (WizardPage):
 
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
-        src_num, src_pre  = cfg_source_get_next (self._cfg)
+        src_num, src_pre = cfg_source_get_next (self._cfg)
 
         # Add the new rules
         config = CONFIG_VSRV % (locals())
+        self._apply_cfg_chunk (config)
+
+
+class Wizard_Rules_Django (WizardPage):
+    ICON = "django.png"
+    DESC = "New directory based on a Django project."
+
+    def __init__ (self, cfg, pre):
+        WizardPage.__init__ (self, cfg, pre, 
+                             id    = "Django_Page1",
+                             title = _("Django Wizard"))
+
+    def show (self):
+        return True
+
+    def _render_content (self, url_pre):
+        txt = '<h1>%s</h1>' % (self.title)
+
+        txt += '<h2>Web Directory</h2>'
+        table = TableProps()
+        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_django!new_webdir',    NOTE_NEW_HOST, value="/project")
+        txt += self.Indent(table)
+
+        txt += '<h2>Django Project</h2>'
+        table = TableProps()
+        self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_django!django_dir', NOTE_DJANGO_DIR)
+        txt += self.Indent(table)
+
+        form = Form (url_pre, add_submit=True, auto=False)
+        return form.Render(txt, DEFAULT_SUBMIT_VALUE)
+        return txt
+
+    def _op_apply (self, post):
+        # Validation
+        self._ValidateChanges (post, DATA_VALIDATION)
+        if self.has_errors():
+            return
+
+        # Incoming info
+        django_dir = post.pop('tmp!wizard_django!django_dir')
+        webdir     = post.pop('tmp!wizard_django!new_webdir')
+
+        # Locals
+        rule_num, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
+        src_num,  src_pre  = cfg_source_get_next (self._cfg)
+
+        # Add the new rules
+        config = CONFIG_RULES % (locals())
         self._apply_cfg_chunk (config)
 

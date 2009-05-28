@@ -17,10 +17,10 @@ def cfg_vsrv_rule_get_next (cfg, pre):
     tmp = [int(x) for x in cfg.keys("%s!rule"%(pre))]
     tmp.sort()
     if tmp:
-        next = str(tmp[-1] + 10)
+        next = tmp[-1] + 100
     else:
-        next = "100"
-    return "%s!rule!%s" % (pre, next)
+        next = 100
+    return (next, "%s!rule!%d" % (pre, next))
 
 def cfg_vsrv_rule_find_extension (cfg, pre, extension):
     """Find an extension rule in a virtual server """
