@@ -3,8 +3,10 @@ from util import *
 from Page import *
 from Wizard import *
 
-NOTE_SRC_HOST = "New host name."
-NOTE_TRG_HOST = "Host name to which requests will be redirected."
+NOTE_SRC_HOST   = _("New host name.")
+NOTE_TRG_HOST   = _("Host name to which requests will be redirected.")
+ERROR_EMPTY_SRC = _("A source host name is required")
+ERROR_EMPTY_TRG = _("A target host name is required")
 
 CONFIG_VSRV = """
 %(pre_vsrv)s!nick = %(host_src)s
@@ -43,12 +45,14 @@ class Wizard_VServer_Redirect (WizardPage):
         return txt
 
     def _op_apply (self, post):
+        # Validate
+        self.Validate_NotEmpty (post, 'tmp!wizard_redir!host_src', ERROR_EMPTY_SRC)
+        self.Validate_NotEmpty (post, 'tmp!wizard_redir!host_trg', ERROR_EMPTY_TRG)
+        if self.has_errors(): return
+
         # Incoming info
         host_src = post.pop('tmp!wizard_redir!host_src')
         host_trg = post.pop('tmp!wizard_redir!host_trg')
-
-        if not host_src or not host_trg:
-            return 
 
         # Locals
         pre_vsrv = cfg_vsrv_get_next (self._cfg)

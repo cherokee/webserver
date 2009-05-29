@@ -5,7 +5,8 @@ wizards_DATA = \
 php.jpg \
 wordpress.jpg \
 redirect.jpg \
-django.png
+django.png \
+hotlinking.png
 
 EXTRA_DIST = \
 $(wizards_DATA)

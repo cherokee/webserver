@@ -109,6 +109,7 @@ Wizard.py \
 Wizard_PHP.py \
 Wizard_WordPress.py \
 Wizard_Django.py \
+Wizard_HotLinking.py
 endif
 
 adminpy_DATA = $(admin_data)

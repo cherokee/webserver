@@ -84,7 +84,7 @@ class WizardManager:
                 txt += '<tr><td rowspan="2"><a href="%s"><img src="%s" /></a></td><td><b>%s</b></td></tr>' % (url, img, name)
                 txt += '<tr><td>%s</td></tr>' % (wizard.DESC)
 
-        return '<table>%s</table>' %(txt)
+        return '<div class="indented"><table>%s</table></div>' %(txt)
 
     def load (self, name):
         fname = 'Wizard_%s.py' % (name)

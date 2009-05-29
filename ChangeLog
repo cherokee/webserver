@@ -1,5 +1,10 @@
 2009-05-29  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Wizard.py, admin/static/images/wizards/Makefile.am,
+	admin/static/images/wizards/hotlinking.png, admin/Makefile.am,
+	admin/Wizard_Redirect.py, admin/Wizard_HotLinking.py: Adds a new
+	Hot-Linking prevention wizard.
+
 	* admin/Wizard_Django.py, admin/Wizard_Redirect.py,
 	admin/Wizard.py: Adds log cloning support to the 'VServer'
 	wizards. Logging settings can be cloned from a previously
