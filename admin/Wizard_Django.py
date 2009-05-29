@@ -66,9 +66,10 @@ class Wizard_VServer_Django (WizardPage):
     DESC = "New virtual server based on a Django project."
 
     def __init__ (self, cfg, pre):
-        WizardPage.__init__ (self, cfg, pre, 
-                             id    = "Django_Page1",
-                             title = _("Django Wizard"))
+        WizardPage.__init__ (self, cfg, pre,
+                             submit = '/vserver/wizard/Django',
+                             id     = "Django_Page1",
+                             title  = _("Django Wizard"))
 
     def show (self):
         return True
@@ -86,6 +87,9 @@ class Wizard_VServer_Django (WizardPage):
         table = TableProps()
         self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_django!django_dir', NOTE_DJANGO_DIR)
         txt += self.Indent(table)
+
+        txt += '<h2>Logging</h2>'
+        txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
@@ -109,6 +113,7 @@ class Wizard_VServer_Django (WizardPage):
         # Add the new rules
         config = CONFIG_VSRV % (locals())
         self._apply_cfg_chunk (config)
+        self._common_apply_logging (post, vsrv_pre)
 
 
 class Wizard_Rules_Django (WizardPage):
@@ -117,8 +122,9 @@ class Wizard_Rules_Django (WizardPage):
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre, 
-                             id    = "Django_Page1",
-                             title = _("Django Wizard"))
+                             submit = '/vserver/%s/wizard/Django'%(pre.split('!')[1]),
+                             id     = "Django_Page1",
+                             title  = _("Django Wizard"))
 
     def show (self):
         return True

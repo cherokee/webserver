@@ -2,6 +2,8 @@ import os, imp, sys
 from util import *
 from Page import *
 
+NOTE_DUP_LOGS = "Use the same logging configuration as one of the other virtual servers."
+
 class Wizard:
     def __init__ (self, cfg, pre=None):
         self.name    = "Unknown wizard"
@@ -96,12 +98,13 @@ class WizardManager:
 
 
 class WizardPage (PageMenu, FormHelper, Wizard):
-    def __init__ (self, cfg, pre, id, title):
+    def __init__ (self, cfg, pre, submit, id, title):
         Wizard.__init__     (self, cfg, pre)
         PageMenu.__init__   (self, id, cfg, [])
         FormHelper.__init__ (self, id, cfg)
 
-        self.title = title
+        self.submit_url = submit
+        self.title      = title
 
     # Virtual Methods
     #
@@ -136,3 +139,29 @@ class WizardPage (PageMenu, FormHelper, Wizard):
             line = line.strip()
             left, right = line.split (" = ", 2)
             self._cfg[left] = right
+
+    # Common pieces
+    #
+    def _common_add_logging (self):
+        txt  = ''
+        logs = [('', 'No Logs')]
+
+        for v in self._cfg.keys('vserver'):
+            pre  = 'vserver!%s!logger' % (v)
+            log  = self._cfg.get_val(pre)
+            nick = self._cfg.get_val('vserver!%s!nick'%(v))
+            if not log: continue
+            logs.append ((pre, '%s (%s)'%(nick, log)))
+
+        table = TableProps()
+        self.AddPropOptions (table, _('Same logs as vserver'), 'tmp!wizard!logs_as_vsrv', logs, NOTE_DUP_LOGS)
+        txt += self.Indent(table)
+
+        return txt
+
+    def _common_apply_logging (self, post, vsrv_pre):
+        logging_as = post.pop('tmp!wizard!logs_as_vsrv')
+        if not logging_as:
+            return
+        
+        self._cfg.clone (logging_as, '%s!logger'%(vsrv_pre))

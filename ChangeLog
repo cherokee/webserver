@@ -1,3 +1,10 @@
+2009-05-29  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/Wizard_Django.py, admin/Wizard_Redirect.py,
+	admin/Wizard.py: Adds log cloning support to the 'VServer'
+	wizards. Logging settings can be cloned from a previously
+	configured virtual server.
+
 2009-05-28  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/Wizard_Django.py: Adds support of the in-virtual server

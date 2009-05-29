@@ -23,8 +23,9 @@ class Wizard_VServer_Redirect (WizardPage):
     
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre, 
-                             id    = "Redirect_Page1",
-                             title = _("Redirection Wizard"))
+                             submit = '/vserver/wizard/Redirect',
+                             id     = "Redirect_Page1",
+                             title  = _("Redirection Wizard"))
 
     def show (self):
         return True
