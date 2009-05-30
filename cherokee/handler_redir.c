@@ -52,7 +52,13 @@ match_and_substitute (cherokee_handler_redir_t *n)
 	
 	/* Append the query string
 	 */
-	if (! cherokee_buffer_is_empty (&conn->query_string)) {
+	if ((conn->web_directory.len > 1) &&
+	    (conn->options & conn_op_document_root))
+	{
+		cherokee_buffer_prepend_buf (&conn->request, &conn->web_directory);
+	}
+
+	if  (! cherokee_buffer_is_empty (&conn->query_string)) {
 		cherokee_buffer_add_str (&conn->request, "?");
 		cherokee_buffer_add_buffer (&conn->request, &conn->query_string);
 	}
@@ -180,8 +186,15 @@ match_and_substitute (cherokee_handler_redir_t *n)
 	ret = ret_ok;
 
 out:
-	if (! cherokee_buffer_is_empty (&conn->query_string))
+	if (! cherokee_buffer_is_empty (&conn->query_string)) {
 		cherokee_buffer_drop_ending (&conn->request, conn->query_string.len + 1);
+	}
+
+	if ((conn->web_directory.len > 1) &&
+	    (conn->options & conn_op_document_root))
+	{
+		cherokee_buffer_move_to_begin (&conn->request, conn->web_directory.len);
+	}
 
 	return ret;
 }

@@ -1,5 +1,10 @@
 2009-05-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_redir.c (match_and_substitute): When a custom
+	document root is used, the web_directory property is dropped from
+	the request. Detect that case and add web_directory to the request
+	before the evaluation is performed.
+
 	* cherokee/handler_redir.c (match_and_substitute): Bug Fix: Do not
 	overwrite or modify the original request property if it's already
 	set.
