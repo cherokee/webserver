@@ -27,7 +27,8 @@ class Wizard_VServer_Redirect (WizardPage):
         WizardPage.__init__ (self, cfg, pre, 
                              submit = '/vserver/wizard/Redirect',
                              id     = "Redirect_Page1",
-                             title  = _("Redirection Wizard"))
+                             title  = _("Redirection Wizard"),
+                             group  = WIZARD_GROUP_TASKS)
 
     def show (self):
         return True

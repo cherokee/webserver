@@ -154,7 +154,8 @@ class Wizard_Rules_WordPress (Wizard):
 
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
-        self.name = "Configure Wordpress"
+        self.name  = "Configure Wordpress"
+        self.group = WIZARD_GROUP_CMS
 
     def show (self):
         # Check for PHP
@@ -181,7 +182,8 @@ class Wizard_VServer_WordPress (Wizard):
 
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
-        self.name = "Add a new Wordpress virtual server"
+        self.name  = "Add a new Wordpress virtual server"
+        self.group = WIZARD_GROUP_CMS
 
     def show (self):
         # Check for a PHP Information Source

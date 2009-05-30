@@ -4,12 +4,18 @@ from Page import *
 
 NOTE_DUP_LOGS = "Use the same logging configuration as one of the other virtual servers."
 
+WIZARD_GROUP_MISC     = 'misc'
+WIZARD_GROUP_CMS      = 'cms'
+WIZARD_GROUP_TASKS    = 'tasks'
+WIZARD_GROUP_PLATFORM = 'platform'
+
 class Wizard:
     def __init__ (self, cfg, pre=None):
         self.name    = "Unknown wizard"
         self._cfg    = cfg
         self._pre    = pre
         self.no_show = None
+        self.group   = WIZARD_GROUP_MISC
 
     def show (self):
         assert (False);
@@ -63,13 +69,11 @@ class WizardManager:
 
         return wizards
 
-    def render (self, url_pre):
-        txt     = ''
-        no_show = ''
+    def _render_group (self, url_pre, wizards_all, group):
+        txt = ''
 
-        wizards = self.get_available()
-        if not wizards:
-            return ''
+        wizards = filter (lambda x: x[1].group == group, wizards_all)
+        if not wizards: return ''
 
         for tmp in wizards:
             name, wizard = tmp
@@ -84,7 +88,33 @@ class WizardManager:
                 txt += '<tr><td rowspan="2"><a href="%s"><img src="%s" /></a></td><td><b>%s</b></td></tr>' % (url, img, name)
                 txt += '<tr><td>%s</td></tr>' % (wizard.DESC)
 
-        return '<div class="indented"><table>%s</table></div>' %(txt)
+        return '<table>%s</table>' %(txt)
+
+    def render (self, url_pre):
+        wizards = self.get_available()
+        if not wizards:
+            return ''
+
+        t_tasks = ("Tasks",     self._render_group (url_pre, wizards, WIZARD_GROUP_TASKS))
+        t_cms   = ("CMS",       self._render_group (url_pre, wizards, WIZARD_GROUP_CMS))
+        t_platf = ("Platforms", self._render_group (url_pre, wizards, WIZARD_GROUP_PLATFORM))
+        t_misc  = ("Misc",      self._render_group (url_pre, wizards, WIZARD_GROUP_MISC))
+
+        boxes = [t_tasks, t_cms, t_platf, t_misc]
+        boxes.sort (cmp=lambda x,y: len(x[1]) < len(y[1]))
+
+        added = 0
+        txt   = "<table><tr>"
+        for name, t in boxes:
+            if not t:
+                continue
+            txt += "<td><h3>%s</h3>%s</td>" % (name, t)
+            added += 1
+            if (added % 2) == 0:
+                txt += "</tr><tr>"
+        txt += "</tr></table>"
+
+        return txt
 
     def load (self, name):
         fname = 'Wizard_%s.py' % (name)
@@ -98,13 +128,14 @@ class WizardManager:
 
 
 class WizardPage (PageMenu, FormHelper, Wizard):
-    def __init__ (self, cfg, pre, submit, id, title):
+    def __init__ (self, cfg, pre, submit, id, title, group):
         Wizard.__init__     (self, cfg, pre)
         PageMenu.__init__   (self, id, cfg, [])
         FormHelper.__init__ (self, id, cfg)
 
         self.submit_url = submit
         self.title      = title
+        self.group      = group
 
     # Virtual Methods
     #

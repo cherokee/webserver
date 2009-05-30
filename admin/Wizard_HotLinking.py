@@ -48,17 +48,21 @@ class Wizard_Rules_HotLinking (WizardPage):
         WizardPage.__init__ (self, cfg, pre, 
                              submit = '/vserver/%s/wizard/HotLinking'%(pre.split('!')[1]),
                              id     = "HotLinking_Page1",
-                             title  = _("Hot Linking Prevention Wizard"))
+                             title  = _("Hot Linking Prevention Wizard"),
+                             group  = WIZARD_GROUP_TASKS)
 
     def show (self):
         return True
 
     def _render_content (self, url_pre):
-        txt = '<h1>%s</h1>' % (self.title)
+        nick = self._cfg.get_val("%s!nick"%(self._pre))
+        if not '.' in nick:
+            nick = "example.com"
 
+        txt = '<h1>%s</h1>' % (self.title)
         txt += '<h2>Local Host Name</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Domain Name'), 'tmp!wizard_hotlink!domain', NOTE_DOMAIN)
+        self.AddPropEntry (table, _('Domain Name'), 'tmp!wizard_hotlink!domain', NOTE_DOMAIN, value=nick)
         txt += self.Indent(table)
 
         txt += '<h2>Behaviour</h2>'

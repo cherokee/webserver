@@ -69,7 +69,8 @@ class Wizard_VServer_Django (WizardPage):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/Django',
                              id     = "Django_Page1",
-                             title  = _("Django Wizard"))
+                             title  = _("Django Wizard"),
+                             group  = WIZARD_GROUP_PLATFORM)
 
     def show (self):
         return True
@@ -124,7 +125,8 @@ class Wizard_Rules_Django (WizardPage):
         WizardPage.__init__ (self, cfg, pre, 
                              submit = '/vserver/%s/wizard/Django'%(pre.split('!')[1]),
                              id     = "Django_Page1",
-                             title  = _("Django Wizard"))
+                             title  = _("Django Wizard"),
+                             group  = WIZARD_GROUP_PLATFORM)
 
     def show (self):
         return True
