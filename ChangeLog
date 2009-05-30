@@ -1,3 +1,8 @@
+2009-05-31  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/ModuleFcgi.py: We decided to make Script Alias available
+	on FastCGI handler config.
+
 2009-05-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/handler_redir.c (match_and_substitute): When a custom

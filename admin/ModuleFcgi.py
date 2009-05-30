@@ -19,7 +19,7 @@ class ModuleFcgi (ModuleCgiBase):
     def __init__ (self, cfg, prefix, submit):
         ModuleCgiBase.__init__ (self, cfg, prefix, 'fcgi', submit)
 
-        self.show_script_alias  = False
+        self.show_script_alias  = True
         self.show_change_uid    = False
         self.show_document_root = True
 
