@@ -21,7 +21,7 @@ CONFIG_RULES = """
 %(rule_pre)s!match!right = not
 %(rule_pre)s!match!right!right = header
 %(rule_pre)s!match!right!right!header = Referer
-%(rule_pre)s!match!right!right!match = $|https?://(.*\.)?%(domain)s
+%(rule_pre)s!match!right!right!match = ^($|https?://(.*?\.)?%(domain)s)
 """
 
 REPLY_FORBIDDEN = """
