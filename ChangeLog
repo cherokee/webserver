@@ -1,5 +1,8 @@
 2009-05-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_redir.c (match_and_substitute): Bug Fix: The
+	internal web directory must be cleaned up on internal redirs.
+
 	* admin/Wizard_PHP.py: Adds support for adding a index.php in the
 	virtual server's directory index.
 

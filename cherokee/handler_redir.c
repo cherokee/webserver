@@ -75,7 +75,7 @@ match_and_substitute (cherokee_handler_redir_t *n)
 		 */
 		if (conn->web_directory.len == 1)
 			subject = conn->request.buf + (conn->web_directory.len - 1);
-		else 
+		else
 			subject = conn->request.buf + conn->web_directory.len;
 
 		subject_len = strlen (subject);
@@ -130,8 +130,9 @@ match_and_substitute (cherokee_handler_redir_t *n)
 			int   len;
 			char *args;
 
-			cherokee_buffer_clean (&conn->pathinfo);
 			cherokee_buffer_clean (&conn->request);
+			cherokee_buffer_clean (&conn->pathinfo);
+			cherokee_buffer_clean (&conn->web_directory);
 			cherokee_buffer_clean (&conn->local_directory);
 
 			cherokee_buffer_ensure_size (&conn->request, conn->request.len + subject_len);
