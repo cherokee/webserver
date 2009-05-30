@@ -127,7 +127,7 @@ class PageVServers (PageMenu, FormHelper):
             n += 10
 
     def _render_vserver_list (self):
-        txt = "<h1>Virtual Servers</h1>"
+        txt = "<h1>%s</h1>" % (_('Virtual Servers'))
         txt += self.Dialog (COMMENT)
 
         vservers = self._cfg['vserver']
@@ -150,14 +150,25 @@ class PageVServers (PageMenu, FormHelper):
             nick          = self._cfg.get_val('vserver!%s!nick'%(prio))
             document_root = self._cfg.get_val('vserver!%s!document_root'%(prio), '')
             logger_val    = self._cfg.get_val('vserver!%s!logger'%(prio))
-            domains       = self._cfg.keys('vserver!%s!domain'%(prio))
 
-            if not domains:
-                doms = 1
+            hmatchtype    = self._cfg.get_val('vserver!%s!match'%(prio), None)
+            if hmatchtype == 'rehost':
+                skey = 'regex'
+            elif hmatchtype == 'wildcard':
+                skey = 'domain'
             else:
-                doms = len(domains)
-                if not nick in domains:
-                    doms += 1
+                doms = 1
+
+            if hmatchtype:
+                prefix        = 'vserver!%s!match!%s!%%s' % (prio,skey)
+                domkeys       = [prefix % k for k in self._cfg.keys(prefix[:-3])]
+                domains       = self._cfg.get_vals(domkeys)
+                if domains:
+                    doms = len(domains)
+                    if not nick in domains:
+                        doms += 1
+                else:
+                    doms = 1
 
             link = '<a href="/vserver/%s">%s</a>' % (prio, nick)
             if nick == 'default':

@@ -24,6 +24,12 @@ class ConfigNode (object):
             return default
         return subcfg.value
 
+    def get_vals (self, keys, default=None):
+        values = []
+        for k in keys:
+            values += [self.get_val(k)]
+        return values
+
     # Get child
     #
     def _getitem_simple (self, key):
@@ -231,6 +237,9 @@ class Config:
 
     def get_val (self, path, default=None):
         return self.root.get_val (path, default)
+
+    def get_vals (self, paths, default=None):
+        return self.root.get_vals (paths, default)
 
     def __delitem__ (self, path):
         parent, parent_path, child_name = self._get_parent_node (path)
