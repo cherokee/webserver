@@ -1,5 +1,8 @@
 2009-05-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Wizard_PHP.py: Adds support for adding a index.php in the
+	virtual server's directory index.
+
 	* admin/Wizard_WordPress.py: Reimplement the wizard using the
 	proper class structure.
 
