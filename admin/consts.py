@@ -161,9 +161,3 @@ CLIENT_CERTS = [
     ('accept',   N_('Accept')),
     ('required', N_('Require'))
 ]
-
-WIZARD_TYPES = [
-    'tasks',
-    'cms',
-    'misc'
-]

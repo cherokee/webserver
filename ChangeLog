@@ -1,5 +1,7 @@
 2009-05-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Wizard.py, admin/consts.py: Generalize Wizard categories.
+	
 	* admin/Wizard.py, admin/consts.py, admin/Wizard_Django.py,
 	admin/Wizard_HotLinking.py, admin/Wizard_WordPress.py,
 	admin/Wizard_Redirect.py: Groups wizards in groups.

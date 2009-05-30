@@ -4,10 +4,10 @@ from Page import *
 
 NOTE_DUP_LOGS = "Use the same logging configuration as one of the other virtual servers."
 
-WIZARD_GROUP_MISC     = 'misc'
-WIZARD_GROUP_CMS      = 'cms'
-WIZARD_GROUP_TASKS    = 'tasks'
-WIZARD_GROUP_PLATFORM = 'platform'
+WIZARD_GROUP_MISC     = 'Misc'
+WIZARD_GROUP_CMS      = 'CMS'
+WIZARD_GROUP_TASKS    = 'Tasks'
+WIZARD_GROUP_PLATFORM = 'Platforms'
 
 class Wizard:
     def __init__ (self, cfg, pre=None):
@@ -95,14 +95,15 @@ class WizardManager:
         if not wizards:
             return ''
 
-        t_tasks = ("Tasks",     self._render_group (url_pre, wizards, WIZARD_GROUP_TASKS))
-        t_cms   = ("CMS",       self._render_group (url_pre, wizards, WIZARD_GROUP_CMS))
-        t_platf = ("Platforms", self._render_group (url_pre, wizards, WIZARD_GROUP_PLATFORM))
-        t_misc  = ("Misc",      self._render_group (url_pre, wizards, WIZARD_GROUP_MISC))
-
-        boxes = [t_tasks, t_cms, t_platf, t_misc]
+        # Group names
+        group_names = [(w[1].group, None) for w in wizards]
+        boxes = []
+        for tmp in group_names:
+            group , _ = tmp
+            boxes += [(group, self._render_group (url_pre, wizards, group))]
         boxes.sort (cmp=lambda x,y: len(x[1]) < len(y[1]))
 
+        # Table of wizard groups
         added = 0
         txt   = "<table><tr>"
         for name, t in boxes:
