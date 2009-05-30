@@ -119,7 +119,9 @@ match_and_substitute (cherokee_handler_redir_t *n)
 
 		/* Make a copy of the original request before rewrite it
 		 */
-		cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		if (cherokee_buffer_is_empty (&conn->request_original)) {
+			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
+		}
 		
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_add (tmp, subject, subject_len);

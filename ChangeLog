@@ -1,5 +1,9 @@
 2009-05-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_redir.c (match_and_substitute): Bug Fix: Do not
+	overwrite or modify the original request property if it's already
+	set.
+
 	* cherokee/handler_redir.c (match_and_substitute): Bug Fix: The
 	internal web directory must be cleaned up on internal redirs.
 

@@ -1523,7 +1523,7 @@ cherokee_connection_build_local_directory (cherokee_connection_t     *conn,
 		 * on petition: http://server/thing/cherokee	
 		 * should read: /usr/share/this/rocks/cherokee	
 		 */
-		if (cherokee_buffer_is_empty(&conn->request_original)) {
+		if (cherokee_buffer_is_empty (&conn->request_original)) {
 			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
 		}
 
@@ -1582,7 +1582,7 @@ cherokee_connection_build_local_directory_userdir (cherokee_connection_t *conn, 
 
 		cherokee_buffer_add_buffer (&conn->local_directory, entry->document_root);
 
-		if (cherokee_buffer_is_empty(&conn->request_original)) {
+		if (cherokee_buffer_is_empty (&conn->request_original)) {
 			cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
 		}
 
