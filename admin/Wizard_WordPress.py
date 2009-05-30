@@ -5,10 +5,12 @@ from Wizard import *
 from Wizard_PHP import wizard_php_get_info
 from Wizard_PHP import wizard_php_get_source_info
 
-NOTE_SOURCES = _("Path to the directory where the Wordpress source code is located. (Example: /usr/share/wordpress)")
-NOTE_WEB_DIR = _("Web directory where you want Wordpress to be accessible. (Example: /blog)")
-NOTE_HOST    = _("Host name of the virtual host that is about to be created.")
-ERROR_NO_SRC = _("Does not look like a WordPress source directory.")
+NOTE_SOURCES  = _("Path to the directory where the Wordpress source code is located. (Example: /usr/share/wordpress)")
+NOTE_WEB_DIR  = _("Web directory where you want Wordpress to be accessible. (Example: /blog)")
+NOTE_HOST     = _("Host name of the virtual host that is about to be created.")
+ERROR_NO_SRC  = _("Does not look like a WordPress source directory.")
+ERROR_NO_WEB  = _("A web directory must be provided.")
+ERROR_NO_HOST = _("A host name must be provided.")
 
 CONFIG_DIR = """
 %(pre_rule_0)s!document_root = %(local_src_dir)s
@@ -49,85 +51,106 @@ CONFIG_VSRV = """
 %(pre_vsrv)s!rule!1!handler = common
 """
 
-class Page1 (PageMenu, FormHelper):
-    def __init__ (self, cfg, pre, uri, type):
-        PageMenu.__init__ (self, "WordPress_Page1", cfg, [])
-        FormHelper.__init__ (self, "WordPress_Page1", cfg)
-        self._pre    = pre
-        self.url_pre = uri
-        self.type    = type
-        self.title = _('Wordpress Wizard: Location')
+class Wizard_Rules_WordPress (WizardPage):
+    ICON = "wordpress.jpg"
+    DESC = "Configures Wordpress inside a public web directory."
+    
+    def __init__ (self, cfg, pre):
+        WizardPage.__init__ (self, cfg, pre, 
+                             submit = '/vserver/%s/wizard/WordPress'%(pre.split('!')[1]),
+                             id     = "WordPress_Page1",
+                             title  = _("Wordpress Wizard: Location"),
+                             group  = WIZARD_GROUP_CMS)
 
-    def _op_render (self):
-        content = self._render_content()
-        self.AddMacroContent ('title', _('Worpress Wizard: Page 1'))
-        self.AddMacroContent ('content', content)
-        return Page.Render(self)
+    def show (self):
+        # Check for PHP
+        php_info = wizard_php_get_info (self._cfg, self._pre)
+        if not php_info:
+            self.no_show = "PHP support is required."
+            return False
+        return True
 
-    def _render_content (self):
-        txt = '<h1>%s</h1>' % (self.title)
-        
+    def _render_content (self, url_pre):        
         table = TableProps()
-        self.AddPropEntry (table, _('Source Directory'),  'tmp!wizard_wp!sources', NOTE_SOURCES)
-        if self.type == "dir":
-            self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_wp!web_dir', NOTE_WEB_DIR, value="/blog")
-        else:
-            self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_wp!host', NOTE_HOST, value="blog.example.com")
-        txt += self.Indent(table)
+        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_wp!sources', NOTE_SOURCES)
+        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_wp!web_dir', NOTE_WEB_DIR, value="/blog")
 
-        form = Form (self.url_pre, add_submit=True, auto=False)
+        txt  = '<h1>%s</h1>' % (self.title)
+        txt += self.Indent(table)
+        form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
 
-        return txt
+    def _op_apply (self, post):
+        # Validation
+        self.Validate_NotEmpty (post, 'tmp!wizard_wp!sources', ERROR_NO_SRC)
+        self.Validate_NotEmpty (post, 'tmp!wizard_wp!web_dir', ERROR_NO_WEB)
 
-    def __apply_cfg_chunk (self, config_txt):
-        lines = config_txt.split('\n')
-        lines = filter (lambda x: len(x) and x[0] != '#', lines)
+        local_src_dir = post.get_val('tmp!wizard_wp!sources', '')
+        if not os.path.exists (os.path.join (local_src_dir, "wp-login.php")):
+            self.errors['tmp!wizard_wp!sources'] = (ERROR_NO_SRC, local_src_dir)
 
-        for line in lines:
-            line = line.strip()
-            left, right = line.split (" = ", 2)
-            self._cfg[left] = right
-
-    def _op_apply_dir (self, post):
-        tmp = self.url_pre.split("/")
-        vserver       = tmp[2]
+        if self.has_errors(): return
 
         # Incoming info
         local_src_dir = post.pop('tmp!wizard_wp!sources')
         web_dir       = post.pop('tmp!wizard_wp!web_dir')
 
-        if not local_src_dir or not web_dir:
-            return 
-
-        # Validation
-        if not os.path.exists (os.path.join (local_src_dir, "wp-login.php")):
-            self.errors['tmp!wizard_wp!sources'] = (ERROR_NO_SRC, local_src_dir)
-            return
-
         # Replacement
         php_info = wizard_php_get_info (self._cfg, self._pre)
         php_rule = int (php_info['rule'].split('!')[-1])
 
-        pre_rule_0 = "vserver!%s!rule!%d" % (vserver, php_rule - 1)
-        pre_rule_1 = "vserver!%s!rule!%d" % (vserver, php_rule - 2)
+        pre_rule_0 = "%s!rule!%d" % (self._pre, php_rule - 1)
+        pre_rule_1 = "%s!rule!%d" % (self._pre, php_rule - 2)
 
         # Add the new rules
         config = CONFIG_DIR % (locals())
-        self.__apply_cfg_chunk (config)
+        self._apply_cfg_chunk (config)
 
-    def _op_apply_vserver (self, post):
-        pre_vsrv = cfg_vsrv_get_next (self._cfg)
-        vsrv_id  = pre_vsrv.split('!')[-1]
+
+class Wizard_VServer_WordPress (WizardPage):
+    ICON = "wordpress.jpg"
+    DESC = "Configure a new virtual server using Wordpress."
+
+    def __init__ (self, cfg, pre):
+        WizardPage.__init__ (self, cfg, pre,
+                             submit = '/vserver/wizard/WordPress',
+                             id     = "WordPress_Page1",
+                             title  = _("WordPress Wizard"),
+                             group  = WIZARD_GROUP_CMS)
+
+    def show (self):
+        # Check for a PHP Information Source
+        php_source = wizard_php_get_source_info (self._cfg)
+        if not php_source:
+            self.no_show = "PHP support is required."
+            return False
+        return True
+
+    def _render_content (self, url_pre):        
+        table = TableProps()
+        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_wp!sources', NOTE_SOURCES)
+        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_wp!host', NOTE_HOST, value="blog.example.com")
+
+        txt  = '<h1>%s</h1>' % (self.title)
+        txt += self.Indent(table)
+        form = Form (url_pre, add_submit=True, auto=False)
+        return form.Render(txt, DEFAULT_SUBMIT_VALUE)
+
+    def _op_apply (self, post):
+        # Validation
+        self.Validate_NotEmpty (post, 'tmp!wizard_wp!sources', ERROR_NO_SRC)
+        self.Validate_NotEmpty (post, 'tmp!wizard_wp!host',    ERROR_NO_HOST)
+
+        local_src_dir = post.get_val('tmp!wizard_wp!sources', '')
+        if not os.path.exists (os.path.join (local_src_dir, "wp-login.php")):
+            self.errors['tmp!wizard_wp!sources'] = (ERROR_NO_SRC, local_src_dir)
+
+        if self.has_errors(): return
 
         # Incoming info
         local_src_dir = post.pop('tmp!wizard_wp!sources')
         host          = post.pop('tmp!wizard_wp!host')
-
-        # Validation
-        if not os.path.exists (os.path.join (local_src_dir, "wp-login.php")):
-            self.errors['tmp!wizard_wp!sources'] = (ERROR_NO_SRC, local_src_dir)
-            return
+        pre_vsrv      = cfg_vsrv_get_next (self._cfg)
         
         # Add PHP Rule
         from Wizard_PHP import Wizard_Rules_PHP
@@ -144,60 +167,4 @@ class Page1 (PageMenu, FormHelper):
 
         # Add the new rules    
         config = CONFIG_VSRV % (locals())
-        self.__apply_cfg_chunk (config)
-
-
-
-class Wizard_Rules_WordPress (Wizard):
-    ICON = "wordpress.jpg"
-    DESC = "Configures Wordpress inside a public web directory."
-
-    def __init__ (self, cfg, pre):
-        Wizard.__init__ (self, cfg, pre)
-        self.name  = "Configure Wordpress"
-        self.group = WIZARD_GROUP_CMS
-
-    def show (self):
-        # Check for PHP
-        php_info = wizard_php_get_info (self._cfg, self._pre)
-        if not php_info:
-            self.no_show = "PHP support is required."
-            return False
-
-        return True
-
-    def _run (self, uri, post):
-        page = Page1 (self._cfg, self._pre, uri, "dir")
-        if post.get_val('is_submit'):
-            re = page._op_apply_dir (post)
-            if page.has_errors():
-                return page._op_render()
-        else:
-            return page._op_render()
-
-
-class Wizard_VServer_WordPress (Wizard):
-    ICON = "wordpress.jpg"
-    DESC = "Configure a new virtual server using Wordpress."
-
-    def __init__ (self, cfg, pre):
-        Wizard.__init__ (self, cfg, pre)
-        self.name  = "Add a new Wordpress virtual server"
-        self.group = WIZARD_GROUP_CMS
-
-    def show (self):
-        # Check for a PHP Information Source
-        php_source = wizard_php_get_source_info (self._cfg)
-        if not php_source:
-            self.no_show = "PHP support is required."
-            return False
-        return True
-
-    def _run (self, uri, post):
-        page = Page1 (self._cfg, self._pre, uri, "vserver")
-        if post.get_val('is_submit'):
-            re = page._op_apply_vserver (post)
-            if page.has_errors():
-                return page._op_render()
-        else:
-            return page._op_render()
+        self._apply_cfg_chunk (config)

@@ -1,5 +1,8 @@
 2009-05-30  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Wizard_WordPress.py: Reimplement the wizard using the
+	proper class structure.
+
 	* admin/Wizard.py, admin/consts.py: Generalize Wizard categories.
 	
 	* admin/Wizard.py, admin/consts.py, admin/Wizard_Django.py,
