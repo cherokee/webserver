@@ -110,7 +110,8 @@ Wizard_PHP.py \
 Wizard_WordPress.py \
 Wizard_Django.py \
 Wizard_Redirect.py \
-Wizard_HotLinking.py
+Wizard_HotLinking.py \
+Wizard_Drupal.py
 endif
 
 adminpy_DATA = $(admin_data)
