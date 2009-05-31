@@ -1,5 +1,9 @@
 2009-05-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Wizard_Drupal.py, admin/Wizard_WordPress.py,
+	admin/util.py: Tries to detect where the software is installed so
+	it can use the path as suggestion.
+
 	* admin/Wizard_Drupal.py, admin/static/images/wizards/Makefile.am,
 	admin/static/images/wizards/drupal.png, admin/Makefile.am: Adds a
 	new wizard for Drupal.

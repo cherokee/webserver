@@ -1,5 +1,6 @@
 import os
 import sys
+import glob
 
 #
 # Virtual Server
@@ -90,6 +91,20 @@ def path_find_binary (executable, extra_dirs=[], custom_test=None):
                     if custom_test and custom_test(tmp):
                         return tmp
 
+def path_find_w_default (path_list, default=''):
+    """Find a path.
+    It checks a list of paths (that can contain wildcards),
+    if none exists default is returned.
+    """
+    for path in path_list:
+        if '*' in path or '?' in path:
+            to_check = glob.glob (path)
+        else:
+            to_check = [path]
+        for p in to_check:
+            if os.path.exists (p):
+                return p
+    return default
 
 
 #

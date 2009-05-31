@@ -51,6 +51,12 @@ CONFIG_VSRV = """
 %(pre_vsrv)s!rule!1!handler = common
 """
 
+SRC_PATHS = [
+    "/usr/share/wordpress",        # Debian, Fedora
+    "/var/www/*/htdocs/wordpress", # Gentoo
+    "/srv/www/htdocs/wordpress"    # SuSE
+]
+
 class Wizard_Rules_WordPress (WizardPage):
     ICON = "wordpress.jpg"
     DESC = "Configures Wordpress inside a public web directory."
@@ -71,8 +77,10 @@ class Wizard_Rules_WordPress (WizardPage):
         return True
 
     def _render_content (self, url_pre):        
+        guessed_src = path_find_w_default (SRC_PATHS)
+
         table = TableProps()
-        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_wp!sources', NOTE_SOURCES)
+        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_wp!sources', NOTE_SOURCES, value=guessed_src)
         self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_wp!web_dir', NOTE_WEB_DIR, value="/blog")
 
         txt  = '<h1>%s</h1>' % (self.title)

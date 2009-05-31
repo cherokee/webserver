@@ -45,6 +45,14 @@ CONFIG_DIR = """
 %(pre_rule_minus2)s!match!directory = %(web_dir)s
 """
 
+SRC_PATHS = [
+    "/usr/share/drupal6",       # Debian, Fedora
+    "/usr/share/drupal5",
+    "/usr/share/drupal",
+    "/var/www/*/htdocs/drupal", # Gentoo
+    "/srv/www/htdocs/drupal"    # SuSE
+]
+
 class Wizard_Rules_Drupal (WizardPage):
     ICON = "drupal.png"
     DESC = "Configures Drupal inside a public web directory."
@@ -65,8 +73,10 @@ class Wizard_Rules_Drupal (WizardPage):
         return True
 
     def _render_content (self, url_pre):        
+        guessed_src = path_find_w_default (SRC_PATHS)
+
         table = TableProps()
-        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_drupal!sources', NOTE_SOURCES)
+        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_drupal!sources', NOTE_SOURCES, value=guessed_src)
         self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_drupal!web_dir', NOTE_WEB_DIR, value="/blog")
 
         txt  = '<h1>%s</h1>' % (self.title)
