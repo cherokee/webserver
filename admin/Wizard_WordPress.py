@@ -59,7 +59,7 @@ SRC_PATHS = [
 ]
 
 class Wizard_Rules_WordPress (WizardPage):
-    ICON = "wordpress.jpg"
+    ICON = "wordpress.png"
     DESC = "Configures Wordpress inside a public web directory."
     
     def __init__ (self, cfg, pre):
@@ -117,7 +117,7 @@ class Wizard_Rules_WordPress (WizardPage):
 
 
 class Wizard_VServer_WordPress (WizardPage):
-    ICON = "wordpress.jpg"
+    ICON = "wordpress.png"
     DESC = "Configure a new virtual server using Wordpress."
 
     def __init__ (self, cfg, pre):

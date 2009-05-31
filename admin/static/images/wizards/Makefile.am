@@ -3,7 +3,7 @@
 wizardsdir = "$(datadir)/cherokee/admin/static/images/wizards"
 wizards_DATA = \
 php.jpg \
-wordpress.jpg \
+wordpress.png \
 redirect.jpg \
 django.png \
 hotlinking.png \
