@@ -1,5 +1,8 @@
 2009-05-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_scgi.c (add_env_pair): Adds a new tracing
+	entry.
+
 	* admin/Wizard_Drupal.py: Adds the Virtual Server version of the
 	Wizard.
 	
