@@ -34,10 +34,13 @@
 PLUGIN_INFO_RULE_EASIEST_INIT(bind);
 
 static ret_t 
-match (cherokee_rule_bind_t  *rule, 
-       cherokee_connection_t *conn)
+match (cherokee_rule_bind_t    *rule, 
+       cherokee_connection_t   *conn,
+       cherokee_config_entry_t *ret_conf)
 {
 	cherokee_list_t *i;
+
+	UNUSED(ret_conf);
 
 	list_for_each (i, &rule->binds) {
 		if (LIST_ITEM_INFO(i) == conn->bind) {

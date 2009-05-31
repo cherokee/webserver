@@ -68,9 +68,12 @@ _free (void *p)
 }
 
 static ret_t 
-match (cherokee_rule_method_t *rule,
-       cherokee_connection_t  *conn)
+match (cherokee_rule_method_t  *rule,
+       cherokee_connection_t   *conn,
+       cherokee_config_entry_t *ret_conf)
 {
+	UNUSED(ret_conf);
+
 	if (conn->header.method == rule->method) {
 		TRACE(ENTRIES, "Match method: %d\n", rule->method);
 		return ret_ok;

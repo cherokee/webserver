@@ -160,8 +160,9 @@ match_file (cherokee_rule_exists_t *rule,
 }
 
 static ret_t 
-match (cherokee_rule_exists_t *rule,
-       cherokee_connection_t  *conn)
+match (cherokee_rule_exists_t  *rule,
+       cherokee_connection_t   *conn,
+       cherokee_config_entry_t *ret_conf)
 {
 	int                re;
 	ret_t              ret;
@@ -169,13 +170,26 @@ match (cherokee_rule_exists_t *rule,
 	cherokee_buffer_t *tmp  = THREAD_TMP_BUF1(CONN_THREAD(conn));
 	
 	/* Path base */
-	cherokee_buffer_clean      (tmp);
-	cherokee_buffer_add_buffer (tmp, &CONN_VSRV(conn)->root);
-	cherokee_buffer_add_str    (tmp, "/");
+	cherokee_buffer_clean (tmp);
+
+	if (ret_conf->document_root != NULL) {
+		/* A previous non-final rule set a custom document root */
+		cherokee_buffer_add_buffer (tmp, ret_conf->document_root);
+	} else {
+		cherokee_buffer_add_buffer (tmp, &CONN_VSRV(conn)->root);
+	}
+
+	cherokee_buffer_add_str (tmp, "/");
 
 	/* Always match */
 	if (rule->match_any) {
-		cherokee_buffer_add_buffer (tmp, &conn->request);
+		if (! cherokee_buffer_is_empty (&conn->web_directory)) {
+			cherokee_buffer_add (tmp, 
+					     conn->request.buf + conn->web_directory.len,
+					     conn->request.len - conn->web_directory.len);
+		} else {
+			cherokee_buffer_add_buffer (tmp, &conn->request);
+		}
 		TRACE(ENTRIES, "Gonna match any file: '%s'\n", tmp->buf);
 
 		return match_file (rule, conn, tmp);

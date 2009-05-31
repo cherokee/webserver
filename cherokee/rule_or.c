@@ -32,19 +32,21 @@
 PLUGIN_INFO_RULE_EASIEST_INIT(or);
 
 static ret_t 
-match (cherokee_rule_t *rule, cherokee_connection_t *conn)
+match (cherokee_rule_t         *rule,
+       cherokee_connection_t   *conn,
+       cherokee_config_entry_t *ret_conf)
 {
 	ret_t ret;
 
 	/* It only needs one of the sides to match.
 	 */
-	ret = cherokee_rule_match (RULE_OR(rule)->left, conn);
+	ret = cherokee_rule_match (RULE_OR(rule)->left, conn, ret_conf);
 	if (ret == ret_ok) 
 		return ret;
 
 	/* It didn't match, it is time for the right side
 	 */
-	return cherokee_rule_match (RULE_OR(rule)->right, conn);
+	return cherokee_rule_match (RULE_OR(rule)->right, conn, ret_conf);
 }
 
 static ret_t 

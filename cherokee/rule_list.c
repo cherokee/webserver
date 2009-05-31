@@ -93,7 +93,7 @@ cherokee_rule_list_match (cherokee_rule_list_t    *list,
 
 		/* Does this rule apply
 		 */
-		ret = cherokee_rule_match (rule, conn);
+		ret = cherokee_rule_match (rule, conn, ret_config);
 		switch (ret) {
 		case ret_not_found:
 			continue;
@@ -124,7 +124,7 @@ cherokee_rule_list_match (cherokee_rule_list_t    *list,
 	
 	TRACE(ENTRIES, "Did not match any. Using %s\n", "default");
 
-	list->def_rule->match(list->def_rule, conn);
+	list->def_rule->match(list->def_rule, conn, ret_config);
 	cherokee_config_entry_complete (ret_config, &list->def_rule->config);
 	
 	/* Update the connection

@@ -103,13 +103,13 @@ cherokee_rule_configure (cherokee_rule_t *rule, cherokee_config_node_t *conf, vo
 
 
 ret_t 
-cherokee_rule_match (cherokee_rule_t *rule, void *cnt)
+cherokee_rule_match (cherokee_rule_t *rule, void *cnt, void *ret_conf)
 {
 	return_if_fail (rule, ret_error);
 	return_if_fail (rule->match, ret_error);
 
 	/* Call the real method
 	 */
-	return rule->match (rule, CONN(cnt));
+	return rule->match (rule, CONN(cnt), CONF_ENTRY(ret_conf));
 }
 

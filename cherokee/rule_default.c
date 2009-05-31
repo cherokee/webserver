@@ -35,9 +35,12 @@ PLUGIN_INFO_RULE_EASIEST_INIT(default);
 
 
 static ret_t 
-match (cherokee_rule_t *rule, cherokee_connection_t *conn)
+match (cherokee_rule_t         *rule,
+       cherokee_connection_t   *conn,
+       cherokee_config_entry_t *ret_conf)
 {
 	UNUSED(rule);
+	UNUSED(ret_conf);
 
 	if (cherokee_buffer_is_empty (&conn->web_directory)) { 
 		cherokee_buffer_add_str (&conn->web_directory, "/"); 

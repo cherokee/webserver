@@ -89,12 +89,16 @@ geoip_release (void)
  */
 
 static ret_t 
-match (cherokee_rule_t *rule_, cherokee_connection_t *conn)
+match (cherokee_rule_t         *rule_,
+       cherokee_connection_t   *conn,
+       cherokee_config_entry_t *ret_conf)
 {
 	ret_t                  ret;
 	void                  *foo;
 	const char            *country;
 	cherokee_rule_geoip_t *rule = RULE_GEOIP(rule_);
+
+	UNUSED(ret_conf);
 
 	country = GeoIP_country_code_by_ipnum (rule->geoip, SOCKET_ADDRESS_IPv4(&conn->socket));
 	if (country == NULL) {

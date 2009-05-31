@@ -84,7 +84,9 @@ _free (void *p)
 }
 
 static ret_t
-match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
+match (cherokee_rule_extensions_t *rule,
+       cherokee_connection_t      *conn,
+       cherokee_config_entry_t    *ret_conf)
 {
 	ret_t  ret;
 	char  *dot;
@@ -93,6 +95,8 @@ match (cherokee_rule_extensions_t *rule, cherokee_connection_t *conn)
 	char  *p;
 	void  *foo;
 	char  *dot_prev = NULL;
+
+	UNUSED(ret_conf);
 
 	end = conn->request.buf + conn->request.len;
 	p   = end - 1;

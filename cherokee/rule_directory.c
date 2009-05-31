@@ -34,8 +34,12 @@ PLUGIN_INFO_RULE_EASIEST_INIT(directory);
 
 
 static ret_t
-match (cherokee_rule_directory_t *rule, cherokee_connection_t *conn)
+match (cherokee_rule_directory_t *rule,
+       cherokee_connection_t     *conn,
+       cherokee_config_entry_t   *ret_conf)
 {
+	UNUSED(ret_conf);
+
 	/* Not the same lenght
 	 */
 	if (conn->request.len < rule->directory.len) {

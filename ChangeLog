@@ -1,3 +1,15 @@
+2009-05-31  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/rule_list.c, cherokee/rule_header.c, cherokee/rule.c,
+	cherokee/rule_default.c, cherokee/rule_and.c, cherokee/rule_or.c,
+	cherokee/rule.h, cherokee/rule_extensions.c, cherokee/rule_bind.c,
+	cherokee/rule_directory.c, cherokee/rule_request.c,
+	cherokee/rule_exists.c, cherokee/rule_geoip.c,
+	cherokee/rule_not.c, cherokee/rule_method.c: The "file exists"
+	rule did not check whether a previous non-final rules set a custom
+	document root. Now, it takes it into account and uses the right
+	document root directory for the checking.
+
 2009-05-31  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/ModuleFcgi.py: We decided to make Script Alias available

@@ -32,13 +32,15 @@
 PLUGIN_INFO_RULE_EASIEST_INIT(not);
 
 static ret_t 
-match (cherokee_rule_t *rule, cherokee_connection_t *conn)
+match (cherokee_rule_t         *rule,
+       cherokee_connection_t   *conn,
+       cherokee_config_entry_t *ret_conf)
 {
 	ret_t ret;
 
 	/* Call match() in the subrule and invert the result
 	 */
-	ret = cherokee_rule_match (RULE_NOT(rule)->right, conn);
+	ret = cherokee_rule_match (RULE_NOT(rule)->right, conn, ret_conf);
 	switch (ret) {
 	case ret_ok:
 		return ret_not_found;

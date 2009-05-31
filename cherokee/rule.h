@@ -45,7 +45,7 @@ CHEROKEE_BEGIN_DECLS
  */
 typedef ret_t (* rule_func_new_t)       (void **rule);
 typedef ret_t (* rule_func_configure_t) (void  *rule, cherokee_config_node_t *conf, void *vsrv);
-typedef ret_t (* rule_func_match_t)     (void  *rule, void *cnt);
+typedef ret_t (* rule_func_match_t)     (void  *rule, void *cnt, void *ret_conf);
 
 /* Data types
  */
@@ -87,7 +87,7 @@ ret_t cherokee_rule_init_base   (cherokee_rule_t *rule, cherokee_plugin_info_t *
 
 /* Rule virtual methods
  */
-ret_t cherokee_rule_match       (cherokee_rule_t *rule, void *cnt);
+ret_t cherokee_rule_match       (cherokee_rule_t *rule, void *cnt, void *ret_conf);
 ret_t cherokee_rule_configure   (cherokee_rule_t *rule, cherokee_config_node_t *conf, void *vsrv);
 
 CHEROKEE_END_DECLS
