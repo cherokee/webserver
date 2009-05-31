@@ -153,11 +153,6 @@ class Wizard_VServer_Drupal (WizardPage):
                              group  = WIZARD_GROUP_CMS)
 
     def show (self):
-        # Check for a PHP Information Source
-        php_source = wizard_php_get_source_info (self._cfg)
-        if not php_source:
-            self.no_show = "PHP support is required."
-            return False
         return True
 
     def _render_content (self, url_pre):        

@@ -127,20 +127,20 @@ class Wizard_VServer_WordPress (WizardPage):
                              group  = WIZARD_GROUP_CMS)
 
     def show (self):
-        # Check for a PHP Information Source
-        php_source = wizard_php_get_source_info (self._cfg)
-        if not php_source:
-            self.no_show = "PHP support is required."
-            return False
         return True
-
+        
     def _render_content (self, url_pre):        
-        table = TableProps()
-        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_wp!sources', NOTE_SOURCES)
-        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_wp!host', NOTE_HOST, value="blog.example.com")
+        txt = '<h1>%s</h1>' % (self.title)
+        guessed_src = path_find_w_default (SRC_PATHS)
 
-        txt  = '<h1>%s</h1>' % (self.title)
+        table = TableProps()
+        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_wp!sources', NOTE_SOURCES, value=guessed_src)
+        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_wp!host',    NOTE_HOST,    value="blog.example.com")
         txt += self.Indent(table)
+
+        txt += '<h2>Logging</h2>'
+        txt += self._common_add_logging()
+
         form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
 
@@ -176,3 +176,4 @@ class Wizard_VServer_WordPress (WizardPage):
         # Add the new rules    
         config = CONFIG_VSRV % (locals())
         self._apply_cfg_chunk (config)
+        self._common_apply_logging (post, pre_vsrv)
