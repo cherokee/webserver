@@ -98,10 +98,9 @@ class WizardManager:
         # Group names
         group_names = [(w[1].group, None) for w in wizards]
         boxes = []
-        for tmp in group_names:
-            group , _ = tmp
+        for group in dict(group_names).keys():
             boxes += [(group, self._render_group (url_pre, wizards, group))]
-        boxes.sort (cmp=lambda x,y: len(x[1]) < len(y[1]))
+        boxes.sort (lambda x,y: len(y[1]) - len(x[1]))
 
         # Table of wizard groups
         added = 0
