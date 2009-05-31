@@ -78,7 +78,7 @@ class Wizard_Rules_PHP (Wizard):
             self._cfg['%s!encoder!gzip' % (self.rule)]              = '1'
 
         # Check the Directory Index
-        indexes = self._cfg.get_val ("%s!directory_index" % (self._pre))
+        indexes = self._cfg.get_val ("%s!directory_index" % (self._pre), '')
         if indexes.find("index.php") == -1:
             self._cfg["%s!directory_index" % (self._pre)] = 'index.php,%s' % (indexes)
 
