@@ -74,11 +74,12 @@ CONFIG_VSERVER = """
 """
 
 SRC_PATHS = [
-    "/usr/share/drupal6",       # Debian, Fedora
+    "/usr/share/drupal6",         # Debian, Fedora
     "/usr/share/drupal5",
     "/usr/share/drupal",
-    "/var/www/*/htdocs/drupal", # Gentoo
-    "/srv/www/htdocs/drupal"    # SuSE
+    "/var/www/*/htdocs/drupal",   # Gentoo
+    "/srv/www/htdocs/drupal",     # SuSE
+    "/usr/local/www/data/drupal*" # BSD
 ]
 
 class Wizard_Rules_Drupal (WizardPage):

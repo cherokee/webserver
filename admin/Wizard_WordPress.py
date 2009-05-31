@@ -52,9 +52,10 @@ CONFIG_VSRV = """
 """
 
 SRC_PATHS = [
-    "/usr/share/wordpress",        # Debian, Fedora
-    "/var/www/*/htdocs/wordpress", # Gentoo
-    "/srv/www/htdocs/wordpress"    # SuSE
+    "/usr/share/wordpress",         # Debian, Fedora
+    "/var/www/*/htdocs/wordpress",  # Gentoo
+    "/srv/www/htdocs/wordpress",    # SuSE
+    "/usr/local/www/data/wordpress" # BSD
 ]
 
 class Wizard_Rules_WordPress (WizardPage):
