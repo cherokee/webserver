@@ -50,8 +50,8 @@ CONFIG_VSERVER = """
 %(pre_vsrv)s!document_root = %(local_src_dir)s
 %(pre_vsrv)s!directory_index = index.php,index.html
 
-%(pre_rule_plus1)s!match = request
-%(pre_rule_plus1)s!match!request = ^/$
+%(pre_rule_plus1)s!match = fullpath
+%(pre_rule_plus1)s!match!fullpath!1 = /
 %(pre_rule_plus1)s!handler = redir
 %(pre_rule_plus1)s!handler!rewrite!1!show = 0
 %(pre_rule_plus1)s!handler!rewrite!1!substring = /index.php
@@ -132,8 +132,8 @@ class Wizard_Rules_Drupal (WizardPage):
         php_info = wizard_php_get_info (self._cfg, self._pre)
         php_rule = int (php_info['rule'].split('!')[-1])
 
-        pre_rule_plus2  = "%s!rule!%d" % (self._pre, php_rule + 1)
-        pre_rule_plus1  = "%s!rule!%d" % (self._pre, php_rule + 2)
+        pre_rule_plus2  = "%s!rule!%d" % (self._pre, php_rule + 2)
+        pre_rule_plus1  = "%s!rule!%d" % (self._pre, php_rule + 1)
         pre_rule_minus1 = "%s!rule!%d" % (self._pre, php_rule - 1)
         pre_rule_minus2 = "%s!rule!%d" % (self._pre, php_rule - 2)
 
@@ -201,6 +201,10 @@ class Wizard_VServer_Drupal (WizardPage):
         pre_rule_plus1  = "%s!rule!%d" % (pre_vsrv, php_rule + 1)
         pre_rule_minus1 = "%s!rule!%d" % (pre_vsrv, php_rule - 1)
         pre_rule_minus2 = "%s!rule!%d" % (pre_vsrv, php_rule - 2)
+
+        # Common static
+        pre_rule_plus3  = "%s!rule!%d" % (pre_vsrv, php_rule + 3)
+        self._common_add_usual_static_files (pre_rule_plus3)
 
         # Add the new rules
         config = CONFIG_VSERVER % (locals())

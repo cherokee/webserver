@@ -13,20 +13,20 @@ ERROR_NO_WEB  = _("A web directory must be provided.")
 ERROR_NO_HOST = _("A host name must be provided.")
 
 CONFIG_DIR = """
-%(pre_rule_0)s!document_root = %(local_src_dir)s
-%(pre_rule_0)s!match = directory
-%(pre_rule_0)s!match!directory = %(web_dir)s
-%(pre_rule_0)s!match!final = 0
+%(pre_rule_minus1)s!document_root = %(local_src_dir)s
+%(pre_rule_minus1)s!match = directory
+%(pre_rule_minus1)s!match!directory = %(web_dir)s
+%(pre_rule_minus1)s!match!final = 0
 
-%(pre_rule_1)s!match = and
-%(pre_rule_1)s!match!final = 1
-%(pre_rule_1)s!match!left = directory
-%(pre_rule_1)s!match!left!directory = %(web_dir)s
-%(pre_rule_1)s!match!right = exists
-%(pre_rule_1)s!match!right!iocache = 1
-%(pre_rule_1)s!match!right!match_any = 1
-%(pre_rule_1)s!handler = file
-%(pre_rule_1)s!handler!iocache = 1
+%(pre_rule_minus2)s!match = and
+%(pre_rule_minus2)s!match!final = 1
+%(pre_rule_minus2)s!match!left = directory
+%(pre_rule_minus2)s!match!left!directory = %(web_dir)s
+%(pre_rule_minus2)s!match!right = exists
+%(pre_rule_minus2)s!match!right!iocache = 1
+%(pre_rule_minus2)s!match!right!match_any = 1
+%(pre_rule_minus2)s!handler = file
+%(pre_rule_minus2)s!handler!iocache = 1
 """
 
 CONFIG_VSRV = """
@@ -34,18 +34,20 @@ CONFIG_VSRV = """
 %(pre_vsrv)s!nick = %(host)s
 %(pre_vsrv)s!directory_index = index.php,index.html
 
-%(pre_rule_0)s!match = request
-%(pre_rule_0)s!match!request = ^/$
-%(pre_rule_0)s!handler = redir
-%(pre_rule_0)s!handler!rewrite!1!substring = /index.php
-%(pre_rule_0)s!handler!rewrite!1!show = 0
+# The PHP rule comes here
 
-%(pre_rule_1)s!match = exists
-%(pre_rule_1)s!match!iocache = 1
-%(pre_rule_1)s!match!match_any = 1
-%(pre_rule_1)s!match!match_only_files = 1
-%(pre_rule_1)s!handler = file
-%(pre_rule_1)s!handler!iocache = 1
+%(pre_rule_minus2)s!match = fullpath
+%(pre_rule_minus2)s!match!fullpath!1 = /
+%(pre_rule_minus2)s!handler = redir
+%(pre_rule_minus2)s!handler!rewrite!1!substring = /index.php
+%(pre_rule_minus2)s!handler!rewrite!1!show = 0
+
+%(pre_rule_minus3)s!match = exists
+%(pre_rule_minus3)s!match!iocache = 1
+%(pre_rule_minus3)s!match!match_any = 1
+%(pre_rule_minus3)s!match!match_only_files = 1
+%(pre_rule_minus3)s!handler = file
+%(pre_rule_minus3)s!handler!iocache = 1
 
 %(pre_vsrv)s!rule!1!match = default
 %(pre_vsrv)s!rule!1!handler = common
@@ -108,8 +110,8 @@ class Wizard_Rules_WordPress (WizardPage):
         php_info = wizard_php_get_info (self._cfg, self._pre)
         php_rule = int (php_info['rule'].split('!')[-1])
 
-        pre_rule_0 = "%s!rule!%d" % (self._pre, php_rule - 1)
-        pre_rule_1 = "%s!rule!%d" % (self._pre, php_rule - 2)
+        pre_rule_minus1 = "%s!rule!%d" % (self._pre, php_rule - 1)
+        pre_rule_minus2 = "%s!rule!%d" % (self._pre, php_rule - 2)
 
         # Add the new rules
         config = CONFIG_DIR % (locals())
@@ -171,8 +173,12 @@ class Wizard_VServer_WordPress (WizardPage):
         php_info = wizard_php_get_info (self._cfg, pre_vsrv)
         php_rule = int (php_info['rule'].split('!')[-1])
 
-        pre_rule_0 = "%s!rule!%d" % (pre_vsrv, php_rule - 1)
-        pre_rule_1 = "%s!rule!%d" % (pre_vsrv, php_rule - 2)
+        pre_rule_minus2 = "%s!rule!%d" % (pre_vsrv, php_rule - 2)
+        pre_rule_minus3 = "%s!rule!%d" % (pre_vsrv, php_rule - 3)
+
+        # Usual static files
+        pre_rule_minus1 = "%s!rule!%d" % (pre_vsrv, php_rule - 1)
+        self._common_add_usual_static_files (pre_rule_minus1)
 
         # Add the new rules    
         config = CONFIG_VSRV % (locals())

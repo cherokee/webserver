@@ -9,6 +9,8 @@ WIZARD_GROUP_CMS      = 'CMS'
 WIZARD_GROUP_TASKS    = 'Tasks'
 WIZARD_GROUP_PLATFORM = 'Platforms'
 
+USUAL_STATIC_FILES = ['/favicon.ico', '/robots.txt']
+
 class Wizard:
     def __init__ (self, cfg, pre=None):
         self.name    = "Unknown wizard"
@@ -196,3 +198,13 @@ class WizardPage (PageMenu, FormHelper, Wizard):
             return
         
         self._cfg.clone (logging_as, '%s!logger'%(vsrv_pre))
+
+    def _common_add_usual_static_files (self, rule_pre):
+        self._cfg['%s!match'%(rule_pre)]   = 'fullpath'
+        self._cfg['%s!handler'%(rule_pre)] = 'file'
+
+        n = 1
+        for file in USUAL_STATIC_FILES:
+            self._cfg['%s!match!fullpath!%d'%(rule_pre,n)] = file
+            n += 1
+

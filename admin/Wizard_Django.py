@@ -111,6 +111,9 @@ class Wizard_VServer_Django (WizardPage):
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
         src_num, src_pre = cfg_source_get_next (self._cfg)
 
+        # Usual Static files
+        self._common_add_usual_static_files ("%s!rule!500" % (vsrv_pre))
+
         # Add the new rules
         config = CONFIG_VSRV % (locals())
         self._apply_cfg_chunk (config)

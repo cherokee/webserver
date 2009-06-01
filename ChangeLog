@@ -1,5 +1,10 @@
 2009-06-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Wizard_Drupal.py, admin/Wizard_WordPress.py,
+	admin/Wizard_Django.py, admin/Wizard.py: Adds support for the
+	usual static files (favicon.ico and robots.txt) to the "Virtual
+	Server" wizards.
+
 	* cherokee/rule_fullpath.c, cherokee/rule_fullpath.h,
 	cherokee/Makefile.am, configure.in, qa/229-Fullpath.py,
 	qa/230-Fullpath2.py, qa/Makefile.am, admin/ModuleFullpath.py,
