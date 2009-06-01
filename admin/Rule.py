@@ -13,19 +13,22 @@ N_ = lambda x: x
 DEFAULT_RULE_WARNING = N_('The default match ought not to be changed.')
 
 class Rule (Module, FormHelper):
-    def __init__ (self, cfg, prefix, submit_url, depth=0):
+    def __init__ (self, cfg, prefix, submit_url, in_errors, depth=0):
         FormHelper.__init__ (self, 'rule', cfg)
         Module.__init__ (self, 'rule', cfg, prefix, submit_url)
         self.depth = depth
 
+        for e in in_errors:
+            self.errors[e] = in_errors[e]
+
     def get_checks (self):
         matcher = self._cfg.get_val(self._prefix)
         if matcher == 'not':
-            r = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.depth+1)
+            r = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.errors, self.depth+1)
             return r.get_checks()
         elif matcher in ['or', 'and']:
-            r1 = Rule(self._cfg, '%s!left'%(self._prefix), self.submit_url, self.depth+1)
-            r2 = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.depth+1)
+            r1 = Rule(self._cfg, '%s!left'%(self._prefix), self.submit_url, self.errors, self.depth+1)
+            r2 = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.errors, self.depth+1)
             return r1.get_checks() + r2.get_checks()
         else:
             rule_module = module_obj_factory (matcher, self._cfg, self._prefix, self.submit_url)
@@ -41,12 +44,12 @@ class Rule (Module, FormHelper):
             return _("Unknown")
 
         if matcher == 'not':
-            r = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.depth+1)
+            r = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.errors, self.depth+1)
             return "%s (%s)" % (_('Not'), r.get_title())
         elif matcher in ['or', 'and']:
             op = [_('AND'), _('OR')][matcher == 'or']
-            r1 = Rule(self._cfg, '%s!left'%(self._prefix), self.submit_url, self.depth+1)
-            r2 = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.depth+1)
+            r1 = Rule(self._cfg, '%s!left'%(self._prefix), self.submit_url, self.errors, self.depth+1)
+            r2 = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.errors, self.depth+1)
             return "(%s) %s (%s)"%(r1.get_title(), op, r2.get_title())
 
         rule_module = module_obj_factory (matcher, self._cfg, self._prefix, self.submit_url)
@@ -85,7 +88,7 @@ class Rule (Module, FormHelper):
 
         matcher = self._cfg.get_val(pre)
         if matcher == "not":
-            rule = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url, self.depth+1)
+            rule = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url, self.errors, self.depth+1)
             rule_txt = rule._op_render()
 
             _not, _and, _or, _del = self._get_ops(pre)
@@ -104,9 +107,9 @@ class Rule (Module, FormHelper):
             op = [_("AND"), _("OR")][matcher == "or"]
 
             depth = self.depth + 1
-            rule1 = Rule (self._cfg, "%s!left"%(self._prefix), self.submit_url, depth)
+            rule1 = Rule (self._cfg, "%s!left"%(self._prefix), self.submit_url, self.errors, depth)
             rule1_txt = rule1._op_render()
-            rule2 = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url, depth)
+            rule2 = Rule (self._cfg, "%s!right"%(self._prefix), self.submit_url, self.errors, depth)
             rule2_txt = rule2._op_render()
 
             _not, _and, _or, _del = self._get_ops(pre)

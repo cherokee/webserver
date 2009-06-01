@@ -25,10 +25,10 @@ The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for minutes, 
 """)
 
 DATA_VALIDATION = [
-    ("vserver!.*?!rule!(\d+)!document_root",  (validations.is_dev_null_or_local_dir_exists, 'cfg')),
-    ("vserver!.*?!rule!(\d+)!allow_from",      validations.is_ip_or_netmask_list),
-    ("vserver!.*?!rule!(\d+)!rate",            validations.is_number_gt_0),
-    ("vserver!.*?!rule!(\d+)!expiration!time", validations.is_time) 
+    ("vserver!(\d+)!rule!(\d+)!document_root",  (validations.is_dev_null_or_local_dir_exists, 'cfg')),
+    ("vserver!(\d+)!rule!(\d+)!allow_from",      validations.is_ip_or_netmask_list),
+    ("vserver!(\d+)!rule!(\d+)!rate",            validations.is_number_gt_0),
+    ("vserver!(\d+)!rule!(\d+)!expiration!time", validations.is_time) 
 ]
 
 HELPS = [
@@ -85,10 +85,19 @@ class PageEntry (PageMenu, FormHelper):
         # Check what to do..
         if post.get_val('is_submit'):
             self._op_apply_changes (uri, post)
+            if self.has_errors():
+                return self._op_default (uri)
 
         return self._op_default (uri)
 
     def _op_apply_changes (self, uri, post):
+        name = self._cfg.get_val("%s!match"%(self._conf_prefix))
+        rule_module = module_obj_factory (name, self._cfg, "%s!match"%(self._conf_prefix), self.submit_url)
+
+        # Validate
+        validation = DATA_VALIDATION[:]
+        validation += rule_module.validation
+
         # Handler properties
         pre = "%s!handler" % (self._conf_prefix)
         self.ApplyChanges_OptionModule (pre, uri, post)
@@ -104,11 +113,11 @@ class PageEntry (PageMenu, FormHelper):
             checks.append ('%s!encoder!%s' % (self._conf_prefix, e))
 
         pre = '%s!match'%(self._conf_prefix)
-        rule = Rule (self._cfg, pre, self.submit_url, 0)
+        rule = Rule (self._cfg, pre, self.submit_url, self.errors, 0)
         checks += rule.get_checks()
 
         # Apply changes
-        self.ApplyChanges (checks, post, DATA_VALIDATION)
+        self.ApplyChanges (checks, post, validation)
 
     def _op_default (self, uri):
         # Render page
@@ -129,7 +138,7 @@ class PageEntry (PageMenu, FormHelper):
 
         # Load the rule plugin
         pre = "%s!match"%(self._conf_prefix)
-        rule = Rule (self._cfg, pre, self.submit_url, 0)
+        rule = Rule (self._cfg, pre, self.submit_url, self.errors, 0)
 
         txt += rule.get_title()
         return txt
@@ -189,7 +198,7 @@ class PageEntry (PageMenu, FormHelper):
     def _render_rule (self):
         txt  = "<h2>%s</h2>" % (_('Matching Rule'))
         pre  = "%s!match"%(self._conf_prefix)
-        rule = Rule (self._cfg, pre, self.submit_url, 0)
+        rule = Rule (self._cfg, pre, self.submit_url, self.errors, 0)
         txt += rule._op_render()
 
         return txt

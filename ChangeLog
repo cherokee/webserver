@@ -1,3 +1,9 @@
+2009-06-01  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/PageEntry.py, admin/Rule.py, admin/PageVServer.py,
+	admin/PageInfoSource.py: Allows matching rules to validate its
+	content and show error messages.
+
 2009-05-31  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/static/images/wizards/wordpress.jpg,

@@ -291,7 +291,7 @@ class PageInfoSource (PageMenu, FormHelper):
                 serv = self._cfg.get_val('vserver!%s!nick'%(serv_id))
 
                 # Try to get the rule name
-                rule = Rule(self._cfg, '%s!match'%(rule), self.submit_url, 0)
+                rule = Rule(self._cfg, '%s!match'%(rule), self.submit_url, self.errors, 0)
                 rule_name = rule.get_name()
 
                 if len(rule_name) > RULE_NAME_LEN_LIMIT:
