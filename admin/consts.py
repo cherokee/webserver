@@ -130,6 +130,7 @@ RULES = [
     ('exists',     N_('File Exists')),
     ('method',     N_('HTTP Method')),
     ('bind',       N_('Incoming Port')),
+    ('fullpath',   N_('Full Path')),
     ('geoip',      N_('GeoIP'))
 ]
 

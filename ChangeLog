@@ -1,5 +1,14 @@
 2009-06-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/rule_fullpath.c, cherokee/rule_fullpath.h,
+	cherokee/Makefile.am, configure.in, qa/229-Fullpath.py,
+	qa/230-Fullpath2.py, qa/Makefile.am, admin/ModuleFullpath.py,
+	admin/consts.py, admin/Makefile.am: Adds a new rule type: Full
+	Path. It's a very simplistic rule for match full paths. It is
+	going to be useful for matching request like '/favicon.ico' or
+	'/robots.txt' without using a regular expression. This commit also
+	adds a couple for QA tests on the new rule type.
+
 	* admin/PageEntry.py, admin/Rule.py, admin/PageVServer.py,
 	admin/PageInfoSource.py: Allows matching rules to validate its
 	content and show error messages.

@@ -90,6 +90,7 @@ ModuleDefault.py \
 ModuleRequest.py \
 ModuleDirectory.py \
 ModuleExtensions.py \
+ModuleFullpath.py \
 ModuleGeoip.py \
 ModuleHeader.py \
 ModuleExists.py \

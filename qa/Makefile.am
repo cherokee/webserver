@@ -233,8 +233,9 @@ run-tests.py \
 225-PathTranslated.py \
 226-PathInfo-Default.py \
 227-Redir-Paths.py \
-228-Redir-Paths2.py
-
+228-Redir-Paths2.py \
+229-Fullpath.py \
+230-Fullpath2.py
 
 test:
 	./run-tests.py
