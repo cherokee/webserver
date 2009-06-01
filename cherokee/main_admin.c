@@ -154,8 +154,10 @@ config_server (cherokee_server_t *srv)
 				 "source!1!type = interpreter\n"
 				 "source!1!timeout = 25\n"
 				 "source!1!host = localhost:%d\n"
-				 "source!1!interpreter = %s/server.py %d %s\n",
-				 scgi_port, document_root, scgi_port, config_file);
+				 "source!1!interpreter = %s/server.py %d %s\n"
+				 "source!1!env!PATH = %s\n",
+				 scgi_port, document_root, scgi_port, 
+				 config_file, getenv("PATH"));
 
 	if (debug) {
 		cherokee_buffer_add_str  (&buf, "source!1!debug = 1\n");

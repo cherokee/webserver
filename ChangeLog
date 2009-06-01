@@ -1,5 +1,9 @@
 2009-06-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/main_admin.c: Configure cherokee-admin to pass the PATH
+	environment variable to the python SCGI back-end. It fixes an
+	issue on FreeBSD.
+
 	* admin/Wizard_Drupal.py, admin/Wizard_WordPress.py,
 	admin/Wizard_Django.py, admin/Wizard.py: Adds support for the
 	usual static files (favicon.ico and robots.txt) to the "Virtual
