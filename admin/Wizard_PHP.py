@@ -2,10 +2,17 @@ from config import *
 from util import *
 from Wizard import *
 
+DEFAULT_BINS  = ['php-cgi', 'php']
+
+DEFAULT_PATHS = ['/usr/bin', 
+                 '/opt/php', 
+                 '/usr/php/bin', 
+                 '/usr/sfw/bin',
+                 '/usr/gnu/bin',
+                 '/opt/local/bin']
+
 class Wizard_Rules_PHP (Wizard):
     UNIX_SOCK     = "/tmp/cherokee-php.socket"
-    DEFAULT_PATHS = ['/usr/bin', '/opt/php', '/usr/sfw/bin', '/usr/gnu/bin', '/opt/local/bin']
-    DEFAULT_BINS  = ['php-cgi', 'php']
     ICON          = "php.jpg"
     DESC          = "Configures PHP in the current Virtual Server. It will add a new .php extension is not present."
     
@@ -44,11 +51,11 @@ class Wizard_Rules_PHP (Wizard):
 
         # Add a new Source, if needed
         if not self.source:
-            php_path = path_find_binary (self.DEFAULT_BINS,
-                                         extra_dirs  = self.DEFAULT_PATHS,
+            php_path = path_find_binary (DEFAULT_BINS,
+                                         extra_dirs  = DEFAULT_PATHS,
                                          custom_test = test_php_fcgi)
             if not php_path:
-                desc = "<p>Looked for the binaries: %s.</p>" % (", ".join(self.DEFAULT_BINS))
+                desc = "<p>Looked for the binaries: %s.</p>" % (", ".join(DEFAULT_BINS))
                 return self.report_error ("Couldn't find a suitable PHP interpreter.", desc)
 
             _, self.source = cfg_source_get_next (self._cfg)

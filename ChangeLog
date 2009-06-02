@@ -1,5 +1,8 @@
 2009-06-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Wizard_PHP.py: Adds a new default path /usr/php/bin. For
+	some reason OpenSolaris 2009.06 install PHP in there.
+
 	* contrib/Makefile.am (cherokee): Fixes compilation with Sun's
 	make.
 
