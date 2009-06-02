@@ -35,7 +35,8 @@ favicon.ico \
 macFFBgHack.png \
 loadingAnimation.gif \
 forbidden.png \
-web_proud.jpg
+web_proud.jpg \
+rulestable-th.png
 
 EXTRA_DIST = \
 $(adminstatic_DATA)
