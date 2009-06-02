@@ -1,5 +1,8 @@
 2009-06-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* contrib/Makefile.am (cherokee): Fixes compilation with Sun's
+	make.
+
 	* cherokee/spawner.c, cherokee/shm.c, cherokee/shm.h,
 	cherokee/common-internal.h, cherokee/main.c, configure.in: Replace
 	POSIX semaphores with SysV semaphores. The reason? Quite sadly,
