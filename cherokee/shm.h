@@ -53,11 +53,6 @@ ret_t cherokee_shm_mrproper  (cherokee_shm_t *shm);
 ret_t cherokee_shm_create    (cherokee_shm_t *shm, char *name, size_t len);
 ret_t cherokee_shm_map       (cherokee_shm_t *shm, cherokee_buffer_t *name);
 
-/* Semaphores */
-ret_t cherokee_sem_init      (cherokee_sem_t *sem, cherokee_buffer_t *name);
-ret_t cherokee_sem_mrproper  (cherokee_sem_t *sem);
-ret_t cherokee_sem_post      (cherokee_sem_t *sem);
-
 CHEROKEE_END_DECLS
 
 #endif /* CHEROKEE_SHM_H */

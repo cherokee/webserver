@@ -1,3 +1,13 @@
+2009-06-02  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/spawner.c, cherokee/shm.c, cherokee/shm.h,
+	cherokee/common-internal.h, cherokee/main.c, configure.in: Replace
+	POSIX semaphores with SysV semaphores. The reason? Quite sadly,
+	FreeBSD doesn't support POSIX semaphores by default (support is
+	supposed to be kind of unstable). Since SysV semaphores are
+	supported on Linux, MacOS X and FreeBSD, it made sense to use them
+	instead of POSIX.
+
 2009-06-01  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/main_admin.c: Configure cherokee-admin to pass the PATH

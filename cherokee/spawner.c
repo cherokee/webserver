@@ -29,11 +29,12 @@
 
 #include <unistd.h>
 #include <signal.h>
+#include <sys/sem.h>
 
 #define ENTRIES "spawn,spawner"
 
 cherokee_shm_t             cherokee_spawn_shared;
-cherokee_sem_t             cherokee_spawn_sem;
+int                        cherokee_spawn_sem;
 static cherokee_boolean_t _active                 = true;
 
 
@@ -69,10 +70,8 @@ cherokee_spawner_init (void)
 	}
 
 	/* Semaphore */
-	cherokee_buffer_add_str (&name, ".sem");
-
-	ret = cherokee_sem_init (&cherokee_spawn_sem, &name);
-	if (ret != ret_ok) {
+	cherokee_spawn_sem = semget (getppid(), 0, 0);
+	if (cherokee_spawn_sem < 0) {
 		goto error;
 	}
 
@@ -94,7 +93,6 @@ ret_t
 cherokee_spawner_free (void)
 {
 #ifdef HAVE_POSIX_SHM
-	cherokee_sem_mrproper (&cherokee_spawn_sem);
 	cherokee_shm_mrproper (&cherokee_spawn_shared);
 #endif
 	return ret_ok;
@@ -146,6 +144,26 @@ nothing:
 	return ret_ok;	
 }
 #endif
+
+static ret_t
+sem_signal (int sem)
+{
+	int           re;
+	struct sembuf so;
+
+	so.sem_num = 0;
+	so.sem_op  = 1;
+	so.sem_flg = SEM_UNDO;
+
+	do {
+		re = semop (sem, &so, 1);
+		if (re >= 0) {
+			return ret_ok;
+		}
+	} while (re < 0 && errno == EINTR);
+	
+	return ret_error;
+}
 
 ret_t
 cherokee_spawner_spawn (cherokee_buffer_t  *binary,
@@ -223,7 +241,7 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 
 	/* Wake up the spawning thread
 	 */
-	ret = cherokee_sem_post (&cherokee_spawn_sem);	
+	ret = sem_signal (cherokee_spawn_sem);
 	if (unlikely (ret != ret_ok)) {
 		PRINT_ERROR_S ("WARNING: Couldn't unlock spawning semaphore..\n");
 	}

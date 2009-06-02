@@ -29,10 +29,15 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <sys/mman.h>
-#include <semaphore.h>
 #include <sys/types.h>
 #include <grp.h>
 #include <pthread.h>
+
+#ifdef HAVE_SYSV_SEMAPHORES
+# include <sys/ipc.h>
+# include <sys/sem.h>
+#endif
+
 #include "server.h"
 #include "spawner.h"
 
@@ -54,8 +59,7 @@ cherokee_boolean_t  graceful_restart;
 char               *cherokee_worker;
 char               *spawn_shared          = NULL;
 char               *spawn_shared_name     = NULL;
-sem_t              *spawn_shared_sem      = NULL;
-char               *spawn_shared_sem_name = NULL;
+int                 spawn_shared_sem      = -1;
 pthread_t           spawn_thread;
 
 static void
@@ -445,13 +449,18 @@ do_spawn (void)
 static void *
 spawn_thread_func (void *param)
 {
-	int re;
+	int           re;
+	struct sembuf so;
 
 	UNUSED (param);
 
 	while (true) {
 		do {
-			re = sem_wait (spawn_shared_sem);
+			so.sem_num = 0;
+			so.sem_op  = -1;
+			so.sem_flg = SEM_UNDO;
+
+			re = semop (spawn_shared_sem, &so, 1);
 		} while (re < 0 && errno == EINTR);
 		do_spawn ();
 	}
@@ -471,10 +480,6 @@ spawn_init (void)
 	mem_len = sizeof("/cherokee-spawner-XXXXXXX");
 	spawn_shared_name = malloc (mem_len);
 	snprintf (spawn_shared_name, mem_len, "/cherokee-spawner-%d", getpid());
-
-	mem_len = sizeof("/cherokee-spawner-XXXXXXX.sem");
-	spawn_shared_sem_name = malloc (mem_len);
-	snprintf (spawn_shared_sem_name, mem_len, "/cherokee-spawner-%d.sem", getpid());
 
 	/* Create the shared memory
 	 */
@@ -502,8 +507,8 @@ spawn_init (void)
 
 	/* Semaphore
 	*/
-	spawn_shared_sem = sem_open (spawn_shared_sem_name, O_CREAT, S_IRUSR | S_IWUSR, 0);
-	if (spawn_shared_sem == NULL) {
+	spawn_shared_sem = semget (getpid(), 1, IPC_CREAT | SEM_R | SEM_A);
+	if (spawn_shared_sem < 0) {
 		return ret_error;
 	}
 
@@ -521,8 +526,10 @@ spawn_init (void)
 static void
 spawn_clean (void)
 {
+	long dummy;
+
 	shm_unlink (spawn_shared_name);
-	sem_unlink (spawn_shared_sem_name);
+	semctl (spawn_shared_sem, 0, IPC_RMID, dummy);
 }
 #endif /* HAVE_POSIX_SHM */
 

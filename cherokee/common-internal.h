@@ -80,10 +80,13 @@
 # error "Can not include inttypes or stdint"
 #endif
 
-
 #ifdef HAVE_PTHREAD
 # include <pthread.h>
 #endif
+
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
 
 #ifdef HAVE_INLINE
 # define INLINE inline
@@ -205,5 +208,16 @@ char *strcasestr(char *s, char *find);
 #ifndef S_ISLNK
 # define S_ISLNK(i) (0)
 #endif
+
+/* SysV semaphores
+ */
+#ifndef SEM_R
+# define SEM_R 0400
+#endif
+
+#ifndef SEM_A
+# define SEM_A 0200
+#endif
+
 
 #endif /* CHEROKEE_COMMON_INTERNAL_H */

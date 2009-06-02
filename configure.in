@@ -749,7 +749,7 @@ if test x"$samba_cv_HAVE_OFF64_T" = x"yes"; then
 fi
 
 dnl
-dnl Shared memory and semaphores
+dnl Shared Memory
 dnl
 AC_CHECK_FUNC(shm_open, have_shm_open=yes)
 
@@ -770,6 +770,23 @@ if test "$have_shm_open" = "yes"; then
    AC_DEFINE(HAVE_POSIX_SHM, 1, [Define to 1 to use POSIX shared memory])
 fi
 AM_CONDITIONAL(USE_POSIX_SHM, test "$have_shm_open" = "yes")
+
+
+dnl
+dnl SYSV Semaphores
+dnl
+AC_CHECK_HEADER(sys/sem.h, sysv_sem=yes, sysv_sem=no)
+
+if test "x$sysv_sem" = "xyes"; then
+   AC_CHECK_FUNC(semget, , sysv_sem=no)
+   AC_CHECK_FUNC(semop, , sysv_sem=no)
+   AC_CHECK_FUNC(semctl, , sysv_sem=no)
+fi
+
+if test "x$sysv_sem" = xyes; then
+   AC_DEFINE(HAVE_SYSV_SEMAPHORES, 1, [Define to 1 to use SYSV semaphores])
+fi
+AM_CONDITIONAL(USE_SYSV_SEMAPHORES, test "x$sysv_sem" = xyes)
 
 
 # From etr_socket_nsl.m4
