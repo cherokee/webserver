@@ -1,0 +1,2934 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: cherokee '0.99.15' admin UI for zh_CN \n"
+"Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
+"POT-Creation-Date: 2009-05-12 10:29+0200\n"
+"PO-Revision-Date: 2009-04-14 21:27+CEST\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: ownlinux.cn\n"
+"Language-Translator:Gefire\n"
+"MIME-Version: 1.0\n"
+"Generated-By: gettext\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/CherokeeManagement.py:98
+msgid "Could not access file descriptors: "
+msgstr "不能访问配置文件: "
+
+#: admin/CherokeeManagement.py:252
+#, python-format
+msgid "ERROR: Couldn't execute '%s -i'"
+msgstr "遇到错误: 执行 '%s -i' 失败"
+
+#: admin/Entry.py:43
+msgid " Enabled"
+msgstr " 允许"
+
+#: admin/Form.py:30
+msgid "Submit"
+msgstr "提交"
+
+#: admin/Form.py:206
+msgid "Delete"
+msgstr "删除"
+
+#: admin/ModuleAdmin.py:5 admin/consts.py:26
+msgid "Remote Administration"
+msgstr "远程管理"
+
+#: admin/ModuleAuth.py:15
+msgid "Allowed HTTP Authentication methods."
+msgstr "允许HTTP访问控制模式."
+
+#: admin/ModuleAuth.py:16
+msgid "Name associated with the protected resource."
+msgstr "名称相关保护资源."
+
+#: admin/ModuleAuth.py:17
+msgid "User filter. List of allowed users."
+msgstr "用户访问控制. 列出允许访问的用户."
+
+#: admin/ModuleAuth.py:40
+msgid "Methods"
+msgstr "方式"
+
+#: admin/ModuleAuth.py:41
+msgid "Realm"
+msgstr "界限"
+
+#: admin/ModuleAuth.py:42
+msgid "Users"
+msgstr "用户"
+
+#: admin/ModuleAuth.py:44
+msgid "Authentication Details"
+msgstr "认证模式详细信息"
+
+#: admin/ModuleAuth.py:51
+msgid "Realm can not be empty"
+msgstr "界限不能为空"
+
+#: admin/ModuleAuthlist.py:10 admin/consts.py:44
+msgid "Fixed list"
+msgstr "修复列表"
+
+#: admin/ModuleAuthlist.py:25
+msgid "Fixed authentication list"
+msgstr "修复认证列表"
+
+#: admin/ModuleAuthlist.py:29
+msgid "Authentication list"
+msgstr "认证列表"
+
+#: admin/ModuleAuthlist.py:31 admin/ModuleAuthlist.py:47
+#: admin/PageGeneral.py:69
+msgid "User"
+msgstr "用户"
+
+#: admin/ModuleAuthlist.py:31 admin/ModuleAuthlist.py:47
+msgid "Password"
+msgstr "密码"
+
+#: admin/ModuleAuthlist.py:42
+msgid "Add new pair"
+msgstr "增加一对"
+
+#: admin/ModuleBalancer.py:10
+msgid "Allow to select how the connections will be dispatched."
+msgstr "允许你选择连接如何进行."
+
+#: admin/ModuleBalancer.py:11
+msgid ""
+"There are no Information Sources configured. Please proceed to configure an "
+"<a href=\"/source\">Information Source</a>."
+msgstr ""
+"没有已配置信息源. 请配置一个 "
+"<a href=\"/source\">数据源</a>."
+
+#: admin/ModuleBalancer.py:12
+msgid ""
+"A load balancer must be configured to use at least one information source."
+msgstr ""
+"负载均衡器要求必须配置至少一个数据源."
+
+#: admin/ModuleBalancer.py:55 admin/Page.py:154 admin/PageInfoSource.py:32
+#: admin/PageInfoSource.py:84
+msgid "Information Sources"
+msgstr "数据源"
+
+#: admin/ModuleBalancer.py:57 admin/PageInfoSource.py:167
+#: admin/PageInfoSource.py:194 admin/PageInfoSource.py:222
+#: admin/PageInfoSource.py:272
+msgid "Nick"
+msgstr "名称"
+
+#: admin/ModuleBalancer.py:57 admin/ModuleMysql.py:39
+msgid "Host"
+msgstr "主机"
+
+#: admin/ModuleBalancer.py:71
+msgid "Assign Information Sources"
+msgstr "转移数据源"
+
+#: admin/ModuleBalancer.py:73
+msgid "It is already balancing among all the configured "
+msgstr "这是已经配置好的均衡器 "
+
+#: admin/ModuleBalancer.py:74
+msgid "information sources"
+msgstr "数据源"
+
+#: admin/ModuleBalancer.py:76 admin/consts.py:134
+msgid "Choose.."
+msgstr "选择.."
+
+#: admin/ModuleBalancer.py:82
+msgid "Application Server"
+msgstr "应用程序服务器"
+
+#: admin/ModuleBind.py:21 admin/ModuleBind.py:22 admin/ModuleBind.py:47
+#: admin/ModuleLdap.py:36 admin/ModuleMysql.py:40 admin/PageGeneral.py:111
+msgid "Port"
+msgstr "端口"
+
+#: admin/ModuleBind.py:26 admin/ModuleBind.py:76 admin/ModuleMethod.py:10
+#: admin/PageStatus.py:105
+msgid "Choose"
+msgstr "选择"
+
+#: admin/ModuleBind.py:35 admin/ModuleBind.py:82 admin/consts.py:129
+msgid "Incoming Port"
+msgstr "接收端口"
+
+#: admin/ModuleBind.py:45
+msgid "Selected Ports"
+msgstr "已经选择的端口"
+
+#: admin/ModuleBind.py:47 admin/PageGeneral.py:111
+msgid "Bind to"
+msgstr "绑定到IP"
+
+#: admin/ModuleBind.py:47 admin/PageGeneral.py:111
+msgid "TLS"
+msgstr "TLS支持"
+
+#: admin/ModuleBind.py:53
+msgid "No"
+msgstr "否"
+
+#: admin/ModuleBind.py:53
+msgid "Yes"
+msgstr "是"
+
+#: admin/ModuleBind.py:75
+msgid "Assign new port"
+msgstr "增加新的端口"
+
+#: admin/ModuleBind.py:97 admin/ModuleExists.py:40
+#: admin/ModuleExtensions.py:31 admin/ModuleGeoip.py:65
+#: admin/ModuleMethod.py:60 admin/ModuleRequest.py:31
+msgid "ERROR, a 'value' entry is needed!"
+msgstr "遇到错误, 您必须输入一个参数!"
+
+#: admin/ModuleCgi.py:9
+msgid "Path to an executable that will be run with the CGI as parameter."
+msgstr "可执行CGI路径."
+
+#: admin/ModuleCgi.py:10
+msgid "Execute the CGI under its file owner user ID."
+msgstr "执行CGI的用户"
+
+#: admin/ModuleCgi.py:11
+msgid "Send errors exactly as they are generated."
+msgstr "发送产生的错误."
+
+#: admin/ModuleCgi.py:12
+msgid "Check whether the file is in place."
+msgstr "检查文件是否存在."
+
+#: admin/ModuleCgi.py:13
+msgid "Forward all the client headers to the CGI encoded as HTTP_*. headers."
+msgstr "转发所有HTTP_*的客户端请求头到CGI编码 ."
+
+#: admin/ModuleCgi.py:14
+msgid "Allow the use of the non-standard X-Sendfile header."
+msgstr "允许使用非标准的X-Sendfile请求头."
+
+#: admin/ModuleCgi.py:42
+msgid "Common CGI options"
+msgstr "一般 CGI 设置"
+
+#: admin/ModuleCgi.py:46
+msgid "Script Alias"
+msgstr "脚本别名"
+
+#: admin/ModuleCgi.py:48
+msgid "Change UID"
+msgstr "修改 UID（用户ID）"
+
+#: admin/ModuleCgi.py:50 admin/PageVServer.py:238
+msgid "Error handler"
+msgstr "错误处理"
+
+#: admin/ModuleCgi.py:52
+msgid "Check file"
+msgstr "检查文件"
+
+#: admin/ModuleCgi.py:53
+msgid "Pass Request Headers"
+msgstr "允许请求头通过"
+
+#: admin/ModuleCgi.py:54
+msgid "Allow X-Sendfile"
+msgstr "允许 X-Sendfile"
+
+#: admin/ModuleCgi.py:57
+msgid "Custom environment variables"
+msgstr "自定义环境变量"
+
+#: admin/ModuleCgi.py:70
+msgid "Add new custom environment variable"
+msgstr "添加新的自定义环境变量"
+
+#: admin/ModuleCgi.py:75 admin/PageFeedback.py:59
+msgid "Name"
+msgstr "姓名"
+
+#: admin/ModuleCgi.py:75 admin/ModuleProxy.py:100 admin/ModuleProxy.py:116
+#: admin/PageInfoSource.py:149
+msgid "Value"
+msgstr "值"
+
+#: admin/ModuleCommon.py:11
+msgid "Allow extra tailing paths"
+msgstr "允许额外附加路径"
+
+#: admin/ModuleCommon.py:12
+msgid "Allow to list directory contents"
+msgstr "允许列出文件夹内容"
+
+#: admin/ModuleCommon.py:15 admin/consts.py:11
+msgid "List & Send"
+msgstr "列出 & 发送"
+
+#: admin/ModuleCommon.py:34
+msgid "Allow PathInfo"
+msgstr "允许显示路径信息"
+
+#: admin/ModuleCommon.py:35
+msgid "Allow Directory Listing"
+msgstr "允许目录列表"
+
+#: admin/ModuleCommon.py:37
+msgid "Parsing"
+msgstr "解析"
+
+#: admin/ModuleCustomError.py:9
+msgid "HTTP Error that you be used to reply the request."
+msgstr "HTTP错误，您要对请求作出答复."
+
+#: admin/ModuleCustomError.py:12
+msgid "HTTP Custom Error"
+msgstr "自定义的HTTP错误"
+
+#: admin/ModuleCustomError.py:24
+msgid "HTTP Error"
+msgstr "HTTP错误"
+
+#: admin/ModuleDbslayer.py:19
+msgid "Language from which the information will be consumed."
+msgstr "设置信息使用的语言."
+
+#: admin/ModuleDbslayer.py:20
+msgid "User to access the database."
+msgstr "访问数据库的用户."
+
+#: admin/ModuleDbslayer.py:21
+msgid "Password for the user accessing the database."
+msgstr "访问数据库的用户密码."
+
+#: admin/ModuleDbslayer.py:22
+msgid "Optionally specifies a database to connect to."
+msgstr "指定数据库连接."
+
+#: admin/ModuleDbslayer.py:25
+msgid "MySQL balancing"
+msgstr "MySQL 负载均衡"
+
+#: admin/ModuleDbslayer.py:26
+msgid "DB balancig recipe"
+msgstr "数据库负载均衡处理方法"
+
+#: admin/ModuleDbslayer.py:41
+msgid "Serialization"
+msgstr "连载"
+
+#: admin/ModuleDbslayer.py:43
+msgid "Language"
+msgstr "语言"
+
+#: admin/ModuleDbslayer.py:44 admin/ModuleMysql.py:42 admin/ModuleMysql.py:54
+msgid "DB User"
+msgstr "数据库用户"
+
+#: admin/ModuleDbslayer.py:45 admin/ModuleMysql.py:43
+msgid "DB Password"
+msgstr "数据库用户密码"
+
+#: admin/ModuleDbslayer.py:46
+msgid "Data Base"
+msgstr "数据库名称"
+
+#: admin/ModuleDbslayer.py:49
+msgid "Data base balancing"
+msgstr "数据库负载均衡"
+
+#: admin/ModuleDbslayer.py:52 admin/ModuleFcgi.py:34 admin/ModuleMirror.py:28
+#: admin/ModuleProxy.py:49 admin/ModuleScgi.py:36
+msgid "Balancer"
+msgstr "均衡器"
+
+#: admin/ModuleDirectory.py:9
+msgid ""
+"Public Web Directory to which content the configuration will be applied."
+msgstr ""
+"公共网页目录的内容将应用于配置."
+
+#: admin/ModuleDirectory.py:21 admin/ModuleDirectory.py:23
+msgid "Web Directory"
+msgstr "网页目录"
+
+#: admin/ModuleDirlist.py:14
+msgid "Choose the listing theme."
+msgstr "选个一个列出的主题."
+
+#: admin/ModuleDirlist.py:15
+msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
+msgstr ""
+"网站目录下的图标文件位于. 默认: <i>/icons</i>."
+
+#: admin/ModuleDirlist.py:16
+msgid "List of notice files to be inserted."
+msgstr "列出要插入的通知文件."
+
+#: admin/ModuleDirlist.py:17
+msgid "List of files that should not be listed."
+msgstr "列出不允许被列出的文件."
+
+#: admin/ModuleDirlist.py:26 admin/consts.py:13
+msgid "Only listing"
+msgstr "仅进行目录列表"
+
+#: admin/ModuleDirlist.py:41
+msgid "Listing"
+msgstr "列出"
+
+#: admin/ModuleDirlist.py:43
+msgid "Show Size"
+msgstr "显示大小"
+
+#: admin/ModuleDirlist.py:44
+msgid "Show Date"
+msgstr "显示日期"
+
+#: admin/ModuleDirlist.py:45
+msgid "Show User"
+msgstr "显示用户"
+
+#: admin/ModuleDirlist.py:46
+msgid "Show Group"
+msgstr "显示用户组"
+
+#: admin/ModuleDirlist.py:47
+msgid "Allow symbolic links"
+msgstr "允许符号链接"
+
+#: admin/ModuleDirlist.py:50
+msgid "Theming"
+msgstr "主题"
+
+#: admin/ModuleDirlist.py:53
+msgid "Theme"
+msgstr "主题"
+
+#: admin/ModuleDirlist.py:54
+msgid "Icons dir"
+msgstr "图标文件目录"
+
+#: admin/ModuleDirlist.py:55
+msgid "Notice files"
+msgstr "通知文件"
+
+#: admin/ModuleDirlist.py:56
+msgid "Hidden files"
+msgstr "隐藏文件"
+
+#: admin/ModuleEmptyGif.py:6
+msgid "1x1 Empty GIF"
+msgstr "1x1 空白GIF文件"
+
+#: admin/ModuleErrorRedir.py:13 admin/consts.py:102
+msgid "Internal"
+msgstr "内部"
+
+#: admin/ModuleErrorRedir.py:14 admin/consts.py:101
+msgid "External"
+msgstr "外部"
+
+#: admin/ModuleErrorRedir.py:39
+msgid "Configured error codes"
+msgstr "配置错误代码"
+
+#: admin/ModuleErrorRedir.py:41 admin/ModuleErrorRedir.py:52
+msgid "Error"
+msgstr "错误"
+
+#: admin/ModuleErrorRedir.py:41 admin/ModuleErrorRedir.py:52
+#: admin/consts.py:14
+msgid "Redirection"
+msgstr "重定向"
+
+#: admin/ModuleErrorRedir.py:41 admin/ModuleErrorRedir.py:52
+#: admin/ModuleRedir.py:35 admin/PageInfoSource.py:166
+#: admin/PageInfoSource.py:193 admin/PageInfoSource.py:222
+#: admin/PageVServer.py:324
+msgid "Type"
+msgstr "类型"
+
+#: admin/ModuleErrorRedir.py:50
+msgid "Add error codes"
+msgstr "增加错误代码"
+
+#: admin/ModuleEvhost.py:9
+msgid ""
+"Check the dynamically generated Document Root, and use the general Document "
+"Root if it doesn't exist."
+msgstr ""
+"检查动态生成的文档根目录, 如果不存在则使用默认 "
+"文件根目录."
+
+#: admin/ModuleEvhost.py:10
+msgid ""
+"The Document Root directory will be built dynamically. The following "
+"variables are accepted:<br/>"
+msgstr ""
+"根目录将是动态生成的. 以下变量将被接受 "
+":<br/>"
+
+#: admin/ModuleEvhost.py:30
+msgid "Dynamic Document Root"
+msgstr "动态根目录"
+
+#: admin/ModuleEvhost.py:31
+msgid "Check Document Root"
+msgstr "检查根目录"
+
+#: admin/ModuleExists.py:9
+msgid "Comma separated list of files. Rule applies if one exists."
+msgstr "逗号分隔的文件列表.已存在的规则将被应用."
+
+#: admin/ModuleExists.py:10
+msgid ""
+"Uses cache during file detection. Disable if directory contents change "
+"frequently. Enable otherwise."
+msgstr ""
+"启用文件高速缓存检测机制. 如果目录内容经常改变请禁用. "
+"选择其他机制."
+
+#: admin/ModuleExists.py:11
+msgid "Match the request if any file exists."
+msgstr "检查符合要求的文件是否存在."
+
+#: admin/ModuleExists.py:27 admin/ModuleExists.py:31 admin/PageIcon.py:177
+msgid "Files"
+msgstr "文件"
+
+#: admin/ModuleExists.py:29
+msgid "Match any file"
+msgstr "匹配任何文件"
+
+#: admin/ModuleExists.py:32 admin/ModuleFile.py:26
+msgid "Use I/O cache"
+msgstr "使用 I/O 缓存"
+
+#: admin/ModuleExists.py:47
+msgid "Any file"
+msgstr "任何文件"
+
+#: admin/ModuleExists.py:51 admin/consts.py:127
+msgid "File Exists"
+msgstr "文件存在"
+
+#: admin/ModuleExtensions.py:9
+msgid "File extension list to which content the configuration will be applied."
+msgstr ""
+"应用文件扩展名列表的配置内容."
+
+#: admin/ModuleExtensions.py:21 admin/ModuleExtensions.py:23
+#: admin/PageIcon.py:123 admin/PageIcon.py:142 admin/PageIcon.py:147
+#: admin/PageMime.py:95 admin/PageMime.py:113 admin/PageMime.py:123
+#: admin/consts.py:124
+msgid "Extensions"
+msgstr "扩展"
+
+#: admin/ModuleFcgi.py:29
+msgid "FastCGI specific"
+msgstr "FastCGI 详细设置"
+
+#: admin/ModuleFile.py:8
+msgid "Enables an internal I/O cache that improves performance."
+msgstr "使内部的I/O缓存提高性能."
+
+#: admin/ModuleFile.py:11 admin/PageNewConfig.py:39
+msgid "Static Content"
+msgstr "静态内容"
+
+#: admin/ModuleFile.py:28
+msgid "File Sending"
+msgstr "文件传送"
+
+#: admin/ModuleGeoip.py:12
+msgid "Add the initial country. It's possible to add more later on."
+msgstr "增加初始国家，可以增加更多."
+
+#: admin/ModuleGeoip.py:13
+msgid "Pick an additional country to add to the country list."
+msgstr "增加一个国家到国家名单."
+
+#: admin/ModuleGeoip.py:14
+#, python-format
+msgid ""
+"List of countries from the client IPs. It must use the\n"
+"<a target=\"_blank\" href=\"%s\">ISO 3166</a> country notation."
+msgstr ""
+"国家IP地址名单. 必须使用\n"
+"<a target=\"_blank\" href=\"%s\">ISO 3166</a> 国家符号."
+
+#: admin/ModuleGeoip.py:27 admin/ModuleGeoip.py:47 admin/Table.py:5
+msgid "Add"
+msgstr "增加"
+
+#: admin/ModuleGeoip.py:30
+msgid "Country"
+msgstr "国家"
+
+#: admin/ModuleGeoip.py:39
+msgid "Countries"
+msgstr "国家"
+
+#: admin/ModuleGeoip.py:50
+msgid "Add Country"
+msgstr "新增国家"
+
+#: admin/ModuleHeader.py:9
+msgid "Header against which the regular expression will be evaluated."
+msgstr "符合正则表达式的将被优先应用."
+
+#: admin/ModuleHeader.py:10
+msgid "Regular expression."
+msgstr "正则表达式."
+
+#: admin/ModuleHeader.py:33 admin/ModuleHeader.py:35 admin/ModuleProxy.py:100
+#: admin/ModuleProxy.py:126 admin/consts.py:126
+msgid "Header"
+msgstr "请求头"
+
+#: admin/ModuleHeader.py:36 admin/ModuleProxy.py:156 admin/ModuleRedir.py:35
+#: admin/ModuleRedir.py:52 admin/ModuleRequest.py:21 admin/ModuleRequest.py:23
+#: admin/ModuleRequest.py:40 admin/consts.py:125
+msgid "Regular Expression"
+msgstr "正则表达式"
+
+#: admin/ModuleHtdigest.py:9
+msgid "Full path to the Htdigest formated password file."
+msgstr "Htdigest格式密码文件的完整路径."
+
+#: admin/ModuleHtdigest.py:33 admin/ModuleHtpasswd.py:33
+#: admin/ModulePlain.py:33
+msgid "Password File"
+msgstr "密码文件"
+
+#: admin/ModuleHtdigest.py:35 admin/ModuleHtpasswd.py:35 admin/consts.py:39
+msgid "Htpasswd file"
+msgstr "Htpasswd文件"
+
+#: admin/ModuleHtdigest.py:41 admin/ModuleHtpasswd.py:41
+#: admin/ModulePlain.py:41
+msgid "Password file can not be empty"
+msgstr "密码文件不能为空"
+
+#: admin/ModuleHtpasswd.py:9
+msgid "Full path to the Htpasswd formated password file."
+msgstr "Htpasswd格式密码文件的完整路径."
+
+#: admin/ModuleIpHash.py:8
+msgid ""
+"The <i>IP Hash</i> balancer distributes connections between upstreams\n"
+"based on the IP-address of the client."
+msgstr ""
+"<i>IP Hash</i> 负载均衡的上传数据流 \n"
+"基于IP地址的客户端."
+
+#: admin/ModuleLdap.py:7
+msgid "LDAP server IP address."
+msgstr "LDAP 服务器地址."
+
+#: admin/ModuleLdap.py:8
+msgid "LDAP server port to connect to. Defaults to 389"
+msgstr "LDAP 服务器连接端口. 默认值:389"
+
+#: admin/ModuleLdap.py:9
+msgid "Domain sent during the LDAP authentication operation. Optional."
+msgstr "域间发送LDAP认证模式. 选择."
+
+#: admin/ModuleLdap.py:10
+msgid "Password to authenticate in the LDAP server."
+msgstr "LDAP服务器的验证密码."
+
+#: admin/ModuleLdap.py:11
+msgid "Base domain for the web server authentications."
+msgstr "相应的域的Web服务器身份验证."
+
+#: admin/ModuleLdap.py:12
+msgid "Object filter. It can be empty."
+msgstr "对象的过滤器。可以为空."
+
+#: admin/ModuleLdap.py:13
+msgid "Enable to use secure connections between the web and LDAP servers."
+msgstr "启用使用安全链接WEB服务器和LDAP服务器."
+
+#: admin/ModuleLdap.py:14
+msgid "CA File for the TLS connections."
+msgstr "TLS 链接使用的CA 文件."
+
+#: admin/ModuleLdap.py:17
+msgid "LDAP"
+msgstr "LDAP"
+
+#: admin/ModuleLdap.py:35 admin/ModuleLdap.py:51 admin/PageStatus.py:140
+msgid "Server"
+msgstr "服务器"
+
+#: admin/ModuleLdap.py:37
+msgid "Bind Domain"
+msgstr "绑定域名"
+
+#: admin/ModuleLdap.py:38
+msgid "Bind Password"
+msgstr "绑定密码"
+
+#: admin/ModuleLdap.py:39 admin/ModuleLdap.py:52
+msgid "Base Domain"
+msgstr "相应的域名"
+
+#: admin/ModuleLdap.py:40
+msgid "Filter"
+msgstr "过滤器"
+
+#: admin/ModuleLdap.py:41
+msgid "Use TLS"
+msgstr "使用 TLS"
+
+#: admin/ModuleLdap.py:42
+msgid "CA File"
+msgstr "CA 文件"
+
+#: admin/ModuleLdap.py:45
+msgid "LDAP connection"
+msgstr "LDAP 链接"
+
+#: admin/ModuleMethod.py:33
+msgid "The HTTP method that should match this rule."
+msgstr "HTTP 方法将被此规则验证."
+
+#: admin/ModuleMethod.py:47 admin/ModuleMethod.py:50 admin/PageVServer.py:451
+msgid "Method"
+msgstr "方式"
+
+#: admin/ModuleMirror.py:12
+msgid "TCP balancer"
+msgstr "TCP 负载均衡"
+
+#: admin/ModuleMirror.py:33
+msgid "Load balancing options"
+msgstr "负载平衡选项"
+
+#: admin/ModuleMysql.py:7
+msgid "MySQL server IP address."
+msgstr "MySQL 服务器IP地址."
+
+#: admin/ModuleMysql.py:8
+msgid "Server port to connect to."
+msgstr "服务器端口."
+
+#: admin/ModuleMysql.py:9
+msgid "Full path of Unix socket to communicate with the data base."
+msgstr "数据库UNIX套接字连接完整路径."
+
+#: admin/ModuleMysql.py:10
+msgid "User name for connecting to the database."
+msgstr "数据库用户名."
+
+#: admin/ModuleMysql.py:11
+msgid "Password for connecting to the database."
+msgstr "数据库用户密码."
+
+#: admin/ModuleMysql.py:12
+msgid "Database name containing the user/password pair list."
+msgstr "数据库名称及相应用户/密码名单."
+
+#: admin/ModuleMysql.py:13
+msgid "SQL command to execute. ${user} is replaced with the user name."
+msgstr "SQL命令执行. ${user} 将替代此用户."
+
+#: admin/ModuleMysql.py:14
+msgid ""
+"Active to use MD5 passwords. Only suitable for the \"Basic\" authentication "
+"mechanism."
+msgstr ""
+"使用MD5密码加密. 只适合\"Basic\" 认证 "
+"机制."
+
+#: admin/ModuleMysql.py:41
+msgid "Unix Socket"
+msgstr "Unix 套接字"
+
+#: admin/ModuleMysql.py:44 admin/ModuleMysql.py:56
+msgid "Database"
+msgstr "数据库"
+
+#: admin/ModuleMysql.py:45
+msgid "SQL Query"
+msgstr "SQL 查询"
+
+#: admin/ModuleMysql.py:46
+msgid "Use MD5 Passwords"
+msgstr "使用 MD5 加密"
+
+#: admin/ModuleMysql.py:48
+msgid "MySQL connection"
+msgstr "MySQL 连接"
+
+#: admin/ModuleMysql.py:55
+msgid "SQL query"
+msgstr "SQL 查询"
+
+#: admin/ModuleMysql.py:58
+msgid " can not be empty"
+msgstr " 不能为空"
+
+#: admin/ModulePlain.py:9
+msgid "Full path to the plain text password file."
+msgstr "纯文字密码文件的完整路径."
+
+#: admin/ModulePlain.py:16
+msgid "Plain text"
+msgstr "纯文字"
+
+#: admin/ModulePlain.py:35
+msgid "Plain password file"
+msgstr "纯文字密码文件"
+
+#: admin/ModuleProxy.py:13
+msgid ""
+"Maximum number of connection per server that the proxy can try to keep "
+"opened."
+msgstr ""
+"服务器保持开放的最大代理请求数量 "
+""
+
+#: admin/ModuleProxy.py:14
+msgid ""
+"Allow the server to use Keep-alive connections with the back-end servers."
+msgstr ""
+"允许服务器使用活动连接到后台程序."
+
+#: admin/ModuleProxy.py:15
+msgid "Preserve the original \"Host:\" header sent by the client. (Default No)"
+msgstr ""
+"保留原始\"Host:\" 客户端请求. (Default No)"
+
+#: admin/ModuleProxy.py:18
+msgid "Reverse Proxy"
+msgstr "反向代理"
+
+#: admin/ModuleProxy.py:38
+msgid "Reverse Proxy Settings"
+msgstr "反向代理设置"
+
+#: admin/ModuleProxy.py:41
+msgid "Request"
+msgstr "请求"
+
+#: admin/ModuleProxy.py:43
+#, fuzzy
+msgid "Reply"
+msgstr "回复"
+
+#: admin/ModuleProxy.py:52
+msgid "Back-end Servers"
+msgstr "服务器后台程序"
+
+#: admin/ModuleProxy.py:59 admin/PageAdvanced.py:93
+msgid "Reuse connections"
+msgstr "连接重用"
+
+#: admin/ModuleProxy.py:60
+msgid "Allow Keepalive"
+msgstr "允许活动连接"
+
+#: admin/ModuleProxy.py:61
+msgid "Preserve Host header"
+msgstr "维护主机头"
+
+#: admin/ModuleProxy.py:67 admin/ModuleProxy.py:82
+msgid "URL Rewriting"
+msgstr "URL 重写"
+
+#: admin/ModuleProxy.py:71
+msgid "Header Addition"
+msgstr "头部附加文件"
+
+#: admin/ModuleProxy.py:72 admin/ModuleProxy.py:87
+msgid "Add New Header"
+msgstr "添加新的请求头"
+
+#: admin/ModuleProxy.py:75 admin/ModuleProxy.py:90
+msgid "Hide Headers"
+msgstr "隐藏请求头"
+
+#: admin/ModuleProxy.py:76 admin/ModuleProxy.py:91
+msgid "Hide Header"
+msgstr "隐藏请求头"
+
+#: admin/ModuleProxy.py:86
+msgid "Header addition"
+msgstr "附加请求头"
+
+#: admin/ModuleProxy.py:156 admin/ModuleProxy.py:179 admin/ModuleRedir.py:35
+#: admin/ModuleRedir.py:53
+msgid "Substitution"
+msgstr "替换"
+
+#: admin/ModuleProxy.py:179
+msgid "Add RegEx"
+msgstr "新增正则表达式"
+
+#: admin/ModuleRedir.py:9
+msgid "Defines whether the redirection will be seen by the client."
+msgstr "Defines whether the redirection will be seen by the client."
+
+#: admin/ModuleRedir.py:10
+msgid ""
+"Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc."
+"perl.org/perlre.html\">Reference</a>."
+msgstr ""
+"Regular expression. Check out the <a target=\"_blank\" href=\"http://perldoc."
+"perl.org/perlre.html\">Reference</a>."
+
+#: admin/ModuleRedir.py:11
+msgid "Target address. It can use Regular Expression substitution sub-strings."
+msgstr ""
+"Target address. It can use Regular Expression substitution sub-strings."
+
+#: admin/ModuleRedir.py:14
+msgid "Redirections"
+msgstr "重定向"
+
+#: admin/ModuleRedir.py:15 admin/ModuleRehost.py:24 admin/ModuleRehost.py:28
+#: admin/consts.py:136
+msgid "Regular Expressions"
+msgstr "正则表达式"
+
+#: admin/ModuleRedir.py:46
+msgid "Rule list"
+msgstr "规则列表"
+
+#: admin/ModuleRedir.py:51
+msgid "Show"
+msgstr "显示"
+
+#: admin/ModuleRedir.py:55 admin/PageVServer.py:295
+msgid "Add new rule"
+msgstr "添加新的规则"
+
+#: admin/ModuleRehost.py:9
+msgid ""
+"Regular Expression against which the hosts be Host name will be compared."
+msgstr ""
+"正则表达式将对主机和主机名之间进行比较."
+
+#: admin/ModuleRehost.py:10
+msgid "At least one Regular Expression string must be defined."
+msgstr "至少需要定一个正则表达式规则."
+
+#: admin/ModuleRehost.py:52
+msgid "New Regular Expression"
+msgstr "新的正则表达式"
+
+#: admin/ModuleRehost.py:53 admin/ModuleWildcard.py:53
+#: admin/PageInfoSource.py:236
+msgid "Add new"
+msgstr "新增"
+
+#: admin/ModuleRequest.py:9
+msgid "Regular expression against which the request will be executed."
+msgstr "正在表达式将决定哪些请求将被执行."
+
+#: admin/ModuleRoundRobin.py:8
+msgid ""
+"The <i>Round Robin</i> balancer can either access remote servers or\n"
+"launch local application servers and connect to them."
+msgstr ""
+"<i>轮询模式</i> 的负载均衡可以轮流连接和使用远程或本地应用程序服务器\n"
+"."
+
+#: admin/ModuleScgi.py:32
+msgid "SCGI specific"
+msgstr "SCGI 详细"
+
+#: admin/ModuleSecdownload.py:12
+msgid "Hidden Download"
+msgstr "隐藏下载"
+
+#: admin/ModuleSecdownload.py:20
+msgid "Shared secret between the server and the script."
+msgstr "服务器和脚本引擎见共享安全模式."
+
+#: admin/ModuleSecdownload.py:21
+msgid "How long the download will last accessible - in seconds. Default: 60."
+msgstr "下载开放时间 - 单位：秒. 默认值: 60."
+
+#: admin/ModuleSecdownload.py:38
+msgid "Secret"
+msgstr "保密"
+
+#: admin/ModuleSecdownload.py:39
+msgid "Timeout"
+msgstr "超时"
+
+#: admin/ModuleSecdownload.py:41
+msgid "Covering parameters"
+msgstr "覆盖参数"
+
+#: admin/ModuleSecdownload.py:53
+msgid "A shared-secret must be defined"
+msgstr "必须设置一个共享安全模式"
+
+#: admin/ModuleSecdownload.py:57
+msgid "It can't be empty"
+msgstr "不能为空"
+
+#: admin/ModuleServerInfo.py:8
+msgid "Which information should be shown."
+msgstr "要显示的信息."
+
+#: admin/ModuleServerInfo.py:11 admin/ModuleServerInfo.py:17
+msgid "Server Information"
+msgstr "服务器信息"
+
+#: admin/ModuleServerInfo.py:12
+msgid "Only version information"
+msgstr "服务器版本号"
+
+#: admin/ModuleServerInfo.py:13
+msgid "Server Information + Connections"
+msgstr "服务器信息和连接数"
+
+#: admin/ModuleServerInfo.py:28
+msgid "Privacy settings"
+msgstr "隐私设置"
+
+#: admin/ModuleServerInfo.py:31
+msgid "Show Information"
+msgstr "显示服务器信息"
+
+#: admin/ModuleSsi.py:5 admin/consts.py:20
+msgid "Server Side Includes"
+msgstr "服务器端包含"
+
+#: admin/ModuleStreaming.py:12
+msgid "Figure the bit rate of the media file, and limit the bandwidth to it."
+msgstr "数字比特率的媒体文件，并限制它的带宽."
+
+#: admin/ModuleStreaming.py:13
+msgid "Factor by which the bandwidth limit will be increased. Default: 0.1"
+msgstr "动态增加带宽限制因子. 默认值: 0.1"
+
+#: admin/ModuleStreaming.py:14
+msgid ""
+"Number of seconds to stream before setting the bandwidth limit. Default: 5."
+msgstr ""
+"不限制带宽值钱的时间（秒），默认值: 5."
+
+#: admin/ModuleStreaming.py:22 admin/ModuleStreaming.py:45
+msgid "Audio/Video Streaming"
+msgstr "视频/音频流媒体"
+
+#: admin/ModuleStreaming.py:40
+msgid "Auto Rate"
+msgstr "自动"
+
+#: admin/ModuleStreaming.py:42
+msgid "Speedup Factor"
+msgstr "加速"
+
+#: admin/ModuleStreaming.py:43
+msgid "Initial Boost"
+msgstr "开始升高"
+
+#: admin/ModuleWildcard.py:9
+msgid ""
+"Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example."
+"com"
+msgstr ""
+"设置域名. 允许匹配字符 (* and ?) . 例: *.example."
+"com"
+
+#: admin/ModuleWildcard.py:10
+msgid "At least one wildcard string must be defined."
+msgstr "至少有一个通配符字符串必须定义."
+
+#: admin/ModuleWildcard.py:24
+msgid "Accepted domains"
+msgstr "被使用的域名"
+
+#: admin/ModuleWildcard.py:28
+msgid "Domain pattern"
+msgstr "域名模式"
+
+#: admin/ModuleWildcard.py:52
+msgid "New host name"
+msgstr "新主机别名"
+
+#: admin/Page.py:99
+msgid "Version:"
+msgstr "服务器版本:"
+
+#: admin/Page.py:128
+msgid "Help"
+msgstr "帮助"
+
+#: admin/Page.py:151 admin/PageAdvanced.py:100 admin/PageStatus.py:67
+#: admin/PageVServer.py:419
+msgid "Status"
+msgstr "状态"
+
+#: admin/Page.py:152
+msgid "General"
+msgstr "一般设置"
+
+#: admin/Page.py:153 admin/PageVServer.py:70 admin/PageVServers.py:24
+msgid "Virtual Servers"
+msgstr "虚拟主机设置"
+
+#: admin/Page.py:155 admin/PageIcon.py:12
+msgid "Icons"
+msgstr "图标设置"
+
+#: admin/Page.py:156
+msgid "Mime Types"
+msgstr "Mime 文件类型设置"
+
+#: admin/Page.py:157 admin/PageAdvanced.py:57
+msgid "Advanced"
+msgstr "高级设置"
+
+#: admin/Page.py:158
+msgid "Save Changes"
+msgstr "保存修改"
+
+#: admin/Page.py:159
+msgid "Save"
+msgstr "保存"
+
+#: admin/Page.py:163
+msgid "Graceful restart"
+msgstr "常规重启"
+
+#: admin/Page.py:164
+msgid "Hard restart"
+msgstr "强制重启"
+
+#: admin/Page.py:165
+msgid "Do not restart"
+msgstr "不重启"
+
+#: admin/Page.py:168
+msgid "Commit to disk and apply changes to the running server"
+msgstr "保存配置文件，并将所做修改应用于服务器"
+
+#: admin/Page.py:171
+msgid "Commit all the changes permanently"
+msgstr "永久应用所有修改"
+
+#: admin/PageAdvanced.py:33
+msgid ""
+"<p><b>WARNING</b>: This section contains advanced configuration parameters. "
+"Changing things is not recommended unless you really know what you are doing."
+"</p>"
+msgstr ""
+"<p><b>注意</b>: 本页面有服务器高级设置参数. "
+"除非你知道自己在做什么，否则请不要修改任何参数."
+"</p>"
+
+#: admin/PageAdvanced.py:35
+msgid "Defines which thread policy the OS should apply to the server."
+msgstr "定义服务器线程使用的规则."
+
+#: admin/PageAdvanced.py:36
+msgid "If empty, Cherokee will calculate a default number."
+msgstr "如果为空，Cherokee将使用默认值."
+
+#: admin/PageAdvanced.py:37
+msgid ""
+"It defines how many file descriptors the server should handle. Default is "
+"the number showed by ulimit -n"
+msgstr ""
+"它定义多少文件描述符被服务器处理. 默认值是 "
+"ulimit -n所显示的数量"
+
+#: admin/PageAdvanced.py:38
+msgid "Allows to choose the internal file descriptor polling method."
+msgstr "允许选择内部文件描述符 polling 方法."
+
+#: admin/PageAdvanced.py:39
+msgid "Minimum size of a file to use sendfile(). Default: 32768 Bytes."
+msgstr "使用sendfile()发送文件的最小值. 默认是: 32768 Bytes."
+
+#: admin/PageAdvanced.py:40
+msgid "Maximum size of a file to use sendfile(). Default: 2 GB."
+msgstr "使用sendfile()发送文件的最大值. 默认是: 2 GB."
+
+#: admin/PageAdvanced.py:41
+msgid ""
+"Name a program that will be called if, by some reason, the server fails. "
+"Default: <em>cherokee-panic</em>."
+msgstr ""
+"如果服务器启动失败，将执行的程序"
+"默认: <em>cherokee-panic</em>."
+
+#: admin/PageAdvanced.py:42
+msgid "Path of the PID file. If empty, the file will not be created."
+msgstr "PID文件的路径. 为空则不建立PID文件"
+
+#: admin/PageAdvanced.py:43
+msgid "Max. length of the incoming connection queue."
+msgstr "最大访问请求队列长度"
+
+#: admin/PageAdvanced.py:44
+msgid ""
+"Set the number of how many internal connections can be held for reuse by "
+"each thread. Default 20."
+msgstr ""
+"设置可以被线程重用的内部连接数量"
+" 默认 20."
+
+#: admin/PageAdvanced.py:45
+msgid ""
+"Sets the number of seconds between log consolidations (flushes). Default: 10 "
+"seconds."
+msgstr ""
+"设置日志合并（刷新时间）. Default: 10 "
+"秒."
+
+#: admin/PageAdvanced.py:46
+msgid "Time lapse (in seconds) between Nonce cache clean ups."
+msgstr "缓存清理间隔时间(单位：秒)."
+
+#: admin/PageAdvanced.py:47
+msgid ""
+"Enables the server-wide keep-alive support. It increases the performance. It "
+"is usually set on."
+msgstr ""
+"允许服务器使用活动连接，将提高服务器性能 ， "
+"通常都是启用的."
+
+#: admin/PageAdvanced.py:48
+msgid ""
+"Maximum number of HTTP requests that can be served by each keepalive "
+"connection."
+msgstr ""
+"每个活动连接的最大HTTP请求数量."
+""
+
+#: admin/PageAdvanced.py:49
+msgid ""
+"Allows the server to use Chunked encoding to try to keep Keep-Alive enabled."
+msgstr ""
+"允许服务器在活动连接时使用分块编码."
+
+#: admin/PageAdvanced.py:50
+msgid "Activate or deactivate the I/O cache globally."
+msgstr "全局设置是否启用I/O缓存."
+
+#: admin/PageAdvanced.py:51
+msgid "Number of pages that the cache should handle."
+msgstr "缓存处理页面数量."
+
+#: admin/PageAdvanced.py:52
+msgid "Files under this size will not be cached."
+msgstr "文件小于此大小则不会被缓存."
+
+#: admin/PageAdvanced.py:53
+msgid "Files over this size will not be cached."
+msgstr "文件大于此大小则不会被缓存."
+
+#: admin/PageAdvanced.py:54
+msgid "How long the file information should last cached without refreshing it."
+msgstr ""
+"文件信息最大缓存时间."
+
+#: admin/PageAdvanced.py:55
+msgid "How long the file content should last cached."
+msgstr "文件最大缓存时间."
+
+#: admin/PageAdvanced.py:67 admin/PageAdvanced.py:121
+msgid "Advanced configuration"
+msgstr "高级配置"
+
+#: admin/PageAdvanced.py:79
+msgid "Keep Alive"
+msgstr "保持活动连接"
+
+#: admin/PageAdvanced.py:80
+msgid "Max keepalive reqs"
+msgstr "活动连接最大数量"
+
+#: admin/PageAdvanced.py:81
+msgid "Chunked Encoding"
+msgstr "分块编码"
+
+#: admin/PageAdvanced.py:82
+msgid "Polling Method"
+msgstr "Polling 方式"
+
+#: admin/PageAdvanced.py:83
+msgid "Sendfile min size"
+msgstr "最小文件发送大小"
+
+#: admin/PageAdvanced.py:84
+msgid "Sendfile max size"
+msgstr "最大发送文件大小"
+
+#: admin/PageAdvanced.py:89
+msgid "Thread Number"
+msgstr "线程数量"
+
+#: admin/PageAdvanced.py:90
+msgid "Thread Policy"
+msgstr "线程策略"
+
+#: admin/PageAdvanced.py:91
+msgid "File descriptors"
+msgstr "文件描述符"
+
+#: admin/PageAdvanced.py:92
+msgid "Listening queue length"
+msgstr "访问队列长度"
+
+#: admin/PageAdvanced.py:94
+msgid "Log flush time"
+msgstr "线程日志刷新时间"
+
+#: admin/PageAdvanced.py:95
+msgid "Nonces clean up time"
+msgstr "清理时间"
+
+#: admin/PageAdvanced.py:101
+msgid "Max pages"
+msgstr "最大页数"
+
+#: admin/PageAdvanced.py:102
+msgid "File Min Size"
+msgstr "文件最小大小"
+
+#: admin/PageAdvanced.py:103
+msgid "File Max Size"
+msgstr "文件最大大小"
+
+#: admin/PageAdvanced.py:104
+msgid "Lasting: stat"
+msgstr "持续时间: stat方式"
+
+#: admin/PageAdvanced.py:105
+msgid "Lasting: mmap"
+msgstr "持续时间: mmap方式"
+
+#: admin/PageAdvanced.py:110
+msgid "Panic action"
+msgstr "Panic action"
+
+#: admin/PageAdvanced.py:111 admin/PageStatus.py:138
+msgid "PID file"
+msgstr "PID 进程号"
+
+#: admin/PageAdvanced.py:116
+msgid "Connections"
+msgstr "连接"
+
+#: admin/PageAdvanced.py:117
+msgid "Resources"
+msgstr "资源"
+
+#: admin/PageAdvanced.py:118
+msgid "I/O cache"
+msgstr "I/O 缓存"
+
+#: admin/PageAdvanced.py:119
+msgid "Special Files"
+msgstr "特殊文件"
+
+#: admin/PageEntry.py:15
+msgid "Allows to specify an alternative document root path."
+msgstr "允许指定的替代文件根路径."
+
+#: admin/PageEntry.py:16
+msgid "How the connection will be handled."
+msgstr "连接将被怎么处理."
+
+#: admin/PageEntry.py:17
+msgid "Enable to allow access to the resource only by https."
+msgstr "启用只有通过HTTPS才允许访问资源."
+
+#: admin/PageEntry.py:18
+msgid "List of IPs and subnets allowed to access the resource."
+msgstr "列表中的IP和子网允许访问该资源."
+
+#: admin/PageEntry.py:19
+msgid "Which, if any, will be the authentication method."
+msgstr "其中，如果有的话，将使用此验证方法."
+
+#: admin/PageEntry.py:20
+msgid "Points how long the files should be cached"
+msgstr "多久文件应当缓存"
+
+#: admin/PageEntry.py:21
+msgid ""
+"Set an outbound traffic limit. It must be specified in Bytes per second."
+msgstr ""
+"启用了流量限制.必须指定每秒字节数(Bytes/s)"
+
+#: admin/PageEntry.py:22
+msgid "Do not log requests matching this rule."
+msgstr "没有登录请求匹配这条规则."
+
+#: admin/PageEntry.py:23
+msgid ""
+"How long from the object can be cached.<br />\n"
+"The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for "
+"minutes, hours, days, and weeks. Eg: 2d.\n"
+msgstr ""
+"对象缓存时间.<br />\n"
+"单位 <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> 分别对应 "
+"分,时,天, 周. 例: 2d.\n"
+
+#: admin/PageEntry.py:35
+msgid "Behavior rules"
+msgstr "行为规则"
+
+#: admin/PageEntry.py:142 admin/PageInfoSource.py:272
+msgid "Rule"
+msgstr "规则"
+
+#: admin/PageEntry.py:146 admin/PageEntry.py:154 admin/PageEntry.py:156
+#: admin/PageVServer.py:324
+msgid "Handler"
+msgstr "处理"
+
+#: admin/PageEntry.py:151 admin/PageVServer.py:438 admin/PageVServers.py:196
+msgid "Document Root"
+msgstr "根目录"
+
+#: admin/PageEntry.py:161
+msgid "Encoding"
+msgstr "压缩"
+
+#: admin/PageEntry.py:164 admin/PageEntry.py:213
+msgid "Expiration"
+msgstr "过期"
+
+#: admin/PageEntry.py:167 admin/PageVServer.py:246
+msgid "Security"
+msgstr "安全"
+
+#: admin/PageEntry.py:170 admin/PageEntry.py:203
+msgid "Traffic Shaping"
+msgstr "流量限制"
+
+#: admin/PageEntry.py:190
+msgid "Matching Rule"
+msgstr "匹配规则"
+
+#: admin/PageEntry.py:201
+msgid "Limit traffic to"
+msgstr "限制流量到"
+
+#: admin/PageEntry.py:217
+msgid "Time to expire"
+msgstr "过期时间"
+
+#: admin/PageEntry.py:219
+msgid "Content Expiration"
+msgstr "内容过期"
+
+#: admin/PageEntry.py:227 admin/PageEntry.py:240
+msgid "Authentication"
+msgstr "认证"
+
+#: admin/PageEntry.py:229 admin/PageVServer.py:242 admin/PageVServers.py:126
+msgid "Logging"
+msgstr "启用日志"
+
+#: admin/PageEntry.py:231
+#, fuzzy
+msgid "Skip Logging"
+msgstr "不启用日志"
+
+#: admin/PageEntry.py:234
+msgid "Access Restrictions"
+msgstr "访问限制"
+
+#: admin/PageEntry.py:236
+msgid "Only https"
+msgstr "只允许 https"
+
+#: admin/PageEntry.py:237
+msgid "Allow From"
+msgstr "允许来自"
+
+#: admin/PageEntry.py:242
+msgid "Validation Mechanism"
+msgstr "验证机制"
+
+#: admin/PageEntry.py:260
+msgid "Information Encoders"
+msgstr "数据压缩"
+
+#: admin/PageEntry.py:263
+#, python-format
+msgid "Use the %s encoder whenever the client requests it."
+msgstr "每当客户端请求时使用 %s 压缩."
+
+#: admin/PageEntry.py:265
+#, fuzzy
+msgid "Allow"
+msgstr "允许 "
+
+#: admin/PageError.py:36
+msgid "Configuration file cannot be modified"
+msgstr "配置文件不允许修改"
+
+#: admin/PageError.py:37
+msgid "Icons directory is missing"
+msgstr "图标文件目录不存在"
+
+#: admin/PageError.py:38
+msgid "Could not launch the server"
+msgstr "不能启动服务器"
+
+#: admin/PageFeedback.py:10
+msgid "A working connection to the Internet is required for this form to work."
+msgstr ""
+"您需要有一个工作的互联网连接才能完成本次反馈."
+
+#: admin/PageFeedback.py:50 admin/PageFeedback.py:55 admin/PageStatus.py:112
+msgid "Feedback"
+msgstr "向我们反馈信息"
+
+#: admin/PageFeedback.py:60
+msgid "EMail"
+msgstr "EMail地址"
+
+#: admin/PageFeedback.py:61
+msgid "Include configuration"
+msgstr "附上服务器配置文件"
+
+#: admin/PageFeedback.py:64
+msgid "Message:"
+msgstr "要反馈的内容:"
+
+#: admin/PageFeedback.py:82
+msgid "Error reading response from the server"
+msgstr "服务器响应错误"
+
+#: admin/PageFeedback.py:91
+msgid "Not included"
+msgstr "未包含"
+
+#: admin/PageFeedback.py:111
+msgid "Report sent"
+msgstr "提交报告"
+
+#: admin/PageFeedback.py:112
+msgid "Thank you a million for your feedback. We do appreciate your help."
+msgstr "谢谢您的宝贵意见，我们改写您的帮助！"
+
+#: admin/PageFeedback.py:113
+msgid "Report"
+msgstr "报告"
+
+#: admin/PageFeedback.py:118
+msgid "Feedback: Thank you"
+msgstr "反馈信息: 谢谢"
+
+#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:348
+#: admin/consts.py:84
+msgid "Default"
+msgstr "默认"
+
+#: admin/PageGeneral.py:13
+msgid "Product only"
+msgstr "只列出服务器软件介绍"
+
+#: admin/PageGeneral.py:14
+msgid "Product + Minor version"
+msgstr "服务器软件介绍 + 次要版本"
+
+#: admin/PageGeneral.py:15
+msgid "Product + Minimal version"
+msgstr "服务器软件介绍 + 最小版本号"
+
+#: admin/PageGeneral.py:16
+msgid "Product + Platform"
+msgstr "服务器软件介绍 + 系统平台"
+
+#: admin/PageGeneral.py:17
+msgid "Full Server string"
+msgstr "完整服务器信息"
+
+#: admin/PageGeneral.py:29
+msgid "Defines a port that the server will listen to"
+msgstr "设置一个服务器监听端口"
+
+#: admin/PageGeneral.py:30
+msgid ""
+"Set to enable the IPv6 support. The OS must support IPv6 for this to work."
+msgstr ""
+"如果要启用IPV6支持，请确认你的系统支持IPV6."
+
+#: admin/PageGeneral.py:31
+msgid "IP address of the interface to bind. It is usually empty."
+msgstr "绑定IP地址，通常可以不填写."
+
+#: admin/PageGeneral.py:32
+msgid "Time interval until the server closes inactive connections."
+msgstr "服务器关闭无效链接的时间."
+
+#: admin/PageGeneral.py:33
+msgid "This option allows to choose how the server identifies itself."
+msgstr "这个选项允许修改服务器识别信息的级别."
+
+#: admin/PageGeneral.py:34
+msgid "Changes the effective user. User names and IDs are accepted."
+msgstr "修改服务器启动用户为有效的系统用户，请填写用户名或者用户ID."
+
+#: admin/PageGeneral.py:35
+msgid "Changes the effective group. Group names and IDs are accepted."
+msgstr "修改服务器启动用户组为有效的系统用户组. 请填写用户组名或者用户组ID."
+
+#: admin/PageGeneral.py:36
+msgid ""
+"Jail the server inside the directory. Don't use it as the only security "
+"measure."
+msgstr ""
+"监禁服务器运行目录，注意：请不要把这种方式作为你服务器唯一的安全措施。 "
+""
+
+#: admin/PageGeneral.py:37
+msgid "Which, if any, should be the TLS/SSL backend."
+msgstr "如果要启用TLS/SSL支持，请在列表中选择相应的选项."
+
+#: admin/PageGeneral.py:39 admin/PageGeneral.py:50
+msgid "General Configuration"
+msgstr "一般配置"
+
+#: admin/PageGeneral.py:40
+msgid "Configuration Quickstart"
+msgstr "快速配置"
+
+#: admin/PageGeneral.py:55
+msgid "General Settings"
+msgstr "一般设置"
+
+#: admin/PageGeneral.py:58 admin/PageVServer.py:442
+msgid "Network"
+msgstr "网络"
+
+#: admin/PageGeneral.py:59
+msgid "Ports to listen"
+msgstr "监听端口"
+
+#: admin/PageGeneral.py:60
+msgid "Server Permissions"
+msgstr "服务器权限"
+
+#: admin/PageGeneral.py:67
+msgid "Execution Permissions"
+msgstr "执行权限"
+
+#: admin/PageGeneral.py:70
+msgid "Group"
+msgstr "用户组"
+
+#: admin/PageGeneral.py:71
+msgid "Chroot"
+msgstr "Chroot"
+
+#: admin/PageGeneral.py:76
+msgid "Support"
+msgstr "支持"
+
+#: admin/PageGeneral.py:79
+msgid "SSL/TLS back-end"
+msgstr "SSL/TLS 支持"
+
+#: admin/PageGeneral.py:82
+msgid "Network behavior"
+msgstr "网络行为"
+
+#: admin/PageGeneral.py:84
+msgid "Timeout (<i>secs</i>)"
+msgstr "超时 (<i>秒</i>)"
+
+#: admin/PageGeneral.py:85
+msgid "Server Tokens"
+msgstr "服务器识别信息级别"
+
+#: admin/PageGeneral.py:124
+msgid "Listening to ports"
+msgstr "服务器端口设置"
+
+#: admin/PageGeneral.py:130
+msgid "Add new port"
+msgstr "增加一个端口"
+
+#: admin/PageIcon.py:22
+msgid "Icon configuration"
+msgstr "Icon 设置"
+
+#: admin/PageIcon.py:37
+msgid "Unknown method"
+msgstr "未知方式"
+
+#: admin/PageIcon.py:62 admin/consts.py:10 admin/consts.py:37
+#: admin/consts.py:54
+msgid "None"
+msgstr "没有"
+
+#: admin/PageIcon.py:110
+msgid "Icons configuration"
+msgstr "图标设置"
+
+#: admin/PageIcon.py:120
+msgid "Extension list"
+msgstr "扩展列表"
+
+#: admin/PageIcon.py:123
+msgid "Icon File"
+msgstr "图标文件"
+
+#: admin/PageIcon.py:142 admin/PageIcon.py:172 admin/PageIcon.py:188
+msgid "Icon"
+msgstr "图标"
+
+#: admin/PageIcon.py:144
+msgid "Add new extension"
+msgstr "增加新的扩展"
+
+#: admin/PageIcon.py:153
+msgid "File Matches"
+msgstr "文件匹配"
+
+#: admin/PageIcon.py:156
+msgid "Match"
+msgstr "匹配"
+
+#: admin/PageIcon.py:156 admin/PageIcon.py:172 admin/PageIcon.py:188
+#: admin/consts.py:62
+msgid "File"
+msgstr "文件"
+
+#: admin/PageIcon.py:174
+msgid "Add new file match"
+msgstr "增加新的文件匹配"
+
+#: admin/PageIcon.py:190 admin/consts.py:123
+msgid "Directory"
+msgstr "目录"
+
+#: admin/PageIcon.py:191
+msgid "Go to Parent"
+msgstr "转到上一级"
+
+#: admin/PageIcon.py:193 admin/PageIcon.py:196
+msgid "Special Icons"
+msgstr "特殊图标"
+
+#: admin/PageInfoSource.py:12
+msgid ""
+"The source can be either a local interpreter or a remote host acting as an "
+"information source."
+msgstr ""
+"可以是本地翻译或远程主机代理作为一个"
+"数据源."
+
+#: admin/PageInfoSource.py:13
+msgid ""
+"Source nick. It will be referenced by this name in the rest of the server."
+msgstr ""
+"源名称，这个名字将被主机引用"
+
+#: admin/PageInfoSource.py:14
+msgid "It allows to choose whether it runs the local host or a remote server."
+msgstr "可以选择运行在本地主机或远程服务器."
+
+#: admin/PageInfoSource.py:15
+msgid ""
+"Where the information source can be accessed. The host:port pair, or the "
+"Unix socket path."
+msgstr ""
+"如果信息源可以访问. 主机:端口, 或者 "
+"UNIX套接字连接路径."
+
+#: admin/PageInfoSource.py:16
+msgid "Command to spawn a new source in case it were not accessible."
+msgstr "命令生成新数据源情况下，无法访问."
+
+#: admin/PageInfoSource.py:17
+msgid ""
+"How long should the server wait when spawning an interpreter before giving "
+"up (in seconds). Default: 3."
+msgstr ""
+"服务器解释引擎等待时间 "
+"(单位:秒). 默认: 3."
+
+#: admin/PageInfoSource.py:18
+msgid ""
+"Sources currently in use. Note that the last source of any rule cannot be "
+"deleted until the rule has been manually edited."
+msgstr ""
+"数据源正在使用中，任何规则都不能被删除直到规则被手动修改 "
+"."
+
+#: admin/PageInfoSource.py:19
+#, fuzzy
+msgid ""
+"Execute the interpreter under a different user. Default: Same UID as the "
+"server."
+msgstr ""
+"设置不同的执行用户. 默认: 与主机执行用户 UID 相同  "
+"."
+
+#: admin/PageInfoSource.py:20
+#, fuzzy
+msgid ""
+"Execute the interpreter under a different group. Default: Default GID of the "
+"new process UID."
+msgstr ""
+"设置不同的执行用户. 默认: 与主机执行用户 UID 相同  "
+"."
+
+#: admin/PageInfoSource.py:129
+msgid "Environment variables"
+msgstr "环境变量"
+
+#: admin/PageInfoSource.py:144
+msgid "Add new Environment variable"
+msgstr "新增环境变量"
+
+#: admin/PageInfoSource.py:149
+msgid "Variable"
+msgstr "变量"
+
+#: admin/PageInfoSource.py:168 admin/PageInfoSource.py:195
+#: admin/PageInfoSource.py:222
+msgid "Connection"
+msgstr "连接"
+
+#: admin/PageInfoSource.py:170 admin/PageInfoSource.py:197
+msgid "Interpreter"
+msgstr "解释器"
+
+#: admin/PageInfoSource.py:171 admin/PageInfoSource.py:198
+msgid "Spawning timeout"
+msgstr "超时"
+
+#: admin/PageInfoSource.py:172 admin/PageInfoSource.py:199
+msgid "Execute as User"
+msgstr "执行用户"
+
+#: admin/PageInfoSource.py:173 admin/PageInfoSource.py:200
+#, fuzzy
+msgid "Execute as Group"
+msgstr "执行用户组"
+
+#: admin/PageInfoSource.py:207
+msgid "Information Sources Settings"
+msgstr "数据源设置"
+
+#: admin/PageInfoSource.py:219
+msgid "Known sources"
+msgstr "已有数据源"
+
+#: admin/PageInfoSource.py:230
+msgid "Deletion forbidden. Check source usage."
+msgstr "不允许删除. 请检查数据源是否使用中."
+
+#: admin/PageInfoSource.py:245
+msgid "Details:"
+msgstr "详细:"
+
+#: admin/PageInfoSource.py:251
+msgid "Add a new"
+msgstr "新增"
+
+#: admin/PageInfoSource.py:260
+msgid "Source usage"
+msgstr "数据源使用"
+
+#: admin/PageInfoSource.py:272
+msgid "Virtual server"
+msgstr "虚拟主机"
+
+#: admin/PageMime.py:19 admin/PageMime.py:74
+msgid "MIME types"
+msgstr "MIME 类型"
+
+#: admin/PageMime.py:21
+msgid "New MIME type to be added."
+msgstr "新增 MIME 类型."
+
+#: admin/PageMime.py:22
+msgid "Comma separated list of file extensions associated with the MIME type."
+msgstr "逗号分隔的MIME类型列表."
+
+#: admin/PageMime.py:23
+msgid "Maximum time that this sort of content can be cached (in seconds)."
+msgstr "内容缓存的最大时间 (单位:秒)."
+
+#: admin/PageMime.py:42
+msgid "Mime types configuration"
+msgstr "Mime 文件类型设置"
+
+#: admin/PageMime.py:81
+msgid "Add new MIME"
+msgstr "新增 MIME"
+
+#: admin/PageMime.py:95
+msgid "Mime type"
+msgstr "Mime 类型"
+
+#: admin/PageMime.py:95
+msgid "MaxAge<br/>(<i>secs</i>)"
+msgstr "缓存最大时间<br/>(<i>秒</i>)"
+
+#: admin/PageMime.py:112 admin/PageMime.py:123
+msgid "Mime Type"
+msgstr "Mime 类型"
+
+#: admin/PageMime.py:114 admin/PageMime.py:123
+msgid "Max Age"
+msgstr "缓存最大时间"
+
+#: admin/PageNewConfig.py:14
+msgid ""
+"<b>The configuration is not found</b>.<br />You can create a new "
+"configuration file and proceed to customize the web server."
+msgstr ""
+"<b>配置文件没找到</b>.<br />你可以新建 "
+"一个配置文件并设置WEB服务器."
+
+#: admin/PageNewConfig.py:22
+msgid "Create"
+msgstr "新建"
+
+#: admin/PageNewConfig.py:39
+msgid "Regular"
+msgstr "Regular"
+
+#: admin/PageNewConfig.py:39
+msgid "Server Development"
+msgstr "服务器开发"
+
+#: admin/PageNewConfig.py:40
+msgid "Regular configuration: PHP, Apache logs, MIME types, icons, etc."
+msgstr "设置: PHP, Apache logs, MIME types, icons, 等"
+
+#: admin/PageNewConfig.py:41
+msgid "Optimized to send static content."
+msgstr "优化发送静态内容."
+
+#: admin/PageNewConfig.py:42
+msgid "No standard port, No log files, No PID file, etc."
+msgstr "没有标准的端口，没有日志文件，没有任何的PID文件等"
+
+#: admin/PageNewConfig.py:82
+msgid "New Configuration File"
+msgstr "新配置文件"
+
+#: admin/PageNewConfig.py:89
+msgid "Configuration File Not Found"
+msgstr "配置文件没有找到"
+
+#: admin/PageNewConfig.py:92
+msgid "Create a new configuration file"
+msgstr "新建一个新的配置文件"
+
+#: admin/PageStatus.py:48
+#, fuzzy
+msgid ""
+"\n"
+"<h3>Beta testing</h3>\n"
+"<p>Individuals like yourself who download and test the latest developer "
+"snapshots of Cherokee Web Server help us to create the highest quality "
+"product.</p>\n"
+"<p>For that, we thank you.</p>\n"
+msgstr ""
+"\n"
+"<h3>Beta 测试</h3>\n"
+"<p>个人下载并测试最新开发 "
+"Web服务器帮助我们创造最高质量 "
+"服务.</p>\n"
+"<p>为此，我们感谢你。</p>\n"
+
+#: admin/PageStatus.py:54
+msgid ""
+"\n"
+"If you wanted to let us know something about Cherokee: what you\n"
+"like the most or what you would improve, please do not hesitate to\n"
+"<a href=\"/feedback\">drop us a line</a>.\n"
+msgstr ""
+"\n"
+"如果您想告诉我们一些对Cherokee的建议:\n"
+"比如你喜欢的活着你建议增加的功能, 请不要犹豫，\n"
+"<a href=\"/feedback\">将它写下来告诉我们吧！</a>.\n"
+
+#: admin/PageStatus.py:60
+msgid ""
+"\n"
+"We would love to know that you are using Cherokee. Submit your domain\n"
+"name and  it will be <a href=\"http://www.cherokee-project.com/cherokee-"
+"domain-list.html\">\n"
+"listed on the Cherokee Project web site</a>.\n"
+msgstr ""
+"\n"
+"欢迎您使用Cherokee服务器. 向Cherokee提交您的使用Cherokee服务器的域名,您的域名\n"
+"<a href=\"http://www.cherokee-project.com/cherokee-"
+"domain-list.html\">\n"
+"将会在Cherokee项目网站上列出</a>.\n"
+
+#: admin/PageStatus.py:76
+msgid "Welcome to Cherokee Admin"
+msgstr "欢迎进入Cherokee后台管理中心"
+
+#: admin/PageStatus.py:77
+msgid "This interface will assist in configuring the Cherokee Web Server."
+msgstr "这个后台管理界面将帮您有效配置您的Cherokee网站服务器"
+
+#: admin/PageStatus.py:87
+msgid "Server status"
+msgstr "服务器状态"
+
+#: admin/PageStatus.py:89
+msgid "Server is running."
+msgstr "服务器正在运行中."
+
+#: admin/PageStatus.py:90
+msgid "Stop"
+msgstr "停止"
+
+#: admin/PageStatus.py:93
+msgid "Server is not running."
+msgstr "服务器没有运行."
+
+#: admin/PageStatus.py:94
+msgid "Launch"
+msgstr "启动服务器"
+
+#: admin/PageStatus.py:98
+#, fuzzy
+msgid "Information"
+msgstr "服务器相关信息"
+
+#: admin/PageStatus.py:103
+#, fuzzy
+msgid "Language:"
+msgstr "语言选择"
+
+#: admin/PageStatus.py:115
+msgid "Proud Cherokee Users"
+msgstr "致服务器所有者"
+
+#: admin/PageStatus.py:128
+msgid "Version"
+msgstr "服务器版本"
+
+#: admin/PageStatus.py:129
+msgid "Prefix"
+msgstr "服务器安装目录"
+
+#: admin/PageStatus.py:130
+msgid "WWW Root"
+msgstr "网站根目录"
+
+#: admin/PageStatus.py:136
+msgid "Not running"
+msgstr "服务器没有运行"
+
+#: admin/PageStatus.py:150
+msgid "Path"
+msgstr "配置文件路径"
+
+#: admin/PageStatus.py:151
+msgid "Modified"
+msgstr "上次修改时间"
+
+#: admin/PageStatus.py:153
+msgid "Configuration file"
+msgstr "服务器配置文件"
+
+#: admin/PageStatus.py:153
+msgid "Not Found"
+msgstr "没有找到哦！~"
+
+#: admin/PageStatus.py:155
+msgid "Configuration File"
+msgstr "服务器配置文件"
+
+#: admin/PageVServer.py:30
+msgid ""
+"<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to "
+"reorder.</p>"
+msgstr ""
+"<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to "
+"reorder.</p>"
+
+#: admin/PageVServer.py:32
+msgid ""
+"\n"
+"<p>The 'default' virtual server matches all the domain names.</p>\n"
+msgstr ""
+"\n"
+"<p>这个默认虚拟主机将匹配所有未设定的域名</p>\n"
+
+#: admin/PageVServer.py:36
+msgid "Nickname for the virtual server."
+msgstr "虚拟主机名称."
+
+#: admin/PageVServer.py:37
+msgid ""
+"This directive points to the PEM-encoded Certificate file for the server "
+"(Full path to the file)"
+msgstr ""
+"设置服务器的PEM编码的证书文件"
+"(完整路径)"
+
+#: admin/PageVServer.py:38
+msgid "PEM-encoded Private Key file for the server (Full path to the file)"
+msgstr "设置服务器PEM-编码加密文件  (完整路径)"
+
+#: admin/PageVServer.py:39
+msgid ""
+"Optional: File containing the trusted CA certificates, utilized for checking "
+"the client certificates (Full path to the file)"
+msgstr ""
+"选择：用于检查客户端的信任CA客户端证书 "
+" (完整路径)"
+
+#: admin/PageVServer.py:40
+msgid ""
+"Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
+"www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
+"ciphers supported by the OpenSSL version used)."
+msgstr ""
+"TLS的/ SSL是允许使用密码的. <a target=\"_blank\" href=\"http://"
+"www.openssl.org/docs/apps/ciphers.html\">参考</a>. (默认: 所有 "
+"OPENSSL将启动密码支持)."
+
+#: admin/PageVServer.py:41
+msgid "Optional: Skip, Accept or Require client certificates."
+msgstr "选择：跳过，接受或者要求客户端证书。"
+
+#: admin/PageVServer.py:42
+msgid ""
+"Limit up to which depth certificates in a chain are used during the "
+"verification procedure (Default: 1)"
+msgstr ""
+"限制证书链在检查程序中的使用范围 "
+"(默认值: 1)"
+
+#: admin/PageVServer.py:43
+msgid "Allows the selection of how to generate the error responses."
+msgstr "允许选择如何产生错误的反应."
+
+#: admin/PageVServer.py:44
+msgid ""
+"Directory inside the user home directory to use as root web directory. "
+"Disabled if empty."
+msgstr ""
+"目录内的用户主目录用作根Web目录. "
+"为空则禁止此功能."
+
+#: admin/PageVServer.py:45
+msgid "The personal web support is currently turned on."
+msgstr "个人网页支持目前正在打开."
+
+#: admin/PageVServer.py:46
+msgid "Adds a new domain name. Wildcards are allowed in the domain name."
+msgstr "增加了一个新域名。允许在域名中使用通配符."
+
+#: admin/PageVServer.py:47
+msgid "Virtual Server root directory."
+msgstr "虚拟主机根目录."
+
+#: admin/PageVServer.py:48
+msgid ""
+"List of name files that will be used as directory index. Eg: <em>index.html,"
+"index.php</em>."
+msgstr ""
+"默认首页设置. 例如: <em>index.html,"
+"index.php</em>."
+
+#: admin/PageVServer.py:49
+msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
+msgstr "设置服务器允许上传大小, 单位：bytes (默认:无限制)"
+
+#: admin/PageVServer.py:50
+msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
+msgstr ""
+"虚拟主机是否允许使用活动连接(默认: 是)"
+
+#: admin/PageVServer.py:51
+msgid ""
+"Specifies if Traffic Statistics should be collected for the virtual server "
+"(Default: yes)"
+msgstr ""
+"设置是否允许使用流量统计"
+"(默认: 是)"
+
+#: admin/PageVServer.py:52
+msgid "The Logging is currently enabled."
+msgstr "日志记录正在启用."
+
+#: admin/PageVServer.py:53
+msgid "Logging format. Apache compatible is highly recommended here."
+msgstr "日志格式强烈建议使用 Apache 兼容格式."
+
+#: admin/PageVServer.py:54
+msgid "Back-end used to store the log accesses."
+msgstr "存放访问日志后台程序."
+
+#: admin/PageVServer.py:55
+msgid "Back-end used to store the log errors."
+msgstr "存放错误日志后台程序."
+
+#: admin/PageVServer.py:56
+msgid "Back-end used to store the log accesses and errors."
+msgstr "存放错误和访问日志的后台程序."
+
+#: admin/PageVServer.py:57
+msgid "Full path to the file where the information will be saved."
+msgstr "文件的完整路径信息会被保存."
+
+#: admin/PageVServer.py:58
+msgid "Path to the executable that will be invoked on each log entry."
+msgstr "可执行路径将援引每个日志条目."
+
+#: admin/PageVServer.py:59
+#, fuzzy
+msgid ""
+"Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
+"headers (send by reverse proxies)."
+msgstr ""
+"是否记录和使用 X-Real-IP  和X-Forwarded-For 请求头  ( "
+"由反向代理服务器发送)."
+
+#: admin/PageVServer.py:60
+#, fuzzy
+msgid ""
+"Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
+"only if you are centain of what you are doing."
+msgstr ""
+"接受X-Real-IP和X-Forwarded-For请求头. 警告："
+"如果你不确信你需要这个功能请不要开启"
+
+#: admin/PageVServer.py:61
+#, fuzzy
+msgid ""
+"List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
+"Forwarded-For headers."
+msgstr ""
+"列表上的IP地址和子网允许发送 X-Real-IP and X-Forwarded-For 请求头"
+"通常应用于代理服务器."
+
+#: admin/PageVServer.py:62
+msgid ""
+"How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
+msgstr ""
+"设置是否允许高级虚拟主机支持. (默认：关闭)"
+
+#: admin/PageVServer.py:63
+msgid ""
+"The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
+"${protocol}, ${transport}, ${port_server}, ${query_string}, "
+"${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
+"${user_remote}, ${request}, ${request_original}, ${vserver_name}"
+msgstr ""
+"可使用以下变量: <br/>${ip_remote}, ${ip_local}, "
+"${protocol}, ${transport}, ${port_server}, ${query_string}, "
+"${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, "
+"${user_remote}, ${request}, ${request_original}, ${vserver_name}"
+
+#: admin/PageVServer.py:64
+#, fuzzy
+msgid "Allows the selection of domain matching method."
+msgstr "域名匹配规则."
+
+#: admin/PageVServer.py:66
+msgid "<i>No</i>"
+msgstr "<i>否</i>"
+
+#: admin/PageVServer.py:67
+msgid "<i>Yes</i>"
+msgstr "<i>是</i>"
+
+#: admin/PageVServer.py:71
+msgid "Loggers"
+msgstr "日志"
+
+#: admin/PageVServer.py:72
+msgid "SSL cookbook"
+msgstr "SSL cookbook"
+
+#: admin/PageVServer.py:196 admin/PageVServer.py:207 admin/PageVServers.py:207
+msgid "Virtual Server"
+msgstr "虚拟主机"
+
+#: admin/PageVServer.py:211
+msgid "Basics"
+msgstr "基本配置"
+
+#: admin/PageVServer.py:223
+msgid "Behavior"
+msgstr "性能"
+
+#: admin/PageVServer.py:234
+msgid "Personal Webs"
+msgstr "个人主页"
+
+#: admin/PageVServer.py:255
+msgid "Required SSL/TLS values"
+msgstr "必要的 SSL/TLS 值"
+
+#: admin/PageVServer.py:257
+msgid "Certificate"
+msgstr "证书"
+
+#: admin/PageVServer.py:258
+msgid "Certificate key"
+msgstr "加密证书"
+
+#: admin/PageVServer.py:261
+msgid "Advanced options"
+msgstr "高级选项"
+
+#: admin/PageVServer.py:263
+msgid "Ciphers"
+msgstr "密码"
+
+#: admin/PageVServer.py:264
+msgid "Client Certs. Request"
+msgstr "客户端证书. 请求"
+
+#: admin/PageVServer.py:271
+msgid "CA List"
+msgstr "CA 列表"
+
+#: admin/PageVServer.py:275
+msgid "Verify Depth"
+msgstr "验证"
+
+#: admin/PageVServer.py:284
+msgid "Error Handling hook"
+msgstr "错误处理机制"
+
+#: admin/PageVServer.py:286
+msgid "Error Handler"
+msgstr "错误处理"
+
+#: admin/PageVServer.py:297 admin/Rule.py:139
+msgid "Rule Type"
+msgstr "规则类型"
+
+#: admin/PageVServer.py:324
+msgid "Target"
+msgstr "目标"
+
+#: admin/PageVServer.py:324
+msgid "Auth"
+msgstr "认证"
+
+#: admin/PageVServer.py:324
+msgid "Enc"
+msgstr "压缩"
+
+#: admin/PageVServer.py:324
+msgid "Exp"
+msgstr "到期"
+
+#: admin/PageVServer.py:324
+msgid "Final"
+msgstr "启用"
+
+#: admin/PageVServer.py:412
+msgid "/~user directories"
+msgstr "/~user 目录"
+
+#: admin/PageVServer.py:418
+msgid "Disable"
+msgstr "禁止"
+
+#: admin/PageVServer.py:421
+msgid "Directory name"
+msgstr "目录名"
+
+#: admin/PageVServer.py:431
+msgid "Server ID"
+msgstr "服务器 ID"
+
+#: admin/PageVServer.py:433
+msgid "Virtual Server nickname"
+msgstr "虚拟主机名称"
+
+#: admin/PageVServer.py:436
+msgid "Paths"
+msgstr "路径"
+
+#: admin/PageVServer.py:439
+msgid "Directory Indexes"
+msgstr "目录首页设置"
+
+#: admin/PageVServer.py:444
+msgid "Keep-alive"
+msgstr "保持活动连接"
+
+#: admin/PageVServer.py:445
+msgid "Max Upload Size"
+msgstr "允许上传大小"
+
+#: admin/PageVServer.py:446
+msgid "Traffic Statistics"
+msgstr "流量统计"
+
+#: admin/PageVServer.py:449
+msgid "Advanced Virtual Hosting"
+msgstr "高级虚拟主机"
+
+#: admin/PageVServer.py:463
+msgid "Logging Format"
+msgstr "日志格式"
+
+#: admin/PageVServer.py:465
+msgid "Format"
+msgstr "格式"
+
+#: admin/PageVServer.py:477
+msgid "Accesses and Errors"
+msgstr "访问及错误"
+
+#: admin/PageVServer.py:484 admin/PageVServer.py:501 admin/PageVServer.py:524
+msgid "Filename"
+msgstr "文件名"
+
+#: admin/PageVServer.py:488 admin/PageVServer.py:505 admin/PageVServer.py:528
+msgid "Command"
+msgstr "命令"
+
+#: admin/PageVServer.py:495
+msgid "Accesses"
+msgstr "访问"
+
+#: admin/PageVServer.py:518
+msgid "Errors"
+msgstr "错误"
+
+#: admin/PageVServer.py:536
+msgid "Writers"
+msgstr "Writers"
+
+#: admin/PageVServer.py:539
+msgid "Options"
+msgstr "选项"
+
+#: admin/PageVServer.py:545
+msgid "Accept Forwarded IPs"
+msgstr "接受转发IPs"
+
+#: admin/PageVServer.py:547
+msgid "Don't check origin"
+msgstr "不检查来源"
+
+#: admin/PageVServer.py:549
+#, fuzzy
+msgid "Accept from Hosts"
+msgstr "接受域"
+
+#: admin/PageVServer.py:557
+msgid "Host names"
+msgstr "主机名称"
+
+#: admin/PageVServer.py:564
+msgid "Matching method"
+msgstr "匹配方法"
+
+#: admin/PageVServer.py:598
+msgid "Filename must be set"
+msgstr "必须设置文件名"
+
+#: admin/PageVServer.py:642
+msgid "Template: "
+msgstr "日志格式: "
+
+#: admin/PageVServers.py:17
+msgid ""
+"\n"
+"<p>'Virtual Server' is an abstraction mechanism that allows to define\n"
+"a custom number of parameters and rules that have to be applied to one or\n"
+"more domains.</p>\n"
+msgstr ""
+"\n"
+"<p>'虚拟主机是一种抽象网站服务机制，它允许你自定义一个或多个域的参数以及规则。.</p>\n"
+
+#: admin/PageVServers.py:53
+msgid "Virtual Servers configuration"
+msgstr "虚拟主机配置"
+
+#: admin/PageVServers.py:126 admin/PageVServers.py:196
+msgid "Nickname"
+msgstr "名称"
+
+#: admin/PageVServers.py:126
+msgid "Root"
+msgstr "网站根目录"
+
+#: admin/PageVServers.py:126
+msgid "Domains"
+msgstr "绑定域名数量"
+
+#: admin/PageVServers.py:148
+#, fuzzy
+msgid "yes"
+msgstr "是"
+
+#: admin/PageVServers.py:150
+msgid "no"
+msgstr "否"
+
+#: admin/PageVServers.py:202
+msgid "Add new Virtual Server"
+msgstr "新建一个虚拟主机"
+
+#: admin/PageVServers.py:207
+msgid "Clone as.."
+msgstr "克隆成.."
+
+#: admin/PageVServers.py:219
+msgid "Clone Virtual Server"
+msgstr "克隆虚拟主机"
+
+#: admin/PageVServers.py:251 admin/PageVServers.py:265
+#: admin/validations.py:254
+msgid "Cannot be empty"
+msgstr "不能为空"
+
+#: admin/Rule.py:13
+msgid "The default match ought not to be changed."
+msgstr "默认规则不能修改."
+
+#: admin/Rule.py:41
+msgid "Unknown"
+msgstr "未知"
+
+#: admin/Rule.py:45 admin/Rule.py:76
+msgid "Not"
+msgstr "非"
+
+#: admin/Rule.py:47 admin/Rule.py:104
+msgid "AND"
+msgstr "和"
+
+#: admin/Rule.py:47 admin/Rule.py:104
+msgid "OR"
+msgstr "或"
+
+#: admin/Rule.py:64
+msgid "Undefined.."
+msgstr "未定义.."
+
+#: admin/Rule.py:71
+msgid "Complex"
+msgstr "复杂"
+
+#: admin/Rule.py:77
+msgid "And"
+msgstr "和"
+
+#: admin/Rule.py:78
+msgid "Or"
+msgstr "或"
+
+#: admin/Rule.py:79
+msgid "Remove"
+msgstr "删除"
+
+#: admin/Rule.py:93
+msgid "NOT"
+msgstr "非"
+
+#: admin/Rule.py:212
+msgid "ERROR: Unknown uri"
+msgstr "错误: 位置网站"
+
+#: admin/Table.py:6
+msgid "Del"
+msgstr "删除"
+
+#: admin/Table.py:7
+msgid "Clone"
+msgstr "克隆"
+
+#: admin/config.py:178
+#, python-format
+msgid "ERROR: Couldn't unpack '%s'"
+msgstr "错误:无法解压缩 '%s'"
+
+#: admin/config.py:293
+msgid "Could not copy configuration to "
+msgstr "不能复制配置配置文件 "
+
+#: admin/consts.py:5
+msgid "English"
+msgstr "英语"
+
+#: admin/consts.py:6
+msgid "Spanish"
+msgstr "西班牙语"
+
+#: admin/consts.py:6
+msgid "Simplified Chinese"
+msgstr "简体中文"
+
+#: admin/consts.py:12
+msgid "Static content"
+msgstr "静态内容"
+
+#: admin/consts.py:15
+msgid "FastCGI"
+msgstr "FastCGI"
+
+#: admin/consts.py:16
+msgid "SCGI"
+msgstr "SCGI"
+
+#: admin/consts.py:17
+msgid "HTTP reverse proxy"
+msgstr "HTTP反向代理"
+
+#: admin/consts.py:18
+msgid "Audio/Video streaming"
+msgstr "音频/视频流"
+
+#: admin/consts.py:19
+msgid "CGI"
+msgstr "CGI"
+
+#: admin/consts.py:21
+msgid "Hidden Downloads"
+msgstr "隐藏下载"
+
+#: admin/consts.py:22
+msgid "Server Info"
+msgstr "服务器信息"
+
+#: admin/consts.py:23
+msgid "MySQL bridge"
+msgstr "MySQL 桥接"
+
+#: admin/consts.py:24
+msgid "Generic balancer"
+msgstr "通用均衡器"
+
+#: admin/consts.py:25
+msgid "HTTP error"
+msgstr "HTTP错误"
+
+#: admin/consts.py:27
+msgid "1x1 Transparent GIF"
+msgstr "1x1 透明 GIF"
+
+#: admin/consts.py:31
+msgid "Default errors"
+msgstr "预设错误"
+
+#: admin/consts.py:32
+msgid "Custom redirections"
+msgstr "自定义重定向"
+
+#: admin/consts.py:33
+msgid "Closest match"
+msgstr "最接近"
+
+#: admin/consts.py:38
+msgid "Plain text file"
+msgstr "纯文本文件"
+
+#: admin/consts.py:40
+msgid "Htdigest file"
+msgstr "Htdigest 文件"
+
+#: admin/consts.py:41
+msgid "LDAP server"
+msgstr "LDAP 服务器"
+
+#: admin/consts.py:42
+msgid "MySQL server"
+msgstr "MySQL 服务器"
+
+#: admin/consts.py:43
+msgid "PAM"
+msgstr "PAM"
+
+#: admin/consts.py:48
+msgid "Basic"
+msgstr "Basic"
+
+#: admin/consts.py:49
+msgid "Digest"
+msgstr "Digest"
+
+#: admin/consts.py:50
+msgid "Basic or Digest"
+msgstr "Basic or Digest"
+
+#: admin/consts.py:55
+msgid "Apache compatible"
+msgstr "Apache 兼容模式"
+
+#: admin/consts.py:56
+msgid "W3C"
+msgstr "W3C"
+
+#: admin/consts.py:57
+msgid "NCSA"
+msgstr "NCSA"
+
+#: admin/consts.py:58
+msgid "Custom"
+msgstr "自定义"
+
+#: admin/consts.py:63
+msgid "System logger"
+msgstr "系统记录"
+
+#: admin/consts.py:64
+msgid "Standard Error"
+msgstr "标准错误"
+
+#: admin/consts.py:65
+msgid "Execute program"
+msgstr "执行程序"
+
+#: admin/consts.py:69
+msgid "Round Robin"
+msgstr "轮询"
+
+#: admin/consts.py:70
+msgid "IP Hash"
+msgstr "IP 散列"
+
+#: admin/consts.py:74
+msgid "Local interpreter"
+msgstr "本地引擎"
+
+#: admin/consts.py:75
+msgid "Remote host"
+msgstr "远程主机"
+
+#: admin/consts.py:79
+msgid "GZip"
+msgstr "GZip"
+
+#: admin/consts.py:80
+msgid "Deflate"
+msgstr "Deflate"
+
+#: admin/consts.py:85
+msgid "FIFO"
+msgstr "FIFO"
+
+#: admin/consts.py:86
+msgid "Round-robin"
+msgstr "轮询"
+
+#: admin/consts.py:87
+msgid "Dynamic"
+msgstr "动态"
+
+#: admin/consts.py:91
+msgid "Automatic"
+msgstr "自动"
+
+#: admin/consts.py:128
+msgid "HTTP Method"
+msgstr "HTTP 方法"
+
+#: admin/consts.py:130
+msgid "GeoIP"
+msgstr "GeoIP"
+
+#: admin/consts.py:135
+msgid "Wildcards"
+msgstr "通配符"
+
+#: admin/consts.py:140
+msgid "Not set"
+msgstr "未设置"
+
+#: admin/consts.py:141
+msgid "Already expired on 1970"
+msgstr "1970已经过期"
+
+#: admin/consts.py:142
+msgid "Do not expire until 2038"
+msgstr "到2038都不会过期"
+
+#: admin/consts.py:143
+msgid "Custom value"
+msgstr "自定义值"
+
+#: admin/consts.py:147
+msgid "No TLS/SSL"
+msgstr "无 TLS/SSL"
+
+#: admin/consts.py:148
+msgid "OpenSSL / libssl"
+msgstr "OpenSSL / libssl"
+
+#: admin/consts.py:152
+msgid "Off"
+msgstr "关闭"
+
+#: admin/consts.py:153
+msgid "Enhanced Virtual Hosting"
+msgstr "高级虚拟主机"
+
+#: admin/consts.py:157
+msgid "Skip"
+msgstr "跳过"
+
+#: admin/consts.py:158
+msgid "Accept"
+msgstr "接受"
+
+#: admin/consts.py:159
+msgid "Require"
+msgstr "需要"
+
+#: admin/server.py:121
+msgid "Configuration saved."
+msgstr "配置已保存."
+
+#: admin/server.py:123
+msgid " Graceful restart performed."
+msgstr " 平稳重启完成."
+
+#: admin/server.py:125
+msgid " Hard restart performed."
+msgstr " 硬重启完成."
+
+#: admin/server.py:208
+msgid "Incorrect parameters: PORT CONFIG_FILE"
+msgstr "不正确的参数: PORT CONFIG_FILE"
+
+#: admin/server.py:229
+#, fuzzy, python-format
+msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)d"
+msgstr "服务器%s运行中.. 进程号=%d 端口=%d"
+
+#: admin/server.py:236
+msgid "Server exiting.."
+msgstr "服务器退出.."
+
+#: admin/validations.py:8
+msgid "Malformed number"
+msgstr "不正确数字"
+
+#: admin/validations.py:14
+msgid "Malformed float number"
+msgstr "不正确浮点数"
+
+#: admin/validations.py:19
+msgid "Must be greater than zero"
+msgstr "必须大于零"
+
+#: admin/validations.py:31
+msgid "Port must be a number"
+msgstr "端口号必须为"
+
+#: admin/validations.py:33
+msgid "Out of the range (1 to 65535)"
+msgstr "超出范围 (1-65535)"
+
+#: admin/validations.py:46
+msgid "Malformed path"
+msgstr "不正确的路径"
+
+#: admin/validations.py:89
+msgid "It cannot be negative"
+msgstr "不能为负值"
+
+#: admin/validations.py:105
+msgid "Malformed IPv4"
+msgstr "不正确的IPv4地址"
+
+#: admin/validations.py:110
+msgid "Malformed IPv4 entry"
+msgstr "输入的IPv4地址不正确"
+
+#: admin/validations.py:112
+msgid "IPv4 entry out of range"
+msgstr "IPv4地址超出范围"
+
+#: admin/validations.py:120
+msgid "Malformed IPv6"
+msgstr "错误的IPv6地址"
+
+#: admin/validations.py:133 admin/validations.py:150
+msgid "Path does not exist"
+msgstr "路径不存在"
+
+#: admin/validations.py:136
+msgid "Path is not a directory"
+msgstr "路径不是目录"
+
+#: admin/validations.py:153
+msgid "Path is not a regular file"
+msgstr "路径不是一个普通文件"
+
+#: admin/validations.py:169
+msgid "Invalid char. Accepts: letters, digits, _, - and ."
+msgstr "无效字符. 允许: letters, digits, _, - and ."
+
+#: admin/validations.py:192
+msgid "Neither a number or an IPv4"
+msgstr "不是数字或IPV4地址"
+
+#: admin/validations.py:203
+msgid "Invalid mask"
+msgstr "无效掩码"
+
+#: admin/validations.py:227
+msgid "Malformed entry (netmask)"
+msgstr "无效输入(子网掩码)"
+
+#: admin/validations.py:258
+msgid "Forced failure"
+msgstr "运行失败"
+
+#: admin/validations.py:266
+msgid "http:// missing"
+msgstr "http:// 未输入"
+
+#: admin/validations.py:303
+msgid "Time value contain invalid values"
+msgstr "时间值包含无效值"
+
+#: admin/validations.py:306
+msgid "Malformed time"
+msgstr "错误的时间"
+
+#~ msgid "Accept X-Real-IP"
+#~ msgstr "允许 X-Real-IP"
+
+#~ msgid "Accept all X-Real-IPs"
+#~ msgstr "允许所有有  X-Real-IPs"
+
+#~ msgid "X-Real-IP Hosts"
+#~ msgstr "X-Real-IP 主机"
+
+#~ msgid "Active to use MD5 passwords."
+#~ msgstr "使用 MD5 加密密码."
+
+#~ msgid "Available languages"
+#~ msgstr "可用的语言"
+
+#~ msgid "Change"
+#~ msgstr "修改"
+
+#~ msgid "Beta testing"
+#~ msgstr "Beta测试"
+
+#~ msgid "For that, we thank you."
+#~ msgstr "为此，我们感谢你."

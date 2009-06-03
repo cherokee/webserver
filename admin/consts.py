@@ -6,7 +6,8 @@ AVAILABLE_LANGUAGES = [
     ('es',           N_('Spanish')),
     ('de',           N_('German')),
     ('nl',           N_('Dutch')),
-    ('se',           N_('Swedish'))
+    ('se',           N_('Swedish')),
+    ('zh_CN',        N_('Chinese'))
 ]
 
 HANDLERS = [
