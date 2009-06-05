@@ -1,3 +1,8 @@
+2009-06-05  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* po/admin/zh_CN.po, admin/consts.py: Updates the Chinese
+	translation. Patch by lijiong1986 <lijiong1986@126.com>.
+
 2009-06-02  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/Wizard_PHP.py: Adds a new default path /usr/php/bin. For
