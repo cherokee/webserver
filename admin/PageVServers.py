@@ -186,7 +186,7 @@ class PageVServers (PageMenu, FormHelper):
             else:
                 link_del = ''
 
-            txt += '<tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%d</td><td>%s</td><td>%s</td></tr>' % (
+            txt += '<tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td class="center">%d</td><td class="center">%s</td><td class="center">%s</td></tr>' % (
                 prio, prio, extra, link, document_root, doms, logging, link_del)
 
         txt += '</table>'
@@ -194,6 +194,8 @@ class PageVServers (PageMenu, FormHelper):
 
         txt += '''
                       <script type="text/javascript">
+                      var prevSection = '';
+
                       $(document).ready(function() {
                         $("#%(name)s tr:even').addClass('alt')");
 
@@ -215,21 +217,20 @@ class PageVServers (PageMenu, FormHelper):
 
                       $(document).ready(function(){
                         $("table.rulestable tr:odd").addClass("odd");
-
-                        $("#newsection").hide();
-                        $("#clonesection").hide();
-                        $("#wizardsection").hide();
-                        $("#newsection_b").click(function() { openSection($("#newsection"))});
-                        $("#clonesection_b").click(function() { openSection($("#clonesection"))});
-                        $("#wizardsection_b").click(function() { openSection($("#wizardsection"))});
+                        $("#newsection_b").click(function() { openSection('newsection')});
+                        $("#clonesection_b").click(function() { openSection('clonesection')});
+                        $("#wizardsection_b").click(function() { openSection('wizardsection')});
                       });
 
-                      function openSection(el) 
+                      function openSection(section) 
                       {
-                          $("#newsection").hide();
-                          $("#clonesection").hide();
-                          $("#wizardsection").hide();
-                          el.show();
+                          if (prevSection != '') {
+                              $("#"+prevSection).hide();
+                              $("#"+prevSection+"_b").attr("style", "font-weight: normal;");
+                          }
+		          $("#"+section+"_b").attr("style", "font-weight: bold;");
+                          $("#"+section).show();
+                          prevSection = section;
                       }
 
                       $(document).mouseup(function(){

@@ -1,3 +1,8 @@
+2009-05-27  Jonathan Hernandez  <ion@suavizado.com>
+	* admin/PageVServer.py admin/PageVServers.py admin/css/cherokee.css:
+	Update Look & Feel for VServers
+	
+
 2009-06-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* po/admin/zh_CN.po, admin/consts.py: Updates the Chinese
@@ -130,16 +135,16 @@
 
 2009-05-27  Jonathan Hernandez  <ion@suavizado.com>
 
-    * admin/Wizard_PHP.py: Add /usr/local/bin to paths
+	* admin/Wizard_PHP.py: Add /opt/local/bin to paths
 
-    * admin/PageVServers.py, admin/PageVServer.py: Nest rules table 
-    in a div for new look and feel and JS for show sections (work in 
-    progress).
+	* admin/PageVServers.py, admin/PageVServer.py: Nest rules table 
+	in a div for new look and feel and JS for show sections (work in 
+	progress).
 
-    * admin/static/images/tab.png, admin/static/images/rulestable-th.png, 
-    admin/static/images/menu-active.png, admin/static/css/cherokee.css:
-    Change images for tabs (not so rounded corners), active menu option 
-    and table header, styles for rulestable and vserver actions.
+	* admin/static/images/tab.png, admin/static/images/rulestable-th.png, 
+	admin/static/images/menu-active.png, admin/static/css/cherokee.css:
+	Change images for tabs (not so rounded corners), active menu option 
+	and table header, styles for rulestable and vserver actions.
 
 2009-05-27  Alvaro Lopez Ortega  <alvaro@octality.com>
 

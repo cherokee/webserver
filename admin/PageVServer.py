@@ -218,11 +218,24 @@ class PageVServer (PageMenu, FormHelper):
 
         # Behavior
         pre = 'vserver!%s!rule' %(host)
-        tmp = self._render_rules_generic (cfg_key    = pre, 
+        tmp = self.Dialog(RULE_LIST_NOTE)
+        tmp += '<div class="rulesdiv">'
+        tmp += self._render_rules_generic (cfg_key    = pre, 
                                           url_prefix = '/vserver/%s'%(host),
                                           priorities = self._priorities)
+
+        tmp += '<div class="rulessection" id="newsection">'
         tmp += self._render_add_rule ("tmp!new_rule")
+        tmp += '</div>'
+
+        tmp += '<div class="rulessection" id="wizardsection">'
         tmp += self._render_wizards (host)
+        tmp += '</div>'
+
+        tmp += '<div class="rulesbutton"><a id="newsection_b">%s</a></div>' % (_('Add new rule'))
+        tmp += '<div class="rulesbutton"><a id="wizardsection_b">%s</a></div>' % (_('Wizards'))
+
+        tmp += '</div>\n'
         tabs += [(_('Behavior'), tmp)]
 
         # Personal Webs
@@ -318,7 +331,6 @@ class PageVServer (PageMenu, FormHelper):
         if not len(priorities):
             return txt
 
-        txt += self.Dialog(RULE_LIST_NOTE)
 
         table_name = "rules%d" % (self._rule_table)
         self._rule_table += 1
@@ -326,7 +338,7 @@ class PageVServer (PageMenu, FormHelper):
         ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
         DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
 
-        txt += '<div class="rulesdiv"><table id="%s" class="rulestable">' % (table_name)
+        txt += '<table id="%s" class="rulestable">' % (table_name)
         txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
 
         # Rule list
@@ -375,12 +387,14 @@ class PageVServer (PageMenu, FormHelper):
                     if int(conf.get_val('encoder!%s'%(k))):
                         encoders = ENABLED_IMAGE
 
-            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n' % (
+            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td></tr>\n' % (
                 prio, pre, prio, extra, link, name_type, handler_name, document_root, auth_name, encoders, expiration, final, link_del)
 
-        txt += '</table></div>\n'
+        txt += '</table>\n'
+
         txt += '''
                       <script type="text/javascript">
+                      prevSection = '';
                       $(document).ready(function() {
                         $("#%(name)s tr:even').addClass('alt')");
 
@@ -403,7 +417,21 @@ class PageVServer (PageMenu, FormHelper):
 
                       $(document).ready(function(){
                         $("table.rulestable tr:odd").addClass("odd");
+                        $("#newsection_b").click(function() { openSection('newsection')});
+                        $("#wizardsection_b").click(function() { openSection('wizardsection')});
                       });
+
+                      function openSection(section) 
+                      {
+                          if (prevSection != '') {
+                              $("#"+prevSection).hide();
+                              $("#"+prevSection+"_b").attr("style", "font-weight: normal;");
+                          }
+                          $("#"+section+"_b").attr("style", "font-weight: bold;");
+                          $("#"+section).show();
+                          prevSection = section;
+                      }
+
 
                       $(document).mouseup(function(){
                         $("table.rulestable tr:even").removeClass("odd");

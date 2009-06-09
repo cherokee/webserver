@@ -20,6 +20,8 @@ html>body #container {
 a { color: #2d5e9a; }
 a:hover { color: #164987; }
 
+.center { text-align: center; }
+
 #container {
     background: #cfd9e8 url(../images/background.png) center top repeat-y;
     width: 960px;
@@ -495,7 +497,6 @@ table tr th {
 }
 
 .rulesdiv .rulesbutton {
-  font-size: 85%;
   background: #d4e1f1;
   margin: 4px 4px 4px 8px;
   padding: 2px 8px;
@@ -507,6 +508,7 @@ table tr th {
 }
 
 .rulesbutton a {
+  font-size: 11px;
   padding: 0;
   color: #7695bc;
   text-decoration: none;
@@ -515,7 +517,6 @@ table tr th {
 .rulesbutton a:hover {
   cursor: pointer;
 }
-
 
 .rulestable {
   width: 100%;
@@ -537,6 +538,10 @@ table tr th {
   padding: 8px;
   background: #fff;
 }
+
+#wizardsection { display: none; }
+#clonesection { display: none; }
+#newsection { display: none; }
 
 #mimetable {
   width: 680px;
@@ -590,11 +595,11 @@ table tr th {
 /* Alternate row color in rule list */
 table.rulestable tr td {
   padding: 2px 4px;
-  background-color: #fff;
   border-right: 1px solid #d4e1f1;
+  background-color: #f9fcff;
 }
 table.rulestable tr.odd td {
-  background-color: #f3fbfb;
+  background-color: #fff;
 }
 
 /**************************/
