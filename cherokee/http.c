@@ -152,6 +152,7 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	/* 2xx
 	 */
 	case http_ok:  	                    *str = http_ok_string; break;
+	case http_created:                  *str = http_created_string; break;
 	case http_accepted:                 *str = http_accepted_string; break;
 	case http_no_content:               *str = http_no_content_string; break;
 	case http_partial_content:          *str = http_partial_content_string; break;
@@ -215,6 +216,7 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		/* 2xx
 		 */
 		entry_code (ok);
+		entry_code (created);
 		entry_code (accepted);
 		entry_code (no_content);
 		entry_code (partial_content);

@@ -86,6 +86,7 @@ typedef enum {
 	http_continue                 = 100,
 	http_switching_protocols      = 101,
 	http_ok                       = 200,
+	http_created                  = 201,
 	http_accepted                 = 202,
 	http_no_content               = 204,
 	http_partial_content          = 206,
@@ -118,6 +119,7 @@ typedef enum {
 #define http_continue_string                 "100 Continue"
 #define http_switching_protocols_string      "101 Switching Protocols"
 #define http_ok_string                       "200 OK"
+#define http_created_string                  "201 Created"
 #define http_accepted_string                 "202 Accepted"
 #define http_no_content_string               "204 No Content"
 #define http_partial_content_string          "206 Partial Content"

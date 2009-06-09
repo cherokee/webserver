@@ -1,7 +1,11 @@
+2009-06-09  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/http.h, cherokee/http.c: Adds the "201 Created" HTTP
+	error. Implements: http://bugs.cherokee-project.com/490
+
 2009-05-27  Jonathan Hernandez  <ion@suavizado.com>
 	* admin/PageVServer.py admin/PageVServers.py admin/css/cherokee.css:
 	Update Look & Feel for VServers
-	
 
 2009-06-05  Alvaro Lopez Ortega  <alvaro@octality.com>
 
