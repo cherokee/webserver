@@ -478,6 +478,16 @@ a.button:active span {
   font-weight: bold;
 }
 
+.dragHandle {
+	width: 18px;
+	cursor: move;
+	background: transparent url('../images/arrow_ns.png') center center no-repeat;
+}
+
+.dragHandleH {
+	background: transparent url('../images/arrow_ns_h.png') center center no-repeat;
+}
+
 table tr {
   vertical-align: top;
 }

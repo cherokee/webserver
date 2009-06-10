@@ -339,7 +339,7 @@ class PageVServer (PageMenu, FormHelper):
         DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
+        txt += '<tr><th>&nbsp;</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
 
         # Rule list
         for prio in priorities:
@@ -358,15 +358,17 @@ class PageVServer (PageMenu, FormHelper):
                 name = "%s<b>...</b>" % (name[:RULE_NAME_LEN_LIMIT])
 
             if _type != 'default':
-                link     = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, name)
-                final    = self.InstanceCheckbox ('%s!final'%(pre), True, quiet=True)
-                link_del = self.AddDeleteLink (self.submit_ajax_url, "%s!%s"%(cfg_key, prio))
-                extra    = ''
+                link      = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, name)
+                final     = self.InstanceCheckbox ('%s!final'%(pre), True, quiet=True)
+                link_del  = self.AddDeleteLink (self.submit_ajax_url, "%s!%s"%(cfg_key, prio))
+                extra     = ''
+                draggable = ' class="dragHandle"'
             else:
-                link     = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, _('Default'))
-                extra    = ' NoDrag="1" NoDrop="1"'
-                final    = self.HiddenInput ('%s!final'%(pre), "1")
-                link_del = ''
+                link      = '<a href="%s/rule/%s">%s</a>' % (url_prefix, prio, _('Default'))
+                final     = self.HiddenInput ('%s!final'%(pre), "1")
+                link_del  = ''
+                extra     = ' class="nodrag nodrop"'
+                draggable = ''
 
             if conf.get_val('handler'):
                 handler_name = self._get_handler_name (conf['handler'].value)
@@ -387,8 +389,8 @@ class PageVServer (PageMenu, FormHelper):
                     if int(conf.get_val('encoder!%s'%(k))):
                         encoders = ENABLED_IMAGE
 
-            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td>%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td></tr>\n' % (
-                prio, pre, prio, extra, link, name_type, handler_name, document_root, auth_name, encoders, expiration, final, link_del)
+            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td%s>&nbsp;</td><td>%s</td><td>%s</td><td>%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td></tr>\n' % (
+                prio, pre, prio, extra, draggable, link, name_type, handler_name, document_root, auth_name, encoders, expiration, final, link_del)
 
         txt += '</table>\n'
 
@@ -411,8 +413,16 @@ class PageVServer (PageMenu, FormHelper):
                                       window.location = window.location;
                                   }
                               );
-                          }
+                          },
+                          dragHandle: "dragHandle"
                         });
+
+                        $("#%(name)s tr:not(.nodrag, nodrop)").hover(function() {
+                            $(this.cells[0]).addClass('dragHandleH');
+                        }, function() {
+                            $(this.cells[0]).removeClass('dragHandleH');
+                        });
+
                       });
 
                       $(document).ready(function(){

@@ -140,7 +140,7 @@ class PageVServers (PageMenu, FormHelper):
         sorted_vservers.sort(sort_vservers, reverse=True)
 
         txt += '<div class="rulesdiv"><table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr NoDrag="1" NoDrop="1"><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
+        txt += '<tr><th>&nbsp</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
             (_('Nickname'), _('Root'), _('Domains'), _('Logging'))
 
         ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
@@ -172,9 +172,11 @@ class PageVServers (PageMenu, FormHelper):
 
             link = '<a href="/vserver/%s">%s</a>' % (prio, nick)
             if nick == 'default':
-                extra = ' NoDrag="1" NoDrop="1"'
+                extra = ' class="nodrag nodrop"'
+                draggable = ''
             else:
                 extra = ''
+                draggable = ' class="dragHandle"'
 
             if logger_val:
                 logging = ENABLED_IMAGE
@@ -186,8 +188,8 @@ class PageVServers (PageMenu, FormHelper):
             else:
                 link_del = ''
 
-            txt += '<tr prio="%s" id="%s"%s><td>%s</td><td>%s</td><td class="center">%d</td><td class="center">%s</td><td class="center">%s</td></tr>' % (
-                prio, prio, extra, link, document_root, doms, logging, link_del)
+            txt += '<tr prio="%s" id="%s"%s><td%s>&nbsp</td><td>%s</td><td>%s</td><td class="center">%d</td><td class="center">%s</td><td class="center">%s</td></tr>' % (
+                prio, prio, extra, draggable, link, document_root, doms, logging, link_del)
 
         txt += '</table>'
 
@@ -211,8 +213,16 @@ class PageVServers (PageMenu, FormHelper):
                                       window.location.reload();
                                   }
                               );
-                          }
+                          },
+                          dragHandle: "dragHandle"
                         });
+
+                        $("#%(name)s tr:not(.nodrag, nodrop)").hover(function() {
+                            $(this.cells[0]).addClass('dragHandleH');
+                        }, function() {
+                            $(this.cells[0]).removeClass('dragHandleH');
+                        });
+
                       });
 
                       $(document).ready(function(){

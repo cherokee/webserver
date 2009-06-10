@@ -1,3 +1,10 @@
+2009-06-10  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/PageVServers.py, admin/PageVServer.py,
+	admin/static/css/cherokee.css, admin/static/js/jquery.tablednd.js:
+	Since now, to reorder Virtual Servers or Rules, we have to click
+	on the first column of the table, instead on all the row.
+
 2009-06-09  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* cherokee/http.h, cherokee/http.c: Adds the "201 Created" HTTP
