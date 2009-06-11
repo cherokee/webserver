@@ -27,7 +27,8 @@ CONFIG_VSRV = """
 %(vsrv_pre)s!document_root = %(document_root)s
 
 %(vsrv_pre)s!rule!10!match = directory
-%(vsrv_pre)s!rule!10!match!directory = /media
+%(vsrv_pre)s!rule!10!match!directory = /public
+%(vsrv_pre)s!rule!10!document_root = %(ror_dir)s/public
 %(vsrv_pre)s!rule!10!handler = file
 %(vsrv_pre)s!rule!10!expiration = time
 %(vsrv_pre)s!rule!10!expiration!time = 7d
@@ -45,6 +46,13 @@ CONFIG_VSRV_CHILD = """
 """
 
 CONFIG_RULES = """
+%(rule_pre_plus1)s!match = directory
+%(rule_pre_plus1)s!match!directory = %(webdir)s/public
+%(rule_pre_plus1)s!document_root = %(ror_dir)s/public
+%(rule_pre_plus1)s!handler = file
+%(rule_pre_plus1)s!expiration = time
+%(rule_pre_plus1)s!expiration!time = 7d
+
 %(rule_pre)s!match = directory
 %(rule_pre)s!match!directory = %(webdir)s
 %(rule_pre)s!encoder!gzip = 1
@@ -191,6 +199,7 @@ class Wizard_Rules_RoR (WizardPage):
         rule_num, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
         src_num,  src_pre  = cfg_source_get_next (self._cfg)
         new_host           = self._cfg.get_val ("%s!nick"%(self._pre))
+        rule_pre_plus1     = "%s!rule!%d" % (self._pre, rule_num + 1)
 
         # Add the new rules
         config = CONFIG_RULES % (locals())
