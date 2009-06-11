@@ -1,3 +1,8 @@
+2009-06-11  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/util.py (path_find_binary): It wasn't working property
+	when invoked without custom check function.
+
 2009-06-10  Antonio Perez  <aperez@skarcha.com>
 
 	* admin/PageVServers.py, admin/PageVServer.py,

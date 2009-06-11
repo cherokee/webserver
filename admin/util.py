@@ -59,7 +59,6 @@ def cfg_source_find_interpreter (cfg,
             in_nick in cfg.get_val("source!%s!nick"%(i))):
             return "source!%s" % (i)
 
-
 #
 # Paths
 #
@@ -82,14 +81,18 @@ def path_find_binary (executable, extra_dirs=[], custom_test=None):
         if type(executable) == str:
             tmp = os.path.join (dir, executable)
             if os.path.exists (tmp):
-                if custom_test and custom_test(tmp):
-                    return tmp
+                if custom_test:
+                    if not custom_test(tmp):
+                        continue
+                return tmp
         elif type(executable) == list:
             for n in executable:
                 tmp = os.path.join (dir, n)
                 if os.path.exists (tmp):
-                    if custom_test and custom_test(tmp):
-                        return tmp
+                    if custom_test:
+                        if not custom_test(tmp):
+                            continue
+                    return tmp
 
 def path_find_w_default (path_list, default=''):
     """Find a path.
