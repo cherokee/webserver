@@ -40,7 +40,7 @@ class ModuleExists (Module, FormHelper):
 
         txt = str(table)
         if not specific_file:
-            txt += '<input type="submit" value="%s" />' % (_('Add'))
+            txt += '<div align="right"><input type="submit" value="%s" /></div>' % (_('Add'))
             txt += '<input type="hidden" name="tmp!new_rule!bypass_value_check" value="1" />'
 
         return txt
@@ -59,7 +59,7 @@ class ModuleExists (Module, FormHelper):
         self.ApplyChangesPrefix (self._prefix, None, post)
 
     def apply_cfg (self, values):
-        if not values.has_key('value') and
+        if not values.has_key('value') and \
            not values.has_key('bypass_value_check'):
             print _("ERROR, a 'value' entry is needed!")
 
