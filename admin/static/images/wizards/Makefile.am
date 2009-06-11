@@ -7,7 +7,8 @@ wordpress.png \
 redirect.jpg \
 django.png \
 hotlinking.png \
-drupal.png
+drupal.png \
+ror.png
 
 EXTRA_DIST = \
 $(wizards_DATA)

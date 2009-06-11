@@ -59,6 +59,28 @@ def cfg_source_find_interpreter (cfg,
             in_nick in cfg.get_val("source!%s!nick"%(i))):
             return "source!%s" % (i)
 
+def cfg_source_find_empty_port (cfg, n_ports=1):
+    ports = []
+    for i in cfg.keys("source"):
+        host = cfg.get_val ("source!%s!host"%(i))
+        if not host: continue
+
+        colon = host.rfind(':')
+        if colon < 0: continue
+        
+        port = int (host[colon+1:])
+        if port < 1024: continue
+
+        ports.append (port)
+
+    pport = 1025
+    for x in ports:
+        if pport + n_ports < x:
+            return pport
+
+    assert (False)
+
+
 #
 # Paths
 #

@@ -1,5 +1,9 @@
 2009-06-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Wizard_RoR.py, admin/static/images/wizards/ror.png,
+	admin/static/images/wizards/Makefile.am, admin/Makefile.am,
+	admin/util.py: Adds a new Wizard for Ruby on Rails.
+
 	* admin/util.py (path_find_binary): It wasn't working property
 	when invoked without custom check function.
 
