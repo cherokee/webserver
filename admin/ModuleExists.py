@@ -10,6 +10,9 @@ NOTE_EXISTS  = N_("Comma separated list of files. Rule applies if one exists.")
 NOTE_IOCACHE = N_("Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise.")
 NOTE_ANY     = N_("Match the request if any file exists.")
 
+OPTIONS = [('0', _('Match a specific list of files')),
+           ('1', _('Match any file'))]
+
 class ModuleExists (Module, FormHelper):
     validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
 
@@ -22,25 +25,50 @@ class ModuleExists (Module, FormHelper):
                        '%s!match_any'%(self._prefix)]
 
     def _op_render (self):
-        table = TableProps()
         if self._prefix.startswith('tmp!'):
+            return self._render_new_entry()
+
+        return self._render_modify_entry()
+
+    def _render_new_entry (self):
+        specific_file = not int(self._cfg.get_val('%s!match_any'%(self._prefix), '0'))
+
+        table = TableProps()
+        self.AddPropOptions_Reload (table, _("Match type"), '%s!match_any'%(self._prefix), OPTIONS, "")
+        if specific_file:
             self.AddPropEntry (table, _('Files'), '%s!value'%(self._prefix), _(NOTE_EXISTS))
-        else:
-            self.AddPropCheck (table, _('Match any file'), '%s!match_any'%(self._prefix), False, _(NOTE_ANY))
-            if not int(self._cfg.get_val ('%s!match_any'%(self._prefix), '0')):
-                self.AddPropEntry (table, _('Files'), '%s!exists'%(self._prefix), _(NOTE_EXISTS))
-            self.AddPropCheck (table, _('Use I/O cache'), '%s!iocache'%(self._prefix), False, _(NOTE_IOCACHE))
+
+        txt = str(table)
+        if not specific_file:
+            txt += '<input type="submit" value="%s" />' % (_('Add'))
+            txt += '<input type="hidden" name="tmp!new_rule!bypass_value_check" value="1" />'
+
+        return txt
+
+    def _render_modify_entry (self):
+        specific_file = not int(self._cfg.get_val ('%s!match_any'%(self._prefix), '0'))
+
+        table = TableProps()
+        self.AddPropCheck (table, _('Match any file'), '%s!match_any'%(self._prefix), False, _(NOTE_ANY))
+        if specific_file:
+            self.AddPropEntry (table, _('Files'), '%s!exists'%(self._prefix), _(NOTE_EXISTS))
+        self.AddPropCheck (table, _('Use I/O cache'), '%s!iocache'%(self._prefix), False, _(NOTE_IOCACHE))
         return str(table)
 
     def _op_apply_changes (self, uri, post):
         self.ApplyChangesPrefix (self._prefix, None, post)
 
     def apply_cfg (self, values):
-        if not values.has_key('value'):
+        if not values.has_key('value') and
+           not values.has_key('bypass_value_check'):
             print _("ERROR, a 'value' entry is needed!")
 
-        exts = values['value']
-        self._cfg['%s!exists'%(self._prefix)] = exts
+        any = values['match_any']
+        if int(any):
+            self._cfg['%s!match_any'%(self._prefix)] = any
+        else:
+            exts = values['value']
+            self._cfg['%s!exists'%(self._prefix)] = exts
 
     def get_name (self):
         if int(self._cfg.get_val ('%s!match_any'%(self._prefix), 0)):

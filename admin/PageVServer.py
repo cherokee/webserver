@@ -101,7 +101,8 @@ class PageVServer (PageMenu, FormHelper):
             if re: return re
 
         elif post.get_val('is_submit'):
-            if post.get_val('tmp!new_rule!value'):
+            if (post.get_val('tmp!new_rule!value') or
+                post.get_val('tmp!new_rule!bypass_value_check')):
                 re = self._op_add_new_entry (post       = post,
                                              cfg_prefix = 'vserver!%s!rule' %(host),
                                              url_prefix = '/vserver/%s'%(host),
