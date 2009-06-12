@@ -57,10 +57,10 @@ NOTE_IO_MIN_SIZE  = N_('Files under this size will not be cached.')
 NOTE_IO_MAX_SIZE  = N_('Files over this size will not be cached.')
 NOTE_IO_LAST_STAT = N_('How long the file information should last cached without refreshing it.')
 NOTE_IO_LAST_MMAP = N_('How long the file content should last cached.')
-NOTE_DH512        = N_('Path DH parameters PEM file (512 bits).')
-NOTE_DH1024       = N_('Path DH parameters PEM file (1024 bits).')
-NOTE_DH2048       = N_('Path DH parameters PEM file (2048 bits).')
-NOTE_DH4096       = N_('Path DH parameters PEM file (4096 bits).')
+NOTE_DH512        = N_('Path to a Diffie Hellman (DH) parameters PEM file: 512 bits.')
+NOTE_DH1024       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 1024 bits.')
+NOTE_DH2048       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 2048 bits.')
+NOTE_DH4096       = N_('Path to a Diffie Hellman (DH) parameters PEM file: 4096 bits.')
 
 HELPS = [('config_advanced', N_('Advanced'))]
 
@@ -121,10 +121,10 @@ class PageAdvanced (PageMenu, FormHelper):
 
     def _render_tls (self):
 	table = TableProps()
-        self.AddPropEntry (table, _('Diffie Hellman parameters (512 bits)'), 'server!tls!dh_param512', _(NOTE_DH512))
-        self.AddPropEntry (table, _('Diffie Hellman parameters (1024 bits)'), 'server!tls!dh_param1024', _(NOTE_DH1024))
-        self.AddPropEntry (table, _('Diffie Hellman parameters (2048 bits)'), 'server!tls!dh_param2048', _(NOTE_DH2048))
-        self.AddPropEntry (table, _('Diffie Hellman parameters (4096 bits)'), 'server!tls!dh_param4096', _(NOTE_DH4096))
+        self.AddPropEntry (table, _('DH parameters: 512 bits'), 'server!tls!dh_param512', _(NOTE_DH512))
+        self.AddPropEntry (table, _('DH parameters: 1024 bits'), 'server!tls!dh_param1024', _(NOTE_DH1024))
+        self.AddPropEntry (table, _('DH parameters: 2048 bits'), 'server!tls!dh_param2048', _(NOTE_DH2048))
+        self.AddPropEntry (table, _('DH parameters: 4096 bits'), 'server!tls!dh_param4096', _(NOTE_DH4096))
         return self.Indent(table)
 
     def _render_content (self):

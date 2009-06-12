@@ -119,7 +119,7 @@ class PageIcon (PageMenu, FormHelper):
         if icons and icons.has_child():
             tmp += '<h2>%s</h2>' % (_('Extension list'))
 
-            table = Table(4, 1, style='width="100%" class="rulestable"')
+            table = Table(4, 1, style='width="100%"')
             table += ('', _('Icon File'), _('Extensions'), '')
 
             for icon in icons:
