@@ -1,3 +1,9 @@
+2009-06-12  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/PageEntry.py, admin/Rule.py, admin/Module.py: Improves the
+	Rule matching entries validation. It also fixes the bug #486:
+	http://bugs.cherokee-project.com/486
+
 2009-06-11  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/ModuleExists.py, admin/PageVServer.py: The "File Exists"

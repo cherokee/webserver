@@ -91,12 +91,13 @@ class PageEntry (PageMenu, FormHelper):
         return self._op_default (uri)
 
     def _op_apply_changes (self, uri, post):
-        name = self._cfg.get_val("%s!match"%(self._conf_prefix))
-        rule_module = module_obj_factory (name, self._cfg, "%s!match"%(self._conf_prefix), self.submit_url)
-
         # Validate
         validation = DATA_VALIDATION[:]
-        validation += rule_module.validation
+
+        # Validate += rule
+        pre = '%s!match'%(self._conf_prefix)
+        rule = Rule (self._cfg, pre, self.submit_url, self.errors, 0)
+        validation += rule.get_validation()
 
         # Handler properties
         pre = "%s!handler" % (self._conf_prefix)

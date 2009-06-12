@@ -36,6 +36,21 @@ class Rule (Module, FormHelper):
                 return rule_module.checks
         return []
 
+    def get_validation (self):
+        matcher = self._cfg.get_val(self._prefix)
+        if matcher == 'not':
+            r = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.errors, self.depth+1)
+            return r.get_validation()
+        elif matcher in ['or', 'and']:
+            r1 = Rule(self._cfg, '%s!left'%(self._prefix), self.submit_url, self.errors, self.depth+1)
+            r2 = Rule(self._cfg, '%s!right'%(self._prefix), self.submit_url, self.errors, self.depth+1)
+            return r1.get_validation() + r2.get_validation()
+        else:
+            rule_module = module_obj_factory (matcher, self._cfg, self._prefix, self.submit_url)
+            if 'checks' in dir(rule_module):
+                return rule_module.validation
+        return []
+
     def get_title (self):
         txt = ''
 

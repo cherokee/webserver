@@ -13,7 +13,12 @@ def module_obj_factory_detailed (mod_type, name, cfg, prefix, submit_url, **kwar
     mod_name = reduce (lambda x,y: x+y, map(lambda x: x.capitalize(), name.split('_')))
 
     # Load the module source file
-    mod = imp.load_source (name, "%s%s.py" % (mod_type, mod_name))
+    try:
+        mod = imp.load_source (name, "%s%s.py" % (mod_type, mod_name))
+    except IOError:
+        print "ERROR: Could load module: '%s'" % ("%s%s.py" % (mod_type, mod_name))
+        return None
+
     sys.modules[name] = mod
 
     # Instance the object
