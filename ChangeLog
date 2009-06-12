@@ -1,5 +1,8 @@
 2009-06-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/Wizard_RoR.py: Fixes the wizard so it uses the right
+	directory root. Thanks to Gunnar Wolf for pointing the mistake.
+
 	* admin/PageInfoSource.py: Fixes Information Source table render.
 
 	* cherokee/source_interpreter.c, cherokee/spawner.c,

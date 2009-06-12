@@ -24,12 +24,13 @@ source!%(src_num)d!interpreter = spawn-fcgi -n -f %(ror_dir)s/public/dispatch.fc
 
 CONFIG_VSRV = """
 %(vsrv_pre)s!nick = %(new_host)s
-%(vsrv_pre)s!document_root = %(document_root)s
+%(vsrv_pre)s!document_root = %(ror_dir)s/public
+%(vsrv_pre)s!directory_index = index.html
 
-%(vsrv_pre)s!rule!10!match = directory
-%(vsrv_pre)s!rule!10!match!directory = /public
-%(vsrv_pre)s!rule!10!document_root = %(ror_dir)s/public
-%(vsrv_pre)s!rule!10!handler = file
+%(vsrv_pre)s!rule!10!match = exists
+%(vsrv_pre)s!rule!10!match!match_any = 1
+%(vsrv_pre)s!rule!10!match!match_only_files = 0
+%(vsrv_pre)s!rule!10!handler = common
 %(vsrv_pre)s!rule!10!expiration = time
 %(vsrv_pre)s!rule!10!expiration!time = 7d
 
@@ -46,10 +47,18 @@ CONFIG_VSRV_CHILD = """
 """
 
 CONFIG_RULES = """
-%(rule_pre_plus1)s!match = directory
-%(rule_pre_plus1)s!match!directory = %(webdir)s/public
-%(rule_pre_plus1)s!document_root = %(ror_dir)s/public
-%(rule_pre_plus1)s!handler = file
+%(rule_pre_plus2)s!match = directory
+%(rule_pre_plus2)s!match!directory = %(webdir)s
+%(rule_pre_plus2)s!document_root = %(ror_dir)s/public
+%(rule_pre_plus2)s!final = 0
+
+%(rule_pre_plus1)s!match = and
+%(rule_pre_plus1)s!match!left = directory
+%(rule_pre_plus1)s!match!left!directory = %(webdir)s
+%(rule_pre_plus1)s!match!right = exists
+%(rule_pre_plus1)s!match!right!any_file = 1
+%(rule_pre_plus1)s!match!right!match_only_files = 0
+%(rule_pre_plus1)s!handler = common
 %(rule_pre_plus1)s!expiration = time
 %(rule_pre_plus1)s!expiration!time = 7d
 
@@ -74,9 +83,8 @@ def is_ror_dir (path, cfg, nochroot):
     return path
 
 DATA_VALIDATION = [
-    ("tmp!wizard_ror!ror_dir",       (is_ror_dir, 'cfg')),
-    ("tmp!wizard_ror!new_host",      (validations.is_new_host, 'cfg')),
-    ("tmp!wizard_ror!document_root", (validations.is_local_dir_exists, 'cfg'))
+    ("tmp!wizard_ror!ror_dir",  (is_ror_dir, 'cfg')),
+    ("tmp!wizard_ror!new_host", (validations.is_new_host, 'cfg'))
 ]
 
 class Wizard_VServer_RoR (WizardPage):
@@ -103,7 +111,6 @@ class Wizard_VServer_RoR (WizardPage):
         txt += '<h2>New Virtual Server</h2>'
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_ror!new_host',      NOTE_NEW_HOST, value="www.example.com")
-        self.AddPropEntry (table, _('Document Root'), 'tmp!wizard_ror!document_root', NOTE_NEW_HOST, value=os_get_document_root())
         txt += self.Indent(table)
 
         txt += '<h2>Ruby on Rails Project</h2>'
@@ -125,9 +132,8 @@ class Wizard_VServer_RoR (WizardPage):
             return
 
         # Incoming info
-        ror_dir       = post.pop('tmp!wizard_ror!ror_dir')
-        new_host      = post.pop('tmp!wizard_ror!new_host')
-        document_root = post.pop('tmp!wizard_ror!document_root')
+        ror_dir  = post.pop('tmp!wizard_ror!ror_dir')
+        new_host = post.pop('tmp!wizard_ror!new_host')
 
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
@@ -199,6 +205,7 @@ class Wizard_Rules_RoR (WizardPage):
         rule_num, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
         src_num,  src_pre  = cfg_source_get_next (self._cfg)
         new_host           = self._cfg.get_val ("%s!nick"%(self._pre))
+        rule_pre_plus2     = "%s!rule!%d" % (self._pre, rule_num + 2)
         rule_pre_plus1     = "%s!rule!%d" % (self._pre, rule_num + 1)
 
         # Add the new rules
