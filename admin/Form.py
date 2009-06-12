@@ -249,14 +249,14 @@ class FormHelper (WebComponent):
 
         # Render active option
         if name:
-            try:
-                # Inherit the errors, if any
-                kwargs['errors'] = self.errors
-                props_widget = module_obj_factory (name, self._cfg, cfg_key,
-                                                   self.submit_url, **kwargs)
-                render = props_widget._op_render()
-            except IOError:
+            # Inherit the errors, if any
+            kwargs['errors'] = self.errors
+            props_widget = module_obj_factory (name, self._cfg, cfg_key,
+                                               self.submit_url, **kwargs)
+            if not props_widget:
                 render = "Couldn't load the properties module: %s" % (name)
+            else:
+                render = props_widget._op_render()
         else:
             render = ''
 
