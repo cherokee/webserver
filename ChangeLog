@@ -1,5 +1,7 @@
 2009-06-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageInfoSource.py: Fixes Information Source table render.
+
 	* cherokee/source_interpreter.c, cherokee/spawner.c,
 	cherokee/connection-protected.h, cherokee/connection.c: Fixes a
 	potential issue for the new spawning mechanism.

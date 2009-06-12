@@ -218,7 +218,7 @@ class PageInfoSource (PageMenu, FormHelper):
 
             txt += "<h2>%s</h2>" % (_('Known sources'))
             table  = '<table width="90%" id="sources" class="rulestable">'
-            table += '<tr><th>%s</th><th>%s</th><th>%s</th></tr>' % \
+            table += '<tr><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
                      (_('Nick'), _('Type'), _('Connection'))
 
             for s in self._cfg.keys('source'):
@@ -233,7 +233,7 @@ class PageInfoSource (PageMenu, FormHelper):
                     link = self.AddDeleteLink ('/source/ajax_update', 'source!%s'%(s))
 
                 table += '<tr><td><a href="/%s/%s">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (self._id, s, nick, type, host, link)
-            table += '<tr><td colspan="4" align="center"><br/><a href="/%s">%s</a></td></tr>' % (self._id, _('Add new'))
+            table += '<tr><th colspan="4"><a href="/%s"><div align="center">%s</div></a></th></tr>' % (self._id, _('Add new'))
             table += '</table>'
             txt += self.Indent(table)
             txt += TABLE_JS
