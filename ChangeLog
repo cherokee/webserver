@@ -1,5 +1,10 @@
 2009-06-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleExists.py: Adds a missing options supported by the
+	server: 'match_only_files'. It specifies whether regular files
+	should be the only entries taken into account by the rule match
+	plug-in.
+
 	* admin/Wizard_RoR.py: Fixes the wizard so it uses the right
 	directory root. Thanks to Gunnar Wolf for pointing the mistake.
 
