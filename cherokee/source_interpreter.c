@@ -387,7 +387,12 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 				      envp,
 				      logger,
 				      &src->pid);
-	if (ret != ret_ok) {
+	switch (ret) {
+	case ret_ok:
+		break;
+	case ret_eagain:
+		return ret_eagain;
+	default:
 		return ret_error;
 	}
 
@@ -507,8 +512,10 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 	 */
 #ifdef HAVE_POSIX_SHM
 	ret = _spawn_shm (src, logger);
-	if (ret == ret_ok) {
-		return ret_ok;
+	if ((ret == ret_ok) ||
+	    (ret == ret_eagain)) 
+	{
+		return ret;
 	}
 #endif
 
@@ -579,7 +586,15 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		src->launching = true;
 
 		ret = cherokee_source_interpreter_spawn (src, CONN_VSRV(conn)->logger);
-		if (ret != ret_ok) {
+		switch (ret) {
+		case ret_ok:
+			break;
+		case ret_eagain:
+			/* Spawner was busy.. */
+			cherokee_connection_sleep (conn, 300);
+			ret = ret_eagain;
+			goto out;
+		default:
 			if (src->interpreter.buf)
 				TRACE (ENTRIES, "Couldn't spawn: %s\n",
 				       src->interpreter.buf);

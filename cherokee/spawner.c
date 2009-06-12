@@ -36,7 +36,7 @@
 cherokee_shm_t             cherokee_spawn_shared;
 int                        cherokee_spawn_sem;
 static cherokee_boolean_t _active                 = true;
-
+CHEROKEE_MUTEX_T          (spawning_mutex);
 
 ret_t
 cherokee_spawner_set_active (cherokee_boolean_t active)
@@ -55,6 +55,9 @@ cherokee_spawner_init (void)
 	if (! _active) {
 		return ret_ok;
 	}
+
+	/* Monitor mutex */
+	CHEROKEE_MUTEX_INIT (&spawning_mutex, CHEROKEE_MUTEX_FAST);
 
 	/* Shared memory */
 	cherokee_buffer_add_va (&name, "/cherokee-spawner-%d", getppid());
@@ -92,6 +95,8 @@ error:
 ret_t 
 cherokee_spawner_free (void)
 {
+	CHEROKEE_MUTEX_DESTROY (&spawning_mutex);
+
 #ifdef HAVE_POSIX_SHM
 	cherokee_shm_mrproper (&cherokee_spawn_shared);
 #endif
@@ -191,6 +196,13 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 		return ret_deny;
 	}
 
+	/* Lock the monitor mutex
+	 */
+	k = CHEROKEE_MUTEX_TRY_LOCK (&spawning_mutex);
+	if (k) {
+		return ret_eagain;
+	}
+
 	/* Build the string
 	 */
 	cherokee_buffer_ensure_size (&tmp, SPAWN_SHARED_LEN);
@@ -233,7 +245,7 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 	/* Copy it to the shared memory
 	 */
 	if (unlikely (tmp.len > SPAWN_SHARED_LEN)) {
-		return ret_error;
+		goto error;
 	}
 
 	memcpy (cherokee_spawn_shared.mem, tmp.buf, tmp.len);
@@ -256,12 +268,18 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 
 	if (*pid_shm == -1) {
 		TRACE(ENTRIES, "Could get the PID of: '%s'\n", binary->buf);
-		return ret_error;
+		goto error;
 	}
 
 	TRACE(ENTRIES, "Successfully launched PID=%d\n", *pid_shm);
 	*pid_ret = *pid_shm;
+
+	CHEROKEE_MUTEX_UNLOCK (&spawning_mutex);
 	return ret_ok;
+
+error:
+	CHEROKEE_MUTEX_UNLOCK (&spawning_mutex);
+	return ret_error;
 #else
 	return ret_not_found;
 #endif

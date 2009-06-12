@@ -270,6 +270,7 @@ void  cherokee_connection_set_keepalive          (cherokee_connection_t *conn);
 void  cherokee_connection_set_chunked_encoding   (cherokee_connection_t *conn);
 int   cherokee_connection_should_include_length  (cherokee_connection_t *conn);
 ret_t cherokee_connection_instance_encoder       (cherokee_connection_t *conn);
+ret_t cherokee_connection_sleep                  (cherokee_connection_t *conn, cherokee_msec_t msecs);
 
 /* Iteration
  */

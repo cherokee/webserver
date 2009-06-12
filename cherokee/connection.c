@@ -2637,3 +2637,12 @@ cherokee_connection_set_redirect (cherokee_connection_t *conn, cherokee_buffer_t
 	cherokee_buffer_add_buffer (&conn->redirect, address);
 	return ret_ok;
 }
+
+
+ret_t
+cherokee_connection_sleep (cherokee_connection_t *conn,
+			   cherokee_msec_t        msecs)
+{
+	conn->limit_blocked_until = cherokee_bogonow_msec + msecs;
+	return ret_ok;
+}
