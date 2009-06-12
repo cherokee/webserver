@@ -1,3 +1,8 @@
+2009-06-12  Jonathan Hernandez  <ion@suavizado.com>
+	* admin/PageVServer.py admin/PageVServers.py: Add cookie for
+	persistency in sections. Fixes the bug #493:
+	http://bugs.cherokee-project.com/493
+
 2009-06-12  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/ModuleExists.py: Adds a missing options supported by the

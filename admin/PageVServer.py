@@ -430,10 +430,16 @@ class PageVServer (PageMenu, FormHelper):
                         $("table.rulestable tr:odd").addClass("odd");
                         $("#newsection_b").click(function() { openSection('newsection')});
                         $("#wizardsection_b").click(function() { openSection('wizardsection')});
+                        open_vsec  = get_cookie('open_vsec');
+                        if (open_vsec && document.referrer == window.location) {
+                            openSection(open_vsec);
+                        }
+
                       });
 
                       function openSection(section) 
                       {
+                          document.cookie = "open_vsec="  + section;
                           if (prevSection != '') {
                               $("#"+prevSection).hide();
                               $("#"+prevSection+"_b").attr("style", "font-weight: normal;");

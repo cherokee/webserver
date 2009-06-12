@@ -230,10 +230,15 @@ class PageVServers (PageMenu, FormHelper):
                         $("#newsection_b").click(function() { openSection('newsection')});
                         $("#clonesection_b").click(function() { openSection('clonesection')});
                         $("#wizardsection_b").click(function() { openSection('wizardsection')});
+                        open_vssec  = get_cookie('open_vssec');
+                        if (open_vssec && document.referrer == window.location) {
+                            openSection(open_vssec);
+                        }
                       });
 
                       function openSection(section) 
                       {
+                          document.cookie = "open_vssec="  + section;
                           if (prevSection != '') {
                               $("#"+prevSection).hide();
                               $("#"+prevSection+"_b").attr("style", "font-weight: normal;");
