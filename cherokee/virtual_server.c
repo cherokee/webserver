@@ -154,7 +154,7 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 
 	/* Index list
 	 */
-	cherokee_list_content_free (&vserver->index_list, free);
+	cherokee_list_content_free (&vserver->index_list, cherokee_buffer_free);
 
 	free (vserver);	
 	return ret_ok;
@@ -222,11 +222,15 @@ cherokee_virtual_server_add_tx (cherokee_virtual_server_t *vserver, size_t tx)
 static ret_t 
 add_directory_index (char *index, void *data)
 {
+	cherokee_buffer_t         *new_buf;
 	cherokee_virtual_server_t *vserver = VSERVER(data);
 
 	TRACE(ENTRIES, "Adding directory index '%s'\n", index);
 
-	cherokee_list_add_tail_content (&vserver->index_list, strdup(index));
+	cherokee_buffer_new (&new_buf);
+	cherokee_buffer_add (new_buf, index, strlen(index));
+
+	cherokee_list_add_tail_content (&vserver->index_list, new_buf);
 	return ret_ok;
 }
 

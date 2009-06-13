@@ -1,5 +1,8 @@
 2009-06-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/handler_common.c, cherokee/virtual_server.c: The index
+	files list entries are now buffers instead of char*.
+
 	* admin/validations.py, split_list: Improve list parsing. From now
 	on, lists can be defined with ',' and/or ' '.
 

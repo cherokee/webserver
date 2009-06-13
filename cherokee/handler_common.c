@@ -230,13 +230,12 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 		/* Have an index file inside?
 		 */
 		list_for_each (i, &CONN_VSRV(conn)->index_list) {
-			int   is_dir;
-			char *index     = LIST_ITEM_INFO(i);
-			int   index_len = strlen (index);
+			int                is_dir;
+			cherokee_buffer_t *index = BUF(LIST_ITEM_INFO(i));
 
 			/* Check if the index is fullpath
 			 */
-			if (*index == '/') {
+			if (index->buf[0] == '/') {
 				cherokee_buffer_t *new_local_dir = THREAD_TMP_BUF1(thread);
 
 				/* This means there is a configuration entry like:
@@ -252,7 +251,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				 */
 				cherokee_buffer_clean (new_local_dir);
 				cherokee_buffer_add_buffer (new_local_dir, &CONN_VSRV(conn)->root);
-				cherokee_buffer_add (new_local_dir, index, index_len);
+				cherokee_buffer_add_buffer (new_local_dir, index);
 				
 				ret = cherokee_io_stat (iocache, new_local_dir, use_iocache, &nocache_info, &io_entry, &info);
 				exists = (ret == ret_ok);
@@ -269,9 +268,9 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				}
 
 				cherokee_buffer_clean (&conn->request);
-				cherokee_buffer_add (&conn->request, index, index_len);
+				cherokee_buffer_add_buffer (&conn->request, index);
 
-				TRACE (ENTRIES, "top level index matched %s\n", index);
+				TRACE (ENTRIES, "top level index matched %s\n", index->buf);
 
 				BIT_SET (conn->options, conn_op_root_index);
 
@@ -281,16 +280,16 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 
 			/* stat() the possible new path
 			 */
-			cherokee_buffer_add (&conn->local_directory, index, index_len);
+			cherokee_buffer_add_buffer (&conn->local_directory, index);
 			ret = cherokee_io_stat (iocache, &conn->local_directory, use_iocache, &nocache_info, &io_entry, &info);
 
 			exists =  (ret == ret_ok);
 			is_dir = ((ret == ret_ok) && S_ISDIR(info->st_mode));
 
 			cherokee_iocache_entry_unref (&io_entry);
-			cherokee_buffer_drop_ending (&conn->local_directory, index_len);
+			cherokee_buffer_drop_ending (&conn->local_directory, index->len);
 
-			TRACE (ENTRIES, "trying index '%s', exists %d\n", index, exists);
+			TRACE (ENTRIES, "trying index '%s', exists %d\n", index->buf, exists);
 
 			/* If the file doesn't exist or it is a directory, try with the next one
 			 */
@@ -305,7 +304,7 @@ cherokee_handler_common_new (cherokee_handler_t **hdl, void *cnt, cherokee_modul
 				cherokee_buffer_add_buffer (&conn->request_original, &conn->request);
 			}
 
-			cherokee_buffer_add (&conn->request, index, index_len);
+			cherokee_buffer_add_buffer (&conn->request, index);
 
 			TRACE_CONN(conn);
 			return ret_eagain;
