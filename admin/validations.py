@@ -1,5 +1,6 @@
 import string
 import os.path
+from util import split_list
 
 def is_number (value):
     try:
@@ -46,7 +47,7 @@ def is_path (value):
     raise ValueError, _('Malformed path')
 
 def is_list (value):
-    tmp = [x.strip() for x in value.split(',')]
+    tmp = split_list (value)
     if not tmp:
         return ''
     return ','.join(tmp)
@@ -73,15 +74,15 @@ def is_dir_formated (value):
 
 def is_extension_list (value):
     re = []
-    for p in value.split(','):
+    for p in split_list(value):
         re.append(is_extension(p))
-    return reduce(lambda x,y: x+','+y, re)
+    return ','.join(re)
 
 def is_path_list (value):
     re = []
-    for p in value.split(','):
+    for p in split_list(value):
         re.append(is_path(p))
-    return reduce(lambda x,y: x+','+y, re)
+    return ','.join(re)
 
 def is_positive_int (value):
     tmp = int(value)
@@ -171,12 +172,8 @@ def is_safe_id (value):
 
 def is_safe_id_list (value):
     ids = []
-    for t1 in value.split(','):
-        for t2 in t1.split(' '):
-            id = t2.strip()
-            if not id:
-                continue
-            ids.append(is_safe_id (id))
+    for id in split_list (value):
+        ids.append(is_safe_id (id))
     return ','.join(ids)
 
 def int2bin(n, count=24):
@@ -241,15 +238,13 @@ def is_ip_or_netmask (value):
 
 def is_ip_list (value):
     re = []
-    for entry in value.split(','):
-        e = entry.strip()
+    for e in split_list(value):
         re.append(is_ip(e))
     return ','.join(re)
 
 def is_ip_or_netmask_list (value):
     re = []
-    for entry in value.split(','):
-        e = entry.strip()
+    for e in split_list(value):
         re.append(is_ip_or_netmask(e))
     return ','.join(re)
 

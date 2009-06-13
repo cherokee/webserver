@@ -1,5 +1,8 @@
 2009-06-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/validations.py, split_list: Improve list parsing. From now
+	on, lists can be defined with ',' and/or ' '.
+
 	* admin/Rule.py, admin/ModuleExtensions.py, admin/PageVServer.py,
 	admin/validations.py: Fixes a problem reported on the mailing
 	list: Extension Lists weren't being checked:

@@ -154,3 +154,17 @@ def os_get_document_root():
         return '/var/www'
 
     return ''
+
+
+#
+# Misc
+#
+def split_list (value):
+    ids = []
+    for t1 in value.split(','):
+        for t2 in t1.split(' '):
+            id = t2.strip()
+            if not id:
+                continue
+            ids.append(id)
+    return ids
