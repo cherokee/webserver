@@ -82,9 +82,10 @@ configure (cherokee_rule_exists_t    *rule,
 
 	UNUSED(vsrv);
 
-	cherokee_config_node_read_bool (conf, "iocache",          &rule->use_iocache);
-	cherokee_config_node_read_bool (conf, "match_any",        &rule->match_any);
-	cherokee_config_node_read_bool (conf, "match_only_files", &rule->match_only_files);
+	cherokee_config_node_read_bool (conf, "iocache",           &rule->use_iocache);
+	cherokee_config_node_read_bool (conf, "match_any",         &rule->match_any);
+	cherokee_config_node_read_bool (conf, "match_only_files",  &rule->match_only_files);
+	cherokee_config_node_read_bool (conf, "match_index_files", &rule->match_index_files);
 	
 	if (rule->match_any == false) {
 		ret = cherokee_config_node_read (conf, "exists", &tmp);
@@ -118,21 +119,20 @@ _free (void *p)
 	return ret_ok;
 }
 
-static ret_t
-match_file (cherokee_rule_exists_t *rule,
-	    cherokee_connection_t  *conn,
-	    cherokee_buffer_t      *fullpath)
+static cherokee_boolean_t
+check_is_file (cherokee_server_t  *srv,
+	       cherokee_boolean_t  use_iocache,
+	       cherokee_buffer_t  *fullpath)
 {
 	ret_t                     ret;
+	cherokee_boolean_t        is_file;
 	struct stat               nocache_info;
 	struct stat              *info;
-	cherokee_boolean_t       *is_file;
 	cherokee_iocache_entry_t *io_entry = NULL;
-	cherokee_server_t        *srv      = CONN_SRV(conn);
 
 	ret = cherokee_io_stat (srv->iocache, 
 				fullpath, 
-				rule->use_iocache,
+				use_iocache,
 				&nocache_info,
 				&io_entry,
 				&info);
@@ -145,18 +145,95 @@ match_file (cherokee_rule_exists_t *rule,
 		cherokee_iocache_entry_unref (&io_entry);
 	}
 
+	return (ret == ret_ok) ? is_file : false;
+}
+
+static ret_t
+match_file (cherokee_rule_exists_t *rule,
+	    cherokee_connection_t  *conn,
+	    cherokee_buffer_t      *fullpath)
+{
+	ret_t                     ret;
+	struct stat               nocache_info;
+	struct stat              *info;
+	cherokee_boolean_t        is_dir;
+	cherokee_boolean_t        is_file;
+	cherokee_iocache_entry_t *io_entry = NULL;
+	cherokee_server_t        *srv      = CONN_SRV(conn);
+
+	ret = cherokee_io_stat (srv->iocache, 
+				fullpath, 
+				rule->use_iocache,
+				&nocache_info,
+				&io_entry,
+				&info);
+
+	if (ret == ret_ok) {
+		is_dir  = S_ISDIR(info->st_mode);
+		is_file = S_ISREG(info->st_mode);
+	}
+
+	if (io_entry) {
+		cherokee_iocache_entry_unref (&io_entry);
+	}
+
+	/* Not found
+	 */
 	if (ret != ret_ok) {
 		TRACE(ENTRIES, "Rule exists: did not match '%s'\n", fullpath->buf);
 		return ret_not_found;
 	}
 
-	if ((rule->match_only_files) && (! is_file)) {
+	/* File
+	 */
+	if (is_file) {
+		TRACE(ENTRIES, "Match exists: '%s'\n", fullpath->buf);
+		return ret_ok;
+	}
+
+	/* Check directory indexes
+	 */
+	if (is_dir) {
+		if (rule->match_index_files) {
+			cherokee_list_t    *i;
+			cherokee_buffer_t  *index_file;
+			cherokee_boolean_t  is_file;
+
+			list_for_each (i, &CONN_VSRV(conn)->index_list) {
+				index_file = BUF(LIST_ITEM_INFO(i));
+
+				cherokee_buffer_add_buffer (fullpath, index_file);
+				is_file = check_is_file (srv, rule->use_iocache, fullpath);
+				cherokee_buffer_drop_ending (fullpath, index_file->len);
+				
+				if (is_file) {
+					TRACE(ENTRIES, "Match exists (dir): '%s' (Index: '%s')\n", 
+					      fullpath->buf, index_file->buf);
+					return ret_ok;
+				}
+			}
+		}
+
+		if (rule->match_only_files) {
+			TRACE(ENTRIES, "Rule exists: is dir, no index. Rejecting '%s'\n", fullpath->buf);
+			return ret_not_found;
+		}
+
+		TRACE(ENTRIES, "Rule exists: No index. Matching dir '%s' anyway\n", fullpath->buf);
+		return ret_ok;
+	}
+
+	/* Only files are checked, not found
+	 */
+	if (rule->match_only_files) {
 		TRACE(ENTRIES, "Rule exists: isn't a regular file '%s'\n", fullpath->buf);
 		return ret_not_found;
 	}
-
-	TRACE(ENTRIES, "Match exists: '%s'\n", fullpath->buf);
-	return ret_ok;
+	
+	/* Unusual case
+	 */
+	TRACE(ENTRIES, "Rule exists: Neither a file, nor a dir. Rejecting: '%s'\n", fullpath->buf);
+	return ret_not_found;
 }
 
 static ret_t 
@@ -246,9 +323,10 @@ cherokee_rule_exists_new (cherokee_rule_exists_t **rule)
 	 */
 	INIT_LIST_HEAD (&n->files);
 
-	n->use_iocache      = false;
-	n->match_any        = false;
-	n->match_only_files = true;
+	n->use_iocache       = false;
+	n->match_any         = false;
+	n->match_only_files  = true;
+	n->match_index_files = true;
 
 	*rule = n;
  	return ret_ok;

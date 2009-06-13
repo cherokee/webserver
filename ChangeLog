@@ -1,5 +1,9 @@
 2009-06-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* cherokee/rule_exists.h, cherokee/rule_exists.c,
+	admin/ModuleExists.py: Add a new option to the exists rule, so it
+	checks for index file when a local directory is found.
+
 	* cherokee/handler_common.c, cherokee/virtual_server.c: The index
 	files list entries are now buffers instead of char*.
 

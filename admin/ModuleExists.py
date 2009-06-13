@@ -6,10 +6,11 @@ import validations
 # For gettext
 N_ = lambda x: x
 
-NOTE_EXISTS     = N_("Comma separated list of files. Rule applies if one exists.")
-NOTE_IOCACHE    = N_("Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise.")
-NOTE_ANY        = N_("Match the request if any file exists.")
-NOTE_ONLY_FILES = N_("Only match regular files. If unset directories will be matched as well.")
+NOTE_EXISTS      = N_("Comma separated list of files. Rule applies if one exists.")
+NOTE_IOCACHE     = N_("Uses cache during file detection. Disable if directory contents change frequently. Enable otherwise.")
+NOTE_ANY         = N_("Match the request if any file exists.")
+NOTE_ONLY_FILES  = N_("Only match regular files. If unset directories will be matched as well.")
+NOTE_INDEX_FILES = N_("If a directory is request, check the index files inside it.")
 
 OPTIONS = [('0', _('Match a specific list of files')),
            ('1', _('Match any file'))]
@@ -24,7 +25,8 @@ class ModuleExists (Module, FormHelper):
         # Special case: there is a check in the rule
         self.checks = ['%s!iocache'%(self._prefix),
                        '%s!match_any'%(self._prefix), 
-                       '%s!match_only_files'%(self._prefix)]
+                       '%s!match_only_files'%(self._prefix),
+                       '%s!match_index_files'%(self._prefix)]
 
     def _op_render (self):
         if self._prefix.startswith('tmp!'):
@@ -55,7 +57,8 @@ class ModuleExists (Module, FormHelper):
         if specific_file:
             self.AddPropEntry (table, _('Files'), '%s!exists'%(self._prefix), _(NOTE_EXISTS))
         self.AddPropCheck (table, _('Use I/O cache'),    '%s!iocache'%(self._prefix), False, _(NOTE_IOCACHE))
-        self.AddPropCheck (table, _('Only match files'), '%s!match_only_files'%(self._prefix), True, _(NOTE_ONLY_FILES))
+        self.AddPropCheck (table, _('Only match files'), '%s!match_only_files'%(self._prefix),  True, _(NOTE_ONLY_FILES))
+        self.AddPropCheck (table, _('If dir, check index files'),'%s!match_index_files'%(self._prefix), True, _(NOTE_INDEX_FILES))
         return str(table)
 
     def _op_apply_changes (self, uri, post):
