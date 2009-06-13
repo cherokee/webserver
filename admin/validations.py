@@ -170,14 +170,14 @@ def is_safe_id (value):
     return value
 
 def is_safe_id_list (value):
-    ids = [id.strip() for id in value.split(',')]
-    
-    new_ids = []
-    for id in ids:
-        if len(id) <= 0:
-            continue
-        new_ids.append (is_safe_id (id))
-    return ','.join(new_ids)
+    ids = []
+    for t1 in value.split(','):
+        for t2 in t1.split(' '):
+            id = t2.strip()
+            if not id:
+                continue
+            ids.append(is_safe_id (id))
+    return ','.join(ids)
 
 def int2bin(n, count=24):
     """returns the binary of integer n, using count number of digits"""
