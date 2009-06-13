@@ -158,6 +158,24 @@ class PageVServer (PageMenu, FormHelper):
         priority = rules.get_highest_priority() + 100
         pre = '%s!%d' % (cfg_prefix, priority)
 
+        # Look for the rule type
+        _type = post.get_val (key_prefix)
+
+        # Build validation list
+        validation = DATA_VALIDATION[:]
+
+        # The 'add_new_entry' checking function depends on 
+        # the whether 'add_new_type' is a directory, an extension
+        # or a regular extension
+        rule_module = module_obj_factory (_type, self._cfg, "%s!match"%(pre), self.submit_url)
+        if 'validation' in dir(rule_module):
+            validation += rule_module.validation
+
+        # Validate
+        self._ValidateChanges (post, validation)
+        if self.has_errors():
+            return
+
         # Read the properties
         filtered_post = {}
         for p in post:
@@ -168,22 +186,6 @@ class PageVServer (PageMenu, FormHelper):
             if not prop: continue
 
             filtered_post[prop] = post[p][0]
-
-        # Look for the rule type
-        _type = post.get_val (key_prefix)
-
-        # The 'add_new_entry' checking function depends on 
-        # the whether 'add_new_type' is a directory, an extension
-        # or a regular extension
-        rule_module = module_obj_factory (_type, self._cfg, "%s!match"%(pre), self.submit_url)
-
-        # Validate
-        validation = DATA_VALIDATION[:]
-        validation += rule_module.validation
-
-        self._ValidateChanges (post, validation)
-        if self.has_errors():
-            return
 
         # Apply the changes to the configuration tree
         self._cfg['%s!match'%(pre)] = _type

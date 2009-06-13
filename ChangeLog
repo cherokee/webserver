@@ -1,3 +1,10 @@
+2009-06-13  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* admin/Rule.py, admin/ModuleExtensions.py, admin/PageVServer.py,
+	admin/validations.py: Fixes a problem reported on the mailing
+	list: Extension Lists weren't being checked:
+	http://lists.octality.com/pipermail/cherokee/2009-June/010467.html
+
 2009-06-12  Jonathan Hernandez  <ion@suavizado.com>
 	* admin/PageVServer.py admin/PageVServers.py: Add cookie for
 	persistency in sections. Fixes the bug #493:

@@ -47,7 +47,7 @@ class Rule (Module, FormHelper):
             return r1.get_validation() + r2.get_validation()
         else:
             rule_module = module_obj_factory (matcher, self._cfg, self._prefix, self.submit_url)
-            if 'checks' in dir(rule_module):
+            if 'validation' in dir(rule_module):
                 return rule_module.validation
         return []
 
