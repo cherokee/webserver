@@ -29,7 +29,8 @@ CONFIG_VSRV = """
 
 %(vsrv_pre)s!rule!10!match = exists
 %(vsrv_pre)s!rule!10!match!match_any = 1
-%(vsrv_pre)s!rule!10!match!match_only_files = 0
+%(vsrv_pre)s!rule!10!match!match_only_files = 1
+%(vsrv_pre)s!rule!10!match!match_index_files = 1
 %(vsrv_pre)s!rule!10!handler = common
 %(vsrv_pre)s!rule!10!expiration = time
 %(vsrv_pre)s!rule!10!expiration!time = 7d
