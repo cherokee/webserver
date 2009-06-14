@@ -1,5 +1,7 @@
 2009-06-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* 0.99.17 released
+
 	* cherokee/rule_exists.h, cherokee/rule_exists.c,
 	admin/ModuleExists.py: Add a new option to the exists rule, so it
 	checks for index file when a local directory is found.
