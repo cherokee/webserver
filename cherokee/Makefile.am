@@ -233,6 +233,23 @@ endif
 
 
 #
+# Rule from
+#
+rule_from = \
+rule_from.c \
+rule_from.h
+
+libplugin_from_la_LDFLAGS = $(module_ldflags)  
+libplugin_from_la_SOURCES = $(rule_from)
+
+if STATIC_RULE_FROM
+static_rule_from_src = $(rule_from)
+else
+dynamic_rule_from_lib = libplugin_from.la
+endif
+
+
+#
 # Rule geoip
 #
 if HAVE_GEOIP
@@ -1336,6 +1353,7 @@ $(static_rule_exists_src) \
 $(static_rule_fullpath_src) \
 $(static_rule_bind_src) \
 $(static_rule_method_src) \
+$(static_rule_from_src) \
 $(static_rule_geoip_src) \
 $(static_rule_not_src) \
 $(static_rule_and_src) \
@@ -1520,6 +1538,7 @@ $(dynamic_rule_exists_lib) \
 $(dynamic_rule_fullpath_lib) \
 $(dynamic_rule_bind_lib) \
 $(dynamic_rule_method_lib) \
+$(dynamic_rule_from_lib) \
 $(dynamic_rule_geoip_lib) \
 $(dynamic_rule_not_lib) \
 $(dynamic_rule_and_lib) \

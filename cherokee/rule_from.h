@@ -22,26 +22,29 @@
  * 02110-1301, USA.
  */ 
 
-#ifndef CHEROKEE_ACCESS_H
-#define CHEROKEE_ACCESS_H
+#if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
+# error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
+#endif
 
-#include "common-internal.h"
-#include "list.h"
-#include "socket.h"
+#ifndef CHEROKEE_RULE_FROM_H
+#define CHEROKEE_RULE_FROM_H
+
+#include <cherokee/common.h>
+#include <cherokee/buffer.h>
+#include <cherokee/rule.h>
+#include <cherokee/access.h>
+
+CHEROKEE_BEGIN_DECLS
 
 typedef struct {
-	cherokee_list_t list_ips;
-	cherokee_list_t list_subnets;
-} cherokee_access_t;
+	cherokee_rule_t   rule;
+	cherokee_access_t access;
+} cherokee_rule_from_t;
 
-ret_t cherokee_access_init       (cherokee_access_t  *entry);
-ret_t cherokee_access_mrproper   (cherokee_access_t  *entry);
-ret_t cherokee_access_new        (cherokee_access_t **entry);
-ret_t cherokee_access_free       (cherokee_access_t  *entry);
+#define RULE_FROM(x) ((cherokee_rule_from_t *)(x))
 
-ret_t cherokee_access_add        (cherokee_access_t *entry, char *ip_or_subnet);
-ret_t cherokee_access_ip_match   (cherokee_access_t *entry, cherokee_socket_t *sock);
+ret_t cherokee_rule_from_new (cherokee_rule_from_t **rule);
 
-ret_t cherokee_access_print_debug (cherokee_access_t *entry);
+CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_ACCESS_H */
+#endif /* CHEROKEE_RULE_FROM_H */

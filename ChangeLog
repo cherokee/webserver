@@ -1,3 +1,11 @@
+2009-06-14  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* cherokee/access.c, cherokee/access.h, cherokee/Makefile.am,
+	cherokee/rule_from.c, cherokee/rule_from.h, configure.in,
+	admin/ModuleFrom.py, admin/consts.py, admin/Makefile.am: Adds a
+	new matching rule plug-in. It checks the IP of the source of the
+	request and compare it with a list of IPs and subnets.
+
 2009-06-13  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* 0.99.17 released

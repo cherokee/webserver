@@ -118,16 +118,37 @@ new_subnet (void)
 
 
 ret_t 
-cherokee_access_new (cherokee_access_t **entry)
+cherokee_access_init (cherokee_access_t *entry)
 {
-	CHEROKEE_NEW_STRUCT (n, access);
-
-	INIT_LIST_HEAD(&n->list_ips);
-	INIT_LIST_HEAD(&n->list_subnets);
-	
-	*entry = n;
+	INIT_LIST_HEAD(&entry->list_ips);
+	INIT_LIST_HEAD(&entry->list_subnets);
 	return ret_ok;
 }
+
+ret_t 
+cherokee_access_mrproper (cherokee_access_t *entry)
+{
+	cherokee_list_t *i, *tmp;
+	
+	/* Free the IP list items
+	 */
+	list_for_each_safe (i, tmp, LIST(&entry->list_ips)) {
+		cherokee_list_del (i);
+		free (i);
+	}
+
+	/* Free the Subnet list items
+	 */
+	list_for_each_safe (i, tmp, LIST(&entry->list_subnets)) {
+		cherokee_list_del (i);
+		free (i);
+	}
+
+	return ret_ok;
+}
+
+CHEROKEE_ADD_FUNC_NEW (access);
+CHEROKEE_ADD_FUNC_FREE (access);
 
 
 static void
@@ -149,30 +170,6 @@ print_ip (ip_type_t type, ip_t *ip)
 #else
 	printf ("%s", inet_ntoa (ip->ip4));
 #endif
-}
-
-
-ret_t 
-cherokee_access_free (cherokee_access_t *entry)
-{
-	cherokee_list_t *i, *tmp;
-	
-	/* Free the IP list items
-	 */
-	list_for_each_safe (i, tmp, LIST(&entry->list_ips)) {
-		cherokee_list_del (i);
-		free (i);
-	}
-
-	/* Free the Subnet list items
-	 */
-	list_for_each_safe (i, tmp, LIST(&entry->list_subnets)) {
-		cherokee_list_del (i);
-		free (i);
-	}
-
-	free (entry);
-	return ret_ok;
 }
 
 

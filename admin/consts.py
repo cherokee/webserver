@@ -132,6 +132,7 @@ RULES = [
     ('method',     N_('HTTP Method')),
     ('bind',       N_('Incoming Port')),
     ('fullpath',   N_('Full Path')),
+    ('from',       N_('Connected from')),
     ('geoip',      N_('GeoIP'))
 ]
 

@@ -96,6 +96,7 @@ ModuleHeader.py \
 ModuleExists.py \
 ModuleMethod.py \
 ModuleBind.py \
+ModuleFrom.py \
 ModuleCustomError.py \
 ModuleWildcard.py \
 ModuleRehost.py \
