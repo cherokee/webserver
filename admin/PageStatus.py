@@ -78,7 +78,7 @@ class PageStatus (PageMenu, FormHelper):
         self.AddMacroContent ('content', self.Read('status.template'))
 
         if 'b' in VERSION:
-            notice = self.Dialog(BETA_TESTER_NOTICE)
+            notice = self.Dialog(_(BETA_TESTER_NOTICE))
             self.AddMacroContent ('beta_tester', notice)
         else:
             self.AddMacroContent ('beta_tester', '')
