@@ -1,5 +1,10 @@
 2009-06-15  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/ModuleFullpath.py, admin/ModuleHeader.py,
+	admin/ModuleRequest.py, admin/ModuleExists.py,
+	admin/ModuleMethod.py, admin/ModuleDirectory.py: Improves the
+	validation functions.
+
 	* admin/Wizard_RoR.py: Adds a check in order to ensure that
 	public/dispatch.fcgi exists. There are RoR applications that
 	doesn't include it (or includes a dispatch.fcgi.example file).

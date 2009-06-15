@@ -9,12 +9,12 @@ N_ = lambda x: x
 NOTE_FULLPATH = N_("Full path request to which content the configuration will be applied. (Eg: /favicon.ico)")
 
 class ModuleFullpath (Module, FormHelper):
-    validation = [('tmp!new_rule!value',                   validations.is_path),
-                  ('vserver!.+!rule!.+!match!fullpath!.+', validations.is_path)]
-
     def __init__ (self, cfg, prefix, submit_url):
         FormHelper.__init__ (self, 'fullpath', cfg)
         Module.__init__ (self, 'fullpath', cfg, prefix, submit_url)
+
+        self.validation = [('tmp!new_rule!value',            validations.is_path),
+                           ('%s!fullpath!.+'%(self._prefix), validations.is_path)]
 
     def _op_render (self):
         if self._prefix.startswith('tmp!'):
@@ -22,9 +22,9 @@ class ModuleFullpath (Module, FormHelper):
             self.AddPropEntry (table, _('Full Path'), '%s!value'%(self._prefix), _(NOTE_FULLPATH))
             return str(table)
 
-        txt = '<h3>%s</h3>' % (_("Full Web Paths"))
+        txt = ""
         pre = '%s!fullpath'%(self._prefix)
-
+        
         table = Table (2)
         first = True
         for k in self._cfg.keys(pre):
@@ -36,9 +36,11 @@ class ModuleFullpath (Module, FormHelper):
             table += (fpath, link_del)
             first = False
 
-        txt += self.Indent(table)
-        txt += '<h3>%s</h3>' % (_("Add another path"))
+        if not first:
+            txt = '<h3>%s</h3>' % (_("Full Web Paths"))
+            txt += self.Indent(table)
 
+        txt += '<h3>%s</h3>' % (_("Add another path"))
         tmp = [int(x) for x in self._cfg.keys(pre)]
         if len(tmp):
             tmp.sort()

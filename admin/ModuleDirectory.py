@@ -9,11 +9,12 @@ N_ = lambda x: x
 NOTE_DIRECTORY = N_("Public Web Directory to which content the configuration will be applied.")
 
 class ModuleDirectory (Module, FormHelper):
-    validation = [('tmp!new_rule!value', validations.is_dir_formated)]
-
     def __init__ (self, cfg, prefix, submit_url):
         FormHelper.__init__ (self, 'directory', cfg)
         Module.__init__ (self, 'directory', cfg, prefix, submit_url)
+
+        self.validation = [('tmp!new_rule!value',          validations.is_dir_formated),
+                           ('%s!directory'%(self._prefix), validations.is_dir_formated)]
 
     def _op_render (self):
         table = TableProps()

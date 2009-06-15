@@ -9,11 +9,12 @@ N_ = lambda x: x
 NOTE_REQUEST = N_("Regular expression against which the request will be executed.")
 
 class ModuleRequest (Module, FormHelper):
-    validation = [('tmp!new_rule!value', validations.is_regex)]
-
     def __init__ (self, cfg, prefix, submit_url):
         FormHelper.__init__ (self, 'request', cfg)
         Module.__init__ (self, 'request', cfg, prefix, submit_url)
+
+        self.validation = [('tmp!new_rule!value',        validations.is_regex),
+                           ('%s!request'%(self._prefix), validations.is_regex)]
 
     def _op_render (self):
         table = TableProps()

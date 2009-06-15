@@ -22,11 +22,12 @@ HEADERS = [
 ]
 
 class ModuleHeader (Module, FormHelper):
-    validation = [('tmp!new_rule!match', validations.is_regex)]
-
     def __init__ (self, cfg, prefix, submit_url):
         FormHelper.__init__ (self, 'header', cfg)
         Module.__init__ (self, 'header', cfg, prefix, submit_url)
+
+        self.validation = [('tmp!new_rule!match',      validations.is_regex),
+                           ('%s!match'%(self._prefix), validations.is_regex)]
 
     def _op_render (self):
         table = TableProps()

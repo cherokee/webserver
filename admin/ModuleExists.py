@@ -16,8 +16,6 @@ OPTIONS = [('0', _('Match a specific list of files')),
            ('1', _('Match any file'))]
 
 class ModuleExists (Module, FormHelper):
-    validation = [('tmp!new_rule!value', validations.is_safe_id_list)]
-
     def __init__ (self, cfg, prefix, submit_url):
         FormHelper.__init__ (self, 'exists', cfg)
         Module.__init__ (self, 'exists', cfg, prefix, submit_url)
@@ -27,6 +25,9 @@ class ModuleExists (Module, FormHelper):
                        '%s!match_any'%(self._prefix), 
                        '%s!match_only_files'%(self._prefix),
                        '%s!match_index_files'%(self._prefix)]
+
+        self.validation = [('tmp!new_rule!value',       validations.is_safe_id_list),
+                           ('%s!exists'%(self._prefix), validations.is_safe_id_list)]
 
     def _op_render (self):
         if self._prefix.startswith('tmp!'):
