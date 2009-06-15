@@ -1,3 +1,8 @@
+2009-06-15  Antonio Perez  <aperez@skarcha.com>
+
+	* admin/PageVServers.py, admin/PageVServer.py: Table headers
+	should not be reordered.
+
 2009-06-15  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/ModuleFullpath.py, admin/ModuleHeader.py,

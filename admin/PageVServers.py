@@ -140,7 +140,7 @@ class PageVServers (PageMenu, FormHelper):
         sorted_vservers.sort(sort_vservers, reverse=True)
 
         txt += '<div class="rulesdiv"><table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr><th>&nbsp</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
+        txt += '<tr class="nodrag nodrop"><th>&nbsp</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
             (_('Nickname'), _('Root'), _('Domains'), _('Logging'))
 
         ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
