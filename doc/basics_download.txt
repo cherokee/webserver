@@ -24,9 +24,9 @@ wget http://www.cherokee-project.com/download/x.y/x.y.z/cherokee-x.y.z.tar.gz \
 
 The latest release is at your disposal with:
 
----------------------------------------------------------------------------
-wget http://www.cherokee-project.com/cherokee-last-tarball -O -| tar zxvf -
----------------------------------------------------------------------------
+------------------------------------------------------------------------------
+wget http://www.cherokee-project.com/cherokee-latest-tarball -O -| tar zxvf -
+------------------------------------------------------------------------------
 
 Finally, if you are a developer or simply want to test out the bleeding edge
 version, you can access our Subversion repository. Be advised, this is the
