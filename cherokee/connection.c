@@ -526,7 +526,7 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 	 *                   nonce="", opaque=""
 	 */
 	if (conn->auth_type & http_auth_digest) {
-		cherokee_thread_t *thread = CONN_THREAD(conn);
+		cherokee_thread_t *thread    = CONN_THREAD(conn);
 		cherokee_buffer_t *new_nonce = THREAD_TMP_BUF1(thread);
 
 		/* Realm
@@ -549,6 +549,7 @@ build_response_header_authentication (cherokee_connection_t *conn, cherokee_buff
 
 		cherokee_buffer_add_str (buffer, "nonce=\"");			
 		if (ret != ret_ok) {
+			cherokee_buffer_clean (new_nonce);
 			cherokee_nonce_table_generate (CONN_SRV(conn)->nonces, conn, new_nonce);
 			cherokee_buffer_add_buffer (buffer, new_nonce);
 		} else {

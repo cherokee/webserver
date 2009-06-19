@@ -210,8 +210,8 @@ validate_md5 (cherokee_connection_t *conn, const char *magic, char *crypted)
 static ret_t
 validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 {	
-	cuint_t           c_len       = strlen (crypted);
-	cherokee_thread_t *thread = CONN_THREAD(conn);
+	cuint_t           c_len      = strlen (crypted);
+	cherokee_thread_t *thread    = CONN_THREAD(conn);
 	cherokee_buffer_t *sha1_buf1 = THREAD_TMP_BUF1(thread);
 	cherokee_buffer_t *sha1_buf2 = THREAD_TMP_BUF2(thread);
 

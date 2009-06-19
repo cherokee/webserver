@@ -58,6 +58,10 @@ configure (cherokee_rule_fullpath_t  *rule,
 	 */
 	cherokee_config_node_foreach (i, subconf) {
 		cherokee_config_node_t *path = CONFIG_NODE(i);
+
+		TRACE(ENTRIES, "Adding fullpath entry (key=%s): '%s'\n", 
+		      path->key.buf, path->val.buf);
+
 		cherokee_avl_add (&rule->paths, &path->val, NULL);
 	}
 
