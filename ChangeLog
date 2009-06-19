@@ -1,5 +1,7 @@
 2009-06-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/PageVServer.py: Fixes a missing translation.
+
 	* cherokee/handler_streaming.c (set_auto_rate): Fixes the FLV
 	management. There was a bug in this function that caused it
 	randomly.

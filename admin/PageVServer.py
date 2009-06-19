@@ -221,7 +221,7 @@ class PageVServer (PageMenu, FormHelper):
 
         # Behavior
         pre = 'vserver!%s!rule' %(host)
-        tmp = self.Dialog(RULE_LIST_NOTE)
+        tmp = self.Dialog(_(RULE_LIST_NOTE))
         tmp += '<div class="rulesdiv">'
         tmp += self._render_rules_generic (cfg_key    = pre, 
                                           url_prefix = '/vserver/%s'%(host),
