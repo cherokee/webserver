@@ -367,12 +367,6 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 		return ret_error;
 	}
 
-	/* Sanity Check
-	 */
-	if ((rate < 0) || (secs < 0)) {
-		return ret_error;
-	}
-
 	/* bits/s to bytes/s
 	 */
 	rate = (hdl->avformat->bit_rate / 8);
@@ -380,6 +374,12 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 
 	TRACE(ENTRIES, "Duration: %d seconds\n", hdl->avformat->duration / AV_TIME_BASE);
 	TRACE(ENTRIES, "Rate: %d bps (%d bytes/s)\n", hdl->avformat->bit_rate, rate);
+
+	/* Sanity Check
+	 */
+	if ((rate < 0) || (secs < 0)) {
+		return ret_error;
+	}
 
 	if (likely (secs > 0)) {
 		long tmp;
@@ -403,18 +403,21 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 static ret_t
 seek_mp4 (cherokee_handler_streaming_t *hdl)
 {
+	TRACE(ENTRIES, "%s: No FFMped support\n", "Seek MP4");
 	return ret_error;
 }
 
 static ret_t
 open_media_file (cherokee_handler_streaming_t *hdl)
 {
+	TRACE(ENTRIES, "%s: No FFMped support\n", "Open Media");
 	return ret_error;
 }
 
 static ret_t
 set_auto_rate (cherokee_handler_streaming_t *hdl)
 {
+	TRACE(ENTRIES, "%s: No FFMped support\n", "Auto Rate");
 	return ret_ok;
 }
 #endif
