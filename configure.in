@@ -1269,6 +1269,12 @@ AC_ARG_ENABLE(admin,
 	   wants_admin="$enableval", wants_admin="yes")
 AM_CONDITIONAL(INSTALL_ADMIN, test "x$wants_admin" != "xno")
 
+dnl
+dnl Clean the .pre files
+dnl
+pres="constants.h cherokee.conf.sample performance.conf.sample admin/configured.py contrib/cherokee"
+AC_MSG_NOTICE([Deleting .pre files])
+rm -f $pres
 
 dnl
 dnl Options

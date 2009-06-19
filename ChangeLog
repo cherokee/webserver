@@ -1,3 +1,10 @@
+2009-06-19  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* configure.in: The *.pre files was not being rebuild when
+	./configure was being run twice. That leaded the build to be
+	corrupted in some same. Thanks to Giuseppe Maxia for finding and
+	reporting this bug.
+
 2009-06-19  Jonathan Hernandez  <ion@suavizado.com>
 
 	* admin/PageVServers.py, admin/PageVServer.py, admin/Wizard.py, 
