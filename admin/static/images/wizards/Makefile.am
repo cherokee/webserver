@@ -8,7 +8,8 @@ redirect.jpg \
 django.png \
 hotlinking.png \
 drupal.png \
-ror.png
+ror.png \
+mailman.png
 
 EXTRA_DIST = \
 $(wizards_DATA)

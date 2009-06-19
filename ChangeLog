@@ -1,5 +1,9 @@
 2009-06-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
+	* admin/static/images/wizards/Makefile.am, admin/Makefile.am,
+	admin/Wizard_Mailman.py, admin/static/images/wizards/mailman.png:
+	Adds a new wizard for Mailman.
+
 	* admin/PageVServer.py: Fixes a missing translation.
 
 	* cherokee/handler_streaming.c (set_auto_rate): Fixes the FLV

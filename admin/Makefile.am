@@ -114,7 +114,8 @@ Wizard_Django.py \
 Wizard_Redirect.py \
 Wizard_HotLinking.py \
 Wizard_Drupal.py \
-Wizard_RoR.py
+Wizard_RoR.py \
+Wizard_Mailman.py
 endif
 
 adminpy_DATA = $(admin_data)
