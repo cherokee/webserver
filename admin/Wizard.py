@@ -82,15 +82,15 @@ class WizardManager:
             show = wizard.show()
             img  = "/static/images/wizards/%s" % (wizard.ICON)
 
+            txt += 'cherokeeWizards["%s"]["%s"] = {"title": "%s", "desc": "%s", "img": "%s", ' % (group, name, name, wizard.DESC, img) 
+
             if not show:
-                txt += '<tr><td rowspan="2"><img src="%s" /></td><td><b>%s</b> (disabled)</td></tr>' % (img, name)
-                txt += '<tr><td>%s <!-- NOT ADDED BECAUSE: %s --></td></tr>' % (wizard.DESC, wizard.no_show)
+                txt += '"show": false, "no_show": "%s" }\n' % (wizard.no_show) 
             else:
                 url = "%s/wizard/%s" % (url_pre, name)
-                txt += '<tr><td rowspan="2"><a href="%s"><img src="%s" /></a></td><td><b>%s</b></td></tr>' % (url, img, name)
-                txt += '<tr><td>%s</td></tr>' % (wizard.DESC)
+                txt += '"show": true, "url": "%s" }\n' % (url) 
 
-        return '<table>%s</table>' %(txt)
+        return txt
 
     def render (self, url_pre):
         wizards = self.get_available()
@@ -106,15 +106,15 @@ class WizardManager:
 
         # Table of wizard groups
         added = 0
-        txt   = "<table><tr>"
+        txt = '<script type="text/javascript">'
+        txt += 'var cherokeeWizards = {} \n'
         for name, t in boxes:
             if not t:
                 continue
-            txt += "<td><h3>%s</h3>%s</td>" % (name, t)
-            added += 1
-            if (added % 2) == 0:
-                txt += "</tr><tr>"
-        txt += "</tr></table>"
+            txt += 'cherokeeWizards["%s"] = {} \n %s' % (name, t)
+        txt += '$(document).ready(function() { wizardRender(); });'
+        txt += '</script>'
+        txt += '<script type="text/javascript" src="/static/js/wizards.js"></script>'
 
         return txt
 

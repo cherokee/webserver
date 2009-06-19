@@ -553,6 +553,78 @@ table tr th {
 #clonesection { display: none; }
 #newsection { display: none; }
 
+.wizOdd {
+    background-color: #f9fcff;
+}
+
+#wizSel {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0;
+}
+
+#wizSel td {
+    width: 33%;
+    border: 1px solid #d4e1f1;
+    padding: 0;
+}
+
+#wizardsection ul {
+    width: 100%;
+    height: 200px;
+    overflow: auto;
+    font-size: 95%;
+    margin-right: 8px;
+}
+
+#wizardsection li {
+    padding: 4px 8px;
+    margin: 0;
+    float: none;
+}
+
+#wizardsection li:hover {
+    background: #e5ebf4;
+    cursor: pointer;
+}
+
+
+.wizSelected {
+    background: #e5ebf4;
+    font-weight: bold;
+}
+
+#wizIinner {
+    padding: 16px;
+    text-align: center;
+    overflow: auto;
+}
+
+#wizImg {
+    margin-bottom: 4px;
+}
+
+#wizTitle {
+    padding: 4px;
+    font-weight: bold;
+    font-size: 110%;
+}
+
+#wizDesc {
+    font-size: 85%;
+    text-align: center;
+    color: #999;
+}
+
+#wizBut {
+    margin-top: 16px;
+    margin-left: 40px;
+}
+
+#wizBut a {
+    width: 100px;
+}
+
 #mimetable {
   width: 680px;
   height: 400px;
@@ -740,3 +812,4 @@ table#table_new_file {
 table#table_new_file td {
 	width: 220px;
 }
+

@@ -305,8 +305,11 @@ class PageVServers (PageMenu, FormHelper):
         mgr = WizardManager (self._cfg, "VServer", pre='vserver')
         txt += mgr.render ("/vserver")
 
+        table = '<table id="wizSel" class="rulestable"><tr><th>Category</th><th>Wizard</th><th>Info</th></tr>'
+        table += '<tr><td id="wizG"></td><td id="wizL"></td><td id="wizI"><div id="wizIinner"></div></td></table>'
+
         if txt: 
-            txt = _("<h2>Wizards</h2>") + txt
+            txt = _("<h2>Wizards</h2>") + table + txt
 
         return txt
 
