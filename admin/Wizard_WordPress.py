@@ -38,9 +38,11 @@ CONFIG_VSRV = """
 
 %(pre_rule_minus2)s!match = fullpath
 %(pre_rule_minus2)s!match!fullpath!1 = /
+%(pre_rule_minus2)s!match!fullpath!2 = /wp-admin/
 %(pre_rule_minus2)s!handler = redir
-%(pre_rule_minus2)s!handler!rewrite!1!substring = /index.php
 %(pre_rule_minus2)s!handler!rewrite!1!show = 0
+%(pre_rule_minus2)s!handler!rewrite!1!regex = (.*)/
+%(pre_rule_minus2)s!handler!rewrite!1!substring = $1/index.php
 
 %(pre_rule_minus3)s!match = exists
 %(pre_rule_minus3)s!match!iocache = 1

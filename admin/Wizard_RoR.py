@@ -157,7 +157,6 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
 
         form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
-        return txt
 
     def _op_apply (self, post):
         # Validation
