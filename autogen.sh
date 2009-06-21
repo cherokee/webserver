@@ -35,7 +35,7 @@ fi
 FIRST_REV="3357"
 
 if [ -e $srcdir/ChangeLog ]; then
-    CHANGELOG_VERSION=`head -n 2 $srcdir/ChangeLog | tail -n 1 | awk {'print $1'} | grep ^r[0-9] | sed s/r//g`
+    CHANGELOG_VERSION=`head -n 2 $srcdir/ChangeLog | tail -n 1 | awk {'print $2'} | sed 's|r||g; s|,||g'`
 else
     touch ChangeLog
     CHANGELOG_VERSION=$FIRST_REV
@@ -53,7 +53,7 @@ else
     else
 	   echo "Updating ChangeLog from version $CHANGELOG_VERSION to $SVN_VERSION..."
 	   mv $srcdir/ChangeLog $srcdir/ChangeLog.prev
-	   TZ=UTC $SVN log -v --xml -r $((CHANGELOG_VERSION+1)):$SVN_VERSION $srcdir | python $srcdir/svnlog2changelog.py > $srcdir/ChangeLog
+	   TZ=UTC $SVN log -v --xml -r $SVN_VERSION:$((CHANGELOG_VERSION+1)) $srcdir | python $srcdir/svnlog2changelog.py > $srcdir/ChangeLog
 	   cat $srcdir/ChangeLog.prev >> $srcdir/ChangeLog
 	   rm $srcdir/ChangeLog.prev
     fi
