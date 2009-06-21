@@ -68,6 +68,7 @@ cherokee.spec.in      \
 SUNWcherokee.spec     \
 pam.d_cherokee        \
 cherokee.pc.in        \
+svnlog2changelog      \
 $(m4data_DATA)        \
 $(CONFS_PRE)          \
 $(CONSTANTS_PRE)      \
