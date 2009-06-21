@@ -1,3 +1,9 @@
+2009-06-21  Alvaro Lopez Ortega  <alvaro@octality.com>
+
+	* Changelog: This is the last entry of this change-log file. It's
+	being rename to Changelog.20090621. From now on we will use SVN
+	commit comments, and the Changelog file will be built out of them.
+
 2009-06-19  Alvaro Lopez Ortega  <alvaro@octality.com>
 
 	* admin/static/images/wizards/Makefile.am, admin/Makefile.am,
