@@ -12,7 +12,8 @@ from sys import stdin
 import xml.dom.minidom
 
 DEVELOPERS = {
-    'alo' : "Alvaro Lopez Ortega  <alvaro@octality.com>"
+    'alo' : "Alvaro Lopez Ortega  <alvaro@octality.com>",
+    'ion' : "Jonathan Hernandez  <ion@suavizado.com>",
 }
 
 def get_text (nodelist):
@@ -37,11 +38,12 @@ def reformat_msg (msg):
             txts.append('\t%s'%(l))
     return '\n'.join(txts)
 
-def render_paths (paths):
+def render_paths (entry):
     txt = ''
-    for entry in log.getElementsByTagName('path'):
-        action = entry.getAttribute('action')
-        txt += "\t%s %s\n"%(action, get_text(entry.childNodes))
+    for paths in entry.getElementsByTagName('paths'):
+        for path in entry.getElementsByTagName('path'):
+            action = path.getAttribute('action')
+            txt += "\t%s %s\n"%(action, get_text(path.childNodes))
     return txt        
 
 dom = xml.dom.minidom.parseString (stdin.read())
@@ -54,7 +56,7 @@ for entry in log.getElementsByTagName('logentry'):
     dev      = entry_get_val (entry, 'author')
     msg      = reformat_msg(entry_get_val (entry, 'msg'))
     author   = DEVELOPERS[dev]
-    paths    = render_paths(entry_get_val (entry, 'paths'))
+    paths    = render_paths(entry)
     
     print "%s  %s" % (date, author)
     print " "*12 + "SVN: r%s, %s - %s" % (revision, dev, time)
