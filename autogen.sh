@@ -21,7 +21,6 @@ test -z "$AUTOMAKE" && AUTOMAKE=automake
 test -z "$ACLOCAL" && ACLOCAL=aclocal
 test -z "$AUTOCONF" && AUTOCONF=autoconf
 test -z "$AUTOHEADER" && AUTOHEADER=autoheader
-test -z "$SVN" && SVN=svn
 if [ -x /usr/bin/glibtool ]; then
  test -z "$LIBTOOL" && LIBTOOL=glibtool
  test -z "$LIBTOOLIZE" && LIBTOOLIZE=glibtoolize
@@ -30,34 +29,8 @@ else
  test -z "$LIBTOOLIZE" && LIBTOOLIZE=libtoolize
 fi
 
-
 # Build the Changelog file
-FIRST_REV="3357"
-
-if [ -e $srcdir/ChangeLog ]; then
-    CHANGELOG_VERSION=`head -n 2 $srcdir/ChangeLog | tail -n 1 | awk {'print $2'} | sed 's|r||g; s|,||g'`
-else
-    touch ChangeLog
-    CHANGELOG_VERSION=$FIRST_REV
-fi
-
-SVN_VERSION=`svnversion -nc . | sed -e 's/^[^:]*://;s/[A-Za-z]//'`
-if [ -z $SVN_VERSION ]; then
-     echo
-	echo "WARNING: Couldn't get svn revision number."
-	echo "         Is svn or the .svn directories missing?"
-	echo
-else
-    if [ $SVN_VERSION -eq $CHANGELOG_VERSION ]; then
-	   echo "ChangeLog is already up-to-date."
-    else
-	   echo "Updating ChangeLog from version $CHANGELOG_VERSION to $SVN_VERSION..."
-	   mv $srcdir/ChangeLog $srcdir/ChangeLog.prev
-	   TZ=UTC $SVN log -v --xml -r $SVN_VERSION:$((CHANGELOG_VERSION+1)) $srcdir | python $srcdir/svnlog2changelog.py > $srcdir/ChangeLog
-	   cat $srcdir/ChangeLog.prev >> $srcdir/ChangeLog
-	   rm $srcdir/ChangeLog.prev
-    fi
-fi
+./changelog-update.sh
 
 
 ($AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
