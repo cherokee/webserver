@@ -55,6 +55,7 @@
 
 pid_t               pid;
 char               *pid_file_path;
+char               *worker_uid;
 cherokee_boolean_t  graceful_restart; 
 char               *cherokee_worker;
 char               *spawn_shared          = NULL;
@@ -183,6 +184,41 @@ figure_config_file (int argc, char **argv)
 	}
 
 	return DEFAULT_CONFIG;
+}
+
+
+static char *
+figure_worker_uid (const char *config)
+{
+	FILE *f;
+	char *p;
+	char *line;
+	char  tmp[512];
+
+	f = fopen (config, "r");
+	if (f == NULL)
+		return NULL;
+
+	while (! feof(f)) {
+		line = fgets (tmp, sizeof(tmp), f);
+		if ((line != NULL) &&
+		    (! strncmp (line, "server!user = ", 14)))
+		{
+			fclose(f);
+			p = line + 14;
+			while (*p) {
+				if ((*p == '\r') || (*p == '\n')) {
+					*p = '\0';
+					break;
+				}
+				p += 1;
+			}
+			return strdup(line + 14);
+		}
+	}
+
+	fclose(f);
+	return NULL;
 }
 
 static char *
@@ -468,6 +504,45 @@ spawn_thread_func (void *param)
 	return NULL;
 }
 
+
+static int
+sem_chmod (int sem, char *worker_uid)
+{
+	int              re;
+	struct semid_ds  buf;
+	struct passwd   *passwd;
+	int              uid     = 0;
+		
+	uid = (int)strtol (worker_uid, (char **)NULL, 10);
+	if (uid == 0) {
+		passwd = getpwnam (worker_uid);
+		if (passwd != NULL) {
+			uid = passwd->pw_uid;
+		}
+	}
+	
+	if (uid == 0) {
+		PRINT_ERROR ("Couldn't get UID for user '%s'\n", worker_uid);
+		return -1;
+	}
+
+	re = semctl (sem, 0, IPC_STAT, &buf);
+	if (re != -0) {
+		PRINT_ERROR ("Couldn't IPC_STAT: errno=%d\n", errno);
+		return -1;
+	}
+
+	buf.sem_perm.uid = uid;
+	re = semctl (spawn_shared_sem, 0, IPC_SET, &buf);
+	if (re != 0) {
+		PRINT_ERROR ("Couldn't IPC_SET: uid=%d errno=%d\n", uid, errno);
+		return -1;
+	}
+
+	return 0;
+}
+
+
 static ret_t
 spawn_init (void)
 {
@@ -510,6 +585,10 @@ spawn_init (void)
 	spawn_shared_sem = semget (getpid(), 1, IPC_CREAT | SEM_R | SEM_A);
 	if (spawn_shared_sem < 0) {
 		return ret_error;
+	}
+
+	if (worker_uid != NULL) {
+		sem_chmod (spawn_shared_sem, worker_uid);
 	}
 
 	/* Thread
@@ -736,6 +815,7 @@ main (int argc, char *argv[])
 	 */
 	config_file_path = figure_config_file (argc, argv);
 	pid_file_path    = figure_pid_file_path (config_file_path);
+	worker_uid       = figure_worker_uid (config_file_path);
 
 	/* Turn into a daemon
 	 */
