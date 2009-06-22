@@ -418,7 +418,7 @@ static ret_t
 set_auto_rate (cherokee_handler_streaming_t *hdl)
 {
 	TRACE(ENTRIES, "%s: No FFMped support\n", "Auto Rate");
-	return ret_ok;
+	return ret_error;
 }
 #endif
 
