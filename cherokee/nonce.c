@@ -149,7 +149,6 @@ cherokee_nonce_table_generate (cherokee_nonce_table_t *nonces,
 
 	/* Generate nonce string
 	 */
-	cherokee_buffer_clean (nonce);
 	cherokee_buffer_add_ullong16(nonce, (cullong_t) cherokee_bogonow_now);
 	cherokee_buffer_add_ulong16 (nonce, (culong_t) rand());
 	cherokee_buffer_add_ulong16 (nonce, (culong_t) POINTER_TO_INT(conn));

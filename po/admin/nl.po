@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-06-13 22:37+0200\n"
+"POT-Creation-Date: 2009-06-22 12:21+0200\n"
 "PO-Revision-Date: 2009-05-21 22:35+0200\n"
 "Last-Translator: Stefan de Konink <stefan@konink.de>\n"
 "Language-Team: none\n"
@@ -145,7 +145,7 @@ msgstr "Het is al aan het verdelen tussen alle geconfigureerde"
 msgid "information sources"
 msgstr "informatien bronnen"
 
-#: admin/ModuleBalancer.py:76 admin/consts.py:139
+#: admin/ModuleBalancer.py:76 admin/consts.py:140
 msgid "Choose.."
 msgstr "Kies.."
 
@@ -191,9 +191,9 @@ msgstr "Ja"
 msgid "Assign new port"
 msgstr "Koppel nieuwe poort"
 
-#: admin/ModuleBind.py:97 admin/ModuleExists.py:70
+#: admin/ModuleBind.py:97 admin/ModuleExists.py:71
 #: admin/ModuleExtensions.py:32 admin/ModuleGeoip.py:65
-#: admin/ModuleMethod.py:60 admin/ModuleRequest.py:31
+#: admin/ModuleMethod.py:61 admin/ModuleRequest.py:32
 msgid "ERROR, a 'value' entry is needed!"
 msgstr "FOUT, een 'waarde' moet worden opgegeven!"
 
@@ -362,7 +362,7 @@ msgid ""
 "Public Web Directory to which content the configuration will be applied."
 msgstr "Publieke Web Map waar op de configuratie wordt uitgevoerd."
 
-#: admin/ModuleDirectory.py:21 admin/ModuleDirectory.py:23
+#: admin/ModuleDirectory.py:22 admin/ModuleDirectory.py:24
 msgid "Web Directory"
 msgstr "Web Map"
 
@@ -519,42 +519,42 @@ msgstr ""
 msgid "Match a specific list of files"
 msgstr ""
 
-#: admin/ModuleExists.py:16 admin/ModuleExists.py:56
+#: admin/ModuleExists.py:16 admin/ModuleExists.py:57
 msgid "Match any file"
 msgstr "Neem willekeurig bestand"
 
-#: admin/ModuleExists.py:41
+#: admin/ModuleExists.py:42
 #, fuzzy
 msgid "Match type"
 msgstr "Neem willekeurig bestand"
 
-#: admin/ModuleExists.py:43 admin/ModuleExists.py:58 admin/PageIcon.py:177
+#: admin/ModuleExists.py:44 admin/ModuleExists.py:59 admin/PageIcon.py:177
 msgid "Files"
 msgstr "Bestanden"
 
-#: admin/ModuleExists.py:47 admin/ModuleGeoip.py:27 admin/ModuleGeoip.py:47
+#: admin/ModuleExists.py:48 admin/ModuleGeoip.py:27 admin/ModuleGeoip.py:47
 #: admin/Table.py:5
 msgid "Add"
 msgstr "Voeg toe"
 
-#: admin/ModuleExists.py:59 admin/ModuleFile.py:26
+#: admin/ModuleExists.py:60 admin/ModuleFile.py:26
 msgid "Use I/O cache"
 msgstr "Gebruik I/O archief"
 
-#: admin/ModuleExists.py:60
+#: admin/ModuleExists.py:61
 #, fuzzy
 msgid "Only match files"
 msgstr "Neem willekeurig bestand"
 
-#: admin/ModuleExists.py:61
+#: admin/ModuleExists.py:62
 msgid "If dir, check index files"
 msgstr ""
 
-#: admin/ModuleExists.py:81
+#: admin/ModuleExists.py:82
 msgid "Any file"
 msgstr "Willekeurig bestand"
 
-#: admin/ModuleExists.py:85 admin/consts.py:131
+#: admin/ModuleExists.py:86 admin/consts.py:131
 msgid "File Exists"
 msgstr "Bestand Bestaat"
 
@@ -627,14 +627,14 @@ msgstr "Hoofdregel waar tegen de reguliere expressie wordt geevalueerd."
 msgid "Regular expression."
 msgstr "Reguliere expressie."
 
-#: admin/ModuleHeader.py:34 admin/ModuleHeader.py:36 admin/ModuleProxy.py:100
+#: admin/ModuleHeader.py:35 admin/ModuleHeader.py:37 admin/ModuleProxy.py:100
 #: admin/ModuleProxy.py:126 admin/consts.py:130
 msgid "Header"
 msgstr "Hoofdregel"
 
-#: admin/ModuleHeader.py:37 admin/ModuleProxy.py:156 admin/ModuleRedir.py:35
-#: admin/ModuleRedir.py:52 admin/ModuleRequest.py:21 admin/ModuleRequest.py:23
-#: admin/ModuleRequest.py:40 admin/consts.py:129
+#: admin/ModuleHeader.py:38 admin/ModuleProxy.py:156 admin/ModuleRedir.py:35
+#: admin/ModuleRedir.py:52 admin/ModuleRequest.py:22 admin/ModuleRequest.py:24
+#: admin/ModuleRequest.py:41 admin/consts.py:129
 msgid "Regular Expression"
 msgstr "Reguliere Expressie"
 
@@ -741,7 +741,7 @@ msgstr "LDAP verbinding"
 msgid "The HTTP method that should match this rule."
 msgstr "De HTTP methode dat deze regel beschrijft."
 
-#: admin/ModuleMethod.py:47 admin/ModuleMethod.py:50 admin/PageVServer.py:517
+#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:520
 msgid "Method"
 msgstr "Methode"
 
@@ -938,7 +938,7 @@ msgid "Redirections"
 msgstr "Herleidingen."
 
 #: admin/ModuleRedir.py:15 admin/ModuleRehost.py:24 admin/ModuleRehost.py:28
-#: admin/consts.py:141
+#: admin/consts.py:142
 msgid "Regular Expressions"
 msgstr "Reguliere Expressies"
 
@@ -1112,7 +1112,7 @@ msgid "Help"
 msgstr "Hulp"
 
 #: admin/Page.py:151 admin/PageAdvanced.py:108 admin/PageStatus.py:67
-#: admin/PageVServer.py:485
+#: admin/PageVServer.py:488
 msgid "Status"
 msgstr "Status"
 
@@ -1485,7 +1485,7 @@ msgstr "Regel"
 msgid "Handler"
 msgstr "Uitvoerder"
 
-#: admin/PageEntry.py:161 admin/PageVServer.py:504 admin/PageVServers.py:262
+#: admin/PageEntry.py:161 admin/PageVServer.py:507 admin/PageVServers.py:262
 msgid "Document Root"
 msgstr "Hoofdmap"
 
@@ -1704,7 +1704,7 @@ msgstr "Configuratie Snelstart"
 msgid "General Settings"
 msgstr "Algemene instellingen"
 
-#: admin/PageGeneral.py:58 admin/PageVServer.py:508
+#: admin/PageGeneral.py:58 admin/PageVServer.py:511
 msgid "Network"
 msgstr "Netwerk"
 
@@ -2419,117 +2419,117 @@ msgstr "Exp"
 msgid "Final"
 msgstr "Definieve"
 
-#: admin/PageVServer.py:473 admin/PageVServers.py:309
+#: admin/PageVServer.py:476 admin/PageVServers.py:312
 msgid "<h2>Wizards</h2>"
 msgstr ""
 
-#: admin/PageVServer.py:478
+#: admin/PageVServer.py:481
 msgid "/~user directories"
 msgstr "/~gebruiker mappen"
 
-#: admin/PageVServer.py:484
+#: admin/PageVServer.py:487
 msgid "Disable"
 msgstr "Zet uit"
 
-#: admin/PageVServer.py:487
+#: admin/PageVServer.py:490
 msgid "Directory name"
 msgstr "Map naam"
 
-#: admin/PageVServer.py:497
+#: admin/PageVServer.py:500
 msgid "Server ID"
 msgstr "Server ID"
 
-#: admin/PageVServer.py:499
+#: admin/PageVServer.py:502
 msgid "Virtual Server nickname"
 msgstr "Virtuele Server naam"
 
-#: admin/PageVServer.py:502
+#: admin/PageVServer.py:505
 msgid "Paths"
 msgstr "Paden"
 
-#: admin/PageVServer.py:505
+#: admin/PageVServer.py:508
 msgid "Directory Indexes"
 msgstr "Map indices"
 
-#: admin/PageVServer.py:510
+#: admin/PageVServer.py:513
 msgid "Keep-alive"
 msgstr "Blijf-inleven"
 
-#: admin/PageVServer.py:511
+#: admin/PageVServer.py:514
 msgid "Max Upload Size"
 msgstr "Max Upload grootte"
 
-#: admin/PageVServer.py:512
+#: admin/PageVServer.py:515
 msgid "Traffic Statistics"
 msgstr "Verkeer Statistieken"
 
-#: admin/PageVServer.py:515
+#: admin/PageVServer.py:518
 msgid "Advanced Virtual Hosting"
 msgstr "Geavanceerde Virtuele Hosting"
 
-#: admin/PageVServer.py:529
+#: admin/PageVServer.py:532
 msgid "Logging Format"
 msgstr "Logging Formaat"
 
-#: admin/PageVServer.py:531
+#: admin/PageVServer.py:534
 msgid "Format"
 msgstr "Formaat"
 
-#: admin/PageVServer.py:543
+#: admin/PageVServer.py:546
 msgid "Accesses and Errors"
 msgstr ""
 
-#: admin/PageVServer.py:550 admin/PageVServer.py:567 admin/PageVServer.py:590
+#: admin/PageVServer.py:553 admin/PageVServer.py:570 admin/PageVServer.py:593
 msgid "Filename"
 msgstr "Bestandsnaam"
 
-#: admin/PageVServer.py:554 admin/PageVServer.py:571 admin/PageVServer.py:594
+#: admin/PageVServer.py:557 admin/PageVServer.py:574 admin/PageVServer.py:597
 msgid "Command"
 msgstr "Commando"
 
-#: admin/PageVServer.py:561
+#: admin/PageVServer.py:564
 #, fuzzy
 msgid "Accesses"
 msgstr "Toegang"
 
-#: admin/PageVServer.py:584
+#: admin/PageVServer.py:587
 msgid "Errors"
 msgstr "Fouten"
 
-#: admin/PageVServer.py:602
+#: admin/PageVServer.py:605
 msgid "Writers"
 msgstr "Schrijvers"
 
-#: admin/PageVServer.py:605
+#: admin/PageVServer.py:608
 msgid "Options"
 msgstr "Opties"
 
-#: admin/PageVServer.py:611
+#: admin/PageVServer.py:614
 msgid "Accept Forwarded IPs"
 msgstr ""
 
-#: admin/PageVServer.py:613
+#: admin/PageVServer.py:616
 msgid "Don't check origin"
 msgstr ""
 
-#: admin/PageVServer.py:615
+#: admin/PageVServer.py:618
 #, fuzzy
 msgid "Accept from Hosts"
 msgstr "Geaccepteerde domeinen"
 
-#: admin/PageVServer.py:623
+#: admin/PageVServer.py:626
 msgid "Host names"
 msgstr "Computer namen"
 
-#: admin/PageVServer.py:630
+#: admin/PageVServer.py:633
 msgid "Matching method"
 msgstr ""
 
-#: admin/PageVServer.py:677
+#: admin/PageVServer.py:680
 msgid "Filename must be set"
 msgstr "Bestandsnaam moet gezet zijn"
 
-#: admin/PageVServer.py:721
+#: admin/PageVServer.py:724
 msgid "Template: "
 msgstr "Sjabloon:"
 
@@ -2569,7 +2569,7 @@ msgstr "Kloon als.."
 msgid "Clone Virtual Server"
 msgstr "Kloon Virtual server"
 
-#: admin/PageVServers.py:340 admin/PageVServers.py:354
+#: admin/PageVServers.py:343 admin/PageVServers.py:357
 #: admin/validations.py:253
 msgid "Cannot be empty"
 msgstr "Kan niet leeg zijn"
@@ -2835,54 +2835,59 @@ msgid "Full Path"
 msgstr "Pad"
 
 #: admin/consts.py:135
+#, fuzzy
+msgid "Connected from"
+msgstr "Verbinding"
+
+#: admin/consts.py:136
 msgid "GeoIP"
 msgstr "GeoIP"
 
-#: admin/consts.py:140
+#: admin/consts.py:141
 msgid "Wildcards"
 msgstr "Jokers"
 
-#: admin/consts.py:145
+#: admin/consts.py:146
 msgid "Not set"
 msgstr "Niet gezet"
 
-#: admin/consts.py:146
+#: admin/consts.py:147
 msgid "Already expired on 1970"
 msgstr "Reeks vervallen in 1970"
 
-#: admin/consts.py:147
+#: admin/consts.py:148
 msgid "Do not expire until 2038"
 msgstr "Vervalt niet tot 2038"
 
-#: admin/consts.py:148
+#: admin/consts.py:149
 msgid "Custom value"
 msgstr "Eigen waarde"
 
-#: admin/consts.py:152
+#: admin/consts.py:153
 msgid "No TLS/SSL"
 msgstr "Geen TLS/SSL"
 
-#: admin/consts.py:153
+#: admin/consts.py:154
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: admin/consts.py:157
+#: admin/consts.py:158
 msgid "Off"
 msgstr "Uit"
 
-#: admin/consts.py:158
+#: admin/consts.py:159
 msgid "Enhanced Virtual Hosting"
 msgstr "Uitgebreide Virtuele Hosting"
 
-#: admin/consts.py:162
+#: admin/consts.py:163
 msgid "Skip"
 msgstr "Sla over"
 
-#: admin/consts.py:163
+#: admin/consts.py:164
 msgid "Accept"
 msgstr "Accepteer"
 
-#: admin/consts.py:164
+#: admin/consts.py:165
 msgid "Require"
 msgstr "Vereist"
 

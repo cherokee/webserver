@@ -397,6 +397,7 @@ cherokee_handler_scgi_init (cherokee_handler_scgi_t *hdl)
 		case ret_eagain:
 			return ret_eagain;
 		case ret_deny:
+			printf ("504 %s:%d\n", __FILE__, __LINE__);
 			conn->error_code = http_gateway_timeout;
 			return ret_error;
 		default:

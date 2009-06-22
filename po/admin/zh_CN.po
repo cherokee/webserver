@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.15' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-06-13 22:37+0200\n"
+"POT-Creation-Date: 2009-06-22 12:21+0200\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: ownlinux.cn\n"
@@ -136,7 +136,7 @@ msgstr "这是已经配置好的均衡器 "
 msgid "information sources"
 msgstr "数据源"
 
-#: admin/ModuleBalancer.py:76 admin/consts.py:139
+#: admin/ModuleBalancer.py:76 admin/consts.py:140
 msgid "Choose.."
 msgstr "选择.."
 
@@ -182,9 +182,9 @@ msgstr "是"
 msgid "Assign new port"
 msgstr "增加新的端口"
 
-#: admin/ModuleBind.py:97 admin/ModuleExists.py:70
+#: admin/ModuleBind.py:97 admin/ModuleExists.py:71
 #: admin/ModuleExtensions.py:32 admin/ModuleGeoip.py:65
-#: admin/ModuleMethod.py:60 admin/ModuleRequest.py:31
+#: admin/ModuleMethod.py:61 admin/ModuleRequest.py:32
 msgid "ERROR, a 'value' entry is needed!"
 msgstr "遇到错误, 您必须输入一个参数!"
 
@@ -351,7 +351,7 @@ msgid ""
 "Public Web Directory to which content the configuration will be applied."
 msgstr "公共网页目录的内容将应用于配置."
 
-#: admin/ModuleDirectory.py:21 admin/ModuleDirectory.py:23
+#: admin/ModuleDirectory.py:22 admin/ModuleDirectory.py:24
 msgid "Web Directory"
 msgstr "网页目录"
 
@@ -501,42 +501,42 @@ msgstr ""
 msgid "Match a specific list of files"
 msgstr ""
 
-#: admin/ModuleExists.py:16 admin/ModuleExists.py:56
+#: admin/ModuleExists.py:16 admin/ModuleExists.py:57
 msgid "Match any file"
 msgstr "匹配任何文件"
 
-#: admin/ModuleExists.py:41
+#: admin/ModuleExists.py:42
 #, fuzzy
 msgid "Match type"
 msgstr "匹配任何文件"
 
-#: admin/ModuleExists.py:43 admin/ModuleExists.py:58 admin/PageIcon.py:177
+#: admin/ModuleExists.py:44 admin/ModuleExists.py:59 admin/PageIcon.py:177
 msgid "Files"
 msgstr "文件"
 
-#: admin/ModuleExists.py:47 admin/ModuleGeoip.py:27 admin/ModuleGeoip.py:47
+#: admin/ModuleExists.py:48 admin/ModuleGeoip.py:27 admin/ModuleGeoip.py:47
 #: admin/Table.py:5
 msgid "Add"
 msgstr "增加"
 
-#: admin/ModuleExists.py:59 admin/ModuleFile.py:26
+#: admin/ModuleExists.py:60 admin/ModuleFile.py:26
 msgid "Use I/O cache"
 msgstr "使用 I/O 缓存"
 
-#: admin/ModuleExists.py:60
+#: admin/ModuleExists.py:61
 #, fuzzy
 msgid "Only match files"
 msgstr "匹配任何文件"
 
-#: admin/ModuleExists.py:61
+#: admin/ModuleExists.py:62
 msgid "If dir, check index files"
 msgstr ""
 
-#: admin/ModuleExists.py:81
+#: admin/ModuleExists.py:82
 msgid "Any file"
 msgstr "任何文件"
 
-#: admin/ModuleExists.py:85 admin/consts.py:131
+#: admin/ModuleExists.py:86 admin/consts.py:131
 msgid "File Exists"
 msgstr "文件存在"
 
@@ -607,14 +607,14 @@ msgstr "符合正则表达式的将被优先应用."
 msgid "Regular expression."
 msgstr "正则表达式."
 
-#: admin/ModuleHeader.py:34 admin/ModuleHeader.py:36 admin/ModuleProxy.py:100
+#: admin/ModuleHeader.py:35 admin/ModuleHeader.py:37 admin/ModuleProxy.py:100
 #: admin/ModuleProxy.py:126 admin/consts.py:130
 msgid "Header"
 msgstr "请求头"
 
-#: admin/ModuleHeader.py:37 admin/ModuleProxy.py:156 admin/ModuleRedir.py:35
-#: admin/ModuleRedir.py:52 admin/ModuleRequest.py:21 admin/ModuleRequest.py:23
-#: admin/ModuleRequest.py:40 admin/consts.py:129
+#: admin/ModuleHeader.py:38 admin/ModuleProxy.py:156 admin/ModuleRedir.py:35
+#: admin/ModuleRedir.py:52 admin/ModuleRequest.py:22 admin/ModuleRequest.py:24
+#: admin/ModuleRequest.py:41 admin/consts.py:129
 msgid "Regular Expression"
 msgstr "正则表达式"
 
@@ -720,7 +720,7 @@ msgstr "LDAP 链接"
 msgid "The HTTP method that should match this rule."
 msgstr "HTTP 方法将被此规则验证."
 
-#: admin/ModuleMethod.py:47 admin/ModuleMethod.py:50 admin/PageVServer.py:517
+#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:520
 msgid "Method"
 msgstr "方式"
 
@@ -909,7 +909,7 @@ msgid "Redirections"
 msgstr "重定向"
 
 #: admin/ModuleRedir.py:15 admin/ModuleRehost.py:24 admin/ModuleRehost.py:28
-#: admin/consts.py:141
+#: admin/consts.py:142
 msgid "Regular Expressions"
 msgstr "正则表达式"
 
@@ -1079,7 +1079,7 @@ msgid "Help"
 msgstr "帮助"
 
 #: admin/Page.py:151 admin/PageAdvanced.py:108 admin/PageStatus.py:67
-#: admin/PageVServer.py:485
+#: admin/PageVServer.py:488
 msgid "Status"
 msgstr "状态"
 
@@ -1435,7 +1435,7 @@ msgstr "规则"
 msgid "Handler"
 msgstr "处理"
 
-#: admin/PageEntry.py:161 admin/PageVServer.py:504 admin/PageVServers.py:262
+#: admin/PageEntry.py:161 admin/PageVServer.py:507 admin/PageVServers.py:262
 msgid "Document Root"
 msgstr "根目录"
 
@@ -1647,7 +1647,7 @@ msgstr "快速配置"
 msgid "General Settings"
 msgstr "一般设置"
 
-#: admin/PageGeneral.py:58 admin/PageVServer.py:508
+#: admin/PageGeneral.py:58 admin/PageVServer.py:511
 msgid "Network"
 msgstr "网络"
 
@@ -2343,116 +2343,116 @@ msgstr "到期"
 msgid "Final"
 msgstr "启用"
 
-#: admin/PageVServer.py:473 admin/PageVServers.py:309
+#: admin/PageVServer.py:476 admin/PageVServers.py:312
 msgid "<h2>Wizards</h2>"
 msgstr "新建向导"
 
-#: admin/PageVServer.py:478
+#: admin/PageVServer.py:481
 msgid "/~user directories"
 msgstr "/~user 目录"
 
-#: admin/PageVServer.py:484
+#: admin/PageVServer.py:487
 msgid "Disable"
 msgstr "禁止"
 
-#: admin/PageVServer.py:487
+#: admin/PageVServer.py:490
 msgid "Directory name"
 msgstr "目录名"
 
-#: admin/PageVServer.py:497
+#: admin/PageVServer.py:500
 msgid "Server ID"
 msgstr "服务器 ID"
 
-#: admin/PageVServer.py:499
+#: admin/PageVServer.py:502
 msgid "Virtual Server nickname"
 msgstr "虚拟主机名称"
 
-#: admin/PageVServer.py:502
+#: admin/PageVServer.py:505
 msgid "Paths"
 msgstr "路径"
 
-#: admin/PageVServer.py:505
+#: admin/PageVServer.py:508
 msgid "Directory Indexes"
 msgstr "目录首页设置"
 
-#: admin/PageVServer.py:510
+#: admin/PageVServer.py:513
 msgid "Keep-alive"
 msgstr "保持活动连接"
 
-#: admin/PageVServer.py:511
+#: admin/PageVServer.py:514
 msgid "Max Upload Size"
 msgstr "允许上传大小"
 
-#: admin/PageVServer.py:512
+#: admin/PageVServer.py:515
 msgid "Traffic Statistics"
 msgstr "流量统计"
 
-#: admin/PageVServer.py:515
+#: admin/PageVServer.py:518
 msgid "Advanced Virtual Hosting"
 msgstr "高级虚拟主机"
 
-#: admin/PageVServer.py:529
+#: admin/PageVServer.py:532
 msgid "Logging Format"
 msgstr "日志格式"
 
-#: admin/PageVServer.py:531
+#: admin/PageVServer.py:534
 msgid "Format"
 msgstr "格式"
 
-#: admin/PageVServer.py:543
+#: admin/PageVServer.py:546
 msgid "Accesses and Errors"
 msgstr "访问及错误"
 
-#: admin/PageVServer.py:550 admin/PageVServer.py:567 admin/PageVServer.py:590
+#: admin/PageVServer.py:553 admin/PageVServer.py:570 admin/PageVServer.py:593
 msgid "Filename"
 msgstr "文件名"
 
-#: admin/PageVServer.py:554 admin/PageVServer.py:571 admin/PageVServer.py:594
+#: admin/PageVServer.py:557 admin/PageVServer.py:574 admin/PageVServer.py:597
 msgid "Command"
 msgstr "命令"
 
-#: admin/PageVServer.py:561
+#: admin/PageVServer.py:564
 msgid "Accesses"
 msgstr "访问"
 
-#: admin/PageVServer.py:584
+#: admin/PageVServer.py:587
 msgid "Errors"
 msgstr "错误"
 
-#: admin/PageVServer.py:602
+#: admin/PageVServer.py:605
 msgid "Writers"
 msgstr "Writers"
 
-#: admin/PageVServer.py:605
+#: admin/PageVServer.py:608
 msgid "Options"
 msgstr "选项"
 
-#: admin/PageVServer.py:611
+#: admin/PageVServer.py:614
 msgid "Accept Forwarded IPs"
 msgstr "接受转发IPs"
 
-#: admin/PageVServer.py:613
+#: admin/PageVServer.py:616
 msgid "Don't check origin"
 msgstr "不检查来源"
 
-#: admin/PageVServer.py:615
+#: admin/PageVServer.py:618
 #, fuzzy
 msgid "Accept from Hosts"
 msgstr "接受域"
 
-#: admin/PageVServer.py:623
+#: admin/PageVServer.py:626
 msgid "Host names"
 msgstr "主机名称"
 
-#: admin/PageVServer.py:630
+#: admin/PageVServer.py:633
 msgid "Matching method"
 msgstr "匹配方法"
 
-#: admin/PageVServer.py:677
+#: admin/PageVServer.py:680
 msgid "Filename must be set"
 msgstr "必须设置文件名"
 
-#: admin/PageVServer.py:721
+#: admin/PageVServer.py:724
 msgid "Template: "
 msgstr "日志格式: "
 
@@ -2491,7 +2491,7 @@ msgstr "克隆成.."
 msgid "Clone Virtual Server"
 msgstr "克隆虚拟主机"
 
-#: admin/PageVServers.py:340 admin/PageVServers.py:354
+#: admin/PageVServers.py:343 admin/PageVServers.py:357
 #: admin/validations.py:253
 msgid "Cannot be empty"
 msgstr "不能为空"
@@ -2757,54 +2757,59 @@ msgid "Full Path"
 msgstr "配置文件路径"
 
 #: admin/consts.py:135
+#, fuzzy
+msgid "Connected from"
+msgstr "连接"
+
+#: admin/consts.py:136
 msgid "GeoIP"
 msgstr "GeoIP"
 
-#: admin/consts.py:140
+#: admin/consts.py:141
 msgid "Wildcards"
 msgstr "通配符"
 
-#: admin/consts.py:145
+#: admin/consts.py:146
 msgid "Not set"
 msgstr "未设置"
 
-#: admin/consts.py:146
+#: admin/consts.py:147
 msgid "Already expired on 1970"
 msgstr "1970已经过期"
 
-#: admin/consts.py:147
+#: admin/consts.py:148
 msgid "Do not expire until 2038"
 msgstr "到2038都不会过期"
 
-#: admin/consts.py:148
+#: admin/consts.py:149
 msgid "Custom value"
 msgstr "自定义值"
 
-#: admin/consts.py:152
+#: admin/consts.py:153
 msgid "No TLS/SSL"
 msgstr "无 TLS/SSL"
 
-#: admin/consts.py:153
+#: admin/consts.py:154
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: admin/consts.py:157
+#: admin/consts.py:158
 msgid "Off"
 msgstr "关闭"
 
-#: admin/consts.py:158
+#: admin/consts.py:159
 msgid "Enhanced Virtual Hosting"
 msgstr "高级虚拟主机"
 
-#: admin/consts.py:162
+#: admin/consts.py:163
 msgid "Skip"
 msgstr "跳过"
 
-#: admin/consts.py:163
+#: admin/consts.py:164
 msgid "Accept"
 msgstr "接受"
 
-#: admin/consts.py:164
+#: admin/consts.py:165
 msgid "Require"
 msgstr "需要"
 
