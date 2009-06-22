@@ -17,7 +17,8 @@ adminstaticdir = "$(datadir)/cherokee/admin/static/js"
 adminstatic_DATA = \
 $(THIRD_PARTY) \
 common.js \
-icons.js
+icons.js \
+wizards.js
 
 EXTRA_DIST = \
 $(adminstatic_DATA)
