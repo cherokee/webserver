@@ -496,7 +496,6 @@ send_hardcoded_error (cherokee_socket_t *sock,
 			done = true;
 	} while (!done);
 
-	cherokee_buffer_clean (tmp);
 }
 
 
@@ -517,7 +516,6 @@ process_polling_connections (cherokee_thread_t *thd)
 			       conn, SOCKET_FD(&conn->socket));
 
 			if (conn->phase <= phase_add_headers) {
-				printf ("504 %s:%d, phase: %d\n", __FILE__, __LINE__, conn->phase);
 				send_hardcoded_error (&conn->socket,
 						      http_gateway_timeout_string,
 						      THREAD_TMP_BUF1(thd));
@@ -1359,9 +1357,7 @@ accept_new_connection (cherokee_thread_t *thd,
 	int                    new_fd;
 	cherokee_sockaddr_t    new_sa;
 	cherokee_connection_t *new_conn;
-///
-//	printf("accept_new_connection: entra\n");
-///
+
 	/* Check whether there are connections waiting
 	 */
 	re = cherokee_fdpoll_check (thd->fdpoll, S_SOCKET_FD(bind->socket), FDPOLL_MODE_READ);
@@ -1426,10 +1422,6 @@ accept_new_connection (cherokee_thread_t *thd,
 
 	TRACE (ENTRIES, "new conn %p, fd %d\n", new_conn, new_fd);
 
-////////
-//	printf ("accept new: ok\n");
-//	cherokee_connection_print (new_conn);
-////////
 	return ret_ok;
 
 error:
@@ -1444,9 +1436,7 @@ error:
 	/* Don't waste / reuse this new_conn object.
 	 */
 	connection_reuse_or_free (thd, new_conn);
-//
-//	printf ("accept new: error\n");
-//
+
 	/* Release the thread ownership
 	 */
 	CHEROKEE_MUTEX_UNLOCK (&thd->ownership);
@@ -1531,11 +1521,6 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	/* Accept new connections, if possible
 	 */
 	accepting = (thd->conns_num < thd->conns_max);
-
-///////
-//	printf ("accepting(%d) = (thd->conns_num(%d) < thd->conns_max(%d));\n",
-//		accepting, thd->conns_num, thd->conns_max);
-///////
 
 	list_for_each (i, &srv->listeners) {
 		if (! accepting) {
