@@ -14,7 +14,7 @@ import xml.dom.minidom
 DEVELOPERS = {
     'alo'    : "Alvaro Lopez Ortega  <alvaro@octality.com>",
     'aperez' : "Antonio Perez  <aperez@skarcha.com",
-    'ion'    : "Jonathan Hernandez  <ion@suavizado.com>",
+    'ion'    : "Jonathan Hernandez  <ion@suavizado.com>"
 }
 
 def get_text (nodelist):
