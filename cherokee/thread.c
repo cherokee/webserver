@@ -1571,6 +1571,11 @@ watch_accept_MULTI_THREAD (cherokee_thread_t  *thd,
 		}
 	}
 
+	/* Shortcut: don't waste time on watch() */
+	if (unlikely (srv->wanna_exit)) {
+		goto out;
+	}
+
 	/* Locked; Add port file descriptors
 	 */
 	list_for_each (i, &srv->listeners) {
