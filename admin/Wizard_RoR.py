@@ -12,8 +12,9 @@ NOTE_ROR_DIR    = _("Local path to the Ruby on Rails based project.")
 NOTE_NEW_HOST   = _("Name of the new domain that will be created.")
 NOTE_NEW_DIR    = _("Directory of the web directory where the Ruby on Rails project will live in.")
 
-ERROR_DISPATCH  = _("<p>Even though it does look like a Ruby on Rails project, the <b>public/dispatch.fcgi</b> file wasn't found.</p>")
+ERROR_DISPATCH  = _("<p>Even though the directory looks like a Ruby on Rails project, the public/dispatch.fcgi file wasn't found.</p>")
 ERROR_EXAMPLE   = _("<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you might want to rename it.</p>")
+ERROR_RAILS23   = _("<p>If you are using Rails >= 2.3.0, you will have to execute the following command from the project directory in order to add the missing file:</p><p><pre>rake rails:update:generate_dispatchers</pre></p>")
 ERROR_NO_ROR    = _("It does not look like a Ruby on Rails based project directory.")
 ERROR_NO_DROOT  = _("The document root directory does not exist.")
 
@@ -80,9 +81,9 @@ CONFIG_RULES_CHILD = """
 
 def is_ror_dir (path, cfg, nochroot):
     path = validations.is_local_dir_exists (path, cfg, nochroot)
-    manage = os.path.join (path, "script/process/spawner")
+    manage = os.path.join (path, "script/server")
     if not os.path.exists (manage):
-        raise ValueError, _("Directory doesn't look like a Ruby on Rails based project.")
+        raise ValueError, ERROR_NO_ROR
     return path
 
 DATA_VALIDATION = [
@@ -103,7 +104,7 @@ class CommonMethods:
             if self.errors.has_key('dispatch.fcgi.example'):
                 return self.Indent(self.Dialog(ERROR_DISPATCH + ERROR_EXAMPLE, 'important-information'))
             else:
-                return self.Indent(self.Dialog(ERROR_DISPATCH, 'important-information'))
+                return self.Indent(self.Dialog(ERROR_DISPATCH + ERROR_RAILS23, 'important-information'))
         return ''
 
     def _op_apply_dispatch_fcgi (self, post):
