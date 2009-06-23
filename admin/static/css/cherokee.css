@@ -549,9 +549,16 @@ table tr th {
   background: #fff;
 }
 
-#wizardsection { display: none; }
+#wizardsection { 
+    display: none; 
+    padding: 0; 
+    border: 0;
+    background: #f9fcff;
+}
 #clonesection { display: none; }
 #newsection { display: none; }
+
+#wizardsection h2 { padding: 8px; }
 
 .wizOdd {
     background-color: #f9fcff;
@@ -559,15 +566,27 @@ table tr th {
 
 #wizSel {
     width: 100%;
+    background: #fff;
+    font-size: small;
     border-collapse: collapse;
-    margin: 8px 0;
+    margin: 0;
+    text-align: left;
 }
 
 #wizSel td {
-    width: 33%;
     border: 1px solid #d4e1f1;
     padding: 0;
 }
+
+#wizSelCat {
+    font-size: 200%;
+    text-align: center;
+    padding: 2em 1em;
+    color: #e5ebf4;
+}
+
+#wizG { width: 33%; }
+#wizL { width: 67%; }
 
 #wizardsection ul {
     width: 100%;
@@ -583,9 +602,24 @@ table tr th {
     float: none;
 }
 
-#wizardsection li:hover {
+#wizG li:hover {
     background: #e5ebf4;
+    background-repeat: no-repeat;
+    background-position: 4px 4px;
     cursor: pointer;
+}
+
+#wizList li {
+    background-repeat: no-repeat;
+    background-position: 4px 4px;
+    padding-left: 60px;
+    text-align: left;
+}
+
+#wizList li:hover {
+    background: #e5ebf4;
+    background-repeat: no-repeat;
+    background-position: 4px 4px;
 }
 
 
@@ -594,35 +628,23 @@ table tr th {
     font-weight: bold;
 }
 
-#wizIinner {
-    padding: 16px;
-    text-align: center;
-    overflow: auto;
-}
-
-#wizImg {
-    margin-bottom: 4px;
-}
-
-#wizTitle {
+.wizTitle {
     padding: 4px;
     font-weight: bold;
     font-size: 110%;
 }
 
-#wizDesc {
+.wizDesc {
+    padding-left: 4px;
     font-size: 85%;
-    text-align: center;
     color: #999;
 }
 
-#wizBut {
-    margin-top: 16px;
-    margin-left: 40px;
-}
-
-#wizBut a {
-    width: 100px;
+.wizBut {
+    width: 100%;
+    padding: 4px;
+    text-align: right;
+    font-size: 85%;
 }
 
 #mimetable {
@@ -812,4 +834,3 @@ table#table_new_file {
 table#table_new_file td {
 	width: 220px;
 }
-

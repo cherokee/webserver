@@ -1,5 +1,4 @@
 var wizCur = '';
-var wizwCur = '';
 
 function wizardRender() 
 {
@@ -29,18 +28,23 @@ function wizardRender()
                         $("#" + wizCur).removeClass("wizSelected");
                     }
                     wizCur = $(this).attr("id");
-                    wizwCur = '';
                     getWizards(event.data.w);
                 })
             .appendTo("#wizGroup");
         x++;
     }
+
+    $("#wizL").empty();
+    $("<div/>")
+	.attr("id", "wizSelCat")
+        .html("Select a category")
+        .appendTo("#wizL");
+
 }
 
-function getWizards(w)
+function getWizards(c)
 {
     $("#wizL").empty();
-    $("#wizIinner").empty();
 
     $("<ul/>")
         .attr("id", "wizList")
@@ -48,59 +52,50 @@ function getWizards(w)
 
 
     x = 1;
-    for (var i in cherokeeWizards[w]) {
+    for (var i in cherokeeWizards[c]) {
+	w = cherokeeWizards[c][i];
+
         if (x % 2 == 0) {
             odd = "";
         } else {
             odd = "wizOdd";
         }
+
         $("<li/>")
-            .html(i)
             .attr("id", "wizw" + x)
             .addClass(odd)
-            .attr("value", i)
-            .bind(
-                'click',
-                { "g": w, "w": i },
-                function (event) { 
-                    $(this).addClass("wizSelected");
-                    if (wizwCur != '') {
-                        $("#" + wizwCur).removeClass("wizSelected");
-                    }
-                    wizwCur = $(this).attr("id");
-                    getWizInfo(event.data.g, event.data.w);
-                })
+            .attr("style", "background-image:url('"+w.img+"');")
             .appendTo("#wizList");
+
+        $("<div/>")
+            .addClass("wizTitle")
+            .html(w.title)
+            .appendTo("#wizw"+x);
+
+        $("<div/>")
+            .addClass("wizDesc")
+            .html(w.desc)
+            .appendTo("#wizw"+x);
+
+        if (w.show) {
+            $('<div class="wizBut"><a href="'+w.url+'">Run Wizard</a></div>').appendTo("#wizw"+x);
+        } else {
+            $("<div/>")
+                .addClass("wizBut")
+                .attr("id", "wizBut"+x)
+                .appendTo("#wizw"+x);
+
+            $("<a/>")
+                .attr("href", "#")
+                .html("Run Wizard")
+                .click(function() {
+                    alert(w.no_show)
+                })
+                .appendTo("#wizBut"+x);
+        }
+
+
         x++;
     }
 
-}
-
-function getWizInfo(g,w)
-{
-    $("#wizIinner").empty();
-    i = cherokeeWizards[g][w];
-    $("<img/>")
-        .attr("src", i.img)
-        .attr("id", "wizImg")
-        .appendTo("#wizIinner");
-
-    $("<div/>")
-        .attr("id", "wizTitle")
-        .html(i.title)
-        .appendTo("#wizIinner");
-
-    $("<div/>")
-        .attr("id", "wizDesc")
-        .html(i.desc)
-        .appendTo("#wizIinner");
-
-    if (i.show) {
-        $('<div id="wizBut"><a class="button" href="'+i.url+'"><span>Run Wizard</span></a></div>').appendTo("#wizIinner");
-    } else {
-        $('<div/>')
-            .addClass('dialog-warning')
-            .html(i.no_show)
-            .appendTo("#wizIinner");
-    }
 }
