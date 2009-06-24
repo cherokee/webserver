@@ -277,7 +277,7 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->limit_bps            = 0;
 	conn->limit_blocked_until  = 0;
 
-	memset (conn->regex_ovector, OVECTOR_LEN * sizeof(int), 0);
+	memset (conn->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
 	conn->regex_ovecsize = 0;
 
 	if (conn->handler != NULL) {
