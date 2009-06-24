@@ -129,11 +129,10 @@ _configure (cherokee_cryptor_t     *cryp,
 	    cherokee_config_node_t *conf,
 	    cherokee_server_t      *srv)
 {
+	ret_t ret;
+
 	UNUSED(cryp);
 	UNUSED(srv);
-
-	ret_t              ret;
-	cherokee_buffer_t *buf;
 
 	ret = try_read_dh_param (conf, &dh_param_512, 512);
 	if (ret != ret_ok)
@@ -237,6 +236,9 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 static DH *
 tmp_dh_cb (SSL *ssl, int export, int keylen)
 {
+	UNUSED(ssl);
+	UNUSED(export);
+
 	switch (keylen) {
 	case 512:
 		if (dh_param_512) return dh_param_512;
@@ -579,7 +581,7 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 	}
 	
 	PRINT_ERROR ("ERROR: SSL_write (%d, ..) -> err=%d '%s'\n", 
-		     SOCKET_FD(socket), (int)len, ERR_error_string(re, NULL));
+		     SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
 
 	return ret_error;
 }
@@ -632,7 +634,7 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 	}
 
 	PRINT_ERROR ("ERROR: OpenSSL: SSL_read (%d, ..) -> err=%d '%s'\n",
-		     SOCKET_FD(socket), (int)len, ERR_error_string(re, NULL));
+		     SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
 	return ret_error;
 }
 
