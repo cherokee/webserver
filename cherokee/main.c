@@ -605,7 +605,7 @@ spawn_init (void)
 static void
 spawn_clean (void)
 {
-	long dummy;
+	long dummy = 0;
 
 	shm_unlink (spawn_shared_name);
 	semctl (spawn_shared_sem, 0, IPC_RMID, dummy);
