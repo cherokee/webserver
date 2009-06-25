@@ -164,8 +164,10 @@ load_theme (cherokee_buffer_t *theme_path, cherokee_handler_dirlist_props_t *pro
 ret_t 
 cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 {
-	cherokee_list_content_free (&props->notice_files, cherokee_buffer_free);
-	cherokee_list_content_free (&props->hidden_files, cherokee_buffer_free);
+	cherokee_list_content_free (&props->notice_files,
+				    (cherokee_list_free_func) cherokee_buffer_free);
+	cherokee_list_content_free (&props->hidden_files,
+				    (cherokee_list_free_func) cherokee_buffer_free);
 
 	cherokee_buffer_mrproper (&props->header);
 	cherokee_buffer_mrproper (&props->footer);

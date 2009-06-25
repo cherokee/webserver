@@ -162,10 +162,10 @@ ret_t
 cherokee_template_parse (cherokee_template_t *tem,
 			 cherokee_buffer_t   *incoming)
 {
-	ret_t              ret;
 	char              *token1;
 	char              *token2;
 	cherokee_list_t   *i;
+	ret_t              ret   = ret_ok;
 	char              *p     = incoming->buf;
 	char              *end   = incoming->buf + incoming->len;
 	cherokee_buffer_t  token = CHEROKEE_BUF_INIT;

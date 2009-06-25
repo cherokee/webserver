@@ -231,7 +231,6 @@ cherokee_logger_w3c_write_error (cherokee_logger_w3c_t *logger, cherokee_connect
 		goto error;
 	}
 
-ok:
 	cherokee_logger_writer_release_buf (logger->writer);
 	return ret_ok;
 
@@ -288,7 +287,6 @@ error:
 ret_t
 cherokee_logger_w3c_write_access (cherokee_logger_w3c_t *logger, cherokee_connection_t *cnt)
 {
-	ret_t              ret;
 	cuint_t            method_len = 0;
 	const char        *method;
 	cherokee_buffer_t *log;

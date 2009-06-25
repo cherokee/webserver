@@ -154,7 +154,8 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 
 	/* Index list
 	 */
-	cherokee_list_content_free (&vserver->index_list, cherokee_buffer_free);
+	cherokee_list_content_free (&vserver->index_list,
+				    (cherokee_list_free_func) cherokee_buffer_free);
 
 	free (vserver);	
 	return ret_ok;

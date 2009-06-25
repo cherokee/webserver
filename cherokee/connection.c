@@ -152,7 +152,7 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	cherokee_header_init (&n->header, header_type_request);
 	cherokee_post_init (&n->post);
 
-	memset (n->regex_ovector, OVECTOR_LEN * sizeof(int), 0);
+	memset (n->regex_ovector, 0, OVECTOR_LEN * sizeof(int));
 	n->regex_ovecsize = 0;
 
 	n->chunked_encoding     = false;
