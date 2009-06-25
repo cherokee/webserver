@@ -23,10 +23,10 @@ function wizardRender()
                 'click',
                 { "w": i },
                 function (event) { 
-                    $(this).addClass("wizSelected");
                     if (wizCur != '') {
                         $("#" + wizCur).removeClass("wizSelected");
                     }
+                    $(this).addClass("wizSelected");
                     wizCur = $(this).attr("id");
                     getWizards(event.data.w);
                 })
@@ -46,26 +46,15 @@ function getWizards(c)
 {
     $("#wizL").empty();
 
-    $("<ul/>")
-        .attr("id", "wizList")
-        .appendTo("#wizL");
-
-
     x = 1;
     for (var i in cherokeeWizards[c]) {
 	w = cherokeeWizards[c][i];
 
-        if (x % 2 == 0) {
-            odd = "";
-        } else {
-            odd = "wizOdd";
-        }
-
-        $("<li/>")
+        $("<div/>")
             .attr("id", "wizw" + x)
-            .addClass(odd)
+            .addClass("wizInfo")
             .attr("style", "background-image:url('"+w.img+"');")
-            .appendTo("#wizList");
+            .appendTo("#wizL");
 
         $("<div/>")
             .addClass("wizTitle")
