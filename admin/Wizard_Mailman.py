@@ -136,10 +136,14 @@ class Wizard_VServer_Mailman (WizardPage):
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
 
     def _op_apply (self, post):
-        # Validation
+        # Store tmp, validate and clean up tmp
+        self._cfg_store_post (post)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
+
+        self._cfg_clean_values (post)
 
         # Incoming info
         mailman_cgi_dir  = post.pop('tmp!wizard_mailman!mailman_cgi_dir')

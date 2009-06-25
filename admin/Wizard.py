@@ -173,6 +173,16 @@ class WizardPage (PageMenu, FormHelper, Wizard):
             left, right = line.split (" = ", 2)
             self._cfg[left] = right
 
+    def _cfg_store_post (self, post):
+        for key in post:
+            if key.startswith('tmp!'):
+                self._cfg[key] = post[key][0]
+
+    def _cfg_clean_values (self, post):
+        for key in post:
+            if key.startswith('tmp!'):
+                del(self._cfg[key])
+
     # Common pieces
     #
     def _common_add_logging (self):

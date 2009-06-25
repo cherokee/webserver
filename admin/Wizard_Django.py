@@ -58,6 +58,7 @@ def is_django_dir (path, cfg, nochroot):
 DATA_VALIDATION = [
     ("tmp!wizard_django!django_dir",    (is_django_dir, 'cfg')),
     ("tmp!wizard_django!new_host",      (validations.is_new_host, 'cfg')),
+    ("tmp!wizard_django!new_webdir",    (validations.is_dir_formated, 'cfg')),
     ("tmp!wizard_django!document_root", (validations.is_local_dir_exists, 'cfg'))
 ]
 
@@ -97,15 +98,19 @@ class Wizard_VServer_Django (WizardPage):
         return txt
 
     def _op_apply (self, post):
-        # Validation
+        # Store tmp, validate and clean up tmp
+        self._cfg_store_post (post)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
 
+        self._cfg_clean_values (post)
+
         # Incoming info
-        django_dir    = post.pop('tmp!wizard_django!django_dir')
         new_host      = post.pop('tmp!wizard_django!new_host')
         document_root = post.pop('tmp!wizard_django!document_root')
+        django_dir    = post.pop('tmp!wizard_django!django_dir')
 
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
@@ -139,7 +144,7 @@ class Wizard_Rules_Django (WizardPage):
 
         txt += '<h2>Web Directory</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_django!new_webdir',    NOTE_NEW_HOST, value="/project")
+        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_django!new_webdir', NOTE_NEW_HOST, value="/project")
         txt += self.Indent(table)
 
         txt += '<h2>Django Project</h2>'
@@ -152,10 +157,14 @@ class Wizard_Rules_Django (WizardPage):
         return txt
 
     def _op_apply (self, post):
-        # Validation
+        # Store tmp, validate and clean up tmp
+        self._cfg_store_post (post)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
+
+        self._cfg_clean_values (post)
 
         # Incoming info
         django_dir = post.pop('tmp!wizard_django!django_dir')

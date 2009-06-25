@@ -160,10 +160,14 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
 
     def _op_apply (self, post):
-        # Validation
+        # Store tmp, validate and clean up tmp
+        self._cfg_store_post (post)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
+
+        self._cfg_clean_values (post)
 
         # Check whether dispatch.fcgi is present
         error = self._op_apply_dispatch_fcgi (post)
@@ -225,10 +229,14 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
         return txt
 
     def _op_apply (self, post):
-        # Validation
+        # Store tmp, validate and clean up tmp
+        self._cfg_store_post (post)
+
         self._ValidateChanges (post, DATA_VALIDATION)
         if self.has_errors():
             return
+
+        self._cfg_clean_values (post)
 
         # Check whether dispatch.fcgi is present
         error = self._op_apply_dispatch_fcgi (post)

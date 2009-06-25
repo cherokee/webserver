@@ -1,3 +1,4 @@
+import validations
 from config import *
 from util import *
 from Page import *
@@ -62,62 +63,18 @@ SRC_PATHS = [
     "/usr/local/www/data/wordpress" # BSD
 ]
 
-class Wizard_Rules_WordPress (WizardPage):
-    ICON = "wordpress.png"
-    DESC = "Configures Wordpress inside a public web directory."
-    
-    def __init__ (self, cfg, pre):
-        WizardPage.__init__ (self, cfg, pre, 
-                             submit = '/vserver/%s/wizard/WordPress'%(pre.split('!')[1]),
-                             id     = "WordPress_Page1",
-                             title  = _("Wordpress Wizard: Location"),
-                             group  = WIZARD_GROUP_CMS)
+def is_wordpress_dir (path, cfg, nochroot):
+    path = validations.is_local_dir_exists (path, cfg, nochroot)
+    module_inc = os.path.join (path, 'wp-login.php')
+    if not os.path.exists (module_inc):
+        raise ValueError, ERROR_NO_SRC
+    return path
 
-    def show (self):
-        # Check for PHP
-        php_info = wizard_php_get_info (self._cfg, self._pre)
-        if not php_info:
-            self.no_show = "PHP support is required."
-            return False
-        return True
-
-    def _render_content (self, url_pre):        
-        guessed_src = path_find_w_default (SRC_PATHS)
-
-        table = TableProps()
-        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_wp!sources', NOTE_SOURCES, value=guessed_src)
-        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_wp!web_dir', NOTE_WEB_DIR, value="/blog")
-
-        txt  = '<h1>%s</h1>' % (self.title)
-        txt += self.Indent(table)
-        form = Form (url_pre, add_submit=True, auto=False)
-        return form.Render(txt, DEFAULT_SUBMIT_VALUE)
-
-    def _op_apply (self, post):
-        # Validation
-        self.Validate_NotEmpty (post, 'tmp!wizard_wp!sources', ERROR_NO_SRC)
-        self.Validate_NotEmpty (post, 'tmp!wizard_wp!web_dir', ERROR_NO_WEB)
-
-        local_src_dir = post.get_val('tmp!wizard_wp!sources', '')
-        if not os.path.exists (os.path.join (local_src_dir, "wp-login.php")):
-            self.errors['tmp!wizard_wp!sources'] = (ERROR_NO_SRC, local_src_dir)
-
-        if self.has_errors(): return
-
-        # Incoming info
-        local_src_dir = post.pop('tmp!wizard_wp!sources')
-        web_dir       = post.pop('tmp!wizard_wp!web_dir')
-
-        # Replacement
-        php_info = wizard_php_get_info (self._cfg, self._pre)
-        php_rule = int (php_info['rule'].split('!')[-1])
-
-        pre_rule_minus1 = "%s!rule!%d" % (self._pre, php_rule - 1)
-        pre_rule_minus2 = "%s!rule!%d" % (self._pre, php_rule - 2)
-
-        # Add the new rules
-        config = CONFIG_DIR % (locals())
-        self._apply_cfg_chunk (config)
+DATA_VALIDATION = [
+    ("tmp!wizard_wp!sources", (is_wordpress_dir, 'cfg')),
+    ("tmp!wizard_wp!host",    (validations.is_new_host, 'cfg')),
+    ("tmp!wizard_wp!web_dir", (validations.is_dir_formated, 'cfg'))
+]
 
 
 class Wizard_VServer_WordPress (WizardPage):
@@ -139,8 +96,8 @@ class Wizard_VServer_WordPress (WizardPage):
         guessed_src = path_find_w_default (SRC_PATHS)
 
         table = TableProps()
-        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_wp!sources', NOTE_SOURCES, value=guessed_src)
         self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_wp!host',    NOTE_HOST,    value="blog.example.com")
+        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_wp!sources', NOTE_SOURCES, value=guessed_src)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -150,15 +107,14 @@ class Wizard_VServer_WordPress (WizardPage):
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
 
     def _op_apply (self, post):
-        # Validation
-        self.Validate_NotEmpty (post, 'tmp!wizard_wp!sources', ERROR_NO_SRC)
-        self.Validate_NotEmpty (post, 'tmp!wizard_wp!host',    ERROR_NO_HOST)
+        # Store tmp, validate and clean up tmp
+        self._cfg_store_post (post)
 
-        local_src_dir = post.get_val('tmp!wizard_wp!sources', '')
-        if not os.path.exists (os.path.join (local_src_dir, "wp-login.php")):
-            self.errors['tmp!wizard_wp!sources'] = (ERROR_NO_SRC, local_src_dir)
+        self._ValidateChanges (post, DATA_VALIDATION)
+        if self.has_errors():
+            return
 
-        if self.has_errors(): return
+        self._cfg_clean_values (post)
 
         # Incoming info
         local_src_dir = post.pop('tmp!wizard_wp!sources')
@@ -186,3 +142,60 @@ class Wizard_VServer_WordPress (WizardPage):
         config = CONFIG_VSRV % (locals())
         self._apply_cfg_chunk (config)
         self._common_apply_logging (post, pre_vsrv)
+
+
+class Wizard_Rules_WordPress (WizardPage):
+    ICON = "wordpress.png"
+    DESC = "Configures Wordpress inside a public web directory."
+    
+    def __init__ (self, cfg, pre):
+        WizardPage.__init__ (self, cfg, pre, 
+                             submit = '/vserver/%s/wizard/WordPress'%(pre.split('!')[1]),
+                             id     = "WordPress_Page1",
+                             title  = _("Wordpress Wizard: Location"),
+                             group  = WIZARD_GROUP_CMS)
+
+    def show (self):
+        # Check for PHP
+        php_info = wizard_php_get_info (self._cfg, self._pre)
+        if not php_info:
+            self.no_show = "PHP support is required."
+            return False
+        return True
+
+    def _render_content (self, url_pre):        
+        guessed_src = path_find_w_default (SRC_PATHS)
+
+        table = TableProps()
+        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_wp!web_dir', NOTE_WEB_DIR, value="/blog")
+        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_wp!sources', NOTE_SOURCES, value=guessed_src)
+
+        txt  = '<h1>%s</h1>' % (self.title)
+        txt += self.Indent(table)
+        form = Form (url_pre, add_submit=True, auto=False)
+        return form.Render(txt, DEFAULT_SUBMIT_VALUE)
+
+    def _op_apply (self, post):
+        # Store tmp, validate and clean up tmp
+        self._cfg_store_post (post)
+
+        self._ValidateChanges (post, DATA_VALIDATION)
+        if self.has_errors():
+            return
+
+        self._cfg_clean_values (post)
+
+        # Incoming info
+        local_src_dir = post.pop('tmp!wizard_wp!sources')
+        web_dir       = post.pop('tmp!wizard_wp!web_dir')
+
+        # Replacement
+        php_info = wizard_php_get_info (self._cfg, self._pre)
+        php_rule = int (php_info['rule'].split('!')[-1])
+
+        pre_rule_minus1 = "%s!rule!%d" % (self._pre, php_rule - 1)
+        pre_rule_minus2 = "%s!rule!%d" % (self._pre, php_rule - 2)
+
+        # Add the new rules
+        config = CONFIG_DIR % (locals())
+        self._apply_cfg_chunk (config)

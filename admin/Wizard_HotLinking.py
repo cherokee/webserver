@@ -80,13 +80,18 @@ class Wizard_Rules_HotLinking (WizardPage):
         return txt
 
     def _op_apply (self, post):
+        self._cfg_store_post (post)
         tipe = post.pop('tmp!wizard_hotlink!type')
 
         # Validate
         if tipe == 'redir':
             self.ValidateChange_SingleKey ('tmp!wizard_hotlink!redirection', post, DATA_VALIDATION)
+
         self.Validate_NotEmpty (post, 'tmp!wizard_hotlink!domain', ERROR_EMPTY_DOMAIN)
-        if self.has_errors(): return
+        if self.has_errors():
+            return
+
+        self._cfg_clean_values (post)
 
         # Incoming info
         domain      = post.pop('tmp!wizard_hotlink!domain')
