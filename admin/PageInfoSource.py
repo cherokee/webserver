@@ -221,7 +221,9 @@ class PageInfoSource (PageMenu, FormHelper):
             table += '<tr><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
                      (_('Nick'), _('Type'), _('Connection'))
 
-            for s in self._cfg.keys('source'):
+            keys = self._cfg.keys('source')
+            keys.sort()
+            for s in keys:
                 nick = self._cfg.get_val('source!%s!nick'%(s))
                 host = self._cfg.get_val('source!%s!host'%(s))
                 type = self._cfg.get_val('source!%s!type'%(s))
@@ -270,7 +272,10 @@ class PageInfoSource (PageMenu, FormHelper):
         table  = '<table width="90%" id="usage" class="rulestable">'
         table += '<tr><th>%s</th><th>%s</th><th>%s</th></tr>' % \
                  (_('Nick'), _('Virtual server'), _('Rule'))
-        for src in used_sources:
+
+        keys = used_sources.keys()
+        keys.sort()
+        for src in keys:
             for entry in used_sources[src]:
                 is_user_dir = False
 
@@ -321,7 +326,7 @@ class PageInfoSource (PageMenu, FormHelper):
         target ='!balancer!source!'
         for entry in self._cfg.serialize().split():
             if target in entry:
-                source =  self._cfg.get_val(entry)
+                source = self._cfg.get_val(entry)
                 if not used_sources.has_key(source):
                     used_sources[source] = []
                 used_sources[source].append(entry)
