@@ -22,7 +22,7 @@ SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = RoR %(new_host)s, instance %(src_instance)d
 source!%(src_num)d!host = /tmp/cherokee-ror-%(src_num)d.sock
-source!%(src_num)d!interpreter = spawn-fcgi -n -f %(ror_dir)s/public/dispatch.fcgi -s /tmp/cherokee-ror-%(src_num)d.sock -P /tmp/cherokee-ror-%(src_num)d.sock
+source!%(src_num)d!interpreter = spawn-fcgi -n -d %(ror_dir)s -f %(ror_dir)s/public/dispatch.fcgi -s /tmp/cherokee-ror-%(src_num)d.sock -P /tmp/cherokee-ror-%(src_num)d.sock
 """
 
 CONFIG_VSRV = """
