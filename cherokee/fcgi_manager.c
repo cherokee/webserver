@@ -290,7 +290,7 @@ process_package (cherokee_fcgi_manager_t *mgr, cherokee_buffer_t *inbuf)
 			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 			
 			cherokee_buffer_add (&tmp, data, len);
-			cherokee_logger_write_string (CONN_VSRV(conn)->logger, "%s", tmp.buf);
+			cherokee_logger_write_string (CONN_VSRV(conn)->logger, "%s\n", tmp.buf);
 			cherokee_buffer_mrproper (&tmp);		
 		}
 		exit(1);

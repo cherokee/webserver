@@ -172,7 +172,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 		if (unlikely (req_time == DTM_TIME_EVAL)) {
 			cherokee_logger_write_string (
 				CONN_VSRV(conn)->logger, 
-				"Warning: Unparseable time '%s'",
+				"Warning: Unparseable time '%s'\n",
 				header);
 			/* restore end of line */
 			*end = tmp;
@@ -253,7 +253,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 		if (unlikely (req_time == DTM_TIME_EVAL)) {
 			cherokee_logger_write_string (
 				CONN_VSRV(conn)->logger, 
-				"Warning: Unparseable time '%s'",
+				"Warning: Unparseable time '%s'\n",
 				header);
 			*end = tmp;
 			return ret_ok;

@@ -119,7 +119,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
 			cherokee_buffer_add (&tmp, data, len);
-			cherokee_logger_write_string (CONN_VSRV(conn)->logger, "%s", tmp.buf);
+			cherokee_logger_write_string (CONN_VSRV(conn)->logger, "%s\n", tmp.buf);
 			cherokee_buffer_mrproper (&tmp);
 		}
 		else if (SOURCE_INT(hdl->src_ref)->debug) {
