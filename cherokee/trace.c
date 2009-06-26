@@ -26,6 +26,7 @@
 #include "trace.h"
 #include "buffer.h"
 #include "util.h"
+#include "bogotime.h"
 
 #ifdef HAVE_SYSLOG_H
 # include <syslog.h>
@@ -96,8 +97,6 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	char               *lentry;
 	char               *lentry_end;
 	va_list             args;
-	struct tm           now;
-	time_t              now_time;
 	cherokee_buffer_t  *trace_modules = &trace.modules;
 	cherokee_boolean_t  do_log        = false;
 	cherokee_buffer_t   entries       = CHEROKEE_BUF_INIT;
@@ -152,15 +151,15 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	}
 
 	if (trace.print_time) {
-		now_time = time(NULL);
-		cherokee_localtime (&now_time, &now);
-		cherokee_buffer_add_va (&entries, "[%02d/%02d/%d:%02d:%02d:%02d] ",
-					now.tm_mday, 
-					now.tm_mon, 
-					now.tm_year + 1900,
-					now.tm_hour, 
-					now.tm_min, 
-					now.tm_sec);
+		cherokee_bogotime_try_update();
+		cherokee_buffer_add_va (&entries, "[%02d/%02d/%d %02d:%02d:%02d.%03d] ",
+					cherokee_bogonow_tmloc.tm_mday, 
+					cherokee_bogonow_tmloc.tm_mon, 
+					cherokee_bogonow_tmloc.tm_year + 1900,
+					cherokee_bogonow_tmloc.tm_hour, 
+					cherokee_bogonow_tmloc.tm_min, 
+					cherokee_bogonow_tmloc.tm_sec,
+					cherokee_bogonow_tv.tv_usec / 1000);
 	}
 	
 	cherokee_buffer_add_va (&entries, "%18s:%04d (%30s): ", file, line, func);
