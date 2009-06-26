@@ -11,6 +11,7 @@ DEFAULT_BINS    = ['spawn-fcgi']
 NOTE_ROR_DIR    = _("Local path to the Ruby on Rails based project.")
 NOTE_NEW_HOST   = _("Name of the new domain that will be created.")
 NOTE_NEW_DIR    = _("Directory of the web directory where the Ruby on Rails project will live in.")
+NOTE_ENV        = _("Value of the RAILS_ENV variable.")
 
 ERROR_DISPATCH  = _("<p>Even though the directory looks like a Ruby on Rails project, the public/dispatch.fcgi file wasn't found.</p>")
 ERROR_EXAMPLE   = _("<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you might want to rename it.</p>")
@@ -18,11 +19,22 @@ ERROR_RAILS23   = _("<p>If you are using Rails >= 2.3.0, you will have to execut
 ERROR_NO_ROR    = _("It does not look like a Ruby on Rails based project directory.")
 ERROR_NO_DROOT  = _("The document root directory does not exist.")
 
+RAILS_ENV = [
+    ('production',  'Production'),
+    ('test',        'Test'),
+    ('Development', 'Development'),
+    ('',            'Empty')
+]
+
 SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = RoR %(new_host)s, instance %(src_instance)d
 source!%(src_num)d!host = /tmp/cherokee-ror-%(src_num)d.sock
 source!%(src_num)d!interpreter = spawn-fcgi -n -d %(ror_dir)s -f %(ror_dir)s/public/dispatch.fcgi -s /tmp/cherokee-ror-%(src_num)d.sock -P /tmp/cherokee-ror-%(src_num)d.sock
+"""
+
+SOURCE_ENV = """
+source!%(src_num)d!env!RAILS_ENV = %(ror_env)s
 """
 
 CONFIG_VSRV = """
@@ -150,7 +162,8 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
         txt += self._render_content_dispatch_fcgi()
 
         table = TableProps()
-        self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_ror!ror_dir', NOTE_ROR_DIR)
+        self.AddPropEntry   (table, _('Project Directory'),     'tmp!wizard_ror!ror_dir', NOTE_ROR_DIR)
+        self.AddPropOptions (table, _('RAILS_ENV environment'), 'tmp!wizard_ror!ror_env', RAILS_ENV, NOTE_ENV)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -176,6 +189,7 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
         # Incoming info
         ror_dir  = post.pop('tmp!wizard_ror!ror_dir')
         new_host = post.pop('tmp!wizard_ror!new_host')
+        ror_env  = post.pop('tmp!wizard_ror!ror_env')
 
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
@@ -191,6 +205,8 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
         for i in range(ROR_CHILD_PROCS):
             src_instance = i + 1
             config += SOURCE % (locals())
+            if ror_env:
+                config += SOURCE_ENV % (locals())
             config += CONFIG_VSRV_CHILD % (locals())
             src_num += 1
 
@@ -221,7 +237,8 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
         txt += self._render_content_dispatch_fcgi()
 
         table = TableProps()
-        self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_ror!ror_dir', NOTE_ROR_DIR)
+        self.AddPropEntry   (table, _('Project Directory'),     'tmp!wizard_ror!ror_dir', NOTE_ROR_DIR)
+        self.AddPropOptions (table, _('RAILS_ENV environment'), 'tmp!wizard_ror!ror_env', RAILS_ENV, NOTE_ENV)
         txt += self.Indent(table)
 
         form = Form (url_pre, add_submit=True, auto=False)
@@ -245,6 +262,7 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
         # Incoming info
         ror_dir = post.pop('tmp!wizard_ror!ror_dir')
         webdir  = post.pop('tmp!wizard_ror!new_webdir')
+        ror_env = post.pop('tmp!wizard_ror!ror_env')
 
         # Locals
         rule_num, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
@@ -260,6 +278,8 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
         for i in range(ROR_CHILD_PROCS):
             src_instance = i + 1
             config += SOURCE % (locals())
+            if ror_env:
+                config += SOURCE_ENV % (locals())
             config += CONFIG_RULES_CHILD % (locals())
             src_num += 1
 
