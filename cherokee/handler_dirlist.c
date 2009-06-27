@@ -202,6 +202,8 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 		n->show_group    = false;
 		n->show_icons    = true;
 		n->show_symlinks = true;
+		n->show_hidden   = false;
+		n->show_backup   = false;
 
 		cherokee_buffer_init (&n->header);
 		cherokee_buffer_init (&n->footer);
@@ -234,6 +236,10 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 			props->show_group = !! atoi (subconf->val.buf);
 		} else if (equal_buf_str (&subconf->key, "symlinks")) {
 			props->show_symlinks = !! atoi (subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "hidden")) {
+			props->show_hidden = !! atoi (subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "backup")) {
+			props->show_backup = !! atoi (subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "theme")) {
 			theme = subconf->val.buf;
@@ -325,14 +331,17 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 
 		/* Skip some files
 		 */
-		if ((name[0] == '.') ||
-		    (name[0] == '#') ||
-		    (name[n->name_len-1] == '~') ||
-		    is_file_in_list (&HDL_DIRLIST_PROP(dhdl)->notice_files, name, n->name_len) ||
-		    is_file_in_list (&HDL_DIRLIST_PROP(dhdl)->hidden_files, name, n->name_len))
-		{
+		if ((! HDL_DIRLIST_PROP(dhdl)->show_hidden) &&
+		    (name[0] == '.'))
 			continue;
-		}
+
+		if ((! HDL_DIRLIST_PROP(dhdl)->show_backup) &&
+		    ((name[0] == '#') || (name[n->name_len-1] == '~')))
+			continue;
+			    
+		if (is_file_in_list (&HDL_DIRLIST_PROP(dhdl)->notice_files, name, n->name_len) ||
+		    is_file_in_list (&HDL_DIRLIST_PROP(dhdl)->hidden_files, name, n->name_len))
+			continue;
 		
 		/* Build the local path, stat and clean
 		 */
