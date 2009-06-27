@@ -1572,7 +1572,11 @@ watch_accept_MULTI_THREAD (cherokee_thread_t  *thd,
 	}
 
 	/* Shortcut: don't waste time on watch() */
-	if (unlikely (srv->wanna_exit)) {
+	if (unlikely ((srv->wanna_exit) ||
+		      ((srv->wanna_reinit) &&
+		       (thd->active_list_num  == 0) &&
+		       (thd->polling_list_num == 0))))
+	{
 		goto out;
 	}
 
