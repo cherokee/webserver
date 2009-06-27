@@ -157,9 +157,8 @@ class ModuleProxy (ModuleHandler):
 
             for k in keys:
                 pre = '%s!%s!%s'%(self._prefix, key, k)
-                regex = self._cfg.get_val ('%s!regex'%(pre))
-                subst = self._cfg.get_val ('%s!substring'%(pre))
-
+                regex = self.InstanceEntry('%s!regex'%(pre),     'text', size=30, req=False)
+                subst = self.InstanceEntry('%s!substring'%(pre), 'text', size=30, req=False)
                 rm_link = self.AddDeleteLink ('/ajax/update', pre)
                 table += (regex, subst, rm_link)
 
