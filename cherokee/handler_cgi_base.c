@@ -342,10 +342,10 @@ cherokee_handler_cgi_base_build_basic_env (
 
 	/* Remote user
 	 */
-	if (conn->validator && !cherokee_buffer_is_empty (&conn->validator->user))
+	if (conn->validator && !cherokee_buffer_is_empty (&conn->validator->user)) {
+		/* Only set when user authenticated (bug #467) */
 		set_env (cgi, "REMOTE_USER", conn->validator->user.buf, conn->validator->user.len);
-	else 
-		set_env (cgi, "REMOTE_USER", "", 0);
+	}
 
 	/* Set PATH_INFO 
 	 */
