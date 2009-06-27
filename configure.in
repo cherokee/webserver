@@ -949,7 +949,11 @@ AC_ARG_ENABLE(pam, AC_HELP_STRING([--disable-pam],[Disable PAM support]), use_pa
 if test "x$use_pam" = "xyes"; then
      AC_CHECK_LIB(pam, pam_start, have_pam_lib=yes, have_pam_lib=no)
      AC_CHECK_LIB(pam, _pam_dispatch, have_pam_dispatch=yes, have_pam_dispatch=no)
-     AC_CHECK_HEADER(security/pam_modules.h, have_pam_include=yes, have_pam_include=no)
+     AC_CHECK_HEADER(security/pam_modules.h, have_pam_include=yes, have_pam_include=no, [[
+#ifdef HAVE_SECURITY_PAM_MODULES_H
+# include <security/pam_modules.h>
+#endif	  
+	]])
      AC_CHECK_HEADERS(security/_pam_macros.h security/pam_appl.h)
 fi
 
