@@ -1486,11 +1486,6 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	}
 #endif
 
-	/* Graceful restart
-	 */
-	if (srv->wanna_reinit)
-		goto out;
-
 	/* May have to reactive connections
 	 */
 	cherokee_limiter_reactive (&thd->limiter, thd);
@@ -1512,6 +1507,20 @@ cherokee_thread_step_SINGLE_THREAD (cherokee_thread_t *thd)
 	 */
 	fdwatch_msecs = cherokee_limiter_get_time_limit (&thd->limiter,
 							 fdwatch_msecs);
+
+	/* Graceful restart
+	 */
+	if (srv->wanna_reinit) {
+		if ((thd->active_list_num == 0) && 
+		    (thd->polling_list_num == 0))
+		{
+			thd->exit = true;
+			return ret_eof;
+		}
+
+		cherokee_fdpoll_watch (thd->fdpoll, fdwatch_msecs);
+		goto out;
+	}
 
 	/* Inspect the file descriptors
 	 */
