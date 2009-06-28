@@ -482,8 +482,8 @@ do_spawn (void)
 	free (envp);
 }
 
-static void *
-spawn_thread_func (void *param)
+static NORETURN void *
+spawn_thread_func (void *param) 
 {
 	int           re;
 	struct sembuf so;
@@ -500,8 +500,6 @@ spawn_thread_func (void *param)
 		} while (re < 0 && errno == EINTR);
 		do_spawn ();
 	}
-
-	return NULL;
 }
 
 

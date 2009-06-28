@@ -500,7 +500,7 @@ _fd_set_properties (int fd, int add_flags, int remove_flags)
 }
 
 
-static void 
+static NORETURN void 
 manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe_server[2])
 {
 	/* Child process

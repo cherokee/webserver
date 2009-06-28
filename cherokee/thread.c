@@ -79,7 +79,7 @@ thread_update_bogo_now (cherokee_thread_t *thd)
 
 
 #ifdef HAVE_PTHREAD       
-static void *
+static NORETURN void *
 thread_routine (void *data)
 {
 	cherokee_thread_t *thread = THREAD(data);

@@ -1704,7 +1704,7 @@ cherokee_server_handle_TERM (cherokee_server_t *srv)
 }
 
 
-void
+NORETURN void 
 cherokee_server_handle_panic (cherokee_server_t *srv)
 {
 	int               re;

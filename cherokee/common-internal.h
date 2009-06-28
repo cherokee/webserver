@@ -219,5 +219,15 @@ char *strcasestr(char *s, char *find);
 # define SEM_A 0200
 #endif
 
+/* GCC specific
+ */
+#ifndef NORETURN
+# ifdef __GNUC__
+#  define NORETURN __attribute__((noreturn))
+# else
+#  define NORETURN
+# endif
+#endif
+
 
 #endif /* CHEROKEE_COMMON_INTERNAL_H */
