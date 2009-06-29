@@ -109,7 +109,8 @@ _add (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 	}
 
 	if (epoll_ctl (fdp->ep_fd, EPOLL_CTL_ADD, fd, &ev) < 0) {
-		PRINT_ERRNO (errno, "epoll_ctl(%d, EPOLL_CTL_ADD, %d): '${errno}'", fdp->ep_fd, fd);
+		LOG_ERRNO (errno, cherokee_err_error,
+			   "epoll_ctl(%d, EPOLL_CTL_ADD, %d): '${errno}'", fdp->ep_fd, fd);
 		return ret_error;
 	}
 
@@ -135,7 +136,8 @@ _del (cherokee_fdpoll_epoll_t *fdp, int fd)
 	}
 
 	if (epoll_ctl(fdp->ep_fd, EPOLL_CTL_DEL, fd, &ev) < 0) {
-		PRINT_ERRNO (errno, "epoll_ctl(%d, EPOLL_CTL_DEL, %d): '${errno}'", fdp->ep_fd, fd);
+		LOG_ERRNO (errno, cherokee_err_error,
+			   "epoll_ctl(%d, EPOLL_CTL_DEL, %d): '${errno}'", fdp->ep_fd, fd);
 		return ret_error;
 	}
 
@@ -225,7 +227,8 @@ _set_mode (cherokee_fdpoll_epoll_t *fdp, int fd, int rw)
 	}
 
 	if (epoll_ctl(fdp->ep_fd, EPOLL_CTL_MOD, fd, &ev) < 0) {
-		PRINT_ERRNO (errno, "epoll_ctl(%d, EPOLL_CTL_MOD, %d): '${errno}'", fdp->ep_fd, fd);
+		LOG_ERRNO (errno, cherokee_err_error,
+			   "epoll_ctl(%d, EPOLL_CTL_MOD, %d): '${errno}'", fdp->ep_fd, fd);
 		return ret_error;
 	}
 	return ret_ok;
@@ -309,7 +312,8 @@ fdpoll_epoll_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 		 * but the kernel doesn't.
 		 */
 #if 0
-		PRINT_ERRNO (errno, "epoll_create(%d): '${errno}'", nfd->nfiles+1);
+		LOG_ERRNO (errno, cherokee_err_error,
+			   "epoll_create(%d): '${errno}'", nfd->nfiles+1);
 #endif
 		_free (n);
 		return ret_error;
@@ -317,7 +321,8 @@ fdpoll_epoll_new (cherokee_fdpoll_t **fdp, int sys_fd_limit, int fd_limit)
 
 	re = fcntl (n->ep_fd, F_SETFD, FD_CLOEXEC);
 	if (re < 0) {
-		PRINT_ERRNO (errno, "Could not set CloseExec to the epoll descriptor: fcntl: '${errno}'");
+		LOG_ERRNO (errno, cherokee_err_error,
+			   "Could not set CloseExec to the epoll descriptor: fcntl: '${errno}'");
 		_free (n);
 		return ret_error;		
 	}

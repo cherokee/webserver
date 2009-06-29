@@ -911,7 +911,8 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		re = chroot (srv->chroot.buf);
 		srv->chrooted = (re == 0);
 		if (srv->chrooted == 0) {
-			PRINT_ERRNO (errno, "Cannot chroot() to '%s': '${errno}'", srv->chroot.buf);
+			LOG_ERRNO (errno, cherokee_err_error,
+				   "Cannot chroot() to '%s': '${errno}'", srv->chroot.buf);
 			return ret_error;
 		}
 	} 
@@ -931,7 +932,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	 */
 	re = chdir ("/");
 	if (re < 0) {
-		PRINT_ERRNO_S (errno, "Couldn't chdir(\"/\"): '${errno}'");
+		LOG_ERRNO_S (errno, cherokee_err_error, "Couldn't chdir(\"/\"): '${errno}'");
 		return ret_error;
 	}
 
@@ -1749,7 +1750,7 @@ cherokee_server_handle_panic (cherokee_server_t *srv)
 #else
 		int val = re;			
 #endif
-		PRINT_ERROR ("PANIC: re-panic: '%s', status %d\n", cmd.buf, val);
+		LOG_CRITICAL ("PANIC: re-panic: '%s', status %d\n", cmd.buf, val);
 	}
 
 	cherokee_buffer_mrproper (&cmd);
@@ -1865,7 +1866,8 @@ cherokee_server_write_pidfile (cherokee_server_t *srv)
 
 	file = fopen (srv->pidfile.buf, "w+");
 	if (file == NULL) {
-		PRINT_ERRNO (errno, "Cannot write PID file '%s': '${errno}'", srv->pidfile.buf);
+		LOG_ERRNO (errno, cherokee_err_error,
+			   "Cannot write PID file '%s': '${errno}'", srv->pidfile.buf);
 		goto error;
 	}
 

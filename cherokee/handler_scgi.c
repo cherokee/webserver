@@ -97,7 +97,7 @@ cherokee_handler_scgi_configure (cherokee_config_node_t *conf, cherokee_server_t
 	/* Final checks
 	 */
 	if (props->balancer == NULL) {
-		PRINT_ERROR_S ("ERROR: SCGI handler needs a balancer\n");
+		LOG_CRITICAL_S ("ERROR: SCGI handler needs a balancer\n");
 		return ret_error;
 	}
 

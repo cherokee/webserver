@@ -55,7 +55,7 @@ typedef struct {
 	cherokee_buffer_t              filename;
 	cherokee_buffer_t              command;
 
-	CHEROKEE_MUTEX_T              (mutex);
+	void                          *priv;
 } cherokee_logger_writer_t;
 
 #define LOGGER_WRITER(x) ((cherokee_logger_writer_t *)(x))

@@ -173,7 +173,7 @@ _watch (cherokee_fdpoll_kqueue_t *fdp, int timeout_msecs)
 			  &timeout);
 	fdp->nchanges=0;
 	if (unlikely (n_events < 0)) {
-		PRINT_ERRNO (errno, "kevent: '${errno}'");
+		LOG_ERRNO (errno, cherokee_err_error, "kevent: '${errno}'");
 		return 0;
 
 	} else if (n_events > 0) {

@@ -56,7 +56,7 @@ cherokee_balancer_ip_hash_configure (cherokee_balancer_t    *balancer,
 	/* Sanity check
 	 */
 	if (balancer->entries_len <= 0) {
-		PRINT_ERROR_S ("ERROR: Balancer cannot be empty\n");
+		LOG_CRITICAL_S ("Balancer cannot be empty\n");
 		return ret_error;
 	}
  
@@ -195,7 +195,7 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 	/* Select a back-end
 	 */
 	if (unlikely (balancer->n_active <= 0)) {
-		PRINT_MSG_S ("ERROR: Sources exhausted: re-enabling one.\n");
+		PRINT_MSG_S ("NOTICE: Sources exhausted: re-enabling one.\n");
 		reactivate_entry (balancer, BAL_ENTRY(balancer->last_one));
 
 		balancer->last_one = list_next_circular (&BAL(balancer)->entries,

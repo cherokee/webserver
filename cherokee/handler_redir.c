@@ -111,7 +111,7 @@ match_and_substitute (cherokee_handler_redir_t *n)
 		else {
 			rc = pcre_exec (list->re, NULL, subject, subject_len, 0, 0, ovector, OVECTOR_LEN);
 			if (rc == 0) {
-				PRINT_ERROR_S("Too many groups in the regex\n");
+				LOG_ERROR_S("Too many groups in the regex\n");
 			}
 
 			TRACE (ENTRIES, "subject = \"%s\" + len(\"%s\")-1=%d\n", 

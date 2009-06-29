@@ -1016,8 +1016,8 @@ process_active_connections (cherokee_thread_t *thd)
 			default:
 				if ((MODULE(conn->handler)->info) &&
 				    (MODULE(conn->handler)->info->name)) 
-					PRINT_ERROR ("Unknown ret %d from handler %s\n", ret,
-						     MODULE(conn->handler)->info->name);
+					LOG_ERROR ("Unknown ret %d from handler %s\n", ret,
+						   MODULE(conn->handler)->info->name);
 				else
 					RET_UNKNOWN(ret);
 				break;
@@ -1344,7 +1344,7 @@ thread_full_handler (cherokee_thread_t *thd,
 	if (ret != ret_ok)
 		goto out;
 
-	PRINT_ERROR_S ("WARNING: Run out of file descriptors!!\n");
+	LOG_WARNING_S ("Run out of file descriptors!!\n");
 	
 	/* Read the request
 	 */
@@ -1394,7 +1394,7 @@ accept_new_connection (cherokee_thread_t *thd,
 	 */
 	ret = cherokee_thread_get_new_connection (thd, &new_conn);
 	if (unlikely(ret < ret_ok)) {
-		PRINT_ERROR_S ("ERROR: Trying to get a new connection object\n");
+		LOG_ERROR_S ("Trying to get a new connection object\n");
 		cherokee_fd_close (new_fd);
 		return ret_deny;
 	}
@@ -1410,7 +1410,7 @@ accept_new_connection (cherokee_thread_t *thd,
 	CHEROKEE_MUTEX_LOCK (&thd->ownership);
 
 	if (unlikely(ret < ret_ok)) {
-		PRINT_ERROR_S ("ERROR: Trying to set sockaddr\n");
+		LOG_ERROR_S ("Trying to set sockaddr\n");
 		goto error;
 	}
 

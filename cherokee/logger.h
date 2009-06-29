@@ -30,6 +30,7 @@
 #define CHEROKEE_LOGGER_H
 
 #include <cherokee/common.h>
+#include <cherokee/buffer.h>
 #include <cherokee/module.h>
 #include <cherokee/logger_writer.h>
 

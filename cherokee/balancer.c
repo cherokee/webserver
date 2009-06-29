@@ -134,7 +134,7 @@ cherokee_balancer_configure_base (cherokee_balancer_t    *balancer,
 	 */
 	ret = cherokee_config_node_get (conf, "source", &subconf);
 	if (ret != ret_ok) {
-		PRINT_ERROR_S ("ERROR: Balancer: An entry 'source' is needed\n");
+		LOG_ERROR_S ("Balancer: An entry 'source' is needed\n");
 		return ret_error;
 	}
 
@@ -143,7 +143,7 @@ cherokee_balancer_configure_base (cherokee_balancer_t    *balancer,
 
 		ret = cherokee_avl_get (&srv->sources, &subconf2->val, (void **)&src);
 		if (ret != ret_ok) {
-			PRINT_ERROR ("Could not find source '%s'\n", subconf2->val.buf);
+			LOG_ERROR ("Could not find source '%s'\n", subconf2->val.buf);
 			return ret_error;
 		}
 
@@ -217,7 +217,7 @@ cherokee_balancer_instance (cherokee_buffer_t       *name,
 	cherokee_plugin_info_t    *info = NULL;
 	
 	if (cherokee_buffer_is_empty (name)) {
-		PRINT_ERROR_S ("Balancer defined without a value\n");
+		LOG_CRITICAL_S ("Balancer defined without a value\n");
 		return ret_error;
 	}
 

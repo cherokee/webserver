@@ -115,7 +115,7 @@ configure (cherokee_vrule_wildcard_t   *vrule,
 
 	ret = cherokee_config_node_get (conf, "domain", &subconf);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Virtual Server '%s' wildcard vrule needs a 'domain' entry\n", vsrv->name.buf);
+		LOG_CRITICAL ("Virtual Server '%s' wildcard vrule needs a 'domain' entry\n", vsrv->name.buf);
 		return ret_error;
 	}
 

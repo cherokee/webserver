@@ -79,7 +79,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 	if (! cherokee_buffer_is_empty (&post->tmp_file)) {
 		re = unlink (post->tmp_file.buf);
 		if (unlikely (re != 0)) {
-			PRINT_ERRNO (errno, "Couldn't remove %s: %s\n", post->tmp_file.buf);
+			LOG_ERRNO (errno, cherokee_err_error, "Couldn't remove %s: %s\n", post->tmp_file.buf);
 		}
 
 		TRACE(ENTRIES, "Removing '%s'\n", post->tmp_file.buf);

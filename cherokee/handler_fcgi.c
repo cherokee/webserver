@@ -81,7 +81,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 
 	if (header->version != 1) {
 		cherokee_buffer_print_debug (inbuf, -1);
-		PRINT_ERROR_S ("Parsing error: unknown version\n");
+		LOG_ERROR_S ("Parsing error: unknown version\n");
 		return ret_error;
 	}
 	
@@ -89,7 +89,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	    header->type != FCGI_STDOUT && 
 	    header->type != FCGI_END_REQUEST) {
 		cherokee_buffer_print_debug (inbuf, -1);
-		PRINT_ERROR_S ("Parsing error: unknown type\n");
+		LOG_ERROR_S ("Parsing error: unknown type\n");
 		return ret_error;
 	}
 	
@@ -259,7 +259,7 @@ cherokee_handler_fcgi_configure (cherokee_config_node_t   *conf,
 	/* Final checks
 	 */
 	if (props->balancer == NULL) {
-		PRINT_ERROR_S ("ERROR: fcgi handler needs a balancer\n");
+		LOG_CRITICAL_S ("fcgi handler needs a balancer\n");
 		return ret_error;
 	}
 

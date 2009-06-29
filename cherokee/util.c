@@ -805,7 +805,7 @@ cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
 #else
  	flags = fcntl (fd, F_GETFL, 0);
 	if (unlikely (flags == -1)) {
-		PRINT_ERRNO (errno, "ERROR: fcntl/F_GETFL fd %d: ${errno}\n", fd);
+		LOG_ERRNO (errno, cherokee_err_error, "fcntl/F_GETFL fd %d: ${errno}\n", fd);
 		return ret_error;
 	}
 
@@ -817,7 +817,7 @@ cherokee_fd_set_nodelay (int fd, cherokee_boolean_t enable)
 	re = fcntl (fd, F_SETFL, flags);
 #endif	
 	if (unlikely (re < 0)) {
-		PRINT_ERRNO (errno, "ERROR: Setting O_NDELAY to fd %d: ${errno}\n", fd);
+		LOG_ERRNO (errno, cherokee_err_error, "Setting O_NDELAY to fd %d: ${errno}\n", fd);
 		return ret_error;
 	}
 
@@ -835,7 +835,7 @@ cherokee_fd_set_nonblocking (int fd, cherokee_boolean_t enable)
 #else	
 	flags = fcntl (fd, F_GETFL, 0);
 	if (flags < 0) {
-		PRINT_ERRNO (errno, "ERROR: fcntl/F_GETFL fd %d: ${errno}\n", fd);
+		LOG_ERRNO (errno, cherokee_err_error, "fcntl/F_GETFL fd %d: ${errno}\n", fd);
 		return ret_error;
 	}
 
@@ -847,7 +847,7 @@ cherokee_fd_set_nonblocking (int fd, cherokee_boolean_t enable)
 	re = fcntl (fd, F_SETFL, flags);
 #endif
 	if (re < 0) {
-		PRINT_ERRNO (errno, "ERROR: Setting O_NONBLOCK to fd %d: ${errno}\n", fd);
+		LOG_ERRNO (errno, cherokee_err_error, "Setting O_NONBLOCK to fd %d: ${errno}\n", fd);
 		return ret_error;
 	}
 
@@ -863,7 +863,7 @@ cherokee_fd_set_closexec (int fd)
 
 	re = fcntl (fd, F_SETFD, FD_CLOEXEC);
 	if (re < 0) {
-		PRINT_ERRNO (errno, "ERROR: Setting FD_CLOEXEC to fd %d: ${errno}\n", fd);
+		LOG_ERRNO (errno, cherokee_err_error, "Setting FD_CLOEXEC to fd %d: ${errno}\n", fd);
 		return ret_error;
 	}
 #endif
@@ -1333,31 +1333,6 @@ cherokee_buf_add_bogonow (cherokee_buffer_t  *buf,
 }
 
 
-void
-cherokee_print_errno (int error, const char *format, ...) 
-{
-	va_list           ap;
-	const char       *errstr;
-	char              err_tmp[ERROR_MAX_BUFSIZE];
-	cherokee_buffer_t buffer = CHEROKEE_BUF_INIT;
-
-	errstr = cherokee_strerror_r (error, err_tmp, sizeof(err_tmp));
-	if (errstr == NULL)
-		errstr = "unknwon error (?)";
-
-	cherokee_buffer_ensure_size (&buffer, 128);
-	va_start (ap, format);
-	cherokee_buffer_add_va_list (&buffer, format, ap);
-	va_end (ap);
-
-	cherokee_buffer_replace_string (&buffer, (char *)"${errno}", 8,
-					(char *) errstr, strlen(errstr));
-	PRINT_MSG_S (buffer.buf);
-
-	cherokee_buffer_mrproper (&buffer);
-}
-
-
 ret_t 
 cherokee_mkstemp (cherokee_buffer_t *buffer, int *fd)
 {
@@ -1420,7 +1395,7 @@ cherokee_mkdir_p (cherokee_buffer_t *path)
 		*p = '\0';
 		re = cherokee_mkdir (path->buf, 0700);
 		if ((re != 0) && (errno != EEXIST)) {
-			PRINT_ERRNO (errno, "Could not mkdir '%s': ${errno}\n", path->buf);
+			LOG_ERRNO (errno, cherokee_err_error, "Could not mkdir '%s': ${errno}\n", path->buf);
 			return ret_error;
 		}
 		*p = '/';
@@ -1432,7 +1407,7 @@ cherokee_mkdir_p (cherokee_buffer_t *path)
 
 	re = cherokee_mkdir (path->buf, 0700);
 	if ((re != 0) && (errno != EEXIST)) {
-		PRINT_ERRNO (errno, "Could not mkdir '%s': ${errno}\n", path->buf);
+		LOG_ERRNO (errno, cherokee_err_error, "Could not mkdir '%s': ${errno}\n", path->buf);
 		return ret_error;
 	}
 	

@@ -84,7 +84,7 @@ cherokee_handler_mirror_configure (cherokee_config_node_t   *conf,
 	/* Final checks
 	 */
 	if (props->balancer == NULL) {
-		PRINT_ERROR_S ("ERROR: Mirror handler needs a balancer\n");
+		LOG_CRITICAL_S ("ERROR: Mirror handler needs a balancer\n");
 		return ret_error;
 	}
 

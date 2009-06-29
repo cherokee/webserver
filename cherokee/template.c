@@ -216,7 +216,7 @@ cherokee_template_parse (cherokee_template_t *tem,
 		}
 		
 		if (unlikely (repl->token == NULL)) {
-			PRINT_ERROR ("Template: Token not found '%s'\n", token.buf);
+			LOG_ERROR ("Template: Token not found '%s'\n", token.buf);
 			ret = ret_error;
 			goto out;
 		}

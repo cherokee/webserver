@@ -151,8 +151,8 @@ configure (cherokee_rule_geoip_t       *rule,
 
 	ret = cherokee_config_node_read (conf, "countries", &tmp);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Rule prio=%d needs an 'geoip' property\n", 
-			     RULE(rule)->priority);
+		LOG_CRITICAL ("Rule prio=%d needs an 'geoip' property\n", 
+			      RULE(rule)->priority);
 		return ret_error;
 	}
 

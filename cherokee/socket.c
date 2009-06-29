@@ -270,7 +270,7 @@ cherokee_socket_pton (cherokee_socket_t *socket, cherokee_buffer_t *host)
 		break;
 #endif
 	default:
-		PRINT_ERROR ("ERROR: Unknown socket family: %d\n", SOCKET_AF(socket));
+		LOG_CRITICAL ("Unknown socket family: %d\n", SOCKET_AF(socket));
 		return ret_error;
 	}
 
@@ -376,8 +376,8 @@ cherokee_socket_accept_fd (cherokee_socket_t *server_socket, int *new_fd, cherok
 	re = 1;
 	re = setsockopt (new_socket, SOL_SOCKET, SO_KEEPALIVE, &re, sizeof(re));
 	if (re == -1) {
-		PRINT_ERRNO (errno, "WARNING: Couldn't set SO_KEEPALIVE on fd=%d: ${errno}",
-			     new_socket);
+		LOG_ERRNO (errno, cherokee_err_warning,
+			   "Couldn't set SO_KEEPALIVE on fd=%d: ${errno}", new_socket);
 	}	
 
 	linger.l_onoff  = 1;
@@ -385,8 +385,8 @@ cherokee_socket_accept_fd (cherokee_socket_t *server_socket, int *new_fd, cherok
 
 	re = setsockopt (new_socket, SOL_SOCKET, SO_LINGER, &linger, sizeof(linger));
 	if (re == -1) {
-		PRINT_ERRNO (errno, "WARNING: Couldn't set SO_LINGER on fd=%d: ${errno}",
-			     new_socket);
+		LOG_ERRNO (errno, cherokee_err_warning,
+			   "Couldn't set SO_LINGER on fd=%d: ${errno}", new_socket);
 	}
 
 	/* Close-on-exec: Child processes won't inherit this fd
@@ -399,7 +399,7 @@ cherokee_socket_accept_fd (cherokee_socket_t *server_socket, int *new_fd, cherok
 	 */
 	ret = cherokee_fd_set_nodelay (new_socket, true);
 	if (ret != ret_ok) {
-		PRINT_ERROR_S ("Could not disable Nagle's algorithm.\n");
+		LOG_WARNING_S ("Could not disable Nagle's algorithm.\n");
 		return ret_error;
 	}
 
@@ -407,7 +407,7 @@ cherokee_socket_accept_fd (cherokee_socket_t *server_socket, int *new_fd, cherok
 	 */
 	ret = cherokee_fd_set_nonblocking (new_socket, true);
 	if (ret != ret_ok) {
-		PRINT_ERROR_S ("Could not set non-blocking.\n");
+		LOG_WARNING_S ("Could not set non-blocking.\n");
 		return ret_error;
 	}
 
@@ -518,13 +518,13 @@ cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 	re = stat (listen_to->buf, &buf);
 	if (re == 0) {
 		if (! S_ISSOCK(buf.st_mode)) {
-			PRINT_ERROR ("ERROR: %s isn't a socket!\n", listen_to->buf);
+			LOG_CRITICAL ("%s isn't a socket!\n", listen_to->buf);
 			return ret_error;			
 		}
 
 		re = unlink (listen_to->buf);
 		if (re != 0) {
-			PRINT_ERROR ("ERROR: Couldn't remove %s\n", listen_to->buf);
+			LOG_ERROR ("Couldn't remove %s\n", listen_to->buf);
 			return ret_error;
 		}
 	}
@@ -639,7 +639,8 @@ cherokee_socket_write (cherokee_socket_t *socket,
 				return ret_error;
 			}
 
-			PRINT_ERRNO (err, "write(%d, ..): '${errno}'", SOCKET_FD(socket));
+			LOG_ERRNO (errno, cherokee_err_error,
+				   "write(%d, ..): '${errno}'", SOCKET_FD(socket));
 		}
 		return ret_error;
 
@@ -728,7 +729,8 @@ cherokee_socket_read (cherokee_socket_t *socket,
 				return ret_error;
 			}
 
-			PRINT_ERRNO (err, "read(%d, ..): '${errno}'", SOCKET_FD(socket));
+			LOG_ERRNO (errno, cherokee_err_error,
+				   "read(%d, ..): '${errno}'", SOCKET_FD(socket));
 		}
 		return ret_error;
 
@@ -932,7 +934,8 @@ cherokee_socket_writev (cherokee_socket_t  *socket,
 				return ret_error;
 			}
 
-			PRINT_ERRNO (err, "writev(%d, ..): '${errno}'", SOCKET_FD(socket));
+			LOG_ERRNO (errno, cherokee_err_error,
+				   "writev(%d, ..): '${errno}'", SOCKET_FD(socket));
 		}
 		return ret_error;
 
@@ -1359,7 +1362,8 @@ cherokee_socket_connect (cherokee_socket_t *sock)
 #endif
 			return ret_eagain;
 		default:
-			PRINT_ERRNO_S (err, "Cannot connect: '${errno}'");
+			LOG_ERRNO_S (errno, cherokee_err_error,
+				     "Cannot connect: '${errno}'");
 			return ret_error;
 		}
 	}
@@ -1413,7 +1417,8 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 		} while ((re == -1) && (errno == EINTR));
 			
 		if (unlikely (re < 0)) {
-			PRINT_ERRNO (errno, "ERROR: Removing TCP_NODELAY to fd %d: ${errno}", fd);
+			LOG_ERRNO (errno, cherokee_err_error,
+				   "Removing TCP_NODELAY to fd %d: ${errno}", fd);
 			return ret_error;
 		}
 
@@ -1426,7 +1431,8 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 		} while ((re == -1) && (errno == EINTR));
 
 		if (unlikely (re < 0)) {
-			PRINT_ERRNO (errno, "ERROR: Setting TCP_CORK to fd %d: ${errno}", fd);
+			LOG_ERRNO (errno, cherokee_err_error,
+				   "Setting TCP_CORK to fd %d: ${errno}", fd);
 			return ret_error;
 		}
 
@@ -1442,7 +1448,8 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 		re = setsockopt (fd, IPPROTO_TCP, TCP_CORK, &tmp, sizeof(tmp));
 	} while ((re == -1) && (errno == EINTR));
 	if (unlikely (re < 0)) {
-		PRINT_ERRNO (errno, "ERROR: Removing TCP_CORK to fd %d: ${errno}", fd);
+		LOG_ERRNO (errno, cherokee_err_error,
+			   "Removing TCP_CORK to fd %d: ${errno}", fd);
 		return ret_error;
 	}
 
@@ -1454,7 +1461,8 @@ cherokee_socket_set_cork (cherokee_socket_t *socket, cherokee_boolean_t enable)
 		re = setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, &tmp, sizeof(tmp));
 	} while ((re == -1) && (errno == EINTR));
 	if (unlikely (re < 0)) {
-		PRINT_ERRNO (errno, "ERROR: Setting TCP_NODELAY to fd %d: ${errno}", fd);
+		LOG_ERRNO (errno, cherokee_err_error,
+			   "Setting TCP_NODELAY to fd %d: ${errno}", fd);
 		return ret_error;
 	}
 

@@ -818,7 +818,7 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 	/* Check the buffer content
 	 */
 	if ((buffer->buf == NULL) || (buffer->len < 5)) {
-		PRINT_ERROR_S ("ERROR: Calling cherokee_header_parse() with an empty header\n");
+		LOG_ERROR_S ("Calling cherokee_header_parse() with an empty header\n");
 		return ret_error;
 	}
 
@@ -839,9 +839,9 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 		ret = has_header_request (hdr, buffer, buffer->len);
 		if (ret != ret_ok) {
 			if (ret == ret_not_found)
-				PRINT_ERROR("ERROR: EOH not found:\n===\n%s===\n", buffer->buf);
+				LOG_ERROR("EOH not found:\n===\n%s===\n", buffer->buf);
 			else
-				PRINT_ERROR("ERROR: Too many initial CRLF:\n===\n%s===\n", buffer->buf);
+				LOG_ERROR("Too many initial CRLF:\n===\n%s===\n", buffer->buf);
 			return ret_error;
 		}
 	}
@@ -1049,7 +1049,7 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 		}
 
 		if (ret < ret_ok) {
-			PRINT_ERROR_S ("ERROR: Failed to add_(un)known_header()\n");
+			LOG_ERROR_S ("Failed to add_(un)known_header()\n");
 			*header_end = chr_header_end;
 			return ret;
 		}

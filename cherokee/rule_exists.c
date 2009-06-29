@@ -90,8 +90,8 @@ configure (cherokee_rule_exists_t    *rule,
 	if (rule->match_any == false) {
 		ret = cherokee_config_node_read (conf, "exists", &tmp);
 		if (ret != ret_ok) {
-			PRINT_ERROR ("Rule prio=%d needs an 'exists' property\n", 
-				     RULE(rule)->priority);
+			LOG_CRITICAL ("Rule prio=%d needs an 'exists' property\n", 
+				      RULE(rule)->priority);
 			return ret_error;
 		}
 

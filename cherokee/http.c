@@ -260,7 +260,7 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (switching_protocols);
 
 	default:
- 		PRINT_ERROR ("ERROR: Unknown HTTP status code %d\n", code);
+ 		LOG_WARNING ("Unknown HTTP status code %d\n", code);
  		cherokee_buffer_add_str (buf, http_internal_error_string);
  		return ret_error;
 	}

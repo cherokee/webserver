@@ -1481,7 +1481,7 @@ get_authorization (cherokee_connection_t *conn,
 		break;
 
 	default:
-		PRINT_ERROR_S ("Unknown authentication method\n");
+		LOG_ERROR_S ("Unknown authentication method\n");
 		return ret_error;
 	}
 
@@ -1562,7 +1562,7 @@ ok:
 	return ret_ok;
 
 error:
-	PRINT_ERROR_S ("Couldn't set local directory\n");
+	LOG_ERROR_S ("Couldn't set local directory\n");
 	return ret_error;
 }
 
@@ -1908,7 +1908,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		ret = cherokee_server_get_vserver (CONN_SRV(conn), &conn->host,
 						   (cherokee_virtual_server_t **)&conn->vserver);
 		if (unlikely (ret != ret_ok)) {
-			PRINT_ERROR ("Couldn't get virtual server: '%s'\n", conn->host.buf);
+			LOG_ERROR ("Couldn't get virtual server: '%s'\n", conn->host.buf);
 			return ret_error;
 		}
 		break;

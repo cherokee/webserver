@@ -402,7 +402,7 @@ downloader_header_read (cherokee_downloader_t *downloader, cherokee_buffer_t *tm
 		return ret_error;
 
 	default:
-		PRINT_ERROR ("Unknown ret code %d\n", ret);
+		LOG_ERROR ("Unknown ret code %d\n", ret);
 		SHOULDNT_HAPPEN;
 		return ret;
 	}
@@ -583,7 +583,7 @@ cherokee_downloader_post_set (cherokee_downloader_t *downloader, cherokee_post_t
 	TRACE(ENTRIES, "post=%p\n", post);
 
 	if (downloader->post != NULL) {
-		PRINT_ERROR_S ("WARNING: Overwriting post info\n");
+		LOG_WARNING_S ("Overwriting post info\n");
 	}
 
 	downloader->post = post;

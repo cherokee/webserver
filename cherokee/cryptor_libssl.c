@@ -183,7 +183,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	 */
 	socket = SSL_get_app_data (ssl); 
 	if (unlikely (socket == NULL)) {
-		PRINT_ERROR ("Could not get the socket struct: %p\n", ssl);
+		LOG_ERROR ("Could not get the socket struct: %p\n", ssl);
 		return SSL_TLSEXT_ERR_ALERT_FATAL; 
 	}
 
@@ -203,7 +203,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 
 	ret = cherokee_server_get_vserver (srv, &tmp, &vsrv);
 	if ((ret != ret_ok) || (vsrv == NULL)) {
-		PRINT_ERROR ("Servername did not match: '%s'\n", servername);
+		LOG_ERROR ("Servername did not match: '%s'\n", servername);
 		return SSL_TLSEXT_ERR_NOACK; 
 	}
 
@@ -214,7 +214,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	 */
 	ctx = SSL_set_SSL_CTX (ssl, CRYPTOR_VSRV_SSL(vsrv->cryptor)->context);
 	if (ctx != CRYPTOR_VSRV_SSL(vsrv->cryptor)->context) {
-		PRINT_ERROR ("Could change the SSL context: servername='%s'\n", servername);
+		LOG_ERROR ("Could change the SSL context: servername='%s'\n", servername);
 	}
 
 	/* SSL_set_SSL_CTX() only change certificates. We need to
@@ -281,7 +281,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	 */
 	n->context = SSL_CTX_new (SSLv23_server_method());
 	if (n->context == NULL) {
-		PRINT_ERROR_S("ERROR: OpenSSL: Couldn't allocate OpenSSL context\n");
+		LOG_ERROR_S("OpenSSL: Couldn't allocate OpenSSL context\n");
 		return ret_error;
 	}
 
@@ -307,8 +307,8 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		rc = SSL_CTX_set_cipher_list (n->context, vsrv->ciphers.buf);
 		if (rc != 1) {
 			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR("ERROR: OpenSSL: Can not set cipher list '%s': %s\n",
-			            vsrv->ciphers.buf, error);
+			LOG_ERROR("OpenSSL: Can not set cipher list '%s': %s\n",
+				  vsrv->ciphers.buf, error);
 			return ret_error;
 		}
 	}
@@ -323,8 +323,8 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	rc = SSL_CTX_use_certificate_chain_file (n->context, vsrv->server_cert.buf);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR("ERROR: OpenSSL: Can not use certificate file '%s':  %s\n", 
-			    vsrv->server_cert.buf, error);
+		LOG_ERROR("OpenSSL: Can not use certificate file '%s':  %s\n", 
+			  vsrv->server_cert.buf, error);
 		return ret_error;
 	}
 
@@ -333,8 +333,8 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	rc = SSL_CTX_use_PrivateKey_file (n->context, vsrv->server_key.buf, SSL_FILETYPE_PEM);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR("ERROR: OpenSSL: Can not use private key file '%s': %s\n", 
-			    vsrv->server_key.buf, error);
+		LOG_ERROR("OpenSSL: Can not use private key file '%s': %s\n", 
+			  vsrv->server_key.buf, error);
 		return ret_error;
 	}
 
@@ -342,7 +342,7 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	 */
 	rc = SSL_CTX_check_private_key (n->context);
 	if (rc != 1) {
-		PRINT_ERROR_S("ERROR: OpenSSL: Private key does not match the certificate public key\n");
+		LOG_ERROR_S("OpenSSL: Private key does not match the certificate public key\n");
 		return ret_error;
 	}
 
@@ -360,16 +360,16 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 			rc = SSL_CTX_load_verify_locations (n->context, vsrv->certs_ca.buf, NULL);
 			if (rc != 1) {
 				OPENSSL_LAST_ERROR(error);
-				PRINT_ERROR("ERROR: OpenSSL: Can't read trusted CA list '%s': %s\n", 
-				            vsrv->certs_ca.buf, error);
+				LOG_CRITICAL("OpenSSL: Can't read trusted CA list '%s': %s\n", 
+					     vsrv->certs_ca.buf, error);
 				return ret_error;
 			}
 
 			X509_clients = SSL_load_client_CA_file (vsrv->certs_ca.buf);
 			if (X509_clients == NULL) {
 				OPENSSL_LAST_ERROR(error);
-				PRINT_ERROR ("SSL_load_client_CA_file '%s': %s\n",
-				             vsrv->certs_ca.buf, error);
+				LOG_CRITICAL ("SSL_load_client_CA_file '%s': %s\n",
+					      vsrv->certs_ca.buf, error);
 				return ret_error;
 			}
 
@@ -391,8 +391,8 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 					     vsrv->name.buf, vsrv->name.len);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("Unable to set SSL session-id context for '%s': %s\n",
-			     vsrv->name.buf, error);
+		LOG_ERROR ("Unable to set SSL session-id context for '%s': %s\n",
+			   vsrv->name.buf, error);
 	}
 
 	SSL_CTX_set_mode (n->context, SSL_MODE_ENABLE_PARTIAL_WRITE);
@@ -403,14 +403,14 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 	rc = SSL_CTX_set_tlsext_servername_callback (n->context, openssl_sni_servername_cb);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("Could activate TLS SNI for '%s': %s\n", vsrv->name.buf, error);
+		LOG_ERROR ("Could activate TLS SNI for '%s': %s\n", vsrv->name.buf, error);
 		return ret_error;
 	}
 
 	rc = SSL_CTX_set_tlsext_servername_arg (n->context, VSERVER_SRV(vsrv));
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("Could activate TLS SNI for '%s': %s\n", vsrv->name.buf, error);
+		LOG_ERROR ("Could activate TLS SNI for '%s': %s\n", vsrv->name.buf, error);
 		return ret_error;
 	}
 #endif /* OPENSSL_NO_TLSEXT */
@@ -449,8 +449,8 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	cryp->session = SSL_new (vsrv_crytor->context);
 	if (cryp->session == NULL) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Unable to create a new SSL "
-			     "connection from the SSL context: %s\n", error);
+		LOG_ERROR ("OpenSSL: Unable to create a new SSL "
+			   "connection from the SSL context: %s\n", error);
 		return ret_error;
 	}
 	
@@ -459,8 +459,8 @@ socket_initialize (cherokee_cryptor_socket_libssl_t *cryp,
 	re = SSL_set_fd (cryp->session, socket->socket);
 	if (re != 1) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Can not set fd(%d): %s\n", 
-			     socket->socket, error);
+		LOG_ERROR ("OpenSSL: Can not set fd(%d): %s\n", 
+			   socket->socket, error);
 		return ret_error;
 	}
 
@@ -510,7 +510,7 @@ _socket_init_tls (cherokee_cryptor_socket_libssl_t *cryp,
 			return ret_error;
 		default:
 			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR ("ERROR: Init OpenSSL: %s\n", error);
+			LOG_ERROR ("Init OpenSSL: %s\n", error);
 			return ret_error;
 		}
 	}
@@ -572,7 +572,8 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 		case ECONNRESET:
 			return ret_eof;
 		default:
-			PRINT_ERRNO_S (error, "SSL_write: unknown errno: ${errno}\n");
+			LOG_ERRNO_S (error, cherokee_err_error,
+				     "SSL_write: unknown errno: ${errno}\n");
 		}
 		return ret_error;
 
@@ -580,8 +581,8 @@ _socket_write (cherokee_cryptor_socket_libssl_t *cryp,
 		return ret_error;
 	}
 	
-	PRINT_ERROR ("ERROR: SSL_write (%d, ..) -> err=%d '%s'\n", 
-		     SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
+	LOG_ERROR ("SSL_write (%d, ..) -> err=%d '%s'\n", 
+		   SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
 
 	return ret_error;
 }
@@ -628,13 +629,14 @@ _socket_read (cherokee_cryptor_socket_libssl_t *cryp,
 		case ECONNRESET:
 			return ret_eof;
 		default:
-			PRINT_ERRNO_S (error, "SSL_read: unknown errno: ${errno}\n");
+			LOG_ERRNO_S (error, cherokee_err_error,
+				     "SSL_read: unknown errno: ${errno}\n");
 		}
 		return ret_error;
 	}
 
-	PRINT_ERROR ("ERROR: OpenSSL: SSL_read (%d, ..) -> err=%d '%s'\n",
-		     SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
+	LOG_ERROR ("OpenSSL: SSL_read (%d, ..) -> err=%d '%s'\n",
+		   SSL_get_fd(cryp->session), (int)len, ERR_error_string(re, NULL));
 	return ret_error;
 }
 
@@ -709,7 +711,7 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 	cryp->ssl_ctx = SSL_CTX_new (SSLv23_client_method());
 	if (cryp->ssl_ctx == NULL) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Unable to create a new SSL context: %s\n", error);
+		LOG_CRITICAL ("OpenSSL: Unable to create a new SSL context: %s\n", error);
 		return ret_error;
 	}
 	
@@ -720,21 +722,20 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 						    socket->vserver_ref->certs_ca.buf, NULL);
 		if (! re) {
 			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR ("ERROR: OpenSSL: '%s': %s\n", 
-				     socket->vserver_ref->certs_ca.buf, error);
+			LOG_ERROR ("OpenSSL: '%s': %s\n", 
+			           socket->vserver_ref->certs_ca.buf, error);
 			return ret_error;
 		}
 
 		re = SSL_CTX_set_default_verify_paths (socket->ssl_ctx);
 		if (! re) {
 			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR ("ERROR: OpenSSL: cannot set certificate "
-				     "verification paths: %s\n", error);
+			LOG_ERROR ("OpenSSL: cannot set certificate "
+				   "verification paths: %s\n", error);
 			return ret_error;
 		}
 	}
 	 */
-
 
 	SSL_CTX_set_verify (cryp->ssl_ctx, SSL_VERIFY_NONE, NULL);
 	SSL_CTX_set_mode (cryp->ssl_ctx, SSL_MODE_ENABLE_PARTIAL_WRITE);
@@ -744,8 +745,8 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 	cryp->session = SSL_new (cryp->ssl_ctx);
 	if (cryp->session == NULL) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Unable to create a new SSL connection "
-			     "from the SSL context: %s\n", error);
+		LOG_ERROR ("OpenSSL: Unable to create a new SSL connection "
+			   "from the SSL context: %s\n", error);
 		return ret_error;
 	}
 
@@ -754,7 +755,7 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 	re = SSL_set_fd (cryp->session, socket->socket);
 	if (re != 1) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Can not set fd(%d): %s\n", socket->socket, error);
+		LOG_ERROR ("OpenSSL: Can not set fd(%d): %s\n", socket->socket, error);
 		return ret_error;
 	}
 
@@ -767,7 +768,7 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 		re = SSL_set_tlsext_host_name (cryp->session, host->buf);
 		if (re <= 0) {
 			OPENSSL_LAST_ERROR(error);
-			PRINT_ERROR ("ERROR: OpenSSL: Could set SNI server name: %s\n", error);
+			LOG_ERROR ("OpenSSL: Could set SNI server name: %s\n", error);
 			return ret_error;
 		}
 	}
@@ -776,7 +777,7 @@ _client_init_tls (cherokee_cryptor_client_libssl_t *cryp,
 	re = SSL_connect (cryp->session);
 	if (re <= 0) {
 		OPENSSL_LAST_ERROR(error);
-		PRINT_ERROR ("ERROR: OpenSSL: Can not connect: %s\n", error);
+		LOG_ERROR ("OpenSSL: Can not connect: %s\n", error);
 		return ret_error;
 	}
 
@@ -893,13 +894,13 @@ PLUGIN_INIT_NAME(libssl) (cherokee_plugin_loader_t *loader)
         while (e != NULL) {
                 if(! ENGINE_init(e)) {
                         ENGINE_free (e);
-                        PRINT_ERROR_S ("ERROR: Could not init pkcs11 engine");
+                        LOG_CRITICAL_S ("Could not init pkcs11 engine");
 			break;
                 }
 
                 if(! ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
                         ENGINE_free (e);
-                        PRINT_ERROR_S ("ERROR: Could not set all defaults");
+                        LOG_CRITICAL_S ("Could not set all defaults");
 			break;
                 }
 

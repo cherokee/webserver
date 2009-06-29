@@ -35,6 +35,7 @@
 
 #include "common.h"
 #include "threading.h"
+#include "error_log.h"
 
 #ifndef _WIN32
 # if defined HAVE_ENDIAN_H

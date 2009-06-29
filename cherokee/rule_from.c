@@ -66,8 +66,8 @@ configure (cherokee_rule_from_t      *rule,
 
 	ret = cherokee_config_node_get (conf, "from", &subconf);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Rule prio=%d needs an 'from' property\n",
-			     RULE(rule)->priority);
+		LOG_CRITICAL ("Rule prio=%d needs an 'from' property\n",
+			      RULE(rule)->priority);
 		return ret_error;
 	} 
 	
@@ -76,7 +76,7 @@ configure (cherokee_rule_from_t      *rule,
 
 		ret = cherokee_access_add (&rule->access, subconf2->val.buf);
 		if (ret != ret_ok) {
-			PRINT_ERROR ("ERROR: Couldn't parse 'from' entry: '%s'\n", subconf2->val.buf);
+			LOG_ERROR ("Couldn't parse 'from' entry: '%s'\n", subconf2->val.buf);
 			return ret_error;
 		}
 	}

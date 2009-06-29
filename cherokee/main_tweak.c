@@ -258,7 +258,7 @@ do_logrotate (cherokee_buffer_t  *url,
 	 */
 	re = rename (log->buf, newname.buf);
 	if (re != 0) {
-		PRINT_ERRNO (errno, "Could not move '%s' to '%s': '${errno}'", log->buf, newname.buf);
+		PRINT_ERROR ("Could not move '%s' to '%s': errno=%d", log->buf, newname.buf, errno);
 	}
 	printf ("Log file '%s' moved to '%s' successfully\n", log->buf, newname.buf);
 	

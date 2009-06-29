@@ -352,7 +352,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 			return ret;
 
 		if ((entry->authentication & vinfo->valid_methods) != entry->authentication) {
-			PRINT_MSG ("ERROR: '%s' unsupported methods\n", tmp->buf);
+			LOG_CRITICAL ("Unsupported methods '%s'\n", tmp->buf);
 			return ret_error;
 		}		
 
@@ -375,7 +375,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 			entry->expiration = cherokee_expiration_time;
 			ret = cherokee_config_node_read (conf, "time", &tmp);
 			if (ret != ret_ok) {
-				PRINT_ERROR_S ("Expiration 'time' without a time property\n");
+				LOG_ERROR_S ("Expiration 'time' without a time property\n");
 				return ret_error;
 			}
 
@@ -394,7 +394,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		/* Ignore: Previously handled 
 		 */
 	} else {
-		PRINT_MSG ("ERROR: Virtual Server parser: Unknown key \"%s\"\n", conf->key.buf);
+		LOG_CRITICAL ("Virtual Server parser: Unknown key \"%s\"\n", conf->key.buf);
 		return ret_error;
 	}
 
@@ -466,7 +466,7 @@ cherokee_virtual_server_new_rule (cherokee_virtual_server_t  *vserver,
 	/* Sanity check
 	 */
 	if (cherokee_buffer_is_empty (type)) {
-		PRINT_ERROR ("Rule match prio=%d must include a type property\n", priority);
+		LOG_CRITICAL ("Rule match prio=%d must include a type property\n", priority);
 		return ret_error;
 	}
 
@@ -480,7 +480,7 @@ cherokee_virtual_server_new_rule (cherokee_virtual_server_t  *vserver,
 	} else {
 		ret = cherokee_plugin_loader_get (&srv->loader, type->buf, &info);
 		if (ret < ret_ok) {
-			PRINT_MSG ("ERROR: Couldn't load rule module '%s'\n", type->buf);
+			LOG_CRITICAL ("ERROR: Couldn't load rule module '%s'\n", type->buf);
 			return ret_error;
 		}
 
@@ -522,7 +522,7 @@ add_rule (cherokee_config_node_t    *config,
 	 */
 	prio = atoi (config->key.buf);
 	if (prio <= CHEROKEE_RULE_PRIO_NONE) {
-		PRINT_ERROR ("Invalid priority: '%s'\n", config->key.buf);
+		LOG_CRITICAL ("Invalid priority: '%s'\n", config->key.buf);
 		return ret_error;
 	}
 
@@ -530,7 +530,7 @@ add_rule (cherokee_config_node_t    *config,
 	 */
 	ret = cherokee_config_node_get (config, "match", &subconf);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Rule prio=%d needs a 'match' section\n", prio);
+		LOG_CRITICAL ("Rule prio=%d needs a 'match' section\n", prio);
 		return ret_error;
 	}
 
@@ -570,7 +570,7 @@ configure_match (cherokee_config_node_t    *config,
 	cherokee_server_t      *srv       = SRV(vserver->server_ref);
 
 	if (cherokee_buffer_is_empty (&config->val)) {
-		PRINT_ERROR_S ("ERROR: A virtual server 'match' must be specified\n");
+		LOG_CRITICAL_S ("A virtual server 'match' must be specified\n");
 		return ret_error;
 	}
 
@@ -578,7 +578,7 @@ configure_match (cherokee_config_node_t    *config,
 	 */
 	ret = cherokee_plugin_loader_get (&srv->loader, config->val.buf, &info);
 	if (ret < ret_ok) {
-		PRINT_MSG ("ERROR: Couldn't load vrule module '%s'\n", config->val.buf);
+		LOG_CRITICAL ("Couldn't load vrule module '%s'\n", config->val.buf);
 		return ret_error;
 	}
 
@@ -617,7 +617,7 @@ add_evhost (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 	 */
 	ret = cherokee_plugin_loader_get (&srv->loader, config->val.buf, &info);
 	if (ret < ret_ok) {
-		PRINT_MSG ("ERROR: Couldn't load evhost module '%s'\n", config->val.buf);
+		LOG_CRITICAL ("Couldn't load evhost module '%s'\n", config->val.buf);
 		return ret_error;
 	}
 
@@ -662,7 +662,7 @@ add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 	 */
 	ret = cherokee_plugin_loader_get (&srv->loader, config->val.buf, &info);
 	if (ret < ret_ok) {
-		PRINT_MSG ("ERROR: Couldn't load logger module '%s'\n", config->val.buf);
+		LOG_CRITICAL ("Couldn't load logger module '%s'\n", config->val.buf);
 		return ret_error;
 	}
 
@@ -810,7 +810,7 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		cherokee_buffer_add_buffer (&vserver->ciphers, &conf->val);
 
 	} else {
-		PRINT_MSG ("ERROR: Virtual Server: Unknown key '%s'\n", conf->key.buf);
+		LOG_CRITICAL ("Virtual Server: Unknown key '%s'\n", conf->key.buf);
 		return ret_error;
 	}
 
@@ -838,12 +838,12 @@ cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver,
 	/* Perform some sanity checks
 	 */
 	if (cherokee_buffer_is_empty (&vserver->name)) {
-		PRINT_MSG ("ERROR: Virtual host prio=%d needs a nick\n", prio);
+		LOG_CRITICAL ("Virtual host prio=%d needs a nick\n", prio);
 		return ret_error;
 	}
 
 	if (cherokee_buffer_is_empty (&vserver->root)) {
-		PRINT_MSG ("ERROR: Virtual host '%s' needs a document_root\n", vserver->name.buf);
+		LOG_CRITICAL ("Virtual host '%s' needs a document_root\n", vserver->name.buf);
 		return ret_error;
 	}
 

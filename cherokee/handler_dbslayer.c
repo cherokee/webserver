@@ -554,8 +554,7 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 				props->lang = dwriter_ruby;
 
 			} else {
-				PRINT_ERROR ("ERROR: DBSlayer: unrecognized language '%s'\n",
-					     subconf->val.buf);
+				LOG_CRITICAL ("DBSlayer: unrecognized language '%s'\n", subconf->val.buf);
 				return ret_error;
 			}
 		} 
@@ -564,7 +563,7 @@ cherokee_handler_dbslayer_configure (cherokee_config_node_t  *conf,
 	/* Final checks
 	 */
 	if (props->balancer == NULL) {
-		PRINT_ERROR_S ("ERROR: DBSlayer handler needs a balancer\n");
+		LOG_CRITICAL_S ("DBSlayer handler needs a balancer\n");
 		return ret_error;
 	}
 

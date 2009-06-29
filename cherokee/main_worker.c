@@ -104,7 +104,7 @@ wait_process (pid_t pid)
 		else if (errno == EINTR) 
 			continue;
 		else {
-			PRINT_ERRNO (errno, "ERROR: waitting PID %d: ${errno}\n", pid);
+			PRINT_ERROR ("ERROR: waitting PID %d, error %d\n", pid, errno);
 			return;
 		}
 	}

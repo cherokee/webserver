@@ -226,7 +226,7 @@ check_interpreter (cherokee_source_interpreter_t *src)
 		if (ret == ret_ok) 
 			return ret_ok;
 
-		PRINT_ERROR ("ERROR: Could find interpreter '%s'\n", src->interpreter.buf);
+		LOG_ERROR ("Could find interpreter '%s'\n", src->interpreter.buf);
 		return ret_error;
 	}
 	
@@ -268,8 +268,7 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 
 			ret = cherokee_getpwnam (child->val.buf, &pwd, tmp, sizeof(tmp));
 			if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
-				PRINT_MSG ("ERROR: User '%s' not found in the system\n",
-					   child->val.buf);
+				LOG_CRITICAL ("User '%s' not found in the system\n", child->val.buf);
 				return ret_error;
 			}
 
@@ -285,7 +284,7 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 		
 			ret = cherokee_getgrnam (child->val.buf, &grp, tmp, sizeof(tmp));
 			if (ret != ret_ok) {
-				PRINT_MSG ("ERROR: Group '%s' not found in the system\n", conf->val.buf);
+				LOG_CRITICAL ("Group '%s' not found in the system\n", conf->val.buf);
 				return ret_error;
 			}		
 			
@@ -304,13 +303,13 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 	/* Sanity check
 	 */
 	if (cherokee_buffer_is_empty (&src->interpreter)) {
-		PRINT_ERROR_S ("ERROR: 'Source interpreter' with no interpreter\n");
+		LOG_CRITICAL_S ("'Source interpreter' with no interpreter\n");
 		return ret_error;
 	}
 
 	ret = check_interpreter (src);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("ERROR: Couldn't find interpreter '%s'\n", src->interpreter.buf);
+		LOG_ERROR ("Couldn't find interpreter '%s'\n", src->interpreter.buf);
 		return ret_error;
 	}
 
@@ -472,7 +471,7 @@ _spawn_local (cherokee_source_interpreter_t *src,
 		argv[2] = (char *)tmp.buf;
 		re = execve ("/bin/sh", (char **)argv, envp);
 		if (re < 0) {
-			PRINT_ERROR ("ERROR: Could spawn %s\n", tmp.buf);
+			LOG_ERROR ("Could spawn %s\n", tmp.buf);
 			exit (1);
 		}
 

@@ -58,7 +58,8 @@ int dcc_ncpus(int *ncpus)
 		return 0;
 	} else {
 		*ncpus = -1;
-		PRINT_ERRNO (errno, "pstat_getdynamic failed: '${errno}'");
+		LOG_ERRNO (errno, cherokee_err_error,
+                     "pstat_getdynamic failed: '${errno}'");
 		return EXIT_DISTCC_FAILED;
 	}
 }
@@ -108,10 +109,10 @@ int dcc_ncpus(int *ncpus)
 	mib[0] = CTL_HW;
 	mib[1] = HW_NCPU;
 	if (sysctl(mib, 2, ncpus, &len, NULL, 0) == 0)
-		return 0;
+         return 0;
 	else {
-		PRINT_ERRNO (errno, "sysctl(CTL_HW:HW_NCPU) failed: '${errno}'");
-		return EXIT_DISTCC_FAILED;
+         LOG_ERRNO (errno, cherokee_err_error, "sysctl(CTL_HW:HW_NCPU) failed: '${errno}'");
+         return EXIT_DISTCC_FAILED;
 	}
 }
 
@@ -138,7 +139,8 @@ int dcc_ncpus(int *ncpus)
 #endif
     
 	if (*ncpus == -1) {
-		PRINT_ERRNO_S (errno, "sysconf(_SC_NPROCESSORS_ONLN) failed: '${errno}'");
+         LOG_ERRNO_S (errno, cherokee_err_error,
+                      "sysconf(_SC_NPROCESSORS_ONLN) failed: '${errno}'");
 		return EXIT_DISTCC_FAILED;
 	} else if (*ncpus == 0) {
 		/* If there are no cpus, what are we running on ?

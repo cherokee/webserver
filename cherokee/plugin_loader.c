@@ -156,7 +156,7 @@ get_sym_from_dlopen_handler (void *dl_handle, const char *sym)
 	dlerror();
 	re = (void *) dlsym(dl_handle, sym);
 	if ((error = dlerror()) != NULL)  {
-		PRINT_MSG ("ERROR: %s\n", error);
+		LOG_ERROR ("%s\n", error);
 		CHEROKEE_MUTEX_UNLOCK (&dlerror_mutex);
 		return NULL;
 	}
@@ -191,7 +191,7 @@ dylib_open (cherokee_plugin_loader_t  *loader,
 	CHEROKEE_MUTEX_LOCK (&dlerror_mutex);
 	lib = dlopen (tmp.buf, flags);
 	if (lib == NULL) {
-		PRINT_ERROR ("ERROR: dlopen(%s): %s\n", tmp.buf, dlerror());
+		LOG_ERROR ("dlopen(%s): %s\n", tmp.buf, dlerror());
 		CHEROKEE_MUTEX_UNLOCK (&dlerror_mutex);
 		cherokee_buffer_mrproper (&tmp);
 		return ret_error;
@@ -236,7 +236,7 @@ execute_init_func (cherokee_plugin_loader_t *loader,
 	/* Only try to execute if it exists
 	 */
 	if (init_func == NULL) {
-		PRINT_ERROR ("WARNING: %s was not found\n", init_name.buf);
+		LOG_WARNING ("%s was not found\n", init_name.buf);
 
 		cherokee_buffer_mrproper (&init_name);
 		return ret_not_found;
@@ -360,10 +360,10 @@ load_common (cherokee_plugin_loader_t *loader,
 	case ret_ok:
 		break;
 	case ret_error:
-		PRINT_ERROR ("ERROR: Can't open \"%s\" module\n", modname);		
+		LOG_ERROR ("Can't open \"%s\" module\n", modname);		
 		return ret;
 	case ret_not_found:
-		PRINT_ERROR ("ERROR: Can't read \"info\" structure from %s\n", modname);
+		LOG_ERROR ("Can't read \"info\" structure from %s\n", modname);
 		return ret;
 	default:
 		SHOULDNT_HAPPEN;

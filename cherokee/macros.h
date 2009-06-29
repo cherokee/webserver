@@ -282,13 +282,11 @@
 /* Printing macros
  */
 #ifdef __GNUC__
-# define PRINT_MSG(fmt,arg...)          fprintf(stderr, fmt, ##arg)
-# define PRINT_ERROR(fmt,arg...)        fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, ##arg)
-# define PRINT_ERRNO(err,fmt,arg...)    cherokee_print_errno(err, "%s:%d - "fmt"\n", __FILE__, __LINE__, ##arg)
+# define PRINT_MSG(fmt,arg...)    fprintf(stderr, fmt, ##arg)
+# define PRINT_ERROR(fmt,arg...)  fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, ##arg)
 #else
-# define PRINT_MSG(fmt,...)             fprintf(stderr, fmt, __VA_ARGS__)
-# define PRINT_ERROR(fmt,...)           fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, __VA_ARGS__)
-# define PRINT_ERRNO(err,fmt,...)       cherokee_print_errno(err, "%s:%d - "fmt"\n", __FILE__, __LINE__, __VA_ARGS__)
+# define PRINT_MSG(fmt,...)       fprintf(stderr, fmt, __VA_ARGS__)
+# define PRINT_ERROR(fmt,...)     fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, __VA_ARGS__)
 #endif
 
 #ifdef DEBUG
@@ -305,7 +303,6 @@
 # endif
 #endif
 
-#define PRINT_ERRNO_S(e,str)      PRINT_ERRNO(e, str, "")
 #define PRINT_ERROR_S(str)        PRINT_ERROR("%s",str)
 #define PRINT_MSG_S(str)          PRINT_MSG("%s",str)
 

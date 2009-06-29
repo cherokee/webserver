@@ -51,7 +51,7 @@ cherokee_balancer_round_robin_configure (cherokee_balancer_t    *balancer,
 	/* Sanity check
 	 */
 	if (balancer->entries_len <= 0) {
-		PRINT_ERROR_S ("ERROR: Balancer cannot be empty\n");
+		LOG_CRITICAL_S ("Balancer cannot be empty\n");
 		return ret_error;
 	}
  
@@ -119,7 +119,7 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 		/* Count how many it's checked so far */
 		if (tries > gbal->entries_len) {
-			PRINT_MSG_S ("ERROR: Sources exhausted: re-enabling one.\n");
+			PRINT_MSG_S ("NOTICE: Sources exhausted: re-enabling one.\n");
 			reactivate_entry (entry);
 			break;
 		}

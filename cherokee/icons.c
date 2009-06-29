@@ -255,7 +255,7 @@ cherokee_icons_get_icon (cherokee_icons_t   *icons,
 		return ret_ok;
 	}
 
-	PRINT_MSG_S ("A default icons is needed\n");
+	LOG_CRITICAL_S ("A default icons is needed\n");
 	return ret_error;
 }
 
@@ -287,7 +287,7 @@ add_suffix (char *file, void *data)
 
 	ret = cherokee_icons_add_suffix (icons, key, &file_buf);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Couldn't assign suffix '%s' to file '%s'\n", file, key->buf);
+		LOG_ERROR ("Couldn't assign suffix '%s' to file '%s'\n", file, key->buf);
 		return ret_error;
 	}
 

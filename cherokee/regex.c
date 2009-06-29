@@ -89,7 +89,7 @@ _add (cherokee_regex_table_t *table, char *pattern, void **regex)
 	
 	tmp = pcre_compile (pattern, 0, &error_msg, &error_offset, NULL);
 	if (tmp == NULL) {
-		PRINT_ERROR ("ERROR: regex <<%s>>: \"%s\", offset %d\n", pattern, error_msg, error_offset);
+		LOG_ERROR ("regex <<%s>>: \"%s\", offset %d\n", pattern, error_msg, error_offset);
 
 		CHEROKEE_RWLOCK_UNLOCK (&table->rwlock);
 		return ret_error;

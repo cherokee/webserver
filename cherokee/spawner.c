@@ -82,7 +82,8 @@ cherokee_spawner_init (void)
 	return ret_ok;
 
 error:
-	PRINT_ERRNO (errno, "Could initialize SHM '%s': ${errno}\n", name.buf);
+	LOG_ERRNO (errno, cherokee_err_error,
+		   "Could initialize SHM '%s': ${errno}\n", name.buf);
 
 	cherokee_buffer_mrproper (&name);
 	return ret_error;
@@ -255,7 +256,7 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 	 */
 	ret = sem_signal (cherokee_spawn_sem);
 	if (unlikely (ret != ret_ok)) {
-		PRINT_ERROR_S ("WARNING: Couldn't unlock spawning semaphore..\n");
+		LOG_WARNING_S ("Couldn't unlock spawning semaphore..\n");
 	}
 	
 	/* Wait for the PID

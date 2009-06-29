@@ -37,6 +37,13 @@
 # include <syslog.h>
 #endif
 
+typedef struct {
+	CHEROKEE_MUTEX_T  (mutex);
+	int                foo;
+} priv_t;
+
+#define PRIV(l) ((priv_t *)(l->priv))
+
 
 ret_t 
 cherokee_logger_writer_new (cherokee_logger_writer_t **writer)
@@ -54,7 +61,12 @@ cherokee_logger_writer_new (cherokee_logger_writer_t **writer)
 	cherokee_buffer_init (&n->buffer);
 
 	cherokee_buffer_ensure_size (&n->buffer, n->max_bufsize);
-	CHEROKEE_MUTEX_INIT (&n->mutex, NULL);
+
+	n->priv = malloc (sizeof(priv_t));
+	if (n->priv == NULL) {
+		return ret_nomem;
+	}
+	CHEROKEE_MUTEX_INIT (&PRIV(n)->mutex, NULL);
 	
 	*writer = n;
 	return ret_ok;
@@ -89,8 +101,9 @@ cherokee_logger_writer_free (cherokee_logger_writer_t *writer)
 	cherokee_buffer_mrproper (&writer->filename);
 	cherokee_buffer_mrproper (&writer->command);
 
-	CHEROKEE_MUTEX_DESTROY (&writer->mutex);
-
+	CHEROKEE_MUTEX_DESTROY (&PRIV(writer)->mutex);
+	
+	free (writer->priv);
 	free (writer);
 	return ret;
 }
@@ -199,7 +212,7 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 	pid_t pid; 
 
 	if (pipe (to_log_fds)) { 
-		PRINT_ERRNO_S (errno, "Pipe error: '${errno}'");
+		PRINT_ERROR ("Pipe error: errno=%d", errno);
 		return ret_error;
 	}
 
@@ -220,7 +233,7 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 		SHOULDNT_HAPPEN;
 
 	case -1:
-		PRINT_ERRNO_S (errno, "Fork failed: '${errno}'");
+		PRINT_ERROR ("Fork failed, errno=%d", errno);
 		break;
 
 	default:
@@ -278,7 +291,7 @@ cherokee_logger_writer_reopen (cherokee_logger_writer_t *writer)
 {
 	ret_t ret;
 
-	CHEROKEE_MUTEX_LOCK (&writer->mutex);
+	CHEROKEE_MUTEX_LOCK (&PRIV(writer)->mutex);
 
 	switch (writer->type) {
 	case cherokee_logger_writer_syslog:
@@ -300,10 +313,10 @@ cherokee_logger_writer_reopen (cherokee_logger_writer_t *writer)
 		goto error;
 
 out:
-	CHEROKEE_MUTEX_UNLOCK (&writer->mutex);
+	CHEROKEE_MUTEX_UNLOCK (&PRIV(writer)->mutex);
 	return ret_ok;
 error:
-	CHEROKEE_MUTEX_UNLOCK (&writer->mutex);
+	CHEROKEE_MUTEX_UNLOCK (&PRIV(writer)->mutex);
 	return ret_error;
 }
 
@@ -312,7 +325,7 @@ ret_t
 cherokee_logger_writer_get_buf (cherokee_logger_writer_t *writer, cherokee_buffer_t **buf)
 {
 	*buf = &writer->buffer;
-	CHEROKEE_MUTEX_LOCK (&writer->mutex);
+	CHEROKEE_MUTEX_LOCK (&PRIV(writer)->mutex);
 
 	return ret_ok;
 }
@@ -320,7 +333,7 @@ cherokee_logger_writer_get_buf (cherokee_logger_writer_t *writer, cherokee_buffe
 ret_t
 cherokee_logger_writer_release_buf (cherokee_logger_writer_t *writer)
 {
-	CHEROKEE_MUTEX_UNLOCK (&writer->mutex);
+	CHEROKEE_MUTEX_UNLOCK (&PRIV(writer)->mutex);
 	return ret_ok;
 }
 
@@ -339,7 +352,7 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer,
 	}
 
 	if (!locked) {
-		CHEROKEE_MUTEX_LOCK (&writer->mutex);
+		CHEROKEE_MUTEX_LOCK (&PRIV(writer)->mutex);
 	}
 
 	/* If not, do the proper thing
@@ -409,7 +422,7 @@ cherokee_logger_writer_flush (cherokee_logger_writer_t *writer,
 
 out:
 	if (! locked) {
-		CHEROKEE_MUTEX_UNLOCK (&writer->mutex);
+		CHEROKEE_MUTEX_UNLOCK (&PRIV(writer)->mutex);
 	}
 	return ret;
 }

@@ -122,15 +122,15 @@ cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_serve
 	/* Checks
 	 */
 	if (cherokee_buffer_is_empty (&props->user)) {
-		PRINT_ERROR_S ("ERROR: MySQL validator: an 'user' entry is needed\n");
+		LOG_ERROR_S ("MySQL validator: an 'user' entry is needed\n");
 		return ret_error;
 	}
 	if (cherokee_buffer_is_empty (&props->database)) {
-		PRINT_ERROR_S ("ERROR: MySQL validator: a 'database' entry is needed\n");
+		LOG_ERROR_S ("MySQL validator: a 'database' entry is needed\n");
 		return ret_error;
 	}
 	if (cherokee_buffer_is_empty (&props->query)) {
-		PRINT_ERROR_S ("ERROR: MySQL validator: a 'query' entry is needed\n");
+		LOG_ERROR_S ("MySQL validator: a 'query' entry is needed\n");
 		return ret_error;
 	}
 
@@ -145,7 +145,7 @@ init_mysql_connection (cherokee_validator_mysql_t *mysql, cherokee_validator_mys
 
 	if (unlikely ((props->host.buf == NULL) &&
 		      (props->unix_socket.buf == NULL))) {
-		PRINT_ERROR_S ("ERROR: MySQL validator misconfigured: A Host or Unix socket is needed.");
+		LOG_ERROR_S ("MySQL validator misconfigured: A Host or Unix socket is needed.");
 		return ret_error;
 	}
 
@@ -161,8 +161,8 @@ init_mysql_connection (cherokee_validator_mysql_t *mysql, cherokee_validator_mys
 				   props->port, 
 				   props->unix_socket.buf, 0);
 	if (conn == NULL) {
-		PRINT_ERROR ("Unable to connect to MySQL server: %s:%d %s\n", 
-			     props->host.buf, props->port, mysql_error (mysql->conn));
+		LOG_ERROR ("Unable to connect to MySQL server: %s:%d %s\n", 
+			   props->host.buf, props->port, mysql_error (mysql->conn));
 		return ret_error;
 	}
 

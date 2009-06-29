@@ -136,7 +136,7 @@ cherokee_config_entry_set_handler (cherokee_config_entry_t        *entry,
 	return_if_fail (plugin_info != NULL, ret_error);
 
 	if (PLUGIN_INFO(plugin_info)->type != cherokee_handler) {
-		PRINT_ERROR ("Directory '%s' has not a handler module!\n", entry->document_root->buf);
+		LOG_ERROR ("Directory '%s' has not a handler module!\n", entry->document_root->buf);
 		return ret_error;
 	}
 

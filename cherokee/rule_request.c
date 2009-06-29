@@ -49,12 +49,12 @@ match (cherokee_rule_request_t *rule,
 	/* Sanity checks
 	 */
 	if (unlikely (regexs == NULL)) {
-		PRINT_ERROR_S ("Couldn't access regex table\n");
+		LOG_ERROR_S ("Couldn't access regex table\n");
 		return ret_error;
 	}
 
 	if (unlikely (rule->pcre == NULL)) {
-		PRINT_ERROR_S ("RegExp rule has null pcre\n");
+		LOG_ERROR_S ("RegExp rule has null pcre\n");
 		return ret_error;
 	}
 
@@ -109,8 +109,7 @@ configure (cherokee_rule_request_t   *rule,
 	 */
 	ret = cherokee_config_node_copy (conf, "request", &rule->pattern);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Rule prio=%d needs a 'request' property\n", 
-			     RULE(rule)->priority);
+		LOG_CRITICAL ("Rule prio=%d needs a 'request' property\n", RULE(rule)->priority);
 		return ret_error;
 	}
 

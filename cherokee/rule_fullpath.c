@@ -49,8 +49,8 @@ configure (cherokee_rule_fullpath_t  *rule,
 	 */
 	ret = cherokee_config_node_get (conf, "fullpath", &subconf);
 	if (ret != ret_ok) {
-		PRINT_ERROR ("Rule prio=%d needs a 'fullpath' property\n", 
-			     RULE(rule)->priority);
+		LOG_CRITICAL ("Rule prio=%d needs a 'fullpath' property\n", 
+			      RULE(rule)->priority);
 		return ret_error;
 	}
 

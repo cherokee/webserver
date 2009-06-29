@@ -88,7 +88,7 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 		if (!http_type_300 (error) &&
 		    !http_type_400 (error) &&
 		    !http_type_500 (error)) {
-			PRINT_ERROR ("ERROR: error_redir: Wrong error code: '%s'\n", subconf->key.buf);
+			LOG_ERROR ("error_redir: Wrong error code: '%s'\n", subconf->key.buf);
 			continue;
 		}
 
@@ -108,7 +108,7 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 		 */
 		ret = cherokee_config_node_copy (subconf, "url", &entry->url);
 		if (ret != ret_ok) {
-			PRINT_ERROR ("Redir Error %d: An 'url' property is required\n", error);
+			LOG_CRITICAL ("Redir Error %d: An 'url' property is required\n", error);
 			return ret_error;
 		}
 

@@ -212,7 +212,7 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 	/* Final checks
 	 */
 	if (props->balancer == NULL) {
-		PRINT_ERROR_S ("ERROR: Proxy handler needs a balancer\n");
+		LOG_CRITICAL_S ("Proxy handler needs a balancer\n");
 		return ret_error;
 	}
 
@@ -237,7 +237,7 @@ replace_againt_regex_list (cherokee_buffer_t *in_buf,
 				in_buf->buf, in_buf->len, 0, 0,
 				ovector, OVECTOR_LEN);
 		if (re == 0) {
-			PRINT_ERROR_S("Too many groups in the regex\n");
+			LOG_ERROR_S("Too many groups in the regex\n");
 		}
 		if (re <= 0) {
 			continue;
