@@ -42,7 +42,8 @@ cherokee_error_log (cherokee_error_type_t type, const char *format, ...)
 	cherokee_logger_t *logger; 
 	cherokee_buffer_t  tmp     = CHEROKEE_BUF_INIT;
 
-	/* Error message formatting */
+	/* Error message formatting
+	 */
 	cherokee_buf_add_bogonow (&tmp, false);
 
 	switch (type) {
@@ -61,15 +62,18 @@ cherokee_error_log (cherokee_error_type_t type, const char *format, ...)
 	cherokee_buffer_add_va_list (&tmp, format, ap);
 	va_end (ap);
 
-	/* Logging: 1st option - connection's logger */
+	/* Logging: 1st option - connection's logger
+	 */
 	logger = LOGGER (CHEROKEE_THREAD_PROP_GET (thread_logger_error_ptr));
 
-	/* Logging: 2nd option - default logger */
+	/* Logging: 2nd option - default logger
+	 */
 	if (logger == NULL) {
 		logger = default_error_logger;
 	}
 
-	/* Do logging */
+	/* Do logging
+	 */
 	if (logger) {
 		cherokee_logger_write_error (logger, &tmp);
 	} 
@@ -81,5 +85,39 @@ cherokee_error_log (cherokee_error_type_t type, const char *format, ...)
 	}
 
 	cherokee_buffer_mrproper (&tmp);
+	return ret_ok;
+}
+
+
+ret_t cherokee_error_errno_log (int error, cherokee_error_type_t type, const char *format, ...)
+{
+	va_list           ap;
+	const char       *errstr;
+	char              err_tmp[ERROR_MAX_BUFSIZE];
+	cherokee_buffer_t buffer = CHEROKEE_BUF_INIT;
+
+	/* Get the error string
+	 */
+	errstr = cherokee_strerror_r (error, err_tmp, sizeof(err_tmp));
+	if (errstr == NULL)
+		errstr = "unknwon error (?)";
+
+	/* Render
+	 */
+	cherokee_buffer_ensure_size (&buffer, 128);
+	va_start (ap, format);
+	cherokee_buffer_add_va_list (&buffer, format, ap);
+	va_end (ap);
+
+	/* Replace error
+	 */
+	cherokee_buffer_replace_string (&buffer, (char *)"${errno}", 8,
+					(char *) errstr, strlen(errstr));
+
+	/* Log & clean up
+	 */
+	cherokee_error_log (type, "%s", buffer.buf);
+	cherokee_buffer_mrproper (&buffer);
+
 	return ret_ok;
 }
