@@ -97,41 +97,49 @@
 #endif
 
 #ifdef HAVE_PTHREAD
-# define CHEROKEE_MUTEX_T(n)          pthread_mutex_t n
-# define CHEROKEE_RWLOCK_T(n)         pthread_rwlock_t n
-# define CHEROKEE_THREAD_JOIN(t)      pthread_join(t,NULL)
-# define CHEROKEE_THREAD_SELF         pthread_self()
+# define CHEROKEE_MUTEX_T(n)           pthread_mutex_t n
+# define CHEROKEE_RWLOCK_T(n)          pthread_rwlock_t n
+# define CHEROKEE_THREAD_JOIN(t)       pthread_join(t,NULL)
+# define CHEROKEE_THREAD_SELF          pthread_self()
 
-# define CHEROKEE_MUTEX_LOCK(m)       pthread_mutex_lock(m)
-# define CHEROKEE_MUTEX_UNLOCK(m)     pthread_mutex_unlock(m)
-# define CHEROKEE_MUTEX_INIT(m,n)     pthread_mutex_init(m,n)
-# define CHEROKEE_MUTEX_DESTROY(m)    pthread_mutex_destroy(m)
-# define CHEROKEE_MUTEX_TRY_LOCK(m)   pthread_mutex_trylock(m)
+# define CHEROKEE_THREAD_PROP_GET(p)   pthread_getspecific(p)
+# define CHEROKEE_THREAD_PROP_SET(p,v) pthread_setspecific(p,v)
+# define CHEROKEE_THREAD_PROP_NEW(p,f) pthread_key_create2(p,f)
 
-# define CHEROKEE_RWLOCK_INIT(m,n)    pthread_rwlock_init(m,n)
-# define CHEROKEE_RWLOCK_READER(m)    pthread_rwlock_rdlock(m)
-# define CHEROKEE_RWLOCK_WRITER(m)    pthread_rwlock_wrlock(m)
-# define CHEROKEE_RWLOCK_TRYREADER(m) pthread_rwlock_tryrdlock(m)
-# define CHEROKEE_RWLOCK_TRYWRITER(m) pthread_rwlock_trywrlock(m)
-# define CHEROKEE_RWLOCK_UNLOCK(m)    pthread_rwlock_unlock(m)
-# define CHEROKEE_RWLOCK_DESTROY(m)   pthread_rwlock_destroy(m)
+# define CHEROKEE_MUTEX_LOCK(m)        pthread_mutex_lock(m)
+# define CHEROKEE_MUTEX_UNLOCK(m)      pthread_mutex_unlock(m)
+# define CHEROKEE_MUTEX_INIT(m,n)      pthread_mutex_init(m,n)
+# define CHEROKEE_MUTEX_DESTROY(m)     pthread_mutex_destroy(m)
+# define CHEROKEE_MUTEX_TRY_LOCK(m)    pthread_mutex_trylock(m)
+
+# define CHEROKEE_RWLOCK_INIT(m,n)     pthread_rwlock_init(m,n)
+# define CHEROKEE_RWLOCK_READER(m)     pthread_rwlock_rdlock(m)
+# define CHEROKEE_RWLOCK_WRITER(m)     pthread_rwlock_wrlock(m)
+# define CHEROKEE_RWLOCK_TRYREADER(m)  pthread_rwlock_tryrdlock(m)
+# define CHEROKEE_RWLOCK_TRYWRITER(m)  pthread_rwlock_trywrlock(m)
+# define CHEROKEE_RWLOCK_UNLOCK(m)     pthread_rwlock_unlock(m)
+# define CHEROKEE_RWLOCK_DESTROY(m)    pthread_rwlock_destroy(m)
 #else
 # define CHEROKEE_MUTEX_T(n)          
 # define CHEROKEE_RWLOCK_T(n)         
 # define CHEROKEE_THREAD_JOIN(t)
-# define CHEROKEE_THREAD_SELF         0
+# define CHEROKEE_THREAD_SELF          0
+
+# define CHEROKEE_THREAD_PROP_GET(p)   NULL
+# define CHEROKEE_THREAD_PROP_SET(p,v) NULL
+# define CHEROKEE_THREAD_PROP_NEW(p,f) 0
 
 # define CHEROKEE_MUTEX_LOCK(m)
 # define CHEROKEE_MUTEX_UNLOCK(m)
 # define CHEROKEE_MUTEX_INIT(m,n)  
 # define CHEROKEE_MUTEX_DESTROY(m) 
-# define CHEROKEE_MUTEX_TRY_LOCK(m)   0
+# define CHEROKEE_MUTEX_TRY_LOCK(m)    0
 
 # define CHEROKEE_RWLOCK_INIT(m,n)
 # define CHEROKEE_RWLOCK_READER(m)
 # define CHEROKEE_RWLOCK_WRITER(m)
-# define CHEROKEE_RWLOCK_TRYREADER(m) 0
-# define CHEROKEE_RWLOCK_TRYWRITER(m) 0
+# define CHEROKEE_RWLOCK_TRYREADER(m)  0
+# define CHEROKEE_RWLOCK_TRYWRITER(m)  0
 # define CHEROKEE_RWLOCK_UNLOCK(m)
 # define CHEROKEE_RWLOCK_DESTROY(m)
 #endif

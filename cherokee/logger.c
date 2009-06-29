@@ -259,21 +259,6 @@ cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
 
 
 ret_t
-cherokee_logger_write_error (cherokee_logger_t *logger, void *conn)
-{
-	ret_t ret = ret_error;
-
-	if (logger->write_error) {
-		CHEROKEE_MUTEX_LOCK (&PRIV(logger)->mutex);
-		ret = logger->write_error (logger, conn);
-		CHEROKEE_MUTEX_UNLOCK (&PRIV(logger)->mutex);
-	}
-
-	return ret;
-}
-
-
-ret_t
 cherokee_logger_get_error_writer (cherokee_logger_t         *logger,
 				  cherokee_logger_writer_t **writer)
 {
@@ -289,28 +274,20 @@ cherokee_logger_get_error_writer (cherokee_logger_t         *logger,
 }
 
 
-
 ret_t 
-cherokee_logger_write_string (cherokee_logger_t *logger, const char *format, ...)
+cherokee_logger_write_error (cherokee_logger_t *logger,
+			     cherokee_buffer_t *error)
 {
-	va_list ap;
+	ret_t ret;
 
 	if (logger == NULL) 
 		return ret_ok;
 
-	if (logger->write_string) {
-		ret_t             ret;
-		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-
+	if (logger->write_error) {
 		CHEROKEE_MUTEX_LOCK(&PRIV(logger)->mutex);
-		va_start (ap, format);
-		cherokee_buffer_add_va_list (&tmp, (char *)format, ap);
-		va_end (ap);
+		ret = logger->write_error (logger, error);
 		CHEROKEE_MUTEX_UNLOCK(&PRIV(logger)->mutex);
 
-		ret = logger->write_string (logger, tmp.buf);
-
-		cherokee_buffer_mrproper (&tmp);
 		return ret;
 	}
 

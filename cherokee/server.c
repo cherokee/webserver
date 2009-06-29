@@ -27,6 +27,7 @@
 #include "server.h"
 #include "bind.h"
 #include "spawner.h"
+#include "error_log.h"
 
 #include <fcntl.h>
 #include <sys/types.h>
@@ -324,8 +325,8 @@ change_execution_user (cherokee_server_t *srv, struct passwd *ent)
 	if (srv->user_orig == 0) {
 		error = initgroups (ent->pw_name, srv->group);
 		if (error == -1) {
-			PRINT_ERROR ("initgroups: Unable to set groups for user `%s' and GID %d\n", 
-				     ent->pw_name, srv->group);
+			LOG_ERROR ("initgroups: Unable to set groups for user `%s' and GID %d\n", 
+				   ent->pw_name, srv->group);
 		}
 	}
 
@@ -334,8 +335,8 @@ change_execution_user (cherokee_server_t *srv, struct passwd *ent)
 	if (srv->group != srv->group_orig) {
 		error = setgid (srv->group);
 		if (error != 0) {
-			PRINT_ERROR ("Can't change group to GID %d, running with GID=%d\n",
-				     srv->group, srv->group_orig);
+			LOG_ERROR ("Can't change group to GID %d, running with GID=%d\n",
+				   srv->group, srv->group_orig);
 		}
 	}
 
@@ -344,8 +345,8 @@ change_execution_user (cherokee_server_t *srv, struct passwd *ent)
 	if (srv->user != srv->user_orig) {
 		error = setuid (srv->user);		
 		if (error != 0) {
-			PRINT_ERROR ("Can't change user to UID %d, running with UID=%d\n",
-				     srv->user, srv->user_orig);
+			LOG_ERROR ("Can't change user to UID %d, running with UID=%d\n",
+				   srv->user, srv->user_orig);
 		}
 	}
 
@@ -531,8 +532,8 @@ initialize_server_threads (cherokee_server_t *srv)
 
 		ret = cherokee_fdpoll_get_fdlimits (srv->fdpoll_method, &sys_fd_limit, &poll_fd_limit);
 		if (ret != ret_ok) {
-			PRINT_ERROR ("cherokee_fdpoll_get_fdlimits: failed %d (poll_type %d)\n", 
-				     (int)ret, (int) srv->fdpoll_method);
+			LOG_CRITICAL ("cherokee_fdpoll_get_fdlimits: failed %d (poll_type %d)\n", 
+				      (int)ret, (int) srv->fdpoll_method);
 			return ret_error;
 		}
 
@@ -540,8 +541,8 @@ initialize_server_threads (cherokee_server_t *srv)
 		 */
 		if ((sys_fd_limit > 0) &&
 		    (cherokee_fdlimit > sys_fd_limit)) {
-			PRINT_ERROR ("system_fd_limit %d > %d sys_fd_limit\n",
-				     cherokee_fdlimit, sys_fd_limit);
+			LOG_CRITICAL ("system_fd_limit %d > %d sys_fd_limit\n",
+				      cherokee_fdlimit, sys_fd_limit);
 			return ret_error;
 		}
 
@@ -551,8 +552,8 @@ initialize_server_threads (cherokee_server_t *srv)
 		if ((poll_fd_limit > 0) &&
 		    (fds_per_thread > poll_fd_limit)) 
 		{
-			PRINT_ERROR ("fds_per_thread %d > %d poll_fd_limit (reduce that limit)\n",
-				     fds_per_thread, poll_fd_limit);
+			LOG_ERROR ("fds_per_thread %d > %d poll_fd_limit (reduce that limit)\n",
+				   fds_per_thread, poll_fd_limit);
 			fds_per_thread = poll_fd_limit - listen_fds;
 		}
 	}
@@ -584,7 +585,7 @@ initialize_server_threads (cherokee_server_t *srv)
 				   conns_per_thread,
 				   keepalive_per_thread);
 	if (unlikely(ret < ret_ok)) {
-		PRINT_ERROR("cherokee_thread_new (main_thread) failed %d\n", ret);
+		LOG_CRITICAL ("cherokee_thread_new (main_thread) failed %d\n", ret);
 		return ret;
 	}
 
@@ -619,7 +620,7 @@ initialize_server_threads (cherokee_server_t *srv)
 					   conns_per_thread, 
 					   keepalive_per_thread);
 		if (unlikely(ret < ret_ok)) {
-			PRINT_ERROR("cherokee_thread_new() failed %d\n", ret);
+			LOG_CRITICAL ("cherokee_thread_new() failed %d\n", ret);
 			return ret;
 		}
 
@@ -695,8 +696,8 @@ init_vservers_tls (cherokee_server_t *srv)
 
 		ret = cherokee_virtual_server_init_tls (vserver);
 		if (ret < ret_ok) {
-			PRINT_ERROR ("Can not initialize TLS for `%s' virtual host\n", 
-				     cherokee_buffer_is_empty(&vserver->name) ? "unknown" : vserver->name.buf);
+			LOG_CRITICAL ("Can not initialize TLS for `%s' virtual host\n", 
+				      cherokee_buffer_is_empty(&vserver->name) ? "unknown" : vserver->name.buf);
 			error = true;
 
 		} else if (ret == ret_ok) {
@@ -738,16 +739,15 @@ raise_fd_limit (cherokee_server_t *srv, cint_t new_limit)
 	 */
 	ret = cherokee_sys_fdlimit_set (new_limit);
 	if (ret < ret_ok) {
-		PRINT_ERROR ("WARNING: Unable to raise file descriptor limit to %d\n",
-			     new_limit);
+		LOG_WARNING ("Unable to raise file descriptor limit to %d\n", new_limit);
 	}
 
 	/* Update the new value
 	 */
 	ret = cherokee_sys_fdlimit_get (&cherokee_fdlimit);
 	if (ret < ret_ok) {
-		PRINT_ERROR_S ("ERROR: Unable to get file descriptor limit\n");
-		return ret;
+		LOG_CRITICAL_S ("ERROR: Unable to get file descriptor limit\n");
+		return ret_error;
 	}
 	
 	return ret_ok;
@@ -778,8 +778,8 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	/* Verify if there are enough fds.
 	 */
 	if (cherokee_fdlimit < FD_NUM_MIN_SYSTEM) {
-		PRINT_ERROR("Number of system fds too low: %d < %d\n", 
-			    cherokee_fdlimit, FD_NUM_MIN_SYSTEM);
+		LOG_CRITICAL ("Number of system fds too low: %d < %d\n", 
+			      cherokee_fdlimit, FD_NUM_MIN_SYSTEM);
 		return ret_error;
 	}
 
@@ -792,8 +792,8 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	 */
 	srv->fdlimit_available = (cherokee_fdlimit - FD_NUM_SPARE);
 	if (srv->fdlimit_available < FD_NUM_MIN_AVAILABLE) {
-		PRINT_ERROR("Number of max. fds too low: %d < %d\n", 
-			    srv->fdlimit_available, FD_NUM_MIN_AVAILABLE);
+		LOG_CRITICAL ("Number of max. fds too low: %d < %d\n", 
+			      srv->fdlimit_available, FD_NUM_MIN_AVAILABLE);
 		return ret_error;
 	}
 
@@ -886,7 +886,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	{
 		ent = getpwuid (srv->user);
 		if (ent == NULL) {
-			PRINT_ERROR ("Can't get username for UID %d\n", srv->user);
+			LOG_CRITICAL ("Can't get username for UID %d\n", srv->user);
 			return ret_error;
 		}
 	}
@@ -1090,7 +1090,7 @@ add_source (cherokee_config_node_t *conf, void *data)
 	 */
 	prio = atoi (conf->key.buf);
 	if (prio <= 0) {
-		PRINT_ERROR ("Invalid Source entry '%s'\n", conf->key.buf);
+		LOG_CRITICAL ("Invalid Source entry '%s'\n", conf->key.buf);
 		return ret_error;
 	}
 
@@ -1100,8 +1100,8 @@ add_source (cherokee_config_node_t *conf, void *data)
 	 */
 	ret = cherokee_config_node_read (conf, "type", &buf);
 	if (ret != ret_ok) {
-		PRINT_ERROR_S ("ERROR: Source: An entry 'type' is needed\n");
-		return ret;
+		LOG_CRITICAL ("Source %d: An entry 'type' is required.\n", prio);
+		return ret_error;
 	}
 	
 	if (equal_buf_str (buf, "interpreter")) {
@@ -1121,7 +1121,7 @@ add_source (cherokee_config_node_t *conf, void *data)
 		if (ret != ret_ok) return ret;
 
 	} else {
-		PRINT_ERROR ("ERROR: Source: Unknown type '%s'\n", buf->buf);
+		LOG_CRITICAL ("ERROR: Source: Unknown type '%s'\n", buf->buf);
 		return ret_error;
 	}
 
@@ -1139,7 +1139,7 @@ add_vserver (cherokee_config_node_t *conf, void *data)
 
 	prio = atoi (conf->key.buf);
 	if (prio <= 0) {
-		PRINT_ERROR ("Invalid Virtual Server entry '%s'\n", conf->key.buf);
+		LOG_CRITICAL ("Invalid Virtual Server entry '%s'\n", conf->key.buf);
 		return ret_error;
 	}
 
@@ -1178,7 +1178,7 @@ vservers_check_sanity (cherokee_server_t *srv)
 	 */
 	cherokee_list_get_len (&srv->vservers, &len);
 	if (len == 0) {
-		PRINT_ERROR_S ("No virtual hosts have been added.\n");
+		LOG_CRITICAL_S ("No virtual hosts have been added.\n");
 		return ret_error;
 	}
 
@@ -1186,7 +1186,7 @@ vservers_check_sanity (cherokee_server_t *srv)
 	 */
 	vsrv = VSERVER(srv->vservers.prev);
 	if (! equal_buf_str (&vsrv->name, "default")) {
-		PRINT_ERROR_S ("Lowest priority virtual server must be 'default'.\n");
+		LOG_CRITICAL_S ("Lowest priority virtual server must be 'default'.\n");
 		return ret_error;
 	}
 
@@ -1396,6 +1396,26 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 	return ret_ok;
 }
 
+static ret_t
+set_default_server_logger (cherokee_server_t *srv)
+{
+	cherokee_list_t   *i;
+	cherokee_logger_t *logger;
+
+	logger = VSERVER(srv->vservers.prev)->logger;
+	if (logger == NULL) {
+		list_for_each (i, &srv->vservers) {
+			if (VSERVER(i)->logger) {
+				logger = VSERVER(i)->logger;
+				break;
+			}
+		}
+	}
+
+	cherokee_error_log_set_log (logger);
+	return ret_ok;
+}
+
 
 static ret_t
 configure_server (cherokee_server_t *srv)
@@ -1512,6 +1532,10 @@ configure_server (cherokee_server_t *srv)
 		cherokee_list_add (&listener->listed, &srv->listeners);
 	}
 
+	/* Set default logger
+	 */
+	set_default_server_logger (srv);
+
 	return ret_ok;
 }
 
@@ -1579,7 +1603,7 @@ cherokee_server_daemonize (cherokee_server_t *srv)
 	child_pid = fork();
         switch (child_pid) {
 	case -1:
-                PRINT_ERROR_S ("Could not fork\n");
+                LOG_CRITICAL_S ("Could not fork\n");
 		break;
 
 	case 0:

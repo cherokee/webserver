@@ -33,6 +33,7 @@
 #include "thread.h"
 #include "source_interpreter.h"
 #include "bogotime.h"
+#include "error_log.h"
 
 #include "fastcgi.h"
 
@@ -116,11 +117,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 /*		printf ("READ:STDERR (%d): %s", len, data?data:""); */
 
 		if (CONN_VSRV(conn)->logger != NULL) {
-			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-
-			cherokee_buffer_add (&tmp, data, len);
-			cherokee_logger_write_string (CONN_VSRV(conn)->logger, "%s\n", tmp.buf);
-			cherokee_buffer_mrproper (&tmp);
+			LOG_ERROR("%s\n", data);
 		}
 		else if (SOURCE_INT(hdl->src_ref)->debug) {
 			PRINT_MSG ("%.*s\n", len, data);

@@ -64,7 +64,6 @@ ret_t cherokee_logger_ncsa_reopen           (cherokee_logger_ncsa_t *logger);
 ret_t cherokee_logger_ncsa_get_error_writer (cherokee_logger_ncsa_t *logger, cherokee_logger_writer_t **writer);
 
 ret_t cherokee_logger_ncsa_write_access     (cherokee_logger_ncsa_t *logger, cherokee_connection_t *conn);
-ret_t cherokee_logger_ncsa_write_error      (cherokee_logger_ncsa_t *logger, cherokee_connection_t *conn);
-ret_t cherokee_logger_ncsa_write_string     (cherokee_logger_ncsa_t *logger, const char *string);
+ret_t cherokee_logger_ncsa_write_error      (cherokee_logger_ncsa_t *logger, cherokee_buffer_t *error);
 
 #endif /* CHEROKEE_LOGGER_NCSA_H */

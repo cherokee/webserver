@@ -51,7 +51,6 @@ cherokee_logger_combined_new (cherokee_logger_t         **logger,
 	LOGGER(n)->get_error_writer = (logger_func_get_error_writer_t)  cherokee_logger_ncsa_get_error_writer;
 	LOGGER(n)->write_error      = (logger_func_write_error_t)  cherokee_logger_ncsa_write_error;
 	LOGGER(n)->write_access     = (logger_func_write_access_t) cherokee_logger_ncsa_write_access;
-	LOGGER(n)->write_string     = (logger_func_write_string_t) cherokee_logger_ncsa_write_string;
 
 	/* Init the base class: NCSA
 	 */

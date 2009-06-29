@@ -58,6 +58,7 @@ cherokee_init (void)
 	/* Init the bogotime mechanism
 	 */
 	cherokee_bogotime_init();
+	cherokee_bogotime_update();
 
 	/* Init threading stuff
 	 */

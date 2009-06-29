@@ -54,7 +54,7 @@
 #include "header.h"
 #include "header-protected.h"
 #include "post.h"
-
+#include "error_log.h"
 
 #define ENTRIES "handler,cgi"
 
@@ -609,9 +609,7 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 		if (re >= 0) {
 			re = setuid (info.st_uid);
 			if (re != 0) {
-				cherokee_logger_write_string (CONN_VSRV(conn)->logger, 
-							      "%s: couldn't set UID %d\n",
-							      script, info.st_uid);
+				LOG_ERROR("%s: couldn't set UID %d\n", script, info.st_uid);
 			}
 		}
 	}

@@ -43,6 +43,7 @@
 #include "iocache.h"
 #include "util.h"
 #include "handler_dirlist.h"
+#include "error_log.h"
 
 #define ENTRIES "handler,file"
 
@@ -170,10 +171,8 @@ check_cached (cherokee_handler_file_t *fhdl)
 
 		req_time = cherokee_dtm_str2time (header);			
 		if (unlikely (req_time == DTM_TIME_EVAL)) {
-			cherokee_logger_write_string (
-				CONN_VSRV(conn)->logger, 
-				"Warning: Unparseable time '%s'\n",
-				header);
+			LOG_WARNING("Unparseable time '%s'\n", header);
+				
 			/* restore end of line */
 			*end = tmp;
 			return ret_ok;
@@ -251,10 +250,8 @@ check_cached (cherokee_handler_file_t *fhdl)
 		
 		req_time = cherokee_dtm_str2time (header);			
 		if (unlikely (req_time == DTM_TIME_EVAL)) {
-			cherokee_logger_write_string (
-				CONN_VSRV(conn)->logger, 
-				"Warning: Unparseable time '%s'\n",
-				header);
+			LOG_WARNING ("Unparseable time '%s'\n", header);
+				
 			*end = tmp;
 			return ret_ok;
 		}

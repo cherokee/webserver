@@ -167,6 +167,10 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 	n->fastcgi_servers     = NULL;
 	n->fastcgi_free_func   = NULL;
 
+	/* Thread Local Storage
+	 */
+	CHEROKEE_THREAD_PROP_SET (thread_logger_error_ptr, NULL);
+
 	/* Event poll object
 	 */
 	if (fdpoll_type == cherokee_poll_UNSET)
@@ -509,6 +513,10 @@ process_polling_connections (cherokee_thread_t *thd)
 	list_for_each_safe (i, tmp, LIST(&thd->polling_list)) {
 		conn = CONN(i);
 
+		/* Thread logger
+		 */
+		CHEROKEE_THREAD_PROP_SET (thread_logger_error_ptr, conn->logger_ref);
+
 		/* Has it been too much without any work?
 		 */
 		if (conn->timeout < cherokee_bogonow_now) {
@@ -577,6 +585,10 @@ process_active_connections (cherokee_thread_t *thd)
 
 		TRACE (ENTRIES, "thread (%p) processing conn (%p), phase %d '%s'\n", 
 		       thd, conn, conn->phase, cherokee_connection_get_phase_str (conn));
+
+		/* Thread logger
+		 */
+		CHEROKEE_THREAD_PROP_SET (thread_logger_error_ptr, conn->logger_ref);
 
 		/* Has the connection been too much time w/o any work
 		 */
@@ -832,6 +844,10 @@ process_active_connections (cherokee_thread_t *thd)
 				conn_set_mode (thd, conn, socket_writing);
 				continue;
 			}
+
+			/* Thread logger
+			 */
+			CHEROKEE_THREAD_PROP_SET (thread_logger_error_ptr, conn->logger_ref);
 
 			/* If it's a POST we've to read more data
 			 */

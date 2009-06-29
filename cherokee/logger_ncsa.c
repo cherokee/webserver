@@ -76,7 +76,6 @@ cherokee_logger_ncsa_new (cherokee_logger_t         **logger,
 	LOGGER(n)->get_error_writer = (logger_func_get_error_writer_t)  cherokee_logger_ncsa_get_error_writer;
 	LOGGER(n)->write_error      = (logger_func_write_error_t)  cherokee_logger_ncsa_write_error;
 	LOGGER(n)->write_access     = (logger_func_write_access_t) cherokee_logger_ncsa_write_access;
-	LOGGER(n)->write_string     = (logger_func_write_string_t) cherokee_logger_ncsa_write_string;
 
 	n->writer_access = NULL;
 	n->writer_error  = NULL;
@@ -299,39 +298,6 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 }
 
 
-ret_t 
-cherokee_logger_ncsa_write_string (cherokee_logger_ncsa_t *logger, const char *string)
-{
-	ret_t              ret;
-	cherokee_buffer_t *log;
-
-	/* Get the buffer
-	 */
-	cherokee_logger_writer_get_buf (logger->writer_access, &log);
-
-	ret = cherokee_buffer_add (log, string, strlen(string));
- 	if (unlikely (ret != ret_ok))
-		goto error;
-
-	/* Flush buffer if full
-	 */  
-  	if (log->len < logger->writer_access->max_bufsize)
-		goto ok;
-
-	ret = cherokee_logger_writer_flush (logger->writer_access, true);
-	if (unlikely (ret != ret_ok))
-		goto error;
-
-ok:
-	cherokee_logger_writer_release_buf (logger->writer_access);
-	return ret_ok;
-
-error:
-	cherokee_logger_writer_release_buf (logger->writer_access);
-	return ret_error;
-}
-
-
 ret_t
 cherokee_logger_ncsa_write_access (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt)
 {
@@ -368,7 +334,8 @@ error:
 
 
 ret_t 
-cherokee_logger_ncsa_write_error (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt)
+cherokee_logger_ncsa_write_error (cherokee_logger_ncsa_t *logger,
+				  cherokee_buffer_t      *error)
 {
 	ret_t              ret;
 	cherokee_buffer_t *log;
@@ -379,22 +346,25 @@ cherokee_logger_ncsa_write_error (cherokee_logger_ncsa_t *logger, cherokee_conne
 
 	/* Add the new string
 	 */
-	ret = build_log_string (logger, cnt, log);
-	if (unlikely (ret != ret_ok))
-		goto error;
+	ret = cherokee_buffer_add_buffer (log, error);
+	if (unlikely (ret != ret_ok)) {
+		ret = ret_error;
+		goto out;
+	}
 
-	/* It's an error. Flush it!
+	/* It's an error, flush it right away.
 	 */
 	ret = cherokee_logger_writer_flush (logger->writer_error, true);
-	if (unlikely (ret != ret_ok))
-		goto error;
+	if (unlikely (ret != ret_ok)) {
+		ret = ret_error;
+		goto out;
+	}
 
-	cherokee_logger_writer_release_buf (logger->writer_error);
-	return ret_ok;
+	ret = ret_ok;
 
-error:
+out:
 	cherokee_logger_writer_release_buf (logger->writer_error);
-	return ret_error;
+	return ret;
 }
 
 

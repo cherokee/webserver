@@ -29,6 +29,7 @@
 #include "connection-protected.h"
 #include "handler_fastcgi.h"
 #include "source_interpreter.h"
+#include "error_log.h"
 
 #include <unistd.h>
 
@@ -287,11 +288,7 @@ process_package (cherokee_fcgi_manager_t *mgr, cherokee_buffer_t *inbuf)
 	switch (type) {
 	case FCGI_STDERR: 
 		if (CONN_VSRV(conn)->logger != NULL) {
-			cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-			
-			cherokee_buffer_add (&tmp, data, len);
-			cherokee_logger_write_string (CONN_VSRV(conn)->logger, "%s\n", tmp.buf);
-			cherokee_buffer_mrproper (&tmp);		
+			LOG_ERROR ("%s\n", data);
 		}
 		exit(1);
 		break;

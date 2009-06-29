@@ -24,6 +24,8 @@
 
 #include "common-internal.h"
 #include "util.h"
+#include "logger.h"
+#include "bogotime.h"
 
 #include <stdlib.h>
 #include <stdarg.h>
@@ -1307,6 +1309,26 @@ cherokee_get_shell (const char **shell, const char **binary)
 
 	*binary = &t1[1];
 
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_buf_add_bogonow (cherokee_buffer_t  *buf,
+			  cherokee_boolean_t  update)
+{
+	if (update) {
+		cherokee_bogotime_try_update();
+	}
+
+	cherokee_buffer_add_va (buf, "[%02d/%02d/%d %02d:%02d:%02d.%03d]",
+				cherokee_bogonow_tmloc.tm_mday, 
+				cherokee_bogonow_tmloc.tm_mon, 
+				cherokee_bogonow_tmloc.tm_year + 1900,
+				cherokee_bogonow_tmloc.tm_hour, 
+				cherokee_bogonow_tmloc.tm_min, 
+				cherokee_bogonow_tmloc.tm_sec,
+				cherokee_bogonow_tv.tv_usec / 1000);
 	return ret_ok;
 }
 

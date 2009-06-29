@@ -448,7 +448,6 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 	LOGGER(n)->get_error_writer = (logger_func_get_error_writer_t)  cherokee_logger_custom_get_error_writer;
 	LOGGER(n)->write_error      = (logger_func_write_error_t) cherokee_logger_custom_write_error;
 	LOGGER(n)->write_access     = (logger_func_write_access_t) cherokee_logger_custom_write_access;
-	LOGGER(n)->write_string     = (logger_func_write_string_t) cherokee_logger_custom_write_string;
 
 	/* Init properties
 	 */
@@ -585,7 +584,7 @@ error:
 
 ret_t
 cherokee_logger_custom_write_error (cherokee_logger_custom_t *logger,
-				    cherokee_connection_t    *conn)
+				    cherokee_buffer_t        *error)
 {
 	ret_t              ret;
 	cherokee_buffer_t *log;
@@ -594,28 +593,27 @@ cherokee_logger_custom_write_error (cherokee_logger_custom_t *logger,
 	 */
 	cherokee_logger_writer_get_buf (logger->writer_error, &log);
 
-	/* Render the template
+	/* Add the new string
 	 */
-	ret = cherokee_template_render (&logger->template_error, log, conn);
+	ret = cherokee_buffer_add_buffer (log, error);
 	if (unlikely (ret != ret_ok)) {
-		goto error;
+		ret = ret_error;
+		goto out;
 	}
 
-	cherokee_buffer_add_char (log, '\n');
-
-	/* It's an error. Flush it!
+	/* It's an error, flush it right away.
 	 */
 	ret = cherokee_logger_writer_flush (logger->writer_error, true);
 	if (unlikely (ret != ret_ok)) {
-		goto error;
+		ret = ret_error;
+		goto out;
 	}
 
-	cherokee_logger_writer_release_buf (logger->writer_error);
-	return ret_ok;
+	ret = ret_ok;
 
-error:
+out:
 	cherokee_logger_writer_release_buf (logger->writer_error);
-	return ret_error;
+	return ret;
 }
 
 ret_t

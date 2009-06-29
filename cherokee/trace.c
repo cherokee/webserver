@@ -151,15 +151,8 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	}
 
 	if (trace.print_time) {
-		cherokee_bogotime_try_update();
-		cherokee_buffer_add_va (&entries, "[%02d/%02d/%d %02d:%02d:%02d.%03d] ",
-					cherokee_bogonow_tmloc.tm_mday, 
-					cherokee_bogonow_tmloc.tm_mon, 
-					cherokee_bogonow_tmloc.tm_year + 1900,
-					cherokee_bogonow_tmloc.tm_hour, 
-					cherokee_bogonow_tmloc.tm_min, 
-					cherokee_bogonow_tmloc.tm_sec,
-					cherokee_bogonow_tv.tv_usec / 1000);
+		cherokee_buf_add_bogonow (&entries, true);
+		cherokee_buffer_add_char (&entries, ' ');
 	}
 	
 	cherokee_buffer_add_va (&entries, "%18s:%04d (%30s): ", file, line, func);
