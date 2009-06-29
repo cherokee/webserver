@@ -57,7 +57,6 @@ VALIDATOR_METHODS = [
 LOGGERS = [
     ('',           N_('None')),
     ('combined',   N_('Apache compatible')),
-    ('w3c',        N_('W3C')),
     ('ncsa',       N_('NCSA')),
     ('custom',     N_('Custom'))
 ]

@@ -539,68 +539,49 @@ class PageVServer (PageMenu, FormHelper):
         if format:
             writers = ''
 
-            # Accesses & Error together
-            if format == 'w3c':
-                cfg_key = "%s!all!type"%(pre)
-                table = TableProps()
-                self.AddPropOptions_Ajax (table, _('Accesses and Errors'), cfg_key, 
-                                          LOGGER_WRITERS, _(NOTE_ACCESSES_ERRORS))
-                writers += str(table)
+            # Accesses
+            cfg_key = "%s!access!type"%(pre)
+            table = TableProps()
+            self.AddPropOptions_Ajax (table, _('Accesses'), cfg_key, LOGGER_WRITERS, _(NOTE_ACCESSES))
+            writers += str(table)
 
-                all = self._cfg.get_val(cfg_key)
-                if not all or all == 'file':
-                    t1 = TableProps()
-                    self.AddPropEntry (t1, _('Filename'), '%s!all!filename'%(pre), _(NOTE_WRT_FILE))
-                    writers += str(t1)
-                elif all == 'exec':
-                    t1 = TableProps()
-                    self.AddPropEntry (t1, _('Command'), '%s!all!command'%(pre), _(NOTE_WRT_EXEC))
-                    writers += str(t1)
+            access = self._cfg.get_val(cfg_key)
+            if not access or access == 'file':
+                t1 = TableProps()
+                self.AddPropEntry (t1, _('Filename'), '%s!access!filename'%(pre), _(NOTE_WRT_FILE))
+                writers += str(t1)
+            elif access == 'exec':
+                t1 = TableProps()
+                self.AddPropEntry (t1, _('Command'), '%s!access!command'%(pre), _(NOTE_WRT_EXEC))
+                writers += str(t1)
 
-            else:
-                # Accesses
-                cfg_key = "%s!access!type"%(pre)
-                table = TableProps()
-                self.AddPropOptions_Ajax (table, _('Accesses'), cfg_key, LOGGER_WRITERS, _(NOTE_ACCESSES))
-                writers += str(table)
+            if format == 'custom':
+                t2 = TableProps()
+                self._add_logger_template(t2, pre, 'access')
+                writers += str(t2)
 
-                access = self._cfg.get_val(cfg_key)
-                if not access or access == 'file':
-                    t1 = TableProps()
-                    self.AddPropEntry (t1, _('Filename'), '%s!access!filename'%(pre), _(NOTE_WRT_FILE))
-                    writers += str(t1)
-                elif access == 'exec':
-                    t1 = TableProps()
-                    self.AddPropEntry (t1, _('Command'), '%s!access!command'%(pre), _(NOTE_WRT_EXEC))
-                    writers += str(t1)
+            writers += "<hr />"
 
-                if format == 'custom':
-                    t2 = TableProps()
-                    self._add_logger_template(t2, pre, 'access')
-                    writers += str(t2)
+            # Error
+            cfg_key = "%s!error!type"%(pre)
+            table = TableProps()
+            self.AddPropOptions_Ajax (table, _('Errors'), cfg_key, LOGGER_WRITERS, _(NOTE_ERRORS))
+            writers += str(table)
 
-                writers += "<hr />"
+            error = self._cfg.get_val(cfg_key)
+            if not error or error == 'file':
+                t1 = TableProps()
+                self.AddPropEntry (t1, _('Filename'), '%s!error!filename'%(pre), _(NOTE_WRT_FILE))
+                writers += str(t1)
+            elif error == 'exec':
+                t1 = TableProps()
+                self.AddPropEntry (t1, _('Command'), '%s!error!command'%(pre), _(NOTE_WRT_EXEC))
+                writers += str(t1)
 
-                # Error
-                cfg_key = "%s!error!type"%(pre)
-                table = TableProps()
-                self.AddPropOptions_Ajax (table, _('Errors'), cfg_key, LOGGER_WRITERS, _(NOTE_ERRORS))
-                writers += str(table)
-
-                error = self._cfg.get_val(cfg_key)
-                if not error or error == 'file':
-                    t1 = TableProps()
-                    self.AddPropEntry (t1, _('Filename'), '%s!error!filename'%(pre), _(NOTE_WRT_FILE))
-                    writers += str(t1)
-                elif error == 'exec':
-                    t1 = TableProps()
-                    self.AddPropEntry (t1, _('Command'), '%s!error!command'%(pre), _(NOTE_WRT_EXEC))
-                    writers += str(t1)
-
-                if format == 'custom':
-                    t2 = TableProps()
-                    self._add_logger_template(t2, pre, 'error')
-                    writers += str(t2)
+            if format == 'custom':
+                t2 = TableProps()
+                self._add_logger_template(t2, pre, 'error')
+                writers += str(t2)
 
             txt += '<h2>%s</h2>' % (_('Writers'))
             txt += self.Indent(writers)
@@ -695,11 +676,7 @@ class PageVServer (PageMenu, FormHelper):
             return
 
         to_be_deleted = []
-        if logger == 'w3c':
-            to_be_deleted.append('%s!access' % cfg_key)
-            to_be_deleted.append('%s!error' % cfg_key)
-        else:
-            to_be_deleted.append('%s!all' % cfg_key)
+        to_be_deleted.append('%s!all' % cfg_key)
 
         for entry in self._cfg[cfg_key]:
             if logger == "stderr" or \
