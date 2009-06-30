@@ -191,6 +191,8 @@ class PageVServer (PageMenu, FormHelper):
         self._cfg['%s!match'%(pre)] = _type
         rule_module.apply_cfg (filtered_post)
 
+        del(self._cfg['tmp!new_rule'])
+
         # Get to the details page
         return "%s/rule/%d" % (url_prefix, priority)
 
