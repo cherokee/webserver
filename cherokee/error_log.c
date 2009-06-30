@@ -36,7 +36,8 @@ cherokee_error_log_set_log (cherokee_logger_t *logger)
 }
 
 ret_t
-cherokee_error_log (cherokee_error_type_t type, const char *format, ...)
+cherokee_error_log (cherokee_error_type_t type, 
+		    const char *format, ...)
 {
 	va_list            ap;
 	cherokee_logger_t *logger; 
@@ -89,7 +90,10 @@ cherokee_error_log (cherokee_error_type_t type, const char *format, ...)
 }
 
 
-ret_t cherokee_error_errno_log (int error, cherokee_error_type_t type, const char *format, ...)
+ret_t
+cherokee_error_errno_log (int                    error,
+			  cherokee_error_type_t  type,
+			  const char            *format, ...)
 {
 	va_list           ap;
 	const char       *errstr;

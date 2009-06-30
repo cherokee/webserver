@@ -219,7 +219,7 @@ do_download__has_headers (cherokee_downloader_t *downloader, void *param)
 		cherokee_header_get_length (hdr, &len);
 		written = write (output_fd, hdr->input_buffer->buf, len);
 		if (written < 0) {
-			PRINT_ERROR_S ("Can not write to output file\n");
+			PRINT_MSG_S ("ERROR: Can not write to output file\n");
 			return ret_error;
 		}
 	}
@@ -387,7 +387,7 @@ main (int argc, char **argv)
 			} else {
 				global_fd = open (optarg, O_WRONLY | O_CREAT, 0644);
 				if (global_fd < 0) {
-					PRINT_ERROR ("ERROR: Can not open %s\n", optarg);
+					PRINT_MSG ("ERROR: Can not open %s\n", optarg);
 					return EXIT_ERROR;
 				}
 			}

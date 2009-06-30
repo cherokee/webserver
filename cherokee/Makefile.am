@@ -1283,7 +1283,12 @@ config_reader.c \
 bogotime.h \
 bogotime.c \
 cache.h \
-cache.c
+cache.c \
+logger.h \
+logger.c \
+logger_writer.h \
+logger_writer.c
+
 
 libcherokee_client_la_SOURCES = \
 url.h \
@@ -1418,10 +1423,6 @@ virtual_server.h \
 virtual_server.c \
 encoder.h \
 encoder.c \
-logger.h \
-logger.c \
-logger_writer.h \
-logger_writer.c \
 thread.h \
 thread.c \
 plugin.h \
