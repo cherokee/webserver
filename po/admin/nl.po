@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-06-23 17:21+0200\n"
+"POT-Creation-Date: 2009-07-01 15:57+0200\n"
 "PO-Revision-Date: 2009-05-21 22:35+0200\n"
 "Last-Translator: Stefan de Konink <stefan@konink.de>\n"
 "Language-Team: none\n"
@@ -125,11 +125,11 @@ msgstr "Informatie Bronnen"
 
 #: admin/ModuleBalancer.py:57 admin/PageInfoSource.py:167
 #: admin/PageInfoSource.py:194 admin/PageInfoSource.py:222
-#: admin/PageInfoSource.py:272
+#: admin/PageInfoSource.py:274
 msgid "Nick"
 msgstr "Naam"
 
-#: admin/ModuleBalancer.py:57 admin/ModuleMysql.py:39
+#: admin/ModuleBalancer.py:57 admin/ModuleMysql.py:44
 msgid "Host"
 msgstr "Systeem"
 
@@ -145,7 +145,7 @@ msgstr "Het is al aan het verdelen tussen alle geconfigureerde"
 msgid "information sources"
 msgstr "informatien bronnen"
 
-#: admin/ModuleBalancer.py:76 admin/consts.py:140
+#: admin/ModuleBalancer.py:76 admin/consts.py:139
 msgid "Choose.."
 msgstr "Kies.."
 
@@ -154,7 +154,7 @@ msgid "Application Server"
 msgstr "Applicatie Server"
 
 #: admin/ModuleBind.py:21 admin/ModuleBind.py:22 admin/ModuleBind.py:47
-#: admin/ModuleLdap.py:36 admin/ModuleMysql.py:40 admin/PageGeneral.py:111
+#: admin/ModuleLdap.py:36 admin/ModuleMysql.py:45 admin/PageGeneral.py:111
 msgid "Port"
 msgstr "Poort"
 
@@ -163,7 +163,7 @@ msgstr "Poort"
 msgid "Choose"
 msgstr "Kies"
 
-#: admin/ModuleBind.py:35 admin/ModuleBind.py:82 admin/consts.py:133
+#: admin/ModuleBind.py:35 admin/ModuleBind.py:82 admin/consts.py:132
 msgid "Incoming Port"
 msgstr "Binnenkomende Poort"
 
@@ -179,11 +179,11 @@ msgstr "Verbind aan"
 msgid "TLS"
 msgstr "TLS"
 
-#: admin/ModuleBind.py:53 admin/PageVServer.py:342 admin/PageVServers.py:147
+#: admin/ModuleBind.py:53 admin/PageVServer.py:344 admin/PageVServers.py:147
 msgid "No"
 msgstr "Nee"
 
-#: admin/ModuleBind.py:53 admin/PageVServer.py:341 admin/PageVServers.py:146
+#: admin/ModuleBind.py:53 admin/PageVServer.py:343 admin/PageVServers.py:146
 msgid "Yes"
 msgstr "Ja"
 
@@ -235,7 +235,7 @@ msgstr "Script Alias"
 msgid "Change UID"
 msgstr "Wijzig UID"
 
-#: admin/ModuleCgi.py:50 admin/PageVServer.py:257
+#: admin/ModuleCgi.py:50 admin/PageVServer.py:259
 msgid "Error handler"
 msgstr "Fout afhandelaar"
 
@@ -336,11 +336,11 @@ msgstr "Achtereenschakelen"
 msgid "Language"
 msgstr "Taal"
 
-#: admin/ModuleDbslayer.py:44 admin/ModuleMysql.py:42 admin/ModuleMysql.py:54
+#: admin/ModuleDbslayer.py:44 admin/ModuleMysql.py:47 admin/ModuleMysql.py:63
 msgid "DB User"
 msgstr "DB Gebruiker"
 
-#: admin/ModuleDbslayer.py:45 admin/ModuleMysql.py:43
+#: admin/ModuleDbslayer.py:45 admin/ModuleMysql.py:48
 msgid "DB Password"
 msgstr "DB Wachtwoord"
 
@@ -386,47 +386,56 @@ msgstr "Lijst van bestanden die mogen worden weergegeven."
 msgid "Only listing"
 msgstr "Alleen lijst"
 
-#: admin/ModuleDirlist.py:41
+#: admin/ModuleDirlist.py:42
 msgid "Listing"
 msgstr "Lijst"
 
-#: admin/ModuleDirlist.py:43
+#: admin/ModuleDirlist.py:44
 msgid "Show Size"
 msgstr "Toon grootte"
 
-#: admin/ModuleDirlist.py:44
+#: admin/ModuleDirlist.py:45
 msgid "Show Date"
 msgstr "Toon Datum"
 
-#: admin/ModuleDirlist.py:45
+#: admin/ModuleDirlist.py:46
 msgid "Show User"
 msgstr "Toon Gebruiker"
 
-#: admin/ModuleDirlist.py:46
+#: admin/ModuleDirlist.py:47
 msgid "Show Group"
 msgstr "Toon Groep"
 
-#: admin/ModuleDirlist.py:47
+#: admin/ModuleDirlist.py:48
+msgid "Show Backup files"
+msgstr ""
+
+#: admin/ModuleDirlist.py:49
+#, fuzzy
+msgid "Show Hidden files"
+msgstr "Verborgen bestanden"
+
+#: admin/ModuleDirlist.py:50
 msgid "Allow symbolic links"
 msgstr "Sta symbolische koppeling toe"
 
-#: admin/ModuleDirlist.py:50
+#: admin/ModuleDirlist.py:53
 msgid "Theming"
 msgstr "Thema's"
 
-#: admin/ModuleDirlist.py:53
+#: admin/ModuleDirlist.py:56
 msgid "Theme"
 msgstr "Thema"
 
-#: admin/ModuleDirlist.py:54
+#: admin/ModuleDirlist.py:57
 msgid "Icons dir"
 msgstr "Icoon map"
 
-#: admin/ModuleDirlist.py:55
+#: admin/ModuleDirlist.py:58
 msgid "Notice files"
 msgstr "Notificatie bestanden"
 
-#: admin/ModuleDirlist.py:56
+#: admin/ModuleDirlist.py:59
 msgid "Hidden files"
 msgstr "Verborgen bestanden"
 
@@ -434,11 +443,11 @@ msgstr "Verborgen bestanden"
 msgid "1x1 Empty GIF"
 msgstr "1x1 Lege GIF"
 
-#: admin/ModuleErrorRedir.py:13 admin/consts.py:106
+#: admin/ModuleErrorRedir.py:13 admin/consts.py:105
 msgid "Internal"
 msgstr "Interne"
 
-#: admin/ModuleErrorRedir.py:14 admin/consts.py:105
+#: admin/ModuleErrorRedir.py:14 admin/consts.py:104
 msgid "External"
 msgstr "Externe"
 
@@ -458,7 +467,7 @@ msgstr "Herleiding"
 #: admin/ModuleErrorRedir.py:41 admin/ModuleErrorRedir.py:52
 #: admin/ModuleRedir.py:35 admin/PageInfoSource.py:166
 #: admin/PageInfoSource.py:193 admin/PageInfoSource.py:222
-#: admin/PageVServer.py:345
+#: admin/PageVServer.py:347
 msgid "Type"
 msgstr "Type"
 
@@ -554,7 +563,7 @@ msgstr ""
 msgid "Any file"
 msgstr "Willekeurig bestand"
 
-#: admin/ModuleExists.py:86 admin/consts.py:131
+#: admin/ModuleExists.py:86 admin/consts.py:130
 msgid "File Exists"
 msgstr "Bestand Bestaat"
 
@@ -569,7 +578,7 @@ msgstr ""
 #: admin/ModuleExtensions.py:22 admin/ModuleExtensions.py:24
 #: admin/PageIcon.py:123 admin/PageIcon.py:142 admin/PageIcon.py:147
 #: admin/PageMime.py:95 admin/PageMime.py:113 admin/PageMime.py:123
-#: admin/consts.py:128
+#: admin/consts.py:127
 msgid "Extensions"
 msgstr "Extenties"
 
@@ -628,13 +637,13 @@ msgid "Regular expression."
 msgstr "Reguliere expressie."
 
 #: admin/ModuleHeader.py:35 admin/ModuleHeader.py:37 admin/ModuleProxy.py:100
-#: admin/ModuleProxy.py:126 admin/consts.py:130
+#: admin/ModuleProxy.py:126 admin/consts.py:129
 msgid "Header"
 msgstr "Hoofdregel"
 
 #: admin/ModuleHeader.py:38 admin/ModuleProxy.py:156 admin/ModuleRedir.py:35
 #: admin/ModuleRedir.py:52 admin/ModuleRequest.py:22 admin/ModuleRequest.py:24
-#: admin/ModuleRequest.py:41 admin/consts.py:129
+#: admin/ModuleRequest.py:41 admin/consts.py:128
 msgid "Regular Expression"
 msgstr "Reguliere Expressie"
 
@@ -741,7 +750,7 @@ msgstr "LDAP verbinding"
 msgid "The HTTP method that should match this rule."
 msgstr "De HTTP methode dat deze regel beschrijft."
 
-#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:520
+#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:522
 msgid "Method"
 msgstr "Methode"
 
@@ -784,35 +793,36 @@ msgstr ""
 
 #: admin/ModuleMysql.py:14
 msgid ""
-"Active to use MD5 passwords. Only suitable for the \"Basic\" authentication "
-"mechanism."
+"Choose an encryption type for the password. Only suitable for the \"Basic\" "
+"authentication mechanism."
 msgstr ""
 
-#: admin/ModuleMysql.py:41
+#: admin/ModuleMysql.py:46
 msgid "Unix Socket"
 msgstr "Unix Socket"
 
-#: admin/ModuleMysql.py:44 admin/ModuleMysql.py:56
+#: admin/ModuleMysql.py:49 admin/ModuleMysql.py:65
 msgid "Database"
 msgstr "Databank"
 
-#: admin/ModuleMysql.py:45
+#: admin/ModuleMysql.py:50
 msgid "SQL Query"
 msgstr "SQL Query"
 
-#: admin/ModuleMysql.py:46
-msgid "Use MD5 Passwords"
-msgstr "Gebruik MD5 Wachtwoorden"
+#: admin/ModuleMysql.py:53 admin/ModuleMysql.py:55
+#, fuzzy
+msgid "Password Hash"
+msgstr "Wachtwoord"
 
-#: admin/ModuleMysql.py:48
+#: admin/ModuleMysql.py:57
 msgid "MySQL connection"
 msgstr "MySQL verbinding"
 
-#: admin/ModuleMysql.py:55
+#: admin/ModuleMysql.py:64
 msgid "SQL query"
 msgstr "SQL query"
 
-#: admin/ModuleMysql.py:58
+#: admin/ModuleMysql.py:67
 msgid " can not be empty"
 msgstr " can niet leeg zijn"
 
@@ -906,12 +916,12 @@ msgstr "Verberg regel"
 msgid "Header addition"
 msgstr "Regel toevoeging"
 
-#: admin/ModuleProxy.py:156 admin/ModuleProxy.py:179 admin/ModuleRedir.py:35
+#: admin/ModuleProxy.py:156 admin/ModuleProxy.py:178 admin/ModuleRedir.py:35
 #: admin/ModuleRedir.py:53
 msgid "Substitution"
 msgstr "Vervanging"
 
-#: admin/ModuleProxy.py:179
+#: admin/ModuleProxy.py:178
 msgid "Add RegEx"
 msgstr "Voeg Reguliere Expressie toe"
 
@@ -938,7 +948,7 @@ msgid "Redirections"
 msgstr "Herleidingen."
 
 #: admin/ModuleRedir.py:15 admin/ModuleRehost.py:24 admin/ModuleRehost.py:28
-#: admin/consts.py:142
+#: admin/consts.py:141
 msgid "Regular Expressions"
 msgstr "Reguliere Expressies"
 
@@ -950,7 +960,7 @@ msgstr "Regel lijst"
 msgid "Show"
 msgstr "Toon"
 
-#: admin/ModuleRedir.py:55 admin/PageVServer.py:238 admin/PageVServer.py:314
+#: admin/ModuleRedir.py:55 admin/PageVServer.py:240 admin/PageVServer.py:316
 msgid "Add new rule"
 msgstr "Voeg nieuwe regel toe"
 
@@ -968,7 +978,7 @@ msgid "New Regular Expression"
 msgstr "Nieuwe Reguliere Expressie"
 
 #: admin/ModuleRehost.py:53 admin/ModuleWildcard.py:53
-#: admin/PageInfoSource.py:236
+#: admin/PageInfoSource.py:238
 msgid "Add new"
 msgstr "Voeg toe"
 
@@ -1112,7 +1122,7 @@ msgid "Help"
 msgstr "Hulp"
 
 #: admin/Page.py:151 admin/PageAdvanced.py:108 admin/PageStatus.py:67
-#: admin/PageVServer.py:488
+#: admin/PageVServer.py:490
 msgid "Status"
 msgstr "Status"
 
@@ -1476,16 +1486,16 @@ msgstr ""
 msgid "Behavior rules"
 msgstr "Gedrag regels"
 
-#: admin/PageEntry.py:152 admin/PageInfoSource.py:272
+#: admin/PageEntry.py:152 admin/PageInfoSource.py:274
 msgid "Rule"
 msgstr "Regel"
 
 #: admin/PageEntry.py:156 admin/PageEntry.py:164 admin/PageEntry.py:166
-#: admin/PageVServer.py:345
+#: admin/PageVServer.py:347
 msgid "Handler"
 msgstr "Uitvoerder"
 
-#: admin/PageEntry.py:161 admin/PageVServer.py:507 admin/PageVServers.py:262
+#: admin/PageEntry.py:161 admin/PageVServer.py:509 admin/PageVServers.py:262
 msgid "Document Root"
 msgstr "Hoofdmap"
 
@@ -1497,7 +1507,7 @@ msgstr "Encodering"
 msgid "Expiration"
 msgstr "Vervaltijd"
 
-#: admin/PageEntry.py:177 admin/PageVServer.py:265
+#: admin/PageEntry.py:177 admin/PageVServer.py:267
 msgid "Security"
 msgstr "Beveiliging"
 
@@ -1525,7 +1535,7 @@ msgstr "Inhoud Vervaltijd"
 msgid "Authentication"
 msgstr "Authenticatie"
 
-#: admin/PageEntry.py:239 admin/PageVServer.py:261 admin/PageVServers.py:144
+#: admin/PageEntry.py:239 admin/PageVServer.py:263 admin/PageVServers.py:144
 msgid "Logging"
 msgstr "Logging"
 
@@ -1622,8 +1632,8 @@ msgstr "Rapport"
 msgid "Feedback: Thank you"
 msgstr "Reactie: Bedankt"
 
-#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:370
-#: admin/consts.py:88
+#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:372
+#: admin/consts.py:87
 msgid "Default"
 msgstr "Standaard"
 
@@ -1704,7 +1714,7 @@ msgstr "Configuratie Snelstart"
 msgid "General Settings"
 msgstr "Algemene instellingen"
 
-#: admin/PageGeneral.py:58 admin/PageVServer.py:511
+#: admin/PageGeneral.py:58 admin/PageVServer.py:513
 msgid "Network"
 msgstr "Netwerk"
 
@@ -1798,7 +1808,7 @@ msgid "Match"
 msgstr "Overeenkomst"
 
 #: admin/PageIcon.py:156 admin/PageIcon.py:172 admin/PageIcon.py:188
-#: admin/consts.py:66
+#: admin/consts.py:65
 msgid "File"
 msgstr "Bestand"
 
@@ -1806,7 +1816,7 @@ msgstr "Bestand"
 msgid "Add new file match"
 msgstr "Voeg nieuwe bestandsovereenkomst toe"
 
-#: admin/PageIcon.py:190 admin/consts.py:127
+#: admin/PageIcon.py:190 admin/consts.py:126
 msgid "Directory"
 msgstr "Map"
 
@@ -1922,23 +1932,23 @@ msgstr "Informatie Bron Instellingen"
 msgid "Known sources"
 msgstr "Bekende bronnen"
 
-#: admin/PageInfoSource.py:230
+#: admin/PageInfoSource.py:232
 msgid "Deletion forbidden. Check source usage."
 msgstr "Verwijdering voorkomen. Controleer bron gebruik."
 
-#: admin/PageInfoSource.py:245
+#: admin/PageInfoSource.py:247
 msgid "Details:"
 msgstr "Defails:"
 
-#: admin/PageInfoSource.py:251
+#: admin/PageInfoSource.py:253
 msgid "Add a new"
 msgstr "Voeg een nieuwe toe"
 
-#: admin/PageInfoSource.py:260
+#: admin/PageInfoSource.py:262
 msgid "Source usage"
 msgstr "Bron gebruik"
 
-#: admin/PageInfoSource.py:272
+#: admin/PageInfoSource.py:274
 msgid "Virtual server"
 msgstr "Virtuele server"
 
@@ -2329,207 +2339,203 @@ msgstr "Loggers"
 msgid "SSL cookbook"
 msgstr "SSL kookboek"
 
-#: admin/PageVServer.py:201 admin/PageVServer.py:212 admin/PageVServers.py:275
+#: admin/PageVServer.py:203 admin/PageVServer.py:214 admin/PageVServers.py:275
 msgid "Virtual Server"
 msgstr "Virtuele Server"
 
-#: admin/PageVServer.py:216
+#: admin/PageVServer.py:218
 msgid "Basics"
 msgstr "Basis"
 
-#: admin/PageVServer.py:239 admin/PageVServers.py:298
+#: admin/PageVServer.py:241 admin/PageVServers.py:298
 #, fuzzy
 msgid "Wizards"
 msgstr "Jokers"
 
-#: admin/PageVServer.py:242
+#: admin/PageVServer.py:244
 msgid "Behavior"
 msgstr "Gedrag"
 
-#: admin/PageVServer.py:253
+#: admin/PageVServer.py:255
 msgid "Personal Webs"
 msgstr "Persoonlijke webs"
 
-#: admin/PageVServer.py:274
+#: admin/PageVServer.py:276
 msgid "Required SSL/TLS values"
 msgstr "Verplichte SSL/TLS waarden"
 
-#: admin/PageVServer.py:276
+#: admin/PageVServer.py:278
 msgid "Certificate"
 msgstr "Certificaat"
 
-#: admin/PageVServer.py:277
+#: admin/PageVServer.py:279
 msgid "Certificate key"
 msgstr "Certificaat sleutel"
 
-#: admin/PageVServer.py:280
+#: admin/PageVServer.py:282
 msgid "Advanced options"
 msgstr "Uitgebreide opties"
 
-#: admin/PageVServer.py:282
+#: admin/PageVServer.py:284
 msgid "Ciphers"
 msgstr "Versleutelingen"
 
-#: admin/PageVServer.py:283
+#: admin/PageVServer.py:285
 msgid "Client Certs. Request"
 msgstr "Gebruiker Certificaat Aanvragen"
 
-#: admin/PageVServer.py:290
+#: admin/PageVServer.py:292
 msgid "CA List"
 msgstr "CA lijst"
 
-#: admin/PageVServer.py:294
+#: admin/PageVServer.py:296
 #, fuzzy
 msgid "Verify Depth"
 msgstr "Verifieer Diepte"
 
-#: admin/PageVServer.py:303
+#: admin/PageVServer.py:305
 msgid "Error Handling hook"
 msgstr ""
 
-#: admin/PageVServer.py:305
+#: admin/PageVServer.py:307
 msgid "Error Handler"
 msgstr "Fout afhandelaar"
 
-#: admin/PageVServer.py:316 admin/Rule.py:157
+#: admin/PageVServer.py:318 admin/Rule.py:157
 msgid "Rule Type"
 msgstr "Regel Type"
 
-#: admin/PageVServer.py:345
+#: admin/PageVServer.py:347
 msgid "Target"
 msgstr "Doel"
 
-#: admin/PageVServer.py:345 admin/PageVServers.py:144
+#: admin/PageVServer.py:347 admin/PageVServers.py:144
 msgid "Root"
 msgstr "Hoofdmap"
 
-#: admin/PageVServer.py:345
+#: admin/PageVServer.py:347
 msgid "Auth"
 msgstr "Auth"
 
-#: admin/PageVServer.py:345
+#: admin/PageVServer.py:347
 msgid "Enc"
 msgstr "Enc"
 
-#: admin/PageVServer.py:345
+#: admin/PageVServer.py:347
 msgid "Exp"
 msgstr "Exp"
 
-#: admin/PageVServer.py:345
+#: admin/PageVServer.py:347
 msgid "Final"
 msgstr "Definieve"
 
-#: admin/PageVServer.py:476 admin/PageVServers.py:312
+#: admin/PageVServer.py:478 admin/PageVServers.py:312
 msgid "<h2>Wizards</h2>"
 msgstr ""
 
-#: admin/PageVServer.py:481
+#: admin/PageVServer.py:483
 msgid "/~user directories"
 msgstr "/~gebruiker mappen"
 
-#: admin/PageVServer.py:487
+#: admin/PageVServer.py:489
 msgid "Disable"
 msgstr "Zet uit"
 
-#: admin/PageVServer.py:490
+#: admin/PageVServer.py:492
 msgid "Directory name"
 msgstr "Map naam"
 
-#: admin/PageVServer.py:500
+#: admin/PageVServer.py:502
 msgid "Server ID"
 msgstr "Server ID"
 
-#: admin/PageVServer.py:502
+#: admin/PageVServer.py:504
 msgid "Virtual Server nickname"
 msgstr "Virtuele Server naam"
 
-#: admin/PageVServer.py:505
+#: admin/PageVServer.py:507
 msgid "Paths"
 msgstr "Paden"
 
-#: admin/PageVServer.py:508
+#: admin/PageVServer.py:510
 msgid "Directory Indexes"
 msgstr "Map indices"
 
-#: admin/PageVServer.py:513
+#: admin/PageVServer.py:515
 msgid "Keep-alive"
 msgstr "Blijf-inleven"
 
-#: admin/PageVServer.py:514
+#: admin/PageVServer.py:516
 msgid "Max Upload Size"
 msgstr "Max Upload grootte"
 
-#: admin/PageVServer.py:515
+#: admin/PageVServer.py:517
 msgid "Traffic Statistics"
 msgstr "Verkeer Statistieken"
 
-#: admin/PageVServer.py:518
+#: admin/PageVServer.py:520
 msgid "Advanced Virtual Hosting"
 msgstr "Geavanceerde Virtuele Hosting"
 
-#: admin/PageVServer.py:532
+#: admin/PageVServer.py:534
 msgid "Logging Format"
 msgstr "Logging Formaat"
 
-#: admin/PageVServer.py:534
+#: admin/PageVServer.py:536
 msgid "Format"
 msgstr "Formaat"
 
-#: admin/PageVServer.py:546
-msgid "Accesses and Errors"
-msgstr ""
-
-#: admin/PageVServer.py:553 admin/PageVServer.py:570 admin/PageVServer.py:593
-msgid "Filename"
-msgstr "Bestandsnaam"
-
-#: admin/PageVServer.py:557 admin/PageVServer.py:574 admin/PageVServer.py:597
-msgid "Command"
-msgstr "Commando"
-
-#: admin/PageVServer.py:564
+#: admin/PageVServer.py:547
 #, fuzzy
 msgid "Accesses"
 msgstr "Toegang"
 
-#: admin/PageVServer.py:587
+#: admin/PageVServer.py:553 admin/PageVServer.py:576
+msgid "Filename"
+msgstr "Bestandsnaam"
+
+#: admin/PageVServer.py:557 admin/PageVServer.py:580
+msgid "Command"
+msgstr "Commando"
+
+#: admin/PageVServer.py:570
 msgid "Errors"
 msgstr "Fouten"
 
-#: admin/PageVServer.py:605
+#: admin/PageVServer.py:588
 msgid "Writers"
 msgstr "Schrijvers"
 
-#: admin/PageVServer.py:608
+#: admin/PageVServer.py:591
 msgid "Options"
 msgstr "Opties"
 
-#: admin/PageVServer.py:614
+#: admin/PageVServer.py:597
 msgid "Accept Forwarded IPs"
 msgstr ""
 
-#: admin/PageVServer.py:616
+#: admin/PageVServer.py:599
 msgid "Don't check origin"
 msgstr ""
 
-#: admin/PageVServer.py:618
+#: admin/PageVServer.py:601
 #, fuzzy
 msgid "Accept from Hosts"
 msgstr "Geaccepteerde domeinen"
 
-#: admin/PageVServer.py:626
+#: admin/PageVServer.py:609
 msgid "Host names"
 msgstr "Computer namen"
 
-#: admin/PageVServer.py:633
+#: admin/PageVServer.py:616
 msgid "Matching method"
 msgstr ""
 
-#: admin/PageVServer.py:680
+#: admin/PageVServer.py:663
 msgid "Filename must be set"
 msgstr "Bestandsnaam moet gezet zijn"
 
-#: admin/PageVServer.py:724
+#: admin/PageVServer.py:703
 msgid "Template: "
 msgstr "Sjabloon:"
 
@@ -2762,132 +2768,128 @@ msgid "Apache compatible"
 msgstr "Apache compatibel"
 
 #: admin/consts.py:60
-msgid "W3C"
-msgstr "W3C"
-
-#: admin/consts.py:61
 msgid "NCSA"
 msgstr "NCSA"
 
-#: admin/consts.py:62
+#: admin/consts.py:61
 msgid "Custom"
 msgstr "Eigen"
 
-#: admin/consts.py:67
+#: admin/consts.py:66
 msgid "System logger"
 msgstr "Systeem logger"
 
-#: admin/consts.py:68
+#: admin/consts.py:67
 msgid "Standard Error"
 msgstr "Standaard Fout"
 
-#: admin/consts.py:69
+#: admin/consts.py:68
 msgid "Execute program"
 msgstr "Voer programma uit"
 
-#: admin/consts.py:73
+#: admin/consts.py:72
 msgid "Round Robin"
 msgstr "Rond verdelen"
 
-#: admin/consts.py:74
+#: admin/consts.py:73
 msgid "IP Hash"
 msgstr "IP Hash"
 
-#: admin/consts.py:78
+#: admin/consts.py:77
 msgid "Local interpreter"
 msgstr "Lokale interpreter"
 
-#: admin/consts.py:79
+#: admin/consts.py:78
 msgid "Remote host"
 msgstr "Externe Computer"
 
-#: admin/consts.py:83
+#: admin/consts.py:82
 msgid "GZip"
 msgstr "GZip"
 
-#: admin/consts.py:84
+#: admin/consts.py:83
 msgid "Deflate"
 msgstr "Inpakken"
 
-#: admin/consts.py:89
+#: admin/consts.py:88
 msgid "FIFO"
 msgstr "FIFO"
 
-#: admin/consts.py:90
+#: admin/consts.py:89
 msgid "Round-robin"
 msgstr "Rond verdelen"
 
-#: admin/consts.py:91
+#: admin/consts.py:90
 msgid "Dynamic"
 msgstr "Dynamisch"
 
-#: admin/consts.py:95
+#: admin/consts.py:94
 msgid "Automatic"
 msgstr "Autotisch"
 
-#: admin/consts.py:132
+#: admin/consts.py:131
 msgid "HTTP Method"
 msgstr "HTTP Methode"
 
-#: admin/consts.py:134
+#: admin/consts.py:133
 #, fuzzy
 msgid "Full Path"
 msgstr "Pad"
 
-#: admin/consts.py:135
+#: admin/consts.py:134
 #, fuzzy
 msgid "Connected from"
 msgstr "Verbinding"
 
-#: admin/consts.py:136
+#: admin/consts.py:135
 msgid "GeoIP"
 msgstr "GeoIP"
 
-#: admin/consts.py:141
+#: admin/consts.py:140
 msgid "Wildcards"
 msgstr "Jokers"
 
-#: admin/consts.py:146
+#: admin/consts.py:145
 msgid "Not set"
 msgstr "Niet gezet"
 
-#: admin/consts.py:147
+#: admin/consts.py:146
 msgid "Already expired on 1970"
 msgstr "Reeks vervallen in 1970"
 
-#: admin/consts.py:148
+#: admin/consts.py:147
 msgid "Do not expire until 2038"
 msgstr "Vervalt niet tot 2038"
 
-#: admin/consts.py:149
+#: admin/consts.py:148
 msgid "Custom value"
 msgstr "Eigen waarde"
 
-#: admin/consts.py:153
+#: admin/consts.py:152
 msgid "No TLS/SSL"
 msgstr "Geen TLS/SSL"
 
-#: admin/consts.py:154
+#: admin/consts.py:153
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: admin/consts.py:158
+#: admin/consts.py:157
 msgid "Off"
 msgstr "Uit"
 
-#: admin/consts.py:159
+#: admin/consts.py:158
 msgid "Enhanced Virtual Hosting"
 msgstr "Uitgebreide Virtuele Hosting"
 
-#: admin/consts.py:163
+#: admin/consts.py:162
 msgid "Skip"
 msgstr "Sla over"
 
-#: admin/consts.py:164
+#: admin/consts.py:163
 msgid "Accept"
 msgstr "Accepteer"
 
-#: admin/consts.py:165
+#: admin/consts.py:164
 msgid "Require"
 msgstr "Vereist"
 
@@ -3007,6 +3009,12 @@ msgstr "Misvormde tijd"
 #: admin/validations.py:312
 msgid "Virtual host nick is already being used."
 msgstr ""
+
+#~ msgid "Use MD5 Passwords"
+#~ msgstr "Gebruik MD5 Wachtwoorden"
+
+#~ msgid "W3C"
+#~ msgstr "W3C"
 
 #, fuzzy
 #~ msgid "yes"
