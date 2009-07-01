@@ -113,19 +113,23 @@ cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t    *logger,
 	/* Init the logger writers
 	 */
 	ret = cherokee_config_node_get (config, "access", &subconf);
-	if (ret == ret_ok) {
-		ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &logger->writer_access);
-		if (ret != ret_ok) {
-			return ret_error;
-		}
+	if (ret != ret_ok) {
+		LOG_CRITICAL_S ("Logger NCSA: No 'access' log has been defined.\n");
+		return ret_error;
+	}
+	ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &logger->writer_access);
+	if (ret != ret_ok) {
+		return ret_error;
 	}
 
 	ret = cherokee_config_node_get (config, "error", &subconf);
-	if (ret == ret_ok) {
-		ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &logger->writer_error);
-		if (ret != ret_ok) {
-			return ret_error;
-		}
+	if (ret != ret_ok) {
+		LOG_CRITICAL_S ("Logger NCSA: No 'error' log has been defined.\n");
+		return ret_error;
+	}
+	ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &logger->writer_error);
+	if (ret != ret_ok) {
+		return ret_error;
 	}
 
 	return ret_ok;
