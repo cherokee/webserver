@@ -22,8 +22,9 @@ __database__              , Required. The MySQL database to select upon    \
                             connection.
 __query__                 , Required. The query to execute to authenticate \
                             the HTTP user.
-__use_md5_passwd__        , Optional. The passwords in the database table  \
-                            are hashed with MD5.  Default: __0__.
+__hash__                  , Optional. What the passwords in the database table \
+                            are hashed with. Valid options are __sha1__ \
+                            __md5__ or __none__. Default: __none__.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The `query` parameter is given an argument `$\{user}` so you can query
