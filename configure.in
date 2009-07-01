@@ -1190,6 +1190,10 @@ if test "x$want_ffmpeg" = "xyes"; then
 	 FFMPEG_LIBS="$FFMPEG_LIBS -lbz2"
    ])
 
+   AC_CHECK_LIB([m], [cos], [
+	 FFMPEG_LIBS="$FFMPEG_LIBS -lm"
+   ])
+
    AC_CHECK_HEADERS([libavformat/avformat.h], [
       have_ffmpeg_include=yes
    ],[have_ffmpeg_include=no]) 
