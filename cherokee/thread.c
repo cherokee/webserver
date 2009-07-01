@@ -896,6 +896,15 @@ process_active_connections (cherokee_thread_t *thd)
 			} else {
 				rules = &CONN_VSRV(conn)->rules;
 			}
+
+			/* Local directory
+			 */
+			if (cherokee_buffer_is_empty (&conn->local_directory)) {
+				if (is_userdir)
+					ret = cherokee_connection_build_local_directory_userdir (conn, CONN_VSRV(conn));
+				else
+					ret = cherokee_connection_build_local_directory (conn, CONN_VSRV(conn));
+			}
 			
 			/* Check against the rule list
 			 */
@@ -905,19 +914,14 @@ process_active_connections (cherokee_thread_t *thd)
 				continue;
 			}
 
+			/* Local directory
+			 */
+			cherokee_connection_set_custom_droot (conn, &entry);
+
 			/* Set the logger of the connection
 			 */
 			if (entry.no_log != true) {
 				conn->logger_ref = CONN_VSRV(conn)->logger;
-			}
-
-			/* Local directory
-			 */
-			if (cherokee_buffer_is_empty (&conn->local_directory)) {
-				if (is_userdir)
-					ret = cherokee_connection_build_local_directory_userdir (conn, CONN_VSRV(conn), &entry);
-				else
-					ret = cherokee_connection_build_local_directory (conn, CONN_VSRV(conn), &entry);
 			}
 
 			/* Check of the HTTP method is supported by the handler

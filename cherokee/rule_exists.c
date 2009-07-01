@@ -253,7 +253,7 @@ match (cherokee_rule_exists_t  *rule,
 		/* A previous non-final rule set a custom document root */
 		cherokee_buffer_add_buffer (tmp, ret_conf->document_root);
 	} else {
-		cherokee_buffer_add_buffer (tmp, &CONN_VSRV(conn)->root);
+		cherokee_buffer_add_buffer (tmp, &conn->local_directory);
 	}
 
 	cherokee_buffer_add_str (tmp, "/");
