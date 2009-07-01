@@ -35,6 +35,12 @@ typedef struct {
 	MYSQL		       *conn;
 } cherokee_validator_mysql_t;
 
+typedef enum {
+	cherokee_mysql_hash_none,
+	cherokee_mysql_hash_md5,
+	cherokee_mysql_hash_sha1
+} cherokee_mysql_hash_t;
+
 typedef struct {
 	cherokee_module_props_t	base;
 	
@@ -47,8 +53,7 @@ typedef struct {
 	cherokee_buffer_t	database;
 	cherokee_buffer_t	query;
 
-	cherokee_boolean_t      use_md5_passwd;
-	
+	cherokee_mysql_hash_t   hash_type;
 } cherokee_validator_mysql_props_t;
 
 #define MYSQL(x)           ((cherokee_validator_mysql_t *)(x))

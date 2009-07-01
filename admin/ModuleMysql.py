@@ -11,8 +11,13 @@ NOTE_USER   = N_('User name for connecting to the database.')
 NOTE_PASSWD = N_('Password for connecting to the database.')
 NOTE_DB     = N_('Database name containing the user/password pair list.')
 NOTE_SQL    = N_('SQL command to execute. ${user} is replaced with the user name.')
-NOTE_MD5    = N_('Active to use MD5 passwords. Only suitable for the "Basic" authentication mechanism.')
+NOTE_HASH   = N_('Choose an encryption type for the password. Only suitable for the "Basic" authentication mechanism.')
 
+HASHES = [
+    ('',     'None'),
+    ('md5',  'MD5'),
+    ('sha1', 'SHA1')
+]
 
 HELPS = [
     ('modules_validators_mysql', "MySQL")
@@ -22,7 +27,7 @@ class ModuleMysql (ModuleAuthBase):
     PROPERTIES = ModuleAuthBase.PROPERTIES + [
         'host', 'port', 'unix_socket',
         'user', 'passwd', 'database',
-        'query', 'use_md5_passwd'
+        'query', 'hash'
     ]
 
     METHODS = ['basic', 'digest']
@@ -43,7 +48,11 @@ class ModuleMysql (ModuleAuthBase):
         self.AddPropEntry (table, _("DB Password"), "%s!passwd"%(self._prefix), _(NOTE_PASSWD))
         self.AddPropEntry (table, _("Database"), "%s!database"%(self._prefix), _(NOTE_DB))
         self.AddPropEntry (table, _("SQL Query"), "%s!query"%(self._prefix), _(NOTE_SQL))
-        self.AddPropCheck (table, _('Use MD5 Passwords'), "%s!use_md5_passwd"%(self._prefix), False, _(NOTE_MD5), disabled=not is_basic)
+        
+        if not is_basic:
+            self.AddPropOptions (table, _('Password Hash'), "%s!hash"%(self._prefix), HASHES, _(NOTE_HASH), disabled=1)
+        else:
+            self.AddPropOptions (table, _('Password Hash'), "%s!hash"%(self._prefix), HASHES, _(NOTE_HASH))
 
         txt += '<h2>%s</h2>' % (_('MySQL connection'))
         txt += self.Indent(table)
@@ -57,14 +66,12 @@ class ModuleMysql (ModuleAuthBase):
             pre = '%s!%s' % (self._prefix, key)
             self.Validate_NotEmpty (post, pre, msg + _(' can not be empty'))
 
-        # Check MD5
-        md5_pre  = "%s!use_md5_passwd"%(self._prefix)
+        # Check Hash
+        hash_pre = "%s!hash"%(self._prefix)
         is_basic = (self._cfg.get_val ("%s!methods"%(self._prefix)) == "basic")
 
         if not is_basic:
-            self._cfg[md5_pre] = '0'
-
-        self.ApplyChangesPrefix (self._prefix, ['use_md5_passwd'], post)
-        post.pop('use_md5_passwd')
+            post.pop (hash_pre)
+            del(self._cfg[hash_pre])
 
         ModuleAuthBase._op_apply_changes (self, uri, post)
