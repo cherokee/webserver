@@ -49,7 +49,7 @@ match (cherokee_vrule_target_ip_t *vrule,
 
 	/* Copy the server IP
 	 */	
-	sock.client_addr = conn->socket.client_addr;
+	sock.client_addr_len = conn->socket.client_addr_len;
 
 	re = getsockname (SOCKET_FD(&conn->socket), 
 			  (struct sockaddr *) &(sock.client_addr),
