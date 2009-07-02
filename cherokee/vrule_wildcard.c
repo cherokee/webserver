@@ -74,12 +74,15 @@ entry_free (cherokee_wc_entry_t *wc)
  */
 
 static ret_t 
-match (cherokee_vrule_wildcard_t  *vrule,
-       cherokee_buffer_t          *host)
+match (cherokee_vrule_wildcard_t *vrule,
+       cherokee_buffer_t         *host,
+       cherokee_connection_t     *conn)
 {
 	int              re;
 	ret_t            ret;
 	cherokee_list_t *i;
+
+	UNUSED(conn);
 
 	list_for_each (i, &vrule->entries) {
 		cherokee_wc_entry_t *entry = (cherokee_wc_entry_t *)i;

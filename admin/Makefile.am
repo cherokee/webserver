@@ -100,6 +100,7 @@ ModuleFrom.py \
 ModuleCustomError.py \
 ModuleWildcard.py \
 ModuleRehost.py \
+ModuleTargetIp.py \
 ModuleEvhost.py \
 config.py \
 pyscgi.py \

@@ -201,9 +201,9 @@ class FormHelper (WebComponent):
     def InstanceLinkedImage (self, name, alt, link, **kwargs):
         return self.InstanceLink(link, self.InstanceImage(name, alt, **kwargs))
 
-    def AddDeleteLink (self, url, key):
+    def AddDeleteLink (self, url, key, **kwargs):
         js = "javascript:post_del_key('%s', '%s');" % (url, key)
-        return self.InstanceLinkedImage("bin.png", _("Delete"), js, border="0")
+        return self.InstanceLinkedImage("bin.png", _("Delete"), js, border="0", **kwargs)
 
     def InstanceOptions (self, cfg_key, options, *args, **kwargs):
         value = self._cfg.get_val (cfg_key)

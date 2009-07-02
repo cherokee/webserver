@@ -156,6 +156,8 @@ class PageVServers (PageMenu, FormHelper):
                 skey = 'regex'
             elif hmatchtype == 'wildcard':
                 skey = 'domain'
+            elif hmatchtype == 'target_ip':
+                skey = 'ip'
             else:
                 doms = 1
 

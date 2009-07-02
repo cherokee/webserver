@@ -88,13 +88,14 @@ cherokee_vrule_configure (cherokee_vrule_t       *vrule,
 
 ret_t 
 cherokee_vrule_match (cherokee_vrule_t  *vrule,
-		      cherokee_buffer_t *buffer)
+		      cherokee_buffer_t *buffer,
+		      void              *conn)
 {
 	return_if_fail (vrule, ret_error);
 	return_if_fail (vrule->match, ret_error);
 
 	/* Call the real method
 	 */
-	return vrule->match (vrule, buffer);
+	return vrule->match (vrule, buffer, conn);
 }
 

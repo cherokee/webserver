@@ -356,6 +356,24 @@ endif
 
 
 #
+# VRule Target IP
+#
+vrule_target_ip = \
+vrule_target_ip.c \
+vrule_target_ip.h
+
+libplugin_target_ip_la_LDFLAGS = $(module_ldflags)
+libplugin_target_ip_la_SOURCES = $(vrule_target_ip)
+
+if STATIC_VRULE_TARGET_IP
+static_vrule_target_ip_src = $(vrule_target_ip)
+else
+dynamic_vrule_target_ip_lib = libplugin_target_ip.la
+endif
+
+
+
+#
 # Gen wildcard
 #
 gen_evhost = \
@@ -1351,6 +1369,7 @@ $(static_rule_or_src) \
 \
 $(static_vrule_wildcard_src) \
 $(static_vrule_rehost_src) \
+$(static_vrule_target_ip_src) \
 \
 $(static_gen_evhost_src) \
 \
@@ -1530,6 +1549,7 @@ $(dynamic_rule_and_lib) \
 $(dynamic_rule_or_lib) \
 $(dynamic_vrule_wildcard_lib) \
 $(dynamic_vrule_rehost_lib) \
+$(dynamic_vrule_target_ip_lib) \
 $(dynamic_gen_evhost_lib) \
 $(dynamic_handler_file_lib) \
 $(dynamic_handler_cgi_lib) \

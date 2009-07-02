@@ -44,7 +44,7 @@ CHEROKEE_BEGIN_DECLS
  */
 typedef ret_t (* vrule_func_new_t)       (void **vrule);
 typedef ret_t (* vrule_func_configure_t) (void  *vrule, cherokee_config_node_t *conf, void *vsrv);
-typedef ret_t (* vrule_func_match_t)     (void  *vrule, cherokee_buffer_t *host);
+typedef ret_t (* vrule_func_match_t)     (void  *vrule, cherokee_buffer_t *host, void *conn);
 
 /* Data types
  */
@@ -84,7 +84,7 @@ ret_t cherokee_vrule_init_base   (cherokee_vrule_t *vrule, cherokee_plugin_info_
 
 /* Vrule virtual methods
  */
-ret_t cherokee_vrule_match       (cherokee_vrule_t *vrule, cherokee_buffer_t *host);
+ret_t cherokee_vrule_match       (cherokee_vrule_t *vrule, cherokee_buffer_t *host, void *conn);
 ret_t cherokee_vrule_configure   (cherokee_vrule_t *vrule, cherokee_config_node_t *conf, void *vsrv);
 
 CHEROKEE_END_DECLS

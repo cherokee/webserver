@@ -9,7 +9,11 @@ N_ = lambda x: x
 NOTE_WILDCARD = N_("Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example.com")
 WARNING_EMPTY = N_("At least one wildcard string must be defined.")
 
+DATA_VALIDATION = []
+
 class ModuleWildcard (Module, FormHelper):
+    PROPERTIES = ['domain']
+
     def __init__ (self, cfg, prefix, submit_url):
         FormHelper.__init__ (self, 'wildcard', cfg)
         Module.__init__ (self, 'wildcard', cfg, prefix, submit_url)
@@ -32,7 +36,10 @@ class ModuleWildcard (Module, FormHelper):
                 domain = cfg_domains[i].value
                 cfg_key = "%s!%s" % (pre, i)
                 en = self.InstanceEntry (cfg_key, 'text')
-                link_del = self.AddDeleteLink ('/ajax/update', cfg_key)
+                if len(cfg_domains.keys()) >= 2:
+                    link_del = self.AddDeleteLink ('/ajax/update', cfg_key)
+                else:
+                    link_del = ''
                 table += (en, link_del)
 
             txt += self.Indent(table)
@@ -54,3 +61,6 @@ class ModuleWildcard (Module, FormHelper):
         txt += self.Indent(table)
 
         return txt
+
+    def _op_apply_changes (self, uri, post):
+        self.ApplyChangesPrefix (self._prefix, [], post, DATA_VALIDATION)
