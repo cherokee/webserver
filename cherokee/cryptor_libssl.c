@@ -313,13 +313,17 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 		}
 	}
 
-	/* Certificate
-	 */
 #if (OPENSSL_VERSION_NUMBER < 0x0090808fL)
 	/* OpenSSL < 0.9.8h
 	 */
 	ERR_clear_error();
 #endif
+
+	/* Certificate
+	 */
+	TRACE(ENTRIES, "Vserver '%s'. Reading certificate file '%s'\n",
+	      vsrv->name.buf, vsrv->server_cert.buf);
+
 	rc = SSL_CTX_use_certificate_chain_file (n->context, vsrv->server_cert.buf);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
@@ -330,6 +334,9 @@ _vserver_new (cherokee_cryptor_t          *cryp,
 
 	/* Private key
 	 */
+	TRACE(ENTRIES, "Vserver '%s'. Reading key file '%s'\n",
+	      vsrv->name.buf, vsrv->server_key.buf);
+
 	rc = SSL_CTX_use_PrivateKey_file (n->context, vsrv->server_key.buf, SSL_FILETYPE_PEM);
 	if (rc != 1) {
 		OPENSSL_LAST_ERROR(error);
