@@ -1582,51 +1582,75 @@ strnstr (const char *s, const char *find, size_t slen)
 
 
 ret_t
-cherokee_find_header_end (cherokee_buffer_t  *buf,
-			  char              **end,
-			  cuint_t            *sep_len)
+cherokee_find_header_end_cstr (char      *c_str,
+			       cint_t     c_len,
+			       char     **end,
+			       cuint_t   *sep_len)
 {
 	char *p;
 	char *fin;
 	char *begin;
-	char *limit;
-	int   len;
+	int   cr_n, lf_n;
 
-	if (cherokee_buffer_is_empty (buf))
+	if ((c_str == NULL) || (c_len <= 0))
 		return ret_not_found;
 
-	p     = buf->buf;
-	fin   = buf->buf + buf->len;
-	limit = buf->buf + MAX_HEADER_LEN;
+	p   = c_str;
+	fin = c_str + MIN(c_len, MAX_HEADER_LEN);
 
 	while (p < fin) {
-		if (unlikely (p > limit)) {
-			return ret_error;
-		}
-
-		if ((*p == CHR_CR) || (*p == CHR_LF)) {
-			len   = 0;
+ 		if ((*p == CHR_CR) || (*p == CHR_LF)) {
+			cr_n  = 0;
+			lf_n  = 0;
 			begin = p;
-			while ((*p == CHR_CR) || (*p == CHR_LF)) {
+
+			/* Valid scenarios:
+			 * CR_n: [CRLF_CRLF] 0, 1, 1, 2, 2  | [LF_LF] 0, 0
+			 * LF_n:             0, 0, 1, 1, 2  |         1, 2
+			 * 
+			 * so, the two forbidden situations are:
+			 * CR_n: 1, 2
+			 * LF_n: 2, 0
+			 */
+			while (p < fin) {
 				if (*p == CHR_LF) {
-					len += 1;
-					if (len == 2) {
+					lf_n++;
+					if (lf_n == 2) {
 						*end     = begin;
 						*sep_len = (p - begin) + 1;
 						return ret_ok;
 					}
+
 				} else if (*p == CHR_CR) {
-					;
+					cr_n++;
+
 				} else {
 					break;
 				}
-				p += 1;
+
+				if (unlikely (((cr_n == 1) && (lf_n == 2)) ||
+					      ((cr_n == 2) && (lf_n == 0))))
+				{
+					return ret_error;
+				}
+
+				p++;
 			}
 		}
-		p += 1;
+
+		p++;
 	}
 
 	return ret_not_found;
+}
+
+
+ret_t
+cherokee_find_header_end (cherokee_buffer_t  *buf,
+			  char              **end,
+			  cuint_t            *sep_len)
+{
+	return cherokee_find_header_end_cstr (buf->buf, buf->len, end, sep_len);
 }
 
 

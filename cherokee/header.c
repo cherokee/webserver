@@ -722,6 +722,7 @@ has_header_response (cherokee_header_t *hdr, cherokee_buffer_t *buffer)
 static ret_t 
 has_header_request (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cuint_t tail_len)
 {
+	ret_t   ret;
 	char   *start;
 	char   *end;
 	size_t  crlf_len = 0;
@@ -744,7 +745,7 @@ has_header_request (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cuint_t t
 		 * buffer length so we have to move the real content
 		 * to the beginning of the buffer.
 		 */
-		cherokee_buffer_move_to_begin(buffer, (int) crlf_len);
+		cherokee_buffer_move_to_begin (buffer, (int) crlf_len);
 	}
 
 	/* Do we have enough information ?
@@ -763,20 +764,15 @@ has_header_request (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cuint_t t
 
 	/* It could be a partial header, or maybe a POST request
 	 */
-	if (unlikely ((end = strstr(start, CRLF_CRLF)) == NULL)) {
-		if ((end = strstr (start, LF_LF)) == NULL)
-			return ret_not_found;
-
-		/* Found uncommon / non standard EOH, set header length 
-		 */
-		hdr->input_header_len = ((int) (end - buffer->buf)) + CSZLEN(LF_LF);
-		return ret_ok;
+	ret = cherokee_find_header_end_cstr (start,
+					     (buffer->buf + buffer->len) - start,
+					     &end, &crlf_len);
+	if (ret != ret_ok) {
+		return ret_not_found;
 	}
-
-	/* Found standard EOH, set header length 
-	 */
-	hdr->input_header_len = ((int) (end - buffer->buf)) + CSZLEN(CRLF_CRLF);
-
+	
+	hdr->input_header_len = ((int) (end - buffer->buf)) + crlf_len;
+	
 	return ret_ok;
 }
 

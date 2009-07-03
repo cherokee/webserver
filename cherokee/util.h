@@ -113,6 +113,11 @@ ret_t   cherokee_find_header_end    (cherokee_buffer_t  *buf,
 				     char              **end,
 				     cuint_t            *sep_len);
 
+ret_t   cherokee_find_header_end_cstr (char      *c_str,
+				       cint_t     c_len,
+				       char     **end,
+				       cuint_t   *sep_len);
+
 ret_t   cherokee_parse_host         (cherokee_buffer_t *buf,
 				     cherokee_buffer_t *host,
 				     cuint_t           *port);
