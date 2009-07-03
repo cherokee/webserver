@@ -1065,15 +1065,15 @@ cryptor_libssl_dh_1024.c \
 cryptor_libssl_dh_2048.c \
 cryptor_libssl_dh_4096.c
 
-libplugin_libssl_la_LDFLAGS = $(module_ldflags) $(TLS_LIBS)
+libplugin_libssl_la_LDFLAGS = $(module_ldflags) $(LIBSSL_LIBS)
 libplugin_libssl_la_SOURCES = $(cryptor_libssl)
-libplugin_libssl_la_CFLAGS  = $(TLS_CFLAGS)
+libplugin_libssl_la_CFLAGS  = $(LIBSSL_CFLAGS)
 
 if USE_OPENSSL
 if STATIC_CRYPTOR_LIBSSL
 static_cryptor_libssl_src   = $(cryptor_libssl)
-static_cryptor_libssl_lib   = $(TLS_LIBS)
-static_cryptor_libssl_flags = $(TLS_CFLAGS)
+static_cryptor_libssl_lib   = $(LIBSSL_LIBS)
+static_cryptor_libssl_flags = $(LIBSSL_CFLAGS)
 else
 dynamic_cryptor_libssl_lib = libplugin_libssl.la
 endif
