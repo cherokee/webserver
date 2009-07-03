@@ -43,6 +43,13 @@ match (cherokee_vrule_target_ip_t *vrule,
 	ret_t             ret;
 	cherokee_socket_t sock;
 
+	/* There might not be a connection
+	 */
+	if (conn == NULL)
+		return ret_deny;
+
+	/* Use a temporal socket object
+	 */
 	ret = cherokee_socket_init (&sock);
 	if (unlikely(ret != ret_ok))
 		return ret_error;
@@ -67,6 +74,7 @@ match (cherokee_vrule_target_ip_t *vrule,
 		goto deny;
 	}
 
+	cherokee_socket_mrproper (&sock);
 	TRACE(ENTRIES, "Rule from matched %s", "\n");
 	return ret_ok;
 deny:
