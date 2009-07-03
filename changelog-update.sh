@@ -1,5 +1,13 @@
 #!/bin/sh
 
+# Renders a ChangeLog file by using the Subversion commit logs
+#
+# Author: Alvaro Lopez Ortega <alvaro@alobbs.com>
+
+# FOR THE RECORD:
+# Commit log messages can be modified by running (replace $REV):
+#  svn propedit svn:log --revprop -r$REV .
+
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 test -z "$SVN" && SVN=svn
