@@ -38,6 +38,7 @@ ret_t cherokee_trace_init        (void);
 ret_t cherokee_trace_set_modules (cherokee_buffer_t *modules);
 ret_t cherokee_trace_do_trace    (const char *entry, const char *file, int line, const char *func, const char *fmt, ...);
 ret_t cherokee_trace_get_trace   (cherokee_buffer_t **buf_ref);
+int   cherokee_trace_is_tracing  (void);
 
 CHEROKEE_END_DECLS
 

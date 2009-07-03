@@ -188,3 +188,10 @@ cherokee_trace_get_trace (cherokee_buffer_t **buf_ref)
 	*buf_ref = &trace.modules;
 	return ret_ok;
 }
+
+
+int
+cherokee_trace_is_tracing (void)
+{
+	return (! cherokee_buffer_is_empty (&trace.modules));
+}

@@ -2480,9 +2480,17 @@ cherokee_connection_use_webdir (cherokee_connection_t *conn)
 char *
 cherokee_connection_print (cherokee_connection_t *conn)
 {
-	cherokee_buffer_t *buf = &conn->self_trace;
+	ret_t              ret;
 	const char        *phase;
+	cherokee_buffer_t *buf    = &conn->self_trace;
 
+	/* Shortcut: Don't render if not tracing
+	 */
+	if (! cherokee_trace_is_tracing())
+		return "";
+
+	/* Render
+	 */
 	cherokee_buffer_clean (buf);
 
 	if (conn == NULL) {
