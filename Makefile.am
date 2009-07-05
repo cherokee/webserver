@@ -1,7 +1,7 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
 SUBDIRS = po m4 www icons themes qa doc . admin contrib cherokee cget windows dbslayer
-SUFFIXES = .sample.pre .sample .h.pre .h
+SUFFIXES = .sample.pre .sample .h.pre .h .xml.pre .xml
 ACLOCAL_AMFLAGS = -I m4
 
 bin_SCRIPTS = cherokee-config
@@ -30,14 +30,14 @@ cherokeeadmindir = $(datadir)/cherokee/admin
 	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%libdir%|${libdir}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
 .sample.pre.sample:
 	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%libdir%|${libdir}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
-
+.xml.pre.xml:
+	sed -e "s|%sysconfdir%|${sysconfdir}|g; s|%datadir%|${datadir}|g; s|%docdir%|${docdir}|g; s|%prefix%|${prefix}|g; s|%libdir%|${libdir}|g; s|%localstatedir%|${localstatedir}|g; s|%wwwroot%|${WWW_ROOT}|g; s|%phpcgi%|${PHPCGI}|g" $< > $@
 
 CONSTANTS_PRE = \
 constants.h.pre
 
 CONSTANTS = \
 $(CONSTANTS_PRE:.h.pre=.h)
-
 
 CONFS_PRE =              \
 cherokee.conf.sample.pre \
@@ -46,10 +46,18 @@ performance.conf.sample.pre
 CONFS = \
 $(CONFS_PRE:.sample.pre=.sample)
 
+XMLS_PRE = \
+http-cherokee.xml.pre 
+
+XMLS = \
+$(XMLS_PRE:.xml.pre=.xml)
+
+
 WINDOWS_PORT_FILES = \
 config.h.win32
 
 CLEANFILES = \
+$(XMLS) \
 $(CONFS) \
 $(CONSTANTS)
 
@@ -71,13 +79,14 @@ cherokee.pc.in        \
 svnlog2changelog.py   \
 changelog-update.sh   \
 $(m4data_DATA)        \
+$(XMLS_PRE)           \
 $(CONFS_PRE)          \
 $(CONSTANTS_PRE)      \
 $(man_MANS)           \
 $(WINDOWS_PORT_FILES) \
 $(COMPILATION_TESTS)
 
-all-local: $(CONSTANTS) $(CONFS)
+all-local: $(CONSTANTS) $(CONFS) $(XMLS)
 
 install-data-local-config:
 	@$(mkinstalldirs) $(DESTDIR)$(pkgincludedir);

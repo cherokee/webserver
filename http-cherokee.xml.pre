@@ -60,7 +60,7 @@
       -->
       <exec_method type='method'
 		   name='start'
-		   exec='/usr/sbin/cherokee -b'
+		   exec='%prefix%/sbin/cherokee -d'
 		   timeout_seconds='60'>
 	<method_context>
 	  <method_credential user='root' group='root' />
@@ -73,7 +73,7 @@
       -->
       <exec_method type='method'
 		   name='stop'
-		   exec='kill `cat /var/run/cherokee.pid`'
+		   exec='kill `cat %localstatedir%/run/cherokee.pid`'
 		   timeout_seconds='60'>
 	<method_context>
 	  <method_credential user='root' group='root' />
@@ -86,7 +86,7 @@
       -->
       <exec_method type='method'
 		   name='refresh'
-		   exec='kill -HUP `cat /var/run/cherokee.pid`'
+		   exec='kill -HUP `cat %localstatedir%/run/cherokee.pid`'
 		   timeout_seconds='60'>
 	<method_context>
 	  <method_credential user='root' group='root' />
