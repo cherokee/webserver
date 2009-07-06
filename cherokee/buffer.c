@@ -138,13 +138,15 @@ cherokee_buffer_dup (cherokee_buffer_t *buf, cherokee_buffer_t **dup)
 static ret_t
 realloc_inc_bufsize (cherokee_buffer_t *buf, size_t incsize)
 {
-	char *pbuf;
-	size_t newsize = buf->size + incsize + REALLOC_EXTRA_SIZE + 1;
+	char   *pbuf;
+	size_t  newsize = buf->size + incsize + REALLOC_EXTRA_SIZE + 1;
 
 	pbuf = (char *) realloc(buf->buf, newsize);
-	if (unlikely (pbuf == NULL)) 
+	if (unlikely (pbuf == NULL)) {
 		return ret_nomem;
-	buf->buf = pbuf;
+	}
+
+	buf->buf  = pbuf;
 	buf->size = (int) newsize;
 
 	return ret_ok;
@@ -155,11 +157,14 @@ static ret_t
 realloc_new_bufsize (cherokee_buffer_t *buf, size_t newsize)
 {
 	char *pbuf;
+
 	newsize += REALLOC_EXTRA_SIZE + 1;
 
 	pbuf = (char *) realloc(buf->buf, newsize);
-	if (unlikely (pbuf == NULL)) 
+	if (unlikely (pbuf == NULL)) {
 		return ret_nomem;
+	}
+
 	buf->buf = pbuf;
 	buf->size = (int) newsize;
 
@@ -170,16 +175,19 @@ realloc_new_bufsize (cherokee_buffer_t *buf, size_t newsize)
 ret_t
 cherokee_buffer_add (cherokee_buffer_t *buf, const char *txt, size_t size)
 {	   
-	int free = buf->size - buf->len;
+	int available;
 
 	if (unlikely (size <= 0))
 		return ret_ok;
 
 	/* Get memory
 	 */
-	if ((cuint_t) free < (size+1)) {
-		if (unlikely (realloc_inc_bufsize(buf, size - free)) != ret_ok)
+	available = buf->size - buf->len;
+
+	if ((cuint_t) available < (size+1)) {
+		if (unlikely (realloc_inc_bufsize(buf, size - available) != ret_ok)) {
 			return ret_nomem;
+		}
 	}
 
 	/* Copy	
@@ -268,8 +276,9 @@ cherokee_buffer_add_long10 (cherokee_buffer_t *buf, clong_t lNum)
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
 	if (unlikely ((cuint_t)newlen >= buf->size)) {
-		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
+		if (unlikely (realloc_new_bufsize(buf, newlen) != ret_ok)) {
 			return ret_nomem;
+		}
 	}
 
 	/* Copy	including '\0'
@@ -313,8 +322,9 @@ cherokee_buffer_add_llong10 (cherokee_buffer_t *buf, cllong_t lNum)
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
 	if (unlikely ((cuint_t)newlen >= buf->size)) {
-		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
+		if (unlikely (realloc_new_bufsize(buf, newlen) != ret_ok)) {
 			return ret_nomem;
+		}
 	}
 
 	/* Copy	including '\0'
@@ -347,8 +357,9 @@ cherokee_buffer_add_ulong10 (cherokee_buffer_t *buf, culong_t ulNum)
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
 	if (unlikely ((cuint_t)newlen >= buf->size)) {
-		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
+		if (unlikely (realloc_new_bufsize(buf, newlen) != ret_ok)) {
 			return ret_nomem;
+		}
 	}
 
 	/* Copy	including '\0'
@@ -381,8 +392,9 @@ cherokee_buffer_add_ullong10 (cherokee_buffer_t *buf, cullong_t ulNum)
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
 	if (unlikely ((cuint_t)newlen >= buf->size)) {
-		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
+		if (unlikely (realloc_new_bufsize(buf, newlen) != ret_ok)) {
 			return ret_nomem;
+		}
 	}
 
 	/* Copy	including '\0'
@@ -420,8 +432,9 @@ cherokee_buffer_add_ulong16 (cherokee_buffer_t *buf, culong_t ulNum)
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
 	if (unlikely ((cuint_t)newlen >= buf->size)) {
-		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
+		if (unlikely (realloc_new_bufsize(buf, newlen) != ret_ok)) {
 			return ret_nomem;
+		}
 	}
 
 	/* Copy	including '\0'
@@ -459,8 +472,9 @@ cherokee_buffer_add_ullong16 (cherokee_buffer_t *buf, cullong_t ulNum)
 	*/
 	newlen = buf->len + (int) ((IOS_NUMBUF - 1) - i);
 	if (unlikely ((cuint_t)newlen >= buf->size)) {
-		if (unlikely (realloc_new_bufsize(buf, newlen)) != ret_ok)
+		if (unlikely (realloc_new_bufsize(buf, newlen) != ret_ok)) {
 			return ret_nomem;
+		}
 	}
 
 	/* Copy	including '\0'
@@ -497,7 +511,7 @@ cherokee_buffer_add_va_fixed (cherokee_buffer_t *buf, const char *format, ...)
 
 	/* Don't expand buffer if there is not enough space.
 	 */
-	if (unlikely ( len >= size )) 
+	if (unlikely (len >= size)) 
 		return ret_error;
 
 	buf->len += len;
@@ -600,8 +614,9 @@ cherokee_buffer_add_char (cherokee_buffer_t *buf, char c)
 
 	/* Get memory
 	 */
-	if (unlikely (realloc_inc_bufsize(buf, 1)) != ret_ok)
+	if (unlikely (realloc_inc_bufsize(buf, 1) != ret_ok)) {
 		return ret_nomem;
+	}
 
 	/* Add char
 	 */
@@ -623,8 +638,9 @@ cherokee_buffer_add_char_n (cherokee_buffer_t *buf, char c, int num)
 	/* Get memory
 	 */
 	if (free < (num+1)) {
-		if (unlikely (realloc_inc_bufsize(buf, num - free)) != ret_ok)
+		if (unlikely (realloc_inc_bufsize(buf, num - free) != ret_ok)) {
 			return ret_nomem;
+		}
 	}
 
 	memset (buf->buf+buf->len, c, num);
@@ -643,8 +659,9 @@ cherokee_buffer_prepend (cherokee_buffer_t *buf, const char *txt, size_t size)
 	/* Get memory
 	 */
 	if ((cuint_t) free < (size+1)) {
-		if (unlikely (realloc_inc_bufsize(buf, size - free)) != ret_ok)
+		if (unlikely (realloc_inc_bufsize(buf, size - free) != ret_ok)) {
 			return ret_nomem;
+		}
 	}
 
 	memmove (buf->buf+size, buf->buf, buf->len);
@@ -728,8 +745,9 @@ cherokee_buffer_ensure_size (cherokee_buffer_t *buf, size_t size)
 	/* It already has memory, but it needs more..
 	 */
 	pbuf = (char *) realloc(buf->buf, size);
-	if (unlikely (pbuf == NULL))
+	if (unlikely (pbuf == NULL)) {
 		return ret_nomem;
+	}
 
 	buf->buf = pbuf;
 	buf->size = size;
@@ -1735,8 +1753,9 @@ cherokee_buffer_replace_string (cherokee_buffer_t *buf,
 	/* Take the new memory chunk
 	 */
 	result = (char *) malloc (result_length + 1);
-	if (unlikely (result == NULL))
+	if (unlikely (result == NULL)) {
 		return ret_nomem;
+	}
 
 	/* Build the new string
 	 */
