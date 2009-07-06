@@ -51,6 +51,10 @@
  */
 PLUGIN_INFO_LOGGER_EASIEST_INIT (ncsa);
 
+/* Global stuff
+ */
+static cherokee_buffer_t now;
+
 
 ret_t
 cherokee_logger_ncsa_new (cherokee_logger_t         **logger,
@@ -86,20 +90,34 @@ cherokee_logger_ncsa_new (cherokee_logger_t         **logger,
 }
 
 
+static void 
+bogotime_callback (void) 
+{
+	struct tm *pnow_tm = &cherokee_bogonow_tmloc;
+	
+	cherokee_buffer_clean  (&now);
+	cherokee_buffer_add_va (&now, 
+				" [%02d/%s/%d:%02d:%02d:%02d %c%02d%02d] \"",
+				pnow_tm->tm_mday, 
+				month[pnow_tm->tm_mon], 
+				1900 + pnow_tm->tm_year,
+				pnow_tm->tm_hour, 
+				pnow_tm->tm_min, 
+				pnow_tm->tm_sec,
+				(cherokee_bogonow_tzloc < 0) ? '-' : '+',
+				(int) (abs(cherokee_bogonow_tzloc) / 60),
+				(int) (abs(cherokee_bogonow_tzloc) % 60));
+}
+
+
 ret_t 
 cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t    *logger,
 				cherokee_virtual_server_t *vsrv,
 				cherokee_config_node_t    *config)
 {
 	ret_t                   ret;
-	long                   *this_timezone = NULL;
 	cherokee_config_node_t *subconf;
-
-	/* Get the timezone reference and compute tz offset
-	 */
-	this_timezone = cherokee_get_timezone_ref();
-	logger->tz = - (*this_timezone / 60);
-	logger->now_time = (time_t) -1;
+	static int              callback_init = 0;
 
 	/* Init the local buffers
 	 */
@@ -130,6 +148,13 @@ cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t    *logger,
 	ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &logger->writer_error);
 	if (ret != ret_ok) {
 		return ret_error;
+	}
+
+	/* Callback init
+	 */
+	if (callback_init == 0) {
+		cherokee_buffer_init (&now);
+		cherokee_bogotime_add_callback (bogotime_callback);
 	}
 
 	return ret_ok;
@@ -172,36 +197,14 @@ cherokee_logger_ncsa_flush (cherokee_logger_ncsa_t *logger)
 static ret_t
 build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, cherokee_buffer_t *buf)
 {
-	ret_t              ret;
-	size_t             username_len = 0;
-	cuint_t            method_len = 0;
-	cuint_t            version_len = 0;
-	char              *username;
-	const char        *method;
-	const char        *version;
-	char               ipaddr[CHE_INET_ADDRSTRLEN];
-
-	/* Read the bogonow value from the thread and
-	 * if time has changed then recreate the date-time string.
-	 */
-	if (unlikely (logger->now_time != CONN_THREAD(cnt)->bogo_now)) {
-		struct tm *pnow_tm;
-
-		logger->now_time = CONN_THREAD(cnt)->bogo_now;
-		pnow_tm = &CONN_THREAD(cnt)->bogo_now_tmloc;
-		cherokee_buffer_clean (&logger->now_dtm);
-		cherokee_buffer_add_va (&logger->now_dtm, 
-				" [%02d/%s/%d:%02d:%02d:%02d %c%02d%02d] \"",
-				pnow_tm->tm_mday, 
-				month[pnow_tm->tm_mon], 
-				1900 + pnow_tm->tm_year,
-				pnow_tm->tm_hour, 
-				pnow_tm->tm_min, 
-				pnow_tm->tm_sec,
-				(logger->tz < 0) ? '-' : '+', 
-				(int) (abs(logger->tz) / 60), 
-				(int) (abs(logger->tz) % 60));
-	}
+	ret_t       ret;
+	char       *username;
+	size_t      username_len = 0;
+	const char *method;
+	cuint_t     method_len   = 0;
+	const char *version;
+	cuint_t     version_len  = 0;
+	char        ipaddr[CHE_INET_ADDRSTRLEN];
 
 	/* Look for the user
 	 */
@@ -239,7 +242,7 @@ build_log_string (cherokee_logger_ncsa_t *logger, cherokee_connection_t *cnt, ch
 
 	/* " [date time] "
 	 */
-	cherokee_buffer_add_buffer (buf, &logger->now_dtm);
+	cherokee_buffer_add_buffer (buf, &now);
 	cherokee_buffer_add        (buf, method, method_len);
 	cherokee_buffer_add_char   (buf, ' ');
 
@@ -391,4 +394,3 @@ cherokee_logger_ncsa_reopen (cherokee_logger_ncsa_t *logger)
 
 	return ret2;
 }
-

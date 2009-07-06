@@ -39,8 +39,8 @@ typedef struct {
 
 	long               tz;
 	time_t             now_time;
-
 	cherokee_buffer_t  now_dtm;
+
 	cherokee_buffer_t  referer;
 	cherokee_buffer_t  useragent;
 
