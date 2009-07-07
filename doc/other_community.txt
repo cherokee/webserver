@@ -44,6 +44,10 @@ party resources that may be of your interest.
 * IRC Channel: link:irc://irc.freenode.net/cherokee[#cherokee] on
   freenode.net
 
+[[identica]]
+* link:http://identi.ca/group/cherokee[Cherokee group at identi.ca]: 
+microblogging about Cherokee.
+
 
 More resources:
 ~~~~~~~~~~~~~~~
