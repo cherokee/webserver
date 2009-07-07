@@ -37,7 +37,7 @@ CONFIG_TABLE = """
   </tr></table>
 </div>
 """ % (N_('Regular'), N_('Static Content'), N_('Server Development'),
-       N_('Regular configuration: PHP, Apache logs, MIME types, icons, etc.'),
+       N_('Regular configuration: Apache logs, MIME types, icons, etc.'),
        N_('Optimized to send static content.'),
        N_('No standard port, No log files, No PID file, etc.'),
        BUTTON %("/create_config/regular"),
