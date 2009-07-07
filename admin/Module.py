@@ -16,7 +16,7 @@ def module_obj_factory_detailed (mod_type, name, cfg, prefix, submit_url, **kwar
     try:
         mod = imp.load_source (name, "%s%s.py" % (mod_type, mod_name))
     except IOError:
-        print "ERROR: Could load module: '%s'" % ("%s%s.py" % (mod_type, mod_name))
+        print "ERROR: Could not load module: '%s'" % ("%s%s.py" % (mod_type, mod_name))
         return None
 
     sys.modules[name] = mod
