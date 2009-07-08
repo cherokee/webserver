@@ -9,7 +9,8 @@ DEFAULT_PATHS = ['/usr/bin',
                  '/usr/php/bin', 
                  '/usr/sfw/bin',
                  '/usr/gnu/bin',
-                 '/opt/local/bin']
+                 '/opt/local/bin',
+                 '/usr/pkg/libexec/cgi-bin']
 
 class Wizard_Rules_PHP (Wizard):
     UNIX_SOCK     = "/tmp/cherokee-php.socket"
