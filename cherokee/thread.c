@@ -625,14 +625,14 @@ process_active_connections (cherokee_thread_t *thd)
 			continue;
 		}
 
-		/* Process the connection?
-		 * 2.- Inspect the file descriptor if it's not shutdown
-		 *     and it's not reading header or there is no more buffered data.
+		/* Check if the connection is active
 		 */
-		if ((! (conn->options & conn_op_was_polling)) &&
-		    (conn->phase != phase_shutdown) &&
-		    (conn->phase != phase_lingering) &&
-		    (conn->phase != phase_reading_header || conn->incoming_header.len <= 0))
+		if (conn->options & conn_op_was_polling) {
+			BIT_UNSET (conn->options, conn_op_was_polling);
+		}
+		else if ((conn->phase != phase_shutdown) &&
+			 (conn->phase != phase_lingering) &&
+			 (conn->phase != phase_reading_header || conn->incoming_header.len <= 0))
 		{
 			re = cherokee_fdpoll_check (thd->fdpoll, 
 						    SOCKET_FD(&conn->socket), 
@@ -647,13 +647,7 @@ process_active_connections (cherokee_thread_t *thd)
 					continue;
 			}
 		}
-
-		/* This connection was polling a moment ago
-		 */
-		if (conn->options & conn_op_was_polling) {
-			BIT_UNSET (conn->options, conn_op_was_polling);
-		}
-
+		
 		TRACE (ENTRIES, "conn on phase n=%d: %s\n", 
 		       conn->phase, cherokee_connection_get_phase_str (conn));
 
