@@ -110,7 +110,6 @@ link:modules.html[Modules]: Information about the standard modules
     - link:modules_loggers_combined.html[Combined]: Combined log format.
     - link:modules_loggers_custom.html[Custom]: Customizable log format.
     - link:modules_loggers_ncsa.html[Common (NCSA)]: Common log format.
-    - link:modules_loggers_w3c.html[w3c]: W3C Log Format.
   . link:modules_balancers.html[Balancers]: Load balancing strategies.
     - link:modules_balancers_round_robin.html[Round robin]: Round Robin strategy.
     - link:modules_balancers_ip_hash.html[IP Hash]: Client IP hash strategy.

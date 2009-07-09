@@ -385,7 +385,7 @@ and/or formats:
 
     * Destination: File, syslog, program execution and standard error output.
 
-    * Format: Combined (Apache compatible), NCSA or W3C
+    * Format: Combined (Apache compatible), NCSA or custom.
 
 If a virtual server doesn't have a logger set up it will not log anything.
 
@@ -403,9 +403,9 @@ Logging using the Apache log format. It is the `de facto standard` nowadays.
 
 Logging using the NCSA log format.
 
-- w3c - link:modules_loggers_w3c.html[W3C Log Format]
+- custom - link:modules_loggers_custom.html[Customizable Log Format]
 
-Logging using the W3C log format.
+Logging using a user-specified format.
 --
 
 
