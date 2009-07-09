@@ -118,6 +118,10 @@ echo "Running: autoconf..."
 $AUTOCONF
 
 # ./configure
+if test x$NO_CONFIGURE != x; then
+  exit;
+fi
+
 cd $ORIGDIR
 $srcdir/configure "$@"
 
