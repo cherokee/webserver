@@ -228,20 +228,6 @@ destroy_thread (cherokee_thread_t *thread)
 }
 
 
-static ret_t
-remove_pidfile (cherokee_server_t *srv)
-{
-	if (cherokee_buffer_is_empty (&srv->pidfile))
-		return ret_not_found;
-	
-	cherokee_buffer_add_str (&srv->pidfile, ".worker");
-	unlink (srv->pidfile.buf);
-	cherokee_buffer_drop_ending (&srv->pidfile, 7);
-
-	return ret_ok;
-}
-
-
 ret_t
 cherokee_server_free (cherokee_server_t *srv)
 {
@@ -314,10 +300,8 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_buffer_mrproper (&srv->timeout_header);
 
 	cherokee_buffer_mrproper (&srv->chroot);
-	cherokee_buffer_mrproper (&srv->panic_action);
-
-	remove_pidfile (srv);
 	cherokee_buffer_mrproper (&srv->pidfile);
+	cherokee_buffer_mrproper (&srv->panic_action);
 
 	/* Module loader: It must be the last action to be performed
 	 * because it will close all the opened modules.
@@ -1865,41 +1849,6 @@ cherokee_server_get_backup_mode (cherokee_server_t *srv, cherokee_boolean_t *act
 	}
 
 	return ret_ok;
-}
-
-
-ret_t 
-cherokee_server_write_pidfile (cherokee_server_t *srv)
-{
-	size_t  written;
-	FILE   *file;
-	CHEROKEE_TEMP(buffer, 10);
-
-	if (cherokee_buffer_is_empty (&srv->pidfile))
-		return ret_not_found;
-
-	cherokee_buffer_add_str (&srv->pidfile, ".worker");
-
-	file = fopen (srv->pidfile.buf, "w+");
-	if (file == NULL) {
-		LOG_ERRNO (errno, cherokee_err_error,
-			   "Cannot write PID file '%s': '${errno}'", srv->pidfile.buf);
-		goto error;
-	}
-
-	snprintf (buffer, buffer_size, "%d\n", getpid());
-	written = fwrite (buffer, 1, strlen(buffer), file);
-	fclose (file);
-
-	if (written <= 0)
-		goto error;
-
-	cherokee_buffer_drop_ending (&srv->pidfile, 7);
-	return ret_ok;
-
-error:
-	cherokee_buffer_drop_ending (&srv->pidfile, 7);
-	return ret_error;
 }
 
 ret_t 

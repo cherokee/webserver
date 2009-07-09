@@ -52,7 +52,7 @@ def cherokee_management_reset ():
 class CherokeeManagement:
     def __init__ (self, cfg):
         self._cfg = cfg
-        self._pid = self._get_pid (worker=False)
+        self._pid = self._get_pid()
         self._is_child = False
 
     # Public
@@ -121,13 +121,6 @@ class CherokeeManagement:
         self._pid = None
         self._is_child = False
 
-        # Get the PID
-        pid = self._get_pid (worker=True)
-        if not pid: return
-
-        # Stop Cherokee Worker
-        self.__stop_process (pid)
-
     def create_config (self, file, template_file):
         if os.path.exists (file):
             return True
@@ -156,16 +149,14 @@ class CherokeeManagement:
 
     # Protected
     #
-    def _get_pid_path (self, worker):
+    def _get_pid_path (self):
         pid_file = self._cfg.get_val("server!pid_file")
         if not pid_file:
             pid_file = os.path.join (CHEROKEE_VAR_RUN, "cherokee.pid")
-        if worker:
-            pid_file += ".worker"
         return pid_file
 
-    def _get_pid (self, worker=False):
-        pid_file = self._get_pid_path(worker)
+    def _get_pid (self):
+        pid_file = self._get_pid_path()
         return self.__read_pid_file (pid_file)
 
     def _restart (self, graceful=False):

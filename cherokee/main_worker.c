@@ -241,8 +241,6 @@ common_server_initialization (cherokee_server_t *srv)
 	if (daemon_mode)
 		cherokee_server_daemonize (srv);
 
-	cherokee_server_write_pidfile (srv);
-
 	ret = cherokee_server_initialize (srv);
 	if (ret != ret_ok) return ret_error;
 
