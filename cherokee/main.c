@@ -852,9 +852,6 @@ main (int argc, char *argv[])
 			DELAY_ERROR);
 	}
 
-	if (! single_time) {
-		clean_up();
-	}
-
+	clean_up();
 	return EXIT_OK;
 }
