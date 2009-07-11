@@ -210,6 +210,15 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	TRACE (ENTRIES, "SNI: Setting new TLS context. Virtual host='%s'\n",
 	       vsrv->name.buf);
 
+	/* Check whether the Virtual Server supports TLS
+	 */
+	if ((vsrv->cryptor == NULL) ||
+	    (CRYPTOR_VSRV_SSL(vsrv->cryptor)->context == NULL))
+	{
+		TRACE (ENTRIES, "Virtual server '%s' does not support SSL\n", servername);
+		return SSL_TLSEXT_ERR_NOACK;		
+	}
+
 	/* Set the new SSL context
 	 */
 	ctx = SSL_set_SSL_CTX (ssl, CRYPTOR_VSRV_SSL(vsrv->cryptor)->context);
