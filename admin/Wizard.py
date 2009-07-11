@@ -9,7 +9,7 @@ WIZARD_GROUP_CMS      = 'CMS'
 WIZARD_GROUP_TASKS    = 'Tasks'
 WIZARD_GROUP_PLATFORM = 'Platforms'
 
-USUAL_STATIC_FILES = ['/favicon.ico', '/robots.txt']
+USUAL_STATIC_FILES = ['/favicon.ico', '/robots.txt', '/crossdomain.xml']
 
 class Wizard:
     def __init__ (self, cfg, pre=None):
