@@ -643,8 +643,10 @@ process_wait (pid_t pid)
 	if (WIFEXITED(exitcode)) {
 		int re = WEXITSTATUS(exitcode);
 
-		if (re == EXIT_OK_ONCE)
+		if (re == EXIT_OK_ONCE) {
+			clean_up();
 			exit (EXIT_OK_ONCE);
+		}
 
 		/* Child terminated normally */ 
 		PRINT_MSG ("PID %d: exited re=%d\n", pid, re);
