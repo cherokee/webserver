@@ -93,7 +93,7 @@ def is_drupal_dir (path, cfg, nochroot):
 DATA_VALIDATION = [
     ("tmp!wizard_drupal!sources", (is_drupal_dir, 'cfg')),
     ("tmp!wizard_drupal!host",    (validations.is_new_host, 'cfg')),
-    ("tmp!wizard_drupal!web_dir", (validations.is_dir_formated, 'cfg'))
+    ("tmp!wizard_drupal!web_dir",  validations.is_dir_formated)
 ]
 
 class Wizard_VServer_Drupal (WizardPage):

@@ -58,7 +58,7 @@ def is_django_dir (path, cfg, nochroot):
 DATA_VALIDATION = [
     ("tmp!wizard_django!django_dir",    (is_django_dir, 'cfg')),
     ("tmp!wizard_django!new_host",      (validations.is_new_host, 'cfg')),
-    ("tmp!wizard_django!new_webdir",    (validations.is_dir_formated, 'cfg')),
+    ("tmp!wizard_django!new_webdir",     validations.is_dir_formated),
     ("tmp!wizard_django!document_root", (validations.is_local_dir_exists, 'cfg'))
 ]
 

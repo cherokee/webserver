@@ -73,7 +73,7 @@ def is_wordpress_dir (path, cfg, nochroot):
 DATA_VALIDATION = [
     ("tmp!wizard_wp!sources", (is_wordpress_dir, 'cfg')),
     ("tmp!wizard_wp!host",    (validations.is_new_host, 'cfg')),
-    ("tmp!wizard_wp!web_dir", (validations.is_dir_formated, 'cfg'))
+    ("tmp!wizard_wp!web_dir",  validations.is_dir_formated)
 ]
 
 
