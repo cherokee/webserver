@@ -20,6 +20,9 @@ if [ -e $srcdir/ChangeLog ]; then
     CHANGELOG_VERSION=`head -n 2 $srcdir/ChangeLog | tail -n 1 | awk {'print $2'} | sed 's|r||g; s|,||g'`
 else
     touch ChangeLog
+fi
+
+if [ -z $CHANGELOG_VERSION ]; then
     CHANGELOG_VERSION=$FIRST_REV
 fi
 
