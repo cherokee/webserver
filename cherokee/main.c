@@ -133,7 +133,7 @@ check_worker_version (const char *this_exec)
 	snprintf (tmp, sizeof(tmp), "%s -i", cherokee_worker);
 	f = popen (tmp, "r");
 	if (f == NULL) {
-		PRINT_MSG ("Cannot execute '%s'\n", tmp);
+		PRINT_MSG ("(critical) Cannot execute '%s'\n", tmp);
 		goto error;
 	}
 	
@@ -166,7 +166,7 @@ check_worker_version (const char *this_exec)
 		goto error;
 	}
 
-	PRINT_MSG ("Could not find the version string: '%s -i'\n", cherokee_worker);
+	PRINT_MSG ("(critical) Couldn't find the version string: '%s -i'\n", cherokee_worker);
 error:
 	pclose(f);
 	return ret_error;
@@ -265,8 +265,7 @@ pid_file_save (const char *pid_file, int pid)
 	file = fopen (pid_file, "w+");
 	if (file == NULL) {
 		/* Do not report any error if the PID file cannot be
-		 * created. It wouldn't allow cherokee-admin to start
-		 * Cherokee. The worker would complain later anyway..
+		 * created. It wouldn't allow cherokee-admin to start.
 		 */
 		return;
 	}
@@ -276,7 +275,7 @@ pid_file_save (const char *pid_file, int pid)
 	fclose (file);
 
 	if (written <= 0) {
-		PRINT_MSG ("Cannot write PID file '%s'\n", pid_file);
+		PRINT_MSG ("(warning) Couldn't write PID file '%s'\n", pid_file);
 	}
 }
 
@@ -418,7 +417,7 @@ do_spawn (void)
 			int fd;
 			fd = open (log_file, O_WRONLY | O_APPEND | O_CREAT, 0600);
 			if (fd < 0) {
-				PRINT_ERROR ("WARNING: Couldn't open '%s' for writing..\n", log_file);
+				PRINT_ERROR ("(warning) Couldn't open '%s' for writing..\n", log_file);
 			}
 			dup2 (fd, STDOUT_FILENO);
 			dup2 (fd, STDERR_FILENO);
@@ -433,21 +432,21 @@ do_spawn (void)
 		if (uid_str != NULL) {
 			n = initgroups (uid_str, gid);
 			if (n == -1) {
-				PRINT_ERROR ("WARNING: initgroups failed User=%s, GID=%d\n", uid_str, gid);
+				PRINT_ERROR ("(warning) initgroups failed User=%s, GID=%d\n", uid_str, gid);
 			}
 		}
 
 		if (gid != -1) {
 			n = setgid (gid);
 			if (n != 0) {
-				PRINT_ERROR ("WARNING: Could not set GID=%d\n", gid);
+				PRINT_ERROR ("(warning) Couldn't set GID=%d\n", gid);
 			}
 		}
 
 		if (uid != -1) {
 			n = setuid (uid);
 			if (n != 0) {
-				PRINT_ERROR ("WARNING: Could not set UID=%d\n", uid);
+				PRINT_ERROR ("(warning) Couldn't set UID=%d\n", uid);
 			}
 		}
 
@@ -459,7 +458,7 @@ do_spawn (void)
 		argv[2] = interpreter;
 		execve ("/bin/sh", (char **)argv, envp);
 
-		PRINT_ERROR ("ERROR: Could spawn %s\n", interpreter);
+		PRINT_MSG ("(critical) Couldn't spawn: sh -c %s\n", interpreter);
 		exit (1);
 	case -1:
 		/* Error */
@@ -520,20 +519,20 @@ sem_chmod (int sem, char *worker_uid)
 	}
 	
 	if (uid == 0) {
-		PRINT_ERROR ("Couldn't get UID for user '%s'\n", worker_uid);
+		PRINT_MSG ("(warning) Couldn't get UID for user '%s'\n", worker_uid);
 		return -1;
 	}
 
 	re = semctl (sem, 0, IPC_STAT, &buf);
 	if (re != -0) {
-		PRINT_ERROR ("Couldn't IPC_STAT: errno=%d\n", errno);
+		PRINT_MSG ("(warning) Couldn't IPC_STAT: errno=%d\n", errno);
 		return -1;
 	}
 
 	buf.sem_perm.uid = uid;
 	re = semctl (spawn_shared_sem, 0, IPC_SET, &buf);
 	if (re != 0) {
-		PRINT_ERROR ("Couldn't IPC_SET: uid=%d errno=%d\n", uid, errno);
+		PRINT_MSG ("(warning) Couldn't IPC_SET: uid=%d errno=%d\n", uid, errno);
 		return -1;
 	}
 
@@ -593,7 +592,7 @@ spawn_init (void)
 	*/
 	re = pthread_create (&spawn_thread, NULL, spawn_thread_func, NULL);
 	if (re != 0) {
-		PRINT_ERROR_S ("Couldn't spawning thread..\n");
+		PRINT_MSG_S ("(critical) Couldn't spawning thread..\n");
 		return ret_error;
 	}
 	
@@ -830,8 +829,7 @@ main (int argc, char *argv[])
 	if (! single_time) {
 		ret = spawn_init();
 		if (ret != ret_ok) {
-			PRINT_MSG_S ("Couldn't initialize spawn mechanism.\n");
-			return ret_error;
+			PRINT_MSG_S ("(warning) Couldn't initialize spawn mechanism.\n");
 		}
 	}
 #endif
@@ -841,7 +839,7 @@ main (int argc, char *argv[])
 
 		pid = process_launch (cherokee_worker, argv);
 		if (pid < 0) {
-			PRINT_MSG ("Couldn't launch '%s'\n", cherokee_worker);
+			PRINT_MSG ("(critical) Couldn't launch '%s'\n", cherokee_worker);
 			exit (EXIT_ERROR);
 		}
 
