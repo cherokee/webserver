@@ -102,10 +102,15 @@ class CherokeeManagement:
             if stderr_fd in r:
                 stderr += stderr_f.read(1)
 
-            if stderr.count('\n'):
-                self.__stop_process (p.pid)
-                self._pid = None
-                return stderr
+            nl = stderr.find('\n')
+            if nl != -1:
+                if (("ERROR" in stderr) or
+                    ("(error)" in stderr) or
+                    ("(critical)" in stderr)):
+                    self.__stop_process (p.pid)
+                    self._pid = None
+                    return stderr
+                stderr = stderr[nl+1:]
 
             if stdout.count('\n') > 1:
                 break
