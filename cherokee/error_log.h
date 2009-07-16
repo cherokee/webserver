@@ -42,18 +42,18 @@ typedef enum {
 # define LOG_WARNING(fmt,arg...)   cherokee_error_log(cherokee_err_warning,  "%s:%d - "fmt, __FILE__, __LINE__, ##arg)
 # define LOG_ERROR(fmt,arg...)     cherokee_error_log(cherokee_err_error,    "%s:%d - "fmt, __FILE__, __LINE__, ##arg)
 # define LOG_CRITICAL(fmt,arg...)  cherokee_error_log(cherokee_err_critical, "%s:%d - "fmt, __FILE__, __LINE__, ##arg)
-# define LOG_ERRNO(t,e,fmt,arg...) cherokee_error_errno_log(e, t, "%s:%d - "fmt, __FILE__, __LINE__, ##arg)
+# define LOG_ERRNO(e,t,fmt,arg...) cherokee_error_errno_log(e, t, "%s:%d - "fmt, __FILE__, __LINE__, ##arg)
 #else
 # define LOG_WARNING(t,fmt,...)   cherokee_error_log(cherokee_err_warning,  "%s:%d - "fmt, __FILE__, __LINE__, __VA_ARGS__)
 # define LOG_ERROR(t,fmt,...)     cherokee_error_log(cherokee_err_error,    "%s:%d - "fmt, __FILE__, __LINE__, __VA_ARGS__)
 # define LOG_CRITIAL(t,fmt,...)   cherokee_error_log(cherokee_err_critical, "%s:%d - "fmt, __FILE__, __LINE__, __VA_ARGS__)
-# define LOG_ERRNO(t,e,fmt,...)   cherokee_error_errno_log(e, t, "%s:%d - "fmt, __FILE__, __LINE__, __VA_ARGS__)
+# define LOG_ERRNO(e,t,fmt,...)   cherokee_error_errno_log(e, t, "%s:%d - "fmt, __FILE__, __LINE__, __VA_ARGS__)
 #endif
 
 #define LOG_WARNING_S(str)   LOG_WARNING("%s", str)
 #define LOG_ERROR_S(str)     LOG_ERROR("%s", str)
 #define LOG_CRITICAL_S(str)  LOG_CRITICAL("%s", str)
-#define LOG_ERRNO_S(t,e,str) LOG_ERRNO(t,e,"%s",str)
+#define LOG_ERRNO_S(e,t,str) LOG_ERRNO(t,e,"%s",str)
 
 ret_t cherokee_error_log         (cherokee_error_type_t type, const char *format, ...);
 ret_t cherokee_error_errno_log   (int error, cherokee_error_type_t type, const char *format, ...);
