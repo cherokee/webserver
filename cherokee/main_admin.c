@@ -23,7 +23,10 @@
  */ 
 
 #include "common-internal.h"
+
 #include <signal.h>
+#include <sys/stat.h>
+
 #include "init.h"
 #include "server.h"
 #include "socket.h"
@@ -109,6 +112,37 @@ generate_admin_password (cherokee_buffer_t *buf)
 	return ret_ok;
 }
 
+static ret_t
+remove_old_socket (const char *path)
+{
+	int         re;
+	struct stat info;
+
+	/* It might not exist
+	 */
+	re = stat (path, &info);
+	if (re != 0) {
+		return ret_ok;
+	}
+
+	/* If exist, it must be a socket
+	 */
+	if (! S_ISSOCK(info.st_mode)) {
+		PRINT_MSG ("ERROR: Something happens; '%s' isn't a socket.\n", path);
+		return ret_error;
+	}
+
+	/* Remove it
+	 */
+	re = unlink (path);
+	if (re != 0) {
+		PRINT_MSG ("ERROR: Couldn't remove unix socket '%s'.\n", path);
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
 
 static ret_t
 config_server (cherokee_server_t *srv) 
@@ -142,9 +176,11 @@ config_server (cherokee_server_t *srv)
 	 */
 	if (scgi_port > 0) {
 		ret = find_empty_port (scgi_port, &scgi_port);
-		if (ret != ret_ok) {
-			return ret;
-		}
+	} else {
+		ret = remove_old_socket (DEFAULT_UNIX_SOCKET);
+	}
+	if (ret != ret_ok) {
+		return ret_error;
 	}
 
 	cherokee_buffer_add_va  (&buf, "server!bind!1!port = %d\n", port);
