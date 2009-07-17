@@ -91,9 +91,11 @@ cherokee_logger_ncsa_new (cherokee_logger_t         **logger,
 
 
 static void 
-bogotime_callback (void) 
+bogotime_callback (void *param) 
 {
 	struct tm *pnow_tm = &cherokee_bogonow_tmloc;
+
+	UNUSED (param);
 	
 	cherokee_buffer_clean  (&now);
 	cherokee_buffer_add_va (&now, 
@@ -154,7 +156,7 @@ cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t    *logger,
 	 */
 	if (callback_init == 0) {
 		cherokee_buffer_init (&now);
-		cherokee_bogotime_add_callback (bogotime_callback);
+		cherokee_bogotime_add_callback (bogotime_callback, NULL, 1);
 	}
 
 	return ret_ok;

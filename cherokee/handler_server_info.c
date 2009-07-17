@@ -349,29 +349,36 @@ add_traffic (cherokee_dwriter_t *writer,
 	     cherokee_server_t  *srv)
 {
 	cherokee_list_t  *i;
-	size_t            rx  = 0;
-	size_t            tx  = 0;
 	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
 
 	/* Global statistics
 	 */
-	cherokee_server_get_total_traffic (srv, &rx, &tx);
-
 	cherokee_dwriter_dict_open (writer);
 	cherokee_dwriter_cstring (writer, "tx");
-	cherokee_dwriter_integer (writer, tx);
+	cherokee_dwriter_integer (writer,
+				    (srv->collector) ? COLLECTOR_RX(srv->collector) : -1);
+
 	cherokee_dwriter_cstring (writer, "rx");
-	cherokee_dwriter_integer (writer, rx);
+	cherokee_dwriter_integer (writer, 
+				  (srv->collector) ? COLLECTOR_TX(srv->collector) : -1);
 
-	cherokee_buffer_clean (&tmp);
-	cherokee_buffer_add_fsize (&tmp, tx);
 	cherokee_dwriter_cstring (writer, "tx_formatted");
-	cherokee_dwriter_bstring (writer, &tmp);
+	if (srv->collector != NULL) {
+		cherokee_buffer_clean     (&tmp);
+		cherokee_buffer_add_fsize (&tmp, COLLECTOR_TX(srv->collector));
+		cherokee_dwriter_bstring (writer, &tmp);
+	} else {
+		cherokee_dwriter_cstring (writer, "unknown");
+	}
 
-	cherokee_buffer_clean (&tmp);
-	cherokee_buffer_add_fsize (&tmp, rx);
 	cherokee_dwriter_cstring (writer, "rx_formatted");
-	cherokee_dwriter_bstring (writer, &tmp);
+	if (srv->collector != NULL) {
+		cherokee_buffer_clean     (&tmp);
+		cherokee_buffer_add_fsize (&tmp, COLLECTOR_RX(srv->collector));
+		cherokee_dwriter_bstring (writer, &tmp);
+	} else {
+		cherokee_dwriter_cstring (writer, "unknown");
+	}
 
 	/* Per Virtual Server
 	 */
@@ -382,12 +389,12 @@ add_traffic (cherokee_dwriter_t *writer,
 		cherokee_virtual_server_t *vsrv = VSERVER(i);
 
 		cherokee_dwriter_bstring (writer, &vsrv->name);
-		if (vsrv->data.enabled) {
+		if (vsrv->collector != NULL) {
 			cherokee_dwriter_dict_open (writer);
 			cherokee_dwriter_cstring (writer, "rx");
-			cherokee_dwriter_integer (writer, vsrv->data.rx);
+			cherokee_dwriter_integer (writer, COLLECTOR_RX(vsrv->collector));
 			cherokee_dwriter_cstring (writer, "tx");
-			cherokee_dwriter_integer (writer, vsrv->data.tx);
+			cherokee_dwriter_integer (writer, COLLECTOR_TX(vsrv->collector));
 			cherokee_dwriter_dict_close (writer);
 		} else {
 			cherokee_dwriter_null (writer);
@@ -474,6 +481,7 @@ modules_while (cherokee_buffer_t *key, void *value, void *params[])
 	int *rules      = (int *) params[6];
 	int *cryptors   = (int *) params[7];
 	int *vrules     = (int *) params[8];
+	int *collectors = (int *) params[9];
 
 	cherokee_plugin_loader_entry_t *entry = value;
 	cherokee_plugin_info_t         *mod   = entry->info;
@@ -498,6 +506,8 @@ modules_while (cherokee_buffer_t *key, void *value, void *params[])
 		*cryptors += 1;
 	} else if (mod->type & cherokee_vrule) {
 		*vrules += 1;
+	} else if (mod->type & cherokee_collector) {
+		*collectors += 1;
 	} else {
 		LOG_ERROR("Unknown module type (%d)\n", mod->type);
 	}
@@ -518,8 +528,9 @@ add_modules (cherokee_dwriter_t *writer,
 	cuint_t  rules      = 0;
 	cuint_t  cryptors   = 0;
 	cuint_t  vrules     = 0;
-	void    *params[]   = {&loggers, &handlers, &encoders, &validators,
-			       &generic, &balancers, &rules, &cryptors, &vrules};
+	cuint_t  collectors = 0;
+	void    *params[]   = {&loggers, &handlers, &encoders, &validators, &generic,
+			       &balancers, &rules, &cryptors, &vrules, &collectors};
 
 	cherokee_avl_while (&srv->loader.table, 
 			    (cherokee_avl_while_func_t) modules_while, 
@@ -544,6 +555,8 @@ add_modules (cherokee_dwriter_t *writer,
 	cherokee_dwriter_integer (writer, cryptors);
 	cherokee_dwriter_cstring (writer, "vrules");
 	cherokee_dwriter_integer (writer, vrules);
+	cherokee_dwriter_cstring (writer, "collectors");
+	cherokee_dwriter_integer (writer, collectors);
 	cherokee_dwriter_dict_close (writer);
 }
 

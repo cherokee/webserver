@@ -9,6 +9,7 @@ from Rule import *
 from RuleList import *
 from CherokeeManagement import *
 from Wizard import *
+from GraphManager import *
 
 # For gettext
 N_ = lambda x: x
@@ -63,6 +64,7 @@ NOTE_X_REAL_IP_ACCESS = N_('List of IP addresses and subnets that are allowed to
 NOTE_EVHOST           = N_('How to support the "Advanced Virtual Hosting" mechanism. (Default: off)')
 NOTE_LOGGER_TEMPLATE  = N_('The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}')
 NOTE_MATCHING_METHOD  = N_('Allows the selection of domain matching method.')
+NOTE_COLLECTOR        = N_('Whether or not it should collected statistics about the traffic of this virtual server.')
 
 HELPS = [
     ('config_virtual_servers', N_("Virtual Servers")),
@@ -259,7 +261,8 @@ class PageVServer (PageMenu, FormHelper):
         tabs += [(_('Error handler'), tmp)]
 
         # Logging
-        tmp = self._render_logger(host)
+        tmp  = self._render_logger(host)
+        tmp += self._render_graphs(host)
         tabs += [(_('Logging'), tmp)]
 
         # Security
@@ -525,6 +528,42 @@ class PageVServer (PageMenu, FormHelper):
 
         return txt
 
+
+    def _render_graphs (self, host):
+        txt = ''
+        pre = "vserver!%s" % (host)
+
+        # Server collects statistics
+        srv_has = (self._cfg.get_val('server!collector') != None)
+
+        # VServer options
+        txt += '<h2>%s</h2>' % (_('Statistics'))
+        table = TableProps()
+        if srv_has:
+            self.AddPropCheck (table, _('Collect Statistics'), '%s!collector!enabled'%(pre), True, _(NOTE_COLLECTOR))
+        else:
+            self.AddPropCheck (table, _('Collect Statistics'), '%s!collector!enabled'%(pre), True, _(NOTE_COLLECTOR), disabled=1)
+
+        txt += self.Indent(table)
+        txt += "<br/>"
+        
+        # VServer collect statistics
+        if not srv_has:
+            return txt
+
+        if not int(self._cfg.get_val('%s!collector!enabled'%(pre), '1')):
+            return txt
+
+        if not graphs_are_active(self._cfg):
+            return ''
+
+        name = self._cfg.get_val('vserver!%s!nick'%(host), "default")
+        for tmp in graphs_get_images (self._cfg, "vserver_traffic_%s"%(name)):
+            interval, img_name = tmp
+            txt += '<p><img src="/graphs/%s" alt="%s, Traffic %s" /></p>\n' % (img_name, name, interval)
+
+        return txt
+
     def _render_logger (self, host):
         txt   = ""
         pre = 'vserver!%s!logger'%(host)
@@ -649,7 +688,8 @@ class PageVServer (PageMenu, FormHelper):
         checkboxes = ['%s!keepalive'%(pre),
                       '%s!collect_statistics'%(pre),
                       '%s!logger!x_real_ip_enabled'%(pre),
-                      '%s!logger!x_real_ip_access_all'%(pre)]
+                      '%s!logger!x_real_ip_access_all'%(pre),
+                      '%s!collector!enabled'%(pre)]
 
         tmp = self._cfg['%s!rule'%(pre)]
         if tmp and tmp.has_child():

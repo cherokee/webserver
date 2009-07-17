@@ -164,3 +164,8 @@ CLIENT_CERTS = [
     ('accept',   N_('Accept')),
     ('required', N_('Require'))
 ]
+
+COLLECTORS = [
+    ('',         N_('Disabled')),
+    ('rrd',      N_('RRDtool graphs'))
+]

@@ -262,33 +262,6 @@ class FormHelper (WebComponent):
 
         return render
 
-    def AddTableOptions_Reload (self, table, title, cfg_key, options, **kwargs):
-        assert (self.submit_url)
-        print "DEPRECATED: AddTableOptions_Reload"
-
-        # The Table entry itself
-        js = "options_changed('/ajax/update', this);"
-        name = self.AddTableOptions (table, title, cfg_key, options, onChange=js)
-
-        # If there was no cfg value, pick the first
-        if not name:
-            name = options[0][0]
-
-        # Render active option
-        if name:
-            try:
-                # Inherit the errors, if any
-                kwargs['errors'] = self.errors
-                props_widget = module_obj_factory (name, self._cfg, cfg_key,
-                                                   self.submit_url, **kwargs)
-                render = props_widget._op_render()
-            except IOError:
-                render = "Couldn't load the properties module: %s" % (name)
-        else:
-            render = ''
-
-        return render
-
     def InstanceCheckbox (self, cfg_key, default=None, quiet=False, **kwargs):
         try:
             tmp = self._cfg[cfg_key].value.lower()

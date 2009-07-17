@@ -4,6 +4,7 @@ from Page import *
 from Table import *
 from configured import *
 from CherokeeManagement import *
+from GraphManager import *
 
 # For gettext
 N_ = lambda x: x
@@ -98,6 +99,12 @@ class PageStatus (PageMenu, FormHelper):
         self.AddMacroContent ('_linformation', _('Information'))
         self.AddMacroContent ('extra_info', extra_info)
 
+        if graphs_are_active(self._cfg):
+            server_graphs = self._render_server_graphs()
+        else:
+            server_graphs = ''
+        self.AddMacroContent ('server_graphs', server_graphs)
+
         # Translation
         if len(AVAILABLE_LANGUAGES) > 1:
             self.AddMacroContent ('_llanguages',    _('Language:'))
@@ -154,5 +161,26 @@ class PageStatus (PageMenu, FormHelper):
 
         txt += '<h3>%s</h3>' % (_('Configuration File'))
         txt += self.Indent(table)
+
+        return txt
+
+
+    def _render_server_graphs (self):
+        txt = '<h2>Server graphs</h2>'
+
+        txt += '<h3>Server Traffic</h3>'
+        for tmp in graphs_get_images (self._cfg, "server_traffic"):
+            interval, img_name = tmp
+            txt += '<p><img src="/graphs/%s" alt="Traffic %s" /></p>\n' % (img_name, interval)
+
+        txt += '<h3>Connections Accepted</h3>'
+        for tmp in graphs_get_images (self._cfg, "server_accepts"):
+            interval, img_name = tmp
+            txt += '<p><img src="/graphs/%s" alt="Accepts %s" /></p>\n' % (img_name, interval)
+
+        txt += '<h3>Timeouts</h3>'
+        for tmp in graphs_get_images (self._cfg, "server_timeouts"):
+            interval, img_name = tmp
+            txt += '<p><img src="/graphs/%s" alt="Timeouts %s" /></p>\n' % (img_name, interval)
 
         return txt

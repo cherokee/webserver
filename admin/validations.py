@@ -72,6 +72,12 @@ def is_dir_formated (value):
 
     return value
 
+def is_exec_path (value):
+    is_path(value)
+    if not os.access (value, os.X_OK):
+        raise ValueError, _('It is not executable')
+    return value
+
 def is_extension_list (value):
     re = []
     for p in split_list(value):

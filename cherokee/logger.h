@@ -37,7 +37,7 @@
 CHEROKEE_BEGIN_DECLS
 
 
-/* Callback function definitions
+/* Virtual method prototypes
  */
 typedef ret_t (* logger_func_new_t)              (void **logger, void *vsrv, cherokee_config_node_t *config);
 typedef ret_t (* logger_func_init_t)             (void  *logger);

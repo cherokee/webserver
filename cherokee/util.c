@@ -1809,3 +1809,43 @@ cherokee_string_is_ipv6 (cherokee_buffer_t *ip)
 
 	return 0;
 }
+
+
+ret_t
+cherokee_find_exec_in_path (const char        *bin_name,
+			    cherokee_buffer_t *fullpath)
+{
+	int   re;
+	char *p, *q;
+	char *path;
+
+	p = getenv("PATH");
+	if (p == NULL) {
+		return ret_not_found;
+	}
+	
+	path = strdup(p);
+	p    = path;
+	do {
+		q = strchr (p, ':');
+		if (q) {
+			*q = '\0';
+		}
+
+		cherokee_buffer_clean   (fullpath);
+		cherokee_buffer_add     (fullpath, p, strlen(p));
+		cherokee_buffer_add_str (fullpath, "/");
+		cherokee_buffer_add     (fullpath, bin_name, strlen(bin_name));
+
+		re = access (fullpath->buf, X_OK);
+		if (re == 0) {
+			free (path);
+			return ret_ok;
+		}
+
+		p = q + 1;
+	} while(p);
+
+	free (path);
+	return ret_not_found;
+}

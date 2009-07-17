@@ -58,6 +58,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->post_max_len    = -1;
 	n->evhost          = NULL;
 	n->matching        = NULL;
+	n->collector       = NULL;
 
 	/* Virtual entries
 	 */
@@ -69,17 +70,9 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	if (ret != ret_ok)
 		return ret;
 
-	/* Data transference 
-	 */
-	n->data.enabled    = true;
-	n->data.rx         = 0;
-	n->data.tx         = 0;
-	CHEROKEE_MUTEX_INIT(&n->data.rx_mutex, NULL);
-	CHEROKEE_MUTEX_INIT(&n->data.tx_mutex, NULL);
-
 	/* TLS related
 	 */
-	n->verify_depth    = 1;
+	n->verify_depth = 1;
 	cherokee_buffer_init (&n->server_cert);
 	cherokee_buffer_init (&n->server_key);
 	cherokee_buffer_init (&n->certs_ca);
@@ -143,6 +136,11 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 		vserver->logger = NULL;
 	}
 
+	if (vserver->collector != NULL) {
+		cherokee_collector_vsrv_free (vserver->collector);
+		vserver->collector = NULL;
+	}
+
 	cherokee_buffer_mrproper (&vserver->name);
 	cherokee_buffer_mrproper (&vserver->root);
 	cherokee_buffer_mrproper (&vserver->userdir);
@@ -199,24 +197,6 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 		return ret;
 
 	return ret_ok;
-}
-
-
-void  
-cherokee_virtual_server_add_rx (cherokee_virtual_server_t *vserver, size_t rx)
-{
-	CHEROKEE_MUTEX_LOCK(&vserver->data.rx_mutex);
-	vserver->data.rx += rx;
-	CHEROKEE_MUTEX_UNLOCK(&vserver->data.rx_mutex);
-}
-
-
-void
-cherokee_virtual_server_add_tx (cherokee_virtual_server_t *vserver, size_t tx)
-{
-	CHEROKEE_MUTEX_LOCK(&vserver->data.tx_mutex);
-	vserver->data.tx += tx;
-	CHEROKEE_MUTEX_UNLOCK(&vserver->data.tx_mutex);
 }
 
 
@@ -644,8 +624,10 @@ add_evhost (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 	return ret_ok;
 }
 
+
 static ret_t 
-add_logger (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
+add_logger (cherokee_config_node_t    *config,
+	    cherokee_virtual_server_t *vserver)
 {
 	ret_t                   ret;
 	logger_func_new_t       func_new;
@@ -788,9 +770,6 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "post_max_len")) {
 		vserver->post_max_len = atoi (conf->val.buf);
 
-	} else if (equal_buf_str (&conf->key, "collect_statistics")) {
-		vserver->data.enabled = !! atoi (conf->val.buf);
-
 	} else if (equal_buf_str (&conf->key, "ssl_verify_depth")) {
 		vserver->verify_depth = !!atoi (conf->val.buf);
 
@@ -809,6 +788,8 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "ssl_ciphers")) {
 		cherokee_buffer_add_buffer (&vserver->ciphers, &conf->val);
 
+ 	} else if (equal_buf_str (&conf->key, "collect_statistics")) { 
+		/* DEPRECATED: Ignore */
 	} else {
 		LOG_CRITICAL ("Virtual Server: Unknown key '%s'\n", conf->key.buf);
 		return ret_error;
@@ -817,6 +798,32 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	return ret_ok;
 }
 
+static ret_t
+configure_collector (cherokee_virtual_server_t *vserver, 
+		     cherokee_virtual_server_t *vsrv,
+		     cherokee_config_node_t    *config)
+{
+	ret_t                 ret;
+	cherokee_boolean_t    active    = true;
+	cherokee_collector_t *collector = VSERVER_SRV(vserver)->collector;
+
+	/* Read the value
+	 */
+	cherokee_config_node_read_bool (config, "collector!active", &active);
+	
+	/* Instance object if needed 
+	 */
+	if (! active) {
+		return ret_ok;
+	}
+
+	ret = cherokee_collector_vsrv_new (collector, vsrv, config, &vserver->collector);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
 
 ret_t 
 cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver, 
@@ -834,6 +841,15 @@ cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver,
 	ret = cherokee_config_node_while (config, configure_virtual_server_property, vserver);
 	if (ret != ret_ok)
 		return ret;
+
+	/* Information collectors
+	 */
+	if (VSERVER_SRV(vserver)->collector) {
+		ret = configure_collector (vserver, vserver, config);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
+	}
 
 	/* Perform some sanity checks
 	 */

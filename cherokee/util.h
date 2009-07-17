@@ -123,7 +123,12 @@ ret_t   cherokee_parse_host         (cherokee_buffer_t *buf,
 				     cuint_t           *port);
 
 int     cherokee_string_is_ipv6     (cherokee_buffer_t *ip);
-ret_t   cherokee_buf_add_bogonow    (cherokee_buffer_t *buf, cherokee_boolean_t update);
+
+ret_t   cherokee_buf_add_bogonow    (cherokee_buffer_t *buf,
+				     cherokee_boolean_t update);
+
+ret_t   cherokee_find_exec_in_path  (const char        *bin_name,
+				     cherokee_buffer_t *fullpath);
 
 /* Time management functions
  */

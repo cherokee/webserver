@@ -523,6 +523,14 @@ process_polling_connections (cherokee_thread_t *thd)
 			TRACE (ENTRIES",polling", "conn %p(fd=%d): Time out\n", 
 			       conn, SOCKET_FD(&conn->socket));
 
+			/* Information collection
+			 */
+			if (THREAD_SRV(thd)->collector != NULL) {
+				cherokee_collector_log_timeout (THREAD_SRV(thd)->collector);
+			}
+
+			/* Close it
+			 */
 			if (conn->phase <= phase_add_headers) {
 				send_hardcoded_error (&conn->socket,
 						      http_gateway_timeout_string,
@@ -595,6 +603,12 @@ process_active_connections (cherokee_thread_t *thd)
 		if (conn->timeout < cherokee_bogonow_now) {
 			TRACE (ENTRIES, "thread (%p) processing conn (%p): Time out\n", thd, conn);
 
+			/* Information collection
+			 */
+			if (THREAD_SRV(thd)->collector != NULL) {
+				cherokee_collector_log_timeout (THREAD_SRV(thd)->collector);
+			}
+
 			conns_freed++;
 			close_active_connection (thd, conn);
 			continue;
@@ -610,9 +624,9 @@ process_active_connections (cherokee_thread_t *thd)
 
 		/* Maybe update traffic counters
 		 */
-		if ((CONN_VSRV(conn)->data.enabled) &&
-		    ((conn->rx != 0) || (conn->tx != 0)) &&
-		    (conn->traffic_next < cherokee_bogonow_now))
+		if ((CONN_VSRV(conn)->collector) &&
+		    (conn->traffic_next < cherokee_bogonow_now) &&
+		    ((conn->rx_partial != 0) || (conn->tx_partial != 0)))
 		{
 			cherokee_connection_update_vhost_traffic (conn);
 		}
@@ -1388,6 +1402,12 @@ accept_new_connection (cherokee_thread_t *thd,
 	if (ret != ret_ok)
 		return ret_deny;
 
+	/* Information collection
+	 */
+	if (THREAD_SRV(thd)->collector != NULL) {
+		cherokee_collector_log_accept (THREAD_SRV(thd)->collector);
+	}
+
 	/* We got the new socket, now set it up in a new connection object
 	 */
 	ret = cherokee_thread_get_new_connection (thd, &new_conn);
@@ -1784,7 +1804,8 @@ cherokee_thread_get_new_connection (cherokee_thread_t *thd, cherokee_connection_
 	new_connection->server    = server;
 	new_connection->vserver   = VSERVER(server->vservers.prev); 
 
-	new_connection->timeout   = cherokee_bogonow_now + THREAD_SRV(thd)->timeout;
+	new_connection->timeout      = cherokee_bogonow_now + THREAD_SRV(thd)->timeout;
+	new_connection->traffic_next = cherokee_bogonow_now + DEFAULT_TRAFFIC_UPDATE;
 
 	*conn = new_connection;
 	return ret_ok;

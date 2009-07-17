@@ -38,6 +38,7 @@
 #include "cryptor.h"
 #include "vrule.h"
 #include "gen_evhost.h"
+#include "collector.h"
 
 typedef struct {
 	cherokee_list_t              list_node;
@@ -55,6 +56,7 @@ typedef struct {
 	cherokee_config_entry_t     *error_handler;   /* Default error handler       */
 
 	cherokee_logger_t           *logger;          /* Logger object               */
+	cherokee_collector_vsrv_t   *collector;       /* Information collector       */  
 
 	cherokee_buffer_t            userdir;         /* Eg: public_html             */
 	cherokee_rule_list_t         userdir_rules;   /* User dir behavior           */
@@ -62,14 +64,6 @@ typedef struct {
 	cherokee_buffer_t            root;            /* Document root. Eg: /var/www */
 	cherokee_list_t              index_list;      /* Eg: index.html, index.php   */
 	void                        *evhost;
-
-	struct {                                      /* Number of bytes {up,down}loaded */
-		off_t                tx;
-		off_t                rx;
-		CHEROKEE_MUTEX_T    (tx_mutex);
-		CHEROKEE_MUTEX_T    (rx_mutex);
-		cherokee_boolean_t   enabled;
-	} data;
 
 	cuint_t                      verify_depth;
 	cherokee_buffer_t            server_cert;

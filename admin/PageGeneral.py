@@ -26,15 +26,16 @@ DATA_VALIDATION = [
     ("server!chroot",           (validations.is_local_dir_exists, 'cfg')),
 ]
 
-NOTE_ADD_PORT  = N_('Defines a port that the server will listen to')
-NOTE_IPV6      = N_('Set to enable the IPv6 support. The OS must support IPv6 for this to work.')
-NOTE_LISTEN    = N_('IP address of the interface to bind. It is usually empty.')
-NOTE_TIMEOUT   = N_('Time interval until the server closes inactive connections.')
-NOTE_TOKENS    = N_('This option allows to choose how the server identifies itself.')
-NOTE_USER      = N_('Changes the effective user. User names and IDs are accepted.')
-NOTE_GROUP     = N_('Changes the effective group. Group names and IDs are accepted.')
-NOTE_CHROOT    = N_('Jail the server inside the directory. Don\'t use it as the only security measure.')
-NOTE_TLS       = N_('Which, if any, should be the TLS/SSL backend.')
+NOTE_ADD_PORT   = N_('Defines a port that the server will listen to')
+NOTE_IPV6       = N_('Set to enable the IPv6 support. The OS must support IPv6 for this to work.')
+NOTE_LISTEN     = N_('IP address of the interface to bind. It is usually empty.')
+NOTE_TIMEOUT    = N_('Time interval until the server closes inactive connections.')
+NOTE_TOKENS     = N_('This option allows to choose how the server identifies itself.')
+NOTE_USER       = N_('Changes the effective user. User names and IDs are accepted.')
+NOTE_GROUP      = N_('Changes the effective group. Group names and IDs are accepted.')
+NOTE_CHROOT     = N_('Jail the server inside the directory. Don\'t use it as the only security measure.')
+NOTE_TLS        = N_('Which, if any, should be the TLS/SSL backend.')
+NOTE_COLLECTORS = N_('How the usage graphics should be generated.')
 
 HELPS = [('config_general',    N_("General Configuration")),
          ('config_quickstart', N_("Configuration Quickstart"))]
@@ -84,13 +85,32 @@ class PageGeneral (PageMenu, FormHelper):
         self.AddPropEntry (table,  _('Timeout (<i>secs</i>)'), 'server!timeout',       _(NOTE_TIMEOUT))
         self.AddPropOptions_Reload (table, _('Server Tokens'), 'server!server_tokens', PRODUCT_TOKENS, _(NOTE_TOKENS))
         txt += self.Indent(table)
+
+        txt += "<h2>%s</h2>" % (_('Collect Statistics'))
+        table = TableProps()
+        e = self.AddPropOptions_Reload (table, _('Graphs Type'), 'server!collector',
+                                        modules_available(COLLECTORS), _(NOTE_COLLECTORS))
+        txt += self.Indent(str(table) + e)
+
         return txt
 
     def _op_apply_changes (self, uri, post):
-        checkboxes = ['server!ipv6']
         # TLS checkboxes
+        checkboxes  = ['server!ipv6']
         checkboxes += ['server!bind!%s!tls' % (cb) for cb in self._cfg.keys('server!bind')]
-        self.ApplyChanges (checkboxes, post, validation = DATA_VALIDATION)
+
+        # Validation
+        validation = DATA_VALIDATION[:]
+
+        pre  = "server!collector"
+        name = self._cfg.get_val (pre)
+
+        if name:
+            graph_module = module_obj_factory (name, self._cfg, pre, self.submit_url)
+            if 'validation' in dir(graph_module):
+                validation += graph_module.validation
+
+        self.ApplyChanges (checkboxes, post, validation)
 
     def _render_ports (self):
         txt = ''

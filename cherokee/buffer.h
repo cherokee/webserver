@@ -53,6 +53,7 @@ typedef struct {
 #define cherokee_buffer_prepend_buf(b,s)   cherokee_buffer_prepend (b, (s)->buf, (s)->len)
 #define cherokee_buffer_cmp_str(b,s)       cherokee_buffer_cmp (b, (char *)s, sizeof(s)-1)
 #define cherokee_buffer_case_cmp_str(b,s)  cherokee_buffer_case_cmp (b, (char *)s, sizeof(s)-1)
+#define cherokee_buffer_fake_str(b,s)      cherokee_buffer_fake (b, s, sizeof(s)-1)
 
 ret_t cherokee_buffer_new                (cherokee_buffer_t **buf);
 ret_t cherokee_buffer_free               (cherokee_buffer_t  *buf);

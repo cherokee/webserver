@@ -372,6 +372,22 @@ dynamic_vrule_target_ip_lib = libplugin_target_ip.la
 endif
 
 
+#
+# Collector RRD
+#
+collector_rrd = \
+collector_rrd.c \
+collector_rrd.h
+
+libplugin_collector_rrd_la_LDFLAGS = $(module_ldflags)
+libplugin_collector_rrd_la_SOURCES = $(collector_rrd)
+
+if STATIC_COLLECTOR_RRD
+static_collector_rrd_src = $(collector_rrd)
+else
+dynamic_collector_rrd_lib = libplugin_collector_rrd.la
+endif
+
 
 #
 # Gen wildcard
@@ -1373,6 +1389,8 @@ $(static_vrule_target_ip_src) \
 \
 $(static_gen_evhost_src) \
 \
+$(static_collector_rrd_src) \
+\
 $(static_handler_file_src) \
 $(static_handler_admin_src) \
 $(static_handler_dirlist_src) \
@@ -1470,7 +1488,9 @@ dwriter.c \
 limiter.h \
 limiter.c \
 spawner.h \
-spawner.c
+spawner.c \
+collector.h \
+collector.c
 
 
 libcherokee_config_la_SOURCES = \
@@ -1550,6 +1570,7 @@ $(dynamic_rule_or_lib) \
 $(dynamic_vrule_wildcard_lib) \
 $(dynamic_vrule_rehost_lib) \
 $(dynamic_vrule_target_ip_lib) \
+$(dynamic_collector_rrd_lib) \
 $(dynamic_gen_evhost_lib) \
 $(dynamic_handler_file_lib) \
 $(dynamic_handler_cgi_lib) \

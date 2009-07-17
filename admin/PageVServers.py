@@ -140,8 +140,8 @@ class PageVServers (PageMenu, FormHelper):
         sorted_vservers.sort(sort_vservers, reverse=True)
 
         txt += '<div class="rulesdiv"><table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr class="nodrag nodrop"><th>&nbsp</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
-            (_('Nickname'), _('Root'), _('Domains'), _('Logging'))
+        txt += '<tr class="nodrag nodrop"><th>&nbsp</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
+            (_('Nickname'), _('Root'), _('Domains'), _('Logging'), _('Stats'))
 
         ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
         DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
@@ -150,6 +150,7 @@ class PageVServers (PageMenu, FormHelper):
             nick          = self._cfg.get_val('vserver!%s!nick'%(prio))
             document_root = self._cfg.get_val('vserver!%s!document_root'%(prio), '')
             logger_val    = self._cfg.get_val('vserver!%s!logger'%(prio))
+            collector_val = self._cfg.get_val('vserver!%s!collector!enabled'%(prio))
 
             hmatchtype    = self._cfg.get_val('vserver!%s!match'%(prio), None)
             if hmatchtype == 'rehost':
@@ -185,13 +186,23 @@ class PageVServers (PageMenu, FormHelper):
             else:
                 logging = DISABLED_IMAGE
 
+            if not collector_val:
+                tmp = self._cfg.get_val ('server!collector')
+                if tmp:
+                    collector_val = "1"
+
+            if collector_val:
+                collector = ENABLED_IMAGE
+            else:
+                collector = DISABLED_IMAGE
+
             if nick != "default":
                 link_del = self.AddDeleteLink ('/ajax/update', 'vserver!%s'%(prio))
             else:
                 link_del = ''
 
-            txt += '<tr prio="%s" id="%s"%s><td%s>&nbsp</td><td>%s</td><td>%s</td><td class="center">%d</td><td class="center">%s</td><td class="center">%s</td></tr>' % (
-                prio, prio, extra, draggable, link, document_root, doms, logging, link_del)
+            txt += '<tr prio="%s" id="%s"%s><td%s>&nbsp</td><td>%s</td><td>%s</td><td class="center">%d</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td></tr>' % (
+                prio, prio, extra, draggable, link, document_root, doms, logging, collector, link_del)
 
         txt += '</table>'
 

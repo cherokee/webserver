@@ -102,10 +102,12 @@ ModuleWildcard.py \
 ModuleRehost.py \
 ModuleTargetIp.py \
 ModuleEvhost.py \
+ModuleRrd.py \
 config.py \
 pyscgi.py \
 validations.py \
 CherokeeManagement.py \
+GraphManager.py \
 flags.py \
 util.py \
 Wizard.py \

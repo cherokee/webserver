@@ -36,7 +36,7 @@
 #include <cherokee/buffer.h>
 
 typedef unsigned long long cherokee_msec_t;
-typedef void (*bogotime_callback_t) (void);
+typedef void (*bogotime_callback_t) (void *param);
 
 /* Global bogonow variables
  */
@@ -65,6 +65,6 @@ void  cherokee_bogotime_lock_read    (void);
 void  cherokee_bogotime_release      (void);
 
 /* Callbacks */
-ret_t cherokee_bogotime_add_callback (bogotime_callback_t func);
+ret_t cherokee_bogotime_add_callback (bogotime_callback_t func, void *param, time_t elapse);
 
 #endif /* CHEROKEE_BOGOTIME_H */

@@ -28,6 +28,7 @@
 #include "server.h"
 #include "socket.h"
 #include "spawner.h"
+#include "config_reader.h"
 
 #ifdef HAVE_GETOPT_LONG
 # include <getopt.h>
@@ -106,13 +107,17 @@ generate_admin_password (cherokee_buffer_t *buf)
 	return ret_ok;
 }
 
+
 static ret_t
 config_server (cherokee_server_t *srv) 
 {
-	ret_t             ret;
-	int               scgi_port = 4000;
-	cherokee_buffer_t buf       = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t password  = CHEROKEE_BUF_INIT;
+	ret_t                   ret;
+	cherokee_config_node_t  conf;
+	int                     scgi_port = 4000;
+	cherokee_buffer_t       buf       = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t       password  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t       rrd_dir   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t       fake;
 
 	/* Print some information
 	 */
@@ -227,6 +232,32 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "6!handler!iocache = 0\n"
 				 RULE_PRE "6!document_root = %s\n", CHEROKEE_DOCDIR);
 
+	/* Figure the RRDtool db directory
+	 */
+	cherokee_config_node_init (&conf);
+	cherokee_buffer_fake (&fake, config_file, strlen(config_file));
+
+	ret = cherokee_config_reader_parse (&conf, &fake);
+	if (ret == ret_ok) {
+		ret = cherokee_config_node_copy (&conf, "server!collector!database_dir", &rrd_dir);
+		if (ret == ret_ok) {
+			cherokee_buffer_add_str (&rrd_dir, "/images");
+		}
+	}
+
+	cherokee_buffer_add_va  (&buf, 
+				 RULE_PRE "6!match = directory\n"
+				 RULE_PRE "6!match!directory = /graphs\n"
+				 RULE_PRE "6!handler = file\n"
+				 RULE_PRE "6!handler!iocache = 0\n"
+				 RULE_PRE "6!document_root = %s\n",
+				 rrd_dir.buf ? rrd_dir.buf : CHEROKEE_GRAPHS_DIR);
+
+	if (! debug) {
+		cherokee_buffer_add_str (&buf, RULE_PRE "6!expiration = time\n");
+		cherokee_buffer_add_str (&buf, RULE_PRE "6!expiration!time = 60\n");
+	}
+
 	cherokee_buffer_add_str (&buf,
 				 "mime!text/javascript!extensions = js\n"
 				 "mime!text/css!extensions = css\n"
@@ -241,6 +272,9 @@ config_server (cherokee_server_t *srv)
 		return ret;
 	}
 
+	cherokee_config_node_mrproper (&conf);
+
+	cherokee_buffer_mrproper (&rrd_dir);
 	cherokee_buffer_mrproper (&password);
 	cherokee_buffer_mrproper (&buf);
 	return ret_ok;

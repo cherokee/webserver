@@ -44,6 +44,16 @@ cherokee_buffer_t        cherokee_bogonow_strgmt;
 /* Registered callbacks */
 static cherokee_list_t   _callbacks;
 
+typedef struct {
+	cherokee_list_t      node;
+
+	bogotime_callback_t  func;
+	void                *param;
+
+	time_t               next;
+	time_t               elapse;
+} callback_entry_t;
+
 
 /* Global
  */
@@ -103,11 +113,16 @@ cherokee_bogotime_init (void)
 ret_t
 cherokee_bogotime_free (void)
 {
+	cherokee_list_t *i, *tmp;
+
 	if (! inited) {
 		return ret_ok;
 	}
 
-	cherokee_list_content_free (&_callbacks, NULL);
+	list_for_each_safe (i, tmp, &_callbacks) {
+		free(i);
+	}
+
 	cherokee_buffer_mrproper (&cherokee_bogonow_strgmt);
 	CHEROKEE_RWLOCK_DESTROY (&lock);
 
@@ -155,8 +170,12 @@ update_guts (void)
 	/* Callbacks
 	 */
 	list_for_each (c, &_callbacks) {
-		bogotime_callback_t func = LIST_ITEM_INFO(c);
-		func();
+		callback_entry_t *entry = (callback_entry_t *) c;
+
+		if (cherokee_bogonow_now >= entry->next) {
+			entry->func (entry->param);
+			entry->next = entry->elapse + cherokee_bogonow_now;
+		}
 	}
 
 	return ret_ok;
@@ -194,13 +213,30 @@ cherokee_bogotime_try_update (void)
 
 
 ret_t
-cherokee_bogotime_add_callback (bogotime_callback_t func)
+cherokee_bogotime_add_callback (bogotime_callback_t  func,
+				void                *param,
+				time_t               elapse)
 {
-	ret_t ret;
+	callback_entry_t *entry;
 
+	/* Build the list entry
+	 */
+	entry = (callback_entry_t *) malloc (sizeof(callback_entry_t));
+	if (unlikely (entry == NULL)) {
+		return ret_nomem;
+	}
+
+	INIT_LIST_HEAD(&entry->node);
+	entry->func   = func;
+	entry->param  = param;
+	entry->elapse = elapse;
+	entry->next   = elapse + cherokee_bogonow_now;
+
+	/* Add it
+	 */
 	CHEROKEE_RWLOCK_WRITER (&lock);
-	ret = cherokee_list_add_tail_content (&_callbacks, (void *)func);
+	cherokee_list_add_tail (&entry->node, &_callbacks);
 	CHEROKEE_RWLOCK_UNLOCK (&lock);
 
-	return ret;
+	return ret_ok;
 }

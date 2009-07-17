@@ -103,6 +103,7 @@ install-data-local: $(CONFS) install-data-local-config
 	@$(mkinstalldirs) $(DESTDIR)$(localstatedir)
 	@$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run
 	@$(mkinstalldirs) $(DESTDIR)$(localstatedir)/log
+	@$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/cherokee/graphs/images
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeconfdir)/ssl
 	@$(mkinstalldirs) $(DESTDIR)$(cherokeeadmindir)

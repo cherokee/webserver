@@ -56,6 +56,7 @@
 #include "version.h"
 #include "cryptor.h"
 #include "logger_writer.h"
+#include "collector.h"
 
 struct cherokee_server {
 	/* Exit related
@@ -91,6 +92,8 @@ struct cherokee_server {
 
 	/* Programmed tasks
 	 */
+	cherokee_collector_t      *collector;
+
 	cherokee_list_t            logger_writers;
 	cherokee_avl_t             logger_writers_index;
 

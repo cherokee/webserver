@@ -2393,19 +2393,21 @@ cherokee_connection_log_delayed (cherokee_connection_t *conn)
 ret_t 
 cherokee_connection_update_vhost_traffic (cherokee_connection_t *conn)
 {
-	/* Update the virtual server traffic counters
+	if (CONN_VSRV(conn)->collector == NULL)
+		return ret_ok;
+
+	cherokee_collector_vsrv_count (CONN_VSRV(conn)->collector,
+				       conn->rx_partial,
+				       conn->tx_partial);
+
+	/* Update the time for the next update
 	 */
-	cherokee_virtual_server_add_rx (CONN_VSRV(conn), conn->rx_partial);
-	cherokee_virtual_server_add_tx (CONN_VSRV(conn), conn->tx_partial);	
+	conn->traffic_next = cherokee_bogonow_now + DEFAULT_TRAFFIC_UPDATE;
 
 	/* Reset partial counters
 	 */
 	conn->rx_partial = 0;
 	conn->tx_partial = 0;
-
-	/* Update the time for the next update
-	 */
-	conn->traffic_next += DEFAULT_TRAFFIC_UPDATE;
 
 	return ret_ok;
 }
@@ -2480,7 +2482,6 @@ cherokee_connection_use_webdir (cherokee_connection_t *conn)
 char *
 cherokee_connection_print (cherokee_connection_t *conn)
 {
-	ret_t              ret;
 	const char        *phase;
 	cherokee_buffer_t *buf    = &conn->self_trace;
 
@@ -2495,7 +2496,7 @@ cherokee_connection_print (cherokee_connection_t *conn)
 
 	if (conn == NULL) {
 		cherokee_buffer_add_str (buf, "Connection is NULL\n");
-		return ret_ok;
+		return buf->buf;
 	}
 
 	phase = cherokee_connection_get_phase_str (conn);

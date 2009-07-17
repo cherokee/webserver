@@ -16,5 +16,7 @@
 # define CHEROKEE_ICONSDIR    "%prefix%/share/cherokee/icons"
 # define CHEROKEE_THEMEDIR    "%prefix%/share/cherokee/themes"
 # define CHEROKEE_PANIC_PATH  "%prefix%/bin/cherokee-panic"
+# define CHEROKEE_RRD_DIR     "%localstatedir%/lib/cherokee/graphs"
+# define CHEROKEE_GRAPHS_DIR  "%localstatedir%/lib/cherokee/graphs/images"
 
 #endif

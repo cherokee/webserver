@@ -145,6 +145,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->mime             = NULL;
 	n->icons            = NULL;
 	n->regexs           = NULL;
+	n->collector        = NULL;
 
 	cherokee_buffer_init (&n->chroot);
 	cherokee_buffer_init (&n->timeout_header);
@@ -275,11 +276,17 @@ cherokee_server_free (cherokee_server_t *srv)
 	cherokee_icons_free (srv->icons);
 	cherokee_regex_table_free (srv->regexs);
 
-	if (srv->iocache)
+	if (srv->iocache) {
 		cherokee_iocache_free (srv->iocache);
+	}
 
-	if (srv->cryptor)
+	if (srv->cryptor) {
 		cherokee_cryptor_free (srv->cryptor);
+	}
+
+	if (srv->collector) {
+		cherokee_collector_free (srv->collector);
+	}
 
 	cherokee_nonce_table_free (srv->nonces);
 
@@ -325,8 +332,8 @@ change_execution_user (cherokee_server_t *srv, struct passwd *ent)
 	if (srv->user_orig == 0) {
 		error = initgroups (ent->pw_name, srv->group);
 		if (error == -1) {
-			LOG_ERROR ("initgroups: Unable to set groups for user `%s' and GID %d\n", 
-				   ent->pw_name, srv->group);
+			LOG_WARNING ("initgroups: Unable to set groups for user `%s' and GID %d\n", 
+				     ent->pw_name, srv->group);
 		}
 	}
 
@@ -335,8 +342,8 @@ change_execution_user (cherokee_server_t *srv, struct passwd *ent)
 	if (srv->group != srv->group_orig) {
 		error = setgid (srv->group);
 		if (error != 0) {
-			LOG_ERROR ("Can't change group to GID %d, running with GID=%d\n",
-				   srv->group, srv->group_orig);
+			LOG_WARNING ("Can't change group to GID %d, running with GID=%d\n",
+				     srv->group, srv->group_orig);
 		}
 	}
 
@@ -345,8 +352,8 @@ change_execution_user (cherokee_server_t *srv, struct passwd *ent)
 	if (srv->user != srv->user_orig) {
 		error = setuid (srv->user);		
 		if (error != 0) {
-			LOG_ERROR ("Can't change user to UID %d, running with UID=%d\n",
-				   srv->user, srv->user_orig);
+			LOG_WARNING ("Can't change user to UID %d, running with UID=%d\n",
+				     srv->user, srv->user_orig);
 		}
 	}
 
@@ -552,8 +559,8 @@ initialize_server_threads (cherokee_server_t *srv)
 		if ((poll_fd_limit > 0) &&
 		    (fds_per_thread > poll_fd_limit)) 
 		{
-			LOG_ERROR ("fds_per_thread %d > %d poll_fd_limit (reduce that limit)\n",
-				   fds_per_thread, poll_fd_limit);
+			LOG_WARNING ("fds_per_thread %d > %d poll_fd_limit (reduce that limit)\n",
+				     fds_per_thread, poll_fd_limit);
 			fds_per_thread = poll_fd_limit - listen_fds;
 		}
 	}
@@ -1383,6 +1390,19 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		if (ret != ret_ok)
 			return ret;
 
+	} else if (equal_buf_str (&conf->key, "collector")) {
+		collector_func_new_t    instance;
+		cherokee_plugin_info_t *info      = NULL;
+
+		ret = cherokee_plugin_loader_get (&srv->loader, conf->val.buf, &info);
+		if ((ret != ret_ok) || (info == NULL))
+			return ret;
+
+		instance = (collector_func_new_t) info->instance;
+		ret = instance ((void **) &srv->collector, info, conf);
+		if (ret != ret_ok)
+			return ret;
+
 	} else if (equal_buf_str (&conf->key, "module_dir") ||
 		   equal_buf_str (&conf->key, "module_deps") ||
 		   equal_buf_str (&conf->key, "iocache")) {
@@ -1684,20 +1704,6 @@ cherokee_server_get_reusable_conns (cherokee_server_t *srv, cuint_t *num)
 	/* Return out parameters
 	 */
 	*num = reusable;
-	return ret_ok;
-}
-
-
-ret_t 
-cherokee_server_get_total_traffic (cherokee_server_t *srv, size_t *rx, size_t *tx)
-{
-	cherokee_list_t *i;
-
-	list_for_each (i, &srv->vservers) {
-		*rx += VSERVER(i)->data.rx;
-		*tx += VSERVER(i)->data.tx;
-	}
-
 	return ret_ok;
 }
 
