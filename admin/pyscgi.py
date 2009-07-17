@@ -41,8 +41,10 @@ import socket
 import errno
 import sys
 
-__version__ = '1.7'
-__author__  = 'Alvaro Lopez Ortega'
+__version__   = '1.9'
+__author__    = 'Alvaro Lopez Ortega'
+__copyright__ = 'Copyright 2009, Alvaro Lopez Ortega'
+__license__   = 'BSD'
 
 
 class SCGIHandler (SocketServer.StreamRequestHandler):
@@ -52,19 +54,19 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         SocketServer.StreamRequestHandler.__init__ (self, request, client_address, server)
 
     def __safe_read (self, lenght):
-         while True: 
-             chunk = None
-             try:
-                 chunk = self.rfile.read(lenght)
-                 return chunk
-             except socket.error, (err, strerr):
-                 if err == errno.EAGAIN or \
-                    err == errno.EWOULDBLOCK or \
-                    err == errno.EINPROGRESS:
-                     if chunk:
-                         return chunk
-                     continue
-             raise
+        while True: 
+            chunk = None
+            try:
+                chunk = self.rfile.read(lenght)
+                return chunk
+            except socket.error, (err, strerr):
+                if err == errno.EAGAIN or \
+                   err == errno.EWOULDBLOCK or \
+                   err == errno.EINPROGRESS:
+                   if chunk:
+                       return chunk
+                   continue
+            raise
 
     def send(self, buf):
         pending = len(buf)
@@ -84,8 +86,8 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
             c = self.__safe_read(1)
             if c == ':':
                 break
-            elif len(c) == 0:
-                raise IOError, 'Empty Length. Closed?'
+            elif not c:
+                raise IOError, 'Malformed netstring'
             size += c
         return long(size)
 
@@ -134,11 +136,14 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         except: pass
 
     def handle_request (self):
-        self.wfile.write("Content-Type: text/plain\r\n\r\n")
-        self.wfile.write("handle_request() should be overridden")
+        self.send('Status: 200 OK\r\n')
+        self.send("Content-Type: text/plain\r\n\r\n")
+        self.send("handle_request() should be overridden")
 
 
-class SCGIServer(SocketServer.ThreadingTCPServer):
+# TCP port
+#
+class SCGIServer (SocketServer.ThreadingTCPServer):
     def __init__(self, handler_class=SCGIHandler, host="", port=4000):
         self.allow_reuse_address = True
         SocketServer.ThreadingTCPServer.__init__ (self, (host, port), handler_class)
@@ -148,9 +153,30 @@ class SCGIServerFork (SocketServer.ForkingTCPServer):
         self.allow_reuse_address = True
         SocketServer.ForkingTCPServer.__init__ (self, (host, port), handler_class)
 
+# Unix socket
+#
+class SCGIUnixServer (SocketServer.ThreadingUnixStreamServer):
+    def __init__(self, unix_socket, handler_class=SCGIHandler):
+        self.allow_reuse_address = True
+        SocketServer.ThreadingUnixStreamServer.__init__ (self, unix_socket, handler_class)
+
+class SCGIUnixServerFork (SocketServer.UnixStreamServer):
+    def __init__(self, unix_socket, handler_class=SCGIHandler):
+        self.allow_reuse_address = True
+        SocketServer.UnixStreamServer.__init__ (self, unix_socket, handler_class)
+
 
 def ServerFactory (threading=False, *args, **kargs):
+    threading   = kargs.get('threading',   False)
+    unix_socket = kargs.get('unix_socket', None)
+
     if threading:
-        return SCGIServer(*args, **kargs)
+        if unix_socket:
+            return SCGIUnixServer (*args, **kargs)
+        else:
+            return SCGIServer(*args, **kargs)
     else:
-        return SCGIServerFork(*args, **kargs)
+        if unix_socket:
+            return SCGIUnixServerFork(*args, **kargs)
+        else:
+            return SCGIServerFork(*args, **kargs)

@@ -36,21 +36,54 @@ This module has been written as part of the Cherokee project:
 # POSSIBILITY OF SUCH DAMAGE.
 
 import SocketServer
+import traceback
+import socket
+import errno
+import sys
 
-__version__ = '1.0'
-__author__  = 'Alvaro Lopez Ortega'
+__version__   = '1.9'
+__author__    = 'Alvaro Lopez Ortega'
+__copyright__ = 'Copyright 2009, Alvaro Lopez Ortega'
+__license__   = 'BSD'
 
 
-class SCGIHandler (SocketServer.BaseRequestHandler):
+class SCGIHandler (SocketServer.StreamRequestHandler):
     def __init__ (self, request, client_address, server):
-        self.env  = {}
-        self.post = None
-        SocketServer.BaseRequestHandler.__init__ (self, request, client_address, server)
+        self.env    = {}
+        self.post   = None
+        SocketServer.StreamRequestHandler.__init__ (self, request, client_address, server)
+
+    def __safe_read (self, lenght):
+        while True: 
+            chunk = None
+            try:
+                chunk = self.rfile.read(lenght)
+                return chunk
+            except socket.error, (err, strerr):
+                if err == errno.EAGAIN or \
+                   err == errno.EWOULDBLOCK or \
+                   err == errno.EINPROGRESS:
+                   if chunk:
+                       return chunk
+                   continue
+            raise
+
+    def send(self, buf):
+        pending = len(buf)
+        offset = 0
+        while pending:
+            try:
+                sent = self.connection.send(buf[offset:])
+                pending -= sent
+                offset += sent
+            except socket.error, e:
+                if e[0]!=errno.EAGAIN:
+                    raise
 
     def __read_netstring_size (self):
         size = ""
         while 1:
-            c = self.input.read(1)
+            c = self.__safe_read(1)
             if c == ':':
                 break
             elif not c:
@@ -62,12 +95,12 @@ class SCGIHandler (SocketServer.BaseRequestHandler):
         data = ""
         size = self.__read_netstring_size()
         while size > 0:
-            s = self.input.read(size)
+            s = self.__safe_read(size)
             if not s:
                 raise IOError, 'Malformed netstring'
             data += s
             size -= len(s)
-            if self.input.read(1) != ',':
+            if self.__safe_read(1) != ',':
                 raise IOError, 'Missing netstring terminator'
         return data
 
@@ -83,24 +116,34 @@ class SCGIHandler (SocketServer.BaseRequestHandler):
     def handle_post (self):
         if not self.env.has_key('CONTENT_LENGTH'):
             return
+        if self.post:
+            return
         length = int(self.env['CONTENT_LENGTH'])
-        self.post = self.input.read(length)
+        self.post = self.__safe_read(length)
 
     def handle (self):
-        self.input = self.request.makefile('r')
-        self.output = self.request.makefile('w')
-
         self.__read_env()
-        self.handle_request()
-        self.output.close()
-        self.input.close()
+
+        try:
+            self.handle_request()
+        except:
+            if sys.exc_type != SystemExit:
+                traceback.print_exc()  # Print the error
+
+        try:
+            self.finish()          # Closes wfile and rfile
+            self.request.close()   # ..
+        except: pass
 
     def handle_request (self):
-        self.output.write("Content-Type: text/plain\r\n\r\n")
-        self.output.write("handle_request() should be overridden")
+        self.send('Status: 200 OK\r\n')
+        self.send("Content-Type: text/plain\r\n\r\n")
+        self.send("handle_request() should be overridden")
 
 
-class SCGIServer(SocketServer.ThreadingTCPServer):
+# TCP port
+#
+class SCGIServer (SocketServer.ThreadingTCPServer):
     def __init__(self, handler_class=SCGIHandler, host="", port=4000):
         self.allow_reuse_address = True
         SocketServer.ThreadingTCPServer.__init__ (self, (host, port), handler_class)
@@ -110,9 +153,30 @@ class SCGIServerFork (SocketServer.ForkingTCPServer):
         self.allow_reuse_address = True
         SocketServer.ForkingTCPServer.__init__ (self, (host, port), handler_class)
 
+# Unix socket
+#
+class SCGIUnixServer (SocketServer.ThreadingUnixStreamServer):
+    def __init__(self, unix_socket, handler_class=SCGIHandler):
+        self.allow_reuse_address = True
+        SocketServer.ThreadingUnixStreamServer.__init__ (self, unix_socket, handler_class)
+
+class SCGIUnixServerFork (SocketServer.UnixStreamServer):
+    def __init__(self, unix_socket, handler_class=SCGIHandler):
+        self.allow_reuse_address = True
+        SocketServer.UnixStreamServer.__init__ (self, unix_socket, handler_class)
+
 
 def ServerFactory (threading=False, *args, **kargs):
+    threading   = kargs.get('threading',   False)
+    unix_socket = kargs.get('unix_socket', None)
+
     if threading:
-        return SCGIServer(*args, **kargs)
+        if unix_socket:
+            return SCGIUnixServer (*args, **kargs)
+        else:
+            return SCGIServer(*args, **kargs)
     else:
-        return SCGIServerFork(*args, **kargs)
+        if unix_socket:
+            return SCGIUnixServerFork(*args, **kargs)
+        else:
+            return SCGIServerFork(*args, **kargs)

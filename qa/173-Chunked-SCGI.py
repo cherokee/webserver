@@ -16,9 +16,9 @@ from pyscgi import *
 class TestHandler (SCGIHandler):
     def handle_request (self):
         self.handle_post()
-        # self.output.write('Content-Length: %d\\r\\n')
-        self.output.write('Content-Type: text/plain\\r\\n\\r\\n')
-        self.output.write('%s')
+        # self.send('Content-Length: %d\\r\\n')
+        self.send('Content-Type: text/plain\\r\\n\\r\\n')
+        self.send('%s')
 
 SCGIServer(TestHandler, port=%d).serve_forever()
 """ % (len(MAGIC), MAGIC, PORT)

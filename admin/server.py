@@ -199,7 +199,7 @@ def main():
 
     # Read the arguments
     try:
-        scgi_port = int(sys.argv[1])
+        scgi_port = sys.argv[1]
         cfg_file  = sys.argv[2]
     except:
         print _("Incorrect parameters: PORT CONFIG_FILE")
@@ -214,7 +214,11 @@ def main():
     os.chdir(os.path.abspath(pathname))
 
     # SCGI server
-    srv = pyscgi.ServerFactory (True, handler_class=Handler, host="127.0.0.1", port=scgi_port)
+    if scgi_port.isdigit():
+        srv = pyscgi.ServerFactory (True, handler_class=Handler, host="127.0.0.1", port=int(scgi_port))
+    else:
+        srv = pyscgi.ServerFactory (True, handler_class=Handler, unix_socket=scgi_port)
+
     srv.socket.settimeout (MODIFIED_CHECK_ELAPSE)
 
     # Read configuration file
@@ -223,7 +227,11 @@ def main():
 
     version = VERSION
     pid     = os.getpid()
-    print _("Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)d") % (locals())
+
+    if scgi_port.isdigit():
+        print _("Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s") % (locals())
+    else:
+        print _("Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s") % (locals())
 
     # Iterate until the user exists
     try:

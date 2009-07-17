@@ -14,10 +14,10 @@ from pyscgi import *
 class TestHandler (SCGIHandler):
     def handle_request (self):
         self.handle_post()
-        self.output.write('Content-Type: text/plain\\r\\n\\r\\n')
+        self.send('Content-Type: text/plain\\r\\n\\r\\n')
 
         for v in self.env:
-            self.output.write('%%s: "%%s"\\n' %% (v, self.env[v]))
+            self.send('%%s: "%%s"\\n' %% (v, self.env[v]))
 
 SCGIServer(TestHandler, port=%d).serve_forever()
 """ % (PORT)

@@ -13,9 +13,9 @@ from pyscgi import *
 
 class TestHandler (SCGIHandler):
     def handle_request (self):
-        self.output.write('Content-Type: text/plain\\r\\n\\r\\n')
-        self.output.write('PathInfo is: >'  + self.env['PATH_INFO']   +'<\\n')
-        self.output.write('ScriptName is: >'+ self.env['SCRIPT_NAME'] +'<\\n')
+        self.send('Content-Type: text/plain\\r\\n\\r\\n')
+        self.send('PathInfo is: >'  + self.env['PATH_INFO']   +'<\\n')
+        self.send('ScriptName is: >'+ self.env['SCRIPT_NAME'] +'<\\n')
 
 SCGIServerFork(TestHandler, port=%d).serve_forever()
 """ % (PORT)
