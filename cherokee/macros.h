@@ -88,7 +88,7 @@
 
 #define DEFAULT_RECV_SIZE             2048
 #define DEFAULT_READ_SIZE             8192
-#define MAX_HEADER_LEN                4096
+#define MAX_HEADER_LEN                8122
 #define MAX_HEADER_CRLF               8
 #define MAX_KEEPALIVE                 500
 #define MAX_NEW_CONNECTIONS_PER_STEP  50
