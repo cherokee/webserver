@@ -22,7 +22,7 @@ ERROR_NO_DROOT  = _("The document root directory does not exist.")
 RAILS_ENV = [
     ('production',  'Production'),
     ('test',        'Test'),
-    ('Development', 'Development'),
+    ('development', 'Development'),
     ('',            'Empty')
 ]
 
