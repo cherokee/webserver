@@ -817,7 +817,7 @@ configure_collector (cherokee_virtual_server_t *vserver,
 		return ret_ok;
 	}
 
-	ret = cherokee_collector_vsrv_new (collector, vsrv, config, &vserver->collector);
+	ret = cherokee_collector_vsrv_new (collector, config, &vserver->collector);
 	if (ret != ret_ok) {
 		return ret_error;
 	}

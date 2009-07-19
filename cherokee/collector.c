@@ -131,9 +131,9 @@ base_count (cherokee_collector_base_t *collector,
  */
 
 ret_t
-cherokee_collector_init (cherokee_collector_t  *collector,
-			cherokee_plugin_info_t *info,
-			cherokee_config_node_t *config)
+cherokee_collector_init_base (cherokee_collector_t  *collector,
+			      cherokee_plugin_info_t *info,
+			      cherokee_config_node_t *config)
 {
 	/* Init the base class
 	 */
@@ -165,6 +165,17 @@ cherokee_collector_free (cherokee_collector_t *collector)
 }
 
 ret_t
+cherokee_collector_init (cherokee_collector_t *collector)
+{
+	if (collector->init == NULL) {
+		return ret_error;
+	}
+
+	return collector->init (collector);
+}
+
+
+ret_t
 cherokee_collector_log_accept (cherokee_collector_t *collector)
 {
 	LOCK(collector);
@@ -194,7 +205,6 @@ cherokee_collector_log_timeout (cherokee_collector_t *collector)
 
 ret_t
 cherokee_collector_vsrv_new (cherokee_collector_t       *collector,
-			     void                       *vsrv,
 			     cherokee_config_node_t     *config,
 			     cherokee_collector_vsrv_t **collector_vsrv)
 {
@@ -206,7 +216,7 @@ cherokee_collector_vsrv_new (cherokee_collector_t       *collector,
 
 	/* Instance
 	 */
-	ret = collector->new_vsrv (collector, vsrv, config, (void **)collector_vsrv);
+	ret = collector->new_vsrv (collector, config, (void **)collector_vsrv);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
@@ -218,8 +228,8 @@ cherokee_collector_vsrv_new (cherokee_collector_t       *collector,
 }
 
 ret_t
-cherokee_collector_vsrv_init (cherokee_collector_vsrv_t  *collector_vsrv,
-			      cherokee_config_node_t     *config)
+cherokee_collector_vsrv_init_base (cherokee_collector_vsrv_t  *collector_vsrv,
+				   cherokee_config_node_t     *config)
 {
 	/* Init the base class
 	 */
@@ -275,4 +285,16 @@ cherokee_collector_vsrv_count (cherokee_collector_vsrv_t  *collector_vsrv,
 
 	UNLOCK(collector_vsrv);
 	return ret_ok;
+}
+
+
+ret_t
+cherokee_collector_vsrv_init (cherokee_collector_vsrv_t *collector,
+			      void                      *vsrv)
+{
+	if (collector->init == NULL) {
+		return ret_error;
+	}
+
+	return collector->init (collector, vsrv);
 }

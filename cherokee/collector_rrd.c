@@ -545,6 +545,65 @@ srv_free (cherokee_collector_rrd_t *rrd)
 }
 
 
+static ret_t
+srv_init (cherokee_collector_rrd_t *rrd)
+{
+	ret_t ret;
+
+	/* Check whether the DB exists
+	 */
+	cherokee_buffer_clean      (&rrd->tmp);
+	cherokee_buffer_add_str    (&rrd->tmp, "create ");
+	cherokee_buffer_add_buffer (&rrd->tmp, &rrd->path_database);
+	cherokee_buffer_add_str    (&rrd->tmp, " --step ");
+	cherokee_buffer_add_long10 (&rrd->tmp, ELAPSE_UPDATE);
+	cherokee_buffer_add_str    (&rrd->tmp, " ");
+
+	/* Data Sources */
+	cherokee_buffer_add_va     (&rrd->tmp, "DS:Accepts:ABSOLUTE:%d:U:U ",  ELAPSE_UPDATE*10);
+	cherokee_buffer_add_va     (&rrd->tmp, "DS:Timeouts:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
+	cherokee_buffer_add_va     (&rrd->tmp, "DS:RX:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
+	cherokee_buffer_add_va     (&rrd->tmp, "DS:TX:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
+
+	/* Archives */
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:AVERAGE:0.5:1:600 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:AVERAGE:0.5:6:700 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:AVERAGE:0.5:24:775 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:AVERAGE:0.5:288:797 ");
+
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MAX:0.5:1:600 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MAX:0.5:6:700 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MAX:0.5:24:775 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MAX:0.5:288:797 ");
+
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MIN:0.5:1:600 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MIN:0.5:6:700 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MIN:0.5:24:775 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MIN:0.5:288:797 ");	   
+	cherokee_buffer_add_str    (&rrd->tmp, "\n");
+
+	ret = check_and_create_db (rrd, &rrd->tmp);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	/* Add the commit callback
+	 */
+	ret = cherokee_bogotime_add_callback (update_srv_cb, rrd, ELAPSE_UPDATE);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	/* Add the re-rendering callback
+	 */
+	ret = cherokee_bogotime_add_callback (render_srv_cb, rrd, ELAPSE_RENDER);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+	
+	return ret_ok;
+}
+
 
 /* Virtual Servers
  */
@@ -589,8 +648,88 @@ vsrv_free (cherokee_collector_vsrv_rrd_t *rrd)
 
 
 static ret_t
+vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
+	   cherokee_virtual_server_t      *vsrv)
+
+{
+	ret_t              ret;
+	cherokee_server_t *srv = VSERVER_SRV(vsrv);
+
+	/* Store a ref to the virtual server
+	 */
+	rrd->vsrv_ref = vsrv;
+
+	/* Configuration
+	 */
+	cherokee_buffer_init       (&rrd->database_dir);
+	cherokee_buffer_add_buffer (&rrd->database_dir,
+				    &COLLECTOR_RRD(srv->collector)->database_dir);
+
+	cherokee_buffer_init       (&rrd->path_rrdtool);
+	cherokee_buffer_add_buffer (&rrd->path_rrdtool, 
+				    &COLLECTOR_RRD(srv->collector)->path_rrdtool);
+
+	cherokee_buffer_init       (&rrd->path_database);
+	cherokee_buffer_add_buffer (&rrd->path_database, &rrd->database_dir);
+	cherokee_buffer_add_str    (&rrd->path_database, "/vserver_");
+	cherokee_buffer_add_buffer (&rrd->path_database, &vsrv->name);
+	cherokee_buffer_add_str    (&rrd->path_database, ".rrd");
+
+	/* Check whether the DB exists
+	 */
+	cherokee_buffer_clean      (&rrd->tmp);
+	cherokee_buffer_add_str    (&rrd->tmp, "create ");
+	cherokee_buffer_add_buffer (&rrd->tmp, &rrd->path_database);
+	cherokee_buffer_add_str    (&rrd->tmp, " --step ");
+	cherokee_buffer_add_long10 (&rrd->tmp, ELAPSE_UPDATE);
+	cherokee_buffer_add_str    (&rrd->tmp, " ");
+
+	/* Data Sources */
+	cherokee_buffer_add_va     (&rrd->tmp, "DS:RX:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
+	cherokee_buffer_add_va     (&rrd->tmp, "DS:TX:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
+
+	/* Archives */
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:AVERAGE:0.5:1:600 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:AVERAGE:0.5:6:700 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:AVERAGE:0.5:24:775 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:AVERAGE:0.5:288:797 ");
+
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MAX:0.5:1:600 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MAX:0.5:6:700 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MAX:0.5:24:775 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MAX:0.5:288:797 ");
+
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MIN:0.5:1:600 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MIN:0.5:6:700 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MIN:0.5:24:775 ");
+	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MIN:0.5:288:797 ");	   
+	cherokee_buffer_add_str    (&rrd->tmp, "\n");
+
+	ret = check_and_create_db (rrd, &rrd->tmp);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	/* Add the commit callback
+	 */
+	ret = cherokee_bogotime_add_callback (update_vsrv_cb, rrd, ELAPSE_UPDATE);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	/* Add the re-rendering callback
+	 */
+	ret = cherokee_bogotime_add_callback (render_vsrv_cb, rrd, ELAPSE_RENDER);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t
 vsrv_new (cherokee_collector_t           *collector,
-	  cherokee_virtual_server_t      *vsrv,
 	  cherokee_config_node_t         *config,
 	  cherokee_collector_vsrv_rrd_t **collector_vsrv)
 {
@@ -599,7 +738,7 @@ vsrv_new (cherokee_collector_t           *collector,
 
 	/* Base class initialization
 	 */
-	ret = cherokee_collector_vsrv_init (COLLECTOR_VSRV(n), config);
+	ret = cherokee_collector_vsrv_init_base (COLLECTOR_VSRV(n), config);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
@@ -607,6 +746,7 @@ vsrv_new (cherokee_collector_t           *collector,
 	/* Virtual methods
 	 */
 	COLLECTOR(n)->new_vsrv  = NULL;
+	COLLECTOR(n)->init      = (collector_func_init_t) vsrv_init;
 	COLLECTOR_BASE(n)->free = (collector_func_free_t) vsrv_free;
 
 	/* Default values
@@ -614,75 +754,9 @@ vsrv_new (cherokee_collector_t           *collector,
 	n->write_fd      = -1;
 	n->read_fd       = -1;
 	n->pid           = -1;
-	n->vsrv_ref      = vsrv;
 	n->render_elapse = COLLECTOR_RRD(collector)->render_elapse;
 
 	cherokee_buffer_init (&n->tmp);
-
-	/* Configuration
-	 */
-	cherokee_buffer_init       (&n->database_dir);
-	cherokee_buffer_add_buffer (&n->database_dir,
-				    &COLLECTOR_RRD(VSERVER_SRV(vsrv)->collector)->database_dir);
-
-	cherokee_buffer_init       (&n->path_rrdtool);
-	cherokee_buffer_add_buffer (&n->path_rrdtool, 
-				    &COLLECTOR_RRD(VSERVER_SRV(vsrv)->collector)->path_rrdtool);
-
-	cherokee_buffer_init       (&n->path_database);
-	cherokee_buffer_add_buffer (&n->path_database, &n->database_dir);
-	cherokee_buffer_add_str    (&n->path_database, "/vserver_");
-	cherokee_buffer_add_buffer (&n->path_database, &vsrv->name);
-	cherokee_buffer_add_str    (&n->path_database, ".rrd");
-
-	/* Check whether the DB exists
-	 */
-	cherokee_buffer_clean      (&n->tmp);
-	cherokee_buffer_add_str    (&n->tmp, "create ");
-	cherokee_buffer_add_buffer (&n->tmp, &n->path_database);
-	cherokee_buffer_add_str    (&n->tmp, " --step ");
-	cherokee_buffer_add_long10 (&n->tmp, ELAPSE_UPDATE);
-	cherokee_buffer_add_str    (&n->tmp, " ");
-
-	/* Data Sources */
-	cherokee_buffer_add_va     (&n->tmp, "DS:RX:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
-	cherokee_buffer_add_va     (&n->tmp, "DS:TX:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
-
-	/* Archives */
-	cherokee_buffer_add_str    (&n->tmp, "RRA:AVERAGE:0.5:1:600 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:AVERAGE:0.5:6:700 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:AVERAGE:0.5:24:775 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:AVERAGE:0.5:288:797 ");
-
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MAX:0.5:1:600 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MAX:0.5:6:700 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MAX:0.5:24:775 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MAX:0.5:288:797 ");
-
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MIN:0.5:1:600 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MIN:0.5:6:700 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MIN:0.5:24:775 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MIN:0.5:288:797 ");	   
-	cherokee_buffer_add_str    (&n->tmp, "\n");
-
-	ret = check_and_create_db (n, &n->tmp);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
-
-	/* Add the commit callback
-	 */
-	ret = cherokee_bogotime_add_callback (update_vsrv_cb, n, ELAPSE_UPDATE);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
-
-	/* Add the re-rendering callback
-	 */
-	ret = cherokee_bogotime_add_callback (render_vsrv_cb, n, ELAPSE_RENDER);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
 
 	/* Return object
 	 */
@@ -706,7 +780,7 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 	   
 	/* Base class initialization
 	 */
-	ret = cherokee_collector_init (COLLECTOR(n), info, config);
+	ret = cherokee_collector_init_base (COLLECTOR(n), info, config);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
@@ -714,6 +788,7 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 	/* Virtual methods
 	 */
 	COLLECTOR_BASE(n)->free = (collector_func_free_t) srv_free;
+	COLLECTOR(n)->init      = (collector_func_init_t) srv_init;
 	COLLECTOR(n)->new_vsrv  = (collector_func_new_vsrv_t) vsrv_new;
 
 	/* Default values
@@ -755,57 +830,8 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 	cherokee_buffer_add_buffer (&n->path_database, &n->database_dir);
 	cherokee_buffer_add_str    (&n->path_database, "/server.rrd");
 
-	/* Check whether the DB exists
+	/* Return obj
 	 */
-	cherokee_buffer_clean      (&n->tmp);
-	cherokee_buffer_add_str    (&n->tmp, "create ");
-	cherokee_buffer_add_buffer (&n->tmp, &n->path_database);
-	cherokee_buffer_add_str    (&n->tmp, " --step ");
-	cherokee_buffer_add_long10 (&n->tmp, ELAPSE_UPDATE);
-	cherokee_buffer_add_str    (&n->tmp, " ");
-
-	/* Data Sources */
-	cherokee_buffer_add_va     (&n->tmp, "DS:Accepts:ABSOLUTE:%d:U:U ",  ELAPSE_UPDATE*10);
-	cherokee_buffer_add_va     (&n->tmp, "DS:Timeouts:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
-	cherokee_buffer_add_va     (&n->tmp, "DS:RX:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
-	cherokee_buffer_add_va     (&n->tmp, "DS:TX:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
-
-	/* Archives */
-	cherokee_buffer_add_str    (&n->tmp, "RRA:AVERAGE:0.5:1:600 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:AVERAGE:0.5:6:700 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:AVERAGE:0.5:24:775 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:AVERAGE:0.5:288:797 ");
-
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MAX:0.5:1:600 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MAX:0.5:6:700 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MAX:0.5:24:775 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MAX:0.5:288:797 ");
-
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MIN:0.5:1:600 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MIN:0.5:6:700 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MIN:0.5:24:775 ");
-	cherokee_buffer_add_str    (&n->tmp, "RRA:MIN:0.5:288:797 ");	   
-	cherokee_buffer_add_str    (&n->tmp, "\n");
-
-	ret = check_and_create_db (n, &n->tmp);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
-
-	/* Add the commit callback
-	 */
-	ret = cherokee_bogotime_add_callback (update_srv_cb, n, ELAPSE_UPDATE);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
-
-	/* Add the re-rendering callback
-	 */
-	ret = cherokee_bogotime_add_callback (render_srv_cb, n, ELAPSE_RENDER);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
-	   
 	*rrd = n;
 	return ret_ok;
 }

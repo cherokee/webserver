@@ -42,10 +42,15 @@ typedef ret_t (* collector_func_new_t)      (void                   **collector,
 					     cherokee_plugin_info_t  *info,
 					     cherokee_config_node_t  *config);
 typedef ret_t (* collector_func_free_t)     (void                    *collector);
+typedef ret_t (* collector_func_init_t)     (void                    *collector);
+
 typedef ret_t (* collector_func_new_vsrv_t) (void                    *collector,
-					     void                    *vsrv,
 					     cherokee_config_node_t  *config,
 					     void                   **collector_vsrv);
+
+typedef ret_t (* collector_vsrv_func_init_t) (void                    *collector_vsrv,
+					      void                    *vsrv);
+
 
 typedef struct {
 	cherokee_module_t         module;
@@ -69,6 +74,7 @@ typedef struct {
 	/* Virtual Methods
 	 */
 	collector_func_new_vsrv_t new_vsrv;
+	collector_func_init_t     init;
 
 	/* Properties
 	 */
@@ -82,6 +88,12 @@ typedef struct {
 	cherokee_collector_base_t  collector;
 	cherokee_collector_t      *srv_collector;
 
+	/* Virtual Methods
+	 */
+	collector_vsrv_func_init_t init;
+
+	/* Properties
+	 */
 	time_t                     srv_next_update;
 	off_t                      srv_rx_partial;
 	off_t                      srv_tx_partial;
@@ -108,12 +120,19 @@ typedef struct {
 	PLUGIN_EMPTY_INIT_FUNCTION(name)                            \
 	PLUGIN_INFO_COLLECTOR_EASY_INIT(name)
 
+/* Internal
+ */
+ret_t cherokee_collector_init_base      (cherokee_collector_t      *collector,
+				         cherokee_plugin_info_t    *info,
+				         cherokee_config_node_t    *config);
+
+ret_t cherokee_collector_vsrv_init_base (cherokee_collector_vsrv_t  *collector_vsrv,
+					 cherokee_config_node_t     *config);
+
 
 /* Collector virtual methods
  */
-ret_t cherokee_collector_init        (cherokee_collector_t      *collector,
-				      cherokee_plugin_info_t    *info,
-				      cherokee_config_node_t    *config);
+ret_t cherokee_collector_init        (cherokee_collector_t      *collector);
 ret_t cherokee_collector_free        (cherokee_collector_t      *collector);
 
 ret_t cherokee_collector_log_accept  (cherokee_collector_t      *collector);
@@ -122,12 +141,11 @@ ret_t cherokee_collector_log_timeout (cherokee_collector_t      *collector);
 /* Collector virtual methods
  */
 ret_t cherokee_collector_vsrv_new    (cherokee_collector_t       *collector,
-				      void                       *vsrv,
 				      cherokee_config_node_t     *config,
 				      cherokee_collector_vsrv_t **collector_vsrv);
-ret_t cherokee_collector_vsrv_init   (cherokee_collector_vsrv_t  *collector_vsrv,
-				      cherokee_config_node_t     *config);
 ret_t cherokee_collector_vsrv_free   (cherokee_collector_vsrv_t  *collector_vsrv);
+ret_t cherokee_collector_vsrv_init   (cherokee_collector_vsrv_t  *collector_vsrv,
+				      void                       *vsrv);
 
 ret_t cherokee_collector_vsrv_count  (cherokee_collector_vsrv_t  *collector_vsrv,
 				      off_t                       rx,

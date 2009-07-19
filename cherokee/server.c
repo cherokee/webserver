@@ -760,6 +760,41 @@ raise_fd_limit (cherokee_server_t *srv, cint_t new_limit)
 	return ret_ok;
 }
 
+static ret_t
+initialize_collectors (cherokee_server_t *srv)
+{
+	ret_t                      ret;
+	cherokee_list_t           *i;
+	cherokee_virtual_server_t *vsrv;
+
+	if (srv->collector == NULL) {
+		return ret_ok;
+	}
+
+	TRACE (ENTRIES, "Initializing the main information collector %s", "\n");
+
+	ret = cherokee_collector_init (srv->collector);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	list_for_each (i, &srv->vservers) {
+		vsrv = VSERVER(i);
+
+		if (vsrv->collector == NULL) {
+			continue;
+		}
+			
+		TRACE (ENTRIES, "Initializing collector for vserver '%s'\n", vsrv->name.buf);
+
+		ret = cherokee_collector_vsrv_init (vsrv->collector, vsrv);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
+	}
+
+	return ret_ok;
+}
 
 ret_t
 cherokee_server_initialize (cherokee_server_t *srv) 
@@ -950,6 +985,12 @@ cherokee_server_initialize (cherokee_server_t *srv)
 		if (unlikely(ret < ret_ok))
 			return ret;
 	}
+
+	/* Collectors
+	 */
+	ret = initialize_collectors (srv);
+	if (ret != ret_ok)
+		return ret_error;
 
 	/* Create the threads
 	 */
