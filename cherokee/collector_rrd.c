@@ -360,7 +360,7 @@ update_generic (cherokee_collector_rrd_t *rrd,
 	return ret_ok;
 }
 
-static void
+static ret_t
 check_img_dir (cherokee_collector_rrd_t *rrd)
 {
 	int re;
@@ -370,9 +370,15 @@ check_img_dir (cherokee_collector_rrd_t *rrd)
 	re = access (rrd->database_dir.buf, W_OK);
 	if (re != 0) {
 		mkdir (rrd->database_dir.buf, 0775);		
+
+		re = access (rrd->database_dir.buf, W_OK);
+		if (re != 0) {
+			return ret_error;
+		}
 	}
 
 	cherokee_buffer_drop_ending (&rrd->database_dir, 7);
+	return ret_ok;
 }
 
 
@@ -383,7 +389,6 @@ render_srv_cb (void *param)
 	cherokee_collector_rrd_t *rrd = COLLECTOR_RRD(param);
 	cherokee_buffer_t        *buf = &rrd->tmp;
 
-	check_img_dir (rrd);
 	cherokee_buffer_clean (buf);
 
 	/* Accepts
@@ -470,7 +475,6 @@ render_vsrv_cb (void *param)
 	cherokee_buffer_t             *buf  = &rrd->tmp;
 	cherokee_virtual_server_t     *vsrv = VSERVER(rrd->vsrv_ref);
 	
-	check_img_dir (rrd);
 	cherokee_buffer_clean (buf);
 
 	/* Traffic
@@ -582,7 +586,14 @@ srv_init (cherokee_collector_rrd_t *rrd)
 	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MIN:0.5:288:797 ");	   
 	cherokee_buffer_add_str    (&rrd->tmp, "\n");
 
+	/* Checks
+	 */
 	ret = check_and_create_db (rrd, &rrd->tmp);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	ret = check_img_dir (rrd);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
@@ -705,7 +716,14 @@ vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
 	cherokee_buffer_add_str    (&rrd->tmp, "RRA:MIN:0.5:288:797 ");	   
 	cherokee_buffer_add_str    (&rrd->tmp, "\n");
 
+	/* Checks
+	 */
 	ret = check_and_create_db (rrd, &rrd->tmp);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	ret = check_img_dir (rrd);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
