@@ -269,7 +269,7 @@ cherokee_collector_vsrv_count (cherokee_collector_vsrv_t  *collector_vsrv,
 	collector_vsrv->srv_rx_partial += rx;
 	collector_vsrv->srv_tx_partial += tx;
 
-	if (collector_vsrv->srv_next_update >= cherokee_bogonow_now) {
+	if (cherokee_bogonow_now >= collector_vsrv->srv_next_update) {
 		LOCK(collector_vsrv->srv_collector);
 
 		base_count (COLLECTOR_BASE(collector_vsrv->srv_collector),
