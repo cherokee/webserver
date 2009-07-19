@@ -118,7 +118,8 @@ Wizard_Redirect.py \
 Wizard_HotLinking.py \
 Wizard_Drupal.py \
 Wizard_RoR.py \
-Wizard_Mailman.py
+Wizard_Mailman.py \
+Wizard_Icons.py
 endif
 
 adminpy_DATA = $(admin_data)

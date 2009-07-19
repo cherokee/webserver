@@ -9,7 +9,8 @@ django.png \
 hotlinking.png \
 drupal.png \
 ror.png \
-mailman.png
+mailman.png \
+icons.png
 
 EXTRA_DIST = \
 $(wizards_DATA)
