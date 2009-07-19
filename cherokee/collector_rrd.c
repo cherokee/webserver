@@ -373,6 +373,7 @@ check_img_dir (cherokee_collector_rrd_t *rrd)
 
 		re = access (rrd->database_dir.buf, W_OK);
 		if (re != 0) {
+			LOG_CRITICAL ("Cannot write in '%s'\n", rrd->database_dir.buf);
 			return ret_error;
 		}
 	}
@@ -588,12 +589,12 @@ srv_init (cherokee_collector_rrd_t *rrd)
 
 	/* Checks
 	 */
-	ret = check_and_create_db (rrd, &rrd->tmp);
+	ret = check_img_dir (rrd);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
 
-	ret = check_img_dir (rrd);
+	ret = check_and_create_db (rrd, &rrd->tmp);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
@@ -718,12 +719,12 @@ vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
 
 	/* Checks
 	 */
-	ret = check_and_create_db (rrd, &rrd->tmp);
+	ret = check_img_dir (rrd);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
 
-	ret = check_img_dir (rrd);
+	ret = check_and_create_db (rrd, &rrd->tmp);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
