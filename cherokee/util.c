@@ -1844,7 +1844,7 @@ cherokee_find_exec_in_path (const char        *bin_name,
 		}
 
 		p = q + 1;
-	} while(p);
+	} while(q);
 
 	free (path);
 	return ret_not_found;
