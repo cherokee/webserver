@@ -701,11 +701,12 @@ vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
 
 	/* Configuration
 	 */
-	cherokee_buffer_init       (&rrd->path_database);
-	cherokee_buffer_add_buffer (&rrd->path_database, &rrd_srv->database_dir);
-	cherokee_buffer_add_str    (&rrd->path_database, "/vserver_");
-	cherokee_buffer_add_buffer (&rrd->path_database, &vsrv->name);
-	cherokee_buffer_add_str    (&rrd->path_database, ".rrd");
+	cherokee_buffer_init           (&rrd->path_database);
+	cherokee_buffer_add_buffer     (&rrd->path_database, &rrd_srv->database_dir);
+	cherokee_buffer_add_str        (&rrd->path_database, "/vserver_");
+	cherokee_buffer_add_buffer     (&rrd->path_database, &vsrv->name);
+	cherokee_buffer_add_str        (&rrd->path_database, ".rrd");
+	cherokee_buffer_replace_string (&rrd->path_database, " ", 1, "_", 1);
 
 	/* Check whether the DB exists
 	 */
