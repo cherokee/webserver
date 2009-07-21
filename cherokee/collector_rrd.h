@@ -32,12 +32,11 @@ typedef struct {
 	cherokee_collector_t collector;
 
 	/* Configuration*/
-	cherokee_buffer_t    database_dir;
 	cherokee_buffer_t    path_rrdtool;
+	cherokee_buffer_t    database_dir;
 	cherokee_buffer_t    path_database;
 	int                  render_elapse;
-	void                *vsrv_ref;
-	
+
 	/* Communication */
 	int                  write_fd;
 	int                  read_fd;
@@ -47,10 +46,21 @@ typedef struct {
 	cherokee_buffer_t    tmp;
 } cherokee_collector_rrd_t;
 
-typedef cherokee_collector_rrd_t cherokee_collector_vsrv_rrd_t;
+typedef struct {
+	cherokee_collector_vsrv_t  collector;
 
-#define COLLECTOR_RRD(c)      ((cherokee_collector_rrd_t *)(c))
-#define COLLECTOR_VSRV_RRD(c) ((cherokee_collector_vsrv_rrd_t *)(c))
+	/* Configuration*/
+	cherokee_buffer_t          path_database;
+	cherokee_boolean_t         render_srv_line;
+
+	/* Internals */
+	void                      *vsrv_ref;
+	cherokee_buffer_t          tmp;
+} cherokee_collector_vsrv_rrd_t;
+
+#define COLLECTOR_RRD(c)          ((cherokee_collector_rrd_t *)(c))
+#define COLLECTOR_VSRV_RRD(c)     ((cherokee_collector_vsrv_rrd_t *)(c))
+#define COLLECTOR_VSRV_RRD_SRV(c) (COLLECTOR_RRD(VSERVER_SRV(COLLECTOR_VSRV_RRD(c)->vsrv_ref)->collector))
 
 ret_t cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 				  cherokee_plugin_info_t    *info,

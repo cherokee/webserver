@@ -67,6 +67,7 @@ static struct interval_t {
 };
 
 
+
 static ret_t
 spawn_rrdtool (cherokee_collector_rrd_t *rrd)
 {
@@ -176,6 +177,7 @@ kill_and_clean (cherokee_collector_rrd_t *rrd,
 
 static ret_t
 check_and_create_db (cherokee_collector_rrd_t *rrd,
+		     cherokee_buffer_t        *path_database,
 		     cherokee_buffer_t        *params)
 {
 	int          re;
@@ -185,22 +187,22 @@ check_and_create_db (cherokee_collector_rrd_t *rrd,
 
 	/* It exists
 	 */
-	re = cherokee_stat (rrd->path_database.buf, &info);
+	re = cherokee_stat (path_database->buf, &info);
 	if ((re == 0) && (info.st_size > 0)) {
 		return ret_ok;
 	}
 
 	/* Write access
 	 */
-	slash = strrchr (rrd->path_database.buf, '/');
+	slash = strrchr (path_database->buf, '/');
 	if (slash == NULL) {
 		return ret_error;
 	}
 
 	*slash = '\0';
-	re = access (rrd->path_database.buf, W_OK);
+	re = access (path_database->buf, W_OK);
 	if (re != 0) {
-		LOG_ERRNO (errno, cherokee_err_error, "Cannot write in %s: ${errno}\n", rrd->path_database.buf);
+		LOG_ERRNO (errno, cherokee_err_error, "Cannot write in %s: ${errno}\n", path_database->buf);
 		return ret_error;
 	}
 	*slash = '/';
@@ -315,17 +317,17 @@ command_rrdtool (cherokee_collector_rrd_t *rrd,
 }
 
 static ret_t
-update_generic (cherokee_collector_rrd_t *rrd,
+update_generic (cherokee_collector_rrd_t *rrd_srv,
 		cherokee_buffer_t        *params)
 {
 	ret_t ret;
 
 	/* Spawn new interpreter
 	 */
-	ret = spawn_rrdtool (rrd);
+	ret = spawn_rrdtool (rrd_srv);
 	if (ret != ret_ok) {
-		LOG_ERROR ("Couldn't spawn rrdtool (%s)\n", rrd->path_rrdtool.buf);
-		kill_and_clean(rrd, false);
+		LOG_ERROR ("Couldn't spawn rrdtool (%s)\n", rrd_srv->path_rrdtool.buf);
+		kill_and_clean(rrd_srv, false);
 		return ret_error;
 	}
 
@@ -333,18 +335,18 @@ update_generic (cherokee_collector_rrd_t *rrd,
 	 */
 	TRACE (ENTRIES, "Sending to RRDtool: %s", params->buf);
 
-	ret = write_rrdtool (rrd, params);
+	ret = write_rrdtool (rrd_srv, params);
 	if (unlikely (ret != ret_ok)) {
-		kill_and_clean(rrd, false);
+		kill_and_clean(rrd_srv, false);
 		return ret_error;
 	}
 
 	/* Read response
 	 */
 	cherokee_buffer_clean (params);
-	ret = read_rrdtool (rrd, params);
+	ret = read_rrdtool (rrd_srv, params);
 	if (unlikely (ret != ret_ok)) {
-		kill_and_clean(rrd, false);
+		kill_and_clean(rrd_srv, false);
 		return ret_error;
 	}
 
@@ -353,7 +355,7 @@ update_generic (cherokee_collector_rrd_t *rrd,
 	if ((params->len < 3) &&
 	    (strncmp (params->buf, "OK", 2) != 0))
 	{
-		kill_and_clean(rrd, false);
+		kill_and_clean(rrd_srv, false);
 		return ret_error;
 	}
 
@@ -361,24 +363,24 @@ update_generic (cherokee_collector_rrd_t *rrd,
 }
 
 static ret_t
-check_img_dir (cherokee_collector_rrd_t *rrd)
+check_img_dir (cherokee_collector_rrd_t *rrd_srv)
 {
 	int re;
 
-	cherokee_buffer_add_str (&rrd->database_dir, "/images");
+	cherokee_buffer_add_str (&rrd_srv->database_dir, "/images");
 
-	re = access (rrd->database_dir.buf, W_OK);
+	re = access (rrd_srv->database_dir.buf, W_OK);
 	if (re != 0) {
-		mkdir (rrd->database_dir.buf, 0775);		
+		mkdir (rrd_srv->database_dir.buf, 0775);		
 
-		re = access (rrd->database_dir.buf, W_OK);
+		re = access (rrd_srv->database_dir.buf, W_OK);
 		if (re != 0) {
-			LOG_CRITICAL ("Cannot write in '%s'\n", rrd->database_dir.buf);
+			LOG_CRITICAL ("Cannot write in '%s'\n", rrd_srv->database_dir.buf);
 			return ret_error;
 		}
 	}
 
-	cherokee_buffer_drop_ending (&rrd->database_dir, 7);
+	cherokee_buffer_drop_ending (&rrd_srv->database_dir, 7);
 	return ret_ok;
 }
 
@@ -477,9 +479,10 @@ static void
 render_vsrv_cb (void *param) 
 {
 	struct interval_t             *i;
-	cherokee_collector_vsrv_rrd_t *rrd  = COLLECTOR_VSRV_RRD(param);
-	cherokee_buffer_t             *buf  = &rrd->tmp;
-	cherokee_virtual_server_t     *vsrv = VSERVER(rrd->vsrv_ref);
+	cherokee_collector_vsrv_rrd_t *rrd     = COLLECTOR_VSRV_RRD(param);
+	cherokee_collector_rrd_t      *rrd_srv = COLLECTOR_VSRV_RRD_SRV(param);
+	cherokee_buffer_t             *buf     = &rrd->tmp;
+	cherokee_virtual_server_t     *vsrv    = VSERVER(rrd->vsrv_ref);
 	
 	cherokee_buffer_clean (buf);
 
@@ -487,7 +490,7 @@ render_vsrv_cb (void *param)
 	 */
 	for (i = intervals; i->interval != NULL; i++) {
 		cherokee_buffer_add_str    (buf, "graph ");
-		cherokee_buffer_add_buffer (buf, &rrd->database_dir);
+		cherokee_buffer_add_buffer (buf, &rrd_srv->database_dir);
 		cherokee_buffer_add_va     (buf, "/images/vserver_traffic_%s_%s.png ", vsrv->name.buf, i->interval);
 		cherokee_buffer_add_va     (buf, "--imgformat PNG --width 600 --height 350 --start -%s ", i->interval);
 		cherokee_buffer_add_va     (buf, "--title \"Traffic, %s: %s\" ", vsrv->name.buf, i->interval);
@@ -506,10 +509,19 @@ render_vsrv_cb (void *param)
 		cherokee_buffer_add_str    (buf, "LINE1:rx_r#990000:In ");
 		cherokee_buffer_add_str    (buf, "GPRINT:rx:LAST:\"      Current\\:%8.2lf%s\" ");
 		cherokee_buffer_add_str    (buf, "GPRINT:rx:AVERAGE:\"Average\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:rx_max:MAX:\"Maximum\\:%8.2lf%s\\n\"");
+		cherokee_buffer_add_str    (buf, "GPRINT:rx_max:MAX:\"Maximum\\:%8.2lf%s\\n\" ");
+
+		if (rrd->render_srv_line) {
+			cherokee_buffer_add_va  (buf, "DEF:srv_tx=%s:TX:AVERAGE ", rrd_srv->path_database.buf);
+			cherokee_buffer_add_str (buf, "LINE1:srv_tx#ADE:\"Global\" ");
+			cherokee_buffer_add_str (buf, "GPRINT:srv_tx:LAST:\"  Current\\:%8.2lf%s\" ");
+			cherokee_buffer_add_str (buf, "GPRINT:srv_tx:AVERAGE:\"Average\\:%8.2lf%s\" ");
+			cherokee_buffer_add_str (buf, "GPRINT:srv_tx:MAX:\"Maximum\\:%8.2lf%s\\n\" ");
+		}
+
 		cherokee_buffer_add_str    (buf, "\n");
 
-		command_rrdtool (rrd, buf);
+		command_rrdtool (rrd_srv, buf);
 		cherokee_buffer_clean (buf);
 	}
 
@@ -608,7 +620,7 @@ srv_init (cherokee_collector_rrd_t *rrd)
 		return ret_error;
 	}
 
-	ret = check_and_create_db (rrd, &rrd->tmp);
+	ret = check_and_create_db (rrd, &rrd->path_database, &rrd->tmp);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
@@ -637,8 +649,9 @@ srv_init (cherokee_collector_rrd_t *rrd)
 static void 
 update_vsrv_cb (void *param) 
 {
-	ret_t                     ret;
-	cherokee_collector_rrd_t *rrd = COLLECTOR_RRD(param);
+	ret_t                          ret;
+	cherokee_collector_vsrv_rrd_t *rrd     = COLLECTOR_VSRV_RRD(param);
+	cherokee_collector_rrd_t      *rrd_srv = COLLECTOR_VSRV_RRD_SRV(param);
 
 	/* Build params
 	 */
@@ -653,7 +666,7 @@ update_vsrv_cb (void *param)
 
 	/* Update
 	 */
-	ret = update_generic (rrd, &rrd->tmp);
+	ret = update_generic (rrd_srv, &rrd->tmp);
 	if (ret != ret_ok) {
 		return;
 	}
@@ -678,8 +691,9 @@ vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
 	   cherokee_virtual_server_t      *vsrv)
 
 {
-	ret_t              ret;
-	cherokee_server_t *srv = VSERVER_SRV(vsrv);
+	ret_t                     ret;
+	cherokee_server_t        *srv     = VSERVER_SRV(vsrv);
+	cherokee_collector_rrd_t *rrd_srv = COLLECTOR_RRD(srv->collector);
 
 	/* Store a ref to the virtual server
 	 */
@@ -687,16 +701,8 @@ vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
 
 	/* Configuration
 	 */
-	cherokee_buffer_init       (&rrd->database_dir);
-	cherokee_buffer_add_buffer (&rrd->database_dir,
-				    &COLLECTOR_RRD(srv->collector)->database_dir);
-
-	cherokee_buffer_init       (&rrd->path_rrdtool);
-	cherokee_buffer_add_buffer (&rrd->path_rrdtool, 
-				    &COLLECTOR_RRD(srv->collector)->path_rrdtool);
-
 	cherokee_buffer_init       (&rrd->path_database);
-	cherokee_buffer_add_buffer (&rrd->path_database, &rrd->database_dir);
+	cherokee_buffer_add_buffer (&rrd->path_database, &rrd_srv->database_dir);
 	cherokee_buffer_add_str    (&rrd->path_database, "/vserver_");
 	cherokee_buffer_add_buffer (&rrd->path_database, &vsrv->name);
 	cherokee_buffer_add_str    (&rrd->path_database, ".rrd");
@@ -733,12 +739,12 @@ vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
 
 	/* Checks
 	 */
-	ret = check_img_dir (rrd);
+	ret = check_img_dir (rrd_srv);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
 
-	ret = check_and_create_db (rrd, &rrd->tmp);
+	ret = check_and_create_db (rrd_srv, &rrd->path_database, &rrd->tmp);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
@@ -778,17 +784,12 @@ vsrv_new (cherokee_collector_t           *collector,
 
 	/* Virtual methods
 	 */
-	COLLECTOR(n)->new_vsrv  = NULL;
-	COLLECTOR(n)->init      = (collector_func_init_t) vsrv_init;
+	COLLECTOR_VSRV(n)->init = (collector_vsrv_func_init_t) vsrv_init;
 	COLLECTOR_BASE(n)->free = (collector_func_free_t) vsrv_free;
 
 	/* Default values
 	 */
-	n->write_fd      = -1;
-	n->read_fd       = -1;
-	n->pid           = -1;
-	n->render_elapse = COLLECTOR_RRD(collector)->render_elapse;
-
+	n->render_srv_line = true;
 	cherokee_buffer_init (&n->tmp);
 
 	/* Return object
