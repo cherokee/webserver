@@ -511,7 +511,7 @@ render_vsrv_cb (void *param)
 		cherokee_buffer_add_str    (buf, "GPRINT:rx:AVERAGE:\"Average\\:%8.2lf%s\" ");
 		cherokee_buffer_add_str    (buf, "GPRINT:rx_max:MAX:\"Maximum\\:%8.2lf%s\\n\" ");
 
-		if (rrd->render_srv_line) {
+		if (rrd->draw_srv_traffic) {
 			cherokee_buffer_add_va  (buf, "DEF:srv_tx=%s:TX:AVERAGE ", rrd_srv->path_database.buf);
 			cherokee_buffer_add_str (buf, "LINE1:srv_tx#ADE:\"Global\" ");
 			cherokee_buffer_add_str (buf, "GPRINT:srv_tx:LAST:\"  Current\\:%8.2lf%s\" ");
@@ -775,6 +775,8 @@ vsrv_new (cherokee_collector_t           *collector,
 	ret_t ret;
 	CHEROKEE_NEW_STRUCT (n, collector_vsrv_rrd);
 
+	UNUSED (collector);
+
 	/* Base class initialization
 	 */
 	ret = cherokee_collector_vsrv_init_base (COLLECTOR_VSRV(n), config);
@@ -789,8 +791,12 @@ vsrv_new (cherokee_collector_t           *collector,
 
 	/* Default values
 	 */
-	n->render_srv_line = true;
+	n->draw_srv_traffic = true;
 	cherokee_buffer_init (&n->tmp);
+
+	/* Read configuration
+	 */
+	cherokee_config_node_read_bool (config, "draw_srv_traffic", &n->draw_srv_traffic);
 
 	/* Return object
 	 */

@@ -51,7 +51,7 @@ typedef struct {
 
 	/* Configuration*/
 	cherokee_buffer_t          path_database;
-	cherokee_boolean_t         render_srv_line;
+	cherokee_boolean_t         draw_srv_traffic;
 
 	/* Internals */
 	void                      *vsrv_ref;
