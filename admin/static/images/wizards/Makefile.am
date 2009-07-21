@@ -10,7 +10,8 @@ hotlinking.png \
 drupal.png \
 ror.png \
 mailman.png \
-icons.png
+icons.png \
+common_static.png
 
 EXTRA_DIST = \
 $(wizards_DATA)
