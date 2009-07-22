@@ -433,8 +433,8 @@ render_srv_cb (void *param)
 		cherokee_buffer_add_va     (buf, "DEF:timeouts_max=%s:Timeouts:MAX ", rrd->path_database.buf);
 		cherokee_buffer_add_str    (buf, "CDEF:timeouts_minmax=timeouts_max,timeouts_min,- ");
 		cherokee_buffer_add_str    (buf, "AREA:timeouts_min#ffffff: ");
-		cherokee_buffer_add_str    (buf, "STACK:timeouts_minmax#4477BB:Timeouts ");
-		cherokee_buffer_add_str    (buf, "LINE1.5:timeouts#224499:Average ");
+		cherokee_buffer_add_str    (buf, "STACK:timeouts_minmax#C007:Timeouts ");
+		cherokee_buffer_add_str    (buf, "LINE1.5:timeouts#900:Average ");
 		cherokee_buffer_add_str    (buf, "GPRINT:timeouts:LAST:\"     Current\\:%8.2lf%s\" ");
 		cherokee_buffer_add_str    (buf, "GPRINT:timeouts:AVERAGE:\"Average\\:%8.2lf%s\" ");
 		cherokee_buffer_add_str    (buf, "GPRINT:timeouts_max:MAX:\"Maximum\\:%8.2lf%s\\n\" ");
