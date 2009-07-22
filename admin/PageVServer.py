@@ -528,7 +528,6 @@ class PageVServer (PageMenu, FormHelper):
 
         return txt
 
-
     def _render_graphs (self, host):
         txt = ''
         pre = "vserver!%s" % (host)
@@ -555,7 +554,7 @@ class PageVServer (PageMenu, FormHelper):
             return txt
 
         if not graphs_are_active(self._cfg):
-            return ''
+            return txt
 
         name = self._cfg.get_val('vserver!%s!nick'%(host), "default")
         for tmp in graphs_get_images (self._cfg, "vserver_traffic_%s"%(name)):

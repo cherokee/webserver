@@ -18,6 +18,7 @@ from configured import *
 from Post import *
 from PageStatus import *
 from PageGeneral import *
+from PageStats import *
 from PageIcon import *
 from PageMime import *
 from PageVServer import *
@@ -86,6 +87,8 @@ class Handler(pyscgi.SCGIHandler):
         # Check the URL
         if uri.startswith('/general'):
             page = PageGeneral(cfg)
+        if uri.startswith('/stats'):
+            page = PageStats(cfg)
         elif uri.startswith('/icon'):
             page = PageIcon(cfg)
         elif uri.startswith('/mime'):

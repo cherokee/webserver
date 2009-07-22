@@ -53,6 +53,7 @@ PAGE_MENU_MENU = """
 <li id="icon"><a href="/icons">{{_icon}}</a></li>
 <li id="mime"><a href="/mime">{{_mime}}</a></li>
 <li id="advanced"><a href="/advanced">{{_advanced}}</a></li>
+<li id="stats"><a href="/stats">{{_stats}}</a></li>
 </ul>
 <br />
 
@@ -149,6 +150,7 @@ class PageMenu (Page):
         Page.__init__ (self, id, cfg, helps)
 
         self.AddMacroContent ('_status',       _('Status'))
+        self.AddMacroContent ('_stats',        _('Statistics and Graphs'))
         self.AddMacroContent ('_general',      _('General'))
         self.AddMacroContent ('_vserver',      _('Virtual Servers'))
         self.AddMacroContent ('_source',       _('Information Sources'))
