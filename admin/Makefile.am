@@ -51,6 +51,7 @@ PageVServers.py \
 PageError.py \
 PageFeedback.py \
 PageInfoSource.py \
+PageStats.py \
 Table.py \
 Theme.py \
 Rule.py \
