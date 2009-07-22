@@ -120,7 +120,7 @@ Wizard_Drupal.py \
 Wizard_RoR.py \
 Wizard_Mailman.py \
 Wizard_Icons.py \
-Wizard_CommonStatic.py \
+Wizard_CommonStatic.py
 endif
 
 adminpy_DATA = $(admin_data)
