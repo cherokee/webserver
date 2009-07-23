@@ -788,6 +788,9 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "ssl_ciphers")) {
 		cherokee_buffer_add_buffer (&vserver->ciphers, &conf->val);
 
+ 	} else if (equal_buf_str (&conf->key, "collector")) { 
+		/* Handled later on */
+
  	} else if (equal_buf_str (&conf->key, "collect_statistics")) { 
 		/* DEPRECATED: Ignore */
 	} else {
