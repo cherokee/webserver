@@ -379,13 +379,13 @@ collector_rrd = \
 collector_rrd.c \
 collector_rrd.h
 
-libplugin_collector_rrd_la_LDFLAGS = $(module_ldflags)
-libplugin_collector_rrd_la_SOURCES = $(collector_rrd)
+libplugin_rrd_la_LDFLAGS = $(module_ldflags)
+libplugin_rrd_la_SOURCES = $(collector_rrd)
 
 if STATIC_COLLECTOR_RRD
 static_collector_rrd_src = $(collector_rrd)
 else
-dynamic_collector_rrd_lib = libplugin_collector_rrd.la
+dynamic_collector_rrd_lib = libplugin_rrd.la
 endif
 
 
