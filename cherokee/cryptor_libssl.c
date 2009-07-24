@@ -201,7 +201,7 @@ openssl_sni_servername_cb (SSL *ssl, int *ad, void *arg)
 	 */
 	cherokee_buffer_fake (&tmp, servername, strlen(servername));
 
-	ret = cherokee_server_get_vserver (srv, &tmp, &vsrv, NULL);
+	ret = cherokee_server_get_vserver (srv, &tmp, NULL, &vsrv);
 	if ((ret != ret_ok) || (vsrv == NULL)) {
 		LOG_ERROR ("Servername did not match: '%s'\n", servername);
 		return SSL_TLSEXT_ERR_NOACK; 
