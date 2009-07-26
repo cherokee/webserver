@@ -325,6 +325,8 @@ add_header (cherokee_buffer_t *buf,
 		end = strchr (p + key->len, CHR_CR);
 		if (end) {
 			if (end[1] == CHR_LF)
+				end += 2;
+			else
 				end += 1;
 		} else {
 			end = strchr (p + key->len, CHR_LF);
