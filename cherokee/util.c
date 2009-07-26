@@ -891,9 +891,11 @@ cherokee_syslog (int priority, cherokee_buffer_t *buf)
 
 		syslog (priority, "%s", p);
 
-		if (nl != NULL) 
-			*nl = '\n';
+		if (nl == NULL) {
+			break;
+		} 
 
+		*nl = '\n';
 		p = nl + 1;
 	} while (p < end);
 
