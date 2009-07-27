@@ -406,13 +406,17 @@ render_srv_cb (void *param)
 		cherokee_buffer_add_va     (buf, "DEF:accepts=%s:Accepts:AVERAGE ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:accepts_min=%s:Accepts:MIN ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:accepts_max=%s:Accepts:MAX ", rrd->path_database.buf);
+		cherokee_buffer_add_str    (buf, "VDEF:accepts_total=accepts,TOTAL ");
 		cherokee_buffer_add_str    (buf, "CDEF:accepts_minmax=accepts_max,accepts_min,- ");
+		cherokee_buffer_add_str    (buf, "COMMENT:\"\\n\" ");
+		cherokee_buffer_add_str    (buf, "COMMENT:\"  Current          Average          Maximum             Total\\n\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:accepts:LAST:\"%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:accepts:AVERAGE:\"%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:accepts_max:MAX:\"%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:accepts_total:\"%8.2lf%s\" ");
 		cherokee_buffer_add_str    (buf, "AREA:accepts_min#ffffff: ");
 		cherokee_buffer_add_str    (buf, "STACK:accepts_minmax#4477BB:Connections ");
 		cherokee_buffer_add_str    (buf, "LINE1.5:accepts#224499:Average ");
-		cherokee_buffer_add_str    (buf, "GPRINT:accepts:LAST:\"     Current\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:accepts:AVERAGE:\"Average\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:accepts_max:MAX:\"Maximum\\:%8.2lf%s\\n\" ");
 		cherokee_buffer_add_str    (buf, "\n");
 
 		command_rrdtool (rrd, buf);
@@ -431,13 +435,17 @@ render_srv_cb (void *param)
 		cherokee_buffer_add_va     (buf, "DEF:timeouts=%s:Timeouts:AVERAGE ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:timeouts_min=%s:Timeouts:MIN ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:timeouts_max=%s:Timeouts:MAX ", rrd->path_database.buf);
+		cherokee_buffer_add_str    (buf, "VDEF:timeouts_total=timeouts,TOTAL ");
 		cherokee_buffer_add_str    (buf, "CDEF:timeouts_minmax=timeouts_max,timeouts_min,- ");
+		cherokee_buffer_add_str    (buf, "COMMENT:\"\\n\" ");
+		cherokee_buffer_add_str    (buf, "COMMENT:\"  Current           Average           Maximum             Total\\n\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:timeouts:LAST:\"%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:timeouts:AVERAGE:\"%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:timeouts_max:MAX:\"%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:timeouts_total:\"%8.2lf%s\" ");
 		cherokee_buffer_add_str    (buf, "AREA:timeouts_min#ffffff: ");
 		cherokee_buffer_add_str    (buf, "STACK:timeouts_minmax#C007:Timeouts ");
 		cherokee_buffer_add_str    (buf, "LINE1.5:timeouts#900:Average ");
-		cherokee_buffer_add_str    (buf, "GPRINT:timeouts:LAST:\"     Current\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:timeouts:AVERAGE:\"Average\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:timeouts_max:MAX:\"Maximum\\:%8.2lf%s\\n\" ");
 		cherokee_buffer_add_str    (buf, "\n");
 
 		command_rrdtool (rrd, buf);
@@ -457,17 +465,21 @@ render_srv_cb (void *param)
 		cherokee_buffer_add_va     (buf, "DEF:rx_max=%s:RX:MAX ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:tx=%s:TX:AVERAGE ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:tx_max=%s:TX:MAX ", rrd->path_database.buf);
+		cherokee_buffer_add_str    (buf, "VDEF:tx_total=tx,TOTAL ");
+		cherokee_buffer_add_str    (buf, "VDEF:rx_total=rx,TOTAL ");
 		cherokee_buffer_add_str    (buf, "CDEF:rx_r=rx,-1,* ");
 		cherokee_buffer_add_str    (buf, "AREA:tx#4477BB:Out ");
 		cherokee_buffer_add_str    (buf, "LINE1:tx#224499 ");
 		cherokee_buffer_add_str    (buf, "GPRINT:tx:LAST:\"     Current\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:tx:AVERAGE:\"Average\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:tx_max:MAX:\"Maximum\\:%8.2lf%s\\n\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:tx:AVERAGE:\" Average\\:%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:tx_max:MAX:\" Maximum\\:%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:tx_total:\"   Total\\:%8.2lf%s\\n\" ");
 		cherokee_buffer_add_str    (buf, "AREA:rx_r#C007 ");
 		cherokee_buffer_add_str    (buf, "LINE1:rx_r#990000:In ");
 		cherokee_buffer_add_str    (buf, "GPRINT:rx:LAST:\"      Current\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:rx:AVERAGE:\"Average\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:rx_max:MAX:\"Maximum\\:%8.2lf%s\\n\"");
+		cherokee_buffer_add_str    (buf, "GPRINT:rx:AVERAGE:\" Average\\:%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:rx_max:MAX:\" Maximum\\:%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:rx_total:\"   Total\\:%8.2lf%s\\n\" ");
 		cherokee_buffer_add_str    (buf, "\n");
 
 		command_rrdtool (rrd, buf);
@@ -499,24 +511,30 @@ render_vsrv_cb (void *param)
 		cherokee_buffer_add_va     (buf, "DEF:rx_max=%s:RX:MAX ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:tx=%s:TX:AVERAGE ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:tx_max=%s:TX:MAX ", rrd->path_database.buf);
+		cherokee_buffer_add_str    (buf, "VDEF:tx_total=tx,TOTAL ");
+		cherokee_buffer_add_str    (buf, "VDEF:rx_total=rx,TOTAL ");
 		cherokee_buffer_add_str    (buf, "CDEF:rx_r=rx,-1,* ");
 		cherokee_buffer_add_str    (buf, "AREA:tx#4477BB:Out ");
 		cherokee_buffer_add_str    (buf, "LINE1:tx#224499 ");
-		cherokee_buffer_add_str    (buf, "GPRINT:tx:LAST:\"     Current\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:tx:AVERAGE:\"Average\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:tx_max:MAX:\"Maximum\\:%8.2lf%s\\n\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:tx:LAST:\"    Current\\:%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:tx:AVERAGE:\" Average\\:%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:tx_max:MAX:\" Maximum\\:%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:tx_total:\"   Total\\:%8.2lf%s\\n\" ");
 		cherokee_buffer_add_str    (buf, "AREA:rx_r#C007 ");
 		cherokee_buffer_add_str    (buf, "LINE1:rx_r#990000:In ");
-		cherokee_buffer_add_str    (buf, "GPRINT:rx:LAST:\"      Current\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:rx:AVERAGE:\"Average\\:%8.2lf%s\" ");
-		cherokee_buffer_add_str    (buf, "GPRINT:rx_max:MAX:\"Maximum\\:%8.2lf%s\\n\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:rx:LAST:\"     Current\\:%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:rx:AVERAGE:\" Average\\:%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:rx_max:MAX:\" Maximum\\:%8.2lf%s\" ");
+		cherokee_buffer_add_str    (buf, "GPRINT:rx_total:\"   Total\\:%8.2lf%s\\n\" ");
 
 		if (rrd->draw_srv_traffic) {
 			cherokee_buffer_add_va  (buf, "DEF:srv_tx=%s:TX:AVERAGE ", rrd_srv->path_database.buf);
+			cherokee_buffer_add_str (buf, "VDEF:srv_tx_total=srv_tx,TOTAL ");
 			cherokee_buffer_add_str (buf, "LINE1:srv_tx#ADE:\"Global\" ");
-			cherokee_buffer_add_str (buf, "GPRINT:srv_tx:LAST:\"  Current\\:%8.2lf%s\" ");
-			cherokee_buffer_add_str (buf, "GPRINT:srv_tx:AVERAGE:\"Average\\:%8.2lf%s\" ");
-			cherokee_buffer_add_str (buf, "GPRINT:srv_tx:MAX:\"Maximum\\:%8.2lf%s\\n\" ");
+			cherokee_buffer_add_str (buf, "GPRINT:srv_tx:LAST:\" Current\\:%8.2lf%s\" ");
+			cherokee_buffer_add_str (buf, "GPRINT:srv_tx:AVERAGE:\" Average\\:%8.2lf%s\" ");
+			cherokee_buffer_add_str (buf, "GPRINT:srv_tx:MAX:\" Maximum\\:%8.2lf%s\" ");
+			cherokee_buffer_add_str (buf, "GPRINT:srv_tx_total:\"   Total\\:%8.2lf%s\\n\" ");
 		}
 
 		cherokee_buffer_add_str    (buf, "\n");
