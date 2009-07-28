@@ -75,8 +75,7 @@
 	"vserver!1!rule!3!document_root = " CHEROKEE_THEMEDIR "\n"	\
 	"icons!default = page_white.png\n"				\
 	"icons!directory = folder.png\n"				\
-	"icons!parent_directory = arrow_turn_left.png\n"		\
-	"try_include = " CHEROKEE_CONFDIR "/mods-enabled\n"
+	"icons!parent_directory = arrow_turn_left.png\n"
 
 static cherokee_server_t  *srv           = NULL;
 static char               *config_file   = NULL;
