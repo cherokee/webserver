@@ -88,6 +88,7 @@
 #include "source_interpreter.h"
 
 #define ENTRIES "core,server"
+#define GRNAM_BUF_LEN 8192
 
 ret_t
 cherokee_server_new  (cherokee_server_t **srv)
@@ -1404,7 +1405,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "group")) {
 		struct group grp;
-		char         tmp[1024];
+		char         tmp[GRNAM_BUF_LEN];
 		
 		ret = cherokee_getgrnam (conf->val.buf, &grp, tmp, sizeof(tmp));
 		if (ret != ret_ok) {
