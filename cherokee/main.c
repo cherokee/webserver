@@ -347,6 +347,10 @@ do_spawn (void)
 	size = *((int *)p);
 	p += sizeof(int);
 
+	if (size <= 0) {
+		return;
+	}
+
 	interpreter = malloc (sizeof("exec ") + size);
 	memcpy (interpreter, "exec ", 5);
 	memcpy (interpreter + 5, p, size + 1);
