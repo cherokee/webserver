@@ -36,8 +36,9 @@
 #include <signal.h>
 
 #define ENTRIES "source,src,interpreter"
-#define DEFAULT_TIMEOUT 10
 
+#define DEFAULT_TIMEOUT 10
+#define GRNAM_BUF_LEN   8192
 
 static void interpreter_free (void *src);
 
@@ -280,7 +281,7 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 
 		} else if (equal_buf_str (&child->key, "group")) {
 			struct group grp;
-			char         tmp[1024];
+			char         tmp[GRNAM_BUF_LEN];
 		
 			ret = cherokee_getgrnam (child->val.buf, &grp, tmp, sizeof(tmp));
 			if (ret != ret_ok) {
