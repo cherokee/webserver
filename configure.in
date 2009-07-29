@@ -248,7 +248,7 @@ AC_CHECK_HEADERS(endian.h machine/endian.h sys/machine.h sys/endian.h sys/isa_de
 AC_CHECK_HEADERS(sys/socket.h sys/un.h netinet/in.h arpa/inet.h netinet/tcp.h sys/ioctl.h fcntl.h sys/ofcntl.h sys/time.h)
 AC_CHECK_HEADERS(sys/resource.h resource.h unistd.h syslog.h stdint.h inttypes.h error.h pwd.h sys/uio.h)
 AC_CHECK_HEADERS(pthread.h netdb.h stdarg.h sys/filio.h sys/varargs.h sys/select.h sys/mman.h sys/uio.h grp.h winsock.h)
-AC_CHECK_HEADERS(winsock.h winsock2.h)
+AC_CHECK_HEADERS(winsock.h winsock2.h sched.h)
 
 AC_SYS_LARGEFILE
 
@@ -574,8 +574,21 @@ then
 
 	AC_CHECK_FUNCS(pthread_mutexattr_settype pthread_mutexattr_setkind_np)
 
-	LIBS="$save_LIBS"
+	dnl
+	dnl Yield
+	dnl
+	AC_CHECK_FUNCS(sched_yield, , [
+	   AC_CHECK_LIB(rt, sched_yield, [
+	       AC_DEFINE(HAVE_SCHED_YIELD)
+		  PTHREAD_LIBS="$PTHREAD_LIBS -lrt"
+	   ],[
+	       AC_CHECK_LIB(posix4, sched_yield, [
+		  AC_DEFINE(HAVE_SCHED_YIELD)
+      	  PTHREAD_LIBS="$PTHREAD_LIBS -lposix4"
+   	   ])])
+     ])
 
+	LIBS="$save_LIBS"
 	CFLAGS="$oldcflags"
 fi
 
@@ -584,6 +597,7 @@ if test "$have_pthread" = "yes"; then
 	AC_SUBST(PTHREAD_CFLAGS)
 	AC_SUBST(PTHREAD_LIBS)
 fi
+
 
 dnl
 dnl Is setenv() threadsafe?

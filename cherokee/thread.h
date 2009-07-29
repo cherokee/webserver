@@ -81,6 +81,7 @@ typedef struct {
 	cherokee_list_t         reuse_list;
 	int                     reuse_list_num;      /* reusable connections objs */
 	cherokee_limiter_t      limiter;             /* Traffic shaping */
+	cherokee_boolean_t      is_full;
 
 	int                     pending_conns_num;   /* Waiting pipelining connections */
 	int                     pending_read_num;    /* Conns with SSL deping read */

@@ -85,6 +85,10 @@
 # include <pthread.h>
 #endif
 
+#include HAVE_SCHED_H
+# include <sched.h>
+#endif
+
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
@@ -101,7 +105,7 @@
 # define CHEROKEE_MUTEX_T(n)           pthread_mutex_t n
 # define CHEROKEE_RWLOCK_T(n)          pthread_rwlock_t n
 # define CHEROKEE_THREAD_JOIN(t)       pthread_join(t,NULL)
-# define CHEROKEE_THREAD_SELF          pthread_self()
+# define CHEROKEE_THREAD_SELF          pthread_self
 
 # define CHEROKEE_THREAD_PROP_GET(p)   pthread_getspecific(p)
 # define CHEROKEE_THREAD_PROP_SET(p,v) pthread_setspecific(p,v)
@@ -144,6 +148,13 @@
 # define CHEROKEE_RWLOCK_UNLOCK(m)
 # define CHEROKEE_RWLOCK_DESTROY(m)
 #endif
+
+#ifdef HAVE_SCHED_YIELD
+# define CHEROKEE_THREAD_YIELD         sched_yield
+#else
+# define CHEROKEE_THREAD_YIELD         
+#endif 
+
 
 #ifdef _WIN32
 # define SOCK_ERRNO()      WSAGetLastError()

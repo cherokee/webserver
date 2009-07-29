@@ -150,6 +150,8 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 
 	n->exit                = false;
 	n->ended               = false;
+	n->is_full             = false;
+
 	n->server              = server;
 	n->thread_type         = type;
 
@@ -1596,11 +1598,12 @@ watch_accept_MULTI_THREAD (cherokee_thread_t  *thd,
 			   cherokee_boolean_t  block,
 			   int                 fdwatch_msecs)
 {
-	ret_t              ret;
-	int                unlocked;
-	cherokee_bind_t   *bind;
-	cherokee_list_t   *i;
- 	cherokee_server_t *srv        = THREAD_SRV(thd);
+	ret_t               ret;
+	int                 unlocked;
+	cherokee_bind_t    *bind;
+	cherokee_list_t    *i;
+	cherokee_boolean_t  yield      = false;
+ 	cherokee_server_t  *srv        = THREAD_SRV(thd);
 
 	/* Lock
 	 */
@@ -1645,13 +1648,27 @@ watch_accept_MULTI_THREAD (cherokee_thread_t  *thd,
 	list_for_each (i, &srv->listeners) {
 		bind = BIND(i);
 
+		/* Is it full?
+		 */
 		if (unlikely (thd->conns_num >= thd->conns_max)) {
-			thread_full_handler (thd, bind);
+			if (thd->is_full) {
+				thread_full_handler (thd, bind);
+				thd->is_full = false;
+			} else {
+				thd->is_full = true;
+			}
+
+			yield = true;
+			break;
 		} else {
-			do {
-				ret = accept_new_connection (thd, bind);
-			} while (should_accept_more (thd, bind, ret) == ret_ok);
+			thd->is_full = false;
 		}
+		
+		/* Accept new connections
+		 */
+		do {
+			ret = accept_new_connection (thd, bind);
+		} while (should_accept_more (thd, bind, ret) == ret_ok);
 	}
 
 	/* Release the port file descriptors 
@@ -1667,6 +1684,10 @@ out:
 	/* Unlock
 	 */
 	CHEROKEE_MUTEX_UNLOCK (&srv->listeners_mutex);
+
+	if (yield) {
+		CHEROKEE_THREAD_YIELD();
+	}
 }
 
 
