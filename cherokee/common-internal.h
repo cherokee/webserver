@@ -85,7 +85,7 @@
 # include <pthread.h>
 #endif
 
-#include HAVE_SCHED_H
+#ifdef HAVE_SCHED_H
 # include <sched.h>
 #endif
 
