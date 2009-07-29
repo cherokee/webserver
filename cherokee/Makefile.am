@@ -1696,9 +1696,7 @@ $(validator_mysql) \
 $(handler_dbslayer) \
 $(cherokeedeps_DATA) \
 $(WINDOWS_PORT_FILES) \
-$(cryptor_libssl_dist) \
-loader.autoconf.h \
-loader.autoconf.inc
+$(cryptor_libssl_dist)
 
 distclean-local:
 	$(RM) -f loader.autoconf.h loader.autoconf.inc
