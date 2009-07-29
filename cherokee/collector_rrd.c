@@ -55,15 +55,16 @@ static ret_t read_rrdtool  (cherokee_collector_rrd_t *rrd, cherokee_buffer_t *);
 static ret_t write_rrdtool (cherokee_collector_rrd_t *rrd, cherokee_buffer_t *);
 
 static struct interval_t {
-	const char *interval;
-	const char *description;
+	const char    *interval;
+	const char    *description;
+	const cuint_t  render_n_ticks;
 } intervals[] = {
-	{ "1h", "1 Hour" },
-	{ "6h", "6 Hours" },
-	{ "1d", "1 Day" },
-	{ "1w", "1 Week" },
-	{ "1m", "1 Month" },
-	{ NULL, NULL }
+	{ "1h", "1 Hour",   1},
+	{ "6h", "6 Hours",  5},
+	{ "1d", "1 Day",   10},
+	{ "1w", "1 Week",  20},
+	{ "1m", "1 Month", 60},
+	{ NULL, NULL,       0}
 };
 
 
@@ -389,14 +390,20 @@ static void
 render_srv_cb (void *param) 
 {
 	struct interval_t        *i;
+	static culong_t           n   = 0;
 	cherokee_collector_rrd_t *rrd = COLLECTOR_RRD(param);
 	cherokee_buffer_t        *buf = &rrd->tmp;
 
+	n++;
 	cherokee_buffer_clean (buf);
 
 	/* Accepts
 	 */
 	for (i = intervals; i->interval != NULL; i++) {
+		if ((n % i->render_n_ticks) != 0) {
+			continue;
+		}
+
 		cherokee_buffer_add_str    (buf, "graph ");
 		cherokee_buffer_add_buffer (buf, &rrd->database_dir);
 		cherokee_buffer_add_va     (buf, "/images/server_accepts_%s.png ", i->interval);
@@ -426,6 +433,10 @@ render_srv_cb (void *param)
 	/* Timeouts
 	 */
 	for (i = intervals; i->interval != NULL; i++) {
+		if ((n % i->render_n_ticks) != 0) {
+			continue;
+		}
+
 		cherokee_buffer_add_str    (buf, "graph ");
 		cherokee_buffer_add_buffer (buf, &rrd->database_dir);
 		cherokee_buffer_add_va     (buf, "/images/server_timeouts_%s.png ", i->interval);
@@ -455,6 +466,10 @@ render_srv_cb (void *param)
 	/* Traffic
 	 */
 	for (i = intervals; i->interval != NULL; i++) {
+		if ((n % i->render_n_ticks) != 0) {
+			continue;
+		}
+
 		cherokee_buffer_add_str    (buf, "graph ");
 		cherokee_buffer_add_buffer (buf, &rrd->database_dir);
 		cherokee_buffer_add_va     (buf, "/images/server_traffic_%s.png ", i->interval);
@@ -491,16 +506,22 @@ static void
 render_vsrv_cb (void *param) 
 {
 	struct interval_t             *i;
+	static culong_t                n       = 0;
 	cherokee_collector_vsrv_rrd_t *rrd     = COLLECTOR_VSRV_RRD(param);
 	cherokee_collector_rrd_t      *rrd_srv = COLLECTOR_VSRV_RRD_SRV(param);
 	cherokee_buffer_t             *buf     = &rrd->tmp;
 	cherokee_virtual_server_t     *vsrv    = VSERVER(rrd->vsrv_ref);
 	
+	n++;
 	cherokee_buffer_clean (buf);
 
 	/* Traffic
 	 */
 	for (i = intervals; i->interval != NULL; i++) {
+		if ((n % i->render_n_ticks) != 0) {
+			continue;
+		}
+
 		cherokee_buffer_add_str    (buf, "graph ");
 		cherokee_buffer_add_buffer (buf, &rrd_srv->database_dir);
 		cherokee_buffer_add_va     (buf, "/images/vserver_traffic_%s_%s.png ", vsrv->name.buf, i->interval);
@@ -542,7 +563,6 @@ render_vsrv_cb (void *param)
 		command_rrdtool (rrd_srv, buf);
 		cherokee_buffer_clean (buf);
 	}
-
 }
 
 
