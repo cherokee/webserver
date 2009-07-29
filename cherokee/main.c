@@ -608,8 +608,13 @@ spawn_clean (void)
 {
 	long dummy = 0;
 
-	shm_unlink (spawn_shared_name);
-	semctl (spawn_shared_sem, 0, IPC_RMID, dummy);
+	if (spawn_shared_name != NULL) {
+		shm_unlink (spawn_shared_name);
+	}
+
+	if (spawn_shared_sem != -1) {
+		semctl (spawn_shared_sem, 0, IPC_RMID, dummy);
+	}
 }
 #endif /* HAVE_POSIX_SHM */
 
