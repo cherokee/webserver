@@ -10,30 +10,22 @@ from GraphManager import *
 N_ = lambda x: x
 
 SERVER_RUNNING = """
-<div class="dialog-online">
- <form id="run-form" action="/stop" method="post">
-  <h2>{{_lserver_status}}</h2>
-  <p>
-   {{_server_running}}
-   <div style="float: right;">
-    <a class="button" href="#" onclick="this.blur(); $('#run-form').submit(); return false;"><span>{{_button_stop}}</span></a>
-   </div>
-  </p>
- </form>
+<div id="statusarea" class="running">
+<form id="run-form" action="/stop" method="post">
+ <div id="statustitle">{{_lserver_status}}:</div>
+ <div id="statusmsg">{{_server_running}}</div>
+ <div id="statusaction"><a href="#" onclick="this.blur(); $('#run-form').submit(); return false;">{{_button_stop}}</a></div>
+</form>
 </div>
 """
 
 SERVER_NOT_RUNNING = """
-<div class="dialog-offline">
- <form id="run-form" action="/launch" method="post">
-  <h2>{{_lserver_status}}</h2>
-  <p>
-   {{_server_running}}
-   <div style="float: right;">
-    <a class="button" href="#" onclick="this.blur(); $('#run-form').submit(); return false;"><span>{{_button_launch}}</span></a>
-   </div>
-  </p>
- </form>
+<div id="statusarea" class="notrunning">
+<form id="run-form" action="/launch" method="post">
+ <div id="statustitle">{{_lserver_status}}:</div>
+ <div id="statusmsg">{{_server_running}}</div>
+ <div id="statusaction"><a href="#" onclick="this.blur(); $('#run-form').submit(); return false;">{{_button_launch}}</a></div>
+</form>
 </div>
 """
 
@@ -129,12 +121,12 @@ class PageStatus (PageMenu, FormHelper):
 
     def _render_extra_info (self):
         txt = ""
+        txt += '<table width="100%" class="rulestable">'
 
         # Server
-        table = Table(2, title_left=1, header_style='width="130px"')
-        table += (_("Version"), VERSION)
-        table += (_("Prefix"),  PREFIX)
-        table += (_("WWW Root"),  WWWROOT)
+        txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>' % (_("Version"), VERSION)
+        txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>' % (_("Prefix"), PREFIX)
+        txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>' % (_("WWW Root"), WWWROOT)
 
         manager = cherokee_management_get (self._cfg)
         if manager.is_alive():
@@ -142,45 +134,48 @@ class PageStatus (PageMenu, FormHelper):
         else:
             current_pid = _("Not running")
 
-        table += (_("PID file"),  current_pid)
+        txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>'  % (_("PID file"), current_pid)
 
-        txt += '<h3>%s</h3>' % (_('Server'))
-        txt += self.Indent(table)
-
-        # Configuraion
-        table = Table(2, title_left=1, header_style='width="130px"')
-
+        # Configuration
         file = self._cfg.file
         if file:
             info = os.stat(file)
             file_status = time.ctime(info.st_ctime)
-            table += (_("Path"), file)
-            table += (_("Modified"), file_status)
+            txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>'  % (_("Configuration File"), file)
+            txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>'  % (_("Modified"), file_status)
         else:
-            table += (_("Configuration file"), _('Not Found'))
+            txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>'  % (_("Configuration File"), _('Not Found'))
 
-        txt += '<h3>%s</h3>' % (_('Configuration File'))
-        txt += self.Indent(table)
+        txt += '</table>'
 
         return txt
 
 
     def _render_server_graphs (self):
-        txt = '<h2>Server graphs</h2>'
+        txt = '<script type="text/javascript" src="/static/js/graphs.js"></script>';
+        txt += '<div id="grapharea">'
 
-        txt += '<h3>Server Traffic</h3>'
-        for tmp in graphs_get_images (self._cfg, "server_traffic"):
-            interval, img_name = tmp
-            txt += '<p><img src="/graphs/%s" alt="Traffic %s" /></p>\n' % (img_name, interval)
+        txt += '<div id="gmenu">'
+        txt += '<ul>'
+        txt += '<li id="gmtop"><span>%s</span></li>' % (_("Server Traffic"))
+        txt += '<li class="item"><a onclick="graphChangeType(\'traffic\', this.innerHTML)">%s</a></li>'  % (_("Server Traffic"))
+        txt += '<li class="item"><a onclick="graphChangeType(\'accepts\', this.innerHTML)">%s</a></li>'  % (_("Accepted Connections"))
+        txt += '<li class="item last"><a onclick="graphChangeType(\'timeouts\', this.innerHTML)">%s</a></li>'  % (_("Connections Timeout"))
+        txt += '</ul>'
+        txt += '</div>'
 
-        txt += '<h3>Connections Accepted</h3>'
-        for tmp in graphs_get_images (self._cfg, "server_accepts"):
-            interval, img_name = tmp
-            txt += '<p><img src="/graphs/%s" alt="Accepts %s" /></p>\n' % (img_name, interval)
+        txt += '<div id="gtype">'
+        txt += '<div id="g1m" class="gbutton"><a onclick="graphChangeInterval(\'1m\')">%s</a></div>' % (_("1 month"))
+        txt += '<div id="g1w" class="gbutton"><a onclick="graphChangeInterval(\'1w\')">%s</a></div>' % (_("1 week"))
+        txt += '<div id="g1d" class="gbutton"><a onclick="graphChangeInterval(\'1d\')">%s</a></div>' % (_("1 day"))
+        txt += '<div id="g6h" class="gbutton"><a onclick="graphChangeInterval(\'6h\')">%s</a></div>' % (_("6 hours"))
+        txt += '<div id="g1h" class="gbutton gsel"><a onclick="graphChangeInterval(\'1h\')">%s</a></div>' % (_("1 hour"))
+        txt += '</div>'
+ 
+        txt += '<div id="graphdiv">'
+        txt += '<img id="graphimg" src="/graphs/server_traffic_1h.png" alt="Graph" />'
+        txt += '</div>'
 
-        txt += '<h3>Timeouts</h3>'
-        for tmp in graphs_get_images (self._cfg, "server_timeouts"):
-            interval, img_name = tmp
-            txt += '<p><img src="/graphs/%s" alt="Timeouts %s" /></p>\n' % (img_name, interval)
+        txt += '</div>'
 
         return txt

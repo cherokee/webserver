@@ -35,7 +35,8 @@ favicon.ico \
 macFFBgHack.png \
 loadingAnimation.gif \
 forbidden.png \
-web_proud.jpg \
+proud.png \
+feedback.png \
 rulestable-th.png \
 arrow_ns.png \
 arrow_ns_h.png

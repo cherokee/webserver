@@ -17,6 +17,22 @@ html>body #container {
  min-height: 100%;
 }
 
+/* slightly enhanced, universal clearfix hack */
+.clearfix:after {
+ visibility: hidden;
+ display: block;
+ font-size: 0;
+ content: " ";
+ clear: both;
+ height: 0;
+}
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+* .clearfix { display: block; }
+*/* close commented backslash hack */
+
+
 a { color: #2d5e9a; }
 a:hover { color: #164987; }
 
@@ -146,7 +162,6 @@ h2 {
  color: #204a87;
  font-weight: normal;
  font-size: 120%;
- letter-spacing: -1px;
 }
 
 h3 {
@@ -833,3 +848,219 @@ table#table_new_file {
 table#table_new_file td {
  width: 220px;
 }
+
+/*************************/
+/* Graphs                */
+/************************/
+#grapharea {
+  margin: 32px 0 16px 0;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border: 1px solid #d4e1f1;
+  background: #f9fcff;
+  padding: 8px;
+}
+
+#grapharea .gbutton {
+  background: #f9fcff;
+  padding: 2px 8px;
+  margin: 2px 4px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border: 1px solid #f9fcff;
+  float: right;
+  font-size: 80%;
+}
+
+#grapharea .gbutton a {
+  text-decoration: none;
+}
+
+#grapharea a:hover {
+ cursor: pointer;
+}
+
+#grapharea .gsel {
+  background: #d4e1f1;
+  border: 1px solid #d4e1f1;
+}
+
+#graphdiv {
+ text-align: center;
+ padding-top: 24px;
+}
+
+#gmenu {
+ background: #f9fcff;
+}
+
+#gmenu ul .item { 
+ display: none; 
+}
+
+#gmenu ul .item a { 
+ text-decoration: none;
+ display: block;
+ padding: 4px 16px;
+}
+
+#gmenu ul .item a:hover { 
+ background: #e5ebf4;
+ cursor: pointer;
+}
+
+#gmenu ul:hover .item { 
+ display:block; 
+ border-left: 1px solid #d4e1f1;
+ border-right: 1px solid #d4e1f1;
+}
+
+#gmenu ul:hover .last {
+ border-bottom: 1px solid #d4e1f1;
+}
+
+#gmenu{
+ position:absolute;
+}
+
+#gmtop { 
+ color: #204a87;
+ font-size: 120%;
+}
+
+#gmenu:hover #gmtop {
+ border-bottom: 1px solid #d4e1f1;
+}
+
+
+#gmtop span {
+ padding: 2px 8px 1px 1px;
+ margin-right: 2px;
+ background: #f9fcff;
+ border: 1px solid #f9fcff;
+ border-bottom: 0;
+}
+
+#gmtop span:before {
+ content: "\25BA";
+ padding-right: 2px;
+ font-size: 90%;
+}
+
+#gmenu:hover #gmtop span:before {
+ content: "\25BC";
+}
+
+#gmenu:hover #gmtop span {
+ border: 1px solid #d4e1f1;
+ border-bottom: 0;
+}
+
+#statusarea {
+ border-radius: 4px;
+ -moz-border-radius: 4px;
+ -webkit-border-radius: 4px;
+ padding: 8px 8px 8px 64px;
+ margin: 16px 0;
+ height: 60px;
+}
+
+#statustitle {
+ font-size: 90%;
+ padding: 3px 0 0 0;
+ margin: 0;
+}
+
+#statusmsg {
+ padding: 0 8px 4px 0;
+ margin: 0;
+ font-size: 120%;
+ font-weight: bold;
+}
+
+#infoarea {
+ width: 454px;
+ float: left;
+ padding: 8px 24px 8px 0;
+ border-right: 1px solid #d4e1f1;
+}
+
+.running {
+ background: #e9ffd4 url(../images/online.png) 8px 8px no-repeat;
+ border: 1px solid #73d216;
+}
+
+.notrunning {
+ background: #fbf7da url(../images/offline.png) 8px 8px no-repeat;
+ border: 1px solid #edd400;
+}
+
+#statusaction {
+  background: #f9fcff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border: 1px solid #d4e1f1;
+  float: right;
+}
+
+#statusaction a {
+  font-size: 11px;
+  padding: 0;
+  color: #7695bc;
+  text-decoration: none;
+}
+
+#statusaction:hover a {
+ cursor: pointer;
+ color: #fff;
+}
+
+.running #statusaction:hover {
+ color: #fff;
+ background: #c00;
+ border: 1px solid #c00;
+}
+
+.notrunning #statusaction:hover {
+ color: #fff;
+ background: #74d216;
+ border: 1px solid #73d216;
+}
+
+#sidebararea {
+ float: right;
+ width: 224px;
+ padding: 8px;
+ font-size: 95%;
+}
+
+#sidebararea h2 {
+ border-bottom: 1px solid #d4e1f1;
+ padding-bottom: 4px;
+ margin-bottom: 8px;
+}
+
+#feedback, #proud {
+  margin: 0 0 8px 0;
+  padding: 8px;
+}
+
+#moreinfo {
+ padding: 4px;
+ border-radius: 4px;
+ -moz-border-radius: 4px;
+ -webkit-border-radius: 4px;
+ border: 1px solid #d4e1f1;
+ background: #f9fcff;
+}
+#moreinfo h2 {
+ padding: 2px 0;
+}
+#moreinfo td { background: #fff; padding: 4px 1px; border: 0; border-bottom: 1px solid #d4e1f1; }
+
+#moreinfo .infolab { white-space: pre; width: 128px; text-align: right; padding-left: 8px;}
+

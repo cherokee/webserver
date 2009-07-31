@@ -18,6 +18,7 @@ adminstatic_DATA = \
 $(THIRD_PARTY) \
 common.js \
 icons.js \
+graphs.js \
 wizards.js
 
 EXTRA_DIST = \
