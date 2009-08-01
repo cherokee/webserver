@@ -527,8 +527,9 @@ class PageVServer (PageMenu, FormHelper):
         return txt
 
     def _render_graphs (self, host):
-        txt = ''
-        pre = "vserver!%s" % (host)
+        txt  = ''
+        pre  = "vserver!%s" % (host)
+        name = self._cfg.get_val('vserver!%s!nick'%(host), "default")
 
         # Server collects statistics
         srv_has = (self._cfg.get_val('server!collector') != None)
@@ -554,10 +555,19 @@ class PageVServer (PageMenu, FormHelper):
         if not graphs_are_active(self._cfg):
             return txt
 
-        name = self._cfg.get_val('vserver!%s!nick'%(host), "default")
-        for tmp in graphs_get_images (self._cfg, "vserver_traffic_%s"%(name)):
-            interval, img_name = tmp
-            txt += '<p><img src="/graphs/%s" alt="%s, Traffic %s" /></p>\n' % (img_name, name, interval)
+        txt += '<script type="text/javascript" src="/static/js/graphs.js"></script>';
+        txt += '<div id="grapharea">'
+        txt += ' <div id="gtype">'
+        txt += '  <div id="g1m" class="gbutton"><a onclick="graphChangeInterval(\'1m\')">%s</a></div>' % (_("1 month"))
+        txt += '  <div id="g1w" class="gbutton"><a onclick="graphChangeInterval(\'1w\')">%s</a></div>' % (_("1 week"))
+        txt += '  <div id="g1d" class="gbutton"><a onclick="graphChangeInterval(\'1d\')">%s</a></div>' % (_("1 day"))
+        txt += '  <div id="g6h" class="gbutton"><a onclick="graphChangeInterval(\'6h\')">%s</a></div>' % (_("6 hours"))
+        txt += '  <div id="g1h" class="gbutton gsel"><a onclick="graphChangeInterval(\'1h\')">%s</a></div>' % (_("1 hour"))
+        txt += ' </div>'
+        txt += ' <div id="graphdiv">'
+        txt += '  <img id="graphimg" src="/graphs/vserver_traffic_%s_1h.png" alt="Graph" />' % (name)
+        txt += ' </div>'
+        txt += '</div>'
 
         return txt
 
