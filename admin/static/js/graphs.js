@@ -1,6 +1,8 @@
-var graphType = 'traffic';
+var graphPrefix   = 'server';
+var graphType     = 'traffic';
+var graphVServer  = null;
 var graphInterval = '1h';
-var refInterval = 60000;
+var refInterval   = 60000;
 
 function graphChangeType(type, title) {
     graphType = type;
@@ -17,7 +19,11 @@ function graphChangeInterval(i) {
 
 function changeGraph()
 {
-    imgurl = '/graphs/server_' + graphType + '_' + graphInterval + '.png';
+    if (graphPrefix == 'vserver') {
+	   imgurl = '/graphs/' + graphPrefix + '_' + graphType + '_' + graphVServer + '_' + graphInterval + '.png';
+    } else {
+	   imgurl = '/graphs/' + graphPrefix + '_' + graphType + '_' + graphInterval + '.png';
+    }
     $('#graphimg').attr('src', imgurl);
 }
 
@@ -26,7 +32,3 @@ function refreshGraph()
     changeGraph();
     setTimeout(refreshGraph, refInterval);
 }
-
-$(document).ready(function() { refreshGraph(); });
-
-

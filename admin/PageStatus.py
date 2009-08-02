@@ -147,7 +147,6 @@ class PageStatus (PageMenu, FormHelper):
             txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>'  % (_("Configuration File"), _('Not Found'))
 
         txt += '</table>'
-
         return txt
 
 
@@ -175,7 +174,11 @@ class PageStatus (PageMenu, FormHelper):
         txt += '<div id="graphdiv">'
         txt += '<img id="graphimg" src="/graphs/server_traffic_1h.png" alt="Graph" />'
         txt += '</div>'
-
         txt += '</div>'
+
+        txt += """<script type="text/javascript">
+                   $(document).ready(function() { refreshGraph(); });
+                  </script>
+               """
 
         return txt

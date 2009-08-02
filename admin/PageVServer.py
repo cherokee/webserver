@@ -569,6 +569,15 @@ class PageVServer (PageMenu, FormHelper):
         txt += ' </div>'
         txt += '</div>'
 
+        txt += """<script type="text/javascript">
+                   graphPrefix   = "vserver";
+                   graphType     = "traffic";
+                   graphVServer  = "%s";
+                   graphInterval = "1h";
+                   $(document).ready(function() { refreshGraph(); });
+                  </script>
+               """ % (name)
+
         return txt
 
     def _render_logger (self, host):

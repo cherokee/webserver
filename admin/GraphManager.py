@@ -11,9 +11,6 @@ def graphs_are_active (cfg):
     except OSError:
         return False
 
-    if time.time() > info.st_mtime + (2 * 60 * 60):
-        return False
-
     return True
 
 
