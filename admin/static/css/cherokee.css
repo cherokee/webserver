@@ -703,7 +703,7 @@ table tr th {
   margin-bottom: 16px;
 }
 
-.tableprop_block hr {
+.tableprop_block hr, hr {
   background: #d4e1f1;
   border: none;
   margin-top: 5px;
