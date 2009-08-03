@@ -1770,8 +1770,9 @@ cherokee_server_handle_HUP (cherokee_server_t *srv)
 ret_t 
 cherokee_server_handle_TERM (cherokee_server_t *srv)
 {
-	if (srv != NULL)
+	if (srv != NULL) {
 		srv->wanna_exit = true;
+	}
 
 	return ret_ok;
 }

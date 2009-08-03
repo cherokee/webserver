@@ -127,6 +127,10 @@ signals_handler (int sig, siginfo_t *si, void *context)
 
 	case SIGINT:
 	case SIGTERM:
+		if (srv->wanna_exit) {
+			break;
+		}
+
 		printf ("Server is exiting..\n");
 		cherokee_server_handle_TERM (srv);
 		break;
