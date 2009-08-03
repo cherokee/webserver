@@ -35,6 +35,7 @@ NOTE_USER       = N_('Changes the effective user. User names and IDs are accepte
 NOTE_GROUP      = N_('Changes the effective group. Group names and IDs are accepted.')
 NOTE_CHROOT     = N_('Jail the server inside the directory. Don\'t use it as the only security measure.')
 NOTE_TLS        = N_('Which, if any, should be the TLS/SSL backend.')
+NOTE_COLLECTORS = N_('How the usage graphics should be generated.')
 
 HELPS = [('config_general',    N_("General Configuration")),
          ('config_quickstart', N_("Configuration Quickstart"))]
@@ -85,6 +86,12 @@ class PageGeneral (PageMenu, FormHelper):
         self.AddPropOptions_Reload (table, _('Server Tokens'), 'server!server_tokens', PRODUCT_TOKENS, _(NOTE_TOKENS))
         txt += self.Indent(table)
 
+        txt += "<h2>%s</h2>" % (_('Information Collector'))
+        table = TableProps()
+        e = self.AddPropOptions_Reload (table, _('Graphs Type'), 'server!collector',
+                                        modules_available(COLLECTORS), _(NOTE_COLLECTORS))
+        txt += self.Indent(str(table) + e)
+
         return txt
 
     def _op_apply_changes (self, uri, post):
@@ -94,6 +101,17 @@ class PageGeneral (PageMenu, FormHelper):
 
         # Validation
         validation = DATA_VALIDATION[:]
+
+        # Collector
+        pre  = "server!collector"
+        name = self._cfg.get_val (pre)
+
+        if name:
+            graph_module = module_obj_factory (name, self._cfg, pre, self.submit_url)
+            if 'validation' in dir(graph_module):
+                validation += graph_module.validation
+
+        # Apply
         self.ApplyChanges (checkboxes, post, validation)
 
     def _render_ports (self):
