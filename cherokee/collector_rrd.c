@@ -57,13 +57,13 @@ static ret_t write_rrdtool (cherokee_collector_rrd_t *rrd, cherokee_buffer_t *);
 static struct interval_t {
 	const char    *interval;
 	const char    *description;
-	const cuint_t  render_n_ticks;
+	const cuint_t  secs_per_pixel;
 } intervals[] = {
-	{ "1h", "1 Hour",   1},
-	{ "6h", "6 Hours",  5},
-	{ "1d", "1 Day",   10},
-	{ "1w", "1 Week",  20},
-	{ "1m", "1 Month", 60},
+	{ "1h", "1 Hour",       ( 1 * 60 * 60) / 600},
+	{ "6h", "6 Hours",      ( 6 * 60 * 60) / 600},
+	{ "1d", "1 Day",        (24 * 60 * 60) / 600},
+	{ "1w", "1 Week",   (7 * 24 * 60 * 60) / 600},
+	{ "1m", "1 Month", (28 * 24 * 60 * 60) / 600},
 	{ NULL, NULL,       0}
 };
 
@@ -385,22 +385,47 @@ check_img_dir (cherokee_collector_rrd_t *rrd_srv)
 	return ret_ok;
 }
 
+static cherokee_boolean_t
+check_image_freshness (cherokee_buffer_t *database_dir, 
+		       cherokee_buffer_t *buf,
+		       struct interval_t *interval)
+{
+	int         re;
+	struct stat info;
+
+	cherokee_buffer_prepend_buf (buf, database_dir);
+	cherokee_buffer_add_char    (buf, '_');
+	cherokee_buffer_add         (buf, interval->interval, strlen(interval->interval));
+	cherokee_buffer_add_str     (buf, ".png");
+	
+	re = stat (buf->buf, &info);
+	cherokee_buffer_clean (buf);
+
+	if (re != 0) {
+		return false;
+	}
+
+	if (cherokee_bogonow_now >= info.st_mtime + interval->secs_per_pixel) {
+		return false;
+	}
+
+	return true;
+}
+
 
 static void 
 render_srv_cb (void *param) 
 {
 	struct interval_t        *i;
-	static culong_t           n   = 0;
 	cherokee_collector_rrd_t *rrd = COLLECTOR_RRD(param);
 	cherokee_buffer_t        *buf = &rrd->tmp;
-
-	n++;
-	cherokee_buffer_clean (buf);
 
 	/* Accepts
 	 */
 	for (i = intervals; i->interval != NULL; i++) {
-		if ((n % i->render_n_ticks) != 0) {
+		cherokee_buffer_clean   (buf);
+		cherokee_buffer_add_str (buf, "/images/server_accepts");
+		if (check_image_freshness (&rrd->database_dir, buf, i)) {
 			continue;
 		}
 
@@ -433,7 +458,9 @@ render_srv_cb (void *param)
 	/* Timeouts
 	 */
 	for (i = intervals; i->interval != NULL; i++) {
-		if ((n % i->render_n_ticks) != 0) {
+		cherokee_buffer_clean   (buf);
+		cherokee_buffer_add_str (buf, "/images/server_timeouts");
+		if (check_image_freshness (&rrd->database_dir, buf, i)) {
 			continue;
 		}
 
@@ -466,7 +493,9 @@ render_srv_cb (void *param)
 	/* Traffic
 	 */
 	for (i = intervals; i->interval != NULL; i++) {
-		if ((n % i->render_n_ticks) != 0) {
+		cherokee_buffer_clean   (buf);
+		cherokee_buffer_add_str (buf, "/images/server_traffic");
+		if (check_image_freshness (&rrd->database_dir, buf, i)) {
 			continue;
 		}
 
@@ -506,19 +535,19 @@ static void
 render_vsrv_cb (void *param) 
 {
 	struct interval_t             *i;
-	static culong_t                n       = 0;
 	cherokee_collector_vsrv_rrd_t *rrd     = COLLECTOR_VSRV_RRD(param);
 	cherokee_collector_rrd_t      *rrd_srv = COLLECTOR_VSRV_RRD_SRV(param);
 	cherokee_buffer_t             *buf     = &rrd->tmp;
 	cherokee_virtual_server_t     *vsrv    = VSERVER(rrd->vsrv_ref);
 	
-	n++;
-	cherokee_buffer_clean (buf);
-
 	/* Traffic
 	 */
 	for (i = intervals; i->interval != NULL; i++) {
-		if ((n % i->render_n_ticks) != 0) {
+
+		cherokee_buffer_clean      (buf);
+		cherokee_buffer_add_str    (buf, "/images/vserver_traffic_");
+		cherokee_buffer_add_buffer (buf, &vsrv->name);
+		if (check_image_freshness  (&rrd_srv->database_dir, buf, i)) {
 			continue;
 		}
 
