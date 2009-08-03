@@ -546,14 +546,14 @@ class PageVServer (PageMenu, FormHelper):
         txt += "<br/>"
         
         # VServer collect statistics
-        if not srv_has:
-            return txt
+        #if not srv_has:
+        #    return txt
 
-        if not int(self._cfg.get_val('%s!collector!enabled'%(pre), '1')):
-            return txt
+        #if not int(self._cfg.get_val('%s!collector!enabled'%(pre), '1')):
+        #    return txt
 
-        if not graphs_are_active(self._cfg):
-            return txt
+        #if not graphs_are_active(self._cfg):
+        #    return txt
 
         txt += '<script type="text/javascript" src="/static/js/graphs.js"></script>';
         txt += '<div id="grapharea">'

@@ -85,6 +85,10 @@ a:hover { color: #164987; }
  padding: 16px;
 }
 
+#body-status #workarea-inner {
+ padding: 16px 32px;
+}
+
 #save_changes_msg {
  display: none;
  padding: 15px 10px;
@@ -193,8 +197,9 @@ table td label {
 }
 
 #change_language {
- float: right;
- width: 120px;
+}
+
+#change_language div {
 }
 
 .label_lang {
@@ -424,7 +429,7 @@ table td label {
 }
 .ui-tabs-panel {
  border-top: 1px solid #bacce2;
- padding: 16px;
+ padding: 16px 14px;
  background: #fff; 
 }
 
@@ -861,6 +866,10 @@ table#table_new_file td {
   padding: 8px;
 }
 
+#grapharea img {
+  border: 1px solid #d4e1f1;
+}
+
 #grapharea .gbutton {
   background: #f9fcff;
   padding: 2px 8px;
@@ -980,7 +989,7 @@ table#table_new_file td {
 }
 
 #infoarea {
- width: 454px;
+ width: 422px;
  float: left;
  padding: 8px 24px 8px 0;
  border-right: 1px solid #d4e1f1;
@@ -1044,7 +1053,7 @@ table#table_new_file td {
 }
 
 #feedback, #proud {
-  margin: 0 0 8px 0;
+  margin: 8px 0 4px 0;
   padding: 8px;
 }
 

@@ -31,9 +31,9 @@ SERVER_NOT_RUNNING = """
 
 MENU_LANGUAGES = """
 <div id="change_language">
-  <div class="label_lang">{{_llanguages}}</div>
   <form name="flanguages" id="flanguages" method="post" action="/change_language">
-    {{languages_select}}
+  <div class="label_lang">{{_llanguages}}</div>
+  <div>{{languages_select}}</div>
   </form>
 </div>
 """

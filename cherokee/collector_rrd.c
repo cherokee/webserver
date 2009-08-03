@@ -59,11 +59,11 @@ static struct interval_t {
 	const char    *description;
 	const cuint_t  secs_per_pixel;
 } intervals[] = {
-	{ "1h", "1 Hour",       ( 1 * 60 * 60) / 600},
-	{ "6h", "6 Hours",      ( 6 * 60 * 60) / 600},
-	{ "1d", "1 Day",        (24 * 60 * 60) / 600},
-	{ "1w", "1 Week",   (7 * 24 * 60 * 60) / 600},
-	{ "1m", "1 Month", (28 * 24 * 60 * 60) / 600},
+	{ "1h", "1 Hour",       ( 1 * 60 * 60) / 580},
+	{ "6h", "6 Hours",      ( 6 * 60 * 60) / 580},
+	{ "1d", "1 Day",        (24 * 60 * 60) / 580},
+	{ "1w", "1 Week",   (7 * 24 * 60 * 60) / 580},
+	{ "1m", "1 Month", (28 * 24 * 60 * 60) / 580},
 	{ NULL, NULL,       0}
 };
 
@@ -432,9 +432,9 @@ render_srv_cb (void *param)
 		cherokee_buffer_add_str    (buf, "graph ");
 		cherokee_buffer_add_buffer (buf, &rrd->database_dir);
 		cherokee_buffer_add_va     (buf, "/images/server_accepts_%s.png ", i->interval);
-		cherokee_buffer_add_va     (buf, "--imgformat PNG --width 600 --height 350 --start -%s ", i->interval);
+		cherokee_buffer_add_va     (buf, "--imgformat PNG --width 580 --height 340 --start -%s ", i->interval);
 		cherokee_buffer_add_va     (buf, "--title \"Accepted Connections: %s\" ", i->interval);
-		cherokee_buffer_add_str    (buf, "--vertical-label \"conn/s\" -c BACK#E9EEF4 ");
+		cherokee_buffer_add_str    (buf, "--vertical-label \"conn/s\" -c BACK#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF ");
 		cherokee_buffer_add_va     (buf, "DEF:accepts=%s:Accepts:AVERAGE ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:accepts_min=%s:Accepts:MIN ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:accepts_max=%s:Accepts:MAX ", rrd->path_database.buf);
@@ -467,9 +467,9 @@ render_srv_cb (void *param)
 		cherokee_buffer_add_str    (buf, "graph ");
 		cherokee_buffer_add_buffer (buf, &rrd->database_dir);
 		cherokee_buffer_add_va     (buf, "/images/server_timeouts_%s.png ", i->interval);
-		cherokee_buffer_add_va     (buf, "--imgformat PNG --width 600 --height 350 --start -%s ", i->interval);
+		cherokee_buffer_add_va     (buf, "--imgformat PNG --width 580 --height 340 --start -%s ", i->interval);
 		cherokee_buffer_add_va     (buf, "--title \"Timeouts: %s\" ", i->interval);
-		cherokee_buffer_add_str    (buf, "--vertical-label \"timeouts/s\" -c BACK#E9EEF4 ");
+		cherokee_buffer_add_str    (buf, "--vertical-label \"timeouts/s\" -c BACK#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF ");
 		cherokee_buffer_add_va     (buf, "DEF:timeouts=%s:Timeouts:AVERAGE ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:timeouts_min=%s:Timeouts:MIN ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:timeouts_max=%s:Timeouts:MAX ", rrd->path_database.buf);
@@ -502,9 +502,9 @@ render_srv_cb (void *param)
 		cherokee_buffer_add_str    (buf, "graph ");
 		cherokee_buffer_add_buffer (buf, &rrd->database_dir);
 		cherokee_buffer_add_va     (buf, "/images/server_traffic_%s.png ", i->interval);
-		cherokee_buffer_add_va     (buf, "--imgformat PNG --width 600 --height 350 --start -%s ", i->interval);
+		cherokee_buffer_add_va     (buf, "--imgformat PNG --width 580 --height 340 --start -%s ", i->interval);
 		cherokee_buffer_add_va     (buf, "--title \"Traffic: %s\" ", i->interval);
-		cherokee_buffer_add_str    (buf, "--vertical-label \"bytes/s\" -c BACK#E9EEF4 ");
+		cherokee_buffer_add_str    (buf, "--vertical-label \"bytes/s\" -c BACK#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF ");
 		cherokee_buffer_add_va     (buf, "DEF:rx=%s:RX:AVERAGE ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:rx_max=%s:RX:MAX ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:tx=%s:TX:AVERAGE ", rrd->path_database.buf);
@@ -554,9 +554,9 @@ render_vsrv_cb (void *param)
 		cherokee_buffer_add_str    (buf, "graph ");
 		cherokee_buffer_add_buffer (buf, &rrd_srv->database_dir);
 		cherokee_buffer_add_va     (buf, "/images/vserver_traffic_%s_%s.png ", vsrv->name.buf, i->interval);
-		cherokee_buffer_add_va     (buf, "--imgformat PNG --width 600 --height 350 --start -%s ", i->interval);
+		cherokee_buffer_add_va     (buf, "--imgformat PNG --width 580 --height 340 --start -%s ", i->interval);
 		cherokee_buffer_add_va     (buf, "--title \"Traffic, %s: %s\" ", vsrv->name.buf, i->interval);
-		cherokee_buffer_add_str    (buf, "--vertical-label \"bytes/s\" -c BACK#E9EEF4 ");
+		cherokee_buffer_add_str    (buf, "--vertical-label \"bytes/s\" -c BACK#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF ");
 		cherokee_buffer_add_va     (buf, "DEF:rx=%s:RX:AVERAGE ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:rx_max=%s:RX:MAX ", rrd->path_database.buf);
 		cherokee_buffer_add_va     (buf, "DEF:tx=%s:TX:AVERAGE ", rrd->path_database.buf);
