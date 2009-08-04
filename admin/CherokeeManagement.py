@@ -153,15 +153,12 @@ class CherokeeManagement:
 
     # Protected
     #
-    def _get_pid_path (self):
-        pid_file = self._cfg.get_val("server!pid_file")
-        if not pid_file:
-            pid_file = os.path.join (CHEROKEE_VAR_RUN, "cherokee.pid")
-        return pid_file
-
     def _get_pid (self):
-        pid_file = self._get_pid_path()
-        return self.__read_pid_file (pid_file)
+        pid_file = self._cfg.get_val("server!pid_file")
+        if pid_file:
+            return self.__read_pid_file (pid_file)
+
+        return self.__try_to_figure_pid()
 
     def _restart (self, graceful=False):
         if not self._pid:
@@ -176,6 +173,17 @@ class CherokeeManagement:
 
     # Private
     #
+    def __try_to_figure_pid (self):
+        try:
+            ps = os.popen ("ps aux").read()
+        except:
+            return -1
+
+        for l in ps.split("\n"):
+            if "cherokee " in l and "-C %s"%(self._cfg.file) in l:
+                pid = filter (lambda x: x.isdigit(), l.split())[0]
+                return int(pid)
+        return -1
 
     def __read_pid_file (self, file):
         if not os.access (file, os.R_OK):
