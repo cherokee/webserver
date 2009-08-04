@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-07-01 15:57+0200\n"
+"POT-Creation-Date: 2009-08-04 21:44+0200\n"
 "PO-Revision-Date: 2009-05-21 22:35+0200\n"
 "Last-Translator: Stefan de Konink <stefan@konink.de>\n"
 "Language-Team: none\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Could not access file descriptors: "
 msgstr "Kan niet bij bestandsbeschrijvers: "
 
-#: admin/CherokeeManagement.py:252
+#: admin/CherokeeManagement.py:262
 #, python-format
 msgid "ERROR: Couldn't execute '%s -i'"
 msgstr "FOUT: Kan '%s -i' niet uitvoeren"
@@ -87,7 +87,7 @@ msgid "Authentication list"
 msgstr "Authenticatie lijst"
 
 #: admin/ModuleAuthlist.py:31 admin/ModuleAuthlist.py:47
-#: admin/PageGeneral.py:69
+#: admin/PageGeneral.py:70
 msgid "User"
 msgstr "Gebruiker"
 
@@ -154,12 +154,12 @@ msgid "Application Server"
 msgstr "Applicatie Server"
 
 #: admin/ModuleBind.py:21 admin/ModuleBind.py:22 admin/ModuleBind.py:47
-#: admin/ModuleLdap.py:36 admin/ModuleMysql.py:45 admin/PageGeneral.py:111
+#: admin/ModuleLdap.py:36 admin/ModuleMysql.py:45 admin/PageGeneral.py:133
 msgid "Port"
 msgstr "Poort"
 
 #: admin/ModuleBind.py:26 admin/ModuleBind.py:76 admin/ModuleMethod.py:10
-#: admin/PageStatus.py:105
+#: admin/PageStatus.py:104
 msgid "Choose"
 msgstr "Kies"
 
@@ -171,19 +171,19 @@ msgstr "Binnenkomende Poort"
 msgid "Selected Ports"
 msgstr "Geselecteerde Poorten"
 
-#: admin/ModuleBind.py:47 admin/PageGeneral.py:111
+#: admin/ModuleBind.py:47 admin/PageGeneral.py:133
 msgid "Bind to"
 msgstr "Verbind aan"
 
-#: admin/ModuleBind.py:47 admin/PageAdvanced.py:136 admin/PageGeneral.py:111
+#: admin/ModuleBind.py:47 admin/PageAdvanced.py:136 admin/PageGeneral.py:133
 msgid "TLS"
 msgstr "TLS"
 
-#: admin/ModuleBind.py:53 admin/PageVServer.py:344 admin/PageVServers.py:147
+#: admin/ModuleBind.py:53 admin/PageVServer.py:346 admin/PageVServers.py:147
 msgid "No"
 msgstr "Nee"
 
-#: admin/ModuleBind.py:53 admin/PageVServer.py:343 admin/PageVServers.py:146
+#: admin/ModuleBind.py:53 admin/PageVServer.py:345 admin/PageVServers.py:146
 msgid "Yes"
 msgstr "Ja"
 
@@ -235,7 +235,7 @@ msgstr "Script Alias"
 msgid "Change UID"
 msgstr "Wijzig UID"
 
-#: admin/ModuleCgi.py:50 admin/PageVServer.py:259
+#: admin/ModuleCgi.py:50 admin/PageVServer.py:260
 msgid "Error handler"
 msgstr "Fout afhandelaar"
 
@@ -467,7 +467,7 @@ msgstr "Herleiding"
 #: admin/ModuleErrorRedir.py:41 admin/ModuleErrorRedir.py:52
 #: admin/ModuleRedir.py:35 admin/PageInfoSource.py:166
 #: admin/PageInfoSource.py:193 admin/PageInfoSource.py:222
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Type"
 msgstr "Type"
 
@@ -714,7 +714,7 @@ msgstr "CA Bestand voor de TLS verbindingen."
 msgid "LDAP"
 msgstr "LDAP"
 
-#: admin/ModuleLdap.py:35 admin/ModuleLdap.py:51 admin/PageStatus.py:140
+#: admin/ModuleLdap.py:35 admin/ModuleLdap.py:51
 msgid "Server"
 msgstr "Server"
 
@@ -750,7 +750,7 @@ msgstr "LDAP verbinding"
 msgid "The HTTP method that should match this rule."
 msgstr "De HTTP methode dat deze regel beschrijft."
 
-#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:522
+#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:523
 msgid "Method"
 msgstr "Methode"
 
@@ -947,7 +947,7 @@ msgstr ""
 msgid "Redirections"
 msgstr "Herleidingen."
 
-#: admin/ModuleRedir.py:15 admin/ModuleRehost.py:24 admin/ModuleRehost.py:28
+#: admin/ModuleRedir.py:15 admin/ModuleRehost.py:28 admin/ModuleRehost.py:32
 #: admin/consts.py:141
 msgid "Regular Expressions"
 msgstr "Reguliere Expressies"
@@ -960,7 +960,7 @@ msgstr "Regel lijst"
 msgid "Show"
 msgstr "Toon"
 
-#: admin/ModuleRedir.py:55 admin/PageVServer.py:240 admin/PageVServer.py:316
+#: admin/ModuleRedir.py:55 admin/PageVServer.py:241 admin/PageVServer.py:318
 msgid "Add new rule"
 msgstr "Voeg nieuwe regel toe"
 
@@ -973,11 +973,11 @@ msgstr "Reguliere Expressie waartegen de Computer naam wordt vergeleken. "
 msgid "At least one Regular Expression string must be defined."
 msgstr "Minimaal een Reguliere Expressie regel moet worden gedefinieerd."
 
-#: admin/ModuleRehost.py:52
+#: admin/ModuleRehost.py:59
 msgid "New Regular Expression"
 msgstr "Nieuwe Reguliere Expressie"
 
-#: admin/ModuleRehost.py:53 admin/ModuleWildcard.py:53
+#: admin/ModuleRehost.py:60 admin/ModuleWildcard.py:60
 #: admin/PageInfoSource.py:238
 msgid "Add new"
 msgstr "Voeg toe"
@@ -1101,15 +1101,15 @@ msgstr ""
 msgid "At least one wildcard string must be defined."
 msgstr "Tenminste een joker string moet worden gedefinieerd."
 
-#: admin/ModuleWildcard.py:24
+#: admin/ModuleWildcard.py:28
 msgid "Accepted domains"
 msgstr "Geaccepteerde domeinen"
 
-#: admin/ModuleWildcard.py:28
+#: admin/ModuleWildcard.py:32
 msgid "Domain pattern"
 msgstr "Domein patroon"
 
-#: admin/ModuleWildcard.py:52
+#: admin/ModuleWildcard.py:59
 msgid "New host name"
 msgstr "Nieuwe computer naam"
 
@@ -1121,8 +1121,8 @@ msgstr "Versie:"
 msgid "Help"
 msgstr "Hulp"
 
-#: admin/Page.py:151 admin/PageAdvanced.py:108 admin/PageStatus.py:67
-#: admin/PageVServer.py:490
+#: admin/Page.py:151 admin/PageAdvanced.py:108 admin/PageStatus.py:60
+#: admin/PageVServer.py:492
 msgid "Status"
 msgstr "Status"
 
@@ -1130,7 +1130,7 @@ msgstr "Status"
 msgid "General"
 msgstr "Algemene"
 
-#: admin/Page.py:153 admin/PageVServer.py:68 admin/PageVServers.py:25
+#: admin/Page.py:153 admin/PageVServer.py:69 admin/PageVServers.py:25
 #: admin/PageVServers.py:130
 msgid "Virtual Servers"
 msgstr "Virtuele Server"
@@ -1400,7 +1400,7 @@ msgstr ""
 msgid "Panic action"
 msgstr "Paniek actie"
 
-#: admin/PageAdvanced.py:119 admin/PageStatus.py:138
+#: admin/PageAdvanced.py:119 admin/PageStatus.py:137
 msgid "PID file"
 msgstr "PID bestand"
 
@@ -1491,11 +1491,11 @@ msgid "Rule"
 msgstr "Regel"
 
 #: admin/PageEntry.py:156 admin/PageEntry.py:164 admin/PageEntry.py:166
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Handler"
 msgstr "Uitvoerder"
 
-#: admin/PageEntry.py:161 admin/PageVServer.py:509 admin/PageVServers.py:262
+#: admin/PageEntry.py:161 admin/PageVServer.py:511 admin/PageVServers.py:275
 msgid "Document Root"
 msgstr "Hoofdmap"
 
@@ -1507,7 +1507,7 @@ msgstr "Encodering"
 msgid "Expiration"
 msgstr "Vervaltijd"
 
-#: admin/PageEntry.py:177 admin/PageVServer.py:267
+#: admin/PageEntry.py:177 admin/PageVServer.py:269
 msgid "Security"
 msgstr "Beveiliging"
 
@@ -1535,7 +1535,7 @@ msgstr "Inhoud Vervaltijd"
 msgid "Authentication"
 msgstr "Authenticatie"
 
-#: admin/PageEntry.py:239 admin/PageVServer.py:263 admin/PageVServers.py:144
+#: admin/PageEntry.py:239 admin/PageVServer.py:265 admin/PageVServers.py:144
 msgid "Logging"
 msgstr "Logging"
 
@@ -1592,7 +1592,7 @@ msgstr ""
 "A werkende connectie naar het Internet is nodig om dit formulier te laten "
 "werken."
 
-#: admin/PageFeedback.py:50 admin/PageFeedback.py:55 admin/PageStatus.py:112
+#: admin/PageFeedback.py:50 admin/PageFeedback.py:55 admin/PageStatus.py:111
 msgid "Feedback"
 msgstr "Reactie"
 
@@ -1632,7 +1632,7 @@ msgstr "Rapport"
 msgid "Feedback: Thank you"
 msgstr "Reactie: Bedankt"
 
-#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:372
+#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:374
 #: admin/consts.py:87
 msgid "Default"
 msgstr "Standaard"
@@ -1702,67 +1702,80 @@ msgstr ""
 msgid "Which, if any, should be the TLS/SSL backend."
 msgstr ""
 
-#: admin/PageGeneral.py:39 admin/PageGeneral.py:50
+#: admin/PageGeneral.py:38
+msgid "How the usage graphics should be generated."
+msgstr ""
+
+#: admin/PageGeneral.py:40 admin/PageGeneral.py:51
 msgid "General Configuration"
 msgstr "Algemene Configuratie"
 
-#: admin/PageGeneral.py:40
+#: admin/PageGeneral.py:41
 msgid "Configuration Quickstart"
 msgstr "Configuratie Snelstart"
 
-#: admin/PageGeneral.py:55
+#: admin/PageGeneral.py:56
 msgid "General Settings"
 msgstr "Algemene instellingen"
 
-#: admin/PageGeneral.py:58 admin/PageVServer.py:513
+#: admin/PageGeneral.py:59 admin/PageVServer.py:515
 msgid "Network"
 msgstr "Netwerk"
 
-#: admin/PageGeneral.py:59
+#: admin/PageGeneral.py:60
 msgid "Ports to listen"
 msgstr "Poorten om naar te luisteren"
 
-#: admin/PageGeneral.py:60
+#: admin/PageGeneral.py:61
 msgid "Server Permissions"
 msgstr "Server Permissies"
 
-#: admin/PageGeneral.py:67
+#: admin/PageGeneral.py:68
 msgid "Execution Permissions"
 msgstr "Uitvoer Permissies"
 
-#: admin/PageGeneral.py:70
+#: admin/PageGeneral.py:71
 msgid "Group"
 msgstr "Groep"
 
-#: admin/PageGeneral.py:71
+#: admin/PageGeneral.py:72
 msgid "Chroot"
 msgstr "Chroot"
 
-#: admin/PageGeneral.py:76
+#: admin/PageGeneral.py:77
 msgid "Support"
 msgstr "Ondersteuning"
 
-#: admin/PageGeneral.py:79
+#: admin/PageGeneral.py:80
 msgid "SSL/TLS back-end"
 msgstr "SSL/TLS ondersteuning"
 
-#: admin/PageGeneral.py:82
+#: admin/PageGeneral.py:83
 msgid "Network behavior"
 msgstr "Netwerk gedrag"
 
-#: admin/PageGeneral.py:84
+#: admin/PageGeneral.py:85
 msgid "Timeout (<i>secs</i>)"
 msgstr "Uitvaltijd (<i>seconde</i>)"
 
-#: admin/PageGeneral.py:85
+#: admin/PageGeneral.py:86
 msgid "Server Tokens"
 msgstr "Server Tokens"
 
-#: admin/PageGeneral.py:124
+#: admin/PageGeneral.py:89
+#, fuzzy
+msgid "Information Collector"
+msgstr "Informatie Encoders"
+
+#: admin/PageGeneral.py:91
+msgid "Graphs Type"
+msgstr ""
+
+#: admin/PageGeneral.py:146
 msgid "Listening to ports"
 msgstr "Luisteren naar poorten"
 
-#: admin/PageGeneral.py:130
+#: admin/PageGeneral.py:152
 msgid "Add new port"
 msgstr "Voeg nieuwe poort toe"
 
@@ -2015,7 +2028,8 @@ msgid "Server Development"
 msgstr "Server Ontwikkelinig"
 
 #: admin/PageNewConfig.py:40
-msgid "Regular configuration: PHP, Apache logs, MIME types, icons, etc."
+#, fuzzy
+msgid "Regular configuration: Apache logs, MIME types, icons, etc."
 msgstr "Normale configuratie: PHP, Apache logs, MIME typen, iconen, etc."
 
 #: admin/PageNewConfig.py:41
@@ -2038,7 +2052,7 @@ msgstr "Configuratie Bestand Niet Gevonden"
 msgid "Create a new configuration file"
 msgstr "Maak een nieuw configuratie bestand"
 
-#: admin/PageStatus.py:48
+#: admin/PageStatus.py:41
 #, fuzzy
 msgid ""
 "\n"
@@ -2052,7 +2066,7 @@ msgstr ""
 "Webserver downloaden en testen helpen ons om de beste product af te kunnen "
 "leveren."
 
-#: admin/PageStatus.py:54
+#: admin/PageStatus.py:47
 msgid ""
 "\n"
 "If you wanted to let us know something about Cherokee: what you\n"
@@ -2060,7 +2074,7 @@ msgid ""
 "<a href=\"/feedback\">drop us a line</a>.\n"
 msgstr ""
 
-#: admin/PageStatus.py:60
+#: admin/PageStatus.py:53
 msgid ""
 "\n"
 "We would love to know that you are using Cherokee. Submit your domain\n"
@@ -2069,85 +2083,112 @@ msgid ""
 "listed on the Cherokee Project web site</a>.\n"
 msgstr ""
 
-#: admin/PageStatus.py:76
+#: admin/PageStatus.py:69
 msgid "Welcome to Cherokee Admin"
 msgstr "Welkom bij de Cherokee Admin"
 
-#: admin/PageStatus.py:77
+#: admin/PageStatus.py:70
 msgid "This interface will assist in configuring the Cherokee Web Server."
 msgstr ""
 
-#: admin/PageStatus.py:87
+#: admin/PageStatus.py:80
 msgid "Server status"
 msgstr "Server status"
 
-#: admin/PageStatus.py:89
+#: admin/PageStatus.py:82
 msgid "Server is running."
 msgstr "Server draait."
 
-#: admin/PageStatus.py:90
+#: admin/PageStatus.py:83
 msgid "Stop"
 msgstr "Stop"
 
-#: admin/PageStatus.py:93
+#: admin/PageStatus.py:86
 msgid "Server is not running."
 msgstr "Server draait niet."
 
-#: admin/PageStatus.py:94
+#: admin/PageStatus.py:87
 msgid "Launch"
 msgstr "Start"
 
-#: admin/PageStatus.py:98
+#: admin/PageStatus.py:91
 #, fuzzy
 msgid "Information"
 msgstr "Toon Informatie"
 
-#: admin/PageStatus.py:103
+#: admin/PageStatus.py:102
 #, fuzzy
 msgid "Language:"
 msgstr "Taal"
 
-#: admin/PageStatus.py:115
+#: admin/PageStatus.py:114
 msgid "Proud Cherokee Users"
 msgstr ""
 
-#: admin/PageStatus.py:128
+#: admin/PageStatus.py:127
 msgid "Version"
 msgstr "Versie"
 
-#: admin/PageStatus.py:129
+#: admin/PageStatus.py:128
 msgid "Prefix"
 msgstr "Voorvoegsel"
 
-#: admin/PageStatus.py:130
+#: admin/PageStatus.py:129
 msgid "WWW Root"
 msgstr "WWW Hoofdmap"
 
-#: admin/PageStatus.py:136
+#: admin/PageStatus.py:135
 msgid "Not running"
 msgstr "Draait niet"
 
-#: admin/PageStatus.py:150
-msgid "Path"
-msgstr "Pad"
-
-#: admin/PageStatus.py:151
-msgid "Modified"
-msgstr "Veranderd"
-
-#: admin/PageStatus.py:153
-msgid "Configuration file"
-msgstr "Configuratie bestand"
-
-#: admin/PageStatus.py:153
-msgid "Not Found"
-msgstr "Niet gevonden"
-
-#: admin/PageStatus.py:155
+#: admin/PageStatus.py:144 admin/PageStatus.py:147
 msgid "Configuration File"
 msgstr "Configuratie Bestand"
 
-#: admin/PageVServer.py:31
+#: admin/PageStatus.py:145
+msgid "Modified"
+msgstr "Veranderd"
+
+#: admin/PageStatus.py:147
+msgid "Not Found"
+msgstr "Niet gevonden"
+
+#: admin/PageStatus.py:159 admin/PageStatus.py:160
+#, fuzzy
+msgid "Server Traffic"
+msgstr "Server Informatie"
+
+#: admin/PageStatus.py:161
+#, fuzzy
+msgid "Accepted Connections"
+msgstr "Geaccepteerde domeinen"
+
+#: admin/PageStatus.py:162
+#, fuzzy
+msgid "Connections Timeout"
+msgstr "Verbindingen"
+
+#: admin/PageStatus.py:167 admin/PageVServer.py:561
+msgid "1 month"
+msgstr ""
+
+#: admin/PageStatus.py:168 admin/PageVServer.py:562
+msgid "1 week"
+msgstr ""
+
+#: admin/PageStatus.py:169 admin/PageVServer.py:563
+msgid "1 day"
+msgstr ""
+
+#: admin/PageStatus.py:170 admin/PageVServer.py:564
+msgid "6 hours"
+msgstr ""
+
+#: admin/PageStatus.py:171 admin/PageVServer.py:565
+msgid "1 hour"
+msgstr ""
+
+#: admin/PageVServer.py:32
 msgid ""
 "<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to "
 "reorder.</p>"
@@ -2155,7 +2196,7 @@ msgstr ""
 "<p>Regels worden geevaluteerd van <b>boven naar onder</b>. Sleep & Pleur ze "
 "om te herschikken.</p>"
 
-#: admin/PageVServer.py:33
+#: admin/PageVServer.py:34
 msgid ""
 "\n"
 "<p>The 'default' virtual server matches all the domain names.</p>\n"
@@ -2163,48 +2204,48 @@ msgstr ""
 "\n"
 "<p>De 'standaard' virtuele server voor alle domein namen.</p>\n"
 
-#: admin/PageVServer.py:37
+#: admin/PageVServer.py:38
 msgid "Nickname for the virtual server."
 msgstr "Naam voor de virtuele server."
 
-#: admin/PageVServer.py:38
+#: admin/PageVServer.py:39
 msgid ""
 "This directive points to the PEM-encoded Certificate file for the server "
 "(Full path to the file)"
 msgstr ""
 
-#: admin/PageVServer.py:39
+#: admin/PageVServer.py:40
 msgid "PEM-encoded Private Key file for the server (Full path to the file)"
 msgstr ""
 
-#: admin/PageVServer.py:40
+#: admin/PageVServer.py:41
 msgid ""
 "Optional: File containing the trusted CA certificates, utilized for checking "
 "the client certificates (Full path to the file)"
 msgstr ""
 
-#: admin/PageVServer.py:41
+#: admin/PageVServer.py:42
 msgid ""
 "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
 "ciphers supported by the OpenSSL version used)."
 msgstr ""
 
-#: admin/PageVServer.py:42
+#: admin/PageVServer.py:43
 msgid "Optional: Skip, Accept or Require client certificates."
 msgstr "Optioneel: Sla over, Accepteer of Vereis gebruiker certificaten."
 
-#: admin/PageVServer.py:43
+#: admin/PageVServer.py:44
 msgid ""
 "Limit up to which depth certificates in a chain are used during the "
 "verification procedure (Default: 1)"
 msgstr ""
 
-#: admin/PageVServer.py:44
+#: admin/PageVServer.py:45
 msgid "Allows the selection of how to generate the error responses."
 msgstr ""
 
-#: admin/PageVServer.py:45
+#: admin/PageVServer.py:46
 msgid ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
@@ -2212,21 +2253,21 @@ msgstr ""
 "Map binnen de gebruikers thuis map om te gebruiken als hoofdmap voor een "
 "website. Niet actief wanneer niet opgegeven."
 
-#: admin/PageVServer.py:46
+#: admin/PageVServer.py:47
 msgid "The personal web support is currently turned on."
 msgstr "De persoonlijke website functie is ingeschakeld."
 
-#: admin/PageVServer.py:47
+#: admin/PageVServer.py:48
 msgid "Adds a new domain name. Wildcards are allowed in the domain name."
 msgstr ""
 "Voegt een nieuwe domeinnaam toe. Jokertekens zijn toegestaan binnen een "
 "domeinnaam."
 
-#: admin/PageVServer.py:48
+#: admin/PageVServer.py:49
 msgid "Virtual Server root directory."
 msgstr "Virtuele Server hoofdmap."
 
-#: admin/PageVServer.py:49
+#: admin/PageVServer.py:50
 msgid ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
@@ -2234,23 +2275,15 @@ msgstr ""
 "Lijst met bestanden dat zal worden gebruikt als map index. Vb <em>index.html,"
 "index.php</em>."
 
-#: admin/PageVServer.py:50
+#: admin/PageVServer.py:51
 msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
 msgstr ""
 "De maximum grootte, in bytes, voor POST uploads. (Standaard: niet "
 "gelimiteerd)"
 
-#: admin/PageVServer.py:51
+#: admin/PageVServer.py:52
 msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
 msgstr "Of deze virtuele server blijf-inleven mag gebruiken (Standaard: ja)"
-
-#: admin/PageVServer.py:52
-msgid ""
-"Specifies if Traffic Statistics should be collected for the virtual server "
-"(Default: yes)"
-msgstr ""
-"Specificeert of Verkeer Statistieke worden bijgehouden voor de virtuele "
-"server (Standaard: ja)"
 
 #: admin/PageVServer.py:53
 msgid "The Logging is currently enabled."
@@ -2331,211 +2364,223 @@ msgstr ""
 msgid "Allows the selection of domain matching method."
 msgstr ""
 
-#: admin/PageVServer.py:69
+#: admin/PageVServer.py:66
+msgid ""
+"Whether or not it should collected statistics about the traffic of this "
+"virtual server."
+msgstr ""
+
+#: admin/PageVServer.py:70
 msgid "Loggers"
 msgstr "Loggers"
 
-#: admin/PageVServer.py:70
+#: admin/PageVServer.py:71
 msgid "SSL cookbook"
 msgstr "SSL kookboek"
 
-#: admin/PageVServer.py:203 admin/PageVServer.py:214 admin/PageVServers.py:275
+#: admin/PageVServer.py:204 admin/PageVServer.py:215 admin/PageVServers.py:288
 msgid "Virtual Server"
 msgstr "Virtuele Server"
 
-#: admin/PageVServer.py:218
+#: admin/PageVServer.py:219
 msgid "Basics"
 msgstr "Basis"
 
-#: admin/PageVServer.py:241 admin/PageVServers.py:298
+#: admin/PageVServer.py:242 admin/PageVServers.py:311
 #, fuzzy
 msgid "Wizards"
 msgstr "Jokers"
 
-#: admin/PageVServer.py:244
+#: admin/PageVServer.py:245
 msgid "Behavior"
 msgstr "Gedrag"
 
-#: admin/PageVServer.py:255
+#: admin/PageVServer.py:256
 msgid "Personal Webs"
 msgstr "Persoonlijke webs"
 
-#: admin/PageVServer.py:276
+#: admin/PageVServer.py:278
 msgid "Required SSL/TLS values"
 msgstr "Verplichte SSL/TLS waarden"
 
-#: admin/PageVServer.py:278
+#: admin/PageVServer.py:280
 msgid "Certificate"
 msgstr "Certificaat"
 
-#: admin/PageVServer.py:279
+#: admin/PageVServer.py:281
 msgid "Certificate key"
 msgstr "Certificaat sleutel"
 
-#: admin/PageVServer.py:282
+#: admin/PageVServer.py:284
 msgid "Advanced options"
 msgstr "Uitgebreide opties"
 
-#: admin/PageVServer.py:284
+#: admin/PageVServer.py:286
 msgid "Ciphers"
 msgstr "Versleutelingen"
 
-#: admin/PageVServer.py:285
+#: admin/PageVServer.py:287
 msgid "Client Certs. Request"
 msgstr "Gebruiker Certificaat Aanvragen"
 
-#: admin/PageVServer.py:292
+#: admin/PageVServer.py:294
 msgid "CA List"
 msgstr "CA lijst"
 
-#: admin/PageVServer.py:296
+#: admin/PageVServer.py:298
 #, fuzzy
 msgid "Verify Depth"
 msgstr "Verifieer Diepte"
 
-#: admin/PageVServer.py:305
+#: admin/PageVServer.py:307
 msgid "Error Handling hook"
 msgstr ""
 
-#: admin/PageVServer.py:307
+#: admin/PageVServer.py:309
 msgid "Error Handler"
 msgstr "Fout afhandelaar"
 
-#: admin/PageVServer.py:318 admin/Rule.py:157
+#: admin/PageVServer.py:320 admin/Rule.py:157
 msgid "Rule Type"
 msgstr "Regel Type"
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Target"
 msgstr "Doel"
 
-#: admin/PageVServer.py:347 admin/PageVServers.py:144
+#: admin/PageVServer.py:349 admin/PageVServers.py:144
 msgid "Root"
 msgstr "Hoofdmap"
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Auth"
 msgstr "Auth"
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Enc"
 msgstr "Enc"
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Exp"
 msgstr "Exp"
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Final"
 msgstr "Definieve"
 
-#: admin/PageVServer.py:478 admin/PageVServers.py:312
+#: admin/PageVServer.py:480 admin/PageVServers.py:325
 msgid "<h2>Wizards</h2>"
 msgstr ""
 
-#: admin/PageVServer.py:483
+#: admin/PageVServer.py:485
 msgid "/~user directories"
 msgstr "/~gebruiker mappen"
 
-#: admin/PageVServer.py:489
+#: admin/PageVServer.py:491
 msgid "Disable"
 msgstr "Zet uit"
 
-#: admin/PageVServer.py:492
+#: admin/PageVServer.py:494
 msgid "Directory name"
 msgstr "Map naam"
 
-#: admin/PageVServer.py:502
+#: admin/PageVServer.py:504
 msgid "Server ID"
 msgstr "Server ID"
 
-#: admin/PageVServer.py:504
+#: admin/PageVServer.py:506
 msgid "Virtual Server nickname"
 msgstr "Virtuele Server naam"
 
-#: admin/PageVServer.py:507
+#: admin/PageVServer.py:509
 msgid "Paths"
 msgstr "Paden"
 
-#: admin/PageVServer.py:510
+#: admin/PageVServer.py:512
 msgid "Directory Indexes"
 msgstr "Map indices"
 
-#: admin/PageVServer.py:515
+#: admin/PageVServer.py:517
 msgid "Keep-alive"
 msgstr "Blijf-inleven"
 
-#: admin/PageVServer.py:516
+#: admin/PageVServer.py:518
 msgid "Max Upload Size"
 msgstr "Max Upload grootte"
 
-#: admin/PageVServer.py:517
-msgid "Traffic Statistics"
-msgstr "Verkeer Statistieken"
-
-#: admin/PageVServer.py:520
+#: admin/PageVServer.py:521
 msgid "Advanced Virtual Hosting"
 msgstr "Geavanceerde Virtuele Hosting"
 
-#: admin/PageVServer.py:534
+#: admin/PageVServer.py:538
+#, fuzzy
+msgid "Statistics"
+msgstr "Verkeer Statistieken"
+
+#: admin/PageVServer.py:541 admin/PageVServer.py:543
+#, fuzzy
+msgid "Collect Statistics"
+msgstr "Verkeer Statistieken"
+
+#: admin/PageVServer.py:589
 msgid "Logging Format"
 msgstr "Logging Formaat"
 
-#: admin/PageVServer.py:536
+#: admin/PageVServer.py:591
 msgid "Format"
 msgstr "Formaat"
 
-#: admin/PageVServer.py:547
+#: admin/PageVServer.py:602
 #, fuzzy
 msgid "Accesses"
 msgstr "Toegang"
 
-#: admin/PageVServer.py:553 admin/PageVServer.py:576
+#: admin/PageVServer.py:608 admin/PageVServer.py:631
 msgid "Filename"
 msgstr "Bestandsnaam"
 
-#: admin/PageVServer.py:557 admin/PageVServer.py:580
+#: admin/PageVServer.py:612 admin/PageVServer.py:635
 msgid "Command"
 msgstr "Commando"
 
-#: admin/PageVServer.py:570
+#: admin/PageVServer.py:625
 msgid "Errors"
 msgstr "Fouten"
 
-#: admin/PageVServer.py:588
+#: admin/PageVServer.py:643
 msgid "Writers"
 msgstr "Schrijvers"
 
-#: admin/PageVServer.py:591
+#: admin/PageVServer.py:646
 msgid "Options"
 msgstr "Opties"
 
-#: admin/PageVServer.py:597
+#: admin/PageVServer.py:652
 msgid "Accept Forwarded IPs"
 msgstr ""
 
-#: admin/PageVServer.py:599
+#: admin/PageVServer.py:654
 msgid "Don't check origin"
 msgstr ""
 
-#: admin/PageVServer.py:601
+#: admin/PageVServer.py:656
 #, fuzzy
 msgid "Accept from Hosts"
 msgstr "Geaccepteerde domeinen"
 
-#: admin/PageVServer.py:609
+#: admin/PageVServer.py:664
 msgid "Host names"
 msgstr "Computer namen"
 
-#: admin/PageVServer.py:616
+#: admin/PageVServer.py:671
 msgid "Matching method"
 msgstr ""
 
-#: admin/PageVServer.py:663
+#: admin/PageVServer.py:722
 msgid "Filename must be set"
 msgstr "Bestandsnaam moet gezet zijn"
 
-#: admin/PageVServer.py:703
+#: admin/PageVServer.py:762
 msgid "Template: "
 msgstr "Sjabloon:"
 
@@ -2555,7 +2600,7 @@ msgstr ""
 msgid "Virtual Servers configuration"
 msgstr "Virtuele Servers configuratie"
 
-#: admin/PageVServers.py:144 admin/PageVServers.py:262
+#: admin/PageVServers.py:144 admin/PageVServers.py:275
 msgid "Nickname"
 msgstr "Bijnaam"
 
@@ -2563,20 +2608,25 @@ msgstr "Bijnaam"
 msgid "Domains"
 msgstr "Domeinen"
 
-#: admin/PageVServers.py:268 admin/PageVServers.py:296
+#: admin/PageVServers.py:144
+#, fuzzy
+msgid "Stats"
+msgstr "Status"
+
+#: admin/PageVServers.py:281 admin/PageVServers.py:309
 msgid "Add new Virtual Server"
 msgstr "Voeg nieuwe Virtual Server toe"
 
-#: admin/PageVServers.py:275
+#: admin/PageVServers.py:288
 msgid "Clone as.."
 msgstr "Kloon als.."
 
-#: admin/PageVServers.py:287 admin/PageVServers.py:297
+#: admin/PageVServers.py:300 admin/PageVServers.py:310
 msgid "Clone Virtual Server"
 msgstr "Kloon Virtual server"
 
-#: admin/PageVServers.py:343 admin/PageVServers.py:357
-#: admin/validations.py:253
+#: admin/PageVServers.py:356 admin/PageVServers.py:370
+#: admin/validations.py:259
 msgid "Cannot be empty"
 msgstr "Kan niet leeg zijn"
 
@@ -2849,49 +2899,63 @@ msgstr "GeoIP"
 msgid "Wildcards"
 msgstr "Jokers"
 
-#: admin/consts.py:145
+#: admin/consts.py:142
+#, fuzzy
+msgid "Server IP"
+msgstr "Server ID"
+
+#: admin/consts.py:146
 msgid "Not set"
 msgstr "Niet gezet"
 
-#: admin/consts.py:146
+#: admin/consts.py:147
 msgid "Already expired on 1970"
 msgstr "Reeks vervallen in 1970"
 
-#: admin/consts.py:147
+#: admin/consts.py:148
 msgid "Do not expire until 2038"
 msgstr "Vervalt niet tot 2038"
 
-#: admin/consts.py:148
+#: admin/consts.py:149
 msgid "Custom value"
 msgstr "Eigen waarde"
 
-#: admin/consts.py:152
+#: admin/consts.py:153
 msgid "No TLS/SSL"
 msgstr "Geen TLS/SSL"
 
-#: admin/consts.py:153
+#: admin/consts.py:154
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: admin/consts.py:157
+#: admin/consts.py:158
 msgid "Off"
 msgstr "Uit"
 
-#: admin/consts.py:158
+#: admin/consts.py:159
 msgid "Enhanced Virtual Hosting"
 msgstr "Uitgebreide Virtuele Hosting"
 
-#: admin/consts.py:162
+#: admin/consts.py:163
 msgid "Skip"
 msgstr "Sla over"
 
-#: admin/consts.py:163
+#: admin/consts.py:164
 msgid "Accept"
 msgstr "Accepteer"
 
-#: admin/consts.py:164
+#: admin/consts.py:165
 msgid "Require"
 msgstr "Vereist"
+
+#: admin/consts.py:169
+#, fuzzy
+msgid "Disabled"
+msgstr "Zet uit"
+
+#: admin/consts.py:170
+msgid "RRDtool graphs"
+msgstr ""
 
 #: admin/server.py:118
 msgid "Configuration saved."
@@ -2909,12 +2973,17 @@ msgstr "Directe restart uitgevoerd."
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Foutieve parameters: PORT CONFIG_FILE"
 
-#: admin/server.py:226
+#: admin/server.py:232
 #, fuzzy, python-format
-msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)d"
+msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s"
 msgstr "Server %s draait... PID=%d Poort=%d"
 
-#: admin/server.py:233
+#: admin/server.py:234
+#, fuzzy, python-format
+msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
+msgstr "Server %s draait... PID=%d Poort=%d"
+
+#: admin/server.py:241
 msgid "Server exiting.."
 msgstr "Server sluit af.."
 
@@ -2942,73 +3011,91 @@ msgstr "Buiten bereik (1 tot 65535)"
 msgid "Malformed path"
 msgstr "Misvormd pad"
 
-#: admin/validations.py:90
+#: admin/validations.py:78
+#, fuzzy
+msgid "It is not executable"
+msgstr "Pad is geen regulier bestand"
+
+#: admin/validations.py:96
 msgid "It cannot be negative"
 msgstr "Het kan niet negatief zijn"
 
-#: admin/validations.py:106
+#: admin/validations.py:112
 msgid "Malformed IPv4"
 msgstr "Misvorm IPv4"
 
-#: admin/validations.py:111
+#: admin/validations.py:117
 msgid "Malformed IPv4 entry"
 msgstr "Misvormd IPv4 veld"
 
-#: admin/validations.py:113
+#: admin/validations.py:119
 msgid "IPv4 entry out of range"
 msgstr "IPv4 buiten bereik"
 
-#: admin/validations.py:121
+#: admin/validations.py:127
 msgid "Malformed IPv6"
 msgstr "Misvormd IPv6"
 
-#: admin/validations.py:134 admin/validations.py:151
+#: admin/validations.py:140 admin/validations.py:157
 msgid "Path does not exist"
 msgstr "Pad bestaat niet"
 
-#: admin/validations.py:137
+#: admin/validations.py:143
 msgid "Path is not a directory"
 msgstr "Pad is geen map"
 
-#: admin/validations.py:154
+#: admin/validations.py:160
 msgid "Path is not a regular file"
 msgstr "Pad is geen regulier bestand"
 
-#: admin/validations.py:170
+#: admin/validations.py:176
 msgid "Invalid char. Accepts: letters, digits, _, - and ."
 msgstr "Verkeerde teken. Accepteert: letters, cijfers, _, - en ."
 
-#: admin/validations.py:193
+#: admin/validations.py:199
 msgid "Neither a number or an IPv4"
 msgstr "Geen nummer of IPv4"
 
-#: admin/validations.py:204
+#: admin/validations.py:210
 msgid "Invalid mask"
 msgstr "Verkeerd masker"
 
-#: admin/validations.py:228
+#: admin/validations.py:234
 msgid "Malformed entry (netmask)"
 msgstr "Misvormd veld (netmask)"
 
-#: admin/validations.py:257
+#: admin/validations.py:263
 msgid "Forced failure"
 msgstr "Geforceerde fout"
 
-#: admin/validations.py:265
+#: admin/validations.py:271
 msgid "http:// missing"
 msgstr "http:// mist"
 
-#: admin/validations.py:302
+#: admin/validations.py:308
 msgid "Time value contain invalid values"
 msgstr "Tijd waarde bevat onjuiste waarden"
 
-#: admin/validations.py:305
+#: admin/validations.py:311
 msgid "Malformed time"
 msgstr "Misvormde tijd"
 
-#: admin/validations.py:312
+#: admin/validations.py:318
 msgid "Virtual host nick is already being used."
 msgstr ""
+
+#~ msgid "Path"
+#~ msgstr "Pad"
+
+#~ msgid "Configuration file"
+#~ msgstr "Configuratie bestand"
+
+#~ msgid ""
+#~ "Specifies if Traffic Statistics should be collected for the virtual "
+#~ "server (Default: yes)"
+#~ msgstr ""
+#~ "Specificeert of Verkeer Statistieke worden bijgehouden voor de virtuele "
+#~ "server (Standaard: ja)"
 
 #~ msgid "Use MD5 Passwords"
 #~ msgstr "Gebruik MD5 Wachtwoorden"

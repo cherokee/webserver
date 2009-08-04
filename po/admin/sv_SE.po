@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee-admin 0.99.16\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-07-01 15:57+0200\n"
+"POT-Creation-Date: 2009-08-04 21:44+0200\n"
 "PO-Revision-Date: 2009-06-02 12:23+0100\n"
 "Last-Translator: Andreas Andersson <andreas@cyberdelic.org>\n"
 "Language-Team: Swedish <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "Could not access file descriptors: "
 msgstr ""
 
-#: admin/CherokeeManagement.py:252
+#: admin/CherokeeManagement.py:262
 #, python-format
 msgid "ERROR: Couldn't execute '%s -i'"
 msgstr "FEL: Kunde inte köra '%s -i'"
@@ -86,7 +86,7 @@ msgid "Authentication list"
 msgstr "Autentiseringslista"
 
 #: admin/ModuleAuthlist.py:31 admin/ModuleAuthlist.py:47
-#: admin/PageGeneral.py:69
+#: admin/PageGeneral.py:70
 msgid "User"
 msgstr "Användare"
 
@@ -152,12 +152,12 @@ msgid "Application Server"
 msgstr "Applikations-server"
 
 #: admin/ModuleBind.py:21 admin/ModuleBind.py:22 admin/ModuleBind.py:47
-#: admin/ModuleLdap.py:36 admin/ModuleMysql.py:45 admin/PageGeneral.py:111
+#: admin/ModuleLdap.py:36 admin/ModuleMysql.py:45 admin/PageGeneral.py:133
 msgid "Port"
 msgstr "Port"
 
 #: admin/ModuleBind.py:26 admin/ModuleBind.py:76 admin/ModuleMethod.py:10
-#: admin/PageStatus.py:105
+#: admin/PageStatus.py:104
 msgid "Choose"
 msgstr "Välj"
 
@@ -169,19 +169,19 @@ msgstr "Inkommande port"
 msgid "Selected Ports"
 msgstr "Valda portar"
 
-#: admin/ModuleBind.py:47 admin/PageGeneral.py:111
+#: admin/ModuleBind.py:47 admin/PageGeneral.py:133
 msgid "Bind to"
 msgstr "Använd ip:"
 
-#: admin/ModuleBind.py:47 admin/PageAdvanced.py:136 admin/PageGeneral.py:111
+#: admin/ModuleBind.py:47 admin/PageAdvanced.py:136 admin/PageGeneral.py:133
 msgid "TLS"
 msgstr "TLS"
 
-#: admin/ModuleBind.py:53 admin/PageVServer.py:344 admin/PageVServers.py:147
+#: admin/ModuleBind.py:53 admin/PageVServer.py:346 admin/PageVServers.py:147
 msgid "No"
 msgstr "Nej"
 
-#: admin/ModuleBind.py:53 admin/PageVServer.py:343 admin/PageVServers.py:146
+#: admin/ModuleBind.py:53 admin/PageVServer.py:345 admin/PageVServers.py:146
 msgid "Yes"
 msgstr "Ja"
 
@@ -231,7 +231,7 @@ msgstr "Script-alias"
 msgid "Change UID"
 msgstr "Byt UID"
 
-#: admin/ModuleCgi.py:50 admin/PageVServer.py:259
+#: admin/ModuleCgi.py:50 admin/PageVServer.py:260
 msgid "Error handler"
 msgstr "Felhanterare"
 
@@ -463,7 +463,7 @@ msgstr "Omdirigering"
 #: admin/ModuleErrorRedir.py:41 admin/ModuleErrorRedir.py:52
 #: admin/ModuleRedir.py:35 admin/PageInfoSource.py:166
 #: admin/PageInfoSource.py:193 admin/PageInfoSource.py:222
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Type"
 msgstr "Typ"
 
@@ -708,7 +708,7 @@ msgstr "CA-fil för TLS-anslutningar"
 msgid "LDAP"
 msgstr "LDAP"
 
-#: admin/ModuleLdap.py:35 admin/ModuleLdap.py:51 admin/PageStatus.py:140
+#: admin/ModuleLdap.py:35 admin/ModuleLdap.py:51
 msgid "Server"
 msgstr "Server"
 
@@ -744,7 +744,7 @@ msgstr "LDAP-anslutning"
 msgid "The HTTP method that should match this rule."
 msgstr "HTTP-metoden som ska matcha denna regel."
 
-#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:522
+#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:523
 msgid "Method"
 msgstr "Metod"
 
@@ -938,7 +938,7 @@ msgstr ""
 msgid "Redirections"
 msgstr "Omdirigeringar"
 
-#: admin/ModuleRedir.py:15 admin/ModuleRehost.py:24 admin/ModuleRehost.py:28
+#: admin/ModuleRedir.py:15 admin/ModuleRehost.py:28 admin/ModuleRehost.py:32
 #: admin/consts.py:141
 msgid "Regular Expressions"
 msgstr "Reguljära uttryck"
@@ -951,7 +951,7 @@ msgstr "Regellista"
 msgid "Show"
 msgstr "Visa"
 
-#: admin/ModuleRedir.py:55 admin/PageVServer.py:240 admin/PageVServer.py:316
+#: admin/ModuleRedir.py:55 admin/PageVServer.py:241 admin/PageVServer.py:318
 msgid "Add new rule"
 msgstr "Lägg till ny regel"
 
@@ -964,11 +964,11 @@ msgstr "Reguljärt uttryck som värdnamnet jämförs emot."
 msgid "At least one Regular Expression string must be defined."
 msgstr "Åtminstone ett reguljärt uttryck måste anges."
 
-#: admin/ModuleRehost.py:52
+#: admin/ModuleRehost.py:59
 msgid "New Regular Expression"
 msgstr "Nytt reguljärt uttryck"
 
-#: admin/ModuleRehost.py:53 admin/ModuleWildcard.py:53
+#: admin/ModuleRehost.py:60 admin/ModuleWildcard.py:60
 #: admin/PageInfoSource.py:238
 msgid "Add new"
 msgstr "Lägg till ny"
@@ -1092,15 +1092,15 @@ msgstr "Godkänt värdnamn. Joker-tecken (* och ?) är tillåtna. T.ex: *example
 msgid "At least one wildcard string must be defined."
 msgstr "Åtminstone en sträng med joker-tecken måste anges."
 
-#: admin/ModuleWildcard.py:24
+#: admin/ModuleWildcard.py:28
 msgid "Accepted domains"
 msgstr "Godkända domäner"
 
-#: admin/ModuleWildcard.py:28
+#: admin/ModuleWildcard.py:32
 msgid "Domain pattern"
 msgstr "Domän-mönster"
 
-#: admin/ModuleWildcard.py:52
+#: admin/ModuleWildcard.py:59
 msgid "New host name"
 msgstr "Nytt värdnamn"
 
@@ -1112,8 +1112,8 @@ msgstr "Version"
 msgid "Help"
 msgstr "Hjälp"
 
-#: admin/Page.py:151 admin/PageAdvanced.py:108 admin/PageStatus.py:67
-#: admin/PageVServer.py:490
+#: admin/Page.py:151 admin/PageAdvanced.py:108 admin/PageStatus.py:60
+#: admin/PageVServer.py:492
 msgid "Status"
 msgstr "Status"
 
@@ -1121,7 +1121,7 @@ msgstr "Status"
 msgid "General"
 msgstr "Allmänt"
 
-#: admin/Page.py:153 admin/PageVServer.py:68 admin/PageVServers.py:25
+#: admin/Page.py:153 admin/PageVServer.py:69 admin/PageVServers.py:25
 #: admin/PageVServers.py:130
 msgid "Virtual Servers"
 msgstr "Virtuella servrar"
@@ -1387,7 +1387,7 @@ msgstr ""
 msgid "Panic action"
 msgstr "Panikåtgärd"
 
-#: admin/PageAdvanced.py:119 admin/PageStatus.py:138
+#: admin/PageAdvanced.py:119 admin/PageStatus.py:137
 msgid "PID file"
 msgstr "PID-fil"
 
@@ -1480,11 +1480,11 @@ msgid "Rule"
 msgstr "Regel"
 
 #: admin/PageEntry.py:156 admin/PageEntry.py:164 admin/PageEntry.py:166
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Handler"
 msgstr "Hanterare"
 
-#: admin/PageEntry.py:161 admin/PageVServer.py:509 admin/PageVServers.py:262
+#: admin/PageEntry.py:161 admin/PageVServer.py:511 admin/PageVServers.py:275
 msgid "Document Root"
 msgstr "Dokumentrot"
 
@@ -1496,7 +1496,7 @@ msgstr "Kodning"
 msgid "Expiration"
 msgstr "Förfallande"
 
-#: admin/PageEntry.py:177 admin/PageVServer.py:267
+#: admin/PageEntry.py:177 admin/PageVServer.py:269
 msgid "Security"
 msgstr "Säkerhet"
 
@@ -1524,7 +1524,7 @@ msgstr "Innehållsförfall"
 msgid "Authentication"
 msgstr "Autentisering"
 
-#: admin/PageEntry.py:239 admin/PageVServer.py:263 admin/PageVServers.py:144
+#: admin/PageEntry.py:239 admin/PageVServer.py:265 admin/PageVServers.py:144
 msgid "Logging"
 msgstr "Loggning"
 
@@ -1579,7 +1579,7 @@ msgstr ""
 "En fungerande anslutning till Internet krävs för att detta formuläret ska "
 "fungera."
 
-#: admin/PageFeedback.py:50 admin/PageFeedback.py:55 admin/PageStatus.py:112
+#: admin/PageFeedback.py:50 admin/PageFeedback.py:55 admin/PageStatus.py:111
 msgid "Feedback"
 msgstr "Respons"
 
@@ -1619,7 +1619,7 @@ msgstr "Rapportera"
 msgid "Feedback: Thank you"
 msgstr "Feedback: Tack!"
 
-#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:372
+#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:374
 #: admin/consts.py:87
 msgid "Default"
 msgstr "Förvald"
@@ -1688,67 +1688,80 @@ msgstr ""
 msgid "Which, if any, should be the TLS/SSL backend."
 msgstr "Vilket bibliotek ska användas som back-end för TLS/SSL."
 
-#: admin/PageGeneral.py:39 admin/PageGeneral.py:50
+#: admin/PageGeneral.py:38
+msgid "How the usage graphics should be generated."
+msgstr ""
+
+#: admin/PageGeneral.py:40 admin/PageGeneral.py:51
 msgid "General Configuration"
 msgstr "Allmän konfiguration"
 
-#: admin/PageGeneral.py:40
+#: admin/PageGeneral.py:41
 msgid "Configuration Quickstart"
 msgstr "Konfigurationssnabbstart"
 
-#: admin/PageGeneral.py:55
+#: admin/PageGeneral.py:56
 msgid "General Settings"
 msgstr "Allmänna inställningar"
 
-#: admin/PageGeneral.py:58 admin/PageVServer.py:513
+#: admin/PageGeneral.py:59 admin/PageVServer.py:515
 msgid "Network"
 msgstr "Nätverk"
 
-#: admin/PageGeneral.py:59
+#: admin/PageGeneral.py:60
 msgid "Ports to listen"
 msgstr "Portar att lyssna med"
 
-#: admin/PageGeneral.py:60
+#: admin/PageGeneral.py:61
 msgid "Server Permissions"
 msgstr "Server-rättigheter"
 
-#: admin/PageGeneral.py:67
+#: admin/PageGeneral.py:68
 msgid "Execution Permissions"
 msgstr "Exekverings-rättigheter"
 
-#: admin/PageGeneral.py:70
+#: admin/PageGeneral.py:71
 msgid "Group"
 msgstr "Grupp"
 
-#: admin/PageGeneral.py:71
+#: admin/PageGeneral.py:72
 msgid "Chroot"
 msgstr "Chroot"
 
-#: admin/PageGeneral.py:76
+#: admin/PageGeneral.py:77
 msgid "Support"
 msgstr "Support"
 
-#: admin/PageGeneral.py:79
+#: admin/PageGeneral.py:80
 msgid "SSL/TLS back-end"
 msgstr "Back-end för SSL/TLS"
 
-#: admin/PageGeneral.py:82
+#: admin/PageGeneral.py:83
 msgid "Network behavior"
 msgstr "Nätverksbetéende"
 
-#: admin/PageGeneral.py:84
+#: admin/PageGeneral.py:85
 msgid "Timeout (<i>secs</i>)"
 msgstr "Timeout  (<i>sekunder</i>)"
 
-#: admin/PageGeneral.py:85
+#: admin/PageGeneral.py:86
 msgid "Server Tokens"
 msgstr "Serveridentifiering"
 
-#: admin/PageGeneral.py:124
+#: admin/PageGeneral.py:89
+#, fuzzy
+msgid "Information Collector"
+msgstr "Informationskodare"
+
+#: admin/PageGeneral.py:91
+msgid "Graphs Type"
+msgstr ""
+
+#: admin/PageGeneral.py:146
 msgid "Listening to ports"
 msgstr "Lyssnar på portarna: "
 
-#: admin/PageGeneral.py:130
+#: admin/PageGeneral.py:152
 msgid "Add new port"
 msgstr "Lägg till ny port"
 
@@ -1997,7 +2010,8 @@ msgid "Server Development"
 msgstr "Serverutveckling"
 
 #: admin/PageNewConfig.py:40
-msgid "Regular configuration: PHP, Apache logs, MIME types, icons, etc."
+#, fuzzy
+msgid "Regular configuration: Apache logs, MIME types, icons, etc."
 msgstr "Vanlig konfiguration: PHP, Apache-loggar, MIME-typer, ikoner osv."
 
 #: admin/PageNewConfig.py:41
@@ -2020,7 +2034,7 @@ msgstr "Konfigurationsfilen hittades inte."
 msgid "Create a new configuration file"
 msgstr "Skapa en ny konfigurations-fil"
 
-#: admin/PageStatus.py:48
+#: admin/PageStatus.py:41
 msgid ""
 "\n"
 "<h3>Beta testing</h3>\n"
@@ -2036,7 +2050,7 @@ msgstr ""
 "kvalitet.</p>\n"
 "<p>För det tackar vi dig.</p>\n"
 
-#: admin/PageStatus.py:54
+#: admin/PageStatus.py:47
 msgid ""
 "\n"
 "If you wanted to let us know something about Cherokee: what you\n"
@@ -2048,7 +2062,7 @@ msgstr ""
 "lämna lovord, föreslå en förbättring eller ny funktionalitet.\n"
 "\n"
 
-#: admin/PageStatus.py:60
+#: admin/PageStatus.py:53
 msgid ""
 "\n"
 "We would love to know that you are using Cherokee. Submit your domain\n"
@@ -2063,83 +2077,110 @@ msgstr ""
 "cherokee-domain-list.html\">\n"
 "lista på Cherokee</a>'s hemsida.\n"
 
-#: admin/PageStatus.py:76
+#: admin/PageStatus.py:69
 msgid "Welcome to Cherokee Admin"
 msgstr "Välkommen till Cherokee Admin"
 
-#: admin/PageStatus.py:77
+#: admin/PageStatus.py:70
 msgid "This interface will assist in configuring the Cherokee Web Server."
 msgstr "Detta gränssnitt hjälper till att att konfigurera Cherokee Web Server."
 
-#: admin/PageStatus.py:87
+#: admin/PageStatus.py:80
 msgid "Server status"
 msgstr "Serverstatus"
 
-#: admin/PageStatus.py:89
+#: admin/PageStatus.py:82
 msgid "Server is running."
 msgstr "Servern körs"
 
-#: admin/PageStatus.py:90
+#: admin/PageStatus.py:83
 msgid "Stop"
 msgstr "Stoppa"
 
-#: admin/PageStatus.py:93
+#: admin/PageStatus.py:86
 msgid "Server is not running."
 msgstr "Servern körs inte."
 
-#: admin/PageStatus.py:94
+#: admin/PageStatus.py:87
 msgid "Launch"
 msgstr "Starta"
 
-#: admin/PageStatus.py:98
+#: admin/PageStatus.py:91
 msgid "Information"
 msgstr "Information"
 
-#: admin/PageStatus.py:103
+#: admin/PageStatus.py:102
 msgid "Language:"
 msgstr "Språk"
 
-#: admin/PageStatus.py:115
+#: admin/PageStatus.py:114
 msgid "Proud Cherokee Users"
 msgstr "Stolta Cherokee-användare"
 
-#: admin/PageStatus.py:128
+#: admin/PageStatus.py:127
 msgid "Version"
 msgstr "Version"
 
-#: admin/PageStatus.py:129
+#: admin/PageStatus.py:128
 msgid "Prefix"
 msgstr "Prefix"
 
-#: admin/PageStatus.py:130
+#: admin/PageStatus.py:129
 msgid "WWW Root"
 msgstr "WWW-rot"
 
-#: admin/PageStatus.py:136
+#: admin/PageStatus.py:135
 msgid "Not running"
 msgstr "Körs inte"
 
-#: admin/PageStatus.py:150
-msgid "Path"
-msgstr "Sökväg"
-
-#: admin/PageStatus.py:151
-msgid "Modified"
-msgstr "Modifierad"
-
-#: admin/PageStatus.py:153
-msgid "Configuration file"
-msgstr "Konfigurationsfil"
-
-#: admin/PageStatus.py:153
-msgid "Not Found"
-msgstr "Hittades inte"
-
-#: admin/PageStatus.py:155
+#: admin/PageStatus.py:144 admin/PageStatus.py:147
 msgid "Configuration File"
 msgstr "Konfigurationsfil"
 
-#: admin/PageVServer.py:31
+#: admin/PageStatus.py:145
+msgid "Modified"
+msgstr "Modifierad"
+
+#: admin/PageStatus.py:147
+msgid "Not Found"
+msgstr "Hittades inte"
+
+#: admin/PageStatus.py:159 admin/PageStatus.py:160
+#, fuzzy
+msgid "Server Traffic"
+msgstr "Serverinfo"
+
+#: admin/PageStatus.py:161
+#, fuzzy
+msgid "Accepted Connections"
+msgstr "Godkända domäner"
+
+#: admin/PageStatus.py:162
+#, fuzzy
+msgid "Connections Timeout"
+msgstr "Anslutningar"
+
+#: admin/PageStatus.py:167 admin/PageVServer.py:561
+msgid "1 month"
+msgstr ""
+
+#: admin/PageStatus.py:168 admin/PageVServer.py:562
+msgid "1 week"
+msgstr ""
+
+#: admin/PageStatus.py:169 admin/PageVServer.py:563
+msgid "1 day"
+msgstr ""
+
+#: admin/PageStatus.py:170 admin/PageVServer.py:564
+msgid "6 hours"
+msgstr ""
+
+#: admin/PageStatus.py:171 admin/PageVServer.py:565
+msgid "1 hour"
+msgstr ""
+
+#: admin/PageVServer.py:32
 msgid ""
 "<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to "
 "reorder.</p>"
@@ -2147,7 +2188,7 @@ msgstr ""
 "<p>Regler läses <b>uppifrån och ner.</b>. Dra och släpp för att byta plats.</"
 "p>"
 
-#: admin/PageVServer.py:33
+#: admin/PageVServer.py:34
 msgid ""
 "\n"
 "<p>The 'default' virtual server matches all the domain names.</p>\n"
@@ -2156,11 +2197,11 @@ msgstr ""
 "<p>Den virtuella servern som konfigureras vid installation matchar alla  "
 "domännamn.</p>\n"
 
-#: admin/PageVServer.py:37
+#: admin/PageVServer.py:38
 msgid "Nickname for the virtual server."
 msgstr "Namn för den virtuella servern."
 
-#: admin/PageVServer.py:38
+#: admin/PageVServer.py:39
 msgid ""
 "This directive points to the PEM-encoded Certificate file for the server "
 "(Full path to the file)"
@@ -2168,11 +2209,11 @@ msgstr ""
 "Detta direktiv pekar till den PEM-kodade certifikatfilen för servern (Hela "
 "sökvägen till filen)."
 
-#: admin/PageVServer.py:39
+#: admin/PageVServer.py:40
 msgid "PEM-encoded Private Key file for the server (Full path to the file)"
 msgstr "PEM-kodad privat nyckelfil för servern (Hela sökvägen till filen)"
 
-#: admin/PageVServer.py:40
+#: admin/PageVServer.py:41
 msgid ""
 "Optional: File containing the trusted CA certificates, utilized for checking "
 "the client certificates (Full path to the file)"
@@ -2180,7 +2221,7 @@ msgstr ""
 "Valbart: Fil som innehåller det betrodda  CA-certifikatet.  Används för att "
 "kolla klientcertifikat. (Hela sökvägen till filen)"
 
-#: admin/PageVServer.py:41
+#: admin/PageVServer.py:42
 msgid ""
 "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
@@ -2190,11 +2231,11 @@ msgstr ""
 "www.openssl.org/docs/apps/ciphers.html\">Referens</a>.. ( Förvalt värde: "
 "alla chiffer som stöds  av  OpenSSL används)."
 
-#: admin/PageVServer.py:42
+#: admin/PageVServer.py:43
 msgid "Optional: Skip, Accept or Require client certificates."
 msgstr "Valbart: Använd inte, acceptera eller kräv klientcertifikat."
 
-#: admin/PageVServer.py:43
+#: admin/PageVServer.py:44
 msgid ""
 "Limit up to which depth certificates in a chain are used during the "
 "verification procedure (Default: 1)"
@@ -2202,11 +2243,11 @@ msgstr ""
 "Begränsa till vilket djup certifikatet i en kedja används under "
 "verifikations-proceduren ( Förvalt värde: 1)"
 
-#: admin/PageVServer.py:44
+#: admin/PageVServer.py:45
 msgid "Allows the selection of how to generate the error responses."
 msgstr "Låter dig att välja hur felmeddelanden ska återges."
 
-#: admin/PageVServer.py:45
+#: admin/PageVServer.py:46
 msgid ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
@@ -2214,20 +2255,20 @@ msgstr ""
 "Katalog att använda som rotkatalog inuti användarens hemkatalog. Används ej "
 "om fältet är tomt."
 
-#: admin/PageVServer.py:46
+#: admin/PageVServer.py:47
 msgid "The personal web support is currently turned on."
 msgstr "Funktionen för personliga hemsidor är förnärvarande på."
 
-#: admin/PageVServer.py:47
+#: admin/PageVServer.py:48
 msgid "Adds a new domain name. Wildcards are allowed in the domain name."
 msgstr ""
 "Lägger till ett nytt domännamn. Joker-tecken är tillåtna i domännamnet."
 
-#: admin/PageVServer.py:48
+#: admin/PageVServer.py:49
 msgid "Virtual Server root directory."
 msgstr "Rot-katalog för den virtuella servern."
 
-#: admin/PageVServer.py:49
+#: admin/PageVServer.py:50
 msgid ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
@@ -2235,24 +2276,16 @@ msgstr ""
 "Lista av filer som används som katalog-index. Eg: <em>index.html,index.php</"
 "em>."
 
-#: admin/PageVServer.py:50
+#: admin/PageVServer.py:51
 msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
 msgstr ""
 "Den maximala storleken i bytes för POST-uppladdningar. ( Förvalt värde: "
 "obegränsad)"
 
-#: admin/PageVServer.py:51
+#: admin/PageVServer.py:52
 msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
 msgstr ""
 "Huruvida den här virtuella servern tillåts att använda Keep-alive ( Förvalt "
-"värde: Ja)"
-
-#: admin/PageVServer.py:52
-msgid ""
-"Specifies if Traffic Statistics should be collected for the virtual server "
-"(Default: yes)"
-msgstr ""
-"Anger om trafik-statistik ska samlas in för den virtuella servern.( Förvalt "
 "värde: Ja)"
 
 #: admin/PageVServer.py:53
@@ -2328,207 +2361,219 @@ msgstr ""
 msgid "Allows the selection of domain matching method."
 msgstr "Möjliggör valet av metod för matching av domäner."
 
-#: admin/PageVServer.py:69
+#: admin/PageVServer.py:66
+msgid ""
+"Whether or not it should collected statistics about the traffic of this "
+"virtual server."
+msgstr ""
+
+#: admin/PageVServer.py:70
 msgid "Loggers"
 msgstr "Loggare"
 
-#: admin/PageVServer.py:70
+#: admin/PageVServer.py:71
 msgid "SSL cookbook"
 msgstr "SSL-kokbok"
 
-#: admin/PageVServer.py:203 admin/PageVServer.py:214 admin/PageVServers.py:275
+#: admin/PageVServer.py:204 admin/PageVServer.py:215 admin/PageVServers.py:288
 msgid "Virtual Server"
 msgstr "Virtuell server"
 
-#: admin/PageVServer.py:218
+#: admin/PageVServer.py:219
 msgid "Basics"
 msgstr "Allmänt"
 
-#: admin/PageVServer.py:241 admin/PageVServers.py:298
+#: admin/PageVServer.py:242 admin/PageVServers.py:311
 msgid "Wizards"
 msgstr "Guider"
 
-#: admin/PageVServer.py:244
+#: admin/PageVServer.py:245
 msgid "Behavior"
 msgstr "Betéende"
 
-#: admin/PageVServer.py:255
+#: admin/PageVServer.py:256
 msgid "Personal Webs"
 msgstr "Personliga hemsidor"
 
-#: admin/PageVServer.py:276
+#: admin/PageVServer.py:278
 msgid "Required SSL/TLS values"
 msgstr "Obligatoriska SSL/TLS-värden"
 
-#: admin/PageVServer.py:278
+#: admin/PageVServer.py:280
 msgid "Certificate"
 msgstr "Certifikat"
 
-#: admin/PageVServer.py:279
+#: admin/PageVServer.py:281
 msgid "Certificate key"
 msgstr "Certifikatnyckel"
 
-#: admin/PageVServer.py:282
+#: admin/PageVServer.py:284
 msgid "Advanced options"
 msgstr "Avancerade val"
 
-#: admin/PageVServer.py:284
+#: admin/PageVServer.py:286
 msgid "Ciphers"
 msgstr "Chiffer"
 
-#: admin/PageVServer.py:285
+#: admin/PageVServer.py:287
 msgid "Client Certs. Request"
 msgstr ""
 
-#: admin/PageVServer.py:292
+#: admin/PageVServer.py:294
 msgid "CA List"
 msgstr "CA-lista"
 
-#: admin/PageVServer.py:296
+#: admin/PageVServer.py:298
 msgid "Verify Depth"
 msgstr "Verifiera djup"
 
-#: admin/PageVServer.py:305
+#: admin/PageVServer.py:307
 msgid "Error Handling hook"
 msgstr ""
 
-#: admin/PageVServer.py:307
+#: admin/PageVServer.py:309
 msgid "Error Handler"
 msgstr "Felhanterare"
 
-#: admin/PageVServer.py:318 admin/Rule.py:157
+#: admin/PageVServer.py:320 admin/Rule.py:157
 msgid "Rule Type"
 msgstr "Regeltyp"
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Target"
 msgstr "Mål"
 
-#: admin/PageVServer.py:347 admin/PageVServers.py:144
+#: admin/PageVServer.py:349 admin/PageVServers.py:144
 msgid "Root"
 msgstr "Rot"
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Auth"
 msgstr ""
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Enc"
 msgstr ""
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Exp"
 msgstr ""
 
-#: admin/PageVServer.py:347
+#: admin/PageVServer.py:349
 msgid "Final"
 msgstr ""
 
-#: admin/PageVServer.py:478 admin/PageVServers.py:312
+#: admin/PageVServer.py:480 admin/PageVServers.py:325
 msgid "<h2>Wizards</h2>"
 msgstr "<h2>Guider</h2>"
 
-#: admin/PageVServer.py:483
+#: admin/PageVServer.py:485
 msgid "/~user directories"
 msgstr "/~användar-kataloger"
 
-#: admin/PageVServer.py:489
+#: admin/PageVServer.py:491
 msgid "Disable"
 msgstr "Deaktivera"
 
-#: admin/PageVServer.py:492
+#: admin/PageVServer.py:494
 msgid "Directory name"
 msgstr "Katalognamn"
 
-#: admin/PageVServer.py:502
+#: admin/PageVServer.py:504
 msgid "Server ID"
 msgstr "Server-id"
 
-#: admin/PageVServer.py:504
+#: admin/PageVServer.py:506
 msgid "Virtual Server nickname"
 msgstr "Smeknamn för virtuell server"
 
-#: admin/PageVServer.py:507
+#: admin/PageVServer.py:509
 msgid "Paths"
 msgstr "Sökvägar"
 
-#: admin/PageVServer.py:510
+#: admin/PageVServer.py:512
 msgid "Directory Indexes"
 msgstr "Katalogindex"
 
-#: admin/PageVServer.py:515
+#: admin/PageVServer.py:517
 msgid "Keep-alive"
 msgstr "Keep-alive"
 
-#: admin/PageVServer.py:516
+#: admin/PageVServer.py:518
 msgid "Max Upload Size"
 msgstr "Max Uppladdnings-storlek"
 
-#: admin/PageVServer.py:517
-msgid "Traffic Statistics"
-msgstr "Trafikstatistik"
-
-#: admin/PageVServer.py:520
+#: admin/PageVServer.py:521
 msgid "Advanced Virtual Hosting"
 msgstr "Avancerad Virtual Hosting"
 
-#: admin/PageVServer.py:534
+#: admin/PageVServer.py:538
+#, fuzzy
+msgid "Statistics"
+msgstr "Trafikstatistik"
+
+#: admin/PageVServer.py:541 admin/PageVServer.py:543
+#, fuzzy
+msgid "Collect Statistics"
+msgstr "Trafikstatistik"
+
+#: admin/PageVServer.py:589
 msgid "Logging Format"
 msgstr "Loggningsformat"
 
-#: admin/PageVServer.py:536
+#: admin/PageVServer.py:591
 msgid "Format"
 msgstr "Format"
 
-#: admin/PageVServer.py:547
+#: admin/PageVServer.py:602
 msgid "Accesses"
 msgstr "Åtkomster"
 
-#: admin/PageVServer.py:553 admin/PageVServer.py:576
+#: admin/PageVServer.py:608 admin/PageVServer.py:631
 msgid "Filename"
 msgstr "Filnamn"
 
-#: admin/PageVServer.py:557 admin/PageVServer.py:580
+#: admin/PageVServer.py:612 admin/PageVServer.py:635
 msgid "Command"
 msgstr "Kommando"
 
-#: admin/PageVServer.py:570
+#: admin/PageVServer.py:625
 msgid "Errors"
 msgstr "Fel"
 
-#: admin/PageVServer.py:588
+#: admin/PageVServer.py:643
 msgid "Writers"
 msgstr ""
 
-#: admin/PageVServer.py:591
+#: admin/PageVServer.py:646
 msgid "Options"
 msgstr "Ytterligare inställningar"
 
-#: admin/PageVServer.py:597
+#: admin/PageVServer.py:652
 msgid "Accept Forwarded IPs"
 msgstr "Acceptera vidarebefodrade IPnummer."
 
-#: admin/PageVServer.py:599
+#: admin/PageVServer.py:654
 msgid "Don't check origin"
 msgstr "Kolla inte ursprung"
 
-#: admin/PageVServer.py:601
+#: admin/PageVServer.py:656
 msgid "Accept from Hosts"
 msgstr "Acceptera från värd(ar)"
 
-#: admin/PageVServer.py:609
+#: admin/PageVServer.py:664
 msgid "Host names"
 msgstr "Värdnamn"
 
-#: admin/PageVServer.py:616
+#: admin/PageVServer.py:671
 msgid "Matching method"
 msgstr "Matchnings-metod"
 
-#: admin/PageVServer.py:663
+#: admin/PageVServer.py:722
 msgid "Filename must be set"
 msgstr "Filnamn måste anges"
 
-#: admin/PageVServer.py:703
+#: admin/PageVServer.py:762
 msgid "Template: "
 msgstr "Mall:"
 
@@ -2548,7 +2593,7 @@ msgstr ""
 msgid "Virtual Servers configuration"
 msgstr "Konfiguration för virtuella servrar."
 
-#: admin/PageVServers.py:144 admin/PageVServers.py:262
+#: admin/PageVServers.py:144 admin/PageVServers.py:275
 msgid "Nickname"
 msgstr "Smeknamn"
 
@@ -2556,20 +2601,25 @@ msgstr "Smeknamn"
 msgid "Domains"
 msgstr "Domäner"
 
-#: admin/PageVServers.py:268 admin/PageVServers.py:296
+#: admin/PageVServers.py:144
+#, fuzzy
+msgid "Stats"
+msgstr "Status"
+
+#: admin/PageVServers.py:281 admin/PageVServers.py:309
 msgid "Add new Virtual Server"
 msgstr "Lägg till ny virtuell server"
 
-#: admin/PageVServers.py:275
+#: admin/PageVServers.py:288
 msgid "Clone as.."
 msgstr "Klona som.."
 
-#: admin/PageVServers.py:287 admin/PageVServers.py:297
+#: admin/PageVServers.py:300 admin/PageVServers.py:310
 msgid "Clone Virtual Server"
 msgstr "Klona virtuell server"
 
-#: admin/PageVServers.py:343 admin/PageVServers.py:357
-#: admin/validations.py:253
+#: admin/PageVServers.py:356 admin/PageVServers.py:370
+#: admin/validations.py:259
 msgid "Cannot be empty"
 msgstr "Kan inte vara tom"
 
@@ -2841,49 +2891,63 @@ msgstr "GeoIP"
 msgid "Wildcards"
 msgstr "Joker-tecken"
 
-#: admin/consts.py:145
+#: admin/consts.py:142
+#, fuzzy
+msgid "Server IP"
+msgstr "Server-id"
+
+#: admin/consts.py:146
 msgid "Not set"
 msgstr "Inte satt"
 
-#: admin/consts.py:146
+#: admin/consts.py:147
 msgid "Already expired on 1970"
 msgstr "Förföll redan 1970"
 
-#: admin/consts.py:147
+#: admin/consts.py:148
 msgid "Do not expire until 2038"
 msgstr "Förfaller inte förens år 2038"
 
-#: admin/consts.py:148
+#: admin/consts.py:149
 msgid "Custom value"
 msgstr "Eget värde"
 
-#: admin/consts.py:152
+#: admin/consts.py:153
 msgid "No TLS/SSL"
 msgstr "Ingen TLS/SSL"
 
-#: admin/consts.py:153
+#: admin/consts.py:154
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: admin/consts.py:157
+#: admin/consts.py:158
 msgid "Off"
 msgstr "Av"
 
-#: admin/consts.py:158
+#: admin/consts.py:159
 msgid "Enhanced Virtual Hosting"
 msgstr "Förbättrad Virtual Hosting"
 
-#: admin/consts.py:162
+#: admin/consts.py:163
 msgid "Skip"
 msgstr "Hoppa över"
 
-#: admin/consts.py:163
+#: admin/consts.py:164
 msgid "Accept"
 msgstr "Acceptera"
 
-#: admin/consts.py:164
+#: admin/consts.py:165
 msgid "Require"
 msgstr "Kräv"
+
+#: admin/consts.py:169
+#, fuzzy
+msgid "Disabled"
+msgstr "Deaktivera"
+
+#: admin/consts.py:170
+msgid "RRDtool graphs"
+msgstr ""
 
 #: admin/server.py:118
 msgid "Configuration saved."
@@ -2901,12 +2965,17 @@ msgstr "Hård omstart genomförd."
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Felaktiga parametrar: PORT CONFIG_FILE"
 
-#: admin/server.py:226
-#, python-format
-msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)d"
+#: admin/server.py:232
+#, fuzzy, python-format
+msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s"
 msgstr "Server %(version)s körs.. PID=%(pid)d Port=%(scgi_port)d"
 
-#: admin/server.py:233
+#: admin/server.py:234
+#, fuzzy, python-format
+msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
+msgstr "Server %(version)s körs.. PID=%(pid)d Port=%(scgi_port)d"
+
+#: admin/server.py:241
 msgid "Server exiting.."
 msgstr "Server stängs ner.."
 
@@ -2934,73 +3003,91 @@ msgstr "Utanför omfång (1 till 65535)"
 msgid "Malformed path"
 msgstr "Felformaterad sökväg"
 
-#: admin/validations.py:90
+#: admin/validations.py:78
+#, fuzzy
+msgid "It is not executable"
+msgstr "Sökvägen är inte en vanlig fil"
+
+#: admin/validations.py:96
 msgid "It cannot be negative"
 msgstr "Kan inte vara negativt"
 
-#: admin/validations.py:106
+#: admin/validations.py:112
 msgid "Malformed IPv4"
 msgstr "Felformaterad IPv4-adress"
 
-#: admin/validations.py:111
+#: admin/validations.py:117
 msgid "Malformed IPv4 entry"
 msgstr "Felformaterat IPv4-inlägg"
 
-#: admin/validations.py:113
+#: admin/validations.py:119
 msgid "IPv4 entry out of range"
 msgstr "IPv4-inlägg utanför omfång"
 
-#: admin/validations.py:121
+#: admin/validations.py:127
 msgid "Malformed IPv6"
 msgstr "Felformaterad IPv6-adress"
 
-#: admin/validations.py:134 admin/validations.py:151
+#: admin/validations.py:140 admin/validations.py:157
 msgid "Path does not exist"
 msgstr "Sökvägen finns inte"
 
-#: admin/validations.py:137
+#: admin/validations.py:143
 msgid "Path is not a directory"
 msgstr "Sökvägen är inte en katalog"
 
-#: admin/validations.py:154
+#: admin/validations.py:160
 msgid "Path is not a regular file"
 msgstr "Sökvägen är inte en vanlig fil"
 
-#: admin/validations.py:170
+#: admin/validations.py:176
 msgid "Invalid char. Accepts: letters, digits, _, - and ."
 msgstr "Otillåtet tecken. Godkända: bokstäver (a-z), sifrror, - och ."
 
-#: admin/validations.py:193
+#: admin/validations.py:199
 msgid "Neither a number or an IPv4"
 msgstr "Varken ett nummer eller en  IPv4-adress"
 
-#: admin/validations.py:204
+#: admin/validations.py:210
 msgid "Invalid mask"
 msgstr "Felaktig mask"
 
-#: admin/validations.py:228
+#: admin/validations.py:234
 msgid "Malformed entry (netmask)"
 msgstr "Felaktigt inlägg (netmask)"
 
-#: admin/validations.py:257
+#: admin/validations.py:263
 msgid "Forced failure"
 msgstr "Påtvingat misslyckande"
 
-#: admin/validations.py:265
+#: admin/validations.py:271
 msgid "http:// missing"
 msgstr "http:// fattas"
 
-#: admin/validations.py:302
+#: admin/validations.py:308
 msgid "Time value contain invalid values"
 msgstr "Tidsvärdet innehöll felaktiga värden"
 
-#: admin/validations.py:305
+#: admin/validations.py:311
 msgid "Malformed time"
 msgstr "Felformaterad tid"
 
-#: admin/validations.py:312
+#: admin/validations.py:318
 msgid "Virtual host nick is already being used."
 msgstr "Namnet för den virtuella värden används redan."
+
+#~ msgid "Path"
+#~ msgstr "Sökväg"
+
+#~ msgid "Configuration file"
+#~ msgstr "Konfigurationsfil"
+
+#~ msgid ""
+#~ "Specifies if Traffic Statistics should be collected for the virtual "
+#~ "server (Default: yes)"
+#~ msgstr ""
+#~ "Anger om trafik-statistik ska samlas in för den virtuella servern."
+#~ "( Förvalt värde: Ja)"
 
 #~ msgid "Use MD5 Passwords"
 #~ msgstr "Använd MD5-hashade lösenord"
