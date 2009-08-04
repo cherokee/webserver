@@ -175,15 +175,20 @@ class CherokeeManagement:
     #
     def __try_to_figure_pid (self):
         try:
-            ps = os.popen ("ps aux").read()
+            f  = os.popen ("ps aux")
+            ps = f.read()
         except:
-            return -1
+            return None
+
+        try:
+            f.close()
+        except: pass
 
         for l in ps.split("\n"):
             if "cherokee " in l and "-C %s"%(self._cfg.file) in l:
                 pid = filter (lambda x: x.isdigit(), l.split())[0]
                 return int(pid)
-        return -1
+        return None
 
     def __read_pid_file (self, file):
         if not os.access (file, os.R_OK):
@@ -207,7 +212,6 @@ class CherokeeManagement:
         except:
             pass
 
-
     def __wait_process (self, pid):
         if self._is_child:
             try: os.waitpid (pid, 0)
@@ -219,6 +223,9 @@ class CherokeeManagement:
                 retries += 1
 
 def is_PID_alive (pid):
+    if not pid:
+        return False
+
     if sys.platform.startswith('linux') or \
        sys.platform.startswith('sunos') or \
        sys.platform.startswith('irix'):
