@@ -133,7 +133,7 @@ cherokee_server_new  (cherokee_server_t **srv)
 	n->group_orig       = getgid();
 	n->group            = n->group_orig;
 
-	n->fdlimit_custom    = -1;
+	n->fdlimit_custom    = FD_NUM_CUSTOM_LIMIT;
 	n->fdlimit_available = -1;
 
 	n->conns_max        =  0;

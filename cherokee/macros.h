@@ -108,10 +108,11 @@
 #define NONCE_CLEANUP_LAPSE           60
 #define NONCE_EXPIRATION              60
 
-#define FD_NUM_SPARE                  10	/* range:  8 - 20 */
-#define FD_NUM_MIN_SYSTEM             20	/* range: 16 - 64 */
-#define FD_NUM_MIN_AVAILABLE           8	/* range:  8 ... 65000 */
-#define FD_NUM_MIN_PER_THREAD          8	/* range:  8 ... 65000 */
+#define FD_NUM_SPARE                  10        /* range:  8 ... 20    */
+#define FD_NUM_MIN_SYSTEM             20        /* range: 16 ... 64    */
+#define FD_NUM_MIN_AVAILABLE          8         /* range:  8 ... 65000 */
+#define FD_NUM_MIN_PER_THREAD         8         /* range:  8 ... 65000 */
+#define FD_NUM_CUSTOM_LIMIT           4096      /* range: 16 ... 65000 */
 
 #define EXIT_OK                        0
 #define EXIT_ERROR                     1
