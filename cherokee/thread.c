@@ -522,7 +522,7 @@ process_polling_connections (cherokee_thread_t *thd)
 		/* Has it been too much without any work?
 		 */
 		if (conn->timeout < cherokee_bogonow_now) {
-			TRACE (ENTRIES",polling", "conn %p(fd=%d): Time out\n", 
+			TRACE (ENTRIES",polling,timeout", "conn %p(fd=%d): Time out\n", 
 			       conn, SOCKET_FD(&conn->socket));
 
 			/* Information collection
@@ -603,7 +603,8 @@ process_active_connections (cherokee_thread_t *thd)
 		/* Has the connection been too much time w/o any work
 		 */
 		if (conn->timeout < cherokee_bogonow_now) {
-			TRACE (ENTRIES, "thread (%p) processing conn (%p): Time out\n", thd, conn);
+			TRACE (ENTRIES",polling,timeout", 
+			       "thread (%p) processing conn (%p): Time out\n", thd, conn);
 
 			/* Information collection
 			 */
