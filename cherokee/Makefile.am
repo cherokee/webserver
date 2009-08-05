@@ -1521,7 +1521,6 @@ header.h \
 resolv_cache.h \
 post.h \
 trace.h \
-avl.h \
 cache.h \
 iocache.h \
 module.h \
