@@ -24,11 +24,10 @@ function changeGraph()
     } else {
 	   imgurl = '/graphs/' + graphPrefix + '_' + graphType + '_' + graphInterval + '.png';
     }
-    $('#graphimg').attr('src', imgurl);
+    $('#graphimg').fadeOut("slow").attr('src', imgurl).fadeIn("slow");
 }
 
 function refreshGraph()
 {
-    changeGraph();
-    setTimeout(refreshGraph, refInterval);
+    setInterval(function(){ changeGraph(); }, refInterval);
 }
