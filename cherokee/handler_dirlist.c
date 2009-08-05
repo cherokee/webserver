@@ -30,6 +30,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <limits.h>
 
 #ifdef HAVE_PWD_H
 #  include <pwd.h>
@@ -54,11 +55,12 @@
 
 
 struct file_entry {
-	cherokee_list_t  list_node;
-	struct stat      stat;
-	struct stat      rstat;
-	cuint_t          name_len;
-	struct dirent    info;          /* It *must* be the last entry */
+	cherokee_list_t   list_node;
+	struct stat       stat;
+	struct stat       rstat;
+	cherokee_buffer_t realpath;
+	cuint_t           name_len;
+	struct dirent     info;          /* It *must* be the last entry */
 };
 typedef struct file_entry file_entry_t;
 
@@ -66,6 +68,33 @@ typedef struct file_entry file_entry_t;
 /* Plug-in initialization
  */
 PLUGIN_INFO_HANDLER_EASIEST_INIT (dirlist, http_get);
+
+
+/* Private type
+ */
+static ret_t
+file_entry_new (file_entry_t **file, cuint_t extra_size)
+{
+	file_entry_t  *n;
+
+	n = (file_entry_t *) malloc (sizeof(file_entry_t) + extra_size);
+	if (unlikely(n == NULL)) {
+		return ret_nomem;
+	}
+
+	INIT_LIST_HEAD (&n->list_node);
+	cherokee_buffer_init (&n->realpath);
+
+	*file = n;
+	return ret_ok;
+}
+
+static void
+file_entry_free (file_entry_t *file)
+{
+	cherokee_buffer_mrproper (&file->realpath);
+	free (file);
+}
 
 
 /* Methods implementation
@@ -196,14 +225,16 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
 			MODULE_PROPS_FREE(cherokee_handler_dirlist_props_free));
 
-		n->show_size     = true;
-		n->show_date     = true;
-		n->show_user     = false;
-		n->show_group    = false;
-		n->show_icons    = true;
-		n->show_symlinks = true;
-		n->show_hidden   = false;
-		n->show_backup   = false;
+		n->show_size      = true;
+		n->show_date      = true;
+		n->show_user      = false;
+		n->show_group     = false;
+		n->show_icons     = true;
+		n->show_symlinks  = true;
+		n->redir_symlinks = false;
+
+		n->show_hidden    = false;
+		n->show_backup    = false;
 
 		cherokee_buffer_init (&n->header);
 		cherokee_buffer_init (&n->footer);
@@ -236,6 +267,8 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 			props->show_group = !! atoi (subconf->val.buf);
 		} else if (equal_buf_str (&subconf->key, "symlinks")) {
 			props->show_symlinks = !! atoi (subconf->val.buf);
+		} else if (equal_buf_str (&subconf->key, "redir_symlinks")) {
+			props->redir_symlinks = !! atoi (subconf->val.buf);
 		} else if (equal_buf_str (&subconf->key, "hidden")) {
 			props->show_hidden = !! atoi (subconf->val.buf);
 		} else if (equal_buf_str (&subconf->key, "backup")) {
@@ -299,6 +332,7 @@ static ret_t
 generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer_t *path, file_entry_t **ret_entry)
 {
 	int            re;
+	ret_t          ret;
 	file_entry_t  *n;
 	char          *name;
 	cuint_t        extra;
@@ -312,17 +346,17 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 
 	/* New object
 	 */
-	n = (file_entry_t *) malloc (sizeof(file_entry_t) + path->len + extra + 3);
-	if (unlikely(n == NULL)) return ret_nomem;
-
-	INIT_LIST_HEAD(&n->list_node);
+	ret = file_entry_new (&n, path->len + extra + 3);
+	if (unlikely (ret != ret_ok)) {
+		return ret;
+	}
 
 	for (;;) {
 		/* Read a new directory entry
 		 */
 		cherokee_readdir (dir, &n->info, &entry);
 		if (entry == NULL) {
-			free (n);
+			file_entry_free (n);
 			return ret_eof;
 		}
 
@@ -358,12 +392,41 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 		if (re < 0) {
 			cherokee_buffer_drop_ending (path, n->name_len);
 
-			free (n);
+			file_entry_free (n);
 			return ret_error;
 		}
 
 	        if (S_ISLNK(n->stat.st_mode)) {
 			cherokee_stat (path->buf, &n->rstat);
+
+			if (HDL_DIRLIST_PROP(dhdl)->redir_symlinks) {
+				char *res;
+
+				/* Read the real path
+				 */
+				cherokee_buffer_ensure_size (&n->realpath, PATH_MAX);
+				res = realpath (path->buf, n->realpath.buf);
+				if (res == NULL) {
+					cherokee_buffer_drop_ending (path, n->name_len);
+
+					file_entry_free (n);
+					return ret_error;
+				}
+				
+				/* Check it is within the limits
+				 */
+				n->realpath.len = strlen (n->realpath.buf);
+				re = strncmp (n->realpath.buf, path->buf,
+					      path->len - n->name_len);
+
+				if (re != 0) {
+					file_entry_free (n);
+					return ret_error;
+				} 
+
+				cherokee_buffer_move_to_begin (&n->realpath,
+							       path->len - n->name_len);
+			}
 		}
 
 		/* Clean up and exit
@@ -465,12 +528,12 @@ cherokee_handler_dirlist_free (cherokee_handler_dirlist_t *dhdl)
 
 	list_for_each_safe (i, tmp, &dhdl->dirs) {
 		cherokee_list_del (i);
-		free (i);
+		file_entry_free ((file_entry_t *)i);
 	}
 
 	list_for_each_safe (i, tmp, &dhdl->files) {
 		cherokee_list_del (i);
-		free (i);
+		file_entry_free ((file_entry_t *)i);
 	}
 
 	return ret_ok;
@@ -826,8 +889,11 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 	/* Check whether it is a symlink that we should skip
 	 */
-	if ((! props->show_symlinks) && is_link)
-		return ret_not_found;
+	if (is_link) {
+		if (! props->show_symlinks) {
+			return ret_not_found;
+		} 
+	}
 
 	/* Add the icon
 	 */
@@ -863,8 +929,15 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	 */
 	VTMP_SUBSTITUTE_TOKEN ("%file_name%", name);
 
-	if (! is_dir) {
+	if ((is_link) && (props->redir_symlinks)) {
+		if (file->realpath.len <= 0) {
+			return ret_not_found;
+		}
+		VTMP_SUBSTITUTE_TOKEN ("%file_link%", file->realpath.buf);
+			
+	} else if (! is_dir) {
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", name);
+
 	} else {
 		cherokee_buffer_clean (tmp);
 		cherokee_buffer_add (tmp, name, name_len);

@@ -32,7 +32,8 @@ class ModuleDirlist (ModuleHandler):
         'user', 'group',
         'theme', 'icon_dir',
         'notice_files', 'symlinks',
-        'hidden', 'backup'
+        'redir_symlinks', 'hidden', 
+        'backup'
     ]
 
     def __init__ (self, cfg, prefix, submit_url):
@@ -48,6 +49,7 @@ class ModuleDirlist (ModuleHandler):
         self.AddPropCheck (table, _("Show Backup files"), "%s!backup"%(self._prefix), False, '')
         self.AddPropCheck (table, _("Show Hidden files"), "%s!hidden"%(self._prefix), False, '')
         self.AddPropCheck (table, _("Allow symbolic links"), "%s!symlinks"%(self._prefix), True, '')
+        self.AddPropCheck (table, _("Redirect symbolic links"), "%s!redir_symlinks"%(self._prefix), False, '')
         txt += self.Indent(table)
 
         txt += '<h2>%s</h2>' % (_('Theming'))
@@ -62,7 +64,7 @@ class ModuleDirlist (ModuleHandler):
         return txt
 
     def _op_apply_changes (self, uri, post):
-        checkboxes = ['size', 'date', 'user', 'group', 'symlinks', 'backup', 'hidden']
+        checkboxes = ['size', 'date', 'user', 'group', 'symlinks', 'redir_symlinks', 'backup', 'hidden']
         self.ApplyChangesPrefix (self._prefix, checkboxes, post, DATA_VALIDATION)
 
     def _get_theme_list (self):
