@@ -18,6 +18,7 @@ NOTE_TIMEOUT     = N_('How long should the server wait when spawning an interpre
 NOTE_USAGE       = N_('Sources currently in use. Note that the last source of any rule cannot be deleted until the rule has been manually edited.')
 NOTE_USER        = N_('Execute the interpreter under a different user. Default: Same UID as the server.')
 NOTE_GROUP       = N_('Execute the interpreter under a different group. Default: Default GID of the new process UID.')
+NOTE_ENV_INHETIR = N_('Whether the new child process should inherit the environment variables from the server process. Default: yes.')
 
 TABLE_JS = """
 <script type="text/javascript">
@@ -42,6 +43,8 @@ DATA_VALIDATION = [
 RULE_NAME_LEN_LIMIT = 35
 
 class PageInfoSource (PageMenu, FormHelper):
+    check_boxes = ['env_inherited']
+
     def __init__ (self, cfg):
         FormHelper.__init__ (self, 'source', cfg)
         PageMenu.__init__ (self, 'source', cfg, HELPS)
@@ -68,7 +71,8 @@ class PageInfoSource (PageMenu, FormHelper):
                     post.get_val ('new_env_value')):
                     self._apply_add_new_env_var(post, source)
 
-                self.ApplyChanges ([], post, validation = DATA_VALIDATION)
+                checkboxes = ['source!%s!%s'%(source,x) for x in self.check_boxes]
+                self.ApplyChanges (checkboxes, post, validation = DATA_VALIDATION)
                 return "/%s/%s" % (self._id, source)
 
         tmp = uri.split('/')
@@ -124,6 +128,8 @@ class PageInfoSource (PageMenu, FormHelper):
 
     def _render_source_details_env (self, s):
         txt = ''
+
+        # Env list
         envs = self._cfg.keys('source!%s!env'%(s))
         if envs:
             txt += '<h3>%s</h3>' % (_('Environment variables'))
@@ -141,6 +147,7 @@ class PageInfoSource (PageMenu, FormHelper):
         fo = Form ("/%s"%(self._id), add_submit=False, auto=True)
         render=fo.Render(txt)
 
+        # New Env
         txt = '<h3>%s</h3>' % (_('Add new Environment variable'))
         name  = self.InstanceEntry('new_env_name',  'text', size=25)
         value = self.InstanceEntry('new_env_value', 'text', size=25)
@@ -158,8 +165,9 @@ class PageInfoSource (PageMenu, FormHelper):
 
     def _render_source_details (self, s):
         txt = ''
-        nick = self._cfg.get_val('source!%s!nick'%(s))
-        type = self._cfg.get_val('source!%s!type'%(s))
+        nick    = self._cfg.get_val('source!%s!nick'%(s))
+        type    = self._cfg.get_val('source!%s!type'%(s))
+        inherit = int(self._cfg.get_val('source!%s!env_inherited'%(s), '1'))
         
         # Properties
         table = TableProps()
@@ -167,10 +175,11 @@ class PageInfoSource (PageMenu, FormHelper):
         self.AddPropEntry   (table, _('Nick'),       'source!%s!nick'%(s), _(NOTE_NICK), req=True)
         self.AddPropEntry   (table, _('Connection'), 'source!%s!host'%(s), _(NOTE_HOST), req=True)
         if type == 'interpreter':
-            self.AddPropEntry (table, _('Interpreter'),      'source!%s!interpreter'%(s),  _(NOTE_INTERPRETER), req=True)
-            self.AddPropEntry (table, _('Spawning timeout'), 'source!%s!timeout'%(s), _(NOTE_TIMEOUT))
-            self.AddPropEntry (table, _('Execute as User'),  'source!%s!user'%(s), _(NOTE_USER))
-            self.AddPropEntry (table, _('Execute as Group'), 'source!%s!group'%(s), _(NOTE_GROUP))
+            self.AddPropEntry (table, _('Interpreter'),        'source!%s!interpreter'%(s),  _(NOTE_INTERPRETER), req=True)
+            self.AddPropEntry (table, _('Spawning timeout'),   'source!%s!timeout'%(s), _(NOTE_TIMEOUT))
+            self.AddPropEntry (table, _('Execute as User'),    'source!%s!user'%(s), _(NOTE_USER))
+            self.AddPropEntry (table, _('Execute as Group'),   'source!%s!group'%(s), _(NOTE_GROUP))
+            self.AddPropCheck (table, _('Inherit Environment'),'source!%s!env_inherited'%(s), True, _(NOTE_ENV_INHETIR))
 
         tmp  = self.HiddenInput ('source_num', s)
         tmp += str(table)
@@ -179,7 +188,7 @@ class PageInfoSource (PageMenu, FormHelper):
         txt = fo.Render(tmp)
 
         # Environment variables
-        if type == 'interpreter':
+        if type == 'interpreter' and not inherit:
             tmp = self._render_source_details_env (s)
             txt += self.Indent(tmp)
 

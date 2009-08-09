@@ -57,6 +57,7 @@ ret_t cherokee_spawner_spawn      (cherokee_buffer_t  *binary,
 				   cherokee_buffer_t  *user_name,
 				   uid_t               uid,
 				   gid_t               gid,
+				   int                 env_inherited,
 				   char              **envp,
 				   cherokee_logger_t  *logger,
 				   pid_t              *pid_ret);

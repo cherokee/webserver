@@ -54,6 +54,7 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 
 	n->custom_env     = NULL;
 	n->custom_env_len = 0;
+	n->env_inherited  = true;
 	n->debug          = false;
 	n->pid            = -1;
 	n->timeout        = DEFAULT_TIMEOUT;
@@ -258,6 +259,9 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 		} else if (equal_buf_str (&child->key, "debug")) {
 			src->debug = !! atoi (child->val.buf);
 
+		} else if (equal_buf_str (&child->key, "env_inherited")) {
+			src->env_inherited = !! atoi (child->val.buf);
+
 		} else if (equal_buf_str (&child->key, "timeout")) {
 			src->timeout = atoi (child->val.buf);
 
@@ -331,12 +335,14 @@ cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *e
 	val_len = strlen (val);
 
 	entry = (char *) malloc (env_len + val_len + 2);
-	if (entry == NULL) return ret_nomem;
+	if (entry == NULL) {
+		return ret_nomem;
+	}
 
 	memcpy (entry, env, env_len);
 	entry[env_len] = '=';
 	memcpy (entry + env_len + 1, val, val_len);
-	entry[env_len + val_len+1] = '\0';
+	entry[env_len + val_len + 1] = '\0';
 	
 	/* Add it into the env array
 	 */
@@ -345,10 +351,10 @@ cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *e
 	} else {
 		src->custom_env = realloc (src->custom_env, (src->custom_env_len + 2) * sizeof (char *));
 	}
-	src->custom_env_len +=  1;
+	src->custom_env_len += 1;
 
 	src->custom_env[src->custom_env_len - 1] = entry;
-	src->custom_env[src->custom_env_len] = NULL;
+	src->custom_env[src->custom_env_len]     = NULL;
 
 	return ret_ok;
 }
@@ -384,6 +390,7 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 				      &src->change_user_name,
 				      src->change_user,
 				      src->change_group,
+				      src->env_inherited,
 				      envp,
 				      logger,
 				      &src->pid);
@@ -426,8 +433,7 @@ _spawn_local (cherokee_source_interpreter_t *src,
 	/* Execute the FastCGI server
 	 */
 	cherokee_buffer_add_va (&tmp, "exec %s", src->interpreter.buf);
-
-	TRACE (ENTRIES, "Spawn \"/bin/sh -c %s\"\n", src->interpreter.buf);
+	TRACE (ENTRIES, "Spawn: /bin/sh -c \"exec %s\"\n", src->interpreter.buf);
 
 #ifndef _WIN32
 	child = fork();
@@ -470,7 +476,12 @@ _spawn_local (cherokee_source_interpreter_t *src,
 		}
 
 		argv[2] = (char *)tmp.buf;
-		re = execve ("/bin/sh", (char **)argv, envp);
+		if (src->env_inherited) {
+			re = execv ("/bin/sh", (char **)argv);
+		} else {
+			re = execve ("/bin/sh", (char **)argv, envp);
+		}
+
 		if (re < 0) {
 			LOG_ERROR ("Could spawn %s\n", tmp.buf);
 			exit (1);
