@@ -128,9 +128,21 @@ php_interpreter    = look_for_php()
 python_interpreter = look_for_python()
 
 print "Interpreters"
-print_key('PHP',    php_interpreter)
-print_key('Python', python_interpreter)
+if php_interpreter:
+    print_key('PHP', php_interpreter)
+else:
+    print_key('PHP', "Couldn't find a suitable PHP interpreter (with fastcgi support)")
+
+if python_interpreter:
+    print_key('Python', python_interpreter)
+else:
+    print_key('Python', "ERROR: Python interpreter not found")
 print
+
+# Might need to fake PHP
+fake_php = len(php_interpreter) == 0
+if fake_php > 0:
+    php_interpreter = "false"
 
 # Set the panic script
 panic = CHEROKEE_PANIC

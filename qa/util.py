@@ -119,8 +119,7 @@ def look_for_php():
                     __php_ref = php
                     return php
 
-    error = "Couldn't find a suitable PHP interpreter (with fastcgi support)"
-    __php_ref = error
+    __php_ref = ''
     return __php_ref
 
 
@@ -142,7 +141,6 @@ def look_for_python():
                 __python_ref = py
                 return py
 
-    print "ERROR: Python interpreter not found"
     __python_ref = ''
     return __python_ref
 
