@@ -87,7 +87,6 @@ modules_handlers_scgi.html \
 modules_handlers_server_info.html \
 modules_handlers_ssi.html \
 modules_handlers_streaming.html \
-modules_handlers_mirror.html \
 modules_handlers_admin.html \
 modules_handlers_proxy.html \
 modules_handlers_secdownload.html \

@@ -70,7 +70,6 @@ ModuleSsi.py \
 ModuleSecdownload.py \
 ModuleEmptyGif.py \
 ModuleProxy.py \
-ModuleMirror.py \
 ModuleDbslayer.py \
 ModuleStreaming.py \
 ModuleErrorNn.py \

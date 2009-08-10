@@ -677,23 +677,6 @@ dynamic_handler_proxy_lib = libplugin_proxy.la
 endif
 
 
-#
-# Handler mirror
-#
-handler_mirror = \
-handler_mirror.c \
-handler_mirror.h
-
-libplugin_mirror_la_LDFLAGS = $(module_ldflags)  
-libplugin_mirror_la_SOURCES = $(handler_mirror)
-libplugin_mirror_la_LIBADD  = libcherokee-client.la  
-
-if STATIC_HANDLER_MIRROR
-static_handler_mirror_src = $(handler_mirror)
-else
-dynamic_handler_mirror_lib = libplugin_mirror.la
-endif
-
 
 #
 # Handler ssi
@@ -1404,7 +1387,6 @@ $(static_handler_cgi_src) \
 $(static_handler_phpcgi_src) \
 $(static_handler_common_src) \
 $(static_handler_proxy_src) \
-$(static_handler_mirror_src) \
 $(static_handler_ssi_src) \
 $(static_handler_secdownload_src) \
 $(static_handler_empty_gif_src) \
@@ -1583,7 +1565,6 @@ $(dynamic_handler_fcgi_lib) \
 $(dynamic_handler_fastcgi_lib) \
 $(dynamic_handler_redir_lib) \
 $(dynamic_handler_proxy_lib) \
-$(dynamic_handler_mirror_lib) \
 $(dynamic_handler_ssi_lib) \
 $(dynamic_handler_secdownload_lib) \
 $(dynamic_handler_empty_gif_lib) \
