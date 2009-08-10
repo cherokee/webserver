@@ -68,6 +68,8 @@ cherokee_logger_writer_new (cherokee_logger_writer_t **writer)
 	}
 	CHEROKEE_MUTEX_INIT (&PRIV(n)->mutex, NULL);
 	
+	n->initialized = false;
+
 	*writer = n;
 	return ret_ok;
 }
@@ -256,33 +258,44 @@ cherokee_logger_writer_open (cherokee_logger_writer_t *writer)
 	case cherokee_logger_writer_syslog:
 		/* Nothing to do, syslog already opened at startup.
 		 */
-		return ret_ok;
+		goto out;
 
 	case cherokee_logger_writer_pipe:
-		return launch_logger_process (writer);
+		ret = launch_logger_process (writer);
+		if (ret != ret_ok)
+			goto error;
+
+		goto out;
 
 	case cherokee_logger_writer_stderr:
 		writer->fd = STDERR_FILENO;
-		return ret_ok;
+		goto out;
 
 	case cherokee_logger_writer_file:
 		writer->fd = open (writer->filename.buf, O_APPEND | O_WRONLY | O_CREAT | O_LARGEFILE | O_NOFOLLOW, 0640);
 		if (writer->fd == -1) {
 			PRINT_MSG ("Couldn't open '%s' for appending\n", writer->filename.buf);
-			return ret_error;
+			ret = ret_error;
+			goto error;
 		}
 
 		ret = cherokee_fd_set_closexec (writer->fd);
 		if (ret != ret_ok)
-			return ret;
+			goto error;
 
-		return ret_ok;
+		goto out;
 
 	default:
 		SHOULDNT_HAPPEN;
+		ret = ret_error;
+		goto error;
 	}
 
-	return ret_error;
+out:
+	writer->initialized = true;
+	return ret_ok;
+error:
+	return ret;
 }
 
 
