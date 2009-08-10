@@ -1,6 +1,6 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-SUBDIRS = po m4 www icons themes qa doc . admin contrib cherokee cget windows dbslayer
+SUBDIRS = po m4 www icons themes qa doc . admin contrib cherokee cget packages dbslayer
 SUFFIXES = .sample.pre .sample .h.pre .h .xml.pre .xml
 ACLOCAL_AMFLAGS = -I m4
 

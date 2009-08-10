@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+
+<plist version="1.0">
+<dict>
+    <!-- Provides information for the Finder to display about the package -->
+    <key>CFBundleGetInfoString</key>
+    <string>Cherokee Web Server @VERSION@</string>
+
+    <!-- Provides information for the Finder to display about the package. -->    
+    <key>CFBundleName</key>
+    <string>cherokee</string>
+
+    <!-- Provides information for the Finder to display about the package. -->    
+    <key>CFBundleShortVersionString</key>
+    <string>@VERSION@</string>
+
+    <!-- A unique identifier string for the bundle. It should be in the form of a Java-style package name. -->
+    <key>CFBundleIdentifier</key>
+    <string>org.cherokeeproject.cherokee</string>
+
+    <!-- Should Installer require authorization (and prompt the user to authenticate)? -->
+    <key>IFPkgFlagAuthorizationAction</key>
+    <string>AdminAuthorization</string>
+
+    <key>IFPkgFlagDefaultLocation</key>
+    <string>/usr/local</string>
+
+    <key>IFPkgFlagRelocatable</key>
+    <false/>
+
+    <!-- Weird, standard version string to indicate the package format -->
+    <key>IFPkgFormatVersion</key>
+    <real>0.10000000149011612</real>
+</dict>
+</plist>

@@ -25,7 +25,7 @@ AC_PREREQ([2.60])
 dnl Version
 m4_define([cherokee_major_version], [0])
 m4_define([cherokee_minor_version], [99])
-m4_define([cherokee_micro_version], [22])
+m4_define([cherokee_micro_version], [23])
 m4_define([cherokee_version], m4_format('%s.%s.%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version))
 
 dnl Init autoconf and automake
@@ -1450,8 +1450,12 @@ themes/Makefile
 themes/default/Makefile 
 themes/firefox3/Makefile 
 themes/plain/Makefile 
-windows/Makefile
-windows/cherokee.nsi
+packages/Makefile
+packages/osx/Makefile
+packages/osx/Info.plist
+packages/osx/Description.plist
+packages/windows/Makefile
+packages/windows/cherokee.nsi
 www/Makefile 
 dbslayer/Makefile
 admin/Makefile
