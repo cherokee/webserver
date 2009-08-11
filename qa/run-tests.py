@@ -6,7 +6,7 @@
 #      Alvaro Lopez Ortega <alvaro@alobbs.com>
 #
 # Copyright (C) 2001-2009 Alvaro Lopez Ortega
-# This file is distributed under the GPL license.
+# This file is distributed under the GPL2 license.
 
 import os
 import sys
