@@ -94,6 +94,7 @@ typedef enum {
 	http_moved_temporarily        = 302,
  	http_see_other                = 303,
 	http_not_modified             = 304,
+	http_temporary_redirect       = 307,
 	http_bad_request              = 400,
 	http_unauthorized             = 401,
 	http_access_denied            = 403,
@@ -127,6 +128,7 @@ typedef enum {
 #define http_moved_temporarily_string        "302 Moved Temporarily"
 #define http_see_other_string                "303 See Other"
 #define http_not_modified_string             "304 Not Modified"
+#define http_temporary_redirect_string       "307 Temporary Redirect"
 #define http_bad_request_string              "400 Bad Request"
 #define http_unauthorized_string             "401 Authorization Required"
 #define http_access_denied_string            "403 Forbidden"
