@@ -77,7 +77,7 @@ def perform():
     global version
 
     osx_dir    = os.path.abspath (os.path.dirname(__file__))
-    src_topdir = os.path.abspath ("../..")
+    src_topdir = os.path.abspath ("%s/../.."%(osx_dir))
     version    = _figure_version (osx_dir)
 
     # Change the current directory
