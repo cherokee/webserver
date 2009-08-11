@@ -132,8 +132,10 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 			   "Failed to set nonblocking (fd=%d): ${errno}\n", sock->socket);
 	}
 
-out: 	
+	/* Set close-on-exec */
 	cherokee_fd_set_closexec (sock->socket);
+
+out: 	
 	return cherokee_socket_connect (sock);
 }
 
