@@ -10,14 +10,7 @@ be made clear.
 Balancer modules only implement the balancing strategy. To actually
 use one of these strategies you will need to select a
 link:modules_handlers.html[handler] that makes use of balancers in the
-link:bundle_cherokee-admin.html[cherokee-admin] interface. Besides
-this, balancing strategies can be utilized both directly within first level
-Cherokee handlers and as second level subsystems used by other first
-level handlers. The link:modules_handlers_mirror.html[Generic
-balancer] handler is an example of the former, while the latter would
-be the case for the link:modules_handlers_fcgi.html[FastCGI] or
-link:modules_handlers_scgi.html[SCGI] handlers that can offer load
-balancing as well.
+link:bundle_cherokee-admin.html[cherokee-admin] interface.
 
 These handlers can be chosen within the
 `Handler` tab of the link:config_virtual_servers_rule.html[Rule
@@ -38,5 +31,4 @@ And these are the handlers that use balancing:
 
 * link:modules_handlers_fcgi.html[FastCGI]
 * link:modules_handlers_scgi.html[SCGI]
-* link:modules_handlers_mirror.html[Generic balancer]
 * link:modules_handlers_dbslayer.html[MySQL bridge]

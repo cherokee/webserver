@@ -57,14 +57,3 @@ able to run one such application -say Wordpress, for instance-.
 Even though the obtained configuration will most probably not be
 perfect, it will always be a good starting point to play with for
 further tuning.
-
-[[boolean_rules]]
-AND, OR and NOT rule types
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-These rule types are fully implemented, but the feature is not yet
-supported in Cherokee Admin. Some GUI issues remain to be solved, as
-the things achievable by these rules are at the same time very
-powerful and very complex. This is said in the sense that one can
-combine them with so much flexibility that dealing with it from the
-GUI could get really messy.

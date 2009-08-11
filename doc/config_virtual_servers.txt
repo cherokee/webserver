@@ -298,12 +298,6 @@ Communicates with SCGI servers.
 +
 Provide some configurable information about the server.
 
-- link:modules_handlers_mirror.html[Generic balancer] - **Generic
-  balancer**
-+
-Select one of the available mechanisms to distribute the load (locally
-or remotely).
-
 - link:modules_handlers_admin.html[Remote Administration] - **Remote
   Administration**
 +

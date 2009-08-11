@@ -6,12 +6,10 @@ Handler: Redirection
 The main idea of a redirection is telling the web client to go to
 another URL when the requested URL matches a rule. It could happen
 that this is not precisely what you are looking for. Check the
-link:modules_handlers_mirror.html[generic balancer] for layer 4
-connection forwarding instead, or if you are looking for more complex
-layer 7 operations take a look at the
-link:modules_handlers_proxy.html[reverse proxy] handler. However, for
-URL redirections this handler is the place to go. A very common
-scenario would be rewriting URLS.
+link:modules_handlers_proxy.html[reverse proxy] handler if you are
+looking for more complex layer 7 operations.  However, for URL
+redirections this handler is the place to go. A very common scenario
+would be rewriting URLS.
 
 Lets suppose you have URLs like::
 +
