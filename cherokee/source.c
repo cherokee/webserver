@@ -133,6 +133,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	}
 
 out: 	
+	cherokee_fd_set_closexec (sock->socket);
 	return cherokee_socket_connect (sock);
 }
 
