@@ -4,11 +4,8 @@ import os
 import re
 from utils import *
 
-TMP               = "/var/tmp"
-SVN_URL           = "svn://cherokee-project.com/cherokee/trunk"
-DIR               = "cherokee-trunk"
-CONFIGURE_PARAMS  = "--prefix=/usr/local --enable-static-module=all --enable-static --enable-shared=no --with-mysql=no --with-ldap=no"
 MAKE_PARAMS       = "-j4"
+TMP               = "/var/tmp"
 DESTDIR           = "%s/cherokee-destdir" % (TMP)
 DESTDIR_ROOT      = "%s/cherokee-destdir/root" % (TMP)
 DESTDIR_RESOURCES = "%s/cherokee-destdir/resouces" % (TMP)
@@ -20,20 +17,13 @@ def _figure_version (path):
     regex = r"<key>CFBundleShortVersionString</key>[ \n\r]*<string>(.+)</string>"
     return re.findall(regex, info, re.MULTILINE)[0]
 
+
 def _perform():
     dmg_fullpath = "%s/Cherokee-%s.dmg" % (osx_dir, version)
 
     # Clean up
-    exe ("sudo rm -rfv %s %s %s" % (DIR, DESTDIR, dmg_fullpath), colorer=red)
+    exe ("sudo rm -rfv %s %s" % (DESTDIR, dmg_fullpath), colorer=red)
     exe ("mkdir -p %s %s" % (DESTDIR_ROOT, DESTDIR_RESOURCES), colorer=blue)
-
-    # Set the www user
-    cfg = '%s/cherokee.conf.sample.pre' % (src_topdir)
-    if not "server!user = www" in open(cfg, 'r').read():
-        f = open (cfg, 'a')
-        f.write ('server!user = www\n')
-        f.write ('server!group = www\n')
-        f.close()
 
     # Ensure it's compiled
     chdir (src_topdir)
@@ -71,15 +61,6 @@ def _perform():
 
 
 def perform():
-    # Get the srcdir
-    global osx_dir
-    global src_topdir
-    global version
-
-    osx_dir    = os.path.abspath (os.path.dirname(__file__))
-    src_topdir = os.path.abspath ("%s/../.."%(osx_dir))
-    version    = _figure_version (osx_dir)
-
     # Change the current directory
     prev_dir = chdir (TMP)
 
@@ -96,13 +77,21 @@ def perform():
 
 
 def check_preconditions():
+    conf = os.path.join (src_topdir, "cherokee.conf.sample")
+    assert "server!user = www" in open(conf).read(), "Bad user"
+    assert "server!group = www" in open(conf).read(), "Bad group"
     assert "prefix = /usr/local" in open("Makefile").read(), "Wrong configuration"
     assert os.access (TMP, os.W_OK), "Cannot compile in: %s" %(TMP)
-    assert which("svn"), "SVN is required"
-    assert which("gunzip"), "gunzip is required"
     assert which("hdiutil"), "hdiutil is required"
+    assert which("gunzip"), "gunzip is required"
+    assert which("svn"), "SVN is required"
 
 
-if __name__ == "__main__":    
+# Globals
+osx_dir    = os.path.abspath (os.path.dirname(__file__))
+src_topdir = os.path.abspath ("%s/../.."%(osx_dir))
+version    = _figure_version (osx_dir)
+
+if __name__ == "__main__":
     check_preconditions()
     perform()

@@ -93,7 +93,7 @@ FAQ
 
   How to build a MacOS X binary package
   -----------------------------------
-   ./autogen.sh --prefix=/usr/local --with-wwwroot=/Library/WebServer/Documents --with-mysql=no --with-ffmpeg=no --with-ldap=no --enable-beta
+   ./autogen.sh --prefix=/usr/local --with-wwwroot=/Library/WebServer/Documents --with-wwwuser=www --with-wwwgroup=www --with-mysql=no --with-ffmpeg=no --with-ldap=no --enable-beta
    make -j4
    packages/osx/build.py
 
