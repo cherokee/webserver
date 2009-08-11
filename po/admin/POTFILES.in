@@ -1,5 +1,3 @@
-# List of source files which contain translatable strings.
-
 admin/CherokeeManagement.py
 admin/Entry.py
 admin/Form.py
@@ -22,6 +20,8 @@ admin/ModuleExists.py
 admin/ModuleExtensions.py
 admin/ModuleFcgi.py
 admin/ModuleFile.py
+admin/ModuleFrom.py
+admin/ModuleFullpath.py
 admin/ModuleGeoip.py
 admin/ModuleHeader.py
 admin/ModuleHtdigest.py
@@ -29,7 +29,6 @@ admin/ModuleHtpasswd.py
 admin/ModuleIpHash.py
 admin/ModuleLdap.py
 admin/ModuleMethod.py
-admin/ModuleMirror.py
 admin/ModuleMysql.py
 admin/ModulePlain.py
 admin/ModuleProxy.py
@@ -37,11 +36,13 @@ admin/ModuleRedir.py
 admin/ModuleRehost.py
 admin/ModuleRequest.py
 admin/ModuleRoundRobin.py
+admin/ModuleRrd.py
 admin/ModuleScgi.py
 admin/ModuleSecdownload.py
 admin/ModuleServerInfo.py
 admin/ModuleSsi.py
 admin/ModuleStreaming.py
+admin/ModuleTargetIp.py
 admin/ModuleWildcard.py
 admin/Page.py
 admin/PageAdvanced.py
@@ -58,6 +59,14 @@ admin/PageVServer.py
 admin/PageVServers.py
 admin/Rule.py
 admin/Table.py
+admin/Wizard.py
+admin/Wizard_Django.py
+admin/Wizard_Drupal.py
+admin/Wizard_HotLinking.py
+admin/Wizard_Mailman.py
+admin/Wizard_Redirect.py
+admin/Wizard_RoR.py
+admin/Wizard_WordPress.py
 admin/config.py
 admin/consts.py
 admin/pyscgi.py
