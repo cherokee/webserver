@@ -167,7 +167,15 @@ class PageInfoSource (PageMenu, FormHelper):
         txt = ''
         nick    = self._cfg.get_val('source!%s!nick'%(s))
         type    = self._cfg.get_val('source!%s!type'%(s))
-        inherit = int(self._cfg.get_val('source!%s!env_inherited'%(s), '1'))
+        
+        # Inherit variables
+        if self._cfg.get_val('source!%s!env_inherited'%(s)) == None:
+            if self._cfg.keys ('source!%s!env'%(s)):
+                self._cfg['source!%s!env_inherited'%(s)] = '0'
+            else:
+                self._cfg['source!%s!env_inherited'%(s)] = '1'
+
+        inherit = int(self._cfg.get_val('source!%s!env_inherited'%(s)))
         
         # Properties
         table = TableProps()
