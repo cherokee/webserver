@@ -87,7 +87,21 @@ $(man_MANS)           \
 $(WINDOWS_PORT_FILES) \
 $(COMPILATION_TESTS)
 
-all-local: $(CONSTANTS) $(CONFS) $(XMLS)
+all-local: $(CONSTANTS) $(CONFS) $(XMLS) add_user_group
+
+add_user_group: cherokee.conf.sample
+	@if test "x$(WWW_USER)" != "x" ; then \
+		grep -e '^server.user' cherokee.conf.sample >/dev/null 2>/dev/null || ( \
+			echo "Adding default user '$(WWW_USER)' to cherokee.conf.sample.."; \
+			echo 'server!user = '$(WWW_USER) >> cherokee.conf.sample; \
+		); \
+	fi
+	@if test "x$(WWW_GROUP)" != "x" ; then \
+		grep -e '^server.group' cherokee.conf.sample >/dev/null 2>/dev/null || ( \
+			echo "Adding default group '$(WWW_GROUP)' to cherokee.conf.sample.."; \
+			echo 'server!group = '$(WWW_GROUP) >> cherokee.conf.sample; \
+		); \
+	fi
 
 install-data-local-config:
 	@$(mkinstalldirs) $(DESTDIR)$(pkgincludedir);

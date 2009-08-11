@@ -320,5 +320,3 @@ mime!video/x-msvideo!extensions = avi
 mime!video/x-sgi-movie!extensions = movie
 mime!x-conference/x-cooltalk!extensions = ice
 mime!x-world/x-vrml!extensions = vrm,vrml,wrl
-server!user = www
-server!group = www

@@ -1242,12 +1242,19 @@ AM_CONDITIONAL(HAVE_FFMPEG, test "x$have_ffmpeg" = "xyes")
 
 
 dnl
-dnl WWW root directory
+dnl WWW root directory, and user/group
 dnl
 AC_ARG_WITH(wwwroot, AC_HELP_STRING([--with-wwwroot=DIR], [Set the WWW root directory]),
 		  WWW_ROOT="$withval", WWW_ROOT="$localstatedir/www")
-
 AC_SUBST(WWW_ROOT)
+
+AC_ARG_WITH(wwwuser, AC_HELP_STRING([--with-wwwuser=USER], [Set default execution user]),
+		  WWW_USER="$withval", WWW_USER="")
+AC_SUBST(WWW_USER)
+
+AC_ARG_WITH(wwwgroup, AC_HELP_STRING([--with-wwwgroup=GROUP], [Set default execution group]),
+		  WWW_GROUP="$withval", WWW_GROUP="")
+AC_SUBST(WWW_GROUP)
 
 
 dnl
