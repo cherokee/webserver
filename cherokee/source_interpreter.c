@@ -259,9 +259,6 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 		} else if (equal_buf_str (&child->key, "debug")) {
 			src->debug = !! atoi (child->val.buf);
 
-		} else if (equal_buf_str (&child->key, "env_inherited")) {
-			src->env_inherited = !! atoi (child->val.buf);
-
 		} else if (equal_buf_str (&child->key, "timeout")) {
 			src->timeout = atoi (child->val.buf);
 
@@ -302,7 +299,19 @@ cherokee_source_interpreter_configure (cherokee_source_interpreter_t *src, chero
 				ret = cherokee_source_interpreter_add_env (src, child2->key.buf, child2->val.buf);
 				if (ret != ret_ok) return ret;
 			}
+
+		} else if (equal_buf_str (&child->key, "env_inherited")) {
+			/* Handled later on */
 		}	
+	}
+
+	/* Inherited Environment
+	 */
+	ret = cherokee_config_node_get (conf, "env_inherited", &child);
+	if (ret == ret_ok) {
+		src->env_inherited = !! atoi (child->val.buf);
+	} else {
+		src->env_inherited = (src->custom_env_len == 0);
 	}
 
 	/* Sanity check
