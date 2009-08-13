@@ -87,6 +87,16 @@ free_custom_env (void *ptr)
 
 
 static void
+kill_pid (cherokee_source_interpreter_t *src)
+{
+	if (src->pid <= 0)
+		return;
+
+	TRACE(ENTRIES, "Killing %s, pid=%d\n", src->interpreter.buf, src->pid);
+	kill (src->pid, SIGTERM);
+}
+
+static void
 interpreter_free (void *ptr)
 {
 	cherokee_source_interpreter_t *src = ptr;
@@ -94,10 +104,7 @@ interpreter_free (void *ptr)
 	/* Only frees its stuff, the rest will be freed by
 	 * cherokee_source_t.
 	 */
-	if (src->pid > 0) {
-		TRACE(ENTRIES, "Killing %s, pid=%d\n", src->interpreter.buf, src->pid);
-		kill (src->pid, SIGTERM);
-	}
+	kill_pid (src);
 
 	cherokee_buffer_mrproper (&src->interpreter);
 	cherokee_buffer_mrproper (&src->change_user_name);
@@ -430,10 +437,7 @@ _spawn_local (cherokee_source_interpreter_t *src,
 
 	/* If there is a previous instance running, kill it
 	 */
-	if (src->pid > 0) {
-		kill (src->pid, SIGTERM);
-		src->pid = 0;
-	}
+	kill_pid (src);
 
 	/* Maybe set a custom enviroment variable set 
 	 */
