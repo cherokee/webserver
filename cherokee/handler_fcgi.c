@@ -180,15 +180,22 @@ read_from_fcgi (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer)
 
 	switch (ret) {
 	case ret_eagain:
-		cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), HANDLER_CONN(cgi), 
-						     fcgi->socket.socket, 0, false);
+		ret = cherokee_thread_deactive_to_polling (HANDLER_THREAD(cgi), HANDLER_CONN(cgi), 
+							   fcgi->socket.socket, FDPOLL_MODE_READ,
+							   false);
+		if (unlikely (ret != ret_ok)) {
+			cgi->got_eof = true;
+			return ret_error;
+		}
 		return ret_eagain;
 
 	case ret_ok:
 		ret = process_buffer (fcgi, &fcgi->write_buffer, buffer);
 		TRACE (ENTRIES, "%d bytes read, buffer.len %d\n", read, buffer->len);
-		if ((ret == ret_ok) && cgi->got_eof && (buffer->len > 0)) 
+
+		if ((ret == ret_ok) && cgi->got_eof && (buffer->len > 0)) {
 			return ret_eof_have_data;
+		}
 		return ret;
 
 	case ret_eof:
