@@ -30,6 +30,12 @@
 
 CHEROKEE_BEGIN_DECLS
 
+typedef enum {
+	spawn_unknown,
+	spawn_shm,
+	spawn_local
+} cherokee_source_interpreter_spawn_t;
+
 typedef struct {
 	cherokee_source_t    source;
 	cherokee_buffer_t    interpreter;
@@ -41,13 +47,15 @@ typedef struct {
 	cuint_t              timeout;
 	cherokee_boolean_t   debug;
 	pid_t                pid;
+	time_t               last_spawn;
 
 	cherokee_buffer_t    change_user_name;
 	uid_t                change_user;
 	gid_t                change_group;
 
-	CHEROKEE_MUTEX_T    (launching_mutex);
-	cherokee_boolean_t   launching;
+	CHEROKEE_MUTEX_T                    (launching_mutex);
+	cherokee_boolean_t                   launching;
+	cherokee_source_interpreter_spawn_t  spawn_type;
 } cherokee_source_interpreter_t;
 
 #define SOURCE_INT(s)  ((cherokee_source_interpreter_t *)(s))

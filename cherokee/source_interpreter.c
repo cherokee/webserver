@@ -37,8 +37,9 @@
 
 #define ENTRIES "source,src,interpreter"
 
-#define DEFAULT_TIMEOUT 10
-#define GRNAM_BUF_LEN   8192
+#define DEFAULT_TIMEOUT     10
+#define GRNAM_BUF_LEN       8192
+#define SPAWNING_GRACE_TIME 5
 
 static void interpreter_free (void *src);
 
@@ -60,9 +61,11 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	n->timeout        = DEFAULT_TIMEOUT;
 	n->change_user    = -1;
 	n->change_group   = -1;
+	n->spawn_type     = spawn_unknown;
+	n->last_spawn     = cherokee_bogonow_now - (SPAWNING_GRACE_TIME + 1);
 
-	SOURCE(n)->type   = source_interpreter;
-	SOURCE(n)->free   = (cherokee_func_free_t)interpreter_free;
+	SOURCE(n)->type = source_interpreter;
+	SOURCE(n)->free = (cherokee_func_free_t)interpreter_free;
 	
 	CHEROKEE_MUTEX_INIT (&n->launching_mutex, NULL);
 	n->launching = false;
@@ -529,27 +532,52 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 
 	/* Sanity check
 	 */
-	if (cherokee_buffer_is_empty (&src->interpreter)) 
+	if (cherokee_buffer_is_empty (&src->interpreter)) {
 		return ret_not_found;
+	}
 
-	/* Try to use the spawn mechanism
+	/* Check grace time
+	 */
+	if ((src->last_spawn + SPAWNING_GRACE_TIME) < cherokee_bogonow_now) {
+		return ret_ok;
+	}
+
+	/* Try with SHM first
 	 */
 #ifdef HAVE_POSIX_SHM
-	ret = _spawn_shm (src, logger);
-	if ((ret == ret_ok) ||
-	    (ret == ret_eagain)) 
+	if ((src->spawn_type == spawn_shm) ||
+	    (src->spawn_type == spawn_unknown))
 	{
-		return ret;
+		ret = _spawn_shm (src, logger);
+		if (ret == ret_ok) {
+			if (src->spawn_type == spawn_unknown) {
+				src->spawn_type == spawn_shm;
+			}
+
+			src->last_spawn = cherokee_bogonow_now + SPAWNING_GRACE_TIME;
+			return ret_ok;
+
+		} else if (ret == ret_eagain) {
+			return ret_eagain;
+		}
+		if (src->spawn_type == spawn_shm) {
+			return ret_error;
+		}
 	}
 #endif
 
-	/* It has failed: do it yourself
+	/* No luck, go 'local' then..
 	 */
+	if (src->spawn_type == spawn_unknown) {
+		src->spawn_type == spawn_local;
+	}
+
 	ret = _spawn_local (src, logger);
 	if (ret != ret_ok) {
 		return ret;
 	}
 
+	src->last_spawn = cherokee_bogonow_now + SPAWNING_GRACE_TIME;
 	return ret_ok;
 }
 
