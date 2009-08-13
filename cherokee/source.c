@@ -76,8 +76,9 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 
 	/* Short path: it's already connecting
 	 */
-	if (sock->socket >= 0)
-		goto out;
+	if (sock->socket >= 0) {
+		return cherokee_socket_connect (sock);
+	}
 
 	/* Get required objects
 	 */
@@ -89,13 +90,15 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	 */
 	if (! cherokee_buffer_is_empty (&src->unix_socket)) {
 		ret = cherokee_socket_set_client (sock, AF_UNIX);
-		if (unlikely (ret != ret_ok))
+		if (unlikely (ret != ret_ok)) {
 			return ret;
+		}
 
 		/* Copy the unix socket path */
 		ret = cherokee_socket_gethostbyname (sock, &src->unix_socket);
-		if (unlikely (ret != ret_ok))
+		if (unlikely (ret != ret_ok)) {
 			return ret;
+		}
 
 		/* Set non-blocking */
 		ret = cherokee_fd_set_nonblocking (sock->socket, true);
@@ -104,38 +107,36 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 				   "Failed to set nonblocking (fd=%d): ${errno}\n", sock->socket);
 		}
 
-		goto out;
-	}
-
 	/* INET socket
 	 */
-	if (cherokee_string_is_ipv6 (&src->host)) {
-		ret = cherokee_socket_set_client (sock, AF_INET6);
 	} else {
-		ret = cherokee_socket_set_client (sock, AF_INET);
-	}
-
-	if (unlikely (ret != ret_ok))
-		return ret;
+		if (cherokee_string_is_ipv6 (&src->host)) {
+			ret = cherokee_socket_set_client (sock, AF_INET6);
+		} else {
+			ret = cherokee_socket_set_client (sock, AF_INET);
+		}
+		if (unlikely (ret != ret_ok)) {
+			return ret;
+		}
 	
-	/* Query the host */
-	ret = cherokee_resolv_cache_get_host (resolv, src->host.buf, sock);
-	if (unlikely (ret != ret_ok))
-		return ret;
+		/* Query the host */
+		ret = cherokee_resolv_cache_get_host (resolv, src->host.buf, sock);
+		if (unlikely (ret != ret_ok)) {
+			return ret;
+		}
 	
-	SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
+		SOCKET_ADDR_IPv4(sock)->sin_port = htons(src->port);
 
-	/* Set non-blocking */
-	ret = cherokee_fd_set_nonblocking (sock->socket, true);
-	if (unlikely (ret != ret_ok)) {
-		LOG_ERRNO (errno, cherokee_err_error,
-			   "Failed to set nonblocking (fd=%d): ${errno}\n", sock->socket);
+		/* Set non-blocking */
+		ret = cherokee_fd_set_nonblocking (sock->socket, true);
+		if (unlikely (ret != ret_ok)) {
+			LOG_ERRNO (errno, cherokee_err_error,
+				   "Failed to set nonblocking (fd=%d): ${errno}\n", sock->socket);
+		}
 	}
 
 	/* Set close-on-exec */
 	cherokee_fd_set_closexec (sock->socket);
-
-out: 	
 	return cherokee_socket_connect (sock);
 }
 
