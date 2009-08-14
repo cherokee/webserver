@@ -37,12 +37,13 @@
 
 #define ENTRIES "source,src,interpreter"
 
-#define DEFAULT_TIMEOUT     10
-#define GRNAM_BUF_LEN       8192
-#define SPAWNING_GRACE_TIME 5
+#define DEFAULT_TIMEOUT 10
+#define GRNAM_BUF_LEN   8192
 
 static void interpreter_free (void *src);
 
+#define source_is_unresponsive(src)					\
+	(cherokee_bogonow_now > (src)->spawning_since + (src)->timeout)
 
 ret_t 
 cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
@@ -62,7 +63,8 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	n->change_user    = -1;
 	n->change_group   = -1;
 	n->spawn_type     = spawn_unknown;
-	n->last_spawn     = cherokee_bogonow_now - (SPAWNING_GRACE_TIME + 1);
+	n->spawning_since = 0;
+	n->last_connect   = 0;
 
 	SOURCE(n)->type = source_interpreter;
 	SOURCE(n)->free = (cherokee_func_free_t)interpreter_free;
@@ -536,12 +538,6 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 		return ret_not_found;
 	}
 
-	/* Check grace time
-	 */
-	if ((src->last_spawn + SPAWNING_GRACE_TIME) < cherokee_bogonow_now) {
-		return ret_ok;
-	}
-
 	/* Try with SHM first
 	 */
 #ifdef HAVE_POSIX_SHM
@@ -551,10 +547,9 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 		ret = _spawn_shm (src, logger);
 		if (ret == ret_ok) {
 			if (src->spawn_type == spawn_unknown) {
-				src->spawn_type == spawn_shm;
+				src->spawn_type = spawn_shm;
 			}
 
-			src->last_spawn = cherokee_bogonow_now + SPAWNING_GRACE_TIME;
 			return ret_ok;
 
 		} else if (ret == ret_eagain) {
@@ -569,7 +564,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 	/* No luck, go 'local' then..
 	 */
 	if (src->spawn_type == spawn_unknown) {
-		src->spawn_type == spawn_local;
+		src->spawn_type = spawn_local;
 	}
 
 	ret = _spawn_local (src, logger);
@@ -577,7 +572,6 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 		return ret;
 	}
 
-	src->last_spawn = cherokee_bogonow_now + SPAWNING_GRACE_TIME;
 	return ret_ok;
 }
 
@@ -585,99 +579,118 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 ret_t
 cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src, 
 					     cherokee_socket_t             *socket,
-					     cherokee_connection_t         *conn,
-					     time_t                        *spawned)
+					     cherokee_connection_t         *conn)
 {
+	int   re;
 	ret_t ret;
-
-	/* Try to connect
+	int   unlocked;
+	int   kill_prev;
+	
+	/* Connect
 	 */
  	ret = cherokee_source_connect (SOURCE(src), socket); 
 	switch (ret) {
 	case ret_ok:
+		/* connected */
+		if (src->spawning_since != 0) {
+			src->spawning_since = 0;
+		}
+		src->last_connect = cherokee_bogonow_now;
 		TRACE (ENTRIES, "Connected successfully fd=%d\n", socket->socket);
-		goto out;
+		return ret_ok;
+
+	case ret_eagain:
+		/* wait for the fd */
+		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
+							   conn, SOCKET_FD(socket),
+							   FDPOLL_MODE_WRITE, false);
+		if (ret != ret_ok) {
+			return ret_error;
+		}
+		return ret_eagain;
+
 	case ret_deny:
-		/* The connection has been refused:
-		 * Close the socket and try again.
-		 */
+	case ret_error:
+		/* reset by peer: spawn process? */
 		TRACE (ENTRIES, "Connection refused (closing fd=%d)\n", socket->socket);
 		cherokee_socket_close (socket);
 		break;
-	case ret_eagain:
-		ret = cherokee_thread_deactive_to_polling (CONN_THREAD(conn),
-							   conn,
-							   SOCKET_FD(socket),
-							   FDPOLL_MODE_WRITE, 
-							   false);
-		if (ret != ret_ok) {
-			ret = ret_deny;
-			goto out;
-		}
 
-		/* Leave the mutex locked */
-		return ret_eagain;
-	case ret_error:
-		ret = ret_error;
-		goto out;
 	default:
-		break;
+		cherokee_socket_close (socket);
+		RET_UNKNOWN(ret);
+		return ret_error;
 	}
 
-	/* In case it did not success, launch a interpreter
+	/* Spawn a new process
 	 */
-	if (*spawned == 0) {
-		int unlocked;
+	unlocked = CHEROKEE_MUTEX_TRY_LOCK (&src->launching_mutex);
+	if (unlocked) {
+		cherokee_connection_sleep (conn, 1000);
+		return ret_eagain;
+	}
 
-		/* Launch a new interpreter 
-		 */
-		unlocked = CHEROKEE_MUTEX_TRY_LOCK(&src->launching_mutex);
-		if (unlocked)
-			return ret_eagain;
+	if (src->spawning_since == 0) {
+		/* Kill prev (unresponsive) interpreter? */
+		kill_prev = ((src->pid > 0) && (source_is_unresponsive(src)));
+		if (! kill_prev) {
+			src->pid = -1;
+		}
 
-		src->launching = true;
-
+		/* Spawn */
 		ret = cherokee_source_interpreter_spawn (src, CONN_VSRV(conn)->logger);
 		switch (ret) {
 		case ret_ok:
-			break;
-		case ret_eagain:
-			/* Spawner was busy.. */
-			cherokee_connection_sleep (conn, 300);
+			src->spawning_since = cherokee_bogonow_now;
 			ret = ret_eagain;
 			goto out;
-		default:
-			if (src->interpreter.buf)
-				TRACE (ENTRIES, "Couldn't spawn: %s\n",
-				       src->interpreter.buf);
-			else
-				TRACE (ENTRIES, "No interpreter to be spawned %s", "\n");
 
+		case ret_eagain:
+			cherokee_connection_sleep (conn, 1000);
+			ret = ret_eagain;
+			goto out;
+
+		default:
+			if (src->interpreter.buf) {
+				TRACE (ENTRIES, "Couldn't spawn: %s\n", src->interpreter.buf);
+			} else {
+				TRACE (ENTRIES, "No interpreter to be spawned %s", "\n");
+			}
 			ret = ret_error;
 			goto out;
 		}
 
-		*spawned = cherokee_bogonow_now;
-
-		/* Reset the internal socket */
-		cherokee_socket_close (socket);
-
-	} else if (cherokee_bogonow_now > *spawned + src->timeout) {	
-		TRACE (ENTRIES, "Giving up; spawned %d secs ago: %s\n",
-		       src->timeout, src->interpreter.buf);
-
+		SHOULDNT_HAPPEN;
 		ret = ret_error;
 		goto out;
 	}
 
-	/* Leave the mutex locked */
-	return ret_eagain;
-
-out:
-	if (src->launching) {
-		CHEROKEE_MUTEX_UNLOCK (&src->launching_mutex);
-		src->launching = false;
+	/* Is the launching process death?
+	 */
+	if (src->pid > 0) {
+		re = kill (src->pid, 0);
+		if (re != 0) {
+			/* It's death */
+			src->spawning_since = 0;
+			ret = ret_eagain;
+			goto out;
+		}
 	}
 
+	/* Is it unresponsive?
+	 */
+	if (source_is_unresponsive(src)) {
+		src->spawning_since = 0;
+		ret = ret_eagain;
+		goto out;
+	}
+
+	/* Spawning on-going
+	 */
+	cherokee_connection_sleep (conn, 1000);
+	ret = ret_eagain;
+
+out:
+	CHEROKEE_MUTEX_UNLOCK (&src->launching_mutex);
 	return ret;
 }

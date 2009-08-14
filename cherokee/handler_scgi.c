@@ -193,7 +193,6 @@ cherokee_handler_scgi_new (cherokee_handler_t **hdl, void *cnt, cherokee_module_
 	/* Properties
 	 */
 	n->post_len = 0;
-	n->spawned  = 0;
 	n->src_ref  = NULL;
 
 	cherokee_buffer_init (&n->header);
@@ -289,8 +288,7 @@ connect_to_server (cherokee_handler_scgi_t *hdl)
 		}
 	} else {
 		ret = cherokee_source_interpreter_connect_polling (SOURCE_INT(hdl->src_ref),
-								   &hdl->socket, conn, 
-								   &hdl->spawned);
+								   &hdl->socket, conn);
 	}
 
 	return ret;

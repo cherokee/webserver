@@ -47,7 +47,8 @@ typedef struct {
 	cuint_t              timeout;
 	cherokee_boolean_t   debug;
 	pid_t                pid;
-	time_t               last_spawn;
+	time_t               last_connect;
+	time_t               spawning_since;
 
 	cherokee_buffer_t    change_user_name;
 	uid_t                change_user;
@@ -70,8 +71,7 @@ ret_t cherokee_source_interpreter_spawn     (cherokee_source_interpreter_t *src,
 
 ret_t cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src, 
 						   cherokee_socket_t             *socket,
-						   cherokee_connection_t         *conn,
-						   time_t                        *spawned);
+						   cherokee_connection_t         *conn);
 
 CHEROKEE_END_DECLS
 

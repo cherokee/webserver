@@ -83,8 +83,9 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 	/* Get required objects
 	 */
 	ret = cherokee_resolv_cache_get_default (&resolv);
-        if (unlikely (ret!=ret_ok)) 
+        if (unlikely (ret!=ret_ok)) {
 		return ret;
+	}
 
 	/* UNIX socket
 	 */

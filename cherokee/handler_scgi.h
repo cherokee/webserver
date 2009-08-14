@@ -47,7 +47,6 @@ typedef struct {
 	cherokee_buffer_t            header;
 	cherokee_socket_t            socket;
 	cherokee_source_t           *src_ref;
-	time_t                       spawned;
 	off_t                        post_len;
 } cherokee_handler_scgi_t;
 
