@@ -21,7 +21,7 @@ class ModuleCustomError (ModuleHandler):
 
     def _op_render (self):
         table = TableProps()
-        self.AddPropOptions_Reload (table, _("HTTP Error"), "%s!error" % (self._prefix), ERROR_CODES, _(NOTE_ERRORS))
+        self.AddPropOptions_Reload_Plain (table, _("HTTP Error"), "%s!error" % (self._prefix), ERROR_CODES, _(NOTE_ERRORS))
         return str(table)
 
     def _op_apply_changes (self, uri, post):

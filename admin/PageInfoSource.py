@@ -179,9 +179,9 @@ class PageInfoSource (PageMenu, FormHelper):
         
         # Properties
         table = TableProps()
-        self.AddPropOptions_Reload (table, _('Type'),'source!%s!type'%(s), SOURCE_TYPES, _(NOTE_TYPE))
-        self.AddPropEntry   (table, _('Nick'),       'source!%s!nick'%(s), _(NOTE_NICK), req=True)
-        self.AddPropEntry   (table, _('Connection'), 'source!%s!host'%(s), _(NOTE_HOST), req=True)
+        self.AddPropOptions_Reload_Plain (table, _('Type'),'source!%s!type'%(s), SOURCE_TYPES, _(NOTE_TYPE))
+        self.AddPropEntry (table, _('Nick'),       'source!%s!nick'%(s), _(NOTE_NICK), req=True)
+        self.AddPropEntry (table, _('Connection'), 'source!%s!host'%(s), _(NOTE_HOST), req=True)
         if type == 'interpreter':
             self.AddPropEntry (table, _('Interpreter'),        'source!%s!interpreter'%(s),  _(NOTE_INTERPRETER), req=True)
             self.AddPropEntry (table, _('Spawning timeout'),   'source!%s!timeout'%(s), _(NOTE_TIMEOUT))
@@ -207,9 +207,9 @@ class PageInfoSource (PageMenu, FormHelper):
         type = self._cfg.get_val('tmp!new_source_type')
 
         table = TableProps()
-        self.AddPropOptions_Reload (table, _('Type'),       'tmp!new_source_type', SOURCE_TYPES, _(NOTE_TYPE))
-        self.AddPropEntry          (table, _('Nick'),       'tmp!new_source_nick', _(NOTE_NICK), req=True)
-        self.AddPropEntry          (table, _('Connection'), 'tmp!new_source_host', _(NOTE_HOST), req=True)
+        self.AddPropOptions_Reload_Plain (table, _('Type'),       'tmp!new_source_type', SOURCE_TYPES, _(NOTE_TYPE))
+        self.AddPropEntry (table, _('Nick'),       'tmp!new_source_nick', _(NOTE_NICK), req=True)
+        self.AddPropEntry (table, _('Connection'), 'tmp!new_source_host', _(NOTE_HOST), req=True)
         if type == 'interpreter' or not type:
             self.AddPropEntry (table, _('Interpreter'),      'tmp!new_source_interpreter', _(NOTE_INTERPRETER), req=True)
             self.AddPropEntry (table, _('Spawning timeout'), 'tmp!new_source_timeout', _(NOTE_TIMEOUT))

@@ -46,8 +46,8 @@ class ModuleProxy (ModuleHandler):
         # Balancers
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddPropOptions_Reload (table, _("Balancer"), prefix,
-                                        modules_available(BALANCERS), _(NOTE_BALANCER))
+        e = self.AddPropOptions_Reload_Module (table, _("Balancer"), prefix,
+                                               modules_available(BALANCERS), _(NOTE_BALANCER))
 
         txt += '<h2>%s</h2>' % (_('Back-end Servers'))
         txt += self.Indent(str(table) + e)

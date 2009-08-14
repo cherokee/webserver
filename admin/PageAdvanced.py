@@ -87,7 +87,7 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddPropCheck (table, _('Keep Alive'),         'server!keepalive',        True, _(NOTE_KEEPALIVE))
         self.AddPropEntry (table, _('Max keepalive reqs'), 'server!keepalive_max_requests', _(NOTE_KEEPALIVE_RS))
         self.AddPropCheck (table, _('Chunked Encoding'),   'server!chunked_encoding', True, _(NOTE_CHUNKED))
-        self.AddPropOptions_Reload (table, _('Polling Method'), 'server!poll_method',  polling_methods, _(NOTE_POLLING))
+        self.AddPropOptions_Reload_Plain (table, _('Polling Method'), 'server!poll_method',  polling_methods, _(NOTE_POLLING))
         self.AddPropEntry (table, _('Sendfile min size'),  'server!sendfile_min', _(NOTE_SENDFILE_MIN))
         self.AddPropEntry (table, _('Sendfile max size'),  'server!sendfile_max', _(NOTE_SENDFILE_MAX))
         return self.Indent(table)
@@ -95,7 +95,7 @@ class PageAdvanced (PageMenu, FormHelper):
     def _render_resources (self):
         table = TableProps()
         self.AddPropEntry (table, _('Thread Number'),          'server!thread_number',        _(NOTE_THREAD_NUM))
-        self.AddPropOptions_Reload (table, _('Thread Policy'), 'server!thread_policy', THREAD_POLICY, _(NOTE_THREAD))
+        self.AddPropOptions_Reload_Plain (table, _('Thread Policy'), 'server!thread_policy', THREAD_POLICY, _(NOTE_THREAD))
         self.AddPropEntry (table, _('File descriptors'),       'server!fdlimit',              _(NOTE_FD_NUM))
         self.AddPropEntry (table, _('Listening queue length'), 'server!listen_queue',         _(NOTE_LISTEN_Q))
         self.AddPropEntry (table, _('Reuse connections'),      'server!max_connection_reuse', _(NOTE_REUSE_CONNS))

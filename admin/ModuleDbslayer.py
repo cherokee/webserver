@@ -40,7 +40,7 @@ class ModuleDbslayer (ModuleHandler):
 
         txt += '<h2>%s</h2>' % (_('Serialization'))
         table = TableProps()
-        self.AddPropOptions_Reload (table, _("Language"), "%s!lang" % (self._prefix), LANG_OPTIONS, _(NOTE_LANG))
+        self.AddPropOptions_Reload_Plain (table, _("Language"), "%s!lang" % (self._prefix), LANG_OPTIONS, _(NOTE_LANG))
         self.AddPropEntry   (table, _("DB User"),      "%s!user" % (self._prefix),     _(NOTE_USER))
         self.AddPropEntry   (table, _("DB Password"),  "%s!password" % (self._prefix), _(NOTE_PASSWORD))
         self.AddPropEntry   (table, _("Data Base"),    "%s!db" % (self._prefix),       _(NOTE_DB))
@@ -49,8 +49,8 @@ class ModuleDbslayer (ModuleHandler):
         txt += '<h2>%s</h2>' % (_('Data base balancing'))
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
-        e = self.AddPropOptions_Reload (table, _("Balancer"), prefix, 
-                                        modules_available(BALANCERS), _(NOTE_BALANCER))
+        e = self.AddPropOptions_Reload_Plain (table, _("Balancer"), prefix, 
+                                              modules_available(BALANCERS), _(NOTE_BALANCER))
         txt += self.Indent(str(table) + e)
         return txt
 

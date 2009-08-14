@@ -67,7 +67,7 @@ class Wizard_Rules_HotLinking (WizardPage):
 
         txt += '<h2>Behaviour</h2>'
         table = TableProps()
-        self.AddPropOptions_Reload (table, _('Reply type'), 'tmp!wizard_hotlink!type', TYPES, NOTE_TYPE)
+        self.AddPropOptions_Reload_Plain (table, _('Reply type'), 'tmp!wizard_hotlink!type', TYPES, NOTE_TYPE)
 
         tipe = self._cfg.get_val ('tmp!wizard_hotlink!type')
         if tipe == 'redir':

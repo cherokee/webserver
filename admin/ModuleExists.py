@@ -39,7 +39,7 @@ class ModuleExists (Module, FormHelper):
         specific_file = not int(self._cfg.get_val('%s!match_any'%(self._prefix), '0'))
 
         table = TableProps()
-        self.AddPropOptions_Reload (table, _("Match type"), '%s!match_any'%(self._prefix), OPTIONS, "")
+        self.AddPropOptions_Reload_Plain (table, _("Match type"), '%s!match_any'%(self._prefix), OPTIONS, "")
         if specific_file:
             self.AddPropEntry (table, _('Files'), '%s!value'%(self._prefix), _(NOTE_EXISTS))
 

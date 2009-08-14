@@ -31,8 +31,8 @@ class ModuleFcgi (ModuleCgiBase):
         table = TableProps()
         prefix = "%s!balancer" % (self._prefix)
         assert (self.submit_url)
-        e = self.AddPropOptions_Reload (table, _("Balancer"), prefix,
-                                        modules_available(BALANCERS), _(NOTE_BALANCER))
+        e = self.AddPropOptions_Reload_Module (table, _("Balancer"), prefix,
+                                               modules_available(BALANCERS), _(NOTE_BALANCER))
         txt += self.Indent (str(table) + e)
         return txt
 

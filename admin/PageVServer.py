@@ -306,10 +306,10 @@ class PageVServer (PageMenu, FormHelper):
 
         txt = '<h2>%s</h2>' % (_('Error Handling hook'))
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, _('Error Handler'),
-                                        '%s!error_handler' % (pre), 
-                                        modules_available(ERROR_HANDLERS), 
-                                        NOTE_ERROR_HANDLER)
+        e = self.AddPropOptions_Reload_Module (table, _('Error Handler'),
+                                               '%s!error_handler' % (pre), 
+                                               modules_available(ERROR_HANDLERS), 
+                                               NOTE_ERROR_HANDLER)
         txt += self.Indent(table) + e
         return txt
 
@@ -317,8 +317,8 @@ class PageVServer (PageMenu, FormHelper):
         # Render
         txt = "<h2>%s</h2>" % (_('Add new rule'))
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, _("Rule Type"), prefix, 
-                                        modules_available(RULES), "")
+        e = self.AddPropOptions_Reload_Module (table, _("Rule Type"), prefix, 
+                                               modules_available(RULES), "")
         txt += self.Indent (str(table) + e)
         return txt
 
@@ -520,8 +520,8 @@ class PageVServer (PageMenu, FormHelper):
 
         txt += '<h2>%s</h2>' % (_('Advanced Virtual Hosting'))
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, _('Method'), '%s!evhost'%(pre),
-                                        modules_available(EVHOSTS), _(NOTE_EVHOST))
+        e = self.AddPropOptions_Reload_Module (table, _('Method'), '%s!evhost'%(pre),
+                                               modules_available(EVHOSTS), _(NOTE_EVHOST))
         txt += self.Indent(table) + e
 
         return txt
@@ -668,10 +668,10 @@ class PageVServer (PageMenu, FormHelper):
             return txt
 
         table = TableProps()
-        e = self.AddPropOptions_Reload (table, _('Matching method'),
-                                        '%s!match' % (pre), 
-                                        modules_available(VRULES), 
-                                        _(NOTE_MATCHING_METHOD))
+        e = self.AddPropOptions_Reload_Module (table, _('Matching method'),
+                                               '%s!match' % (pre), 
+                                               modules_available(VRULES), 
+                                               _(NOTE_MATCHING_METHOD))
         txt += self.Indent(table) + e
         return txt
 

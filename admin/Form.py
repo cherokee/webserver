@@ -234,7 +234,16 @@ class FormHelper (WebComponent):
 
         return self.AddPropOptions (table, title, cfg_key, options, comment, *args, **kwargs)
 
-    def AddPropOptions_Reload (self, table, title, cfg_key, options, comment, **kwargs):
+    def AddPropOptions_Reload_Plain (self, table, title, cfg_key, options, comment, **kwargs):
+        assert (self.submit_url)
+
+        # The Table entry itself
+        js = "options_changed('/ajax/update', this);"
+        kwargs['onChange'] = js
+        kwargs['noautosubmit'] = True
+        self.AddPropOptions (table, title, cfg_key, options, comment, **kwargs)
+
+    def AddPropOptions_Reload_Module (self, table, title, cfg_key, options, comment, **kwargs):
         assert (self.submit_url)
 
         # The Table entry itself
@@ -248,7 +257,7 @@ class FormHelper (WebComponent):
             name = options[0][0]
 
         # Render active option
-        if name and module_exists(name):
+        if name:
             # Inherit the errors, if any
             kwargs['errors'] = self.errors
             props_widget = module_obj_factory (name, self._cfg, cfg_key,

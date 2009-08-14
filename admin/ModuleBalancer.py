@@ -79,8 +79,8 @@ class ModuleBalancerGeneric (Module, FormHelper):
                 options.append((s,nick))
 
             table = TableProps()
-            self.AddPropOptions_Reload (table, _("Application Server"),
-                                        "tmp!new_balancer_node", options, "")
+            self.AddPropOptions_Reload_Plain (table, _("Application Server"),
+                                              "tmp!new_balancer_node", options, "")
             txt += str(table)
 
         return txt
