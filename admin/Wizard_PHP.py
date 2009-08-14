@@ -12,8 +12,10 @@ DEFAULT_PATHS = ['/usr/bin',
                  '/opt/local/bin',
                  '/usr/pkg/libexec/cgi-bin']
 
+# IANA: TCP ports 47809-47999 are unassigned
+
 class Wizard_Rules_PHP (Wizard):
-    UNIX_SOCK     = "/tmp/cherokee-php.socket"
+    TCP_PORT      = 47990
     ICON          = "php.jpg"
     DESC          = "Configures PHP in the current Virtual Server. It will add a new .php extension is not present."
     
@@ -62,8 +64,8 @@ class Wizard_Rules_PHP (Wizard):
             _, self.source = cfg_source_get_next (self._cfg)
             self._cfg['%s!nick' % (self.source)]        = 'PHP Interpreter'
             self._cfg['%s!type' % (self.source)]        = 'interpreter'
-            self._cfg['%s!interpreter' % (self.source)] = '%s -b %s' % (php_path, self.UNIX_SOCK)
-            self._cfg['%s!host' % (self.source)]        = self.UNIX_SOCK
+            self._cfg['%s!interpreter' % (self.source)] = '%s -b localhost:%d' % (php_path, self.TCP_PORT)
+            self._cfg['%s!host' % (self.source)]        = 'localhost:%d' % (self.TCP_PORT)
 
             self._cfg['%s!env!PHP_FCGI_MAX_REQUESTS' % (self.source)] = "5000"
             self._cfg['%s!env!PHP_FCGI_CHILDREN' % (self.source)]     = "5"
