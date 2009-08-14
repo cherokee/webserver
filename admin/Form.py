@@ -248,7 +248,7 @@ class FormHelper (WebComponent):
             name = options[0][0]
 
         # Render active option
-        if name:
+        if name and module_exists(name):
             # Inherit the errors, if any
             kwargs['errors'] = self.errors
             props_widget = module_obj_factory (name, self._cfg, cfg_key,

@@ -1,4 +1,4 @@
-import imp, sys
+import os, imp, sys
 from CherokeeManagement import cherokee_has_plugin
 
 class Module:
@@ -7,6 +7,9 @@ class Module:
         self._cfg       = cfg
         self._prefix    = prefix
         self.submit_url = submit_url
+
+def module_exists (name):
+    return os.path.exists ("Module%s.py"%(name))
 
 def module_obj_factory_detailed (mod_type, name, cfg, prefix, submit_url, **kwargs):
     # Assemble module name
