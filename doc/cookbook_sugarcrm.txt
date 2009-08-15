@@ -46,13 +46,13 @@ We will have to create several rules in our virtual server to cover
 the whole list of banned files. This list is loosely based on the one
 provided by `.htaccess`.
 
-`~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~
-Type     , Regular Expression             , Substitution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Internal , ^/(.\*\.log.*|not_imported_.*txt) , /log_file_restricted.html
-External , emailmandelivery.php            , /index.php
-External , ^/.\*/.*\.php                   , /index.php
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|======================================================================
+|Type     |Regular Expression                |Substitution
+|Internal |^/(.\*\.log.*|not_imported_.*txt) |/log_file_restricted.html
+|External |emailmandelivery.php              |/index.php
+|External |^/.\*/.*\.php                     |/index.php
+|======================================================================
 
 These need to be created as `Regular Expression` type rules matching
 the expressions of the list. The rules must be managed by the

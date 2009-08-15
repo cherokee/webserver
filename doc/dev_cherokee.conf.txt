@@ -53,62 +53,58 @@ The server configuration keys define some of the server-wide
 properties, such as the user under which the server ought to run if it
 is run as root or whether to use keep-alive connections.
 
-[grid="rows"]
-```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**,                          **Type**, **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-server!bind!#!port,               Number         , Listen to a TCP port. '#' is a secuential \
-                                                   number since many ports can be listened at once.
-server!bind!#!tls,                Bool           , on|off: whether the listened port '#' is for HTTPS.
-server!max_fds,                   Number         , Max open file descriptors
-server!listen_queue,              Number         , Length of the listen queue
-server!thread_number,             Number         , Number of threads
-server!sendfile_min,              Number         , Minimum file size of using sendfile
-server!sendfile_max,              Number         , Maximum file size of using sendfile
-server!max_connection_reuse,      Number         , How many connections to reuse
-server!ipv6,                      Bool           , Whether to use IPv6
-server!timeout,                   Number         , Connections timeout
-server!log_flush_lapse,           Number         , Time between log flushes
-server!nonces_cleanup_lapse,      Number         , Time between Nonces clean ups
-server!keepalive,                 Bool           , Allow keepalive connections
-server!keepalive_max_requests,    Number         , How many keepalive reqs per connection
-server!unix_socket,               Path           , Listen to a Unix socket
-server!panic_action,              Path           , Path to cherokee-panic
-server!chroot,                    Bool           , Whether to use chroot
-server!pid_file,                  Path           , PID file
-server!listen,                    IP             , Listen NIC
-server!poll_method,               String         , Which poll method it should use
-server!server_tokens,             String         , "Server identification: minor, minimal, os, full"
-server!thread_policy,             String         , "Thread policy: fifo, rr, other"
-server!user,                      String/Number  , Change effective user
-server!group,                     String/Number  , Change effective group
-server!module_dir,                Path           , Path to the plug-in directory
-server!module_deps,               Path           , Path to the plug-in inter-dependencies files
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|====================================================================
+|**Key**                       |**Type** |**Description**
+|server!bind!#!port            |Number   |Listen to a TCP port. '#' is a secuential number since many ports can be listened at once.
+|server!bind!#!tls             |Bool    |on\|off: whether the listened port '#' is for HTTPS.
+|server!max_fds                |Number   |Max open file descriptors
+|server!listen_queue           |Number   |Length of the listen queue
+|server!thread_number          |Number   |Number of threads
+|server!sendfile_min           |Number   |Minimum file size of using sendfile
+|server!sendfile_max           |Number   |Maximum file size of using sendfile
+|server!max_connection_reuse   |Number   |How many connections to reuse
+|server!ipv6                   |Bool     |Whether to use IPv6
+|server!timeout                |Number   |Connections timeout
+|server!log_flush_lapse        |Number   |Time between log flushes
+|server!nonces_cleanup_lapse   |Number   |Time between Nonces clean ups
+|server!keepalive              |Bool     |Allow keepalive connections
+|server!keepalive_max_requests |Number   |How many keepalive reqs per connection
+|server!unix_socket            |Path     |Listen to a Unix socket
+|server!panic_action           |Path     |Path to cherokee-panic
+|server!chroot                 |Bool     |Whether to use chroot
+|server!pid_file               |Path     |PID file
+|server!listen                 |IP       |Listen NIC
+|server!poll_method            |String   |Which poll method it should use
+|server!server_tokens          |String   |"Server identification: minor, minimal, os, full"
+|server!thread_policy          |String   |"Thread policy: fifo, rr, other"
+|server!user                   |String/Number |Change effective user
+|server!group                  |String/Number |Change effective group
+|server!module_dir             |Path     |Path to the plug-in directory
+|server!module_deps            |Path     |Path to the plug-in inter-dependencies files
+|====================================================================
 
 ``server!server_tokens`` parameters
 
-[grid="rows"]
-`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Value                     , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Product                   , Cherokee
-Minor                     , Cherokee/0.99
-Minimal                   , Cherokee/0.99.3
-OS                        , Cherokee/0.99.3 (UNIX)
-Full                      , Cherokee/0.99.3 b2955 (UNIX)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,80%",options="header"]
+|=====================================
+|Value   |Description
+|Product |Cherokee
+|Minor   |Cherokee/0.99
+|Minimal |Cherokee/0.99.3
+|OS      |Cherokee/0.99.3 (UNIX)
+|Full    |Cherokee/0.99.3 b2955 (UNIX)
+|=====================================
 
 ``server!thread_policy`` parameters
 
-[grid="rows"]
-`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Value                     , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-fifo                      , First in first out
-rr                        , Round Robin
-other                     , By default in Linux
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,80%",options="header"]
+|=====================================
+|Value   |Description
+|fifo    |First in first out
+|rr      |Round Robin
+|other   |By default in Linux
+|=====================================
 
 
 [[virtual_server]]
@@ -132,20 +128,19 @@ repeated priorities, since the behavior in these cases in undefined.
 
 
 
-[grid="rows"]
-`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**                           , **Type**, **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-vserver!1!nick = default          , String  , The name of the Virtual Server
-vserver!1!document_root           , Path    , Document Root path
-vserver!1!user_dir                , String  , Users' web directory (for ~ requests)
-vserver!1!domain! ``id``          , String  , "Domain name, admits wildcards"
-vserver!1!error_handler           , String  , Defines the error handler module
-vserver!1!directory_index         , List    , String list: Directory indexes
-vserver!1!ssl_certificate_file    , Path    , TLS/SSL certificate file
-vserver!1!ssl_certificate_key_file, Path    , TLS/SSL certificate key file
-vserver!1!ssl_ca_list_file        , Path    , TLS/SSL CA list file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="40%,10%,50%",options="header"]
+|===================================================================
+|**Key**                            |**Type** |**Description**
+|vserver!1!nick = default           |String   |The name of the Virtual Server
+|vserver!1!document_root            |Path     |Document Root path
+|vserver!1!user_dir                 |String   |Users' web directory (for ~ requests)
+|vserver!1!domain! ``id``           |String   |"Domain name, admits wildcards"
+|vserver!1!error_handler            |String   |Defines the error handler module
+|vserver!1!directory_index          |List     |String list: Directory indexes
+|vserver!1!ssl_certificate_file     |Path     |TLS/SSL certificate file
+|vserver!1!ssl_certificate_key_file |Path     |TLS/SSL certificate key file
+|vserver!1!ssl_ca_list_file         |Path     |TLS/SSL CA list file
+|===================================================================
 
 Besides these configuration keys there are a few other more complex
 that needs further explanation:
@@ -236,13 +231,12 @@ Eg: Default rule for the 'default' virtual server:
 The ``!encoder`` configuration entry allows to configure encoding
 plug-ins. Each entry applies to a specific rule.
 
-[grid="rows"]
-`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameter                 , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-deflate                   , deflate encoder. 0|1 to define disabled|enabled.
-gzip                      , gzip encoder. 0|1 to define disabled|enabled.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,80%",options="header"]
+|=============================================================
+|Parameter |Description
+|deflate   |deflate encoder. 0\|1 to define disabled\|enabled.
+|gzip      |zip encoder. 0\|1 to define disabled\|enabled.
+|=============================================================
 
 Example::
 +
@@ -256,17 +250,16 @@ Example::
 The following parameters are concatenated with any of the previous
 kinds of entry:
 
-[grid="rows"]
-`~~~~~~~~~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**                                 , **Type**, **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-priority                                , Number  , Priority in the rules list
-directory_root                          , Path    , Special Directory Root for the request
-allow_from                              , List    , List of IP/Domain allowed to access the resource
-handler                                 , String  , Handler (module) that handles the request
-auth                                    , String  , Validator (module) that protects the resource
-only_secure                             , Bool    , Allow only secure (https) connections
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,10%,70%",options="header"]
+|===================================================================
+|**Key**        |**Type** |**Description**
+|priority       |Number   |Priority in the rules list
+|directory_root |Path     |Special Directory Root for the request
+|allow_from     |List     |List of IP/Domain allowed to access the resource
+|handler        |String   |Handler (module) that handles the request
+|auth           |String   |Validator (module) that protects the resource
+|only_secure    |Bool     |Allow only secure (https) connections
+|===================================================================
 
 The ``auth`` entry deserves a little more attention,
 actually. Accepted validarot modules are `htdigest, htpasswd, ldap,
@@ -274,64 +267,58 @@ mysql, pam, plain`. It restricts the access to some of the objects
 accessed by the web server based on a number of properties that are
 defined at its child properties:
 
-[grid="rows"]
-`~~~~~~~~~~~~`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**                                 , **Type**, **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-auth!methods                            , List    , Allowed methods (basic & digest)
-auth!realm                              , String  , Realm of the resource
-auth!users                              , List    , List of allowed users
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="10%,10%,80%",options="header"]
+|============================================================
+|**Key**          |**Type** |**Description**
+|auth!methods     |List     |Allowed methods (basic & digest)
+|auth!realm       |String   |Realm of the resource
+|auth!users       |List     |List of allowed users
+|============================================================
 
 Some validators have extra configuration keys.
 
 .htdigest, htpasswd, plain
-[grid="rows"]
-`~~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**           , **Type**, **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-auth!passwdfile   , String  , Full path to the passwords' file. htdigest|htpasswd|plain
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,10%,70%",options="header"]
+|====================================================================
+|**Key**         |**Type** |**Description**
+|auth!passwdfile |String   |Full path to the passwords' file. htdigest\|htpasswd\|plain
+|====================================================================
 
 .mysql
-[grid="rows"]
-`~~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**           , **Type**, **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-auth!host           , String, MySQL host.
-auth!database       , String, Database name.
-auth!user           , String, Database user.
-auth!passwd         , String, Database password.
-auth!port           , Number, Port number of the service.
-auth!query          , String, SQL query to match users/passwords. \
-                              Replace your username for '${user}'.
-auth!use_md5_passwd , Bool  , Encrypt the passwords with MD5.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,10%,70%",options="header"]
+|====================================================================
+|**Key**       |**Type** |**Description**
+|auth!host     |String   |MySQL host.
+|auth!database |String   |Database name.
+|auth!user     |String   |Database user.
+|auth!passwd   |String   |Database password.
+|auth!port     |Number   |Port number of the service.
+|auth!query    |String   |SQL query to match users/passwords. Replace your username for '${user}'.
+|auth!use_md5_passwd |Bool |Encrypt the passwords with MD5.
+|===================================================================
 
 .ldap
-[grid="rows"]
-`~~~~~~~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**      , **Type**, **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-auth!server  , String  , IP or hostname of the LDAP server.
-auth!port    , Number  , Port number of the service.
-auth!base_dn , String  , Base distinguished name.
-auth!bind_dn , String  , User
-auth!bind_pw , String  , Password
-auth!filter  , String  , LDAP search filter.
-auth!tls     , Bool    , Indicates TLS based integrity
-auth!ca_file , String  , Cert file. Must be provided if TLS is enabled.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,10%,70%",options="header"]
+|====================================================================
+|**Key**      |**Type** |**Description**
+|auth!server  |String   |IP or hostname of the LDAP server.
+|auth!port    |Number   |Port number of the service.
+|auth!base_dn |String   |Base distinguished name.
+|auth!bind_dn |String   |User
+|auth!bind_pw |String   |Password
+|auth!filter  |String   |LDAP search filter.
+|auth!tls     |Bool     |Indicates TLS based integrity
+|auth!ca_file |String   |Cert file. Must be provided if TLS is enabled.
+|====================================================================
 
 .authlist
-[grid="rows"]
-`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**             , **Type** , **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-auth                , String   , name of the validator module: authlist
-auth!list!#!password, String   , Password for entry number #
-auth!list!#!user,     String   , User for entry number #
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,10%,70%",options="header"]
+|====================================================================
+|**Key**              |**Type** |**Description**
+|auth                 |String   |name of the validator module: authlist
+|auth!list!#!password |String   |Password for entry number #
+|auth!list!#!user     |String   |User for entry number #
+|====================================================================
 
 [[examples]]
 Here are a few examples about how this notation works:
@@ -435,28 +422,26 @@ Logs
 The log files are defined as properties inside the Virtual Server
 hierarchy under a ``logger`` entry with the following properties:
 
-[grid="rows"]
-```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**                                 , **Type**, **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-logger                                  , String  , Output format (validator name)
-logger!access                           , Node    , Defines the access log file
-logger!error                            , Node    , Defines the error log file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,10%,70%",options="header"]
+|========================================================
+|**Key**        |**Type** |**Description**
+|logger         |String   |Output format (validator name)
+|logger!access  |Node     |Defines the access log file
+|logger!error   |Node     |Defines the error log file
+|========================================================
 
 and then, both access and error accept a number of parameters
 depending on its property ``type`` which specifies where the logging
 information will be written. It can be either:
 
-[grid="rows"]
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Logger writer Type**                  , **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-file                                    , Write a file
- syslog                                  , Use the system logging mechanism
-stderr                                  , Use the standard output
-exec                                    , Execute a program with each line
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|========================================================
+|**Logger writer Type** |**Description**
+|file                   |Write a file
+|syslog                 |Use the system logging mechanism
+|stderr                 |Use the standard output
+|exec                   |Execute a program with each line
+|========================================================
 
 If either ``file`` or ``exec`` is used, there is an additional
 parameter that has to be set. In the case of file, a sub-property
@@ -482,17 +467,16 @@ Information sources
 
 They follow the format: ``source ! {source number} ! {key}``
 
-[grid="rows"]
-```~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Key**         , **Type**, **Description**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-nick            , String  , Alias to identify the source
-env             , String  , Variable to be set in the environment
-host            , String  , host:port or path to unix socket
-interpreter     , String  , command to launch the service if any
-type            , Type    , `host` | `interpreter`
-timeout         , Number  , spawning timeout specified in seconds
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,20%,60%",options="header"]
+|===========================================================
+|**Key**      |**Type** |**Description**
+|nick         |String   |Alias to identify the source
+|env          |String   |Variable to be set in the environment
+|host         |String   |host:port or path to unix socket
+|interpreter  |String   |command to launch the service if any
+|type         |Type     |`host` \| `interpreter`
+|timeout      |Number   |spawning timeout specified in seconds
+|=============================================================
 
 Examples:
 

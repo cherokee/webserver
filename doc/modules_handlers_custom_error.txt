@@ -11,31 +11,29 @@ passwords.
 [[parameters]]
 Parameters
 ~~~~~~~~~~
-[grid="rows"]
-`~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters  , Type    , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-`error`     , number  , HTTP error code return.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|============================================
+|Parameters |Type    |Description
+|`error`    |number  |HTTP error code return.
+|============================================
 
 image::media/images/admin_handler_custom_error.png[Handler Custom Error]
 
 .Available errors in `cherokee-admin`
-[grid="rows"]
-`~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Code , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-400  , Bad Request
-403  , Forbidden
-404  , Not Found
-405  , Method Not Allowed
-413  , Request Entity too large
-414  , Request-URI too long
-416  , Requested range not satisfiable
-500  , Internal Server Error
-501  , Not Implemented
-502  , Bad gateway
-503  , Service Unavailable
-504  , Gatewat Timeout
-505  , HTTP Version Not Supported
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="10%,90%",options="header"]
+|=====================================
+|Code |Description
+|400  |Bad Request
+|403  |Forbidden
+|404  |Not Found
+|405  |Method Not Allowed
+|413  |Request Entity too large
+|414  |Request-URI too long
+|416  |Requested range not satisfiable
+|500  |Internal Server Error
+|501  |Not Implemented
+|502  |Bad gateway
+|503  |Service Unavailable
+|504  |Gatewat Timeout
+|505  |HTTP Version Not Supported
+|=====================================

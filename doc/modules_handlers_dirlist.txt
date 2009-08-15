@@ -11,34 +11,37 @@ Send] for the opposite behaviour.
 [[listing]]
 Parameters: Listing
 ~~~~~~~~~~~~~~~~~~~
-[grid="rows"]
-`~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters       , Type    , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-``size``         , boolean , Optional. Display the size of files in the      \
-                             listings. Default: ``Enabled``.
-``date``         , boolean , Optional. Display the last modification date of \
-                             the files and directories in the listings.      \
-                             Default: ``Enabled``.
-``user``         , boolean , Optional. Display the owner of the files and directories \
-                             in the listings. Default: ``Disabled``.
-``group``        , boolean , Optional. Display the group ownership of the files and  \
-                             directories in the listings. Default ``Disabled``.
-``symlinks``     , boolean , Optional. Display symbolic links. Default ``Enabled``.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,20%,60%",options="header"]
+|====================================================================
+|Parameters |Type    |Description
+|`size`     |boolean |Optional. Display the size of files in the
+                      listings. Default: `Enabled`.
+|`date`     |boolean |Optional. Display the last modification date of                       the files and directories in the listings.
+                      Default: `Enabled`.
+|`user`     |boolean |Optional. Display the owner of the files and
+                      directories in the listings.
+                      Default: `Disabled`.
+|`group`    |boolean |Optional. Display the group ownership of the
+                      files and directories in the listings.
+                      Default `Disabled`.
+|`symlinks` |boolean |Optional. Display symbolic links.
+                      Default `Enabled`.
+|====================================================================
 
 [[theming]]
 Parameters: Theming
 ~~~~~~~~~~~~~~~~~~~
-[grid="rows"]
-`~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters       , Type    , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-``theme``        , string  , Optional. The theme to use when displaying the  \
-                             directory listings. Default: ``default``.
-``icon_dir``     , string  , Optional: Alternative path to a new icon set.
-``notice_files`` , string  , Optional: List of notice files to be inserted.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,20%,60%",options="header"]
+|====================================================================
+|Parameters     |Type    |Description
+|`theme`        |string  |Optional. The theme to use when displaying
+                          the directory listings.
+                          Default: `default`.
+|`icon_dir`     |string  |Optional: Alternative path to a new icon 
+                          set.
+|`notice_files` |string  |Optional: List of notice files to be
+                          inserted.
+|====================================================================
 
 It is possible to change the default theme used when displaying the directory
 listings.

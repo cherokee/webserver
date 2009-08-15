@@ -35,18 +35,17 @@ source]: the MySQL server being bridged.
 
 [[parameters]]
 Parameters
-^^^^^^^^^^
+~~~~~~~~~~
 
-[grid="rows"]
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameter                 , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-__user__                  , The MySQL user to authenticate as.
-__password__              , The MySQL user password to use.
-__db__                    , Optional. A MySQL database name.
-__lang__                  , Language from which the information will \
-                            be consumed: json | python | ruby | php
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|========================================================
+|Parameter    |Description
+|__user__     |The MySQL user to authenticate as.
+|__password__ |The MySQL user password to use.
+|__db__       |Optional. A MySQL database name.
+|__lang__     |Language from which the information will  
+               be consumed: json \| python \| ruby \| php
+|========================================================
 
 Note that for this module to be correctly compiled, the MySQL database
 development files are required.

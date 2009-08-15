@@ -38,12 +38,11 @@ will have to create a rule for that (`Virtual Servers` -> `default` ->
 `Behavior` -> `Add new rule`). We will use a directory-type
 rule.
 
-[grid="all"]
-``~
-Rule Type, Web Directory
-~~~~~~~~~~~~~~~~~~~~~~~~
-Directory, /admin
-~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|=======================
+|Rule Type |Web Directory
+|Directory |/admin
+|=======================
 
 .Handler
 image::media/images/cookbook_managing_logs_handler.png[Handler]

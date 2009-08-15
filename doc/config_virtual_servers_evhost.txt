@@ -14,13 +14,12 @@ image::media/images/admin_vserver_evhost.png[Advanced Virtual Hosting]
 The following replacement variables are supported. Let's suppose a
 request to the `alo.users.example.com` domain for the examples:
 
-[grid="rows"]
-`~~~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Variable                  , Example                    , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-`$\{domain\}`             , alo.users.example.com      , Full domain name
-`$\{tld\}`                , com                        , Top Level Domain
-`$\{domain_no_tld\}`      , alo.users.example          , Domain without the TLD
-`$\{subdomain1\}`         , users                      , First sub-domain
-`$\{subdomain2\}`         , alo                        , Second sub-domain
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|===================================================================
+|Variable           |Example               |Description
+|`${domain}`        |alo.users.example.com |Full domain name
+|`${tld}`           |com                   |Top Level Domain
+|`${domain_no_tld}` |alo.users.example     |Domain without the TLD
+|`${subdomain1}`    |users                 |First sub-domain
+|`${subdomain2}`    |alo                   |Second sub-domain
+|===================================================================

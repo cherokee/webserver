@@ -14,14 +14,14 @@ link:modules_handlers_file.html[File Sending] handler.
 [[parameters]]
 Parameters
 ~~~~~~~~~~
-[grid="rows"]
-`~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters      , Type    , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-`allow_pathinfo`, boolean , Makes the handler to stop parsing the \
+[cols="20%,10%,70%",options="header"]
+|==================================================================
+|Parameters       |Type    |Description
+|`allow_pathinfo` |boolean |Makes the handler to stop parsing the
                             pathinfo string. Default: `Disabled`.
-`allow_dirlist` , boolean , Enables showing the contents of a directory.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|`allow_dirlist`  |boolean |Enables showing the contents of a 
+                            directory.
+|==================================================================
 
 Besides, it inherits all the parameters from the
 link:modules_handlers_file.html[file/Static Content] and

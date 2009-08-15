@@ -36,16 +36,15 @@ Server Tokens
 This specifies the string that Cherokee should use to identify
 itself.
 
-[grid="rows"]
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters               , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Product                  , Cherokee
-Minor                    , Cherokee/0.98
-Minimal                  , Cherokee/0.98.3
-OS                       , Cherokee/0.98.3 (UNIX)
-Full                     , Cherokee/0.98.3 b2955 (UNIX)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|=======================================================
+|Parameters |Description
+|Product    |Cherokee
+|Minor      |Cherokee/0.98
+|Minimal    |Cherokee/0.98.3
+|OS         |Cherokee/0.98.3 (UNIX)
+|Full       |Cherokee/0.98.3 b2955 (UNIX)
+|=======================================================
 
 By default, Cherokee will use *Full*.
 

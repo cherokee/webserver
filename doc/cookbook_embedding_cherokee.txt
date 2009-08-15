@@ -3,7 +3,7 @@
 Cookbook: Cherokee on embedded devices
 --------------------------------------
 
-[elphel]
+[[elphel]]
 Elphel Cameras:
 ~~~~~~~~~~~~~~~
 These are network cameras that can provide high-resolution at high

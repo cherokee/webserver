@@ -93,14 +93,13 @@ You will simply have to add as many sources as desired, for instance
 our example uses the default values to set up ports 8000 through
 8002. These sources will be nicknamed *ror0*, *ror1* and *ror2*.
 
-[grid="rows"]
-`~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Host           , Interpreter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-localhost:8000 , `/home/foo/example/script/process/spawner fcgi`
-localhost:8001 , `/home/foo/example/script/process/spawner fcgi`
-localhost:8002 , `/home/foo/example/script/process/spawner fcgi`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,80%",options="header"]
+|===============================================================
+|Host           |Interpreter
+|localhost:8000 |`/home/foo/example/script/process/spawner fcgi`
+|localhost:8001 |`/home/foo/example/script/process/spawner fcgi`
+|localhost:8002 |`/home/foo/example/script/process/spawner fcgi`
+|===============================================================
 
 If any of those ports was not reachable, the `interpreter` command
 would be launched and the fallen one would be reinstantiated.

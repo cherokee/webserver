@@ -7,25 +7,24 @@ The MySQL validator allows you to authenticate a user against a MySQL database.
 
 [[parameters]]
 .Parameters
-[grid="rows"]
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameter                 , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-__host__                  , Optional. The server that is running the      \
-                            MySQL database server. Default: __localhost__.
-__port__                  , Optional. The port that MySQL is listening on. \
-                            Default: __3306__.
-__unix_socket__           , Optional. A Unix socket.
-__user__                  , The MySQL user to authenticate as.
-__passwd__                , The MySQL user password to use.
-__database__              , Required. The MySQL database to select upon    \
-                            connection.
-__query__                 , Required. The query to execute to authenticate \
-                            the HTTP user.
-__hash__                  , Optional. What the passwords in the database table \
-                            are hashed with. Valid options are __sha1__ \
-                            __md5__ or __none__. Default: __none__.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,80%",options="header"]
+|===================================================================
+|Parameter       |Description
+|__host__        |Optional. The server that is running the MySQL
+                  database server. Default: __localhost__.
+|__port__        |Optional. The port that MySQL is listening on.
+                  Default: __3306__.
+|__unix_socket__ |Optional. A Unix socket.
+|__user__        |The MySQL user to authenticate as.
+|__passwd__      |The MySQL user password to use.
+|__database__    |Required. The MySQL database to select upon 
+                  connection.
+|__query__       |Required. The query to execute to authenticate
+                  the HTTP user.
+|__hash__        |Optional. What the passwords in the database table
+                  are hashed with. Valid options are __sha1__
+                   __md5__ or __none__. Default: __none__.
+|===================================================================
 
 The `query` parameter is given an argument `$\{user}` so you can query
 against it.

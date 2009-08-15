@@ -30,17 +30,19 @@ their bitrate.
 
 Parameters: Listing
 ~~~~~~~~~~~~~~~~~~~
-[grid="rows"]
-`~~~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters         , Type    , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-``Auto Rate``      , boolean , Whether to enable the bitrate based bandwidth limit.
-``Speedup Factor`` , float   , Optional. It is the factor by which the bandwidth \
-                               limit would be multiplied. Default: 0.1.
-``Initial Boost``  , number  , Optional. Seconds of media that should be sent \
-                               before setting the bandwidth limit. This allows the \
-                               client to buffer some media. Default: 5 (seconds).
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,10%,70%",options="header"]
+|====================================================================
+|Parameters       |Type    |Description
+|`Auto Rate`      |boolean |Whether to enable the bitrate based
+                            bandwidth limit.
+|`Speedup Factor` |float   |Optional. It is the factor by which the
+                            bandwidth limit would be multiplied.
+                            Default: 0.1.
+|`Initial Boost`  |number  |Optional. Seconds of media that should be
+                            sent before setting the bandwidth limit.
+                            This allows the client to buffer some
+                            media. Default: 5 (seconds).
+|====================================================================
 
 
 Notes on FLV streaming

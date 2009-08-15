@@ -88,12 +88,12 @@ link:http://localhost:8080/share[http://localhost:8080/share]
 
 .Initial access information
 
-`~~~~~~~`~~~~~~
-Field   , Value
-~~~~~~~~~~~~~~~
-user    , admin
-password, admin
-~~~~~~~~~~~~~~~
+[options="header"]
+|===============
+|Field    |Value
+|user     |admin
+|password |admin
+|===============
 
 .Accessing Alfresco
 image::media/images/cookbook_alfresco_share.png[Share]
@@ -126,11 +126,11 @@ configuration. Alfresco's application server doesn't provide content
 directly in the document root, so we'll have to add the required
 subnode.
 
-`~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~
-Regular Expression, Substitution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                  , /share/$1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|================================
+|Regular Expression |Substitution
+|                   |/share/$1
+|================================
 
 You will need to assign it an information source you define for the
 server running Alfresco. We will assume the IP is `192.168.1.100` in
@@ -140,11 +140,11 @@ your firewalled local network, and your reverse proxy is accessible as
 This information source is to be defined as external sources, like
 the following example:
 
-`~~~~~~~~~~~`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~
-Type        , Nick       , Connection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Remote host , liferay    , 192.168.1.100:8080
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|===========================================
+|Type        |Nick       |Connection
+|Remote host |liferay    |192.168.1.100:8080
+|===========================================
 
 Refer to the link:modules_handlers_proxy.html[HTTP reverse proxy]
 documentation if you need any further help with this.

@@ -9,12 +9,11 @@ less.
 [[parameters]]
 Parameters
 ~~~~~~~~~~
-[grid="rows"]
-`~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters  , Type    , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-``iocache`` , Boolean , Optional. Default: ``Enabled``.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="25%,25%,50%",options="header"]
+|===================================================
+|Parameters  |Type    |Description
+|`iocache`   |Boolean |Optional. Default: `Enabled`.
+|===================================================
 
 By default it will use an internal I/O cache to improve the server
 performance.

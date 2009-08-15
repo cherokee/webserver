@@ -7,12 +7,11 @@ information about the web server. When these rules are matched,
 information regarding Cherokee's status will be displayed. The pages
 will be refreshed every 30 seconds.
 
-[grid="rows"]
-`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters          , Type    , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-type                , String , just_about | normal | connection_details
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,10%,70%",options="header"]
+|==============================================================
+|Parameters |Type   |Description
+|type       |String |just_about \| normal \| connection_details
+|==============================================================
 
 The type parameter specifies influences the verbosity of the output.
 

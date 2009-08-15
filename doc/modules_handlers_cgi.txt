@@ -11,20 +11,23 @@ Parameters
 
 This module accepts three parameters:
 
-[grid="rows"]
-`~~~~~~~~~~~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters            , Type           , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Script Alias          , String  , It defines a kind of execution interpreter. \
-                                  The CGI will be run as a parameter of this \
-                                  script.
-Change to UID         , String  , Executes each CGI under its owner's user ID.
-Error handler         , Boolean , Use CGI output as error message.
-Check file            , Boolean , Check file existence to build PATH_INFO.
-Pass request          , Boolean , Pass request headers.
-Allow X-Sendfile      , Boolean , Use the non-standard X-Sendfile header.
-Pass Request Headers  , Boolean , Forward all the headers to the CGI as HTTP_*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="30%,15%,55%",options="header"]
+|====================================================================
+|Parameters           |Type    |Description
+|Script Alias         |String  |It defines a kind of execution
+                                interpreter. The CGI will be run as a
+                                parameter of this script.
+|Change to UID        |String  |Executes each CGI under its owner's
+                                user ID.
+|Error handler        |Boolean |Use CGI output as error message.
+|Check file           |Boolean |Check file existence to build
+                                PATH_INFO.
+|Pass request         |Boolean |Pass request headers.
+|Allow X-Sendfile     |Boolean |Use the non-standard X-Sendfile
+                                header.
+|Pass Request Headers |Boolean |Forward all the headers to the CGI as
+                                HTTP_*
+|====================================================================
 
 Note that the link:other_goodies.html#x-sendfile[X-Sendfile] feature
 also supports `X-Accel-Redirect` headers transparently. This is to

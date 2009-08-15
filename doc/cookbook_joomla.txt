@@ -35,13 +35,12 @@ We will also be making changes in the `Error Handler` tab, selecting
 the `Custom redirections` option and adding an option to send errors
 to Joomla.
 
-[grid="rows"]
-`~~~~~~~~~~~~`~~~~~~~~~~~
-Error        , URL
-~~~~~~~~~~~~~~~~~~~~~~~~~
-403 Forbidden, /index.php
-404 Not Found, /index.php
-~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|=========================
+|Error         |URL
+|403 Forbidden |/index.php
+|404 Not Found |/index.php
+|=========================
 
 Now only the database issue remains. Log in to MySQL:
 
@@ -98,12 +97,11 @@ _REQUEST(=|\[|\%[0-9A-Z]{0,2})
 
 Each should be managed by a handler that returns an error:
 
-[grid="rows"]
-`~~~~~~~~~`~~~~~~~~~~~~~~
-Handler   , Error
-~~~~~~~~~~~~~~~~~~~~~~~~~
-HTTP error, 403 Forbidden
-~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|=========================
+|Handler    |Error
+|HTTP error |403 Forbidden
+|=========================
 
 After this you are done! Remember that all these settings are
 refinements not really needed by Joomla to perform its basic

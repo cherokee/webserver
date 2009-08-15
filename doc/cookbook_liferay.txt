@@ -52,12 +52,12 @@ server directly at link:http://localhost:8080[http://localhost:8080]
 
 .Initial access information
 
-`~~~~~~~`~~~~~~~~~~~~~~~~~
-Field   , Value
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-user    , test@liferay.com
-password, test
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|==========================
+|Field    |Value
+|user     |test@liferay.com
+|password |test
+|==========================
 
 .Accessing Liferay
 image::media/images/cookbook_liferay.png[Liferay]
@@ -90,11 +90,11 @@ your firewalled local network, and your reverse proxy is accessible as
 This information source is to be defined as external sources, like
 the following example:
 
-`~~~~~~~~~~~`~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~
-Type        , Nick       , Connection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Remote host , liferay    , 192.168.1.100:8080
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|========================================
+|Type        |Nick    |Connection
+|Remote host |liferay |192.168.1.100:8080
+|========================================
 
 Refer to the link:modules_handlers_proxy.html[HTTP reverse proxy]
 documentation if you need any further help with this.

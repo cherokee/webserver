@@ -92,22 +92,21 @@ Examples
 
 This example will perform internal redirections:
 
-`~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Regular Expression   , Substitution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-__/(\d+)$__          , http://example.com/inst/photogallery/viewphoto?photoid=$1
-__/(\d+)/cmts__      , http://example.com/viewcomments?photoid=$1
-__/(\d+)/delete__    , http://example.com/inst/photogallery/admin?photoid=$1&method=delete
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="30%,70%",options="header"]
+|=======================================================================================
+|Regular Expression |Substitution
+|__/(\d+)$__        |http://example.com/inst/photogallery/viewphoto?photoid=$1
+|__/(\d+)/cmts__    |http://example.com/viewcomments?photoid=$1
+|__/(\d+)/delete__  |http://example.com/inst/photogallery/admin?photoid=$1&method=delete
+|=======================================================================================
 
 Which would translate into the following redirections for the listed
 matching requests:
 
-`~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Request               , Internal translation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-__/photo/123__        , http://example.com/inst/photogallery/viewphoto?photoid=123
-__/photo/213/cmts__   , http://example.com/viewcomments?photoid=213
-__/photo/501/delete__ , http://example.com/inst/photogallery/admin?photoid=501&method=delete
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+[cols="30%,70%",options="header"]
+|===========================================================================================
+|Request               |Internal translation
+|__/photo/123__        |http://example.com/inst/photogallery/viewphoto?photoid=123
+|__/photo/213/cmts__   |http://example.com/viewcomments?photoid=213
+|__/photo/501/delete__ |http://example.com/inst/photogallery/admin?photoid=501&method=delete
+|===========================================================================================

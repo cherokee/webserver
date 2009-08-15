@@ -9,13 +9,14 @@ This module allows to handle temporal URLs to serve hidden files.
 [[parameters]]
 Parameters
 ~~~~~~~~~~
-[grid="rows"]
-`~~~~~~~~~~~`~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters  , Type    , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-``secret``  , String , Required. Share secret between the handler and the script.
-``timeout`` , number , Optional. How long - in seconds - the URL will be valid.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,10%,70%",options="header"]
+|==================================================================
+|Parameters |Type   |Description
+|`secret`   |String |Required. Share secret between the handler and
+                     the script.
+|`timeout`  |number |Optional. How long - in seconds - the URL will 
+                     be valid.
+|==================================================================
 
 [[technical]]
 Technical Description

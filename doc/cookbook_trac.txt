@@ -64,12 +64,12 @@ source] with a local interpreter.
 image::media/images/cookbook_trac_info.png[Information source]
 
 .Information sources
-`~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Host           , Interpreter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-localhost:4433 , /usr/bin/tracd --single-env --daemonize --protocol=scgi \
+[cols="20%,80%",options="header"]
+|=========================================================================
+|Host           |Interpreter
+|localhost:4433 |/usr/bin/tracd --single-env --daemonize --protocol=scgi \
                  --hostname=localhost --port=4433 /path/to/project/
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|=========================================================================
 
 If the port was not reachable, the `interpreter` command would be
 launched and the process would be reinstantiated.  Note that, in the

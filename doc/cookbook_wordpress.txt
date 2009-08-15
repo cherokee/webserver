@@ -66,12 +66,11 @@ since we are going to use it to redirect every petition not matched by
 the example.net virtual server. We will set the remaining one to be
 managed by the `Redirection` handler, like this:
 
-[grid="rows"]
-`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~
-Type     , Regular Expression, Redirection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-External , ^(.*)$            , http://example.net/$1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|===================================================
+|Type     |Regular Expression |Redirection
+|External |^(.*)$             |http://example.net/$1
+|===================================================
 
 After that, this is how the list of rules for this server should look
 like.
@@ -95,11 +94,12 @@ to the second milestone now.
 As previously, we will manage the `Default` rule with the redirection
 handler.
 
-`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~
-Type     , Regular Expression, Redirection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Internal , ^/(.*)$           , /index.php
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[options="header"]
+|=========================================
+|Type     |Regular Expression |Redirection
+|Internal |^/(.*)$            |/index.php
+|=========================================
 
 image::media/images/cookbook_wp_example2.png[WP example.net]
 
@@ -118,13 +118,13 @@ To do this, we will be creating `Directory` type rules for the
 `images` and `static` directory, and a `Regular Expression` type rule
 for the sitemap.
 
-`~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Type              , Value
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Directory         , /images
-Directory         , /static
-Regular Expression, /sitemap.xml.*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|==================================
+|Type               |Value
+|Directory          |/images
+|Directory          |/static
+|Regular Expression |/sitemap.xml.*
+|==================================
 
 Remeber to manage them with a handler that can serve files: `Static
 content` and `List & Send`.

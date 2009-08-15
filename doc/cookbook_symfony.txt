@@ -66,11 +66,11 @@ project.
   link:modules_handlers_redir.html[redirection handler], through the
   `Handler` tab.
 +
-`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~
-Type     , Regular Expression, Substitution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Internal , ^.*$              , /index.php
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|==========================================
+|Type     |Regular Expression |Substitution
+|Internal |^.*$               |/index.php
+|==========================================
 
 . Symfony includes two controllers. One of them is "index.php". The
   redirection above only makes the "index.php" controller accessible.
@@ -87,19 +87,19 @@ Internal , ^.*$              , /index.php
   errors. Simply define yet another redirection rule for this regular
   expression:
 +
-`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~
-Type     , Regular Expression, Redirection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Internal ,  ^/$              , /index.php
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|=========================================
+|Type     |Regular Expression |Redirection
+|Internal |^/$                |/index.php
+|=========================================
 
 . Finally, you need to set up a rule for the "/sf" directory.
 +
-`~~~~~~~~~`~~~~~~~~~~~~~~`~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Type      , Web Directory, Handler,        Document Root
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Directory , /sf          , Static content, /usr/share/php/data/symfony/web/sf
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|============================================================================
+|Type      |Web Directory |Handler        |Document Root
+|Directory |/sf           |Static content |/usr/share/php/data/symfony/web/sf
+|============================================================================
 
 Note that the document root for the /sf directory depends on your
 installation. The value given above corresponds to a pear installation

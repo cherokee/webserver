@@ -15,12 +15,11 @@ colon.
 Parameters
 ^^^^^^^^^^
 
-[grid="rows"]
-`~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameter       ,           Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-__passwdfile__  ,           Required. The location of the user/pass file.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,80%",options="header"]
+|=============================================================
+|Parameter      |Description
+|__passwdfile__ |Required. The location of the user/pass file.
+|=============================================================
 
 The parameter that specifies the file containing the pairs
 'user:password' is mandatory. `Plain` authentication can use both

@@ -70,11 +70,11 @@ tab to set up the rules.
   link:modules_handlers_redir.html[redirection handler], through the
   `Handler` tab.
 +
-`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~
-Type     , Regular Expression, Substitution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Internal , ^.*$              , /index.php
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|==========================================
+|Type     |Regular Expression |Substitution
+|Internal |^.*$               |/index.php
+|==========================================
 
 This will take care of redirecting the requests to Zend.
 

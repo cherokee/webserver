@@ -12,25 +12,24 @@ both literal characters and a set of variables. All the literal
 characters will be copied to the log. The following variables will be
 evaluated right before writing each log entry:
 
-[grid="rows"]
-`~~~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Variable                  , Example                    , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-`$\{ip_remote\}`          , 74.125.67.100              , Remote IP-address
-`$\{ip_local\}`           , 10.0.0.1                   , Local IP-address
-`$\{request\}`            , /file.txt                  , URL path requested
-`$\{request_original\}`   , /file.txt                  , URL path requested before any rewrite
-`$\{protocol\}`           , http                       , Request Protocol
-`$\{port_server\}`        , 80                         , Port of the server serving the request
-`$\{query_string\}`       , ?bar=foo                   , "The query string, if exists"
-`$\{request_first_line\}` , GET / HTTP/1.0             , First line of request
-`$\{status\}`             , 200                        , Status of the request
-`$\{now\}`                , 08/Apr/2009:12:02:11 +0200 , Time: in common log format time format
-`$\{time_secs\}`          , 1239185281                 , Time: seconds since Epoch
-`$\{time_msecs\}`         , 18446744071655350332       , Time: milliseconds since Epoch
-`$\{user_remote\}`        , guest                      , Remote user (authentication)
-`$\{vserver_name\}`       , default                    , Virtual Server nick name
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|===================================================================================
+|Variable                |Example                    |Description
+|`${ip_remote}`          |74.125.67.100              |Remote IP-address
+|`${ip_local}`           |10.0.0.1                   |Local IP-address
+|`${request}`            |/file.txt                  |URL path requested
+|`${request_original}`   |/file.txt                  |URL path requested before any rewrite
+|`${protocol}`           |http                       |Request Protocol
+|`${port_server}`        |80                         |Port of the server serving the request
+|`${query_string}`       |?bar=foo                   |"The query string, if exists"
+|`${request_first_line}` |GET / HTTP/1.0             |First line of request
+|`${status}`             |200                        |Status of the request
+|`${now}`                |08/Apr/2009:12:02:11 +0200 |Time: in common log format time format
+|`${time_secs}`          |1239185281                 |Time: seconds since Epoch
+|`${time_msecs}`         |18446744071655350332       |Time: milliseconds since Epoch
+|`${user_remote}`        |guest                      |Remote user (authentication)
+|`${vserver_name}`       |default                    |Virtual Server nick name
+|===================================================================================
 
 [[examples]]
 Example

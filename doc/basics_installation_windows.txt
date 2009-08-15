@@ -131,21 +131,20 @@ Advanced parameters
 If you want to learn more about 'configure' you can run `./configure
 --help`.
 
-[grid="rows"]
-``~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameter,             Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-`--with-wwwroot=DIR` , Specify the webserver root directory
-`--with-user=USER`   , Custom username under which the server will run
-`--with-user=GROUP`  , Custom group under which the server will run
-`--disable-epoll`    , Disable epoll() support
-`--disable-pthread`  , Disable threading support
-`--disable-readdir_r`, Disable readdir_r usage
-`--disable-ipv6`     , Disable IPv6 support
-`--disable-pam`      , Disable PAM support
-`--enable-trace`     , Allows debugging options
-`--disable-admin`    , Stops cherokee-admin from installing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="30%,70%",options="header"]
+|======================================================================
+|Parameter             |Description
+|`--with-wwwroot=DIR`  |Specify the webserver root directory
+|`--with-user=USER`    |Custom username under which the server will run
+|`--with-user=GROUP`   |Custom group under which the server will run
+|`--disable-epoll`     |Disable epoll() support
+|`--disable-pthread`   |Disable threading support
+|`--disable-readdir_r` |Disable readdir_r usage
+|`--disable-ipv6`      |Disable IPv6 support
+|`--disable-pam`       |Disable PAM support
+|`--enable-trace`      |Allows debugging options
+|`--disable-admin`     |Stops cherokee-admin from installing
+|======================================================================
 
 [[autostart]]
 Autostart

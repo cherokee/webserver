@@ -11,13 +11,12 @@ can be provided.
 Parameters
 ^^^^^^^^^^
 
-[grid="rows"]
-`~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameter        , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-__user__         , Required. Username.
-__password__     , Required. Password.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|=================================
+|Parameter    |Description
+|__user__     |Required. Username.
+|__password__ |Required. Password.
+|=================================
 
 The parameters can be repeated, but must be provided in user-password
 pairs.

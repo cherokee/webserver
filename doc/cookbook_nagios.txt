@@ -42,12 +42,11 @@ follow these steps:
 - First, define an information source with the parameters of
   the Nagios box.
 +
-[grid="rows"]
-`~~~~~~`~~~~~~~~~~`~~~~~~~~~~~~~
-Nick   , Type     , Host         
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Nagios , External , 10.0.0.11:80 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|==============================
+|Nick   |Type     |Host         
+|Nagios |External |10.0.0.11:80 
+|==============================
 
 - Then, create the set of rules that match the following list of
   paths:

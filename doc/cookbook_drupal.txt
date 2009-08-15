@@ -54,13 +54,11 @@ managed by the `Redirection` handler, like this:
 
 image::media/images/cookbook_drupal_default2.png[Drupal default]
 
-
-[grid="rows"]
-`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~
-Type     , Regular Expression, Redirection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-External , (.*)$             , http://example.net/$1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|===================================================
+|Type     |Regular Expression |Redirection
+|External |(.*)$              |http://example.net/$1
+|===================================================
 
 After that, this is how the list of rules for this server should look
 like.
@@ -88,11 +86,11 @@ image::media/images/cookbook_drupal_example2.png[Drupal example]
 As previously, we will manage the `Default` rule with the redirection
 handler.
 
-`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~
-Type     , Regular Expression, Redirection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Internal , ^/(.*)$           , /index.php?q=$1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|=============================================
+|Type     |Regular Expression |Redirection
+|Internal |^/(.*)$            |/index.php?q=$1
+|=============================================
 
 image::media/images/cookbook_drupal_example3.png[Drupal example]
 
@@ -105,12 +103,11 @@ redirections` option and sending 404 errors to Drupal.
 
 image::media/images/cookbook_drupal_example4.png[Drupal example]
 
-[grid="rows"]
-`~~~~~~~~~~~~`~~~~~~~~~~~
-Error        , URL
-~~~~~~~~~~~~~~~~~~~~~~~~~
-404 Not Found, /index.php
-~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|=========================
+|Error         |URL
+|404 Not Found |/index.php
+|=========================
 
 Third step
 ++++++++++
@@ -118,11 +115,11 @@ Third step
 Next, we need to address the clean URLs matter. To do so, create
 another redirection rule.
 
-`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~
-Type     , Regular Expression, Redirection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Internal ,  ^/(.*)\?(.*)$    , /index.php?q=$1&$2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|================================================
+|Type     |Regular Expression |Redirection
+|Internal |^/(.*)\?(.*)$      |/index.php?q=$1&$2
+|================================================
 
 Fourth step
 +++++++++++
@@ -152,12 +149,11 @@ expression`-type rule matching the following expression:
 
 Handle this with the `HTTP error` handler:
 
-[grid="rows"]
-`~~~~~~~~~~~~
-Error
-~~~~~~~~~~~~~
-403 Forbidden
-~~~~~~~~~~~~~
+[options="header"]
+|=============
+|Error
+|403 Forbidden
+|=============
 
 Sixth step
 ++++++++++
@@ -167,11 +163,11 @@ that fixes an issue with how requests for the root are managed having
 the `File exists` handler in place. Simply define yet another
 redirection rule for this regular expression:
 
-`~~~~~~~~`~~~~~~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~
-Type     , Regular Expression, Redirection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Internal ,  ^/$              , /index.php
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[options="header"]
+|=========================================
+|Type     |Regular Expression |Redirection
+|Internal |^/$                |/index.php
+|=========================================
 
 All done. After this you should have six rules in your list. This
 configuration does work. Reorder your rules accordingly if you seem to

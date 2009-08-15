@@ -90,13 +90,12 @@ You will simply have to add as many sources as needed, for instance
 our example uses one nicknamed `django1`, created as *local
 interpreter* with these parameters on port 3033.
 
-[grid="rows"]
-`~~~~~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Host           , Interpreter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-localhost:3033 , `/var/www/example/manage.py runfcgi method=threaded ` \
+[cols="10%,90%",options="header"]
+|======================================================================
+|Host           |Interpreter
+|localhost:3033 |`/var/www/example/manage.py runfcgi method=threaded ` \
                  `host=127.0.0.1 port=3033 protocol=scgi`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|======================================================================
 
 You can set up as many hosts as desired and Cherokee will balance the
 load among them.

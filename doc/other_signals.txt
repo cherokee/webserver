@@ -13,12 +13,11 @@ link:bundle_cherokee-worker.html[cherokee-worker] instances.
 
 The following signals are supported by Cherokee:
 
-[grid="rows"]
-`~~~~~~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Parameters , Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SIGHUP     , Restarts the server gracefully
-SIGUSR1    , Restarts the server closing all the opened connections
-SIGUSR2    , Reopens the log files
-SIGTERM    , Exits
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[cols="20%,80%",options="header"]
+|==================================================================
+|Parameters |Description
+|SIGHUP     |Restarts the server gracefully
+|SIGUSR1    |Restarts the server closing all the opened connections
+|SIGUSR2    |Reopens the log files
+|SIGTERM    |Exits
+|==================================================================
