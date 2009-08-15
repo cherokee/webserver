@@ -39,12 +39,18 @@ def check_images():
 
     for ref in img_refs:
         if not ref in img_files:
-            print "ERROR: %s: File not found" % (ref)
+            print "ERROR: %s: File not found" %(ref)
             error = True
 
     for img in img_files:
         if not img in img_refs:
-            print "ERROR: %s: Not longer used" % (ref)
+            print "ERROR: %s: Not longer used" %(img)
+            error = True
+
+    automake_am = open("Makefile.am", 'r').read()
+    for img in img_refs:
+        if not img in automake_am:
+            print "ERROR: %s isn't covered in Makefile.am " %(img)
             error = True
 
     return error
