@@ -4,179 +4,51 @@ Cookbook: Setting up Drupal
 ---------------------------
 
 Setting up link:http://drupal.org/[Drupal] with Cherokee is really
-easy. We will assume that our `Document Root` directory is
-`/var/www/drupal` of the server we are working on. This recipe uses
-Drupal 6.6, which is the latest release at the time of writing.
+easy. This recipe describes the Drupal 6.x installation, which is the
+latest release at the time of writing.
 
-You will need PHP support correctly configured in Cherokee, and PHP
-with the MySQL module installed. The default configuration already
-provides a valid PHP configuration for Cherokee if you have php-cgi
-installed, but you can follow the appropriate recipe about
-link:cookbook_php.html[setting up PHP] in case you don't have it
-available for some reason.
+There are two ways of installing Drupal: it can either be installed as
+a new virtual server or be installed inside a directory of some of the
+virtual server that already exist.
 
-Under these conditions, you could start Drupal's installation and you
-would already be able to have your site up and running.
+[[cherokee_vserver]]
+Setting up Drupal as a new Virtual Server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-However, we can add several refinements to Cherokee's
-settings. Mainly:
+The first step would be to go to the virtual server list page. Once in
+there, you'll have to click the `Wizards` button:
 
-. Forward all requests for www.example.net (or whatever domain is
-  resolved to our machine) to example.net
+image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 
-. Set up an appropriate url rewriting configuration for Drupal.
+Now, you will have to select the `CMS` category, and run the Drupal
+wizard.  At this stage the Drupal wizard will ask you for some basic
+parameters about the installation. It will try to auto-fill as many
+entries of the form as possible.  For instance, if it finds Drupal
+installed in a standard location it will use that path as the default
+directory.
 
-. Serve directly the static content speeding avoiding the
-  dynamic-processing bottle-neck.
+The new virtual server will be created after this form is submitted.
+The virtual server configuration will cover the bast majority of the
+cases. Most probably it will cover your needs, although you are free
+to modify it as you will.
 
-. Use the regex from Drupal's .htaccess for denying access to certain
-  paths.
+[[cherokee_dir]]
+Setting up Drupal inside a Directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With this we should be able to do everything Drupal's supposed to do,
-and it should work with Imagecache's dynamic thumbnail generation.
+Drupal can also be configured inside a directory. Let's suppose we
+want to set up Drupal inside the `/blog` directory of one of our
+virtual servers.
 
-[[cherokee]]
-Setting up Cherokee
-~~~~~~~~~~~~~~~~~~~
+In this case, the first thing you will have to do is to enter the
+virtual server configuration you'd like the configure Drupal in. Once
+in there, click the `Wizards` button:
 
-Default virtual server
-^^^^^^^^^^^^^^^^^^^^^^
+image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
 
-We'll begin by cloning the default virtual server, just to keep the
-default PHP configuration. Create a clone named `example.net`.
-
-image::media/images/cookbook_drupal_default1.png[Drupal default]
-
-Then, we'll delete every erasable rule in the default virtual server
-since we are going to use it to redirect every petition not matched by
-the example.net virtual server. We will set the remaining one to be
-managed by the `Redirection` handler, like this:
-
-image::media/images/cookbook_drupal_default2.png[Drupal default]
-
-[options="header"]
-|===================================================
-|Type     |Regular Expression |Redirection
-|External |(.*)$              |http://example.net/$1
-|===================================================
-
-After that, this is how the list of rules for this server should look
-like.
-
-image::media/images/cookbook_drupal_default3.png[Drupal default]
-
-This clears the first milestone. The remaining three will be
-accomplished by tweaking the `example.net` virtual server.
-
-
-example.net
-^^^^^^^^^^^
-
-First step
-++++++++++
-
-Remember to set up the `Document root` to `/var/www/drupal`.
-
-image::media/images/cookbook_drupal_example1.png[Drupal example]
-
-Delete all the rules except `php` and `Default`.
-
-image::media/images/cookbook_drupal_example2.png[Drupal example]
-
-As previously, we will manage the `Default` rule with the redirection
-handler.
-
-[options="header"]
-|=============================================
-|Type     |Regular Expression |Redirection
-|Internal |^/(.*)$            |/index.php?q=$1
-|=============================================
-
-image::media/images/cookbook_drupal_example3.png[Drupal example]
-
-Second step
-+++++++++++
-
-Remember to set up Drupal as custom error handler for the virtual
-server. Do so in the `Error Handler` tab, selecting the `Custom
-redirections` option and sending 404 errors to Drupal.
-
-image::media/images/cookbook_drupal_example4.png[Drupal example]
-
-[options="header"]
-|=========================
-|Error         |URL
-|404 Not Found |/index.php
-|=========================
-
-Third step
-++++++++++
-
-Next, we need to address the clean URLs matter. To do so, create
-another redirection rule.
-
-[options="header"]
-|================================================
-|Type     |Regular Expression |Redirection
-|Internal |^/(.*)\?(.*)$      |/index.php?q=$1&$2
-|================================================
-
-Fourth step
-+++++++++++
-
-After this we will go straight to another milestone: directly serving
-static files, which is an easy task to accomplish.
-
-Just set up an `File Exists`-type rule. Check the `Match any`
-checkbox, and manage it with the `Static file` handler. Remember to
-activate the `IO Cache` option and to specify whatever expiration
-period you see fit for these files. If you ever edit the configuration
-just remember that this rule should be located after the PHP
-rule. Otherwise you will end up statically serving them instead of
-processing them via PHP. In fact it is a good idea to keep your rules
-for dynamic contents in a high position on your list of rules.
-
-Fifth step
-++++++++++
-
-Now to block bad paths, as specified by the htaccess file provided
-with Drupal. For this we will use an internal `Regular
-expression`-type rule matching the following expression:
-
-----
-(\.(engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(\.php)?|xtmpl)|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template))(\?.*)?$
-----
-
-Handle this with the `HTTP error` handler:
-
-[options="header"]
-|=============
-|Error
-|403 Forbidden
-|=============
-
-Sixth step
-++++++++++
-
-The last thing to do on Cherokee's side is to specify a sixth rule
-that fixes an issue with how requests for the root are managed having
-the `File exists` handler in place. Simply define yet another
-redirection rule for this regular expression:
-
-[options="header"]
-|=========================================
-|Type     |Regular Expression |Redirection
-|Internal |^/$                |/index.php
-|=========================================
-
-All done. After this you should have six rules in your list. This
-configuration does work. Reorder your rules accordingly if you seem to
-have any trouble.
-
-.List of rules
-image::media/images/cookbook_drupal_rules.png[Drupal rules]
-
-Now, to install Drupal!
+As in the previous case, this wizard will ask some very basic
+information, including the public web directory where Drupal will be
+set up and the local Drupal source directory.
 
 [[drupal]]
 Setting up Drupal

@@ -154,6 +154,8 @@ media/images/admin_validators_pam.png \
 media/images/admin_validators_plain.png \
 media/images/admin_validators_authlist.png \
 media/images/admin_validators_ldap.png \
+media/images/admin_vservers_wizard.png \
+media/images/admin_vserver_wizard.png \
 media/images/admin_vserver_errors.png \
 media/images/admin_vserver_loggers.png \
 media/images/admin_vserver.png \
