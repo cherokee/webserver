@@ -34,26 +34,3 @@ by Cherokee-Admin.
 The "fastcgi" handler will eventually become the default option
 because it is faster and more standard-compliant. However, at the
 moment "fcgi" is a better option.
-
-[[reverse_proxy]]
-Reverse Proxy
-~~~~~~~~~~~~~
-
-The reverse proxy has been one of the most demanded features and is
-under heavy development. It is currently released as a standard
-handler, so check out the link:modules_handlers_proxy.html[HTTP
-reverse proxy] handler documentation.
-
-[[wizards]]
-Configuration Wizards
-~~~~~~~~~~~~~~~~~~~~~
-
-Another interesting feature -not yet reflected in the repository- is a
-project aimed at providing configuration wizards as an easy way to
-deploy a set of standard applications. The idea is to select an
-application from the list and let the wizard configure Cherokee to be
-able to run one such application -say Wordpress, for instance-.
-
-Even though the obtained configuration will most probably not be
-perfect, it will always be a good starting point to play with for
-further tuning.

@@ -9,7 +9,7 @@ latest release at the time of writing.
 
 There are two ways of installing Drupal: it can either be installed as
 a new virtual server or be installed inside a directory of some of the
-virtual server that already exist.
+virtual servers that already exist.
 
 [[cherokee_vserver]]
 Setting up Drupal as a new Virtual Server
@@ -28,7 +28,7 @@ installed in a standard location it will use that path as the default
 directory.
 
 The new virtual server will be created after this form is submitted.
-The virtual server configuration will cover the bast majority of the
+The virtual server configuration will cover the vast majority of the
 cases. Most probably it will cover your needs, although you are free
 to modify it as you will.
 
@@ -41,7 +41,7 @@ want to set up Drupal inside the `/blog` directory of one of our
 virtual servers.
 
 In this case, the first thing you will have to do is to enter the
-virtual server configuration you'd like the configure Drupal in. Once
+virtual server configuration you'd like to configure Drupal in. Once
 in there, click the `Wizards` button:
 
 image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]

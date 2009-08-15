@@ -181,5 +181,24 @@ lots of files and want to be protected against automatic download
 scripts. Of course that is not the sole use of this. Cherokee only
 implements the security. From there on, the sky is the limit.
 
+[[boolean_rules]]
+AND, OR and NOT rule types
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+These rule types have been fully implemented for a long time. The
+things achievable by these rules are at the same time very powerful
+and very complex. You can combine them with as much flexibility as you
+want.
 
+[[wizards]]
+Configuration Wizards
+~~~~~~~~~~~~~~~~~~~~~
+
+Another interesting feature is a project aimed at providing
+configuration wizards as an easy way to deploy a set of standard
+applications. The idea is to select an application from the list and
+let the wizard configure Cherokee to be able to run such application
+-say Wordpress, for instance-.
+
+Even though the obtained configuration could not be perfect, it will
+always be a good starting point to play with for further tuning.
