@@ -250,6 +250,8 @@ media/images/cookbook_phpmyadmin_denied.png \
 media/images/cookbook_managing_logs_security.png \
 media/images/cookbook_managing_logs_rules.png \
 media/images/cookbook_managing_logs_handler.png \
+media/images/cookbook_zend1.png \
+media/images/cookbook_joomla.png \
 media/images/proxy_phase1.png \
 media/images/proxy_phase2.png \
 media/images/tracelor.png
