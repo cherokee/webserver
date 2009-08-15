@@ -18,7 +18,7 @@ Parameters  , Type    , Description
 `error`     , number  , HTTP error code return.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-image::media/images/admin_custom_error.png
+image::media/images/admin_handler_custom_error.png[Handler Custom Error]
 
 .Available errors in `cherokee-admin`
 [grid="rows"]
