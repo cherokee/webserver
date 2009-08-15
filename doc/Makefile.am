@@ -124,7 +124,6 @@ media/images/admin_advanced2.png \
 media/images/admin_advanced3.png \
 media/images/admin_advanced4.png \
 media/images/admin_behaviour.png \
-media/images/admin_dirlist_cherokee.png \
 media/images/admin_general.png \
 media/images/admin_general_networking.png \
 media/images/admin_general_permissions.png \
