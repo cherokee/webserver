@@ -257,8 +257,12 @@ media/images/tracelor.png
 EXTRA_DIST = \
 $(doc_DATA) \
 $(docmediacss_DATA) \
-$(docmediaimages_DATA)
+$(docmediaimages_DATA) \
+test_images.py
 
 
 serve:
 	../cherokee/cherokee -r .
+
+test:
+	./test_images.py

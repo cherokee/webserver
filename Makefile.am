@@ -150,4 +150,5 @@ uninstall-local: uninstall-local-config
 	$(RM) -f $(DESTDIR)$(cherokeeadmindir)/performance.conf.sample
 
 test:
+	$(MAKE) -C doc test
 	$(MAKE) -C qa test
