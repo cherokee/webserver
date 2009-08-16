@@ -13,21 +13,69 @@ ERROR_NO_SRC  = _("Does not look like a WordPress source directory.")
 ERROR_NO_WEB  = _("A web directory must be provided.")
 ERROR_NO_HOST = _("A host name must be provided.")
 
+# http://www.example.com/2009/08/16/sample-post/
+RULE_PERMALINKS_DAY_NAME = """
+match = request
+match!request = /(\d){4}/(\d){2}/(\d){2}/(.+)
+handler = redir
+handler!rewrite!1!show = 0
+handler!rewrite!1!substring = /index.php?/$1/$2/$3/$4
+"""
+
+# http://www.example.com/2009/08/sample-post/
+RULE_PERMALINKS_MONTH_NAME = """
+match = request
+match!request = /(\d){4}/(\d){2}/(.+)
+handler = redir
+handler!rewrite!1!show = 0
+handler!rewrite!1!substring = /index.php?/$1/$2/$3
+"""
+
+# http://www.example.com/archives/123
+RULE_PERMALINKS_NUMERIC = """
+match = request
+match!request = /archives/(.+)
+handler = redir
+handler!rewrite!1!show = 0
+handler!rewrite!1!substring = /index.php?/$1
+"""
+
 CONFIG_DIR = """
 %(pre_rule_minus1)s!document_root = %(local_src_dir)s
 %(pre_rule_minus1)s!match = directory
 %(pre_rule_minus1)s!match!directory = %(web_dir)s
 %(pre_rule_minus1)s!match!final = 0
 
-%(pre_rule_minus2)s!match = and
-%(pre_rule_minus2)s!match!final = 1
-%(pre_rule_minus2)s!match!left = directory
-%(pre_rule_minus2)s!match!left!directory = %(web_dir)s
-%(pre_rule_minus2)s!match!right = exists
-%(pre_rule_minus2)s!match!right!iocache = 1
-%(pre_rule_minus2)s!match!right!match_any = 1
-%(pre_rule_minus2)s!handler = file
-%(pre_rule_minus2)s!handler!iocache = 1
+# http://www.example.com/dir/2009/08/16/sample-post/
+%(pre_rule_minus2)s!match = request
+%(pre_rule_minus2)s!match!request = /%(web_dir)s/(\d){4}/(\d){2}/(\d){2}/(.+)
+%(pre_rule_minus2)s!handler = redir
+%(pre_rule_minus2)s!handler!rewrite!1!show = 0
+%(pre_rule_minus2)s!handler!rewrite!1!substring = /%(web_dir)s/index.php?/$1/$2/$3/$4
+
+# http://www.example.com/dir/2009/08/sample-post/
+%(pre_rule_minus3)s!match = request
+%(pre_rule_minus3)s!match!request = /%(web_dir)s/(\d){4}/(\d){2}/(.+)
+%(pre_rule_minus3)s!handler = redir
+%(pre_rule_minus3)s!handler!rewrite!1!show = 0
+%(pre_rule_minus3)s!handler!rewrite!1!substring = /%(web_dir)s/index.php?/$1/$2/$3
+
+# http://www.example.com/dir/archives/123
+%(pre_rule_minus4)s!match = request
+%(pre_rule_minus4)s!match!request = /%(web_dir)s/archives/(.+)
+%(pre_rule_minus4)s!handler = redir
+%(pre_rule_minus4)s!handler!rewrite!1!show = 0
+%(pre_rule_minus4)s!handler!rewrite!1!substring = /%(web_dir)s/index.php?/$1
+
+%(pre_rule_minus5)s!match = and
+%(pre_rule_minus5)s!match!final = 1
+%(pre_rule_minus5)s!match!left = directory
+%(pre_rule_minus5)s!match!left!directory = %(web_dir)s
+%(pre_rule_minus5)s!match!right = exists
+%(pre_rule_minus5)s!match!right!iocache = 1
+%(pre_rule_minus5)s!match!right!match_any = 1
+%(pre_rule_minus5)s!handler = file
+%(pre_rule_minus5)s!handler!iocache = 1
 """
 
 CONFIG_VSRV = """
@@ -45,12 +93,33 @@ CONFIG_VSRV = """
 %(pre_rule_minus2)s!handler!rewrite!1!regex = (.*)/
 %(pre_rule_minus2)s!handler!rewrite!1!substring = $1/index.php
 
-%(pre_rule_minus3)s!match = exists
-%(pre_rule_minus3)s!match!iocache = 1
-%(pre_rule_minus3)s!match!match_any = 1
-%(pre_rule_minus3)s!match!match_only_files = 1
-%(pre_rule_minus3)s!handler = file
-%(pre_rule_minus3)s!handler!iocache = 1
+# http://www.example.com/2009/08/16/sample-post/
+%(pre_rule_minus3)s!match = request
+%(pre_rule_minus3)s!match!request = /(\d){4}/(\d){2}/(\d){2}/(.+)
+%(pre_rule_minus3)s!handler = redir
+%(pre_rule_minus3)s!handler!rewrite!1!show = 0
+%(pre_rule_minus3)s!handler!rewrite!1!substring = /index.php?/$1/$2/$3/$4
+
+# http://www.example.com/2009/08/sample-post/
+%(pre_rule_minus4)s!match = request
+%(pre_rule_minus4)s!match!request = /(\d){4}/(\d){2}/(.+)
+%(pre_rule_minus4)s!handler = redir
+%(pre_rule_minus4)s!handler!rewrite!1!show = 0
+%(pre_rule_minus4)s!handler!rewrite!1!substring = /index.php?/$1/$2/$3
+
+# http://www.example.com/archives/123
+%(pre_rule_minus5)s!match = request
+%(pre_rule_minus5)s!match!request = /archives/(.+)
+%(pre_rule_minus5)s!handler = redir
+%(pre_rule_minus5)s!handler!rewrite!1!show = 0
+%(pre_rule_minus5)s!handler!rewrite!1!substring = /index.php?/$1
+
+%(pre_rule_minus6)s!match = exists
+%(pre_rule_minus6)s!match!iocache = 1
+%(pre_rule_minus6)s!match!match_any = 1
+%(pre_rule_minus6)s!match!match_only_files = 1
+%(pre_rule_minus6)s!handler = file
+%(pre_rule_minus6)s!handler!iocache = 1
 
 %(pre_vsrv)s!rule!1!match = default
 %(pre_vsrv)s!rule!1!handler = common
@@ -133,6 +202,9 @@ class Wizard_VServer_WordPress (WizardPage):
 
         pre_rule_minus2 = "%s!rule!%d" % (pre_vsrv, php_rule - 2)
         pre_rule_minus3 = "%s!rule!%d" % (pre_vsrv, php_rule - 3)
+        pre_rule_minus4 = "%s!rule!%d" % (pre_vsrv, php_rule - 4)
+        pre_rule_minus5 = "%s!rule!%d" % (pre_vsrv, php_rule - 5)
+        pre_rule_minus6 = "%s!rule!%d" % (pre_vsrv, php_rule - 6)
 
         # Usual static files
         pre_rule_minus1 = "%s!rule!%d" % (pre_vsrv, php_rule - 1)
@@ -195,6 +267,9 @@ class Wizard_Rules_WordPress (WizardPage):
 
         pre_rule_minus1 = "%s!rule!%d" % (self._pre, php_rule - 1)
         pre_rule_minus2 = "%s!rule!%d" % (self._pre, php_rule - 2)
+        pre_rule_minus3 = "%s!rule!%d" % (self._pre, php_rule - 3)
+        pre_rule_minus4 = "%s!rule!%d" % (self._pre, php_rule - 4)
+        pre_rule_minus5 = "%s!rule!%d" % (self._pre, php_rule - 5)
 
         # Add the new rules
         config = CONFIG_DIR % (locals())
