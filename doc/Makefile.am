@@ -1,4 +1,4 @@
-ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py --unsafe --conf-file=$(top_srcdir)/doc/build/doc.conf
+ASCIIDOC=python $(top_srcdir)/doc/build/asciidoc.py --conf-file=$(top_srcdir)/doc/build/doc.conf
 
 SUFFIXES = .txt .html
 
@@ -255,6 +255,8 @@ $(docmediacss_DATA) \
 $(docmediaimages_DATA) \
 test_images.py
 
+CLEANFILES = \
+$(doc_DATA)
 
 serve:
 	../cherokee/cherokee -r .
