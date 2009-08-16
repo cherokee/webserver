@@ -191,14 +191,6 @@ media/images/cookbook_ror.png \
 media/images/cookbook_mailman.png \
 media/images/cookbook_glassfish.png \
 media/images/cookbook_drupal.png \
-media/images/cookbook_drupal_default1.png \
-media/images/cookbook_drupal_default2.png \
-media/images/cookbook_drupal_default3.png \
-media/images/cookbook_drupal_example1.png \
-media/images/cookbook_drupal_example2.png \
-media/images/cookbook_drupal_example3.png \
-media/images/cookbook_drupal_example4.png \
-media/images/cookbook_drupal_rules.png \
 media/images/cookbook_wp1.png \
 media/images/cookbook_wp2.png \
 media/images/cookbook_wp3.png \
