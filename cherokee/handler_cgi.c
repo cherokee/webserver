@@ -546,7 +546,13 @@ manage_child_cgi_process (cherokee_handler_cgi_t *cgi, int pipe_cgi[2], int pipe
 		cherokee_logger_writer_t *writer = NULL;
 		cherokee_logger_t        *log    = CONN_VSRV(conn)->logger;
 
-		cherokee_logger_get_error_writer (log, &writer);
+		/* Get the error logger. Can't call virtual method
+		 * cherokee_logger_get_error_writer, it'd death-lock
+		 * the child process.
+		 */
+		if (log->get_error_writer != NULL) {
+			log->get_error_writer (log, &writer);
+		}
 		if ((writer != NULL) && (writer->fd != -1)) {
 			dup2 (writer->fd, STDERR_FILENO);
 		}
