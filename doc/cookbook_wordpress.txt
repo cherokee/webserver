@@ -118,20 +118,6 @@ way the links are to be rewritten.
 
 image::media/images/cookbook_wp4.png[WP admin]
 
-By default, the Cherokee wizard for Wordpress adds support for the
-most used Permalinks formats:
-
-[options="header"]
-|============================================================================================
-|Permalink format                               | Example URL
-|/%year%/%monthnum%/%day%/%postname%/           | `http://example.com/2009/08/16/sample-post/`
-|/%year%/%monthnum%/%postname%/                 | `http://example.com/2009/08/sample-post`
-|/archives/%post_id%                            | `http://example.com/archives/123`
-|/index.php/%year%/%monthnum%/%day%/%postname%/ | `http://example.com/index.php/2009/08/16/sample-post`
-|/index.php/%year%/%monthnum%/%postname%/       | `http://example.com/index.php/2009/08/sample-post`
-|/index.php/archives/123                        | `http://example.com/index.php/archives/123`
-|============================================================================================
-
 Remember to set up the plugins that are of interest for you, such as
 the sitemaps generator, in a fashion compatible with what you
 configured in Cherokee.
