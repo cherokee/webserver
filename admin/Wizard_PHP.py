@@ -18,11 +18,12 @@ class Wizard_Rules_PHP (Wizard):
     TCP_PORT      = 47990
     ICON          = "php.jpg"
     DESC          = "Configures PHP in the current Virtual Server. It will add a new .php extension is not present."
-    
+
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
         self.name   = "Add PHP support"
         self.source = None
+        self.group  = WIZARD_GROUP_LANGS    
 
     def show (self):
         self.rule   = None

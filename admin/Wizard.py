@@ -8,6 +8,7 @@ WIZARD_GROUP_MISC     = 'Misc'
 WIZARD_GROUP_CMS      = 'CMS'
 WIZARD_GROUP_TASKS    = 'Tasks'
 WIZARD_GROUP_PLATFORM = 'Platforms'
+WIZARD_GROUP_LANGS    = 'Languages'
 
 USUAL_STATIC_FILES = ['/favicon.ico', '/robots.txt', '/crossdomain.xml']
 
