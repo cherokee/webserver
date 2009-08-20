@@ -17,7 +17,7 @@ DEFAULT_PATHS = ['/usr/bin',
 class Wizard_Rules_PHP (Wizard):
     TCP_PORT      = 47990
     ICON          = "php.jpg"
-    DESC          = "Configures PHP in the current Virtual Server. It will add a new .php extension is not present."
+    DESC          = "Configures PHP in the current Virtual Server. It will add a new .php extension if not present."
 
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
