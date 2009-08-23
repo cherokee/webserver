@@ -7,7 +7,7 @@
 ## Licensed: GPL v2
 ##
 
-import time, sys
+import time
 from sys import stdin
 import xml.dom.minidom
 
