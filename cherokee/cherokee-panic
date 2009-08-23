@@ -58,7 +58,7 @@ fi
 		   echo "$0: No such process: $pid"
 		   exit 1
 	    fi
-	    if test "x${BINARYNAME} " = "x"; then 
+	    if test "x${BINARYNAME}" = "x"; then 
 		   echo "This means there was a problem with the program, such as a segfault."
 		   echo "However, the executable could not be found for process $pid."
 		   echo "It may have died unexpectedly, or you may not have permission to"
