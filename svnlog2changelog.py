@@ -7,7 +7,7 @@
 ## Licensed: GPL v2
 ##
 
-import time
+import time, sys
 from sys import stdin
 import xml.dom.minidom
 
@@ -63,8 +63,8 @@ for entry in log.getElementsByTagName('logentry'):
     print "%s  %s" % (date, author)
     print " "*12 + "SVN: r%s, %s - %s" % (revision, dev, time)
     if msg:
-        print
-        print msg,
+        print msg.encode("utf-8"),
+
     if paths:
         print
         print paths
