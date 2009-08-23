@@ -20,9 +20,9 @@ fi
      os=`uname`
 
 	# We must be given a pid to look at
-	if [ -z "$1" ]; then
-		echo "$0 called with no arguments."
-		exit 1
+	if [ x$1 = x ]; then
+	    echo "$0 called with no arguments."
+	    exit 1
 	else
 	    pid=$1
 	fi
@@ -102,7 +102,7 @@ fi
 		  echo "thread apply all bt full"
 		  echo "quit" ) >> $tmp_cmd
 
-		if [ -z $BINARYNAME ]; then
+		if [ x$BINARYNAME = x ]; then
 		    $gdb -x $tmp_cmd -batch --pid=$pid
 		else
 		    $gdb -x $tmp_cmd -batch "$BINARYNAME" "$pid"
@@ -126,5 +126,3 @@ fi
 		  exit 1
     esac;
 )
-
-
