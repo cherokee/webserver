@@ -691,6 +691,13 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	ret = ret_eagain;
 
 out:
+	/* Raise conn's timeout? */
+	if ((src->spawning_since != 0) &&
+	    (src->spawning_since + src->timeout > conn->timeout))
+	{
+		conn->timeout = src->spawning_since + src->timeout + 1;
+	}
+
 	CHEROKEE_MUTEX_UNLOCK (&src->launching_mutex);
 	return ret;
 }
