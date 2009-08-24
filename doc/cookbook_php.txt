@@ -4,27 +4,43 @@ Cookbook: Setting up PHP
 ------------------------
 
 There is not much to learn to configure PHP with Cherokee.
-The default configuration (the one created by `cherokee-admin` from
-scratch when there is no `cherokee.conf` present) already supports
-PHP.
+Cherokee-admin ships a one-click wizard that will do everything for
+you. It will look for the PHP interpreter, it will check whether it
+support FastCGI, and then it'll perform all the necessary operations
+to set it up on Cherokee. It is a piece of cake.
 
-This example shows a typical usage of FastCGI. It only uses one
-link:config_info_sources.html[information source] nicknamed `php` in
-this case. This connects to a FastCGI server located in localhost in
-port 1234. If no server is running, the webserver will run the FastCGI
-server by issuing the command defined as the *Interpreter*
-sub-parameter:
+It requires a single operation to get PHP configured on a Virtual
+Server: Choose the virtual server your want to configure, and click on
+the `Behavior` tab. Once in there, click on `Wizards`:
 
-image::media/images/admin_handler_fastcgi1.png[Fastcgi]
+image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
 
-This other example shows a typical usage of multiple FastCGI
-servers. It connects to FastCGI servers in several locations. If no
-server is running in the local computer, the webserver will run the
-FastCGI server by issuing the specified command. Note that for *remote*
-FastCGI servers, you are responsible of running the FastCGI services
-there manually:
+Now select `Languages` and run the PHP wizard. And, that's it. If you
+had `php-cgi` installed in your system, PHP should be configured now.
 
-image::media/images/admin_handler_fastcgi2.png[Fastcgi]
+
+[[php_fastcgi]]
+PHP FastCGI support
+~~~~~~~~~~~~~~~~~~~
+
+Note that only FastCGI-enabled binaries of PHP will work with the
+FastCGI handler. Many prepackaged versions already enable this by
+default. If yours does not, you will need to build a suitable
+binary. You can check this with the `-v` parameter:
+
+----
+$ php-cgi -v
+PHP 5.2.10 (cgi-fcgi) (built: Jul 11 2009 15:33:11)
+Copyright (c) 1997-2009 The PHP Group
+Zend Engine v2.2.0, Copyright (c) 1998-2009 Zend Technologies
+----
+
+You cannot proceed unless the *"cgi-fcgi"* string is present.
+
+
+[[php_env]]
+PHP process Environment Variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The **PHP_FCGI_CHILDREN** environment variable is mandatory for PHP
 FastCGI servers.  It defines how much children should serve the
@@ -36,16 +52,31 @@ unset, PHP will take the default value (500), after which it will be
 restarted. It is generally a good idea to let PHP be restarted to free
 up resources and possible memory leaks.
 
-Note that only FastCGI-enabled binaries of PHP will work with the
-FastCGI handler. Many prepackaged versions already enable this by
-default. If yours does not, you will need to build a suitable
-binary. You can check this with the `-v` parameter:
 
-----
-$ php-cgi -v
-PHP 5.2.5 (cgi-fcgi) (built: Apr 20 2008 17:11:05)
-Copyright (c) 1997-2007 The PHP Group
-Zend Engine v2.2.0, Copyright (c) 1998-2007 Zend Technologies
-----
+[[advanced]]
+Advanced configuration
+~~~~~~~~~~~~~~~~~~~~~~
 
-You cannot proceed unless the *"cgi-fcgi"* string is present.
+Once PHP is configured, you are free to tweak the configuration to
+adapt it to your specific needs. You may want to change some of the
+php-cgi parameters, or even point Cherokee to use distributed PHP
+execution.
+
+This example shows a typical usage of FastCGI. It only uses one
+link:config_info_sources.html[information source] nicknamed `php` in
+this case. This connects to a FastCGI server located in localhost in
+port 47990. If no server is running, the webserver will run the
+FastCGI server by issuing the command defined as the *Interpreter*
+sub-parameter:
+
+image::media/images/admin_handler_fastcgi1.png[Fastcgi]
+
+This other example shows a typical usage of multiple FastCGI servers.
+It connects to FastCGI servers in several locations. If no server is
+running in the local computer, the webserver will run the FastCGI
+server by issuing the specified command. Note that for *remote*
+FastCGI servers, you are responsible of running the FastCGI services
+there manually:
+
+image::media/images/admin_handler_fastcgi2.png[Fastcgi]
+
