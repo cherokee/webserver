@@ -67,6 +67,7 @@ cookbook_trac.html \
 cookbook_phpbb.html \
 cookbook_phpmyadmin.html \
 cookbook_managing_logs.html \
+cookbook_streaming.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_ip_hash.html \

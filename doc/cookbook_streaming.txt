@@ -1,0 +1,26 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+
+Cookbook: Streaming Audio and Video
+-----------------------------------
+
+It's really easy to configure Cherokee so it streams audio and video
+files instead of sending then as a regular file. 
+
+The first thing you have to ensure is that Cherokee has been compiled
+with the required libraries. In this case, the FFMpeg library set is
+required. Cherokee uses it to extract information of the media files.
+
+[[wizard]]
+Standard configuration
+~~~~~~~~~~~~~~~~~~~~~~
+
+To configure Cherokee to stream media files is trivial. The only thing
+you will have to do is to choose the virtual server on which you want
+to enable the streaming functionality, and then click on `Wizard`.
+
+image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
+
+Once in there, the only thing left to do is to click `Misc` and run
+the Streaming wizard. Right after which the virtual server will be
+ready to stream your media files, including MP3, OGG, OGV, MP4, etc.
+
