@@ -19,7 +19,7 @@ class Wizard_Rules_CommonStatic (Wizard):
 
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
-        self.name   = "Common Static"
+        self.name = "Common Static"
 
     def show (self):
         rules = self._cfg.keys('%s!rule'%(self._pre))
