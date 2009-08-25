@@ -864,7 +864,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 {
 	ret_t                             ret;
 	cherokee_buffer_t                *vtmp[2];
-	cuint_t                           name_len;
+	cherokee_buffer_t                 name_buf;
 	int                               is_dir;
 	int                               is_link;
 	const char                       *alt      = NULL;
@@ -895,24 +895,25 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		} 
 	}
 
+	/* Name buffer
+	 */
+	cherokee_buffer_fake (&name_buf, name, strlen(name));
+
 	/* Add the icon
 	 */
-	alt = (is_dir) ? "[DIR]" : "[   ]";
-	name_len = strlen(name);
-
 	if (props->show_icons) {
 		if (is_dir) {
 			icon = &icons->directory_icon;
 		} else {
-			cherokee_buffer_t name_buf;
-
-			cherokee_buffer_fake (&name_buf, name, name_len);
 			ret = cherokee_icons_get_icon (icons, &name_buf, &icon);
 			if (ret != ret_ok)
 				return ret;
 		}
 	}
 
+	/* Icon's 'alt'
+	 */
+	alt = (is_dir) ? "[DIR]" : "[   ]";
 	VTMP_SUBSTITUTE_TOKEN ("%icon_alt%", alt);
 
 	if (icon) {
@@ -933,14 +934,19 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		if (file->realpath.len <= 0) {
 			return ret_not_found;
 		}
-		VTMP_SUBSTITUTE_TOKEN ("%file_link%", file->realpath.buf);
+
+		cherokee_buffer_clean (tmp);
+		cherokee_buffer_escape_uri (tmp, &file->realpath);
+		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 			
 	} else if (! is_dir) {
-		VTMP_SUBSTITUTE_TOKEN ("%file_link%", name);
+		cherokee_buffer_clean (tmp);
+		cherokee_buffer_escape_uri (tmp, &name_buf);
+		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 
 	} else {
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_add (tmp, name, name_len);
+		cherokee_buffer_escape_uri (tmp, &name_buf);
 		cherokee_buffer_add_str (tmp, "/");
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);		
 	}
