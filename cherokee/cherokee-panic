@@ -123,7 +123,43 @@ exec 2>&1
 		rm -f $tmp_cmd
 
 	elif [ x$debugger = x$dbx ]; then
+	     #Solaris
+	     
+	     echo "Related processes were:"
+	     /usr/bin/ptree $pid
+		echo
+
+		echo "Stack(s) were:"
+		/usr/bin/pstack $pid
+		echo
+
+		echo "Flags were:"
+		/usr/bin/pflags $pid
+		echo
+		
+		echo "Credentials were:"
+		/usr/bin/pcred $pid
+		echo
+
+		echo "Libraries used were:"
+		/usr/bin/pldd $pid
+		echo
+
+		echo "Signal-handler settings were:"
+		/usr/bin/psig $pid
+		echo
+
+		echo "Files and devices in use were:"
+		/usr/bin/pfiles $pid
+		echo
+
+		echo "Directory in use was:"
+		/usr/bin/pwdx $pid
+		echo
+		
+		echo "Backtrace"
 	     $dbx -c "print (char *)cherokee_version; where -v -l ; quit" "$BINARYNAME" "$pid"
+		echo
 	fi
 
 ) | ( 
