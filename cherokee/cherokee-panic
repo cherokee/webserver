@@ -14,6 +14,9 @@ else
     fi
 fi
 
+# Redirect stderr to stdout
+exec 2>&1
+
 # Redirect all output to our mail command
 (
      # Check the OS
@@ -95,10 +98,19 @@ fi
 
 	# Get the backtrace
 	if [ x$debugger = x$gdb ]; then 
-	     tmp_cmd=`mktemp -t 2>/dev/null` ||
-	     tmp_cmd=`mktemp "/tmp/chrk.XXXXXX"` || exit 1
+	    
+	    # Use /dev/shm as temp dir
+	    test -d /dev/shm &&    \
+		   TMPDIR=/dev/shm || \
+		   TMPDIR=/var/tmp
 
-		( echo "print cherokee_version"
+	     tmp_cmd=`mktemp "$TMPDIR/chrk.XXXXXX"` || (
+		    echo "ERROR: Couldn't create temp file in ${TMPDIR}"
+		    exit 1
+		)
+
+		( echo "set height 0"
+		  echo "print cherokee_version"
 		  echo "thread apply all bt full"
 		  echo "quit" ) >> $tmp_cmd
 
@@ -107,7 +119,8 @@ fi
 		else
 		    $gdb -x $tmp_cmd -batch "$BINARYNAME" "$pid"
 		fi
-		rm $tmp_cmd
+
+		rm -f $tmp_cmd
 
 	elif [ x$debugger = x$dbx ]; then
 	     $dbx -c "print (char *)cherokee_version; where -v -l ; quit" "$BINARYNAME" "$pid"
