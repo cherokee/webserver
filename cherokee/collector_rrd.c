@@ -46,8 +46,9 @@
  */
 PLUGIN_INFO_COLLECTOR_EASIEST_INIT (rrd);
 
-#define ELAPSE_UPDATE 60 
-#define ELAPSE_RENDER 60
+#define ELAPSE_UPDATE     60 
+#define ELAPSE_RENDER     60
+#define WORKER_INIT_SLEEP 10
 
 #define ENTRIES "collector,rrd"
 
@@ -692,19 +693,10 @@ srv_init (cherokee_collector_rrd_t *rrd)
 		return ret_error;
 	}
 
-	/* Add the commit callback
+	/* Next iterations
 	 */
-	ret = cherokee_bogotime_add_callback (update_srv_cb, rrd, ELAPSE_UPDATE);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
-
-	/* Add the re-rendering callback
-	 */
-	ret = cherokee_bogotime_add_callback (render_srv_cb, rrd, ELAPSE_RENDER);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
+	rrd->next_update = cherokee_bogonow_now + ELAPSE_UPDATE;
+	rrd->next_render = cherokee_bogonow_now + rrd->render_elapse;
 	
 	return ret_ok;
 }
@@ -817,19 +809,12 @@ vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
 		return ret_error;
 	}
 
-	/* Add the commit callback
+	/* Next iterations
 	 */
-	ret = cherokee_bogotime_add_callback (update_vsrv_cb, rrd, ELAPSE_UPDATE);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
+	cherokee_list_add_tail_content (&rrd_srv->collectors_vsrv, rrd);
 
-	/* Add the re-rendering callback
-	 */
-	ret = cherokee_bogotime_add_callback (render_vsrv_cb, rrd, ELAPSE_RENDER);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
+	rrd->next_update = cherokee_bogonow_now + ELAPSE_UPDATE;
+	rrd->next_render = cherokee_bogonow_now + rrd_srv->render_elapse;
 
 	return ret_ok;
 }
@@ -873,6 +858,72 @@ vsrv_new (cherokee_collector_t           *collector,
 }
 
 
+static void *
+rrd_thread_worker_func (void *param)
+{
+	time_t                         start;
+	cuint_t                        elapse;
+	cuint_t                        to_sleep;
+	cherokee_list_t               *i;
+	cherokee_collector_vsrv_rrd_t *vrrd;
+	time_t                         next_task;
+	cherokee_collector_rrd_t      *rrd       = COLLECTOR_RRD(param);
+
+	TRACE (ENTRIES, "Worker thread created.. sleeping %dsecs\n", WORKER_INIT_SLEEP);
+	sleep (WORKER_INIT_SLEEP);
+
+	while (true) {
+		start     = cherokee_bogonow_now;
+		next_task = cherokee_bogonow_now + ELAPSE_RENDER + 1;
+
+		TRACE (ENTRIES, "Worker thread: Starting new iteration (now=%d)\n", start);
+ 
+		/* RRD Server
+		 */
+		if (cherokee_bogonow_now >= rrd->next_update) {
+			update_srv_cb (rrd);
+			rrd->next_update += ELAPSE_UPDATE;
+		}
+
+		if (cherokee_bogonow_now >= rrd->next_render) {
+			render_srv_cb (rrd);
+			rrd->next_render += rrd->render_elapse;
+		}
+
+		next_task = MIN (next_task, MIN(rrd->next_render, rrd->next_update));
+
+		/* RRD Virtual Servers
+		 */
+		list_for_each (i, &rrd->collectors_vsrv) {
+			vrrd = COLLECTOR_VSRV_RRD (LIST_ITEM_INFO(i));
+
+			if (cherokee_bogonow_now >= vrrd->next_update) {
+				update_vsrv_cb (vrrd);
+				vrrd->next_update += ELAPSE_UPDATE;
+			}
+
+			if (cherokee_bogonow_now >= vrrd->next_render) {
+				render_vsrv_cb (vrrd);
+				vrrd->next_render += rrd->render_elapse;
+			}
+
+			next_task = MIN (next_task, MIN(vrrd->next_render, vrrd->next_update));
+		}
+
+		/* End of iteration
+		 */
+		elapse   = cherokee_bogonow_now - start;
+		to_sleep = MAX (0, next_task - cherokee_bogonow_now);
+		TRACE (ENTRIES, "Worker thread: Finished iteration (elapse %d secs, sleeping %d secs)\n", elapse, to_sleep);
+
+		if (to_sleep > 0) {
+			sleep (to_sleep);
+		}
+	}
+
+	return NULL;
+}
+
 
 /* Plug-in constructor
  */
@@ -882,6 +933,7 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 			    cherokee_plugin_info_t    *info,
 			    cherokee_config_node_t    *config)
 {
+	int                     re;
 	ret_t                   ret;
 	cherokee_config_node_t *subconf;
 	CHEROKEE_NEW_STRUCT (n, collector_rrd);
@@ -911,6 +963,8 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 	cherokee_buffer_init (&n->path_rrdtool);
 	cherokee_buffer_init (&n->path_database);
 
+	INIT_LIST_HEAD (&n->collectors_vsrv);
+
 	/* Configuration
 	 */
 	cherokee_config_node_read_int (config, "render_elapse", &n->render_elapse);
@@ -937,6 +991,14 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 	 */
 	cherokee_buffer_add_buffer (&n->path_database, &n->database_dir);
 	cherokee_buffer_add_str    (&n->path_database, "/server.rrd");
+
+	/* Create the thread
+	 */
+	re = pthread_create (&n->thread, NULL, rrd_thread_worker_func, n);
+	if (re != 0) {
+		PRINT_ERROR ("Couldn't create the RRD working thread: error=%d\n", re);
+		return ret_error;
+	}
 
 	/* Return obj
 	 */
