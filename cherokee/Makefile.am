@@ -20,6 +20,7 @@ error_redir.deps \
 phpcgi.deps \
 scgi.deps \
 fcgi.deps \
+uwsgi.deps \
 fastcgi.deps \
 cgi.deps \
 streaming.deps \
@@ -526,6 +527,29 @@ if STATIC_HANDLER_FCGI
 static_handler_fcgi_src = $(handler_fcgi)
 else
 dynamic_handler_fcgi_lib = libplugin_fcgi.la
+endif
+
+
+#
+# Handler uwsgi
+#
+if !STATIC_HANDLER_UWSGI
+handleruwsgi_cgi = handler_cgi_base.h handler_cgi_base.c
+endif
+
+handler_uwsgi = \
+$(handleruwsgi_cgi) \
+handler_uwsgi.h \
+handler_uwsgi.c
+
+libplugin_uwsgi_la_LDFLAGS = $(module_ldflags)  
+libplugin_uwsgi_la_SOURCES = $(handler_uwsgi)
+libplugin_uwsgi_la_LIBADD  = $(dynamic_handler_file_lib)
+
+if STATIC_HANDLER_UWSGI
+static_handler_uwsgi_src = $(handler_uwsgi)
+else
+dynamic_handler_uwsgi_lib = libplugin_uwsgi.la
 endif
 
 
@@ -1335,6 +1359,10 @@ if STATIC_HANDLER_SCGI
    common_cgi = handler_cgi_base.h \
 	     	 handler_cgi_base.c
 endif
+if STATIC_HANDLER_UWSGI
+   common_cgi = handler_cgi_base.h \
+	     	 handler_cgi_base.c
+endif
 
 if STATIC_VALIDATOR_PLAIN
    common_val_file = validator_file.h \
@@ -1379,6 +1407,7 @@ $(static_handler_admin_src) \
 $(static_handler_dirlist_src) \
 $(static_handler_scgi_src) \
 $(static_handler_fcgi_src) \
+$(static_handler_uwsgi_src) \
 $(static_handler_fastcgi_src) \
 $(static_handler_redir_src) \
 $(static_handler_error_redir_src) \
@@ -1562,6 +1591,7 @@ $(dynamic_handler_admin_lib) \
 $(dynamic_handler_dirlist_lib) \
 $(dynamic_handler_scgi_lib) \
 $(dynamic_handler_fcgi_lib) \
+$(dynamic_handler_uwsgi_lib) \
 $(dynamic_handler_fastcgi_lib) \
 $(dynamic_handler_redir_lib) \
 $(dynamic_handler_proxy_lib) \

@@ -65,6 +65,7 @@ ModuleServerInfo.py \
 ModuleCgi.py \
 ModuleFcgi.py \
 ModuleScgi.py \
+ModuleUwsgi.py \
 ModuleBalancer.py \
 ModuleSsi.py \
 ModuleSecdownload.py \
