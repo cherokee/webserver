@@ -64,6 +64,12 @@ cherokee_error_log (cherokee_error_type_t type,
 	cherokee_buffer_add_va_list (&tmp, format, ap);
 	va_end (ap);
 
+	/* Backtrace
+	 */
+#ifdef BACKTRACES_ENABLED
+	cherokee_buf_add_backtrace (&tmp, 2);
+#endif
+
 	/* Logging: 1st option - connection's logger
 	 */
 	logger = LOGGER (CHEROKEE_THREAD_PROP_GET (thread_logger_error_ptr));

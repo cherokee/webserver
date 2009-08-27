@@ -76,6 +76,10 @@
 # include <syslog.h>
 #endif
 
+#ifdef HAVE_EXECINFO_H
+# include <execinfo.h>
+#endif
+
 #define ENTRIES "util"
 
 const char *cherokee_version    = PACKAGE_VERSION;
@@ -1332,6 +1336,32 @@ cherokee_buf_add_bogonow (cherokee_buffer_t  *buf,
 				cherokee_bogonow_tmloc.tm_sec,
 				cherokee_bogonow_tv.tv_usec / 1000);
 	return ret_ok;
+}
+
+
+ret_t
+cherokee_buf_add_backtrace (cherokee_buffer_t *buf,
+			    int                n_skip)
+{
+#if HAVE_BACKTRACE
+	void    *array[128];
+	size_t   size;
+	char   **strings;
+	size_t   i;
+	
+	size = backtrace (array, 128);
+	strings = backtrace_symbols (array, size);
+	
+	for (i=n_skip; i < size; i++) {
+		cherokee_buffer_add      (buf, strings[i], strlen(strings[i]));
+		cherokee_buffer_add_char (buf, '\n');
+	}
+ 
+	free (strings);
+	return ret_ok;
+#else
+	return ret_no_sys;
+#endif
 }
 
 

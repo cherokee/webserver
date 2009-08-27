@@ -36,6 +36,13 @@ And then you'll be able to execute gdb, cgdb, gdbtui..
   --enable-shared=no
 ----
 
+* If you want a code backtrace printed each time an error message is
+  generated, add the following `configure` parameter:
++
+----
+  --enable-backtraces
+----
++
 * You can also enable a cool feature: the CHEROKEE_TRACE environment
   variable to trace what is going on inside the server. To enable it
   you must add a special flag to your `configure` or `autogen.sh`

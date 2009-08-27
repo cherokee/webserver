@@ -181,6 +181,13 @@ AC_ARG_ENABLE(trace, AC_HELP_STRING([--enable-trace], [Enable trace facility]),
     AC_DEFINE(TRACE_ENABLED, 1, [Trace facility])
    ], [enable_trace="no"])
 
+dnl
+dnl Backtraces
+dnl 
+AC_ARG_ENABLE(backtraces, AC_HELP_STRING([--enable-backtraces], [Enable backtraces on error]), 
+   [enable_backtraces="$enableval"
+    AC_DEFINE(BACKTRACES_ENABLED, 1, [Backtracing facility])
+   ], [enable_backtraces="no"])
 
 dnl
 dnl Dynamic library loading library
@@ -248,7 +255,7 @@ AC_CHECK_HEADERS(endian.h machine/endian.h sys/machine.h sys/endian.h sys/isa_de
 AC_CHECK_HEADERS(sys/socket.h sys/un.h netinet/in.h arpa/inet.h netinet/tcp.h sys/ioctl.h fcntl.h sys/ofcntl.h sys/time.h)
 AC_CHECK_HEADERS(sys/resource.h resource.h unistd.h syslog.h stdint.h inttypes.h error.h pwd.h sys/uio.h)
 AC_CHECK_HEADERS(pthread.h netdb.h stdarg.h sys/filio.h sys/varargs.h sys/select.h sys/mman.h sys/uio.h grp.h winsock.h)
-AC_CHECK_HEADERS(winsock.h winsock2.h sched.h)
+AC_CHECK_HEADERS(winsock.h winsock2.h sched.h execinfo.h)
 
 AC_SYS_LARGEFILE
 
@@ -286,7 +293,7 @@ AC_FUNC_MEMCMP
 AC_FUNC_MMAP
 AC_FUNC_FORK
 
-AC_CHECK_FUNCS(gmtime gmtime_r localtime localtime_r getrlimit getdtablesize readdir readdir_r flockfile funlockfile strnstr)
+AC_CHECK_FUNCS(gmtime gmtime_r localtime localtime_r getrlimit getdtablesize readdir readdir_r flockfile funlockfile strnstr backtrace)
 
 FW_CHECK_PWD
 FW_CHECK_GRP
@@ -1496,6 +1503,7 @@ echo ============================
 echo "Install prefix        $prefix"
 echo "CFLAGS                $CFLAGS"
 echo "trace                 $enable_trace"
+echo "backtracing           $enable_backtraces"
 echo "sendfile()            $with_sendfile_support"
 echo "IPv6 support          $have_ipv6"
 i=1
