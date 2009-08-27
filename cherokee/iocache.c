@@ -334,8 +334,11 @@ ioentry_update_mmap (cherokee_iocache_entry_t *entry,
 			goto error;
 		}
 
-		if (fd != NULL)
+		cherokee_fd_set_closexec (fd_local);
+
+		if (fd != NULL) {
 			*fd = fd_local;
+		}
 	}
 
 	/* Might need to free the previous mmap
