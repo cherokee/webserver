@@ -290,8 +290,10 @@ open_local_directory (cherokee_handler_file_t *fhdl, cherokee_buffer_t *local_fi
 	/* Open it
 	 */
 	fhdl->fd = open (local_file->buf, O_RDONLY | O_BINARY);
-	if (fhdl->fd > 0)
+	if (fhdl->fd > 0) {
+		cherokee_fd_set_closexec (fhdl->fd);
 		return ret_ok;
+	}
 
 	/* Manage errors
 	 */

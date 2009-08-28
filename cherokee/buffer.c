@@ -962,6 +962,8 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 		return ret_error;
 	}
 
+	cherokee_fd_set_closexec (f);
+
 	/* Read the content
 	 */
 	r = read (f, buf->buf + buf->len, info.st_size);
