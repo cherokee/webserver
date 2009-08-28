@@ -415,16 +415,17 @@ cherokee_handler_cgi_base_build_basic_env (
 		char                ip_str[CHE_INET_ADDRSTRLEN+1];
 
 		my_address_len = sizeof(my_address);
-		getsockname (SOCKET_FD(&conn->socket), 
-			     (struct sockaddr *)&my_address,
-			     &my_address_len);
+		re = getsockname (SOCKET_FD(&conn->socket), 
+				  (struct sockaddr *)&my_address,
+				  &my_address_len);
+		if (re == 0) {
+			cherokee_ntop (my_address.sa_in.sin_family,
+				       (struct sockaddr *) &my_address,
+				       ip_str, sizeof(ip_str)-1);
 
-		cherokee_ntop (my_address.sa_in.sin_family,
-			       (struct sockaddr *) &my_address,
-			       ip_str, sizeof(ip_str)-1);
-
-		set_env (cgi, "SERVER_ADDR",
-			 ip_str, strlen(ip_str));
+			set_env (cgi, "SERVER_ADDR",
+				 ip_str, strlen(ip_str));
+		}
 	} else {
 		set_env (cgi, "SERVER_ADDR",
 			 bind->server_address.buf,

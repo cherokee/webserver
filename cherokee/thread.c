@@ -417,7 +417,7 @@ close_active_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 	 */
 	ret = cherokee_fdpoll_del (thread->fdpoll, SOCKET_FD(&conn->socket));
 	if (ret != ret_ok) {
-		SHOULDNT_HAPPEN;
+		LOG_ERROR ("Couldn't remove fd(%d) from fdpoll\n", SOCKET_FD(&conn->socket));
 	}
 
 	/* Remove from active connections list

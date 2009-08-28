@@ -255,6 +255,12 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 	int                 re;
 	ret_t               ret;
 	cherokee_iocache_t *iocache = IOCACHE(CACHE_ENTRY(entry)->cache);
+	
+	/* Returns:
+	 * ret_ok          - Ok, updated
+	 * ret_ok_and_sent - It's still fresh
+	 * ret_deny        - No info about the file
+	 */
 
 	if (PRIV(entry)->stat_expiration >= cherokee_bogonow_now) {
 		TRACE (ENTRIES, "Update stat: %s: updated - skipped\n", 
