@@ -300,16 +300,16 @@ config_server (cherokee_server_t *srv)
 	}
 
 	cherokee_buffer_add_va  (&buf, 
-				 RULE_PRE "6!match = directory\n"
-				 RULE_PRE "6!match!directory = /graphs\n"
-				 RULE_PRE "6!handler = file\n"
-				 RULE_PRE "6!handler!iocache = 0\n"
-				 RULE_PRE "6!document_root = %s\n",
+				 RULE_PRE "7!match = directory\n"
+				 RULE_PRE "7!match!directory = /graphs\n"
+				 RULE_PRE "7!handler = file\n"
+				 RULE_PRE "7!handler!iocache = 0\n"
+				 RULE_PRE "7!document_root = %s\n",
 				 rrd_dir.buf ? rrd_dir.buf : CHEROKEE_GRAPHS_DIR);
 
 	if (! debug) {
-		cherokee_buffer_add_str (&buf, RULE_PRE "6!expiration = time\n");
-		cherokee_buffer_add_str (&buf, RULE_PRE "6!expiration!time = 60\n");
+		cherokee_buffer_add_str (&buf, RULE_PRE "7!expiration = time\n");
+		cherokee_buffer_add_str (&buf, RULE_PRE "7!expiration!time = 60\n");
 	}
 
 	cherokee_buffer_add_str (&buf,
