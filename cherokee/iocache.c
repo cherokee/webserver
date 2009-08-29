@@ -265,6 +265,12 @@ ioentry_update_stat (cherokee_iocache_entry_t *entry)
 	if (PRIV(entry)->stat_expiration >= cherokee_bogonow_now) {
 		TRACE (ENTRIES, "Update stat: %s: updated - skipped\n", 
 		       CACHE_ENTRY(entry)->key.buf);
+
+		/* Checked, but file didn't exist */
+		if (PUBL(entry)->state_ret != ret_ok) {
+			return ret_deny;
+		}
+
 		return ret_ok_and_sent;
 	}
 
