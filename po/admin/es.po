@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-08-16 21:21+0200\n"
-"PO-Revision-Date: 2009-08-16 22:47+0200\n"
+"POT-Creation-Date: 2009-08-28 16:12+0200\n"
+"PO-Revision-Date: 2009-08-29 12:05+0200\n"
 "Last-Translator: Alvaro Lopez Ortega <alvaro@alobbs.com>\n"
 "Language-Team: Spanish <>\n"
 "MIME-Version: 1.0\n"
@@ -370,7 +370,7 @@ msgstr ""
 
 #: admin/ModuleDirectory.py:22 admin/ModuleDirectory.py:24
 #: admin/Wizard_Django.py:147 admin/Wizard_Drupal.py:191
-#: admin/Wizard_RoR.py:233 admin/Wizard_WordPress.py:242
+#: admin/Wizard_RoR.py:233 admin/Wizard_WordPress.py:180
 msgid "Web Directory"
 msgstr "Directorio web"
 
@@ -419,7 +419,6 @@ msgid "Show Backup files"
 msgstr "Mostrar ficheros de backup"
 
 #: admin/ModuleDirlist.py:50
-#, fuzzy
 msgid "Show Hidden files"
 msgstr "Ficheros ocultos"
 
@@ -428,9 +427,8 @@ msgid "Allow symbolic links"
 msgstr "Permitir enlaces simbólicos"
 
 #: admin/ModuleDirlist.py:52
-#, fuzzy
 msgid "Redirect symbolic links"
-msgstr "Permitir enlaces simbólicos"
+msgstr "Redirigir enlaces simbólicos"
 
 #: admin/ModuleDirlist.py:55
 msgid "Theming"
@@ -531,11 +529,15 @@ msgstr "Coincide con la solicitud si algún fichero existe."
 
 #: admin/ModuleExists.py:12
 msgid "Only match regular files. If unset directories will be matched as well."
-msgstr "Sólo coincide con ficheros normales. Si se desactiva, los directorios coincidirán también."
+msgstr ""
+"Sólo coincide con ficheros normales. Si se desactiva, los directorios "
+"coincidirán también."
 
 #: admin/ModuleExists.py:13
 msgid "If a directory is request, check the index files inside it."
-msgstr "Si se trata de la petición de un directorio, comprobar el fichero de índice en su interior."
+msgstr ""
+"Si se trata de la petición de un directorio, comprobar el fichero de índice "
+"en su interior."
 
 #: admin/ModuleExists.py:15
 msgid "Match a specific list of files"
@@ -546,9 +548,8 @@ msgid "Match any file"
 msgstr "Coincide cualquier fichero"
 
 #: admin/ModuleExists.py:42
-#, fuzzy
 msgid "Match type"
-msgstr "Coincide cualquier fichero"
+msgstr "Tipo de prueba"
 
 #: admin/ModuleExists.py:44 admin/ModuleExists.py:59 admin/PageIcon.py:177
 msgid "Files"
@@ -564,9 +565,8 @@ msgid "Use I/O cache"
 msgstr "Usar caché E/S"
 
 #: admin/ModuleExists.py:61
-#, fuzzy
 msgid "Only match files"
-msgstr "Coincide cualquier fichero"
+msgstr "Sólo comprobar ficheros"
 
 #: admin/ModuleExists.py:62
 msgid "If dir, check index files"
@@ -581,7 +581,6 @@ msgid "File Exists"
 msgstr "Existe fichero"
 
 #: admin/ModuleExtensions.py:9
-#, fuzzy
 msgid ""
 "Comma-separated list of File Extension to which the configuration will be "
 "applied."
@@ -616,41 +615,34 @@ msgid "IP or SubNet to check the connection origin against."
 msgstr "IP o subred con la que comprobar origen de la conexión."
 
 #: admin/ModuleFrom.py:27 admin/ModuleFrom.py:76 admin/consts.py:133
-#, fuzzy
 msgid "Connected from"
-msgstr "Conexión"
+msgstr "Conectado desde"
 
 #: admin/ModuleFrom.py:35
 msgid "IP or SubNet"
 msgstr "IP o Subred"
 
 #: admin/ModuleFrom.py:54
-#, fuzzy
 msgid "Add new entry"
-msgstr "Añadir nuevo par"
+msgstr "Añadir nueva entrada"
 
 #: admin/ModuleFullpath.py:9
-#, fuzzy
 msgid ""
 "Full path request to which content the configuration will be applied. (Eg: /"
 "favicon.ico)"
-msgstr ""
-"Directorio web público a cuyo contenido se le aplicará la configuración."
+msgstr "Directorio web público a cuyo contenido se le aplicará la configuración. (Ej: /favicon.ico)"
 
 #: admin/ModuleFullpath.py:22 admin/ModuleFullpath.py:52 admin/consts.py:132
-#, fuzzy
 msgid "Full Path"
-msgstr "Ruta"
+msgstr "Ruta completa"
 
 #: admin/ModuleFullpath.py:40
-#, fuzzy
 msgid "Full Web Paths"
-msgstr "Ruta"
+msgstr "Ruta Web completa"
 
 #: admin/ModuleFullpath.py:43
-#, fuzzy
 msgid "Add another path"
-msgstr "Añadir nuevo par"
+msgstr "Añadir nueva rutar"
 
 #: admin/ModuleGeoip.py:12
 msgid "Add the initial country. It's possible to add more later on."
@@ -837,11 +829,10 @@ msgstr ""
 "Sentencia SQL para ejecutar. ${user} se sustituirá por el nombre del usuario."
 
 #: admin/ModuleMysql.py:14
-#, fuzzy
 msgid ""
 "Choose an encryption type for the password. Only suitable for the \"Basic\" "
 "authentication mechanism."
-msgstr "Usar passwords en MD5. Sólo disponible para autenticación \"Basic\"."
+msgstr "Elige un tipo de encriptación para el password. Sólo disponible para autenticación \"Basic\"."
 
 #: admin/ModuleMysql.py:46
 msgid "Unix Socket"
@@ -856,9 +847,8 @@ msgid "SQL Query"
 msgstr "Consulta SQL"
 
 #: admin/ModuleMysql.py:53 admin/ModuleMysql.py:55
-#, fuzzy
 msgid "Password Hash"
-msgstr "Contraseña"
+msgstr "Hash de la Contraseña"
 
 #: admin/ModuleMysql.py:57
 msgid "MySQL connection"
@@ -1045,27 +1035,29 @@ msgstr "Avanzado: Directorio donde se localizan las bases de datos de RRDtool."
 msgid ""
 "Advanced: Path to the rrdtool binary. By default the server will look in the "
 "PATH."
-msgstr "Avanzado: Ruta al binario rrdtool. Por defecto el servidor lo buscará en el PATH."
+msgstr ""
+"Avanzado: Ruta al binario rrdtool. Por defecto el servidor lo buscará en el "
+"PATH."
 
 #: admin/ModuleRrd.py:9
 msgid ""
 "Advanded: How often usage graphics should be regenerated. (Default: 60 "
 "seconds)"
-msgstr "Avanzado: Frecuencia con las que las gráficas deben ser regeneradas. (Defecto: 60 segundos)"
+msgstr ""
+"Avanzado: Frecuencia con las que las gráficas deben ser regeneradas. "
+"(Defecto: 60 segundos)"
 
 #: admin/ModuleRrd.py:26
 msgid "RRD Database directory"
 msgstr "Directorio de las bases de datos RRD"
 
 #: admin/ModuleRrd.py:27
-#, fuzzy
 msgid "Custom rrdtool binary"
-msgstr "Redirecciones personalizadas"
+msgstr "Binario personalizado de rrdtool"
 
 #: admin/ModuleRrd.py:28
-#, fuzzy
 msgid "Rendering interval (<i>secs</i>)"
-msgstr "Tiempo de espera (<i>segs.</i>)"
+msgstr "Intervalo de regeneración (<i>segs.</i>)"
 
 #: admin/ModuleScgi.py:32
 msgid "SCGI specific"
@@ -1090,7 +1082,7 @@ msgstr "Secreto"
 
 #: admin/ModuleSecdownload.py:39
 msgid "Timeout"
-msgstr ""
+msgstr "Tiempo de Espera"
 
 #: admin/ModuleSecdownload.py:41
 msgid "Covering parameters"
@@ -1170,12 +1162,13 @@ msgstr "Impulso inicial"
 msgid ""
 "IP or Subnet of the NIC that accepted the request. Example: ::1, or "
 "10.0.0.0/8"
-msgstr "IP o subred de la interface de red que aceptó la petición. Por ejemplo: ::1 o 10.0.0.0/8"
+msgstr ""
+"IP o subred de la interface de red que aceptó la petición. Por ejemplo: ::1 "
+"o 10.0.0.0/8"
 
 #: admin/ModuleTargetIp.py:10
-#, fuzzy
 msgid "At least one IP or Subnet entry must be defined."
-msgstr "Se debe definir al menos una cadena comodín."
+msgstr "Se debe definir al menos una dirección IP o Subred."
 
 #: admin/ModuleTargetIp.py:30
 msgid "Accepted Server IP addresses and subnets"
@@ -1851,9 +1844,8 @@ msgid "Server Tokens"
 msgstr "Identificación del servidor"
 
 #: admin/PageGeneral.py:89
-#, fuzzy
 msgid "Information Collector"
-msgstr "Codificador de información"
+msgstr "Colector de actividad"
 
 #: admin/PageGeneral.py:91
 msgid "Graphs Type"
@@ -1988,19 +1980,18 @@ msgstr ""
 "servidor."
 
 #: admin/PageInfoSource.py:20
-#, fuzzy
 msgid ""
 "Execute the interpreter under a different group. Default: Default GID of the "
 "new process UID."
-msgstr ""
-"Ejecutar el intérprete con otro usuario. Por defecto: El mismo GID que el "
-"servidor."
+msgstr "Ejecutar el intérprete con otro grupo. Por defecto: El mismo GID que el servidor."
 
 #: admin/PageInfoSource.py:21
 msgid ""
 "Whether the new child process should inherit the environment variables from "
 "the server process. Default: yes."
-msgstr "Define si el nuevo proceso debe heredar las variables de entorno del proceso del servidor. Por defecto: Sí."
+msgstr ""
+"Define si el nuevo proceso debe heredar las variables de entorno del proceso "
+"del servidor. Por defecto: Sí."
 
 #: admin/PageInfoSource.py:135
 msgid "Environment variables"
@@ -2131,7 +2122,6 @@ msgid "Server Development"
 msgstr "Servidor de desarrollo"
 
 #: admin/PageNewConfig.py:40
-#, fuzzy
 msgid "Regular configuration: Apache logs, MIME types, icons, etc."
 msgstr "Configuración normal: PHP, logs tipo Apache, tipos MIME, iconos, etc."
 
@@ -2184,7 +2174,6 @@ msgstr ""
 "<a href=\"/feedback\">contactar con nosotros</a>.\n"
 
 #: admin/PageStatus.py:53
-#, fuzzy
 msgid ""
 "\n"
 "We would love to know that you are using Cherokee. Submit your domain\n"
@@ -2267,19 +2256,16 @@ msgid "Not Found"
 msgstr "No encontrado"
 
 #: admin/PageStatus.py:159 admin/PageStatus.py:160
-#, fuzzy
 msgid "Server Traffic"
-msgstr "Info. del servidor"
+msgstr "Tráfico del servidor"
 
 #: admin/PageStatus.py:161
-#, fuzzy
 msgid "Accepted Connections"
-msgstr "Dominios aceptados"
+msgstr "Conexiones aceptadas"
 
 #: admin/PageStatus.py:162
-#, fuzzy
 msgid "Connections Timeout"
-msgstr "Conexiones"
+msgstr "Tiempo de espera de las conexiones"
 
 #: admin/PageStatus.py:167 admin/PageVServer.py:561
 msgid "1 month"
@@ -2437,7 +2423,6 @@ msgid "Path to the executable that will be invoked on each log entry."
 msgstr "Ruta al ejecutable al que se llamará por cada entra del log."
 
 #: admin/PageVServer.py:60
-#, fuzzy
 msgid ""
 "Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
 "headers (send by reverse proxies)."
@@ -2446,7 +2431,6 @@ msgstr ""
 "los proxies inversos)."
 
 #: admin/PageVServer.py:61
-#, fuzzy
 msgid ""
 "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
 "only if you are centain of what you are doing."
@@ -2455,7 +2439,6 @@ msgstr ""
 "realmente lo que está haciendo."
 
 #: admin/PageVServer.py:62
-#, fuzzy
 msgid ""
 "List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
 "Forwarded-For headers."
@@ -2490,7 +2473,8 @@ msgstr "Permite seleccionar cómo evaluar los nombres de domínio."
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
-msgstr "Si debería recolectar estadísticas sobre el tráfico de este servidor virtual."
+msgstr ""
+"Si debería recolectar estadísticas sobre el tráfico de este servidor virtual."
 
 #: admin/PageVServer.py:70
 msgid "Loggers"
@@ -2509,9 +2493,8 @@ msgid "Basics"
 msgstr "Básica"
 
 #: admin/PageVServer.py:242 admin/PageVServers.py:311
-#, fuzzy
 msgid "Wizards"
-msgstr "Comodines"
+msgstr "Asistentes"
 
 #: admin/PageVServer.py:245
 msgid "Behavior"
@@ -2634,12 +2617,10 @@ msgid "Advanced Virtual Hosting"
 msgstr "Hospedaje Virtual Avanzado"
 
 #: admin/PageVServer.py:538
-#, fuzzy
 msgid "Statistics"
-msgstr "Estadísticas de Tráfico"
+msgstr "Estadísticas"
 
 #: admin/PageVServer.py:541 admin/PageVServer.py:543
-#, fuzzy
 msgid "Collect Statistics"
 msgstr "Estadísticas de Tráfico"
 
@@ -2684,9 +2665,8 @@ msgid "Don't check origin"
 msgstr "No comprobar origen"
 
 #: admin/PageVServer.py:656
-#, fuzzy
 msgid "Accept from Hosts"
-msgstr "Dominios aceptados"
+msgstr "Acceptar de Hosts"
 
 #: admin/PageVServer.py:664
 msgid "Host names"
@@ -2729,9 +2709,8 @@ msgid "Domains"
 msgstr "Dominios"
 
 #: admin/PageVServers.py:144
-#, fuzzy
 msgid "Stats"
-msgstr "Estado"
+msgstr "Stats"
 
 #: admin/PageVServers.py:281 admin/PageVServers.py:309
 msgid "Add new Virtual Server"
@@ -2807,7 +2786,7 @@ msgstr "Borrar"
 msgid "Clone"
 msgstr "Clonar"
 
-#: admin/Wizard.py:202
+#: admin/Wizard.py:203
 msgid "Same logs as vserver"
 msgstr "Los mismos los que el vserver"
 
@@ -2816,9 +2795,8 @@ msgid "Local path to the Django based project."
 msgstr "Ruta local al proyecto basado en Django."
 
 #: admin/Wizard_Django.py:9 admin/Wizard_Mailman.py:11 admin/Wizard_RoR.py:12
-#, fuzzy
 msgid "Name of the new domain that will be created."
-msgstr "Ruta del fichero PID. Vacío, el fichero no se creará."
+msgstr "Nombre del dominio que será creado."
 
 #: admin/Wizard_Django.py:11
 msgid "It does not look like a Django based project directory."
@@ -2833,22 +2811,19 @@ msgid "Directory doesn't look like a Django based project."
 msgstr "El directorio no parece un proyecto basado en Django."
 
 #: admin/Wizard_Django.py:73 admin/Wizard_Django.py:136
-#, fuzzy
 msgid "Django Wizard"
-msgstr "Comodines"
+msgstr "Asistente para Django"
 
 #: admin/Wizard_Django.py:84 admin/Wizard_Drupal.py:119
 #: admin/Wizard_Mailman.py:122 admin/Wizard_RoR.py:158
-#: admin/Wizard_WordPress.py:168
-#, fuzzy
+#: admin/Wizard_WordPress.py:108
 msgid "New Host Name"
-msgstr "Nuevo nombre de servidor"
+msgstr "Nuevo nombre de host"
 
 #: admin/Wizard_Django.py:90 admin/Wizard_Django.py:152
 #: admin/Wizard_RoR.py:165 admin/Wizard_RoR.py:240
-#, fuzzy
 msgid "Project Directory"
-msgstr "Directorio web"
+msgstr "Directorio del proyecto"
 
 #: admin/Wizard_Drupal.py:9
 msgid ""
@@ -2877,29 +2852,25 @@ msgid "A host name must be provided."
 msgstr "Se debe proporcionar un nombre de servidor."
 
 #: admin/Wizard_Drupal.py:107 admin/Wizard_Drupal.py:176
-#, fuzzy
 msgid "Drupal Wizard"
-msgstr "Comodines"
+msgstr "Asistente para Drupal"
 
 #: admin/Wizard_Drupal.py:120 admin/Wizard_Drupal.py:192
-#: admin/Wizard_WordPress.py:169 admin/Wizard_WordPress.py:243
-#, fuzzy
+#: admin/Wizard_WordPress.py:109 admin/Wizard_WordPress.py:181
 msgid "Source Directory"
-msgstr "Directorio web"
+msgstr "Directorio de las fuentes"
 
 #: admin/Wizard_HotLinking.py:51
 msgid "Hot Linking Prevention Wizard"
 msgstr "Prevención de Hot-Linking"
 
 #: admin/Wizard_HotLinking.py:65
-#, fuzzy
 msgid "Domain Name"
-msgstr "Patrón de dominio"
+msgstr "Nombre de Dominio"
 
 #: admin/Wizard_HotLinking.py:70
-#, fuzzy
 msgid "Reply type"
-msgstr "Respuesta"
+msgstr "Tipo de Respuesta"
 
 #: admin/Wizard_Mailman.py:8
 msgid "Local path to the Mailman CGI directory."
@@ -2927,120 +2898,112 @@ msgstr "No parece ser un directorio de 'archive' de Mailman."
 
 #: admin/Wizard_Mailman.py:108
 msgid "Mailman Wizard"
-msgstr ""
+msgstr "Asistente para Mailman"
 
 #: admin/Wizard_Mailman.py:127
-#, fuzzy
 msgid "Mailman CGI directory"
-msgstr "La ruta no es un directorio"
+msgstr "Directorio CGI de Mailman"
 
 #: admin/Wizard_Mailman.py:128
-#, fuzzy
 msgid "Mailman Data directory"
-msgstr "La ruta no es un directorio"
+msgstr "Directorio de Datos de Mailman"
 
 #: admin/Wizard_Mailman.py:129
-#, fuzzy
 msgid "Mail Archive directory"
-msgstr "Directorio raíz del servidor virtual."
+msgstr "Directorio del almacen de correo"
 
 #: admin/Wizard_Redirect.py:7
 msgid ""
 "This domain name will be used as nickname for the new virtual server. More "
 "domains names can be added to the virtual server later on."
-msgstr ""
+msgstr "Este nombre de dominio será utilizado como nick del nuevo servidor virtual. Más adelante se podrán añadir más nombres de dominio al servidor virtual."
 
 #: admin/Wizard_Redirect.py:8
-#, fuzzy
 msgid "Domain name to which requests will be redirected."
-msgstr "Expresión regular con la que se comparará la solicitud."
+msgstr "Nombre de dominio al cual se redirigiran las peticiones"
 
 #: admin/Wizard_Redirect.py:9
-#, fuzzy
 msgid "This field can not be empty."
-msgstr "Realm no puede estar vacío"
+msgstr "Este campo no puede estar vacio"
 
 #: admin/Wizard_Redirect.py:34
-#, fuzzy
 msgid "Redirection Wizard"
-msgstr "Redirección"
+msgstr "Asistente para Redirecciones"
 
 #: admin/Wizard_Redirect.py:44
-#, fuzzy
 msgid "Origin Domain"
-msgstr "Dominios"
+msgstr "Dominio de Origen"
 
 #: admin/Wizard_Redirect.py:45
-#, fuzzy
 msgid "Target Domain"
-msgstr "Dominio base"
+msgstr "Dominio de Destino"
 
 #: admin/Wizard_RoR.py:11
 msgid "Local path to the Ruby on Rails based project."
-msgstr ""
+msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
 #: admin/Wizard_RoR.py:13
 msgid ""
 "Directory of the web directory where the Ruby on Rails project will live in."
-msgstr ""
+msgstr "Directorio web donde el proyecto será accesible."
 
 #: admin/Wizard_RoR.py:14
 msgid "Value of the RAILS_ENV variable."
-msgstr ""
+msgstr "Valor del la variable RAILS_ENV."
 
 #: admin/Wizard_RoR.py:16
 msgid ""
 "<p>Even though the directory looks like a Ruby on Rails project, the public/"
 "dispatch.fcgi file wasn't found.</p>"
-msgstr ""
+msgstr "<p>Incluso si el directorio parece contener un proyecto basado en Ruby on Rails, el fichero public/dispatch.fcgi no fué encontrado.</p>"
 
 #: admin/Wizard_RoR.py:17
 msgid ""
 "<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you "
 "might want to rename it.</p>"
-msgstr ""
+msgstr "<p>Sin embargo el fichero <b>public/dispatch.fcgi.example</b> está presente. Posiblemente quiera renombrarlo.</p>"
 
 #: admin/Wizard_RoR.py:18
 msgid ""
 "<p>If you are using Rails >= 2.3.0, you will have to execute the following "
 "command from the project directory in order to add the missing file:</"
 "p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
-msgstr ""
+msgstr "<p>Si estás usando Rails >= 2.3.0, tendrá que ejecutar el siguiente commando desde el directorio del proyecto:</p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
 
 #: admin/Wizard_RoR.py:19
 msgid "It does not look like a Ruby on Rails based project directory."
-msgstr ""
+msgstr "El directorio no parece contener un proyecto basado en Ruby on Rails."
 
 #: admin/Wizard_RoR.py:150 admin/Wizard_RoR.py:225
 msgid "Ruby on Rails Wizard"
-msgstr ""
+msgstr "Asistente para Ruby on Rails"
 
 #: admin/Wizard_RoR.py:166 admin/Wizard_RoR.py:241
 msgid "RAILS_ENV environment"
-msgstr ""
+msgstr "Valor de RAILS_ENV"
 
 #: admin/Wizard_WordPress.py:9
 msgid ""
 "Path to the directory where the Wordpress source code is located. (Example: /"
 "usr/share/wordpress)"
-msgstr ""
+msgstr "Directorio local a las fuentes de Wordpress (Por ejemplo: /usr/share/wordpress)"
 
 #: admin/Wizard_WordPress.py:10
 msgid ""
 "Web directory where you want Wordpress to be accessible. (Example: /blog)"
-msgstr ""
+msgstr "Directorio web donde Wordpress será publicado (Ejemplo: /blog)"
 
 #: admin/Wizard_WordPress.py:12
 msgid "Does not look like a WordPress source directory."
-msgstr ""
+msgstr "No parece ser el directorio de fuentes de Wordpress."
 
-#: admin/Wizard_WordPress.py:157
+#: admin/Wizard_WordPress.py:97
 msgid "WordPress Wizard"
-msgstr ""
+msgstr "Asistente para Wordpress"
 
-#: admin/Wizard_WordPress.py:227
+#: admin/Wizard_WordPress.py:165
 msgid "Wordpress Wizard: Location"
-msgstr ""
+msgstr "Asistente para Wordpress"
 
 #: admin/config.py:184
 #, python-format
@@ -3060,21 +3023,20 @@ msgid "Spanish"
 msgstr "Español"
 
 #: admin/consts.py:7
-#, fuzzy
 msgid "German"
-msgstr "General"
+msgstr "Alemán"
 
 #: admin/consts.py:8
 msgid "Dutch"
-msgstr ""
+msgstr "Holandés"
 
 #: admin/consts.py:9
 msgid "Swedish"
-msgstr ""
+msgstr "Sueco"
 
 #: admin/consts.py:10
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "Chino Simplificado"
 
 #: admin/consts.py:16
 msgid "Static content"
@@ -3241,9 +3203,8 @@ msgid "Wildcards"
 msgstr "Comodines"
 
 #: admin/consts.py:141
-#, fuzzy
 msgid "Server IP"
-msgstr "ID del servidor"
+msgstr "IP del Servidor"
 
 #: admin/consts.py:145
 msgid "Not set"
@@ -3290,13 +3251,12 @@ msgid "Require"
 msgstr "Requerir"
 
 #: admin/consts.py:168
-#, fuzzy
 msgid "Disabled"
-msgstr "Desactivar"
+msgstr "Desactivado"
 
 #: admin/consts.py:169
 msgid "RRDtool graphs"
-msgstr ""
+msgstr "Gráficas RRDTool"
 
 #: admin/server.py:118
 msgid "Configuration saved."
@@ -3315,14 +3275,14 @@ msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Parámetros incorrectos: PORT CONFIG_FILE"
 
 #: admin/server.py:232
-#, fuzzy, python-format
+#, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s"
-msgstr "Servidor %(version)s ejecutandose.. PID=%(pid)d Puerto=%(scgi_port)d"
+msgstr "Servidor %(version)s ejecutandose.. PID=%(pid)d Puerto=%(scgi_port)s"
 
 #: admin/server.py:234
-#, fuzzy, python-format
+#, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
-msgstr "Servidor %(version)s ejecutandose.. PID=%(pid)d Puerto=%(scgi_port)d"
+msgstr "Servidor %(version)s ejecutandose.. PID=%(pid)d Puerto=%(scgi_port)s"
 
 #: admin/server.py:241
 msgid "Server exiting.."
@@ -3353,9 +3313,8 @@ msgid "Malformed path"
 msgstr "Ruta malformada"
 
 #: admin/validations.py:78
-#, fuzzy
 msgid "It is not executable"
-msgstr "La ruta no es un fichero"
+msgstr "No es un ejecutable"
 
 #: admin/validations.py:96
 msgid "It cannot be negative"
@@ -3423,7 +3382,7 @@ msgstr "Tiempo malformado"
 
 #: admin/validations.py:318
 msgid "Virtual host nick is already being used."
-msgstr ""
+msgstr "El nombre del virtual server ya está siendo usado."
 
 #~ msgid "TCP balancer"
 #~ msgstr "Balanceador TCP"

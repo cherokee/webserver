@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.15' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-08-16 21:21+0200\n"
+"POT-Creation-Date: 2009-08-28 16:12+0200\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: ownlinux.cn\n"
@@ -354,7 +354,7 @@ msgstr "公共网页目录的内容将应用于配置."
 
 #: admin/ModuleDirectory.py:22 admin/ModuleDirectory.py:24
 #: admin/Wizard_Django.py:147 admin/Wizard_Drupal.py:191
-#: admin/Wizard_RoR.py:233 admin/Wizard_WordPress.py:242
+#: admin/Wizard_RoR.py:233 admin/Wizard_WordPress.py:180
 msgid "Web Directory"
 msgstr "网页目录"
 
@@ -2715,7 +2715,7 @@ msgstr "删除"
 msgid "Clone"
 msgstr "克隆"
 
-#: admin/Wizard.py:202
+#: admin/Wizard.py:203
 msgid "Same logs as vserver"
 msgstr ""
 
@@ -2747,7 +2747,7 @@ msgstr "通配符"
 
 #: admin/Wizard_Django.py:84 admin/Wizard_Drupal.py:119
 #: admin/Wizard_Mailman.py:122 admin/Wizard_RoR.py:158
-#: admin/Wizard_WordPress.py:168
+#: admin/Wizard_WordPress.py:108
 #, fuzzy
 msgid "New Host Name"
 msgstr "新主机别名"
@@ -2790,7 +2790,7 @@ msgid "Drupal Wizard"
 msgstr "通配符"
 
 #: admin/Wizard_Drupal.py:120 admin/Wizard_Drupal.py:192
-#: admin/Wizard_WordPress.py:169 admin/Wizard_WordPress.py:243
+#: admin/Wizard_WordPress.py:109 admin/Wizard_WordPress.py:181
 #, fuzzy
 msgid "Source Directory"
 msgstr "网页目录"
@@ -2942,11 +2942,11 @@ msgstr ""
 msgid "Does not look like a WordPress source directory."
 msgstr ""
 
-#: admin/Wizard_WordPress.py:157
+#: admin/Wizard_WordPress.py:97
 msgid "WordPress Wizard"
 msgstr ""
 
-#: admin/Wizard_WordPress.py:227
+#: admin/Wizard_WordPress.py:165
 msgid "Wordpress Wizard: Location"
 msgstr ""
 
