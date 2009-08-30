@@ -43,7 +43,7 @@ class ModuleCgiBase (ModuleHandler):
 
         table = TableProps()
         if self.show_script_alias:
-            self.AddPropEntry (table, _("Script Alias"),  "%s!script_alias" % (self._prefix), _(NOTE_SCRIPT_ALIAS))
+            self.AddPropEntry (table, _("Script Alias"),  "%s!script_alias" % (self._prefix), _(NOTE_SCRIPT_ALIAS), optional=True)
         if self.show_change_uid:
             self.AddPropCheck (table, _("Change UID"), "%s!change_user"%(self._prefix), False, _(NOTE_CHANGE_USER))
 

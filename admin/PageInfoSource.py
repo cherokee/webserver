@@ -167,7 +167,7 @@ class PageInfoSource (PageMenu, FormHelper):
         txt = ''
         nick    = self._cfg.get_val('source!%s!nick'%(s))
         type    = self._cfg.get_val('source!%s!type'%(s))
-        
+
         # Inherit variables
         if self._cfg.get_val('source!%s!env_inherited'%(s)) == None:
             if self._cfg.keys ('source!%s!env'%(s)):
@@ -176,7 +176,7 @@ class PageInfoSource (PageMenu, FormHelper):
                 self._cfg['source!%s!env_inherited'%(s)] = '1'
 
         inherit = int(self._cfg.get_val('source!%s!env_inherited'%(s)))
-        
+
         # Properties
         table = TableProps()
         self.AddPropOptions_Reload_Plain (table, _('Type'),'source!%s!type'%(s), SOURCE_TYPES, _(NOTE_TYPE))
@@ -184,9 +184,9 @@ class PageInfoSource (PageMenu, FormHelper):
         self.AddPropEntry (table, _('Connection'), 'source!%s!host'%(s), _(NOTE_HOST), req=True)
         if type == 'interpreter':
             self.AddPropEntry (table, _('Interpreter'),        'source!%s!interpreter'%(s),  _(NOTE_INTERPRETER), req=True)
-            self.AddPropEntry (table, _('Spawning timeout'),   'source!%s!timeout'%(s), _(NOTE_TIMEOUT))
-            self.AddPropEntry (table, _('Execute as User'),    'source!%s!user'%(s), _(NOTE_USER))
-            self.AddPropEntry (table, _('Execute as Group'),   'source!%s!group'%(s), _(NOTE_GROUP))
+            self.AddPropEntry (table, _('Spawning timeout'),   'source!%s!timeout'%(s), _(NOTE_TIMEOUT), optional=True)
+            self.AddPropEntry (table, _('Execute as User'),    'source!%s!user'%(s), _(NOTE_USER), optional=True)
+            self.AddPropEntry (table, _('Execute as Group'),   'source!%s!group'%(s), _(NOTE_GROUP), optional=True)
             self.AddPropCheck (table, _('Inherit Environment'),'source!%s!env_inherited'%(s), True, _(NOTE_ENV_INHETIR))
 
         tmp  = self.HiddenInput ('source_num', s)
@@ -212,9 +212,9 @@ class PageInfoSource (PageMenu, FormHelper):
         self.AddPropEntry (table, _('Connection'), 'tmp!new_source_host', _(NOTE_HOST), req=True)
         if type == 'interpreter' or not type:
             self.AddPropEntry (table, _('Interpreter'),      'tmp!new_source_interpreter', _(NOTE_INTERPRETER), req=True)
-            self.AddPropEntry (table, _('Spawning timeout'), 'tmp!new_source_timeout', _(NOTE_TIMEOUT))
-            self.AddPropEntry (table, _('Execute as User'),  'tmp!new_source_user', _(NOTE_USER))
-            self.AddPropEntry (table, _('Execute as Group'), 'tmp!new_source_group', _(NOTE_GROUP))
+            self.AddPropEntry (table, _('Spawning timeout'), 'tmp!new_source_timeout', _(NOTE_TIMEOUT), optional=True)
+            self.AddPropEntry (table, _('Execute as User'),  'tmp!new_source_user', _(NOTE_USER), optional=True)
+            self.AddPropEntry (table, _('Execute as Group'), 'tmp!new_source_group', _(NOTE_GROUP), optional=True)
 
         txt += self.Indent(table)
         return txt

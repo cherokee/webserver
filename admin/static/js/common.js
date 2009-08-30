@@ -158,7 +158,7 @@ function do_autosubmit(obj)
 {
 	if (check_all_or_none('required')) {
 		setConfirmUnload(false);
-		obj.form.submit();
+		$(obj.form).submit();
 	}
 }
 

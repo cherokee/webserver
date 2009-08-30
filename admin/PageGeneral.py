@@ -67,9 +67,9 @@ class PageGeneral (PageMenu, FormHelper):
     def _render_permissions (self):
         txt = "<h2>%s</h2>" % (_('Execution Permissions'))
         table = TableProps()
-        self.AddPropEntry (table, _('User'),   'server!user',   _(NOTE_USER))
-        self.AddPropEntry (table, _('Group'),  'server!group',  _(NOTE_GROUP))
-        self.AddPropEntry (table, _('Chroot'), 'server!chroot', _(NOTE_CHROOT))
+        self.AddPropEntry (table, _('User'),   'server!user',   _(NOTE_USER), optional=True)
+        self.AddPropEntry (table, _('Group'),  'server!group',  _(NOTE_GROUP), optional=True)
+        self.AddPropEntry (table, _('Chroot'), 'server!chroot', _(NOTE_CHROOT), optional=True)
         txt += self.Indent(table)
         return txt
 
@@ -136,7 +136,7 @@ class PageGeneral (PageMenu, FormHelper):
             pre = 'server!bind!%s'%(k)
 
             port   = self.InstanceEntry ("%s!port"%(pre),      'text', size=8)
-            listen = self.InstanceEntry ("%s!interface"%(pre), 'text', size=45)
+            listen = self.InstanceEntry ("%s!interface"%(pre), 'text', size=45, optional=True)
             tls    = self.InstanceCheckbox ('%s!tls'%(pre), False, quiet=True, disabled=not has_tls)
 
             link_del = self.AddDeleteLink ('/ajax/update', pre)

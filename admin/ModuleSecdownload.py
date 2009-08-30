@@ -36,7 +36,7 @@ class ModuleSecdownload (ModuleHandler):
         # Local properties
         table = TableProps()
         self.AddPropEntry (table, _('Secret'),  "%s!secret"  % (self._prefix), _(NOTE_SECRET))
-        self.AddPropEntry (table, _('Timeout'), "%s!timeout" % (self._prefix), _(NOTE_TIMEOUT))
+        self.AddPropEntry (table, _('Timeout'), "%s!timeout" % (self._prefix), _(NOTE_TIMEOUT), optional=True)
 
         txt = '<h2>%s</h2>' % (_('Covering parameters'))
         txt += self.Indent(table)

@@ -4,9 +4,9 @@ from Module import *
 
 import validations
 
-NOTE_DB_DIR    = N_("Advanced: Directory where the RRDtool databases should be written.")
-NOTE_RRDTOOL   = N_("Advanced: Path to the rrdtool binary. By default the server will look in the PATH.")
-NOTE_RENDERING = N_("Advanded: How often usage graphics should be regenerated. (Default: 60 seconds)")
+NOTE_DB_DIR    = N_("Directory where the RRDtool databases should be written.")
+NOTE_RRDTOOL   = N_("Path to the rrdtool binary. By default the server will look in the PATH.")
+NOTE_RENDERING = N_("How often usage graphics should be regenerated. (Default: 60 seconds)")
 
 class ModuleRrd (Module, FormHelper):
     def __init__ (self, cfg, prefix, submit_url):
@@ -23,8 +23,8 @@ class ModuleRrd (Module, FormHelper):
         txt = ''
 
         table = TableProps()
-        self.AddPropEntry (table, _('RRD Database directory'),           '%s!database_dir'%(self._prefix), _(NOTE_DB_DIR))
-        self.AddPropEntry (table, _('Custom rrdtool binary'),            '%s!rrdtool_path'%(self._prefix), _(NOTE_RRDTOOL))
-        self.AddPropEntry (table, _('Rendering interval (<i>secs</i>)'), '%s!render_elapse'%(self._prefix), _(NOTE_RENDERING))
+        self.AddPropEntry (table, _('RRD Database directory'),           '%s!database_dir'%(self._prefix), _(NOTE_DB_DIR), optional=True)
+        self.AddPropEntry (table, _('Custom rrdtool binary'),            '%s!rrdtool_path'%(self._prefix), _(NOTE_RRDTOOL), optional=True)
+        self.AddPropEntry (table, _('Rendering interval (<i>secs</i>)'), '%s!render_elapse'%(self._prefix), _(NOTE_RENDERING), optional=True)
         txt += str(table)
         return txt

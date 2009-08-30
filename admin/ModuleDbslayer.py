@@ -19,7 +19,7 @@ LANG_OPTIONS = [
 NOTE_LANG     = N_("Language from which the information will be consumed.")
 NOTE_USER     = N_("User to access the database.")
 NOTE_PASSWORD = N_("Password for the user accessing the database.")
-NOTE_DB       = N_("Optionally specifies a database to connect to.")
+NOTE_DB       = N_("Database to connect to.")
 
 HELPS = [
     ('modules_handlers_dbslayer', N_("MySQL balancing")),
@@ -43,7 +43,7 @@ class ModuleDbslayer (ModuleHandler):
         self.AddPropOptions_Reload_Plain (table, _("Language"), "%s!lang" % (self._prefix), LANG_OPTIONS, _(NOTE_LANG))
         self.AddPropEntry   (table, _("DB User"),      "%s!user" % (self._prefix),     _(NOTE_USER))
         self.AddPropEntry   (table, _("DB Password"),  "%s!password" % (self._prefix), _(NOTE_PASSWORD))
-        self.AddPropEntry   (table, _("Data Base"),    "%s!db" % (self._prefix),       _(NOTE_DB))
+        self.AddPropEntry   (table, _("Data Base"),    "%s!db" % (self._prefix),       _(NOTE_DB), optional=True)
         txt += self.Indent(table)
 
         txt += '<h2>%s</h2>' % (_('Data base balancing'))

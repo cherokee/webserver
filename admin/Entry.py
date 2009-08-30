@@ -22,6 +22,11 @@ class Entry:
             str_class += 'noautosubmit '
             del kwargs['noautosubmit']
 
+        if 'optional' in kwargs and kwargs['optional'] == True and \
+            not self._kwargs.has_key('value'):
+            str_class += 'optional '
+            del kwargs['optional']
+
         if str_class:
             self._kwargs['class'] = str_class
 

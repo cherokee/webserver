@@ -39,8 +39,8 @@ class ModuleStreaming (ModuleHandler):
         table = TableProps()
         self.AddPropCheck (table, _("Auto Rate"),       "%s!rate" % (self._prefix), True,  _(NOTE_RATE))
         if int(self._cfg.get_val ('%s!rate'%(self._prefix), "1")):
-            self.AddPropEntry (table, _("Speedup Factor"), "%s!rate_factor" % (self._prefix), _(NOTE_RATE_FACTOR))
-            self.AddPropEntry (table, _("Initial Boost"),  "%s!rate_boost" % (self._prefix),  _(NOTE_RATE_BOOST))
+            self.AddPropEntry (table, _("Speedup Factor"), "%s!rate_factor" % (self._prefix), _(NOTE_RATE_FACTOR), optional=True)
+            self.AddPropEntry (table, _("Initial Boost"),  "%s!rate_boost" % (self._prefix),  _(NOTE_RATE_BOOST), optional=True)
 
         txt += '<h2>%s</h2>' % (_('Audio/Video Streaming'))
         txt += self.Indent(table)

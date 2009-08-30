@@ -70,7 +70,10 @@ PAGE_MENU_MENU = """
 </div>
 
 <script type="text/javascript">
-  $(document).ready(protectChanges);
+  $(document).ready(function() {
+    $('input.optional').DefaultValue('optional', '{{_optional}}');
+    protectChanges();
+  });
 </script>
 """
 
@@ -158,6 +161,7 @@ class PageMenu (Page):
         self.AddMacroContent ('_title_save',   _('Save Changes'))
         self.AddMacroContent ('_button_save',  _('Save'))
         self.AddMacroContent ('_button_apply', _('Apply'))
+        self.AddMacroContent ('_optional',     _('Optional'))
 
         manager = cherokee_management_get (cfg)
         if manager.is_alive():

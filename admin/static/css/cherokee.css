@@ -1072,3 +1072,7 @@ table#table_new_file td {
 
 #moreinfo .infolab { white-space: pre; width: 128px; text-align: right; padding-left: 8px;}
 
+.optional {
+	color: #ccc;
+}
+

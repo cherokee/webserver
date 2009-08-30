@@ -38,9 +38,9 @@ DEFAULT_HOST_NOTE = N_("""
 NOTE_NICKNAME         = N_('Nickname for the virtual server.')
 NOTE_CERT             = N_('This directive points to the PEM-encoded Certificate file for the server (Full path to the file)')
 NOTE_CERT_KEY         = N_('PEM-encoded Private Key file for the server (Full path to the file)')
-NOTE_CA_LIST          = N_('Optional: File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)')
+NOTE_CA_LIST          = N_('File containing the trusted CA certificates, utilized for checking the client certificates (Full path to the file)')
 NOTE_CIPHERS          = N_('Ciphers that TLS/SSL is allowed to use. <a target="_blank" href="http://www.openssl.org/docs/apps/ciphers.html">Reference</a>. (Default: all ciphers supported by the OpenSSL version used).')
-NOTE_CLIENT_CERTS     = N_('Optional: Skip, Accept or Require client certificates.')
+NOTE_CLIENT_CERTS     = N_('Skip, Accept or Require client certificates.')
 NOTE_VERIFY_DEPTH     = N_('Limit up to which depth certificates in a chain are used during the verification procedure (Default: 1)')
 NOTE_ERROR_HANDLER    = N_('Allows the selection of how to generate the error responses.')
 NOTE_PERSONAL_WEB     = N_('Directory inside the user home directory to use as root web directory. Disabled if empty.')
@@ -277,13 +277,13 @@ class PageVServer (PageMenu, FormHelper):
 
         txt = '<h2>%s</h2>' % (_('Required SSL/TLS values'))
         table = TableProps()
-        self.AddPropEntry (table, _('Certificate'),      '%s!ssl_certificate_file' % (pre),       _(NOTE_CERT))
-        self.AddPropEntry (table, _('Certificate key'),  '%s!ssl_certificate_key_file' % (pre),   _(NOTE_CERT_KEY))
+        self.AddPropEntry (table, _('Certificate'),      '%s!ssl_certificate_file' % (pre),       _(NOTE_CERT), optional=True)
+        self.AddPropEntry (table, _('Certificate key'),  '%s!ssl_certificate_key_file' % (pre),   _(NOTE_CERT_KEY), optional=True)
         txt += self.Indent(table)
 
         txt += '<h2>%s</h2>' % (_('Advanced options'))
         table = TableProps()
-        self.AddPropEntry (table, _('Ciphers'), '%s!ssl_ciphers' % (pre), _(NOTE_CIPHERS))
+        self.AddPropEntry (table, _('Ciphers'), '%s!ssl_ciphers' % (pre), _(NOTE_CIPHERS), optional=True)
         self.AddPropOptions_Ajax (table, _('Client Certs. Request'),
                                          '%s!ssl_client_certs' % (pre),
                                          CLIENT_CERTS, 
@@ -491,7 +491,7 @@ class PageVServer (PageMenu, FormHelper):
             button = self.InstanceButton (_("Disable"), onClick=js)
             self.AddProp (table, _('Status'), '', button, _(NOTE_DISABLE_PW))
 
-        self.AddPropEntry (table, _('Directory name'), cfg_key, _(NOTE_PERSONAL_WEB))
+        self.AddPropEntry (table, _('Directory name'), cfg_key, _(NOTE_PERSONAL_WEB), optional=True)
         txt += self.Indent(table)
 
         return txt
@@ -515,7 +515,7 @@ class PageVServer (PageMenu, FormHelper):
         txt += '<h2>%s</h2>' % (_('Network'))
         table = TableProps()
         self.AddPropCheck (table, _('Keep-alive'),         '%s!keepalive'%(pre), True, _(NOTE_KEEPALIVE))
-        self.AddPropEntry (table, _('Max Upload Size'),    '%s!post_max_len' % (pre),  _(NOTE_MAX_UPLOAD_SIZE))
+        self.AddPropEntry (table, _('Max Upload Size'),    '%s!post_max_len' % (pre),  _(NOTE_MAX_UPLOAD_SIZE), optional=True)
         txt += self.Indent(table)
 
         txt += '<h2>%s</h2>' % (_('Advanced Virtual Hosting'))

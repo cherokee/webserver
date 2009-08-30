@@ -56,9 +56,9 @@ class ModuleDirlist (ModuleHandler):
         table  = TableProps()
         themes = self._get_theme_list()
         self.AddPropOptions_Reload_Plain (table, _('Theme'), "%s!theme" % (self._prefix), themes, _(NOTE_THEME))
-        self.AddPropEntry (table, _('Icons dir'),    "%s!icon_dir" % (self._prefix), _(NOTE_ICON_DIR))
-        self.AddPropEntry (table, _('Notice files'), "%s!notice_files" % (self._prefix), _(NOTE_NOTICE_FILES))
-        self.AddPropEntry (table, _('Hidden files'), "%s!hidden_files" % (self._prefix), _(NOTE_HIDDEN_FILES))
+        self.AddPropEntry (table, _('Icons dir'),    "%s!icon_dir" % (self._prefix), _(NOTE_ICON_DIR), optional=True)
+        self.AddPropEntry (table, _('Notice files'), "%s!notice_files" % (self._prefix), _(NOTE_NOTICE_FILES), optional=True)
+        self.AddPropEntry (table, _('Hidden files'), "%s!hidden_files" % (self._prefix), _(NOTE_HIDDEN_FILES), optional=True)
         txt += self.Indent(table)
 
         return txt

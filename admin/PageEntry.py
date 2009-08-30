@@ -158,7 +158,7 @@ class PageEntry (PageMenu, FormHelper):
 
         props = self._get_handler_properties()
         if not props or props.show_document_root:
-            self.AddPropEntry (table, _('Document Root'), '%s!document_root'%(pre), _(NOTE_DOCUMENT_ROOT))
+            self.AddPropEntry (table, _('Document Root'), '%s!document_root'%(pre), _(NOTE_DOCUMENT_ROOT), optional=True)
 
         if e:
             tabs += [(_('Handler'), str(table) + e)]
@@ -208,7 +208,7 @@ class PageEntry (PageMenu, FormHelper):
         txt = ''
 
         table = TableProps()
-        self.AddPropEntry (table, _('Limit traffic to'), '%s!rate'%(self._conf_prefix), _(NOTE_RATE))
+        self.AddPropEntry (table, _('Limit traffic to'), '%s!rate'%(self._conf_prefix), _(NOTE_RATE), optional=True)
 
         txt += "<h2>%s</h2>" % (_('Traffic Shaping'))
         txt += self.Indent(table)
@@ -244,7 +244,7 @@ class PageEntry (PageMenu, FormHelper):
         txt  += "<h2>%s</h2>" % (_('Access Restrictions'))
         table = TableProps()
         self.AddPropCheck (table, _('Only https'), '%s!only_secure'%(pre), False, _(NOTE_HTTPS_ONLY))
-        self.AddPropEntry (table, _('Allow From'),  '%s!allow_from' %(pre), _(NOTE_ALLOW_FROM))
+        self.AddPropEntry (table, _('Allow From'),  '%s!allow_from' %(pre), _(NOTE_ALLOW_FROM), optional=True)
         txt += self.Indent(table)
 
         txt += "<h2>%s</h2>" % (_('Authentication'))
