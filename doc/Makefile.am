@@ -197,10 +197,6 @@ media/images/cookbook_wp2.png \
 media/images/cookbook_wp3.png \
 media/images/cookbook_wp4.png \
 media/images/cookbook_wp5.png \
-media/images/cookbook_wp_default1.png \
-media/images/cookbook_wp_example1.png \
-media/images/cookbook_wp_example2.png \
-media/images/cookbook_wp_example3.png \
 media/images/cookbook_nagios1.png \
 media/images/cookbook_nagios2.png \
 media/images/cookbook_nagios3.png \
