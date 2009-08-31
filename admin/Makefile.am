@@ -121,7 +121,8 @@ Wizard_RoR.py \
 Wizard_Mailman.py \
 Wizard_Icons.py \
 Wizard_CommonStatic.py \
-Wizard_Streaming.py 
+Wizard_Streaming.py \
+Wizard_rTorrent.py
 endif
 
 adminpy_DATA = $(admin_data)

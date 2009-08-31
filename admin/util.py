@@ -31,6 +31,13 @@ def cfg_vsrv_rule_find_extension (cfg, pre, extension):
             if extension in cfg.get_val ("%s!match!extensions"%(p)):
                 return p
 
+def cfg_vsrv_rule_find_regexp (cfg, pre, regexp):
+    """Find a regular expresion rule in a virtual server """
+    for r in cfg.keys("%s!rule"%(pre)):
+        p = "%s!rule!%s" % (pre, r)
+        if cfg.get_val ("%s!match"%(p)) == "request":
+            if regexp == cfg.get_val ("%s!match!request"%(p)):
+                return p
 
 #
 # Information Sources
