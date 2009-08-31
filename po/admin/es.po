@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-08-28 16:12+0200\n"
-"PO-Revision-Date: 2009-08-29 12:05+0200\n"
-"Last-Translator: Alvaro Lopez Ortega <alvaro@alobbs.com>\n"
+"POT-Creation-Date: 2009-08-31 02:09+0200\n"
+"PO-Revision-Date: 2009-08-31 02:16+0200\n"
+"Last-Translator: Antonio Pérez Jiménez <aperez@skarcha.com>\n"
 "Language-Team: Spanish <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +30,7 @@ msgstr "No puedo acceder a los descriptores de fichero:"
 msgid "ERROR: Couldn't execute '%s -i'"
 msgstr "ERROR: No puedo ejecutar '%s -i'"
 
-#: admin/Entry.py:43
+#: admin/Entry.py:48
 msgid " Enabled"
 msgstr " Activado"
 
@@ -42,7 +42,7 @@ msgstr "Enviar"
 msgid "Delete"
 msgstr "Borrar"
 
-#: admin/ModuleAdmin.py:5 admin/consts.py:29
+#: admin/ModuleAdmin.py:5 admin/consts.py:30
 msgid "Remote Administration"
 msgstr "Administración Remota"
 
@@ -78,7 +78,7 @@ msgstr "Detalles de autenticación"
 msgid "Realm can not be empty"
 msgstr "Realm no puede estar vacío"
 
-#: admin/ModuleAuthlist.py:10 admin/consts.py:47
+#: admin/ModuleAuthlist.py:10 admin/consts.py:48
 msgid "Fixed list"
 msgstr "Lista fija"
 
@@ -122,7 +122,7 @@ msgstr ""
 "Un balanceador de carga debe ser configurado para usar al menos un origen de "
 "datos."
 
-#: admin/ModuleBalancer.py:55 admin/Page.py:154 admin/PageInfoSource.py:33
+#: admin/ModuleBalancer.py:55 admin/Page.py:157 admin/PageInfoSource.py:33
 #: admin/PageInfoSource.py:88
 msgid "Information Sources"
 msgstr "Orígenes de datos"
@@ -149,7 +149,7 @@ msgstr "Ya se está balanceando entre todos los definidos"
 msgid "information sources"
 msgstr "origines de datos"
 
-#: admin/ModuleBalancer.py:76 admin/consts.py:138
+#: admin/ModuleBalancer.py:76 admin/consts.py:139
 msgid "Choose.."
 msgstr "Elija.."
 
@@ -167,7 +167,7 @@ msgstr "Puerto"
 msgid "Choose"
 msgstr "Elija"
 
-#: admin/ModuleBind.py:35 admin/ModuleBind.py:82 admin/consts.py:131
+#: admin/ModuleBind.py:35 admin/ModuleBind.py:82 admin/consts.py:132
 msgid "Incoming Port"
 msgstr "Puerto de entrada"
 
@@ -322,8 +322,8 @@ msgid "Password for the user accessing the database."
 msgstr "Contraseña del usuario de la base de datos."
 
 #: admin/ModuleDbslayer.py:22
-msgid "Optionally specifies a database to connect to."
-msgstr "Base de datos (opcional)"
+msgid "Database to connect to."
+msgstr "Base de datos"
 
 #: admin/ModuleDbslayer.py:25
 msgid "MySQL balancing"
@@ -454,11 +454,11 @@ msgstr "Ficheros ocultos"
 msgid "1x1 Empty GIF"
 msgstr "GIF transparente 1x1"
 
-#: admin/ModuleErrorRedir.py:13 admin/consts.py:104
+#: admin/ModuleErrorRedir.py:13 admin/consts.py:105
 msgid "Internal"
 msgstr "Interna"
 
-#: admin/ModuleErrorRedir.py:14 admin/consts.py:103
+#: admin/ModuleErrorRedir.py:14 admin/consts.py:104
 msgid "External"
 msgstr "Externa"
 
@@ -576,7 +576,7 @@ msgstr "Si es un directorio, comprobar fichero de índice"
 msgid "Any file"
 msgstr "Cualquier fichero"
 
-#: admin/ModuleExists.py:86 admin/consts.py:129
+#: admin/ModuleExists.py:86 admin/consts.py:130
 msgid "File Exists"
 msgstr "Existe fichero"
 
@@ -590,7 +590,7 @@ msgstr ""
 #: admin/ModuleExtensions.py:22 admin/ModuleExtensions.py:24
 #: admin/PageIcon.py:123 admin/PageIcon.py:142 admin/PageIcon.py:147
 #: admin/PageMime.py:95 admin/PageMime.py:113 admin/PageMime.py:123
-#: admin/consts.py:126
+#: admin/consts.py:127
 msgid "Extensions"
 msgstr "Extensiones"
 
@@ -614,7 +614,7 @@ msgstr "Envío de fichero"
 msgid "IP or SubNet to check the connection origin against."
 msgstr "IP o subred con la que comprobar origen de la conexión."
 
-#: admin/ModuleFrom.py:27 admin/ModuleFrom.py:76 admin/consts.py:133
+#: admin/ModuleFrom.py:27 admin/ModuleFrom.py:76 admin/consts.py:134
 msgid "Connected from"
 msgstr "Conectado desde"
 
@@ -630,9 +630,11 @@ msgstr "Añadir nueva entrada"
 msgid ""
 "Full path request to which content the configuration will be applied. (Eg: /"
 "favicon.ico)"
-msgstr "Directorio web público a cuyo contenido se le aplicará la configuración. (Ej: /favicon.ico)"
+msgstr ""
+"Directorio web público a cuyo contenido se le aplicará la configuración. "
+"(Ej: /favicon.ico)"
 
-#: admin/ModuleFullpath.py:22 admin/ModuleFullpath.py:52 admin/consts.py:132
+#: admin/ModuleFullpath.py:22 admin/ModuleFullpath.py:52 admin/consts.py:133
 msgid "Full Path"
 msgstr "Ruta completa"
 
@@ -682,13 +684,13 @@ msgid "Regular expression."
 msgstr "Expresión regular."
 
 #: admin/ModuleHeader.py:35 admin/ModuleHeader.py:37 admin/ModuleProxy.py:100
-#: admin/ModuleProxy.py:126 admin/consts.py:128
+#: admin/ModuleProxy.py:126 admin/consts.py:129
 msgid "Header"
 msgstr "Cabecera"
 
 #: admin/ModuleHeader.py:38 admin/ModuleProxy.py:156 admin/ModuleRedir.py:35
 #: admin/ModuleRedir.py:52 admin/ModuleRequest.py:22 admin/ModuleRequest.py:24
-#: admin/ModuleRequest.py:41 admin/consts.py:127
+#: admin/ModuleRequest.py:41 admin/consts.py:128
 msgid "Regular Expression"
 msgstr "Expresión regular"
 
@@ -701,7 +703,7 @@ msgstr "Camino completo al fichero de contraseñas Htdigest."
 msgid "Password File"
 msgstr "Fichero de contraseñas"
 
-#: admin/ModuleHtdigest.py:35 admin/ModuleHtpasswd.py:35 admin/consts.py:42
+#: admin/ModuleHtdigest.py:35 admin/ModuleHtpasswd.py:35 admin/consts.py:43
 msgid "Htpasswd file"
 msgstr "Fichero Htpasswd"
 
@@ -832,7 +834,9 @@ msgstr ""
 msgid ""
 "Choose an encryption type for the password. Only suitable for the \"Basic\" "
 "authentication mechanism."
-msgstr "Elige un tipo de encriptación para el password. Sólo disponible para autenticación \"Basic\"."
+msgstr ""
+"Elige un tipo de encriptación para el password. Sólo disponible para "
+"autenticación \"Basic\"."
 
 #: admin/ModuleMysql.py:46
 msgid "Unix Socket"
@@ -981,7 +985,7 @@ msgid "Redirections"
 msgstr "Redirecciones"
 
 #: admin/ModuleRedir.py:15 admin/ModuleRehost.py:28 admin/ModuleRehost.py:32
-#: admin/consts.py:140
+#: admin/consts.py:141
 msgid "Regular Expressions"
 msgstr "Expresiones Regulares"
 
@@ -1028,23 +1032,20 @@ msgstr ""
 "lanzar servidores de aplicaciones locales y conectar con ellos."
 
 #: admin/ModuleRrd.py:7
-msgid "Advanced: Directory where the RRDtool databases should be written."
-msgstr "Avanzado: Directorio donde se localizan las bases de datos de RRDtool."
+msgid "Directory where the RRDtool databases should be written."
+msgstr "Directorio donde se localizan las bases de datos de RRDtool."
 
 #: admin/ModuleRrd.py:8
 msgid ""
-"Advanced: Path to the rrdtool binary. By default the server will look in the "
-"PATH."
+"Path to the rrdtool binary. By default the server will look in the PATH."
 msgstr ""
-"Avanzado: Ruta al binario rrdtool. Por defecto el servidor lo buscará en el "
+"Ruta al binario rrdtool. Por defecto el servidor lo buscará en el "
 "PATH."
 
 #: admin/ModuleRrd.py:9
-msgid ""
-"Advanded: How often usage graphics should be regenerated. (Default: 60 "
-"seconds)"
+msgid "How often usage graphics should be regenerated. (Default: 60 seconds)"
 msgstr ""
-"Avanzado: Frecuencia con las que las gráficas deben ser regeneradas. "
+"Frecuencia con las que las gráficas deben ser regeneradas. "
 "(Defecto: 60 segundos)"
 
 #: admin/ModuleRrd.py:26
@@ -1120,7 +1121,7 @@ msgstr "Ajustes de privacidad"
 msgid "Show Information"
 msgstr "Mostrar información"
 
-#: admin/ModuleSsi.py:5 admin/consts.py:24
+#: admin/ModuleSsi.py:5 admin/consts.py:25
 msgid "Server Side Includes"
 msgstr ""
 
@@ -1206,69 +1207,73 @@ msgstr "Patrón de dominio"
 msgid "New host name"
 msgstr "Nuevo nombre de servidor"
 
-#: admin/Page.py:99
+#: admin/Page.py:102
 msgid "Version:"
 msgstr "Versión:"
 
-#: admin/Page.py:128
+#: admin/Page.py:131
 msgid "Help"
 msgstr "Ayuda"
 
-#: admin/Page.py:151 admin/PageAdvanced.py:108 admin/PageStatus.py:60
+#: admin/Page.py:154 admin/PageAdvanced.py:108 admin/PageStatus.py:60
 #: admin/PageVServer.py:492
 msgid "Status"
 msgstr "Estado"
 
-#: admin/Page.py:152
+#: admin/Page.py:155
 msgid "General"
 msgstr "General"
 
-#: admin/Page.py:153 admin/PageVServer.py:69 admin/PageVServers.py:25
+#: admin/Page.py:156 admin/PageVServer.py:69 admin/PageVServers.py:25
 #: admin/PageVServers.py:130
 msgid "Virtual Servers"
 msgstr "Servidores virtuales"
 
-#: admin/Page.py:155 admin/PageIcon.py:12
+#: admin/Page.py:158 admin/PageIcon.py:12
 msgid "Icons"
 msgstr "Iconos"
 
-#: admin/Page.py:156
+#: admin/Page.py:159
 msgid "Mime Types"
 msgstr "Tipos MIME"
 
-#: admin/Page.py:157 admin/PageAdvanced.py:65
+#: admin/Page.py:160 admin/PageAdvanced.py:65
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: admin/Page.py:158
+#: admin/Page.py:161
 msgid "Save Changes"
 msgstr "Guardar cambios"
 
-#: admin/Page.py:159
+#: admin/Page.py:162
 msgid "Save"
 msgstr "Guardar"
 
-#: admin/Page.py:160
+#: admin/Page.py:163
 msgid "Apply"
 msgstr "Aplicar"
 
 #: admin/Page.py:164
+msgid "Optional"
+msgstr "Opcional"
+
+#: admin/Page.py:168
 msgid "Graceful restart"
 msgstr "Reinicio suave"
 
-#: admin/Page.py:165
+#: admin/Page.py:169
 msgid "Hard restart"
 msgstr "Reinicio forzado"
 
-#: admin/Page.py:166
+#: admin/Page.py:170
 msgid "Do not restart"
 msgstr "No reiniciar"
 
-#: admin/Page.py:169
+#: admin/Page.py:173
 msgid "Commit to disk and apply changes to the running server"
 msgstr "Guardar en disco y aplicar los cambios al servidor actual"
 
-#: admin/Page.py:172
+#: admin/Page.py:176
 msgid "Commit all the changes permanently"
 msgstr "Guardar todos los cambios permanentemente"
 
@@ -1716,7 +1721,7 @@ msgid "Feedback: Thank you"
 msgstr "Comentarios: Muchas gracias"
 
 #: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:374
-#: admin/consts.py:86
+#: admin/consts.py:87
 msgid "Default"
 msgstr "Defecto"
 
@@ -1867,8 +1872,8 @@ msgstr "Icono de configuración"
 msgid "Unknown method"
 msgstr "Método desconocido"
 
-#: admin/PageIcon.py:62 admin/consts.py:14 admin/consts.py:40
-#: admin/consts.py:57
+#: admin/PageIcon.py:62 admin/consts.py:14 admin/consts.py:41
+#: admin/consts.py:58
 msgid "None"
 msgstr "Ninguno"
 
@@ -1901,7 +1906,7 @@ msgid "Match"
 msgstr ""
 
 #: admin/PageIcon.py:156 admin/PageIcon.py:172 admin/PageIcon.py:188
-#: admin/consts.py:64
+#: admin/consts.py:65
 msgid "File"
 msgstr "Fichero"
 
@@ -1909,7 +1914,7 @@ msgstr "Fichero"
 msgid "Add new file match"
 msgstr ""
 
-#: admin/PageIcon.py:190 admin/consts.py:125
+#: admin/PageIcon.py:190 admin/consts.py:126
 msgid "Directory"
 msgstr "Directorio"
 
@@ -1983,7 +1988,9 @@ msgstr ""
 msgid ""
 "Execute the interpreter under a different group. Default: Default GID of the "
 "new process UID."
-msgstr "Ejecutar el intérprete con otro grupo. Por defecto: El mismo GID que el servidor."
+msgstr ""
+"Ejecutar el intérprete con otro grupo. Por defecto: El mismo GID que el "
+"servidor."
 
 #: admin/PageInfoSource.py:21
 msgid ""
@@ -2323,10 +2330,10 @@ msgstr ""
 
 #: admin/PageVServer.py:41
 msgid ""
-"Optional: File containing the trusted CA certificates, utilized for checking "
-"the client certificates (Full path to the file)"
+"File containing the trusted CA certificates, utilized for checking the "
+"client certificates (Full path to the file)"
 msgstr ""
-"Opcional: Fichero que contiene los certificados de CA confiables, usadas "
+"Fichero que contiene los certificados de CA confiables, usadas "
 "para verificar los certificados de los clientes (Ruta completa al fichero)"
 
 #: admin/PageVServer.py:42
@@ -2340,8 +2347,8 @@ msgstr ""
 "soportados por la versión de OpenSSL instalada)."
 
 #: admin/PageVServer.py:43
-msgid "Optional: Skip, Accept or Require client certificates."
-msgstr "Opcional: Saltar, Aceptar o Requerir certificados de clientes."
+msgid "Skip, Accept or Require client certificates."
+msgstr "Saltar, Aceptar o Requerir certificados de clientes."
 
 #: admin/PageVServer.py:44
 msgid ""
@@ -2916,7 +2923,9 @@ msgstr "Directorio del almacen de correo"
 msgid ""
 "This domain name will be used as nickname for the new virtual server. More "
 "domains names can be added to the virtual server later on."
-msgstr "Este nombre de dominio será utilizado como nick del nuevo servidor virtual. Más adelante se podrán añadir más nombres de dominio al servidor virtual."
+msgstr ""
+"Este nombre de dominio será utilizado como nick del nuevo servidor virtual. "
+"Más adelante se podrán añadir más nombres de dominio al servidor virtual."
 
 #: admin/Wizard_Redirect.py:8
 msgid "Domain name to which requests will be redirected."
@@ -2955,20 +2964,27 @@ msgstr "Valor del la variable RAILS_ENV."
 msgid ""
 "<p>Even though the directory looks like a Ruby on Rails project, the public/"
 "dispatch.fcgi file wasn't found.</p>"
-msgstr "<p>Incluso si el directorio parece contener un proyecto basado en Ruby on Rails, el fichero public/dispatch.fcgi no fué encontrado.</p>"
+msgstr ""
+"<p>Incluso si el directorio parece contener un proyecto basado en Ruby on "
+"Rails, el fichero public/dispatch.fcgi no fué encontrado.</p>"
 
 #: admin/Wizard_RoR.py:17
 msgid ""
 "<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you "
 "might want to rename it.</p>"
-msgstr "<p>Sin embargo el fichero <b>public/dispatch.fcgi.example</b> está presente. Posiblemente quiera renombrarlo.</p>"
+msgstr ""
+"<p>Sin embargo el fichero <b>public/dispatch.fcgi.example</b> está presente. "
+"Posiblemente quiera renombrarlo.</p>"
 
 #: admin/Wizard_RoR.py:18
 msgid ""
 "<p>If you are using Rails >= 2.3.0, you will have to execute the following "
 "command from the project directory in order to add the missing file:</"
 "p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
-msgstr "<p>Si estás usando Rails >= 2.3.0, tendrá que ejecutar el siguiente commando desde el directorio del proyecto:</p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
+msgstr ""
+"<p>Si estás usando Rails >= 2.3.0, tendrá que ejecutar el siguiente commando "
+"desde el directorio del proyecto:</p><p><pre>rake rails:update:"
+"generate_dispatchers</pre></p>"
 
 #: admin/Wizard_RoR.py:19
 msgid "It does not look like a Ruby on Rails based project directory."
@@ -2986,7 +3002,9 @@ msgstr "Valor de RAILS_ENV"
 msgid ""
 "Path to the directory where the Wordpress source code is located. (Example: /"
 "usr/share/wordpress)"
-msgstr "Directorio local a las fuentes de Wordpress (Por ejemplo: /usr/share/wordpress)"
+msgstr ""
+"Directorio local a las fuentes de Wordpress (Por ejemplo: /usr/share/"
+"wordpress)"
 
 #: admin/Wizard_WordPress.py:10
 msgid ""
@@ -3051,210 +3069,214 @@ msgid "SCGI"
 msgstr "SCGI"
 
 #: admin/consts.py:21
+msgid "uWSGI"
+msgstr "uWSGI"
+
+#: admin/consts.py:22
 msgid "HTTP reverse proxy"
 msgstr "Proxy inverso HTTP"
 
-#: admin/consts.py:22
+#: admin/consts.py:23
 msgid "Audio/Video streaming"
 msgstr "Flujo de Audio/Video"
 
-#: admin/consts.py:23
+#: admin/consts.py:24
 msgid "CGI"
 msgstr "CGI"
 
-#: admin/consts.py:25
+#: admin/consts.py:26
 msgid "Hidden Downloads"
 msgstr "Descargas ocultas"
 
-#: admin/consts.py:26
+#: admin/consts.py:27
 msgid "Server Info"
 msgstr "Info. del servidor"
 
-#: admin/consts.py:27
+#: admin/consts.py:28
 msgid "MySQL bridge"
 msgstr "Puente MySQL"
 
-#: admin/consts.py:28
+#: admin/consts.py:29
 msgid "HTTP error"
 msgstr "Error HTTP"
 
-#: admin/consts.py:30
+#: admin/consts.py:31
 msgid "1x1 Transparent GIF"
 msgstr "GIF Transparente 1x1"
 
-#: admin/consts.py:34
+#: admin/consts.py:35
 msgid "Default errors"
 msgstr "Errores por defecto"
 
-#: admin/consts.py:35
+#: admin/consts.py:36
 msgid "Custom redirections"
 msgstr "Redirecciones personalizadas"
 
-#: admin/consts.py:36
+#: admin/consts.py:37
 msgid "Closest match"
 msgstr "Fichero más parecido"
 
-#: admin/consts.py:41
+#: admin/consts.py:42
 msgid "Plain text file"
 msgstr "Fichero de texto plano"
 
-#: admin/consts.py:43
+#: admin/consts.py:44
 msgid "Htdigest file"
 msgstr "Fichero Htdigest"
 
-#: admin/consts.py:44
+#: admin/consts.py:45
 msgid "LDAP server"
 msgstr "Servidor LDAP"
 
-#: admin/consts.py:45
+#: admin/consts.py:46
 msgid "MySQL server"
 msgstr "Servidor MySQL"
 
-#: admin/consts.py:46
+#: admin/consts.py:47
 msgid "PAM"
 msgstr "PAM"
 
-#: admin/consts.py:51
+#: admin/consts.py:52
 msgid "Basic"
 msgstr "Básico"
 
-#: admin/consts.py:52
+#: admin/consts.py:53
 msgid "Digest"
 msgstr "Digest"
 
-#: admin/consts.py:53
+#: admin/consts.py:54
 msgid "Basic or Digest"
 msgstr "Basic o Digest"
 
-#: admin/consts.py:58
+#: admin/consts.py:59
 msgid "Apache compatible"
 msgstr "Compatible con Apache"
 
-#: admin/consts.py:59
+#: admin/consts.py:60
 msgid "NCSA"
 msgstr "NCSA"
 
-#: admin/consts.py:60
+#: admin/consts.py:61
 msgid "Custom"
 msgstr "Personalizado"
 
-#: admin/consts.py:65
+#: admin/consts.py:66
 msgid "System logger"
 msgstr "Log del sistema"
 
-#: admin/consts.py:66
+#: admin/consts.py:67
 msgid "Standard Error"
 msgstr "Error estándar"
 
-#: admin/consts.py:67
+#: admin/consts.py:68
 msgid "Execute program"
 msgstr "Ejecutar programa"
 
-#: admin/consts.py:71
+#: admin/consts.py:72
 msgid "Round Robin"
 msgstr "Round Robin"
 
-#: admin/consts.py:72
+#: admin/consts.py:73
 msgid "IP Hash"
 msgstr "IP Hash"
 
-#: admin/consts.py:76
+#: admin/consts.py:77
 msgid "Local interpreter"
 msgstr "Intérprete local"
 
-#: admin/consts.py:77
+#: admin/consts.py:78
 msgid "Remote host"
 msgstr "Servidor remoto"
 
-#: admin/consts.py:81
+#: admin/consts.py:82
 msgid "GZip"
 msgstr "GZip"
 
-#: admin/consts.py:82
+#: admin/consts.py:83
 msgid "Deflate"
 msgstr "Deflate"
 
-#: admin/consts.py:87
+#: admin/consts.py:88
 msgid "FIFO"
 msgstr "FIFO"
 
-#: admin/consts.py:88
+#: admin/consts.py:89
 msgid "Round-robin"
 msgstr "Round-robin"
 
-#: admin/consts.py:89
+#: admin/consts.py:90
 msgid "Dynamic"
 msgstr "Dinámico"
 
-#: admin/consts.py:93
+#: admin/consts.py:94
 msgid "Automatic"
 msgstr "Automático"
 
-#: admin/consts.py:130
+#: admin/consts.py:131
 msgid "HTTP Method"
 msgstr "Método HTTP"
 
-#: admin/consts.py:134
+#: admin/consts.py:135
 msgid "GeoIP"
 msgstr "GeoIP"
 
-#: admin/consts.py:139
+#: admin/consts.py:140
 msgid "Wildcards"
 msgstr "Comodines"
 
-#: admin/consts.py:141
+#: admin/consts.py:142
 msgid "Server IP"
 msgstr "IP del Servidor"
 
-#: admin/consts.py:145
+#: admin/consts.py:146
 msgid "Not set"
 msgstr "Sin configurar"
 
-#: admin/consts.py:146
+#: admin/consts.py:147
 msgid "Already expired on 1970"
 msgstr "Caducado en 1970"
 
-#: admin/consts.py:147
+#: admin/consts.py:148
 msgid "Do not expire until 2038"
 msgstr "No cadua hasta 2038"
 
-#: admin/consts.py:148
+#: admin/consts.py:149
 msgid "Custom value"
 msgstr "Valor personalizado"
 
-#: admin/consts.py:152
+#: admin/consts.py:153
 msgid "No TLS/SSL"
 msgstr "Sin TLS/SSL"
 
-#: admin/consts.py:153
+#: admin/consts.py:154
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: admin/consts.py:157
+#: admin/consts.py:158
 msgid "Off"
 msgstr "Desactivado"
 
-#: admin/consts.py:158
+#: admin/consts.py:159
 msgid "Enhanced Virtual Hosting"
 msgstr "Hospedaje Virtual Mejorado"
 
-#: admin/consts.py:162
+#: admin/consts.py:163
 msgid "Skip"
 msgstr "Saltar"
 
-#: admin/consts.py:163
+#: admin/consts.py:164
 msgid "Accept"
 msgstr "Aceptar"
 
-#: admin/consts.py:164
+#: admin/consts.py:165
 msgid "Require"
 msgstr "Requerir"
 
-#: admin/consts.py:168
+#: admin/consts.py:169
 msgid "Disabled"
 msgstr "Desactivado"
 
-#: admin/consts.py:169
+#: admin/consts.py:170
 msgid "RRDtool graphs"
 msgstr "Gráficas RRDTool"
 
@@ -3383,6 +3405,9 @@ msgstr "Tiempo malformado"
 #: admin/validations.py:318
 msgid "Virtual host nick is already being used."
 msgstr "El nombre del virtual server ya está siendo usado."
+
+#~ msgid "Optionally specifies a database to connect to."
+#~ msgstr "Base de datos (opcional)"
 
 #~ msgid "TCP balancer"
 #~ msgstr "Balanceador TCP"
