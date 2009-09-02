@@ -63,6 +63,7 @@ for entry in log.getElementsByTagName('logentry'):
     
     print "%s  %s" % (date, author)
     print " "*12 + "SVN: r%s, %s - %s" % (revision, dev, time)
+    print
     if msg:
         print msg.encode("utf-8"),
 
