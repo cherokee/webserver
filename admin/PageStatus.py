@@ -123,10 +123,21 @@ class PageStatus (PageMenu, FormHelper):
         txt = ""
         txt += '<table width="100%" class="rulestable">'
 
+        # Document root
+        #
+        tmp = [int(x) for x in self._cfg.keys('vserver')]
+        tmp.sort()
+
+        www_root = None
+        if tmp:
+            www_root = self._cfg.get_val ('vserver!%d!document_root'%(tmp[0]))
+        if not www_root:
+            www_root = WWWROOT
+
         # Server
         txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>' % (_("Version"), VERSION)
+        txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>' % (_("Default WWW"), www_root)
         txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>' % (_("Prefix"), PREFIX)
-        txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>' % (_("WWW Root"), WWWROOT)
 
         manager = cherokee_management_get (self._cfg)
         if manager.is_alive():
