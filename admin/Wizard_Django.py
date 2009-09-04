@@ -82,7 +82,7 @@ class Wizard_VServer_Django (WizardPage):
         txt += '<h2>New Virtual Server</h2>'
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_django!new_host',      NOTE_NEW_HOST, value="www.example.com")
-        self.AddPropEntry (table, _('Document Root'), 'tmp!wizard_django!document_root', NOTE_NEW_HOST, value=os_get_document_root())
+        self.AddPropEntry (table, _('Document Root'), 'tmp!wizard_django!document_root', NOTE_DJANGO_DIR, value=os_get_document_root())
         txt += self.Indent(table)
 
         txt += '<h2>Django Project</h2>'
