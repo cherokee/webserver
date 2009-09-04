@@ -79,7 +79,7 @@ reactivate_entry (cherokee_balancer_entry_t *entry)
 	/* Notify
 	 */
 	cherokee_source_copy_name (entry->source, &tmp);
-	PRINT_MSG ("NOTICE: Taking source='%s' back on-line\n", tmp.buf);
+	LOG_WARNING ("Taking source='%s' back on-line\n", tmp.buf);
 	cherokee_buffer_mrproper (&tmp);
 
 	return ret_ok;
@@ -119,7 +119,7 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 		/* Count how many it's checked so far */
 		if (tries > gbal->entries_len) {
-			PRINT_MSG_S ("NOTICE: Sources exhausted: re-enabling one.\n");
+			LOG_WARNING_S ("Sources exhausted: re-enabling one.\n");
 			reactivate_entry (entry);
 			break;
 		}
@@ -167,7 +167,7 @@ report_fail (cherokee_balancer_round_robin_t *balancer,
 		/* Notify what has happened
 		 */
 		cherokee_source_copy_name (entry->source, &tmp);
-		PRINT_MSG ("NOTICE: Taking source='%s' off-line\n", tmp.buf);
+		LOG_WARNING ("Taking source='%s' off-line\n", tmp.buf);
 		cherokee_buffer_mrproper (&tmp);
 		
 		CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);

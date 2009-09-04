@@ -95,7 +95,7 @@ reactivate_entry (cherokee_balancer_ip_hash_t *balancer,
 	/* Notify
 	 */
 	cherokee_source_copy_name (entry->source, &tmp);
-	PRINT_MSG ("NOTICE: Taking source='%s' back on-line: %d active\n",
+	LOG_WARNING ("Taking source='%s' back on-line: %d active\n",
 		   tmp.buf, balancer->n_active);
 	cherokee_buffer_mrproper (&tmp);
 
@@ -140,7 +140,7 @@ report_fail (cherokee_balancer_ip_hash_t *balancer,
 		/* Notify what has happened
 		 */
 		cherokee_source_copy_name (entry->source, &tmp);
-		PRINT_MSG ("NOTICE: Taking source='%s' off-line. Active %d\n", 
+		LOG_WARNING ("Taking source='%s' off-line. Active %d\n", 
 			   tmp.buf, balancer->n_active);
 		cherokee_buffer_mrproper (&tmp);
 
@@ -195,7 +195,7 @@ dispatch (cherokee_balancer_ip_hash_t  *balancer,
 	/* Select a back-end
 	 */
 	if (unlikely (balancer->n_active <= 0)) {
-		PRINT_MSG_S ("NOTICE: Sources exhausted: re-enabling one.\n");
+		LOG_WARNING_S ("Sources exhausted: re-enabling one.\n");
 		reactivate_entry (balancer, BAL_ENTRY(balancer->last_one));
 
 		balancer->last_one = list_next_circular (&BAL(balancer)->entries,
