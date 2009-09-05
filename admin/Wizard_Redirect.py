@@ -1,3 +1,4 @@
+import string
 import validations
 from config import *
 from util import *
@@ -18,6 +19,17 @@ CONFIG_VSRV = """
 %(pre_vsrv)s!rule!1!handler!rewrite!1!regex = /(.*)$
 %(pre_vsrv)s!rule!1!handler!rewrite!1!substring = http://%(host_trg)s/$1
 """
+
+EXTRA_WILDCARD = """
+%(pre_vsrv)s!match = wildcard
+%(pre_vsrv)s!match!domain!1 = %(host_src)s
+"""
+
+EXTRA_REHOST = """
+%(pre_vsrv)s!match = rehost
+%(pre_vsrv)s!match!regex!1 = %(host_src)s
+"""
+
 
 DATA_VALIDATION = [
     ("tmp!wizard_redir!host_src", (validations.is_new_host, 'cfg'))
@@ -67,7 +79,18 @@ class Wizard_VServer_Redirect (WizardPage):
 
         # Locals
         pre_vsrv = cfg_vsrv_get_next (self._cfg)
-        
+
         # Add the new rules
         config = CONFIG_VSRV % (locals())
+
+        # Analise the source domain
+        wildcard_domain = string.letters + "_-.*?"
+        is_wildcard = reduce (lambda x,y: x and y, [c in wildcard_domain for c in host_src])
+        
+        if is_wildcard:
+            config += EXTRA_WILDCARD % (locals())
+        else:
+            config += EXTRA_REHOST % (locals())
+            
+        # Apply it
         self._apply_cfg_chunk (config)
