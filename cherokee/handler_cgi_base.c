@@ -267,8 +267,8 @@ cherokee_handler_cgi_base_build_basic_env (
 		 bind->server_string.buf,
 		 bind->server_string.len);
 
-	set_env (cgi, "SERVER_NAME",       "Cherokee", 8);
-	set_env (cgi, "SERVER_SIGNATURE",  "<address>Cherokee web server</address>", 38);
+	set_env (cgi, "SERVER_SOFTWARE",   "Cherokee", 8);
+	set_env (cgi, "SERVER_SIGNATURE",  "<address>Cherokee Web Server</address>", 38);
 	set_env (cgi, "GATEWAY_INTERFACE", "CGI/1.1", 7);
 	set_env (cgi, "PATH",              "/bin:/usr/bin:/sbin:/usr/sbin", 29);
 
