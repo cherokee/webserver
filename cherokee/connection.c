@@ -407,6 +407,17 @@ cherokee_connection_setup_error_handler (cherokee_connection_t *conn)
 		conn->handler = NULL;
 	}
 
+	/* The rid of the encoder as well.
+	 */
+	if (conn->encoder_new_func) {
+		conn->encoder_new_func = NULL;
+	}
+
+	if (conn->encoder != NULL) {
+		cherokee_encoder_free (conn->encoder);
+		conn->encoder = NULL;
+	}
+
 	/* Loop detection: Set the default error handler and exit.
 	 */
 	conn->respins += 1;
@@ -473,18 +484,13 @@ out:
 	if (http_type_500 (conn->error_code)) {
 		conn->keepalive = 0;
 		
-	} else if (http_type_400 (conn->error_code) &&
-		   ((conn->error_code != http_not_found) && /* 404 */
-		    (conn->error_code != http_gone))) {     /* 410 */
+	} else if (! http_type_300 (conn->error_code) &&   /* 3xx */
+		   (conn->error_code != http_gone) &&      /* 410 */
+		   (conn->error_code != http_not_found))   /* 404 */
+	{
 		conn->keepalive = 0;
 	}
-
-	/* Ensure that the error handler supports Content-Length:
-	 */
-	if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
-		conn->keepalive = 0;
-	}
-
+	
 	ret = ret_ok;
 
 clean:
