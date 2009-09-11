@@ -161,12 +161,20 @@ cherokee_post_get_len (cherokee_post_t *post, off_t *len)
 
 
 ret_t 
-cherokee_post_append (cherokee_post_t *post, const char *str, size_t len)
+cherokee_post_append (cherokee_post_t *post, const char *str, size_t len, size_t *written)
 {
-	TRACE(ENTRIES, "appends=%d bytes\n", len);
+	if ((post->size > 0) &&
+	    (post->received + len > post->size))
+	{
+		*written = post->size - post->received;
+	} else {
+		*written = len;
+	}
 
-	cherokee_buffer_add (&post->info, str, len);
-	cherokee_post_commit_buf (post, len);
+	TRACE(ENTRIES, "appends=%d bytes\n", *written);
+
+	cherokee_buffer_add (&post->info, str, *written);
+	cherokee_post_commit_buf (post, *written);
 	return ret_ok;
 }
 

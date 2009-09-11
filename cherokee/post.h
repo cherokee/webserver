@@ -76,7 +76,7 @@ int   cherokee_post_got_all        (cherokee_post_t *post);
 ret_t cherokee_post_set_len        (cherokee_post_t *post, off_t  len);
 ret_t cherokee_post_get_len        (cherokee_post_t *post, off_t *len);
 
-ret_t cherokee_post_append         (cherokee_post_t *post, const char *str, size_t len);
+ret_t cherokee_post_append         (cherokee_post_t *post, const char *str, size_t len, size_t *written);
 ret_t cherokee_post_commit_buf     (cherokee_post_t *post, size_t len);
 ret_t cherokee_post_set_encoding   (cherokee_post_t *post, cherokee_post_encoding_t enc);
 

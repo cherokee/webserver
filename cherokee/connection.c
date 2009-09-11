@@ -1828,6 +1828,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 	if (http_method_with_input (conn->header.method)) {
 		uint32_t header_len;
 		uint32_t post_len;
+		size_t   written;
 		
 		/* Init the post info
 		 */
@@ -1844,8 +1845,12 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 
 		post_len = conn->incoming_header.len - header_len;
 
-		cherokee_post_append (&conn->post, conn->incoming_header.buf + header_len, post_len);
-		cherokee_buffer_drop_ending (&conn->incoming_header, post_len);
+		if (post_len > 0) {
+			cherokee_post_append (&conn->post, conn->incoming_header.buf + header_len,
+					       post_len, &written);
+
+			cherokee_buffer_remove_chunk (&conn->incoming_header, header_len, written);
+		}
 	}
 
 	/* Copy the request and query string

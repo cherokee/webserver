@@ -196,6 +196,8 @@ internal_step (cherokee_admin_client_t *admin)
 static void
 prepare_and_set_post (cherokee_admin_client_t *admin, const char *str, cuint_t str_len)
 {
+	size_t written;
+
 	cherokee_downloader_t *downloader = DOWNLOADER(admin->downloader);
 
 	cherokee_downloader_set_url (downloader, admin->url_ref); 
@@ -205,7 +207,7 @@ prepare_and_set_post (cherokee_admin_client_t *admin, const char *str, cuint_t s
 	 */
 	cherokee_post_init (&admin->post);
 	cherokee_post_set_len (&admin->post, str_len);
-	cherokee_post_append (&admin->post, str, str_len);
+	cherokee_post_append (&admin->post, str, str_len, &written);
 	cherokee_downloader_post_set (downloader, &admin->post); 
 }
 
