@@ -41,7 +41,8 @@ class Test (TestBase):
         TestBase.__init__ (self, __file__)
         self.name = "FastCGI: Variables"
 
-        self.request           = "GET %s HTTP/1.0\r\n" %(DIR) 
+        self.request           = "GET %s HTTP/1.0\r\n" %(DIR) +\
+                                 "Host: localhost\r\n"
         self.expected_error    = 200
         self.expected_content  = ['PATH_INFO:', 'QUERY_STRING:']
         self.forbidden_content = ['from fcgi', 'start_response']
