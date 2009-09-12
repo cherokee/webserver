@@ -65,8 +65,8 @@ class Wizard_Rules_PHP (Wizard):
             _, self.source = cfg_source_get_next (self._cfg)
             self._cfg['%s!nick' % (self.source)]        = 'PHP Interpreter'
             self._cfg['%s!type' % (self.source)]        = 'interpreter'
-            self._cfg['%s!interpreter' % (self.source)] = '%s -b localhost:%d' % (php_path, self.TCP_PORT)
-            self._cfg['%s!host' % (self.source)]        = 'localhost:%d' % (self.TCP_PORT)
+            self._cfg['%s!interpreter' % (self.source)] = '%s -b 127.0.0.1:%d' % (php_path, self.TCP_PORT)
+            self._cfg['%s!host' % (self.source)]        = '127.0.0.1:%d' % (self.TCP_PORT)
 
             self._cfg['%s!env!PHP_FCGI_MAX_REQUESTS' % (self.source)] = "5000"
             self._cfg['%s!env!PHP_FCGI_CHILDREN' % (self.source)]     = "5"
@@ -76,7 +76,7 @@ class Wizard_Rules_PHP (Wizard):
             _, self.rule = cfg_vsrv_rule_get_next (self._cfg, self._pre)
             if not self.rule:
                 return self.report_error ("Couldn't add a new rule.")
-            
+
             src_num = self.source.split('!')[-1]
 
             self._cfg['%s!match' % (self.rule)]                     = 'extensions'
@@ -120,4 +120,4 @@ def wizard_php_get_source_info (cfg):
 
     return {'source': wizard.source,
             'nick':   wizard.nick}
-    
+
