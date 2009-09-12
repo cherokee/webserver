@@ -730,7 +730,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 			case ret_ok:
 				if ((conn->post.size > 0) &&
-				    ((conn->post.received + conn->post.info.len) > conn->post.size))
+				    ((conn->post.received + len) > conn->post.size))
 				{
 					len = conn->post.size - conn->post.received;
 
