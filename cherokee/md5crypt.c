@@ -168,17 +168,17 @@ md5_crypt(const char *pw, const char *salt, const char *magic, char passwd[MD5CR
 	p = passwd + strlen(passwd);
 
 	l = (final[ 0]<<16) | (final[ 6]<<8) | final[12];
-	cherokee_strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
+	strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
 	l = (final[ 1]<<16) | (final[ 7]<<8) | final[13];
-	cherokee_strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
+	strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
 	l = (final[ 2]<<16) | (final[ 8]<<8) | final[14];
-	cherokee_strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
+	strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
 	l = (final[ 3]<<16) | (final[ 9]<<8) | final[15];
-	cherokee_strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
+	strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
 	l = (final[ 4]<<16) | (final[10]<<8) | final[ 5];
-	cherokee_strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
+	strlcat (passwd, to64(to64_buf, l, 4), MD5CRYPT_PASSWD_LEN);
 	l =                    final[11]                ;
-	cherokee_strlcat (passwd, to64(to64_buf, l, 2), MD5CRYPT_PASSWD_LEN);
+	strlcat (passwd, to64(to64_buf, l, 2), MD5CRYPT_PASSWD_LEN);
 
 	/* Don't leave anything around in vm they could use. 
 	 */

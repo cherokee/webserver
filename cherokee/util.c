@@ -293,51 +293,17 @@ rpl_malloc (size_t n)
 #endif
 
 
+
+/* The following few lines has been copy and pasted from Todd
+ * C. Miller <Todd.Miller@courtesan.com> code. BSD licensed.
+ */
+
 /* Appends src to string dst of size siz (unlike strncat, siz is the
  * full size of dst, not space left).  At most siz-1 characters
  * will be copied.  Always NUL terminates (unless siz <= strlen(dst)).
  * Returns strlen(src) + MIN(siz, strlen(initial dst)).
  * If retval >= siz, truncation occurred.
  */
-size_t
-cherokee_strlcat (char *dst, const char *src, size_t siz)
-{
-#ifdef HAVE_STRLCAT
-	return strlcat (dst, src, siz);
-#else
-	/* The following few lines has been copy and pasted from Todd
-	 * C. Miller <Todd.Miller@courtesan.com> code. BSD licensed.
-	 */
-	register char *d = dst;
-        register const char *s = src;
-        register size_t n = siz;
-        size_t dlen;
-
-        /* Find the end of dst and adjust bytes left but do not go
-	 * past end.
-	 */
-        while (n-- != 0 && *d != '\0')
-                d++;
-        dlen = d - dst;
-        n = siz - dlen;
-
-        if (n == 0)
-                return(dlen + strlen(s));
-        while (*s != '\0') {
-                if (n != 1) {
-                        *d++ = *s;
-                        n--;
-                }
-                s++;
-        }
-        *d = '\0';
-
-	 /* Count does not include NUL 
-	  */
-        return(dlen + (s - src));      
-#endif
-}
-
 
 #ifndef HAVE_STRLCAT
 size_t
