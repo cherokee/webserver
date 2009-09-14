@@ -35,6 +35,7 @@
 #include "util.h"
 #include "avl.h"
 #include "socket.h"
+#include "bogotime.h"
 
 
 typedef struct {
@@ -76,16 +77,38 @@ entry_free (void *entry)
 
 
 static ret_t
-entry_fill_up (cherokee_resolv_cache_entry_t *entry, const char *domain)
+entry_fill_up (cherokee_resolv_cache_entry_t *entry,
+	       cherokee_buffer_t             *domain)
 {
-	ret_t  ret;
-	char  *tmp;
+	ret_t   ret;
+	char   *tmp;
+	time_t  eagain_at = 0;
 
-	ret = cherokee_gethostbyname (domain, &entry->addr); 
-	if (unlikely (ret != ret_ok)) return ret;
+	while (true) {
+		ret = cherokee_gethostbyname (domain->buf, &entry->addr); 
+		if (ret == ret_ok) {
+			break;
+
+		} else if (ret == ret_eagain) {
+			if (eagain_at == 0) {
+				eagain_at = cherokee_bogonow_now;
+			} else if (cherokee_bogonow_now > eagain_at + 3) {
+			      	LOG_WARNING ("Timed out while resolving '%s'\n", domain->buf);
+				return ret_error;
+			}
+
+			CHEROKEE_THREAD_YIELD();
+			continue;
+
+		} else {
+			return ret_error;
+		}
+	}
 
 	tmp = inet_ntoa (entry->addr);
-	if (tmp == NULL) return ret;
+	if (tmp == NULL) {
+		return ret_error;
+	}
 	
 	cherokee_buffer_add (&entry->ip_str, tmp, strlen(tmp));
 	return ret_ok;
@@ -151,7 +174,9 @@ cherokee_resolv_cache_clean (cherokee_resolv_cache_t *resolv)
 
 
 static ret_t
-table_add_new_entry (cherokee_resolv_cache_t *resolv, const char *domain, cherokee_resolv_cache_entry_t **entry)
+table_add_new_entry (cherokee_resolv_cache_t        *resolv,
+		     cherokee_buffer_t              *domain,
+		     cherokee_resolv_cache_entry_t **entry)
 {
 	ret_t                          ret;
 	cherokee_resolv_cache_entry_t *n    = NULL;
@@ -173,7 +198,7 @@ table_add_new_entry (cherokee_resolv_cache_t *resolv, const char *domain, cherok
 	/* Add it to the table
 	 */
 	CHEROKEE_RWLOCK_WRITER (&resolv->lock);
-	ret = cherokee_avl_add_ptr (&resolv->table, (char *)domain, (void **)n);
+	ret = cherokee_avl_add (&resolv->table, domain, (void **)n);
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	*entry = n;
@@ -182,7 +207,9 @@ table_add_new_entry (cherokee_resolv_cache_t *resolv, const char *domain, cherok
 
 
 ret_t 
-cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t *resolv, const char *domain, const char **ip)
+cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t  *resolv,
+				 cherokee_buffer_t        *domain,
+				 const char              **ip)
 {
 	ret_t                          ret;
 	cherokee_resolv_cache_entry_t *entry = NULL;
@@ -190,14 +217,16 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t *resolv, const char *do
 	/* Look for the name in the cache
 	 */
 	CHEROKEE_RWLOCK_READER (&resolv->lock);
-	ret = cherokee_avl_get_ptr (&resolv->table, (char *)domain, (void **)&entry);
+	ret = cherokee_avl_get (&resolv->table, domain, (void **)&entry);
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	if (ret != ret_ok) {
 		/* Bad luck: it wasn't cached
 		 */
 		ret = table_add_new_entry (resolv, domain, &entry);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok) {
+			return ret;
+		}
 	}
 
 	/* Return the ip string
@@ -208,7 +237,9 @@ cherokee_resolv_cache_get_ipstr (cherokee_resolv_cache_t *resolv, const char *do
 
 
 ret_t 
-cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv, const char *domain, void *sock_)
+cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv,
+				cherokee_buffer_t       *domain,
+				void                    *sock_)
 {
 	ret_t                          ret;
 	cherokee_socket_t             *sock  = sock_;
@@ -217,14 +248,16 @@ cherokee_resolv_cache_get_host (cherokee_resolv_cache_t *resolv, const char *dom
 	/* Look for the name in the cache
 	 */
 	CHEROKEE_RWLOCK_READER (&resolv->lock);
-	ret = cherokee_avl_get_ptr (&resolv->table, (char *)domain, (void **)&entry);
+	ret = cherokee_avl_get (&resolv->table, domain, (void **)&entry);
 	CHEROKEE_RWLOCK_UNLOCK (&resolv->lock);
 
 	if (ret != ret_ok) {
 		/* Bad luck: it wasn't cached
 		 */
 		ret = table_add_new_entry (resolv, domain, &entry);
-		if (ret != ret_ok) return ret;
+		if (ret != ret_ok) {
+			return ret;
+		}
 	}
 
 	/* Copy the address

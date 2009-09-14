@@ -121,7 +121,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		}
 	
 		/* Query the host */
-		ret = cherokee_resolv_cache_get_host (resolv, src->host.buf, sock);
+		ret = cherokee_resolv_cache_get_host (resolv, &src->host, sock);
 		if (unlikely (ret != ret_ok)) {
 			return ret;
 		}
@@ -201,8 +201,9 @@ set_host (cherokee_source_t *src, cherokee_buffer_t *host)
 	/* Host name
 	 */
 	ret = cherokee_parse_host (host, &src->host, &src->port);
-	if (unlikely (ret != ret_ok))
+	if (unlikely (ret != ret_ok)) {
 		return ret_error;
+	}
 	
 	return ret_ok;
 }

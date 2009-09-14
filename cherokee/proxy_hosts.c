@@ -24,6 +24,7 @@
 
 #include "common-internal.h"
 #include "proxy_hosts.h"
+#include "resolv_cache.h"
 #include "util.h"
 
 
@@ -355,7 +356,8 @@ ret_t
 cherokee_proxy_util_init_socket (cherokee_socket_t *socket, 
 				 cherokee_source_t *src)
 {
-	ret_t ret;
+	ret_t                    ret;
+	cherokee_resolv_cache_t *resolv;
 	
 	/* Family */
 	if (cherokee_string_is_ipv6 (&src->host)) {
@@ -371,13 +373,15 @@ cherokee_proxy_util_init_socket (cherokee_socket_t *socket,
         SOCKET_SIN_PORT(socket) = htons (src->port);
 
         /* IP host */
-        ret = cherokee_socket_pton (socket, &src->host);
-        if (ret != ret_ok) {
-                ret = cherokee_socket_gethostbyname (socket, &src->host);
-                if (unlikely(ret != ret_ok)) {
-			return ret_error;
-		}
-        }
+	ret = cherokee_resolv_cache_get_default (&resolv);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	ret = cherokee_resolv_cache_get_host (resolv, &src->host, socket);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
 
 	/* Set a few properties */
 	cherokee_fd_set_closexec    (socket->socket);

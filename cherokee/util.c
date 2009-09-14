@@ -689,10 +689,16 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
 	struct hostent *host;
 
 	CHEROKEE_MUTEX_LOCK (&__global_gethostbyname_mutex);
+
 	/* Resolv the host name
 	*/
 	host = gethostbyname (hostname);
 	if (host == NULL) {
+		if (h_errno == TRY_AGAIN) {
+			CHEROKEE_MUTEX_UNLOCK (&__global_gethostbyname_mutex);
+			return ret_eagain;
+		}
+
 		CHEROKEE_MUTEX_UNLOCK (&__global_gethostbyname_mutex);
 		return ret_error;
 	}
@@ -711,11 +717,10 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
 # define GETHOSTBYNAME_R_BUF_LEN 512
 
 	int             r;
-	int             h_errnop;
 	struct hostent  hs;
-	struct hostent *hp = NULL;
+	int             h_errnop = 0;
+	struct hostent *hp       = NULL;
 	char   tmp[GETHOSTBYNAME_R_BUF_LEN];
-        
 
 # if defined(SOLARIS) || defined(IRIX)
 	/* Solaris 10:
@@ -723,11 +728,14 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
 	 *        (const char *, struct hostent *, char *, int, int *h_errnop);
 	 */
 	hp = gethostbyname_r (hostname, &hs, tmp, 
-			GETHOSTBYNAME_R_BUF_LEN - 1, &h_errnop);
+			      GETHOSTBYNAME_R_BUF_LEN - 1, &h_errnop);
 
-	if (hp == NULL)
+	if (hp == NULL) {
+		if (h_errnop == TRY_AGAIN) {
+			return ret_eagain;
+		}
 		return ret_error;
-
+	}
 # else
 	/* Linux glibc2:
 	 *  int gethostbyname_r (const char *name,
@@ -737,17 +745,22 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
 	r = gethostbyname_r (hostname, 
 			&hs, tmp, GETHOSTBYNAME_R_BUF_LEN - 1, 
 			&hp, &h_errnop);
-	if (r != 0)
+	if (r != 0) {
+		if (h_errnop == TRY_AGAIN) {
+			return ret_eagain;
+		}
 		return ret_error;
+	}
 # endif  
 	/* Copy the address
 	 */
-	if (hp == NULL)
+	if (hp == NULL) {
 		return ret_not_found;
+	}
 
 	memcpy (addr, hp->h_addr, hp->h_length);
-
 	return ret_ok;
+
 #else
 	/* Bad case !
 	 */
