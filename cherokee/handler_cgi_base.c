@@ -305,9 +305,8 @@ cherokee_handler_cgi_base_build_basic_env (
 			set_env (cgi, "SERVER_NAME", tmp->buf, tmp->len);
 		}
 	} else {
-		cherokee_buffer_clean (tmp);
-		re = cherokee_gethostname (tmp);
-		if (re == ret_ok) {
+		ret = cherokee_gethostname (tmp);
+		if (ret == ret_ok) {
 			set_env (cgi, "SERVER_NAME", tmp->buf, tmp->len);
 		} else {
 			LOG_WARNING_S ("Error getting host name.\n");
