@@ -457,6 +457,9 @@ AC_CHECK_FUNCS(inet_pton inet_ntop inet_addr)
 AC_SEARCH_LIBS(gethostbyname, [socket nsl resolv])
 AC_CHECK_FUNCS(gethostbyname gethostbyname_r)
 
+AC_CHECK_HEADER(sys/utsname.h)
+AC_CHECK_FUNCS(gethostname uname)
+
 dnl
 dnl Check for inet_addr
 dnl

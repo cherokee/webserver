@@ -80,6 +80,14 @@
 # include <execinfo.h>
 #endif
 
+#ifdef HAVE_SYS_UTSNAME_H
+# include <sys/utsname.h>
+#endif
+
+#ifndef HOST_NAME_MAX
+# define HOST_NAME_MAX 255
+#endif
+
 #define ENTRIES "util"
 
 const char *cherokee_version    = PACKAGE_VERSION;
@@ -767,6 +775,40 @@ cherokee_gethostbyname (const char *hostname, void *_addr)
 	SHOULDNT_HAPPEN;
 	return ret_error;
 #endif
+}
+
+
+ret_t
+cherokee_gethostname (cherokee_buffer_t *buf)
+{
+	int  re;
+
+#ifdef HAVE_GETHOSTNAME
+	char host_name[HOST_NAME_MAX + 1];
+
+	re = gethostname (host_name, HOST_NAME_MAX);
+	if (re) {
+		return ret_error;
+	}
+
+	cherokee_buffer_add (buf, host_name, strlen(host_name));
+
+	return ret_ok;
+
+#elif defined(HAVE_SYS_UTSNAME_H) && defined(HAVE_UNAME)
+	struct utsname info;
+
+	re = uname (&info);
+	if (re) {
+		return ret_error;
+	}
+
+	cherokee_buffer_add (buf, info.nodename, sizeof(info.nodename));
+
+	return ret_ok;
+#endif
+
+	return ret_error;
 }
 
 
