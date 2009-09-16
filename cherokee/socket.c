@@ -423,6 +423,7 @@ cherokee_socket_set_client (cherokee_socket_t *sock, unsigned short int type)
 	 */
 	sock->socket = socket (type, SOCK_STREAM, 0);
 	if (sock->socket < 0) {
+		LOG_ERRNO (errno, cherokee_err_error, "Could not create socket: ${errno}\n");
 		return ret_error;
 	}
 
