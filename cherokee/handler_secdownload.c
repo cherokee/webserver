@@ -67,6 +67,7 @@ cherokee_handler_secdownload_configure (cherokee_config_node_t   *conf,
 
 	/* Parse 'file' parameters
 	 */
+	props->props_file = NULL;
 	ret = cherokee_handler_file_configure (conf, srv, (cherokee_module_props_t **)&props->props_file);
 	if ((ret != ret_ok) && (ret != ret_deny))
 		return ret;
