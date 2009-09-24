@@ -15,6 +15,7 @@ project's documentation for more information on
 link:http://www.djangoproject.com/documentation/install[how to install
 Django].
 
+=== Preparing the framework
 
 On Debian based systems this will be enough:
 ----
@@ -33,16 +34,42 @@ $ django-admin startproject example
 ----
 
 This will create the basic structure into a new directory called
-`example`. Now you are ready to configure Cherokee. You only need to
-know how to spawn the FastCGI or SCGI, which is done with a script
-provided by your project called `manage.py`.
+`example`.
 
 It is important to ensure that `manage.py` has execution permissions.
-If it had not, you would only have to set them by running:
+If it does not, you will only have to set them by running:
 
 ----
 chmod a+rx manage.py
 ----
+
+Now you are ready to configure Cherokee.
+
+=== Preparing Cherokee
+
+You can either do it by hand, or you can use the appropriate wizard
+for a hassle-free configuration.
+
+To do so, simply access the `Virtual Servers` section in
+`Cherokee-Admin`, and click on `Wizards` -> `Platforms` -
+`Django`. You can use this wizard both within your `Virtual
+Servers` list (in which case a new virtual server is configured) and
+from the `Behavior` tab inside one of your virtual servers. In this
+last scenario, the Django project will be accessible under the
+specified web directory of the selected virtual server.
+
+That's it. You can stop reading now. Go enjoy your Django application
+running on Cherokee.
+
+The following information details the steps needed to configure
+Cherokee by hand, which is not the recommended option. The wizards are
+constantly being updated as new releases of the software become
+available, while the recipe might become somehow more outdated given
+enough time.
+
+It is not difficult, though. You only need to know how to spawn the
+FastCGI or SCGI, which is done with a script provided by your project
+called `manage.py`.
 
 Django can be run on a TCP port or on a Unix socket. In our example we
 will be launching it as threaded server on a TCP port with SCGI
