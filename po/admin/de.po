@@ -2119,7 +2119,7 @@ msgstr "Willkommen bei Cherokee-Admin"
 #: admin/PageStatus.py:70
 msgid "This interface will assist in configuring the Cherokee Web Server."
 msgstr ""
-"Diese Oberfläche wird ihnen helfen den Chrokee Web Server zu konfigurieren"
+"Diese Oberfläche wird ihnen helfen den Cherokee Web Server zu konfigurieren"
 
 #: admin/PageStatus.py:80
 msgid "Server status"
@@ -2381,7 +2381,7 @@ msgstr ""
 
 #: admin/PageVServer.py:204 admin/PageVServer.py:215 admin/PageVServers.py:288
 msgid "Virtual Server"
-msgstr "Viruteller Server"
+msgstr "Virtueller Server"
 
 #: admin/PageVServer.py:219
 msgid "Basics"
