@@ -58,8 +58,12 @@ from the `Behavior` tab inside one of your virtual servers. In this
 last scenario, the Django project will be accessible under the
 specified web directory of the selected virtual server.
 
+image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
+
 That's it. You can stop reading now. Go enjoy your Django application
 running on Cherokee.
+
+=== Setting up Cherokee by hand
 
 The following information details the steps needed to configure
 Cherokee by hand, which is not the recommended option. The wizards are

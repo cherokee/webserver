@@ -7,6 +7,7 @@ link:http://www.gnu.org/software/mailman/[GNU Mailman] is the
 most spread software for managing mailing-lists.
 
 To install Mailman you will have to actually do several things:
+
 . Install the software
 . Set up your web server.
 . Set up your mail server.
@@ -15,6 +16,25 @@ This recipe is meant to be used as a complement of the official
 link:http://www.gnu.org/software/mailman/mailman-install/[installation
 instructions], not as a replacement, and as such it only covers the
 section specific to Cherokee: the configuration of the web server.
+
+You should really use the recommended method, which is using the
+configuration wizard provided by Cherokee-Admin. Simply go to the
+virtual server list page. Once in there, you'll have to click the
+`Wizards` button:
+
+image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
+
+Now, you will have to select the `Misc` category, and run the
+`Mailman` wizard. You will be asked for some basic parameters about
+the installation. The new virtual server will be created after this
+form is submitted.  The virtual server configuration will cover the
+vast majority of the cases. Most probably it will cover your needs,
+although you are free to modify it as you will. No more configuration
+is needed after this step.
+
+If you decide to ignore the configuration wizard you can set up
+everything by hand. Although it is not complicated, this method is not
+recommended.
 
 Very little configuration is required by Mailman to work. Simply
 setting up a couple of paths -the location of the Mailman archive and

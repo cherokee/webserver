@@ -5,9 +5,12 @@ Cookbook: Setting up Ruby on Rails
 
 Setting up a Rails application to run with Cherokee and FastCGI is not
 only easy. It is also the best possible solution to manage the load
-among one or many Rails servers, using an extremely efficient web
-server to manage the web part and leaving as many free resources as
-possible to Rails.
+among one or many Rails servers. This is done by using an extremely
+efficient web server to manage the web part and leaving as many free
+resources as possible to Rails.
+
+[[framewrok]]
+=== Preparing the framework
 
 Of course you will need a working Rails installation for this to
 succed. You can set this up easily. If you have Ruby and Ruby Gems
@@ -56,13 +59,40 @@ type:
 $ ln -s /home/foo/example/public /var/www/example
 ----
 
-Now you are ready to configure Cherokee. You only need to know that
-you can spawn the FastCGI process using a script that is already in
-your deployed project. In this case,
-`/home/foo/example/script/process/spawner`.
-We will be using the default parameters (3 instances starting at port
-8000) but you can fine tune this using the many parameters provided by
-the script.
+Now you are ready to configure Cherokee.
+
+[[cherokee]]
+=== Preparing Cherokee
+
+You can either do it by hand, or you can use the appropriate wizard
+for a hassle-free configuration.
+
+You should really use the recommended method, which is using the
+configuration wizard provided by Cherokee-Admin. Simply go to the
+virtual server list page. Once in there, you'll have to click the
+`Wizards` button:
+
+image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
+
+Now, you will have to select the `Platforms` category, and run the
+`RoR` wizard. You will be asked for some basic parameters about the
+installation, and the wizard will try to fill in automatically as many
+entries as possible. The virtual server configuration will cover the
+vast majority of the cases. Most probably it will cover your needs,
+although you are free to modify it as you will. No more configuration
+is needed after this step.
+
+If you decide to ignore the configuration wizard you can set up
+everything by hand. Although it is not complicated, this method is not
+recommended.
+
+=== Setting up Cherokee by hand
+
+You only need to know that you can spawn the FastCGI process using a
+script that is already in your deployed project. In this case,
+`/home/foo/example/script/process/spawner`.  We will be using the
+default parameters (3 instances starting at port 8000) but you can
+fine tune this using the many parameters provided by the script.
 
 The process is fairly simple. Set up a new rule for this new path and
 manage it with the FastCGI handler.
