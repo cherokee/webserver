@@ -373,7 +373,7 @@ check_img_dir (cherokee_collector_rrd_t *rrd_srv)
 
 	re = access (rrd_srv->database_dir.buf, W_OK);
 	if (re != 0) {
-		mkdir (rrd_srv->database_dir.buf, 0775);		
+		cherokee_mkdir (rrd_srv->database_dir.buf, 0775);
 
 		re = access (rrd_srv->database_dir.buf, W_OK);
 		if (re != 0) {
