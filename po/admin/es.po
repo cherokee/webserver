@@ -380,7 +380,7 @@ msgstr "Elija el tema para mostrar."
 
 #: admin/ModuleDirlist.py:15
 msgid "Web directory where the icon files are located. Default: <i>/icons</i>."
-msgstr "Directorio web donde se encuentran los iconos. Defecto: <i>/icons</i>."
+msgstr "Directorio web donde se encuentran los iconos. Por defecto: <i>/icons</i>."
 
 #: admin/ModuleDirlist.py:16
 msgid "List of notice files to be inserted."
@@ -895,7 +895,7 @@ msgstr ""
 #: admin/ModuleProxy.py:15
 msgid "Preserve the original \"Host:\" header sent by the client. (Default No)"
 msgstr ""
-"Mantener la cabecera \"Host:\" original enviada por el cliente. (Defecto: No)"
+"Mantener la cabecera \"Host:\" original enviada por el cliente. (Predeterminado: No)"
 
 #: admin/ModuleProxy.py:18
 msgid "Reverse Proxy"
@@ -1046,7 +1046,7 @@ msgstr ""
 msgid "How often usage graphics should be regenerated. (Default: 60 seconds)"
 msgstr ""
 "Frecuencia con las que las gráficas deben ser regeneradas. "
-"(Defecto: 60 segundos)"
+"(Predeterminado: 60 segundos)"
 
 #: admin/ModuleRrd.py:26
 msgid "RRD Database directory"
@@ -1075,7 +1075,7 @@ msgstr "Secreto compartido entre el servidor y el script."
 #: admin/ModuleSecdownload.py:21
 msgid "How long the download will last accessible - in seconds. Default: 60."
 msgstr ""
-"Cuanto tiempo permanecerá disponible la descarga - en segundos. Defecto: 60."
+"Cuanto tiempo permanecerá disponible la descarga - en segundos. Por defecto: 60."
 
 #: admin/ModuleSecdownload.py:38
 msgid "Secret"
@@ -1134,14 +1134,14 @@ msgstr ""
 #: admin/ModuleStreaming.py:13
 msgid "Factor by which the bandwidth limit will be increased. Default: 0.1"
 msgstr ""
-"Factor por el que el límite de ancho de banda se incrementará. Defecto: 0.1"
+"Factor por el que el límite de ancho de banda se incrementará. Por defecto: 0.1"
 
 #: admin/ModuleStreaming.py:14
 msgid ""
 "Number of seconds to stream before setting the bandwidth limit. Default: 5."
 msgstr ""
 "Número de segundos transmitiendo antes de ajustar el límite de ancho de "
-"banda. Defecto: 5."
+"banda. Por defecto: 5."
 
 #: admin/ModuleStreaming.py:22 admin/ModuleStreaming.py:45
 msgid "Audio/Video Streaming"
@@ -1313,11 +1313,11 @@ msgstr ""
 #: admin/PageAdvanced.py:43
 msgid "Minimum size of a file to use sendfile(). Default: 32768 Bytes."
 msgstr ""
-"Tamaño mínimo de un fichero para usar sendfile(). Defecto: 32768 bytes."
+"Tamaño mínimo de un fichero para usar sendfile(). Por defecto: 32768 bytes."
 
 #: admin/PageAdvanced.py:44
 msgid "Maximum size of a file to use sendfile(). Default: 2 GB."
-msgstr "Tamaño máximo de un fichero para usar sendfile(). Defecto: 2 GB."
+msgstr "Tamaño máximo de un fichero para usar sendfile(). Por defecto: 2 GB."
 
 #: admin/PageAdvanced.py:45
 msgid ""
@@ -1325,7 +1325,7 @@ msgid ""
 "Default: <em>cherokee-panic</em>."
 msgstr ""
 "Nombre del programa que se ejecutará si, por alguna razón, falla el "
-"servidor. Defecto: <em>cherokee-panic</em>."
+"servidor. Por defecto: <em>cherokee-panic</em>."
 
 #: admin/PageAdvanced.py:46
 msgid "Path of the PID file. If empty, the file will not be created."
@@ -1341,13 +1341,13 @@ msgid ""
 "each thread. Default 20."
 msgstr ""
 "Número de conexiones internas que se mantendrán para reutilizar por cada "
-"hilo. Defecto: 20."
+"hilo. Por defecto: 20."
 
 #: admin/PageAdvanced.py:49
 msgid ""
 "Sets the number of seconds between log consolidations (flushes). Default: 10 "
 "seconds."
-msgstr "Número de segundos entre volcados de log. Defecto: 10 segundos."
+msgstr "Número de segundos entre volcados de log. Por defecto: 10 segundos."
 
 #: admin/PageAdvanced.py:50
 msgid "Time lapse (in seconds) between Nonce cache clean ups."
@@ -1723,7 +1723,7 @@ msgstr "Comentarios: Muchas gracias"
 #: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:374
 #: admin/consts.py:87
 msgid "Default"
-msgstr "Defecto"
+msgstr "Por defecto"
 
 #: admin/PageGeneral.py:13
 msgid "Product only"
@@ -1965,7 +1965,7 @@ msgid ""
 "up (in seconds). Default: 3."
 msgstr ""
 "Cuánto debe esperar el servidor cuando lanza un intérprete, antes de "
-"conectar con él (en segundos). Defecto: 3."
+"conectar con él (en segundos). Por defecto: 3."
 
 #: admin/PageInfoSource.py:18
 msgid ""
@@ -2343,7 +2343,7 @@ msgid ""
 "ciphers supported by the OpenSSL version used)."
 msgstr ""
 "Tipos de cifrado permitidos para TLS/SSL. <a target=\"_blank\" href=\"http://"
-"www.openssl.org/docs/apps/ciphers.html\">Referencia</a>. (Defecto: todos los "
+"www.openssl.org/docs/apps/ciphers.html\">Referencia</a>. (Predeterminado: todos los "
 "soportados por la versión de OpenSSL instalada)."
 
 #: admin/PageVServer.py:43
@@ -2356,7 +2356,7 @@ msgid ""
 "verification procedure (Default: 1)"
 msgstr ""
 "Profundidad máxima de la cadena de certificados usados durante el proceso de "
-"verificación (Defecto: 1)"
+"verificación (Predeterminado: 1)"
 
 #: admin/PageVServer.py:45
 msgid "Allows the selection of how to generate the error responses."
@@ -2394,11 +2394,11 @@ msgstr ""
 
 #: admin/PageVServer.py:51
 msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
-msgstr "Tamaño máximo, en bytes, de los subidas por POST. (Defecto: ilimitado)"
+msgstr "Tamaño máximo, en bytes, de los subidas por POST. (Predeterminado: ilimitado)"
 
 #: admin/PageVServer.py:52
 msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
-msgstr "Si este servidor virtual puede usar Keep-alive (Defecto: sí)"
+msgstr "Si este servidor virtual puede usar Keep-alive (Predeterminado: sí)"
 
 #: admin/PageVServer.py:53
 msgid "The Logging is currently enabled."
@@ -2457,7 +2457,7 @@ msgstr ""
 msgid ""
 "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
 msgstr ""
-"Cómo darle soporte al mecanismo de \"Hospedaje Virtual Avanzado\". (Defecto: "
+"Cómo darle soporte al mecanismo de \"Hospedaje Virtual Avanzado\". (Predeterminado: "
 "desactivado)"
 
 #: admin/PageVServer.py:64
@@ -3429,7 +3429,7 @@ msgstr "El nombre del virtual server ya está siendo usado."
 #~ "server (Default: yes)"
 #~ msgstr ""
 #~ "Especifica si se deben recopilar las estadísticas de tráfico para el "
-#~ "servidor virtual (Defecto: sí)"
+#~ "servidor virtual (Predeterminado: sí)"
 
 #~ msgid "Use MD5 Passwords"
 #~ msgstr "Usar contraseñas MD5"
