@@ -4,11 +4,12 @@ from Page import *
 
 NOTE_DUP_LOGS = "Use the same logging configuration as one of the other virtual servers."
 
-WIZARD_GROUP_MISC     = 'Misc'
-WIZARD_GROUP_CMS      = 'CMS'
-WIZARD_GROUP_TASKS    = 'Tasks'
-WIZARD_GROUP_PLATFORM = 'Platforms'
-WIZARD_GROUP_LANGS    = 'Languages'
+WIZARD_GROUP_MISC       = 'Misc'
+WIZARD_GROUP_CMS        = 'CMS'
+WIZARD_GROUP_TASKS      = 'Tasks'
+WIZARD_GROUP_PLATFORM   = 'Platforms'
+WIZARD_GROUP_LANGS      = 'Languages'
+WIZARD_GROUP_MANAGEMENT = 'Management'
 
 USUAL_STATIC_FILES = ['/favicon.ico', '/robots.txt', '/crossdomain.xml']
 
