@@ -1,4 +1,9 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee 0.99.25
+* Wordpress 2.8.4
+///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Wordpress
 ------------------------------

@@ -1,48 +1,84 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee: 0.99.25
+* Joomla 1.5.14
+///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Joomla
 ---------------------------
 
 Setting up link:http://www.joomla.org/[Joomla] with Cherokee is really
-easy. We will assume that our `Document Root` directory is `/var/www`
-and that we want to install the software on a subdirectory called
-`joomla` of the server we are working on.
+easy. A configuration wizard is provided that can either be used to
+install Joomla as a new dedicated Virtual Server, or to set it up
+inside a Directory.
 
-You will need PHP support correctly configured in Cherokee, and PHP
-with the MySQL module installed. The default configuration already
-provides a valid PHP configuration for Cherokee if you have php-cgi
-installed, but you can follow the appropriate recipe about
-link:cookbook_php.html[setting up PHP] in case you don't have it
-available for any reason. You will also need an FTP server if the
-Joomla files are owned by a user other than the one running the web
-server.
+This recipe contains three sections detailing how to:
+. Configure Cherokee for either installation mode using the Wizard.
+. Install Joomla v1.5.14 which is the last one available at the time
+of writing.
+. Configure Cherokee manually.
 
-Under these conditions, you could start Joomla's installation and you
-would already be able to have your site up and running.
+You don't need to worry about the manual installation. It is legacy
+documentation from the time when the wizards weren't available. Every
+step described there is taken care of by the wizard.
 
-However, we can add several refinements. In this recipe we will be
-dedicating a virtual server entirely to Joomla, so either create a new
-one or adjust `default` accodringly. Of course, you can also set it up
-under a directory in an existing virtual server, but we will take the
-first approach for clarity and simplicity. And we will make the
-modifications in our `default` virtual server. This will only affect
-the URLs we'll be accessing to log in to Joomla. First download and
-uncompress the distributed Joomla release into `/var/www/joomla`, and
-set that path as the `Document Root` in your virtual host's `Basics`
-tab.
+[[wizard_configuration]]
+Configure Cheroke using the Wizard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We will also be making changes in the `Error Handler` tab, selecting
-the `Custom redirections` option and adding an option to send errors
-to Joomla.
+Two common scenarios are contemplated: installation on a dedicated
+virtual server (http://joomla.example.net/, for instance) or under a
+subdirectory on an existing virtual servar (as could be
+http://example.net/joomla/).
 
-[options="header"]
-|=========================
-|Error         |URL
-|403 Forbidden |/index.php
-|404 Not Found |/index.php
-|=========================
+[[cherokee_vserver]]
+Setting up Joomla as a new Virtual Server
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now only the database issue remains. Log in to MySQL:
+The first step would be to go to the virtual server list page. Once in
+there, you'll have to click the `Wizards` button:
+
+image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
+
+Now, you will have to select the `CMS` category, and run the Joomla
+wizard.  At this stage the Joomla wizard will ask you for some basic
+parameters about the installation. It will try to auto-fill as many
+entries of the form as possible.  For instance, if it finds Joomla
+installed in a standard location it will use that path as the default
+directory.
+
+The new virtual server will be created after this form is submitted.
+The virtual server configuration will cover the vast majority of the
+cases. Most probably it will cover your needs, although you are free
+to modify it as you will.
+
+[[cherokee_dir]]
+Setting up Joomla inside a Directory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Joomla can also be configured inside a directory. Let's suppose we
+want to set up Joomla inside the `/blog` directory of one of our
+virtual servers.
+
+In this case, the first thing you will have to do is to enter the
+virtual server configuration you'd like to configure Joomla in. Once
+in there, click the `Wizards` button:
+
+image::media/images/admin_vserver_wizard.png[Virtual Server Wizards]
+
+As in the previous case, this wizard will ask some very basic
+information, including the public web directory where Joomla will be
+set up and the local Joomla source directory.
+
+
+
+[[package_installation]]
+Installing Joomla
+~~~~~~~~~~~~~~~~~
+
+Once Cherokee is ready, only the database issue remains to be able to
+install Joomla. Log in to MySQL:
 
 ----------------
 mysql -u root -p
@@ -82,6 +118,52 @@ Now to set up Joomla. Visit
 link:http://localhost/administration[http://localhost/administration]
 and log in. Go to the `Global Configuration` option and enable all the
 *SEO Settings*, including the ones for Apache mod_rewrite.
+
+Mission accomplished. You can skip the rest of the document unless you
+want some more insight on what exactly has been done by the
+Cherokee-Admin Joomla Wizard.
+
+[[manual_configuration]]
+Configuring Cherokee manually
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We will assume that our `Document Root` directory is `/var/www`
+and that we want to install the software on a subdirectory called
+`joomla` of the server we are working on.
+
+You will need PHP support correctly configured in Cherokee, and PHP
+with the MySQL module installed. The default configuration already
+provides a valid PHP configuration for Cherokee if you have php-cgi
+installed, but you can follow the appropriate recipe about
+link:cookbook_php.html[setting up PHP] in case you don't have it
+available for any reason. You will also need an FTP server if the
+Joomla files are owned by a user other than the one running the web
+server.
+
+Under these conditions, you could start Joomla's installation and you
+would already be able to have your site up and running.
+
+However, we can add several refinements. In this recipe we will be
+dedicating a virtual server entirely to Joomla, so either create a new
+one or adjust `default` accodringly. Of course, you can also set it up
+under a directory in an existing virtual server, but we will take the
+first approach for clarity and simplicity. And we will make the
+modifications in our `default` virtual server. This will only affect
+the URLs we'll be accessing to log in to Joomla. First download and
+uncompress the distributed Joomla release into `/var/www/joomla`, and
+set that path as the `Document Root` in your virtual host's `Basics`
+tab.
+
+We will also be making changes in the `Error Handler` tab, selecting
+the `Custom redirections` option and adding an option to send errors
+to Joomla.
+
+[options="header"]
+|=========================
+|Error         |URL
+|403 Forbidden |/index.php
+|404 Not Found |/index.php
+|=========================
 
 Finally, set up the rewrite rules recommended by Joomla to block out
 the most common type of exploit attempts. To do so, simply create

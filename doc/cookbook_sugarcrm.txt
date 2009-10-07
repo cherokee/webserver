@@ -1,12 +1,17 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee 0.99.25
+* Sugar    5.5.0beta
+///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up SugarCRM
 -----------------------------
 
 For this recipe we will be using
-link:http://www.sugarforge.org/frs/download.php/4870/SugarCE-5.1.0c.zip
-Sugar Community Edition 5.1.0c], which was the latest freely
-distributable edition available at the
+link:http://www.sugarcrm.com/crm/download/sugar-suite.html[Sugar
+Community Edition 5.5], which is the latest freely distributable
+edition available at the
 link:http://www.sugarcrm.com/crm/download/sugar-suite.html[download
 site] when this was written.
 
@@ -48,10 +53,10 @@ provided by `.htaccess`.
 
 [options="header"]
 |======================================================================
-|Type     |Regular Expression                |Substitution
-|Internal |^/(.\*\.log.*|not_imported_.*txt) |/log_file_restricted.html
-|External |emailmandelivery.php              |/index.php
-|External |^/.\*/.*\.php                     |/index.php
+|Type     |Regular Expression                 |Substitution
+|Internal |^/(.\*\.log.*\|not_imported_.*txt) |/log_file_restricted.html
+|External |emailmandelivery.php               |/index.php
+|External |^/.\*/.*\.php                      |/index.php
 |======================================================================
 
 These need to be created as `Regular Expression` type rules matching
