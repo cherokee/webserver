@@ -195,9 +195,6 @@ validate_md5 (cherokee_connection_t *conn, const char *magic, char *crypted)
 	char  *new_md5_crypt;
 	char   space[120];
 
-	if (cherokee_buffer_is_empty (&conn->validator->passwd))
-		return ret_error;
-
 	new_md5_crypt = md5_crypt (conn->validator->passwd.buf, crypted, magic, space);
 	if (new_md5_crypt == NULL)
 		return ret_error;
