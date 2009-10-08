@@ -2795,7 +2795,7 @@ msgstr "Clonar"
 
 #: admin/Wizard.py:203
 msgid "Same logs as vserver"
-msgstr "Los mismos los que el vserver"
+msgstr "Los mismos logs que el vserver"
 
 #: admin/Wizard_Django.py:8
 msgid "Local path to the Django based project."
