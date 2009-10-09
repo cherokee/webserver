@@ -1,4 +1,9 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee 0.99.25
+* Zend     1.9.3PL1
+///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Zend Framework
 -----------------------------------
@@ -14,9 +19,9 @@ PHP] recipe for further hints on fine tuning this feature.
 
 To make sure the recipe works, we'll be using the demo provided by the
 link:http://framework.zend.com/docs/quickstart[Zend Framework
-Quickstart]. At the time of writing, it was
-link:http://framework.zend.com/demos/ZendFrameworkQuickstart-20080915.tar.gz[demo
-20080915].
+Quickstart]. Last time this document was edited, it was
+link:http://framework.zend.com/demos/ZendFrameworkQuickstart-20090430.tar.gz[demo
+20090430].
 
 Uncompress its contents to a directory and set up the `public`
 subdirectory as your web document root. In our example, it will be
@@ -48,38 +53,29 @@ entry point to our application.
 
 *********************************************************************
 
+[[wizard_configuration]]
+Configure Cheroke using the Wizard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[[manual_configuration]]
+Configure Cheroke using the Wizard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Cherokee is shipped with a configuration `Wizard` that can be used
+both to deploy the application under a dedicated `Virtual Server` and
+under a web folder from one already existent.
+
 Launch cherokee-admin, and proceed to the
-link:config_virtual_servers.html[Virtual servers] section. Select the
-virtual server that you will be configuring and go to the `Behavior`
-tab to set up the rules.
+link:config_virtual_servers.html[Virtual servers] section.
 
-.Steps
-. You will need to keep the rule for the `php` extension.
+Now you can either enter the chosen one to install under a web folder,
+or directly click on the `Symfony Wizard` to create a customised one.
 
-. Next, configure a rule with the handler `File Exists` that should be
-  set to a priority lower than that of the `php` rule.  This one can
-  be set to match whatever files you like, but the important thing is
-  to check the `Match any file` checkbox. Let this rule be handled by
-  the link:modules_handlers_common.html[List & Send] handler. Note that
-  we're not using the link:modules_handlers_file.html[Static Content]
-  handler. This is because it doesn't support indexes, so it wouldn't
-  allow you to browse the website at http://hostname.tld/, but only at
-  http://hostname.tld/index.php.
+After that you will be asked for the minimal information required to
+correctly configure your server in a totally transparent way.
 
-. And last, modify your `Default` rule by configuring the
-  link:modules_handlers_redir.html[redirection handler], through the
-  `Handler` tab.
-+
-[options="header"]
-|==========================================
-|Type     |Regular Expression |Substitution
-|Internal |^.*$               |/index.php
-|==========================================
-
-This will take care of redirecting the requests to Zend.
-
-You are done with the configuration! You can now access your
-application. The demo provided by Zend will look like this:
+And that's it. You are done with the configuration! You can now access
+your application. The demo provided by Zend will look like this:
 
 image::media/images/cookbook_zend1.png[Demo]
 

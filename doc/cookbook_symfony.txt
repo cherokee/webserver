@@ -1,16 +1,29 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee 0.99.25
+* Symfony  1.2.9
+///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Symfony Framework
 --------------------------------------
+If you need to deploy a Symfony application with Cherokee, the
+configuration is trivial. You will find a `Wizard` that can be used
+both to deploy the application under a dedicated `Virtual Server` and
+under a web folder from one already existent.
 
+[[package_configuration]]
+Prepare your Symfony project
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The link:http://www.symfony-project.org/[Symfony Framework] is a PHP
 framework focused on building more secure, reliable, and modern Web
 2.0 applications.
 
 It is essential that Cherokee supports PHP before starting with this
-recipe. That should not be a problem since it comes preconfigured by
-default. However, you can follow the link:cookbook_php.html[setting up
-PHP] recipe for further hints on fine tuning this feature.
+recipe. That should not be a problem since Cherokee-Admin provides a
+PHP configuration Wizard. However, you can follow the
+link:cookbook_php.html[setting up PHP] recipe for further hints on
+fine tuning this feature.
 
 To make sure the recipe works, we'll initialize a simple symfony
 application.
@@ -43,13 +56,49 @@ So now that we have the files in place, we'll just create the needed
 rules for the web server. Specially important will be the rewrite
 rules.
 
-Launch cherokee-admin, and proceed to the
-link:config_virtual_servers.html[Virtual servers] section. Select or
-create the virtual server that you will be configuring and go to the
-`Behavior` tab to set up the rules.  Remember that the document root
-for this virtual server should be the `web` folder in your demo
-project.
 
+[[wizard_configuration]]
+Configure Cheroke using the Wizard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Launch cherokee-admin, and proceed to the
+link:config_virtual_servers.html[Virtual servers] section and either
+enter the chosen one to install under a web folder, or directly click
+on the `Symfony Wizard` to create a customised one.
+
+In either case you will be asked for the basic information and
+everything will be handled for you. The two main data pieces will be
+the location of the public web folder of your Symfony project (that
+is, the part that you wish to make publicly accesible, not the whole
+project), and the path to the installed release of Symfony in your
+system.
+
+There is nothing else you need to do on Cherokee.
+
+You may need to edit your "hosts" file to include the domain name you
+call the virtual server. Your symfony application should then be
+accessible. You can find more information about setting up symfony
+applications in the symfony manual.
+
+.Running application
+image::media/images/cookbook_symfony.png[Symfony Application]
+
+Note that the Wizard configures Cherokee for your project's production
+frontend. Should you wish to access the development environment simply
+adjust the redirection to the appropriate forntend.
+
+
+[[manual_configuration]]
+Configure Cheroke manually
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In case you are wondering, these are manual steps you would have to
+follow if you opted for not using the configuration Wizard.
+
+Select or create the virtual server that you will be configuring and
+go to the `Behavior` tab to set up the rules.  Remember that the
+document root for this virtual server should be the `web` folder in
+your demo project.
 
 .Steps
 . You will need to keep the rule for the `php` extension. If this rule
@@ -104,11 +153,3 @@ project.
 Note that the document root for the /sf directory depends on your
 installation. The value given above corresponds to a pear installation
 of symfony on an Ubuntu 8.10 (Intrepid Ibex) system.
-
-You may need to edit your "hosts" file to include the domain name you
-call the virtual server. Your symfony application should then be
-accessible. You can find more information about setting up symfony
-applications in the symfony manual.
-
-.Running application
-image::media/images/cookbook_symfony.png[Symfony Application]

@@ -36,6 +36,7 @@ config_mime_types.html \
 config_advanced.html \
 config_info_sources.html \
 config_status.html \
+config_wizards.html \
 cookbook.html \
 cookbook_managing_logs.html \
 cookbook_optimizations.html \

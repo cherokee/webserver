@@ -1,4 +1,9 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee   0.99.25
+* phpMyAdmin 3.1.2
+///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up phpMyAdmin
 -------------------------------
@@ -35,8 +40,12 @@ are just:
   * Web browser with cookies enabled.
 
 This means that you don't need to modify Cherokee at all provided you
-have PHP with MySQL support and you are using a default Cherokee
-configuration.
+have PHP with MySQL support.
+
+Simply use Cherokee-Admin's phpMyAdmin Wizard, located under the
+`Database` category. It checks for the presence of phpMyAdmin, so you
+better have the package installed prior to using the Wizard, or else
+the Wizard will not let you proceed.
 
 Express setup
 ~~~~~~~~~~~~~
@@ -52,7 +61,6 @@ of seconds.
 .Debian installation
 -----
 # apt-get install php5-cgi php5-mysql mysql-server-5.0 phpmyadmin
-# ln -s /usr/share/phpmyadmin/ /var/www/phpmyadmin
 -----
 
 Since Cherokee doesn't appear in the list of web servers provided by
@@ -83,9 +91,9 @@ link:http://www.phpmyadmin.net/home_page/downloads.php[main download
 site] and follow the `Quick Install` notes in the
 link:http://www.phpmyadmin.net/documentation/[phpMyAdmin
 documentation]. As before, you simply need to make the program
-accessible to your web server, so either install directly under your
-`document root` or make a symbolic link.
-
+accessible to your web server, so simply use the Wizard and fill in
+the required information. Alternatively you can either install
+directly under your `document root` or make a symbolic link.
 
 Considerations
 ~~~~~~~~~~~~~~
@@ -103,14 +111,15 @@ Considerations
   or alternatively by using Cherokee's authentication features.  Refer
   to the link:http://www.phpmyadmin.net/documentation/[phpMyAdmin
   documentation] for more details on the former, or to our
-  link;cookbook_authentication.html[authentication recipe] for the
+  link:cookbook_authentication.html[authentication recipe] for the
   latter.
 
 * It is generally good idea to protect public phpMyAdmin installation
   against access by robots as they usually can not do anything good
   there. You can do this using robots.txt file in root.
 
-* You should deny access to the `./libraries` and `./setup/lib`
+* The Wizard already takes care of this, but if you have installed it
+  manually you should deny access to the `./libraries` and `./setup/lib`
   subfolders in Cherokee's configuration. Such configuration prevents
   from possible path exposure and cross side scripting vulnerabilities
   that might happen to be found in that code. To do so, configure

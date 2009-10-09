@@ -1,4 +1,9 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee 0.99.25
+* Alfresco Labs 3c
+///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Alfresco
 -----------------------------
@@ -106,15 +111,22 @@ image::media/images/cookbook_alfresco_alfresco.png[Alfresco]
 Phase two: Cherokee
 ~~~~~~~~~~~~~~~~~~~
 
-Now to set up Cherokee as reverse proxy. You can either create a new
-virtual server with a matching rule (be it `default` or anything else)
-if you are sharing the proxy machine, or dedicate another machine
-to the Proxy Handler. This will be our choice, since typically you
-will be wanting to get the best possible performance, the Java
-application server is heavy by definition, and you could be using the
-proxy machine also to serve other contents. We are only going to set
-Cherokee's HTTP reverse proxy handler to hit the server running
-Alfresco at port 8080.
+Now to set up Cherokee. To do this, use the provided `Wizard`. Launch
+Cherokee-Admin on your proxy machine and then you will find this
+assistant under the `CMS` category of the Wizards. Click, answer a few
+questions and you are done. You can then skip the rest of this
+document.
+
+Should you have any problem with the assitant, you can perform the
+same tasks manually. Simply set up Cherokee as reverse proxy. You can
+either create a new virtual server with a matching rule (be it
+`default` or anything else) if you are sharing the proxy machine, or
+dedicate another machine to the Proxy Handler. This will be our
+choice, since typically you will be wanting to get the best possible
+performance, the Java application server is heavy by definition, and
+you could be using the proxy machine also to serve other contents. We
+are only going to set Cherokee's HTTP reverse proxy handler to hit the
+server running Alfresco at port 8080.
 
 Launch Cherokee-Admin on your proxy machine, create a rule that
 matches the desired path on your web server hierarchy -`/share` for
@@ -143,7 +155,7 @@ the following example:
 [options="header"]
 |===========================================
 |Type        |Nick       |Connection
-|Remote host |liferay    |192.168.1.100:8080
+|Remote host |alfresco   |192.168.1.100:8080
 |===========================================
 
 Refer to the link:modules_handlers_proxy.html[HTTP reverse proxy]

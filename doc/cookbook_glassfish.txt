@@ -133,6 +133,26 @@ This means you have GlassFish up and running. Now you can:
 Configuring Cherokee
 ~~~~~~~~~~~~~~~~~~~~
 
+Cherokee provides a wizard that will assist you on this task. You can
+either dedicate a new virtual server to the task, or use a preexisting
+one. It is your choice, since the Wizard contemplates both scenarios.
+For the former you'll have to access the Wizard from the list of
+available ones within the `Virtual Servers` tab of Cherokee-Admin. The
+latter is accessed through the same list of Wizards, this time within
+the `Behaviour` tab of any given virtual server.
+
+The wizard will simply ask for the host to be proxied and will set it
+up for you to see. Should you need to add more machines to your
+cluster, you can add extra informtion sources to your Cherokee
+configuration and let it deal with all the load balancing.
+
+No extra steps are necessary. You can skip directly to the
+link:#deployment[deployment] section of this recipe. If for any reason
+the Wizard doesn't work for you, you can always use the manual method
+described below.
+
+Manual method
+^^^^^^^^^^^^^
 You can either create a new virtual server with a matching rule (be it
 `default` or anything else) if you are sharing the proxy machine, or
 completely dedicate a machine to the Proxy Handler. This will be our

@@ -39,6 +39,7 @@ link:config.html[Configuration]: Set up process explained
   . link:config_icons.html[Icons]: Icon managment.
   . link:config_mime_types.html[Mime Types]: Setting up the MIME types.
   . link:config_advanced.html[Advanced]: Advanced tweaking. Not for the faint of heart.
+  . link:config_wizards.html[Wizards]: Configuration assistants for many known scenarios.
 
 *********************************
 link:cookbook.html[Cookbook]: Recipes for specific tasks

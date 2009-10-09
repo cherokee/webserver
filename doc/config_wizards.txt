@@ -1,0 +1,100 @@
+== link:index.html[Index] -> link:config.html[Configuration]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee 0.99.25
+///////////////////////////////////////////////////////////////////
+
+Configuration Wizards
+---------------------
+
+A whole lot of effort has been invested in making Cherokee as painless
+to configure as possible. To this extent, its nifty configuration
+interface is shipped with a bunch of configuration assistants.
+
+These will help you to set up Cherokee to work with several popular
+applications, frameworks and programming languages, and hopefully your
+task will be performed with just a couple of clicks.
+
+Even if they might not apply exactly to your what you are trying to
+accomplish, they can always be used as a template that you can fine
+tune afterwards.
+
+Some of the wizards can only be applied to new virtual servers, others
+can only be used inside pre-existent ones. Most of them, however, are
+good for both scenarios.
+
+Using them is as simple as clicking on the `Wizards` button located
+under the list of `Virtual servers` or `Behavior rules`. The former
+applies to new dedicated virtual servers, and is located on its
+homonymous tab of the main interface. The latter is found on a tab by
+the same name that exists for every virtual server defined on your
+configuration.
+
+Most of the wizards are documented on their corresponding recipes in
+the link:cookbook.html[Cookbook].
+
+The wizards are loosly organized on several categories: CMS,
+platforms, tasks, misc, etc. Take a look at them. You might find
+something interesting in the place least expected.
+
+These are the wizards currently implemented:
+
+Available Wizards
+~~~~~~~~~~~~~~~~~
+
+* link:cookbook_alfresco.html[Alfresco]: open source ECM.
+
+* CommonStatic: adds the usual rules to manage static contents.
+
+* link:cookbook_django.html[Django]: high-level Python Web framework.
+
+* link:cookbook_drupal.html[Drupal]: open source content management
+
+* link:cookbook_glassfish.html[GlassFish]: open source enterprise Java
+  EE software
+
+* HotLinking: prevent your files from being hot-linked.
+
+* Icons: adds the usual icon rules.
+
+* link:cookbook_joomla.html[Joomla]: dynamic portal engine and content
+  management system.
+
+* link:cookbook_liferay.html[Liferay]: Enterprise Open Source Portal,
+  CMS, Web Publishing, Collaboration, and Social Networking Software.
+
+* link:cookbook_mailman.html[Mailman]: Mailman is free software for
+  managing electronic mail discussion and e-newsletter lists.
+
+* link:cookbook_moodle.html[Moodle]: Course Management System.
+
+* link:cookbook_phpbb.html[phpBB]: Forum software.
+
+* link:cookbook_phpmyadmin.html[phpMyAdmin]: MySQL administration web
+  interface.
+
+* link:cookbook_php.html[PHP]: PHP configuration.
+
+* Redirect: assits in configurin redirections.
+
+* link:cookbook_ror.html[RoR]: Ruby on Rails configuration.
+
+* rTorrent: BitTorrent client.
+
+* link:cookbook_streaming.html[Streaming]: assists in media streaming
+  configuration.
+
+* link:cookbook_sugarcrm.html[Sugar]: open-source Customer
+  Relationship Management.
+
+* link:cookbook_symfony.html[Symfony]: Symfony PHP web development
+  framework.
+
+
+* link:cookbook_trac.html[Trac]: open source, web-based project
+  management and bug-tracking tool.
+
+* link:cookbook_wordpress.html[WordPress]: blog publishing application
+  and content management system.
+
+* link:cookbook_zend.html[Zend]: PHP web development framework.

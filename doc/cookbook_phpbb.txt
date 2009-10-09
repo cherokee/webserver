@@ -1,4 +1,9 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee 0.99.25
+* phpBB    3.0.5
+///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up phpBB
 --------------------------
@@ -82,7 +87,7 @@ image::media/images/cookbook_phpbb_3_db.png["phpBB step3"]
 image::media/images/cookbook_phpbb_4_admin.png["phpBB step4"]
 
 .Configuration file
-image::media/images/cookbook_phpbb_5_config.png["phpBB step5"}
+image::media/images/cookbook_phpbb_5_config.png["phpBB step5"]
 
 .Advanced settings
 image::media/images/cookbook_phpbb_6_advanced.png["phpBB step6"]

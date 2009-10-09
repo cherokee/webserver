@@ -1,8 +1,8 @@
 == link:index.html[Index] -> link:cookbook.html[Cookbook]
 ///////////////////////////////////////////////////////////////////
 Last checked:
-* Cherokee: 0.99.25
-* Joomla 1.5.14
+* Cherokee 0.99.25
+* Joomla   1.5.14
 ///////////////////////////////////////////////////////////////////
 
 Cookbook: Setting up Joomla

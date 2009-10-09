@@ -152,7 +152,7 @@ intranet.
 
 Refer to the link:config_info_sources.html[information sources]
 section for details on how to do this. In this case, the MySQL servers
-are running in on port 3306 of the hosts 10.0.0.100 and 10.0.0.101, so
+are running on port 3306 of the hosts 10.0.0.100 and 10.0.0.101, so
 that is what we will use.
 
 image::media/images/cookbook_dbslayer2.png[MySQL Bridge, step 2]
