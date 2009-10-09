@@ -99,8 +99,8 @@ class Wizard_VServer_WordPress (WizardPage):
 
     def show (self):
         return True
-        
-    def _render_content (self, url_pre):        
+
+    def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
         guessed_src = path_find_w_default (SRC_PATHS)
 

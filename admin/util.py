@@ -1,6 +1,7 @@
 import os
 import sys
 import glob
+import socket
 
 #
 # Virtual Server
@@ -51,7 +52,7 @@ def cfg_source_get_next (cfg):
     next = tmp[-1] + 10
     return (next, "source!%d" % (next))
 
-def cfg_source_find_interpreter (cfg, 
+def cfg_source_find_interpreter (cfg,
                                  in_interpreter = None,
                                  in_nick        = None):
     for i in cfg.keys("source"):
@@ -74,7 +75,7 @@ def cfg_source_find_empty_port (cfg, n_ports=1):
 
         colon = host.rfind(':')
         if colon < 0: continue
-        
+
         port = int (host[colon+1:])
         if port < 1024: continue
 
@@ -86,6 +87,15 @@ def cfg_source_find_empty_port (cfg, n_ports=1):
             return pport
 
     assert (False)
+
+def cfg_source_find_free_port (host_name='localhost'):
+    """Return a port not currently running anything"""
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((host_name, 0))
+    addr, port = s.getsockname()
+    s.close()
+    return port
+
 
 
 #

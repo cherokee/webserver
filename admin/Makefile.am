@@ -122,7 +122,18 @@ Wizard_Mailman.py \
 Wizard_Icons.py \
 Wizard_CommonStatic.py \
 Wizard_Streaming.py \
-Wizard_rTorrent.py
+Wizard_rTorrent.py \
+Wizard_Joomla.py \
+Wizard_Moodle.py \
+Wizard_Sugar.py \
+Wizard_phpBB.py \
+Wizard_phpMyAdmin.py \
+Wizard_Symfony.py \
+Wizard_Zend.py \
+Wizard_Trac.py \
+Wizard_Liferay.py \
+Wizard_Alfresco.py \
+Wizard_Glassfish.py
 endif
 
 adminpy_DATA = $(admin_data)
