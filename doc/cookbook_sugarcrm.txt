@@ -93,7 +93,7 @@ Package installation
 ~~~~~~~~~~~~~~~~~~~~
 
 Uncompress SugarCRM to your web document root and rename the directory
-to whatver you like. We will choose `/var/www/sugar` as installation
+to whatever you like. We will choose `/var/www/sugar` as installation
 directory for this recipe.
 
 Then remember setting up file permissions. Some files and directories
