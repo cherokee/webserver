@@ -92,6 +92,7 @@ modules_handlers_streaming.html \
 modules_handlers_admin.html \
 modules_handlers_proxy.html \
 modules_handlers_secdownload.html \
+modules_handlers_uwsgi.html \
 modules_loggers.html \
 modules_loggers_combined.html \
 modules_loggers_ncsa.html \

@@ -21,6 +21,7 @@ This is the list of standard handlers provided by Cherokee:
 * link:modules_handlers_cgi.html[CGI]: Common Gateway Interface.
 * link:modules_handlers_fcgi.html[FastCGI]: Fast Common Gateway Interface.
 * link:modules_handlers_scgi.html[SCGI]: Simple Common Gateway Interface.
+* link:modules_handlers_uwsgi.html[uWSGI]: uWSGI protocol.
 * link:modules_handlers_proxy.html[HTTP reverse proxy]: Surrogate/reverse proxy handler.
 * link:modules_handlers_ssi.html[Server Side Includes]:  SSI Server Support.
 * link:modules_handlers_streaming.html[Audio/Video Streaming]: Media streamer.

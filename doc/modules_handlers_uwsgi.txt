@@ -1,0 +1,13 @@
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_handlers.html[Handlers]
+
+Handler: uWSGI
+--------------
+
+The `uwsgi handler` allows Cherokee to communicate with the uWSGI
+server. The configuration parameters are exactly the same from the
+link:modules_handlers_fcgi.html[FastCGI], so check that section of the
+documentation if you want to set up this handler.
+
+uWSGI is feature rich and developer friendly. The
+(link:http://projects.unbit.it/uwsgi[uWSGI]) protocol is derived
+from SCGI.
