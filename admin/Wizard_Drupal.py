@@ -14,16 +14,22 @@ ERROR_NO_WEB  = _("A web directory must be provided.")
 ERROR_NO_HOST = _("A host name must be provided.")
 
 CONFIG_DIR = """
-%(pre_rule_plus2)s!match = request
-%(pre_rule_plus2)s!match!request = ^%(web_dir)s/$
-%(pre_rule_plus2)s!handler = redir
-%(pre_rule_plus2)s!handler!rewrite!1!show = 0
-%(pre_rule_plus2)s!handler!rewrite!1!substring = %(web_dir)s/index.php
+%(pre_rule_plus3)s!match = request
+%(pre_rule_plus3)s!match!request = ^%(web_dir)s/$
+%(pre_rule_plus3)s!handler = redir
+%(pre_rule_plus3)s!handler!rewrite!1!show = 0
+%(pre_rule_plus3)s!handler!rewrite!1!substring = %(web_dir)s/index.php
 
-%(pre_rule_plus1)s!match = directory
-%(pre_rule_plus1)s!match!directory = %(web_dir)s
-%(pre_rule_plus1)s!match!final = 0
-%(pre_rule_plus1)s!document_root = %(local_src_dir)s
+%(pre_rule_plus2)s!match = directory
+%(pre_rule_plus2)s!match!directory = %(web_dir)s
+%(pre_rule_plus2)s!match!final = 0
+%(pre_rule_plus2)s!document_root = %(local_src_dir)s
+
+%(pre_rule_plus1)s!match = and
+%(pre_rule_plus1)s!match!left = directory
+%(pre_rule_plus1)s!match!left!directory = %(web_dir)s
+%(pre_rule_plus1)s!match!right = request
+%(pre_rule_plus1)s!match!right!request = \.(engine|inc|info|install|module|profile|test|po|sh|.*sql|theme|tpl(\.php)?|xtmpl|svn-base)$|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template|all-wcprops|entries|format)$
 
 # IMPORTANT: The PHP rule comes here
 
@@ -50,6 +56,11 @@ CONFIG_VSERVER = """
 %(pre_vsrv)s!nick = %(host)s
 %(pre_vsrv)s!document_root = %(local_src_dir)s
 %(pre_vsrv)s!directory_index = index.php,index.html
+
+%(pre_rule_plus2)s!match = request
+%(pre_rule_plus2)s!match!request = \.(engine|inc|info|install|module|profile|test|po|sh|.*sql|theme|tpl(\.php)?|xtmpl|svn-base)$|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template|all-wcprops|entries|format)$
+%(pre_rule_plus2)s!handler = custom_error
+%(pre_rule_plus2)s!handler!error = 403
 
 %(pre_rule_plus1)s!match = fullpath
 %(pre_rule_plus1)s!match!fullpath!1 = /
@@ -151,6 +162,7 @@ class Wizard_VServer_Drupal (WizardPage):
         php_info = wizard_php_get_info (self._cfg, pre_vsrv)
         php_rule = int (php_info['rule'].split('!')[-1])
 
+        pre_rule_plus2  = "%s!rule!%d" % (pre_vsrv, php_rule + 2)
         pre_rule_plus1  = "%s!rule!%d" % (pre_vsrv, php_rule + 1)
         pre_rule_minus1 = "%s!rule!%d" % (pre_vsrv, php_rule - 1)
         pre_rule_minus2 = "%s!rule!%d" % (pre_vsrv, php_rule - 2)
@@ -214,6 +226,7 @@ class Wizard_Rules_Drupal (WizardPage):
         php_info = wizard_php_get_info (self._cfg, self._pre)
         php_rule = int (php_info['rule'].split('!')[-1])
 
+        pre_rule_plus3  = "%s!rule!%d" % (self._pre, php_rule + 3)
         pre_rule_plus2  = "%s!rule!%d" % (self._pre, php_rule + 2)
         pre_rule_plus1  = "%s!rule!%d" % (self._pre, php_rule + 1)
         pre_rule_minus1 = "%s!rule!%d" % (self._pre, php_rule - 1)
