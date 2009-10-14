@@ -64,11 +64,15 @@ class Wizard_Rules_PHP (Wizard):
                 desc = "<p>%s: %s.</p>" % (msg, ", ".join(DEFAULT_BINS))
                 return self.report_error (_("Couldn't find a suitable PHP interpreter."), desc)
 
+            tcp_addr = cfg_source_get_localhost_addr()
+            if not tcp_addr:
+                return self.report_error (_("Couldn't find IP address for 'localhost'"))
+
             _, self.source = cfg_source_get_next (self._cfg)
             self._cfg['%s!nick' % (self.source)]        = 'PHP Interpreter'
             self._cfg['%s!type' % (self.source)]        = 'interpreter'
-            self._cfg['%s!interpreter' % (self.source)] = '%s -b 127.0.0.1:%d' % (php_path, self.TCP_PORT)
-            self._cfg['%s!host' % (self.source)]        = '127.0.0.1:%d' % (self.TCP_PORT)
+            self._cfg['%s!interpreter' % (self.source)] = '%s -b %s:%d' % (php_path, tcp_addr, self.TCP_PORT)
+            self._cfg['%s!host' % (self.source)]        = '%s:%d' % (tcp_addr, self.TCP_PORT)
 
             self._cfg['%s!env!PHP_FCGI_MAX_REQUESTS' % (self.source)] = "5000"
             self._cfg['%s!env!PHP_FCGI_CHILDREN' % (self.source)]     = "5"

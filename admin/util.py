@@ -96,7 +96,11 @@ def cfg_source_find_free_port (host_name='localhost'):
     s.close()
     return port
 
-
+def cfg_source_get_localhost_addr ():
+    _, _, addrs = socket.gethostbyname_ex('localhost')
+    if addrs:
+        return addrs[0]
+    return None
 
 #
 # Paths
