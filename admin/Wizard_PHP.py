@@ -2,11 +2,12 @@ from config import *
 from util import *
 from Wizard import *
 
+
 DEFAULT_BINS  = ['php-cgi', 'php']
 
-DEFAULT_PATHS = ['/usr/bin', 
-                 '/opt/php', 
-                 '/usr/php/bin', 
+DEFAULT_PATHS = ['/usr/bin',
+                 '/opt/php',
+                 '/usr/php/bin',
                  '/usr/sfw/bin',
                  '/usr/gnu/bin',
                  '/opt/local/bin',
@@ -17,13 +18,13 @@ DEFAULT_PATHS = ['/usr/bin',
 class Wizard_Rules_PHP (Wizard):
     TCP_PORT      = 47990
     ICON          = "php.jpg"
-    DESC          = "Configures PHP in the current Virtual Server. It will add a new .php extension if not present."
+    DESC          = _("Configures PHP in the current Virtual Server. It will add a new .php extension if not present.")
 
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
-        self.name   = "Add PHP support"
+        self.name   = _("Add PHP support")
         self.source = None
-        self.group  = WIZARD_GROUP_LANGS    
+        self.group  = WIZARD_GROUP_LANGS
 
     def show (self):
         self.rule   = None
@@ -42,7 +43,7 @@ class Wizard_Rules_PHP (Wizard):
 
         # Already configured
         self.nick = self._cfg.get_val ("%s!nick"%(self.source))
-        self.no_show = "Already configured: nick=%s" % (self.nick)
+        self.no_show = _("Already configured: nick=%s" % (self.nick))
         return False
 
     def _run (self, uri, post):
@@ -59,8 +60,9 @@ class Wizard_Rules_PHP (Wizard):
                                          extra_dirs  = DEFAULT_PATHS,
                                          custom_test = test_php_fcgi)
             if not php_path:
-                desc = "<p>Looked for the binaries: %s.</p>" % (", ".join(DEFAULT_BINS))
-                return self.report_error ("Couldn't find a suitable PHP interpreter.", desc)
+                msg  = _("Looked for the binaries")
+                desc = "<p>%s: %s.</p>" % (msg, ", ".join(DEFAULT_BINS))
+                return self.report_error (_("Couldn't find a suitable PHP interpreter."), desc)
 
             _, self.source = cfg_source_get_next (self._cfg)
             self._cfg['%s!nick' % (self.source)]        = 'PHP Interpreter'
@@ -75,7 +77,7 @@ class Wizard_Rules_PHP (Wizard):
         if not self.rule:
             _, self.rule = cfg_vsrv_rule_get_next (self._cfg, self._pre)
             if not self.rule:
-                return self.report_error ("Couldn't add a new rule.")
+                return self.report_error (_("Couldn't add a new rule."))
 
             src_num = self.source.split('!')[-1]
 
