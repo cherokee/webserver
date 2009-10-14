@@ -8,7 +8,8 @@ offline.png
 
 SILK_ICONS = \
 cross.png \
-tick.png
+tick.png \
+exclamation.png
 
 adminstaticdir = "$(datadir)/cherokee/admin/static/images"
 adminstatic_DATA = \

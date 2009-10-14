@@ -145,6 +145,7 @@ class PageVServers (PageMenu, FormHelper):
 
         ENABLED_IMAGE  = self.InstanceImage('tick.png', _('Yes'))
         DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
+        OFFLINE_IMAGE = self.InstanceImage('exclamation.png', _('Offline'))
 
         for prio in sorted_vservers:
             nick          = self._cfg.get_val('vserver!%s!nick'%(prio))
@@ -186,15 +187,13 @@ class PageVServers (PageMenu, FormHelper):
             else:
                 logging = DISABLED_IMAGE
 
-            if not collector_val:
-                tmp = self._cfg.get_val ('server!collector')
-                if tmp:
-                    collector_val = "1"
-
-            if collector_val:
+            collector_status = self._cfg.get_val ('server!collector')
+            if collector_val=="0":
+                collector = DISABLED_IMAGE
+            elif collector_status:
                 collector = ENABLED_IMAGE
             else:
-                collector = DISABLED_IMAGE
+                collector = OFFLINE_IMAGE
 
             if nick != "default":
                 link_del = self.AddDeleteLink ('/ajax/update', 'vserver!%s'%(prio))
