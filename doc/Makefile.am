@@ -110,6 +110,7 @@ other_faq.html \
 other_goodies.html \
 other_signals.html \
 other_community.html \
+other_errors.html \
 dev.html \
 dev_debug.html \
 dev_cherokee.conf.html \

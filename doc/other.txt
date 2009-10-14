@@ -4,3 +4,4 @@
   . link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.
   . link:other_signals.html[Signals]: Signals supported by Cherokee.
   . link:other_community.html[Community]: More information sources.
+  . link:other_errors.html[Common errors]: Some typical production  errors and their cause.
