@@ -43,7 +43,8 @@ class Wizard_Rules_PHP (Wizard):
 
         # Already configured
         self.nick = self._cfg.get_val ("%s!nick"%(self.source))
-        self.no_show = _("Already configured: nick=%s" % (self.nick))
+        msg = _("Already configured: nick")
+        self.no_show = '%s=%s' % (msg, self.nick)
         return False
 
     def _run (self, uri, post):

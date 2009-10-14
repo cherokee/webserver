@@ -25,7 +25,7 @@ SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = Trac %(src_num)d
 source!%(src_num)d!host = 127.0.0.1:%(src_port)d
-source!%(src_num)d!interpreter = tracd --single-env --daemonize --protocol=scgi --hostname=127.0.0.1 --port=%(src_port)s %(trac_project)s
+source!%(src_num)d!interpreter = tracd --single-env --daemonize --protocol=scgi --hostname=%(localhost)s --port=%(src_port)s %(trac_project)s
 """
 
 CONFIG_VSRV = SOURCE + """
@@ -134,6 +134,7 @@ class Wizard_VServer_Trac (WizardPage):
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
         src_num, src_pre = cfg_source_get_next (self._cfg)
         src_port = cfg_source_find_free_port ()
+        localhost = cfg_source_get_localhost_addr()
 
         # Add the new rules
         config = CONFIG_VSRV % (locals())
