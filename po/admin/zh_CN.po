@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.15' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-08-31 02:09+0200\n"
+"POT-Creation-Date: 2009-10-15 16:26+0200\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: ownlinux.cn\n"
@@ -144,9 +144,13 @@ msgstr "选择.."
 msgid "Application Server"
 msgstr "应用程序服务器"
 
-#: admin/ModuleBind.py:21 admin/ModuleBind.py:22 admin/ModuleBind.py:47
-#: admin/ModuleLdap.py:36 admin/ModuleMysql.py:45 admin/PageGeneral.py:133
-msgid "Port"
+#: admin/ModuleBind.py:21
+msgid "IP (Port):"
+msgstr ""
+
+#: admin/ModuleBind.py:22
+#, fuzzy
+msgid "Port:"
 msgstr "端口"
 
 #: admin/ModuleBind.py:26 admin/ModuleBind.py:76 admin/ModuleMethod.py:10
@@ -155,12 +159,18 @@ msgid "Choose"
 msgstr "选择"
 
 #: admin/ModuleBind.py:35 admin/ModuleBind.py:82 admin/consts.py:132
-msgid "Incoming Port"
+#, fuzzy
+msgid "Incoming IP/Port"
 msgstr "接收端口"
 
 #: admin/ModuleBind.py:45
 msgid "Selected Ports"
 msgstr "已经选择的端口"
+
+#: admin/ModuleBind.py:47 admin/ModuleLdap.py:36 admin/ModuleMysql.py:45
+#: admin/PageGeneral.py:133
+msgid "Port"
+msgstr "端口"
 
 #: admin/ModuleBind.py:47 admin/PageGeneral.py:133
 msgid "Bind to"
@@ -179,7 +189,8 @@ msgid "Yes"
 msgstr "是"
 
 #: admin/ModuleBind.py:75
-msgid "Assign new port"
+#, fuzzy
+msgid "Assign new IP/Port"
 msgstr "增加新的端口"
 
 #: admin/ModuleBind.py:97 admin/ModuleExists.py:71
@@ -354,8 +365,8 @@ msgid ""
 msgstr "公共网页目录的内容将应用于配置."
 
 #: admin/ModuleDirectory.py:22 admin/ModuleDirectory.py:24
-#: admin/Wizard_Django.py:147 admin/Wizard_Drupal.py:191
-#: admin/Wizard_RoR.py:233 admin/Wizard_WordPress.py:180
+#: admin/Wizard_Django.py:150 admin/Wizard_Drupal.py:208
+#: admin/Wizard_RoR.py:236 admin/Wizard_WordPress.py:185
 msgid "Web Directory"
 msgstr "网页目录"
 
@@ -458,7 +469,7 @@ msgid "Error"
 msgstr "错误"
 
 #: admin/ModuleErrorRedir.py:41 admin/ModuleErrorRedir.py:52
-#: admin/Wizard_HotLinking.py:74 admin/consts.py:18
+#: admin/Wizard_HotLinking.py:77 admin/consts.py:18
 msgid "Redirection"
 msgstr "重定向"
 
@@ -821,7 +832,7 @@ msgstr "使用MD5密码加密. 只适合\"Basic\" 认证 机制."
 msgid "Unix Socket"
 msgstr "Unix 套接字"
 
-#: admin/ModuleMysql.py:49 admin/ModuleMysql.py:65
+#: admin/ModuleMysql.py:49 admin/ModuleMysql.py:65 admin/Wizard.py:16
 msgid "Database"
 msgstr "数据库"
 
@@ -1446,7 +1457,7 @@ msgstr "持续时间: mmap方式"
 msgid "Panic action"
 msgstr "Panic action"
 
-#: admin/PageAdvanced.py:119 admin/PageStatus.py:137
+#: admin/PageAdvanced.py:119 admin/PageStatus.py:148
 msgid "PID file"
 msgstr "PID 进程号"
 
@@ -1542,8 +1553,8 @@ msgstr "规则"
 msgid "Handler"
 msgstr "处理"
 
-#: admin/PageEntry.py:161 admin/PageVServer.py:511 admin/PageVServers.py:275
-#: admin/Wizard_Django.py:85
+#: admin/PageEntry.py:161 admin/PageVServer.py:511 admin/PageVServers.py:274
+#: admin/Wizard_Django.py:88
 msgid "Document Root"
 msgstr "根目录"
 
@@ -2171,66 +2182,67 @@ msgstr "语言选择"
 msgid "Proud Cherokee Users"
 msgstr "致服务器所有者"
 
-#: admin/PageStatus.py:127
+#: admin/PageStatus.py:138
 msgid "Version"
 msgstr "服务器版本"
 
-#: admin/PageStatus.py:128
+#: admin/PageStatus.py:139
+#, fuzzy
+msgid "Default WWW"
+msgstr "默认"
+
+#: admin/PageStatus.py:140
 msgid "Prefix"
 msgstr "服务器安装目录"
 
-#: admin/PageStatus.py:129
-msgid "WWW Root"
-msgstr "网站根目录"
-
-#: admin/PageStatus.py:135
+#: admin/PageStatus.py:146
 msgid "Not running"
 msgstr "服务器没有运行"
 
-#: admin/PageStatus.py:144 admin/PageStatus.py:147
+#: admin/PageStatus.py:155 admin/PageStatus.py:158
 msgid "Configuration File"
 msgstr "服务器配置文件"
 
-#: admin/PageStatus.py:145
+#: admin/PageStatus.py:156
 msgid "Modified"
 msgstr "上次修改时间"
 
-#: admin/PageStatus.py:147
+#: admin/PageStatus.py:158
 msgid "Not Found"
 msgstr "没有找到哦！~"
 
-#: admin/PageStatus.py:159 admin/PageStatus.py:160
+#: admin/PageStatus.py:170 admin/PageStatus.py:171
 #, fuzzy
 msgid "Server Traffic"
 msgstr "服务器信息"
 
-#: admin/PageStatus.py:161
+#: admin/PageStatus.py:172
 #, fuzzy
 msgid "Accepted Connections"
 msgstr "被使用的域名"
 
-#: admin/PageStatus.py:162
+#: admin/PageStatus.py:173
 #, fuzzy
 msgid "Connections Timeout"
 msgstr "连接"
 
-#: admin/PageStatus.py:167 admin/PageVServer.py:561
+#: admin/PageStatus.py:178 admin/PageVServer.py:561
 msgid "1 month"
 msgstr ""
 
-#: admin/PageStatus.py:168 admin/PageVServer.py:562
+#: admin/PageStatus.py:179 admin/PageVServer.py:562
 msgid "1 week"
 msgstr ""
 
-#: admin/PageStatus.py:169 admin/PageVServer.py:563
+#: admin/PageStatus.py:180 admin/PageVServer.py:563
 msgid "1 day"
 msgstr ""
 
-#: admin/PageStatus.py:170 admin/PageVServer.py:564
+#: admin/PageStatus.py:181 admin/PageVServer.py:564
 msgid "6 hours"
 msgstr ""
 
-#: admin/PageStatus.py:171 admin/PageVServer.py:565
+#: admin/PageStatus.py:182 admin/PageVServer.py:565
 msgid "1 hour"
 msgstr ""
 
@@ -2415,7 +2427,7 @@ msgstr "日志"
 msgid "SSL cookbook"
 msgstr "SSL cookbook"
 
-#: admin/PageVServer.py:204 admin/PageVServer.py:215 admin/PageVServers.py:288
+#: admin/PageVServer.py:204 admin/PageVServer.py:215 admin/PageVServers.py:287
 msgid "Virtual Server"
 msgstr "虚拟主机"
 
@@ -2423,7 +2435,7 @@ msgstr "虚拟主机"
 msgid "Basics"
 msgstr "基本配置"
 
-#: admin/PageVServer.py:242 admin/PageVServers.py:311
+#: admin/PageVServer.py:242 admin/PageVServers.py:310
 #, fuzzy
 msgid "Wizards"
 msgstr "通配符"
@@ -2504,7 +2516,7 @@ msgstr "到期"
 msgid "Final"
 msgstr "启用"
 
-#: admin/PageVServer.py:480 admin/PageVServers.py:325
+#: admin/PageVServer.py:480 admin/PageVServers.py:324
 msgid "<h2>Wizards</h2>"
 msgstr "新建向导"
 
@@ -2634,7 +2646,7 @@ msgstr ""
 msgid "Virtual Servers configuration"
 msgstr "虚拟主机配置"
 
-#: admin/PageVServers.py:144 admin/PageVServers.py:275
+#: admin/PageVServers.py:144 admin/PageVServers.py:274
 msgid "Nickname"
 msgstr "名称"
 
@@ -2647,19 +2659,24 @@ msgstr "绑定域名数量"
 msgid "Stats"
 msgstr "状态"
 
-#: admin/PageVServers.py:281 admin/PageVServers.py:309
+#: admin/PageVServers.py:148
+#, fuzzy
+msgid "Offline"
+msgstr "关闭"
+
+#: admin/PageVServers.py:280 admin/PageVServers.py:308
 msgid "Add new Virtual Server"
 msgstr "新建一个虚拟主机"
 
-#: admin/PageVServers.py:288
+#: admin/PageVServers.py:287
 msgid "Clone as.."
 msgstr "克隆成.."
 
-#: admin/PageVServers.py:300 admin/PageVServers.py:310
+#: admin/PageVServers.py:299 admin/PageVServers.py:309
 msgid "Clone Virtual Server"
 msgstr "克隆虚拟主机"
 
-#: admin/PageVServers.py:356 admin/PageVServers.py:370
+#: admin/PageVServers.py:355 admin/PageVServers.py:369
 #: admin/validations.py:259
 msgid "Cannot be empty"
 msgstr "不能为空"
@@ -2720,96 +2737,170 @@ msgstr "删除"
 msgid "Clone"
 msgstr "克隆"
 
-#: admin/Wizard.py:203
+#: admin/Wizard.py:8
+msgid "Use the same logging configuration as one of the other virtual servers."
+msgstr ""
+
+#: admin/Wizard.py:10
+msgid "Misc"
+msgstr ""
+
+#: admin/Wizard.py:11
+msgid "CMS"
+msgstr ""
+
+#: admin/Wizard.py:12
+msgid "Tasks"
+msgstr ""
+
+#: admin/Wizard.py:13
+msgid "Platforms"
+msgstr ""
+
+#: admin/Wizard.py:14
+#, fuzzy
+msgid "Languages"
+msgstr "语言"
+
+#: admin/Wizard.py:15
+msgid "Management"
+msgstr ""
+
+#: admin/Wizard.py:22
+#, fuzzy
+msgid "Unknown wizard"
+msgstr "未知"
+
+#: admin/Wizard.py:208
 msgid "Same logs as vserver"
 msgstr ""
 
-#: admin/Wizard_Django.py:8
+#: admin/Wizard_Django.py:11
 msgid "Local path to the Django based project."
 msgstr ""
 
-#: admin/Wizard_Django.py:9 admin/Wizard_Mailman.py:11 admin/Wizard_RoR.py:12
+#: admin/Wizard_Django.py:12 admin/Wizard_Mailman.py:11 admin/Wizard_RoR.py:15
 #, fuzzy
 msgid "Name of the new domain that will be created."
 msgstr "PID文件的路径. 为空则不建立PID文件"
 
-#: admin/Wizard_Django.py:11
+#: admin/Wizard_Django.py:14
 msgid "It does not look like a Django based project directory."
 msgstr ""
 
-#: admin/Wizard_Django.py:12 admin/Wizard_RoR.py:20
+#: admin/Wizard_Django.py:15 admin/Wizard_RoR.py:23
 msgid "The document root directory does not exist."
 msgstr ""
 
-#: admin/Wizard_Django.py:55
+#: admin/Wizard_Django.py:58
 msgid "Directory doesn't look like a Django based project."
 msgstr ""
 
-#: admin/Wizard_Django.py:73 admin/Wizard_Django.py:136
+#: admin/Wizard_Django.py:70
+msgid "New virtual server based on a Django project."
+msgstr ""
+
+#: admin/Wizard_Django.py:76 admin/Wizard_Django.py:139
 #, fuzzy
 msgid "Django Wizard"
 msgstr "通配符"
 
-#: admin/Wizard_Django.py:84 admin/Wizard_Drupal.py:119
-#: admin/Wizard_Mailman.py:122 admin/Wizard_RoR.py:158
-#: admin/Wizard_WordPress.py:108
+#: admin/Wizard_Django.py:87 admin/Wizard_Drupal.py:133
+#: admin/Wizard_Mailman.py:122 admin/Wizard_RoR.py:161
+#: admin/Wizard_WordPress.py:111
 #, fuzzy
 msgid "New Host Name"
 msgstr "新主机别名"
 
-#: admin/Wizard_Django.py:90 admin/Wizard_Django.py:152
-#: admin/Wizard_RoR.py:165 admin/Wizard_RoR.py:240
+#: admin/Wizard_Django.py:93 admin/Wizard_Django.py:155
+#: admin/Wizard_RoR.py:168 admin/Wizard_RoR.py:243
 #, fuzzy
 msgid "Project Directory"
 msgstr "网页目录"
 
-#: admin/Wizard_Drupal.py:9
+#: admin/Wizard_Django.py:133
+msgid "New directory based on a Django project."
+msgstr ""
+
+#: admin/Wizard_Drupal.py:12
 msgid ""
 "Path to the directory where the Drupal source code is located. (Example: /"
 "usr/share/drupal)"
 msgstr ""
 
-#: admin/Wizard_Drupal.py:10
+#: admin/Wizard_Drupal.py:13
 msgid "Web directory where you want Drupal to be accessible. (Example: /blog)"
 msgstr ""
 
-#: admin/Wizard_Drupal.py:11 admin/Wizard_WordPress.py:11
+#: admin/Wizard_Drupal.py:14 admin/Wizard_WordPress.py:14
 msgid "Host name of the virtual host that is about to be created."
 msgstr ""
 
-#: admin/Wizard_Drupal.py:12
+#: admin/Wizard_Drupal.py:15
 msgid "Does not look like a Drupal source directory."
 msgstr ""
 
-#: admin/Wizard_Drupal.py:13 admin/Wizard_WordPress.py:13
+#: admin/Wizard_Drupal.py:16 admin/Wizard_WordPress.py:16
 msgid "A web directory must be provided."
 msgstr ""
 
-#: admin/Wizard_Drupal.py:14 admin/Wizard_WordPress.py:14
+#: admin/Wizard_Drupal.py:17 admin/Wizard_WordPress.py:17
 msgid "A host name must be provided."
 msgstr ""
 
-#: admin/Wizard_Drupal.py:107 admin/Wizard_Drupal.py:176
+#: admin/Wizard_Drupal.py:121 admin/Wizard_Drupal.py:193
 #, fuzzy
 msgid "Drupal Wizard"
 msgstr "通配符"
 
-#: admin/Wizard_Drupal.py:120 admin/Wizard_Drupal.py:192
-#: admin/Wizard_WordPress.py:109 admin/Wizard_WordPress.py:181
+#: admin/Wizard_Drupal.py:134 admin/Wizard_Drupal.py:209
+#: admin/Wizard_WordPress.py:112 admin/Wizard_WordPress.py:186
 #, fuzzy
 msgid "Source Directory"
 msgstr "网页目录"
 
-#: admin/Wizard_HotLinking.py:51
+#: admin/Wizard_Drupal.py:167 admin/Wizard_WordPress.py:145
+msgid "Couldn't find a suitable PHP interpreter."
+msgstr ""
+
+#: admin/Wizard_Drupal.py:187
+msgid "Configures Drupal inside a public web directory."
+msgstr ""
+
+#: admin/Wizard_Drupal.py:200 admin/Wizard_WordPress.py:177
+msgid "PHP support is required."
+msgstr ""
+
+#: admin/Wizard_HotLinking.py:11
+msgid "Domain allowed to access the files. Eg: example.com"
+msgstr ""
+
+#: admin/Wizard_HotLinking.py:12
+msgid "Path to the public to use. Eg: /images/forbidden.jpg"
+msgstr ""
+
+#: admin/Wizard_HotLinking.py:13
+msgid "How to handle hot-linking requests."
+msgstr ""
+
+#: admin/Wizard_HotLinking.py:14
+msgid "A domain name is required"
+msgstr ""
+
+#: admin/Wizard_HotLinking.py:48
+msgid "Stop other domains from hot-linking your media files."
+msgstr ""
+
+#: admin/Wizard_HotLinking.py:54
 msgid "Hot Linking Prevention Wizard"
 msgstr ""
 
-#: admin/Wizard_HotLinking.py:65
+#: admin/Wizard_HotLinking.py:68
 #, fuzzy
 msgid "Domain Name"
 msgstr "域名模式"
 
-#: admin/Wizard_HotLinking.py:70
+#: admin/Wizard_HotLinking.py:73
 #, fuzzy
 msgid "Reply type"
 msgstr "回复"
@@ -2857,101 +2948,113 @@ msgstr "路径不是目录"
 msgid "Mail Archive directory"
 msgstr "虚拟主机根目录."
 
-#: admin/Wizard_Redirect.py:7
+#: admin/Wizard_Redirect.py:11
 msgid ""
 "This domain name will be used as nickname for the new virtual server. More "
 "domains names can be added to the virtual server later on."
 msgstr ""
 
-#: admin/Wizard_Redirect.py:8
+#: admin/Wizard_Redirect.py:12
 #, fuzzy
 msgid "Domain name to which requests will be redirected."
 msgstr "正在表达式将决定哪些请求将被执行."
 
-#: admin/Wizard_Redirect.py:9
+#: admin/Wizard_Redirect.py:13
 #, fuzzy
 msgid "This field can not be empty."
 msgstr "界限不能为空"
 
-#: admin/Wizard_Redirect.py:34
+#: admin/Wizard_Redirect.py:43
+msgid "New virtual server redirecting every request to another domain host."
+msgstr ""
+
+#: admin/Wizard_Redirect.py:49
 #, fuzzy
 msgid "Redirection Wizard"
 msgstr "重定向"
 
-#: admin/Wizard_Redirect.py:44
+#: admin/Wizard_Redirect.py:59
 #, fuzzy
 msgid "Origin Domain"
 msgstr "绑定域名"
 
-#: admin/Wizard_Redirect.py:45
+#: admin/Wizard_Redirect.py:60
 #, fuzzy
 msgid "Target Domain"
 msgstr "相应的域名"
 
-#: admin/Wizard_RoR.py:11
+#: admin/Wizard_RoR.py:14
 msgid "Local path to the Ruby on Rails based project."
 msgstr ""
 
-#: admin/Wizard_RoR.py:13
+#: admin/Wizard_RoR.py:16
 msgid ""
 "Directory of the web directory where the Ruby on Rails project will live in."
 msgstr ""
 
-#: admin/Wizard_RoR.py:14
+#: admin/Wizard_RoR.py:17
 msgid "Value of the RAILS_ENV variable."
 msgstr ""
 
-#: admin/Wizard_RoR.py:16
+#: admin/Wizard_RoR.py:19
 msgid ""
 "<p>Even though the directory looks like a Ruby on Rails project, the public/"
 "dispatch.fcgi file wasn't found.</p>"
 msgstr ""
 
-#: admin/Wizard_RoR.py:17
+#: admin/Wizard_RoR.py:20
 msgid ""
 "<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you "
 "might want to rename it.</p>"
 msgstr ""
 
-#: admin/Wizard_RoR.py:18
+#: admin/Wizard_RoR.py:21
 msgid ""
 "<p>If you are using Rails >= 2.3.0, you will have to execute the following "
 "command from the project directory in order to add the missing file:</"
 "p><p><pre>rake rails:update:generate_dispatchers</pre></p>"
 msgstr ""
 
-#: admin/Wizard_RoR.py:19
+#: admin/Wizard_RoR.py:22
 msgid "It does not look like a Ruby on Rails based project directory."
 msgstr ""
 
-#: admin/Wizard_RoR.py:150 admin/Wizard_RoR.py:225
+#: admin/Wizard_RoR.py:147
+msgid "New virtual server based on a Ruby on Rails project."
+msgstr ""
+
+#: admin/Wizard_RoR.py:153 admin/Wizard_RoR.py:228
 msgid "Ruby on Rails Wizard"
 msgstr ""
 
-#: admin/Wizard_RoR.py:166 admin/Wizard_RoR.py:241
+#: admin/Wizard_RoR.py:169 admin/Wizard_RoR.py:244
 msgid "RAILS_ENV environment"
 msgstr ""
 
-#: admin/Wizard_WordPress.py:9
+#: admin/Wizard_RoR.py:222
+msgid "New directory based on a Ruby of Rails project."
+msgstr ""
+
+#: admin/Wizard_WordPress.py:12
 msgid ""
 "Path to the directory where the Wordpress source code is located. (Example: /"
 "usr/share/wordpress)"
 msgstr ""
 
-#: admin/Wizard_WordPress.py:10
+#: admin/Wizard_WordPress.py:13
 msgid ""
 "Web directory where you want Wordpress to be accessible. (Example: /blog)"
 msgstr ""
 
-#: admin/Wizard_WordPress.py:12
+#: admin/Wizard_WordPress.py:15
 msgid "Does not look like a WordPress source directory."
 msgstr ""
 
-#: admin/Wizard_WordPress.py:97
+#: admin/Wizard_WordPress.py:100
 msgid "WordPress Wizard"
 msgstr ""
 
-#: admin/Wizard_WordPress.py:165
+#: admin/Wizard_WordPress.py:170
 msgid "Wordpress Wizard: Location"
 msgstr ""
 
@@ -3343,6 +3446,9 @@ msgstr "错误的时间"
 #: admin/validations.py:318
 msgid "Virtual host nick is already being used."
 msgstr "虚拟主机名称正在被使用中"
+
+#~ msgid "WWW Root"
+#~ msgstr "网站根目录"
 
 #~ msgid "Optionally specifies a database to connect to."
 #~ msgstr "指定数据库连接."
