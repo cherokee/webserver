@@ -1,0 +1,67 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee: 0.99.25
+* uWSGI 0.92
+///////////////////////////////////////////////////////////////////
+
+Cookbook: Deployment of an uWSGI application
+--------------------------------------------
+
+Python applications can be deployed in many ways, be it using flup,
+FastCGI, SCGI, WSGI, etc. link:http://projects.unbit.it/uwsgi/[uWSGI]
+is a feature rich, developer friendly application to do exactly
+that. It is a fast (pure C), self-healing, feature-rich WSGI server,
+aimed for professional python webapps deployment and development.
+
+Cherokee offers native support for it. The configuration is quite
+easy, and uses the link:modules_handlers_uwsgi.html[uWSGI] handler.
+
+To run Cherokee with uWSGI three simple steps will suffice:
+
+. You will need to complete a regular
+link:http://projects.unbit.it/uwsgi/wiki/Install[uWSGI installation]
+
+. Adapt your application to work with uWSGI.
+
+. Run the uWSGI Wizard provided by Cherokee and let it handle
+everything by itself.
+
+The last step, configuring Cherokee, is trivial. The wizard will read
+the specified configuration file and will configure the web server
+accordingly.
+
+Adapting your project is also fairly easy. For example, suppose you
+have a Django application which you want to adapt. You'll have to
+create 2 configuration files on your django project directory.
+
+[[Django]]
+Django
+~~~~~~
+
+We'll call this one `django_wsgi.py`:
+
+.django_wsgi.py
+---------------------------------------------------------
+import os
+import django.core.handlers.wsgi
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'project.settings'
+application = django.core.handlers.wsgi.WSGIHandler()
+---------------------------------------------------------
+
+uWSGI
+~~~~~
+.uwsgi.xml
+---------------------------------------------------------
+<uwsgi>
+    <app mountpoint="/">
+        <script>project.django_wsgi</script>
+    </app>
+</uwsgi>
+--------------------------------------------------------
+
+Cheroekee
+~~~~~~~~~
+The wizard will look for the uWSGI server, find out the mountpoint and
+configure the web server accordingly. Nothing more to do.

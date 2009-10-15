@@ -84,8 +84,16 @@ embedded devices and other similar situations.
 [[faq08]]
 === Does Cherokee speak WSGI natively like `mod_wsgi` does?
 
-In short: no. We believe that we should not implement anything like
-`mod_wsgi` for a number of reasons.
+In short: not like `mod_wsgi` at all. There is native support for the
+link:http://projects.unbit.it/uwsgi/[uWSGI server], which is a fast
+(pure C), self-healing, developer-friendly WSGI server aimed for
+professional python webapps deployment and development. Cherokee also
+provides a wizard to adjust its settings to those defined in the uWSGI
+configuration file of your project.
+
+/////////////////////////////////////////////////////////////////////
+We believe that we should not implement anything like `mod_wsgi` for a
+number of reasons.
 
 * First, and purely from an architectural point, embedding an
 interpreter into the web server doesn't feel quite right. Be it a huge
@@ -107,6 +115,7 @@ give it further consideration.
 Give Cherokee (SCGI|FastCGI) a try with your WSGI application.  We
 believe that besides fixing both the architectural and security flaws
 you will improve performance.
+/////////////////////////////////////////////////////////////////////
 
 [[faq09]]
 === I need to make an administration script: What signals are supported by Cherokee?
