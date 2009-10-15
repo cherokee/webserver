@@ -27,7 +27,8 @@ sugarcrm.png \
 symfony.png \
 trac.png \
 wordpress.png \
-zend.png
+zend.png \
+uwsgi.png
 
 EXTRA_DIST = \
 $(wizards_DATA)
