@@ -380,6 +380,24 @@ add_traffic (cherokee_dwriter_t *writer,
 		cherokee_dwriter_cstring (writer, "unknown");
 	}
 
+	cherokee_dwriter_cstring (writer, "accepts");
+	if (srv->collector != NULL) {
+		cherokee_buffer_clean     (&tmp);
+		cherokee_buffer_add_fsize (&tmp, COLLECTOR(srv->collector)->accepts);
+		cherokee_dwriter_bstring (writer, &tmp);
+	} else {
+		cherokee_dwriter_cstring (writer, "unknown");
+	}
+
+	cherokee_dwriter_cstring (writer, "timeouts");
+	if (srv->collector != NULL) {
+		cherokee_buffer_clean     (&tmp);
+		cherokee_buffer_add_fsize (&tmp, COLLECTOR(srv->collector)->timeouts);
+		cherokee_dwriter_bstring (writer, &tmp);
+	} else {
+		cherokee_dwriter_cstring (writer, "unknown");
+	}
+
 	/* Per Virtual Server
 	 */
 	cherokee_dwriter_cstring (writer, "vservers");
