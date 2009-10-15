@@ -23,6 +23,10 @@ class Wizard_Rules_Streaming (Wizard):
         self.name = "Media Streaming"
 
     def show (self):
+        if not cherokee_has_plugin ('streaming'):
+            self.no_show = _("The media streaming plug-in is not installed.")
+            return False
+
         rules = self._cfg.keys('%s!rule'%(self._pre))
         for r in rules:
             if self._cfg.get_val ('%s!rule!%s!match'%(self._pre, r)) != 'extensions':
