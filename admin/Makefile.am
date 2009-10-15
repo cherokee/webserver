@@ -133,7 +133,8 @@ Wizard_Zend.py \
 Wizard_Trac.py \
 Wizard_Liferay.py \
 Wizard_Alfresco.py \
-Wizard_Glassfish.py
+Wizard_Glassfish.py \
+Wizard_uWSGI.py
 endif
 
 adminpy_DATA = $(admin_data)
