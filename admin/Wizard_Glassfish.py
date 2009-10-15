@@ -12,10 +12,13 @@ from util import *
 from Page import *
 from Wizard import *
 
-NOTE_VSRV_NAME = _("Name of the new domain that will be created.")
-NOTE_HOST_SRC = _('Hostname or IP of the server running Glassfish. You can add more later to have the load balanced.')
-NOTE_HOST_PRT = _('Port running the service in said host. (Example: 8080)')
-NOTE_WEB_DIR = _("Web folder under which Glassfish will be accessible.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_VSRV_NAME = N_("Name of the new domain that will be created.")
+NOTE_HOST_SRC = N_('Hostname or IP of the server running Glassfish. You can add more later to have the load balanced.')
+NOTE_HOST_PRT = N_('Port running the service in said host. (Example: 8080)')
+NOTE_WEB_DIR = N_("Web folder under which Glassfish will be accessible.")
 
 SOURCE = """
 source!%(src_num)d!env_inherited = 0
@@ -56,14 +59,14 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_Glassfish (WizardPage):
     ICON = "glassfish.png"
-    DESC = "New virtual server to proxy Glassfish projects."
+    DESC = _("New virtual server to proxy Glassfish projects.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/Glassfish',
                              id     = "Glassfish_Page1",
                              title  = _("Glassfish Wizard"),
-                             group  = WIZARD_GROUP_PLATFORM)
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True
@@ -73,13 +76,13 @@ class Wizard_VServer_Glassfish (WizardPage):
 
         txt += '<h2>New Virtual Server</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_glassfish!new_host', NOTE_VSRV_NAME, value="glassfish.example.com")
+        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_glassfish!new_host', _(NOTE_VSRV_NAME), value="glassfish.example.com")
         txt += self.Indent(table)
 
         txt += '<h2>Glassfish Project</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_glassfish!new_src_host', NOTE_HOST_SRC, value="localhost")
-        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_glassfish!new_src_port', NOTE_HOST_PRT, value=8080)
+        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_glassfish!new_src_host', _(NOTE_HOST_SRC), value="localhost")
+        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_glassfish!new_src_port', _(NOTE_HOST_PRT), value=8080)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -116,14 +119,14 @@ class Wizard_VServer_Glassfish (WizardPage):
 
 class Wizard_Rules_Glassfish (WizardPage):
     ICON = "glassfish.png"
-    DESC = "New directory to proxy Glassfish projects."
+    DESC = _("New directory to proxy Glassfish projects.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/Glassfish'%(pre.split('!')[1]),
                              id     = "Glassfish_Page1",
                              title  = _("Glassfish Wizard"),
-                             group  = WIZARD_GROUP_PLATFORM)
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True
@@ -133,9 +136,9 @@ class Wizard_Rules_Glassfish (WizardPage):
 
         txt += '<h2>Glassfish Project</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_glassfish!new_webdir', NOTE_WEB_DIR, value="/glassfish")
-        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_glassfish!new_src_host', NOTE_HOST_SRC, value="localhost")
-        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_glassfish!new_src_port', NOTE_HOST_PRT, value=8080)
+        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_glassfish!new_webdir', _(NOTE_WEB_DIR), value="/glassfish")
+        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_glassfish!new_src_host', _(NOTE_HOST_SRC), value="localhost")
+        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_glassfish!new_src_port', _(NOTE_HOST_PRT), value=8080)
         txt += self.Indent(table)
 
         form = Form (url_pre, add_submit=True, auto=False)

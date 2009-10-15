@@ -5,10 +5,10 @@ from util import *
 from Page import *
 from Wizard import *
 
-NOTE_MAILMAN_CGI_DIR  = _("Local path to the Mailman CGI directory.")
-NOTE_MAILMAN_DATA_DIR = _("Local path to the Mailman data directory.")
-NOTE_MAILMAN_ARCH_DIR = _("Local path to the Mailman mail archive directory.")
-NOTE_NEW_HOST         = _("Name of the new domain that will be created.")
+NOTE_MAILMAN_CGI_DIR  = N_("Local path to the Mailman CGI directory.")
+NOTE_MAILMAN_DATA_DIR = N_("Local path to the Mailman data directory.")
+NOTE_MAILMAN_ARCH_DIR = N_("Local path to the Mailman mail archive directory.")
+NOTE_NEW_HOST         = N_("Name of the new domain that will be created.")
 
 CONFIG_VSRV = """
 %(vsrv_pre)s!nick = %(new_host)s
@@ -106,7 +106,7 @@ class Wizard_VServer_Mailman (WizardPage):
                              submit = '/vserver/wizard/mailman',
                              id     = "mailman_Page1",
                              title  = _("Mailman Wizard"),
-                             group  = WIZARD_GROUP_MISC)
+                             group  = _(WIZARD_GROUP_MISC))
 
     def show (self):
         return True
@@ -119,14 +119,14 @@ class Wizard_VServer_Mailman (WizardPage):
         txt = '<h1>%s</h1>' % (self.title)
         txt += '<h2>New Virtual Server</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_mailman!new_host', NOTE_NEW_HOST, value="www.example.com")
+        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_mailman!new_host', _(NOTE_NEW_HOST), value="www.example.com")
         txt += self.Indent(table)
 
         txt += '<h2>Mailman</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Mailman CGI directory'),  'tmp!wizard_mailman!mailman_cgi_dir',  NOTE_MAILMAN_CGI_DIR,  value=guessed_cgi)
-        self.AddPropEntry (table, _('Mailman Data directory'), 'tmp!wizard_mailman!mailman_data_dir', NOTE_MAILMAN_DATA_DIR, value=guessed_data)
-        self.AddPropEntry (table, _('Mail Archive directory'), 'tmp!wizard_mailman!mailman_arch_dir', NOTE_MAILMAN_ARCH_DIR, value=guessed_arch)
+        self.AddPropEntry (table, _('Mailman CGI directory'),  'tmp!wizard_mailman!mailman_cgi_dir',  _(NOTE_MAILMAN_CGI_DIR),  value=guessed_cgi)
+        self.AddPropEntry (table, _('Mailman Data directory'), 'tmp!wizard_mailman!mailman_data_dir', _(NOTE_MAILMAN_DATA_DIR), value=guessed_data)
+        self.AddPropEntry (table, _('Mail Archive directory'), 'tmp!wizard_mailman!mailman_arch_dir', _(NOTE_MAILMAN_ARCH_DIR), value=guessed_arch)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'

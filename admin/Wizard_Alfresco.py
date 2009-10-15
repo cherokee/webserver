@@ -12,10 +12,13 @@ from util import *
 from Page import *
 from Wizard import *
 
-NOTE_VSRV_NAME  = _("Name of the new domain that will be created.")
-NOTE_HOST_SRC = _('Hostname or IP of the server running Alfresco.')
-NOTE_HOST_PRT = _('Port running the service in said host.')
-NOTE_WEB_DIR = _("Web folder under which Liferay will be accessible.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_VSRV_NAME  = N_("Name of the new domain that will be created.")
+NOTE_HOST_SRC = N_('Hostname or IP of the server running Alfresco.')
+NOTE_HOST_PRT = N_('Port running the service in said host.')
+NOTE_WEB_DIR = N_("Web folder under which Liferay will be accessible.")
 
 SOURCE = """
 source!%(src_num)d!env_inherited = 0
@@ -59,14 +62,14 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_Alfresco (WizardPage):
     ICON = "alfresco.png"
-    DESC = "New virtual server based on a Alfresco project."
+    DESC = _("New virtual server based on a Alfresco project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/Alfresco',
                              id     = "Alfresco_Page1",
                              title  = _("Alfresco Wizard"),
-                             group  = WIZARD_GROUP_CMS)
+                             group  = _(WIZARD_GROUP_CMS))
 
     def show (self):
         return True
@@ -76,13 +79,13 @@ class Wizard_VServer_Alfresco (WizardPage):
 
         txt += '<h2>New Virtual Server</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_alfresco!new_host', NOTE_VSRV_NAME, value="alfresco.example.com")
+        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_alfresco!new_host', _(NOTE_VSRV_NAME), value="alfresco.example.com")
         txt += self.Indent(table)
 
         txt += '<h2>Alfresco Project</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_alfresco!new_src_host', NOTE_HOST_SRC)
-        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_alfresco!new_src_port', NOTE_HOST_PRT, value=8080)
+        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_alfresco!new_src_host', _(NOTE_HOST_SRC))
+        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_alfresco!new_src_port', _(NOTE_HOST_PRT), value=8080)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -119,14 +122,14 @@ class Wizard_VServer_Alfresco (WizardPage):
 
 class Wizard_Rules_Alfresco (WizardPage):
     ICON = "alfresco.png"
-    DESC = "New directory based on a Alfresco project."
+    DESC = _("New directory based on a Alfresco project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/Alfresco'%(pre.split('!')[1]),
                              id     = "Alfresco_Page1",
                              title  = _("Alfresco Wizard"),
-                             group  = WIZARD_GROUP_CMS)
+                             group  = _(WIZARD_GROUP_CMS))
 
     def show (self):
         return True
@@ -136,9 +139,9 @@ class Wizard_Rules_Alfresco (WizardPage):
 
         txt += '<h2>Alfresco Project</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_alfresco!new_webdir', NOTE_WEB_DIR, value="/alfresco")
-        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_alfresco!new_src_host', NOTE_HOST_SRC, value="localhost")
-        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_alfresco!new_src_port', NOTE_HOST_PRT, value=8080)
+        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_alfresco!new_webdir', _(NOTE_WEB_DIR), value="/alfresco")
+        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_alfresco!new_src_host', _(NOTE_HOST_SRC), value="localhost")
+        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_alfresco!new_src_port', _(NOTE_HOST_PRT), value=8080)
         txt += self.Indent(table)
 
         form = Form (url_pre, add_submit=True, auto=False)

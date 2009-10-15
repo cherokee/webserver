@@ -5,10 +5,13 @@ from util import *
 from Page import *
 from Wizard import *
 
-NOTE_DOMAIN        = "Domain allowed to access the files. Eg: example.com"
-NOTE_REDIR         = "Path to the public to use. Eg: /images/forbidden.jpg"
-NOTE_TYPE          = "How to handle hot-linking requests."
-ERROR_EMPTY_DOMAIN = "A domain name is required"
+# For gettext
+N_ = lambda x: x
+
+NOTE_DOMAIN        = N_("Domain allowed to access the files. Eg: example.com")
+NOTE_REDIR         = N_("Path to the public to use. Eg: /images/forbidden.jpg")
+NOTE_TYPE          = N_("How to handle hot-linking requests.")
+ERROR_EMPTY_DOMAIN = N_("A domain name is required")
 
 DATA_VALIDATION = [
     ("tmp!wizard_hotlink!redirection", validations.is_path)
@@ -42,14 +45,14 @@ TYPES = [
 
 class Wizard_Rules_HotLinking (WizardPage):
     ICON = "hotlinking.png"
-    DESC = "Stop other domains from hot-linking your media files."
-    
+    DESC = _("Stop other domains from hot-linking your media files.")
+
     def __init__ (self, cfg, pre):
-        WizardPage.__init__ (self, cfg, pre, 
+        WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/HotLinking'%(pre.split('!')[1]),
                              id     = "HotLinking_Page1",
                              title  = _("Hot Linking Prevention Wizard"),
-                             group  = WIZARD_GROUP_TASKS)
+                             group  = _(WIZARD_GROUP_TASKS))
 
     def show (self):
         return True
@@ -62,18 +65,18 @@ class Wizard_Rules_HotLinking (WizardPage):
         txt = '<h1>%s</h1>' % (self.title)
         txt += '<h2>Local Host Name</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Domain Name'), 'tmp!wizard_hotlink!domain', NOTE_DOMAIN, value=nick)
+        self.AddPropEntry (table, _('Domain Name'), 'tmp!wizard_hotlink!domain', _(NOTE_DOMAIN), value=nick)
         txt += self.Indent(table)
 
         txt += '<h2>Behaviour</h2>'
         table = TableProps()
-        self.AddPropOptions_Reload_Plain (table, _('Reply type'), 'tmp!wizard_hotlink!type', TYPES, NOTE_TYPE)
+        self.AddPropOptions_Reload_Plain (table, _('Reply type'), 'tmp!wizard_hotlink!type', TYPES, _(NOTE_TYPE))
 
         tipe = self._cfg.get_val ('tmp!wizard_hotlink!type')
         if tipe == 'redir':
-            self.AddPropEntry (table, _('Redirection'), 'tmp!wizard_hotlink!redirection', NOTE_REDIR)
+            self.AddPropEntry (table, _('Redirection'), 'tmp!wizard_hotlink!redirection', _(NOTE_REDIR))
 
-        txt += self.Indent(table)            
+        txt += self.Indent(table)
 
         form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
@@ -87,7 +90,7 @@ class Wizard_Rules_HotLinking (WizardPage):
         if tipe == 'redir':
             self.ValidateChange_SingleKey ('tmp!wizard_hotlink!redirection', post, DATA_VALIDATION)
 
-        self.Validate_NotEmpty (post, 'tmp!wizard_hotlink!domain', ERROR_EMPTY_DOMAIN)
+        self.Validate_NotEmpty (post, 'tmp!wizard_hotlink!domain', _(ERROR_EMPTY_DOMAIN))
         if self.has_errors():
             return
 

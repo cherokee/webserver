@@ -11,12 +11,15 @@ from Wizard import *
 from Wizard_PHP import wizard_php_get_info
 from Wizard_PHP import wizard_php_get_source_info
 
-NOTE_SOURCES  = _("Path to the directory where the phpBB source code is located. (Example: /usr/share/phpbb)")
-NOTE_WEB_DIR  = _("Web directory where you want phpBB to be accessible. (Example: /phpbb)")
-NOTE_HOST     = _("Host name of the virtual host that is about to be created.")
-ERROR_NO_SRC  = _("Does not look like a phpBB source directory.")
-ERROR_NO_WEB  = _("A web directory must be provided.")
-ERROR_NO_HOST = _("A host name must be provided.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_SOURCES  = N_("Path to the directory where the phpBB source code is located. (Example: /usr/share/phpbb)")
+NOTE_WEB_DIR  = N_("Web directory where you want phpBB to be accessible. (Example: /phpbb)")
+NOTE_HOST     = N_("Host name of the virtual host that is about to be created.")
+ERROR_NO_SRC  = N_("Does not look like a phpBB source directory.")
+ERROR_NO_WEB  = N_("A web directory must be provided.")
+ERROR_NO_HOST = N_("A host name must be provided.")
 
 CONFIG_DIR = """
 %(pre_rule_plus1)s!handler = custom_error
@@ -56,7 +59,7 @@ def is_phpbb_dir (path, cfg, nochroot):
     path = validations.is_local_dir_exists (path, cfg, nochroot)
     module_inc = os.path.join (path, 'includes/bbcode.php')
     if not os.path.exists (module_inc):
-        raise ValueError, ERROR_NO_SRC
+        raise ValueError, _(ERROR_NO_SRC)
     return path
 
 DATA_VALIDATION = [
@@ -67,14 +70,14 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_phpBB (WizardPage):
     ICON = "phpbb.png"
-    DESC = "Configure a new virtual server using phpBB."
+    DESC = _("Configure a new virtual server using phpBB.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/phpBB',
                              id     = "phpBB_Page1",
                              title  = _("phpBB Wizard"),
-                             group  = WIZARD_GROUP_MISC)
+                             group  = _(WIZARD_GROUP_MISC))
 
     def show (self):
         return True
@@ -85,8 +88,8 @@ class Wizard_VServer_phpBB (WizardPage):
 
         txt += '<h2>phpBB</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_phpbb!host',    NOTE_HOST,    value="bulletin.example.com")
-        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_phpbb!sources', NOTE_SOURCES, value=guessed_src)
+        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_phpbb!host',    _(NOTE_HOST),    value="bulletin.example.com")
+        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_phpbb!sources', _(NOTE_SOURCES), value=guessed_src)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -118,6 +121,8 @@ class Wizard_VServer_phpBB (WizardPage):
 
         # Replacement
         php_info = wizard_php_get_info (self._cfg, pre_vsrv)
+        if not php_info:
+            return self.report_error (_("Couldn't find a suitable PHP interpreter."))
         php_rule = int (php_info['rule'].split('!')[-1])
 
         pre_rule_plus1  = "%s!rule!%d" % (pre_vsrv, php_rule + 1)
@@ -142,7 +147,7 @@ class Wizard_Rules_phpBB (WizardPage):
                              submit = '/vserver/%s/wizard/phpBB'%(pre.split('!')[1]),
                              id     = "phpBB_Page1",
                              title  = _("phpBB Wizard"),
-                             group  = WIZARD_GROUP_MISC)
+                             group  = _(WIZARD_GROUP_MISC))
 
     def show (self):
         # Check for PHP
@@ -156,8 +161,8 @@ class Wizard_Rules_phpBB (WizardPage):
         guessed_src = path_find_w_default (SRC_PATHS)
 
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_phpbb!web_dir', NOTE_WEB_DIR, value="/bulletin")
-        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_phpbb!sources', NOTE_SOURCES, value=guessed_src)
+        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_phpbb!web_dir', _(NOTE_WEB_DIR), value="/bulletin")
+        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_phpbb!sources', _(NOTE_SOURCES), value=guessed_src)
 
         txt  = '<h1>%s</h1>' % (self.title)
         txt += self.Indent(table)

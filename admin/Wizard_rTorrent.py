@@ -4,9 +4,11 @@ from util import *
 from Page import *
 from Wizard import *
 
-NOTE_CONNECTION = _("Where rTorrent XMLRPC is available. The host:port pair, or the Unix socket path.")
-NOTE_WEB_DIR    = _("Web directory where you want rTorrent XMLRPC to be accessible. (Example: /RPC2)")
+# For gettext
+N_ = lambda x: x
 
+NOTE_CONNECTION = N_("Where rTorrent XMLRPC is available. The host:port pair, or the Unix socket path.")
+NOTE_WEB_DIR    = N_("Web directory where you want rTorrent XMLRPC to be accessible. (Example: /RPC2)")
 
 CONFIG_DIR = """
 %(rule_pre_1)s!match = request
@@ -32,15 +34,15 @@ class Wizard_Rules_rTorrent (WizardPage):
                              submit = '/vserver/%s/wizard/rTorrent'%(pre.split('!')[1]),
                              id     = "rTorrent_Page1",
                              title  = _("rTorrent Wizard"),
-                             group  = WIZARD_GROUP_MISC )
+                             group  = _(WIZARD_GROUP_MISC))
 
     def show (self):
         return True
 
     def _render_content (self, url_pre):
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_rTorrent!web_dir', NOTE_WEB_DIR, value="/RPC2")
-        self.AddPropEntry (table, _('Connection'),'tmp!wizard_rTorrent!connection', NOTE_CONNECTION, value="localhost:5000")
+        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_rTorrent!web_dir', _(NOTE_WEB_DIR), value="/RPC2")
+        self.AddPropEntry (table, _('Connection'),'tmp!wizard_rTorrent!connection', _(NOTE_CONNECTION), value="localhost:5000")
 
         txt  = '<h1>%s</h1>' % (self.title)
         txt += self.Indent(table)
@@ -59,12 +61,12 @@ class Wizard_Rules_rTorrent (WizardPage):
 
         rule = cfg_vsrv_rule_find_regexp (self._cfg, self._pre, '^'+web_dir)
         if rule:
-            return self.report_error ("Already configured: %s" % web_dir)
+            return self.report_error (_("Already configured:") + web_dir)
 
         # Add source
         source = cfg_source_find_interpreter (self._cfg, None, 'rTorrent XMLRPC')
         if not source:
-            _, source = cfg_source_get_next (self._cfg)
+            x, source = cfg_source_get_next (self._cfg)
             config_source = CONFIG_SOURCE % (locals())
             self._apply_cfg_chunk (config_source)
 
@@ -72,7 +74,7 @@ class Wizard_Rules_rTorrent (WizardPage):
 
         rule_n, _ = cfg_vsrv_rule_get_next (self._cfg, self._pre)
         if not rule_n:
-            return self.report_error ("Couldn't add a new rule.")
+            return self.report_error (_("Couldn't add a new rule."))
 
         rule_pre_1   = '%s!rule!%d' % (self._pre, rule_n)
 

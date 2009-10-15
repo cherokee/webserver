@@ -13,15 +13,18 @@ from util import *
 from Page import *
 from Wizard import *
 
-NOTE_UWSGI_CONFIG = _("Path to the uWSGI configuration file. Its mountpoint will be used.")
-NOTE_UWSGI_BINARY = _("Location of the uWSGI binary")
+# For gettext
+N_ = lambda x: x
 
-NOTE_NEW_HOST = _("Name of the new domain that will be created.")
-NOTE_NEW_DIR = _("Public web directory to access the project.")
-NOTE_DROOT = _("Document root for the new virtual server.")
+NOTE_UWSGI_CONFIG = N_("Path to the uWSGI configuration file. Its mountpoint will be used.")
+NOTE_UWSGI_BINARY = N_("Location of the uWSGI binary")
 
-ERROR_NO_UWSGI_CONFIG = _("It does not look like a uWSGI configuration file.")
-ERROR_NO_UWSGI_BINARY = _("The uWSGI server could not be found.")
+NOTE_NEW_HOST = N_("Name of the new domain that will be created.")
+NOTE_NEW_DIR = N_("Public web directory to access the project.")
+NOTE_DROOT = N_("Document root for the new virtual server.")
+
+ERROR_NO_UWSGI_CONFIG = N_("It does not look like a uWSGI configuration file.")
+ERROR_NO_UWSGI_BINARY = N_("The uWSGI server could not be found.")
 
 SOURCE = """
 source!%(src_num)d!type = interpreter
@@ -73,7 +76,7 @@ def is_uwsgi_cfg (filename, cfg, nochroot):
     filename = validations.is_local_file_exists (filename, cfg, nochroot)
     mountpoint = find_mountpoint(filename)
     if not mountpoint:
-        raise ValueError, ERROR_NO_UWSGI_CONFIG
+        raise ValueError, _(ERROR_NO_UWSGI_CONFIG)
     return filename
 
 def find_mountpoint(filename):
@@ -100,14 +103,14 @@ class Wizard_VServer_uWSGI (WizardPage):
                              submit = '/vserver/wizard/uWSGI',
                              id     = "uWSGI_Page1",
                              title  = _("uWSGI Wizard"),
-                             group  = WIZARD_GROUP_PLATFORM)
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         # Check for uWSGI
         self.uwsgi_binary = path_find_binary (DEFAULT_BINS,
                                               extra_dirs = DEFAULT_PATHS)
         if not self.uwsgi_binary:
-            self.no_show = ERROR_NO_UWSGI_BINARY
+            self.no_show = _(ERROR_NO_UWSGI_BINARY)
             return False
         return True
 
@@ -116,15 +119,15 @@ class Wizard_VServer_uWSGI (WizardPage):
 
         txt += '<h2>New Virtual Server</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_uwsgi!new_host',      NOTE_NEW_HOST, value="www.example.com")
-        self.AddPropEntry (table, _('Document Root'), 'tmp!wizard_uwsgi!document_root', NOTE_DROOT, value=os_get_document_root())
+        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_uwsgi!new_host',      _(NOTE_NEW_HOST), value="www.example.com")
+        self.AddPropEntry (table, _('Document Root'), 'tmp!wizard_uwsgi!document_root', _(NOTE_DROOT), value=os_get_document_root())
         txt += self.Indent(table)
 
         txt += '<h2>uWSGI</h2>'
         table = TableProps()
         if not self.uwsgi_binary:
-            self.AddPropEntry (table, _('uWSGI binary'), 'tmp!wizard_uwsgi!uwsgi_binary', NOTE_UWSGI_BINARY)
-        self.AddPropEntry (table, _('Configuration File'), 'tmp!wizard_uwsgi!uwsgi_cfg', NOTE_UWSGI_CONFIG)
+            self.AddPropEntry (table, _('uWSGI binary'), 'tmp!wizard_uwsgi!uwsgi_binary', _(NOTE_UWSGI_BINARY))
+        self.AddPropEntry (table, _('Configuration File'), 'tmp!wizard_uwsgi!uwsgi_cfg', _(NOTE_UWSGI_CONFIG))
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -175,14 +178,14 @@ class Wizard_Rules_uWSGI (WizardPage):
                              submit = '/vserver/%s/wizard/uWSGI'%(pre.split('!')[1]),
                              id     = "uWSGI_Page1",
                              title  = _("uWSGI Wizard"),
-                             group  = WIZARD_GROUP_PLATFORM)
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         # Check for uWSGI
         self.uwsgi_binary = path_find_binary (DEFAULT_BINS,
                                               extra_dirs = DEFAULT_PATHS)
         if not self.uwsgi_binary:
-            self.no_show = ERROR_NO_UWSGI_BINARY
+            self.no_show = _(ERROR_NO_UWSGI_BINARY)
             return False
         return True
 
@@ -192,8 +195,8 @@ class Wizard_Rules_uWSGI (WizardPage):
         txt += '<h2>uWSGI Project</h2>'
         table = TableProps()
         if not self.uwsgi_binary:
-            self.AddPropEntry (table, _('uWSGI binary'), 'tmp!wizard_uwsgi!uwsgi_binary', NOTE_UWSGI_BINARY)
-        self.AddPropEntry (table, _('Configuration File'), 'tmp!wizard_uwsgi!uwsgi_cfg', NOTE_UWSGI_CONFIG)
+            self.AddPropEntry (table, _('uWSGI binary'), 'tmp!wizard_uwsgi!uwsgi_binary', _(NOTE_UWSGI_BINARY))
+        self.AddPropEntry (table, _('Configuration File'), 'tmp!wizard_uwsgi!uwsgi_cfg', _(NOTE_UWSGI_CONFIG))
         txt += self.Indent(table)
 
         form = Form (url_pre, add_submit=True, auto=False)

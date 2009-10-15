@@ -6,12 +6,15 @@ from Wizard import *
 from Wizard_PHP import wizard_php_get_info
 from Wizard_PHP import wizard_php_get_source_info
 
-NOTE_SOURCES  = _("Path to the directory where the Drupal source code is located. (Example: /usr/share/drupal)")
-NOTE_WEB_DIR  = _("Web directory where you want Drupal to be accessible. (Example: /blog)")
-NOTE_HOST     = _("Host name of the virtual host that is about to be created.")
-ERROR_NO_SRC  = _("Does not look like a Drupal source directory.")
-ERROR_NO_WEB  = _("A web directory must be provided.")
-ERROR_NO_HOST = _("A host name must be provided.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_SOURCES  = N_("Path to the directory where the Drupal source code is located. (Example: /usr/share/drupal)")
+NOTE_WEB_DIR  = N_("Web directory where you want Drupal to be accessible. (Example: /blog)")
+NOTE_HOST     = N_("Host name of the virtual host that is about to be created.")
+ERROR_NO_SRC  = N_("Does not look like a Drupal source directory.")
+ERROR_NO_WEB  = N_("A web directory must be provided.")
+ERROR_NO_HOST = N_("A host name must be provided.")
 
 CONFIG_DIR = """
 %(pre_rule_plus3)s!match = request
@@ -98,7 +101,7 @@ def is_drupal_dir (path, cfg, nochroot):
     path = validations.is_local_dir_exists (path, cfg, nochroot)
     module_inc = os.path.join (path, 'includes/module.inc')
     if not os.path.exists (module_inc):
-        raise ValueError, ERROR_NO_SRC
+        raise ValueError, _(ERROR_NO_SRC)
     return path
 
 DATA_VALIDATION = [
@@ -116,7 +119,7 @@ class Wizard_VServer_Drupal (WizardPage):
                              submit = '/vserver/wizard/Drupal',
                              id     = "Drupal_Page1",
                              title  = _("Drupal Wizard"),
-                             group  = WIZARD_GROUP_CMS)
+                             group  = _(WIZARD_GROUP_CMS))
 
     def show (self):
         return True
@@ -127,8 +130,8 @@ class Wizard_VServer_Drupal (WizardPage):
 
         txt += '<h2>Drupal</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_drupal!host',    NOTE_HOST,    value="blog.example.com")
-        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_drupal!sources', NOTE_SOURCES, value=guessed_src)
+        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_drupal!host',    _(NOTE_HOST),    value="blog.example.com")
+        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_drupal!sources', _(NOTE_SOURCES), value=guessed_src)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -160,6 +163,8 @@ class Wizard_VServer_Drupal (WizardPage):
 
         # Replacement
         php_info = wizard_php_get_info (self._cfg, pre_vsrv)
+        if not php_info:
+            return self.report_error (_("Couldn't find a suitable PHP interpreter."))
         php_rule = int (php_info['rule'].split('!')[-1])
 
         pre_rule_plus2  = "%s!rule!%d" % (pre_vsrv, php_rule + 2)
@@ -179,20 +184,20 @@ class Wizard_VServer_Drupal (WizardPage):
 
 class Wizard_Rules_Drupal (WizardPage):
     ICON = "drupal.png"
-    DESC = "Configures Drupal inside a public web directory."
+    DESC = _("Configures Drupal inside a public web directory.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/Drupal'%(pre.split('!')[1]),
                              id     = "Drupal_Page1",
                              title  = _("Drupal Wizard"),
-                             group  = WIZARD_GROUP_CMS)
+                             group  = _(WIZARD_GROUP_CMS))
 
     def show (self):
         # Check for PHP
         php_info = wizard_php_get_info (self._cfg, self._pre)
         if not php_info:
-            self.no_show = "PHP support is required."
+            self.no_show = _("PHP support is required.")
             return False
         return True
 
@@ -200,8 +205,8 @@ class Wizard_Rules_Drupal (WizardPage):
         guessed_src = path_find_w_default (SRC_PATHS)
 
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_drupal!web_dir', NOTE_WEB_DIR, value="/blog")
-        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_drupal!sources', NOTE_SOURCES, value=guessed_src)
+        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_drupal!web_dir', _(NOTE_WEB_DIR), value="/blog")
+        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_drupal!sources', _(NOTE_SOURCES), value=guessed_src)
 
         txt  = '<h1>%s</h1>' % (self.title)
         txt += self.Indent(table)

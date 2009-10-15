@@ -11,12 +11,13 @@ from Wizard import *
 from Wizard_PHP import wizard_php_get_info
 from Wizard_PHP import wizard_php_get_source_info
 
-NOTE_SOURCES  = _("Path to the directory where the Sugar CRM source code is located. (Example: /usr/share/sugar)")
-NOTE_WEB_DIR  = _("Web directory where you want Sugar CRM to be accessible. (Example: /crm)")
-NOTE_HOST     = _("Host name of the virtual host that is about to be created.")
-ERROR_NO_SRC  = _("Does not look like a Sugar CRM source directory.")
-ERROR_NO_WEB  = _("A web directory must be provided.")
-ERROR_NO_HOST = _("A host name must be provided.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_SOURCES  = N_("Path to the directory where the Sugar CRM source code is located. (Example: /usr/share/sugar)")
+NOTE_WEB_DIR  = N_("Web directory where you want Sugar CRM to be accessible. (Example: /crm)")
+NOTE_HOST     = N_("Host name of the virtual host that is about to be created.")
+ERROR_NO_SRC  = N_("Does not look like a Sugar CRM source directory.")
 
 CONFIG_DIR = """
 # The PHP rule comes here
@@ -86,7 +87,7 @@ def is_sugar_dir (path, cfg, nochroot):
     path = validations.is_local_dir_exists (path, cfg, nochroot)
     module_inc = os.path.join (path, 'include/entryPoint.php')
     if not os.path.exists (module_inc):
-        raise ValueError, ERROR_NO_SRC
+        raise ValueError, _(ERROR_NO_SRC)
     return path
 
 DATA_VALIDATION = [
@@ -98,14 +99,14 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_Sugar (WizardPage):
     ICON = "sugarcrm.png"
-    DESC = "Configure a new virtual server for Sugar CRM."
+    DESC = _("Configure a new virtual server for Sugar CRM.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/Sugar',
                              id     = "Sugar_Page1",
                              title  = _("Sugar Wizard"),
-                             group  = WIZARD_GROUP_MANAGEMENT)
+                             group  = _(WIZARD_GROUP_MANAGEMENT))
 
     def show (self):
         return True
@@ -116,8 +117,8 @@ class Wizard_VServer_Sugar (WizardPage):
 
         txt += '<h2>Sugar</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_sugar!host',    NOTE_HOST,    value="sugar.example.com")
-        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_sugar!sources', NOTE_SOURCES, value=guessed_src)
+        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_sugar!host',    _(NOTE_HOST),    value="sugar.example.com")
+        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_sugar!sources', _(NOTE_SOURCES), value=guessed_src)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -149,6 +150,8 @@ class Wizard_VServer_Sugar (WizardPage):
 
         # Replacement
         php_info = wizard_php_get_info (self._cfg, pre_vsrv)
+        if not php_info:
+            return self.report_error (_("Couldn't find a suitable PHP interpreter."))
         php_rule = int (php_info['rule'].split('!')[-1])
 
         pre_rule_plus3  = "%s!rule!%d" % (pre_vsrv, php_rule + 3)
@@ -168,14 +171,14 @@ class Wizard_VServer_Sugar (WizardPage):
 
 class Wizard_Rules_Sugar (WizardPage):
     ICON = "sugarcrm.png"
-    DESC = "Configures Sugar CRM inside a public web directory."
+    DESC = _("Configures Sugar CRM inside a public web directory.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/Sugar'%(pre.split('!')[1]),
                              id     = "Sugar_Page1",
                              title  = _("Sugar Wizard"),
-                             group  = WIZARD_GROUP_MANAGEMENT)
+                             group  = _(WIZARD_GROUP_MANAGEMENT))
 
     def show (self):
         # Check for PHP
@@ -189,8 +192,8 @@ class Wizard_Rules_Sugar (WizardPage):
         guessed_src = path_find_w_default (SRC_PATHS)
 
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_sugar!web_dir', NOTE_WEB_DIR, value="/sugar")
-        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_sugar!sources', NOTE_SOURCES, value=guessed_src)
+        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_sugar!web_dir', _(NOTE_WEB_DIR), value="/sugar")
+        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_sugar!sources', _(NOTE_SOURCES), value=guessed_src)
 
         txt  = '<h1>%s</h1>' % (self.title)
         txt += self.Indent(table)

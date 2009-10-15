@@ -24,7 +24,7 @@ class Wizard_Rules_PHP (Wizard):
         Wizard.__init__ (self, cfg, pre)
         self.name   = _("Add PHP support")
         self.source = None
-        self.group  = WIZARD_GROUP_LANGS
+        self.group  = _(WIZARD_GROUP_LANGS)
 
     def show (self):
         self.rule   = None
@@ -69,7 +69,7 @@ class Wizard_Rules_PHP (Wizard):
             if not tcp_addr:
                 return self.report_error (_("Couldn't find IP address for 'localhost'"))
 
-            _, self.source = cfg_source_get_next (self._cfg)
+            x, self.source = cfg_source_get_next (self._cfg)
             self._cfg['%s!nick' % (self.source)]        = 'PHP Interpreter'
             self._cfg['%s!type' % (self.source)]        = 'interpreter'
             self._cfg['%s!interpreter' % (self.source)] = '%s -b %s:%d' % (php_path, tcp_addr, self.TCP_PORT)
@@ -80,7 +80,7 @@ class Wizard_Rules_PHP (Wizard):
 
         # Add a new Extension PHP rule
         if not self.rule:
-            _, self.rule = cfg_vsrv_rule_get_next (self._cfg, self._pre)
+            x, self.rule = cfg_vsrv_rule_get_next (self._cfg, self._pre)
             if not self.rule:
                 return self.report_error (_("Couldn't add a new rule."))
 

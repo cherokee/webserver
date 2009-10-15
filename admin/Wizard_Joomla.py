@@ -11,12 +11,15 @@ from Wizard import *
 from Wizard_PHP import wizard_php_get_info
 from Wizard_PHP import wizard_php_get_source_info
 
-NOTE_SOURCES  = _("Path to the directory where the Joomla source code is located. (Example: /usr/share/joomla)")
-NOTE_WEB_DIR  = _("Web directory where you want Joomla to be accessible. (Example: /blog)")
-NOTE_HOST     = _("Host name of the virtual host that is about to be created.")
-ERROR_NO_SRC  = _("Does not look like a Joomla source directory.")
-ERROR_NO_WEB  = _("A web directory must be provided.")
-ERROR_NO_HOST = _("A host name must be provided.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_SOURCES  = N_("Path to the directory where the Joomla source code is located. (Example: /usr/share/joomla)")
+NOTE_WEB_DIR  = N_("Web directory where you want Joomla to be accessible. (Example: /blog)")
+NOTE_HOST     = N_("Host name of the virtual host that is about to be created.")
+ERROR_NO_SRC  = N_("Does not look like a Joomla source directory.")
+ERROR_NO_WEB  = N_("A web directory must be provided.")
+ERROR_NO_HOST = N_("A host name must be provided.")
 
 CONFIG_DIR = """
 %(pre_rule_plus3)s!handler = custom_error
@@ -81,7 +84,7 @@ CONFIG_VSERVER = """
 BAN_REGEX = 'mosConfig_[a-zA-Z_]{1,21}(=|\=)|base64_encode.*\(.*\)|(\<|<).*script.*(\>|>)|GLOBALS(=|\[|\%[0-9A-Z]{0,2})|_REQUEST(=|\[|\%[0-9A-Z]{0,2})'
 
 SRC_PATHS = [
-    "/usr/share/joomla",         # Debian, Fedora
+    "/usr/share/joomla",          # Debian, Fedora
     "/var/www/*/htdocs/joomla",   # Gentoo
     "/srv/www/htdocs/joomla",     # SuSE
     "/usr/local/www/data/joomla*" # BSD
@@ -91,7 +94,7 @@ def is_joomla_dir (path, cfg, nochroot):
     path = validations.is_local_dir_exists (path, cfg, nochroot)
     module_inc = os.path.join (path, 'includes/framework.php')
     if not os.path.exists (module_inc):
-        raise ValueError, ERROR_NO_SRC
+        raise ValueError, _(ERROR_NO_SRC)
     return path
 
 DATA_VALIDATION = [
@@ -102,14 +105,14 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_Joomla (WizardPage):
     ICON = "joomla.png"
-    DESC = "Configure a new virtual server using Joomla."
+    DESC = _("Configure a new virtual server using Joomla.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/Joomla',
                              id     = "Joomla_Page1",
                              title  = _("Joomla Wizard"),
-                             group  = WIZARD_GROUP_CMS)
+                             group  = _(WIZARD_GROUP_CMS))
 
     def show (self):
         return True
@@ -120,8 +123,8 @@ class Wizard_VServer_Joomla (WizardPage):
 
         txt += '<h2>Joomla</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_joomla!host',    NOTE_HOST,    value="blog.example.com")
-        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_joomla!sources', NOTE_SOURCES, value=guessed_src)
+        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_joomla!host',    _(NOTE_HOST),    value="blog.example.com")
+        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_joomla!sources', _(NOTE_SOURCES), value=guessed_src)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -153,6 +156,8 @@ class Wizard_VServer_Joomla (WizardPage):
 
         # Replacement
         php_info = wizard_php_get_info (self._cfg, pre_vsrv)
+        if not php_info:
+            return self.report_error (_("Couldn't find a suitable PHP interpreter."))
         php_rule = int (php_info['rule'].split('!')[-1])
 
         pre_rule_plus1  = "%s!rule!%d" % (pre_vsrv, php_rule + 1)
@@ -172,20 +177,20 @@ class Wizard_VServer_Joomla (WizardPage):
 
 class Wizard_Rules_Joomla (WizardPage):
     ICON = "joomla.png"
-    DESC = "Configures Joomla inside a public web directory."
+    DESC = _("Configures Joomla inside a public web directory.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/Joomla'%(pre.split('!')[1]),
                              id     = "Joomla_Page1",
                              title  = _("Joomla Wizard"),
-                             group  = WIZARD_GROUP_CMS)
+                             group  = _(WIZARD_GROUP_CMS))
 
     def show (self):
         # Check for PHP
         php_info = wizard_php_get_info (self._cfg, self._pre)
         if not php_info:
-            self.no_show = "PHP support is required."
+            self.no_show = _("PHP support is required.")
             return False
         return True
 
@@ -193,8 +198,8 @@ class Wizard_Rules_Joomla (WizardPage):
         guessed_src = path_find_w_default (SRC_PATHS)
 
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_joomla!web_dir', NOTE_WEB_DIR, value="/blog")
-        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_joomla!sources', NOTE_SOURCES, value=guessed_src)
+        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_joomla!web_dir', _(NOTE_WEB_DIR), value="/blog")
+        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_joomla!sources', _(NOTE_SOURCES), value=guessed_src)
 
         txt  = '<h1>%s</h1>' % (self.title)
         txt += self.Indent(table)

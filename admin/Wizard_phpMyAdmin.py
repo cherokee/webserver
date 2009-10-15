@@ -11,10 +11,13 @@ from Wizard import *
 from Wizard_PHP import wizard_php_get_info
 from Wizard_PHP import wizard_php_get_source_info
 
-NOTE_SOURCES  = _("Path to the directory where the phpMyAdmin source code is located. (Example: /usr/share/phpmyadmin)")
-NOTE_WEB_DIR  = _("Web directory where you want phpMyAdmin to be accessible. (Example: /phpmyadmin)")
-ERROR_NO_SRC  = _("Does not look like a phpMyAdmin source directory.")
-ERROR_NO_WEB  = _("A web directory must be provided.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_SOURCES  = N_("Path to the directory where the phpMyAdmin source code is located. (Example: /usr/share/phpmyadmin)")
+NOTE_WEB_DIR  = N_("Web directory where you want phpMyAdmin to be accessible. (Example: /phpmyadmin)")
+ERROR_NO_SRC  = N_("Does not look like a phpMyAdmin source directory.")
+ERROR_NO_WEB  = N_("A web directory must be provided.")
 
 CONFIG_DIR = """
 %(pre_rule_plus2)s!handler = custom_error
@@ -51,20 +54,20 @@ DATA_VALIDATION = [
 
 class Wizard_Rules_phpMyAdmin (WizardPage):
     ICON = "phpmyadmin.png"
-    DESC = "Configures phpMyAdmin inside a public web directory."
+    DESC = _("Configures phpMyAdmin inside a public web directory.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/phpMyAdmin'%(pre.split('!')[1]),
                              id     = "phpMyAdmin_Page1",
                              title  = _("phpMyAdmin Wizard"),
-                             group  = WIZARD_GROUP_DB)
+                             group  = _(WIZARD_GROUP_DB))
 
     def show (self):
         # Check for PHP
         php_info = wizard_php_get_info (self._cfg, self._pre)
         if not php_info:
-            self.no_show = "PHP support is required."
+            self.no_show = _("PHP support is required.")
             return False
         return True
 
@@ -96,6 +99,8 @@ class Wizard_Rules_phpMyAdmin (WizardPage):
 
         # Replacement
         php_info = wizard_php_get_info (self._cfg, self._pre)
+        if not php_info:
+            return self.report_error (_("Couldn't find a suitable PHP interpreter."))
         php_rule = int (php_info['rule'].split('!')[-1])
 
         pre_rule_plus2  = "%s!rule!%d" % (self._pre, php_rule + 2)

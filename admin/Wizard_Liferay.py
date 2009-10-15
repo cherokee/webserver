@@ -12,10 +12,13 @@ from util import *
 from Page import *
 from Wizard import *
 
-NOTE_VSRV_NAME = _("Name of the new domain that will be created.")
-NOTE_HOST_SRC = _('Hostname or IP of the server running Liferay.')
-NOTE_HOST_PRT = _('Port running the service in said host.')
-NOTE_WEB_DIR = _("Web folder under which Liferay will be accessible.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_VSRV_NAME = N_("Name of the new domain that will be created.")
+NOTE_HOST_SRC = N_('Hostname or IP of the server running Liferay.')
+NOTE_HOST_PRT = N_('Port running the service in said host.')
+NOTE_WEB_DIR = N_("Web folder under which Liferay will be accessible.")
 
 SOURCE = """
 source!%(src_num)d!env_inherited = 0
@@ -63,7 +66,7 @@ class Wizard_VServer_Liferay (WizardPage):
                              submit = '/vserver/wizard/Liferay',
                              id     = "Liferay_Page1",
                              title  = _("Liferay Wizard"),
-                             group  = WIZARD_GROUP_CMS)
+                             group  = _(WIZARD_GROUP_CMS))
 
     def show (self):
         return True
@@ -73,13 +76,13 @@ class Wizard_VServer_Liferay (WizardPage):
 
         txt += '<h2>New Virtual Server</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_liferay!new_host', NOTE_VSRV_NAME, value="liferay.example.com")
+        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_liferay!new_host', _(NOTE_VSRV_NAME), value="liferay.example.com")
         txt += self.Indent(table)
 
         txt += '<h2>Liferay Project</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_liferay!new_src_host', NOTE_HOST_SRC, value="localhost")
-        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_liferay!new_src_port', NOTE_HOST_PRT, value=8080)
+        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_liferay!new_src_host', _(NOTE_HOST_SRC), value="localhost")
+        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_liferay!new_src_port', _(NOTE_HOST_PRT), value=8080)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -123,7 +126,7 @@ class Wizard_Rules_Liferay (WizardPage):
                              submit = '/vserver/%s/wizard/Liferay'%(pre.split('!')[1]),
                              id     = "Liferay_Page1",
                              title  = _("Liferay Wizard"),
-                             group  = WIZARD_GROUP_CMS)
+                             group  = _(WIZARD_GROUP_CMS))
 
     def show (self):
         return True
@@ -133,9 +136,9 @@ class Wizard_Rules_Liferay (WizardPage):
 
         txt += '<h2>Liferay Project</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_liferay!new_webdir', NOTE_WEB_DIR, value="/liferay")
-        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_liferay!new_src_host', NOTE_HOST_SRC, value="localhost")
-        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_liferay!new_src_port', NOTE_HOST_PRT, value=8080)
+        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_liferay!new_webdir', _(NOTE_WEB_DIR), value="/liferay")
+        self.AddPropEntry (table, _('Source host'), 'tmp!wizard_liferay!new_src_host', _(NOTE_HOST_SRC), value="localhost")
+        self.AddPropEntry (table, _('Source port'), 'tmp!wizard_liferay!new_src_port', _(NOTE_HOST_PRT), value=8080)
         txt += self.Indent(table)
 
         form = Form (url_pre, add_submit=True, auto=False)

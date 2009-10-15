@@ -5,11 +5,14 @@ from util import *
 from Page import *
 from Wizard import *
 
-NOTE_DJANGO_DIR = _("Local path to the Django based project.")
-NOTE_NEW_HOST   = _("Name of the new domain that will be created.")
+# For gettext
+N_ = lambda x: x
 
-ERROR_NO_DJANGO = _("It does not look like a Django based project directory.")
-ERROR_NO_DROOT  = _("The document root directory does not exist.")
+NOTE_DJANGO_DIR = N_("Local path to the Django based project.")
+NOTE_NEW_HOST   = N_("Name of the new domain that will be created.")
+
+ERROR_NO_DJANGO = N_("It does not look like a Django based project directory.")
+ERROR_NO_DROOT  = N_("The document root directory does not exist.")
 
 SOURCE = """
 source!%(src_num)d!type = interpreter
@@ -64,14 +67,14 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_Django (WizardPage):
     ICON = "django.png"
-    DESC = "New virtual server based on a Django project."
+    DESC = _("New virtual server based on a Django project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/Django',
                              id     = "Django_Page1",
                              title  = _("Django Wizard"),
-                             group  = WIZARD_GROUP_PLATFORM)
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True
@@ -81,13 +84,13 @@ class Wizard_VServer_Django (WizardPage):
 
         txt += '<h2>New Virtual Server</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_django!new_host',      NOTE_NEW_HOST, value="www.example.com")
-        self.AddPropEntry (table, _('Document Root'), 'tmp!wizard_django!document_root', NOTE_DJANGO_DIR, value=os_get_document_root())
+        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_django!new_host',      _(NOTE_NEW_HOST),   value="www.example.com")
+        self.AddPropEntry (table, _('Document Root'), 'tmp!wizard_django!document_root', _(NOTE_DJANGO_DIR), value=os_get_document_root())
         txt += self.Indent(table)
 
         txt += '<h2>Django Project</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_django!django_dir', NOTE_DJANGO_DIR)
+        self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_django!django_dir', _(NOTE_DJANGO_DIR))
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -127,14 +130,14 @@ class Wizard_VServer_Django (WizardPage):
 
 class Wizard_Rules_Django (WizardPage):
     ICON = "django.png"
-    DESC = "New directory based on a Django project."
+    DESC = _("New directory based on a Django project.")
 
     def __init__ (self, cfg, pre):
-        WizardPage.__init__ (self, cfg, pre, 
+        WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/Django'%(pre.split('!')[1]),
                              id     = "Django_Page1",
                              title  = _("Django Wizard"),
-                             group  = WIZARD_GROUP_PLATFORM)
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True
@@ -144,12 +147,12 @@ class Wizard_Rules_Django (WizardPage):
 
         txt += '<h2>Web Directory</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_django!new_webdir', NOTE_NEW_HOST, value="/project")
+        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_django!new_webdir', _(NOTE_NEW_HOST), value="/project")
         txt += self.Indent(table)
 
         txt += '<h2>Django Project</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_django!django_dir', NOTE_DJANGO_DIR)
+        self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_django!django_dir', _(NOTE_DJANGO_DIR))
         txt += self.Indent(table)
 
         form = Form (url_pre, add_submit=True, auto=False)

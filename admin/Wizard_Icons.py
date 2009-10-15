@@ -29,7 +29,7 @@ CONFIG_THEMES = """
 
 class Wizard_Rules_Icons (Wizard):
     ICON = "icons.png"
-    DESC = "Add the /icons and /cherokee_themes directories so Cherokee can use icons when listing directories."
+    DESC = _("Add the /icons and /cherokee_themes directories so Cherokee can use icons when listing directories.")
 
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
@@ -48,7 +48,7 @@ class Wizard_Rules_Icons (Wizard):
                 self.have_themes = True
 
         if self.have_icons and self.have_themes:
-            self.no_show = "The /icons and /cherokee_themes directories are already configured."
+            self.no_show = _("The /icons and /cherokee_themes directories are already configured.")
             return False
 
         return True
@@ -59,8 +59,8 @@ class Wizard_Rules_Icons (Wizard):
     def _run (self, uri, post):
         rule_n, _ = cfg_vsrv_rule_get_next (self._cfg, self._pre)
         if not rule_n:
-            return self.report_error ("Couldn't add a new rule.")
-        
+            return self.report_error (_("Couldn't add a new rule."))
+
         config_src = ''
 
         self._check_config()

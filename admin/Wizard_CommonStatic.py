@@ -15,7 +15,7 @@ CONFIG = """
 
 class Wizard_Rules_CommonStatic (Wizard):
     ICON = "common_static.png"
-    DESC = "Adds a rule to serve the most common static files as files."
+    DESC = _("Adds a rule to serve the most common static files as files.")
 
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
@@ -34,14 +34,14 @@ class Wizard_Rules_CommonStatic (Wizard):
                     except ValueError:
                         pass
                 if not len(files):
-                    self.no_show = "Common files has been already configured."
+                    self.no_show = _("Common files have been already configured.")
                     return False
         return True
 
     def _run (self, uri, post):
-        _, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
+        x, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
         if not rule_pre:
-            return self.report_error ("Couldn't add a new rule.")
+            return self.report_error (_("Couldn't add a new rule."))
 
         config_tmp = CONFIG
         for n in range(len(USUAL_STATIC_FILES)):

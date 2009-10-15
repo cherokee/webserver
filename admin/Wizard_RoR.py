@@ -5,19 +5,22 @@ from util import *
 from Page import *
 from Wizard import *
 
+# For gettext
+N_ = lambda x: x
+
 ROR_CHILD_PROCS = 3
 DEFAULT_BINS    = ['spawn-fcgi']
 
-NOTE_ROR_DIR    = _("Local path to the Ruby on Rails based project.")
-NOTE_NEW_HOST   = _("Name of the new domain that will be created.")
-NOTE_NEW_DIR    = _("Directory of the web directory where the Ruby on Rails project will live in.")
-NOTE_ENV        = _("Value of the RAILS_ENV variable.")
+NOTE_ROR_DIR    = N_("Local path to the Ruby on Rails based project.")
+NOTE_NEW_HOST   = N_("Name of the new domain that will be created.")
+NOTE_NEW_DIR    = N_("Directory of the web directory where the Ruby on Rails project will live in.")
+NOTE_ENV        = N_("Value of the RAILS_ENV variable.")
 
-ERROR_DISPATCH  = _("<p>Even though the directory looks like a Ruby on Rails project, the public/dispatch.fcgi file wasn't found.</p>")
-ERROR_EXAMPLE   = _("<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you might want to rename it.</p>")
-ERROR_RAILS23   = _("<p>If you are using Rails >= 2.3.0, you will have to execute the following command from the project directory in order to add the missing file:</p><p><pre>rake rails:update:generate_dispatchers</pre></p>")
-ERROR_NO_ROR    = _("It does not look like a Ruby on Rails based project directory.")
-ERROR_NO_DROOT  = _("The document root directory does not exist.")
+ERROR_DISPATCH  = N_("<p>Even though the directory looks like a Ruby on Rails project, the public/dispatch.fcgi file wasn't found.</p>")
+ERROR_EXAMPLE   = N_("<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you might want to rename it.</p>")
+ERROR_RAILS23   = N_("<p>If you are using Rails >= 2.3.0, you will have to execute the following command from the project directory in order to add the missing file:</p><p><pre>rake rails:update:generate_dispatchers</pre></p>")
+ERROR_NO_ROR    = N_("It does not look like a Ruby on Rails based project directory.")
+ERROR_NO_DROOT  = N_("The document root directory does not exist.")
 
 RAILS_ENV = [
     ('production',  'Production'),
@@ -95,7 +98,7 @@ def is_ror_dir (path, cfg, nochroot):
     path = validations.is_local_dir_exists (path, cfg, nochroot)
     manage = os.path.join (path, "script/server")
     if not os.path.exists (manage):
-        raise ValueError, ERROR_NO_ROR
+        raise ValueError, _(ERROR_NO_ROR)
     return path
 
 DATA_VALIDATION = [
@@ -114,9 +117,9 @@ class CommonMethods:
     def _render_content_dispatch_fcgi (self):
         if self.errors.has_key('dispatch.fcgi'):
             if self.errors.has_key('dispatch.fcgi.example'):
-                return self.Indent(self.Dialog(ERROR_DISPATCH + ERROR_EXAMPLE, 'important-information'))
+                return self.Indent(self.Dialog(_(ERROR_DISPATCH) + _(ERROR_EXAMPLE), 'important-information'))
             else:
-                return self.Indent(self.Dialog(ERROR_DISPATCH + ERROR_RAILS23, 'important-information'))
+                return self.Indent(self.Dialog(_(ERROR_DISPATCH) + _(ERROR_RAILS23), 'important-information'))
         return ''
 
     def _op_apply_dispatch_fcgi (self, post):
@@ -141,29 +144,29 @@ class CommonMethods:
 
 class Wizard_VServer_RoR (CommonMethods, WizardPage):
     ICON = "ror.png"
-    DESC = "New virtual server based on a Ruby on Rails project."
+    DESC = _("New virtual server based on a Ruby on Rails project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/RoR',
                              id     = "RoR_Page1",
                              title  = _("Ruby on Rails Wizard"),
-                             group  = WIZARD_GROUP_PLATFORM)
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
         txt += '<h2>New Virtual Server</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_ror!new_host',      NOTE_NEW_HOST, value="www.example.com")
+        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_ror!new_host',      _(NOTE_NEW_HOST), value="www.example.com")
         txt += self.Indent(table)
 
         txt += '<h2>Ruby on Rails Project</h2>'
         txt += self._render_content_dispatch_fcgi()
 
         table = TableProps()
-        self.AddPropEntry   (table, _('Project Directory'),     'tmp!wizard_ror!ror_dir', NOTE_ROR_DIR)
-        self.AddPropOptions (table, _('RAILS_ENV environment'), 'tmp!wizard_ror!ror_env', RAILS_ENV, NOTE_ENV)
+        self.AddPropEntry   (table, _('Project Directory'),     'tmp!wizard_ror!ror_dir', _(NOTE_ROR_DIR))
+        self.AddPropOptions (table, _('RAILS_ENV environment'), 'tmp!wizard_ror!ror_env', RAILS_ENV, _(NOTE_ENV))
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -216,28 +219,28 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
 
 class Wizard_Rules_RoR (CommonMethods, WizardPage):
     ICON = "ror.png"
-    DESC = "New directory based on a Ruby of Rails project."
+    DESC = _("New directory based on a Ruby of Rails project.")
 
     def __init__ (self, cfg, pre):
-        WizardPage.__init__ (self, cfg, pre, 
+        WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/RoR'%(pre.split('!')[1]),
                              id     = "RoR_Page1",
                              title  = _("Ruby on Rails Wizard"),
-                             group  = WIZARD_GROUP_PLATFORM)
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
         txt += '<h2>Web Directory</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_ror!new_webdir', NOTE_NEW_DIR, value="/project")
+        self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_ror!new_webdir', _(NOTE_NEW_DIR), value="/project")
         txt += self.Indent(table)
 
         txt += '<h2>Ruby on Rails Project</h2>'
         txt += self._render_content_dispatch_fcgi()
 
         table = TableProps()
-        self.AddPropEntry   (table, _('Project Directory'),     'tmp!wizard_ror!ror_dir', NOTE_ROR_DIR)
+        self.AddPropEntry   (table, _('Project Directory'),     'tmp!wizard_ror!ror_dir', _(NOTE_ROR_DIR))
         self.AddPropOptions (table, _('RAILS_ENV environment'), 'tmp!wizard_ror!ror_env', RAILS_ENV, NOTE_ENV)
         txt += self.Indent(table)
 

@@ -12,12 +12,15 @@ from util import *
 from Page import *
 from Wizard import *
 
-NOTE_TRAC_PROJECT = _("Local path to the Trac project.")
-NOTE_TRAC_DATA = _("Local path to the Trac installation. (Example: /usr/share/trac)")
-NOTE_NEW_HOST = _("Name of the new domain that will be created.")
+# For gettext
+N_ = lambda x: x
 
-ERROR_NO_TRAC_PROJECT = _("It does not look like a Trac based project directory.")
-ERROR_NO_TRAC_DATA = _("It does not look like a Trac installation.")
+NOTE_TRAC_PROJECT = N_("Local path to the Trac project.")
+NOTE_TRAC_DATA = N_("Local path to the Trac installation. (Example: /usr/share/trac)")
+NOTE_NEW_HOST = N_("Name of the new domain that will be created.")
+
+ERROR_NO_TRAC_PROJECT = N_("It does not look like a Trac based project directory.")
+ERROR_NO_TRAC_DATA = N_("It does not look like a Trac installation.")
 
 # TCP port value is automatically asigned to one currently not in use
 
@@ -56,7 +59,7 @@ def is_trac_data (path, cfg, nochroot):
     manage = os.path.join (path, "htdocs")
 
     if not os.path.exists (manage):
-        raise ValueError, ERROR_NO_TRAC_DATA
+        raise ValueError, _(ERROR_NO_TRAC_DATA)
     return path
 
 def is_trac_project (path, cfg, nochroot):
@@ -64,7 +67,7 @@ def is_trac_project (path, cfg, nochroot):
     manage = os.path.join (path, "conf/trac.ini")
 
     if not os.path.exists (manage):
-        raise ValueError, ERROR_NO_TRAC_PROJECT
+        raise ValueError, _(ERROR_NO_TRAC_PROJECT)
     return path
 
 DATA_VALIDATION = [
@@ -81,14 +84,14 @@ SRC_PATHS = [
 
 class Wizard_VServer_Trac (WizardPage):
     ICON = "trac.png"
-    DESC = "New virtual server based on a Trac project."
+    DESC = _("New virtual server based on a Trac project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/Trac',
                              id     = "Trac_Page1",
                              title  = _("Trac Wizard"),
-                             group  = WIZARD_GROUP_CMS)
+                             group  = _(WIZARD_GROUP_CMS))
 
     def show (self):
         return True
@@ -99,13 +102,13 @@ class Wizard_VServer_Trac (WizardPage):
 
         txt += '<h2>New Virtual Server</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_trac!new_host', NOTE_NEW_HOST, value="trac.example.com")
+        self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_trac!new_host', _(NOTE_NEW_HOST), value="trac.example.com")
         txt += self.Indent(table)
 
         txt += '<h2>Trac Project</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_trac!trac_project', NOTE_TRAC_PROJECT, value=os_get_document_root())
-        self.AddPropEntry (table, _('Trac Directory'), 'tmp!wizard_trac!trac_data', NOTE_TRAC_DATA, value=guessed_src)
+        self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_trac!trac_project', _(NOTE_TRAC_PROJECT), value=os_get_document_root())
+        self.AddPropEntry (table, _('Trac Directory'), 'tmp!wizard_trac!trac_data', _(NOTE_TRAC_DATA), value=guessed_src)
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'

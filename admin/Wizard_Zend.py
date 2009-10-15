@@ -11,12 +11,12 @@ from Wizard import *
 from Wizard_PHP import wizard_php_get_info
 from Wizard_PHP import wizard_php_get_source_info
 
-NOTE_SOURCES  = _("Path to the directory where the Zend source code is located. (Example: /usr/share/zend)")
-NOTE_WEB_DIR  = _("Web directory where you want Zend to be accessible. (Example: /blog)")
-NOTE_HOST     = _("Host name of the virtual host that is about to be created.")
-ERROR_NO_SRC  = _("Does not look like a Zend source directory.")
-ERROR_NO_WEB  = _("A web directory must be provided.")
-ERROR_NO_HOST = _("A host name must be provided.")
+# For gettext
+N_ = lambda x: x
+
+NOTE_SOURCES  = N_("Path to the directory where the Zend source code is located. (Example: /usr/share/zend)")
+NOTE_WEB_DIR  = N_("Web directory where you want Zend to be accessible. (Example: /blog)")
+NOTE_HOST     = N_("Host name of the virtual host that is about to be created.")
 
 CONFIG_DIR = """
 # PHP rule
@@ -75,14 +75,14 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_Zend (WizardPage):
     ICON = "zend.png"
-    DESC = "Configures Zend in a new virtual server."
+    DESC = _("Configures Zend in a new virtual server.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/wizard/Zend',
                              id     = "Zend_Page1",
                              title  = _("Zend Wizard"),
-                             group  = WIZARD_GROUP_PLATFORM)
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         return True
@@ -92,8 +92,8 @@ class Wizard_VServer_Zend (WizardPage):
 
         txt += '<h2>Zend</h2>'
         table = TableProps()
-        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_zend!host', NOTE_HOST, value="zend.example.com")
-        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_zend!sources', NOTE_SOURCES, value="/var/www")
+        self.AddPropEntry (table, _('New Host Name'),    'tmp!wizard_zend!host', _(NOTE_HOST), value="zend.example.com")
+        self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_zend!sources', _(NOTE_SOURCES), value="/var/www")
         txt += self.Indent(table)
 
         txt += '<h2>Logging</h2>'
@@ -125,6 +125,8 @@ class Wizard_VServer_Zend (WizardPage):
 
         # Replacement
         php_info = wizard_php_get_info (self._cfg, pre_vsrv)
+        if not php_info:
+            return self.report_error (_("Couldn't find a suitable PHP interpreter."))
         php_rule = int (php_info['rule'].split('!')[-1])
 
         pre_rule_minus1 = "%s!rule!%d" % (pre_vsrv, php_rule - 1)
@@ -139,27 +141,27 @@ class Wizard_VServer_Zend (WizardPage):
 
 class Wizard_Rules_Zend (WizardPage):
     ICON = "zend.png"
-    DESC = "Configures Zend inside a public web directory."
+    DESC = _("Configures Zend inside a public web directory.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/Zend'%(pre.split('!')[1]),
                              id     = "Zend_Page1",
                              title  = _("Zend Wizard"),
-                             group  = WIZARD_GROUP_PLATFORM)
+                             group  = _(WIZARD_GROUP_PLATFORM))
 
     def show (self):
         # Check for PHP
         php_info = wizard_php_get_info (self._cfg, self._pre)
         if not php_info:
-            self.no_show = "PHP support is required."
+            self.no_show = _("PHP support is required.")
             return False
         return True
 
     def _render_content (self, url_pre):
         table = TableProps()
-        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_zend!web_dir', NOTE_WEB_DIR, value="/zend")
-        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_zend!sources', NOTE_SOURCES, value="/var/www")
+        self.AddPropEntry (table, _('Web Directory'),   'tmp!wizard_zend!web_dir', _(NOTE_WEB_DIR), value="/zend")
+        self.AddPropEntry (table, _('Source Directory'),'tmp!wizard_zend!sources', _(NOTE_SOURCES), value="/var/www")
 
         txt  = '<h1>%s</h1>' % (self.title)
         txt += self.Indent(table)

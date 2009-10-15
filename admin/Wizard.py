@@ -2,25 +2,28 @@ import os, imp, sys
 from util import *
 from Page import *
 
-NOTE_DUP_LOGS = "Use the same logging configuration as one of the other virtual servers."
+# For gettext
+N_ = lambda x: x
 
-WIZARD_GROUP_MISC       = 'Misc'
-WIZARD_GROUP_CMS        = 'CMS'
-WIZARD_GROUP_TASKS      = 'Tasks'
-WIZARD_GROUP_PLATFORM   = 'Platforms'
-WIZARD_GROUP_LANGS      = 'Languages'
-WIZARD_GROUP_MANAGEMENT = 'Management'
-WIZARD_GROUP_DB         = 'Database'
+NOTE_DUP_LOGS = N_("Use the same logging configuration as one of the other virtual servers.")
+
+WIZARD_GROUP_MISC       = N_('Misc')
+WIZARD_GROUP_CMS        = N_('CMS')
+WIZARD_GROUP_TASKS      = N_('Tasks')
+WIZARD_GROUP_PLATFORM   = N_('Platforms')
+WIZARD_GROUP_LANGS      = N_('Languages')
+WIZARD_GROUP_MANAGEMENT = N_('Management')
+WIZARD_GROUP_DB         = N_('Database')
 
 USUAL_STATIC_FILES = ['/favicon.ico', '/robots.txt', '/crossdomain.xml']
 
 class Wizard:
     def __init__ (self, cfg, pre=None):
-        self.name    = "Unknown wizard"
+        self.name    = _("Unknown wizard")
         self._cfg    = cfg
         self._pre    = pre
         self.no_show = None
-        self.group   = WIZARD_GROUP_MISC
+        self.group   = _(WIZARD_GROUP_MISC)
 
     def show (self):
         assert (False);
@@ -64,7 +67,7 @@ class WizardManager:
             if not fname.startswith("Wizard_") or \
                not fname.endswith('.py'):
                 continue
-            
+
             # Load the module source file
             name = fname[:-3]
             mod = imp.load_source (name, fname)
@@ -139,7 +142,7 @@ class WizardManager:
 
         src = "wizard = mod.Wizard_%s_%s (self._cfg, self._pre)" % (self.type, name)
         exec(src)
-        
+
         return wizard
 
 
@@ -159,7 +162,7 @@ class WizardPage (PageMenu, FormHelper, Wizard):
         assert (False)
     def _op_apply (self):
         assert (False)
-        
+
     # Methods
     #
     def _op_render (self, url_pre):
@@ -202,7 +205,7 @@ class WizardPage (PageMenu, FormHelper, Wizard):
             logs.append ((pre, '%s (%s)'%(nick, log)))
 
         table = TableProps()
-        self.AddPropOptions (table, _('Same logs as vserver'), 'tmp!wizard!logs_as_vsrv', logs, NOTE_DUP_LOGS)
+        self.AddPropOptions (table, _('Same logs as vserver'), 'tmp!wizard!logs_as_vsrv', logs, _(NOTE_DUP_LOGS))
         txt += self.Indent(table)
 
         return txt
@@ -211,7 +214,7 @@ class WizardPage (PageMenu, FormHelper, Wizard):
         logging_as = post.pop('tmp!wizard!logs_as_vsrv')
         if not logging_as:
             return
-        
+
         self._cfg.clone (logging_as, '%s!logger'%(vsrv_pre))
 
     def _common_add_usual_static_files (self, rule_pre):
