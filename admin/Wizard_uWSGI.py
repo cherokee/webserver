@@ -14,6 +14,8 @@ from Page import *
 from Wizard import *
 
 NOTE_UWSGI_CONFIG = _("Path to the uWSGI configuration file. Its mountpoint will be used.")
+NOTE_UWSGI_BINARY = _("Location of the uWSGI binary")
+
 NOTE_NEW_HOST = _("Name of the new domain that will be created.")
 NOTE_NEW_DIR = _("Public web directory to access the project.")
 NOTE_DROOT = _("Document root for the new virtual server.")
@@ -85,6 +87,7 @@ DATA_VALIDATION = [
     ("tmp!wizard_uwsgi!uwsgi_cfg",     (is_uwsgi_cfg, 'cfg')),
     ("tmp!wizard_uwsgi!new_host",      (validations.is_new_host, 'cfg')),
     ("tmp!wizard_uwsgi!new_webdir",     validations.is_dir_formated),
+    ("tmp!wizard_uwsgi!uwsgi_binary",  (validations.is_local_file_exists, 'cfg')),
     ("tmp!wizard_uwsgi!document_root", (validations.is_local_dir_exists, 'cfg'))
 ]
 
@@ -119,6 +122,8 @@ class Wizard_VServer_uWSGI (WizardPage):
 
         txt += '<h2>uWSGI</h2>'
         table = TableProps()
+        if not self.uwsgi_binary:
+            self.AddPropEntry (table, _('uWSGI binary'), 'tmp!wizard_uwsgi!uwsgi_binary', NOTE_UWSGI_BINARY)
         self.AddPropEntry (table, _('Configuration File'), 'tmp!wizard_uwsgi!uwsgi_cfg', NOTE_UWSGI_CONFIG)
         txt += self.Indent(table)
 
@@ -145,6 +150,8 @@ class Wizard_VServer_uWSGI (WizardPage):
         uwsgi_cfg     = post.pop('tmp!wizard_uwsgi!uwsgi_cfg')
         webdir        = find_mountpoint(uwsgi_cfg)
         uwsgi_binary  = self.uwsgi_binary
+        if not uwsgi_binary:
+            uwsgi_binary = post.pop('tmp!wizard_uwsgi!uwsgi_binary')
 
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
@@ -184,6 +191,8 @@ class Wizard_Rules_uWSGI (WizardPage):
 
         txt += '<h2>uWSGI Project</h2>'
         table = TableProps()
+        if not self.uwsgi_binary:
+            self.AddPropEntry (table, _('uWSGI binary'), 'tmp!wizard_uwsgi!uwsgi_binary', NOTE_UWSGI_BINARY)
         self.AddPropEntry (table, _('Configuration File'), 'tmp!wizard_uwsgi!uwsgi_cfg', NOTE_UWSGI_CONFIG)
         txt += self.Indent(table)
 
@@ -202,10 +211,11 @@ class Wizard_Rules_uWSGI (WizardPage):
         self._cfg_clean_values (post)
 
         # Incoming info
-        global uwsgi_mountpoint
         uwsgi_cfg     = post.pop('tmp!wizard_uwsgi!uwsgi_cfg')
-        uwsgi_binary  = self.uwsgi_binary
         webdir        = find_mountpoint(uwsgi_cfg)
+        uwsgi_binary  = self.uwsgi_binary
+        if not uwsgi_binary:
+            uwsgi_binary = post.pop('tmp!wizard_uwsgi!uwsgi_binary')
 
         # Locals
         rule_num, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
