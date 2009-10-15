@@ -258,9 +258,6 @@ $(docmediacss_DATA) \
 $(docmediaimages_DATA) \
 test_images.py
 
-CLEANFILES = \
-$(doc_DATA)
-
 serve:
 	../cherokee/cherokee -r .
 
