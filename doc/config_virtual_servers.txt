@@ -344,7 +344,7 @@ Enables Server Side Includes.
 +
 Creates one-time, secure, time-expiring downloads.
 
-- link:modules_handlers_dbslayer[dbslayer] - **MySQL Bridge**
+- link:modules_handlers_dbslayer.html[dbslayer] - **MySQL Bridge**
 +
 MySQL load-balancing database abstraction layer.
 
