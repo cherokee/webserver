@@ -355,12 +355,18 @@ add_traffic (cherokee_dwriter_t *writer,
 	 */
 	cherokee_dwriter_dict_open (writer);
 	cherokee_dwriter_cstring (writer, "tx");
-	cherokee_dwriter_integer (writer,
-				    (srv->collector) ? COLLECTOR_RX(srv->collector) : -1);
+	if (srv->collector) {
+		cherokee_dwriter_integer (writer, COLLECTOR_TX(srv->collector));
+	} else {
+		cherokee_dwriter_number (writer, "-1", 2);
+	}
 
 	cherokee_dwriter_cstring (writer, "rx");
-	cherokee_dwriter_integer (writer, 
-				  (srv->collector) ? COLLECTOR_TX(srv->collector) : -1);
+	if (srv->collector) {
+		cherokee_dwriter_integer (writer, COLLECTOR_RX(srv->collector));
+	} else {
+		cherokee_dwriter_number (writer, "-1", 2);
+	}
 
 	cherokee_dwriter_cstring (writer, "tx_formatted");
 	if (srv->collector != NULL) {
