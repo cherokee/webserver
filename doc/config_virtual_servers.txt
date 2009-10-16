@@ -135,7 +135,11 @@ persisting connections has dramatic effects both in speed, but very
 high traffic loads can suffer because less connections are available
 for any given moment.
 
---
+- *Advanced Virtual Hosting*
+
+Settings to link:config_virtual_servers_evhost.html[host many
+domains].
+
 
 [[domain_names]]
 Domain names

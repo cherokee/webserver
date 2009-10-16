@@ -5,6 +5,7 @@
   . link:config_general.html[General]: General settings.
   . link:config_virtual_servers.html[Virtual servers]: Server definition.
     - link:config_virtual_servers_rule.html[Rule Options]: Specifying the matching rules.
+    - link:config_virtual_servers_evhost.html[Advanced Virtual Hosting]: Multi-domain settings.
   . link:config_info_sources.html[Information Sources]: Defining information sources.
   . link:config_icons.html[Icons]: Icon managment.
   . link:config_mime_types.html[Mime Types]: Setting up the MIME types.
