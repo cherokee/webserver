@@ -15,13 +15,17 @@ When the server receives a request it will try to match the domain
 name specified in the virtual server that should handle it. In case no
 virtual server matches the request, default will be used.
 
-Three main options are accessible through this menu:
+image::media/images/admin_vserver.png[Virtual server]
+
+Four main options are accessible through this menu:
 
 . Virtual Server List
 
 . Add new Virtual Server
 
 . Clone Virtual Server
+
+. Wizards
 
 *Cloning a Virtual Server* is simply a matter of selecting a target name
 and a source virtual server currently present. Every setting will be
@@ -34,7 +38,15 @@ further work.
 *To add a new Virtual Server* you have to enter the server name and a
 valid Document Root directory.
 
-image::media/images/admin_vserver.png[Virtual server]
+*As for Wizards, these are configuration assistants that will allow
+you to set up a new virtual server tailored to some application's
+specific needs. The wizard will ask for some basic values, such as the
+name of the new virtual server or anything that might be needed to
+make its job, like deploying a Django application, installing
+Wordpress or whatever task you might have chosen. The wizards can also
+be run on a per-server basis, in which case instead of creating a new
+dedicated virtual server, the required changes will be added to the
+existing one.
 
 --
 - *Document Root*
@@ -173,6 +185,9 @@ presented, containing several fields of information:
   . *Handler*: The handler that manages the requests that match this
     rule. Read on for further details.
 
+  . *Root*: Indicates if the rule defines an alternative document root
+    path.
+
   . *Auth*: Indicates if authentication is used for this rule. This
     can be set up through the link:config_virtual_servers_rule.html[Rule
     Entry] menu.
@@ -242,6 +257,18 @@ rule types:
       mechanism inaccurate. An initial country must be added to the
       rule, and more selections can be added in further steps.
 
+  * **Incoming IP/Port**: If the server is running on several ports,
+      this rule type will let you specify to which port's pettitions
+      will it apply.
+
+  * **Full Path**: Full path request to which content the
+      configuration will be applied. This means you can pinpoint a
+      list of files that will be specifcally targetted by this rule
+      type.
+
+  * **Connected from**: will let you discriminate connections based on
+      the IP or SubNet from which these are originated.
+
 It is very important to know that these rules are prioritized. The
 higher its priority is, the sooner they are checked. You could
 think of a network routing table, it is quite similar. You can set the
@@ -293,6 +320,38 @@ Communicates with FastCGI servers.
 +
 Communicates with SCGI servers.
 
+- link:modules_handlers_uwsgi.html[uwsgi] - **uWSGI Server Support**
++
+Communicates with the uWSGI server.
+
+- link:modules_handlers_proxy.html[proxy] - **HTTP Reverse Proxy**
++
+Advanced proxy services.
+
+- link:modules_handlers_streaming.html[streaming] - **Audio/Video streaming**
++
+Media streaming directly within Cherokee.
+
+- link:modules_handlers_ssi.html[ssi] - **Server Side Includes**
++
+Enables Server Side Includes.
+
+- link:modules_handlers_secdownload.html[secdownload] - **Hidden Downloads**
++
+Creates one-time, secure, time-expiring downloads.
+
+- link:modules_handlers_dbslayer[dbslayer] - **MySQL Bridge**
++
+MySQL load-balancing database abstraction layer.
+
+- link:modules_handlers_custom_error.html[custom_error] - **HTTP Error**
++
+Generates customizable HTTP errors.
+
+- link:modules_handlers_empty_gif.html[empty_gif] - **1x1 Transparent GIF**
++
+Returns a 1 pixel transparent image.
+
 - link:modules_handlers_server_info.html[Server Info] - **Server
   Info**
 +
@@ -313,6 +372,10 @@ link:config_virtual_servers_rule.html[Rule Entry] menu.
 Each of the mentioned handlers can be fine-tuned through that
 menu. Refer to each handler's documentation if you are interested in
 the available settings.
+
+These rules can also be combined with boolean operators, so you can
+apply AND to require two rules, NOT to negate and so forth. These can
+be nested as much as necessary.
 
 [NOTE]
 It is quite easy to fully specify a virtual server's behavior having

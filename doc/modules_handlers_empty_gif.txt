@@ -1,0 +1,7 @@
+== link:index.html[Index] -> link:modules.html[Modules] -> link:modules_handlers.html[Handlers]
+
+Handler: 1x1 Transparent GIF
+----------------------------
+
+Nothing can be specified for this handler. It just return a 1 pixel
+transparent image.

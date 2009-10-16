@@ -23,6 +23,9 @@ This menu offers the following tabs:
  . Security: in this section one can configure *Access Restrictions*
    and *Authentication*.
 
+ . Traffic Shaping: Sets an outbound traffic limit for this rule,
+   specified in bytes per second.
+
 [[encoding]]
 Encoding
 ~~~~~~~~
@@ -52,10 +55,15 @@ on the values you have configured. The available options are:
  . 2038: Maximum date value representable in POSIX time.
  . Custom Value: set a value by hand.
 
+[[security]]
+Security
+~~~~~~~~
+This section will give acces to access restriction settings and
+authentication settings.
+
 [[restrictions]]
 Access Restrictions
-~~~~~~~~~~~~~~~~~~~
-
+^^^^^^^^^^^^^^^^^^^
 * Only https::
   This configuration entry determines that the directory will be
   served by the secure server (*https*) only.
@@ -76,7 +84,7 @@ Access Restrictions
 
 [[examples]]
 Examples
-^^^^^^^^
+++++++++
 
 - Allow access only from the IPv6 localhost address
 +
@@ -105,10 +113,9 @@ addresses and networks if you want
 ----
 
 
-
 [[authentication]]
 Authentication
-~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^
 
 This parameter allows to configure user/password protected entries. A
 validator has to be used in each Auth entry in order to specify the

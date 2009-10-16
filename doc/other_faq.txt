@@ -173,3 +173,9 @@ rule at the beginning of the virtual server that matches the specific
 file extensions and has the encoding enabled. Set the rule to be
 non-final. That should do the trick.
 
+[[faq15]]
+=== I can't set TLS/SSL in Cherokee-Admin. There's no TLS/SSL (and
+nothing in the pulldown) for me.
+
+First, make sure openssl in installed. If you are not installing from
+source, most likely you've missed installing libcherokee-mod-libssl

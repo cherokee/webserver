@@ -133,3 +133,12 @@ Special Files
   useful to trace what is going on with Cherokee.
 
 image::media/images/admin_advanced4.png[Cherokee Admin interface]
+
+[[tls]]
+TLS
+~~~
+* DH parameters:
+  Here you can specify the paths to your Diffie Hellman parameters PEM
+  files for 512, 1024, 2048 and 4096 bits.
+
+image::media/images/admin_advanced5.png[Cherokee Admin interface]
