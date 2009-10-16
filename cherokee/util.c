@@ -1350,7 +1350,7 @@ cherokee_buf_add_bogonow (cherokee_buffer_t  *buf,
 
 	cherokee_buffer_add_va (buf, "[%02d/%02d/%d %02d:%02d:%02d.%03d]",
 				cherokee_bogonow_tmloc.tm_mday, 
-				cherokee_bogonow_tmloc.tm_mon, 
+				cherokee_bogonow_tmloc.tm_mon + 1,
 				cherokee_bogonow_tmloc.tm_year + 1900,
 				cherokee_bogonow_tmloc.tm_hour, 
 				cherokee_bogonow_tmloc.tm_min, 
