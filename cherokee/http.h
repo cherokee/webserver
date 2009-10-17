@@ -66,7 +66,8 @@ typedef enum {
 	http_search       = 1 << 16,
 	http_subscribe    = 1 << 17,
 	http_unlock       = 1 << 18,
-	http_unsubscribe  = 1 << 19
+	http_unsubscribe  = 1 << 19,
+	http_report       = 1 << 20
 } cherokee_http_method_t;
 
 typedef enum {
@@ -170,6 +171,7 @@ typedef enum {
 				   (m == http_put)      || \
 				   (m == http_mkcol)    || \
 				   (m == http_search)   || \
+				   (m == http_report)   || \
 				   (m == http_options)  || \
 				   (m == http_propfind) || \
 				   (m == http_proppatch))

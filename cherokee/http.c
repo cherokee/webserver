@@ -63,6 +63,7 @@ cherokee_http_method_to_string (cherokee_http_method_t method, const char **str,
 		entry (http_subscribe, "SUBSCRIBE");
 		entry (http_unlock, "UNLOCK");
 		entry (http_unsubscribe, "UNSUBSCRIBE");
+		entry (http_report, "REPORT");
 
 	default:
 		break;
@@ -118,6 +119,8 @@ cherokee_http_string_to_method (cherokee_buffer_t      *string,
 		*method = http_unlock;
 	else if (cherokee_buffer_case_cmp_str (string, "unsubscribe") == 0) 
 		*method = http_unsubscribe;
+	else if (cherokee_buffer_case_cmp_str (string, "report") == 0) 
+		*method = http_report;
 	else {
 		*method = http_unknown;
 		return ret_not_found;

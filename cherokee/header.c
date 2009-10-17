@@ -345,6 +345,9 @@ parse_method (cherokee_header_t *hdr, char *line, char **pointer)
 		else
 		detect_method (line, "UNSUBSCRIBE", unsubscribe)
 	        break;
+	case 'R':
+		detect_method (line, "REPORT", report)
+	        break;
 	}
 
 	return ret_error;
