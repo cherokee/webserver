@@ -90,6 +90,7 @@ typedef enum {
 	http_accepted                 = 202,
 	http_no_content               = 204,
 	http_partial_content          = 206,
+	http_multi_status             = 207,
 	http_moved_permanently        = 301,
 	http_moved_temporarily        = 302,
  	http_see_other                = 303,
@@ -124,6 +125,7 @@ typedef enum {
 #define http_accepted_string                 "202 Accepted"
 #define http_no_content_string               "204 No Content"
 #define http_partial_content_string          "206 Partial Content"
+#define http_multi_status_string             "207 Multi-Status"
 #define http_moved_permanently_string        "301 Moved Permanently"
 #define http_moved_temporarily_string        "302 Moved Temporarily"
 #define http_see_other_string                "303 See Other"
@@ -162,13 +164,13 @@ typedef enum {
 #define http_type_400(c)  ((c >= 400) && (c <= http_type_400_max))
 #define http_type_500(c)  ((c >= 500) && (c <= http_type_500_max))
 
-#define http_method_with_body(m)  (((m) != http_head)   && \
-				   ((m) != http_options))
+#define http_method_with_body(m)  ((m) != http_head)
 
 #define http_method_with_input(m) ((m == http_post)     || \
 				   (m == http_put)      || \
 				   (m == http_mkcol)    || \
 				   (m == http_search)   || \
+				   (m == http_options)  || \
 				   (m == http_propfind) || \
 				   (m == http_proppatch))
 

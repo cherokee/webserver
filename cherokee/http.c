@@ -156,6 +156,7 @@ cherokee_http_code_to_string (cherokee_http_t code, const char **str)
 	case http_accepted:                 *str = http_accepted_string; break;
 	case http_no_content:               *str = http_no_content_string; break;
 	case http_partial_content:          *str = http_partial_content_string; break;
+	case http_multi_status:             *str = http_multi_status_string; break;
 
 	/* 3xx
 	 */
@@ -221,6 +222,7 @@ cherokee_http_code_copy (cherokee_http_t code, cherokee_buffer_t *buf)
 		entry_code (accepted);
 		entry_code (no_content);
 		entry_code (partial_content);
+		entry_code (multi_status);
 
 		/* 3xx
 		 */
