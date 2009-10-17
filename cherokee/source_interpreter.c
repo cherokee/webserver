@@ -636,6 +636,10 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	if (src->spawning_since == 0) {
 		/* Check re-try limit */
 		if (src->spawning_since_fails >= MAX_SPAWN_FAILS_IN_A_ROW) {
+			TRACE (ENTRIES, "Failed to launch the interpreter %d consecutive times. Giving up now.\n",
+			       src->spawning_since_fails);
+
+			src->spawning_since_fails = 0;
 			ret = ret_error;
 			goto out;
 		}
