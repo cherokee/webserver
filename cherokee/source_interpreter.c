@@ -37,8 +37,9 @@
 
 #define ENTRIES "source,src,interpreter"
 
-#define DEFAULT_TIMEOUT 10
-#define GRNAM_BUF_LEN   8192
+#define DEFAULT_TIMEOUT          10
+#define GRNAM_BUF_LEN            8192
+#define MAX_SPAWN_FAILS_IN_A_ROW 5
 
 static void interpreter_free (void *src);
 
@@ -54,17 +55,18 @@ cherokee_source_interpreter_new  (cherokee_source_interpreter_t **src)
 	cherokee_buffer_init (&n->interpreter);
 	cherokee_buffer_init (&n->change_user_name);
 
-	n->custom_env     = NULL;
-	n->custom_env_len = 0;
-	n->env_inherited  = true;
-	n->debug          = false;
-	n->pid            = -1;
-	n->timeout        = DEFAULT_TIMEOUT;
-	n->change_user    = -1;
-	n->change_group   = -1;
-	n->spawn_type     = spawn_unknown;
-	n->spawning_since = 0;
-	n->last_connect   = 0;
+	n->custom_env           = NULL;
+	n->custom_env_len       = 0;
+	n->env_inherited        = true;
+	n->debug                = false;
+	n->pid                  = -1;
+	n->timeout              = DEFAULT_TIMEOUT;
+	n->change_user          = -1;
+	n->change_group         = -1;
+	n->spawn_type           = spawn_unknown;
+	n->spawning_since       = 0;
+	n->spawning_since_fails = 0;
+	n->last_connect         = 0;
 
 	SOURCE(n)->type = source_interpreter;
 	SOURCE(n)->free = (cherokee_func_free_t)interpreter_free;
@@ -593,7 +595,8 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	case ret_ok:
 		/* connected */
 		if (src->spawning_since != 0) {
-			src->spawning_since = 0;
+			src->spawning_since       = 0;
+			src->spawning_since_fails = 0;
 		}
 		src->last_connect = cherokee_bogonow_now;
 		TRACE (ENTRIES, "Connected successfully fd=%d\n", socket->socket);
@@ -631,6 +634,12 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	}
 
 	if (src->spawning_since == 0) {
+		/* Check re-try limit */
+		if (src->spawning_since_fails >= MAX_SPAWN_FAILS_IN_A_ROW) {
+			ret = ret_error;
+			goto out;
+		}
+
 		/* Kill prev (unresponsive) interpreter? */
 		kill_prev = ((src->pid > 0) && (source_is_unresponsive(src)));
 		if (! kill_prev) {
@@ -671,7 +680,11 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		re = kill (src->pid, 0);
 		if (re != 0) {
 			/* It's death */
-			src->spawning_since = 0;
+			TRACE (ENTRIES, "PID %d is already death\n", src->pid);
+
+			src->spawning_since        = 0;
+			src->spawning_since_fails += 1;
+
 			ret = ret_eagain;
 			goto out;
 		}
@@ -680,7 +693,9 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 	/* Is it unresponsive?
 	 */
 	if (source_is_unresponsive(src)) {
-		src->spawning_since = 0;
+		src->spawning_since        = 0;
+		src->spawning_since_fails += 1;
+
 		ret = ret_eagain;
 		goto out;
 	}

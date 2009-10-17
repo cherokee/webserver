@@ -49,6 +49,7 @@ typedef struct {
 	pid_t                pid;
 	time_t               last_connect;
 	time_t               spawning_since;
+	time_t               spawning_since_fails;
 
 	cherokee_buffer_t    change_user_name;
 	uid_t                change_user;
