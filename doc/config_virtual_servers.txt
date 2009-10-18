@@ -35,22 +35,20 @@ implicated one. This is a great way to set up complex domains,
 since you can use the existing ones as templates to be refined with
 further work.
 
-*To add a new Virtual Server* you have to enter the server name and a
-valid Document Root directory.
+*Wizards* are configuration assistants that will allow you to set up a
+new virtual server tailored to some application's specific needs. The
+wizard will ask for some basic values, such as the name of the new
+virtual server or anything that might be needed to make its job, like
+deploying a Django application, installing Wordpress or whatever task
+you might have chosen. The wizards can also be run on a per-server
+basis, in which case instead of creating a new dedicated virtual
+server, the required changes will be added to the existing one.
 
-*As for Wizards, these are configuration assistants that will allow
-you to set up a new virtual server tailored to some application's
-specific needs. The wizard will ask for some basic values, such as the
-name of the new virtual server or anything that might be needed to
-make its job, like deploying a Django application, installing
-Wordpress or whatever task you might have chosen. The wizards can also
-be run on a per-server basis, in which case instead of creating a new
-dedicated virtual server, the required changes will be added to the
-existing one.
+*Add a new Virtual Server* allows you to do that by entering the
+server name and a valid Document Root directory.
 
---
 - *Document Root*
-
++
 This directive sets the directory from which Cherokee will serve
 files. The set of rules is checked from the highest to the lowest
 possible priority. Once a rule is matched, the server appends the path
@@ -58,11 +56,11 @@ from the requested URL to the document root to make the path to the
 document. If it is a directory, this information is used. If other
 rules apply to a parent directory, those are applied as well without
 overwriting the original behavior:
-
++
 ----
 	http://www.example.com/index.html refers to /var/www/index.html
 ----
-
++
 This might seem complicated but it's actually simple to
 understand. For example suppose you had a directory called /secret
 that was protected with authentication, and there was also a rule with
@@ -70,14 +68,11 @@ higher priority for /secret/cgi that only specified to use the CGI
 handler. Under these circumstances, if a request was received for
 /secret/cgi/something then the CGI handler would be taken and it would
 inherit the authentication specified for /secret.
-
-
++
 - *Name*
-
++
 Name is an alias. The domain names handled by the virtual server
 should be specified later in the virtual server details page.
-
---
 
 The *Virtual Server List* is by far the most interesting of these
 three main options. It gives an overview of the existing virtual
@@ -90,8 +85,6 @@ A detailed explanation of every tab follows.
 [[basics]]
 Basics
 ~~~~~~
-
---
 - *Virtual Server nickname*
 
 The name that will be used to identify the virtual server.
@@ -99,7 +92,6 @@ The name that will be used to identify the virtual server.
 - *Document Root*
 
 Path to use as root directory for the virtual server.
-
 
 - *Directory Indexes*
 
@@ -109,7 +101,6 @@ at the end of the directory name. Several URLs may be given, in which
 case the server will return the first one that it finds. If none of
 the resources exist, the server will reply according to the handler
 behavior.
-
 
 Note that the documents do not need to be relative to the directory:
 
