@@ -110,7 +110,7 @@ class CommonMethods:
     def show (self):
         spawn_fcgi = path_find_binary (DEFAULT_BINS)
         if not spawn_fcgi:
-            self.no_show = "Could not find the spawn-fcgi binary"
+            self.no_show = _("Could not find the spawn-fcgi binary")
             return False
         return True
 

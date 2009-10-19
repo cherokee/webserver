@@ -91,7 +91,7 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_WordPress (WizardPage):
     ICON = "wordpress.png"
-    DESC = "Configure a new virtual server using Wordpress."
+    DESC = _("Configure a new virtual server using Wordpress.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
@@ -153,7 +153,7 @@ class Wizard_VServer_WordPress (WizardPage):
         pre_rule_minus1 = "%s!rule!%d" % (pre_vsrv, php_rule - 1)
         self._common_add_usual_static_files (pre_rule_minus1)
 
-        # Add the new rules    
+        # Add the new rules
         config = CONFIG_VSRV % (locals())
         self._apply_cfg_chunk (config)
         self._common_apply_logging (post, pre_vsrv)
@@ -161,10 +161,10 @@ class Wizard_VServer_WordPress (WizardPage):
 
 class Wizard_Rules_WordPress (WizardPage):
     ICON = "wordpress.png"
-    DESC = "Configures Wordpress inside a public web directory."
-    
+    DESC = _("Configures Wordpress inside a public web directory.")
+
     def __init__ (self, cfg, pre):
-        WizardPage.__init__ (self, cfg, pre, 
+        WizardPage.__init__ (self, cfg, pre,
                              submit = '/vserver/%s/wizard/WordPress'%(pre.split('!')[1]),
                              id     = "WordPress_Page1",
                              title  = _("Wordpress Wizard: Location"),
