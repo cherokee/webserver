@@ -60,6 +60,11 @@ specified web directory of the selected virtual server.
 
 image::media/images/admin_vservers_wizard.png[Virtual Server Wizards]
 
+Simply fill in the required fields. `Project Directory` applies to the
+path where your Django application is located, while `Document Root`
+applies to the directory that contains non-Django related files, such
+as any static content.
+
 That's it. You can stop reading now. Go enjoy your Django application
 running on Cherokee.
 
