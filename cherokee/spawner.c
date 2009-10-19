@@ -83,7 +83,7 @@ cherokee_spawner_init (void)
 
 error:
 	LOG_ERRNO (errno, cherokee_err_error,
-		   "Could initialize SHM '%s': ${errno}\n", name.buf);
+		   "Couldn't initialize SHM '%s': ${errno}\n", name.buf);
 
 	cherokee_buffer_mrproper (&name);
 	return ret_error;
