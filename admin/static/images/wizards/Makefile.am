@@ -28,7 +28,8 @@ symfony.png \
 trac.png \
 wordpress.png \
 zend.png \
-uwsgi.png
+uwsgi.png \
+mono.png
 
 EXTRA_DIST = \
 $(wizards_DATA)
