@@ -97,6 +97,14 @@ are through.
 
 image::media/images/cookbook_drupal.png[Drupal in action!]
 
+[NOTE]
+As of Drupal 6.14, a problem has been reported related to gzip
+compression of multilingual contents. Since the Wizard is meant to
+work out of the box, Cherokee disables gzip compression for the rule
+that manages PHP in your Drupal `Virtual Server`. If you are not using
+a multilingual Drupal or find another workaround for the issue, you
+will probably want to enable gzip encoding on the PHP rule to increase
+performance.
 
 /////////////////////////////
 #Config snippet from ericdrex

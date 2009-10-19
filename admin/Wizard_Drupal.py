@@ -48,11 +48,11 @@ CONFIG_DIR = """
 %(pre_rule_minus2)s!match!directory = %(web_dir)s
 %(pre_rule_minus2)s!handler = redir
 %(pre_rule_minus2)s!handler!rewrite!1!show = 0
-%(pre_rule_minus2)s!handler!rewrite!1!regex = /(.*)\?(.*)$
-%(pre_rule_minus2)s!handler!rewrite!1!substring = %(web_dir)s/index.php?q=/$1&$2
+%(pre_rule_minus2)s!handler!rewrite!1!regex = ^/(.*)\?(.*)$
+%(pre_rule_minus2)s!handler!rewrite!1!substring = %(web_dir)s/index.php?q=$1&$2
 %(pre_rule_minus2)s!handler!rewrite!2!show = 0
-%(pre_rule_minus2)s!handler!rewrite!2!regex = /(.*)$
-%(pre_rule_minus2)s!handler!rewrite!2!substring = %(web_dir)s/index.php?q=/$1
+%(pre_rule_minus2)s!handler!rewrite!2!regex = ^/(.*)$
+%(pre_rule_minus2)s!handler!rewrite!2!substring = %(web_dir)s/index.php?q=$1
 """
 
 CONFIG_VSERVER = """
@@ -81,11 +81,11 @@ CONFIG_VSERVER = """
 %(pre_rule_minus2)s!match = default
 %(pre_rule_minus2)s!handler = redir
 %(pre_rule_minus2)s!handler!rewrite!1!show = 0
-%(pre_rule_minus2)s!handler!rewrite!1!regex = /(.*)\?(.*)$
-%(pre_rule_minus2)s!handler!rewrite!1!substring = /index.php?q=/$1&$2
+%(pre_rule_minus2)s!handler!rewrite!1!regex = ^/(.*)\?(.*)$
+%(pre_rule_minus2)s!handler!rewrite!1!substring = /index.php?q=$1&$2
 %(pre_rule_minus2)s!handler!rewrite!2!show = 0
-%(pre_rule_minus2)s!handler!rewrite!2!regex = /(.*)$
-%(pre_rule_minus2)s!handler!rewrite!2!substring = /index.php?q=/$1
+%(pre_rule_minus2)s!handler!rewrite!2!regex = ^/(.*)$
+%(pre_rule_minus2)s!handler!rewrite!2!substring = /index.php?q=$1
 """
 
 SRC_PATHS = [
@@ -167,6 +167,9 @@ class Wizard_VServer_Drupal (WizardPage):
             return self.report_error (_("Couldn't find a suitable PHP interpreter."))
         php_rule = int (php_info['rule'].split('!')[-1])
 
+        #Fixes Drupal bug for multilingual content
+        self._cfg[php_info['rule']]["encoder!gzip"] = 0
+
         pre_rule_plus2  = "%s!rule!%d" % (pre_vsrv, php_rule + 2)
         pre_rule_plus1  = "%s!rule!%d" % (pre_vsrv, php_rule + 1)
         pre_rule_minus1 = "%s!rule!%d" % (pre_vsrv, php_rule - 1)
@@ -230,6 +233,9 @@ class Wizard_Rules_Drupal (WizardPage):
         # Replacement
         php_info = wizard_php_get_info (self._cfg, self._pre)
         php_rule = int (php_info['rule'].split('!')[-1])
+
+        #Fixes Drupal bug for multilingual content
+        self._cfg[php_info['rule']]["encoder!gzip"] = 0
 
         pre_rule_plus3  = "%s!rule!%d" % (self._pre, php_rule + 3)
         pre_rule_plus2  = "%s!rule!%d" % (self._pre, php_rule + 2)
