@@ -27,7 +27,7 @@ if [ -z $CHANGELOG_VERSION ]; then
 fi
 
 # Find the latest revision in the SVN
-SVN_VERSION=`svnversion -nc . | sed -e 's/^[^:]*://;s/[A-Za-z]//'`
+SVN_VERSION=`svnversion -c . | sed -e 's/^[^:]*://;s/[A-Za-z]//'`
 if [ -z $SVN_VERSION ]; then
      echo
 	echo "WARNING: Couldn't get svn revision number."
