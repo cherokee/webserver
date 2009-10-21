@@ -228,7 +228,7 @@ error:
 #ifdef USE_FFMPEG
 
 static ret_t
-seek_mp4 (cherokee_handler_streaming_t *hdl)
+seek_mp3 (cherokee_handler_streaming_t *hdl)
 {
 	int      re;
 	ret_t    ret;
@@ -401,9 +401,9 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 }
 #else
 static ret_t
-seek_mp4 (cherokee_handler_streaming_t *hdl)
+seek_mp3 (cherokee_handler_streaming_t *hdl)
 {
-	TRACE(ENTRIES, "%s: No FFMped support\n", "Seek MP4");
+	TRACE(ENTRIES, "%s: No FFMped support\n", "Seek MP3");
 	return ret_error;
 }
 
@@ -429,7 +429,7 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 	ret_t                               ret;
 	void                               *value;
 	cherokee_boolean_t                  is_flv = false;
-	cherokee_boolean_t                  is_mp4 = false;
+	cherokee_boolean_t                  is_mp3 = false;
 	cherokee_buffer_t                  *mime   = NULL;
 	cherokee_connection_t              *conn   = HANDLER_CONN(hdl);
 	cherokee_handler_streaming_props_t *props  = HDL_STREAMING_PROP(hdl);
@@ -454,8 +454,8 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 	if (mime != NULL) {
 		if (cherokee_buffer_cmp_str (mime, "video/x-flv") == 0) {
 			is_flv = true;
-		} else if (cherokee_buffer_cmp_str (mime, "video/mp4") == 0) {
-			is_mp4 = true;
+		} else if (cherokee_buffer_cmp_str (mime, "audio/mpeg") == 0) {
+			is_mp3 = true;
 		}
 	}
 
@@ -472,7 +472,7 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 				if (ret != ret_ok)
 					return ret_error;
 
-			} else if (is_mp4) {
+			} else if (is_mp3) {
 				ret = parse_time_start (hdl, (const char *)value);
 				if (ret != ret_ok)
 					return ret_error;
@@ -489,13 +489,13 @@ cherokee_handler_streaming_init (cherokee_handler_streaming_t *hdl)
 		}
 		hdl->start_flv = true;
 
-	} else if ((is_mp4) && (hdl->start_time > 0)) {
+	} else if ((is_mp3) && (hdl->start_time > 0)) {
 		ret = open_media_file (hdl);
 		if (ret != ret_ok) {
 			return ret_error;
 		}
 
-		ret = seek_mp4 (hdl);
+		ret = seek_mp3 (hdl);
 		if (unlikely (ret != ret_ok)) {
 			return ret_error;
 		}
