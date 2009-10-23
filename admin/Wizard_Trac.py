@@ -100,18 +100,18 @@ class Wizard_VServer_Trac (WizardPage):
         txt = '<h1>%s</h1>' % (self.title)
         guessed_src = path_find_w_default (SRC_PATHS)
 
-        txt += '<h2>New Virtual Server</h2>'
+        txt += '<h2>%s</h2>' % (_("New Virtual Server"))
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_trac!new_host', _(NOTE_NEW_HOST), value="trac.example.com")
         txt += self.Indent(table)
 
-        txt += '<h2>Trac Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Trac Project"))
         table = TableProps()
         self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_trac!trac_project', _(NOTE_TRAC_PROJECT), value=os_get_document_root())
         self.AddPropEntry (table, _('Trac Directory'), 'tmp!wizard_trac!trac_data', _(NOTE_TRAC_DATA), value=guessed_src)
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)

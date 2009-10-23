@@ -33,7 +33,7 @@ class Wizard_Rules_Icons (Wizard):
 
     def __init__ (self, cfg, pre):
         Wizard.__init__ (self, cfg, pre)
-        self.name        = "Add the /icons directory"
+        self.name        = _("Add the /icons directory")
         self.have_icons  = False
         self.have_themes = False
 

@@ -65,7 +65,7 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_Moodle (WizardPage):
     ICON = "moodle.png"
-    DESC = "Configures Moodle e-learning platform on a new virtual server."
+    DESC = _("Configures Moodle e-learning platform on a new virtual server.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
@@ -87,7 +87,7 @@ class Wizard_VServer_Moodle (WizardPage):
         self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_moodle!sources', _(NOTE_SOURCES), value=guessed_src)
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)
@@ -147,7 +147,7 @@ class Wizard_Rules_Moodle (WizardPage):
         # Check for PHP
         php_info = wizard_php_get_info (self._cfg, self._pre)
         if not php_info:
-            self.no_show = "PHP support is required."
+            self.no_show = _("PHP support is required.")
             return False
         return True
 

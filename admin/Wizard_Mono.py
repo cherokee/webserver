@@ -93,8 +93,7 @@ class Wizard_VServer_Mono (CommonMethods, WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        title= _('New Virtual Server')
-        txt += '<h2>%s</h2>' % title
+        txt += '<h2>%s</h2>' % (_("New Virtual Server"))
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_mono!new_host',      _(NOTE_NEW_HOST),   value="www.example.com")
         self.AddPropEntry (table, _('Document Root'), 'tmp!wizard_mono!document_root', _(NOTE_DROOT), value=os_get_document_root())
@@ -106,8 +105,7 @@ class Wizard_VServer_Mono (CommonMethods, WizardPage):
         self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_mono!mono_dir', _(NOTE_MONO_DIR))
         txt += self.Indent(table)
 
-        title = _('Logging')
-        txt += '<h2>%s</h2>' % title
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)

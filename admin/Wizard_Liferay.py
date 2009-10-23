@@ -59,7 +59,7 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_Liferay (WizardPage):
     ICON = "liferay.png"
-    DESC = "New virtual server based on a Liferay project."
+    DESC = _("New virtual server based on a Liferay project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
@@ -74,18 +74,18 @@ class Wizard_VServer_Liferay (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>New Virtual Server</h2>'
+        txt += '<h2>%s</h2>' % (_("New Virtual Server"))
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_liferay!new_host', _(NOTE_VSRV_NAME), value="liferay.example.com")
         txt += self.Indent(table)
 
-        txt += '<h2>Liferay Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Liferay Project"))
         table = TableProps()
         self.AddPropEntry (table, _('Source host'), 'tmp!wizard_liferay!new_src_host', _(NOTE_HOST_SRC), value="localhost")
         self.AddPropEntry (table, _('Source port'), 'tmp!wizard_liferay!new_src_port', _(NOTE_HOST_PRT), value=8080)
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)
@@ -119,7 +119,7 @@ class Wizard_VServer_Liferay (WizardPage):
 
 class Wizard_Rules_Liferay (WizardPage):
     ICON = "liferay.png"
-    DESC = "New directory based on a Liferay project."
+    DESC = _("New directory based on a Liferay project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
@@ -134,7 +134,7 @@ class Wizard_Rules_Liferay (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>Liferay Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Liferay Project"))
         table = TableProps()
         self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_liferay!new_webdir', _(NOTE_WEB_DIR), value="/liferay")
         self.AddPropEntry (table, _('Source host'), 'tmp!wizard_liferay!new_src_host', _(NOTE_HOST_SRC), value="localhost")

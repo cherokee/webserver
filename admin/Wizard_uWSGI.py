@@ -117,7 +117,7 @@ class Wizard_VServer_uWSGI (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>New Virtual Server</h2>'
+        txt += '<h2>%s</h2>' % (_("New Virtual Server"))
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_uwsgi!new_host',      _(NOTE_NEW_HOST), value="www.example.com")
         self.AddPropEntry (table, _('Document Root'), 'tmp!wizard_uwsgi!document_root', _(NOTE_DROOT), value=os_get_document_root())
@@ -130,7 +130,6 @@ class Wizard_VServer_uWSGI (WizardPage):
         self.AddPropEntry (table, _('Configuration File'), 'tmp!wizard_uwsgi!uwsgi_cfg', _(NOTE_UWSGI_CONFIG))
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)
@@ -192,7 +191,7 @@ class Wizard_Rules_uWSGI (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>uWSGI Project</h2>'
+        txt += '<h2>uWSGI</h2>'
         table = TableProps()
         if not self.uwsgi_binary:
             self.AddPropEntry (table, _('uWSGI binary'), 'tmp!wizard_uwsgi!uwsgi_binary', _(NOTE_UWSGI_BINARY))

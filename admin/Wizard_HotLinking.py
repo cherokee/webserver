@@ -63,12 +63,12 @@ class Wizard_Rules_HotLinking (WizardPage):
             nick = "example.com"
 
         txt = '<h1>%s</h1>' % (self.title)
-        txt += '<h2>Local Host Name</h2>'
+        txt += '<h2>%s</h2>' % (_("Local Host Name"))
         table = TableProps()
         self.AddPropEntry (table, _('Domain Name'), 'tmp!wizard_hotlink!domain', _(NOTE_DOMAIN), value=nick)
         txt += self.Indent(table)
 
-        txt += '<h2>Behaviour</h2>'
+        txt += '<h2>%s</h2>' % (_("Behavior"))
         table = TableProps()
         self.AddPropOptions_Reload_Plain (table, _('Reply type'), 'tmp!wizard_hotlink!type', TYPES, _(NOTE_TYPE))
 

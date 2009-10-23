@@ -156,12 +156,12 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>New Virtual Server</h2>'
+        txt += '<h2>%s</h2>' % (_("New Virtual Server"))
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_ror!new_host',      _(NOTE_NEW_HOST), value="www.example.com")
         txt += self.Indent(table)
 
-        txt += '<h2>Ruby on Rails Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Ruby on Rails Project"))
         txt += self._render_content_dispatch_fcgi()
 
         table = TableProps()
@@ -169,7 +169,7 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
         self.AddPropOptions (table, _('RAILS_ENV environment'), 'tmp!wizard_ror!ror_env', RAILS_ENV, _(NOTE_ENV))
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)
@@ -231,12 +231,12 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>Web Directory</h2>'
+        txt += '<h2>%s</h2>' % (_("Web Directory"))
         table = TableProps()
         self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_ror!new_webdir', _(NOTE_NEW_DIR), value="/project")
         txt += self.Indent(table)
 
-        txt += '<h2>Ruby on Rails Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Ruby on Rails Project"))
         txt += self._render_content_dispatch_fcgi()
 
         table = TableProps()

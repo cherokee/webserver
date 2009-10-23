@@ -77,18 +77,18 @@ class Wizard_VServer_Alfresco (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>New Virtual Server</h2>'
+        txt += '<h2>%s</h2>' % (_("New Virtual Server"))
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_alfresco!new_host', _(NOTE_VSRV_NAME), value="alfresco.example.com")
         txt += self.Indent(table)
 
-        txt += '<h2>Alfresco Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Alfresco project"))
         table = TableProps()
         self.AddPropEntry (table, _('Source host'), 'tmp!wizard_alfresco!new_src_host', _(NOTE_HOST_SRC))
         self.AddPropEntry (table, _('Source port'), 'tmp!wizard_alfresco!new_src_port', _(NOTE_HOST_PRT), value=8080)
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)
@@ -137,7 +137,7 @@ class Wizard_Rules_Alfresco (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>Alfresco Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Alfresco Project"))
         table = TableProps()
         self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_alfresco!new_webdir', _(NOTE_WEB_DIR), value="/alfresco")
         self.AddPropEntry (table, _('Source host'), 'tmp!wizard_alfresco!new_src_host', _(NOTE_HOST_SRC), value="localhost")

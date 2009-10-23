@@ -99,7 +99,7 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_Mailman (WizardPage):
     ICON = "mailman.png"
-    DESC = "New virtual server based on a Mailman mailing list manager."
+    DESC = _("New virtual server based on a Mailman mailing list manager.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
@@ -117,7 +117,7 @@ class Wizard_VServer_Mailman (WizardPage):
         guessed_arch = path_find_w_default (SRC_PATHS_ARCH)
 
         txt = '<h1>%s</h1>' % (self.title)
-        txt += '<h2>New Virtual Server</h2>'
+        txt += '<h2>%s</h2>' % (_("New Virtual Server"))
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_mailman!new_host', _(NOTE_NEW_HOST), value="www.example.com")
         txt += self.Indent(table)
@@ -129,7 +129,7 @@ class Wizard_VServer_Mailman (WizardPage):
         self.AddPropEntry (table, _('Mail Archive directory'), 'tmp!wizard_mailman!mailman_arch_dir', _(NOTE_MAILMAN_ARCH_DIR), value=guessed_arch)
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)

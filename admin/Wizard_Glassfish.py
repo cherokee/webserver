@@ -74,18 +74,18 @@ class Wizard_VServer_Glassfish (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>New Virtual Server</h2>'
+        txt += '<h2>%s</h2>' % (_("New Virtual Server"))
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_glassfish!new_host', _(NOTE_VSRV_NAME), value="glassfish.example.com")
         txt += self.Indent(table)
 
-        txt += '<h2>Glassfish Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Glassfish Project"))
         table = TableProps()
         self.AddPropEntry (table, _('Source host'), 'tmp!wizard_glassfish!new_src_host', _(NOTE_HOST_SRC), value="localhost")
         self.AddPropEntry (table, _('Source port'), 'tmp!wizard_glassfish!new_src_port', _(NOTE_HOST_PRT), value=8080)
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)
@@ -134,7 +134,7 @@ class Wizard_Rules_Glassfish (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>Glassfish Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Glassfish Project"))
         table = TableProps()
         self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_glassfish!new_webdir', _(NOTE_WEB_DIR), value="/glassfish")
         self.AddPropEntry (table, _('Source host'), 'tmp!wizard_glassfish!new_src_host', _(NOTE_HOST_SRC), value="localhost")

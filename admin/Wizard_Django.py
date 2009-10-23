@@ -82,18 +82,18 @@ class Wizard_VServer_Django (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>New Virtual Server</h2>'
+        txt += '<h2>%s</h2>' % (_("New Virtual Server"))
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_django!new_host',      _(NOTE_NEW_HOST),   value="www.example.com")
         self.AddPropEntry (table, _('Document Root'), 'tmp!wizard_django!document_root', _(NOTE_DJANGO_DIR), value=os_get_document_root())
         txt += self.Indent(table)
 
-        txt += '<h2>Django Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Django Project"))
         table = TableProps()
         self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_django!django_dir', _(NOTE_DJANGO_DIR))
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)
@@ -145,12 +145,12 @@ class Wizard_Rules_Django (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>Web Directory</h2>'
+        txt += '<h2>%s</h2>' % (_("Web Directory"))
         table = TableProps()
         self.AddPropEntry (table, _('Web Directory'), 'tmp!wizard_django!new_webdir', _(NOTE_NEW_HOST), value="/project")
         txt += self.Indent(table)
 
-        txt += '<h2>Django Project</h2>'
+        txt += '<h2>%s</h2>' % (_("Django Project"))
         table = TableProps()
         self.AddPropEntry (table, _('Project Directory'), 'tmp!wizard_django!django_dir', _(NOTE_DJANGO_DIR))
         txt += self.Indent(table)

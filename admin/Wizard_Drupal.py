@@ -112,7 +112,7 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_Drupal (WizardPage):
     ICON = "drupal.png"
-    DESC = "Configure a new virtual server using Drupal."
+    DESC = _("Configure a new virtual server using Drupal.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
@@ -134,7 +134,7 @@ class Wizard_VServer_Drupal (WizardPage):
         self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_drupal!sources', _(NOTE_SOURCES), value=guessed_src)
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)

@@ -96,7 +96,7 @@ class Wizard_VServer_ColdFusion (WizardPage):
     def _render_content (self, url_pre):
         txt = '<h1>%s</h1>' % (self.title)
 
-        txt += '<h2>New Virtual Server</h2>'
+        txt += '<h2>%s</h2>' % (_("New Virtual Server"))
         table = TableProps()
         self.AddPropEntry (table, _('New Host Name'), 'tmp!wizard_coldfusion!new_host', _(NOTE_VSRV_NAME), value="coldfusion.example.com")
         txt += self.Indent(table)
@@ -106,7 +106,7 @@ class Wizard_VServer_ColdFusion (WizardPage):
         self.AddPropEntry (table, _('Host'), 'tmp!wizard_coldfusion!new_source', _(NOTE_SOURCE), value="127.0.0.1:8500")
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)

@@ -121,7 +121,7 @@ class Wizard_VServer_Sugar (WizardPage):
         self.AddPropEntry (table, _('Source Directory'), 'tmp!wizard_sugar!sources', _(NOTE_SOURCES), value=guessed_src)
         txt += self.Indent(table)
 
-        txt += '<h2>Logging</h2>'
+        txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
 
         form = Form (url_pre, add_submit=True, auto=False)
@@ -184,7 +184,7 @@ class Wizard_Rules_Sugar (WizardPage):
         # Check for PHP
         php_info = wizard_php_get_info (self._cfg, self._pre)
         if not php_info:
-            self.no_show = "PHP support is required."
+            self.no_show = _("PHP support is required.")
             return False
         return True
 
