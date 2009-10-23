@@ -29,7 +29,8 @@ trac.png \
 wordpress.png \
 zend.png \
 uwsgi.png \
-mono.png
+mono.png \
+coldfusion.png
 
 EXTRA_DIST = \
 $(wizards_DATA)

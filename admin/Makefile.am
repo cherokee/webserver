@@ -135,7 +135,8 @@ Wizard_Liferay.py \
 Wizard_Alfresco.py \
 Wizard_Glassfish.py \
 Wizard_uWSGI.py \
-Wizard_Mono.py
+Wizard_Mono.py \
+Wizard_ColdFusion.py
 endif
 
 adminpy_DATA = $(admin_data)
