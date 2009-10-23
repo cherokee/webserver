@@ -70,6 +70,7 @@ cookbook_phpmyadmin.html \
 cookbook_managing_logs.html \
 cookbook_streaming.html \
 cookbook_uwsgi.html \
+cookbook_coldfusion.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_ip_hash.html \

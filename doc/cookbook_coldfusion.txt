@@ -1,0 +1,74 @@
+== link:index.html[Index] -> link:cookbook.html[Cookbook]
+///////////////////////////////////////////////////////////////////
+Last checked:
+* Cherokee 0.99.25
+* Adobe ColdFusion 9
+
+Thanks to pubcrawler.com@gmail.com for this contribution.
+///////////////////////////////////////////////////////////////////
+
+Cookbook: Setting up ColdFusion
+-------------------------------
+
+Supporting link:http://www.adobe.com/products/coldfusion/[ColdFusion]
+with Cherokee is almost trivial.
+
+[[cherokee]]
+Configuring Cherokee
+~~~~~~~~~~~~~~~~~~~~
+
+Cherokee provides a wizard that will assist you on this task. You can
+either dedicate a new virtual server to the task, or use a preexisting
+one. It is your choice, since the Wizard contemplates both scenarios.
+For the former you'll have to access the Wizard from the list of
+available ones within the `Virtual Servers` tab of Cherokee-Admin. The
+latter is accessed through the same list of Wizards, this time within
+the `Behaviour` tab of any given virtual server.
+
+The wizard will simply ask for the host to be proxied and will set it
+up for you to see. It will automatically detect if the provided
+hostname:port are in fact running ColdFusion by probing for the
+presence of the JRun service. Should you need to add more machines
+to your cluster, you can add extra information sources to your
+Cherokee configuration and let it deal with all the load balancing.
+
+No extra steps are necessary. If for any reason the Wizard doesn't
+work for you, you can always use the manual method described below.
+
+Manual method
+^^^^^^^^^^^^^
+Getting Cherokee to work with ColdFusion (MX 6 versions and newer) is
+simple and this emulates how tie-in is done with Apache and other
+out-of-box supported web servers.
+
+ColdFusion (actually the JRUN Java server which Coldfusion runs on top
+of) processes web requests by default on port 8500.
+
+So create as many `Information Sources` running ColdFusion as needed
+in Cherokee:
+
+[options="header"]
+|============================================
+|Type        |Nick        |Connection
+|Remote host |ColdFusion1 |192.168.1.101:8500
+|Remote host |ColdFusion2 |192.168.1.102:8500
+|Remote host |ColdFusion3 |192.168.1.103:8500
+|============================================
+
+Then, add a rule to your virtual server that is managed by the
+link:modules_handlers_proxy.html[HTTP reverse proxy], and assign the
+above mentioned sources to it.
+
+Round robin or IPHash will work for the balancer type. It is
+recommended to stick with IPHash if you have multiple ColdFusion app
+servers behind Cherokee so that session data will be preserved by
+sending the user to the same backend always - thus eliminating
+complicated and expensive load balancing solution to accomplish the
+same.
+
+That's all there is to this.
+
+One note: This is good for a single domain operation.  If you have
+multiple sites that are to be handled by the same ColdFusion
+backend(s) you will need to modify JRUN configuration files to handle
+such.

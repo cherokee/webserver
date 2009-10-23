@@ -58,6 +58,7 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks
   . link:cookbook_php.html[PHP]: How to run PHP apps with Cherokee.
   . link:cookbook_ror.html[Ruby on Rails]: How to run Ruby on Rails apps with Cherokee.
   . link:cookbook_django.html[Django]: How to run Django apps with Cherokee.
+  . link:cookbook_coldfusion.html[ColdFusion]: How to run ColdFusion apps with Cherokee.
   . link:cookbook_drupal.html[Drupal]: How to run Drupal on Cherokee.
   . link:cookbook_wordpress.html[Wordpress]: How to run Wordpress on Cherokee.
   . link:cookbook_alfresco.html[Alfresco]: How to run Alfresco on Cherokee.
