@@ -21,7 +21,7 @@ used to give temporary access to a remote administrator.
 [[cherokee-tweak]]
 Cherokee-Tweak
 ~~~~~~~~~~~~~~
-The swiss-army knife of the Cherokee bundle. This little tool enables
+The Swiss-army knife of the Cherokee bundle. This little tool enables
 you, among other things, to rotate the logs with absolutely no
 downtime at all. No connections are lost. No delay happens. It can
 also be used to trace Cherokee's state on the fly, even remotely and
@@ -36,7 +36,7 @@ X-Sendfile
 X-Sendfile is a special, non-standard HTTP header that has been
 supported by Cherokee for a while. At first you might think it is no
 big deal, but think again.It can be enabled in any CGI, FastCGI or
-SCGI backend. Basicaly its job is to instruct the web server to ignore
+SCGI backend. Basically its job is to instruct the web server to ignore
 the content of the response and replace it by whatever is specified in
 the header. The main advantage of this is that it will be Cherokee the
 one serving the file, making use of all its optimizations. It is
@@ -52,13 +52,13 @@ You retain the ability to check for special privileges or dynamically
 deciding anything contemplated by your backend's logic, you speed up
 things a lot while having more resources freed, and you can even
 specify the delivery of files outside of the web server's document
-root path. Of course, this is to be done solely in controled
+root path. Of course, this is to be done solely in controlled
 environments. In short, it offers a huge performance gain at
 absolutely no cost.
 
 Note that the X-Sendfile feature also supports `X-Accel-Redirect`
 header, a similar feature offered by other web servers.
-This is to allow the migration of applications supporting it whithout
+This is to allow the migration of applications supporting it without
 having to make major code rewrites.
 
 [[zero-downtime]]
@@ -150,7 +150,7 @@ slave database failures, or replication failures.
 
 This feature delivers connection pooling, database abstraction to
 enable easier migrations and administration, load balancing and
-automatic failover.
+automatic fail over.
 
 [[reverse_proxy]]
 Reverse Proxy
@@ -171,7 +171,7 @@ the next Youtube? Take a look at the
 link:modules_handlers_streaming.html[Streaming handler].
 
 [[secure_downloads]]
-Secure donwloads
+Secure downloads
 ~~~~~~~~~~~~~~~~
 A pretty nifty feature that has been having great acceptance is
 Cherokee's capability of generating temporal URLs to serve hidden
