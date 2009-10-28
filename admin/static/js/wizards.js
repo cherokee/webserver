@@ -77,9 +77,9 @@ function getWizards(c)
             $("<a/>")
                 .attr("href", "#")
                 .html("Run Wizard")
-                .click(function() {
-                    alert(w.no_show)
-                })
+   		      .bind('click', {"reason" : w.no_show}, function(event) {
+				alert (event.data.reason);
+			 })
                 .appendTo("#wizBut"+x);
         }
 
