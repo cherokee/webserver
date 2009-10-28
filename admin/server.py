@@ -217,6 +217,14 @@ def main():
     if scgi_port.isdigit():
         srv = pyscgi.ServerFactory (True, handler_class=Handler, host="127.0.0.1", port=int(scgi_port))
     else:
+        # Remove the unix socket if it already exists
+        try:
+            mode = os.stat (scgi_port)[stat.ST_MODE]
+            if stat.S_ISSOCK(mode):
+                os.unlink (scgi_port)
+        except OSError:
+            pass
+
         srv = pyscgi.ServerFactory (True, handler_class=Handler, unix_socket=scgi_port)
 
     srv.socket.settimeout (MODIFIED_CHECK_ELAPSE)
