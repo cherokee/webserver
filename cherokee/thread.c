@@ -732,14 +732,17 @@ process_active_connections (cherokee_thread_t *thd)
 				if ((conn->post.size > 0) &&
 				    ((conn->post.received + len) > conn->post.size))
 				{
+					size_t remain = 0;
+
+					remain = len - (conn->post.size - conn->post.received);
 					len = conn->post.size - conn->post.received;
 
 					cherokee_buffer_add (&conn->incoming_header,
 							conn->post.info.buf + len,
-							conn->post.info.len - len);
+							remain);
 
 					cherokee_buffer_drop_ending (POST_BUF(&conn->post),
-							conn->post.info.len - len);
+							remain);
 				}
 
 				cherokee_post_commit_buf (&conn->post, len);
