@@ -17,6 +17,13 @@ ERROR_NO_WEB  = N_("A web directory must be provided.")
 ERROR_NO_HOST = N_("A host name must be provided.")
 
 CONFIG_DIR = """
+%(pre_rule_plus4)s!match = request
+%(pre_rule_plus4)s!match!request = ^%(web_dir)s/([0-9]+)$
+%(pre_rule_plus4)s!handler = redir
+%(pre_rule_plus4)s!handler!rewrite!1!regex = ^%(web_dir)s/([0-9]+)$
+%(pre_rule_plus4)s!handler!rewrite!1!show = 0
+%(pre_rule_plus4)s!handler!rewrite!1!substring = %(web_dir)s/index.php?q=/node/$1
+
 %(pre_rule_plus3)s!match = request
 %(pre_rule_plus3)s!match!request = ^%(web_dir)s/$
 %(pre_rule_plus3)s!handler = redir
@@ -59,6 +66,13 @@ CONFIG_VSERVER = """
 %(pre_vsrv)s!nick = %(host)s
 %(pre_vsrv)s!document_root = %(local_src_dir)s
 %(pre_vsrv)s!directory_index = index.php,index.html
+
+%(pre_rule_plus3)s!match = request
+%(pre_rule_plus3)s!match!request = ^/([0-9]+)$
+%(pre_rule_plus3)s!handler = redir
+%(pre_rule_plus3)s!handler!rewrite!1!regex = ^/([0-9]+)$
+%(pre_rule_plus3)s!handler!rewrite!1!show = 0
+%(pre_rule_plus3)s!handler!rewrite!1!substring = /index.php?q=/node/$1
 
 %(pre_rule_plus2)s!match = request
 %(pre_rule_plus2)s!match!request = \.(engine|inc|info|install|module|profile|test|po|sh|.*sql|theme|tpl(\.php)?|xtmpl|svn-base)$|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template|all-wcprops|entries|format)$
@@ -170,6 +184,7 @@ class Wizard_VServer_Drupal (WizardPage):
         #Fixes Drupal bug for multilingual content
         self._cfg[php_info['rule']]["encoder!gzip"] = 0
 
+        pre_rule_plus3  = "%s!rule!%d" % (pre_vsrv, php_rule + 3)
         pre_rule_plus2  = "%s!rule!%d" % (pre_vsrv, php_rule + 2)
         pre_rule_plus1  = "%s!rule!%d" % (pre_vsrv, php_rule + 1)
         pre_rule_minus1 = "%s!rule!%d" % (pre_vsrv, php_rule - 1)
@@ -237,6 +252,7 @@ class Wizard_Rules_Drupal (WizardPage):
         #Fixes Drupal bug for multilingual content
         self._cfg[php_info['rule']]["encoder!gzip"] = 0
 
+        pre_rule_plus4  = "%s!rule!%d" % (self._pre, php_rule + 4)
         pre_rule_plus3  = "%s!rule!%d" % (self._pre, php_rule + 3)
         pre_rule_plus2  = "%s!rule!%d" % (self._pre, php_rule + 2)
         pre_rule_plus1  = "%s!rule!%d" % (self._pre, php_rule + 1)
