@@ -387,7 +387,17 @@
 # define SLASH '/'
 #endif
 
+#define CHEROKEE_CRASH				\
+	do {					\
+		*((int *)(0)) = 1;		\
+	} while(0)
 
-#define CHEROKEE_CRASH do { *((int *)(0)) = 1; } while(0)
+#define CHEROKEE_PRINT_BACKTRACE				\
+	do {							\
+		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;	\
+		cherokee_buf_add_backtrace (&tmp, 0);		\
+		PRINT_MSG ("%s", tmp.buf);			\
+		cherokee_buffer_mrproper (&tmp);		\
+	} while (0);
 
 #endif /* CHEROKEE_MACROS_H */
