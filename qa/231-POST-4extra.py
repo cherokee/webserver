@@ -3,6 +3,9 @@ import string
 from base import *
 from util import *
 
+# This QA test checks:
+# http://bugs.cherokee-project.com/504
+
 POST_LENGTH = 1024 * 10
 POST_EXTRA  = "\r\n\r\n"
 FILENAME    = "post_4extra.php"
