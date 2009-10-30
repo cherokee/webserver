@@ -1895,6 +1895,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		if (conn->header.version == http_version_11) {
 			/* It is needed in HTTP/1.1
 			 */
+			TRACE(ENTRIES, "conn %p, HTTP/1.1 with no Host header entry\n", conn);
 			goto error;
 		}
 		break;
