@@ -221,6 +221,7 @@ def main():
         try:
             mode = os.stat (scgi_port)[stat.ST_MODE]
             if stat.S_ISSOCK(mode):
+                print "Removing an old '%s' unix socket.." %(scgi_port)
                 os.unlink (scgi_port)
         except OSError:
             pass
