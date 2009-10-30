@@ -83,6 +83,7 @@ static char               *document_root = NULL;
 static cherokee_boolean_t  daemon_mode   = false;
 static cherokee_boolean_t  just_test     = false;
 static cherokee_boolean_t  print_modules = false;
+static cherokee_boolean_t  port_set      = false;
 static cuint_t             port          = 80;
 
 static ret_t common_server_initialization (cherokee_server_t *srv);
@@ -229,6 +230,12 @@ common_server_initialization (cherokee_server_t *srv)
 
 	} else {
 		const char *config;
+
+		/* Check parameter inconsistencies */
+		if (port_set) {
+			PRINT_MSG ("The -p parameter can only be used in conjunction with -r.");
+			return ret_error;
+		}
 		
 		/* Read the configuration file
 		 */
@@ -300,6 +307,7 @@ process_parameters (int argc, char **argv)
 			break;
 		case 'p':
 			port = atoi(optarg);
+			port_set = true;
 			break;
 		case 't':
 			just_test = true;
