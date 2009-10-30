@@ -235,7 +235,8 @@ run-tests.py \
 227-Redir-Paths.py \
 228-Redir-Paths2.py \
 229-Fullpath.py \
-230-Fullpath2.py
+230-Fullpath2.py \
+231-POST-4extra.py
 
 test:
 	./run-tests.py
