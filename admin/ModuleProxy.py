@@ -210,4 +210,5 @@ class ModuleProxy (ModuleHandler):
 
         # And CGI changes
         self.ApplyChangesPrefix (self._prefix, 
-                                 ['in_allow_keepalive', 'in_preserve_host'], post)
+                                 ['in_allow_keepalive', 'in_preserve_host',
+                                  'out_preserve_server'], post)
