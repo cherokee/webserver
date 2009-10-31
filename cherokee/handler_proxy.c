@@ -118,10 +118,11 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 		cherokee_module_props_init_base (MODULE_PROPS(n), 
 						 MODULE_PROPS_FREE(props_free));
 
-		n->balancer           = NULL;
-		n->reuse_max          = DEFAULT_REUSE_MAX;
-		n->in_allow_keepalive = true;
-		n->in_preserve_host   = false;
+		n->balancer            = NULL;
+		n->reuse_max           = DEFAULT_REUSE_MAX;
+		n->in_allow_keepalive  = true;
+		n->in_preserve_host    = false;
+		n->out_preserve_server = false;
 
 		INIT_LIST_HEAD (&n->in_request_regexs);
 		INIT_LIST_HEAD (&n->in_headers_add);
@@ -158,6 +159,9 @@ cherokee_handler_proxy_configure (cherokee_config_node_t   *conf,
 
 		} else if (equal_buf_str (&subconf->key, "in_preserve_host")) {
 			props->in_preserve_host = !! atoi (subconf->val.buf);
+
+		} else if (equal_buf_str (&subconf->key, "out_preserve_server")) {
+			props->out_preserve_server = !! atoi (subconf->val.buf);
 
 		} else if (equal_buf_str (&subconf->key, "in_header_hide")) {
 			cherokee_config_node_foreach (j, subconf) {
@@ -998,6 +1002,14 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 			}
 
 			HANDLER(hdl)->support |= hsupport_length;
+
+		} else if ((! props->out_preserve_server) &&
+			   (strncasecmp (begin, "Server:", 7) == 0)) {
+
+			cherokee_buffer_add_str (buf_out, "Server: ");
+			cherokee_buffer_add_buffer (buf_out, &CONN_BIND(conn)->server_string);
+			cherokee_buffer_add_str (buf_out, CRLF);
+			goto next;
 
 		} else  if (strncasecmp (begin, "Location:", 9) == 0) {
 			cherokee_buffer_t *tmp1 = &HANDLER_THREAD(hdl)->tmp_buf1;
