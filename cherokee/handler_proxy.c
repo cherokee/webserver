@@ -1067,7 +1067,7 @@ parse_server_header (cherokee_handler_proxy_t *hdl,
 	    (! http_code_with_body (HANDLER_CONN(hdl)->error_code)))
 	{
 		cherokee_buffer_add_str (buf_out, "Content-Length: 0"CRLF);
-	}   
+	}
 
 	TRACE(ENTRIES, " IN - Header:\n%s",     buf_in->buf);
 	TRACE(ENTRIES, " IN - Keepalive: %d\n", hdl->pconn->keepalive_in);
@@ -1202,6 +1202,15 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			}
 
 			return ret_ok;
+		}
+
+		/* Might have already finished (Content-length: 0)
+		 */
+		if ((hdl->pconn->enc == pconn_enc_known_size) &&
+		    (hdl->pconn->sent_out >= hdl->pconn->size_in))
+		{
+			hdl->got_all = true;
+			return ret_eof;
 		}
 
 		/* Read
