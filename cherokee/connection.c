@@ -100,8 +100,8 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->encoder_new_func     = NULL;
 	n->logger_ref           = NULL;
 	n->keepalive            = 0;
-	n->range_start          = 0;
-	n->range_end            = 0;
+	n->range_start          = -1;
+	n->range_end            = -1;
 	n->vserver              = NULL;
 	n->arguments            = NULL;
 	n->realm_ref            = NULL;
@@ -254,8 +254,8 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	conn->upgrade              = http_upgrade_nothing;
 	conn->options              = conn_op_log_at_end;
 	conn->error_code           = http_ok;
-	conn->range_start          = 0;
-	conn->range_end            = 0;
+	conn->range_start          = -1;
+	conn->range_end            = -1;
 	conn->logger_ref           = NULL;
 	conn->realm_ref            = NULL;
 	conn->mmaped               = NULL;
@@ -1101,7 +1101,7 @@ out:
 	/* If this connection has a handler without Content-Length support
 	 * it has to count the bytes sent
 	 */
-	if (!HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
+	if (! HANDLER_SUPPORTS (conn->handler, hsupport_length)) {
 		conn->range_end += sent;
 	}
 
@@ -1654,14 +1654,14 @@ get_range (cherokee_connection_t *conn, char *ptr, int ptr_len)
 		}
 		tmp[num_len] = '\0';
 		conn->range_end = strtoll (tmp, (char **)NULL, 10);
-		if (conn->range_end < 1){
+		if (conn->range_end < 0){
 			return ret_error;
 		}
 	}
 
 	/* Sanity check: switched range
 	 */
-	if ((conn->range_start != 0) && (conn->range_end != 0)) {
+	if ((conn->range_start != -1) && (conn->range_end != -1)) {
 		if (conn->range_start > conn->range_end) {
 			conn->error_code = http_range_not_satisfiable;
 			return ret_error;

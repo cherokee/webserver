@@ -25,8 +25,12 @@ class Test (TestBase):
         self.name = "If-Range header, 206 error"
 
         self.conf              = CONF
-        self.expected_error    = 206
         self.forbidden_content = DOCUMENTATION
+        self.expected_error    = 206
+
+        l = len(DOCUMENTATION)
+        self.expected_content  = ["Content-Length: 1",
+                                  "Content-Range: bytes %d-%d/%d" %(l-1, l-1, l)]
 
     def Prepare (self, www):
         d = self.Mkdir (www, "if_range2")
@@ -40,4 +44,4 @@ class Test (TestBase):
                                 "Host: localhost\r\n"               + \
                                 "Connection: Close\r\n"             + \
                                 "If-Range: %s\r\n" % (times)        + \
-                                "Range: bytes=%d-\r\n" % (len(DOCUMENTATION)) 
+                                "Range: bytes=%d-\r\n" % (len(DOCUMENTATION)-1) 

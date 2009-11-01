@@ -55,7 +55,6 @@ typedef struct {
 	cherokee_mime_entry_t *mime;
 	struct stat            cache_info;	
 
-	cherokee_boolean_t     range_both;
 	cherokee_boolean_t     using_sendfile;
 	cherokee_boolean_t     not_modified;
 } cherokee_handler_file_t;
