@@ -22,19 +22,19 @@ else
     touch ChangeLog
 fi
 
-if [ -z $CHANGELOG_VERSION ]; then
+if [ x$CHANGELOG_VERSION = x ]; then
     CHANGELOG_VERSION=$FIRST_REV
 fi
 
 # Find the latest revision in the SVN
 SVN_VERSION=`svnversion -c . | sed -e 's/^[^:]*://;s/[A-Za-z]//'`
-if [ -z $SVN_VERSION ]; then
+if [ x$SVN_VERSION = x ]; then
      echo
 	echo "WARNING: Couldn't get svn revision number."
 	echo "         Is svn or the .svn directories missing?"
 	echo
 else
-    if [ $SVN_VERSION -eq $CHANGELOG_VERSION ]; then
+    if [ x$SVN_VERSION = x$CHANGELOG_VERSION ]; then
 	   echo "ChangeLog is already up-to-date."
     else
 	   echo "Updating ChangeLog from version $CHANGELOG_VERSION to $SVN_VERSION..."

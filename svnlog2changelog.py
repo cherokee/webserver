@@ -49,25 +49,36 @@ def render_paths (entry):
             txt += "\t%s %s\n"%(action, get_text(path.childNodes))
     return txt        
 
-dom = xml.dom.minidom.parseString (stdin.read())
-log = dom.getElementsByTagName('log')[0]
-
-for entry in log.getElementsByTagName('logentry'):    
-    revision = entry.getAttribute('revision')
-    date     = entry_get_val (entry, 'date').split('T')[0]
-    time     = entry_get_val (entry, 'date').split('T')[1].split('.')[0]
-    dev      = entry_get_val (entry, 'author')
-    msg      = reformat_msg(entry_get_val (entry, 'msg'))
-    author   = DEVELOPERS[dev]
-    paths    = render_paths(entry)
-    
-    print "%s  %s" % (date, author)
-    print " "*12 + "SVN: r%s, %s - %s" % (revision, dev, time)
-    print
-    if msg:
-        print msg.encode("utf-8"),
-
-    if paths:
+def do_parse():
+    try:
+        dom = xml.dom.minidom.parseString (stdin.read())
+    except xml.parsers.expat.ExpatError, e:
+        print "ERROR: Could update ChangeLog. The XML arser reported: "
+        print '       "%s2"' %(e)
         print
-        print paths
+        raise SystemExit
+
+    log = dom.getElementsByTagName('log')[0]
+
+    for entry in log.getElementsByTagName('logentry'):    
+        revision = entry.getAttribute('revision')
+        date     = entry_get_val (entry, 'date').split('T')[0]
+        time     = entry_get_val (entry, 'date').split('T')[1].split('.')[0]
+        dev      = entry_get_val (entry, 'author')
+        msg      = reformat_msg(entry_get_val (entry, 'msg'))
+        author   = DEVELOPERS[dev]
+        paths    = render_paths(entry)
+    
+        print "%s  %s" % (date, author)
+        print " "*12 + "SVN: r%s, %s - %s" % (revision, dev, time)
+        print
+        if msg:
+            print msg.encode("utf-8"),
+
+        if paths:
+            print
+            print paths
+
+if __name__ == "__main__":
+    do_parse()
 
