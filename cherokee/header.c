@@ -969,6 +969,8 @@ cherokee_header_parse (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cherok
 				ret = add_known_header (hdr, header_connection, val_offs, val_len);
 			} else if (header_equals ("Content-Length", header_content_length, begin, header_len)) {
 				ret = add_known_header (hdr, header_content_length, val_offs, val_len);
+			} else if (header_equals ("Content-Type", header_content_type, begin, header_len)) {
+				ret = add_known_header (hdr, header_content_type, val_offs, val_len);
 			} else if (header_equals ("Cookie", header_cookie, begin, header_len)) {
 				ret = add_known_header (hdr, header_cookie, val_offs, val_len);
 			} else

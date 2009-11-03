@@ -316,7 +316,7 @@ cherokee_handler_cgi_base_build_basic_env (
 	/* Content-Type
 	 */
 	cherokee_buffer_clean (tmp);
-	ret = cherokee_header_copy_unknown (&conn->header, "Content-Type", 12, tmp);
+	ret = cherokee_header_copy_known (&conn->header, header_content_type, tmp);
 	if (ret == ret_ok) {
 		set_env (cgi, "CONTENT_TYPE", tmp->buf, tmp->len);
 	}
