@@ -64,7 +64,7 @@ CONFIG_RULES = SOURCE + """
 %(rule_pre)s!handler!balancer!source!1 = %(src_num)d
 """
 
-DEFAULT_BINS   = ['uwsgi']
+DEFAULT_BINS   = ['uwsgi','uwsgi26']
 
 DEFAULT_PATHS  = ['/usr/bin',
                  '/usr/gnu/bin',
