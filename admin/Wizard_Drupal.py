@@ -40,6 +40,8 @@ CONFIG_DIR = """
 %(pre_rule_plus1)s!match!left!directory = %(web_dir)s
 %(pre_rule_plus1)s!match!right = request
 %(pre_rule_plus1)s!match!right!request = \.(engine|inc|info|install|module|profile|test|po|sh|.*sql|theme|tpl(\.php)?|xtmpl|svn-base)$|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template|all-wcprops|entries|format)$
+%(pre_rule_plus1)s!handler = custom_error
+%(pre_rule_plus1)s!handler!error = 403
 
 # IMPORTANT: The PHP rule comes here
 
