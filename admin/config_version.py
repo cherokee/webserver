@@ -9,7 +9,7 @@ def config_version_get_current():
     micro = int(v3)
 
     return "%03d%03d%03d" %(major, minor, micro)
-    
+
 
 def config_version_cfg_is_up_to_date (cfg):
     # Cherokee's version
@@ -24,7 +24,7 @@ def config_version_cfg_is_up_to_date (cfg):
     # Compare both of them
     if int(ver_config) > int(ver_cherokee):
         print "WARNING!! Running a new configuration file (version %s)"  % (ver_config)
-        print            "with anolder version of Cherokee (version %s)" % (ver_cherokee)
+        print "          with anolder version of Cherokee (version %s)" % (ver_cherokee)
         return True
 
     elif int(ver_config) == int(ver_cherokee):
@@ -35,6 +35,10 @@ def config_version_cfg_is_up_to_date (cfg):
 
 
 def config_version_update_cfg (cfg):
+    # Do not proceed if it's empty
+    if not cfg.has_tree():
+        return
+
     # Update only when it's outdated
     if config_version_cfg_is_up_to_date (cfg):
         return

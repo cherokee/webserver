@@ -56,6 +56,7 @@ class Handler(pyscgi.SCGIHandler):
         status  = "200 OK"
         uri     = self.env['REQUEST_URI']
 
+        # Translation
         if (not SELECTED_LANGUAGE and
             self.env.has_key('HTTP_ACCEPT_LANGUAGE')):
             try:

@@ -57,16 +57,19 @@ class PageNewConfig (Page, FormHelper):
                 return None
             cherokee_management_reset()
             return "/"
+
         elif uri == "/performance":
             manager = cherokee_management_get (self._cfg)
             if not manager.create_config (self._cfg.file, "performance.conf.sample"):
                 return None
             cherokee_management_reset()
             return "/"
+
         elif uri == "/development":
             manager = cherokee_management_get (self._cfg)
             if not manager.create_config (self._cfg.file, "cherokee.conf.sample"):
                 return None
+
             self._tweak_config_for_dev()
             cherokee_management_reset()
             return "/"

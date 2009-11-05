@@ -7,6 +7,7 @@ from subprocess import *
 
 from consts import *
 from configured import *
+from config_version import *
 
 DEFAULT_DELAY    = 2
 WAIT_SERVER_STOP = 10
@@ -136,11 +137,13 @@ class CherokeeManagement:
             except:
                 return False
 
+        content = "config!version = %s\n" %(config_version_get_current())
+
         conf_sample = os.path.join(CHEROKEE_ADMINDIR, template_file)
         if os.path.exists (conf_sample):
-            content = open(conf_sample, 'r').read()
+            content += open(conf_sample, 'r').read()
         else:
-            content = CHEROKEE_MIN_DEFAULT_CONFIG
+            content += CHEROKEE_MIN_DEFAULT_CONFIG
 
         try:
             f = open(file, 'w+')

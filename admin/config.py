@@ -288,7 +288,7 @@ class Config:
 
         tmp = self.root.serialize().split('\n')
         tmp.sort(sorter)
-        return '\n'.join(tmp)
+        return '\n'.join (filter (lambda x: len(x) > 1, tmp))
 
     def save (self):
         # Try to make a copy
