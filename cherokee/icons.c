@@ -180,8 +180,11 @@ cherokee_icons_add_suffix (cherokee_icons_t *icons, cherokee_buffer_t *icon, che
 
 	ret = cherokee_avl_add (&icons->suffixes, suffix, tmp);
 	if (unlikely (ret != ret_ok)) {
+		LOG_ERROR ("Duped suffix (case insensitive) '%s', pointing to '%s'\n",
+			   suffix->buf, tmp->buf);
+
 		cherokee_buffer_free (tmp);
-		return ret;
+		return ret_ok;
 	}
 
 	return ret_ok;

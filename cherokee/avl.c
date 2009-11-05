@@ -133,10 +133,11 @@ compare_buffers (cherokee_buffer_t *A,
 		 cherokee_buffer_t *B,
 		 cherokee_boolean_t case_insensitive)
 {
-	if (case_insensitive)
-		return cherokee_buffer_cmp_buf (A, B);
-	else
+	if (case_insensitive) {
 		return cherokee_buffer_case_cmp_buf (A, B);
+	} else {
+		return cherokee_buffer_cmp_buf (A, B);
+	}
 }
 
 
