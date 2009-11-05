@@ -30,6 +30,7 @@ from PageNewConfig import *
 from PageAjaxUpdate import *
 from PageInfoSource import *
 from CherokeeManagement import *
+from config_version import *
 
 # Constants
 #
@@ -234,6 +235,10 @@ def main():
     global cfg
     cfg = Config(cfg_file)
 
+    # Update the configuration file if needed
+    config_version_update_cfg (cfg)
+
+    # Let the user know what is going on
     version = VERSION
     pid     = os.getpid()
 

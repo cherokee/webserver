@@ -104,6 +104,7 @@ ModuleTargetIp.py \
 ModuleEvhost.py \
 ModuleRrd.py \
 config.py \
+config_version.py \
 pyscgi.py \
 validations.py \
 CherokeeManagement.py \
