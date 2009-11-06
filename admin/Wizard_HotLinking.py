@@ -80,7 +80,6 @@ class Wizard_Rules_HotLinking (WizardPage):
 
         form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
-        return txt
 
     def _op_apply (self, post):
         self._cfg_store_post (post)

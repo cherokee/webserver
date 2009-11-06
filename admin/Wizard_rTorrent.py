@@ -76,9 +76,9 @@ class Wizard_Rules_rTorrent (WizardPage):
         if not rule_n:
             return self.report_error (_("Couldn't add a new rule."))
 
-        rule_pre_1   = '%s!rule!%d' % (self._pre, rule_n)
+        rule_pre_1 = '%s!rule!%d' % (self._pre, rule_n)
 
         # Add the new rules
-        config_dir    = CONFIG_DIR % (locals())
+        config_dir = CONFIG_DIR % (locals())
 
         self._apply_cfg_chunk (config_dir)
