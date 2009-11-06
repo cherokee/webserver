@@ -102,7 +102,7 @@ class Wizard_Rules_HotLinking (WizardPage):
         domain = domain.replace ('.', "\\.")
 
         # Locals
-        _, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
+        x, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
 
         # Add the new rules
         if tipe == 'redir' and redirection:
