@@ -57,7 +57,7 @@ class Wizard_Rules_Icons (Wizard):
         return self._check_config()
 
     def _run (self, uri, post):
-        rule_n, _ = cfg_vsrv_rule_get_next (self._cfg, self._pre)
+        rule_n, x = cfg_vsrv_rule_get_next (self._cfg, self._pre)
         if not rule_n:
             return self.report_error (_("Couldn't add a new rule."))
 
