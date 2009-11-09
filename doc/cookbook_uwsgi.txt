@@ -22,6 +22,8 @@ To run Cherokee with uWSGI three simple steps will suffice:
 . You will need to complete a regular
 link:http://projects.unbit.it/uwsgi/wiki/Install[uWSGI installation]
 
+. Add the produced binary into your PATH under the name "uwsgi"
+
 . Adapt your application to work with uWSGI.
 
 . Run the uWSGI Wizard provided by Cherokee and let it handle
@@ -61,7 +63,7 @@ uWSGI
 </uwsgi>
 --------------------------------------------------------
 
-Cheroekee
+Cherokee
 ~~~~~~~~~
 The wizard will look for the uWSGI server, find out the mountpoint and
 configure the web server accordingly. Nothing more to do.
