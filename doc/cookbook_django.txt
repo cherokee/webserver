@@ -15,6 +15,18 @@ project's documentation for more information on
 link:http://www.djangoproject.com/documentation/install[how to install
 Django].
 
+There are two ways to deploy a Django project running on Cherokee. The
+first one is the classical method and involves the usage of Flup, it
+is the method documented in this recipe and has been the standard
+method for years. Thousands of sites currently use this approach
+successfully.
+
+The other method involves using link:cookbook_uwsgi.html[uWSGI]. It is
+a new, modern and feature-rich approach. There is a separate recipe
+and wizard for that, so check it out. We can assure you it will be
+worth your time. The instructions on how to set up the Framework are
+the same, but the method in which Cherokee is configured varies.
+
 === Preparing the framework
 
 On Debian based systems this will be enough:
