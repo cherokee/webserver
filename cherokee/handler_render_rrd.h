@@ -32,7 +32,8 @@
 
 typedef struct {
 	cherokee_module_props_t        base;
-	cherokee_handler_file_props_t *file_props;
+	cherokee_boolean_t             disabled;
+	cherokee_handler_file_props_t *file_props;	
 } cherokee_handler_render_rrd_props_t;
 
 typedef struct {

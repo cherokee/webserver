@@ -414,30 +414,6 @@ endif
 
 
 #
-# Handler render_rrd
-#
-if !STATIC_HANDLER_RENDER_RRD
-rrd_common = rrd_tools.h rrd_tools.c
-endif
-
-handler_render_rrd = \
-$(rrd_common) \
-handler_render_rrd.c \
-handler_render_rrd.h \
-logo.inc 
-
-libplugin_render_rrd_la_LDFLAGS = $(module_ldflags)
-libplugin_render_rrd_la_SOURCES = $(handler_render_rrd)
-libplugin_render_rrd_la_LIBADD  = libcherokee-config.la
-
-if STATIC_HANDLER_RENDER_RRD
-static_handler_render_rrd_src = $(handler_render_rrd)
-else
-dynamic_handler_render_rrd_lib = libplugin_render_rrd.la
-endif
-
-
-#
 # Handler server_info
 #
 handler_server_info = \
@@ -487,6 +463,30 @@ if STATIC_HANDLER_DIRLIST
 static_handler_dirlist_src = $(handler_dirlist)
 else
 dynamic_handler_dirlist_lib = libplugin_dirlist.la
+endif
+
+
+#
+# Handler render_rrd
+#
+if !STATIC_HANDLER_RENDER_RRD
+rrd_common = rrd_tools.h rrd_tools.c
+endif
+
+handler_render_rrd = \
+$(rrd_common) \
+handler_render_rrd.c \
+handler_render_rrd.h \
+logo.inc 
+
+libplugin_render_rrd_la_LDFLAGS = $(module_ldflags)
+libplugin_render_rrd_la_SOURCES = $(handler_render_rrd)
+libplugin_render_rrd_la_LIBADD  = $(dynamic_handler_file_lib)
+
+if STATIC_HANDLER_RENDER_RRD
+static_handler_render_rrd_src = $(handler_render_rrd)
+else
+dynamic_handler_render_rrd_lib = libplugin_render_rrd.la
 endif
 
 

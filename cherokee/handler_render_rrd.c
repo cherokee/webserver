@@ -32,6 +32,8 @@
 
 #define ENTRIES "rrd,render,render_rrd,handler"
 
+#define DISABLED_MSG "Graphs generation is disabled because RRDtool was not found." CRLF
+
 PLUGIN_INFO_HANDLER_EASY_INIT (render_rrd, http_get);
 
 
@@ -286,6 +288,12 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 	cherokee_connection_t             *conn       = HANDLER_CONN(hdl);
 	cherokee_buffer_t                  tmp        = CHEROKEE_BUF_INIT;
 
+	/* The handler might be disabled
+	 */
+	if (HANDLER_RENDER_RRD_PROPS(hdl)->disabled) {
+		return ret_ok;
+	}
+
 	/* Sanity checks
 	 */
 	if (strncmp (conn->request.buf + conn->request.len - 4, ".png", 4) != 0) {
@@ -468,6 +476,12 @@ static ret_t
 handler_add_headers (cherokee_handler_render_rrd_t *hdl, 
 		     cherokee_buffer_t             *buffer)
 {
+	if (HANDLER_RENDER_RRD_PROPS(hdl)->disabled) {
+		cherokee_buffer_add_str (buffer, "Content-Type: text/html" CRLF);
+		cherokee_buffer_add_va  (buffer, "Content-Length: %d" CRLF, strlen(DISABLED_MSG));
+		return ret_ok;
+	}
+
 	return cherokee_handler_file_add_headers (hdl->file_hdl, buffer);
 }
 
@@ -476,6 +490,11 @@ static ret_t
 handler_step (cherokee_handler_render_rrd_t *hdl,
 	      cherokee_buffer_t             *buffer)
 {
+	if (HANDLER_RENDER_RRD_PROPS(hdl)->disabled) {
+		cherokee_buffer_add_str (buffer, DISABLED_MSG);
+		return ret_eof_have_data;
+	}
+
 	return cherokee_handler_file_step (hdl->file_hdl, buffer);
 }
 
@@ -516,11 +535,18 @@ cherokee_handler_render_rrd_new (cherokee_handler_t     **hdl,
 	 */
 	n->file_hdl = NULL;
 
-	/* Instance the File handler
+	/* Instance file sub-handler
 	 */
-	ret = cherokee_handler_file_new ((cherokee_handler_t **)&n->file_hdl, cnt, MODULE_PROPS(PROP_RENDER_RRD(props)->file_props));
-	if (ret != ret_ok) {
-		return ret_ok;
+	if (PROP_RENDER_RRD(props)->disabled) {
+		HANDLER(n)->support |= hsupport_length;
+
+	} else {
+		ret = cherokee_handler_file_new ((cherokee_handler_t **)&n->file_hdl, cnt, MODULE_PROPS(PROP_RENDER_RRD(props)->file_props));
+		if (ret != ret_ok) {
+			return ret_ok;
+		}
+
+		HANDLER(n)->support = HANDLER(n->file_hdl)->support;
 	}
 
 	*hdl = HANDLER(n);
@@ -553,6 +579,7 @@ cherokee_handler_render_rrd_configure (cherokee_config_node_t  *conf,
 						  MODULE_PROPS_FREE(props_free));
 
 		/* Sub-handler properties */
+		n->disabled   = false;
 		n->file_props = NULL;
 		cherokee_handler_file_configure (conf, srv,
 						 (cherokee_module_props_t **) &n->file_props);
@@ -571,7 +598,8 @@ cherokee_handler_render_rrd_configure (cherokee_config_node_t  *conf,
 	 */
 	ret = cherokee_rrd_connection_configure (rrd_connection, conf);
 	if (ret != ret_ok) {
-		return ret_error;
+		PROP_RENDER_RRD(*_props)->disabled = true;
+		return ret_ok;
 	}
 	
 	/* At least the server.rdd should be present
