@@ -403,21 +403,21 @@ set_auto_rate (cherokee_handler_streaming_t *hdl)
 static ret_t
 seek_mp3 (cherokee_handler_streaming_t *hdl)
 {
-	TRACE(ENTRIES, "%s: No FFMped support\n", "Seek MP3");
+	TRACE(ENTRIES, "%s: No FFMpeg support\n", "Seek MP3");
 	return ret_error;
 }
 
 static ret_t
 open_media_file (cherokee_handler_streaming_t *hdl)
 {
-	TRACE(ENTRIES, "%s: No FFMped support\n", "Open Media");
+	TRACE(ENTRIES, "%s: No FFMpeg support\n", "Open Media");
 	return ret_error;
 }
 
 static ret_t
 set_auto_rate (cherokee_handler_streaming_t *hdl)
 {
-	TRACE(ENTRIES, "%s: No FFMped support\n", "Auto Rate");
+	TRACE(ENTRIES, "%s: No FFMpeg support\n", "Auto Rate");
 	return ret_error;
 }
 #endif

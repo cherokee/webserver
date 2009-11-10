@@ -24,7 +24,8 @@ uwsgi.deps \
 fastcgi.deps \
 cgi.deps \
 streaming.deps \
-secdownload.deps
+secdownload.deps \
+render_rrd.deps
 
 #
 # External sources
@@ -376,7 +377,12 @@ endif
 #
 # Collector RRD
 #
+if !STATIC_COLLECTOR_RRD
+rrd_common = rrd_tools.h rrd_tools.c
+endif
+
 collector_rrd = \
+$(rrd_common) \
 collector_rrd.c \
 collector_rrd.h
 
@@ -404,6 +410,30 @@ if STATIC_GEN_EVHOST
 static_gen_evhost_src = $(gen_evhost)
 else
 dynamic_gen_evhost_lib = libplugin_evhost.la
+endif
+
+
+#
+# Handler render_rrd
+#
+if !STATIC_HANDLER_RENDER_RRD
+rrd_common = rrd_tools.h rrd_tools.c
+endif
+
+handler_render_rrd = \
+$(rrd_common) \
+handler_render_rrd.c \
+handler_render_rrd.h \
+logo.inc 
+
+libplugin_render_rrd_la_LDFLAGS = $(module_ldflags)
+libplugin_render_rrd_la_SOURCES = $(handler_render_rrd)
+libplugin_render_rrd_la_LIBADD  = libcherokee-config.la
+
+if STATIC_HANDLER_RENDER_RRD
+static_handler_render_rrd_src = $(handler_render_rrd)
+else
+dynamic_handler_render_rrd_lib = libplugin_render_rrd.la
 endif
 
 
@@ -1379,6 +1409,16 @@ if STATIC_VALIDATOR_HTDIGEST
 				 validator_file.c
 endif
 
+if STATIC_COLLECTOR_RRD
+   common_rrd_tools = rrd_tools.h \
+				  rrd_tools.c
+endif
+
+if STATIC_HANDLER_RENDER_RRD
+   common_rrd_tools = rrd_tools.h \
+				  rrd_tools.c
+endif
+
 libcherokee_server_la_SOURCES = \
 $(static_rule_directory_src) \
 $(static_rule_extensions_src) \
@@ -1422,6 +1462,7 @@ $(static_handler_empty_gif_src) \
 $(static_handler_streaming_src) \
 $(static_handler_custom_error_src) \
 $(static_handler_server_info_src) \
+$(static_handler_render_rrd_src) \
 $(static_handler_dbslayer_src) \
 \
 $(static_logger_ncsa_src) \
@@ -1446,6 +1487,7 @@ $(static_balancer_ip_hash_src) \
 \
 $(common_cgi) \
 $(common_val_file) \
+$(common_rrd_tools) \
 \
 connection.h \
 connection-protected.h \
@@ -1587,6 +1629,7 @@ $(dynamic_handler_file_lib) \
 $(dynamic_handler_cgi_lib) \
 $(dynamic_handler_phpcgi_lib) \
 $(dynamic_handler_server_info_lib) \
+$(dynamic_handler_render_rrd_lib) \
 $(dynamic_handler_admin_lib) \
 $(dynamic_handler_dirlist_lib) \
 $(dynamic_handler_scgi_lib) \

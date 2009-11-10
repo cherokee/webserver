@@ -27,31 +27,44 @@
 
 #include "common-internal.h"
 #include "collector.h"
+#include "rrd_tools.h"
+
+
+/* Enums
+ */
+typedef enum {
+	collector_rrd_vserver_traffic,
+	collector_rrd_server_timeouts,
+	collector_rrd_server_accepts
+} cherokee_collector_rrd_graphs_t;
 
 typedef struct {
-	cherokee_collector_t collector;
+	const char    *interval;
+	const char    *description;
+	const cuint_t  secs_per_pixel;
+} cherokee_collector_rrd_interval_t;
+
+extern cherokee_collector_rrd_interval_t cherokee_rrd_intervals[];
+
+
+/* Data types
+ */
+typedef struct {
+	cherokee_collector_t      collector;
 
 	/* Configuration*/
-	cherokee_buffer_t    path_rrdtool;
-	cherokee_buffer_t    database_dir;
-	cherokee_buffer_t    path_database;
-	int                  render_elapse;
-
-	/* Communication */
-	int                  write_fd;
-	int                  read_fd;
-	pid_t                pid;
+	cherokee_buffer_t         path_rrdtool;
+	cherokee_buffer_t         path_database;
 
 	/* Internals */
-	cherokee_buffer_t    tmp;
+	cherokee_buffer_t         tmp;
 	
 	/* Asynchronous */
-	pthread_t            thread;
-	cherokee_list_t      collectors_vsrv;
-
-	time_t               next_render;
-	time_t               next_update;
+	pthread_t                 thread;
+	pthread_mutex_t           mutex;	
+	cherokee_list_t           collectors_vsrv;
 } cherokee_collector_rrd_t;
+
 
 typedef struct {
 	cherokee_collector_vsrv_t  collector;
@@ -73,6 +86,9 @@ typedef struct {
 #define COLLECTOR_VSRV_RRD(c)     ((cherokee_collector_vsrv_rrd_t *)(c))
 #define COLLECTOR_VSRV_RRD_SRV(c) (COLLECTOR_RRD(VSERVER_SRV(COLLECTOR_VSRV_RRD(c)->vsrv_ref)->collector))
 
+
+/* Public methods
+ */
 ret_t cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 				  cherokee_plugin_info_t    *info,
 				  cherokee_config_node_t    *config);

@@ -147,12 +147,13 @@ remove_old_socket (const char *path)
 static ret_t
 config_server (cherokee_server_t *srv) 
 {
-	ret_t                   ret;
-	cherokee_config_node_t  conf;
-	cherokee_buffer_t       buf       = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t       password  = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t       rrd_dir   = CHEROKEE_BUF_INIT;
-	cherokee_buffer_t       fake;
+	ret_t                  ret;
+	cherokee_config_node_t conf;
+	cherokee_buffer_t      buf       = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      password  = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      rrd_dir   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      rrd_bin   = CHEROKEE_BUF_INIT;
+	cherokee_buffer_t      fake;
 
 	/* Print some information
 	 */
@@ -285,32 +286,37 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "6!handler!iocache = 0\n"
 				 RULE_PRE "6!document_root = %s\n", CHEROKEE_DOCDIR);
 
-	/* Figure the RRDtool db directory
-	 */
+
+	/* RRDtool graphs
+	 */	
 	cherokee_config_node_init (&conf);
 	cherokee_buffer_fake (&fake, config_file, strlen(config_file));
 
 	ret = cherokee_config_reader_parse (&conf, &fake);
 	if (ret == ret_ok) {
-		ret = cherokee_config_node_copy (&conf, "server!collector!database_dir", &rrd_dir);
-		if (ret == ret_ok) {
-			cherokee_buffer_add_str (&rrd_dir, "/images");
-		}
+		cherokee_config_node_copy (&conf, "server!collector!rrdtool_path", &rrd_bin);
+		cherokee_config_node_copy (&conf, "server!collector!database_dir", &rrd_dir);
+	}	
+
+	if (! cherokee_buffer_is_empty (&rrd_bin)) {
+		cherokee_buffer_add_va  (&buf,
+					 RULE_PRE "7!handler!rrdtool_path = %s\n", rrd_bin.buf);
 	}
 
-	cherokee_buffer_add_va  (&buf, 
-				 RULE_PRE "7!match = directory\n"
-				 RULE_PRE "7!match!directory = /graphs\n"
-				 RULE_PRE "7!handler = file\n"
-				 RULE_PRE "7!handler!iocache = 0\n"
+	if (! cherokee_buffer_is_empty (&rrd_dir)) {
+		cherokee_buffer_add_va  (&buf,
+					 RULE_PRE "7!handler!database_dir = %s\n", rrd_dir.buf);
+	}
+
+	cherokee_buffer_add_va  (&buf,
+				 RULE_PRE "7!match = directory\n" 
+				 RULE_PRE "7!match!directory = /graphs\n" 
+				 RULE_PRE "7!handler = render_rrd\n"
 				 RULE_PRE "7!document_root = %s\n",
 				 rrd_dir.buf ? rrd_dir.buf : CHEROKEE_GRAPHS_DIR);
 
-	if (! debug) {
-		cherokee_buffer_add_str (&buf, RULE_PRE "7!expiration = time\n");
-		cherokee_buffer_add_str (&buf, RULE_PRE "7!expiration!time = 60\n");
-	}
-
+	/* MIME types
+	 */
 	cherokee_buffer_add_str (&buf,
 				 "mime!text/javascript!extensions = js\n"
 				 "mime!text/css!extensions = css\n"
@@ -327,12 +333,13 @@ config_server (cherokee_server_t *srv)
 
 	cherokee_config_node_mrproper (&conf);
 
+	cherokee_buffer_mrproper (&rrd_bin);
 	cherokee_buffer_mrproper (&rrd_dir);
 	cherokee_buffer_mrproper (&password);
 	cherokee_buffer_mrproper (&buf);
 	return ret_ok;
-}
 
+}
 static void
 print_help (void)
 {

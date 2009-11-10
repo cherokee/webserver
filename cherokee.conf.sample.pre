@@ -9,6 +9,10 @@
 ## then proceed to point your web browser to: http://localhost:9090/
 ##
 
+# Version
+#
+config!version = 990250
+
 # Server
 #
 server!bind!1!port = 80
