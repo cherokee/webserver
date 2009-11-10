@@ -42,6 +42,15 @@
  */
 cherokee_rrd_connection_t *rrd_connection = NULL;
 
+cherokee_collector_rrd_interval_t cherokee_rrd_intervals[] = {
+	{ "1h", "1 Hour",       ( 1 * 60 * 60) / 580},
+	{ "6h", "6 Hours",      ( 6 * 60 * 60) / 580},
+	{ "1d", "1 Day",        (24 * 60 * 60) / 580},
+	{ "1w", "1 Week",   (7 * 24 * 60 * 60) / 580},
+	{ "1m", "1 Month", (28 * 24 * 60 * 60) / 580},
+	{ NULL, NULL,       0}
+};
+
 
 static ret_t
 cherokee_rrd_connection_init (cherokee_rrd_connection_t *rrd_conn)

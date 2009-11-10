@@ -38,14 +38,6 @@ typedef enum {
 	collector_rrd_server_accepts
 } cherokee_collector_rrd_graphs_t;
 
-typedef struct {
-	const char    *interval;
-	const char    *description;
-	const cuint_t  secs_per_pixel;
-} cherokee_collector_rrd_interval_t;
-
-extern cherokee_collector_rrd_interval_t cherokee_rrd_intervals[];
-
 
 /* Data types
  */

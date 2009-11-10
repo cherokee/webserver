@@ -47,8 +47,17 @@ typedef struct {
 	cherokee_buffer_t tmp;
 } cherokee_rrd_connection_t;
 
+typedef struct {
+	const char    *interval;
+	const char    *description;
+	const cuint_t  secs_per_pixel;
+} cherokee_collector_rrd_interval_t;
 
-extern cherokee_rrd_connection_t *rrd_connection;
+
+/* Globals
+ */
+extern cherokee_collector_rrd_interval_t  cherokee_rrd_intervals[];
+extern cherokee_rrd_connection_t         *rrd_connection;
 
 
 /* Methods
