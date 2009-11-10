@@ -45,21 +45,27 @@ Advanced parameters
 ~~~~~~~~~~~~~~~~~~~
 
 If you want to learn more about 'configure' you can run `./configure
---help`.
+--help`. The list of parameter is extensive, so you might want to take
+a look at it, particularly if you are a developer. Some of the most
+used parameters are these:
 
 [cols="30%,70%",options="header"]
 |======================================================================
-|Parameter             |Description
-|`--with-wwwroot=DIR`  |Specify the webserver root directory
-|`--with-user=USER`    |Custom username under which the server will run
-|`--with-user=GROUP`   |Custom group under which the server will run
-|`--disable-epoll`     |Disable epoll() support
-|`--disable-pthread`   |Disable threading support
-|`--disable-readdir_r` |Disable readdir_r usage
-|`--disable-ipv6`      |Disable IPv6 support
-|`--disable-pam`       |Disable PAM support
-|`--enable-trace`      |Allows debugging options
-|`--disable-admin`     |Skips cherokee-admin installation
+|Parameter               |Description
+|`--with-wwwroot=DIR`    |Specify the webserver root directory
+|`--with-wwwuser=USER`   |Custom username under which the server will run
+|`--with-wwwgroup=GROUP` |Custom group under which the server will run
+|`--disable-epoll`       |Disable epoll() support
+|`--disable-pthread`     |Disable threading support
+|`--disable-readdir_r`   |Disable readdir_r usage
+|`--disable-ipv6`        |Disable IPv6 support
+|`--disable-pam`         |Disable PAM support
+|`--enable-trace`        |Allows debugging options
+|`--disable-admin`       |Skips cherokee-admin installation
+|`--disable-largefile`   |omit support for large files
+|`--enable-internal-pcre`|Enable internal PCRE
+|`--disable-nls`         |do not use Native Language Support
+|`--enable-static-module=MODULE`| build listed modules as static. Accepts ALL
 |======================================================================
 
 [[autostart]]
