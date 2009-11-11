@@ -49,7 +49,7 @@ If you want to learn more about 'configure' you can run `./configure
 a look at it, particularly if you are a developer. Some of the most
 used parameters are these:
 
-[cols="30%,70%",options="header"]
+[cols="43%,57%",options="header"]
 |======================================================================
 |Parameter               |Description
 |`--with-wwwroot=DIR`    |Specify the webserver root directory
