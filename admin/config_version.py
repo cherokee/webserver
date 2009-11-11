@@ -21,15 +21,20 @@ def config_version_cfg_is_up_to_date (cfg):
         cfg["config!version"] = ver_cherokee
         return True
 
+    # Cherokee 0.99.26 bug: 990250 is actually 99025
+    if int(ver_config) == 990250:
+        ver_config = "000099025"
+        cfg['config!version'] = ver_config
+
     # Compare both of them
     if int(ver_config) > int(ver_cherokee):
-        print "WARNING!! Running a new configuration file (version %s)"  % (ver_config)
-        print "          with an older version of Cherokee (version %s)" % (ver_cherokee)
+        print "WARNING!! Running a new configuration file (version %d)"  % int(ver_config)
+        print "          with an older version of Cherokee (version %d)" % int(ver_cherokee)
         return True
 
     elif int(ver_config) == int(ver_cherokee):
         return True
-
+    
     else:
         return False
 
@@ -43,9 +48,9 @@ def config_version_update_cfg (cfg):
     if config_version_cfg_is_up_to_date (cfg):
         return
 
-    # Update..
     ver_config_s = cfg.get_val("config!version")
     ver_config_i = int(ver_config_s)
 
-    print "Updating configuration.."
-    None
+    # Update to.. 0.99.xx
+    return 
+
