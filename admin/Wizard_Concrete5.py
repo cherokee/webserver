@@ -1,6 +1,6 @@
 """
 Concrete5 wizard. Checked with:
-* Cherokee 0.99.28b & Concrete5 1.5.14
+* Cherokee 0.99.28b & Concrete5 3.3.1
 """
 import validations
 from config import *
