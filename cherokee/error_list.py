@@ -338,6 +338,29 @@ e('LOGGER_CUSTOM_TEMPLATE',
   desc  = "The server found a problem while processing the logging template. Please, check it and.. (to-do).")
 
 
+# cherokee/fdpoll-epoll.c
+#
+
+e('FDPOLL_EPOLL_CTL_ADD',
+  title = "epoll_ctl: ep_fd %d, fd %d: '${errno}'",
+  desc  = SYSTEM_ISSUE)
+
+e('FDPOLL_EPOLL_CTL_DEL',
+  title = "epoll_ctl: ep_fd %d, fd %d: '${errno}'",
+  desc  = SYSTEM_ISSUE)
+
+e('FDPOLL_EPOLL_CTL_MOD',
+  title = "epoll_ctl: ep_fd %d, fd %d: '${errno}'",
+  desc  = SYSTEM_ISSUE)
+
+e('FDPOLL_EPOLL_CREATE',
+  title = "epoll_create: %d: '${errno}'",
+  desc  = SYSTEM_ISSUE)
+
+e('FDPOLL_EPOLL_CLOEXEC',
+  title = "Could not set CloseExec to the epoll descriptor: fcntl: '${errno}'",
+  desc  = SYSTEM_ISSUE)
+
 # cherokee/fdpoll-port.c
 #
 e('FDPOLL_PORTS_FD_ASSOCIATE',
@@ -1142,4 +1165,3 @@ e('SSL_PKCS11',
 e('SSL_DEFAULTS',
   title = "Could not set all defaults",
   desc  = SYSTEM_ISSUE)
-

@@ -520,7 +520,7 @@ cherokee_bind_local (cherokee_socket_t *sock, cherokee_buffer_t *listen_to)
 	if (re == 0) {
 		if (! S_ISSOCK(buf.st_mode)) {
 			LOG_CRITICAL (CHEROKEE_ERROR_SOCKET_NO_SOCKET, listen_to->buf);
-			return ret_error;			
+			return ret_error;
 		}
 
 		re = unlink (listen_to->buf);
