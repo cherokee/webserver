@@ -24,12 +24,12 @@ def config_version_cfg_is_up_to_date (cfg):
     # Compare both of them
     if int(ver_config) > int(ver_cherokee):
         print "WARNING!! Running a new configuration file (version %s)"  % (ver_config)
-        print "          with anolder version of Cherokee (version %s)" % (ver_cherokee)
+        print "          with an older version of Cherokee (version %s)" % (ver_cherokee)
         return True
 
     elif int(ver_config) == int(ver_cherokee):
         return True
-    
+
     else:
         return False
 
