@@ -336,7 +336,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 			LOG_CRITICAL (CHEROKEE_ERROR_VSERVER_BAD_METHOD,
 				      tmp->buf, vserver->priority, rule_prio);
 			return ret_error;
-		}		
+		}
 
 		TRACE(ENTRIES, "Validator: %s\n", tmp->buf);
 
@@ -457,7 +457,7 @@ cherokee_virtual_server_new_rule (cherokee_virtual_server_t  *vserver,
 
 	TRACE (ENTRIES, "Adding type=%s\n", type->buf);
 
-	/* Default is compled in, the rest are loded as plug-ins
+	/* Default is compiled in, the rest are loded as plug-ins
 	 */
 	if (equal_buf_str (type, "default")) {
 		func_new = (rule_func_new_t) cherokee_rule_default_new;

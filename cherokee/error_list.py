@@ -805,7 +805,7 @@ e('INIT_CPU_NUMBER',
 e('INIT_GET_FD_LIMIT',
   title = "Couldn't get the file descriptor limit of your system",
   desc  = SYSTEM_ISSUE)
-  
+
 
 # cherokee/utils.c
 #
@@ -903,22 +903,22 @@ e('PLUGIN_NO_INFO',
 e('VSERVER_BAD_METHOD',
   title = "Unsupported method '%s'",
   admin = "/vserver/%d/rule/%d",
-  desc  = "(TO DO)")
+  desc  = "For some reason the configuration file is trying to use an invalid authentication method. Either the file has been tampered with, or you are using a legacy configuration from a system that was compiled with support for more authentication methods.")
 
 e('VSERVER_TIME_MISSING',
   title = "Expiration time without a 'time' property",
   admin = "/vserver/%d/rule/%d",
-  desc  = "(TO DO)")
+  desc  = "The expiration time feature is being used but no amount of time has been specified. Either provide on or disable Expiration.")
 
 e('VSERVER_RULE_UNKNOWN_KEY',
   title = "Virtual Server Rule, Unknown key '%s'",
   admin = "/vserver/%d/rule/%d",
-  desc  = "(TO DO)")
+  desc  = "Most probably you are using an old configuration file that contains a deprecated key. Loading and then saving it through Cherokee-Admin should update the old entries for you automatically.")
 
 e('VSERVER_TYPE_MISSING',
   title = "Rule matches must specify a 'type' property",
   admin = "/vserver/%d/rule/%d",
-  desc  = "(TO DO)")
+  desc  = "For some reason the rule is incomplete. Try editing or recreating it within Cherokee-Admin.")
 
 e('VSERVER_LOAD_MODULE',
   title = "Could not load rule module '%s'",
@@ -928,32 +928,32 @@ e('VSERVER_LOAD_MODULE',
 e('VSERVER_BAD_PRIORITY',
   title = "Invalid priority '%s'",
   admin = "/vserver/%d",
-  desc  = "(TO DO)")
+  desc  = "For some reason your configuration file contains invalid priority values, which must be an integer higher than 0. Most likely it has been edited by hand and the value must be fixed manually or the rule has to be discarded.")
 
 e('VSERVER_RULE_MATCH_MISSING',
   title = "Rules must specify a 'match' property",
   admin = "/vserver/%d/rule/%d",
-  desc  = "(TO DO)")
-  
+  desc  = "For some reason there is an incomplete rule in your configuration file. Try locating it in Cherokee-Admin and fill in all the mandatory fields.")
+
 e('VSERVER_MATCH_MISSING',
   title = "Virtual Server must specify a 'match' property",
-  admin = "/vserver/%d",
-  desc  = "(TO DO)")
+  admin = "/vserver/%d#tabs_vserver-1",
+  desc  = "Try filling in the fields under the 'Host Match' tab.")
 
 e('VSERVER_UNKNOWN_KEY',
   title = "Virtual Server, Unknown key '%s'",
   admin = "/vserver/%d",
-  desc  = "(TO DO)")
+  desc  = "Most probably you are using an old configuration file that contains a deprecated key. Loading and then saving it through Cherokee-Admin should update the old entries for you automatically.")
 
 e('VSERVER_NICK_MISSING',
   title = "Virtual Server  without a 'nick' property",
-  admin = "/vserver/%d",
-  desc  = "(TO DO)")
+  admin = "/vserver/%d#tabs_vserver-0",
+  desc  = "For some reason, a mandatory property is not present in your configuration. Fill in the 'Virtual Server nickname' field, under the 'Basics' tab.")
 
 e('VSERVER_DROOT_MISSING',
   title = "Virtual Server  without a 'document_root' property",
-  admin = "/vserver/%d",
-  desc  = "(TO DO)")
+  admin = "/vserver/%d#tabs_vserver-0",
+  desc  = "You seem to have forgotten to provide a valid Document Root. This is the root path that contains the files and directories that will be made publicly available through the web server. It can be an empty path and even /dev/null, but it is a mandatory property.")
 
 
 # cherokee/regex.c
