@@ -127,7 +127,7 @@ cherokee_bind_configure (cherokee_bind_t        *listener,
 
 	ret = cherokee_config_node_read_int (conf, "port", &listener->port);
 	if (ret != ret_ok) {
-		LOG_CRITICAL_S ("ERROR: A port entry is need.");
+		LOG_CRITICAL_S (CHEROKEE_ERROR_BIND_PORT_NEEDED);
 		return ret_error;
 	}
 
@@ -280,7 +280,7 @@ cherokee_bind_init_port (cherokee_bind_t         *listener,
 		ret = init_socket (listener, AF_INET);
 
 		if (ret != ret_ok) {
-			LOG_CRITICAL ("Could not bind() port=%d (UID=%d, GID=%d)\n", 
+			LOG_CRITICAL (CHEROKEE_ERROR_BIND_COULDNT_BIND_PORT, 
 				      listener->port, getuid(), getgid());
 			return ret_error;
 		}

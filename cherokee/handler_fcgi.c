@@ -81,7 +81,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 
 	if (header->version != 1) {
 		cherokee_buffer_print_debug (inbuf, -1);
-		LOG_ERROR_S ("Parsing error: unknown version\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_HANDLER_FCGI_VERSION);
 		return ret_error;
 	}
 	
@@ -89,7 +89,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 	    header->type != FCGI_STDOUT && 
 	    header->type != FCGI_END_REQUEST) {
 		cherokee_buffer_print_debug (inbuf, -1);
-		LOG_ERROR_S ("Parsing error: unknown type\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_HANDLER_FCGI_PARSING);
 		return ret_error;
 	}
 	
@@ -117,7 +117,7 @@ process_package (cherokee_handler_fcgi_t *hdl, cherokee_buffer_t *inbuf, cheroke
 /*		printf ("READ:STDERR (%d): %s", len, data?data:""); */
 
 		if (CONN_VSRV(conn)->logger != NULL) {
-			LOG_ERROR("%s\n", data);
+			LOG_ERROR (CHEROKEE_ERROR_HANDLER_FCGI_STDERR, data);
 		}
 		else if (SOURCE_INT(hdl->src_ref)->debug) {
 			PRINT_MSG ("%.*s\n", len, data);
@@ -266,7 +266,7 @@ cherokee_handler_fcgi_configure (cherokee_config_node_t   *conf,
 	/* Final checks
 	 */
 	if (props->balancer == NULL) {
-		LOG_CRITICAL_S ("fcgi handler needs a balancer\n");
+		LOG_CRITICAL_S (CHEROKEE_ERROR_HANDLER_FCGI_BALANCER);
 		return ret_error;
 	}
 

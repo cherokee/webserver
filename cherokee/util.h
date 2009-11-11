@@ -129,10 +129,13 @@ int     cherokee_string_is_ipv6     (cherokee_buffer_t *ip);
 ret_t   cherokee_buf_add_bogonow    (cherokee_buffer_t *buf,
 				     cherokee_boolean_t update);
 
-ret_t   cherokee_buf_add_backtrace  (cherokee_buffer_t *buf, int n_skip);
+ret_t   cherokee_buf_add_backtrace  (cherokee_buffer_t *buf, int n_skip, const char *new_line, const char *line_pre);
 
 ret_t   cherokee_find_exec_in_path  (const char        *bin_name,
 				     cherokee_buffer_t *fullpath);
+
+ret_t   cherokee_atoi               (const char        *str,
+				     int               *ret_value);
 
 /* Time management functions
  */

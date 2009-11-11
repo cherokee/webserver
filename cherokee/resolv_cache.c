@@ -92,8 +92,9 @@ entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 		} else if (ret == ret_eagain) {
 			if (eagain_at == 0) {
 				eagain_at = cherokee_bogonow_now;
+
 			} else if (cherokee_bogonow_now > eagain_at + 3) {
-			      	LOG_WARNING ("Timed out while resolving '%s'\n", domain->buf);
+			      	LOG_WARNING (CHEROKEE_ERROR_RESOLVE_TIMEOUT, domain->buf);
 				return ret_error;
 			}
 

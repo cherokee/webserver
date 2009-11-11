@@ -1,9 +1,8 @@
-<h1>Could not launch the server</h1>
-
-<p>Something happened while launching the server. The error reported by the server follows:</p>
-
-<p>
- <pre>{{error}}
- </pre>
-</p>
-
+<div class="error-page">
+<div class="error-title">Could not launch the server</div>
+<div class="error-reason">{{title}}</div>
+<div class="error-suggestion">The server suggests to check <a href="{{admin_url}}">this page</a>. Most probably the problem can he solved in there.</div>
+<div class="error-description">{{description}}</div>
+<div class="error-backtrace">{{backtrace}}</div>
+<div class="error-datetime">{{time}}</div>
+</div>

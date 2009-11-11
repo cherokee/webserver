@@ -32,10 +32,14 @@
 #include "threading.h"
 #include "spawner.h"
 
-cuint_t           cherokee_cacheline_size;
-cint_t            cherokee_cpu_number;
-cuint_t           cherokee_fdlimit;
-cherokee_buffer_t cherokee_tmp_dir;
+/* Global variables
+ */
+cuint_t              cherokee_cacheline_size;
+cint_t               cherokee_cpu_number;
+cuint_t              cherokee_fdlimit;
+cherokee_buffer_t    cherokee_tmp_dir;
+cherokee_boolean_t   cherokee_admin_child;
+cherokee_null_bool_t cherokee_readable_errors;
 
 static cherokee_boolean_t _cherokee_init = false;
 
@@ -68,7 +72,7 @@ cherokee_init (void)
 	 */
 	dcc_ncpus (&cherokee_cpu_number);
 	if (cherokee_cpu_number < 1) {
-		LOG_WARNING ("Bad CPU number: %d, using 1\n", cherokee_cpu_number);
+		LOG_WARNING (CHEROKEE_ERROR_INIT_CPU_NUMBER, cherokee_cpu_number);
 		cherokee_cpu_number = 1;
 	}
 
@@ -80,7 +84,7 @@ cherokee_init (void)
 	 */
 	ret = cherokee_sys_fdlimit_get (&cherokee_fdlimit);
 	if (ret < ret_ok) {
-		LOG_ERROR_S ("Unable to get file descriptor limit\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_INIT_GET_FD_LIMIT);
 		return ret;
 	}
 
@@ -88,6 +92,9 @@ cherokee_init (void)
 	 */
 	cherokee_buffer_init (&cherokee_tmp_dir);
 	cherokee_tmp_dir_copy (&cherokee_tmp_dir);
+
+	cherokee_admin_child     = false;
+	cherokee_readable_errors = NULLB_NULL;
 
 	_cherokee_init = true;
 	return ret_ok;

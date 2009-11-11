@@ -99,7 +99,7 @@ command_rrdtool (cherokee_buffer_t *buf)
 	 */
 	ret = cherokee_rrd_connection_execute (rrd_connection, buf);
 	if (ret != ret_ok) {
-		LOG_ERROR ("Could not execute RRD command: %s\n", buf->buf);
+		LOG_ERROR (CHEROKEE_ERROR_HANDLER_RENDER_RRD_EXEC, buf->buf);
 		cherokee_rrd_connection_kill (rrd_connection, false);
 		return ret_error;
 	}
@@ -107,11 +107,11 @@ command_rrdtool (cherokee_buffer_t *buf)
 	/* Check everything was alright
 	 */
         if (cherokee_buffer_is_empty (buf)) {
-		LOG_ERROR_S ("RRDtool empty response\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_HANDLER_RENDER_RRD_EMPTY_REPLY);
 		return ret_error;
 		
 	} else if (strncmp (buf->buf, "ERROR", 5) == 0) {
-		LOG_ERROR ("RRDtool: %s\n", buf->buf);
+		LOG_ERROR (CHEROKEE_ERROR_HANDLER_RENDER_RRD_MSG, buf->buf);
 		return ret_error;
 	}
 
@@ -463,7 +463,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		}
 
 	} else {
-		LOG_ERROR ("Invalid request: %s\n", conn->request.buf);
+		LOG_ERROR (CHEROKEE_ERROR_HANDLER_RENDER_RRD_INVALID_REQ, conn->request.buf);
 		conn->error_code = http_service_unavailable;
 		return ret_error;		
 	}

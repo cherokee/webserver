@@ -97,7 +97,7 @@ header_str_to_type (cherokee_buffer_t        *header,
 	} else if (equal_buf_str (header, "Host")) {
 		*common_header = header_host;
 	} else {
-		LOG_CRITICAL ("Unknown header: '%s'\n", header->buf);
+		LOG_CRITICAL (CHEROKEE_ERROR_RULE_HEADER_UNKNOWN, header->buf);
 		return ret_error;
 	}
 
@@ -118,8 +118,8 @@ configure (cherokee_rule_header_t    *rule,
 	 */
 	ret = cherokee_config_node_read (conf, "header", &header);
 	if (ret != ret_ok) {
-		LOG_ERROR ("Rule header prio=%d needs a 'header' entry\n", 
-			   RULE(rule)->priority);
+		LOG_ERROR (CHEROKEE_ERROR_RULE_NO_PROPERTY,
+			   RULE(rule)->priority, "header");
 		return ret_error;
 	}
 
@@ -131,8 +131,8 @@ configure (cherokee_rule_header_t    *rule,
 	 */
 	ret = cherokee_config_node_copy (conf, "match", &rule->match);
 	if (ret != ret_ok) {
-		LOG_ERROR ("Rule header prio=%d needs a 'match' entry\n", 
-			   RULE(rule)->priority);
+		LOG_ERROR (CHEROKEE_ERROR_RULE_NO_PROPERTY,
+			   RULE(rule)->priority, "match");
 		return ret_error;
 	}
 

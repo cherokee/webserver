@@ -534,7 +534,7 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, const char *format, va_list
 	 */
 	estimation = cherokee_estimate_va_length (format, args);
 	if (unlikely (estimation) < 0) {
-		LOG_ERROR ("  -> '%s', esti=%d ( < 0)\n", format, estimation);
+		LOG_ERROR (CHEROKEE_ERROR_BUFFER_NEG_ESTIMATION, format, estimation);
 		return ret_error;
 	}
 
@@ -542,7 +542,6 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, const char *format, va_list
 	 */
 	ret = cherokee_buffer_ensure_size (buf, buf->len + estimation + 2);
 	if (unlikely (ret != ret_ok)) {
-		LOG_ERROR ("  -> '%s', esti=%d ensure_size=%d failed !\n", format, estimation, buf->len + estimation + 2);
 		return ret;
 	}
 
@@ -550,16 +549,17 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, const char *format, va_list
 	 * NOTE: len does NOT include '\0', size includes '\0' (len + 1)
 	 */
 	size = buf->size - buf->len;
-	if (size < 1) {
-		LOG_ERROR ("  -> '%s', esti=%d size=%d ( < 1)!\n", format, estimation, size);
+	if (unlikely (size < 1)) {
+		LOG_ERROR (CHEROKEE_ERROR_BUFFER_NO_SPACE, format, size, estimation);
 		return ret_error;
 	}
-	len = vsnprintf (buf->buf + buf->len, size, format, args2);
 
+	len = vsnprintf (buf->buf + buf->len, size, format, args2);
 #if 0
-	if (estimation < len)
-		LOG_ERROR ("  -> '%s' -> '%s', esti=%d real=%d size=%d\n", 
+	if (unlikely (estimation < len)) {
+		LOG_ERROR (CHEROKEE_ERROR_BUFFER_BAD_ESTIMATION,
 			   format, buf->buf + buf->len, estimation, len, size);
+	}
 #endif
 
 	if (unlikely (len < 0))
@@ -568,7 +568,7 @@ cherokee_buffer_add_va_list (cherokee_buffer_t *buf, const char *format, va_list
 	/* At this point buf-size is always greater than buf-len, thus size > 0.
 	 */
 	if (len >= size) {
-		LOG_ERROR ("Failed estimation=%d, needed=%d available size=%d: %s\n", 
+		LOG_ERROR (CHEROKEE_ERROR_BUFFER_AVAIL_SIZE,
 			   estimation, len, size, format);
 
 		cherokee_buffer_ensure_size (buf, buf->len + len + 2);
@@ -696,13 +696,6 @@ cherokee_buffer_move_to_begin (cherokee_buffer_t *buf, cuint_t pos)
 	 */
 	memmove (buf->buf, buf->buf+pos, (buf->len - pos) + 1);
 	buf->len -= pos;
-
-#if 0
-	if (strlen(buf->buf) != buf->len) {
-		LOG_ERROR ("ERROR: cherokee_buffer_move_to_begin(): strlen=%d buf->len=%d\n", 
-			   strlen(buf->buf), buf->len);
-	}
-#endif
 
 	return ret_ok;
 }
@@ -958,7 +951,7 @@ cherokee_buffer_read_file (cherokee_buffer_t *buf, char *filename)
 	 */
 	f = open (filename, O_RDONLY | O_BINARY);
 	if (f < 0) {
-		LOG_ERRNO(errno, cherokee_err_error, "Couldn't open '%s': ${errno}\n", filename);
+		LOG_ERRNO(errno, cherokee_err_error, CHEROKEE_ERROR_BUFFER_OPEN_FILE, filename);
 		return ret_error;
 	}
 
@@ -1017,7 +1010,7 @@ cherokee_buffer_read_from_fd (cherokee_buffer_t *buf, int fd, size_t size, size_
 			return ret_error;
 		}
 
-		LOG_ERRNO (errno, cherokee_err_error, "read(%d, %u,..): '${errno}'", fd, size);
+		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_BUFFER_READ_FILE, fd, size);
 		return ret_error;
 	}
 	else if (len == 0) {

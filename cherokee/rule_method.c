@@ -46,14 +46,14 @@ configure (cherokee_rule_method_t    *rule,
 
 	ret = cherokee_config_node_read (conf, "method", &tmp);
 	if (ret != ret_ok) {
-		LOG_CRITICAL ("Rule prio=%d needs an 'method' property\n", 
-			      RULE(rule)->priority);
+		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY,
+			      RULE(rule)->priority, "method");
 		return ret_error;
 	}
 
 	ret = cherokee_http_string_to_method (tmp, &rule->method);
 	if (ret != ret_ok) {
-		LOG_CRITICAL ("Did not recognize HTTP method '%s'\n", tmp->buf);
+		LOG_CRITICAL (CHEROKEE_ERROR_RULE_METHOD_UNKNOWN, tmp->buf);
 		return ret;
 	}
 

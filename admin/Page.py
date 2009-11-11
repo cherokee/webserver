@@ -7,6 +7,19 @@ from CherokeeManagement import *
 # For gettext
 N_ = lambda x: x
 
+PAGE_BASIC_LAYOUT_NOBAR = """
+    <div id="container-nobar">
+        <div id="header">
+           <div id="logo"><a href="/"><img src="/static/images/cherokee-logo-bar.png" alt="logo"/></a></div>
+           <div id="version">{{_lversion}} {{version}}</div>
+           {{help_block}}
+        </div>
+        <div id="workarea"><div id="workarea-inner">
+        {{content}}
+        </div></div>
+    </div>"""
+
+
 PAGE_BASIC_LAYOUT = """
     <div id="container">
 	<div id="header">

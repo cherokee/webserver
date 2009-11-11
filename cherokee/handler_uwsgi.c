@@ -90,7 +90,7 @@ cherokee_handler_uwsgi_configure (cherokee_config_node_t *conf, cherokee_server_
 	/* Final checks
 	 */
 	if (props->balancer == NULL) {
-		LOG_CRITICAL_S ("ERROR: UWSGI handler needs a balancer\n");
+		LOG_CRITICAL_S (CHEROKEE_ERROR_HANDLER_NO_BALANCER);
 		return ret_error;
 	}
 

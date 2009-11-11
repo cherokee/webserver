@@ -116,8 +116,8 @@ configure (cherokee_rule_directory_t *rule,
 
 	ret = cherokee_config_node_copy (conf, "directory", &rule->directory);
 	if (ret != ret_ok) {
-		LOG_CRITICAL ("Rule prio=%d needs a 'directory' property\n", 
-			      RULE(rule)->priority);
+		LOG_CRITICAL (CHEROKEE_ERROR_RULE_NO_PROPERTY,
+			      RULE(rule)->priority, "directory");
 		return ret_error;
 	}
 

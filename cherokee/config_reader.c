@@ -62,7 +62,7 @@ do_include (cherokee_config_node_t *conf, cherokee_buffer_t *path)
 
 	re = stat (path->buf, &info);
 	if (re < 0) {
-		LOG_CRITICAL ("Could not access '%s'\n", path->buf);
+		LOG_CRITICAL (CHEROKEE_ERROR_CONF_READ_ACCESS_FILE, path->buf);
 		return ret_error;
 	}
 
@@ -131,7 +131,7 @@ check_config_node_sanity (cherokee_config_node_t *conf)
 			re = cherokee_buffer_case_cmp_buf (&CONFIG_NODE(i)->key, 
 							   &CONFIG_NODE(j)->key);
 			if (re == 0) {
-				LOG_ERROR ("'%s' and '%s' as child of the same node.\n",
+				LOG_ERROR (CHEROKEE_ERROR_CONF_READ_CHILDREN_SAME_NODE,
 					   CONFIG_NODE(i)->key.buf, CONFIG_NODE(j)->key.buf);
 				return ret_error;
 			}
@@ -246,7 +246,7 @@ cherokee_config_reader_parse_string (cherokee_config_node_t *conf, cherokee_buff
 	return ret_ok;
 
 error:
-	LOG_ERROR ("Error parsing: %s\n", begin);
+	LOG_ERROR (CHEROKEE_ERROR_CONF_READ_PARSE, begin);
 
 	cherokee_buffer_mrproper (&key);
 	cherokee_buffer_mrproper (&val);

@@ -288,13 +288,14 @@ process_parameters (int argc, char **argv)
 		{"detach",            no_argument,       NULL, 'd'},
 		{"test",              no_argument,       NULL, 't'},
 		{"print-server-info", no_argument,       NULL, 'i'},
+		{"admin_child",       no_argument,       NULL, 'a'},
 		{"port",              required_argument, NULL, 'p'},
 		{"documentroot",      required_argument, NULL, 'r'},
 		{"config",            required_argument, NULL, 'C'},
 		{NULL, 0, NULL, 0}
 	};
 
-	while ((c = getopt_long(argc, argv, "hVdtip:r:C:", long_options, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "hVdtiap:r:C:", long_options, NULL)) != -1) {
 		switch(c) {
 		case 'C':
 			config_file = strdup(optarg);
@@ -314,6 +315,9 @@ process_parameters (int argc, char **argv)
 			break;
 		case 'i':
 			print_modules = true;
+			break;
+		case 'a':
+			cherokee_admin_child = true;
 			break;
 		case 'V':
 			printf (APP_NAME " " PACKAGE_VERSION "\n" APP_COPY_NOTICE);

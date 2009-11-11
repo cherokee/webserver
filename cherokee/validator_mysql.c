@@ -113,7 +113,7 @@ cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_serve
 				props->hash_type = cherokee_mysql_hash_sha1;
 
 			} else {
-				LOG_CRITICAL ("Validator MySQL: Unknown hash type: '%s'\n", subconf->val.buf);
+				LOG_CRITICAL (CHEROKEE_ERROR_VALIDATOR_MYSQL_HASH, subconf->val.buf);
 				return ret_error;
 			}
 
@@ -123,7 +123,7 @@ cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_serve
 			/* not handled here
 			 */
 		} else {
-			LOG_CRITICAL ("Validator MySQL: Unknown key: '%s'\n", subconf->key.buf);
+			LOG_CRITICAL (CHEROKEE_ERROR_VALIDATOR_MYSQL_KEY, subconf->key.buf);
 			return ret_error;
 		}
 	}
@@ -131,15 +131,15 @@ cherokee_validator_mysql_configure (cherokee_config_node_t *conf, cherokee_serve
 	/* Checks
 	 */
 	if (cherokee_buffer_is_empty (&props->user)) {
-		LOG_ERROR_S ("MySQL validator: an 'user' entry is needed\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_VALIDATOR_MYSQL_USER);
 		return ret_error;
 	}
 	if (cherokee_buffer_is_empty (&props->database)) {
-		LOG_ERROR_S ("MySQL validator: a 'database' entry is needed\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_VALIDATOR_MYSQL_DATABASE);
 		return ret_error;
 	}
 	if (cherokee_buffer_is_empty (&props->query)) {
-		LOG_ERROR_S ("MySQL validator: a 'query' entry is needed\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_VALIDATOR_MYSQL_QUERY);
 		return ret_error;
 	}
 
@@ -154,7 +154,7 @@ init_mysql_connection (cherokee_validator_mysql_t *mysql, cherokee_validator_mys
 
 	if (unlikely ((props->host.buf == NULL) &&
 		      (props->unix_socket.buf == NULL))) {
-		LOG_ERROR_S ("MySQL validator misconfigured: A Host or Unix socket is needed.");
+		LOG_ERROR_S (CHEROKEE_ERROR_VALIDATOR_MYSQL_SOURCE);
 		return ret_error;
 	}
 
@@ -170,7 +170,7 @@ init_mysql_connection (cherokee_validator_mysql_t *mysql, cherokee_validator_mys
 				   props->port, 
 				   props->unix_socket.buf, 0);
 	if (conn == NULL) {
-		LOG_ERROR ("Unable to connect to MySQL server: %s:%d %s\n", 
+		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_MYSQL_NOCONN, 
 			   props->host.buf, props->port, mysql_error (mysql->conn));
 		return ret_error;
 	}

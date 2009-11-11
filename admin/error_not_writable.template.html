@@ -1,10 +1,5 @@
-<h1>ERROR</h1>
-
-<div class="dialog-error">
- <p>The configuration file <b>{{cherokee_conf}}</b> cannot be modified.</p>
+<div class="error-page">
+<div class="error-title">Error</div>
+<div class="error-reason">The configuration file <code>{{cherokee_conf}}</code> cannot be modified.</div>
+<div class="error-suggestion">You have to change its permissions in order to allow cherokee-admin to work with it. You can try to fix it by changing the file permissions (<code>chmod u+w {{cherokee_conf}}</code>) or by launching cherokee-admin as root.</div>
 </div>
-
-<p>You have to change its permissions in order to allow cherokee-admin to work with it.</p>
-
-<p>You can try to fix it by changing the file permissions (<em>chmod u+w
-{{cherokee_conf}}</em>) or by launching cherokee-admin as root.</p>

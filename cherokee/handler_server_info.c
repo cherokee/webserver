@@ -289,7 +289,7 @@ cherokee_handler_server_info_configure (cherokee_config_node_t *conf, cherokee_s
 				props->connection_details = true;
 
 			} else {
-				LOG_ERROR("Unknown ServerInfo type: '%s'\n", subconf->val.buf);
+				LOG_ERROR (CHEROKEE_ERROR_HANDLER_SRV_INFO_TYPE, subconf->val.buf);
 				return ret_error;
 			}
 		}
@@ -533,7 +533,7 @@ modules_while (cherokee_buffer_t *key, void *value, void *params[])
 	} else if (mod->type & cherokee_collector) {
 		*collectors += 1;
 	} else {
-		LOG_ERROR("Unknown module type (%d)\n", mod->type);
+		LOG_ERROR (CHEROKEE_ERROR_HANDLER_SRV_INFO_MOD, mod->type);
 	}
 
 	return 0;

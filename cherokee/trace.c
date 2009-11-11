@@ -151,8 +151,9 @@ cherokee_trace_do_trace (const char *entry, const char *file, int line, const ch
 	}
 
 	if (trace.print_time) {
+		cherokee_buffer_add_char (&entries, '[');
 		cherokee_buf_add_bogonow (&entries, true);
-		cherokee_buffer_add_char (&entries, ' ');
+		cherokee_buffer_add_str  (&entries, "] ");
 	}
 	
 	cherokee_buffer_add_va (&entries, "%18s:%04d (%30s): ", file, line, func);

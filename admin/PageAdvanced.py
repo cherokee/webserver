@@ -76,6 +76,21 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddMacroContent ('content', content)
         return Page.Render(self)
 
+    def _render_content (self):
+        tabs  = []
+        tabs += [(_('Connections'),   self._render_performance())]
+        tabs += [(_('Resources'),     self._render_resources())]
+        tabs += [(_('I/O cache'),     self._render_iocache())]
+        tabs += [(_('Special Files'), self._render_special_files())]
+        tabs += [(_('TLS'),           self._render_tls())]
+
+        txt = "<h1>%s</h1>" % (_('Advanced configuration'))
+        txt += self.Dialog(WARNING, 'warning')
+        txt += self.InstanceTab (tabs)
+
+        form = Form ("/%s" % (self._id), add_submit=False)
+        return form.Render(txt, DEFAULT_SUBMIT_VALUE)
+
     def _render_performance (self):
         polling_methods = []
         for name, desc in POLL_METHODS:
@@ -126,22 +141,6 @@ class PageAdvanced (PageMenu, FormHelper):
         self.AddPropEntry (table, _('DH parameters: 2048 bits'), 'server!tls!dh_param2048', _(NOTE_DH2048), optional=True)
         self.AddPropEntry (table, _('DH parameters: 4096 bits'), 'server!tls!dh_param4096', _(NOTE_DH4096), optional=True)
         return self.Indent(table)
-
-    def _render_content (self):
-        tabs  = []
-        tabs += [(_('Connections'),   self._render_performance())]
-        tabs += [(_('Resources'),     self._render_resources())]
-        tabs += [(_('I/O cache'),     self._render_iocache())]
-        tabs += [(_('Special Files'), self._render_special_files())]
-        tabs += [(_('TLS'),           self._render_tls())]
-
-        txt = "<h1>%s</h1>" % (_('Advanced configuration'))
-        txt += self.Dialog(WARNING, 'warning')
-        txt += self.InstanceTab (tabs)
-
-        form = Form ("/%s" % (self._id), add_submit=False)
-        return form.Render(txt, DEFAULT_SUBMIT_VALUE)
-
 
     def _op_apply_changes (self, uri, post):
         self.ApplyChanges (['server!keepalive', 

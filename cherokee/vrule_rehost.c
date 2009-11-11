@@ -70,7 +70,7 @@ configure (cherokee_vrule_rehost_t   *vrule,
 
 	ret = cherokee_config_node_get (conf, "regex", &subconf);
 	if (ret != ret_ok) {
-		LOG_CRITICAL ("Virtual Server '%s' regex vrule needs a 'domain' entry\n", vsrv->name.buf);
+		LOG_CRITICAL (CHEROKEE_ERROR_VRULE_REHOST_NO_DOMAIN, vsrv->name.buf);
 		return ret_error;
 	}
 

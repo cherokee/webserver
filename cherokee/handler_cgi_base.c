@@ -309,7 +309,7 @@ cherokee_handler_cgi_base_build_basic_env (
 		if (ret == ret_ok) {
 			set_env (cgi, "SERVER_NAME", tmp->buf, tmp->len);
 		} else {
-			LOG_WARNING_S ("Error getting host name.\n");
+			LOG_WARNING_S (CHEROKEE_ERROR_HANDLER_CGI_GET_HOSTNAME);
 		}
 	}
 

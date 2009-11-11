@@ -104,8 +104,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		/* Set non-blocking */
 		ret = cherokee_fd_set_nonblocking (sock->socket, true);
 		if (unlikely (ret != ret_ok)) {
-			LOG_ERRNO (errno, cherokee_err_error,
-				   "Failed to set nonblocking (fd=%d): ${errno}\n", sock->socket);
+			LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_SOURCE_NONBLOCK, sock->socket);
 		}
 
 	/* INET socket
@@ -131,8 +130,7 @@ cherokee_source_connect (cherokee_source_t *src, cherokee_socket_t *sock)
 		/* Set non-blocking */
 		ret = cherokee_fd_set_nonblocking (sock->socket, true);
 		if (unlikely (ret != ret_ok)) {
-			LOG_ERRNO (errno, cherokee_err_error,
-				   "Failed to set nonblocking (fd=%d): ${errno}\n", sock->socket);
+			LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_SOURCE_NONBLOCK, sock->socket);
 		}
 	}
 

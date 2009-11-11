@@ -83,7 +83,7 @@ class CherokeeManagement:
         if not "PATH" in environ:
             environ["PATH"] = ':'.join(DEFAULT_PATH)
 
-        p = Popen ([CHEROKEE_SERVER, '-C', self._cfg.file], 
+        p = Popen ([CHEROKEE_SERVER, '--admin_child', '-C', self._cfg.file], 
                    stdout=PIPE, stderr=PIPE, env=environ,
                    preexec_fn=daemonize, close_fds=True)
 
@@ -105,7 +105,7 @@ class CherokeeManagement:
 
             nl = stderr.find('\n')
             if nl != -1:
-                for e in ['ERROR', '(error) ', '(critical) ']:
+                for e in ["{'type': ", 'ERROR', '(error) ', '(critical) ']:
                     if e in stderr:
                         self.__stop_process (p.pid)
                         self._pid = None

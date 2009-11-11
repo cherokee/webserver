@@ -170,7 +170,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 
 		req_time = cherokee_dtm_str2time (header);			
 		if (unlikely (req_time == DTM_TIME_EVAL)) {
-			LOG_WARNING("Unparseable time '%s'\n", header);
+			LOG_WARNING (CHEROKEE_ERROR_HANDLER_FILE_TIME_PARSE, header);
 				
 			/* restore end of line */
 			*end = tmp;
@@ -249,7 +249,7 @@ check_cached (cherokee_handler_file_t *fhdl)
 		
 		req_time = cherokee_dtm_str2time (header);			
 		if (unlikely (req_time == DTM_TIME_EVAL)) {
-			LOG_WARNING ("Unparseable time '%s'\n", header);
+			LOG_WARNING (CHEROKEE_ERROR_HANDLER_FILE_TIME_PARSE, header);
 				
 			*end = tmp;
 			return ret_ok;

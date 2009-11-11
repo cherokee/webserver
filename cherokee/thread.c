@@ -417,7 +417,7 @@ close_active_connection (cherokee_thread_t *thread, cherokee_connection_t *conn)
 	 */
 	ret = cherokee_fdpoll_del (thread->fdpoll, SOCKET_FD(&conn->socket));
 	if (ret != ret_ok) {
-		LOG_ERROR ("Couldn't remove fd(%d) from fdpoll\n", SOCKET_FD(&conn->socket));
+		LOG_ERROR (CHEROKEE_ERROR_THREAD_RM_FD_POLL, SOCKET_FD(&conn->socket));
 	}
 
 	/* Remove from active connections list
@@ -1047,8 +1047,8 @@ process_active_connections (cherokee_thread_t *thd)
 			default:
 				if ((MODULE(conn->handler)->info) &&
 				    (MODULE(conn->handler)->info->name)) 
-					LOG_ERROR ("Unknown ret %d from handler %s\n", ret,
-						   MODULE(conn->handler)->info->name);
+					LOG_ERROR (CHEROKEE_ERROR_THREAD_HANDLER_RET,
+						   ret, MODULE(conn->handler)->info->name);
 				else
 					RET_UNKNOWN(ret);
 				break;
@@ -1375,7 +1375,7 @@ thread_full_handler (cherokee_thread_t *thd,
 	if (ret != ret_ok)
 		goto out;
 
-	LOG_WARNING_S ("Run out of file descriptors!!\n");
+	LOG_WARNING_S (CHEROKEE_ERROR_THREAD_OUT_OF_FDS);
 	
 	/* Read the request
 	 */
@@ -1431,7 +1431,7 @@ accept_new_connection (cherokee_thread_t *thd,
 	 */
 	ret = cherokee_thread_get_new_connection (thd, &new_conn);
 	if (unlikely(ret < ret_ok)) {
-		LOG_ERROR_S ("Trying to get a new connection object\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_THREAD_GET_CONN_OBJ);
 		cherokee_fd_close (new_fd);
 		return ret_deny;
 	}
@@ -1447,7 +1447,7 @@ accept_new_connection (cherokee_thread_t *thd,
 	CHEROKEE_MUTEX_LOCK (&thd->ownership);
 
 	if (unlikely(ret < ret_ok)) {
-		LOG_ERROR_S ("Trying to set sockaddr\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_THREAD_SET_SOCKADDR);
 		goto error;
 	}
 

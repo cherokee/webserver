@@ -131,8 +131,8 @@ cherokee_encoder_deflate_init (cherokee_encoder_deflate_t *encoder)
 				 Z_DEFAULT_STRATEGY);
 
 	if (err != Z_OK) {
-		LOG_ERROR("deflateInit2() = %s\n", 
-			  get_deflate_error_string(err));
+		LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATEINIT2,
+			   get_deflate_error_string(err));
 
 		return ret_error;
 	}
@@ -181,15 +181,15 @@ do_encode (cherokee_encoder_deflate_t *encoder,
 		case Z_STREAM_END:
 			err = zlib_deflateEnd (z);
 			if (err != Z_OK) {
-				LOG_ERROR("deflateEnd(): err=%s\n", 
-					  get_deflate_error_string(err));
+				LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATEEND,
+					   get_deflate_error_string(err));
 				return ret_error;
 			}
 			cherokee_buffer_add (out, buf, sizeof(buf) - z->avail_out);
 			break;
 		default:
-			LOG_ERROR("deflate(): err=%s avail=%d\n", 
-				  get_deflate_error_string(err), z->avail_in);
+			LOG_ERROR (CHEROKEE_ERROR_ENCODER_DEFLATE,
+				   get_deflate_error_string(err), z->avail_in);
 			
 			zlib_deflateEnd (z);
 			return ret_error;		

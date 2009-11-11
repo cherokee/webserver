@@ -135,7 +135,7 @@ class Handler(pyscgi.SCGIHandler):
             manager = cherokee_management_get (cfg)
             error = manager.launch()
             if error:
-                page = PageError (cfg, PageError.COULDNT_LAUNCH, error=error)
+                page = PareError_LaunchFail (cfg, error)
             else:
                 body = "/"
         elif uri.startswith('/stop'):

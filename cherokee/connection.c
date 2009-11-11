@@ -1487,7 +1487,7 @@ get_authorization (cherokee_connection_t *conn,
 		break;
 
 	default:
-		LOG_ERROR_S ("Unknown authentication method\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_CONNECTION_AUTH);
 		return ret_error;
 	}
 
@@ -1572,15 +1572,16 @@ cherokee_connection_build_local_directory (cherokee_connection_t     *conn,
 	/* Regular request
 	 */
 	ret = cherokee_buffer_add_buffer (&conn->local_directory, &vsrv->root);
-	if (unlikely (ret != ret_ok))
+	if (unlikely (ret != ret_ok)) {
 		goto error;
+	}
 	
 ok:
 	TRACE(ENTRIES, "Set Local Directory: '%s'\n", conn->local_directory.buf);
 	return ret_ok;
 
 error:
-	LOG_ERROR_S ("Couldn't set local directory\n");
+	LOG_ERROR_S (CHEROKEE_ERROR_CONNECTION_LOCAL_DIR);
 	return ret_error;
 }
 
@@ -1909,7 +1910,7 @@ cherokee_connection_get_request (cherokee_connection_t *conn)
 		ret = cherokee_server_get_vserver (CONN_SRV(conn), &conn->host, conn,
 						   (cherokee_virtual_server_t **)&conn->vserver);
 		if (unlikely (ret != ret_ok)) {
-			LOG_ERROR ("Couldn't get virtual server: '%s'\n", conn->host.buf);
+			LOG_ERROR (CHEROKEE_ERROR_CONNECTION_GET_VSERVER, conn->host.buf);
 			return ret_error;
 		}
 		break;

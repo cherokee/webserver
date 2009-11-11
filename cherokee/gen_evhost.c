@@ -117,13 +117,13 @@ cherokee_generic_evhost_configure (cherokee_generic_evhost_t *evhost,
 
 	ret = cherokee_config_node_read (config, "tpl_document_root", &tmp);
 	if (ret != ret_ok) {
-		LOG_CRITICAL_S ("ERROR: EvHost needs a 'tpl_document_root property'\n");
+		LOG_CRITICAL_S (CHEROKEE_ERROR_GEN_EVHOST_TPL_DROOT);
 		return ret;
 	}
 
 	ret = cherokee_template_parse (&evhost->tpl_document_root, tmp);
 	if (ret != ret_ok) {
-		LOG_CRITICAL ("ERROR: EvHost: Couldn't parse template '%s'\n", tmp->buf);
+		LOG_CRITICAL (CHEROKEE_ERROR_GEN_EVHOST_PARSE, tmp->buf);
 		return ret_error;
 	}
 

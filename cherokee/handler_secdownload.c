@@ -76,7 +76,7 @@ cherokee_handler_secdownload_configure (cherokee_config_node_t   *conf,
 	 */
 	ret = cherokee_config_node_copy (conf, "secret", &props->secret);
 	if (ret != ret_ok) {
-		LOG_CRITICAL_S ("Handler secdownload needs a secret.\n");
+		LOG_CRITICAL_S (CHEROKEE_ERROR_HANDLER_SECDOWN_SECRET);
 		return ret_error;
 	}
 

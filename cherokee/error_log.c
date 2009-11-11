@@ -24,9 +24,15 @@
 
 #include "common-internal.h"
 #include "error_log.h"
+#include "nullable.h"
+#include "init.h"
 #include "util.h"
 
 static cherokee_logger_t *default_error_logger = NULL;
+
+/* Include the error information */
+#include "errors.h"
+
 
 ret_t
 cherokee_error_log_set_log (cherokee_logger_t *logger)
@@ -35,40 +41,38 @@ cherokee_error_log_set_log (cherokee_logger_t *logger)
 	return ret_ok;
 }
 
-ret_t
-cherokee_error_log (cherokee_error_type_t type,
-		    const char *format, ...)
+
+static void
+skip_args (va_list *ap, const char *prev_string)
 {
-	va_list                   ap;
-	cherokee_logger_t        *logger;
-	cherokee_logger_writer_t *writer = NULL;
-	cherokee_buffer_t         tmp    = CHEROKEE_BUF_INIT;
+	const char *p = prev_string;
 
-	/* Error message formatting
-	 */
-	cherokee_buf_add_bogonow (&tmp, false);
+	p = strchr (prev_string, '%');
+	while (p) {
+		p++;
+		switch (*p) {
+		case 's':
+			va_arg ((*ap), char *);
+			break;
+		case 'd':
+			va_arg ((*ap), int);
+			break;
+		default:
+//			LOG_CRITICAL (CHEROKEE_ERROR_ERRORLOG_PARAM, p);
+			break;
+		}
 
-	switch (type) {
-	case cherokee_err_warning:
-		cherokee_buffer_add_str (&tmp, " (warning) ");
-		break;
-	case cherokee_err_error:
-		cherokee_buffer_add_str (&tmp, " (error) ");
-		break;
-	case cherokee_err_critical:
-		cherokee_buffer_add_str (&tmp, " (critical) ");
-		break;
+		p = strchr (p, '%');
 	}
 
-	va_start (ap, format);
-	cherokee_buffer_add_va_list (&tmp, format, ap);
-	va_end (ap);
+}
 
-	/* Backtrace
-	 */
-#ifdef BACKTRACES_ENABLED
-	cherokee_buf_add_backtrace (&tmp, 2);
-#endif
+
+static ret_t
+report_error (cherokee_buffer_t *buf)
+{
+	cherokee_logger_t        *logger;
+	cherokee_logger_writer_t *writer = NULL;
 
 	/* Logging: 1st option - connection's logger
 	 */
@@ -85,55 +89,277 @@ cherokee_error_log (cherokee_error_type_t type,
 	if (logger) {
 		cherokee_logger_get_error_writer (logger, &writer);
 		if ((writer) && (writer->initialized)) {
-			cherokee_logger_write_error (logger, &tmp);
+			cherokee_logger_write_error (logger, buf);
+			return ret_ok;
 		}
 	}
 
-	if ((logger == NULL) ||
-	    (! writer) ||
-	    ((writer) && (! writer->initialized)) ||
-	    (type == cherokee_err_critical))
-	{
-		fprintf (stderr, "%s", tmp.buf);
+	fprintf (stderr, "%s", buf->buf);
+	return ret_ok;
+}
+
+
+static void 
+render_python_error (cherokee_error_type_t   type,
+		     const char             *filename,
+		     int                     line,
+		     int                     error_num,
+		     const cherokee_error_t *error,
+		     cherokee_buffer_t      *output,
+		     va_list                 ap)
+{
+	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
+	
+	/* Dict: open */
+	cherokee_buffer_add_char (output, '{');
+
+	/* Error type */
+	cherokee_buffer_add_str (output, "'type': \"");
+
+	switch (type) {
+	case cherokee_err_warning:
+		cherokee_buffer_add_str (output, "warning");
+		break;
+	case cherokee_err_error:
+		cherokee_buffer_add_str (output, "error");
+		break;
+	case cherokee_err_critical:
+		cherokee_buffer_add_str (output, "critical");
+		break;
+	default:
+		SHOULDNT_HAPPEN;
+	}
+	cherokee_buffer_add_str (output, "\", ");
+	
+	/* Time */
+	cherokee_buffer_add_str  (output, "'time': \"");
+	cherokee_buf_add_bogonow (output, false);
+	cherokee_buffer_add_str  (output, "\", ");
+
+	/* Render the title */
+	cherokee_buffer_add_str     (output, "'title': \"");
+	cherokee_buffer_add_va_list (output, error->title, ap);
+	cherokee_buffer_add_str     (output, "\", ");
+	skip_args (&ap, error->title);
+
+	/* File and line*/
+	cherokee_buffer_add_str (output, "'code': \"");
+	cherokee_buffer_add_va  (output, "%s:%d", filename, line);
+	cherokee_buffer_add_str (output, "\", ");
+
+	/* Error number */
+	cherokee_buffer_add_str (output, "'error': \"");
+	cherokee_buffer_add_va  (output, "%d", error_num);
+	cherokee_buffer_add_str (output, "\", ");
+
+	/* Description */
+	if (error->description) {
+		cherokee_buffer_add_str     (output, "'description': \"");
+		cherokee_buffer_clean       (&tmp);
+		cherokee_buffer_add_va_list (&tmp, error->description, ap);
+		cherokee_buffer_add_escape_html (output, &tmp);
+		cherokee_buffer_add_str     (output, "\", ");
+		skip_args (&ap, error->description);
 	}
 
+	/* Admin URL */
+	if (error->admin_url) {
+		cherokee_buffer_add_str     (output, "'admin_url': \"");
+		cherokee_buffer_add_va_list (output, error->admin_url, ap);
+		cherokee_buffer_add_str     (output, "\", ");
+
+		/* ARGS: Skip 'admin_url' */
+		skip_args (&ap, error->admin_url);
+	}
+
+	/* Debug information */
+	if (error->debug) {
+		cherokee_buffer_add_str     (output, "'debug': \"");
+		cherokee_buffer_add_va_list (output, error->debug, ap);
+		cherokee_buffer_add_str     (output, "\", ");
+
+		/* ARGS: Skip 'debug' */
+		skip_args (&ap, error->debug);
+	}
+
+	/* Version */
+	cherokee_buffer_add_str (output, "'version': \"");	
+	cherokee_buffer_add_str (output, PACKAGE_VERSION);
+	cherokee_buffer_add_str (output, "\", ");
+
+	cherokee_buffer_add_str (output, "'compilation_date': \"");	
+	cherokee_buffer_add_str (output, __DATE__ " " __TIME__);
+	cherokee_buffer_add_str (output, "\", ");
+
+	cherokee_buffer_add_str (output, "'configure_args': \"");	
+	cherokee_buffer_clean   (&tmp);
+	cherokee_buffer_add_str (&tmp, CHEROKEE_CONFIG_ARGS);
+	cherokee_buffer_add_escape_html (output, &tmp);
+	cherokee_buffer_add_buffer (output, &tmp);
+	cherokee_buffer_add_str (output, "\", ");	
+	
+	/* Backtrace */
+	cherokee_buffer_add_str (output, "'backtrace': \"");	
+#ifdef BACKTRACES_ENABLED
+	cherokee_buffer_clean (&tmp);
+	cherokee_buf_add_backtrace (&tmp, 2, "\\n", "");
+	cherokee_buffer_add_escape_html (output, &tmp);
+#endif
+	cherokee_buffer_add_str (output, "\", ");
+
+	/* Let's finish here.. */
+	if (strcmp (output->buf + output->len - 2, ", ") == 0) {
+		cherokee_buffer_drop_ending (output, 2);
+	}
+	cherokee_buffer_add_str (output, "}\n");
+
+	/* Clean up */
 	cherokee_buffer_mrproper (&tmp);
+}
+
+
+static void 
+render_human_error (cherokee_error_type_t   type,
+		    const char             *filename,
+		    int                     line,
+		    int                     error_num,
+		    const cherokee_error_t *error,
+		    cherokee_buffer_t      *output,
+		    va_list                 ap)
+{
+	UNUSED (error_num);
+	
+	/* Time */
+	cherokee_buffer_add_char (output, '[');
+	cherokee_buf_add_bogonow (output, false);
+	cherokee_buffer_add_str  (output, "] ");
+	
+	/* Error type */
+	switch (type) {
+	case cherokee_err_warning:
+		cherokee_buffer_add_str (output, "(warning)");
+		break;
+	case cherokee_err_error:
+		cherokee_buffer_add_str (output, "(error)");
+		break;
+	case cherokee_err_critical:
+		cherokee_buffer_add_str (output, "(critical)");
+		break;
+	default:
+		SHOULDNT_HAPPEN;
+	}
+
+	/* Source */
+	cherokee_buffer_add_va (output, " %s:%d - ", filename, line);
+
+	/* Error */
+	cherokee_buffer_add_va_list (output, error->title, ap);
+	cherokee_buffer_add_char    (output, '\n');
+
+	/* Backtrace */
+#ifdef BACKTRACES_ENABLED
+	cherokee_buf_add_backtrace (output, 2, "\n", "  ");
+#endif
+}
+
+
+static ret_t
+render (cherokee_error_type_t  type,
+	const char            *filename,
+	int                    line,
+	int                    error_num,
+	va_list                ap,
+	cherokee_buffer_t     *error_str)
+{
+	const cherokee_error_t *error;
+	cherokee_boolean_t      readable;
+
+	/* Get the error information
+	 */
+	error = &__cherokee_errors[error_num];
+	if (unlikely (error->id != error_num)) {
+		return ret_error;
+	}
+	
+	/* Format
+	 */
+	if (! NULLB_IS_NULL (cherokee_readable_errors)) {
+		readable = NULLB_TO_BOOL (cherokee_readable_errors);
+	} else {
+		readable = ! cherokee_admin_child;
+	}
+
+	/* Render
+	 */
+	if (readable) {
+		render_human_error (type, filename, line, error_num, error, error_str, ap);
+	} else {
+		render_python_error (type, filename, line, error_num, error, error_str, ap);
+	}
+
 	return ret_ok;
 }
 
 
 ret_t
-cherokee_error_errno_log (int                    error,
-			  cherokee_error_type_t  type,
-			  const char            *format, ...)
+cherokee_error_log (cherokee_error_type_t  type,
+		    const char            *filename,
+		    int                    line,
+		    int                    error_num, ...)
 {
-	va_list           ap;
-	const char       *errstr;
-	char              err_tmp[ERROR_MAX_BUFSIZE];
-	cherokee_buffer_t buffer = CHEROKEE_BUF_INIT;
+	va_list            ap;
+	cherokee_buffer_t  error_str = CHEROKEE_BUF_INIT;
 
-	/* Get the error string
+	/* Render the error message
 	 */
-	errstr = cherokee_strerror_r (error, err_tmp, sizeof(err_tmp));
-	if (errstr == NULL)
-		errstr = "unknwon error (?)";
-
-	/* Render
-	 */
-	cherokee_buffer_ensure_size (&buffer, 128);
-	va_start (ap, format);
-	cherokee_buffer_add_va_list (&buffer, format, ap);
+	va_start (ap, error_num);
+	render (type, filename, line, error_num, ap, &error_str);
 	va_end (ap);
 
-	/* Replace error
+	/* Report it
 	 */
-	cherokee_buffer_replace_string (&buffer, (char *)"${errno}", 8,
+	report_error (&error_str);
+
+	/* Clean up
+	 */
+	cherokee_buffer_mrproper (&error_str);
+	return ret_ok;
+}
+
+ret_t
+cherokee_error_errno_log (int                    errnumber,
+			  cherokee_error_type_t  type,
+			  const char            *filename,
+			  int                    line,
+			  int                    error_num, ...)
+{
+	va_list            ap;
+	const char        *errstr;
+	char               err_tmp[ERROR_MAX_BUFSIZE];
+	cherokee_buffer_t  error_str = CHEROKEE_BUF_INIT;
+
+	/* Render the error message
+	 */
+	va_start (ap, error_num);
+	render (type, filename, line, error_num, ap, &error_str);
+	va_end (ap);
+
+	/* Replace ${errno}
+	 */
+	errstr = cherokee_strerror_r (errnumber, err_tmp, sizeof(err_tmp));
+	if (errstr == NULL) {
+		errstr = "unknwon error (?)";
+	}
+
+	cherokee_buffer_replace_string (&error_str, (char *)"${errno}", 8,
 					(char *) errstr, strlen(errstr));
 
-	/* Log & clean up
+	/* Report it
 	 */
-	cherokee_error_log (type, "%s", buffer.buf);
-	cherokee_buffer_mrproper (&buffer);
+	report_error (&error_str);
 
+	/* Clean up
+	 */
+	cherokee_buffer_mrproper (&error_str);
 	return ret_ok;
 }

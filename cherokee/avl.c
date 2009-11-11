@@ -743,7 +743,7 @@ node_check (cherokee_avl_node_t *node)
 		if (node->left_child) {
 			tmp = node_prev (node);
 			if (tmp->right != node) {
-				LOG_ERROR_S ("previous");
+				LOG_ERROR_S (CHEROKEE_ERROR_AVL_PREVIOUS);
 				return ret_error;
 			}
 		}
@@ -751,7 +751,7 @@ node_check (cherokee_avl_node_t *node)
 		if (node->right_child) {
 			tmp = node_next (node);
 			if (tmp->left != node) {
-				LOG_ERROR_S ("next");
+				LOG_ERROR_S (CHEROKEE_ERROR_AVL_NEXT);
 				return ret_error;
 			}
 		}
@@ -766,7 +766,7 @@ node_check (cherokee_avl_node_t *node)
       
 		balance = right_height - left_height;
 		if (balance != node->balance) {
-			LOG_ERROR_S ("Balance");
+			LOG_ERROR_S (CHEROKEE_ERROR_AVL_BALANCE);
 			return ret_error;
 		}
 

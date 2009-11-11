@@ -12,7 +12,8 @@ body {
  height:100%;
 }
 
-html>body #container {
+html>body #container, 
+html>body #container-nobar {
  overflow: auto;
  min-height: 100%;
 }
@@ -40,11 +41,19 @@ a:hover { color: #164987; }
 
 #container {
  background: #cfd9e8 url(../images/background.png) center top repeat-y;
+}
+
+#container-nobar {
+ background: #cfd9e8 url(../images/background-nobar.png) center top repeat-y;
+}
+
+#container, #container-nobar {
  width: 960px;
  min-width: 960px;
  margin: 0 auto;
  text-align: center;
 }
+
 
 #header {
  width: 960px;
@@ -79,6 +88,12 @@ a:hover { color: #164987; }
  min-height: 550px;
  text-align: left;
  height:100%;
+}
+
+#container-nobar #workarea {
+ width: 90%;
+ margin: 0 auto;
+ float: none;
 }
 
 #workarea-inner {
@@ -343,6 +358,60 @@ table td label {
  font-weight: bold;
  letter-spacing: 1px;
  color: #000;
+}
+
+/* ERROR PAGE */
+.error-page {
+ padding: 8px 16px 8px 64px;
+ margin: 16px 0;
+ min-height: 60px;
+ background: #fbf7da url(../images/offline.png) 8px 8px no-repeat;
+ border-radius: 4px;
+ -moz-border-radius: 4px;
+ -webkit-border-radius: 4px;
+ border: 1px solid #edd400;
+}
+
+.error-title {
+ color: #c00;
+ font-weight: normal;
+ font-size: 150%;
+}
+
+.error-reason {
+ font-weight: bold;
+ margin-bottom: 1em;
+}
+
+.error-suggestion {
+ margin: 0.5em 0;
+}
+
+.error-description {
+ margin: 0.5em 0;
+}
+
+.error-backtrace {
+ padding: 1em;
+ background: #efeac7;
+ white-space: pre;
+ font-family: monospace;
+ margin: 1em 0;
+ overflow-x: auto;
+}
+
+.error-page code {
+ background: #efeac7;
+ white-space: pre;
+ font-family: monospace;
+ padding: 2px;
+ font-size: 110%;
+}
+
+
+.error-datetime {
+ text-align: right;
+ color: #c3ba7b;
 }
 
 /* TABS */

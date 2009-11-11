@@ -168,7 +168,7 @@ cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
 #ifdef HAVE_PAM_FAIL_DELAY
 	ret = pam_fail_delay (pamhandle, 0);
 	if (ret != PAM_SUCCESS) {
-		LOG_ERROR_S ("Setting pam fail delay failed\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_VALIDATOR_PAM_DELAY);
 
 		conn->error_code = http_internal_error;
 		return ret_error;
@@ -194,7 +194,7 @@ cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
 #endif
 
 	if (ret != PAM_SUCCESS) {
-		LOG_ERROR ("PAM: user '%s' - not authenticated: %s\n",
+		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_PAM_AUTH,
 			   conn->validator->user.buf,
 			   pam_strerror(pamhandle, ret));
 
@@ -205,7 +205,7 @@ cherokee_validator_pam_check (cherokee_validator_pam_t *pam,
 	 */
 	ret = pam_acct_mgmt (pamhandle, PAM_DISALLOW_NULL_AUTHTOK); 
 	if (ret != PAM_SUCCESS) {
-		LOG_ERROR ("PAM: user '%s' - invalid account: %s\n",
+		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_PAM_ACCOUNT,
 			   conn->validator->user.buf,
 			   pam_strerror(pamhandle, ret));
 

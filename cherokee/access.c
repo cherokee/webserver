@@ -82,8 +82,6 @@ typedef struct {
 #define SUBNET_NODE(x) ((subnet_item_t *)(x))
 
 
-
-
 static ip_item_t *
 new_ip (void) 
 {
@@ -197,9 +195,7 @@ parse_ip (char *ip, ip_item_t *n)
 # ifdef HAVE_IPV6
 	if (n->type == ipv6) {
 		if (IN6_IS_ADDR_V4MAPPED (&(n->ip).ip6)) {
-			LOG_ERROR ("ERROR: This IP '%s' is IPv6-mapped IPv6 address.  "
-				   "Please, specify IPv4 in a.b.c.d style instead "
-				   "of ::ffff:a.b.c.d style\n", ip);
+			LOG_ERROR (CHEROKEE_ERROR_ACCESS_IPV4_MAPPED, ip);
 			return ret_error;
 		}
 	}
@@ -312,7 +308,7 @@ cherokee_access_add_ip (cherokee_access_t *entry, char *ip)
 
 	ret = parse_ip (ip, n);
 	if (ret < ret_ok) {
-		LOG_ERROR ("IP address '%s' seems to be invalid\n", ip);
+		LOG_ERROR (CHEROKEE_ERROR_ACCESS_INVALID_IP, ip);
 
 		free_ip(n);
 		return ret;
@@ -374,7 +370,7 @@ cherokee_access_add_subnet (cherokee_access_t *entry, char *subnet)
 	 */
 	ret = parse_ip (ip.buf, IP_NODE(n));
 	if (ret < ret_ok) {
-		LOG_ERROR ("IP address '%s' seems to be invalid\n", ip.buf);
+		LOG_ERROR (CHEROKEE_ERROR_ACCESS_INVALID_IP, ip.buf);
 		goto error;
 	}
 
@@ -382,7 +378,7 @@ cherokee_access_add_subnet (cherokee_access_t *entry, char *subnet)
 	 */
 	ret = parse_netmask (mask, n);
 	if (ret < ret_ok) {
-		LOG_ERROR ("Netmask '%s' seems to be invalid\n", mask);
+		LOG_ERROR (CHEROKEE_ERROR_ACCESS_INVALID_MASK, mask);
 		goto error;	
 	}
 

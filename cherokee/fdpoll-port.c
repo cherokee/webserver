@@ -81,7 +81,8 @@ fd_associate( cherokee_fdpoll_port_t *fdp, int fd, void *rw )
 	                     rw);                      /* user data */
 
 	if ( rc == -1 ) {
-		LOG_ERRNO (errno, cherokee_err_error, "port_associate: fd %d: '${errno}'", fd);
+		LOG_ERRNO (errno, cherokee_err_error,
+			   CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
 		return ret_error;
 	}
 	
@@ -119,7 +120,8 @@ _add (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 
 	rc = fd_associate(fdp, fd, (rw == FDPOLL_MODE_WRITE ? WRITE : READ));
 	if ( rc == -1 ) {
-		LOG_ERRNO (errno, cherokee_err_error, "port_associate: fd %d: '${errno}'", fd);
+		LOG_ERRNO (errno, cherokee_err_error, 
+			   CHEROKEE_ERROR_FDPOLL_PORTS_FD_ASSOCIATE, fd);
 		return ret_error;
 	}
 
@@ -137,7 +139,8 @@ _del (cherokee_fdpoll_port_t *fdp, int fd)
 	                      PORT_SOURCE_FD, /* source */
 	                      fd);            /* object */
 	if ( rc == -1 ) {
-		LOG_ERRNO (errno, cherokee_err_error, "port_dissociate: fd %d: '${errno}'", fd);
+		LOG_ERRNO (errno, cherokee_err_error,
+			   CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
 		return ret_error;
 	}
 
@@ -170,7 +173,7 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 			(uint_t *)&fdp->port_readyfds,
 		        &timeout);
 	if ( rc < 0 ) {
-		LOG_ERRNO_S (errno, cherokee_err_error, "port_getn: '${errno}'");
+		LOG_ERRNO_S (errno, cherokee_err_error, CHEROKEE_ERROR_FDPOLL_PORTS_GETN);
 		return 0;
 	}
 
@@ -186,7 +189,7 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 	rc = port_getn (fdp->port, fdp->port_events,FDPOLL(fdp)->nfiles, 
 			&fdp->port_readyfds, &timeout);
 	if ( ( (rc < 0) && (errno != ETIME) ) || (fdp->port_readyfds == -1)) {
-		LOG_ERRNO_S (errno, cherokee_err_error, "port_getn: '${errno}'");
+		LOG_ERRNO_S (errno, cherokee_err_error, CHEROKEE_ERROR_FDPOLL_PORTS_GETN);
 		return 0;
 	}
 
@@ -199,7 +202,8 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 		                   nfd, 
 		                   fdp->port_events[i].portev_user);
 		if ( rc < 0 ) {
-			LOG_ERRNO_S (errno, cherokee_err_error, "port_associate: '${errno}'");
+			LOG_ERRNO_S (errno, cherokee_err_error,
+				     CHEROKEE_ERROR_FDPOLL_PORTS_FD_ASSOCIATE, nfd);
 		}
 	}
 
@@ -253,7 +257,8 @@ _set_mode (cherokee_fdpoll_port_t *fdp, int fd, int rw)
 	                    (rw == FDPOLL_MODE_WRITE ? POLLOUT : POLLIN),
 	                    (rw == FDPOLL_MODE_WRITE ? WRITE   : READ));
 	if ( rc == -1 ) {
-		LOG_ERRNO (errno, cherokee_err_error, "port_associate: fd %d: '${errno}'", fd);
+		LOG_ERRNO (errno, cherokee_err_error,
+			   CHEROKEE_ERROR_FDPOLL_PORTS_ASSOCIATE, fd);
 		return ret_error;
 	}
 

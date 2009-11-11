@@ -104,7 +104,7 @@ cherokee_rrd_connection_configure (cherokee_rrd_connection_t *rrd_conn,
 	} else {
 		ret = cherokee_find_exec_in_path ("rrdtool", &rrd_conn->path_rrdtool);
 		if (ret != ret_ok) {
-			LOG_ERROR ("Couldn't find rrdtool in PATH=%s\n", getenv("PATH"));
+			LOG_ERROR (CHEROKEE_ERROR_RRD_NO_BINARY, getenv("PATH"));
 			return ret_error;
 		}
 	}
@@ -187,11 +187,11 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
 		/* Execute it */
 		re = execv(argv[0], argv);
 
-		LOG_ERRNO (errno, cherokee_err_error, "execv failed cmd='%s': ${errno}\n", argv[0]);
+		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_RRD_EXECV, argv[0]);
 		exit (EXIT_ERROR);
 
         case -1:
-		LOG_ERRNO (errno, cherokee_err_error, "Fork failed pid=%d: ${errno}\n", pid);
+		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_RRD_FORK, pid);
                 break;
 
         default:
@@ -349,7 +349,7 @@ ensure_db_exists (cherokee_buffer_t *path_database)
 	*slash = '\0';
 	re = access (path_database->buf, W_OK);
 	if (re != 0) {
-		LOG_ERRNO (errno, cherokee_err_error, "Cannot write in %s: ${errno}\n", path_database->buf);
+		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_RRD_WRITE, path_database->buf);
 		return false;
 	}
 	*slash = '/';
@@ -371,7 +371,7 @@ create_dirs (cherokee_rrd_connection_t *rrd_conn)
 
 		re = access (rrd_conn->path_databases.buf, W_OK);
 		if (re != 0) {
-			LOG_CRITICAL ("Cannot write in '%s'\n", rrd_conn->path_databases.buf);
+			LOG_CRITICAL (CHEROKEE_ERROR_RRD_MKDIR_WRITE, rrd_conn->path_databases.buf);
 			goto error;
 		}
 	}

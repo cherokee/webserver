@@ -106,7 +106,7 @@ cherokee_admin_client_prepare (cherokee_admin_client_t *admin,
 	if ((admin->url_ref == NULL) || 
 	    (admin->poll_ref == NULL))
 	{
-		LOG_CRITICAL_S ("Internal error\n");
+		LOG_CRITICAL_S (CHEROKEE_ERROR_ADMIN_CLIENT_INTERNAL);
 		return ret_error;
 	}
 	
@@ -219,8 +219,8 @@ prepare_and_set_post (cherokee_admin_client_t *admin, const char *str, cuint_t s
 	if ((string == NULL) || (strlen(string) == 0))			\
 		return ret_error;					\
 	if (strncmp (string, substr, sizeof(substr)-1)) {		\
-		LOG_ERROR ("Uknown response len(" FMT_SIZE "): '%s'\n", \
-			   (CST_SIZE) strlen(string), string);		\
+		LOG_ERROR (CHEROKEE_ERROR_ADMIN_CLIENT_BAD_RESPONSE,	\
+			   strlen(string), string);			\
 		return ret_error;					\
 	}								\
 	string += sizeof(substr)-1;
@@ -238,7 +238,7 @@ check_and_skip_literal (cherokee_buffer_t *buf, const char *literal)
 	re = strncmp (buf->buf, literal, len);
 	if (re != 0) {
 #if 0
-		LOG_ERROR ("Couldn't find len(%d):'%s' in len(%d):'%s'\n", 
+		LOG_ERROR (CHEROKEE_ERROR_ADMIN_CLIENT_LITERAL,
 			   strlen(literal), literal, buf->len, buf->buf);
 #endif
 		return ret_error;

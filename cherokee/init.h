@@ -31,6 +31,7 @@
 
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
+#include <cherokee/nullable.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -41,10 +42,13 @@ ret_t cherokee_mrproper (void);
 
 /* Globals
  */
-extern cuint_t           cherokee_cacheline_size;
-extern cint_t            cherokee_cpu_number;
-extern cuint_t           cherokee_fdlimit;
-extern cherokee_buffer_t cherokee_tmp_dir;
+extern cuint_t              cherokee_cacheline_size;
+extern cint_t               cherokee_cpu_number;
+extern cuint_t              cherokee_fdlimit;
+extern cherokee_buffer_t    cherokee_tmp_dir;
+
+extern cherokee_boolean_t   cherokee_admin_child;
+extern cherokee_null_bool_t cherokee_readable_errors;
 
 CHEROKEE_END_DECLS
 

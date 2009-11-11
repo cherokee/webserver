@@ -304,7 +304,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 	
 	ret = load_theme (&theme_path, props);
 	if (ret != ret_ok) {
-		LOG_ERROR ("Couldn't load theme '%s': %s\n", theme, theme_path.buf);
+		LOG_ERROR (CHEROKEE_ERROR_HANDLER_DIRLIST_THEME, theme, theme_path.buf);
 	}
 	cherokee_buffer_mrproper (&theme_path);
 	return ret;
@@ -508,8 +508,9 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	 */
 	if (cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->entry)  ||
 	    cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->header) ||
-	    cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->footer)) {
-		LOG_CRITICAL_S ("The theme is incomplete\n");
+	    cherokee_buffer_is_empty (&HDL_DIRLIST_PROP(n)->footer))
+	{
+		LOG_CRITICAL_S (CHEROKEE_ERROR_HANDLER_DIRLIST_BAD_THEME);
 		return ret_error;
 	}
 

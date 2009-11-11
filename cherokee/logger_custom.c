@@ -396,13 +396,13 @@ _init_template (cherokee_logger_custom_t *logger,
 
 	ret = cherokee_config_node_read (config, key_config, &tmp);
 	if (ret != ret_ok) {
-		LOG_CRITICAL ("Custom Logger: A template is needed for logging connections: %s\n", key_config);
+		LOG_CRITICAL (CHEROKEE_ERROR_LOGGER_CUSTOM_NO_TEMPLATE, key_config);
 		return ret_error;
 	}
 
 	ret = cherokee_template_parse (template, tmp);
 	if (ret != ret_ok) {
-		LOG_CRITICAL ("Couldn't parse custom log: '%s'\n", tmp->buf);
+		LOG_CRITICAL (CHEROKEE_ERROR_LOGGER_CUSTOM_TEMPLATE, tmp->buf);
 		return ret_error;
 	}
 
@@ -459,7 +459,7 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 	 */
 	ret = cherokee_config_node_get (config, "access", &subconf);
 	if (ret != ret_ok) {
-		LOG_CRITICAL_S ("Logger Custom: No 'access' log has been defined.\n");
+		LOG_CRITICAL (CHEROKEE_ERROR_LOGGER_NO_KEY, "access");
 		return ret_error;
 	}
 	ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &n->writer_access);
@@ -469,7 +469,7 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 
 	ret = cherokee_config_node_get (config, "error", &subconf);
 	if (ret != ret_ok) {
-		LOG_CRITICAL_S ("Logger Custom: No 'error' log has been defined.\n");
+		LOG_CRITICAL (CHEROKEE_ERROR_LOGGER_NO_KEY, "error");
 		return ret_error;
 	}
 	ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &n->writer_error);

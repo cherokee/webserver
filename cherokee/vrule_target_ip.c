@@ -96,8 +96,7 @@ configure (cherokee_vrule_target_ip_t   *vrule,
 
 	ret = cherokee_config_node_get (conf, "to", &subconf);
 	if (ret != ret_ok) {
-		LOG_CRITICAL ("Rule prio=%d needs an 'to' property\n",
-			      VRULE(vrule)->priority);
+		LOG_CRITICAL (CHEROKEE_ERROR_VRULE_NO_PROPERTY, VRULE(vrule)->priority, "to");
 		return ret_error;
 	} 
 	
@@ -106,7 +105,7 @@ configure (cherokee_vrule_target_ip_t   *vrule,
 
 		ret = cherokee_access_add (&vrule->access, subconf2->val.buf);
 		if (ret != ret_ok) {
-			LOG_ERROR ("Couldn't parse 'to' entry: '%s'\n", subconf2->val.buf);
+			LOG_ERROR (CHEROKEE_ERROR_VRULE_TARGET_IP_PARSE, subconf2->val.buf);
 			return ret_error;
 		}
 	}

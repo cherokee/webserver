@@ -4,7 +4,8 @@ SUBDIRS = flags wizards
 
 DARKGLASS_ICONS = \
 online.png \
-offline.png
+offline.png \
+error.png
 
 SILK_ICONS = \
 cross.png \
@@ -16,6 +17,7 @@ adminstatic_DATA = \
 $(DARKGLASS_ICONS) \
 $(SILK_ICONS) \
 background.png \
+background-nobar.png \
 cherokee-logo-bar.png \
 top-bar.png \
 menu-sep.png \

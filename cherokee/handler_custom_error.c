@@ -69,7 +69,7 @@ cherokee_handler_custom_error_configure (cherokee_config_node_t   *conf,
 	/* Post checks
 	 */
 	if (props->error_code == http_unset) {
-		LOG_CRITICAL_S ("Handler custom error needs an HTTP error value.\n");
+		LOG_CRITICAL_S (CHEROKEE_ERROR_HANDLER_CUSTOM_ERROR_HTTP);
 		return ret_error;
 	}
 

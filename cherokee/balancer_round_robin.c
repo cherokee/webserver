@@ -51,7 +51,7 @@ cherokee_balancer_round_robin_configure (cherokee_balancer_t    *balancer,
 	/* Sanity check
 	 */
 	if (balancer->entries_len <= 0) {
-		LOG_CRITICAL_S ("Balancer cannot be empty\n");
+		LOG_CRITICAL_S (CHEROKEE_ERROR_BALANCER_EMPTY);
 		return ret_error;
 	}
  
@@ -79,7 +79,7 @@ reactivate_entry (cherokee_balancer_entry_t *entry)
 	/* Notify
 	 */
 	cherokee_source_copy_name (entry->source, &tmp);
-	LOG_WARNING ("Taking source='%s' back on-line\n", tmp.buf);
+	LOG_WARNING (CHEROKEE_ERROR_BALANCER_ONLINE_SOURCE, tmp.buf);
 	cherokee_buffer_mrproper (&tmp);
 
 	return ret_ok;
@@ -119,7 +119,7 @@ dispatch (cherokee_balancer_round_robin_t *balancer,
 
 		/* Count how many it's checked so far */
 		if (tries > gbal->entries_len) {
-			LOG_WARNING_S ("Sources exhausted: re-enabling one.\n");
+			LOG_WARNING_S (CHEROKEE_ERROR_BALANCER_EXHAUSTED);
 			reactivate_entry (entry);
 			break;
 		}
@@ -167,7 +167,7 @@ report_fail (cherokee_balancer_round_robin_t *balancer,
 		/* Notify what has happened
 		 */
 		cherokee_source_copy_name (entry->source, &tmp);
-		LOG_WARNING ("Taking source='%s' off-line\n", tmp.buf);
+		LOG_WARNING (CHEROKEE_ERROR_BALANCER_OFFLINE_SOURCE, tmp.buf);
 		cherokee_buffer_mrproper (&tmp);
 		
 		CHEROKEE_MUTEX_UNLOCK (&balancer->mutex);

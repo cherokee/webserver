@@ -58,8 +58,7 @@ int dcc_ncpus(int *ncpus)
 		return 0;
 	} else {
 		*ncpus = -1;
-		LOG_ERRNO (errno, cherokee_err_error,
-                     "pstat_getdynamic failed: '${errno}'");
+		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_NCPUS_PSTAT);
 		return EXIT_DISTCC_FAILED;
 	}
 }
@@ -111,7 +110,7 @@ int dcc_ncpus(int *ncpus)
 	if (sysctl(mib, 2, ncpus, &len, NULL, 0) == 0)
          return 0;
 	else {
-         LOG_ERRNO (errno, cherokee_err_error, "sysctl(CTL_HW:HW_NCPU) failed: '${errno}'");
+         LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_NCPUS_HW_NCPU);
          return EXIT_DISTCC_FAILED;
 	}
 }
@@ -139,9 +138,8 @@ int dcc_ncpus(int *ncpus)
 #endif
     
 	if (*ncpus == -1) {
-         LOG_ERRNO_S (errno, cherokee_err_error,
-                      "sysconf(_SC_NPROCESSORS_ONLN) failed: '${errno}'");
-		return EXIT_DISTCC_FAILED;
+         LOG_ERRNO_S (errno, cherokee_err_error, CHEROKEE_ERROR_NCPUS_SYSCONF);
+         return EXIT_DISTCC_FAILED;
 	} else if (*ncpus == 0) {
 		/* If there are no cpus, what are we running on ?
 		 * NOTE: it has apparently been observed to happen on ARM Linux

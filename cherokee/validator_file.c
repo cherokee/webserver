@@ -74,7 +74,7 @@ cherokee_validator_file_configure (cherokee_config_node_t     *conf,
 		} else if (equal_buf_str (&subconf->val, "local_dir")) {
 			props->password_path_type = val_path_local_dir;
 		} else {
-			LOG_ERROR ("Unknown path type '%s'\n", subconf->val.buf);
+			LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_FILE, subconf->val.buf);
 			return ret_error;
 		}
 	}
@@ -82,7 +82,7 @@ cherokee_validator_file_configure (cherokee_config_node_t     *conf,
 	/* Final checks
 	 */
 	if (cherokee_buffer_is_empty (&props->password_file)) {
-		LOG_CRITICAL_S ("File based validators need a password file\n");
+		LOG_CRITICAL_S (CHEROKEE_ERROR_VALIDATOR_FILE_NO_FILE);
 		return ret_error;
 	}
 

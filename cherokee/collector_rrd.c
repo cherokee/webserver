@@ -75,7 +75,7 @@ update_generic (cherokee_buffer_t *params)
 	 */
 	ret = cherokee_rrd_connection_execute (rrd_connection, params);
 	if (ret != ret_ok) {
-		LOG_ERROR ("Could not execute RRD command: %s\n", params->buf);
+		LOG_ERROR (CHEROKEE_ERROR_COLLECTOR_COMMAND_EXEC, params->buf);
 		cherokee_rrd_connection_kill (rrd_connection, false);
 		return ret_error;
 	}
@@ -344,13 +344,13 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 	 */
 	re = pthread_create (&n->thread, NULL, rrd_thread_worker_func, n);
 	if (re != 0) {
-		PRINT_ERROR ("Couldn't create the RRD working thread: error=%d\n", re);
+		LOG_ERROR (CHEROKEE_ERROR_COLLECTOR_NEW_THREAD, re);
 		return ret_error;
 	}	
 
 	re = pthread_mutex_init (&n->mutex, NULL);
 	if (re != 0) {
-		PRINT_ERROR ("Couldn't create the RRD working mutex: error=%d\n", re);
+		LOG_ERROR (CHEROKEE_ERROR_COLLECTOR_NEW_MUTEX, re);
 		return ret_error;
 	}
 

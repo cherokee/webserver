@@ -288,7 +288,7 @@ process_package (cherokee_fcgi_manager_t *mgr, cherokee_buffer_t *inbuf)
 	switch (type) {
 	case FCGI_STDERR: 
 		if (CONN_VSRV(conn)->logger != NULL) {
-			LOG_ERROR ("%s\n", data);
+			LOG_ERROR (CHEROKEE_ERROR_HANDLER_FCGI_STDERR, data);
 		}
 		exit(1);
 		break;
