@@ -24,7 +24,7 @@ generated_DATA = $(gen_data)
 
 
 if INSTALL_ADMIN
-admin_scripts = server.py
+admin_scripts = server.py upgrade_config.py
 endif
 
 adminpydir = "$(datadir)/cherokee/admin"

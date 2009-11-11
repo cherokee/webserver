@@ -25,6 +25,7 @@ def config_version_cfg_is_up_to_date (cfg):
     if int(ver_config) == 990250:
         ver_config = "000099025"
         cfg['config!version'] = ver_config
+        return False
 
     # Compare both of them
     if int(ver_config) > int(ver_cherokee):
@@ -42,15 +43,16 @@ def config_version_cfg_is_up_to_date (cfg):
 def config_version_update_cfg (cfg):
     # Do not proceed if it's empty
     if not cfg.has_tree():
-        return
+        return False
 
     # Update only when it's outdated
     if config_version_cfg_is_up_to_date (cfg):
-        return
+        return False
 
-    ver_config_s = cfg.get_val("config!version")
-    ver_config_i = int(ver_config_s)
+    ver_release_s = config_version_get_current()
+    ver_config_s  = cfg.get_val("config!version")
+    ver_config_i  = int(ver_config_s)
 
     # Update to.. 0.99.xx
-    return 
-
+    cfg["config!version"] = ver_release_s
+    return True
