@@ -4,16 +4,20 @@ wizardsdir = "$(datadir)/cherokee/admin/static/images/wizards"
 wizards_DATA = \
 alfresco.png \
 aspnet.png \
+coldfusion.png \
 common_static.png \
+concrete5.png \
 dbslayer.png \
 django.png \
 drupal.png \
+gallery.png \
 glassfish.png \
 hotlinking.png \
 icons.png \
 joomla.png \
 liferay.png \
 mailman.png \
+mono.png \
 moodle.png \
 nagios.png \
 phpbb.png \
@@ -26,11 +30,9 @@ streaming.png \
 sugarcrm.png \
 symfony.png \
 trac.png \
-wordpress.png \
-zend.png \
 uwsgi.png \
-mono.png \
-coldfusion.png
+wordpress.png \
+zend.png
 
 EXTRA_DIST = \
 $(wizards_DATA)
