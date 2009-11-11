@@ -26,7 +26,7 @@ e('SOURCE_NONBLOCK',
 #
 e('RRD_NO_BINARY',
   title = "Couldn't find the rrdtool binary.",
-  desc  = "A custom rrdtool binary has not been defined, and server could not find one in the $PATH.",
+  desc  = "A custom rrdtool binary has not been defined, and the server could not find one in the $PATH.",
   debug = "PATH=%s")
 
 e('RRD_EXECV',
@@ -963,7 +963,7 @@ e('BIND_PORT_NEEDED',
 
 e('BIND_COULDNT_BIND_PORT',
   title = "Could not bind() port=%d (UID=%d, GID=%d)",
-  desc  = "Most probably there is another web server listening to the same port. You'll have to shut it down before launching Cherokee. It could also be a permissions issue. Remember that non-root user cannot listen to ports > 1024.")
+  desc  = "Most probably there is another web server listening to the same port. You'll have to shut it down before launching Cherokee. It could also be a permissions issue. Remember that non-root user cannot listen to ports < 1024.")
 
 
 # cherokee/handler_rrd.c
