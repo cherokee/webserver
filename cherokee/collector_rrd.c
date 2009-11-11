@@ -46,6 +46,7 @@
  */
 PLUGIN_INFO_COLLECTOR_EASIEST_INIT (rrd);
 
+#define ELAPSE_UPDATE     60
 #define WORKER_INIT_SLEEP 10
 #define ENTRIES "collector,rrd"
 
@@ -282,7 +283,7 @@ rrd_thread_worker_func (void *param)
 		/* End of iteration
 		 */
 		elapse   = cherokee_bogonow_now - start;
-		to_sleep = MAX (0, elapse);
+		to_sleep = MAX (0, ELAPSE_UPDATE - elapse);
 		TRACE (ENTRIES, "Worker thread: Finished iteration (elapse %d secs, sleeping %d secs)\n", elapse, to_sleep);
 
 		if (to_sleep > 0) {
