@@ -196,7 +196,7 @@ same thing. It is provided under
 In case you need to do this manually, the usage is as follows:
 
 ----
-  /usr/share/cherokee/admin/upgrade_config.py /etc/cherokee/ cherokee.conf
+  /usr/share/cherokee/admin/upgrade_config.py /etc/cherokee/cherokee.conf
 ----
 
 If Cherokee-Admin can not make the conversion automatically (because
