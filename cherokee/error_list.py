@@ -75,7 +75,7 @@ e('VALIDATOR_PAM_DELAY',
 
 e('VALIDATOR_PAM_AUTH',
   title = "User '%s' - not authenticated: %s",
-  desc  = "(to-do)")
+  desc  = "Most likely the password didn't match")
 
 e('VALIDATOR_PAM_ACCOUNT',
   title = "User '%s' - invalid account: %s",
@@ -86,7 +86,7 @@ e('VALIDATOR_PAM_ACCOUNT',
 #
 e('VALIDATOR_LDAP_PROPERTY',
   title = "The LDAP validation module requires a '%s' property",
-  desc  = "It looks like you did not fill a required property, please.. (to-do)")
+  desc  = "It looks like you did not fill a required property. Check the LDAP details and try again.")
 
 e('VALIDATOR_LDAP_SECURITY',
   title = "Security problem found in LDAP validation config",
@@ -125,7 +125,7 @@ e('VALIDATOR_FILE',
 
 e('VALIDATOR_FILE_NO_FILE',
   title = "File based validators need a password file",
-  desc  = "This validation modules reads a local file in order to get the authorizated user list. The configuration specifies no file, bla, bla (to-do).")
+  desc  = "This validation modules reads a local file in order to get the authorizated user list. The configuration specifies. Please try to reconfigure the details and ensure a filename is provided.")
 
 
 # cherokee/downloader.c
@@ -154,7 +154,7 @@ e('ADMIN_CLIENT_LITERAL',
 #
 e('HANDLER_REGEX_GROUPS',
   title = "Too many groups in the regex",
-  desc  = "(to-do)")
+  desc  = "The specified regular expression is wrong. Please double check it.")
 
 e('HANDLER_NO_BALANCER',
   title = "The handler needs a balancer",
@@ -165,7 +165,7 @@ e('HANDLER_NO_BALANCER',
 #
 e('HANDLER_SECDOWN_SECRET',
   title = "Handler secdownload needs a secret",
-  desc  = "You must define a passphrase. .. (to-do).")
+  desc  = "You must define a passphrase to be used as shared secret between the Hidden Downloads handler and the script you use to generate the URLs.")
 
 
 # cherokee/handler_server_info.c
@@ -176,7 +176,8 @@ e('HANDLER_SRV_INFO_MOD',
 
 e('HANDLER_SRV_INFO_TYPE',
   title = "Unknown ServerInfo type: '%s'",
-  desc  = "(to-do)")
+  desc  = "Your configuration file is either broken, obsolete or has
+  been tampered with. You need to reconfigure the verbosity of your ServerInfo handler.")
 
 
 # cherokee/handler_file.c
@@ -217,22 +218,22 @@ e('HANDLER_ERROR_REDIR_URL',
 #
 e('HANDLER_DIRLIST_THEME',
   title = "Couldn't load theme '%s': %s",
-  desc  = "(to-do).")
+  desc  = "Either the directory where your theme resides has been deleted, or the permissions are wrong.")
 
 e('HANDLER_DIRLIST_BAD_THEME',
   title = "The theme is incomplete",
-  desc  = "(to-do).")
+  desc  = "Most likely someone has inadvertedly deleted some of the files of your theme. Please try to restore the files or change your theme selection.")
 
 
 # cherokee/handler_dbslayer.c
 #
 e('HANDLER_DBSLAYER_LANG',
   title = "Unrecognized language '%s'",
-  desc  = "Cherokee's DBSlayer supports a number of output languages and formats, including: ..(to-do).")
+  desc  = "Cherokee's DBSlayer supports a number of output languages and formats, including: JSON, Python, PHP and Ruby. Please reconfigure the DBSlayer rule to match one of those.")
 
 e('HANDLER_DBSLAYER_BALANCER',
   title = "DBSlayer handler needs a balancer",
-  desc  = "(to-do).")
+  desc  = "The DBSlayer handler needs must specify a load balancing strategy and a list of target hosts to attend the load. At least one host is required. Please ensure it is correctly configured.")
 
 
 # cherokee/handler_custom_error.c
@@ -289,7 +290,8 @@ e('BALANCER_NO_KEY',
 
 e('BALANCER_BAD_SOURCE',
   title = "Could not find source '%s'",
-  desc  = "For some reason the load balancer module is using a missing Information Source. Please.. (to-do).")
+  desc  = "For some reason the load balancer module is using a missing Information Source. Please recheck that it uses a correct one.",
+  admin = "/source")
 
 e('BALANCER_ONLINE_SOURCE',
   title = "Taking source='%s' back on-line",
@@ -330,11 +332,11 @@ e('LOGGER_NO_KEY',
 #
 e('LOGGER_CUSTOM_NO_TEMPLATE',
   title = "A template is needed for logging connections: %s",
-  desc  = "You have to write a template for the server to... (to-do)")
+  desc  = "Since you are trying to use a custom logging template, providing the template is mandatory.")
 
 e('LOGGER_CUSTOM_TEMPLATE',
   title = "Couldn't parse custom log: '%s'",
-  desc  = "The server found a problem while processing the logging template. Please, check it and.. (to-do).")
+  desc  = "The server found a problem while processing the logging template. Please ensure it is correct.")
 
 
 # cherokee/fdpoll-epoll.c
