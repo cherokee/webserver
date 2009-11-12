@@ -21,7 +21,6 @@ e('SOURCE_NONBLOCK',
   desc  = SYSTEM_ISSUE)
 
 
-
 # cherokee/rrd_tools.c
 #
 e('RRD_NO_BINARY',
@@ -982,11 +981,13 @@ e('ACCESS_INVALID_MASK',
 #
 e('BIND_PORT_NEEDED',
   title = "A port entry is need",
-  desc  = "It seems that the configuration file includes a port listening entry with the wrong format. It should contain one port specification, but it does not in this case.")
+  desc  = "It seems that the configuration file includes a port listening entry with the wrong format. It should contain one port specification, but it does not in this case.",
+  admin = "/general/#tabs_general-1")
 
 e('BIND_COULDNT_BIND_PORT',
   title = "Could not bind() port=%d (UID=%d, GID=%d)",
-  desc  = "Most probably there is another web server listening to the same port. You'll have to shut it down before launching Cherokee. It could also be a permissions issue. Remember that non-root user cannot listen to ports < 1024.")
+  desc  = "Most probably there is another web server listening to the same port. You will have to shut it down before launching Cherokee. It could also be a permissions issue as well. Remember that non-root user cannot listen to ports < 1024.",
+  admin = "/general/#tabs_general-1")
 
 
 # cherokee/handler_rrd.c
@@ -1012,7 +1013,8 @@ e('HANDLER_RENDER_RRD_INVALID_REQ',
 #
 e('COLLECTOR_COMMAND_EXEC',
   title = "Could not execute RRD command: %s",
-  desc  = SYSTEM_ISSUE)
+  desc  = SYSTEM_ISSUE,
+  admin = "/general/#tabs_general-0")
 
 e('COLLECTOR_NEW_THREAD',
   title = "Couldn't create the RRD working thread: error=%d",
