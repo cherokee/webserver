@@ -1,10 +1,15 @@
 from Page import *
 
-class PareError_LaunchFail (Page):
+ERROR_LAUNCH_URL_ADMIN = """
+<div class="error-suggestion">The server suggests to check <a href="%s">this page</a>. Most probably the problem can he solved in there.</div>
+"""
+
+class PageError_LaunchFail (Page):
     def __init__ (self, cfg, error):
         Page.__init__ (self, 'error_couldnt_launch', cfg)
 
         self._cfg         = cfg
+        self._error       = None
         self._error_raw   = error
         self._error_lines = error.split("\n")
 
@@ -18,7 +23,13 @@ class PareError_LaunchFail (Page):
                 break
 
     def _op_render (self):
-        template = 'error_couldnt_launch.template'
+        if not self._error:
+            return self._op_render_unknown()
+
+        return self._op_render_error()
+
+    def _op_render_error (self):
+        template = 'error_couldnt_launch.template'            
 
         self.AddMacroContent ('menu', '')
         self.AddMacroContent ('help', '')
@@ -27,13 +38,56 @@ class PareError_LaunchFail (Page):
         self.AddMacroContent ('content', self.Read(template))
         self.AddMacroContent ('icons_dir', CHEROKEE_ICONSDIR)
 
-        self.AddMacroContent ('time',        self._error.get('time', ''))
-        self.AddMacroContent ('admin_url',   self._error.get('admin_url', ''))
-        self.AddMacroContent ('backtrace',   self._error.get('backtrace', ''))
-        self.AddMacroContent ('description', self._error.get('description', ''))
-        self.AddMacroContent ('title',       self._error.get('title', self._error_raw))
+        # admin
+        admin_url = self._error.get('admin_url')
+        if admin_url:
+            admin_url_msg = ERROR_LAUNCH_URL_ADMIN % (admin_url)
+        else:
+            admin_url_msg = ''
+
+        # debug
+        debug = self._error.get('debug')
+        if debug:
+            debug_msg = '<div class="error-debug">%s</div>' %(debug)
+        else:
+            debug_msg = ''
+
+        # backtrace
+        backtrace = self._error.get('backtrace')
+        if backtrace:
+            backtrace_msg = '<div class="error-backtrace">%s</div>' %(backtrace)
+        else:
+            backtrace_msg = ''
+
+        self.AddMacroContent ('time',          self._error.get('time', ''))
+        self.AddMacroContent ('debug_msg',     debug_msg)
+        self.AddMacroContent ('admin_url_msg', admin_url_msg)
+        self.AddMacroContent ('backtrace_msg', backtrace_msg)
+        self.AddMacroContent ('description',   self._error.get('description', ''))
+        self.AddMacroContent ('title',         self._error.get('title', self._error_raw))
         
         return Page.Render(self)
+
+    def _op_render_unknown (self):
+        template = 'error_couldnt_launch.template'
+
+        self.AddMacroContent ('menu', '')
+        self.AddMacroContent ('help', '')
+        self.AddMacroContent ('body',       PAGE_BASIC_LAYOUT_NOBAR)
+        self.AddMacroContent ('title',      'Unknown Error')
+        self.AddMacroContent ('content',    self.Read(template))
+        self.AddMacroContent ('icons_dir',  CHEROKEE_ICONSDIR)
+
+        debug_msg = '<div class="error-debug">%s</div>' %(self._error_raw)
+
+        self.AddMacroContent ('time',          '')
+        self.AddMacroContent ('backtrace_msg', '')
+        self.AddMacroContent ('admin_url_msg', '')
+        self.AddMacroContent ('debug_msg',     debug_msg)
+        self.AddMacroContent ('description',   'Something unexpected just happened.')
+
+        return Page.Render(self)
+
 
     def _op_handler (self, uri, post):
         return '/'

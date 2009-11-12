@@ -391,6 +391,15 @@ table td label {
  margin: 0.5em 0;
 }
 
+.error-debug {
+ padding: 1em;
+ background: #dddddd;
+ white-space: pre;
+ font-family: monospace;
+ margin: 1em 0;
+ overflow-x: auto;
+}
+
 .error-backtrace {
  padding: 1em;
  background: #efeac7;

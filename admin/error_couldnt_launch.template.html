@@ -1,8 +1,9 @@
 <div class="error-page">
 <div class="error-title">Could not launch the server</div>
 <div class="error-reason">{{title}}</div>
-<div class="error-suggestion">The server suggests to check <a href="{{admin_url}}">this page</a>. Most probably the problem can he solved in there.</div>
+{{admin_url_msg}}
 <div class="error-description">{{description}}</div>
-<div class="error-backtrace">{{backtrace}}</div>
+{{debug_msg}}
+{{backtrace_msg}}
 <div class="error-datetime">{{time}}</div>
 </div>
