@@ -472,6 +472,58 @@ e('RULE_BIND_PORT',
 
 # cherokee/server.c
 #
+e('SERVER_GROUP_NOT_FOUND',
+  title = "Group '%s' not found in the system",
+  desc  = "to-do")
+
+e('SERVER_USER_NOT_FOUND',
+  title = "User '%s' not found in the system",
+  desc  = "to-do")
+
+e('SERVER_THREAD_IGNORE',
+  title = "Ignoring thread_policy entry '%s'",
+  desc  = "to-do")
+
+e('SERVER_THREAD_POLICY',
+  title = "Unknown thread policy '%s'",
+  desc  = "to-do")
+
+e('SERVER_TOKEN',
+  title = "Unknown server token '%s'",
+  desc  = "to-do")
+
+e('SERVER_POLLING_UNRECOGNIZED',
+  title = "Polling method '%s' has not been recognized",
+  desc  = "to-do")
+
+e('SERVER_POLLING_UNSUPPORTED',
+  title = "Polling method '%s' is not supported by this OS",
+  desc  = "to-do")
+
+e('SERVER_POLLING_UNKNOWN',
+  title = "Unknown polling method '%s'",
+  desc  = "to-do")
+
+e('SERVER_NO_BIND',
+  title = "No listening on any port.",
+  desc  = "to-do")
+
+e('SERVER_IGNORE_TLS',
+  title = "Ignoring TLS port %d",
+  desc  = "to-do")
+
+e('SERVER_TLS_DEFAULT',
+  title = "TLS/SSL support must be set up in the 'default' Virtual Server. Its certificate will we used by the server in case TLS SNI information is not provided by the client.",
+  desc  = "to-do")
+
+e('SERVER_NO_CRYPTOR',
+  title = "Virtual Server '%s' is configured to use SSL/TLS but no Crypto engine has been activated server-wide.",
+  desc  = "to-do")
+
+e('SERVER_PARSE',
+  title = "Server parser: Unknown key '%s'",
+  desc  = "to-do")
+
 e('SERVER_INITGROUPS',
   title = "initgroups: Unable to set groups for user `%s' and GID %d",
   desc  = SYSTEM_ISSUE)

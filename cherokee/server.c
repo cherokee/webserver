@@ -669,9 +669,8 @@ vservers_check_tls (cherokee_server_t *srv)
 		ret = cherokee_virtual_server_has_tls (VSERVER(i));
 		if (ret == ret_ok) {
 			if (srv->cryptor == NULL) {
-				PRINT_MSG ("ERROR: Virtual Server '%s' is configured to use SSL/TLS\n"
-					   "       but no Crypto engine has been activated server-wide.\n",
-					   VSERVER(i)->name.buf);
+				LOG_CRITICAL (CHEROKEE_ERROR_SERVER_NO_CRYPTOR, 
+					      VSERVER(i)->name.buf);
 				return ret_error;
 			}
 
@@ -718,9 +717,7 @@ init_vservers_tls (cherokee_server_t *srv)
 	if ((ok > 0) &&
 	    (VSERVER(srv->vservers.prev)->cryptor == NULL))
 	{
-		PRINT_MSG_S ("ERROR: TLS/SSL support must be set up in the 'default' Virtual\n"
-			     "       Server. Its certificate will we used by the server in case\n"
-			     "       TLS SNI information is not provided by the client.\n");
+		LOG_CRITICAL_S (CHEROKEE_ERROR_SERVER_TLS_DEFAULT);
 		return ret_error;
 	}
 
@@ -867,7 +864,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 			if (! BIND_IS_TLS(i))
 				continue;
 			
-			PRINT_MSG ("WARNING: Ignoring TLS port %d\n", BIND(i)->port);
+			LOG_WARNING (CHEROKEE_ERROR_SERVER_IGNORE_TLS, BIND(i)->port);
 			cherokee_list_del (i);
 			cherokee_bind_free (BIND(i));
 		}
@@ -876,7 +873,7 @@ cherokee_server_initialize (cherokee_server_t *srv)
 	/* Ensure there is at least one listener
 	*/
 	if (cherokee_list_empty (&srv->listeners)) {
-		PRINT_MSG_S("ERROR: No listening on any port\n");
+		LOG_CRITICAL (CHEROKEE_ERROR_SERVER_NO_BIND);
 		return ret_error;
 	}
 
@@ -1342,7 +1339,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		 */
 		ret = cherokee_fdpoll_str_to_method(str, &(srv->fdpoll_method));
 		if (ret != ret_ok) {
-			PRINT_MSG ("ERROR: Unknown polling method '%s'\n", str);
+			LOG_CRITICAL (CHEROKEE_ERROR_SERVER_POLLING_UNKNOWN, str);
 			return ret_error;
 		}
 
@@ -1353,10 +1350,10 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		case ret_ok:
 			break;
 		case ret_no_sys:
-			PRINT_MSG ("ERROR: polling method '%s' is NOT supported by this OS\n", str);
+			LOG_WARNING (CHEROKEE_ERROR_SERVER_POLLING_UNSUPPORTED, str);
 			return ret;
 		default:
-			PRINT_MSG ("ERROR: polling method '%s' has NOT been recognized (internal ERROR)\n", str);
+			LOG_CRITICAL (CHEROKEE_ERROR_SERVER_POLLING_UNRECOGNIZED, str);
 			return ret_error;
 		}
 
@@ -1372,7 +1369,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		} else if (equal_buf_str (&conf->val, "Full")) {
 			srv->server_token = cherokee_version_full;
 		} else {
-			PRINT_MSG ("ERROR: Unknown server token '%s'\n", conf->val.buf);
+			LOG_CRITICAL (CHEROKEE_ERROR_SERVER_TOKEN, conf->val.buf);
 			return ret_error;
 		}
 
@@ -1385,11 +1382,11 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		} else if (equal_buf_str (&conf->val, "other")) {
 			srv->thread_policy = SCHED_OTHER;
 		} else {
-			PRINT_MSG ("ERROR: Unknown thread policy '%s'\n", conf->val.buf);
+			LOG_CRITICAL (CHEROKEE_ERROR_SERVER_THREAD_POLICY, conf->val.buf);
 			return ret_error;
 		}
 #else
-		PRINT_MSG ("WARNING: Ignoring thread_policy entry '%s'\n", conf->val.buf);
+		LOG_WARNING (CHEROKEE_ERROR_SERVER_THREAD_IGNORE, conf->val.buf);
 #endif
 
 	} else if (equal_buf_str (&conf->key, "user")) {
@@ -1398,8 +1395,8 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 
 		ret = cherokee_getpwnam (conf->val.buf, &pwd, tmp, sizeof(tmp));
 		if ((ret != ret_ok) || (pwd.pw_dir == NULL)) {
-			 PRINT_MSG ("ERROR: User '%s' not found in the system\n", conf->val.buf);
-			 return ret_error;
+			LOG_CRITICAL (CHEROKEE_ERROR_SERVER_USER_NOT_FOUND, conf->val.buf);
+			return ret_error;
 		}
 
 		srv->user = pwd.pw_uid;
@@ -1410,7 +1407,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		
 		ret = cherokee_getgrnam (conf->val.buf, &grp, tmp, sizeof(tmp));
 		if (ret != ret_ok) {
-			PRINT_MSG ("ERROR: Group '%s' not found in the system\n", conf->val.buf);
+			LOG_CRITICAL (CHEROKEE_ERROR_SERVER_GROUP_NOT_FOUND, conf->val.buf);
 			return ret_error;
 		}		
 
@@ -1453,7 +1450,7 @@ configure_server_property (cherokee_config_node_t *conf, void *data)
 		 */
 
 	} else {
-		PRINT_MSG ("ERROR: Server parser: Unknown key \"%s\"\n", key);
+		LOG_CRITICAL (CHEROKEE_ERROR_SERVER_PARSE, key);
 		return ret_error;
 	}
 	
