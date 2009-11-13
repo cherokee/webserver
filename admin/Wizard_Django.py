@@ -1,3 +1,5 @@
+import os
+import re
 import validations
 
 from config import *
@@ -26,7 +28,7 @@ CONFIG_VSRV = SOURCE + """
 %(vsrv_pre)s!document_root = %(document_root)s
 
 %(vsrv_pre)s!rule!10!match = directory
-%(vsrv_pre)s!rule!10!match!directory = /media
+%(vsrv_pre)s!rule!10!match!directory = %(media_web_dir)s
 %(vsrv_pre)s!rule!10!handler = file
 %(vsrv_pre)s!rule!10!expiration = time
 %(vsrv_pre)s!rule!10!expiration!time = 7d
@@ -57,6 +59,28 @@ def is_django_dir (path, cfg, nochroot):
     if not os.path.exists (manage):
         raise ValueError, _("Directory doesn't look like a Django based project.")
     return path
+
+def django_figure_media_prefix (local_djando_dir):
+    prefix   = '/media'
+    fullpath = os.path.join (local_djando_dir, "settings.py")
+
+    # Red the file
+    if os.path.exists (fullpath):        
+        content = open(fullpath, "r").read()
+        tmp = re.findall (r"\s*ADMIN_MEDIA_PREFIX\s*=\s*['\"](.*)['\"]", content)
+        if tmp:
+            prefix = tmp[0]
+            if prefix.startswith("http"):
+                n = prefix.index("://")
+                s = prefix.index("/", n+4)
+                prefix = prefix[s:]
+
+    # Remove trailer slash
+    while len(prefix)>1 and prefix[-1] == '/':
+        prefix = prefix[:-1]
+
+    return prefix
+
 
 DATA_VALIDATION = [
     ("tmp!wizard_django!django_dir",    (is_django_dir, 'cfg')),
@@ -118,6 +142,9 @@ class Wizard_VServer_Django (WizardPage):
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
         src_num, src_pre = cfg_source_get_next (self._cfg)
+
+        # Analize Django config file
+        media_web_dir = django_figure_media_prefix (django_dir)
 
         # Usual Static files
         self._common_add_usual_static_files ("%s!rule!500" % (vsrv_pre))
