@@ -176,8 +176,7 @@ e('HANDLER_SRV_INFO_MOD',
 
 e('HANDLER_SRV_INFO_TYPE',
   title = "Unknown ServerInfo type: '%s'",
-  desc  = "Your configuration file is either broken, obsolete or has
-  been tampered with. You need to reconfigure the verbosity of your ServerInfo handler.")
+  desc  = "Your configuration file is either broken, obsolete or has been tampered with. You need to reconfigure the verbosity of your ServerInfo handler.")
 
 
 # cherokee/handler_file.c
