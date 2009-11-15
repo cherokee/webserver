@@ -164,8 +164,9 @@ check_crypt (char *passwd, char *salt, const char *compared)
 static ret_t
 validate_plain (cherokee_connection_t *conn, const char *crypted)
 {
-	if (cherokee_buffer_is_empty (&conn->validator->passwd))
+	if (cherokee_buffer_is_empty (&conn->validator->passwd)) {
 		return ret_error;
+	}
 
 	return (strcmp (conn->validator->passwd.buf, crypted) == 0) ? ret_ok : ret_error;
 }
@@ -177,11 +178,11 @@ validate_crypt (cherokee_connection_t *conn, const char *crypted)
 	ret_t ret;
 	char  salt[CRYPT_SALT_LENGTH];
 
-	if (cherokee_buffer_is_empty (&conn->validator->passwd))
+	if (cherokee_buffer_is_empty (&conn->validator->passwd)) {
 		return ret_error;
+	}
 
 	memcpy (salt, crypted, CRYPT_SALT_LENGTH);
-
 	ret = check_crypt (conn->validator->passwd.buf, salt, crypted);
 
 	return ret;
@@ -195,9 +196,14 @@ validate_md5 (cherokee_connection_t *conn, const char *magic, char *crypted)
 	char  *new_md5_crypt;
 	char   space[120];
 
-	new_md5_crypt = md5_crypt (conn->validator->passwd.buf, crypted, magic, space);
-	if (new_md5_crypt == NULL)
+	if (cherokee_buffer_is_empty (&conn->validator->passwd)) {
 		return ret_error;
+	}
+
+	new_md5_crypt = md5_crypt (conn->validator->passwd.buf, crypted, magic, space);
+	if (new_md5_crypt == NULL) {
+		return ret_error;
+	}
 	
 	ret = (strcmp (new_md5_crypt, crypted) == 0) ? ret_ok : ret_error;
 
@@ -217,11 +223,13 @@ validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 
 	/* Check the size. It should be: "{SHA1}" + Base64(SHA1(info))
 	 */
-	if (c_len != 28)
+	if (c_len != 28) {
 		return ret_error;
+	}
 
-	if (cherokee_buffer_is_empty (&conn->validator->passwd))
+	if (cherokee_buffer_is_empty (&conn->validator->passwd)) {
 		return ret_error;
+	}
  
 	/* Decode user
 	 */
@@ -230,8 +238,9 @@ validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 	cherokee_buffer_add_buffer (sha1_buf1, &conn->validator->passwd);
 	cherokee_buffer_encode_sha1_base64 (sha1_buf1, sha1_buf2);
 
-	if (strcmp (sha1_buf2->buf, crypted) == 0)
+	if (strcmp (sha1_buf2->buf, crypted) == 0) {
 		return ret_ok;
+	}
 
 	return ret_error;
 }
@@ -357,23 +366,27 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
 		} else if (cryp_len == 13) {
 			ret_auth = validate_crypt (conn, cryp);
 
-			if (ret_auth != ret_ok)
+			if (ret_auth == ret_deny) {
 				ret_auth = validate_plain (conn, cryp);
-
+			}
 		} else {
 			ret_auth = validate_plain (conn, cryp);
 		}
 
-		if (ret_auth == ret_ok)
-			break;
+		if (ret_auth == ret_deny)
+			continue;
+
+		/* ret_ok, or ret_error */
+		break;
 	}
 
 	fclose(f);
 
 	/* Check the authentication returned value
 	 */
-	if (ret_auth < ret_ok)
+	if (ret_auth < ret_ok) {
 		return ret_auth;
+	}
 
 	/* 2.- Security check:
 	 * Is the client trying to download the passwd file?
