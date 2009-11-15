@@ -77,7 +77,9 @@ cherokee.spec.in      \
 SUNWcherokee.spec     \
 pam.d_cherokee        \
 cherokee.pc.in        \
+developers.py         \
 svnlog2changelog.py   \
+gitlog2changelog.py   \
 changelog-update.sh   \
 $(m4data_DATA)        \
 $(XMLS_PRE)           \
