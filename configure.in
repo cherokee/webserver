@@ -62,7 +62,11 @@ AC_ARG_ENABLE(beta, AC_HELP_STRING([--enable-beta], [Enable beta development]),
 
 if test x"$is_beta" = "xyes"; then
   if test -d ".svn"; then
-     svn_rev="`svn info -R | grep Revision | sort | tail -1 | sed 's/Revision: //'`";   
+     svn_rev="`svn info -R | grep Revision | sort | tail -1 | sed 's/Revision: //'`";
+  else
+    if test -d ".git"; then
+	  svn_rev="`git svn info | grep 'Last Changed Rev' | sed 's/Last Changed Rev: //'`";
+    fi
   fi
 
   PACKAGE_PATCH_VERSION="b$svn_rev"
