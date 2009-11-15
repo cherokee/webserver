@@ -164,10 +164,6 @@ check_crypt (char *passwd, char *salt, const char *compared)
 static ret_t
 validate_plain (cherokee_connection_t *conn, const char *crypted)
 {
-	if (cherokee_buffer_is_empty (&conn->validator->passwd)) {
-		return ret_error;
-	}
-
 	return (strcmp (conn->validator->passwd.buf, crypted) == 0) ? ret_ok : ret_error;
 }
 
@@ -177,10 +173,6 @@ validate_crypt (cherokee_connection_t *conn, const char *crypted)
 {
 	ret_t ret;
 	char  salt[CRYPT_SALT_LENGTH];
-
-	if (cherokee_buffer_is_empty (&conn->validator->passwd)) {
-		return ret_error;
-	}
 
 	memcpy (salt, crypted, CRYPT_SALT_LENGTH);
 	ret = check_crypt (conn->validator->passwd.buf, salt, crypted);
@@ -195,10 +187,6 @@ validate_md5 (cherokee_connection_t *conn, const char *magic, char *crypted)
 	ret_t  ret;
 	char  *new_md5_crypt;
 	char   space[120];
-
-	if (cherokee_buffer_is_empty (&conn->validator->passwd)) {
-		return ret_error;
-	}
 
 	new_md5_crypt = md5_crypt (conn->validator->passwd.buf, crypted, magic, space);
 	if (new_md5_crypt == NULL) {
@@ -227,10 +215,6 @@ validate_non_salted_sha (cherokee_connection_t *conn, char *crypted)
 		return ret_error;
 	}
 
-	if (cherokee_buffer_is_empty (&conn->validator->passwd)) {
-		return ret_error;
-	}
- 
 	/* Decode user
 	 */
 	cherokee_buffer_clean (sha1_buf1);
@@ -296,7 +280,8 @@ cherokee_validator_htpasswd_check (cherokee_validator_htpasswd_t *htpasswd,
 	/* Sanity checks
 	 */
 	if ((conn->validator == NULL) ||
-	    cherokee_buffer_is_empty (&conn->validator->user))
+	    cherokee_buffer_is_empty (&conn->validator->user) ||
+	    cherokee_buffer_is_empty (&conn->validator->passwd))
 	{
 		return ret_error;
 	}
