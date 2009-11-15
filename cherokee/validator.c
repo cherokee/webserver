@@ -404,8 +404,8 @@ add_method (char *method, void *data)
 	else if (equal_str (method, "digest")) 
 		entry->authentication |= http_auth_digest;
 	else {
-		PRINT_MSG ("ERROR: Unknown authentication method '%s'\n", method);
-		return ret_error;
+		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_METHOD_UNKNOWN, method);
+ 		return ret_error;
 	}
 
 	return ret_ok;

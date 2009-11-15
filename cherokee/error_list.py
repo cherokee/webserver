@@ -128,6 +128,13 @@ e('VALIDATOR_FILE_NO_FILE',
   desc  = "This validation modules reads a local file in order to get the authorizated user list. The configuration specifies. Please try to reconfigure the details and ensure a filename is provided.")
 
 
+# cherokee/validator.c
+#
+e('VALIDATOR_METHOD_UNKNOWN',
+  title = "Unknown authentication method '%s'",
+  desc  = BROKEN_CONFIG)
+
+
 # cherokee/downloader.c
 #
 e('DOWNLOADER_OVERWRITE_POST',
