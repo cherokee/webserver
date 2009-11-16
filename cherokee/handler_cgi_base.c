@@ -61,8 +61,6 @@ cherokee_handler_cgi_base_init (cherokee_handler_cgi_base_t              *cgi,
 
 	cherokee_buffer_init (&cgi->xsendfile);
 	cherokee_buffer_init (&cgi->executable);
-	cherokee_buffer_init (&cgi->param);
-	cherokee_buffer_init (&cgi->param_extra);
 
 	cherokee_buffer_init (&cgi->data);
 	cherokee_buffer_ensure_size (&cgi->data, 2*1024);
@@ -214,18 +212,7 @@ cherokee_handler_cgi_base_free (cherokee_handler_cgi_base_t *cgi)
 	cherokee_buffer_mrproper (&cgi->executable);
 	cherokee_buffer_mrproper (&cgi->xsendfile);
 
-	cherokee_buffer_mrproper (&cgi->param);
-	cherokee_buffer_mrproper (&cgi->param_extra);
-
 	return ret_ok;
-}
-
-
-void  
-cherokee_handler_cgi_base_add_parameter (cherokee_handler_cgi_base_t *cgi, char *param, cuint_t param_len)
-{
-	cherokee_buffer_clean (&cgi->param_extra);
-	cherokee_buffer_add (&cgi->param_extra, param, param_len);
 }
 
 
@@ -651,11 +638,9 @@ cherokee_handler_cgi_base_build_envp (cherokee_handler_cgi_base_t *cgi, cherokee
 		 */
 		cherokee_buffer_clean (&tmp);
 		if (cherokee_buffer_is_empty (&cgi_props->script_alias)) {
-			if (cgi->param.len > 0) {
-				name = &cgi->param;      /* phpcgi */
-			} else {
-				name = &cgi->executable; /* cgi */
-			}
+			/* cgi */
+			name = &cgi->executable; 
+
 			if (conn->local_directory.len > 0){
 				p = name->buf + conn->local_directory.len;
 				len = (name->buf + name->len) - p;

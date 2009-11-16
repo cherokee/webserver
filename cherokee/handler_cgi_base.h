@@ -75,15 +75,12 @@ struct cherokee_handler_cgi_base {
 	 */
 	cherokee_handler_cgi_base_phase_t  init_phase;	
 	cuint_t                            got_eof;
-	char                              *extra_param;
 
 	size_t                             content_length;
 
 	cherokee_buffer_t                  xsendfile;
 	void                              *file_handler;
 
-	cherokee_buffer_t                  param; 
-	cherokee_buffer_t                  param_extra;
 	cherokee_buffer_t                  executable;
 	cherokee_buffer_t                  data; 
 
@@ -127,7 +124,6 @@ ret_t cherokee_handler_cgi_base_free            (cherokee_handler_cgi_base_t *hd
 ret_t cherokee_handler_cgi_base_add_headers     (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer);
 ret_t cherokee_handler_cgi_base_step            (cherokee_handler_cgi_base_t *cgi, cherokee_buffer_t *buffer);
 
-void  cherokee_handler_cgi_base_add_parameter   (cherokee_handler_cgi_base_t *cgi, char *name, cuint_t len);
 ret_t cherokee_handler_cgi_base_extract_path    (cherokee_handler_cgi_base_t *cgi, cherokee_boolean_t check_filename);
 ret_t cherokee_handler_cgi_base_split_pathinfo  (cherokee_handler_cgi_base_t *cgi, 
 					  	 cherokee_buffer_t           *buf, 

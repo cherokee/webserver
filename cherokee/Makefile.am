@@ -17,7 +17,6 @@ cherokeedeps_DATA = \
 common.deps \
 combined.deps \
 error_redir.deps \
-phpcgi.deps \
 scgi.deps \
 fcgi.deps \
 uwsgi.deps \
@@ -623,28 +622,6 @@ if STATIC_HANDLER_FASTCGI
 static_handler_fastcgi_src = $(handler_fastcgi)
 else
 dynamic_handler_fastcgi_lib = libplugin_fastcgi.la
-endif
-
-
-#
-# Handler phpcgi
-#
-handler_phpcgi = \
-handler_phpcgi.c \
-handler_phpcgi.h
-
-if PLATFORM_WIN32
-phpcgi_ldflags_win32 = -lplugin_cgi
-endif
-
-libplugin_phpcgi_la_LDFLAGS = $(module_ldflags) $(phpcgi_ldflags_win32)
-libplugin_phpcgi_la_SOURCES = $(handler_phpcgi)
-libplugin_phpcgi_la_LIBADD  = $(dynamic_handler_file_lib)
-
-if STATIC_HANDLER_PHPCGI
-static_handler_phpcgi_src = $(handler_phpcgi)
-else
-dynamic_handler_phpcgi_lib = libplugin_phpcgi.la
 endif
 
 
@@ -1471,7 +1448,6 @@ $(static_handler_redir_src) \
 $(static_handler_error_redir_src) \
 $(static_handler_error_nn_src) \
 $(static_handler_cgi_src) \
-$(static_handler_phpcgi_src) \
 $(static_handler_common_src) \
 $(static_handler_proxy_src) \
 $(static_handler_ssi_src) \
@@ -1645,7 +1621,6 @@ $(dynamic_collector_rrd_lib) \
 $(dynamic_gen_evhost_lib) \
 $(dynamic_handler_file_lib) \
 $(dynamic_handler_cgi_lib) \
-$(dynamic_handler_phpcgi_lib) \
 $(dynamic_handler_server_info_lib) \
 $(dynamic_handler_render_rrd_lib) \
 $(dynamic_handler_admin_lib) \
