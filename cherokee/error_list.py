@@ -540,43 +540,53 @@ e('RULE_BIND_PORT',
 #
 e('SERVER_GROUP_NOT_FOUND',
   title = "Group '%s' not found in the system",
-  desc  = "to-do")
+  desc  = "Seem like you've specified a wrong GID. Change the specified one or try to create it using the addgroup/groupadd command.",
+  admin = "/general#tabs_general-2")
 
 e('SERVER_USER_NOT_FOUND',
   title = "User '%s' not found in the system",
-  desc  = "to-do")
+  desc  = "Looks like you've specified a wrong UID. Either change the specified one or try to create it using the adduser/useradd command.",
+  admin = "/general#tabs_general-2")
 
 e('SERVER_THREAD_IGNORE',
   title = "Ignoring thread_policy entry '%s'",
-  desc  = "to-do")
+  desc  = "It looks like an error ocurred with the selected OS thread policy and it has been ignored. Once a valid one is selected, the issue will be fixed.",
+  admin = "/advanced#tabs_advanced-1")
 
 e('SERVER_THREAD_POLICY',
   title = "Unknown thread policy '%s'",
-  desc  = "to-do")
+  desc  = "The specified OS thread policy is unknown. You should try re-selecting one.",
+  admin = "/advanced#tabs_advanced-1")
 
 e('SERVER_TOKEN',
   title = "Unknown server token '%s'",
-  desc  = "to-do")
+  desc  = "An incorrect server token was specified. Please choose one that is available in you Network behavior settings.",
+  admin = "/general")
 
 e('SERVER_POLLING_UNRECOGNIZED',
   title = "Polling method '%s' has not been recognized",
-  desc  = "to-do")
+  desc  = "An incorrect polling method was specified. Please try to fix that in your advanced settings.",
+  admin = "/advanced#tabs_advanced-0")
 
 e('SERVER_POLLING_UNSUPPORTED',
   title = "Polling method '%s' is not supported by this OS",
-  desc  = "to-do")
+  desc  = "The specified polling method does not work on your platform. Please try to choose another one in your advanced settings.",
+  admin = "/advanced#tabs_advanced-0")
 
 e('SERVER_POLLING_UNKNOWN',
   title = "Unknown polling method '%s'",
-  desc  = "to-do")
+  desc  = "An incorrect polling method was specified. Please try to fix that in your advanced settings.",
+  admin = "/advanced#tabs_advanced-0")
 
 e('SERVER_NO_BIND',
-  title = "No listening on any port.",
-  desc  = "to-do")
+  title = "Not listening on any port.",
+  desc  = "The web server needs to be associated to a TCP port. Please try to specify that in your general settings.",
+  admin = "/general#tabs_general-1")
 
 e('SERVER_IGNORE_TLS',
   title = "Ignoring TLS port %d",
-  desc  = "to-do")
+  desc  = "No TLS backend is specified, but the configuration specifies a secure port and it is being ignored. Either enable a TLS backend or disable the TLS checkbox for the specified port.",
+  admin = "/general#tabs_general-0")
 
 e('SERVER_TLS_DEFAULT',
   title = "TLS/SSL support must be set up in the 'default' Virtual Server. Its certificate will we used by the server in case TLS SNI information is not provided by the client.",
