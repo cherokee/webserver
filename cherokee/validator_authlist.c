@@ -100,16 +100,16 @@ add_new_user (cherokee_validator_authlist_props_t *props,
 	
 	ret = cherokee_config_node_read (conf, "user", &tmp);
 	if (ret != ret_ok) {
-		PRINT_MSG ("Couldn't read 'user' value for %s\n", conf->val.buf);
+		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_AUTHLIST_USER, conf->val.buf);
 		return ret_error;
 	}
 	cherokee_buffer_add_buffer (&entry->user, tmp);
 
-	TRACE(ENTRIES, "Adding user='%s'\n", entry->user.buf);
+	TRACE (ENTRIES, "Adding user='%s'\n", entry->user.buf);
 
 	ret = cherokee_config_node_read (conf, "password", &tmp);
 	if (ret != ret_ok) {
-		PRINT_MSG ("Couldn't read 'password' value for %s\n", conf->val.buf);
+		LOG_ERROR (CHEROKEE_ERROR_VALIDATOR_AUTHLIST_PASSWORD, conf->val.buf);
 		return ret_error;
 	}
 	cherokee_buffer_add_buffer (&entry->password, tmp);
@@ -144,7 +144,7 @@ cherokee_validator_authlist_configure (cherokee_config_node_t   *conf,
 	 */
 	ret = cherokee_config_node_get (conf, "list", &subconf);
 	if (ret != ret_ok) {
-		PRINT_MSG_S ("WARNING: Empty authlist: Access will be denied.\n");
+		LOG_WARNING_S (CHEROKEE_ERROR_VALIDATOR_AUTHLIST_EMPTY);
 		goto out;
 	}
 

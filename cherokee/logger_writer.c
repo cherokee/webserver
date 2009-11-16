@@ -119,7 +119,7 @@ config_read_type (cherokee_config_node_t         *config,
 
 	ret = cherokee_config_node_read (config, "type", &tmp);
 	if (ret != ret_ok) {
-		PRINT_MSG_S ("Logger writer type is needed\n");
+		LOG_ERROR_S (CHEROKEE_ERROR_LOGGER_NO_WRITER);
 		return ret_error;
 	}
 	
@@ -132,7 +132,7 @@ config_read_type (cherokee_config_node_t         *config,
 	} else if (equal_buf_str (tmp, "exec")) {
 		*type = cherokee_logger_writer_pipe;		
 	} else {
-		PRINT_MSG ("Unknown logger writer type '%s'\n", tmp->buf);
+		LOG_CRITICAL (CHEROKEE_ERROR_LOGGER_WRITER_UNKNOWN, tmp->buf);
 		return ret_error;
 	}	
 
@@ -159,7 +159,7 @@ cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherokee_con
 	case cherokee_logger_writer_file:
 		ret = cherokee_config_node_read (config, "filename", &tmp);
 		if (ret != ret_ok) { 
-			PRINT_MSG_S ("Logger writer (file): Couldn't read the filename\n");
+			LOG_ERROR (CHEROKEE_ERROR_LOGGER_WRITER_READ, "file");
 			return ret_error;
 		}
 		cherokee_buffer_add_buffer (&writer->filename, tmp);
@@ -168,7 +168,7 @@ cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherokee_con
 	case cherokee_logger_writer_pipe:
 		ret = cherokee_config_node_read (config, "command", &tmp);
 		if (ret != ret_ok) { 
-			PRINT_MSG_S ("Logger writer (exec): Couldn't read the command\n");
+			LOG_ERROR (CHEROKEE_ERROR_LOGGER_WRITER_READ, "exec");
 			return ret_error;
 		}
 		cherokee_buffer_add_buffer (&writer->command, tmp);
@@ -193,8 +193,7 @@ cherokee_logger_writer_configure (cherokee_logger_writer_t *writer, cherokee_con
 		
 		ret = cherokee_buffer_ensure_size (&writer->buffer, buf_len);
 		if (ret != ret_ok) {
-			PRINT_ERROR ("Allocation logger->max_bufsize " FMT_SIZE " failed !\n", 
-				     (CST_SIZE) writer->max_bufsize);
+			LOG_ERROR (CHEROKEE_ERROR_LOGGER_WRITER_ALLOC, writer->max_bufsize);
 			return ret_nomem;
 		}
 		
@@ -214,7 +213,7 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 	pid_t pid; 
 
 	if (pipe (to_log_fds)) { 
-		PRINT_ERROR ("Pipe error: errno=%d", errno);
+		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_LOGGER_WRITER_PIPE, errno);
 		return ret_error;
 	}
 
@@ -235,7 +234,7 @@ launch_logger_process (cherokee_logger_writer_t *writer)
 		SHOULDNT_HAPPEN;
 
 	case -1:
-		PRINT_ERROR ("Fork failed, errno=%d", errno);
+		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_LOGGER_WRITER_FORK, errno);
 		break;
 
 	default:
@@ -274,7 +273,7 @@ cherokee_logger_writer_open (cherokee_logger_writer_t *writer)
 	case cherokee_logger_writer_file:
 		writer->fd = open (writer->filename.buf, O_APPEND | O_WRONLY | O_CREAT | O_LARGEFILE | O_NOFOLLOW, 0640);
 		if (writer->fd == -1) {
-			PRINT_MSG ("Couldn't open '%s' for appending\n", writer->filename.buf);
+			LOG_ERROR (CHEROKEE_ERROR_LOGGER_WRITER_APPEND, writer->filename.buf);
 			ret = ret_error;
 			goto error;
 		}

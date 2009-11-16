@@ -144,7 +144,7 @@ def check_parameters (dirs):
         source_num = source_errors_params[error.id]
         known_num  = known_errors_params[error.id]
         if source_num != known_num:
-            print >> sys.stderr, "ERROR: Parameter number mismatch: %s (source %d, definition %d)" % (error.id, source_errors_params[error.id], known_errors_params[error.id])
+            print >> sys.stderr, "ERROR: Parameter number mismatch: %s (source %d, definition %d)" % (error.id, source_num, known_num)
             error_found = True
 
     return error_found

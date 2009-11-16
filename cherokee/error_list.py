@@ -67,6 +67,21 @@ e('RESOLVE_TIMEOUT',
   desc  = "For some reason, Cherokee could not resolve the hostname.")
 
 
+# cherokee/validator_authlist.c
+#
+e('VALIDATOR_AUTHLIST_USER',
+  title = "Could not read 'user' value for '%s'",
+  desc  = BROKEN_CONFIG)
+
+e('VALIDATOR_AUTHLIST_PASSWORD',
+  title = "Couldn't read 'password' value for '%s'",
+  desc  = BROKEN_CONFIG)
+
+e('VALIDATOR_AUTHLIST_EMPTY',
+  title = "Empty authlist: Access will be denied.",
+  desc  = "The access to this resource will be denied as long as the list of allowed users is empty.")
+
+
 # cherokee/validator_pam.c
 #
 e('VALIDATOR_PAM_DELAY',
@@ -84,6 +99,10 @@ e('VALIDATOR_PAM_ACCOUNT',
 
 # cherokee/validator_ldap.c
 #
+e('VALIDATOR_LDAP_KEY',
+  title = "Validator LDAP: Unknown key: '%s'",
+  desc  = BROKEN_CONFIG)
+
 e('VALIDATOR_LDAP_PROPERTY',
   title = "The LDAP validation module requires a '%s' property",
   desc  = "It looks like you did not fill a required property. Check the LDAP details and try again.")
@@ -332,6 +351,34 @@ e('ENCODER_DEFLATE',
 e('LOGGER_NO_KEY',
   title = "Logger: No '%s' log has been defined.",
   desc  = BROKEN_CONFIG)
+
+e('LOGGER_NO_WRITER',
+  title = "Logger writer type is required.",
+  desc  = BROKEN_CONFIG)
+
+e('LOGGER_WRITER_UNKNOWN',
+  title = "Unknown logger writer type '%s'",
+  desc  = BROKEN_CONFIG)
+
+e('LOGGER_WRITER_READ',
+  title = "Logger writer (%s): Couldn't read the filename.",
+  desc  = BROKEN_CONFIG)
+
+e('LOGGER_WRITER_APPEND',
+  title = "Could not open '%s' for appending",
+  desc  = SYSTEM_ISSUE)
+
+e('LOGGER_WRITER_ALLOC',
+  title = "Allocation logger->max_bufsize %d failed.",
+  desc  = "The system might have run out of memory.")
+
+e('LOGGER_WRITER_PIPE',
+  title = "Could not create pipe (errno=%d): ${errno}",
+  desc  = SYSTEM_ISSUE)
+
+e('LOGGER_WRITER_FORK',
+  title = "Could not fork (errno=%d): ${errno}",
+  desc  = SYSTEM_ISSUE)
 
 
 # cherokee/logger_custom.c

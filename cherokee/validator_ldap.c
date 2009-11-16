@@ -119,7 +119,7 @@ cherokee_validator_ldap_configure (cherokee_config_node_t *conf, cherokee_server
 			/* Not handled here
 			 */
 		} else {
-			PRINT_MSG ("Validator LDAP: Unknown key: '%s'\n", subconf->key.buf);
+			LOG_CRITICAL (CHEROKEE_ERROR_VALIDATOR_LDAP_KEY, subconf->key.buf);
 			return ret_error;
 		}
 	}
