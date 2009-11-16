@@ -45,7 +45,6 @@ typedef struct {
 	cherokee_collector_t      collector;
 
 	/* Configuration*/
-	cherokee_buffer_t         path_rrdtool;
 	cherokee_buffer_t         path_database;
 
 	/* Internals */

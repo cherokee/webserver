@@ -133,7 +133,6 @@ update_srv_cb (cherokee_collector_rrd_t *rrd)
 static ret_t
 srv_free (cherokee_collector_rrd_t *rrd)
 {
-	cherokee_buffer_mrproper (&rrd->path_rrdtool);
 	cherokee_buffer_mrproper (&rrd->path_database);
 	cherokee_buffer_mrproper (&rrd->tmp);
 
