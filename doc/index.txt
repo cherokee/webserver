@@ -73,6 +73,7 @@ link:cookbook.html[Cookbook]: Recipes for specific tasks
   . link:cookbook_phpbb.html[phpBB]: How to run phpBB on Cherokee.
   . link:cookbook_phpmyadmin.html[phpMyAdmin]: How to run phpMyAdmin on Cherokee.
   . link:cookbook_sugarcrm.html[SugarCRM]: How to run SugarCRM on Cherokee.
+  . link:cookbook_concrete5.html[Concrete5]: How to run Concrete5 on Cherokee.
   . link:cookbook_symfony.html[Symfony]: How to run Symfony apps with Cherokee.
   . link:cookbook_trac.html[Trac]: How to run Trac on Cherokee.
   . link:cookbook_zend.html[Zend]: How to run Zend apps with Cherokee.

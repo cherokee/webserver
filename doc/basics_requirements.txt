@@ -31,7 +31,7 @@ If you intend to build Cherokee from source however, you will need
 several tools and libraries.
 
 * Building tools: Cherokee is built on top of the autoconf and
-  automake tools, hence your systems has to have some basic system
+  automake tools, hence your system has to have some basic system
   programs like an sh shell, make and an ANSI C compiler. We have
   compiled Cherokee in various platforms with different compilers, so
   it shouldn't be a problem.
@@ -48,13 +48,13 @@ several tools and libraries.
   interpreter installed on your system.
 
 * If you are building Cherokee in a non-POSIX compliant platform such
-  as Windows, you will need a POSIX threads implementation. Albeit you can
-  disable the usage at compilation time and do without this, it will
-  have a dramatic impact in scalability.
+  as Windows, you will need a POSIX threads implementation. Although
+  you can disable the usage at compilation time and do without this,
+  it will have a dramatic impact in scalability.
 
 * If you want to make a build that serves secure content, you will
   need TLS libraries. Cherokee ships with support for the OpenSSL
-  backend, but the architecture is completly modular and any other
+  backend, but the architecture is completely modular and any other
   backend can be implemented. You need to have the development files
   of the chosen backend libraries in order to build a package that
   suits your needs.

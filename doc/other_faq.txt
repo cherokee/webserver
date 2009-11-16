@@ -182,33 +182,9 @@ source, most likely you've missed installing libcherokee-mod-libssl
 [[faq16]]
 === Can I use an old configuration file with a new Cherokee release?
 
-The answer is yes. Cherokee now supports configuration versioning, so
-from now on, whenever a change is made to the configuration file
-format, Cherokee-Admin will be able to automatically convert yours to
-the new release. You simply have to load Cherokee-Admin and it will be
-converted once you proceed to saving it.
-
-There is also a command line utility that you can use to do the exact
-same thing. It is provided under
-`$prefix/share/cherokee/admin/upgrade_config.py.`
-
-In case you need to do this manually, the usage is as follows:
-
-----
-  /usr/share/cherokee/admin/upgrade_config.py /etc/cherokee/cherokee.conf
-----
-
-If Cherokee-Admin can not make the conversion automatically (because
-it is older than the configuration versioning feature), you still have
-options.
-
-Back when we transitioned from 0.5.x to 0.6, the configuration file
-format changed drastically. We have always tried to provide conversion
-scripts that would let you upgrade the old configuration files you
-had. They are made available under the `contrib` subdirectory. If it
-is really old, you might need to apply several of them, one after
-another (i.e. from 0.5 to 0.6, from 0.6 to 0.7, and so on).
-
+The answer is yes. Please refer to the
+link:basics_upgrade.html[Upgrading Cherokee] section of the
+documentation.
 
 [[faq17]]
 === I'm using *BSD and can't compile Cherokee. What's wrong?

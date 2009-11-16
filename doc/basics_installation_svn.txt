@@ -9,7 +9,7 @@ unstable. In general it is not recommended to run this release in
 production environments.
 
 Briefly, SVN is a system tool used to store and maintain files and a
-history of their changes over time, and it is an ivaluable development
+history of their changes over time, and it is an invaluable development
 tool. The Cherokee source code and related files are kept on a SVN
 server at svn.cherokee-project.com.
 

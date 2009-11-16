@@ -71,6 +71,7 @@ cookbook_managing_logs.html \
 cookbook_streaming.html \
 cookbook_uwsgi.html \
 cookbook_coldfusion.html \
+cookbook_concrete5.html \
 modules.html \
 modules_balancers.html \
 modules_balancers_ip_hash.html \
