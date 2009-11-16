@@ -1,17 +1,19 @@
 # Macros
 #
-INTERNAL_ISSUE = """The server found an internal problem.
-"""
+CODING_BUG = """It looks like you've hit a bug in the server. Please, \
+do not hesitate to report it at http://bugs.cherokee-project.com/ so  \
+the developer team can fix it."""
 
-CODING_BUG = """Looks like a bug in the plug-in that you're trying to
-use. Please report it to its author or maintainer so he can fix it
-up."""
+UNKNOWN_CAUSE = """An unexpected error has just occurred in the \
+server. The cause of the issue is unknown. Please, do not hesitate to \
+report it at http://bugs.cherokee-project.com/ so the developer team \
+can fix it."""
 
 SYSTEM_ISSUE = """The issue seems to be related to your system."""
 
-UNKNOWN_CAUSE = """We are not sure why this happened. (To-do)."""
-
 BROKEN_CONFIG = """The configuration file seems to be broken."""
+
+INTERNAL_ISSUE = """The server found an internal problem. """
 
 
 # cherokee/source.c
@@ -598,7 +600,7 @@ e('SERVER_NO_CRYPTOR',
 
 e('SERVER_PARSE',
   title = "Server parser: Unknown key '%s'",
-  desc  = "to-do")
+  desc  = BROKEN_CONFIG)
 
 e('SERVER_INITGROUPS',
   title = "initgroups: Unable to set groups for user `%s' and GID %d",
@@ -898,15 +900,15 @@ e('THREAD_SET_SOCKADDR',
 #
 e('CONNECTION_AUTH',
   title = "Unknown authentication method",
-  desc  = "To-do")
+  desc  = BROKEN_CONFIG)
 
 e('CONNECTION_LOCAL_DIR',
   title = "Could not build the local directory string",
-  desc  = "To-do")
+  desc  = CODING_BUG)
 
 e('CONNECTION_GET_VSERVER',
   title = "Couldn't get virtual server: '%s'",
-  desc  = "To-do")
+  desc  = CODING_BUG)
 
 
 # cherokee/ncpus.c
