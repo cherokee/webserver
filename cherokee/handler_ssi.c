@@ -231,7 +231,7 @@ parse (cherokee_handler_ssi_t *hdl,
 			op  = op_lastmod;
 			len = 8;
 		} else {
-			PRINT_MSG ("Unknown SSI property: '%s'\n", key.buf);
+			LOG_ERROR (CHEROKEE_ERROR_HANDLER_SSI_PROPERTY, key.buf);
 		}
 
 		/* Deeper parsing

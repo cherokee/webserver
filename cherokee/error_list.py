@@ -211,6 +211,13 @@ e('HANDLER_FILE_TIME_PARSE',
   title = "Unparseable time '%s'")
 
 
+# cherokee/handler_ssi.c
+#
+e('HANDLER_SSI_PROPERTY',
+  title = "Unknown SSI property: '%s'",
+  desc  = BROKEN_CONFIG)
+
+
 # cherokee/handler_fcgi.c
 #
 e('HANDLER_FCGI_VERSION',
@@ -225,7 +232,6 @@ e('HANDLER_FCGI_STDERR',
 e('HANDLER_FCGI_BALANCER',
   title = "Found a FastCGI handler without a Load Balancer",
   desc  = BROKEN_CONFIG)
-
 
 
 # cherokee/handler_error_redir.c
@@ -379,6 +385,10 @@ e('LOGGER_WRITER_PIPE',
 e('LOGGER_WRITER_FORK',
   title = "Could not fork (errno=%d): ${errno}",
   desc  = SYSTEM_ISSUE)
+
+e('LOGGER_X_REAL_IP_PARSE',
+  title = "Could not parse X-Real-IP access list",
+  desc  = "You must define an access list in order to activate the X-Real-IP support.")
 
 
 # cherokee/logger_custom.c

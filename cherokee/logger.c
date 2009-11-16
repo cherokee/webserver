@@ -107,7 +107,7 @@ cherokee_logger_init_base (cherokee_logger_t      *logger,
 	if (ret == ret_ok) {
 		ret = cherokee_config_node_read_list (subconf, NULL, add_access, logger);
 		if (ret != ret_ok) {
-			PRINT_ERROR_S ("ERROR: Couldn't parse X-Real-IP access list\n");
+			LOG_ERROR_S (CHEROKEE_ERROR_LOGGER_X_REAL_IP_PARSE);
 			return ret_error;
 		}
 	}
