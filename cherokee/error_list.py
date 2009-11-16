@@ -387,7 +387,8 @@ e('FDPOLL_PORTS_GETN',
 #
 e('FDPOLL_POLL_FULL',
   title = "The FD Poll is full",
-  desc  = "The server reached the file descriptor limit. That is usually due to..(to-do). Try to increase the limit..(to-do)")
+  desc  = "The server reached the file descriptor limit. This usaully happens when many simultaneous connections are kept open. Try to increase this limit.",
+  admin = "/advanced#tabs_advanced-1")
 
 e('FDPOLL_POLL_DEL',
   title = "Could not remove fd %d (idx=%d) from the poll",
@@ -409,7 +410,7 @@ e('GEN_EVHOST_TPL_DROOT',
 
 e('GEN_EVHOST_PARSE',
   title = "EvHost: Couldn't parse template '%s'",
-  desc  = "Could not parse the template definining how virtual servers are located. (to-do).")
+  desc  = "Could not parse the template definining how virtual servers are located. You need to re-define the Dynamic Document Root for your Advanced Virtual Hosting.")
 
 
 # cherokee/vrule_*.c
