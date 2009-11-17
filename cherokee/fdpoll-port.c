@@ -202,8 +202,8 @@ _watch (cherokee_fdpoll_port_t *fdp, int timeout_msecs)
 		                   nfd, 
 		                   fdp->port_events[i].portev_user);
 		if ( rc < 0 ) {
-			LOG_ERRNO_S (errno, cherokee_err_error,
-				     CHEROKEE_ERROR_FDPOLL_PORTS_FD_ASSOCIATE, nfd);
+			LOG_ERRNO (errno, cherokee_err_error,
+				   CHEROKEE_ERROR_FDPOLL_PORTS_FD_ASSOCIATE, nfd);
 		}
 	}
 
