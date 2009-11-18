@@ -28,6 +28,7 @@
 #include "util.h"
 #include "thread.h"
 #include "server-protected.h"
+#include "source_interpreter.h"
 
 #define ENTRIES "proxy"
 
@@ -746,6 +747,20 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 					hdl->pconn->keepalive_in = false;
 					return ret_error;
 				}
+
+				if (hdl->src_ref->type == source_interpreter) {
+					ret = cherokee_source_interpreter_spawn (SOURCE_INT(hdl->src_ref),
+										 CONN_VSRV(conn)->logger);
+					switch (ret) {
+					case ret_ok:
+						break;
+					case ret_eagain:
+						return ret_eagain;
+					default:
+						return ret_error;
+					}
+				}
+
 				hdl->respined = true;
 				goto reconnect;
 			default:
