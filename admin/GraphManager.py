@@ -3,18 +3,7 @@ import time
 from configured import *
 
 def graphs_are_active (cfg):
-    if not cfg.get_val("server!collector"):
-        return False
-    
-    rrd_dir = cfg.get_val("server!collector!database_dir", CHEROKEE_RRD_DIR)
-
-    img = os.path.join (rrd_dir, "images/server_traffic_1h.png")
-    try:
-        info = os.stat(img)
-    except OSError:
-        return False
-
-    return True
+    return cfg.get_val("server!collector") != None
 
 
 def graphs_get_images (cfg, filter):
