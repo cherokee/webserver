@@ -38,6 +38,7 @@ typedef struct {
 
 typedef struct {
 	cherokee_handler_t             base;
+	cherokee_buffer_t              rrd_error;
 	cherokee_handler_file_t       *file_hdl;
 } cherokee_handler_render_rrd_t;
 

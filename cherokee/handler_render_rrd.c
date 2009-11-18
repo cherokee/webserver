@@ -91,7 +91,8 @@ check_image_freshness (cherokee_buffer_t                 *database_dir,
 
 
 static ret_t
-command_rrdtool (cherokee_buffer_t *buf)
+command_rrdtool (cherokee_handler_render_rrd_t *hdl,
+		 cherokee_buffer_t             *buf)
 {
 	ret_t ret;
 
@@ -111,7 +112,9 @@ command_rrdtool (cherokee_buffer_t *buf)
 		return ret_error;
 		
 	} else if (strncmp (buf->buf, "ERROR", 5) == 0) {
+		cherokee_buffer_add_buffer (&hdl->rrd_error, buf);
 		LOG_ERROR (CHEROKEE_ERROR_HANDLER_RENDER_RRD_MSG, buf->buf);
+
 		return ret_error;
 	}
 
@@ -121,7 +124,8 @@ command_rrdtool (cherokee_buffer_t *buf)
 
 
 static ret_t
-render_srv_accepts (cherokee_collector_rrd_interval_t *interval)
+render_srv_accepts (cherokee_handler_render_rrd_t     *hdl,
+		    cherokee_collector_rrd_interval_t *interval)
 {
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
@@ -147,7 +151,7 @@ render_srv_accepts (cherokee_collector_rrd_interval_t *interval)
 	cherokee_buffer_add_str    (tmp, "LINE1.5:accepts#224499:Average ");
 	cherokee_buffer_add_str    (tmp, "\n");
 	
-	command_rrdtool (tmp);
+	command_rrdtool (hdl, tmp);
 	cherokee_buffer_clean (tmp);
 
 	return ret_ok;
@@ -155,7 +159,8 @@ render_srv_accepts (cherokee_collector_rrd_interval_t *interval)
 
 
 static ret_t
-render_srv_timeouts (cherokee_collector_rrd_interval_t *interval)
+render_srv_timeouts (cherokee_handler_render_rrd_t     *hdl,
+		     cherokee_collector_rrd_interval_t *interval)
 {
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
@@ -181,7 +186,7 @@ render_srv_timeouts (cherokee_collector_rrd_interval_t *interval)
 	cherokee_buffer_add_str    (tmp, "LINE1.5:timeouts#900:Average ");
 	cherokee_buffer_add_str    (tmp, "\n");
 
-	command_rrdtool (tmp);
+	command_rrdtool (hdl, tmp);
 	cherokee_buffer_clean (tmp);
 
 	return ret_ok;
@@ -189,7 +194,8 @@ render_srv_timeouts (cherokee_collector_rrd_interval_t *interval)
 
 
 static ret_t
-render_srv_traffic (cherokee_collector_rrd_interval_t *interval)
+render_srv_traffic (cherokee_handler_render_rrd_t     *hdl,
+		    cherokee_collector_rrd_interval_t *interval)
 {
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
@@ -220,7 +226,7 @@ render_srv_traffic (cherokee_collector_rrd_interval_t *interval)
 	cherokee_buffer_add_str    (tmp, "GPRINT:rx_total:\"   Total\\:%8.2lf%s\\n\" ");
 	cherokee_buffer_add_str    (tmp, "\n");
 
-	command_rrdtool (tmp);
+	command_rrdtool (hdl, tmp);
 	cherokee_buffer_clean (tmp);
 
 	return ret_ok;
@@ -228,7 +234,8 @@ render_srv_traffic (cherokee_collector_rrd_interval_t *interval)
 
 
 static ret_t
-render_vsrv_traffic (cherokee_collector_rrd_interval_t *interval,
+render_vsrv_traffic (cherokee_handler_render_rrd_t     *hdl,
+		     cherokee_collector_rrd_interval_t *interval,
 		     cherokee_buffer_t                 *vserver_name)
 {
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
@@ -269,7 +276,7 @@ render_vsrv_traffic (cherokee_collector_rrd_interval_t *interval,
 	cherokee_buffer_add_str (tmp, "GPRINT:srv_tx_total:\"   Total\\:%8.2lf%s\\n\" ");
 	cherokee_buffer_add_str (tmp, "\n");
 
-	command_rrdtool (tmp);
+	command_rrdtool (hdl, tmp);
 	cherokee_buffer_clean (tmp);
 
 	return ret_ok;
@@ -340,7 +347,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 				return ret_eagain;
 			}
 
-			ret = render_srv_accepts (interval);
+			ret = render_srv_accepts (hdl, interval);
 			if (ret != ret_ok) {
 				TRACE (ENTRIES, "Couldn't render image: %s\n", conn->request.buf);
 
@@ -370,7 +377,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 				return ret_eagain;
 			}
 
-			ret = render_srv_timeouts (interval);
+			ret = render_srv_timeouts (hdl, interval);
 			if (ret != ret_ok) {
 				TRACE (ENTRIES, "Couldn't render image: %s\n", conn->request.buf);
 
@@ -400,7 +407,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 				return ret_eagain;
 			}
 
-			ret = render_srv_traffic (interval);
+			ret = render_srv_traffic (hdl, interval);
 			if (ret != ret_ok) {
 				TRACE (ENTRIES, "Couldn't render image: %s\n", conn->request.buf);
 
@@ -448,7 +455,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 
 			/* Render
 			 */
-			ret = render_vsrv_traffic (interval, &vserver_buf);
+			ret = render_vsrv_traffic (hdl, interval, &vserver_buf);
 			cherokee_buffer_mrproper (&vserver_buf);
 
 			if (ret != ret_ok) {
@@ -468,6 +475,17 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		return ret_error;		
 	}
 
+	/* Has everything gone alright?
+	 */
+	if (! cherokee_buffer_is_empty (&hdl->rrd_error)) {
+		cherokee_connection_t *conn = HANDLER_CONN(hdl);
+
+		conn->error_code = http_service_unavailable;
+		BIT_SET (HANDLER(hdl)->support, hsupport_error);
+
+		return ret_ok;
+	}
+
 	return cherokee_handler_file_init (hdl->file_hdl);
 }
 
@@ -476,6 +494,12 @@ static ret_t
 handler_add_headers (cherokee_handler_render_rrd_t *hdl, 
 		     cherokee_buffer_t             *buffer)
 {
+	if (! cherokee_buffer_is_empty (&hdl->rrd_error)) {
+		cherokee_buffer_add_str (buffer, "Content-Type: text/html" CRLF);
+		cherokee_buffer_add_va  (buffer, "Content-Length: %d" CRLF, hdl->rrd_error.len);
+		return ret_ok;
+	}
+
 	if (HANDLER_RENDER_RRD_PROPS(hdl)->disabled) {
 		cherokee_buffer_add_str (buffer, "Content-Type: text/html" CRLF);
 		cherokee_buffer_add_va  (buffer, "Content-Length: %d" CRLF, strlen(DISABLED_MSG));
@@ -490,6 +514,11 @@ static ret_t
 handler_step (cherokee_handler_render_rrd_t *hdl,
 	      cherokee_buffer_t             *buffer)
 {
+	if (! cherokee_buffer_is_empty (&hdl->rrd_error)) {
+		cherokee_buffer_add_buffer (buffer, &hdl->rrd_error);
+		return ret_eof_have_data;
+	}
+
 	if (HANDLER_RENDER_RRD_PROPS(hdl)->disabled) {
 		cherokee_buffer_add_str (buffer, DISABLED_MSG);
 		return ret_eof_have_data;
@@ -502,6 +531,8 @@ handler_step (cherokee_handler_render_rrd_t *hdl,
 static ret_t
 handler_free (cherokee_handler_render_rrd_t *hdl)
 {
+	cherokee_buffer_mrproper (&hdl->rrd_error);
+
 	if (hdl->file_hdl != NULL) {
 		cherokee_handler_file_free (hdl->file_hdl);
 	}
@@ -534,6 +565,7 @@ cherokee_handler_render_rrd_new (cherokee_handler_t     **hdl,
 	/* Properties
 	 */
 	n->file_hdl = NULL;
+	cherokee_buffer_init (&n->rrd_error);
 
 	/* Instance file sub-handler
 	 */
