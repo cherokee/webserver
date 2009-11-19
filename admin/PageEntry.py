@@ -88,10 +88,6 @@ class PageEntry (PageMenu, FormHelper):
             if self.has_errors():
                 return self._op_default (uri)
 
-        # Cleanup properties on autoreloads
-        pre = "%s!handler" % (self._conf_prefix)
-        self.ApplyChanges_OptionModule (pre, uri, post)
-
         return self._op_default (uri)
 
     def _op_apply_changes (self, uri, post):
