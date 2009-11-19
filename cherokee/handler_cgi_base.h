@@ -31,6 +31,7 @@
 #include "handler.h"
 #include "list.h"
 #include "connection.h"
+#include "xrealip.h"
 
 #define SUPPORT_XSENDFILE
 
@@ -104,6 +105,7 @@ typedef struct {
 	cherokee_boolean_t                 allow_xsendfile;
 	cherokee_boolean_t                 is_error_handler;
 	cherokee_boolean_t                 pass_req_headers;
+	cherokee_x_real_ip_t               x_real_ip;
 } cherokee_handler_cgi_base_props_t;
 
 #define PROP_CGI_BASE(x)               ((cherokee_handler_cgi_base_props_t *)(x))

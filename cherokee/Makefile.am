@@ -1353,7 +1353,9 @@ cache.c \
 logger.h \
 logger.c \
 logger_writer.h \
-logger_writer.c
+logger_writer.c \
+xrealip.h \
+xrealip.c
 
 
 libcherokee_client_la_SOURCES = \

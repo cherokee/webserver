@@ -27,6 +27,7 @@
 #include "access.h"
 #include "header.h"
 #include "connection-protected.h"
+#include "xrealip.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -34,45 +35,20 @@
 
 
 struct cherokee_logger_private {
-	CHEROKEE_MUTEX_T   (mutex);
-	cherokee_boolean_t  backup_mode;
-
-	cherokee_boolean_t  x_real_ip_enabled;
-	cherokee_access_t  *x_real_ip_access;
-	cherokee_boolean_t  x_real_ip_access_all;
+	CHEROKEE_MUTEX_T     (mutex);
+	cherokee_boolean_t    backup_mode;
+	cherokee_x_real_ip_t  x_real_ip; 
 };
 
 #define PRIV(x)  (LOGGER(x)->priv)
 
-static ret_t
-add_access (char *address, void *data)
-{
-	ret_t              ret;
-	cherokee_logger_t *logger = LOGGER(data);
-
-	if (logger->priv->x_real_ip_access == NULL) {
-		ret = cherokee_access_new (&logger->priv->x_real_ip_access);
-		if (ret != ret_ok) {
-			return ret;
-		}
-	}
-
-	ret = cherokee_access_add (logger->priv->x_real_ip_access, address);
-	if (ret != ret_ok) {
-		return ret;
-	}
-
-	return ret_ok;
-	
-}
 
 ret_t
 cherokee_logger_init_base (cherokee_logger_t      *logger,
 			   cherokee_plugin_info_t *info,
 			   cherokee_config_node_t *config)
 {
-	ret_t                   ret;
-	cherokee_config_node_t *subconf;
+	ret_t ret;
 	CHEROKEE_NEW_TYPE(priv, struct cherokee_logger_private);
 
 	/* Init the base class
@@ -88,28 +64,16 @@ cherokee_logger_init_base (cherokee_logger_t      *logger,
 
 	/* Private
 	 */	
-	logger->priv->backup_mode          = false;
-	logger->priv->x_real_ip_enabled    = false;
-	logger->priv->x_real_ip_access     = NULL;
-	logger->priv->x_real_ip_access_all = false;
-
-	CHEROKEE_MUTEX_INIT (&PRIV(logger)->mutex, NULL);
+	logger->priv->backup_mode = false;
+	
+       	CHEROKEE_MUTEX_INIT (&PRIV(logger)->mutex, NULL);
+	cherokee_x_real_ip_init (&logger->priv->x_real_ip);
 
 	/* Read the configuration
 	 */
-	cherokee_config_node_read_bool (config, "x_real_ip_enabled",
-					&logger->priv->x_real_ip_enabled);
-	
-	cherokee_config_node_read_bool (config, "x_real_ip_access_all",
-					&logger->priv->x_real_ip_access_all);
-	
-	ret = cherokee_config_node_get (config, "x_real_ip_access", &subconf);
-	if (ret == ret_ok) {
-		ret = cherokee_config_node_read_list (subconf, NULL, add_access, logger);
-		if (ret != ret_ok) {
-			LOG_ERROR_S (CHEROKEE_ERROR_LOGGER_X_REAL_IP_PARSE);
-			return ret_error;
-		}
+	ret = cherokee_x_real_ip_configure (&logger->priv->x_real_ip, config);
+	if (ret != ret_ok) {
+		return ret_error;
 	}
 
 	return ret_ok;
@@ -129,9 +93,7 @@ cherokee_logger_free (cherokee_logger_t *logger)
 	}
 
 	if (logger->priv) {
-		if (logger->priv->x_real_ip_access) {
-			cherokee_access_free (logger->priv->x_real_ip_access);
-		}
+		cherokee_x_real_ip_mrproper (&logger->priv->x_real_ip);
 		free (logger->priv);
 	}
 
@@ -208,15 +170,9 @@ parse_x_real_ip (cherokee_logger_t *logger, cherokee_connection_t *conn)
 	
 	/* Is the client allowed to use X-Real-IP?
 	 */
-	if (! logger->priv->x_real_ip_access_all) {
-		if (logger->priv->x_real_ip_access == NULL) {
-			return ret_deny;
-		}
-
-		ret = cherokee_access_ip_match (logger->priv->x_real_ip_access, &conn->socket);
-		if (ret != ret_ok) {
-			return ret_deny;
-		}
+	ret = cherokee_x_real_ip_is_allowed (&logger->priv->x_real_ip, &conn->socket);
+	if (ret != ret_ok) {
+		return ret_deny;
 	}
 		
 	/* Store the X-Real-IP value
@@ -242,7 +198,7 @@ cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
 	
 	/* Deal with X-Real-IP
 	 */
-	if (logger->priv->x_real_ip_enabled) {
+	if (logger->priv->x_real_ip.enabled) {
 		ret = parse_x_real_ip (logger, CONN(conn));
 		if (unlikely (ret == ret_error))
 			return ret_error;

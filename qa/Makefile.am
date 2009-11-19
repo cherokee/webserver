@@ -236,7 +236,11 @@ run-tests.py \
 228-Redir-Paths2.py \
 229-Fullpath.py \
 230-Fullpath2.py \
-231-POST-4extra.py
+231-POST-4extra.py \
+232-X-Real-IP-CGI.py \
+233-X-Real-IP-CGI-2.py \
+234-X-Real-IP-CGI-3.py
+
 
 test:
 	./run-tests.py
