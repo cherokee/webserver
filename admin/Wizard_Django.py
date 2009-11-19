@@ -20,7 +20,7 @@ SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = Django %(src_num)d
 source!%(src_num)d!host = /tmp/cherokee-source%(src_num)d.sock
-source!%(src_num)d!interpreter = python %(django_dir)s/manage.py runfcgi protocol=scgi socket=/tmp/cherokee-source%(src_num)d.sock 
+source!%(src_num)d!interpreter = python %(django_dir)s/manage.py runfcgi protocol=scgi socket=/tmp/cherokee-source%(src_num)d.sock
 """
 
 CONFIG_VSRV = SOURCE + """
@@ -65,7 +65,7 @@ def django_figure_media_prefix (local_djando_dir):
     fullpath = os.path.join (local_djando_dir, "settings.py")
 
     # Red the file
-    if os.path.exists (fullpath):        
+    if os.path.exists (fullpath):
         content = open(fullpath, "r").read()
         tmp = re.findall (r"\s*ADMIN_MEDIA_PREFIX\s*=\s*['\"](.*)['\"]", content)
         if tmp:
@@ -122,7 +122,6 @@ class Wizard_VServer_Django (WizardPage):
 
         form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
-        return txt
 
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
@@ -184,7 +183,6 @@ class Wizard_Rules_Django (WizardPage):
 
         form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
-        return txt
 
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
