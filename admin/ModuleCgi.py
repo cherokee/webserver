@@ -6,12 +6,16 @@ from ModuleHandler import *
 # For gettext
 N_ = lambda x: x
 
-NOTE_SCRIPT_ALIAS  = N_('Path to an executable that will be run with the CGI as parameter.')
-NOTE_CHANGE_USER   = N_('Execute the CGI under its file owner user ID.')
-NOTE_ERROR_HANDLER = N_('Send errors exactly as they are generated.')
-NOTE_CHECK_FILE    = N_('Check whether the file is in place.')
-NOTE_PASS_REQ      = N_('Forward all the client headers to the CGI encoded as HTTP_*. headers.')
-NOTE_XSENDFILE     = N_('Allow the use of the non-standard X-Sendfile header.')
+NOTE_SCRIPT_ALIAS     = N_('Path to an executable that will be run with the CGI as parameter.')
+NOTE_CHANGE_USER      = N_('Execute the CGI under its file owner user ID.')
+NOTE_ERROR_HANDLER    = N_('Send errors exactly as they are generated.')
+NOTE_CHECK_FILE       = N_('Check whether the file is in place.')
+NOTE_PASS_REQ         = N_('Forward all the client headers to the CGI encoded as HTTP_*. headers.')
+NOTE_XSENDFILE        = N_('Allow the use of the non-standard X-Sendfile header.')
+NOTE_X_REAL_IP        = N_('Whether the handler should read and use the X-Real-IP header and use it in REMOTE_ADDR.')
+NOTE_X_REAL_IP_ALL    = N_('Accept all the X-Real-IP headers. WARNING: Turn it on only if you are centain of what you are doing.')
+NOTE_X_REAL_IP_ACCESS = N_('List of IP addresses and subnets that are allowed to send the X-Real-IP header.')
+
 
 DATA_VALIDATION = [
     ('vserver!.+?!rule!.+?!handler!script_alias', validations.is_path),
@@ -29,7 +33,10 @@ class ModuleCgiBase (ModuleHandler):
         'check_file',
         'pass_req_headers',
         'xsendfile',
-        'env'
+        'env',
+        'x_real_ip_enabled',
+        'x_real_ip_access_all',
+        'x_real_ip_access'
     ]
 
     def __init__ (self, cfg, prefix, name, submit_url):
@@ -47,11 +54,21 @@ class ModuleCgiBase (ModuleHandler):
         if self.show_change_uid:
             self.AddPropCheck (table, _("Change UID"), "%s!change_user"%(self._prefix), False, _(NOTE_CHANGE_USER))
 
-        self.AddPropCheck (table, _("Error handler"),     "%s!error_handler"% (self._prefix), True, _(NOTE_ERROR_HANDLER))
-
-        self.AddPropCheck (table, _("Check file"),           "%s!check_file"   % (self._prefix), True,  _(NOTE_CHECK_FILE))
+        self.AddPropCheck (table, _("Error handler"),        "%s!error_handler"% (self._prefix),     True,  _(NOTE_ERROR_HANDLER))
+        self.AddPropCheck (table, _("Check file"),           "%s!check_file"   % (self._prefix),     True,  _(NOTE_CHECK_FILE))
         self.AddPropCheck (table, _("Pass Request Headers"), "%s!pass_req_headers" % (self._prefix), True,  _(NOTE_PASS_REQ))
         self.AddPropCheck (table, _("Allow X-Sendfile"),     "%s!xsendfile" % (self._prefix),        False, _(NOTE_XSENDFILE))
+
+        # X-Real-IP
+        x_real_ip     = int(self._cfg.get_val('%s!x_real_ip_enabled' %(self._prefix), "0"))
+        x_real_ip_all = int(self._cfg.get_val('%s!x_real_ip_access_all' %(self._prefix), "0"))
+
+        self.AddPropCheck (table, _('Read X-Real-IP'), '%s!x_real_ip_enabled'%(self._prefix), False, _(NOTE_X_REAL_IP))
+        if x_real_ip:
+            self.AddPropCheck (table, _('Don\'t check origin'), '%s!x_real_ip_access_all'%(self._prefix), False, _(NOTE_X_REAL_IP_ALL))
+            if not x_real_ip_all:
+                self.AddPropEntry (table, _('Accept from Hosts'), '%s!x_real_ip_access'%(self._prefix), _(NOTE_X_REAL_IP_ACCESS))
+
         txt += self.Indent(table)
 
         txt1 = '<h2>%s</h2>' % (_('Custom environment variables'))
@@ -87,7 +104,8 @@ class ModuleCgiBase (ModuleHandler):
             self._cfg['%s!env!%s'%(self._prefix, new_name)] = new_value
 
         checkboxes = ['error_handler', 'pass_req_headers', 'xsendfile',
-                      'change_user', 'check_file']
+                      'change_user', 'check_file', 'x_real_ip_enabled',
+                      'x_real_ip_access_all']
 
         self.ApplyChangesPrefix (self._prefix, checkboxes, post, DATA_VALIDATION)
 
