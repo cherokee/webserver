@@ -2,7 +2,7 @@
 uWSGI wizard.
 
 Last update:
-* Cherokee 0.99.25
+* Cherokee 0.99.28
 * uWSGI 20090829 Version 0.9.2
 """
 import validations
@@ -64,11 +64,11 @@ CONFIG_RULES = SOURCE + """
 %(rule_pre)s!handler!balancer!source!1 = %(src_num)d
 """
 
-DEFAULT_BINS   = ['uwsgi','uwsgi26']
+DEFAULT_BINS   = ['uwsgi','uwsgi26','uwsgi25']
 
 DEFAULT_PATHS  = ['/usr/bin',
-                 '/usr/gnu/bin',
-                 '/opt/local/bin']
+                  '/usr/gnu/bin',
+                  '/opt/local/bin']
 
 RE_MOUNTPOINT = """<uwsgi>.*?<app mountpoint=["|'](.*?)["|']>.*</uwsgi>"""
 
@@ -79,12 +79,14 @@ def is_uwsgi_cfg (filename, cfg, nochroot):
         raise ValueError, _(ERROR_NO_UWSGI_CONFIG)
     return filename
 
-def find_mountpoint(filename):
+def find_mountpoint (filename):
     regex = re.compile(RE_MOUNTPOINT, re.DOTALL)
     match = regex.search(open(filename).read())
     if match:
         return match.groups()[0]
 
+def find_uwsgi_binary ():
+    return path_find_binary (DEFAULT_BINS, extra_dirs = DEFAULT_PATHS)
 
 DATA_VALIDATION = [
     ("tmp!wizard_uwsgi!uwsgi_cfg",     (is_uwsgi_cfg, 'cfg')),
@@ -96,7 +98,7 @@ DATA_VALIDATION = [
 
 class Wizard_VServer_uWSGI (WizardPage):
     ICON = "uwsgi.png"
-    DESC = _("New virtual server for a uWSGI project.")
+    DESC = _("New virtual server for an uWSGI project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
@@ -104,11 +106,9 @@ class Wizard_VServer_uWSGI (WizardPage):
                              id     = "uWSGI_Page1",
                              title  = _("uWSGI Wizard"),
                              group  = _(WIZARD_GROUP_PLATFORM))
+        self.uwsgi_binary = find_uwsgi_binary()
 
     def show (self):
-        # Check for uWSGI
-        self.uwsgi_binary = path_find_binary (DEFAULT_BINS,
-                                              extra_dirs = DEFAULT_PATHS)
         if not self.uwsgi_binary:
             self.no_show = _(ERROR_NO_UWSGI_BINARY)
             return False
@@ -134,7 +134,6 @@ class Wizard_VServer_uWSGI (WizardPage):
 
         form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
-        return txt
 
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
@@ -170,7 +169,7 @@ class Wizard_VServer_uWSGI (WizardPage):
 
 class Wizard_Rules_uWSGI (WizardPage):
     ICON = "uwsgi.png"
-    DESC = _("New directory for a uWSGI project.")
+    DESC = _("New directory for an uWSGI project.")
 
     def __init__ (self, cfg, pre):
         WizardPage.__init__ (self, cfg, pre,
@@ -178,11 +177,9 @@ class Wizard_Rules_uWSGI (WizardPage):
                              id     = "uWSGI_Page1",
                              title  = _("uWSGI Wizard"),
                              group  = _(WIZARD_GROUP_PLATFORM))
+        self.uwsgi_binary = find_uwsgi_binary()
 
     def show (self):
-        # Check for uWSGI
-        self.uwsgi_binary = path_find_binary (DEFAULT_BINS,
-                                              extra_dirs = DEFAULT_PATHS)
         if not self.uwsgi_binary:
             self.no_show = _(ERROR_NO_UWSGI_BINARY)
             return False
@@ -200,7 +197,6 @@ class Wizard_Rules_uWSGI (WizardPage):
 
         form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
-        return txt
 
     def _op_apply (self, post):
         # Store tmp, validate and clean up tmp
