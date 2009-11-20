@@ -35,6 +35,7 @@
 #include "connection-protected.h"
 #include "sha1.h"
 #include "md5crypt.h"
+#include "util.h"
 
 #define CRYPT_SALT_LENGTH 2
 

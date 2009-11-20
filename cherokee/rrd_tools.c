@@ -29,6 +29,7 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 #include "rrd_tools.h"
 #include "virtual_server.h"
