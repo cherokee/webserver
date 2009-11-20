@@ -116,6 +116,8 @@ cherokee_connection_new  (cherokee_connection_t **conn)
 	n->traffic_next         = 0;
 	n->validator            = NULL;
 	n->timeout              = -1;
+	n->timeout_lapse        = -1;
+	n->timeout_header       = NULL;
 	n->polling_fd           = -1;
 	n->polling_multiple     = false;
 	n->polling_mode         = FDPOLL_MODE_NONE;
@@ -247,7 +249,6 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 		BIT_UNSET (conn->options, conn_op_tcp_cork);		
 	}
 
-	conn->timeout              = -1;
 	conn->phase                = phase_reading_header;
 	conn->auth_type            = http_auth_nothing;
 	conn->req_auth_type        = http_auth_nothing;
@@ -637,7 +638,7 @@ build_response_header (cherokee_connection_t *conn, cherokee_buffer_t *buffer)
 
 	} else if (conn->handler && (conn->keepalive > 0)) {
 		cherokee_buffer_add_str (buffer, "Connection: Keep-Alive"CRLF);
-		cherokee_buffer_add_buffer (buffer, &CONN_SRV(conn)->timeout_header);
+		cherokee_buffer_add_buffer (buffer, conn->timeout_header);
 	} else {
 		cherokee_buffer_add_str (buffer, "Connection: close"CRLF);
 	}
@@ -2500,8 +2501,9 @@ cherokee_connection_print (cherokee_connection_t *conn)
 
 	/* Shortcut: Don't render if not tracing
 	 */
-	if (! cherokee_trace_is_tracing())
+	if (! cherokee_trace_is_tracing()) {
 		return "";
+	}
 
 	/* Render
 	 */

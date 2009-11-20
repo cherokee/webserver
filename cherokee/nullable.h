@@ -33,11 +33,15 @@
 CHEROKEE_BEGIN_DECLS
 
 typedef int cherokee_null_bool_t;
+typedef int cherokee_null_int_t;
 
 #define NULLB_NULL       0xFC
 #define NULLB_TO_BOOL(x) ((x) & 0x3)
 #define NULLB_IS_NULL(x) ((x) & NULLB_NULL)
 #define NULLB_TO_STR(x)  (NULLB_IS_NULL(x) ? "NULL" : ((x) ? "True" : "False"))
+
+#define NULLI_NULL       INT_MAX
+#define NULLI_IS_NULL(x) ((x) == NULLI_NULL)
 
 CHEROKEE_END_DECLS
 

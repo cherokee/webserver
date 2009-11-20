@@ -84,6 +84,11 @@ typedef struct {
 	/* Traffic shaping
 	 */
 	cuint_t                     limit_bps;
+
+	/* Timeout
+	 */
+	cherokee_null_int_t         timeout_lapse;
+	cherokee_buffer_t          *timeout_header;
 } cherokee_config_entry_t; 
 
 #define CONF_ENTRY(x) ((cherokee_config_entry_t *)(x))

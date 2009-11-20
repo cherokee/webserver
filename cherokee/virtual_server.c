@@ -372,10 +372,20 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		if (equal_buf_str (&conf->val, "1")) {
 			entry->no_log = true;
 		}
+
+	} else if (equal_buf_str (&conf->key, "timeout")) {
+		entry->timeout_lapse = atoi(conf->val.buf);
+
+		if (entry->timeout_header != NULL) {
+			cherokee_buffer_free (entry->timeout_header);
+		}
+		cherokee_buffer_new (&entry->timeout_header);
+		cherokee_buffer_add_va (entry->timeout_header, "Keep-Alive: timeout=%d"CRLF, entry->timeout_lapse);
 		
 	} else if (equal_buf_str (&conf->key, "match")) {
 		/* Ignore: Previously handled 
 		 */
+
 	} else {
 		LOG_CRITICAL (CHEROKEE_ERROR_VSERVER_RULE_UNKNOWN_KEY,
 			      conf->key.buf, vserver->priority, rule_prio);

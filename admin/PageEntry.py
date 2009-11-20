@@ -13,6 +13,7 @@ from Rule import *
 N_ = lambda x: x
 
 NOTE_DOCUMENT_ROOT   = N_('Allows to specify an alternative document root path.')
+NOTE_TIMEOUT         = N_('Apply a custom timeout to the connections matching this rule.')
 NOTE_HANDLER         = N_('How the connection will be handled.')
 NOTE_HTTPS_ONLY      = N_('Enable to allow access to the resource only by https.')
 NOTE_ALLOW_FROM      = N_('List of IPs and subnets allowed to access the resource.')
@@ -28,6 +29,7 @@ DATA_VALIDATION = [
     ("vserver!(\d+)!rule!(\d+)!document_root",  (validations.is_dev_null_or_local_dir_exists, 'cfg')),
     ("vserver!(\d+)!rule!(\d+)!allow_from",      validations.is_ip_or_netmask_list),
     ("vserver!(\d+)!rule!(\d+)!rate",            validations.is_number_gt_0),
+    ("vserver!(\d+)!rule!(\d+)!timeout",         validations.is_number_gt_0),
     ("vserver!(\d+)!rule!(\d+)!expiration!time", validations.is_time) 
 ]
 
@@ -159,6 +161,8 @@ class PageEntry (PageMenu, FormHelper):
         props = self._get_handler_properties()
         if not props or props.show_document_root:
             self.AddPropEntry (table, _('Document Root'), '%s!document_root'%(pre), _(NOTE_DOCUMENT_ROOT), optional=True)
+
+        self.AddPropEntry (table, _('Timeout'), '%s!timeout'%(pre), _(NOTE_TIMEOUT), optional=True)
 
         if e:
             tabs += [(_('Handler'), str(table) + e)]

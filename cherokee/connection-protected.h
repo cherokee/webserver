@@ -185,6 +185,9 @@ struct cherokee_connection {
 	uint32_t                      keepalive;
 	time_t                        timeout;
 
+	time_t                        timeout_lapse;
+	cherokee_buffer_t            *timeout_header;
+
 	/* Polling
 	 */
 	int                           polling_fd;
