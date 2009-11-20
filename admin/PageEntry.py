@@ -162,8 +162,6 @@ class PageEntry (PageMenu, FormHelper):
         if not props or props.show_document_root:
             self.AddPropEntry (table, _('Document Root'), '%s!document_root'%(pre), _(NOTE_DOCUMENT_ROOT), optional=True)
 
-        self.AddPropEntry (table, _('Timeout'), '%s!timeout'%(pre), _(NOTE_TIMEOUT), optional=True)
-
         if e:
             tabs += [(_('Handler'), str(table) + e)]
         else:
@@ -175,7 +173,7 @@ class PageEntry (PageMenu, FormHelper):
         tabs += [(_('Encoding'), self._render_encoding())]
 
         # Expiration
-        tabs += [(_('Expiration'), self._render_expiration())]
+        tabs += [(_('Time'), self._render_time())]
 
         # Security
         tabs += [(_('Security'), self._render_security())]
@@ -219,8 +217,17 @@ class PageEntry (PageMenu, FormHelper):
         return txt
 
 
-    def _render_expiration (self):
+    def _render_time (self):
         txt = ''
+
+        # Timeout
+        table = TableProps()
+        self.AddPropEntry (table, _('Timeout'), '%s!timeout'%(self._conf_prefix), _(NOTE_TIMEOUT), optional=True)
+
+        txt += "<h2>%s</h2>" % (_('Connections timeout'))
+        txt += self.Indent(table)
+
+        # Expiration
         pre = "%s!expiration"%(self._conf_prefix)
 
         table = TableProps()
