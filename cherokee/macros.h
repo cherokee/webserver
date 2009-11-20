@@ -282,7 +282,7 @@
 
 /* Printing macros
  */
-#ifdef __GNUC__
+#if defined(__GNUC__) || ( defined(__SUNPRO_C) && __SUNPRO_C > 0x590 )
 # define PRINT_MSG(fmt,arg...)    fprintf(stderr, fmt, ##arg)
 # define PRINT_ERROR(fmt,arg...)  fprintf(stderr, "%s:%d - "fmt, __FILE__, __LINE__, ##arg)
 #else
