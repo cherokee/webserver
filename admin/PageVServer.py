@@ -346,7 +346,8 @@ class PageVServer (PageMenu, FormHelper):
         DISABLED_IMAGE = self.InstanceImage('cross.png', _('No'))
 
         txt += '<table id="%s" class="rulestable">' % (table_name)
-        txt += '<tr class="nodrag nodrop"><th>&nbsp;</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % (_('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Final'))
+        txt += '<tr class="nodrag nodrop"><th>&nbsp;</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' %(
+            _('Target'), _('Type'), _('Handler'), _('Root'), _('Auth'), _('Enc'), _('Exp'), _('Time'), _('Final'))
 
         # Rule list
         for prio in priorities:
@@ -389,6 +390,7 @@ class PageVServer (PageMenu, FormHelper):
 
             expiration    = [DISABLED_IMAGE, ENABLED_IMAGE]['expiration' in conf.keys()]
             document_root = [DISABLED_IMAGE, ENABLED_IMAGE]['document_root' in conf.keys()]
+            timeout       = [DISABLED_IMAGE, ENABLED_IMAGE]['timeout' in conf.keys()]
 
             encoders = DISABLED_IMAGE
             if 'encoder' in conf.keys():
@@ -396,8 +398,8 @@ class PageVServer (PageMenu, FormHelper):
                     if int(conf.get_val('encoder!%s'%(k))):
                         encoders = ENABLED_IMAGE
 
-            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td%s>&nbsp;</td><td>%s</td><td>%s</td><td>%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td></tr>\n' % (
-                prio, pre, prio, extra, draggable, link, name_type, handler_name, document_root, auth_name, encoders, expiration, final, link_del)
+            txt += '<!-- %s --><tr prio="%s" id="%s"%s><td%s>&nbsp;</td><td>%s</td><td>%s</td><td>%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td><td class="center">%s</td></tr>\n' % (
+                prio, pre, prio, extra, draggable, link, name_type, handler_name, document_root, auth_name, encoders, expiration, timeout, final, link_del)
 
         txt += '</table>\n'
 
