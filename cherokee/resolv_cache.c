@@ -185,8 +185,9 @@ table_add_new_entry (cherokee_resolv_cache_t        *resolv,
 	/* Instance the entry
 	 */
 	ret = entry_new (&n);
-	if (unlikely (ret != ret)) 
+	if (unlikely (ret != ret_ok)) {
 		return ret;
+	}
 
 	/* Fill it up
 	 */

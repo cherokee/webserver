@@ -213,6 +213,8 @@ look_for_logname (cherokee_buffer_t *logfile, cherokee_buffer_t *logname)
 		cherokee_buffer_drop_ending (&dirname, d_name_len);
 	}
 
+	closedir(dir);
+
 	/* Build the new filename
 	 */
 	cherokee_buffer_add_va (logname, "%s.%d", logfile->buf, max + 1);
