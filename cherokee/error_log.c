@@ -43,7 +43,7 @@ cherokee_error_log_set_log (cherokee_logger_t *logger)
 
 
 static void
-skip_args (va_list *ap, const char *prev_string)
+skip_args (va_list ap, const char *prev_string)
 {
 	const char *p = prev_string;
 
@@ -52,10 +52,10 @@ skip_args (va_list *ap, const char *prev_string)
 		p++;
 		switch (*p) {
 		case 's':
-			va_arg ((*ap), char *);
+			va_arg (ap, char *);
 			break;
 		case 'd':
-			va_arg ((*ap), int);
+			va_arg (ap, int);
 			break;
 		default:
 //			LOG_CRITICAL (CHEROKEE_ERROR_ERRORLOG_PARAM, p);
@@ -140,7 +140,7 @@ render_python_error (cherokee_error_type_t   type,
 	cherokee_buffer_add_str     (output, "'title': \"");
 	cherokee_buffer_add_va_list (output, error->title, ap);
 	cherokee_buffer_add_str     (output, "\", ");
-	skip_args (&ap, error->title);
+	skip_args (ap, error->title);
 
 	/* File and line*/
 	cherokee_buffer_add_str (output, "'code': \"");
@@ -159,7 +159,7 @@ render_python_error (cherokee_error_type_t   type,
 		cherokee_buffer_add_va_list (&tmp, error->description, ap);
 		cherokee_buffer_add_escape_html (output, &tmp);
 		cherokee_buffer_add_str     (output, "\", ");
-		skip_args (&ap, error->description);
+		skip_args (ap, error->description);
 	}
 
 	/* Admin URL */
@@ -169,7 +169,7 @@ render_python_error (cherokee_error_type_t   type,
 		cherokee_buffer_add_str     (output, "\", ");
 
 		/* ARGS: Skip 'admin_url' */
-		skip_args (&ap, error->admin_url);
+		skip_args (ap, error->admin_url);
 	}
 
 	/* Debug information */
@@ -179,7 +179,7 @@ render_python_error (cherokee_error_type_t   type,
 		cherokee_buffer_add_str     (output, "\", ");
 
 		/* ARGS: Skip 'debug' */
-		skip_args (&ap, error->debug);
+		skip_args (ap, error->debug);
 	}
 
 	/* Version */

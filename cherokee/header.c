@@ -725,10 +725,10 @@ has_header_response (cherokee_header_t *hdr, cherokee_buffer_t *buffer)
 static ret_t 
 has_header_request (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cuint_t tail_len)
 {
-	ret_t   ret;
-	char   *start;
-	char   *end;
-	size_t  crlf_len = 0;
+	ret_t    ret;
+	char    *start;
+	char    *end;
+	cuint_t  crlf_len = 0;
 
 	/* Skip initial CRLFs:
 	 * NOTE: they are not allowed by standard (RFC) but many
@@ -743,7 +743,7 @@ has_header_request (cherokee_header_t *hdr, cherokee_buffer_t *buffer, cuint_t t
 		return ret_error;
 	}
 
-	if ((crlf_len > 0) && (crlf_len < (size_t) buffer->len)) {
+	if ((crlf_len > 0) && (crlf_len < buffer->len)) {
 		/* Found heading CRLFs and their length is less than
 		 * buffer length so we have to move the real content
 		 * to the beginning of the buffer.
