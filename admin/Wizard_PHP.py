@@ -1,7 +1,10 @@
+import re
+
 from config import *
 from util import *
 from Wizard import *
 
+PHP_DEFAULT_TIMEOUT = '30'
 
 DEFAULT_BINS  = ['php-cgi', 'php']
 
@@ -12,6 +15,13 @@ DEFAULT_PATHS = ['/usr/bin',
                  '/usr/gnu/bin',
                  '/opt/local/bin',
                  '/usr/pkg/libexec/cgi-bin']
+
+DEFAULT_ETC_PATHS = ['/etc/php*/cgi/php.ini',
+                     '/usr/local/etc/php.ini',
+                     '/opt/php*/etc/php.ini',
+                     '/opt/local/etc/php*/php.ini',
+                     '/etc/php*/*/php.ini']
+
 
 # IANA: TCP ports 47809-47999 are unassigned
 
@@ -46,6 +56,30 @@ class Wizard_Rules_PHP (Wizard):
         msg = _("Already configured: nick")
         self.no_show = '%s=%s' % (msg, self.nick)
         return False
+
+    def __figure__max_execution_time (self):
+        # Figure out the php.ini path
+        paths = []
+        for p in DEFAULT_ETC_PATHS:
+            paths.append (p)
+            paths.append ("%s-*" %(p))
+
+        phpini_path = path_find_w_default (paths, None)
+        if not phpini_path:
+            return PHP_DEFAULT_TIMEOUT
+
+        # Read the file
+        try:
+            content = open(phpini_path, "r").read()
+        except IOError:
+            return PHP_DEFAULT_TIMEOUT
+
+        # Try to read the max_execution_time
+        tmp = re.findall (r"max_execution_time\s*=\s*(.*)", content)
+        if not tmp:
+            return PHP_DEFAULT_TIMEOUT
+
+        return tmp[0]
 
     def _run (self, uri, post):
         def test_php_fcgi (path):
@@ -94,6 +128,10 @@ class Wizard_Rules_PHP (Wizard):
             self._cfg['%s!handler!balancer!source!1' % (self.rule)] = src_num
             self._cfg['%s!handler!error_handler' % (self.rule)]     = '1'
             self._cfg['%s!encoder!gzip' % (self.rule)]              = '1'
+
+            # Check the php.ini file
+            timeout = self.__figure__max_execution_time()
+            self._cfg['%s!timeout' % (self.rule)]                   = timeout
 
         # Check the Directory Index
         indexes = self._cfg.get_val ("%s!directory_index" % (self._pre), '')
