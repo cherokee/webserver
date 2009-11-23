@@ -75,6 +75,7 @@ CONFIG_RULES = """
 %(rule_pre_plus1)s!match!left = directory
 %(rule_pre_plus1)s!match!left!directory = %(webdir)s
 %(rule_pre_plus1)s!match!right = exists
+%(rule_pre_plus1)s!match!right!match_any = 1
 %(rule_pre_plus1)s!match!right!any_file = 1
 %(rule_pre_plus1)s!match!right!match_only_files = 0
 %(rule_pre_plus1)s!handler = common
