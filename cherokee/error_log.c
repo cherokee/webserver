@@ -28,16 +28,36 @@
 #include "init.h"
 #include "util.h"
 
-static cherokee_logger_t *default_error_logger = NULL;
+static cherokee_logger_writer_t *default_error_writer = NULL;
+static cherokee_boolean_t        echo_to_stderr       = true;
 
 /* Include the error information */
 #include "errors.h"
 
 
 ret_t
-cherokee_error_log_set_log (cherokee_logger_t *logger)
+cherokee_error_log_set_log_writer (cherokee_logger_writer_t *writer)
 {
-	default_error_logger = logger;
+	default_error_writer = writer;
+	return ret_ok;
+}
+
+ret_t
+cherokee_error_log_set_echo_stderr (cherokee_boolean_t do_echo)
+{
+	echo_to_stderr = do_echo;
+	return ret_ok;
+}
+
+
+ret_t
+cherokee_error_log_get_log_writer (cherokee_logger_writer_t **writer)
+{
+	if (default_error_writer == NULL) {
+		return ret_not_found;
+	}
+
+	*writer = default_error_writer;
 	return ret_ok;
 }
 
@@ -74,24 +94,37 @@ report_error (cherokee_buffer_t *buf)
 	cherokee_logger_t        *logger;
 	cherokee_logger_writer_t *writer = NULL;
 
+	/* Echo to stderr
+	 */
+	if (echo_to_stderr) {
+		fprintf (stderr, "%s\n", buf->buf);
+		fflush (stderr);
+	}
+
 	/* Logging: 1st option - connection's logger
 	 */
 	logger = LOGGER (CHEROKEE_THREAD_PROP_GET (thread_logger_error_ptr));
+	if (logger != NULL) {
+		cherokee_logger_get_error_writer (logger, &writer);
+	}
 
 	/* Logging: 2nd option - default logger
 	 */
-	if (logger == NULL) {
-		logger = default_error_logger;
+	if (writer == NULL) {
+		writer = default_error_writer;
 	}
 
 	/* Do logging
 	 */
-	if (logger) {
-		cherokee_logger_get_error_writer (logger, &writer);
-		if ((writer) && (writer->initialized)) {
-			cherokee_logger_write_error (logger, buf);
-			return ret_ok;
-		}
+	if ((writer) && (writer->initialized)) {
+		cherokee_buffer_t *writer_log;
+
+		cherokee_logger_writer_get_buf (writer, &writer_log);
+		cherokee_buffer_add_buffer (writer_log, buf);
+		cherokee_logger_writer_flush (writer, true);
+		cherokee_logger_writer_release_buf (writer);
+
+		return ret_ok;
 	}
 
 	fprintf (stderr, "%s", buf->buf);
