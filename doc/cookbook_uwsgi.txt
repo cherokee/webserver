@@ -48,7 +48,7 @@ We'll call this one `django_wsgi.py`:
 import os
 import django.core.handlers.wsgi
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'project.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 application = django.core.handlers.wsgi.WSGIHandler()
 ---------------------------------------------------------
 
@@ -57,11 +57,16 @@ uWSGI
 .uwsgi.xml
 ---------------------------------------------------------
 <uwsgi>
+    <pythonpath>/var/www/example/</pythonpath>
     <app mountpoint="/">
         <script>project.django_wsgi</script>
     </app>
 </uwsgi>
 --------------------------------------------------------
+
+Since it is unlikely you'll have the Django project on your system
+path, it should be reflected on the 'pytonpath' line. In this example,
+it would be under '/var/www/example/'
 
 Cherokee
 ~~~~~~~~~
