@@ -68,8 +68,8 @@ CONFIG_VSRV_CHILD = """
 CONFIG_RULES = """
 %(rule_pre_plus2)s!match = directory
 %(rule_pre_plus2)s!match!directory = %(webdir)s
+%(rule_pre_plus2)s!match!final = 0
 %(rule_pre_plus2)s!document_root = %(ror_dir)s/public
-%(rule_pre_plus2)s!final = 0
 
 %(rule_pre_plus1)s!match = and
 %(rule_pre_plus1)s!match!left = directory
