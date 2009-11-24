@@ -1,14 +1,17 @@
 from base import *
 
 DIR   = "header_arg_match_all_2"
-ARGS  = "first=1&second=http://1.1.1.1&third=3"
+ARGS  = "first238=1&second238=http://1.1.1.1&third238=3"
 MAGIC = "magic string"
 
 CONF = """
-vserver!1!rule!2370!match = http_arg
-vserver!1!rule!2370!match!match = not_found
-vserver!1!rule!2370!handler = cgi
-"""
+vserver!1!rule!2380!match = and
+vserver!1!rule!2380!match!left = http_arg
+vserver!1!rule!2380!match!left!match = not_found
+vserver!1!rule!2380!match!right = directory
+vserver!1!rule!2380!match!right!directory = /%s
+vserver!1!rule!2380!handler = cgi
+""" % (DIR)
 
 CGI = """#!/bin/sh
 

@@ -444,8 +444,8 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 ret_t
 cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
 {	
-	ret_t  ret;
-	char  *value;
+	ret_t              ret;
+	cherokee_buffer_t *value;
 	CHEROKEE_NEW_STRUCT (n, handler_dirlist);
 	
 	TRACE_CONN(cnt);
@@ -491,12 +491,12 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 
 	ret = cherokee_avl_get_ptr (HANDLER_CONN(n)->arguments, "order", (void **) &value);
 	if (ret == ret_ok) {
-		if      (value[0] == 'N') n->sort = Name_Up;
-		else if (value[0] == 'n') n->sort = Name_Down;
-		else if (value[0] == 'D') n->sort = Date_Up;
-		else if (value[0] == 'd') n->sort = Date_Down;
-		else if (value[0] == 'S') n->sort = Size_Up;
-		else if (value[0] == 's') n->sort = Size_Down;
+		if      (value->buf[0] == 'N') n->sort = Name_Up;
+		else if (value->buf[0] == 'n') n->sort = Name_Down;
+		else if (value->buf[0] == 'D') n->sort = Date_Up;
+		else if (value->buf[0] == 'd') n->sort = Date_Down;
+		else if (value->buf[0] == 'S') n->sort = Size_Up;
+		else if (value->buf[0] == 's') n->sort = Size_Down;
 	}
 
 	/* Properties

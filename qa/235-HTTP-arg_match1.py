@@ -1,12 +1,12 @@
 from base import *
 
 DIR   = "header_arg1_match"
-ARGS  = "first=1&second=http://1.1.1.1&third=3"
+ARGS  = "first235=1&second235=http://1.1.1.1&third235=3"
 MAGIC = "magic string"
 
 CONF = """
 vserver!1!rule!2350!match = http_arg
-vserver!1!rule!2350!match!arg = second
+vserver!1!rule!2350!match!arg = second235
 vserver!1!rule!2350!match!match = http://
 vserver!1!rule!2350!handler = cgi
 """

@@ -273,6 +273,9 @@
 #define CHEROKEE_ADD_FUNC_FREE(klass)  \
 	ret_t                                                         \
 	cherokee_ ## klass ## _free (cherokee_ ## klass ## _t *obj) { \
+		if (obj == NULL)				      \
+			return ret_ok;				      \
+								      \
 		cherokee_ ## klass ## _mrproper (obj);                \
 		                                                      \
 		free (obj);                                           \

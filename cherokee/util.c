@@ -1055,16 +1055,18 @@ cherokee_get_timezone_ref (void)
 ret_t 
 cherokee_parse_query_string (cherokee_buffer_t *qstring, cherokee_avl_t *arguments)
 {
- 	char *string;
-	char *token; 
+	ret_t  ret;
+ 	char  *string;
+	char  *token; 
 
-	if (cherokee_buffer_is_empty (qstring))
+	if (cherokee_buffer_is_empty (qstring)) {
 		return ret_ok;
+	}
 
 	string = qstring->buf;
 
 	while ((token = (char *) strsep(&string, "&")) != NULL) {
-		char *equ, *key, *val;
+		char *equ, *val;
 
 		if (*token == '\0') {
 			*token = '&';
@@ -1072,14 +1074,21 @@ cherokee_parse_query_string (cherokee_buffer_t *qstring, cherokee_avl_t *argumen
 		}
 
 		if ((equ = strchr(token, '=')) != NULL) {
-			*equ = '\0';
+			cherokee_buffer_t *value;
 
-			key = token;
 			val = equ+1;
 
-			cherokee_avl_add_ptr (arguments, key, strdup(val));
+			ret = cherokee_buffer_new (&value);
+			if (unlikely (ret != ret_ok)) {
+				return ret;
+			}
 
+			cherokee_buffer_add (value, val, strlen(val));
+
+			*equ = '\0';
+			cherokee_avl_add_ptr (arguments, token, value);
 			*equ = '=';
+
 		} else {
 			cherokee_avl_add_ptr (arguments, token, NULL);
 		}

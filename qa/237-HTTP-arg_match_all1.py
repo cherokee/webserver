@@ -1,14 +1,17 @@
 from base import *
 
 DIR   = "header_arg_match_all_1"
-ARGS  = "first=1&second=http://1.1.1.1&third=3"
+ARGS  = "first237=1&second237=http://1.1.1.1&third237=3"
 MAGIC = "magic string"
 
 CONF = """
-vserver!1!rule!2370!match = http_arg
-vserver!1!rule!2370!match!match = http://
+vserver!1!rule!2370!match = and
+vserver!1!rule!2370!match!right = http_arg
+vserver!1!rule!2370!match!right!match = http://
+vserver!1!rule!2370!match!left = directory
+vserver!1!rule!2370!match!left!directory = /%s
 vserver!1!rule!2370!handler = cgi
-"""
+""" % (DIR)
 
 CGI = """#!/bin/sh
 
@@ -26,7 +29,7 @@ class Test (TestBase):
         self.conf              = CONF
         self.expected_error    = 200
         self.required_content  = MAGIC
-        self.forbidden_content = ["/bin/sh", "echo"]
+        self.forbidder_content = ["/bin/sh", "echo"]
 
     def Prepare (self, www):
         d = self.Mkdir (www, DIR)

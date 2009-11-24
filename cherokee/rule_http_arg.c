@@ -62,18 +62,23 @@ check_argument (cherokee_rule_http_arg_t *rule,
 
 
 static ret_t
-match_avl_func (cherokee_buffer_t *key, void *value, void *param)
+match_avl_func (cherokee_buffer_t *key, void *val, void *param)
 {
 	ret_t                     ret;
-	cherokee_buffer_t         fake;
-	cherokee_rule_http_arg_t *rule = RULE_HTTP_ARG(param);
+	cherokee_buffer_t        *value = BUF(val);
+	cherokee_rule_http_arg_t *rule  = RULE_HTTP_ARG(param);
 
 	UNUSED(key);
 
-	// Temporal until conn->arguments uses cherokee_buffer_t
-	cherokee_buffer_fake (&fake, (char *)value, strlen((char *)value));
+	/* Skip key-only entries (with no value)
+	 */
+	if (value == NULL) {
+		return ret_ok;
+	}
 
-	ret = check_argument (rule, &fake);
+	/* Check the value
+	 */
+	ret = check_argument (rule, value);
 	if (ret == ret_not_found) {
 		return ret_ok;
 	}
@@ -88,7 +93,8 @@ match (cherokee_rule_http_arg_t *rule,
        cherokee_connection_t    *conn,
        cherokee_config_entry_t  *ret_conf)
 {
-	ret_t ret;
+	ret_t              ret;
+	cherokee_buffer_t *value; 
 
 	UNUSED(ret_conf);
 
@@ -105,19 +111,14 @@ match (cherokee_rule_http_arg_t *rule,
 
 	/* Retrieve the right one
 	 */
-	if (! cherokee_buffer_is_empty (&rule->arg)) {
-		cherokee_buffer_t  fake;
-		char              *value;
-		
+	if (! cherokee_buffer_is_empty (&rule->arg))
+	{
 		ret = cherokee_avl_get (conn->arguments, &rule->arg, (void **)&value);
 		if (ret != ret_ok) {
 			return ret_not_found;
 		}
 
-		// Temporal until conn->arguments uses cherokee_buffer_t
-		cherokee_buffer_fake (&fake, (char *)value, strlen((char *)value));
-
-		return check_argument (rule, &fake);
+		return check_argument (rule, value);
 	} 
 
 	/* Check all arguments
