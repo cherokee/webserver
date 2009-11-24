@@ -72,3 +72,31 @@ Cherokee
 ~~~~~~~~~
 The wizard will look for the uWSGI server, find out the mountpoint and
 configure the web server accordingly. Nothing more to do.
+
+Troubleshooting
+~~~~~~~~~~~~~~~
+This should work out of the box, but in case it doesn't you might need
+some pointers to determine what is going wrong exactly.
+
+You should check both your error and access log files, and it comes in
+very handy to execute uWSGI by hand when running your tests. This will
+give all the help you need in the form of backtraces.
+
+The simplest way to do so is looking into the `Information Sources`
+section in `Cherokee-Admin`, exploring the one created by the uWSGI
+wizard, and running that command by hand.
+
+-------------------------------------------------------
+/usr/local/bin/uwsgi -s /tmp/cherokee-source1.sock -C -x /<path to my django project>/uwsgi.conf
+-------------------------------------------------------
+
+Make sure to kill other instances running in the background.
+
+Another thing to keep in mind is that sometimes you might modify
+Python sources and not see the changes reflected on the server. In
+those cases simply restart `Cherokee` through `Cherokee-Admin` or
+simply by sending the SIGHUP signal.
+
+--------------------------
+# killall -SIGHUP cherokee
+--------------------------
