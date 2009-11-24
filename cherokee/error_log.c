@@ -94,13 +94,6 @@ report_error (cherokee_buffer_t *buf)
 	cherokee_logger_t        *logger;
 	cherokee_logger_writer_t *writer = NULL;
 
-	/* Echo to stderr
-	 */
-	if (echo_to_stderr) {
-		fprintf (stderr, "%s\n", buf->buf);
-		fflush (stderr);
-	}
-
 	/* Logging: 1st option - connection's logger
 	 */
 	logger = LOGGER (CHEROKEE_THREAD_PROP_GET (thread_logger_error_ptr));
@@ -112,6 +105,17 @@ report_error (cherokee_buffer_t *buf)
 	 */
 	if (writer == NULL) {
 		writer = default_error_writer;
+	}
+
+	/* Echo to stderr
+	 */
+	if (echo_to_stderr) {
+		if ((writer == NULL) ||
+		    ((writer != NULL) && (writer->type != cherokee_logger_writer_stderr)))
+		{
+			fprintf (stderr, "%s\n", buf->buf);
+			fflush (stderr);
+		}
 	}
 
 	/* Do logging
