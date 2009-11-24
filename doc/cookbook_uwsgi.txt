@@ -59,7 +59,7 @@ uWSGI
 <uwsgi>
     <pythonpath>/var/www/example/</pythonpath>
     <app mountpoint="/">
-        <script>project.django_wsgi</script>
+        <script>django_wsgi</script>
     </app>
 </uwsgi>
 --------------------------------------------------------
