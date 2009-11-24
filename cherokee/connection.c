@@ -2315,9 +2315,11 @@ cherokee_connection_parse_args (cherokee_connection_t *conn)
 {
 	ret_t ret;
 
-	/* Sanity check
+	/* Parse arguments only once
 	 */
-	return_if_fail (conn->arguments == NULL, ret_error);
+	if (conn->arguments != NULL) {
+		return ret_ok;
+	}
 
 	/* Build a new table 
 	 */

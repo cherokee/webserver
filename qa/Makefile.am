@@ -239,8 +239,11 @@ run-tests.py \
 231-POST-4extra.py \
 232-X-Real-IP-CGI.py \
 233-X-Real-IP-CGI-2.py \
-234-X-Real-IP-CGI-3.py
-
+234-X-Real-IP-CGI-3.py \
+235-HTTP-arg_match1.py \
+236-HTTP-arg_match2.py \
+237-HTTP-arg_match_all1.py \
+238-HTTP-arg_match_all2.py
 
 test:
 	./run-tests.py
