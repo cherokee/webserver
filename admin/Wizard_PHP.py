@@ -4,7 +4,8 @@ from config import *
 from util import *
 from Wizard import *
 
-PHP_DEFAULT_TIMEOUT = '30'
+PHP_DEFAULT_TIMEOUT        = '30'
+SAFE_PHP_FCGI_MAX_REQUESTS = '490'
 
 DEFAULT_BINS  = ['php-cgi', 'php']
 
@@ -109,7 +110,7 @@ class Wizard_Rules_PHP (Wizard):
             self._cfg['%s!interpreter' % (self.source)] = '%s -b %s:%d' % (php_path, tcp_addr, self.TCP_PORT)
             self._cfg['%s!host' % (self.source)]        = '%s:%d' % (tcp_addr, self.TCP_PORT)
 
-            self._cfg['%s!env!PHP_FCGI_MAX_REQUESTS' % (self.source)] = "5000"
+            self._cfg['%s!env!PHP_FCGI_MAX_REQUESTS' % (self.source)] = SAFE_PHP_FCGI_MAX_REQUESTS
             self._cfg['%s!env!PHP_FCGI_CHILDREN' % (self.source)]     = "5"
 
         # Add a new Extension PHP rule
