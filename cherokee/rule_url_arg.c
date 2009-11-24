@@ -23,7 +23,7 @@
  */ 
 
 #include "common-internal.h"
-#include "rule_http_arg.h"
+#include "rule_url_arg.h"
 
 #include "plugin_loader.h"
 #include "server-protected.h"
@@ -31,14 +31,14 @@
 #include "util.h"
 #include "pcre/pcre.h"
 
-#define ENTRIES "rule,http_arg"
+#define ENTRIES "rule,url_arg"
 
-PLUGIN_INFO_RULE_EASIEST_INIT(http_arg);
+PLUGIN_INFO_RULE_EASIEST_INIT(url_arg);
 
 
 static ret_t
-check_argument (cherokee_rule_http_arg_t *rule,
-		cherokee_buffer_t        *value)
+check_argument (cherokee_rule_url_arg_t *rule,
+		cherokee_buffer_t       *value)
 {
 	int re;
 
@@ -64,9 +64,9 @@ check_argument (cherokee_rule_http_arg_t *rule,
 static ret_t
 match_avl_func (cherokee_buffer_t *key, void *val, void *param)
 {
-	ret_t                     ret;
-	cherokee_buffer_t        *value = BUF(val);
-	cherokee_rule_http_arg_t *rule  = RULE_HTTP_ARG(param);
+	ret_t                    ret;
+	cherokee_buffer_t       *value = BUF(val);
+	cherokee_rule_url_arg_t *rule  = RULE_URL_ARG(param);
 
 	UNUSED(key);
 
@@ -89,7 +89,7 @@ match_avl_func (cherokee_buffer_t *key, void *val, void *param)
 
 
 static ret_t 
-match (cherokee_rule_http_arg_t *rule, 
+match (cherokee_rule_url_arg_t  *rule, 
        cherokee_connection_t    *conn,
        cherokee_config_entry_t  *ret_conf)
 {
@@ -135,7 +135,7 @@ match (cherokee_rule_http_arg_t *rule,
 
 
 static ret_t 
-configure (cherokee_rule_http_arg_t  *rule, 
+configure (cherokee_rule_url_arg_t   *rule, 
 	   cherokee_config_node_t    *conf, 
 	   cherokee_virtual_server_t *vsrv)
 {
@@ -172,7 +172,7 @@ configure (cherokee_rule_http_arg_t  *rule,
 static ret_t
 _free (void *p)
 {
-	cherokee_rule_http_arg_t *rule = RULE_HTTP_ARG(p);
+	cherokee_rule_url_arg_t *rule = RULE_URL_ARG(p);
 
 	cherokee_buffer_mrproper (&rule->arg);
 	cherokee_buffer_mrproper (&rule->match);
@@ -181,13 +181,13 @@ _free (void *p)
 
 
 ret_t
-cherokee_rule_http_arg_new (cherokee_rule_http_arg_t **rule)
+cherokee_rule_url_arg_new (cherokee_rule_url_arg_t **rule)
 {
-	CHEROKEE_NEW_STRUCT (n, rule_http_arg);
+	CHEROKEE_NEW_STRUCT (n, rule_url_arg);
 
 	/* Parent class constructor
 	 */
-	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(http_arg));
+	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(url_arg));
 	
 	/* Virtual methods
 	 */

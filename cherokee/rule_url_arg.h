@@ -26,8 +26,8 @@
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
 #endif
 
-#ifndef CHEROKEE_RULE_HTTP_ARG_H
-#define CHEROKEE_RULE_HTTP_ARG_H
+#ifndef CHEROKEE_RULE_URL_ARG_H
+#define CHEROKEE_RULE_URL_ARG_H
 
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
@@ -42,12 +42,12 @@ typedef struct {
 	cherokee_buffer_t     match;
 	void                 *pcre;
 
-} cherokee_rule_http_arg_t;
+} cherokee_rule_url_arg_t;
 
-#define RULE_HTTP_ARG(x) ((cherokee_rule_http_arg_t *)(x))
+#define RULE_URL_ARG(x) ((cherokee_rule_url_arg_t *)(x))
 
-ret_t cherokee_rule_http_arg_new (cherokee_rule_http_arg_t **rule);
+ret_t cherokee_rule_url_arg_new (cherokee_rule_url_arg_t **rule);
 
 CHEROKEE_END_DECLS
 
-#endif /* CHEROKEE_RULE_HTTP_ARG_H */
+#endif /* CHEROKEE_RULE_URL_ARG_H */

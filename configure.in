@@ -1344,7 +1344,7 @@ AC_ARG_ENABLE(static-module,
 	   AC_HELP_STRING([--enable-static-module=MODULE][]),
 	   [use_static_module="$use_static_module $enableval "],[])
 
-modules="error_redir error_nn server_info file admin dirlist fcgi fastcgi scgi uwsgi redir common cgi proxy ssi secdownload empty_gif custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash directory extensions request header exists fullpath method from bind geoip http_arg wildcard rehost target_ip evhost libssl render_rrd rrd not and or"
+modules="error_redir error_nn server_info file admin dirlist fcgi fastcgi scgi uwsgi redir common cgi proxy ssi secdownload empty_gif custom_error dbslayer streaming gzip deflate ncsa combined custom pam ldap mysql htpasswd plain htdigest authlist round_robin ip_hash directory extensions request header exists fullpath method from bind geoip url_arg wildcard rehost target_ip evhost libssl render_rrd rrd not and or"
 
 # Remove modules that will not be compiles
 #
@@ -1445,7 +1445,7 @@ AM_CONDITIONAL(STATIC_RULE_BIND,        	 grep bind           $conf_h >/dev/null
 AM_CONDITIONAL(STATIC_RULE_METHOD,        	 grep method         $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_FROM,        	 grep from           $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_RULE_GEOIP,             grep geoip          $conf_h >/dev/null)
-AM_CONDITIONAL(STATIC_RULE_HTTP_ARG,        	 grep http_arg       $conf_h >/dev/null)
+AM_CONDITIONAL(STATIC_RULE_URL_ARG,        	 grep url_arg        $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_VRULE_WILDCARD,         grep wildcard       $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_VRULE_REHOST,           grep rehost         $conf_h >/dev/null)
 AM_CONDITIONAL(STATIC_VRULE_TARGET_IP,        grep target_ip      $conf_h >/dev/null)

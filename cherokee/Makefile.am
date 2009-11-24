@@ -198,19 +198,19 @@ endif
 
 
 #
-# Rule http_arg
+# Rule url_arg
 #
-rule_http_arg = \
-rule_http_arg.c \
-rule_http_arg.h
+rule_url_arg = \
+rule_url_arg.c \
+rule_url_arg.h
 
-libplugin_http_arg_la_LDFLAGS = $(module_ldflags)  
-libplugin_http_arg_la_SOURCES = $(rule_http_arg)
+libplugin_url_arg_la_LDFLAGS = $(module_ldflags)  
+libplugin_url_arg_la_SOURCES = $(rule_url_arg)
 
-if STATIC_RULE_HTTP_ARG
-static_rule_http_arg_src = $(rule_http_arg)
+if STATIC_RULE_URL_ARG
+static_rule_url_arg_src = $(rule_url_arg)
 else
-dynamic_rule_http_arg_lib = libplugin_http_arg.la
+dynamic_rule_url_arg_lib = libplugin_url_arg.la
 endif
 
 
@@ -1439,7 +1439,7 @@ $(static_rule_extensions_src) \
 $(static_rule_request_src) \
 $(static_rule_header_src) \
 $(static_rule_exists_src) \
-$(static_rule_http_arg_src) \
+$(static_rule_url_arg_src) \
 $(static_rule_fullpath_src) \
 $(static_rule_bind_src) \
 $(static_rule_method_src) \
@@ -1626,7 +1626,7 @@ $(dynamic_rule_extensions_lib) \
 $(dynamic_rule_request_lib) \
 $(dynamic_rule_header_lib) \
 $(dynamic_rule_exists_lib) \
-$(dynamic_rule_http_arg_lib) \
+$(dynamic_rule_url_arg_lib) \
 $(dynamic_rule_fullpath_lib) \
 $(dynamic_rule_bind_lib) \
 $(dynamic_rule_method_lib) \

@@ -103,6 +103,7 @@ ModuleRehost.py \
 ModuleTargetIp.py \
 ModuleEvhost.py \
 ModuleRrd.py \
+ModuleUrlarg.py \
 config.py \
 config_version.py \
 pyscgi.py \
