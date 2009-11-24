@@ -58,6 +58,7 @@ uWSGI
 ---------------------------------------------------------
 <uwsgi>
     <pythonpath>/var/www/example/</pythonpath>
+    <pythonpath>/var/www/</pythonpath>
     <app mountpoint="/">
         <script>django_wsgi</script>
     </app>
