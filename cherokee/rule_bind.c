@@ -119,7 +119,7 @@ cherokee_rule_bind_new (cherokee_rule_bind_t **rule)
 	 */
 	cherokee_rule_init_base (RULE(n), PLUGIN_INFO_PTR(bind));
 	
-	/* Virtual methos
+	/* Virtual methods
 	 */
 	RULE(n)->match     = (rule_func_match_t) match;
 	RULE(n)->configure = (rule_func_configure_t) configure;

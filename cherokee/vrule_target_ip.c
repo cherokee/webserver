@@ -134,7 +134,7 @@ cherokee_vrule_target_ip_new (cherokee_vrule_t **vrule)
 	 */
 	cherokee_vrule_init_base (VRULE(n), PLUGIN_INFO_PTR(target_ip));
 
-	/* Virtual methos
+	/* Virtual methods
 	 */
 	VRULE(n)->match     = (vrule_func_match_t) match;
 	VRULE(n)->configure = (vrule_func_configure_t) configure;
