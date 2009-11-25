@@ -169,7 +169,7 @@ class PageStatus (PageMenu, FormHelper):
         txt += '<ul>'
         txt += '<li id="gmtop"><span>%s</span></li>' % (_("Server Traffic"))
         txt += '<li class="item"><a onclick="graphChangeType(\'traffic\', this.innerHTML)">%s</a></li>'  % (_("Server Traffic"))
-        txt += '<li class="item"><a onclick="graphChangeType(\'accepts\', this.innerHTML)">%s</a></li>'  % (_("Accepted Connections"))
+        txt += '<li class="item"><a onclick="graphChangeType(\'accepts\', this.innerHTML)">%s</a></li>'  % (_("Connections / Requests"))
         txt += '<li class="item last"><a onclick="graphChangeType(\'timeouts\', this.innerHTML)">%s</a></li>'  % (_("Connections Timeout"))
         txt += '</ul>'
         txt += '</div>'
