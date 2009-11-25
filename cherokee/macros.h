@@ -401,6 +401,6 @@
 		cherokee_buf_add_backtrace (&tmp, 0);		\
 		PRINT_MSG ("%s", tmp.buf);			\
 		cherokee_buffer_mrproper (&tmp);		\
-	} while (0);
+	} while (0)
 
 #endif /* CHEROKEE_MACROS_H */
