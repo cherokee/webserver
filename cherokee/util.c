@@ -1390,17 +1390,20 @@ cherokee_buf_add_backtrace (cherokee_buffer_t *buf,
 	char   **strings;
 	size_t   i;
 	int      line_pre_len;
+	int      new_line_len;
+
+	line_pre_len = strlen (line_pre);
+	new_line_len = strlen (new_line);
 	
 	size = backtrace (array, 128);
 	strings = backtrace_symbols (array, size);
-	line_pre_len = strlen (line_pre);
-	
+
 	for (i=n_skip; i < size; i++) {
 		if (line_pre_len > 0) {
 			cherokee_buffer_add (buf, line_pre, line_pre_len);
 		}
 		cherokee_buffer_add (buf, strings[i], strlen(strings[i]));
-		cherokee_buffer_add (buf, new_line, strlen(new_line));
+		cherokee_buffer_add (buf, new_line, new_line_len);
 	}
  
 	free (strings);

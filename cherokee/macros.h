@@ -398,7 +398,7 @@
 #define CHEROKEE_PRINT_BACKTRACE				\
 	do {							\
 		cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;	\
-		cherokee_buf_add_backtrace (&tmp, 0);		\
+		cherokee_buf_add_backtrace (&tmp, 0, "\n", "");	\
 		PRINT_MSG ("%s", tmp.buf);			\
 		cherokee_buffer_mrproper (&tmp);		\
 	} while (0)
