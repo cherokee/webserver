@@ -147,7 +147,9 @@ srv_free (cherokee_collector_rrd_t *rrd)
 	rrd->exiting            = true;
 	rrd_connection->exiting = true;
 
+	CHEROKEE_THREAD_KILL (rrd->thread, SIGINT);
 	CHEROKEE_THREAD_JOIN (rrd->thread);
+
 	CHEROKEE_MUTEX_DESTROY (&rrd->mutex);	
 
 	/* Clean up
