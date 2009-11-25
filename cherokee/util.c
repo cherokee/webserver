@@ -1459,10 +1459,11 @@ cherokee_fix_dirpath (cherokee_buffer_t *buf)
 
 
 ret_t
-cherokee_mkdir_p (cherokee_buffer_t *path)
+cherokee_mkdir_p (cherokee_buffer_t *path, int mode)
 {
-	int   re;
-        char *p;
+	int          re;
+        char        *p;
+	struct stat  foo;
 
 	if (cherokee_buffer_is_empty (path))
 		return ret_ok;
@@ -1474,10 +1475,14 @@ cherokee_mkdir_p (cherokee_buffer_t *path)
 			break;
 
 		*p = '\0';
-		re = cherokee_mkdir (path->buf, 0700);
-		if ((re != 0) && (errno != EEXIST)) {
-			LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_MKDIR, path->buf);
-			return ret_error;
+
+		re = stat(path->buf, &foo);
+		if (re != 0) {
+			re = cherokee_mkdir (path->buf, mode);
+			if ((re != 0) && (errno != EEXIST)) {
+				LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_MKDIR, path->buf);
+				return ret_error;
+			}
 		}
 		*p = '/';
 		
@@ -1486,7 +1491,7 @@ cherokee_mkdir_p (cherokee_buffer_t *path)
 			return ret_ok;
 	}
 
-	re = cherokee_mkdir (path->buf, 0700);
+	re = cherokee_mkdir (path->buf, mode);
 	if ((re != 0) && (errno != EEXIST)) {
 		LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_UTIL_MKDIR, path->buf);
 		return ret_error;
