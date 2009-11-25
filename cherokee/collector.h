@@ -80,6 +80,8 @@ typedef struct {
 	 */
 	cullong_t                 accepts;
 	cullong_t                 accepts_partial;
+	cullong_t                 requests;
+	cullong_t                 requests_partial;
 	cullong_t                 timeouts;
 	cullong_t                 timeouts_partial;
 } cherokee_collector_t;
@@ -136,6 +138,7 @@ ret_t cherokee_collector_init        (cherokee_collector_t      *collector);
 ret_t cherokee_collector_free        (cherokee_collector_t      *collector);
 
 ret_t cherokee_collector_log_accept  (cherokee_collector_t      *collector);
+ret_t cherokee_collector_log_request (cherokee_collector_t      *collector);
 ret_t cherokee_collector_log_timeout (cherokee_collector_t      *collector);
 
 /* Collector virtual methods

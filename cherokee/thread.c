@@ -880,6 +880,12 @@ process_active_connections (cherokee_thread_t *thd)
 			 */
 			CHEROKEE_THREAD_PROP_SET (thread_logger_error_ptr, conn->logger_ref);
 
+			/* Information collection
+			 */
+			if (THREAD_SRV(thd)->collector != NULL) {
+				cherokee_collector_log_request (THREAD_SRV(thd)->collector);
+			}
+
 			/* If it's a POST we've to read more data
 			 */
 			if (http_method_with_input (conn->header.method)) {

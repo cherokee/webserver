@@ -35,7 +35,8 @@
 typedef enum {
 	collector_rrd_vserver_traffic,
 	collector_rrd_server_timeouts,
-	collector_rrd_server_accepts
+	collector_rrd_server_accepts,
+	collector_rrd_server_requests
 } cherokee_collector_rrd_graphs_t;
 
 

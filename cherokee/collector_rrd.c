@@ -54,6 +54,8 @@ PLUGIN_INFO_COLLECTOR_EASIEST_INIT (rrd);
 static ret_t
 srv_init (cherokee_collector_rrd_t *rrd)
 {
+	ret_t ret;
+
 	/* Configuration
 	 */
 	cherokee_buffer_init       (&rrd->path_database);
@@ -62,7 +64,11 @@ srv_init (cherokee_collector_rrd_t *rrd)
 
 	/* Check whether the DB exists
 	 */
-	cherokee_rrd_connection_create_srv_db (rrd_connection);
+	ret = cherokee_rrd_connection_create_srv_db (rrd_connection);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
 	return ret_ok;
 }
 
@@ -107,6 +113,8 @@ update_srv_cb (cherokee_collector_rrd_t *rrd)
 	cherokee_buffer_add_str      (&rrd->tmp, " N:");
 	cherokee_buffer_add_ullong10 (&rrd->tmp, COLLECTOR(rrd)->accepts_partial);
 	cherokee_buffer_add_str      (&rrd->tmp, ":");
+	cherokee_buffer_add_ullong10 (&rrd->tmp, COLLECTOR(rrd)->requests_partial);
+	cherokee_buffer_add_str      (&rrd->tmp, ":");
 	cherokee_buffer_add_ullong10 (&rrd->tmp, COLLECTOR(rrd)->timeouts_partial);
 	cherokee_buffer_add_str      (&rrd->tmp, ":");
 	cherokee_buffer_add_ullong10 (&rrd->tmp, COLLECTOR_BASE(rrd)->rx_partial);
@@ -124,6 +132,7 @@ update_srv_cb (cherokee_collector_rrd_t *rrd)
 	/* Begin partial counting from scratch
 	 */
 	COLLECTOR(rrd)->accepts_partial  = 0;
+	COLLECTOR(rrd)->requests_partial = 0;
 	COLLECTOR(rrd)->timeouts_partial = 0;
 	COLLECTOR_BASE(rrd)->rx_partial  = 0;
 	COLLECTOR_BASE(rrd)->tx_partial  = 0;
@@ -138,7 +147,7 @@ srv_free (cherokee_collector_rrd_t *rrd)
 	rrd->exiting            = true;
 	rrd_connection->exiting = true;
 
-	CHEROKEE_THREAD_JOIN (&rrd->thread);
+	CHEROKEE_THREAD_JOIN (rrd->thread);
 	CHEROKEE_MUTEX_DESTROY (&rrd->mutex);	
 
 	/* Clean up
@@ -196,6 +205,7 @@ vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
 	   cherokee_virtual_server_t      *vsrv)
 
 {
+	ret_t                     ret;
 	cherokee_server_t        *srv     = VSERVER_SRV(vsrv);
 	cherokee_collector_rrd_t *rrd_srv = COLLECTOR_RRD(srv->collector);
 
@@ -214,7 +224,10 @@ vsrv_init (cherokee_collector_vsrv_rrd_t  *rrd,
 
 	/* Check whether the DB exists
 	 */
-	cherokee_rrd_connection_create_vsrv_db (rrd_connection, &rrd->path_database);
+	ret = cherokee_rrd_connection_create_vsrv_db (rrd_connection, &rrd->path_database);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
 
 	/* Next iterations
 	 */

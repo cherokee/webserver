@@ -75,6 +75,8 @@ ret_t
 cherokee_rrd_connection_get (cherokee_rrd_connection_t **rrd_conn)
 {
 	if (rrd_connection == NULL) {
+		/* Create the global object
+		 */
 		rrd_connection = malloc (sizeof(cherokee_rrd_connection_t));
 		if (unlikely (rrd_connection == NULL)) {
 			return ret_error;
@@ -119,6 +121,13 @@ cherokee_rrd_connection_configure (cherokee_rrd_connection_t *rrd_conn,
 	} else {
 		cherokee_buffer_add_str (&rrd_conn->path_databases, CHEROKEE_RRD_DIR);
 	}
+	
+	/* Check permissions
+	 */
+/* 	ret = check_dir_permissions (rrd_conn); */
+/* 	if (ret != ret_ok) { */
+/* 		return ret_error; */
+/* 	} */
 
 	return ret_ok;
 }
@@ -374,7 +383,7 @@ create_dirs (cherokee_rrd_connection_t *rrd_conn)
 
 	re = access (rrd_conn->path_databases.buf, W_OK);
 	if (re != 0) {
-		cherokee_mkdir (rrd_conn->path_databases.buf, 0775);
+		cherokee_mkdir_p (&rrd_conn->path_databases, 0700);
 
 		re = access (rrd_conn->path_databases.buf, W_OK);
 		if (re != 0) {
@@ -402,7 +411,10 @@ cherokee_rrd_connection_create_srv_db (cherokee_rrd_connection_t *rrd_conn)
 
 	/* Ensure directories are accessible
 	 */
-	create_dirs (rrd_conn);
+	ret = create_dirs (rrd_conn);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
 
 	/* Check the Server database
 	 */
@@ -422,6 +434,7 @@ cherokee_rrd_connection_create_srv_db (cherokee_rrd_connection_t *rrd_conn)
 
 	/* Data Sources */
 	cherokee_buffer_add_va     (&tmp, "DS:Accepts:ABSOLUTE:%d:U:U ",  ELAPSE_UPDATE*10);
+	cherokee_buffer_add_va     (&tmp, "DS:Requests:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
 	cherokee_buffer_add_va     (&tmp, "DS:Timeouts:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
 	cherokee_buffer_add_va     (&tmp, "DS:RX:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
 	cherokee_buffer_add_va     (&tmp, "DS:TX:ABSOLUTE:%d:U:U ", ELAPSE_UPDATE*10);
@@ -472,7 +485,10 @@ cherokee_rrd_connection_create_vsrv_db (cherokee_rrd_connection_t *rrd_conn,
 
 	/* Ensure directories are accessible
 	 */
-	create_dirs (rrd_conn);
+	ret = create_dirs (rrd_conn);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
 
 	/* Check the Server database
 	 */

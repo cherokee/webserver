@@ -148,6 +148,9 @@ cherokee_collector_init_base (cherokee_collector_t  *collector,
 	collector->accepts          = 0;
 	collector->accepts_partial  = 0;
 
+	collector->requests         = 0;
+	collector->requests_partial = 0;
+
 	collector->timeouts         = 0;
 	collector->timeouts_partial = 0;
 
@@ -182,6 +185,18 @@ cherokee_collector_log_accept (cherokee_collector_t *collector)
 
 	collector->accepts++;
 	collector->accepts_partial++;
+
+	UNLOCK(collector);
+	return ret_ok;
+}
+
+ret_t
+cherokee_collector_log_request (cherokee_collector_t *collector)
+{
+	LOCK(collector);
+
+	collector->requests++;
+	collector->requests_partial++;
 
 	UNLOCK(collector);
 	return ret_ok;
