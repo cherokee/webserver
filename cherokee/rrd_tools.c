@@ -311,7 +311,7 @@ cherokee_rrd_connection_execute (cherokee_rrd_connection_t *rrd_conn,
 {
 	ret_t ret;
 
-	TRACE (ENTRIES, "Sending to RRDtool: %s\n", buf->buf);
+	TRACE (ENTRIES, "Sending to RRDtool: %s", buf->buf);
 
 	/* Spawn rrdtool
 	 */

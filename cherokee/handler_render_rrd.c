@@ -135,20 +135,32 @@ render_srv_accepts (cherokee_handler_render_rrd_t     *hdl,
 	cherokee_buffer_add_va     (tmp, "--imgformat PNG --width 580 --height 340 --start -%s ", interval->interval);
 	cherokee_buffer_add_va     (tmp, "--title \"Accepted Connections: %s\" ", interval->interval);
 	cherokee_buffer_add_str    (tmp, "--vertical-label \"conn/s\" -c BACK#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF ");
+
 	cherokee_buffer_add_va     (tmp, "DEF:accepts=%s/server.rrd:Accepts:AVERAGE ", rrd_connection->path_databases.buf);
 	cherokee_buffer_add_va     (tmp, "DEF:accepts_min=%s/server.rrd:Accepts:MIN ", rrd_connection->path_databases.buf);
 	cherokee_buffer_add_va     (tmp, "DEF:accepts_max=%s/server.rrd:Accepts:MAX ", rrd_connection->path_databases.buf);
 	cherokee_buffer_add_str    (tmp, "VDEF:accepts_total=accepts,TOTAL ");
 	cherokee_buffer_add_str    (tmp, "CDEF:accepts_minmax=accepts_max,accepts_min,- ");
-	cherokee_buffer_add_str    (tmp, "COMMENT:\"\\n\" ");
-	cherokee_buffer_add_str    (tmp, "COMMENT:\"  Current          Average          Maximum             Total\\n\" ");
-	cherokee_buffer_add_str    (tmp, "GPRINT:accepts:LAST:\"%8.2lf%s\" ");
-	cherokee_buffer_add_str    (tmp, "GPRINT:accepts:AVERAGE:\"%8.2lf%s\" ");
-	cherokee_buffer_add_str    (tmp, "GPRINT:accepts_max:MAX:\"%8.2lf%s\" ");
-	cherokee_buffer_add_str    (tmp, "GPRINT:accepts_total:\"%8.2lf%s\" ");
+
+	cherokee_buffer_add_va     (tmp, "DEF:requests=%s/server.rrd:Requests:AVERAGE ", rrd_connection->path_databases.buf);
+	cherokee_buffer_add_va     (tmp, "DEF:requests_min=%s/server.rrd:Requests:MIN ", rrd_connection->path_databases.buf);
+	cherokee_buffer_add_va     (tmp, "DEF:requests_max=%s/server.rrd:Requests:MAX ", rrd_connection->path_databases.buf);
+	cherokee_buffer_add_str    (tmp, "VDEF:requests_total=requests,TOTAL ");
+	cherokee_buffer_add_str    (tmp, "CDEF:requests_minmax=requests_max,requests_min,- ");
+
+	cherokee_buffer_add_str    (tmp, "LINE1.5:requests#900:\"HTTP reqs\" ");
+	cherokee_buffer_add_str    (tmp, "GPRINT:requests:LAST:\"Current\\:%8.2lf%s\" ");
+	cherokee_buffer_add_str    (tmp, "GPRINT:requests:AVERAGE:\" Average\\:%8.2lf%s\" ");
+	cherokee_buffer_add_str    (tmp, "GPRINT:requests_max:MAX:\" Maximum\\:%8.2lf%s\" ");
+	cherokee_buffer_add_str    (tmp, "GPRINT:requests_total:\"  Total\\:%8.2lf%s\\n\" ");
+
 	cherokee_buffer_add_str    (tmp, "AREA:accepts_min#ffffff: ");
-	cherokee_buffer_add_str    (tmp, "STACK:accepts_minmax#4477BB:Connections ");
-	cherokee_buffer_add_str    (tmp, "LINE1.5:accepts#224499:Average ");
+	cherokee_buffer_add_str    (tmp, "STACK:accepts_minmax#4477BB: ");
+	cherokee_buffer_add_str    (tmp, "LINE1.5:accepts#224499:\"TCP conns\" ");
+	cherokee_buffer_add_str    (tmp, "GPRINT:accepts:LAST:\"Current\\:%8.2lf%s\" ");
+	cherokee_buffer_add_str    (tmp, "GPRINT:accepts:AVERAGE:\" Average\\:%8.2lf%s\" ");
+	cherokee_buffer_add_str    (tmp, "GPRINT:accepts_max:MAX:\" Maximum\\:%8.2lf%s\" ");
+	cherokee_buffer_add_str    (tmp, "GPRINT:accepts_total:\"  Total\\:%8.2lf%s\\n\" ");
 	cherokee_buffer_add_str    (tmp, "\n");
 	
 	command_rrdtool (hdl, tmp);

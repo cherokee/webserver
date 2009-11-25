@@ -286,7 +286,7 @@ rrd_thread_worker_func (void *param)
 	cherokee_collector_vsrv_rrd_t *vrrd;
 	cherokee_collector_rrd_t      *rrd       = COLLECTOR_RRD(param);
 
-	TRACE (ENTRIES, "Worker thread created.. sleeping %dsecs\n", WORKER_INIT_SLEEP);
+	TRACE (ENTRIES, "Worker thread created.. sleeping %d secs\n", WORKER_INIT_SLEEP);
 	sleep (WORKER_INIT_SLEEP);
 
 	while (! rrd->exiting) {
