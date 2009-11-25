@@ -32,19 +32,20 @@
  */
 typedef struct {
 	/* Configuration */
-	cherokee_buffer_t path_rrdtool;
-	cherokee_buffer_t path_databases;
+	cherokee_buffer_t  path_rrdtool;
+	cherokee_buffer_t  path_databases;
 
 	/* Connection */
-	int               write_fd;
-	int               read_fd;
-	pid_t             pid;
+	int                write_fd;
+	int                read_fd;
+	pid_t              pid;
+	cherokee_boolean_t exiting;
 
 	/* Threading */
-	CHEROKEE_MUTEX_T (mutex);
+	CHEROKEE_MUTEX_T  (mutex);
 
 	/* Misc */
-	cherokee_buffer_t tmp;
+	cherokee_buffer_t  tmp;
 } cherokee_rrd_connection_t;
 
 typedef struct {

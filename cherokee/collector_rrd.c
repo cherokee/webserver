@@ -133,6 +133,16 @@ update_srv_cb (cherokee_collector_rrd_t *rrd)
 static ret_t
 srv_free (cherokee_collector_rrd_t *rrd)
 {
+	/* Stop the thread
+	 */
+	rrd->exiting            = true;
+	rrd_connection->exiting = true;
+
+	CHEROKEE_THREAD_JOIN (&rrd->thread);
+	CHEROKEE_MUTEX_DESTROY (&rrd->mutex);	
+
+	/* Clean up
+	 */
 	cherokee_buffer_mrproper (&rrd->path_database);
 	cherokee_buffer_mrproper (&rrd->tmp);
 
@@ -264,7 +274,7 @@ rrd_thread_worker_func (void *param)
 	TRACE (ENTRIES, "Worker thread created.. sleeping %dsecs\n", WORKER_INIT_SLEEP);
 	sleep (WORKER_INIT_SLEEP);
 
-	while (true) {
+	while (! rrd->exiting) {
 		start = cherokee_bogonow_now;
 		TRACE (ENTRIES, "Worker thread: Starting new iteration (now=%d)\n", start);
 
@@ -290,6 +300,7 @@ rrd_thread_worker_func (void *param)
 		}
 	}
 
+	pthread_exit (NULL);
 	return NULL;
 }
 
@@ -342,6 +353,8 @@ cherokee_collector_rrd_new (cherokee_collector_rrd_t **rrd,
 
 	/* Create the thread and mutex
 	 */
+	n->exiting = false;
+
 	re = pthread_create (&n->thread, NULL, rrd_thread_worker_func, n);
 	if (re != 0) {
 		LOG_ERROR (CHEROKEE_ERROR_COLLECTOR_NEW_THREAD, re);

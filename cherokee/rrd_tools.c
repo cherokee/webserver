@@ -59,6 +59,7 @@ cherokee_rrd_connection_init (cherokee_rrd_connection_t *rrd_conn)
 	rrd_conn->write_fd = -1;
 	rrd_conn->read_fd  = -1;
 	rrd_conn->pid      = -1;
+	rrd_conn->exiting  = false;
 
 	cherokee_buffer_init (&rrd_conn->tmp);
 	cherokee_buffer_init (&rrd_conn->path_rrdtool);
@@ -146,6 +147,11 @@ cherokee_rrd_connection_spawn (cherokee_rrd_connection_t *rrd_conn)
 	int    fds_to[2];
         int    fds_from[2];
 	
+	/* Do not spawn if the server it exiting */
+	if (rrd_conn->exiting) { 
+		return ret_ok;
+	}
+
 	/* There might be a live process */
 	if ((rrd_conn->write_fd != -1) &&
 	    (rrd_conn->read_fd != -1) &&
