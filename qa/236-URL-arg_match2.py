@@ -5,7 +5,7 @@ ARGS  = "first236=1&second236=http://1.1.1.1&third236=3"
 MAGIC = "magic string"
 
 CONF = """
-vserver!1!rule!2360!match = http_arg
+vserver!1!rule!2360!match = url_arg
 vserver!1!rule!2360!match!arg = second236
 vserver!1!rule!2360!match!match = isnt_there
 vserver!1!rule!2360!handler = cgi
@@ -21,7 +21,7 @@ echo "%s"
 class Test (TestBase):
     def __init__ (self):
         TestBase.__init__ (self, __file__)
-        self.name = "Rule http_arg: no match"
+        self.name = "Rule url_arg: no match"
 
         self.request           = "GET /%s/test?%s HTTP/1.0\r\n" % (DIR, ARGS)
         self.conf              = CONF
