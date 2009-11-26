@@ -444,14 +444,14 @@ do_spawn (void)
 			}
 		}
 
-		if (gid != -1) {
+		if ((int)gid != -1) {
 			n = setgid (gid);
 			if (n != 0) {
 				PRINT_ERROR ("(warning) Couldn't set GID=%d\n", gid);
 			}
 		}
 
-		if (uid != -1) {
+		if ((int)uid != -1) {
 			n = setuid (uid);
 			if (n != 0) {
 				PRINT_ERROR ("(warning) Couldn't set UID=%d\n", uid);
@@ -475,6 +475,7 @@ do_spawn (void)
 		exit (1);
 	case -1:
 		/* Error */
+		PRINT_MSG ("(critical) Couldn't fork(): %s\n", strerror(errno));
 		break;
 	default:
 		/* Return the PID */
@@ -498,22 +499,48 @@ static NORETURN void *
 spawn_thread_func (void *param) 
 {
 	int           re;
-	struct sembuf so;
+	struct sembuf sops[1];
 
 	UNUSED (param);
 
 	while (true) {
-		do {
-			so.sem_num = 0;
-			so.sem_op  = -1;
-			so.sem_flg = SEM_UNDO;
+		sops[0].sem_num = 0;
+		sops[0].sem_op  = -1;
+		sops[0].sem_flg = SEM_UNDO;
 
-			re = semop (spawn_shared_sem, &so, 1);
-		} while (re < 0 && errno == EINTR);
+		do {
+			errno = 0;
+			re = semop (spawn_shared_sem, sops, 1);
+		} while ((re < 0) && (errno == EINTR));
+
 		do_spawn ();
 	}
 }
 
+static int
+sem_new (void)
+{
+	int         re;
+	int         sem;
+	union semun ctrl;
+
+	/* Create */
+	sem = semget (getpid(), 1, IPC_CREAT | SEM_R | SEM_A);
+	if (sem < 0) {
+		PRINT_MSG ("Could not create semaphore: %s\n", strerror(errno));
+		return -1;
+	}
+
+	/* Initialize */
+	ctrl.val = 0;
+	re = semctl (sem, 0, SETVAL, ctrl); 
+	if (re < 0) {
+		PRINT_MSG ("Could not initialize semaphore: %s\n", strerror(errno));
+		return -1;
+	}
+
+	return sem;
+}
 
 static int
 sem_chmod (int sem, char *worker_uid)
@@ -592,7 +619,7 @@ spawn_init (void)
 
 	/* Semaphore
 	*/
-	spawn_shared_sem = semget (getpid(), 1, IPC_CREAT | SEM_R | SEM_A);
+	spawn_shared_sem = sem_new();
 	if (spawn_shared_sem < 0) {
 		return ret_error;
 	}
@@ -700,6 +727,8 @@ signals_handler (int sig, siginfo_t *si, void *context)
 	case SIGTERM:
 		/* Kill all child */
 		kill (0, SIGTERM);
+
+		errno = 0;
 		while ((wait (0) == -1) && (errno == EINTR));
 
 		/* Clean up and exit */

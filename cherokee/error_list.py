@@ -753,11 +753,11 @@ e('TEMPLATE_NO_TOKEN',
 # cherokee/spawner.c
 #
 e('SPAWNER_SHM_INIT',
-  title = "Couldn't initialize SHM '%s': ${errno}",
+  title = "Could not initialize SHM '%s': ${errno}",
   desc  = SYSTEM_ISSUE)
 
 e('SPAWNER_UNLOCK_SEMAPHORE',
-  title = "Couldn't unlock spawning semaphore",
+  title = "Could not unlock spawning semaphore %d: ${errno}",
   desc  = SYSTEM_ISSUE)
 
 

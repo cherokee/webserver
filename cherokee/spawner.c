@@ -78,6 +78,8 @@ cherokee_spawner_init (void)
 		goto error;
 	}
 
+	TRACE (ENTRIES",sem", "Got semaphore %d\n", cherokee_spawn_sem);
+
 	cherokee_buffer_mrproper (&name);
 	return ret_ok;
 
@@ -150,22 +152,24 @@ nothing:
 #endif
 
 static ret_t
-sem_signal (int sem)
+sem_unlock (int sem)
 {
 	int           re;
 	struct sembuf so;
 
-	so.sem_num = 0;
-	so.sem_op  = 1;
-	so.sem_flg = SEM_UNDO;
-
 	do {
+		so.sem_num = 0;
+		so.sem_op  = 1;
+		so.sem_flg = SEM_UNDO;
+
+		errno = 0;
 		re = semop (sem, &so, 1);
 		if (re >= 0) {
 			return ret_ok;
 		}
-	} while (re < 0 && errno == EINTR);
+	} while ((re < 0) && (errno == EINTR));
 	
+	LOG_ERRNO (errno, cherokee_err_error, CHEROKEE_ERROR_SPAWNER_UNLOCK_SEMAPHORE, sem);
 	return ret_error;
 }
 
@@ -180,7 +184,6 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 			pid_t              *pid_ret)
 {
 #ifdef HAVE_POSIX_SHM
-	ret_t              ret;
 	char             **n;
 	int               *pid_shm;
 	int                pid_prev;
@@ -256,10 +259,7 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 
 	/* Wake up the spawning thread
 	 */
-	ret = sem_signal (cherokee_spawn_sem);
-	if (unlikely (ret != ret_ok)) {
-		LOG_WARNING_S (CHEROKEE_ERROR_SPAWNER_UNLOCK_SEMAPHORE);
-	}
+	sem_unlock (cherokee_spawn_sem);
 	
 	/* Wait for the PID
 	 */
@@ -270,7 +270,11 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 	}
 
 	if (*pid_shm == -1) {
-		TRACE(ENTRIES, "Could get the PID of: '%s'\n", binary->buf);
+		TRACE(ENTRIES, "Could not get the PID of: '%s'\n", binary->buf);
+		goto error;
+
+	} else if (*pid_shm == pid_prev) {
+		TRACE(ENTRIES, "Could not the new PID, previously it was %d\n", pid_prev);
 		goto error;
 	}
 

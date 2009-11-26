@@ -687,6 +687,8 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 			/* It's death */
 			TRACE (ENTRIES, "PID %d is already death\n", src->pid);
 
+			src->pid = -1;
+
 			src->spawning_since        = 0;
 			src->spawning_since_fails += 1;
 
