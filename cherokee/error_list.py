@@ -515,14 +515,14 @@ e('RULE_REQUEST_NO_PCRE_PTR',
 #
 e('RULE_METHOD_UNKNOWN',
   title = "Could not recognize HTTP method '%s'",
-  desc  = "The rule found an entry with an unsupported HTTP method. Probably this is due to... (to-do).")
+  desc  = "The rule found an entry with an unsupported HTTP method. Probably the configuration file has been tampered with.")
 
 
 # cherokee/rule_header.c
 #
 e('RULE_HEADER_UNKNOWN',
   title = "Unknown header '%s'",
-  desc  = "The rule found an entry with an unsupported header. Probably this is due to... (to-do).")
+  desc  = "The rule found an entry with an unsupported header. Probably the configuration file has been tampered with.")
 
 
 # cherokee/rule_from.c
@@ -591,19 +591,19 @@ e('SERVER_IGNORE_TLS',
   admin = "/general#tabs_general-0")
 
 e('SERVER_TLS_DEFAULT',
-  title = "TLS/SSL support must be set up in the 'default' Virtual Server. Its certificate will we used by the server in case TLS SNI information is not provided by the client.",
-  desc  = "to-do")
+  title = "TLS/SSL support required for 'default' Virtual Server.",
+  desc  = "TLS/SSL support must be set up in the 'default' Virtual Server. Its certificate will be used by the server in case TLS SNI information is not provided by the client.")
 
 e('SERVER_NO_CRYPTOR',
-  title = "Virtual Server '%s' is configured to use SSL/TLS but no Crypto engine has been activated server-wide.",
-  desc  = "to-do")
+  title = "Virtual Server '%s' is trying to use SSL/TLS, but no Crypto engine is active.",
+  desc  = "For a Virtual Server to use SSL/TLS, a Crypto engine must be available server-wide.")
 
 e('SERVER_PARSE',
   title = "Server parser: Unknown key '%s'",
   desc  = BROKEN_CONFIG)
 
 e('SERVER_INITGROUPS',
-  title = "initgroups: Unable to set groups for user `%s' and GID %d",
+  title = "initgroups: Unable to set groups for user '%s' and GID %d",
   desc  = SYSTEM_ISSUE)
 
 e('SERVER_SETGID',
@@ -633,8 +633,8 @@ e('SERVER_NEW_THREAD',
   debug = "ret = %d")
 
 e('SERVER_TLS_INIT',
-  title = "Can not initialize TLS for `%s' virtual host",
-  desc  = "(To-Do)")
+  title = "Can not initialize TLS for '%s' virtual host",
+  desc  = "This is usually caused by an error with a certificate or private key.")
 
 e('SERVER_FD_SET',
   title = "Unable to raise file descriptor limit to %d",
@@ -1200,7 +1200,7 @@ e('SSL_SOCKET',
 
 e('SSL_SRV_MATCH',
   title = "Servername did not match: '%s'",
-  desc  = "(to-do)")
+  desc  = "A TLS negotiation using SNI is sending a domain name that doesn't match any of the available ones. This makes it impossible to present a certificate with a correct CA. Check the list of TLS enabled Virtual Servers if you expect otherwise.")
 
 e('SSL_CHANGE_CTX',
   title = "Couldn't change the SSL context: servername='%s'",
@@ -1216,23 +1216,23 @@ e('SSL_CIPHER',
 
 e('SSL_CERTIFICATE',
   title = "OpenSSL: Can not use certificate file '%s':  %s",
-  desc  = "(to-do)")
+  desc  = "An error occured while trying to load a certificate into the SSL context structure. Most likely the certificate file is wrong or has been corrupted.")
 
 e('SSL_KEY',
   title = "OpenSSL: Can not use private key file '%s': %s",
-  desc  = "(to-do)")
+  desc  = "An error occured while trying to load a private key the SSL context structure. Most likely the file is wrong or has been corrupted.")
 
 e('SSL_KEY_MATCH',
   title = "OpenSSL: Private key does not match the certificate public key",
-  desc  = "(to-do)")
+  desc  = "The private key must agree with the corresponding public key in the certificate associated with a specific SSL context. Double check both private key and certificate.")
 
 e('SSL_CA_READ',
   title = "OpenSSL: Can't read trusted CA list '%s': %s",
-  desc  = "(to-do)")
+  desc  = "If this happens, CA certificates for verification purposes can't be located. It is likely there is a problem with your private key.")
 
 e('SSL_CA_LOAD',
   title = "SSL_load_client_CA_file '%s': %s",
-  desc  = "(to-do)")
+  desc  = "A file of PEM formatted certificates should be read to extract data of the certificates found. It is likely there is a problem with your private key.")
 
 e('SSL_SESSION_ID',
   title = "Unable to set SSL session-id context for '%s': %s",
@@ -1284,7 +1284,7 @@ e('SSL_CTX_SET',
 
 e('SSL_SNI_SRV',
   title = "OpenSSL: Couldn't set SNI server name: %s",
-  desc  = "(to-do)")
+  desc  = SYSTEM_ISSUE)
 
 e('SSL_CONNECT',
   title = "OpenSSL: Can not connect: %s",
