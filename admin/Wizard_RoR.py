@@ -15,6 +15,7 @@ NOTE_ROR_DIR    = N_("Local path to the Ruby on Rails based project.")
 NOTE_NEW_HOST   = N_("Name of the new domain that will be created.")
 NOTE_NEW_DIR    = N_("Directory of the web directory where the Ruby on Rails project will live in.")
 NOTE_ENV        = N_("Value of the RAILS_ENV variable.")
+NOTE_MTD        = N_("It is recommended to proxy the best available option, but FastCGI can also be used.")
 
 ERROR_DISPATCH  = N_("<p>Even though the directory looks like a Ruby on Rails project, the public/dispatch.fcgi file wasn't found.</p>")
 ERROR_EXAMPLE   = N_("<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you might want to rename it.</p>")
@@ -29,11 +30,23 @@ RAILS_ENV = [
     ('',            'Empty')
 ]
 
+RAILS_MTD = [
+    ('proxy',  'Proxy'),
+    ('fcgi',   'FastCGI')
+]
+
 SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = RoR %(new_host)s, instance %(src_instance)d
-source!%(src_num)d!host = /tmp/cherokee-ror-%(src_num)d.sock
-source!%(src_num)d!interpreter = spawn-fcgi -n -d %(ror_dir)s -f %(ror_dir)s/public/dispatch.fcgi -s /tmp/cherokee-ror-%(src_num)d.sock -P /tmp/cherokee-ror-%(src_num)d.sock
+source!%(src_num)d!host = 127.0.0.1:%(src_port)d
+"""
+
+SOURCE_FCGI = """
+source!%(src_num)d!interpreter = spawn-fcgi -n -d %(ror_dir)s -f %(ror_dir)s/public/dispatch.fcgi -p %(src_port)d
+"""
+
+SOURCE_PROXY = """
+source!%(src_num)d!interpreter = %(ror_dir)s/script/server -p %(src_port)d
 """
 
 SOURCE_ENV = """
@@ -55,10 +68,19 @@ CONFIG_VSRV = """
 
 %(vsrv_pre)s!rule!1!match = default
 %(vsrv_pre)s!rule!1!encoder!gzip = 1
+"""
+
+CONFIG_VSRV_FCGI = """
 %(vsrv_pre)s!rule!1!handler = fcgi
 %(vsrv_pre)s!rule!1!handler!error_handler = 1
 %(vsrv_pre)s!rule!1!handler!check_file = 0
 %(vsrv_pre)s!rule!1!handler!balancer = round_robin
+"""
+
+CONFIG_VSRV_PROXY = """
+%(vsrv_pre)s!rule!1!handler = proxy
+%(vsrv_pre)s!rule!1!handler!balancer = round_robin
+%(vsrv_pre)s!rule!1!handler!in_allow_keepalive = 1
 """
 
 CONFIG_VSRV_CHILD = """
@@ -85,10 +107,19 @@ CONFIG_RULES = """
 %(rule_pre)s!match = directory
 %(rule_pre)s!match!directory = %(webdir)s
 %(rule_pre)s!encoder!gzip = 1
+"""
+
+CONFIG_RULES_FCGI = """
 %(rule_pre)s!handler = fcgi
 %(rule_pre)s!handler!error_handler = 1
 %(rule_pre)s!handler!check_file = 0
 %(rule_pre)s!handler!balancer = round_robin
+"""
+
+CONFIG_RULES_PROXY = """
+%(rule_pre)s!handler = proxy
+%(rule_pre)s!handler!balancer = round_robin
+%(rule_pre)s!handler!in_allow_keepalive = 1
 """
 
 CONFIG_RULES_CHILD = """
@@ -165,8 +196,13 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
         txt += '<h2>%s</h2>' % (_("Ruby on Rails Project"))
         txt += self._render_content_dispatch_fcgi()
 
+        # Trim deployment options if needed
+        if not path_find_binary (DEFAULT_BINS):
+            RAILS_ENV.remove(('fcgi', 'FastCGI'))
+
         table = TableProps()
         self.AddPropEntry   (table, _('Project Directory'),     'tmp!wizard_ror!ror_dir', _(NOTE_ROR_DIR))
+        self.AddPropOptions (table, _('Deployment method'),     'tmp!wizard_ror!ror_mtd', RAILS_MTD, _(NOTE_MTD))
         self.AddPropOptions (table, _('RAILS_ENV environment'), 'tmp!wizard_ror!ror_env', RAILS_ENV, _(NOTE_ENV))
         txt += self.Indent(table)
 
@@ -187,13 +223,16 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
         self._cfg_clean_values (post)
 
         # Check whether dispatch.fcgi is present
-        error = self._op_apply_dispatch_fcgi (post)
-        if error: return
+        if post.get_val('tmp!wizard_ror!ror_dir'):
+            error = self._op_apply_dispatch_fcgi (post)
+        if error:
+            return
 
         # Incoming info
         ror_dir  = post.pop('tmp!wizard_ror!ror_dir')
         new_host = post.pop('tmp!wizard_ror!new_host')
         ror_env  = post.pop('tmp!wizard_ror!ror_env')
+        ror_mtd  = post.pop('tmp!wizard_ror!ror_mtd')
 
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
@@ -202,13 +241,25 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
         # Usual Static files
         self._common_add_usual_static_files ("%s!rule!500" % (vsrv_pre))
 
+        # Deployment method distinction
+        CONFIG = CONFIG_VSRV
+        SRC    = SOURCE
+        if ror_mtd == 'fcgi':
+            CONFIG += CONFIG_VSRV_FCGI
+            SRC    += SOURCE_FCGI
+        else:
+            CONFIG += CONFIG_VSRV_PROXY
+            SRC    += SOURCE_PROXY
+
         # Add the new main rules
-        config = CONFIG_VSRV % (locals())
+        config = CONFIG % (locals())
 
         # Add the Information Sources
+        free_port = cfg_source_find_free_port()
         for i in range(ROR_CHILD_PROCS):
             src_instance = i + 1
-            config += SOURCE % (locals())
+            src_port     = i + free_port
+            config += SRC % (locals())
             if ror_env:
                 config += SOURCE_ENV % (locals())
             config += CONFIG_VSRV_CHILD % (locals())
@@ -216,7 +267,6 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
 
         self._apply_cfg_chunk (config)
         self._common_apply_logging (post, vsrv_pre)
-
 
 class Wizard_Rules_RoR (CommonMethods, WizardPage):
     ICON = "ror.png"
@@ -240,8 +290,13 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
         txt += '<h2>%s</h2>' % (_("Ruby on Rails Project"))
         txt += self._render_content_dispatch_fcgi()
 
+        # Trim deployment options if needed
+        if not path_find_binary (DEFAULT_BINS):
+            RAILS_ENV.remove(('fcgi', 'FastCGI'))
+
         table = TableProps()
         self.AddPropEntry   (table, _('Project Directory'),     'tmp!wizard_ror!ror_dir', _(NOTE_ROR_DIR))
+        self.AddPropOptions (table, _('Deployment method'),     'tmp!wizard_ror!ror_mtd', RAILS_MTD, _(NOTE_MTD))
         self.AddPropOptions (table, _('RAILS_ENV environment'), 'tmp!wizard_ror!ror_env', RAILS_ENV, NOTE_ENV)
         txt += self.Indent(table)
 
@@ -260,13 +315,16 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
         self._cfg_clean_values (post)
 
         # Check whether dispatch.fcgi is present
-        error = self._op_apply_dispatch_fcgi (post)
-        if error: return
+        if post.get_val('tmp!wizard_ror!ror_dir'):
+            error = self._op_apply_dispatch_fcgi (post)
+        if error:
+            return
 
         # Incoming info
         ror_dir = post.pop('tmp!wizard_ror!ror_dir')
         webdir  = post.pop('tmp!wizard_ror!new_webdir')
         ror_env = post.pop('tmp!wizard_ror!ror_env')
+        ror_mtd  = post.pop('tmp!wizard_ror!ror_mtd')
 
         # Locals
         rule_num, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
@@ -275,17 +333,28 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
         rule_pre_plus2     = "%s!rule!%d" % (self._pre, rule_num + 2)
         rule_pre_plus1     = "%s!rule!%d" % (self._pre, rule_num + 1)
 
+        # Deployment method distinction
+        CONFIG = CONFIG_RULES
+        SRC    = SOURCE
+        if ror_mtd == 'fcgi':
+            CONFIG += CONFIG_RULES_FCGI
+            SRC    += SOURCE_FCGI
+        else:
+            CONFIG += CONFIG_RULES_PROXY
+            SRC    += SOURCE_PROXY
+
         # Add the new rules
-        config = CONFIG_RULES % (locals())
+        config = CONFIG % (locals())
 
         # Add the Information Sources
+        free_port = cfg_source_find_free_port()
         for i in range(ROR_CHILD_PROCS):
             src_instance = i + 1
-            config += SOURCE % (locals())
+            src_port     = i + free_port
+            config += SRC % (locals())
             if ror_env:
                 config += SOURCE_ENV % (locals())
             config += CONFIG_RULES_CHILD % (locals())
             src_num += 1
 
         self._apply_cfg_chunk (config)
-
