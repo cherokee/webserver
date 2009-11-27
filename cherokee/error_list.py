@@ -26,7 +26,7 @@ e('SOURCE_NONBLOCK',
 # cherokee/rrd_tools.c
 #
 e('RRD_NO_BINARY',
-  title = "Couldn't find the rrdtool binary.",
+  title = "Could not find the rrdtool binary.",
   desc  = "A custom rrdtool binary has not been defined, and the server could not find one in the $PATH.",
   debug = "PATH=%s")
 
@@ -76,7 +76,7 @@ e('VALIDATOR_AUTHLIST_USER',
   desc  = BROKEN_CONFIG)
 
 e('VALIDATOR_AUTHLIST_PASSWORD',
-  title = "Couldn't read 'password' value for '%s'",
+  title = "Could not read 'password' value for '%s'",
   desc  = BROKEN_CONFIG)
 
 e('VALIDATOR_AUTHLIST_EMPTY',
@@ -92,7 +92,7 @@ e('VALIDATOR_PAM_DELAY',
 
 e('VALIDATOR_PAM_AUTH',
   title = "User '%s' - not authenticated: %s",
-  desc  = "Most likely the password didn't match")
+  desc  = "Most likely the password did not match")
 
 e('VALIDATOR_PAM_ACCOUNT',
   title = "User '%s' - invalid account: %s",
@@ -126,7 +126,7 @@ e('VALIDATOR_LDAP_CA',
   desc = SYSTEM_ISSUE)
 
 e('VALIDATOR_LDAP_STARTTLS',
-  title = "Can't StartTLS, it isn't supported by LDAP client libraries",
+  title = "cannot StartTLS, it is not supported by LDAP client libraries",
   desc = SYSTEM_ISSUE)
 
 e('VALIDATOR_LDAP_BIND',
@@ -250,7 +250,7 @@ e('HANDLER_ERROR_REDIR_URL',
 # cherokee/handler_dirlist.c
 #
 e('HANDLER_DIRLIST_THEME',
-  title = "Couldn't load theme '%s': %s",
+  title = "Could not load theme '%s': %s",
   desc  = "Either the directory where your theme resides has been deleted, or the permissions are wrong.")
 
 e('HANDLER_DIRLIST_BAD_THEME',
@@ -283,8 +283,8 @@ e('HANDLER_CGI_SET_PROP',
   desc  = SYSTEM_ISSUE)
 
 e('HANDLER_CGI_SETID',
-  title = "%s: couldn't set UID %d",
-  desc  = "Most probably the server isn't running as root, and therefore it cannot switch to a new user. If you want Cherokee to be able to change use UID to execute CGIs, you'll have to run it as root.")
+  title = "%s: could not set UID %d",
+  desc  = "Most probably the server is not running as root, and therefore it cannot switch to a new user. If you want Cherokee to be able to change use UID to execute CGIs, you'll have to run it as root.")
 
 e('HANDLER_CGI_EXECUTE',
   title = "Could not execute '%s': %s",
@@ -369,7 +369,7 @@ e('LOGGER_WRITER_UNKNOWN',
   desc  = BROKEN_CONFIG)
 
 e('LOGGER_WRITER_READ',
-  title = "Logger writer (%s): Couldn't read the filename.",
+  title = "Logger writer (%s): Could not read the filename.",
   desc  = BROKEN_CONFIG)
 
 e('LOGGER_WRITER_APPEND',
@@ -400,7 +400,7 @@ e('LOGGER_CUSTOM_NO_TEMPLATE',
   desc  = "Since you are trying to use a custom logging template, providing the template is mandatory.")
 
 e('LOGGER_CUSTOM_TEMPLATE',
-  title = "Couldn't parse custom log: '%s'",
+  title = "Could not parse custom log: '%s'",
   desc  = "The server found a problem while processing the logging template. Please ensure it is correct.")
 
 
@@ -468,7 +468,7 @@ e('GEN_EVHOST_TPL_DROOT',
   desc  = BROKEN_CONFIG)
 
 e('GEN_EVHOST_PARSE',
-  title = "EvHost: Couldn't parse template '%s'",
+  title = "EvHost: Could not parse template '%s'",
   desc  = "Could not parse the template definining how virtual servers are located. You need to re-define the Dynamic Document Root for your Advanced Virtual Hosting.")
 
 
@@ -482,7 +482,7 @@ e('VRULE_NO_PROPERTY',
 # cherokee/vrule_target_ip.c
 #
 e('VRULE_TARGET_IP_PARSE',
-  title = "Couldn't parse 'to' entry: '%s'",
+  title = "Could not parse 'to' entry: '%s'",
   desc  = BROKEN_CONFIG)
 
 
@@ -528,7 +528,7 @@ e('RULE_HEADER_UNKNOWN',
 # cherokee/rule_from.c
 #
 e('RULE_FROM_ENTRY',
-  title = "Couldn't parse 'from' entry: '%s'",
+  title = "Could not parse 'from' entry: '%s'",
   desc  = "The entries of this rule must be either IP address or network masks. Both IPv4 and IPv6 addresses and masks are supported.")
 
 # cherokee/rule_bind.c
@@ -607,11 +607,11 @@ e('SERVER_INITGROUPS',
   desc  = SYSTEM_ISSUE)
 
 e('SERVER_SETGID',
-  title = "Can't change group to GID %d, running with GID=%d",
+  title = "cannot change group to GID %d, running with GID=%d",
   desc  = "Most probably you the server did not have enough permissions to change its execution group.")
 
 e('SERVER_SETUID',
-  title = "Can't change group to UID %d, running with UID=%d",
+  title = "cannot change group to UID %d, running with UID=%d",
   desc  = "Most probably you the server did not have enough permissions to change its execution user.")
 
 e('SERVER_GET_FDLIMIT',
@@ -633,7 +633,7 @@ e('SERVER_NEW_THREAD',
   debug = "ret = %d")
 
 e('SERVER_TLS_INIT',
-  title = "Can not initialize TLS for '%s' virtual host",
+  title = "cannot initialize TLS for '%s' virtual host",
   desc  = "This is usually caused by an error with a certificate or private key.")
 
 e('SERVER_FD_SET',
@@ -711,7 +711,7 @@ e('SRC_INTER_EMPTY_INTERPRETER',
   admin = "/source/%d")
 
 e('SRC_INTER_NO_INTERPRETER',
-  title = "Couldn't find interpreter '%s'",
+  title = "Could not find interpreter '%s'",
   desc  = "The server configuration refers to an interpreter that is not installed in this system.",
   admin = "/source/%d")
 
@@ -724,7 +724,7 @@ e('SRC_INTER_SPAWN',
 #
 e('CONF_READ_ACCESS_FILE',
   title = "Could not access file",
-  desc  = "The configuration file '%s' could not be accessed. Most probably the server user doesn't have enough permissions to read it.")
+  desc  = "The configuration file '%s' could not be accessed. Most probably the server user does not have enough permissions to read it.")
 
 e('CONF_READ_CHILDREN_SAME_NODE',
   title = "'%s' and '%s' as child of the same node",
@@ -775,7 +775,7 @@ e('ICONS_NO_DEFAULT',
   admin = "/icons")
 
 e('ICONS_ASSIGN_SUFFIX',
-  title = "Couldn't assign suffix '%s' to file '%s'",
+  title = "Could not assign suffix '%s' to file '%s'",
   desc  = UNKNOWN_CAUSE,
   admin = "/icons")
 
@@ -828,7 +828,7 @@ e('SOCKET_NON_BLOCKING',
   desc  = CODING_BUG)
 
 e('SOCKET_NO_SOCKET',
-  title = "%s isn't a socket",
+  title = "%s is not a socket",
   desc  = "The file is supposed to be a Unix socket, although it does not look like one.")
 
 e('SOCKET_REMOVE',
@@ -875,7 +875,7 @@ e('SOCKET_RM_CORK',
 # cherokee/thread.c
 #
 e('THREAD_RM_FD_POLL',
-  title = "Couldn't remove fd(%d) from fdpoll",
+  title = "Could not remove fd(%d) from fdpoll",
   desc  = CODING_BUG)
 
 e('THREAD_HANDLER_RET',
@@ -907,7 +907,7 @@ e('CONNECTION_LOCAL_DIR',
   desc  = CODING_BUG)
 
 e('CONNECTION_GET_VSERVER',
-  title = "Couldn't get virtual server: '%s'",
+  title = "Could not get virtual server: '%s'",
   desc  = CODING_BUG)
 
 
@@ -929,10 +929,10 @@ e('NCPUS_SYSCONF',
 # cherokee/init.c
 #
 e('INIT_CPU_NUMBER',
-  title = "Couldn't figure the CPU/core number of your server. Read %d, set to 1")
+  title = "Could not figure the CPU/core number of your server. Read %d, set to 1")
 
 e('INIT_GET_FD_LIMIT',
-  title = "Couldn't get the file descriptor limit of your system",
+  title = "Could not get the file descriptor limit of your system",
   desc  = SYSTEM_ISSUE)
 
 
@@ -993,7 +993,7 @@ e('BUFFER_AVAIL_SIZE',
   desc  = CODING_BUG)
 
 e('BUFFER_OPEN_FILE',
-  title = "Couldn't open the file: %s, ${errno}",
+  title = "Could not open the file: %s, ${errno}",
   desc  = "Please check that the file exists and the server has read access.")
 
 e('BUFFER_READ_FILE',
@@ -1007,7 +1007,7 @@ UNAVAILABLE_PLUGIN = """Either you are trying to use an unavailable
 (uninstalled?) plugin, or there is a installation issue."""
 
 e('PLUGIN_LOAD_NO_SYM',
-  title = "Couldn't get simbol '%s': %s",
+  title = "Could not get simbol '%s': %s",
   desc  = INTERNAL_ISSUE)
 
 e('PLUGIN_DLOPEN',
@@ -1147,11 +1147,11 @@ e('COLLECTOR_COMMAND_EXEC',
   admin = "/general/#tabs_general-0")
 
 e('COLLECTOR_NEW_THREAD',
-  title = "Couldn't create the RRD working thread: error=%d",
+  title = "Could not create the RRD working thread: error=%d",
   desc  = SYSTEM_ISSUE)
 
 e('COLLECTOR_NEW_MUTEX',
-  title = "Couldn't create the RRD working mutex: error=%d",
+  title = "Could not create the RRD working mutex: error=%d",
   desc  = SYSTEM_ISSUE)
 
 
@@ -1200,26 +1200,26 @@ e('SSL_SOCKET',
 
 e('SSL_SRV_MATCH',
   title = "Servername did not match: '%s'",
-  desc  = "A TLS negotiation using SNI is sending a domain name that doesn't match any of the available ones. This makes it impossible to present a certificate with a correct CA. Check the list of TLS enabled Virtual Servers if you expect otherwise.")
+  desc  = "A TLS negotiation using SNI is sending a domain name that does not match any of the available ones. This makes it impossible to present a certificate with a correct CA. Check the list of TLS enabled Virtual Servers if you expect otherwise.")
 
 e('SSL_CHANGE_CTX',
-  title = "Couldn't change the SSL context: servername='%s'",
+  title = "Could not change the SSL context: servername='%s'",
   desc  = SYSTEM_ISSUE)
 
 e('SSL_ALLOCATE_CTX',
-  title = "OpenSSL: Couldn't allocate OpenSSL context",
+  title = "OpenSSL: Could not allocate OpenSSL context",
   desc  = SYSTEM_ISSUE)
 
 e('SSL_CIPHER',
-  title = "OpenSSL: Can not set cipher list '%s': %s",
+  title = "OpenSSL: cannot set cipher list '%s': %s",
   desc  = SYSTEM_ISSUE)
 
 e('SSL_CERTIFICATE',
-  title = "OpenSSL: Can not use certificate file '%s':  %s",
+  title = "OpenSSL: cannot use certificate file '%s':  %s",
   desc  = "An error occured while trying to load a certificate into the SSL context structure. Most likely the certificate file is wrong or has been corrupted.")
 
 e('SSL_KEY',
-  title = "OpenSSL: Can not use private key file '%s': %s",
+  title = "OpenSSL: cannot use private key file '%s': %s",
   desc  = "An error occured while trying to load a private key the SSL context structure. Most likely the file is wrong or has been corrupted.")
 
 e('SSL_KEY_MATCH',
@@ -1227,8 +1227,8 @@ e('SSL_KEY_MATCH',
   desc  = "The private key must agree with the corresponding public key in the certificate associated with a specific SSL context. Double check both private key and certificate.")
 
 e('SSL_CA_READ',
-  title = "OpenSSL: Can't read trusted CA list '%s': %s",
-  desc  = "If this happens, CA certificates for verification purposes can't be located. It is likely there is a problem with your private key.")
+  title = "OpenSSL: cannot read trusted CA list '%s': %s",
+  desc  = "If this happens, CA certificates for verification purposes cannot be located. It is likely there is a problem with your private key.")
 
 e('SSL_CA_LOAD',
   title = "SSL_load_client_CA_file '%s': %s",
@@ -1239,7 +1239,7 @@ e('SSL_SESSION_ID',
   desc  = SYSTEM_ISSUE)
 
 e('SSL_SNI',
-  title = "Couldn't activate TLS SNI for '%s': %s",
+  title = "Could not activate TLS SNI for '%s': %s",
   desc  = SYSTEM_ISSUE)
 
 e('SSL_CONNECTION',
@@ -1247,7 +1247,7 @@ e('SSL_CONNECTION',
   desc  = SYSTEM_ISSUE)
 
 e('SSL_FD',
-  title = "OpenSSL: Can not set fd(%d): %s",
+  title = "OpenSSL: cannot set fd(%d): %s",
   desc  = SYSTEM_ISSUE)
 
 e('SSL_INIT',
@@ -1283,11 +1283,11 @@ e('SSL_CTX_SET',
   desc  = SYSTEM_ISSUE)
 
 e('SSL_SNI_SRV',
-  title = "OpenSSL: Couldn't set SNI server name: %s",
+  title = "OpenSSL: Could not set SNI server name: %s",
   desc  = SYSTEM_ISSUE)
 
 e('SSL_CONNECT',
-  title = "OpenSSL: Can not connect: %s",
+  title = "OpenSSL: cannot connect: %s",
   desc  = SYSTEM_ISSUE)
 
 e('SSL_PKCS11',
