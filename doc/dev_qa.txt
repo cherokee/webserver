@@ -12,6 +12,19 @@ prevent regressions from appearing. It will also help you a lot in
 your development process.
 
 Everything is located under the `/qa` directory, so have a look there.
+This will display all the parameters that you can use with Cherokee's
+QA test suit:
+
+------------------------
+   cd qa
+   ./run-tests.py --help
+------------------------
+
+You can use it to run all the tests, or the specific ones you want.
+
+------------------------
+   ./run-tests.py
+------------------------
 
 Not only that. The full QA bench can be run through a Cherokee proxy
 server. This is something implemented in order to test the
@@ -19,7 +32,8 @@ handler_proxy module when it was incorporated to Cherokee's code base.
 
 The idea is pretty simple, and the process straightforward. We tell
 the QA bench to run through a proxy located in localhost:2222, for
-instance. We also tell it to stop until we hit enter (-d1):
+instance. We also tell it to wait until we hit enter (-d1) to start
+executing the lot:
 
 ----------------
    cd qa
