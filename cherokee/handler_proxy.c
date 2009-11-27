@@ -1143,7 +1143,8 @@ cherokee_handler_proxy_add_headers (cherokee_handler_proxy_t *hdl,
 		TRACE(ENTRIES, "Reply is %d, it has no body. Marking as 'got all'.\n",
 		      HANDLER_CONN(hdl)->error_code);
 	}
-
+	
+	TRACE (ENTRIES, "Added reply headers (len=%d)\n", buf->len);
 	return ret_ok;
 }
 
@@ -1325,6 +1326,7 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			/* There is a chunk to send */
 			if (body_size > 0) {
 				cherokee_buffer_add (buf, (p+head_size), body_size);
+				TRACE(ENTRIES",chunked", "Copying chunk len=%d\n", body_size);
 			}
 
 			copied = (head_size + body_size + 2);
@@ -1332,8 +1334,10 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			copied_total += copied;
 			p            += copied;
 
-			if (ret == ret_eof)
+			if (ret == ret_eof) {
+				TRACE (ENTRIES",chunked", "Got a %s package\n", "EOF");
 				break;
+			}
 		}
 
 	out:
@@ -1349,10 +1353,13 @@ cherokee_handler_proxy_step (cherokee_handler_proxy_t *hdl,
 			return ret_ok;
 		}
 
-		if ((ret == ret_eof) ||
-		    (ret_read == ret_eof))
-		{
+		if (ret_read == ret_eof) {
 			hdl->pconn->keepalive_in = false;
+			return ret_eof;
+		}
+
+		if (ret == ret_eof) {
+			hdl->got_all = true;
 			return ret_eof;
 		}
 

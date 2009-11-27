@@ -625,10 +625,12 @@ process_active_connections (cherokee_thread_t *thd)
 		    (conn->phase != phase_lingering))
 		{
 			if (conn->timeout_lapse == -1) {
-				TRACE (ENTRIES",timeout", "Timeout = now + %d secs\n", srv->timeout);
+				TRACE (ENTRIES",timeout", "conn (%p, %s): Timeout = now + %d secs\n", 
+				       conn, cherokee_connection_get_phase_str (conn), srv->timeout);
 				conn->timeout = cherokee_bogonow_now + srv->timeout;
 			} else {
-				TRACE (ENTRIES",timeout", "Timeout = now + %d secs\n", conn->timeout_lapse);
+				TRACE (ENTRIES",timeout", "conn (%p, %s): Timeout = now + %d secs\n",
+				       conn, cherokee_connection_get_phase_str (conn), conn->timeout_lapse);
 				conn->timeout = cherokee_bogonow_now + conn->timeout_lapse;
 			}
 		}
