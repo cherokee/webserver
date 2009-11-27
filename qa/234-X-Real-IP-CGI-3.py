@@ -29,6 +29,7 @@ class Test (TestBase):
                                  "X-Real-IP: 1.1.1.1\r\n"
         self.expected_error    = 200
         self.conf              = CONF
+        self.proxy_suitable    = False
 
     def CustomTest (self):
         body = self.reply.split ("\r\n\r\n")[1]
