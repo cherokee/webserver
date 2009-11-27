@@ -522,8 +522,9 @@ process_polling_connections (cherokee_thread_t *thd)
 		/* Has it been too much without any work?
 		 */
 		if (conn->timeout < cherokee_bogonow_now) {
-			TRACE (ENTRIES",polling,timeout", "conn %p(fd=%d): Time out\n", 
-			       conn, SOCKET_FD(&conn->socket));
+			TRACE (ENTRIES",polling,timeout", 
+			       "thread (%p) processing polling conn (%p, %s): Time out\n",
+			       thd, conn, cherokee_connection_get_phase_str (conn));
 
 			/* Information collection
 			 */
@@ -604,7 +605,8 @@ process_active_connections (cherokee_thread_t *thd)
 		 */
 		if (conn->timeout < cherokee_bogonow_now) {
 			TRACE (ENTRIES",polling,timeout", 
-			       "thread (%p) processing conn (%p): Time out\n", thd, conn);
+			       "thread (%p) processing active conn (%p, %s): Time out\n",
+			       thd, conn, cherokee_connection_get_phase_str (conn));
 
 			/* Information collection
 			 */
@@ -623,8 +625,10 @@ process_active_connections (cherokee_thread_t *thd)
 		    (conn->phase != phase_lingering))
 		{
 			if (conn->timeout_lapse == -1) {
+				TRACE (ENTRIES",timeout", "Timeout = now + %d secs\n", srv->timeout);
 				conn->timeout = cherokee_bogonow_now + srv->timeout;
 			} else {
+				TRACE (ENTRIES",timeout", "Timeout = now + %d secs\n", conn->timeout_lapse);
 				conn->timeout = cherokee_bogonow_now + conn->timeout_lapse;
 			}
 		}
