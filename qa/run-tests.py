@@ -188,6 +188,7 @@ vserver!10!rule!100!match!final = 1
 vserver!10!rule!100!handler = proxy
 vserver!10!rule!100!handler!balancer = round_robin
 vserver!10!rule!100!handler!balancer!source!1 = 1
+vserver!10!rule!100!handler!in_preserve_host = 1
 
 source!1!host = %(public_ip)s:%(PORT)s
 source!1!nick = QA
