@@ -3,9 +3,9 @@
 Cookbook: Setting up Ruby on Rails
 ----------------------------------
 
-Setting up a Rails application to run with Cherokee and FastCGI is not
-only easy. It is also the best possible solution to manage the load
-among one or many Rails servers. This is done by using an extremely
+Setting up a Rails application to run with Cherokee is not only
+easy. It is also the best possible solution to manage the load among
+one or many Rails servers. This is done by using an extremely
 efficient web server to manage the web part and leaving as many free
 resources as possible to Rails.
 
@@ -40,15 +40,18 @@ ERROR:  While executing gem ... (RuntimeError)
     using the official Debian repositories by aptitude or apt-get.
 ----
 
+You can also install some other gems. `thin`, `mongrel`, `unicorn`,
+`rack` and `fcgi` are some that you might find useful.
+
 Once you are done with that, you must deploy your Rails project:
 
 ----
 $ rails example
 ----
 
-You can do so wherever you want, but the usal recommended way of doing
+You can do so wherever you want, but the usual recommended way of doing
 this is by deploying it outside of your web root path and then
-creating a symbolic link. This is simply to protect from exposure all
+creating a symbolic link. This is simply to protect from exposing all
 the files that do not need to be in your document root.
 
 Assuming you deployed the `example` project in `/home/foo/example`,
@@ -81,6 +84,13 @@ entries as possible. The virtual server configuration will cover the
 vast majority of the cases. Most probably it will cover your needs,
 although you are free to modify it as you will. No more configuration
 is needed after this step.
+
+It is usually best to proxy one or several of the servers used by
+Rails, be it Thin, Mongrel, Unicorn or whatever it can handle.
+You could also choose the FastCGI alternative if there is a suitable
+spawning method in your system. This approach, however, has been known
+to give inconsistent on several releases of Rails. Test it out and
+choose the method that best suits your need.
 
 If you decide to ignore the configuration wizard you can set up
 everything by hand. Although it is not complicated, this method is not
