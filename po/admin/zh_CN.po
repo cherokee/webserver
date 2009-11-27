@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.15' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-11-15 17:09+0100\n"
+"POT-Creation-Date: 2009-11-27 14:51+0100\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: ownlinux.cn\n"
@@ -136,7 +136,7 @@ msgstr "这是已经配置好的均衡器 "
 msgid "information sources"
 msgstr "数据源"
 
-#: admin/ModuleBalancer.py:76 admin/consts.py:139
+#: admin/ModuleBalancer.py:76 admin/consts.py:140
 msgid "Choose.."
 msgstr "选择.."
 
@@ -224,47 +224,87 @@ msgstr "转发所有HTTP_*的客户端请求头到CGI编码 ."
 msgid "Allow the use of the non-standard X-Sendfile header."
 msgstr "允许使用非标准的X-Sendfile请求头."
 
-#: admin/ModuleCgi.py:42
+#: admin/ModuleCgi.py:15
+#, fuzzy
+msgid ""
+"Whether the handler should read and use the X-Real-IP header and use it in "
+"REMOTE_ADDR."
+msgstr ""
+"是否记录和使用 X-Real-IP  和X-Forwarded-For 请求头  ( 由反向代理服务器发送)."
+
+#: admin/ModuleCgi.py:16
+#, fuzzy
+msgid ""
+"Accept all the X-Real-IP headers. WARNING: Turn it on only if you are "
+"centain of what you are doing."
+msgstr ""
+"接受X-Real-IP和X-Forwarded-For请求头. 警告：如果你不确信你需要这个功能请不要"
+"开启"
+
+#: admin/ModuleCgi.py:17
+#, fuzzy
+msgid ""
+"List of IP addresses and subnets that are allowed to send the X-Real-IP "
+"header."
+msgstr ""
+"列表上的IP地址和子网允许发送 X-Real-IP and X-Forwarded-For 请求头通常应用于代"
+"理服务器."
+
+#: admin/ModuleCgi.py:49
 msgid "Common CGI options"
 msgstr "一般 CGI 设置"
 
-#: admin/ModuleCgi.py:46
+#: admin/ModuleCgi.py:53
 msgid "Script Alias"
 msgstr "脚本别名"
 
-#: admin/ModuleCgi.py:48
+#: admin/ModuleCgi.py:55
 msgid "Change UID"
 msgstr "修改 UID（用户ID）"
 
-#: admin/ModuleCgi.py:50 admin/PageVServer.py:260
+#: admin/ModuleCgi.py:57 admin/PageVServer.py:260
 msgid "Error handler"
 msgstr "错误处理"
 
-#: admin/ModuleCgi.py:52
+#: admin/ModuleCgi.py:58
 msgid "Check file"
 msgstr "检查文件"
 
-#: admin/ModuleCgi.py:53
+#: admin/ModuleCgi.py:59
 msgid "Pass Request Headers"
 msgstr "允许请求头通过"
 
-#: admin/ModuleCgi.py:54
+#: admin/ModuleCgi.py:60
 msgid "Allow X-Sendfile"
 msgstr "允许 X-Sendfile"
 
-#: admin/ModuleCgi.py:57
+#: admin/ModuleCgi.py:66
+#, fuzzy
+msgid "Read X-Real-IP"
+msgstr "允许 X-Real-IP"
+
+#: admin/ModuleCgi.py:68 admin/PageVServer.py:656
+msgid "Don't check origin"
+msgstr "不检查来源"
+
+#: admin/ModuleCgi.py:70 admin/PageVServer.py:658
+#, fuzzy
+msgid "Accept from Hosts"
+msgstr "接受域"
+
+#: admin/ModuleCgi.py:74
 msgid "Custom environment variables"
 msgstr "自定义环境变量"
 
-#: admin/ModuleCgi.py:70
+#: admin/ModuleCgi.py:87
 msgid "Add new custom environment variable"
 msgstr "添加新的自定义环境变量"
 
-#: admin/ModuleCgi.py:75 admin/PageFeedback.py:59
+#: admin/ModuleCgi.py:92 admin/PageFeedback.py:59
 msgid "Name"
 msgstr "姓名"
 
-#: admin/ModuleCgi.py:75 admin/ModuleProxy.py:103 admin/ModuleProxy.py:119
+#: admin/ModuleCgi.py:92 admin/ModuleProxy.py:103 admin/ModuleProxy.py:119
 #: admin/PageInfoSource.py:156
 msgid "Value"
 msgstr "值"
@@ -365,8 +405,8 @@ msgid ""
 msgstr "公共网页目录的内容将应用于配置."
 
 #: admin/ModuleDirectory.py:22 admin/ModuleDirectory.py:24
-#: admin/Wizard_Django.py:175 admin/Wizard_Django.py:177
-#: admin/Wizard_Drupal.py:228 admin/Wizard_RoR.py:234 admin/Wizard_RoR.py:236
+#: admin/Wizard_Django.py:174 admin/Wizard_Django.py:176
+#: admin/Wizard_Drupal.py:228 admin/Wizard_RoR.py:236 admin/Wizard_RoR.py:238
 #: admin/Wizard_WordPress.py:185
 msgid "Web Directory"
 msgstr "网页目录"
@@ -477,7 +517,7 @@ msgstr "重定向"
 #: admin/ModuleErrorRedir.py:41 admin/ModuleErrorRedir.py:52
 #: admin/ModuleRedir.py:35 admin/PageInfoSource.py:182
 #: admin/PageInfoSource.py:210 admin/PageInfoSource.py:239
-#: admin/PageVServer.py:349
+#: admin/PageVServer.py:350
 msgid "Type"
 msgstr "类型"
 
@@ -790,7 +830,7 @@ msgstr "LDAP 链接"
 msgid "The HTTP method that should match this rule."
 msgstr "HTTP 方法将被此规则验证."
 
-#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:523
+#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:525
 msgid "Method"
 msgstr "方式"
 
@@ -984,7 +1024,7 @@ msgid "Redirections"
 msgstr "重定向"
 
 #: admin/ModuleRedir.py:15 admin/ModuleRehost.py:28 admin/ModuleRehost.py:32
-#: admin/consts.py:141
+#: admin/consts.py:142
 msgid "Regular Expressions"
 msgstr "正则表达式"
 
@@ -1068,7 +1108,7 @@ msgstr "下载开放时间 - 单位：秒. 默认值: 60."
 msgid "Secret"
 msgstr "保密"
 
-#: admin/ModuleSecdownload.py:39
+#: admin/ModuleSecdownload.py:39 admin/PageEntry.py:225
 msgid "Timeout"
 msgstr "超时"
 
@@ -1195,7 +1235,7 @@ msgid "Help"
 msgstr "帮助"
 
 #: admin/Page.py:167 admin/PageAdvanced.py:123 admin/PageStatus.py:60
-#: admin/PageVServer.py:492
+#: admin/PageVServer.py:494
 msgid "Status"
 msgstr "状态"
 
@@ -1505,35 +1545,40 @@ msgid "Allows to specify an alternative document root path."
 msgstr "允许指定的替代文件根路径."
 
 #: admin/PageEntry.py:16
+#, fuzzy
+msgid "Apply a custom timeout to the connections matching this rule."
+msgstr "没有登录请求匹配这条规则."
+
+#: admin/PageEntry.py:17
 msgid "How the connection will be handled."
 msgstr "连接将被怎么处理."
 
-#: admin/PageEntry.py:17
+#: admin/PageEntry.py:18
 msgid "Enable to allow access to the resource only by https."
 msgstr "启用只有通过HTTPS才允许访问资源."
 
-#: admin/PageEntry.py:18
+#: admin/PageEntry.py:19
 msgid "List of IPs and subnets allowed to access the resource."
 msgstr "列表中的IP和子网允许访问该资源."
 
-#: admin/PageEntry.py:19
+#: admin/PageEntry.py:20
 msgid "Which, if any, will be the authentication method."
 msgstr "其中，如果有的话，将使用此验证方法."
 
-#: admin/PageEntry.py:20
+#: admin/PageEntry.py:21
 msgid "Points how long the files should be cached"
 msgstr "多久文件应当缓存"
 
-#: admin/PageEntry.py:21
+#: admin/PageEntry.py:22
 msgid ""
 "Set an outbound traffic limit. It must be specified in Bytes per second."
 msgstr "启用了流量限制.必须指定每秒字节数(Bytes/s)"
 
-#: admin/PageEntry.py:22
+#: admin/PageEntry.py:23
 msgid "Do not log requests matching this rule."
 msgstr "没有登录请求匹配这条规则."
 
-#: admin/PageEntry.py:23
+#: admin/PageEntry.py:24
 msgid ""
 "How long from the object can be cached.<br />\n"
 "The <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> suffixes are allowed for "
@@ -1543,98 +1588,108 @@ msgstr ""
 "单位 <b>m</b>, <b>h</b>, <b>d</b> and <b>w</b> 分别对应 分,时,天, 周. 例: "
 "2d.\n"
 
-#: admin/PageEntry.py:35
+#: admin/PageEntry.py:37
 msgid "Behavior rules"
 msgstr "行为规则"
 
-#: admin/PageEntry.py:152 admin/PageInfoSource.py:291
+#: admin/PageEntry.py:154 admin/PageInfoSource.py:291
 msgid "Rule"
 msgstr "规则"
 
-#: admin/PageEntry.py:156 admin/PageEntry.py:164 admin/PageEntry.py:166
-#: admin/PageVServer.py:349
+#: admin/PageEntry.py:158 admin/PageEntry.py:166 admin/PageEntry.py:168
+#: admin/PageVServer.py:350
 msgid "Handler"
 msgstr "处理"
 
-#: admin/PageEntry.py:161 admin/PageVServer.py:511 admin/PageVServers.py:274
+#: admin/PageEntry.py:163 admin/PageVServer.py:513 admin/PageVServers.py:274
 #: admin/Wizard_Django.py:112
 msgid "Document Root"
 msgstr "根目录"
 
-#: admin/PageEntry.py:171
+#: admin/PageEntry.py:173
 msgid "Encoding"
 msgstr "压缩"
 
-#: admin/PageEntry.py:174 admin/PageEntry.py:223
-msgid "Expiration"
-msgstr "过期"
+#: admin/PageEntry.py:176 admin/PageVServer.py:350
+#, fuzzy
+msgid "Time"
+msgstr "超时"
 
-#: admin/PageEntry.py:177 admin/PageVServer.py:269
+#: admin/PageEntry.py:179 admin/PageVServer.py:269
 msgid "Security"
 msgstr "安全"
 
-#: admin/PageEntry.py:180 admin/PageEntry.py:213
+#: admin/PageEntry.py:182 admin/PageEntry.py:215
 msgid "Traffic Shaping"
 msgstr "流量限制"
 
-#: admin/PageEntry.py:200
+#: admin/PageEntry.py:202
 msgid "Matching Rule"
 msgstr "匹配规则"
 
-#: admin/PageEntry.py:211
+#: admin/PageEntry.py:213
 msgid "Limit traffic to"
 msgstr "限制流量到"
 
 #: admin/PageEntry.py:227
+#, fuzzy
+msgid "Connections timeout"
+msgstr "连接"
+
+#: admin/PageEntry.py:234
+msgid "Expiration"
+msgstr "过期"
+
+#: admin/PageEntry.py:238
 msgid "Time to expire"
 msgstr "过期时间"
 
-#: admin/PageEntry.py:229
+#: admin/PageEntry.py:240
 msgid "Content Expiration"
 msgstr "内容过期"
 
-#: admin/PageEntry.py:237 admin/PageEntry.py:250
+#: admin/PageEntry.py:248 admin/PageEntry.py:261
 msgid "Authentication"
 msgstr "认证"
 
-#: admin/PageEntry.py:239 admin/PageVServer.py:265 admin/PageVServers.py:144
+#: admin/PageEntry.py:250 admin/PageVServer.py:265 admin/PageVServers.py:144
 #: admin/Wizard_Django.py:120 admin/Wizard_Drupal.py:153
-#: admin/Wizard_Mailman.py:132 admin/Wizard_RoR.py:172
+#: admin/Wizard_Mailman.py:132 admin/Wizard_RoR.py:173
 #: admin/Wizard_WordPress.py:115
 msgid "Logging"
 msgstr "启用日志"
 
-#: admin/PageEntry.py:241
+#: admin/PageEntry.py:252
 #, fuzzy
 msgid "Skip Logging"
 msgstr "不启用日志"
 
-#: admin/PageEntry.py:244
+#: admin/PageEntry.py:255
 msgid "Access Restrictions"
 msgstr "访问限制"
 
-#: admin/PageEntry.py:246
+#: admin/PageEntry.py:257
 msgid "Only https"
 msgstr "只允许 https"
 
-#: admin/PageEntry.py:247
+#: admin/PageEntry.py:258
 msgid "Allow From"
 msgstr "允许来自"
 
-#: admin/PageEntry.py:252
+#: admin/PageEntry.py:263
 msgid "Validation Mechanism"
 msgstr "验证机制"
 
-#: admin/PageEntry.py:270
+#: admin/PageEntry.py:281
 msgid "Information Encoders"
 msgstr "数据压缩"
 
-#: admin/PageEntry.py:273
+#: admin/PageEntry.py:284
 #, python-format
 msgid "Use the %s encoder whenever the client requests it."
 msgstr "每当客户端请求时使用 %s 压缩."
 
-#: admin/PageEntry.py:275
+#: admin/PageEntry.py:286
 #, fuzzy
 msgid "Allow"
 msgstr "允许 "
@@ -1691,7 +1746,7 @@ msgstr "报告"
 msgid "Feedback: Thank you"
 msgstr "反馈信息: 谢谢"
 
-#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:374
+#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:375
 #: admin/consts.py:87
 msgid "Default"
 msgstr "默认"
@@ -1772,7 +1827,7 @@ msgstr "快速配置"
 msgid "General Settings"
 msgstr "一般设置"
 
-#: admin/PageGeneral.py:59 admin/PageVServer.py:515
+#: admin/PageGeneral.py:59 admin/PageVServer.py:517
 msgid "Network"
 msgstr "网络"
 
@@ -2220,31 +2275,31 @@ msgstr "服务器信息"
 
 #: admin/PageStatus.py:172
 #, fuzzy
-msgid "Accepted Connections"
-msgstr "被使用的域名"
+msgid "Connections / Requests"
+msgstr "连接"
 
 #: admin/PageStatus.py:173
 #, fuzzy
 msgid "Connections Timeout"
 msgstr "连接"
 
-#: admin/PageStatus.py:178 admin/PageVServer.py:561
+#: admin/PageStatus.py:178 admin/PageVServer.py:563
 msgid "1 month"
 msgstr ""
 
-#: admin/PageStatus.py:179 admin/PageVServer.py:562
+#: admin/PageStatus.py:179 admin/PageVServer.py:564
 msgid "1 week"
 msgstr ""
 
-#: admin/PageStatus.py:180 admin/PageVServer.py:563
+#: admin/PageStatus.py:180 admin/PageVServer.py:565
 msgid "1 day"
 msgstr ""
 
-#: admin/PageStatus.py:181 admin/PageVServer.py:564
+#: admin/PageStatus.py:181 admin/PageVServer.py:566
 msgid "6 hours"
 msgstr ""
 
-#: admin/PageStatus.py:182 admin/PageVServer.py:565
+#: admin/PageStatus.py:182 admin/PageVServer.py:567
 msgid "1 hour"
 msgstr ""
 
@@ -2494,142 +2549,133 @@ msgstr "错误处理"
 msgid "Rule Type"
 msgstr "规则类型"
 
-#: admin/PageVServer.py:349
+#: admin/PageVServer.py:350
 msgid "Target"
 msgstr "目标"
 
-#: admin/PageVServer.py:349 admin/PageVServers.py:144
+#: admin/PageVServer.py:350 admin/PageVServers.py:144
 msgid "Root"
 msgstr "网站根目录"
 
-#: admin/PageVServer.py:349
+#: admin/PageVServer.py:350
 msgid "Auth"
 msgstr "认证"
 
-#: admin/PageVServer.py:349
+#: admin/PageVServer.py:350
 msgid "Enc"
 msgstr "压缩"
 
-#: admin/PageVServer.py:349
+#: admin/PageVServer.py:350
 msgid "Exp"
 msgstr "到期"
 
-#: admin/PageVServer.py:349
+#: admin/PageVServer.py:350
 msgid "Final"
 msgstr "启用"
 
-#: admin/PageVServer.py:480 admin/PageVServers.py:324
+#: admin/PageVServer.py:482 admin/PageVServers.py:324
 msgid "<h2>Wizards</h2>"
 msgstr "新建向导"
 
-#: admin/PageVServer.py:485
+#: admin/PageVServer.py:487
 msgid "/~user directories"
 msgstr "/~user 目录"
 
-#: admin/PageVServer.py:491
+#: admin/PageVServer.py:493
 msgid "Disable"
 msgstr "禁止"
 
-#: admin/PageVServer.py:494
+#: admin/PageVServer.py:496
 msgid "Directory name"
 msgstr "目录名"
 
-#: admin/PageVServer.py:504
+#: admin/PageVServer.py:506
 msgid "Server ID"
 msgstr "服务器 ID"
 
-#: admin/PageVServer.py:506
+#: admin/PageVServer.py:508
 msgid "Virtual Server nickname"
 msgstr "虚拟主机名称"
 
-#: admin/PageVServer.py:509
+#: admin/PageVServer.py:511
 msgid "Paths"
 msgstr "路径"
 
-#: admin/PageVServer.py:512
+#: admin/PageVServer.py:514
 msgid "Directory Indexes"
 msgstr "目录首页设置"
 
-#: admin/PageVServer.py:517
+#: admin/PageVServer.py:519
 msgid "Keep-alive"
 msgstr "保持活动连接"
 
-#: admin/PageVServer.py:518
+#: admin/PageVServer.py:520
 msgid "Max Upload Size"
 msgstr "允许上传大小"
 
-#: admin/PageVServer.py:521
+#: admin/PageVServer.py:523
 msgid "Advanced Virtual Hosting"
 msgstr "高级虚拟主机"
 
-#: admin/PageVServer.py:538
+#: admin/PageVServer.py:540
 #, fuzzy
 msgid "Statistics"
 msgstr "流量统计"
 
-#: admin/PageVServer.py:541 admin/PageVServer.py:543
+#: admin/PageVServer.py:543 admin/PageVServer.py:545
 #, fuzzy
 msgid "Collect Statistics"
 msgstr "流量统计"
 
-#: admin/PageVServer.py:589
+#: admin/PageVServer.py:591
 msgid "Logging Format"
 msgstr "日志格式"
 
-#: admin/PageVServer.py:591
+#: admin/PageVServer.py:593
 msgid "Format"
 msgstr "格式"
 
-#: admin/PageVServer.py:602
+#: admin/PageVServer.py:604
 msgid "Accesses"
 msgstr "访问"
 
-#: admin/PageVServer.py:608 admin/PageVServer.py:631
+#: admin/PageVServer.py:610 admin/PageVServer.py:633
 msgid "Filename"
 msgstr "文件名"
 
-#: admin/PageVServer.py:612 admin/PageVServer.py:635
+#: admin/PageVServer.py:614 admin/PageVServer.py:637
 msgid "Command"
 msgstr "命令"
 
-#: admin/PageVServer.py:625
+#: admin/PageVServer.py:627
 msgid "Errors"
 msgstr "错误"
 
-#: admin/PageVServer.py:643
+#: admin/PageVServer.py:645
 msgid "Writers"
 msgstr "Writers"
 
-#: admin/PageVServer.py:646
+#: admin/PageVServer.py:648
 msgid "Options"
 msgstr "选项"
 
-#: admin/PageVServer.py:652
+#: admin/PageVServer.py:654
 msgid "Accept Forwarded IPs"
 msgstr "接受转发IPs"
 
-#: admin/PageVServer.py:654
-msgid "Don't check origin"
-msgstr "不检查来源"
-
-#: admin/PageVServer.py:656
-#, fuzzy
-msgid "Accept from Hosts"
-msgstr "接受域"
-
-#: admin/PageVServer.py:664
+#: admin/PageVServer.py:666
 msgid "Host names"
 msgstr "主机名称"
 
-#: admin/PageVServer.py:671
+#: admin/PageVServer.py:673
 msgid "Matching method"
 msgstr "匹配方法"
 
-#: admin/PageVServer.py:722
+#: admin/PageVServer.py:724
 msgid "Filename must be set"
 msgstr "必须设置文件名"
 
-#: admin/PageVServer.py:762
+#: admin/PageVServer.py:764
 msgid "Template: "
 msgstr "日志格式: "
 
@@ -2802,35 +2848,35 @@ msgstr ""
 msgid "New virtual server based on a Django project."
 msgstr ""
 
-#: admin/Wizard_Django.py:100 admin/Wizard_Django.py:166
+#: admin/Wizard_Django.py:100 admin/Wizard_Django.py:165
 #, fuzzy
 msgid "Django Wizard"
 msgstr "通配符"
 
 #: admin/Wizard_Django.py:109 admin/Wizard_Mailman.py:120
-#: admin/Wizard_RoR.py:159
+#: admin/Wizard_RoR.py:160
 #, fuzzy
 msgid "New Virtual Server"
 msgstr "虚拟主机"
 
 #: admin/Wizard_Django.py:111 admin/Wizard_Drupal.py:149
-#: admin/Wizard_Mailman.py:122 admin/Wizard_RoR.py:161
+#: admin/Wizard_Mailman.py:122 admin/Wizard_RoR.py:162
 #: admin/Wizard_WordPress.py:111
 #, fuzzy
 msgid "New Host Name"
 msgstr "新主机别名"
 
-#: admin/Wizard_Django.py:115 admin/Wizard_Django.py:180
+#: admin/Wizard_Django.py:115 admin/Wizard_Django.py:179
 msgid "Django Project"
 msgstr ""
 
-#: admin/Wizard_Django.py:117 admin/Wizard_Django.py:182
-#: admin/Wizard_RoR.py:168 admin/Wizard_RoR.py:243
+#: admin/Wizard_Django.py:117 admin/Wizard_Django.py:181
+#: admin/Wizard_RoR.py:169 admin/Wizard_RoR.py:245
 #, fuzzy
 msgid "Project Directory"
 msgstr "网页目录"
 
-#: admin/Wizard_Django.py:160
+#: admin/Wizard_Django.py:159
 msgid "New directory based on a Django project."
 msgstr ""
 
@@ -3044,27 +3090,27 @@ msgstr ""
 msgid "It does not look like a Ruby on Rails based project directory."
 msgstr ""
 
-#: admin/Wizard_RoR.py:113
+#: admin/Wizard_RoR.py:114
 msgid "Could not find the spawn-fcgi binary"
 msgstr ""
 
-#: admin/Wizard_RoR.py:147
+#: admin/Wizard_RoR.py:148
 msgid "New virtual server based on a Ruby on Rails project."
 msgstr ""
 
-#: admin/Wizard_RoR.py:153 admin/Wizard_RoR.py:228
+#: admin/Wizard_RoR.py:154 admin/Wizard_RoR.py:230
 msgid "Ruby on Rails Wizard"
 msgstr ""
 
-#: admin/Wizard_RoR.py:164 admin/Wizard_RoR.py:239
+#: admin/Wizard_RoR.py:165 admin/Wizard_RoR.py:241
 msgid "Ruby on Rails Project"
 msgstr ""
 
-#: admin/Wizard_RoR.py:169 admin/Wizard_RoR.py:244
+#: admin/Wizard_RoR.py:170 admin/Wizard_RoR.py:246
 msgid "RAILS_ENV environment"
 msgstr ""
 
-#: admin/Wizard_RoR.py:222
+#: admin/Wizard_RoR.py:224
 msgid "New directory based on a Ruby of Rails project."
 msgstr ""
 
@@ -3296,68 +3342,72 @@ msgid "HTTP Method"
 msgstr "HTTP 方法"
 
 #: admin/consts.py:135
+msgid "URL Argument"
+msgstr ""
+
+#: admin/consts.py:136
 msgid "GeoIP"
 msgstr "GeoIP"
 
-#: admin/consts.py:140
+#: admin/consts.py:141
 msgid "Wildcards"
 msgstr "通配符"
 
-#: admin/consts.py:142
+#: admin/consts.py:143
 #, fuzzy
 msgid "Server IP"
 msgstr "服务器 ID"
 
-#: admin/consts.py:146
+#: admin/consts.py:147
 msgid "Not set"
 msgstr "未设置"
 
-#: admin/consts.py:147
+#: admin/consts.py:148
 msgid "Already expired on 1970"
 msgstr "1970已经过期"
 
-#: admin/consts.py:148
+#: admin/consts.py:149
 msgid "Do not expire until 2038"
 msgstr "到2038都不会过期"
 
-#: admin/consts.py:149
+#: admin/consts.py:150
 msgid "Custom value"
 msgstr "自定义值"
 
-#: admin/consts.py:153
+#: admin/consts.py:154
 msgid "No TLS/SSL"
 msgstr "无 TLS/SSL"
 
-#: admin/consts.py:154
+#: admin/consts.py:155
 msgid "OpenSSL / libssl"
 msgstr "OpenSSL / libssl"
 
-#: admin/consts.py:158
+#: admin/consts.py:159
 msgid "Off"
 msgstr "关闭"
 
-#: admin/consts.py:159
+#: admin/consts.py:160
 msgid "Enhanced Virtual Hosting"
 msgstr "高级虚拟主机"
 
-#: admin/consts.py:163
+#: admin/consts.py:164
 msgid "Skip"
 msgstr "跳过"
 
-#: admin/consts.py:164
+#: admin/consts.py:165
 msgid "Accept"
 msgstr "接受"
 
-#: admin/consts.py:165
+#: admin/consts.py:166
 msgid "Require"
 msgstr "需要"
 
-#: admin/consts.py:169
+#: admin/consts.py:170
 #, fuzzy
 msgid "Disabled"
 msgstr "禁止"
 
-#: admin/consts.py:170
+#: admin/consts.py:171
 msgid "RRDtool graphs"
 msgstr ""
 
@@ -3489,6 +3539,10 @@ msgid "Virtual host nick is already being used."
 msgstr "虚拟主机名称正在被使用中"
 
 #, fuzzy
+#~ msgid "Accepted Connections"
+#~ msgstr "被使用的域名"
+
+#, fuzzy
 #~ msgid "Rendering interval (<i>secs</i>)"
 #~ msgstr "超时 (<i>秒</i>)"
 
@@ -3546,9 +3600,6 @@ msgstr "虚拟主机名称正在被使用中"
 
 #~ msgid "no"
 #~ msgstr "否"
-
-#~ msgid "Accept X-Real-IP"
-#~ msgstr "允许 X-Real-IP"
 
 #~ msgid "Accept all X-Real-IPs"
 #~ msgstr "允许所有有  X-Real-IPs"
