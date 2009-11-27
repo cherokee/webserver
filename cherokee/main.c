@@ -47,6 +47,21 @@
 # include "getopt/getopt.h"
 #endif
 
+
+/* union semun is defined by including <sys/sem.h>
+ * according to X/OPEN we have to define it ourselves:
+ */
+#ifndef HAVE_SEMUN
+union semun {
+	int                 val;
+	struct semid_ds    *buf;
+	unsigned short int *array;
+	struct seminfo     *__buf;
+};
+# undef  HAVE_SEMUN
+# define HAVE_SEMUN 1
+#endif
+
 #define DELAY_ERROR       3000 * 1000
 #define DELAY_RESTARTING   500 * 1000
 

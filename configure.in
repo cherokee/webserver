@@ -816,6 +816,27 @@ if test "x$sysv_sem" = xyes; then
 fi
 AM_CONDITIONAL(USE_SYSV_SEMAPHORES, test "x$sysv_sem" = xyes)
 
+dnl union semun
+dnl
+AC_MSG_CHECKING([for union semun])
+AC_CACHE_VAL(ac_cv_struct_semun, [
+   AC_TRY_COMPILE(
+	[
+	   #include <sys/types.h>
+	   #include <sys/ipc.h>
+	   #include <sys/sem.h>;
+     ],[
+	   union semun semdat;
+	],
+	   ac_cv_struct_semun=yes,
+	   ac_cv_struct_semun=no
+     )
+])
+AC_MSG_RESULT($ac_cv_struct_semun)
+if test "$ac_cv_struct_semun" = "yes"; then
+	AC_DEFINE(HAVE_SEMUN, 1, [Define if sys/sem.h defines struct semun])
+fi
+
 
 # From etr_socket_nsl.m4
 ETR_SOCKET_NSL
