@@ -1,0 +1,54 @@
+== link:index.html[Index] -> link:dev.html[Development info]
+
+Development: Quality Assurance
+-------------------------------
+
+Cherokee has an automated battery of scripts intentded to prevent
+regressions.
+
+You should run all the QA tests before whenever you implement changes
+to the code base. Not only will this catch most simple errors and
+prevent regressions from appearing. It will also help you a lot in
+your development process.
+
+Everything is located under the `/qa` directory, so have a look there.
+
+Not only that. The full QA bench can be run through a Cherokee proxy
+server. This is something implemented in order to test the
+handler_proxy module when it was incorporated to Cherokee's code base.
+
+The idea is pretty simple, and the process straightforward. We tell
+the QA bench to run through a proxy located in localhost:2222, for
+instance. We also tell it to stop until we hit enter (-d1):
+
+----------------
+   cd qa
+   ./run-tests.py -Plocalhost:2222 -d1
+----------------
+
+As you'll see, it will generate a configuration file for us to launch
+the proxy server:
+
+----------------
+  Server
+         PID: 29909
+        Path: ../cherokee/cherokee-worker
+        Mods: ../cherokee/.libs/
+        Deps: ../cherokee/
+       Panic: ../cherokee/cherokee-panic
+  Proxy conf: /tmp/tmprV6k4Hcherokee_proxy_cfg
+----------------
+
+At this point, we only have to open a new terminal, launch the
+Cherokee proxy server and hit enter to unlock the tester side of the
+QA bench:
+
+
+----------------
+    cherokee -C /tmp/tmprV6k4Hcherokee_proxy_cfg
+----------------
+
+Almost every single QA test can be run through the proxy server. There
+are a few exceptions though. Tests involving the X-Real-IP header will
+be skipped, for example. It is not a big deal anyway, those are around
+5 o 6 test out of almost 250.

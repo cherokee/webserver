@@ -118,7 +118,8 @@ other_errors.html \
 dev.html \
 dev_debug.html \
 dev_cherokee.conf.html \
-dev_issues.html
+dev_issues.html \
+dev_qa.html
 
 docmediacssdir = $(docdir)/media/css/
 docmediacss_DATA = \
