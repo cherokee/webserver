@@ -15,7 +15,7 @@ NOTE_ROR_DIR    = N_("Local path to the Ruby on Rails based project.")
 NOTE_NEW_HOST   = N_("Name of the new domain that will be created.")
 NOTE_NEW_DIR    = N_("Directory of the web directory where the Ruby on Rails project will live in.")
 NOTE_ENV        = N_("Value of the RAILS_ENV variable.")
-NOTE_MTD        = N_("It is recommended to proxy the best available option, but FastCGI can also be used.")
+NOTE_METHOD     = N_("It is recommended to proxy the best available option, but FastCGI can also be used.")
 
 ERROR_DISPATCH  = N_("<p>Even though the directory looks like a Ruby on Rails project, the public/dispatch.fcgi file wasn't found.</p>")
 ERROR_EXAMPLE   = N_("<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you might want to rename it.</p>")
@@ -30,8 +30,8 @@ RAILS_ENV = [
     ('',            'Empty')
 ]
 
-RAILS_MTD = [
-    ('proxy',  'Proxy'),
+RAILS_METHOD = [
+    ('proxy',  'HTTP proxy'),
     ('fcgi',   'FastCGI')
 ]
 
@@ -198,13 +198,17 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
 
         # Trim deployment options if needed
         if not path_find_binary (DEFAULT_BINS):
-            RAILS_ENV.remove(('fcgi', 'FastCGI'))
+            RAILS_METHOD.remove(('fcgi', 'FastCGI'))
 
         table = TableProps()
         self.AddPropEntry   (table, _('Project Directory'),     'tmp!wizard_ror!ror_dir', _(NOTE_ROR_DIR))
-        self.AddPropOptions (table, _('Deployment method'),     'tmp!wizard_ror!ror_mtd', RAILS_MTD, _(NOTE_MTD))
         self.AddPropOptions (table, _('RAILS_ENV environment'), 'tmp!wizard_ror!ror_env', RAILS_ENV, _(NOTE_ENV))
+        if len(RAILS_METHOD) > 1:
+            self.AddPropOptions (table, _('Deployment method'), 'tmp!wizard_ror!ror_method', RAILS_METHOD, _(NOTE_METHOD))
         txt += self.Indent(table)
+
+        if not len(RAILS_METHOD) > 1:
+            txt += self.HiddenInput ('tmp!wizard_ror!ror_method', RAILS_METHOD[0][0])
 
         txt += '<h2>%s</h2>' % (_("Logging"))
         txt += self._common_add_logging()
@@ -222,17 +226,11 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
 
         self._cfg_clean_values (post)
 
-        # Check whether dispatch.fcgi is present
-        if post.get_val('tmp!wizard_ror!ror_dir'):
-            error = self._op_apply_dispatch_fcgi (post)
-        if error:
-            return
-
         # Incoming info
-        ror_dir  = post.pop('tmp!wizard_ror!ror_dir')
-        new_host = post.pop('tmp!wizard_ror!new_host')
-        ror_env  = post.pop('tmp!wizard_ror!ror_env')
-        ror_mtd  = post.pop('tmp!wizard_ror!ror_mtd')
+        ror_dir    = post.pop('tmp!wizard_ror!ror_dir')
+        new_host   = post.pop('tmp!wizard_ror!new_host')
+        ror_env    = post.pop('tmp!wizard_ror!ror_env')
+        ror_method = post.pop('tmp!wizard_ror!ror_method')
 
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
@@ -244,9 +242,15 @@ class Wizard_VServer_RoR (CommonMethods, WizardPage):
         # Deployment method distinction
         CONFIG = CONFIG_VSRV
         SRC    = SOURCE
-        if ror_mtd == 'fcgi':
+        if ror_method == 'fcgi':
             CONFIG += CONFIG_VSRV_FCGI
             SRC    += SOURCE_FCGI
+
+            # Check whether dispatch.fcgi is present
+            if post.get_val('tmp!wizard_ror!ror_dir'):
+                error = self._op_apply_dispatch_fcgi (post)
+                if error:
+                    return
         else:
             CONFIG += CONFIG_VSRV_PROXY
             SRC    += SOURCE_PROXY
@@ -292,13 +296,17 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
 
         # Trim deployment options if needed
         if not path_find_binary (DEFAULT_BINS):
-            RAILS_ENV.remove(('fcgi', 'FastCGI'))
+            RAILS_METHOD.remove(('fcgi', 'FastCGI'))
 
         table = TableProps()
         self.AddPropEntry   (table, _('Project Directory'),     'tmp!wizard_ror!ror_dir', _(NOTE_ROR_DIR))
-        self.AddPropOptions (table, _('Deployment method'),     'tmp!wizard_ror!ror_mtd', RAILS_MTD, _(NOTE_MTD))
         self.AddPropOptions (table, _('RAILS_ENV environment'), 'tmp!wizard_ror!ror_env', RAILS_ENV, NOTE_ENV)
+        if len(RAILS_METHOD) > 1:
+            self.AddPropOptions (table, _('Deployment method'), 'tmp!wizard_ror!ror_method', RAILS_METHOD, _(NOTE_METHOD))
         txt += self.Indent(table)
+
+        if not len(RAILS_METHOD) > 1:
+            txt += self.HiddenInput ('tmp!wizard_ror!ror_method', RAILS_METHOD[0][0])
 
         form = Form (url_pre, add_submit=True, auto=False)
         return form.Render(txt, DEFAULT_SUBMIT_VALUE)
@@ -314,17 +322,11 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
 
         self._cfg_clean_values (post)
 
-        # Check whether dispatch.fcgi is present
-        if post.get_val('tmp!wizard_ror!ror_dir'):
-            error = self._op_apply_dispatch_fcgi (post)
-        if error:
-            return
-
         # Incoming info
-        ror_dir = post.pop('tmp!wizard_ror!ror_dir')
-        webdir  = post.pop('tmp!wizard_ror!new_webdir')
-        ror_env = post.pop('tmp!wizard_ror!ror_env')
-        ror_mtd  = post.pop('tmp!wizard_ror!ror_mtd')
+        ror_dir    = post.pop('tmp!wizard_ror!ror_dir')
+        webdir     = post.pop('tmp!wizard_ror!new_webdir')
+        ror_env    = post.pop('tmp!wizard_ror!ror_env')
+        ror_method = post.pop('tmp!wizard_ror!ror_method')
 
         # Locals
         rule_num, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
@@ -336,9 +338,15 @@ class Wizard_Rules_RoR (CommonMethods, WizardPage):
         # Deployment method distinction
         CONFIG = CONFIG_RULES
         SRC    = SOURCE
-        if ror_mtd == 'fcgi':
+        if ror_method == 'fcgi':
             CONFIG += CONFIG_RULES_FCGI
             SRC    += SOURCE_FCGI
+
+            # Check whether dispatch.fcgi is present
+            if post.get_val('tmp!wizard_ror!ror_dir'):
+                error = self._op_apply_dispatch_fcgi (post)
+                if error:
+                    return
         else:
             CONFIG += CONFIG_RULES_PROXY
             SRC    += SOURCE_PROXY
