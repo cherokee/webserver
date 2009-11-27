@@ -444,6 +444,18 @@ build_request (cherokee_handler_proxy_t *hdl,
 		hdl->pconn->keepalive_in = false;
 	}
 
+	/* Add header "Content-Length:" */
+	if (conn->post.is_set) {
+		off_t post_len;
+
+		ret = cherokee_post_get_len (&conn->post, &post_len);
+		if (ret == ret_ok) {
+			cherokee_buffer_add_str      (buf, "Content-Length: ");
+			cherokee_buffer_add_ullong10 (buf, (cullong_t)post_len);
+			cherokee_buffer_add_str      (buf, CRLF);
+		}
+	}
+
 	/* Headers
 	 */
 	str = strchr (conn->incoming_header.buf, CHR_CR);
@@ -475,6 +487,7 @@ build_request (cherokee_handler_proxy_t *hdl,
 		    (! strncasecmp (begin, "Expect:", 7)) ||
 		    (! strncasecmp (begin, "Connection:", 11)) ||
 		    (! strncasecmp (begin, "Keep-Alive:", 11)) ||
+		    (! strncasecmp (begin, "Content-Length:", 15)) ||
 		    (! strncasecmp (begin, "Transfer-Encoding:", 18)))
 		{
 			goto next;

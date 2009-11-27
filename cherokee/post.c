@@ -39,6 +39,7 @@ cherokee_post_init (cherokee_post_t *post)
 {
 	post->type              = post_undefined;
 	post->encoding          = post_enc_regular;
+	post->is_set            = false;
 
 	post->size              = 0;
 	post->received          = 0;
@@ -62,6 +63,7 @@ cherokee_post_mrproper (cherokee_post_t *post)
 
 	post->type              = post_undefined;
 	post->encoding          = post_enc_regular;
+	post->is_set            = false;
 
 	post->size              = 0;
 	post->received          = 0;
@@ -98,8 +100,9 @@ cherokee_post_set_len (cherokee_post_t *post, off_t len)
 {
 	ret_t ret;
 
-	post->type = (len > POST_SIZE_TO_DISK) ? post_in_tmp_file : post_in_memory;
-	post->size = len;
+	post->type   = (len > POST_SIZE_TO_DISK) ? post_in_tmp_file : post_in_memory;
+	post->size   = len;
+	post->is_set = true;
 
 	if (post->type == post_in_tmp_file) {
 		cherokee_buffer_add_buffer (&post->tmp_file, &cherokee_tmp_dir);
@@ -129,6 +132,8 @@ cherokee_post_set_encoding (cherokee_post_t          *post,
 
 	post->type     = post_in_memory;
 	post->encoding = enc;
+	post->is_set   = true;
+
 	return ret_ok;
 }
 
@@ -153,6 +158,7 @@ cherokee_post_got_all (cherokee_post_t *post)
 	SHOULDNT_HAPPEN;
 	return 0;
 }
+
 
 ret_t 
 cherokee_post_get_len (cherokee_post_t *post, off_t *len)

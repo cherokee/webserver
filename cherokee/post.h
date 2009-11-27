@@ -47,6 +47,7 @@ typedef enum {
 typedef struct {
 	cherokee_post_type_t     type;
 	cherokee_post_encoding_t encoding;
+	cherokee_boolean_t       is_set;
 
 	cherokee_boolean_t       chunked_last;
 	off_t                    chunked_processed;
