@@ -840,10 +840,17 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				break;
 			case ret_eagain:
 				return ret_eagain;
+			case ret_eof:
 			case ret_error:
-				hdl->pconn->keepalive_in = false;
-				conn->error_code = http_bad_gateway;
-				return ret_error;
+				if (hdl->respined) {
+					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
+					conn->error_code = http_bad_gateway;
+					hdl->pconn->keepalive_in = false;
+					return ret_error;
+				}
+
+				hdl->respined = true;
+				goto reconnect;
 			default:
 				hdl->pconn->keepalive_in = false;
 				conn->error_code = http_bad_gateway;
