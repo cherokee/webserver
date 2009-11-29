@@ -76,7 +76,7 @@ typedef struct {
 	cherokee_source_t                   *src_ref;
 	cherokee_handler_proxy_conn_t       *pconn;
 	cherokee_buffer_t                    tmp;
-	cherokee_boolean_t                   respined;
+	cherokee_boolean_t                   respinned;
 	cherokee_boolean_t                   got_all;
 
 	cherokee_handler_proxy_init_phase_t  init_phase;

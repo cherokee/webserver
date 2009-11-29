@@ -719,9 +719,9 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		TRACE(ENTRIES, "Entering phase '%s'\n", "preconnect");
 	
 	case proxy_init_preconnect:
-		/* Configure if respined
+		/* Configure if respinned
 		 */
-		if (hdl->respined) {
+		if (hdl->respinned) {
 			cherokee_socket_clean (&hdl->pconn->socket);
 			cherokee_socket_close (&hdl->pconn->socket);
 		}
@@ -754,7 +754,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			case ret_eagain:
 				return ret_eagain;
 			case ret_deny:
-				if (hdl->respined) {
+				if (hdl->respinned) {
 					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 					conn->error_code = http_bad_gateway;
 					hdl->pconn->keepalive_in = false;
@@ -774,7 +774,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 					}
 				}
 
-				hdl->respined = true;
+				hdl->respinned = true;
 				goto reconnect;
 			default:
 				hdl->pconn->keepalive_in = false;
@@ -813,14 +813,14 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			return ret_eagain;
 		case ret_eof:
 		case ret_error:
-			if (hdl->respined) {
+			if (hdl->respinned) {
 				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 				conn->error_code = http_bad_gateway;
 				hdl->pconn->keepalive_in = false;
 				return ret_error;
 			}
 
-			hdl->respined = true;
+			hdl->respinned = true;
 			goto reconnect;
 		default:
 			hdl->pconn->keepalive_in = false;
@@ -842,14 +842,14 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 				return ret_eagain;
 			case ret_eof:
 			case ret_error:
-				if (hdl->respined) {
+				if (hdl->respinned) {
 					cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 					conn->error_code = http_bad_gateway;
 					hdl->pconn->keepalive_in = false;
 					return ret_error;
 				}
 
-				hdl->respined = true;
+				hdl->respinned = true;
 				goto reconnect;
 			default:
 				hdl->pconn->keepalive_in = false;
@@ -891,7 +891,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 		case ret_error:
 			/* The socket isn't really connected
 			 */
-			if (hdl->respined) {
+			if (hdl->respinned) {
 				cherokee_balancer_report_fail (props->balancer, conn, hdl->src_ref);
 				hdl->pconn->keepalive_in = false;
 				conn->error_code = http_bad_gateway;
@@ -899,7 +899,7 @@ cherokee_handler_proxy_init (cherokee_handler_proxy_t *hdl)
 			}
 
 			cherokee_post_walk_reset (&conn->post);
-			hdl->respined = true;
+			hdl->respinned = true;
 			goto reconnect;
 		default:
 			hdl->pconn->keepalive_in = false;
@@ -1427,7 +1427,7 @@ cherokee_handler_proxy_new (cherokee_handler_t     **hdl,
 	n->pconn      = NULL;
 	n->src_ref    = NULL;
 	n->init_phase = proxy_init_start;
-	n->respined   = false;
+	n->respinned  = false;
 	n->got_all    = false;
 
 	cherokee_buffer_init (&n->tmp);
