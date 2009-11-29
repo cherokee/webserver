@@ -57,9 +57,9 @@
 #endif
 
 #ifdef MAP_FILE
-# define MAP_OPTIONS MAP_SHARED | MAP_FILE
+# define MAP_OPTIONS MAP_PRIVATE | MAP_FILE
 #else
-# define MAP_OPTIONS MAP_SHARED
+# define MAP_OPTIONS MAP_PRIVATE
 #endif
 
 

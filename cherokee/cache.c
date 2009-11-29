@@ -26,8 +26,10 @@
 #include "cache.h"
 #include "util.h"
 
-#define ENTRIES          "cache"
-#define DEFAULT_MAX_SIZE 100 * 4 
+#define ENTRIES "cache"
+
+/* must be multiple of 4 */
+#define DEFAULT_MAX_SIZE 4 * 10
 
 struct cherokee_cache_priv {
 #ifdef HAVE_PTHREAD

@@ -34,7 +34,7 @@ vserver!1!logger!error!filename = %localstatedir%/log/cherokee.error
 
 vserver!1!rule!1!match = default
 vserver!1!rule!1!handler = common
-vserver!1!rule!1!handler!iocache = 0
+vserver!1!rule!1!handler!iocache = 1
 
 vserver!1!rule!2!match = directory
 vserver!1!rule!2!match!directory = /icons
