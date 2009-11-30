@@ -214,7 +214,8 @@ cherokee_connection_free (cherokee_connection_t  *conn)
 	}
 
 	if (conn->arguments != NULL) {
-		cherokee_avl_free (conn->arguments, cherokee_buffer_free);
+		cherokee_avl_free (conn->arguments,
+				   (cherokee_func_free_t) cherokee_buffer_free);
 		conn->arguments = NULL;
 	}
 
@@ -324,7 +325,8 @@ cherokee_connection_clean (cherokee_connection_t *conn)
 	}
 
 	if (conn->arguments != NULL) {
-		cherokee_avl_free (conn->arguments, cherokee_buffer_free);
+		cherokee_avl_free (conn->arguments,
+				   (cherokee_func_free_t) cherokee_buffer_free);
 		conn->arguments = NULL;
 	}
 
