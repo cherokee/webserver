@@ -377,12 +377,29 @@ ensure_db_exists (cherokee_buffer_t *path_database)
 static ret_t
 create_dirs (cherokee_rrd_connection_t *rrd_conn)
 {
-	int re;
+	int         re;
+	struct stat foo;
 
 	cherokee_buffer_add_str (&rrd_conn->path_databases, "/images");
 
 	re = access (rrd_conn->path_databases.buf, W_OK);
 	if (re != 0) {
+		/* Might exist w/ wrong permissions
+		 */
+		re = stat (rrd_conn->path_databases.buf, &foo);
+		if ((re == 0) ||
+		    ((re < 0) && (errno == EACCES)))
+		{
+			/* The parent directory is one to blame */
+			cherokee_buffer_drop_ending (&rrd_conn->path_databases, 7);
+
+			LOG_CRITICAL (CHEROKEE_ERROR_RRD_DIR_WRITE,
+				      rrd_conn->path_databases.buf);
+			return ret_error;
+		}
+
+		/* Create the directory
+		 */
 		cherokee_mkdir_p (&rrd_conn->path_databases, 0700);
 
 		re = access (rrd_conn->path_databases.buf, W_OK);
