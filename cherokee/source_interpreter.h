@@ -74,7 +74,7 @@ ret_t cherokee_source_interpreter_add_env   (cherokee_source_interpreter_t  *src
 					     char                           *val);
 
 ret_t cherokee_source_interpreter_spawn     (cherokee_source_interpreter_t  *src,
-					     cherokee_logger_t              *logger);
+					     cherokee_logger_writer_t       *error_writer);
 
 ret_t cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src, 
 						   cherokee_socket_t             *socket,

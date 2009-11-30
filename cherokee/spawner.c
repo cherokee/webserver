@@ -106,25 +106,19 @@ cherokee_spawner_free (void)
 
 #ifdef HAVE_POSIX_SHM
 static ret_t
-write_logger (cherokee_buffer_t *buf,
-	      cherokee_logger_t *logger)
+write_logger (cherokee_buffer_t        *buf,
+	      cherokee_logger_writer_t *error_writer)
 {
-	ret_t                     ret;
-	int                       val;
-	cherokee_logger_writer_t *writer = NULL;
+	ret_t ret;
+	int   val;
 
-	/* No log
+	/* No writer
 	 */
-	if (logger == NULL) {
-		goto nothing;
-	}
-
-	ret = cherokee_logger_get_error_writer (logger, &writer);
-	if ((ret != ret_ok) || (writer == NULL)) {
+	if (error_writer == NULL) {
 		goto nothing;
 	}
 	
-	switch (writer->type) {
+	switch (error_writer->type) {
 	case cherokee_logger_writer_stderr:
 		val = 6;
 		cherokee_buffer_add      (buf, (char *)&val, sizeof(int));
@@ -132,10 +126,10 @@ write_logger (cherokee_buffer_t *buf,
 		cherokee_buffer_add_char (buf, '\0');
 		break;
 	case cherokee_logger_writer_file:
-		val = 5 + writer->filename.len;
+		val = 5 + error_writer->filename.len;
 		cherokee_buffer_add        (buf, (char *)&val, sizeof(int));
 		cherokee_buffer_add_str    (buf, "file,");
-		cherokee_buffer_add_buffer (buf, &writer->filename);
+		cherokee_buffer_add_buffer (buf, &error_writer->filename);
 		cherokee_buffer_add_char   (buf, '\0');
 		break;
 	default:
@@ -174,14 +168,14 @@ sem_unlock (int sem)
 }
 
 ret_t
-cherokee_spawner_spawn (cherokee_buffer_t  *binary,
-			cherokee_buffer_t  *user,
-			uid_t               uid,
-			gid_t               gid,
-			int                 env_inherited,
-			char              **envp,
-			cherokee_logger_t  *logger,
-			pid_t              *pid_ret)
+cherokee_spawner_spawn (cherokee_buffer_t         *binary,
+			cherokee_buffer_t         *user,
+			uid_t                      uid,
+			gid_t                      gid,
+			int                        env_inherited,
+			char                     **envp,
+			cherokee_logger_writer_t  *error_writer,
+			pid_t                     *pid_ret)
 {
 #ifdef HAVE_POSIX_SHM
 	char             **n;
@@ -240,7 +234,7 @@ cherokee_spawner_spawn (cherokee_buffer_t  *binary,
 	}
 
 	/* 4.- Error log */
-	write_logger (&tmp, logger);
+	write_logger (&tmp, error_writer);
 
 	/* 5.- PID (will be rewritten by the other side) */
 	pid_shm = (int *) (((char *)cherokee_spawn_shared.mem) + tmp.len);

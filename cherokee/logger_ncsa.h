@@ -45,7 +45,6 @@ typedef struct {
 	cherokee_buffer_t  useragent;
 
 	cherokee_logger_writer_t *writer_access;
-	cherokee_logger_writer_t *writer_error;
 } cherokee_logger_ncsa_t;
 
 #define LOG_NCSA(x) ((cherokee_logger_ncsa_t *)(x))
@@ -56,14 +55,11 @@ ret_t cherokee_logger_ncsa_configure (cherokee_config_node_t *conf, cherokee_ser
 
 /* virtual methods implementation
  */
-ret_t cherokee_logger_ncsa_init             (cherokee_logger_ncsa_t *logger);
-ret_t cherokee_logger_ncsa_free             (cherokee_logger_ncsa_t *logger);
+ret_t cherokee_logger_ncsa_init         (cherokee_logger_ncsa_t *logger);
+ret_t cherokee_logger_ncsa_free         (cherokee_logger_ncsa_t *logger);
 
-ret_t cherokee_logger_ncsa_flush            (cherokee_logger_ncsa_t *logger);
-ret_t cherokee_logger_ncsa_reopen           (cherokee_logger_ncsa_t *logger);
-ret_t cherokee_logger_ncsa_get_error_writer (cherokee_logger_ncsa_t *logger, cherokee_logger_writer_t **writer);
-
-ret_t cherokee_logger_ncsa_write_access     (cherokee_logger_ncsa_t *logger, cherokee_connection_t *conn);
-ret_t cherokee_logger_ncsa_write_error      (cherokee_logger_ncsa_t *logger, cherokee_buffer_t *error);
+ret_t cherokee_logger_ncsa_flush        (cherokee_logger_ncsa_t *logger);
+ret_t cherokee_logger_ncsa_reopen       (cherokee_logger_ncsa_t *logger);
+ret_t cherokee_logger_ncsa_write_access (cherokee_logger_ncsa_t *logger, cherokee_connection_t *conn);
 
 #endif /* CHEROKEE_LOGGER_NCSA_H */

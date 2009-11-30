@@ -91,17 +91,13 @@ skip_args (va_list ap, const char *prev_string)
 static ret_t
 report_error (cherokee_buffer_t *buf)
 {
-	cherokee_logger_t        *logger;
 	cherokee_logger_writer_t *writer = NULL;
 
-	/* Logging: 1st option - connection's logger
+	/* 1st Option, the thread variable
 	 */
-	logger = LOGGER (CHEROKEE_THREAD_PROP_GET (thread_logger_error_ptr));
-	if (logger != NULL) {
-		cherokee_logger_get_error_writer (logger, &writer);
-	}
+	writer = LOGGER_WRITER (CHEROKEE_THREAD_PROP_GET (thread_error_writer_ptr));
 
-	/* Logging: 2nd option - default logger
+	/* 2nd, the default error logger
 	 */
 	if (writer == NULL) {
 		writer = default_error_writer;

@@ -52,6 +52,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 	n->default_handler = NULL;
 	n->error_handler   = NULL;
 	n->logger          = NULL;
+	n->error_writer    = NULL;
 	n->priority        = 0;
 	n->keepalive       = true;
 	n->cryptor         = NULL;
@@ -134,6 +135,11 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	if (vserver->logger != NULL) {
 		cherokee_logger_free (vserver->logger);
 		vserver->logger = NULL;
+	}
+
+	if (vserver->error_writer != NULL) {
+		cherokee_logger_writer_free (vserver->error_writer);
+		vserver->error_writer = NULL;
 	}
 
 	if (vserver->collector != NULL) {
@@ -644,6 +650,29 @@ add_evhost (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 
 
 static ret_t 
+add_error_writer (cherokee_config_node_t    *config,
+		  cherokee_virtual_server_t *vserver)
+{
+	ret_t ret;
+
+	ret = cherokee_logger_writer_new (&vserver->error_writer);
+	if (unlikely (ret != ret_ok)) {
+		return ret;
+	}
+
+	ret = cherokee_logger_writer_configure (vserver->error_writer, config);
+	if (unlikely (ret != ret_ok)) {
+		return ret_ok;
+	}
+
+	TRACE (ENTRIES, "Added a virtual server error_writer, type=%d\n",
+	       vserver->error_writer->type);
+
+	return ret_ok;
+}
+
+
+static ret_t 
 add_logger (cherokee_config_node_t    *config,
 	    cherokee_virtual_server_t *vserver)
 {
@@ -780,6 +809,11 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "logger")) {
 		ret = add_logger (conf, vserver);
+		if (ret != ret_ok)
+			return ret;
+
+	} else if (equal_buf_str (&conf->key, "error_writer")) {
+		ret = add_error_writer (conf, vserver);
 		if (ret != ret_ok)
 			return ret;
 

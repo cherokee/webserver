@@ -446,14 +446,12 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 	 */
 	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(custom), config);
 
-	MODULE(n)->init             = (logger_func_init_t) cherokee_logger_custom_init;
-	MODULE(n)->free             = (logger_func_free_t) cherokee_logger_custom_free;
+	MODULE(n)->init         = (logger_func_init_t) cherokee_logger_custom_init;
+	MODULE(n)->free         = (logger_func_free_t) cherokee_logger_custom_free;
 
-	LOGGER(n)->flush            = (logger_func_flush_t) cherokee_logger_custom_flush;
-	LOGGER(n)->reopen           = (logger_func_reopen_t) cherokee_logger_custom_reopen;
-	LOGGER(n)->get_error_writer = (logger_func_get_error_writer_t)  cherokee_logger_custom_get_error_writer;
-	LOGGER(n)->write_error      = (logger_func_write_error_t) cherokee_logger_custom_write_error;
-	LOGGER(n)->write_access     = (logger_func_write_access_t) cherokee_logger_custom_write_access;
+	LOGGER(n)->flush        = (logger_func_flush_t) cherokee_logger_custom_flush;
+	LOGGER(n)->reopen       = (logger_func_reopen_t) cherokee_logger_custom_reopen;
+	LOGGER(n)->write_access = (logger_func_write_access_t) cherokee_logger_custom_write_access;
 
 	/* Init properties
 	 */
@@ -467,25 +465,12 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 		return ret_error;
 	}
 
-	ret = cherokee_config_node_get (config, "error", &subconf);
-	if (ret != ret_ok) {
-		LOG_CRITICAL (CHEROKEE_ERROR_LOGGER_NO_KEY, "error");
-		return ret_error;
-	}
-	ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &n->writer_error);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
-
-	/* Templates
+	/* Template
 	 */
 	ret = _init_template (n, &n->template_conn, config, "access_template");
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
 		return ret;
-
-	ret = _init_template (n, &n->template_error, config, "error_template");
-	if (ret != ret_ok)
-		return ret;
+	}
 
 	/* Callback init
 	 */
@@ -506,12 +491,9 @@ cherokee_logger_custom_init (cherokee_logger_custom_t *logger)
 	ret_t ret;
 
 	ret = cherokee_logger_writer_open (logger->writer_access);
-	if (ret != ret_ok)
+	if (ret != ret_ok) {
 		return ret;
-
-	ret = cherokee_logger_writer_open (logger->writer_error);
-	if (ret != ret_ok)
-		return ret;
+	}
 
 	return ret_ok;
 }
@@ -520,8 +502,6 @@ ret_t
 cherokee_logger_custom_free (cherokee_logger_custom_t *logger)
 {
 	cherokee_template_mrproper (&logger->template_conn);
-	cherokee_template_mrproper (&logger->template_error);
-
 	return ret_ok;
 }
 
@@ -534,23 +514,13 @@ cherokee_logger_custom_flush (cherokee_logger_custom_t *logger)
 ret_t
 cherokee_logger_custom_reopen (cherokee_logger_custom_t *logger)
 {
-	ret_t ret1;
-	ret_t ret2;
+	ret_t ret;
 
-	ret1 = cherokee_logger_writer_reopen (logger->writer_access);
-	ret2 = cherokee_logger_writer_reopen (logger->writer_error);
+	ret = cherokee_logger_writer_reopen (logger->writer_access);
+	if (ret != ret_ok) {
+		return ret;
+	}
 
-	if (ret1 != ret_ok)
-		return ret1;
-
-	return ret2;
-}
-
-ret_t
-cherokee_logger_custom_get_error_writer (cherokee_logger_custom_t  *logger,
-					 cherokee_logger_writer_t **writer)
-{
-	*writer = logger->writer_error;
 	return ret_ok;
 }
 
@@ -580,8 +550,9 @@ cherokee_logger_custom_write_access (cherokee_logger_custom_t *logger,
 		goto ok;
 
 	ret = cherokee_logger_writer_flush (logger->writer_access, true);
-	if (unlikely (ret != ret_ok))
+	if (unlikely (ret != ret_ok)) {
 		goto error;
+	}
 
 ok:
 	cherokee_logger_writer_release_buf (logger->writer_access);
@@ -592,39 +563,6 @@ error:
 	return ret_error;
 }
 
-ret_t
-cherokee_logger_custom_write_error (cherokee_logger_custom_t *logger,
-				    cherokee_buffer_t        *error)
-{
-	ret_t              ret;
-	cherokee_buffer_t *log;
-
-	/* Get the buffer
-	 */
-	cherokee_logger_writer_get_buf (logger->writer_error, &log);
-
-	/* Add the new string
-	 */
-	ret = cherokee_buffer_add_buffer (log, error);
-	if (unlikely (ret != ret_ok)) {
-		ret = ret_error;
-		goto out;
-	}
-
-	/* It's an error, flush it right away.
-	 */
-	ret = cherokee_logger_writer_flush (logger->writer_error, true);
-	if (unlikely (ret != ret_ok)) {
-		ret = ret_error;
-		goto out;
-	}
-
-	ret = ret_ok;
-
-out:
-	cherokee_logger_writer_release_buf (logger->writer_error);
-	return ret;
-}
 
 ret_t
 cherokee_logger_custom_write_string (cherokee_logger_custom_t *logger,

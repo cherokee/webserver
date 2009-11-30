@@ -105,6 +105,7 @@ class PageNewConfig (Page, FormHelper):
 
         self._cfg['server!bind!1!port']            = "1234"
         self._cfg['vserver!1!rule!5!handler!type'] = "normal"
+        self._cfg['vserver!1!error_writer']        = "strerr"
 
         self._cfg['source!2!type'] = "host"
         self._cfg['source!2!nick'] = "localhost 8000"

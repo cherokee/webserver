@@ -583,81 +583,70 @@ class PageVServer (PageMenu, FormHelper):
         return txt
 
     def _render_logger (self, host):
-        txt   = ""
+        txt = ""
+
+        # Error logging
+        txt += "<h2>%s</h2>" %(_("Error logging"))
+
+        pre = 'vserver!%s!error_writer'%(host)
+        format = self._cfg.get_val(pre)
+
+        writers = LOGGER_WRITERS[:]
+        writers.insert (0, ('', N_('Disabled')))
+
+        cfg_key = "%s!type"%(pre)
+        table = TableProps()
+        self.AddPropOptions_Ajax (table, _('Write errors to'), cfg_key, writers, _(NOTE_ERRORS))
+
+        error = self._cfg.get_val(cfg_key)
+        if error == 'file':
+            self.AddPropEntry (table, _('Filename'), '%s!filename'%(pre), _(NOTE_WRT_FILE))
+        elif error == 'exec':
+            self.AddPropEntry (table, _('Command'), '%s!command'%(pre), _(NOTE_WRT_EXEC))
+
+        txt += self.Indent(table)
+
+        # Access logging
+        txt += "<h2>%s</h2>" %(_("Access logging"))
+        tmp  = ""
+
         pre = 'vserver!%s!logger'%(host)
         format = self._cfg.get_val(pre)
 
-        # Logger
-        txt += '<h2>%s</h2>' % (_('Logging Format'))
         table = TableProps()
         self.AddPropOptions_Ajax (table, _('Format'), pre, 
                                   modules_available(LOGGERS), _(NOTE_LOGGERS))
-        txt += self.Indent(str(table))
 
-        # Writers
         if format:
-            writers = ''
-
-            # Accesses
             cfg_key = "%s!access!type"%(pre)
-            table = TableProps()
             self.AddPropOptions_Ajax (table, _('Accesses'), cfg_key, LOGGER_WRITERS, _(NOTE_ACCESSES))
-            writers += str(table)
 
             access = self._cfg.get_val(cfg_key)
             if not access or access == 'file':
-                t1 = TableProps()
-                self.AddPropEntry (t1, _('Filename'), '%s!access!filename'%(pre), _(NOTE_WRT_FILE))
-                writers += str(t1)
+                self.AddPropEntry (table, _('Filename'), '%s!access!filename'%(pre), _(NOTE_WRT_FILE))
             elif access == 'exec':
-                t1 = TableProps()
-                self.AddPropEntry (t1, _('Command'), '%s!access!command'%(pre), _(NOTE_WRT_EXEC))
-                writers += str(t1)
+                self.AddPropEntry (table, _('Command'), '%s!access!command'%(pre), _(NOTE_WRT_EXEC))
 
             if format == 'custom':
-                t2 = TableProps()
-                self._add_logger_template(t2, pre, 'access')
-                writers += str(t2)
+                self._add_logger_template(table, pre, 'access')
 
-            writers += "<hr />"
+        txt += self.Indent(table)
 
-            # Error
-            cfg_key = "%s!error!type"%(pre)
+        if format:
+            # Options
             table = TableProps()
-            self.AddPropOptions_Ajax (table, _('Errors'), cfg_key, LOGGER_WRITERS, _(NOTE_ERRORS))
-            writers += str(table)
 
-            error = self._cfg.get_val(cfg_key)
-            if not error or error == 'file':
-                t1 = TableProps()
-                self.AddPropEntry (t1, _('Filename'), '%s!error!filename'%(pre), _(NOTE_WRT_FILE))
-                writers += str(t1)
-            elif error == 'exec':
-                t1 = TableProps()
-                self.AddPropEntry (t1, _('Command'), '%s!error!command'%(pre), _(NOTE_WRT_EXEC))
-                writers += str(t1)
+            x_real_ip     = int(self._cfg.get_val('%s!x_real_ip_enabled'%(pre), "0"))
+            x_real_ip_all = int(self._cfg.get_val('%s!x_real_ip_access_all'%(pre), "0"))
 
-            if format == 'custom':
-                t2 = TableProps()
-                self._add_logger_template(t2, pre, 'error')
-                writers += str(t2)
+            self.AddPropCheck (table, _('Accept Forwarded IPs'), '%s!x_real_ip_enabled'%(pre), False, _(NOTE_X_REAL_IP))
+            if x_real_ip:
+                self.AddPropCheck (table, _('Don\'t check origin'), '%s!x_real_ip_access_all'%(pre), False, _(NOTE_X_REAL_IP_ALL))
+                if not x_real_ip_all:
+                    self.AddPropEntry (table, _('Accept from Hosts'), '%s!x_real_ip_access'%(pre), _(NOTE_X_REAL_IP_ACCESS))
 
-            txt += '<h2>%s</h2>' % (_('Writers'))
-            txt += self.Indent(writers)
-
-        txt += '<h2>%s</h2>' % (_('Options'))
-
-        x_real_ip     = int(self._cfg.get_val('%s!x_real_ip_enabled'%(pre), "0"))
-        x_real_ip_all = int(self._cfg.get_val('%s!x_real_ip_access_all'%(pre), "0"))
-
-        table = TableProps()
-        self.AddPropCheck (table, _('Accept Forwarded IPs'), '%s!x_real_ip_enabled'%(pre), False, _(NOTE_X_REAL_IP))
-        if x_real_ip:
-            self.AddPropCheck (table, _('Don\'t check origin'), '%s!x_real_ip_access_all'%(pre), False, _(NOTE_X_REAL_IP_ALL))
-            if not x_real_ip_all:
-                self.AddPropEntry (table, _('Accept from Hosts'), '%s!x_real_ip_access'%(pre), _(NOTE_X_REAL_IP_ACCESS))
-
-        txt += self.Indent(str(table))
+            txt += "<h3>%s</h3>" %(_("Logging Option"))
+            txt += self.Indent(table)
 
         return txt
 

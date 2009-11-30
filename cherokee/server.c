@@ -642,28 +642,14 @@ initialize_server_threads (cherokee_server_t *srv)
 static ret_t
 set_default_server_logger (cherokee_server_t *srv)
 {
-	ret_t                     ret;
-	cherokee_list_t          *i;
 	cherokee_logger_writer_t *writer;
-	cherokee_logger_t        *logger;
 
-	logger = VSERVER(srv->vservers.prev)->logger;
-	if (logger == NULL) {
-		list_for_each (i, &srv->vservers) {
-			if (VSERVER(i)->logger) {
-				logger = VSERVER(i)->logger;
-				break;
-			}
-		}
+	writer = VSERVER(srv->vservers.prev)->error_writer;
+	if (writer == NULL) {
+		return ret_not_found;
 	}
 
-	if (logger != NULL) {
-		ret = cherokee_logger_get_error_writer (logger, &writer);
-		if (ret == ret_ok) {
-			cherokee_error_log_set_log_writer (writer);
-		}
-	}
-
+	cherokee_error_log_set_log_writer (writer);
 	return ret_ok;
 }
 
@@ -702,6 +688,7 @@ initialize_loggers (cherokee_server_t *srv)
 	set_default_server_logger (srv);
 	return ret_ok;
 }
+
 
 static ret_t
 vservers_check_tls (cherokee_server_t *srv)
@@ -1513,7 +1500,7 @@ create_startup_log_writer (cherokee_server_t *srv)
 	cherokee_config_node_t   *lower_conf = NULL;
 	cherokee_logger_writer_t *writer     = NULL;
 
-	/* Find 
+	/* Find the first virtual server
 	 */
 	ret = cherokee_config_node_get (&srv->config, "vserver", &subconf);
 	if (ret != ret_ok) {
@@ -1536,7 +1523,7 @@ create_startup_log_writer (cherokee_server_t *srv)
 
 	/* Instance the writer
 	 */
-	ret = cherokee_config_node_get (lower_conf, "logger!error", &subconf);
+	ret = cherokee_config_node_get (lower_conf, "error_writer", &subconf);
 	if (ret != ret_ok) {
 		return ret_not_found;
 	}
@@ -1559,6 +1546,8 @@ create_startup_log_writer (cherokee_server_t *srv)
 		goto error;
 	}
 
+	TRACE (ENTRIES, "Instanced a specific error writer object: %p\n", writer);
+
 	/* The error writer is ready
 	 */
 	cherokee_error_log_set_log_writer (writer);
@@ -1568,6 +1557,8 @@ error:
 	if (writer) {
 		cherokee_logger_writer_free (writer);
 	}
+
+	TRACE (ENTRIES, "Could not instance a specific error writer object: %p\n", writer);
 	return ret_not_found;
 }
 

@@ -57,10 +57,8 @@ cherokee_logger_init_base (cherokee_logger_t      *logger,
 
 	/* Pure virtual methods
 	 */
-	logger->priv             = priv;
-	logger->write_access     = NULL;
-	logger->write_error      = NULL;
-	logger->get_error_writer = NULL;
+	logger->priv         = priv;
+	logger->write_access = NULL;
 
 	/* Private
 	 */	
@@ -200,8 +198,9 @@ cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
 	 */
 	if (logger->priv->x_real_ip.enabled) {
 		ret = parse_x_real_ip (logger, CONN(conn));
-		if (unlikely (ret == ret_error))
+		if (unlikely (ret == ret_error)) {
 			return ret_error;
+		}
 	}
 
 	/* Call the virtual method
@@ -211,43 +210,6 @@ cherokee_logger_write_access (cherokee_logger_t *logger, void *conn)
 	CHEROKEE_MUTEX_UNLOCK (&PRIV(logger)->mutex);
 
 	return ret;
-}
-
-
-ret_t
-cherokee_logger_get_error_writer (cherokee_logger_t         *logger,
-				  cherokee_logger_writer_t **writer)
-{
-	ret_t ret = ret_error;
-
-	if (logger->get_error_writer) {
-		CHEROKEE_MUTEX_LOCK (&PRIV(logger)->mutex);
-		ret = logger->get_error_writer (logger, writer);
-		CHEROKEE_MUTEX_UNLOCK (&PRIV(logger)->mutex);
-	}
-
-	return ret;
-}
-
-
-ret_t 
-cherokee_logger_write_error (cherokee_logger_t *logger,
-			     cherokee_buffer_t *error)
-{
-	ret_t ret;
-
-	if (logger == NULL) 
-		return ret_ok;
-
-	if (logger->write_error) {
-		CHEROKEE_MUTEX_LOCK(&PRIV(logger)->mutex);
-		ret = logger->write_error (logger, error);
-		CHEROKEE_MUTEX_UNLOCK(&PRIV(logger)->mutex);
-
-		return ret;
-	}
-
-	return ret_error;
 }
 
 
@@ -298,4 +260,3 @@ cherokee_logger_get_backup_mode (cherokee_logger_t *logger, cherokee_boolean_t *
 	*active = logger->priv->backup_mode;
 	return ret_ok;
 }
-

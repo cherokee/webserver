@@ -40,7 +40,7 @@
 #include <cherokee/common.h>
 #include <cherokee/buffer.h>
 #include <cherokee/shm.h>
-#include <cherokee/logger.h>
+#include <cherokee/logger_writer.h>
 
 CHEROKEE_BEGIN_DECLS
 
@@ -53,14 +53,14 @@ ret_t cherokee_spawner_set_active (cherokee_boolean_t active);
 ret_t cherokee_spawner_init       (void);
 ret_t cherokee_spawner_free       (void);
 
-ret_t cherokee_spawner_spawn      (cherokee_buffer_t  *binary,
-				   cherokee_buffer_t  *user_name,
-				   uid_t               uid,
-				   gid_t               gid,
-				   int                 env_inherited,
-				   char              **envp,
-				   cherokee_logger_t  *logger,
-				   pid_t              *pid_ret);
+ret_t cherokee_spawner_spawn      (cherokee_buffer_t         *binary,
+				   cherokee_buffer_t         *user_name,
+				   uid_t                      uid,
+				   gid_t                      gid,
+				   int                        env_inherited,
+				   char                     **envp,
+				   cherokee_logger_writer_t  *error_writer,
+				   pid_t                     *pid_ret);
 
 CHEROKEE_END_DECLS
 

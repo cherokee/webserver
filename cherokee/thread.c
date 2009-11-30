@@ -171,7 +171,7 @@ cherokee_thread_new  (cherokee_thread_t      **thd,
 
 	/* Thread Local Storage
 	 */
-	CHEROKEE_THREAD_PROP_SET (thread_logger_error_ptr, NULL);
+	CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr, NULL);
 
 	/* Event poll object
 	 */
@@ -517,7 +517,7 @@ process_polling_connections (cherokee_thread_t *thd)
 
 		/* Thread logger
 		 */
-		CHEROKEE_THREAD_PROP_SET (thread_logger_error_ptr, conn->logger_ref);
+		CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr, conn->logger_ref);
 
 		/* Has it been too much without any work?
 		 */
@@ -599,7 +599,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 		/* Thread logger
 		 */
-		CHEROKEE_THREAD_PROP_SET (thread_logger_error_ptr, conn->logger_ref);
+		CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr, conn->logger_ref);
 
 		/* Has the connection been too much time w/o any work
 		 */
@@ -884,7 +884,7 @@ process_active_connections (cherokee_thread_t *thd)
 
 			/* Thread logger
 			 */
-			CHEROKEE_THREAD_PROP_SET (thread_logger_error_ptr, conn->logger_ref);
+			CHEROKEE_THREAD_PROP_SET (thread_error_writer_ptr, conn->logger_ref);
 
 			/* Information collection
 			 */

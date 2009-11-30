@@ -68,20 +68,19 @@ cherokee_logger_ncsa_new (cherokee_logger_t         **logger,
 	 */
 	cherokee_logger_init_base (LOGGER(n), PLUGIN_INFO_PTR(ncsa), config);
 
-	MODULE(n)->init             = (logger_func_init_t) cherokee_logger_ncsa_init;
-	MODULE(n)->free             = (logger_func_free_t) cherokee_logger_ncsa_free;
+	MODULE(n)->init         = (logger_func_init_t) cherokee_logger_ncsa_init;
+	MODULE(n)->free         = (logger_func_free_t) cherokee_logger_ncsa_free;
 
-	LOGGER(n)->flush            = (logger_func_flush_t) cherokee_logger_ncsa_flush;
-	LOGGER(n)->reopen           = (logger_func_reopen_t) cherokee_logger_ncsa_reopen;
-	LOGGER(n)->get_error_writer = (logger_func_get_error_writer_t)  cherokee_logger_ncsa_get_error_writer;
-	LOGGER(n)->write_error      = (logger_func_write_error_t)  cherokee_logger_ncsa_write_error;
-	LOGGER(n)->write_access     = (logger_func_write_access_t) cherokee_logger_ncsa_write_access;
+	LOGGER(n)->flush        = (logger_func_flush_t) cherokee_logger_ncsa_flush;
+	LOGGER(n)->reopen       = (logger_func_reopen_t) cherokee_logger_ncsa_reopen;
+	LOGGER(n)->write_access = (logger_func_write_access_t) cherokee_logger_ncsa_write_access;
 
 	n->writer_access = NULL;
-	n->writer_error  = NULL;
 
 	ret = cherokee_logger_ncsa_init_base (n, VSERVER(vsrv), config);
-	if (unlikely(ret < ret_ok)) return ret;
+	if (unlikely(ret < ret_ok)) {
+		return ret;
+	}
 
 	/* Return the object
 	 */
@@ -130,24 +129,15 @@ cherokee_logger_ncsa_init_base (cherokee_logger_ncsa_t    *logger,
 	cherokee_buffer_ensure_size (&logger->referer, 1024);
 	cherokee_buffer_ensure_size (&logger->useragent, 512);
 
-	/* Init the logger writers
+	/* Init the logger writer
 	 */
 	ret = cherokee_config_node_get (config, "access", &subconf);
 	if (ret != ret_ok) {
 		LOG_CRITICAL (CHEROKEE_ERROR_LOGGER_NO_KEY, "access");
 		return ret_error;
 	}
-	ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &logger->writer_access);
-	if (ret != ret_ok) {
-		return ret_error;
-	}
 
-	ret = cherokee_config_node_get (config, "error", &subconf);
-	if (ret != ret_ok) {
-		LOG_CRITICAL (CHEROKEE_ERROR_LOGGER_NO_KEY, "error");
-		return ret_error;
-	}
-	ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &logger->writer_error);
+	ret = cherokee_server_get_log_writer (VSERVER_SRV(vsrv), subconf, &logger->writer_access);
 	if (ret != ret_ok) {
 		return ret_error;
 	}
@@ -169,10 +159,9 @@ cherokee_logger_ncsa_init (cherokee_logger_ncsa_t *logger)
 	ret_t ret;
 
 	ret = cherokee_logger_writer_open (logger->writer_access);
-	if (ret != ret_ok) return ret;
-
-	ret = cherokee_logger_writer_open (logger->writer_error);
-	if (ret != ret_ok) return ret;
+	if (ret != ret_ok) {
+		return ret;
+	}
 
 	return ret_ok;
 }
@@ -316,8 +305,9 @@ cherokee_logger_ncsa_write_access (cherokee_logger_ncsa_t *logger, cherokee_conn
 	/* Add the new string
 	 */
 	ret = build_log_string (logger, cnt, log);
-	if (unlikely (ret != ret_ok)) 
+	if (unlikely (ret != ret_ok)) {
 		goto error;
+	}
 
 	/* Flush buffer if full
 	 */  
@@ -325,8 +315,9 @@ cherokee_logger_ncsa_write_access (cherokee_logger_ncsa_t *logger, cherokee_conn
 		goto ok;
 
 	ret = cherokee_logger_writer_flush (logger->writer_access, true);
-	if (unlikely (ret != ret_ok))
+	if (unlikely (ret != ret_ok)) {
 		goto error;
+	}
 
 ok:
 	cherokee_logger_writer_release_buf (logger->writer_access);
@@ -339,60 +330,14 @@ error:
 
 
 ret_t 
-cherokee_logger_ncsa_write_error (cherokee_logger_ncsa_t *logger,
-				  cherokee_buffer_t      *error)
-{
-	ret_t              ret;
-	cherokee_buffer_t *log;
-
-	/* Get the buffer
-	 */
-	cherokee_logger_writer_get_buf (logger->writer_error, &log);
-
-	/* Add the new string
-	 */
-	ret = cherokee_buffer_add_buffer (log, error);
-	if (unlikely (ret != ret_ok)) {
-		ret = ret_error;
-		goto out;
-	}
-
-	/* It's an error, flush it right away.
-	 */
-	ret = cherokee_logger_writer_flush (logger->writer_error, true);
-	if (unlikely (ret != ret_ok)) {
-		ret = ret_error;
-		goto out;
-	}
-
-	ret = ret_ok;
-
-out:
-	cherokee_logger_writer_release_buf (logger->writer_error);
-	return ret;
-}
-
-
-ret_t 
-cherokee_logger_ncsa_get_error_writer (cherokee_logger_ncsa_t    *logger,
-				       cherokee_logger_writer_t **writer)
-{
-	*writer = logger->writer_error;
-	return ret_ok;
-}
-
-
-ret_t 
 cherokee_logger_ncsa_reopen (cherokee_logger_ncsa_t *logger)
 {
-	ret_t ret1;
-	ret_t ret2;
+	ret_t ret;
 
-	ret1 = cherokee_logger_writer_reopen (logger->writer_access);
-	ret2 = cherokee_logger_writer_reopen (logger->writer_error);
+	ret = cherokee_logger_writer_reopen (logger->writer_access);
+	if (ret != ret_ok) {
+		return ret;
+	}
 
-	if (ret1 != ret_ok)
-		return ret1;
-
-	return ret2;
+	return ret_ok;
 }

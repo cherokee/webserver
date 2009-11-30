@@ -386,7 +386,7 @@ cherokee_source_interpreter_add_env (cherokee_source_interpreter_t *src, char *e
 #ifdef HAVE_POSIX_SHM
 static ret_t 
 _spawn_shm (cherokee_source_interpreter_t *src,
-	    cherokee_logger_t             *logger)
+	    cherokee_logger_writer_t      *error_writer)
 {
 	ret_t   ret;
 	char  **envp;
@@ -416,7 +416,7 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 				      src->change_group,
 				      src->env_inherited,
 				      envp,
-				      logger,
+				      error_writer,
 				      &src->pid);
 	switch (ret) {
 	case ret_ok:
@@ -434,7 +434,7 @@ _spawn_shm (cherokee_source_interpreter_t *src,
 
 static ret_t 
 _spawn_local (cherokee_source_interpreter_t *src,
-	      cherokee_logger_t             *logger)
+	      cherokee_logger_writer_t      *error_writer)
 {
 	int                re;
 	char             **envp;
@@ -478,19 +478,13 @@ _spawn_local (cherokee_source_interpreter_t *src,
 		/* Redirect/Close stderr and stdout
 		 */
 		if (! src->debug) {
-			cherokee_boolean_t        done   = false;
-			cherokee_logger_writer_t *writer = NULL;
-
-			if (logger != NULL) {
-				cherokee_logger_get_error_writer (logger, &writer);
-				if ((writer) && (writer->fd != -1)) {
-					dup2 (writer->fd, STDOUT_FILENO);
-					dup2 (writer->fd, STDERR_FILENO);		
-					done = true;
-				}
+			if ((error_writer != NULL) &&
+			    (error_writer->fd != -1))
+			{
+				dup2 (error_writer->fd, STDOUT_FILENO);
+				dup2 (error_writer->fd, STDERR_FILENO);
 			} 
-
-			if (! done) {
+			else {
 				close (STDOUT_FILENO);
 				close (STDERR_FILENO);
 			}			
@@ -531,7 +525,7 @@ error:
 
 ret_t 
 cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
-				   cherokee_logger_t             *logger)
+				   cherokee_logger_writer_t      *error_writer)
 {
 	ret_t ret;
 
@@ -547,7 +541,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 	if ((src->spawn_type == spawn_shm) ||
 	    (src->spawn_type == spawn_unknown))
 	{
-		ret = _spawn_shm (src, logger);
+		ret = _spawn_shm (src, error_writer);
 		if (ret == ret_ok) {
 			if (src->spawn_type == spawn_unknown) {
 				src->spawn_type = spawn_shm;
@@ -570,7 +564,7 @@ cherokee_source_interpreter_spawn (cherokee_source_interpreter_t *src,
 		src->spawn_type = spawn_local;
 	}
 
-	ret = _spawn_local (src, logger);
+	ret = _spawn_local (src, error_writer);
 	if (ret != ret_ok) {
 		return ret;
 	}
@@ -652,7 +646,7 @@ cherokee_source_interpreter_connect_polling (cherokee_source_interpreter_t *src,
 		}
 
 		/* Spawn */
-		ret = cherokee_source_interpreter_spawn (src, CONN_VSRV(conn)->logger);
+		ret = cherokee_source_interpreter_spawn (src, CONN_VSRV(conn)->error_writer);
 		switch (ret) {
 		case ret_ok:
 			src->spawning_since = cherokee_bogonow_now;
