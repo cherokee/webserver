@@ -34,6 +34,7 @@ typedef struct {
 	/* Configuration */
 	cherokee_buffer_t  path_rrdtool;
 	cherokee_buffer_t  path_databases;
+	cherokee_buffer_t  path_img_cache;
 
 	/* Connection */
 	int                write_fd;

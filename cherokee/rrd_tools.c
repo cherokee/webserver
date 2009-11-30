@@ -64,6 +64,7 @@ cherokee_rrd_connection_init (cherokee_rrd_connection_t *rrd_conn)
 	cherokee_buffer_init (&rrd_conn->tmp);
 	cherokee_buffer_init (&rrd_conn->path_rrdtool);
 	cherokee_buffer_init (&rrd_conn->path_databases);
+	cherokee_buffer_init (&rrd_conn->path_img_cache);
 
 	CHEROKEE_MUTEX_INIT (&rrd_conn->mutex, NULL);
 
@@ -122,12 +123,10 @@ cherokee_rrd_connection_configure (cherokee_rrd_connection_t *rrd_conn,
 		cherokee_buffer_add_str (&rrd_conn->path_databases, CHEROKEE_RRD_DIR);
 	}
 	
-	/* Check permissions
+	/* Build the image cache directory
 	 */
-/* 	ret = check_dir_permissions (rrd_conn); */
-/* 	if (ret != ret_ok) { */
-/* 		return ret_error; */
-/* 	} */
+	cherokee_tmp_dir_copy  (&rrd_conn->path_img_cache);
+	cherokee_buffer_add_va (&rrd_conn->path_img_cache, "/cherokee/rrd-cache");
 
 	return ret_ok;
 }
@@ -139,8 +138,9 @@ cherokee_rrd_connection_mrproper (cherokee_rrd_connection_t *rrd_conn)
 	CHEROKEE_MUTEX_DESTROY (&rrd_conn->mutex);
 
 	cherokee_buffer_mrproper (&rrd_conn->tmp);
-	cherokee_buffer_mrproper (&rrd_conn->path_databases);
 	cherokee_buffer_mrproper (&rrd_conn->path_rrdtool);
+	cherokee_buffer_mrproper (&rrd_conn->path_databases);
+	cherokee_buffer_mrproper (&rrd_conn->path_img_cache);
 
 	return cherokee_rrd_connection_kill (rrd_conn, true);
 }
@@ -374,50 +374,6 @@ ensure_db_exists (cherokee_buffer_t *path_database)
 }
 
 
-static ret_t
-create_dirs (cherokee_rrd_connection_t *rrd_conn)
-{
-	int         re;
-	struct stat foo;
-
-	cherokee_buffer_add_str (&rrd_conn->path_databases, "/images");
-
-	re = access (rrd_conn->path_databases.buf, W_OK);
-	if (re != 0) {
-		/* Might exist w/ wrong permissions
-		 */
-		re = stat (rrd_conn->path_databases.buf, &foo);
-		if ((re == 0) ||
-		    ((re < 0) && (errno == EACCES)))
-		{
-			/* The parent directory is the one to blame */
-			cherokee_buffer_drop_ending (&rrd_conn->path_databases, 7);
-
-			LOG_CRITICAL (CHEROKEE_ERROR_RRD_DIR_WRITE,
-				      rrd_conn->path_databases.buf);
-			return ret_error;
-		}
-
-		/* Create the directory
-		 */
-		cherokee_mkdir_p (&rrd_conn->path_databases, 0700);
-
-		re = access (rrd_conn->path_databases.buf, W_OK);
-		if (re != 0) {
-			LOG_CRITICAL (CHEROKEE_ERROR_RRD_MKDIR_WRITE, rrd_conn->path_databases.buf);
-			goto error;
-		}
-	}
-
-	cherokee_buffer_drop_ending (&rrd_conn->path_databases, 7);
-	return ret_ok;
-
-error:
-	cherokee_buffer_drop_ending (&rrd_conn->path_databases, 7);
-	return ret_error;
-}
-
-
 ret_t
 cherokee_rrd_connection_create_srv_db (cherokee_rrd_connection_t *rrd_conn)
 {
@@ -428,8 +384,9 @@ cherokee_rrd_connection_create_srv_db (cherokee_rrd_connection_t *rrd_conn)
 
 	/* Ensure directories are accessible
 	 */
-	ret = create_dirs (rrd_conn);
+	ret = cherokee_mkdir_p_perm (&rrd_conn->path_databases, 0775, W_OK);
 	if (ret != ret_ok) {
+		LOG_CRITICAL (CHEROKEE_ERROR_RRD_MKDIR_WRITE, rrd_conn->path_databases.buf);
 		return ret_error;
 	}
 
@@ -502,8 +459,9 @@ cherokee_rrd_connection_create_vsrv_db (cherokee_rrd_connection_t *rrd_conn,
 
 	/* Ensure directories are accessible
 	 */
-	ret = create_dirs (rrd_conn);
+	ret = cherokee_mkdir_p_perm (&rrd_conn->path_databases, 0775, W_OK);
 	if (ret != ret_ok) {
+		LOG_CRITICAL (CHEROKEE_ERROR_RRD_MKDIR_WRITE, rrd_conn->path_databases.buf);
 		return ret_error;
 	}
 

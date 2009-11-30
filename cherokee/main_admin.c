@@ -312,12 +312,10 @@ config_server (cherokee_server_t *srv)
 				 RULE_PRE "7!match = directory\n" 
 				 RULE_PRE "7!match!directory = /graphs\n" 
 				 RULE_PRE "7!handler = render_rrd\n");
-	if (rrd_dir.buf) {
-		cherokee_buffer_add_va  (&buf, RULE_PRE "7!document_root = %s/images\n", rrd_dir.buf);
-	} else {
-		cherokee_buffer_add_str (&buf, RULE_PRE "7!document_root = " CHEROKEE_GRAPHS_DIR "\n");
-	}
 
+	cherokee_buffer_add_str (&buf, RULE_PRE "7!document_root = ");
+	cherokee_tmp_dir_copy   (&buf);
+	cherokee_buffer_add_va  (&buf, "/cherokee/rrd-cache\n");
 
 	/* MIME types
 	 */

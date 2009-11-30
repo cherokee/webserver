@@ -1501,6 +1501,34 @@ cherokee_mkdir_p (cherokee_buffer_t *path, int mode)
 }
 
 
+ret_t 
+cherokee_mkdir_p_perm (cherokee_buffer_t *dir_path,
+		       int                create_mode,
+		       int                ensure_perm)
+{
+	int         re;
+	struct stat foo;
+
+	/* Does it exist?
+	 */
+	re = stat (dir_path->buf, &foo);
+	if (re != 0) {
+		/* Create the directory
+		 */
+		cherokee_mkdir_p (dir_path, create_mode);
+	}
+
+	/* Check permissions
+	 */
+	re = access (dir_path->buf, ensure_perm);
+	if (re != 0) {
+		return ret_error;
+	}
+
+	return ret_ok;
+}
+
+
 ret_t
 cherokee_iovec_skip_sent (struct iovec *orig, uint16_t  orig_len,
 			  struct iovec *dest, uint16_t *dest_len,

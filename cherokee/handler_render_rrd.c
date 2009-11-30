@@ -57,17 +57,16 @@ find_interval (const char                         *txt,
 
 
 static cherokee_boolean_t
-check_image_freshness (cherokee_buffer_t                 *database_dir, 
-		       cherokee_buffer_t                 *buf,
+check_image_freshness (cherokee_buffer_t                 *buf,
 		       cherokee_collector_rrd_interval_t *interval)
 {
 	int         re;
 	struct stat info;
 
-	/* database_dir + "/images/" + buf + "_" + interval + ".png"
+	/* cache_img_dir + "/" + buf + "_" + interval + ".png"
 	 */
-	cherokee_buffer_prepend_str (buf, "/images/");
-	cherokee_buffer_prepend_buf (buf, database_dir);
+	cherokee_buffer_prepend_str (buf, "/");
+	cherokee_buffer_prepend_buf (buf, &rrd_connection->path_img_cache);
 
 	cherokee_buffer_add_char    (buf, '_');
 	cherokee_buffer_add         (buf, interval->interval, strlen(interval->interval));
@@ -130,8 +129,8 @@ render_srv_accepts (cherokee_handler_render_rrd_t     *hdl,
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
 	cherokee_buffer_add_str    (tmp, "graph ");
-	cherokee_buffer_add_buffer (tmp, &rrd_connection->path_databases);
-	cherokee_buffer_add_va     (tmp, "/images/server_accepts_%s.png ", interval->interval);
+	cherokee_buffer_add_buffer (tmp, &rrd_connection->path_img_cache);
+	cherokee_buffer_add_va     (tmp, "/server_accepts_%s.png ", interval->interval);
 	cherokee_buffer_add_va     (tmp, "--imgformat PNG --width 580 --height 340 --start -%s ", interval->interval);
 	cherokee_buffer_add_va     (tmp, "--title \"Accepted Connections: %s\" ", interval->interval);
 	cherokee_buffer_add_str    (tmp, "--vertical-label \"conn/s\" -c BACK#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF ");
@@ -177,8 +176,8 @@ render_srv_timeouts (cherokee_handler_render_rrd_t     *hdl,
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
 	cherokee_buffer_add_str    (tmp, "graph ");
-	cherokee_buffer_add_buffer (tmp, &rrd_connection->path_databases);
-	cherokee_buffer_add_va     (tmp, "/images/server_timeouts_%s.png ", interval->interval);
+	cherokee_buffer_add_buffer (tmp, &rrd_connection->path_img_cache);
+	cherokee_buffer_add_va     (tmp, "/server_timeouts_%s.png ", interval->interval);
 	cherokee_buffer_add_va     (tmp, "--imgformat PNG --width 580 --height 340 --start -%s ", interval->interval);
 	cherokee_buffer_add_va     (tmp, "--title \"Timeouts: %s\" ", interval->interval);
 	cherokee_buffer_add_str    (tmp, "--vertical-label \"timeouts/s\" -c BACK#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF ");
@@ -212,8 +211,8 @@ render_srv_traffic (cherokee_handler_render_rrd_t     *hdl,
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
 	cherokee_buffer_add_str    (tmp, "graph ");
-	cherokee_buffer_add_buffer (tmp, &rrd_connection->path_databases);
-	cherokee_buffer_add_va     (tmp, "/images/server_traffic_%s.png ", interval->interval);
+	cherokee_buffer_add_buffer (tmp, &rrd_connection->path_img_cache);
+	cherokee_buffer_add_va     (tmp, "/server_traffic_%s.png ", interval->interval);
 	cherokee_buffer_add_va     (tmp, "--imgformat PNG --width 580 --height 340 --start -%s ", interval->interval);
 	cherokee_buffer_add_va     (tmp, "--title \"Traffic: %s\" ", interval->interval);
 	cherokee_buffer_add_str    (tmp, "--vertical-label \"bytes/s\" -c BACK#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF ");
@@ -253,8 +252,8 @@ render_vsrv_traffic (cherokee_handler_render_rrd_t     *hdl,
 	cherokee_buffer_t *tmp = &rrd_connection->tmp;
 
 	cherokee_buffer_add_str    (tmp, "graph ");
-	cherokee_buffer_add_buffer (tmp, &rrd_connection->path_databases);
-	cherokee_buffer_add_va     (tmp, "/images/vserver_traffic_%s_%s.png ", vserver_name->buf, interval->interval);
+	cherokee_buffer_add_buffer (tmp, &rrd_connection->path_img_cache);
+	cherokee_buffer_add_va     (tmp, "/vserver_traffic_%s_%s.png ", vserver_name->buf, interval->interval);
 	cherokee_buffer_add_va     (tmp, "--imgformat PNG --width 580 --height 340 --start -%s ", interval->interval);
 	cherokee_buffer_add_va     (tmp, "--title \"Traffic, %s: %s\" ", vserver_name->buf, interval->interval);
 	cherokee_buffer_add_str    (tmp, "--vertical-label \"bytes/s\" -c BACK#FFFFFF -c SHADEA#FFFFFF -c SHADEB#FFFFFF ");
@@ -349,7 +348,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		}
 
 		cherokee_buffer_add_str (&tmp, "server_accepts");
-		fresh = check_image_freshness (&rrd_connection->path_databases, &tmp, interval);
+		fresh = check_image_freshness (&tmp, interval);
 		cherokee_buffer_mrproper (&tmp);
 
 		if (! fresh) {
@@ -379,7 +378,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		}
 
 		cherokee_buffer_add_str (&tmp, "server_timeouts");
-		fresh = check_image_freshness (&rrd_connection->path_databases, &tmp, interval);
+		fresh = check_image_freshness (&tmp, interval);
 		cherokee_buffer_mrproper (&tmp);
 
 		if (! fresh) {
@@ -409,7 +408,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		}
 
 		cherokee_buffer_add_str (&tmp, "server_traffic");
-		fresh = check_image_freshness (&rrd_connection->path_databases, &tmp, interval);
+		fresh = check_image_freshness (&tmp, interval);
 		cherokee_buffer_mrproper (&tmp);
 
 		if (! fresh) {
@@ -455,7 +454,7 @@ cherokee_handler_render_rrd_init (cherokee_handler_render_rrd_t *hdl)
 		cherokee_buffer_add_str (&tmp, "vserver_traffic_");
 		cherokee_buffer_add     (&tmp, vserver_name, vserver_len);
 
-		fresh = check_image_freshness (&rrd_connection->path_databases, &tmp, interval);
+		fresh = check_image_freshness (&tmp, interval);
 		cherokee_buffer_mrproper (&tmp);
 
 		if (! fresh) {
@@ -646,9 +645,15 @@ cherokee_handler_render_rrd_configure (cherokee_config_node_t  *conf,
 		return ret_ok;
 	}
 	
-	/* At least the server.rdd should be present
+	/* Ensure the image cache directory exists
 	 */
-	cherokee_rrd_connection_create_srv_db (rrd_connection);
+	ret = cherokee_mkdir_p_perm (&rrd_connection->path_img_cache, 0775, W_OK);
+	if (ret != ret_ok) {
+		LOG_CRITICAL (CHEROKEE_ERROR_RRD_MKDIR_WRITE, rrd_connection->path_img_cache.buf);
+		return ret_error;
+	}
+
+	TRACE(ENTRIES, "RRD cache image directory ready: %s\n", rrd_connection->path_img_cache.buf);
 	return ret_ok;
 }
 
