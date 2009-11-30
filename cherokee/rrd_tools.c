@@ -390,7 +390,7 @@ create_dirs (cherokee_rrd_connection_t *rrd_conn)
 		if ((re == 0) ||
 		    ((re < 0) && (errno == EACCES)))
 		{
-			/* The parent directory is one to blame */
+			/* The parent directory is the one to blame */
 			cherokee_buffer_drop_ending (&rrd_conn->path_databases, 7);
 
 			LOG_CRITICAL (CHEROKEE_ERROR_RRD_DIR_WRITE,
