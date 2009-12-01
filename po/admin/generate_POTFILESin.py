@@ -14,15 +14,11 @@ DIRS = [('admin', ['.+\.py$'])]
 
 import os, re
 
-def _get_top_srcdir (po_admin_dir):
-    return re.findall (r"top_srcdir = (.+)[\r\n]",
-                       open("%s/Makefile"%(po_admin_dir)).read())[0]
-
 def main():
     # Figure a few paths
     orig_dir     = os.getcwd()
     po_admin_dir = os.path.abspath (os.path.dirname(__file__))
-    top_srcdir   = os.path.abspath (os.path.join (po_admin_dir, _get_top_srcdir(po_admin_dir)))
+    top_srcdir   = os.path.abspath (os.path.join (po_admin_dir, "../.."))
 
     # Check the files
     pot_files = []
