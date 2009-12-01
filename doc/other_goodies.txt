@@ -202,3 +202,17 @@ let the wizard configure Cherokee to be able to run such application
 
 Even though the obtained configuration could not be perfect, it will
 always be a good starting point to play with for further tuning.
+
+[[slowloris]]
+Slowloris resilient
+~~~~~~~~~~~~~~~~~~~
+
+Slowloris is the name of a perl-based HTTP client that can be used to
+perform DOS attacks on web servers. It uses a minimal amount of TCP
+traffic to do so, and quite frankly the attack has been running amok
+out in the wild with devastating effects for a lot of servers.
+
+Guess what? Cherokee is resilient to Slowloris and is recommended as
+an effective defense on many security guides, such as the
+link:http://www.funtoo.org/en/security/slowloris/[Slowloris DOS
+Mitigation Guide].
