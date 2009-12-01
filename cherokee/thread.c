@@ -1726,7 +1726,7 @@ out:
 	CHEROKEE_MUTEX_UNLOCK (&srv->listeners_mutex);
 
 	if (yield) {
-		CHEROKEE_THREAD_YIELD();
+		CHEROKEE_THREAD_YIELD;
 	}
 }
 

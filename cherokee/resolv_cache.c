@@ -98,7 +98,7 @@ entry_fill_up (cherokee_resolv_cache_entry_t *entry,
 				return ret_error;
 			}
 
-			CHEROKEE_THREAD_YIELD();
+			CHEROKEE_THREAD_YIELD;
 			continue;
 
 		} else {

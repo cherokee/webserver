@@ -152,7 +152,7 @@
 #endif
 
 #ifdef HAVE_SCHED_YIELD
-# define CHEROKEE_THREAD_YIELD         sched_yield
+# define CHEROKEE_THREAD_YIELD         sched_yield()
 #else
 # define CHEROKEE_THREAD_YIELD         
 #endif 
