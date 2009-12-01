@@ -264,6 +264,10 @@ rule types:
   * **Connected from**: will let you discriminate connections based on
       the IP or SubNet from which these are originated.
 
+  * **URL Argument**: will allow you to match a Regular Expressions to
+      the URL arguments, be it a specific one or any of the possible
+      arguments.
+
 It is very important to know that these rules are prioritized. The
 higher its priority is, the sooner they are checked. You could
 think of a network routing table, it is quite similar. You can set the
