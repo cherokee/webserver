@@ -32,6 +32,10 @@ fi
 # Build the Changelog file
 ./changelog-update.sh
 
+# Update the POTFILES.in
+echo "Generating a fresh po/admin/POTFILES.in file.."
+po/admin/generate_POTFILESin.py > po/admin/POTFILES.in
+
 
 ($AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
     echo
