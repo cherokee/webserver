@@ -50,7 +50,7 @@
 	"Cherokee Web Server"
 
 #define APP_COPY_NOTICE \
-	"Written by Alvaro Lopez Ortega <alvaro@gnu.org>\n\n"                          \
+	"Written by Alvaro Lopez Ortega <alvaro@alobbs.com>\n\n"                       \
 	"Copyright (C) 2001-2009 Alvaro Lopez Ortega.\n"                               \
 	"This is free software; see the source for copying conditions.  There is NO\n" \
 	"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"

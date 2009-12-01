@@ -101,7 +101,7 @@ print_help (void)
 		"  -s,  --save-headers           Save the HTTP headers to file\n"
 		"       --header=STRING          insert STRING among the headers\n"
 		"\n"
-		"Report bugs to alvaro@gnu.org\n", PACKAGE_VERSION);
+		"Report bugs to alvaro@alobbs.com\n", PACKAGE_VERSION);
 }
 
 
@@ -374,7 +374,7 @@ main (int argc, char **argv)
 		switch (val) {
 		case 'V':
 			printf ("Cherokee Downloader %s\n"
-				"Written by Alvaro Lopez Ortega <alvaro@gnu.org>\n\n"
+				"Written by Alvaro Lopez Ortega <alvaro@alobbs.com>\n\n"
 				"Copyright (C) 2001-2008 Alvaro Lopez Ortega.\n"
 				"This is free software; see the source for copying conditions.  There is NO\n"
 				"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
