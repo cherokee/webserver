@@ -76,7 +76,7 @@ class Wizard_Rules_PHP (Wizard):
             return PHP_DEFAULT_TIMEOUT
 
         # Try to read the max_execution_time
-        tmp = re.findall (r"max_execution_time\s*=\s*(.*)", content)
+        tmp = re.findall (r"max_execution_time\s*=\s*(\d*)", content)
         if not tmp:
             return PHP_DEFAULT_TIMEOUT
 
