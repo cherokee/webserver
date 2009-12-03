@@ -30,8 +30,8 @@ def config_version_cfg_is_up_to_date (cfg):
     # Configuration file version
     ver_config = cfg.get_val("config!version")
     if not ver_config:
-        cfg["config!version"] = ver_cherokee
-        return True
+        cfg["config!version"] = "000099028"
+        return False
 
     # Cherokee 0.99.26 bug: 990250 is actually 99025
     if int(ver_config) == 990250:
