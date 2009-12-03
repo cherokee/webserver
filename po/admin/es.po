@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.10'\n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-11-27 14:51+0100\n"
+"POT-Creation-Date: 2009-12-01 16:47+0100\n"
 "PO-Revision-Date: 2009-08-31 02:16+0200\n"
 "Last-Translator: Antonio Pérez Jiménez <aperez@skarcha.com>\n"
 "Language-Team: Spanish <>\n"
@@ -41,6 +41,10 @@ msgstr "Enviar"
 #: admin/Form.py:206
 msgid "Delete"
 msgstr "Borrar"
+
+#: admin/LogViewer.py:192
+msgid "Cherokee Web Server Monitor"
+msgstr ""
 
 #: admin/ModuleAdmin.py:5 admin/consts.py:30
 msgid "Remote Administration"
@@ -134,6 +138,7 @@ msgid "Nick"
 msgstr "Nombre"
 
 #: admin/ModuleBalancer.py:57 admin/ModuleMysql.py:44
+#: admin/Wizard_ColdFusion.py:106 admin/Wizard_ColdFusion.py:160
 msgid "Host"
 msgstr "Servidor"
 
@@ -299,11 +304,11 @@ msgstr "Permitir X-Sendfile"
 msgid "Read X-Real-IP"
 msgstr "Aceptar X-Real-IP"
 
-#: admin/ModuleCgi.py:68 admin/PageVServer.py:656
+#: admin/ModuleCgi.py:68 admin/PageVServer.py:644
 msgid "Don't check origin"
 msgstr "No comprobar origen"
 
-#: admin/ModuleCgi.py:70 admin/PageVServer.py:658
+#: admin/ModuleCgi.py:70 admin/PageVServer.py:646
 msgid "Accept from Hosts"
 msgstr "Acceptar de Hosts"
 
@@ -409,7 +414,7 @@ msgid "Data base balancing"
 msgstr "Balanceo de Base de datos"
 
 #: admin/ModuleDbslayer.py:52 admin/ModuleFcgi.py:34 admin/ModuleProxy.py:51
-#: admin/ModuleScgi.py:36
+#: admin/ModuleScgi.py:36 admin/ModuleUwsgi.py:36
 msgid "Balancer"
 msgstr "Balanceador"
 
@@ -420,9 +425,16 @@ msgstr ""
 "Directorio web público a cuyo contenido se le aplicará la configuración."
 
 #: admin/ModuleDirectory.py:22 admin/ModuleDirectory.py:24
-#: admin/Wizard_Django.py:174 admin/Wizard_Django.py:176
-#: admin/Wizard_Drupal.py:228 admin/Wizard_RoR.py:236 admin/Wizard_RoR.py:238
-#: admin/Wizard_WordPress.py:185
+#: admin/Wizard_Alfresco.py:142 admin/Wizard_ColdFusion.py:159
+#: admin/Wizard_Concrete5.py:206 admin/Wizard_Django.py:174
+#: admin/Wizard_Django.py:176 admin/Wizard_Drupal.py:228
+#: admin/Wizard_Glassfish.py:139 admin/Wizard_Joomla.py:201
+#: admin/Wizard_Liferay.py:139 admin/Wizard_Mono.py:159
+#: admin/Wizard_Mono.py:162 admin/Wizard_Moodle.py:158 admin/Wizard_RoR.py:289
+#: admin/Wizard_RoR.py:291 admin/Wizard_Sugar.py:195
+#: admin/Wizard_Symfony.py:194 admin/Wizard_WordPress.py:185
+#: admin/Wizard_Zend.py:163 admin/Wizard_phpBB.py:164
+#: admin/Wizard_phpMyAdmin.py:78 admin/Wizard_rTorrent.py:44
 msgid "Web Directory"
 msgstr "Directorio web"
 
@@ -600,7 +612,7 @@ msgstr "Comprobar una lista específica de peticiones"
 msgid "Match any file"
 msgstr "Coincide cualquier fichero"
 
-#: admin/ModuleExists.py:42
+#: admin/ModuleExists.py:42 admin/ModuleUrlarg.py:31 admin/ModuleUrlarg.py:42
 msgid "Match type"
 msgstr "Tipo de prueba"
 
@@ -743,7 +755,8 @@ msgstr "Cabecera"
 
 #: admin/ModuleHeader.py:38 admin/ModuleProxy.py:159 admin/ModuleRedir.py:35
 #: admin/ModuleRedir.py:52 admin/ModuleRequest.py:22 admin/ModuleRequest.py:24
-#: admin/ModuleRequest.py:41 admin/consts.py:128
+#: admin/ModuleRequest.py:41 admin/ModuleUrlarg.py:34 admin/ModuleUrlarg.py:45
+#: admin/consts.py:128
 msgid "Regular Expression"
 msgstr "Expresión regular"
 
@@ -1241,6 +1254,44 @@ msgstr "IP o Subnet"
 msgid "New IP/Subnet"
 msgstr "IP/Subnet nueva"
 
+#: admin/ModuleUrlarg.py:9
+msgid "Argument name"
+msgstr ""
+
+#: admin/ModuleUrlarg.py:10
+#, fuzzy
+msgid "Regular Expression for the match"
+msgstr "Expresión regular"
+
+#: admin/ModuleUrlarg.py:12
+#, fuzzy
+msgid "Match a specific argument"
+msgstr "Comprobar una lista específica de peticiones"
+
+#: admin/ModuleUrlarg.py:13
+#, fuzzy
+msgid "Match any argument"
+msgstr "Coincide cualquier fichero"
+
+#: admin/ModuleUrlarg.py:33 admin/ModuleUrlarg.py:44
+msgid "Argument"
+msgstr ""
+
+#: admin/ModuleUrlarg.py:65
+#, python-format
+msgid "Any arg ~= %s"
+msgstr ""
+
+#: admin/ModuleUrlarg.py:72
+#, fuzzy
+msgid "URL arg"
+msgstr "Reescritura de URL"
+
+#: admin/ModuleUwsgi.py:32
+#, fuzzy
+msgid "UWSGI specific"
+msgstr "Específico de SCGI"
+
 #: admin/ModuleWildcard.py:9
 msgid ""
 "Accepted host name. Wildcard characters (* and ?) are allowed. Eg: *example."
@@ -1649,7 +1700,8 @@ msgid "Handler"
 msgstr "Gestor"
 
 #: admin/PageEntry.py:163 admin/PageVServer.py:513 admin/PageVServers.py:274
-#: admin/Wizard_Django.py:112
+#: admin/Wizard_Django.py:112 admin/Wizard_Mono.py:99
+#: admin/Wizard_uWSGI.py:123
 msgid "Document Root"
 msgstr "Raíz de documentos"
 
@@ -1700,9 +1752,15 @@ msgid "Authentication"
 msgstr "Autenticación"
 
 #: admin/PageEntry.py:250 admin/PageVServer.py:265 admin/PageVServers.py:144
-#: admin/Wizard_Django.py:120 admin/Wizard_Drupal.py:153
-#: admin/Wizard_Mailman.py:132 admin/Wizard_RoR.py:173
-#: admin/Wizard_WordPress.py:115
+#: admin/Wizard_Alfresco.py:91 admin/Wizard_ColdFusion.py:109
+#: admin/Wizard_Concrete5.py:134 admin/Wizard_Django.py:120
+#: admin/Wizard_Drupal.py:153 admin/Wizard_Glassfish.py:88
+#: admin/Wizard_Joomla.py:130 admin/Wizard_Liferay.py:88
+#: admin/Wizard_Mailman.py:132 admin/Wizard_Mono.py:108
+#: admin/Wizard_Moodle.py:90 admin/Wizard_RoR.py:213 admin/Wizard_Sugar.py:124
+#: admin/Wizard_Symfony.py:127 admin/Wizard_Trac.py:114
+#: admin/Wizard_WordPress.py:115 admin/Wizard_Zend.py:99
+#: admin/Wizard_phpBB.py:95
 msgid "Logging"
 msgstr ""
 
@@ -2085,7 +2143,7 @@ msgid "Variable"
 msgstr "Variable"
 
 #: admin/PageInfoSource.py:184 admin/PageInfoSource.py:212
-#: admin/PageInfoSource.py:239
+#: admin/PageInfoSource.py:239 admin/Wizard_rTorrent.py:45
 msgid "Connection"
 msgstr "Conexión"
 
@@ -2323,7 +2381,8 @@ msgstr "Prefijo"
 msgid "Not running"
 msgstr "No ejecutándose"
 
-#: admin/PageStatus.py:155 admin/PageStatus.py:158
+#: admin/PageStatus.py:155 admin/PageStatus.py:158 admin/Wizard_uWSGI.py:130
+#: admin/Wizard_uWSGI.py:195
 msgid "Configuration File"
 msgstr "Fichero de configuración"
 
@@ -2335,36 +2394,36 @@ msgstr "Modificado"
 msgid "Not Found"
 msgstr "No encontrado"
 
-#: admin/PageStatus.py:170 admin/PageStatus.py:171
+#: admin/PageStatus.py:173 admin/PageStatus.py:174
 msgid "Server Traffic"
 msgstr "Tráfico del servidor"
 
-#: admin/PageStatus.py:172
+#: admin/PageStatus.py:175
 #, fuzzy
 msgid "Connections / Requests"
 msgstr "Tiempo de espera de las conexiones"
 
-#: admin/PageStatus.py:173
+#: admin/PageStatus.py:176
 msgid "Connections Timeout"
 msgstr "Tiempo de espera de las conexiones"
 
-#: admin/PageStatus.py:178 admin/PageVServer.py:563
+#: admin/PageStatus.py:181 admin/PageVServer.py:563
 msgid "1 month"
 msgstr "1 Mes"
 
-#: admin/PageStatus.py:179 admin/PageVServer.py:564
+#: admin/PageStatus.py:182 admin/PageVServer.py:564
 msgid "1 week"
 msgstr "1 Semana"
 
-#: admin/PageStatus.py:180 admin/PageVServer.py:565
+#: admin/PageStatus.py:183 admin/PageVServer.py:565
 msgid "1 day"
 msgstr "1 Día"
 
-#: admin/PageStatus.py:181 admin/PageVServer.py:566
+#: admin/PageStatus.py:184 admin/PageVServer.py:566
 msgid "6 hours"
 msgstr "6 Horas"
 
-#: admin/PageStatus.py:182 admin/PageVServer.py:567
+#: admin/PageStatus.py:185 admin/PageVServer.py:567
 msgid "1 hour"
 msgstr "1 Hora"
 
@@ -2706,55 +2765,61 @@ msgstr "Estadísticas"
 msgid "Collect Statistics"
 msgstr "Estadísticas de Tráfico"
 
-#: admin/PageVServer.py:591
-msgid "Logging Format"
-msgstr "Formato del histórico"
+#: admin/PageVServer.py:589
+msgid "Error logging"
+msgstr ""
 
-#: admin/PageVServer.py:593
-msgid "Format"
-msgstr "Formato"
+#: admin/PageVServer.py:595 admin/consts.py:170
+msgid "Disabled"
+msgstr "Desactivado"
 
-#: admin/PageVServer.py:604
-msgid "Accesses"
-msgstr "Accesos"
+#: admin/PageVServer.py:599
+#, fuzzy
+msgid "Write errors to"
+msgstr "Escritores"
 
-#: admin/PageVServer.py:610 admin/PageVServer.py:633
+#: admin/PageVServer.py:603 admin/PageVServer.py:626
 msgid "Filename"
 msgstr "Nombre del fichero"
 
-#: admin/PageVServer.py:614 admin/PageVServer.py:637
+#: admin/PageVServer.py:605 admin/PageVServer.py:628
 msgid "Command"
 msgstr "Comando"
 
-#: admin/PageVServer.py:627
-msgid "Errors"
-msgstr "Errores"
+#: admin/PageVServer.py:610
+msgid "Access logging"
+msgstr ""
 
-#: admin/PageVServer.py:645
-msgid "Writers"
-msgstr "Escritores"
+#: admin/PageVServer.py:617
+msgid "Format"
+msgstr "Formato"
 
-#: admin/PageVServer.py:648
-msgid "Options"
-msgstr "Opciones"
+#: admin/PageVServer.py:622
+msgid "Accesses"
+msgstr "Accesos"
 
-#: admin/PageVServer.py:654
+#: admin/PageVServer.py:642
 msgid "Accept Forwarded IPs"
 msgstr "Acceptar IPs redireccionadas"
 
-#: admin/PageVServer.py:666
+#: admin/PageVServer.py:648
+#, fuzzy
+msgid "Logging Option"
+msgstr "Formato del histórico"
+
+#: admin/PageVServer.py:655
 msgid "Host names"
 msgstr "Nombres de servidor"
 
-#: admin/PageVServer.py:673
+#: admin/PageVServer.py:662
 msgid "Matching method"
 msgstr "Método de evaluación"
 
-#: admin/PageVServer.py:724
+#: admin/PageVServer.py:713
 msgid "Filename must be set"
 msgstr "Debe poner un nombre de fichero"
 
-#: admin/PageVServer.py:764
+#: admin/PageVServer.py:753
 msgid "Template: "
 msgstr "Plantilla:"
 
@@ -2903,19 +2968,218 @@ msgstr "Desconocido"
 msgid "Same logs as vserver"
 msgstr "Los mismos logs que el vserver"
 
+#: admin/Wizard_Alfresco.py:18 admin/Wizard_ColdFusion.py:19
+#: admin/Wizard_Django.py:14 admin/Wizard_Glassfish.py:18
+#: admin/Wizard_Liferay.py:18 admin/Wizard_Mailman.py:11
+#: admin/Wizard_Mono.py:12 admin/Wizard_RoR.py:15 admin/Wizard_Trac.py:20
+#: admin/Wizard_uWSGI.py:22
+msgid "Name of the new domain that will be created."
+msgstr "Nombre del dominio que será creado."
+
+#: admin/Wizard_Alfresco.py:19
+msgid "Hostname or IP of the server running Alfresco."
+msgstr ""
+
+#: admin/Wizard_Alfresco.py:20 admin/Wizard_Liferay.py:20
+msgid "Port running the service in said host."
+msgstr ""
+
+#: admin/Wizard_Alfresco.py:21 admin/Wizard_Liferay.py:21
+msgid "Web folder under which Liferay will be accessible."
+msgstr ""
+
+#: admin/Wizard_Alfresco.py:65
+#, fuzzy
+msgid "New virtual server based on a Alfresco project."
+msgstr "Directorio local al proyecto basado en Ruby on Rails."
+
+#: admin/Wizard_Alfresco.py:71 admin/Wizard_Alfresco.py:131
+#, fuzzy
+msgid "Alfresco Wizard"
+msgstr "Asistente para Redirecciones"
+
+#: admin/Wizard_Alfresco.py:80 admin/Wizard_ColdFusion.py:99
+#: admin/Wizard_Django.py:109 admin/Wizard_Glassfish.py:77
+#: admin/Wizard_Liferay.py:77 admin/Wizard_Mailman.py:120
+#: admin/Wizard_Mono.py:96 admin/Wizard_RoR.py:191 admin/Wizard_Trac.py:103
+#: admin/Wizard_uWSGI.py:120
+#, fuzzy
+msgid "New Virtual Server"
+msgstr "Servidor Virtual"
+
+#: admin/Wizard_Alfresco.py:82 admin/Wizard_ColdFusion.py:101
+#: admin/Wizard_Concrete5.py:130 admin/Wizard_Django.py:111
+#: admin/Wizard_Drupal.py:149 admin/Wizard_Glassfish.py:79
+#: admin/Wizard_Joomla.py:126 admin/Wizard_Liferay.py:79
+#: admin/Wizard_Mailman.py:122 admin/Wizard_Mono.py:98
+#: admin/Wizard_Moodle.py:86 admin/Wizard_RoR.py:193 admin/Wizard_Sugar.py:120
+#: admin/Wizard_Symfony.py:122 admin/Wizard_Trac.py:105
+#: admin/Wizard_WordPress.py:111 admin/Wizard_Zend.py:95
+#: admin/Wizard_phpBB.py:91 admin/Wizard_uWSGI.py:122
+msgid "New Host Name"
+msgstr "Nuevo nombre de host"
+
+#: admin/Wizard_Alfresco.py:85
+msgid "Alfresco project"
+msgstr ""
+
+#: admin/Wizard_Alfresco.py:87 admin/Wizard_Alfresco.py:143
+#: admin/Wizard_Glassfish.py:84 admin/Wizard_Glassfish.py:140
+#: admin/Wizard_Liferay.py:84 admin/Wizard_Liferay.py:140
+#, fuzzy
+msgid "Source host"
+msgstr "Uso del origen de datos"
+
+#: admin/Wizard_Alfresco.py:88 admin/Wizard_Alfresco.py:144
+#: admin/Wizard_Glassfish.py:85 admin/Wizard_Glassfish.py:141
+#: admin/Wizard_Liferay.py:85 admin/Wizard_Liferay.py:141
+#, fuzzy
+msgid "Source port"
+msgstr "Soporte"
+
+#: admin/Wizard_Alfresco.py:125
+#, fuzzy
+msgid "New directory based on a Alfresco project."
+msgstr "El directorio no parece un proyecto basado en Django."
+
+#: admin/Wizard_Alfresco.py:140
+msgid "Alfresco Project"
+msgstr ""
+
+#: admin/Wizard_ColdFusion.py:20
+msgid ""
+"The pair IP:port of the server running ColdFusion. You can add more later to "
+"have the load balanced."
+msgstr ""
+
+#: admin/Wizard_ColdFusion.py:21
+msgid "Web folder under which Coldfusion will be accessible."
+msgstr ""
+
+#: admin/Wizard_ColdFusion.py:22
+msgid "ColdFusion is not running on the specified host."
+msgstr ""
+
+#: admin/Wizard_ColdFusion.py:84
+#, fuzzy
+msgid "New virtual server to proxy a ColdFusion host."
+msgstr "Directorio local al proyecto basado en Ruby on Rails."
+
+#: admin/Wizard_ColdFusion.py:90 admin/Wizard_ColdFusion.py:148
+#, fuzzy
+msgid "ColdFusion Wizard"
+msgstr "Asistente para Redirecciones"
+
+#: admin/Wizard_ColdFusion.py:142
+msgid "New directory to proxy a Coldfusion host."
+msgstr ""
+
+#: admin/Wizard_CommonStatic.py:18
+msgid "Adds a rule to serve the most common static files as files."
+msgstr ""
+
+#: admin/Wizard_CommonStatic.py:37
+msgid "Common files have been already configured."
+msgstr ""
+
+#: admin/Wizard_CommonStatic.py:44 admin/Wizard_Icons.py:62
+#: admin/Wizard_PHP.py:120 admin/Wizard_Streaming.py:42
+#: admin/Wizard_rTorrent.py:77
+#, fuzzy
+msgid "Couldn't add a new rule."
+msgstr "Añadir nueva regla"
+
+#: admin/Wizard_Concrete5.py:16
+#, fuzzy
+msgid ""
+"Path to the directory where the Concrete5 source code is located. (Example: /"
+"usr/share/concrete5)"
+msgstr ""
+"Directorio local a las fuentes de Wordpress (Por ejemplo: /usr/share/"
+"wordpress)"
+
+#: admin/Wizard_Concrete5.py:17
+#, fuzzy
+msgid ""
+"Web directory where you want Concrete5 to be accessible. (Example: /cms)"
+msgstr "Directorio web donde Wordpress será publicado (Ejemplo: /blog)"
+
+#: admin/Wizard_Concrete5.py:18 admin/Wizard_Drupal.py:14
+#: admin/Wizard_Joomla.py:19 admin/Wizard_Moodle.py:19
+#: admin/Wizard_Sugar.py:19 admin/Wizard_Symfony.py:20
+#: admin/Wizard_WordPress.py:14 admin/Wizard_Zend.py:19
+#: admin/Wizard_phpBB.py:19
+msgid "Host name of the virtual host that is about to be created."
+msgstr "Nombre del virtual server que será creado."
+
+#: admin/Wizard_Concrete5.py:19
+#, fuzzy
+msgid "Does not look like a Concrete5 source directory."
+msgstr "No parece ser el directorio de fuentes de Wordpress."
+
+#: admin/Wizard_Concrete5.py:20 admin/Wizard_Drupal.py:16
+#: admin/Wizard_Joomla.py:21 admin/Wizard_Moodle.py:21
+#: admin/Wizard_WordPress.py:16 admin/Wizard_phpBB.py:21
+#: admin/Wizard_phpMyAdmin.py:20
+msgid "A web directory must be provided."
+msgstr "Se debe proporcionar un directorio web."
+
+#: admin/Wizard_Concrete5.py:21 admin/Wizard_Drupal.py:17
+#: admin/Wizard_Joomla.py:22 admin/Wizard_Moodle.py:22
+#: admin/Wizard_WordPress.py:17 admin/Wizard_phpBB.py:22
+msgid "A host name must be provided."
+msgstr "Se debe proporcionar un nombre de servidor."
+
+#: admin/Wizard_Concrete5.py:112
+msgid "Configure a new virtual server using Concrete5."
+msgstr ""
+
+#: admin/Wizard_Concrete5.py:118 admin/Wizard_Concrete5.py:191
+#, fuzzy
+msgid "Concrete5 Wizard"
+msgstr "Asistente para Wordpress"
+
+#: admin/Wizard_Concrete5.py:131 admin/Wizard_Concrete5.py:207
+#: admin/Wizard_Drupal.py:150 admin/Wizard_Drupal.py:229
+#: admin/Wizard_Joomla.py:127 admin/Wizard_Joomla.py:202
+#: admin/Wizard_Moodle.py:87 admin/Wizard_Moodle.py:159
+#: admin/Wizard_Sugar.py:121 admin/Wizard_Sugar.py:196
+#: admin/Wizard_WordPress.py:112 admin/Wizard_WordPress.py:186
+#: admin/Wizard_Zend.py:96 admin/Wizard_Zend.py:164 admin/Wizard_phpBB.py:92
+#: admin/Wizard_phpBB.py:165 admin/Wizard_phpMyAdmin.py:79
+msgid "Source Directory"
+msgstr "Directorio de las fuentes"
+
+#: admin/Wizard_Concrete5.py:164 admin/Wizard_Drupal.py:183
+#: admin/Wizard_Joomla.py:160 admin/Wizard_Moodle.py:120
+#: admin/Wizard_PHP.py:101 admin/Wizard_Sugar.py:154
+#: admin/Wizard_Symfony.py:158 admin/Wizard_WordPress.py:145
+#: admin/Wizard_Zend.py:129 admin/Wizard_phpBB.py:125
+#: admin/Wizard_phpMyAdmin.py:103
+msgid "Couldn't find a suitable PHP interpreter."
+msgstr ""
+
+#: admin/Wizard_Concrete5.py:185
+msgid "Configures Concrete5 inside a public web directory."
+msgstr ""
+
+#: admin/Wizard_Concrete5.py:198 admin/Wizard_Drupal.py:220
+#: admin/Wizard_Joomla.py:193 admin/Wizard_Moodle.py:150
+#: admin/Wizard_Sugar.py:187 admin/Wizard_Symfony.py:186
+#: admin/Wizard_WordPress.py:177 admin/Wizard_Zend.py:157
+#: admin/Wizard_phpMyAdmin.py:70
+msgid "PHP support is required."
+msgstr ""
+
 #: admin/Wizard_Django.py:13
 msgid "Local path to the Django based project."
 msgstr "Ruta local al proyecto basado en Django."
-
-#: admin/Wizard_Django.py:14 admin/Wizard_Mailman.py:11 admin/Wizard_RoR.py:15
-msgid "Name of the new domain that will be created."
-msgstr "Nombre del dominio que será creado."
 
 #: admin/Wizard_Django.py:16
 msgid "It does not look like a Django based project directory."
 msgstr "No parece ser el directorio de un proyecto basado en Django."
 
-#: admin/Wizard_Django.py:17 admin/Wizard_RoR.py:23
+#: admin/Wizard_Django.py:17 admin/Wizard_RoR.py:24
 msgid "The document root directory does not exist."
 msgstr "El Document Root no existe."
 
@@ -2931,24 +3195,13 @@ msgstr ""
 msgid "Django Wizard"
 msgstr "Asistente para Django"
 
-#: admin/Wizard_Django.py:109 admin/Wizard_Mailman.py:120
-#: admin/Wizard_RoR.py:160
-#, fuzzy
-msgid "New Virtual Server"
-msgstr "Servidor Virtual"
-
-#: admin/Wizard_Django.py:111 admin/Wizard_Drupal.py:149
-#: admin/Wizard_Mailman.py:122 admin/Wizard_RoR.py:162
-#: admin/Wizard_WordPress.py:111
-msgid "New Host Name"
-msgstr "Nuevo nombre de host"
-
 #: admin/Wizard_Django.py:115 admin/Wizard_Django.py:179
 msgid "Django Project"
 msgstr ""
 
 #: admin/Wizard_Django.py:117 admin/Wizard_Django.py:181
-#: admin/Wizard_RoR.py:169 admin/Wizard_RoR.py:245
+#: admin/Wizard_Mono.py:105 admin/Wizard_Mono.py:168 admin/Wizard_RoR.py:204
+#: admin/Wizard_RoR.py:302 admin/Wizard_Trac.py:110
 msgid "Project Directory"
 msgstr "Directorio del proyecto"
 
@@ -2967,21 +3220,9 @@ msgstr "Ruta local a las fuentes de Drupal. (Ejemplo: /usr/share/drupal)"
 msgid "Web directory where you want Drupal to be accessible. (Example: /blog)"
 msgstr "Directorio web por el cual Drupal será accedido. (Ejemplo: /blog)"
 
-#: admin/Wizard_Drupal.py:14 admin/Wizard_WordPress.py:14
-msgid "Host name of the virtual host that is about to be created."
-msgstr "Nombre del virtual server que será creado."
-
 #: admin/Wizard_Drupal.py:15
 msgid "Does not look like a Drupal source directory."
 msgstr "No parece ser un directorio con las fuentes de Drupal."
-
-#: admin/Wizard_Drupal.py:16 admin/Wizard_WordPress.py:16
-msgid "A web directory must be provided."
-msgstr "Se debe proporcionar un directorio web."
-
-#: admin/Wizard_Drupal.py:17 admin/Wizard_WordPress.py:17
-msgid "A host name must be provided."
-msgstr "Se debe proporcionar un nombre de servidor."
 
 #: admin/Wizard_Drupal.py:131
 msgid "Configure a new virtual server using Drupal."
@@ -2991,22 +3232,42 @@ msgstr ""
 msgid "Drupal Wizard"
 msgstr "Asistente para Drupal"
 
-#: admin/Wizard_Drupal.py:150 admin/Wizard_Drupal.py:229
-#: admin/Wizard_WordPress.py:112 admin/Wizard_WordPress.py:186
-msgid "Source Directory"
-msgstr "Directorio de las fuentes"
-
-#: admin/Wizard_Drupal.py:183 admin/Wizard_WordPress.py:145
-msgid "Couldn't find a suitable PHP interpreter."
-msgstr ""
-
 #: admin/Wizard_Drupal.py:207
 msgid "Configures Drupal inside a public web directory."
 msgstr ""
 
-#: admin/Wizard_Drupal.py:220 admin/Wizard_WordPress.py:177
-msgid "PHP support is required."
+#: admin/Wizard_Glassfish.py:19
+msgid ""
+"Hostname or IP of the server running Glassfish. You can add more later to "
+"have the load balanced."
 msgstr ""
+
+#: admin/Wizard_Glassfish.py:20
+msgid "Port running the service in said host. (Example: 8080)"
+msgstr ""
+
+#: admin/Wizard_Glassfish.py:21
+msgid "Web folder under which Glassfish will be accessible."
+msgstr ""
+
+#: admin/Wizard_Glassfish.py:62
+#, fuzzy
+msgid "New virtual server to proxy Glassfish projects."
+msgstr "Directorio local al proyecto basado en Ruby on Rails."
+
+#: admin/Wizard_Glassfish.py:68 admin/Wizard_Glassfish.py:128
+#, fuzzy
+msgid "Glassfish Wizard"
+msgstr "Asistente para Mailman"
+
+#: admin/Wizard_Glassfish.py:82 admin/Wizard_Glassfish.py:137
+msgid "Glassfish Project"
+msgstr ""
+
+#: admin/Wizard_Glassfish.py:122
+#, fuzzy
+msgid "New directory to proxy Glassfish projects."
+msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
 #: admin/Wizard_HotLinking.py:11
 msgid "Domain allowed to access the files. Eg: example.com"
@@ -3044,6 +3305,74 @@ msgstr "Nombre de Dominio"
 #: admin/Wizard_HotLinking.py:73
 msgid "Reply type"
 msgstr "Tipo de Respuesta"
+
+#: admin/Wizard_Icons.py:32
+msgid ""
+"Add the /icons and /cherokee_themes directories so Cherokee can use icons "
+"when listing directories."
+msgstr ""
+
+#: admin/Wizard_Icons.py:36
+#, fuzzy
+msgid "Add the /icons directory"
+msgstr "La ruta no es un directorio"
+
+#: admin/Wizard_Icons.py:51
+msgid "The /icons and /cherokee_themes directories are already configured."
+msgstr ""
+
+#: admin/Wizard_Joomla.py:17
+#, fuzzy
+msgid ""
+"Path to the directory where the Joomla source code is located. (Example: /"
+"usr/share/joomla)"
+msgstr "Ruta local a las fuentes de Drupal. (Ejemplo: /usr/share/drupal)"
+
+#: admin/Wizard_Joomla.py:18
+#, fuzzy
+msgid "Web directory where you want Joomla to be accessible. (Example: /blog)"
+msgstr "Directorio web por el cual Drupal será accedido. (Ejemplo: /blog)"
+
+#: admin/Wizard_Joomla.py:20
+#, fuzzy
+msgid "Does not look like a Joomla source directory."
+msgstr "No parece ser un directorio con las fuentes de Drupal."
+
+#: admin/Wizard_Joomla.py:108
+msgid "Configure a new virtual server using Joomla."
+msgstr ""
+
+#: admin/Wizard_Joomla.py:114 admin/Wizard_Joomla.py:186
+#, fuzzy
+msgid "Joomla Wizard"
+msgstr "Asistente para Mailman"
+
+#: admin/Wizard_Joomla.py:180
+msgid "Configures Joomla inside a public web directory."
+msgstr ""
+
+#: admin/Wizard_Liferay.py:19
+msgid "Hostname or IP of the server running Liferay."
+msgstr ""
+
+#: admin/Wizard_Liferay.py:62
+#, fuzzy
+msgid "New virtual server based on a Liferay project."
+msgstr "Directorio local al proyecto basado en Ruby on Rails."
+
+#: admin/Wizard_Liferay.py:68 admin/Wizard_Liferay.py:128
+#, fuzzy
+msgid "Liferay Wizard"
+msgstr "Asistente para Drupal"
+
+#: admin/Wizard_Liferay.py:82 admin/Wizard_Liferay.py:137
+msgid "Liferay Project"
+msgstr ""
+
+#: admin/Wizard_Liferay.py:122
+#, fuzzy
+msgid "New directory based on a Liferay project."
+msgstr "El directorio no parece un proyecto basado en Django."
 
 #: admin/Wizard_Mailman.py:8
 msgid "Local path to the Mailman CGI directory."
@@ -3090,6 +3419,103 @@ msgstr "Directorio de Datos de Mailman"
 msgid "Mail Archive directory"
 msgstr "Directorio del almacen de correo"
 
+#: admin/Wizard_Mono.py:11
+#, fuzzy
+msgid "Local path to the Mono based project."
+msgstr "Ruta local al proyecto basado en Django."
+
+#: admin/Wizard_Mono.py:13
+#, fuzzy
+msgid "Web directory under which the Mono application will be published."
+msgstr ""
+"Directorio web público a cuyo contenido se le aplicará la configuración."
+
+#: admin/Wizard_Mono.py:14
+msgid "Document root (for non Mono related files)."
+msgstr ""
+
+#: admin/Wizard_Mono.py:16
+#, fuzzy
+msgid "Directory doesn't look like a Mono based project."
+msgstr "El directorio no parece un proyecto basado en Django."
+
+#: admin/Wizard_Mono.py:78
+#, fuzzy
+msgid "Could not find the fastcgi Mono server binary"
+msgstr "No puedo lanzar el servidor"
+
+#: admin/Wizard_Mono.py:84
+#, fuzzy
+msgid "New virtual server based on a Mono project."
+msgstr "Directorio local al proyecto basado en Ruby on Rails."
+
+#: admin/Wizard_Mono.py:90 admin/Wizard_Mono.py:153
+#, fuzzy
+msgid "Mono Wizard"
+msgstr "Asistente para Django"
+
+#: admin/Wizard_Mono.py:102 admin/Wizard_Mono.py:165
+#, fuzzy
+msgid "Mono Project"
+msgstr "Asistente para Ruby on Rails"
+
+#: admin/Wizard_Mono.py:147
+#, fuzzy
+msgid "New directory based on a Mono project."
+msgstr "El directorio no parece un proyecto basado en Django."
+
+#: admin/Wizard_Moodle.py:17
+#, fuzzy
+msgid ""
+"Path to the directory where the Moodle source code is located. (Example: /"
+"usr/share/moodle)"
+msgstr ""
+"Directorio local a las fuentes de Wordpress (Por ejemplo: /usr/share/"
+"wordpress)"
+
+#: admin/Wizard_Moodle.py:18
+#, fuzzy
+msgid ""
+"Web directory where you want Moodle to be accessible. (Example: /course)"
+msgstr "Directorio web donde Wordpress será publicado (Ejemplo: /blog)"
+
+#: admin/Wizard_Moodle.py:20
+#, fuzzy
+msgid "Does not look like a Moodle source directory."
+msgstr "No parece ser el directorio de fuentes de Wordpress."
+
+#: admin/Wizard_Moodle.py:68
+msgid "Configures Moodle e-learning platform on a new virtual server."
+msgstr ""
+
+#: admin/Wizard_Moodle.py:74 admin/Wizard_Moodle.py:143
+#, fuzzy
+msgid "Moodle Wizard"
+msgstr "Asistente para Wordpress"
+
+#: admin/Wizard_PHP.py:32
+msgid ""
+"Configures PHP in the current Virtual Server. It will add a new .php "
+"extension if not present."
+msgstr ""
+
+#: admin/Wizard_PHP.py:36
+#, fuzzy
+msgid "Add PHP support"
+msgstr "Añadir nuevo puerto"
+
+#: admin/Wizard_PHP.py:57
+msgid "Already configured: nick"
+msgstr ""
+
+#: admin/Wizard_PHP.py:99
+msgid "Looked for the binaries"
+msgstr ""
+
+#: admin/Wizard_PHP.py:105
+msgid "Couldn't find IP address for 'localhost'"
+msgstr ""
+
 #: admin/Wizard_Redirect.py:11
 msgid ""
 "This domain name will be used as nickname for the new virtual server. More "
@@ -3135,7 +3561,13 @@ msgstr "Directorio web donde el proyecto será accesible."
 msgid "Value of the RAILS_ENV variable."
 msgstr "Valor del la variable RAILS_ENV."
 
-#: admin/Wizard_RoR.py:19
+#: admin/Wizard_RoR.py:18
+msgid ""
+"It is recommended to proxy the best available option, but FastCGI can also "
+"be used."
+msgstr ""
+
+#: admin/Wizard_RoR.py:20
 msgid ""
 "<p>Even though the directory looks like a Ruby on Rails project, the public/"
 "dispatch.fcgi file wasn't found.</p>"
@@ -3143,7 +3575,7 @@ msgstr ""
 "<p>Incluso si el directorio parece contener un proyecto basado en Ruby on "
 "Rails, el fichero public/dispatch.fcgi no fué encontrado.</p>"
 
-#: admin/Wizard_RoR.py:20
+#: admin/Wizard_RoR.py:21
 msgid ""
 "<p>However a <b>public/dispatch.fcgi.example</b> file is present, so you "
 "might want to rename it.</p>"
@@ -3151,7 +3583,7 @@ msgstr ""
 "<p>Sin embargo el fichero <b>public/dispatch.fcgi.example</b> está presente. "
 "Posiblemente quiera renombrarlo.</p>"
 
-#: admin/Wizard_RoR.py:21
+#: admin/Wizard_RoR.py:22
 msgid ""
 "<p>If you are using Rails >= 2.3.0, you will have to execute the following "
 "command from the project directory in order to add the missing file:</"
@@ -3161,36 +3593,168 @@ msgstr ""
 "desde el directorio del proyecto:</p><p><pre>rake rails:update:"
 "generate_dispatchers</pre></p>"
 
-#: admin/Wizard_RoR.py:22
+#: admin/Wizard_RoR.py:23
 msgid "It does not look like a Ruby on Rails based project directory."
 msgstr "El directorio no parece contener un proyecto basado en Ruby on Rails."
 
-#: admin/Wizard_RoR.py:114
+#: admin/Wizard_RoR.py:145
 msgid "Could not find the spawn-fcgi binary"
 msgstr ""
 
-#: admin/Wizard_RoR.py:148
+#: admin/Wizard_RoR.py:179
 #, fuzzy
 msgid "New virtual server based on a Ruby on Rails project."
 msgstr "Directorio local al proyecto basado en Ruby on Rails."
 
-#: admin/Wizard_RoR.py:154 admin/Wizard_RoR.py:230
+#: admin/Wizard_RoR.py:185 admin/Wizard_RoR.py:283
 msgid "Ruby on Rails Wizard"
 msgstr "Asistente para Ruby on Rails"
 
-#: admin/Wizard_RoR.py:165 admin/Wizard_RoR.py:241
+#: admin/Wizard_RoR.py:196 admin/Wizard_RoR.py:294
 #, fuzzy
 msgid "Ruby on Rails Project"
 msgstr "Asistente para Ruby on Rails"
 
-#: admin/Wizard_RoR.py:170 admin/Wizard_RoR.py:246
+#: admin/Wizard_RoR.py:205 admin/Wizard_RoR.py:303
 msgid "RAILS_ENV environment"
 msgstr "Valor de RAILS_ENV"
 
-#: admin/Wizard_RoR.py:224
+#: admin/Wizard_RoR.py:207 admin/Wizard_RoR.py:305
+msgid "Deployment method"
+msgstr ""
+
+#: admin/Wizard_RoR.py:277
 #, fuzzy
 msgid "New directory based on a Ruby of Rails project."
 msgstr "Directorio local al proyecto basado en Ruby on Rails."
+
+#: admin/Wizard_Streaming.py:19
+msgid "Adds a rule to stream media files."
+msgstr ""
+
+#: admin/Wizard_Streaming.py:27
+msgid "The media streaming plug-in is not installed."
+msgstr ""
+
+#: admin/Wizard_Streaming.py:35
+#, fuzzy
+msgid "Media streaming is already configured."
+msgstr "El nombre del virtual server ya está siendo usado."
+
+#: admin/Wizard_Sugar.py:17
+#, fuzzy
+msgid ""
+"Path to the directory where the Sugar CRM source code is located. (Example: /"
+"usr/share/sugar)"
+msgstr "Ruta local a las fuentes de Drupal. (Ejemplo: /usr/share/drupal)"
+
+#: admin/Wizard_Sugar.py:18
+#, fuzzy
+msgid ""
+"Web directory where you want Sugar CRM to be accessible. (Example: /crm)"
+msgstr "Directorio web por el cual Drupal será accedido. (Ejemplo: /blog)"
+
+#: admin/Wizard_Sugar.py:20
+#, fuzzy
+msgid "Does not look like a Sugar CRM source directory."
+msgstr "No parece ser un directorio con las fuentes de Drupal."
+
+#: admin/Wizard_Sugar.py:102
+msgid "Configure a new virtual server for Sugar CRM."
+msgstr ""
+
+#: admin/Wizard_Sugar.py:108 admin/Wizard_Sugar.py:180
+#, fuzzy
+msgid "Sugar Wizard"
+msgstr "Asistente para Drupal"
+
+#: admin/Wizard_Sugar.py:174
+msgid "Configures Sugar CRM inside a public web directory."
+msgstr ""
+
+#: admin/Wizard_Symfony.py:17
+#, fuzzy
+msgid ""
+"Path to the directory where Symfony is installed. (Example: /usr/share/php/"
+"data/symfony)"
+msgstr "Ruta local a las fuentes de Drupal. (Ejemplo: /usr/share/drupal)"
+
+#: admin/Wizard_Symfony.py:18
+msgid ""
+"Path to the web folder of the Symfony project. (Example: /home/user/"
+"sf_project/web)"
+msgstr ""
+
+#: admin/Wizard_Symfony.py:19
+#, fuzzy
+msgid "Web directory where you want Symfony to be accessible. (Example: /app)"
+msgstr "Directorio web por el cual Drupal será accedido. (Ejemplo: /blog)"
+
+#: admin/Wizard_Symfony.py:21
+#, fuzzy
+msgid "Does not look like a Symfony source directory."
+msgstr "No parece ser un directorio con las fuentes de Drupal."
+
+#: admin/Wizard_Symfony.py:104
+msgid "Configure a new virtual server using Symfony."
+msgstr ""
+
+#: admin/Wizard_Symfony.py:110 admin/Wizard_Symfony.py:179
+#, fuzzy
+msgid "Symfony Wizard"
+msgstr "Asistente para Mailman"
+
+#: admin/Wizard_Symfony.py:123 admin/Wizard_Symfony.py:195
+#, fuzzy
+msgid "Project Source"
+msgstr "Directorio del proyecto"
+
+#: admin/Wizard_Symfony.py:124 admin/Wizard_Symfony.py:196
+msgid "Symfony Package"
+msgstr ""
+
+#: admin/Wizard_Symfony.py:173
+msgid "Configures Symfony inside a public web directory."
+msgstr ""
+
+#: admin/Wizard_Trac.py:18
+#, fuzzy
+msgid "Local path to the Trac project."
+msgstr "Ruta local al proyecto basado en Django."
+
+#: admin/Wizard_Trac.py:19
+#, fuzzy
+msgid "Local path to the Trac installation. (Example: /usr/share/trac)"
+msgstr "Ruta local a las fuentes de Drupal. (Ejemplo: /usr/share/drupal)"
+
+#: admin/Wizard_Trac.py:22
+#, fuzzy
+msgid "It does not look like a Trac based project directory."
+msgstr "No parece ser el directorio de un proyecto basado en Django."
+
+#: admin/Wizard_Trac.py:23
+#, fuzzy
+msgid "It does not look like a Trac installation."
+msgstr "No parece ser un directorio de datos de Mailman."
+
+#: admin/Wizard_Trac.py:87
+#, fuzzy
+msgid "New virtual server based on a Trac project."
+msgstr "Directorio local al proyecto basado en Ruby on Rails."
+
+#: admin/Wizard_Trac.py:93
+#, fuzzy
+msgid "Trac Wizard"
+msgstr "Asistente para Drupal"
+
+#: admin/Wizard_Trac.py:108
+msgid "Trac Project"
+msgstr ""
+
+#: admin/Wizard_Trac.py:111
+#, fuzzy
+msgid "Trac Directory"
+msgstr "Directorio de las fuentes"
 
 #: admin/Wizard_WordPress.py:12
 msgid ""
@@ -3224,6 +3788,156 @@ msgstr ""
 #: admin/Wizard_WordPress.py:170
 msgid "Wordpress Wizard: Location"
 msgstr "Asistente para Wordpress"
+
+#: admin/Wizard_Zend.py:17
+#, fuzzy
+msgid ""
+"Path to the directory where the Zend source code is located. (Example: /usr/"
+"share/zend)"
+msgstr "Ruta local a las fuentes de Drupal. (Ejemplo: /usr/share/drupal)"
+
+#: admin/Wizard_Zend.py:18
+#, fuzzy
+msgid "Web directory where you want Zend to be accessible. (Example: /blog)"
+msgstr "Directorio web por el cual Drupal será accedido. (Ejemplo: /blog)"
+
+#: admin/Wizard_Zend.py:78
+msgid "Configures Zend in a new virtual server."
+msgstr ""
+
+#: admin/Wizard_Zend.py:84 admin/Wizard_Zend.py:150
+#, fuzzy
+msgid "Zend Wizard"
+msgstr "Asistentes"
+
+#: admin/Wizard_Zend.py:144
+msgid "Configures Zend inside a public web directory."
+msgstr ""
+
+#: admin/Wizard_phpBB.py:17
+#, fuzzy
+msgid ""
+"Path to the directory where the phpBB source code is located. (Example: /usr/"
+"share/phpbb)"
+msgstr "Ruta local a las fuentes de Drupal. (Ejemplo: /usr/share/drupal)"
+
+#: admin/Wizard_phpBB.py:18
+#, fuzzy
+msgid "Web directory where you want phpBB to be accessible. (Example: /phpbb)"
+msgstr "Directorio web por el cual Drupal será accedido. (Ejemplo: /blog)"
+
+#: admin/Wizard_phpBB.py:20
+#, fuzzy
+msgid "Does not look like a phpBB source directory."
+msgstr "No parece ser un directorio con las fuentes de Drupal."
+
+#: admin/Wizard_phpBB.py:73
+msgid "Configure a new virtual server using phpBB."
+msgstr ""
+
+#: admin/Wizard_phpBB.py:79 admin/Wizard_phpBB.py:149
+#, fuzzy
+msgid "phpBB Wizard"
+msgstr "Asistente para Drupal"
+
+#: admin/Wizard_phpMyAdmin.py:17
+#, fuzzy
+msgid ""
+"Path to the directory where the phpMyAdmin source code is located. "
+"(Example: /usr/share/phpmyadmin)"
+msgstr "Ruta local a las fuentes de Drupal. (Ejemplo: /usr/share/drupal)"
+
+#: admin/Wizard_phpMyAdmin.py:18
+#, fuzzy
+msgid ""
+"Web directory where you want phpMyAdmin to be accessible. (Example: /"
+"phpmyadmin)"
+msgstr "Directorio web por el cual Drupal será accedido. (Ejemplo: /blog)"
+
+#: admin/Wizard_phpMyAdmin.py:19
+#, fuzzy
+msgid "Does not look like a phpMyAdmin source directory."
+msgstr "No parece ser un directorio con las fuentes de Drupal."
+
+#: admin/Wizard_phpMyAdmin.py:57
+msgid "Configures phpMyAdmin inside a public web directory."
+msgstr ""
+
+#: admin/Wizard_phpMyAdmin.py:63
+#, fuzzy
+msgid "phpMyAdmin Wizard"
+msgstr "Asistente para Mailman"
+
+#: admin/Wizard_rTorrent.py:10
+#, fuzzy
+msgid ""
+"Where rTorrent XMLRPC is available. The host:port pair, or the Unix socket "
+"path."
+msgstr ""
+"Dónde se puede conectar con el origen de datos. El par servidor:puerto, o la "
+"ruta la socket unix."
+
+#: admin/Wizard_rTorrent.py:11
+#, fuzzy
+msgid ""
+"Web directory where you want rTorrent XMLRPC to be accessible. (Example: /"
+"RPC2)"
+msgstr "Directorio web donde Wordpress será publicado (Ejemplo: /blog)"
+
+#: admin/Wizard_rTorrent.py:36
+#, fuzzy
+msgid "rTorrent Wizard"
+msgstr "Asistente para Wordpress"
+
+#: admin/Wizard_rTorrent.py:64
+msgid "Already configured:"
+msgstr ""
+
+#: admin/Wizard_uWSGI.py:19
+msgid "Path to the uWSGI configuration file. Its mountpoint will be used."
+msgstr ""
+
+#: admin/Wizard_uWSGI.py:20
+msgid "Location of the uWSGI binary"
+msgstr ""
+
+#: admin/Wizard_uWSGI.py:23
+#, fuzzy
+msgid "Public web directory to access the project."
+msgstr "Se debe proporcionar un directorio web."
+
+#: admin/Wizard_uWSGI.py:24
+#, fuzzy
+msgid "Document root for the new virtual server."
+msgstr "Nombre para el servidor virtual."
+
+#: admin/Wizard_uWSGI.py:26
+#, fuzzy
+msgid "It does not look like a uWSGI configuration file."
+msgstr "No parece ser un directorio de CGIs de Mailman."
+
+#: admin/Wizard_uWSGI.py:27
+msgid "The uWSGI server could not be found."
+msgstr ""
+
+#: admin/Wizard_uWSGI.py:101
+#, fuzzy
+msgid "New virtual server for an uWSGI project."
+msgstr "Directorio local al proyecto basado en Ruby on Rails."
+
+#: admin/Wizard_uWSGI.py:107 admin/Wizard_uWSGI.py:178
+#, fuzzy
+msgid "uWSGI Wizard"
+msgstr "Asistente para Drupal"
+
+#: admin/Wizard_uWSGI.py:129 admin/Wizard_uWSGI.py:194
+msgid "uWSGI binary"
+msgstr ""
+
+#: admin/Wizard_uWSGI.py:172
+#, fuzzy
+msgid "New directory for an uWSGI project."
+msgstr "El directorio no parece un proyecto basado en Django."
 
 #: admin/config.py:184
 #, python-format
@@ -3478,41 +4192,37 @@ msgstr "Aceptar"
 msgid "Require"
 msgstr "Requerir"
 
-#: admin/consts.py:170
-msgid "Disabled"
-msgstr "Desactivado"
-
 #: admin/consts.py:171
 msgid "RRDtool graphs"
 msgstr "Gráficas RRDTool"
 
-#: admin/server.py:120
+#: admin/server.py:121
 msgid "Configuration saved."
 msgstr "Configuración guardada."
 
-#: admin/server.py:122
+#: admin/server.py:123
 msgid " Graceful restart performed."
 msgstr " Reinicio suave realizado."
 
-#: admin/server.py:124
+#: admin/server.py:125
 msgid " Hard restart performed."
 msgstr " Realizado el reinicio forzado."
 
-#: admin/server.py:207
+#: admin/server.py:210
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "Parámetros incorrectos: PORT CONFIG_FILE"
 
-#: admin/server.py:247
+#: admin/server.py:250
 #, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s"
 msgstr "Servidor %(version)s ejecutandose.. PID=%(pid)d Puerto=%(scgi_port)s"
 
-#: admin/server.py:249
+#: admin/server.py:252
 #, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
 msgstr "Servidor %(version)s ejecutandose.. PID=%(pid)d Puerto=%(scgi_port)s"
 
-#: admin/server.py:256
+#: admin/server.py:259
 msgid "Server exiting.."
 msgstr "Servidor saliendo.."
 
@@ -3612,6 +4322,12 @@ msgstr "Tiempo malformado"
 msgid "Virtual host nick is already being used."
 msgstr "El nombre del virtual server ya está siendo usado."
 
+#~ msgid "Errors"
+#~ msgstr "Errores"
+
+#~ msgid "Options"
+#~ msgstr "Opciones"
+
 #~ msgid "Accepted Connections"
 #~ msgstr "Conexiones aceptadas"
 
@@ -3623,9 +4339,6 @@ msgstr "El nombre del virtual server ya está siendo usado."
 
 #~ msgid "Rendering interval (<i>secs</i>)"
 #~ msgstr "Intervalo de regeneración (<i>segs.</i>)"
-
-#~ msgid "Could not launch the server"
-#~ msgstr "No puedo lanzar el servidor"
 
 #~ msgid "WWW Root"
 #~ msgstr "Raíz WWW"
