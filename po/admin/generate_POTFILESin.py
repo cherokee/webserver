@@ -24,7 +24,19 @@ def main():
     pot_files = []
     for dir, filters in DIRS:
         dir_path = os.path.join (top_srcdir, dir)
+
+        # Read the Makefile.am file
+        try:
+            makefile_am = open(os.path.join(dir_path, "Makefile.am"), 'r').read()
+        except:
+            continue
+
         for file in os.listdir (dir_path):
+            # Skip the file is Makefile.am doesn't refer to it
+            if not file in makefile_am:
+                continue
+
+            # Check the file filters as well
             for filter in filters:
                 if not re.search (filter, file):
                     continue
