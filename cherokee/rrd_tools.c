@@ -234,6 +234,7 @@ ret_t
 cherokee_rrd_connection_kill (cherokee_rrd_connection_t *rrd_conn,
 			      cherokee_boolean_t         do_kill)
 {
+	int re;
 	int status;
 
 	if (rrd_conn->write_fd) {
@@ -250,7 +251,16 @@ cherokee_rrd_connection_kill (cherokee_rrd_connection_t *rrd_conn,
 		if (do_kill) {
 			kill (rrd_conn->pid, SIGTERM);
 		}
-		waitpid (rrd_conn->pid, &status, WNOHANG);
+
+		do {
+			re = waitpid (rrd_conn->pid, &status, 0);
+			if ((re < 0) && (errno == EINTR)) {
+				usleep (500 * 1000);
+				continue;
+			}
+			break;
+		} while (true);
+
 		rrd_conn->pid = -1;
 	}
 
