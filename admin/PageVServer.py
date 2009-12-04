@@ -64,6 +64,7 @@ NOTE_EVHOST           = N_('How to support the "Advanced Virtual Hosting" mechan
 NOTE_LOGGER_TEMPLATE  = N_('The following variables are accepted: <br/>${ip_remote}, ${ip_local}, ${protocol}, ${transport}, ${port_server}, ${query_string}, ${request_first_line}, ${status}, ${now}, ${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, ${request_original}, ${vserver_name}')
 NOTE_MATCHING_METHOD  = N_('Allows the selection of domain matching method.')
 NOTE_COLLECTOR        = N_('Whether or not it should collected statistics about the traffic of this virtual server.')
+NOTE_UTC_TIME         = N_('Time standard to use in the log file entries.')
 
 HELPS = [
     ('config_virtual_servers', N_("Virtual Servers")),
@@ -639,6 +640,7 @@ class PageVServer (PageMenu, FormHelper):
             x_real_ip     = int(self._cfg.get_val('%s!x_real_ip_enabled'%(pre), "0"))
             x_real_ip_all = int(self._cfg.get_val('%s!x_real_ip_access_all'%(pre), "0"))
 
+            self.AddPropOptions (table, _('Time standard'), '%s!utc_time'%(pre), UTC_TIME, _(NOTE_UTC_TIME))
             self.AddPropCheck (table, _('Accept Forwarded IPs'), '%s!x_real_ip_enabled'%(pre), False, _(NOTE_X_REAL_IP))
             if x_real_ip:
                 self.AddPropCheck (table, _('Don\'t check origin'), '%s!x_real_ip_access_all'%(pre), False, _(NOTE_X_REAL_IP_ALL))

@@ -59,11 +59,12 @@ cherokee_logger_init_base (cherokee_logger_t      *logger,
 	 */
 	logger->priv         = priv;
 	logger->write_access = NULL;
+	logger->utc_time     = false;
 
 	/* Private
 	 */	
 	logger->priv->backup_mode = false;
-	
+
        	CHEROKEE_MUTEX_INIT (&PRIV(logger)->mutex, NULL);
 	cherokee_x_real_ip_init (&logger->priv->x_real_ip);
 
@@ -73,6 +74,8 @@ cherokee_logger_init_base (cherokee_logger_t      *logger,
 	if (ret != ret_ok) {
 		return ret_error;
 	}
+
+	cherokee_config_node_read_bool (config, "utc_time", &logger->utc_time);
 
 	return ret_ok;
 }

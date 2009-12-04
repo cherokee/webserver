@@ -170,3 +170,8 @@ COLLECTORS = [
     ('',         N_('Disabled')),
     ('rrd',      N_('RRDtool graphs'))
 ]
+
+UTC_TIME = [
+    ('',         N_('Local time')),
+    ('1',        N_('UTC: Coordinated Universal Time'))
+]

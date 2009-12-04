@@ -50,6 +50,7 @@ typedef ret_t (* logger_func_write_access_t) (void  *logger, void *conn);
 typedef struct {
 	cherokee_module_t               module;
 	struct cherokee_logger_private *priv;
+	cherokee_boolean_t              utc_time;
 
 	/* Pure virtual methods
 	 */

@@ -413,10 +413,19 @@ _init_template (cherokee_logger_custom_t *logger,
 static void 
 bogotime_callback (void *param) 
 {
-	struct tm *pnow_tm = &cherokee_bogonow_tmloc;
+	struct tm                *pnow_tm;
+	cherokee_logger_custom_t *logger   = LOG_CUSTOM(param);
 
-	UNUSED (param);
-	
+	/* Choose between local and universal time
+	 */
+	if (LOGGER(logger)->utc_time) {
+		pnow_tm = &cherokee_bogonow_tmgmt;
+	} else {
+		pnow_tm = &cherokee_bogonow_tmloc;
+	}
+
+	/* Render the string
+	 */	
 	cherokee_buffer_clean  (&now);
 	cherokee_buffer_add_va (&now,
 				"%02d/%s/%d:%02d:%02d:%02d %c%02d%02d",
@@ -476,7 +485,7 @@ cherokee_logger_custom_new (cherokee_logger_t         **logger,
 	 */
 	if (callback_init == 0) {
 		cherokee_buffer_init (&now);
-		cherokee_bogotime_add_callback (bogotime_callback, NULL, 1);
+		cherokee_bogotime_add_callback (bogotime_callback, n, 1);
 	}
 
 	/* Return the object
