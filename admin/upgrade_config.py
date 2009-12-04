@@ -27,7 +27,7 @@ def main():
     cfg = Config(cfg_file)
 
     # Update the configuration file if needed
-    ver_config  = int (cfg.get_val('config!version', 000099028))
+    ver_config  = int (cfg.get_val('config!version', '000099028'))
     ver_release = int (config_version_get_current())
 
     print "Upgrading '%s' from %d to %d.." % (cfg_file, ver_config, ver_release),
