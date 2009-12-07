@@ -139,7 +139,8 @@ Wizard_Glassfish.py \
 Wizard_uWSGI.py \
 Wizard_Mono.py \
 Wizard_ColdFusion.py \
-Wizard_Concrete5.py
+Wizard_Concrete5.py \
+Wizard_MoinMoin.py
 endif
 
 adminpy_DATA = $(admin_data)
