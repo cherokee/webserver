@@ -16,7 +16,7 @@ from Wizard import *
 # For gettext
 N_ = lambda x: x
 
-NOTE_UWSGI_CONFIG = N_("Path to the uWSGI configuration file. Its mountpoint will be used.")
+NOTE_UWSGI_CONFIG = N_("Path to the uWSGI configuration file (XML or Python-only). Its mountpoint will be used.")
 NOTE_UWSGI_BINARY = N_("Location of the uWSGI binary")
 
 NOTE_NEW_HOST = N_("Name of the new domain that will be created.")
@@ -30,8 +30,12 @@ SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = uWSGI %(src_num)d
 source!%(src_num)d!host = /tmp/cherokee-source%(src_num)d.sock
-source!%(src_num)d!interpreter = %(uwsgi_binary)s -s /tmp/cherokee-source%(src_num)d.sock -C -x %(uwsgi_cfg)s
+source!%(src_num)d!interpreter = %(uwsgi_binary)s -s /tmp/cherokee-source%(src_num)d.sock -t 10 -M -p 1 -C %(uwsgi_extra)s
 """
+
+SOURCE_XML   = """ -x %s"""
+SOURCE_WSGI  = """ -w %s"""
+SOURCE_VE    = """ -H %s"""
 
 CONFIG_VSRV = SOURCE + """
 %(vsrv_pre)s!nick = %(new_host)s
@@ -70,17 +74,35 @@ DEFAULT_PATHS  = ['/usr/bin',
                   '/usr/gnu/bin',
                   '/opt/local/bin']
 
-RE_MOUNTPOINT = """<uwsgi>.*?<app mountpoint=["|'](.*?)["|']>.*</uwsgi>"""
+RE_MOUNTPOINT_XML = """<uwsgi>.*?<app mountpoint=["|'](.*?)["|']>.*</uwsgi>"""
+RE_MOUNTPOINT_WSGI  = """applications.*=.*{.*'(.*?)':"""
 
 def is_uwsgi_cfg (filename, cfg, nochroot):
     filename = validations.is_local_file_exists (filename, cfg, nochroot)
-    mountpoint = find_mountpoint(filename)
+    mountpoint = find_mountpoint_xml(filename)
     if not mountpoint:
-        raise ValueError, _(ERROR_NO_UWSGI_CONFIG)
+        mountpoint = find_mountpoint_wsgi(filename)
+        if not mountpoint:
+            raise ValueError, _(ERROR_NO_UWSGI_CONFIG)
     return filename
 
-def find_mountpoint (filename):
-    regex = re.compile(RE_MOUNTPOINT, re.DOTALL)
+def find_virtualenv (filename):
+    try:
+        import virtualenv
+    except ImportError:
+        return None
+
+    dirname = os.path.dirname(os.path.normpath(filename))
+    return os.path.normpath(dirname + '/..')
+
+def find_mountpoint_xml (filename):
+    regex = re.compile(RE_MOUNTPOINT_XML, re.DOTALL)
+    match = regex.search(open(filename).read())
+    if match:
+        return match.groups()[0]
+
+def find_mountpoint_wsgi (filename):
+    regex = re.compile(RE_MOUNTPOINT_WSGI, re.DOTALL)
     match = regex.search(open(filename).read())
     if match:
         return match.groups()[0]
@@ -149,7 +171,20 @@ class Wizard_VServer_uWSGI (WizardPage):
         new_host      = post.pop('tmp!wizard_uwsgi!new_host')
         document_root = post.pop('tmp!wizard_uwsgi!document_root')
         uwsgi_cfg     = post.pop('tmp!wizard_uwsgi!uwsgi_cfg')
-        webdir        = find_mountpoint(uwsgi_cfg)
+        webdir        = find_mountpoint_xml(uwsgi_cfg)
+
+        # Choose between XML config+launcher, or Python only config
+        if webdir:
+            uwsgi_extra = SOURCE_XML % uwsgi_cfg
+        else:
+            webdir = find_mountpoint_wsgi(uwsgi_cfg)
+            uwsgi_extra = SOURCE_WSGI % uwsgi_cfg
+
+        # Virtualenv support
+        uwsgi_virtualenv = find_virtualenv(uwsgi_cfg)
+        if uwsgi_virtualenv:
+            uwsgi_extra += SOURCE_VE % uwsgi_virtualenv
+
         uwsgi_binary  = self.uwsgi_binary
         if not uwsgi_binary:
             uwsgi_binary = post.pop('tmp!wizard_uwsgi!uwsgi_binary')
@@ -210,7 +245,20 @@ class Wizard_Rules_uWSGI (WizardPage):
 
         # Incoming info
         uwsgi_cfg     = post.pop('tmp!wizard_uwsgi!uwsgi_cfg')
-        webdir        = find_mountpoint(uwsgi_cfg)
+        webdir        = find_mountpoint_xml(uwsgi_cfg)
+
+        # Choose between XML config+launcher, or Python only config
+        if webdir:
+            uwsgi_extra = SOURCE_XML % uwsgi_cfg
+        else:
+            webdir = find_mountpoint_wsgi(uwsgi_cfg)
+            uwsgi_extra = SOURCE_WSGI % uwsgi_cfg
+
+        # Virtualenv support
+        uwsgi_virtualenv = find_virtualenv(uwsgi_cfg)
+        if uwsgi_virtualenv:
+            uwsgi_extra += SOURCE_VE % uwsgi_virtualenv
+
         uwsgi_binary  = self.uwsgi_binary
         if not uwsgi_binary:
             uwsgi_binary = post.pop('tmp!wizard_uwsgi!uwsgi_binary')
@@ -222,4 +270,3 @@ class Wizard_Rules_uWSGI (WizardPage):
         # Add the new rules
         config = CONFIG_RULES % (locals())
         self._apply_cfg_chunk (config)
-
