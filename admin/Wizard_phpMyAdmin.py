@@ -42,7 +42,7 @@ SRC_PATHS = [
 
 def is_phpmyadmin_dir (path, cfg, nochroot):
     path = validations.is_local_dir_exists (path, cfg, nochroot)
-    module_inc = os.path.join (path, 'libraries/PMA.php')
+    module_inc = os.path.join (path, 'libraries/common.inc.php')
     if not os.path.exists (module_inc):
         raise ValueError, ERROR_NO_SRC
     return path
