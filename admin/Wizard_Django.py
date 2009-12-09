@@ -19,8 +19,8 @@ ERROR_NO_DROOT  = N_("The document root directory does not exist.")
 SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = Django %(src_num)d
-source!%(src_num)d!host = /tmp/cherokee-source%(src_num)d.sock
-source!%(src_num)d!interpreter = python %(django_dir)s/manage.py runfcgi protocol=scgi socket=/tmp/cherokee-source%(src_num)d.sock
+source!%(src_num)d!host = 127.0.0.1:%(src_port)d
+source!%(src_num)d!interpreter = python %(django_dir)s/manage.py runfcgi protocol=scgi host=127.0.0.1 port=%(src_port)d
 """
 
 CONFIG_VSRV = SOURCE + """
@@ -141,6 +141,7 @@ class Wizard_VServer_Django (WizardPage):
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
         src_num, src_pre = cfg_source_get_next (self._cfg)
+        src_port = cfg_source_find_free_port ()
 
         # Analize Django config file
         media_web_dir = django_figure_media_prefix (django_dir)
@@ -201,6 +202,7 @@ class Wizard_Rules_Django (WizardPage):
         # Locals
         rule_num, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
         src_num,  src_pre  = cfg_source_get_next (self._cfg)
+        src_port = cfg_source_find_free_port ()
 
         # Add the new rules
         config = CONFIG_RULES % (locals())

@@ -18,8 +18,8 @@ ERROR_NO_MONO = N_("Directory doesn't look like a Mono based project.")
 SOURCE = """
 source!%(src_num)d!type = interpreter
 source!%(src_num)d!nick = Mono %(src_num)d
-source!%(src_num)d!host = /tmp/cherokee-source%(src_num)d.sock
-source!%(src_num)d!interpreter = %(mono_bin)s --socket=unix:/tmp/cherokee-source%(src_num)d.sock --applications=%(webdir)s:%(mono_dir)s
+source!%(src_num)d!host = 127.0.0.1:%(src_port)d
+source!%(src_num)d!interpreter = %(mono_bin)s --socket=tcp --address=127.0.0.1 --port=%(src_port)d --applications=%(webdir)s:%(mono_dir)s
 """
 
 CONFIG_VSRV = SOURCE + """
@@ -132,6 +132,7 @@ class Wizard_VServer_Mono (CommonMethods, WizardPage):
         # Locals
         vsrv_pre = cfg_vsrv_get_next (self._cfg)
         src_num, src_pre = cfg_source_get_next (self._cfg)
+        src_port = cfg_source_find_free_port ()
 
         # Usual Static files
         self._common_add_usual_static_files ("%s!rule!500" % (vsrv_pre))
@@ -190,6 +191,7 @@ class Wizard_Rules_Mono (CommonMethods, WizardPage):
         # Locals
         rule_num, rule_pre = cfg_vsrv_rule_get_next (self._cfg, self._pre)
         src_num,  src_pre  = cfg_source_get_next (self._cfg)
+        src_port = cfg_source_find_free_port ()
 
         # Add the new rules
         config = CONFIG_RULES % (locals())
