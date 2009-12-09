@@ -604,6 +604,35 @@ cherokee_header_copy_known (cherokee_header_t *hdr, cherokee_common_header_t hea
 }
 
 
+static ret_t
+sanitize_buffer (cherokee_buffer_t *buf)
+{
+	cuint_t i, j;
+	cuint_t removed = 0;
+
+	/* Remove ASCII characters below 0x20
+	 */
+	for (i=0,j=0; j<buf->len;) {
+		if (unlikely ((buf->buf[i] <  0x20) ||
+			      (buf->buf[i] == 0x7F)))
+		{
+			j       += 1;
+			removed += 1;
+			buf->buf[i] = buf->buf[j];
+		} else {
+			if (unlikely (removed)) {
+				buf->buf[i] = buf->buf[j];
+			}
+			j++;
+			i++;
+		}
+	}
+
+	buf->len -= removed;
+	return ret_ok;
+}
+
+
 ret_t 
 cherokee_header_copy_request (cherokee_header_t *hdr, cherokee_buffer_t *request)
 {
@@ -615,10 +644,16 @@ cherokee_header_copy_request (cherokee_header_t *hdr, cherokee_buffer_t *request
 	}
 
 	ret = cherokee_buffer_add (request, hdr->input_buffer->buf + hdr->request_off, hdr->request_len);
-	if (unlikely(ret < ret_ok))
+	if (unlikely(ret < ret_ok)) {
 		return ret;
+	}
 
-	return cherokee_buffer_unescape_uri (request);
+	ret = cherokee_buffer_unescape_uri (request);
+	if (unlikely (ret != ret_ok)) {
+		return ret_error;
+	}
+
+	return sanitize_buffer (request);
 }
 
 
