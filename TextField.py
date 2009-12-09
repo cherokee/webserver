@@ -33,13 +33,10 @@ class TextField (Widget):
         if not 'id' in props:
             self._props['id'] = 'widget%d'%(self.uniq_id)
 
-    def __get_common_props (self, skip_props=[]):
+    def __get_input_props (self):
         render = ''
 
         for prop in self._props:
-            if prop in skip_props:
-                continue
-
             render += " %s" %(prop)
             value = self._props[prop]
             if value:
@@ -47,15 +44,20 @@ class TextField (Widget):
                     render += '="%s"' %(value)
                 else:
                     render += '=' + value
+        return render
 
+    def __get_error_div_props (self):
+        render = ' id="%s"' % (self._props['id'])
+        if self._props.get('name'):
+            render += ' key="%s"' %(self._props.get('name'))
         return render
         
     def Render (self):
         # Render the text field
-        render = '<input type="text"%s>' % (self.__get_common_props())
+        render = '<input type="text"%s />' % (self.__get_input_props())
 
         # Render the error reporting field
-        render += '<div class="error"%s>' % (self.__get_common_props(['class']))
+        render += '<div class="error"%s></div>' % (self.__get_error_div_props())
 
         return render
 

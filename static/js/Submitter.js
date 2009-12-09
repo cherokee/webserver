@@ -40,6 +40,7 @@ function Submitter (id, url) {
     }
 
     this.restore_orig_values = function (self) {
+	   console.log ("RESTORING");
         for (var key in self.orig_values) {
 		  $("#submitter"+ self.submitter_id +" #"+key).attr (
 			 'value', self.orig_values[key]
@@ -69,7 +70,8 @@ function Submitter (id, url) {
 
 	   /* Build the post */
 	   info = {};
-	   $("#submitter"+self.submitter_id).children("input:text").each(function(){
+	   $("#submitter"+ self.submitter_id +" input:text").each(function(){
+		  console.log(this.name);
 		  info[this.name] = this.value;
 	   });
 
@@ -83,17 +85,15 @@ function Submitter (id, url) {
 		  data:      info,
 		  success:   function (data) {
 			 if (data['ret'] != "ok") {
-				console.log ("ENTRA");
 				/* Set the error messages */
 				for (var key in data['errors']) {
-				    filter = "#submitter"+ self.submitter_id + "  [key='"+ key +"']";
+				    filter = "#submitter"+ self.submitter_id + " div.error[key='"+ key +"']";
 				    $(filter).html (data['errors'][key]);
 				}
 			 }
-			 console.log ("SALE");
 		  },
 		  error: function (xhr, ajaxOptions, thrownError) {
-			 this.restore_orig_values (self);
+			 self.restore_orig_values (self);
 		  },
 		  complete:  function (XMLHttpRequest, textStatus) {
 			 /* Unlock fields */
