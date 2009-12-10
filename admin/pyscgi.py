@@ -41,7 +41,7 @@ import socket
 import errno
 import sys
 
-__version__   = '1.9'
+__version__   = '1.10'
 __author__    = 'Alvaro Lopez Ortega'
 __copyright__ = 'Copyright 2009, Alvaro Lopez Ortega'
 __license__   = 'BSD'
@@ -167,7 +167,6 @@ class SCGIUnixServerFork (SocketServer.UnixStreamServer):
 
 
 def ServerFactory (threading=False, *args, **kargs):
-    threading   = kargs.get('threading',   False)
     unix_socket = kargs.get('unix_socket', None)
 
     if threading:
