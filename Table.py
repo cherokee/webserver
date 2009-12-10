@@ -26,7 +26,7 @@ from Container import Container
 class TableField (Container):
     def __init__ (self, widget=None):
         Container.__init__ (self)
-        self._props = None
+        self._props = {}
         self._tag   = 'td'
 
         if widget:
@@ -34,29 +34,52 @@ class TableField (Container):
 
     def Render (self):
         render = '<%s' % (self._tag)
-        if self._props:
-            render += ' %s' %(self._props)
+        for prop in self._props:
+            value = self._props[prop]
+            if value:
+                render += ' %s="%s"' %(prop, value)
+            else:
+                render += ' %s' %(prop)
 
         container = Container.Render(self)
         render += '>%s</%s>' %(container, self._tag)
         return render
 
-    def SetProperties (self, props):
-        assert type(props) == str
-        self._props = props
+    def __setitem__ (self, prop, value):
+        assert type(prop)  == str
+        assert type(value) == str
+
+        self._props[prop] = value
 
 
 class Table (Widget):
-    def __init__ (self, cols, rows, **kwargs):
+    def __init__ (self, **kwargs):
         Widget.__init__ (self)
-        self.col_n  = cols
-        self.row_n  = rows
-        self.kwargs = kwargs
+        self.kwargs   = kwargs
+        self.last_col = 0
+        self.last_row = 0
+        self.rows     = []
 
-        # Build empty array
-        self.rows = []
-        for y_i in range(rows):
-            self.rows.append ([None] * cols)
+    def __add_row (self):
+        self.rows.append ([None] * self.last_col)
+        self.last_row += 1
+
+    def __add_col (self):
+        for row in self.rows:
+            row.append (None)
+        self.last_col += 1
+    
+    def __grow_if_needed (self, row, col):
+        if col < 1:
+            raise IndexError, "Column number out of bounds"
+        if row < 1:
+            raise IndexError, "Row number out of bounds"
+
+        while row > self.last_row:
+            self.__add_row()
+
+        while col > self.last_col:
+            self.__add_col()
 
     def __setitem_single (self, pos, widget):
         assert isinstance(widget, Widget)
@@ -64,11 +87,9 @@ class Table (Widget):
 
         # Check table bounds
         row,col = pos
-        if col-1 > self.col_n:
-            raise IndexError, "Column number out of bounds"
-        if row-1 > self.row_n:
-            raise IndexError, "Row number out of bounds"
-        
+        self.__grow_if_needed (row, col)
+
+        # The field object
         field = TableField (widget)
 
         # Set the element
@@ -86,6 +107,16 @@ class Table (Widget):
             return self.__setitem_list (pos, item)
         else:
             return self.__setitem_single (pos, item)
+
+    def __getitem__ (self, pos):
+        row,col = pos
+
+        if col > self.last_col:
+            raise IndexError, "Column number out of bounds"
+        if row > self.last_row:
+            raise IndexError, "Row number out of bounds"
+
+        return self.rows[row-1][col-1]
             
     def Render (self):
         props = self.kwargs.get('props')
@@ -97,10 +128,10 @@ class Table (Widget):
         for row in self.rows:
             render += '<tr>'
             for field in row:
-                assert isinstance(field, TableField)
-                render += field.Render()
+                if field:
+                    assert isinstance(field, TableField)
+                    render += field.Render()
             render += '</tr>'
 
         render += '</table>'
         return render
-        

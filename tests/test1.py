@@ -29,7 +29,7 @@ def test():
     return HTML_PAGE %(submit.Render())
 
 def test2():
-    props = CTK.PropsTable(3)
+    props = CTK.PropsTable()
     props['Name']    = CTK.TextField({'name': "server!uno", 'class':"required"})
     props['Surname'] = CTK.TextField({'name': "server!dos", 'class':"required"})
     props['Nick']    = CTK.TextField({'name': "server!tri", 'class':"optional"})
@@ -40,11 +40,10 @@ def test2():
     return HTML_PAGE %(submit.Render())
 
 def test3():
-    props = CTK.PropsTableAuto (3, 'http://localhost:9091/error')
-
-    props['Name']    = CTK.TextField({'name': "server!uno", 'class':"required"})
-    props['Surname'] = CTK.TextField({'name': "server!dos", 'class':"required"})
-    props['Nick']    = CTK.TextField({'name': "server!tri", 'class':"optional"})
+    props = CTK.PropsTableAuto ('http://localhost:9091/error')
+    props.Add ('Name',    CTK.TextField({'name': "server!uno", 'class':"required"}), 'Example 1')
+    props.Add ('Surname', CTK.TextField({'name': "server!dos", 'class':"required"}), 'Lalala')
+    props.Add ('Nick',    CTK.TextField({'name': "server!tri", 'class':"optional"}), 'Oh uh ah!')
 
     return HTML_PAGE %(props.Render())
 

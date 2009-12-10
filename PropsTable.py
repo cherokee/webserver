@@ -25,25 +25,29 @@ from RawHTML import RawHTML
 from Submitter import Submitter
 
 class PropsTable (Table):
-    def __init__ (self, rows, **kwargs):
-        Table.__init__ (self, 2, rows, **kwargs)
+    def __init__ (self, **kwargs):
+        Table.__init__ (self, **kwargs)
         self.current_row = 1
 
-    def __setitem__ (self, title, widget):
-        title_widget = RawHTML(title)
+    def Add (self, title, widget, comment):
+        widget_title   = RawHTML(title)
+        widget_comment = RawHTML(comment)
+        
+        Table.__setitem__ (self, (self.current_row, 1),  [widget_title, widget])
+        Table.__setitem__ (self, (self.current_row+1, 1), widget_comment)
 
-        Table.__setitem__ (self, (self.current_row, 1), title_widget)
-        Table.__setitem__ (self, (self.current_row, 2), widget)
+        field = Table.__getitem__ (self, (self.current_row+1, 1))
+        field['cellspan'] = "2"
 
-        self.current_row += 1
+        self.current_row += 2
 
 class PropsTableAuto (PropsTable):
-    def __init__ (self, rows, url, **kwargs):
-        PropsTable.__init__ (self, rows, **kwargs)
+    def __init__ (self, url, **kwargs):
+        PropsTable.__init__ (self, **kwargs)
         self._url = url
 
-    def __setitem__ (self, title, widget):
+    def Add (self, title, widget, comment):
         submit = Submitter (self._url)
         submit += widget
 
-        return PropsTable.__setitem__ (self, title, submit)
+        return PropsTable.Add (self, title, submit, comment)
