@@ -30,9 +30,15 @@ from Widget import Widget
 class Template (Widget):
     cache = {}
 
-    def __init__ (self, filename):
+    def __init__ (self, **kwargs):
         Widget.__init__ (self)
-        self.filename = filename
+        self.filename = None
+        self.content  = None
+
+        if kwargs.has_key('filename'):
+            self.filename = kwargs['filename']
+        elif kwargs.has_key('content'):
+            self.content  = kwargs['content']
 
     def _content_update (self):
         content = open(self.filename, 'r').read()
@@ -52,9 +58,12 @@ class Template (Widget):
             pass
 
         # Miss
-        self._content_update()
-        return Template.cache[self.filename]['content']
-
+        if (self.filename and
+            os.path.exists (self.filename)):
+            self._content_update()
+            return Template.cache[self.filename]['content']
+        else:
+            return self.content
 
     def Render (self):
         vars = globals()

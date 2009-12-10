@@ -2,42 +2,15 @@ import CTK
 import time
 import pyscgi
 
-HTML_PAGE = """\
-<html><head>
-<script type="text/javascript" src="/static/js/jquery-1.3.2.js"></script>
-<script type="text/javascript" src="/static/js/Submitter.js"></script>
-</head><body>
-%s
-</body></html>"""
-
 HTTP_HEADER = """\
 Status: 200 OK\r\n\
 Content-Type: text/html\r\n\
 \r\n"""
 
-def test():
-    entry1 = CTK.TextField({'name': "server!uno", 'class':"required", 'value':"algo"})
-    entry2 = CTK.TextField({'name': "server!dos", 'class':"optional"})
-    entry3 = CTK.TextField({'name': "server!tri", 'class':"required"})
-
-    submit = CTK.Submitter('http://localhost:9091/error')
-
-    submit += entry1
-    submit += entry2
-    submit += entry3
-
-    return HTML_PAGE %(submit.Render())
-
-def test2():
-    props = CTK.PropsTable()
-    props['Name']    = CTK.TextField({'name': "server!uno", 'class':"required"})
-    props['Surname'] = CTK.TextField({'name': "server!dos", 'class':"required"})
-    props['Nick']    = CTK.TextField({'name': "server!tri", 'class':"optional"})
-
-    submit = CTK.Submitter('http://localhost:9091/error')
-    submit += props
-
-    return HTML_PAGE %(submit.Render())
+HEADERS = [
+    '<script type="text/javascript" src="/static/js/jquery-1.3.2.js"></script>',
+    '<script type="text/javascript" src="/static/js/Submitter.js"></script>'
+]
 
 def test3():
     props = CTK.PropsTableAuto ('http://localhost:9091/error')
@@ -45,8 +18,11 @@ def test3():
     props.Add ('Surname', CTK.TextField({'name': "server!dos", 'class':"required"}), 'Lalala')
     props.Add ('Nick',    CTK.TextField({'name': "server!tri", 'class':"optional"}), 'Oh uh ah!')
 
-    return HTML_PAGE %(props.Render())
+    page = CTK.Page()
+    page.AddHeaders (HEADERS)
+    page += props
 
+    return page.Render()
 
 class Handler (pyscgi.SCGIHandler):
     def handle_request (self):

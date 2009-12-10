@@ -24,6 +24,7 @@
 from Widget import Widget
 from Container import Container
 from Submitter import Submitter
+from Page import Page
 
 # Widgets
 from Table import Table, TableFixed
