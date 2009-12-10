@@ -40,7 +40,6 @@ function Submitter (id, url) {
     }
 
     this.restore_orig_values = function (self) {
-	   console.log ("RESTORING");
         for (var key in self.orig_values) {
 		  $("#submitter"+ self.submitter_id +" #"+key).attr (
 			 'value', self.orig_values[key]
@@ -50,9 +49,6 @@ function Submitter (id, url) {
 
     this.is_fulfilled = function (self) {
 	   var full = true;
-
-	   console.log("#submitter"+ self.submitter_id +" .required[type=text]");
-	   console.log($("#submitter"+ self.submitter_id +" .required[type=text]"));
 
 	   $("#submitter"+ self.submitter_id +" .required[type=text]").each(function() {
 		  if (! this.value) {
@@ -71,12 +67,10 @@ function Submitter (id, url) {
 	   /* Build the post */
 	   info = {};
 	   $("#submitter"+ self.submitter_id +" input:text").each(function(){
-		  console.log(this.name);
 		  info[this.name] = this.value;
 	   });
 
 	   /* Async post */
-	   console.log ("REQUEST " + self.url);
 	   $.ajax ({
 		  type:     'POST',
 		  url:       self.url,
@@ -122,8 +116,6 @@ function Submitter (id, url) {
     this.input_blur_cb = function (event) {
 	   var self = event.data;
 
-	   console.log("blur: "+self.submitter_id);
-
 	   /* Only proceed when something */
 	   if (! self.key_pressed) {
 		  return;
@@ -132,7 +124,8 @@ function Submitter (id, url) {
 	   /* Procced on the last entry */
 	   last_req_text_filter = "#submitter" + self.submitter_id + " .required[type=text]:last";
 
-	   if ($(last_req_text_filter).attr('id') != event.currentTarget.id) {
+	   if (($(last_req_text_filter).attr('id') != undefined) &&
+		  ($(last_req_text_filter).attr('id') != event.currentTarget.id)) {
 		  return;
 	   }
 

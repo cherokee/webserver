@@ -20,13 +20,30 @@
 # 02110-1301, USA.
 #
 
-# Generic
-from Widget import Widget
-from Container import Container
-from Submitter import Submitter
-
-# Widgets
 from Table import Table
 from RawHTML import RawHTML
-from TextField import TextField
-from PropsTable import PropsTable, PropsTableAuto
+from Submitter import Submitter
+
+class PropsTable (Table):
+    def __init__ (self, rows, **kwargs):
+        Table.__init__ (self, 2, rows, **kwargs)
+        self.current_row = 1
+
+    def __setitem__ (self, title, widget):
+        title_widget = RawHTML(title)
+
+        Table.__setitem__ (self, (self.current_row, 1), title_widget)
+        Table.__setitem__ (self, (self.current_row, 2), widget)
+
+        self.current_row += 1
+
+class PropsTableAuto (PropsTable):
+    def __init__ (self, rows, url, **kwargs):
+        PropsTable.__init__ (self, rows, **kwargs)
+        self._url = url
+
+    def __setitem__ (self, title, widget):
+        submit = Submitter (self._url)
+        submit += widget
+
+        return PropsTable.__setitem__ (self, title, submit)
