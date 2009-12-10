@@ -5,7 +5,7 @@ This module has been written as part of the Cherokee project:
                http://www.cherokee-project.com/
 """
 
-# Copyright (c) 2006, Alvaro Lopez Ortega <alvaro@alobbs.com>
+# Copyright (c) 2006-2009, Alvaro Lopez Ortega <alvaro@alobbs.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -41,8 +41,10 @@ import socket
 import errno
 import sys
 
-__version__ = '1.8'
-__author__  = 'Alvaro Lopez Ortega'
+__version__   = '1.10'
+__author__    = 'Alvaro Lopez Ortega'
+__copyright__ = 'Copyright 2009, Alvaro Lopez Ortega'
+__license__   = 'BSD'
 
 
 class SCGIHandler (SocketServer.StreamRequestHandler):
@@ -139,7 +141,9 @@ class SCGIHandler (SocketServer.StreamRequestHandler):
         self.send("handle_request() should be overridden")
 
 
-class SCGIServer(SocketServer.ThreadingTCPServer):
+# TCP port
+#
+class SCGIServer (SocketServer.ThreadingTCPServer):
     def __init__(self, handler_class=SCGIHandler, host="", port=4000):
         self.allow_reuse_address = True
         SocketServer.ThreadingTCPServer.__init__ (self, (host, port), handler_class)
@@ -149,9 +153,29 @@ class SCGIServerFork (SocketServer.ForkingTCPServer):
         self.allow_reuse_address = True
         SocketServer.ForkingTCPServer.__init__ (self, (host, port), handler_class)
 
+# Unix socket
+#
+class SCGIUnixServer (SocketServer.ThreadingUnixStreamServer):
+    def __init__(self, unix_socket, handler_class=SCGIHandler):
+        self.allow_reuse_address = True
+        SocketServer.ThreadingUnixStreamServer.__init__ (self, unix_socket, handler_class)
+
+class SCGIUnixServerFork (SocketServer.UnixStreamServer):
+    def __init__(self, unix_socket, handler_class=SCGIHandler):
+        self.allow_reuse_address = True
+        SocketServer.UnixStreamServer.__init__ (self, unix_socket, handler_class)
+
 
 def ServerFactory (threading=False, *args, **kargs):
+    unix_socket = kargs.get('unix_socket', None)
+
     if threading:
-        return SCGIServer(*args, **kargs)
+        if unix_socket:
+            return SCGIUnixServer (*args, **kargs)
+        else:
+            return SCGIServer(*args, **kargs)
     else:
-        return SCGIServerFork(*args, **kargs)
+        if unix_socket:
+            return SCGIUnixServerFork(*args, **kargs)
+        else:
+            return SCGIServerFork(*args, **kargs)
