@@ -1,7 +1,9 @@
 import os
 import sys
 import time
+import stat
 import signal
+
 from select import select
 from subprocess import *
 
@@ -11,6 +13,7 @@ from config_version import *
 
 DEFAULT_DELAY    = 2
 WAIT_SERVER_STOP = 10
+PID_TIMEOUT      = 2
 DEFAULT_PATH     = ['/usr/local/sbin', '/usr/local/bin',
                     '/usr/sbin', '/usr/bin', '/sbin', '/bin']
 
@@ -47,14 +50,17 @@ def cherokee_management_reset ():
     global cherokee_management
     cherokee_management = None
 
+
 # Cherokee Management class
 #
 
 class CherokeeManagement:
     def __init__ (self, cfg):
-        self._cfg = cfg
-        self._pid = self._get_pid()
-        self._is_child = False
+        self._cfg           = cfg
+        self._pid_prev      = None
+        self._pid_prev_time = 0
+        self._pid_mtime     = None
+        self._is_child      = False
 
     # Public
     #
@@ -70,20 +76,22 @@ class CherokeeManagement:
             self._restart()
 
     def is_alive (self):
-        if not self._pid:
+        pid = self._get_pid()
+        if not pid:
             return False
-        return is_PID_alive (self._pid)
+
+        return is_PID_alive (pid)
 
     def launch (self):
         def daemonize():
-            os.setsid() 
+            os.setsid()
 
         # Ensure the a minimum path is set
         environ = os.environ.copy()
         if not "PATH" in environ:
             environ["PATH"] = ':'.join(DEFAULT_PATH)
 
-        p = Popen ([CHEROKEE_SERVER, '--admin_child', '-C', self._cfg.file], 
+        p = Popen ([CHEROKEE_SERVER, '--admin_child', '-C', self._cfg.file],
                    stdout=PIPE, stderr=PIPE, env=environ,
                    preexec_fn=daemonize, close_fds=True)
 
@@ -95,7 +103,6 @@ class CherokeeManagement:
             r,w,e = select([stdout_fd, stderr_fd], [], [stdout_fd, stderr_fd], 1)
 
             if e:
-                self._pid = None
                 return _("Could not access file descriptors: ") + str(e)
 
             if stdout_fd in r:
@@ -108,22 +115,22 @@ class CherokeeManagement:
                 for e in ["{'type': ", 'ERROR', '(error) ', '(critical) ']:
                     if e in stderr:
                         self.__stop_process (p.pid)
-                        self._pid = None
                         return stderr
                 stderr = stderr[nl+1:]
 
             if stdout.count('\n') > 1:
                 break
 
-        self._pid = p.pid
+        self._pid_prev = p.pid
         self._is_child = True
         time.sleep (DEFAULT_DELAY)
         return None
 
     def stop (self):
         # Stop Cherokee Guardian
-        self.__stop_process (self._pid)
-        self._pid = None
+        pid = self._get_pid()
+
+        self.__stop_process (pid)
         self._is_child = False
 
     def create_config (self, file, template_file):
@@ -157,20 +164,47 @@ class CherokeeManagement:
     # Protected
     #
     def _get_pid (self):
+        # Read the PID file
         pid_file = self._cfg.get_val("server!pid_file")
         if pid_file:
-            return self.__read_pid_file (pid_file)
+            try:
+                s = os.stat(pid_file)
+                mtime = s[stat.ST_MTIME]
+            except:
+                mtime = None
 
-        return self.__try_to_figure_pid()
+            if (mtime and
+                mtime != self._pid_mtime):
+                self._pid_prev  = self.__read_pid_file (pid_file)
+                self._pid_mtime = mtime
+
+            return self._pid_prev
+
+        # Previous PID may work
+        now = time.time()
+        if ((self._pid_prev_time and self._pid_prev) and
+            (self._pid_prev_time + PID_TIMEOUT > now)):
+            return self._pid_prev
+
+        # Try to figure the PID
+        pid = self.__try_to_figure_pid()
+        if pid:
+            self._pid_prev      = pid
+            self._pid_prev_time = now
+            return self._pid_prev
+
+        return self._pid_prev
 
     def _restart (self, graceful=False):
-        if not self._pid:
+        pid = self._get_pid()
+        if not pid:
             return
+
         try:
             if graceful:
-                os.kill (self._pid, signal.SIGHUP)
+                os.kill (pid, signal.SIGHUP)
             else:
-                os.kill (self._pid, signal.SIGUSR1)
+                os.kill (pid, signal.SIGUSR1)
         except:
             pass
 
@@ -238,7 +272,7 @@ def is_PID_alive (pid):
          "bsd" in sys.platform.lower():
         f = os.popen('/bin/ps -p %s'%(pid))
         alive = len(f.readlines()) >= 2
-        try: 
+        try:
             f.close()
         except: pass
         return alive

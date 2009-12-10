@@ -141,7 +141,7 @@ class PageStatus (PageMenu, FormHelper):
 
         manager = cherokee_management_get (self._cfg)
         if manager.is_alive():
-            current_pid = str(manager._pid)
+            current_pid = manager._get_pid()
         else:
             current_pid = _("Not running")
 
@@ -158,8 +158,11 @@ class PageStatus (PageMenu, FormHelper):
             txt += '<tr><td class="infolab">%s:</td><td>%s</td></tr>'  % (_("Configuration File"), _('Not Found'))
 
         txt += '</table>'
-        return txt
 
+        form = Form('/ows/proud_submit_domains')
+        txt += form.Render()
+
+        return txt
 
     def _render_server_graphs (self):
         txt = '<script type="text/javascript" src="/static/js/graphs.js"></script>';
