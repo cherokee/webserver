@@ -30,3 +30,4 @@ from Table import Table
 from RawHTML import RawHTML
 from TextField import TextField
 from PropsTable import PropsTable, PropsTableAuto
+from Template import Template
