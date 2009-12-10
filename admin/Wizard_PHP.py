@@ -7,22 +7,31 @@ from Wizard import *
 PHP_DEFAULT_TIMEOUT        = '30'
 SAFE_PHP_FCGI_MAX_REQUESTS = '490'
 
-DEFAULT_BINS  = ['php-cgi', 'php']
+FPM_BINS = ['php-fpm', 'php5-fpm']
+STD_BINS = ['php-cgi', 'php']
+
+DEFAULT_BINS  = FPM_BINS + STD_BINS
 
 DEFAULT_PATHS = ['/usr/bin',
                  '/opt/php',
                  '/usr/php/bin',
                  '/usr/sfw/bin',
                  '/usr/gnu/bin',
+                 '/usr/local/bin',
                  '/opt/local/bin',
                  '/usr/pkg/libexec/cgi-bin']
 
-DEFAULT_ETC_PATHS = ['/etc/php*/cgi/php.ini',
-                     '/usr/local/etc/php.ini',
-                     '/opt/php*/etc/php.ini',
-                     '/opt/local/etc/php*/php.ini',
-                     '/etc/php*/*/php.ini']
+FPM_ETC_PATHS = ['/etc/php*/fpm/php*fpm.conf',
+                 '/usr/local/etc/php*fpm.conf',
+                 '/opt/php*/etc/php*fpm.conf',
+                 '/opt/local/etc/php*/php*fpm.conf',
+                 '/etc/php*/*/php*fpm.conf']
 
+STD_ETC_PATHS = ['/etc/php*/cgi/php.ini',
+                 '/usr/local/etc/php.ini',
+                 '/opt/php*/etc/php.ini',
+                 '/opt/local/etc/php*/php.ini',
+                 '/etc/php*/*/php.ini']
 
 # IANA: TCP ports 47809-47999 are unassigned
 
@@ -61,7 +70,7 @@ class Wizard_Rules_PHP (Wizard):
     def __figure__max_execution_time (self):
         # Figure out the php.ini path
         paths = []
-        for p in DEFAULT_ETC_PATHS:
+        for p in STD_ETC_PATHS:
             paths.append (p)
             paths.append ("%s-*" %(p))
 
@@ -82,6 +91,64 @@ class Wizard_Rules_PHP (Wizard):
 
         return tmp[0]
 
+    def __figure__fpm_settings (self):
+        #find config file
+        paths = []
+        for p in FPM_ETC_PATHS:
+            paths.append (p)
+            paths.append ("%s-*" %(p))
+
+        fpm_conf = path_find_w_default (paths, None)
+        if not fpm_conf:
+            return None
+
+        try:
+            content = open(fpm_conf, "r").read()
+        except IOError:
+            return None
+
+        tmp = re.findall (r'<value name="listen_address">(.*?)</value>', content)
+        if tmp:
+            listen_address = tmp[0]
+
+        tmp = re.findall (r'<value name="request_terminate_timeout">(\d*)s*</value>', content)
+        if tmp:
+            timeout = tmp[0]
+        else:
+            timeout = PHP_DEFAULT_TIMEOUT
+
+        fpm_settings = { 'fpm_conf' :           fpm_conf,
+                         'fpm_listen_address' : listen_address,
+                         'fpm_terminate_timeout' : timeout }
+        return fpm_settings
+
+
+    def _add_std_source (self, php_path):
+        tcp_addr = cfg_source_get_localhost_addr()
+        if not tcp_addr:
+            return None
+
+        x, self.source = cfg_source_get_next (self._cfg)
+        self._cfg['%s!nick' % (self.source)]        = 'PHP Interpreter'
+        self._cfg['%s!type' % (self.source)]        = 'interpreter'
+        self._cfg['%s!interpreter' % (self.source)] = '%s -b %s:%d' % (php_path, tcp_addr, self.TCP_PORT)
+        self._cfg['%s!host' % (self.source)]        = '%s:%d' % (tcp_addr, self.TCP_PORT)
+        self._cfg['%s!env!PHP_FCGI_MAX_REQUESTS' % (self.source)] = SAFE_PHP_FCGI_MAX_REQUESTS
+        self._cfg['%s!env!PHP_FCGI_CHILDREN' % (self.source)]     = "5"
+        return True
+
+    def _add_fpm_source (self, php_path):
+        host = self.fpm_settings['fpm_listen_address']
+        if not host:
+            return None
+
+        x, self.source = cfg_source_get_next (self._cfg)
+        self._cfg['%s!nick' % (self.source)]        = 'PHP Interpreter'
+        self._cfg['%s!type' % (self.source)]        = 'interpreter'
+        self._cfg['%s!interpreter' % (self.source)] = '%s --fpm-config %s' % (php_path, self.fpm_settings['fpm_conf'])
+        self._cfg['%s!host' % (self.source)]        = host
+        return True
+
     def _run (self, uri, post):
         def test_php_fcgi (path):
             f = os.popen("%s -v" % (path), 'r')
@@ -100,18 +167,19 @@ class Wizard_Rules_PHP (Wizard):
                 desc = "<p>%s: %s.</p>" % (msg, ", ".join(DEFAULT_BINS))
                 return self.report_error (_("Couldn't find a suitable PHP interpreter."), desc)
 
-            tcp_addr = cfg_source_get_localhost_addr()
-            if not tcp_addr:
-                return self.report_error (_("Couldn't find IP address for 'localhost'"))
+            php_bin = php_path.split('/')[-1]
+            if php_bin in FPM_BINS:
+                self.fpm_settings = self.__figure__fpm_settings()
+                if not self.fpm_settings:
+                    return self.report_error (_("Couldn't determine PHP-fpm settings"))
+                ret     = self._add_fpm_source(php_path)
+                timeout = self.fpm_settings['fpm_terminate_timeout']
+            else:
+                ret     = self._add_std_source(php_path)
+                timeout = self.__figure__max_execution_time ()
 
-            x, self.source = cfg_source_get_next (self._cfg)
-            self._cfg['%s!nick' % (self.source)]        = 'PHP Interpreter'
-            self._cfg['%s!type' % (self.source)]        = 'interpreter'
-            self._cfg['%s!interpreter' % (self.source)] = '%s -b %s:%d' % (php_path, tcp_addr, self.TCP_PORT)
-            self._cfg['%s!host' % (self.source)]        = '%s:%d' % (tcp_addr, self.TCP_PORT)
-
-            self._cfg['%s!env!PHP_FCGI_MAX_REQUESTS' % (self.source)] = SAFE_PHP_FCGI_MAX_REQUESTS
-            self._cfg['%s!env!PHP_FCGI_CHILDREN' % (self.source)]     = "5"
+            if not ret:
+                return self.report_error (_("Couldn't determine correct interpreter settings"))
 
         # Add a new Extension PHP rule
         if not self.rule:
@@ -129,9 +197,6 @@ class Wizard_Rules_PHP (Wizard):
             self._cfg['%s!handler!balancer!source!1' % (self.rule)] = src_num
             self._cfg['%s!handler!error_handler' % (self.rule)]     = '1'
             self._cfg['%s!encoder!gzip' % (self.rule)]              = '1'
-
-            # Check the php.ini file
-            timeout = self.__figure__max_execution_time()
             self._cfg['%s!timeout' % (self.rule)]                   = timeout
 
         # Check the Directory Index
