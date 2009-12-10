@@ -135,3 +135,21 @@ class Table (Widget):
 
         render += '</table>'
         return render
+
+
+class TableFixed (Table):
+    def __init__ (self, rows, cols):
+        Table.__init__ (self)
+        self._fixed_rows = rows
+        self._fixed_cols = cols
+
+    def __setitem__ (self, pos, item):
+        row,col = pos
+
+        if row > self._fixed_rows:
+            raise IndexError, "Row number out of bounds"
+            
+        if col > self._fixed_cols:
+            raise IndexError, "Column number out of bounds"
+
+        return Table.__setitem__ (self, pos, item)

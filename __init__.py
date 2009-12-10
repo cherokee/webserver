@@ -26,7 +26,7 @@ from Container import Container
 from Submitter import Submitter
 
 # Widgets
-from Table import Table
+from Table import Table, TableFixed
 from RawHTML import RawHTML
 from TextField import TextField
 from PropsTable import PropsTable, PropsTableAuto
