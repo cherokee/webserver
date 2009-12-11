@@ -172,7 +172,7 @@ class PageVServer (PageMenu, FormHelper):
         # Build validation list
         validation = DATA_VALIDATION[:]
 
-        # The 'add_new_entry' checking function depends on 
+        # The 'add_new_entry' checking function depends on
         # the whether 'add_new_type' is a directory, an extension
         # or a regular extension
         rule_module = module_obj_factory (_type, self._cfg, "%s!match"%(pre), self.submit_url)
@@ -233,7 +233,7 @@ class PageVServer (PageMenu, FormHelper):
         pre = 'vserver!%s!rule' %(host)
         tmp = self.Dialog(_(RULE_LIST_NOTE))
         tmp += '<div class="rulesdiv">'
-        tmp += self._render_rules_generic (cfg_key    = pre, 
+        tmp += self._render_rules_generic (cfg_key    = pre,
                                           url_prefix = '/vserver/%s'%(host),
                                           priorities = self._priorities)
 
@@ -261,7 +261,7 @@ class PageVServer (PageMenu, FormHelper):
         if self._cfg.get_val('vserver!%s!user_dir'%(host)):
             tmp += "<br/><hr />"
             pre = 'vserver!%s!user_dir!rule'%(host)
-            tmp += self._render_rules_generic (cfg_key    = pre, 
+            tmp += self._render_rules_generic (cfg_key    = pre,
                                                url_prefix = '/vserver/%s/userdir'%(host),
                                                priorities = self._priorities_userdir)
             tmp += self._render_add_rule ("tmp!new_rule!user_dir")
@@ -298,7 +298,7 @@ class PageVServer (PageMenu, FormHelper):
         self.AddPropEntry (table, _('Ciphers'), '%s!ssl_ciphers' % (pre), _(NOTE_CIPHERS), optional=True)
         self.AddPropOptions_Ajax (table, _('Client Certs. Request'),
                                          '%s!ssl_client_certs' % (pre),
-                                         CLIENT_CERTS, 
+                                         CLIENT_CERTS,
                                          _(NOTE_CLIENT_CERTS))
 
         req_cc = self._cfg.get_val('%s!ssl_client_certs' % (pre))
@@ -319,8 +319,8 @@ class PageVServer (PageMenu, FormHelper):
         txt = '<h2>%s</h2>' % (_('Error Handling hook'))
         table = TableProps()
         e = self.AddPropOptions_Reload_Module (table, _('Error Handler'),
-                                               '%s!error_handler' % (pre), 
-                                               modules_available(ERROR_HANDLERS), 
+                                               '%s!error_handler' % (pre),
+                                               modules_available(ERROR_HANDLERS),
                                                NOTE_ERROR_HANDLER)
         txt += self.Indent(table) + e
         return txt
@@ -329,7 +329,7 @@ class PageVServer (PageMenu, FormHelper):
         # Render
         txt = "<h2>%s</h2>" % (_('Add new rule'))
         table = TableProps()
-        e = self.AddPropOptions_Reload_Module (table, _("Rule Type"), prefix, 
+        e = self.AddPropOptions_Reload_Module (table, _("Rule Type"), prefix,
                                                modules_available(RULES), "")
         txt += self.Indent (str(table) + e)
         return txt
@@ -559,7 +559,7 @@ class PageVServer (PageMenu, FormHelper):
 
         txt += self.Indent(table)
         txt += "<br/>"
-        
+
         # VServer collect statistics
         if not srv_has:
             return txt
@@ -627,7 +627,7 @@ class PageVServer (PageMenu, FormHelper):
         format = self._cfg.get_val(pre)
 
         table = TableProps()
-        self.AddPropOptions_Ajax (table, _('Format'), pre, 
+        self.AddPropOptions_Ajax (table, _('Format'), pre,
                                   modules_available(LOGGERS), _(NOTE_LOGGERS))
 
         if format:
@@ -674,8 +674,8 @@ class PageVServer (PageMenu, FormHelper):
 
         table = TableProps()
         e = self.AddPropOptions_Reload_Module (table, _('Matching method'),
-                                               '%s!match' % (pre), 
-                                               modules_available(VRULES), 
+                                               '%s!match' % (pre),
+                                               modules_available(VRULES),
                                                _(NOTE_MATCHING_METHOD))
         txt += self.Indent(table) + e
         return txt
@@ -778,7 +778,6 @@ class PageVServer (PageMenu, FormHelper):
         rule_list = self._cfg[prefix].keys()
         rule_list.sort(reverse=True)
 
-        clonable.append(((""), _("None")))
         for r in rule_list[:-1]:
             pre   = '%s!%s!match' % (prefix, r)
             # Try to load the rule plugin
@@ -786,7 +785,7 @@ class PageVServer (PageMenu, FormHelper):
             name      = rule.get_name()
             clonable.append(("%s!%s"%(prefix, r), name))
 
-        op1 = self.InstanceOptions ("tmp!clone_rule", clonable)
+        op1 = self.InstanceOptions ("tmp!clone_rule", clonable, noautosubmit=True)
         table += (op1[0], SUBMIT_CLONE)
 
         txt += self.Indent(fo1.Render(str(table)))
