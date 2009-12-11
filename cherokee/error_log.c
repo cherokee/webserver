@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "error_log.h"
@@ -91,6 +91,7 @@ skip_args (va_list ap, const char *prev_string)
 static ret_t
 report_error (cherokee_buffer_t *buf)
 {
+	ret_t                     ret;
 	cherokee_logger_writer_t *writer = NULL;
 
 	/* 1st Option, the thread variable
@@ -103,21 +104,27 @@ report_error (cherokee_buffer_t *buf)
 		writer = default_error_writer;
 	}
 
+	/* No error log? Print it, and return.
+	 */
+	if (writer == NULL) {
+		fprintf (stderr, "%s\n", buf->buf);
+		fflush (stderr);
+		return ret_ok;
+	}
+
 	/* Echo to stderr
 	 */
-	if (echo_to_stderr) {
-		if ((writer == NULL) ||
-		    ((writer != NULL) && (writer->type != cherokee_logger_writer_stderr)))
-		{
-			fprintf (stderr, "%s\n", buf->buf);
-			fflush (stderr);
-		}
+	if ((echo_to_stderr) &&
+	    (writer->type != cherokee_logger_writer_stderr))
+	{
+		fprintf (stderr, "%s\n", buf->buf);
+		fflush (stderr);
 	}
 
 	/* Do logging
 	 */
-	if ((writer) && (writer->initialized)) {
-		cherokee_buffer_t *writer_log;
+	if (writer->initialized) {
+		cherokee_buffer_t *writer_log = NULL;
 
 		cherokee_logger_writer_get_buf (writer, &writer_log);
 		cherokee_buffer_add_buffer (writer_log, buf);
@@ -127,12 +134,11 @@ report_error (cherokee_buffer_t *buf)
 		return ret_ok;
 	}
 
-	fprintf (stderr, "%s", buf->buf);
 	return ret_ok;
 }
 
 
-static void 
+static void
 render_python_error (cherokee_error_type_t   type,
 		     const char             *filename,
 		     int                     line,
@@ -142,7 +148,7 @@ render_python_error (cherokee_error_type_t   type,
 		     va_list                 ap)
 {
 	cherokee_buffer_t tmp = CHEROKEE_BUF_INIT;
-	
+
 	/* Dict: open */
 	cherokee_buffer_add_char (output, '{');
 
@@ -163,7 +169,7 @@ render_python_error (cherokee_error_type_t   type,
 		SHOULDNT_HAPPEN;
 	}
 	cherokee_buffer_add_str (output, "\", ");
-	
+
 	/* Time */
 	cherokee_buffer_add_str  (output, "'time': \"");
 	cherokee_buf_add_bogonow (output, false);
@@ -216,23 +222,23 @@ render_python_error (cherokee_error_type_t   type,
 	}
 
 	/* Version */
-	cherokee_buffer_add_str (output, "'version': \"");	
+	cherokee_buffer_add_str (output, "'version': \"");
 	cherokee_buffer_add_str (output, PACKAGE_VERSION);
 	cherokee_buffer_add_str (output, "\", ");
 
-	cherokee_buffer_add_str (output, "'compilation_date': \"");	
+	cherokee_buffer_add_str (output, "'compilation_date': \"");
 	cherokee_buffer_add_str (output, __DATE__ " " __TIME__);
 	cherokee_buffer_add_str (output, "\", ");
 
-	cherokee_buffer_add_str (output, "'configure_args': \"");	
+	cherokee_buffer_add_str (output, "'configure_args': \"");
 	cherokee_buffer_clean   (&tmp);
 	cherokee_buffer_add_str (&tmp, CHEROKEE_CONFIG_ARGS);
 	cherokee_buffer_add_escape_html (output, &tmp);
 	cherokee_buffer_add_buffer (output, &tmp);
-	cherokee_buffer_add_str (output, "\", ");	
-	
+	cherokee_buffer_add_str (output, "\", ");
+
 	/* Backtrace */
-	cherokee_buffer_add_str (output, "'backtrace': \"");	
+	cherokee_buffer_add_str (output, "'backtrace': \"");
 #ifdef BACKTRACES_ENABLED
 	cherokee_buffer_clean (&tmp);
 	cherokee_buf_add_backtrace (&tmp, 2, "\\n", "");
@@ -251,7 +257,7 @@ render_python_error (cherokee_error_type_t   type,
 }
 
 
-static void 
+static void
 render_human_error (cherokee_error_type_t   type,
 		    const char             *filename,
 		    int                     line,
@@ -261,12 +267,12 @@ render_human_error (cherokee_error_type_t   type,
 		    va_list                 ap)
 {
 	UNUSED (error_num);
-	
+
 	/* Time */
 	cherokee_buffer_add_char (output, '[');
 	cherokee_buf_add_bogonow (output, false);
 	cherokee_buffer_add_str  (output, "] ");
-	
+
 	/* Error type */
 	switch (type) {
 	case cherokee_err_warning:
@@ -313,7 +319,7 @@ render (cherokee_error_type_t  type,
 	if (unlikely (error->id != error_num)) {
 		return ret_error;
 	}
-	
+
 	/* Format
 	 */
 	if (! NULLB_IS_NULL (cherokee_readable_errors)) {
