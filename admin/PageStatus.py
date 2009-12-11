@@ -159,9 +159,6 @@ class PageStatus (PageMenu, FormHelper):
 
         txt += '</table>'
 
-        form = Form('/ows/proud_submit_domains')
-        txt += form.Render()
-
         return txt
 
     def _render_server_graphs (self):
@@ -184,7 +181,7 @@ class PageStatus (PageMenu, FormHelper):
         txt += '<div id="g6h" class="gbutton"><a onclick="graphChangeInterval(\'6h\')">%s</a></div>' % (_("6 hours"))
         txt += '<div id="g1h" class="gbutton gsel"><a onclick="graphChangeInterval(\'1h\')">%s</a></div>' % (_("1 hour"))
         txt += '</div>'
- 
+
         txt += '<div id="graphdiv">'
         txt += '<img id="graphimg" src="/graphs/server_traffic_1h.png" alt="Graph" />'
         txt += '</div>'
