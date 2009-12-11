@@ -610,25 +610,36 @@ sanitize_buffer (cherokee_buffer_t *buf)
 	cuint_t i, j;
 	cuint_t removed = 0;
 
-	/* Remove ASCII characters below 0x20
+	/* Look for the ANSI CSIs (0x1B+[, and 0x9B)
 	 */
 	for (i=0,j=0; j<buf->len;) {
-		if (unlikely ((buf->buf[i] <  0x20) ||
-			      (buf->buf[i] == 0x7F)))
+		if (unlikely ((j+1 < buf->len) &&
+			      (buf->buf[i] == 0x1B) &&
+			      (buf->buf[i+1] == '[' || buf->buf[i+1] == ']')))
 		{
+			j       += 2;
+			removed += 2;
+
+		} else if (unlikely ((unsigned char)buf->buf[i] == 0x9B)) {
 			j       += 1;
 			removed += 1;
-			buf->buf[i] = buf->buf[j];
-		} else {
-			if (unlikely (removed)) {
-				buf->buf[i] = buf->buf[j];
-			}
-			j++;
-			i++;
 		}
+
+		if (removed) {
+			buf->buf[i] = buf->buf[j];
+		}
+
+		i++;
+		j++;
 	}
 
-	buf->len -= removed;
+	/* Fix the buffer length
+	 */
+	if (removed) {
+		buf->len -= removed;
+		buf->buf[buf->len] = 0;
+	}
+
 	return ret_ok;
 }
 
@@ -648,12 +659,12 @@ cherokee_header_copy_request (cherokee_header_t *hdr, cherokee_buffer_t *request
 		return ret;
 	}
 
-	ret = sanitize_buffer (request);
+	ret = cherokee_buffer_unescape_uri (request);
 	if (unlikely (ret != ret_ok)) {
 		return ret_error;
 	}
 
-	return cherokee_buffer_unescape_uri (request);
+	return sanitize_buffer (request);
 }
 
 

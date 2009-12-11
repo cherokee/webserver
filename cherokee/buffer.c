@@ -2003,7 +2003,7 @@ cherokee_buffer_to_lowcase (cherokee_buffer_t *buf)
 }
 
 
-static char *
+static const char *
 utf8_get_next_char (const char *string)
 {
 	/* 2 bytes character: 110vvvvv 10vvvvvv
