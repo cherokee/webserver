@@ -2,6 +2,7 @@
 
   . link:other_faq.html[FAQ]: List of Frequently Asked Questions.
   . link:other_goodies.html[Cherokee Goodies]: Interesting Cherokee features.
+  . link:other_graphs.html[Usage graphs]: Information on the several graphs available.
   . link:other_signals.html[Signals]: Signals supported by Cherokee.
   . link:other_community.html[Community]: More information sources.
   . link:other_errors.html[Common errors]: Some typical production  errors and their cause.

@@ -5,8 +5,8 @@ Status
 
 Through this section you will be able to launch and stop the web
 server. It also provides some useful information about the server and
-the configuration status. If statistics collection is enabled, usage
-graphs will be displayed.
+the configuration status. If statistics collection is enabled,
+link:other_graphs.html[usage graphs] will be displayed.
 
 image::media/images/admin_index.png[Status]
 

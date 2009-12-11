@@ -216,3 +216,12 @@ Guess what? Cherokee is resilient to Slowloris and is recommended as
 an effective defense on many security guides, such as the
 link:http://www.funtoo.org/en/security/slowloris/[Slowloris DOS
 Mitigation Guide].
+
+[[rrdtool]]
+Statistics and usage graphs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Cherokee-Admin uses RRDtool to collect and display statistical
+data. If this feature is enabled, you will access a wide variety of
+information. Check the link:other_graphs.html[usage graphs] section
+for more details.

@@ -48,6 +48,10 @@ itself.
 
 By default, Cherokee will use *Full*.
 
+Graphs type
+^^^^^^^^^^^
+Through this you can enable or disable the usage of RRD graphs. Check
+the link:other_graphs.html[usage graphs] section for more details.
 
 [[ports_to_listen]]
 Ports to listen

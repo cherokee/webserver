@@ -464,6 +464,12 @@ Logging using the NCSA log format.
 Logging using a user-specified format.
 --
 
+Besides, this sections allows you to specify several other options,
+such as the backend used to store errors, or wether or not statistics
+should be collected for each particular virtual server. This feature
+has to be globally enabled within the link:config_general.html[general
+configuration section]. In case statistics are collected,
+link:other_graphs.html[usage graphs] are displayed in this section.
 
 [[security]]
 Security
