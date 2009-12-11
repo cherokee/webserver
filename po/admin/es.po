@@ -281,7 +281,7 @@ msgstr "Cambiar UID"
 
 #: admin/ModuleCgi.py:57 admin/PageVServer.py:261
 msgid "Error handler"
-msgstr "Control de errores"
+msgstr "Errores"
 
 #: admin/ModuleCgi.py:58
 msgid "Check file"
