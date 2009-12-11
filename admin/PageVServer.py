@@ -1,4 +1,5 @@
 import validations
+import util
 
 from Page import *
 from Form import *
@@ -120,6 +121,11 @@ class PageVServer (PageMenu, FormHelper):
                 if not self.has_errors() and re:
                     return re
 
+            elif post.get_val('tmp!clone_rule'):
+                re = self._op_clone_rule (post)
+                if not self.has_errors() and re:
+                    return re
+
             else:
                 # It's updating properties
                 re = self._op_apply_changes (host, uri, post)
@@ -235,11 +241,16 @@ class PageVServer (PageMenu, FormHelper):
         tmp += self._render_add_rule ("tmp!new_rule")
         tmp += '</div>'
 
+        tmp += '<div class="rulessection" id="clonesection">'
+        tmp += self._render_clone_rule (pre)
+        tmp += '</div>'
+
         tmp += '<div class="rulessection" id="wizardsection">'
         tmp += self._render_wizards (host)
         tmp += '</div>'
 
         tmp += '<div class="rulesbutton"><a id="newsection_b">%s</a></div>' % (_('Add new rule'))
+        tmp += '<div class="rulesbutton"><a id="clonesection_b">%s</a></div>' % (_('Clone rule'))
         tmp += '<div class="rulesbutton"><a id="wizardsection_b">%s</a></div>' % (_('Wizards'))
 
         tmp += '</div>\n'
@@ -438,6 +449,7 @@ class PageVServer (PageMenu, FormHelper):
                       $(document).ready(function(){
                         $("table.rulestable tr:odd").addClass("odd");
                         $("#newsection_b").click(function() { openSection('newsection')});
+                        $("#clonesection_b").click(function() { openSection('clonesection')});
                         $("#wizardsection_b").click(function() { openSection('wizardsection')});
                         open_vsec  = get_cookie('open_vsec');
                         if (open_vsec && document.referrer == window.location) {
@@ -446,7 +458,7 @@ class PageVServer (PageMenu, FormHelper):
 
                       });
 
-                      function openSection(section) 
+                      function openSection(section)
                       {
                           document.cookie = "open_vsec="  + section;
                           if (prevSection != '') {
@@ -479,7 +491,7 @@ class PageVServer (PageMenu, FormHelper):
         table = '<table id="wizSel" class="rulestable"><tr><th>Category</th><th>Wizard</th></tr>'
         table += '<tr><td id="wizG"></td><td id="wizL"></td></table>'
 
-        if txt: 
+        if txt:
             txt = _("<h2>Wizards</h2>") + table + txt
 
         return txt
@@ -753,3 +765,38 @@ class PageVServer (PageMenu, FormHelper):
         if not value:
             self._cfg[cfg_key] = DEFAULT_LOGGER_TEMPLATE
         self.AddPropEntry (table, _('Template: '), cfg_key, _(NOTE_LOGGER_TEMPLATE))
+
+
+    def _render_clone_rule (self, prefix):
+        # Render
+        txt = "<h2>%s</h2>" % (_('Clone rule'))
+        table = Table(2, 1, header_style='width="200px"')
+        table += (_('Rule'),)
+        fo1 = Form ("/vserver", add_submit=False, auto=False)
+
+        clonable = []
+        rule_list = self._cfg[prefix].keys()
+        rule_list.sort(reverse=True)
+
+        for r in rule_list[:-1]:
+            pre   = '%s!%s!match' % (prefix, r)
+            # Try to load the rule plugin
+            rule = Rule(self._cfg, pre, self.submit_url, self.errors, 0)
+            name      = rule.get_name()
+            clonable.append(("%s!%s"%(prefix, r), name))
+
+        op1 = self.InstanceOptions ("tmp!clone_rule", clonable)
+        table += (op1[0], SUBMIT_CLONE)
+
+        txt += self.Indent(fo1.Render(str(table)))
+        return txt
+
+    def _op_clone_rule (self, post):
+       rule_source = post.pop('tmp!clone_rule')
+       tmp         = rule_source.split('!')
+       vserver     = '!'.join(tmp[:-2])
+       next_rule   = util.cfg_vsrv_rule_get_next (self._cfg, vserver)
+       rule_target = next_rule[1]
+       error = self._cfg.clone(rule_source, rule_target)
+       if not error:
+           return '/%s'%(rule_target.replace('!','/'))
