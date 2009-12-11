@@ -1,5 +1,5 @@
 import validations
-
+import util
 from Page import *
 from Table import *
 from Entry import *
@@ -29,6 +29,66 @@ TABLE_JS = """
 </script>
 """
 
+CLONE_JS = '''
+<script type="text/javascript">
+var prevSection = '';
+
+$(document).ready(function() {
+  $("#%(name)s tr:even').addClass('alt')");
+
+  $('#%(name)s').tableDnD({
+    onDrop: function(table, row) {
+        var rows = table.tBodies[0].rows;
+        var post = 'update_prio=1&prios=';
+        for (var i=1; i<rows.length; i++) {
+          post += rows[i].id + ',';
+        }
+        jQuery.post ('%(url)s', post,
+            function (data, textStatus) {
+                window.location.reload();
+            }
+        );
+    },
+    dragHandle: "dragHandle"
+  });
+
+  $("#%(name)s tr:not(.nodrag, nodrop)").hover(function() {
+      $(this.cells[0]).addClass('dragHandleH');
+  }, function() {
+      $(this.cells[0]).removeClass('dragHandleH');
+  });
+
+});
+
+$(document).ready(function(){
+  $("table.rulestable tr:odd").addClass("odd");
+  $("#sourcesection_b").click(function() { openSection('sourcesection')});
+  $("#clonesection_b").click(function() { openSection('clonesection')});
+  open_ssec  = get_cookie('open_ssec');
+  if (open_ssec && document.referrer == window.location) {
+      openSection(open_ssec);
+  }
+});
+
+function openSection(section)
+{
+    document.cookie = "open_ssec="  + section;
+    if (prevSection != '') {
+        $("#"+prevSection).hide();
+        $("#"+prevSection+"_b").attr("style", "font-weight: normal;");
+    }
+    $("#"+section+"_b").attr("style", "font-weight: bold;");
+    $("#"+section).show();
+    prevSection = section;
+}
+
+$(document).mouseup(function(){
+  $("table.rulestable tr:even").removeClass("odd");
+  $("table.rulestable tr:odd").addClass("odd");
+});
+</script>
+'''
+
 HELPS = [
     ('config_info_sources', N_("Information Sources"))
 ]
@@ -37,7 +97,8 @@ DATA_VALIDATION = [
     ('source!.+?!host',        validations.is_information_source),
     ('source!.+?!timeout',     validations.is_positive_int),
     ('tmp!new_source_host',    validations.is_information_source),
-    ('tmp!new_source_timeout', validations.is_positive_int)
+    ('tmp!new_source_timeout', validations.is_positive_int),
+    ("source_clone_trg",       validations.is_safe_id),
 ]
 
 RULE_NAME_LEN_LIMIT = 35
@@ -62,6 +123,9 @@ class PageInfoSource (PageMenu, FormHelper):
                     self._cfg.pop(r)
 
         if post.get_val('is_submit'):
+            if post.get_val('source_clone_trg'):
+                return self._op_clone_source (post)
+
             if post.get_val('tmp!new_source_nick'):
                 return self._apply_new_source (uri, post)
             else:
@@ -234,7 +298,7 @@ class PageInfoSource (PageMenu, FormHelper):
             protect = self._get_protected_list()
 
             txt += "<h2>%s</h2>" % (_('Known sources'))
-            table  = '<table width="90%" id="sources" class="rulestable">'
+            table  = '<div class="rulesdiv"><table id="sources_table" class="rulestable">'
             table += '<tr><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
                      (_('Nick'), _('Type'), _('Connection'))
 
@@ -251,31 +315,63 @@ class PageInfoSource (PageMenu, FormHelper):
                 else:
                     link = self.AddDeleteLink ('/source/ajax_update', 'source!%s'%(s))
 
-                table += '<tr><td><a href="/%s/%s">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (self._id, s, nick, type, host, link)
-            table += '<tr><th colspan="4"><a href="/%s"><div align="center">%s</div></a></th></tr>' % (self._id, _('Add new'))
+                table += '<tr class="nodrag nodrop"><td><a href="/%s/%s">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (self._id, s, nick, type, host, link)
             table += '</table>'
-            txt += self.Indent(table)
-            txt += TABLE_JS
+            txt += table
 
-        if (source):
-            # Details
-            #
-            nick = self._cfg.get_val('source!%s!nick'%(source))
-            txt += "<h2>%s '%s'</h2>" % (_('Details:'), nick)
-            txt += self.Indent(self._render_source_details (source))
+            clone_params = {'name': 'sources',
+                            'url' : '/source/ajax_update'}
 
-        else:
-            # Add new
-            #
-            tmp = "<h2>%s</h2>" % (_('Add a new'))
-            tmp += self._render_add_new()
+            txt += TABLE_JS + CLONE_JS % clone_params
 
-            fo1 = Form ("/%s"%(self._id), add_submit=False)
-            txt += fo1.Render(tmp)
+            txt += '<div class="infosource_func_block">'
+            txt += '<div class="rulesbutton"><a id="sourcesection_b" href="%s">%s</a></div>' % (self.submit_url, _('Add new Information Source'))
+            txt += '<div class="rulesbutton"><a id="clonesection_b">%s</a></div>' % (_('Clone Information Source'))
+            txt += '</div>'
 
-        # List info about source usage
+            # Clone source
+            txt += '<div class="rulessection" id="clonesection">'
+            table = Table(3, 1, header_style='width="200px"')
+            table += (_('Source'), _('Clone as..'))
+            fo1 = Form ("/source", add_submit=False, auto=False)
+
+            clonable = []
+            for s in keys:
+                nick = self._cfg.get_val('source!%s!nick'%(s))
+                clonable.append((s,nick))
+
+            op1 = self.InstanceOptions ("source_clone_src", clonable)
+            en1 = self.InstanceEntry   ("source_clone_trg", "text", size=40)
+            table += (op1[0], en1, SUBMIT_CLONE)
+
+            txt += "<h2>%s</h2>" % (_('Clone Information Source'))
+            txt += self.Indent(fo1.Render(str(table)))
+            txt += '</div>'
+
+            # Edit/Add source
+            txt += '<div class="rulessection" id="sourcesection">'
+            if (source):
+                # Details
+                #
+                nick = self._cfg.get_val('source!%s!nick'%(source))
+                txt += "<h2>%s '%s'</h2>" % (_('Details:'), nick)
+                txt += self.Indent(self._render_source_details (source))
+            else:
+                # Add new
+                #
+                tmp = "<h2>%s</h2>" % (_('Add a new'))
+                tmp += self._render_add_new()
+
+                fo1 = Form ("/%s"%(self._id), add_submit=False)
+                txt += fo1.Render(tmp)
+            txt += '</div>'
+
+            txt += '</div>'
+
+        # List info about source usage, if any is in use
         #
-        if self._cfg.keys('source'):
+        used_sources = self._get_used_sources()
+        if used_sources:
             txt += "<h2>%s</h2>" % (_('Source usage'))
             txt += self.Indent(self.Dialog (NOTE_USAGE))
             txt += self._render_source_usage ()
@@ -365,3 +461,28 @@ class PageInfoSource (PageMenu, FormHelper):
             if len(rule_sources[s])==1:
                 protect.append(rule_sources[s][0])
         return protect
+
+
+    def _op_clone_source (self, post):
+        # Validate entries
+        self._ValidateChanges (post, DATA_VALIDATION)
+        if self.has_errors():
+            return
+
+        # Fetch data
+        num_source    = post.pop('source_clone_src')
+        num_target, x = util.cfg_source_get_next (self._cfg)
+        nick_target   = post.pop('source_clone_trg')
+
+        # Check the field has been filled out
+        if not nick_target:
+            self._error_add ('source_clone_trg', '', _('Cannot be empty'))
+            return
+
+        # Clone it
+        error = self._cfg.clone('source!%s'%(num_source),
+                                'source!%s'%(num_target))
+        if not error:
+            self._cfg['source!%s!nick'%(num_target)] = nick_target
+            return '/source/%s'%(num_target)
+

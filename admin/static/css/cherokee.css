@@ -919,6 +919,11 @@ table.rulestable tr.odd td {
 #body-source #new_env_value {
 }
 
+.infosource_func_block {
+  margin-bottom: 30px;
+}
+
+
 /**************************/
 /* PageNewConfig.py styl */
 /**************************/
