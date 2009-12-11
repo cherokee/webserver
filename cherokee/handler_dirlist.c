@@ -959,19 +959,16 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		}
 
 		cherokee_buffer_clean (tmp);
-//		cherokee_buffer_escape_uri (tmp, &file->realpath);
 		copy_buffer_escape (&file->realpath, tmp);
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 
 	} else if (! is_dir) {
 		cherokee_buffer_clean (tmp);
-//		cherokee_buffer_escape_uri (tmp, &name_buf);
 		copy_buffer_escape (&name_buf, tmp);
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 
 	} else {
 		cherokee_buffer_clean (tmp);
-//		cherokee_buffer_escape_uri (tmp, &name_buf);
 		copy_buffer_escape (&name_buf, tmp);
 		cherokee_buffer_add_str (tmp, "/");
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
