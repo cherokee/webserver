@@ -294,17 +294,16 @@ class PageInfoSource (PageMenu, FormHelper):
 
         # List
         #
-        if self._cfg.keys('source'):
-            protect = self._get_protected_list()
+        protect = self._get_protected_list()
 
-            txt += "<h2>%s</h2>" % (_('Known sources'))
-            table  = '<div class="rulesdiv"><table id="sources_table" class="rulestable">'
-            table += '<tr><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
-                     (_('Nick'), _('Type'), _('Connection'))
+        txt += "<h2>%s</h2>" % (_('Known sources'))
+        table  = '<div class="rulesdiv"><table id="sources_table" class="rulestable">'
+        table += '<tr><th>%s</th><th>%s</th><th>%s</th><th></th></tr>' % \
+                 (_('Nick'), _('Type'), _('Connection'))
 
-            keys = self._cfg.keys('source')
-            keys.sort()
-            for s in keys:
+        keys = self._cfg.keys('source')
+        keys.sort()
+        for s in keys:
                 nick = self._cfg.get_val('source!%s!nick'%(s))
                 host = self._cfg.get_val('source!%s!host'%(s))
                 type = self._cfg.get_val('source!%s!type'%(s))
@@ -316,19 +315,22 @@ class PageInfoSource (PageMenu, FormHelper):
                     link = self.AddDeleteLink ('/source/ajax_update', 'source!%s'%(s))
 
                 table += '<tr class="nodrag nodrop"><td><a href="/%s/%s">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (self._id, s, nick, type, host, link)
-            table += '</table>'
-            txt += table
+        table += '</table>'
+        txt += table
 
-            clone_params = {'name': 'sources',
-                            'url' : '/source/ajax_update'}
+        clone_params = {'name': 'sources',
+                        'url' : '/source/ajax_update'}
 
-            txt += TABLE_JS + CLONE_JS % clone_params
+        txt += TABLE_JS + CLONE_JS % clone_params
 
-            txt += '<div class="infosource_func_block">'
-            txt += '<div class="rulesbutton"><a id="sourcesection_b" href="%s">%s</a></div>' % (self.submit_url, _('Add new Information Source'))
+        txt += '<div class="infosource_func_block">'
+        txt += '<div class="rulesbutton"><a id="sourcesection_b" href="%s">%s</a></div>' % (self.submit_url, _('Add new Information Source'))
+
+        if keys:
             txt += '<div class="rulesbutton"><a id="clonesection_b">%s</a></div>' % (_('Clone Information Source'))
-            txt += '</div>'
+        txt += '</div>'
 
+        if keys:
             # Clone source
             txt += '<div class="rulessection" id="clonesection">'
             table = Table(3, 1, header_style='width="200px"')
@@ -348,15 +350,15 @@ class PageInfoSource (PageMenu, FormHelper):
             txt += self.Indent(fo1.Render(str(table)))
             txt += '</div>'
 
-            # Edit/Add source
-            txt += '<div class="rulessection" id="sourcesection">'
-            if (source):
+        # Edit/Add source
+        txt += '<div class="rulessection" id="sourcesection">'
+        if (source):
                 # Details
                 #
                 nick = self._cfg.get_val('source!%s!nick'%(source))
                 txt += "<h2>%s '%s'</h2>" % (_('Details:'), nick)
                 txt += self.Indent(self._render_source_details (source))
-            else:
+        else:
                 # Add new
                 #
                 tmp = "<h2>%s</h2>" % (_('Add a new'))
@@ -364,9 +366,9 @@ class PageInfoSource (PageMenu, FormHelper):
 
                 fo1 = Form ("/%s"%(self._id), add_submit=False)
                 txt += fo1.Render(tmp)
-            txt += '</div>'
+        txt += '</div>'
 
-            txt += '</div>'
+        txt += '</div>'
 
         # List info about source usage, if any is in use
         #
