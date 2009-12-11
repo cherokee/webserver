@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #if !defined (CHEROKEE_INSIDE_CHEROKEE_H) && !defined (CHEROKEE_COMPILATION)
 # error "Only <cherokee/cherokee.h> can be included directly, this file may disappear or change contents."
@@ -63,7 +63,7 @@ void  cherokee_buffer_fake               (cherokee_buffer_t  *buf, const char *s
 
 void  cherokee_buffer_clean              (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_dup                (cherokee_buffer_t  *buf, cherokee_buffer_t **dup);
-void  cherokee_buffer_swap_buffers       (cherokee_buffer_t  *buf, cherokee_buffer_t *second);       
+void  cherokee_buffer_swap_buffers       (cherokee_buffer_t  *buf, cherokee_buffer_t *second);
 
 ret_t cherokee_buffer_add                (cherokee_buffer_t  *buf, const char *txt, size_t size);
 ret_t cherokee_buffer_add_long10         (cherokee_buffer_t  *buf, clong_t lNum);
@@ -100,6 +100,7 @@ ret_t cherokee_buffer_replace_string     (cherokee_buffer_t  *buf, const char *s
 ret_t cherokee_buffer_substitute_string  (cherokee_buffer_t  *bufsrc, cherokee_buffer_t *bufdst, char *subs, int subs_len, char *repl, int repl_len);
 ret_t cherokee_buffer_trim               (cherokee_buffer_t  *buf);
 
+ret_t cherokee_buffer_get_utf8_len       (cherokee_buffer_t  *buf, cuint_t *len);
 ret_t cherokee_buffer_ensure_addlen      (cherokee_buffer_t  *buf, size_t alen);
 ret_t cherokee_buffer_ensure_size        (cherokee_buffer_t  *buf, size_t size);
 
@@ -120,6 +121,7 @@ ret_t cherokee_buffer_encode_hex         (cherokee_buffer_t  *buf, cherokee_buff
 ret_t cherokee_buffer_decode_hex         (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_unescape_uri       (cherokee_buffer_t  *buf);
 ret_t cherokee_buffer_escape_uri         (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
+ret_t cherokee_buffer_escape_arg         (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
 ret_t cherokee_buffer_add_escape_html    (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
 ret_t cherokee_buffer_escape_html        (cherokee_buffer_t  *buf, cherokee_buffer_t *src);
 ret_t cherokee_buffer_add_comma_marks    (cherokee_buffer_t  *buf);

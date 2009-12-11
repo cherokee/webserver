@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "handler_dirlist.h"
@@ -121,7 +121,7 @@ parse_if (cherokee_buffer_t *buf, const char *if_entry, size_t len_entry, cherok
 	char              *begin;
 	char              *end;
 	cherokee_buffer_t  token = CHEROKEE_BUF_INIT;
-	
+
 	cherokee_buffer_add_str (&token, "%if ");
 	cherokee_buffer_add (&token, if_entry, len_entry);
 	cherokee_buffer_add_str (&token, "%");
@@ -129,23 +129,23 @@ parse_if (cherokee_buffer_t *buf, const char *if_entry, size_t len_entry, cherok
 	begin = strstr (buf->buf, token.buf);
 	if (begin == NULL)
 		goto error;
-	
+
 	end = strstr (begin, "%fi%");
 	if (end == NULL)
 		goto error;
 
 	if (show) {
-		cherokee_buffer_remove_chunk (buf, end - buf->buf, 4);		
+		cherokee_buffer_remove_chunk (buf, end - buf->buf, 4);
 		cherokee_buffer_remove_chunk (buf, begin - buf->buf, token.len);
 	} else {
 		cherokee_buffer_remove_chunk (buf, begin - buf->buf, (end+4) - begin);
 	}
 
 	cherokee_buffer_mrproper (&token);
-	return ret_ok;	
+	return ret_ok;
 error:
 	cherokee_buffer_mrproper (&token);
-	return ret_error;	
+	return ret_error;
 }
 
 
@@ -176,7 +176,7 @@ load_theme (cherokee_buffer_t *theme_path, cherokee_handler_dirlist_props_t *pro
 	/* Check it
 	 */
 	if ((cherokee_buffer_is_empty (&props->header) ||
-	     cherokee_buffer_is_empty (&props->entry) || 
+	     cherokee_buffer_is_empty (&props->entry) ||
 	     cherokee_buffer_is_empty (&props->footer)))
 	    return ret_error;
 
@@ -190,7 +190,7 @@ load_theme (cherokee_buffer_t *theme_path, cherokee_handler_dirlist_props_t *pro
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 {
 	cherokee_list_content_free (&props->notice_files,
@@ -208,7 +208,7 @@ cherokee_handler_dirlist_props_free  (cherokee_handler_dirlist_props_t *props)
 }
 
 
-ret_t 
+ret_t
 cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                             ret;
@@ -221,8 +221,8 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_dirlist_props);
-		
-		cherokee_handler_props_init_base (HANDLER_PROPS(n), 
+
+		cherokee_handler_props_init_base (HANDLER_PROPS(n),
 			MODULE_PROPS_FREE(cherokee_handler_dirlist_props_free));
 
 		n->show_size      = true;
@@ -246,10 +246,10 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 
 		INIT_LIST_HEAD (&n->notice_files);
 		INIT_LIST_HEAD (&n->hidden_files);
-		
+
 		*_props = MODULE_PROPS(n);
 	}
-	
+
 	props = PROP_DIRLIST(*_props);
 
 	cherokee_config_node_foreach (i, conf) {
@@ -301,7 +301,7 @@ cherokee_handler_dirlist_configure (cherokee_config_node_t *conf, cherokee_serve
 	ret = cherokee_buffer_add_va (&theme_path, CHEROKEE_THEMEDIR"/%s/", theme);
 	if (ret != ret_ok)
 		return ret;
-	
+
 	ret = load_theme (&theme_path, props);
 	if (ret != ret_ok) {
 		LOG_ERROR (CHEROKEE_ERROR_HANDLER_DIRLIST_THEME, theme, theme_path.buf);
@@ -337,7 +337,7 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 	char          *name;
 	cuint_t        extra;
 	struct dirent *entry;
-	
+
 #ifdef _PC_NAME_MAX
 	extra = pathconf(path->buf, _PC_NAME_MAX);
 #else
@@ -372,21 +372,21 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 		if ((! HDL_DIRLIST_PROP(dhdl)->show_backup) &&
 		    ((name[0] == '#') || (name[n->name_len-1] == '~')))
 			continue;
-			    
+
 		if (is_file_in_list (&HDL_DIRLIST_PROP(dhdl)->notice_files, name, n->name_len) ||
 		    is_file_in_list (&HDL_DIRLIST_PROP(dhdl)->hidden_files, name, n->name_len))
 			continue;
-		
+
 		/* Build the local path, stat and clean
 		 */
 		cherokee_buffer_add (path, name, n->name_len);
-		
+
 		/* Check the filename size
 		 */
 		if (n->name_len > dhdl->longest_filename)
 			dhdl->longest_filename = n->name_len;
-		
-		/* Path	
+
+		/* Path
 		 */
 		re = cherokee_lstat (path->buf, &n->stat);
 		if (re < 0) {
@@ -412,7 +412,7 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 					file_entry_free (n);
 					return ret_error;
 				}
-				
+
 				/* Check it is within the limits
 				 */
 				n->realpath.len = strlen (n->realpath.buf);
@@ -422,7 +422,7 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 				if (re != 0) {
 					file_entry_free (n);
 					return ret_error;
-				} 
+				}
 
 				cherokee_buffer_move_to_begin (&n->realpath,
 							       path->len - n->name_len);
@@ -443,11 +443,11 @@ generate_file_entry (cherokee_handler_dirlist_t *dhdl, DIR *dir, cherokee_buffer
 
 ret_t
 cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_module_props_t *props)
-{	
+{
 	ret_t              ret;
 	cherokee_buffer_t *value;
 	CHEROKEE_NEW_STRUCT (n, handler_dirlist);
-	
+
 	TRACE_CONN(cnt);
 
 	/* Init the base class object
@@ -457,7 +457,7 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	MODULE(n)->init         = (handler_func_init_t) cherokee_handler_dirlist_init;
 	MODULE(n)->free         = (module_func_free_t) cherokee_handler_dirlist_free;
 	HANDLER(n)->step        = (handler_func_step_t) cherokee_handler_dirlist_step;
-	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_dirlist_add_headers; 
+	HANDLER(n)->add_headers = (handler_func_add_headers_t) cherokee_handler_dirlist_add_headers;
 
 	/* Supported features
 	 */
@@ -466,7 +466,7 @@ cherokee_handler_dirlist_new  (cherokee_handler_t **hdl, void *cnt, cherokee_mod
 	/* Process the request_string, and build the arguments table..
 	 */
 	cherokee_connection_parse_args (cnt);
-	
+
 	/* Init
 	 */
 	INIT_LIST_HEAD (&n->files);
@@ -547,37 +547,37 @@ check_request_finish_with_slash (cherokee_handler_dirlist_t *dhdl)
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
 
 	if ((cherokee_buffer_is_empty (&conn->request)) ||
-	    (!cherokee_buffer_is_ending (&conn->request, '/'))) 
+	    (!cherokee_buffer_is_ending (&conn->request, '/')))
 	{
 		cherokee_buffer_add_str (&conn->request, "/");
 		cherokee_connection_set_redirect (conn, &conn->request);
 		cherokee_buffer_drop_ending (&conn->request, 1);
-		
+
 		conn->error_code = http_moved_permanently;
-		return ret_error;		
+		return ret_error;
 	}
 
 	return ret_ok;
 }
 
 
-static int 
+static int
 cmp_name_down (cherokee_list_t *a, cherokee_list_t *b)
 {
 	file_entry_t *f1 = (file_entry_t *)a;
 	file_entry_t *f2 = (file_entry_t *)b;
 
-	return cherokee_human_strcmp ((const char *) &f1->info.d_name, 
+	return cherokee_human_strcmp ((const char *) &f1->info.d_name,
 				      (const char *) &f2->info.d_name);
 }
 
 
-static int 
+static int
 cmp_size_down (cherokee_list_t *a, cherokee_list_t *b)
 {
 	file_entry_t *f1 = (file_entry_t *)a;
 	file_entry_t *f2 = (file_entry_t *)b;
-	
+
 	if (f1->stat.st_size > f2->stat.st_size)
 		return 1;
 
@@ -588,7 +588,7 @@ cmp_size_down (cherokee_list_t *a, cherokee_list_t *b)
 }
 
 
-static int 
+static int
 cmp_date_down (cherokee_list_t *a, cherokee_list_t *b)
 {
 	file_entry_t *f1 = (file_entry_t *)a;
@@ -604,21 +604,21 @@ cmp_date_down (cherokee_list_t *a, cherokee_list_t *b)
 }
 
 
-static int 
+static int
 cmp_name_up (cherokee_list_t *a, cherokee_list_t *b)
 {
 	return -cmp_name_down(a,b);
 }
 
 
-static int 
+static int
 cmp_size_up (cherokee_list_t *a, cherokee_list_t *b)
 {
 	return -cmp_size_down(a,b);
 }
 
 
-static int 
+static int
 cmp_date_up (cherokee_list_t *a, cherokee_list_t *b)
 {
 	return -cmp_date_down(a,b);
@@ -674,9 +674,9 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 	 */
 	for (;;) {
 		ret_t ret;
-		
+
 		ret = generate_file_entry (dhdl, dir, &conn->local_directory, &item);
-		if (ret == ret_eof) 
+		if (ret == ret_eof)
 			break;
 		if ((ret == ret_nomem) ||
 		    (ret == ret_error))
@@ -684,7 +684,7 @@ build_file_list (cherokee_handler_dirlist_t *dhdl)
 
 		is_link = S_ISLNK(item->stat.st_mode);
 		if (is_link) {
-			is_dir = S_ISDIR(item->rstat.st_mode);		
+			is_dir = S_ISDIR(item->rstat.st_mode);
 		} else {
 			is_dir = S_ISDIR(item->stat.st_mode);
 		}
@@ -729,17 +729,17 @@ static ret_t
 build_public_path (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buf)
 {
 	cherokee_connection_t *conn = HANDLER_CONN(dhdl);
-	
+
 	if (!cherokee_buffer_is_empty (&conn->userdir)) {
 		/* ~user local dir request
  		 */
 		cherokee_buffer_add_str (buf, "/~");
 		cherokee_buffer_add_buffer (buf, &conn->userdir);
 	}
-	
-	if (cherokee_buffer_is_empty (&conn->request_original)) 
+
+	if (cherokee_buffer_is_empty (&conn->request_original))
 		cherokee_buffer_add_buffer (buf, &conn->request);
-	else 
+	else
 		cherokee_buffer_add_buffer (buf, &conn->request_original);
 
 	return ret_ok;
@@ -757,11 +757,11 @@ read_notice_file (cherokee_handler_dirlist_t *dhdl)
 		cherokee_buffer_t *filename = BUF(LIST_ITEM_INFO(i));
 
 		cherokee_buffer_clean (&dhdl->header);
-	        
+
 		if (filename->buf[0] != '/') {
 			cherokee_buffer_add_buffer (&conn->local_directory, &conn->request);                     /* do   */
 			cherokee_buffer_add_buffer (&conn->local_directory, filename);
-			
+
 			ret = cherokee_buffer_read_file (&dhdl->header, conn->local_directory.buf);
 			cherokee_buffer_drop_ending (&conn->local_directory, conn->request.len + filename->len); /* undo */
 		} else {
@@ -786,7 +786,7 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 	ret = check_request_finish_with_slash (dhdl);
 	if (ret != ret_ok)
 		return ret;
-	
+
 	if (! cherokee_list_empty (&HDL_DIRLIST_PROP(dhdl)->notice_files)) {
 		ret = read_notice_file (dhdl);
 		if (ret != ret_ok)
@@ -798,7 +798,7 @@ cherokee_handler_dirlist_init (cherokee_handler_dirlist_t *dhdl)
 	ret = build_file_list (dhdl);
 	if (unlikely(ret < ret_ok))
 		return ret;
-	
+
 	/* Build public dir string
 	 */
 	ret = build_public_path (dhdl, &dhdl->public_dir);
@@ -861,6 +861,28 @@ substitute_vbuf_token (cherokee_buffer_t **vbuf,
 
 
 static ret_t
+copy_buffer_escape (cherokee_buffer_t *src,
+		    cherokee_buffer_t *trg)
+{
+	ret_t   ret;
+	cuint_t utf8_len;
+
+	ret = cherokee_buffer_get_utf8_len (src, &utf8_len);
+	if (ret != ret_ok) {
+		return ret_error;
+	}
+
+	if (utf8_len != src->len) {
+		cherokee_buffer_add_buffer (trg, src);
+	} else {
+		cherokee_buffer_escape_uri (trg, src);
+	}
+
+	return ret_ok;
+}
+
+
+static ret_t
 render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_entry_t *file)
 {
 	ret_t                             ret;
@@ -875,7 +897,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	cherokee_buffer_t                *tmp      = &dhdl->header;
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
 	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
-	size_t                            idx_tmp  = 0; 
+	size_t                            idx_tmp  = 0;
 
 	/* Initialize temporary substitution buffers
 	 */
@@ -883,7 +905,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 	is_link = S_ISLNK(file->stat.st_mode);
 	if (is_link) {
-		is_dir = S_ISDIR(file->rstat.st_mode);		
+		is_dir = S_ISDIR(file->rstat.st_mode);
 	} else {
 		is_dir = S_ISDIR(file->stat.st_mode);
 	}
@@ -893,7 +915,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 	if (is_link) {
 		if (! props->show_symlinks) {
 			return ret_not_found;
-		} 
+		}
 	}
 
 	/* Name buffer
@@ -937,19 +959,22 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 		}
 
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_escape_uri (tmp, &file->realpath);
+//		cherokee_buffer_escape_uri (tmp, &file->realpath);
+		copy_buffer_escape (&file->realpath, tmp);
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
-			
+
 	} else if (! is_dir) {
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_escape_uri (tmp, &name_buf);
+//		cherokee_buffer_escape_uri (tmp, &name_buf);
+		copy_buffer_escape (&name_buf, tmp);
 		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 
 	} else {
 		cherokee_buffer_clean (tmp);
-		cherokee_buffer_escape_uri (tmp, &name_buf);
+//		cherokee_buffer_escape_uri (tmp, &name_buf);
+		copy_buffer_escape (&name_buf, tmp);
 		cherokee_buffer_add_str (tmp, "/");
-		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);		
+		VTMP_SUBSTITUTE_TOKEN ("%file_link%", tmp->buf);
 	}
 
 	/* Date
@@ -960,7 +985,7 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 
 		strftime (tmp->buf, 32, "%d-%b-%Y %H:%M", localtime(&file->stat.st_mtime));
 		VTMP_SUBSTITUTE_TOKEN ("%date%", tmp->buf);
-	} 
+	}
 
 	/* Size
 	 */
@@ -985,29 +1010,29 @@ render_file (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *buffer, file_e
 			*unit = '\0';
 			VTMP_SUBSTITUTE_TOKEN ("%size%", tmp->buf);
 		}
-	} 
+	}
 
 	/* User
 	 */
 	if (props->show_user) {
 		struct passwd *user;
 		const char    *name;
-		
+
 		user = getpwuid (file->stat.st_uid);
 		name = (char *) (user->pw_name) ? user->pw_name : "unknown";
 
 		VTMP_SUBSTITUTE_TOKEN ("%user%", name);
-	} 
+	}
 
 	/* Group
 	 */
 	if (props->show_group) {
 		struct group *user;
 		const char   *group;
-		
+
 		user = getgrgid (file->stat.st_gid);
 		group = (char *) (user->gr_name) ? user->gr_name : "unknown";
-		
+
 		VTMP_SUBSTITUTE_TOKEN ("%group%", group);
 	}
 
@@ -1028,7 +1053,7 @@ render_parent_directory (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t *bu
 	cherokee_handler_dirlist_props_t *props    = HDL_DIRLIST_PROP(dhdl);
  	cherokee_thread_t                *thread   = HANDLER_THREAD(dhdl);
 	cherokee_buffer_t                *tmp      = &dhdl->header;
-	size_t                            idx_tmp  = 0; 
+	size_t                            idx_tmp  = 0;
 
 	/* Initialize temporary substitution buffers
 	 */
@@ -1072,7 +1097,7 @@ render_header_footer_vbles (cherokee_handler_dirlist_t *dhdl, cherokee_buffer_t 
 {
 	cherokee_buffer_t *vtmp[2];
 	cherokee_thread_t *thread   = HANDLER_THREAD(dhdl);
-	size_t             idx_tmp  = 0; 
+	size_t             idx_tmp  = 0;
 	cherokee_bind_t   *bind     = CONN_BIND(HANDLER_CONN(dhdl));
 
 	/* Initialize temporary substitution buffers
@@ -1139,7 +1164,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 
 			/* Maybe it has read enough data
 			 */
-			if (buffer->len > DEFAULT_READ_SIZE) 
+			if (buffer->len > DEFAULT_READ_SIZE)
 				return ret_ok;
 		}
 
@@ -1155,7 +1180,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 
 			/* Maybe it has read enough data
 			 */
-			if (buffer->len > DEFAULT_READ_SIZE) 
+			if (buffer->len > DEFAULT_READ_SIZE)
 				return ret_ok;
 		}
 		dhdl->phase = dirlist_phase_add_footer;
@@ -1168,7 +1193,7 @@ cherokee_handler_dirlist_step (cherokee_handler_dirlist_t *dhdl, cherokee_buffer
 
 		dhdl->phase = dirlist_phase_finished;
 		return ret_eof_have_data;
-		
+
 	case dirlist_phase_finished:
 		break;
 	}
