@@ -778,6 +778,7 @@ class PageVServer (PageMenu, FormHelper):
         rule_list = self._cfg[prefix].keys()
         rule_list.sort(reverse=True)
 
+        clonable.append(((""), _("None")))
         for r in rule_list[:-1]:
             pre   = '%s!%s!match' % (prefix, r)
             # Try to load the rule plugin
