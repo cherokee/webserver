@@ -774,7 +774,7 @@ class PageVServer (PageMenu, FormHelper):
         table += (_('Rule'),)
         fo1 = Form ("/vserver", add_submit=False, auto=False)
 
-        clonable = []
+        clonable = [("", _("Choose a rule.."))]
         rule_list = self._cfg[prefix].keys()
         rule_list.sort(reverse=True)
 
