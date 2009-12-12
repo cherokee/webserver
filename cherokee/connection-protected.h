@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #ifndef CHEROKEE_CONNECTION_PROTECTED_H
 #define CHEROKEE_CONNECTION_PROTECTED_H
@@ -29,7 +29,7 @@
 
 #ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>
-#else 
+#else
 # include <time.h>
 #endif
 
@@ -111,7 +111,7 @@ struct cherokee_connection {
 	 */
 	culong_t                      id;
 	cherokee_buffer_t             self_trace;
-	
+
 	/* Socket stuff
 	 */
 	cherokee_socket_t             socket;
@@ -134,6 +134,7 @@ struct cherokee_connection {
 	cherokee_http_t               error_code;
 	cherokee_buffer_t             error_internal_url;
 	cherokee_buffer_t             error_internal_qs;
+	cherokee_http_t               error_internal_code;
 
 	/* Headers
 	 */
@@ -153,7 +154,7 @@ struct cherokee_connection {
 	cherokee_buffer_t             request;             /* /dir/file */
 	cherokee_buffer_t             pathinfo;            /* /param1 */
 	cherokee_buffer_t             userdir;             /* 'alo' in http://www.alobbs.com/~alo/thing */
-	cherokee_buffer_t             query_string;	
+	cherokee_buffer_t             query_string;
 	cherokee_avl_t               *arguments;
 
 	cherokee_buffer_t             host;
@@ -203,7 +204,7 @@ struct cherokee_connection {
 
 	int                           regex_ovector[OVECTOR_LEN];
 	int                           regex_ovecsize;
-	
+
 	/* Content Expiration
 	 */
 	cherokee_expiration_t         expiration;

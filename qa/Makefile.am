@@ -247,7 +247,8 @@ run-tests.py \
 239-utf8-file1.py \
 240-utf8-dir1.py \
 241-utf8-pathinfo1.py \
-242-utf8-pathinfo2.py
+242-utf8-pathinfo2.py \
+243-custom-error-1.py
 
 test:
 	./run-tests.py

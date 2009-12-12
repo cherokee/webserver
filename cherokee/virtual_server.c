@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 #include "virtual_server.h"
@@ -39,7 +39,7 @@
 #define MAX_HOST_LEN 255
 
 
-ret_t 
+ret_t
 cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 {
 	ret_t ret;
@@ -82,8 +82,8 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 
 	ret = cherokee_buffer_init (&n->root);
 	if (unlikely(ret < ret_ok))
-		return ret;	
-	
+		return ret;
+
 	ret = cherokee_buffer_init (&n->name);
 	if (unlikely(ret < ret_ok))
 		return ret;
@@ -99,7 +99,7 @@ cherokee_virtual_server_new (cherokee_virtual_server_t **vserver, void *server)
 }
 
 
-ret_t 
+ret_t
 cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 {
 	cherokee_buffer_mrproper (&vserver->server_cert);
@@ -161,12 +161,12 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 	cherokee_list_content_free (&vserver->index_list,
 				    (cherokee_list_free_func) cherokee_buffer_free);
 
-	free (vserver);	
+	free (vserver);
 	return ret_ok;
 }
 
 
-ret_t 
+ret_t
 cherokee_virtual_server_has_tls (cherokee_virtual_server_t *vserver)
 {
 	if (! cherokee_buffer_is_empty (&vserver->server_cert))
@@ -178,7 +178,7 @@ cherokee_virtual_server_has_tls (cherokee_virtual_server_t *vserver)
 }
 
 
-ret_t 
+ret_t
 cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 {
 	ret_t ret;
@@ -195,7 +195,7 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 	if (cherokee_buffer_is_empty (&vsrv->server_cert) ||
 	    cherokee_buffer_is_empty (&vsrv->server_key))
 		return ret_error;
-	
+
 	/* Instance virtual server's cryptor
 	 */
 	ret = cherokee_cryptor_vserver_new (srv->cryptor, vsrv, &vsrv->cryptor);
@@ -206,7 +206,7 @@ cherokee_virtual_server_init_tls (cherokee_virtual_server_t *vsrv)
 }
 
 
-static ret_t 
+static ret_t
 add_directory_index (char *index, void *data)
 {
 	cherokee_buffer_t         *new_buf;
@@ -241,7 +241,7 @@ add_access (char *address, void *data)
 }
 
 
-static ret_t 
+static ret_t
 init_entry_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
@@ -261,7 +261,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "document_root")) {
 		cherokee_config_node_read_path (conf, NULL, &tmp);
 
-		if (entry->document_root == NULL) 
+		if (entry->document_root == NULL)
 			cherokee_buffer_new (&entry->document_root);
 		else
 			cherokee_buffer_clean (entry->document_root);
@@ -291,7 +291,7 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 
 	} else if (equal_buf_str (&conf->key, "encoder")) {
 		cherokee_config_node_foreach (i, conf) {
-			/* Skip the entry if it isn't enabled 
+			/* Skip the entry if it isn't enabled
 			 */
 			if (! atoi(CONFIG_NODE(i)->val.buf))
 				continue;
@@ -387,9 +387,9 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 		}
 		cherokee_buffer_new (&entry->timeout_header);
 		cherokee_buffer_add_va (entry->timeout_header, "Keep-Alive: timeout=%d"CRLF, entry->timeout_lapse);
-		
+
 	} else if (equal_buf_str (&conf->key, "match")) {
-		/* Ignore: Previously handled 
+		/* Ignore: Previously handled
 		 */
 
 	} else {
@@ -402,9 +402,9 @@ init_entry_property (cherokee_config_node_t *conf, void *data)
 }
 
 
-static ret_t 
-init_entry (cherokee_virtual_server_t *vserver, 
-	    cherokee_config_node_t    *config, 
+static ret_t
+init_entry (cherokee_virtual_server_t *vserver,
+	    cherokee_config_node_t    *config,
 	    int                        rule_prio,
 	    cherokee_config_entry_t   *entry)
 {
@@ -419,7 +419,7 @@ init_entry (cherokee_virtual_server_t *vserver,
 }
 
 
-static ret_t 
+static ret_t
 add_error_handler (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 {
 	ret_t                    ret;
@@ -445,7 +445,7 @@ add_error_handler (cherokee_config_node_t *config, cherokee_virtual_server_t *vs
 
 	TRACE(ENTRIES, "Error handler: %s\n", name->buf);
 
-	cherokee_config_entry_set_handler (entry, PLUGIN_INFO_HANDLER(info));		
+	cherokee_config_entry_set_handler (entry, PLUGIN_INFO_HANDLER(info));
 	vserver->error_handler = entry;
 
 	return ret_ok;
@@ -453,8 +453,8 @@ add_error_handler (cherokee_config_node_t *config, cherokee_virtual_server_t *vs
 
 
 ret_t
-cherokee_virtual_server_new_rule (cherokee_virtual_server_t  *vserver, 
-				  cherokee_config_node_t     *config, 
+cherokee_virtual_server_new_rule (cherokee_virtual_server_t  *vserver,
+				  cherokee_config_node_t     *config,
 				  cuint_t                     priority,
 				  cherokee_rule_t           **rule)
 {
@@ -508,15 +508,15 @@ cherokee_virtual_server_new_rule (cherokee_virtual_server_t  *vserver,
 }
 
 
-static ret_t 
-add_rule (cherokee_config_node_t    *config, 
-	  cherokee_virtual_server_t *vserver, 
+static ret_t
+add_rule (cherokee_config_node_t    *config,
+	  cherokee_virtual_server_t *vserver,
 	  cherokee_rule_list_t      *rule_list)
 {
 	ret_t                   ret;
 	cuint_t                 prio;
 	cherokee_rule_t        *rule    = NULL;
-	cherokee_config_node_t *subconf = NULL; 
+	cherokee_config_node_t *subconf = NULL;
 
 	/* Validate priority
 	 */
@@ -537,19 +537,19 @@ add_rule (cherokee_config_node_t    *config,
 	}
 
 	ret = cherokee_virtual_server_new_rule (vserver, subconf, prio, &rule);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		goto failed;
 
 	/* config_node -> config_entry
 	 */
 	ret = init_entry (vserver, config, prio, &rule->config);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		goto failed;
 
 	/* Add the rule to the vserver's list
 	 */
 	ret = cherokee_rule_list_add (rule_list, rule);
-	if (ret != ret_ok) 
+	if (ret != ret_ok)
 		goto failed;
 
 	return ret_ok;
@@ -563,7 +563,7 @@ failed:
 
 
 static ret_t
-configure_match (cherokee_config_node_t    *config, 
+configure_match (cherokee_config_node_t    *config,
 		 cherokee_virtual_server_t *vserver)
 {
 	ret_t                   ret;
@@ -601,11 +601,11 @@ configure_match (cherokee_config_node_t    *config,
 }
 
 
-static ret_t 
+static ret_t
 add_evhost (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 {
 	ret_t                   ret;
-	evhost_func_new_t       func_new;	
+	evhost_func_new_t       func_new;
 	evhost_func_configure_t func_config;
 	cherokee_plugin_info_t *info         = NULL;
 	cherokee_server_t      *srv          = SRV(vserver->server_ref);
@@ -644,12 +644,12 @@ add_evhost (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 	ret = func_config (vserver->evhost, config);
 	if (ret != ret_ok)
 		return ret_error;
-	
+
 	return ret_ok;
 }
 
 
-static ret_t 
+static ret_t
 add_error_writer (cherokee_config_node_t    *config,
 		  cherokee_virtual_server_t *vserver)
 {
@@ -672,7 +672,7 @@ add_error_writer (cherokee_config_node_t    *config,
 }
 
 
-static ret_t 
+static ret_t
 add_logger (cherokee_config_node_t    *config,
 	    cherokee_virtual_server_t *vserver)
 {
@@ -680,7 +680,7 @@ add_logger (cherokee_config_node_t    *config,
 	logger_func_new_t       func_new;
 	cherokee_plugin_info_t *info      = NULL;
 	cherokee_server_t      *srv       = SRV(vserver->server_ref);
-	
+
 	/* Ensure there is a logger to instance..
 	 */
 	if (cherokee_buffer_is_empty (&config->val)) {
@@ -709,18 +709,18 @@ add_logger (cherokee_config_node_t    *config,
 
 
 static ret_t
-configure_rules (cherokee_config_node_t    *config, 
+configure_rules (cherokee_config_node_t    *config,
 		 cherokee_virtual_server_t *vserver,
 		 cherokee_rule_list_t      *rule_list)
 {
 	ret_t                   ret;
-	cherokee_list_t        *i; 
+	cherokee_list_t        *i;
 	cherokee_config_node_t *subconf;
 /*	cherokee_boolean_t      did_default = false; */
 
 	cherokee_config_node_foreach (i, config) {
 		subconf = CONFIG_NODE(i);
-		
+
 		ret = add_rule (subconf, vserver, rule_list);
 		if (ret != ret_ok) return ret;
 	}
@@ -738,7 +738,7 @@ configure_rules (cherokee_config_node_t    *config,
 	return ret_ok;
 }
 
-static ret_t 
+static ret_t
 configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *vserver)
 {
 	ret_t                   ret;
@@ -750,8 +750,8 @@ configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *v
 
 	/* Configure the rest of the entries
 	 */
- 	ret = cherokee_config_node_get (config, "rule", &subconf); 
- 	if (ret == ret_ok) { 
+ 	ret = cherokee_config_node_get (config, "rule", &subconf);
+ 	if (ret == ret_ok) {
 		ret = configure_rules (subconf, vserver, &vserver->userdir_rules);
 		if (ret != ret_ok) return ret;
 	}
@@ -760,7 +760,7 @@ configure_user_dir (cherokee_config_node_t *config, cherokee_virtual_server_t *v
 }
 
 
-static ret_t 
+static ret_t
 configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 {
 	ret_t                      ret;
@@ -771,7 +771,7 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 		ret = cherokee_config_node_read_path (conf, NULL, &tmp);
 		if (ret != ret_ok)
 			return ret;
-		
+
 		cherokee_buffer_clean (&vserver->root);
 		cherokee_buffer_add_buffer (&vserver->root, tmp);
 		cherokee_fix_dirpath (&vserver->root);
@@ -841,10 +841,10 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 	} else if (equal_buf_str (&conf->key, "ssl_ciphers")) {
 		cherokee_buffer_add_buffer (&vserver->ciphers, &conf->val);
 
- 	} else if (equal_buf_str (&conf->key, "collector")) { 
+ 	} else if (equal_buf_str (&conf->key, "collector")) {
 		/* Handled later on */
 
- 	} else if (equal_buf_str (&conf->key, "collect_statistics")) { 
+ 	} else if (equal_buf_str (&conf->key, "collect_statistics")) {
 		/* DEPRECATED: Ignore */
 	} else {
 		LOG_CRITICAL (CHEROKEE_ERROR_VSERVER_UNKNOWN_KEY,
@@ -856,7 +856,7 @@ configure_virtual_server_property (cherokee_config_node_t *conf, void *data)
 }
 
 static ret_t
-configure_collector (cherokee_virtual_server_t *vserver, 
+configure_collector (cherokee_virtual_server_t *vserver,
 		     cherokee_config_node_t    *config)
 {
 	ret_t                 ret;
@@ -866,8 +866,8 @@ configure_collector (cherokee_virtual_server_t *vserver,
 	/* Read the value
 	 */
 	cherokee_config_node_read_bool (config, "collector!active", &active);
-	
-	/* Instance object if needed 
+
+	/* Instance object if needed
 	 */
 	if (! active) {
 		return ret_ok;
@@ -881,9 +881,9 @@ configure_collector (cherokee_virtual_server_t *vserver,
 	return ret_ok;
 }
 
-ret_t 
-cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver, 
-				   cuint_t                    prio, 
+ret_t
+cherokee_virtual_server_configure (cherokee_virtual_server_t *vserver,
+				   cuint_t                    prio,
 				   cherokee_config_node_t    *config)
 {
 	ret_t ret;

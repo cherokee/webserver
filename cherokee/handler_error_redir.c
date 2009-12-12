@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */ 
+ */
 
 #include "common-internal.h"
 
@@ -42,7 +42,7 @@ typedef struct {
 } error_entry_t;
 
 
-static ret_t 
+static ret_t
 props_free (cherokee_handler_error_redir_props_t *props)
 {
 	cherokee_list_t *i, *j;
@@ -57,7 +57,7 @@ props_free (cherokee_handler_error_redir_props_t *props)
 	return cherokee_module_props_free_base (MODULE_PROPS(props));
 }
 
-ret_t 
+ret_t
 cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_server_t *srv, cherokee_module_props_t **_props)
 {
 	ret_t                                 ret;
@@ -69,12 +69,12 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 	if (*_props == NULL) {
 		CHEROKEE_NEW_STRUCT (n, handler_error_redir_props);
 
-		cherokee_module_props_init_base (MODULE_PROPS(n), 
+		cherokee_module_props_init_base (MODULE_PROPS(n),
 						 MODULE_PROPS_FREE(props_free));
 		INIT_LIST_HEAD (&n->errors);
 		*_props = MODULE_PROPS(n);
 	}
-	
+
 	props = PROP_ERREDIR(*_props);
 
 	cherokee_config_node_foreach (i, conf) {
@@ -103,7 +103,7 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 
 		INIT_LIST_HEAD (&entry->entry);
 		cherokee_buffer_init (&entry->url);
-		
+
 		/* Read child values
 		 */
 		ret = cherokee_config_node_copy (subconf, "url", &entry->url);
@@ -126,20 +126,20 @@ cherokee_handler_error_redir_configure (cherokee_config_node_t *conf, cherokee_s
 }
 
 
-static ret_t 
+static ret_t
 do_redir_external (cherokee_handler_t     **hdl,
 		   cherokee_connection_t   *conn,
 		   cherokee_module_props_t *props,
 		   error_entry_t           *entry)
 {
 	cherokee_buffer_clean (&conn->redirect);
-	cherokee_buffer_add_buffer (&conn->redirect, &entry->url); 
-		
-	conn->error_code = http_moved_permanently; 
+	cherokee_buffer_add_buffer (&conn->redirect, &entry->url);
+
+	conn->error_code = http_moved_permanently;
 	return cherokee_handler_redir_new (hdl, conn, props);
 }
 
-static ret_t 
+static ret_t
 do_redir_internal (cherokee_connection_t *conn,
 		   error_entry_t         *entry)
 {
@@ -161,12 +161,16 @@ do_redir_internal (cherokee_connection_t *conn,
 
 	/* Set the new request
 	 */
-	cherokee_buffer_add_buffer (&conn->request, &entry->url); 
+	cherokee_buffer_add_buffer (&conn->request, &entry->url);
+
+	/* Store the previous error code
+	 */
+	conn->error_internal_code = conn->error_code;
 
 	return ret_eagain;
 }
 
-ret_t 
+ret_t
 cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
 				  cherokee_connection_t   *conn,
 				  cherokee_module_props_t *props)
@@ -175,9 +179,10 @@ cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
 
 	list_for_each (i, &PROP_ERREDIR(props)->errors) {
 		error_entry_t *entry = (error_entry_t *)i;
-		
-		if (entry->error != conn->error_code)
+
+		if (entry->error != conn->error_code) {
 			continue;
+		}
 
 		if (entry->show) {
 			return do_redir_external (hdl, conn, props, entry);
@@ -185,7 +190,7 @@ cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
 			return do_redir_internal (conn, entry);
 		}
 	}
-	
+
 	return ret_error;
 }
 
@@ -194,14 +199,14 @@ cherokee_handler_error_redir_new (cherokee_handler_t     **hdl,
  */
 static cherokee_boolean_t _error_redir_is_init = false;
 
-void  
+void
 PLUGIN_INIT_NAME(error_redir) (cherokee_plugin_loader_t *loader)
 {
 	/* Is init?
 	 */
 	if (_error_redir_is_init) return;
 	_error_redir_is_init = true;
-	   
+
 	/* Load the dependences
 	 */
 	cherokee_plugin_loader_load (loader, "redir");
