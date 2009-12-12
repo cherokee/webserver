@@ -122,7 +122,6 @@ class Wizard_Rules_PHP (Wizard):
                          'fpm_terminate_timeout' : timeout }
         return fpm_settings
 
-
     def _add_std_source (self, php_path):
         tcp_addr = cfg_source_get_localhost_addr()
         if not tcp_addr:
@@ -172,14 +171,19 @@ class Wizard_Rules_PHP (Wizard):
                 self.fpm_settings = self.__figure__fpm_settings()
                 if not self.fpm_settings:
                     return self.report_error (_("Couldn't determine PHP-fpm settings"))
-                ret     = self._add_fpm_source(php_path)
-                timeout = self.fpm_settings['fpm_terminate_timeout']
+                ret = self._add_fpm_source(php_path)
             else:
-                ret     = self._add_std_source(php_path)
-                timeout = self.__figure__max_execution_time ()
+                ret = self._add_std_source(php_path)
 
             if not ret:
                 return self.report_error (_("Couldn't determine correct interpreter settings"))
+
+        # Figure the timeout
+        interpreter = self._cfg['%s!interpreter' %(self.source)]
+        if "fpm" in interpreter:
+            timeout = self.fpm_settings['fpm_terminate_timeout']
+        else:
+            timeout = self.__figure__max_execution_time ()
 
         # Add a new Extension PHP rule
         if not self.rule:
