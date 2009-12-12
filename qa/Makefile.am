@@ -243,7 +243,11 @@ run-tests.py \
 235-URL-arg_match1.py \
 236-URL-arg_match2.py \
 237-URL-arg_match_all1.py \
-238-URL-arg_match_all2.py
+238-URL-arg_match_all2.py \
+239-utf8-file1.py \
+240-utf8-dir1.py \
+241-utf8-pathinfo1.py \
+242-utf8-pathinfo2.py
 
 test:
 	./run-tests.py
