@@ -96,9 +96,7 @@ logger_writer_close_file (cherokee_logger_writer_t *writer)
 ret_t
 cherokee_logger_writer_free (cherokee_logger_writer_t *writer)
 {
-	ret_t ret;
-
-	ret = logger_writer_close_file (writer);
+	logger_writer_close_file (writer);
 
 	cherokee_buffer_mrproper (&writer->buffer);
 	cherokee_buffer_mrproper (&writer->filename);
@@ -108,7 +106,8 @@ cherokee_logger_writer_free (cherokee_logger_writer_t *writer)
 
 	free (writer->priv);
 	free (writer);
-	return ret;
+
+	return ret_ok;
 }
 
 static ret_t

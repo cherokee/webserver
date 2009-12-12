@@ -137,11 +137,6 @@ cherokee_virtual_server_free (cherokee_virtual_server_t *vserver)
 		vserver->logger = NULL;
 	}
 
-	if (vserver->error_writer != NULL) {
-		cherokee_logger_writer_free (vserver->error_writer);
-		vserver->error_writer = NULL;
-	}
-
 	if (vserver->collector != NULL) {
 		cherokee_collector_vsrv_free (vserver->collector);
 		vserver->collector = NULL;
@@ -653,16 +648,12 @@ static ret_t
 add_error_writer (cherokee_config_node_t    *config,
 		  cherokee_virtual_server_t *vserver)
 {
-	ret_t ret;
+	ret_t              ret;
+	cherokee_server_t *srv = VSERVER_SRV(vserver);
 
-	ret = cherokee_logger_writer_new (&vserver->error_writer);
-	if (unlikely (ret != ret_ok)) {
-		return ret;
-	}
-
-	ret = cherokee_logger_writer_configure (vserver->error_writer, config);
-	if (unlikely (ret != ret_ok)) {
-		return ret_ok;
+	ret = cherokee_server_get_log_writer (srv, config, &vserver->error_writer);
+	if (ret != ret_ok) {
+		return ret_error;
 	}
 
 	TRACE (ENTRIES, "Added a virtual server error_writer, type=%d\n",
