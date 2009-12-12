@@ -10,6 +10,7 @@ import thread
 import signal
 import socket
 import gettext
+import traceback
 
 # Application modules
 #
@@ -77,6 +78,7 @@ class Handler(pyscgi.SCGIHandler):
 
         if page:
             body = page.HandleRequest (uri, Post())
+
             if body and body[0] == '/':
                 self.send ("Status: 302 Moved Temporarily\r\n" + \
                            "Location: %s\r\n\r\n" % (body))
@@ -167,7 +169,14 @@ class Handler(pyscgi.SCGIHandler):
 
         # Execute page
         if page:
-            body = page.HandleRequest(uri, post)
+            try:
+                body = page.HandleRequest(uri, post)
+            except:
+                trace = traceback.format_exc()
+                page = PageInternelError (trace)
+                body = page.HandleRequest (uri, Post())
+                self.send ('Status: 500 Internal Server Error\r\n\r\n' + body)
+                return
 
         # Is it a redirection?
         if body[0] == '/':

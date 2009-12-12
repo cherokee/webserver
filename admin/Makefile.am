@@ -1,6 +1,6 @@
 ## Cherokee: Makefile.am  -*- makefile -*-
 
-SUBDIRS = 
+SUBDIRS =
 
 if INSTALL_ADMIN
 SUBDIRS += static
@@ -152,7 +152,8 @@ default.template.html \
 status.template.html \
 error_not_writable.template.html \
 error_icons_dir_missing.template.html \
-error_couldnt_launch.template.html
+error_couldnt_launch.template.html \
+error_internal.template.html
 endif
 
 adminhelpdir = "$(datadir)/cherokee/admin"

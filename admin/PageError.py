@@ -29,7 +29,7 @@ class PageError_LaunchFail (Page):
         return self._op_render_error()
 
     def _op_render_error (self):
-        template = 'error_couldnt_launch.template'            
+        template = 'error_couldnt_launch.template'
 
         self.AddMacroContent ('menu', '')
         self.AddMacroContent ('help', '')
@@ -65,7 +65,7 @@ class PageError_LaunchFail (Page):
         self.AddMacroContent ('backtrace_msg', backtrace_msg)
         self.AddMacroContent ('description',   self._error.get('description', ''))
         self.AddMacroContent ('title',         self._error.get('title', self._error_raw))
-        
+
         return Page.Render(self)
 
     def _op_render_unknown (self):
@@ -91,6 +91,26 @@ class PageError_LaunchFail (Page):
 
     def _op_handler (self, uri, post):
         return '/'
+
+
+class PageInternelError (Page):
+    def __init__ (self, trace):
+        Page.__init__ (self, 'error_internal', None)
+        self.trace = trace
+
+    def _op_handler (self, uri, post):
+        return '/'
+
+    def _op_render (self):
+        template = 'error_internal.template'
+
+        self.AddMacroContent ('menu',      '')
+        self.AddMacroContent ('help',      '')
+        self.AddMacroContent ('body',       PAGE_BASIC_LAYOUT_NOBAR)
+        self.AddMacroContent ('title',     'Internal Error')
+        self.AddMacroContent ('backtrace',  self.trace)
+        self.AddMacroContent ('content',    self.Read(template))
+        return Page.Render(self)
 
 
 class PageError (Page):
