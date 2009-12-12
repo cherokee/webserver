@@ -25,7 +25,7 @@ AC_PREREQ([2.60])
 dnl Version
 m4_define([cherokee_major_version], [0])
 m4_define([cherokee_minor_version], [99])
-m4_define([cherokee_micro_version], [33])
+m4_define([cherokee_micro_version], [34])
 m4_define([cherokee_version], m4_format('%s.%s.%s', cherokee_major_version, cherokee_minor_version, cherokee_micro_version))
 
 dnl Init autoconf and automake
@@ -109,7 +109,7 @@ AC_MSG_CHECKING([host platform characteristics])
           libdl="-ldl"
           ;;
 	*-*-solaris*)
-	     AC_DEFINE(SOLARIS, 1, [It is Solaris])	     
+	     AC_DEFINE(SOLARIS, 1, [It is Solaris])
 		setenv_is_threadsafe="yes"
           libdl="-ldl"
           ;;
@@ -147,16 +147,16 @@ case "$host_cpu" in
 	i586|i686)
 		CPU_CACHE_LINE=64
 	;;
-	i786)	
+	i786)
 		CPU_CACHE_LINE=128
 	;;
-	athlon)	
+	athlon)
 		CPU_CACHE_LINE=64
 	;;
-	x86_64)	
+	x86_64)
 		CPU_CACHE_LINE=64
 	;;
-	sparc*)	
+	sparc*)
 		CPU_CACHE_LINE=64
 	;;
 	powerpc)
@@ -180,15 +180,15 @@ AM_CONDITIONAL(PLATFORM_WIN32, test x"$os_string" = "xWin32")
 dnl
 dnl Tracing
 dnl
-AC_ARG_ENABLE(trace, AC_HELP_STRING([--enable-trace], [Enable trace facility]), 
+AC_ARG_ENABLE(trace, AC_HELP_STRING([--enable-trace], [Enable trace facility]),
    [enable_trace="$enableval"
     AC_DEFINE(TRACE_ENABLED, 1, [Trace facility])
    ], [enable_trace="no"])
 
 dnl
 dnl Backtraces
-dnl 
-AC_ARG_ENABLE(backtraces, AC_HELP_STRING([--enable-backtraces], [Enable backtraces on error]), 
+dnl
+AC_ARG_ENABLE(backtraces, AC_HELP_STRING([--enable-backtraces], [Enable backtraces on error]),
    [enable_backtraces="$enableval"
     AC_DEFINE(BACKTRACES_ENABLED, 1, [Backtracing facility])
    ], [enable_backtraces="no"])
@@ -324,7 +324,7 @@ dnl		-linet
 AC_CHECK_LIB(ws2_32, main)
 AC_CHECK_LIB(advapi32, main)
 
-AC_CHECK_FUNC(socket, :, [	
+AC_CHECK_FUNC(socket, :, [
 	AC_CHECK_LIB(socket, main)
 	AC_CHECK_LIB(net, main)
 	AC_CHECK_LIB(nsl_s, main)
@@ -345,7 +345,7 @@ AC_CHECK_FUNC(poll, have_poll=yes)
 AC_CHECK_FUNC(kqueue, have_kqueue=yes)
 AC_CHECK_FUNC(select, have_select=yes)
 
-if test "x-$have_select" != "x-yes" -a "x-$ac_cv_header_winsock2_h" = "x-yes"; then 
+if test "x-$have_select" != "x-yes" -a "x-$ac_cv_header_winsock2_h" = "x-yes"; then
      AC_MSG_CHECKING([for select in ws2_32])
      AC_TRY_LINK([#include <winsock2.h>],
 				[select(0,0,0,0,0)],
@@ -377,13 +377,13 @@ if test "x$have_epoll_include" = "xyes" && test "x$wants_epoll" = "xyes"; then
 		int epoll_create (int size) {
 	        return (syscall(__NR_epoll_create, size));
 		}
-	
+
 		int main (int argc, char **argv) {
 	        int epfd;
 	        epfd = epoll_create(256);
 	    	   exit (epfd == -1 ? 1 : 0);
 		}
-	], 
+	],
 	have_epoll=yes,
 	have_epoll=no,
 	have_epoll=yes)
@@ -403,13 +403,13 @@ if test "x$have_port_include" = "xyes"; then
 		#include <stdint.h>
 		#include <unistd.h>
 		#include <port.h>
-	
+
 		int main (int argc, char **argv) {
 	        int port;
 		   port = port_create();
 	    	   exit (port < 0 ? 1 : 0);
 		}
-	], 
+	],
 	have_port=yes,
 	have_port=no,
 	have_port=cross)
@@ -467,7 +467,7 @@ AC_CHECK_FUNCS(gethostname uname)
 dnl
 dnl Check for inet_addr
 dnl
-AC_SEARCH_LIBS(inet_addr, xnet) 
+AC_SEARCH_LIBS(inet_addr, xnet)
 AC_CHECK_FUNCS(inet_addr)
 
 dnl
@@ -534,7 +534,7 @@ then
 	if test "$have_pthread" != "yes"; then
         AC_CHECK_LIB(pthread, main, have_pthread=yes, have_pthread=no)
 	   if test "$have_pthread" = "yes"; then
-	   	 PTHREAD_LIBS="-lpthread"   
+	   	 PTHREAD_LIBS="-lpthread"
 	   fi
      fi
 
@@ -551,13 +551,13 @@ then
 	if test "$compiled" = "yes"; then
 	   	AC_MSG_RESULT([ok])
 	else
-	     dnl Didn't find rwlock_t. 
+	     dnl Didn't find rwlock_t.
 	     dnl Try defining _XOPEN_SOURCE=500
 	     dnl
 		oldcflags2="$CFLAGS"
 		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
 
-		AC_TRY_COMPILE([#include <pthread.h>], 
+		AC_TRY_COMPILE([#include <pthread.h>],
 			    [pthread_rwlock_t rwlock; pthread_rwlock_init( &rwlock, NULL);],
 			    compiled=yes, compiled=no)
 
@@ -660,7 +660,7 @@ AC_CACHE_VAL(ac_cv_valistisarray,
 		    [ac_cv_valistisarray=false],
 		    [ac_cv_valistisarray=true],
 		    [ac_cv_valistisarray=false])])
-					     
+
 if test "$ac_cv_valistisarray" = true ; then
 	AC_DEFINE(HAVE_VA_LIST_AS_ARRAY,,[va_list works copying an array])
 	AC_MSG_RESULT(yes)
@@ -702,7 +702,7 @@ AC_EGREP_CPP(yes,
 ], [
   AC_MSG_RESULT(no)
   HaveRtldNext=NO
-  ])    
+  ])
 AC_SUBST(HaveRtldNext)
 
 dnl ** RTLD_LOCAL isn't available on cygwin or openbsd
@@ -720,7 +720,7 @@ AC_EGREP_CPP(yes,
 ], [
   AC_MSG_RESULT(no)
   HaveRtldLocal=NO
-  ])    
+  ])
 AC_SUBST(HaveRtldLocal)
 
 dnl ** RTLD_GLOBAL isn't available on openbsd
@@ -738,7 +738,7 @@ AC_EGREP_CPP(yes,
 ], [
   AC_MSG_RESULT(no)
   HaveRtldGlobal=NO
-  ])    
+  ])
 AC_SUBST(HaveRtldGlobal)
 
 dnl ** RTLD_NOW isn't available on openbsd
@@ -756,7 +756,7 @@ AC_EGREP_CPP(yes,
 ], [
   AC_MSG_RESULT(no)
   HaveRtldNow=NO
-  ])    
+  ])
 AC_SUBST(HaveRtldNow)
 
 
@@ -895,9 +895,9 @@ else
     fi
 fi
 
-dnl 
+dnl
 dnl Test whether SO_RCVTIMEO is broken
-dnl 
+dnl
 AC_CACHE_CHECK([whether setsockopt(SO_RCVTIMEO) is broken],
   ac_cv_so_rcvtimeo_broken, [dnl
     AC_RUN_IFELSE([AC_LANG_SOURCE([[
@@ -926,7 +926,7 @@ int main(void) {
         new_tv.tv_sec = 1;
         new_tv.tv_usec = 0;
 
-        ret = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &new_tv, sizeof(new_tv)); 
+        ret = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &new_tv, sizeof(new_tv));
         return ret;
 }
 ]])],[ac_cv_so_rcvtimeo_broken=no],[ac_cv_so_rcvtimeo_broken=yes],[ac_cv_so_rcvtimeo_broken=cross])])
@@ -977,8 +977,8 @@ dnl Check for pcre library
 dnl
 have_pcre="built-in"
 
-AC_ARG_ENABLE(internal_pcre, 
-		    AC_HELP_STRING([--enable-internal-pcre],[Enable internal PCRE]), 
+AC_ARG_ENABLE(internal_pcre,
+		    AC_HELP_STRING([--enable-internal-pcre],[Enable internal PCRE]),
 		    use_internal_pcre="$enableval", use_internal_pcre="no")
 
 if test "x$use_internal_pcre" != "xyes"; then
@@ -1001,7 +1001,7 @@ if test "x$use_pam" = "xyes"; then
      AC_CHECK_HEADER(security/pam_modules.h, have_pam_include=yes, have_pam_include=no, [[
 #ifdef HAVE_SECURITY_PAM_MODULES_H
 # include <security/pam_modules.h>
-#endif	  
+#endif
 	]])
      AC_CHECK_HEADERS(security/_pam_macros.h security/pam_appl.h)
 fi
@@ -1048,12 +1048,12 @@ if test "$system_crypt_r $have_crypt_r_lib" != "no no"; then
 fi
 
 dnl
-dnl crypt_r and pthread 
+dnl crypt_r and pthread
 dnl
 if test "$use_crypt_r" = "yes"; then
    dnl
    dnl crypt_r style
-   dnl 
+   dnl
    AC_MSG_CHECKING([crypt_r style])
    crypt_r_style=none
 
@@ -1076,12 +1076,12 @@ if test "$use_crypt_r" = "yes"; then
 				 [crypt_r_style=struct_crypt_data
 			       CRYPT_CFLAGS="-D_GNU_SOURCE"
 				  AC_SUBST(CRYPT_CFLAGS)])
-   fi   			      
-   
+   fi
+
    AC_MSG_RESULT([$crypt_r_style])
 
    if test "$crypt_r_style" = "cryptd"; then
-     AC_DEFINE(CRYPT_R_CRYPTD, 1, [Define if crypt_r has uses CRYPTD])   
+     AC_DEFINE(CRYPT_R_CRYPTD, 1, [Define if crypt_r has uses CRYPTD])
    fi
 
    if test "$crypt_r_style" = "struct_crypt_data"; then
@@ -1214,8 +1214,8 @@ AC_ARG_WITH([geoip],
 )
 
 if test "x$want_geoip" = "xyes"; then
-   AC_CHECK_LIB(GeoIP, GeoIP_new, have_geoip_lib=yes, have_geoip_lib=no) 
-   AC_CHECK_HEADERS(GeoIP.h, have_geoip_include=yes, have_geoip_include=no) 
+   AC_CHECK_LIB(GeoIP, GeoIP_new, have_geoip_lib=yes, have_geoip_lib=no)
+   AC_CHECK_HEADERS(GeoIP.h, have_geoip_include=yes, have_geoip_include=no)
 fi
 
 have_geoip="no"
@@ -1250,7 +1250,7 @@ if test "x$want_ffmpeg" = "xyes"; then
    AC_CHECK_LIB([avformat], [main], [
 	 FFMPEG_LIBS="-lavformat -lavcodec -lavutil"
    	 have_ffmpeg_lib=yes
-   ],[have_ffmpeg_lib=no]) 
+   ],[have_ffmpeg_lib=no])
 
    AC_CHECK_LIB([bz2], [BZ2_bzdopen], [
 	 FFMPEG_LIBS="$FFMPEG_LIBS -lbz2"
@@ -1262,7 +1262,7 @@ if test "x$want_ffmpeg" = "xyes"; then
 
    AC_CHECK_HEADERS([libavformat/avformat.h], [
       have_ffmpeg_include=yes
-   ],[have_ffmpeg_include=no]) 
+   ],[have_ffmpeg_include=no])
 fi
 
 have_ffmpeg="no"
@@ -1478,28 +1478,28 @@ AM_CONDITIONAL(STATIC_RULE_AND,               grep _and_          $conf_h >/dev/
 AM_CONDITIONAL(STATIC_RULE_OR,                grep _or_           $conf_h >/dev/null)
 
 AC_OUTPUT([
-Makefile 
-cget/Makefile 
+Makefile
+cget/Makefile
 cherokee-config
 cherokee.pc
 cherokee.spec
-cherokee/Makefile 
-contrib/Makefile 
+cherokee/Makefile
+contrib/Makefile
 icons/Makefile
-m4/Makefile 
+m4/Makefile
 qa/Makefile
 doc/Makefile
-themes/Makefile 
-themes/default/Makefile 
-themes/firefox3/Makefile 
-themes/plain/Makefile 
+themes/Makefile
+themes/default/Makefile
+themes/firefox3/Makefile
+themes/plain/Makefile
 packages/Makefile
 packages/osx/Makefile
 packages/osx/Info.plist
 packages/osx/Description.plist
 packages/windows/Makefile
 packages/windows/cherokee.nsi
-www/Makefile 
+www/Makefile
 dbslayer/Makefile
 admin/Makefile
 admin/static/Makefile
@@ -1559,7 +1559,7 @@ echo ============================
 echo
 if test "x$cherokeepath" != "x" ; then
 	echo Warning: You have an old copy of Cherokee at $cherokeepath.
-	echo	
+	echo
 fi
 
 cat <<THEEND
