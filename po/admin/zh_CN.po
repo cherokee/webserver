@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cherokee '0.99.15' admin UI for zh_CN \n"
 "Report-Msgid-Bugs-To: http://bugs.cherokee-project.com/\n"
-"POT-Creation-Date: 2009-12-09 11:35+0100\n"
+"POT-Creation-Date: 2009-12-13 00:18+0100\n"
 "PO-Revision-Date: 2009-04-14 21:27+CEST\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: ownlinux.cn\n"
@@ -12,11 +12,11 @@ msgstr ""
 "Language-Translator:Gefire\n"
 "Generated-By: gettext\n"
 
-#: admin/CherokeeManagement.py:99
+#: admin/CherokeeManagement.py:106
 msgid "Could not access file descriptors: "
 msgstr "不能访问配置文件: "
 
-#: admin/CherokeeManagement.py:265
+#: admin/CherokeeManagement.py:299
 #, python-format
 msgid "ERROR: Couldn't execute '%s -i'"
 msgstr "错误: 执行 '%s -i' 失败"
@@ -109,14 +109,14 @@ msgid ""
 "A load balancer must be configured to use at least one information source."
 msgstr "负载均衡器要求必须配置至少一个数据源."
 
-#: admin/ModuleBalancer.py:55 admin/Page.py:170 admin/PageInfoSource.py:33
-#: admin/PageInfoSource.py:88
+#: admin/ModuleBalancer.py:55 admin/Page.py:170 admin/PageInfoSource.py:93
+#: admin/PageInfoSource.py:152
 msgid "Information Sources"
 msgstr "数据源"
 
-#: admin/ModuleBalancer.py:57 admin/PageInfoSource.py:183
-#: admin/PageInfoSource.py:211 admin/PageInfoSource.py:239
-#: admin/PageInfoSource.py:291
+#: admin/ModuleBalancer.py:57 admin/PageInfoSource.py:247
+#: admin/PageInfoSource.py:275 admin/PageInfoSource.py:302
+#: admin/PageInfoSource.py:389
 msgid "Nick"
 msgstr "名称"
 
@@ -181,11 +181,11 @@ msgstr "绑定到IP"
 msgid "TLS"
 msgstr "TLS支持"
 
-#: admin/ModuleBind.py:53 admin/PageVServer.py:347 admin/PageVServers.py:147
+#: admin/ModuleBind.py:53 admin/PageVServer.py:358 admin/PageVServers.py:147
 msgid "No"
 msgstr "否"
 
-#: admin/ModuleBind.py:53 admin/PageVServer.py:346 admin/PageVServers.py:146
+#: admin/ModuleBind.py:53 admin/PageVServer.py:357 admin/PageVServers.py:146
 msgid "Yes"
 msgstr "是"
 
@@ -263,7 +263,7 @@ msgstr "脚本别名"
 msgid "Change UID"
 msgstr "修改 UID（用户ID）"
 
-#: admin/ModuleCgi.py:57 admin/PageVServer.py:261
+#: admin/ModuleCgi.py:57 admin/PageVServer.py:272
 msgid "Error handler"
 msgstr "错误处理"
 
@@ -284,11 +284,11 @@ msgstr "允许 X-Sendfile"
 msgid "Read X-Real-IP"
 msgstr "允许 X-Real-IP"
 
-#: admin/ModuleCgi.py:68 admin/PageVServer.py:646
+#: admin/ModuleCgi.py:68 admin/PageVServer.py:658
 msgid "Don't check origin"
 msgstr "不检查来源"
 
-#: admin/ModuleCgi.py:70 admin/PageVServer.py:648
+#: admin/ModuleCgi.py:70 admin/PageVServer.py:660
 #, fuzzy
 msgid "Accept from Hosts"
 msgstr "接受域"
@@ -306,7 +306,7 @@ msgid "Name"
 msgstr "姓名"
 
 #: admin/ModuleCgi.py:92 admin/ModuleProxy.py:103 admin/ModuleProxy.py:119
-#: admin/PageInfoSource.py:156
+#: admin/PageInfoSource.py:220
 msgid "Value"
 msgstr "值"
 
@@ -524,9 +524,9 @@ msgid "Redirection"
 msgstr "重定向"
 
 #: admin/ModuleErrorRedir.py:41 admin/ModuleErrorRedir.py:52
-#: admin/ModuleRedir.py:35 admin/PageInfoSource.py:182
-#: admin/PageInfoSource.py:210 admin/PageInfoSource.py:239
-#: admin/PageVServer.py:351
+#: admin/ModuleRedir.py:35 admin/PageInfoSource.py:246
+#: admin/PageInfoSource.py:274 admin/PageInfoSource.py:302
+#: admin/PageVServer.py:362
 msgid "Type"
 msgstr "类型"
 
@@ -840,7 +840,7 @@ msgstr "LDAP 链接"
 msgid "The HTTP method that should match this rule."
 msgstr "HTTP 方法将被此规则验证."
 
-#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:526
+#: admin/ModuleMethod.py:48 admin/ModuleMethod.py:51 admin/PageVServer.py:538
 msgid "Method"
 msgstr "方式"
 
@@ -1046,7 +1046,7 @@ msgstr "规则列表"
 msgid "Show"
 msgstr "显示"
 
-#: admin/ModuleRedir.py:55 admin/PageVServer.py:242 admin/PageVServer.py:319
+#: admin/ModuleRedir.py:55 admin/PageVServer.py:252 admin/PageVServer.py:330
 msgid "Add new rule"
 msgstr "添加新的规则"
 
@@ -1064,7 +1064,7 @@ msgid "New Regular Expression"
 msgstr "新的正则表达式"
 
 #: admin/ModuleRehost.py:60 admin/ModuleTargetIp.py:62
-#: admin/ModuleWildcard.py:60 admin/PageInfoSource.py:255
+#: admin/ModuleWildcard.py:60
 msgid "Add new"
 msgstr "新增"
 
@@ -1282,7 +1282,7 @@ msgid "Help"
 msgstr "帮助"
 
 #: admin/Page.py:167 admin/PageAdvanced.py:123 admin/PageStatus.py:60
-#: admin/PageVServer.py:495
+#: admin/PageVServer.py:507
 msgid "Status"
 msgstr "状态"
 
@@ -1290,7 +1290,7 @@ msgstr "状态"
 msgid "General"
 msgstr "一般设置"
 
-#: admin/Page.py:169 admin/PageVServer.py:70 admin/PageVServers.py:25
+#: admin/Page.py:169 admin/PageVServer.py:71 admin/PageVServers.py:25
 #: admin/PageVServers.py:130
 msgid "Virtual Servers"
 msgstr "虚拟主机设置"
@@ -1639,16 +1639,16 @@ msgstr ""
 msgid "Behavior rules"
 msgstr "行为规则"
 
-#: admin/PageEntry.py:154 admin/PageInfoSource.py:291
+#: admin/PageEntry.py:154 admin/PageInfoSource.py:389 admin/PageVServer.py:774
 msgid "Rule"
 msgstr "规则"
 
 #: admin/PageEntry.py:158 admin/PageEntry.py:166 admin/PageEntry.py:168
-#: admin/PageVServer.py:351
+#: admin/PageVServer.py:362
 msgid "Handler"
 msgstr "处理"
 
-#: admin/PageEntry.py:163 admin/PageVServer.py:514 admin/PageVServers.py:274
+#: admin/PageEntry.py:163 admin/PageVServer.py:526 admin/PageVServers.py:274
 #: admin/Wizard_Django.py:112 admin/Wizard_Mono.py:99
 #: admin/Wizard_uWSGI.py:145
 msgid "Document Root"
@@ -1658,12 +1658,12 @@ msgstr "根目录"
 msgid "Encoding"
 msgstr "压缩"
 
-#: admin/PageEntry.py:176 admin/PageVServer.py:351
+#: admin/PageEntry.py:176 admin/PageVServer.py:362
 #, fuzzy
 msgid "Time"
 msgstr "超时"
 
-#: admin/PageEntry.py:179 admin/PageVServer.py:270
+#: admin/PageEntry.py:179 admin/PageVServer.py:281
 msgid "Security"
 msgstr "安全"
 
@@ -1700,7 +1700,7 @@ msgstr "内容过期"
 msgid "Authentication"
 msgstr "认证"
 
-#: admin/PageEntry.py:250 admin/PageVServer.py:266 admin/PageVServers.py:144
+#: admin/PageEntry.py:250 admin/PageVServer.py:277 admin/PageVServers.py:144
 #: admin/Wizard_Alfresco.py:91 admin/Wizard_ColdFusion.py:109
 #: admin/Wizard_Concrete5.py:134 admin/Wizard_Django.py:120
 #: admin/Wizard_Drupal.py:153 admin/Wizard_Glassfish.py:88
@@ -1748,11 +1748,11 @@ msgstr "每当客户端请求时使用 %s 压缩."
 msgid "Allow"
 msgstr "允许 "
 
-#: admin/PageError.py:128
+#: admin/PageError.py:148
 msgid "Configuration file cannot be modified"
 msgstr "配置文件不允许修改"
 
-#: admin/PageError.py:129
+#: admin/PageError.py:149
 msgid "Icons directory is missing"
 msgstr "图标文件目录不存在"
 
@@ -1800,7 +1800,7 @@ msgstr "报告"
 msgid "Feedback: Thank you"
 msgstr "反馈信息: 谢谢"
 
-#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:376
+#: admin/PageGeneral.py:12 admin/PageIcon.py:189 admin/PageVServer.py:387
 #: admin/consts.py:87
 msgid "Default"
 msgstr "默认"
@@ -1881,7 +1881,7 @@ msgstr "快速配置"
 msgid "General Settings"
 msgstr "一般设置"
 
-#: admin/PageGeneral.py:59 admin/PageVServer.py:518
+#: admin/PageGeneral.py:59 admin/PageVServer.py:530
 msgid "Network"
 msgstr "网络"
 
@@ -2061,71 +2061,95 @@ msgid ""
 "the server process. Default: yes."
 msgstr ""
 
-#: admin/PageInfoSource.py:135
+#: admin/PageInfoSource.py:199
 msgid "Environment variables"
 msgstr "环境变量"
 
-#: admin/PageInfoSource.py:151
+#: admin/PageInfoSource.py:215
 msgid "Add new Environment variable"
 msgstr "新增环境变量"
 
-#: admin/PageInfoSource.py:156
+#: admin/PageInfoSource.py:220
 msgid "Variable"
 msgstr "变量"
 
-#: admin/PageInfoSource.py:184 admin/PageInfoSource.py:212
-#: admin/PageInfoSource.py:239 admin/Wizard_rTorrent.py:45
+#: admin/PageInfoSource.py:248 admin/PageInfoSource.py:276
+#: admin/PageInfoSource.py:302 admin/Wizard_rTorrent.py:45
 msgid "Connection"
 msgstr "连接"
 
-#: admin/PageInfoSource.py:186 admin/PageInfoSource.py:214
+#: admin/PageInfoSource.py:250 admin/PageInfoSource.py:278
 msgid "Interpreter"
 msgstr "解释器"
 
-#: admin/PageInfoSource.py:187 admin/PageInfoSource.py:215
+#: admin/PageInfoSource.py:251 admin/PageInfoSource.py:279
 msgid "Spawning timeout"
 msgstr "超时"
 
-#: admin/PageInfoSource.py:188 admin/PageInfoSource.py:216
+#: admin/PageInfoSource.py:252 admin/PageInfoSource.py:280
 msgid "Execute as User"
 msgstr "执行用户"
 
-#: admin/PageInfoSource.py:189 admin/PageInfoSource.py:217
+#: admin/PageInfoSource.py:253 admin/PageInfoSource.py:281
 #, fuzzy
 msgid "Execute as Group"
 msgstr "执行用户组"
 
-#: admin/PageInfoSource.py:190
+#: admin/PageInfoSource.py:254
 msgid "Inherit Environment"
 msgstr ""
 
-#: admin/PageInfoSource.py:224
+#: admin/PageInfoSource.py:288
 msgid "Information Sources Settings"
 msgstr "数据源设置"
 
-#: admin/PageInfoSource.py:236
+#: admin/PageInfoSource.py:299
 msgid "Known sources"
 msgstr "已有数据源"
 
-#: admin/PageInfoSource.py:249
+#: admin/PageInfoSource.py:312
 msgid "Deletion forbidden. Check source usage."
 msgstr "不允许删除. 请检查数据源是否使用中."
 
-#: admin/PageInfoSource.py:264
+#: admin/PageInfoSource.py:327
+#, fuzzy
+msgid "Add new Information Source"
+msgstr "转移数据源"
+
+#: admin/PageInfoSource.py:330 admin/PageInfoSource.py:349
+#, fuzzy
+msgid "Clone Information Source"
+msgstr "数据源"
+
+#: admin/PageInfoSource.py:337
+#, fuzzy
+msgid "Source"
+msgstr "数据源使用"
+
+#: admin/PageInfoSource.py:337 admin/PageVServers.py:287
+msgid "Clone as.."
+msgstr "克隆成.."
+
+#: admin/PageInfoSource.py:359
 msgid "Details:"
 msgstr "详细:"
 
-#: admin/PageInfoSource.py:270
+#: admin/PageInfoSource.py:364
 msgid "Add a new"
 msgstr "新增"
 
-#: admin/PageInfoSource.py:279
+#: admin/PageInfoSource.py:377
 msgid "Source usage"
 msgstr "数据源使用"
 
-#: admin/PageInfoSource.py:291
+#: admin/PageInfoSource.py:389
 msgid "Virtual server"
 msgstr "虚拟主机"
+
+#: admin/PageInfoSource.py:481 admin/PageVServers.py:355
+#: admin/PageVServers.py:369 admin/validations.py:259
+msgid "Cannot be empty"
+msgstr "不能为空"
 
 #: admin/PageMime.py:19 admin/PageMime.py:74
 msgid "MIME types"
@@ -2311,7 +2335,7 @@ msgid "Not running"
 msgstr "服务器没有运行"
 
 #: admin/PageStatus.py:155 admin/PageStatus.py:158 admin/Wizard_uWSGI.py:152
-#: admin/Wizard_uWSGI.py:230
+#: admin/Wizard_uWSGI.py:231
 msgid "Configuration File"
 msgstr "服务器配置文件"
 
@@ -2338,33 +2362,33 @@ msgstr "连接"
 msgid "Connections Timeout"
 msgstr "连接"
 
-#: admin/PageStatus.py:178 admin/PageVServer.py:564
+#: admin/PageStatus.py:178 admin/PageVServer.py:576
 msgid "1 month"
 msgstr ""
 
-#: admin/PageStatus.py:179 admin/PageVServer.py:565
+#: admin/PageStatus.py:179 admin/PageVServer.py:577
 msgid "1 week"
 msgstr ""
 
-#: admin/PageStatus.py:180 admin/PageVServer.py:566
+#: admin/PageStatus.py:180 admin/PageVServer.py:578
 msgid "1 day"
 msgstr ""
 
-#: admin/PageStatus.py:181 admin/PageVServer.py:567
+#: admin/PageStatus.py:181 admin/PageVServer.py:579
 msgid "6 hours"
 msgstr ""
 
-#: admin/PageStatus.py:182 admin/PageVServer.py:568
+#: admin/PageStatus.py:182 admin/PageVServer.py:580
 msgid "1 hour"
 msgstr ""
 
-#: admin/PageVServer.py:32
+#: admin/PageVServer.py:33
 msgid ""
 "<p>Rules are evaluated from <b>top to bottom</b>. Drag & drop them to "
 "reorder.</p>"
 msgstr "<p>规则的应用时 <b>从上到下的</b>.你可以拖动它们进行排序</p>"
 
-#: admin/PageVServer.py:34
+#: admin/PageVServer.py:35
 msgid ""
 "\n"
 "<p>The 'default' virtual server matches all the domain names.</p>\n"
@@ -2372,28 +2396,28 @@ msgstr ""
 "\n"
 "<p>这个默认虚拟主机将匹配所有未设定的域名</p>\n"
 
-#: admin/PageVServer.py:38
+#: admin/PageVServer.py:39
 msgid "Nickname for the virtual server."
 msgstr "虚拟主机名称."
 
-#: admin/PageVServer.py:39
+#: admin/PageVServer.py:40
 msgid ""
 "This directive points to the PEM-encoded Certificate file for the server "
 "(Full path to the file)"
 msgstr "设置服务器的PEM编码的证书文件(完整路径)"
 
-#: admin/PageVServer.py:40
+#: admin/PageVServer.py:41
 msgid "PEM-encoded Private Key file for the server (Full path to the file)"
 msgstr "设置服务器PEM-编码加密文件  (完整路径)"
 
-#: admin/PageVServer.py:41
+#: admin/PageVServer.py:42
 #, fuzzy
 msgid ""
 "File containing the trusted CA certificates, utilized for checking the "
 "client certificates (Full path to the file)"
 msgstr "选择：用于检查客户端的信任CA客户端证书  (完整路径)"
 
-#: admin/PageVServer.py:42
+#: admin/PageVServer.py:43
 msgid ""
 "Ciphers that TLS/SSL is allowed to use. <a target=\"_blank\" href=\"http://"
 "www.openssl.org/docs/apps/ciphers.html\">Reference</a>. (Default: all "
@@ -2402,82 +2426,82 @@ msgstr ""
 "TLS的/ SSL是允许使用密码的. <a target=\"_blank\" href=\"http://www.openssl."
 "org/docs/apps/ciphers.html\">参考</a>. (默认: 所有 OPENSSL将启动密码支持)."
 
-#: admin/PageVServer.py:43
+#: admin/PageVServer.py:44
 #, fuzzy
 msgid "Skip, Accept or Require client certificates."
 msgstr "选择：跳过，接受或者要求客户端证书。"
 
-#: admin/PageVServer.py:44
+#: admin/PageVServer.py:45
 msgid ""
 "Limit up to which depth certificates in a chain are used during the "
 "verification procedure (Default: 1)"
 msgstr "限制证书链在检查程序中的使用范围 (默认值: 1)"
 
-#: admin/PageVServer.py:45
+#: admin/PageVServer.py:46
 msgid "Allows the selection of how to generate the error responses."
 msgstr "允许选择如何产生错误的反应."
 
-#: admin/PageVServer.py:46
+#: admin/PageVServer.py:47
 msgid ""
 "Directory inside the user home directory to use as root web directory. "
 "Disabled if empty."
 msgstr "目录内的用户主目录用作根Web目录. 为空则禁止此功能."
 
-#: admin/PageVServer.py:47
+#: admin/PageVServer.py:48
 msgid "The personal web support is currently turned on."
 msgstr "个人网页支持目前正在打开."
 
-#: admin/PageVServer.py:48
+#: admin/PageVServer.py:49
 msgid "Adds a new domain name. Wildcards are allowed in the domain name."
 msgstr "增加了一个新域名。允许在域名中使用通配符."
 
-#: admin/PageVServer.py:49
+#: admin/PageVServer.py:50
 msgid "Virtual Server root directory."
 msgstr "虚拟主机根目录."
 
-#: admin/PageVServer.py:50
+#: admin/PageVServer.py:51
 msgid ""
 "List of name files that will be used as directory index. Eg: <em>index.html,"
 "index.php</em>."
 msgstr "默认首页设置. 例如: <em>index.html,index.php</em>."
 
-#: admin/PageVServer.py:51
+#: admin/PageVServer.py:52
 msgid "The maximum size, in bytes, for POST uploads. (Default: unlimited)"
 msgstr "设置服务器允许上传大小, 单位：bytes (默认:无限制)"
 
-#: admin/PageVServer.py:52
+#: admin/PageVServer.py:53
 msgid "Whether this virtual server is allowed to use Keep-alive (Default: yes)"
 msgstr "虚拟主机是否允许使用活动连接(默认: 是)"
 
-#: admin/PageVServer.py:53
+#: admin/PageVServer.py:54
 msgid "The Logging is currently enabled."
 msgstr "日志记录正在启用."
 
-#: admin/PageVServer.py:54
+#: admin/PageVServer.py:55
 msgid "Logging format. Apache compatible is highly recommended here."
 msgstr "日志格式强烈建议使用 Apache 兼容格式."
 
-#: admin/PageVServer.py:55
+#: admin/PageVServer.py:56
 msgid "Back-end used to store the log accesses."
 msgstr "存放访问日志后台程序."
 
-#: admin/PageVServer.py:56
+#: admin/PageVServer.py:57
 msgid "Back-end used to store the log errors."
 msgstr "存放错误日志后台程序."
 
-#: admin/PageVServer.py:57
+#: admin/PageVServer.py:58
 msgid "Back-end used to store the log accesses and errors."
 msgstr "存放错误和访问日志的后台程序."
 
-#: admin/PageVServer.py:58
+#: admin/PageVServer.py:59
 msgid "Full path to the file where the information will be saved."
 msgstr "文件的完整路径信息会被保存."
 
-#: admin/PageVServer.py:59
+#: admin/PageVServer.py:60
 msgid "Path to the executable that will be invoked on each log entry."
 msgstr "可执行路径将援引每个日志条目."
 
-#: admin/PageVServer.py:60
+#: admin/PageVServer.py:61
 #, fuzzy
 msgid ""
 "Whether the logger should read and use the X-Real-IP and X-Forwarded-For "
@@ -2485,7 +2509,7 @@ msgid ""
 msgstr ""
 "是否记录和使用 X-Real-IP  和X-Forwarded-For 请求头  ( 由反向代理服务器发送)."
 
-#: admin/PageVServer.py:61
+#: admin/PageVServer.py:62
 #, fuzzy
 msgid ""
 "Accept all the X-Real-IP and X-Forwarded-For headers. WARNING: Turn it on "
@@ -2494,7 +2518,7 @@ msgstr ""
 "接受X-Real-IP和X-Forwarded-For请求头. 警告：如果你不确信你需要这个功能请不要"
 "开启"
 
-#: admin/PageVServer.py:62
+#: admin/PageVServer.py:63
 #, fuzzy
 msgid ""
 "List of IP addresses and subnets that are allowed to send X-Real-IP and X-"
@@ -2503,12 +2527,12 @@ msgstr ""
 "列表上的IP地址和子网允许发送 X-Real-IP and X-Forwarded-For 请求头通常应用于代"
 "理服务器."
 
-#: admin/PageVServer.py:63
+#: admin/PageVServer.py:64
 msgid ""
 "How to support the \"Advanced Virtual Hosting\" mechanism. (Default: off)"
 msgstr "设置是否允许高级虚拟主机支持. (默认：关闭)"
 
-#: admin/PageVServer.py:64
+#: admin/PageVServer.py:65
 msgid ""
 "The following variables are accepted: <br/>${ip_remote}, ${ip_local}, "
 "${protocol}, ${transport}, ${port_server}, ${query_string}, "
@@ -2520,235 +2544,245 @@ msgstr ""
 "${time_secs}, ${time_nsecs}, ${user_remote}, ${request}, "
 "${request_original}, ${vserver_name}"
 
-#: admin/PageVServer.py:65
+#: admin/PageVServer.py:66
 #, fuzzy
 msgid "Allows the selection of domain matching method."
 msgstr "域名匹配规则."
 
-#: admin/PageVServer.py:66
+#: admin/PageVServer.py:67
 msgid ""
 "Whether or not it should collected statistics about the traffic of this "
 "virtual server."
 msgstr ""
 
-#: admin/PageVServer.py:67
+#: admin/PageVServer.py:68
 msgid "Time standard to use in the log file entries."
 msgstr ""
 
-#: admin/PageVServer.py:71
+#: admin/PageVServer.py:72
 msgid "Loggers"
 msgstr "日志"
 
-#: admin/PageVServer.py:72
+#: admin/PageVServer.py:73
 msgid "SSL cookbook"
 msgstr "SSL cookbook"
 
-#: admin/PageVServer.py:205 admin/PageVServer.py:216 admin/PageVServers.py:287
+#: admin/PageVServer.py:211 admin/PageVServer.py:222 admin/PageVServers.py:287
 msgid "Virtual Server"
 msgstr "虚拟主机"
 
-#: admin/PageVServer.py:220
+#: admin/PageVServer.py:226
 msgid "Basics"
 msgstr "基本配置"
 
-#: admin/PageVServer.py:243 admin/PageVServers.py:310
+#: admin/PageVServer.py:253 admin/PageVServer.py:772
+#, fuzzy
+msgid "Clone rule"
+msgstr "克隆虚拟主机"
+
+#: admin/PageVServer.py:254 admin/PageVServers.py:310
 #, fuzzy
 msgid "Wizards"
 msgstr "通配符"
 
-#: admin/PageVServer.py:246 admin/Wizard_HotLinking.py:71
+#: admin/PageVServer.py:257 admin/Wizard_HotLinking.py:71
 msgid "Behavior"
 msgstr "扩展设置"
 
-#: admin/PageVServer.py:257
+#: admin/PageVServer.py:268
 msgid "Personal Webs"
 msgstr "个人主页"
 
-#: admin/PageVServer.py:279
+#: admin/PageVServer.py:290
 msgid "Required SSL/TLS values"
 msgstr "必要的 SSL/TLS 值"
 
-#: admin/PageVServer.py:281
+#: admin/PageVServer.py:292
 msgid "Certificate"
 msgstr "证书"
 
-#: admin/PageVServer.py:282
+#: admin/PageVServer.py:293
 msgid "Certificate key"
 msgstr "加密证书"
 
-#: admin/PageVServer.py:285
+#: admin/PageVServer.py:296
 msgid "Advanced options"
 msgstr "高级选项"
 
-#: admin/PageVServer.py:287
+#: admin/PageVServer.py:298
 msgid "Ciphers"
 msgstr "密码"
 
-#: admin/PageVServer.py:288
+#: admin/PageVServer.py:299
 msgid "Client Certs. Request"
 msgstr "客户端证书. 请求"
 
-#: admin/PageVServer.py:295
+#: admin/PageVServer.py:306
 msgid "CA List"
 msgstr "CA 列表"
 
-#: admin/PageVServer.py:299
+#: admin/PageVServer.py:310
 msgid "Verify Depth"
 msgstr "验证"
 
-#: admin/PageVServer.py:308
+#: admin/PageVServer.py:319
 msgid "Error Handling hook"
 msgstr "错误处理机制"
 
-#: admin/PageVServer.py:310
+#: admin/PageVServer.py:321
 msgid "Error Handler"
 msgstr "错误处理"
 
-#: admin/PageVServer.py:321 admin/Rule.py:157
+#: admin/PageVServer.py:332 admin/Rule.py:157
 msgid "Rule Type"
 msgstr "规则类型"
 
-#: admin/PageVServer.py:351
+#: admin/PageVServer.py:362
 msgid "Target"
 msgstr "目标"
 
-#: admin/PageVServer.py:351 admin/PageVServers.py:144
+#: admin/PageVServer.py:362 admin/PageVServers.py:144
 msgid "Root"
 msgstr "网站根目录"
 
-#: admin/PageVServer.py:351
+#: admin/PageVServer.py:362
 msgid "Auth"
 msgstr "认证"
 
-#: admin/PageVServer.py:351
+#: admin/PageVServer.py:362
 msgid "Enc"
 msgstr "压缩"
 
-#: admin/PageVServer.py:351
+#: admin/PageVServer.py:362
 msgid "Exp"
 msgstr "到期"
 
-#: admin/PageVServer.py:351
+#: admin/PageVServer.py:362
 msgid "Final"
 msgstr "启用"
 
-#: admin/PageVServer.py:483 admin/PageVServers.py:324
+#: admin/PageVServer.py:495 admin/PageVServers.py:324
 msgid "<h2>Wizards</h2>"
 msgstr "新建向导"
 
-#: admin/PageVServer.py:488
+#: admin/PageVServer.py:500
 msgid "/~user directories"
 msgstr "/~user 目录"
 
-#: admin/PageVServer.py:494
+#: admin/PageVServer.py:506
 msgid "Disable"
 msgstr "禁止"
 
-#: admin/PageVServer.py:497
+#: admin/PageVServer.py:509
 msgid "Directory name"
 msgstr "目录名"
 
-#: admin/PageVServer.py:507
+#: admin/PageVServer.py:519
 msgid "Server ID"
 msgstr "服务器 ID"
 
-#: admin/PageVServer.py:509
+#: admin/PageVServer.py:521
 msgid "Virtual Server nickname"
 msgstr "虚拟主机名称"
 
-#: admin/PageVServer.py:512
+#: admin/PageVServer.py:524
 msgid "Paths"
 msgstr "路径"
 
-#: admin/PageVServer.py:515
+#: admin/PageVServer.py:527
 msgid "Directory Indexes"
 msgstr "目录首页设置"
 
-#: admin/PageVServer.py:520
+#: admin/PageVServer.py:532
 msgid "Keep-alive"
 msgstr "保持活动连接"
 
-#: admin/PageVServer.py:521
+#: admin/PageVServer.py:533
 msgid "Max Upload Size"
 msgstr "允许上传大小"
 
-#: admin/PageVServer.py:524
+#: admin/PageVServer.py:536
 msgid "Advanced Virtual Hosting"
 msgstr "高级虚拟主机"
 
-#: admin/PageVServer.py:541
+#: admin/PageVServer.py:553
 #, fuzzy
 msgid "Statistics"
 msgstr "流量统计"
 
-#: admin/PageVServer.py:544 admin/PageVServer.py:546
+#: admin/PageVServer.py:556 admin/PageVServer.py:558
 #, fuzzy
 msgid "Collect Statistics"
 msgstr "流量统计"
 
-#: admin/PageVServer.py:590
+#: admin/PageVServer.py:602
 #, fuzzy
 msgid "Error logging"
 msgstr "错误处理机制"
 
-#: admin/PageVServer.py:596 admin/consts.py:170
+#: admin/PageVServer.py:608 admin/consts.py:170
 #, fuzzy
 msgid "Disabled"
 msgstr "禁止"
 
-#: admin/PageVServer.py:600
+#: admin/PageVServer.py:612
 #, fuzzy
 msgid "Write errors to"
 msgstr "Writers"
 
-#: admin/PageVServer.py:604 admin/PageVServer.py:627
+#: admin/PageVServer.py:616 admin/PageVServer.py:639
 msgid "Filename"
 msgstr "文件名"
 
-#: admin/PageVServer.py:606 admin/PageVServer.py:629
+#: admin/PageVServer.py:618 admin/PageVServer.py:641
 msgid "Command"
 msgstr "命令"
 
-#: admin/PageVServer.py:611
+#: admin/PageVServer.py:623
 msgid "Access logging"
 msgstr ""
 
-#: admin/PageVServer.py:618
+#: admin/PageVServer.py:630
 msgid "Format"
 msgstr "格式"
 
-#: admin/PageVServer.py:623
+#: admin/PageVServer.py:635
 msgid "Accesses"
 msgstr "访问"
 
-#: admin/PageVServer.py:643
+#: admin/PageVServer.py:655
 msgid "Time standard"
 msgstr ""
 
-#: admin/PageVServer.py:644
+#: admin/PageVServer.py:656
 msgid "Accept Forwarded IPs"
 msgstr "接受转发IPs"
 
-#: admin/PageVServer.py:650
+#: admin/PageVServer.py:662
 #, fuzzy
 msgid "Logging Option"
 msgstr "启用日志"
 
-#: admin/PageVServer.py:657
+#: admin/PageVServer.py:669
 msgid "Host names"
 msgstr "主机名称"
 
-#: admin/PageVServer.py:664
+#: admin/PageVServer.py:676
 msgid "Matching method"
 msgstr "匹配方法"
 
-#: admin/PageVServer.py:715
+#: admin/PageVServer.py:727
 msgid "Filename must be set"
 msgstr "必须设置文件名"
 
-#: admin/PageVServer.py:755
+#: admin/PageVServer.py:767
 msgid "Template: "
 msgstr "日志格式: "
+
+#: admin/PageVServer.py:777
+#, fuzzy
+msgid "Choose a rule.."
+msgstr "选择.."
 
 #: admin/PageVServers.py:18
 msgid ""
@@ -2787,18 +2821,9 @@ msgstr "关闭"
 msgid "Add new Virtual Server"
 msgstr "新建一个虚拟主机"
 
-#: admin/PageVServers.py:287
-msgid "Clone as.."
-msgstr "克隆成.."
-
 #: admin/PageVServers.py:299 admin/PageVServers.py:309
 msgid "Clone Virtual Server"
 msgstr "克隆虚拟主机"
-
-#: admin/PageVServers.py:355 admin/PageVServers.py:369
-#: admin/validations.py:259
-msgid "Cannot be empty"
-msgstr "不能为空"
 
 #: admin/Rule.py:13
 msgid "The default match ought not to be changed."
@@ -3008,7 +3033,7 @@ msgid "Common files have been already configured."
 msgstr ""
 
 #: admin/Wizard_CommonStatic.py:44 admin/Wizard_Icons.py:62
-#: admin/Wizard_MoinMoin.py:225 admin/Wizard_PHP.py:120
+#: admin/Wizard_MoinMoin.py:225 admin/Wizard_PHP.py:192
 #: admin/Wizard_Streaming.py:42 admin/Wizard_rTorrent.py:77
 #, fuzzy
 msgid "Couldn't add a new rule."
@@ -3073,7 +3098,7 @@ msgstr "网页目录"
 
 #: admin/Wizard_Concrete5.py:164 admin/Wizard_Drupal.py:183
 #: admin/Wizard_Joomla.py:160 admin/Wizard_Moodle.py:120
-#: admin/Wizard_PHP.py:101 admin/Wizard_Sugar.py:154
+#: admin/Wizard_PHP.py:167 admin/Wizard_Sugar.py:154
 #: admin/Wizard_Symfony.py:158 admin/Wizard_WordPress.py:145
 #: admin/Wizard_Zend.py:129 admin/Wizard_phpBB.py:125
 #: admin/Wizard_phpMyAdmin.py:103
@@ -3441,27 +3466,31 @@ msgstr ""
 msgid "Moodle Wizard"
 msgstr "通配符"
 
-#: admin/Wizard_PHP.py:32
+#: admin/Wizard_PHP.py:41
 msgid ""
 "Configures PHP in the current Virtual Server. It will add a new .php "
 "extension if not present."
 msgstr ""
 
-#: admin/Wizard_PHP.py:36
+#: admin/Wizard_PHP.py:45
 #, fuzzy
 msgid "Add PHP support"
 msgstr "增加一个端口"
 
-#: admin/Wizard_PHP.py:57
+#: admin/Wizard_PHP.py:66
 msgid "Already configured: nick"
 msgstr ""
 
-#: admin/Wizard_PHP.py:99
+#: admin/Wizard_PHP.py:165
 msgid "Looked for the binaries"
 msgstr ""
 
-#: admin/Wizard_PHP.py:105
-msgid "Couldn't find IP address for 'localhost'"
+#: admin/Wizard_PHP.py:173
+msgid "Couldn't determine PHP-fpm settings"
+msgstr ""
+
+#: admin/Wizard_PHP.py:179
+msgid "Couldn't determine correct interpreter settings"
 msgstr ""
 
 #: admin/Wizard_Redirect.py:11
@@ -3840,16 +3869,16 @@ msgstr ""
 msgid "New virtual server for an uWSGI project."
 msgstr ""
 
-#: admin/Wizard_uWSGI.py:129 admin/Wizard_uWSGI.py:213
+#: admin/Wizard_uWSGI.py:129 admin/Wizard_uWSGI.py:214
 #, fuzzy
 msgid "uWSGI Wizard"
 msgstr "通配符"
 
-#: admin/Wizard_uWSGI.py:151 admin/Wizard_uWSGI.py:229
+#: admin/Wizard_uWSGI.py:151 admin/Wizard_uWSGI.py:230
 msgid "uWSGI binary"
 msgstr ""
 
-#: admin/Wizard_uWSGI.py:207
+#: admin/Wizard_uWSGI.py:208
 msgid "New directory for an uWSGI project."
 msgstr ""
 
@@ -4123,33 +4152,33 @@ msgstr "新主机别名"
 msgid "UTC: Coordinated Universal Time"
 msgstr ""
 
-#: admin/server.py:120
+#: admin/server.py:122
 msgid "Configuration saved."
 msgstr "配置已保存."
 
-#: admin/server.py:122
+#: admin/server.py:124
 msgid " Graceful restart performed."
 msgstr " 平稳重启完成."
 
-#: admin/server.py:124
+#: admin/server.py:126
 msgid " Hard restart performed."
 msgstr " 硬重启完成."
 
-#: admin/server.py:207
+#: admin/server.py:216
 msgid "Incorrect parameters: PORT CONFIG_FILE"
 msgstr "不正确的参数: PORT CONFIG_FILE"
 
-#: admin/server.py:247
+#: admin/server.py:256
 #, fuzzy, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Port=%(scgi_port)s"
 msgstr "服务器%s运行中.. 进程号=%d 端口=%d"
 
-#: admin/server.py:249
+#: admin/server.py:258
 #, fuzzy, python-format
 msgid "Server %(version)s running.. PID=%(pid)d Socket=%(scgi_port)s"
 msgstr "服务器%s运行中.. 进程号=%d 端口=%d"
 
-#: admin/server.py:256
+#: admin/server.py:265
 msgid "Server exiting.."
 msgstr "服务器退出.."
 
