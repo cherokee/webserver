@@ -5,6 +5,7 @@ AVAILABLE_LANGUAGES = [
     ('en',           N_('English')),
     ('es',           N_('Spanish')),
     ('de',           N_('German')),
+    ('fr',           N_('French')),
     ('nl',           N_('Dutch')),
     ('sv_SE',        N_('Swedish')),
     ('zh_CN',        N_('Chinese Simplified'))
